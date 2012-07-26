@@ -42,7 +42,7 @@ namespace Mosa.Tool.Compiler
 				new StaticAllocationResolutionStage(),
 				new CILTransformationStage(),
 					
-				new IRCheckStage(),
+				new CheckIROperandCountStage(),
 
 				(compilerOptions.EnableSSA) ? new EdgeSplitStage() : null,
 				(compilerOptions.EnableSSA) ? new DominanceCalculationStage() : null,

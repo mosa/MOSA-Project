@@ -125,7 +125,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Holds the virtual register layout
 		/// </summary>
-		private readonly VirtualRegisterLayout virtualRegisterLayout;
+		private readonly VirtualRegisters virtualRegisters;
 
 		private bool stopMethodCompiler;
 
@@ -160,7 +160,7 @@ namespace Mosa.Compiler.Framework
 
 			this.stackLayout = new StackLayout(architecture, method.Parameters.Count + (method.Signature.HasThis || method.Signature.HasExplicitThis ? 1 : 0));
 
-			this.virtualRegisterLayout = new VirtualRegisterLayout(architecture, stackLayout);
+			this.virtualRegisters = new VirtualRegisters();
 
 			EvaluateParameterOperands();
 
@@ -261,7 +261,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets the virtual register layout.
 		/// </summary>
-		public VirtualRegisterLayout VirtualRegisterLayout { get { return virtualRegisterLayout; } }
+		public VirtualRegisters VirtualRegisters { get { return virtualRegisters; } }
 
 		#endregion // Properties
 
@@ -277,7 +277,7 @@ namespace Mosa.Compiler.Framework
 
 			foreach (var localVariable in localsSig.Locals)
 			{
-				locals[index++] = stackLayout.AllocateStackOperand(localVariable.Type, true);
+				locals[index++] = stackLayout.AllocateLocalVariableOperand(localVariable.Type);
 				//Scheduler.ScheduleTypeForCompilation(localVariable.Type); // TODO
 			}
 
@@ -358,8 +358,8 @@ namespace Mosa.Compiler.Framework
 		/// </returns>
 		public Operand CreateVirtualRegister(SigType type)
 		{
-			//return virtualRegisterLayout.AllocateVirtualRegister(type);
-			return stackLayout.AllocateStackOperand(type, false);
+			return virtualRegisters.Allocate(type);
+			//return stackLayout.AllocateStackOperand(type, false);
 		}
 
 		/// <summary>

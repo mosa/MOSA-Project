@@ -67,6 +67,11 @@ namespace Mosa.Compiler.Framework
 		/// The register, where the operand is stored.
 		/// </summary>
 		private Register register;
+		
+		/// <summary>
+		/// The operand for the offset base
+		/// </summary>
+		private Operand offsetBase;
 
 		/// <summary>
 		/// Holds the address offset if used together with a base register or the absolute address, if register is null.
@@ -121,6 +126,11 @@ namespace Mosa.Compiler.Framework
 		/// Retrieves the base register, where the operand is located.
 		/// </summary>
 		public Register Base { get { return register; } }
+
+		/// <summary>
+		/// Retrieves the offset base
+		/// </summary>
+		public Operand OffsetBase { get { return offsetBase; } }
 
 		/// <summary>
 		/// Retrieves the runtime member.
@@ -244,6 +254,9 @@ namespace Mosa.Compiler.Framework
 					return (long)(ushort)value;
 				else if (value is ulong)
 					return (long)(ulong)value;
+				
+				else if (value == null)
+					return 0;	// REVIEW
 
 				throw new CompilationException("Not an integer");
 			}
@@ -372,10 +385,25 @@ namespace Mosa.Compiler.Framework
 		/// <param name="baseRegister">The base register.</param>
 		/// <param name="offset">The offset.</param>
 		/// <returns></returns>
-		public static Operand CreateMemoryAddress(SigType sigType, Register baseRegister, IntPtr offset)
+		public static Operand CreateMemoryAddress(SigType sigType, Register baseRegister, IntPtr offset) // TODO: Remove this method as virtual registers get implemented
 		{
 			Operand operand = new Operand(sigType, OperandType.MemoryAddress);
 			operand.register = baseRegister;
+			operand.offset = offset;
+			return operand;
+		}
+
+		/// <summary>
+		/// Creates a new memory address <see cref="Operand"/>.
+		/// </summary>
+		/// <param name="sigType">Type of the sig.</param>
+		/// <param name="offsetBase">The base register.</param>
+		/// <param name="offset">The offset.</param>
+		/// <returns></returns>
+		public static Operand CreateMemoryAddress(SigType sigType, Operand offsetBase, IntPtr offset)
+		{
+			Operand operand = new Operand(sigType, OperandType.MemoryAddress);
+			operand.offsetBase = offsetBase;
 			operand.offset = offset;
 			return operand;
 		}

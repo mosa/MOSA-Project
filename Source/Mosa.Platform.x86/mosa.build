@@ -66,6 +66,7 @@
                     <include name="Intrinsic/Out.cs"/>
                     <include name="Intrinsic/Sti.cs"/>
                     <include name="Intrinsic/TestMethod.cs"/>
+                    <include name="Stages/CheckOperandCountStage.cs"/>
                     <include name="Stages/MethodTableBuilderStage.cs"/>
                     <include name="SegmentRegister.cs"/>
                     <include name="Instructions/Branch.cs"/>

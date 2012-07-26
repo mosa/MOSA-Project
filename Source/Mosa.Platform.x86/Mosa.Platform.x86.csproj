@@ -141,6 +141,7 @@
     <Compile Include="Intrinsic\Out.cs" />
     <Compile Include="Intrinsic\Sti.cs" />
     <Compile Include="Intrinsic\TestMethod.cs" />
+    <Compile Include="Stages\CheckOperandCountStage.cs" />
     <Compile Include="Stages\MethodTableBuilderStage.cs" />
     <Compile Include="SegmentRegister.cs" />
     <Compile Include="Instructions\Branch.cs" />

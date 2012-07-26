@@ -144,8 +144,6 @@ namespace Mosa.Kernel.x86
 				Native.Set8(_buffer + _index, b);
 				_index++;
 
-				//SendNumber((int)_index);
-
 				if (_index == 1 && Native.Get8(_buffer) != (byte)'M')
 					BadDataAbort();
 				else if (_index == 2 && Native.Get8(_buffer + 1) != (byte)'O')

@@ -34,7 +34,7 @@ namespace Mosa.Compiler.Framework
 
 		private int localVariableCount = 0;
 
-		private int stackLocalTempCount = 0;	
+		private int stackLocalTempCount = 0;
 
 		#endregion // Data members
 
@@ -86,18 +86,12 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		/// <param name="type">The type.</param>
 		/// <returns></returns>
-		public Operand AllocateStackOperand(SigType type, bool localVariable)
+		public Operand AllocateLocalVariableOperand(SigType type)
 		{
 			Operand stackOperand;
 
-			if (localVariable)
-			{
-				stackOperand = Operand.CreateLocalVariable(type, architecture.StackFrameRegister, ++localVariableCount, null);
-			}
-			else
-			{
-				stackOperand = Operand.CreateStackLocalTemp(type, architecture.StackFrameRegister, ++stackLocalTempCount);
-			}
+			stackOperand = Operand.CreateLocalVariable(type, architecture.StackFrameRegister, ++localVariableCount, null);
+			//stackOperand = Operand.CreateStackLocalTemp(type, architecture.StackFrameRegister, ++stackLocalTempCount);
 
 			stack.Add(stackOperand);
 

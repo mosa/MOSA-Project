@@ -199,7 +199,7 @@ namespace Mosa.Platform.x86
 			methodCompilerPipeline.InsertAfterLast<PlatformStubStage>(
 				new IMethodCompilerStage[]
 				{
-					//new IntrinsicTransformationStage(),
+					new CheckOperandCountStage(),
 					new LongOperandTransformationStage(),
 					new AddressModeConversionStage(),
 					new IRTransformationStage(),
@@ -211,9 +211,12 @@ namespace Mosa.Platform.x86
 				new SimplePeepholeOptimizationStage()
 			);
 
-			methodCompilerPipeline.InsertAfterLast<CodeGenerationStage>(
-				new ExceptionLayoutStage()
-			);
+			// Disabled for now
+			//methodCompilerPipeline.InsertAfterLast<CodeGenerationStage>(
+			//    new ExceptionLayoutStage()
+			//);
+
+			//methodCompilerPipeline.Add(new ExceptionLayoutStage());
 		}
 		
 		/// <summary>

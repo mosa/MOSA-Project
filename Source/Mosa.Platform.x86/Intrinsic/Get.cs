@@ -31,10 +31,10 @@ namespace Mosa.Platform.x86.Intrinsic
 		{
 			Operand result = context.Result;
 
-			Operand tmp = Operand.CreateCPURegister(BuiltInSigType.Ptr, GeneralPurposeRegister.EDX);
-			Operand operand = Operand.CreateMemoryAddress(context.Operand1.Type, GeneralPurposeRegister.EDX, new System.IntPtr(0));
+			Operand edx = Operand.CreateCPURegister(BuiltInSigType.Ptr, GeneralPurposeRegister.EDX); // FIXME - need access to virtual register allocator
+			Operand operand = Operand.CreateMemoryAddress(context.Operand1.Type, edx, new System.IntPtr(0));
 
-			context.SetInstruction(X86.Mov, tmp, context.Operand1);
+			context.SetInstruction(X86.Mov, edx, context.Operand1);
 			context.AppendInstruction(X86.Mov, result, operand);
 		}
 

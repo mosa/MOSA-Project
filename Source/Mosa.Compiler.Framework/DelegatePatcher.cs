@@ -79,11 +79,11 @@ namespace Mosa.Compiler.Framework
 			int instanceOffset = methodCompiler.TypeLayout.GetFieldOffset(instanceField);
 			Operand instanceOffsetOperand = Operand.CreateConstant(BuiltInSigType.IntPtr, instanceOffset);
 
-			Operand opMethod = methodCompiler.StackLayout.AllocateStackOperand(BuiltInSigType.UInt32, false);
-			Operand opInstance = methodCompiler.StackLayout.AllocateStackOperand(thisOperand.Type, false);
-			Operand opCompare = methodCompiler.StackLayout.AllocateStackOperand(BuiltInSigType.Int32, false);
+			Operand opMethod = methodCompiler.VirtualRegisters.Allocate(BuiltInSigType.UInt32);
+			Operand opInstance = methodCompiler.VirtualRegisters.Allocate(thisOperand.Type);
+			Operand opCompare = methodCompiler.VirtualRegisters.Allocate(BuiltInSigType.Int32);
 
-			Operand opReturn = withReturn ? methodCompiler.StackLayout.AllocateStackOperand(BuiltInSigType.Object, false) : null;
+			Operand opReturn = withReturn ? methodCompiler.VirtualRegisters.Allocate(BuiltInSigType.Object) : null;
 			Operand c0 = Operand.CreateConstant(BuiltInSigType.Int32, 0);
 
 			Context b0 = CreateMethodStructure(methodCompiler, false);

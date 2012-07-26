@@ -28,12 +28,12 @@
                     <include name="CompilationScheduler.cs"/>
                     <include name="Stages/PlatformIntrinsicTransformationStage.cs"/>
                     <include name="Stages/PlugSystem.cs"/>
-                    <include name="Stages/IRCheckStage.cs"/>
+                    <include name="Stages/CheckIROperandCountStage.cs"/>
                     <include name="Stages/LoopAwareBlockOrderStage.cs"/>
                     <include name="Stages/SSAOptimizations.cs"/>
                     <include name="Stages/EdgeSplitStage.cs"/>
                     <include name="Stages/SimpleRegisterAllocatorStage.cs"/>
-                    <include name="VirtualRegisterLayout.cs"/>
+                    <include name="VirtualRegisters.cs"/>
                     <include name="Stages/TypeSchedulerStage.cs"/>
                     <include name="BaseCodeEmitter.cs"/>
                     <include name="BaseInstruction.cs"/>

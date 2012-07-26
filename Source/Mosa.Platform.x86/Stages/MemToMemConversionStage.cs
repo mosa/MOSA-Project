@@ -76,7 +76,7 @@ namespace Mosa.Platform.x86.Stages
 			if (RequiresSseOperation(destinationSigType))
 			{
 				BaseInstruction moveInstruction = GetMoveInstruction(destinationSigType);
-				Operand destinationRegister = AllocateRegister(destinationSigType);
+				Operand destinationRegister = AllocateVirtualRegister(destinationSigType);
 
 				ctx.Result = destinationRegister;
 				ctx.AppendInstruction(moveInstruction, destination, destinationRegister);
@@ -85,7 +85,7 @@ namespace Mosa.Platform.x86.Stages
 			{
 				SigType sourceSigType = source.Type;
 				BaseInstruction moveInstruction = GetMoveInstruction(sourceSigType);
-				Operand sourceRegister = AllocateRegister(sourceSigType);
+				Operand sourceRegister = AllocateVirtualRegister(sourceSigType);
 
 				ctx.Operand1 = sourceRegister;
 
@@ -105,7 +105,7 @@ namespace Mosa.Platform.x86.Stages
 			if (RequiresSseOperation(destinationSigType))
 			{
 				BaseInstruction moveInstruction = GetMoveInstruction(destinationSigType);
-				Operand destinationRegister = AllocateRegister(destinationSigType);
+				Operand destinationRegister = AllocateVirtualRegister(destinationSigType);
 
 				ctx.Operand1 = destinationRegister;
 				ctx.AppendInstruction(moveInstruction, destination, destinationRegister);
@@ -114,7 +114,7 @@ namespace Mosa.Platform.x86.Stages
 			{
 				SigType sourceSigType = source.Type;
 				BaseInstruction moveInstruction = GetMoveInstruction(sourceSigType);
-				Operand sourceRegister = AllocateRegister(sourceSigType);
+				Operand sourceRegister = AllocateVirtualRegister(sourceSigType);
 
 				ctx.Operand2 = sourceRegister;
 				ctx.InsertBefore().SetInstruction(moveInstruction, sourceRegister, source);
@@ -150,19 +150,7 @@ namespace Mosa.Platform.x86.Stages
 
 			return moveInstruction;
 		}
-
-		private Operand AllocateRegister(SigType sigType)
-		{
-			if (RequiresSseOperation(sigType))
-			{
-				return Operand.CreateCPURegister(sigType, SSE2Register.XMM6);
-			}
-			else
-			{
-				return Operand.CreateCPURegister(sigType, GeneralPurposeRegister.EAX);
-			}
-		}
-
+		
 		private bool RequiresSseOperation(SigType sigType)
 		{
 			return sigType.Type == CilElementType.R4

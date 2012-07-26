@@ -31,11 +31,11 @@ namespace Mosa.Platform.x86.Intrinsic
 		{
 			Operand result = context.Result;
 			SigType u4 = BuiltInSigType.UInt32;
-			Operand eax = Operand.CreateCPURegister(u4, GeneralPurposeRegister.EAX);
+			Operand eax = Operand.CreateCPURegister(u4, GeneralPurposeRegister.EAX);// FIXME - need access to virtual register allocator
 
 			context.SetInstruction(X86.Pop, eax);
 			context.AppendInstruction(X86.Add, eax, Operand.CreateCPURegister(u4, GeneralPurposeRegister.ESP));
-			context.AppendInstruction(X86.Mov, eax, Operand.CreateMemoryAddress(u4, GeneralPurposeRegister.EAX, new IntPtr(0)));
+			context.AppendInstruction(X86.Mov, eax, Operand.CreateMemoryAddress(u4, eax, new IntPtr(0)));
 			context.AppendInstruction(X86.Mov, result, eax);
 			context.AppendInstruction(X86.Push, null, eax);
 		}

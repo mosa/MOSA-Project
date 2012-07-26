@@ -48,7 +48,7 @@ namespace Mosa.Platform.x86.Stages
 				return;
 			}
 
-			Debug.Assert(operand.IsMemoryAddress || operand.IsConstant, @"Long operand not memory or constant.");
+			//Debug.Assert(operand.IsMemoryAddress || operand.IsConstant, @"Long operand not memory or constant.");
 
 			if (operand.IsConstant)
 			{
@@ -93,8 +93,8 @@ namespace Mosa.Platform.x86.Stages
 			else
 			{
 				// Plain memory, we can handle it here
-				operandLow = Operand.CreateMemoryAddress(BuiltInSigType.UInt32, operand.Base, operand.Offset);
-				operandHigh = Operand.CreateMemoryAddress(HighType, operand.Base, new IntPtr(operand.Offset.ToInt64() + 4));
+				operandLow = Operand.CreateMemoryAddress(BuiltInSigType.UInt32, operand.OffsetBase, operand.Offset);
+				operandHigh = Operand.CreateMemoryAddress(HighType, operand.OffsetBase, new IntPtr(operand.Offset.ToInt64() + 4));
 			}
 		}
 
@@ -124,8 +124,8 @@ namespace Mosa.Platform.x86.Stages
 			SplitLongOperand(context.Operand2, out op2L, out op2H);
 			SplitLongOperand(context.Result, out resL, out resH);
 
-			Operand eaxH = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.EAX);
-			Operand eaxL = Operand.CreateCPURegister(BuiltInSigType.UInt32, GeneralPurposeRegister.EAX);
+			Operand eaxH = AllocateVirtualRegister(BuiltInSigType.Int32);
+			Operand eaxL = AllocateVirtualRegister(BuiltInSigType.UInt32);
 
 			context.SetInstruction(X86.Mov, eaxL, op1L);
 			context.AppendInstruction(X86.Add, eaxL, op2L);
@@ -155,8 +155,8 @@ namespace Mosa.Platform.x86.Stages
 			// This only works for memory operands (can't store I8/U8 in a register.)
 			// This fails for constant operands right now, which need to be extracted into memory
 			// with a literal/literal operand first - TODO
-			Operand eaxH = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.EAX);
-			Operand eaxL = Operand.CreateCPURegister(BuiltInSigType.UInt32, GeneralPurposeRegister.EAX);
+			Operand eaxH = AllocateVirtualRegister(BuiltInSigType.Int32);
+			Operand eaxL = AllocateVirtualRegister(BuiltInSigType.UInt32);
 
 			Operand op1L, op1H, op2L, op2H, resL, resH;
 			SplitLongOperand(context.Operand1, out op1L, out op1H);
@@ -187,10 +187,10 @@ namespace Mosa.Platform.x86.Stages
 			SplitLongOperand(context.Operand1, out op1L, out op1H);
 			SplitLongOperand(context.Operand2, out op2L, out op2H);
 
-			Operand eax = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.EAX);
-			Operand ebx = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.EBX);
-			Operand ecx = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.ECX);
-			Operand edx = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.EDX);
+			Operand eax = AllocateVirtualRegister(BuiltInSigType.Int32);
+			Operand ebx = AllocateVirtualRegister(BuiltInSigType.Int32);
+			Operand ecx = AllocateVirtualRegister(BuiltInSigType.Int32);
+			Operand edx = AllocateVirtualRegister(BuiltInSigType.Int32);
 
 			Context nextBlock = SplitContext(context, false);
 			Context[] newBlocks = CreateEmptyBlockContexts(context.Label, 4);
@@ -245,16 +245,16 @@ namespace Mosa.Platform.x86.Stages
 			Context[] newBlocks = CreateEmptyBlockContexts(context.Label, 17);
 			Context nextBlock = SplitContext(context, false);
 
-			Operand eax = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.EAX);
-			Operand ebx = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.EBX);
-			Operand edx = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.EDX);
-			Operand ecx = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.ECX);
-			Operand edi = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.EDI);
-			Operand esi = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.ESI);
+			Operand eax = AllocateVirtualRegister(BuiltInSigType.Int32);
+			Operand ebx = AllocateVirtualRegister(BuiltInSigType.Int32);
+			Operand edx = AllocateVirtualRegister(BuiltInSigType.Int32);
+			Operand ecx = AllocateVirtualRegister(BuiltInSigType.Int32);
+			Operand edi = AllocateVirtualRegister(BuiltInSigType.Int32);
+			Operand esi = AllocateVirtualRegister(BuiltInSigType.Int32);
 
-			Operand ueax = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.EAX);
-			Operand uedx = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.EDX);
-			Operand uecx = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.ECX);
+			Operand ueax = AllocateVirtualRegister(BuiltInSigType.Int32);
+			Operand uedx = AllocateVirtualRegister(BuiltInSigType.Int32);
+			Operand uecx = AllocateVirtualRegister(BuiltInSigType.Int32);
 
 			// ; Determine sign of the result (edi = 0 if result is positive, non-zero
 			// ; otherwise) and make operands positive.
@@ -482,12 +482,12 @@ namespace Mosa.Platform.x86.Stages
 			SplitLongOperand(context.Result, out op0L, out op0H);
 			SplitLongOperand(context.Operand1, out op1L, out op1H);
 			SplitLongOperand(context.Operand2, out op2L, out op2H);
-			Operand eax = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.EAX);
-			Operand ebx = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.EBX);
-			Operand edx = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.EDX);
-			Operand ecx = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.ECX);
-			Operand edi = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.EDI);
-			Operand esi = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.ESI);
+			Operand eax = AllocateVirtualRegister(BuiltInSigType.Int32);
+			Operand ebx = AllocateVirtualRegister(BuiltInSigType.Int32);
+			Operand edx = AllocateVirtualRegister(BuiltInSigType.Int32);
+			Operand ecx = AllocateVirtualRegister(BuiltInSigType.Int32);
+			Operand edi = AllocateVirtualRegister(BuiltInSigType.Int32);
+			Operand esi = AllocateVirtualRegister(BuiltInSigType.Int32);
 
 			Context[] newBlocks = CreateEmptyBlockContexts(context.Label, 16);
 			Context nextBlock = SplitContext(context, false);
@@ -723,12 +723,12 @@ namespace Mosa.Platform.x86.Stages
 			SplitLongOperand(context.Result, out op0L, out op0H);
 			SplitLongOperand(context.Operand1, out op1L, out op1H);
 			SplitLongOperand(context.Operand2, out op2L, out op2H);
-			Operand eax = Operand.CreateCPURegister(BuiltInSigType.UInt32, GeneralPurposeRegister.EAX);
-			Operand ebx = Operand.CreateCPURegister(BuiltInSigType.UInt32, GeneralPurposeRegister.EBX);
-			Operand edx = Operand.CreateCPURegister(BuiltInSigType.UInt32, GeneralPurposeRegister.EDX);
-			Operand ecx = Operand.CreateCPURegister(BuiltInSigType.UInt32, GeneralPurposeRegister.ECX);
-			Operand edi = Operand.CreateCPURegister(BuiltInSigType.UInt32, GeneralPurposeRegister.EDI);
-			Operand esi = Operand.CreateCPURegister(BuiltInSigType.UInt32, GeneralPurposeRegister.ESI);
+			Operand eax = AllocateVirtualRegister(BuiltInSigType.UInt32);
+			Operand ebx = AllocateVirtualRegister(BuiltInSigType.UInt32);
+			Operand edx = AllocateVirtualRegister(BuiltInSigType.UInt32);
+			Operand ecx = AllocateVirtualRegister(BuiltInSigType.UInt32);
+			Operand edi = AllocateVirtualRegister(BuiltInSigType.UInt32);
+			Operand esi = AllocateVirtualRegister(BuiltInSigType.UInt32);
 
 			Context[] newBlocks = CreateEmptyBlockContexts(context.Label, 12);
 			Context nextBlock = SplitContext(context, false);
@@ -830,12 +830,12 @@ namespace Mosa.Platform.x86.Stages
 			SplitLongOperand(context.Result, out op0L, out op0H);
 			SplitLongOperand(context.Operand1, out op1L, out op1H);
 			SplitLongOperand(context.Operand2, out op2L, out op2H);
-			Operand eax = Operand.CreateCPURegister(BuiltInSigType.UInt32, GeneralPurposeRegister.EAX);
-			Operand ebx = Operand.CreateCPURegister(BuiltInSigType.UInt32, GeneralPurposeRegister.EBX);
-			Operand edx = Operand.CreateCPURegister(BuiltInSigType.UInt32, GeneralPurposeRegister.EDX);
-			Operand ecx = Operand.CreateCPURegister(BuiltInSigType.UInt32, GeneralPurposeRegister.ECX);
-			Operand edi = Operand.CreateCPURegister(BuiltInSigType.UInt32, GeneralPurposeRegister.EDI);
-			Operand esi = Operand.CreateCPURegister(BuiltInSigType.UInt32, GeneralPurposeRegister.ESI);
+			Operand eax = AllocateVirtualRegister(BuiltInSigType.UInt32);
+			Operand ebx = AllocateVirtualRegister(BuiltInSigType.UInt32);
+			Operand edx = AllocateVirtualRegister(BuiltInSigType.UInt32);
+			Operand ecx = AllocateVirtualRegister(BuiltInSigType.UInt32);
+			Operand edi = AllocateVirtualRegister(BuiltInSigType.UInt32);
+			Operand esi = AllocateVirtualRegister(BuiltInSigType.UInt32);
 
 			Context[] newBlocks = CreateEmptyBlockContexts(context.Label, 11);
 			Context nextBlock = SplitContext(context, false);
@@ -955,9 +955,9 @@ namespace Mosa.Platform.x86.Stages
 			Operand op0H, op1H, op0L, op1L;
 			SplitLongOperand(context.Result, out op0L, out op0H);
 			SplitLongOperand(context.Operand1, out op1L, out op1H);
-			Operand eax = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.EAX);
-			Operand edx = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.EDX);
-			Operand ecx = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.ECX);
+			Operand eax = AllocateVirtualRegister(BuiltInSigType.Int32);
+			Operand edx = AllocateVirtualRegister(BuiltInSigType.Int32);
+			Operand ecx = AllocateVirtualRegister(BuiltInSigType.Int32);
 
 			Context[] newBlocks = CreateEmptyBlockContexts(context.Label, 6);
 			Context nextBlock = SplitContext(context, false);
@@ -1024,11 +1024,11 @@ namespace Mosa.Platform.x86.Stages
 			Operand op0H, op1H, op0L, op1L;
 			SplitLongOperand(context.Result, out op0L, out op0H);
 			SplitLongOperand(context.Operand1, out op1L, out op1H);
-			Operand eax = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.EAX);
-			Operand edx = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.EDX);
-			Operand ecx = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.ECX);
+			Operand eax = AllocateVirtualRegister(BuiltInSigType.Int32);
+			Operand edx = AllocateVirtualRegister(BuiltInSigType.Int32);
+			Operand ecx = AllocateVirtualRegister(BuiltInSigType.Int32);
 
-			Operand cl = Operand.CreateCPURegister(BuiltInSigType.Byte, GeneralPurposeRegister.ECX);
+			Operand cl = AllocateVirtualRegister(BuiltInSigType.Byte);
 
 			Context nextBlock = SplitContext(context, false);
 			Context[] newBlocks = CreateEmptyBlockContexts(context.Label, 6);
@@ -1095,9 +1095,9 @@ namespace Mosa.Platform.x86.Stages
 			Operand op0H, op1H, op0L, op1L;
 			SplitLongOperand(context.Operand1, out op0L, out op0H);
 			SplitLongOperand(context.Operand2, out op1L, out op1H);
-			Operand eax = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.EAX);
-			Operand edx = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.EDX);
-			Operand ecx = Operand.CreateCPURegister(BuiltInSigType.Byte, GeneralPurposeRegister.ECX);
+			Operand eax = AllocateVirtualRegister(BuiltInSigType.Int32);
+			Operand edx = AllocateVirtualRegister(BuiltInSigType.Int32);
+			Operand ecx = AllocateVirtualRegister(BuiltInSigType.Byte);
 
 			Context[] newBlocks = CreateEmptyBlockContexts(context.Label, 6);
 			Context nextBlock = SplitContext(context, false);
@@ -1176,7 +1176,7 @@ namespace Mosa.Platform.x86.Stages
 			SplitLongOperand(context.Result, out op0L, out op0H);
 			SplitLongOperand(context.Operand1, out op1L, out op1H);
 
-			Operand eax = Operand.CreateCPURegister(BuiltInSigType.UInt32, GeneralPurposeRegister.EAX);
+			Operand eax = AllocateVirtualRegister(BuiltInSigType.UInt32);
 
 			context.SetInstruction(X86.Mov, eax, op1H);
 			context.AppendInstruction(X86.Not, eax, eax);
@@ -1277,13 +1277,13 @@ namespace Mosa.Platform.x86.Stages
 		{
 			Operand op0 = context.Result;
 			Operand op1 = context.Operand1;
-			Debug.Assert(op0.IsMemoryAddress, @"I8 not in a memory operand!");
+			//Debug.Assert(op0.IsMemoryAddress, @"I8 not in a memory operand!");
 
 			Operand op0L, op0H, op1L, op1H;
 			SplitLongOperand(op0, out op0L, out op0H);
 			SplitLongOperand(op1, out op1L, out op1H);
-			Operand eax = Operand.CreateCPURegister(BuiltInSigType.UInt32, GeneralPurposeRegister.EAX);
-			Operand edx = Operand.CreateCPURegister(BuiltInSigType.UInt32, GeneralPurposeRegister.EDX);
+			Operand eax = AllocateVirtualRegister(BuiltInSigType.UInt32);
+			Operand edx = AllocateVirtualRegister(BuiltInSigType.UInt32);
 
 			switch (op1.Type.Type)
 			{
@@ -1343,8 +1343,8 @@ namespace Mosa.Platform.x86.Stages
 
 			Operand op0L, op0H;
 			SplitLongOperand(op0, out op0L, out op0H);
-			Operand eax = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.EAX);
-			Operand edx = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.EDX);
+			Operand eax = AllocateVirtualRegister(BuiltInSigType.Int32);
+			Operand edx = AllocateVirtualRegister(BuiltInSigType.Int32);
 
 			switch (op1.Type.Type)
 			{
@@ -1413,14 +1413,14 @@ namespace Mosa.Platform.x86.Stages
 			Operand op0L, op0H;
 			SplitLongOperand(op0, out op0L, out op0H);
 
-			Operand eax = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.EAX);
-			Operand edx = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.EDX);
+			Operand eax = AllocateVirtualRegister(BuiltInSigType.Int32);
+			Operand edx = AllocateVirtualRegister(BuiltInSigType.Int32);
 
 			context.SetInstruction(X86.Mov, eax, op1);
 			context.AppendInstruction(X86.Add, eax, offsetOperand);
-			context.AppendInstruction(X86.Mov, edx, Operand.CreateMemoryAddress(op0L.Type, GeneralPurposeRegister.EAX, IntPtr.Zero));
+			context.AppendInstruction(X86.Mov, edx, Operand.CreateMemoryAddress(op0L.Type, eax, IntPtr.Zero));
 			context.AppendInstruction(X86.Mov, op0L, edx);
-			context.AppendInstruction(X86.Mov, edx, Operand.CreateMemoryAddress(op0H.Type, GeneralPurposeRegister.EAX, new IntPtr(4)));
+			context.AppendInstruction(X86.Mov, edx, Operand.CreateMemoryAddress(op0H.Type, eax, new IntPtr(4)));
 			context.AppendInstruction(X86.Mov, op0H, edx);
 		}
 
@@ -1430,7 +1430,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		private void ExpandStore(Context context)
 		{
-			Debug.Assert(context.Operand1.IsMemoryAddress && context.Operand3.IsMemoryAddress, @"Operands to I8 LoadInstruction are not MemoryOperand.");
+			//Debug.Assert(context.Operand1.IsMemoryAddress && context.Operand3.IsMemoryAddress, @"Operands to I8 LoadInstruction are not MemoryOperand.");
 
 			Operand op0 = context.Operand1;
 			Operand op2 = context.Operand3;
@@ -1438,8 +1438,8 @@ namespace Mosa.Platform.x86.Stages
 
 			Operand op1L, op1H;
 			SplitLongOperand(op2, out op1L, out op1H);
-			Operand eax = Operand.CreateCPURegister(BuiltInSigType.UInt32, GeneralPurposeRegister.EAX);
-			Operand edx = Operand.CreateCPURegister(BuiltInSigType.UInt32, GeneralPurposeRegister.EDX);
+			Operand eax = AllocateVirtualRegister(BuiltInSigType.UInt32);
+			Operand edx = AllocateVirtualRegister(BuiltInSigType.UInt32);
 
 			context.SetInstruction(X86.Mov, edx, op0);
 
@@ -1447,9 +1447,9 @@ namespace Mosa.Platform.x86.Stages
 			context.AppendInstruction(X86.Add, edx, offsetOperand);
 
 			context.AppendInstruction(X86.Mov, eax, op1L);
-			context.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(BuiltInSigType.UInt32, GeneralPurposeRegister.EDX, IntPtr.Zero), eax);
+			context.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(BuiltInSigType.UInt32, edx, IntPtr.Zero), eax);
 			context.AppendInstruction(X86.Mov, eax, op1H);
-			context.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(BuiltInSigType.Int32, GeneralPurposeRegister.EDX, new IntPtr(4)), eax);
+			context.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(BuiltInSigType.Int32, edx, new IntPtr(4)), eax);
 		}
 
 		/// <summary>
@@ -1827,7 +1827,7 @@ namespace Mosa.Platform.x86.Stages
 				//FIXME: Move to IRTransformationStage
 				if (context.Operand2.IsConstant && context.Operand1.Type.Type == CilElementType.Char)
 				{
-					Operand ecx = Operand.CreateCPURegister(context.Operand1.Type, GeneralPurposeRegister.ECX);
+					Operand ecx = AllocateVirtualRegister(context.Operand1.Type);
 					context.InsertBefore().SetInstruction(X86.Mov, ecx, context.Operand2);
 					context.Operand2 = ecx;
 				}

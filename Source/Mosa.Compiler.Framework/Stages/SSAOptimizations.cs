@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.Metadata;
+using Mosa.Compiler.Common;
 
 namespace Mosa.Compiler.Framework.Stages
 {
@@ -23,6 +24,8 @@ namespace Mosa.Compiler.Framework.Stages
 		private int instructionsRemoved = 0;
 
 		private Stack<int> worklist = new Stack<int>();
+
+		private List<Operand> localVariablesInExceptions = new List<Operand>();
 
 		#region IMethodCompilerStage Members
 
@@ -130,16 +133,38 @@ namespace Mosa.Compiler.Framework.Stages
 		}
 
 		/// <summary>
-		/// Gets the base operand.
+		/// Collects the variables in exceptions.
 		/// </summary>
-		/// <param name="operand">The operand.</param>
-		/// <returns></returns>
-		private Operand GetBaseOperand(Operand operand)
+		private void CollectVariablesInExceptions()
 		{
-			if (operand.IsSSA)
-				return operand.SsaOperand;
-			else
-				return operand;
+			if (basicBlocks.HeadBlocks.Count == 1)
+				return;
+
+			foreach (var head in basicBlocks.HeadBlocks)
+			{
+				if (head == basicBlocks.PrologueBlock)
+					continue;
+
+				foreach (BasicBlock block in basicBlocks.GetConnectedBlocksStartingAtHead(head))
+				{
+					for (Context ctx = new Context(instructionSet, block); !ctx.EndOfInstruction; ctx.GotoNext())
+					{
+						if (ctx.IsEmpty)
+							continue;
+
+						foreach (var operand in ctx.Operands)
+							if (operand.IsLocalVariable)
+								localVariablesInExceptions.AddIfNew(operand);
+
+						if (ctx.Result.IsLocalVariable)
+							localVariablesInExceptions.AddIfNew(ctx.Result);
+					}
+
+					// quick out
+					if (localVariablesInExceptions.Count == methodCompiler.StackLayout.LocalVariableCount)
+						return;
+				}
+			}
 		}
 
 		/// <summary>
@@ -167,8 +192,9 @@ namespace Mosa.Compiler.Framework.Stages
 			if (context.Result.Uses.Count != 0 || context.Instruction is IR.Call || context.Instruction is IR.IntrinsicMethodCall)
 				return;
 
-			if (!context.Result.IsStackLocal)
-				return;
+			if (context.Result.IsLocalVariable)
+				if (localVariablesInExceptions.Contains(context.Result))
+					return;
 
 			if (IsLogging) Trace("REMOVED:\t" + context.ToString());
 			AddOperandUsageToWorkList(context);
@@ -247,8 +273,12 @@ namespace Mosa.Compiler.Framework.Stages
 			if (context.Operand1.IsConstant)
 				return;
 
-			if (!context.Result.IsStackLocal)
-				return;
+			if (context.Result.IsLocalVariable)
+				if (localVariablesInExceptions.Contains(context.Result))
+					return;
+			
+			//if (!context.Result.IsVirtualRegister)
+			//    return;
 
 			// FIXME: does not work on ptr or I4 types - probably because of signed extension, or I8/U8 - probably because 64-bit
 			if (!(CanCopyPropagation(context.Result) && CanCopyPropagation(context.Operand1)))
@@ -276,9 +306,6 @@ namespace Mosa.Compiler.Framework.Stages
 			foreach (int index in destinationOperand.Uses.ToArray())
 			{
 				Context ctx = new Context(instructionSet, index);
-
-				if (ctx.Instruction is IR.AddressOf || ctx.Instruction is IR.Phi)
-					continue;
 
 				for (int i = 0; i < ctx.OperandCount; i++)
 				{
@@ -849,6 +876,9 @@ namespace Mosa.Compiler.Framework.Stages
 			else if (value is float)
 				return (float)value == 0;
 
+			else if (value == null) // REVIEW
+				return true;
+
 			throw new CompilationException("unknown type");
 		}
 
@@ -884,6 +914,9 @@ namespace Mosa.Compiler.Framework.Stages
 				return (double)value == 1;
 			else if (value is float)
 				return (float)value == 1;
+
+			else if (value == null) // REVIEW
+				return false;
 
 			throw new CompilationException("unknown type");
 		}

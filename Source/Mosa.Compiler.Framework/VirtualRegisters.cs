@@ -7,6 +7,7 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using System.Collections;
 using System.Collections.Generic;
 using Mosa.Compiler.Metadata.Signatures;
 
@@ -15,32 +16,26 @@ namespace Mosa.Compiler.Framework
 	/// <summary>
 	/// Contains the layout of the stack
 	/// </summary>
-	public sealed class VirtualRegisterLayout
+	public sealed class VirtualRegisters : IEnumerable<Operand>
 	{
 
 		#region Data members
 
-		private IArchitecture architecture;
-
 		private List<Operand> virtualRegisters = new List<Operand>();
-
-		private StackLayout stackLayout;
 
 		#endregion // Data members
 
 		#region Properties
 
+		public int Count { get { return virtualRegisters.Count; } }
+
 		#endregion // Properties
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="VirtualRegisterLayout"/> class.
+		/// Initializes a new instance of the <see cref="VirtualRegisters"/> class.
 		/// </summary>
-		/// <param name="architecture">The architecture.</param>
-		/// <param name="stackLayout">The stack layout.</param>
-		public VirtualRegisterLayout(IArchitecture architecture, StackLayout stackLayout)
+		public VirtualRegisters()
 		{
-			this.architecture = architecture;
-			this.stackLayout = stackLayout;
 		}
 
 		/// <summary>
@@ -48,7 +43,7 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		/// <param name="type">The type.</param>
 		/// <returns></returns>
-		public Operand AllocateVirtualRegister(SigType type)
+		public Operand Allocate(SigType type)
 		{
 			Operand virtualRegister = Operand.CreateVirtualRegister(type, virtualRegisters.Count + 1);
 
@@ -58,5 +53,17 @@ namespace Mosa.Compiler.Framework
 		}
 
 
+		public IEnumerator<Operand> GetEnumerator()
+		{
+			foreach (var virtualRegister in virtualRegisters)
+			{
+				yield return virtualRegister;
+			}
+		}
+
+		IEnumerator IEnumerable.GetEnumerator()
+		{
+			return GetEnumerator();
+		}
 	}
 }

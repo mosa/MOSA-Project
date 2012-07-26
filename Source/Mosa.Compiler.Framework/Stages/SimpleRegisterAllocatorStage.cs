@@ -98,8 +98,6 @@ namespace Mosa.Compiler.Framework.Stages
 				RegisterBitmap outputRegisters = new RegisterBitmap();
 
 				GetRegisterUsage(ctx, ref inputRegisters, ref outputRegisters);
-
-
 			}
 
 			return current;

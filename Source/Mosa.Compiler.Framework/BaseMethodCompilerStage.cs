@@ -158,7 +158,7 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		protected Operand AllocateVirtualRegister(SigType type)
 		{
-			return methodCompiler.VirtualRegisterLayout.AllocateVirtualRegister(type);
+			return methodCompiler.VirtualRegisters.Allocate(type);
 		}
 
 		#endregion

@@ -41,7 +41,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Converts the given instruction from three address format to a two address format.
 		/// </summary>
 		/// <param name="ctx">The conversion context.</param>
-		private static void ThreeTwoAddressConversion(Context ctx)
+		private void ThreeTwoAddressConversion(Context ctx)
 		{
 			if (!(ctx.Instruction is BaseIRInstruction))
 				return;
@@ -61,11 +61,11 @@ namespace Mosa.Platform.x86.Stages
 			Operand op1 = ctx.Operand1;
 			Operand op2 = ctx.Operand2;
 
-			// Create registers for different data types
-			Operand eax = Operand.CreateCPURegister(op1.Type, op1.StackType == StackTypeCode.F ? (Register)SSE2Register.XMM0 : GeneralPurposeRegister.EAX);
-			Operand storeOperand = Operand.CreateCPURegister(result.Type, result.StackType == StackTypeCode.F ? (Register)SSE2Register.XMM0 : GeneralPurposeRegister.EAX);
+			// Create registers for different data types			
+			Operand v1 = AllocateVirtualRegister(op1.Type);
+			Operand v2 = AllocateVirtualRegister(result.Type);
 
-			ctx.Result = storeOperand;
+			ctx.Result = v2;
 			ctx.Operand1 = op2;
 			ctx.Operand2 = null;
 			ctx.OperandCount = 1;
@@ -73,11 +73,11 @@ namespace Mosa.Platform.x86.Stages
 			if (op1.StackType != StackTypeCode.F)
 			{
 				if (IsSigned(op1) && !(op1.IsConstant))
-					ctx.InsertBefore().SetInstruction(IRInstruction.SignExtendedMove, eax, op1);
+					ctx.InsertBefore().SetInstruction(IRInstruction.SignExtendedMove, v1, op1);
 				else if (IsUnsigned(op1) && !(op1.IsConstant))
-					ctx.InsertBefore().SetInstruction(IRInstruction.ZeroExtendedMove, eax, op1);
+					ctx.InsertBefore().SetInstruction(IRInstruction.ZeroExtendedMove, v1, op1);
 				else
-					ctx.InsertBefore().SetInstruction(X86.Mov, eax, op1);
+					ctx.InsertBefore().SetInstruction(X86.Mov, v1, op1);
 			}
 			else
 			{
@@ -86,21 +86,21 @@ namespace Mosa.Platform.x86.Stages
 					if (op1.IsConstant)
 					{
 						Context before = ctx.InsertBefore();
-						before.SetInstruction(X86.Mov, eax, op1);
-						before.AppendInstruction(X86.Cvtss2sd, eax, eax);
+						before.SetInstruction(X86.Mov, v1, op1);
+						before.AppendInstruction(X86.Cvtss2sd, v1, v1);
 					}
 					else
 					{
-						ctx.InsertBefore().SetInstruction(X86.Cvtss2sd, eax, op1);
+						ctx.InsertBefore().SetInstruction(X86.Cvtss2sd, v1, op1);
 					}
 				}
 				else
 				{
-					ctx.InsertBefore().SetInstruction(X86.Mov, eax, op1);
+					ctx.InsertBefore().SetInstruction(X86.Mov, v1, op1);
 				}
 			}
 
-			ctx.AppendInstruction(X86.Mov, result, eax);
+			ctx.AppendInstruction(X86.Mov, result, v1);
 		}
 
 	}

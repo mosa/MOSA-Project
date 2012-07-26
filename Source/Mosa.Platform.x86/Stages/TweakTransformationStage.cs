@@ -9,6 +9,7 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using System.Diagnostics;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Platform;
 using Mosa.Compiler.Metadata;
@@ -30,11 +31,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="ctx">The context.</param>
 		void IX86Visitor.Mov(Context ctx)
 		{
-			if (ctx.Result.IsConstant)
-			{
-				ctx.SetInstruction(X86.Nop);
-				return;
-			}
+			Debug.Assert(!ctx.Result.IsConstant);			
 
 			if (ctx.Operand1.IsConstant && ctx.Operand1.StackType == StackTypeCode.F)
 				ctx.Operand1 = EmitConstant(ctx.Operand1);
@@ -55,7 +52,7 @@ namespace Mosa.Platform.x86.Stages
 		{
 			if (ctx.Operand1.IsConstant)
 			{
-				Operand ecx = Operand.CreateCPURegister(ctx.Operand1.Type, GeneralPurposeRegister.ECX);
+				Operand ecx = AllocateVirtualRegister(ctx.Operand1.Type);
 				Context before = ctx.InsertBefore();
 				before.SetInstruction(X86.Push, null, ecx);
 				before.AppendInstruction(X86.Mov, ecx, ctx.Operand1);
@@ -86,7 +83,7 @@ namespace Mosa.Platform.x86.Stages
 
 			if (!(result.IsRegister))
 			{
-				Operand register = Operand.CreateCPURegister(result.Type, GeneralPurposeRegister.EAX);
+				Operand register = AllocateVirtualRegister(result.Type);
 				ctx.Result = register;
 				ctx.AppendInstruction(X86.Mov, result, register);
 			}
@@ -99,7 +96,7 @@ namespace Mosa.Platform.x86.Stages
 		void IX86Visitor.Cvttss2si(Context ctx)
 		{
 			Operand result = ctx.Result;
-			Operand register = Operand.CreateCPURegister(result.Type, GeneralPurposeRegister.EAX);
+			Operand register = AllocateVirtualRegister(result.Type);
 
 			if (!(result.IsRegister))
 			{
@@ -123,7 +120,7 @@ namespace Mosa.Platform.x86.Stages
 				Operand result = context.Result;
 				if (!(result.IsRegister))
 				{
-					Operand ecx = Operand.CreateCPURegister(context.Result.Type, GeneralPurposeRegister.ECX);
+					Operand ecx = AllocateVirtualRegister(context.Result.Type);
 					context.Result = ecx;
 					context.AppendInstruction(X86.Mov, result, ecx);
 				}
@@ -145,7 +142,7 @@ namespace Mosa.Platform.x86.Stages
 				Operand result = context.Result;
 				if (!(result.IsRegister))
 				{
-					Operand ecx = Operand.CreateCPURegister(context.Result.Type, GeneralPurposeRegister.ECX);
+					Operand ecx = AllocateVirtualRegister(context.Result.Type);
 					context.SetInstruction(X86.Movzx, ecx, context.Operand1);
 					context.AppendInstruction(X86.Mov, result, ecx);
 				}
@@ -162,7 +159,7 @@ namespace Mosa.Platform.x86.Stages
 
 			if (op.IsConstant)
 			{
-				Operand ebx = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.EBX);
+				Operand ebx = AllocateVirtualRegister(BuiltInSigType.Int32);
 				ctx.SetInstruction(X86.Push, null, ebx);
 				ctx.AppendInstruction(X86.Mov, ebx, op);
 				ctx.AppendInstruction(X86.IDiv, ebx);
@@ -185,7 +182,7 @@ namespace Mosa.Platform.x86.Stages
 
 			if (left.IsConstant)
 			{
-				Operand ecx = Operand.CreateCPURegister(left.Type, GeneralPurposeRegister.ECX);
+				Operand ecx = AllocateVirtualRegister(left.Type);
 				Context before = ctx.InsertBefore();
 				before.SetInstruction(X86.Push, null, ecx);
 				before.AppendInstruction(X86.Mov, ecx, left);
@@ -194,7 +191,7 @@ namespace Mosa.Platform.x86.Stages
 			}
 			if (right.IsConstant && !Is32Bit(left))
 			{
-				Operand edx = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.EBX);
+				Operand edx = AllocateVirtualRegister(BuiltInSigType.Int32);
 				Context before = ctx.InsertBefore();
 				before.SetInstruction(X86.Push, null, edx);
 				if (IsSigned(left))
@@ -217,7 +214,7 @@ namespace Mosa.Platform.x86.Stages
 
 			if (context.Operand1.IsConstant)
 			{
-				Operand ecx = Operand.CreateCPURegister(context.Operand1.Type, GeneralPurposeRegister.ECX);
+				Operand ecx = AllocateVirtualRegister(context.Operand1.Type);
 				before.AppendInstruction(X86.Mov, ecx, context.Operand1);
 				context.Operand1 = ecx;
 			}
@@ -232,7 +229,7 @@ namespace Mosa.Platform.x86.Stages
 			if (context.Operand1.IsConstant)
 				return;
 
-			Operand ecx = Operand.CreateCPURegister(BuiltInSigType.IntPtr, GeneralPurposeRegister.ECX);
+			Operand ecx = AllocateVirtualRegister(BuiltInSigType.IntPtr);
 			Context before = context.InsertBefore();
 			before.SetInstruction(X86.Mov, ecx, context.Operand1);
 			context.Operand1 = context.Result;
@@ -247,7 +244,7 @@ namespace Mosa.Platform.x86.Stages
 			if (context.Operand1.IsConstant)
 				return;
 
-			Operand ecx = Operand.CreateCPURegister(BuiltInSigType.IntPtr, GeneralPurposeRegister.ECX);
+			Operand ecx = AllocateVirtualRegister(BuiltInSigType.IntPtr);
 			Context before = context.InsertBefore();
 			before.SetInstruction(X86.Mov, ecx, context.Operand1);
 			context.Operand1 = context.Result;
@@ -262,7 +259,7 @@ namespace Mosa.Platform.x86.Stages
 			if (context.Operand1.IsConstant)
 				return;
 
-			Operand ecx = Operand.CreateCPURegister(BuiltInSigType.IntPtr, GeneralPurposeRegister.ECX);
+			Operand ecx = AllocateVirtualRegister(BuiltInSigType.IntPtr);
 			Context before = context.InsertBefore();
 			before.SetInstruction(X86.Mov, ecx, context.Operand1);
 			context.Operand1 = context.Result;
@@ -282,12 +279,11 @@ namespace Mosa.Platform.x86.Stages
 			if (!(destinationOperand.IsRegister))
 			{
 				Context before = context.InsertBefore();
-				Operand eax = Operand.CreateCPURegister(BuiltInSigType.IntPtr, GeneralPurposeRegister.EAX);
+				Operand eax = AllocateVirtualRegister(BuiltInSigType.IntPtr);
 
 				before.SetInstruction(X86.Mov, eax, destinationOperand);
 				context.Operand1 = eax;
 			}
-
 		}
 
 		#endregion // IX86Visitor

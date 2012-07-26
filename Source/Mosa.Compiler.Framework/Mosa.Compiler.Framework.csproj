@@ -91,12 +91,12 @@
     <Compile Include="CompilationScheduler.cs" />
     <Compile Include="Stages\PlatformIntrinsicTransformationStage.cs" />
     <Compile Include="Stages\PlugSystem.cs" />
-    <Compile Include="Stages\IRCheckStage.cs" />
+    <Compile Include="Stages\CheckIROperandCountStage.cs" />
     <Compile Include="Stages\LoopAwareBlockOrderStage.cs" />
     <Compile Include="Stages\SSAOptimizations.cs" />
     <Compile Include="Stages\EdgeSplitStage.cs" />
     <Compile Include="Stages\SimpleRegisterAllocatorStage.cs" />
-    <Compile Include="VirtualRegisterLayout.cs" />
+    <Compile Include="VirtualRegisters.cs" />
     <Compile Include="Stages\TypeSchedulerStage.cs" />
     <Compile Include="BaseCodeEmitter.cs" />
     <Compile Include="BaseInstruction.cs" />

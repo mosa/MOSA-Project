@@ -7,12 +7,14 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-namespace Mosa.Compiler.Framework.Stages
+using Mosa.Compiler.Framework;
+
+namespace Mosa.Platform.x86.Stages
 {
 	/// <summary>
 	/// 
 	/// </summary>
-	public class IRCheckStage : BaseMethodCompilerStage, IMethodCompilerStage, IPipelineStage
+	public class CheckOperandCountStage : BaseMethodCompilerStage, IMethodCompilerStage, IPipelineStage
 	{
 		/// <summary>
 		/// Performs stage specific processing on the compiler context.
@@ -24,13 +26,7 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				for (var context = new Context(this.instructionSet, block); !context.EndOfInstruction; context.GotoNext())
 				{
-					if (!(context.Instruction is IR.BaseIRInstruction))
-						continue;
-
-					if (context.Instruction is IR.Call || context.Instruction is IR.Switch)
-						continue;
-
-					if (context.Instruction is IR.Jmp && context.OperandCount <= 1)
+					if (!(context.Instruction is X86Instruction))
 						continue;
 
 					if (context.OperandCount != context.Instruction.DefaultOperandCount ||

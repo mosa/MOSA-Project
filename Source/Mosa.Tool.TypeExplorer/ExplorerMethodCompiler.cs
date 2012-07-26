@@ -49,7 +49,7 @@ namespace Mosa.Tool.TypeExplorer
 				new LoopAwareBlockOrderStage(),
 				//new SimpleTraceBlockOrderStage(),
 				//new SimpleRegisterAllocatorStage(),
-				new CodeGenerationStage(),
+				//new CodeGenerationStage(), // Disabled for now
 			});
 		}
 
