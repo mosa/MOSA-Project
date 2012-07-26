@@ -16,7 +16,6 @@
 		<sources>
                     <include name="Runtime.cs"/>
                     <include name="XSharp.cs"/>
-                    <include name="DelegateStub.cs"/>
                     <include name="Native.cs"/>
 		</sources>
 		<references>

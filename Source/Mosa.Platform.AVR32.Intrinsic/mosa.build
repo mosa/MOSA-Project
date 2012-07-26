@@ -14,7 +14,6 @@
 	<target name="build">
 	    <csc target="library" output="${outputDirectory}/Mosa.Platform.AVR32.Intrinsic.dll" debug="${debug}" unsafe="true" nostdlib="false">
 		<sources>
-                    <include name="DelegateStub.cs"/>
                     <include name="Native.cs"/>
                     <include name="Runtime.cs"/>
 		</sources>

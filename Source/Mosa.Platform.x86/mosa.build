@@ -41,10 +41,6 @@
                     <include name="Intrinsic/GetCR3.cs"/>
                     <include name="Intrinsic/GetCR4.cs"/>
                     <include name="Intrinsic/In.cs"/>
-                    <include name="Intrinsic/InvokeDelegate.cs"/>
-                    <include name="Intrinsic/InvokeDelegateWithReturn.cs"/>
-                    <include name="Intrinsic/InvokeInstanceDelegate.cs"/>
-                    <include name="Intrinsic/InvokeInstanceDelegateWithReturn.cs"/>
                     <include name="Intrinsic/RestoreContext.cs"/>
                     <include name="Intrinsic/SetControlRegisterBase.cs"/>
                     <include name="Intrinsic/SetCR0.cs"/>
