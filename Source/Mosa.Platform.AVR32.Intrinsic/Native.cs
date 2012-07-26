@@ -18,18 +18,6 @@ namespace Mosa.Platform.AVR32.Intrinsic
 	{
 		#region Intrinsic
 
-		[DllImportAttribute(@"Mosa.Platform.AVR32.Intrinsic.InvokeDelegate, Mosa.Platform.AVR32")]
-		public extern static void InvokeDelegate(object obj, uint ptr);
-
-		[DllImportAttribute(@"Mosa.Platform.AVR32.Intrinsic.InvokeInstanceDelegate, Mosa.Platform.AVR32")]
-		public extern static void InvokeInstanceDelegate(object obj, uint ptr);
-
-		[DllImportAttribute(@"Mosa.Platform.AVR32.Intrinsic.InvokeDelegateWithReturn, Mosa.Platform.AVR32")]
-		public extern static object InvokeDelegateWithReturn(object obj, uint ptr);
-
-		[DllImportAttribute(@"Mosa.Platform.AVR32.Intrinsic.InvokeInstanceDelegateWithReturn, Mosa.Platform.AVR32")]
-		public extern static object InvokeInstanceDelegateWithReturn(object obj, uint ptr);
-
 		[DllImportAttribute(@"Mosa.Platform.AVR32.Intrinsic.Nop, Mosa.Platform.AVR32")]
 		public extern static void Nop();
 

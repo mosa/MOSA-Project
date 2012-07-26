@@ -30,7 +30,6 @@ namespace Mosa.Tool.TypeExplorer
 		{
 			// Build the assembly compiler pipeline
 			Pipeline.AddRange(new ICompilerStage[] {
-				new DelegateTypePatchStage(),
 				new PlugStage(),
 				new TypeSchedulerStage(),
 				new MethodCompilerSchedulerStage(),

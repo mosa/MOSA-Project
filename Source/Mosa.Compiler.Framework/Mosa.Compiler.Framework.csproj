@@ -133,7 +133,6 @@
     <Compile Include="ITypeInitializerSchedulerStage.cs" />
     <Compile Include="Stages\PlugStage.cs" />
     <Compile Include="Stages\ExceptionPrologueStage.cs" />
-    <Compile Include="Stages\DelegateTypePatchStage.cs" />
     <Compile Include="IR\ExceptionPrologue.cs" />
     <Compile Include="Stages\MetadataStage.cs" />
     <Compile Include="Stages\EnterSSAStage.cs" />
@@ -281,7 +280,6 @@
     <Compile Include="IR\TwoOperandInstruction.cs" />
     <Compile Include="IR\ZeroExtendedMove.cs" />
     <Compile Include="IVisitor.cs" />
-    <Compile Include="IIRInstruction.cs" />
     <Compile Include="Stages\FlowGraphVisualizationStage.cs" />
     <Compile Include="CIL\NopInstruction.cs" />
     <Compile Include="InstructionSet.cs" />

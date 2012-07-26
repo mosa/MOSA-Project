@@ -294,18 +294,6 @@ namespace Mosa.Platform.x86.Intrinsic
 		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.GetEBP, Mosa.Platform.x86")]
 		public extern static uint GetEBP();
 
-		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.InvokeDelegate, Mosa.Platform.x86")]
-		public extern static void InvokeDelegate(uint ptr);
-
-		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.InvokeInstanceDelegate, Mosa.Platform.x86")]
-		public extern static void InvokeInstanceDelegate(object obj, uint ptr);
-
-		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.InvokeDelegateWithReturn, Mosa.Platform.x86")]
-		public extern static object InvokeDelegateWithReturn(uint ptr);
-
-		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.InvokeInstanceDelegateWithReturn, Mosa.Platform.x86")]
-		public extern static object InvokeInstanceDelegateWithReturn(object obj, uint ptr);
-
 		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.GetMethodLookupTable, Mosa.Platform.x86")]
 		public extern static uint GetMethodLookupTable(uint ptr);
 

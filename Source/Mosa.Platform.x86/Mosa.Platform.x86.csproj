@@ -116,10 +116,6 @@
     <Compile Include="Intrinsic\GetCR3.cs" />
     <Compile Include="Intrinsic\GetCR4.cs" />
     <Compile Include="Intrinsic\In.cs" />
-    <Compile Include="Intrinsic\InvokeDelegate.cs" />
-    <Compile Include="Intrinsic\InvokeDelegateWithReturn.cs" />
-    <Compile Include="Intrinsic\InvokeInstanceDelegate.cs" />
-    <Compile Include="Intrinsic\InvokeInstanceDelegateWithReturn.cs" />
     <Compile Include="Intrinsic\RestoreContext.cs" />
     <Compile Include="Intrinsic\SetControlRegisterBase.cs" />
     <Compile Include="Intrinsic\SetCR0.cs" />

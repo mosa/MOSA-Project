@@ -64,7 +64,6 @@
   <ItemGroup>
     <Compile Include="Runtime.cs" />
     <Compile Include="XSharp.cs" />
-    <Compile Include="DelegateStub.cs" />
     <Compile Include="Native.cs" />
   </ItemGroup>
   <ItemGroup>

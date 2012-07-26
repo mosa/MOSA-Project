@@ -266,6 +266,9 @@ namespace Mosa.Compiler.Framework.Stages
 
 				if (ctx.Instruction is IR.AddressOf || ctx.Instruction is IR.Phi)
 					return;
+
+				//if (ctx.Instruction is IR.Store && ctx.Operand1 == destinationOperand)
+				//    return;
 			}
 
 			AddOperandUsageToWorkList(context);

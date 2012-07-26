@@ -45,29 +45,25 @@ namespace Mosa.Test.Cases.CIL
 		}
 
 		[Test]
-		[Row(3, 5)]
-		public void CallDelegateParameters(int a, int b)
+		public void CallDelegateParameters([I4Small]int a, [I4Small]int b)
 		{
 			Assert.AreEqual(DelegateTests.CallDelegateParameters(a, b), Run<int>("Mosa.Test.Collection", "DelegateTests", "CallDelegateParameters", a, b));
 		}
 
 		[Test]
-		[Row(5)]
-		public void CallDelegateReturn(int a)
+		public void CallDelegateReturn([I4]int a)
 		{
 			Assert.AreEqual(DelegateTests.CallDelegateReturn(a), Run<int>("Mosa.Test.Collection", "DelegateTests", "CallDelegateReturn", a));
 		}
 
 		[Test]
-		[Row(3, 5)]
-		public void CallDelegateParametersReturn(int a, int b)
+		public void CallDelegateParametersReturn([I4Small]int a, [I4Small]int b)
 		{
 			Assert.AreEqual(DelegateTests.CallDelegateParametersReturn(a, b), Run<int>("Mosa.Test.Collection", "DelegateTests", "CallDelegateParametersReturn", a, b));
 		}
 
 		[Test]
-		[Row(5)]
-		public void CallDelegateBox(int a)
+		public void CallDelegateBox([I4]int a)
 		{
 			Assert.AreEqual(DelegateTests.CallDelegateBox(a), Run<int>("Mosa.Test.Collection", "DelegateTests", "CallDelegateBox", a));
 		}
@@ -92,57 +88,57 @@ namespace Mosa.Test.Cases.CIL
 			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "DelegateTests", "CallDelegateGenericReturnStructB"));
 		}
 
-		[Test]
-		public void CallDelegateGenericTarget()
-		{
-			settings.CodeSource = @"
-namespace Mosa.Test.Code
-{
-	public static class DelegateTests
-	{
-		delegate void DelegateGenericTarget(int p);
+//        [Test]
+//        public void CallDelegateGenericTarget()
+//        {
+//            settings.CodeSource = @"
+//namespace Mosa.Test.Code
+//{
+//	public static class DelegateTests
+//	{
+//		delegate void DelegateGenericTarget(int p);
+//
+//		public static bool CallDelegateGenericTarget()
+//		{
+//			DelegateGenericTarget d = DelegateGenericTargetTarget<int>;
+//			d(1);
+//			return true;
+//		}
+//
+//		public static void DelegateGenericTargetTarget<T>(T p)
+//		{
+//		}
+//	}
+//}";
+//            Assert.IsTrue(Run<bool>("Mosa.Test.Code", "DelegateTests", "CallDelegateGenericTarget"));
+//            settings.CodeSource = string.Empty;
+//        }
 
-		public static bool CallDelegateGenericTarget()
-		{
-			DelegateGenericTarget d = DelegateGenericTargetTarget<int>;
-			d(1);
-			return true;
-		}
-
-		public static void DelegateGenericTargetTarget<T>(T p)
-		{
-		}
-	}
-}";
-			Assert.IsTrue(Run<bool>("Mosa.Test.Code", "DelegateTests", "CallDelegateGenericTarget"));
-			settings.CodeSource = string.Empty;
-		}
-
-		[Test]
-		public void CallDelegateGenericTargetReturn()
-		{
-			settings.CodeSource = @"
-namespace Mosa.Test.Code
-{
-	public static class DelegateTests
-	{
-		delegate T DelegateGenericTargetReturn<T>(T p);
-
-		public static bool CallDelegateGenericTargetReturn()
-		{
-			DelegateGenericTargetReturn<int> d = DelegateGenericTargetReturnTarget<int>;
-			return d(50) == 50;
-		}
-
-		public static T DelegateGenericTargetReturnTarget<T>(T p)
-		{
-			return p;
-		}
-	}
-}";
-			Assert.IsTrue(Run<bool>("Mosa.Test.Code", "DelegateTests", "CallDelegateGenericTargetReturn"));
-			settings.CodeSource = string.Empty;
-		}
+//        [Test]
+//        public void CallDelegateGenericTargetReturn()
+//        {
+//            settings.CodeSource = @"
+//namespace Mosa.Test.Code
+//{
+//	public static class DelegateTests
+//	{
+//		delegate T DelegateGenericTargetReturn<T>(T p);
+//
+//		public static bool CallDelegateGenericTargetReturn()
+//		{
+//			DelegateGenericTargetReturn<int> d = DelegateGenericTargetReturnTarget<int>;
+//			return d(50) == 50;
+//		}
+//
+//		public static T DelegateGenericTargetReturnTarget<T>(T p)
+//		{
+//			return p;
+//		}
+//	}
+//}";
+//            Assert.IsTrue(Run<bool>("Mosa.Test.Code", "DelegateTests", "CallDelegateGenericTargetReturn"));
+//            settings.CodeSource = string.Empty;
+//        }
 
 		[Test]
 		public void CallInstanceDelegate()

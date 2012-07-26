@@ -68,7 +68,7 @@ namespace Mosa.Test.Collection
 
 		public static int CallDelegateParameters(int a, int b)
 		{
-			status = 0;
+			status = 9999;
 			DelegateParameters d = DelegateParametersTarget;
 			d(a, b);
 			return status;
@@ -76,7 +76,7 @@ namespace Mosa.Test.Collection
 
 		public static void DelegateParametersTarget(int a, int b)
 		{
-			status = a * 10 + b;
+			status = a * 10000 + b;
 		}
 
 		#endregion
@@ -94,7 +94,7 @@ namespace Mosa.Test.Collection
 
 		public static int DelegateReturnTarget()
 		{
-			return status;
+			return status + 3;
 		}
 
 		#endregion
@@ -112,7 +112,7 @@ namespace Mosa.Test.Collection
 
 		public static int DelegateParametersReturnTarget(int a, int b)
 		{
-			return a * 10 + b;
+			return a * 10000 + b;
 		}
 
 		#endregion
@@ -123,8 +123,8 @@ namespace Mosa.Test.Collection
 
 		public static int CallDelegateBox(int p)
 		{
-			DelegateBox d = DelegateBoxTarget;			
-			d(p);			
+			DelegateBox d = DelegateBoxTarget;
+			d(p);
 			return p;
 		}
 
@@ -241,26 +241,26 @@ namespace Mosa.Test.Collection
 
 			public void CallDelegate()
 			{
-				Status = 0;
+				Status = 123;
 				DelegateVoid d = Target;
 				d();
 			}
 
 			public void Target()
 			{
-				Status = 5;
+				Status = 456;
 			}
 
 			public void CallDelegateStatic()
 			{
-				StatusStatic = 0;
+				StatusStatic = 1230;
 				DelegateVoid d = TargetStatic;
 				d();
 			}
 
 			public void TargetStatic()
 			{
-				StatusStatic = 5;
+				StatusStatic = 4560;
 			}
 		}
 

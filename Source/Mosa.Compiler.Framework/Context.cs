@@ -1018,6 +1018,16 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
+		/// Adds the operand.
+		/// </summary>
+		/// <param name="operand">The operand.</param>
+		public void AddOperand(Operand operand)
+		{
+			SetOperand(OperandCount, operand);
+			OperandCount++;
+		}
+
+		/// <summary>
 		/// Sets the operand by index.
 		/// </summary>
 		/// <param name="opIndex">The index.</param>
