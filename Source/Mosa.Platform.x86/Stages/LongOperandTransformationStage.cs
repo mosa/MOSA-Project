@@ -32,71 +32,46 @@ namespace Mosa.Platform.x86.Stages
 
 		#region Utility Methods
 
-		/// <summary>
-		/// Splits the long operand into its high and low parts.
-		/// </summary>
-		/// <param name="operand">The operand to split.</param>
-		/// <param name="operandLow">The low operand.</param>
-		/// <param name="operandHigh">The high operand.</param>
-		/// <exception cref="T:System.ArgumentException"><paramref name="operand"/> is not a Constant and not a MemoryOperand.</exception>
-		public static void SplitLongOperand(Operand operand, out Operand operandLow, out Operand operandHigh)
+		private void SplitLongOperand(Operand operand)
 		{
-			if (operand.Type.Type != CilElementType.I8 && operand.Type.Type != CilElementType.U8)
-			{
-				operandLow = operand;
-				operandHigh = Operand.CreateConstant(BuiltInSigType.Int32, (int)0);
-				return;
-			}
-
-			//Debug.Assert(operand.IsMemoryAddress || operand.IsConstant, @"Long operand not memory or constant.");
-
-			if (operand.IsConstant)
-			{
-				SplitFromConstantOperand(operand, out operandLow, out operandHigh);
-			}
-			else
-			{
-				SplitFromNonConstantOperand(operand, out operandLow, out operandHigh);
-			}
+			methodCompiler.VirtualRegisters.SplitLongOperand(operand);
 		}
 
-		private static void SplitFromConstantOperand(Operand operand, out Operand operandLow, out Operand operandHigh)
+		private void SplitLongOperand(Operand operand, out Operand operandLow, out Operand operandHigh)
 		{
-			SigType HighType = (operand.Type.Type == CilElementType.I8) ? BuiltInSigType.Int32 : BuiltInSigType.UInt32;
 
-			if (HighType.Type == CilElementType.I4)
-			{
-				long value = operand.ValueAsLongInteger;
-				operandLow = Operand.CreateConstant(BuiltInSigType.UInt32, (uint)(value & 0xFFFFFFFF));
-				operandHigh = Operand.CreateConstant(HighType, (int)(value >> 32));
-			}
-			else
-			{
-				ulong value = (ulong)operand.ValueAsLongInteger; ;
-				operandLow = Operand.CreateConstant(BuiltInSigType.UInt32, (uint)(value & 0xFFFFFFFF));
-				operandHigh = Operand.CreateConstant(HighType, (uint)(value >> 32));
-			}
+			//if (operand.Type.Type != CilElementType.I8 && operand.Type.Type != CilElementType.U8)
+			//{
+			//    operandLow = operand;
+			//    operandHigh = Operand.CreateConstant(BuiltInSigType.Int32, (int)0);
+			//    return;
+			//}
+
+			SplitLongOperand(operand);
+
+			operandLow = operand.Low;
+			operandHigh = operand.High;
 		}
 
-		private static void SplitFromNonConstantOperand(Operand operand, out Operand operandLow, out Operand operandHigh)
-		{
-			SigType HighType = (operand.Type.Type == CilElementType.I8) ? BuiltInSigType.Int32 : BuiltInSigType.UInt32;
+		//private static void SplitFromNonConstantOperand(Operand operand, out Operand operandLow, out Operand operandHigh)
+		//{
+		//    SigType HighType = (operand.Type.Type == CilElementType.I8) ? BuiltInSigType.Int32 : BuiltInSigType.UInt32;
 
-			// No, could be a member or a plain memory operand
-			if (operand.IsRuntimeMember)
-			{
-				// We need to keep the member reference, otherwise the linker can't fixup
-				// the member address.
-				operandLow = Operand.CreateRuntimeMember(BuiltInSigType.UInt32, operand.RuntimeMember, operand.Offset);
-				operandHigh = Operand.CreateRuntimeMember(HighType, operand.RuntimeMember, new IntPtr(operand.Offset.ToInt64() + 4));
-			}
-			else
-			{
-				// Plain memory, we can handle it here
-				operandLow = Operand.CreateMemoryAddress(BuiltInSigType.UInt32, operand.OffsetBase, operand.Offset);
-				operandHigh = Operand.CreateMemoryAddress(HighType, operand.OffsetBase, new IntPtr(operand.Offset.ToInt64() + 4));
-			}
-		}
+		//    // No, could be a member or a plain memory operand
+		//    if (operand.IsRuntimeMember)
+		//    {
+		//        // We need to keep the member reference, otherwise the linker can't fixup
+		//        // the member address.
+		//        operandLow = Operand.CreateRuntimeMember(BuiltInSigType.UInt32, operand.RuntimeMember, operand.Offset);
+		//        operandHigh = Operand.CreateRuntimeMember(HighType, operand.RuntimeMember, new IntPtr(operand.Offset.ToInt64() + 4));
+		//    }
+		//    else
+		//    {
+		//        // Plain memory, we can handle it here
+		//        operandLow = Operand.CreateMemoryAddress(BuiltInSigType.UInt32, operand.OffsetBase, operand.Offset);
+		//        operandHigh = Operand.CreateMemoryAddress(HighType, operand.OffsetBase, new IntPtr(operand.Offset.ToInt64() + 4));
+		//    }
+		//}
 
 		/// <summary>
 		/// Expands the add instruction for 64-bit operands.
@@ -119,20 +94,23 @@ namespace Mosa.Platform.x86.Stages
 			// This fails for constant operands right now, which need to be extracted into memory
 			// with a literal/literal operand first - TODO
 
-			Operand op1H, op1L, op2H, op2L, resH, resL;
-			SplitLongOperand(context.Operand1, out op1L, out op1H);
-			SplitLongOperand(context.Operand2, out op2L, out op2H);
-			SplitLongOperand(context.Result, out resL, out resH);
+			Operand result = context.Result;
+			Operand op1 = context.Operand1;
+			Operand op2 = context.Operand2;
+
+			SplitLongOperand(result);
+			SplitLongOperand(op1);
+			SplitLongOperand(op2);
 
 			Operand eaxH = AllocateVirtualRegister(BuiltInSigType.Int32);
 			Operand eaxL = AllocateVirtualRegister(BuiltInSigType.UInt32);
 
-			context.SetInstruction(X86.Mov, eaxL, op1L);
-			context.AppendInstruction(X86.Add, eaxL, op2L);
-			context.AppendInstruction(X86.Mov, resL, eaxL);
-			context.AppendInstruction(X86.Mov, eaxH, op1H);
-			context.AppendInstruction(X86.Adc, eaxH, op2H);
-			context.AppendInstruction(X86.Mov, resH, eaxH);
+			context.SetInstruction(X86.Mov, eaxL, op1.Low);
+			context.AppendInstruction(X86.Add, eaxL, op2.Low);
+			context.AppendInstruction(X86.Mov, result.Low, eaxL);
+			context.AppendInstruction(X86.Mov, eaxH, op1.High);
+			context.AppendInstruction(X86.Adc, eaxH, op2.High);
+			context.AppendInstruction(X86.Mov, result.High, eaxH);
 		}
 
 		/// <summary>
@@ -152,23 +130,26 @@ namespace Mosa.Platform.x86.Stages
 			 * 
 			 */
 
+			Operand result = context.Result;
+			Operand op1 = context.Operand1;
+			Operand op2 = context.Operand2;
+
+			SplitLongOperand(result);
+			SplitLongOperand(op1);
+			SplitLongOperand(op2);
+
 			// This only works for memory operands (can't store I8/U8 in a register.)
 			// This fails for constant operands right now, which need to be extracted into memory
 			// with a literal/literal operand first - TODO
 			Operand eaxH = AllocateVirtualRegister(BuiltInSigType.Int32);
 			Operand eaxL = AllocateVirtualRegister(BuiltInSigType.UInt32);
 
-			Operand op1L, op1H, op2L, op2H, resL, resH;
-			SplitLongOperand(context.Operand1, out op1L, out op1H);
-			SplitLongOperand(context.Operand2, out op2L, out op2H);
-			SplitLongOperand(context.Result, out resL, out resH);
-
-			context.SetInstruction(X86.Mov, eaxL, op1L);
-			context.AppendInstruction(X86.Sub, eaxL, op2L);
-			context.AppendInstruction(X86.Mov, resL, eaxL);
-			context.AppendInstruction(X86.Mov, eaxH, op1H);
-			context.AppendInstruction(X86.Sbb, eaxH, op2H);
-			context.AppendInstruction(X86.Mov, resH, eaxH);
+			context.SetInstruction(X86.Mov, eaxL, op1.Low);
+			context.AppendInstruction(X86.Sub, eaxL, op2.Low);
+			context.AppendInstruction(X86.Mov, result.Low, eaxL);
+			context.AppendInstruction(X86.Mov, eaxH, op1.High);
+			context.AppendInstruction(X86.Sbb, eaxH, op2.High);
+			context.AppendInstruction(X86.Mov, result.High, eaxH);
 		}
 
 		/// <summary>
@@ -1405,23 +1386,22 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		private void ExpandLoad(Context context)
 		{
-			Operand op0 = context.Result;
-			Operand op1 = context.Operand1;
-			Operand offsetOperand = context.Operand2;
-			Debug.Assert(op0 != null && op1 != null, @"Operands to I8 LoadInstruction are not MemoryOperand.");
+			Operand result = context.Result;
+			Operand address = context.Operand1;
+			Operand offset = context.Operand2;
 
-			Operand op0L, op0H;
-			SplitLongOperand(op0, out op0L, out op0H);
+			SplitLongOperand(result);
 
-			Operand eax = AllocateVirtualRegister(BuiltInSigType.Int32);
-			Operand edx = AllocateVirtualRegister(BuiltInSigType.Int32);
+			Operand eax = AllocateVirtualRegister(BuiltInSigType.UInt32);
+			Operand edx = AllocateVirtualRegister(BuiltInSigType.UInt32);
 
-			context.SetInstruction(X86.Mov, eax, op1);
-			context.AppendInstruction(X86.Add, eax, offsetOperand);
-			context.AppendInstruction(X86.Mov, edx, Operand.CreateMemoryAddress(op0L.Type, eax, IntPtr.Zero));
-			context.AppendInstruction(X86.Mov, op0L, edx);
-			context.AppendInstruction(X86.Mov, edx, Operand.CreateMemoryAddress(op0H.Type, eax, new IntPtr(4)));
-			context.AppendInstruction(X86.Mov, op0H, edx);
+			context.SetInstruction(X86.Mov, eax, address);
+			context.AppendInstruction(X86.Add, eax, offset);
+
+			context.AppendInstruction(X86.Mov, edx, Operand.CreateMemoryAddress(BuiltInSigType.UInt32, eax, IntPtr.Zero));
+			context.AppendInstruction(X86.Mov, result.Low, edx);
+			context.AppendInstruction(X86.Mov, edx, Operand.CreateMemoryAddress(BuiltInSigType.UInt32, eax, new IntPtr(4)));
+			context.AppendInstruction(X86.Mov, result.High, edx);
 		}
 
 		/// <summary>
@@ -1430,26 +1410,24 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		private void ExpandStore(Context context)
 		{
-			//Debug.Assert(context.Operand1.IsMemoryAddress && context.Operand3.IsMemoryAddress, @"Operands to I8 LoadInstruction are not MemoryOperand.");
+			Operand address = context.Operand1;
+			Operand offset = context.Operand2;
+			Operand value = context.Operand3;
 
-			Operand op0 = context.Operand1;
-			Operand op2 = context.Operand3;
-			Operand offsetOperand = context.Operand2;
+			SplitLongOperand(value);
 
-			Operand op1L, op1H;
-			SplitLongOperand(op2, out op1L, out op1H);
 			Operand eax = AllocateVirtualRegister(BuiltInSigType.UInt32);
 			Operand edx = AllocateVirtualRegister(BuiltInSigType.UInt32);
 
-			context.SetInstruction(X86.Mov, edx, op0);
+			context.SetInstruction(X86.Mov, edx, address);
 
 			// Fortunately in 32-bit mode, we can't have 64-bit offsets, so this plain add should suffice.
-			context.AppendInstruction(X86.Add, edx, offsetOperand);
+			context.AppendInstruction(X86.Add, edx, offset);
 
-			context.AppendInstruction(X86.Mov, eax, op1L);
+			context.AppendInstruction(X86.Mov, eax, value.Low);
 			context.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(BuiltInSigType.UInt32, edx, IntPtr.Zero), eax);
-			context.AppendInstruction(X86.Mov, eax, op1H);
-			context.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(BuiltInSigType.Int32, edx, new IntPtr(4)), eax);
+			context.AppendInstruction(X86.Mov, eax, value.High);
+			context.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(BuiltInSigType.UInt32, edx, new IntPtr(4)), eax);
 		}
 
 		/// <summary>
@@ -1554,27 +1532,20 @@ namespace Mosa.Platform.x86.Stages
 		}
 
 		/// <summary>
-		/// Determines whether the specified op is double.
+		/// Ares the any64 bit.
 		/// </summary>
-		/// <param name="op">The op.</param>
-		/// <returns>
-		/// 	<c>true</c> if the specified op is double; otherwise, <c>false</c>.
-		/// </returns>
-		public static bool IsDouble(Operand op)
+		/// <param name="context">The context.</param>
+		/// <returns></returns>
+		public static bool AreAny64Bit(Context context)
 		{
-			return op.Type.Matches(BuiltInSigType.Double);
-		}
+			if (IsInt64(context.Result))
+				return true;
 
-		/// <summary>
-		/// Determines whether [is double or int64] [the specified op].
-		/// </summary>
-		/// <param name="op">The op.</param>
-		/// <returns>
-		/// 	<c>true</c> if [is double or int64] [the specified op]; otherwise, <c>false</c>.
-		/// </returns>
-		public static bool IsDoubleOrInt64(Operand op)
-		{
-			return IsInt64(op) || IsDouble(op);
+			foreach (var operand in context.Operands)
+				if (IsInt64(operand))
+					return true;
+
+			return false;
 		}
 
 		#endregion // Utility Methods
@@ -1653,7 +1624,23 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IIRVisitor.LogicalAnd(Context context)
 		{
-			if (IsInt64(context.Operand1))
+
+			if (!IsInt64(context.Result))
+			{
+				if (IsInt64(context.Operand1))
+				{
+					// down convert
+					SplitLongOperand(context.Operand1);
+					context.Operand1 = context.Operand1.Low;
+				}
+
+				if (IsInt64(context.Operand2))
+				{
+					SplitLongOperand(context.Operand2);
+					context.Operand2 = context.Operand1.Low;
+				}
+			}
+			else
 			{
 				ExpandAnd(context);
 			}
@@ -1906,6 +1893,18 @@ namespace Mosa.Platform.x86.Stages
 			}
 		}
 
+		/// <summary>
+		/// Visitation function for CallInstruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IIRVisitor.Call(Context context)
+		{
+			if (context.Result != null && IsInt64(context.Result))
+			{
+				SplitLongOperand(context.Result);
+			}
+		}
+
 		#endregion // IIRVisitor
 
 		#region IIRVisitor - Unused
@@ -1952,16 +1951,10 @@ namespace Mosa.Platform.x86.Stages
 		void IIRVisitor.AddressOf(Context context) { }
 
 		/// <summary>
-		/// Visitation function for CallInstruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void IIRVisitor.Call(Context context) { }
-
-		/// <summary>
 		/// Visitation function for intrinsic the method call.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.IntrinsicMethodCall(Context context) {}
+		void IIRVisitor.IntrinsicMethodCall(Context context) { }
 
 		/// <summary>
 		/// Visitation function for EpilogueInstruction.

@@ -83,18 +83,6 @@ namespace Mosa.Compiler.Framework.Stages
 		}
 
 		/// <summary>
-		/// Determines whether [is assignment to stack variable] [the specified instruction].
-		/// </summary>
-		/// <param name="instruction">The instruction.</param>
-		/// <returns>
-		///   <c>true</c> if [is assignment to stack variable] [the specified instruction]; otherwise, <c>false</c>.
-		/// </returns>
-		public static bool IsAssignmentToStackVariable(Context instruction)
-		{
-			return instruction.Result != null && instruction.Result.IsStackLocal;
-		}
-
-		/// <summary>
 		/// Collects the assignments.
 		/// </summary>
 		private void CollectAssignments()

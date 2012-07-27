@@ -9,6 +9,7 @@
  */
 
 using System;
+using System.Diagnostics;
 using System.Collections.Generic;
 using System.Text;
 using Mosa.Compiler.Metadata;
@@ -49,16 +50,6 @@ namespace Mosa.Compiler.Framework
 		private List<int> uses;
 
 		/// <summary>
-		/// Constant value.
-		/// </summary>
-		private object value;
-
-		/// <summary>
-		/// Holds the name 
-		/// </summary>
-		private string name;
-
-		/// <summary>
 		/// Holds the index
 		/// </summary>
 		private int index;
@@ -67,7 +58,7 @@ namespace Mosa.Compiler.Framework
 		/// The register, where the operand is stored.
 		/// </summary>
 		private Register register;
-		
+
 		/// <summary>
 		/// The operand for the offset base
 		/// </summary>
@@ -82,16 +73,6 @@ namespace Mosa.Compiler.Framework
 		/// Holds the runtime member.
 		/// </summary>
 		private RuntimeMember runtimeMember;
-
-		/// <summary>
-		/// Holds the base operand
-		/// </summary>
-		private Operand ssaOperand;
-
-		/// <summary>
-		/// 
-		/// </summary>
-		private int ssaVersion;
 
 		#endregion // Data members
 
@@ -110,7 +91,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Returns the value of the constant.
 		/// </summary>
-		public object Value { get { return value; } }
+		public object Value { get; private set; }
 
 		/// <summary>
 		/// Returns a list of instructions, which use this operand.
@@ -138,19 +119,35 @@ namespace Mosa.Compiler.Framework
 		public RuntimeMember RuntimeMember { get { return runtimeMember; } }
 
 		/// <summary>
-		/// Gets the operand.
+		/// Gets the base operand.
 		/// </summary>
-		public Operand SsaOperand { get { return ssaOperand; } }
+		public Operand BaseOperand { get; private set; }
 
 		/// <summary>
 		/// Gets the ssa version.
 		/// </summary>
-		public int SsaVersion { get { return ssaVersion; } }
+		public int SSAVersion { get; private set; }
 
 		/// <summary>
 		/// Gets the offset.
 		/// </summary>
 		public IntPtr Offset { get { return offset; } set { offset = value; } }
+
+		/// <summary>
+		/// Gets or sets the low operand.
+		/// </summary>
+		/// <value>
+		/// The low operand.
+		/// </value>
+		public Operand Low { get; private set; }
+
+		/// <summary>
+		/// Gets or sets the high operand.
+		/// </summary>
+		/// <value>
+		/// The high operand.
+		/// </value>
+		public Operand High { get; private set; }
 
 		/// <summary>
 		/// Determines if the operand is a register.
@@ -221,7 +218,7 @@ namespace Mosa.Compiler.Framework
 		/// Gets the name.
 		/// </summary>
 		/// <value>The name.</value>
-		public string Name { get { return this.name; } }
+		public string Name { get; private set; }
 
 		/// <summary>
 		/// Gets the sequence.
@@ -238,24 +235,24 @@ namespace Mosa.Compiler.Framework
 		{
 			get
 			{
-				if (value is int)
-					return (long)(int)value;
-				else if (value is short)
-					return (long)(short)value;
-				else if (value is sbyte)
-					return (long)(sbyte)value;
-				else if (value is long)
-					return (long)value;
-				else if (value is uint)
-					return (long)(uint)value;
-				else if (value is byte)
-					return (long)(byte)value;
-				else if (value is ushort)
-					return (long)(ushort)value;
-				else if (value is ulong)
-					return (long)(ulong)value;
-				
-				else if (value == null)
+				if (Value is int)
+					return (long)(int)Value;
+				else if (Value is short)
+					return (long)(short)Value;
+				else if (Value is sbyte)
+					return (long)(sbyte)Value;
+				else if (Value is long)
+					return (long)Value;
+				else if (Value is uint)
+					return (long)(uint)Value;
+				else if (Value is byte)
+					return (long)(byte)Value;
+				else if (Value is ushort)
+					return (long)(ushort)Value;
+				else if (Value is ulong)
+					return (long)(ulong)Value;
+
+				else if (Value == null)
 					return 0;	// REVIEW
 
 				throw new CompilationException("Not an integer");
@@ -306,7 +303,7 @@ namespace Mosa.Compiler.Framework
 		public static Operand CreateConstant(SigType sigType, object value)
 		{
 			Operand operand = new Operand(sigType, OperandType.Constant);
-			operand.value = value;
+			operand.Value = value;
 			return operand;
 		}
 
@@ -338,7 +335,7 @@ namespace Mosa.Compiler.Framework
 		public static Operand CreateSymbol(SigType sigType, string name)
 		{
 			Operand operand = new Operand(sigType, OperandType.Symbol);
-			operand.name = name;
+			operand.Name = name;
 			return operand;
 		}
 
@@ -417,42 +414,11 @@ namespace Mosa.Compiler.Framework
 		public static Operand CreateLabel(SigType sigType, string label)
 		{
 			Operand operand = new Operand(sigType, OperandType.MemoryAddress | OperandType.Label);
-			operand.name = label;
+			operand.Name = label;
 			operand.offset = IntPtr.Zero;
 			return operand;
 		}
 
-		/// <summary>
-		/// Creates a new stack address <see cref="Operand"/>.
-		/// </summary>
-		/// <param name="sigType">Type of the sig.</param>
-		/// <param name="baseRegister">The base register.</param>
-		/// <param name="index">The index.</param>
-		/// <returns></returns>
-		public static Operand CreateStackLocal(SigType sigType, Register baseRegister, int index)
-		{
-			Operand operand = new Operand(sigType, OperandType.MemoryAddress | OperandType.StackLocal);
-			operand.register = baseRegister;
-			operand.index = index;
-			operand.offset = new IntPtr(-index * 4);
-			return operand;
-		}
-
-		/// <summary>
-		/// Creates a new stack address <see cref="Operand"/>.
-		/// </summary>
-		/// <param name="sigType">Type of the sig.</param>
-		/// <param name="baseRegister">The base register.</param>
-		/// <param name="index">The index.</param>
-		/// <returns></returns>
-		public static Operand CreateStackLocalTemp(SigType sigType, Register baseRegister, int index)
-		{
-			Operand operand = new Operand(sigType, OperandType.MemoryAddress | OperandType.StackLocal | OperandType.VirtualRegister);
-			operand.register = baseRegister;
-			operand.index = index;
-			operand.offset = new IntPtr(-index * 4);
-			return operand;
-		}
 		/// <summary>
 		/// Creates a new runtime member <see cref="Operand"/>.
 		/// </summary>
@@ -492,7 +458,7 @@ namespace Mosa.Compiler.Framework
 		public static Operand CreateLocalVariable(SigType type, Register register, int index, string name)
 		{
 			Operand operand = new Operand(type, OperandType.MemoryAddress | OperandType.StackLocal | OperandType.LocalVariable);
-			operand.name = name;
+			operand.Name = name;
 			operand.register = register;
 			operand.index = index;
 			operand.offset = new IntPtr(-index * 4);
@@ -518,14 +484,71 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Creates the SSA <see cref="Operand"/>.
 		/// </summary>
-		/// <param name="baseOperand">The base operand.</param>
+		/// <param name="ssaOperand">The ssa operand.</param>
 		/// <param name="ssaVersion">The ssa version.</param>
 		/// <returns></returns>
-		public static Operand CreateSSA(Operand baseOperand, int ssaVersion)
+		public static Operand CreateSSA(Operand ssaOperand, int ssaVersion)
 		{
-			Operand operand = new Operand(baseOperand.sigType, baseOperand.operandType | OperandType.SSA);
-			operand.ssaOperand = baseOperand;
-			operand.ssaVersion = ssaVersion;
+			Operand operand = new Operand(ssaOperand.sigType, ssaOperand.operandType | OperandType.SSA);
+			operand.BaseOperand = ssaOperand;
+			operand.SSAVersion = ssaVersion;
+			return operand;
+		}
+
+		/// <summary>
+		/// Creates the low 32 bit portion of a 64-bit <see cref="Operand"/>.
+		/// </summary>
+		/// <returns></returns>
+		public static Operand CreateLowSplitForLong(Operand longOperand, int index)
+		{
+			Debug.Assert(longOperand.Type.Type == CilElementType.U8 || longOperand.Type.Type == CilElementType.I8);
+
+			Operand operand;
+
+			if (longOperand.IsConstant)
+			{
+				operand = new Operand(BuiltInSigType.UInt32, OperandType.Constant);
+				operand.Value = longOperand.ValueAsLongInteger & uint.MaxValue;
+			}
+			else
+			{
+				operand = new Operand(BuiltInSigType.UInt32, OperandType.VirtualRegister);
+			}
+
+			operand.index = index;
+			operand.BaseOperand = longOperand;
+
+			Debug.Assert(longOperand.Low == null);
+			longOperand.Low = operand;
+			return operand;
+		}
+
+		/// <summary>
+		/// Creates the high 32 bit portion of a 64-bit <see cref="Operand"/>.
+		/// </summary>
+		/// <returns></returns>
+		public static Operand CreateHighSplitForLong(Operand longOperand, int index)
+		{
+			Debug.Assert(longOperand.Type.Type == CilElementType.U8 || longOperand.Type.Type == CilElementType.I8);
+
+			Operand operand;
+
+			if (longOperand.IsConstant)
+			{
+				operand = new Operand(BuiltInSigType.UInt32, OperandType.Constant);
+				operand.Value = ((uint)longOperand.ValueAsLongInteger >> 32) & uint.MaxValue;
+			}
+			else
+			{
+				operand = new Operand(BuiltInSigType.UInt32, OperandType.VirtualRegister);
+			}
+
+			operand.index = index;
+			operand.BaseOperand = longOperand;
+
+			Debug.Assert(longOperand.High == null);
+			longOperand.High = operand;
+
 			return operand;
 		}
 
@@ -588,35 +611,35 @@ namespace Mosa.Compiler.Framework
 		{
 			if (IsSSA)
 			{
-				string ssa = ssaOperand.ToString();
+				string ssa = BaseOperand.ToString();
 				int pos = ssa.IndexOf(' ');
 
 				if (pos < 0)
-					return ssa + "<" + ssaVersion + ">";
+					return ssa + "<" + SSAVersion + ">";
 				else
-					return ssa.Substring(0, pos) + "<" + ssaVersion + ">" + ssa.Substring(pos);
+					return ssa.Substring(0, pos) + "<" + SSAVersion + ">" + ssa.Substring(pos);
 			}
 
 			StringBuilder s = new StringBuilder();
 
-			if (name != null)
+			if (Name != null)
 			{
-				s.Append(name);
+				s.Append(Name);
 			}
 
 			if (IsVirtualRegister)
 			{
 				s.AppendFormat("V_{0}", index);
 			}
-			else if (IsLocalVariable && name == null)
+			else if (IsLocalVariable && Name == null)
 			{
 				s.AppendFormat("L_{0}", index);
 			}
-			else if (IsStackLocal && name == null)
+			else if (IsStackLocal && Name == null)
 			{
 				s.AppendFormat("T_{0}", index);
 			}
-			else if (IsParameter && name == null)
+			else if (IsParameter && Name == null)
 			{
 				s.AppendFormat("P_{0}", index);
 			}
@@ -630,10 +653,10 @@ namespace Mosa.Compiler.Framework
 
 			if (IsConstant)
 			{
-				if (value == null)
+				if (Value == null)
 					s.Append("const null");
 				else
-					s.AppendFormat("const {0}", value);
+					s.AppendFormat("const {0}", Value);
 			}
 			else if (IsCPURegister)
 			{

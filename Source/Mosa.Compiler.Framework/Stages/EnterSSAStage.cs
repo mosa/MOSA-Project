@@ -182,7 +182,7 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				if (!context.IsEmpty && context.Result != null && context.Result.IsStackLocal)
 				{
-					var op = context.Result.SsaOperand;
+					var op = context.Result.BaseOperand;
 					var index = variables[op].Pop();
 				}
 			}

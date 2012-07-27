@@ -33,13 +33,13 @@ namespace Mosa.Compiler.Framework.Stages
 					{
 						var op = context.GetOperand(i);
 						if (op != null && op.IsSSA)
-							context.SetOperand(i, op.SsaOperand);
+							context.SetOperand(i, op.BaseOperand);
 					}
 
 					if (context.Result != null)
 					{
 						if (context.Result.IsSSA)
-							context.Result = context.Result.SsaOperand;
+							context.Result = context.Result.BaseOperand;
 					}
 				}
 			}
@@ -77,8 +77,8 @@ namespace Mosa.Compiler.Framework.Stages
 			if (context.Index != -1)
 				context = context.InsertBefore();
 
-			var source = operand.IsSSA ? operand.SsaOperand : operand;
-			var destination = result.IsSSA ? result.SsaOperand : result;
+			var source = operand.IsSSA ? operand.BaseOperand : operand;
+			var destination = result.IsSSA ? result.BaseOperand : result;
 
 			Debug.Assert(!source.IsSSA);
 			Debug.Assert(!destination.IsSSA);

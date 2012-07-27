@@ -52,6 +52,14 @@ namespace Mosa.Compiler.Framework
 			return virtualRegister;
 		}
 
+		public void SplitLongOperand(Operand longOperand)
+		{
+			if (longOperand.Low == null)
+			{
+				virtualRegisters.Add(Operand.CreateHighSplitForLong(longOperand, virtualRegisters.Count + 1));
+				virtualRegisters.Add(Operand.CreateLowSplitForLong(longOperand, virtualRegisters.Count + 1));
+			}
+		}
 
 		public IEnumerator<Operand> GetEnumerator()
 		{

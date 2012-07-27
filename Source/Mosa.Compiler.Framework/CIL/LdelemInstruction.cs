@@ -91,10 +91,7 @@ namespace Mosa.Compiler.Framework.CIL
 				sigType = new ClassSigType(token);
 			}
 
-			StackTypeCode stackType = Operand.StackTypeFromSigType(sigType);
-			Operand result = LoadInstruction.CreateResultOperand(decoder, stackType, sigType);
-
-			ctx.Result = result;
+			ctx.Result = LoadInstruction.CreateResultOperand(decoder, Operand.StackTypeFromSigType(sigType), sigType);
 		}
 
 		/// <summary>

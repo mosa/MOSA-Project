@@ -184,14 +184,11 @@ namespace Mosa.Platform.x86
 			if (!resultOperand.IsMemoryAddress)
 				return;
 
-			Operand opL, opH;
-			LongOperandTransformationStage.SplitLongOperand(resultOperand, out opL, out opH);
-
 			Operand eax = Operand.CreateCPURegister(BuiltInSigType.UInt32, GeneralPurposeRegister.EAX);
 			Operand edx = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.EDX);
 
-			ctx.AppendInstruction(X86.Mov, opL, eax);
-			ctx.AppendInstruction(X86.Mov, opH, edx);
+			ctx.AppendInstruction(X86.Mov, resultOperand.Low, eax);
+			ctx.AppendInstruction(X86.Mov, resultOperand.High, edx);
 		}
 
 		/// <summary>
@@ -232,12 +229,9 @@ namespace Mosa.Platform.x86
 							Debug.Assert(op.IsMemoryAddress, @"I8/U8 arg is not in a memory operand.");
 							Operand eax = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.EAX);
 
-							Operand opL, opH;
-							LongOperandTransformationStage.SplitLongOperand(op, out opL, out opH);
-
-							ctx.AppendInstruction(X86.Mov, eax, opL);
+							ctx.AppendInstruction(X86.Mov, eax, op.Low);
 							ctx.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(op.Type, GeneralPurposeRegister.EDX, new IntPtr(stackSize)), eax);
-							ctx.AppendInstruction(X86.Mov, eax, opH);
+							ctx.AppendInstruction(X86.Mov, eax, op.High);
 							ctx.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(op.Type, GeneralPurposeRegister.EDX, new IntPtr(stackSize + 4)), eax);
 						}
 						return;
@@ -251,13 +245,11 @@ namespace Mosa.Platform.x86
 			}
 			else if (op.IsConstant && op.StackType == StackTypeCode.Int64)
 			{
-				Operand opL, opH;
 				Operand eax = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.EAX);
-				LongOperandTransformationStage.SplitLongOperand(op, out opL, out opH);
 
-				ctx.AppendInstruction(X86.Mov, eax, opL);
+				ctx.AppendInstruction(X86.Mov, eax, op.Low);
 				ctx.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(BuiltInSigType.Int32, GeneralPurposeRegister.EDX, new IntPtr(stackSize)), eax);
-				ctx.AppendInstruction(X86.Mov, eax, opH);
+				ctx.AppendInstruction(X86.Mov, eax, op.High);
 				ctx.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(BuiltInSigType.Int32, GeneralPurposeRegister.EDX, new IntPtr(stackSize + 4)), eax);
 
 				return;
@@ -311,8 +303,8 @@ namespace Mosa.Platform.x86
 			{
 				SigType HighType = (operand.Type.Type == CilElementType.I8) ? BuiltInSigType.Int32 : BuiltInSigType.UInt32;
 
-				Operand opL, opH;
-				LongOperandTransformationStage.SplitLongOperand(operand, out opL, out opH);
+				Operand opL = operand.Low;
+				Operand opH = operand.High;
 
 				// Like Win32: EDX:EAX
 				context.SetInstruction(X86.Mov, Operand.CreateCPURegister(BuiltInSigType.UInt32, GeneralPurposeRegister.EAX), opL);
