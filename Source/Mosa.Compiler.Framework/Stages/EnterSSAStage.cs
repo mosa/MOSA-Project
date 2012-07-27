@@ -67,7 +67,10 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				foreach (var op in methodCompiler.LocalVariables)
 				{
-					AddToAssignments(op);
+					if (op.Uses.Count != 0)
+					{
+						AddToAssignments(op);
+					}
 				}
 			}
 
