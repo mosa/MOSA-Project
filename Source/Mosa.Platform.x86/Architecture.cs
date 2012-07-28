@@ -201,15 +201,15 @@ namespace Mosa.Platform.x86
 				{
 					new CheckOperandCountStage(),
 					new LongOperandTransformationStage(),
-					new AddressModeConversionStage(),
-					new IRTransformationStage(),
-					new TweakTransformationStage(),
-					new MemToMemConversionStage(),
+					//new AddressModeConversionStage(),
+					//new IRTransformationStage(),
+					//new TweakTransformationStage(),
+					//new MemToMemConversionStage(),
 				});
 
-			methodCompilerPipeline.InsertAfterLast<IBlockOrderStage>(
-				new SimplePeepholeOptimizationStage()
-			);
+			//methodCompilerPipeline.InsertAfterLast<IBlockOrderStage>(
+			//    new SimplePeepholeOptimizationStage()
+			//);
 
 			// Disabled for now
 			//methodCompilerPipeline.InsertAfterLast<CodeGenerationStage>(

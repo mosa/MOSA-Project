@@ -155,7 +155,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (context.Result.Uses.Count != 0 || context.Instruction is IR.Call || context.Instruction is IR.IntrinsicMethodCall)
 				return;
 
-			if (!context.Result.IsLocalVariable)
+			if (context.Result.IsLocalVariable)
 				return;
 
 			if (IsLogging) Trace("REMOVED:\t" + context.ToString());

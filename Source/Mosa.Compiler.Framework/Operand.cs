@@ -506,27 +506,27 @@ namespace Mosa.Compiler.Framework
 
 			Operand operand;
 
-			if (longOperand.IsMemoryAddress)
-			{
-				operand = new Operand(BuiltInSigType.UInt32, OperandType.MemoryAddress);
-				operand.offsetBase = longOperand.offsetBase;
-				operand.Offset = longOperand.Offset + offset;
-			}
 			if (longOperand.IsConstant)
 			{
 				operand = new Operand(BuiltInSigType.UInt32, OperandType.Constant);
 				operand.Value = longOperand.ValueAsLongInteger & uint.MaxValue;
+			}
+			else if (longOperand.IsMemoryAddress)
+			{
+				operand = new Operand(BuiltInSigType.UInt32, OperandType.MemoryAddress);
+				operand.offsetBase = longOperand.offsetBase;
+				operand.Offset = longOperand.Offset + offset;
 			}
 			else
 			{
 				operand = new Operand(BuiltInSigType.UInt32, OperandType.VirtualRegister);
 			}
 
-			operand.index = index;
 			operand.BaseOperand = longOperand;
-
 			Debug.Assert(longOperand.Low == null);
 			longOperand.Low = operand;
+
+			operand.index = index;
 			return operand;
 		}
 
@@ -543,28 +543,27 @@ namespace Mosa.Compiler.Framework
 
 			Operand operand;
 
-			if (longOperand.IsMemoryAddress)
+			if (longOperand.IsConstant)
+			{
+				operand = new Operand(BuiltInSigType.UInt32, OperandType.Constant);
+				operand.Value = ((uint)longOperand.ValueAsLongInteger >> 32) & uint.MaxValue;
+			}
+			else if (longOperand.IsMemoryAddress)
 			{
 				operand = new Operand(BuiltInSigType.UInt32, OperandType.MemoryAddress);
 				operand.offsetBase = longOperand.offsetBase;
 				operand.Offset = longOperand.Offset + offset;
-			}
-			else if (longOperand.IsConstant)
-			{
-				operand = new Operand(BuiltInSigType.UInt32, OperandType.Constant);
-				operand.Value = ((uint)longOperand.ValueAsLongInteger >> 32) & uint.MaxValue;
 			}
 			else
 			{
 				operand = new Operand(BuiltInSigType.UInt32, OperandType.VirtualRegister);
 			}
 
-			operand.index = index;
 			operand.BaseOperand = longOperand;
-
 			Debug.Assert(longOperand.High == null);
 			longOperand.High = operand;
 
+			operand.index = index;
 			return operand;
 		}
 
@@ -645,45 +644,52 @@ namespace Mosa.Compiler.Framework
 
 			if (IsVirtualRegister)
 			{
-				s.AppendFormat("V_{0}", index);
+				s.AppendFormat("v{0}", index);
 			}
 			else if (IsLocalVariable && Name == null)
 			{
-				s.AppendFormat("L_{0}", index);
+				s.AppendFormat("l{0}", index);
 			}
 			else if (IsStackLocal && Name == null)
 			{
-				s.AppendFormat("T_{0}", index);
+				s.AppendFormat("t{0}", index);
 			}
 			else if (IsParameter && Name == null)
 			{
-				s.AppendFormat("P_{0}", index);
+				s.AppendFormat("p{0}", index);
+			}
+			else if (IsConstant)
+			{
+				if (Value == null)
+					s.Append("const null");
+				else
+					s.AppendFormat("const {0}", Value);
 			}
 
 			if (BaseOperand != null)
 			{
 				s.Append(" <");
-				if (High == BaseOperand)
-					s.Append("H:");
-				else
-					s.Append("L:");
-
-				if (IsVirtualRegister)
+				if (BaseOperand.IsVirtualRegister)
 				{
-					s.AppendFormat("V_{0}", index);
+					s.AppendFormat("v{0}", BaseOperand.index);
 				}
 				else if (BaseOperand.IsLocalVariable)
 				{
-					s.AppendFormat("L_{0}", BaseOperand.index);
+					s.AppendFormat("l{0}", BaseOperand.index);
 				}
 				else if (BaseOperand.IsStackLocal)
 				{
-					s.AppendFormat("T_{0}", BaseOperand.index);
+					s.AppendFormat("t{0}", BaseOperand.index);
 				}
 				else if (BaseOperand.IsParameter)
 				{
-					s.AppendFormat("P_{0}", BaseOperand.index);
+					s.AppendFormat("p{0}", BaseOperand.index);
 				}
+
+				if (BaseOperand.High == this)
+					s.Append("/high");
+				else
+					s.Append("/low");
 
 				s.Append(">");
 			}
@@ -696,14 +702,7 @@ namespace Mosa.Compiler.Framework
 			if (s.Length != 0)
 				s.Append(' ');
 
-			if (IsConstant)
-			{
-				if (Value == null)
-					s.Append("const null");
-				else
-					s.AppendFormat("const {0}", Value);
-			}
-			else if (IsCPURegister)
+			if (IsCPURegister)
 			{
 				s.AppendFormat("{0}", register);
 			}
