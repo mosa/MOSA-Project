@@ -126,6 +126,63 @@ namespace Mosa.HelloWorld.x86.Tests
 
 			return c == 10;
 		}
+
+		public static bool SimpleTest11()
+		{
+			int a = 0;
+			int b = 10;
+
+			int c = a * b;
+
+			return c == 10;
+		}
+
+
+		public static int SimpleTest12()
+		{
+			int a = 32;
+			int b = 10;
+			int c = 10;
+			int d = 1;
+			int e = 0;
+
+			int z = (a * b) + ((c * d) + (c * d) * e) + e;
+
+			return z;
+		}
+
+		public static int SimpleTest12(int q)
+		{
+			int a = 10;
+			int b = 20;
+
+			int c = a + b + q;
+
+			return c;
+		}
+
+		public static int SimpleTest13(ref int q)
+		{
+			int a = 10;
+			int b = 20;
+
+			int c = a + b + q;
+
+			return c;
+		}
+
+		public static int SimpleTest14(ref int q)
+		{
+			int a = 10;
+			int b = 20;
+
+			int c = a + b + q;
+
+			q = a + b;
+
+			return c;
+		}
+
 		public static bool SimpleTest99()
 		{
 			int[] a = new int[5];
