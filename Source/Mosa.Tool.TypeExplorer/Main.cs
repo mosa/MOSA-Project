@@ -77,7 +77,7 @@ namespace Mosa.Tool.TypeExplorer
 		{
 			if (openFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
 			{
-				LoadAssembly(openFileDialog.FileName);
+				LoadAssembly(openFileDialog.FileName);				
 			}
 		}
 
@@ -126,6 +126,8 @@ namespace Mosa.Tool.TypeExplorer
 			}
 
 			LoadAssembly(filename, includeTestKorlibToolStripMenuItem.Checked, cbPlatform.Text);
+
+			toolStripStatusLabel1.Text = "Assemblies Loaded!";
 		}
 
 		protected void UpdateTree()
@@ -337,6 +339,8 @@ namespace Mosa.Tool.TypeExplorer
 			ExplorerCompiler.Compile(typeSystem, typeLayout, internalTrace, cbPlatform.Text, enableSSAToolStripMenuItem.Checked);
 			tabControl1.SelectedTab = tabPage1;
 			rbOtherResult.Text = compileLog.ToString();
+
+			toolStripStatusLabel1.Text = "Compiled!";
 		}
 
 		private void nowToolStripMenuItem_Click(object sender, EventArgs e)

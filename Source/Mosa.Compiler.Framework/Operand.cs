@@ -637,6 +637,19 @@ namespace Mosa.Compiler.Framework
 
 			StringBuilder s = new StringBuilder();
 
+			if (BaseOperand != null)
+			{
+				s.Append("<");
+				s.Append(BaseOperand.ToString());
+
+				if (BaseOperand.High == this)
+					s.Append("/high");
+				else
+					s.Append("/low");
+			
+				s.Append("> ");
+			}
+
 			if (Name != null)
 			{
 				s.Append(Name);
@@ -644,54 +657,27 @@ namespace Mosa.Compiler.Framework
 
 			if (IsVirtualRegister)
 			{
-				s.AppendFormat("v{0}", index);
+				s.AppendFormat("V_{0}", index);
 			}
 			else if (IsLocalVariable && Name == null)
 			{
-				s.AppendFormat("l{0}", index);
+				s.AppendFormat("L_{0}", index);
 			}
 			else if (IsStackLocal && Name == null)
 			{
-				s.AppendFormat("t{0}", index);
+				s.AppendFormat("T_{0}", index);
 			}
 			else if (IsParameter && Name == null)
 			{
-				s.AppendFormat("p{0}", index);
+				s.AppendFormat("P_{0}", index);
 			}
-			else if (IsConstant)
+
+			if (IsConstant)
 			{
 				if (Value == null)
 					s.Append("const null");
 				else
 					s.AppendFormat("const {0}", Value);
-			}
-
-			if (BaseOperand != null)
-			{
-				s.Append(" <");
-				if (BaseOperand.IsVirtualRegister)
-				{
-					s.AppendFormat("v{0}", BaseOperand.index);
-				}
-				else if (BaseOperand.IsLocalVariable)
-				{
-					s.AppendFormat("l{0}", BaseOperand.index);
-				}
-				else if (BaseOperand.IsStackLocal)
-				{
-					s.AppendFormat("t{0}", BaseOperand.index);
-				}
-				else if (BaseOperand.IsParameter)
-				{
-					s.AppendFormat("p{0}", BaseOperand.index);
-				}
-
-				if (BaseOperand.High == this)
-					s.Append("/high");
-				else
-					s.Append("/low");
-
-				s.Append(">");
 			}
 
 			if (IsRuntimeMember)

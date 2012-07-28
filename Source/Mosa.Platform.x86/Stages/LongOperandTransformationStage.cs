@@ -1870,10 +1870,42 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IIRVisitor.Call(Context context)
 		{
+			Operand op0L, op0H;
+
 			if (context.Result != null && IsInt64(context.Result))
 			{
-				Operand op0L, op0H;
 				SplitLongOperand(context.Result, out op0L, out op0H);
+			}
+
+			foreach (var operand in context.Operands)
+			{
+				if (IsInt64(operand))
+				{
+					SplitLongOperand(operand, out op0L, out op0H);
+				}
+			}
+
+		}
+
+		/// <summary>
+		/// Visitation function for ReturnInstruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IIRVisitor.Return(Context context)
+		{
+			Operand op0L, op0H;
+
+			if (context.Result != null && IsInt64(context.Result))
+			{
+				SplitLongOperand(context.Result, out op0L, out op0H);
+			}
+
+			foreach (var operand in context.Operands)
+			{
+				if (IsInt64(operand))
+				{
+					SplitLongOperand(operand, out op0L, out op0H);
+				}
 			}
 		}
 
@@ -1969,12 +2001,6 @@ namespace Mosa.Platform.x86.Stages
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IIRVisitor.Prologue(Context context) { }
-
-		/// <summary>
-		/// Visitation function for ReturnInstruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void IIRVisitor.Return(Context context) { }
 
 		/// <summary>
 		/// Visitation function for NopInstruction.

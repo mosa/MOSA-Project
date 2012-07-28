@@ -201,10 +201,10 @@ namespace Mosa.Platform.x86
 				{
 					new CheckOperandCountStage(),
 					new LongOperandTransformationStage(),
-					//new AddressModeConversionStage(),
-					//new IRTransformationStage(),
-					//new TweakTransformationStage(),
-					//new MemToMemConversionStage(),
+					new AddressModeConversionStage(),
+					new IRTransformationStage(),
+				//    new TweakTransformationStage(),
+				//    new MemToMemConversionStage(),
 				});
 
 			//methodCompilerPipeline.InsertAfterLast<IBlockOrderStage>(
@@ -218,7 +218,7 @@ namespace Mosa.Platform.x86
 
 			//methodCompilerPipeline.Add(new ExceptionLayoutStage());
 		}
-		
+
 		/// <summary>
 		/// Gets the type memory requirements.
 		/// </summary>
