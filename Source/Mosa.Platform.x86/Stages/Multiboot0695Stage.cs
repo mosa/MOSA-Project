@@ -162,8 +162,8 @@ namespace Mosa.Platform.x86.Stages
 				Context ctx = new Context(instructionSet);
 
 				ctx.AppendInstruction(X86.Mov, ecx, Operand.CreateConstant(I4, 0x200000));
-				ctx.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(I4, ecx, new IntPtr(0x0)), eax);
-				ctx.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(I4, ecx, new IntPtr(0x4)), ebx);
+				ctx.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(I4, ecx, 0), eax);
+				ctx.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(I4, ecx, 4), ebx);
 
 				Operand entryPoint = Operand.CreateSymbolFromMethod(typeInitializerSchedulerStage.TypeInitializerMethod);
 
@@ -256,7 +256,7 @@ namespace Mosa.Platform.x86.Stages
 					bw.Write(load_end_addr);
 					bw.Write(bss_end_addr);
 
-					linker.Link(LinkType.AbsoluteAddress | LinkType.NativeI4, MultibootHeaderSymbolName, (int)stream.Position, 0, @"Mosa.Tools.Compiler.LinkerGenerated.<$>MultibootInit()", IntPtr.Zero);
+					linker.Link(LinkType.AbsoluteAddress | LinkType.NativeI4, MultibootHeaderSymbolName, (int)stream.Position, 0, @"Mosa.Tools.Compiler.LinkerGenerated.<$>MultibootInit()", 0);
 
 					bw.Write(VideoMode);
 					bw.Write(VideoWidth);

@@ -56,7 +56,7 @@ namespace Mosa.Platform.x86
 				(int)(codeStream.Position - codeStreamBasePosition),
 				(int)(codeStream.Position - codeStreamBasePosition) + 4,
 				symbolOperand.Name,
-				IntPtr.Zero
+				0
 			);
 
 			codeStream.Position += 4;
@@ -174,7 +174,7 @@ namespace Mosa.Platform.x86
 
 			if (displacement.IsLabel)
 			{
-				linker.Link(LinkType.AbsoluteAddress | LinkType.NativeI4, compiler.Method.ToString(), pos, 0, displacement.Name, IntPtr.Zero);
+				linker.Link(LinkType.AbsoluteAddress | LinkType.NativeI4, compiler.Method.ToString(), pos, 0, displacement.Name, 0);
 				codeStream.Position += 4;
 			}
 			else if (displacement.IsRuntimeMember)
@@ -184,12 +184,12 @@ namespace Mosa.Platform.x86
 			}
 			else if (displacement.IsSymbol)
 			{
-				linker.Link(LinkType.AbsoluteAddress | LinkType.NativeI4, compiler.Method.ToString(), pos, 0, displacement.Name, IntPtr.Zero);
+				linker.Link(LinkType.AbsoluteAddress | LinkType.NativeI4, compiler.Method.ToString(), pos, 0, displacement.Name, 0);
 				codeStream.Position += 4;
 			}
 			else
 			{
-				codeStream.Write(displacement.Offset.ToInt32(), true);
+				codeStream.Write(displacement.Offset, true);
 			}
 
 		}
@@ -204,7 +204,7 @@ namespace Mosa.Platform.x86
 			if (op.IsLocalVariable || op.IsStackTemp || op.IsMemoryAddress)
 			{
 				// Add the displacement
-				codeStream.Write(op .Offset.ToInt32(), true);
+				codeStream.Write((int)op.Offset, true);
 			}
 			else if (op.IsConstant)
 			{
@@ -332,7 +332,7 @@ namespace Mosa.Platform.x86
 			if (op.IsLocalVariable || op.IsStackTemp || op.IsMemoryAddress)
 			{
 				// Add the displacement
-				codeStream.Write(op.Offset.ToInt32(), true);
+				codeStream.Write((int)op.Offset, true);
 			}
 			else if (op.IsConstant)
 			{
@@ -421,9 +421,9 @@ namespace Mosa.Platform.x86
 			if (!op1IsRegister && op2IsRegister)
 			{
 				// Swap the memory operands
-				op1 = op2; 
+				op1 = op2;
 				op2 = null;
-				mop2 = mop1; 
+				mop2 = mop1;
 				mop1 = null;
 				op1IsRegister = op2IsRegister;
 				op2IsRegister = false;

@@ -289,14 +289,14 @@ namespace Mosa.Compiler.Framework.Stages
 			if (context.Operand1.Type is ValueTypeSigType)
 			{
 				var type = methodCompiler.Method.Module.GetType((context.Operand1.Type as ValueTypeSigType).Token);
-				var operand = Operand.CreateRuntimeMember(type.Fields[0].SignatureType, type.Fields[0], new IntPtr(0));
+				var operand = Operand.CreateRuntimeMember(type.Fields[0].SignatureType, type.Fields[0], 0);
 				context.SetOperand(0, operand);
 			}
 
 			if (context.Operand2.Type is ValueTypeSigType)
 			{
 				var type = methodCompiler.Method.Module.GetType((context.Operand2.Type as ValueTypeSigType).Token);
-				var operand = Operand.CreateRuntimeMember(type.Fields[0].SignatureType, type.Fields[0], new IntPtr(0));
+				var operand = Operand.CreateRuntimeMember(type.Fields[0].SignatureType, type.Fields[0], 0);
 				context.SetOperand(1, operand);
 			}
 
@@ -885,7 +885,7 @@ namespace Mosa.Compiler.Framework.Stages
 				using (Stream stream = linker.Allocate(symbolName, SectionKind.Text, 0, nativePointerAlignment))
 				{
 					// Method table and sync block
-					linker.Link(LinkType.AbsoluteAddress | LinkType.NativeI4, symbolName, 0, 0, @"System.String$mtable", IntPtr.Zero);
+					linker.Link(LinkType.AbsoluteAddress | LinkType.NativeI4, symbolName, 0, 0, @"System.String$mtable", 0);
 					stream.WriteZeroBytes(8);
 
 					// String length field

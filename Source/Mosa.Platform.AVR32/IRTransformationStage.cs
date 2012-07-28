@@ -214,12 +214,12 @@ namespace Mosa.Platform.AVR32
 			Operand result = context.Result;
 			Operand operand = context.Operand1;
 			Operand offset = context.Operand2;
-			IntPtr offsetPtr = IntPtr.Zero;
+			long offsetPtr = 0;
 
 			context.SetInstruction(AVR32.Ld, r8, operand);
 			if (offset.IsConstant)
 			{
-				offsetPtr = new IntPtr(Convert.ToInt64(offset.Value));
+				offsetPtr = (long)offset.ValueAsLongInteger;
 			}
 			else
 			{
@@ -542,10 +542,10 @@ namespace Mosa.Platform.AVR32
 			context.SetInstruction(AVR32.Ld, r8, destination);
 			context.AppendInstruction(AVR32.Ld, r9, value);
 
-			IntPtr offsetPtr = IntPtr.Zero;
+			long offsetPtr = 0;
 			if (offset.IsConstant)
 			{
-				offsetPtr = new IntPtr(Convert.ToInt64(offset.Value));
+				offsetPtr = (long)offset.ValueAsLongInteger;
 			}
 			else
 			{

@@ -37,7 +37,7 @@ namespace Mosa.Platform.x86.Intrinsic
 
 			Operand edx = Operand.CreateCPURegister(dest.Type, GeneralPurposeRegister.EDX);
 			Operand eax = Operand.CreateCPURegister(value.Type, GeneralPurposeRegister.EAX);
-			Operand memory = Operand.CreateMemoryAddress(new SigType(context.InvokeTarget.Signature.Parameters[1].Type), GeneralPurposeRegister.EDX, new IntPtr(0));
+			Operand memory = Operand.CreateMemoryAddress(new SigType(context.InvokeTarget.Signature.Parameters[1].Type), GeneralPurposeRegister.EDX, 0);
 
 			context.SetInstruction(X86.Mov, edx, dest);
 			context.AppendInstruction(X86.Mov, eax, value);

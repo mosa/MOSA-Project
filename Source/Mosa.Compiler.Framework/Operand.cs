@@ -65,11 +65,6 @@ namespace Mosa.Compiler.Framework
 		private Operand offsetBase;
 
 		/// <summary>
-		/// Holds the address offset if used together with a base register or the absolute address, if register is null.
-		/// </summary>
-		private IntPtr offset;
-
-		/// <summary>
 		/// Holds the runtime member.
 		/// </summary>
 		private RuntimeMember runtimeMember;
@@ -129,9 +124,12 @@ namespace Mosa.Compiler.Framework
 		public int SSAVersion { get; private set; }
 
 		/// <summary>
-		/// Gets the offset.
+		/// Holds the address offset if used together with a base register or the absolute address, if register is null.
 		/// </summary>
-		public IntPtr Offset { get { return offset; } set { offset = value; } }
+		/// <value>
+		/// The offset.
+		/// </value>
+		public long Offset { get; set; }
 
 		/// <summary>
 		/// Gets or sets the low operand.
@@ -382,11 +380,11 @@ namespace Mosa.Compiler.Framework
 		/// <param name="baseRegister">The base register.</param>
 		/// <param name="offset">The offset.</param>
 		/// <returns></returns>
-		public static Operand CreateMemoryAddress(SigType sigType, Register baseRegister, IntPtr offset) // TODO: Remove this method as virtual registers get implemented
+		public static Operand CreateMemoryAddress(SigType sigType, Register baseRegister, long offset) // TODO: Remove this method as virtual registers get implemented
 		{
 			Operand operand = new Operand(sigType, OperandType.MemoryAddress);
 			operand.register = baseRegister;
-			operand.offset = offset;
+			operand.Offset = offset;
 			return operand;
 		}
 
@@ -397,11 +395,11 @@ namespace Mosa.Compiler.Framework
 		/// <param name="offsetBase">The base register.</param>
 		/// <param name="offset">The offset.</param>
 		/// <returns></returns>
-		public static Operand CreateMemoryAddress(SigType sigType, Operand offsetBase, IntPtr offset)
+		public static Operand CreateMemoryAddress(SigType sigType, Operand offsetBase, long offset)
 		{
 			Operand operand = new Operand(sigType, OperandType.MemoryAddress);
 			operand.offsetBase = offsetBase;
-			operand.offset = offset;
+			operand.Offset = offset;
 			return operand;
 		}
 
@@ -415,7 +413,7 @@ namespace Mosa.Compiler.Framework
 		{
 			Operand operand = new Operand(sigType, OperandType.MemoryAddress | OperandType.Label);
 			operand.Name = label;
-			operand.offset = IntPtr.Zero;
+			operand.Offset = 0;
 			return operand;
 		}
 
@@ -426,10 +424,10 @@ namespace Mosa.Compiler.Framework
 		/// <param name="member">The member.</param>
 		/// <param name="offset">The offset.</param>
 		/// <returns></returns>
-		public static Operand CreateRuntimeMember(SigType type, RuntimeMember member, IntPtr offset)
+		public static Operand CreateRuntimeMember(SigType type, RuntimeMember member, int offset)
 		{
 			Operand operand = new Operand(type, OperandType.MemoryAddress | OperandType.RuntimeMember);
-			operand.offset = offset;
+			operand.Offset = offset;
 			operand.runtimeMember = member;
 			return operand;
 		}
@@ -442,7 +440,7 @@ namespace Mosa.Compiler.Framework
 		public static Operand CreateRuntimeMember(RuntimeField field)
 		{
 			Operand operand = new Operand(field.SignatureType, OperandType.MemoryAddress | OperandType.RuntimeMember);
-			operand.offset = IntPtr.Zero;
+			operand.Offset = 0;
 			operand.runtimeMember = field;
 			return operand;
 		}
@@ -461,7 +459,7 @@ namespace Mosa.Compiler.Framework
 			operand.Name = name;
 			operand.register = register;
 			operand.index = index;
-			operand.offset = new IntPtr(-index * 4);
+			operand.Offset = -index * 4; // FIXME: 4 is platform dependent!
 			return operand;
 		}
 
@@ -477,7 +475,7 @@ namespace Mosa.Compiler.Framework
 			Operand operand = new Operand(type, OperandType.MemoryAddress | OperandType.Parameter);
 			operand.register = register;
 			operand.index = index; // param.Position;
-			operand.offset = new IntPtr(param.Position * 4);
+			operand.Offset = param.Position * 4; // FIXME: 4 is platform dependent!
 			return operand;
 		}
 
@@ -498,13 +496,22 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Creates the low 32 bit portion of a 64-bit <see cref="Operand"/>.
 		/// </summary>
+		/// <param name="longOperand">The long operand.</param>
+		/// <param name="offset">The offset.</param>
+		/// <param name="index">The index.</param>
 		/// <returns></returns>
-		public static Operand CreateLowSplitForLong(Operand longOperand, int index)
+		public static Operand CreateLowSplitForLong(Operand longOperand, int offset, int index)
 		{
 			Debug.Assert(longOperand.Type.Type == CilElementType.U8 || longOperand.Type.Type == CilElementType.I8);
 
 			Operand operand;
 
+			if (longOperand.IsMemoryAddress)
+			{
+				operand = new Operand(BuiltInSigType.UInt32, OperandType.MemoryAddress);
+				operand.offsetBase = longOperand.offsetBase;
+				operand.Offset = longOperand.Offset + offset;
+			}
 			if (longOperand.IsConstant)
 			{
 				operand = new Operand(BuiltInSigType.UInt32, OperandType.Constant);
@@ -526,14 +533,23 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Creates the high 32 bit portion of a 64-bit <see cref="Operand"/>.
 		/// </summary>
+		/// <param name="longOperand">The long operand.</param>
+		/// <param name="offset">The offset.</param>
+		/// <param name="index">The index.</param>
 		/// <returns></returns>
-		public static Operand CreateHighSplitForLong(Operand longOperand, int index)
+		public static Operand CreateHighSplitForLong(Operand longOperand, int offset, int index)
 		{
 			Debug.Assert(longOperand.Type.Type == CilElementType.U8 || longOperand.Type.Type == CilElementType.I8);
 
 			Operand operand;
 
-			if (longOperand.IsConstant)
+			if (longOperand.IsMemoryAddress)
+			{
+				operand = new Operand(BuiltInSigType.UInt32, OperandType.MemoryAddress);
+				operand.offsetBase = longOperand.offsetBase;
+				operand.Offset = longOperand.Offset + offset;
+			}
+			else if (longOperand.IsConstant)
 			{
 				operand = new Operand(BuiltInSigType.UInt32, OperandType.Constant);
 				operand.Value = ((uint)longOperand.ValueAsLongInteger >> 32) & uint.MaxValue;
@@ -643,6 +659,35 @@ namespace Mosa.Compiler.Framework
 			{
 				s.AppendFormat("P_{0}", index);
 			}
+
+			if (BaseOperand != null)
+			{
+				s.Append(" <");
+				if (High == BaseOperand)
+					s.Append("H:");
+				else
+					s.Append("L:");
+
+				if (IsVirtualRegister)
+				{
+					s.AppendFormat("V_{0}", index);
+				}
+				else if (BaseOperand.IsLocalVariable)
+				{
+					s.AppendFormat("L_{0}", BaseOperand.index);
+				}
+				else if (BaseOperand.IsStackLocal)
+				{
+					s.AppendFormat("T_{0}", BaseOperand.index);
+				}
+				else if (BaseOperand.IsParameter)
+				{
+					s.AppendFormat("P_{0}", BaseOperand.index);
+				}
+
+				s.Append(">");
+			}
+
 			if (IsRuntimeMember)
 			{
 				s.Append(runtimeMember.ToString());
@@ -666,14 +711,14 @@ namespace Mosa.Compiler.Framework
 			{
 				if (register == null)
 				{
-					s.AppendFormat("[{0:X}h]", offset.ToInt32());
+					s.AppendFormat("[{0:X}h]", Offset);
 				}
 				else
 				{
-					if (offset.ToInt32() > 0)
-						s.AppendFormat("[{0}+{1:X}h]", register, offset.ToInt32());
+					if (Offset > 0)
+						s.AppendFormat("[{0}+{1:X}h]", register, Offset);
 					else
-						s.AppendFormat("[{0}-{1:X}h]", register, -offset.ToInt32());
+						s.AppendFormat("[{0}-{1:X}h]", register, -Offset);
 				}
 			}
 

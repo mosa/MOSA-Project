@@ -35,7 +35,7 @@ namespace Mosa.Platform.x86.Intrinsic
 
 			context.SetInstruction(X86.Pop, eax);
 			context.AppendInstruction(X86.Add, eax, Operand.CreateCPURegister(u4, GeneralPurposeRegister.ESP));
-			context.AppendInstruction(X86.Mov, eax, Operand.CreateMemoryAddress(u4, eax, new IntPtr(0)));
+			context.AppendInstruction(X86.Mov, eax, Operand.CreateMemoryAddress(u4, eax, 0));
 			context.AppendInstruction(X86.Mov, result, eax);
 			context.AppendInstruction(X86.Push, null, eax);
 		}

@@ -285,7 +285,7 @@ namespace Mosa.Compiler.Framework.Linker
 		/// <param name="methodRelativeBase">The base virtualAddress, if a relative link is required.</param>
 		/// <param name="targetSymbol">The linker symbol to link against.</param>
 		/// <param name="offset">An offset to apply to the link target.</param>
-		public virtual void Link(LinkType linkType, string symbolName, int methodOffset, int methodRelativeBase, string targetSymbol, IntPtr offset)
+		public virtual void Link(LinkType linkType, string symbolName, int methodOffset, int methodRelativeBase, string targetSymbol, long offset)
 		{
 			Debug.Assert(symbolName != null, @"Symbol can't be null.");
 			if (symbolName == null)
@@ -362,8 +362,7 @@ namespace Mosa.Compiler.Framework.Linker
 					methodAddress,
 					request.MethodOffset,
 					request.MethodRelativeBase,
-					virtualAddress + request.Offset.ToInt64()
-				);
+					virtualAddress + request.Offset);
 			}
 		}
 

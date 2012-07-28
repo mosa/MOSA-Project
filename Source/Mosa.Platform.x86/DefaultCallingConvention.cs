@@ -205,7 +205,7 @@ namespace Mosa.Platform.x86
 				if (op.Type.Type == CilElementType.ValueType)
 				{
 					for (int i = 0; i < parameterSize; i += 4)
-						ctx.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(op.Type, GeneralPurposeRegister.EDX, new IntPtr(stackSize + i)), Operand.CreateMemoryAddress(op.Type, op.Base, new IntPtr(op.Offset.ToInt64() + i)));
+						ctx.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(op.Type, GeneralPurposeRegister.EDX, stackSize + i), Operand.CreateMemoryAddress(op.Type, op.Base, op.Offset + i));
 
 					return;
 				}
@@ -230,9 +230,9 @@ namespace Mosa.Platform.x86
 							Operand eax = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.EAX);
 
 							ctx.AppendInstruction(X86.Mov, eax, op.Low);
-							ctx.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(op.Type, GeneralPurposeRegister.EDX, new IntPtr(stackSize)), eax);
+							ctx.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(op.Type, GeneralPurposeRegister.EDX, stackSize), eax);
 							ctx.AppendInstruction(X86.Mov, eax, op.High);
-							ctx.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(op.Type, GeneralPurposeRegister.EDX, new IntPtr(stackSize + 4)), eax);
+							ctx.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(op.Type, GeneralPurposeRegister.EDX, stackSize + 4), eax);
 						}
 						return;
 
@@ -248,14 +248,14 @@ namespace Mosa.Platform.x86
 				Operand eax = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.EAX);
 
 				ctx.AppendInstruction(X86.Mov, eax, op.Low);
-				ctx.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(BuiltInSigType.Int32, GeneralPurposeRegister.EDX, new IntPtr(stackSize)), eax);
+				ctx.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(BuiltInSigType.Int32, GeneralPurposeRegister.EDX, stackSize), eax);
 				ctx.AppendInstruction(X86.Mov, eax, op.High);
-				ctx.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(BuiltInSigType.Int32, GeneralPurposeRegister.EDX, new IntPtr(stackSize + 4)), eax);
+				ctx.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(BuiltInSigType.Int32, GeneralPurposeRegister.EDX, stackSize + 4), eax);
 
 				return;
 			}
 
-			ctx.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(op.Type, GeneralPurposeRegister.EDX, new IntPtr(stackSize)), op);
+			ctx.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(op.Type, GeneralPurposeRegister.EDX, stackSize), op);
 		}
 
 		/// <summary>

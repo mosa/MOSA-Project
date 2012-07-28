@@ -377,7 +377,7 @@ namespace Mosa.Platform.x86.Stages
 			Operand result = context.Result;
 			Operand operand = context.Operand1;
 			Operand offset = context.Operand2;
-			IntPtr offsetPtr = IntPtr.Zero;
+			long offsetPtr = 0;
 
 			Operand eax = AllocateVirtualRegister(operand.Type);
 
@@ -385,7 +385,7 @@ namespace Mosa.Platform.x86.Stages
 
 			if (offset.IsConstant)
 			{
-				offsetPtr = new IntPtr(Convert.ToInt64(offset.Value));
+				offsetPtr = (long)offset.ValueAsLongInteger;
 			}
 			else
 			{
@@ -408,13 +408,13 @@ namespace Mosa.Platform.x86.Stages
 
 			var eax = AllocateVirtualRegister(BuiltInSigType.Int32);
 			var elementType = GetElementType(type);
-			var offsetPtr = IntPtr.Zero;
+			long offsetPtr = 0;
 
 			context.SetInstruction(X86.Mov, eax, source);
 
 			if (offset.IsConstant)
 			{
-				offsetPtr = new IntPtr(Convert.ToInt64(offset.Value));
+				offsetPtr = (long)offset.ValueAsLongInteger;
 			}
 			else
 			{
@@ -439,13 +439,13 @@ namespace Mosa.Platform.x86.Stages
 
 			Operand eax = AllocateVirtualRegister(source.Type);
 			SigType elementType = GetElementType(source.Type);
-			IntPtr offsetPtr = IntPtr.Zero;
+			long offsetPtr = 0;
 
 			context.SetInstruction(X86.Mov, eax, source);
 
 			if (offset.IsConstant)
 			{
-				offsetPtr = new IntPtr(Convert.ToInt64(offset.Value));
+				offsetPtr = (long)offset.ValueAsLongInteger;
 			}
 
 			if (elementType.Type == CilElementType.Char ||
@@ -718,10 +718,10 @@ namespace Mosa.Platform.x86.Stages
 			context.SetInstruction(X86.Mov, eax, destination);
 			context.AppendInstruction(X86.Mov, edx, value);
 
-			IntPtr offsetPtr = IntPtr.Zero;
+			long offsetPtr = 0;
 			if (offset.IsConstant)
 			{
-				offsetPtr = new IntPtr(Convert.ToInt64(offset.Value));
+				offsetPtr = (long)offset.ValueAsLongInteger;
 			}
 			else
 			{

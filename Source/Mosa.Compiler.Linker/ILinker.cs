@@ -116,7 +116,7 @@ namespace Mosa.Compiler.Linker
 		/// <param name="methodRelativeBase">The base virtualAddress, if a relative link is required.</param>
 		/// <param name="targetSymbol">The linker symbol name to link against.</param>
 		/// <param name="offset">An offset to apply to the link target.</param>
-		void Link(LinkType linkType, string symbolName, int methodOffset, int methodRelativeBase, string targetSymbol, IntPtr offset);
+		void Link(LinkType linkType, string symbolName, int methodOffset, int methodRelativeBase, string targetSymbol, long offset);
 
 		#endregion // Methods
 	}

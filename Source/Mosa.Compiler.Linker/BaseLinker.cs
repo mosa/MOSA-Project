@@ -48,7 +48,7 @@ namespace Mosa.Compiler.Linker
 		/// A dictionary containing all symbol seen in the assembly.
 		/// </summary>
 		private readonly Dictionary<string, LinkerSymbol> symbols;
-	
+
 		/// <summary>
 		/// Flag is the target platform is little-endian
 		/// </summary>
@@ -209,7 +209,7 @@ namespace Mosa.Compiler.Linker
 
 				// Create a linker symbol for the name
 				LinkerSymbol symbol = new LinkerSymbol(name, section, baseStream.Position);
-				
+
 				// Save the symbol for later use
 				if (!symbols.ContainsKey(symbol.Name)) // FIXME: Remove this line when generic patch is fixed! It duplicates generic types
 					symbols.Add(symbol.Name, symbol);
@@ -287,7 +287,7 @@ namespace Mosa.Compiler.Linker
 		/// code. On 32-bit systems, only the lower 32 bits are valid. The above are not used. An implementation of
 		/// IAssemblyLinker may not rely on 64-bits being stored in the memory defined by position.
 		/// </returns>
-		public virtual void Link(LinkType linkType, string symbolName, int methodOffset, int methodRelativeBase, string targetSymbol, IntPtr offset)
+		public virtual void Link(LinkType linkType, string symbolName, int methodOffset, int methodRelativeBase, string targetSymbol, long offset)
 		{
 			Debug.Assert(symbolName != null, @"Symbol can't be null.");
 			if (symbolName == null)
@@ -347,8 +347,7 @@ namespace Mosa.Compiler.Linker
 					methodAddress,
 					request.MethodOffset,
 					request.MethodRelativeBase,
-					virtualAddress + request.Offset.ToInt64()
-				);
+					virtualAddress + request.Offset);
 			}
 		}
 

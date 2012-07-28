@@ -59,7 +59,7 @@ namespace Mosa.Compiler.Framework.Stages
 				string methodTableSymbol = GetMethodTableForType(allocatedType);
 				
 				if (methodTableSymbol != null)
-					methodCompiler.Linker.Link(LinkType.AbsoluteAddress | LinkType.NativeI4, symbolName, 0, 0, methodTableSymbol, IntPtr.Zero);
+					methodCompiler.Linker.Link(LinkType.AbsoluteAddress | LinkType.NativeI4, symbolName, 0, 0, methodTableSymbol, 0);
 			}
 
 			// Issue a load request before the newobj and before the assignment.

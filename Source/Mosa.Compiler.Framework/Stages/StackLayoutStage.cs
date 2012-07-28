@@ -150,7 +150,7 @@ namespace Mosa.Compiler.Framework.Stages
 					offset += (padding + size);
 				}
 
-				operand.Offset = new IntPtr(thisOffset);
+				operand.Offset = thisOffset;
 			}
 
 			return offset;

@@ -29,7 +29,7 @@ namespace Mosa.Platform.x86.Intrinsic
 		/// <param name="typeSystem">The type system.</param>
 		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, ITypeSystem typeSystem, IList<RuntimeParameter> parameters)
 		{
-			Operand operand = Operand.CreateMemoryAddress(BuiltInSigType.Ptr, GeneralPurposeRegister.EAX, new System.IntPtr(0));
+			Operand operand = Operand.CreateMemoryAddress(BuiltInSigType.Ptr, GeneralPurposeRegister.EAX, 0);
 			context.SetInstruction(X86.Mov, Operand.CreateCPURegister(BuiltInSigType.Ptr, GeneralPurposeRegister.EAX), context.Operand1);
 			context.AppendInstruction(X86.Lgdt, null, operand);
 

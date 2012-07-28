@@ -209,7 +209,7 @@ namespace Mosa.Platform.AVR32
 				if (op.Type.Type == CilElementType.ValueType)
 				{
 					for (int i = 0; i < parameterSize; i += 4)
-						ctx.AppendInstruction(AVR32.Mov, Operand.CreateMemoryAddress(op.Type, GeneralPurposeRegister.R9, new IntPtr(stackSize + i)), Operand.CreateMemoryAddress(op.Type, op.Base, new IntPtr(op.Offset.ToInt64() + i)));
+						ctx.AppendInstruction(AVR32.Mov, Operand.CreateMemoryAddress(op.Type, GeneralPurposeRegister.R9, stackSize + i), Operand.CreateMemoryAddress(op.Type, op.Base, op.Offset + i));
 
 					return;
 				}
@@ -266,7 +266,7 @@ namespace Mosa.Platform.AVR32
 				return;
 			}
 
-			ctx.AppendInstruction(AVR32.Mov, Operand.CreateMemoryAddress(op.Type, GeneralPurposeRegister.R9, new IntPtr(stackSize)), op);
+			ctx.AppendInstruction(AVR32.Mov, Operand.CreateMemoryAddress(op.Type, GeneralPurposeRegister.R9, stackSize), op);
 		}
 
 		/// <summary>

@@ -46,7 +46,7 @@ namespace Mosa.Compiler.Linker
 		/// <summary>
 		/// Holds an offset to apply to the link target.
 		/// </summary>
-		private readonly IntPtr offset;
+		private readonly long offset;
 
 		#endregion // Data members
 
@@ -61,7 +61,7 @@ namespace Mosa.Compiler.Linker
 		/// <param name="methodRelativeBase">The method relative base.</param>
 		/// <param name="targetSymbolName">The linker symbol to link against.</param>
 		/// <param name="offset">An offset to apply to the link target.</param>
-		public LinkRequest(LinkType linkType, string symbolName, int methodOffset, int methodRelativeBase, string targetSymbolName, IntPtr offset)
+		public LinkRequest(LinkType linkType, string symbolName, int methodOffset, int methodRelativeBase, string targetSymbolName, long offset)
 		{
 			this.symbolName = symbolName;
 			this.methodOffset = methodOffset;
@@ -120,7 +120,7 @@ namespace Mosa.Compiler.Linker
 		/// Gets the offset to apply to the link target.
 		/// </summary>
 		/// <value>The offset.</value>
-		public IntPtr Offset
+		public long Offset
 		{
 			get { return offset; }
 		}

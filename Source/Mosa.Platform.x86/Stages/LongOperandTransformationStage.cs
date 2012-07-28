@@ -34,7 +34,7 @@ namespace Mosa.Platform.x86.Stages
 
 		private void SplitLongOperand(Operand operand)
 		{
-			methodCompiler.VirtualRegisters.SplitLongOperand(operand);
+			methodCompiler.VirtualRegisters.SplitLongOperand(operand, 0, 4);
 		}
 
 		private void SplitLongOperand(Operand operand, out Operand operandLow, out Operand operandHigh)
@@ -1398,9 +1398,9 @@ namespace Mosa.Platform.x86.Stages
 			context.SetInstruction(X86.Mov, eax, address);
 			context.AppendInstruction(X86.Add, eax, offset);
 
-			context.AppendInstruction(X86.Mov, edx, Operand.CreateMemoryAddress(BuiltInSigType.UInt32, eax, IntPtr.Zero));
+			context.AppendInstruction(X86.Mov, edx, Operand.CreateMemoryAddress(BuiltInSigType.UInt32, eax, 0));
 			context.AppendInstruction(X86.Mov, result.Low, edx);
-			context.AppendInstruction(X86.Mov, edx, Operand.CreateMemoryAddress(BuiltInSigType.UInt32, eax, new IntPtr(4)));
+			context.AppendInstruction(X86.Mov, edx, Operand.CreateMemoryAddress(BuiltInSigType.UInt32, eax, 4));
 			context.AppendInstruction(X86.Mov, result.High, edx);
 		}
 
@@ -1425,9 +1425,9 @@ namespace Mosa.Platform.x86.Stages
 			context.AppendInstruction(X86.Add, edx, offset);
 
 			context.AppendInstruction(X86.Mov, eax, value.Low);
-			context.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(BuiltInSigType.UInt32, edx, IntPtr.Zero), eax);
+			context.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(BuiltInSigType.UInt32, edx, 0), eax);
 			context.AppendInstruction(X86.Mov, eax, value.High);
-			context.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(BuiltInSigType.UInt32, edx, new IntPtr(4)), eax);
+			context.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(BuiltInSigType.UInt32, edx, 4), eax);
 		}
 
 		/// <summary>

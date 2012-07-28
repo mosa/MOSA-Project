@@ -131,7 +131,7 @@ namespace Mosa.Platform.AVR32
 			return ((value & 0x001FFFFF) != value);
 		}
 
-		protected bool IsBetween(int value, int lo, int hi)
+		protected bool IsBetween(long value, long lo, long hi)
 		{
 			return value >= lo && value <= hi;
 		}

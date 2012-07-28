@@ -73,8 +73,7 @@ namespace Mosa.Platform.AVR32
 				(int)(codeStream.Position - codeStreamBasePosition),
 				(int)(codeStream.Position - codeStreamBasePosition) + 4,
 				symbolOperand.Name,
-				IntPtr.Zero
-			);
+				0);
 
 			codeStream.Position += 4;
 		}
@@ -253,7 +252,7 @@ namespace Mosa.Platform.AVR32
 
 			buffer |= 0xE0000000;
 			buffer |= (uint)((opcode & 0x01FF) << 20);
-			buffer |= (uint)(register  << 16);
+			buffer |= (uint)(register << 16);
 			buffer |= (uint)(k16);
 
 			Write(buffer);

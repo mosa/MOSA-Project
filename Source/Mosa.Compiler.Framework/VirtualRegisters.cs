@@ -7,6 +7,7 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using System.Diagnostics;
 using System.Collections;
 using System.Collections.Generic;
 using Mosa.Compiler.Metadata.Signatures;
@@ -52,12 +53,14 @@ namespace Mosa.Compiler.Framework
 			return virtualRegister;
 		}
 
-		public void SplitLongOperand(Operand longOperand)
+		public void SplitLongOperand(Operand longOperand, int highOffset, int lowOffset)
 		{
-			if (longOperand.Low == null)
+			Debug.Assert(longOperand.StackType == StackTypeCode.Int64);
+
+			if (longOperand.Low == null && longOperand.High == null)
 			{
-				virtualRegisters.Add(Operand.CreateHighSplitForLong(longOperand, virtualRegisters.Count + 1));
-				virtualRegisters.Add(Operand.CreateLowSplitForLong(longOperand, virtualRegisters.Count + 1));
+				virtualRegisters.Add(Operand.CreateHighSplitForLong(longOperand, highOffset, virtualRegisters.Count + 1));
+				virtualRegisters.Add(Operand.CreateLowSplitForLong(longOperand, lowOffset, virtualRegisters.Count + 1));
 			}
 		}
 
