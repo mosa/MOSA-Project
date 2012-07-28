@@ -25,8 +25,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private Stack<int> worklist = new Stack<int>();
 
-		private List<Operand> localVariablesInExceptions = new List<Operand>();
-
 		#region IMethodCompilerStage Members
 
 		/// <summary>
@@ -133,41 +131,6 @@ namespace Mosa.Compiler.Framework.Stages
 		}
 
 		/// <summary>
-		/// Collects the variables in exceptions.
-		/// </summary>
-		private void CollectVariablesInExceptions()
-		{
-			if (basicBlocks.HeadBlocks.Count == 1)
-				return;
-
-			foreach (var head in basicBlocks.HeadBlocks)
-			{
-				if (head == basicBlocks.PrologueBlock)
-					continue;
-
-				foreach (BasicBlock block in basicBlocks.GetConnectedBlocksStartingAtHead(head))
-				{
-					for (Context ctx = new Context(instructionSet, block); !ctx.EndOfInstruction; ctx.GotoNext())
-					{
-						if (ctx.IsEmpty)
-							continue;
-
-						foreach (var operand in ctx.Operands)
-							if (operand.IsLocalVariable)
-								localVariablesInExceptions.AddIfNew(operand);
-
-						if (ctx.Result.IsLocalVariable)
-							localVariablesInExceptions.AddIfNew(ctx.Result);
-					}
-
-					// quick out
-					if (localVariablesInExceptions.Count == methodCompiler.StackLayout.LocalVariableCount)
-						return;
-				}
-			}
-		}
-
-		/// <summary>
 		/// Removes the useless move and dead code
 		/// </summary>
 		/// <param name="context">The context.</param>
@@ -192,9 +155,8 @@ namespace Mosa.Compiler.Framework.Stages
 			if (context.Result.Uses.Count != 0 || context.Instruction is IR.Call || context.Instruction is IR.IntrinsicMethodCall)
 				return;
 
-			if (context.Result.IsLocalVariable)
-				if (localVariablesInExceptions.Contains(context.Result))
-					return;
+			//if (context.Result.IsLocalVariable)
+			//    return;
 
 			if (IsLogging) Trace("REMOVED:\t" + context.ToString());
 			AddOperandUsageToWorkList(context);
@@ -274,9 +236,8 @@ namespace Mosa.Compiler.Framework.Stages
 				return;
 
 			if (context.Result.IsLocalVariable)
-				if (localVariablesInExceptions.Contains(context.Result))
-					return;
-			
+				return;
+
 			//if (!context.Result.IsVirtualRegister)
 			//    return;
 

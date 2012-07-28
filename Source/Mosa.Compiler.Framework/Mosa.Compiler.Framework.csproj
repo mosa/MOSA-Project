@@ -97,7 +97,7 @@
     <Compile Include="Stages\EdgeSplitStage.cs" />
     <Compile Include="Stages\SimpleRegisterAllocatorStage.cs" />
     <Compile Include="VirtualRegisters.cs" />
-    <Compile Include="Stages\TypeSchedulerStage.cs" />
+    <Compile Include="Stages\LocalVariablePromotionStage.cs" />
     <Compile Include="BaseCodeEmitter.cs" />
     <Compile Include="BaseInstruction.cs" />
     <Compile Include="Stages\BasicBlockBuilderStage.cs" />

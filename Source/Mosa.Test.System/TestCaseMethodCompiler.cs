@@ -42,6 +42,7 @@ namespace Mosa.Test.System
 				new StaticAllocationResolutionStage(),
 				new CILTransformationStage(),
 				
+				new LocalVariablePromotionStage(), 
 				new	EdgeSplitStage(),
 				new DominanceCalculationStage(),
 				new PhiPlacementStage(),

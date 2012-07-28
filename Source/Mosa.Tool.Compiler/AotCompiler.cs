@@ -99,7 +99,6 @@ namespace Mosa.Tool.Compiler
 				compilerOptions.BootCompilerStage,
 				new MethodPipelineExportStage(),
 				new PlugStage(),
-				new TypeSchedulerStage(), 
 				new MethodCompilerSchedulerStage(),
 				new TypeInitializerSchedulerStage(),
 				compilerOptions.BootCompilerStage,
