@@ -33,7 +33,7 @@ namespace Mosa.HelloWorld.x86
 
 			Screen.Write(@"MOSA OS Version 1.0 '");
 			Screen.Color = Colors.Red;
-			Screen.Write(@"Zaphod");
+			Screen.Write(@"Titan");
 			Screen.Color = Colors.Yellow;
 			Screen.Write(@"'                                Copyright 2008-2011");
 			Screen.NextLine();
