@@ -160,14 +160,12 @@ namespace Mosa.Platform.x86.Stages
 			if (op.IsConstant)
 			{
 				Operand ebx = AllocateVirtualRegister(BuiltInSigType.Int32);
-				ctx.SetInstruction(X86.Push, null, ebx);
-				ctx.AppendInstruction(X86.Mov, ebx, op);
+				ctx.SetInstruction(X86.Mov, ebx, op);
 				ctx.AppendInstruction(X86.IDiv, ebx);
-				ctx.AppendInstruction(X86.Pop, ebx);
 			}
 			else
 			{
-				ctx.SetInstruction(X86.IDiv, null, op);
+				ctx.SetInstruction(X86.IDiv, null, op); // FIXME: set the result
 			}
 		}
 

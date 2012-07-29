@@ -22,6 +22,6 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		/// <param name="context">The context.</param>
 		/// <param name="typeSystem">The type system.</param>
-		void ReplaceIntrinsicCall(Context context, ITypeSystem typeSystem, IList<RuntimeParameter> parameters);
+		void ReplaceIntrinsicCall(Context context, BaseMethodCompiler methodCompiler);
 	}
 }

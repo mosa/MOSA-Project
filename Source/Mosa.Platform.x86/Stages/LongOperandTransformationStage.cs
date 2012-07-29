@@ -1623,7 +1623,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IIRVisitor.LogicalOr(Context context)
 		{
-			if (IsInt64(context.Operand1))
+			if (AreAny64Bit(context))
 			{
 				ExpandOr(context);
 			}
@@ -1635,7 +1635,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IIRVisitor.LogicalXor(Context context)
 		{
-			if (IsInt64(context.Operand1))
+			if (AreAny64Bit(context))
 			{
 				ExpandXor(context);
 			}
@@ -1647,7 +1647,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IIRVisitor.LogicalNot(Context context)
 		{
-			if (IsInt64(context.Operand1))
+			if (AreAny64Bit(context))
 			{
 				ExpandNot(context);
 			}
@@ -1659,8 +1659,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IIRVisitor.Move(Context context)
 		{
-			// FIXME: Why aren't we doing an SSE2 move for int64?
-			if (IsInt64(context.Operand1))
+			if (AreAny64Bit(context))
 			{
 				ExpandMove(context);
 			}
@@ -1672,7 +1671,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IIRVisitor.ShiftLeft(Context context)
 		{
-			if (IsInt64(context.Operand1))
+			if (AreAny64Bit(context))
 			{
 				ExpandShiftLeft(context);
 			}
@@ -1684,7 +1683,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IIRVisitor.ShiftRight(Context context)
 		{
-			if (IsInt64(context.Operand1))
+			if (AreAny64Bit(context))
 			{
 				ExpandShiftRight(context);
 			}
@@ -1696,7 +1695,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IIRVisitor.SignExtendedMove(Context context)
 		{
-			if (IsInt64(context.Operand1) || IsInt64(context.Result))
+			if (AreAny64Bit(context))
 			{
 				ExpandSignedMove(context);
 			}
@@ -1720,7 +1719,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IIRVisitor.DivSigned(Context context)
 		{
-			if (IsInt64(context.Operand1))
+			if (AreAny64Bit(context))
 			{
 				ExpandDiv(context);
 			}
@@ -1732,7 +1731,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IIRVisitor.DivUnsigned(Context context)
 		{
-			if (IsInt64(context.Operand1))
+			if (AreAny64Bit(context))
 			{
 				ExpandUDiv(context);
 			}
@@ -1744,18 +1743,10 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IIRVisitor.MulSigned(Context context)
 		{
-			if (IsInt64(context.Operand1))
+			if (AreAny64Bit(context))
 			{
 				ExpandMul(context);
 			}
-		}
-
-		/// <summary>
-		/// Visitation function for MulFInstruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void IIRVisitor.MulFloat(Context context)
-		{
 		}
 
 		/// <summary>
@@ -1764,7 +1755,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IIRVisitor.MulUnsigned(Context context)
 		{
-			if (IsInt64(context.Operand1))
+			if (AreAny64Bit(context))
 			{
 				ExpandMul(context);
 			}
@@ -1776,19 +1767,9 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IIRVisitor.SubSigned(Context context)
 		{
-			if (IsInt64(context.Operand1))
+			if (AreAny64Bit(context))
 			{
 				ExpandSub(context);
-			}
-			else
-			{
-				//FIXME: Move to IRTransformationStage
-				if (context.Operand2.IsConstant && context.Operand1.Type.Type == CilElementType.Char)
-				{
-					Operand ecx = AllocateVirtualRegister(context.Operand1.Type);
-					context.InsertBefore().SetInstruction(X86.Mov, ecx, context.Operand2);
-					context.Operand2 = ecx;
-				}
 			}
 		}
 
@@ -1798,7 +1779,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IIRVisitor.SubUnsigned(Context context)
 		{
-			if (IsInt64(context.Operand1))
+			if (AreAny64Bit(context))
 			{
 				ExpandSub(context);
 			}
@@ -1810,7 +1791,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IIRVisitor.RemSigned(Context context)
 		{
-			if (IsInt64(context.Operand1))
+			if (AreAny64Bit(context))
 			{
 				ExpandRem(context);
 			}
@@ -1822,7 +1803,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IIRVisitor.RemUnsigned(Context context)
 		{
-			if (IsInt64(context.Operand1))
+			if (AreAny64Bit(context))
 			{
 				ExpandURem(context);
 			}
@@ -1834,7 +1815,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IIRVisitor.ZeroExtendedMove(Context context)
 		{
-			if (IsInt64(context.Result))
+			if (AreAny64Bit(context))
 			{
 				ExpandUnsignedMove(context);
 			}
@@ -1846,7 +1827,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IIRVisitor.AddSigned(Context context)
 		{
-			if (IsInt64(context.Operand1))
+			if (AreAny64Bit(context))
 			{
 				ExpandAdd(context);
 			}
@@ -1858,7 +1839,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IIRVisitor.AddUnsigned(Context context)
 		{
-			if (IsInt64(context.Operand1))
+			if (AreAny64Bit(context))
 			{
 				ExpandAdd(context);
 			}
@@ -1914,13 +1895,13 @@ namespace Mosa.Platform.x86.Stages
 		#region IIRVisitor - Unused
 
 		/// <summary>
-		/// Visitation function for RemFInstruction.
+		/// Visitation function for RemFloatInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IIRVisitor.RemFloat(Context context) { }
 
 		/// <summary>
-		/// Visitation function for SubFInstruction.
+		/// Visitation function for SubFloatInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IIRVisitor.SubFloat(Context context) { }
@@ -1979,7 +1960,7 @@ namespace Mosa.Platform.x86.Stages
 		void IIRVisitor.FloatToIntegerConversion(Context context) { }
 
 		/// <summary>
-		/// Visitation function for IntegerToFloatingPointConversionInstruction instruction.
+		/// Visitation function for IntegerToFloatingPointConversionInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IIRVisitor.IntegerToFloatConversion(Context context) { }
@@ -2007,6 +1988,14 @@ namespace Mosa.Platform.x86.Stages
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IIRVisitor.Nop(Context context) { }
+
+		/// <summary>
+		/// Visitation function for MulFloatInstruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IIRVisitor.MulFloat(Context context)
+		{
+		}
 
 		/// <summary>
 		/// Visitation function for ThrowInstruction.

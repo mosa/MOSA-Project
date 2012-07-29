@@ -30,14 +30,14 @@ namespace Mosa.Platform.x86.Intrinsic
 		/// </summary>
 		/// <param name="context">The context.</param>
 		/// <param name="typeSystem">The type system.</param>
-		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, ITypeSystem typeSystem, IList<RuntimeParameter> parameters)
+		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, BaseMethodCompiler methodCompiler)
 		{
 			Operand dest = context.Operand1;
 			Operand value = context.Operand2;
 
-			Operand edx = Operand.CreateCPURegister(dest.Type, GeneralPurposeRegister.EDX);
-			Operand eax = Operand.CreateCPURegister(value.Type, GeneralPurposeRegister.EAX);
-			Operand memory = Operand.CreateMemoryAddress(new SigType(context.InvokeTarget.Signature.Parameters[1].Type), GeneralPurposeRegister.EDX, 0);
+			Operand edx = methodCompiler.CreateVirtualRegister(dest.Type);
+			Operand eax = methodCompiler.CreateVirtualRegister(value.Type);
+			Operand memory = Operand.CreateMemoryAddress(new SigType(context.InvokeTarget.Signature.Parameters[1].Type), edx, 0);
 
 			context.SetInstruction(X86.Mov, edx, dest);
 			context.AppendInstruction(X86.Mov, eax, value);

@@ -53,7 +53,7 @@ namespace Mosa.Compiler.Framework.Stages
 					if (instance == null)
 						return;
 
-					instance.ReplaceIntrinsicCall(context, typeSystem, methodCompiler.Method.Parameters);
+					instance.ReplaceIntrinsicCall(context, methodCompiler);
 				}
 			}
 		}

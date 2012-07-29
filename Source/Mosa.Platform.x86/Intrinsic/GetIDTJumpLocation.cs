@@ -13,7 +13,7 @@ using System.Diagnostics;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Compiler.TypeSystem;
-using IR = Mosa.Compiler.Framework.IR;
+using Mosa.Compiler.Framework.IR;
 
 namespace Mosa.Platform.x86.Intrinsic
 {
@@ -29,7 +29,7 @@ namespace Mosa.Platform.x86.Intrinsic
 		/// </summary>
 		/// <param name="context">The context.</param>
 		/// <param name="typeSystem">The type system.</param>
-		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, ITypeSystem typeSystem, IList<RuntimeParameter> parameters)
+		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, BaseMethodCompiler methodCompiler)
 		{
 			Debug.Assert(context.Operand1.IsConstant);
 
@@ -38,7 +38,7 @@ namespace Mosa.Platform.x86.Intrinsic
 			if ((irq > 256) || (irq < 0))
 				throw new InvalidOperationException();
 
-			context.SetInstruction(IR.IRInstruction.Move, context.Result, Operand.CreateSymbol(BuiltInSigType.Ptr, @"Mosa.Tools.Compiler.LinkerGenerated.<$>InterruptISR" + irq.ToString() + "()"));
+			context.SetInstruction(IRInstruction.Move, context.Result, Operand.CreateSymbol(BuiltInSigType.Ptr, @"Mosa.Tools.Compiler.LinkerGenerated.<$>InterruptISR" + irq.ToString() + "()"));
 		}
 
 		#endregion // Methods

@@ -27,11 +27,10 @@ namespace Mosa.Platform.x86.Intrinsic
 		/// </summary>
 		/// <param name="context">The context.</param>
 		/// <param name="typeSystem">The type system.</param>
-		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, ITypeSystem typeSystem, IList<RuntimeParameter> parameters)
+		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, BaseMethodCompiler methodCompiler)
 		{
 			Operand result = context.Result;
-
-			Operand edx = Operand.CreateCPURegister(BuiltInSigType.Ptr, GeneralPurposeRegister.EDX); // FIXME - need access to virtual register allocator
+			Operand edx = methodCompiler.CreateVirtualRegister(BuiltInSigType.Ptr);
 			Operand operand = Operand.CreateMemoryAddress(context.Operand1.Type, edx, 0);
 
 			context.SetInstruction(X86.Mov, edx, context.Operand1);
