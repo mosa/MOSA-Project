@@ -34,7 +34,7 @@ namespace Mosa.CoolWorld.x86
 			Console.Color = Colors.White;
 			Console.BackgroundColor = Colors.Green;
 
-			Console.Write(@"                   MOSA OS Version 0.1 - Compiler Version 1.0");
+			Console.Write(@"                   MOSA OS Version 1.2 - Compiler Version 1.2");
 			FillLine();
 			Console.Color = Colors.White;
 			Console.BackgroundColor = Colors.Black;
