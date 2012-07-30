@@ -67,12 +67,13 @@
   <ItemGroup>
     <Compile Include="Boot.cs" />
     <Compile Include="Tests\ComparisonTest.cs" />
+    <Compile Include="Tests\DelegateTest.cs" />
     <Compile Include="Tests\ExceptionTest.cs" />
     <Compile Include="Tests\Generic2Test.cs" />
     <Compile Include="Tests\KernelTest.cs" />
     <Compile Include="Tests\IsInstTest.cs" />
     <Compile Include="Tests\PlugTest.cs" />
-    <Compile Include="Tests\SimpleTest.cs" />
+    <Compile Include="Tests\OptimizationTest.cs" />
     <Compile Include="Tests\StringTest.cs" />
     <Compile Include="Tests\InterfaceTest.cs" />
     <Compile Include="Tests\GenericTest.cs" />

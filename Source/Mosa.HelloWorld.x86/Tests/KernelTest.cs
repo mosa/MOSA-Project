@@ -73,6 +73,7 @@ namespace Mosa.HelloWorld.x86.Tests
 			Console.Color = Colors.Yellow;
 			Console.Write("]");
 
+			var delegateTest = new DelegateTest();
 			var stringTest = new StringTest();
 			var interfaceTest = new InterfaceTest();
 			var genericsTest = new GenericTest();
@@ -81,8 +82,9 @@ namespace Mosa.HelloWorld.x86.Tests
 			var exceptionTest = new ExceptionTest();
 			var plugTestTest = new PlugTestTest();
 			var compareTest = new ComparisonTest();
-			var simpleTest = new SimpleTest();
+			var simpleTest = new OptimizationTest();
 
+			delegateTest.Test();
 			stringTest.Test();
 			interfaceTest.Test();
 			genericsTest.Test();

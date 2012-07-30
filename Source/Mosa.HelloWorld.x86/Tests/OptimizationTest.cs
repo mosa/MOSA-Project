@@ -9,25 +9,25 @@
 
 namespace Mosa.HelloWorld.x86.Tests
 {
-	public class SimpleTest : KernelTest
+	public class OptimizationTest : KernelTest
 	{
-		public SimpleTest()
-			: base("Simple")
+		public OptimizationTest()
+			: base("Optimization")
 		{
-			testMethods.Add(SimpleTest1);
-			testMethods.Add(SimpleTest2);
-			testMethods.Add(SimpleTest3);
-			testMethods.Add(SimpleTest4);
-			testMethods.Add(SimpleTest5);
-			testMethods.Add(SimpleTest6);
-			testMethods.Add(SimpleTest7);
-			testMethods.Add(SimpleTest8);
-			testMethods.Add(SimpleTest9);
-			testMethods.Add(SimpleTest10);
-			testMethods.Add(SimpleTest99);
+			testMethods.Add(OptimizationTest1);
+			testMethods.Add(OptimizationTest2);
+			testMethods.Add(OptimizationTest3);
+			testMethods.Add(OptimizationTest4);
+			testMethods.Add(OptimizationTest5);
+			testMethods.Add(OptimizationTest6);
+			testMethods.Add(OptimizationTest7);
+			testMethods.Add(OptimizationTest8);
+			testMethods.Add(OptimizationTest9);
+			testMethods.Add(OptimizationTest10);
+			testMethods.Add(OptimizationTest11);
 		}
 
-		public static bool SimpleTest1()
+		public static bool OptimizationTest1()
 		{
 			int a = 10;
 			int b = 20;
@@ -37,7 +37,7 @@ namespace Mosa.HelloWorld.x86.Tests
 			return c == 30;
 		}
 
-		public static bool SimpleTest2()
+		public static bool OptimizationTest2()
 		{
 			uint a = 10;
 			uint b = 20;
@@ -47,7 +47,7 @@ namespace Mosa.HelloWorld.x86.Tests
 			return c == 30;
 		}
 
-		public static bool SimpleTest3()
+		public static bool OptimizationTest3()
 		{
 			byte a = 10;
 			uint b = 20;
@@ -57,7 +57,7 @@ namespace Mosa.HelloWorld.x86.Tests
 			return c == 30;
 		}
 
-		public static bool SimpleTest4()
+		public static bool OptimizationTest4()
 		{
 			ulong a = 10;
 			ulong b = 20;
@@ -67,7 +67,7 @@ namespace Mosa.HelloWorld.x86.Tests
 			return c == 30;
 		}
 
-		public static bool SimpleTest5()
+		public static bool OptimizationTest5()
 		{
 			ulong a = ulong.MaxValue;
 			ulong b = 20;
@@ -77,7 +77,7 @@ namespace Mosa.HelloWorld.x86.Tests
 			return c == unchecked(ulong.MaxValue + 20);
 		}
 
-		public static bool SimpleTest6()
+		public static bool OptimizationTest6()
 		{
 			char a = (char)10;
 			char b = (char)20;
@@ -87,7 +87,7 @@ namespace Mosa.HelloWorld.x86.Tests
 			return c == 30;
 		}
 
-		public static bool SimpleTest7()
+		public static bool OptimizationTest7()
 		{
 			ulong a = 10;
 			ulong b = 0;
@@ -97,7 +97,7 @@ namespace Mosa.HelloWorld.x86.Tests
 			return c == 0;
 		}
 
-		public static bool SimpleTest8()
+		public static bool OptimizationTest8()
 		{
 			int a = 10;
 			int b = 0;
@@ -107,7 +107,7 @@ namespace Mosa.HelloWorld.x86.Tests
 			return c == 0;
 		}
 
-		public static bool SimpleTest9()
+		public static bool OptimizationTest9()
 		{
 			ulong a = 10;
 			ulong b = 1;
@@ -117,7 +117,7 @@ namespace Mosa.HelloWorld.x86.Tests
 			return c == 10;
 		}
 
-		public static bool SimpleTest10()
+		public static bool OptimizationTest10()
 		{
 			int a = 1;
 			int b = 10;
@@ -127,18 +127,17 @@ namespace Mosa.HelloWorld.x86.Tests
 			return c == 10;
 		}
 
-		public static bool SimpleTest11()
+		public static bool OptimizationTest11()
 		{
 			int a = 0;
 			int b = 10;
 
 			int c = a * b;
 
-			return c == 10;
+			return c == 0;
 		}
 
-
-		public static int SimpleTest12()
+		public static int OptimizationTest12()
 		{
 			int a = 32;
 			int b = 10;
@@ -151,7 +150,7 @@ namespace Mosa.HelloWorld.x86.Tests
 			return z;
 		}
 
-		public static int SimpleTest12(int q)
+		public static int OptimizationTest12(int q)
 		{
 			int a = 10;
 			int b = 20;
@@ -161,7 +160,7 @@ namespace Mosa.HelloWorld.x86.Tests
 			return c;
 		}
 
-		public static int SimpleTest13(ref int q)
+		public static int OptimizationTest13(ref int q)
 		{
 			int a = 10;
 			int b = 20;
@@ -171,7 +170,7 @@ namespace Mosa.HelloWorld.x86.Tests
 			return c;
 		}
 
-		public static int SimpleTest14(ref int q)
+		public static int OptimizationTest14(ref int q)
 		{
 			int a = 10;
 			int b = 20;
@@ -181,20 +180,6 @@ namespace Mosa.HelloWorld.x86.Tests
 			q = a + b;
 
 			return c;
-		}
-
-		public static bool SimpleTest99()
-		{
-			int[] a = new int[5];
-			for (int i = 0; i < 5; i++)
-				a[i] = i * 2;
-
-			int total = 0;
-
-			foreach (int v in a)
-				total = total + v;
-
-			return (0 + 2 + 4 + 6 + 8) == total;
 		}
 
 	}
