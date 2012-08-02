@@ -615,14 +615,14 @@ namespace Mosa.Compiler.Framework
 			{
 				if (register == null)
 				{
-					s.AppendFormat("[{0:X}h]", offset.ToInt32());
+					s.AppendFormat("[0x{0:X}]", offset.ToInt32());
 				}
 				else
 				{
 					if (offset.ToInt32() > 0)
-						s.AppendFormat("[{0}+{1:X}h]", register, offset.ToInt32());
+						s.AppendFormat("[{0}+0x{1:X}]", register, offset.ToInt32());
 					else
-						s.AppendFormat("[{0}-{1:X}h]", register, -offset.ToInt32());
+						s.AppendFormat("[{0}-0x{1:X}]", register, -offset.ToInt32());
 				}
 			}
 
