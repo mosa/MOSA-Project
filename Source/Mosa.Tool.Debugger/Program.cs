@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using System.Threading;
+using System.IO.Pipes;
 using Mosa.Utility.DebugEngine;
 
 namespace Mosa.Tool.Debugger
@@ -26,9 +27,10 @@ namespace Mosa.Tool.Debugger
 		[STAThread]
 		static void Main()
 		{
-			Thread t = new Thread(new ThreadStart(debugEngine.ThreadStart));
-			t.IsBackground = true;
-			t.Start();
+			var pipeStream = new NamedPipeClientStream(".", @"MOSA", PipeDirection.InOut);
+			pipeStream.Connect();
+			debugEngine.SetConnectionStream(pipeStream);
+			debugEngine.Start();
 
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);

@@ -11,7 +11,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Pipes;
+using System.Net.Sockets;
 using System.Text;
+using System.Threading;
 
 namespace Mosa.Utility.DebugEngine
 {
@@ -23,22 +25,21 @@ namespace Mosa.Utility.DebugEngine
 		private Queue<DebugMessage> commands = new Queue<DebugMessage>();
 		private Dictionary<int, DebugMessage> pending = new Dictionary<int, DebugMessage>();
 
-		private NamedPipeClientStream pipeClient;
+		private Stream stream;
 
 		private object receiver;
 		private SenderMesseageDelegate receiverMethod;
 
-		public void ThreadStart()
+		public void SetConnectionStream(Stream stream)
 		{
-			while (true)
-			{
-				using (pipeClient = new NamedPipeClientStream(".", @"MOSA", PipeDirection.InOut))
-				{
-					PostResponse(0, Codes.Connecting, null);
-					pipeClient.Connect();
-					ReceiveLoop();
-				}
-			}
+			this.stream = stream;
+		}
+
+		public void Start()
+		{
+			Thread t = new Thread(new ThreadStart(ThreadStart));
+			t.IsBackground = true;
+			t.Start();
 		}
 
 		public void SetMirrorReceiver(object receiver, SenderMesseageDelegate receiverMethod)
@@ -60,13 +61,38 @@ namespace Mosa.Utility.DebugEngine
 			ProcessCommandQueue(); // HACK
 		}
 
+		private void ThreadStart()
+		{
+			while (true)
+			{
+				ReceiveLoop();
+			}
+		}
+
+		public bool IsConnected
+		{
+			get
+			{
+				if (stream == null)
+					return false;
+
+				if (stream is NamedPipeClientStream)
+					return (stream as NamedPipeClientStream).IsConnected;
+
+				if (stream is NetworkStream)
+					return (stream as DebugNetworkStream).IsConnected;
+
+				return false;
+			}
+		}
+
 		public void ProcessCommandQueue()
 		{
 			while (true)
 			{
 				lock (sync)
 				{
-					if (!pipeClient.IsConnected)
+					if (!IsConnected)
 						return;
 
 					if (commands.Count == 0)
@@ -81,7 +107,7 @@ namespace Mosa.Utility.DebugEngine
 
 		private void SendByte(int b)
 		{
-			pipeClient.WriteByte((byte)b);
+			stream.WriteByte((byte)b);
 		}
 
 		private void SendInteger(int i)
@@ -224,9 +250,9 @@ namespace Mosa.Utility.DebugEngine
 		{
 			PostResponse(0, Codes.Connected, null);
 
-			while (pipeClient.IsConnected)
+			while (IsConnected)
 			{
-				int b = pipeClient.ReadByte();
+				int b = stream.ReadByte();
 
 				if (b < 0)
 					break;
