@@ -24,7 +24,7 @@ namespace Mosa.Tool.Debugger
 {
 	public partial class MainForm : Form
 	{
-		private DebugServerEngine debugEngine = new DebugServerEngine();
+		private DebugServerEngine debugEngine;
 
 		private string[] events;
 		private int eventIndex;

@@ -20,26 +20,20 @@ namespace Mosa.Utility.DebugEngine
 	public sealed class DebugServerEngine
 	{
 		private object sync = new object();
-		private int nextID = 0;
-
-		private Queue<DebugMessage> commands = new Queue<DebugMessage>();
-		private Dictionary<int, DebugMessage> pending = new Dictionary<int, DebugMessage>();
-
 		private Stream stream;
 
+		private Dictionary<int, DebugMessage> pending = new Dictionary<int, DebugMessage>();
+		private int nextID = 0;
+
+		private byte[] data = new byte[1];
 		private object receiver;
 		private SenderMesseageDelegate receiverMethod;
 
-		public void SetConnectionStream(Stream stream)
+		public DebugServerEngine(Stream stream)
 		{
 			this.stream = stream;
-		}
 
-		public void Start()
-		{
-			Thread t = new Thread(new ThreadStart(ThreadStart));
-			t.IsBackground = true;
-			t.Start();
+			stream.BeginRead(data, 0, 1, ReadAsyncCallback, null);
 		}
 
 		public void SetMirrorReceiver(object receiver, SenderMesseageDelegate receiverMethod)
@@ -48,27 +42,21 @@ namespace Mosa.Utility.DebugEngine
 			this.receiverMethod = receiverMethod;
 		}
 
-		public DebugMessage SendCommand(DebugMessage message)
+		public bool SendCommand(DebugMessage message)
 		{
 			lock (sync)
 			{
+				if (!IsConnected)
+					return false;
+
 				message.ID = ++nextID;
 				pending.Add(message.ID, message);
-				commands.Enqueue(message);
-				return message;
-			}
+				SendCommandMessage(message);
 
-			ProcessCommandQueue(); // HACK
-		}
-
-		private void ThreadStart()
-		{
-			while (true)
-			{
-				ReceiveLoop();
+				return true;
 			}
 		}
-
+		
 		public bool IsConnected
 		{
 			get
@@ -83,25 +71,6 @@ namespace Mosa.Utility.DebugEngine
 					return (stream as DebugNetworkStream).IsConnected;
 
 				return false;
-			}
-		}
-
-		public void ProcessCommandQueue()
-		{
-			while (true)
-			{
-				lock (sync)
-				{
-					if (!IsConnected)
-						return;
-
-					if (commands.Count == 0)
-						return;
-
-					DebugMessage message = commands.Dequeue();
-
-					SendCommandMessage(message);
-				}
 			}
 		}
 
@@ -246,24 +215,15 @@ namespace Mosa.Utility.DebugEngine
 			}
 		}
 
-		private void ReceiveLoop()
+		private void ReadAsyncCallback(IAsyncResult ar)
 		{
-			PostResponse(0, Codes.Connected, null);
+			stream.EndRead(ar);
 
-			while (IsConnected)
-			{
-				int b = stream.ReadByte();
+			Push(data[0]);
 
-				if (b < 0)
-					break;
-
-				Push((byte)b);
-
-				ProcessCommandQueue(); // HACK
-			}
-
-			PostResponse(0, Codes.Disconnected, null);
+			stream.BeginRead(data, 0, 1, ReadAsyncCallback, null);
 		}
+
 
 	}
 }

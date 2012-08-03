@@ -19,7 +19,7 @@ namespace Mosa.Tool.Debugger
 {
 	static class Program
 	{
-		private static DebugServerEngine debugEngine = new DebugServerEngine();
+		private static DebugServerEngine debugEngine;
 
 		/// <summary>
 		/// The main entry point for the application.
@@ -29,8 +29,7 @@ namespace Mosa.Tool.Debugger
 		{
 			var pipeStream = new NamedPipeClientStream(".", @"MOSA", PipeDirection.InOut);
 			pipeStream.Connect();
-			debugEngine.SetConnectionStream(pipeStream);
-			debugEngine.Start();
+			debugEngine = new DebugServerEngine(pipeStream);
 
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
