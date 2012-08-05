@@ -45,10 +45,7 @@ namespace Mosa.Tool.Debugger
 			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
 			this.lbMemory = new System.Windows.Forms.TextBox();
-			this.statusStrip1 = new System.Windows.Forms.StatusStrip();
-			this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
 			this.toolStrip1.SuspendLayout();
-			this.statusStrip1.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// toolStrip1
@@ -132,31 +129,14 @@ namespace Mosa.Tool.Debugger
 			this.lbMemory.Location = new System.Drawing.Point(0, 28);
 			this.lbMemory.Multiline = true;
 			this.lbMemory.Name = "lbMemory";
-			this.lbMemory.Size = new System.Drawing.Size(517, 339);
+			this.lbMemory.Size = new System.Drawing.Size(517, 363);
 			this.lbMemory.TabIndex = 1;
-			// 
-			// statusStrip1
-			// 
-			this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripStatusLabel1});
-			this.statusStrip1.Location = new System.Drawing.Point(0, 370);
-			this.statusStrip1.Name = "statusStrip1";
-			this.statusStrip1.Size = new System.Drawing.Size(517, 22);
-			this.statusStrip1.TabIndex = 3;
-			this.statusStrip1.Text = "statusStrip1";
-			// 
-			// toolStripStatusLabel1
-			// 
-			this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-			this.toolStripStatusLabel1.Size = new System.Drawing.Size(118, 17);
-			this.toolStripStatusLabel1.Text = "toolStripStatusLabel1";
 			// 
 			// MemoryView
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(517, 392);
-			this.Controls.Add(this.statusStrip1);
 			this.Controls.Add(this.lbMemory);
 			this.Controls.Add(this.toolStrip1);
 			this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -166,8 +146,6 @@ namespace Mosa.Tool.Debugger
 			this.ResizeEnd += new System.EventHandler(this.MemoryForm_ResizeEnd);
 			this.toolStrip1.ResumeLayout(false);
 			this.toolStrip1.PerformLayout();
-			this.statusStrip1.ResumeLayout(false);
-			this.statusStrip1.PerformLayout();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -184,7 +162,5 @@ namespace Mosa.Tool.Debugger
 		private System.Windows.Forms.ToolStripComboBox cbSelect;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
 		private System.Windows.Forms.ToolStripLabel toolStripLabel2;
-		private System.Windows.Forms.StatusStrip statusStrip1;
-		private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
 	}
 }

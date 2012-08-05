@@ -28,12 +28,12 @@ namespace Mosa.Tool.Debugger
 
 		public override void OnConnect()
 		{
-			toolStripStatusLabel1.Text = "Connected!";
+			Status = "Connected!";
 		}
 
 		public override void OnDisconnect()
 		{
-			toolStripStatusLabel1.Text = "Disconnected!";
+			Status = "Disconnected!";
 		}
 
 		private string FormatResponseMessage(DebugMessage response)
@@ -60,8 +60,6 @@ namespace Mosa.Tool.Debugger
 		public void ProcessResponses(DebugMessage response)
 		{
 			string formatted = "RECEIVED: #" + response.ID.ToString() + " -> " + FormatResponseMessage(response);
-
-			toolStripStatusLabel1.Text = formatted;
 
 			events[eventIndex++] = formatted;
 

@@ -40,7 +40,7 @@ namespace Mosa.Tool.Debugger
 
 		public override void OnConnect()
 		{
-			toolStripStatusLabel1.Text = "Querying...";
+			Status = "Querying...";
 			SendCommand(new DebugMessage(Codes.Scattered32BitReadMemory, new int[] { (int)0x200004, (int)(1024 * 1024 * 28) }, this, UpdatePointers));
 			SendCommand(new DebugMessage(Codes.ReadCR3, (byte[])null, this, ReadCR3));
 		}
@@ -48,7 +48,6 @@ namespace Mosa.Tool.Debugger
 		public override void OnDisconnect()
 		{
 			cbSelect.Enabled = false;
-			toolStripStatusLabel1.Text = "Disconnected";
 		}
 
 		private void UpdatePointers(DebugMessage message)
@@ -60,7 +59,7 @@ namespace Mosa.Tool.Debugger
 		private void ReadCR3(DebugMessage message)
 		{
 			cr3 = (uint)message.GetUInt32(0);
-			
+
 			cbSelect.Enabled = Enabled;
 			if (cbSelect.SelectedIndex == -1)
 				cbSelect.SelectedIndex = 0;
@@ -95,11 +94,11 @@ namespace Mosa.Tool.Debugger
 					newlines[line] = l + ' ' + d;
 				}
 				lbMemory.Lines = newlines;
-				toolStripStatusLabel1.Text = string.Empty;
+				Status = string.Empty;
 			}
 			catch (Exception e)
 			{
-				toolStripStatusLabel1.Text = "Error: " + e.ToString();
+				Status = "Error: " + e.ToString();
 			}
 		}
 
@@ -125,12 +124,12 @@ namespace Mosa.Tool.Debugger
 				uint at = Convert.ToUInt32(nbr, digits);
 				int lines = lbMemory.Height / (lbMemory.Font.Height + 2);
 
-				toolStripStatusLabel1.Text = "Updating...";
+				Status = "Updating...";
 				SendCommand(new DebugMessage(Codes.ReadMemory, new int[] { (int)at, 16 * lines }, this, DisplayMemory));
 			}
 			catch
 			{
-				toolStripStatusLabel1.Text = "Invalid memory location";
+				Status = "ERROR: Invalid memory location";
 			}
 
 		}

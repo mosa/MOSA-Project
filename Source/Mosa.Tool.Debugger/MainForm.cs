@@ -18,6 +18,8 @@ namespace Mosa.Tool.Debugger
 		ConnectionProperties connectionProperties = new ConnectionProperties();
 		DispatchOutput dispatchOutput = new DispatchOutput();
 
+		public string Status { set { this.toolStripStatusLabel1.Text = value; } }
+
 		public MainForm()
 		{
 			InitializeComponent();

@@ -51,7 +51,7 @@ namespace Mosa.Tool.Debugger
 		{
 			DebugEngine.Stream = null;
 
-			toolStripStatusLabel1.Text = "Attempting to connect...";
+			Status = "Attempting to connect...";
 			try
 			{
 				if (comboBox1.SelectedIndex == 0)
@@ -62,18 +62,18 @@ namespace Mosa.Tool.Debugger
 				}
 				else
 				{
-					toolStripStatusLabel1.Text = "Not supported yet!";
+					Status = "Connection method not supported yet!";
 				}
 
 				if (DebugEngine.IsConnected)
 				{
-					toolStripStatusLabel1.Text = "Connected!";
+					Status = "Connected!";
 				}
 
 			}
 			catch (Exception ex)
 			{
-				toolStripStatusLabel1.Text = ex.Message;
+				Status = "ERROR: " + ex.Message;
 			}
 		}
 

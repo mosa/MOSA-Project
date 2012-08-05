@@ -38,11 +38,8 @@ namespace Mosa.Tool.Debugger
 			this.label6 = new System.Windows.Forms.Label();
 			this.btnDisconnect = new System.Windows.Forms.Button();
 			this.btnConnect = new System.Windows.Forms.Button();
-			this.statusStrip1 = new System.Windows.Forms.StatusStrip();
-			this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
 			this.tbNamedPipe = new System.Windows.Forms.TextBox();
 			this.lbPipeName = new System.Windows.Forms.Label();
-			this.statusStrip1.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// imageList
@@ -127,21 +124,6 @@ namespace Mosa.Tool.Debugger
 			this.btnConnect.UseVisualStyleBackColor = true;
 			this.btnConnect.Click += new System.EventHandler(this.button1_Click);
 			// 
-			// statusStrip1
-			// 
-			this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripStatusLabel1});
-			this.statusStrip1.Location = new System.Drawing.Point(0, 173);
-			this.statusStrip1.Name = "statusStrip1";
-			this.statusStrip1.Size = new System.Drawing.Size(224, 22);
-			this.statusStrip1.TabIndex = 8;
-			this.statusStrip1.Text = "statusStrip1";
-			// 
-			// toolStripStatusLabel1
-			// 
-			this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-			this.toolStripStatusLabel1.Size = new System.Drawing.Size(0, 17);
-			// 
 			// tbNamedPipe
 			// 
 			this.tbNamedPipe.Location = new System.Drawing.Point(15, 86);
@@ -161,7 +143,7 @@ namespace Mosa.Tool.Debugger
 			// 
 			// ConnectionProperties
 			// 
-			this.ClientSize = new System.Drawing.Size(224, 197);
+			this.ClientSize = new System.Drawing.Size(219, 167);
 			this.Controls.Add(this.tbNamedPipe);
 			this.Controls.Add(this.comboBox1);
 			this.Controls.Add(this.label7);
@@ -171,7 +153,6 @@ namespace Mosa.Tool.Debugger
 			this.Controls.Add(this.label6);
 			this.Controls.Add(this.btnDisconnect);
 			this.Controls.Add(this.btnConnect);
-			this.Controls.Add(this.statusStrip1);
 			this.Controls.Add(this.lbPipeName);
 			this.DockAreas = ((WeifenLuo.WinFormsUI.Docking.DockAreas)(((WeifenLuo.WinFormsUI.Docking.DockAreas.Float | WeifenLuo.WinFormsUI.Docking.DockAreas.DockLeft) 
             | WeifenLuo.WinFormsUI.Docking.DockAreas.DockRight)));
@@ -179,15 +160,13 @@ namespace Mosa.Tool.Debugger
 			this.HideOnClose = true;
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
-			this.MinimumSize = new System.Drawing.Size(240, 235);
+			this.MinimumSize = new System.Drawing.Size(235, 205);
 			this.Name = "ConnectionProperties";
 			this.Padding = new System.Windows.Forms.Padding(0, 2, 0, 2);
 			this.ShowHint = WeifenLuo.WinFormsUI.Docking.DockState.DockLeft;
 			this.TabText = "Connection Properties";
 			this.Text = "Connection Properties";
 			this.Load += new System.EventHandler(this.ConnectionProperties_Load);
-			this.statusStrip1.ResumeLayout(false);
-			this.statusStrip1.PerformLayout();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -196,8 +175,6 @@ namespace Mosa.Tool.Debugger
 
 		private System.Windows.Forms.ImageList imageList;
 		private System.Windows.Forms.Button btnConnect;
-		private System.Windows.Forms.StatusStrip statusStrip1;
-		private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
 		private System.Windows.Forms.Button btnDisconnect;
 		private System.Windows.Forms.Label label6;
 		private System.Windows.Forms.Label label7;

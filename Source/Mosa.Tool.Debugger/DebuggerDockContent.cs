@@ -18,11 +18,16 @@ namespace Mosa.Tool.Debugger
 		public virtual void OnConnect() { }
 		public virtual void OnDisconnect() { }
 
-		public DebugServerEngine DebugEngine { get { return ((this.ParentForm) as MainForm).DebugEngine; } }
+		public MainForm MainForm { get { return ((this.ParentForm) as MainForm); } }
+
+		public DebugServerEngine DebugEngine { get { return MainForm.DebugEngine; } }
+
+		public string Status { set { MainForm.Status = value; } }
 
 		public bool SendCommand(DebugMessage message)
 		{
 			return DebugEngine.SendCommand(message);
 		}
+
 	}
 }
