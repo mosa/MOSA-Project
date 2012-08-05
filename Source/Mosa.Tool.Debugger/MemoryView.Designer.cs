@@ -9,7 +9,7 @@
 
 namespace Mosa.Tool.Debugger
 {
-	partial class MemoryForm
+	partial class MemoryView
 	{
 		/// <summary>
 		/// Required designer variable.
@@ -87,7 +87,6 @@ namespace Mosa.Tool.Debugger
 			this.cbSelect.Name = "cbSelect";
 			this.cbSelect.Size = new System.Drawing.Size(160, 25);
 			this.cbSelect.SelectedIndexChanged += new System.EventHandler(this.cbSelect_SelectedIndexChanged);
-			this.cbSelect.Click += new System.EventHandler(this.cbSelect_Click);
 			// 
 			// toolStripSeparator2
 			// 
@@ -152,7 +151,7 @@ namespace Mosa.Tool.Debugger
 			this.toolStripStatusLabel1.Size = new System.Drawing.Size(118, 17);
 			this.toolStripStatusLabel1.Text = "toolStripStatusLabel1";
 			// 
-			// MemoryForm
+			// MemoryView
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -160,8 +159,10 @@ namespace Mosa.Tool.Debugger
 			this.Controls.Add(this.statusStrip1);
 			this.Controls.Add(this.lbMemory);
 			this.Controls.Add(this.toolStrip1);
-			this.Name = "MemoryForm";
-			this.Text = "DEBUG: Memory View";
+			this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.Name = "MemoryView";
+			this.Text = "Memory View";
+			this.Load += new System.EventHandler(this.MemoryView_Load);
 			this.ResizeEnd += new System.EventHandler(this.MemoryForm_ResizeEnd);
 			this.toolStrip1.ResumeLayout(false);
 			this.toolStrip1.PerformLayout();

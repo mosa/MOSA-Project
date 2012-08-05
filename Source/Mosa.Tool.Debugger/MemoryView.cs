@@ -11,33 +11,44 @@ using System;
 using System.Windows.Forms;
 using System.Threading;
 using Mosa.Utility.DebugEngine;
+using WeifenLuo.WinFormsUI.Docking;
 
 namespace Mosa.Tool.Debugger
 {
 	/// <summary>
 	/// 
 	/// </summary>
-	public partial class MemoryForm : Form
+	public partial class MemoryView : DebuggerDockContent
 	{
-		private DebugServerEngine debugEngine;
-		private bool updating = false;
-
 		private uint multibootStructure = 0;
 		private uint physicalPageFreeList = 0;
 		private uint cr3;
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="MemoryForm"/> class.
+		/// Initializes a new instance of the <see cref="MemoryView"/> class.
 		/// </summary>
-		public MemoryForm(DebugServerEngine debugEngine)
+		public MemoryView()
 		{
-			this.debugEngine = debugEngine;
 			InitializeComponent();
-			debugEngine.SendCommand(new DebugMessage(Codes.Scattered32BitReadMemory, new int[] { (int)0x200004, (int)(1024 * 1024 * 28) }, this, UpdatePointers));
-			debugEngine.SendCommand(new DebugMessage(Codes.ReadCR3, (byte[])null, this, ReadCR3));
+		}
 
-			cbSelect.SelectedIndex = 0;
-			UpdateForm();
+		private void MemoryView_Load(object sender, EventArgs e)
+		{
+			cbSelect.Enabled = false;
+			OnConnect();
+		}
+
+		public override void OnConnect()
+		{
+			toolStripStatusLabel1.Text = "Querying...";
+			SendCommand(new DebugMessage(Codes.Scattered32BitReadMemory, new int[] { (int)0x200004, (int)(1024 * 1024 * 28) }, this, UpdatePointers));
+			SendCommand(new DebugMessage(Codes.ReadCR3, (byte[])null, this, ReadCR3));
+		}
+
+		public override void OnDisconnect()
+		{
+			cbSelect.Enabled = false;
+			toolStripStatusLabel1.Text = "Disconnected";
 		}
 
 		private void UpdatePointers(DebugMessage message)
@@ -49,11 +60,15 @@ namespace Mosa.Tool.Debugger
 		private void ReadCR3(DebugMessage message)
 		{
 			cr3 = (uint)message.GetUInt32(0);
+			
+			cbSelect.Enabled = Enabled;
+			if (cbSelect.SelectedIndex == -1)
+				cbSelect.SelectedIndex = 0;
 		}
 
 		private void DisplayMemory(DebugMessage message)
 		{
-			updating = false;
+			cbSelect.Enabled = Enabled;
 
 			int start = message.GetInt32(0);
 			int lines = message.GetInt32(4) / 16;
@@ -90,8 +105,10 @@ namespace Mosa.Tool.Debugger
 
 		private void UpdateForm()
 		{
-			if (updating)
+			if (!cbSelect.Enabled)
 				return;
+
+			cbSelect.Enabled = false;
 
 			try
 			{
@@ -109,8 +126,7 @@ namespace Mosa.Tool.Debugger
 				int lines = lbMemory.Height / (lbMemory.Font.Height + 2);
 
 				toolStripStatusLabel1.Text = "Updating...";
-				debugEngine.SendCommand(new DebugMessage(Codes.ReadMemory, new int[] { (int)at, 16 * lines }, this, DisplayMemory));
-				updating = true;
+				SendCommand(new DebugMessage(Codes.ReadMemory, new int[] { (int)at, 16 * lines }, this, DisplayMemory));
 			}
 			catch
 			{
@@ -147,11 +163,6 @@ namespace Mosa.Tool.Debugger
 		private void MemoryForm_ResizeEnd(object sender, EventArgs e)
 		{
 			UpdateForm();
-		}
-
-		private void cbSelect_Click(object sender, EventArgs e)
-		{
-
 		}
 
 

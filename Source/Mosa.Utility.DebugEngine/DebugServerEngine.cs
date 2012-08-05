@@ -27,19 +27,19 @@ namespace Mosa.Utility.DebugEngine
 
 		private byte[] data = new byte[1];
 		private object receiver;
-		private SenderMesseageDelegate receiverMethod;
+		private SenderMesseageDelegate dispatchMethod;
 
-		public DebugServerEngine(Stream stream)
+		public Stream Stream { set { stream = value; if (IsConnected) stream.BeginRead(data, 0, 1, ReadAsyncCallback, null); } }
+
+		public DebugServerEngine()
 		{
-			this.stream = stream;
-
-			stream.BeginRead(data, 0, 1, ReadAsyncCallback, null);
+			this.stream = null;
 		}
 
-		public void SetMirrorReceiver(object receiver, SenderMesseageDelegate receiverMethod)
+		public void SetDispatchMethod(object receiver, SenderMesseageDelegate receiverMethod)
 		{
 			this.receiver = receiver;
-			this.receiverMethod = receiverMethod;
+			this.dispatchMethod = receiverMethod;
 		}
 
 		public bool SendCommand(DebugMessage message)
@@ -56,7 +56,7 @@ namespace Mosa.Utility.DebugEngine
 				return true;
 			}
 		}
-		
+
 		public bool IsConnected
 		{
 			get
@@ -97,7 +97,6 @@ namespace Mosa.Utility.DebugEngine
 
 		private void SendCommandMessage(DebugMessage message)
 		{
-
 			SendMagic();
 			SendInteger(message.ID);
 			SendInteger(message.Code);
@@ -135,8 +134,8 @@ namespace Mosa.Utility.DebugEngine
 				}
 
 				message.ResponseData = data;
-				message.Notify(receiver, receiverMethod);
-				message.NotifySender();
+
+				dispatchMethod(message);
 			}
 		}
 
@@ -217,10 +216,16 @@ namespace Mosa.Utility.DebugEngine
 
 		private void ReadAsyncCallback(IAsyncResult ar)
 		{
-			stream.EndRead(ar);
+			try
+			{
+				stream.EndRead(ar);
 
-			Push(data[0]);
-
+				Push(data[0]);
+			}
+			catch
+			{
+				// nothing for now
+			}
 			stream.BeginRead(data, 0, 1, ReadAsyncCallback, null);
 		}
 

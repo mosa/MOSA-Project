@@ -75,24 +75,5 @@ namespace Mosa.Utility.DebugEngine
 			return (uint)((ResponseData[index] << 24) | (ResponseData[index + 1] << 16) | (ResponseData[index + 2] << 8) | (ResponseData[index + 3]));
 		}
 
-		public void NotifySender()
-		{
-			Form form = Sender as Form;
-
-			if (form != null)
-			{
-				form.BeginInvoke(SenderMethod, new object[] { this });
-			}
-		}
-
-		public void Notify(object sender, SenderMesseageDelegate senderMethod)
-		{
-			Form form = sender as Form;
-
-			if (form != null)
-			{
-				form.BeginInvoke(senderMethod, new object[] { this });
-			}
-		}
 	}
 }

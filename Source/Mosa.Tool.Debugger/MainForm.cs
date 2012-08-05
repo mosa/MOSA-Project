@@ -1,13 +1,4 @@
-﻿/*
- * (c) 2012 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- */
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -15,95 +6,66 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using System.IO;
-using System.IO.Pipes;
-using System.Threading;
+using WeifenLuo.WinFormsUI.Docking;
 using Mosa.Utility.DebugEngine;
 
 namespace Mosa.Tool.Debugger
 {
 	public partial class MainForm : Form
 	{
-		private DebugServerEngine debugEngine;
+		public DebugServerEngine DebugEngine = new DebugServerEngine();
 
-		private string[] events;
-		private int eventIndex;
+		ConnectionProperties connectionProperties = new ConnectionProperties();
+		DispatchOutput dispatchOutput = new DispatchOutput();
 
-		public MainForm(DebugServerEngine debugEngine)
+		public MainForm()
 		{
-			this.debugEngine = debugEngine;
 			InitializeComponent();
-
-			events = new string[50];
-			eventIndex = 0;
 		}
 
-		private void Form1_Load(object sender, EventArgs e)
+		private void MainForm_Load(object sender, EventArgs e)
 		{
-			toolStripStatusLabel1.Text = string.Empty;
-			debugEngine.SetMirrorReceiver(this, ProcessResponses);
+			dockPanel.SuspendLayout(true);
+			connectionProperties.Show(dockPanel, DockState.DockLeft);
+			dispatchOutput.Show(connectionProperties.Pane, DockAlignment.Bottom, 0.40);
+			dockPanel.ResumeLayout(true, true);
+			DebugEngine.SetDispatchMethod(this, Dispatch);
 		}
 
-		private string FormatResponseMessage(Mosa.Utility.DebugEngine.DebugMessage response)
+		public void Dispatch(DebugMessage response)
 		{
-			switch (response.Code)
+			if (response == null)
+				return;
+
+			dispatchOutput.BeginInvoke((SenderMesseageDelegate)dispatchOutput.ProcessResponses, new object[] { response });
+
+			if (response.Sender is Form)
 			{
-				case Codes.Connected: return "Connected";
-				case Codes.Connecting: return "Connecting";
-				case Codes.Disconnected: return "Disconnected";
-				case Codes.UnknownData: return "Unknown Data: " + System.Text.Encoding.UTF8.GetString(response.ResponseData);
-				case Codes.InformationalMessage: return "Informational Message: " + System.Text.Encoding.UTF8.GetString(response.ResponseData);
-				case Codes.ErrorMessage: return "Error Message: " + System.Text.Encoding.UTF8.GetString(response.ResponseData);
-				case Codes.WarningMessage: return "Warning Message: " + System.Text.Encoding.UTF8.GetString(response.ResponseData);
-				case Codes.Ping: return "Pong";
-				case Codes.Alive: return "Alive";
-				case Codes.ReadCR3: return "ReadCR3";
-				case Codes.ReadMemory: return "ReadMemory";
-				case Codes.SendNumber: return "#: " + ((response.ResponseData[0] << 24) | (response.ResponseData[1] << 16) | (response.ResponseData[2] << 8) | response.ResponseData[3]).ToString();
-				default: return "Code: " + response.Code.ToString();
+				(response.Sender as Form).BeginInvoke(response.SenderMethod, new object[] { response });
 			}
-		}
-
-		public void ProcessResponses(DebugMessage response)
-		{
-			string formatted = "RECEIVED: #" + response.ID.ToString() + " -> " + FormatResponseMessage(response);
-
-			toolStripStatusLabel1.Text = formatted;
-
-			events[eventIndex++] = formatted;
-
-			if (eventIndex == events.Length)
-				eventIndex = 0;
-
-			listBox1.Items.Clear();
-
-			int start = eventIndex;
-			for (int i = 0; i < events.Length; i++)
+			else if (response.Sender is DockContent)
 			{
-				start--;
-
-				if (start < 0)
-					start = events.Length - 1;
-
-				if (events[start] == null)
-					return;
-
-				listBox1.Items.Add(events[start]);
-
+				(response.Sender as DockContent).BeginInvoke(response.SenderMethod, new object[] { response });
 			}
+
 		}
 
-		private void button1_Click(object sender, EventArgs e)
+		private void toolStripButton1_Click(object sender, EventArgs e)
 		{
-			toolStripStatusLabel1.Text = "Ping";
-			//debugEngine.SendCommand(new DebugMessage(Codes.Ping, (byte[])null, this, ProcessResponses));
-			debugEngine.SendCommand(new DebugMessage(Codes.Ping, (byte[])null));
+			connectionProperties.Show(dockPanel, DockState.DockLeft);
 		}
 
-		private void button2_Click(object sender, EventArgs e)
+		private void toolStripButton4_Click(object sender, EventArgs e)
 		{
-			var memoryForm = new MemoryForm(debugEngine);
-			memoryForm.Show();
+			toolStripStatusLabel1.Text = "Sending Ping...";
+			DebugEngine.SendCommand(new DebugMessage(Codes.Ping, (byte[])null));
+		}
+
+		private void toolStripButton2_Click(object sender, EventArgs e)
+		{
+
+			var memoryView = new MemoryView();
+			memoryView.Show(dockPanel, DockState.Document);
 		}
 	}
 }
