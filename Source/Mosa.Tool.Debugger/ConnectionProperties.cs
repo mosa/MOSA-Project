@@ -1,10 +1,22 @@
+/*
+ * (c) 2012 MOSA - The Managed Operating System Alliance
+ *
+ * Licensed under the terms of the New BSD License.
+ *
+ * Authors:
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
+ */
+
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Text;
+using System.IO;
+using System.IO.Ports;
 using System.IO.Pipes;
+using System.Net;
 using System.Net.Sockets;
 using System.Windows.Forms;
 using Mosa.Utility.DebugEngine;
@@ -19,13 +31,13 @@ namespace Mosa.Tool.Debugger
 			InitializeComponent();
 		}
 
-		public override void OnConnect()
+		public override void Connect()
 		{
 			this.btnConnect.Enabled = false;
 			this.btnDisconnect.Enabled = true;
 		}
 
-		public override void OnDisconnect()
+		public override void Disconnect()
 		{
 			this.btnConnect.Enabled = true;
 			this.btnDisconnect.Enabled = false;
@@ -54,26 +66,47 @@ namespace Mosa.Tool.Debugger
 			Status = "Attempting to connect...";
 			try
 			{
-				if (comboBox1.SelectedIndex == 0)
+				switch (comboBox1.SelectedIndex)
 				{
-					var pipeStream = new NamedPipeClientStream(".", tbNamedPipe.Text.Trim(), PipeDirection.InOut);
-					pipeStream.Connect();
-					DebugEngine.Stream = pipeStream;
-				}
-				else
-				{
-					Status = "Connection method not supported yet!";
+					case 0:
+						var pipeStream = new NamedPipeClientStream(".", tbNamedPipe.Text.Trim(), PipeDirection.InOut);
+						pipeStream.Connect();
+						DebugEngine.Stream = pipeStream;
+						break;
+					case 1:
+						var client = new TcpClient(tbServerName.Text.Trim(), Convert.ToInt32(tbPort.Text));
+						DebugEngine.Stream = new DebugNetworkStream(client.Client, true);
+						break;
+					//case 2:
+					//    var server = new TcpListener(Convert.ToInt32(tbPort.Text));
+					//    DebugEngine.Stream = new DebugNetworkStream(server.AcceptSocket(), true);
+					//    break;
+					default:
+						Status = "Connection method not supported yet!";
+						break;
 				}
 
 				if (DebugEngine.IsConnected)
 				{
 					Status = "Connected!";
+					MainForm.SignalConnect();
 				}
 
 			}
 			catch (Exception ex)
 			{
 				Status = "ERROR: " + ex.Message;
+			}
+		}
+
+		private void btnDisconnect_Click(object sender, EventArgs e)
+		{
+			var stream = DebugEngine.Stream;
+			if (stream != null)
+			{
+				DebugEngine.Stream = null;
+				stream.Close();
+				MainForm.SignalDisconnect();
 			}
 		}
 

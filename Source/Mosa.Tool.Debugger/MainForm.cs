@@ -34,6 +34,32 @@ namespace Mosa.Tool.Debugger
 			DebugEngine.SetDispatchMethod(this, Dispatch);
 		}
 
+		public void SignalConnect()
+		{
+			foreach (var content in this.dockPanel.Contents)
+			{
+				var debugContent = content as DebuggerDockContent;
+
+				if (debugContent != null)
+				{
+					debugContent.Connect();
+				}
+			}
+		}
+
+		public void SignalDisconnect()
+		{
+			foreach (var content in this.dockPanel.Contents)
+			{
+				var debugContent = content as DebuggerDockContent;
+
+				if (debugContent != null)
+				{
+					debugContent.Disconnect();
+				}
+			}
+		}
+
 		public void Dispatch(DebugMessage response)
 		{
 			if (response == null)

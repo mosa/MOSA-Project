@@ -29,7 +29,19 @@ namespace Mosa.Utility.DebugEngine
 		private object receiver;
 		private SenderMesseageDelegate dispatchMethod;
 
-		public Stream Stream { set { stream = value; if (IsConnected) stream.BeginRead(data, 0, 1, ReadAsyncCallback, null); } }
+		public Stream Stream
+		{
+			get
+			{
+				return stream;
+			}
+			set
+			{
+				stream = value;
+				if (IsConnected)
+					stream.BeginRead(data, 0, 1, ReadAsyncCallback, null);
+			}
+		}
 
 		public DebugServerEngine()
 		{
@@ -67,7 +79,7 @@ namespace Mosa.Utility.DebugEngine
 				if (stream is NamedPipeClientStream)
 					return (stream as NamedPipeClientStream).IsConnected;
 
-				if (stream is NetworkStream)
+				if (stream is DebugNetworkStream)
 					return (stream as DebugNetworkStream).IsConnected;
 
 				return false;
@@ -221,12 +233,14 @@ namespace Mosa.Utility.DebugEngine
 				stream.EndRead(ar);
 
 				Push(data[0]);
+
+				stream.BeginRead(data, 0, 1, ReadAsyncCallback, null);
 			}
 			catch
 			{
 				// nothing for now
 			}
-			stream.BeginRead(data, 0, 1, ReadAsyncCallback, null);
+
 		}
 
 

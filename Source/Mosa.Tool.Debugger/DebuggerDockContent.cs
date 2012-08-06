@@ -15,8 +15,8 @@ namespace Mosa.Tool.Debugger
 			InitializeComponent();
 		}
 
-		public virtual void OnConnect() { }
-		public virtual void OnDisconnect() { }
+		public virtual void Connect() { }
+		public virtual void Disconnect() { }
 
 		public MainForm MainForm { get { return ((this.ParentForm) as MainForm); } }
 
