@@ -35,17 +35,17 @@ namespace Mosa.Tool.Debugger
 		private void MemoryView_Load(object sender, EventArgs e)
 		{
 			cbSelect.Enabled = false;
-			OnConnect();
+			Connect();
 		}
 
-		public override void OnConnect()
+		public override void Connect()
 		{
 			Status = "Querying...";
 			SendCommand(new DebugMessage(Codes.Scattered32BitReadMemory, new int[] { (int)0x200004, (int)(1024 * 1024 * 28) }, this, UpdatePointers));
 			SendCommand(new DebugMessage(Codes.ReadCR3, (byte[])null, this, ReadCR3));
 		}
 
-		public override void OnDisconnect()
+		public override void Disconnect()
 		{
 			cbSelect.Enabled = false;
 		}

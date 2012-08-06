@@ -26,12 +26,12 @@ namespace Mosa.Tool.Debugger
 			//DebugEngine.SetDispatchMethod(this, Dispatch);
 		}
 
-		public override void OnConnect()
+		public override void Connect()
 		{
 			Status = "Connected!";
 		}
 
-		public override void OnDisconnect()
+		public override void Disconnect()
 		{
 			Status = "Disconnected!";
 		}
