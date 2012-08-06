@@ -94,7 +94,7 @@ namespace Mosa.Compiler.Framework
 			b0.AppendInstruction(IRInstruction.Load, opMethod, thisOperand, methodPointerOffsetOperand);
 			b0.AppendInstruction(IRInstruction.Load, opInstance, thisOperand, instanceOffsetOperand);
 			b0.AppendInstruction(IRInstruction.IntegerCompare, ConditionCode.Equal, opCompare, opInstance, c0);
-			b0.AppendInstruction(IRInstruction.IntegerCompareBranch, ConditionCode.NotEqual, null, opCompare, c0);
+			b0.AppendInstruction(IRInstruction.IntegerCompareBranch, ConditionCode.Equal, null, opCompare, c0);
 			b0.SetBranch(b2.BasicBlock);
 			b0.AppendInstruction(IRInstruction.Jmp, b1.BasicBlock);
 			methodCompiler.BasicBlocks.LinkBlocks(b0.BasicBlock, b1.BasicBlock);

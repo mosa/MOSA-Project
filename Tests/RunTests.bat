@@ -1,6 +1,6 @@
 
 CD ..\Source
-CALL Compile-Debug.bat
+rem CALL Compile-Debug.bat
 CD ..\Tests
 
 IF EXIST "%ProgramFiles(x86)%\Gallio\bin\Gallio.Echo.exe" SET GALLIO="%ProgramFiles(x86)%\Gallio\bin\Gallio.Echo.exe"

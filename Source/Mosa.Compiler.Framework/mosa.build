@@ -34,7 +34,7 @@
                     <include name="Stages/EdgeSplitStage.cs"/>
                     <include name="Stages/SimpleRegisterAllocatorStage.cs"/>
                     <include name="VirtualRegisters.cs"/>
-                    <include name="Stages/TypeSchedulerStage.cs"/>
+                    <include name="Stages/LocalVariablePromotionStage.cs"/>
                     <include name="BaseCodeEmitter.cs"/>
                     <include name="BaseInstruction.cs"/>
                     <include name="Stages/BasicBlockBuilderStage.cs"/>

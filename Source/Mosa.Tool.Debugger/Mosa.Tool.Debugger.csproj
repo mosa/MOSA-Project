@@ -9,8 +9,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Mosa.Tool.Debugger</RootNamespace>
     <AssemblyName>Mosa.Tool.Debugger</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
     <ProjectGuid>{DFD831EA-79D8-49FC-8923-3AFFDA1283B6}</ProjectGuid>
   </PropertyGroup>
@@ -42,33 +43,60 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="WeifenLuo.WinFormsUI.Docking, Version=2.6.0.0, Culture=neutral, PublicKeyToken=5cded1a1a0a7b481, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\3rdParty\WeifenLuo.WinFormsUI.Docking.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DebuggerDockContent.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DebuggerDockContent.designer.cs">
+      <DependentUpon>DebuggerDockContent.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DispatchOutput.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DispatchOutput.designer.cs">
+      <DependentUpon>DispatchOutput.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ConnectionProperties.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ConnectionProperties.designer.cs">
+      <DependentUpon>ConnectionProperties.cs</DependentUpon>
+    </Compile>
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="MemoryForm.cs">
+    <Compile Include="MemoryView.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MemoryForm.Designer.cs">
-      <DependentUpon>MemoryForm.cs</DependentUpon>
+    <Compile Include="MemoryView.Designer.cs">
+      <DependentUpon>MemoryView.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="DispatchOutput.resx">
+      <DependentUpon>DispatchOutput.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ConnectionProperties.resx">
+      <DependentUpon>ConnectionProperties.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MemoryForm.resx">
-      <DependentUpon>MemoryForm.cs</DependentUpon>
+    <EmbeddedResource Include="MemoryView.resx">
+      <DependentUpon>MemoryView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -78,6 +106,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
   </ItemGroup>
   <ItemGroup>

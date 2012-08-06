@@ -11,77 +11,72 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Pipes;
+using System.Net.Sockets;
 using System.Text;
+using System.Threading;
 
 namespace Mosa.Utility.DebugEngine
 {
 	public sealed class DebugServerEngine
 	{
 		private object sync = new object();
+		private Stream stream;
+
+		private Dictionary<int, DebugMessage> pending = new Dictionary<int, DebugMessage>();
 		private int nextID = 0;
 
-		private Queue<DebugMessage> commands = new Queue<DebugMessage>();
-		private Dictionary<int, DebugMessage> pending = new Dictionary<int, DebugMessage>();
-
-		private NamedPipeClientStream pipeClient;
-
+		private byte[] data = new byte[1];
 		private object receiver;
-		private SenderMesseageDelegate receiverMethod;
+		private SenderMesseageDelegate dispatchMethod;
 
-		public void ThreadStart()
+		public Stream Stream { set { stream = value; if (IsConnected) stream.BeginRead(data, 0, 1, ReadAsyncCallback, null); } }
+
+		public DebugServerEngine()
 		{
-			while (true)
-			{
-				using (pipeClient = new NamedPipeClientStream(".", @"MOSA", PipeDirection.InOut))
-				{
-					PostResponse(0, Codes.Connecting, null);
-					pipeClient.Connect();
-					ReceiveLoop();
-				}
-			}
+			this.stream = null;
 		}
 
-		public void SetMirrorReceiver(object receiver, SenderMesseageDelegate receiverMethod)
+		public void SetDispatchMethod(object receiver, SenderMesseageDelegate receiverMethod)
 		{
 			this.receiver = receiver;
-			this.receiverMethod = receiverMethod;
+			this.dispatchMethod = receiverMethod;
 		}
 
-		public DebugMessage SendCommand(DebugMessage message)
+		public bool SendCommand(DebugMessage message)
 		{
 			lock (sync)
 			{
+				if (!IsConnected)
+					return false;
+
 				message.ID = ++nextID;
 				pending.Add(message.ID, message);
-				commands.Enqueue(message);
-				return message;
-			}
+				SendCommandMessage(message);
 
-			ProcessCommandQueue(); // HACK
+				return true;
+			}
 		}
 
-		public void ProcessCommandQueue()
+		public bool IsConnected
 		{
-			while (true)
+			get
 			{
-				lock (sync)
-				{
-					if (!pipeClient.IsConnected)
-						return;
+				if (stream == null)
+					return false;
 
-					if (commands.Count == 0)
-						return;
+				if (stream is NamedPipeClientStream)
+					return (stream as NamedPipeClientStream).IsConnected;
 
-					DebugMessage message = commands.Dequeue();
+				if (stream is NetworkStream)
+					return (stream as DebugNetworkStream).IsConnected;
 
-					SendCommandMessage(message);
-				}
+				return false;
 			}
 		}
 
 		private void SendByte(int b)
 		{
-			pipeClient.WriteByte((byte)b);
+			stream.WriteByte((byte)b);
 		}
 
 		private void SendInteger(int i)
@@ -102,7 +97,6 @@ namespace Mosa.Utility.DebugEngine
 
 		private void SendCommandMessage(DebugMessage message)
 		{
-
 			SendMagic();
 			SendInteger(message.ID);
 			SendInteger(message.Code);
@@ -140,8 +134,8 @@ namespace Mosa.Utility.DebugEngine
 				}
 
 				message.ResponseData = data;
-				message.Notify(receiver, receiverMethod);
-				message.NotifySender();
+
+				dispatchMethod(message);
 			}
 		}
 
@@ -220,24 +214,21 @@ namespace Mosa.Utility.DebugEngine
 			}
 		}
 
-		private void ReceiveLoop()
+		private void ReadAsyncCallback(IAsyncResult ar)
 		{
-			PostResponse(0, Codes.Connected, null);
-
-			while (pipeClient.IsConnected)
+			try
 			{
-				int b = pipeClient.ReadByte();
+				stream.EndRead(ar);
 
-				if (b < 0)
-					break;
-
-				Push((byte)b);
-
-				ProcessCommandQueue(); // HACK
+				Push(data[0]);
 			}
-
-			PostResponse(0, Codes.Disconnected, null);
+			catch
+			{
+				// nothing for now
+			}
+			stream.BeginRead(data, 0, 1, ReadAsyncCallback, null);
 		}
+
 
 	}
 }

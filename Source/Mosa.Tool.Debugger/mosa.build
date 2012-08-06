@@ -14,10 +14,16 @@
 	<target name="build">
 	    <csc target="exe" main="Mosa.Tool.Debugger.Program" output="${outputDirectory}/Mosa.Tool.Debugger.exe" debug="${debug}" unsafe="true" nostdlib="false">
 		<sources>
+                    <include name="DebuggerDockContent.cs"/>
+                    <include name="DebuggerDockContent.designer.cs"/>
+                    <include name="DispatchOutput.cs"/>
+                    <include name="DispatchOutput.designer.cs"/>
+                    <include name="ConnectionProperties.cs"/>
+                    <include name="ConnectionProperties.designer.cs"/>
                     <include name="MainForm.cs"/>
                     <include name="MainForm.Designer.cs"/>
-                    <include name="MemoryForm.cs"/>
-                    <include name="MemoryForm.Designer.cs"/>
+                    <include name="MemoryView.cs"/>
+                    <include name="MemoryView.Designer.cs"/>
                     <include name="Program.cs"/>
                     <include name="Properties/AssemblyInfo.cs"/>
                     <include name="Properties/Resources.Designer.cs"/>
@@ -27,12 +33,12 @@
                     <include name="System.Core.dll"/>
                     <include name="System.Xml.Linq.dll"/>
                     <include name="System.Data.DataSetExtensions.dll"/>
-                    <include name="Microsoft.CSharp.dll"/>
                     <include name="System.Data.dll"/>
                     <include name="System.Deployment.dll"/>
                     <include name="System.Drawing.dll"/>
                     <include name="System.Windows.Forms.dll"/>
                     <include name="System.Xml.dll"/>
+                    <include name="../../3rdParty/WeifenLuo.WinFormsUI.Docking.dll"/>
                     <include name="${outputDirectory}/Mosa.Utility.DebugEngine.dll"/>
 		</references>
 		<!-- supress warnings -->

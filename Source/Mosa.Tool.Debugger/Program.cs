@@ -12,13 +12,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using System.Threading;
-using Mosa.Utility.DebugEngine;
+using System.IO.Pipes;
 
 namespace Mosa.Tool.Debugger
 {
 	static class Program
 	{
-		private static DebugServerEngine debugEngine = new DebugServerEngine();
 
 		/// <summary>
 		/// The main entry point for the application.
@@ -26,22 +25,11 @@ namespace Mosa.Tool.Debugger
 		[STAThread]
 		static void Main()
 		{
-			Thread t = new Thread(new ThreadStart(debugEngine.ThreadStart));
-			t.IsBackground = true;
-			t.Start();
-
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
-			Application.Run(new MainForm(debugEngine));
+			Application.Run(new MainForm());
 		}
 
-		/// <summary>
-		/// Creates the form.
-		/// </summary>
-		private static void CreateMemoryForm()
-		{
-			Application.Run(new MemoryForm(debugEngine));
-		}
 
 	}
 }
