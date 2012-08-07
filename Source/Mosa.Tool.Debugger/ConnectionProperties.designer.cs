@@ -27,9 +27,6 @@ namespace Mosa.Tool.Debugger
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.components = new System.ComponentModel.Container();
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ConnectionProperties));
-			this.imageList = new System.Windows.Forms.ImageList(this.components);
 			this.comboBox1 = new System.Windows.Forms.ComboBox();
 			this.label7 = new System.Windows.Forms.Label();
 			this.lbServerName = new System.Windows.Forms.Label();
@@ -41,12 +38,6 @@ namespace Mosa.Tool.Debugger
 			this.tbNamedPipe = new System.Windows.Forms.TextBox();
 			this.lbPipeName = new System.Windows.Forms.Label();
 			this.SuspendLayout();
-			// 
-			// imageList
-			// 
-			this.imageList.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList.ImageStream")));
-			this.imageList.TransparentColor = System.Drawing.Color.Transparent;
-			this.imageList.Images.SetKeyName(0, "Mouse.bmp");
 			// 
 			// comboBox1
 			// 
@@ -174,7 +165,6 @@ namespace Mosa.Tool.Debugger
 		}
 		#endregion
 
-		private System.Windows.Forms.ImageList imageList;
 		private System.Windows.Forms.Button btnConnect;
 		private System.Windows.Forms.Button btnDisconnect;
 		private System.Windows.Forms.Label label6;

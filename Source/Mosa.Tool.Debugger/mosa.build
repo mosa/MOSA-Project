@@ -31,13 +31,8 @@
 		<references>
                     <include name="System.dll"/>
                     <include name="System.Core.dll"/>
-                    <include name="System.Xml.Linq.dll"/>
-                    <include name="System.Data.DataSetExtensions.dll"/>
-                    <include name="System.Data.dll"/>
-                    <include name="System.Deployment.dll"/>
                     <include name="System.Drawing.dll"/>
                     <include name="System.Windows.Forms.dll"/>
-                    <include name="System.Xml.dll"/>
                     <include name="../../3rdParty/WeifenLuo.WinFormsUI.Docking.dll"/>
                     <include name="${outputDirectory}/Mosa.Utility.DebugEngine.dll"/>
 		</references>

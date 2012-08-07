@@ -37,7 +37,7 @@ namespace Mosa.Tool.Debugger
 			// 
 			this.imageList.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList.ImageStream")));
 			this.imageList.TransparentColor = System.Drawing.Color.Transparent;
-			this.imageList.Images.SetKeyName(0, "Mouse.bmp");
+			
 			// 
 			// listBox1
 			// 
