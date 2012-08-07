@@ -98,7 +98,7 @@ namespace Mosa.Tool.Debugger
 			// 
 			// btnDisconnect
 			// 
-			this.btnDisconnect.Location = new System.Drawing.Point(128, 131);
+			this.btnDisconnect.Location = new System.Drawing.Point(128, 122);
 			this.btnDisconnect.Name = "btnDisconnect";
 			this.btnDisconnect.Size = new System.Drawing.Size(75, 24);
 			this.btnDisconnect.TabIndex = 9;
@@ -108,7 +108,7 @@ namespace Mosa.Tool.Debugger
 			// 
 			// btnConnect
 			// 
-			this.btnConnect.Location = new System.Drawing.Point(12, 131);
+			this.btnConnect.Location = new System.Drawing.Point(12, 122);
 			this.btnConnect.Name = "btnConnect";
 			this.btnConnect.Size = new System.Drawing.Size(75, 24);
 			this.btnConnect.TabIndex = 6;
@@ -135,7 +135,7 @@ namespace Mosa.Tool.Debugger
 			// 
 			// ConnectionProperties
 			// 
-			this.ClientSize = new System.Drawing.Size(219, 167);
+			this.ClientSize = new System.Drawing.Size(219, 162);
 			this.Controls.Add(this.tbNamedPipe);
 			this.Controls.Add(this.comboBox1);
 			this.Controls.Add(this.label7);
@@ -152,7 +152,7 @@ namespace Mosa.Tool.Debugger
 			this.HideOnClose = true;
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
-			this.MinimumSize = new System.Drawing.Size(235, 205);
+			this.MinimumSize = new System.Drawing.Size(235, 200);
 			this.Name = "ConnectionProperties";
 			this.Padding = new System.Windows.Forms.Padding(0, 2, 0, 2);
 			this.ShowHint = WeifenLuo.WinFormsUI.Docking.DockState.DockLeft;

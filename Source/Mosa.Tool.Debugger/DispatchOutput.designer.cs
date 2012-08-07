@@ -28,16 +28,15 @@ namespace Mosa.Tool.Debugger
 		private void InitializeComponent()
 		{
 			this.components = new System.ComponentModel.Container();
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(DispatchOutput));
 			this.imageList = new System.Windows.Forms.ImageList(this.components);
 			this.listBox1 = new System.Windows.Forms.ListBox();
 			this.SuspendLayout();
 			// 
 			// imageList
 			// 
-			this.imageList.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList.ImageStream")));
+			this.imageList.ColorDepth = System.Windows.Forms.ColorDepth.Depth8Bit;
+			this.imageList.ImageSize = new System.Drawing.Size(16, 16);
 			this.imageList.TransparentColor = System.Drawing.Color.Transparent;
-			
 			// 
 			// listBox1
 			// 
@@ -45,12 +44,12 @@ namespace Mosa.Tool.Debugger
 			this.listBox1.FormattingEnabled = true;
 			this.listBox1.Location = new System.Drawing.Point(0, 2);
 			this.listBox1.Name = "listBox1";
-			this.listBox1.Size = new System.Drawing.Size(262, 339);
+			this.listBox1.Size = new System.Drawing.Size(263, 348);
 			this.listBox1.TabIndex = 3;
 			// 
 			// DispatchOutput
 			// 
-			this.ClientSize = new System.Drawing.Size(262, 343);
+			this.ClientSize = new System.Drawing.Size(263, 352);
 			this.Controls.Add(this.listBox1);
 			this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.HideOnClose = true;
