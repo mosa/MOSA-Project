@@ -69,13 +69,13 @@ namespace Mosa.Tool.Debugger
 				switch (comboBox1.SelectedIndex)
 				{
 					case 0:
+						var client = new TcpClient(tbServerName.Text.Trim(), Convert.ToInt32(tbPort.Text));
+						DebugEngine.Stream = new DebugNetworkStream(client.Client, true);
+						break;		
+					case 2:
 						var pipeStream = new NamedPipeClientStream(".", tbNamedPipe.Text.Trim(), PipeDirection.InOut);
 						pipeStream.Connect();
 						DebugEngine.Stream = pipeStream;
-						break;
-					case 1:
-						var client = new TcpClient(tbServerName.Text.Trim(), Convert.ToInt32(tbPort.Text));
-						DebugEngine.Stream = new DebugNetworkStream(client.Client, true);
 						break;
 					//case 2:
 					//    var server = new TcpListener(Convert.ToInt32(tbPort.Text));

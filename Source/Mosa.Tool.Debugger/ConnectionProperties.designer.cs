@@ -53,9 +53,9 @@ namespace Mosa.Tool.Debugger
 			this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboBox1.FormattingEnabled = true;
 			this.comboBox1.Items.AddRange(new object[] {
-            "Named Pipe",
             "TCP Client Socket",
-            "TCP Server Socket"});
+            "TCP Server Socket",
+            "Named Pipe"});
 			this.comboBox1.Location = new System.Drawing.Point(12, 36);
 			this.comboBox1.Name = "comboBox1";
 			this.comboBox1.Size = new System.Drawing.Size(191, 21);
@@ -101,9 +101,9 @@ namespace Mosa.Tool.Debugger
 			this.label6.AutoSize = true;
 			this.label6.Location = new System.Drawing.Point(12, 20);
 			this.label6.Name = "label6";
-			this.label6.Size = new System.Drawing.Size(88, 13);
+			this.label6.Size = new System.Drawing.Size(91, 13);
 			this.label6.TabIndex = 11;
-			this.label6.Text = "Connection Type";
+			this.label6.Text = "Connection Type:";
 			// 
 			// btnDisconnect
 			// 
