@@ -31,9 +31,20 @@ namespace Mosa.Platform.x86.Intrinsic
 		/// <param name="typeSystem">The type system.</param>
 		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, ITypeSystem typeSystem, IList<RuntimeParameter> parameters)
 		{
-			Debug.Assert(context.Operand1.IsConstant);
+			var operand = context.Operand1;
 
-			int irq = (int)context.Operand1.ValueAsLongInteger;
+			if (!operand.IsConstant)
+			{
+				// try to find the constant - a bit of a hack
+				Context def = new Context(context.InstructionSet, operand.Definitions[0]);
+
+				if (def.Instruction is IR.Move && def.Operand1.IsConstant)
+					operand = def.Operand1;
+			}
+
+			Debug.Assert(operand.IsConstant);
+
+			int irq = (int)operand.ValueAsLongInteger;
 
 			if ((irq > 256) || (irq < 0))
 				throw new InvalidOperationException();
