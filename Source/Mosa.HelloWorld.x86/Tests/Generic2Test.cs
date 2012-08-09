@@ -1,5 +1,5 @@
 ﻿/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
+ * (c) 2012 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
  *
@@ -12,7 +12,8 @@ namespace Mosa.HelloWorld.x86.Tests
 {
 	public class Generic2Test : KernelTest
 	{
-		public Generic2Test() : base("Gen-N") 
+		public Generic2Test()
+			: base("Gen-N")
 		{
 			testMethods.Add(GenericTest1);
 			testMethods.Add(GenericTest2);
@@ -20,6 +21,7 @@ namespace Mosa.HelloWorld.x86.Tests
 			testMethods.Add(GenericTest4);
 			testMethods.Add(GenericTest5);
 			testMethods.Add(GenericTest6);
+			testMethods.Add(GenericTest7);
 		}
 
 		public static bool GenericTest1()
@@ -86,5 +88,29 @@ namespace Mosa.HelloWorld.x86.Tests
 
 			return list.FindLast(30) != list.First;
 		}
+
+		public static bool GenericTest7()
+		{
+			LinkedList<IntClass> list = new LinkedList<IntClass>();
+
+			IntClass value1 = new IntClass(9);
+			IntClass value2 = new IntClass(2);
+
+			list.Add(value1);
+			list.Add(value2);
+
+			IntClass first = list.First.value;
+
+			return first.value == 9;
+		}
+
 	}
+
+	public class IntClass
+	{
+		public int value;
+
+		public IntClass(int value) { this.value = value; }
+	}
+
 }
