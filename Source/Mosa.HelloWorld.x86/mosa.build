@@ -16,6 +16,7 @@
 		<sources>
                     <include name="Boot.cs"/>
                     <include name="Tests/ComparisonTest.cs"/>
+                    <include name="Tests/OtherTest.cs"/>
                     <include name="Tests/DelegateTest.cs"/>
                     <include name="Tests/ExceptionTest.cs"/>
                     <include name="Tests/Generic2Test.cs"/>
