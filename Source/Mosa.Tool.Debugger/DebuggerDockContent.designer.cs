@@ -27,9 +27,15 @@ namespace Mosa.Tool.Debugger
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.components = new System.ComponentModel.Container();
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ConnectionProperties));
-			
+			this.SuspendLayout();
+			// 
+			// DebuggerDockContent
+			// 
+			this.ClientSize = new System.Drawing.Size(296, 265);
+			this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.Name = "DebuggerDockContent";
+			this.ResumeLayout(false);
+
 		}
 
 		#endregion

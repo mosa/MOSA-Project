@@ -33,8 +33,6 @@ namespace Mosa.Platform.x86.Intrinsic
 		{
 			Debug.Assert(context.Operand1.IsConstant);
 
-			int irq = (int)context.Operand1.ValueAsLongInteger;
-
 			if ((irq > 256) || (irq < 0))
 				throw new InvalidOperationException();
 

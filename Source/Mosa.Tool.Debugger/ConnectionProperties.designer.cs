@@ -27,9 +27,6 @@ namespace Mosa.Tool.Debugger
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.components = new System.ComponentModel.Container();
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ConnectionProperties));
-			this.imageList = new System.Windows.Forms.ImageList(this.components);
 			this.comboBox1 = new System.Windows.Forms.ComboBox();
 			this.label7 = new System.Windows.Forms.Label();
 			this.lbServerName = new System.Windows.Forms.Label();
@@ -42,20 +39,14 @@ namespace Mosa.Tool.Debugger
 			this.lbPipeName = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
-			// imageList
-			// 
-			this.imageList.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList.ImageStream")));
-			this.imageList.TransparentColor = System.Drawing.Color.Transparent;
-			this.imageList.Images.SetKeyName(0, "Mouse.bmp");
-			// 
 			// comboBox1
 			// 
 			this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboBox1.FormattingEnabled = true;
 			this.comboBox1.Items.AddRange(new object[] {
-            "Named Pipe",
             "TCP Client Socket",
-            "TCP Server Socket"});
+            "TCP Server Socket",
+            "Named Pipe"});
 			this.comboBox1.Location = new System.Drawing.Point(12, 36);
 			this.comboBox1.Name = "comboBox1";
 			this.comboBox1.Size = new System.Drawing.Size(191, 21);
@@ -101,13 +92,13 @@ namespace Mosa.Tool.Debugger
 			this.label6.AutoSize = true;
 			this.label6.Location = new System.Drawing.Point(12, 20);
 			this.label6.Name = "label6";
-			this.label6.Size = new System.Drawing.Size(88, 13);
+			this.label6.Size = new System.Drawing.Size(91, 13);
 			this.label6.TabIndex = 11;
-			this.label6.Text = "Connection Type";
+			this.label6.Text = "Connection Type:";
 			// 
 			// btnDisconnect
 			// 
-			this.btnDisconnect.Location = new System.Drawing.Point(128, 131);
+			this.btnDisconnect.Location = new System.Drawing.Point(128, 122);
 			this.btnDisconnect.Name = "btnDisconnect";
 			this.btnDisconnect.Size = new System.Drawing.Size(75, 24);
 			this.btnDisconnect.TabIndex = 9;
@@ -117,7 +108,7 @@ namespace Mosa.Tool.Debugger
 			// 
 			// btnConnect
 			// 
-			this.btnConnect.Location = new System.Drawing.Point(12, 131);
+			this.btnConnect.Location = new System.Drawing.Point(12, 122);
 			this.btnConnect.Name = "btnConnect";
 			this.btnConnect.Size = new System.Drawing.Size(75, 24);
 			this.btnConnect.TabIndex = 6;
@@ -144,7 +135,7 @@ namespace Mosa.Tool.Debugger
 			// 
 			// ConnectionProperties
 			// 
-			this.ClientSize = new System.Drawing.Size(219, 167);
+			this.ClientSize = new System.Drawing.Size(219, 162);
 			this.Controls.Add(this.tbNamedPipe);
 			this.Controls.Add(this.comboBox1);
 			this.Controls.Add(this.label7);
@@ -161,7 +152,7 @@ namespace Mosa.Tool.Debugger
 			this.HideOnClose = true;
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
-			this.MinimumSize = new System.Drawing.Size(235, 205);
+			this.MinimumSize = new System.Drawing.Size(235, 200);
 			this.Name = "ConnectionProperties";
 			this.Padding = new System.Windows.Forms.Padding(0, 2, 0, 2);
 			this.ShowHint = WeifenLuo.WinFormsUI.Docking.DockState.DockLeft;
@@ -174,7 +165,6 @@ namespace Mosa.Tool.Debugger
 		}
 		#endregion
 
-		private System.Windows.Forms.ImageList imageList;
 		private System.Windows.Forms.Button btnConnect;
 		private System.Windows.Forms.Button btnDisconnect;
 		private System.Windows.Forms.Label label6;

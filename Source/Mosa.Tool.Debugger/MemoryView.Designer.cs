@@ -61,7 +61,7 @@ namespace Mosa.Tool.Debugger
             this.toolStripButton1});
 			this.toolStrip1.Location = new System.Drawing.Point(0, 0);
 			this.toolStrip1.Name = "toolStrip1";
-			this.toolStrip1.Size = new System.Drawing.Size(517, 25);
+			this.toolStrip1.Size = new System.Drawing.Size(524, 25);
 			this.toolStrip1.TabIndex = 0;
 			this.toolStrip1.Text = "toolStrip1";
 			// 
@@ -129,14 +129,14 @@ namespace Mosa.Tool.Debugger
 			this.lbMemory.Location = new System.Drawing.Point(0, 28);
 			this.lbMemory.Multiline = true;
 			this.lbMemory.Name = "lbMemory";
-			this.lbMemory.Size = new System.Drawing.Size(517, 363);
+			this.lbMemory.Size = new System.Drawing.Size(524, 366);
 			this.lbMemory.TabIndex = 1;
 			// 
 			// MemoryView
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(517, 392);
+			this.ClientSize = new System.Drawing.Size(524, 395);
 			this.Controls.Add(this.lbMemory);
 			this.Controls.Add(this.toolStrip1);
 			this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
