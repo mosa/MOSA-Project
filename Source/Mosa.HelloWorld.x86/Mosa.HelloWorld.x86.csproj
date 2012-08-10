@@ -67,6 +67,7 @@
   <ItemGroup>
     <Compile Include="Boot.cs" />
     <Compile Include="Tests\ComparisonTest.cs" />
+    <Compile Include="Tests\OtherTest.cs" />
     <Compile Include="Tests\DelegateTest.cs" />
     <Compile Include="Tests\ExceptionTest.cs" />
     <Compile Include="Tests\Generic2Test.cs" />

@@ -16,6 +16,12 @@ namespace Mosa.Platform.x86.Instructions
 	/// </summary>
 	public sealed class Lea : TwoOperandInstruction
 	{
+		#region Data Members
+
+		private static readonly OpCode opcode = new OpCode(new byte[] { 0x8D });
+
+		#endregion // Data Members
+
 		#region Methods
 		/// <summary>
 		/// 
@@ -32,15 +38,17 @@ namespace Mosa.Platform.x86.Instructions
 				code = new byte[] { 0x8D, 0x84, (4 << 3) };
 				code[1] |= (byte)((context.Result.Register.RegisterCode & 0x07));
 				code[2] |= (byte)((mop.Base.RegisterCode & 0x07));
+
+				emitter.Write(code, 0, code.Length);
+				emitter.EmitImmediate(mop);
 			}
 			else
 			{
-				code = new byte[] { 0xB8 }; //FIXME:
+				emitter.Emit(opcode, context.Result, context.Operand1);
 			}
 
-			emitter.Write(code, 0, code.Length);
-			emitter.EmitImmediate(mop);
 		}
+
 
 		/// <summary>
 		/// Allows visitor based dispatch for this instruction object.

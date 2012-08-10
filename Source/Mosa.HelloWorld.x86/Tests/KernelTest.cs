@@ -83,6 +83,7 @@ namespace Mosa.HelloWorld.x86.Tests
 			var plugTestTest = new PlugTestTest();
 			var compareTest = new ComparisonTest();
 			var simpleTest = new OptimizationTest();
+			var otherTest = new OtherTest();
 
 			delegateTest.Test();
 			stringTest.Test();
@@ -94,6 +95,7 @@ namespace Mosa.HelloWorld.x86.Tests
 			plugTestTest.Test();
 			compareTest.Test();
 			simpleTest.Test();
+			otherTest.Test();
 		}
 
 		public void Test()
