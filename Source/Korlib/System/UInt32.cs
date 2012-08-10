@@ -43,7 +43,7 @@ namespace System
 
 		public string ToString(string format)
 		{
-			return null; // FIXME (rootnode)
+			return Int32.CreateString(_value, false, true);
 		}
 
 		public override int GetHashCode()
