@@ -160,7 +160,7 @@ namespace Mosa.Compiler.Framework.Stages
 		void CIL.ICILVisitor.Ldsflda(Context context)
 		{
 			context.SetInstruction(IRInstruction.AddressOf, context.Result, Operand.CreateRuntimeMember(context.RuntimeField));
-			context.SetInstruction(IRInstruction.Move, context.Result, context.Operand1);
+			//context.AppendInstruction(IRInstruction.Move, context.Result, context.Operand1);
 		}
 
 		/// <summary>
