@@ -57,7 +57,6 @@ namespace Mosa.Tool.TypeExplorer
 
 			switch (platform.ToLower())
 			{
-				case "null": architecture = Mosa.Platform.Null.Architecture.CreateArchitecture(Mosa.Platform.Null.ArchitectureFeatureFlags.AutoDetect); break;
 				case "x86": architecture = Mosa.Platform.x86.Architecture.CreateArchitecture(Mosa.Platform.x86.ArchitectureFeatureFlags.AutoDetect); break;
 				case "avr32": architecture = Mosa.Platform.AVR32.Architecture.CreateArchitecture(Mosa.Platform.AVR32.ArchitectureFeatureFlags.AutoDetect); break;
 				default:
