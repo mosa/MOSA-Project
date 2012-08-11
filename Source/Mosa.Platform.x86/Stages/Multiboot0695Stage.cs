@@ -145,8 +145,7 @@ namespace Mosa.Platform.x86.Stages
 		{
 			if (!secondStage)
 			{
-				IntPtr entryPoint = WriteMultibootEntryPoint();
-				WriteMultibootHeader(entryPoint);
+				WriteMultibootHeader();
 				secondStage = true;
 			}
 			else
@@ -179,34 +178,13 @@ namespace Mosa.Platform.x86.Stages
 
 		#region Internals
 
-		/// <summary>
-		/// Writes the multiboot entry point.
-		/// </summary>
-		/// <returns>The virtualAddress of the real entry point.</returns>
-		private IntPtr WriteMultibootEntryPoint()
-		{
-			/*
-			 * FIXME:
-			 * 
-			 * We can't use the standard entry point of the module. Instead
-			 * we write a multiboot compliant entry point here, which populates
-			 * the boot structure - so that it can be retrieved later.
-			 * 
-			 * Unfortunately this means, we need to define the boot structure
-			 * in the kernel to be able to access it later.
-			 * 
-			 */
-
-			return IntPtr.Zero;
-		}
-
 		private const string MultibootHeaderSymbolName = @"<$>mosa-multiboot-header";
 
 		/// <summary>
 		/// Writes the multiboot header.
 		/// </summary>
 		/// <param name="entryPoint">The virtualAddress of the multiboot compliant entry point.</param>
-		private void WriteMultibootHeader(IntPtr entryPoint)
+		private void WriteMultibootHeader()
 		{
 			// HACK: According to the multiboot specification this header must be within the first 8K of the
 			// kernel binary. Since the text section is always first, this should take care of the problem.
@@ -257,6 +235,7 @@ namespace Mosa.Platform.x86.Stages
 					bw.Write(bss_end_addr);
 
 					linker.Link(LinkType.AbsoluteAddress | LinkType.NativeI4, MultibootHeaderSymbolName, (int)stream.Position, 0, @"Mosa.Tools.Compiler.LinkerGenerated.<$>MultibootInit()", IntPtr.Zero);
+					bw.Write((int)0);
 
 					bw.Write(VideoMode);
 					bw.Write(VideoWidth);

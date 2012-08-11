@@ -201,6 +201,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			int size = array.Length;
 
+			//FIXME: change  SectionKind.Text to SectionKind.ROData
 			using (Stream stream = compiler.Linker.Allocate(tableName, SectionKind.Text, size, typeLayout.NativePointerAlignment))
 			{
 				foreach (byte b in array)

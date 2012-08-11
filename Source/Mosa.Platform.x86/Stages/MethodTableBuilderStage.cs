@@ -98,7 +98,7 @@ namespace Mosa.Platform.x86.Stages
 
 			string section = "<$>methodLookupTable";
 
-			using (var stream = linker.Allocate(section, SectionKind.Text, size, typeLayout.NativePointerAlignment))
+			using (var stream = linker.Allocate(section, SectionKind.ROData, size, typeLayout.NativePointerAlignment))
 			{
 				foreach (var entry in table)
 				{

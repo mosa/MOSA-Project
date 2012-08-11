@@ -241,7 +241,6 @@ namespace System
 		public unsafe static string Concat(String a, String b)
 		{
 			String result = InternalAllocateString(a.length + b.length);
-
 			char* chars = result.first_char;
 
 			foreach (char character in a)
@@ -255,7 +254,6 @@ namespace System
 		public unsafe static string Concat(String a, String b, String c)
 		{
 			String result = InternalAllocateString(a.length + b.length + c.length);
-
 			char* chars = result.first_char;
 
 			foreach (char character in a)
@@ -271,7 +269,6 @@ namespace System
 		public unsafe static string Concat(String a, String b, String c, String d)
 		{
 			String result = InternalAllocateString(a.length + b.length + c.length + d.length);
-
 			char* chars = result.first_char;
 
 			foreach (char character in a)
@@ -311,7 +308,7 @@ namespace System
 			string result = string.Empty;
 
 			for (int i = 0; i < args.Length - 1; ++i)
-				result = Concat(result, args[i], args[i + 1]);
+				result = Concat(result, args[i]);
 
 			return result;
 		}
@@ -321,7 +318,7 @@ namespace System
 			string result = string.Empty;
 
 			for (int i = 0; i < objects.Length - 1; ++i)
-				result = Concat(result, objects[i], objects[i + 1]);
+				result = Concat(result, objects[i]);
 
 			return result;
 		}
