@@ -46,6 +46,7 @@ namespace Mosa.Compiler.Framework
 
 			public void AddRange(LiveRange liveRange)
 			{
+				// TODO: Merge if ranges connect
 				liveRanges.Add(liveRange);
 			}
 
@@ -59,6 +60,9 @@ namespace Mosa.Compiler.Framework
 		{
 			public BasicBlock Block { get; private set; }
 			public int Sequence { get { return Block.Sequence; } }
+
+			public int From { get; set; }
+			public int To { get; set; }
 
 			public BitArray LiveGen { get; set; }
 			public BitArray LiveKill { get; set; }
@@ -114,7 +118,7 @@ namespace Mosa.Compiler.Framework
 
 			// Number all the instructions in block order
 			NumberInstructions();
-			
+
 			ComputeLocalLiveSets();
 
 			ComputeGlobalLiveSets();
@@ -126,6 +130,8 @@ namespace Mosa.Compiler.Framework
 			int index = 2;
 			foreach (BasicBlock block in basicBlocks)
 			{
+				extendedBlocks[block.Sequence].From = index;
+
 				for (Context context = new Context(instructionSet, block); !context.EndOfInstruction; context.GotoNext())
 				{
 					if (!context.IsEmpty)
@@ -134,6 +140,8 @@ namespace Mosa.Compiler.Framework
 						index = index + 2;
 					}
 				}
+
+				extendedBlocks[block.Sequence].To = index - 2;
 			}
 		}
 
@@ -189,6 +197,47 @@ namespace Mosa.Compiler.Framework
 
 					block.LiveOut = liveOut;
 					block.LiveIn = liveIn;
+				}
+			}
+		}
+
+		private void BuildIntervals()
+		{
+			for (int i = basicBlocks.Count - 1; i >= 0; i++)
+			{
+				var block = extendedBlocks[i];
+
+				int blockFrom = block.From;
+				int blockTo = block.To + 2;
+
+				for (int s = 0; s < block.LiveOut.Count; s++)
+				{
+					var operand = extendedVirtualRegisters[s];
+
+					operand.AddRange(new LiveRange(blockFrom, blockTo));
+				}
+
+				Context context = new Context(instructionSet, block.Block);
+				context.GotoLast();
+
+				while (!context.IsFirstInstruction)
+				{
+
+					if (context.Instruction.FlowControl == FlowControl.Call)
+					{
+						//foreach physical register reg do
+						//intervals[reg].add_range(op.id, op.id + 1)
+					}
+
+
+					foreach (var result in context.Results)
+					{
+						//intervals[opr].first_range.from = op.id
+						//intervals[opr].add_use_pos(op.id, use_kind_for(op, opr))
+					}
+
+
+					context.GotoPrevious();
 				}
 			}
 		}

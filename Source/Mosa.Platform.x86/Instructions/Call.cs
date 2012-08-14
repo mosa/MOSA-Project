@@ -24,12 +24,13 @@ namespace Mosa.Platform.x86.Instructions
 
 		#endregion // Data Member
 
-		#region Methods
+		#region Properties
 
-		/// <summary>
-		/// Gets the additional output registers.
-		/// </summary>
-		public override RegisterBitmap AdditionalOutputRegisters { get { return new RegisterBitmap(GeneralPurposeRegister.ESP); } }
+		public override FlowControl FlowControl { get { return FlowControl.Call; } }
+
+		#endregion // Properties
+
+		#region Methods
 
 		/// <summary>
 		/// Emits the specified platform instruction.

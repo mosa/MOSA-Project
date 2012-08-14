@@ -20,7 +20,7 @@ namespace Mosa.Platform.x86.Stages
 	/// <summary>
 	/// 
 	/// </summary>
-	public sealed class TweakTransformationStage : BaseTransformationStage, IX86Visitor, IMethodCompilerStage, IPlatformStage
+	public sealed class TweakTransformationStage : BaseTransformationStage, IX86Visitor, IMethodCompilerStage
 	{
 
 		#region IX86Visitor
@@ -31,7 +31,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="ctx">The context.</param>
 		void IX86Visitor.Mov(Context ctx)
 		{
-			Debug.Assert(!ctx.Result.IsConstant);			
+			Debug.Assert(!ctx.Result.IsConstant);
 
 			if (ctx.Operand1.IsConstant && ctx.Operand1.StackType == StackTypeCode.F)
 				ctx.Operand1 = EmitConstant(ctx.Operand1);

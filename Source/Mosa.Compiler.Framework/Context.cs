@@ -209,6 +209,20 @@ namespace Mosa.Compiler.Framework
 			}
 		}
 
+
+		/// <summary>
+		/// Gets all results.
+		/// </summary>
+		/// <value>The operands.</value>
+		public IEnumerable<Operand> Results
+		{
+			get
+			{
+				if (Result != null)
+					yield return Result;
+			}
+		}
+
 		/// <summary>
 		/// Gets or sets the result operand.
 		/// </summary>

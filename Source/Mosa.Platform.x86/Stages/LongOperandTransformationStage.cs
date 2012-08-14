@@ -27,7 +27,7 @@ namespace Mosa.Platform.x86.Stages
 	/// This stage translates all 64-bit operations to appropriate 32-bit operations on
 	/// architectures without appropriate 64-bit integral operations.
 	/// </remarks>
-	public sealed class LongOperandTransformationStage : BaseTransformationStage, IIRVisitor, IPlatformStage
+	public sealed class LongOperandTransformationStage : BaseTransformationStage, IIRVisitor
 	{
 
 		Operand operandConstantZero = Operand.CreateConstant(BuiltInSigType.Int32, (int)0);

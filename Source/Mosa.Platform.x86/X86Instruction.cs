@@ -15,7 +15,7 @@ namespace Mosa.Platform.x86
 	/// <summary>
 	/// 
 	/// </summary>
-	public abstract class X86Instruction : BasePlatformInstruction, IRegisterUsage
+	public abstract class X86Instruction : BasePlatformInstruction
 	{
 
 		static protected RegisterBitmap NoRegisters = new RegisterBitmap();
@@ -118,6 +118,7 @@ namespace Mosa.Platform.x86
 			return "X86." + base.ToString();
 		}
 
+		//TODO
 		public virtual Register[] UsableRegisters
 		{
 			get { return null; }
@@ -258,89 +259,6 @@ namespace Mosa.Platform.x86
 		}
 
 		#endregion
-
-		#region IRegisterUsage
-
-		/// <summary>
-		/// Gets the output registers.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		/// <returns></returns>
-		public virtual RegisterBitmap GetOutputRegisters(Context context)
-		{
-			RegisterBitmap registers = new RegisterBitmap();
-
-			if (context.Result.IsRegister)
-				registers.Set(context.Result.Register);
-
-			registers.Or(AdditionalOutputRegisters);
-
-			return registers;
-		}
-
-		/// <summary>
-		/// Gets the input registers.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		/// <returns></returns>
-		public virtual RegisterBitmap GetInputRegisters(Context context)
-		{
-			RegisterBitmap registers = new RegisterBitmap();
-
-			registers.Set(GetRegister(context.Operand1, true));
-			registers.Set(GetRegister(context.Operand2, true));
-			registers.Set(GetRegister(context.Operand3, true));
-			registers.Set(GetRegister(context.Result, ResultIsInput));
-
-			registers.Or(AdditionalInputRegisters);
-
-			return registers;
-		}
-
-		/// <summary>
-		/// Gets a value indicating whether [result is input].
-		/// </summary>
-		/// <value>
-		///   <c>true</c> if [result is input]; otherwise, <c>false</c>.
-		/// </value>
-		public virtual bool ResultIsInput { get { return true; } }
-
-		/// <summary>
-		/// Gets the additional output registers.
-		/// </summary>
-		public virtual RegisterBitmap AdditionalOutputRegisters { get { return NoRegisters; } }
-
-		/// <summary>
-		/// Gets the additional input registers.
-		/// </summary>
-		public virtual RegisterBitmap AdditionalInputRegisters { get { return NoRegisters; } }
-
-		#endregion // IRegisterUsage
-
-		/// <summary>
-		/// Gets the register.
-		/// </summary>
-		/// <param name="operand">The operand.</param>
-		/// <returns></returns>
-		protected Register GetRegister(Operand operand, bool includeRegister)
-		{
-			if (operand == null)
-				return null;
-
-			if (includeRegister)
-			{
-				if (operand.IsRegister)
-					return operand.Register;
-			}
-
-			if (operand.IsMemoryAddress || operand.IsParameter)
-			{
-				return operand.Register;
-			}
-
-			return null;
-		}
-
 
 	}
 }

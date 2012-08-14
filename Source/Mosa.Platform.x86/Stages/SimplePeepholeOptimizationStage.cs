@@ -18,7 +18,7 @@ namespace Mosa.Platform.x86.Stages
 	/// <summary>
 	/// 
 	/// </summary>
-	public sealed class SimplePeepholeOptimizationStage : BaseTransformationStage, IMethodCompilerStage, IPlatformStage
+	public sealed class SimplePeepholeOptimizationStage : BaseTransformationStage, IMethodCompilerStage
 	{
 
 		#region Window Class

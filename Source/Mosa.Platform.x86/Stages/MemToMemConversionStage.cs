@@ -21,7 +21,7 @@ namespace Mosa.Platform.x86.Stages
 	/// <summary>
 	/// 
 	/// </summary>
-	public sealed class MemToMemConversionStage : BaseTransformationStage, IMethodCompilerStage, IPlatformStage
+	public sealed class MemToMemConversionStage : BaseTransformationStage, IMethodCompilerStage
 	{
 
 		#region IMethodCompilerStage Members

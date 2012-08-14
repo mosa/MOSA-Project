@@ -30,11 +30,6 @@ namespace Mosa.Platform.x86.Instructions
 		#region Methods
 
 		/// <summary>
-		/// Gets the additional output registers.
-		/// </summary>
-		public override RegisterBitmap AdditionalOutputRegisters { get { return new RegisterBitmap(GeneralPurposeRegister.EAX); } }
-
-		/// <summary>
 		/// Computes the op code.
 		/// </summary>
 		/// <param name="destination">The destination.</param>

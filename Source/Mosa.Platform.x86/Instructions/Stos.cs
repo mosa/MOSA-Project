@@ -21,16 +21,6 @@ namespace Mosa.Platform.x86.Instructions
 		#region Methods
 
 		/// <summary>
-		/// Gets the additional input registers.
-		/// </summary>
-		public override RegisterBitmap AdditionalInputRegisters { get { return new RegisterBitmap(GeneralPurposeRegister.ECX, GeneralPurposeRegister.EDI, GeneralPurposeRegister.EAX); } }
-
-		/// <summary>
-		/// Gets the additional input registers.
-		/// </summary>
-		public override RegisterBitmap AdditionalOutputRegisters { get { return new RegisterBitmap(GeneralPurposeRegister.EDI); } }
-
-		/// <summary>
 		/// Emits the specified platform instruction.
 		/// </summary>
 		/// <param name="ctx">The context.</param>

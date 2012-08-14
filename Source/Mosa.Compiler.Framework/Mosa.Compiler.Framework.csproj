@@ -95,7 +95,6 @@
     <Compile Include="Stages\LoopAwareBlockOrderStage.cs" />
     <Compile Include="Stages\SSAOptimizations.cs" />
     <Compile Include="Stages\EdgeSplitStage.cs" />
-    <Compile Include="Stages\SimpleRegisterAllocatorStage.cs" />
     <Compile Include="VirtualRegisters.cs" />
     <Compile Include="Stages\LocalVariablePromotionStage.cs" />
     <Compile Include="BaseCodeEmitter.cs" />
@@ -124,11 +123,8 @@
     <Compile Include="BaseCompilerStage.cs" />
     <Compile Include="Platform\BasePlatformInstruction.cs" />
     <Compile Include="Platform\BasePlatformTransformationStage.cs" />
-    <Compile Include="Platform\IRegisterUsage.cs" />
     <Compile Include="RegisterBitmap.cs" />
     <Compile Include="StackLayout.cs" />
-    <Compile Include="Stages\RegisterUsageAnalyzerStage.cs" />
-    <Compile Include="Stages\OperandUsageAnalyzerStage.cs" />
     <Compile Include="Stages\MultipleDefinitionMarkerStage.cs" />
     <Compile Include="ITypeInitializerSchedulerStage.cs" />
     <Compile Include="Stages\PlugStage.cs" />
@@ -337,9 +333,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="IMethodCompilerStage.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Platform\IPlatformStage.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="IStackLayoutProvider.cs">

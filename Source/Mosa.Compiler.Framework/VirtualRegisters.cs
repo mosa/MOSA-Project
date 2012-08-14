@@ -30,6 +30,8 @@ namespace Mosa.Compiler.Framework
 
 		public int Count { get { return virtualRegisters.Count; } }
 
+		public Operand this[int index] { get { return virtualRegisters[index]; } }
+
 		#endregion // Properties
 
 		/// <summary>
@@ -76,5 +78,6 @@ namespace Mosa.Compiler.Framework
 		{
 			return GetEnumerator();
 		}
+
 	}
 }

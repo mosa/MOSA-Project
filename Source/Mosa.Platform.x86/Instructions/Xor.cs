@@ -30,16 +30,6 @@ namespace Mosa.Platform.x86.Instructions
 
 		#region Methods
 
-		public override RegisterBitmap GetInputRegisters(Context context)
-		{
-			// Special case when the input register does not matter, example: XOR EAX, EAX. 
-
-			if (context.Result.IsCPURegister && context.Operand1.IsCPURegister && context.Result.Register == context.Operand1.Register)
-				return NoRegisters;
-
-			return base.GetInputRegisters(context);
-		}
-
 		/// <summary>
 		/// Computes the opcode.
 		/// </summary>

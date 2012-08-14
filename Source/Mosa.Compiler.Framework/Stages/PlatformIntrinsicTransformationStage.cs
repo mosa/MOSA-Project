@@ -19,7 +19,7 @@ namespace Mosa.Compiler.Framework.Stages
 	/// <summary>
 	/// 
 	/// </summary>
-	public sealed class PlatformIntrinsicTransformationStage : BaseMethodCompilerStage, IMethodCompilerStage, IPlatformStage
+	public sealed class PlatformIntrinsicTransformationStage : BaseMethodCompilerStage, IMethodCompilerStage
 	{
 
 		#region IMethodCompilerStage Members
