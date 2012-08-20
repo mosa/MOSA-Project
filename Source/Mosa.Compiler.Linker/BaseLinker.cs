@@ -80,6 +80,9 @@ namespace Mosa.Compiler.Linker
 		/// </summary>
 		public virtual void Run()
 		{
+			// FIXME: Remove this linke
+			if (this != null) return;
+
 			long address;
 
 			// Check if we have unresolved requests and try to link them

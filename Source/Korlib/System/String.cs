@@ -98,14 +98,11 @@ namespace System
 		[MethodImplAttribute(MethodImplOptions.InternalCall)]
 		public extern String(char[] value, int startIndex, int length);
 
-		//[MethodImplAttribute(MethodImplOptions.InternalCall)]
-		//public extern unsafe String(sbyte* value, int startIndex, int length);
+		[MethodImplAttribute(MethodImplOptions.InternalCall)]
+		public extern unsafe String(sbyte* value, int startIndex, int length);
 
-		////[MethodImplAttribute(MethodImplOptions.InternalCall)]
-		////public unsafe extern String(sbyte* value);
-
-		////[MethodImplAttribute(MethodImplOptions.InternalCall)]
-		////public unsafe extern String(sbyte* value, int startIndex, int length);
+		[MethodImplAttribute(MethodImplOptions.InternalCall)]
+		public extern unsafe String(sbyte* value);
 
 		////[MethodImplAttribute(MethodImplOptions.InternalCall)]
 		////public unsafe extern String(sbyte* value, int startIndex, int length, Encoding enc);
@@ -122,7 +119,6 @@ namespace System
 		private static unsafe string CreateString(char c, int count)
 		{
 			String result = InternalAllocateString(count);
-
 			char* chars = result.first_char;
 
 			while (count > 0)
@@ -142,8 +138,10 @@ namespace System
 
 		private static unsafe string CreateString(char[] value, int startIndex, int length)
 		{
-			String result = InternalAllocateString(length);
+			if (length == 0)
+				return string.Empty;
 
+			String result = InternalAllocateString(length);
 			char* chars = result.first_char;
 
 			for (int index = startIndex; index < startIndex + length; index++)
@@ -157,11 +155,35 @@ namespace System
 
 		private static unsafe string CreateString(sbyte* value, int startIndex, int length)
 		{
-			String result = InternalAllocateString(length);
+			if (length == 0)
+				return string.Empty;
 
+			String result = InternalAllocateString(length);
 			char* chars = result.first_char;
 
 			value += startIndex;
+
+			for (int index = 0; index < length; index++)
+				*chars++ = (char)*value++;
+
+			return result;
+		}
+
+		private static unsafe string CreateString(sbyte* value)
+		{
+			int length = 0;
+			sbyte* at = value;
+
+			while (*at != 0)
+			{
+				length++;
+			}
+
+			if (length == 0)
+				return string.Empty;
+
+			String result = InternalAllocateString(length);
+			char* chars = result.first_char;
 
 			for (int index = 0; index < length; index++)
 				*chars++ = (char)*value++;
@@ -183,7 +205,7 @@ namespace System
 			return other == this;
 		}
 
-		public static bool operator == (String a, String b)
+		public static bool operator ==(String a, String b)
 		{
 			return Equals(a, b);
 		}
@@ -219,7 +241,6 @@ namespace System
 		public unsafe static string Concat(String a, String b)
 		{
 			String result = InternalAllocateString(a.length + b.length);
-
 			char* chars = result.first_char;
 
 			foreach (char character in a)
@@ -233,7 +254,6 @@ namespace System
 		public unsafe static string Concat(String a, String b, String c)
 		{
 			String result = InternalAllocateString(a.length + b.length + c.length);
-
 			char* chars = result.first_char;
 
 			foreach (char character in a)
@@ -249,7 +269,6 @@ namespace System
 		public unsafe static string Concat(String a, String b, String c, String d)
 		{
 			String result = InternalAllocateString(a.length + b.length + c.length + d.length);
-
 			char* chars = result.first_char;
 
 			foreach (char character in a)
@@ -289,7 +308,7 @@ namespace System
 			string result = string.Empty;
 
 			for (int i = 0; i < args.Length - 1; ++i)
-				result = Concat(result, args[i], args[i + 1]);
+				result = Concat(result, args[i]);
 
 			return result;
 		}
@@ -299,11 +318,11 @@ namespace System
 			string result = string.Empty;
 
 			for (int i = 0; i < objects.Length - 1; ++i)
-				result = Concat(result, objects[i], objects[i + 1]);
+				result = Concat(result, objects[i]);
 
 			return result;
 		}
-		
+
 		public unsafe string Substring(int startIndex)
 		{
 			if (startIndex == 0)

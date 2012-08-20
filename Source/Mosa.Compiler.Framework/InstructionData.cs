@@ -48,9 +48,14 @@ namespace Mosa.Compiler.Framework
 		public Operand Operand3;
 
 		/// <summary>
-		/// Holds the result operands of the instruction.
+		/// Holds the result first operand of the instruction.
 		/// </summary>
 		public Operand Result;
+
+		/// <summary>
+		/// Holds the second result operand of the instruction.
+		/// </summary>
+		public Operand Result2;
 
 		/// <summary>
 		///  Holds the branch targets
@@ -202,6 +207,7 @@ namespace Mosa.Compiler.Framework
 			this.Operand2 = null;
 			this.Operand3 = null;
 			this.Result = null;
+			this.Result2 = null;
 			this.packed = 0;
 			this.BranchTargets = null;
 			this.Other = null;

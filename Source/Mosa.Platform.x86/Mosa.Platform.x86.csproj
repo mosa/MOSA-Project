@@ -99,6 +99,7 @@
     <Compile Include="Instructions\SubSD.cs" />
     <Compile Include="Stages\AddressModeConversionStage.cs" />
     <Compile Include="ControlRegister.cs" />
+    <Compile Include="Stages\FixedRegisterAssignementStage.cs" />
     <Compile Include="Stages\ExceptionVectorStage.cs" />
     <Compile Include="Instructions\TwoOperandNoResultInstruction.cs" />
     <Compile Include="Instructions\FarJmp.cs" />

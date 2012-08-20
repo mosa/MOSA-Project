@@ -16,7 +16,19 @@ namespace Mosa.Platform.x86.Instructions
 	/// </summary>
 	public sealed class Cdq : X86Instruction
 	{
-		
+
+		#region Construction
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Cdq" /> class.
+		/// </summary>
+		public Cdq()
+			: base(1, 2)
+		{
+		}
+
+		#endregion // Construction
+
 		#region Methods
 
 		/// <summary>

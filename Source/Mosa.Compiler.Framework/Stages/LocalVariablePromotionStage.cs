@@ -68,9 +68,9 @@ namespace Mosa.Compiler.Framework.Stages
 							if (operand.IsLocalVariable)
 								localVariablesInExceptions.AddIfNew(operand);
 
-						if (ctx.Result != null)
-							if (ctx.Result.IsLocalVariable)
-								localVariablesInExceptions.AddIfNew(ctx.Result);
+						foreach (var operand in ctx.Results)
+							if (operand.IsLocalVariable)
+								localVariablesInExceptions.AddIfNew(operand);
 					}
 
 					// quick out

@@ -72,11 +72,6 @@ namespace Mosa.Platform.x86
 		/// <param name="context">The context.</param>
 		void Mul(Context context);
 		/// <summary>
-		/// Directs the multiplication.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void DirectMultiplication(Context context);
-		/// <summary>
 		/// Directs the division.
 		/// </summary>
 		/// <param name="context">The context.</param>

@@ -108,10 +108,6 @@
       <Project>{540BEAC7-A2C3-4C46-9F4A-E6E1DF4EF6FC}</Project>
       <Name>Mosa.Compiler.InternalTrace</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Mosa.Platform.Null\Mosa.Platform.Null.csproj">
-      <Project>{E83753B4-BDD2-442E-96AA-C98C91E0D970}</Project>
-      <Name>Mosa.Platform.Null</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Mosa.Platform.x86\Mosa.Platform.x86.csproj">
       <Project>{DE30CBE9-50F3-4A3E-BCC9-A8A36348530E}</Project>
       <Name>Mosa.Platform.x86</Name>

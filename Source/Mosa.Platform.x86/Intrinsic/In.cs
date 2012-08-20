@@ -30,15 +30,7 @@ namespace Mosa.Platform.x86.Intrinsic
 		/// <param name="typeSystem">The type system.</param>
 		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, BaseMethodCompiler methodCompiler)
 		{
-			Operand result = context.Result;
-			Operand operand1 = context.Operand1;
-
-			Operand edx = Operand.CreateCPURegister(operand1.Type, GeneralPurposeRegister.EDX);
-			Operand eax = Operand.CreateCPURegister(result.Type, GeneralPurposeRegister.EAX);
-
-			context.SetInstruction(X86.Mov, edx, operand1);
-			context.AppendInstruction(X86.In, eax, edx);
-			context.AppendInstruction(X86.Mov, result, eax);
+			context.AppendInstruction(X86.In, context.Result, context.Operand1);
 		}
 
 		#endregion // Methods

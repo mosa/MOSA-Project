@@ -32,7 +32,6 @@
                     <include name="Stages/LoopAwareBlockOrderStage.cs"/>
                     <include name="Stages/SSAOptimizations.cs"/>
                     <include name="Stages/EdgeSplitStage.cs"/>
-                    <include name="Stages/SimpleRegisterAllocatorStage.cs"/>
                     <include name="VirtualRegisters.cs"/>
                     <include name="Stages/LocalVariablePromotionStage.cs"/>
                     <include name="BaseCodeEmitter.cs"/>
@@ -61,11 +60,8 @@
                     <include name="BaseCompilerStage.cs"/>
                     <include name="Platform/BasePlatformInstruction.cs"/>
                     <include name="Platform/BasePlatformTransformationStage.cs"/>
-                    <include name="Platform/IRegisterUsage.cs"/>
                     <include name="RegisterBitmap.cs"/>
                     <include name="StackLayout.cs"/>
-                    <include name="Stages/RegisterUsageAnalyzerStage.cs"/>
-                    <include name="Stages/OperandUsageAnalyzerStage.cs"/>
                     <include name="Stages/MultipleDefinitionMarkerStage.cs"/>
                     <include name="ITypeInitializerSchedulerStage.cs"/>
                     <include name="Stages/PlugStage.cs"/>
@@ -246,7 +242,6 @@
                     <include name="IDominanceProvider.cs"/>
                     <include name="CIL/IInstructionDecoder.cs"/>
                     <include name="IMethodCompilerStage.cs"/>
-                    <include name="Platform/IPlatformStage.cs"/>
                     <include name="IStackLayoutProvider.cs"/>
                     <include name="BaseMethodCompiler.cs"/>
                     <include name="Operand.cs"/>

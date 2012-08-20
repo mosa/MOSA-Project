@@ -220,6 +220,8 @@ namespace Mosa.Compiler.Framework
 			{
 				if (Result != null)
 					yield return Result;
+				if (Result2 != null)
+					yield return Result2;
 			}
 		}
 
@@ -236,6 +238,22 @@ namespace Mosa.Compiler.Framework
 				if (current != null) current.Definitions.Remove(index);
 				if (value != null) value.Definitions.Add(index);
 				instructionSet.Data[index].Result = value;
+			}
+		}
+
+		/// <summary>
+		/// Gets or sets the result operand.
+		/// </summary>
+		/// <value>The result operand.</value>
+		public Operand Result2
+		{
+			get { return instructionSet.Data[index].Result2; }
+			set
+			{
+				Operand current = instructionSet.Data[index].Result2;
+				if (current != null) current.Definitions.Remove(index);
+				if (value != null) value.Definitions.Add(index);
+				instructionSet.Data[index].Result2 = value;
 			}
 		}
 
@@ -626,6 +644,7 @@ namespace Mosa.Compiler.Framework
 			Operand2 = null;
 			Operand3 = null;
 			Result = null;
+			Result2 = null;
 		}
 
 		/// <summary>
@@ -723,6 +742,56 @@ namespace Mosa.Compiler.Framework
 			Operand1 = operand1;
 		}
 
+		/// <summary>
+		/// Sets the instruction.
+		/// </summary>
+		/// <param name="instruction">The instruction.</param>
+		/// <param name="result">The result.</param>
+		/// <param name="result2">The result2.</param>
+		/// <param name="operand1">The operand1.</param>
+		public void SetInstruction2(BaseInstruction instruction, Operand result, Operand result2, Operand operand1)
+		{
+			SetInstruction(instruction, 1, 2);
+			Result = result;
+			Result2 = result2;
+			Operand1 = operand1;
+		}
+
+		/// <summary>
+		/// Sets the instruction.
+		/// </summary>
+		/// <param name="instruction">The instruction.</param>
+		/// <param name="result">The result.</param>
+		/// <param name="result2">The result2.</param>
+		/// <param name="operand1">The operand1.</param>
+		/// <param name="operand2">The operand2.</param>
+		public void SetInstruction2(BaseInstruction instruction, Operand result, Operand result2, Operand operand1, Operand operand2)
+		{
+			SetInstruction(instruction, 2, 2);
+			Result = result;
+			Result2 = result2;
+			Operand1 = operand1;
+			Operand2 = operand2;
+		}
+
+		/// <summary>
+		/// Sets the instruction.
+		/// </summary>
+		/// <param name="instruction">The instruction.</param>
+		/// <param name="result">The result.</param>
+		/// <param name="result2">The result2.</param>
+		/// <param name="operand1">The operand1.</param>
+		/// <param name="operand2">The operand2.</param>
+		/// <param name="operand3">The operand3.</param>
+		public void SetInstruction2(BaseInstruction instruction, Operand result, Operand result2, Operand operand1, Operand operand2, Operand operand3)
+		{
+			SetInstruction(instruction, 3, 2);
+			Result = result;
+			Result2 = result2;
+			Operand1 = operand1;
+			Operand2 = operand2;
+			Operand3 = operand3;
+		}
 		/// <summary>
 		/// Sets the instruction.
 		/// </summary>
@@ -897,6 +966,47 @@ namespace Mosa.Compiler.Framework
 			SetInstruction(instruction, result, operand1);
 		}
 
+		/// <summary>
+		/// Appends an instruction after the current index.
+		/// </summary>
+		/// <param name="instruction">The instruction to append.</param>
+		/// <param name="result">The result operand.</param>
+		/// <param name="result2">The result2.</param>
+		/// <param name="operand1">The first operand.</param>
+		public void AppendInstruction2(BaseInstruction instruction, Operand result, Operand result2, Operand operand1)
+		{
+			AppendInstruction();
+			SetInstruction2(instruction, result, result2, operand1);
+		}
+
+		/// <summary>
+		/// Appends an instruction after the current index.
+		/// </summary>
+		/// <param name="instruction">The instruction to append.</param>
+		/// <param name="result">The result operand.</param>
+		/// <param name="result2">The result2.</param>
+		/// <param name="operand1">The first operand.</param>
+		/// <param name="operand2">The operand2.</param>
+		public void AppendInstruction2(BaseInstruction instruction, Operand result, Operand result2, Operand operand1, Operand operand2)
+		{
+			AppendInstruction();
+			SetInstruction2(instruction, result, result2, operand1, operand2);
+		}
+
+		/// <summary>
+		/// Appends an instruction after the current index.
+		/// </summary>
+		/// <param name="instruction">The instruction to append.</param>
+		/// <param name="result">The result operand.</param>
+		/// <param name="result2">The result2.</param>
+		/// <param name="operand1">The first operand.</param>
+		/// <param name="operand2">The operand2.</param>
+		/// <param name="operand3">The operand3.</param>
+		public void AppendInstruction2(BaseInstruction instruction, Operand result, Operand result2, Operand operand1, Operand operand2, Operand operand3)
+		{
+			AppendInstruction();
+			SetInstruction2(instruction, result, result2, operand1, operand2, operand3);
+		}
 
 		/// <summary>
 		/// Appends an instruction after the current index.

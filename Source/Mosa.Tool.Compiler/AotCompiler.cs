@@ -106,7 +106,7 @@ namespace Mosa.Tool.Compiler
 				new MetadataStage(),
 				new ObjectFileLayoutStage(),
 				(ICompilerStage)compilerOptions.Linker,
-				compilerOptions.MapFile != null ? new MapFileGenerationStage() : null
+				//compilerOptions.MapFile != null ? new MapFileGenerationStage() : null
 			});
 
 			aot.Run();

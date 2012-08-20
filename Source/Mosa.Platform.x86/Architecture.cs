@@ -199,12 +199,13 @@ namespace Mosa.Platform.x86
 			methodCompilerPipeline.InsertAfterLast<PlatformStubStage>(
 				new IMethodCompilerStage[]
 				{
-					//new CheckOperandCountStage(),
+					new CheckOperandCountStage(),
 					new LongOperandTransformationStage(),
-					new AddressModeConversionStage(),
+					//new AddressModeConversionStage(),
 					new IRTransformationStage(),
 				    new TweakTransformationStage(),
-				    new MemToMemConversionStage(),
+				    //new MemToMemConversionStage(),
+					new FixedRegisterAssignementStage(),
 				});
 
 			//methodCompilerPipeline.InsertAfterLast<IBlockOrderStage>(

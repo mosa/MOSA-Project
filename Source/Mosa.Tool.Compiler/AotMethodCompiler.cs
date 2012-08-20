@@ -56,11 +56,7 @@ namespace Mosa.Tool.Compiler
 				new PlatformIntrinsicTransformationStage(),
 				new PlatformStubStage(),
 				new LoopAwareBlockOrderStage(),
-				//new SimpleTraceBlockOrderStage(),
-				//new ReverseBlockOrderStage(),	
-				//new LocalCSE(),
-				new CodeGenerationStage(),
-				//new RegisterUsageAnalyzerStage(),
+				//new CodeGenerationStage(), // FIXME: uncomment once register allocator is completed.
 			});
 		}
 

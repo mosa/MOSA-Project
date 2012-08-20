@@ -156,14 +156,19 @@ namespace Mosa.Compiler.Framework
 			{
 				s.Append(" ");
 				s.Append(context.Result);
-			}
 
+				if (context.ResultCount == 2)
+				{
+					s.Append(" : ");
+					s.Append(context.Result2);
+				}
+			}
 			if (context.ResultCount > 0 && context.OperandCount > 0)
 			{
-				s.Append(" <-");
+				s.Append(" <=");
 			}
 
-			for (int i = 0; (i < 3) && (i < context.OperandCount); i++)
+			for (int i = 0; (i < 4) && (i < context.OperandCount); i++)
 			{
 				s.Append(" ");
 				s.Append(context.GetOperand(i));

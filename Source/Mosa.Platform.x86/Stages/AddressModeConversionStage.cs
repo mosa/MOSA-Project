@@ -54,7 +54,14 @@ namespace Mosa.Platform.x86.Stages
 				|| ctx.Instruction is Store
 				|| ctx.Instruction is Call
 				|| ctx.Instruction is ZeroExtendedMove
-				|| ctx.Instruction is SignExtendedMove)
+				|| ctx.Instruction is SignExtendedMove
+				|| ctx.Instruction is DivSigned
+				|| ctx.Instruction is DivFloat
+				|| ctx.Instruction is DivUnsigned
+				|| ctx.Instruction is RemSigned
+				|| ctx.Instruction is RemFloat
+				|| ctx.Instruction is RemUnsigned
+				)
 				return;
 
 			Operand result = ctx.Result;
