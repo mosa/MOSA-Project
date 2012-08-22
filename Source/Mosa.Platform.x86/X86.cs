@@ -123,11 +123,7 @@ namespace Mosa.Platform.x86
 		/// <summary>
 		/// 
 		/// </summary>
-		public static readonly Neg Neg = new Neg();
-		/// <summary>
-		/// 
-		/// </summary>
-		public static readonly Sal Sal = new Sal();
+		public static readonly Neg Neg = new Neg();		
 		/// <summary>
 		/// 
 		/// </summary>

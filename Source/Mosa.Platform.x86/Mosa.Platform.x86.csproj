@@ -214,7 +214,6 @@
     <Compile Include="Instructions\Mov.cs" />
     <Compile Include="Instructions\Mul.cs" />
     <Compile Include="Instructions\Neg.cs" />
-    <Compile Include="Instructions\Sal.cs" />
     <Compile Include="Instructions\Sar.cs" />
     <Compile Include="Instructions\Sbb.cs" />
     <Compile Include="Instructions\Setcc.cs" />

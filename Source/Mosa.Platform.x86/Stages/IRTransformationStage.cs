@@ -903,7 +903,6 @@ namespace Mosa.Platform.x86.Stages
 
 			Operand v1 = AllocateVirtualRegister(BuiltInSigType.Int32);
 			Operand v2 = AllocateVirtualRegister(BuiltInSigType.UInt32);
-			//Operand v4remainder = AllocateVirtualRegister(BuiltInSigType.Int32);
 			Operand v5quotient = AllocateVirtualRegister(BuiltInSigType.Int32);
 
 			context.SetInstruction2(X86.Cdq, v1, v2, operand1);
@@ -916,26 +915,16 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IIRVisitor.RemUnsigned(Context context)
 		{
-			// FIXME: ---
 			Operand result = context.Result;
-			Operand operand = context.Operand1;
+			Operand operand1 = context.Operand1;
+			Operand operand2 = context.Operand2;
 
-			Operand EAX = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.EAX);
-			Operand EDX = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.EDX);
-			Operand ECX = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.ECX);
+			Operand v1 = AllocateVirtualRegister(BuiltInSigType.Int32);
+			Operand v2 = AllocateVirtualRegister(BuiltInSigType.UInt32);
+			Operand v5quotient = AllocateVirtualRegister(BuiltInSigType.Int32);
 
-			Operand eaxSource = AllocateVirtualRegister(result.Type);
-			Operand ecxSource = AllocateVirtualRegister(operand.Type);
-
-			context.SetInstruction(X86.Mov, eaxSource, result);
-			context.AppendInstruction(IRInstruction.ZeroExtendedMove, EAX, eaxSource); // FIXME
-			context.AppendInstruction(X86.Mov, ecxSource, operand);
-			context.AppendInstruction(IRInstruction.ZeroExtendedMove, ECX, ecxSource); // FIXME
-
-			context.AppendInstruction(X86.Xor, EDX, EDX);
-			context.AppendInstruction(X86.Div, EAX, ECX);
-
-			context.AppendInstruction(X86.Mov, result, AllocateVirtualRegister(BuiltInSigType.UInt32)); // FIXME
+			context.SetInstruction2(X86.Cdq, v1, v2, operand1);
+			context.AppendInstruction2(X86.Div, v5quotient, result, v1, v2, operand2);
 		}
 
 		/// <summary>

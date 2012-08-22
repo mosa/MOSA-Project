@@ -199,13 +199,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IX86Visitor.Shl(Context context)
 		{
-			if (context.Operand1.IsConstant)
-				return;
-
-			Operand ecx = AllocateVirtualRegister(BuiltInSigType.IntPtr);
-			Context before = context.InsertBefore();
-			before.SetInstruction(X86.Mov, ecx, context.Operand1);
-			context.Operand1 = context.Result;
+			ShiftConstantToByte(context);
 		}
 
 		/// <summary>
@@ -214,13 +208,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IX86Visitor.Shr(Context context)
 		{
-			if (context.Operand1.IsConstant)
-				return;
-
-			Operand ecx = AllocateVirtualRegister(BuiltInSigType.IntPtr);
-			Context before = context.InsertBefore();
-			before.SetInstruction(X86.Mov, ecx, context.Operand1);
-			context.Operand1 = context.Result;
+			ShiftConstantToByte(context);
 		}
 
 		/// <summary>
@@ -606,5 +594,20 @@ namespace Mosa.Platform.x86.Stages
 
 		#endregion // IX86Visitor - Unused
 
+
+		/// <summary>
+		/// Adjusts the shift constant.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void ShiftConstantToByte(Context context)
+		{
+			if (!context.Operand2.IsConstant)
+				return;
+
+			if (context.Operand2.Type.Type == CilElementType.I1)
+				return;
+
+			context.Operand2 = Operand.CreateConstant(BuiltInSigType.Byte, context.Operand2.Value);
+		}
 	}
 }

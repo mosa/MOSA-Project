@@ -15,7 +15,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// <summary>
 	/// Intermediate representation of the div instruction.
 	/// </summary>
-	public sealed class Div : TwoOperandInstruction
+	public sealed class Div : ThreeOperandInstruction
 	{
 		#region Data Members
 

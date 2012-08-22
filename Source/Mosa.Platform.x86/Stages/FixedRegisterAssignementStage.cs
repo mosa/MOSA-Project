@@ -33,7 +33,7 @@ namespace Mosa.Platform.x86.Stages
 		{
 			// TRANSFORM: IN EAX <= EDX
 			// OPTIONAL TODO: IN EAX, imm8
-	
+
 			if (context.Result.IsCPURegister && context.Operand1.IsCPURegister)
 				return;
 
@@ -181,12 +181,17 @@ namespace Mosa.Platform.x86.Stages
 		}
 
 		// TODO:
-		
+
 		/// <summary>
 		/// Visitation function for <see cref="IX86Visitor.Sar"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IX86Visitor.Sar(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="IX86Visitor.Sal"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IX86Visitor.Sal(Context context) { }
 		/// <summary>
 		/// Visitation function for <see cref="IX86Visitor.Shl"/> instructions.
 		/// </summary>
@@ -197,11 +202,7 @@ namespace Mosa.Platform.x86.Stages
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IX86Visitor.Shr(Context context) { }
-		/// <summary>
-		/// Visitation function for <see cref="IX86Visitor.Sal"/> instructions.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void IX86Visitor.Sal(Context context) { }
+
 		/// <summary>
 		/// Visitation function for <see cref="IX86Visitor.Rcr"/> instructions.
 		/// </summary>
@@ -341,7 +342,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for <see cref="IX86Visitor.DivSD"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IX86Visitor.DivSD(Context context) { }		
+		void IX86Visitor.DivSD(Context context) { }
 		/// <summary>
 		/// Visitation function for <see cref="IX86Visitor.Cvtsi2ss"/> instructions.
 		/// </summary>
