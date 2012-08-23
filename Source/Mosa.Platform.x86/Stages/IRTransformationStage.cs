@@ -114,7 +114,6 @@ namespace Mosa.Platform.x86.Stages
 			Operand v1 = AllocateVirtualRegister(BuiltInSigType.Int32);
 			Operand v2 = AllocateVirtualRegister(BuiltInSigType.UInt32);
 			Operand v4remainder = AllocateVirtualRegister(BuiltInSigType.Int32);
-			//Operand v5quotient = AllocateVirtualRegister(BuiltInSigType.Int32);
 
 			context.SetInstruction2(X86.Cdq, v1, v2, operand1);
 			context.AppendInstruction2(X86.IDiv, result, v4remainder, v1, v2, operand2);
@@ -362,7 +361,6 @@ namespace Mosa.Platform.x86.Stages
 			if (resultOperand != null)
 			{
 				Operand eax = AllocateVirtualRegister(BuiltInSigType.Byte);
-				//VirtualRegisterOperand eax = AllocateVirtualRegister(BuiltInSigType.Byte); 
 
 				if (IsUnsigned(resultOperand))
 					context.AppendInstruction(X86.Setcc, GetUnsignedConditionCode(condition), eax);
@@ -567,9 +565,11 @@ namespace Mosa.Platform.x86.Stages
 
 		private void MoveFloatingPoint(Context context, X86Instruction instruction)
 		{
-			Operand xmm0 = AllocateVirtualRegister(context.Result.Type);
 			Operand result = context.Result;
 			Operand operand = context.Operand1;
+
+			Operand xmm0 = AllocateVirtualRegister(context.Result.Type);
+
 			context.SetInstruction(instruction, xmm0, operand);
 			context.AppendInstruction(instruction, result, xmm0);
 		}
@@ -920,11 +920,10 @@ namespace Mosa.Platform.x86.Stages
 			Operand operand2 = context.Operand2;
 
 			Operand v1 = AllocateVirtualRegister(BuiltInSigType.Int32);
-			Operand v2 = AllocateVirtualRegister(BuiltInSigType.UInt32);
-			Operand v5quotient = AllocateVirtualRegister(BuiltInSigType.Int32);
+			Operand v5quotient = AllocateVirtualRegister(BuiltInSigType.UInt32);
 
-			context.SetInstruction2(X86.Cdq, v1, v2, operand1);
-			context.AppendInstruction2(X86.Div, v5quotient, result, v1, v2, operand2);
+			context.SetInstruction(X86.Xor, v1, v1);
+			context.AppendInstruction2(X86.Div, v5quotient, result, operand1, v1, operand2);
 		}
 
 		/// <summary>
