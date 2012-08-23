@@ -914,19 +914,13 @@ namespace Mosa.Platform.x86.Stages
 			Operand operand = context.Operand1;
 			Operand eax = Operand.CreateCPURegister(BuiltInSigType.UInt32, GeneralPurposeRegister.EAX);
 			Operand ecx = Operand.CreateCPURegister(BuiltInSigType.UInt32, GeneralPurposeRegister.ECX);
-			Operand edx = Operand.CreateCPURegister(BuiltInSigType.IntPtr, GeneralPurposeRegister.EDX);
-			Operand eaxSource = Operand.CreateCPURegister(result.Type, GeneralPurposeRegister.EAX);
-			Operand ecxSource = Operand.CreateCPURegister(operand.Type, GeneralPurposeRegister.ECX);
+			Operand edx = Operand.CreateCPURegister(BuiltInSigType.UInt32, GeneralPurposeRegister.EDX);
 
-			context.SetInstruction(X86.Mov, eaxSource, result);
-			context.AppendInstruction(IRInstruction.ZeroExtendedMove, eax, eaxSource);
-			context.AppendInstruction(X86.Mov, ecxSource, operand);
-			context.AppendInstruction(IRInstruction.ZeroExtendedMove, ecx, ecxSource);
-
+			context.SetInstruction(X86.Mov, eax, result);
+			context.AppendInstruction(X86.Mov, ecx, operand);
 			context.AppendInstruction(X86.Xor, edx, edx);
 			context.AppendInstruction(X86.Div, eax, ecx);
-
-			context.AppendInstruction(X86.Mov, result, Operand.CreateCPURegister(BuiltInSigType.UInt32, GeneralPurposeRegister.EDX));
+			context.AppendInstruction(X86.Mov, result, edx);
 		}
 
 		/// <summary>
