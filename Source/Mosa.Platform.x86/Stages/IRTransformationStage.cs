@@ -99,27 +99,6 @@ namespace Mosa.Platform.x86.Stages
 		}
 
 		/// <summary>
-		/// Visitation function for DivSInstruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void IIRVisitor.DivSigned(Context context)
-		{
-			EmitResultConstants(context);
-			EmitOperandConstants(context);
-
-			Operand operand1 = context.Operand1;
-			Operand operand2 = context.Operand2;
-			Operand result = context.Result;
-
-			Operand v1 = AllocateVirtualRegister(BuiltInSigType.Int32);
-			Operand v2 = AllocateVirtualRegister(BuiltInSigType.UInt32);
-			Operand v4remainder = AllocateVirtualRegister(BuiltInSigType.Int32);
-
-			context.SetInstruction2(X86.Cdq, v1, v2, operand1);
-			context.AppendInstruction2(X86.IDiv, result, v4remainder, v1, v2, operand2);
-		}
-
-		/// <summary>
 		/// Addresses the of instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
@@ -133,15 +112,6 @@ namespace Mosa.Platform.x86.Stages
 			context.ReplaceInstructionOnly(X86.Lea);
 
 			context.AppendInstruction(X86.Mov, result, register);
-		}
-
-		/// <summary>
-		/// Arithmetic the shift right instruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void IIRVisitor.ArithmeticShiftRight(Context context)
-		{
-			HandleShiftOperation(context, X86.Sar);
 		}
 
 		/// <summary>
@@ -699,6 +669,15 @@ namespace Mosa.Platform.x86.Stages
 		}
 
 		/// <summary>
+		/// Arithmetic the shift right instruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IIRVisitor.ArithmeticShiftRight(Context context)
+		{
+			HandleShiftOperation(context, X86.Sar);
+		}
+
+		/// <summary>
 		/// Visitation function for ShiftLeftInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
@@ -746,35 +725,6 @@ namespace Mosa.Platform.x86.Stages
 		}
 
 		/// <summary>
-		/// Visitation function for DivUInstruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void IIRVisitor.DivUnsigned(Context context)
-		{
-			context.ReplaceInstructionOnly(X86.Div);
-
-			Operand edx = AllocateVirtualRegister(BuiltInSigType.IntPtr);
-			Context before = context.InsertBefore();
-			before.SetInstruction(X86.Xor, edx, edx);
-
-			if (context.Operand1.IsConstant)
-			{
-				Operand ecx = AllocateVirtualRegister(context.Operand1.Type);
-				before.AppendInstruction(X86.Mov, ecx, context.Operand1);
-				context.Operand1 = ecx;
-			}
-		}
-
-		/// <summary>
-		/// Visitation function for MulSInstruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void IIRVisitor.MulSigned(Context context)
-		{
-			HandleCommutativeOperation(context, X86.Mul);
-		}
-
-		/// <summary>
 		/// Visitation function for MulFInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
@@ -786,15 +736,6 @@ namespace Mosa.Platform.x86.Stages
 				HandleCommutativeOperation(context, X86.MulSD);
 
 			ExtendToR8(context);
-		}
-
-		/// <summary>
-		/// Visitation function for MulUInstruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void IIRVisitor.MulUnsigned(Context context)
-		{
-			HandleCommutativeOperation(context, X86.Mul);
 		}
 
 		/// <summary>
@@ -817,7 +758,9 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IIRVisitor.SubSigned(Context context)
 		{
-			HandleNonCommutativeOperation(context, X86.Sub);
+			//EmitResultConstants(context);
+			EmitOperandConstants(context);
+			context.ReplaceInstructionOnly(X86.Sub);
 		}
 
 		/// <summary>
@@ -826,7 +769,127 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IIRVisitor.SubUnsigned(Context context)
 		{
-			HandleNonCommutativeOperation(context, X86.Sub);
+			//EmitResultConstants(context);
+			EmitOperandConstants(context);
+			context.ReplaceInstructionOnly(X86.Sub);
+		}
+
+		/// <summary>
+		/// Visitation function for MulSInstruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IIRVisitor.MulSigned(Context context)
+		{
+			EmitOperandConstants(context);
+
+			Operand result = context.Result;
+			Operand operand1 = context.Operand1;
+			Operand operand2 = context.Operand2;
+
+			Operand v1 = AllocateVirtualRegister(BuiltInSigType.Int32);
+			Operand v2 = AllocateVirtualRegister(BuiltInSigType.UInt32);
+			Operand v3 = AllocateVirtualRegister(BuiltInSigType.Int32);
+
+			context.SetInstruction2(X86.Cdq, v1, v2, operand1);
+			context.AppendInstruction2(X86.Mul, v3, result, v1, v2, operand2);
+		}
+
+		/// <summary>
+		/// Visitation function for MulUInstruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IIRVisitor.MulUnsigned(Context context)
+		{
+			EmitOperandConstants(context);
+
+			Operand result = context.Result;
+			Operand operand1 = context.Operand1;
+			Operand operand2 = context.Operand2;
+
+			Operand v1 = AllocateVirtualRegister(BuiltInSigType.Int32);
+			Operand v2 = AllocateVirtualRegister(BuiltInSigType.UInt32);
+
+			context.SetInstruction(X86.Xor, v1, v1);
+			context.AppendInstruction2(X86.Mul, v2, result, operand1, v1, operand2);
+		}
+
+		/// <summary>
+		/// Visitation function for DivSInstruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IIRVisitor.DivSigned(Context context)
+		{
+			EmitOperandConstants(context);
+
+			Operand operand1 = context.Operand1;
+			Operand operand2 = context.Operand2;
+			Operand result = context.Result;
+
+			Operand v1 = AllocateVirtualRegister(BuiltInSigType.Int32);
+			Operand v2 = AllocateVirtualRegister(BuiltInSigType.UInt32);
+			Operand v3 = AllocateVirtualRegister(BuiltInSigType.Int32);
+
+			context.SetInstruction2(X86.Cdq, v1, v2, operand1);
+			context.AppendInstruction2(X86.IDiv, result, v3, v1, v2, operand2);
+		}
+
+		/// <summary>
+		/// Visitation function for DivUInstruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IIRVisitor.DivUnsigned(Context context)
+		{
+			EmitOperandConstants(context);
+
+			Operand operand1 = context.Operand1;
+			Operand operand2 = context.Operand2;
+			Operand result = context.Result;
+
+			Operand v1 = AllocateVirtualRegister(BuiltInSigType.Int32);
+			Operand v2 = AllocateVirtualRegister(BuiltInSigType.UInt32);
+			Operand v3 = AllocateVirtualRegister(BuiltInSigType.Int32);
+
+			context.SetInstruction(X86.Xor, v1, v1);
+			context.AppendInstruction2(X86.IDiv, result, v3, v1, v2, operand2);
+		}
+
+		/// <summary>
+		/// Visitation function for RemSInstruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IIRVisitor.RemSigned(Context context)
+		{
+			EmitOperandConstants(context);
+
+			Operand result = context.Result;
+			Operand operand1 = context.Operand1;
+			Operand operand2 = context.Operand2;
+
+			Operand v1 = AllocateVirtualRegister(BuiltInSigType.Int32);
+			Operand v2 = AllocateVirtualRegister(BuiltInSigType.UInt32);
+			Operand v3 = AllocateVirtualRegister(BuiltInSigType.Int32);
+
+			context.SetInstruction2(X86.Cdq, v1, v2, operand1);
+			context.AppendInstruction2(X86.IDiv, result, v3, v1, v2, operand2);
+		}
+
+		/// <summary>
+		/// Visitation function for RemUInstruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IIRVisitor.RemUnsigned(Context context)
+		{
+			EmitOperandConstants(context);
+
+			Operand result = context.Result;
+			Operand operand1 = context.Operand1;
+			Operand operand2 = context.Operand2;
+
+			Operand v1 = AllocateVirtualRegister(BuiltInSigType.Int32);
+			Operand v2 = AllocateVirtualRegister(BuiltInSigType.UInt32);
+
+			context.SetInstruction(X86.Xor, v1, v1);
+			context.AppendInstruction2(X86.Div, result, v2, operand1, v1, operand2);
 		}
 
 		/// <summary>
@@ -889,41 +952,6 @@ namespace Mosa.Platform.x86.Stages
 			newBlocks[2].SetInstruction(X86.Movsd, destination, xmm6);
 			newBlocks[2].AppendInstruction(X86.Jmp, nextBlock.BasicBlock);
 			LinkBlocks(newBlocks[2], nextBlock);
-		}
-
-		/// <summary>
-		/// Visitation function for RemSInstruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void IIRVisitor.RemSigned(Context context)
-		{
-			Operand result = context.Result;
-			Operand operand1 = context.Operand1;
-			Operand operand2 = context.Operand2;
-
-			Operand v1 = AllocateVirtualRegister(BuiltInSigType.Int32);
-			Operand v2 = AllocateVirtualRegister(BuiltInSigType.UInt32);
-			Operand v5quotient = AllocateVirtualRegister(BuiltInSigType.Int32);
-
-			context.SetInstruction2(X86.Cdq, v1, v2, operand1);
-			context.AppendInstruction2(X86.IDiv, v5quotient, result, v1, v2, operand2);
-		}
-
-		/// <summary>
-		/// Visitation function for RemUInstruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void IIRVisitor.RemUnsigned(Context context)
-		{
-			Operand result = context.Result;
-			Operand operand1 = context.Operand1;
-			Operand operand2 = context.Operand2;
-
-			Operand v1 = AllocateVirtualRegister(BuiltInSigType.Int32);
-			Operand v5quotient = AllocateVirtualRegister(BuiltInSigType.UInt32);
-
-			context.SetInstruction(X86.Xor, v1, v1);
-			context.AppendInstruction2(X86.Div, v5quotient, result, operand1, v1, operand2);
 		}
 
 		/// <summary>
@@ -1143,18 +1171,6 @@ namespace Mosa.Platform.x86.Stages
 		/// </remarks>
 		private void HandleCommutativeOperation(Context context, BaseInstruction instruction)
 		{
-			EmitOperandConstants(context);
-			context.ReplaceInstructionOnly(instruction);
-		}
-
-		/// <summary>
-		/// Handles the non commutative operation.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		/// <param name="instruction">The instruction.</param>
-		private void HandleNonCommutativeOperation(Context context, BaseInstruction instruction)
-		{
-			EmitResultConstants(context);
 			EmitOperandConstants(context);
 			context.ReplaceInstructionOnly(instruction);
 		}

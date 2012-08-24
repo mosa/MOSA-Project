@@ -30,7 +30,7 @@ namespace Mosa.Platform.x86.Instructions
 		/// Initializes a new instance of <see cref="Neg"/>.
 		/// </summary>
 		public Neg() :
-			base(0, 1)
+			base(1, 1)
 		{
 		}
 

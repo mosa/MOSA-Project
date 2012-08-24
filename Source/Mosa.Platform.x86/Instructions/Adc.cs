@@ -5,6 +5,7 @@
  *
  * Authors:
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 using System;
@@ -15,7 +16,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// <summary>
 	/// Representations the x86 adc instruction.
 	/// </summary>
-	public sealed class Adc : TwoOperandInstruction
+	public sealed class Adc : X86Instruction
 	{
 		#region Data members
 
@@ -26,6 +27,18 @@ namespace Mosa.Platform.x86.Instructions
 		private static readonly OpCode R_M = new OpCode(new byte[] { 0x13 });
 
 		#endregion
+
+		#region Construction
+
+		/// <summary>
+		/// Initializes a new instance of <see cref="Adc"/>.
+		/// </summary>
+		public Adc() :
+			base(2, 1)
+		{
+		}
+
+		#endregion // Construction
 
 		#region Methods
 
@@ -38,11 +51,12 @@ namespace Mosa.Platform.x86.Instructions
 		/// <returns></returns>
 		protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
 		{
-			if ((destination.IsRegister) && (source.IsConstant)) return R_C;
-			if ((destination.IsRegister) && (source.IsRegister)) return R_R;
-			if ((destination.IsRegister) && (source.IsMemoryAddress)) return R_M;
-			if ((destination.IsMemoryAddress) && (source.IsRegister)) return M_R;
-			if ((destination.IsMemoryAddress) && (source.IsConstant)) return M_C;
+			if (destination.IsRegister && third.IsConstant) return R_C;
+			if (destination.IsRegister && third.IsRegister) return R_R;
+			if (destination.IsRegister && third.IsMemoryAddress) return R_M;
+			if (destination.IsMemoryAddress && third.IsRegister) return M_R;
+			if (destination.IsMemoryAddress && third.IsConstant) return M_C;
+
 			throw new ArgumentException(@"No opcode for operand type.");
 		}
 

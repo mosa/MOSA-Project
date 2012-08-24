@@ -31,8 +31,8 @@ namespace Mosa.Compiler.Framework.Platform
 		{
 			return (operand.Type.Type == CilElementType.U4)
 				|| (operand.Type.Type == CilElementType.I4)
-				|| IsPointer(operand)
-				|| IsObject(operand);
+				|| IsPointer(operand)		// FIXME: Only on 32-bit platforms is this correct
+				|| IsObject(operand);		// FIXME: Only on 32-bit platforms is this correct
 		}
 
 		/// <summary>

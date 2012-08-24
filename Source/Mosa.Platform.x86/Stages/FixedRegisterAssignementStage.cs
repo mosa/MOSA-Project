@@ -1,11 +1,9 @@
 /*
- * (c) 2008 MOSA - The Managed Operating System Alliance
+ * (c) 2012 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
- *  Michael Ruck (grover) <sharpos@michaelruck.de>
- *  Scott Balmos <sbalmos@fastmail.fm>
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
@@ -83,17 +81,17 @@ namespace Mosa.Platform.x86.Stages
 			if (context.Result.IsCPURegister && context.Result2.IsCPURegister & context.Operand1.IsCPURegister)
 				return;
 
-			Operand v1 = context.Operand1;
-			Operand v2 = context.Result;
-			Operand v3 = context.Result2;
+			Operand operand1 = context.Operand1;
+			Operand result = context.Result;
+			Operand result2 = context.Result2;
 
 			Operand EAX = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.EAX);
 			Operand EDX = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.EDX);
 
-			context.SetInstruction(X86.Mov, EAX, v1);
+			context.SetInstruction(X86.Mov, EAX, operand1);
 			context.AppendInstruction2(X86.Cdq, EDX, EAX, EAX);
-			context.AppendInstruction(X86.Mov, v2, EDX);
-			context.AppendInstruction(X86.Mov, v3, EAX);
+			context.AppendInstruction(X86.Mov, result, EDX);
+			context.AppendInstruction(X86.Mov, result2, EAX);
 		}
 
 		/// <summary>
@@ -108,20 +106,20 @@ namespace Mosa.Platform.x86.Stages
 			if (context.Result.IsCPURegister && context.Result2.IsCPURegister & context.Operand1.IsCPURegister && context.Operand2.IsCPURegister)
 				return;
 
-			Operand v1 = context.Operand1;
-			Operand v2 = context.Operand2;
-			Operand v3 = context.Operand3;
-			Operand v4 = context.Result;
-			Operand v5 = context.Result2;
+			Operand operand1 = context.Operand1;
+			Operand operand2 = context.Operand2;
+			Operand operand3 = context.Operand3;
+			Operand result = context.Result;
+			Operand result2 = context.Result2;
 
 			Operand EAX = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.EAX);
 			Operand EDX = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.EDX);
 
-			context.SetInstruction(X86.Mov, EAX, v1);
-			context.AppendInstruction(X86.Mov, EDX, v2);
-			context.AppendInstruction2(X86.Mul, EDX, EAX, EDX, EAX, v3);
-			context.AppendInstruction(X86.Mov, v4, EDX);
-			context.AppendInstruction(X86.Mov, v5, EAX);
+			context.SetInstruction(X86.Mov, EAX, operand1);
+			context.AppendInstruction(X86.Mov, EDX, operand2);
+			context.AppendInstruction2(X86.Mul, EDX, EAX, EDX, EAX, operand3);
+			context.AppendInstruction(X86.Mov, result, EDX);
+			context.AppendInstruction(X86.Mov, result2, EAX);
 		}
 
 		/// <summary>
@@ -136,20 +134,20 @@ namespace Mosa.Platform.x86.Stages
 			if (context.Result.IsCPURegister && context.Result2.IsCPURegister & context.Operand1.IsCPURegister && context.Operand2.IsCPURegister)
 				return;
 
-			Operand v1 = context.Operand1;
-			Operand v2 = context.Operand2;
-			Operand v3 = context.Operand3;
-			Operand v4 = context.Result;
-			Operand v5 = context.Result2;
+			Operand operand1 = context.Operand1;
+			Operand operand2 = context.Operand2;
+			Operand operand3 = context.Operand3;
+			Operand result = context.Result;
+			Operand result2 = context.Result2;
 
 			Operand EAX = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.EAX);
 			Operand EDX = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.EDX);
 
-			context.SetInstruction(X86.Mov, EAX, v1);
-			context.AppendInstruction(X86.Mov, EDX, v2);
-			context.AppendInstruction2(X86.Div, EDX, EAX, EDX, EAX, v3);
-			context.AppendInstruction(X86.Mov, v4, EDX);
-			context.AppendInstruction(X86.Mov, v5, EAX);
+			context.SetInstruction(X86.Mov, EAX, operand1);
+			context.AppendInstruction(X86.Mov, EDX, operand2);
+			context.AppendInstruction2(X86.Div, EDX, EAX, EDX, EAX, operand3);
+			context.AppendInstruction(X86.Mov, result, EDX);
+			context.AppendInstruction(X86.Mov, result2, EAX);
 		}
 
 		/// <summary>
@@ -164,20 +162,20 @@ namespace Mosa.Platform.x86.Stages
 			if (context.Result.IsCPURegister && context.Result2.IsCPURegister & context.Operand1.IsCPURegister && context.Operand2.IsCPURegister)
 				return;
 
-			Operand v1 = context.Operand1;
-			Operand v2 = context.Operand2;
-			Operand v3 = context.Operand3;
-			Operand v4 = context.Result;
-			Operand v5 = context.Result2;
+			Operand operand1 = context.Operand1;
+			Operand operand2 = context.Operand2;
+			Operand operand3 = context.Operand3;
+			Operand result = context.Result;
+			Operand result2 = context.Result2;
 
 			Operand EAX = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.EAX);
 			Operand EDX = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.EDX);
 
-			context.SetInstruction(X86.Mov, EAX, v1);
-			context.SetInstruction(X86.Mov, EDX, v2);
-			context.AppendInstruction2(X86.IDiv, EDX, EAX, EDX, EAX, v3);
-			context.AppendInstruction(X86.Mov, v4, EDX);
-			context.AppendInstruction(X86.Mov, v5, EAX);
+			context.SetInstruction(X86.Mov, EAX, operand1);
+			context.SetInstruction(X86.Mov, EDX, operand2);
+			context.AppendInstruction2(X86.IDiv, EDX, EAX, EDX, EAX, operand3);
+			context.AppendInstruction(X86.Mov, result, EDX);
+			context.AppendInstruction(X86.Mov, result2, EAX);
 		}
 
 		// TODO:
@@ -186,33 +184,51 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for <see cref="IX86Visitor.Sar"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IX86Visitor.Sar(Context context) { }
+		void IX86Visitor.Sar(Context context)
+		{
+			HandleShiftOperation(context);
+		}
+
 		/// <summary>
 		/// Visitation function for <see cref="IX86Visitor.Sal"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IX86Visitor.Sal(Context context) { }
+		void IX86Visitor.Sal(Context context)
+		{
+			HandleShiftOperation(context);
+		}
 		/// <summary>
 		/// Visitation function for <see cref="IX86Visitor.Shl"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IX86Visitor.Shl(Context context) { }
+		void IX86Visitor.Shl(Context context)
+		{
+			HandleShiftOperation(context);
+		}
 		/// <summary>
 		/// Visitation function for <see cref="IX86Visitor.Shr"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IX86Visitor.Shr(Context context) { }
+		void IX86Visitor.Shr(Context context)
+		{
+			HandleShiftOperation(context);
+		}
 
 		/// <summary>
 		/// Visitation function for <see cref="IX86Visitor.Rcr"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IX86Visitor.Rcr(Context context) { }
+		void IX86Visitor.Rcr(Context context)
+		{
+			HandleShiftOperation(context);
+		}
+
 		/// <summary>
 		/// Visitation function for <see cref="IX86Visitor.CmpXchg"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IX86Visitor.CmpXchg(Context context) { }
+		
 		/// <summary>
 		/// Visitation function for <see cref="IX86Visitor.CpuId"/> instructions.
 		/// </summary>
@@ -581,5 +597,22 @@ namespace Mosa.Platform.x86.Stages
 
 		#endregion // IX86Visitor - Unused
 
+		void HandleShiftOperation(Context context)
+		{
+			if (context.Operand2.IsConstant)
+				return;
+
+			if (context.Operand2.IsCPURegister)
+				return;
+
+			Operand operand1 = context.Operand1;
+			Operand operand2 = context.Operand2;
+			Operand result = context.Result;
+
+			Operand ECX = Operand.CreateCPURegister(BuiltInSigType.Byte, GeneralPurposeRegister.ECX);
+
+			context.SetInstruction(X86.Mov, ECX, operand2);
+			context.AppendInstruction(X86.Sar, result, operand1, ECX);
+		}
 	}
 }

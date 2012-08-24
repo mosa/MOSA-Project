@@ -53,15 +53,15 @@ namespace Mosa.Platform.x86.Stages
 			}
 
 			/// <summary>
-			/// Nexts the specified CTX.
+			/// Adds the specified context.
 			/// </summary>
-			/// <param name="ctx">The CTX.</param>
-			public void Add(Context ctx)
+			/// <param name="context">The context.</param>
+			public void Add(Context context)
 			{
 				for (int i = _length - 1; i > 0; i--)
 					_history[i] = _history[i - 1];
 
-				_history[0] = ctx.Clone();
+				_history[0] = context.Clone();
 				if (_size < _length)
 					_size++;
 			}

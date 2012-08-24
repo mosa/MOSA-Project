@@ -5,6 +5,7 @@
  *
  * Authors:
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 using System;
@@ -15,7 +16,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// <summary>
 	/// Representations the x86 cmp instruction.
 	/// </summary>
-	public sealed class Cmp : TwoOperandNoResultInstruction
+	public sealed class Cmp : X86Instruction
 	{
 		#region Data Member
 
@@ -32,6 +33,18 @@ namespace Mosa.Platform.x86.Instructions
 		private static readonly OpCode R_M_16 = new OpCode(new byte[] { 0x66, 0x3B });
 
 		#endregion
+		
+		#region Construction
+
+		/// <summary>
+		/// Initializes a new instance of <see cref="Cmp"/>.
+		/// </summary>
+		public Cmp() :
+			base(2, 0)
+		{
+		}
+
+		#endregion // Construction
 
 		#region Methods
 
@@ -79,7 +92,7 @@ namespace Mosa.Platform.x86.Instructions
 				return R_C;
 			}
 
-			throw new ArgumentException(String.Format(@"x86.CmpInstruction: No opcode for operand types {0} and {1}.", source, third));
+			throw new ArgumentException(String.Format(@"x86.Cmp: No opcode for operand types {0} and {1}.", source, third));
 		}
 		
 		/// Allows visitor based dispatch for this instruction object.

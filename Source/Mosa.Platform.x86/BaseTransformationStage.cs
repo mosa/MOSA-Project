@@ -105,9 +105,6 @@ namespace Mosa.Platform.x86
 					}
 				}
 			}
-			// FIXME: Attach the label operand to the linker symbol
-			// FIXME: Rename the operand to SymbolOperand
-			// FIXME: Use the provided name to link
 			return Operand.CreateLabel(cop.Type, name);
 		}
 

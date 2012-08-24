@@ -16,7 +16,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// <summary>
 	/// Representations the x86 shift left instruction.
 	/// </summary>
-	public sealed class Shl : ThreeOperandInstruction
+	public sealed class Shl : X86Instruction
 	{
 
 		#region Data Members
@@ -26,6 +26,18 @@ namespace Mosa.Platform.x86.Instructions
 		private static readonly OpCode RM = new OpCode(new byte[] { 0xD3 }, 4);
 
 		#endregion
+		
+		#region Construction
+
+		/// <summary>
+		/// Initializes a new instance of <see cref="Shl"/>.
+		/// </summary>
+		public Shl() :
+			base(1, 2)
+		{
+		}
+
+		#endregion // Construction
 
 		#region Methods
 
@@ -39,7 +51,7 @@ namespace Mosa.Platform.x86.Instructions
 		/// <exception cref="System.ArgumentException"></exception>
 		protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
 		{
-			throw new ArgumentException(@"Not used.");
+			throw new NotSupportedException();
 		}
 
 		/// <summary>

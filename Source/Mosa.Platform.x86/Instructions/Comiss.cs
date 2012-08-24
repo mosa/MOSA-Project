@@ -5,11 +5,11 @@
  *
  * Authors:
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
- *
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 using System;
-
+using System.Diagnostics;
 using Mosa.Compiler.Framework;
 
 namespace Mosa.Platform.x86.Instructions
@@ -17,13 +17,25 @@ namespace Mosa.Platform.x86.Instructions
 	/// <summary>
 	/// Intermediate representation for the x86 comisd instruction.
 	/// </summary>
-	public class Comiss : TwoOperandNoResultInstruction
+	public class Comiss : X86Instruction
 	{
 		#region Data Members
 
 		private static readonly OpCode opcode = new OpCode(new byte[] { 0x0F, 0x2F });
 
 		#endregion
+		
+		#region Construction
+
+		/// <summary>
+		/// Initializes a new instance of <see cref="Cmp"/>.
+		/// </summary>
+		public Comiss() :
+			base(2, 0)
+		{
+		}
+
+		#endregion // Construction
 
 		#region Methods
 
@@ -36,10 +48,9 @@ namespace Mosa.Platform.x86.Instructions
 		/// <returns></returns>
 		protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
 		{
-			if ((source.IsRegister) && (third.IsRegister)) return opcode;
-			if ((source.IsRegister) && (third.IsMemoryAddress)) return opcode;
-			if ((source.IsRegister) && (third.IsConstant)) return opcode;
-			throw new ArgumentException(@"No opcode for operand type.");
+			Debug.Assert(source.IsRegister);
+
+			return opcode;
 		}
 
 		/// <summary>

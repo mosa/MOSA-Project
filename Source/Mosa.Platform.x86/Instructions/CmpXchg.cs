@@ -18,13 +18,25 @@ namespace Mosa.Platform.x86.Instructions
 	/// This instruction compares the value of Operand0 and Operand1. If they are
 	/// equal, Operand0 is set to the value of Operand2.
 	/// </remarks>
-	public sealed class CmpXchg : ThreeOperandInstruction
+	public sealed class CmpXchg : X86Instruction
 	{
 		#region Data Member
 
 		private static readonly OpCode RM_R = new OpCode(new byte[] { 0x0F, 0xB1 });
 
 		#endregion //Data Member
+
+		#region Construction
+
+		/// <summary>
+		/// Initializes a new instance of <see cref="CmpXchg"/>.
+		/// </summary>
+		public CmpXchg() :
+			base(1, 2)
+		{
+		}
+
+		#endregion // Construction
 
 		#region Methods
 

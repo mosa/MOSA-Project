@@ -15,29 +15,27 @@ namespace Mosa.Platform.x86.Instructions
 	/// <summary>
 	/// Intermediate representation of the div instruction.
 	/// </summary>
-	public sealed class Div : ThreeOperandInstruction
+	public sealed class Div : X86Instruction
 	{
 		#region Data Members
 
 		private static readonly OpCode opcode = new OpCode(new byte[] { 0xF7 }, 6);
 
 		#endregion // Data Members
-
-		#region Methods
+		
+		#region Construction
 
 		/// <summary>
-		/// Computes the opcode.
+		/// Initializes a new instance of <see cref="Div"/>.
 		/// </summary>
-		/// <param name="destination">The destination operand.</param>
-		/// <param name="source">The source operand.</param>
-		/// <param name="third">The third operand.</param>
-		/// <returns></returns>
-		protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
+		public Div() :
+			base(2, 3)
 		{
-			if (destination == null || destination.IsRegister || destination.IsMemoryAddress) return opcode;
-
-			throw new ArgumentException(@"No opcode for operand type.");
 		}
+
+		#endregion // Construction
+
+		#region Methods
 
 		/// <summary>
 		/// Emits the specified platform instruction.
@@ -46,8 +44,7 @@ namespace Mosa.Platform.x86.Instructions
 		/// <param name="emitter">The emitter.</param>
 		protected override void Emit(Context context, MachineCodeEmitter emitter)
 		{
-			OpCode opCode = ComputeOpCode(context.Result, context.Operand1, context.Operand2);
-			emitter.Emit(opCode, context.Operand1, null);
+			emitter.Emit(opcode, context.Operand2, null);
 		}
 
 		/// <summary>

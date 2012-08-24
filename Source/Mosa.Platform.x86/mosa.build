@@ -18,14 +18,15 @@
                     <include name="ArchitectureFeatureFlags.cs"/>
                     <include name="BaseTransformationStage.cs"/>
                     <include name="Instructions/AddSD.cs"/>
+                    <include name="Instructions/X86Extensions.cs"/>
                     <include name="Instructions/MulSD.cs"/>
                     <include name="Instructions/DivSD.cs"/>
                     <include name="Instructions/RoundSD.cs"/>
                     <include name="Instructions/SubSD.cs"/>
                     <include name="Stages/AddressModeConversionStage.cs"/>
                     <include name="ControlRegister.cs"/>
+                    <include name="Stages/FixedRegisterAssignementStage.cs"/>
                     <include name="Stages/ExceptionVectorStage.cs"/>
-                    <include name="Instructions/TwoOperandNoResultInstruction.cs"/>
                     <include name="Instructions/FarJmp.cs"/>
                     <include name="Instructions/Leave.cs"/>
                     <include name="Instructions/RoundSS.cs"/>
@@ -138,7 +139,6 @@
                     <include name="Instructions/Mov.cs"/>
                     <include name="Instructions/Mul.cs"/>
                     <include name="Instructions/Neg.cs"/>
-                    <include name="Instructions/Sal.cs"/>
                     <include name="Instructions/Sar.cs"/>
                     <include name="Instructions/Sbb.cs"/>
                     <include name="Instructions/Setcc.cs"/>
@@ -151,7 +151,6 @@
                     <include name="Instructions/MulSS.cs"/>
                     <include name="Instructions/SubSS.cs"/>
                     <include name="Instructions/Sub.cs"/>
-                    <include name="Instructions/ThreeOperandInstruction.cs"/>
                     <include name="Instructions/TwoOperandInstruction.cs"/>
                     <include name="Instructions/Ucomisd.cs"/>
                     <include name="Instructions/Ucomiss.cs"/>

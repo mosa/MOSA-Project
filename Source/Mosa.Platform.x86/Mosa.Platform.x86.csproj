@@ -93,6 +93,7 @@
     </Compile>
     <Compile Include="BaseTransformationStage.cs" />
     <Compile Include="Instructions\AddSD.cs" />
+    <Compile Include="Instructions\X86Extensions.cs" />
     <Compile Include="Instructions\MulSD.cs" />
     <Compile Include="Instructions\DivSD.cs" />
     <Compile Include="Instructions\RoundSD.cs" />
@@ -101,7 +102,6 @@
     <Compile Include="ControlRegister.cs" />
     <Compile Include="Stages\FixedRegisterAssignementStage.cs" />
     <Compile Include="Stages\ExceptionVectorStage.cs" />
-    <Compile Include="Instructions\TwoOperandNoResultInstruction.cs" />
     <Compile Include="Instructions\FarJmp.cs" />
     <Compile Include="Instructions\Leave.cs" />
     <Compile Include="Instructions\RoundSS.cs" />
@@ -226,7 +226,6 @@
     <Compile Include="Instructions\MulSS.cs" />
     <Compile Include="Instructions\SubSS.cs" />
     <Compile Include="Instructions\Sub.cs" />
-    <Compile Include="Instructions\ThreeOperandInstruction.cs" />
     <Compile Include="Instructions\TwoOperandInstruction.cs" />
     <Compile Include="Instructions\Ucomisd.cs" />
     <Compile Include="Instructions\Ucomiss.cs" />

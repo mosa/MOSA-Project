@@ -45,14 +45,6 @@ namespace Mosa.Platform.x86.Stages
 		}
 
 		/// <summary>
-		/// Visitation function for <see cref="IX86Visitor.Mul"/> instructions.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void IX86Visitor.Mul(Context ctx)
-		{
-		}
-
-		/// <summary>
 		/// Visitation function for <see cref="IX86Visitor.Cvtss2sd"/> instructions.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
@@ -171,6 +163,14 @@ namespace Mosa.Platform.x86.Stages
 		}
 
 		/// <summary>
+		/// Visitation function for <see cref="IX86Visitor.Mul"/> instructions.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void IX86Visitor.Mul(Context ctx)
+		{
+		}
+
+		/// <summary>
 		/// Visitation function for <see cref="IX86Visitor.IDiv"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
@@ -184,13 +184,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IX86Visitor.Sar(Context context)
 		{
-			if (context.Operand1.IsConstant)
-				return;
-
-			Operand ecx = AllocateVirtualRegister(BuiltInSigType.IntPtr);
-			Context before = context.InsertBefore();
-			before.SetInstruction(X86.Mov, ecx, context.Operand1);
-			context.Operand1 = context.Result;
+			ConvertShiftConstantToByte(context);
 		}
 
 		/// <summary>
@@ -199,7 +193,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IX86Visitor.Shl(Context context)
 		{
-			ShiftConstantToByte(context);
+			ConvertShiftConstantToByte(context);
 		}
 
 		/// <summary>
@@ -208,7 +202,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IX86Visitor.Shr(Context context)
 		{
-			ShiftConstantToByte(context);
+			ConvertShiftConstantToByte(context);
 		}
 
 		/// <summary>
@@ -217,6 +211,8 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IX86Visitor.Call(Context context)
 		{
+			// FIXME: Result operand should be used instead of Operand1 for the result
+			// FIXME: Move to FixedRegisterAssignmentStage
 			Operand destinationOperand = context.Operand1;
 
 			if (destinationOperand == null || destinationOperand.IsSymbol)
@@ -599,12 +595,12 @@ namespace Mosa.Platform.x86.Stages
 		/// Adjusts the shift constant.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void ShiftConstantToByte(Context context)
+		void ConvertShiftConstantToByte(Context context)
 		{
 			if (!context.Operand2.IsConstant)
 				return;
 
-			if (context.Operand2.Type.Type == CilElementType.I1)
+			if (context.Operand2.Type.Type == CilElementType.U1)
 				return;
 
 			context.Operand2 = Operand.CreateConstant(BuiltInSigType.Byte, context.Operand2.Value);

@@ -17,11 +17,28 @@ using Mosa.Compiler.TypeSystem;
 namespace Mosa.Compiler.Framework
 {
 
+	#region Helper Context Classes
+
+	public class InsertContext
+	{
+		public Context Context;
+		public InsertContext(Context context) { Context = context; }
+	}
+
+	public class SetContext
+	{
+		public Context Context;
+		public SetContext(Context context) { Context = context; }
+	}
+
+	#endregion // Nested Classes
+
 	/// <summary>
 	/// Provides context for transformations.
 	/// </summary>
 	public sealed class Context
 	{
+
 		#region Data members
 
 		/// <summary>
@@ -38,6 +55,16 @@ namespace Mosa.Compiler.Framework
 		/// Holds the block being operated on.
 		/// </summary>
 		private BasicBlock block;
+
+		/// <summary>
+		/// 
+		/// </summary>
+		private InsertContext insertContext;
+
+		/// <summary>
+		/// 
+		/// </summary>
+		private SetContext setContext;
 
 		#endregion // Data members
 
@@ -414,6 +441,28 @@ namespace Mosa.Compiler.Framework
 			get { return new Context(instructionSet, instructionSet.Previous(index)); }
 		}
 
+		/// <summary>
+		/// Gets the insert context
+		/// </summary>
+		/// <value>
+		/// The insert context.
+		/// </value>
+		public InsertContext Insert
+		{
+			get { if (insertContext == null) insertContext = new InsertContext(this); return insertContext; }
+		}
+
+		/// <summary>
+		/// Gets the set context.
+		/// </summary>
+		/// <value>
+		/// The set context.
+		/// </value>
+		public SetContext Set
+		{
+			get { if (setContext == null) setContext = new SetContext(this); return setContext; }
+		}
+
 		#endregion // Properties
 
 		#region Construction
@@ -459,6 +508,7 @@ namespace Mosa.Compiler.Framework
 			: this(instructionSet, null, -1)
 		{
 		}
+
 		#endregion // Construction
 
 		#region Methods

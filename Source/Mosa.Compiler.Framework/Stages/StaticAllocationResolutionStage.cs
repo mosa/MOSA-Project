@@ -22,27 +22,26 @@ namespace Mosa.Compiler.Framework.Stages
 
 		void IMethodCompilerStage.Run()
 		{
-
-			if (this.methodCompiler.Method.Name == @".cctor")
+			if (methodCompiler.Method.Name == @".cctor")
 			{
-				this.AttemptToStaticallyAllocateObjects();
+				AttemptToStaticallyAllocateObjects();
 			}
 		}
 
 		private void AttemptToStaticallyAllocateObjects()
 		{
-			foreach (Context allocation in this.ScanForOperatorNew())
+			foreach (Context allocation in ScanForOperatorNew())
 			{
-				Context assignment = this.SeekAssignmentOfAllocatedObject(allocation);
+				Context assignment = SeekAssignmentOfAllocatedObject(allocation);
 
-				if (assignment != null && this.CheckAssignmentForCompliance(allocation, assignment))
+				if (assignment != null && CheckAssignmentForCompliance(allocation, assignment))
 				{
-					Debug.WriteLine(@"StaticAllocationResolutionStage: Static allocation of object possible.");
-					this.PerformStaticAllocationOf(allocation, assignment);
+					//Debug.WriteLine(@"StaticAllocationResolutionStage: Static allocation of object possible.");
+					PerformStaticAllocationOf(allocation, assignment);
 				}
 				else
 				{
-					Debug.WriteLine(@"StaticAllocationResolutionStage: Can't statically allocate object.");
+					//Debug.WriteLine(@"StaticAllocationResolutionStage: Can't statically allocate object.");
 				}
 			}
 		}
@@ -105,7 +104,7 @@ namespace Mosa.Compiler.Framework.Stages
 				{
 					if (context.Instruction is NewobjInstruction || context.Instruction is NewarrInstruction)
 					{
-						Debug.WriteLine(@"StaticAllocationResolutionStage: Found a newobj or newarr instruction.");
+						//Debug.WriteLine(@"StaticAllocationResolutionStage: Found a newobj or newarr instruction.");
 						yield return context.Clone();
 					}
 
