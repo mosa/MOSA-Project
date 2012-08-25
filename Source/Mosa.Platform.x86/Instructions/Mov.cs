@@ -5,6 +5,7 @@
  *
  * Authors:
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 using System;
@@ -15,7 +16,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// <summary>
 	/// Representations the x86 mov instruction.
 	/// </summary>
-	public sealed class Mov : TwoOperandInstruction
+	public sealed class Mov : X86Instruction
 	{
 		#region Data Members
 
@@ -37,6 +38,18 @@ namespace Mosa.Platform.x86.Instructions
 		private static readonly OpCode SR_R = new OpCode(new byte[] { 0x8E });
 
 		#endregion // Data Members
+		
+		#region Construction
+
+		/// <summary>
+		/// Initializes a new instance of <see cref="Mov"/>.
+		/// </summary>
+		public Mov() :
+			base(1, 1)
+		{
+		}
+
+		#endregion // Construction
 
 		#region Methods
 

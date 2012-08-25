@@ -5,6 +5,7 @@
  *
  * Authors:
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 using System;
@@ -15,7 +16,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// <summary>
 	/// Intermediate representation of the sub instruction.
 	/// </summary>
-	public sealed class Sub : TwoOperandInstruction
+	public sealed class Sub : X86Instruction
 	{
 
 		#region Data Members
@@ -26,6 +27,18 @@ namespace Mosa.Platform.x86.Instructions
 		private static readonly OpCode M_R = new OpCode(new byte[] { 0x29 });
 
 		#endregion
+		
+		#region Construction
+
+		/// <summary>
+		/// Initializes a new instance of <see cref="Sub"/>.
+		/// </summary>
+		public Sub() :
+			base(1, 2)
+		{
+		}
+
+		#endregion // Construction
 
 		#region Methods
 
@@ -48,17 +61,17 @@ namespace Mosa.Platform.x86.Instructions
 		/// <returns></returns>
 		protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
 		{
-			if (source.IsConstant)
+			if (third.IsConstant)
 				return O_C;
 
 			if (destination.IsRegister)
 			{
-				if (IsChar(source))
+				if (IsChar(third))
 					return R_O_16;
 				else
 					return R_O;
 			}
-			if ((destination.IsMemoryAddress) && (source.IsRegister)) return M_R;
+			if ((destination.IsMemoryAddress) && (third.IsRegister)) return M_R;
 
 			throw new ArgumentException(@"No opcode for operand type.");
 		}

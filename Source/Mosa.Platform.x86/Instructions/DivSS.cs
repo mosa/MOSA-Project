@@ -5,6 +5,7 @@
  *
  * Authors:
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 using Mosa.Compiler.Framework;
@@ -14,13 +15,25 @@ namespace Mosa.Platform.x86.Instructions
 	/// <summary>
 	/// Intermediate representation of the SSE division instruction.
 	/// </summary>
-	public sealed class DivSS : TwoOperandInstruction
+	public sealed class DivSS : X86Instruction
 	{
 		#region Data Members
 
 		private static readonly OpCode opcode = new OpCode(new byte[] { 0xF3, 0x0F, 0x5E });
 
 		#endregion // Data Members
+		
+		#region Construction
+
+		/// <summary>
+		/// Initializes a new instance of <see cref="DivSS"/>.
+		/// </summary>
+		public DivSS() :
+			base(1, 2)
+		{
+		}
+
+		#endregion // Construction
 
 		#region Methods
 
@@ -33,10 +46,7 @@ namespace Mosa.Platform.x86.Instructions
 		/// <returns></returns>
 		protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
 		{
-			//if (source.Type.Type == CilElementType.R4) return DIVSS;
 			return opcode;
-
-			//return DIVSD;
 		}
 
 		/// <summary>

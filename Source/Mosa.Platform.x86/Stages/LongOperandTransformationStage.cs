@@ -100,7 +100,7 @@ namespace Mosa.Platform.x86.Stages
 			Operand eaxL = AllocateVirtualRegister(BuiltInSigType.UInt32);
 
 			context.SetInstruction(X86.Mov, eaxL, op1L);
-			context.AppendInstruction(X86.Add, eaxL, op2L);
+			context.AppendInstruction(X86.Add, eaxL, eaxL, op2L);
 			context.AppendInstruction(X86.Mov, op0L, eaxL);
 			context.AppendInstruction(X86.Mov, eaxH, op1H);
 			context.AppendInstruction(X86.Adc, eaxH, eaxH, op2H);
@@ -133,7 +133,7 @@ namespace Mosa.Platform.x86.Stages
 			Operand eaxL = AllocateVirtualRegister(BuiltInSigType.UInt32);
 
 			context.SetInstruction(X86.Mov, eaxL, op1L);
-			context.AppendInstruction(X86.Sub, eaxL, op2L);
+			context.AppendInstruction(X86.Sub, eaxL, eaxL, op2L);
 			context.AppendInstruction(X86.Mov, op0L, eaxL);
 			context.AppendInstruction(X86.Mov, eaxH, op1H);
 			context.AppendInstruction(X86.Sbb, eaxH, op2H);
@@ -170,7 +170,7 @@ namespace Mosa.Platform.x86.Stages
 
 			newBlocks[0].SetInstruction(X86.Mov, eax, op1H);
 			newBlocks[0].AppendInstruction(X86.Mov, v2, op2H);
-			newBlocks[0].AppendInstruction(X86.Or, v2, eax);
+			newBlocks[0].AppendInstruction(X86.Or, v2, v2, eax);
 			newBlocks[0].AppendInstruction(X86.Mov, v2, op2L);
 			newBlocks[0].AppendInstruction(X86.Branch, ConditionCode.NotEqual, newBlocks[2].BasicBlock);
 			newBlocks[0].AppendInstruction(X86.Jmp, newBlocks[1].BasicBlock);
@@ -187,11 +187,11 @@ namespace Mosa.Platform.x86.Stages
 			//newBlocks[2].AppendInstruction(X86.Mov, eax, op1L);
 			//newBlocks[2].AppendInstruction(X86.Mul, eax, op2H);
 			newBlocks[2].AppendInstruction2(X86.Mul, edx, eax, edx, eax, op2H);
-			newBlocks[2].AppendInstruction(X86.Add, v1, eax);
+			newBlocks[2].AppendInstruction(X86.Add, v1, v1, eax);
 			//newBlocks[2].AppendInstruction(X86.Mov, eax, op1L);
 			//newBlocks[2].AppendInstruction(X86.Mul, eax, v2);
 			newBlocks[2].AppendInstruction2(X86.Mul, edx, eax, edx, op1L, v2);
-			newBlocks[2].AppendInstruction(X86.Add, edx, v1);
+			newBlocks[2].AppendInstruction(X86.Add, edx, edx, v1);
 			newBlocks[2].AppendInstruction(X86.Jmp, newBlocks[3].BasicBlock);
 			LinkBlocks(newBlocks[2], newBlocks[3]);
 
@@ -243,9 +243,9 @@ namespace Mosa.Platform.x86.Stages
 			context.SetInstruction(X86.Jmp, newBlocks[0].BasicBlock);
 			LinkBlocks(context, newBlocks[0]);
 
-			newBlocks[0].AppendInstruction(X86.Xor, edi, edi);
+			newBlocks[0].AppendInstruction(X86.Xor, edi, edi, edi);
 			newBlocks[0].AppendInstruction(X86.Mov, eax, op1H);
-			newBlocks[0].AppendInstruction(X86.Or, eax, eax);
+			newBlocks[0].AppendInstruction(X86.Or, eax, eax, eax);
 			newBlocks[0].AppendInstruction(X86.Branch, ConditionCode.GreaterOrEqual, newBlocks[2].BasicBlock);
 			newBlocks[0].AppendInstruction(X86.Jmp, newBlocks[1].BasicBlock);
 			LinkBlocks(newBlocks[0], newBlocks[1], newBlocks[2]);
@@ -254,7 +254,7 @@ namespace Mosa.Platform.x86.Stages
 			newBlocks[1].AppendInstruction(X86.Mov, edx, op1L);
 			newBlocks[1].AppendInstruction(X86.Neg, eax, eax);
 			newBlocks[1].AppendInstruction(X86.Neg, edx, edx);
-			newBlocks[1].AppendInstruction(X86.Sbb, eax, Operand.CreateConstant(BuiltInSigType.Int32, (int)0));
+			newBlocks[1].AppendInstruction(X86.Sbb, eax, eax, Operand.CreateConstant(BuiltInSigType.Int32, (int)0));
 			newBlocks[1].AppendInstruction(X86.Mov, op1H, eax);
 			newBlocks[1].AppendInstruction(X86.Mov, op1L, edx);
 			newBlocks[1].AppendInstruction(X86.Jmp, newBlocks[2].BasicBlock);
@@ -273,7 +273,7 @@ namespace Mosa.Platform.x86.Stages
 			// mov     HIWORD(DVSR),eax ; save positive value
 			// mov     LOWORD(DVSR),edx
 			newBlocks[2].SetInstruction(X86.Mov, eax, op2H);
-			newBlocks[2].AppendInstruction(X86.Or, eax, eax);
+			newBlocks[2].AppendInstruction(X86.Or, eax, eax, eax);
 			newBlocks[2].AppendInstruction(X86.Branch, ConditionCode.GreaterOrEqual, newBlocks[4].BasicBlock);
 			newBlocks[2].AppendInstruction(X86.Jmp, newBlocks[3].BasicBlock);
 			LinkBlocks(newBlocks[2], newBlocks[3], newBlocks[4]);
@@ -282,7 +282,7 @@ namespace Mosa.Platform.x86.Stages
 			newBlocks[3].AppendInstruction(X86.Mov, edx, op2L);
 			newBlocks[3].AppendInstruction(X86.Neg, eax, eax);
 			newBlocks[3].AppendInstruction(X86.Neg, edx, edx);
-			newBlocks[3].AppendInstruction(X86.Sbb, eax, Operand.CreateConstant(BuiltInSigType.Int32, (int)0));
+			newBlocks[3].AppendInstruction(X86.Sbb, eax, eax, Operand.CreateConstant(BuiltInSigType.Int32, (int)0));
 			newBlocks[3].AppendInstruction(X86.Mov, op2H, eax);
 			newBlocks[3].AppendInstruction(X86.Mov, op2L, edx);
 			newBlocks[3].AppendInstruction(X86.Jmp, newBlocks[4].BasicBlock);
@@ -301,7 +301,7 @@ namespace Mosa.Platform.x86.Stages
 			// or      eax,eax         ; check to see if divisor < 4194304K
 			// jnz     short L3        ; nope, gotta do this the hard way
 
-			newBlocks[4].SetInstruction(X86.Or, eax, eax);
+			newBlocks[4].SetInstruction(X86.Or, eax, eax, eax);
 			newBlocks[4].AppendInstruction(X86.Branch, ConditionCode.NotEqual, newBlocks[6].BasicBlock);
 			newBlocks[4].AppendInstruction(X86.Jmp, newBlocks[5].BasicBlock);
 			LinkBlocks(newBlocks[4], newBlocks[5], newBlocks[6]);
@@ -364,7 +364,7 @@ namespace Mosa.Platform.x86.Stages
 			newBlocks[7].AppendInstruction(X86.Rcr, ecx, ecx, ConstantByte1);
 			newBlocks[7].AppendInstruction(X86.Shr, edx, edx, ConstantByte1);
 			newBlocks[7].AppendInstruction(X86.Rcr, eax, eax, ConstantByte1);
-			newBlocks[7].AppendInstruction(X86.Or, ebx, ebx);
+			newBlocks[7].AppendInstruction(X86.Or, ebx, ebx, ebx);
 			newBlocks[7].AppendInstruction(X86.Branch, ConditionCode.NotEqual, newBlocks[7].BasicBlock);
 			newBlocks[7].AppendInstruction(X86.Jmp, newBlocks[8].BasicBlock);
 			LinkBlocks(newBlocks[7], newBlocks[7], newBlocks[8]);
@@ -378,7 +378,7 @@ namespace Mosa.Platform.x86.Stages
 			//newBlocks[8].AppendInstruction(X86.Mul, eax, esi);
 			newBlocks[8].AppendInstruction2(X86.Mul, edx, eax, edx, eax, esi);
 			newBlocks[8].AppendInstruction(X86.Mov, ecx, eax);
-			newBlocks[8].AppendInstruction(X86.Add, edx, ecx);
+			newBlocks[8].AppendInstruction(X86.Add, edx, edx, ecx);
 			newBlocks[8].AppendInstruction(X86.Branch, ConditionCode.UnsignedLessThan, newBlocks[12].BasicBlock);
 			newBlocks[8].AppendInstruction(X86.Jmp, newBlocks[9].BasicBlock);
 			LinkBlocks(newBlocks[8], newBlocks[9], newBlocks[12]);
@@ -403,7 +403,7 @@ namespace Mosa.Platform.x86.Stages
 			LinkBlocks(newBlocks[12], newBlocks[13]);
 
 			// L7:
-			newBlocks[13].SetInstruction(X86.Xor, edx, edx);
+			newBlocks[13].SetInstruction(X86.Xor, edx, edx, edx);
 			newBlocks[13].AppendInstruction(X86.Mov, eax, esi);
 			newBlocks[13].AppendInstruction(X86.Jmp, newBlocks[14].BasicBlock);
 			LinkBlocks(newBlocks[13], newBlocks[14]);
@@ -424,7 +424,7 @@ namespace Mosa.Platform.x86.Stages
 
 			newBlocks[15].SetInstruction(X86.Neg, edx, edx);
 			newBlocks[15].AppendInstruction(X86.Neg, eax, eax);
-			newBlocks[15].AppendInstruction(X86.Sbb, edx, Operand.CreateConstant(BuiltInSigType.Int32, (int)0));
+			newBlocks[15].AppendInstruction(X86.Sbb, edx, edx, Operand.CreateConstant(BuiltInSigType.Int32, (int)0));
 			newBlocks[15].AppendInstruction(X86.Jmp, newBlocks[16].BasicBlock);
 			LinkBlocks(newBlocks[15], newBlocks[16]);
 
@@ -473,9 +473,9 @@ namespace Mosa.Platform.x86.Stages
 			context.SetInstruction(X86.Jmp, newBlocks[0].BasicBlock);
 			LinkBlocks(context, newBlocks[0]);
 
-			newBlocks[0].AppendInstruction(X86.Xor, edi, edi);
+			newBlocks[0].AppendInstruction(X86.Xor, edi, edi, edi);
 			newBlocks[0].AppendInstruction(X86.Mov, eax, op1H);
-			newBlocks[0].AppendInstruction(X86.Or, eax, eax);
+			newBlocks[0].AppendInstruction(X86.Or, eax, eax, eax);
 			newBlocks[0].AppendInstruction(X86.Branch, ConditionCode.GreaterOrEqual, newBlocks[2].BasicBlock);
 			newBlocks[0].AppendInstruction(X86.Jmp, newBlocks[1].BasicBlock);
 			LinkBlocks(newBlocks[0], newBlocks[2], newBlocks[1]);
@@ -484,7 +484,7 @@ namespace Mosa.Platform.x86.Stages
 			newBlocks[1].AppendInstruction(X86.Mov, edx, op1L);
 			newBlocks[1].AppendInstruction(X86.Neg, eax, eax);
 			newBlocks[1].AppendInstruction(X86.Neg, edx, edx);
-			newBlocks[1].AppendInstruction(X86.Sbb, eax, Operand.CreateConstant(BuiltInSigType.Int32, (int)0));
+			newBlocks[1].AppendInstruction(X86.Sbb, eax, eax, Operand.CreateConstant(BuiltInSigType.Int32, (int)0));
 			newBlocks[1].AppendInstruction(X86.Mov, op1H, eax);
 			newBlocks[1].AppendInstruction(X86.Mov, op1L, edx);
 			newBlocks[1].AppendInstruction(X86.Jmp, newBlocks[2].BasicBlock);
@@ -502,7 +502,7 @@ namespace Mosa.Platform.x86.Stages
 			// mov     HIWORD(DVSR),eax ; save positive value
 			// mov     LOWORD(DVSR),edx
 			newBlocks[2].AppendInstruction(X86.Mov, eax, op2H);
-			newBlocks[2].AppendInstruction(X86.Or, eax, eax);
+			newBlocks[2].AppendInstruction(X86.Or, eax, eax, eax);
 			newBlocks[2].AppendInstruction(X86.Branch, ConditionCode.GreaterOrEqual, newBlocks[4].BasicBlock);
 			newBlocks[2].AppendInstruction(X86.Jmp, newBlocks[3].BasicBlock);
 			LinkBlocks(newBlocks[2], newBlocks[4], newBlocks[3]);
@@ -510,7 +510,7 @@ namespace Mosa.Platform.x86.Stages
 			newBlocks[3].AppendInstruction(X86.Mov, edx, op2L);
 			newBlocks[3].AppendInstruction(X86.Neg, eax, eax);
 			newBlocks[3].AppendInstruction(X86.Neg, edx, edx);
-			newBlocks[3].AppendInstruction(X86.Sbb, eax, Operand.CreateConstant(BuiltInSigType.Int32, (int)0));
+			newBlocks[3].AppendInstruction(X86.Sbb, eax, eax, Operand.CreateConstant(BuiltInSigType.Int32, (int)0));
 			newBlocks[3].AppendInstruction(X86.Mov, op2H, eax);
 			newBlocks[3].AppendInstruction(X86.Mov, op2L, edx);
 			newBlocks[3].AppendInstruction(X86.Jmp, newBlocks[4].BasicBlock);
@@ -536,7 +536,7 @@ namespace Mosa.Platform.x86.Stages
 			// div     ecx             ; eax <- low order bits of quotient
 			// mov     edx,ebx         ; edx:eax <- quotient
 			// jmp     short L4        ; set sign, restore stack and return
-			newBlocks[4].AppendInstruction(X86.Or, eax, eax);
+			newBlocks[4].AppendInstruction(X86.Or, eax, eax, eax);
 			newBlocks[4].AppendInstruction(X86.Branch, ConditionCode.NotEqual, newBlocks[6].BasicBlock);
 			newBlocks[4].AppendInstruction(X86.Jmp, newBlocks[5].BasicBlock);
 			LinkBlocks(newBlocks[4], newBlocks[6], newBlocks[5]);
@@ -545,7 +545,7 @@ namespace Mosa.Platform.x86.Stages
 			newBlocks[5].AppendInstruction2(X86.Div, eax, edx, op1H, v8, op2L);
 			newBlocks[5].AppendInstruction2(X86.Div, eax, edx, op1L, edx, op2L);
 			newBlocks[5].AppendInstruction(X86.Mov, eax, edx);
-			newBlocks[5].AppendInstruction(X86.Xor, edx, edx);
+			newBlocks[5].AppendInstruction(X86.Xor, edx, edx, edx);
 			newBlocks[5].AppendInstruction(X86.Dec, edi);
 			newBlocks[5].AppendInstruction(X86.Branch, ConditionCode.NotSigned, newBlocks[14].BasicBlock);
 			newBlocks[5].AppendInstruction(X86.Jmp, newBlocks[15].BasicBlock);
@@ -605,7 +605,7 @@ namespace Mosa.Platform.x86.Stages
 			newBlocks[7].AppendInstruction(X86.Rcr, ecx, ecx, Operand.CreateConstant(BuiltInSigType.Byte, 1)); // RCR
 			newBlocks[7].AppendInstruction(X86.Shr, edx, edx, Operand.CreateConstant(BuiltInSigType.Byte, 1));
 			newBlocks[7].AppendInstruction(X86.Rcr, eax, eax, Operand.CreateConstant(BuiltInSigType.Byte, 1));
-			newBlocks[7].AppendInstruction(X86.Or, ebx, ebx);
+			newBlocks[7].AppendInstruction(X86.Or, ebx, ebx, ebx);
 			newBlocks[7].AppendInstruction(X86.Branch, ConditionCode.NotEqual, newBlocks[7].BasicBlock);
 			newBlocks[7].AppendInstruction(X86.Jmp, newBlocks[8].BasicBlock);
 			LinkBlocks(newBlocks[7], newBlocks[7], newBlocks[8]);
@@ -617,7 +617,7 @@ namespace Mosa.Platform.x86.Stages
 			newBlocks[8].AppendInstruction(X86.Xchg, ecx, eax);
 			//newBlocks[8].AppendInstruction(X86.Mul, eax, op2L);
 			newBlocks[8].AppendInstruction2(X86.Mul, edx, eax, edx, eax, op2L);
-			newBlocks[8].AppendInstruction(X86.Add, edx, ecx);
+			newBlocks[8].AppendInstruction(X86.Add, edx, edx, ecx);
 			newBlocks[8].AppendInstruction(X86.Branch, ConditionCode.UnsignedLessThan, newBlocks[12].BasicBlock);
 			newBlocks[8].AppendInstruction(X86.Jmp, newBlocks[9].BasicBlock);
 			LinkBlocks(newBlocks[8], newBlocks[12], newBlocks[9]);
@@ -637,8 +637,8 @@ namespace Mosa.Platform.x86.Stages
 			LinkBlocks(newBlocks[11], newBlocks[13], newBlocks[12]);
 
 			// L6:
-			newBlocks[12].AppendInstruction(X86.Sub, eax, op2L);
-			newBlocks[12].AppendInstruction(X86.Sbb, edx, op2H);
+			newBlocks[12].AppendInstruction(X86.Sub, eax, eax, op2L);
+			newBlocks[12].AppendInstruction(X86.Sbb, edx, edx, op2H);
 			newBlocks[12].AppendInstruction(X86.Jmp, newBlocks[13].BasicBlock);
 			LinkBlocks(newBlocks[13], newBlocks[13]);
 
@@ -648,8 +648,8 @@ namespace Mosa.Platform.x86.Stages
 			// Since the result is already in a register, we will do the subtract in the
 			// opposite direction and negate the result if necessary.
 			//
-			newBlocks[13].AppendInstruction(X86.Sub, eax, op1L);
-			newBlocks[13].AppendInstruction(X86.Sbb, edx, op1H);
+			newBlocks[13].AppendInstruction(X86.Sub, eax, eax, op1L);
+			newBlocks[13].AppendInstruction(X86.Sbb, edx, edx, op1H);
 			newBlocks[13].AppendInstruction(X86.Dec, edi);
 			newBlocks[13].AppendInstruction(X86.Branch, ConditionCode.NotSigned, newBlocks[15].BasicBlock);
 			newBlocks[13].AppendInstruction(X86.Jmp, newBlocks[14].BasicBlock);
@@ -661,7 +661,7 @@ namespace Mosa.Platform.x86.Stages
 			//        sbb     edx,0
 			newBlocks[14].AppendInstruction(X86.Neg, edx, edx);
 			newBlocks[14].AppendInstruction(X86.Neg, eax, eax);
-			newBlocks[14].AppendInstruction(X86.Sbb, edx, Operand.CreateConstant(BuiltInSigType.Int32, (int)0));
+			newBlocks[14].AppendInstruction(X86.Sbb, edx, edx, Operand.CreateConstant(BuiltInSigType.Int32, (int)0));
 			newBlocks[14].AppendInstruction(X86.Jmp, newBlocks[15].BasicBlock);
 			LinkBlocks(newBlocks[14], newBlocks[15]);
 
@@ -696,14 +696,14 @@ namespace Mosa.Platform.x86.Stages
 			LinkBlocks(context, newBlocks[0]);
 
 			newBlocks[0].AppendInstruction(X86.Mov, eax, op2H);
-			newBlocks[0].AppendInstruction(X86.Or, eax, eax);
+			newBlocks[0].AppendInstruction(X86.Or, eax, eax, eax);
 			newBlocks[0].AppendInstruction(X86.Branch, ConditionCode.NotEqual, newBlocks[2].BasicBlock); // JNZ
 			newBlocks[0].AppendInstruction(X86.Jmp, newBlocks[1].BasicBlock);
 			LinkBlocks(newBlocks[0], newBlocks[2], newBlocks[1]);
 
 			newBlocks[1].AppendInstruction(X86.Mov, ecx, op2L);
 			newBlocks[1].AppendInstruction(X86.Mov, eax, op1H);
-			newBlocks[1].AppendInstruction(X86.Xor, edx, edx);
+			newBlocks[1].AppendInstruction(X86.Xor, edx, edx, edx);
 			newBlocks[1].AppendInstruction2(X86.Div, eax, edx, eax, edx, ecx);
 			newBlocks[1].AppendInstruction(X86.Mov, ebx, eax);
 			newBlocks[1].AppendInstruction(X86.Mov, eax, op1L);
@@ -725,7 +725,7 @@ namespace Mosa.Platform.x86.Stages
 			newBlocks[3].AppendInstruction(X86.Rcr, ebx, ebx, Operand.CreateConstant(BuiltInSigType.Byte, 1)); // RCR
 			newBlocks[3].AppendInstruction(X86.Shr, edx, edx, Operand.CreateConstant(BuiltInSigType.Byte, 1));
 			newBlocks[3].AppendInstruction(X86.Rcr, eax, eax, Operand.CreateConstant(BuiltInSigType.Byte, 1));
-			newBlocks[3].AppendInstruction(X86.Or, ecx, ecx);
+			newBlocks[3].AppendInstruction(X86.Or, ecx, ecx, ecx);
 			newBlocks[3].AppendInstruction(X86.Branch, ConditionCode.NotEqual, newBlocks[3].BasicBlock); // JNZ
 			newBlocks[3].AppendInstruction(X86.Jmp, newBlocks[4].BasicBlock);
 			LinkBlocks(newBlocks[3], newBlocks[3], newBlocks[4]);
@@ -738,7 +738,7 @@ namespace Mosa.Platform.x86.Stages
 			newBlocks[4].AppendInstruction(X86.Mov, eax, op2L);
 			//newBlocks[4].AppendInstruction(X86.Mul, eax, esi);
 			newBlocks[4].AppendInstruction2(X86.Mul, edx, eax, edx, eax, esi);
-			newBlocks[4].AppendInstruction(X86.Add, edx, ecx);
+			newBlocks[4].AppendInstruction(X86.Add, edx, edx, ecx);
 			newBlocks[4].AppendInstruction(X86.Branch, ConditionCode.UnsignedLessThan, newBlocks[8].BasicBlock);
 			newBlocks[4].AppendInstruction(X86.Jmp, newBlocks[5].BasicBlock);
 			LinkBlocks(newBlocks[4], newBlocks[8], newBlocks[5]);
@@ -763,7 +763,7 @@ namespace Mosa.Platform.x86.Stages
 			LinkBlocks(newBlocks[8], newBlocks[9]);
 
 			// L5
-			newBlocks[9].AppendInstruction(X86.Xor, edx, edx);
+			newBlocks[9].AppendInstruction(X86.Xor, edx, edx, edx);
 			newBlocks[9].AppendInstruction(X86.Mov, eax, esi);
 			newBlocks[9].AppendInstruction(X86.Jmp, newBlocks[10].BasicBlock);
 			LinkBlocks(newBlocks[9], newBlocks[10]);
@@ -813,19 +813,19 @@ namespace Mosa.Platform.x86.Stages
 			LinkBlocks(context, newBlocks[0]);
 
 			newBlocks[0].AppendInstruction(X86.Mov, eax, op2H);
-			newBlocks[0].AppendInstruction(X86.Or, eax, eax);
+			newBlocks[0].AppendInstruction(X86.Or, eax, eax, eax);
 			newBlocks[0].AppendInstruction(X86.Branch, ConditionCode.NotEqual, newBlocks[2].BasicBlock);
 			newBlocks[0].AppendInstruction(X86.Jmp, newBlocks[1].BasicBlock);
 			LinkBlocks(newBlocks[0], newBlocks[2], newBlocks[1]);
 
 			newBlocks[1].AppendInstruction(X86.Mov, ecx, op2L);
 			newBlocks[1].AppendInstruction(X86.Mov, eax, op1H);
-			newBlocks[1].AppendInstruction(X86.Xor, edx, edx);
+			newBlocks[1].AppendInstruction(X86.Xor, edx, edx, edx);
 			newBlocks[1].AppendInstruction2(X86.Div, eax, edx, eax, edx, ecx);
 			newBlocks[1].AppendInstruction(X86.Mov, eax, op1L);
 			newBlocks[1].AppendInstruction2(X86.Div, eax, edx, eax, edx, ecx);
 			newBlocks[1].AppendInstruction(X86.Mov, eax, edx);
-			newBlocks[1].AppendInstruction(X86.Xor, edx, edx);
+			newBlocks[1].AppendInstruction(X86.Xor, edx, edx, edx);
 			newBlocks[1].AppendInstruction(X86.Jmp, newBlocks[10].BasicBlock);
 			LinkBlocks(newBlocks[1], newBlocks[10]);
 
@@ -842,7 +842,7 @@ namespace Mosa.Platform.x86.Stages
 			newBlocks[3].AppendInstruction(X86.Rcr, ebx, ebx, Operand.CreateConstant(BuiltInSigType.Byte, 1)); // RCR
 			newBlocks[3].AppendInstruction(X86.Shr, edx, edx, Operand.CreateConstant(BuiltInSigType.Byte, 1));
 			newBlocks[3].AppendInstruction(X86.Rcr, eax, eax, Operand.CreateConstant(BuiltInSigType.Byte, 1));
-			newBlocks[3].AppendInstruction(X86.Or, ecx, ecx);
+			newBlocks[3].AppendInstruction(X86.Or, ecx, ecx, ecx);
 			newBlocks[3].AppendInstruction(X86.Branch, ConditionCode.NotEqual, newBlocks[3].BasicBlock);
 			newBlocks[3].AppendInstruction(X86.Jmp, newBlocks[4].BasicBlock);
 			LinkBlocks(newBlocks[3], newBlocks[3], newBlocks[4]);
@@ -854,7 +854,7 @@ namespace Mosa.Platform.x86.Stages
 			newBlocks[4].AppendInstruction(X86.Xchg, ecx, eax);
 			//newBlocks[4].AppendInstruction(X86.Mul, eax, op2L);
 			newBlocks[4].AppendInstruction2(X86.Mul, edx, eax, edx, eax, op2L);
-			newBlocks[4].AppendInstruction(X86.Add, edx, ecx);
+			newBlocks[4].AppendInstruction(X86.Add, edx, edx, ecx);
 			newBlocks[4].AppendInstruction(X86.Branch, ConditionCode.UnsignedLessThan, newBlocks[8].BasicBlock);
 			newBlocks[4].AppendInstruction(X86.Jmp, newBlocks[5].BasicBlock);
 			LinkBlocks(newBlocks[4], newBlocks[8], newBlocks[5]);
@@ -874,17 +874,17 @@ namespace Mosa.Platform.x86.Stages
 			LinkBlocks(newBlocks[7], newBlocks[9], newBlocks[3]);
 
 			// L4:
-			newBlocks[8].AppendInstruction(X86.Sub, eax, op2L);
-			newBlocks[8].AppendInstruction(X86.Sbb, edx, op2H);
+			newBlocks[8].AppendInstruction(X86.Sub, eax, eax, op2L);
+			newBlocks[8].AppendInstruction(X86.Sbb, edx, edx, op2H);
 			newBlocks[8].AppendInstruction(X86.Jmp, newBlocks[9].BasicBlock);
 			LinkBlocks(newBlocks[8], newBlocks[9]);
 
 			// L5:
-			newBlocks[9].AppendInstruction(X86.Sub, eax, op1L);
-			newBlocks[9].AppendInstruction(X86.Sbb, edx, op1H);
+			newBlocks[9].AppendInstruction(X86.Sub, eax, eax, op1L);
+			newBlocks[9].AppendInstruction(X86.Sbb, edx, edx, op1H);
 			newBlocks[9].AppendInstruction(X86.Neg, edx, edx);
 			newBlocks[9].AppendInstruction(X86.Neg, eax, eax);
-			newBlocks[9].AppendInstruction(X86.Sbb, edx, Operand.CreateConstant(BuiltInSigType.UInt32, (int)0));
+			newBlocks[9].AppendInstruction(X86.Sbb, edx, edx, Operand.CreateConstant(BuiltInSigType.UInt32, (int)0));
 			newBlocks[9].AppendInstruction(X86.Jmp, newBlocks[10].BasicBlock);
 			LinkBlocks(newBlocks[9], newBlocks[10]);
 
@@ -943,7 +943,7 @@ namespace Mosa.Platform.x86.Stages
 			// MORE32:
 			newBlocks[3].AppendInstruction(X86.Mov, eax, edx);
 			newBlocks[3].AppendInstruction(X86.Sar, edx, edx, Operand.CreateConstant(BuiltInSigType.Byte, (sbyte)0x1F));
-			newBlocks[3].AppendInstruction(X86.And, ecx, Operand.CreateConstant(BuiltInSigType.Int32, 0x1F));
+			newBlocks[3].AppendInstruction(X86.And, ecx, ecx, Operand.CreateConstant(BuiltInSigType.Int32, 0x1F));
 			newBlocks[3].AppendInstruction(X86.Sar, eax, eax, ecx);
 			newBlocks[3].AppendInstruction(X86.Jmp, newBlocks[5].BasicBlock);
 			LinkBlocks(newBlocks[3], nextBlock);
@@ -1013,16 +1013,16 @@ namespace Mosa.Platform.x86.Stages
 			// Handle shifts of between 32 and 63 bits
 			// MORE32:
 			newBlocks[3].AppendInstruction(X86.Mov, edx, eax);
-			newBlocks[3].AppendInstruction(X86.Xor, eax, eax);
-			newBlocks[3].AppendInstruction(X86.And, ecx, Operand.CreateConstant(BuiltInSigType.Int32, 0x1F));
+			newBlocks[3].AppendInstruction(X86.Xor, eax, eax, eax);
+			newBlocks[3].AppendInstruction(X86.And, ecx, ecx, Operand.CreateConstant(BuiltInSigType.Int32, 0x1F));
 			newBlocks[3].AppendInstruction(X86.Shl, edx, edx, ecx);
 			newBlocks[3].AppendInstruction(X86.Jmp, newBlocks[5].BasicBlock);
 			LinkBlocks(newBlocks[3], newBlocks[5]);
 
 			// Return double precision 0 or -1, depending on the sign of edx
 			// RETZERO:
-			newBlocks[4].AppendInstruction(X86.Xor, eax, eax);
-			newBlocks[4].AppendInstruction(X86.Xor, edx, edx);
+			newBlocks[4].AppendInstruction(X86.Xor, eax, eax, eax);
+			newBlocks[4].AppendInstruction(X86.Xor, edx, edx, edx);
 			newBlocks[4].AppendInstruction(X86.Jmp, newBlocks[5].BasicBlock);
 			LinkBlocks(newBlocks[4], newBlocks[5]);
 
@@ -1081,7 +1081,7 @@ namespace Mosa.Platform.x86.Stages
 			newBlocks[3].AppendInstruction(X86.Mov, eax, edx);
 			newBlocks[3].AppendInstruction(X86.Mov, ecx, Operand.CreateConstant(BuiltInSigType.Byte, (byte)0x1F));
 			newBlocks[3].AppendInstruction(X86.Sar, edx, edx, ecx);
-			newBlocks[3].AppendInstruction(X86.And, ecx, Operand.CreateConstant(BuiltInSigType.Int32, 0x1F));
+			newBlocks[3].AppendInstruction(X86.And, ecx, ecx, Operand.CreateConstant(BuiltInSigType.Int32, 0x1F));
 			newBlocks[3].AppendInstruction(X86.Sar, eax, eax, Operand.CreateConstant(BuiltInSigType.Byte, (byte)0x1F));
 			newBlocks[3].AppendInstruction(X86.Jmp, newBlocks[5].BasicBlock);
 			LinkBlocks(newBlocks[3], newBlocks[5]);
@@ -1145,14 +1145,14 @@ namespace Mosa.Platform.x86.Stages
 			if (context.Result.StackType != StackTypeCode.Int64)
 			{
 				context.SetInstruction(X86.Mov, op0L, op1L);
-				context.AppendInstruction(X86.And, op0L, op2L);
+				context.AppendInstruction(X86.And, op0L, op0L, op2L);
 			}
 			else
 			{
 				context.SetInstruction(X86.Mov, op0H, op1H);
 				context.AppendInstruction(X86.Mov, op0L, op1L);
-				context.AppendInstruction(X86.And, op0H, op2H);
-				context.AppendInstruction(X86.And, op0L, op2L);
+				context.AppendInstruction(X86.And, op0H, op0H, op2H);
+				context.AppendInstruction(X86.And, op0L, op0L, op2L);
 			}
 		}
 
@@ -1169,8 +1169,8 @@ namespace Mosa.Platform.x86.Stages
 
 			context.SetInstruction(X86.Mov, op0H, op1H);
 			context.AppendInstruction(X86.Mov, op0L, op1L);
-			context.AppendInstruction(X86.Or, op0H, op2H);
-			context.AppendInstruction(X86.Or, op0L, op2L);
+			context.AppendInstruction(X86.Or, op0H, op0H, op2H);
+			context.AppendInstruction(X86.Or, op0L, op0L, op2L);
 		}
 
 		/// <summary>
@@ -1186,8 +1186,8 @@ namespace Mosa.Platform.x86.Stages
 
 			context.SetInstruction(X86.Mov, op0H, op1H);
 			context.AppendInstruction(X86.Mov, op0L, op1L);
-			context.AppendInstruction(X86.Xor, op0H, op2H);
-			context.AppendInstruction(X86.Xor, op0L, op2L);
+			context.AppendInstruction(X86.Xor, op0H, op0H, op2H);
+			context.AppendInstruction(X86.Xor, op0L, op0L, op2L);
 		}
 
 		/// <summary>
@@ -1243,7 +1243,7 @@ namespace Mosa.Platform.x86.Stages
 						context.SetInstruction(X86.Movzx, v1, op1L);
 						context.AppendInstruction2(X86.Cdq, v3, v2, v1);
 						context.AppendInstruction(X86.Mov, op0L, v2);
-						context.AppendInstruction(X86.Xor, op0H, op0H);
+						context.AppendInstruction(X86.Xor, op0H, op0H, op0H);
 						break;
 					}
 				case CilElementType.U2: goto case CilElementType.U1;
@@ -1254,7 +1254,7 @@ namespace Mosa.Platform.x86.Stages
 						Operand v2 = AllocateVirtualRegister(BuiltInSigType.UInt32);
 
 						context.SetInstruction(X86.Movzx, v1, op1L);
-						context.AppendInstruction(X86.Xor, v2, v2);
+						context.AppendInstruction(X86.Xor, v2, v2, v2);
 						context.AppendInstruction(X86.Mov, op0L, v1);
 						context.AppendInstruction(X86.Mov, op0H, v2);
 						break;
@@ -1309,7 +1309,7 @@ namespace Mosa.Platform.x86.Stages
 				case CilElementType.Boolean:
 					{
 						context.SetInstruction(X86.Movzx, op0L, op1);
-						context.AppendInstruction(X86.Xor, op0H, op0H);
+						context.AppendInstruction(X86.Xor, op0H, op0H, op0H);
 						break;
 					}
 				case CilElementType.I1:
@@ -1352,7 +1352,7 @@ namespace Mosa.Platform.x86.Stages
 						context.SetInstruction(X86.Movzx, v1, op1);
 						context.AppendInstruction2(X86.Cdq, v3, v2, v1);
 						context.AppendInstruction(X86.Mov, op0L, v2);
-						context.AppendInstruction(X86.Xor, op0H, op0H);
+						context.AppendInstruction(X86.Xor, op0H, op0H, op0H);
 						break;
 					}
 				case CilElementType.U2: goto case CilElementType.U1;
@@ -1390,7 +1390,7 @@ namespace Mosa.Platform.x86.Stages
 			Operand edx = AllocateVirtualRegister(BuiltInSigType.UInt32);
 
 			context.SetInstruction(X86.Mov, eax, address);
-			context.AppendInstruction(X86.Add, eax, offset);
+			context.AppendInstruction(X86.Add, eax, eax, offset);
 
 			context.AppendInstruction(X86.Mov, edx, Operand.CreateMemoryAddress(BuiltInSigType.UInt32, eax, 0));
 			context.AppendInstruction(X86.Mov, op0L, edx);
@@ -1416,7 +1416,7 @@ namespace Mosa.Platform.x86.Stages
 			context.SetInstruction(X86.Mov, edx, address);
 
 			// Fortunately in 32-bit mode, we can't have 64-bit offsets, so this plain add should suffice.
-			context.AppendInstruction(X86.Add, edx, offset);
+			context.AppendInstruction(X86.Add, edx, edx, offset);
 
 			context.AppendInstruction(X86.Mov, eax, op0L);
 			context.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(BuiltInSigType.UInt32, edx, 0), eax);

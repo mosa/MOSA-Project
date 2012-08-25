@@ -93,7 +93,7 @@
     </Compile>
     <Compile Include="BaseTransformationStage.cs" />
     <Compile Include="Instructions\AddSD.cs" />
-    <Compile Include="Instructions\X86Extensions.cs" />
+    <Compile Include="X86InstructionExtensions.cs" />
     <Compile Include="Instructions\MulSD.cs" />
     <Compile Include="Instructions\DivSD.cs" />
     <Compile Include="Instructions\RoundSD.cs" />
@@ -226,7 +226,6 @@
     <Compile Include="Instructions\MulSS.cs" />
     <Compile Include="Instructions\SubSS.cs" />
     <Compile Include="Instructions\Sub.cs" />
-    <Compile Include="Instructions\TwoOperandInstruction.cs" />
     <Compile Include="Instructions\Ucomisd.cs" />
     <Compile Include="Instructions\Ucomiss.cs" />
     <Compile Include="OpCode.cs" />

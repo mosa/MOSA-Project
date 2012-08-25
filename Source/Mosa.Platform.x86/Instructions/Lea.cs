@@ -5,6 +5,7 @@
  *
  * Authors:
  *  Simon Wollwage (rootnode) <rootnode@mosa-project.org>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 using Mosa.Compiler.Framework;
@@ -14,13 +15,25 @@ namespace Mosa.Platform.x86.Instructions
 	/// <summary>
 	/// 
 	/// </summary>
-	public sealed class Lea : TwoOperandInstruction
+	public sealed class Lea : X86Instruction
 	{
 		#region Data Members
 
 		private static readonly OpCode opcode = new OpCode(new byte[] { 0x8D });
 
 		#endregion // Data Members
+		
+		#region Construction
+
+		/// <summary>
+		/// Initializes a new instance of <see cref="Lea" />.
+		/// </summary>
+		public Lea() :
+			base(1, 1)
+		{
+		}
+
+		#endregion // Construction
 
 		#region Methods
 		/// <summary>

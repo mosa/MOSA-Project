@@ -5,6 +5,7 @@
  *
  * Authors:
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 using Mosa.Compiler.Framework;
@@ -14,7 +15,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// <summary>
 	/// Intermediate representation of the SSE addition instruction.
 	/// </summary>
-	public sealed class AddSD : TwoOperandInstruction
+	public sealed class AddSD : X86Instruction
 	{
 
 		#region Data Members
@@ -22,6 +23,18 @@ namespace Mosa.Platform.x86.Instructions
 		private static readonly OpCode opcode = new OpCode(new byte[] { 0xF2, 0x0F, 0x58 });
 
 		#endregion // Data Members
+		
+		#region Construction
+
+		/// <summary>
+		/// Initializes a new instance of <see cref="AddSD"/>.
+		/// </summary>
+		public AddSD() :
+			base(1, 2)
+		{
+		}
+
+		#endregion // Construction
 
 		#region Methods
 

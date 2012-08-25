@@ -5,6 +5,7 @@
  *
  * Authors:
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 using Mosa.Compiler.Framework;
@@ -14,15 +15,28 @@ namespace Mosa.Platform.x86.Instructions
 	/// <summary>
 	/// Intermediate representation of the SSE multiplication operation.
 	/// </summary>
-	public sealed class MulSS : TwoOperandInstruction
+	public sealed class MulSS : X86Instruction
 	{
 		#region Data Members
 
 		private static readonly OpCode opcode = new OpCode(new byte[] { 0xF3, 0x0F, 0x59 });
 
 		#endregion // Data Members
+		
+		#region Construction
+
+		/// <summary>
+		/// Initializes a new instance of <see cref="MulSS"/>.
+		/// </summary>
+		public MulSS() :
+			base(1, 2)
+		{
+		}
+
+		#endregion // Construction
 
 		#region Methods
+
 		/// <summary>
 		/// Computes the opcode.
 		/// </summary>

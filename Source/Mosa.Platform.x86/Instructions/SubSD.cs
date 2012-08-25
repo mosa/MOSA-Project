@@ -5,6 +5,7 @@
  *
  * Authors:
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 using Mosa.Compiler.Framework;
@@ -14,13 +15,25 @@ namespace Mosa.Platform.x86.Instructions
 	/// <summary>
 	/// Intermediate representation of an SSE based subtraction instruction.
 	/// </summary>
-	public sealed class SubSD : TwoOperandInstruction
+	public sealed class SubSD : X86Instruction
 	{
 		#region Data Members
 
 		private static readonly OpCode opcode = new OpCode(new byte[] { 0xF2, 0x0F, 0x5C });
 
 		#endregion // Data Members
+		
+		#region Construction
+
+		/// <summary>
+		/// Initializes a new instance of <see cref="SubSD"/>.
+		/// </summary>
+		public SubSD() :
+			base(1, 2)
+		{
+		}
+
+		#endregion // Construction
 
 		#region Methods
 		/// <summary>

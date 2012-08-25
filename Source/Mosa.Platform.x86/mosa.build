@@ -18,7 +18,7 @@
                     <include name="ArchitectureFeatureFlags.cs"/>
                     <include name="BaseTransformationStage.cs"/>
                     <include name="Instructions/AddSD.cs"/>
-                    <include name="Instructions/X86Extensions.cs"/>
+                    <include name="X86InstructionExtensions.cs"/>
                     <include name="Instructions/MulSD.cs"/>
                     <include name="Instructions/DivSD.cs"/>
                     <include name="Instructions/RoundSD.cs"/>
@@ -151,7 +151,6 @@
                     <include name="Instructions/MulSS.cs"/>
                     <include name="Instructions/SubSS.cs"/>
                     <include name="Instructions/Sub.cs"/>
-                    <include name="Instructions/TwoOperandInstruction.cs"/>
                     <include name="Instructions/Ucomisd.cs"/>
                     <include name="Instructions/Ucomiss.cs"/>
                     <include name="OpCode.cs"/>

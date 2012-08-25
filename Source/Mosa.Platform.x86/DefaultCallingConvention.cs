@@ -128,7 +128,7 @@ namespace Mosa.Platform.x86
 			Operand esp = Operand.CreateCPURegister(BuiltInSigType.IntPtr, GeneralPurposeRegister.ESP);
 			if (stackSize != 0)
 			{
-				ctx.AppendInstruction(X86.Add, esp, Operand.CreateConstant(BuiltInSigType.IntPtr, stackSize));
+				ctx.AppendInstruction(X86.Add, esp, esp, Operand.CreateConstant(BuiltInSigType.IntPtr, stackSize));
 			}
 		}
 

@@ -5,6 +5,7 @@
  *
  * Authors:
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 using System;
@@ -16,7 +17,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// <summary>
 	/// Representations the x86 xor instruction.
 	/// </summary>
-	public sealed class Xor : TwoOperandInstruction
+	public sealed class Xor : X86Instruction
 	{
 		#region Data Members
 
@@ -27,6 +28,18 @@ namespace Mosa.Platform.x86.Instructions
 		private static readonly OpCode M_C = new OpCode(new byte[] { 0x81 }, 6);
 
 		#endregion // Data Members
+		
+		#region Construction
+
+		/// <summary>
+		/// Initializes a new instance of <see cref="Xor"/>.
+		/// </summary>
+		public Xor() :
+			base(1, 2)
+		{
+		}
+
+		#endregion // Construction
 
 		#region Methods
 
@@ -39,11 +52,11 @@ namespace Mosa.Platform.x86.Instructions
 		/// <returns></returns>
 		protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
 		{
-			if ((destination.IsRegister) && (source.IsConstant)) return R_C;
-			if ((destination.IsRegister) && (source.IsMemoryAddress)) return R_M;
-			if ((destination.IsRegister) && (source.IsRegister)) return R_R;
-			if ((destination.IsMemoryAddress) && (source.IsRegister)) return M_R;
-			if ((destination.IsMemoryAddress) && (source.IsConstant)) return M_C;
+			if (destination.IsRegister && third.IsConstant) return R_C;
+			if (destination.IsRegister && third.IsMemoryAddress) return R_M;
+			if (destination.IsRegister && third.IsRegister) return R_R;
+			if (destination.IsMemoryAddress && third.IsRegister) return M_R;
+			if (destination.IsMemoryAddress && third.IsConstant) return M_C;
 
 			throw new ArgumentException(@"No opcode for operand type.");
 		}

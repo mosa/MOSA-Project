@@ -5,6 +5,7 @@
  *
  * Authors:
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 using System;
@@ -16,7 +17,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// <summary>
 	/// Representations the x86 Movsx instruction.
 	/// </summary>
-	public sealed class Movsx : TwoOperandInstruction
+	public sealed class Movsx : X86Instruction
 	{
 
 		#region Data Members
@@ -25,6 +26,18 @@ namespace Mosa.Platform.x86.Instructions
 		private static readonly OpCode R_X16 = new OpCode(new byte[] { 0x0F, 0xBF });
 
 		#endregion
+		
+		#region Construction
+
+		/// <summary>
+		/// Initializes a new instance of <see cref="Movsx"/>.
+		/// </summary>
+		public Movsx() :
+			base(1, 1)
+		{
+		}
+
+		#endregion // Construction
 
 		#region Methods
 

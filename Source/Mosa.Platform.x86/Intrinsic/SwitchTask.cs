@@ -34,7 +34,7 @@ namespace Mosa.Platform.x86.Intrinsic
 
 			context.SetInstruction(X86.Mov, esp, context.Operand1);
 			context.AppendInstruction(X86.Popad);
-			context.AppendInstruction(X86.Add, esp, Operand.CreateConstant(BuiltInSigType.Int32, 0x08));
+			context.AppendInstruction(X86.Add, esp, esp, Operand.CreateConstant(BuiltInSigType.Int32, 0x08));
 			context.AppendInstruction(X86.Sti);
 			context.AppendInstruction(X86.IRetd);
 		}

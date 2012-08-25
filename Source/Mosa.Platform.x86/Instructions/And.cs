@@ -5,6 +5,7 @@
  *
  * Authors:
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 using System;
@@ -15,7 +16,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// <summary>
 	/// Representations the x86 and instruction.
 	/// </summary>
-	public sealed class And : TwoOperandInstruction
+	public sealed class And : X86Instruction
 	{
 		#region Data Members
 
@@ -26,6 +27,18 @@ namespace Mosa.Platform.x86.Instructions
 		private static readonly OpCode M_R = new OpCode(new byte[] { 0x21 });
 
 		#endregion // Data Members
+		
+		#region Construction
+
+		/// <summary>
+		/// Initializes a new instance of <see cref="And"/>.
+		/// </summary>
+		public And() :
+			base(1, 2)
+		{
+		}
+
+		#endregion // Construction
 
 		#region Methods
 
@@ -40,14 +53,14 @@ namespace Mosa.Platform.x86.Instructions
 		{
 			if (destination.IsRegister)
 			{
-				if (source.IsMemoryAddress) return R_M;
-				if (source.IsRegister) return R_R;
-				if (source.IsConstant) return R_C;
+				if (third.IsMemoryAddress) return R_M;
+				if (third.IsRegister) return R_R;
+				if (third.IsConstant) return R_C;
 			}
 			else if (destination.IsMemoryAddress)
 			{
-				if (source.IsRegister) return M_R;
-				if (source.IsConstant) return M_C;
+				if (third.IsRegister) return M_R;
+				if (third.IsConstant) return M_C;
 			}
 
 			throw new ArgumentException(@"No opcode for operand type.");

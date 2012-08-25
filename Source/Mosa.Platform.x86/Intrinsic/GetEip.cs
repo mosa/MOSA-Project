@@ -32,7 +32,7 @@ namespace Mosa.Platform.x86.Intrinsic
 			Operand result = context.Result;
 			Operand eax = methodCompiler.CreateVirtualRegister(BuiltInSigType.UInt32);
 
-			context.AppendInstruction(X86.Add, eax, Operand.CreateCPURegister(BuiltInSigType.UInt32, GeneralPurposeRegister.ESP));
+			context.AppendInstruction(X86.Add, eax, eax, Operand.CreateCPURegister(BuiltInSigType.UInt32, GeneralPurposeRegister.ESP));
 			context.AppendInstruction(X86.Mov, eax, Operand.CreateMemoryAddress(BuiltInSigType.UInt32, eax, 0));
 			context.AppendInstruction(X86.Mov, result, eax);
 		}

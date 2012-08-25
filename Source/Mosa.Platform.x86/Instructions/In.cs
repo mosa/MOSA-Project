@@ -5,6 +5,7 @@
  *
  * Authors:
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 using System;
@@ -15,7 +16,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// <summary>
 	/// Representations the x86 in instruction.
 	/// </summary>
-	public sealed class In : TwoOperandInstruction
+	public sealed class In : X86Instruction
 	{
 		#region Data Members
 
@@ -26,6 +27,18 @@ namespace Mosa.Platform.x86.Instructions
 		private static readonly OpCode opcode = new OpCode(new byte[] { 0xEC });
 
 		#endregion // Data Members
+		
+		#region Construction
+
+		/// <summary>
+		/// Initializes a new instance of <see cref="In"/>.
+		/// </summary>
+		public In() :
+			base(1, 1)
+		{
+		}
+
+		#endregion // Construction
 
 		#region Methods
 
@@ -34,9 +47,10 @@ namespace Mosa.Platform.x86.Instructions
 		/// </summary>
 		/// <param name="destination">The destination.</param>
 		/// <param name="source">The source.</param>
-		/// <param name="empty">The empty.</param>
+		/// <param name="third">The third operand.</param>
 		/// <returns></returns>
-		protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand empty)
+		/// <exception cref="System.ArgumentException"></exception>
+		protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
 		{
 			// FIXME: This method is not called. 
 			if (IsByte(source))
