@@ -646,7 +646,7 @@ namespace Mosa.Compiler.Framework
 					s.Append("/high");
 				else
 					s.Append("/low");
-			
+
 				s.Append("> ");
 			}
 
@@ -694,17 +694,24 @@ namespace Mosa.Compiler.Framework
 			}
 			else if (IsMemoryAddress)
 			{
-				if (register == null)
-				{
-					s.AppendFormat("[{0:X}h]", Offset);
-				}
-				else
+				if (offsetBase != null)
 				{
 					if (Offset > 0)
-						s.AppendFormat("[{0}+{1:X}h]", register, Offset);
+						s.AppendFormat("[{0}+{1:X}h]", offsetBase.ToString(), Offset);
 					else
-						s.AppendFormat("[{0}-{1:X}h]", register, -Offset);
+						s.AppendFormat("[{0}-{1:X}h]", offsetBase.ToString(), -Offset);
 				}
+				if (register != null)
+				{
+					if (Offset > 0)
+						s.AppendFormat("[{0}+{1:X}h]", register.ToString(), Offset);
+					else
+						s.AppendFormat("[{0}-{1:X}h]", register.ToString(), -Offset);
+				}
+				//if (IsLabel)
+				//{
+				//	s.AppendFormat("[{0}]", Name); 
+				//}
 			}
 
 			if (s.Length != 0)

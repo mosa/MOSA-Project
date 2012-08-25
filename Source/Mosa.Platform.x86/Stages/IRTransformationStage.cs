@@ -361,20 +361,20 @@ namespace Mosa.Platform.x86.Stages
 			Operand offset = context.Operand2;
 			long offsetPtr = 0;
 
-			Operand eax = AllocateVirtualRegister(operand.Type);
+			Operand v1 = AllocateVirtualRegister(operand.Type);
 
-			context.SetInstruction(X86.Mov, eax, operand);
+			context.SetInstruction(X86.Mov, v1, operand);
 
 			if (offset.IsConstant)
 			{
-				offsetPtr = (long)offset.ValueAsLongInteger;
+				offsetPtr = offset.ValueAsLongInteger;
 			}
 			else
 			{
-				context.AppendInstruction(X86.Add, eax, eax, offset);
+				context.AppendInstruction(X86.Add, v1, v1, offset);
 			}
 
-			context.AppendInstruction(X86.Mov, result, Operand.CreateMemoryAddress(eax.Type, eax, offsetPtr));
+			context.AppendInstruction(X86.Mov, result, Operand.CreateMemoryAddress(v1.Type, v1, offsetPtr));
 		}
 
 		/// <summary>
