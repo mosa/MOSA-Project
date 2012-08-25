@@ -24,7 +24,7 @@ namespace Mosa.Platform.x86.Instructions
 		/// Initializes a new instance of the <see cref="Cdq" /> class.
 		/// </summary>
 		public Cdq()
-			: base(1, 2)
+			: base(2, 1)
 		{
 		}
 

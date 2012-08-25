@@ -21,6 +21,18 @@ namespace Mosa.Platform.AVR32.Instructions
 	/// </summary>
 	public class St : AVR32Instruction
 	{
+		
+		#region Construction
+
+		/// <summary>
+		/// Initializes a new instance of <see cref="St"/>.
+		/// </summary>
+		public St() :
+			base(0, 0)
+		{
+		}
+
+		#endregion // Construction
 
 		#region Methods
 

@@ -18,6 +18,18 @@ namespace Mosa.Platform.x86.Instructions
 	public class RoundSS : X86Instruction
 	{
 		
+		#region Construction
+
+		/// <summary>
+		/// Initializes a new instance of <see cref="RoundSS"/>.
+		/// </summary>
+		public RoundSS() :
+			base(1, 2)
+		{
+		}
+
+		#endregion // Construction
+
 		private static readonly OpCode opcode = new OpCode(new byte[] { 0x66, 0x0F, 0x3A, 0x0A });
 
 		/// <summary>
@@ -31,6 +43,7 @@ namespace Mosa.Platform.x86.Instructions
 		{
 			return opcode;
 		}
+
 		/// <summary>
 		/// Allows visitor based dispatch for this instruction object.
 		/// </summary>

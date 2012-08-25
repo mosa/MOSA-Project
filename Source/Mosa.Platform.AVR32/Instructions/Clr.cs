@@ -16,6 +16,18 @@ namespace Mosa.Platform.AVR32.Instructions
 	/// </summary>
 	public class Clr : AVR32Instruction
 	{
+		
+		#region Construction
+
+		/// <summary>
+		/// Initializes a new instance of <see cref="Clr"/>.
+		/// </summary>
+		public Clr() :
+			base(0, 0)
+		{
+		}
+
+		#endregion // Construction
 
 		#region Methods
 

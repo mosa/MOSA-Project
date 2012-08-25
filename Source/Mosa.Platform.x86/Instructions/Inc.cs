@@ -33,7 +33,7 @@ namespace Mosa.Platform.x86.Instructions
 		/// Initializes a new instance of <see cref="Inc"/>.
 		/// </summary>
 		public Inc() :
-			base(0, 1)
+			base(1, 0)
 		{
 		}
 

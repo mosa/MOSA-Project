@@ -21,6 +21,19 @@ namespace Mosa.Platform.AVR32.Instructions
 	/// </summary>
 	public class Ld : AVR32Instruction
 	{
+
+		#region Construction
+
+		/// <summary>
+		/// Initializes a new instance of <see cref="Ld"/>.
+		/// </summary>
+		public Ld() :
+			base(0, 0)
+		{
+		}
+
+		#endregion // Construction
+
 		#region Methods
 
 		/// <summary>

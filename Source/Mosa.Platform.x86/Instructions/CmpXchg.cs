@@ -15,10 +15,6 @@ namespace Mosa.Platform.x86.Instructions
 	/// <summary>
 	/// Representations the x86 compare-exchange instruction.
 	/// </summary>
-	/// <remarks>
-	/// This instruction compares the value of Operand0 and Operand1. If they are
-	/// equal, Operand0 is set to the value of Operand2.
-	/// </remarks>
 	public sealed class CmpXchg : X86Instruction
 	{
 		#region Data Member
@@ -33,7 +29,7 @@ namespace Mosa.Platform.x86.Instructions
 		/// Initializes a new instance of <see cref="CmpXchg"/>.
 		/// </summary>
 		public CmpXchg() :
-			base(1, 2)
+			base(2, 3)
 		{
 		}
 

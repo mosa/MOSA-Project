@@ -17,6 +17,18 @@ namespace Mosa.Platform.x86.Instructions
 	/// </summary>
 	public sealed class Stos : X86Instruction
 	{
+		
+		#region Construction
+
+		/// <summary>
+		/// Initializes a new instance of <see cref="Stos"/>.
+		/// </summary>
+		public Stos() :
+			base(0, 1)
+		{
+		}
+
+		#endregion // Construction
 
 		#region Methods
 

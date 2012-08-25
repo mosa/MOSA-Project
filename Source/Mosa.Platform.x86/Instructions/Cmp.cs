@@ -40,7 +40,7 @@ namespace Mosa.Platform.x86.Instructions
 		/// Initializes a new instance of <see cref="Cmp"/>.
 		/// </summary>
 		public Cmp() :
-			base(2, 0)
+			base(0, 2)
 		{
 		}
 

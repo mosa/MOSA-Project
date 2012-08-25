@@ -22,14 +22,14 @@ namespace Mosa.Platform.x86.Instructions
 		private static readonly OpCode opcode = new OpCode(new byte[] { 0xCD });
 
 		#endregion // Data Members
-		
+
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of <see cref="Dec"/>.
+		/// Initializes a new instance of <see cref="Int"/>.
 		/// </summary>
 		public Int() :
-			base(1, 0)
+			base(0, 1)
 		{
 		}
 

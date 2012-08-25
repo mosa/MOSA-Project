@@ -23,7 +23,7 @@ namespace Mosa.Compiler.Framework.CIL
 		/// </summary>
 		/// <param name="opcode">The opcode.</param>
 		public BranchInstruction(OpCode opcode)
-			: base(opcode)
+			: base(opcode,0)
 		{
 		}
 

@@ -25,13 +25,19 @@ namespace Mosa.Platform.x86.Instructions
 
 		#endregion
 
+		#region Properties
+
+		public override FlowControl FlowControl { get { return FlowControl.Branch; } }
+
+		#endregion // Properties
+
 		#region Construction
 
 		/// <summary>
 		/// Initializes a new instance of <see cref="Jmp"/>.
 		/// </summary>
 		public Jmp() :
-			base(1, 0)
+			base(0, 1)
 		{
 		}
 

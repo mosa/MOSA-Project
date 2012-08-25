@@ -936,9 +936,9 @@ namespace Mosa.Platform.x86.Stages
 			newBlocks[1].AppendInstruction(X86.Cvtsi2sd, destination, edx);
 
 			if (xmm5.Type.Type == CilElementType.R4)
-				newBlocks[1].AppendInstruction(X86.MulSS, destination, xmm5);
+				newBlocks[1].AppendInstruction(X86.MulSS, destination, destination, xmm5);
 			else
-				newBlocks[1].AppendInstruction(X86.MulSD, destination, xmm5);
+				newBlocks[1].AppendInstruction(X86.MulSD, destination, destination, xmm5);
 
 			if (destination.Type.Type == CilElementType.R4)
 				newBlocks[1].AppendInstruction(X86.SubSS, xmm6, xmm6, destination);

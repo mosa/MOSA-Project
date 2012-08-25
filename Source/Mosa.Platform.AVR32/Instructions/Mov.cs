@@ -22,6 +22,18 @@ namespace Mosa.Platform.AVR32.Instructions
 	/// </summary>
 	public class Mov : AVR32Instruction
 	{
+		
+		#region Construction
+
+		/// <summary>
+		/// Initializes a new instance of <see cref="Mov"/>.
+		/// </summary>
+		public Mov() :
+			base(1, 1)
+		{
+		}
+
+		#endregion // Construction
 
 		#region Methods
 

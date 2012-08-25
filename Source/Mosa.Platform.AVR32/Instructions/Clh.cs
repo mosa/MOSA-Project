@@ -16,6 +16,18 @@ namespace Mosa.Platform.AVR32.Instructions
 	/// </summary>
 	public class Clh : AVR32Instruction
 	{
+		
+		#region Construction
+
+		/// <summary>
+		/// Initializes a new instance of <see cref="Clh"/>.
+		/// </summary>
+		public Clh() :
+			base(0, 0)
+		{
+		}
+
+		#endregion // Construction
 
 		#region Methods
 

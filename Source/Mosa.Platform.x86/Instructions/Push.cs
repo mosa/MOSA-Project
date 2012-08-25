@@ -40,7 +40,7 @@ namespace Mosa.Platform.x86.Instructions
 		/// Initializes a new instance of <see cref="Push"/>.
 		/// </summary>
 		public Push() :
-			base(1, 0)
+			base(0, 1)
 		{
 		}
 

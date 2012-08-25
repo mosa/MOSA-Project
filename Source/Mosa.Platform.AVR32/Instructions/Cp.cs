@@ -22,6 +22,18 @@ namespace Mosa.Platform.AVR32.Instructions
 	/// </summary>
 	public class Cp : AVR32Instruction
 	{
+		
+		#region Construction
+
+		/// <summary>
+		/// Initializes a new instance of <see cref="Cp"/>.
+		/// </summary>
+		public Cp() :
+			base(0, 0)
+		{
+		}
+
+		#endregion // Construction
 
 		#region Methods
 

@@ -35,7 +35,7 @@ namespace Mosa.Platform.x86.Instructions
 		/// Initializes a new instance of the <see cref="X86Instruction"/> class.
 		/// </summary>
 		public Pop()
-			: base(0, 1)
+			: base(1, 0)
 		{
 		}
 

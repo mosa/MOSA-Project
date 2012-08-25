@@ -16,6 +16,18 @@ namespace Mosa.Platform.x86.Instructions
 	/// </summary>
 	public class Break : X86Instruction
 	{
+		
+		#region Construction
+
+		/// <summary>
+		/// Initializes a new instance of <see cref="Break"/>.
+		/// </summary>
+		public Break() :
+			base(0, 0)
+		{
+		}
+
+		#endregion // Construction
 
 		#region Methods
 

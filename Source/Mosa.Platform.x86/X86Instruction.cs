@@ -18,33 +18,17 @@ namespace Mosa.Platform.x86
 	public abstract class X86Instruction : BasePlatformInstruction
 	{
 
-		static protected RegisterBitmap NoRegisters = new RegisterBitmap();
+		//static protected RegisterBitmap NoRegisters = new RegisterBitmap();
 
 		#region Construction
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="X86Instruction"/> class.
 		/// </summary>
-		protected X86Instruction()
-		{
-		}
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="X86Instruction"/> class.
-		/// </summary>
-		/// <param name="operandCount">The operand count.</param>
-		private X86Instruction(byte operandCount)
-			: base(operandCount)
-		{
-		}
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="X86Instruction"/> class.
-		/// </summary>
-		/// <param name="operandCount">The operand count.</param>
 		/// <param name="resultCount">The result count.</param>
-		protected X86Instruction(byte operandCount, byte resultCount)
-			: base(operandCount, resultCount)
+		/// <param name="operandCount">The operand count.</param>
+		protected X86Instruction(byte resultCount, byte operandCount)
+			: base(resultCount, operandCount)
 		{
 		}
 

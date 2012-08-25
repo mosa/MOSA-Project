@@ -16,6 +16,18 @@ namespace Mosa.Platform.x86.Instructions
 	/// </summary>
 	public class Nop : X86Instruction
 	{
+		
+		#region Construction
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Nop" /> class.
+		/// </summary>
+		public Nop()
+			: base(0, 0)
+		{
+		}
+
+		#endregion // Construction
 
 		#region Methods
 

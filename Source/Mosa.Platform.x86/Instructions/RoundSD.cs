@@ -19,6 +19,18 @@ namespace Mosa.Platform.x86.Instructions
 	{
 
 		private static readonly OpCode opcode = new OpCode(new byte[] { 0x66, 0x0F, 0x3A, 0x0B });
+		
+		#region Construction
+
+		/// <summary>
+		/// Initializes a new instance of <see cref="RoundSD"/>.
+		/// </summary>
+		public RoundSD() :
+			base(1, 2)
+		{
+		}
+
+		#endregion // Construction
 
 		/// <summary>
 		/// Computes the opcode.

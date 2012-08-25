@@ -34,7 +34,7 @@ namespace Mosa.Platform.x86.Instructions
 		/// Initializes a new instance of <see cref="Adc"/>.
 		/// </summary>
 		public Adc() :
-			base(2, 1)
+			base(1, 2)
 		{
 		}
 

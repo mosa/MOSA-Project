@@ -25,27 +25,10 @@ namespace Mosa.Compiler.Framework.Platform
 		/// <summary>
 		/// Initializes a new instance of the <see cref="BaseInstruction"/> class.
 		/// </summary>
-		public BasePlatformInstruction()
-			: base()
-		{
-		}
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="BaseInstruction"/> class.
-		/// </summary>
-		/// <param name="operandCount">The operand count.</param>
-		public BasePlatformInstruction(byte operandCount)
-			: base(operandCount)
-		{
-		}
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="BaseInstruction"/> class.
-		/// </summary>
-		/// <param name="operandCount">The operand count.</param>
 		/// <param name="resultCount">The result count.</param>
-		public BasePlatformInstruction(byte operandCount, byte resultCount)
-			: base(operandCount, resultCount)
+		/// <param name="operandCount">The operand count.</param>
+		public BasePlatformInstruction(byte resultCount, byte operandCount)
+			: base(resultCount, operandCount)
 		{
 		}
 

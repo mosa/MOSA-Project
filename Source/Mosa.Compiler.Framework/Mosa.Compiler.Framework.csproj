@@ -89,6 +89,7 @@
     <Compile Include="SimpleFastDominance.cs" />
     <Compile Include="LoopAwareBlockOrder.cs" />
     <Compile Include="CompilationScheduler.cs" />
+    <Compile Include="Stages\CheckPlatformOperandCountStage.cs" />
     <Compile Include="Stages\PlatformIntrinsicTransformationStage.cs" />
     <Compile Include="Stages\PlugSystem.cs" />
     <Compile Include="Stages\CheckIROperandCountStage.cs" />

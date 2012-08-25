@@ -16,6 +16,18 @@ namespace Mosa.Platform.AVR32.Instructions
 	/// </summary>
 	public class Ror : AVR32Instruction
 	{
+			
+		#region Construction
+
+		/// <summary>
+		/// Initializes a new instance of <see cref="Ror"/>.
+		/// </summary>
+		public Ror() :
+			base(0, 0)
+		{
+		}
+
+		#endregion // Construction
 
 		#region Methods
 

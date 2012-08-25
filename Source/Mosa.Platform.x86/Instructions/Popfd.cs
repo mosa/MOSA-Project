@@ -23,6 +23,18 @@ namespace Mosa.Platform.x86.Instructions
 		private static readonly OpCode opcode = new OpCode(new byte[] { 0x9D });
 
 		#endregion
+		
+		#region Construction
+
+		/// <summary>
+		/// Initializes a new instance of <see cref="Popfd"/>.
+		/// </summary>
+		public Popfd() :
+			base(0, 0)
+		{
+		}
+
+		#endregion // Construction
 
 		#region Methods
 

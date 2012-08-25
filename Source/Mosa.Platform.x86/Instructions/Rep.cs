@@ -18,6 +18,18 @@ namespace Mosa.Platform.x86.Instructions
 	public sealed class Rep : X86Instruction
 	{
 		
+		#region Construction
+
+		/// <summary>
+		/// Initializes a new instance of <see cref="Rep"/>.
+		/// </summary>
+		public Rep() :
+			base(0, 0)
+		{
+		}
+
+		#endregion // Construction
+
 		#region Methods
 
 		/// <summary>

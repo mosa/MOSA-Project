@@ -12,6 +12,7 @@ namespace Mosa.Compiler.Framework.IR
 		/// Initializes a new instance of the <see cref="Call"/> class.
 		/// </summary>
 		public Call()
+			: base(0, 0)
 		{
 		}
 

@@ -9,13 +9,14 @@ namespace Mosa.Compiler.Framework.IR
 	public sealed class IntegerCompareBranch : BaseIRInstruction
 	{
 		#region Construction
-	
-		public IntegerCompareBranch() : base(2)
+
+		public IntegerCompareBranch()
+			: base(0, 2)
 		{
 		}
 
 		#endregion // Construction
-		
+
 		#region Methods
 
 		/// <summary>

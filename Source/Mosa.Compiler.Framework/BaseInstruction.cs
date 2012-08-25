@@ -62,28 +62,9 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Initializes a new instance of the <see cref="BaseInstruction"/> class.
 		/// </summary>
-		public BaseInstruction()
-		{
-			operandDefaultCount = 0;
-			resultDefaultCount = 0;
-		}
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="BaseInstruction"/> class.
-		/// </summary>
-		/// <param name="operandCount">The operand count.</param>
-		public BaseInstruction(byte operandCount)
-		{
-			operandDefaultCount = operandCount;
-			resultDefaultCount = 0;
-		}
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="BaseInstruction"/> class.
-		/// </summary>
-		/// <param name="operandCount">The operand count.</param>
 		/// <param name="resultCount">The result count.</param>
-		public BaseInstruction(byte operandCount, byte resultCount)
+		/// <param name="operandCount">The operand count.</param>
+		public BaseInstruction(byte resultCount, byte operandCount)
 		{
 			resultDefaultCount = resultCount;
 			operandDefaultCount = operandCount;

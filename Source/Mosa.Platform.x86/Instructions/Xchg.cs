@@ -33,7 +33,7 @@ namespace Mosa.Platform.x86.Instructions
 		/// Initializes a new instance of <see cref="Xchg"/>.
 		/// </summary>
 		public Xchg() :
-			base(1, 2)
+			base(1, 1)
 		{
 		}
 

@@ -47,6 +47,9 @@ namespace Mosa.Tool.TypeExplorer
 				new StackLayoutStage(),
 				new PlatformIntrinsicTransformationStage(),
 				new PlatformStubStage(),
+				
+				new CheckPlatformOperandCountStage(),
+
 				new LoopAwareBlockOrderStage(),
 				//new SimpleTraceBlockOrderStage(),
 				//new SimpleRegisterAllocatorStage(),

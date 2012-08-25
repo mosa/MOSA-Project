@@ -17,6 +17,18 @@ namespace Mosa.Platform.x86.Instructions
 	/// </summary>
 	public sealed class Pushad : X86Instruction
 	{
+		
+		#region Construction
+
+		/// <summary>
+		/// Initializes a new instance of <see cref="Pushad"/>.
+		/// </summary>
+		public Pushad() :
+			base(0, 0)
+		{
+		}
+
+		#endregion // Construction
 
 		#region Methods
 

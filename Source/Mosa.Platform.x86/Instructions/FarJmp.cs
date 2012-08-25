@@ -16,6 +16,18 @@ namespace Mosa.Platform.x86.Instructions
 	/// </summary>
 	public sealed class FarJmp : X86Instruction
 	{
+			
+		#region Construction
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="FarJmp" /> class.
+		/// </summary>
+		public FarJmp()
+			: base(0, 1)
+		{
+		}
+
+		#endregion // Construction
 
 		#region Methods
 

@@ -17,6 +17,18 @@ namespace Mosa.Platform.x86.Instructions
 	/// </summary>
 	public sealed class Leave : X86Instruction
 	{
+		
+		#region Construction
+
+		/// <summary>
+		/// Initializes a new instance of <see cref="Leave"/>.
+		/// </summary>
+		public Leave() :
+			base(0, 0)
+		{
+		}
+
+		#endregion // Construction
 
 		#region Methods
 

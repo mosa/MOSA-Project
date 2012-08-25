@@ -17,12 +17,14 @@ namespace Mosa.Compiler.Framework.IR
 	/// </summary>
 	public sealed class Phi : BaseIRInstruction
 	{
+		
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of Phicontext.
+		/// Initializes a new instance of the <see cref="Phi" /> class.
 		/// </summary>
 		public Phi()
+			: base(0, 0)
 		{
 		}
 

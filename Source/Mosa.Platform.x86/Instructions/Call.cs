@@ -23,6 +23,18 @@ namespace Mosa.Platform.x86.Instructions
 		private static readonly byte[] LabelCall = new byte[] { 0xE8 };
 
 		#endregion // Data Member
+		
+		#region Construction
+
+		/// <summary>
+		/// Initializes a new instance of <see cref="Call"/>.
+		/// </summary>
+		public Call() :
+			base(0, 0)
+		{
+		}
+
+		#endregion // Construction
 
 		#region Properties
 

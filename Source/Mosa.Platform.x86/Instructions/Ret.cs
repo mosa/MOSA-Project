@@ -16,6 +16,18 @@ namespace Mosa.Platform.x86.Instructions
 	/// </summary>
 	public sealed class Ret : X86Instruction
 	{
+			
+		#region Construction
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Ret" /> class.
+		/// </summary>
+		public Ret()
+			: base(0, 0)
+		{
+		}
+
+		#endregion // Construction
 
 		#region Methods
 
