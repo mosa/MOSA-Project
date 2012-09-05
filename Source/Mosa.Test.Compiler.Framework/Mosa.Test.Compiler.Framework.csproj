@@ -91,7 +91,6 @@
     <Reference Include="MbUnit">
       <HintPath>..\..\3rdParty\MbUnit.dll</HintPath>
     </Reference>
-    <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="LoopAwareBlockOrderTests.cs" />

@@ -20,7 +20,7 @@
                     <include name="Stages/Elf64LinkerStage.cs"/>
                     <include name="Stages/MapFileGenerationStage.cs"/>
                     <include name="Stages/ObjectFileLayoutStage.cs"/>
-                    <include name="Stages/PortableExecutableLinkerStage.cs"/>
+                    <include name="Stages/PELinkerStage.cs"/>
                     <include name="AotMethodCompiler.cs"/>
                     <include name="Compiler.cs"/>
                     <include name="Stages/InstructionStatisticsStage.cs"/>
@@ -30,10 +30,8 @@
 		</sources>
 		<references>
                     <include name="System.dll"/>
-                    <include name="${outputDirectory}/Mosa.Compiler.Common.dll"/>
                     <include name="${outputDirectory}/Mosa.Compiler.LinkerFormat.dll"/>
                     <include name="${outputDirectory}/Mosa.Compiler.Linker.dll"/>
-                    <include name="${outputDirectory}/Mosa.Compiler.Pdb.dll"/>
                     <include name="${outputDirectory}/Mosa.Compiler.TypeSystem.dll"/>
                     <include name="${outputDirectory}/Mosa.Platform.AVR32.dll"/>
                     <include name="${outputDirectory}/Mosa.Compiler.InternalTrace.dll"/>

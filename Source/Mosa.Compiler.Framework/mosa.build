@@ -26,6 +26,7 @@
                     <include name="SimpleFastDominance.cs"/>
                     <include name="LoopAwareBlockOrder.cs"/>
                     <include name="CompilationScheduler.cs"/>
+                    <include name="Stages/CheckPlatformOperandCountStage.cs"/>
                     <include name="Stages/PlatformIntrinsicTransformationStage.cs"/>
                     <include name="Stages/PlugSystem.cs"/>
                     <include name="Stages/CheckIROperandCountStage.cs"/>
@@ -222,7 +223,6 @@
                     <include name="RuntimeMethodData.cs"/>
                     <include name="Stages/SimpleTraceBlockOrderStage.cs"/>
                     <include name="Stages/LocalCSEStage.cs"/>
-                    <include name="Linker/BaseLinkerStage.cs"/>
                     <include name="Linker/LinkerGeneratedMethod.cs"/>
                     <include name="Linker/LinkerGeneratedType.cs"/>
                     <include name="Linker/LinkerMethodCompiler.cs"/>

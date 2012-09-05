@@ -17,7 +17,7 @@
                     <include name="CodeForm.cs"/>
                     <include name="CodeForm.Designer.cs"/>
                     <include name="ExplorerCompiler.cs"/>
-                    <include name="ExplorerLinker.cs"/>
+                    <include name="ExplorerLinkerStage.cs"/>
                     <include name="ExplorerMethodCompiler.cs"/>
                     <include name="Main.cs"/>
                     <include name="Main.Designer.cs"/>
@@ -34,7 +34,6 @@
                     <include name="${outputDirectory}/Mosa.Compiler.Metadata.dll"/>
                     <include name="${outputDirectory}/Mosa.Compiler.Pdb.dll"/>
                     <include name="${outputDirectory}/Mosa.Compiler.TypeSystem.dll"/>
-                    <include name="${outputDirectory}/Mosa.Compiler.Verifier.dll"/>
                     <include name="${outputDirectory}/Mosa.Platform.AVR32.dll"/>
                     <include name="${outputDirectory}/Mosa.Compiler.InternalTrace.dll"/>
                     <include name="${outputDirectory}/Mosa.Platform.x86.dll"/>

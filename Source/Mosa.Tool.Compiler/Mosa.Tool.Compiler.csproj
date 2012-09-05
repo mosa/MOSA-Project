@@ -90,10 +90,6 @@
     <Compile Include="Stages\TypeInitializerSchedulerStage.cs">
       <SubType>Code</SubType>
     </Compile>
-    <ProjectReference Include="..\Mosa.Compiler.Common\Mosa.Compiler.Common.csproj">
-      <Project>{0B1011A6-8FCD-4F9E-BBB8-8DB86E23D2E8}</Project>
-      <Name>Mosa.Compiler.Common</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Mosa.Compiler.LinkerFormat\Mosa.Compiler.LinkerFormat.csproj">
       <Project>{CC2E6418-C325-4486-B50D-941EC27053F6}</Project>
       <Name>Mosa.Compiler.LinkerFormat</Name>
@@ -101,10 +97,6 @@
     <ProjectReference Include="..\Mosa.Compiler.Linker\Mosa.Compiler.Linker.csproj">
       <Project>{65866A51-B229-44C5-AC81-87A90FA1741B}</Project>
       <Name>Mosa.Compiler.Linker</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Mosa.Compiler.Pdb\Mosa.Compiler.Pdb.csproj">
-      <Project>{F970F8CB-8FF1-4244-9A31-D00C6D7AABE5}</Project>
-      <Name>Mosa.Compiler.Pdb</Name>
     </ProjectReference>
     <ProjectReference Include="..\Mosa.Compiler.TypeSystem\Mosa.Compiler.TypeSystem.csproj">
       <Project>{5F30A68E-05BF-40EA-B576-5EBCDE520449}</Project>
