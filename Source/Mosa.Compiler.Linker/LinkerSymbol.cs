@@ -21,9 +21,9 @@ namespace Mosa.Compiler.Linker
 		#region Data members
 
 		/// <summary>
-		/// Holds the virtualAddress of the symbol.
+		/// Holds the virtual address of the symbol.
 		/// </summary>
-		private IntPtr address;
+		private long virtualAddress;
 
 		/// <summary>
 		/// Holds the length of the linker symbol in bytes.
@@ -83,10 +83,10 @@ namespace Mosa.Compiler.Linker
 		/// Gets the virtualAddress of the linker symbol.
 		/// </summary>
 		/// <value>The virtualAddress of the linker symbol.</value>
-		public IntPtr VirtualAddress
+		public long VirtualAddress
 		{
-			get { return this.address; }
-			set { this.address = value; }
+			get { return this.virtualAddress; }
+			set { this.virtualAddress = value; }
 		}
 
 		/// <summary>

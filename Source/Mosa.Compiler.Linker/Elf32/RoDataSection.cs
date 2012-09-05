@@ -20,7 +20,7 @@ namespace Mosa.Compiler.Linker.Elf32
 		/// Initializes a new instance of the <see cref="RoDataSection"/> class.
 		/// </summary>
 		public RoDataSection()
-			: base(SectionKind.ROData, @".rodata", IntPtr.Zero)
+			: base(SectionKind.ROData, @".rodata", 0)
 		{
 			header.Type = SectionType.ProgBits;
 			header.Flags = SectionAttribute.Alloc;

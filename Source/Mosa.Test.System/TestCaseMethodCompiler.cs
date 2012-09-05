@@ -68,7 +68,7 @@ namespace Mosa.Test.System
 			VirtualMemoryStream vms = (VirtualMemoryStream)stream.BaseStream;
 
 			if (address == IntPtr.Zero)
-				address = new IntPtr(vms.Base.ToInt64() + vms.Position);
+				address = new IntPtr(vms.Base + vms.Position);
 
 			return stream;
 		}

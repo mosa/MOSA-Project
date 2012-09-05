@@ -46,13 +46,13 @@ namespace Mosa.Test.System
 		/// <summary>
 		/// Performs stage specific processing on the compiler context.
 		/// </summary>
-		 void ICompilerStage.Run()
+		void ICompilerStage.Run()
 		{
 			foreach (LinkerSymbol symbol in Symbols)
 			{
 				LinkerSection ls = GetSection(symbol.Section);
 				symbol.Offset = ls.Offset + symbol.SectionAddress;
-				symbol.VirtualAddress = new IntPtr(ls.VirtualAddress.ToInt64() + symbol.SectionAddress);
+				symbol.VirtualAddress = ls.VirtualAddress + symbol.SectionAddress;
 			}
 
 			// Now run the linker
@@ -82,7 +82,7 @@ namespace Mosa.Test.System
 			int maxSections = (int)SectionKind.Max;
 			sections = new List<LinkerSection>(maxSections);
 			for (int i = 0; i < maxSections; i++)
-				sections.Add(new TestLinkerSection((SectionKind)i, String.Empty, IntPtr.Zero));
+				sections.Add(new TestLinkerSection((SectionKind)i, String.Empty, 0));
 
 			//this.allocateMemoryHandler = new AllocateMemoryDelegate(global::Mosa.Test.System.HostedRuntime.AllocateMemory);
 		}
@@ -159,7 +159,7 @@ namespace Mosa.Test.System
 			{
 				VirtualMemoryStream vms = (VirtualMemoryStream)stream.BaseStream;
 				LinkerSymbol symbol = GetSymbol(name);
-				symbol.VirtualAddress = new IntPtr(vms.Base.ToInt64() + vms.Position);
+				symbol.VirtualAddress = vms.Base + vms.Position;
 				//Trace.WriteLine("Symbol " + name + " located at 0x" + symbol.VirtualAddress.ToInt32().ToString("x08"));
 			}
 			catch

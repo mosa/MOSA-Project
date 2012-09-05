@@ -33,7 +33,7 @@ namespace Mosa.Compiler.Linker.Elf64
 		/// <param name="kind">The kind of the section.</param>
 		/// <param name="name">The name.</param>
 		/// <param name="virtualAddress">The virtualAddress.</param>
-		public Section(Mosa.Compiler.Linker.SectionKind kind, string name, IntPtr virtualAddress)
+		public Section(Mosa.Compiler.Linker.SectionKind kind, string name, long virtualAddress)
 			: base(kind, name, virtualAddress)
 		{
 			header = new SectionHeader();
@@ -130,7 +130,7 @@ namespace Mosa.Compiler.Linker.Elf64
 		/// <param name="alignment">The alignment.</param>
 		private void InsertPadding(int alignment)
 		{
-			long address = this.VirtualAddress.ToInt64() + this.stream.Length;
+			long address = this.VirtualAddress + this.stream.Length;
 			int pad = (int)(alignment - (address % alignment));
 			this.stream.Write(new byte[pad], 0, pad);
 		}

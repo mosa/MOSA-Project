@@ -43,9 +43,9 @@ namespace Mosa.Test.System
 		/// </summary>
 		private TestLinkerStage linker;
 
-		private static uint memoryPtr = 0x21700000; // Location for pointer to allocated memory!
+		private static long memoryPtr = 0x21700000; // Location for pointer to allocated memory!
 		private static uint memorySize = 1024 * 1024 * 2; // 2Mb
-		private IntPtr memoryAllocated = IntPtr.Zero;
+		private long memoryAllocated = 0;
 
 		#endregion // Data members
 
@@ -83,22 +83,22 @@ namespace Mosa.Test.System
 
 		protected void ResetMemory()
 		{
-			if (memoryAllocated == IntPtr.Zero)
+			if (memoryAllocated == 0)
 			{
-				if (Memory.MemoryPageManager.Allocate(new IntPtr(memoryPtr), 1024, PageProtectionFlags.Read | PageProtectionFlags.Write | PageProtectionFlags.WriteCombine).ToInt32() != memoryPtr)
+				if (Win32Memory.Allocate(memoryPtr, 1024, PageProtectionFlags.Read | PageProtectionFlags.Write | PageProtectionFlags.WriteCombine) != memoryPtr)
 					throw new OutOfMemoryException();
 
-				memoryAllocated = Memory.MemoryPageManager.Allocate(IntPtr.Zero, memorySize, PageProtectionFlags.Read | PageProtectionFlags.Write | PageProtectionFlags.WriteCombine);
+				memoryAllocated = Win32Memory.Allocate(0, memorySize, PageProtectionFlags.Read | PageProtectionFlags.Write | PageProtectionFlags.WriteCombine);
 
-				if (memoryAllocated == IntPtr.Zero)
+				if (memoryAllocated == 0)
 					throw new OutOfMemoryException();
 
 			}
 
 			unsafe
 			{
-				((uint*)memoryPtr)[0] = (uint)memoryAllocated.ToInt32();
-				((uint*)memoryPtr)[1] = (uint)memoryAllocated.ToInt32(); 
+				((uint*)memoryPtr)[0] = (uint)memoryAllocated;
+				((uint*)memoryPtr)[1] = (uint)memoryAllocated; 
 				((uint*)memoryPtr)[2] = memorySize;
 			}
 		}
@@ -129,11 +129,11 @@ namespace Mosa.Test.System
 
 			Debug.Assert(delegateType != null, delegateName);
 
-			IntPtr address = linker.GetSymbol(runtimeMethod.ToString()).VirtualAddress;
+			long address = linker.GetSymbol(runtimeMethod.ToString()).VirtualAddress;
 
 			// Create a delegate for the test method
 			Delegate fn = Marshal.GetDelegateForFunctionPointer(
-				address,
+				new IntPtr(address),
 				delegateType
 			);
 

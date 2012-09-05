@@ -321,7 +321,7 @@ namespace Mosa.Compiler.Linker
 			LinkerSymbol linkerSymbol;
 			if (symbols.TryGetValue(symbol, out linkerSymbol))
 			{
-				virtualAddress = linkerSymbol.VirtualAddress.ToInt64();
+				virtualAddress = linkerSymbol.VirtualAddress;
 			}
 
 			return (0 != virtualAddress);

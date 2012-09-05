@@ -12,31 +12,23 @@ using System.Runtime.InteropServices;
 
 namespace Mosa.Test.System
 {
-	/// <summary>
-	/// Provides implementation of IMemoryPageManager based on Win32 virtual memory.
-	/// </summary>
-	sealed class Win32MemoryPageManager : IMemoryPageManager
+	internal static class Win32Memory
 	{
 		#region IMemoryPageManager Members
 
-		IntPtr IMemoryPageManager.Allocate(IntPtr address, ulong size, PageProtectionFlags accessMode)
+		internal static long Allocate(long address, ulong size, PageProtectionFlags accessMode)
 		{
-			IntPtr memory = VirtualAlloc(address, (uint)size, VirtualAllocTypes.MEM_COMMIT | VirtualAllocTypes.MEM_RESERVE, AccessProtectionFlags.PAGE_EXECUTE_READWRITE);
+			IntPtr memory = VirtualAlloc(new IntPtr(address), (uint)size, VirtualAllocTypes.MEM_COMMIT | VirtualAllocTypes.MEM_RESERVE, AccessProtectionFlags.PAGE_EXECUTE_READWRITE);
 
-			return memory;
+			return memory.ToInt64();
 		}
 
-		void IMemoryPageManager.Free(IntPtr address, ulong size)
+		internal static void Free(long address, ulong size)
 		{
 			if (size > UInt32.MaxValue)
 				throw new ArgumentOutOfRangeException(@"size", size, @"Can't exceed " + UInt32.MaxValue);
 
-			VirtualFree(address, (uint)size, VirtualAllocTypes.MEM_RELEASE);
-		}
-
-		PageProtectionFlags IMemoryPageManager.Protect(IntPtr address, ulong size, PageProtectionFlags accessMode)
-		{
-			throw new NotImplementedException();
+			VirtualFree(new IntPtr(address), (uint)size, VirtualAllocTypes.MEM_RELEASE);
 		}
 
 		#endregion // IMemoryPageManager Members

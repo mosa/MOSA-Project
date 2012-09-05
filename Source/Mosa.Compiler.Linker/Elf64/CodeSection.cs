@@ -20,7 +20,7 @@ namespace Mosa.Compiler.Linker.Elf64
 		/// Initializes a new instance of the <see cref="CodeSection"/> class.
 		/// </summary>
 		public CodeSection()
-			: base(Mosa.Compiler.Linker.SectionKind.Text, @".text", IntPtr.Zero)
+			: base(Mosa.Compiler.Linker.SectionKind.Text, @".text", 0)
 		{
 			header.Type = SectionType.ProgBits;
 			header.Flags = SectionAttribute.AllocExecute;

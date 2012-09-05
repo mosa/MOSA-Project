@@ -21,7 +21,7 @@ namespace Mosa.Compiler.Linker
 		/// <summary>
 		/// Holds the sections load virtualAddress.
 		/// </summary>
-		private IntPtr virtualAddress;
+		private long virtualAddress;
 
 		/// <summary>
 		/// Holds the kind of the section.
@@ -48,7 +48,7 @@ namespace Mosa.Compiler.Linker
 		/// <param name="kind">The kind of the section.</param>
 		/// <param name="name">The name.</param>
 		/// <param name="virtualAddress">The virtualAddress.</param>
-		protected LinkerSection(SectionKind kind, string name, IntPtr virtualAddress)
+		protected LinkerSection(SectionKind kind, string name, long virtualAddress)
 		{
 			this.virtualAddress = virtualAddress;
 			this.kind = kind;
@@ -63,7 +63,7 @@ namespace Mosa.Compiler.Linker
 		/// Gets the virtual address of the section.
 		/// </summary>
 		/// <value>The virtual address.</value>
-		public IntPtr VirtualAddress
+		public long VirtualAddress
 		{
 			get { return this.virtualAddress; }
 			/* internal protected  */ set { this.virtualAddress = value; }

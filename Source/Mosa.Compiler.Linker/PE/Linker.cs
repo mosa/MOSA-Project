@@ -97,10 +97,10 @@ namespace Mosa.Compiler.Linker.PE
 			// Create the default section set
 			this.sections = new Dictionary<SectionKind, LinkerSection>() 
 			{
-				{ SectionKind.Text, new Section(SectionKind.Text, @".text", new IntPtr(this.BaseAddress + this.sectionAlignment)) },
-				{ SectionKind.Data, new Section(SectionKind.Data, @".data", IntPtr.Zero) },
-				{ SectionKind.ROData, new Section(SectionKind.ROData, @".rodata", IntPtr.Zero) },
-				{ SectionKind.BSS, new Section(SectionKind.BSS, @".bss", IntPtr.Zero) }
+				{ SectionKind.Text, new Section(SectionKind.Text, @".text", this.BaseAddress + this.sectionAlignment) },
+				{ SectionKind.Data, new Section(SectionKind.Data, @".data", 0) },
+				{ SectionKind.ROData, new Section(SectionKind.ROData, @".rodata", 0) },
+				{ SectionKind.BSS, new Section(SectionKind.BSS, @".bss", 0) }
 			};
 		}
 
@@ -174,7 +174,7 @@ namespace Mosa.Compiler.Linker.PE
 			// Retrieve the text section
 			Section text = (Section)GetSection(SectionKind.Text);
 			// Calculate the patch offset
-			long offset = (methodAddress - text.VirtualAddress.ToInt64()) + methodOffset;
+			long offset = (methodAddress - text.VirtualAddress) + methodOffset;
 
 			if ((linkType & LinkType.KindMask) == LinkType.AbsoluteAddress)
 			{
@@ -422,7 +422,7 @@ namespace Mosa.Compiler.Linker.PE
 			ntHeaders.OptionalHeader.SizeOfCode = AlignValue(GetSectionLength(SectionKind.Text), this.sectionAlignment);
 			ntHeaders.OptionalHeader.SizeOfInitializedData = AlignValue(GetSectionLength(SectionKind.Data) + GetSectionLength(SectionKind.ROData), this.sectionAlignment);
 			ntHeaders.OptionalHeader.SizeOfUninitializedData = AlignValue(GetSectionLength(SectionKind.BSS), this.sectionAlignment);
-			ntHeaders.OptionalHeader.AddressOfEntryPoint = (uint)(this.EntryPoint.VirtualAddress.ToInt64() - this.BaseAddress);
+			ntHeaders.OptionalHeader.AddressOfEntryPoint = (uint)(this.EntryPoint.VirtualAddress - this.BaseAddress);
 			ntHeaders.OptionalHeader.BaseOfCode = (uint)(GetSectionAddress(SectionKind.Text) - this.BaseAddress);
 
 			long sectionAddress = GetSectionAddress(SectionKind.Data);
@@ -467,7 +467,7 @@ namespace Mosa.Compiler.Linker.PE
 					ImageSectionHeader ish = new ImageSectionHeader();
 					ish.Name = section.Name;
 					ish.VirtualSize = (uint)section.Length;
-					ish.VirtualAddress = (uint)(section.VirtualAddress.ToInt64() - this.BaseAddress);
+					ish.VirtualAddress = (uint)(section.VirtualAddress - this.BaseAddress);
 
 					if (section.SectionKind != SectionKind.BSS)
 						ish.SizeOfRawData = (uint)section.Length;
@@ -533,7 +533,7 @@ namespace Mosa.Compiler.Linker.PE
 				// Only use a section with something inside
 				if (ls.Length > 0)
 				{
-					sectionEnd = (uint)(ls.VirtualAddress.ToInt32() + AlignValue(ls.Length, this.sectionAlignment));
+					sectionEnd = (uint)(ls.VirtualAddress + AlignValue(ls.Length, this.sectionAlignment));
 					if (sectionEnd > virtualSizeOfImage)
 						virtualSizeOfImage = sectionEnd;
 				}
@@ -547,7 +547,7 @@ namespace Mosa.Compiler.Linker.PE
 			LinkerSection section;
 			if (this.sections.TryGetValue(sectionKind, out section) && section.Length > 0)
 			{
-				return (uint)section.VirtualAddress.ToInt64();
+				return (uint)section.VirtualAddress;
 			}
 
 			return 0L;

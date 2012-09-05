@@ -42,7 +42,7 @@ namespace Mosa.Tool.Compiler.Stages
 				if (ls.Length > 0)
 				{
 					// Set the section virtualAddress
-					ls.VirtualAddress = new IntPtr(this.linker.BaseAddress + virtualSizeOfImage);
+					ls.VirtualAddress = this.linker.BaseAddress + virtualSizeOfImage;
 					ls.Offset = fileSizeOfImage;
 
 					// Update the file size
@@ -66,7 +66,7 @@ namespace Mosa.Tool.Compiler.Stages
 			{
 				LinkerSection ls = linker.GetSection(symbol.Section);
 				symbol.Offset = ls.Offset + symbol.SectionAddress;
-				symbol.VirtualAddress = new IntPtr(ls.VirtualAddress.ToInt64() + symbol.SectionAddress);
+				symbol.VirtualAddress = ls.VirtualAddress + symbol.SectionAddress;
 			}
 		}
 

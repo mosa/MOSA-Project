@@ -120,7 +120,7 @@ namespace Mosa.Compiler.Linker.Elf64
 			// Retrieve the text section
 			Section text = (Section)GetSection(SectionKind.Text);
 			// Calculate the patch offset
-			long offset = (methodAddress - text.VirtualAddress.ToInt64()) + methodOffset;
+			long offset = (methodAddress - text.VirtualAddress) + methodOffset;
 
 			if ((linkType & LinkType.KindMask) == LinkType.AbsoluteAddress)
 			{

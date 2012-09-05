@@ -37,7 +37,7 @@ namespace Mosa.Compiler.Linker.PE
 		/// <param name="kind">The kind of the section.</param>
 		/// <param name="name">The name of the section.</param>
 		/// <param name="virtualAddress">The virtualAddress of the section.</param>
-		public Section(SectionKind kind, string name, IntPtr virtualAddress) :
+		public Section(SectionKind kind, string name, long virtualAddress) :
 			base(kind, name, virtualAddress)
 		{
 			stream = new MemoryStream();
@@ -128,7 +128,7 @@ namespace Mosa.Compiler.Linker.PE
 		/// <param name="alignment">The alignment.</param>
 		private void InsertPadding(int alignment)
 		{
-			long address = this.VirtualAddress.ToInt64() + stream.Length;
+			long address = this.VirtualAddress + stream.Length;
 			int pad = (int)(alignment - (address % alignment));
 			if (pad < alignment)
 			{

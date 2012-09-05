@@ -316,7 +316,7 @@ namespace Mosa.Platform.x86
 			LinkerSection linkerSection = linker.GetSection(SectionKind.Text);
 			if (linkerSection != null) // To assist TypeExplorer, which returns null from GetSection method
 			{
-				codeStream.Write((int)(linkerSection.VirtualAddress.ToInt32() + linkerSection.Length + 6), true);
+				codeStream.Write((int)(linkerSection.VirtualAddress + linkerSection.Length + 6), true);
 			}
 
 			codeStream.WriteByte(0x08);

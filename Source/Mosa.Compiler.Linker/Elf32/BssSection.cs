@@ -20,7 +20,7 @@ namespace Mosa.Compiler.Linker.Elf32
 		/// Initializes a new instance of the <see cref="BssSection"/> class.
 		/// </summary>
 		public BssSection()
-			: base(SectionKind.BSS, @".bss", IntPtr.Zero)
+			: base(SectionKind.BSS, @".bss", 0)
 		{
 			header.Type = SectionType.NoBits;
 			header.Flags = SectionAttribute.Alloc | SectionAttribute.Write;

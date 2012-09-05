@@ -216,7 +216,7 @@ namespace Mosa.Platform.x86.Stages
 						// No, special multiboot treatment required
 						flags |= HEADER_MB_FLAG_NON_ELF_BINARY;
 
-						header_addr = (uint)(linker.GetSection(SectionKind.Text).VirtualAddress.ToInt64() + linker.GetSymbol(MultibootHeaderSymbolName).SectionAddress);
+						header_addr = (uint)(linker.GetSection(SectionKind.Text).VirtualAddress + linker.GetSymbol(MultibootHeaderSymbolName).SectionAddress);
 						load_addr = (uint)linker.BaseAddress;
 						load_end_addr = 0;
 						bss_end_addr = 0;

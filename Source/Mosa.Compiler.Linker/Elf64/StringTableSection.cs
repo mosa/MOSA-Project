@@ -39,7 +39,7 @@ namespace Mosa.Compiler.Linker.Elf64
 		/// Initializes a new instance of the <see cref="CodeSection"/> class.
 		/// </summary>
 		public StringTableSection()
-			: base(Mosa.Compiler.Linker.SectionKind.Text, @".shstrtab", IntPtr.Zero)
+			: base(Mosa.Compiler.Linker.SectionKind.Text, @".shstrtab", 0)
 		{
 			header.Type = SectionType.StringTable;
 			header.Flags = (SectionAttribute)0;

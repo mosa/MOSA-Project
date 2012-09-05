@@ -20,7 +20,7 @@ namespace Mosa.Compiler.Linker.Elf64
 		/// Initializes a new instance of the <see cref="DataSection"/> class.
 		/// </summary>
 		public DataSection()
-			: base(Mosa.Compiler.Linker.SectionKind.Data, @".data", IntPtr.Zero)
+			: base(Mosa.Compiler.Linker.SectionKind.Data, @".data", 0)
 		{
 			header.Type = SectionType.ProgBits;
 			header.Flags = SectionAttribute.Alloc | SectionAttribute.Write;

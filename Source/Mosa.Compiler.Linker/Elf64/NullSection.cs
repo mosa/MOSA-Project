@@ -33,7 +33,7 @@ namespace Mosa.Compiler.Linker.Elf64
 		/// Initializes a new instance of the <see cref="CodeSection"/> class.
 		/// </summary>
 		public NullSection()
-			: base(Mosa.Compiler.Linker.SectionKind.Text, @"", IntPtr.Zero)
+			: base(Mosa.Compiler.Linker.SectionKind.Text, @"", 0)
 		{
 			header.Name = 0;
 			header.Type = SectionType.Null;

@@ -26,11 +26,9 @@ namespace Mosa.Test.System
 		/// <summary>
 		/// Pointer to the allocated virtual memory to be able to free it later on.
 		/// </summary>
-		private IntPtr memory;
+		private long memory;
 
 		private uint allocationSize;
-
-		private IMemoryPageManager pageManager;
 
 		#endregion // Data members
 
@@ -39,18 +37,17 @@ namespace Mosa.Test.System
 		/// <summary>
 		/// Initializes a new <see cref="VirtualMemoryStream"/> and allocates the requested amount of virtual memory to back it.
 		/// </summary>
-		/// <param name="pageManager"></param>
+		/// <param name="memoryManager"></param>
 		/// <param name="allocationSize">The number of bytes to allocate from virtual memory.</param>
-		public unsafe VirtualMemoryStream(IMemoryPageManager pageManager, uint allocationSize)
+		public unsafe VirtualMemoryStream(uint allocationSize)
 		{
-			this.memory = pageManager.Allocate(IntPtr.Zero, allocationSize, PageProtectionFlags.Read | PageProtectionFlags.Write | PageProtectionFlags.Execute);
+			this.memory = Win32Memory.Allocate(0, allocationSize, PageProtectionFlags.Read | PageProtectionFlags.Write | PageProtectionFlags.Execute);
 			
-			if (this.memory == IntPtr.Zero)
+			if (this.memory == 0)
 				throw new OutOfMemoryException();
 
-			base.Initialize((byte*)memory.ToPointer(), allocationSize, allocationSize, FileAccess.Write);
+			base.Initialize((byte*)memory, allocationSize, allocationSize, FileAccess.Write);
 			this.allocationSize = allocationSize;
-			this.pageManager = pageManager;
 		}
 
 		#endregion // Construction
@@ -64,10 +61,10 @@ namespace Mosa.Test.System
 		protected unsafe override void Dispose(bool disposing)
 		{
 			base.Dispose(disposing);
-			if (memory != IntPtr.Zero)
+			if (memory != 0)
 			{
-				pageManager.Free(memory, allocationSize);
-				memory = IntPtr.Zero;
+				Win32Memory.Free(memory, allocationSize);
+				memory = 0;
 			}
 		}
 
@@ -79,7 +76,7 @@ namespace Mosa.Test.System
 		/// Gets the memory base pointer.
 		/// </summary>
 		/// <value>The memory base pointer.</value>
-		public IntPtr Base
+		public long Base
 		{
 			get { return this.memory; }
 		}

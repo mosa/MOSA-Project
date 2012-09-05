@@ -36,7 +36,7 @@ namespace Mosa.Test.System
 		/// <param name="kind">The kind of the section.</param>
 		/// <param name="name">The name.</param>
 		/// <param name="address">The address.</param>
-		public TestLinkerSection(SectionKind kind, string name, IntPtr address) :
+		public TestLinkerSection(SectionKind kind, string name, long address) :
 			base(kind, name, address)
 		{
 		}
@@ -56,7 +56,7 @@ namespace Mosa.Test.System
 			if (stream == null)
 			{
 				// Allocate 4Mb for this stream
-				VirtualMemoryStream vms = new VirtualMemoryStream(global::Mosa.Test.System.Memory.MemoryPageManager, 1024 * 1024 * 4);
+				VirtualMemoryStream vms = new VirtualMemoryStream(1024 * 1024 * 4);
 
 				// Save the stream for further references
 				this.stream = vms;

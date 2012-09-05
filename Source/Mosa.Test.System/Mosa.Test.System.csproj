@@ -111,7 +111,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IMemoryPageManager.cs" />
     <Compile Include="MbunitExtensions.cs" />
     <Compile Include="Numbers\B.cs" />
     <Compile Include="Numbers\Series.cs" />
@@ -147,13 +146,12 @@
     <Compile Include="VirtualMemoryStream.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Win32MemoryPageManager.cs">
+    <Compile Include="Win32Memory.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Memory.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />
   <PropertyGroup>
