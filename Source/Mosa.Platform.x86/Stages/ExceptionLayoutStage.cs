@@ -120,7 +120,6 @@ namespace Mosa.Platform.x86.Stages
 				Type = type;
 				Filter = filter;
 			}
-
 		}
 
 		private void EmitProtectedBlockTable()

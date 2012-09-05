@@ -82,6 +82,11 @@ namespace Mosa.Compiler.TypeSystem
 		/// </summary>
 		private IList<GenericParameter> genericParameters;
 
+		/// <summary>
+		/// 
+		/// </summary>
+		private string fullname;
+
 		#endregion // Data members
 
 		#region Construction
@@ -235,12 +240,15 @@ namespace Mosa.Compiler.TypeSystem
 		{
 			get
 			{
-				string ns = Namespace;
-				string name = Name;
-				if (ns == null)
-					return name;
+				if (fullname == null)
+				{
+					if (Namespace == null)
+						fullname = Name;
+					else
+						fullname = Namespace + "." + Name;
+				}
 
-				return ns + "." + name;
+				return fullname;
 			}
 		}
 

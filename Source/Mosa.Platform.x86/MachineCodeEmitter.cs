@@ -174,17 +174,17 @@ namespace Mosa.Platform.x86
 
 			if (displacement.IsLabel)
 			{
-				linker.Link(LinkType.AbsoluteAddress | LinkType.NativeI4, compiler.Method.ToString(), pos, 0, displacement.Name, 0);
+				linker.Link(LinkType.AbsoluteAddress | LinkType.NativeI4, compiler.Method.FullName, pos, 0, displacement.Name, 0);
 				codeStream.Position += 4;
 			}
 			else if (displacement.IsRuntimeMember)
 			{
-				linker.Link(LinkType.AbsoluteAddress | LinkType.NativeI4, compiler.Method.ToString(), pos, 0, displacement.RuntimeMember.ToString(), displacement.Offset);
+				linker.Link(LinkType.AbsoluteAddress | LinkType.NativeI4, compiler.Method.FullName, pos, 0, displacement.RuntimeMember.ToString(), displacement.Offset);
 				codeStream.Position += 4;
 			}
 			else if (displacement.IsSymbol)
 			{
-				linker.Link(LinkType.AbsoluteAddress | LinkType.NativeI4, compiler.Method.ToString(), pos, 0, displacement.Name, 0);
+				linker.Link(LinkType.AbsoluteAddress | LinkType.NativeI4, compiler.Method.FullName, pos, 0, displacement.Name, 0);
 				codeStream.Position += 4;
 			}
 			else

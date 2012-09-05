@@ -29,9 +29,9 @@ namespace Mosa.Compiler.Linker
 		#region Properties
 
 		/// <summary>
-		/// Gets the base virtualAddress.
+		/// Gets the base address.
 		/// </summary>
-		/// <value>The base virtualAddress.</value>
+		/// <value>The base address.</value>
 		long BaseAddress { get; }
 
 		/// <summary>
