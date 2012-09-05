@@ -10,6 +10,7 @@
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Linker;
 using Mosa.Compiler.TypeSystem;
+using Mosa.Compiler.Framework.Linker;
 using IR = Mosa.Compiler.Framework.IR;
 
 namespace Mosa.Tool.Compiler.Stages

@@ -7,7 +7,6 @@
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  */
 
-
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Linker;
 
@@ -16,7 +15,7 @@ namespace Mosa.Tool.Compiler.Stages
 	/// <summary>
 	/// 
 	/// </summary>
-	public class PortableExecutableLinkerStage : Mosa.Compiler.Linker.PE.Linker, IPipelineStage, ICompilerStage, ILinker
+	public class PELinkerStage : Mosa.Compiler.Linker.PE.Linker, IPipelineStage, ICompilerStage
 	{
 
 		#region IPipelineStage

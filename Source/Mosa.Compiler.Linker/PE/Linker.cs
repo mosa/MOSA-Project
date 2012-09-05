@@ -261,7 +261,7 @@ namespace Mosa.Compiler.Linker.PE
 		/// <summary>
 		/// Performs stage specific processing on the compiler context.
 		/// </summary>
-		public override void Run()
+		public void Run()
 		{
 			if (String.IsNullOrEmpty(this.OutputFile))
 				throw new ArgumentException(@"Invalid argument.", @"outputFile");
@@ -270,7 +270,7 @@ namespace Mosa.Compiler.Linker.PE
 			LayoutSections();
 
 			// Resolve all symbols first
-			base.Run();
+			Resolve();
 
 			// Persist the PE file now
 			CreatePEFile();

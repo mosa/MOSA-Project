@@ -60,10 +60,10 @@ namespace Mosa.Compiler.Linker.Elf64
 		/// <summary>
 		/// Performs stage specific processing on the compiler context.
 		/// </summary>
-		public override void Run()
+		public  void Run()
 		{
 			// Resolve all symbols first
-			base.Run();
+			Resolve();
 
 			// Persist the Elf32 file now
 			CreateElf64File();

@@ -13,7 +13,7 @@ using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Compiler.TypeSystem;
 
-namespace Mosa.Compiler.Linker
+namespace Mosa.Compiler.Framework.Linker
 {
 	/// <summary>
 	/// Represents compiler generated methods.

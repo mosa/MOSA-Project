@@ -78,11 +78,8 @@ namespace Mosa.Compiler.Linker
 		/// <summary>
 		/// Performs stage specific processing on the compiler context.
 		/// </summary>
-		public virtual void Run()
+		public void Resolve()
 		{
-			// FIXME: Remove this linke
-			if (this != null) return;
-
 			long address;
 
 			// Check if we have unresolved requests and try to link them

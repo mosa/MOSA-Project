@@ -13,7 +13,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.Linker;
 
 namespace Mosa.Test.System
@@ -22,12 +21,46 @@ namespace Mosa.Test.System
 	/// A specialized linker for in-memory tests. This linker performs live linking in memory without
 	/// respect to an executable format.
 	/// </summary>
-	/// <remarks>
-	/// It is similar to the Jit linker. TODO: Move most of this code to the Jit linker and reuse 
-	/// the Jit linker.
-	/// </remarks>
-	public class TestAssemblyLinker : BaseLinkerStage, IPipelineStage
+	public class TestLinkerStage : BaseLinker, IPipelineStage, ICompilerStage
 	{
+		#region IPipelineStage
+
+		/// <summary>
+		/// Retrieves the name of the compilation stage.
+		/// </summary>
+		/// <value>The name of the compilation stage.</value>
+		string IPipelineStage.Name { get { return @"TestLinkerStage"; } }
+
+		#endregion // IPipelineStage Members
+
+		#region ICompilerStage members
+
+		/// <summary>
+		/// Sets up the assembly compiler stage.
+		/// </summary>
+		/// <param name="compiler">A <see cref="BaseCompiler" /> using the stage.</param>
+		void ICompilerStage.Setup(BaseCompiler compiler)
+		{
+		}
+
+		/// <summary>
+		/// Performs stage specific processing on the compiler context.
+		/// </summary>
+		 void ICompilerStage.Run()
+		{
+			foreach (LinkerSymbol symbol in Symbols)
+			{
+				LinkerSection ls = GetSection(symbol.Section);
+				symbol.Offset = ls.Offset + symbol.SectionAddress;
+				symbol.VirtualAddress = new IntPtr(ls.VirtualAddress.ToInt64() + symbol.SectionAddress);
+			}
+
+			// Now run the linker
+			Resolve();
+		}
+
+		#endregion // ICompilerStage members
+
 		#region Data members
 
 		/// <summary>
@@ -42,9 +75,9 @@ namespace Mosa.Test.System
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="TestAssemblyLinker"/> class.
+		/// Initializes a new instance of the <see cref="TestLinkerStage"/> class.
 		/// </summary>
-		public unsafe TestAssemblyLinker()
+		public TestLinkerStage()
 		{
 			int maxSections = (int)SectionKind.Max;
 			sections = new List<LinkerSection>(maxSections);
@@ -106,8 +139,7 @@ namespace Mosa.Test.System
 		/// </returns>
 		protected override Stream Allocate(SectionKind section, int size, int alignment)
 		{
-			TestLinkerSection tle = (TestLinkerSection)sections[(int)section];
-			return tle.Allocate(size, alignment);
+			return ((TestLinkerSection)sections[(int)section]).Allocate(size, alignment);
 		}
 
 		/// <summary>
@@ -168,45 +200,27 @@ namespace Mosa.Test.System
 			*pAddress = (int)value;
 		}
 
-		[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-		private unsafe delegate void* AllocateMemoryDelegate(uint size);
+		//[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+		//private unsafe delegate void* AllocateMemoryDelegate(uint size);
 
-		protected override void AddVmCalls(IDictionary<string, LinkerSymbol> virtualMachineCalls)
-		{
-			//AddVmCall(virtualMachineCalls, allocateMemoryHandler, @"Mosa.Internal.Runtime.AllocateMemory(U4 size)");
-		}
+		//protected void AddVmCalls(IDictionary<string, LinkerSymbol> virtualMachineCalls)
+		//{
+		//	//AddVmCall(virtualMachineCalls, allocateMemoryHandler, @"Mosa.Internal.Runtime.AllocateMemory(U4 size)");
+		//}
 
-		protected unsafe void AddVmCall(IDictionary<string, LinkerSymbol> virtualMachineCalls, Delegate handler, string method)
-		{
-			IntPtr allocate = Marshal.GetFunctionPointerForDelegate(handler);
+		//protected unsafe void AddVmCall(IDictionary<string, LinkerSymbol> virtualMachineCalls, Delegate handler, string method)
+		//{
+		//	IntPtr allocate = Marshal.GetFunctionPointerForDelegate(handler);
 
-			long virtualAddress = allocate.ToInt64();
-			//Trace.WriteLine(String.Format("\t{0} at 0x{1:x08}", method, virtualAddress));
+		//	long virtualAddress = allocate.ToInt64();
+		//	//Trace.WriteLine(String.Format("\t{0} at 0x{1:x08}", method, virtualAddress));
 
-			LinkerSymbol symbol = new LinkerSymbol(method, SectionKind.Text, virtualAddress);
-			symbol.VirtualAddress = new IntPtr(symbol.SectionAddress);
+		//	LinkerSymbol symbol = new LinkerSymbol(method, SectionKind.Text, virtualAddress);
+		//	symbol.VirtualAddress = new IntPtr(symbol.SectionAddress);
 
-			virtualMachineCalls.Remove(method);
-			virtualMachineCalls.Add(method, symbol);
-		}
-
-		/// <summary>
-		/// Performs stage specific processing on the compiler context.
-		/// </summary>
-		public override void Run()
-		{
-			// Adjust the symbol addresses
-			// __grover, 01/02/2009: Copied from ObjectFileLayoutStage
-			foreach (LinkerSymbol symbol in Symbols)
-			{
-				LinkerSection ls = GetSection(symbol.Section);
-				symbol.Offset = ls.Offset + symbol.SectionAddress;
-				symbol.VirtualAddress = new IntPtr(ls.VirtualAddress.ToInt64() + symbol.SectionAddress);
-			}
-
-			// Now run the linker
-			base.Run();
-		}
+		//	virtualMachineCalls.Remove(method);
+		//	virtualMachineCalls.Add(method, symbol);
+		//}
 
 		#endregion // BaseLinkerStage Overrides
 	}

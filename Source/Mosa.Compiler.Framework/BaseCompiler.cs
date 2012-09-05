@@ -12,7 +12,6 @@ using System;
 using Mosa.Compiler.InternalTrace;
 using Mosa.Compiler.TypeSystem;
 using Mosa.Compiler.Linker;
-using Mosa.Compiler.Framework.Linker;
 
 namespace Mosa.Compiler.Framework
 {

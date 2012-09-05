@@ -11,7 +11,7 @@ using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Stages;
 using Mosa.Compiler.TypeSystem;
 
-namespace Mosa.Compiler.Linker
+namespace Mosa.Compiler.Framework.Linker
 {
 	public sealed class LinkerMethodCompiler : BaseMethodCompiler
 	{

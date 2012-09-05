@@ -16,7 +16,7 @@ namespace Mosa.Tool.Compiler.Stages
 	/// <summary>
 	/// 
 	/// </summary>
-	public class Elf64LinkerStage : Mosa.Compiler.Linker.Elf64.Linker, IPipelineStage, ICompilerStage, ILinker
+	public class Elf64LinkerStage : Mosa.Compiler.Linker.Elf64.Linker, IPipelineStage, ICompilerStage
 	{
 
 		#region IPipelineStage

@@ -286,7 +286,6 @@
     <Compile Include="RuntimeMethodData.cs" />
     <Compile Include="Stages\SimpleTraceBlockOrderStage.cs" />
     <Compile Include="Stages\LocalCSEStage.cs" />
-    <Compile Include="Linker\BaseLinkerStage.cs" />
     <Compile Include="Linker\LinkerGeneratedMethod.cs" />
     <Compile Include="Linker\LinkerGeneratedType.cs" />
     <Compile Include="Linker\LinkerMethodCompiler.cs" />

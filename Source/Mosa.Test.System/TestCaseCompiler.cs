@@ -39,7 +39,7 @@ namespace Mosa.Test.System
 				new MethodCompilerSchedulerStage(),
 				new TypeLayoutStage(),
 				new MetadataStage(),
-				(TestAssemblyLinker)Linker
+				(TestLinkerStage)Linker
 			});
 
 			architecture.ExtendCompilerPipeline(Pipeline);
@@ -50,7 +50,7 @@ namespace Mosa.Test.System
 		/// </summary>
 		/// <param name="typeSystem">The type system.</param>
 		/// <returns></returns>
-		public static TestAssemblyLinker Compile(ITypeSystem typeSystem)
+		public static TestLinkerStage Compile(ITypeSystem typeSystem)
 		{
 			IArchitecture architecture = x86.Architecture.CreateArchitecture(x86.ArchitectureFeatureFlags.AutoDetect);
 
@@ -61,7 +61,7 @@ namespace Mosa.Test.System
 			(internalLog.CompilerEventListener as BasicCompilerEventListener).DebugOutput = false;
 			(internalLog.CompilerEventListener as BasicCompilerEventListener).ConsoleOutput = false;
 
-			var linker = new TestAssemblyLinker();
+			var linker = new TestLinkerStage();
 
 			CompilerOptions compilerOptions = new CompilerOptions();
 			compilerOptions.Linker = linker;

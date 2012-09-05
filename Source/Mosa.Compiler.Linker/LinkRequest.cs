@@ -24,7 +24,7 @@ namespace Mosa.Compiler.Linker
 		private readonly string symbolName;
 
 		/// <summary>
-		/// The position within the code stream where the virtualAddress is patched
+		/// The position within the code stream where the virtual address is patched
 		/// </summary>
 		private readonly int methodOffset;
 
@@ -56,15 +56,15 @@ namespace Mosa.Compiler.Linker
 		/// Initializes a new instance of LinkRequest.
 		/// </summary>
 		/// <param name="linkType">Type of the link.</param>
-		/// <param name="symbolName">The method whose code is being patched.</param>
-		/// <param name="methodOffset">The method offset.</param>
-		/// <param name="methodRelativeBase">The method relative base.</param>
+		/// <param name="symbolName">The symbol whose code is being patched.</param>
+		/// <param name="symbolOffset">The symbol offset.</param>
+		/// <param name="methodRelativeBase">The symbol relative base.</param>
 		/// <param name="targetSymbolName">The linker symbol to link against.</param>
 		/// <param name="offset">An offset to apply to the link target.</param>
-		public LinkRequest(LinkType linkType, string symbolName, int methodOffset, int methodRelativeBase, string targetSymbolName, long offset)
+		public LinkRequest(LinkType linkType, string symbolName, int symbolOffset, int methodRelativeBase, string targetSymbolName, long offset)
 		{
 			this.symbolName = symbolName;
-			this.methodOffset = methodOffset;
+			this.methodOffset = symbolOffset;
 			this.linkType = linkType;
 			this.methodRelativeBase = methodRelativeBase;
 			this.targetSymbolName = targetSymbolName;

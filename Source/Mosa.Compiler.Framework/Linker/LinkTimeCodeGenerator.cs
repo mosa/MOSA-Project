@@ -12,7 +12,7 @@ using Mosa.Compiler.Framework;
 using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Compiler.TypeSystem;
 
-namespace Mosa.Compiler.Linker
+namespace Mosa.Compiler.Framework.Linker
 {
 	/// <summary>
 	/// Performs link time code generation for various parts of mosacl.

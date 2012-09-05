@@ -33,7 +33,7 @@ namespace Mosa.Tool.TypeExplorer
 				new PlugStage(),
 				new MethodCompilerSchedulerStage(),
 				new TypeLayoutStage(),
-				(ExplorerLinker)Linker
+				(ExplorerLinkerStage)Linker
 			});
 
 			architecture.ExtendCompilerPipeline(Pipeline);
@@ -66,7 +66,7 @@ namespace Mosa.Tool.TypeExplorer
 			CompilerOptions compilerOptions = new CompilerOptions();
 			compilerOptions.EnableSSA = enabledSSA;
 			compilerOptions.EnableSSAOptimizations = enabledSSA && enabledSSA;
-			compilerOptions.Linker = new ExplorerLinker();
+			compilerOptions.Linker = new ExplorerLinkerStage();
 
 			ExplorerCompiler compiler = new ExplorerCompiler(architecture, typeSystem, typeLayout, internalTrace, compilerOptions);
 

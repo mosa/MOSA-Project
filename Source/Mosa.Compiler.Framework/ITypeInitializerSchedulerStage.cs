@@ -9,6 +9,7 @@
 
 using Mosa.Compiler.Linker;
 using Mosa.Compiler.TypeSystem;
+using Mosa.Compiler.Framework.Linker;
 
 namespace Mosa.Compiler.Framework
 {

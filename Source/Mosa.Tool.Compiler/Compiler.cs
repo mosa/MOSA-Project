@@ -562,7 +562,7 @@ namespace Mosa.Tool.Compiler
 					return new Elf64LinkerStage();
 
 				case "pe":
-					return new PortableExecutableLinkerStage();
+					return new PELinkerStage();
 
 				default:
 					throw new OptionException(String.Format("Unknown or unsupported binary format {0}.", format), "format");

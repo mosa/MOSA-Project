@@ -59,13 +59,8 @@ namespace Mosa.Compiler.Linker.Elf32
 		/// Retrieves the collection of _sections created during compilation.
 		/// </summary>
 		/// <value>The _sections collection.</value>
-		public override ICollection<LinkerSection> Sections
-		{
-			get
-			{
-				return sections;
-			}
-		}
+		public override ICollection<LinkerSection> Sections { get { return sections; } }
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Linker"/> class.
 		/// </summary>
@@ -90,7 +85,7 @@ namespace Mosa.Compiler.Linker.Elf32
 		/// <summary>
 		/// Performs stage specific processing on the compiler context.
 		/// </summary>
-		public override void Run()
+		public void Run()
 		{
 			if (String.IsNullOrEmpty(OutputFile))
 				throw new ArgumentException(@"Invalid argument.", "compiler");
@@ -99,7 +94,7 @@ namespace Mosa.Compiler.Linker.Elf32
 			LayoutSections();
 
 			// Resolve all symbols first
-			base.Run();
+			Resolve();
 
 			// Persist the Elf32 file now
 			CreateElf32File();

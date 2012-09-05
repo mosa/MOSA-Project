@@ -10,18 +10,43 @@
 using System.Collections.Generic;
 using System.IO;
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.Linker;
 
 namespace Mosa.Tool.TypeExplorer
 {
-	class ExplorerLinker : BaseLinkerStage, ILinker, IPipelineStage
+	class ExplorerLinkerStage : BaseLinker, IPipelineStage, ICompilerStage
 	{
-		public override void Run()
+
+		#region IPipelineStage
+
+		/// <summary>
+		/// Retrieves the name of the compilation stage.
+		/// </summary>
+		/// <value>The name of the compilation stage.</value>
+		string IPipelineStage.Name { get { return @"ExplorerLinkerStage"; } }
+
+		#endregion // IPipelineStage Members
+
+		#region ICompilerStage members
+
+		/// <summary>
+		/// Sets up the assembly compiler stage.
+		/// </summary>
+		/// <param name="compiler">A <see cref="BaseCompiler" /> using the stage.</param>
+		void ICompilerStage.Setup(BaseCompiler compiler)
+		{
+		}
+
+		/// <summary>
+		/// Performs stage specific processing on the compiler context.
+		/// </summary>
+		void ICompilerStage.Run()
 		{
 			// DO NOTHING
-			return; 
+			return;
 		}
+
+		#endregion // ICompilerStage members
 
 		public override long LoadSectionAlignment
 		{

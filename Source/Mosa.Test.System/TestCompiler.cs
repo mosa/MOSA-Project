@@ -41,7 +41,7 @@ namespace Mosa.Test.System
 		/// <summary>
 		/// 
 		/// </summary>
-		private TestAssemblyLinker linker;
+		private TestLinkerStage linker;
 
 		private static uint memoryPtr = 0x21700000; // Location for pointer to allocated memory!
 		private static uint memorySize = 1024 * 1024 * 2; // 2Mb
@@ -207,7 +207,7 @@ namespace Mosa.Test.System
 			throw new MissingMethodException(ns + "." + type, method);
 		}
 
-		private TestAssemblyLinker RunMosaCompiler(CompilerSettings settings, string assemblyFile)
+		private TestLinkerStage RunMosaCompiler(CompilerSettings settings, string assemblyFile)
 		{
 			IAssemblyLoader assemblyLoader = new AssemblyLoader();
 			assemblyLoader.InitializePrivatePaths(settings.References);
@@ -222,7 +222,7 @@ namespace Mosa.Test.System
 			typeSystem = new TypeSystem();
 			typeSystem.LoadModules(assemblyLoader.Modules);
 
-			TestAssemblyLinker linker = TestCaseCompiler.Compile(typeSystem);
+			TestLinkerStage linker = TestCaseCompiler.Compile(typeSystem);
 
 			return linker;
 		}
