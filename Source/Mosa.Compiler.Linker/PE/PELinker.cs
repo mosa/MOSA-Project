@@ -23,6 +23,7 @@ namespace Mosa.Compiler.Linker.PE
 	/// </summary>
 	public class PELinker : BaseLinker
 	{
+
 		#region Constants
 
 		/// <summary>
@@ -49,30 +50,15 @@ namespace Mosa.Compiler.Linker.PE
 		/// </summary>
 		private ImageNtHeaders ntHeaders;
 
-		///// <summary>
-		///// Holds the CLI header.
-		///// </summary>
-		//private CLI_HEADER cilHeader;
-
 		/// <summary>
 		/// Holds the section alignment used for this PE file.
 		/// </summary>
 		private uint sectionAlignment;
 
 		/// <summary>
-		/// Holds the sections of the PE file.
-		/// </summary>
-		private Dictionary<SectionKind, LinkerSection> sections;
-
-		/// <summary>
 		/// Determines if the checksum of the generated executable must be set.
 		/// </summary>
 		private bool setChecksum;
-
-		/// <summary>
-		/// Flag, if the symbols have been resolved.
-		/// </summary>
-		private bool symbolsResolved;
 
 		#endregion // Data members
 
@@ -85,19 +71,14 @@ namespace Mosa.Compiler.Linker.PE
 		{
 			this.dosHeader = new ImageDosHeader();
 			this.ntHeaders = new ImageNtHeaders();
-			this.sectionAlignment = SECTION_ALIGNMENT;
+			this.SectionAlignment = SECTION_ALIGNMENT;
 			this.LoadSectionAlignment = FILE_SECTION_ALIGNMENT;
 			this.setChecksum = true;
 
-			// Create the default section set
-			this.sections = new Dictionary<SectionKind, LinkerSection>() 
-			{
-				{ SectionKind.Text, new Section(SectionKind.Text, @".text", this.BaseAddress + this.sectionAlignment) },
-				{ SectionKind.Data, new Section(SectionKind.Data, @".data", 0) },
-				{ SectionKind.ROData, new Section(SectionKind.ROData, @".rodata", 0) },
-				{ SectionKind.BSS, new Section(SectionKind.BSS, @".bss", 0) }
-			};
-
+			Sections.Add(new Section(SectionKind.Text, @".text", this.BaseAddress + this.sectionAlignment));
+			Sections.Add(new Section(SectionKind.Data, @".data", 0));
+			Sections.Add(new Section(SectionKind.ROData, @".rodata", 0));
+			Sections.Add(new Section(SectionKind.BSS, @".bss", 0));
 		}
 
 		#endregion // Construction
@@ -114,24 +95,6 @@ namespace Mosa.Compiler.Linker.PE
 			set { this.setChecksum = value; }
 		}
 
-		/// <summary>
-		/// Gets or sets the section alignment in bytes.
-		/// </summary>
-		/// <value>The section alignment in bytes.</value>
-		public uint SectionAlignment
-		{
-			get { return this.sectionAlignment; }
-			set
-			{
-				if (value < SECTION_ALIGNMENT)
-					throw new ArgumentException(@"Section alignment must not be less than 4K.", @"value");
-				if ((value & unchecked(SECTION_ALIGNMENT - 1)) != 0)
-					throw new ArgumentException(@"Section alignment must be a multiple of 4K.", @"value");
-
-				this.sectionAlignment = value;
-			}
-		}
-
 		#endregion // Properties
 
 		#region AssembyLinkerStageBase Overrides
@@ -146,7 +109,7 @@ namespace Mosa.Compiler.Linker.PE
 		/// <param name="targetAddress">The position in code, where it should be patched.</param>
 		protected override void ApplyPatch(LinkType linkType, long methodAddress, long methodOffset, long methodRelativeBase, long targetAddress)
 		{
-			if (!symbolsResolved)
+			if (!SymbolsResolved)
 				throw new InvalidOperationException(@"Can't apply patches - symbols not resolved.");
 
 			// Retrieve the text section
@@ -168,48 +131,6 @@ namespace Mosa.Compiler.Linker.PE
 
 			// Save the stream position
 			text.ApplyPatch(offset, linkType, targetAddress);
-		}
-
-		/// <summary>
-		/// Retrieves a linker section by its type.
-		/// </summary>
-		/// <param name="sectionKind">The type of the section to retrieve.</param>
-		/// <returns>The retrieved linker section.</returns>
-		public override LinkerSection GetSection(SectionKind sectionKind)
-		{
-			return this.sections[sectionKind];
-		}
-
-		/// <summary>
-		/// Determines whether the specified symbol is resolved.
-		/// </summary>
-		/// <param name="symbol">The symbol.</param>
-		/// <param name="virtualAddress">The virtualAddress.</param>
-		/// <returns>
-		/// 	<c>true</c> if the specified symbol is resolved; otherwise, <c>false</c>.
-		/// </returns>
-		protected override bool IsResolved(string symbol, out long virtualAddress)
-		{
-			virtualAddress = 0;
-			return (this.symbolsResolved == true && base.IsResolved(symbol, out virtualAddress) == true);
-		}
-
-		/// <summary>
-		/// Retrieves the collection of sections created during compilation.
-		/// </summary>
-		/// <value>The sections collection.</value>
-		public override ICollection<LinkerSection> Sections
-		{
-			get { return this.sections.Values; }
-		}
-
-		/// <summary>
-		/// Gets the virtual alignment of sections.
-		/// </summary>
-		/// <value>The virtual section alignment.</value>
-		public override long VirtualSectionAlignment
-		{
-			get { return this.sectionAlignment; }
 		}
 
 		/// <summary>
@@ -236,6 +157,11 @@ namespace Mosa.Compiler.Linker.PE
 				throw new ArgumentException(@"Section alignment must not be less than 512 bytes.", @"value");
 			if ((LoadSectionAlignment & unchecked(FILE_SECTION_ALIGNMENT - 1)) != 0)
 				throw new ArgumentException(@"Section alignment must be a multiple of 512 bytes.", @"value");
+			
+			if (SectionAlignment < SECTION_ALIGNMENT)
+				throw new ArgumentException(@"Section alignment must not be less than 4K.", @"value");
+			if ((SectionAlignment & unchecked(SECTION_ALIGNMENT - 1)) != 0)
+				throw new ArgumentException(@"Section alignment must be a multiple of 4K.", @"value");
 
 			if (String.IsNullOrEmpty(this.OutputFile))
 				throw new ArgumentException(@"Invalid argument.", @"outputFile");
@@ -247,7 +173,7 @@ namespace Mosa.Compiler.Linker.PE
 			Resolve();
 
 			// Persist the PE file now
-			CreatePEFile();
+			CreateFile();
 		}
 
 		#endregion // AssembyLinkerStageBase Overrides
@@ -257,7 +183,7 @@ namespace Mosa.Compiler.Linker.PE
 		/// <summary>
 		/// Creates the PE file.
 		/// </summary>
-		private void CreatePEFile()
+		private void CreateFile()
 		{
 			// Open the output file
 			using (FileStream fs = new FileStream(this.OutputFile, FileMode.Create, FileAccess.ReadWrite, FileShare.Read))
@@ -270,7 +196,7 @@ namespace Mosa.Compiler.Linker.PE
 
 					// Iterate all sections and store their data
 					long position = writer.BaseStream.Position;
-					foreach (Section section in this.sections.Values)
+					foreach (Section section in Sections)
 					{
 						if (section.Length > 0)
 						{
@@ -336,7 +262,7 @@ namespace Mosa.Compiler.Linker.PE
 						this.sections = usedSections;
 			*/
 			// We've resolved all symbols, allow IsResolved to succeed
-			symbolsResolved = true;
+			SymbolsResolved = true;
 		}
 
 		/// <summary>
@@ -393,10 +319,10 @@ namespace Mosa.Compiler.Linker.PE
 			ntHeaders.OptionalHeader.Magic = ImageOptionalHeader.IMAGE_OPTIONAL_HEADER_MAGIC;
 			ntHeaders.OptionalHeader.MajorLinkerVersion = 6;
 			ntHeaders.OptionalHeader.MinorLinkerVersion = 0;
-			ntHeaders.OptionalHeader.SizeOfCode = AlignValue(GetSectionLength(SectionKind.Text), this.sectionAlignment);
-			ntHeaders.OptionalHeader.SizeOfInitializedData = AlignValue(GetSectionLength(SectionKind.Data) + GetSectionLength(SectionKind.ROData), this.sectionAlignment);
-			ntHeaders.OptionalHeader.SizeOfUninitializedData = AlignValue(GetSectionLength(SectionKind.BSS), this.sectionAlignment);
-			ntHeaders.OptionalHeader.AddressOfEntryPoint = (uint)(this.EntryPoint.VirtualAddress - this.BaseAddress);
+			ntHeaders.OptionalHeader.SizeOfCode = (uint)AlignValue(GetSectionLength(SectionKind.Text), sectionAlignment);
+			ntHeaders.OptionalHeader.SizeOfInitializedData = (uint)AlignValue(GetSectionLength(SectionKind.Data) + GetSectionLength(SectionKind.ROData), this.sectionAlignment);
+			ntHeaders.OptionalHeader.SizeOfUninitializedData = (uint)AlignValue(GetSectionLength(SectionKind.BSS), sectionAlignment);
+			ntHeaders.OptionalHeader.AddressOfEntryPoint = (uint)(EntryPoint.VirtualAddress - this.BaseAddress);
 			ntHeaders.OptionalHeader.BaseOfCode = (uint)(GetSectionAddress(SectionKind.Text) - this.BaseAddress);
 
 			long sectionAddress = GetSectionAddress(SectionKind.Data);
@@ -434,7 +360,7 @@ namespace Mosa.Compiler.Linker.PE
 
 			// Write the section headers
 			uint address = this.LoadSectionAlignment;
-			foreach (LinkerSection section in this.sections.Values)
+			foreach (LinkerSection section in Sections)
 			{
 				if (section.Length > 0)
 				{
@@ -474,11 +400,11 @@ namespace Mosa.Compiler.Linker.PE
 					ish.Write(writer);
 
 					address += (uint)section.Length;
-					address = AlignValue(address, this.LoadSectionAlignment);
+					address = AlignValue(address, LoadSectionAlignment);
 				}
 			}
 
-			WritePaddingToPosition(writer, this.LoadSectionAlignment);
+			WritePaddingToPosition(writer, LoadSectionAlignment);
 		}
 
 		/// <summary>
@@ -488,9 +414,9 @@ namespace Mosa.Compiler.Linker.PE
 		private ushort CountSections()
 		{
 			ushort sections = 0;
-			foreach (LinkerSection ls in this.sections.Values)
+			foreach (LinkerSection section in Sections)
 			{
-				if (ls.Length > 0)
+				if (section.Length > 0)
 					sections++;
 			}
 			return sections;
@@ -502,38 +428,29 @@ namespace Mosa.Compiler.Linker.PE
 			uint virtualSizeOfImage = this.sectionAlignment, sectionEnd;
 
 			// Move all sections to their right positions
-			foreach (LinkerSection ls in this.sections.Values)
+			foreach (LinkerSection sections in Sections)
 			{
 				// Only use a section with something inside
-				if (ls.Length > 0)
+				if (sections.Length > 0)
 				{
-					sectionEnd = (uint)(ls.VirtualAddress + AlignValue(ls.Length, this.sectionAlignment));
+					sectionEnd = (uint)(sections.VirtualAddress + AlignValue(sections.Length, sectionAlignment));
+
 					if (sectionEnd > virtualSizeOfImage)
 						virtualSizeOfImage = sectionEnd;
 				}
 			}
 
-			return virtualSizeOfImage - (uint)this.BaseAddress;
+			return virtualSizeOfImage - (uint)BaseAddress;
 		}
 
 		private long GetSectionAddress(SectionKind sectionKind)
 		{
-			LinkerSection section;
-			if (this.sections.TryGetValue(sectionKind, out section) && section.Length > 0)
-			{
-				return (uint)section.VirtualAddress;
-			}
-
-			return 0L;
+			return GetSection(sectionKind).VirtualAddress;
 		}
 
-		private uint GetSectionLength(SectionKind sectionKind)
+		private long GetSectionLength(SectionKind sectionKind)
 		{
-			LinkerSection section;
-			if (this.sections.TryGetValue(sectionKind, out section) && section.Length > 0)
-				return (uint)section.Length;
-
-			return 0;
+			return GetSection(sectionKind).Length;
 		}
 
 		private long AlignValue(long value, uint alignment)

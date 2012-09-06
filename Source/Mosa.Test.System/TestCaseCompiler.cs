@@ -32,7 +32,7 @@ namespace Mosa.Test.System
 		/// <param name="internalTrace">The internal trace.</param>
 		/// <param name="compilerOptions">The compiler options.</param>
 		private TestCaseCompiler(IArchitecture architecture, ITypeSystem typeSystem, ITypeLayout typeLayout, IInternalTrace internalTrace, ILinker linker, CompilerOptions compilerOptions) :
-			base(architecture, typeSystem, typeLayout, new CompilationScheduler(typeSystem, true), internalTrace, linker, compilerOptions) // FIXME: linker
+			base(architecture, typeSystem, typeLayout, new CompilationScheduler(typeSystem, true), internalTrace, linker, compilerOptions)
 		{
 			// Build the assembly compiler pipeline
 			Pipeline.AddRange(new ICompilerStage[] {
@@ -51,7 +51,7 @@ namespace Mosa.Test.System
 		/// </summary>
 		/// <param name="typeSystem">The type system.</param>
 		/// <returns></returns>
-		public static TestLinkerStage Compile(ITypeSystem typeSystem)
+		public static TestLinker Compile(ITypeSystem typeSystem)
 		{
 			IArchitecture architecture = x86.Architecture.CreateArchitecture(x86.ArchitectureFeatureFlags.AutoDetect);
 
@@ -62,7 +62,7 @@ namespace Mosa.Test.System
 			(internalLog.CompilerEventListener as BasicCompilerEventListener).DebugOutput = false;
 			(internalLog.CompilerEventListener as BasicCompilerEventListener).ConsoleOutput = false;
 
-			var linker = new TestLinkerStage();
+			var linker = new TestLinker();
 
 			CompilerOptions compilerOptions = new CompilerOptions();
 

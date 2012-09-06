@@ -21,10 +21,9 @@ namespace Mosa.Compiler.Linker.Elf64
 	/// </summary>
 	public class Elf64Linker : BaseLinker
 	{
-		/// <summary>
-		/// 
-		/// </summary>
-		private List<LinkerSection> sections;
+
+		#region Data members
+
 		/// <summary>
 		/// 
 		/// </summary>
@@ -34,16 +33,7 @@ namespace Mosa.Compiler.Linker.Elf64
 		/// </summary>
 		private StringTableSection stringTableSection;
 
-		/// <summary>
-		/// Retrieves the collection of sections created during compilation.
-		/// </summary>
-		/// <value>The sections collection.</value>
-		public override ICollection<LinkerSection> Sections { get { return sections; } }
-
-		/// <summary>
-		/// Flag, if the symbols have been resolved.
-		/// </summary>
-		private bool symbolsResolved;
+		#endregion // Data members
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Elf64Linker"/> class.
@@ -51,13 +41,10 @@ namespace Mosa.Compiler.Linker.Elf64
 		public Elf64Linker()
 		{
 			// Create the default section set
-			sections = new List<LinkerSection>()
-			{
-				new CodeSection(),
-				new DataSection(),
-				new RoDataSection(),
-				new BssSection()
-			};
+			Sections.Add(new CodeSection());
+			Sections.Add(new DataSection());
+			Sections.Add(new RoDataSection());
+			Sections.Add(new BssSection());
 
 			nullSection = new NullSection();
 			stringTableSection = new StringTableSection();
@@ -72,17 +59,7 @@ namespace Mosa.Compiler.Linker.Elf64
 			Resolve();
 
 			// Persist the Elf32 file now
-			CreateElf64File();
-		}
-
-		/// <summary>
-		/// Gets the virtual alignment of sections.
-		/// </summary>
-		/// <value>The virtual section alignment.</value>
-		public override long VirtualSectionAlignment
-		{
-			// TODO
-			get { throw new NotImplementedException(); }
+			CreateFile();
 		}
 
 		/// <summary>
@@ -110,7 +87,7 @@ namespace Mosa.Compiler.Linker.Elf64
 		/// <param name="targetAddress">The position in code, where it should be patched.</param>
 		protected override void ApplyPatch(LinkType linkType, long methodAddress, long methodOffset, long methodRelativeBase, long targetAddress)
 		{
-			if (!symbolsResolved)
+			if (!SymbolsResolved)
 				throw new InvalidOperationException(@"Can't apply patches - symbols not resolved.");
 
 			// Retrieve the text section
@@ -134,41 +111,17 @@ namespace Mosa.Compiler.Linker.Elf64
 			text.ApplyPatch(offset, linkType, targetAddress, IsLittleEndian);
 		}
 
-		/// <summary>
-		/// Retrieves a linker section by its type.
-		/// </summary>
-		/// <param name="sectionKind">The type of the section to retrieve.</param>
-		/// <returns>The retrieved linker section.</returns>
-		public override LinkerSection GetSection(SectionKind sectionKind)
-		{
-			return this.sections[(int)sectionKind];
-		}
-
-		/// <summary>
-		/// Determines whether the specified symbol is resolved.
-		/// </summary>
-		/// <param name="symbol">The symbol.</param>
-		/// <param name="address">The virtualAddress.</param>
-		/// <returns>
-		/// 	<c>true</c> if the specified symbol is resolved; otherwise, <c>false</c>.
-		/// </returns>
-		protected override bool IsResolved(string symbol, out long address)
-		{
-			address = 0;
-			return true;
-			//return base.IsResolved(symbol, out virtualAddress);*/
-		}
 
 		/// <summary>
 		/// Creates the elf32 file.
 		/// </summary>
-		private void CreateElf64File()
+		private void CreateFile()
 		{
 			using (FileStream fs = new FileStream(this.OutputFile, FileMode.Create, FileAccess.Write, FileShare.None))
 			{
 				Header header = new Header();
 				header.Type = FileType.Executable;
-				header.Machine = (MachineType)MachineID; 
+				header.Machine = (MachineType)MachineID;
 				header.SectionHeaderNumber = (ushort)(Sections.Count + 2);
 				header.SectionHeaderOffset = header.ElfHeaderSize;
 
@@ -221,7 +174,7 @@ namespace Mosa.Compiler.Linker.Elf64
 		private void LayoutSections()
 		{
 			// We've resolved all symbols, allow IsResolved to succeed
-			symbolsResolved = true;
+			SymbolsResolved = true;
 		}
 	}
 }

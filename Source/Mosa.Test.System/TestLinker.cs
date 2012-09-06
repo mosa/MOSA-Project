@@ -21,105 +21,30 @@ namespace Mosa.Test.System
 	/// A specialized linker for in-memory tests. This linker performs live linking in memory without
 	/// respect to an executable format.
 	/// </summary>
-	public class TestLinkerStage : BaseLinker, IPipelineStage, ICompilerStage
+	public class TestLinker : BaseLinker
 	{
-		#region IPipelineStage
-
-		/// <summary>
-		/// Retrieves the name of the compilation stage.
-		/// </summary>
-		/// <value>The name of the compilation stage.</value>
-		string IPipelineStage.Name { get { return @"TestLinkerStage"; } }
-
-		#endregion // IPipelineStage Members
-
-		#region ICompilerStage members
-
-		/// <summary>
-		/// Sets up the assembly compiler stage.
-		/// </summary>
-		/// <param name="compiler">A <see cref="BaseCompiler" /> using the stage.</param>
-		void ICompilerStage.Setup(BaseCompiler compiler)
-		{
-		}
-
-		/// <summary>
-		/// Performs stage specific processing on the compiler context.
-		/// </summary>
-		void ICompilerStage.Run()
-		{
-			foreach (LinkerSymbol symbol in Symbols)
-			{
-				LinkerSection ls = GetSection(symbol.Section);
-				symbol.Offset = ls.Offset + symbol.SectionAddress;
-				symbol.VirtualAddress = ls.VirtualAddress + symbol.SectionAddress;
-			}
-
-			// Now run the linker
-			Resolve();
-		}
-
-		#endregion // ICompilerStage members
 
 		#region Data members
-
-		/// <summary>
-		/// Holds the linker sections of the assembly linker.
-		/// </summary>
-		private List<LinkerSection> sections;
-
-		//private readonly AllocateMemoryDelegate allocateMemoryHandler;
 
 		#endregion // Data members
 
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="TestLinkerStage"/> class.
+		/// Initializes a new instance of the <see cref="TestLinker"/> class.
 		/// </summary>
-		public TestLinkerStage()
+		public TestLinker()
 		{
-			int maxSections = (int)SectionKind.Max;
-			sections = new List<LinkerSection>(maxSections);
-			for (int i = 0; i < maxSections; i++)
-				sections.Add(new TestLinkerSection((SectionKind)i, String.Empty, 0));
+			for (int i = 0; i < (int)SectionKind.Max; i++)
+				Sections.Add(new TestLinkerSection((SectionKind)i, String.Empty, 0));
 
 			LoadSectionAlignment = 1;
-
-			//this.allocateMemoryHandler = new AllocateMemoryDelegate(global::Mosa.Test.System.HostedRuntime.AllocateMemory);
+			SectionAlignment = 1;
 		}
 
 		#endregion // Construction
 
 		#region BaseLinkerStage Overrides
-
-		/// <summary>
-		/// Gets the virtual alignment of sections.
-		/// </summary>
-		/// <value>The virtual section alignment.</value>
-		public override long VirtualSectionAlignment
-		{
-			get { return 1; }
-		}
-
-		/// <summary>
-		/// Retrieves a linker section by its type.
-		/// </summary>
-		/// <param name="sectionKind">The type of the section to retrieve.</param>
-		/// <returns>The retrieved linker section.</returns>
-		public override LinkerSection GetSection(SectionKind sectionKind)
-		{
-			return sections[(int)sectionKind];
-		}
-
-		/// <summary>
-		/// Retrieves the collection of sections created during compilation.
-		/// </summary>
-		/// <value>The sections collection.</value>
-		public override ICollection<LinkerSection> Sections
-		{
-			get { return (ICollection<LinkerSection>)sections.AsReadOnly(); }
-		}
 
 		/// <summary>
 		/// Allocates a symbol of the given name in the specified section.
@@ -132,7 +57,7 @@ namespace Mosa.Test.System
 		/// </returns>
 		protected override Stream Allocate(SectionKind section, int size, int alignment)
 		{
-			return ((TestLinkerSection)sections[(int)section]).Allocate(size, alignment);
+			return ((TestLinkerSection)GetSection(section)).Allocate(size, alignment);
 		}
 
 		/// <summary>
@@ -179,35 +104,13 @@ namespace Mosa.Test.System
 				default:
 					throw new NotSupportedException();
 			}
-			
+
 			long address = methodAddress + methodOffset;
 			// Position is a raw memory virtualAddress, we're just storing value there
 			Debug.Assert(0 != value && value == (int)value);
 			int* pAddress = (int*)address;
 			*pAddress = (int)value;
 		}
-
-		//[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-		//private unsafe delegate void* AllocateMemoryDelegate(uint size);
-
-		//protected void AddVmCalls(IDictionary<string, LinkerSymbol> virtualMachineCalls)
-		//{
-		//	//AddVmCall(virtualMachineCalls, allocateMemoryHandler, @"Mosa.Internal.Runtime.AllocateMemory(U4 size)");
-		//}
-
-		//protected unsafe void AddVmCall(IDictionary<string, LinkerSymbol> virtualMachineCalls, Delegate handler, string method)
-		//{
-		//	IntPtr allocate = Marshal.GetFunctionPointerForDelegate(handler);
-
-		//	long virtualAddress = allocate.ToInt64();
-		//	//Trace.WriteLine(String.Format("\t{0} at 0x{1:x08}", method, virtualAddress));
-
-		//	LinkerSymbol symbol = new LinkerSymbol(method, SectionKind.Text, virtualAddress);
-		//	symbol.VirtualAddress = new IntPtr(symbol.SectionAddress);
-
-		//	virtualMachineCalls.Remove(method);
-		//	virtualMachineCalls.Add(method, symbol);
-		//}
 
 		#endregion // BaseLinkerStage Overrides
 	}

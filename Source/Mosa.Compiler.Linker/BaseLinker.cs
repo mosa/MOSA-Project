@@ -37,7 +37,12 @@ namespace Mosa.Compiler.Linker
 		/// <summary>
 		/// Holds all unresolved link requests.
 		/// </summary>
-		private readonly Dictionary<string, List<LinkRequest>> linkRequests;
+		private readonly Dictionary<string, List<LinkRequest>> linkRequests = new Dictionary<string, List<LinkRequest>>();
+
+		/// <summary>
+		/// 
+		/// </summary>
+		private readonly List<LinkerSection> sections = new List<LinkerSection>();
 
 		/// <summary>
 		/// Holds the output file of the linker.
@@ -47,7 +52,7 @@ namespace Mosa.Compiler.Linker
 		/// <summary>
 		/// A dictionary containing all symbol seen in the assembly.
 		/// </summary>
-		private readonly Dictionary<string, LinkerSymbol> symbols;
+		private readonly Dictionary<string, LinkerSymbol> symbols = new Dictionary<string, LinkerSymbol>();
 
 		/// <summary>
 		/// Flag is the target platform is little-endian
@@ -60,13 +65,103 @@ namespace Mosa.Compiler.Linker
 		/// <value>
 		/// </value>
 		public uint MachineID { get; set; }
-		
+
 		/// <summary>
 		/// Holds the file alignment used for this ELF32 file.
 		/// </summary>
 		private uint loadSectionAlignment;
 
+		/// <summary>
+		/// Flag, if the symbols have been resolved.
+		/// </summary>
+		private bool symbolsResolved;
+
+		/// <summary>
+		/// Holds the section alignment
+		/// </summary>
+		private uint sectionAlignment;
+
 		#endregion // Data members
+
+		#region Properties
+
+		/// <summary>
+		/// Gets the base virtualAddress.
+		/// </summary>
+		/// <value>The base virtualAddress.</value>
+		public long BaseAddress
+		{
+			get { return baseAddress; }
+		}
+
+		/// <summary>
+		/// Gets the entry point symbol.
+		/// </summary>
+		/// <value>The entry point symbol.</value>
+		public LinkerSymbol EntryPoint
+		{
+			get { return entryPoint; }
+			set { entryPoint = value; }
+		}
+
+		/// <summary>
+		/// Gets the load alignment of sections.
+		/// </summary>
+		/// <value>The load alignment.</value>
+		public uint LoadSectionAlignment
+		{
+			get { return loadSectionAlignment; }
+			protected set { loadSectionAlignment = value; }
+		}
+
+		/// <summary>
+		/// Gets or sets a value indicating whether symbols are resolved.
+		/// </summary>
+		/// <value>
+		///   <c>true</c> if [symbols are resolved]; otherwise, <c>false</c>.
+		/// </value>
+		public bool SymbolsResolved
+		{
+			get { return symbolsResolved; }
+			protected set { symbolsResolved = value; }
+		}
+
+		/// <summary>
+		/// Gets or sets the output file of the linker.
+		/// </summary>
+		/// <value>The output file.</value>
+		public string OutputFile
+		{
+			get { return outputFile; }
+			set { outputFile = value; }
+		}
+
+		/// <summary>
+		/// Retrieves the collection of sections created during compilation.
+		/// </summary>
+		/// <value>The sections collection.</value>
+		public IList<LinkerSection> Sections { get { return sections; } }
+
+		/// <summary>
+		/// Retrieves the collection of _symbols known by the linker.
+		/// </summary>
+		/// <value>The symbol collection.</value>
+		public ICollection<LinkerSymbol> Symbols
+		{
+			get { return symbols.Values; }
+		}
+
+		/// <summary>
+		/// Gets or sets the section alignment in bytes.
+		/// </summary>
+		/// <value>The section alignment in bytes.</value>
+		public uint SectionAlignment
+		{
+			get { return this.sectionAlignment; }
+			protected set { this.sectionAlignment = value; }
+		}
+
+		#endregion // Properties
 
 		#region Construction
 
@@ -76,8 +171,8 @@ namespace Mosa.Compiler.Linker
 		protected BaseLinker()
 		{
 			baseAddress = 0x00400000; // Use the Win32 default for now, FIXME
-			linkRequests = new Dictionary<string, List<LinkRequest>>();
-			symbols = new Dictionary<string, LinkerSymbol>();
+			sectionAlignment = 0x1000; // default 1K
+			symbolsResolved = false;
 		}
 
 		#endregion // Construction
@@ -135,74 +230,6 @@ namespace Mosa.Compiler.Linker
 
 		#endregion // Methods
 
-		#region ILinker Members
-
-		/// <summary>
-		/// Gets the base virtualAddress.
-		/// </summary>
-		/// <value>The base virtualAddress.</value>
-		public long BaseAddress
-		{
-			get { return baseAddress; }
-		}
-
-		/// <summary>
-		/// Gets the entry point symbol.
-		/// </summary>
-		/// <value>The entry point symbol.</value>
-		public LinkerSymbol EntryPoint
-		{
-			get { return entryPoint; }
-			set { entryPoint = value; }
-		}
-
-		/// <summary>
-		/// Gets the load alignment of sections.
-		/// </summary>
-		/// <value>The load alignment.</value>
-		public uint LoadSectionAlignment
-		{
-			get { return loadSectionAlignment; }
-			protected set { loadSectionAlignment = value; }
-		}
-
-		/// <summary>
-		/// Gets or sets the output file of the linker.
-		/// </summary>
-		/// <value>The output file.</value>
-		public string OutputFile
-		{
-			get { return outputFile; }
-			set { outputFile = value; }
-		}
-
-		/// <summary>
-		/// Retrieves the collection of sections created during compilation.
-		/// </summary>
-		/// <value>The sections collection.</value>
-		public abstract ICollection<LinkerSection> Sections
-		{
-			get;
-		}
-
-		/// <summary>
-		/// Retrieves the collection of _symbols known by the linker.
-		/// </summary>
-		/// <value>The symbol collection.</value>
-		public ICollection<LinkerSymbol> Symbols
-		{
-			get { return symbols.Values; }
-		}
-
-		/// <summary>
-		/// Gets the virtual alignment of sections.
-		/// </summary>
-		/// <value>The virtual section alignment.</value>
-		public abstract long VirtualSectionAlignment
-		{
-			get;
-		}
-
 		/// <summary>
 		/// Allocates a symbol of the given name in the specified section.
 		/// </summary>
@@ -256,7 +283,10 @@ namespace Mosa.Compiler.Linker
 		/// </summary>
 		/// <param name="sectionKind">Kind of the section.</param>
 		/// <returns>The section of the requested kind.</returns>
-		public abstract LinkerSection GetSection(SectionKind sectionKind);
+		public LinkerSection GetSection(SectionKind sectionKind)
+		{
+			return sections[(int)sectionKind];
+		}
 
 		/// <summary>
 		/// Retrieves a linker symbol.
@@ -313,8 +343,6 @@ namespace Mosa.Compiler.Linker
 			list.Add(new LinkRequest(linkType, symbolName, symbolOffset, methodRelativeBase, targetSymbol, targetOffset));
 		}
 
-		#endregion // ILinker Members
-
 		#region Internals
 
 		/// <summary>
@@ -323,18 +351,22 @@ namespace Mosa.Compiler.Linker
 		/// <param name="symbol">The symbol.</param>
 		/// <param name="virtualAddress">The virtualAddress.</param>
 		/// <returns>
-		/// 	<c>true</c> if the specified symbol is resolved; otherwise, <c>false</c>.
+		///   <c>true</c> if the specified symbol is resolved; otherwise, <c>false</c>.
 		/// </returns>
-		protected virtual bool IsResolved(string symbol, out long virtualAddress)
+		protected bool IsResolved(string symbol, out long virtualAddress)
 		{
 			virtualAddress = 0;
+
+			if (!symbolsResolved)
+				return false;
+
 			LinkerSymbol linkerSymbol;
 			if (symbols.TryGetValue(symbol, out linkerSymbol))
 			{
 				virtualAddress = linkerSymbol.VirtualAddress;
 			}
 
-			return (0 != virtualAddress);
+			return (virtualAddress != 0);
 		}
 
 		/// <summary>

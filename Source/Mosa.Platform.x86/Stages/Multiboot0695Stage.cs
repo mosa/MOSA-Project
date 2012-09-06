@@ -207,7 +207,7 @@ namespace Mosa.Platform.x86.Stages
 					if (!(linker is Mosa.Compiler.Linker.Elf32.Elf32Linker || linker is Mosa.Compiler.Linker.Elf64.Elf64Linker))
 					{
 						// Check the linker layout settings
-						if (linker.LoadSectionAlignment != linker.VirtualSectionAlignment)
+						if (linker.LoadSectionAlignment != linker.SectionAlignment)
 							throw new LinkerException(@"Load and virtual section alignment must be identical if you are booting non-ELF binaries with a multiboot bootloader.");
 
 						// No, special multiboot treatment required

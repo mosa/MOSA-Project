@@ -18,7 +18,7 @@ namespace Mosa.Tool.TypeExplorer
 	class ExplorerCompiler : BaseCompiler
 	{
 		/// <summary>
-		/// Prevents a default instance of the <see cref="ExplorerCompiler"/> class from being created.
+		/// Prevents a default instance of the <see cref="ExplorerCompiler" /> class from being created.
 		/// </summary>
 		/// <param name="architecture">The compiler target architecture.</param>
 		/// <param name="typeSystem">The type system.</param>
@@ -26,7 +26,7 @@ namespace Mosa.Tool.TypeExplorer
 		/// <param name="internalTrace">The internal trace.</param>
 		/// <param name="compilerOptions">The compiler options.</param>
 		public ExplorerCompiler(IArchitecture architecture, ITypeSystem typeSystem, ITypeLayout typeLayout, IInternalTrace internalTrace, CompilerOptions compilerOptions) :
-			base(architecture, typeSystem, typeLayout, new CompilationScheduler(typeSystem, true), internalTrace, new ExplorerLinkerStage(), compilerOptions) 
+			base(architecture, typeSystem, typeLayout, new CompilationScheduler(typeSystem, true), internalTrace, new ExplorerLinker(), compilerOptions)
 		{
 			// Build the assembly compiler pipeline
 			Pipeline.AddRange(new ICompilerStage[] {
@@ -34,7 +34,6 @@ namespace Mosa.Tool.TypeExplorer
 				new MethodCompilerSchedulerStage(),
 				new TypeLayoutStage(),
 				new LinkerFinalizationStage(),
-				//(ExplorerLinkerStage)Linker
 			});
 
 			architecture.ExtendCompilerPipeline(Pipeline);

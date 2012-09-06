@@ -46,7 +46,7 @@ namespace Mosa.Compiler.Framework.Stages
 		private void LayoutSections()
 		{
 			long fileAlignment = linker.LoadSectionAlignment;
-			long sectionAlignment = linker.VirtualSectionAlignment;
+			long sectionAlignment = linker.SectionAlignment;
 
 			// Reset the size of the image
 			long virtualSizeOfImage = sectionAlignment;	// FIXME: Why not 0? Zero aligns to everything

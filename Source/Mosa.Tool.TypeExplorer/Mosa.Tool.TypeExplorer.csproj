@@ -46,7 +46,7 @@
       <DependentUpon>CodeForm.cs</DependentUpon>
     </Compile>
     <Compile Include="ExplorerCompiler.cs" />
-    <Compile Include="ExplorerLinkerStage.cs" />
+    <Compile Include="ExplorerLinker.cs" />
     <Compile Include="ExplorerMethodCompiler.cs" />
     <Compile Include="Main.cs">
       <SubType>Form</SubType>

@@ -129,7 +129,7 @@
     <Compile Include="Numbers\I1.cs" />
     <Compile Include="PageAccessFlags.cs" />
     <Compile Include="Prebuilt.cs" />
-    <Compile Include="TestLinkerStage.cs">
+    <Compile Include="TestLinker.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="TestCaseCompiler.cs">

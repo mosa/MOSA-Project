@@ -50,7 +50,7 @@ namespace Mosa.Compiler.Linker
 		/// Retrieves the collection of sections created during compilation.
 		/// </summary>
 		/// <value>The sections collection.</value>
-		ICollection<LinkerSection> Sections { get; }
+		IList<LinkerSection> Sections { get; }
 
 		/// <summary>
 		/// Retrieves the collection of symbols known by the linker.
@@ -65,10 +65,10 @@ namespace Mosa.Compiler.Linker
 		string OutputFile { get; set; }
 
 		/// <summary>
-		/// Gets the virtual alignment of sections.
+		/// Gets the alignment of sections.
 		/// </summary>
 		/// <value>The virtual section alignment.</value>
-		long VirtualSectionAlignment { get; }
+		uint SectionAlignment { get; }
 
 		/// <summary>
 		/// Flag is the target platform is little-endian
