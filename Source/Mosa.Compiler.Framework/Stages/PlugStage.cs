@@ -154,6 +154,8 @@ namespace Mosa.Compiler.Framework.Stages
 				}
 			}
 		}
+		
+		#endregion // ICompilerStage members
 
 		private void Patch(RuntimeMethod targetMethod, RuntimeMethod method)
 		{
@@ -251,7 +253,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 			return target.Substring(pos + 1);
 		}
-		#endregion // ICompilerStage members
 
 	}
 }

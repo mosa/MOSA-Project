@@ -15,7 +15,8 @@
 	    <csc target="library" output="${outputDirectory}/Mosa.Compiler.Linker.dll" debug="${debug}" unsafe="true" nostdlib="false">
 		<sources>
                     <include name="BaseLinker.cs"/>
-                    <include name="Elf32/Linker.cs"/>
+                    <include name="LinkerType.cs"/>
+                    <include name="Elf32/Elf32Linker.cs"/>
                     <include name="Elf32/BssSection.cs"/>
                     <include name="Elf32/CodeSection.cs"/>
                     <include name="Elf32/DataSection.cs"/>
@@ -26,7 +27,7 @@
                     <include name="Elf32/SectionHeader.cs"/>
                     <include name="Elf32/SectionType.cs"/>
                     <include name="Elf32/StringTableSection.cs"/>
-                    <include name="Elf64/Linker.cs"/>
+                    <include name="Elf64/Elf64Linker.cs"/>
                     <include name="Elf64/BssSection.cs"/>
                     <include name="Elf64/CodeSection.cs"/>
                     <include name="Elf64/DataSection.cs"/>
@@ -45,7 +46,7 @@
                     <include name="LinkRequest.cs"/>
                     <include name="LinkType.cs"/>
                     <include name="PE/Section.cs"/>
-                    <include name="PE/Linker.cs"/>
+                    <include name="PE/PELinker.cs"/>
                     <include name="SectionKind.cs"/>
 		</sources>
 		<references>

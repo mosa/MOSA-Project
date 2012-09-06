@@ -67,11 +67,7 @@
   <ItemGroup>
     <Compile Include="AotCompiler.cs" />
     <Compile Include="Stages\MethodPipelineExportStage.cs" />
-    <Compile Include="Stages\Elf32LinkerStage.cs" />
-    <Compile Include="Stages\Elf64LinkerStage.cs" />
     <Compile Include="Stages\MapFileGenerationStage.cs" />
-    <Compile Include="Stages\ObjectFileLayoutStage.cs" />
-    <Compile Include="Stages\PELinkerStage.cs" />
     <Compile Include="AotMethodCompiler.cs">
       <SubType>Code</SubType>
     </Compile>

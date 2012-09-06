@@ -35,7 +35,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseLinker.cs" />
-    <Compile Include="Elf32\Linker.cs" />
+    <Compile Include="LinkerType.cs" />
+    <Compile Include="Elf32\Elf32Linker.cs" />
     <Compile Include="Elf32\BssSection.cs" />
     <Compile Include="Elf32\CodeSection.cs" />
     <Compile Include="Elf32\DataSection.cs" />
@@ -46,7 +47,7 @@
     <Compile Include="Elf32\SectionHeader.cs" />
     <Compile Include="Elf32\SectionType.cs" />
     <Compile Include="Elf32\StringTableSection.cs" />
-    <Compile Include="Elf64\Linker.cs" />
+    <Compile Include="Elf64\Elf64Linker.cs" />
     <Compile Include="Elf64\BssSection.cs" />
     <Compile Include="Elf64\CodeSection.cs" />
     <Compile Include="Elf64\DataSection.cs" />
@@ -65,7 +66,7 @@
     <Compile Include="LinkRequest.cs" />
     <Compile Include="LinkType.cs" />
     <Compile Include="PE\Section.cs" />
-    <Compile Include="PE\Linker.cs" />
+    <Compile Include="PE\PELinker.cs" />
     <Compile Include="SectionKind.cs" />
   </ItemGroup>
   <ItemGroup>

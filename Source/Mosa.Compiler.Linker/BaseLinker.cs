@@ -52,12 +52,19 @@ namespace Mosa.Compiler.Linker
 		/// <summary>
 		/// Flag is the target platform is little-endian
 		/// </summary>
-		protected bool IsLittleEndian;
+		public bool IsLittleEndian { get; set; }
 
 		/// <summary>
-		/// 
+		/// Gets or sets the machine type (depends on platform)
 		/// </summary>
-		protected MachineType Machine;
+		/// <value>
+		/// </value>
+		public uint MachineID { get; set; }
+		
+		/// <summary>
+		/// Holds the file alignment used for this ELF32 file.
+		/// </summary>
+		private uint loadSectionAlignment;
 
 		#endregion // Data members
 
@@ -74,6 +81,10 @@ namespace Mosa.Compiler.Linker
 		}
 
 		#endregion // Construction
+
+		public virtual void Finalize()
+		{
+		}
 
 		/// <summary>
 		/// Performs stage specific processing on the compiler context.
@@ -149,9 +160,10 @@ namespace Mosa.Compiler.Linker
 		/// Gets the load alignment of sections.
 		/// </summary>
 		/// <value>The load alignment.</value>
-		public abstract long LoadSectionAlignment
+		public uint LoadSectionAlignment
 		{
-			get;
+			get { return loadSectionAlignment; }
+			protected set { loadSectionAlignment = value; }
 		}
 
 		/// <summary>
@@ -213,9 +225,9 @@ namespace Mosa.Compiler.Linker
 				// Save the symbol for later use
 				//if (!symbols.ContainsKey(symbol.Name)) // FIXME: Remove this line when generic patch is fixed! It duplicates generic types
 				Debug.Assert(!symbols.ContainsKey(symbol.Name));
-				
+
 				symbols.Add(symbol.Name, symbol);
-				
+
 				// Wrap the stream to catch premature disposal
 				Stream result = new LinkerStream(symbol, baseStream, size);
 
@@ -280,16 +292,12 @@ namespace Mosa.Compiler.Linker
 		/// </summary>
 		/// <param name="linkType">The type of link required.</param>
 		/// <param name="symbolName">The method the patched code belongs to.</param>
-		/// <param name="methodOffset">The offset inside the method where the patch is placed.</param>
+		/// <param name="symbolOffset">The offset inside the method where the patch is placed.</param>
 		/// <param name="methodRelativeBase">The base virtualAddress, if a relative link is required.</param>
 		/// <param name="targetSymbol">The linker symbol to link against.</param>
-		/// <param name="offset">An offset to apply to the link target.</param>
-		/// <returns>
-		/// The return value is the preliminary virtualAddress to place in the generated machine
-		/// code. On 32-bit systems, only the lower 32 bits are valid. The above are not used. An implementation of
-		/// IAssemblyLinker may not rely on 64-bits being stored in the memory defined by position.
-		/// </returns>
-		public virtual void Link(LinkType linkType, string symbolName, int methodOffset, int methodRelativeBase, string targetSymbol, long offset)
+		/// <param name="targetOffset">An offset to apply to the link target.</param>
+		/// <exception cref="System.ArgumentNullException"></exception>
+		public virtual void Link(LinkType linkType, string symbolName, int symbolOffset, int methodRelativeBase, string targetSymbol, long targetOffset)
 		{
 			Debug.Assert(symbolName != null, @"Symbol can't be null.");
 			if (symbolName == null)
@@ -302,7 +310,7 @@ namespace Mosa.Compiler.Linker
 				linkRequests.Add(targetSymbol, list);
 			}
 
-			list.Add(new LinkRequest(linkType, symbolName, methodOffset, methodRelativeBase, targetSymbol, offset));
+			list.Add(new LinkRequest(linkType, symbolName, symbolOffset, methodRelativeBase, targetSymbol, targetOffset));
 		}
 
 		#endregion // ILinker Members

@@ -44,7 +44,7 @@ namespace Mosa.Compiler.Linker
 		/// Gets the load alignment of sections.
 		/// </summary>
 		/// <value>The load alignment.</value>
-		long LoadSectionAlignment { get; }
+		uint LoadSectionAlignment { get; }
 
 		/// <summary>
 		/// Retrieves the collection of sections created during compilation.
@@ -69,6 +69,18 @@ namespace Mosa.Compiler.Linker
 		/// </summary>
 		/// <value>The virtual section alignment.</value>
 		long VirtualSectionAlignment { get; }
+
+		/// <summary>
+		/// Flag is the target platform is little-endian
+		/// </summary>
+		bool IsLittleEndian { get; set; }
+
+		/// <summary>
+		/// Gets or sets the machine id (depends on platform)
+		/// </summary>
+		/// <value>
+		/// </value>
+		uint MachineID { get; set; }
 
 		#endregion // Properties
 
@@ -111,12 +123,17 @@ namespace Mosa.Compiler.Linker
 		/// Issues a linker request for the given runtime method.
 		/// </summary>
 		/// <param name="linkType">The type of link required.</param>
-		/// <param name="symbolName">The method the patched code belongs to.</param>
-		/// <param name="methodOffset">The offset inside the method where the patch is placed.</param>
+		/// <param name="symbolName">The symbol name the patched code belongs to.</param>
+		/// <param name="symbolOffset">The offset inside the method where the patch is placed.</param>
 		/// <param name="methodRelativeBase">The base virtualAddress, if a relative link is required.</param>
 		/// <param name="targetSymbol">The linker symbol name to link against.</param>
-		/// <param name="offset">An offset to apply to the link target.</param>
-		void Link(LinkType linkType, string symbolName, int methodOffset, int methodRelativeBase, string targetSymbol, long offset);
+		/// <param name="targetOffset">An offset to apply to the link target.</param>
+		void Link(LinkType linkType, string symbolName, int symbolOffset, int methodRelativeBase, string targetSymbol, long targetOffset);
+
+		/// <summary>
+		/// Finalizes linking
+		/// </summary>
+		void Finalize();
 
 		#endregion // Methods
 	}

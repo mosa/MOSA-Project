@@ -12,6 +12,7 @@ using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Stages;
 using Mosa.Compiler.InternalTrace;
 using Mosa.Compiler.TypeSystem;
+using Mosa.Compiler.Linker;
 using x86 = Mosa.Platform.x86;
 
 namespace Mosa.Test.System
@@ -30,8 +31,8 @@ namespace Mosa.Test.System
 		/// <param name="typeLayout">The type layout.</param>
 		/// <param name="internalTrace">The internal trace.</param>
 		/// <param name="compilerOptions">The compiler options.</param>
-		private TestCaseCompiler(IArchitecture architecture, ITypeSystem typeSystem, ITypeLayout typeLayout, IInternalTrace internalTrace, CompilerOptions compilerOptions) :
-			base(architecture, typeSystem, typeLayout, new CompilationScheduler(typeSystem, true), internalTrace, compilerOptions)
+		private TestCaseCompiler(IArchitecture architecture, ITypeSystem typeSystem, ITypeLayout typeLayout, IInternalTrace internalTrace, ILinker linker, CompilerOptions compilerOptions) :
+			base(architecture, typeSystem, typeLayout, new CompilationScheduler(typeSystem, true), internalTrace, linker, compilerOptions) // FIXME: linker
 		{
 			// Build the assembly compiler pipeline
 			Pipeline.AddRange(new ICompilerStage[] {
@@ -39,7 +40,7 @@ namespace Mosa.Test.System
 				new MethodCompilerSchedulerStage(),
 				new TypeLayoutStage(),
 				new MetadataStage(),
-				(TestLinkerStage)Linker
+				new LinkerFinalizationStage(),
 			});
 
 			architecture.ExtendCompilerPipeline(Pipeline);
@@ -64,9 +65,8 @@ namespace Mosa.Test.System
 			var linker = new TestLinkerStage();
 
 			CompilerOptions compilerOptions = new CompilerOptions();
-			compilerOptions.Linker = linker;
 
-			TestCaseCompiler compiler = new TestCaseCompiler(architecture, typeSystem, typeLayout, internalLog, compilerOptions);
+			TestCaseCompiler compiler = new TestCaseCompiler(architecture, typeSystem, typeLayout, internalLog, linker, compilerOptions);
 			compiler.Compile();
 
 			return linker;

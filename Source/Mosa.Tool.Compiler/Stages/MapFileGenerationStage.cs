@@ -22,8 +22,6 @@ namespace Mosa.Tool.Compiler.Stages
 	{
 		#region Data members
 
-		private ILinker linker;
-
 		public string MapFile { get; set; }
 
 		/// <summary>
@@ -49,7 +47,6 @@ namespace Mosa.Tool.Compiler.Stages
 		void ICompilerStage.Setup(BaseCompiler compiler)
 		{
 			base.Setup(compiler);
-			this.linker = RetrieveLinkerFromCompiler();
 			this.MapFile = compiler.CompilerOptions.MapFile;
 		}
 

@@ -78,6 +78,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BasicBlocks.cs" />
+    <Compile Include="Linker\LinkerFactory.cs" />
+    <Compile Include="Stages\LinkerFinalizationStage.cs" />
     <Compile Include="LiveRangeAnalysis.cs" />
     <Compile Include="IIntrinsicInternalMethod.cs" />
     <Compile Include="DelegatePatcher.cs" />
@@ -90,8 +92,9 @@
     <Compile Include="LoopAwareBlockOrder.cs" />
     <Compile Include="CompilationScheduler.cs" />
     <Compile Include="Stages\CheckPlatformOperandCountStage.cs" />
+    <Compile Include="Stages\ObjectFileLayoutStage.cs" />
     <Compile Include="Stages\PlatformIntrinsicTransformationStage.cs" />
-    <Compile Include="Stages\PlugSystem.cs" />
+    <Compile Include="PlugSystem.cs" />
     <Compile Include="Stages\CheckIROperandCountStage.cs" />
     <Compile Include="Stages\LoopAwareBlockOrderStage.cs" />
     <Compile Include="Stages\SSAOptimizations.cs" />

@@ -129,7 +129,7 @@ namespace Mosa.Test.System
 
 			Debug.Assert(delegateType != null, delegateName);
 
-			long address = linker.GetSymbol(runtimeMethod.ToString()).VirtualAddress;
+			long address = linker.GetSymbol(runtimeMethod.FullName).VirtualAddress;
 
 			// Create a delegate for the test method
 			Delegate fn = Marshal.GetDelegateForFunctionPointer(

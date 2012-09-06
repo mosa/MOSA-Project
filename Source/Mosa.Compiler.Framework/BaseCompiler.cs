@@ -12,6 +12,7 @@ using System;
 using Mosa.Compiler.InternalTrace;
 using Mosa.Compiler.TypeSystem;
 using Mosa.Compiler.Linker;
+using Mosa.Compiler.Framework.Linker;
 
 namespace Mosa.Compiler.Framework
 {
@@ -92,7 +93,7 @@ namespace Mosa.Compiler.Framework
 		/// <param name="compilationScheduler">The compilation scheduler.</param>
 		/// <param name="internalTrace">The internal trace.</param>
 		/// <param name="compilerOptions">The compiler options.</param>
-		protected BaseCompiler(IArchitecture architecture, ITypeSystem typeSystem, ITypeLayout typeLayout, ICompilationScheduler compilationScheduler, IInternalTrace internalTrace, CompilerOptions compilerOptions)
+		protected BaseCompiler(IArchitecture architecture, ITypeSystem typeSystem, ITypeLayout typeLayout, ICompilationScheduler compilationScheduler, IInternalTrace internalTrace, ILinker linker, CompilerOptions compilerOptions)
 		{
 			if (architecture == null)
 				throw new ArgumentNullException(@"architecture");
@@ -106,7 +107,7 @@ namespace Mosa.Compiler.Framework
 			this.genericTypePatcher = new GenericTypePatcher(typeSystem);
 			this.counters = new Counters();
 			this.compilationScheduler = compilationScheduler;
-			this.linker = compilerOptions.Linker;
+			this.linker = (linker != null) ? linker : LinkerFactory.Create(compilerOptions.LinkerType, compilerOptions, architecture);
 			this.plugSystem = new PlugSystem();
 		}
 

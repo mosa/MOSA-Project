@@ -26,7 +26,7 @@ namespace Mosa.Compiler.Linker
 		/// <summary>
 		/// The position within the code stream where the virtual address is patched
 		/// </summary>
-		private readonly int methodOffset;
+		private readonly int symbolOffset;
 
 		/// <summary>
 		/// Holds the relative request flag.
@@ -41,12 +41,12 @@ namespace Mosa.Compiler.Linker
 		/// <summary>
 		/// Holds the symbol name to link against.
 		/// </summary>
-		private readonly string targetSymbolName;
+		private readonly string targetSymbol;
 
 		/// <summary>
 		/// Holds an offset to apply to the link target.
 		/// </summary>
-		private readonly long offset;
+		private readonly long targetOffset;
 
 		#endregion // Data members
 
@@ -59,16 +59,16 @@ namespace Mosa.Compiler.Linker
 		/// <param name="symbolName">The symbol whose code is being patched.</param>
 		/// <param name="symbolOffset">The symbol offset.</param>
 		/// <param name="methodRelativeBase">The symbol relative base.</param>
-		/// <param name="targetSymbolName">The linker symbol to link against.</param>
-		/// <param name="offset">An offset to apply to the link target.</param>
-		public LinkRequest(LinkType linkType, string symbolName, int symbolOffset, int methodRelativeBase, string targetSymbolName, long offset)
+		/// <param name="targetSymbol">The linker symbol to link against.</param>
+		/// <param name="TargetOffset">An offset to apply to the link target.</param>
+		public LinkRequest(LinkType linkType, string symbolName, int symbolOffset, int methodRelativeBase, string targetSymbol, long TargetOffset)
 		{
 			this.symbolName = symbolName;
-			this.methodOffset = symbolOffset;
+			this.symbolOffset = symbolOffset;
 			this.linkType = linkType;
 			this.methodRelativeBase = methodRelativeBase;
-			this.targetSymbolName = targetSymbolName;
-			this.offset = offset;
+			this.targetSymbol = targetSymbol;
+			this.targetOffset = TargetOffset;
 		}
 
 		#endregion // Construction
@@ -104,7 +104,7 @@ namespace Mosa.Compiler.Linker
 		/// </summary>
 		public int MethodOffset
 		{
-			get { return methodOffset; }
+			get { return symbolOffset; }
 		}
 
 		/// <summary>
@@ -113,7 +113,7 @@ namespace Mosa.Compiler.Linker
 		/// <value>The name of the symbol.</value>
 		public string TargetSymbolName
 		{
-			get { return targetSymbolName; }
+			get { return targetSymbol; }
 		}
 
 		/// <summary>
@@ -122,7 +122,7 @@ namespace Mosa.Compiler.Linker
 		/// <value>The offset.</value>
 		public long Offset
 		{
-			get { return offset; }
+			get { return targetOffset; }
 		}
 
 		#endregion // Properties

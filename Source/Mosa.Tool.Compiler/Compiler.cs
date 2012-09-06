@@ -146,7 +146,7 @@ namespace Mosa.Tool.Compiler
 				"Select the format of the binary file to create [{ELF32|ELF64|PE}].",
 				delegate(string format)
 				{
-					compilerOptions.Linker = SelectLinkerStage(format);
+					compilerOptions.LinkerType = SelectLinkerStage(format);
 				}
 			);
 
@@ -159,21 +159,21 @@ namespace Mosa.Tool.Compiler
 				}
 			);
 
-			optionSet.Add<uint>(
-				"elf-file-alignment=",
-				"Determines the alignment of sections within the ELF file. Must be a multiple of 512 bytes.",
-				delegate(uint alignment)
-				{
-					try
-					{
-						compilerOptions.Elf32.FileAlignment = alignment;
-					}
-					catch (System.Exception x)
-					{
-						throw new OptionException(@"The specified file alignment is invalid.", @"elf-file-alignment", x);
-					}
-				}
-			);
+			//optionSet.Add<uint>(
+			//	"elf-file-alignment=",
+			//	"Determines the alignment of sections within the ELF file. Must be a multiple of 512 bytes.",
+			//	delegate(uint alignment)
+			//	{
+			//		try
+			//		{
+			//			compilerOptions.Elf32.FileAlignment = alignment;
+			//		}
+			//		catch (System.Exception x)
+			//		{
+			//			throw new OptionException(@"The specified file alignment is invalid.", @"elf-file-alignment", x);
+			//		}
+			//	}
+			//);
 
 			optionSet.Add(
 				"map=",
@@ -193,46 +193,46 @@ namespace Mosa.Tool.Compiler
 				}
 			);
 
-			optionSet.Add(
-				"pe-no-checksum",
-				"Causes no checksum to be written in the generated PE file. MOSA requires the checksum to be set. It is on by default, use this switch to turn it off.",
-				delegate(string value)
-				{
-					compilerOptions.PortableExecutable.SetChecksum = false;
-				}
-			);
+			//optionSet.Add(
+			//	"pe-no-checksum",
+			//	"Causes no checksum to be written in the generated PE file. MOSA requires the checksum to be set. It is on by default, use this switch to turn it off.",
+			//	delegate(string value)
+			//	{
+			//		compilerOptions.PortableExecutable.SetChecksum = false;
+			//	}
+			//);
 
-			optionSet.Add<uint>(
-				"pe-file-alignment=",
-				"Determines the alignment of sections within the PE file. Must be a multiple of 512 bytes.",
-				delegate(uint alignment)
-				{
-					try
-					{
-						compilerOptions.PortableExecutable.FileAlignment = alignment;
-					}
-					catch (Exception x)
-					{
-						throw new OptionException(@"The specified file alignment is invalid.", @"pe-file-alignment", x);
-					}
-				}
-			);
+			//optionSet.Add<uint>(
+			//	"pe-file-alignment=",
+			//	"Determines the alignment of sections within the PE file. Must be a multiple of 512 bytes.",
+			//	delegate(uint alignment)
+			//	{
+			//		try
+			//		{
+			//			compilerOptions.PortableExecutable.FileAlignment = alignment;
+			//		}
+			//		catch (Exception x)
+			//		{
+			//			throw new OptionException(@"The specified file alignment is invalid.", @"pe-file-alignment", x);
+			//		}
+			//	}
+			//);
 
-			optionSet.Add<uint>(
-				"pe-section-alignment=",
-				"Determines the alignment of sections in memory. Must be a multiple of 4096 bytes.",
-				delegate(uint alignment)
-				{
-					try
-					{
-						compilerOptions.PortableExecutable.SectionAlignment = alignment;
-					}
-					catch (Exception x)
-					{
-						throw new OptionException(@"The specified section alignment is invalid.", @"pe-section-alignment", x);
-					}
-				}
-			);
+			//optionSet.Add<uint>(
+			//	"pe-section-alignment=",
+			//	"Determines the alignment of sections in memory. Must be a multiple of 4096 bytes.",
+			//	delegate(uint alignment)
+			//	{
+			//		try
+			//		{
+			//			compilerOptions.PortableExecutable.SectionAlignment = alignment;
+			//		}
+			//		catch (Exception x)
+			//		{
+			//			throw new OptionException(@"The specified section alignment is invalid.", @"pe-section-alignment", x);
+			//		}
+			//	}
+			//);
 
 			optionSet.Add(
 				@"sa|enable-static-alloc",
@@ -390,7 +390,7 @@ namespace Mosa.Tool.Compiler
 				}
 
 				// Check for missing options
-				if (compilerOptions.Linker == null)
+				if (compilerOptions.LinkerType == LinkerType.None)
 				{
 					throw new OptionException("No binary format specified.", "Architecture");
 				}
@@ -443,7 +443,7 @@ namespace Mosa.Tool.Compiler
 			sb.Append(" > Output file: ").AppendLine(compilerOptions.OutputFile);
 			sb.Append(" > Input file(s): ").AppendLine(String.Join(", ", new List<string>(GetInputFileNames()).ToArray()));
 			sb.Append(" > Architecture: ").AppendLine(compilerOptions.Architecture.GetType().FullName);
-			sb.Append(" > Binary format: ").AppendLine(((IPipelineStage)compilerOptions.Linker).Name);
+			sb.Append(" > Binary format: ").AppendLine(compilerOptions.LinkerType.ToString());
 			sb.Append(" > Boot format: ").AppendLine((compilerOptions.BootCompilerStage == null) ? "None" : ((IPipelineStage)compilerOptions.BootCompilerStage).Name);
 			sb.Append(" > Is executable: ").AppendLine(isExecutable.ToString());
 			return sb.ToString();
@@ -551,18 +551,18 @@ namespace Mosa.Tool.Compiler
 		/// </summary>
 		/// <param name="format">The linker format.</param>
 		/// <returns>The implementation of the linker.</returns>
-		private static ILinker SelectLinkerStage(string format)
+		private static LinkerType SelectLinkerStage(string format)
 		{
 			switch (format.ToLower())
 			{
 				case "elf32":
-					return new Elf32LinkerStage();
+					return LinkerType.Elf32;
 
 				case "elf64":
-					return new Elf64LinkerStage();
+					return LinkerType.Elf64;
 
 				case "pe":
-					return new PELinkerStage();
+					return LinkerType.PE;
 
 				default:
 					throw new OptionException(String.Format("Unknown or unsupported binary format {0}.", format), "format");

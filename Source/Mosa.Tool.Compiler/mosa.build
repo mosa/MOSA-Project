@@ -16,11 +16,7 @@
 		<sources>
                     <include name="AotCompiler.cs"/>
                     <include name="Stages/MethodPipelineExportStage.cs"/>
-                    <include name="Stages/Elf32LinkerStage.cs"/>
-                    <include name="Stages/Elf64LinkerStage.cs"/>
                     <include name="Stages/MapFileGenerationStage.cs"/>
-                    <include name="Stages/ObjectFileLayoutStage.cs"/>
-                    <include name="Stages/PELinkerStage.cs"/>
                     <include name="AotMethodCompiler.cs"/>
                     <include name="Compiler.cs"/>
                     <include name="Stages/InstructionStatisticsStage.cs"/>

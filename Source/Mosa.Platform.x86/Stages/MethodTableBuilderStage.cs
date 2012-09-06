@@ -31,18 +31,12 @@ namespace Mosa.Platform.x86.Stages
 	{
 
 		/// <summary>
-		/// 
-		/// </summary>
-		private ILinker linker;
-
-		/// <summary>
 		/// Setups the specified compiler.
 		/// </summary>
 		/// <param name="compiler">The compiler.</param>
 		void ICompilerStage.Setup(BaseCompiler compiler)
 		{
 			base.Setup(compiler);
-			linker = RetrieveLinkerFromCompiler();
 		}
 
 		/// <summary>
@@ -75,7 +69,7 @@ namespace Mosa.Platform.x86.Stages
 				{
 					if (linker.HasSymbol(method.ToString()))
 					{
-						table.Add(linker.GetSymbol(method.ToString()));
+						table.Add(linker.GetSymbol(method.FullName));
 
 						if (!methods.Contains(method))
 							methods.Add(method);

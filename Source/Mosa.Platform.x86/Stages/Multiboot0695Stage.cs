@@ -77,8 +77,6 @@ namespace Mosa.Platform.x86.Stages
 
 		#region Data members
 
-		private ILinker linker;
-
 		/// <summary>
 		/// Holds the multiboot video mode.
 		/// </summary>
@@ -127,7 +125,6 @@ namespace Mosa.Platform.x86.Stages
 		void ICompilerStage.Setup(BaseCompiler compiler)
 		{
 			base.Setup(compiler);
-			linker = RetrieveLinkerFromCompiler();
 
 			if (compiler.CompilerOptions.Multiboot.VideoDepth.HasValue)
 				this.VideoDepth = compiler.CompilerOptions.Multiboot.VideoDepth.Value;
@@ -171,7 +168,7 @@ namespace Mosa.Platform.x86.Stages
 				ctx.AppendInstruction(X86.Ret);
 
 				LinkerGeneratedMethod method = LinkTimeCodeGenerator.Compile(this.compiler, @"MultibootInit", instructionSet, typeSystem);
-				linker.EntryPoint = linker.GetSymbol(method.ToString());
+				linker.EntryPoint = linker.GetSymbol(method.FullName);
 			}
 		}
 
@@ -207,7 +204,7 @@ namespace Mosa.Platform.x86.Stages
 					uint bss_end_addr = 0;
 					// entry_point the load virtualAddress of the entry point to invoke
 					// Are we linking an ELF binary?
-					if (!(linker is Mosa.Compiler.Linker.Elf32.Linker || linker is Mosa.Compiler.Linker.Elf64.Linker))
+					if (!(linker is Mosa.Compiler.Linker.Elf32.Elf32Linker || linker is Mosa.Compiler.Linker.Elf64.Elf64Linker))
 					{
 						// Check the linker layout settings
 						if (linker.LoadSectionAlignment != linker.VirtualSectionAlignment)

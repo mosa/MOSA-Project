@@ -32,8 +32,8 @@ namespace Mosa.Tool.Compiler
 		/// <param name="typeLayout">The type layout.</param>
 		/// <param name="internalTrace">The internal trace.</param>
 		/// <param name="compilerOptions">The compiler options.</param>
-		public AotCompiler(IArchitecture architecture, ILinker linker, ITypeSystem typeSystem, ITypeLayout typeLayout, IInternalTrace internalTrace, CompilerOptions compilerOptions)
-			: base(architecture, typeSystem, typeLayout, new CompilationScheduler(typeSystem, true), internalTrace, compilerOptions)
+		public AotCompiler(IArchitecture architecture, ITypeSystem typeSystem, ITypeLayout typeLayout, IInternalTrace internalTrace, CompilerOptions compilerOptions)
+			: base(architecture, typeSystem, typeLayout, new CompilationScheduler(typeSystem, true), internalTrace, null, compilerOptions) 
 		{
 
 		}
@@ -93,7 +93,7 @@ namespace Mosa.Tool.Compiler
 
 			IInternalTrace internalTrace = new BasicInternalTrace();
 
-			AotCompiler aot = new AotCompiler(compilerOptions.Architecture, compilerOptions.Linker, typeSystem, typeLayout, internalTrace, compilerOptions);
+			AotCompiler aot = new AotCompiler(compilerOptions.Architecture, typeSystem, typeLayout, internalTrace, compilerOptions);
 
 			aot.Pipeline.AddRange(new ICompilerStage[] {
 				compilerOptions.BootCompilerStage,
@@ -105,8 +105,7 @@ namespace Mosa.Tool.Compiler
 				new TypeLayoutStage(),
 				new MetadataStage(),
 				new ObjectFileLayoutStage(),
-				(ICompilerStage)compilerOptions.Linker,
-				//compilerOptions.MapFile != null ? new MapFileGenerationStage() : null
+				new LinkerFinalizationStage(),
 			});
 
 			aot.Run();

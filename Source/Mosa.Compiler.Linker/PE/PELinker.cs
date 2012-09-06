@@ -21,7 +21,7 @@ namespace Mosa.Compiler.Linker.PE
 	/// <summary>
 	/// A Linker, which creates portable executable files.
 	/// </summary>
-	public class Linker : BaseLinker
+	public class PELinker : BaseLinker
 	{
 		#region Constants
 
@@ -55,11 +55,6 @@ namespace Mosa.Compiler.Linker.PE
 		//private CLI_HEADER cilHeader;
 
 		/// <summary>
-		/// Holds the file alignment used for this PE file.
-		/// </summary>
-		private uint fileAlignment;
-
-		/// <summary>
 		/// Holds the section alignment used for this PE file.
 		/// </summary>
 		private uint sectionAlignment;
@@ -84,14 +79,14 @@ namespace Mosa.Compiler.Linker.PE
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="Linker"/> class.
+		/// Initializes a new instance of the <see cref="PELinker"/> class.
 		/// </summary>
-		public Linker()
+		public PELinker()
 		{
 			this.dosHeader = new ImageDosHeader();
 			this.ntHeaders = new ImageNtHeaders();
 			this.sectionAlignment = SECTION_ALIGNMENT;
-			this.fileAlignment = FILE_SECTION_ALIGNMENT;
+			this.LoadSectionAlignment = FILE_SECTION_ALIGNMENT;
 			this.setChecksum = true;
 
 			// Create the default section set
@@ -102,6 +97,7 @@ namespace Mosa.Compiler.Linker.PE
 				{ SectionKind.ROData, new Section(SectionKind.ROData, @".rodata", 0) },
 				{ SectionKind.BSS, new Section(SectionKind.BSS, @".bss", 0) }
 			};
+
 		}
 
 		#endregion // Construction
@@ -116,24 +112,6 @@ namespace Mosa.Compiler.Linker.PE
 		{
 			get { return this.setChecksum; }
 			set { this.setChecksum = value; }
-		}
-
-		/// <summary>
-		/// Gets or sets the file alignment in bytes.
-		/// </summary>
-		/// <value>The file alignment in bytes.</value>
-		public uint FileAlignment
-		{
-			get { return this.fileAlignment; }
-			set
-			{
-				if (value < FILE_SECTION_ALIGNMENT)
-					throw new ArgumentException(@"Section alignment must not be less than 512 bytes.", @"value");
-				if ((value & unchecked(FILE_SECTION_ALIGNMENT - 1)) != 0)
-					throw new ArgumentException(@"Section alignment must be a multiple of 512 bytes.", @"value");
-
-				this.fileAlignment = value;
-			}
 		}
 
 		/// <summary>
@@ -217,15 +195,6 @@ namespace Mosa.Compiler.Linker.PE
 		}
 
 		/// <summary>
-		/// Gets the load alignment of sections.
-		/// </summary>
-		/// <value>The load alignment.</value>
-		public override long LoadSectionAlignment
-		{
-			get { return this.fileAlignment; }
-		}
-
-		/// <summary>
 		/// Retrieves the collection of sections created during compilation.
 		/// </summary>
 		/// <value>The sections collection.</value>
@@ -261,8 +230,13 @@ namespace Mosa.Compiler.Linker.PE
 		/// <summary>
 		/// Performs stage specific processing on the compiler context.
 		/// </summary>
-		public void Run()
+		public override void Finalize()
 		{
+			if (LoadSectionAlignment < FILE_SECTION_ALIGNMENT)
+				throw new ArgumentException(@"Section alignment must not be less than 512 bytes.", @"value");
+			if ((LoadSectionAlignment & unchecked(FILE_SECTION_ALIGNMENT - 1)) != 0)
+				throw new ArgumentException(@"Section alignment must be a multiple of 512 bytes.", @"value");
+
 			if (String.IsNullOrEmpty(this.OutputFile))
 				throw new ArgumentException(@"Invalid argument.", @"outputFile");
 
@@ -305,7 +279,7 @@ namespace Mosa.Compiler.Linker.PE
 
 							// Add padding...
 							position += section.Length;
-							position += (this.fileAlignment - (position % this.fileAlignment));
+							position += (this.LoadSectionAlignment - (position % this.LoadSectionAlignment));
 							WritePaddingToPosition(writer, position);
 						}
 					}
@@ -431,7 +405,7 @@ namespace Mosa.Compiler.Linker.PE
 
 			ntHeaders.OptionalHeader.ImageBase = (uint)this.BaseAddress; // FIXME: Linker Script/cmdline
 			ntHeaders.OptionalHeader.SectionAlignment = this.sectionAlignment; // FIXME: Linker Script/cmdline
-			ntHeaders.OptionalHeader.FileAlignment = this.fileAlignment; // FIXME: Linker Script/cmdline
+			ntHeaders.OptionalHeader.FileAlignment = this.LoadSectionAlignment; // FIXME: Linker Script/cmdline
 			ntHeaders.OptionalHeader.MajorOperatingSystemVersion = 4;
 			ntHeaders.OptionalHeader.MinorOperatingSystemVersion = 0;
 			ntHeaders.OptionalHeader.MajorImageVersion = 0;
@@ -440,7 +414,7 @@ namespace Mosa.Compiler.Linker.PE
 			ntHeaders.OptionalHeader.MinorSubsystemVersion = 0;
 			ntHeaders.OptionalHeader.Win32VersionValue = 0;
 			ntHeaders.OptionalHeader.SizeOfImage = CalculateSizeOfImage();
-			ntHeaders.OptionalHeader.SizeOfHeaders = this.fileAlignment; // FIXME: Use the full header size
+			ntHeaders.OptionalHeader.SizeOfHeaders = this.LoadSectionAlignment; // FIXME: Use the full header size
 			ntHeaders.OptionalHeader.CheckSum = 0;
 			ntHeaders.OptionalHeader.Subsystem = 0x03;
 			ntHeaders.OptionalHeader.DllCharacteristics = 0x0540;
@@ -459,7 +433,7 @@ namespace Mosa.Compiler.Linker.PE
 			ntHeaders.Write(writer);
 
 			// Write the section headers
-			uint address = this.fileAlignment;
+			uint address = this.LoadSectionAlignment;
 			foreach (LinkerSection section in this.sections.Values)
 			{
 				if (section.Length > 0)
@@ -500,11 +474,11 @@ namespace Mosa.Compiler.Linker.PE
 					ish.Write(writer);
 
 					address += (uint)section.Length;
-					address = AlignValue(address, this.fileAlignment);
+					address = AlignValue(address, this.LoadSectionAlignment);
 				}
 			}
 
-			WritePaddingToPosition(writer, this.fileAlignment);
+			WritePaddingToPosition(writer, this.LoadSectionAlignment);
 		}
 
 		/// <summary>

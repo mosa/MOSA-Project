@@ -47,11 +47,18 @@ namespace Mosa.Tool.TypeExplorer
 		}
 
 		#endregion // ICompilerStage members
+		
+		#region Construction
 
-		public override long LoadSectionAlignment
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ExplorerLinkerStage"/> class.
+		/// </summary>
+		public ExplorerLinkerStage()
 		{
-			get { return 1; }
+			LoadSectionAlignment = 1;
 		}
+
+		#endregion // Construction
 
 		/// <summary>
 		/// Gets the virtual alignment of sections.

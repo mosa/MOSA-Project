@@ -26,14 +26,15 @@ namespace Mosa.Tool.TypeExplorer
 		/// <param name="internalTrace">The internal trace.</param>
 		/// <param name="compilerOptions">The compiler options.</param>
 		public ExplorerCompiler(IArchitecture architecture, ITypeSystem typeSystem, ITypeLayout typeLayout, IInternalTrace internalTrace, CompilerOptions compilerOptions) :
-			base(architecture, typeSystem, typeLayout, new CompilationScheduler(typeSystem, true), internalTrace, compilerOptions)
+			base(architecture, typeSystem, typeLayout, new CompilationScheduler(typeSystem, true), internalTrace, new ExplorerLinkerStage(), compilerOptions) 
 		{
 			// Build the assembly compiler pipeline
 			Pipeline.AddRange(new ICompilerStage[] {
 				new PlugStage(),
 				new MethodCompilerSchedulerStage(),
 				new TypeLayoutStage(),
-				(ExplorerLinkerStage)Linker
+				new LinkerFinalizationStage(),
+				//(ExplorerLinkerStage)Linker
 			});
 
 			architecture.ExtendCompilerPipeline(Pipeline);
@@ -66,7 +67,6 @@ namespace Mosa.Tool.TypeExplorer
 			CompilerOptions compilerOptions = new CompilerOptions();
 			compilerOptions.EnableSSA = enabledSSA;
 			compilerOptions.EnableSSAOptimizations = enabledSSA && enabledSSA;
-			compilerOptions.Linker = new ExplorerLinkerStage();
 
 			ExplorerCompiler compiler = new ExplorerCompiler(architecture, typeSystem, typeLayout, internalTrace, compilerOptions);
 

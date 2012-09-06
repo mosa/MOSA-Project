@@ -21,21 +21,12 @@ namespace Mosa.Compiler.Framework.Stages
 	/// </summary>
 	public sealed class MetadataStage : BaseCompilerStage, ICompilerStage
 	{
-		#region Data members
-
-		/// <summary>
-		/// 
-		/// </summary>
-		private ILinker linker;
-
-		#endregion // Data members
 
 		#region ICompilerStage members
 
 		void ICompilerStage.Setup(BaseCompiler compiler)
 		{
 			base.Setup(compiler);
-			this.linker = RetrieveLinkerFromCompiler();
 		}
 
 		void ICompilerStage.Run()

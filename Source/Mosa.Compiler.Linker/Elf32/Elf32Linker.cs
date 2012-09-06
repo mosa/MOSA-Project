@@ -11,38 +11,58 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using Mosa.Compiler.Common;
-using Mosa.Compiler.LinkerFormat.Elf64;
+using Mosa.Compiler.LinkerFormat.Elf32;
+using Mosa.Compiler.LinkerFormat.Elf;
 
-namespace Mosa.Compiler.Linker.Elf64
+namespace Mosa.Compiler.Linker.Elf32
 {
 	/// <summary>
 	/// 
 	/// </summary>
-	public class Linker : BaseLinker
+	public class Elf32Linker : BaseLinker
 	{
-		/// <summary>
-		/// 
-		/// </summary>
-		private List<LinkerSection> sections;
-		/// <summary>
-		/// 
-		/// </summary>
-		private NullSection nullSection;
-		/// <summary>
-		/// 
-		/// </summary>
-		private StringTableSection stringTableSection;
 
 		/// <summary>
-		/// Retrieves the collection of sections created during compilation.
+		/// 
 		/// </summary>
-		/// <value>The sections collection.</value>
+		private const uint FileSectionAlignment = 0x200;
+
+		/// <summary>
+		/// Specifies the default section alignment in virtual memory.
+		/// </summary>
+		private const uint SectionAlignment = 0x1000;
+		/// <summary>
+		/// 
+		/// </summary>
+		private readonly List<LinkerSection> sections;
+		/// <summary>
+		/// 
+		/// </summary>
+		private readonly NullSection nullSection;
+		/// <summary>
+		/// 
+		/// </summary>
+		private readonly StringTableSection stringTableSection;
+		
+		/// <summary>
+		/// Holds the section alignment used for this ELF32 file.
+		/// </summary>
+		private readonly uint sectionAlignment;
+		/// <summary>
+		/// Flag, if the symbols have been resolved.
+		/// </summary>
+		private bool symbolsResolved;
+
+		/// <summary>
+		/// Retrieves the collection of _sections created during compilation.
+		/// </summary>
+		/// <value>The _sections collection.</value>
 		public override ICollection<LinkerSection> Sections { get { return sections; } }
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="Linker"/> class.
+		/// Initializes a new instance of the <see cref="Elf32Linker"/> class.
 		/// </summary>
-		public Linker()
+		public Elf32Linker()
 		{
 			// Create the default section set
 			sections = new List<LinkerSection>()
@@ -53,6 +73,9 @@ namespace Mosa.Compiler.Linker.Elf64
 				new BssSection()
 			};
 
+			LoadSectionAlignment = FileSectionAlignment;
+			sectionAlignment = SectionAlignment;
+
 			nullSection = new NullSection();
 			stringTableSection = new StringTableSection();
 		}
@@ -60,33 +83,33 @@ namespace Mosa.Compiler.Linker.Elf64
 		/// <summary>
 		/// Performs stage specific processing on the compiler context.
 		/// </summary>
-		public  void Run()
+		public override void Finalize()
 		{
+			if (String.IsNullOrEmpty(OutputFile))
+				throw new ArgumentException(@"Invalid argument.", "compiler");
+
+			if (LoadSectionAlignment < FileSectionAlignment)
+				throw new ArgumentException(@"Section alignment must not be less than 512 bytes.", @"value");
+			if ((LoadSectionAlignment & unchecked(FileSectionAlignment - 1)) != 0)
+				throw new ArgumentException(@"Section alignment must be a multiple of 512 bytes.", @"value");
+
+			// Layout the sections in memory
+			LayoutSections();
+
 			// Resolve all symbols first
 			Resolve();
 
 			// Persist the Elf32 file now
-			CreateElf64File();
+			CreateElf32File();
 		}
 
 		/// <summary>
-		/// Gets the load alignment of sections.
-		/// </summary>
-		/// <value>The load alignment.</value>
-		public override long LoadSectionAlignment
-		{
-			// TODO
-			get { throw new NotImplementedException(); }
-		}
-
-		/// <summary>
-		/// Gets the virtual alignment of sections.
+		/// Gets the virtual alignment of _sections.
 		/// </summary>
 		/// <value>The virtual section alignment.</value>
 		public override long VirtualSectionAlignment
 		{
-			// TODO
-			get { throw new NotImplementedException(); }
+			get { return sectionAlignment; }
 		}
 
 		/// <summary>
@@ -114,8 +137,8 @@ namespace Mosa.Compiler.Linker.Elf64
 		/// <param name="targetAddress">The position in code, where it should be patched.</param>
 		protected override void ApplyPatch(LinkType linkType, long methodAddress, long methodOffset, long methodRelativeBase, long targetAddress)
 		{
-			//			if (!symbolsResolved)
-			//				throw new InvalidOperationException(@"Can't apply patches - symbols not resolved.");
+			if (!symbolsResolved)
+				throw new InvalidOperationException(@"Can't apply patches - symbols not resolved.");
 
 			// Retrieve the text section
 			Section text = (Section)GetSection(SectionKind.Text);
@@ -145,38 +168,38 @@ namespace Mosa.Compiler.Linker.Elf64
 		/// <returns>The retrieved linker section.</returns>
 		public override LinkerSection GetSection(SectionKind sectionKind)
 		{
-			return this.sections[(int)sectionKind];
+			return sections[(int)sectionKind];
 		}
 
 		/// <summary>
 		/// Determines whether the specified symbol is resolved.
 		/// </summary>
 		/// <param name="symbol">The symbol.</param>
-		/// <param name="address">The virtualAddress.</param>
+		/// <param name="virtualAddress">The address.</param>
 		/// <returns>
 		/// 	<c>true</c> if the specified symbol is resolved; otherwise, <c>false</c>.
 		/// </returns>
-		protected override bool IsResolved(string symbol, out long address)
+		protected override bool IsResolved(string symbol, out long virtualAddress)
 		{
-			address = 0;
-			return true;
-			//return base.IsResolved(symbol, out virtualAddress);*/
+			virtualAddress = 0;
+			return (symbolsResolved && base.IsResolved(symbol, out virtualAddress));
 		}
 
 		/// <summary>
 		/// Creates the elf32 file.
 		/// </summary>
-		private void CreateElf64File()
+		/// <param name="compiler">The compiler.</param>
+		private void CreateElf32File()
 		{
-			using (FileStream fs = new FileStream(this.OutputFile, FileMode.Create, FileAccess.Write, FileShare.None))
+			using (FileStream fs = new FileStream(OutputFile, FileMode.Create, FileAccess.Write, FileShare.None))
 			{
 				Header header = new Header();
 				header.Type = FileType.Executable;
-				header.Machine = Machine;
+				header.Machine = (MachineType)MachineID;
 				header.SectionHeaderNumber = (ushort)(Sections.Count + 2);
 				header.SectionHeaderOffset = header.ElfHeaderSize;
 
-				header.CreateIdent(IdentClass.Class64, IdentData.Data2LSB, null);
+				header.CreateIdent(IdentClass.Class32, IsLittleEndian ? IdentData.Data2LSB : IdentData.Data2MSB, null);
 
 				// Calculate the concatenated size of all section's data
 				uint offset = 0;
@@ -188,8 +211,9 @@ namespace Mosa.Compiler.Linker.Elf64
 				offset += (uint)stringTableSection.Length;
 
 				// Calculate offsets
-				header.ProgramHeaderOffset = (uint)header.ElfHeaderSize + (uint)header.SectionHeaderEntrySize * (uint)header.SectionHeaderNumber + offset;
-				header.SectionHeaderStringIndex = (ushort)((ushort)header.ProgramHeaderOffset + (ushort)header.ProgramHeaderNumber * (ushort)header.ProgramHeaderEntrySize);
+				header.ProgramHeaderOffset = header.ElfHeaderSize + header.SectionHeaderEntrySize * (uint)header.SectionHeaderNumber + offset;
+				header.ProgramHeaderNumber = 1;
+				header.SectionHeaderStringIndex = 1;
 
 				EndianAwareBinaryWriter writer = new EndianAwareBinaryWriter(fs, IsLittleEndian);
 
@@ -203,7 +227,7 @@ namespace Mosa.Compiler.Linker.Elf64
 				nullSection.Write(writer);
 				stringTableSection.Write(writer);
 
-				// Write the sections
+				// Write the _sections
 				foreach (Section section in Sections)
 					section.Write(writer);
 
@@ -216,7 +240,31 @@ namespace Mosa.Compiler.Linker.Elf64
 				// Write the section headers
 				foreach (Section section in Sections)
 					section.WriteHeader(writer);
+
+				ProgramHeader pheader = new ProgramHeader
+				{
+					Alignment = 0,
+					FileSize = (uint)GetSection(SectionKind.Text).Length
+				};
+
+				pheader.MemorySize = pheader.FileSize;
+				pheader.VirtualAddress = 0xFF0000;
+				pheader.Flags = ProgramHeaderFlags.Execute | ProgramHeaderFlags.Read | ProgramHeaderFlags.Write;
+				pheader.Offset = ((Section)GetSection(SectionKind.Text)).Header.Offset;
+				pheader.Type = ProgramHeaderType.Load;
+
+				writer.Seek((int)header.ProgramHeaderOffset, SeekOrigin.Begin);
+				pheader.Write(writer);
 			}
+		}
+
+		/// <summary>
+		/// Adjusts the section addresses and performs a proper layout.
+		/// </summary>
+		private void LayoutSections()
+		{
+			// We've resolved all symbols, allow IsResolved to succeed
+			symbolsResolved = true;
 		}
 	}
 }

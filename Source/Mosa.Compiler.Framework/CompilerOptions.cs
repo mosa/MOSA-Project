@@ -34,8 +34,8 @@ namespace Mosa.Compiler.Framework
 		public struct PortableExecutableStruct
 		{
 			public bool? SetChecksum { get; set; }
-			public uint? FileAlignment { get; set; }
-			public uint? SectionAlignment { get; set; }
+			//public uint? FileAlignment { get; set; }
+			//public uint? SectionAlignment { get; set; }
 		}
 
 		/// <summary>
@@ -43,7 +43,7 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		public struct Elf32Struct
 		{
-			public uint FileAlignment { get; set; }
+			//public uint FileAlignment { get; set; }
 		}
 
 		#endregion // Structures
@@ -63,10 +63,12 @@ namespace Mosa.Compiler.Framework
 		public string OutputFile { get; set; }
 
 		/// <summary>
-		/// Gets or sets the linker stage.
+		/// Gets or sets the linker type.
 		/// </summary>
-		/// <value>The linker stage.</value>
-		public ILinker Linker { get; set; }
+		/// <value>
+		/// The type of the linker type.
+		/// </value>
+		public LinkerType LinkerType { get; set; }
 
 		/// <summary>
 		/// Gets or sets the compiler stage responsible for booting.

@@ -84,21 +84,14 @@ namespace Mosa.Test.System
 			for (int i = 0; i < maxSections; i++)
 				sections.Add(new TestLinkerSection((SectionKind)i, String.Empty, 0));
 
+			LoadSectionAlignment = 1;
+
 			//this.allocateMemoryHandler = new AllocateMemoryDelegate(global::Mosa.Test.System.HostedRuntime.AllocateMemory);
 		}
 
 		#endregion // Construction
 
 		#region BaseLinkerStage Overrides
-
-		/// <summary>
-		/// Gets the load alignment of sections.
-		/// </summary>
-		/// <value>The load alignment.</value>
-		public override long LoadSectionAlignment
-		{
-			get { return 1; }
-		}
 
 		/// <summary>
 		/// Gets the virtual alignment of sections.
@@ -155,18 +148,10 @@ namespace Mosa.Test.System
 		public override Stream Allocate(string name, SectionKind section, int size, int alignment)
 		{
 			LinkerStream stream = (LinkerStream)base.Allocate(name, section, size, alignment);
-			try
-			{
-				VirtualMemoryStream vms = (VirtualMemoryStream)stream.BaseStream;
-				LinkerSymbol symbol = GetSymbol(name);
-				symbol.VirtualAddress = vms.Base + vms.Position;
-				//Trace.WriteLine("Symbol " + name + " located at 0x" + symbol.VirtualAddress.ToInt32().ToString("x08"));
-			}
-			catch
-			{
-				stream.Dispose();
-				throw;
-			}
+
+			VirtualMemoryStream vms = (VirtualMemoryStream)stream.BaseStream;
+			LinkerSymbol symbol = GetSymbol(name);
+			symbol.VirtualAddress = vms.Base + vms.Position;
 
 			return stream;
 		}
@@ -179,6 +164,7 @@ namespace Mosa.Test.System
 		/// <param name="methodOffset">The value to store at the position in code.</param>
 		/// <param name="methodRelativeBase">The method relative base.</param>
 		/// <param name="targetAddress">The position in code, where it should be patched.</param>
+		/// <exception cref="System.NotSupportedException"></exception>
 		protected unsafe override void ApplyPatch(LinkType linkType, long methodAddress, long methodOffset, long methodRelativeBase, long targetAddress)
 		{
 			long value;
@@ -193,6 +179,7 @@ namespace Mosa.Test.System
 				default:
 					throw new NotSupportedException();
 			}
+			
 			long address = methodAddress + methodOffset;
 			// Position is a raw memory virtualAddress, we're just storing value there
 			Debug.Assert(0 != value && value == (int)value);
