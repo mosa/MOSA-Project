@@ -24,10 +24,6 @@ namespace Mosa.Test.System
 	public class TestLinker : BaseLinker
 	{
 
-		#region Data members
-
-		#endregion // Data members
-
 		#region Construction
 
 		/// <summary>
@@ -35,70 +31,17 @@ namespace Mosa.Test.System
 		/// </summary>
 		public TestLinker()
 		{
-			for (int i = 0; i < (int)SectionKind.Max; i++)
-				Sections.Add(new TestLinkerSection((SectionKind)i, String.Empty, 0));
+			Sections.Add(new TestLinkerSection(SectionKind.BSS, String.Empty));
+			Sections.Add(new TestLinkerSection(SectionKind.Data, String.Empty));
+			Sections.Add(new TestLinkerSection(SectionKind.ROData, String.Empty));
+			Sections.Add(new TestLinkerSection(SectionKind.Text, String.Empty));
 
 			LoadSectionAlignment = 1;
 			SectionAlignment = 1;
+			IsLittleEndian = true;	// x86
 		}
 
 		#endregion // Construction
 
-		#region BaseLinker Overrides
-
-		/// <summary>
-		/// Allocates a symbol of the given name in the specified section.
-		/// </summary>
-		/// <param name="name">The name of the symbol.</param>
-		/// <param name="section">The executable section to allocate from.</param>
-		/// <param name="size">The number of bytes to allocate. If zero, indicates an unknown amount of memory is required.</param>
-		/// <param name="alignment">The alignment. A value of zero indicates the use of a default alignment for the section.</param>
-		/// <returns>
-		/// A stream, which can be used to populate the section.
-		/// </returns>
-		//public override Stream Allocate(string name, SectionKind section, int size, int alignment)
-		//{
-		//	LinkerStream stream = (LinkerStream)base.Allocate(name, section, size, alignment);
-
-		//	VirtualMemoryStream vms = (VirtualMemoryStream)stream.BaseStream;
-		//	LinkerSymbol symbol = GetSymbol(name);
-		//	symbol.VirtualAddress = vms.Base + vms.Position;
-
-		//	return stream;
-		//}
-
-		/// <summary>
-		/// A request to patch already emitted code by storing the calculated virtualAddress value.
-		/// </summary>
-		/// <param name="linkType">Type of the link.</param>
-		/// <param name="methodAddress">The virtual virtualAddress of the method whose code is being patched.</param>
-		/// <param name="methodOffset">The value to store at the position in code.</param>
-		/// <param name="methodRelativeBase">The method relative base.</param>
-		/// <param name="targetAddress">The position in code, where it should be patched.</param>
-		/// <exception cref="System.NotSupportedException"></exception>
-		protected unsafe override void ApplyPatch(LinkType linkType, long methodAddress, long methodOffset, long methodRelativeBase, long targetAddress)
-		{
-			long value;
-			switch (linkType & LinkType.KindMask)
-			{
-				case LinkType.RelativeOffset:
-					value = targetAddress - (methodAddress + methodRelativeBase);
-					break;
-				case LinkType.AbsoluteAddress:
-					value = targetAddress;
-					break;
-				default:
-					throw new NotSupportedException();
-			}
-
-			long address = methodAddress + methodOffset;
-
-			// Position is a raw memory virtual address, we're just storing value there
-			Debug.Assert(0 != value && value == (int)value);
-			int* pAddress = (int*)address;
-			*pAddress = (int)value;
-		}
-
-		#endregion // BaseLinker Overrides
 	}
 }

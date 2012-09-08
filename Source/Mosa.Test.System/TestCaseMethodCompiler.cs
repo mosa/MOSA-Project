@@ -21,9 +21,18 @@ namespace Mosa.Test.System
 	class TestCaseMethodCompiler : BaseMethodCompiler
 	{
 
-		private IntPtr address = IntPtr.Zero;
+		/// <summary>
+		/// 
+		/// </summary>
+		private long address = 0;
 
-		public IntPtr Address { get { return address; } }
+		/// <summary>
+		/// Gets the address.
+		/// </summary>
+		/// <value>
+		/// The address.
+		/// </value>
+		public long Address { get { return address; } }
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="TestCaseMethodCompiler"/> class.
@@ -67,8 +76,8 @@ namespace Mosa.Test.System
 			LinkerStream stream = base.RequestCodeStream() as LinkerStream;
 			VirtualMemoryStream vms = (VirtualMemoryStream)stream.BaseStream;
 
-			if (address == IntPtr.Zero)
-				address = new IntPtr(vms.Base + vms.Position);
+			if (address == 0)
+				address = vms.Base + vms.Position;
 
 			return stream;
 		}
@@ -82,7 +91,7 @@ namespace Mosa.Test.System
 			MethodAttributes attrs = MethodAttributes.SpecialName | MethodAttributes.RTSpecialName | MethodAttributes.Static;
 			if ((Method.Attributes & attrs) == attrs && Method.Name == ".cctor")
 			{
-				CCtor cctor = (CCtor)Marshal.GetDelegateForFunctionPointer(address, typeof(CCtor));
+				CCtor cctor = (CCtor)Marshal.GetDelegateForFunctionPointer(new IntPtr(address), typeof(CCtor));
 				(Compiler as TestCaseCompiler).QueueCCtorForInvocationAfterCompilation(cctor);
 			}
 

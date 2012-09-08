@@ -95,40 +95,6 @@ namespace Mosa.Compiler.Linker.PE
 		#region BaseLinker Overrides
 
 		/// <summary>
-		/// A request to patch already emitted code by storing the calculated virtualAddress value.
-		/// </summary>
-		/// <param name="linkType">Type of the link.</param>
-		/// <param name="methodAddress">The virtual virtualAddress of the method whose code is being patched.</param>
-		/// <param name="methodOffset">The value to store at the position in code.</param>
-		/// <param name="methodRelativeBase">The method relative base.</param>
-		/// <param name="targetAddress">The position in code, where it should be patched.</param>
-		protected override void ApplyPatch(LinkType linkType, long methodAddress, long methodOffset, long methodRelativeBase, long targetAddress)
-		{
-			if (!SymbolsResolved)
-				throw new InvalidOperationException(@"Can't apply patches - symbols not resolved.");
-
-			// Retrieve the text section
-			PELinkerSection text = (PELinkerSection)GetSection(SectionKind.Text);
-			// Calculate the patch offset
-			long offset = (methodAddress - text.VirtualAddress) + methodOffset;
-
-			if ((linkType & LinkType.KindMask) == LinkType.AbsoluteAddress)
-			{
-				// FIXME: Need a .reloc section with a relocation entry if the module is moved in virtual memory
-				// the runtime loader must patch this link request, we'll fail it until we can do relocations.
-				//throw new NotSupportedException(@".reloc section not supported.");
-			}
-			else
-			{
-				// Change the absolute into a relative offset
-				targetAddress = targetAddress - (methodAddress + methodRelativeBase);
-			}
-
-			// Save the stream position
-			text.ApplyPatch(offset, linkType, targetAddress);
-		}
-
-		/// <summary>
 		/// Verifies the parameters.
 		/// </summary>
 		/// <returns></returns>

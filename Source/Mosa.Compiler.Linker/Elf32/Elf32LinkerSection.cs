@@ -71,39 +71,5 @@ namespace Mosa.Compiler.Linker.Elf32
 			Header.Write(writer);
 		}
 
-		/// <summary>
-		/// Patches the section at the given offset with the specified value.
-		/// </summary>
-		/// <param name="offset">The offset.</param>
-		/// <param name="linkType">Type of the link.</param>
-		/// <param name="value">The value.</param>
-		public void ApplyPatch(long offset, LinkType linkType, long value, bool isLittleEndian)
-		{
-			long pos = stream.Position;
-			stream.Position = offset;
-
-			// Apply the patch
-			switch (linkType & LinkType.SizeMask)
-			{
-				case LinkType.NativeI1:
-					stream.WriteByte((byte)value);
-					break;
-
-				case LinkType.NativeI2:
-					stream.Write((ushort)value, isLittleEndian);
-					break;
-
-				case LinkType.NativeI4:
-					stream.Write((uint)value, isLittleEndian);
-					break;
-
-				case LinkType.NativeI8:
-					stream.Write((ulong)value, isLittleEndian);
-					break;
-			}
-
-			stream.Position = pos;
-		}
-
 	}
 }

@@ -28,8 +28,8 @@ namespace Mosa.Test.System
 		/// <param name="kind">The kind of the section.</param>
 		/// <param name="name">The name.</param>
 		/// <param name="address">The address.</param>
-		public TestLinkerSection(SectionKind kind, string name, long address) :
-			base(kind, name, address)
+		public TestLinkerSection(SectionKind kind, string name) :
+			base(kind, name, 0)
 		{
 			// Allocate 8Mb for this stream
 			VirtualMemoryStream vms = new VirtualMemoryStream(1024 * 1024 * 8);
@@ -38,21 +38,6 @@ namespace Mosa.Test.System
 		}
 
 		#endregion // Construction
-
-		#region Methods
-
-		/// <summary>
-		/// Allocates a stream of the specified size from the section.
-		/// </summary>
-		/// <param name="size">The size.</param>
-		/// <param name="alignment">The alignment.</param>
-		/// <returns></returns>
-		public override Stream Allocate(int size, int alignment)
-		{
-			return stream;
-		}
-
-		#endregion // Methods
 
 	}
 }

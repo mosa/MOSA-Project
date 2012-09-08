@@ -77,7 +77,7 @@ namespace Mosa.Test.System
 		/// </summary>
 		/// <param name="method">The method to compile.</param>
 		/// <returns>
-		/// An instance of a MethodCompilerBase for the given type/method pair.
+		/// An instance of a BaseMethodCompiler for the given type/method pair.
 		/// </returns>
 		public override BaseMethodCompiler CreateMethodCompiler(RuntimeMethod method)
 		{

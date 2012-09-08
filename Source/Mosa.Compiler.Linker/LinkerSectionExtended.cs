@@ -9,6 +9,7 @@
 
 using System;
 using System.IO;
+using Mosa.Compiler.Common;
 
 namespace Mosa.Compiler.Linker
 {
@@ -77,6 +78,40 @@ namespace Mosa.Compiler.Linker
 			long address = VirtualAddress + stream.Length;
 			int pad = (int)(alignment - (address % alignment));
 			stream.Write(new byte[pad], 0, pad);
+		}
+
+		/// <summary>
+		/// Patches the section at the given offset with the specified value.
+		/// </summary>
+		/// <param name="offset">The offset.</param>
+		/// <param name="linkType">Type of the link.</param>
+		/// <param name="value">The value.</param>
+		public void ApplyPatch(long offset, LinkType linkType, long value, bool isLittleEndian)
+		{
+			long pos = stream.Position;
+			stream.Position = offset;
+
+			// Apply the patch
+			switch (linkType & LinkType.SizeMask)
+			{
+				case LinkType.NativeI1:
+					stream.WriteByte((byte)value);
+					break;
+
+				case LinkType.NativeI2:
+					stream.Write((ushort)value, isLittleEndian);
+					break;
+
+				case LinkType.NativeI4:
+					stream.Write((uint)value, isLittleEndian);
+					break;
+
+				case LinkType.NativeI8:
+					stream.Write((ulong)value, isLittleEndian);
+					break;
+			}
+
+			stream.Position = pos;
 		}
 
 		#endregion // Methods

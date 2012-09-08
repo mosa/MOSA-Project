@@ -216,20 +216,45 @@ namespace Mosa.Compiler.Linker
 		}
 
 		/// <summary>
-		/// A request to patch already emitted code by storing the calculated virtualAddress value.
+		/// A request to patch already emitted code by storing the calculated virtual address value.
 		/// </summary>
 		/// <param name="linkType">Type of the link.</param>
-		/// <param name="methodAddress">The method address.</param>
+		/// <param name="methodAddress">The virtual virtualAddress of the method whose code is being patched.</param>
 		/// <param name="methodOffset">The value to store at the position in code.</param>
 		/// <param name="methodRelativeBase">The method relative base.</param>
 		/// <param name="targetAddress">The position in code, where it should be patched.</param>
-		protected abstract void ApplyPatch(LinkType linkType, long methodAddress, long methodOffset, long methodRelativeBase, long targetAddress);
+		protected void ApplyPatch(LinkType linkType, long methodAddress, long methodOffset, long methodRelativeBase, long targetAddress)
+		{
+			if (!SymbolsResolved)
+				throw new InvalidOperationException(@"Can't apply patches - symbols not resolved.");
+
+			// Retrieve the text section
+			LinkerSectionExtended text = GetSection(SectionKind.Text) as LinkerSectionExtended;
+
+			// Calculate the patch offset
+			long offset = (methodAddress - text.VirtualAddress) + methodOffset;
+
+			if ((linkType & LinkType.KindMask) == LinkType.AbsoluteAddress)
+			{
+				// FIXME: Need a .reloc section with a relocation entry if the module is moved in virtual memory
+				// the runtime loader must patch this link request, we'll fail it until we can do relocations.
+				//throw new NotSupportedException(@".reloc section not supported.");
+			}
+			else
+			{
+				// Change the absolute into a relative offset
+				targetAddress = targetAddress - (methodAddress + methodRelativeBase);
+			}
+
+			// Save the stream position
+			text.ApplyPatch(offset, linkType, targetAddress, IsLittleEndian);
+		}
 
 		/// <summary>
 		/// Allocates a symbol of the given name in the specified section.
 		/// </summary>
 		/// <param name="name">The name of the symbol.</param>
-		/// <param name="section">The executable section to allocate From.</param>
+		/// <param name="section">The executable section to allocate from.</param>
 		/// <param name="size">The number of bytes to allocate. If zero, indicates an unknown amount of memory is required.</param>
 		/// <param name="alignment">The alignment. A value of zero indicates the use of a default alignment for the section.</param>
 		/// <returns>
@@ -237,17 +262,20 @@ namespace Mosa.Compiler.Linker
 		/// </returns>
 		Stream ILinker.Allocate(string name, SectionKind section, int size, int alignment)
 		{
-			Stream baseStream = Allocate(section, size, alignment);
+			LinkerSectionExtended linkerSection = (LinkerSectionExtended)GetSection(section);
+			Stream stream = linkerSection.Allocate(size, alignment);
 
 			// Create a linker symbol for the name
-			LinkerSymbol symbol = new LinkerSymbol(name, section, baseStream.Position);
+			LinkerSymbol symbol = new LinkerSymbol(name, section, stream.Position);
+
+			//symbol.VirtualAddress = linkerSection.VirtualAddress + stream.Position;
 
 			Debug.Assert(!symbols.ContainsKey(symbol.Name));
 
 			// Save the symbol for later use
 			symbols.Add(symbol.Name, symbol);
 
-			return new LinkerStream(symbol, baseStream, size);
+			return new LinkerStream(symbol, stream, size);
 		}
 
 		/// <summary>
@@ -342,21 +370,6 @@ namespace Mosa.Compiler.Linker
 		protected virtual void CreateFile()
 		{
 			return;
-		}
-
-		/// <summary>
-		/// Allocates a symbol of the given name in the specified section.
-		/// </summary>
-		/// <param name="section">The executable section to allocate From.</param>
-		/// <param name="size">The number of bytes to allocate. If zero, indicates an unknown amount of memory is required.</param>
-		/// <param name="alignment">The alignment. A value of zero indicates the use of a default alignment for the section.</param>
-		/// <returns>
-		/// A stream, which can be used to populate the section.
-		/// </returns>
-		protected Stream Allocate(SectionKind section, int size, int alignment)
-		{
-			LinkerSectionExtended linkerSection = (LinkerSectionExtended)GetSection(section);
-			return linkerSection.Allocate(size, alignment);
 		}
 
 		#region Internals

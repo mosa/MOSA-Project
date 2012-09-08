@@ -37,9 +37,5 @@ namespace Mosa.Compiler.Linker
 		/// </remarks>
 		BSS = 3,
 
-		/// <summary>
-		/// Holds the highest section index.
-		/// </summary>
-		Max = 4,
 	}
 }

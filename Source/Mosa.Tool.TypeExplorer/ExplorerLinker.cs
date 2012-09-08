@@ -35,19 +35,6 @@ namespace Mosa.Tool.TypeExplorer
 
 		#endregion // Construction
 
-		/// <summary>
-		/// A request to patch already emitted code by storing the calculated virtualAddress value.
-		/// </summary>
-		/// <param name="linkType">Type of the link.</param>
-		/// <param name="methodAddress">The method address.</param>
-		/// <param name="methodOffset">The value to store at the position in code.</param>
-		/// <param name="methodRelativeBase">The method relative base.</param>
-		/// <param name="targetAddress">The position in code, where it should be patched.</param>
-		protected override void ApplyPatch(LinkType linkType, long methodAddress, long methodOffset, long methodRelativeBase, long targetAddress)
-		{
-			return;
-		}
-
 	}
 
 }
