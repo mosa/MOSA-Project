@@ -26,29 +26,23 @@ namespace Mosa.Tool.TypeExplorer
 		{
 			LoadSectionAlignment = 1;
 			SectionAlignment = 1;
+
+			Sections.Add(new ExplorerLinkerSection(SectionKind.Text, @".text", this.BaseAddress + SectionAlignment));
+			Sections.Add(new ExplorerLinkerSection(SectionKind.Data, @".data", 0));
+			Sections.Add(new ExplorerLinkerSection(SectionKind.ROData, @".rodata", 0));
+			Sections.Add(new ExplorerLinkerSection(SectionKind.BSS, @".bss", 0));
 		}
 
 		#endregion // Construction
 
 		/// <summary>
-		/// Allocates a symbol of the given name in the specified section.
+		/// A request to patch already emitted code by storing the calculated virtualAddress value.
 		/// </summary>
-		/// <param name="section">The executable section to allocate from.</param>
-		/// <param name="size">The number of bytes to allocate. If zero, indicates an unknown amount of memory is required.</param>
-		/// <param name="alignment">The alignment. A value of zero indicates the use of a default alignment for the section.</param>
-		/// <returns>
-		/// A stream, which can be used to populate the section.
-		/// </returns>
-		protected override Stream Allocate(SectionKind section, int size, int alignment)
-		{
-			return new MemoryStream();
-		}
-
-		public override Stream Allocate(string name, SectionKind section, int size, int alignment)
-		{
-			return new MemoryStream();
-		}
-
+		/// <param name="linkType">Type of the link.</param>
+		/// <param name="methodAddress">The method address.</param>
+		/// <param name="methodOffset">The value to store at the position in code.</param>
+		/// <param name="methodRelativeBase">The method relative base.</param>
+		/// <param name="targetAddress">The position in code, where it should be patched.</param>
 		protected override void ApplyPatch(LinkType linkType, long methodAddress, long methodOffset, long methodRelativeBase, long targetAddress)
 		{
 			return;

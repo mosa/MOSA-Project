@@ -14,15 +14,13 @@ using System.IO;
 namespace Mosa.Compiler.Linker
 {
 	/// <summary>
-	/// Collects linker requests for processing in the AssemblyLinkerStage.
+	/// Interface to the linker
 	/// </summary>
 	/// <remarks>
-	/// The assembly linker collector performs runtime specific requests in order to resolve a metadata object
-	/// to its physical virtualAddress in memory. All link requests require the metadata object, the request virtualAddress
+	/// The linker collects runtime specific requests in order to resolve a metadata object to its physical virtual 
+	/// address in memory. All link requests require the metadata object, the request virtual address
 	/// and a relative flag. These are used to either resolve the request immediately or patch the code during
 	/// a later linker stage, when all methods and fields have been compiled.
-	/// <para/>
-	/// The methods return a long instead of IntPtr to allow cross-compilation for 64-bit on a 32-bit system.
 	/// </remarks>
 	public interface ILinker
 	{
@@ -50,7 +48,7 @@ namespace Mosa.Compiler.Linker
 		/// Retrieves the collection of sections created during compilation.
 		/// </summary>
 		/// <value>The sections collection.</value>
-		IList<LinkerSection> Sections { get; }
+		IList<LinkerSectionExtended> Sections { get; }
 
 		/// <summary>
 		/// Retrieves the collection of symbols known by the linker.
@@ -131,9 +129,9 @@ namespace Mosa.Compiler.Linker
 		void Link(LinkType linkType, string symbolName, int symbolOffset, int methodRelativeBase, string targetSymbol, long targetOffset);
 
 		/// <summary>
-		/// Finalizes linking
+		/// Executes the linker and generates the final linked file
 		/// </summary>
-		void Finalize();
+		void GeneratedFile();
 
 		#endregion // Methods
 	}

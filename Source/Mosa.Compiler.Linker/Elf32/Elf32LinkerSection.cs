@@ -16,25 +16,21 @@ namespace Mosa.Compiler.Linker.Elf32
 	/// <summary>
 	/// 
 	/// </summary>
-	public class Section : LinkerSection
+	public class Elf32LinkerSection : LinkerSectionExtended
 	{
 
 		/// <summary>
 		/// 
 		/// </summary>
 		protected SectionHeader header = new SectionHeader();
-		/// <summary>
-		/// 
-		/// </summary>
-		protected MemoryStream stream;
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="Section"/> class.
+		/// Initializes a new instance of the <see cref="Elf32LinkerSection"/> class.
 		/// </summary>
 		/// <param name="kind">The kind of the section.</param>
 		/// <param name="name">The name.</param>
 		/// <param name="virtualAddress">The virtualAddress.</param>
-		public Section(SectionKind kind, string name, long virtualAddress)
+		public Elf32LinkerSection(SectionKind kind, string name, long virtualAddress)
 			: base(kind, name, virtualAddress)
 		{
 			header = new SectionHeader();
@@ -54,20 +50,6 @@ namespace Mosa.Compiler.Linker.Elf32
 		/// <value>The header.</value>
 		public SectionHeader Header { get { return header; } }
 
-		/// <summary>
-		/// Allocates the specified size.
-		/// </summary>
-		/// <param name="size">The size.</param>
-		/// <param name="alignment">The alignment.</param>
-		/// <returns></returns>
-		public Stream Allocate(int size, int alignment)
-		{
-			// Do we need to ensure a specific alignment?
-			if (alignment > 1)
-				InsertPadding(alignment);
-
-			return stream;
-		}
 
 		/// <summary>
 		/// Writes the specified fs.
@@ -123,19 +105,5 @@ namespace Mosa.Compiler.Linker.Elf32
 			stream.Position = pos;
 		}
 
-		#region Internals
-
-		/// <summary>
-		/// Pads the stream with zeros until the specific alignment is reached.
-		/// </summary>
-		/// <param name="alignment">The alignment.</param>
-		private void InsertPadding(int alignment)
-		{
-			long address = VirtualAddress + stream.Length;
-			int pad = (int)(alignment - (address % alignment));
-			stream.Write(new byte[pad], 0, pad);
-		}
-
-		#endregion // Internals
 	}
 }

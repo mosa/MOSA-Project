@@ -16,24 +16,20 @@ namespace Mosa.Compiler.Linker.Elf64
 	/// <summary>
 	/// 
 	/// </summary>
-	public class Section : LinkerSection
+	public class Elf64LinkerSection : LinkerSectionExtended
 	{
 		/// <summary>
 		/// 
 		/// </summary>
 		protected SectionHeader header = new SectionHeader();
-		/// <summary>
-		/// 
-		/// </summary>
-		protected MemoryStream stream;
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="Section"/> class.
+		/// Initializes a new instance of the <see cref="Elf64LinkerSection"/> class.
 		/// </summary>
 		/// <param name="kind">The kind of the section.</param>
 		/// <param name="name">The name.</param>
 		/// <param name="virtualAddress">The virtualAddress.</param>
-		public Section(Mosa.Compiler.Linker.SectionKind kind, string name, long virtualAddress)
+		public Elf64LinkerSection(Mosa.Compiler.Linker.SectionKind kind, string name, long virtualAddress)
 			: base(kind, name, virtualAddress)
 		{
 			header = new SectionHeader();
@@ -42,31 +38,10 @@ namespace Mosa.Compiler.Linker.Elf64
 		}
 
 		/// <summary>
-		/// Gets the length of the section in bytes.
-		/// </summary>
-		/// <value>The length of the section in bytes.</value>
-		public override long Length { get { return this.stream.Length; } }
-
-		/// <summary>
 		/// Gets the header.
 		/// </summary>
 		/// <value>The header.</value>
 		public SectionHeader Header { get { return header; } }
-
-		/// <summary>
-		/// Allocates the specified size.
-		/// </summary>
-		/// <param name="size">The size.</param>
-		/// <param name="alignment">The alignment.</param>
-		/// <returns></returns>
-		public Stream Allocate(int size, int alignment)
-		{
-			// Do we need to ensure a specific alignment?
-			if (alignment > 1)
-				InsertPadding(alignment);
-
-			return stream;
-		}
 
 		/// <summary>
 		/// Patches the section at the given offset with the specified value.
@@ -122,19 +97,5 @@ namespace Mosa.Compiler.Linker.Elf64
 			Header.Write(writer);
 		}
 
-		#region Internals
-
-		/// <summary>
-		/// Pads the stream with zeros until the specific alignment is reached.
-		/// </summary>
-		/// <param name="alignment">The alignment.</param>
-		private void InsertPadding(int alignment)
-		{
-			long address = this.VirtualAddress + this.stream.Length;
-			int pad = (int)(alignment - (address % alignment));
-			this.stream.Write(new byte[pad], 0, pad);
-		}
-
-		#endregion // Internals
 	}
 }

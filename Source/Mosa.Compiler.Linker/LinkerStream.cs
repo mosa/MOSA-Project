@@ -234,7 +234,7 @@ namespace Mosa.Compiler.Linker
 			{
 				if (stream == null)
 					throw new ObjectDisposedException(@"LinkerStream");
-				if (0 == length)
+				if (length == 0)
 					throw new System.NotSupportedException();
 
 				return length;

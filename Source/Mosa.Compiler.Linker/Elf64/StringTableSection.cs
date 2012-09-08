@@ -16,7 +16,7 @@ namespace Mosa.Compiler.Linker.Elf64
 	/// <summary>
 	/// 
 	/// </summary>
-	public class StringTableSection : Section
+	public class StringTableSection : Elf64LinkerSection
 	{
 		/// <summary>
 		/// 
@@ -27,13 +27,7 @@ namespace Mosa.Compiler.Linker.Elf64
 		/// Gets the length of the section in bytes.
 		/// </summary>
 		/// <value>The length of the section in bytes.</value>
-		public override long Length
-		{
-			get
-			{
-				return stringTable.Count;
-			}
-		}
+		public override long Length { get { return stringTable.Count; } }
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="CodeSection"/> class.

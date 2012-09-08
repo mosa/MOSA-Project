@@ -17,16 +17,8 @@ namespace Mosa.Test.System
 	/// <summary>
 	/// 
 	/// </summary>
-	public sealed class TestLinkerSection : LinkerSection
+	public sealed class TestLinkerSection : LinkerSectionExtended
 	{
-		#region Data members
-
-		/// <summary>
-		/// Holds the stream of this linker section.
-		/// </summary>
-		private Stream stream;
-
-		#endregion // Data members
 
 		#region Construction
 
@@ -39,6 +31,10 @@ namespace Mosa.Test.System
 		public TestLinkerSection(SectionKind kind, string name, long address) :
 			base(kind, name, address)
 		{
+			// Allocate 8Mb for this stream
+			VirtualMemoryStream vms = new VirtualMemoryStream(1024 * 1024 * 8);
+			base.VirtualAddress = vms.Base;
+			stream = vms;
 		}
 
 		#endregion // Construction
@@ -51,37 +47,12 @@ namespace Mosa.Test.System
 		/// <param name="size">The size.</param>
 		/// <param name="alignment">The alignment.</param>
 		/// <returns></returns>
-		public Stream Allocate(int size, int alignment)
+		public override Stream Allocate(int size, int alignment)
 		{
-			if (stream == null)
-			{
-				// Allocate 4Mb for this stream
-				VirtualMemoryStream vms = new VirtualMemoryStream(1024 * 1024 * 4);
-
-				// Save the stream for further references
-				this.stream = vms;
-				base.VirtualAddress = vms.Base;
-			}
-
-			if (size != 0 && size > (stream.Length - stream.Position))
-				throw new OutOfMemoryException(@"Not enough space in section to allocate symbol.");
-
 			return stream;
 		}
 
 		#endregion // Methods
 
-		#region LinkerSection Overrides
-
-		/// <summary>
-		/// Gets the length of the section in bytes.
-		/// </summary>
-		/// <value>The length of the section in bytes.</value>
-		public override long Length
-		{
-			get { return (this.stream != null ? this.stream.Length : 0); }
-		}
-
-		#endregion // LinkerSection Overrides
 	}
 }

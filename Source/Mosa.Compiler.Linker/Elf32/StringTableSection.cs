@@ -16,7 +16,7 @@ namespace Mosa.Compiler.Linker.Elf32
 	/// <summary>
 	/// 
 	/// </summary>
-	public class StringTableSection : Section
+	public class StringTableSection : Elf32LinkerSection
 	{
 		/// <summary>
 		/// 

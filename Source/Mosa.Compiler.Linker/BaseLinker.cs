@@ -22,6 +22,7 @@ namespace Mosa.Compiler.Linker
 	/// </summary>
 	public abstract class BaseLinker : ILinker
 	{
+
 		#region Data members
 
 		/// <summary>
@@ -42,7 +43,7 @@ namespace Mosa.Compiler.Linker
 		/// <summary>
 		/// 
 		/// </summary>
-		private readonly List<LinkerSection> sections = new List<LinkerSection>();
+		private readonly List<LinkerSectionExtended> sections = new List<LinkerSectionExtended>();
 
 		/// <summary>
 		/// Holds the output file of the linker.
@@ -57,14 +58,14 @@ namespace Mosa.Compiler.Linker
 		/// <summary>
 		/// Flag is the target platform is little-endian
 		/// </summary>
-		public bool IsLittleEndian { get; set; }
+		private bool littleEndian;
 
 		/// <summary>
 		/// Gets or sets the machine type (depends on platform)
 		/// </summary>
 		/// <value>
 		/// </value>
-		public uint MachineID { get; set; }
+		private uint machineID;
 
 		/// <summary>
 		/// Holds the file alignment used for this ELF32 file.
@@ -140,7 +141,7 @@ namespace Mosa.Compiler.Linker
 		/// Retrieves the collection of sections created during compilation.
 		/// </summary>
 		/// <value>The sections collection.</value>
-		public IList<LinkerSection> Sections { get { return sections; } }
+		public IList<LinkerSectionExtended> Sections { get { return sections; } }
 
 		/// <summary>
 		/// Retrieves the collection of _symbols known by the linker.
@@ -157,8 +158,28 @@ namespace Mosa.Compiler.Linker
 		/// <value>The section alignment in bytes.</value>
 		public uint SectionAlignment
 		{
-			get { return this.sectionAlignment; }
-			protected set { this.sectionAlignment = value; }
+			get { return sectionAlignment; }
+			protected set { sectionAlignment = value; }
+		}
+
+		/// <summary>
+		/// Flag is the target platform is little-endian
+		/// </summary>
+		public bool IsLittleEndian
+		{
+			get { return littleEndian; }
+			set { littleEndian = value; }
+		}
+
+		/// <summary>
+		/// Gets or sets the machine type (depends on platform)
+		/// </summary>
+		/// <value>
+		/// </value>
+		public uint MachineID
+		{
+			get { return machineID; }
+			set { machineID = value; }
 		}
 
 		#endregion // Properties
@@ -177,14 +198,173 @@ namespace Mosa.Compiler.Linker
 
 		#endregion // Construction
 
-		public virtual void Finalize()
+		#region ILinker Members
+
+		/// <summary>
+		/// Executes the linker and generates the final linked file
+		/// </summary>
+		void ILinker.GeneratedFile()
 		{
+			// Layout the sections
+			LayoutSections();
+
+			// Resolve all symbols 
+			Resolve();
+
+			// Persist the file now
+			CreateFile();
 		}
+
+		/// <summary>
+		/// A request to patch already emitted code by storing the calculated virtualAddress value.
+		/// </summary>
+		/// <param name="linkType">Type of the link.</param>
+		/// <param name="methodAddress">The method address.</param>
+		/// <param name="methodOffset">The value to store at the position in code.</param>
+		/// <param name="methodRelativeBase">The method relative base.</param>
+		/// <param name="targetAddress">The position in code, where it should be patched.</param>
+		protected abstract void ApplyPatch(LinkType linkType, long methodAddress, long methodOffset, long methodRelativeBase, long targetAddress);
+
+		/// <summary>
+		/// Allocates a symbol of the given name in the specified section.
+		/// </summary>
+		/// <param name="name">The name of the symbol.</param>
+		/// <param name="section">The executable section to allocate From.</param>
+		/// <param name="size">The number of bytes to allocate. If zero, indicates an unknown amount of memory is required.</param>
+		/// <param name="alignment">The alignment. A value of zero indicates the use of a default alignment for the section.</param>
+		/// <returns>
+		/// A stream, which can be used to populate the section.
+		/// </returns>
+		Stream ILinker.Allocate(string name, SectionKind section, int size, int alignment)
+		{
+			Stream baseStream = Allocate(section, size, alignment);
+
+			// Create a linker symbol for the name
+			LinkerSymbol symbol = new LinkerSymbol(name, section, baseStream.Position);
+
+			Debug.Assert(!symbols.ContainsKey(symbol.Name));
+
+			// Save the symbol for later use
+			symbols.Add(symbol.Name, symbol);
+
+			return new LinkerStream(symbol, baseStream, size);
+		}
+
+		/// <summary>
+		/// Gets the section.
+		/// </summary>
+		/// <param name="sectionKind">Kind of the section.</param>
+		/// <returns>The section of the requested kind.</returns>
+		LinkerSection ILinker.GetSection(SectionKind sectionKind)
+		{
+			return GetSection(sectionKind);
+		}
+
+		/// <summary>
+		/// Retrieves a linker symbol.
+		/// </summary>
+		/// <param name="symbolName">The name of the symbol to retrieve.</param>
+		/// <returns>The named linker symbol.</returns>
+		/// <exception cref="System.ArgumentNullException"><paramref name="symbolName"/> is null.</exception>
+		/// <exception cref="System.ArgumentException">There's no symbol of the given name.</exception>
+		LinkerSymbol ILinker.GetSymbol(string symbolName)
+		{
+			if (symbolName == null)
+				throw new ArgumentNullException(@"symbolName");
+
+			LinkerSymbol result;
+			if (!symbols.TryGetValue(symbolName, out result))
+				throw new ArgumentException(@"Symbol not compiled.", @"member");
+
+			return result;
+		}
+
+		/// <summary>
+		/// Determines if a given symbol name is already in use by the linker.
+		/// </summary>
+		/// <param name="symbolName">The symbol name.</param>
+		/// <returns><c>true</c> if the symbol name is already used; <c>false</c> otherwise.</returns>
+		bool ILinker.HasSymbol(string symbolName)
+		{
+			return symbols.ContainsKey(symbolName);
+		}
+
+		/// <summary>
+		/// Issues a linker request for the given runtime method.
+		/// </summary>
+		/// <param name="linkType">The type of link required.</param>
+		/// <param name="symbolName">The method the patched code belongs to.</param>
+		/// <param name="symbolOffset">The offset inside the method where the patch is placed.</param>
+		/// <param name="methodRelativeBase">The base virtualAddress, if a relative link is required.</param>
+		/// <param name="targetSymbol">The linker symbol to link against.</param>
+		/// <param name="targetOffset">An offset to apply to the link target.</param>
+		/// <exception cref="System.ArgumentNullException"></exception>
+		void ILinker.Link(LinkType linkType, string symbolName, int symbolOffset, int methodRelativeBase, string targetSymbol, long targetOffset)
+		{
+			Debug.Assert(symbolName != null, @"Symbol can't be null.");
+			if (symbolName == null)
+				throw new ArgumentNullException(@"symbol");
+
+			List<LinkRequest> list;
+			if (!linkRequests.TryGetValue(targetSymbol, out list))
+			{
+				list = new List<LinkRequest>();
+				linkRequests.Add(targetSymbol, list);
+			}
+
+			list.Add(new LinkRequest(linkType, symbolName, symbolOffset, methodRelativeBase, targetSymbol, targetOffset));
+		}
+
+		#endregion //  ILinker Members
+
+		/// <summary>
+		/// Verifies the parameters.
+		/// </summary>
+		/// <returns></returns>
+		/// <exception cref="System.ArgumentException"></exception>
+		protected virtual void VerifyParameters()
+		{
+			if (String.IsNullOrEmpty(OutputFile))
+				throw new ArgumentException(@"Invalid argument.", "compiler");
+		}
+
+		/// <summary>
+		/// Layouts the sections.
+		/// </summary>
+		protected virtual void LayoutSections()
+		{
+			return;
+		}
+
+		/// <summary>
+		/// Creates the final linked file.
+		/// </summary>
+		protected virtual void CreateFile()
+		{
+			return;
+		}
+
+		/// <summary>
+		/// Allocates a symbol of the given name in the specified section.
+		/// </summary>
+		/// <param name="section">The executable section to allocate From.</param>
+		/// <param name="size">The number of bytes to allocate. If zero, indicates an unknown amount of memory is required.</param>
+		/// <param name="alignment">The alignment. A value of zero indicates the use of a default alignment for the section.</param>
+		/// <returns>
+		/// A stream, which can be used to populate the section.
+		/// </returns>
+		protected Stream Allocate(SectionKind section, int size, int alignment)
+		{
+			LinkerSectionExtended linkerSection = (LinkerSectionExtended)GetSection(section);
+			return linkerSection.Allocate(size, alignment);
+		}
+
+		#region Internals
 
 		/// <summary>
 		/// Performs stage specific processing on the compiler context.
 		/// </summary>
-		public void Resolve()
+		protected void Resolve()
 		{
 			long address;
 
@@ -216,134 +396,15 @@ namespace Mosa.Compiler.Linker
 			}
 		}
 
-		#region Methods
-
-		/// <summary>
-		/// A request to patch already emitted code by storing the calculated virtualAddress value.
-		/// </summary>
-		/// <param name="linkType">Type of the link.</param>
-		/// <param name="methodAddress">The method address.</param>
-		/// <param name="methodOffset">The value to store at the position in code.</param>
-		/// <param name="methodRelativeBase">The method relative base.</param>
-		/// <param name="targetAddress">The position in code, where it should be patched.</param>
-		protected abstract void ApplyPatch(LinkType linkType, long methodAddress, long methodOffset, long methodRelativeBase, long targetAddress);
-
-		#endregion // Methods
-
-		/// <summary>
-		/// Allocates a symbol of the given name in the specified section.
-		/// </summary>
-		/// <param name="name">The name of the symbol.</param>
-		/// <param name="section">The executable section to allocate From.</param>
-		/// <param name="size">The number of bytes to allocate. If zero, indicates an unknown amount of memory is required.</param>
-		/// <param name="alignment">The alignment. A value of zero indicates the use of a default alignment for the section.</param>
-		/// <returns>
-		/// A stream, which can be used to populate the section.
-		/// </returns>
-		public virtual Stream Allocate(string name, SectionKind section, int size, int alignment)
-		{
-			try
-			{
-				Stream baseStream = Allocate(section, size, alignment);
-
-				// Create a linker symbol for the name
-				LinkerSymbol symbol = new LinkerSymbol(name, section, baseStream.Position);
-
-				// Save the symbol for later use
-				//if (!symbols.ContainsKey(symbol.Name)) // FIXME: Remove this line when generic patch is fixed! It duplicates generic types
-				Debug.Assert(!symbols.ContainsKey(symbol.Name));
-
-				symbols.Add(symbol.Name, symbol);
-
-				// Wrap the stream to catch premature disposal
-				Stream result = new LinkerStream(symbol, baseStream, size);
-
-				return result;
-			}
-			catch (ArgumentException argx)
-			{
-				throw new LinkerException(String.Format(@"Symbol {0} defined multiple times.", name), argx);
-			}
-
-		}
-
-		/// <summary>
-		/// Allocates a symbol of the given name in the specified section.
-		/// </summary>
-		/// <param name="section">The executable section to allocate From.</param>
-		/// <param name="size">The number of bytes to allocate. If zero, indicates an unknown amount of memory is required.</param>
-		/// <param name="alignment">The alignment. A value of zero indicates the use of a default alignment for the section.</param>
-		/// <returns>
-		/// A stream, which can be used to populate the section.
-		/// </returns>
-		protected abstract Stream Allocate(SectionKind section, int size, int alignment);
-
 		/// <summary>
 		/// Gets the section.
 		/// </summary>
 		/// <param name="sectionKind">Kind of the section.</param>
 		/// <returns>The section of the requested kind.</returns>
-		public LinkerSection GetSection(SectionKind sectionKind)
+		protected LinkerSection GetSection(SectionKind sectionKind)
 		{
 			return sections[(int)sectionKind];
 		}
-
-		/// <summary>
-		/// Retrieves a linker symbol.
-		/// </summary>
-		/// <param name="symbolName">The name of the symbol to retrieve.</param>
-		/// <returns>The named linker symbol.</returns>
-		/// <exception cref="System.ArgumentNullException"><paramref name="symbolName"/> is null.</exception>
-		/// <exception cref="System.ArgumentException">There's no symbol of the given name.</exception>
-		public LinkerSymbol GetSymbol(string symbolName)
-		{
-			if (symbolName == null)
-				throw new ArgumentNullException(@"symbolName");
-
-			LinkerSymbol result;
-			if (!symbols.TryGetValue(symbolName, out result))
-				throw new ArgumentException(@"Symbol not compiled.", @"member");
-
-			return result;
-		}
-
-		/// <summary>
-		/// Determines if a given symbol name is already in use by the linker.
-		/// </summary>
-		/// <param name="symbolName">The symbol name.</param>
-		/// <returns><c>true</c> if the symbol name is already used; <c>false</c> otherwise.</returns>
-		public bool HasSymbol(string symbolName)
-		{
-			return symbols.ContainsKey(symbolName);
-		}
-
-		/// <summary>
-		/// Issues a linker request for the given runtime method.
-		/// </summary>
-		/// <param name="linkType">The type of link required.</param>
-		/// <param name="symbolName">The method the patched code belongs to.</param>
-		/// <param name="symbolOffset">The offset inside the method where the patch is placed.</param>
-		/// <param name="methodRelativeBase">The base virtualAddress, if a relative link is required.</param>
-		/// <param name="targetSymbol">The linker symbol to link against.</param>
-		/// <param name="targetOffset">An offset to apply to the link target.</param>
-		/// <exception cref="System.ArgumentNullException"></exception>
-		public virtual void Link(LinkType linkType, string symbolName, int symbolOffset, int methodRelativeBase, string targetSymbol, long targetOffset)
-		{
-			Debug.Assert(symbolName != null, @"Symbol can't be null.");
-			if (symbolName == null)
-				throw new ArgumentNullException(@"symbol");
-
-			List<LinkRequest> list;
-			if (!linkRequests.TryGetValue(targetSymbol, out list))
-			{
-				list = new List<LinkRequest>();
-				linkRequests.Add(targetSymbol, list);
-			}
-
-			list.Add(new LinkRequest(linkType, symbolName, symbolOffset, methodRelativeBase, targetSymbol, targetOffset));
-		}
-
-		#region Internals
 
 		/// <summary>
 		/// Determines whether the specified symbol is resolved.

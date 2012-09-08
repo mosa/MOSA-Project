@@ -51,33 +51,6 @@ namespace Mosa.Compiler.Linker.Elf64
 		}
 
 		/// <summary>
-		/// Performs stage specific processing on the compiler context.
-		/// </summary>
-		public override void Finalize()
-		{
-			// Resolve all symbols first
-			Resolve();
-
-			// Persist the Elf32 file now
-			CreateFile();
-		}
-
-		/// <summary>
-		/// Allocates a symbol of the given name in the specified section.
-		/// </summary>
-		/// <param name="section">The executable section to allocate From.</param>
-		/// <param name="size">The number of bytes to allocate. If zero, indicates an unknown amount of memory is required.</param>
-		/// <param name="alignment">The alignment. A value of zero indicates the use of a default alignment for the section.</param>
-		/// <returns>
-		/// A stream, which can be used to populate the section.
-		/// </returns>
-		protected override Stream Allocate(SectionKind section, int size, int alignment)
-		{
-			Section linkerSection = (Section)GetSection(section);
-			return linkerSection.Allocate(size, alignment);
-		}
-
-		/// <summary>
 		/// A request to patch already emitted code by storing the calculated virtualAddress value.
 		/// </summary>
 		/// <param name="linkType">Type of the link.</param>
@@ -91,7 +64,8 @@ namespace Mosa.Compiler.Linker.Elf64
 				throw new InvalidOperationException(@"Can't apply patches - symbols not resolved.");
 
 			// Retrieve the text section
-			Section text = (Section)GetSection(SectionKind.Text);
+			Elf64LinkerSection text = (Elf64LinkerSection)GetSection(SectionKind.Text);
+
 			// Calculate the patch offset
 			long offset = (methodAddress - text.VirtualAddress) + methodOffset;
 
@@ -111,11 +85,10 @@ namespace Mosa.Compiler.Linker.Elf64
 			text.ApplyPatch(offset, linkType, targetAddress, IsLittleEndian);
 		}
 
-
 		/// <summary>
-		/// Creates the elf32 file.
+		/// Creates the final linked file.
 		/// </summary>
-		private void CreateFile()
+		protected override void CreateFile()
 		{
 			using (FileStream fs = new FileStream(this.OutputFile, FileMode.Create, FileAccess.Write, FileShare.None))
 			{
@@ -129,7 +102,7 @@ namespace Mosa.Compiler.Linker.Elf64
 
 				// Calculate the concatenated size of all section's data
 				uint offset = 0;
-				foreach (Section section in Sections)
+				foreach (Elf64LinkerSection section in Sections)
 				{
 					offset += (uint)section.Length;
 				}
@@ -153,7 +126,7 @@ namespace Mosa.Compiler.Linker.Elf64
 				stringTableSection.Write(writer);
 
 				// Write the sections
-				foreach (Section section in Sections)
+				foreach (Elf64LinkerSection section in Sections)
 					section.Write(writer);
 
 				// Jump back to the Section Header Table
@@ -163,7 +136,7 @@ namespace Mosa.Compiler.Linker.Elf64
 				stringTableSection.WriteHeader(writer);
 
 				// Write the section headers
-				foreach (Section section in Sections)
+				foreach (Elf64LinkerSection section in Sections)
 					section.WriteHeader(writer);
 			}
 		}
@@ -171,7 +144,7 @@ namespace Mosa.Compiler.Linker.Elf64
 		/// <summary>
 		/// Adjusts the section addresses and performs a proper layout.
 		/// </summary>
-		private void LayoutSections()
+		protected override void LayoutSections()
 		{
 			// We've resolved all symbols, allow IsResolved to succeed
 			SymbolsResolved = true;

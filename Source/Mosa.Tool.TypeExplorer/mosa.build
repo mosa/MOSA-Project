@@ -23,6 +23,7 @@
                     <include name="Main.Designer.cs"/>
                     <include name="Program.cs"/>
                     <include name="Properties/Resources.Designer.cs"/>
+                    <include name="ExplorerLinkerSection.cs"/>
 		</sources>
 		<references>
                     <include name="System.dll"/>

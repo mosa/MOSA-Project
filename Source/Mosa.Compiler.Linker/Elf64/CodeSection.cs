@@ -14,7 +14,7 @@ namespace Mosa.Compiler.Linker.Elf64
 	/// <summary>
 	/// 
 	/// </summary>
-	public class CodeSection : Section
+	public class CodeSection : Elf64LinkerSection
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="CodeSection"/> class.

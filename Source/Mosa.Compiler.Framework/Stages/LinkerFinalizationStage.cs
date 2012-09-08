@@ -31,7 +31,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		void ICompilerStage.Run()
 		{
-			this.linker.Finalize();
+			linker.GeneratedFile();
 		}
 
 		#endregion // ICompilerStage members

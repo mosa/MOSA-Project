@@ -15,7 +15,7 @@ namespace Mosa.Compiler.Linker.Elf32
 	/// <summary>
 	/// 
 	/// </summary>
-	public class NullSection : Section
+	public class NullSection : Elf32LinkerSection
 	{
 		/// <summary>
 		/// Gets the length of the section in bytes.

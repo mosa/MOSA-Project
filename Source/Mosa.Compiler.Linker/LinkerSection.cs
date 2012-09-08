@@ -19,7 +19,7 @@ namespace Mosa.Compiler.Linker
 		#region Data members
 
 		/// <summary>
-		/// Holds the sections load virtualAddress.
+		/// Holds the sections load virtual address.
 		/// </summary>
 		private long virtualAddress;
 
@@ -66,7 +66,7 @@ namespace Mosa.Compiler.Linker
 		public long VirtualAddress
 		{
 			get { return this.virtualAddress; }
-			/* internal protected  */ set { this.virtualAddress = value; }
+			set { this.virtualAddress = value; }
 		}
 
 		/// <summary>
@@ -94,7 +94,6 @@ namespace Mosa.Compiler.Linker
 		public long Offset
 		{
 			get { return this.offset; }
-			/* internal */
 			set { this.offset = value; }
 		}
 
@@ -115,9 +114,10 @@ namespace Mosa.Compiler.Linker
 		/// </returns>
 		public override string ToString()
 		{
-			return this.name;
+			return Name;
 		}
 
 		#endregion // Properties
+
 	}
 }

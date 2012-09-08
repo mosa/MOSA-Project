@@ -44,21 +44,7 @@ namespace Mosa.Test.System
 
 		#endregion // Construction
 
-		#region BaseLinkerStage Overrides
-
-		/// <summary>
-		/// Allocates a symbol of the given name in the specified section.
-		/// </summary>
-		/// <param name="section">The executable section to allocate from.</param>
-		/// <param name="size">The number of bytes to allocate. If zero, indicates an unknown amount of memory is required.</param>
-		/// <param name="alignment">The alignment. A value of zero indicates the use of a default alignment for the section.</param>
-		/// <returns>
-		/// A stream, which can be used to populate the section.
-		/// </returns>
-		protected override Stream Allocate(SectionKind section, int size, int alignment)
-		{
-			return ((TestLinkerSection)GetSection(section)).Allocate(size, alignment);
-		}
+		#region BaseLinker Overrides
 
 		/// <summary>
 		/// Allocates a symbol of the given name in the specified section.
@@ -70,16 +56,16 @@ namespace Mosa.Test.System
 		/// <returns>
 		/// A stream, which can be used to populate the section.
 		/// </returns>
-		public override Stream Allocate(string name, SectionKind section, int size, int alignment)
-		{
-			LinkerStream stream = (LinkerStream)base.Allocate(name, section, size, alignment);
+		//public override Stream Allocate(string name, SectionKind section, int size, int alignment)
+		//{
+		//	LinkerStream stream = (LinkerStream)base.Allocate(name, section, size, alignment);
 
-			VirtualMemoryStream vms = (VirtualMemoryStream)stream.BaseStream;
-			LinkerSymbol symbol = GetSymbol(name);
-			symbol.VirtualAddress = vms.Base + vms.Position;
+		//	VirtualMemoryStream vms = (VirtualMemoryStream)stream.BaseStream;
+		//	LinkerSymbol symbol = GetSymbol(name);
+		//	symbol.VirtualAddress = vms.Base + vms.Position;
 
-			return stream;
-		}
+		//	return stream;
+		//}
 
 		/// <summary>
 		/// A request to patch already emitted code by storing the calculated virtualAddress value.
@@ -106,12 +92,13 @@ namespace Mosa.Test.System
 			}
 
 			long address = methodAddress + methodOffset;
-			// Position is a raw memory virtualAddress, we're just storing value there
+
+			// Position is a raw memory virtual address, we're just storing value there
 			Debug.Assert(0 != value && value == (int)value);
 			int* pAddress = (int*)address;
 			*pAddress = (int)value;
 		}
 
-		#endregion // BaseLinkerStage Overrides
+		#endregion // BaseLinker Overrides
 	}
 }

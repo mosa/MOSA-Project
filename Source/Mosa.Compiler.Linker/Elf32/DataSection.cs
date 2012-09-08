@@ -14,7 +14,7 @@ namespace Mosa.Compiler.Linker.Elf32
 	/// <summary>
 	/// 
 	/// </summary>
-	public class DataSection : Section
+	public class DataSection : Elf32LinkerSection
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="DataSection"/> class.

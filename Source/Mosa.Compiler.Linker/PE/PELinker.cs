@@ -51,11 +51,6 @@ namespace Mosa.Compiler.Linker.PE
 		private ImageNtHeaders ntHeaders;
 
 		/// <summary>
-		/// Holds the section alignment used for this PE file.
-		/// </summary>
-		private uint sectionAlignment;
-
-		/// <summary>
 		/// Determines if the checksum of the generated executable must be set.
 		/// </summary>
 		private bool setChecksum;
@@ -75,10 +70,10 @@ namespace Mosa.Compiler.Linker.PE
 			this.LoadSectionAlignment = FILE_SECTION_ALIGNMENT;
 			this.setChecksum = true;
 
-			Sections.Add(new Section(SectionKind.Text, @".text", this.BaseAddress + this.sectionAlignment));
-			Sections.Add(new Section(SectionKind.Data, @".data", 0));
-			Sections.Add(new Section(SectionKind.ROData, @".rodata", 0));
-			Sections.Add(new Section(SectionKind.BSS, @".bss", 0));
+			Sections.Add(new PELinkerSection(SectionKind.Text, @".text", this.BaseAddress + SectionAlignment));
+			Sections.Add(new PELinkerSection(SectionKind.Data, @".data", 0));
+			Sections.Add(new PELinkerSection(SectionKind.ROData, @".rodata", 0));
+			Sections.Add(new PELinkerSection(SectionKind.BSS, @".bss", 0));
 		}
 
 		#endregion // Construction
@@ -97,7 +92,7 @@ namespace Mosa.Compiler.Linker.PE
 
 		#endregion // Properties
 
-		#region AssembyLinkerStageBase Overrides
+		#region BaseLinker Overrides
 
 		/// <summary>
 		/// A request to patch already emitted code by storing the calculated virtualAddress value.
@@ -113,7 +108,7 @@ namespace Mosa.Compiler.Linker.PE
 				throw new InvalidOperationException(@"Can't apply patches - symbols not resolved.");
 
 			// Retrieve the text section
-			Section text = (Section)GetSection(SectionKind.Text);
+			PELinkerSection text = (PELinkerSection)GetSection(SectionKind.Text);
 			// Calculate the patch offset
 			long offset = (methodAddress - text.VirtualAddress) + methodOffset;
 
@@ -134,56 +129,29 @@ namespace Mosa.Compiler.Linker.PE
 		}
 
 		/// <summary>
-		/// Allocates a symbol of the given name in the specified section.
+		/// Verifies the parameters.
 		/// </summary>
-		/// <param name="section">The executable section to allocate From.</param>
-		/// <param name="size">The number of bytes to allocate. If zero, indicates an unknown amount of memory is required.</param>
-		/// <param name="alignment">The alignment. A value of zero indicates the use of a default alignment for the section.</param>
-		/// <returns>
-		/// A stream, which can be used to populate the section.
-		/// </returns>
-		protected override Stream Allocate(SectionKind section, int size, int alignment)
+		/// <returns></returns>
+		/// <exception cref="System.ArgumentException"></exception>
+		protected override void VerifyParameters()
 		{
-			Section linkerSection = (Section)GetSection(section);
-			return linkerSection.Allocate(size, alignment);
-		}
+			base.VerifyParameters();
 
-		/// <summary>
-		/// Performs stage specific processing on the compiler context.
-		/// </summary>
-		public override void Finalize()
-		{
 			if (LoadSectionAlignment < FILE_SECTION_ALIGNMENT)
 				throw new ArgumentException(@"Section alignment must not be less than 512 bytes.", @"value");
 			if ((LoadSectionAlignment & unchecked(FILE_SECTION_ALIGNMENT - 1)) != 0)
 				throw new ArgumentException(@"Section alignment must be a multiple of 512 bytes.", @"value");
-			
+
 			if (SectionAlignment < SECTION_ALIGNMENT)
 				throw new ArgumentException(@"Section alignment must not be less than 4K.", @"value");
 			if ((SectionAlignment & unchecked(SECTION_ALIGNMENT - 1)) != 0)
 				throw new ArgumentException(@"Section alignment must be a multiple of 4K.", @"value");
-
-			if (String.IsNullOrEmpty(this.OutputFile))
-				throw new ArgumentException(@"Invalid argument.", @"outputFile");
-
-			// Layout the sections in memory
-			LayoutSections();
-
-			// Resolve all symbols first
-			Resolve();
-
-			// Persist the PE file now
-			CreateFile();
 		}
 
-		#endregion // AssembyLinkerStageBase Overrides
-
-		#region Internals
-
 		/// <summary>
-		/// Creates the PE file.
+		/// Creates the final linked file.
 		/// </summary>
-		private void CreateFile()
+		protected override void CreateFile()
 		{
 			// Open the output file
 			using (FileStream fs = new FileStream(this.OutputFile, FileMode.Create, FileAccess.ReadWrite, FileShare.Read))
@@ -196,7 +164,7 @@ namespace Mosa.Compiler.Linker.PE
 
 					// Iterate all sections and store their data
 					long position = writer.BaseStream.Position;
-					foreach (Section section in Sections)
+					foreach (PELinkerSection section in Sections)
 					{
 						if (section.Length > 0)
 						{
@@ -228,42 +196,46 @@ namespace Mosa.Compiler.Linker.PE
 		/// <summary>
 		/// Adjusts the section addresses and performs a proper layout.
 		/// </summary>
-		private void LayoutSections()
+		protected override void LayoutSections()
 		{
 			/*
-						// Reset the size of the image
-						this.virtualSizeOfImage = this.sectionAlignment;
-						this.fileSizeOfImage = this.fileAlignment;
+			// Reset the size of the image
+			this.virtualSizeOfImage = this.sectionAlignment;
+			this.fileSizeOfImage = this.fileAlignment;
 
-						// Move all sections to their right positions
-						Dictionary<SectionKind, LinkerSection> usedSections = new Dictionary<SectionKind, LinkerSection>();
-						foreach (LinkerSection ls in this.sections.Values)
-						{
-							// Only use a section with something inside
-							if (ls.Length != 0)
-							{
-								// Set the section virtualAddress
-								ls.Address = new IntPtr(this.BaseAddress + this.virtualSizeOfImage);
-								ls.Offset = this.fileSizeOfImage;
+			// Move all sections to their right positions
+			Dictionary<SectionKind, LinkerSection> usedSections = new Dictionary<SectionKind, LinkerSection>();
+			foreach (LinkerSection ls in this.sections.Values)
+			{
+				// Only use a section with something inside
+				if (ls.Length != 0)
+				{
+					// Set the section virtualAddress
+					ls.Address = new IntPtr(this.BaseAddress + this.virtualSizeOfImage);
+					ls.Offset = this.fileSizeOfImage;
 
-								// Update the file size
-								this.fileSizeOfImage += (uint)ls.Length;
-								this.fileSizeOfImage = AlignValue(this.fileSizeOfImage, this.fileAlignment);
+					// Update the file size
+					this.fileSizeOfImage += (uint)ls.Length;
+					this.fileSizeOfImage = AlignValue(this.fileSizeOfImage, this.fileAlignment);
 
-								// Update the virtual size
-								this.virtualSizeOfImage += (uint)ls.Length;
-								this.virtualSizeOfImage = AlignValue(this.virtualSizeOfImage, this.sectionAlignment);
+					// Update the virtual size
+					this.virtualSizeOfImage += (uint)ls.Length;
+					this.virtualSizeOfImage = AlignValue(this.virtualSizeOfImage, this.sectionAlignment);
 
-								// Copy the section
-								usedSections.Add(ls.SectionKind, ls);
-							}
-						}
+					// Copy the section
+					usedSections.Add(ls.SectionKind, ls);
+				}
+			}
 
-						this.sections = usedSections;
+			this.sections = usedSections;
 			*/
 			// We've resolved all symbols, allow IsResolved to succeed
 			SymbolsResolved = true;
 		}
+
+		#endregion // BaseLinker Overrides
+
+		#region Internals
 
 		/// <summary>
 		/// Writes the dos header of the PE file.
@@ -319,19 +291,19 @@ namespace Mosa.Compiler.Linker.PE
 			ntHeaders.OptionalHeader.Magic = ImageOptionalHeader.IMAGE_OPTIONAL_HEADER_MAGIC;
 			ntHeaders.OptionalHeader.MajorLinkerVersion = 6;
 			ntHeaders.OptionalHeader.MinorLinkerVersion = 0;
-			ntHeaders.OptionalHeader.SizeOfCode = (uint)AlignValue(GetSectionLength(SectionKind.Text), sectionAlignment);
-			ntHeaders.OptionalHeader.SizeOfInitializedData = (uint)AlignValue(GetSectionLength(SectionKind.Data) + GetSectionLength(SectionKind.ROData), this.sectionAlignment);
-			ntHeaders.OptionalHeader.SizeOfUninitializedData = (uint)AlignValue(GetSectionLength(SectionKind.BSS), sectionAlignment);
-			ntHeaders.OptionalHeader.AddressOfEntryPoint = (uint)(EntryPoint.VirtualAddress - this.BaseAddress);
-			ntHeaders.OptionalHeader.BaseOfCode = (uint)(GetSectionAddress(SectionKind.Text) - this.BaseAddress);
+			ntHeaders.OptionalHeader.SizeOfCode = (uint)AlignValue(GetSectionLength(SectionKind.Text), SectionAlignment);
+			ntHeaders.OptionalHeader.SizeOfInitializedData = (uint)AlignValue(GetSectionLength(SectionKind.Data) + GetSectionLength(SectionKind.ROData), SectionAlignment);
+			ntHeaders.OptionalHeader.SizeOfUninitializedData = (uint)AlignValue(GetSectionLength(SectionKind.BSS), SectionAlignment);
+			ntHeaders.OptionalHeader.AddressOfEntryPoint = (uint)(EntryPoint.VirtualAddress - BaseAddress);
+			ntHeaders.OptionalHeader.BaseOfCode = (uint)(GetSectionAddress(SectionKind.Text) - BaseAddress);
 
 			long sectionAddress = GetSectionAddress(SectionKind.Data);
 			if (sectionAddress != 0)
 				ntHeaders.OptionalHeader.BaseOfData = (uint)(sectionAddress - this.BaseAddress);
 
 			ntHeaders.OptionalHeader.ImageBase = (uint)this.BaseAddress; // FIXME: Linker Script/cmdline
-			ntHeaders.OptionalHeader.SectionAlignment = this.sectionAlignment; // FIXME: Linker Script/cmdline
-			ntHeaders.OptionalHeader.FileAlignment = this.LoadSectionAlignment; // FIXME: Linker Script/cmdline
+			ntHeaders.OptionalHeader.SectionAlignment = SectionAlignment; // FIXME: Linker Script/cmdline
+			ntHeaders.OptionalHeader.FileAlignment = LoadSectionAlignment; // FIXME: Linker Script/cmdline
 			ntHeaders.OptionalHeader.MajorOperatingSystemVersion = 4;
 			ntHeaders.OptionalHeader.MinorOperatingSystemVersion = 0;
 			ntHeaders.OptionalHeader.MajorImageVersion = 0;
@@ -340,7 +312,7 @@ namespace Mosa.Compiler.Linker.PE
 			ntHeaders.OptionalHeader.MinorSubsystemVersion = 0;
 			ntHeaders.OptionalHeader.Win32VersionValue = 0;
 			ntHeaders.OptionalHeader.SizeOfImage = CalculateSizeOfImage();
-			ntHeaders.OptionalHeader.SizeOfHeaders = this.LoadSectionAlignment; // FIXME: Use the full header size
+			ntHeaders.OptionalHeader.SizeOfHeaders = LoadSectionAlignment; // FIXME: Use the full header size
 			ntHeaders.OptionalHeader.CheckSum = 0;
 			ntHeaders.OptionalHeader.Subsystem = 0x03;
 			ntHeaders.OptionalHeader.DllCharacteristics = 0x0540;
@@ -425,7 +397,7 @@ namespace Mosa.Compiler.Linker.PE
 		private uint CalculateSizeOfImage()
 		{
 			// Reset the size of the image
-			uint virtualSizeOfImage = this.sectionAlignment, sectionEnd;
+			uint virtualSizeOfImage = SectionAlignment, sectionEnd;
 
 			// Move all sections to their right positions
 			foreach (LinkerSection sections in Sections)
@@ -433,7 +405,7 @@ namespace Mosa.Compiler.Linker.PE
 				// Only use a section with something inside
 				if (sections.Length > 0)
 				{
-					sectionEnd = (uint)(sections.VirtualAddress + AlignValue(sections.Length, sectionAlignment));
+					sectionEnd = (uint)(sections.VirtualAddress + AlignValue(sections.Length, SectionAlignment));
 
 					if (sectionEnd > virtualSizeOfImage)
 						virtualSizeOfImage = sectionEnd;

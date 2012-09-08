@@ -47,11 +47,6 @@ namespace Mosa.Compiler.Linker.Elf32
 		/// </summary>
 		private readonly StringTableSection stringTableSection;
 
-		/// <summary>
-		/// Holds the section alignment used for this ELF32 file.
-		/// </summary>
-		private readonly uint sectionAlignment;
-
 		#endregion // Data members
 
 		/// <summary>
@@ -66,48 +61,25 @@ namespace Mosa.Compiler.Linker.Elf32
 			Sections.Add(new BssSection());
 
 			LoadSectionAlignment = FILE_SECTION_ALIGNMENT;
-			sectionAlignment = SECTION_ALIGNMENT;
+			SectionAlignment = SECTION_ALIGNMENT;
 
 			nullSection = new NullSection();
 			stringTableSection = new StringTableSection();
 		}
 
 		/// <summary>
-		/// Performs stage specific processing on the compiler context.
+		/// Verifies the parameters.
 		/// </summary>
-		public override void Finalize()
+		/// <returns></returns>
+		/// <exception cref="System.ArgumentException"></exception>
+		protected override void VerifyParameters()
 		{
-			if (String.IsNullOrEmpty(OutputFile))
-				throw new ArgumentException(@"Invalid argument.", "compiler");
+			base.VerifyParameters();
 
 			if (LoadSectionAlignment < FILE_SECTION_ALIGNMENT)
 				throw new ArgumentException(@"Section alignment must not be less than 512 bytes.", @"value");
 			if ((LoadSectionAlignment & unchecked(FILE_SECTION_ALIGNMENT - 1)) != 0)
 				throw new ArgumentException(@"Section alignment must be a multiple of 512 bytes.", @"value");
-
-			// Layout the sections in memory
-			LayoutSections();
-
-			// Resolve all symbols first
-			Resolve();
-
-			// Persist the Elf32 file now
-			CreateFile();
-		}
-
-		/// <summary>
-		/// Allocates a symbol of the given name in the specified section.
-		/// </summary>
-		/// <param name="section">The executable section to allocate From.</param>
-		/// <param name="size">The number of bytes to allocate. If zero, indicates an unknown amount of memory is required.</param>
-		/// <param name="alignment">The alignment. A value of zero indicates the use of a default alignment for the section.</param>
-		/// <returns>
-		/// A stream, which can be used to populate the section.
-		/// </returns>
-		protected override Stream Allocate(SectionKind section, int size, int alignment)
-		{
-			Section linkerSection = (Section)GetSection(section);
-			return linkerSection.Allocate(size, alignment);
 		}
 
 		/// <summary>
@@ -124,7 +96,8 @@ namespace Mosa.Compiler.Linker.Elf32
 				throw new InvalidOperationException(@"Can't apply patches - symbols not resolved.");
 
 			// Retrieve the text section
-			Section text = (Section)GetSection(SectionKind.Text);
+			Elf32LinkerSection text = (Elf32LinkerSection)GetSection(SectionKind.Text);
+
 			// Calculate the patch offset
 			long offset = (methodAddress - text.VirtualAddress) + methodOffset;
 
@@ -145,10 +118,9 @@ namespace Mosa.Compiler.Linker.Elf32
 		}
 
 		/// <summary>
-		/// Creates the elf32 file.
+		/// Creates the final linked file.
 		/// </summary>
-		/// <param name="compiler">The compiler.</param>
-		private void CreateFile()
+		protected override void CreateFile()
 		{
 			using (FileStream fs = new FileStream(OutputFile, FileMode.Create, FileAccess.Write, FileShare.None))
 			{
@@ -162,7 +134,7 @@ namespace Mosa.Compiler.Linker.Elf32
 
 				// Calculate the concatenated size of all section's data
 				uint offset = 0;
-				foreach (Section section in Sections)
+				foreach (Elf32LinkerSection section in Sections)
 				{
 					offset += (uint)section.Length;
 				}
@@ -187,7 +159,7 @@ namespace Mosa.Compiler.Linker.Elf32
 				stringTableSection.Write(writer);
 
 				// Write the _sections
-				foreach (Section section in Sections)
+				foreach (Elf32LinkerSection section in Sections)
 					section.Write(writer);
 
 				// Jump back to the Section Header Table
@@ -197,7 +169,7 @@ namespace Mosa.Compiler.Linker.Elf32
 				stringTableSection.WriteHeader(writer);
 
 				// Write the section headers
-				foreach (Section section in Sections)
+				foreach (Elf32LinkerSection section in Sections)
 					section.WriteHeader(writer);
 
 				ProgramHeader pheader = new ProgramHeader
@@ -209,7 +181,7 @@ namespace Mosa.Compiler.Linker.Elf32
 				pheader.MemorySize = pheader.FileSize;
 				pheader.VirtualAddress = 0xFF0000;
 				pheader.Flags = ProgramHeaderFlags.Execute | ProgramHeaderFlags.Read | ProgramHeaderFlags.Write;
-				pheader.Offset = ((Section)GetSection(SectionKind.Text)).Header.Offset;
+				pheader.Offset = ((Elf32LinkerSection)GetSection(SectionKind.Text)).Header.Offset;
 				pheader.Type = ProgramHeaderType.Load;
 
 				writer.Seek((int)header.ProgramHeaderOffset, SeekOrigin.Begin);
@@ -220,7 +192,7 @@ namespace Mosa.Compiler.Linker.Elf32
 		/// <summary>
 		/// Adjusts the section addresses and performs a proper layout.
 		/// </summary>
-		private void LayoutSections()
+		protected override void LayoutSections()
 		{
 			// We've resolved all symbols, allow IsResolved to succeed
 			SymbolsResolved = true;

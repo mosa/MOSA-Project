@@ -16,6 +16,7 @@ using MbUnit.Framework;
 using Mosa.Compiler.Metadata.Loader;
 using Mosa.Compiler.TypeSystem;
 using Mosa.Test.CodeDomCompiler;
+using Mosa.Compiler.Linker;
 
 namespace Mosa.Test.System
 {
@@ -41,7 +42,7 @@ namespace Mosa.Test.System
 		/// <summary>
 		/// 
 		/// </summary>
-		private TestLinker linker;
+		private ILinker linker;
 
 		private static long memoryPtr = 0x21700000; // Location for pointer to allocated memory!
 		private static uint memorySize = 1024 * 1024 * 2; // 2Mb

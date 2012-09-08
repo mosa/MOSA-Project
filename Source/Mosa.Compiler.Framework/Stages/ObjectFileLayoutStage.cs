@@ -56,20 +56,20 @@ namespace Mosa.Compiler.Framework.Stages
 			foreach (LinkerSection section in linker.Sections)
 			{
 				// Only use a section with something inside
-				if (section.Length > 0)
-				{
-					// Set the section virtualAddress
-					section.VirtualAddress = linker.BaseAddress + virtualSizeOfImage;
-					section.Offset = fileSizeOfImage;
+				if (section.Length == 0)
+					continue;
 
-					// Update the file size
-					fileSizeOfImage += section.Length;
-					fileSizeOfImage = AlignValue(fileSizeOfImage, fileAlignment);
+				// Set the section virtualAddress
+				section.VirtualAddress = linker.BaseAddress + virtualSizeOfImage;
+				section.Offset = fileSizeOfImage;
 
-					// Update the virtual size
-					virtualSizeOfImage += section.Length;
-					virtualSizeOfImage = AlignValue(virtualSizeOfImage, sectionAlignment);
-				}
+				// Update the file size
+				fileSizeOfImage += section.Length;
+				fileSizeOfImage = AlignValue(fileSizeOfImage, fileAlignment);
+
+				// Update the virtual size
+				virtualSizeOfImage += section.Length;
+				virtualSizeOfImage = AlignValue(virtualSizeOfImage, sectionAlignment);
 			}
 		}
 

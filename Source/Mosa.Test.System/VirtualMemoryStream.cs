@@ -28,7 +28,10 @@ namespace Mosa.Test.System
 		/// </summary>
 		private long memory;
 
-		private uint allocationSize;
+		/// <summary>
+		/// 
+		/// </summary>
+		private uint size;
 
 		#endregion // Data members
 
@@ -38,16 +41,16 @@ namespace Mosa.Test.System
 		/// Initializes a new <see cref="VirtualMemoryStream"/> and allocates the requested amount of virtual memory to back it.
 		/// </summary>
 		/// <param name="memoryManager"></param>
-		/// <param name="allocationSize">The number of bytes to allocate from virtual memory.</param>
-		public unsafe VirtualMemoryStream(uint allocationSize)
+		/// <param name="size">The number of bytes to allocate from virtual memory.</param>
+		public unsafe VirtualMemoryStream(uint size)
 		{
-			this.memory = Win32Memory.Allocate(0, allocationSize, PageProtectionFlags.Read | PageProtectionFlags.Write | PageProtectionFlags.Execute);
+			memory = Win32Memory.Allocate(0, size, PageProtectionFlags.Read | PageProtectionFlags.Write | PageProtectionFlags.Execute);
 			
-			if (this.memory == 0)
+			if (memory == 0)
 				throw new OutOfMemoryException();
 
-			base.Initialize((byte*)memory, allocationSize, allocationSize, FileAccess.Write);
-			this.allocationSize = allocationSize;
+			base.Initialize((byte*)memory, size, size, FileAccess.Write);
+			this.size = size;
 		}
 
 		#endregion // Construction
@@ -61,9 +64,10 @@ namespace Mosa.Test.System
 		protected unsafe override void Dispose(bool disposing)
 		{
 			base.Dispose(disposing);
+
 			if (memory != 0)
 			{
-				Win32Memory.Free(memory, allocationSize);
+				Win32Memory.Free(memory, size);
 				memory = 0;
 			}
 		}
@@ -78,7 +82,7 @@ namespace Mosa.Test.System
 		/// <value>The memory base pointer.</value>
 		public long Base
 		{
-			get { return this.memory; }
+			get { return memory; }
 		}
 
 		#endregion // Properties
