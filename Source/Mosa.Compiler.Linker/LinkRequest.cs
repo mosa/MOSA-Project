@@ -48,6 +48,11 @@ namespace Mosa.Compiler.Linker
 		/// </summary>
 		private readonly long targetOffset;
 
+		/// <summary>
+		/// Holds the patch instructions
+		/// </summary>
+		private readonly Patch[] patch;
+
 		#endregion // Data members
 
 		#region Construction
@@ -60,15 +65,15 @@ namespace Mosa.Compiler.Linker
 		/// <param name="symbolOffset">The symbol offset.</param>
 		/// <param name="methodRelativeBase">The symbol relative base.</param>
 		/// <param name="targetSymbol">The linker symbol to link against.</param>
-		/// <param name="TargetOffset">An offset to apply to the link target.</param>
-		public LinkRequest(LinkType linkType, string symbolName, int symbolOffset, int methodRelativeBase, string targetSymbol, long TargetOffset)
+		/// <param name="targetOffset">An offset to apply to the link target.</param>
+		public LinkRequest(LinkType linkType, string symbolName, int symbolOffset, int methodRelativeBase, string targetSymbol, long targetOffset)
 		{
 			this.symbolName = symbolName;
 			this.symbolOffset = symbolOffset;
 			this.linkType = linkType;
 			this.methodRelativeBase = methodRelativeBase;
 			this.targetSymbol = targetSymbol;
-			this.targetOffset = TargetOffset;
+			this.targetOffset = targetOffset;
 		}
 
 		#endregion // Construction

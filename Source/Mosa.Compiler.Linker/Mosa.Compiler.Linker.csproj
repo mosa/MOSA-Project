@@ -35,6 +35,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseLinker.cs" />
+    <Compile Include="BuildInPatch.cs" />
+    <Compile Include="Patches.cs" />
+    <Compile Include="Patch.cs" />
     <Compile Include="LinkerSectionExtended.cs" />
     <Compile Include="LinkerType.cs" />
     <Compile Include="Elf32\Elf32Linker.cs" />

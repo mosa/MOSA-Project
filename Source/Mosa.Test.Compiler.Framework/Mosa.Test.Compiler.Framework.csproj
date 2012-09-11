@@ -93,6 +93,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="PatchTests.cs" />
     <Compile Include="LoopAwareBlockOrderTests.cs" />
     <Compile Include="SimpleFastDominanceTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -126,6 +127,10 @@
     <ProjectReference Include="..\Mosa.Compiler.Framework\Mosa.Compiler.Framework.csproj">
       <Project>{75A12A8A-8C8F-4D1E-801B-689D8F781BF4}</Project>
       <Name>Mosa.Compiler.Framework</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mosa.Compiler.Linker\Mosa.Compiler.Linker.csproj">
+      <Project>{65866a51-b229-44c5-ac81-87a90fa1741b}</Project>
+      <Name>Mosa.Compiler.Linker</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />
