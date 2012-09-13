@@ -26,7 +26,7 @@ namespace Mosa.Compiler.Framework.Linker
 			// setup all the common attributes
 			linker.OutputFile = compilerOptions.OutputFile;
 			linker.MachineID = architecture.ElfMachineType;
-			linker.IsLittleEndian = architecture.IsLittleEndian;
+			linker.Endianness = architecture.Endianness;
 
 			// TODO: add specific options based on type
 

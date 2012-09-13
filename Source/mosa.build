@@ -54,9 +54,9 @@
         <target name="Mosa.Tool.MonoMosa.Tool.Mono.UpdateSource" depends="init,"><nant buildfile="Mosa.Tool.Mono/Mosa.Tool.Mono.UpdateSource/mosa.build"/></target>
         <target name="Mosa.Utility.BootImage" depends="init,Mosa.ClassLib,Mosa.DeviceSystem,Mosa.EmulatedDevices,Mosa.FileSystem,"><nant buildfile="Mosa.Utility.BootImage/mosa.build"/></target>
         <target name="Mosa.Utility.IsoImage" depends="init,"><nant buildfile="Mosa.Utility.IsoImage/mosa.build"/></target>
-        <target name="Mosa.Platform.AVR32" depends="init,Mosa.Compiler.Linker,Mosa.Compiler.Metadata,Mosa.Compiler.Framework,Mosa.Compiler.TypeSystem,"><nant buildfile="Mosa.Platform.AVR32/mosa.build"/></target>
-        <target name="Mosa.Platform.ARM" depends="init,Mosa.Compiler.Metadata,Mosa.Compiler.Framework,"><nant buildfile="Mosa.Platform.ARM/mosa.build"/></target>
-        <target name="Mosa.Platform.x64" depends="init,Mosa.Compiler.Metadata,Mosa.Compiler.Framework,"><nant buildfile="Mosa.Platform.x64/mosa.build"/></target>
+        <target name="Mosa.Platform.AVR32" depends="init,Mosa.Compiler.Common,Mosa.Compiler.Linker,Mosa.Compiler.Metadata,Mosa.Compiler.Framework,Mosa.Compiler.TypeSystem,"><nant buildfile="Mosa.Platform.AVR32/mosa.build"/></target>
+        <target name="Mosa.Platform.ARM" depends="init,Mosa.Compiler.Common,Mosa.Compiler.Metadata,Mosa.Compiler.Framework,"><nant buildfile="Mosa.Platform.ARM/mosa.build"/></target>
+        <target name="Mosa.Platform.x64" depends="init,Mosa.Compiler.Common,Mosa.Compiler.Metadata,Mosa.Compiler.Framework,"><nant buildfile="Mosa.Platform.x64/mosa.build"/></target>
         <target name="Mosa.Internal.Plug" depends="init,Korlib,"><nant buildfile="Mosa.Internal.Plug/mosa.build"/></target>
         <target name="Mosa.Kernel.AVR32" depends="init,Korlib,Mosa.Internal.Plug,Mosa.Platform.AVR32.Intrinsic,"><nant buildfile="Mosa.Kernel.AVR32/mosa.build"/></target>
         <target name="Mosa.Platform.AVR32.Intrinsic" depends="init,Korlib,"><nant buildfile="Mosa.Platform.AVR32.Intrinsic/mosa.build"/></target>

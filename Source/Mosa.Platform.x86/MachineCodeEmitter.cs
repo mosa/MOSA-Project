@@ -52,6 +52,7 @@ namespace Mosa.Platform.x86
 		{
 			linker.Link(
 				LinkType.RelativeOffset | LinkType.NativeI4,
+				BuildInPatch.I4,
 				compiler.Method.ToString(),
 				(int)(codeStream.Position - codeStreamBasePosition),
 				(int)(codeStream.Position - codeStreamBasePosition) + 4,
@@ -174,22 +175,22 @@ namespace Mosa.Platform.x86
 
 			if (displacement.IsLabel)
 			{
-				linker.Link(LinkType.AbsoluteAddress | LinkType.NativeI4, compiler.Method.FullName, pos, 0, displacement.Name, 0);
+				linker.Link(LinkType.AbsoluteAddress | LinkType.NativeI4, BuildInPatch.I4, compiler.Method.FullName, pos, 0, displacement.Name, 0);
 				codeStream.Position += 4;
 			}
 			else if (displacement.IsRuntimeMember)
 			{
-				linker.Link(LinkType.AbsoluteAddress | LinkType.NativeI4, compiler.Method.FullName, pos, 0, displacement.RuntimeMember.ToString(), displacement.Offset);
+				linker.Link(LinkType.AbsoluteAddress | LinkType.NativeI4, BuildInPatch.I4, compiler.Method.FullName, pos, 0, displacement.RuntimeMember.ToString(), displacement.Offset);
 				codeStream.Position += 4;
 			}
 			else if (displacement.IsSymbol)
 			{
-				linker.Link(LinkType.AbsoluteAddress | LinkType.NativeI4, compiler.Method.FullName, pos, 0, displacement.Name, 0);
+				linker.Link(LinkType.AbsoluteAddress | LinkType.NativeI4, BuildInPatch.I4, compiler.Method.FullName, pos, 0, displacement.Name, 0);
 				codeStream.Position += 4;
 			}
 			else
 			{
-				codeStream.Write(displacement.Offset, true);
+				codeStream.Write(displacement.Offset,  Endianness.Little);
 			}
 
 		}
@@ -204,7 +205,7 @@ namespace Mosa.Platform.x86
 			if (op.IsLocalVariable || op.IsStackTemp || op.IsMemoryAddress)
 			{
 				// Add the displacement
-				codeStream.Write((int)op.Offset, true);
+				codeStream.Write((int)op.Offset, Endianness.Little);
 			}
 			else if (op.IsConstant)
 			{
@@ -216,16 +217,16 @@ namespace Mosa.Platform.x86
 						{
 							if (op.Value is Token)
 							{
-								codeStream.Write(((Token)op.Value).ToInt32(), true);
+								codeStream.Write(((Token)op.Value).ToInt32(), Endianness.Little);
 							}
 							else
 							{
-								codeStream.Write(Convert.ToInt32(op.Value), true);
+								codeStream.Write(Convert.ToInt32(op.Value), Endianness.Little);
 							}
 						}
 						catch (OverflowException) // Odd??
 						{
-							codeStream.Write(Convert.ToUInt64(op.Value), true);
+							codeStream.Write(Convert.ToUInt64(op.Value), Endianness.Little);
 						}
 						break;
 
@@ -233,7 +234,7 @@ namespace Mosa.Platform.x86
 						codeStream.WriteByte(Convert.ToByte(op.Value));
 						break;
 					case CilElementType.I2:
-						codeStream.Write(Convert.ToInt16(op.Value), true);
+						codeStream.Write(Convert.ToInt16(op.Value), Endianness.Little);
 						break;
 					case CilElementType.I4:
 						goto case CilElementType.I;
@@ -243,20 +244,20 @@ namespace Mosa.Platform.x86
 					case CilElementType.Char:
 						goto case CilElementType.U2;
 					case CilElementType.U2:
-						codeStream.Write((ushort)Convert.ToUInt64(op.Value), true);
+						codeStream.Write((ushort)Convert.ToUInt64(op.Value), Endianness.Little);
 						break;
 					case CilElementType.Ptr:
 					case CilElementType.U4:
-						codeStream.Write((uint)Convert.ToUInt64(op.Value), true);
+						codeStream.Write((uint)Convert.ToUInt64(op.Value), Endianness.Little);
 						break;
 					case CilElementType.I8:
-						codeStream.Write(Convert.ToInt64(op.Value), true);
+						codeStream.Write(Convert.ToInt64(op.Value), Endianness.Little);
 						break;
 					case CilElementType.U8:
-						codeStream.Write(Convert.ToUInt64(op.Value), true);
+						codeStream.Write(Convert.ToUInt64(op.Value), Endianness.Little);
 						break;
 					case CilElementType.R4:
-						codeStream.Write(Endian.ConvertToUInt32(Convert.ToSingle(op.Value)), true);
+						codeStream.Write(Endian.ConvertToUInt32(Convert.ToSingle(op.Value)), Endianness.Little);
 						break;
 					case CilElementType.R8:
 						goto default;
@@ -302,7 +303,7 @@ namespace Mosa.Platform.x86
 			}
 
 			// Emit the relative jump offset (zero if we don't know it yet!)
-			codeStream.Write(relOffset, true);
+			codeStream.Write(relOffset, Endianness.Little);
 		}
 
 		/// <summary>
@@ -316,7 +317,7 @@ namespace Mosa.Platform.x86
 			LinkerSection linkerSection = linker.GetSection(SectionKind.Text);
 			if (linkerSection != null) // To assist TypeExplorer, which returns null from GetSection method
 			{
-				codeStream.Write((int)(linkerSection.VirtualAddress + linkerSection.Length + 6), true);
+				codeStream.Write((int)(linkerSection.VirtualAddress + linkerSection.Length + 6), Endianness.Little);
 			}
 
 			codeStream.WriteByte(0x08);
@@ -332,7 +333,7 @@ namespace Mosa.Platform.x86
 			if (op.IsLocalVariable || op.IsStackTemp || op.IsMemoryAddress)
 			{
 				// Add the displacement
-				codeStream.Write((int)op.Offset, true);
+				codeStream.Write((int)op.Offset, Endianness.Little);
 			}
 			else if (op.IsConstant)
 			{
@@ -342,11 +343,11 @@ namespace Mosa.Platform.x86
 					case CilElementType.I:
 						try
 						{
-							codeStream.Write(Convert.ToInt32(op.Value), true);
+							codeStream.Write(Convert.ToInt32(op.Value), Endianness.Little);
 						}
 						catch (OverflowException)
 						{
-							codeStream.Write(Convert.ToUInt32(op.Value), true);
+							codeStream.Write(Convert.ToUInt32(op.Value), Endianness.Little);
 						}
 						break;
 					case CilElementType.I1:
@@ -354,7 +355,7 @@ namespace Mosa.Platform.x86
 						break;
 
 					case CilElementType.I2:
-						codeStream.Write(Convert.ToInt16(op.Value), true);
+						codeStream.Write(Convert.ToInt16(op.Value), Endianness.Little);
 						break;
 					case CilElementType.I4:
 						goto case CilElementType.I;
@@ -364,19 +365,19 @@ namespace Mosa.Platform.x86
 					case CilElementType.Char:
 						goto case CilElementType.U2;
 					case CilElementType.U2:
-						codeStream.Write(Convert.ToUInt16(op.Value), true);
+						codeStream.Write(Convert.ToUInt16(op.Value), Endianness.Little);
 						break;
 					case CilElementType.U4:
-						codeStream.Write(Convert.ToUInt32(op.Value), true);
+						codeStream.Write(Convert.ToUInt32(op.Value), Endianness.Little);
 						break;
 					case CilElementType.I8:
-						codeStream.Write(Convert.ToInt64(op.Value), true);
+						codeStream.Write(Convert.ToInt64(op.Value), Endianness.Little);
 						break;
 					case CilElementType.U8:
-						codeStream.Write(Convert.ToUInt64(op.Value), true);
+						codeStream.Write(Convert.ToUInt64(op.Value), Endianness.Little);
 						break;
 					case CilElementType.R4:
-						codeStream.Write(Endian.ConvertToUInt32(Convert.ToSingle(op.Value)), true);
+						codeStream.Write(Endian.ConvertToUInt32(Convert.ToSingle(op.Value)), Endianness.Little);
 						break;
 					case CilElementType.R8:
 						goto default;

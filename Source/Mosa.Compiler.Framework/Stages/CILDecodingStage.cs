@@ -74,7 +74,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			using (Stream code = methodCompiler.GetInstructionStream())
 			{
-				using (codeReader = new EndianAwareBinaryReader(code, true))
+				using (codeReader = new EndianAwareBinaryReader(code, Endianness.Little))
 				{
 					MethodHeader header = ReadMethodHeader(codeReader);
 

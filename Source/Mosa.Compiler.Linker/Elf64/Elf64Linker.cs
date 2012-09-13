@@ -78,7 +78,7 @@ namespace Mosa.Compiler.Linker.Elf64
 				header.ProgramHeaderOffset = (uint)header.ElfHeaderSize + (uint)header.SectionHeaderEntrySize * (uint)header.SectionHeaderNumber + offset;
 				header.SectionHeaderStringIndex = (ushort)((ushort)header.ProgramHeaderOffset + (ushort)header.ProgramHeaderNumber * (ushort)header.ProgramHeaderEntrySize);
 
-				EndianAwareBinaryWriter writer = new EndianAwareBinaryWriter(fs, IsLittleEndian);
+				EndianAwareBinaryWriter writer = new EndianAwareBinaryWriter(fs, Endianness);
 
 				// Write the ELF Header
 				header.Write(writer);

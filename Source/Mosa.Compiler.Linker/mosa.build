@@ -16,7 +16,6 @@
 		<sources>
                     <include name="BaseLinker.cs"/>
                     <include name="BuildInPatch.cs"/>
-                    <include name="Patches.cs"/>
                     <include name="Patch.cs"/>
                     <include name="LinkerSectionExtended.cs"/>
                     <include name="LinkerType.cs"/>

@@ -93,7 +93,7 @@ namespace Mosa.Compiler.Metadata.Loader.PE
 				throw new ArgumentNullException("stream");
 
 			assemblyStream = stream;
-			assemblyReader = new EndianAwareBinaryReader(stream, true);
+			assemblyReader = new EndianAwareBinaryReader(stream, Endianness.Little);
 
 			// Load all headers by visiting them sequentially
 			dosHeader.Read(assemblyReader);

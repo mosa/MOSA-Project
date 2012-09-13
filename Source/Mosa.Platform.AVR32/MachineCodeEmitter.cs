@@ -69,6 +69,7 @@ namespace Mosa.Platform.AVR32
 		{
 			linker.Link(
 				LinkType.RelativeOffset | LinkType.NativeI4,
+				BuildInPatch.I4,
 				compiler.Method.ToString(),
 				(int)(codeStream.Position - codeStreamBasePosition),
 				(int)(codeStream.Position - codeStreamBasePosition) + 4,

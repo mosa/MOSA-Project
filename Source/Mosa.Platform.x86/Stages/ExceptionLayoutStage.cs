@@ -182,7 +182,7 @@ namespace Mosa.Platform.x86.Stages
 
 			using (Stream stream = methodCompiler.Linker.Allocate(section, SectionKind.ROData, tableSize, nativePointerAlignment))
 			{
-				using (EndianAwareBinaryWriter writer = new EndianAwareBinaryWriter(stream, architecture.IsLittleEndian))
+				using (EndianAwareBinaryWriter writer = new EndianAwareBinaryWriter(stream, architecture.Endianness))
 				{
 					foreach (ProtectedBlock entry in entries)
 					{
@@ -196,7 +196,7 @@ namespace Mosa.Platform.x86.Stages
 						{
 							// Store method table pointer of the exception object type
 							// The VES exception runtime will uses this to compare exception object types
-							methodCompiler.Linker.Link(LinkType.AbsoluteAddress | LinkType.NativeI4, section, (int)writer.Position, 0, entry.Type.FullName + "$mtable", 0);
+							methodCompiler.Linker.Link(LinkType.AbsoluteAddress | LinkType.NativeI4, BuildInPatch.I4, section, (int)writer.Position, 0, entry.Type.FullName + "$mtable", 0);
 
 							writer.Position += nativePointerSize;
 						}

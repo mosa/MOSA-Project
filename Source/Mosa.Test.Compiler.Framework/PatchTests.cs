@@ -21,58 +21,77 @@ namespace Mosa.Test.Compiler.Framework
 		[Test]
 		public void Patch1()
 		{
-			Patch p = new Patch(0, 4, 0);
+			var p = new Patch(0, 4, 0);
 			Assert.AreEqual((ulong)0xF, p.Mask);
 		}
 
 		[Test]
 		public void Patch2()
 		{
-			Patch p = new Patch(0, 8, 0);
+			var p = new Patch(0, 8, 0);
 			Assert.AreEqual((ulong)0xFF, p.Mask);
 		}
 
 		[Test]
 		public void Patch3()
 		{
-			Patch p = new Patch(0, 8, 0);
+			var p = new Patch(0, 8, 0);
 			Assert.AreEqual((ulong)0xFF, p.Mask);
 		}
 
 		[Test]
 		public void Patch4()
 		{
-			Patch p = new Patch(0, 16, 0);
+			var p = new Patch(0, 16, 0);
 			Assert.AreEqual((ulong)0xFFFF, p.Mask);
 		}
 
 		[Test]
 		public void Patch5()
 		{
-			Patch p = new Patch(0, 32, 0);
+			var p = new Patch(0, 32, 0);
 			Assert.AreEqual((ulong)0xFFFFFFFF, p.Mask);
 		}
 
 		[Test]
 		public void Patch6()
 		{
-			Patch p = new Patch(0, 64, 0);
+			var p = new Patch(0, 64, 0);
 			Assert.AreEqual((ulong)0xFFFFFFFFFFFFFFFF, p.Mask);
 		}
 
 		[Test]
 		public void Patch7()
 		{
-			Patch p = new Patch(1, 4, 0);
+			var p = new Patch(1, 4, 0);
 			Assert.AreEqual((ulong)0x1E, p.Mask);
 		}
 
 		[Test]
 		public void Patch8()
 		{
-			Patch p = new Patch(1, 8, 0);
+			var p = new Patch(1, 8, 0);
 			Assert.AreEqual((ulong)0x1FE, p.Mask);
 		}
-	
+
+		[Test]
+		public void Patch1B()
+		{
+			var p = new Patch(0, 4, 0);
+
+			var r = p.GetResult(2);
+
+			Assert.AreEqual((ulong)0x2, r);
+		}
+
+		[Test]
+		public void Patch1C()
+		{
+			var p = new Patch(0, 4, 3);
+
+			var r = p.GetResult(2);
+
+			Assert.AreEqual((ulong)0x10, r);
+		}
 	}
 }

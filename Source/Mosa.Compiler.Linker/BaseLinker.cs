@@ -13,7 +13,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
-using Mosa.Compiler.LinkerFormat.Elf;
+using Mosa.Compiler.Common;
 
 namespace Mosa.Compiler.Linker
 {
@@ -58,7 +58,7 @@ namespace Mosa.Compiler.Linker
 		/// <summary>
 		/// Flag is the target platform is little-endian
 		/// </summary>
-		private bool littleEndian;
+		private Endianness endianness;
 
 		/// <summary>
 		/// Gets or sets the machine type (depends on platform)
@@ -165,10 +165,10 @@ namespace Mosa.Compiler.Linker
 		/// <summary>
 		/// Flag is the target platform is little-endian
 		/// </summary>
-		public bool IsLittleEndian
+		public Endianness Endianness
 		{
-			get { return littleEndian; }
-			set { littleEndian = value; }
+			get { return endianness; }
+			set { endianness = value; }
 		}
 
 		/// <summary>
@@ -213,41 +213,6 @@ namespace Mosa.Compiler.Linker
 
 			// Persist the file now
 			CreateFile();
-		}
-
-		/// <summary>
-		/// A request to patch already emitted code by storing the calculated virtual address value.
-		/// </summary>
-		/// <param name="linkType">Type of the link.</param>
-		/// <param name="methodAddress">The virtual virtualAddress of the method whose code is being patched.</param>
-		/// <param name="methodOffset">The value to store at the position in code.</param>
-		/// <param name="methodRelativeBase">The method relative base.</param>
-		/// <param name="targetAddress">The position in code, where it should be patched.</param>
-		protected void ApplyPatch(LinkType linkType, long methodAddress, long methodOffset, long methodRelativeBase, long targetAddress)
-		{
-			if (!SymbolsResolved)
-				throw new InvalidOperationException(@"Can't apply patches - symbols not resolved.");
-
-			// Retrieve the text section
-			LinkerSectionExtended text = GetSection(SectionKind.Text) as LinkerSectionExtended;
-
-			// Calculate the patch offset
-			long offset = (methodAddress - text.VirtualAddress) + methodOffset;
-
-			if ((linkType & LinkType.KindMask) == LinkType.AbsoluteAddress)
-			{
-				// FIXME: Need a .reloc section with a relocation entry if the module is moved in virtual memory
-				// the runtime loader must patch this link request, we'll fail it until we can do relocations.
-				//throw new NotSupportedException(@".reloc section not supported.");
-			}
-			else
-			{
-				// Change the absolute into a relative offset
-				targetAddress = targetAddress - (methodAddress + methodRelativeBase);
-			}
-
-			// Save the stream position
-			text.ApplyPatch(offset, linkType, targetAddress, IsLittleEndian);
 		}
 
 		/// <summary>
@@ -321,13 +286,13 @@ namespace Mosa.Compiler.Linker
 		/// Issues a linker request for the given runtime method.
 		/// </summary>
 		/// <param name="linkType">The type of link required.</param>
-		/// <param name="symbolName">The method the patched code belongs to.</param>
+		/// <param name="patches">The patches.</param>
+		/// <param name="symbolName">The symbol name the patched code belongs to.</param>
 		/// <param name="symbolOffset">The offset inside the method where the patch is placed.</param>
 		/// <param name="methodRelativeBase">The base virtualAddress, if a relative link is required.</param>
-		/// <param name="targetSymbol">The linker symbol to link against.</param>
+		/// <param name="targetSymbol">The linker symbol name to link against.</param>
 		/// <param name="targetOffset">An offset to apply to the link target.</param>
-		/// <exception cref="System.ArgumentNullException"></exception>
-		void ILinker.Link(LinkType linkType, string symbolName, int symbolOffset, int methodRelativeBase, string targetSymbol, long targetOffset)
+		void ILinker.Link(LinkType linkType, Patch[] patches, string symbolName, int symbolOffset, int methodRelativeBase, string targetSymbol, long targetOffset)
 		{
 			Debug.Assert(symbolName != null, @"Symbol can't be null.");
 			if (symbolName == null)
@@ -340,7 +305,7 @@ namespace Mosa.Compiler.Linker
 				linkRequests.Add(targetSymbol, list);
 			}
 
-			list.Add(new LinkRequest(linkType, symbolName, symbolOffset, methodRelativeBase, targetSymbol, targetOffset));
+			list.Add(new LinkRequest(linkType, patches, symbolName, symbolOffset, methodRelativeBase, targetSymbol, targetOffset));
 		}
 
 		#endregion //  ILinker Members
@@ -460,11 +425,52 @@ namespace Mosa.Compiler.Linker
 				// Patch the code stream
 				ApplyPatch(
 					request.LinkType,
+					request.Patches,
 					methodAddress,
-					request.MethodOffset,
+					request.SymbolOffset,
 					request.MethodRelativeBase,
-					virtualAddress + request.Offset);
+					virtualAddress + request.TargetOffset);
 			}
+		}
+
+		/// <summary>
+		/// A request to patch already emitted code by storing the calculated virtual address value.
+		/// </summary>
+		/// <param name="linkType">Type of the link.</param>
+		/// <param name="patches">The patches.</param>
+		/// <param name="methodAddress">The virtual virtualAddress of the method whose code is being patched.</param>
+		/// <param name="methodOffset">The value to store at the position in code.</param>
+		/// <param name="methodRelativeBase">The method relative base.</param>
+		/// <param name="targetAddress">The position in code, where it should be patched.</param>
+		/// <exception cref="System.InvalidOperationException"></exception>
+		private void ApplyPatch(LinkType linkType, Patch[] patches, long methodAddress, long methodOffset, long methodRelativeBase, long targetAddress)
+		{
+			if (!SymbolsResolved)
+				throw new InvalidOperationException(@"Can't apply patches - symbols not resolved.");
+
+			// Retrieve the text section
+			LinkerSectionExtended text = GetSection(SectionKind.Text) as LinkerSectionExtended;
+
+			// Calculate the patch offset
+			long offset = (methodAddress - text.VirtualAddress) + methodOffset;
+
+			if ((linkType & LinkType.KindMask) == LinkType.AbsoluteAddress)
+			{
+				// FIXME: Need a .reloc section with a relocation entry if the module is moved in virtual memory
+				// the runtime loader must patch this link request, we'll fail it until we can do relocations.
+				//throw new NotSupportedException(@".reloc section not supported.");
+			}
+			else
+			{
+				// Change the absolute into a relative offset
+				targetAddress = targetAddress - (methodAddress + methodRelativeBase);
+			}
+
+			ulong value = Patch.GetResult(patches, (ulong)targetAddress);
+			ulong mask = Patch.GetFinalMask(patches);
+
+			// Save the stream position
+			text.ApplyPatch(offset, linkType, value, mask, Endianness);
 		}
 
 		#endregion // Internals

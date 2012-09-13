@@ -8,7 +8,7 @@
  */
 
 using System;
-
+using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Signatures;
@@ -23,14 +23,8 @@ namespace Mosa.Platform.ARM
 	public class Architecture : BasicArchitecture
 	{
 
-		/// <summary>
-		/// Gets a value indicating whether this architecture is little-endian.
-		/// </summary>
-		/// <value>
-		/// 	<c>true</c> if this instance is architecture is little-endian; otherwise, <c>false</c>.
-		/// </value>
-		public override bool IsLittleEndian { get { return false; } }
-
+		public override Endianness Endianness { get { return Endianness.Big; } }
+	
 		/// <summary>
 		/// Gets the type of the elf machine.
 		/// </summary>

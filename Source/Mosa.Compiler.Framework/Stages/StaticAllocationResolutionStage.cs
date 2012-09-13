@@ -57,8 +57,8 @@ namespace Mosa.Compiler.Framework.Stages
 				// FIXME: Do we have to initialize this?
 				string methodTableSymbol = GetMethodTableForType(allocatedType);
 				
-				if (methodTableSymbol != null)					
-					methodCompiler.Linker.Link(LinkType.AbsoluteAddress | LinkType.NativeI4, symbolName, 0, 0, methodTableSymbol, 0);
+				if (methodTableSymbol != null)
+					methodCompiler.Linker.Link(LinkType.AbsoluteAddress | LinkType.NativeI4, BuildInPatch.I4, symbolName, 0, 0, methodTableSymbol, 0);
 			}
 
 			// Issue a load request before the newobj and before the assignment.

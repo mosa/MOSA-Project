@@ -877,7 +877,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			string referencedString = assembly.Metadata.ReadUserString(context.TokenType);
 
-			string symbolName = @"$ldstr$" + assembly.Name + "$String" + context.TokenType.ToString("x");
+			string symbolName = @"$ldstr$" + assembly.Name + "$" + context.TokenType.ToString("x");
 
 			if (!linker.HasSymbol(symbolName))
 			{
@@ -885,7 +885,7 @@ namespace Mosa.Compiler.Framework.Stages
 				using (Stream stream = linker.Allocate(symbolName, SectionKind.Text, 0, nativePointerAlignment))
 				{
 					// Method table and sync block
-					linker.Link(LinkType.AbsoluteAddress | LinkType.NativeI4, symbolName, 0, 0, @"System.String$mtable", 0);
+					linker.Link(LinkType.AbsoluteAddress | LinkType.NativeI4, BuildInPatch.I4, symbolName, 0, 0, @"System.String$mtable", 0);
 					stream.WriteZeroBytes(8);
 
 					// String length field

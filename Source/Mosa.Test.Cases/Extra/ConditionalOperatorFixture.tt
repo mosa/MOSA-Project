@@ -14,7 +14,7 @@ namespace Mosa.Test.Cases.Extra
 	[TestFixture]
 	public class ConditionalOperatorFixture : TestCompilerAdapter
 	{
-		public ConditionalOperator()
+		public ConditionalOperatorFixture()
 		{
 			settings.AddReference("Mosa.Test.Collection.dll");
 		}

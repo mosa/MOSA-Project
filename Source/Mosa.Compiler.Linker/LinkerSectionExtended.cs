@@ -23,7 +23,7 @@ namespace Mosa.Compiler.Linker
 		/// <summary>
 		/// Holds the sections data.
 		/// </summary>
-		protected Stream stream; 
+		protected Stream stream;
 
 		#endregion // Data members
 
@@ -86,7 +86,7 @@ namespace Mosa.Compiler.Linker
 		/// <param name="offset">The offset.</param>
 		/// <param name="linkType">Type of the link.</param>
 		/// <param name="value">The value.</param>
-		public void ApplyPatch(long offset, LinkType linkType, long value, bool isLittleEndian)
+		public void ApplyPatch(long offset, LinkType linkType, long value, Endianness endianness)
 		{
 			long pos = stream.Position;
 			stream.Position = offset;
@@ -99,19 +99,65 @@ namespace Mosa.Compiler.Linker
 					break;
 
 				case LinkType.NativeI2:
-					stream.Write((ushort)value, isLittleEndian);
+					stream.Write((ushort)value, endianness);
 					break;
 
 				case LinkType.NativeI4:
-					stream.Write((uint)value, isLittleEndian);
+					stream.Write((uint)value, endianness);
 					break;
 
 				case LinkType.NativeI8:
-					stream.Write((ulong)value, isLittleEndian);
+					stream.Write((ulong)value, endianness);
 					break;
 			}
 
 			stream.Position = pos;
+		}
+
+		public void ApplyPatch(long offset, LinkType linkType, ulong value, ulong mask, Endianness endianness)
+		{
+			long pos = stream.Position;
+			stream.Position = offset;
+
+			ulong current = 0;
+
+			switch (linkType & LinkType.SizeMask)
+			{
+				case LinkType.NativeI1:
+					current = (ulong)stream.ReadByte();
+					break;
+				case LinkType.NativeI2:
+					current = (ulong)stream.ReadUInt16(endianness);
+					break;
+				case LinkType.NativeI4:
+					current = (ulong)stream.ReadUInt32(endianness);
+					break;
+				case LinkType.NativeI8:
+					current = (ulong)stream.ReadUInt64(endianness);
+					break;
+			}
+
+			stream.Position = pos;
+			current = (current & ~mask) | value;
+
+			// Apply the patch
+			switch (linkType & LinkType.SizeMask)
+			{
+				case LinkType.NativeI1:
+					stream.WriteByte((byte)current);
+					break;
+				case LinkType.NativeI2:
+					stream.Write((ushort)current, endianness);
+					break;
+				case LinkType.NativeI4:
+					stream.Write((uint)current, endianness);
+					break;
+				case LinkType.NativeI8:
+					stream.Write((ulong)current, endianness);
+					break;
+			}
+
+			//stream.Position = pos;
 		}
 
 		#endregion // Methods

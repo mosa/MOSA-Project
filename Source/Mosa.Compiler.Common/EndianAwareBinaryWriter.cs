@@ -18,15 +18,17 @@ namespace Mosa.Compiler.Common
 
 		private bool swap = false;
 
-		public EndianAwareBinaryWriter(Stream input, Encoding encoding, bool isLittleEndian)
-			: base(input, encoding)
+		public EndianAwareBinaryWriter(Stream input, Endianness endianness)
+			: base(input)
 		{
+			bool isLittleEndian = endianness == Endianness.Little;
 			swap = (isLittleEndian != Endian.NativeIsLittleEndian);
 		}
 
-		public EndianAwareBinaryWriter(Stream input, bool isLittleEndian)
-			: base(input)
+		public EndianAwareBinaryWriter(Stream input, Encoding encoding, Endianness endianness)
+			: base(input, encoding)
 		{
+			bool isLittleEndian = endianness == Endianness.Little;
 			swap = (isLittleEndian != Endian.NativeIsLittleEndian);
 		}
 

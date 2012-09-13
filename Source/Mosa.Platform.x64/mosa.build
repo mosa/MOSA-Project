@@ -18,6 +18,7 @@
                     <include name="ArchitectureFeatureFlags.cs"/>
 		</sources>
 		<references>
+                    <include name="${outputDirectory}/Mosa.Compiler.Common.dll"/>
                     <include name="${outputDirectory}/Mosa.Compiler.Metadata.dll"/>
                     <include name="${outputDirectory}/Mosa.Compiler.Framework.dll"/>
 		</references>

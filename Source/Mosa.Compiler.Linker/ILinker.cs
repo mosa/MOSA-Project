@@ -10,6 +10,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using Mosa.Compiler.Common;
 
 namespace Mosa.Compiler.Linker
 {
@@ -71,7 +72,7 @@ namespace Mosa.Compiler.Linker
 		/// <summary>
 		/// Flag is the target platform is little-endian
 		/// </summary>
-		bool IsLittleEndian { get; set; }
+		Endianness Endianness { get; set; }
 
 		/// <summary>
 		/// Gets or sets the machine id (depends on platform)
@@ -121,12 +122,13 @@ namespace Mosa.Compiler.Linker
 		/// Issues a linker request for the given runtime method.
 		/// </summary>
 		/// <param name="linkType">The type of link required.</param>
+		/// <param name="patches">The patches.</param>
 		/// <param name="symbolName">The symbol name the patched code belongs to.</param>
 		/// <param name="symbolOffset">The offset inside the method where the patch is placed.</param>
 		/// <param name="methodRelativeBase">The base virtualAddress, if a relative link is required.</param>
 		/// <param name="targetSymbol">The linker symbol name to link against.</param>
 		/// <param name="targetOffset">An offset to apply to the link target.</param>
-		void Link(LinkType linkType, string symbolName, int symbolOffset, int methodRelativeBase, string targetSymbol, long targetOffset);
+		void Link(LinkType linkType, Patch[] patches, string symbolName, int symbolOffset, int methodRelativeBase, string targetSymbol, long targetOffset);
 
 		/// <summary>
 		/// Executes the linker and generates the final linked file

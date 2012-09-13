@@ -95,7 +95,7 @@ namespace Mosa.Compiler.Linker.Elf32
 				header.SectionHeaderNumber = (ushort)(Sections.Count + 2);
 				header.SectionHeaderOffset = header.ElfHeaderSize;
 
-				header.CreateIdent(IdentClass.Class32, IsLittleEndian ? IdentData.Data2LSB : IdentData.Data2MSB, null);
+				header.CreateIdent(IdentClass.Class32, Endianness == Endianness.Little ? IdentData.Data2LSB : IdentData.Data2MSB, null);
 
 				// Calculate the concatenated size of all section's data
 				uint offset = 0;
@@ -111,7 +111,7 @@ namespace Mosa.Compiler.Linker.Elf32
 				header.ProgramHeaderNumber = 1;
 				header.SectionHeaderStringIndex = 1;
 
-				EndianAwareBinaryWriter writer = new EndianAwareBinaryWriter(fs, IsLittleEndian);
+				EndianAwareBinaryWriter writer = new EndianAwareBinaryWriter(fs, Endianness);
 
 				// Write the ELF Header
 				header.Write(writer);

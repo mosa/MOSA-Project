@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
+using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Linker;
 
@@ -38,7 +39,7 @@ namespace Mosa.Test.System
 
 			LoadSectionAlignment = 1;
 			SectionAlignment = 1;
-			IsLittleEndian = true;	// x86
+			Endianness = Endianness.Little;	// x86
 		}
 
 		#endregion // Construction

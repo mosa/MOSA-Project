@@ -122,7 +122,7 @@ namespace Mosa.Compiler.Linker.PE
 			// Open the output file
 			using (FileStream fs = new FileStream(this.OutputFile, FileMode.Create, FileAccess.ReadWrite, FileShare.Read))
 			{
-				using (EndianAwareBinaryWriter writer = new EndianAwareBinaryWriter(fs, Encoding.Unicode, true))
+				using (EndianAwareBinaryWriter writer = new EndianAwareBinaryWriter(fs, Encoding.Unicode, Endianness))
 				{
 					// Write the PE headers
 					WriteDosHeader(writer);
@@ -430,7 +430,7 @@ namespace Mosa.Compiler.Linker.PE
 
 			using (FileStream stream = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
 			{
-				using (BinaryReader reader = new EndianAwareBinaryReader(stream, true))
+				using (BinaryReader reader = new EndianAwareBinaryReader(stream, Endianness.Little))
 				{
 					uint l = (uint)stream.Length;
 					for (uint p = 0; p < l; p += 2)

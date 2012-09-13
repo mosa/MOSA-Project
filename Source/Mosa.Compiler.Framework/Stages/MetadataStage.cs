@@ -48,7 +48,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			using (Stream stream = linker.Allocate(assemblyListSymbol, SectionKind.ROData, 0, typeLayout.NativePointerAlignment))
 			{
-				using (EndianAwareBinaryWriter writer = new EndianAwareBinaryWriter(stream, architecture.IsLittleEndian))
+				using (EndianAwareBinaryWriter writer = new EndianAwareBinaryWriter(stream, architecture.Endianness))
 				{
 					// 1. Number of assemblies (modules)
 					writer.Write((uint)typeSystem.TypeModules.Count);
@@ -56,7 +56,7 @@ namespace Mosa.Compiler.Framework.Stages
 					// 2. Pointers to assemblies
 					foreach (var module in typeSystem.TypeModules)
 					{
-						linker.Link(LinkType.AbsoluteAddress | LinkType.NativeI4, assemblyListSymbol, (int)writer.Position, 0, module.Name + "$atable", 0);
+						linker.Link(LinkType.AbsoluteAddress | LinkType.NativeI4, BuildInPatch.I4, assemblyListSymbol, (int)writer.Position, 0, module.Name + "$atable", 0);
 						writer.Position += typeLayout.NativePointerSize;
 					}
 				}
@@ -76,7 +76,7 @@ namespace Mosa.Compiler.Framework.Stages
 			// Emit assembly name
 			using (Stream stream = linker.Allocate(assemblyNameSymbol, SectionKind.ROData, 0, typeLayout.NativePointerAlignment))
 			{
-				using (EndianAwareBinaryWriter writer = new EndianAwareBinaryWriter(stream, architecture.IsLittleEndian))
+				using (EndianAwareBinaryWriter writer = new EndianAwareBinaryWriter(stream, architecture.Endianness))
 				{
 					EmitStringWithLength(writer, typeModule.Name);
 				}
@@ -94,10 +94,10 @@ namespace Mosa.Compiler.Framework.Stages
 
 			using (Stream stream = linker.Allocate(assemblyTableSymbol, SectionKind.ROData, 0, typeLayout.NativePointerAlignment))
 			{
-				using (EndianAwareBinaryWriter writer = new EndianAwareBinaryWriter(stream, architecture.IsLittleEndian))
+				using (EndianAwareBinaryWriter writer = new EndianAwareBinaryWriter(stream, architecture.Endianness))
 				{
 					// 1. Pointer to Assembly Name
-					linker.Link(LinkType.AbsoluteAddress | LinkType.NativeI4, assemblyTableSymbol, 0, 0, assemblyNameSymbol, 0);
+					linker.Link(LinkType.AbsoluteAddress | LinkType.NativeI4, BuildInPatch.I4, assemblyTableSymbol, 0, 0, assemblyNameSymbol, 0);
 					writer.Position += typeLayout.NativePointerSize;
 
 					// 2. Number of types
@@ -107,7 +107,7 @@ namespace Mosa.Compiler.Framework.Stages
 					foreach (var type in typeModule.GetAllTypes())
 					{
 						if (!type.IsModule && !(type.Module is InternalTypeModule))
-							linker.Link(LinkType.AbsoluteAddress | LinkType.NativeI4, assemblyTableSymbol, (int)writer.Position, 0, type.FullName + @"$dtable", 0);
+							linker.Link(LinkType.AbsoluteAddress | LinkType.NativeI4, BuildInPatch.I4, assemblyTableSymbol, (int)writer.Position, 0, type.FullName + @"$dtable", 0);
 
 						writer.Position += typeLayout.NativePointerSize;
 					}
@@ -130,7 +130,7 @@ namespace Mosa.Compiler.Framework.Stages
 			// Emit type name
 			using (Stream stream = linker.Allocate(typeNameSymbol, SectionKind.ROData, 0, typeLayout.NativePointerAlignment))
 			{
-				using (EndianAwareBinaryWriter writer = new EndianAwareBinaryWriter(stream, architecture.IsLittleEndian))
+				using (EndianAwareBinaryWriter writer = new EndianAwareBinaryWriter(stream, architecture.Endianness))
 				{
 					EmitStringWithLength(writer, type.FullName);
 				}
@@ -140,7 +140,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			using (Stream stream = linker.Allocate(typeTableSymbol, SectionKind.ROData, 0, typeLayout.NativePointerAlignment))
 			{
-				using (EndianAwareBinaryWriter writer = new EndianAwareBinaryWriter(stream, architecture.IsLittleEndian))
+				using (EndianAwareBinaryWriter writer = new EndianAwareBinaryWriter(stream, architecture.Endianness))
 				{
 					// 1. Size
 					writer.Write((uint)typeLayout.GetTypeSize(type));
@@ -149,11 +149,11 @@ namespace Mosa.Compiler.Framework.Stages
 					writer.Write((uint)type.Token.ToUInt32());
 
 					// 3. Pointer to Name
-					linker.Link(LinkType.AbsoluteAddress | LinkType.NativeI4, typeTableSymbol, (int)writer.Position, 0, typeNameSymbol, 0);
+					linker.Link(LinkType.AbsoluteAddress | LinkType.NativeI4, BuildInPatch.I4, typeTableSymbol, (int)writer.Position, 0, typeNameSymbol, 0);
 					writer.Position += typeLayout.NativePointerSize;
 
 					// 4. Pointer to Assembly Definition
-					linker.Link(LinkType.AbsoluteAddress | LinkType.NativeI4, typeTableSymbol, (int)writer.Position, 0, assemblySymbol, 0);
+					linker.Link(LinkType.AbsoluteAddress | LinkType.NativeI4, BuildInPatch.I4, typeTableSymbol, (int)writer.Position, 0, assemblySymbol, 0);
 					writer.Position += typeLayout.NativePointerSize;
 
 					// 5. TODO: Constructor that accept no parameters, if any, for this type

@@ -51,7 +51,7 @@ namespace Mosa.Compiler.Linker
 		/// <summary>
 		/// Holds the patch instructions
 		/// </summary>
-		private readonly Patch[] patch;
+		private readonly Patch[] patches;
 
 		#endregion // Data members
 
@@ -61,12 +61,13 @@ namespace Mosa.Compiler.Linker
 		/// Initializes a new instance of LinkRequest.
 		/// </summary>
 		/// <param name="linkType">Type of the link.</param>
+		/// <param name="patches">The patches.</param>
 		/// <param name="symbolName">The symbol whose code is being patched.</param>
 		/// <param name="symbolOffset">The symbol offset.</param>
 		/// <param name="methodRelativeBase">The symbol relative base.</param>
 		/// <param name="targetSymbol">The linker symbol to link against.</param>
 		/// <param name="targetOffset">An offset to apply to the link target.</param>
-		public LinkRequest(LinkType linkType, string symbolName, int symbolOffset, int methodRelativeBase, string targetSymbol, long targetOffset)
+		public LinkRequest(LinkType linkType, Patch[] patches, string symbolName, int symbolOffset, int methodRelativeBase, string targetSymbol, long targetOffset)
 		{
 			this.symbolName = symbolName;
 			this.symbolOffset = symbolOffset;
@@ -74,6 +75,7 @@ namespace Mosa.Compiler.Linker
 			this.methodRelativeBase = methodRelativeBase;
 			this.targetSymbol = targetSymbol;
 			this.targetOffset = targetOffset;
+			this.patches = patches;
 		}
 
 		#endregion // Construction
@@ -107,7 +109,7 @@ namespace Mosa.Compiler.Linker
 		/// <summary>
 		/// The position within the code stream where the virtualAddress is patched.
 		/// </summary>
-		public int MethodOffset
+		public int SymbolOffset
 		{
 			get { return symbolOffset; }
 		}
@@ -116,7 +118,7 @@ namespace Mosa.Compiler.Linker
 		/// Gets the name of the symbol.
 		/// </summary>
 		/// <value>The name of the symbol.</value>
-		public string TargetSymbolName
+		public string TargetSymbol
 		{
 			get { return targetSymbol; }
 		}
@@ -125,9 +127,17 @@ namespace Mosa.Compiler.Linker
 		/// Gets the offset to apply to the link target.
 		/// </summary>
 		/// <value>The offset.</value>
-		public long Offset
+		public long TargetOffset
 		{
 			get { return targetOffset; }
+		}
+
+		/// <summary>
+		/// Gets the patches.
+		/// </summary>
+		public Patch[] Patches
+		{
+			get { return patches; }
 		}
 
 		#endregion // Properties
