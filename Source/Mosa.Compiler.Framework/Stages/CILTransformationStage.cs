@@ -885,7 +885,7 @@ namespace Mosa.Compiler.Framework.Stages
 				using (Stream stream = linker.Allocate(symbolName, SectionKind.Text, 0, nativePointerAlignment))
 				{
 					// Method table and sync block
-					linker.Link(LinkType.AbsoluteAddress | LinkType.NativeI4, BuildInPatch.I4, symbolName, 0, 0, @"System.String$mtable", 0);
+					linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuildInPatch.I4, symbolName, 0, 0, @"System.String$mtable", 0);
 					stream.WriteZeroBytes(8);
 
 					// String length field

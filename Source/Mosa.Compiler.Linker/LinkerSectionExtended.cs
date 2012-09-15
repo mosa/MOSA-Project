@@ -94,19 +94,19 @@ namespace Mosa.Compiler.Linker
 			// Apply the patch
 			switch (linkType & LinkType.SizeMask)
 			{
-				case LinkType.NativeI1:
+				case LinkType.I1:
 					stream.WriteByte((byte)value);
 					break;
 
-				case LinkType.NativeI2:
+				case LinkType.I2:
 					stream.Write((ushort)value, endianness);
 					break;
 
-				case LinkType.NativeI4:
+				case LinkType.I4:
 					stream.Write((uint)value, endianness);
 					break;
 
-				case LinkType.NativeI8:
+				case LinkType.I8:
 					stream.Write((ulong)value, endianness);
 					break;
 			}
@@ -123,16 +123,16 @@ namespace Mosa.Compiler.Linker
 
 			switch (linkType & LinkType.SizeMask)
 			{
-				case LinkType.NativeI1:
+				case LinkType.I1:
 					current = (ulong)stream.ReadByte();
 					break;
-				case LinkType.NativeI2:
+				case LinkType.I2:
 					current = (ulong)stream.ReadUInt16(endianness);
 					break;
-				case LinkType.NativeI4:
+				case LinkType.I4:
 					current = (ulong)stream.ReadUInt32(endianness);
 					break;
-				case LinkType.NativeI8:
+				case LinkType.I8:
 					current = (ulong)stream.ReadUInt64(endianness);
 					break;
 			}
@@ -143,16 +143,16 @@ namespace Mosa.Compiler.Linker
 			// Apply the patch
 			switch (linkType & LinkType.SizeMask)
 			{
-				case LinkType.NativeI1:
+				case LinkType.I1:
 					stream.WriteByte((byte)current);
 					break;
-				case LinkType.NativeI2:
+				case LinkType.I2:
 					stream.Write((ushort)current, endianness);
 					break;
-				case LinkType.NativeI4:
+				case LinkType.I4:
 					stream.Write((uint)current, endianness);
 					break;
-				case LinkType.NativeI8:
+				case LinkType.I8:
 					stream.Write((ulong)current, endianness);
 					break;
 			}
