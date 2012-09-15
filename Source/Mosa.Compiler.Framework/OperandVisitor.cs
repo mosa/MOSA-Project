@@ -19,11 +19,11 @@ namespace Mosa.Compiler.Framework
 	/// <summary>
 	/// 
 	/// </summary>
-	public sealed class OpcodeVisitor
+	public sealed class OperandVisitor
 	{
 		private Context context;
 
-		public OpcodeVisitor(Context context)
+		public OperandVisitor(Context context)
 		{
 			this.context = context;
 		}

@@ -122,7 +122,6 @@ namespace Mosa.Compiler.Framework
 			ComputeLocalLiveSets();
 
 			ComputeGlobalLiveSets();
-
 		}
 
 		private void NumberInstructions()
@@ -154,13 +153,21 @@ namespace Mosa.Compiler.Framework
 
 				for (Context context = new Context(instructionSet, block.Block); !context.EndOfInstruction; context.GotoNext())
 				{
-					foreach (var ops in context.Operands)
+					OperandVisitor visitor = new OperandVisitor(context);
+
+					foreach (var ops in visitor.Input)
 						if (ops.IsVirtualRegister)
 							if (!liveKill.Get(ops.Sequence))
 								liveGen.Set(ops.Sequence, true);
 
-					if (!liveKill.Get(context.Result.Sequence))
-						liveKill.Set(context.Result.Sequence, true);
+					foreach (var ops in visitor.Temp)
+						if (ops.IsVirtualRegister)
+							if (!liveKill.Get(ops.Sequence))
+								liveGen.Set(ops.Sequence, true);
+
+					foreach (var ops in visitor.Output)
+						if (!liveKill.Get(ops.Sequence))
+							liveKill.Set(ops.Sequence, true);
 				}
 
 				block.LiveGen = liveGen;
@@ -222,6 +229,7 @@ namespace Mosa.Compiler.Framework
 
 				while (!context.IsFirstInstruction)
 				{
+					OperandVisitor visitor = new OperandVisitor(context);
 
 					if (context.Instruction.FlowControl == FlowControl.Call)
 					{
@@ -230,7 +238,7 @@ namespace Mosa.Compiler.Framework
 					}
 
 
-					foreach (var result in context.Results)
+					foreach (var result in visitor.Output)
 					{
 						//intervals[opr].first_range.from = op.id
 						//intervals[opr].add_use_pos(op.id, use_kind_for(op, opr))
