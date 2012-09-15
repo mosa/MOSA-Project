@@ -17,6 +17,7 @@
                     <include name="Architecture.cs"/>
                     <include name="ArchitectureFeatureFlags.cs"/>
                     <include name="BaseTransformationStage.cs"/>
+                    <include name="AVR32Patch.cs"/>
                     <include name="DefaultCallingConvention.cs"/>
                     <include name="GeneralPurposeRegister.cs"/>
                     <include name="Instructions/Branch.cs"/>

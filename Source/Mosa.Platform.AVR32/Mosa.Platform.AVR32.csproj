@@ -88,6 +88,7 @@
     <Compile Include="Architecture.cs" />
     <Compile Include="ArchitectureFeatureFlags.cs" />
     <Compile Include="BaseTransformationStage.cs" />
+    <Compile Include="AVR32Patch.cs" />
     <Compile Include="DefaultCallingConvention.cs" />
     <Compile Include="GeneralPurposeRegister.cs" />
     <Compile Include="Instructions\Branch.cs" />
