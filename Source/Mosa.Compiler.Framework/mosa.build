@@ -15,6 +15,7 @@
 	    <csc target="library" output="${outputDirectory}/Mosa.Compiler.Framework.dll" debug="${debug}" unsafe="true" nostdlib="false">
 		<sources>
                     <include name="BasicBlocks.cs"/>
+                    <include name="OpcodeVisitor.cs"/>
                     <include name="Linker/LinkerFactory.cs"/>
                     <include name="Stages/LinkerFinalizationStage.cs"/>
                     <include name="LiveRangeAnalysis.cs"/>

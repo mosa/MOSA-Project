@@ -78,6 +78,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BasicBlocks.cs" />
+    <Compile Include="OpcodeVisitor.cs" />
     <Compile Include="Linker\LinkerFactory.cs" />
     <Compile Include="Stages\LinkerFinalizationStage.cs" />
     <Compile Include="LiveRangeAnalysis.cs" />

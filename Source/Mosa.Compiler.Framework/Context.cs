@@ -19,17 +19,17 @@ namespace Mosa.Compiler.Framework
 
 	#region Helper Context Classes
 
-	public class InsertContext
-	{
-		public Context Context;
-		public InsertContext(Context context) { Context = context; }
-	}
+	//public class InsertContext
+	//{
+	//	public Context Context;
+	//	public InsertContext(Context context) { Context = context; }
+	//}
 
-	public class SetContext
-	{
-		public Context Context;
-		public SetContext(Context context) { Context = context; }
-	}
+	//public class SetContext
+	//{
+	//	public Context Context;
+	//	public SetContext(Context context) { Context = context; }
+	//}
 
 	#endregion // Nested Classes
 
@@ -59,12 +59,12 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// 
 		/// </summary>
-		private InsertContext insertContext;
+		//private InsertContext insertContext;
 
 		/// <summary>
 		/// 
 		/// </summary>
-		private SetContext setContext;
+		//private SetContext setContext;
 
 		#endregion // Data members
 
@@ -447,10 +447,10 @@ namespace Mosa.Compiler.Framework
 		/// <value>
 		/// The insert context.
 		/// </value>
-		public InsertContext Insert
-		{
-			get { if (insertContext == null) insertContext = new InsertContext(this); return insertContext; }
-		}
+		//public InsertContext Insert
+		//{
+		//	get { if (insertContext == null) insertContext = new InsertContext(this); return insertContext; }
+		//}
 
 		/// <summary>
 		/// Gets the set context.
@@ -458,10 +458,10 @@ namespace Mosa.Compiler.Framework
 		/// <value>
 		/// The set context.
 		/// </value>
-		public SetContext Set
-		{
-			get { if (setContext == null) setContext = new SetContext(this); return setContext; }
-		}
+		//public SetContext Set
+		//{
+		//	get { if (setContext == null) setContext = new SetContext(this); return setContext; }
+		//}
 
 		#endregion // Properties
 

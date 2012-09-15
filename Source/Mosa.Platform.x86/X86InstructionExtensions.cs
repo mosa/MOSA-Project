@@ -19,25 +19,25 @@ namespace Mosa.Platform.x86.Instructions
 	{
 		// this is just play for now...
 
-		public static void Adc(this InsertContext insert, Operand destination, Operand source)
-		{
-			insert.Context.AppendInstruction(X86.Add, destination, destination, source);
-		}
+		//public static void Adc(this InsertContext insert, Operand destination, Operand source)
+		//{
+		//	insert.Context.AppendInstruction(X86.Add, destination, destination, source);
+		//}
 
-		public static void Adc(this SetContext set, Operand destination, Operand source)
-		{
-			set.Context.SetInstruction(X86.Add, destination, destination, source);
-		}
+		//public static void Adc(this SetContext set, Operand destination, Operand source)
+		//{
+		//	set.Context.SetInstruction(X86.Add, destination, destination, source);
+		//}
 
-		public static void Add(this InsertContext insert, Operand destination, Operand source)
-		{
-			insert.Context.AppendInstruction(X86.Add, destination, destination, source);
-		}
+		//public static void Add(this InsertContext insert, Operand destination, Operand source)
+		//{
+		//	insert.Context.AppendInstruction(X86.Add, destination, destination, source);
+		//}
 
-		public static void Add(this SetContext set, Operand destination, Operand source)
-		{
-			set.Context.AppendInstruction(X86.Add, destination, destination, source);
-		}
+		//public static void Add(this SetContext set, Operand destination, Operand source)
+		//{
+		//	set.Context.AppendInstruction(X86.Add, destination, destination, source);
+		//}
 
 	}
 }
