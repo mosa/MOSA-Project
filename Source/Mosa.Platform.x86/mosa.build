@@ -161,7 +161,6 @@
                     <include name="GeneralPurposeRegister.cs"/>
                     <include name="Stages/IRTransformationStage.cs"/>
                     <include name="Stages/LongOperandTransformationStage.cs"/>
-                    <include name="MMXRegister.cs"/>
                     <include name="Registers.cs"/>
                     <include name="SSE2Register.cs"/>
                     <include name="XSharp/CPURegister.cs"/>

@@ -244,6 +244,17 @@ namespace Mosa.Compiler.Framework
 						//intervals[opr].add_use_pos(op.id, use_kind_for(op, opr))
 					}
 
+					foreach (var result in visitor.Temp)
+					{
+						//intervals[opr].add_range(op.id, op.id + 1)
+						//intervals[opr].add_use_pos(op.id, use_kind_for(op, opr))
+					}
+
+					foreach (var result in visitor.Input)
+					{
+						//intervals[opr].add_range(block_from, op.id)
+						//intervals[opr].add_use_pos(op.id, use_kind_for(op, opr))
+					}
 
 					context.GotoPrevious();
 				}

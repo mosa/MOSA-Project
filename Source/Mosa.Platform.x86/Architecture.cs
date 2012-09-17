@@ -60,18 +60,6 @@ namespace Mosa.Platform.x86
 			GeneralPurposeRegister.EDI,
 
 			////////////////////////////////////////////////////////
-			// MMX floating point registers
-			////////////////////////////////////////////////////////			
-			MMXRegister.MM0,
-			MMXRegister.MM1,
-			MMXRegister.MM2,
-			MMXRegister.MM3,
-			MMXRegister.MM4,
-			MMXRegister.MM5,
-			MMXRegister.MM6,
-			MMXRegister.MM7,
-
-			////////////////////////////////////////////////////////
 			// SSE 128-bit floating point registers
 			////////////////////////////////////////////////////////
 			SSE2Register.XMM0,
