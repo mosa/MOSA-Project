@@ -23,7 +23,7 @@ namespace Mosa.Platform.x86
 	/// This class provides a common base class for architecture
 	/// specific operations.
 	/// </summary>
-	public class Architecture : BasicArchitecture
+	public class Architecture : BaseArchitecture
 	{
 
 		/// <summary>

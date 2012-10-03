@@ -16,7 +16,7 @@ namespace Mosa.Compiler.Linker.PE
 	/// <summary>
 	/// An implementation of a portable executable linker section.
 	/// </summary>
-	public class PELinkerSection : LinkerSectionExtended
+	public class PELinkerSection : ExtendedLinkerSection
 	{
 
 		#region Construction

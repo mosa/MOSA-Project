@@ -43,7 +43,7 @@ namespace Mosa.Compiler.Linker
 		/// <summary>
 		/// 
 		/// </summary>
-		private readonly List<LinkerSectionExtended> sections = new List<LinkerSectionExtended>();
+		private readonly List<ExtendedLinkerSection> sections = new List<ExtendedLinkerSection>();
 
 		/// <summary>
 		/// Holds the output file of the linker.
@@ -141,7 +141,7 @@ namespace Mosa.Compiler.Linker
 		/// Retrieves the collection of sections created during compilation.
 		/// </summary>
 		/// <value>The sections collection.</value>
-		public IList<LinkerSectionExtended> Sections { get { return sections; } }
+		public IList<ExtendedLinkerSection> Sections { get { return sections; } }
 
 		/// <summary>
 		/// Retrieves the collection of _symbols known by the linker.
@@ -227,7 +227,7 @@ namespace Mosa.Compiler.Linker
 		/// </returns>
 		Stream ILinker.Allocate(string name, SectionKind section, int size, int alignment)
 		{
-			LinkerSectionExtended linkerSection = (LinkerSectionExtended)GetSection(section);
+			ExtendedLinkerSection linkerSection = (ExtendedLinkerSection)GetSection(section);
 			Stream stream = linkerSection.Allocate(size, alignment);
 
 			// Create a linker symbol for the name
@@ -449,7 +449,7 @@ namespace Mosa.Compiler.Linker
 				throw new InvalidOperationException(@"Can't apply patches - symbols not resolved.");
 
 			// Retrieve the text section
-			LinkerSectionExtended text = GetSection(SectionKind.Text) as LinkerSectionExtended;
+			ExtendedLinkerSection text = GetSection(SectionKind.Text) as ExtendedLinkerSection;
 
 			// Calculate the patch offset
 			long offset = (methodAddress - text.VirtualAddress) + methodOffset;

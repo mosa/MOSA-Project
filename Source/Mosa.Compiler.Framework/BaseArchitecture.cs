@@ -15,9 +15,9 @@ namespace Mosa.Compiler.Framework
 {
 
 	/// <summary>
-	/// Implements a basic framework for architectures.
+	/// Implements a base framework for architectures.
 	/// </summary>
-	public abstract class BasicArchitecture : IArchitecture
+	public abstract class BaseArchitecture : IArchitecture
 	{
 
 		/// <summary>

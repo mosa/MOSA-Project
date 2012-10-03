@@ -37,7 +37,7 @@
     <Compile Include="BaseLinker.cs" />
     <Compile Include="BuildInPatch.cs" />
     <Compile Include="Patch.cs" />
-    <Compile Include="LinkerSectionExtended.cs" />
+    <Compile Include="ExtendedLinkerSection.cs" />
     <Compile Include="LinkerType.cs" />
     <Compile Include="Elf32\Elf32Linker.cs" />
     <Compile Include="Elf32\BssSection.cs" />

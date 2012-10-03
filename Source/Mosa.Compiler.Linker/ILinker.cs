@@ -49,7 +49,7 @@ namespace Mosa.Compiler.Linker
 		/// Retrieves the collection of sections created during compilation.
 		/// </summary>
 		/// <value>The sections collection.</value>
-		IList<LinkerSectionExtended> Sections { get; }
+		IList<ExtendedLinkerSection> Sections { get; }
 
 		/// <summary>
 		/// Retrieves the collection of symbols known by the linker.

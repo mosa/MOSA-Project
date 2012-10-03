@@ -55,6 +55,11 @@ namespace Mosa.Compiler.Framework
 		private int index;
 
 		/// <summary>
+		/// Holds the sequence
+		/// </summary>
+		//private int sequence;
+
+		/// <summary>
 		/// The register, where the operand is stored.
 		/// </summary>
 		private Register register;
@@ -227,6 +232,14 @@ namespace Mosa.Compiler.Framework
 		public int Sequence { get { return this.index; } }
 
 		/// <summary>
+		/// Gets the index.
+		/// </summary>
+		/// <value>
+		/// The name.
+		/// </value>
+		public int Index { get { return this.index; } }
+
+		/// <summary>
 		/// Gets the value as long integer.
 		/// </summary>
 		public long ValueAsLongInteger
@@ -357,6 +370,7 @@ namespace Mosa.Compiler.Framework
 		{
 			Operand operand = new Operand(sigType, OperandType.Register | OperandType.VirtualRegister);
 			operand.index = index;
+			//operand.sequence = sequence;
 			return operand;
 		}
 
@@ -459,6 +473,7 @@ namespace Mosa.Compiler.Framework
 			operand.Name = name;
 			operand.register = register;
 			operand.index = index;
+			//operand.sequence = index;
 			operand.Offset = -index * 4; // FIXME: 4 is platform dependent!
 			return operand;
 		}
@@ -475,6 +490,7 @@ namespace Mosa.Compiler.Framework
 			Operand operand = new Operand(type, OperandType.MemoryAddress | OperandType.Parameter);
 			operand.register = register;
 			operand.index = index; // param.Position;
+			//operand.sequence = index;
 			operand.Offset = param.Position * 4; // FIXME: 4 is platform dependent!
 			return operand;
 		}
@@ -527,6 +543,7 @@ namespace Mosa.Compiler.Framework
 			longOperand.Low = operand;
 
 			operand.index = index;
+			//operand.sequence = index;
 			return operand;
 		}
 

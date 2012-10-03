@@ -16,7 +16,7 @@ namespace Mosa.Compiler.Linker.Elf32
 	/// <summary>
 	/// 
 	/// </summary>
-	public class Elf32LinkerSection : LinkerSectionExtended
+	public class Elf32LinkerSection : ExtendedLinkerSection
 	{
 
 		/// <summary>

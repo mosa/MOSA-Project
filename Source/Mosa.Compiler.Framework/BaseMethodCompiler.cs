@@ -160,7 +160,7 @@ namespace Mosa.Compiler.Framework
 
 			this.stackLayout = new StackLayout(architecture, method.Parameters.Count + (method.Signature.HasThis || method.Signature.HasExplicitThis ? 1 : 0));
 
-			this.virtualRegisters = new VirtualRegisters();
+			this.virtualRegisters = new VirtualRegisters(architecture);
 
 			EvaluateParameterOperands();
 

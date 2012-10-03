@@ -16,7 +16,7 @@ namespace Mosa.Compiler.Linker
 	/// <summary>
 	/// Abstract class, that represents sections in an executable file provided by the linker.
 	/// </summary>
-	public abstract class LinkerSectionExtended : LinkerSection
+	public abstract class ExtendedLinkerSection : LinkerSection
 	{
 		#region Data members
 
@@ -35,7 +35,7 @@ namespace Mosa.Compiler.Linker
 		/// <param name="kind">The kind of the section.</param>
 		/// <param name="name">The name.</param>
 		/// <param name="virtualAddress">The virtualAddress.</param>
-		protected LinkerSectionExtended(SectionKind kind, string name, long virtualAddress)
+		protected ExtendedLinkerSection(SectionKind kind, string name, long virtualAddress)
 			: base(kind, name, virtualAddress)
 		{
 		}

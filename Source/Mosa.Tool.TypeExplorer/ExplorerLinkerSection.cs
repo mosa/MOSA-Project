@@ -16,7 +16,7 @@ namespace Mosa.Tool.TypeExplorer
 	/// <summary>
 	/// 
 	/// </summary>
-	public sealed class ExplorerLinkerSection : LinkerSectionExtended
+	public sealed class ExplorerLinkerSection : ExtendedLinkerSection
 	{
 
 		#region Construction

@@ -17,7 +17,7 @@ namespace Mosa.Test.System
 	/// <summary>
 	/// 
 	/// </summary>
-	public sealed class TestLinkerSection : LinkerSectionExtended
+	public sealed class TestLinkerSection : ExtendedLinkerSection
 	{
 
 		#region Construction

@@ -22,37 +22,36 @@ namespace Mosa.Compiler.Framework
 	public sealed class LiveRangeAnalysis
 	{
 
-		public struct LiveRange
+		public sealed class ExtendedRegister
 		{
-			int Start { get; set; }
-			int End { get; set; }
-
-			public LiveRange(int start, int end)
-				: this()
-			{
-				Start = start;
-				End = end;
-			}
-		}
-
-		public sealed class ExtendedVirtualRegister
-		{
-			public List<LiveRange> liveRanges = new List<LiveRange>(1);
+			private List<LiveRange> liveRanges = new List<LiveRange>(1);
 
 			public Operand VirtualRegister { get; private set; }
-			public int Sequence { get { return VirtualRegister.Sequence; } }
+			public Register PhysicalRegister { get; private set; }
+			public int Sequence { get; private set; }
 			public List<LiveRange> LiveRanges { get { return liveRanges; } }
 			public int Count { get { return liveRanges.Count; } }
 
 			public void AddRange(LiveRange liveRange)
 			{
-				// TODO: Merge if ranges connect
-				liveRanges.Add(liveRange);
+				LiveRange.AddRangeToList(liveRanges, liveRange.Start, liveRange.End);
 			}
 
-			public ExtendedVirtualRegister(Operand virtualRegister)
+			public void AddRange(int start, int end)
 			{
-				VirtualRegister = virtualRegister;
+				LiveRange.AddRangeToList(liveRanges, start, end);
+			}
+
+			public ExtendedRegister(Operand virtualRegister, int sequence)
+			{
+				this.VirtualRegister = virtualRegister;
+				this.Sequence = sequence;
+			}
+
+			public ExtendedRegister(Register physicalRegister, int sequence)
+			{
+				this.PhysicalRegister = physicalRegister;
+				this.Sequence = sequence;
 			}
 		}
 
@@ -85,35 +84,50 @@ namespace Mosa.Compiler.Framework
 		private InstructionSet instructionSet;
 		private VirtualRegisters virtualRegisters;
 		private int virtualRegisterCount;
-
+		private int physicalRegisterCount;
+		private int registerCount;
 		private int[] instructionNumbering;
 		private ExtendedBlock[] extendedBlocks;
-		private ExtendedVirtualRegister[] extendedVirtualRegisters;
+		private ExtendedRegister[] extendedRegisters;
 
 		/// <summary>
 		/// Performs stage specific processing on the compiler context.
 		/// </summary>
-		public LiveRangeAnalysis(BasicBlocks basicBlocks, VirtualRegisters virtualRegisters, InstructionSet instructionSet)
+		public LiveRangeAnalysis(BasicBlocks basicBlocks, VirtualRegisters virtualRegisters, InstructionSet instructionSet, IArchitecture architecture)
 		{
 			this.basicBlocks = basicBlocks;
 			this.instructionSet = instructionSet;
 			this.virtualRegisters = virtualRegisters;
 
 			this.virtualRegisterCount = virtualRegisters.Count;
+			this.physicalRegisterCount = architecture.RegisterSet[architecture.RegisterSet.Length - 1].Index;
+			this.registerCount = virtualRegisterCount + physicalRegisterCount;
+			//foreach (var register in architecture.RegisterSet)
+			//	if (register.Index > this.physicalRegisterCount)
+			//		this.physicalRegisterCount = register.Index;
+
 			this.instructionNumbering = new int[instructionSet.Size];
-			this.extendedVirtualRegisters = new ExtendedVirtualRegister[virtualRegisterCount];
+			this.extendedRegisters = new ExtendedRegister[registerCount];
 
 			// Allocate and setup extended blocks
 			this.extendedBlocks = new ExtendedBlock[basicBlocks.Count];
 			for (int i = 0; i < basicBlocks.Count; i++)
 			{
-				this.extendedBlocks[i] = new ExtendedBlock(basicBlocks[i], virtualRegisterCount);
+				this.extendedBlocks[i] = new ExtendedBlock(basicBlocks[i], registerCount);
 			}
 
-			// Allocate and setup extended virtual registers
+			// Setup extended physical registers
+			foreach (var physicalRegister in architecture.RegisterSet)
+			{
+				int sequence = physicalRegister.Index;
+				extendedRegisters[sequence] = new ExtendedRegister(physicalRegister, sequence);
+			}
+
+			// Setup extended virtual registers
 			foreach (var virtualRegister in virtualRegisters)
 			{
-				extendedVirtualRegisters[virtualRegister.Sequence] = new ExtendedVirtualRegister(virtualRegister);
+				int sequence = virtualRegister.Sequence + physicalRegisterCount;
+				extendedRegisters[sequence] = new ExtendedRegister(virtualRegister, sequence);
 			}
 
 			// Number all the instructions in block order
@@ -122,6 +136,11 @@ namespace Mosa.Compiler.Framework
 			ComputeLocalLiveSets();
 
 			ComputeGlobalLiveSets();
+		}
+
+		private int GetIndex(Operand operand)
+		{
+			return (operand.IsCPURegister) ? operand.Sequence : operand.Sequence + physicalRegisterCount;
 		}
 
 		private void NumberInstructions()
@@ -148,8 +167,8 @@ namespace Mosa.Compiler.Framework
 		{
 			foreach (var block in extendedBlocks)
 			{
-				BitArray liveGen = new BitArray(virtualRegisterCount);
-				BitArray liveKill = new BitArray(virtualRegisterCount);
+				BitArray liveGen = new BitArray(registerCount);
+				BitArray liveKill = new BitArray(registerCount);
 
 				for (Context context = new Context(instructionSet, block.Block); !context.EndOfInstruction; context.GotoNext())
 				{
@@ -157,17 +176,26 @@ namespace Mosa.Compiler.Framework
 
 					foreach (var ops in visitor.Input)
 						if (ops.IsVirtualRegister)
-							if (!liveKill.Get(ops.Sequence))
-								liveGen.Set(ops.Sequence, true);
+						{
+							int index = GetIndex(ops);
+							if (!liveKill.Get(index))
+								liveGen.Set(index, true);
+						}
 
 					foreach (var ops in visitor.Temp)
 						if (ops.IsVirtualRegister)
-							if (!liveKill.Get(ops.Sequence))
-								liveGen.Set(ops.Sequence, true);
+						{
+							int index = GetIndex(ops);
+							if (!liveKill.Get(index))
+								liveGen.Set(index, true);
+						}
 
 					foreach (var ops in visitor.Output)
-						if (!liveKill.Get(ops.Sequence))
-							liveKill.Set(ops.Sequence, true);
+					{
+						int index = GetIndex(ops);
+						if (!liveKill.Get(index))
+							liveKill.Set(index, true);
+					}
 				}
 
 				block.LiveGen = liveGen;
@@ -187,7 +215,7 @@ namespace Mosa.Compiler.Framework
 				{
 					var block = extendedBlocks[i];
 
-					BitArray liveOut = new BitArray(virtualRegisterCount);
+					BitArray liveOut = new BitArray(registerCount);
 
 					foreach (var next in block.Block.NextBlocks)
 					{
@@ -219,9 +247,9 @@ namespace Mosa.Compiler.Framework
 
 				for (int s = 0; s < block.LiveOut.Count; s++)
 				{
-					var operand = extendedVirtualRegisters[s];
+					var register = extendedRegisters[s];
 
-					operand.AddRange(new LiveRange(blockFrom, blockTo));
+					register.AddRange(new LiveRange(blockFrom, blockTo));
 				}
 
 				Context context = new Context(instructionSet, block.Block);
@@ -230,29 +258,41 @@ namespace Mosa.Compiler.Framework
 				while (!context.IsFirstInstruction)
 				{
 					OperandVisitor visitor = new OperandVisitor(context);
+					int index = instructionNumbering[context.Index];
 
 					if (context.Instruction.FlowControl == FlowControl.Call)
 					{
-						//foreach physical register reg do
-						//intervals[reg].add_range(op.id, op.id + 1)
+						for (int s = 0; s < physicalRegisterCount; s++)
+						{
+							var register = extendedRegisters[s];
+							register.AddRange(new LiveRange(index, index + 1));
+						}
 					}
-
 
 					foreach (var result in visitor.Output)
 					{
-						//intervals[opr].first_range.from = op.id
+						var register = extendedRegisters[GetIndex(result)];
+						register.LiveRanges[0] = new LiveRange(index, (register.LiveRanges[0]).End);
+
+						//done intervals[opr].first_range.from = op.id
 						//intervals[opr].add_use_pos(op.id, use_kind_for(op, opr))
 					}
 
 					foreach (var result in visitor.Temp)
 					{
-						//intervals[opr].add_range(op.id, op.id + 1)
+						var register = extendedRegisters[GetIndex(result)];
+						register.AddRange(new LiveRange(index, index + 1));
+
+						//done intervals[opr].add_range(op.id, op.id + 1) 
 						//intervals[opr].add_use_pos(op.id, use_kind_for(op, opr))
 					}
 
 					foreach (var result in visitor.Input)
 					{
-						//intervals[opr].add_range(block_from, op.id)
+						var register = extendedRegisters[GetIndex(result)];
+						register.AddRange(new LiveRange(blockFrom, index));
+
+						//done intervals[opr].add_range(block_from, op.id) 
 						//intervals[opr].add_use_pos(op.id, use_kind_for(op, opr))
 					}
 

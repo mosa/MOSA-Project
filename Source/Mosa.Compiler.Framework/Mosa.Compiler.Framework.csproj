@@ -78,6 +78,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BasicBlocks.cs" />
+    <Compile Include="LiveRange.cs" />
     <Compile Include="OperandVisitor.cs" />
     <Compile Include="Linker\LinkerFactory.cs" />
     <Compile Include="Stages\LinkerFinalizationStage.cs" />
@@ -297,7 +298,7 @@
     <Compile Include="BaseCompiler.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="BasicArchitecture.cs">
+    <Compile Include="BaseArchitecture.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="BasicBlock.cs">

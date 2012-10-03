@@ -15,6 +15,7 @@
 	    <csc target="library" output="${outputDirectory}/Mosa.Compiler.Framework.dll" debug="${debug}" unsafe="true" nostdlib="false">
 		<sources>
                     <include name="BasicBlocks.cs"/>
+                    <include name="LiveRange.cs"/>
                     <include name="OperandVisitor.cs"/>
                     <include name="Linker/LinkerFactory.cs"/>
                     <include name="Stages/LinkerFinalizationStage.cs"/>
@@ -232,7 +233,7 @@
                     <include name="Linker/LinkerMethodCompiler.cs"/>
                     <include name="Linker/LinkTimeCodeGenerator.cs"/>
                     <include name="BaseCompiler.cs"/>
-                    <include name="BasicArchitecture.cs"/>
+                    <include name="BaseArchitecture.cs"/>
                     <include name="BasicBlock.cs"/>
                     <include name="Stages/CodeGenerationStage.cs"/>
                     <include name="BaseCodeTransformationStage.cs"/>

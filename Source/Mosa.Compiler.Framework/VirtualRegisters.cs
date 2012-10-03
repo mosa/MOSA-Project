@@ -24,6 +24,8 @@ namespace Mosa.Compiler.Framework
 
 		private List<Operand> virtualRegisters = new List<Operand>();
 
+		//private int sequenceStart;
+
 		#endregion // Data members
 
 		#region Properties
@@ -37,8 +39,12 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Initializes a new instance of the <see cref="VirtualRegisters"/> class.
 		/// </summary>
-		public VirtualRegisters()
+		public VirtualRegisters(IArchitecture architecture)
 		{
+			//foreach (var register in architecture.RegisterSet)
+			//	if (register.Index > startVirtualSequence)
+			//		startVirtualSequence = register.Index;
+			//sequenceStart = architecture.RegisterSet[architecture.RegisterSet.Length - 1].Index;
 		}
 
 		/// <summary>
@@ -48,7 +54,9 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		public Operand Allocate(SigType type)
 		{
-			Operand virtualRegister = Operand.CreateVirtualRegister(type, virtualRegisters.Count + 1);
+			int index = virtualRegisters.Count + 1;
+			//int sequence = index + sequenceStart;
+			Operand virtualRegister = Operand.CreateVirtualRegister(type, index);
 
 			virtualRegisters.Add(virtualRegister);
 
