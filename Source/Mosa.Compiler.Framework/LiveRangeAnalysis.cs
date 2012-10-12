@@ -25,12 +25,14 @@ namespace Mosa.Compiler.Framework
 		public sealed class ExtendedRegister
 		{
 			private List<LiveRange> liveRanges = new List<LiveRange>(1);
+			private List<int> usePositions = new List<int>();
 
 			public Operand VirtualRegister { get; private set; }
 			public Register PhysicalRegister { get; private set; }
 			public int Sequence { get; private set; }
 			public List<LiveRange> LiveRanges { get { return liveRanges; } }
 			public int Count { get { return liveRanges.Count; } }
+			public List<int> UsePositions { get { return usePositions; } }
 
 			public void AddRange(LiveRange liveRange)
 			{
@@ -40,6 +42,12 @@ namespace Mosa.Compiler.Framework
 			public void AddRange(int start, int end)
 			{
 				LiveRange.AddRangeToList(liveRanges, start, end);
+			}
+
+			public void AddUsePosition(int position)
+			{
+				Debug.Assert(!usePositions.Contains(position));
+				usePositions.Add(position);
 			}
 
 			public ExtendedRegister(Operand virtualRegister, int sequence)
@@ -273,27 +281,21 @@ namespace Mosa.Compiler.Framework
 					{
 						var register = extendedRegisters[GetIndex(result)];
 						register.LiveRanges[0] = new LiveRange(index, (register.LiveRanges[0]).End);
-
-						//done intervals[opr].first_range.from = op.id
-						//intervals[opr].add_use_pos(op.id, use_kind_for(op, opr))
+						register.AddUsePosition(index);
 					}
 
 					foreach (var result in visitor.Temp)
 					{
 						var register = extendedRegisters[GetIndex(result)];
 						register.AddRange(new LiveRange(index, index + 1));
-
-						//done intervals[opr].add_range(op.id, op.id + 1) 
-						//intervals[opr].add_use_pos(op.id, use_kind_for(op, opr))
+						register.AddUsePosition(index);
 					}
 
 					foreach (var result in visitor.Input)
 					{
 						var register = extendedRegisters[GetIndex(result)];
 						register.AddRange(new LiveRange(blockFrom, index));
-
-						//done intervals[opr].add_range(block_from, op.id) 
-						//intervals[opr].add_use_pos(op.id, use_kind_for(op, opr))
+						register.AddUsePosition(index);
 					}
 
 					context.GotoPrevious();
