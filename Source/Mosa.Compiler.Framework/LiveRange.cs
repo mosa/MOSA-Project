@@ -41,19 +41,34 @@ namespace Mosa.Compiler.Framework
 			return (location >= Start && location < End);
 		}
 
-		public bool Intersect(int start, int end)
+		public bool IsSame(int start, int end)
+		{
+			return (Start == start && End == end);
+		}
+
+		public bool Intersects(int start, int end)
 		{
 			return (start <= End - 1) && (end - 1 >= Start);
 		}
 
-		public bool Intersect(LiveRange liveRange)
+		public bool Intersects(LiveRange liveRange)
 		{
-			return Intersect(liveRange.Start, liveRange.End);
+			return Intersects(liveRange.Start, liveRange.End);
+		}
+
+		public bool IsAdjacent(int start, int end)
+		{
+			return (start == End) || (end == Start);
+		}
+
+		public bool IsAdjacent(LiveRange liveRange)
+		{
+			return IsAdjacent(liveRange.Start, liveRange.End);
 		}
 
 		public void Merge(int start, int end)
 		{
-			Debug.Assert(Intersect(start, end));
+			Debug.Assert(IsAdjacent(start, end));
 
 			this.Start = Math.Min(this.Start, start);
 			this.End = Math.Max(this.End, end);
@@ -77,46 +92,41 @@ namespace Mosa.Compiler.Framework
 				return;
 			}
 
-			int active = -1;
-
 			for (int i = 0; i < liveRanges.Count; i++)
 			{
 				var liveRange = liveRanges[i];
 
-				if (liveRange.Intersect(start, end))
+				if (liveRange.IsSame(start, end))
+					return;
+
+				if (liveRange.IsAdjacent(start, end))
 				{
 					liveRange.Merge(start, end);
-					active = i;
-					break;
+
+					if (i + 1 < liveRanges.Count)
+					{
+						var nextLiveRange = liveRanges[i + 1];
+						if (liveRange.IsAdjacent(nextLiveRange))
+						{
+							liveRange.Merge(nextLiveRange);
+							liveRanges.RemoveAt(i + 1);
+						}
+					}
+
+					return;
 				}
 
-				if (liveRange.Start >= end)
+				if (liveRange.Start > end)
 				{
 					// new range is before the current range (so insert before)
 					liveRanges.Insert(i, new LiveRange(start, end));
 					return;
 				}
+
 			}
 
-			if (active == -1)
-			{
-				// new range is after the last range
-				liveRanges.Add(new LiveRange(start, end));
-				return;
-			}
-
-			LiveRange activeLiveRange = liveRanges[active];
-
-			for (int i = active + 1; i < liveRanges.Count; i++)
-			{
-				var liveRange = liveRanges[i];
-
-				if (!activeLiveRange.Intersect(liveRange.Start, liveRange.End))
-					break;
-
-				activeLiveRange.Merge(liveRange.Start, liveRange.End);
-				liveRanges.RemoveAt(i);
-			}
+			// new range is after the last range
+			liveRanges.Add(new LiveRange(start, end));
 		}
 	}
 

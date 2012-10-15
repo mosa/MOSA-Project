@@ -35,18 +35,18 @@ namespace Mosa.Test.Compiler.Framework
 			LiveRange l1_2 = new LiveRange(1, 2);
 			LiveRange l2_3 = new LiveRange(2, 3);
 			
-			Assert.IsFalse(l1_2.Intersect(l2_3));
-			Assert.IsFalse(l2_3.Intersect(l1_2));
+			Assert.IsFalse(l1_2.Intersects(l2_3));
+			Assert.IsFalse(l2_3.Intersects(l1_2));
 
 			LiveRange l1_3 = new LiveRange(1, 3);
 
-			Assert.IsTrue(l1_2.Intersect(l1_3));
-			Assert.IsTrue(l1_3.Intersect(l1_2));
+			Assert.IsTrue(l1_2.Intersects(l1_3));
+			Assert.IsTrue(l1_3.Intersects(l1_2));
 
 			LiveRange l1_100 = new LiveRange(1, 100);
 			LiveRange l50_60 = new LiveRange(50, 60);
 
-			Assert.IsTrue(l1_100.Intersect(l50_60));
+			Assert.IsTrue(l1_100.Intersects(l50_60));
 			//Assert.IsTrue(l50_60.Overlaps(l1_100));
 		}
 
@@ -59,9 +59,9 @@ namespace Mosa.Test.Compiler.Framework
 			Assert.Count(1, ranges);
 
 			LiveRange.AddRangeToList(ranges, new LiveRange(2, 3));
-			Assert.Count(2, ranges);
+			Assert.Count(1, ranges);
 
-			LiveRange.AddRangeToList(ranges, new LiveRange(1, 3));
+			LiveRange.AddRangeToList(ranges, new LiveRange(3, 4));
 			Assert.Count(1, ranges);
 		}
 
@@ -74,9 +74,9 @@ namespace Mosa.Test.Compiler.Framework
 			Assert.Count(1, ranges);
 
 			LiveRange.AddRangeToList(ranges, new LiveRange(1, 2));
-			Assert.Count(2, ranges);
+			Assert.Count(1, ranges);
 
-			LiveRange.AddRangeToList(ranges, new LiveRange(1, 3));
+			LiveRange.AddRangeToList(ranges, new LiveRange(3, 4));
 			Assert.Count(1, ranges);
 		}
 
@@ -85,13 +85,19 @@ namespace Mosa.Test.Compiler.Framework
 		{
 			List<LiveRange> ranges = new List<LiveRange>();
 
-			LiveRange.AddRangeToList(ranges, new LiveRange(1, 3));
+			LiveRange.AddRangeToList(ranges, new LiveRange(1, 2));
 			Assert.Count(1, ranges);
+
+			LiveRange.AddRangeToList(ranges, new LiveRange(4, 5));
+			Assert.Count(2, ranges);
+
+			LiveRange.AddRangeToList(ranges, new LiveRange(3, 3));
+			Assert.Count(3, ranges);
 
 			LiveRange.AddRangeToList(ranges, new LiveRange(2, 3));
-			Assert.Count(1, ranges);
+			Assert.Count(2, ranges);
 
-			LiveRange.AddRangeToList(ranges, new LiveRange(1, 2));
+			LiveRange.AddRangeToList(ranges, new LiveRange(3, 4));
 			Assert.Count(1, ranges);
 		}
 
