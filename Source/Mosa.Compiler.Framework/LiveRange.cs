@@ -41,19 +41,19 @@ namespace Mosa.Compiler.Framework
 			return (location >= Start && location < End);
 		}
 
-		public bool Overlaps(int start, int end)
+		public bool Intersect(int start, int end)
 		{
 			return (start <= End - 1) && (end - 1 >= Start);
 		}
 
-		public bool Overlaps(LiveRange liveRange)
+		public bool Intersect(LiveRange liveRange)
 		{
-			return Overlaps(liveRange.Start, liveRange.End);
+			return Intersect(liveRange.Start, liveRange.End);
 		}
 
 		public void Merge(int start, int end)
 		{
-			Debug.Assert(Overlaps(start, end));
+			Debug.Assert(Intersect(start, end));
 
 			this.Start = Math.Min(this.Start, start);
 			this.End = Math.Max(this.End, end);
@@ -83,7 +83,7 @@ namespace Mosa.Compiler.Framework
 			{
 				var liveRange = liveRanges[i];
 
-				if (liveRange.Overlaps(start, end))
+				if (liveRange.Intersect(start, end))
 				{
 					liveRange.Merge(start, end);
 					active = i;
@@ -111,7 +111,7 @@ namespace Mosa.Compiler.Framework
 			{
 				var liveRange = liveRanges[i];
 
-				if (!activeLiveRange.Overlaps(liveRange.Start, liveRange.End))
+				if (!activeLiveRange.Intersect(liveRange.Start, liveRange.End))
 					break;
 
 				activeLiveRange.Merge(liveRange.Start, liveRange.End);
