@@ -77,7 +77,26 @@ namespace Mosa.Compiler.Linker
 		{
 			long address = VirtualAddress + stream.Length;
 			int pad = (int)(alignment - (address % alignment));
-			stream.Write(new byte[pad], 0, pad);
+			stream.WriteZeroBytes(pad);
+		}
+
+		/// <summary>
+		/// Sizes the type of the of link.
+		/// </summary>
+		/// <param name="linkType">Type of the link.</param>
+		/// <returns></returns>
+		/// <exception cref="System.InvalidProgramException"></exception>
+		public int SizeOfLinkType(LinkType linkType)
+		{
+			switch (linkType & LinkType.SizeMask)
+			{
+				case LinkType.I1: return 1;
+				case LinkType.I2: return 2;
+				case LinkType.I4: return 4;
+				case LinkType.I8: return 8;
+			}
+
+			throw new InvalidProgramException();
 		}
 
 		/// <summary>
@@ -90,6 +109,12 @@ namespace Mosa.Compiler.Linker
 		{
 			long pos = stream.Position;
 			stream.Position = offset;
+
+			int linkSize = SizeOfLinkType(linkType);
+			if (stream.Position + linkSize > stream.Length)
+			{
+				stream.SetLength(stream.Position + linkSize);
+			}
 
 			// Apply the patch
 			switch (linkType & LinkType.SizeMask)
@@ -120,6 +145,12 @@ namespace Mosa.Compiler.Linker
 			stream.Position = offset;
 
 			ulong current = 0;
+
+			int linkSize = SizeOfLinkType(linkType);
+			if (stream.Position + linkSize > stream.Length)
+			{
+				stream.SetLength(stream.Position + linkSize);
+			}
 
 			switch (linkType & LinkType.SizeMask)
 			{
