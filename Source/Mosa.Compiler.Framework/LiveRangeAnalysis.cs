@@ -24,31 +24,19 @@ namespace Mosa.Compiler.Framework
 
 		public sealed class ExtendedRegister
 		{
-			private List<LiveRange> liveRanges = new List<LiveRange>(1);
+			private List<Interval> liveRanges = new List<Interval>(1);
 			private List<int> usePositions = new List<int>();
 
 			public Operand VirtualRegister { get; private set; }
 			public Register PhysicalRegister { get; private set; }
 			public int Sequence { get; private set; }
-			public List<LiveRange> LiveRanges { get { return liveRanges; } }
+			public List<Interval> LiveRanges { get { return liveRanges; } }
 			public int Count { get { return liveRanges.Count; } }
 			public List<int> UsePositions { get { return usePositions; } }
 
-			public void AddRange(LiveRange liveRange)
-			{
-				LiveRange.AddRangeToList(liveRanges, liveRange.Start, liveRange.End);
-			}
-
-			public void AddRange(int start, int end)
-			{
-				LiveRange.AddRangeToList(liveRanges, start, end);
-			}
-
-			public void AddUsePosition(int position)
-			{
-				Debug.Assert(!usePositions.Contains(position));
-				usePositions.Add(position);
-			}
+			public bool IsPhysicalRegister { get { return VirtualRegister == null; } }
+			public Interval LastRange { get { return liveRanges.Count == 0 ? null : liveRanges[liveRanges.Count - 1]; } }
+			public Interval FirstRange { get { return liveRanges.Count == 0 ? null : liveRanges[0]; } }
 
 			public ExtendedRegister(Operand virtualRegister, int sequence)
 			{
@@ -60,6 +48,36 @@ namespace Mosa.Compiler.Framework
 			{
 				this.PhysicalRegister = physicalRegister;
 				this.Sequence = sequence;
+			}
+
+			public void AddRange(Interval liveRange)
+			{
+				Interval.AddRangeToList(liveRanges, liveRange.Start, liveRange.End);
+			}
+
+			public void AddRange(int start, int end)
+			{
+				Interval.AddRangeToList(liveRanges, start, end);
+			}
+
+			public void AddUsePosition(int position)
+			{
+				Debug.Assert(!usePositions.Contains(position));
+				usePositions.Add(position);
+			}
+
+			public bool Contains(int position)
+			{
+				foreach (var range in liveRanges)
+				{
+					// TODO: early exit optimization
+					if (range.IsInside(position))
+					{
+						return true;
+					}
+				}
+
+				return false;
 			}
 		}
 
@@ -141,9 +159,14 @@ namespace Mosa.Compiler.Framework
 			// Number all the instructions in block order
 			NumberInstructions();
 
+			// Computer Local Live Sets
 			ComputeLocalLiveSets();
 
+			// Computer Global Live Sets
 			ComputeGlobalLiveSets();
+
+			// TODO: Walking Intervals
+			WalkIntervals();
 		}
 
 		private int GetIndex(Operand operand)
@@ -257,7 +280,7 @@ namespace Mosa.Compiler.Framework
 				{
 					var register = extendedRegisters[s];
 
-					register.AddRange(new LiveRange(blockFrom, blockTo));
+					register.AddRange(new Interval(blockFrom, blockTo));
 				}
 
 				Context context = new Context(instructionSet, block.Block);
@@ -273,36 +296,137 @@ namespace Mosa.Compiler.Framework
 						for (int s = 0; s < physicalRegisterCount; s++)
 						{
 							var register = extendedRegisters[s];
-							register.AddRange(new LiveRange(index, index + 1));
+							register.AddRange(new Interval(index, index + 1));
 						}
 					}
 
 					foreach (var result in visitor.Output)
 					{
 						var register = extendedRegisters[GetIndex(result)];
-						register.LiveRanges[0] = new LiveRange(index, (register.LiveRanges[0]).End);
-						register.AddUsePosition(index);
+						register.LiveRanges[0] = new Interval(index, (register.FirstRange.End));
+						if (register.IsPhysicalRegister)
+							register.AddUsePosition(index);
 					}
 
 					foreach (var result in visitor.Temp)
 					{
 						var register = extendedRegisters[GetIndex(result)];
-						register.AddRange(new LiveRange(index, index + 1));
-						register.AddUsePosition(index);
+						register.AddRange(new Interval(index, index + 1));
+						if (register.IsPhysicalRegister)
+							register.AddUsePosition(index);
 					}
 
 					foreach (var result in visitor.Input)
 					{
 						var register = extendedRegisters[GetIndex(result)];
-						register.AddRange(new LiveRange(blockFrom, index));
-						register.AddUsePosition(index);
+						register.AddRange(new Interval(blockFrom, index));
+						if (register.IsPhysicalRegister)
+							register.AddUsePosition(index);
 					}
 
 					context.GotoPrevious();
 				}
 			}
 		}
-	}
 
+		private void WalkIntervals()
+		{
+			SortedList<int, ExtendedRegister> unhandled = new SortedList<int, ExtendedRegister>(extendedRegisters.Length);
+
+			List<ExtendedRegister> active = new List<ExtendedRegister>();
+			List<ExtendedRegister> inactive = new List<ExtendedRegister>();
+
+			foreach (var register in extendedRegisters)
+			{
+				var firstRange = register.FirstRange;
+				if (firstRange != null)
+				{
+					// sorting in reverse order
+					unhandled.Add(-firstRange.Start, register);
+				}
+			}
+
+			List<ExtendedRegister> removed = new List<ExtendedRegister>();
+
+			while (unhandled.Count != 0)
+			{
+				var current = unhandled[unhandled.Count - 1];
+				unhandled.RemoveAt(unhandled.Count - 1);
+
+				int position = current.FirstRange.Start;
+
+				foreach (var it in active)
+				{
+					if (it.LastRange.End < position)
+					{
+						removed.Add(it);
+					}
+					else if (it.Contains(position))
+					{
+						inactive.Add(it);
+						removed.Add(it);
+						break;
+					}
+				}
+
+				// remove items from active
+				foreach (var remove in removed)
+				{
+					active.Remove(remove);
+				}
+				removed.Clear();
+
+				foreach (var it in inactive)
+				{
+					if (it.LastRange.End < position)
+					{
+						removed.Add(it);
+					}
+					else if (it.Contains(position))
+					{
+						active.Add(it);
+						removed.Add(it);
+					}
+				}
+
+				// remove items from inactive
+				foreach (var remove in removed)
+				{
+					inactive.Remove(remove);
+				}
+				removed.Clear();
+
+				TryAllocateFreeRegister(active);
+			}
+
+		}
+
+		private bool TryAllocateFreeRegister(List<ExtendedRegister> active)
+		{
+			int[] freepos = new int[physicalRegisterCount];
+
+			for (int i = 0; i < physicalRegisterCount; i++)
+			{
+				freepos[i] = Int32.MaxValue;
+			}
+
+			foreach (var it in active)
+			{
+				if (it.IsPhysicalRegister)
+				{
+					freepos[it.PhysicalRegister.Index] = 0;
+					continue;
+				}
+
+				//
+			}
+
+			return false;
+		}
+
+		private void AllocateBlockedRegister()
+		{
+		}
+	}
 }
 

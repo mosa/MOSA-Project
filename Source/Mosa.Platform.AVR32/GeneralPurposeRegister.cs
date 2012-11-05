@@ -100,7 +100,7 @@ namespace Mosa.Platform.AVR32
 			/// The AVR32 LR/R14 register instruction encoding.
 			/// </summary>
 			LR = 14
-}
+		}
 
 		#endregion // Types
 
@@ -208,6 +208,14 @@ namespace Mosa.Platform.AVR32
 		#endregion // Construction
 
 		#region Properties
+
+		/// <summary>
+		/// General purpose registers support integer operations.
+		/// </summary>
+		public override bool IsInteger
+		{
+			get { return true; }
+		}
 
 		/// <summary>
 		/// General purpose register do not support floating point operations.

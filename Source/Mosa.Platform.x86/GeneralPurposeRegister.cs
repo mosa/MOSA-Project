@@ -139,6 +139,14 @@ namespace Mosa.Platform.x86
 		#region Properties
 
 		/// <summary>
+		/// General purpose registers support integer operations.
+		/// </summary>
+		public override bool IsInteger
+		{
+			get { return true; }
+		}
+
+		/// <summary>
 		/// General purpose register do not support floating point operations.
 		/// </summary>
 		public override bool IsFloatingPoint

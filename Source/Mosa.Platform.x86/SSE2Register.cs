@@ -95,7 +95,15 @@ namespace Mosa.Platform.x86
 		#region Properties
 
 		/// <summary>
-		/// Indicates that SSE2 registers are floating point register.
+		/// SSE2 registers do not support integer operations.
+		/// </summary>
+		public override bool IsInteger
+		{
+			get { return false; }
+		}
+
+		/// <summary>
+		/// SSE2 registers are floating point register.
 		/// </summary>
 		public override bool IsFloatingPoint
 		{

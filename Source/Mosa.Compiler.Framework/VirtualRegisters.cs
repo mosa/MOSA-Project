@@ -41,10 +41,6 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		public VirtualRegisters(IArchitecture architecture)
 		{
-			//foreach (var register in architecture.RegisterSet)
-			//	if (register.Index > startVirtualSequence)
-			//		startVirtualSequence = register.Index;
-			//sequenceStart = architecture.RegisterSet[architecture.RegisterSet.Length - 1].Index;
 		}
 
 		/// <summary>

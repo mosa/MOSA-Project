@@ -128,7 +128,14 @@ namespace Mosa.Platform.x86
 		}
 
 		/// <summary>
-		/// General purpose register do not support floating point operations.
+		/// Segment registers do not support integer operations.
+		/// </summary>
+		public override bool IsInteger
+		{
+			get { return false; }
+		}
+		/// <summary>
+		/// Segment registers do not support floating point operations.
 		/// </summary>
 		public override bool IsFloatingPoint
 		{
