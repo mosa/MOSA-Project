@@ -19,8 +19,19 @@ namespace Mosa.Compiler.Framework
 	/// <summary>
 	/// 
 	/// </summary>
-	public sealed class LiveRangeAnalysis
+	public sealed class LinearRegisterAllocator
 	{
+
+		public class ExtendedInternal : Interval
+		{
+			public Register Register { get; set; }
+
+			public ExtendedInternal(int start, int end, Register register)
+				: base(start, end)
+			{
+				this.Register = register;
+			}
+		}
 
 		public sealed class ExtendedRegister
 		{
@@ -37,6 +48,9 @@ namespace Mosa.Compiler.Framework
 			public bool IsPhysicalRegister { get { return VirtualRegister == null; } }
 			public Interval LastRange { get { return liveRanges.Count == 0 ? null : liveRanges[liveRanges.Count - 1]; } }
 			public Interval FirstRange { get { return liveRanges.Count == 0 ? null : liveRanges[0]; } }
+
+			private List<ExtendedInternal> assignedRegisters = new List<ExtendedInternal>();
+			private Register CurrentWalkPhysicalRegister { get; set; }
 
 			public ExtendedRegister(Operand virtualRegister, int sequence)
 			{
@@ -79,6 +93,32 @@ namespace Mosa.Compiler.Framework
 
 				return false;
 			}
+
+			public void AssignRegister(Interval interval, Register register)
+			{
+				// TODO: Keep this list sorted
+				CurrentWalkPhysicalRegister = register;
+				assignedRegisters.Add(new ExtendedInternal(interval.Start, interval.End, register));
+			}
+
+			public Register GetCurrentWalkRegister()
+			{
+				return CurrentWalkPhysicalRegister;
+			}
+
+			public Register GetAssignedRegister(int position)
+			{
+				foreach (var assigned in assignedRegisters)
+				{
+					if (assigned.IsInside(position))
+					{
+						return assigned.Register;
+					}
+				}
+
+				return null;
+			}
+
 		}
 
 		public sealed class ExtendedBlock
@@ -119,7 +159,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Performs stage specific processing on the compiler context.
 		/// </summary>
-		public LiveRangeAnalysis(BasicBlocks basicBlocks, VirtualRegisters virtualRegisters, InstructionSet instructionSet, IArchitecture architecture)
+		public LinearRegisterAllocator(BasicBlocks basicBlocks, VirtualRegisters virtualRegisters, InstructionSet instructionSet, IArchitecture architecture)
 		{
 			this.basicBlocks = basicBlocks;
 			this.instructionSet = instructionSet;
@@ -396,12 +436,12 @@ namespace Mosa.Compiler.Framework
 				}
 				removed.Clear();
 
-				TryAllocateFreeRegister(active);
+				TryAllocateFreeRegister(current, active);
 			}
 
 		}
 
-		private bool TryAllocateFreeRegister(List<ExtendedRegister> active)
+		private bool TryAllocateFreeRegister(ExtendedRegister current, List<ExtendedRegister> active)
 		{
 			int[] freepos = new int[physicalRegisterCount];
 
@@ -415,11 +455,14 @@ namespace Mosa.Compiler.Framework
 				if (it.IsPhysicalRegister)
 				{
 					freepos[it.PhysicalRegister.Index] = 0;
-					continue;
 				}
-
-				//
+				else
+				{
+					freepos[it.GetCurrentWalkRegister().Index] = 0;
+				}
 			}
+
+			// TODO: 
 
 			return false;
 		}

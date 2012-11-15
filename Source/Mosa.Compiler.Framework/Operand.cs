@@ -274,6 +274,14 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		public StackTypeCode StackType { get { return StackTypeFromSigType(sigType); } }
 
+		/// <summary>
+		/// Gets a value indicating whether this instance is floating point.
+		/// </summary>
+		/// <value>
+		/// <c>true</c> if this instance is floating point; otherwise, <c>false</c>.
+		/// </value>
+		public bool IsFloatingPoint { get { return (Type.Type == CilElementType.R4 || Type.Type == CilElementType.R8); } }
+
 		#endregion // Properties
 
 		#region Construction
