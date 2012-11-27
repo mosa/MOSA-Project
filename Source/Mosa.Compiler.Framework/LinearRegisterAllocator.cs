@@ -487,7 +487,8 @@ namespace Mosa.Compiler.Framework
 
 			foreach (var it in inactive)
 			{
-
+				//if (it.Intersects(current));
+				;
 			}
 
 			// TODO: 
