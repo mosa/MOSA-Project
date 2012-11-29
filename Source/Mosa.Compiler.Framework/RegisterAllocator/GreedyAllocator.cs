@@ -25,27 +25,22 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		private BasicBlocks basicBlocks;
 		private InstructionSet instructionSet;
-		private VirtualRegisters virtualRegisters;
 		private int virtualRegisterCount;
 		private int physicalRegisterCount;
 		private int registerCount;
 		private int[] instructionNumbering;
 		private ExtendedBlock[] extendedBlocks;
-		private LiveInterval[] liveInterval;
+		private VirtualRegister[] virtualRegisters;
 
 		private bool[] floatingPositions;
 		private bool[] integerPositions;
 
-		/// <summary>
-		/// Performs stage specific processing on the compiler context.
-		/// </summary>
-		public GreedyAllocator(BasicBlocks basicBlocks, VirtualRegisters virtualRegisters, InstructionSet instructionSet, IArchitecture architecture)
+		public GreedyAllocator(BasicBlocks basicBlocks, VirtualRegisters compilerVirtualRegisters, InstructionSet instructionSet, IArchitecture architecture)
 		{
 			this.basicBlocks = basicBlocks;
 			this.instructionSet = instructionSet;
-			this.virtualRegisters = virtualRegisters;
 
-			this.virtualRegisterCount = virtualRegisters.Count;
+			this.virtualRegisterCount = compilerVirtualRegisters.Count;
 			this.physicalRegisterCount = architecture.RegisterSet[architecture.RegisterSet.Length - 1].Index;
 			this.registerCount = virtualRegisterCount + physicalRegisterCount;
 			//foreach (var register in architecture.RegisterSet)
@@ -53,7 +48,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			//		this.physicalRegisterCount = register.Index;
 
 			this.instructionNumbering = new int[instructionSet.Size];
-			this.liveInterval = new LiveInterval[registerCount];
+			this.virtualRegisters = new VirtualRegister[registerCount];
 
 			// Allocate and setup extended blocks
 			this.extendedBlocks = new ExtendedBlock[basicBlocks.Count];
@@ -66,14 +61,14 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			foreach (var physicalRegister in architecture.RegisterSet)
 			{
 				int sequence = physicalRegister.Index;
-				liveInterval[sequence] = new LiveInterval(physicalRegister, sequence);
+				virtualRegisters[sequence] = new VirtualRegister(physicalRegister, sequence);
 			}
 
 			// Setup extended virtual registers
-			foreach (var virtualRegister in virtualRegisters)
+			foreach (var virtualRegister in compilerVirtualRegisters)
 			{
 				int sequence = virtualRegister.Sequence + physicalRegisterCount;
-				liveInterval[sequence] = new LiveInterval(virtualRegister, sequence);
+				virtualRegisters[sequence] = new VirtualRegister(virtualRegister, sequence);
 			}
 
 			// Mark which physical registers are integers and floating point
@@ -208,7 +203,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 				for (int s = 0; s < block.LiveOut.Count; s++)
 				{
-					var register = liveInterval[s];
+					var register = virtualRegisters[s];
 
 					register.AddRange(blockFrom, blockTo);
 				}
@@ -225,22 +220,22 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 					{
 						for (int s = 0; s < physicalRegisterCount; s++)
 						{
-							var register = liveInterval[s];
+							var register = virtualRegisters[s];
 							register.AddRange(index, index + 1);
 						}
 					}
 
 					foreach (var result in visitor.Output)
 					{
-						var register = liveInterval[GetIndex(result)];
-						register.LiveRanges[0] = new Interval(index, register.FirstRange.End);
+						var register = virtualRegisters[GetIndex(result)];
+						register.LiveIntervals[0] = new LiveInterval(register, index, register.FirstRange.End);
 						if (register.IsPhysicalRegister)
 							register.AddUsePosition(index);
 					}
 
 					foreach (var result in visitor.Temp)
 					{
-						var register = liveInterval[GetIndex(result)];
+						var register = virtualRegisters[GetIndex(result)];
 						register.AddRange(index, index + 1);
 						if (register.IsPhysicalRegister)
 							register.AddUsePosition(index);
@@ -248,7 +243,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 					foreach (var result in visitor.Input)
 					{
-						var register = liveInterval[GetIndex(result)];
+						var register = virtualRegisters[GetIndex(result)];
 						register.AddRange(blockFrom, index);
 						if (register.IsPhysicalRegister)
 							register.AddUsePosition(index);
@@ -259,19 +254,17 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			}
 		}
 
+
 		private void WalkIntervals()
 		{
-			SortedList<int, LiveRange> unhandled = new SortedList<int, LiveRange>((int)(liveInterval.Length * 1.2)); // 1.2 is an estimate
+			SortedList<int, LiveInterval> unhandled = new SortedList<int, LiveInterval>((int)(virtualRegisters.Length * 1.2)); // 1.2 is an estimate
 
-			List<LiveRange> active = new List<LiveRange>();
-			List<LiveRange> inactive = new List<LiveRange>();
-
-			foreach (var register in liveInterval)
+			foreach (var virtualRegisterRanges in virtualRegisters)
 			{
-				foreach (var interval in register.LiveRanges)
+				foreach (var liveInterval in virtualRegisterRanges.LiveIntervals)
 				{
 					// sorting in reverse order
-					unhandled.Add(-interval.Start, new LiveRange(register, interval));
+					unhandled.Add(-liveInterval.Start, liveInterval);
 				}
 			}
 		}

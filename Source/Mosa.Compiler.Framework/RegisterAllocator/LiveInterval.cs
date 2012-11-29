@@ -17,18 +17,18 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Compiler.Framework.RegisterAllocator
 {
 
-	public class LiveRange
+	public class LiveInterval : Interval
 	{
-		public LiveInterval LiveInterval { get; private set; }
-		public Interval Interval { get; private set; }
-		public int SpillCosts { get; set; }
+		public VirtualRegister VirtualRegisterLiveIntervals { get; private set; }
+		public int SpillCost { get; set; }
 
-		public LiveRange(LiveInterval liveInterval, Interval interval)
+		public LiveInterval(VirtualRegister liveIntervalRanges, int start, int end)
+			: base(start, end)
 		{
-			this.Interval = interval;
-			this.LiveInterval = liveInterval;
-			this.SpillCosts = 0;
+			this.VirtualRegisterLiveIntervals = liveIntervalRanges;
+			this.SpillCost = 0;
 		}
+
 	}
 
 }
