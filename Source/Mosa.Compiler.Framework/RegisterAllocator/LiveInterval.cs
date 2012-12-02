@@ -19,13 +19,13 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 	public class LiveInterval : Interval
 	{
-		public VirtualRegister VirtualRegisterLiveIntervals { get; private set; }
+		public VirtualRegister VirtualRegister { get; private set; }
 		public int SpillCost { get; set; }
 
-		public LiveInterval(VirtualRegister liveIntervalRanges, int start, int end)
+		public LiveInterval(VirtualRegister virtualRegister, int start, int end)
 			: base(start, end)
 		{
-			this.VirtualRegisterLiveIntervals = liveIntervalRanges;
+			this.VirtualRegister = virtualRegister;
 			this.SpillCost = 0;
 		}
 

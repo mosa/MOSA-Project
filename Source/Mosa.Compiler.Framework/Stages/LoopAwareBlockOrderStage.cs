@@ -7,9 +7,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-// FIXME PG
-
-
 namespace Mosa.Compiler.Framework.Stages
 {
 	/// <summary>
