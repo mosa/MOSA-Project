@@ -86,8 +86,16 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			// Computer Global Live Sets
 			ComputeGlobalLiveSets();
 
+			// Calculate Spill Costs for Live Intervals
+			CalculateSpillCosts();
+
 			// Populate Priority Queue
 			PopulatePriorityQueue();
+
+			// Process Priority Queue
+			ProcessPriorityQueue();
+
+			// MORE
 		}
 
 		private int GetIndex(Operand operand)
@@ -262,8 +270,51 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			}
 		}
 
+		private int CalculateSpillCost(LiveInterval liveInterval)
+		{
+			// TODO: Improve this imprecise and very trivial spill cost estimator
+
+			int maxLoopDepth = 0;
+
+			// find max block loop depth that interval spans
+			foreach (var block in extendedBlocks)
+			{
+				if (liveInterval.Intersects(block.From, block.To))
+				{
+					maxLoopDepth = Math.Max(block.LoopDepth, maxLoopDepth);
+				}
+			}
+
+			// get usage count (imprecise since it looks at the entire virtual register and not just the range of the live interval)
+			int usage = liveInterval.VirtualRegister.UsePositions.Count;
+
+			return (maxLoopDepth * 100) + usage;
+		}
+
+		private void CalculateSpillCosts()
+		{
+			foreach (var virtualRegister in virtualRegisters)
+			{
+				foreach (var liveInterval in virtualRegister.LiveIntervals)
+				{
+					// Skip adding live intervals for physical registers to priority queue
+					if (liveInterval.VirtualRegister.IsPhysicalRegister)
+					{
+						// fixed and not spillable
+						liveInterval.SpillCost = Int32.MaxValue;
+					}
+					else
+					{
+						// Calculate spill costs for live interval
+						liveInterval.SpillCost = CalculateSpillCost(liveInterval);
+					}
+				}
+			}
+		}
+
 		private void AddPriorityQueue(LiveInterval liveInterval)
 		{
+			// priority is based on interval size
 			priorityQueue.Add(liveInterval.Size, liveInterval);
 		}
 
@@ -278,10 +329,21 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 		{
 			priorityQueue.Capacity = (int)(virtualRegisters.Length * 1.2); // 1.2 is an estimate
 
-			foreach (var virtualRegisterRanges in virtualRegisters)
+			foreach (var virtualRegister in virtualRegisters)
 			{
-				foreach (var liveInterval in virtualRegisterRanges.LiveIntervals)
+				foreach (var liveInterval in virtualRegister.LiveIntervals)
 				{
+					// Skip adding live intervals for physical registers to priority queue
+					if (liveInterval.VirtualRegister.IsPhysicalRegister)
+					{
+						Debug.Assert(!liveIntervalUnions[liveInterval.VirtualRegister.PhysicalRegister.Index].Intersects(liveInterval));
+
+						liveIntervalUnions[liveInterval.VirtualRegister.PhysicalRegister.Index].AddLiveInterval(liveInterval);
+
+						continue;
+					}
+
+					// Add live intervals for virtual registers to priority queue
 					AddPriorityQueue(liveInterval);
 				}
 			}
@@ -292,18 +354,6 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			while (priorityQueue.Count != 0)
 			{
 				var liveInterval = PopPriorityQueue();
-
-				// Handle physical registers
-				if (liveInterval.VirtualRegister.IsPhysicalRegister)
-				{
-					Debug.Assert(!liveIntervalUnions[liveInterval.VirtualRegister.PhysicalRegister.Index].Intersects(liveInterval));
-
-					liveIntervalUnions[liveInterval.VirtualRegister.PhysicalRegister.Index].AddLiveInterval(liveInterval);
-
-					continue;
-				}
-
-				// Handle virtual registers
 
 				// Find any available live interval union to place this live interval
 				foreach (var liveIntervalUnion in liveIntervalUnions)
@@ -318,7 +368,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 					}
 				}
 
-				// No free space, find live interval(s) to evict based on spill cost
+				// No place for live interval; find live interval(s) to evict based on spill costs
 
 				// TODO
 
