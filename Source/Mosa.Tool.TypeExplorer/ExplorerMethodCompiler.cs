@@ -49,7 +49,7 @@ namespace Mosa.Tool.TypeExplorer
 				new PlatformStubStage(),
 				
 				new CheckPlatformOperandCountStage(),
-
+				new GreedyRegisterAllocatorStage(),
 				new LoopAwareBlockOrderStage(),
 				//new SimpleTraceBlockOrderStage(),
 				//new SimpleRegisterAllocatorStage(),

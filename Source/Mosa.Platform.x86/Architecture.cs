@@ -74,12 +74,12 @@ namespace Mosa.Platform.x86
 			////////////////////////////////////////////////////////
 			// Segmentation Registers
 			////////////////////////////////////////////////////////
-			SegmentRegister.CS,
-			SegmentRegister.DS,
-			SegmentRegister.ES,
-			SegmentRegister.FS,
-			SegmentRegister.GS,
-			SegmentRegister.SS
+			//SegmentRegister.CS,
+			//SegmentRegister.DS,
+			//SegmentRegister.ES,
+			//SegmentRegister.FS,
+			//SegmentRegister.GS,
+			//SegmentRegister.SS
 		};
 
 		/// <summary>

@@ -20,7 +20,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 	/// <summary>
 	/// 
 	/// </summary>
-	public sealed class GreedyAllocator
+	public sealed class GreedyRegisterAllocator
 	{
 
 		private BasicBlocks basicBlocks;
@@ -35,24 +35,18 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 		private SortedList<int, LiveInterval> priorityQueue;
 		private LiveIntervalUnion[] liveIntervalUnions;
 
-		public GreedyAllocator(BasicBlocks basicBlocks, VirtualRegisters compilerVirtualRegisters, InstructionSet instructionSet, IArchitecture architecture)
+		public GreedyRegisterAllocator(BasicBlocks basicBlocks, VirtualRegisters compilerVirtualRegisters, InstructionSet instructionSet, IArchitecture architecture)
 		{
 			this.basicBlocks = basicBlocks;
 			this.instructionSet = instructionSet;
 
 			this.virtualRegisterCount = compilerVirtualRegisters.Count;
-			this.physicalRegisterCount = architecture.RegisterSet[architecture.RegisterSet.Length - 1].Index;
+			this.physicalRegisterCount = architecture.RegisterSet.Length; 
 			this.registerCount = virtualRegisterCount + physicalRegisterCount;
-			//foreach (var register in architecture.RegisterSet)
-			//	if (register.Index > this.physicalRegisterCount)
-			//		this.physicalRegisterCount = register.Index;
 
 			this.liveIntervalUnions = new LiveIntervalUnion[physicalRegisterCount];
 			this.instructionNumbering = new int[instructionSet.Size];
 			this.virtualRegisters = new VirtualRegister[registerCount];
-
-			// Allocate and setup extended blocks
-			this.extendedBlocks = new ExtendedBlock[basicBlocks.Count];
 
 			// Setup extended physical registers
 			foreach (var physicalRegister in architecture.RegisterSet)
@@ -64,7 +58,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			// Setup extended virtual registers
 			foreach (var virtualRegister in compilerVirtualRegisters)
 			{
-				this.virtualRegisters[virtualRegister.Sequence + physicalRegisterCount] = new VirtualRegister(virtualRegister);
+				this.virtualRegisters[virtualRegister.Sequence - 1 + physicalRegisterCount] = new VirtualRegister(virtualRegister);
 			}
 
 			priorityQueue = new SortedList<int, LiveInterval>();
@@ -100,7 +94,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		private int GetIndex(Operand operand)
 		{
-			return (operand.IsCPURegister) ? operand.Sequence : operand.Sequence + physicalRegisterCount;
+			return (operand.IsCPURegister) ? operand.Sequence : operand.Sequence - 1 + physicalRegisterCount;
 		}
 
 		private void OrderBlocks()
@@ -108,6 +102,9 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			var loopAwareBlockOrder = new LoopAwareBlockOrder(this.basicBlocks);
 
 			basicBlocks.ReorderBlocks(loopAwareBlockOrder.NewBlockOrder);
+
+			// Allocate and setup extended blocks
+			this.extendedBlocks = new ExtendedBlock[basicBlocks.Count];
 
 			for (int i = 0; i < basicBlocks.Count; i++)
 			{
@@ -181,9 +178,9 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			bool changed = true;
 			while (changed)
 			{
-				changed = true;
+				changed = false;
 
-				for (int i = basicBlocks.Count - 1; i >= 0; i++)
+				for (int i = basicBlocks.Count - 1; i >= 0; i--)
 				{
 					var block = extendedBlocks[i];
 
@@ -199,7 +196,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 					liveIn.And(block.LiveGen);
 
 					// compare them for any changes
-					if (!block.LiveOut.Equals(liveOut) || !block.LiveIn.Equals(liveIn))
+					if (!block.LiveOut.AreSame(liveOut) || !block.LiveIn.AreSame(liveIn))
 						changed = true;
 
 					block.LiveOut = liveOut;
@@ -210,7 +207,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		private void BuildLiveIntervals()
 		{
-			for (int i = basicBlocks.Count - 1; i >= 0; i++)
+			for (int i = basicBlocks.Count - 1; i >= 0; i--)
 			{
 				var block = extendedBlocks[i];
 
@@ -318,6 +315,14 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			priorityQueue.Add(liveInterval.Size, liveInterval);
 		}
 
+		private void AddPriorityQueue(List<LiveInterval> liveIntervals)
+		{
+			foreach (var liveInterval in liveIntervals)
+			{
+				AddPriorityQueue(liveInterval);
+			}
+		}
+
 		private LiveInterval PopPriorityQueue()
 		{
 			var liveInterval = priorityQueue[priorityQueue.Count - 1];
@@ -338,7 +343,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 					{
 						Debug.Assert(!liveIntervalUnions[liveInterval.VirtualRegister.PhysicalRegister.Index].Intersects(liveInterval));
 
-						liveIntervalUnions[liveInterval.VirtualRegister.PhysicalRegister.Index].AddLiveInterval(liveInterval);
+						liveIntervalUnions[liveInterval.VirtualRegister.PhysicalRegister.Index].Add(liveInterval);
 
 						continue;
 					}
@@ -355,24 +360,60 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			{
 				var liveInterval = PopPriorityQueue();
 
-				// Find any available live interval union to place this live interval
-				foreach (var liveIntervalUnion in liveIntervalUnions)
-				{
-					if ((liveInterval.VirtualRegister.IsFloatingPoint == liveIntervalUnion.IsFloatingPoint))
-						continue;
+				ProcessLiveInterval(liveInterval);
+			}
+		}
 
-					if (!liveIntervalUnion.Intersects(liveInterval))
+		private void ProcessLiveInterval(LiveInterval liveInterval)
+		{
+
+			// Find an available live interval union to place this live interval
+			foreach (var liveIntervalUnion in liveIntervalUnions)
+			{
+				if ((liveInterval.VirtualRegister.IsFloatingPoint != liveIntervalUnion.IsFloatingPoint))
+					continue;
+
+				if (!liveIntervalUnion.Intersects(liveInterval))
+				{
+					liveIntervalUnion.Add(liveInterval);
+					return;
+				}
+			}
+
+			// No place for live interval; find live interval(s) to evict based on spill costs
+			foreach (var liveIntervalUnion in liveIntervalUnions)
+			{
+				if ((liveInterval.VirtualRegister.IsFloatingPoint != liveIntervalUnion.IsFloatingPoint))
+					continue;
+
+				var intersections = liveIntervalUnion.GetIntersections(liveInterval);
+
+				bool evict = true;
+
+				foreach (var intersection in intersections)
+				{
+					if (intersection.SpillCost > liveInterval.SpillCost || intersection.SpillCost == Int32.MaxValue || intersection.VirtualRegister.IsPhysicalRegister)
 					{
-						liveIntervalUnion.AddLiveInterval(liveInterval);
-						continue;
+						evict = false;
+						break;
 					}
 				}
 
-				// No place for live interval; find live interval(s) to evict based on spill costs
+				if (evict)
+				{
+					liveIntervalUnion.Evict(intersections);
+					AddPriorityQueue(intersections);
+					liveIntervalUnion.Add(liveInterval);
 
-				// TODO
+					return;
+				}
 
 			}
+
+			// No live intervals to evict; split live interval
+
+			// TODO
+
 		}
 
 	}

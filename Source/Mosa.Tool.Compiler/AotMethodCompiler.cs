@@ -55,7 +55,7 @@ namespace Mosa.Tool.Compiler
 				new StackLayoutStage(),
 				new PlatformIntrinsicTransformationStage(),
 				new PlatformStubStage(),
-
+				new GreedyRegisterAllocatorStage(),
 				new LoopAwareBlockOrderStage(),
 				//new CodeGenerationStage(), // FIXME: uncomment once register allocator is completed.
 			});

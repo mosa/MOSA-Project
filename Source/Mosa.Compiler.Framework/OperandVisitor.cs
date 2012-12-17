@@ -37,7 +37,14 @@ namespace Mosa.Compiler.Framework
 					yield return operand;
 
 					if (operand.BaseOperand != null)
-						yield return operand.OffsetBase;
+					{
+						yield return operand.BaseOperand;
+
+						if (operand.OffsetBase != null)
+						{
+							yield return operand.OffsetBase;
+						}
+					}
 				}
 			}
 		}
@@ -51,7 +58,14 @@ namespace Mosa.Compiler.Framework
 					yield return operand;
 
 					if (operand.BaseOperand != null)
-						yield return operand.OffsetBase;
+					{
+						yield return operand.BaseOperand;
+
+						if (operand.OffsetBase != null)
+						{
+							yield return operand.OffsetBase;
+						}
+					}
 				}
 			}
 		}

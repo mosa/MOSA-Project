@@ -34,6 +34,7 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="BitArrayExtension.cs" />
     <Compile Include="Endianness .cs" />
     <Compile Include="ListExtension.cs" />
     <Compile Include="EndianAwareBinaryWriter.cs" />

@@ -42,6 +42,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			this.LiveKillNot = new BitArray(virtualRegisterCount);
 			this.LoopDepth = loopDepth;
 		}
+	
 	}
 }
 
