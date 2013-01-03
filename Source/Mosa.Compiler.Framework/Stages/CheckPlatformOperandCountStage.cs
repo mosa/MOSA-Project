@@ -24,7 +24,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			foreach (var block in basicBlocks)
 			{
-				for (var context = new Context(this.instructionSet, block); !context.EndOfInstruction; context.GotoNext())
+				for (var context = new Context(this.instructionSet, block); !context.IsLastInstruction; context.GotoNext())
 				{
 					if (!(context.Instruction is BasePlatformInstruction))
 						continue;

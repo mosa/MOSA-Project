@@ -1,76 +1,88 @@
-<?xml version="1.0"?>
-<project name="Mosa" default="build" basedir=".">
-	
-	<!-- Comma-separated list of warnings that should be surpressed in all modules. Warning: no spaces allowed! -->
-	<property name="suppresswarnings" value="0414,0219,0169,0162,0168"/>
-	
-	<!-- Toggle debug output by setting this to true (nant -D:debug=true) -->
-	<property name="debug" value="none" overwrite="false"/>
-	
-	<!-- Speaks for itself, I should hope -->
-	<property name="outputDirectory" value="../bin" overwrite="false"/>
-	
-	<!-- Main build target -->
-	<target name="build">
-	    <csc target="library" output="${outputDirectory}/Mosa.Test.Cases.dll" debug="${debug}" unsafe="true" nostdlib="false">
-		<sources>
+<?xml version="1.0"?>
+<project name="Mosa" default="build" basedir=".">
+	
+	<!-- Comma-separated list of warnings that should be surpressed in all modules. Warning: no spaces allowed! -->
+	<property name="suppresswarnings" value="0414,0219,0169,0162,0168"/>
+	
+	<!-- Toggle debug output by setting this to true (nant -D:debug=true) -->
+	<property name="debug" value="none" overwrite="false"/>
+	
+	<!-- Speaks for itself, I should hope -->
+	<property name="outputDirectory" value="../bin" overwrite="false"/>
+	
+	<!-- Main build target -->
+	<target name="build">
+	    <csc target="library" output="${outputDirectory}/Mosa.Test.Cases.dll" debug="${debug}" unsafe="true" nostdlib="false">
+		<sources>
                     <include name="CIL/BooleanFixture.cs"/>
-                    <include name="CIL/CallvirtFixture.cs"/>
+                    <include name="CIL/BoxingFixture.cs"/>
+                    <include name="CIL/CallVirtualFixture.cs"/>
                     <include name="CIL/CharFixture.cs"/>
+                    <include name="CIL/SpecificTestFixture.cs"/>
+                    <include name="CIL/DelegateFixture.cs"/>
+                    <include name="CIL/ExceptionHandlingFixture.cs"/>
+                    <include name="CIL/FibonacciFixture.cs"/>
+                    <include name="CIL/CallFixture.cs"/>
+                    <include name="CIL/ComparisonFixture.cs"/>
                     <include name="CIL/GenericInterfaceFixture.cs"/>
                     <include name="CIL/Int16Fixture.cs"/>
                     <include name="CIL/Int8Fixture.cs"/>
+                    <include name="CIL/ForeachFixture.cs"/>
+                    <include name="CIL/SwitchFixture.cs"/>
                     <include name="CIL/UInt16Fixture.cs"/>
                     <include name="CIL/UInt8Fixture.cs"/>
                     <include name="CIL/DoubleFixture.cs"/>
                     <include name="CIL/EnumFixture.cs"/>
-                    <include name="CIL/ExceptionHandlingFixture.cs"/>
-                    <include name="OLD.CIL/GenericMethodMemberFixture.cs"/>
-                    <include name="OLD.CIL/GenericTypeFixture.cs"/>
+                    <include name="CIL/IsInstFixture.cs"/>
+                    <include name="CIL/ConvFixture.cs"/>
+                    <include name="CIL/GenericCallFixture.cs"/>
+                    <include name="CIL/InitobjFixture.cs"/>
+                    <include name="CIL/LdargaFixture.cs"/>
+                    <include name="CIL/LdlocaFixture.cs"/>
+                    <include name="CIL/StaticFieldFixture.cs"/>
+                    <include name="CIL/StructureFixture.cs"/>
+                    <include name="Extra/ConditionalOperatorFixture.cs"/>
+                    <include name="OLD/GenericMethodMemberFixture.cs"/>
+                    <include name="OLD/GenericTypeFixture.cs"/>
                     <include name="CIL/Int32Fixture.cs"/>
                     <include name="CIL/Int64Fixture.cs"/>
                     <include name="CIL/InterfaceFixture.cs"/>
-                    <include name="CIL/ObjectFixture.cs"/>
-                    <include name="OLD.CIL/PinnedFixture.cs"/>
+                    <include name="CIL/NewobjFixture.cs"/>
+                    <include name="OLD/PinnedFixture.cs"/>
                     <include name="CIL/SingleFixture.cs"/>
                     <include name="CIL/StringFixture.cs"/>
                     <include name="CIL/UInt32Fixture.cs"/>
                     <include name="CIL/UInt64Fixture.cs"/>
-                    <include name="OLD.IL/Add.cs"/>
-                    <include name="OLD.IL/AddPtr.cs"/>
-                    <include name="OLD.IL/And.cs"/>
-                    <include name="IL/CallWithConstant.cs"/>
-                    <include name="OLD.IL/Ceq.cs"/>
-                    <include name="OLD.IL/Cgt.cs"/>
-                    <include name="OLD.IL/Clt.cs"/>
-                    <include name="IL/ConditionalOperator.cs"/>
-                    <include name="IL/CallOrder.cs"/>
-                    <include name="IL/Call.cs"/>
-                    <include name="IL/Conv.cs"/>
-                    <include name="IL/Ldloca.cs"/>
-                    <include name="OLD.IL/Div.cs"/>
-                    <include name="IL/Ldarga.cs"/>
-                    <include name="OLD.IL/Mul.cs"/>
-                    <include name="OLD.IL/Or.cs"/>
-                    <include name="OLD.IL/Rem.cs"/>
-                    <include name="OLD.IL/Shl.cs"/>
-                    <include name="OLD.IL/Shr.cs"/>
-                    <include name="OLD.IL/StaticFieldInit.cs"/>
-                    <include name="OLD.IL/Stind.cs"/>
-                    <include name="OLD.IL/Stsfld.cs"/>
-                    <include name="OLD.IL/Sub.cs"/>
-                    <include name="IL/Switch.cs"/>
-                    <include name="IL/While.cs"/>
-                    <include name="OLD.IL/Xor.cs"/>
-		</sources>
-		<references>
+                    <include name="OLD/Add.cs"/>
+                    <include name="OLD/AddPtr.cs"/>
+                    <include name="OLD/And.cs"/>
+                    <include name="OLD/CallWithConstant.cs"/>
+                    <include name="OLD/Ceq.cs"/>
+                    <include name="OLD/Cgt.cs"/>
+                    <include name="OLD/Clt.cs"/>
+                    <include name="CIL/CallOrderFixture.cs"/>
+                    <include name="OLD/Div.cs"/>
+                    <include name="OLD/Mul.cs"/>
+                    <include name="OLD/Or.cs"/>
+                    <include name="OLD/Rem.cs"/>
+                    <include name="OLD/Shl.cs"/>
+                    <include name="OLD/Shr.cs"/>
+                    <include name="OLD/StaticFieldInit.cs"/>
+                    <include name="OLD/Stind.cs"/>
+                    <include name="OLD/Sub.cs"/>
+                    <include name="CIL/WhileFixture.cs"/>
+                    <include name="OLD/Xor.cs"/>
+		</sources>
+		<references>
+                    <include name="System.dll"/>
                     <include name="../../3rdParty/Gallio.dll"/>
                     <include name="../../3rdParty/MbUnit.dll"/>
+                    <include name="${outputDirectory}/Mosa.Test.CodeDomCompiler.dll"/>
                     <include name="${outputDirectory}/Mosa.Test.Collection.dll"/>
-                    <include name="${outputDirectory}/Mosa.Test.Runtime.CompilerFramework.dll"/>
-		</references>
-		<!-- supress warnings -->
-		<nowarn><warning number="${suppresswarnings}"/></nowarn>
-        </csc>
-	</target>
-</project>
+                    <include name="${outputDirectory}/Mosa.Test.System.dll"/>
+		</references>
+		<!-- supress warnings -->
+		<nowarn><warning number="${suppresswarnings}"/></nowarn>
+        </csc>
+	</target>
+</project>

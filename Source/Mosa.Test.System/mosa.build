@@ -1,24 +1,22 @@
-<?xml version="1.0"?>
-<project name="Mosa" default="build" basedir=".">
-	
-	<!-- Comma-separated list of warnings that should be surpressed in all modules. Warning: no spaces allowed! -->
-	<property name="suppresswarnings" value="0414,0219,0169,0162,0168"/>
-	
-	<!-- Toggle debug output by setting this to true (nant -D:debug=true) -->
-	<property name="debug" value="none" overwrite="false"/>
-	
-	<!-- Speaks for itself, I should hope -->
-	<property name="outputDirectory" value="../bin" overwrite="false"/>
-	
-	<!-- Main build target -->
-	<target name="build">
-	    <csc target="library" output="${outputDirectory}/Mosa.Test.Runtime.CompilerFramework.dll" debug="${debug}" unsafe="true" nostdlib="false">
-		<sources>
-                    <include name="Compiler/StaticAllocationFixture.cs"/>
+<?xml version="1.0"?>
+<project name="Mosa" default="build" basedir=".">
+	
+	<!-- Comma-separated list of warnings that should be surpressed in all modules. Warning: no spaces allowed! -->
+	<property name="suppresswarnings" value="0414,0219,0169,0162,0168"/>
+	
+	<!-- Toggle debug output by setting this to true (nant -D:debug=true) -->
+	<property name="debug" value="none" overwrite="false"/>
+	
+	<!-- Speaks for itself, I should hope -->
+	<property name="outputDirectory" value="../bin" overwrite="false"/>
+	
+	<!-- Main build target -->
+	<target name="build">
+	    <csc target="library" output="${outputDirectory}/Mosa.Test.System.dll" debug="${debug}" unsafe="true" nostdlib="false">
+		<sources>
                     <include name="MbunitExtensions.cs"/>
                     <include name="Numbers/B.cs"/>
                     <include name="Numbers/Series.cs"/>
-                    <include name="TestCompilerSettings.cs"/>
                     <include name="DelegateUtility.cs"/>
                     <include name="Numbers/C.cs"/>
                     <include name="Numbers/R8.cs"/>
@@ -32,35 +30,34 @@
                     <include name="Numbers/U1.cs"/>
                     <include name="Numbers/Extension.cs"/>
                     <include name="Numbers/I1.cs"/>
+                    <include name="PageAccessFlags.cs"/>
                     <include name="Prebuilt.cs"/>
-                    <include name="TestAssemblyLinker.cs"/>
-                    <include name="TestCaseAssemblyCompiler.cs"/>
+                    <include name="TestLinker.cs"/>
+                    <include name="TestCaseCompiler.cs"/>
                     <include name="TestCaseMethodCompiler.cs"/>
                     <include name="TestCompiler.cs"/>
                     <include name="TestCompilerAdapter.cs"/>
                     <include name="TestLinkerSection.cs"/>
                     <include name="VirtualMemoryStream.cs"/>
-                    <include name="Win32MemoryPageManager.cs"/>
+                    <include name="Win32Memory.cs"/>
                     <include name="Properties/AssemblyInfo.cs"/>
-                    <include name="Runtime.cs"/>
-		</sources>
-		<references>
+		</sources>
+		<references>
                     <include name="System.dll"/>
-                    <include name="System.Data.dll"/>
-                    <include name="System.Xml.dll"/>
                     <include name="System.Core.dll"/>
-                    <include name="../../3rdParty/Mono.Cecil.dll"/>
                     <include name="../../3rdParty/Gallio.dll"/>
                     <include name="../../3rdParty/MbUnit.dll"/>
+                    <include name="${outputDirectory}/Mosa.Compiler.Common.dll"/>
                     <include name="${outputDirectory}/Mosa.Compiler.Linker.dll"/>
-                    <include name="${outputDirectory}/Mosa.Runtime.Metadata.dll"/>
+                    <include name="${outputDirectory}/Mosa.Compiler.InternalTrace.dll"/>
+                    <include name="${outputDirectory}/Mosa.Compiler.Metadata.dll"/>
+                    <include name="${outputDirectory}/Mosa.Compiler.TypeSystem.dll"/>
                     <include name="${outputDirectory}/Mosa.Platform.x86.dll"/>
-                    <include name="${outputDirectory}/Mosa.Runtime.TypeSystem.dll"/>
-                    <include name="${outputDirectory}/mosacl.dll"/>
-                    <include name="${outputDirectory}/Mosa.Runtime.dll"/>
-		</references>
-		<!-- supress warnings -->
-		<nowarn><warning number="${suppresswarnings}"/></nowarn>
-        </csc>
-	</target>
-</project>
+                    <include name="${outputDirectory}/Mosa.Test.CodeDomCompiler.dll"/>
+                    <include name="${outputDirectory}/Mosa.Compiler.Framework.dll"/>
+		</references>
+		<!-- supress warnings -->
+		<nowarn><warning number="${suppresswarnings}"/></nowarn>
+        </csc>
+	</target>
+</project>

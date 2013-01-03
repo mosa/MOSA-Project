@@ -81,7 +81,7 @@ namespace Mosa.Tool.Compiler.Stages
 			numberOfMethods++;
 
 			foreach (BasicBlock block in basicBlocks)
-				for (Context ctx = CreateContext(block); !ctx.EndOfInstruction; ctx.GotoNext())
+				for (Context ctx = CreateContext(block); !ctx.IsLastInstruction; ctx.GotoNext())
 					Visit(ctx);
 		}
 

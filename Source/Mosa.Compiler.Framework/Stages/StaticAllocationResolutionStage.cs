@@ -100,7 +100,7 @@ namespace Mosa.Compiler.Framework.Stages
 			foreach (BasicBlock block in this.basicBlocks)
 			{
 				Context context = new Context(instructionSet, block);
-				while (!context.EndOfInstruction)
+				while (!context.IsLastInstruction)
 				{
 					if (context.Instruction is NewobjInstruction || context.Instruction is NewarrInstruction)
 					{
@@ -116,7 +116,7 @@ namespace Mosa.Compiler.Framework.Stages
 		private Context SeekAssignmentOfAllocatedObject(Context allocation)
 		{
 			Context next = allocation.Next;
-			if (next.EndOfInstruction || !(next.Instruction is StsfldInstruction))
+			if (next.IsLastInstruction || !(next.Instruction is StsfldInstruction))
 			{
 				next = null;
 			}

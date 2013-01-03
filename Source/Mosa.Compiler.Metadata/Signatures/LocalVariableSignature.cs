@@ -26,43 +26,42 @@ namespace Mosa.Compiler.Metadata.Signatures
 		/// </summary>
 		private static VariableSignature[] Empty = new VariableSignature[0];
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="LocalVariableSignature"/> class.
-		/// </summary>
-		/// <param name="reader">The reader.</param>
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LocalVariableSignature" /> class.
+        /// </summary>
+        /// <param name="reader">The reader.</param>
 		public LocalVariableSignature(SignatureReader reader)
 			: base(reader)
 		{
 		}
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="LocalVariableSignature"/> class.
-		/// </summary>
-		/// <param name="provider">The provider.</param>
-		/// <param name="token">The token.</param>
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LocalVariableSignature" /> class.
+        /// </summary>
+        /// <param name="provider">The provider.</param>
+        /// <param name="token">The token.</param>
 		public LocalVariableSignature(IMetadataProvider provider, HeapIndexToken token)
 			: base(provider, token)
 		{
 		}
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="LocalVariableSignature"/> class.
-		/// </summary>
-		/// <param name="provider">The provider.</param>
-		/// <param name="token">The token.</param>
-		/// <param name="genericArguments">The generic arguments.</param>
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LocalVariableSignature" /> class.
+        /// </summary>
+        /// <param name="provider">The provider.</param>
+        /// <param name="token">The token.</param>
+        /// <param name="genericArguments">The generic arguments.</param>
 		public LocalVariableSignature(IMetadataProvider provider, HeapIndexToken token, SigType[] genericArguments)
 			: base(provider, token)
 		{
 			ApplyGenericArguments(genericArguments);
 		}
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="LocalVariableSignature"/> class.
-		/// </summary>
-		/// <param name="provider">The provider.</param>
-		/// <param name="token">The token.</param>
-		/// <param name="genericArguments">The generic arguments.</param>
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LocalVariableSignature" /> class.
+        /// </summary>
+        /// <param name="signature">The signature.</param>
+        /// <param name="genericArguments">The generic arguments.</param>
 		public LocalVariableSignature(LocalVariableSignature signature, SigType[] genericArguments)
 			: base(signature.Token)
 		{
@@ -72,9 +71,9 @@ namespace Mosa.Compiler.Metadata.Signatures
 				locals[i] = new VariableSignature(signature.locals[i], genericArguments);
 		}
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="LocalVariableSignature"/> class.
-		/// </summary>
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LocalVariableSignature" /> class.
+        /// </summary>
 		public LocalVariableSignature()
 		{
 			this.locals = LocalVariableSignature.Empty;
@@ -111,6 +110,10 @@ namespace Mosa.Compiler.Metadata.Signatures
 			}
 		}
 
+        /// <summary>
+        /// Applies the generic arguments.
+        /// </summary>
+        /// <param name="genericArguments">The generic arguments.</param>
 		private void ApplyGenericArguments(SigType[] genericArguments)
 		{
 			for (int i = 0; i < locals.Length; i++)

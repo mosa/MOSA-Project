@@ -8,12 +8,11 @@
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  */
 
-
 using System.Collections.Generic;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Compiler.TypeSystem;
-using IR = Mosa.Compiler.Framework.IR;
+using Mosa.Compiler.Framework.IR;
 
 namespace Mosa.Platform.x86.Intrinsic
 {
@@ -48,8 +47,8 @@ namespace Mosa.Platform.x86.Intrinsic
 			Operand eax = Operand.CreateCPURegister(BuiltInSigType.UInt32, GeneralPurposeRegister.EAX);
 			Operand cr = Operand.CreateCPURegister(BuiltInSigType.UInt32, control);
 
-			context.SetInstruction(IR.IRInstruction.Move, eax, operand1);
-			context.AppendInstruction(IR.IRInstruction.Move, cr, eax);
+			context.SetInstruction(IRInstruction.Move, eax, operand1);
+			context.AppendInstruction(IRInstruction.Move, cr, eax);
 		}
 
 		#endregion // Methods

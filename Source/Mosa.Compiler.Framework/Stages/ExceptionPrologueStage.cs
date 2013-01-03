@@ -10,6 +10,7 @@
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Compiler.TypeSystem;
+using Mosa.Compiler.Framework.IR;
 
 namespace Mosa.Compiler.Framework.Stages
 {
@@ -41,7 +42,7 @@ namespace Mosa.Compiler.Framework.Stages
 					SigType sigType = new ClassSigType(typeToken);
 					Operand exceptionObject = methodCompiler.CreateVirtualRegister(sigType);
 
-					context.SetInstruction(IR.IRInstruction.ExceptionPrologue, exceptionObject);
+					context.SetInstruction(IRInstruction.ExceptionPrologue, exceptionObject);
 				}	
 			}
 		}

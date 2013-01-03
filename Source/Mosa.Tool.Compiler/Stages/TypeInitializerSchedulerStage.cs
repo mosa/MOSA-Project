@@ -11,7 +11,7 @@ using Mosa.Compiler.Framework;
 using Mosa.Compiler.Linker;
 using Mosa.Compiler.TypeSystem;
 using Mosa.Compiler.Framework.Linker;
-using IR = Mosa.Compiler.Framework.IR;
+using Mosa.Compiler.Framework.IR;
 
 namespace Mosa.Tool.Compiler.Stages
 {
@@ -52,7 +52,7 @@ namespace Mosa.Tool.Compiler.Stages
 			instructionSet = new InstructionSet(1024);
 			ctx = new Context(instructionSet);
 
-			ctx.AppendInstruction(IR.IRInstruction.Prologue);
+			ctx.AppendInstruction(IRInstruction.Prologue);
 			//ctx.Other = 0; // stacksize
 		}
 
@@ -92,7 +92,7 @@ namespace Mosa.Tool.Compiler.Stages
 				Schedule(entrypoint);
 			}
 
-			ctx.AppendInstruction(IR.IRInstruction.Epilogue);
+			ctx.AppendInstruction(IRInstruction.Epilogue);
 			//ctx.Other = 0;
 
 			method = LinkTimeCodeGenerator.Compile(compiler, @"AssemblyInit", instructionSet, typeSystem);
@@ -109,7 +109,7 @@ namespace Mosa.Tool.Compiler.Stages
 		public void Schedule(RuntimeMethod method)
 		{
 			Operand symbolOperand = Operand.CreateSymbolFromMethod(method);
-			ctx.AppendInstruction(IR.IRInstruction.Call, null, symbolOperand);
+			ctx.AppendInstruction(IRInstruction.Call, null, symbolOperand);
 		}
 
 		#endregion // Methods

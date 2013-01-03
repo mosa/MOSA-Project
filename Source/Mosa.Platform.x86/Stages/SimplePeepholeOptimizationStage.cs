@@ -157,7 +157,7 @@ namespace Mosa.Platform.x86.Stages
 			Window window = new Window(5);
 
 			foreach (BasicBlock block in basicBlocks)
-				for (Context ctx = CreateContext(block); !ctx.EndOfInstruction; ctx.GotoNext())
+				for (Context ctx = CreateContext(block); !ctx.IsLastInstruction; ctx.GotoNext())
 					if (!ctx.IsEmpty)
 					{
 						window.Add(ctx);

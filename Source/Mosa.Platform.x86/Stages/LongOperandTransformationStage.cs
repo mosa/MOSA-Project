@@ -162,8 +162,8 @@ namespace Mosa.Platform.x86.Stages
 			Operand v1 = AllocateVirtualRegister(BuiltInSigType.Int32);
 			Operand v2 = AllocateVirtualRegister(BuiltInSigType.Int32);
 
-			Context nextBlock = SplitContext(context, false);
-			Context[] newBlocks = CreateEmptyBlockContexts(context.Label, 4);
+			Context nextBlock = Split(context, false);
+			Context[] newBlocks = CreateNewBlocksWithContexts(context.Label, 4);
 
 			context.SetInstruction(X86.Jmp, newBlocks[0].BasicBlock);
 			LinkBlocks(context, newBlocks[0]);
@@ -213,8 +213,8 @@ namespace Mosa.Platform.x86.Stages
 			SplitLongOperand(context.Operand1, out op1L, out op1H);
 			SplitLongOperand(context.Operand2, out op2L, out op2H);
 
-			Context[] newBlocks = CreateEmptyBlockContexts(context.Label, 17);
-			Context nextBlock = SplitContext(context, false);
+			Context[] newBlocks = CreateNewBlocksWithContexts(context.Label, 17);
+			Context nextBlock = Split(context, false);
 
 			Operand eax = AllocateVirtualRegister(BuiltInSigType.Int32);
 			Operand edx = AllocateVirtualRegister(BuiltInSigType.Int32);
@@ -454,8 +454,8 @@ namespace Mosa.Platform.x86.Stages
 
 			Operand v8 = AllocateVirtualRegister(BuiltInSigType.Int32);
 
-			Context[] newBlocks = CreateEmptyBlockContexts(context.Label, 16);
-			Context nextBlock = SplitContext(context, false);
+			Context[] newBlocks = CreateNewBlocksWithContexts(context.Label, 16);
+			Context nextBlock = Split(context, false);
 
 			// Determine sign of the result (edi = 0 if result is positive, non-zero
 			// otherwise) and make operands positive.
@@ -689,8 +689,8 @@ namespace Mosa.Platform.x86.Stages
 			Operand edi = AllocateVirtualRegister(BuiltInSigType.UInt32);
 			Operand esi = AllocateVirtualRegister(BuiltInSigType.UInt32);
 
-			Context[] newBlocks = CreateEmptyBlockContexts(context.Label, 12);
-			Context nextBlock = SplitContext(context, false);
+			Context[] newBlocks = CreateNewBlocksWithContexts(context.Label, 12);
+			Context nextBlock = Split(context, false);
 
 			context.SetInstruction(X86.Jmp, newBlocks[0].BasicBlock);
 			LinkBlocks(context, newBlocks[0]);
@@ -793,8 +793,8 @@ namespace Mosa.Platform.x86.Stages
 			Operand edi = AllocateVirtualRegister(BuiltInSigType.UInt32);
 			Operand esi = AllocateVirtualRegister(BuiltInSigType.UInt32);
 
-			Context[] newBlocks = CreateEmptyBlockContexts(context.Label, 11);
-			Context nextBlock = SplitContext(context, false);
+			Context[] newBlocks = CreateNewBlocksWithContexts(context.Label, 11);
+			Context nextBlock = Split(context, false);
 
 			// Determine sign of the result (edi = 0 if result is positive, non-zero
 			// otherwise) and make operands positive.
@@ -912,8 +912,8 @@ namespace Mosa.Platform.x86.Stages
 			Operand edx = AllocateVirtualRegister(BuiltInSigType.Int32);
 			Operand ecx = AllocateVirtualRegister(BuiltInSigType.Int32);
 
-			Context[] newBlocks = CreateEmptyBlockContexts(context.Label, 6);
-			Context nextBlock = SplitContext(context, false);
+			Context[] newBlocks = CreateNewBlocksWithContexts(context.Label, 6);
+			Context nextBlock = Split(context, false);
 
 			// Handle shifts of 64 bits or more (if shifting 64 bits or more, the result
 			// depends only on the high order bit of edx).
@@ -984,8 +984,8 @@ namespace Mosa.Platform.x86.Stages
 
 			Operand cl = AllocateVirtualRegister(BuiltInSigType.Byte);
 
-			Context nextBlock = SplitContext(context, false);
-			Context[] newBlocks = CreateEmptyBlockContexts(context.Label, 6);
+			Context nextBlock = Split(context, false);
+			Context[] newBlocks = CreateNewBlocksWithContexts(context.Label, 6);
 
 			// Handle shifts of 64 bits or more (if shifting 64 bits or more, the result
 			// depends only on the high order bit of edx).
@@ -1050,8 +1050,8 @@ namespace Mosa.Platform.x86.Stages
 			Operand edx = AllocateVirtualRegister(BuiltInSigType.Int32);
 			Operand ecx = AllocateVirtualRegister(BuiltInSigType.Byte);
 
-			Context[] newBlocks = CreateEmptyBlockContexts(context.Label, 6);
-			Context nextBlock = SplitContext(context, false);
+			Context[] newBlocks = CreateNewBlocksWithContexts(context.Label, 6);
+			Context nextBlock = Split(context, false);
 
 			// Handle shifts of 64 bits or more (if shifting 64 bits or more, the result
 			// depends only on the high order bit of edx).
@@ -1438,9 +1438,9 @@ namespace Mosa.Platform.x86.Stages
 			SplitLongOperand(context.Operand1, out op1L, out op1H);
 			SplitLongOperand(context.Operand2, out op2L, out op2H);
 
-			Context[] newBlocks = CreateEmptyBlockContexts(context.Label, 2);
+			Context[] newBlocks = CreateNewBlocksWithContexts(context.Label, 2);
 			ConditionCode conditionCode = context.ConditionCode;
-			Context nextBlock = SplitContext(context, false);
+			Context nextBlock = Split(context, false);
 
 			// Compare high dwords
 			context.SetInstruction(X86.Cmp, null, op1H, op2H);
@@ -1480,9 +1480,9 @@ namespace Mosa.Platform.x86.Stages
 			SplitLongOperand(op1, out op1L, out op1H);
 			SplitLongOperand(op2, out op2L, out op2H);
 
-			Context[] newBlocks = CreateEmptyBlockContexts(context.Label, 4);
+			Context[] newBlocks = CreateNewBlocksWithContexts(context.Label, 4);
 			ConditionCode conditionCode = context.ConditionCode;
-			Context nextBlock = SplitContext(context, false);
+			Context nextBlock = Split(context, false);
 
 			// Compare high dwords
 			context.SetInstruction(X86.Cmp, null, op1H, op2H);

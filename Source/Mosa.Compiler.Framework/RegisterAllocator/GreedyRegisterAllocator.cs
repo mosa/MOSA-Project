@@ -119,7 +119,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			{
 				extendedBlocks[block.Sequence].From = index;
 
-				for (Context context = new Context(instructionSet, block); !context.EndOfInstruction; context.GotoNext())
+				for (Context context = new Context(instructionSet, block); !context.IsLastInstruction; context.GotoNext())
 				{
 					if (!context.IsEmpty)
 					{
@@ -139,7 +139,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 				BitArray liveGen = new BitArray(registerCount);
 				BitArray liveKill = new BitArray(registerCount);
 
-				for (Context context = new Context(instructionSet, block.BasicBlock); !context.EndOfInstruction; context.GotoNext())
+				for (Context context = new Context(instructionSet, block.BasicBlock); !context.IsLastInstruction; context.GotoNext())
 				{
 					OperandVisitor visitor = new OperandVisitor(context);
 
@@ -221,10 +221,9 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 					register.AddRange(blockFrom, blockTo);
 				}
 
-				Context context = new Context(instructionSet, block.BasicBlock);
-				context.GotoLast();
+				Context context = new Context(instructionSet, block.BasicBlock, block.BasicBlock.EndIndex);
 
-				while (!context.IsFirstInstruction)
+				while (!context.IsStartInstruction)
 				{
 					OperandVisitor visitor = new OperandVisitor(context);
 					int index = instructionNumbering[context.Index];

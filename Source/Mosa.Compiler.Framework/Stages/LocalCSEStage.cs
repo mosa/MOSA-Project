@@ -115,7 +115,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			AEBinExp aeb;
 
-			for (; !ctx.EndOfInstruction; ctx.GotoNext())
+			for (; !ctx.IsLastInstruction; ctx.GotoNext())
 			{
 				BaseInstruction instruction = ctx.Instruction; 
 				Operand temp = null;

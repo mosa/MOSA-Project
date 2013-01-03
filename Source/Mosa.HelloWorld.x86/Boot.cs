@@ -6,7 +6,6 @@
  */
 
 using System;
-using Mosa.HelloWorld.x86.Tests;
 using Mosa.Kernel.x86;
 using Mosa.Kernel.x86.Smbios;
 using Mosa.Platform.x86.Intrinsic;
@@ -274,8 +273,6 @@ namespace Mosa.HelloWorld.x86
 			Console.Write(@"www.mosa-project.org");
 
 			CMOS cmos = new CMOS();
-
-			KernelTest.RunTests();
 
 			byte last = 0;
 

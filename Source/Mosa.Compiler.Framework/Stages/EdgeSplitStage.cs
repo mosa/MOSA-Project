@@ -7,6 +7,7 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using System.Diagnostics;
 using System.Collections.Generic;
 using Mosa.Compiler.Framework.IR;
 
@@ -53,11 +54,11 @@ namespace Mosa.Compiler.Framework.Stages
 		void SplitEdge(BasicBlock a, BasicBlock b)
 		{
 			// Create new block z
-			var z = basicBlocks.CreateBlock();
-			Context ctx = new Context(instructionSet);
-			ctx.AppendInstruction(IR.IRInstruction.Jmp, a);
+            Context ctx = CreateNewBlockWithContext();
+			ctx.AppendInstruction(IRInstruction.Jmp, b);
 			ctx.Label = -1;
-			z.Index = ctx.Index;
+
+            var z = ctx.BasicBlock;
 
 			// Unlink blocks
 			a.NextBlocks.Remove(b);
@@ -71,12 +72,12 @@ namespace Mosa.Compiler.Framework.Stages
 			b.PreviousBlocks.Add(z);
 			z.NextBlocks.Add(b);
 
-			// Insert jump in z to b
-			ctx.SetInstruction(IRInstruction.Jmp, b);
-
 			// Replace any jump/branch target in block a with z
-			ctx = new Context(instructionSet, a);
-			ctx.GotoLast();
+			ctx = new Context(instructionSet, a, a.EndIndex);
+
+            Debug.Assert(ctx.IsLastInstruction);
+            
+            ctx.GotoPrevious();
 
 			// Find branch or jump to b and replace it with z
 			while (ctx.BranchTargets != null)

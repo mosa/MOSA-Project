@@ -12,6 +12,7 @@ using System.Diagnostics;
 using System.IO;
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.CIL;
+using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Compiler.Metadata.Tables;
@@ -52,13 +53,11 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (plugMethod != null)
 			{
-				Operand plugSymbol = Operand.CreateSymbolFromMethod(plugMethod);
-				Context context = new Context(instructionSet);
-				context.AppendInstruction(IR.IRInstruction.Jmp, null, plugSymbol);
-				context.Label = -1;
-				var prologue = basicBlocks.CreateBlock(BasicBlock.PrologueLabel, context.Index);
-				basicBlocks.AddHeaderBlock(prologue);
-				return;
+                Operand plugSymbol = Operand.CreateSymbolFromMethod(plugMethod);
+                Context context = CreateNewBlockWithContext(-1);
+                context.AppendInstruction(IRInstruction.Jmp, null, plugSymbol);
+                basicBlocks.AddHeaderBlock(context.BasicBlock);
+                return;
 			}
 
 			if (!methodCompiler.Method.HasCode)
@@ -299,7 +298,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <summary>
 		/// Gets the generic type patcher.
 		/// </summary>
-		IGenericTypePatcher IInstructionDecoder.GenericTypePatcher
+		GenericTypePatcher IInstructionDecoder.GenericTypePatcher
 		{
 			get { return methodCompiler.Compiler.GenericTypePatcher; }
 		}

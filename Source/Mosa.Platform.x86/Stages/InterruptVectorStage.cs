@@ -12,6 +12,7 @@ using Mosa.Compiler.Linker;
 using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Compiler.TypeSystem;
 using Mosa.Compiler.Framework.Linker;
+using Mosa.Compiler.Framework.IR;
 
 namespace Mosa.Platform.x86.Stages
 {
@@ -65,6 +66,7 @@ namespace Mosa.Platform.x86.Stages
 				InstructionSet instructionSet = new InstructionSet(100);
 				Context ctx = new Context(instructionSet);
 
+                ctx.AppendInstruction(IRInstruction.BlockStart);
 				ctx.AppendInstruction(X86.Cli);
 				if (i <= 7 || i >= 16 | i == 9) // For IRQ 8, 10, 11, 12, 13, 14 the cpu will automatically pushed the error code
 					ctx.AppendInstruction(X86.Push, null, Operand.CreateConstant(BuiltInSigType.SByte, 0x0));
@@ -75,6 +77,7 @@ namespace Mosa.Platform.x86.Stages
 				ctx.AppendInstruction(X86.Add, esp, esp, Operand.CreateConstant(BuiltInSigType.Int32, 0x08));
 				ctx.AppendInstruction(X86.Sti);
 				ctx.AppendInstruction(X86.IRetd);
+                ctx.AppendInstruction(IRInstruction.BlockEnd);
 
 				LinkTimeCodeGenerator.Compile(this.compiler, @"InterruptISR" + i.ToString(), instructionSet, typeSystem);
 			}

@@ -29,7 +29,7 @@ namespace Mosa.Compiler.Linker.PE
 		/// <summary>
 		/// Specifies the default section alignment in a PE file.
 		/// </summary>
-		private const uint FILE_SECTION_ALIGNMENT = 0x200;
+		private const uint FILE_SECTION_ALIGNMENT = 4096; // FIXME?: 0x200;
 
 		/// <summary>
 		/// Specifies the default section alignment in virtual memory.

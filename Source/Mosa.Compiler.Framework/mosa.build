@@ -15,11 +15,20 @@
 	    <csc target="library" output="${outputDirectory}/Mosa.Compiler.Framework.dll" debug="${debug}" unsafe="true" nostdlib="false">
 		<sources>
                     <include name="BasicBlocks.cs"/>
-                    <include name="LiveRange.cs"/>
+                    <include name="ContextHelper.cs"/>
+                    <include name="IR/BlockStart.cs"/>
+                    <include name="IR/BlockEnd.cs"/>
+                    <include name="RegisterAllocator/Interval.cs"/>
+                    <include name="RegisterAllocator/LiveIntervalUnion.cs"/>
+                    <include name="RegisterAllocator/ExtendedBlock.cs"/>
+                    <include name="RegisterAllocator/LiveInterval.cs"/>
+                    <include name="RegisterAllocator/VirtualRegister.cs"/>
+                    <include name="RegisterAllocator/GreedyRegisterAllocator.cs"/>
+                    <include name="Interval.cs"/>
                     <include name="OperandVisitor.cs"/>
                     <include name="Linker/LinkerFactory.cs"/>
+                    <include name="Stages/GreedyRegisterAllocatorStage.cs"/>
                     <include name="Stages/LinkerFinalizationStage.cs"/>
-                    <include name="LiveRangeAnalysis.cs"/>
                     <include name="IIntrinsicInternalMethod.cs"/>
                     <include name="DelegatePatcher.cs"/>
                     <include name="ICompilationScheduler.cs"/>
@@ -84,7 +93,6 @@
                     <include name="Stages/StaticAllocationResolutionStage.cs"/>
                     <include name="Stages/TypeLayoutStage.cs"/>
                     <include name="IR/Throw.cs"/>
-                    <include name="Stages/GenericsResolverStage.cs"/>
                     <include name="Intrinsics/InternalAllocateString.cs"/>
                     <include name="IR/AddFloat.cs"/>
                     <include name="IR/AddSigned.cs"/>

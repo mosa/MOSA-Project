@@ -5,6 +5,7 @@
  *
  * Authors:
  *  Simon Wollwage (rootnode) <rootnode@mosa-project.org>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 using System.Diagnostics;
@@ -24,7 +25,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			foreach (var block in basicBlocks)
 			{
-				for (var context = new Context(instructionSet, block); !context.EndOfInstruction; context.GotoNext())
+				for (var context = new Context(instructionSet, block); !context.IsLastInstruction; context.GotoNext())
 				{
 					if (context.Instruction is IR.Phi)
 						ProcessPhiInstruction(block, context);
@@ -71,7 +72,7 @@ namespace Mosa.Compiler.Framework.Stages
 		private void InsertCopyStatement(BasicBlock predecessor, Operand result, Operand operand)
 		{
 			var context = new Context(instructionSet, predecessor);
-			while (!context.EndOfInstruction && IsBranchInstruction(context))
+			while (!context.IsLastInstruction && IsBranchInstruction(context))
 				context.GotoNext();
 
 			if (context.Index != -1)
@@ -84,7 +85,7 @@ namespace Mosa.Compiler.Framework.Stages
 			Debug.Assert(!destination.IsSSA);
 
 			if (destination != source)
-				context.SetInstruction(IR.IRInstruction.Move, destination, source);
+				context.SetInstruction(IRInstruction.Move, destination, source);
 		}
 
 		/// <summary>

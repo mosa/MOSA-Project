@@ -15,273 +15,281 @@ using System.IO;
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Linker;
 using Mosa.Compiler.TypeSystem;
+using Mosa.Compiler.TypeSystem.Generic;
 
 namespace Mosa.Compiler.Framework.Stages
 {
-	/// <summary>
-	/// Performs memory layout of a type for compilation.
-	/// </summary>
-	public sealed class TypeLayoutStage : BaseCompilerStage, ICompilerStage
-	{
+    /// <summary>
+    /// Performs memory layout of a type for compilation.
+    /// </summary>
+    public sealed class TypeLayoutStage : BaseCompilerStage, ICompilerStage
+    {
 
-		#region ICompilerStage members
+        #region ICompilerStage members
 
-		void ICompilerStage.Run()
-		{
-			foreach (RuntimeType type in typeSystem.GetAllTypes())
-			{
-				if (type.ContainsOpenGenericParameters)
-					continue;
+        void ICompilerStage.Run()
+        {
+            foreach (RuntimeType type in typeSystem.GetAllTypes())
+            {
+                Debug.WriteLine(type.ToString());
+                Debug.Flush();
 
-				if (type.IsModule || type.IsGeneric)
-					continue;
+                if (type.IsModule || type.IsGeneric)
+                    continue;
 
-				if (!type.IsInterface)
-				{
-					BuildMethodTable(type);
-					BuildTypeInterfaceSlots(type);
-					BuildTypeInterfaceBitmap(type);
-					BuildTypeInterfaceTables(type);
-				}
+                if (type.ContainsOpenGenericParameters)
+                    continue;
 
-				AllocateStaticFields(type);
-			}
-		}
+                // Only create method tables for generic types in the internal type module
+                if (type is CilGenericType && !(type.Module is InternalTypeModule))
+                    continue;
 
-		#endregion // ICompilerStage members
+                if (!type.IsInterface)
+                {
+                    BuildMethodTable(type);
+                    BuildTypeInterfaceSlots(type);
+                    BuildTypeInterfaceBitmap(type);
+                    BuildTypeInterfaceTables(type);
+                }
 
-		private void BuildTypeInterfaceSlots(RuntimeType type)
-		{
-			if (type.Interfaces.Count == 0)
-				return;
+                AllocateStaticFields(type);
+            }
+        }
 
-			List<string> slots = new List<string>(typeLayout.Interfaces.Count);
+        #endregion // ICompilerStage members
 
-			foreach (RuntimeType interfaceType in typeLayout.Interfaces)
-			{
-				if (type.Interfaces.Contains(interfaceType))
-					slots.Add(type.FullName + @"$mtable$" + interfaceType.FullName);
-				else
-					slots.Add(null);
-			}
+        private void BuildTypeInterfaceSlots(RuntimeType type)
+        {
+            if (type.Interfaces.Count == 0)
+                return;
 
-			AskLinkerToCreateMethodTable(type.FullName + @"$itable", null, slots);
-		}
+            List<string> slots = new List<string>(typeLayout.Interfaces.Count);
 
-		private void BuildTypeInterfaceBitmap(RuntimeType type)
-		{
-			if (type.Interfaces.Count == 0)
-				return;
+            foreach (RuntimeType interfaceType in typeLayout.Interfaces)
+            {
+                if (type.Interfaces.Contains(interfaceType))
+                    slots.Add(type.FullName + @"$mtable$" + interfaceType.FullName);
+                else
+                    slots.Add(null);
+            }
 
-			byte[] bitmap = new byte[(((typeLayout.Interfaces.Count - 1) / 8) + 1)];
+            AskLinkerToCreateMethodTable(type.FullName + @"$itable", null, slots);
+        }
 
-			int at = 0;
-			byte bit = 0;
-			foreach (RuntimeType interfaceType in typeLayout.Interfaces)
-			{
-				if (type.ImplementsInterface(interfaceType))
-					bitmap[at] = (byte)(bitmap[at] | (byte)(1 << bit));
+        private void BuildTypeInterfaceBitmap(RuntimeType type)
+        {
+            if (type.Interfaces.Count == 0)
+                return;
 
-				bit++;
-				if (bit == 8)
-				{
-					bit = 0;
-					at++;
-				}
-			}
+            byte[] bitmap = new byte[(((typeLayout.Interfaces.Count - 1) / 8) + 1)];
 
-			AskLinkerToCreateArray(type.FullName + @"$ibitmap", bitmap);
-		}
+            int at = 0;
+            byte bit = 0;
+            foreach (RuntimeType interfaceType in typeLayout.Interfaces)
+            {
+                if (type.ImplementsInterface(interfaceType))
+                    bitmap[at] = (byte)(bitmap[at] | (byte)(1 << bit));
 
-		private void BuildTypeInterfaceTables(RuntimeType type)
-		{
-			foreach (RuntimeType interfaceType in type.Interfaces)
-			{
-				BuildInterfaceTable(type, interfaceType);
-			}
-		}
+                bit++;
+                if (bit == 8)
+                {
+                    bit = 0;
+                    at++;
+                }
+            }
 
-		private void BuildInterfaceTable(RuntimeType type, RuntimeType interfaceType)
-		{
-			RuntimeMethod[] methodTable = typeLayout.GetInterfaceTable(type, interfaceType);
+            AskLinkerToCreateArray(type.FullName + @"$ibitmap", bitmap);
+        }
 
-			if (methodTable == null)
-				return;
+        private void BuildTypeInterfaceTables(RuntimeType type)
+        {
+            foreach (RuntimeType interfaceType in type.Interfaces)
+            {
+                BuildInterfaceTable(type, interfaceType);
+            }
+        }
 
-			AskLinkerToCreateMethodTable(type.FullName + @"$mtable$" + interfaceType.FullName, methodTable, null);
-		}
+        private void BuildInterfaceTable(RuntimeType type, RuntimeType interfaceType)
+        {
+            RuntimeMethod[] methodTable = typeLayout.GetInterfaceTable(type, interfaceType);
 
-		/// <summary>
-		/// Builds the method table.
-		/// </summary>
-		/// <param name="type">The type.</param>
-		private void BuildMethodTable(RuntimeType type)
-		{
-			// The method table is offset by a four pointers:
-			// 1. interface dispatch table pointer
-			// 2. type pointer - contains the type information pointer, used to realize object.GetType().
-			// 3. interface implementation bitmap
-			// 4. parent type (if any)
-			// 5. type metadata
-			List<string> headerlinks = new List<string>();
+            if (methodTable == null)
+                return;
 
-			// 1. interface dispatch table pointer
-			if (type.Interfaces.Count == 0)
-				headerlinks.Add(null);
-			else
-				headerlinks.Add(type.FullName + @"$itable");
+            AskLinkerToCreateMethodTable(type.FullName + @"$mtable$" + interfaceType.FullName, methodTable, null);
+        }
 
-			// 2. type pointer - contains the type information pointer, used to realize object.GetType().
-			headerlinks.Add(null); // TODO: GetType()
+        /// <summary>
+        /// Builds the method table.
+        /// </summary>
+        /// <param name="type">The type.</param>
+        private void BuildMethodTable(RuntimeType type)
+        {
+            // The method table is offset by a four pointers:
+            // 1. interface dispatch table pointer
+            // 2. type pointer - contains the type information pointer, used to realize object.GetType().
+            // 3. interface implementation bitmap
+            // 4. parent type (if any)
+            // 5. type metadata
+            List<string> headerlinks = new List<string>();
 
-			// 3. interface bitmap
-			if (type.Interfaces.Count == 0)
-				headerlinks.Add(null);
-			else
-				headerlinks.Add(type.FullName + @"$ibitmap");
+            // 1. interface dispatch table pointer
+            if (type.Interfaces.Count == 0)
+                headerlinks.Add(null);
+            else
+                headerlinks.Add(type.FullName + @"$itable");
 
-			// 4. parent type (if any)
-			if (type.BaseType == null)
-				headerlinks.Add(null);
-			else
-				headerlinks.Add(type.BaseType + @"$mtable");
+            // 2. type pointer - contains the type information pointer, used to realize object.GetType().
+            headerlinks.Add(null); // TODO: GetType()
 
-			// 5. Type Metadata
-			if (!type.IsModule && !(type.Module is InternalTypeModule))
-				headerlinks.Add(type.FullName + @"$dtable");
-			else
-				headerlinks.Add(null);
+            // 3. interface bitmap
+            if (type.Interfaces.Count == 0)
+                headerlinks.Add(null);
+            else
+                headerlinks.Add(type.FullName + @"$ibitmap");
 
-			IList<RuntimeMethod> methodTable = typeLayout.GetMethodTable(type);
-			AskLinkerToCreateMethodTable(type.FullName + @"$mtable", methodTable, headerlinks);
-		}
+            // 4. parent type (if any)
+            if (type.BaseType == null)
+                headerlinks.Add(null);
+            else
+                headerlinks.Add(type.BaseType + @"$mtable");
 
-		private void AskLinkerToCreateMethodTable(string methodTableName, IList<RuntimeMethod> methodTable, IList<string> headerlinks)
-		{
-			int methodTableSize = ((headerlinks == null ? 0 : headerlinks.Count) + (methodTable == null ? 0 : methodTable.Count)) * typeLayout.NativePointerSize;
+            // 5. Type Metadata
+            if (!type.IsModule && !(type.Module is InternalTypeModule))
+                headerlinks.Add(type.FullName + @"$dtable");
+            else
+                headerlinks.Add(null);
 
-			using (Stream stream = compiler.Linker.Allocate(methodTableName, SectionKind.ROData, methodTableSize, typeLayout.NativePointerAlignment))
-			{
-				stream.Position = methodTableSize;
-			}
+            IList<RuntimeMethod> methodTable = typeLayout.GetMethodTable(type);
+            AskLinkerToCreateMethodTable(type.FullName + @"$mtable", methodTable, headerlinks);
+        }
 
-			int offset = 0;
+        private void AskLinkerToCreateMethodTable(string methodTableName, IList<RuntimeMethod> methodTable, IList<string> headerlinks)
+        {
+            int methodTableSize = ((headerlinks == null ? 0 : headerlinks.Count) + (methodTable == null ? 0 : methodTable.Count)) * typeLayout.NativePointerSize;
 
-			if (headerlinks != null)
-			{
-				foreach (string link in headerlinks)
-				{
-					if (!string.IsNullOrEmpty(link))
-					{
-						compiler.Linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuildInPatch.I4, methodTableName, offset, 0, link, 0);
-					}
+            using (Stream stream = compiler.Linker.Allocate(methodTableName, SectionKind.ROData, methodTableSize, typeLayout.NativePointerAlignment))
+            {
+                stream.Position = methodTableSize;
+            }
 
-					offset += typeLayout.NativePointerSize;
-				}
-			}
+            int offset = 0;
 
-			if (methodTable == null)
-				return;
+            if (headerlinks != null)
+            {
+                foreach (string link in headerlinks)
+                {
+                    if (!string.IsNullOrEmpty(link))
+                    {
+                        compiler.Linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuildInPatch.I4, methodTableName, offset, 0, link, 0);
+                    }
 
-			foreach (RuntimeMethod method in methodTable)
-			{
-				if (!method.IsAbstract)
-				{
-					//if (compiler.Scheduler.IsMethodScheduled(method))
-					{
-						compiler.Linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuildInPatch.I4, methodTableName, offset, 0, method.FullName, 0);
-					}
-				}
-				offset += typeLayout.NativePointerSize;
-			}
+                    offset += typeLayout.NativePointerSize;
+                }
+            }
 
-		}
+            if (methodTable == null)
+                return;
 
-		private void AskLinkerToCreateArray(string tableName, byte[] array)
-		{
-			int size = array.Length;
+            foreach (RuntimeMethod method in methodTable)
+            {
+                if (!method.IsAbstract)
+                {
+                    //if (compiler.Scheduler.IsMethodScheduled(method))
+                    {
+                        compiler.Linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuildInPatch.I4, methodTableName, offset, 0, method.FullName, 0);
+                    }
+                }
+                offset += typeLayout.NativePointerSize;
+            }
 
-			//FIXME: change  SectionKind.Text to SectionKind.ROData
-			using (Stream stream = compiler.Linker.Allocate(tableName, SectionKind.Text, size, typeLayout.NativePointerAlignment))
-			{
-				foreach (byte b in array)
-					stream.WriteByte(b);
+        }
 
-				stream.Position = size;
-			}
-		}
+        private void AskLinkerToCreateArray(string tableName, byte[] array)
+        {
+            int size = array.Length;
 
-		private void AllocateStaticFields(RuntimeType type)
-		{
-			foreach (RuntimeField field in type.Fields)
-			{
-				if (field.IsStaticField && !field.IsLiteralField)
-				{
-					// Assign a memory slot to the static & initialize it, if there's initial data set
-					CreateStaticField(field);
-				}
-			}
-		}
+            //FIXME: change  SectionKind.Text to SectionKind.ROData
+            using (Stream stream = compiler.Linker.Allocate(tableName, SectionKind.Text, size, typeLayout.NativePointerAlignment))
+            {
+                foreach (byte b in array)
+                    stream.WriteByte(b);
 
-		/// <summary>
-		/// Allocates memory for the static field and initializes it.
-		/// </summary>
-		/// <param name="field">The field.</param>
-		private void CreateStaticField(RuntimeField field)
-		{
-			Debug.Assert(field != null, @"No field given.");
+                stream.Position = size;
+            }
+        }
 
-			// Determine the size of the type & alignment requirements
-			int size, alignment;
-			architecture.GetTypeRequirements(field.SignatureType, out size, out alignment);
+        private void AllocateStaticFields(RuntimeType type)
+        {
+            foreach (RuntimeField field in type.Fields)
+            {
+                if (field.IsStaticField && !field.IsLiteralField)
+                {
+                    // Assign a memory slot to the static & initialize it, if there's initial data set
+                    CreateStaticField(field);
+                }
+            }
+        }
 
-			size = (int)typeLayout.GetFieldSize(field);
+        /// <summary>
+        /// Allocates memory for the static field and initializes it.
+        /// </summary>
+        /// <param name="field">The field.</param>
+        private void CreateStaticField(RuntimeField field)
+        {
+            Debug.Assert(field != null, @"No field given.");
 
-			// The linker section to move this field into
-			SectionKind section;
-			// Does this field have an RVA?
-			if (field.RVA != 0)
-			{
-				// FIXME: Move a static field into ROData, if it is read-only and can be initialized
-				// using static analysis
-				section = SectionKind.Data;
-			}
-			else
-			{
-				section = SectionKind.BSS;
-			}
+            // Determine the size of the type & alignment requirements
+            int size, alignment;
+            architecture.GetTypeRequirements(field.SignatureType, out size, out alignment);
 
-			AllocateSpace(field, section, size, alignment);
-		}
+            size = (int)typeLayout.GetFieldSize(field);
 
-		private void AllocateSpace(RuntimeField field, SectionKind section, int size, int alignment)
-		{
-			using (Stream stream = compiler.Linker.Allocate(field.ToString(), section, size, alignment))
-			{
-				if (field.RVA != 0)
-				{
-					InitializeStaticValueFromRVA(stream, size, field);
-				}
-				else
-				{
-					stream.WriteZeroBytes(size);
-				}
-			}
-		}
+            // The linker section to move this field into
+            SectionKind section;
+            // Does this field have an RVA?
+            if (field.RVA != 0)
+            {
+                // FIXME: Move a static field into ROData, if it is read-only and can be initialized
+                // using static analysis
+                section = SectionKind.Data;
+            }
+            else
+            {
+                section = SectionKind.BSS;
+            }
 
-		private void InitializeStaticValueFromRVA(Stream stream, int size, RuntimeField field)
-		{
-			using (Stream source = field.Module.MetadataModule.GetDataSection((long)field.RVA))
-			{
-				byte[] data = new byte[size];
-				int wrote = source.Read(data, 0, size);
+            AllocateSpace(field, section, size, alignment);
+        }
 
-				if (wrote != size)
-					throw new InvalidDataException(); // FIXME
+        private void AllocateSpace(RuntimeField field, SectionKind section, int size, int alignment)
+        {
+            using (Stream stream = compiler.Linker.Allocate(field.ToString(), section, size, alignment))
+            {
+                if (field.RVA != 0)
+                {
+                    InitializeStaticValueFromRVA(stream, size, field);
+                }
+                else
+                {
+                    stream.WriteZeroBytes(size);
+                }
+            }
+        }
 
-				stream.Write(data, 0, size);
-			}
-		}
+        private void InitializeStaticValueFromRVA(Stream stream, int size, RuntimeField field)
+        {
+            using (Stream source = field.Module.MetadataModule.GetDataSection((long)field.RVA))
+            {
+                byte[] data = new byte[size];
+                int wrote = source.Read(data, 0, size);
 
-	}
+                if (wrote != size)
+                    throw new InvalidDataException(); // FIXME
+
+                stream.Write(data, 0, size);
+            }
+        }
+
+    }
 }

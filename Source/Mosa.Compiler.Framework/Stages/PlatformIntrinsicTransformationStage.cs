@@ -31,7 +31,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			foreach (BasicBlock block in basicBlocks)
 			{
-				for (Context context = CreateContext(block); !context.EndOfInstruction; context.GotoNext())
+				for (Context context = CreateContext(block); !context.IsLastInstruction; context.GotoNext())
 				{
 					if (context.IsEmpty)
 						continue;

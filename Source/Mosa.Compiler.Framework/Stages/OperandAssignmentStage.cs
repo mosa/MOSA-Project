@@ -11,254 +11,256 @@
 using System.Collections;
 using System.Collections.Generic;
 using Mosa.Compiler.Framework.CIL;
+using Mosa.Compiler.Framework.IR;
 
 namespace Mosa.Compiler.Framework.Stages
 {
-	/// <summary>
-	/// 
-	/// </summary>
-	public sealed class OperandAssignmentStage : BaseMethodCompilerStage, IMethodCompilerStage
-	{
-		/// <summary>
-		/// 
-		/// </summary>
-		private sealed class WorkItem
-		{
-			/// <summary>
-			/// 
-			/// </summary>
-			public BasicBlock Block;
-			/// <summary>
-			/// 
-			/// </summary>
-			public Stack<Operand> IncomingStack;
+    /// <summary>
+    /// 
+    /// </summary>
+    public sealed class OperandAssignmentStage : BaseMethodCompilerStage, IMethodCompilerStage
+    {
+        /// <summary>
+        /// 
+        /// </summary>
+        private sealed class WorkItem
+        {
+            /// <summary>
+            /// 
+            /// </summary>
+            public BasicBlock Block;
+            /// <summary>
+            /// 
+            /// </summary>
+            public Stack<Operand> IncomingStack;
 
-			/// <summary>
-			/// Initializes a new instance of the <see cref="WorkItem"/> class.
-			/// </summary>
-			/// <param name="block">The block.</param>
-			/// <param name="incomingStack">The incoming stack.</param>
-			public WorkItem(BasicBlock block, Stack<Operand> incomingStack)
-			{
-				Block = block;
-				IncomingStack = incomingStack;
-			}
-		}
+            /// <summary>
+            /// Initializes a new instance of the <see cref="WorkItem"/> class.
+            /// </summary>
+            /// <param name="block">The block.</param>
+            /// <param name="incomingStack">The incoming stack.</param>
+            public WorkItem(BasicBlock block, Stack<Operand> incomingStack)
+            {
+                Block = block;
+                IncomingStack = incomingStack;
+            }
+        }
 
-		/// <summary>
-		/// 
-		/// </summary>
-		private Queue<WorkItem> workList = new Queue<WorkItem>();
-		/// <summary>
-		/// 
-		/// </summary>
-		private BitArray processed;
-		/// <summary>
-		/// 
-		/// </summary>
-		private BitArray enqueued;
-		/// <summary>
-		/// 
-		/// </summary>
-		private Stack<Operand>[] outgoingStack;
-		/// <summary>
-		/// 
-		/// </summary>
-		private Stack<Operand>[] scheduledMoves;
+        /// <summary>
+        /// 
+        /// </summary>
+        private Queue<WorkItem> workList = new Queue<WorkItem>();
+        /// <summary>
+        /// 
+        /// </summary>
+        private BitArray processed;
+        /// <summary>
+        /// 
+        /// </summary>
+        private BitArray enqueued;
+        /// <summary>
+        /// 
+        /// </summary>
+        private Stack<Operand>[] outgoingStack;
+        /// <summary>
+        /// 
+        /// </summary>
+        private Stack<Operand>[] scheduledMoves;
 
-		/// <summary>
-		/// Runs the specified compiler.
-		/// </summary>
-		void IMethodCompilerStage.Run()
-		{
-			foreach (BasicBlock headBlock in basicBlocks.HeadBlocks)
-				Trace(headBlock);
-		}
+        /// <summary>
+        /// Runs the specified compiler.
+        /// </summary>
+        void IMethodCompilerStage.Run()
+        {
+            //System.Diagnostics.Debug.WriteLine("METHOD: "+this.methodCompiler.Method.ToString());
+            foreach (BasicBlock headBlock in basicBlocks.HeadBlocks)
+                Trace(headBlock);
+        }
 
-		/// <summary>
-		/// Traces the specified label.
-		/// </summary>
-		/// <param name="headBlock">The head block.</param>
-		private void Trace(BasicBlock headBlock)
-		{
-			outgoingStack = new Stack<Operand>[basicBlocks.Count];
-			scheduledMoves = new Stack<Operand>[basicBlocks.Count];
-			processed = new BitArray(basicBlocks.Count);
-			processed.SetAll(false);
-			enqueued = new BitArray(basicBlocks.Count);
-			enqueued.SetAll(false);
+        /// <summary>
+        /// Traces the specified label.
+        /// </summary>
+        /// <param name="headBlock">The head block.</param>
+        private void Trace(BasicBlock headBlock)
+        {
+            outgoingStack = new Stack<Operand>[basicBlocks.Count];
+            scheduledMoves = new Stack<Operand>[basicBlocks.Count];
+            processed = new BitArray(basicBlocks.Count);
+            processed.SetAll(false);
+            enqueued = new BitArray(basicBlocks.Count);
+            enqueued.SetAll(false);
 
-			processed.Set(headBlock.Sequence, true);
-			workList.Enqueue(new WorkItem(headBlock, new Stack<Operand>()));
+            processed.Set(headBlock.Sequence, true);
+            workList.Enqueue(new WorkItem(headBlock, new Stack<Operand>()));
 
-			while (workList.Count > 0)
-			{
-				AssignOperands(workList.Dequeue());
-			}
-		}
+            while (workList.Count > 0)
+            {
+                AssignOperands(workList.Dequeue());
+            }
+        }
 
-		/// <summary>
-		/// Assigns the operands.
-		/// </summary>
-		/// <param name="workItem">The work item.</param>
-		private void AssignOperands(WorkItem workItem)
-		{
-			var operandStack = workItem.IncomingStack;
-			var block = workItem.Block;
+        /// <summary>
+        /// Assigns the operands.
+        /// </summary>
+        /// <param name="workItem">The work item.</param>
+        private void AssignOperands(WorkItem workItem)
+        {
+            var operandStack = workItem.IncomingStack;
+            var block = workItem.Block;
 
-			operandStack = CreateMovesForIncomingStack(block, operandStack);
-			AssignOperands(block, operandStack);
-			operandStack = CreateScheduledMoves(block, operandStack);
+            operandStack = CreateMovesForIncomingStack(block, operandStack);
+            //System.Diagnostics.Debug.WriteLine("IN:    Block: " + block.Label + " Operand Stack Count: " + operandStack.Count);
+            AssignOperands(block, operandStack);
+            //System.Diagnostics.Debug.WriteLine("AFTER: Block: " + block.Label + " Operand Stack Count: " + operandStack.Count);
+            operandStack = CreateScheduledMoves(block, operandStack);
 
-			outgoingStack[block.Sequence] = operandStack;
-			processed.Set(block.Sequence, true);
+            outgoingStack[block.Sequence] = operandStack;
+            processed.Set(block.Sequence, true);
 
-			foreach (var b in block.NextBlocks)
-			{
-				if (enqueued.Get(b.Sequence))
-					continue;
+            foreach (var b in block.NextBlocks)
+            {
+                if (enqueued.Get(b.Sequence))
+                    continue;
 
-				workList.Enqueue(new WorkItem(b, new Stack<Operand>(operandStack)));
-				enqueued.Set(b.Sequence, true);
-			}
-		}
+                workList.Enqueue(new WorkItem(b, new Stack<Operand>(operandStack)));
+                enqueued.Set(b.Sequence, true);
+            }
+        }
 
-		/// <summary>
-		/// Creates the scheduled moves.
-		/// </summary>
-		/// <param name="block">The block.</param>
-		/// <param name="operandStack">The operand stack.</param>
-		/// <returns></returns>
-		private Stack<Operand> CreateScheduledMoves(BasicBlock block, Stack<Operand> operandStack)
-		{
-			if (scheduledMoves[block.Sequence] != null)
-			{
-				CreateOutgoingMoves(block, new Stack<Operand>(operandStack), new Stack<Operand>(scheduledMoves[block.Sequence]));
-				operandStack = new Stack<Operand>(scheduledMoves[block.Sequence]);
-				scheduledMoves[block.Sequence] = null;
-			}
-			return operandStack;
-		}
+        /// <summary>
+        /// Creates the scheduled moves.
+        /// </summary>
+        /// <param name="block">The block.</param>
+        /// <param name="operandStack">The operand stack.</param>
+        /// <returns></returns>
+        private Stack<Operand> CreateScheduledMoves(BasicBlock block, Stack<Operand> operandStack)
+        {
+            if (scheduledMoves[block.Sequence] != null)
+            {
+                CreateOutgoingMoves(block, new Stack<Operand>(operandStack), new Stack<Operand>(scheduledMoves[block.Sequence]));
+                operandStack = new Stack<Operand>(scheduledMoves[block.Sequence]);
+                scheduledMoves[block.Sequence] = null;
+            }
+            return operandStack;
+        }
 
-		/// <summary>
-		/// Assigns the operands.
-		/// </summary>
-		/// <param name="block">The block.</param>
-		/// <param name="operandStack">The operand stack.</param>
-		private void AssignOperands(BasicBlock block, Stack<Operand> operandStack)
-		{
-			for (var ctx = new Context(instructionSet, block); !ctx.EndOfInstruction; ctx.GotoNext())
-			{
-				if (ctx.IsEmpty)
-					continue;
+        /// <summary>
+        /// Assigns the operands.
+        /// </summary>
+        /// <param name="block">The block.</param>
+        /// <param name="operandStack">The operand stack.</param>
+        private void AssignOperands(BasicBlock block, Stack<Operand> operandStack)
+        {
+            for (var ctx = new Context(instructionSet, block); !ctx.IsLastInstruction; ctx.GotoNext())
+            {
+                if (ctx.IsEmpty)
+                    continue;
 
-				if (ctx.Instruction is IR.Jmp)
-					continue;
+                if (ctx.Instruction is IR.BlockEnd || ctx.Instruction is IR.BlockStart)
+                    continue;
 
-				if (!(ctx.Instruction is IBranchInstruction) && !(ctx.Instruction is BaseCILInstruction) && !(ctx.Instruction is IR.ExceptionPrologue))
-					continue;
+                if (ctx.Instruction is IR.Jmp)
+                    continue;
 
-				if (ctx.Instruction is IR.ExceptionPrologue)
-				{
-					AssignOperandsFromCILStack(ctx, operandStack);
-					PushResultOperands(ctx, operandStack);
-				}
-				else //if (!(ctx.Instruction is IR.JmpInstruction))
-				{
-					AssignOperandsFromCILStack(ctx, operandStack);
-					(ctx.Instruction as BaseCILInstruction).Validate(ctx, methodCompiler);
-					PushResultOperands(ctx, operandStack);
-				}
-			}
-		}
+                if (!(ctx.Instruction is IBranchInstruction) && !(ctx.Instruction is BaseCILInstruction) && !(ctx.Instruction is IR.ExceptionPrologue))
+                    continue;
 
-		/// <summary>
-		/// Creates the moves for incoming stack.
-		/// </summary>
-		/// <param name="operandStack">The operand stack.</param>
-		/// <returns></returns>
-		private Stack<Operand> CreateMovesForIncomingStack(BasicBlock block, Stack<Operand> operandStack)
-		{
-			var joinStack = new Stack<Operand>();
+                if (ctx.Instruction is IR.ExceptionPrologue)
+                {
+                    AssignOperandsFromCILStack(ctx, operandStack);
+                    PushResultOperands(ctx, operandStack);
+                }
+                else
+                {
+                    AssignOperandsFromCILStack(ctx, operandStack);
+                    (ctx.Instruction as BaseCILInstruction).Validate(ctx, methodCompiler);
+                    PushResultOperands(ctx, operandStack);
+                }
+            }
+        }
 
-			foreach (var operand in operandStack)
-			{
-				joinStack.Push(methodCompiler.CreateVirtualRegister(operand.Type));
-			}
+        /// <summary>
+        /// Creates the moves for incoming stack.
+        /// </summary>
+        /// <param name="operandStack">The operand stack.</param>
+        /// <returns></returns>
+        private Stack<Operand> CreateMovesForIncomingStack(BasicBlock block, Stack<Operand> operandStack)
+        {
+            var joinStack = new Stack<Operand>();
 
-			foreach (var b in block.PreviousBlocks)
-			{
-				if (processed.Get(b.Sequence) && joinStack.Count > 0)
-				{
-					CreateOutgoingMoves(b, new Stack<Operand>(outgoingStack[b.Sequence]), new Stack<Operand>(joinStack));
-					outgoingStack[b.Sequence] = new Stack<Operand>(joinStack);
-				}
-				else if (joinStack.Count > 0)
-				{
-					scheduledMoves[b.Sequence] = new Stack<Operand>(joinStack);
-				}
-			}
-			return joinStack;
-		}
+            foreach (var operand in operandStack)
+            {
+                joinStack.Push(methodCompiler.CreateVirtualRegister(operand.Type));
+            }
 
-		/// <summary>
-		/// Creates the outgoing moves.
-		/// </summary>
-		/// <param name="block">The block.</param>
-		/// <param name="operandStack">The operand stack.</param>
-		/// <param name="joinStack">The join stack.</param>
-		private void CreateOutgoingMoves(BasicBlock block, Stack<Operand> operandStack, Stack<Operand> joinStack)
-		{
-			var context = new Context(instructionSet, block);
+            foreach (var b in block.PreviousBlocks)
+            {
+                if (processed.Get(b.Sequence) && joinStack.Count > 0)
+                {
+                    CreateOutgoingMoves(b, new Stack<Operand>(outgoingStack[b.Sequence]), new Stack<Operand>(joinStack));
+                    outgoingStack[b.Sequence] = new Stack<Operand>(joinStack);
+                }
+                else if (joinStack.Count > 0)
+                {
+                    scheduledMoves[b.Sequence] = new Stack<Operand>(joinStack);
+                }
+            }
+            return joinStack;
+        }
 
-			while (!context.EndOfInstruction && !(context.Instruction is IBranchInstruction))
-			{
-				context.GotoNext();
-			}
+        /// <summary>
+        /// Creates the outgoing moves.
+        /// </summary>
+        /// <param name="block">The block.</param>
+        /// <param name="operandStack">The operand stack.</param>
+        /// <param name="joinStack">The join stack.</param>
+        private void CreateOutgoingMoves(BasicBlock block, Stack<Operand> operandStack, Stack<Operand> joinStack)
+        {
+            var context = new Context(instructionSet, block, block.EndIndex);
 
-			while (operandStack.Count > 0)
-			{
-				var operand = operandStack.Pop();
-				var destination = joinStack.Pop();
-				context.InsertBefore().SetInstruction(IR.IRInstruction.Move, destination, operand);
-			}
-		}
+            while (operandStack.Count > 0)
+            {
+                var operand = operandStack.Pop();
+                var destination = joinStack.Pop();
+                context.InsertBefore().SetInstruction(IRInstruction.Move, destination, operand);
+            }
+        }
 
-		/// <summary>
-		/// Assigns the operands from CIL stack.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		/// <param name="currentStack">The current stack.</param>
-		private void AssignOperandsFromCILStack(Context ctx, Stack<Operand> currentStack)
-		{
-			for (int index = ctx.OperandCount - 1; index >= 0; --index)
-			{
-				if (ctx.GetOperand(index) != null)
-					continue;
+        /// <summary>
+        /// Assigns the operands from CIL stack.
+        /// </summary>
+        /// <param name="ctx">The context.</param>
+        /// <param name="currentStack">The current stack.</param>
+        private void AssignOperandsFromCILStack(Context ctx, Stack<Operand> currentStack)
+        {
+            for (int index = ctx.OperandCount - 1; index >= 0; --index)
+            {
+                if (ctx.GetOperand(index) != null)
+                    continue;
 
-				ctx.SetOperand(index, currentStack.Pop());
-			}
-		}
+                ctx.SetOperand(index, currentStack.Pop());
+            }
+        }
 
-		/// <summary>
-		/// Pushes the result operands on to the stack
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		/// <param name="currentStack">The current stack.</param>
-		private static void PushResultOperands(Context ctx, Stack<Operand> currentStack)
-		{
-			if (!(ctx.Instruction is IR.ExceptionPrologue))
-				if (!(ctx.Instruction as BaseCILInstruction).PushResult)
-					return;
+        /// <summary>
+        /// Pushes the result operands on to the stack
+        /// </summary>
+        /// <param name="ctx">The context.</param>
+        /// <param name="currentStack">The current stack.</param>
+        private static void PushResultOperands(Context ctx, Stack<Operand> currentStack)
+        {
+            if (!(ctx.Instruction is IR.ExceptionPrologue))
+                if (!(ctx.Instruction as BaseCILInstruction).PushResult)
+                    return;
 
-			if (ctx.ResultCount == 0)
-				return;
+            if (ctx.ResultCount == 0)
+                return;
 
-			currentStack.Push(ctx.Result);
+            currentStack.Push(ctx.Result);
 
-			if (ctx.Instruction is CIL.DupInstruction)
-				currentStack.Push(ctx.Result);
-		}
+            if (ctx.Instruction is CIL.DupInstruction)
+                currentStack.Push(ctx.Result);
+        }
 
-	}
+    }
 }

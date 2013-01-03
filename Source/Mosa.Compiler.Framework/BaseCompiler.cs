@@ -58,7 +58,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Holds the generic type patcher
 		/// </summary>
-		private IGenericTypePatcher genericTypePatcher;
+		private GenericTypePatcher genericTypePatcher;
 
 		/// <summary>
 		/// Holds the counters
@@ -153,7 +153,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets the generic type patcher.
 		/// </summary>
-		public IGenericTypePatcher GenericTypePatcher { get { return genericTypePatcher; } }
+		public GenericTypePatcher GenericTypePatcher { get { return genericTypePatcher; } }
 
 		/// <summary>
 		/// Gets the counters.
@@ -188,7 +188,7 @@ namespace Mosa.Compiler.Framework
 			Trace(CompilerEvent.CompilingMethod, method.FullName);
 
 			BaseMethodCompiler methodCompiler = CreateMethodCompiler(method);
-			Architecture.ExtendMethodCompilerPipeline(methodCompiler.Pipeline);
+	//		Architecture.ExtendMethodCompilerPipeline(methodCompiler.Pipeline);
 
 			methodCompiler.Compile();
 

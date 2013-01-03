@@ -59,7 +59,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 				foreach (BasicBlock block in basicBlocks.GetConnectedBlocksStartingAtHead(head))
 				{
-					for (Context ctx = new Context(instructionSet, block); !ctx.EndOfInstruction; ctx.GotoNext())
+					for (Context ctx = new Context(instructionSet, block); !ctx.IsLastInstruction; ctx.GotoNext())
 					{
 						if (ctx.IsEmpty)
 							continue;

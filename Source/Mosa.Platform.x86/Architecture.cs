@@ -169,9 +169,10 @@ namespace Mosa.Platform.x86
 				new ExceptionVectorStage()
 			);
 
-			compilerPipeline.InsertAfterLast<TypeLayoutStage>(
-				new MethodTableBuilderStage()
-			);
+            //FIXME: Uncomment
+            //compilerPipeline.InsertAfterLast<TypeLayoutStage>(
+            //    new MethodTableBuilderStage()
+            //);
 
 		}
 
@@ -196,16 +197,18 @@ namespace Mosa.Platform.x86
 					new FixedRegisterAssignementStage(),
 				});
 
-			//methodCompilerPipeline.InsertAfterLast<IBlockOrderStage>(
+            // FIXME: Disabled for now
+            //methodCompilerPipeline.InsertAfterLast<IBlockOrderStage>(
 			//    new SimplePeepholeOptimizationStage()
 			//);
 
-			// Disabled for now
+			// FIXME: Disabled for now
 			//methodCompilerPipeline.InsertAfterLast<CodeGenerationStage>(
 			//    new ExceptionLayoutStage()
 			//);
 
-			//methodCompilerPipeline.Add(new ExceptionLayoutStage());
+            // FIXME: Disabled for now
+            //methodCompilerPipeline.Add(new ExceptionLayoutStage());
 		}
 
 		/// <summary>

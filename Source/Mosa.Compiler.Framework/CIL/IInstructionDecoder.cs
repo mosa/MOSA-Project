@@ -36,7 +36,7 @@ namespace Mosa.Compiler.Framework.CIL
 		/// <summary>
 		/// Gets the generic type patcher.
 		/// </summary>
-		IGenericTypePatcher GenericTypePatcher { get; }
+		GenericTypePatcher GenericTypePatcher { get; }
 
 		/// <summary>
 		/// Decodes the byte value from the instruction stream

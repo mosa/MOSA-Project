@@ -22,11 +22,11 @@ namespace Mosa.Compiler.Framework
 	public static class DelegatePatcher
 	{
 
-		/// <summary>
-		/// Patches the delegate.
-		/// </summary>
-		/// <param name="methodCompiler">The method compiler.</param>
-		/// <returns></returns>
+        /// <summary>
+        /// Patches the delegate.
+        /// </summary>
+        /// <param name="methodCompiler">The method compiler.</param>
+        /// <returns></returns>
 		public static bool PatchDelegate(BaseMethodCompiler methodCompiler)
 		{
 			if (!methodCompiler.Method.DeclaringType.IsDelegate)
@@ -144,50 +144,34 @@ namespace Mosa.Compiler.Framework
 			var basicBlocks = methodCompiler.BasicBlocks;
 			CreatePrologueAndEpilogueBlocks(methodCompiler.InstructionSet, basicBlocks);
 
-			Context context = new Context(methodCompiler.InstructionSet);
-			context.AppendInstruction(null);
-			context.Label = 0;
+            var context = ContextHelper.CreateNewBlockWithContext(methodCompiler.InstructionSet, basicBlocks);
 
-			var newblock = basicBlocks.CreateBlock(0, context.Index);
-			basicBlocks.LinkBlocks(basicBlocks.PrologueBlock, newblock);
-			if (linkEpilogueBlock)
-				basicBlocks.LinkBlocks(newblock, basicBlocks.EpilogueBlock);
-			context.BasicBlock = newblock;
-
-			return context;
-		}
-
-		private static Context CreateNewBlock(BaseMethodCompiler methodCompiler)
-		{
-			var basicBlocks = methodCompiler.BasicBlocks;
-
-			Context context = new Context(methodCompiler.InstructionSet);
-			context.AppendInstruction(null);
-			context.Label = 0;
-
-			var newblock = basicBlocks.CreateBlock(basicBlocks.Count, context.Index);
-			context.BasicBlock = newblock;
+            basicBlocks.LinkBlocks(basicBlocks.PrologueBlock, context.BasicBlock);
+			
+            if (linkEpilogueBlock)
+                basicBlocks.LinkBlocks(context.BasicBlock, basicBlocks.EpilogueBlock);
 
 			return context;
 		}
 
 		private static void CreatePrologueAndEpilogueBlocks(InstructionSet instructionSet, BasicBlocks basicBlocks)
 		{
-			// Create the prologue block
-			Context context = new Context(instructionSet);
-			// Add a jump instruction to the first block from the prologue
-			context.AppendInstruction(IRInstruction.Jmp);
-			context.SetBranch(0);
-			context.Label = BasicBlock.PrologueLabel;
-			var prologue = basicBlocks.CreateBlock(BasicBlock.PrologueLabel, context.Index);
-			basicBlocks.AddHeaderBlock(prologue);
+            // Create the prologue block
+            var context = ContextHelper.CreateNewBlockWithContext(instructionSet, basicBlocks, BasicBlock.PrologueLabel);
+            // Add a jump instruction to the first block from the prologue
+            context.AppendInstruction(IRInstruction.Jmp);
+            context.SetBranch(0);
+            var prologue = context.BasicBlock;
+            basicBlocks.AddHeaderBlock(prologue);
 
-			// Create the epilogue block
-			context = new Context(instructionSet);
-			// Add null instruction, necessary to generate a block index
-			context.AppendInstruction(null);
-			context.Label = BasicBlock.EpilogueLabel;
-			var epilogue = basicBlocks.CreateBlock(BasicBlock.EpilogueLabel, context.Index);
+            // Create the epilogue block
+            context = ContextHelper.CreateNewBlockWithContext(instructionSet, basicBlocks, BasicBlock.EpilogueLabel);
+            var epilogue = context.BasicBlock;
+		}
+
+		private static Context CreateNewBlock(BaseMethodCompiler methodCompiler)
+		{
+            return ContextHelper.CreateNewBlockWithContext(methodCompiler.InstructionSet, methodCompiler.BasicBlocks);
 		}
 
 		private static RuntimeField GetField(RuntimeType type, string name)
