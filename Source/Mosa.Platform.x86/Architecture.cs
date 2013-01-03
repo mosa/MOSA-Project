@@ -194,7 +194,7 @@ namespace Mosa.Platform.x86
 					new IRTransformationStage(),
 				    new TweakTransformationStage(),
 				    //new MemToMemConversionStage(),
-					new FixedRegisterAssignementStage(),
+					new FixedRegisterAssignmentStage(),
 				});
 
             // FIXME: Disabled for now

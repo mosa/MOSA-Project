@@ -908,7 +908,7 @@ namespace Mosa.Platform.x86.Stages
 			Operand destination = context.Result;
 			Operand source = context.Operand1;
 
-			Context[] newBlocks = CreateNewBlocksWithContexts(context.Label, 3);
+			Context[] newBlocks = CreateNewBlocksWithContexts(3);
 			Context nextBlock = Split(context, false);
 
 			Operand xmm5 = AllocateVirtualRegister(BuiltInSigType.Double);

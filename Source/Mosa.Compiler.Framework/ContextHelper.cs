@@ -43,7 +43,7 @@ namespace Mosa.Compiler.Framework
             ctx.AppendInstruction(IRInstruction.BlockEnd);
             int last = ctx.Index;
 
-            BasicBlock block = basicBlocks.CreateBlock(start, start, last);
+            BasicBlock block = basicBlocks.CreateBlockWithAutoLabel(start, last);
             ctx.BasicBlock = block;
 
             ctx.GotoPrevious();

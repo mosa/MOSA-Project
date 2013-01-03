@@ -248,13 +248,13 @@ namespace Mosa.Compiler.Framework
         /// <param name="label">The label.</param>
         /// <param name="blocks">The Blocks.</param>
         /// <returns></returns>
-        protected Context[] CreateNewBlocksWithContexts(int label, int blocks)
+        protected Context[] CreateNewBlocksWithContexts(int blocks)
         {
             // Allocate the context array
             Context[] result = new Context[blocks];
 
             for (int index = 0; index < blocks; index++)
-                result[index] = CreateNewBlockWithContext(label);
+                result[index] = CreateNewBlockWithContext();
 
             return result;
         }

@@ -188,7 +188,7 @@ namespace Mosa.Compiler.Framework
 			Trace(CompilerEvent.CompilingMethod, method.FullName);
 
 			BaseMethodCompiler methodCompiler = CreateMethodCompiler(method);
-	//		Architecture.ExtendMethodCompilerPipeline(methodCompiler.Pipeline);
+            Architecture.ExtendMethodCompilerPipeline(methodCompiler.Pipeline);
 
 			methodCompiler.Compile();
 
