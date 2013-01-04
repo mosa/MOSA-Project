@@ -83,8 +83,8 @@ namespace Mosa.Compiler.Metadata.Signatures
 		{
 			if (object.ReferenceEquals(this, other))
 				return true;
-			
-            if (other.Type != this.Type)
+
+			if (other.Type != this.Type)
 				return false;
 
 			switch (this.Type)

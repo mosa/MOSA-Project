@@ -68,9 +68,9 @@ namespace Mosa.Platform.x86.Stages
 
 			//1. 
 			//2. 
-			
+
 			//3. Call the managed exception handler
-			ctx.AppendInstruction(X86.Call, null, exceptionMethod);			
+			ctx.AppendInstruction(X86.Call, null, exceptionMethod);
 
 			LinkTimeCodeGenerator.Compile(this.compiler, @"ExceptionVector", instructionSet, typeSystem);
 

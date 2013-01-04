@@ -54,11 +54,11 @@ namespace Mosa.Compiler.Framework.Stages
 		void SplitEdge(BasicBlock a, BasicBlock b)
 		{
 			// Create new block z
-            Context ctx = CreateNewBlockWithContext();
+			Context ctx = CreateNewBlockWithContext();
 			ctx.AppendInstruction(IRInstruction.Jmp, b);
 			ctx.Label = -1;
 
-            var z = ctx.BasicBlock;
+			var z = ctx.BasicBlock;
 
 			// Unlink blocks
 			a.NextBlocks.Remove(b);
@@ -75,9 +75,9 @@ namespace Mosa.Compiler.Framework.Stages
 			// Replace any jump/branch target in block a with z
 			ctx = new Context(instructionSet, a, a.EndIndex);
 
-            Debug.Assert(ctx.IsLastInstruction);
-            
-            ctx.GotoPrevious();
+			Debug.Assert(ctx.IsLastInstruction);
+
+			ctx.GotoPrevious();
 
 			// Find branch or jump to b and replace it with z
 			while (ctx.BranchTargets != null)

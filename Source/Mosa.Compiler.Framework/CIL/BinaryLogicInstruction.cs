@@ -65,29 +65,29 @@ namespace Mosa.Compiler.Framework.CIL
 
 			if (ctx.Operand1.Type is ValueTypeSigType)
 			{
-				var op1Type = compiler.Method.Module.GetType ((ctx.Operand1.Type as ValueTypeSigType).Token);
+				var op1Type = compiler.Method.Module.GetType((ctx.Operand1.Type as ValueTypeSigType).Token);
 				if (op1Type.BaseType.FullName == "System.Enum")
-					stackTypeForOperand1 = this.FromSigType (op1Type.Fields[0].SigType.Type);
+					stackTypeForOperand1 = this.FromSigType(op1Type.Fields[0].SigType.Type);
 			}
 
 			if (ctx.Operand2.Type is ValueTypeSigType)
 			{
-				var op2Type = compiler.Method.Module.GetType ((ctx.Operand2.Type as ValueTypeSigType).Token);
+				var op2Type = compiler.Method.Module.GetType((ctx.Operand2.Type as ValueTypeSigType).Token);
 				if (op2Type.BaseType.FullName == "System.Enum")
-					stackTypeForOperand2 = this.FromSigType (op2Type.Fields[0].SigType.Type);
+					stackTypeForOperand2 = this.FromSigType(op2Type.Fields[0].SigType.Type);
 			}
 
 			var result = _opTable[(int)stackTypeForOperand1][(int)stackTypeForOperand2];
 
 			if (result == StackTypeCode.Unknown)
-				throw new InvalidOperationException (@"Invalid stack result of instruction: " + result.ToString () + " (" + ctx.Operand1.ToString () + ")");
+				throw new InvalidOperationException(@"Invalid stack result of instruction: " + result.ToString() + " (" + ctx.Operand1.ToString() + ")");
 
 			ctx.Result = compiler.CreateVirtualRegister(Operand.SigTypeFromStackType(result));
 		}
 
-		private StackTypeCode FromSigType (CilElementType type)
+		private StackTypeCode FromSigType(CilElementType type)
 		{
-			switch(type)
+			switch (type)
 			{
 				case CilElementType.I1: goto case CilElementType.U4;
 				case CilElementType.I2: goto case CilElementType.U4;
@@ -97,7 +97,7 @@ namespace Mosa.Compiler.Framework.CIL
 				case CilElementType.U4: return StackTypeCode.Int32;
 			}
 
-			throw new NotSupportedException ();
+			throw new NotSupportedException();
 		}
 
 		/// <summary>

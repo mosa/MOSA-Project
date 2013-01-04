@@ -201,14 +201,14 @@ namespace Mosa.Compiler.Framework.IR
 		/// <summary>
 		/// 
 		/// </summary>
-		public static readonly IntrinsicMethodCall IntrinsicMethodCall = new IntrinsicMethodCall();        
-        /// <summary>
-        /// 
-        /// </summary>
-        public static readonly BlockEnd BlockEnd = new BlockEnd();
-        /// <summary>
-        /// 
-        /// </summary>
-        public static readonly BlockStart BlockStart = new BlockStart();
+		public static readonly IntrinsicMethodCall IntrinsicMethodCall = new IntrinsicMethodCall();
+		/// <summary>
+		/// 
+		/// </summary>
+		public static readonly BlockEnd BlockEnd = new BlockEnd();
+		/// <summary>
+		/// 
+		/// </summary>
+		public static readonly BlockStart BlockStart = new BlockStart();
 	}
 }

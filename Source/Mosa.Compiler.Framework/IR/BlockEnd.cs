@@ -14,13 +14,13 @@ namespace Mosa.Compiler.Framework.IR
 	/// </summary>
 	public sealed class BlockEnd : BaseIRInstruction
 	{
-		
+
 		#region Construction
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Phi" /> class.
 		/// </summary>
-        public BlockEnd()
+		public BlockEnd()
 			: base(0, 0)
 		{
 		}

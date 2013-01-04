@@ -24,7 +24,7 @@ namespace Mosa.Platform.ARM
 	{
 
 		public override Endianness Endianness { get { return Endianness.Big; } }
-	
+
 		/// <summary>
 		/// Gets the type of the elf machine.
 		/// </summary>
@@ -50,7 +50,7 @@ namespace Mosa.Platform.ARM
 		/// Initializes a new instance of the <see cref="Architecture"/> class.
 		/// </summary>
 		/// <param name="architectureFeatures">The features this architecture supports.</param>
-		private Architecture(ArchitectureFeatureFlags architectureFeatures) 
+		private Architecture(ArchitectureFeatureFlags architectureFeatures)
 		{
 			this.architectureFeatures = architectureFeatures;
 		}

@@ -22,7 +22,7 @@ namespace Mosa.Platform.x86.Instructions
 		private static readonly OpCode INVLPG = new OpCode(new byte[] { 0x0F, 0x01 }, 7);
 
 		#endregion // Data Members
-		
+
 		#region Construction
 
 		/// <summary>
@@ -56,7 +56,7 @@ namespace Mosa.Platform.x86.Instructions
 		{
 			visitor.Invlpg(context);
 		}
-		
+
 		#endregion // Methods
 	}
 }

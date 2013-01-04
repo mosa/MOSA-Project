@@ -36,30 +36,30 @@ namespace Mosa.Compiler.TypeSystem.Cil
 		/// <param name="methodAttributes">The method attributes.</param>
 		/// <param name="methodImplAttributes">The method impl attributes.</param>
 		/// <param name="rva">The rva.</param>
-        public CilRuntimeMethod(ITypeModule module, string name, SigType returnType, bool hasThis, bool hasExplicitThis, SigType[] sigParameters, Token token, RuntimeType declaringType, MethodAttributes methodAttributes, MethodImplAttributes methodImplAttributes, uint rva) :
+		public CilRuntimeMethod(ITypeModule module, string name, SigType returnType, bool hasThis, bool hasExplicitThis, SigType[] sigParameters, Token token, RuntimeType declaringType, MethodAttributes methodAttributes, MethodImplAttributes methodImplAttributes, uint rva) :
 			base(module, token, declaringType)
 		{
 			base.Attributes = methodAttributes;
 			base.ImplAttributes = methodImplAttributes;
 			base.Rva = rva;
 			this.Name = name;
-			
-            this.ReturnType = returnType;
-            this.HasThis = hasThis;
-            this.HasExplicitThis = hasExplicitThis;
-            this.SigParameters = sigParameters;
+
+			this.ReturnType = returnType;
+			this.HasThis = hasThis;
+			this.HasExplicitThis = hasExplicitThis;
+			this.SigParameters = sigParameters;
 
 			this.Parameters = new List<RuntimeParameter>();
 		}
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CilRuntimeMethod" /> class.
-        /// </summary>
-        /// <param name="module">The module.</param>
-        /// <param name="genericMethod">The generic method.</param>
-        /// <param name="signature">The signature.</param>
-        /// <param name="declaringType">Type of the declaring.</param>
-        public CilRuntimeMethod(ITypeModule module, CilRuntimeMethod genericMethod, SigType returnType, bool hasThis, bool hasExplicitThis, SigType[] sigParameters, RuntimeType declaringType) :
+		/// <summary>
+		/// Initializes a new instance of the <see cref="CilRuntimeMethod" /> class.
+		/// </summary>
+		/// <param name="module">The module.</param>
+		/// <param name="genericMethod">The generic method.</param>
+		/// <param name="signature">The signature.</param>
+		/// <param name="declaringType">Type of the declaring.</param>
+		public CilRuntimeMethod(ITypeModule module, CilRuntimeMethod genericMethod, SigType returnType, bool hasThis, bool hasExplicitThis, SigType[] sigParameters, RuntimeType declaringType) :
 			base(module, genericMethod.Token, declaringType)
 		{
 			this.Attributes = genericMethod.Attributes;
@@ -68,10 +68,10 @@ namespace Mosa.Compiler.TypeSystem.Cil
 			this.Parameters = genericMethod.Parameters;
 			base.Name = genericMethod.Name;
 
-            this.ReturnType = returnType;
-            this.HasThis = hasThis;
-            this.HasExplicitThis = hasExplicitThis;
-            this.SigParameters = sigParameters;
+			this.ReturnType = returnType;
+			this.HasThis = hasThis;
+			this.HasExplicitThis = hasExplicitThis;
+			this.SigParameters = sigParameters;
 		}
 
 		#endregion // Construction

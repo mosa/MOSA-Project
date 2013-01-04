@@ -26,8 +26,8 @@ namespace Mosa.Compiler.Framework.Linker
 		public LinkerMethodCompiler(BaseCompiler compiler, RuntimeMethod method, InstructionSet instructionSet)
 			: base(compiler, method, instructionSet)
 		{
-            Context context = ContextHelper.CreateNewBlockWithContext(instructionSet, this.BasicBlocks, BasicBlock.PrologueLabel);
-            BasicBlocks.AddHeaderBlock(context.BasicBlock);
+			Context context = ContextHelper.CreateNewBlockWithContext(instructionSet, this.BasicBlocks, BasicBlock.PrologueLabel);
+			BasicBlocks.AddHeaderBlock(context.BasicBlock);
 
 			this.Pipeline.AddRange(new IMethodCompilerStage[] {
 				new LoopAwareBlockOrderStage(),

@@ -21,13 +21,13 @@ namespace Mosa.Platform.x86.Instructions
 	{
 
 		#region Data Members
-		
+
 		private static readonly OpCode R_M = new OpCode(new byte[] { 0xF2, 0x0F, 0x10 });
 		private static readonly OpCode R_R = new OpCode(new byte[] { 0xF2, 0x0F, 0x10 });
 		private static readonly OpCode M_R = new OpCode(new byte[] { 0xF2, 0x0F, 0x11 });
 
 		#endregion
-		
+
 		#region Construction
 
 		/// <summary>

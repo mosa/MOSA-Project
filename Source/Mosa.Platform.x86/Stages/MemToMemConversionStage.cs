@@ -35,7 +35,7 @@ namespace Mosa.Platform.x86.Stages
 			{
 				for (Context ctx = CreateContext(block); !ctx.IsLastInstruction; ctx.GotoNext())
 				{
-					if (ctx.IsEmpty) 
+					if (ctx.IsEmpty)
 						continue;
 
 					if (!(ctx.Instruction is X86Instruction))
@@ -150,7 +150,7 @@ namespace Mosa.Platform.x86.Stages
 
 			return moveInstruction;
 		}
-		
+
 		private bool RequiresSseOperation(SigType sigType)
 		{
 			return sigType.Type == CilElementType.R4

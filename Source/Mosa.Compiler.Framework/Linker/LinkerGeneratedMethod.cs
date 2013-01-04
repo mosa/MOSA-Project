@@ -40,10 +40,10 @@ namespace Mosa.Compiler.Framework.Linker
 
 			base.Name = name;
 
-            this.ReturnType = returnType;
-            this.HasThis = hasThis;
-            this.HasExplicitThis = hasExplicitThis;
-            this.SigParameters = sigParameters;
+			this.ReturnType = returnType;
+			this.HasThis = hasThis;
+			this.HasExplicitThis = hasExplicitThis;
+			this.SigParameters = sigParameters;
 
 			this.Parameters = new List<RuntimeParameter>();
 		}

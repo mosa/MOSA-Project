@@ -9,23 +9,23 @@
 
 namespace Mosa.Compiler.Framework.RegisterAllocator
 {
-    public class SlotIndex
-    {
-        private int index;
-        private InstructionSet instructionSet;
+	public class SlotIndex
+	{
+		private int index;
+		private InstructionSet instructionSet;
 
-        public SlotIndex(InstructionSet instructionSet, int index)
-        {
-            this.index = index;
-            this.instructionSet = instructionSet;
-        }
+		public SlotIndex(InstructionSet instructionSet, int index)
+		{
+			this.index = index;
+			this.instructionSet = instructionSet;
+		}
 
-        public SlotIndex(Context context)
-            : this(context.InstructionSet, context.Index)
-        {
-        }
+		public SlotIndex(Context context)
+			: this(context.InstructionSet, context.Index)
+		{
+		}
 
-        public int Index { get { return instructionSet.Data[index].SlotNumber; } }
+		public int Index { get { return instructionSet.Data[index].SlotNumber; } }
 
-    }
+	}
 }

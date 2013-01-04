@@ -106,9 +106,9 @@ namespace Mosa.Compiler.Framework.Stages
 			if (type.ContainsOpenGenericParameters)
 				return;
 
-            // Do not compile generic types outside of the internal type module
-            if (type is CilGenericType && !(type.Module is InternalTypeModule))
-                return;
+			// Do not compile generic types outside of the internal type module
+			if (type is CilGenericType && !(type.Module is InternalTypeModule))
+				return;
 
 			if (typeScheduled.Contains(type))
 				return;
@@ -130,9 +130,9 @@ namespace Mosa.Compiler.Framework.Stages
 			if (method.IsAbstract)
 				return;
 
-            // Do not compile generic methods outside of the internal type module
-            //if (method.DeclaringType is CilGenericType && !(method.DeclaringType.Module is InternalTypeModule))
-            //    return;
+			// Do not compile generic methods outside of the internal type module
+			//if (method.DeclaringType is CilGenericType && !(method.DeclaringType.Module is InternalTypeModule))
+			//    return;
 
 			if (methodScheduled.Contains(method))
 				return;

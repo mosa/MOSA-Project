@@ -70,7 +70,7 @@ namespace Mosa.Compiler.Framework.CIL
 		/// </summary>
 		/// <param name="opcode">The opcode.</param>
 		public InvokeInstruction(OpCode opcode)
-			: base(opcode,0)
+			: base(opcode, 0)
 		{
 		}
 
@@ -117,7 +117,7 @@ namespace Mosa.Compiler.Framework.CIL
 		{
 			base.Validate(ctx, compiler);
 
-            int paramCount = ctx.InvokeTarget.SigParameters.Length;
+			int paramCount = ctx.InvokeTarget.SigParameters.Length;
 
 			if (ctx.InvokeTarget.HasThis && !ctx.InvokeTarget.HasExplicitThis)
 				paramCount++;
@@ -168,7 +168,7 @@ namespace Mosa.Compiler.Framework.CIL
 				case TableType.MemberRef:
 					method = module.GetMethod(callTarget, decoder.Method.DeclaringType);
 					if (method.DeclaringType.IsGeneric)
-					decoder.Compiler.Scheduler.TrackMethodInvoked(method);
+						decoder.Compiler.Scheduler.TrackMethodInvoked(method);
 					break;
 
 				case TableType.MethodSpec:
@@ -212,7 +212,7 @@ namespace Mosa.Compiler.Framework.CIL
 			var invokeTarget = ctx.InvokeTarget;
 
 			// Fix the parameter list
-            int paramCount = invokeTarget.SigParameters.Length;
+			int paramCount = invokeTarget.SigParameters.Length;
 
 			if (invokeTarget.HasThis && !invokeTarget.HasExplicitThis)
 				paramCount++;

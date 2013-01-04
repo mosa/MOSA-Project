@@ -96,11 +96,11 @@ namespace Mosa.Compiler.InternalTrace
 		/// <param name="ctx">The context.</param>
 		private static void LogInstructions(StringBuilder text, Context ctx)
 		{
-			for (; ctx.Index >= 0 ; ctx.GotoNext())
+			for (; ctx.Index >= 0; ctx.GotoNext())
 			{
 				if (ctx.IsEmpty)
 					continue;
-				
+
 				if (ctx.Marked)
 					text.AppendFormat("L_{0:X4}* {1}", ctx.Label, ctx.Instruction.ToString(ctx));
 				else
@@ -108,8 +108,8 @@ namespace Mosa.Compiler.InternalTrace
 
 				text.AppendLine();
 
-                if (ctx.IsLastInstruction)
-                    return;
+				if (ctx.IsLastInstruction)
+					return;
 			}
 
 		}

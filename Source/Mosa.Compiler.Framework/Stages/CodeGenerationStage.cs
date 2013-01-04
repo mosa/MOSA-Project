@@ -15,124 +15,124 @@ using Mosa.Compiler.Framework.Platform;
 
 namespace Mosa.Compiler.Framework.Stages
 {
-    /// <summary>
-    /// Base class for code generation stages.
-    /// </summary>
-    public class CodeGenerationStage : BaseMethodCompilerStage, IMethodCompilerStage, IPipelineStage
-    {
+	/// <summary>
+	/// Base class for code generation stages.
+	/// </summary>
+	public class CodeGenerationStage : BaseMethodCompilerStage, IMethodCompilerStage, IPipelineStage
+	{
 
-        #region Data members
+		#region Data members
 
-        /// <summary>
-        /// Holds the stream, where code is emitted to.
-        /// </summary>
-        protected static Stream codeStream;
+		/// <summary>
+		/// Holds the stream, where code is emitted to.
+		/// </summary>
+		protected static Stream codeStream;
 
-        /// <summary>
-        /// 
-        /// </summary>
-        protected ICodeEmitter codeEmitter;
+		/// <summary>
+		/// 
+		/// </summary>
+		protected ICodeEmitter codeEmitter;
 
-        #endregion // Data members
+		#endregion // Data members
 
-        #region Properties
+		#region Properties
 
-        public ICodeEmitter CodeEmitter { get { return codeEmitter; } }
+		public ICodeEmitter CodeEmitter { get { return codeEmitter; } }
 
-        #endregion // Properties
+		#endregion // Properties
 
-        #region Methods
+		#region Methods
 
-        /// <summary>
-        /// Performs stage specific processing on the compiler context.
-        /// </summary>
-        void IMethodCompilerStage.Run()
-        {
-            // Retrieve a stream to place the code into
-            using (codeStream = methodCompiler.RequestCodeStream())
-            {
-                // HINT: We need seeking to resolve labels.
-                Debug.Assert(codeStream.CanSeek, @"Can't seek code output stream.");
-                Debug.Assert(codeStream.CanWrite, @"Can't write to code output stream.");
+		/// <summary>
+		/// Performs stage specific processing on the compiler context.
+		/// </summary>
+		void IMethodCompilerStage.Run()
+		{
+			// Retrieve a stream to place the code into
+			using (codeStream = methodCompiler.RequestCodeStream())
+			{
+				// HINT: We need seeking to resolve labels.
+				Debug.Assert(codeStream.CanSeek, @"Can't seek code output stream.");
+				Debug.Assert(codeStream.CanWrite, @"Can't write to code output stream.");
 
-                if (!codeStream.CanSeek || !codeStream.CanWrite)
-                    throw new NotSupportedException(@"Code stream doesn't support seeking or writing.");
+				if (!codeStream.CanSeek || !codeStream.CanWrite)
+					throw new NotSupportedException(@"Code stream doesn't support seeking or writing.");
 
-                // Emit method prologue
-                BeginGenerate();
+				// Emit method prologue
+				BeginGenerate();
 
-                // Emit all instructions
-                EmitInstructions();
+				// Emit all instructions
+				EmitInstructions();
 
-                // Emit the method epilogue
-                EndGenerate();
-            }
-        }
+				// Emit the method epilogue
+				EndGenerate();
+			}
+		}
 
-        /// <summary>
-        /// Called to emit a list of instructions offered by the instruction provider.
-        /// </summary>
-        protected virtual void EmitInstructions()
-        {
-            foreach (BasicBlock block in basicBlocks)
-            {
-                BlockStart(block);
+		/// <summary>
+		/// Called to emit a list of instructions offered by the instruction provider.
+		/// </summary>
+		protected virtual void EmitInstructions()
+		{
+			foreach (BasicBlock block in basicBlocks)
+			{
+				BlockStart(block);
 
-                for (Context context = new Context(instructionSet, block); !context.IsLastInstruction; context.GotoNext())
-                {
-                    if (!(context.IsEmpty || context.Instruction == IRInstruction.BlockStart))
-                    {
-                        BasePlatformInstruction instruction = context.Instruction as BasePlatformInstruction;
+				for (Context context = new Context(instructionSet, block); !context.IsLastInstruction; context.GotoNext())
+				{
+					if (!(context.IsEmpty || context.Instruction == IRInstruction.BlockStart))
+					{
+						BasePlatformInstruction instruction = context.Instruction as BasePlatformInstruction;
 
-                        if (instruction != null)
-                            instruction.Emit(context, codeEmitter);
-                        else
-                            if (architecture.PlatformName != "Null")
-                                Trace(InternalTrace.CompilerEvent.Error, "Missing Code Transformation: " + context.ToString());
-                    }
-                }
+						if (instruction != null)
+							instruction.Emit(context, codeEmitter);
+						else
+							if (architecture.PlatformName != "Null")
+								Trace(InternalTrace.CompilerEvent.Error, "Missing Code Transformation: " + context.ToString());
+					}
+				}
 
-                BlockEnd(block);
-            }
-        }
+				BlockEnd(block);
+			}
+		}
 
-        /// <summary>
-        /// Begins the generate.
-        /// </summary>
-        protected virtual void BeginGenerate()
-        {
-            codeEmitter = architecture.GetCodeEmitter();
-            codeEmitter.Initialize(methodCompiler, codeStream);
-        }
+		/// <summary>
+		/// Begins the generate.
+		/// </summary>
+		protected virtual void BeginGenerate()
+		{
+			codeEmitter = architecture.GetCodeEmitter();
+			codeEmitter.Initialize(methodCompiler, codeStream);
+		}
 
-        /// <summary>
-        /// Start of code generation for a block.
-        /// </summary>
-        /// <param name="block">The started block.</param>
-        protected virtual void BlockStart(BasicBlock block)
-        {
-            codeEmitter.Label(block.Label);
-        }
+		/// <summary>
+		/// Start of code generation for a block.
+		/// </summary>
+		/// <param name="block">The started block.</param>
+		protected virtual void BlockStart(BasicBlock block)
+		{
+			codeEmitter.Label(block.Label);
+		}
 
-        /// <summary>
-        /// Completion of code generation for a block.
-        /// </summary>
-        /// <param name="block">The completed block.</param>
-        protected virtual void BlockEnd(BasicBlock block)
-        {
-            // TODO: Adjust ICodeEmitter interface to mark the end of label sections, rather than create this special label:
-            codeEmitter.Label(block.Label + 0x0F000000);
-        }
+		/// <summary>
+		/// Completion of code generation for a block.
+		/// </summary>
+		/// <param name="block">The completed block.</param>
+		protected virtual void BlockEnd(BasicBlock block)
+		{
+			// TODO: Adjust ICodeEmitter interface to mark the end of label sections, rather than create this special label:
+			codeEmitter.Label(block.Label + 0x0F000000);
+		}
 
-        /// <summary>
-        /// Code generation completed.
-        /// </summary>
-        protected virtual void EndGenerate()
-        {
-            codeEmitter.ResolvePatches();
-            codeEmitter.Dispose();
-        }
+		/// <summary>
+		/// Code generation completed.
+		/// </summary>
+		protected virtual void EndGenerate()
+		{
+			codeEmitter.ResolvePatches();
+			codeEmitter.Dispose();
+		}
 
-        #endregion // Methods
-    }
+		#endregion // Methods
+	}
 }

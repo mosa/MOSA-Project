@@ -25,7 +25,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </summary>
 		void IMethodCompilerStage.Run()
 		{
-			
+
 			// Handler Code
 			foreach (ExceptionHandlingClause clause in methodCompiler.ExceptionClauseHeader.Clauses)
 			{
@@ -43,7 +43,7 @@ namespace Mosa.Compiler.Framework.Stages
 					Operand exceptionObject = methodCompiler.CreateVirtualRegister(sigType);
 
 					context.SetInstruction(IRInstruction.ExceptionPrologue, exceptionObject);
-				}	
+				}
 			}
 		}
 

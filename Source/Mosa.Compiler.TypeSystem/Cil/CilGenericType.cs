@@ -48,7 +48,7 @@ namespace Mosa.Compiler.TypeSystem.Cil
 		/// <param name="token">The token.</param>
 		/// <param name="baseGenericType">Type of the base generic.</param>
 		/// <param name="genericTypeInstanceSignature">The generic type instance signature.</param>
-        public CilGenericType(ITypeModule typeModule, Token token, RuntimeType baseGenericType, SigType[] genericArguments) :
+		public CilGenericType(ITypeModule typeModule, Token token, RuntimeType baseGenericType, SigType[] genericArguments) :
 			base(baseGenericType.Module, token, baseGenericType.BaseType)
 		{
 			Debug.Assert(baseGenericType is CilRuntimeType);
@@ -66,7 +66,7 @@ namespace Mosa.Compiler.TypeSystem.Cil
 			}
 
 			// TODO: if this is a nested types, add enclosing type(s) into genericArguments first
-            this.genericArguments = genericArguments;
+			this.genericArguments = genericArguments;
 
 			base.Name = GetName(typeModule);
 
@@ -172,12 +172,12 @@ namespace Mosa.Compiler.TypeSystem.Cil
 		{
 			foreach (CilRuntimeMethod method in baseGenericType.Methods)
 			{
-                SigType[] sigTypes = GenericSigTypeResolver.Resolve(method.SigParameters, genericArguments);
-                SigType returnType = GenericSigTypeResolver.Resolve(method.ReturnType, genericArguments);
+				SigType[] sigTypes = GenericSigTypeResolver.Resolve(method.SigParameters, genericArguments);
+				SigType returnType = GenericSigTypeResolver.Resolve(method.ReturnType, genericArguments);
 
-                var genericInstanceMethod = new CilRuntimeMethod(Module, method, returnType, method.HasThis, method.HasExplicitThis, sigTypes, this);
-				
-                Methods.Add(genericInstanceMethod);
+				var genericInstanceMethod = new CilRuntimeMethod(Module, method, returnType, method.HasThis, method.HasExplicitThis, sigTypes, this);
+
+				Methods.Add(genericInstanceMethod);
 			}
 		}
 
@@ -185,10 +185,10 @@ namespace Mosa.Compiler.TypeSystem.Cil
 		{
 			foreach (CilRuntimeField field in baseGenericType.Fields)
 			{
-                // Resolve variable type using generic arguments, if any
-                SigType sigType = (!(field.SigType is VarSigType)) ? field.SigType : genericArguments[(field.SigType as VarSigType).Index];
+				// Resolve variable type using generic arguments, if any
+				SigType sigType = (!(field.SigType is VarSigType)) ? field.SigType : genericArguments[(field.SigType as VarSigType).Index];
 
-                var genericInstanceField = new CilRuntimeField(Module, field, sigType, this);
+				var genericInstanceField = new CilRuntimeField(Module, field, sigType, this);
 				Fields.Add(genericInstanceField);
 			}
 

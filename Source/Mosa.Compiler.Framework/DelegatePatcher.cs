@@ -22,11 +22,11 @@ namespace Mosa.Compiler.Framework
 	public static class DelegatePatcher
 	{
 
-        /// <summary>
-        /// Patches the delegate.
-        /// </summary>
-        /// <param name="methodCompiler">The method compiler.</param>
-        /// <returns></returns>
+		/// <summary>
+		/// Patches the delegate.
+		/// </summary>
+		/// <param name="methodCompiler">The method compiler.</param>
+		/// <returns></returns>
 		public static bool PatchDelegate(BaseMethodCompiler methodCompiler)
 		{
 			if (!methodCompiler.Method.DeclaringType.IsDelegate)
@@ -144,34 +144,34 @@ namespace Mosa.Compiler.Framework
 			var basicBlocks = methodCompiler.BasicBlocks;
 			CreatePrologueAndEpilogueBlocks(methodCompiler.InstructionSet, basicBlocks);
 
-            var context = ContextHelper.CreateNewBlockWithContext(methodCompiler.InstructionSet, basicBlocks);
+			var context = ContextHelper.CreateNewBlockWithContext(methodCompiler.InstructionSet, basicBlocks);
 
-            basicBlocks.LinkBlocks(basicBlocks.PrologueBlock, context.BasicBlock);
-			
-            if (linkEpilogueBlock)
-                basicBlocks.LinkBlocks(context.BasicBlock, basicBlocks.EpilogueBlock);
+			basicBlocks.LinkBlocks(basicBlocks.PrologueBlock, context.BasicBlock);
+
+			if (linkEpilogueBlock)
+				basicBlocks.LinkBlocks(context.BasicBlock, basicBlocks.EpilogueBlock);
 
 			return context;
 		}
 
 		private static void CreatePrologueAndEpilogueBlocks(InstructionSet instructionSet, BasicBlocks basicBlocks)
 		{
-            // Create the prologue block
-            var context = ContextHelper.CreateNewBlockWithContext(instructionSet, basicBlocks, BasicBlock.PrologueLabel);
-            // Add a jump instruction to the first block from the prologue
-            context.AppendInstruction(IRInstruction.Jmp);
-            context.SetBranch(0);
-            var prologue = context.BasicBlock;
-            basicBlocks.AddHeaderBlock(prologue);
+			// Create the prologue block
+			var context = ContextHelper.CreateNewBlockWithContext(instructionSet, basicBlocks, BasicBlock.PrologueLabel);
+			// Add a jump instruction to the first block from the prologue
+			context.AppendInstruction(IRInstruction.Jmp);
+			context.SetBranch(0);
+			var prologue = context.BasicBlock;
+			basicBlocks.AddHeaderBlock(prologue);
 
-            // Create the epilogue block
-            context = ContextHelper.CreateNewBlockWithContext(instructionSet, basicBlocks, BasicBlock.EpilogueLabel);
-            var epilogue = context.BasicBlock;
+			// Create the epilogue block
+			context = ContextHelper.CreateNewBlockWithContext(instructionSet, basicBlocks, BasicBlock.EpilogueLabel);
+			var epilogue = context.BasicBlock;
 		}
 
 		private static Context CreateNewBlock(BaseMethodCompiler methodCompiler)
 		{
-            return ContextHelper.CreateNewBlockWithContext(methodCompiler.InstructionSet, methodCompiler.BasicBlocks);
+			return ContextHelper.CreateNewBlockWithContext(methodCompiler.InstructionSet, methodCompiler.BasicBlocks);
 		}
 
 		private static RuntimeField GetField(RuntimeType type, string name)
