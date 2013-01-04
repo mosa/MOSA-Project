@@ -241,7 +241,7 @@ namespace Mosa.Compiler.Framework.Stages
 
             // Determine the size of the type & alignment requirements
             int size, alignment;
-            architecture.GetTypeRequirements(field.SignatureType, out size, out alignment);
+            architecture.GetTypeRequirements(field.SigType, out size, out alignment);
 
             size = (int)typeLayout.GetFieldSize(field);
 

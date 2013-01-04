@@ -52,7 +52,7 @@ namespace Mosa.Compiler.Framework.CIL
 				Debug.Assert(!ctx.RuntimeField.ContainsGenericParameter);
 			}
 
-			var sigType = ctx.RuntimeField.SignatureType;
+			var sigType = ctx.RuntimeField.SigType;
 			ctx.Result = LoadInstruction.CreateResultOperand(decoder, Operand.StackTypeFromSigType(sigType), sigType);
 		}
 

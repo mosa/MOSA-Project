@@ -172,8 +172,10 @@ namespace Mosa.Compiler.TypeSystem.Cil
 		{
 			foreach (CilRuntimeField field in baseGenericType.Fields)
 			{
-				var signature = new FieldSignature(field.Signature, genericArguments);
-                var genericInstanceField = new CilRuntimeField(Module, field, signature, this);
+                // Resolve variable type using generic arguments, if any
+                SigType sigType = (!(field.SigType is VarSigType)) ? field.SigType : genericArguments[(field.SigType as VarSigType).Index];
+
+                var genericInstanceField = new CilRuntimeField(Module, field, sigType, this);
 				Fields.Add(genericInstanceField);
 			}
 

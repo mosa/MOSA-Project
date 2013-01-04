@@ -171,13 +171,13 @@ namespace Mosa.Compiler.TypeSystem
 			}
 
 			// If the field is another struct, we have to dig down and compute its size too.
-			if (field.SignatureType.Type == CilElementType.ValueType)
+			if (field.SigType.Type == CilElementType.ValueType)
 			{
 				size = ((ITypeLayout)this).GetTypeSize(field.DeclaringType);
 			}
 			else
 			{
-				size = GetMemorySize(field.SignatureType);
+				size = GetMemorySize(field.SigType);
 			}
 
 			fieldSizes.Add(field, size);
@@ -349,7 +349,7 @@ namespace Mosa.Compiler.TypeSystem
 			{
 				if (!field.IsStaticField)
 				{
-					int fieldSize = GetMemorySize(field.SignatureType);
+					int fieldSize = GetMemorySize(field.SigType);
 					//int fieldAlignment = GetAlignmentSize(field.SignatureType);
 
 					// Pad the field in the type

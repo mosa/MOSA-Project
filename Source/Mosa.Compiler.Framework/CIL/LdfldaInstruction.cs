@@ -66,7 +66,7 @@ namespace Mosa.Compiler.Framework.CIL
 				Debug.Assert(!ctx.RuntimeField.ContainsGenericParameter);
 			}
 
-			SigType sigType = new RefSigType(ctx.RuntimeField.SignatureType);
+			SigType sigType = new RefSigType(ctx.RuntimeField.SigType);
 			ctx.Result = LoadInstruction.CreateResultOperand(decoder, Operand.StackTypeFromSigType(sigType), sigType);
 		}
 

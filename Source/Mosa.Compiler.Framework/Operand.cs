@@ -461,7 +461,7 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		public static Operand CreateRuntimeMember(RuntimeField field)
 		{
-			Operand operand = new Operand(field.SignatureType, OperandType.MemoryAddress | OperandType.RuntimeMember);
+			Operand operand = new Operand(field.SigType, OperandType.MemoryAddress | OperandType.RuntimeMember);
 			operand.Offset = 0;
 			operand.runtimeMember = field;
 			return operand;

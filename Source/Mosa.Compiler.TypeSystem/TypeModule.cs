@@ -510,7 +510,7 @@ namespace Mosa.Compiler.TypeSystem
 				var field = new CilRuntimeField(
 					this,
 					GetString(fieldRow.Name),
-					GetFieldSignature(fieldRow.Signature),
+					GetFieldSignature(fieldRow.Signature).Type,
 					token,
 					layout,
 					rva,

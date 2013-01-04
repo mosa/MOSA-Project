@@ -13,7 +13,7 @@ namespace Mosa.Compiler.Metadata.Signatures
 	{
 		private CustomMod[] customMods;
 		private CilElementType modifier;
-		private SigType type;
+		private SigType sigType;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="VariableSignature"/> class.
@@ -44,7 +44,7 @@ namespace Mosa.Compiler.Metadata.Signatures
 		{
 			this.customMods = signature.customMods;
 			this.modifier = signature.modifier;
-			this.type = signature.type;
+			this.sigType = signature.sigType;
 		}
 
 		/// <summary>
@@ -78,8 +78,8 @@ namespace Mosa.Compiler.Metadata.Signatures
 		/// <value>The type.</value>
 		public SigType Type
 		{
-			get { return this.type; }
-			set { this.type = value; }
+			get { return this.sigType; }
+			set { this.sigType = value; }
 		}
 
 		protected override void ParseSignature(SignatureReader reader)
@@ -87,7 +87,7 @@ namespace Mosa.Compiler.Metadata.Signatures
 			this.ParseModifier(reader);
 
 			this.customMods = CustomMod.ParseCustomMods(reader);
-			this.type = SigType.ParseTypeSignature(reader);
+			this.sigType = SigType.ParseTypeSignature(reader);
 		}
 
 		private void ParseModifier(SignatureReader reader)
@@ -105,14 +105,14 @@ namespace Mosa.Compiler.Metadata.Signatures
 			if (genericArguments == null)
 				return;
 
-			if (this.Type is VarSigType)
+            if (sigType is VarSigType)
 			{
-				if ((Type as VarSigType).Index < genericArguments.Length)
-					this.Type = genericArguments[(Type as VarSigType).Index];
+                if ((sigType as VarSigType).Index < genericArguments.Length)
+                    sigType = genericArguments[(sigType as VarSigType).Index];
 			}
-			else if (this.Type is GenericInstSigType)
+            else if (sigType is GenericInstSigType)
 			{
-				var genericInstSigType = this.Type as GenericInstSigType;
+				var genericInstSigType = sigType as GenericInstSigType;
 				for (var i = 0; i < genericInstSigType.GenericArguments.Length; ++i)
 				{
 					if (genericInstSigType.GenericArguments[i] is VarSigType)

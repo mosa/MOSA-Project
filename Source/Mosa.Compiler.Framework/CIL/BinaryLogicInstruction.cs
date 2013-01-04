@@ -67,14 +67,14 @@ namespace Mosa.Compiler.Framework.CIL
 			{
 				var op1Type = compiler.Method.Module.GetType ((ctx.Operand1.Type as ValueTypeSigType).Token);
 				if (op1Type.BaseType.FullName == "System.Enum")
-					stackTypeForOperand1 = this.FromSigType (op1Type.Fields[0].SignatureType.Type);
+					stackTypeForOperand1 = this.FromSigType (op1Type.Fields[0].SigType.Type);
 			}
 
 			if (ctx.Operand2.Type is ValueTypeSigType)
 			{
 				var op2Type = compiler.Method.Module.GetType ((ctx.Operand2.Type as ValueTypeSigType).Token);
 				if (op2Type.BaseType.FullName == "System.Enum")
-					stackTypeForOperand2 = this.FromSigType (op2Type.Fields[0].SignatureType.Type);
+					stackTypeForOperand2 = this.FromSigType (op2Type.Fields[0].SigType.Type);
 			}
 
 			var result = _opTable[(int)stackTypeForOperand1][(int)stackTypeForOperand2];

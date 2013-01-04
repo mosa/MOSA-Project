@@ -135,7 +135,7 @@ namespace Mosa.Compiler.Framework.Stages
         /// <param name="context">The context.</param>
         void CIL.ICILVisitor.Ldsfld(Context context)
         {
-            SigType sigType = context.RuntimeField.SignatureType;
+            SigType sigType = context.RuntimeField.SigType;
             Operand source = Operand.CreateRuntimeMember(context.RuntimeField);
             Operand destination = context.Result;
 
@@ -289,14 +289,14 @@ namespace Mosa.Compiler.Framework.Stages
             if (context.Operand1.Type is ValueTypeSigType)
             {
                 var type = methodCompiler.Method.Module.GetType((context.Operand1.Type as ValueTypeSigType).Token);
-                var operand = Operand.CreateRuntimeMember(type.Fields[0].SignatureType, type.Fields[0], 0);
+                var operand = Operand.CreateRuntimeMember(type.Fields[0].SigType, type.Fields[0], 0);
                 context.SetOperand(0, operand);
             }
 
             if (context.Operand2.Type is ValueTypeSigType)
             {
                 var type = methodCompiler.Method.Module.GetType((context.Operand2.Type as ValueTypeSigType).Token);
-                var operand = Operand.CreateRuntimeMember(type.Fields[0].SignatureType, type.Fields[0], 0);
+                var operand = Operand.CreateRuntimeMember(type.Fields[0].SigType, type.Fields[0], 0);
                 context.SetOperand(1, operand);
             }
 
@@ -915,18 +915,18 @@ namespace Mosa.Compiler.Framework.Stages
         {
             Operand resultOperand = context.Result;
             Operand objectOperand = context.Operand1;
-            Operand result = methodCompiler.CreateVirtualRegister(context.RuntimeField.SignatureType);
+            Operand result = methodCompiler.CreateVirtualRegister(context.RuntimeField.SigType);
             RuntimeField field = context.RuntimeField;
 
             int offset = typeLayout.GetFieldOffset(field);
             Operand offsetOperand = Operand.CreateConstant(BuiltInSigType.IntPtr, offset);
 
             BaseInstruction loadInstruction = IRInstruction.Load;
-            if (MustSignExtendOnLoad(field.SignatureType.Type))
+            if (MustSignExtendOnLoad(field.SigType.Type))
             {
                 loadInstruction = IRInstruction.LoadSignExtended;
             }
-            else if (MustZeroExtendOnLoad(field.SignatureType.Type))
+            else if (MustZeroExtendOnLoad(field.SigType.Type))
             {
                 loadInstruction = IRInstruction.LoadZeroExtended;
             }
@@ -934,7 +934,7 @@ namespace Mosa.Compiler.Framework.Stages
             Debug.Assert(offsetOperand != null);
 
             context.SetInstruction(loadInstruction, result, objectOperand, offsetOperand);
-            context.SigType = field.SignatureType;
+            context.SigType = field.SigType;
             context.AppendInstruction(IRInstruction.Move, resultOperand, result);
         }
 
@@ -961,7 +961,7 @@ namespace Mosa.Compiler.Framework.Stages
         {
             Operand objectOperand = context.Operand1;
             Operand valueOperand = context.Operand2;
-            Operand temp = methodCompiler.CreateVirtualRegister(context.RuntimeField.SignatureType);
+            Operand temp = methodCompiler.CreateVirtualRegister(context.RuntimeField.SigType);
 
             int offset = typeLayout.GetFieldOffset(context.RuntimeField);
             Operand offsetOperand = Operand.CreateConstant(BuiltInSigType.IntPtr, offset);
