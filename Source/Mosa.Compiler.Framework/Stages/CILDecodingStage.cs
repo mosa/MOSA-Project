@@ -53,11 +53,11 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (plugMethod != null)
 			{
-                Operand plugSymbol = Operand.CreateSymbolFromMethod(plugMethod);
-                Context context = CreateNewBlockWithContext(-1);
-                context.AppendInstruction(IRInstruction.Jmp, null, plugSymbol);
-                basicBlocks.AddHeaderBlock(context.BasicBlock);
-                return;
+				Operand plugSymbol = Operand.CreateSymbolFromMethod(plugMethod);
+				Context context = CreateNewBlockWithContext(-1);
+				context.AppendInstruction(IRInstruction.Jmp, null, plugSymbol);
+				basicBlocks.AddHeaderBlock(context.BasicBlock);
+				return;
 			}
 
 			if (!methodCompiler.Method.HasCode)
@@ -81,34 +81,22 @@ namespace Mosa.Compiler.Framework.Stages
 					{
 						StandAloneSigRow row = methodCompiler.Method.Module.MetadataModule.Metadata.ReadStandAloneSigRow(header.LocalsSignature);
 
-						LocalVariableSignature localsSignature;
+						LocalVariableSignature localsSignature = new LocalVariableSignature(methodCompiler.Method.Module.MetadataModule.Metadata, row.SignatureBlobIdx);
 
-                        // FIXME: Don't resolve generics like this
-						if (methodCompiler.Method.DeclaringType is CilGenericType)
+						SigType[] localSigTypes = new SigType[localsSignature.Locals.Length];
+
+						for (int i = 0; i < localsSignature.Locals.Length; i++)
 						{
-							localsSignature = new LocalVariableSignature(methodCompiler.Method.Module.MetadataModule.Metadata, row.SignatureBlobIdx, (methodCompiler.Method.DeclaringType as CilGenericType).GenericArguments);
-						}
-						else
-						{
-							localsSignature = new LocalVariableSignature(methodCompiler.Method.Module.MetadataModule.Metadata, row.SignatureBlobIdx);
+							localSigTypes[i] = localsSignature.Locals[i].Type;
 						}
 
-						var declaringType = methodCompiler.Method.DeclaringType;
-						var locals = localsSignature.Locals;
-						for (var i = 0; i < locals.Length; ++i)
+						var genericDeclaringType = methodCompiler.Method.DeclaringType as CilGenericType;
+						if (genericDeclaringType != null)
 						{
-							var local = locals[i];
-							if (local.Type is GenericInstSigType && declaringType is CilGenericType)
-							{
-								var genericInstSigType = local.Type as GenericInstSigType;
-								var genericArguments = methodCompiler.Compiler.GenericTypePatcher.CloseGenericArguments((declaringType as CilGenericType).GenericArguments, genericInstSigType.GenericArguments);
-								
-                                // FIXME: Don't resolve generics like this
-                                local = new VariableSignature(locals[i], genericArguments);
-							}
+							localSigTypes = GenericSigTypeResolver.Resolve(localSigTypes, genericDeclaringType.GenericArguments);
 						}
 
-						methodCompiler.SetLocalVariableSignature(localsSignature);
+						methodCompiler.SetLocalVariableSignature(localSigTypes);
 					}
 
 					/* Decode the instructions */

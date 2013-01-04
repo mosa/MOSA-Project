@@ -9,6 +9,7 @@
  */
 
 using System;
+using System.Diagnostics;
 using System.Collections.Generic;
 using System.IO;
 using Mosa.Compiler.InternalTrace;
@@ -61,11 +62,6 @@ namespace Mosa.Compiler.Framework
 		/// Holds a list of operands which represent local variables
 		/// </summary>
 		private Operand[] locals;
-
-		/// <summary>
-		/// Optional signature of stack local variables
-		/// </summary>
-		private LocalVariableSignature localsSig;
 
 		/// <summary>
 		/// The method definition being compiled
@@ -268,22 +264,6 @@ namespace Mosa.Compiler.Framework
 		#region Methods
 
 		/// <summary>
-		/// Evaluates the local operands.
-		/// </summary>
-		protected void EvaluateLocalVariables()
-		{
-			int index = 0;
-			locals = new Operand[localsSig.Locals.Length];
-
-			foreach (var localVariable in localsSig.Locals)
-			{
-				locals[index++] = stackLayout.AllocateLocalVariableOperand(localVariable.Type);
-				//Scheduler.ScheduleTypeForCompilation(localVariable.Type); // TODO
-			}
-
-		}
-
-		/// <summary>
 		/// Evaluates the parameter operands.
 		/// </summary>
 		protected void EvaluateParameterOperands()
@@ -301,7 +281,7 @@ namespace Mosa.Compiler.Framework
 
 			for (int paramIndex = 0; paramIndex < method.SigParameters.Length; paramIndex++)
 			{
-                var parameterType = method.SigParameters[paramIndex];
+				var parameterType = method.SigParameters[paramIndex];
 
 				if (parameterType is GenericInstSigType && (parameterType as GenericInstSigType).ContainsGenericParameters)
 				{
@@ -347,7 +327,7 @@ namespace Mosa.Compiler.Framework
 		/// Stops the method compiler.
 		/// </summary>
 		/// <returns></returns>
-		public void StopMethodCompiler() { stopMethodCompiler = true; } 
+		public void StopMethodCompiler() { stopMethodCompiler = true; }
 
 		/// <summary>
 		/// Creates a new virtual register operand.
@@ -402,16 +382,19 @@ namespace Mosa.Compiler.Framework
 		/// Sets the signature of local variables in the method.
 		/// </summary>
 		/// <param name="localVariableSignature">The local variable signature of the _method.</param>
-		public void SetLocalVariableSignature(LocalVariableSignature localVariableSignature)
+		public void SetLocalVariableSignature(SigType[] localSigTypes)
 		{
-            // FIXME: Do not capture signature 
+			Debug.Assert(localSigTypes != null, "localVariableSignature");
 
-			if (localVariableSignature == null)
-				throw new ArgumentNullException(@"localVariableSignature");
+			int index = 0;
+			locals = new Operand[localSigTypes.Length];
 
-			localsSig = localVariableSignature;
+			foreach (var localVariable in localSigTypes)
+			{
+				locals[index++] = stackLayout.AllocateLocalVariableOperand(localVariable);
+				//Scheduler.ScheduleTypeForCompilation(localVariable); // TODO
+			}
 
-			EvaluateLocalVariables();
 		}
 
 		/// <summary>

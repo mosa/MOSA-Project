@@ -17,19 +17,6 @@ namespace Mosa.Compiler.Metadata.Signatures
 	/// </summary>
 	public abstract class Signature
 	{
-		/// <summary>
-		/// 
-		/// </summary>
-		private HeapIndexToken token;
-
-		/// <summary>
-		/// Gets the token.
-		/// </summary>
-		/// <value>The token.</value>
-		public HeapIndexToken Token
-		{
-			get { return token; }
-		}
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Signature"/> class.
@@ -50,15 +37,6 @@ namespace Mosa.Compiler.Metadata.Signatures
 		/// <summary>
 		/// Loads the signature.
 		/// </summary>
-		/// <param name="token">The token.</param>
-		protected Signature(HeapIndexToken token)
-		{
-			this.token = token;
-		}
-
-		/// <summary>
-		/// Loads the signature.
-		/// </summary>
 		/// <param name="provider">The provider.</param>
 		/// <param name="token">The token.</param>
 		public Signature(IMetadataProvider provider, HeapIndexToken token)
@@ -67,8 +45,6 @@ namespace Mosa.Compiler.Metadata.Signatures
 
 			this.ParseSignature(reader);
 			Debug.Assert(reader.Index == reader.Length, @"Signature parser didn't complete.");
-
-			this.token = token;
 		}
 
 		/// <summary>
@@ -79,8 +55,6 @@ namespace Mosa.Compiler.Metadata.Signatures
 		{
 			if (signature == null)
 				throw new ArgumentNullException(@"signature");
-
-			this.token = signature.token;
 		}
 
 		/// <summary>
@@ -94,8 +68,6 @@ namespace Mosa.Compiler.Metadata.Signatures
 
 			this.ParseSignature(reader);
 			Debug.Assert(reader.Index == reader.Length, @"Signature parser didn't complete.");
-
-			this.token = token;
 		}
 
 		/// <summary>

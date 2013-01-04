@@ -29,7 +29,6 @@ namespace Mosa.Compiler.Metadata.Signatures
 		/// </summary>
 		private int _rank;
 
-
 		/// <summary>
 		/// Holds the sizes of each rank of the array.
 		/// </summary>
