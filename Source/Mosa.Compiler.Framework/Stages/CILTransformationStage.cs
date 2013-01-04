@@ -21,7 +21,7 @@ using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Loader;
 using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Compiler.TypeSystem;
-using Mosa.Compiler.TypeSystem.Generic;
+using Mosa.Compiler.TypeSystem.Cil;
 
 namespace Mosa.Compiler.Framework.Stages
 {
@@ -560,7 +560,7 @@ namespace Mosa.Compiler.Framework.Stages
                 {
                     if (!(classType is CilGenericType))
                     {
-                        classType = new CilGenericType(classType.Module, classType.Token, classType, thisReference.Type as GenericInstSigType);
+                        classType = new CilGenericType(classType.Module, classType.Token, classType, (thisReference.Type as GenericInstSigType).GenericArguments);
                     }
 
                     classType = methodCompiler.Compiler.GenericTypePatcher.PatchType(this.typeModule, methodCompiler.Method.DeclaringType as CilGenericType, classType as CilGenericType);

@@ -8,8 +8,7 @@
  */
 
 using System.Diagnostics;
-
-using Mosa.Compiler.TypeSystem.Generic;
+using Mosa.Compiler.TypeSystem.Cil;
 
 namespace Mosa.Compiler.Framework.CIL
 {

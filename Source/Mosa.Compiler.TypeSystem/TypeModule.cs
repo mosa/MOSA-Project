@@ -16,7 +16,6 @@ using Mosa.Compiler.Metadata.Loader;
 using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Compiler.Metadata.Tables;
 using Mosa.Compiler.TypeSystem.Cil;
-using Mosa.Compiler.TypeSystem.Generic;
 
 namespace Mosa.Compiler.TypeSystem
 {

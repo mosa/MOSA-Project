@@ -13,7 +13,7 @@ using System.Collections.Generic;
 using Mosa.Compiler.Common;
 using Mosa.Compiler.InternalTrace;
 using Mosa.Compiler.TypeSystem;
-using Mosa.Compiler.TypeSystem.Generic;
+using Mosa.Compiler.TypeSystem.Cil;
 
 namespace Mosa.Compiler.Framework.Stages
 {

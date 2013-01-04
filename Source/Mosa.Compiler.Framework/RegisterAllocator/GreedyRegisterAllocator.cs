@@ -28,7 +28,6 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 		private int virtualRegisterCount;
 		private int physicalRegisterCount;
 		private int registerCount;
-		private int[] instructionNumbering;
 		private ExtendedBlock[] extendedBlocks;
 		private VirtualRegister[] virtualRegisters;
 
@@ -45,7 +44,6 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			this.registerCount = virtualRegisterCount + physicalRegisterCount;
 
 			this.liveIntervalUnions = new LiveIntervalUnion[physicalRegisterCount];
-			this.instructionNumbering = new int[instructionSet.Size];
 			this.virtualRegisters = new VirtualRegister[registerCount];
 
 			// Setup extended physical registers
@@ -123,7 +121,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 				{
 					if (!context.IsEmpty)
 					{
-						instructionNumbering[context.Index] = index;
+                        context.SlotNumber = index;
 						index = index + 2;
 					}
 				}
@@ -226,7 +224,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 				while (!context.IsStartInstruction)
 				{
 					OperandVisitor visitor = new OperandVisitor(context);
-					int index = instructionNumbering[context.Index];
+                    int index = context.SlotNumber;
 
 					if (context.Instruction.FlowControl == FlowControl.Call)
 					{

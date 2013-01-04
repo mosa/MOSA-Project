@@ -48,6 +48,25 @@ namespace Mosa.Compiler.TypeSystem.Cil
 			this.Parameters = new List<RuntimeParameter>();
 		}
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CilRuntimeMethod" /> class.
+        /// </summary>
+        /// <param name="module">The module.</param>
+        /// <param name="genericMethod">The generic method.</param>
+        /// <param name="signature">The signature.</param>
+        /// <param name="declaringType">Type of the declaring.</param>
+        public CilRuntimeMethod(ITypeModule module, CilRuntimeMethod genericMethod, MethodSignature signature, RuntimeType declaringType) :
+			base(module, genericMethod.Token, declaringType)
+		{
+			this.Signature = signature;
+			this.Attributes = genericMethod.Attributes;
+			this.ImplAttributes = genericMethod.ImplAttributes;
+			this.Rva = genericMethod.Rva;
+			this.Parameters = genericMethod.Parameters;
+			base.Name = genericMethod.Name;
+		}
+
+
 		#endregion // Construction
 
 	}

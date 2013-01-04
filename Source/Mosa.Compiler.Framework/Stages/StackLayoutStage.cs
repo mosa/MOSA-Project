@@ -43,8 +43,8 @@ namespace Mosa.Compiler.Framework.Stages
 			LayoutParameters(methodCompiler);
 
 			// Create a prologue instruction
-			Context prologueCtx = new Context(instructionSet, basicBlocks.PrologueBlock).InsertBefore();
-			prologueCtx.SetInstruction(IRInstruction.Prologue);
+            Context prologueCtx = new Context(instructionSet, basicBlocks.PrologueBlock);
+			prologueCtx.AppendInstruction(IRInstruction.Prologue);
 			prologueCtx.Label = -1;
 
 			// Create an epilogue instruction

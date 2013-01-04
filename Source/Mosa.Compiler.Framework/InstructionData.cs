@@ -32,6 +32,11 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		public int Label;
 
+        /// <summary>
+        /// The order slot number (initalized by some stage)
+        /// </summary>
+        public int SlotNumber;
+
 		/// <summary>
 		/// Holds the first operand of the instruction.
 		/// </summary>
@@ -68,7 +73,7 @@ namespace Mosa.Compiler.Framework
 		public object Other;
 
 		/// <summary>
-		/// 
+		/// Holds a packed value (to save space)
 		/// </summary>
 		private uint packed;
 

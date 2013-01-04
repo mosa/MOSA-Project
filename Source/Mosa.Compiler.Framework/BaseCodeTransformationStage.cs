@@ -27,7 +27,7 @@ namespace Mosa.Compiler.Framework
             for (int index = 0; index < basicBlocks.Count; index++)
                 for (Context ctx = new Context(instructionSet, basicBlocks[index]); !ctx.IsLastInstruction; ctx.GotoNext())
                     if (!ctx.IsEmpty)
-                        ctx.Clone().Visit(this); // TRY: ctx.Visit(this); to speed up traversal
+                        ctx.Clone().Visit(this);
         }
 
         #endregion // IMethodCompilerStage Members

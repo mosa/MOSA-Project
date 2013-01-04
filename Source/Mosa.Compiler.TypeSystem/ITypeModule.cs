@@ -11,7 +11,7 @@ using System.Collections.Generic;
 
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Loader;
-using Mosa.Compiler.TypeSystem.Generic;
+using Mosa.Compiler.TypeSystem.Cil;
 
 namespace Mosa.Compiler.TypeSystem
 {

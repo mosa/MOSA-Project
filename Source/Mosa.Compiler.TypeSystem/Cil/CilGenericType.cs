@@ -6,7 +6,7 @@ using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Compiler.TypeSystem.Cil;
 
-namespace Mosa.Compiler.TypeSystem.Generic
+namespace Mosa.Compiler.TypeSystem.Cil
 {
 
 	public class CilGenericType : RuntimeType
@@ -15,11 +15,6 @@ namespace Mosa.Compiler.TypeSystem.Generic
 		/// 
 		/// </summary>
 		private readonly CilRuntimeType baseGenericType;
-
-		/// <summary>
-		/// 
-		/// </summary>
-		private readonly GenericInstSigType signature;
 
 		/// <summary>
 		/// 
@@ -43,12 +38,11 @@ namespace Mosa.Compiler.TypeSystem.Generic
 		/// <param name="token">The token.</param>
 		/// <param name="baseGenericType">Type of the base generic.</param>
 		/// <param name="genericTypeInstanceSignature">The generic type instance signature.</param>
-		public CilGenericType(ITypeModule typeModule, Token token, RuntimeType baseGenericType, GenericInstSigType genericTypeInstanceSignature) :
+        public CilGenericType(ITypeModule typeModule, Token token, RuntimeType baseGenericType, SigType[] genericArguments) :
 			base(baseGenericType.Module, token, baseGenericType.BaseType)
 		{
 			Debug.Assert(baseGenericType is CilRuntimeType);
 
-			this.signature = genericTypeInstanceSignature;
 			this.baseGenericType = baseGenericType as CilRuntimeType;
 			this.InstantiationModule = typeModule;
 			base.Attributes = baseGenericType.Attributes;
@@ -62,7 +56,7 @@ namespace Mosa.Compiler.TypeSystem.Generic
 			}
 
 			// TODO: if this is a nested types, add enclosing type(s) into genericArguments first
-			this.genericArguments = signature.GenericArguments;
+            this.genericArguments = genericArguments;
 
 			base.Name = GetName(typeModule);
 
@@ -169,7 +163,7 @@ namespace Mosa.Compiler.TypeSystem.Generic
 			foreach (CilRuntimeMethod method in baseGenericType.Methods)
 			{
 				var signature = new MethodSignature(method.Signature, genericArguments);
-				var genericInstanceMethod = new CilGenericMethod(Module, method, signature, this);
+                var genericInstanceMethod = new CilRuntimeMethod(Module, method, signature, this);
 				Methods.Add(genericInstanceMethod);
 			}
 		}
@@ -179,7 +173,7 @@ namespace Mosa.Compiler.TypeSystem.Generic
 			foreach (CilRuntimeField field in baseGenericType.Fields)
 			{
 				var signature = new FieldSignature(field.Signature, genericArguments);
-				var genericInstanceField = new CilGenericField(Module, field, signature, this);
+                var genericInstanceField = new CilRuntimeField(Module, field, signature, this);
 				Fields.Add(genericInstanceField);
 			}
 

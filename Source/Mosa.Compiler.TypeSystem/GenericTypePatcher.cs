@@ -13,7 +13,7 @@ using System.Collections.Generic;
 
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Signatures;
-using Mosa.Compiler.TypeSystem.Generic;
+using Mosa.Compiler.TypeSystem.Cil;
 
 namespace Mosa.Compiler.TypeSystem
 {
@@ -134,7 +134,7 @@ namespace Mosa.Compiler.TypeSystem
 				var sigtype = new TypeSigType(signatureToken, CilElementType.Var);
 				var signature = new GenericInstSigType(sigtype, genericArguments);
 
-				patchedType = new CilGenericType(enclosingType.InstantiationModule, typeToken, openType.BaseGenericType, signature);
+				patchedType = new CilGenericType(enclosingType.InstantiationModule, typeToken, openType.BaseGenericType, signature.GenericArguments);
 				AddPatchedType(openType, genericArguments, patchedType);
 			}
 
@@ -161,7 +161,7 @@ namespace Mosa.Compiler.TypeSystem
 				var sigtype = new TypeSigType(signatureToken, CilElementType.Var);
 				var signature = new GenericInstSigType(sigtype, genericArguments);
 
-				patchedType = new CilGenericType(enclosingType.InstantiationModule, typeToken, openType.BaseGenericType, signature);
+				patchedType = new CilGenericType(enclosingType.InstantiationModule, typeToken, openType.BaseGenericType, signature.GenericArguments);
 				AddPatchedType(openType, genericArguments, patchedType);
 			}
 
@@ -189,7 +189,7 @@ namespace Mosa.Compiler.TypeSystem
 				var sigtype = new TypeSigType(signatureToken, CilElementType.Var);
 				var signature = new GenericInstSigType(sigtype, genericArguments);
 
-				patchedType = new CilGenericType(enclosingType.InstantiationModule, typeToken, openType.BaseGenericType, signature);
+				patchedType = new CilGenericType(enclosingType.InstantiationModule, typeToken, openType.BaseGenericType, signature.GenericArguments);
 				
 				AddPatchedType(openType, genericArguments, patchedType);
 			}

@@ -17,22 +17,6 @@ using Mosa.Compiler.TypeSystem;
 namespace Mosa.Compiler.Framework
 {
 
-    #region Helper Context Classes
-
-    //public class InsertContext
-    //{
-    //	public Context Context;
-    //	public InsertContext(Context context) { Context = context; }
-    //}
-
-    //public class SetContext
-    //{
-    //	public Context Context;
-    //	public SetContext(Context context) { Context = context; }
-    //}
-
-    #endregion // Nested Classes
-
     /// <summary>
     /// Provides context for transformations.
     /// </summary>
@@ -42,7 +26,7 @@ namespace Mosa.Compiler.Framework
         #region Data members
 
         /// <summary>
-        /// Holds the instruction index operated on.
+        /// Holds the index of the instruction being operated on.
         /// </summary>
         private int index;
 
@@ -52,19 +36,9 @@ namespace Mosa.Compiler.Framework
         private InstructionSet instructionSet;
 
         /// <summary>
-        /// Holds the block being operated on.
+        /// Holds the basic block of the instruction being operated on.
         /// </summary>
         private BasicBlock block;
-
-        /// <summary>
-        /// 
-        /// </summary>
-        //private InsertContext insertContext;
-
-        /// <summary>
-        /// 
-        /// </summary>
-        //private SetContext setContext;
 
         #endregion // Data members
 
@@ -138,6 +112,16 @@ namespace Mosa.Compiler.Framework
         }
 
         /// <summary>
+        /// The order slot number (initalized by some stage)
+        /// </summary>
+        /// <value>The label.</value>
+        public int SlotNumber
+        {
+            get { return instructionSet.Data[index].SlotNumber; }
+            set { instructionSet.Data[index].SlotNumber = value; }
+        }
+
+        /// <summary>
         /// Gets or sets the label.
         /// </summary>
         /// <value>The label.</value>
@@ -148,7 +132,7 @@ namespace Mosa.Compiler.Framework
         }
 
         /// <summary>
-        /// Gets or sets the branch.
+        /// Gets or sets the branch targets.
         /// </summary>
         /// <value>
         /// The branch.
@@ -501,15 +485,6 @@ namespace Mosa.Compiler.Framework
         }
 
         /// <summary>
-        /// Clones this context, beginning at the start of the basic block.
-        /// </summary>
-        /// <returns></returns>
-        public Context CloneAtStart()
-        {
-            return new Context(instructionSet, block, block.StartIndex);
-        }
-
-        /// <summary>
         /// Goes to the next instruction.
         /// </summary>
         public void GotoNext()
@@ -561,35 +536,27 @@ namespace Mosa.Compiler.Framework
         /// <returns></returns>
         public Context InsertBefore()
         {
-            int label = Label;
-            int beforeIndex = -1;
+            Debug.Assert(!IsStartInstruction);
 
-            if (IsStartInstruction)
-            {
-                Debug.Assert(BasicBlock != null, @"Cannot insert before first instruction without basic block");
-                Debug.Assert(BasicBlock.StartIndex == index, @"Cannot be first instruction since basic block does not start here");
-                beforeIndex = instructionSet.InsertBefore(index);
-                BasicBlock.StartIndex = beforeIndex;
-            }
-            else
-                beforeIndex = instructionSet.InsertBefore(index);
+            int label = Label;
+            int beforeIndex = instructionSet.InsertBefore(index);
 
             Context ctx = new Context(instructionSet, beforeIndex);
             ctx.Clear();
-            ctx.Label = label;
+            ctx.Label = label; // assign label to this new node
             return ctx;
         }
 
         /// <summary>
-        /// Remove this instance.
+        /// Remove this instruction.
         /// </summary>
         public void Remove()
         {
             int label = Label;
             Clear();
 
-            Instruction = null;
-            Label = label;
+            //Instruction = null;
+            Label = label; // maintain label for this node
         }
 
         /// <summary>

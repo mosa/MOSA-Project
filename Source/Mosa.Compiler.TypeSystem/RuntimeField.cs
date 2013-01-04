@@ -96,8 +96,7 @@ namespace Mosa.Compiler.TypeSystem
 		/// <value>The type.</value>
 		public SigType SignatureType
 		{
-			get { return this.Signature.Type; }
-			internal set { this.Signature.Type = value; }
+			get { return signature.Type; }
 		}
 
 		public bool IsLiteralField

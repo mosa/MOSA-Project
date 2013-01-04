@@ -82,9 +82,7 @@
     <Compile Include="TypeLayout.cs" />
     <Compile Include="TypeSystem.cs" />
     <Compile Include="CustomAttributeParser.cs" />
-    <Compile Include="Generic\CilGenericField.cs" />
-    <Compile Include="Generic\CilGenericMethod.cs" />
-    <Compile Include="Generic\CilGenericType.cs">
+    <Compile Include="Cil\CilGenericType.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ITypeModule.cs" />
