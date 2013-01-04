@@ -25,7 +25,7 @@
                     <include name="Instructions/SubSD.cs"/>
                     <include name="Stages/AddressModeConversionStage.cs"/>
                     <include name="ControlRegister.cs"/>
-                    <include name="Stages/FixedRegisterAssignementStage.cs"/>
+                    <include name="Stages/FixedRegisterAssignmentStage.cs"/>
                     <include name="Stages/ExceptionVectorStage.cs"/>
                     <include name="Instructions/FarJmp.cs"/>
                     <include name="Instructions/Leave.cs"/>

@@ -3,4 +3,4 @@ if exist %SYSTEMROOT%\Microsoft.NET\Framework\v4.0.30319 set MSBUILDPATH=%SYSTEM
 
 set MSBUILD=%MSBUILDPATH%\msbuild.exe
 
-%MSBUILD% /nologo /m /p:BuildInParallel=true /p:Configuration=Release /p:Platform="Any CPU" MOSA-VS2010.sln
+%MSBUILD% /nologo /m /p:BuildInParallel=true /p:Configuration=Release /p:Platform="Any CPU" MOSA-VS2012.sln

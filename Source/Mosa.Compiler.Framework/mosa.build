@@ -22,6 +22,7 @@
                     <include name="RegisterAllocator/LiveIntervalUnion.cs"/>
                     <include name="RegisterAllocator/ExtendedBlock.cs"/>
                     <include name="RegisterAllocator/LiveInterval.cs"/>
+                    <include name="RegisterAllocator/SlotIndex.cs"/>
                     <include name="RegisterAllocator/VirtualRegister.cs"/>
                     <include name="RegisterAllocator/GreedyRegisterAllocator.cs"/>
                     <include name="Interval.cs"/>
@@ -75,7 +76,6 @@
                     <include name="BaseCompilerStage.cs"/>
                     <include name="Platform/BasePlatformInstruction.cs"/>
                     <include name="Platform/BasePlatformTransformationStage.cs"/>
-                    <include name="RegisterBitmap.cs"/>
                     <include name="StackLayout.cs"/>
                     <include name="Stages/MultipleDefinitionMarkerStage.cs"/>
                     <include name="ITypeInitializerSchedulerStage.cs"/>
