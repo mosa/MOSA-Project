@@ -91,6 +91,7 @@
     <Compile Include="Smbios\SmbiosManager.cs" />
     <Compile Include="Smbios\SmbiosStructure.cs" />
     <Compile Include="TaskManager.cs" />
+    <Compile Include="VBE.cs" />
     <Compile Include="VirtualPageAllocator.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -107,7 +108,9 @@
       <Name>Mosa.Platform.x86.Intrinsic</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Reference Include="System" />
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />
   <PropertyGroup>
     <PreBuildEvent>
