@@ -104,7 +104,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			int offset = 0;
 
-			if (compiler.Method.Signature.HasThis || compiler.Method.Signature.HasExplicitThis)
+			if (compiler.Method.HasThis || compiler.Method.HasExplicitThis)
 				++offset;
 
 			for (int i = 0; i < compiler.Method.Parameters.Count + offset; ++i)

@@ -124,18 +124,5 @@ namespace Mosa.Compiler.Metadata.Signatures
 			}
 		}
 
-		public static Signature FromMemberRefSignatureToken(IMetadataProvider provider, HeapIndexToken token, SigType[] genericArguments)
-		{
-			SignatureReader reader = new SignatureReader(provider.ReadBlob(token));
-
-			if (reader[0] == 0x06)
-			{
-				return new FieldSignature(reader, genericArguments);
-			}
-			else
-			{
-				return new MethodSignature(reader, genericArguments);
-			}
-		}
 	}
 }

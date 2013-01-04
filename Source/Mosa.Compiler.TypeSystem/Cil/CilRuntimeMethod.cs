@@ -36,14 +36,18 @@ namespace Mosa.Compiler.TypeSystem.Cil
 		/// <param name="methodAttributes">The method attributes.</param>
 		/// <param name="methodImplAttributes">The method impl attributes.</param>
 		/// <param name="rva">The rva.</param>
-		public CilRuntimeMethod(ITypeModule module, string name, MethodSignature signature, Token token, RuntimeType declaringType, MethodAttributes methodAttributes, MethodImplAttributes methodImplAttributes, uint rva) :
+        public CilRuntimeMethod(ITypeModule module, string name, SigType returnType, bool hasThis, bool hasExplicitThis, SigType[] sigParameters, Token token, RuntimeType declaringType, MethodAttributes methodAttributes, MethodImplAttributes methodImplAttributes, uint rva) :
 			base(module, token, declaringType)
 		{
 			base.Attributes = methodAttributes;
 			base.ImplAttributes = methodImplAttributes;
 			base.Rva = rva;
 			this.Name = name;
-			this.Signature = signature;
+			
+            this.ReturnType = returnType;
+            this.HasThis = hasThis;
+            this.HasExplicitThis = hasExplicitThis;
+            this.SigParameters = sigParameters;
 
 			this.Parameters = new List<RuntimeParameter>();
 		}
@@ -55,17 +59,20 @@ namespace Mosa.Compiler.TypeSystem.Cil
         /// <param name="genericMethod">The generic method.</param>
         /// <param name="signature">The signature.</param>
         /// <param name="declaringType">Type of the declaring.</param>
-        public CilRuntimeMethod(ITypeModule module, CilRuntimeMethod genericMethod, MethodSignature signature, RuntimeType declaringType) :
+        public CilRuntimeMethod(ITypeModule module, CilRuntimeMethod genericMethod, SigType returnType, bool hasThis, bool hasExplicitThis, SigType[] sigParameters, RuntimeType declaringType) :
 			base(module, genericMethod.Token, declaringType)
 		{
-			this.Signature = signature;
 			this.Attributes = genericMethod.Attributes;
 			this.ImplAttributes = genericMethod.ImplAttributes;
 			this.Rva = genericMethod.Rva;
 			this.Parameters = genericMethod.Parameters;
 			base.Name = genericMethod.Name;
-		}
 
+            this.ReturnType = returnType;
+            this.HasThis = hasThis;
+            this.HasExplicitThis = hasExplicitThis;
+            this.SigParameters = sigParameters;
+		}
 
 		#endregion // Construction
 

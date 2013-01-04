@@ -437,7 +437,7 @@ namespace Mosa.Compiler.TypeSystem
 
 				if (cleanInterfaceMethodName.Equals(cleanMethodName))
 				{
-					if (interfaceMethod.Signature.Matches(method.Signature))
+					if (interfaceMethod.Matches(method))
 					{
 						return method;
 					}
@@ -532,7 +532,7 @@ namespace Mosa.Compiler.TypeSystem
 		{
 			foreach (var baseMethod in methodTable)
 			{
-				if (baseMethod.Name.Equals(method.Name) && baseMethod.Signature.Matches(method.Signature))
+				if (baseMethod.Name.Equals(method.Name) && baseMethod.Matches(method))
 				{
 					return methodTableOffsets[baseMethod];
 				}

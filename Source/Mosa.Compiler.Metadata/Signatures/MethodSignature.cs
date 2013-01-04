@@ -118,17 +118,6 @@ namespace Mosa.Compiler.Metadata.Signatures
 		/// <summary>
 		/// Initializes a new instance of the <see cref="MethodSignature"/> class.
 		/// </summary>
-		/// <param name="reader">The reader.</param>
-		/// <param name="genericArguments">The generic arguments.</param>
-		public MethodSignature(SignatureReader reader, SigType[] genericArguments)
-			: base(reader)
-		{
-			ApplyGenericArguments(genericArguments);
-		}
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="MethodSignature"/> class.
-		/// </summary>
 		/// <param name="provider">The provider.</param>
 		/// <param name="token">The token.</param>
 		public MethodSignature(IMetadataProvider provider, HeapIndexToken token)
@@ -172,17 +161,6 @@ namespace Mosa.Compiler.Metadata.Signatures
 			this.parameters = new SigType[signature.parameters.Length];
 			for (int i = 0; i < signature.parameters.Length; i++)
 				this.parameters[i] = signature.parameters[i];
-		}
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="MethodSignature"/> class.
-		/// </summary>
-		/// <param name="signature">The signature.</param>
-		/// <param name="genericArguments">The generic arguments.</param>
-		public MethodSignature(MethodSignature signature, SigType[] genericArguments)
-			: this(signature)
-		{
-			ApplyGenericArguments(genericArguments);
 		}
 
 		/// <summary>
@@ -251,52 +229,5 @@ namespace Mosa.Compiler.Metadata.Signatures
 		/// </summary>
 		private const byte HAS_EXPLICIT_THIS = 0x40;
 
-		/// <summary>
-		/// Matches the specified other.
-		/// </summary>
-		/// <param name="other">The other.</param>
-		/// <returns></returns>
-		public bool Matches(MethodSignature other)
-		{
-			if (object.ReferenceEquals(this, other))
-				return true;
-
-			// TODO: Check this to make sure it is correct
-			if (other.GenericParameterCount != this.GenericParameterCount)
-				return false;
-			if (other.MethodCallingConvention != this.MethodCallingConvention)
-				return false;
-			if (other.HasThis != this.HasThis)
-				return false;
-			if (other.HasExplicitThis != this.HasExplicitThis)
-				return false;
-			if (this.Parameters.Length != other.Parameters.Length)
-				return false;
-			if (!this.ReturnType.Matches(other.ReturnType))
-				return false;
-
-			for (int i = 0; i < this.Parameters.Length; i++)
-			{
-				if (!this.Parameters[i].Matches(other.Parameters[i]))
-					return false;
-			}
-
-			return true;
-		}
-
-		protected void ApplyGenericArguments(SigType[] genericArguments)
-		{
-			for (int i = 0; i < parameters.Length; i++)
-			{
-				if (parameters[i] is VarSigType)
-				{
-					if ((parameters[i] as VarSigType).Index < genericArguments.Length)
-						parameters[i] = genericArguments[(parameters[i] as VarSigType).Index];
-				}
-			}
-
-			if (returnType is VarSigType)
-				returnType = genericArguments[(returnType as VarSigType).Index];
-		}
 	}
 }

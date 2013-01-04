@@ -83,6 +83,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 						LocalVariableSignature localsSignature;
 
+                        // FIXME: Don't resolve generics like this
 						if (methodCompiler.Method.DeclaringType is CilGenericType)
 						{
 							localsSignature = new LocalVariableSignature(methodCompiler.Method.Module.MetadataModule.Metadata, row.SignatureBlobIdx, (methodCompiler.Method.DeclaringType as CilGenericType).GenericArguments);
@@ -101,7 +102,9 @@ namespace Mosa.Compiler.Framework.Stages
 							{
 								var genericInstSigType = local.Type as GenericInstSigType;
 								var genericArguments = methodCompiler.Compiler.GenericTypePatcher.CloseGenericArguments((declaringType as CilGenericType).GenericArguments, genericInstSigType.GenericArguments);
-								local = new VariableSignature(locals[i], genericArguments);
+								
+                                // FIXME: Don't resolve generics like this
+                                local = new VariableSignature(locals[i], genericArguments);
 							}
 						}
 

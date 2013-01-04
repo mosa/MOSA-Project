@@ -410,7 +410,7 @@ namespace Mosa.Compiler.Framework.Stages
                 {
                     if (method.Name == invokeTarget.Name)
                     {
-                        if (method.Signature.Matches(invokeTarget.Signature))
+                        if (method.Matches(invokeTarget))
                         {
                             invokeTarget = method;
                             break;
@@ -608,21 +608,17 @@ namespace Mosa.Compiler.Framework.Stages
 
         private bool DoCtorParametersMatch(RuntimeMethod method, List<Operand> ctorOperands)
         {
-            bool result = false;
+            if (method.Parameters.Count != ctorOperands.Count)
+                return false;
 
-            if (method.Parameters.Count == ctorOperands.Count)
+            for (int index = 0; index < ctorOperands.Count; index++)
             {
-                result = true;
-
-                for (int index = 0; result && index < ctorOperands.Count; index++)
-                {
-                    result = ctorOperands[index].Type.Matches(method.Signature.Parameters[index]);
-                }
+                if (!ctorOperands[index].Type.Matches(method.SigParameters[index]))
+                    return false;
             }
 
-            return result;
+            return true;
         }
-
 
         /// <summary>
         /// Visitation function for Castclass instruction.

@@ -158,7 +158,7 @@ namespace Mosa.Compiler.Framework
 
 			this.pipeline = new CompilerPipeline();
 
-			this.stackLayout = new StackLayout(architecture, method.Parameters.Count + (method.Signature.HasThis || method.Signature.HasExplicitThis ? 1 : 0));
+			this.stackLayout = new StackLayout(architecture, method.Parameters.Count + (method.HasThis || method.HasExplicitThis ? 1 : 0));
 
 			this.virtualRegisters = new VirtualRegisters(architecture);
 
@@ -290,7 +290,7 @@ namespace Mosa.Compiler.Framework
 		{
 			int index = 0;
 
-			if (method.Signature.HasThis || method.Signature.HasExplicitThis)
+			if (method.HasThis || method.HasExplicitThis)
 			{
 				var signatureType = Method.DeclaringType.ContainsOpenGenericParameters
 					? compiler.GenericTypePatcher.PatchSignatureType(Method.Module, Method.DeclaringType as CilGenericType, type.Token)
@@ -299,9 +299,9 @@ namespace Mosa.Compiler.Framework
 				stackLayout.SetStackParameter(index++, new RuntimeParameter(@"this", 2, ParameterAttributes.In), signatureType);
 			}
 
-			for (int paramIndex = 0; paramIndex < method.Signature.Parameters.Length; paramIndex++)
+			for (int paramIndex = 0; paramIndex < method.SigParameters.Length; paramIndex++)
 			{
-				var parameterType = method.Signature.Parameters[paramIndex];
+                var parameterType = method.SigParameters[paramIndex];
 
 				if (parameterType is GenericInstSigType && (parameterType as GenericInstSigType).ContainsGenericParameters)
 				{
@@ -404,6 +404,8 @@ namespace Mosa.Compiler.Framework
 		/// <param name="localVariableSignature">The local variable signature of the _method.</param>
 		public void SetLocalVariableSignature(LocalVariableSignature localVariableSignature)
 		{
+            // FIXME: Do not capture signature 
+
 			if (localVariableSignature == null)
 				throw new ArgumentNullException(@"localVariableSignature");
 

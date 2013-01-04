@@ -443,8 +443,8 @@ namespace Mosa.Platform.AVR32
 			context.AppendInstruction(AVR32.Pop, r7);
 
 			// Save EDX for int32 return values (or do not save EDX for non-int64 return values)
-			if (methodCompiler.Method.Signature.ReturnType.Type != CilElementType.I8 &&
-				methodCompiler.Method.Signature.ReturnType.Type != CilElementType.U8)
+			if (methodCompiler.Method.ReturnType.Type != CilElementType.I8 &&
+				methodCompiler.Method.ReturnType.Type != CilElementType.U8)
 			{
 				// push edx
 				context.AppendInstruction(AVR32.Push, null, Operand.CreateCPURegister(I, GeneralPurposeRegister.R9));
@@ -465,8 +465,8 @@ namespace Mosa.Platform.AVR32
 			Operand r7 = Operand.CreateCPURegister(I, GeneralPurposeRegister.R7);
 
 			// Load EDX for int32 return values
-			if (methodCompiler.Method.Signature.ReturnType.Type != CilElementType.I8 &&
-				methodCompiler.Method.Signature.ReturnType.Type != CilElementType.U8)
+			if (methodCompiler.Method.ReturnType.Type != CilElementType.I8 &&
+				methodCompiler.Method.ReturnType.Type != CilElementType.U8)
 			{
 				// pop edx
 				context.SetInstruction(AVR32.Pop, r9);

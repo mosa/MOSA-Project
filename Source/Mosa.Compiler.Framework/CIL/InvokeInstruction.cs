@@ -117,9 +117,9 @@ namespace Mosa.Compiler.Framework.CIL
 		{
 			base.Validate(ctx, compiler);
 
-			int paramCount = ctx.InvokeTarget.Signature.Parameters.Length;
+            int paramCount = ctx.InvokeTarget.SigParameters.Length;
 
-			if (ctx.InvokeTarget.Signature.HasThis && !ctx.InvokeTarget.Signature.HasExplicitThis)
+			if (ctx.InvokeTarget.HasThis && !ctx.InvokeTarget.HasExplicitThis)
 				paramCount++;
 
 			// Validate the operands...
@@ -209,23 +209,24 @@ namespace Mosa.Compiler.Framework.CIL
 			ctx.InvokeTarget = method;
 
 			// Retrieve the target signature
-			MethodSignature signature = ctx.InvokeTarget.Signature;
+			var invokeTarget = ctx.InvokeTarget;
 
 			// Fix the parameter list
-			byte paramCount = (byte)signature.Parameters.Length;
-			if (signature.HasThis && !signature.HasExplicitThis)
+            int paramCount = invokeTarget.SigParameters.Length;
+
+			if (invokeTarget.HasThis && !invokeTarget.HasExplicitThis)
 				paramCount++;
 
 			// Setup operands for parameters and the return value
-			if (signature.ReturnType.Type != CilElementType.Void)
+			if (invokeTarget.ReturnType.Type != CilElementType.Void)
 			{
 				ctx.ResultCount = 1;
-				ctx.Result = compiler.CreateVirtualRegister(signature.ReturnType);
+				ctx.Result = compiler.CreateVirtualRegister(invokeTarget.ReturnType);
 			}
 			else
 				ctx.ResultCount = 0;
 
-			ctx.OperandCount = paramCount;
+			ctx.OperandCount = (byte)paramCount;
 		}
 
 		/// <summary>

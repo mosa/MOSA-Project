@@ -79,7 +79,8 @@ namespace Mosa.Compiler.Framework.Stages
 			IPipelineStage previousStage = methodCompiler.GetStage(typeof(IMethodCompilerStage));
 
 			dotFile.WriteLine("subgraph cluster" + methodName + "_FlowGraph {");
-			dotFile.WriteLine("label = \"Method: " + methodName + "(" + methodCompiler.Method.Signature + ") after " + previousStage.Name + "\"");
+			//dotFile.WriteLine("label = \"Method: " + methodName + "(" + methodCompiler.Method.Signature + ") after " + previousStage.Name + "\"");
+            dotFile.WriteLine("label = \"Method: " + methodName + " after " + previousStage.Name + "\"");
 			//dotFile.WriteLine("graph [rankdir = \"TB\"];");
 
 			string nodes = string.Empty;

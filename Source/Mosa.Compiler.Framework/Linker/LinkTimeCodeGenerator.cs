@@ -64,11 +64,9 @@ namespace Mosa.Compiler.Framework.Linker
 				//compiler.Scheduler.TrackTypeAllocated(compilerGeneratedType);
 			}
 
-			MethodSignature signature = new MethodSignature(BuiltInSigType.Void, new SigType[0]);
-
 			// Create the method
 			// HACK: <$> prevents the method from being called from CIL
-			LinkerGeneratedMethod method = new LinkerGeneratedMethod(typeSystem.InternalTypeModule, "<$>" + methodName, compilerGeneratedType, signature);
+            LinkerGeneratedMethod method = new LinkerGeneratedMethod(typeSystem.InternalTypeModule, "<$>" + methodName, compilerGeneratedType, BuiltInSigType.Void, false, false, new SigType[0]);
 			compilerGeneratedType.AddMethod(method);
 
 			//compiler.Scheduler.TrackMethodInvoked(method);

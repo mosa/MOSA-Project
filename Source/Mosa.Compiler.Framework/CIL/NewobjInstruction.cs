@@ -141,8 +141,8 @@ namespace Mosa.Compiler.Framework.CIL
 		public override void Validate(Context ctx, BaseMethodCompiler compiler)
 		{
 			// Validate the operands...
-			int offset = (ctx.InvokeTarget.Signature.HasExplicitThis ? 1 : 0);
-			Debug.Assert(ctx.OperandCount == ctx.InvokeTarget.Parameters.Count - offset, @"Operand count doesn't match parameter count.");
+			int offset = (ctx.InvokeTarget.HasExplicitThis ? 1 : 0);
+            Debug.Assert(ctx.OperandCount == ctx.InvokeTarget.SigParameters.Length - offset, @"Operand count doesn't match parameter count.");
 		}
 
 		/// <summary>

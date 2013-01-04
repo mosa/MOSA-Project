@@ -1,3 +1,13 @@
+/*
+ * (c) 2008 MOSA - The Managed Operating System Alliance
+ *
+ * Licensed under the terms of the New BSD License.
+ *
+ * Authors:
+ *  Michael Ruck (grover) <sharpos@michaelruck.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
+ */
+
 using System;
 using System.Diagnostics;
 using System.Text;
@@ -162,9 +172,12 @@ namespace Mosa.Compiler.TypeSystem.Cil
 		{
 			foreach (CilRuntimeMethod method in baseGenericType.Methods)
 			{
-				var signature = new MethodSignature(method.Signature, genericArguments);
-                var genericInstanceMethod = new CilRuntimeMethod(Module, method, signature, this);
-				Methods.Add(genericInstanceMethod);
+                SigType[] sigTypes = GenericSigTypeResolver.Resolve(method.SigParameters, genericArguments);
+                SigType returnType = GenericSigTypeResolver.Resolve(method.ReturnType, genericArguments);
+
+                var genericInstanceMethod = new CilRuntimeMethod(Module, method, returnType, method.HasThis, method.HasExplicitThis, sigTypes, this);
+				
+                Methods.Add(genericInstanceMethod);
 			}
 		}
 

@@ -297,7 +297,7 @@ namespace Mosa.Compiler.TypeSystem
 
 			for (int i = 0; i < openType.Methods.Count; ++i)
 			{
-				if (method.Name == openType.Methods[i].Name && method.Signature.Matches(openType.Methods[i].Signature))
+				if (method.Name == openType.Methods[i].Name && method.Matches(openType.Methods[i]))
 				{
 					return i;
 				}

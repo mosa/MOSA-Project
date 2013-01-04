@@ -287,7 +287,7 @@ namespace Mosa.Compiler.TypeSystem
 					if ((method.Attributes & attrs) == attrs && method.Name == ".cctor")
 					{
 						Debug.Assert(method.Parameters.Count == 0, @"Static initializer takes arguments??");
-						Debug.Assert(method.Signature.ReturnType == null, @"Static initializer having a result??");
+						Debug.Assert(method.ReturnType == null, @"Static initializer having a result??");
 						result = method;
 						break;
 					}
