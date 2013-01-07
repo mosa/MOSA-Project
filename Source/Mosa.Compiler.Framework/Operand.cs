@@ -798,7 +798,7 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Sigs the type of the type From stack.
+		/// Sigs the type of the type from stack.
 		/// </summary>
 		/// <param name="typeCode">The type code.</param>
 		/// <returns></returns>

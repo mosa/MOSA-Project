@@ -1548,7 +1548,7 @@ namespace Mosa.Compiler.Framework.Stages
 		}
 
 		/// <summary>
-		/// Determines the implicit result type of the load  instruction.
+		/// Determines the implicit result type of the load instruction.
 		/// </summary>
 		/// <param name="sigType">The signature type of the source operand.</param>
 		/// <returns>The signature type of the result.</returns>
@@ -1574,7 +1574,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 				case CilElementType.Char: goto case CilElementType.U2;
 				case CilElementType.Boolean: goto case CilElementType.U2;
-
 
 				default:
 					result = sigType;

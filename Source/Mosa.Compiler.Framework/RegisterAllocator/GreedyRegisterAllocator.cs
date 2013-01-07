@@ -12,17 +12,14 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using Mosa.Compiler.Common;
-using Mosa.Compiler.Framework;
 
 namespace Mosa.Compiler.Framework.RegisterAllocator
 {
-
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public sealed class GreedyRegisterAllocator
 	{
-
 		private BasicBlocks basicBlocks;
 		private InstructionSet instructionSet;
 		private int virtualRegisterCount;
@@ -363,7 +360,6 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		private void ProcessLiveInterval(LiveInterval liveInterval)
 		{
-
 			// Find an available live interval union to place this live interval
 			foreach (var liveIntervalUnion in liveIntervalUnions)
 			{
@@ -404,15 +400,11 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 					return;
 				}
-
 			}
 
 			// No live intervals to evict; split live interval
 
 			// TODO
-
 		}
-
 	}
 }
-

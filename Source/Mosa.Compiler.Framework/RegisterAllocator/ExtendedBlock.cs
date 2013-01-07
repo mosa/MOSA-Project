@@ -7,29 +7,30 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Diagnostics;
-using Mosa.Compiler.Common;
-using Mosa.Compiler.Framework;
 
 namespace Mosa.Compiler.Framework.RegisterAllocator
 {
-
 	public sealed class ExtendedBlock
 	{
 		public BasicBlock BasicBlock { get; private set; }
+
 		public int Sequence { get { return BasicBlock.Sequence; } }
+
 		public int LoopDepth { get; private set; }
 
 		public int From { get; set; }
+
 		public int To { get; set; }
 
 		public BitArray LiveGen { get; set; }
+
 		public BitArray LiveKill { get; set; }
+
 		public BitArray LiveOut { get; set; }
+
 		public BitArray LiveIn { get; set; }
+
 		public BitArray LiveKillNot { get; set; }
 
 		public ExtendedBlock(BasicBlock basicBlock, int virtualRegisterCount, int loopDepth)
@@ -42,7 +43,5 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			this.LiveKillNot = new BitArray(virtualRegisterCount);
 			this.LoopDepth = loopDepth;
 		}
-	
 	}
 }
-

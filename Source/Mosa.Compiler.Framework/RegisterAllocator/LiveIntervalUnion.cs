@@ -7,12 +7,7 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
-using Mosa.Compiler.Common;
-using Mosa.Compiler.Framework;
 
 namespace Mosa.Compiler.Framework.RegisterAllocator
 {
@@ -23,9 +18,11 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 		protected Register register;
 
 		public IList<LiveInterval> LiveIntervals { get { return liveIntervals.AsReadOnly(); } }
+
 		public Register Register { get { return register; } }
 
 		public bool IsFloatingPoint { get { return register.IsFloatingPoint; } }
+
 		public bool IsInteger { get { return register.IsInteger; } }
 
 		public LiveIntervalUnion(Register register)
@@ -82,6 +79,4 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			return intersections;
 		}
 	}
-
 }
-

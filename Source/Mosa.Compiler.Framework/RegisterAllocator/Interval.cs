@@ -8,21 +8,19 @@
  */
 
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Diagnostics;
-using Mosa.Compiler.Common;
 
 namespace Mosa.Compiler.Framework.RegisterAllocator
 {
-
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public class Interval
 	{
 		public int Start { get; set; }
+
 		public int End { get; set; }
+
 		public int Size { get { return End - Start; } }
 
 		public Interval(int start, int end)
@@ -79,8 +77,5 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 		{
 			Merge(liveRange.Start, liveRange.End);
 		}
-
 	}
-
 }
-

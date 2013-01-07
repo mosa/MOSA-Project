@@ -7,31 +7,30 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
-using Mosa.Compiler.Common;
-using Mosa.Compiler.Framework;
 
 namespace Mosa.Compiler.Framework.RegisterAllocator
 {
-
 	public sealed class VirtualRegister
 	{
-
 		private List<LiveInterval> liveIntervals = new List<LiveInterval>(1);
 		private List<int> usePositions = new List<int>();
 
 		public Operand VirtualRegisterOperand { get; private set; }
+
 		public Register PhysicalRegister { get; private set; }
+
 		public bool IsPhysicalRegister { get { return VirtualRegisterOperand == null; } }
 
 		public List<LiveInterval> LiveIntervals { get { return liveIntervals; } }
+
 		public int Count { get { return liveIntervals.Count; } }
+
 		public List<int> UsePositions { get { return usePositions; } }
 
 		public LiveInterval LastRange { get { return liveIntervals.Count == 0 ? null : liveIntervals[liveIntervals.Count - 1]; } }
+
 		public LiveInterval FirstRange { get { return liveIntervals.Count == 0 ? null : liveIntervals[0]; } }
 
 		public int SpillSlot { get; set; }
@@ -92,7 +91,6 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 					liveIntervals.Insert(i, new LiveInterval(this, start, end));
 					return;
 				}
-
 			}
 
 			// new range is after the last range
@@ -114,4 +112,3 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 		}
 	}
 }
-

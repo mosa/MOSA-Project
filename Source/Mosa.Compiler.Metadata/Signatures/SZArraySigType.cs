@@ -40,8 +40,8 @@ namespace Mosa.Compiler.Metadata.Signatures
 		public SZArraySigType(CustomMod[] customMods, SigType type) :
 			base(CilElementType.SZArray)
 		{
-			customMods = customMods;
-			elementType = type;
+			this.customMods = customMods;
+			this.elementType = type;
 		}
 
 		#endregion // Construction

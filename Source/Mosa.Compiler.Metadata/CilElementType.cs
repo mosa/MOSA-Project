@@ -7,7 +7,6 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-
 namespace Mosa.Compiler.Metadata
 {
 	/// <summary>
@@ -15,11 +14,6 @@ namespace Mosa.Compiler.Metadata
 	/// </summary>
 	public enum CilElementType
 	{
-		/// <summary>
-		/// Marks the end of the list
-		/// </summary>
-		End = 0x00,
-
 		/// <summary>
 		/// 
 		/// </summary>

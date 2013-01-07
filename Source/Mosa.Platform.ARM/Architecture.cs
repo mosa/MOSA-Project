@@ -163,37 +163,19 @@ namespace Mosa.Platform.ARM
 		/// Gets the type memory requirements.
 		/// </summary>
 		/// <param name="signatureType">The signature type.</param>
-		/// <param name="memorySize">Receives the memory size of the type.</param>
+		/// <param name="size">Receives the memory size of the type.</param>
 		/// <param name="alignment">Receives alignment requirements of the type.</param>
-		public override void GetTypeRequirements(SigType signatureType, out int memorySize, out int alignment)
+		public override void GetTypeRequirements(SigType signatureType, out int size, out int alignment)
 		{
 			if (signatureType == null)
 				throw new ArgumentNullException("signatureType");
 
 			switch (signatureType.Type)
 			{
-				case CilElementType.U1: memorySize = alignment = 4; break;
-				case CilElementType.U2: memorySize = alignment = 4; break;
-				case CilElementType.U4: memorySize = alignment = 4; break;
-				case CilElementType.U8: memorySize = 8; alignment = 4; break;
-				case CilElementType.I1: memorySize = alignment = 4; break;
-				case CilElementType.I2: memorySize = alignment = 4; break;
-				case CilElementType.I4: memorySize = alignment = 4; break;
-				case CilElementType.I8: memorySize = 8; alignment = 4; break;
-				case CilElementType.R4: memorySize = alignment = 4; break;
-				case CilElementType.R8: memorySize = alignment = 8; break;
-				case CilElementType.Boolean: memorySize = alignment = 4; break;
-				case CilElementType.Char: memorySize = alignment = 4; break;
-
-				// Platform specific
-				case CilElementType.Ptr: memorySize = alignment = 4; break;
-				case CilElementType.I: memorySize = alignment = 4; break;
-				case CilElementType.U: memorySize = alignment = 4; break;
-				case CilElementType.Object: memorySize = alignment = 4; break;
-				case CilElementType.Class: memorySize = alignment = 4; break;
-				case CilElementType.String: memorySize = alignment = 4; break;
-
-				default: memorySize = alignment = 4; break;
+				case CilElementType.U8: size = 8; alignment = 4; break;
+				case CilElementType.I8: size = 8; alignment = 4; break;
+				case CilElementType.R8: size = alignment = 8; break;
+				default: size = alignment = 4; break;
 			}
 		}
 
