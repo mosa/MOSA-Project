@@ -146,7 +146,8 @@ namespace Mosa.Compiler.Framework.Stages
 					writer.Write((uint)typeLayout.GetTypeSize(type));
 
 					// 2. Metadata Token
-					writer.Write((uint)type.Token.ToUInt32());
+					//writer.Write((uint)type.Token.ToUInt32());
+					writer.Write((uint)0); //FIXME: ^^^
 
 					// 3. Pointer to Name
 					linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuildInPatch.I4, typeTableSymbol, (int)writer.Position, 0, typeNameSymbol, 0);

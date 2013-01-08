@@ -357,24 +357,25 @@ namespace Mosa.Platform.x86.Stages
 		void IIRVisitor.Load(Context context)
 		{
 			Operand result = context.Result;
-			Operand operand = context.Operand1;
-			Operand offset = context.Operand2;
-			long offsetPtr = 0;
+			Operand baseOperand = context.Operand1;
+			Operand offsetOperand = context.Operand2;
+			long offset = 0;
 
-			Operand v1 = AllocateVirtualRegister(operand.Type);
-
-			context.SetInstruction(X86.Mov, v1, operand);
-
-			if (offset.IsConstant)
+			if (offsetOperand.IsConstant)
 			{
-				offsetPtr = offset.ValueAsLongInteger;
+				//Operand v1 = AllocateVirtualRegister(baseOperand.Type);
+				//context.SetInstruction(X86.Mov, v1, baseOperand);
+				//offset = offsetOperand.ValueAsLongInteger;
+				context.SetInstruction(X86.Mov, result, Operand.CreateMemoryAddress(baseOperand.Type, baseOperand, offsetOperand.ValueAsLongInteger));
 			}
 			else
 			{
-				context.AppendInstruction(X86.Add, v1, v1, offset);
+				Operand v1 = AllocateVirtualRegister(baseOperand.Type);
+				context.SetInstruction(X86.Mov, v1, baseOperand);
+				context.AppendInstruction(X86.Add, v1, v1, offsetOperand);
+				context.AppendInstruction(X86.Mov, result, Operand.CreateMemoryAddress(v1.Type, v1, offset));
 			}
-
-			context.AppendInstruction(X86.Mov, result, Operand.CreateMemoryAddress(v1.Type, v1, offsetPtr));
+			
 		}
 
 		/// <summary>

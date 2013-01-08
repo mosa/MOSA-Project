@@ -20,16 +20,18 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 	/// </summary>
 	public sealed class GreedyRegisterAllocator
 	{
+		private const int SlotIncrement = 4;
+
 		private BasicBlocks basicBlocks;
 		private InstructionSet instructionSet;
 		private int virtualRegisterCount;
 		private int physicalRegisterCount;
 		private int registerCount;
-		private ExtendedBlock[] extendedBlocks;
-		private VirtualRegister[] virtualRegisters;
+		private List<ExtendedBlock> extendedBlocks;
+		private List<VirtualRegister> virtualRegisters;
 
 		private SortedList<int, LiveInterval> priorityQueue;
-		private LiveIntervalUnion[] liveIntervalUnions;
+		private List<LiveIntervalUnion> liveIntervalUnions;
 
 		public GreedyRegisterAllocator(BasicBlocks basicBlocks, VirtualRegisters compilerVirtualRegisters, InstructionSet instructionSet, IArchitecture architecture)
 		{
@@ -40,20 +42,26 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			this.physicalRegisterCount = architecture.RegisterSet.Length;
 			this.registerCount = virtualRegisterCount + physicalRegisterCount;
 
-			this.liveIntervalUnions = new LiveIntervalUnion[physicalRegisterCount];
-			this.virtualRegisters = new VirtualRegister[registerCount];
+			this.liveIntervalUnions = new List<LiveIntervalUnion>(physicalRegisterCount);
+			this.virtualRegisters = new List<VirtualRegister>(registerCount);
+			this.extendedBlocks = new List<ExtendedBlock>(basicBlocks.Count);
 
 			// Setup extended physical registers
 			foreach (var physicalRegister in architecture.RegisterSet)
 			{
-				this.virtualRegisters[physicalRegister.Index] = new VirtualRegister(physicalRegister);
-				this.liveIntervalUnions[physicalRegister.Index] = new LiveIntervalUnion(physicalRegister);
+				Debug.Assert(physicalRegister.Index == virtualRegisters.Count);
+				Debug.Assert(physicalRegister.Index == liveIntervalUnions.Count);
+
+				this.virtualRegisters.Add(new VirtualRegister(physicalRegister));
+				this.liveIntervalUnions.Add(new LiveIntervalUnion(physicalRegister));
 			}
 
 			// Setup extended virtual registers
 			foreach (var virtualRegister in compilerVirtualRegisters)
 			{
-				this.virtualRegisters[virtualRegister.Sequence - 1 + physicalRegisterCount] = new VirtualRegister(virtualRegister);
+				Debug.Assert(virtualRegister.Index == virtualRegisters.Count - physicalRegisterCount + 1);
+
+				this.virtualRegisters.Add(new VirtualRegister(virtualRegister));
 			}
 
 			priorityQueue = new SortedList<int, LiveInterval>();
@@ -64,7 +72,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 		private void Start()
 		{
 			// Order all the blocks
-			OrderBlocks();
+			CreateExtendedBlocks();
 
 			// Number all the instructions in block order
 			NumberInstructions();
@@ -92,24 +100,24 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			return (operand.IsCPURegister) ? operand.Sequence : operand.Sequence - 1 + physicalRegisterCount;
 		}
 
-		private void OrderBlocks()
+		private void CreateExtendedBlocks()
 		{
 			var loopAwareBlockOrder = new LoopAwareBlockOrder(this.basicBlocks);
 
+			// The re-ordering is not strictly necessary; however, it reduces "holes" in live ranges. 
+			// Less "holes" increase readability of the debug logs.
 			basicBlocks.ReorderBlocks(loopAwareBlockOrder.NewBlockOrder);
 
 			// Allocate and setup extended blocks
-			this.extendedBlocks = new ExtendedBlock[basicBlocks.Count];
-
 			for (int i = 0; i < basicBlocks.Count; i++)
 			{
-				extendedBlocks[i] = new ExtendedBlock(basicBlocks[i], registerCount, loopAwareBlockOrder.GetLoopDepth(basicBlocks[i]));
+				extendedBlocks.Add(new ExtendedBlock(basicBlocks[i], registerCount, loopAwareBlockOrder.GetLoopDepth(basicBlocks[i])));
 			}
 		}
 
 		private void NumberInstructions()
 		{
-			int index = 2;
+			int index = SlotIncrement;
 			foreach (BasicBlock block in basicBlocks)
 			{
 				extendedBlocks[block.Sequence].From = index;
@@ -119,11 +127,11 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 					if (!context.IsEmpty)
 					{
 						context.SlotNumber = index;
-						index = index + 2;
+						index = index + SlotIncrement;
 					}
 				}
 
-				extendedBlocks[block.Sequence].To = index - 2;
+				extendedBlocks[block.Sequence].To = index - SlotIncrement;
 			}
 		}
 
@@ -326,7 +334,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		private void PopulatePriorityQueue()
 		{
-			priorityQueue.Capacity = (int)(virtualRegisters.Length * 1.2); // 1.2 is an estimate
+			priorityQueue.Capacity = (int)(virtualRegisters.Count * 1.2); // 1.2 is an estimate
 
 			foreach (var virtualRegister in virtualRegisters)
 			{

@@ -145,9 +145,9 @@ namespace Mosa.Compiler.TypeSystem
 		/// <returns></returns>
 		RuntimeMethod ITypeModule.GetMethod(Token token)
 		{
-			foreach (var method in methods)
-				if (method.Token == token)
-					return method;
+			//foreach (var method in methods)
+			//	if (method.Token == token)
+			//		return method;
 			return null;
 		}
 

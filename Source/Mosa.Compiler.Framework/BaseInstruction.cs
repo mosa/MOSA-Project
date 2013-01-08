@@ -79,7 +79,7 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		/// <param name="compiler">The compiler.</param>
-		public virtual void Validate(Context ctx, BaseMethodCompiler compiler)
+		public virtual void Resolve(Context ctx, BaseMethodCompiler compiler)
 		{
 			/* Default implementation is to do nothing */
 		}

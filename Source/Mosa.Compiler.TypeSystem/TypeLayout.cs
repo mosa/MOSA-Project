@@ -399,7 +399,7 @@ namespace Mosa.Compiler.TypeSystem
 			foreach (var token in new Token(TableType.MethodImpl, 1).Upto(maxToken))
 			{
 				MethodImplRow row = metadata.ReadMethodImplRow(token);
-				if (row.@Class == type.Token)
+				if (row.Class == type.Token)
 				{
 					int slot = 0;
 					foreach (var interfaceMethod in interfaceType.Methods)

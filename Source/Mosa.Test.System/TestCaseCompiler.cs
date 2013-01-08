@@ -39,7 +39,7 @@ namespace Mosa.Test.System
 				new PlugStage(),
 				new MethodCompilerSchedulerStage(),
 				new TypeLayoutStage(),
-				new MetadataStage(),
+				//new MetadataStage(),
 				new LinkerFinalizationStage(),
 			});
 

@@ -109,24 +109,14 @@ namespace Mosa.Compiler.Framework
 		public Register Base { get { return register; } }
 
 		/// <summary>
-		/// Retrieves the offset base
-		/// </summary>
-		public Operand OffsetBase { get { return offsetBase; } }
-
-		/// <summary>
-		/// Retrieves the runtime member.
-		/// </summary>
-		public RuntimeMember RuntimeMember { get { return runtimeMember; } }
-
-		/// <summary>
 		/// Gets the base operand.
 		/// </summary>
 		public Operand BaseOperand { get; private set; }
 
 		/// <summary>
-		/// Gets the ssa version.
+		/// Retrieves the offset base
 		/// </summary>
-		public int SSAVersion { get; private set; }
+		public Operand OffsetBase { get { return offsetBase; } }
 
 		/// <summary>
 		/// Holds the address offset if used together with a base register or the absolute address, if register is null.
@@ -135,6 +125,16 @@ namespace Mosa.Compiler.Framework
 		/// The offset.
 		/// </value>
 		public long Offset { get; set; }
+
+		/// <summary>
+		/// Retrieves the runtime member.
+		/// </summary>
+		public RuntimeMember RuntimeMember { get { return runtimeMember; } }
+
+		/// <summary>
+		/// Gets the ssa version.
+		/// </summary>
+		public int SSAVersion { get; private set; }
 
 		/// <summary>
 		/// Gets or sets the low operand.

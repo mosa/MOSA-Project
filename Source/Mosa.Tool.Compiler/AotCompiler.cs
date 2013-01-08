@@ -103,9 +103,9 @@ namespace Mosa.Tool.Compiler
 				new TypeInitializerSchedulerStage(),
 				compilerOptions.BootCompilerStage,
 				new TypeLayoutStage(),
-				new MetadataStage(),
+				//new MetadataStage(),
 				new ObjectFileLayoutStage(),
-				new LinkerFinalizationStage(),
+//FIXME				new LinkerFinalizationStage(),
 			});
 
 			aot.Run();

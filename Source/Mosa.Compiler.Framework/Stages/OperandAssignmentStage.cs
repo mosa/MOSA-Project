@@ -173,7 +173,7 @@ namespace Mosa.Compiler.Framework.Stages
 				else
 				{
 					AssignOperandsFromCILStack(ctx, operandStack);
-					(ctx.Instruction as BaseCILInstruction).Validate(ctx, methodCompiler);
+					(ctx.Instruction as BaseCILInstruction).Resolve(ctx, methodCompiler);
 					PushResultOperands(ctx, operandStack);
 				}
 			}
