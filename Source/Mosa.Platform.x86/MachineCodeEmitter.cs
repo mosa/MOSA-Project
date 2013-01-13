@@ -173,12 +173,7 @@ namespace Mosa.Platform.x86
 		{
 			int pos = (int)(codeStream.Position - codeStreamBasePosition);
 
-			if (displacement.IsLabel)
-			{
-				linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuildInPatch.I4, compiler.Method.FullName, pos, 0, displacement.Name, 0);
-				codeStream.Position += 4;
-			}
-			else if (displacement.IsRuntimeMember)
+			if (displacement.IsRuntimeMember)
 			{
 				linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuildInPatch.I4, compiler.Method.FullName, pos, 0, displacement.RuntimeMember.ToString(), displacement.Offset);
 				codeStream.Position += 4;
@@ -188,7 +183,12 @@ namespace Mosa.Platform.x86
 				linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuildInPatch.I4, compiler.Method.FullName, pos, 0, displacement.Name, 0);
 				codeStream.Position += 4;
 			}
-			else
+			else if (displacement.IsLabel)
+			{
+				linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuildInPatch.I4, compiler.Method.FullName, pos, 0, displacement.Name, 0);
+				codeStream.Position += 4;
+			}
+			else 
 			{
 				codeStream.Write(displacement.Offset,  Endianness.Little);
 			}

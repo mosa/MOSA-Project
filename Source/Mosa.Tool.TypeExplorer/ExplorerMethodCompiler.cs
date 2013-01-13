@@ -49,8 +49,8 @@ namespace Mosa.Tool.TypeExplorer
                 new PlatformStubStage(),
 				
                 new CheckPlatformOperandCountStage(),
-                //new GreedyRegisterAllocatorStage(),
-                //new LoopAwareBlockOrderStage(),
+                new GreedyRegisterAllocatorStage(),
+                new LoopAwareBlockOrderStage(),
 
                 //new CodeGenerationStage(), // Disabled for now
 			});

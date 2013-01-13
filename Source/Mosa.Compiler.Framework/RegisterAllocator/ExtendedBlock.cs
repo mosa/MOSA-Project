@@ -43,5 +43,15 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			this.LiveKillNot = new BitArray(virtualRegisterCount);
 			this.LoopDepth = loopDepth;
 		}
+
+		public bool Contains(int slot)
+		{
+			return (slot >= From && slot < To);
+		}
+
+		public bool Contains(Context context)
+		{
+			return Contains(context.SlotNumber);				
+		}
 	}
 }

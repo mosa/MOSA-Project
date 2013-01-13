@@ -8,10 +8,12 @@
  */
 
 using System;
+using System.Text;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using Mosa.Compiler.Common;
+using Mosa.Compiler.InternalTrace;
 
 namespace Mosa.Compiler.Framework.RegisterAllocator
 {
@@ -33,8 +35,12 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 		private SortedList<int, LiveInterval> priorityQueue;
 		private List<LiveIntervalUnion> liveIntervalUnions;
 
-		public GreedyRegisterAllocator(BasicBlocks basicBlocks, VirtualRegisters compilerVirtualRegisters, InstructionSet instructionSet, IArchitecture architecture)
+		private BaseMethodCompilerStage stage;
+
+		public GreedyRegisterAllocator(BasicBlocks basicBlocks, VirtualRegisters compilerVirtualRegisters, InstructionSet instructionSet, IArchitecture architecture, BaseMethodCompilerStage stage)
 		{
+			this.stage = stage; // for access to internal tracing 
+
 			this.basicBlocks = basicBlocks;
 			this.instructionSet = instructionSet;
 
@@ -83,6 +89,10 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			// Computer Global Live Sets
 			ComputeGlobalLiveSets();
 
+			BuildLiveIntervals();
+
+			TraceLiveIntervals();
+
 			// Calculate Spill Costs for Live Intervals
 			CalculateSpillCosts();
 
@@ -93,6 +103,69 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			ProcessPriorityQueue();
 
 			// MORE
+		}
+
+		private static string ToString(BitArray bitArray)
+		{
+			var builder = new StringBuilder();
+
+			foreach (bool bit in bitArray)
+			{
+				builder.Append(bit ? "X" : ".");
+			}
+
+			return builder.ToString();
+		}
+
+		private void TraceLiveIntervals()
+		{
+			if (!stage.IsLogging)
+				return;
+
+			string section = "Extended Blocks";
+
+			foreach (var block in extendedBlocks)
+			{
+				stage.Trace(section, "Block # " + block.BasicBlock.Sequence.ToString());
+				stage.Trace(section, " LiveGen:");
+				stage.Trace(section, " :" + ToString(block.LiveGen));
+				stage.Trace(section, " LiveIn:");
+				stage.Trace(section, " :" + ToString(block.LiveIn));
+				stage.Trace(section, " LiveOut:");
+				stage.Trace(section, " :" + ToString(block.LiveOut));
+				stage.Trace(section, " LiveKill:");
+				stage.Trace(section, " :" + ToString(block.LiveKill));
+			}
+
+			section = "Registers";
+
+			foreach (var virtualRegister in virtualRegisters)
+			{
+				if (virtualRegister.IsPhysicalRegister)
+				{
+					stage.Trace(section, "Physical Register # " + virtualRegister.PhysicalRegister.ToString());
+				}
+				else
+				{
+					stage.Trace(section, "Virtual Register # " + virtualRegister.VirtualRegisterOperand.Index.ToString());
+				}
+
+				stage.Trace(section, " Live Intervals (" + virtualRegister.LiveIntervals.Count.ToString() + ")");
+
+				int i = 1;
+				foreach (var liveInterval in virtualRegister.LiveIntervals)
+				{
+					stage.Trace(section, "  # " + i.ToString() + " " + liveInterval.ToString());
+				}
+
+				stage.Trace(section, " Use Positions (" + virtualRegister.UsePositions.Count.ToString() + ")");
+
+				foreach (var use in virtualRegister.UsePositions)
+				{
+					stage.Trace(section, "  # " + i.ToString() + " " + use.ToString());
+				}
+
+			}
 		}
 
 		private int GetIndex(Operand operand)
@@ -244,7 +317,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 					{
 						var register = virtualRegisters[GetIndex(result)];
 						register.LiveIntervals[0] = new LiveInterval(register, index, register.FirstRange.End);
-						if (register.IsPhysicalRegister)
+						if (!register.IsPhysicalRegister)
 							register.AddUsePosition(index);
 					}
 
@@ -252,7 +325,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 					{
 						var register = virtualRegisters[GetIndex(result)];
 						register.AddRange(index, index + 1);
-						if (register.IsPhysicalRegister)
+						if (!register.IsPhysicalRegister)
 							register.AddUsePosition(index);
 					}
 
@@ -260,7 +333,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 					{
 						var register = virtualRegisters[GetIndex(result)];
 						register.AddRange(blockFrom, index);
-						if (register.IsPhysicalRegister)
+						if (!register.IsPhysicalRegister)
 							register.AddUsePosition(index);
 					}
 
@@ -343,7 +416,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 					// Skip adding live intervals for physical registers to priority queue
 					if (liveInterval.VirtualRegister.IsPhysicalRegister)
 					{
-						Debug.Assert(!liveIntervalUnions[liveInterval.VirtualRegister.PhysicalRegister.Index].Intersects(liveInterval));
+						//Debug.Assert(!liveIntervalUnions[liveInterval.VirtualRegister.PhysicalRegister.Index].Intersects(liveInterval));
 
 						liveIntervalUnions[liveInterval.VirtualRegister.PhysicalRegister.Index].Add(liveInterval);
 

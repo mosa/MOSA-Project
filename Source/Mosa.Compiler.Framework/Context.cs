@@ -161,8 +161,23 @@ namespace Mosa.Compiler.Framework
 			set
 			{
 				Operand current = instructionSet.Data[index].Operand1;
-				if (current != null) current.Uses.Remove(index);
-				if (value != null) value.Uses.Add(index);
+				if (current != null)
+				{
+					current.Uses.Remove(index);
+					if (current.IsMemoryAddress && current.OffsetBase != null)
+					{
+						current.OffsetBase.Uses.Remove(index);
+					}
+				}
+				if (value != null)
+				{
+					value.Uses.Add(index);
+					if (value.IsMemoryAddress && value.OffsetBase != null)
+					{
+						value.OffsetBase.Uses.Add(index);
+					}
+				}
+
 				instructionSet.Data[index].Operand1 = value;
 			}
 		}
@@ -177,8 +192,22 @@ namespace Mosa.Compiler.Framework
 			set
 			{
 				Operand current = instructionSet.Data[index].Operand2;
-				if (current != null) current.Uses.Remove(index);
-				if (value != null) value.Uses.Add(index);
+				if (current != null)
+				{
+					current.Uses.Remove(index);
+					if (current.IsMemoryAddress && current.OffsetBase != null)
+					{
+						current.OffsetBase.Uses.Remove(index);
+					}
+				}
+				if (value != null)
+				{
+					value.Uses.Add(index);
+					if (value.IsMemoryAddress && value.OffsetBase != null)
+					{
+						value.OffsetBase.Uses.Add(index);
+					}
+				}
 				instructionSet.Data[index].Operand2 = value;
 			}
 		}
@@ -193,8 +222,22 @@ namespace Mosa.Compiler.Framework
 			set
 			{
 				Operand current = instructionSet.Data[index].Operand3;
-				if (current != null) current.Uses.Remove(index);
-				if (value != null) value.Uses.Add(index);
+				if (current != null)
+				{
+					current.Uses.Remove(index);
+					if (current.IsMemoryAddress && current.OffsetBase != null)
+					{
+						current.OffsetBase.Uses.Remove(index);
+					}
+				}
+				if (value != null)
+				{
+					value.Uses.Add(index);
+					if (value.IsMemoryAddress && value.OffsetBase != null)
+					{
+						value.OffsetBase.Uses.Add(index);
+					}
+				}
 				instructionSet.Data[index].Operand3 = value;
 			}
 		}
@@ -246,8 +289,22 @@ namespace Mosa.Compiler.Framework
 			set
 			{
 				Operand current = instructionSet.Data[index].Result;
-				if (current != null) current.Definitions.Remove(index);
-				if (value != null) value.Definitions.Add(index);
+				if (current != null)
+				{
+					current.Definitions.Remove(index);
+					if (current.IsMemoryAddress && current.OffsetBase != null)
+					{
+						current.OffsetBase.Uses.Remove(index);
+					}
+				}
+				if (value != null)
+				{
+					value.Definitions.Add(index);
+					if (value.IsMemoryAddress && value.OffsetBase != null)
+					{
+						value.OffsetBase.Uses.Remove(index);
+					}
+				}
 				instructionSet.Data[index].Result = value;
 			}
 		}
@@ -262,8 +319,22 @@ namespace Mosa.Compiler.Framework
 			set
 			{
 				Operand current = instructionSet.Data[index].Result2;
-				if (current != null) current.Definitions.Remove(index);
-				if (value != null) value.Definitions.Add(index);
+				if (current != null)
+				{
+					current.Definitions.Remove(index);
+					if (current.IsMemoryAddress && current.OffsetBase != null)
+					{
+						current.OffsetBase.Uses.Remove(index);
+					}
+				}
+				if (value != null)
+				{
+					value.Definitions.Add(index);
+					if (value.IsMemoryAddress && value.OffsetBase != null)
+					{
+						value.OffsetBase.Uses.Remove(index);
+					}
+				}
 				instructionSet.Data[index].Result2 = value;
 			}
 		}
@@ -1120,8 +1191,25 @@ namespace Mosa.Compiler.Framework
 				default:
 					{
 						Operand current = instructionSet.Data[index].GetAdditionalOperand(opIndex);
-						if (current != null) current.Uses.Remove(index);
-						if (operand != null) operand.Uses.Add(index);
+
+						if (current != null)
+						{
+							current.Definitions.Remove(index);
+							if (current.IsMemoryAddress && current.OffsetBase != null)
+							{
+								current.OffsetBase.Uses.Remove(index);
+							}
+						}
+
+						if (operand != null)
+						{
+							operand.Definitions.Add(index);
+							if (operand.IsMemoryAddress && operand.OffsetBase != null)
+							{
+								operand.OffsetBase.Uses.Remove(index);
+							}
+						}
+
 						instructionSet.Data[index].SetAdditionalOperand(opIndex, operand);
 						return;
 					}

@@ -114,7 +114,7 @@ namespace Mosa.Compiler.Framework
 		public Operand BaseOperand { get; private set; }
 
 		/// <summary>
-		/// Retrieves the offset base
+		/// Retrieves the offset base.
 		/// </summary>
 		public Operand OffsetBase { get { return offsetBase; } }
 
@@ -210,7 +210,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Determines if the operand is a stack temp operand. 
 		/// </summary>
-		public bool IsStackTemp { get { return IsStackLocal && !IsLocalVariable && !IsParameter; } }
+		public bool IsStackTemp { get { return IsStackLocal && !IsLocalVariable && !IsParameter; } } // FIXME: Remove
 
 		/// <summary>
 		/// Determines if the operand is a ssa operand.
@@ -383,6 +383,41 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
+		/// Creates a new virtual register <see cref="Operand" />.
+		/// </summary>
+		/// <param name="sigType">Type of the sig.</param>
+		/// <param name="index">The index.</param>
+		/// <param name="name">The name.</param>
+		/// <returns></returns>
+		public static Operand CreateVirtualRegister(SigType sigType, int index, string name)
+		{
+			Operand operand = new Operand(sigType, OperandType.Register | OperandType.VirtualRegister);
+			operand.Name = name; 
+			operand.index = index;
+			//operand.sequence = sequence;
+			return operand;
+		}		
+
+		/// <summary>
+		/// Creates a new local variable <see cref="Operand"/>.
+		/// </summary>
+		/// <param name="type">The type.</param>
+		/// <param name="register">The register.</param>
+		/// <param name="index">The index.</param>
+		/// <param name="name">The name.</param>
+		/// <returns></returns>
+		public static Operand CreateLocalVariable(SigType type, Register register, int index, string name)
+		{
+			Operand operand = new Operand(type, OperandType.MemoryAddress | OperandType.StackLocal | OperandType.LocalVariable);
+			operand.Name = name;
+			operand.register = register;
+			operand.index = index;
+			//operand.sequence = index;
+			operand.Offset = -index * 4; // FIXME: 4 is platform dependent!
+			return operand;
+		}
+
+		/// <summary>
 		/// Creates a new physical register <see cref="Operand"/>.
 		/// </summary>
 		/// <param name="sigType">Type of the sig.</param>
@@ -464,25 +499,6 @@ namespace Mosa.Compiler.Framework
 			Operand operand = new Operand(field.SigType, OperandType.MemoryAddress | OperandType.RuntimeMember);
 			operand.Offset = 0;
 			operand.runtimeMember = field;
-			return operand;
-		}
-
-		/// <summary>
-		/// Creates a new local variable <see cref="Operand"/>.
-		/// </summary>
-		/// <param name="type">The type.</param>
-		/// <param name="register">The register.</param>
-		/// <param name="index">The index.</param>
-		/// <param name="name">The name.</param>
-		/// <returns></returns>
-		public static Operand CreateLocalVariable(SigType type, Register register, int index, string name)
-		{
-			Operand operand = new Operand(type, OperandType.MemoryAddress | OperandType.StackLocal | OperandType.LocalVariable);
-			operand.Name = name;
-			operand.register = register;
-			operand.index = index;
-			//operand.sequence = index;
-			operand.Offset = -index * 4; // FIXME: 4 is platform dependent!
 			return operand;
 		}
 

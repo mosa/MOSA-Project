@@ -304,24 +304,29 @@ namespace Mosa.Compiler.Framework
 
 		#region Trace Helper Methods
 
-		protected void Trace(CompilerEvent compilerEvent, string message)
+		public void Trace(CompilerEvent compilerEvent, string message)
 		{
 			methodCompiler.InternalTrace.CompilerEventListener.SubmitTraceEvent(compilerEvent, message);
 		}
 
-		protected void Trace(string line)
+		public void Trace(string line)
 		{
 			methodCompiler.InternalTrace.TraceListener.SubmitDebugStageInformation(methodCompiler.Method, Name, line);
 		}
 
-		protected bool IsLogging { get { return methodCompiler.InternalTrace.TraceFilter.IsLogging; } }
+		public void Trace(string section, string line)
+		{
+			methodCompiler.InternalTrace.TraceListener.SubmitDebugStageInformation(methodCompiler.Method, Name + "-" + section, line);
+		}
+
+		public bool IsLogging { get { return methodCompiler.InternalTrace.TraceFilter.IsLogging; } }
 
 		/// <summary>
 		/// Updates the counter.
 		/// </summary>
 		/// <param name="name">The name.</param>
 		/// <param name="count">The count.</param>
-		protected void UpdateCounter(string name, int count)
+		public void UpdateCounter(string name, int count)
 		{
 			methodCompiler.Compiler.Counters.UpdateCounter(name, count);
 		}

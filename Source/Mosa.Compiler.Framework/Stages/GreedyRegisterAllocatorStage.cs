@@ -30,7 +30,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </summary>
 		void IMethodCompilerStage.Run()
 		{
-			var allocator = new GreedyRegisterAllocator(basicBlocks, methodCompiler.VirtualRegisters, instructionSet, architecture);
+			var allocator = new GreedyRegisterAllocator(basicBlocks, methodCompiler.VirtualRegisters, instructionSet, architecture, this);
 
 			return;
 		}

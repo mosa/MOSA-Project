@@ -35,6 +35,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="BitArrayExtension.cs" />
+    <Compile Include="SimplePriorityQueue.cs" />
     <Compile Include="Endianness .cs" />
     <Compile Include="ListExtension.cs" />
     <Compile Include="EndianAwareBinaryWriter.cs" />
@@ -44,6 +45,9 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
