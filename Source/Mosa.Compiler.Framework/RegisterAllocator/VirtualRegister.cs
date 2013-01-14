@@ -15,7 +15,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 	public sealed class VirtualRegister
 	{
 		private List<LiveInterval> liveIntervals = new List<LiveInterval>(1);
-		private List<int> usePositions = new List<int>();
+		private List<SlotIndex> usePositions = new List<SlotIndex>();
 
 		public Operand VirtualRegisterOperand { get; private set; }
 
@@ -27,7 +27,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		public int Count { get { return liveIntervals.Count; } }
 
-		public List<int> UsePositions { get { return usePositions; } }
+		public List<SlotIndex> UsePositions { get { return usePositions; } }
 
 		public LiveInterval LastRange { get { return liveIntervals.Count == 0 ? null : liveIntervals[liveIntervals.Count - 1]; } }
 
@@ -47,13 +47,23 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			this.PhysicalRegister = physicalRegister;
 		}
 
-		public void AddUsePosition(int position)
+		public void AddUsePosition(SlotIndex position)
 		{
 			Debug.Assert(!usePositions.Contains(position));
 			usePositions.Add(position);
 		}
 
-		public void AddRange(int start, int end)
+		//public void AddLiveInterval(LiveInterval interval)
+		//{
+		//	AddLiveInterval(interval.Start, interval.End);
+		//}
+
+		public void AddLiveInterval(Interval interval)
+		{
+			AddLiveInterval(interval.Start, interval.End);
+		}
+
+		public void AddLiveInterval(SlotIndex start, SlotIndex end)
 		{
 			if (liveIntervals.Count == 0)
 			{
@@ -65,19 +75,22 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			{
 				var liveRange = liveIntervals[i];
 
-				if (liveRange.IsSame(start, end))
+				if (liveRange.Start == start && liveRange.End == end)
 					return;
 
 				if (liveRange.IsAdjacent(start, end))
 				{
-					liveRange.Merge(start, end);
+					liveRange = liveRange.CreateExpandedLiveRange(start, end);
+					liveIntervals[i] = liveRange;
 
 					if (i + 1 < liveIntervals.Count)
 					{
 						var nextLiveRange = liveIntervals[i + 1];
 						if (liveRange.IsAdjacent(nextLiveRange))
 						{
-							liveRange.Merge(nextLiveRange);
+							liveRange = liveRange.CreateExpandedLiveInterval(nextLiveRange);
+							liveIntervals[i] = liveRange;
+
 							liveIntervals.RemoveAt(i + 1);
 						}
 					}

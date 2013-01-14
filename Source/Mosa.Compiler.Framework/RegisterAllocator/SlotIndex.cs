@@ -32,6 +32,11 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		public int SlotNumber { get { return instructionSet.Data[index].SlotNumber; } }
 
+		public static int operator -(SlotIndex s1, SlotIndex s2)
+		{
+			return s1.SlotNumber - s2.SlotNumber;
+		}
+
 		public static bool operator >=(SlotIndex s1, SlotIndex s2)
 		{
 			return s1.SlotNumber >= s2.SlotNumber;
@@ -74,7 +79,6 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 		{
 			return SlotNumber;
 		}
-
 
 	}
 }

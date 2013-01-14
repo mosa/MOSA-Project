@@ -1,5 +1,5 @@
 ﻿/*
- * (c) 2012 MOSA - The Managed Operating System Alliance
+ * (c) 2013 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
  *
@@ -7,75 +7,58 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
 using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework.RegisterAllocator
 {
-	/// <summary>
-	///
-	/// </summary>
+
 	public class Interval
 	{
-		public int Start { get; set; }
+		public SlotIndex Start { get; private set; }
+		public SlotIndex End { get; private set; }
 
-		public int End { get; set; }
-
-		public int Size { get { return End - Start; } }
-
-		public Interval(int start, int end)
+		public Interval(SlotIndex start, SlotIndex end)
 		{
-			Debug.Assert(end > start);
-			Start = start;
-			End = end;
+			Debug.Assert(start <= end);
+
+			this.Start = start;
+			this.End = end;
 		}
 
-		public override string ToString()
+		public Interval CreateExpandedInterval(Interval interval)
 		{
-			return "[" + Start.ToString() + ", " + End.ToString() + "]";
+			var start = Start < interval.Start ? Start : interval.Start;
+			var end = End > interval.End ? End : interval.End;
+
+			return new Interval(start, end);
 		}
 
-		public bool IsInside(int location)
+		public int Length { get { return End - Start; } }
+
+		public bool Intersects(SlotIndex start, SlotIndex end)
 		{
-			return (location >= Start && location < End);
+			return ((Start <= start && End > start) || (start <= Start && end > Start));
 		}
 
-		public bool IsSame(int start, int end)
+		public bool Intersects(Interval other)
 		{
-			return (Start == start && End == end);
+			return Intersects(other.Start, other.End);
 		}
 
-		public bool Intersects(int start, int end)
-		{
-			return (start <= End - 1) && (end - 1 >= Start);
-		}
-
-		public bool Intersects(Interval liveRange)
-		{
-			return Intersects(liveRange.Start, liveRange.End);
-		}
-
-		public bool IsAdjacent(int start, int end)
+		public bool IsAdjacent(SlotIndex start, SlotIndex end)
 		{
 			return (start == End) || (end == Start);
 		}
 
-		public bool IsAdjacent(Interval liveRange)
+		public bool IsAdjacent(Interval other)
 		{
-			return IsAdjacent(liveRange.Start, liveRange.End);
+			return IsAdjacent(other.Start, other.End);
 		}
 
-		public void Merge(int start, int end)
+		public bool Contains(SlotIndex slot)
 		{
-			Debug.Assert(IsAdjacent(start, end));
-
-			this.Start = Math.Min(this.Start, start);
-			this.End = Math.Max(this.End, end);
+			return (Start >= slot && slot < End);
 		}
 
-		public void Merge(Interval liveRange)
-		{
-			Merge(liveRange.Start, liveRange.End);
-		}
 	}
 }

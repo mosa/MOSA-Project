@@ -191,9 +191,9 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 		private void NumberInstructions()
 		{
 			int index = SlotIncrement;
+
 			foreach (BasicBlock block in basicBlocks)
 			{
-				extendedBlocks[block.Sequence].From = index;
 
 				for (Context context = new Context(instructionSet, block); !context.IsLastInstruction; context.GotoNext())
 				{
@@ -204,7 +204,9 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 					}
 				}
 
-				extendedBlocks[block.Sequence].To = index - SlotIncrement;
+				SlotIndex start = new SlotIndex(instructionSet, block.StartIndex);
+				SlotIndex end = new SlotIndex(instructionSet, block.EndIndex);
+				extendedBlocks[block.Sequence].Interval = new Interval(start, end);
 			}
 		}
 
@@ -283,60 +285,68 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		private void BuildLiveIntervals()
 		{
-			for (int i = basicBlocks.Count - 1; i >= 0; i--)
+			int blockMax = basicBlocks.Count - 1;
+
+			for (int i = blockMax; i >= 0; i--)
 			{
 				var block = extendedBlocks[i];
-
-				int blockFrom = block.From;
-				int blockTo = block.To + 2;
 
 				for (int s = 0; s < block.LiveOut.Count; s++)
 				{
 					var register = virtualRegisters[s];
 
-					register.AddRange(blockFrom, blockTo);
+					if (i != blockMax)
+					{
+						register.AddLiveInterval(block.From, extendedBlocks[i + 1].From);
+					}
+					else
+					{
+						register.AddLiveInterval(block.Interval);
+					}
 				}
 
 				Context context = new Context(instructionSet, block.BasicBlock, block.BasicBlock.EndIndex);
+				SlotIndex prevSlotIndex = new SlotIndex(context);
 
 				while (!context.IsStartInstruction)
 				{
 					OperandVisitor visitor = new OperandVisitor(context);
-					int index = context.SlotNumber;
+					SlotIndex currentSlotIndex = new SlotIndex(context);
 
 					if (context.Instruction.FlowControl == FlowControl.Call)
 					{
 						for (int s = 0; s < physicalRegisterCount; s++)
 						{
 							var register = virtualRegisters[s];
-							register.AddRange(index, index + 1);
+							register.AddLiveInterval(currentSlotIndex, prevSlotIndex);
 						}
 					}
 
 					foreach (var result in visitor.Output)
 					{
 						var register = virtualRegisters[GetIndex(result)];
-						register.LiveIntervals[0] = new LiveInterval(register, index, register.FirstRange.End);
+						register.LiveIntervals[0] = new LiveInterval(register, currentSlotIndex, register.FirstRange.End);
 						if (!register.IsPhysicalRegister)
-							register.AddUsePosition(index);
+							register.AddUsePosition(currentSlotIndex);
 					}
 
 					foreach (var result in visitor.Temp)
 					{
 						var register = virtualRegisters[GetIndex(result)];
-						register.AddRange(index, index + 1);
+						register.AddLiveInterval(currentSlotIndex, prevSlotIndex);
 						if (!register.IsPhysicalRegister)
-							register.AddUsePosition(index);
+							register.AddUsePosition(currentSlotIndex);
 					}
 
 					foreach (var result in visitor.Input)
 					{
 						var register = virtualRegisters[GetIndex(result)];
-						register.AddRange(blockFrom, index);
+						register.AddLiveInterval(block.From, currentSlotIndex);
 						if (!register.IsPhysicalRegister)
-							register.AddUsePosition(index);
+							register.AddUsePosition(currentSlotIndex);
 					}
 
+					prevSlotIndex = currentSlotIndex;
 					context.GotoPrevious();
 				}
 			}
@@ -351,7 +361,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			// find max block loop depth that interval spans
 			foreach (var block in extendedBlocks)
 			{
-				if (liveInterval.Intersects(block.From, block.To))
+				if (liveInterval.Intersects(block.Interval))
 				{
 					maxLoopDepth = Math.Max(block.LoopDepth, maxLoopDepth);
 				}
@@ -387,7 +397,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 		private void AddPriorityQueue(LiveInterval liveInterval)
 		{
 			// priority is based on interval size
-			priorityQueue.Add(liveInterval.Size, liveInterval);
+			priorityQueue.Add(liveInterval.Length, liveInterval);
 		}
 
 		private void AddPriorityQueue(List<LiveInterval> liveIntervals)

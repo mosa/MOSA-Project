@@ -19,9 +19,9 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		public int LoopDepth { get; private set; }
 
-		public int From { get; set; }
-
-		public int To { get; set; }
+		public Interval Interval { get; set; }		
+		public SlotIndex From { get { return Interval.Start; } }
+		public SlotIndex To { get { return Interval.End; } }
 
 		public BitArray LiveGen { get; set; }
 
@@ -44,14 +44,15 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			this.LoopDepth = loopDepth;
 		}
 
-		public bool Contains(int slot)
+		public bool Contains(SlotIndex slot)
 		{
-			return (slot >= From && slot < To);
+			return Interval.Contains(slot);
 		}
 
 		public bool Contains(Context context)
 		{
-			return Contains(context.SlotNumber);				
+			// TODO: could be made faster by avoiding allocation of SlotIndex
+			return Contains(new SlotIndex(context));
 		}
 	}
 }
