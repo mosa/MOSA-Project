@@ -13,7 +13,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using Mosa.Compiler.Common;
-using Mosa.Compiler.InternalTrace;
 
 namespace Mosa.Compiler.Framework.RegisterAllocator
 {
@@ -32,14 +31,14 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 		private List<ExtendedBlock> extendedBlocks;
 		private List<VirtualRegister> virtualRegisters;
 
-		private SortedList<int, LiveInterval> priorityQueue;
+		private SimpleKeyPriorityQueue<LiveInterval> priorityQueue;
 		private List<LiveIntervalUnion> liveIntervalUnions;
 
 		private BaseMethodCompilerStage stage;
 
 		public GreedyRegisterAllocator(BasicBlocks basicBlocks, VirtualRegisters compilerVirtualRegisters, InstructionSet instructionSet, IArchitecture architecture, BaseMethodCompilerStage stage)
 		{
-			this.stage = stage; // for access to internal tracing 
+			this.stage = stage; // for access to internal tracing
 
 			this.basicBlocks = basicBlocks;
 			this.instructionSet = instructionSet;
@@ -70,7 +69,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 				this.virtualRegisters.Add(new VirtualRegister(virtualRegister));
 			}
 
-			priorityQueue = new SortedList<int, LiveInterval>();
+			priorityQueue = new SimpleKeyPriorityQueue<LiveInterval>();
 
 			Start();
 		}
@@ -164,7 +163,6 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 				{
 					stage.Trace(section, "  # " + i.ToString() + " " + use.ToString());
 				}
-
 			}
 		}
 
@@ -177,7 +175,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 		{
 			var loopAwareBlockOrder = new LoopAwareBlockOrder(this.basicBlocks);
 
-			// The re-ordering is not strictly necessary; however, it reduces "holes" in live ranges. 
+			// The re-ordering is not strictly necessary; however, it reduces "holes" in live ranges.
 			// Less "holes" increase readability of the debug logs.
 			basicBlocks.ReorderBlocks(loopAwareBlockOrder.NewBlockOrder);
 
@@ -194,14 +192,16 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 			foreach (BasicBlock block in basicBlocks)
 			{
-
-				for (Context context = new Context(instructionSet, block); !context.IsLastInstruction; context.GotoNext())
+				for (Context context = new Context(instructionSet, block); ; context.GotoNext())
 				{
 					if (!context.IsEmpty)
 					{
 						context.SlotNumber = index;
 						index = index + SlotIncrement;
 					}
+
+					if (context.IsLastInstruction)
+						break;
 				}
 
 				SlotIndex start = new SlotIndex(instructionSet, block.StartIndex);
@@ -397,7 +397,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 		private void AddPriorityQueue(LiveInterval liveInterval)
 		{
 			// priority is based on interval size
-			priorityQueue.Add(liveInterval.Length, liveInterval);
+			priorityQueue.Enqueue(liveInterval.Length, liveInterval);
 		}
 
 		private void AddPriorityQueue(List<LiveInterval> liveIntervals)
@@ -408,16 +408,9 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			}
 		}
 
-		private LiveInterval PopPriorityQueue()
-		{
-			var liveInterval = priorityQueue[priorityQueue.Count - 1];
-			priorityQueue.RemoveAt(priorityQueue.Count - 1);
-			return liveInterval;
-		}
-
 		private void PopulatePriorityQueue()
 		{
-			priorityQueue.Capacity = (int)(virtualRegisters.Count * 1.2); // 1.2 is an estimate
+			//priorityQueue.Capacity = (int)(virtualRegisters.Count * 1.2); // 1.2 is an estimate
 
 			foreach (var virtualRegister in virtualRegisters)
 			{
@@ -441,9 +434,9 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		private void ProcessPriorityQueue()
 		{
-			while (priorityQueue.Count != 0)
+			while (!priorityQueue.IsEmpty)
 			{
-				var liveInterval = PopPriorityQueue();
+				var liveInterval = priorityQueue.Dequeue();
 
 				ProcessLiveInterval(liveInterval);
 			}

@@ -7,53 +7,55 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
 using System.Collections.Generic;
 
 namespace Mosa.Compiler.Common
 {
-	public class SimplePriorityQueue<T> where T : IComparable<T>
+	public class SimpleKeyPriorityQueue<T>
 	{
-		private readonly LinkedList<T> items;
+		private readonly LinkedList<KeyValuePair<int, T>> items;
+
+		public int Count { get { return items.Count; } }
 
 		public bool IsEmpty { get { return items.Count == 0; } }
 
-		public SimplePriorityQueue()
+		public SimpleKeyPriorityQueue()
 		{
-			items = new LinkedList<T>();
+			items = new LinkedList<KeyValuePair<int, T>>();
 		}
 
-		public void Enqueue(T item)
+		public void Enqueue(int priority, T item)
 		{
+			var keyitem = new KeyValuePair<int, T>(priority, item);
+
 			if (IsEmpty)
 			{
-				items.AddFirst(item);
+				items.AddFirst(keyitem);
 				return;
 			}
 
-			LinkedListNode<T> at = items.First;
+			var at = items.First;
 
-			while (at != null && at.Value.CompareTo(item) < 0)
+			while (at != null && priority < at.Value.Key)
 			{
 				at = at.Next;
 			}
 
 			if (at == null)
 			{
-				items.AddLast(item);
+				items.AddLast(keyitem);
 			}
 			else
 			{
-				items.AddBefore(at, item);
+				items.AddBefore(at, keyitem);
 			}
 		}
 
 		public T Dequeue()
 		{
-			T item = items.First.Value;
+			var item = items.First.Value;
 			items.RemoveFirst();
-			return item;
+			return item.Value;
 		}
-
 	}
 }

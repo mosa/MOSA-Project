@@ -7,12 +7,13 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework.RegisterAllocator
 {
 
-	public class LiveInterval : Interval
+	public class LiveInterval : Interval//, IComparer<LiveInterval>
 	{
 		public VirtualRegister VirtualRegister { get; private set; }
 

@@ -88,7 +88,6 @@
     <Compile Include="RegisterAllocator\LiveInterval.cs" />
     <Compile Include="RegisterAllocator\VirtualRegister.cs" />
     <Compile Include="RegisterAllocator\GreedyRegisterAllocator.cs" />
-    <Compile Include="Interval.cs" />
     <Compile Include="OperandVisitor.cs" />
     <Compile Include="Linker\LinkerFactory.cs" />
     <Compile Include="Stages\GreedyRegisterAllocatorStage.cs" />

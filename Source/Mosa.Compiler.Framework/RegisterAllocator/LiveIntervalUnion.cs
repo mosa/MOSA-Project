@@ -40,7 +40,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			liveIntervals.Remove(liveInterval);
 		}
 
-		public void Evict(List<LiveInterval> liveInterval)
+		public void Evict(List<LiveInterval> liveIntervals)
 		{
 			foreach (var interval in liveIntervals)
 			{
