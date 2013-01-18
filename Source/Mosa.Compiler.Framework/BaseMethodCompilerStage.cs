@@ -269,15 +269,10 @@ namespace Mosa.Compiler.Framework
 		{
 			Context current = ctx.Clone();
 
-			current.AppendInstruction(IRInstruction.BlockEnd);
-			int last = current.Index;
-			current.AppendInstruction(IRInstruction.BlockStart);
-			int start = current.Index;
-
-			BasicBlock nextBlock = basicBlocks.CreateBlockWithAutoLabel(start, current.BasicBlock.EndIndex);
+			Context next = ctx.Next;
+			next.AppendInstruction(IRInstruction.BlockStart);
+			BasicBlock nextBlock = basicBlocks.CreateBlockWithAutoLabel(next.Index, current.BasicBlock.EndIndex);
 			Context nextContext = new Context(instructionSet, nextBlock);
-
-			current.BasicBlock.EndIndex = last;
 
 			foreach (BasicBlock block in current.BasicBlock.NextBlocks)
 			{
@@ -290,12 +285,12 @@ namespace Mosa.Compiler.Framework
 			{
 				current.BasicBlock.NextBlocks.Add(nextBlock);
 				nextBlock.PreviousBlocks.Add(ctx.BasicBlock);
-			}
-
-			if (addJump)
-			{
+			
 				ctx.AppendInstruction(IRInstruction.Jmp, nextBlock);
 			}
+
+			current.AppendInstruction(IRInstruction.BlockEnd);
+			current.BasicBlock.EndIndex = current.Index;
 
 			return nextContext;
 		}

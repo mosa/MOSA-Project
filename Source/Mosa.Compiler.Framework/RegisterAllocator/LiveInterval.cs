@@ -13,11 +13,14 @@ using System.Diagnostics;
 namespace Mosa.Compiler.Framework.RegisterAllocator
 {
 
-	public class LiveInterval : Interval//, IComparer<LiveInterval>
+	public class LiveInterval : Interval
 	{
 		public VirtualRegister VirtualRegister { get; private set; }
 
 		public int SpillCost { get; set; }
+		public LiveIntervalUnion LiveIntervalUnion { get; set; }
+
+		public Register Register { get { return this.LiveIntervalUnion.Register; } }
 
 		public LiveInterval(VirtualRegister virtualRegister, SlotIndex start, SlotIndex end)
 			: base(start, end)
@@ -44,5 +47,9 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			return new LiveInterval(this.VirtualRegister, mergedStart, mergedEnd);
 		}
 
+		public override string ToString()
+		{
+			return VirtualRegister.ToString() + " at " + base.ToString();
+		}
 	}
 }

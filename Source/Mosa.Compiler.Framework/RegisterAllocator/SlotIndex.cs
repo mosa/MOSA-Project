@@ -28,7 +28,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			this.index = context.Index;
 		}
 
-		public int Index { get { return index; } }
+		//public int Index { get { return index; } }
 
 		public int SlotNumber { get { return instructionSet.Data[index].SlotNumber; } }
 
@@ -78,6 +78,11 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 		public override int GetHashCode()
 		{
 			return SlotNumber;
+		}
+
+		public override string ToString()
+		{
+			return SlotNumber.ToString();
 		}
 
 	}

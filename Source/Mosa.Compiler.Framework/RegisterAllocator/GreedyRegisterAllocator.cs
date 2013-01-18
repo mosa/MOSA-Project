@@ -57,8 +57,10 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 				Debug.Assert(physicalRegister.Index == virtualRegisters.Count);
 				Debug.Assert(physicalRegister.Index == liveIntervalUnions.Count);
 
+				bool reserved = (physicalRegister == architecture.StackFrameRegister || physicalRegister == architecture.StackPointerRegister);
+
 				this.virtualRegisters.Add(new VirtualRegister(physicalRegister));
-				this.liveIntervalUnions.Add(new LiveIntervalUnion(physicalRegister));
+				this.liveIntervalUnions.Add(new LiveIntervalUnion(physicalRegister, reserved));
 			}
 
 			// Setup extended virtual registers
@@ -98,8 +100,8 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			// Populate Priority Queue
 			PopulatePriorityQueue();
 
-			// Process Priority Queue
-			ProcessPriorityQueue();
+			//// Process Priority Queue
+			//ProcessPriorityQueue();
 
 			// MORE
 		}
@@ -310,40 +312,44 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 				while (!context.IsStartInstruction)
 				{
-					OperandVisitor visitor = new OperandVisitor(context);
 					SlotIndex currentSlotIndex = new SlotIndex(context);
 
-					if (context.Instruction.FlowControl == FlowControl.Call)
+					if (!context.IsEmpty)
 					{
-						for (int s = 0; s < physicalRegisterCount; s++)
+						OperandVisitor visitor = new OperandVisitor(context);
+
+						if (context.Instruction.FlowControl == FlowControl.Call)
 						{
-							var register = virtualRegisters[s];
-							register.AddLiveInterval(currentSlotIndex, prevSlotIndex);
+							for (int s = 0; s < physicalRegisterCount; s++)
+							{
+								var register = virtualRegisters[s];
+								register.AddLiveInterval(currentSlotIndex, prevSlotIndex);
+							}
 						}
-					}
 
-					foreach (var result in visitor.Output)
-					{
-						var register = virtualRegisters[GetIndex(result)];
-						register.LiveIntervals[0] = new LiveInterval(register, currentSlotIndex, register.FirstRange.End);
-						if (!register.IsPhysicalRegister)
-							register.AddUsePosition(currentSlotIndex);
-					}
+						foreach (var result in visitor.Output)
+						{
+							var register = virtualRegisters[GetIndex(result)];
+							register.LiveIntervals[0] = new LiveInterval(register, currentSlotIndex, register.FirstRange.End);
+							if (!register.IsPhysicalRegister)
+								register.AddUsePosition(currentSlotIndex);
+						}
 
-					foreach (var result in visitor.Temp)
-					{
-						var register = virtualRegisters[GetIndex(result)];
-						register.AddLiveInterval(currentSlotIndex, prevSlotIndex);
-						if (!register.IsPhysicalRegister)
-							register.AddUsePosition(currentSlotIndex);
-					}
+						foreach (var result in visitor.Temp)
+						{
+							var register = virtualRegisters[GetIndex(result)];
+							register.AddLiveInterval(currentSlotIndex, prevSlotIndex);
+							if (!register.IsPhysicalRegister)
+								register.AddUsePosition(currentSlotIndex);
+						}
 
-					foreach (var result in visitor.Input)
-					{
-						var register = virtualRegisters[GetIndex(result)];
-						register.AddLiveInterval(block.From, currentSlotIndex);
-						if (!register.IsPhysicalRegister)
-							register.AddUsePosition(currentSlotIndex);
+						foreach (var result in visitor.Input)
+						{
+							var register = virtualRegisters[GetIndex(result)];
+							register.AddLiveInterval(block.From, currentSlotIndex);
+							if (!register.IsPhysicalRegister)
+								register.AddUsePosition(currentSlotIndex);
+						}
 					}
 
 					prevSlotIndex = currentSlotIndex;
@@ -352,25 +358,31 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			}
 		}
 
-		private int CalculateSpillCost(LiveInterval liveInterval)
+		private int GetLoopDepth(SlotIndex slotIndex)
 		{
-			// TODO: Improve this imprecise and very trivial spill cost estimator
-
-			int maxLoopDepth = 0;
-
-			// find max block loop depth that interval spans
 			foreach (var block in extendedBlocks)
 			{
-				if (liveInterval.Intersects(block.Interval))
+				if (block.Contains(slotIndex))
 				{
-					maxLoopDepth = Math.Max(block.LoopDepth, maxLoopDepth);
+					return block.LoopDepth;
 				}
 			}
 
-			// get usage count (imprecise since it looks at the entire virtual register and not just the range of the live interval)
-			int usage = liveInterval.VirtualRegister.UsePositions.Count;
+			Debug.Assert(false, "GetLoopDepth");
 
-			return (maxLoopDepth * 100) + usage;
+			return 0;
+		}
+
+		private int CalculateSpillCost(LiveInterval liveInterval)
+		{
+			int spillcosts = 0;
+
+			foreach (var use in liveInterval.VirtualRegister.UsePositions)
+			{
+				spillcosts += 100 * (1 + GetLoopDepth(use));
+			}
+
+			return (spillcosts / liveInterval.Length);
 		}
 
 		private void CalculateSpillCosts()
@@ -410,8 +422,6 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		private void PopulatePriorityQueue()
 		{
-			//priorityQueue.Capacity = (int)(virtualRegisters.Count * 1.2); // 1.2 is an estimate
-
 			foreach (var virtualRegister in virtualRegisters)
 			{
 				foreach (var liveInterval in virtualRegister.LiveIntervals)
@@ -447,7 +457,10 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			// Find an available live interval union to place this live interval
 			foreach (var liveIntervalUnion in liveIntervalUnions)
 			{
-				if ((liveInterval.VirtualRegister.IsFloatingPoint != liveIntervalUnion.IsFloatingPoint))
+				if (liveIntervalUnion.IsReserved)
+					continue;
+
+				if (liveIntervalUnion.IsFloatingPoint != liveInterval.VirtualRegister.IsFloatingPoint)
 					continue;
 
 				if (!liveIntervalUnion.Intersects(liveInterval))
@@ -460,7 +473,10 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			// No place for live interval; find live interval(s) to evict based on spill costs
 			foreach (var liveIntervalUnion in liveIntervalUnions)
 			{
-				if ((liveInterval.VirtualRegister.IsFloatingPoint != liveIntervalUnion.IsFloatingPoint))
+				if (liveIntervalUnion.IsReserved)
+					continue;
+
+				if (liveIntervalUnion.IsFloatingPoint != liveInterval.VirtualRegister.IsFloatingPoint)
 					continue;
 
 				var intersections = liveIntervalUnion.GetIntersections(liveInterval);

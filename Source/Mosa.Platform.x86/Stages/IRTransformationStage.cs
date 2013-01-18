@@ -919,7 +919,7 @@ namespace Mosa.Platform.x86.Stages
 			context.SetInstruction(X86.Jmp, newBlocks[0].BasicBlock);
 			LinkBlocks(context, newBlocks[0]);
 
-			newBlocks[0].SetInstruction(X86.Movsd, xmm5, source);
+			newBlocks[0].AppendInstruction(X86.Movsd, xmm5, source);
 			newBlocks[0].AppendInstruction(X86.Movsd, xmm6, destination);
 
 			if (source.Type.Type == CilElementType.R4)
@@ -950,7 +950,7 @@ namespace Mosa.Platform.x86.Stages
 			newBlocks[1].AppendInstruction(X86.Jmp, nextBlock.BasicBlock);
 			LinkBlocks(newBlocks[1], nextBlock);
 
-			newBlocks[2].SetInstruction(X86.Movsd, destination, xmm6);
+			newBlocks[2].AppendInstruction(X86.Movsd, destination, xmm6);
 			newBlocks[2].AppendInstruction(X86.Jmp, nextBlock.BasicBlock);
 			LinkBlocks(newBlocks[2], nextBlock);
 		}

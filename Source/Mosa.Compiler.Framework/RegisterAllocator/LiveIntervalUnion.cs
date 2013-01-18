@@ -16,28 +16,34 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 	{
 		protected List<LiveInterval> liveIntervals = new List<LiveInterval>();
 		protected Register register;
+		protected bool reserved;
 
 		public IList<LiveInterval> LiveIntervals { get { return liveIntervals.AsReadOnly(); } }
 
 		public Register Register { get { return register; } }
 
 		public bool IsFloatingPoint { get { return register.IsFloatingPoint; } }
-
 		public bool IsInteger { get { return register.IsInteger; } }
+		public bool IsReserved { get { return reserved; } }
 
-		public LiveIntervalUnion(Register register)
+		public LiveIntervalUnion(Register register, bool reserved)
 		{
 			this.register = register;
+			this.reserved = reserved;
 		}
 
 		public void Add(LiveInterval liveInterval)
 		{
 			liveIntervals.Add(liveInterval);
+			
+			liveInterval.LiveIntervalUnion = this;
 		}
 
 		public void Evict(LiveInterval liveInterval)
 		{
 			liveIntervals.Remove(liveInterval);
+
+			liveInterval.LiveIntervalUnion = null;
 		}
 
 		public void Evict(List<LiveInterval> liveIntervals)
@@ -77,6 +83,11 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			}
 
 			return intersections;
+		}
+
+		public override string ToString()
+		{
+			return register.ToString();
 		}
 	}
 }

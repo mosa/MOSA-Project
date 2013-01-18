@@ -9,6 +9,7 @@
 
 using System.Collections.Generic;
 using System.Diagnostics;
+using Mosa.Compiler.Common;
 
 namespace Mosa.Compiler.Framework.RegisterAllocator
 {
@@ -49,8 +50,8 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		public void AddUsePosition(SlotIndex position)
 		{
-			Debug.Assert(!usePositions.Contains(position));
-			usePositions.Add(position);
+			//Debug.Assert(!usePositions.Contains(position));
+			usePositions.AddIfNew(position);
 		}
 
 		//public void AddLiveInterval(LiveInterval interval)

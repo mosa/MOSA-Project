@@ -44,15 +44,20 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			this.LoopDepth = loopDepth;
 		}
 
-		public bool Contains(SlotIndex slot)
+		public bool Contains(SlotIndex slotIndex)
 		{
-			return Interval.Contains(slot);
+			return Interval.Contains(slotIndex);
 		}
 
 		public bool Contains(Context context)
 		{
 			// TODO: could be made faster by avoiding allocation of SlotIndex
 			return Contains(new SlotIndex(context));
+		}
+
+		public override string ToString()
+		{
+			return BasicBlock.ToString();
 		}
 	}
 }

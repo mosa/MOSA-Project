@@ -55,10 +55,14 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			return IsAdjacent(other.Start, other.End);
 		}
 
-		public bool Contains(SlotIndex slot)
+		public bool Contains(SlotIndex slotIndex)
 		{
-			return (Start >= slot && slot < End);
+			return (slotIndex >= Start && slotIndex < End);
 		}
 
+		public override string ToString()
+		{
+			return "[" + Start.ToString() + ", " + End.ToString() + "]";
+		}
 	}
 }
