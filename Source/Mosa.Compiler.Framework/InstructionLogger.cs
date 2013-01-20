@@ -101,18 +101,20 @@ namespace Mosa.Compiler.InternalTrace
 				if (ctx.IsEmpty)
 					continue;
 
-				if (ctx.Marked)
-					text.AppendFormat("L_{0:X4}* {1}", ctx.Label, ctx.Instruction.ToString(ctx));
-				else
-					text.AppendFormat("L_{0:X4}: {1}", ctx.Label, ctx.Instruction.ToString(ctx));
+				text.AppendFormat("L_{0:X4}", ctx.Label);
 
+				if (ctx.Marked)
+					text.AppendFormat("*");
+
+				if (ctx.SlotNumber != 0)
+					text.AppendFormat("/{0}", ctx.SlotNumber.ToString());
+
+				text.AppendFormat(" {0}", ctx.Instruction.ToString(ctx));
 				text.AppendLine();
 
 				if (ctx.IsLastInstruction)
 					return;
 			}
-
 		}
-
 	}
 }

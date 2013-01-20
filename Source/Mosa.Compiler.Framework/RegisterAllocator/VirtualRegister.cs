@@ -79,7 +79,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 				if (liveRange.Start == start && liveRange.End == end)
 					return;
 
-				if (liveRange.IsAdjacent(start, end))
+				if (liveRange.IsAdjacent(start, end) || liveRange.Intersects(start, end))
 				{
 					liveRange = liveRange.CreateExpandedLiveRange(start, end);
 					liveIntervals[i] = liveRange;
@@ -87,7 +87,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 					if (i + 1 < liveIntervals.Count)
 					{
 						var nextLiveRange = liveIntervals[i + 1];
-						if (liveRange.IsAdjacent(nextLiveRange))
+						if (liveRange.IsAdjacent(start, end) || liveRange.Intersects(start, end))
 						{
 							liveRange = liveRange.CreateExpandedLiveInterval(nextLiveRange);
 							liveIntervals[i] = liveRange;

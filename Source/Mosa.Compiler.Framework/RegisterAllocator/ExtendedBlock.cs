@@ -33,14 +33,14 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		public BitArray LiveKillNot { get; set; }
 
-		public ExtendedBlock(BasicBlock basicBlock, int virtualRegisterCount, int loopDepth)
+		public ExtendedBlock(BasicBlock basicBlock, int registerCount, int loopDepth)
 		{
 			this.BasicBlock = basicBlock;
-			this.LiveGen = new BitArray(virtualRegisterCount);
-			this.LiveKill = new BitArray(virtualRegisterCount);
-			this.LiveOut = new BitArray(virtualRegisterCount);
-			this.LiveIn = new BitArray(virtualRegisterCount);
-			this.LiveKillNot = new BitArray(virtualRegisterCount);
+			this.LiveGen = new BitArray(registerCount);
+			this.LiveKill = new BitArray(registerCount);
+			this.LiveOut = new BitArray(registerCount);
+			this.LiveIn = new BitArray(registerCount);
+			this.LiveKillNot = new BitArray(registerCount);
 			this.LoopDepth = loopDepth;
 		}
 

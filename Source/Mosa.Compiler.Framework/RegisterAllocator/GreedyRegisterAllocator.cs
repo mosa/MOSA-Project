@@ -129,13 +129,13 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			{
 				stage.Trace(section, "Block # " + block.BasicBlock.Sequence.ToString());
 				stage.Trace(section, " LiveGen:");
-				stage.Trace(section, " :" + ToString(block.LiveGen));
+				stage.Trace(section, " " + ToString(block.LiveGen));
 				stage.Trace(section, " LiveIn:");
-				stage.Trace(section, " :" + ToString(block.LiveIn));
+				stage.Trace(section, " " + ToString(block.LiveIn));
 				stage.Trace(section, " LiveOut:");
-				stage.Trace(section, " :" + ToString(block.LiveOut));
+				stage.Trace(section, " " + ToString(block.LiveOut));
 				stage.Trace(section, " LiveKill:");
-				stage.Trace(section, " :" + ToString(block.LiveKill));
+				stage.Trace(section, " " + ToString(block.LiveKill));
 			}
 
 			section = "Registers";
@@ -151,26 +151,25 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 					stage.Trace(section, "Virtual Register # " + virtualRegister.VirtualRegisterOperand.Index.ToString());
 				}
 
-				stage.Trace(section, " Live Intervals (" + virtualRegister.LiveIntervals.Count.ToString() + ")");
+				stage.Trace(section, "Live Intervals (" + virtualRegister.LiveIntervals.Count.ToString() + ")");
 
-				int i = 1;
 				foreach (var liveInterval in virtualRegister.LiveIntervals)
 				{
-					stage.Trace(section, "  # " + i.ToString() + " " + liveInterval.ToString());
+					stage.Trace(section, " [" + liveInterval.Start.ToString() + ", " + liveInterval.End.ToString() + "]");
 				}
 
-				stage.Trace(section, " Use Positions (" + virtualRegister.UsePositions.Count.ToString() + ")");
+				stage.Trace(section, "Use Positions (" + virtualRegister.UsePositions.Count.ToString() + ")");
 
 				foreach (var use in virtualRegister.UsePositions)
 				{
-					stage.Trace(section, "  # " + i.ToString() + " " + use.ToString());
+					stage.Trace(section, " " + use.ToString());
 				}
 			}
 		}
 
 		private int GetIndex(Operand operand)
 		{
-			return (operand.IsCPURegister) ? operand.Sequence : operand.Sequence - 1 + physicalRegisterCount;
+			return (operand.IsCPURegister) ? (operand.Sequence) : (operand.Sequence + physicalRegisterCount - 1);
 		}
 
 		private void CreateExtendedBlocks()
@@ -224,26 +223,29 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 					OperandVisitor visitor = new OperandVisitor(context);
 
 					foreach (var ops in visitor.Input)
+					{
 						if (ops.IsVirtualRegister)
 						{
 							int index = GetIndex(ops);
 							if (!liveKill.Get(index))
 								liveGen.Set(index, true);
 						}
-
+					}
 					foreach (var ops in visitor.Temp)
+					{
 						if (ops.IsVirtualRegister)
 						{
 							int index = GetIndex(ops);
-							if (!liveKill.Get(index))
-								liveGen.Set(index, true);
+							liveKill.Set(index, true);
 						}
-
+					}
 					foreach (var ops in visitor.Output)
 					{
-						int index = GetIndex(ops);
-						if (!liveKill.Get(index))
+						if (ops.IsVirtualRegister)
+						{
+							int index = GetIndex(ops);
 							liveKill.Set(index, true);
+						}
 					}
 				}
 
@@ -268,12 +270,12 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 					foreach (var next in block.BasicBlock.NextBlocks)
 					{
-						liveOut.And(extendedBlocks[next.Sequence].LiveGen);
+						liveOut.Or(extendedBlocks[next.Sequence].LiveIn);
 					}
 
-					BitArray liveIn = (BitArray)block.LiveIn.Clone();
+					BitArray liveIn = (BitArray)block.LiveOut.Clone();
 					liveIn.And(block.LiveKillNot);
-					liveIn.And(block.LiveGen);
+					liveIn.Or(block.LiveGen);
 
 					// compare them for any changes
 					if (!block.LiveOut.AreSame(liveOut) || !block.LiveIn.AreSame(liveIn))
@@ -293,8 +295,11 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			{
 				var block = extendedBlocks[i];
 
-				for (int s = 0; s < block.LiveOut.Count; s++)
+				for (int s = 0; s < registerCount; s++)
 				{
+					if (!block.LiveIn.Get(s))
+						continue;
+
 					var register = virtualRegisters[s];
 
 					if (i != blockMax)

@@ -34,6 +34,9 @@ namespace Mosa.Compiler.Framework
 			{
 				foreach (Operand operand in context.Operands)
 				{
+					//if (!(operand.IsVirtualRegister && operand.IsCPURegister))
+					//	continue;
+
 					yield return operand;
 
 					if (operand.BaseOperand != null)
@@ -56,16 +59,6 @@ namespace Mosa.Compiler.Framework
 				foreach (Operand operand in context.Results)
 				{
 					yield return operand;
-
-					if (operand.BaseOperand != null)
-					{
-						yield return operand.BaseOperand;
-					}
-
-					if (operand.OffsetBase != null)
-					{
-						yield return operand.OffsetBase;
-					}
 				}
 			}
 		}
@@ -74,6 +67,9 @@ namespace Mosa.Compiler.Framework
 		{
 			get
 			{
+//				if (!(operand.IsVirtualRegister && operand.IsCPURegister))
+//					continue;
+
 				// TODO: add scratch registers (register which are not in Operand.Results)
 				yield break;
 			}
