@@ -38,14 +38,18 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		public bool IsFloatingPoint { get { return VirtualRegisterOperand.IsFloatingPoint; } }
 
+		public bool IsReserved { get; private set; }
+
 		public VirtualRegister(Operand virtualRegister)
 		{
 			this.VirtualRegisterOperand = virtualRegister;
+			this.IsReserved = false;
 		}
 
-		public VirtualRegister(Register physicalRegister)
+		public VirtualRegister(Register physicalRegister, bool reserved)
 		{
 			this.PhysicalRegister = physicalRegister;
+			this.IsReserved = reserved;
 		}
 
 		public void AddUsePosition(SlotIndex position)
@@ -53,11 +57,6 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			//Debug.Assert(!usePositions.Contains(position));
 			usePositions.AddIfNew(position);
 		}
-
-		//public void AddLiveInterval(LiveInterval interval)
-		//{
-		//	AddLiveInterval(interval.Start, interval.End);
-		//}
 
 		public void AddLiveInterval(Interval interval)
 		{
