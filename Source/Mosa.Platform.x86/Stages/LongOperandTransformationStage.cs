@@ -44,7 +44,7 @@ namespace Mosa.Platform.x86.Stages
 				operandHigh = operand.High;
 				return;
 			}
-			else if (operand.StackType == StackTypeCode.Int32)
+			else if (operand.StackType == StackTypeCode.Int32 || operand.StackType == StackTypeCode.Ptr)
 			{
 				operandLow = operand;
 				operandHigh = operandConstantZero;
