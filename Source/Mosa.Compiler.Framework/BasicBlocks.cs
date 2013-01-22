@@ -252,6 +252,7 @@ namespace Mosa.Compiler.Framework
 		public void ReorderBlocks(IList<BasicBlock> newBlockOrder)
 		{
 			basicBlocks.Clear();
+			basicBlocksByLabel.Clear();
 
 			int sequence = 0;
 			foreach (var block in newBlockOrder)
@@ -260,6 +261,7 @@ namespace Mosa.Compiler.Framework
 				{
 					basicBlocks.Add(block);
 					block.Sequence = sequence++;
+					basicBlocksByLabel.Add(block.Label, block);
 				}
 			}
 
