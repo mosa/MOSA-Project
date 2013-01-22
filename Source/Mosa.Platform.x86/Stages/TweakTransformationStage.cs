@@ -143,22 +143,18 @@ namespace Mosa.Platform.x86.Stages
 			{
 				Operand ecx = AllocateVirtualRegister(left.Type);
 				Context before = ctx.InsertBefore();
-				before.SetInstruction(X86.Push, null, ecx);
 				before.AppendInstruction(X86.Mov, ecx, left);
 				ctx.Operand1 = ecx;
-				ctx.AppendInstruction(X86.Pop, ecx);
 			}
 			if (right.IsConstant && !Is32Bit(left))
 			{
 				Operand edx = AllocateVirtualRegister(BuiltInSigType.Int32);
 				Context before = ctx.InsertBefore();
-				before.SetInstruction(X86.Push, null, edx);
 				if (IsSigned(left))
 					before.AppendInstruction(X86.Movsx, edx, left);
 				else
 					before.AppendInstruction(X86.Movzx, edx, left);
 				ctx.Operand1 = edx;
-				ctx.AppendInstruction(X86.Pop, edx);
 			}
 		}
 
