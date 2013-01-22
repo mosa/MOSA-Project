@@ -181,6 +181,9 @@ namespace Mosa.Compiler.Framework.Stages
 			if (!context.Operand1.IsConstant)
 				return;
 
+			if (context.Result.Definitions.Count != 1)
+				return;
+
 			Operand destinationOperand = context.Result;
 			Operand sourceOperand = context.Operand1;
 
@@ -233,6 +236,9 @@ namespace Mosa.Compiler.Framework.Stages
 				return;
 
 			if (context.Operand1.IsConstant)
+				return;
+
+			if (context.Result.Definitions.Count != 1)
 				return;
 
 			if (context.Result.IsLocalVariable)
