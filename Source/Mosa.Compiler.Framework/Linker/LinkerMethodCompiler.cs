@@ -30,9 +30,11 @@ namespace Mosa.Compiler.Framework.Linker
 			BasicBlocks.AddHeaderBlock(context.BasicBlock);
 
 			this.Pipeline.AddRange(new IMethodCompilerStage[] {
+				new StackSetupStage(),
 				new LoopAwareBlockOrderStage(),
 				new PlatformStubStage(),
-				new CodeGenerationStage(),
+				new StackLayoutStage(),
+				//new CodeGenerationStage(),
 			});
 
 			compiler.Architecture.ExtendMethodCompilerPipeline(this.Pipeline);

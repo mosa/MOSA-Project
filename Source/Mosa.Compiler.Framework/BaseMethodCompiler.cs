@@ -10,7 +10,6 @@
 
 using System;
 using System.Diagnostics;
-using System.Collections.Generic;
 using System.IO;
 using Mosa.Compiler.InternalTrace;
 using Mosa.Compiler.Linker;
@@ -35,7 +34,6 @@ namespace Mosa.Compiler.Framework
 	/// </remarks>
 	public class BaseMethodCompiler
 	{
-
 		#region Data Members
 
 		/// <summary>
@@ -44,7 +42,7 @@ namespace Mosa.Compiler.Framework
 		protected readonly CompilerPipeline pipeline;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private readonly ICompilationScheduler compilationScheduler;
 
@@ -290,7 +288,6 @@ namespace Mosa.Compiler.Framework
 
 				stackLayout.SetStackParameter(index++, method.Parameters[paramIndex], parameterType);
 			}
-
 		}
 
 		/// <summary>
@@ -327,7 +324,10 @@ namespace Mosa.Compiler.Framework
 		/// Stops the method compiler.
 		/// </summary>
 		/// <returns></returns>
-		public void StopMethodCompiler() { stopMethodCompiler = true; }
+		public void StopMethodCompiler()
+		{
+			stopMethodCompiler = true;
+		}
 
 		/// <summary>
 		/// Creates a new virtual register operand.
@@ -339,6 +339,7 @@ namespace Mosa.Compiler.Framework
 		public Operand CreateVirtualRegister(SigType type)
 		{
 			return virtualRegisters.Allocate(type);
+
 			//return stackLayout.AllocateStackOperand(type, false);
 		}
 
@@ -359,7 +360,8 @@ namespace Mosa.Compiler.Framework
 		/// <exception cref="System.ArgumentOutOfRangeException">The <paramref name="index"/> is not valid.</exception>
 		public Operand GetLocalOperand(int index)
 		{
-			return stackLayout.GetStackOperand(index);
+			//return stackLayout.GetStackOperand(index);
+			return virtualRegisters[index];
 		}
 
 		/// <summary>
@@ -391,10 +393,11 @@ namespace Mosa.Compiler.Framework
 
 			foreach (var localVariable in localSigTypes)
 			{
-				locals[index++] = stackLayout.AllocateLocalVariableOperand(localVariable);
+				//locals[index++] = stackLayout.AllocateLocalVariableOperand(localVariable);
+				locals[index++] = VirtualRegisters.Allocate(localVariable);
+
 				//Scheduler.ScheduleTypeForCompilation(localVariable); // TODO
 			}
-
 		}
 
 		/// <summary>
@@ -430,6 +433,5 @@ namespace Mosa.Compiler.Framework
 		}
 
 		#endregion // Methods
-
 	}
 }

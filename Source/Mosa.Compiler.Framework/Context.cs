@@ -292,17 +292,31 @@ namespace Mosa.Compiler.Framework
 				if (current != null)
 				{
 					current.Definitions.Remove(index);
-					if (current.IsMemoryAddress && current.OffsetBase != null)
+					if (current.IsMemoryAddress)
 					{
-						current.OffsetBase.Uses.Remove(index);
+						if (current.OffsetBase != null)
+						{
+							current.OffsetBase.Uses.Remove(index);
+						}
+						if (current.BaseOperand != null)
+						{
+							current.BaseOperand.Uses.Remove(index);
+						}
 					}
 				}
 				if (value != null)
 				{
 					value.Definitions.Add(index);
-					if (value.IsMemoryAddress && value.OffsetBase != null)
+					if (value.IsMemoryAddress)
 					{
-						value.OffsetBase.Uses.Remove(index);
+						if (value.OffsetBase != null)
+						{
+							value.OffsetBase.Uses.Remove(index);
+						}
+						if (value.BaseOperand != null)
+						{
+							value.BaseOperand.Uses.Remove(index);
+						}
 					}
 				}
 				instructionSet.Data[index].Result = value;
@@ -322,17 +336,31 @@ namespace Mosa.Compiler.Framework
 				if (current != null)
 				{
 					current.Definitions.Remove(index);
-					if (current.IsMemoryAddress && current.OffsetBase != null)
+					if (current.IsMemoryAddress)
 					{
-						current.OffsetBase.Uses.Remove(index);
+						if (current.OffsetBase != null)
+						{
+							current.OffsetBase.Uses.Remove(index);
+						}
+						if (current.BaseOperand != null)
+						{
+							current.BaseOperand.Uses.Remove(index);
+						}
 					}
 				}
 				if (value != null)
 				{
 					value.Definitions.Add(index);
-					if (value.IsMemoryAddress && value.OffsetBase != null)
+					if (value.IsMemoryAddress)
 					{
-						value.OffsetBase.Uses.Remove(index);
+						if (value.OffsetBase != null)
+						{
+							value.OffsetBase.Uses.Add(index);
+						}
+						if (value.BaseOperand != null)
+						{
+							value.BaseOperand.Uses.Add(index);
+						}
 					}
 				}
 				instructionSet.Data[index].Result2 = value;
@@ -1194,7 +1222,7 @@ namespace Mosa.Compiler.Framework
 
 						if (current != null)
 						{
-							current.Definitions.Remove(index);
+							current.Uses.Remove(index);
 							if (current.IsMemoryAddress && current.OffsetBase != null)
 							{
 								current.OffsetBase.Uses.Remove(index);
@@ -1203,7 +1231,7 @@ namespace Mosa.Compiler.Framework
 
 						if (operand != null)
 						{
-							operand.Definitions.Add(index);
+							operand.Uses.Add(index);
 							if (operand.IsMemoryAddress && operand.OffsetBase != null)
 							{
 								operand.OffsetBase.Uses.Remove(index);

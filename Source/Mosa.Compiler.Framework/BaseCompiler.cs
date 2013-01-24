@@ -16,7 +16,6 @@ using Mosa.Compiler.Framework.Linker;
 
 namespace Mosa.Compiler.Framework
 {
-
 	/// <summary>
 	/// Base class for just-in-time and ahead-of-time compilers, which use
 	/// the Mosa.Compiler.Framework framework.
@@ -188,7 +187,7 @@ namespace Mosa.Compiler.Framework
 			Trace(CompilerEvent.CompilingMethod, method.FullName);
 
 			BaseMethodCompiler methodCompiler = CreateMethodCompiler(method);
-            Architecture.ExtendMethodCompilerPipeline(methodCompiler.Pipeline);
+			Architecture.ExtendMethodCompilerPipeline(methodCompiler.Pipeline);
 
 			methodCompiler.Compile();
 
@@ -214,7 +213,7 @@ namespace Mosa.Compiler.Framework
 		/// Executes the compiler using the configured stages.
 		/// </summary>
 		/// <remarks>
-		/// The method iterates the compilation stage chain and runs each 
+		/// The method iterates the compilation stage chain and runs each
 		/// stage on the input.
 		/// </remarks>
 		public void Compile()
@@ -246,12 +245,16 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Called when compilation is about to begin.
 		/// </summary>
-		protected virtual void BeginCompile() { }
+		protected virtual void BeginCompile()
+		{
+		}
 
 		/// <summary>
 		/// Called when compilation has completed.
 		/// </summary>
-		protected virtual void EndCompile() { }
+		protected virtual void EndCompile()
+		{
+		}
 
 		#endregion // Methods
 

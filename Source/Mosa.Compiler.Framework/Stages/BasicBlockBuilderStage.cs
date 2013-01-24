@@ -23,11 +23,12 @@ namespace Mosa.Compiler.Framework.Stages
 		#region Data members
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private BasicBlock epilogue;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private BasicBlock prologue;
 
@@ -48,6 +49,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			// Create the prologue block
 			Context context = CreateNewBlockWithContext(BasicBlock.PrologueLabel);
+
 			// Add a jump instruction to the first block from the prologue
 			context.AppendInstruction(IRInstruction.Jmp);
 			context.SetBranch(0);
@@ -103,13 +105,15 @@ namespace Mosa.Compiler.Framework.Stages
 					case FlowControl.Return: continue;
 					case FlowControl.Throw: continue;
 					case FlowControl.Branch:
-						// Unconditional branch 
+
+						// Unconditional branch
 						Debug.Assert(ctx.BranchTargets.Length == 1);
 						if (!targets.ContainsKey(ctx.BranchTargets[0]))
 							targets.Add(ctx.BranchTargets[0], -1);
 						continue;
 					case FlowControl.Switch: goto case FlowControl.ConditionalBranch;
 					case FlowControl.ConditionalBranch:
+
 						// Conditional branch with multiple targets
 						foreach (int target in ctx.BranchTargets)
 							if (!targets.ContainsKey(target))
@@ -201,12 +205,14 @@ namespace Mosa.Compiler.Framework.Stages
 						if (!block.NextBlocks.Contains(epilogue))
 							LinkBlocks(block, epilogue);
 						return;
+
 					case FlowControl.Break: goto case FlowControl.Branch;
 					case FlowControl.Throw: continue;
 					case FlowControl.Switch: goto case FlowControl.ConditionalBranch;
 					case FlowControl.Branch:
 						FindAndLinkBlock(block, ctx.BranchTargets[0]);
 						return;
+
 					case FlowControl.ConditionalBranch:
 						foreach (int target in ctx.BranchTargets)
 							FindAndLinkBlock(block, target);
@@ -220,6 +226,7 @@ namespace Mosa.Compiler.Framework.Stages
 					case FlowControl.Leave:
 						FindAndLinkBlock(block, ctx.BranchTargets[0]);
 						return;
+
 					default:
 						Debug.Assert(false);
 						break;
@@ -248,6 +255,5 @@ namespace Mosa.Compiler.Framework.Stages
 			caller.NextBlocks.Add(callee);
 			callee.PreviousBlocks.Add(caller);
 		}
-
 	}
 }

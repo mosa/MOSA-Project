@@ -81,22 +81,6 @@ namespace Mosa.Compiler.Framework
 			this.parameters = new Operand[parameters];
 		}
 
-		/// <summary>
-		/// Allocates the stack operand.
-		/// </summary>
-		/// <param name="type">The type.</param>
-		/// <returns></returns>
-		public Operand AllocateLocalVariableOperand(SigType type)
-		{
-			Operand stackOperand;
-
-			stackOperand = Operand.CreateLocalVariable(type, architecture.StackFrameRegister, ++localVariableCount, null);
-			//stackOperand = Operand.CreateStackLocalTemp(type, architecture.StackFrameRegister, ++stackLocalTempCount);
-
-			stack.Add(stackOperand);
-
-			return stackOperand;
-		}
 
 		/// <summary>
 		/// Gets the stack operand.

@@ -18,14 +18,12 @@ using Mosa.Platform.x86.Stages;
 
 namespace Mosa.Platform.x86
 {
-
 	/// <summary>
 	/// This class provides a common base class for architecture
 	/// specific operations.
 	/// </summary>
 	public class Architecture : BaseArchitecture
 	{
-
 		/// <summary>
 		/// Gets the endianness of the target architecture.
 		/// </summary>
@@ -173,7 +171,6 @@ namespace Mosa.Platform.x86
 			//compilerPipeline.InsertAfterLast<TypeLayoutStage>(
 			//    new MethodTableBuilderStage()
 			//);
-
 		}
 
 		/// <summary>
@@ -190,17 +187,24 @@ namespace Mosa.Platform.x86
 				{
 					new CheckOperandCountStage(),
 					new LongOperandTransformationStage(),
+
 					//new AddressModeConversionStage(),
 					new IRTransformationStage(),
 				    new TweakTransformationStage(),
+
 				    //new MemToMemConversionStage(),
 					new FixedRegisterAssignmentStage(),
+					new SimpleDeadCodeRemovalStage(),
 				});
 
 			// FIXME: Disabled for now
 			//methodCompilerPipeline.InsertAfterLast<IBlockOrderStage>(
 			//    new SimplePeepholeOptimizationStage()
 			//);
+
+			methodCompilerPipeline.InsertAfterLast<StackLayoutStage>(
+				new BuildStackStage()
+			);
 
 			// FIXME: Disabled for now
 			//methodCompilerPipeline.InsertAfterLast<CodeGenerationStage>(

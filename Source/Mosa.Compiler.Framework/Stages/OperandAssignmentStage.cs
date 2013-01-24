@@ -16,21 +16,22 @@ using Mosa.Compiler.Framework.IR;
 namespace Mosa.Compiler.Framework.Stages
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public sealed class OperandAssignmentStage : BaseMethodCompilerStage, IMethodCompilerStage
 	{
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private sealed class WorkItem
 		{
 			/// <summary>
-			/// 
+			///
 			/// </summary>
 			public BasicBlock Block;
+
 			/// <summary>
-			/// 
+			///
 			/// </summary>
 			public Stack<Operand> IncomingStack;
 
@@ -47,23 +48,27 @@ namespace Mosa.Compiler.Framework.Stages
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private Queue<WorkItem> workList = new Queue<WorkItem>();
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private BitArray processed;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private BitArray enqueued;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private Stack<Operand>[] outgoingStack;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private Stack<Operand>[] scheduledMoves;
 
@@ -109,8 +114,10 @@ namespace Mosa.Compiler.Framework.Stages
 			var block = workItem.Block;
 
 			operandStack = CreateMovesForIncomingStack(block, operandStack);
+
 			//System.Diagnostics.Debug.WriteLine("IN:    Block: " + block.Label + " Operand Stack Count: " + operandStack.Count);
 			AssignOperands(block, operandStack);
+
 			//System.Diagnostics.Debug.WriteLine("AFTER: Block: " + block.Label + " Operand Stack Count: " + operandStack.Count);
 			operandStack = CreateScheduledMoves(block, operandStack);
 
@@ -218,11 +225,18 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			var context = new Context(instructionSet, block, block.EndIndex);
 
+			context.GotoPrevious();
+
+			while (context.Instruction is IBranchInstruction || context.Instruction is IR.Jmp)
+			{
+				context.GotoPrevious();
+			}
+
 			while (operandStack.Count > 0)
 			{
 				var operand = operandStack.Pop();
 				var destination = joinStack.Pop();
-				context.InsertBefore().SetInstruction(IRInstruction.Move, destination, operand);
+				context.AppendInstruction(IRInstruction.Move, destination, operand);
 			}
 		}
 
@@ -261,6 +275,5 @@ namespace Mosa.Compiler.Framework.Stages
 			if (ctx.Instruction is CIL.DupInstruction)
 				currentStack.Push(ctx.Result);
 		}
-
 	}
 }

@@ -23,14 +23,13 @@ namespace Mosa.Compiler.Framework
 	/// </summary>
 	public sealed class Operand
 	{
-
 		#region Data members
 
 		[Flags]
 		private enum OperandType { Undefined = 0, Constant = 1, StackLocal = 2, Parameter = 4, LocalVariable = 8, Symbol = 16, Register = 32, CPURegister = 64, SSA = 128, RuntimeMember = 256, MemoryAddress = 512, VirtualRegister = 1024, Label = 2048 };
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private readonly OperandType operandType;
 
@@ -200,17 +199,12 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Determines if the operand is a local variable operand.
 		/// </summary>
-		public bool IsLocalVariable { get { return (operandType & OperandType.LocalVariable) == OperandType.LocalVariable; } }
-
-		/// <summary>
-		/// Determines if the operand is a local variable operand.
-		/// </summary>
 		public bool IsParameter { get { return (operandType & OperandType.Parameter) == OperandType.Parameter; } }
 
 		/// <summary>
-		/// Determines if the operand is a stack temp operand. 
+		/// Determines if the operand is a stack temp operand.
 		/// </summary>
-		public bool IsStackTemp { get { return IsStackLocal && !IsLocalVariable && !IsParameter; } } // FIXME: Remove
+		public bool IsStackTemp { get { return IsStackLocal && !IsParameter; } } // FIXME: Remove
 
 		/// <summary>
 		/// Determines if the operand is a ssa operand.
@@ -269,6 +263,7 @@ namespace Mosa.Compiler.Framework
 				throw new CompilationException("Not an integer");
 			}
 		}
+
 		/// <summary>
 		/// Returns the stack type of the operand.
 		/// </summary>
@@ -378,6 +373,7 @@ namespace Mosa.Compiler.Framework
 		{
 			Operand operand = new Operand(sigType, OperandType.Register | OperandType.VirtualRegister);
 			operand.index = index;
+
 			//operand.sequence = sequence;
 			return operand;
 		}
@@ -392,11 +388,10 @@ namespace Mosa.Compiler.Framework
 		public static Operand CreateVirtualRegister(SigType sigType, int index, string name)
 		{
 			Operand operand = new Operand(sigType, OperandType.Register | OperandType.VirtualRegister);
-			operand.Name = name; 
+			operand.Name = name;
 			operand.index = index;
-			//operand.sequence = sequence;
 			return operand;
-		}		
+		}
 
 		/// <summary>
 		/// Creates a new local variable <see cref="Operand"/>.
@@ -412,6 +407,7 @@ namespace Mosa.Compiler.Framework
 			operand.Name = name;
 			operand.register = register;
 			operand.index = index;
+
 			//operand.sequence = index;
 			operand.Offset = -index * 4; // FIXME: 4 is platform dependent!
 			return operand;
@@ -514,6 +510,7 @@ namespace Mosa.Compiler.Framework
 			Operand operand = new Operand(type, OperandType.MemoryAddress | OperandType.Parameter);
 			operand.register = register;
 			operand.index = index; // param.Position;
+
 			//operand.sequence = index;
 			operand.Offset = param.Position * 4; // FIXME: 4 is platform dependent!
 			return operand;
@@ -567,6 +564,7 @@ namespace Mosa.Compiler.Framework
 			longOperand.Low = operand;
 
 			operand.index = index;
+
 			//operand.sequence = index;
 			return operand;
 		}
@@ -619,7 +617,6 @@ namespace Mosa.Compiler.Framework
 		/// <param name="instructionSet">The instruction set.</param>
 		public void Replace(Operand replacement, InstructionSet instructionSet)
 		{
-
 			// Iterate all definition sites first
 			foreach (int index in Definitions.ToArray())
 			{
@@ -632,7 +629,6 @@ namespace Mosa.Compiler.Framework
 					{
 						ctx.Result = replacement;
 					}
-
 				}
 			}
 
@@ -640,6 +636,9 @@ namespace Mosa.Compiler.Framework
 			foreach (int index in Uses.ToArray())
 			{
 				Context ctx = new Context(instructionSet, index);
+
+				Debug.Assert(ctx.GetOperand(ctx.OperandCount) == null);
+				Debug.Assert(ctx.GetOperand(ctx.OperandCount - 1) != null);
 
 				int opIdx = 0;
 				foreach (Operand r in ctx.Operands)
@@ -700,10 +699,6 @@ namespace Mosa.Compiler.Framework
 			{
 				s.AppendFormat("V_{0}", index);
 			}
-			else if (IsLocalVariable && Name == null)
-			{
-				s.AppendFormat("L_{0}", index);
-			}
 			else if (IsStackLocal && Name == null)
 			{
 				s.AppendFormat("T_{0}", index);
@@ -749,9 +744,10 @@ namespace Mosa.Compiler.Framework
 					else
 						s.AppendFormat("[{0}-{1:X}h]", register.ToString(), -Offset);
 				}
+
 				//if (IsLabel)
 				//{
-				//	s.AppendFormat("[{0}]", Name); 
+				//	s.AppendFormat("[{0}]", Name);
 				//}
 			}
 
@@ -833,7 +829,5 @@ namespace Mosa.Compiler.Framework
 		}
 
 		#endregion // Static Methods
-
 	}
 }
-

@@ -37,6 +37,7 @@ namespace Mosa.Tool.Compiler
 			Pipeline.AddRange(new IMethodCompilerStage[] {
 				new CILDecodingStage(),
 				new BasicBlockBuilderStage(),
+				new StackSetupStage(),
 				new ExceptionPrologueStage(),
 				new OperandAssignmentStage(),
 				new StaticAllocationResolutionStage(),
@@ -44,7 +45,6 @@ namespace Mosa.Tool.Compiler
 					
 				new CheckIROperandCountStage(),
 
-				(compilerOptions.EnableSSA && compilerOptions.EnableSSAOptimizations) ? new LocalVariablePromotionStage() : null,
 				(compilerOptions.EnableSSA) ? new EdgeSplitStage() : null,
 				(compilerOptions.EnableSSA) ? new DominanceCalculationStage() : null,
 				(compilerOptions.EnableSSA) ? new PhiPlacementStage() : null,

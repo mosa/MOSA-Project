@@ -155,9 +155,6 @@ namespace Mosa.Compiler.Framework.Stages
 			if (context.Result.Uses.Count != 0 || context.Instruction is IR.Call || context.Instruction is IR.IntrinsicMethodCall)
 				return;
 
-			if (context.Result.IsLocalVariable)
-				return;
-
 			if (IsLogging) Trace("REMOVED:\t" + context.ToString());
 			AddOperandUsageToWorkList(context);
 			context.SetInstruction(IRInstruction.Nop);
@@ -181,8 +178,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (!context.Operand1.IsConstant)
 				return;
 
-			if (context.Result.Definitions.Count != 1)
-				return;
+			Debug.Assert(context.Result.Definitions.Count == 1);
 
 			Operand destinationOperand = context.Result;
 			Operand sourceOperand = context.Operand1;
@@ -238,11 +234,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (context.Operand1.IsConstant)
 				return;
 
-			if (context.Result.Definitions.Count != 1)
-				return;
-
-			if (context.Result.IsLocalVariable)
-				return;
+			Debug.Assert(context.Result.Definitions.Count == 1);
 
 			// FIXME: does not work on ptr or I4 types - probably because of signed extension, or I8/U8 - probably because 64-bit
 			if (!(CanCopyPropagation(context.Result) && CanCopyPropagation(context.Operand1)))

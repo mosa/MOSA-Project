@@ -11,26 +11,23 @@
 using System.Diagnostics;
 
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Platform;
 
 namespace Mosa.Platform.x86.Stages
 {
 	/// <summary>
-	/// 
 	/// </summary>
 	public sealed class SimplePeepholeOptimizationStage : BaseTransformationStage, IMethodCompilerStage
 	{
-
 		#region Window Class
 
 		/// <summary>
 		/// Window Class
 		/// </summary>
-		public class Window
+		private sealed class Window
 		{
-			private int _length;
-			private Context[] _history;
-			private int _size;
+			private int length;
+			private Context[] history;
+			private int size;
 
 			/// <summary>
 			/// Initializes a new instance of the <see cref="Window"/> class.
@@ -38,9 +35,9 @@ namespace Mosa.Platform.x86.Stages
 			/// <param name="length">The length.</param>
 			public Window(int length)
 			{
-				_length = length;
-				_history = new Context[length];
-				_size = 0;
+				this.length = length;
+				history = new Context[length];
+				size = 0;
 			}
 
 			/// <summary>
@@ -49,7 +46,7 @@ namespace Mosa.Platform.x86.Stages
 			/// <value>The size.</value>
 			public int Size
 			{
-				get { return _size; }
+				get { return size; }
 			}
 
 			/// <summary>
@@ -58,12 +55,12 @@ namespace Mosa.Platform.x86.Stages
 			/// <param name="context">The context.</param>
 			public void Add(Context context)
 			{
-				for (int i = _length - 1; i > 0; i--)
-					_history[i] = _history[i - 1];
+				for (int i = length - 1; i > 0; i--)
+					history[i] = history[i - 1];
 
-				_history[0] = context.Clone();
-				if (_size < _length)
-					_size++;
+				history[0] = context.Clone();
+				if (size < length)
+					size++;
 			}
 
 			/// <summary>
@@ -71,10 +68,10 @@ namespace Mosa.Platform.x86.Stages
 			/// </summary>
 			public void DeleteCurrent()
 			{
-				_history[0].Remove();
-				_size--;
-				for (int i = 0; i < _size; i++)
-					_history[i] = _history[i + 1];
+				history[0].Remove();
+				size--;
+				for (int i = 0; i < size; i++)
+					history[i] = history[i + 1];
 			}
 
 			/// <summary>
@@ -82,10 +79,10 @@ namespace Mosa.Platform.x86.Stages
 			/// </summary>
 			public void DeletePrevious()
 			{
-				_history[1].Remove();
-				_size--;
-				for (int i = 1; i < _size; i++)
-					_history[i] = _history[i + 1];
+				history[1].Remove();
+				size--;
+				for (int i = 1; i < size; i++)
+					history[i] = history[i + 1];
 			}
 
 			/// <summary>
@@ -93,10 +90,10 @@ namespace Mosa.Platform.x86.Stages
 			/// </summary>
 			public void DeletePreviousPrevious()
 			{
-				_history[2].Remove();
-				_size--;
-				for (int i = 2; i < _size; i++)
-					_history[i] = _history[i + 1];
+				history[2].Remove();
+				size--;
+				for (int i = 2; i < size; i++)
+					history[i] = history[i + 1];
 			}
 
 			/// <summary>
@@ -107,10 +104,10 @@ namespace Mosa.Platform.x86.Stages
 			{
 				get
 				{
-					if (_size == 0)
+					if (size == 0)
 						return null;
 					else
-						return _history[0];
+						return history[0];
 				}
 			}
 
@@ -122,10 +119,10 @@ namespace Mosa.Platform.x86.Stages
 			{
 				get
 				{
-					if (_size < 2)
+					if (size < 2)
 						return null;
 					else
-						return _history[1];
+						return history[1];
 				}
 			}
 
@@ -137,10 +134,10 @@ namespace Mosa.Platform.x86.Stages
 			{
 				get
 				{
-					if (_size < 3)
+					if (size < 3)
 						return null;
 					else
-						return _history[2];
+						return history[2];
 				}
 			}
 		}

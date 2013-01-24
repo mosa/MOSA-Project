@@ -90,6 +90,7 @@
     <Compile Include="RegisterAllocator\GreedyRegisterAllocator.cs" />
     <Compile Include="OperandVisitor.cs" />
     <Compile Include="Linker\LinkerFactory.cs" />
+    <Compile Include="Stages\StackSetupStage.cs" />
     <Compile Include="Stages\GreedyRegisterAllocatorStage.cs" />
     <Compile Include="Stages\LinkerFinalizationStage.cs" />
     <Compile Include="IIntrinsicInternalMethod.cs" />
@@ -111,7 +112,6 @@
     <Compile Include="Stages\SSAOptimizations.cs" />
     <Compile Include="Stages\EdgeSplitStage.cs" />
     <Compile Include="VirtualRegisters.cs" />
-    <Compile Include="Stages\LocalVariablePromotionStage.cs" />
     <Compile Include="BaseCodeEmitter.cs" />
     <Compile Include="BaseInstruction.cs" />
     <Compile Include="Stages\BasicBlockBuilderStage.cs" />

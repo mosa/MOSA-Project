@@ -41,16 +41,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 			// Layout parameters
 			LayoutParameters(methodCompiler);
-
-			// Create a prologue instruction
-            Context prologueCtx = new Context(instructionSet, basicBlocks.PrologueBlock);
-			prologueCtx.AppendInstruction(IRInstruction.Prologue);
-			prologueCtx.Label = -1;
-
-			// Create an epilogue instruction
-			Context epilogueCtx = new Context(instructionSet, basicBlocks.EpilogueBlock);
-			epilogueCtx.AppendInstruction(IRInstruction.Epilogue);
-			epilogueCtx.Label = Int32.MaxValue;
 		}
 
 		#region IStackLayoutStage Members
@@ -69,13 +59,13 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </summary>
 		private void LayoutStackVariables()
 		{
-			List<Operand> locals = GetActiveStackVariables();
+			List<Operand> stackVariables = GetActiveStackVariables(); // maybe just pull: methodCompiler.StackLayout.Stack
 
-			// Sort all found locals
-			OrderVariables(locals, callingConvention);
+			// Sort all found stack variables
+			OrderVariables(stackVariables, callingConvention);
 
 			// Now we assign increasing stack offsets to each variable
-			localsSize = LayoutVariables(locals, callingConvention, callingConvention.OffsetOfFirstLocal, 1);
+			localsSize = LayoutVariables(stackVariables, callingConvention, callingConvention.OffsetOfFirstLocal, 1);
 		}
 
 		/// <summary>
@@ -88,7 +78,7 @@ namespace Mosa.Compiler.Framework.Stages
 			List<Operand> locals = new List<Operand>();
 
 			foreach (var operand in methodCompiler.StackLayout.Stack)
-				if (operand.IsLocalVariable || operand.Uses.Count != 0 || operand.Definitions.Count != 0)
+				if (operand.Uses.Count != 0 || operand.Definitions.Count != 0)
 					locals.Add(operand);
 
 			return locals;

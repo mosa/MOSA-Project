@@ -20,7 +20,7 @@ namespace Mosa.Compiler.Framework.Stages
 	public class PhiPlacementStage : BaseMethodCompilerStage, IMethodCompilerStage, IPipelineStage
 	{
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public enum PhiPlacementStrategy
 		{
@@ -30,11 +30,12 @@ namespace Mosa.Compiler.Framework.Stages
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private PhiPlacementStrategy strategy;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private Dictionary<Operand, List<BasicBlock>> assignments = new Dictionary<Operand, List<BasicBlock>>();
 
@@ -90,7 +91,7 @@ namespace Mosa.Compiler.Framework.Stages
 			foreach (var block in basicBlocks)
 				for (var context = new Context(instructionSet, block); !context.IsLastInstruction; context.GotoNext())
 					if (!context.IsEmpty && context.Result != null)
-						if (context.Result.IsStackLocal)
+						if (context.Result.IsVirtualRegister)
 							AddToAssignments(context.Result, block);
 
 			// FUTURE: Only include parameter operands if reachable from the given header block
@@ -124,15 +125,16 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="variable">The variable.</param>
 		private void InsertPhiInstruction(BasicBlock block, Operand variable)
 		{
-			var context = new Context(instructionSet, block).InsertBefore();
-			context.SetInstruction(IRInstruction.Phi, variable);
+			var context = new Context(instructionSet, block);
+			context.AppendInstruction(IRInstruction.Phi, variable);
 
 			for (var i = 0; i < block.PreviousBlocks.Count; ++i)
+			{
 				context.SetOperand(i, variable);
+			}
 
 			context.OperandCount = (byte)block.PreviousBlocks.Count;
 		}
-
 
 		/// <summary>
 		/// Places the phi functions minimal.
@@ -140,7 +142,9 @@ namespace Mosa.Compiler.Framework.Stages
 		private void PlacePhiFunctionsMinimal()
 		{
 			foreach (var headBlock in basicBlocks.HeadBlocks)
+			{
 				PlacePhiFunctionsMinimal(headBlock);
+			}
 		}
 
 		/// <summary>

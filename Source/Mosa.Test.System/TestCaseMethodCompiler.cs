@@ -46,12 +46,12 @@ namespace Mosa.Test.System
 			Pipeline.AddRange(new IMethodCompilerStage[] {
 				new CILDecodingStage(),
 				new BasicBlockBuilderStage(),
+				new StackSetupStage(),
 				new ExceptionPrologueStage(),
 				new OperandAssignmentStage(),
 				new StaticAllocationResolutionStage(),
 				new CILTransformationStage(),
 				
-				new LocalVariablePromotionStage(), 
 				new	EdgeSplitStage(),
 				new DominanceCalculationStage(),
 				new PhiPlacementStage(),

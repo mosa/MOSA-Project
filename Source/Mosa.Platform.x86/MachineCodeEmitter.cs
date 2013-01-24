@@ -188,9 +188,9 @@ namespace Mosa.Platform.x86
 				linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuildInPatch.I4, compiler.Method.FullName, pos, 0, displacement.Name, 0);
 				codeStream.Position += 4;
 			}
-			else 
+			else
 			{
-				codeStream.Write(displacement.Offset,  Endianness.Little);
+				codeStream.Write(displacement.Offset, Endianness.Little);
 			}
 
 		}
@@ -202,7 +202,7 @@ namespace Mosa.Platform.x86
 		private void WriteImmediate(Operand op)
 		{
 
-			if (op.IsLocalVariable || op.IsStackTemp || op.IsMemoryAddress)
+			if (op.IsStackTemp || op.IsMemoryAddress)
 			{
 				// Add the displacement
 				codeStream.Write((int)op.Offset, Endianness.Little);
@@ -330,7 +330,7 @@ namespace Mosa.Platform.x86
 		/// <param name="op">The immediate operand to emit.</param>
 		public void EmitImmediate(Operand op)
 		{
-			if (op.IsLocalVariable || op.IsStackTemp || op.IsMemoryAddress)
+			if (op.IsStackTemp || op.IsMemoryAddress)
 			{
 				// Add the displacement
 				codeStream.Write((int)op.Offset, Endianness.Little);

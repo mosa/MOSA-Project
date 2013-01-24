@@ -15,7 +15,7 @@ using Mosa.Compiler.Metadata.Signatures;
 namespace Mosa.Compiler.Framework
 {
 	/// <summary>
-	/// Contains the layout of the stack
+	/// 
 	/// </summary>
 	public sealed class VirtualRegisters : IEnumerable<Operand>
 	{
@@ -50,9 +50,20 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		public Operand Allocate(SigType type)
 		{
+			return Allocate(type, null);
+		}
+
+		/// <summary>
+		/// Allocates the virtual register.
+		/// </summary>
+		/// <param name="type">The type.</param>
+		/// <param name="name">The name.</param>
+		/// <returns></returns>
+		public Operand Allocate(SigType type, string name)
+		{
 			int index = virtualRegisters.Count + 1;
-			//int sequence = index + sequenceStart;
-			Operand virtualRegister = Operand.CreateVirtualRegister(type, index);
+
+			Operand virtualRegister = name == null ? Operand.CreateVirtualRegister(type, index) : Operand.CreateVirtualRegister(type, index, name); 
 
 			virtualRegisters.Add(virtualRegister);
 

@@ -14,11 +14,10 @@ using Mosa.Compiler.Framework.IR;
 namespace Mosa.Compiler.Framework.Stages
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public sealed class EnterSSAStage : BaseMethodCompilerStage, IMethodCompilerStage, IPipelineStage
 	{
-
 		private PhiPlacementStage phiPlacementStage;
 		private Dictionary<Operand, Stack<int>> variables;
 		private Dictionary<Operand, int> counts;
@@ -38,7 +37,9 @@ namespace Mosa.Compiler.Framework.Stages
 			phiPlacementStage = methodCompiler.Pipeline.FindFirst<PhiPlacementStage>();
 
 			foreach (var headBlock in basicBlocks.HeadBlocks)
+			{
 				EnterSSA(headBlock);
+			}
 
 			ssaOperands = null;
 		}
@@ -98,7 +99,9 @@ namespace Mosa.Compiler.Framework.Stages
 				variables[operand].Push(0);
 
 				if (!ssaOperands.ContainsKey(operand))
+				{
 					ssaOperands.Add(operand, new Operand[operand.Definitions.Count + 1]);
+				}
 			}
 		}
 
@@ -123,6 +126,8 @@ namespace Mosa.Compiler.Framework.Stages
 			return ssaOperand;
 		}
 
+		//
+
 		/// <summary>
 		/// Renames the variables.
 		/// </summary>
@@ -137,7 +142,7 @@ namespace Mosa.Compiler.Framework.Stages
 					{
 						var op = context.GetOperand(i);
 
-						if (op == null || !op.IsStackLocal)
+						if (op == null || !op.IsVirtualRegister)
 							continue;
 
 						Debug.Assert(variables.ContainsKey(op), op.ToString() + " is not in dictionary [block = " + block + "]");
@@ -147,7 +152,7 @@ namespace Mosa.Compiler.Framework.Stages
 					}
 				}
 
-				if (!context.IsEmpty && context.Result != null && context.Result.IsStackLocal)
+				if (!context.IsEmpty && context.Result != null && (context.Result.IsVirtualRegister || context.Result.IsParameter))
 				{
 					var op = context.Result;
 					var index = counts[op];
@@ -183,13 +188,12 @@ namespace Mosa.Compiler.Framework.Stages
 
 			for (var context = new Context(instructionSet, block); !context.IsLastInstruction; context.GotoNext())
 			{
-				if (!context.IsEmpty && context.Result != null && context.Result.IsStackLocal)
+				if (!context.IsEmpty && context.Result != null && context.Result.IsVirtualRegister)
 				{
 					var op = context.Result.BaseOperand;
 					var index = variables[op].Pop();
 				}
 			}
-
 		}
 
 		/// <summary>
@@ -205,7 +209,5 @@ namespace Mosa.Compiler.Framework.Stages
 					return i;
 			return -1;
 		}
-
-
 	}
 }

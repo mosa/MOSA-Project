@@ -10,11 +10,12 @@
 
 using System.Diagnostics;
 using Mosa.Compiler.Framework.IR;
+using Mosa.Compiler.Framework.CIL;
 
 namespace Mosa.Compiler.Framework.Stages
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public class LeaveSSA : BaseMethodCompilerStage, IMethodCompilerStage, IPipelineStage
 	{
@@ -28,20 +29,24 @@ namespace Mosa.Compiler.Framework.Stages
 				for (var context = new Context(instructionSet, block); !context.IsLastInstruction; context.GotoNext())
 				{
 					if (context.Instruction is IR.Phi)
+					{
 						ProcessPhiInstruction(block, context);
+					}
 
 					for (var i = 0; i < context.OperandCount; ++i)
 					{
 						var op = context.GetOperand(i);
 						if (op != null && op.IsSSA)
+						{
 							context.SetOperand(i, op.BaseOperand);
+						}
 					}
 
-					if (context.Result != null)
+					if (context.Result != null && context.Result.IsSSA)
 					{
-						if (context.Result.IsSSA)
-							context.Result = context.Result.BaseOperand;
+						context.Result = context.Result.BaseOperand;
 					}
+
 				}
 			}
 		}
@@ -71,12 +76,14 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="operand">The operand.</param>
 		private void InsertCopyStatement(BasicBlock predecessor, Operand result, Operand operand)
 		{
-			var context = new Context(instructionSet, predecessor);
-			while (!context.IsLastInstruction && IsBranchInstruction(context))
-				context.GotoNext();
+			var context = new Context(instructionSet, predecessor, predecessor.EndIndex);
 
-			if (context.Index != -1)
-				context = context.InsertBefore();
+			context.GotoPrevious();
+
+			while (context.Instruction is IntegerCompareBranch || context.Instruction is Jmp)
+			{
+				context.GotoPrevious();
+			}
 
 			var source = operand.IsSSA ? operand.BaseOperand : operand;
 			var destination = result.IsSSA ? result.BaseOperand : result;
@@ -85,19 +92,7 @@ namespace Mosa.Compiler.Framework.Stages
 			Debug.Assert(!destination.IsSSA);
 
 			if (destination != source)
-				context.SetInstruction(IRInstruction.Move, destination, source);
-		}
-
-		/// <summary>
-		/// Determines whether [is branch instruction] [the specified context].
-		/// </summary>
-		/// <param name="context">The context.</param>
-		/// <returns>
-		///   <c>true</c> if [is branch instruction] [the specified context]; otherwise, <c>false</c>.
-		/// </returns>
-		private bool IsBranchInstruction(Context context)
-		{
-			return context.Instruction is Jmp || context.Instruction is IntegerCompareBranch;
+				context.AppendInstruction(IRInstruction.Move, destination, source);
 		}
 
 	}
