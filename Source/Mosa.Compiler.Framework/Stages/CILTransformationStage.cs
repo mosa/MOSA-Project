@@ -438,7 +438,7 @@ namespace Mosa.Compiler.Framework.Stages
 				{
 					int methodTableOffset = CalculateMethodTableOffset(invokeTarget) + (nativePointerSize * 5);
 					context.SetInstruction(IRInstruction.Load, methodTable, thisPtr, Operand.CreateConstant(0));
-					context.AppendInstruction(IRInstruction.Load, methodPtr, methodTable, Operand.CreateConstant(BuiltInSigType.Int32, methodTableOffset));
+					context.AppendInstruction(IRInstruction.Load, methodPtr, methodTable, Operand.CreateConstant((int)methodTableOffset));
 				}
 				else
 				{
@@ -450,8 +450,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 					context.SetInstruction(IRInstruction.Load, methodTable, thisPtr, Operand.CreateConstant(0));
 					context.AppendInstruction(IRInstruction.Load, interfaceSlotPtr, methodTable, Operand.CreateConstant(0));
-					context.AppendInstruction(IRInstruction.Load, interfaceMethodTablePtr, interfaceSlotPtr, Operand.CreateConstant(BuiltInSigType.Int32, slotOffset));
-					context.AppendInstruction(IRInstruction.Load, methodPtr, interfaceMethodTablePtr, Operand.CreateConstant(BuiltInSigType.Int32, methodTableOffset));
+					context.AppendInstruction(IRInstruction.Load, interfaceMethodTablePtr, interfaceSlotPtr, Operand.CreateConstant((int)slotOffset));
+					context.AppendInstruction(IRInstruction.Load, methodPtr, interfaceMethodTablePtr, Operand.CreateConstant((int)methodTableOffset));
 				}
 
 				context.AppendInstruction(IRInstruction.Nop);
@@ -526,8 +526,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 			ReplaceWithVmCall(context, VmCall.AllocateArray);
 
-			context.SetOperand(1, Operand.CreateConstant(BuiltInSigType.IntPtr, 0));
-			context.SetOperand(2, Operand.CreateConstant(BuiltInSigType.Int32, elementSize));
+			context.SetOperand(1, Operand.CreateConstant((int)0));
+			context.SetOperand(2, Operand.CreateConstant((int)elementSize));
 			context.SetOperand(3, lengthOperand);
 			context.OperandCount = 4;
 		}
@@ -574,7 +574,7 @@ namespace Mosa.Compiler.Framework.Stages
 				Operand methodTableSymbol = GetMethodTableSymbol(classType);
 
 				before.SetOperand(1, methodTableSymbol);
-				before.SetOperand(2, Operand.CreateConstant(BuiltInSigType.Int32, typeLayout.GetTypeSize(classType)));
+				before.SetOperand(2, Operand.CreateConstant((int)typeLayout.GetTypeSize(classType)));
 				before.OperandCount = 2;
 				before.Result = thisReference;
 
@@ -661,7 +661,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 				ReplaceWithVmCall(context, VmCall.IsInstanceOfInterfaceType);
 
-				context.SetOperand(1, Operand.CreateConstant(BuiltInSigType.UInt32, slot));
+				context.SetOperand(1, Operand.CreateConstant((uint)slot));
 				context.SetOperand(2, reference);
 				context.OperandCount = 3;
 				context.ResultCount = 1;
@@ -772,7 +772,7 @@ namespace Mosa.Compiler.Framework.Stages
 			var classSize = typeLayout.GetTypeSize(type);
 
 			context.SetOperand(1, methodTableSymbol);
-			context.SetOperand(2, Operand.CreateConstant(BuiltInSigType.UInt32, classSize));
+			context.SetOperand(2, Operand.CreateConstant((uint)classSize));
 			context.SetOperand(3, value);
 			context.OperandCount = 4;
 			context.Result = result;
@@ -944,7 +944,7 @@ namespace Mosa.Compiler.Framework.Stages
 			Operand objectOperand = context.Operand1;
 
 			int offset = typeLayout.GetFieldOffset(context.RuntimeField);
-			Operand fixedOffset = Operand.CreateConstant(BuiltInSigType.Int32, offset);
+			Operand fixedOffset = Operand.CreateConstant((int)offset);
 
 			context.SetInstruction(IRInstruction.AddU, fieldAddress, objectOperand, fixedOffset);
 		}
@@ -993,7 +993,7 @@ namespace Mosa.Compiler.Framework.Stages
 			int target = context.BranchTargets[0];
 
 			Operand first = context.Operand1;
-			Operand second = Operand.CreateConstant(BuiltInSigType.Int32, (int)0);
+			Operand second = Operand.CreateConstant((int)0);
 
 			CIL.OpCode opcode = ((CIL.BaseCILInstruction)context.Instruction).OpCode;
 
@@ -1110,7 +1110,7 @@ namespace Mosa.Compiler.Framework.Stages
 			//
 
 			Operand elementOffset = methodCompiler.CreateVirtualRegister(BuiltInSigType.Int32);
-			Operand elementSizeOperand = Operand.CreateConstant(BuiltInSigType.Int32, elementSizeInBytes);
+			Operand elementSizeOperand = Operand.CreateConstant((int)elementSizeInBytes);
 			context.AppendInstruction(IRInstruction.MulS, elementOffset, arrayIndexOperand, elementSizeOperand);
 
 			return elementOffset;
@@ -1119,7 +1119,7 @@ namespace Mosa.Compiler.Framework.Stages
 		private Operand LoadArrayBaseAddress(Context context, SZArraySigType arraySignatureType, Operand arrayOperand)
 		{
 			Operand arrayAddress = methodCompiler.CreateVirtualRegister(new PtrSigType(arraySignatureType.ElementType));
-			Operand fixedOffset = Operand.CreateConstant(BuiltInSigType.Int32, 12);
+			Operand fixedOffset = Operand.CreateConstant((int)12);
 			context.SetInstruction(IRInstruction.AddS, arrayAddress, arrayOperand, fixedOffset);
 			return arrayAddress;
 		}
@@ -1291,9 +1291,8 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="context">The context.</param>
 		void CIL.ICILVisitor.Endfinally(Context context)
 		{
-			context.SetInstruction(IRInstruction.Return);
+			context.SetInstruction(IRInstruction.InternalReturn);
 		}
-
 
 		private ExceptionHandlingClause FindImmediateClause(Context context)
 		{
@@ -1858,12 +1857,14 @@ namespace Mosa.Compiler.Framework.Stages
 				{
 					if (sourceOperand.Type.Type == CilElementType.I8 || sourceOperand.Type.Type == CilElementType.U8)
 					{
-						context.SetInstruction(IRInstruction.Move, destinationOperand, sourceOperand);
-						context.AppendInstruction(type, destinationOperand, sourceOperand, Operand.CreateConstant(BuiltInSigType.UInt32, mask));
+						Operand temp = AllocateVirtualRegister(destinationOperand.Type);
+
+						context.SetInstruction(IRInstruction.Move, temp, sourceOperand);
+						context.AppendInstruction(type, destinationOperand, temp, Operand.CreateConstant((uint)mask));
 					}
 					else
 					{
-						context.SetInstruction(type, destinationOperand, sourceOperand, Operand.CreateConstant(BuiltInSigType.UInt32, mask));
+						context.SetInstruction(type, destinationOperand, sourceOperand, Operand.CreateConstant((uint)mask));
 					}
 				}
 			}

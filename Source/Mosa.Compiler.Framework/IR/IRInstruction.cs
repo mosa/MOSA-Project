@@ -149,11 +149,15 @@ namespace Mosa.Compiler.Framework.IR
 		/// <summary>
 		/// 
 		/// </summary>
-		public static readonly ShiftLeft ShiftLeft = new ShiftLeft();
+		public static readonly InternalReturn InternalReturn = new InternalReturn();
 		/// <summary>
 		/// 
 		/// </summary>
 		public static readonly ShiftRight ShiftRight = new ShiftRight();
+		/// <summary>
+		/// 
+		/// </summary>
+		public static readonly ShiftLeft ShiftLeft = new ShiftLeft();
 		/// <summary>
 		/// 
 		/// </summary>

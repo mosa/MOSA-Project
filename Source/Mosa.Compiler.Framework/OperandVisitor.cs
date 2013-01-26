@@ -40,9 +40,9 @@ namespace Mosa.Compiler.Framework
 					}
 					else if (operand.IsMemoryAddress)
 					{
-						if (operand.BaseOperand != null)
+						if (operand.OffsetBase != null)
 						{
-							yield return operand.BaseOperand;
+							yield return operand.OffsetBase;
 						}
 
 						if (operand.OffsetBase != null)
@@ -61,9 +61,9 @@ namespace Mosa.Compiler.Framework
 							yield return operand;
 						}
 
-						if (operand.BaseOperand != null)
+						if (operand.SSAParent != null)
 						{
-							yield return operand.BaseOperand;
+							yield return operand.OffsetBase;
 						}
 
 						if (operand.OffsetBase != null)

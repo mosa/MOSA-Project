@@ -23,23 +23,35 @@ namespace Mosa.Platform.x86.Stages
 		/// </summary>
 		void IMethodCompilerStage.Run()
 		{
-			foreach (BasicBlock block in basicBlocks)
+			bool changed = true;
+			while (changed)
 			{
-				for (Context ctx = CreateContext(block); !ctx.IsLastInstruction; ctx.GotoNext())
+				changed = false;
+
+				foreach (BasicBlock block in basicBlocks)
 				{
-					if (ctx.IsEmpty)
-						continue;
-
-					// Remove Nop instructions
-					if (ctx.Instruction is Instructions.Nop)
+					for (Context ctx = CreateContext(block); !ctx.IsLastInstruction; ctx.GotoNext())
 					{
-						ctx.Remove();
-					}
+						if (ctx.IsEmpty)
+							continue;
 
-					// Remove useless instructions
-					else if (ctx.ResultCount == 1 && ctx.Result.Uses.Count == 0 && ctx.Result.IsVirtualRegister)
-					{
-						ctx.Remove();
+						// Remove Nop instructions
+						if (ctx.Instruction is Instructions.Nop)
+						{
+							ctx.Remove();
+						}
+
+						// Remove useless instructions
+						else if (ctx.ResultCount == 1 && ctx.Result.Uses.Count == 0 && ctx.Result.IsVirtualRegister)
+						{
+							// Check is split child, if so check is parent in use (IR.Return for example)
+							if (ctx.Result.IsSplitChild && ctx.Result.SplitParent.Uses.Count != 0)
+								continue;
+
+							if (IsLogging) Trace("REMOVED:\t" + ctx.ToString());
+							ctx.Remove();
+							changed = true;
+						}
 					}
 				}
 			}

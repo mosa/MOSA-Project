@@ -32,6 +32,5 @@ namespace Mosa.Compiler.Framework
 
 		#endregion // IMethodCompilerStage Members
 
-
 	}
 }

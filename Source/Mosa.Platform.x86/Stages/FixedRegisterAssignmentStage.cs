@@ -172,7 +172,7 @@ namespace Mosa.Platform.x86.Stages
 			Operand EDX = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.EDX);
 
 			context.SetInstruction(X86.Mov, EAX, operand1);
-			context.SetInstruction(X86.Mov, EDX, operand2);
+			context.AppendInstruction(X86.Mov, EDX, operand2);
 			context.AppendInstruction2(X86.IDiv, EDX, EAX, EDX, EAX, operand3);
 			context.AppendInstruction(X86.Mov, result, EDX);
 			context.AppendInstruction(X86.Mov, result2, EAX);

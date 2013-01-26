@@ -84,7 +84,7 @@ namespace Mosa.Compiler.Framework
 			Operand opCompare = methodCompiler.VirtualRegisters.Allocate(BuiltInSigType.Int32);
 
 			Operand opReturn = withReturn ? methodCompiler.VirtualRegisters.Allocate(BuiltInSigType.Object) : null;
-			Operand c0 = Operand.CreateConstant(BuiltInSigType.Int32, 0);
+			Operand c0 = Operand.CreateConstant((int)0);
 
 			Context b0 = CreateMethodStructure(methodCompiler, false);
 			Context b1 = CreateNewBlock(methodCompiler);

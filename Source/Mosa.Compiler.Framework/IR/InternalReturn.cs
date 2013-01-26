@@ -1,10 +1,10 @@
 ﻿/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
+ * (c) 2013 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
- *  Michael Ruck (grover) <sharpos@michaelruck.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 namespace Mosa.Compiler.Framework.IR
@@ -12,14 +12,14 @@ namespace Mosa.Compiler.Framework.IR
 	/// <summary>
 	/// Intermediate representation of a method return context.
 	/// </summary>
-	public sealed class Return : OneOperandInstruction
+	public sealed class InternalReturn : OneOperandInstruction
 	{
 		#region Construction
 
 		/// <summary>
 		/// Initializes a new instance of <see cref="Return"/>.
 		/// </summary>
-		public Return()
+		public InternalReturn()
 		{
 		}
 
@@ -45,7 +45,7 @@ namespace Mosa.Compiler.Framework.IR
 		/// <param name="context">The context.</param>
 		public override void Visit(IIRVisitor visitor, Context context)
 		{
-			visitor.Return(context);
+			visitor.InternalReturn(context);
 		}
 
 		#endregion // OneOperandInstruction Overrides

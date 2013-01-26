@@ -34,6 +34,9 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 		private SimpleKeyPriorityQueue<LiveInterval> priorityQueue;
 		private List<LiveIntervalUnion> liveIntervalUnions;
 
+		private Register stackFrameRegister;
+		private Register stackPointerRegister;
+
 		private BaseMethodCompilerStage stage;
 
 		public GreedyRegisterAllocator(BasicBlocks basicBlocks, VirtualRegisters compilerVirtualRegisters, InstructionSet instructionSet, IArchitecture architecture, BaseMethodCompilerStage stage)
@@ -50,6 +53,9 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			this.liveIntervalUnions = new List<LiveIntervalUnion>(physicalRegisterCount);
 			this.virtualRegisters = new List<VirtualRegister>(registerCount);
 			this.extendedBlocks = new List<ExtendedBlock>(basicBlocks.Count);
+			
+			stackFrameRegister = architecture.StackFrameRegister ;
+			stackPointerRegister = architecture.StackPointerRegister;
 
 			// Setup extended physical registers
 			foreach (var physicalRegister in architecture.RegisterSet)
@@ -57,7 +63,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 				Debug.Assert(physicalRegister.Index == virtualRegisters.Count);
 				Debug.Assert(physicalRegister.Index == liveIntervalUnions.Count);
 
-				bool reserved = (physicalRegister == architecture.StackFrameRegister || physicalRegister == architecture.StackPointerRegister);
+				bool reserved = (physicalRegister == stackFrameRegister || physicalRegister == stackPointerRegister);
 
 				this.virtualRegisters.Add(new VirtualRegister(physicalRegister, reserved));
 				this.liveIntervalUnions.Add(new LiveIntervalUnion(physicalRegister, reserved));
@@ -128,14 +134,10 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			foreach (var block in extendedBlocks)
 			{
 				stage.Trace(section, "Block # " + block.BasicBlock.Sequence.ToString());
-				stage.Trace(section, " LiveGen:");
-				stage.Trace(section, " " + ToString(block.LiveGen));
-				stage.Trace(section, " LiveKill:");
-				stage.Trace(section, " " + ToString(block.LiveKill));
-				stage.Trace(section, " LiveIn:");
-				stage.Trace(section, " " + ToString(block.LiveIn));
-				stage.Trace(section, " LiveOut:");
-				stage.Trace(section, " " + ToString(block.LiveOut));
+				stage.Trace(section, " LiveIn:   " + ToString(block.LiveIn));
+				stage.Trace(section, " LiveGen:  " + ToString(block.LiveGen));
+				stage.Trace(section, " LiveKill: " + ToString(block.LiveKill));
+				stage.Trace(section, " LiveOut:  " + ToString(block.LiveOut));
 			}
 
 			section = "Registers";
@@ -222,6 +224,9 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 				BitArray liveGen = new BitArray(registerCount, false);
 				BitArray liveKill = new BitArray(registerCount, false);
 
+				liveGen.Set(stackFrameRegister.Index, true);
+				liveGen.Set(stackPointerRegister.Index, true);
+
 				for (Context context = new Context(instructionSet, block.BasicBlock); !context.IsLastInstruction; context.GotoNext())
 				{
 					if (context.IsEmpty)
@@ -241,12 +246,17 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 							stage.Trace(section, "GEN:  " + index.ToString() + " " + ops.ToString());
 						}
 					}
-					foreach (var ops in visitor.Temp)
+
+					if (context.Instruction.FlowControl == FlowControl.Call)
 					{
-						int index = GetIndex(ops);
-						liveKill.Set(index, true);
-						stage.Trace(section, "KILL: " + index.ToString() + " " + ops.ToString());
-					}
+						for (int s = 0; s < physicalRegisterCount; s++)
+						{
+							liveKill.Set(s, true);
+						}
+						stage.Trace(section, "KILL ALL PHYSICAL");
+
+					}				
+
 					foreach (var ops in visitor.Output)
 					{
 						stage.Trace(section, "OUTPUT: " + ops.ToString());
@@ -300,17 +310,6 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 				}
 			}
 
-			var epilogueBlock = basicBlocks.EpilogueBlock;
-
-			if (epilogueBlock == null)
-				return;
-
-			var epilogueExtendedBlock = extendedBlocks[epilogueBlock.Sequence];
-
-			for (int i = 0; i < physicalRegisterCount; i++)
-			{
-				epilogueExtendedBlock.LiveOut.Set(i, true);
-			}
 		}
 
 		private void BuildLiveIntervals()
@@ -365,7 +364,19 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 							if (register.IsReserved)
 								continue;
 
-							register.LiveIntervals[0] = new LiveInterval(register, currentSlotIndex, register.FirstRange.End);
+							var first = register.FirstRange;
+
+							if (first != null)
+							{
+								register.LiveIntervals[0] = new LiveInterval(register, currentSlotIndex, first.End);
+							}
+							else
+							{
+								// This is necesary to handled a result that is never used! 
+								// Common with instructions which more than one results
+								register.AddLiveInterval(currentSlotIndex, prevSlotIndex);
+							}
+
 							if (!register.IsPhysicalRegister)
 								register.AddUsePosition(currentSlotIndex);
 						}

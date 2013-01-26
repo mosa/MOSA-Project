@@ -190,7 +190,7 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				if (!context.IsEmpty && context.Result != null && context.Result.IsVirtualRegister)
 				{
-					var op = context.Result.BaseOperand;
+					var op = context.Result.SSAParent;
 					var index = variables[op].Pop();
 				}
 			}

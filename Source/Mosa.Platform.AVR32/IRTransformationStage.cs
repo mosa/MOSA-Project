@@ -751,6 +751,12 @@ namespace Mosa.Platform.AVR32
 		#region IIRVisitor - Unused
 
 		/// <summary>
+		/// Visitation function for InternalReturn.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IIRVisitor.InternalReturn(Context context) { }
+
+		/// <summary>
 		/// Visitation function for IntegerToFloatingPointConversion.
 		/// </summary>
 		/// <param name="context">The context.</param>

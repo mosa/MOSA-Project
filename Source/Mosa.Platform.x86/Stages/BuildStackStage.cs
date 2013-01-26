@@ -4,11 +4,10 @@
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
- *  Michael Ruck (grover) <sharpos@michaelruck.de>
- *  Scott Balmos <sbalmos@fastmail.fm>
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using System;
 using System.Diagnostics;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.IR;
@@ -18,7 +17,7 @@ using Mosa.Compiler.Metadata.Signatures;
 namespace Mosa.Platform.x86.Stages
 {
 	/// <summary>
-	///
+	/// Completes the stack handling after register allocation
 	/// </summary>
 	public sealed class BuildStackStage : BaseMethodCompilerStage, IMethodCompilerStage, IPipelineStage
 	{
@@ -29,7 +28,6 @@ namespace Mosa.Platform.x86.Stages
 		/// <summary>
 		/// Setup stage specific processing on the compiler context.
 		/// </summary>
-		/// <param name="methodCompiler">The compiler context to perform processing in.</param>
 		void IMethodCompilerStage.Run()
 		{
 			if (methodCompiler.Compiler.PlugSystem.GetPlugMethod(methodCompiler.Method) != null)
@@ -41,6 +39,19 @@ namespace Mosa.Platform.x86.Stages
 
 			Debug.Assert((stackSize % 4) == 0, @"Stack size of method can't be divided by 4!!");
 
+			UpdatePrologue();
+			UpdateEpilogue();
+			UpdateReturns();
+		}
+
+		#endregion // IMethodCompilerStage
+
+		/// <summary>
+		/// Updates the prologue.
+		/// </summary>
+		private void UpdatePrologue()
+		{
+			// Update prologue Block
 			var prologueBlock = this.basicBlocks.PrologueBlock;
 
 			Context prologueContext = new Context(instructionSet, prologueBlock);
@@ -49,8 +60,15 @@ namespace Mosa.Platform.x86.Stages
 
 			Debug.Assert(prologueContext.Instruction is Prologue);
 
-			Prologue(prologueContext);
+			AddPrologueInstructions(prologueContext);
+		}
 
+		/// <summary>
+		/// Updates the epilogue.
+		/// </summary>
+		private void UpdateEpilogue()
+		{
+			// Update epilogue Block
 			var epilogueBlock = this.basicBlocks.EpilogueBlock;
 
 			if (epilogueBlock != null)
@@ -61,16 +79,50 @@ namespace Mosa.Platform.x86.Stages
 
 				Debug.Assert(epilogueContext.Instruction is Epilogue);
 
-				Epilogue(epilogueContext);
+				AddEpilogueInstructions(epilogueContext);
 			}
 		}
 
-		#endregion // IMethodCompilerStage
+		/// <summary>
+		/// Updates the returns.
+		/// </summary>
+		private void UpdateReturns()
+		{
+			// Update Return(s)
+			foreach (var block in basicBlocks)
+			{
+				// optimization - the return instruction is always the last instruction of the block
+				Context ctx = new Context(instructionSet, block, block.EndIndex);
+
+				ctx.GotoPrevious();
+
+				while (ctx.IsEmpty)
+				{
+					ctx.GotoPrevious();
+				}
+
+				if (ctx.Instruction is Return)
+				{
+					if (ctx.Operand1 != null)
+					{
+						callingConvention.MoveReturnValue(ctx, ctx.Operand1);
+						ctx.AppendInstruction(X86.Jmp);
+						ctx.SetBranch(Int32.MaxValue);
+					}
+					else
+					{
+						ctx.SetInstruction(X86.Jmp);
+						ctx.SetBranch(Int32.MaxValue);
+					}
+				}
+			}
+		}
 
 		/// <summary>
+		/// Adds the prologue instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		private void Prologue(Context context)
+		private void AddPrologueInstructions(Context context)
 		{
 			Operand eax = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.EAX);
 			Operand ebx = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.EBX);
@@ -106,7 +158,7 @@ namespace Mosa.Platform.x86.Stages
 			context.AppendInstruction(X86.Mov, ebp, esp);
 
 			// sub esp, localsSize
-			context.AppendInstruction(X86.Sub, esp, esp, Operand.CreateConstant(BuiltInSigType.Int32, -stackSize));
+			context.AppendInstruction(X86.Sub, esp, esp, Operand.CreateConstant((int)-stackSize));
 
 			// push ebx
 			context.AppendInstruction(X86.Push, null, ebx);
@@ -115,9 +167,9 @@ namespace Mosa.Platform.x86.Stages
 			context.AppendInstruction(X86.Push, null, edi);
 			context.AppendInstruction(X86.Push, null, ecx);
 			context.AppendInstruction(X86.Mov, edi, esp);
-			context.AppendInstruction(X86.Add, edi, edi, Operand.CreateConstant(BuiltInSigType.Int32, 3 * 4)); // 4 bytes per push above
+			context.AppendInstruction(X86.Add, edi, edi, Operand.CreateConstant((int)(3 * 4))); // 4 bytes per push above
 			context.AppendInstruction(X86.Mov, ecx, Operand.CreateConstant(BuiltInSigType.Int32, -(int)(stackSize >> 2)));
-			context.AppendInstruction(X86.Xor, eax, eax, eax);
+			context.AppendInstruction(X86.Mov, eax, Operand.CreateConstant((uint)0));
 			context.AppendInstruction(X86.Rep);
 			context.AppendInstruction(X86.Stos);
 
@@ -131,9 +183,10 @@ namespace Mosa.Platform.x86.Stages
 		}
 
 		/// <summary>
+		/// Adds the epilogue instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		private void Epilogue(Context context)
+		private void AddEpilogueInstructions(Context context)
 		{
 			Operand ebx = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.EBX);
 			Operand edx = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.EDX);

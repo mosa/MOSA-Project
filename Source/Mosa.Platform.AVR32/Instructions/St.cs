@@ -49,11 +49,11 @@ namespace Mosa.Platform.AVR32.Instructions
 
 				if (IsBetween(destination.Offset, 0, 60))
 				{
-					emitter.EmitTwoRegistersWithK4((byte)destination.Base.RegisterCode, (byte)context.Operand1.Register.RegisterCode, (sbyte)destination.Offset);
+					emitter.EmitTwoRegistersWithK4((byte)destination.OffsetBaseRegister.RegisterCode, (byte)context.Operand1.Register.RegisterCode, (sbyte)destination.Offset);
 				}
 				else if (IsBetween(destination.Offset, -32768, 32767))
 				{
-					emitter.EmitTwoRegistersAndK16(0x14, (byte)destination.Base.RegisterCode, (byte)context.Operand1.Register.RegisterCode, (short)destination.Offset);
+					emitter.EmitTwoRegistersAndK16(0x14, (byte)destination.OffsetBaseRegister.RegisterCode, (byte)context.Operand1.Register.RegisterCode, (short)destination.Offset);
 				}
 				else
 					throw new OverflowException();

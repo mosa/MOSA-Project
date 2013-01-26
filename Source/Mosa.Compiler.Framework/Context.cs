@@ -298,9 +298,9 @@ namespace Mosa.Compiler.Framework
 						{
 							current.OffsetBase.Uses.Remove(index);
 						}
-						if (current.BaseOperand != null)
+						if (current.SSAParent != null)
 						{
-							current.BaseOperand.Uses.Remove(index);
+							current.SSAParent.Uses.Remove(index);
 						}
 					}
 				}
@@ -313,9 +313,9 @@ namespace Mosa.Compiler.Framework
 						{
 							value.OffsetBase.Uses.Remove(index);
 						}
-						if (value.BaseOperand != null)
+						if (value.SSAParent != null)
 						{
-							value.BaseOperand.Uses.Remove(index);
+							value.SSAParent.Uses.Remove(index);
 						}
 					}
 				}
@@ -342,9 +342,9 @@ namespace Mosa.Compiler.Framework
 						{
 							current.OffsetBase.Uses.Remove(index);
 						}
-						if (current.BaseOperand != null)
+						if (current.SSAParent != null)
 						{
-							current.BaseOperand.Uses.Remove(index);
+							current.SSAParent.Uses.Remove(index);
 						}
 					}
 				}
@@ -357,9 +357,9 @@ namespace Mosa.Compiler.Framework
 						{
 							value.OffsetBase.Uses.Add(index);
 						}
-						if (value.BaseOperand != null)
+						if (value.SSAParent != null)
 						{
-							value.BaseOperand.Uses.Add(index);
+							value.SSAParent.Uses.Add(index);
 						}
 					}
 				}

@@ -49,24 +49,24 @@ namespace Mosa.Compiler.Framework
 		private List<int> uses;
 
 		/// <summary>
-		/// Holds the index
+		/// Holds the index.
 		/// </summary>
 		private int index;
 
 		/// <summary>
-		/// Holds the sequence
-		/// </summary>
-		//private int sequence;
-
-		/// <summary>
-		/// The register, where the operand is stored.
+		/// The register where the operand is stored.
 		/// </summary>
 		private Register register;
 
 		/// <summary>
-		/// The operand for the offset base
+		/// The operand for the offset base.
 		/// </summary>
 		private Operand offsetBase;
+
+		/// <summary>
+		/// The operand of the parent.
+		/// </summary>
+		private Operand parent;
 
 		/// <summary>
 		/// Holds the runtime member.
@@ -103,19 +103,19 @@ namespace Mosa.Compiler.Framework
 		public Register Register { get { return register; } }
 
 		/// <summary>
+		/// Retrieves the offset base.
+		/// </summary>
+		public Operand OffsetBase { get { return offsetBase; } }
+
+		/// <summary>
 		/// Retrieves the base register, where the operand is located.
 		/// </summary>
-		public Register Base { get { return register; } }
+		public Register OffsetBaseRegister { get { return register; } }
 
 		/// <summary>
 		/// Gets the base operand.
 		/// </summary>
-		public Operand BaseOperand { get; private set; }
-
-		/// <summary>
-		/// Retrieves the offset base.
-		/// </summary>
-		public Operand OffsetBase { get { return offsetBase; } }
+		public Operand SSAParent { get { return IsSSA ? parent : null; } private set { parent = value; } }
 
 		/// <summary>
 		/// Holds the address offset if used together with a base register or the absolute address, if register is null.
@@ -150,6 +150,14 @@ namespace Mosa.Compiler.Framework
 		/// The high operand.
 		/// </value>
 		public Operand High { get; private set; }
+
+		/// <summary>
+		/// Gets the split64 parent.
+		/// </summary>
+		/// <value>
+		/// The split64 parent.
+		/// </value>
+		public Operand SplitParent { get { return !IsSSA ? parent : null; } private set { parent = value; } }
 
 		/// <summary>
 		/// Determines if the operand is a register.
@@ -202,14 +210,17 @@ namespace Mosa.Compiler.Framework
 		public bool IsParameter { get { return (operandType & OperandType.Parameter) == OperandType.Parameter; } }
 
 		/// <summary>
-		/// Determines if the operand is a stack temp operand.
-		/// </summary>
-		public bool IsStackTemp { get { return IsStackLocal && !IsParameter; } } // FIXME: Remove
-
-		/// <summary>
 		/// Determines if the operand is a ssa operand.
 		/// </summary>
 		public bool IsSSA { get { return (operandType & OperandType.SSA) == OperandType.SSA; } }
+
+		/// <summary>
+		/// Gets a value indicating whether this instance is split64 child.
+		/// </summary>
+		/// <value>
+		/// <c>true</c> if this instance is split64 child; otherwise, <c>false</c>.
+		/// </value>
+		public bool IsSplitChild { get { return parent != null && (High != null || Low != null); } }
 
 		/// <summary>
 		/// Gets the name.
@@ -321,6 +332,15 @@ namespace Mosa.Compiler.Framework
 			return operand;
 		}
 
+		/// <summary>
+		/// Creates a new constant <see cref="Operand"/> for the given integral value.
+		/// </summary>
+		/// <param name="value">The value to create the constant operand for.</param>
+		/// <returns>A new Operand representing the value <paramref name="value"/>.</returns>
+		public static Operand CreateConstant(uint value)
+		{
+			return CreateConstant(BuiltInSigType.UInt32, value);
+		}
 		/// <summary>
 		/// Creates a new constant <see cref="Operand"/> for the given integral value.
 		/// </summary>
@@ -525,7 +545,7 @@ namespace Mosa.Compiler.Framework
 		public static Operand CreateSSA(Operand ssaOperand, int ssaVersion)
 		{
 			Operand operand = new Operand(ssaOperand.sigType, ssaOperand.operandType | OperandType.SSA);
-			operand.BaseOperand = ssaOperand;
+			operand.SSAParent = ssaOperand;
 			operand.SSAVersion = ssaVersion;
 			return operand;
 		}
@@ -540,6 +560,8 @@ namespace Mosa.Compiler.Framework
 		public static Operand CreateLowSplitForLong(Operand longOperand, int offset, int index)
 		{
 			Debug.Assert(longOperand.Type.Type == CilElementType.U8 || longOperand.Type.Type == CilElementType.I8);
+			
+			Debug.Assert(longOperand.SplitParent == null);
 
 			Operand operand;
 
@@ -559,7 +581,7 @@ namespace Mosa.Compiler.Framework
 				operand = new Operand(BuiltInSigType.UInt32, OperandType.VirtualRegister);
 			}
 
-			operand.BaseOperand = longOperand;
+			operand.SplitParent = longOperand;
 			Debug.Assert(longOperand.Low == null);
 			longOperand.Low = operand;
 
@@ -580,6 +602,8 @@ namespace Mosa.Compiler.Framework
 		{
 			Debug.Assert(longOperand.Type.Type == CilElementType.U8 || longOperand.Type.Type == CilElementType.I8);
 
+			Debug.Assert(longOperand.SplitParent == null);
+
 			Operand operand;
 
 			if (longOperand.IsConstant)
@@ -598,7 +622,7 @@ namespace Mosa.Compiler.Framework
 				operand = new Operand(BuiltInSigType.UInt32, OperandType.VirtualRegister);
 			}
 
-			operand.BaseOperand = longOperand;
+			operand.SplitParent = longOperand;
 			Debug.Assert(longOperand.High == null);
 			longOperand.High = operand;
 
@@ -666,7 +690,7 @@ namespace Mosa.Compiler.Framework
 		{
 			if (IsSSA)
 			{
-				string ssa = BaseOperand.ToString();
+				string ssa = SSAParent.ToString();
 				int pos = ssa.IndexOf(' ');
 
 				if (pos < 0)
@@ -676,19 +700,6 @@ namespace Mosa.Compiler.Framework
 			}
 
 			StringBuilder s = new StringBuilder();
-
-			if (BaseOperand != null)
-			{
-				s.Append("<");
-				s.Append(BaseOperand.ToString());
-
-				if (BaseOperand.High == this)
-					s.Append("/high");
-				else
-					s.Append("/low");
-
-				s.Append("> ");
-			}
 
 			if (Name != null)
 			{
@@ -706,6 +717,19 @@ namespace Mosa.Compiler.Framework
 			else if (IsParameter && Name == null)
 			{
 				s.AppendFormat("P_{0}", index);
+			}
+
+			if (IsSplitChild)
+			{
+				s.Append(" (");
+				s.Append(parent.ToString());
+
+				if (parent.High == this)
+					s.Append("/high");
+				else
+					s.Append("/low");
+
+				s.Append(")");
 			}
 
 			if (IsConstant)

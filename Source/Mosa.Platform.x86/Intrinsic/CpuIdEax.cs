@@ -35,7 +35,7 @@ namespace Mosa.Platform.x86.Intrinsic
 			Operand ecx = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.ECX);
 			Operand reg = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.EAX);
 			context.SetInstruction(X86.Mov, eax, operand);
-			context.AppendInstruction(X86.Xor, ecx, ecx, ecx);
+			context.AppendInstruction(X86.Mov, ecx, Operand.CreateConstant((uint)0));
 			context.AppendInstruction(X86.CpuId, eax, eax);
 			context.AppendInstruction(X86.Mov, result, reg);
 		}

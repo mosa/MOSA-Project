@@ -81,6 +81,7 @@
     <Compile Include="ContextHelper.cs" />
     <Compile Include="IR\BlockStart.cs" />
     <Compile Include="IR\BlockEnd.cs" />
+    <Compile Include="IR\InternalReturn.cs" />
     <Compile Include="RegisterAllocator\Interval.cs" />
     <Compile Include="RegisterAllocator\SlotIndex.cs" />
     <Compile Include="RegisterAllocator\LiveIntervalUnion.cs" />

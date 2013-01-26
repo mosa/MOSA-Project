@@ -46,13 +46,12 @@ namespace Mosa.Tool.TypeExplorer
 				(compilerOptions.EnableSSA && compilerOptions.EnableSSAOptimizations) ? new SSAOptimizations() : null,
 				(compilerOptions.EnableSSA) ? new LeaveSSA() : null,
 
-				new StackLayoutStage(),
 				new PlatformIntrinsicTransformationStage(),
 				new PlatformStubStage(),
 
 				new CheckPlatformOperandCountStage(),
 
-				//new GreedyRegisterAllocatorStage(),
+				new GreedyRegisterAllocatorStage(),
 				new StackLayoutStage(),
 
 				//new LoopAwareBlockOrderStage(),

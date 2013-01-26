@@ -231,7 +231,7 @@ namespace Mosa.Platform.x86.Stages
 				context.AppendInstruction(X86.Or, ebx, ebx, ecx);
 				context.AppendInstruction(X86.Or, ebx, ebx, edx);
 				context.AppendInstruction(X86.And, eax, eax, ebx);
-				context.AppendInstruction(X86.And, eax, eax, Operand.CreateConstant(BuiltInSigType.Int32, (int)1));
+				context.AppendInstruction(X86.And, eax, eax, Operand.CreateConstant((int)1));
 			}
 			else if (code == ConditionCode.NotEqual)
 			{
@@ -245,7 +245,7 @@ namespace Mosa.Platform.x86.Stages
 				context.AppendInstruction(X86.Or, ebx, ebx, edx);
 				context.AppendInstruction(X86.Not, ebx, ebx);
 				context.AppendInstruction(X86.Or, eax, eax, ebx);
-				context.AppendInstruction(X86.And, eax, eax, Operand.CreateConstant(BuiltInSigType.Int32, (int)1));
+				context.AppendInstruction(X86.And, eax, eax, Operand.CreateConstant((int)1));
 			}
 			else if (code == ConditionCode.GreaterThan)
 			{
@@ -469,9 +469,9 @@ namespace Mosa.Platform.x86.Stages
 
 			context.SetInstruction(X86.Mov, context.Result, context.Operand1);
 			if (dest.Type.Type == CilElementType.U1)
-				context.AppendInstruction(X86.Xor, dest, dest, Operand.CreateConstant(BuiltInSigType.UInt32, (uint)0xFF));
+				context.AppendInstruction(X86.Xor, dest, dest, Operand.CreateConstant((uint)0xFF));
 			else if (dest.Type.Type == CilElementType.U2)
-				context.AppendInstruction(X86.Xor, dest, dest, Operand.CreateConstant(BuiltInSigType.UInt32, (uint)0xFFFF));
+				context.AppendInstruction(X86.Xor, dest, dest, Operand.CreateConstant((uint)0xFFFF));
 			else
 				context.AppendInstruction(X86.Not, dest, dest);
 		}
@@ -538,29 +538,36 @@ namespace Mosa.Platform.x86.Stages
 		}
 
 		/// <summary>
-		/// Visitation function for ReturnInstruction.
+		/// Visitation function for Return.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IIRVisitor.Return(Context context)
 		{
-			if (context.BranchTargets == null)
-			{
-				// To return from an internal method call (usually from within a finally or exception clause)
-				context.SetInstruction(X86.Ret);
-				return;
-			}
+			Debug.Assert(context.BranchTargets != null);
 
-			if (context.Operand1 != null)
-			{
-				callingConvention.MoveReturnValue(context, context.Operand1);
-				context.AppendInstruction(X86.Jmp);
-				context.SetBranch(Int32.MaxValue);
-			}
-			else
-			{
-				context.SetInstruction(X86.Jmp);
-				context.SetBranch(Int32.MaxValue);
-			}
+			//if (context.Operand1 != null)
+			//{
+			//	callingConvention.MoveReturnValue(context, context.Operand1);
+			//	context.AppendInstruction(X86.Jmp);
+			//	context.SetBranch(Int32.MaxValue);
+			//}
+			//else
+			//{
+			//	context.SetInstruction(X86.Jmp);
+			//	context.SetBranch(Int32.MaxValue);
+			//}
+		}
+
+		/// <summary>
+		/// Visitation function for InternalReturn.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IIRVisitor.InternalReturn(Context context)
+		{
+			Debug.Assert(context.BranchTargets == null);
+
+			// To return from an internal method call (usually from within a finally or exception clause)
+			context.SetInstruction(X86.Ret);
 		}
 
 		/// <summary>
@@ -701,11 +708,9 @@ namespace Mosa.Platform.x86.Stages
 			Operand operand1 = context.Operand1;
 			Operand operand2 = context.Operand2;
 
-			Operand v1 = AllocateVirtualRegister(BuiltInSigType.Int32);
 			Operand v2 = AllocateVirtualRegister(BuiltInSigType.UInt32);
 
-			context.SetInstruction(X86.Xor, v1, v1, v1);
-			context.AppendInstruction2(X86.Mul, v2, result, operand1, v1, operand2);
+			context.AppendInstruction2(X86.Mul, v2, result, operand1, Operand.CreateConstant((uint)0x0), operand2);
 		}
 
 		/// <summary>
@@ -740,12 +745,10 @@ namespace Mosa.Platform.x86.Stages
 			Operand operand2 = context.Operand2;
 			Operand result = context.Result;
 
-			Operand v1 = AllocateVirtualRegister(BuiltInSigType.Int32);
 			Operand v2 = AllocateVirtualRegister(BuiltInSigType.UInt32);
 			Operand v3 = AllocateVirtualRegister(BuiltInSigType.Int32);
 
-			context.SetInstruction(X86.Xor, v1, v1, v1);
-			context.AppendInstruction2(X86.IDiv, result, v3, v1, v2, operand2);
+			context.SetInstruction2(X86.IDiv, result, v3, Operand.CreateConstant((uint)0x0), v2, operand2);
 		}
 
 		/// <summary>
@@ -780,15 +783,13 @@ namespace Mosa.Platform.x86.Stages
 			Operand operand1 = context.Operand1;
 			Operand operand2 = context.Operand2;
 
-			Operand v1 = AllocateVirtualRegister(BuiltInSigType.Int32);
 			Operand v2 = AllocateVirtualRegister(BuiltInSigType.UInt32);
 
-			context.SetInstruction(X86.Xor, v1, v1, v1);
-			context.AppendInstruction2(X86.Div, result, v2, operand1, v1, operand2);
+			context.SetInstruction2(X86.Div, result, v2, operand1, Operand.CreateConstant((uint)0x0), operand2);
 		}
 
 		/// <summary>
-		/// Visitation function for RemFInstruction.
+		/// Visitation function for RemF.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IIRVisitor.RemFloat(Context context)
@@ -823,7 +824,7 @@ namespace Mosa.Platform.x86.Stages
 
 			newBlocks[0].AppendInstruction(X86.Cvttsd2si, edx, destination);
 
-			newBlocks[0].AppendInstruction(X86.Cmp, null, edx, Operand.CreateConstant(BuiltInSigType.Int32, (int)0));
+			newBlocks[0].AppendInstruction(X86.Cmp, null, edx, Operand.CreateConstant((int)0));
 			newBlocks[0].AppendInstruction(X86.Branch, ConditionCode.Equal, newBlocks[2].BasicBlock);
 			newBlocks[0].AppendInstruction(X86.Jmp, newBlocks[1].BasicBlock);
 			LinkBlocks(newBlocks[0], newBlocks[1], newBlocks[2]);

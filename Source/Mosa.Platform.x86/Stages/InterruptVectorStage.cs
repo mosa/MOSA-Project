@@ -74,7 +74,7 @@ namespace Mosa.Platform.x86.Stages
 				ctx.AppendInstruction(X86.Pushad);
 				ctx.AppendInstruction(X86.Call, null, interruptMethod);
 				ctx.AppendInstruction(X86.Popad);
-				ctx.AppendInstruction(X86.Add, esp, esp, Operand.CreateConstant(BuiltInSigType.Int32, 0x08));
+				ctx.AppendInstruction(X86.Add, esp, esp, Operand.CreateConstant((int)0x08));
 				ctx.AppendInstruction(X86.Sti);
 				ctx.AppendInstruction(X86.IRetd);
 				ctx.AppendInstruction(IRInstruction.BlockEnd);
