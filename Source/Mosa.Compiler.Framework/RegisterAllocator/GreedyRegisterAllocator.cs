@@ -53,8 +53,8 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			this.liveIntervalUnions = new List<LiveIntervalUnion>(physicalRegisterCount);
 			this.virtualRegisters = new List<VirtualRegister>(registerCount);
 			this.extendedBlocks = new List<ExtendedBlock>(basicBlocks.Count);
-			
-			stackFrameRegister = architecture.StackFrameRegister ;
+
+			stackFrameRegister = architecture.StackFrameRegister;
 			stackPointerRegister = architecture.StackPointerRegister;
 
 			// Setup extended physical registers
@@ -96,7 +96,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			// Computer Global Live Sets
 			ComputeGlobalLiveSets();
 
-			//BuildLiveIntervals();
+			BuildLiveIntervals();
 
 			TraceLiveIntervals();
 
@@ -255,7 +255,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 						}
 						stage.Trace(section, "KILL ALL PHYSICAL");
 
-					}				
+					}
 
 					foreach (var ops in visitor.Output)
 					{
@@ -346,6 +346,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 					if (!context.IsEmpty)
 					{
+
 						OperandVisitor visitor = new OperandVisitor(context);
 
 						if (context.Instruction.FlowControl == FlowControl.Call)
@@ -404,9 +405,10 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 							if (!register.IsPhysicalRegister)
 								register.AddUsePosition(currentSlotIndex);
 						}
-					}
 
-					prevSlotIndex = currentSlotIndex;
+						prevSlotIndex = currentSlotIndex;
+					}
+					
 					context.GotoPrevious();
 				}
 			}

@@ -100,12 +100,12 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Retrieves the register, where the operand is located.
 		/// </summary>
-		public Register Register { get { return register; } }
+		public Register Register { get { return register; } private set { register = value; } }
 
 		/// <summary>
 		/// Retrieves the offset base.
 		/// </summary>
-		public Operand OffsetBase { get { return offsetBase; } }
+		public Operand OffsetBase { get { return offsetBase; } private set { offsetBase = value; } }
 
 		/// <summary>
 		/// Retrieves the base register, where the operand is located.
@@ -220,7 +220,7 @@ namespace Mosa.Compiler.Framework
 		/// <value>
 		/// <c>true</c> if this instance is split64 child; otherwise, <c>false</c>.
 		/// </value>
-		public bool IsSplitChild { get { return parent != null && (High != null || Low != null); } }
+		public bool IsSplitChild { get { return parent != null && !IsSSA; } }
 
 		/// <summary>
 		/// Gets the name.
@@ -471,7 +471,7 @@ namespace Mosa.Compiler.Framework
 		public static Operand CreateMemoryAddress(SigType sigType, Operand offsetBase, long offset)
 		{
 			Operand operand = new Operand(sigType, OperandType.MemoryAddress);
-			operand.offsetBase = offsetBase;
+			operand.OffsetBase = offsetBase;
 			operand.Offset = offset;
 			return operand;
 		}
@@ -560,8 +560,9 @@ namespace Mosa.Compiler.Framework
 		public static Operand CreateLowSplitForLong(Operand longOperand, int offset, int index)
 		{
 			Debug.Assert(longOperand.Type.Type == CilElementType.U8 || longOperand.Type.Type == CilElementType.I8);
-			
+
 			Debug.Assert(longOperand.SplitParent == null);
+			Debug.Assert(longOperand.Low == null);
 
 			Operand operand;
 
@@ -573,15 +574,18 @@ namespace Mosa.Compiler.Framework
 			else if (longOperand.IsMemoryAddress)
 			{
 				operand = new Operand(BuiltInSigType.UInt32, OperandType.MemoryAddress);
-				operand.offsetBase = longOperand.offsetBase;
+				operand.OffsetBase = longOperand.OffsetBase;
 				operand.Offset = longOperand.Offset + offset;
+				operand.Register = longOperand.Register;
 			}
 			else
 			{
 				operand = new Operand(BuiltInSigType.UInt32, OperandType.VirtualRegister);
 			}
 
-			operand.SplitParent = longOperand;
+			operand.parent = longOperand;
+			//operand.SplitParent = longOperand;
+
 			Debug.Assert(longOperand.Low == null);
 			longOperand.Low = operand;
 
@@ -603,6 +607,7 @@ namespace Mosa.Compiler.Framework
 			Debug.Assert(longOperand.Type.Type == CilElementType.U8 || longOperand.Type.Type == CilElementType.I8);
 
 			Debug.Assert(longOperand.SplitParent == null);
+			Debug.Assert(longOperand.High == null);
 
 			Operand operand;
 
@@ -614,15 +619,18 @@ namespace Mosa.Compiler.Framework
 			else if (longOperand.IsMemoryAddress)
 			{
 				operand = new Operand(BuiltInSigType.UInt32, OperandType.MemoryAddress);
-				operand.offsetBase = longOperand.offsetBase;
+				operand.OffsetBase = longOperand.OffsetBase;
 				operand.Offset = longOperand.Offset + offset;
+				operand.Register = longOperand.Register;
 			}
 			else
 			{
 				operand = new Operand(BuiltInSigType.UInt32, OperandType.VirtualRegister);
 			}
 
-			operand.SplitParent = longOperand;
+			operand.parent = longOperand;
+			//operand.SplitParent = longOperand;
+
 			Debug.Assert(longOperand.High == null);
 			longOperand.High = operand;
 
@@ -631,54 +639,6 @@ namespace Mosa.Compiler.Framework
 		}
 
 		#endregion // Static Factory Constructors
-
-		#region Methods
-
-		/// <summary>
-		/// Replaces this operand in all uses and defs with the given operand.
-		/// </summary>
-		/// <param name="replacement">The replacement operand.</param>
-		/// <param name="instructionSet">The instruction set.</param>
-		public void Replace(Operand replacement, InstructionSet instructionSet)
-		{
-			// Iterate all definition sites first
-			foreach (int index in Definitions.ToArray())
-			{
-				Context ctx = new Context(instructionSet, index);
-
-				if (ctx.Result != null)
-				{
-					// Is this the operand?
-					if (ReferenceEquals(ctx.Result, this))
-					{
-						ctx.Result = replacement;
-					}
-				}
-			}
-
-			// Iterate all use sites
-			foreach (int index in Uses.ToArray())
-			{
-				Context ctx = new Context(instructionSet, index);
-
-				Debug.Assert(ctx.GetOperand(ctx.OperandCount) == null);
-				Debug.Assert(ctx.GetOperand(ctx.OperandCount - 1) != null);
-
-				int opIdx = 0;
-				foreach (Operand r in ctx.Operands)
-				{
-					// Is this the operand?
-					if (ReferenceEquals(r, this))
-					{
-						ctx.SetOperand(opIdx, replacement);
-					}
-
-					opIdx++;
-				}
-			}
-		}
-
-		#endregion // Methods
 
 		#region Object Overrides
 
@@ -704,6 +664,7 @@ namespace Mosa.Compiler.Framework
 			if (Name != null)
 			{
 				s.Append(Name);
+				s.Append(' ');
 			}
 
 			if (IsVirtualRegister)
@@ -721,19 +682,21 @@ namespace Mosa.Compiler.Framework
 
 			if (IsSplitChild)
 			{
-				s.Append(" (");
-				s.Append(parent.ToString());
+				s.Append(' ');
+
+				s.Append("(" + parent.ToString() + ")");
 
 				if (parent.High == this)
 					s.Append("/high");
 				else
 					s.Append("/low");
-
-				s.Append(")");
 			}
+
 
 			if (IsConstant)
 			{
+				s.Append(' ');
+
 				if (Value == null)
 					s.Append("const null");
 				else
@@ -742,45 +705,38 @@ namespace Mosa.Compiler.Framework
 
 			if (IsRuntimeMember)
 			{
+				s.Append(' ');
 				s.Append(runtimeMember.ToString());
 			}
 
-			if (s.Length != 0)
-				s.Append(' ');
 
 			if (IsCPURegister)
 			{
-				s.AppendFormat("{0}", register);
+				s.AppendFormat(" {0}", register);
 			}
 			else if (IsMemoryAddress)
 			{
-				if (offsetBase != null)
+				s.Append(' ');
+				if (OffsetBase != null)
 				{
 					if (Offset > 0)
-						s.AppendFormat("[{0}+{1:X}h]", offsetBase.ToString(), Offset);
+						s.AppendFormat("[{0}+{1:X}h]", OffsetBase.ToString(), Offset);
 					else
-						s.AppendFormat("[{0}-{1:X}h]", offsetBase.ToString(), -Offset);
+						s.AppendFormat("[{0}-{1:X}h]", OffsetBase.ToString(), -Offset);
 				}
-				if (register != null)
+				if (Register != null)
 				{
 					if (Offset > 0)
-						s.AppendFormat("[{0}+{1:X}h]", register.ToString(), Offset);
+						s.AppendFormat("[{0}+{1:X}h]", Register.ToString(), Offset);
 					else
-						s.AppendFormat("[{0}-{1:X}h]", register.ToString(), -Offset);
+						s.AppendFormat("[{0}-{1:X}h]", Register.ToString(), -Offset);
 				}
 
-				//if (IsLabel)
-				//{
-				//	s.AppendFormat("[{0}]", Name);
-				//}
 			}
 
-			if (s.Length != 0)
-				if (s[s.Length - 1] != ' ')
-					s.Append(' ');
+			s.AppendFormat(" [{0}]", sigType);
 
-			s.AppendFormat("[{0}]", sigType);
-			return s.ToString();
+			return s.ToString().Replace("  ", " ").Trim();
 		}
 
 		#endregion // Object Overrides

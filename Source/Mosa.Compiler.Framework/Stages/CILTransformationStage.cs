@@ -2029,8 +2029,8 @@ namespace Mosa.Compiler.Framework.Stages
 			if (extension != null)
 			{
 				Operand temp = methodCompiler.CreateVirtualRegister(extendedType);
-				destination.Replace(temp, context.InstructionSet);
 				context.SetInstruction(extension, temp, source);
+				context.AppendInstruction(IRInstruction.Move, destination, source);
 				return;
 			}
 
