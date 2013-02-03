@@ -1968,8 +1968,8 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </summary>
 		/// <param name="context">The transformation context.</param>
 		/// <param name="destinationOperand">The operand, which holds the call destination.</param>
-		/// <param name="resultOperand"></param>
-		/// <param name="operands"></param>
+		/// <param name="resultOperand">The result operand.</param>
+		/// <param name="operands">The operands.</param>
 		private void ProcessInvokeInstruction(Context context, Operand destinationOperand, Operand resultOperand, List<Operand> operands)
 		{
 			context.SetInstruction(IRInstruction.Call, (byte)(operands.Count + 1), (byte)(resultOperand == null ? 0 : 1));

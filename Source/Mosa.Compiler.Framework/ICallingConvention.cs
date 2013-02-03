@@ -53,17 +53,5 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		int OffsetOfFirstParameter { get; }
 
-		/// <summary>
-		/// Gets the callee saved registers.
-		/// </summary>
-		Register[] CalleeSavedRegisters { get; }
-
-		/// <summary>
-		/// Gets the return registers.
-		/// </summary>
-		/// <param name="returnType">Type of the return.</param>
-		/// <returns></returns>
-		Register[] GetReturnRegisters(CilElementType returnType);
-
 	}
 }

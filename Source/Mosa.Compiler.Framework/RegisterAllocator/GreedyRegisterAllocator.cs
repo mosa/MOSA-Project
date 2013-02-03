@@ -101,10 +101,10 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			TraceLiveIntervals();
 
 			// Calculate Spill Costs for Live Intervals
-			//CalculateSpillCosts();
+			CalculateSpillCosts();
 
 			// Populate Priority Queue
-			//PopulatePriorityQueue();
+			PopulatePriorityQueue();
 
 			//// Process Priority Queue
 			//ProcessPriorityQueue();
@@ -254,7 +254,6 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 							liveKill.Set(s, true);
 						}
 						stage.Trace(section, "KILL ALL PHYSICAL");
-
 					}
 
 					foreach (var ops in visitor.Output)
@@ -309,7 +308,6 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 					block.LiveIn = liveIn;
 				}
 			}
-
 		}
 
 		private void BuildLiveIntervals()
@@ -346,7 +344,6 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 					if (!context.IsEmpty)
 					{
-
 						OperandVisitor visitor = new OperandVisitor(context);
 
 						if (context.Instruction.FlowControl == FlowControl.Call)
@@ -373,7 +370,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 							}
 							else
 							{
-								// This is necesary to handled a result that is never used! 
+								// This is necesary to handled a result that is never used!
 								// Common with instructions which more than one results
 								register.AddLiveInterval(currentSlotIndex, prevSlotIndex);
 							}
@@ -408,7 +405,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 						prevSlotIndex = currentSlotIndex;
 					}
-					
+
 					context.GotoPrevious();
 				}
 			}
@@ -429,7 +426,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			return 0;
 		}
 
-		private int CalculateSpillCost(LiveInterval liveInterval)
+		private void CalculateSpillCost(LiveInterval liveInterval)
 		{
 			int spillcosts = 0;
 
@@ -438,7 +435,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 				spillcosts += 100 * (1 + GetLoopDepth(use));
 			}
 
-			return (spillcosts / liveInterval.Length);
+			liveInterval.SpillCost = spillcosts / liveInterval.Length;
 		}
 
 		private void CalculateSpillCosts()
@@ -456,7 +453,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 					else
 					{
 						// Calculate spill costs for live interval
-						liveInterval.SpillCost = CalculateSpillCost(liveInterval);
+						CalculateSpillCost(liveInterval);
 					}
 				}
 			}
@@ -464,16 +461,8 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		private void AddPriorityQueue(LiveInterval liveInterval)
 		{
-			// priority is based on interval size
-			priorityQueue.Enqueue(liveInterval.Length, liveInterval);
-		}
-
-		private void AddPriorityQueue(List<LiveInterval> liveIntervals)
-		{
-			foreach (var liveInterval in liveIntervals)
-			{
-				AddPriorityQueue(liveInterval);
-			}
+			// priority is based on allocation stage (primary, lower first) and interval size (secondary, higher first)
+			priorityQueue.Enqueue(liveInterval.Length | ((int)(((int)LiveInterval.AllocationStage.Max - liveInterval.Stage)) << 30), liveInterval);
 		}
 
 		private void PopulatePriorityQueue()
@@ -491,6 +480,8 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 						continue;
 					}
+
+					liveInterval.Stage = LiveInterval.AllocationStage.Initial;
 
 					// Add live intervals for virtual registers to priority queue
 					AddPriorityQueue(liveInterval);
@@ -551,16 +542,134 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 				if (evict)
 				{
 					liveIntervalUnion.Evict(intersections);
-					AddPriorityQueue(intersections);
+
+					foreach (var intersection in intersections)
+					{
+						liveInterval.Stage = LiveInterval.AllocationStage.Initial;
+						AddPriorityQueue(intersection);
+					};
+
 					liveIntervalUnion.Add(liveInterval);
 
 					return;
 				}
 			}
 
-			// No live intervals to evict; split live interval
+			// No live intervals to evict!
+
+			// prepare to split live interval
+			if (liveInterval.Stage == LiveInterval.AllocationStage.Initial)
+			{
+				liveInterval.Stage = LiveInterval.AllocationStage.PreSpill;
+				AddPriorityQueue(liveInterval);
+				return;
+			}
+
+			// split live interval
+			if (liveInterval.Stage == LiveInterval.AllocationStage.PreSpill)
+			{
+				if (TrySplitInterval(liveInterval))
+				{
+					//liveInterval.Stage = LiveIntervalAllocationStage.Initial;
+					//AddPriorityQueue(liveInterval);
+
+					// TODO
+
+					return;
+				}
+				else
+				{
+					liveInterval.Stage = LiveInterval.AllocationStage.Spillable;
+					AddPriorityQueue(liveInterval);
+					return;
+				}
+			}
+
+			// spill interval to stack slot
+			if (liveInterval.Stage == LiveInterval.AllocationStage.Spillable)
+			{
+				// TODO: Spill interval to stack slot
+				return;
+			}
 
 			// TODO
+			return;
+		}
+
+		private bool TrySplitInterval(LiveInterval liveInterval)
+		{
+			if (TrySimpleIntervalSplit(liveInterval))
+				return true;
+
+			return false;
+		}
+
+		private bool TrySimpleIntervalSplit(LiveInterval liveInterval)
+		{
+			IntersectionResult spillCandidate = null;
+
+			foreach (var liveIntervalUnion in liveIntervalUnions)
+			{
+				if (liveIntervalUnion.IsReserved)
+					continue;
+
+				if (liveIntervalUnion.IsFloatingPoint != liveInterval.VirtualRegister.IsFloatingPoint)
+					continue;
+
+				var intersection = liveIntervalUnion.GetIntersectionAt(liveInterval.Start);
+
+				spillCandidate = GetBestIntersectionForSpill(spillCandidate, intersection);
+			}
+
+			return false;
+		}
+
+		private IntersectionResult GetBestIntersectionForSpill(IntersectionResult a, IntersectionResult b)
+		{
+			if (a == null)
+				return b;
+
+			if (b == null)
+				return a;
+
+			if (a.IsFreeToInfinity)
+				return a;
+
+			if (b.IsFreeToInfinity)
+				return b;
+
+			if (a.IsFree && !b.IsFree)
+				return a;
+
+			if (!a.IsFree && b.IsFree)
+				return b;
+
+			if (a.IsFree && b.IsFree)
+			{
+				if (a.EndOfFree > b.EndOfFree)
+					return a;
+
+				return b;
+			}
+
+			if (a.LiveInterval.Start > b.LiveInterval.Start)
+				return a;
+
+			return b;
+		}
+
+		private void SplitInterval(LiveInterval liveInterval, SlotIndex at)
+		{
+			// TODO: Find start/end ranges based on uses
+
+			var first = new LiveInterval(liveInterval.VirtualRegister, liveInterval.Start, at);
+			var second = new LiveInterval(liveInterval.VirtualRegister, at, liveInterval.End);
+
+			CalculateSpillCost(first);
+			CalculateSpillCost(second);
+
+			AddPriorityQueue(first);
+			AddPriorityQueue(second);
 		}
 	}
 }

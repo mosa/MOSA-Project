@@ -29,12 +29,6 @@ namespace Mosa.Platform.x86
 		/// </summary>
 		private IArchitecture architecture;
 
-		private static readonly Register[] ReturnVoidRegisters = new Register[] { };
-		private static readonly Register[] Return32BitRegisters = new Register[] { GeneralPurposeRegister.EAX };
-		private static readonly Register[] Return64BitRegisters = new Register[] { GeneralPurposeRegister.EAX, GeneralPurposeRegister.EDX };
-		private static readonly Register[] ReturnFPRegisters = new Register[] { SSE2Register.XMM0 };
-		private static readonly Register[] CalleeSavedRegisters = new Register[] { GeneralPurposeRegister.EDX, GeneralPurposeRegister.EBX, GeneralPurposeRegister.EDI };
-
 		#endregion // Data members
 
 		#region Construction
@@ -114,32 +108,41 @@ namespace Mosa.Platform.x86
 
 		private void ReserveStackSizeForCall(Context ctx, int stackSize)
 		{
-			if (stackSize != 0)
-			{
-				Operand esp = Operand.CreateCPURegister(BuiltInSigType.IntPtr, GeneralPurposeRegister.ESP);
+			if (stackSize == 0)
+				return;
 
-				ctx.AppendInstruction(X86.Sub, esp, esp, Operand.CreateConstant(esp.Type, stackSize));
-				ctx.AppendInstruction(X86.Mov, Operand.CreateCPURegister(architecture.NativeType, GeneralPurposeRegister.EDX), esp);
-			}
+			Operand esp = Operand.CreateCPURegister(BuiltInSigType.IntPtr, GeneralPurposeRegister.ESP);
+
+			ctx.AppendInstruction(X86.Sub, esp, esp, Operand.CreateConstant(esp.Type, stackSize));
+			ctx.AppendInstruction(X86.Mov, Operand.CreateCPURegister(architecture.NativeType, GeneralPurposeRegister.EDX), esp);
 		}
 
 		private void FreeStackAfterCall(Context ctx, int stackSize)
 		{
+			if (stackSize == 0)
+				return;
+
 			Operand esp = Operand.CreateCPURegister(BuiltInSigType.IntPtr, GeneralPurposeRegister.ESP);
-			if (stackSize != 0)
-			{
-				ctx.AppendInstruction(X86.Add, esp, esp, Operand.CreateConstant(BuiltInSigType.IntPtr, stackSize));
-			}
+			ctx.AppendInstruction(X86.Add, esp, esp, Operand.CreateConstant(BuiltInSigType.IntPtr, stackSize));
 		}
 
 		private void CleanupReturnValue(Context ctx, Operand result)
 		{
-			if (result != null)
+			if (result == null)
+				return;
+
+			Operand eax = Operand.CreateCPURegister(result.Type, GeneralPurposeRegister.EAX);
+
+			if (result.StackType == StackTypeCode.Int64)
 			{
-				if (result.StackType == StackTypeCode.Int64)
-					MoveReturnValueTo64Bit(result, ctx);
-				else
-					MoveReturnValueTo32Bit(result, ctx);
+				Operand edx = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.EDX);
+
+				ctx.AppendInstruction(X86.Mov, result.Low, eax);
+				ctx.AppendInstruction(X86.Mov, result.High, edx);
+			}
+			else
+			{
+				ctx.AppendInstruction(X86.Mov, result, eax);
 			}
 		}
 
@@ -164,34 +167,6 @@ namespace Mosa.Platform.x86
 		}
 
 		/// <summary>
-		/// Moves the return value to 32 bit.
-		/// </summary>
-		/// <param name="resultOperand">The result operand.</param>
-		/// <param name="ctx">The context.</param>
-		private void MoveReturnValueTo32Bit(Operand resultOperand, Context ctx)
-		{
-			Operand eax = Operand.CreateCPURegister(resultOperand.Type, GeneralPurposeRegister.EAX);
-			ctx.AppendInstruction(X86.Mov, resultOperand, eax);
-		}
-
-		/// <summary>
-		/// Moves the return value to 64 bit.
-		/// </summary>
-		/// <param name="resultOperand">The result operand.</param>
-		/// <param name="ctx">The context.</param>
-		private void MoveReturnValueTo64Bit(Operand resultOperand, Context ctx)
-		{
-			if (!resultOperand.IsMemoryAddress)
-				return;
-
-			Operand eax = Operand.CreateCPURegister(BuiltInSigType.UInt32, GeneralPurposeRegister.EAX);
-			Operand edx = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.EDX);
-
-			ctx.AppendInstruction(X86.Mov, resultOperand.Low, eax);
-			ctx.AppendInstruction(X86.Mov, resultOperand.High, edx);
-		}
-
-		/// <summary>
 		/// Pushes the specified instructions.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
@@ -205,7 +180,9 @@ namespace Mosa.Platform.x86
 				if (op.Type.Type == CilElementType.ValueType)
 				{
 					for (int i = 0; i < parameterSize; i += 4)
+					{
 						ctx.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(op.Type, GeneralPurposeRegister.EDX, stackSize + i), Operand.CreateMemoryAddress(op.Type, op.OffsetBaseRegister, op.Offset + i));
+					}
 
 					return;
 				}
@@ -226,13 +203,8 @@ namespace Mosa.Platform.x86
 
 					case StackTypeCode.Int64:
 						{
-							Debug.Assert(op.IsMemoryAddress, @"I8/U8 arg is not in a memory operand.");
-							Operand eax = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.EAX);
-
-							ctx.AppendInstruction(X86.Mov, eax, op.Low);
-							ctx.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(op.Type, GeneralPurposeRegister.EDX, stackSize), eax);
-							ctx.AppendInstruction(X86.Mov, eax, op.High);
-							ctx.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(op.Type, GeneralPurposeRegister.EDX, stackSize + 4), eax);
+							ctx.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(op.Type, GeneralPurposeRegister.EDX, stackSize), op.Low);
+							ctx.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(op.Type, GeneralPurposeRegister.EDX, stackSize + 4), op.High);
 						}
 						return;
 
@@ -243,14 +215,10 @@ namespace Mosa.Platform.x86
 				ctx.AppendInstruction(X86.Mov, rop, op);
 				op = rop;
 			}
-			else if (op.IsConstant && op.StackType == StackTypeCode.Int64)
+			else if (op.StackType == StackTypeCode.Int64)
 			{
-				Operand eax = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.EAX);
-
-				ctx.AppendInstruction(X86.Mov, eax, op.Low);
-				ctx.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(BuiltInSigType.Int32, GeneralPurposeRegister.EDX, stackSize), eax);
-				ctx.AppendInstruction(X86.Mov, eax, op.High);
-				ctx.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(BuiltInSigType.Int32, GeneralPurposeRegister.EDX, stackSize + 4), eax);
+				ctx.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(BuiltInSigType.Int32, GeneralPurposeRegister.EDX, stackSize), op.Low);
+				ctx.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(BuiltInSigType.Int32, GeneralPurposeRegister.EDX, stackSize + 4), op.High);
 
 				return;
 			}
@@ -357,33 +325,6 @@ namespace Mosa.Platform.x86
 				 */
 				return 8;
 			}
-		}
-
-		/// <summary>
-		/// Gets the callee saved registers.
-		/// </summary>
-		Register[] ICallingConvention.CalleeSavedRegisters
-		{
-			get { return CalleeSavedRegisters; }
-		}
-
-		/// <summary>
-		/// Gets the return registers.
-		/// </summary>
-		/// <param name="returnType">Type of the return.</param>
-		/// <returns></returns>
-		Register[] ICallingConvention.GetReturnRegisters(CilElementType returnType)
-		{
-			if (returnType == CilElementType.Void)
-				return ReturnVoidRegisters;
-
-			if (returnType == CilElementType.R4 || returnType == CilElementType.R8)
-				return ReturnFPRegisters;
-
-			if (returnType == CilElementType.I8 || returnType == CilElementType.U8)
-				return Return64BitRegisters;
-
-			return Return32BitRegisters;
 		}
 
 		#endregion // ICallingConvention Members

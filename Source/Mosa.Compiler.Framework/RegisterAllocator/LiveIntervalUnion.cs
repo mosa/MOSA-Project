@@ -23,7 +23,9 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 		public Register Register { get { return register; } }
 
 		public bool IsFloatingPoint { get { return register.IsFloatingPoint; } }
+
 		public bool IsInteger { get { return register.IsInteger; } }
+
 		public bool IsReserved { get { return reserved; } }
 
 		public LiveIntervalUnion(Register register, bool reserved)
@@ -35,7 +37,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 		public void Add(LiveInterval liveInterval)
 		{
 			liveIntervals.Add(liveInterval);
-			
+
 			liveInterval.LiveIntervalUnion = this;
 		}
 
@@ -65,6 +67,38 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			}
 
 			return false;
+		}
+
+		public IntersectionResult GetIntersectionAt(SlotIndex slotIndex)
+		{
+			SlotIndex maxSlotIndex = null;
+
+			foreach (var liveInterval in liveIntervals)
+			{
+				if (liveInterval.Contains(slotIndex))
+				{
+					return new IntersectionResult(liveInterval);
+				}
+
+				if (liveInterval.Start < slotIndex)
+					continue;
+
+				if (maxSlotIndex == null)
+				{
+					maxSlotIndex = liveInterval.Start;
+					continue;
+				}
+
+				if (liveInterval.Start < maxSlotIndex)
+				{
+					maxSlotIndex = liveInterval.Start;
+				}
+			}
+
+			if (maxSlotIndex == null)
+				return IntersectionResult.FreeToInfinity;
+
+			return new IntersectionResult(maxSlotIndex);
 		}
 
 		public List<LiveInterval> GetIntersections(LiveInterval liveInterval)

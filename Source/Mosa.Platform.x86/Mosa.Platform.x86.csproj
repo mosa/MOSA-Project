@@ -143,7 +143,6 @@
     <Compile Include="Intrinsic\Nop.cs" />
     <Compile Include="Intrinsic\Out.cs" />
     <Compile Include="Intrinsic\Sti.cs" />
-    <Compile Include="Intrinsic\TestMethod.cs" />
     <Compile Include="Stages\CheckOperandCountStage.cs" />
     <Compile Include="Stages\MethodTableBuilderStage.cs" />
     <Compile Include="SegmentRegister.cs" />
@@ -252,11 +251,6 @@
     <Compile Include="SSE2Register.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="XSharp\CPURegister.cs" />
-    <Compile Include="XSharp\IndexedRegister.cs" />
-    <Compile Include="XSharp\Register.cs" />
-    <Compile Include="XSharp\Registers.cs" />
-    <Compile Include="XSharp\XSharpMethod.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />

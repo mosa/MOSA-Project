@@ -15,10 +15,22 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 	public class LiveInterval : Interval
 	{
+
+		public enum AllocationStage
+		{
+			Initial = 0,
+			PreSpill = 1,
+			Spillable = 2,
+
+			Max = 2,
+		}
+
 		public VirtualRegister VirtualRegister { get; private set; }
 
 		public int SpillCost { get; set; }
 		public LiveIntervalUnion LiveIntervalUnion { get; set; }
+
+		public AllocationStage Stage { get; set; }
 
 		public Register Register { get { return this.LiveIntervalUnion.Register; } }
 
@@ -27,6 +39,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 		{
 			this.VirtualRegister = virtualRegister;
 			this.SpillCost = 0;
+			this.Stage = AllocationStage.Initial;
 		}
 
 		public LiveInterval CreateExpandedLiveInterval(LiveInterval interval)
