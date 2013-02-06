@@ -14,6 +14,7 @@ using Mosa.Compiler.Framework.Platform;
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Compiler.Framework.RegisterAllocator;
+using Mosa.Compiler.InternalTrace;
 
 namespace Mosa.Compiler.Framework.Stages
 {
@@ -30,7 +31,9 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </summary>
 		void IMethodCompilerStage.Run()
 		{
-			var allocator = new GreedyRegisterAllocator(basicBlocks, methodCompiler.VirtualRegisters, instructionSet, architecture, this);
+			var trace = CreateTrace();
+
+			var allocator = new GreedyRegisterAllocator(basicBlocks, methodCompiler.VirtualRegisters, instructionSet, architecture, trace);
 
 			return;
 		}

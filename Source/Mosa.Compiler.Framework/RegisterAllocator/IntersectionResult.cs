@@ -32,5 +32,15 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 		private IntersectionResult()
 		{
 		}
+
+		public override string ToString()
+		{
+			if (!IsFree) return "[" + LiveInterval.ToString() + "]";
+			else
+				if (IsFreeToInfinity)
+					return "[free to infinitiy]";
+				else
+					return "[free to " + EndOfFree.ToString() + "]";
+		}
 	}
 }

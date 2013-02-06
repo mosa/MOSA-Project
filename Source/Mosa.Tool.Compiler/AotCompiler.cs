@@ -96,16 +96,16 @@ namespace Mosa.Tool.Compiler
 			AotCompiler aot = new AotCompiler(compilerOptions.Architecture, typeSystem, typeLayout, internalTrace, compilerOptions);
 
 			aot.Pipeline.AddRange(new ICompilerStage[] {
-				compilerOptions.BootCompilerStage,
+				//compilerOptions.BootCompilerStage,
 				new MethodPipelineExportStage(),
 				new PlugStage(),
 				new MethodCompilerSchedulerStage(),
 				new TypeInitializerSchedulerStage(),
-				compilerOptions.BootCompilerStage,
+				//compilerOptions.BootCompilerStage,
 				new TypeLayoutStage(),
 				//new MetadataStage(),
 				new ObjectFileLayoutStage(),
-//FIXME				new LinkerFinalizationStage(),
+				//new LinkerFinalizationStage(),
 			});
 
 			aot.Run();

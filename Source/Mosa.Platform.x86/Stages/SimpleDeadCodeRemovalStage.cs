@@ -8,6 +8,7 @@
  */
 
 using Mosa.Compiler.Framework;
+using Mosa.Compiler.InternalTrace;
 
 namespace Mosa.Platform.x86.Stages
 {
@@ -23,6 +24,8 @@ namespace Mosa.Platform.x86.Stages
 		/// </summary>
 		void IMethodCompilerStage.Run()
 		{
+			var trace = CreateTrace();
+
 			bool changed = true;
 			while (changed)
 			{
@@ -48,7 +51,8 @@ namespace Mosa.Platform.x86.Stages
 							if (ctx.Result.IsSplitChild && ctx.Result.SplitParent.Uses.Count != 0)
 								continue;
 
-							if (IsLogging) Trace("REMOVED:\t" + ctx.ToString());
+							if (trace.Active) trace.Log("REMOVED:\t" + ctx.ToString());
+
 							ctx.Remove();
 							changed = true;
 						}

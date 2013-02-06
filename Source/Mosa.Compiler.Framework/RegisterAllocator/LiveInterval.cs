@@ -26,12 +26,13 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 		}
 
 		public VirtualRegister VirtualRegister { get; private set; }
-
+		
 		public int SpillCost { get; set; }
+		
 		public LiveIntervalUnion LiveIntervalUnion { get; set; }
 
 		public AllocationStage Stage { get; set; }
-
+	
 		public Register Register { get { return this.LiveIntervalUnion.Register; } }
 
 		public LiveInterval(VirtualRegister virtualRegister, SlotIndex start, SlotIndex end)

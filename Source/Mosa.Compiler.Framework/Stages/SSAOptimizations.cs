@@ -12,6 +12,7 @@ using System.Diagnostics;
 using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Common;
+using Mosa.Compiler.InternalTrace;
 
 namespace Mosa.Compiler.Framework.Stages
 {
@@ -24,6 +25,8 @@ namespace Mosa.Compiler.Framework.Stages
 		private int instructionsRemoved = 0;
 
 		private Stack<int> worklist = new Stack<int>();
+
+		private CompilerTrace trace;
 
 		#region IMethodCompilerStage Members
 
@@ -69,7 +72,9 @@ namespace Mosa.Compiler.Framework.Stages
 			if (context.IsEmpty)
 				return;
 
-			//if (IsLogging) Trace("@REVIEW:\t" + context.ToString());
+			trace = CreateTrace();
+
+			//if (trace.IsLogging) trace.Log("@REVIEW:\t" + context.ToString());
 
 			SimplifyExtendedMove(context);
 			SimplifySubtraction(context);
@@ -144,7 +149,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (context.Instruction is IR.Move && context.Operand1 == context.Result)
 			{
-				if (IsLogging) Trace("REMOVED:\t" + context.ToString());
+				if (trace.Active) trace.Log("REMOVED:\t" + context.ToString());
 				AddOperandUsageToWorkList(context);
 				context.SetInstruction(IRInstruction.Nop);
 				instructionsRemoved++;
@@ -155,7 +160,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (context.Result.Uses.Count != 0 || context.Instruction is IR.Call || context.Instruction is IR.IntrinsicMethodCall)
 				return;
 
-			if (IsLogging) Trace("REMOVED:\t" + context.ToString());
+			if (trace.Active) trace.Log("REMOVED:\t" + context.ToString());
 			AddOperandUsageToWorkList(context);
 			context.SetInstruction(IRInstruction.Nop);
 			instructionsRemoved++;
@@ -201,10 +206,10 @@ namespace Mosa.Compiler.Framework.Stages
 					{
 						propogated = true;
 
-						if (IsLogging) Trace("BEFORE:\t" + ctx.ToString());
+						if (trace.Active) trace.Log("BEFORE:\t" + ctx.ToString());
 						AddOperandUsageToWorkList(operand);
 						ctx.SetOperand(i, sourceOperand);
-						if (IsLogging) Trace("AFTER: \t" + ctx.ToString());
+						if (trace.Active) trace.Log("AFTER: \t" + ctx.ToString());
 					}
 				}
 
@@ -243,7 +248,7 @@ namespace Mosa.Compiler.Framework.Stages
 			Operand destinationOperand = context.Result;
 			Operand sourceOperand = context.Operand1;
 
-			//if (IsLogging) Trace("REVIEWING:\t" + context.ToString());
+			//if (trace.IsLogging) trace.Log("REVIEWING:\t" + context.ToString());
 
 			// for each statement T that uses operand, substituted c in statement T
 			foreach (int index in destinationOperand.Uses.ToArray())
@@ -266,9 +271,9 @@ namespace Mosa.Compiler.Framework.Stages
 
 					if (destinationOperand == operand)
 					{
-						if (IsLogging) Trace("BEFORE:\t" + ctx.ToString());
+						if (trace.Active) trace.Log("BEFORE:\t" + ctx.ToString());
 						ctx.SetOperand(i, sourceOperand);
-						if (IsLogging) Trace("AFTER: \t" + ctx.ToString());
+						if (trace.Active) trace.Log("AFTER: \t" + ctx.ToString());
 					}
 				}
 
@@ -276,7 +281,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			Debug.Assert(destinationOperand.Uses.Count == 0);
 
-			if (IsLogging) Trace("REMOVED:\t" + context.ToString());
+			if (trace.Active) trace.Log("REMOVED:\t" + context.ToString());
 			AddOperandUsageToWorkList(context);
 			context.SetInstruction(IRInstruction.Nop);
 			instructionsRemoved++;
@@ -431,9 +436,9 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				AddOperandUsageToWorkList(context);
 
-				if (IsLogging) Trace("BEFORE:\t" + context.ToString());
+				if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
 				context.SetInstruction(IRInstruction.Move, context.Result, constant);
-				if (IsLogging) Trace("AFTER: \t" + context.ToString());
+				if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
 			}
 
 		}
@@ -475,9 +480,9 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 
 			AddOperandUsageToWorkList(context);
-			if (IsLogging) Trace("BEFORE:\t" + context.ToString());
+			if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
 			context.SetInstruction(IRInstruction.Move, result, Operand.CreateConstant(result.Type, (int)(compareResult ? 1 : 0)));
-			if (IsLogging) Trace("AFTER: \t" + context.ToString());
+			if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
 		}
 
 		/// <summary>
@@ -499,18 +504,18 @@ namespace Mosa.Compiler.Framework.Stages
 			if (op1.IsConstant && !op2.IsConstant && IsValueZero(op1))
 			{
 				AddOperandUsageToWorkList(context);
-				if (IsLogging) Trace("BEFORE:\t" + context.ToString());
+				if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
 				context.SetInstruction(IRInstruction.Move, result, op2);
-				if (IsLogging) Trace("AFTER: \t" + context.ToString());
+				if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
 				return;
 			}
 
 			if (op2.IsConstant && !op1.IsConstant && IsValueZero(op2))
 			{
 				AddOperandUsageToWorkList(context);
-				if (IsLogging) Trace("BEFORE:\t" + context.ToString());
+				if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
 				context.SetInstruction(IRInstruction.Move, result, op1);
-				if (IsLogging) Trace("AFTER: \t" + context.ToString());
+				if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
 				return;
 			}
 
@@ -535,36 +540,36 @@ namespace Mosa.Compiler.Framework.Stages
 			if (op1.IsConstant && IsValueZero(op1))
 			{
 				AddOperandUsageToWorkList(context);
-				if (IsLogging) Trace("BEFORE:\t" + context.ToString());
+				if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
 				context.SetInstruction(IRInstruction.Move, result, Operand.CreateConstant(context.Result.Type, 0));
-				if (IsLogging) Trace("AFTER: \t" + context.ToString());
+				if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
 				return;
 			}
 
 			if (op2.IsConstant && IsValueZero(op2))
 			{
 				AddOperandUsageToWorkList(context);
-				if (IsLogging) Trace("BEFORE:\t" + context.ToString());
+				if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
 				context.SetInstruction(IRInstruction.Move, result, Operand.CreateConstant(context.Result.Type, 0));
-				if (IsLogging) Trace("AFTER: \t" + context.ToString());
+				if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
 				return;
 			}
 
 			if (op1.IsConstant && IsValueOne(op1))
 			{
 				AddOperandUsageToWorkList(context);
-				if (IsLogging) Trace("BEFORE:\t" + context.ToString());
+				if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
 				context.SetInstruction(IRInstruction.Move, result, op2);
-				if (IsLogging) Trace("AFTER: \t" + context.ToString());
+				if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
 				return;
 			}
 
 			if (op2.IsConstant && IsValueOne(op2))
 			{
 				AddOperandUsageToWorkList(context);
-				if (IsLogging) Trace("BEFORE:\t" + context.ToString());
+				if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
 				context.SetInstruction(IRInstruction.Move, result, op1);
-				if (IsLogging) Trace("AFTER: \t" + context.ToString());
+				if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
 				return;
 			}
 		}
@@ -588,9 +593,9 @@ namespace Mosa.Compiler.Framework.Stages
 			if (op1.IsConstant && IsValueZero(op1))
 			{
 				AddOperandUsageToWorkList(context);
-				if (IsLogging) Trace("BEFORE:\t" + context.ToString());
+				if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
 				context.SetInstruction(IRInstruction.Move, result, Operand.CreateConstant(context.Result.Type, 0));
-				if (IsLogging) Trace("AFTER: \t" + context.ToString());
+				if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
 				return;
 			}
 
@@ -603,9 +608,9 @@ namespace Mosa.Compiler.Framework.Stages
 			if (op2.IsConstant && IsValueOne(op2))
 			{
 				AddOperandUsageToWorkList(context);
-				if (IsLogging) Trace("BEFORE:\t" + context.ToString());
+				if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
 				context.SetInstruction(IRInstruction.Move, result, op1);
-				if (IsLogging) Trace("AFTER: \t" + context.ToString());
+				if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
 				return;
 			}
 		}
@@ -629,9 +634,9 @@ namespace Mosa.Compiler.Framework.Stages
 				return;
 
 			AddOperandUsageToWorkList(context);
-			if (IsLogging) Trace("BEFORE:\t" + context.ToString());
+			if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
 			context.SetInstruction(IRInstruction.Move, result, Operand.CreateConstant(context.Result.Type, op1.Value));
-			if (IsLogging) Trace("AFTER: \t" + context.ToString());
+			if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
 		}
 
 		/// <summary>
@@ -654,7 +659,7 @@ namespace Mosa.Compiler.Framework.Stages
 				return;
 
 			AddOperandUsageToWorkList(context);
-			if (IsLogging) Trace("BEFORE:\t" + context.ToString());
+			if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
 			context.SetInstruction(IRInstruction.Move, result, Operand.CreateConstant(context.Result.Type, 0));
 		}
 
@@ -677,33 +682,33 @@ namespace Mosa.Compiler.Framework.Stages
 			if (context.Instruction is IR.LogicalOr && op1.IsConstant && !op2.IsConstant && IsValueZero(op1))
 			{
 				AddOperandUsageToWorkList(context);
-				if (IsLogging) Trace("BEFORE:\t" + context.ToString());
+				if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
 				context.SetInstruction(IRInstruction.Move, result, Operand.CreateConstant(context.Result.Type, op2.Value));
-				if (IsLogging) Trace("AFTER: \t" + context.ToString());
+				if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
 			}
 
 			if (context.Instruction is IR.LogicalOr && op2.IsConstant && !op1.IsConstant && IsValueZero(op2))
 			{
 				AddOperandUsageToWorkList(context);
-				if (IsLogging) Trace("BEFORE:\t" + context.ToString());
+				if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
 				context.SetInstruction(IRInstruction.Move, result, Operand.CreateConstant(context.Result.Type, op1.Value));
-				if (IsLogging) Trace("AFTER: \t" + context.ToString());
+				if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
 			}
 
 			if (context.Instruction is IR.LogicalAnd && op1.IsConstant && !op1.IsConstant && IsValueZero(op1))
 			{
 				AddOperandUsageToWorkList(context);
-				if (IsLogging) Trace("BEFORE:\t" + context.ToString());
+				if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
 				context.SetInstruction(IRInstruction.Move, result, Operand.CreateConstant(context.Result.Type, 0));
-				if (IsLogging) Trace("AFTER: \t" + context.ToString());
+				if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
 			}
 
 			if (context.Instruction is IR.LogicalAnd && op2.IsConstant && !op1.IsConstant && IsValueZero(op2))
 			{
 				AddOperandUsageToWorkList(context);
-				if (IsLogging) Trace("BEFORE:\t" + context.ToString());
+				if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
 				context.SetInstruction(IRInstruction.Move, result, Operand.CreateConstant(context.Result.Type, 0));
-				if (IsLogging) Trace("AFTER: \t" + context.ToString());
+				if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
 			}
 
 			// TODO: Add more strength reductions especially for AND w/ 0xFF, 0xFFFF, 0xFFFFFFFF, etc when source or destination are same or smaller
@@ -737,7 +742,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (context.BranchTargets[0] == context.Next.BranchTargets[0])
 			{
-				if (IsLogging) Trace("REMOVED:\t" + context.ToString());
+				if (trace.Active) trace.Log("REMOVED:\t" + context.ToString());
 				AddOperandUsageToWorkList(context);
 				context.SetInstruction(IRInstruction.Nop);
 				instructionsRemoved++;
@@ -766,11 +771,11 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				target = basicBlocks.GetByLabel(context.Next.BranchTargets[0]);
 
-				if (IsLogging) Trace("BEFORE:\t" + context.ToString());
+				if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
 
 				// change to JMP
 				context.SetInstruction(IRInstruction.Jmp, basicBlocks.GetByLabel(context.BranchTargets[0]));
-				if (IsLogging) Trace("AFTER:\t" + context.ToString());
+				if (trace.Active) trace.Log("AFTER:\t" + context.ToString());
 
 				// goto next instruction and prepare to remove it
 				context.GotoNext();
@@ -780,7 +785,7 @@ namespace Mosa.Compiler.Framework.Stages
 				target = basicBlocks.GetByLabel(context.BranchTargets[0]);
 			}
 
-			if (IsLogging) Trace("REMOVED:\t" + context.ToString());
+			if (trace.Active) trace.Log("REMOVED:\t" + context.ToString());
 			AddOperandUsageToWorkList(context);
 			context.SetInstruction(IRInstruction.Nop);
 			instructionsRemoved++;

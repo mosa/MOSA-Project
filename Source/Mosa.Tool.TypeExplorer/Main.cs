@@ -333,7 +333,6 @@ namespace Mosa.Tool.TypeExplorer
 			compileStartTime = DateTime.Now;
 			methodStages.Clear();
 
-			filter.IsLogging = true;
 			filter.MethodMatch = MatchType.Any;
 
 			ExplorerCompiler.Compile(typeSystem, typeLayout, internalTrace, cbPlatform.Text, enableSSAToolStripMenuItem.Checked);

@@ -43,8 +43,6 @@ namespace Mosa.Tool.Compiler
 				new StaticAllocationResolutionStage(),
 				new CILTransformationStage(),
 					
-				new CheckIROperandCountStage(),
-
 				(compilerOptions.EnableSSA) ? new EdgeSplitStage() : null,
 				(compilerOptions.EnableSSA) ? new DominanceCalculationStage() : null,
 				(compilerOptions.EnableSSA) ? new PhiPlacementStage() : null,
@@ -52,12 +50,13 @@ namespace Mosa.Tool.Compiler
 				(compilerOptions.EnableSSA && compilerOptions.EnableSSAOptimizations) ? new SSAOptimizations() : null,
 				(compilerOptions.EnableSSA) ? new LeaveSSA() : null,
 					
-				new StackLayoutStage(),
 				new PlatformIntrinsicTransformationStage(),
 				new PlatformStubStage(),
+				
 				new GreedyRegisterAllocatorStage(),
-				new LoopAwareBlockOrderStage(),
-				//new CodeGenerationStage(), // FIXME: uncomment once register allocator is completed.
+				new StackLayoutStage(),
+				//new CodeGenerationStage(), 
+
 			});
 		}
 

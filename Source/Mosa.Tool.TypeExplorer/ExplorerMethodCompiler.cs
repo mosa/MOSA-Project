@@ -32,16 +32,15 @@ namespace Mosa.Tool.TypeExplorer
 				new StackSetupStage(),
 				new ExceptionPrologueStage(),
 				new OperandAssignmentStage(),
-
 				//new SingleUseMarkerStage(),
 				//new OperandUsageAnalyzerStage(),
 				new StaticAllocationResolutionStage(),
 				new CILTransformationStage(),
+				//new CheckIROperandCountStage(),
 
 				(compilerOptions.EnableSSA) ? new EdgeSplitStage() : null,
 				(compilerOptions.EnableSSA) ? new DominanceCalculationStage() : null,
 				(compilerOptions.EnableSSA) ? new PhiPlacementStage() : null,
-
 				(compilerOptions.EnableSSA) ? new EnterSSAStage() : null,
 				(compilerOptions.EnableSSA && compilerOptions.EnableSSAOptimizations) ? new SSAOptimizations() : null,
 				(compilerOptions.EnableSSA) ? new LeaveSSA() : null,

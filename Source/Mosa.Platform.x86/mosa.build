@@ -18,6 +18,8 @@
                     <include name="ArchitectureFeatureFlags.cs"/>
                     <include name="BaseTransformationStage.cs"/>
                     <include name="Instructions/AddSD.cs"/>
+                    <include name="Stages/BuildStackStage.cs"/>
+                    <include name="Stages/SimpleDeadCodeRemovalStage.cs"/>
                     <include name="X86InstructionExtensions.cs"/>
                     <include name="Instructions/MulSD.cs"/>
                     <include name="Instructions/DivSD.cs"/>
@@ -66,7 +68,6 @@
                     <include name="Intrinsic/Nop.cs"/>
                     <include name="Intrinsic/Out.cs"/>
                     <include name="Intrinsic/Sti.cs"/>
-                    <include name="Intrinsic/TestMethod.cs"/>
                     <include name="Stages/CheckOperandCountStage.cs"/>
                     <include name="Stages/MethodTableBuilderStage.cs"/>
                     <include name="SegmentRegister.cs"/>
@@ -163,15 +164,11 @@
                     <include name="Stages/LongOperandTransformationStage.cs"/>
                     <include name="Registers.cs"/>
                     <include name="SSE2Register.cs"/>
-                    <include name="XSharp/CPURegister.cs"/>
-                    <include name="XSharp/IndexedRegister.cs"/>
-                    <include name="XSharp/Register.cs"/>
-                    <include name="XSharp/Registers.cs"/>
-                    <include name="XSharp/XSharpMethod.cs"/>
 		</sources>
 		<references>
                     <include name="System.dll"/>
                     <include name="${outputDirectory}/Mosa.Compiler.Common.dll"/>
+                    <include name="${outputDirectory}/Mosa.Compiler.InternalTrace.dll"/>
                     <include name="${outputDirectory}/Mosa.Compiler.Linker.dll"/>
                     <include name="${outputDirectory}/Mosa.Compiler.Metadata.dll"/>
                     <include name="${outputDirectory}/Mosa.Compiler.Framework.dll"/>

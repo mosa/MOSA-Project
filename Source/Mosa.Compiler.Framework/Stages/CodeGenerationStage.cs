@@ -12,6 +12,7 @@ using System.Diagnostics;
 using System.IO;
 using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.Framework.Platform;
+using Mosa.Compiler.InternalTrace;
 
 namespace Mosa.Compiler.Framework.Stages
 {
@@ -74,6 +75,8 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </summary>
 		protected virtual void EmitInstructions()
 		{
+			var trace = CreateTrace();
+
 			foreach (BasicBlock block in basicBlocks)
 			{
 				BlockStart(block);
@@ -85,10 +88,16 @@ namespace Mosa.Compiler.Framework.Stages
 						BasePlatformInstruction instruction = context.Instruction as BasePlatformInstruction;
 
 						if (instruction != null)
+						{
 							instruction.Emit(context, codeEmitter);
+						}
 						else
+						{
 							if (architecture.PlatformName != "Null")
-								Trace(InternalTrace.CompilerEvent.Error, "Missing Code Transformation: " + context.ToString());
+							{
+								trace.Log(InternalTrace.CompilerEvent.Error, "Missing Code Transformation: " + context.ToString());
+							}
+						}
 					}
 				}
 

@@ -65,7 +65,7 @@
         <target name="Mosa.Kernel.AVR32" depends="init,Korlib,Mosa.Internal.Plug,Mosa.Platform.AVR32.Intrinsic,"><nant buildfile="Mosa.Kernel.AVR32/mosa.build"/></target>
         <target name="Mosa.Platform.AVR32.Intrinsic" depends="init,Korlib,"><nant buildfile="Mosa.Platform.AVR32.Intrinsic/mosa.build"/></target>
         <target name="Mosa.HelloWorld.AVR32" depends="init,Korlib,Mosa.Kernel.AVR32,"><nant buildfile="Mosa.HelloWorld.AVR32/mosa.build"/></target>
-        <target name="Mosa.Platform.x86" depends="init,Mosa.Compiler.Common,Mosa.Compiler.Linker,Mosa.Compiler.Metadata,Mosa.Compiler.Framework,Mosa.Compiler.TypeSystem,"><nant buildfile="Mosa.Platform.x86/mosa.build"/></target>
+        <target name="Mosa.Platform.x86" depends="init,Mosa.Compiler.Common,Mosa.Compiler.InternalTrace,Mosa.Compiler.Linker,Mosa.Compiler.Metadata,Mosa.Compiler.Framework,Mosa.Compiler.TypeSystem,"><nant buildfile="Mosa.Platform.x86/mosa.build"/></target>
         <target name="Mosa.CoolWorld.x86" depends="init,Mosa.ClassLib,Mosa.Kernel.x86,Korlib,Mosa.Platform.x86.Intrinsic,"><nant buildfile="Mosa.CoolWorld.x86/mosa.build"/></target>
         <target name="Mosa.Test.Collection" depends="init,"><nant buildfile="Mosa.Test.Collection/mosa.build"/></target>
         <target name="Mosa.HelloWorld.x86" depends="init,Mosa.ClassLib,Mosa.Internal.Plug,Mosa.Kernel.x86,Korlib,Mosa.Platform.x86.Intrinsic,"><nant buildfile="Mosa.HelloWorld.x86/mosa.build"/></target>

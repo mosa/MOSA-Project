@@ -31,8 +31,8 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			foreach (RuntimeType type in typeSystem.GetAllTypes())
 			{
-				Debug.WriteLine(type.ToString());
-				Debug.Flush();
+				//Debug.WriteLine(type.ToString());
+				//Debug.Flush();
 
 				if (type.IsModule || type.IsGeneric)
 					continue;

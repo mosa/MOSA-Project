@@ -299,22 +299,17 @@ namespace Mosa.Compiler.Framework
 
 		#region Trace Helper Methods
 
-		public void Trace(CompilerEvent compilerEvent, string message)
+		public CompilerTrace CreateTrace()
 		{
-			methodCompiler.InternalTrace.CompilerEventListener.SubmitTraceEvent(compilerEvent, message);
+			return new CompilerTrace(this.methodCompiler.InternalTrace, this.methodCompiler.Method, this.Name);
 		}
 
-		public void Trace(string line)
+		public CompilerTrace CreateTrace(string section)
 		{
-			methodCompiler.InternalTrace.TraceListener.SubmitDebugStageInformation(methodCompiler.Method, Name, line);
+			return new CompilerTrace(this.methodCompiler.InternalTrace, this.methodCompiler.Method, this.Name, section);
 		}
 
-		public void Trace(string section, string line)
-		{
-			methodCompiler.InternalTrace.TraceListener.SubmitDebugStageInformation(methodCompiler.Method, Name + "-" + section, line);
-		}
-
-		public bool IsLogging { get { return methodCompiler.InternalTrace.TraceFilter.IsLogging; } }
+		#endregion
 
 		/// <summary>
 		/// Updates the counter.
@@ -325,8 +320,6 @@ namespace Mosa.Compiler.Framework
 		{
 			methodCompiler.Compiler.Counters.UpdateCounter(name, count);
 		}
-
-		#endregion
 
 		#region Utility Methods
 
