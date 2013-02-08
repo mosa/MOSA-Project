@@ -402,7 +402,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 							if (register.IsReserved)
 								continue;
 
-							register.AddLiveInterval(block.From, currentSlotIndex);
+							register.AddLiveInterval(block.From, prevSlotIndex);
 							if (!register.IsPhysicalRegister)
 								register.AddUsePosition(currentSlotIndex);
 						}
@@ -432,14 +432,14 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		private void CalculateSpillCost(LiveInterval liveInterval)
 		{
-			int spillcosts = 0;
+			int spillvalue = 0;
 
 			foreach (var use in liveInterval.VirtualRegister.UsePositions)
 			{
-				spillcosts += 100 * (1 + GetLoopDepth(use));
+				spillvalue += (100 * SlotIncrement) * (1 + GetLoopDepth(use));
 			}
 
-			liveInterval.SpillCost = spillcosts / liveInterval.Length;
+			liveInterval.SpillValue = spillvalue * 100;
 		}
 
 		private void CalculateSpillCosts()
@@ -452,7 +452,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 					if (liveInterval.VirtualRegister.IsPhysicalRegister)
 					{
 						// fixed and not spillable
-						liveInterval.SpillCost = Int32.MaxValue;
+						liveInterval.SpillValue = Int32.MaxValue;
 					}
 					else
 					{
@@ -466,7 +466,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 		private void AddPriorityQueue(LiveInterval liveInterval)
 		{
 			// priority is based on allocation stage (primary, lower first) and interval size (secondary, higher first)
-			priorityQueue.Enqueue(liveInterval.Length | ((int)(((int)LiveInterval.AllocationStage.Max - liveInterval.Stage)) << 30), liveInterval);
+			priorityQueue.Enqueue(liveInterval.Length | ((int)(((int)LiveInterval.AllocationStage.Max - liveInterval.Stage)) << 28), liveInterval);
 		}
 
 		private void PopulatePriorityQueue()
@@ -505,9 +505,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		private void ProcessLiveInterval(LiveInterval liveInterval)
 		{
-			if (trace.Active) trace.Log("Processing Interval: " + liveInterval.ToString());
-			if (trace.Active) trace.Log("         Spill cost: " + liveInterval.SpillCost.ToString());
-			if (trace.Active) trace.Log("              Stage: " + liveInterval.Stage.ToString());
+			if (trace.Active) trace.Log("Processing Interval: " + liveInterval.ToString() + " / Length: " + liveInterval.Length.ToString() + " / Spill cost: " + liveInterval.SpillCost.ToString() + " / Stage: " + liveInterval.Stage.ToString());
 
 			// Find an available live interval union to place this live interval
 			foreach (var liveIntervalUnion in liveIntervalUnions)
@@ -520,14 +518,14 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 				if (!liveIntervalUnion.Intersects(liveInterval))
 				{
-					if (trace.Active) trace.Log("Assigned live interval to: " + liveIntervalUnion.ToString());
+					if (trace.Active) trace.Log("  Assigned live interval to: " + liveIntervalUnion.ToString());
 
 					liveIntervalUnion.Add(liveInterval);
 					return;
 				}
 			}
 
-			if (trace.Active) trace.Log("No free register available");
+			if (trace.Active) trace.Log("  No free register available");
 
 			// No place for live interval; find live interval(s) to evict based on spill costs
 			foreach (var liveIntervalUnion in liveIntervalUnions)
@@ -544,13 +542,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 				foreach (var intersection in intersections)
 				{
-					if (intersection.SpillCost > liveInterval.SpillCost || intersection.SpillCost == Int32.MaxValue || intersection.VirtualRegister.IsPhysicalRegister)
-					{
-						evict = false;
-						break;
-					}
-
-					if (intersection.Register != null)
+					if (intersection.SpillCost >= liveInterval.SpillCost || intersection.SpillCost == Int32.MaxValue || intersection.VirtualRegister.IsPhysicalRegister || intersection.IsPhysicalRegister)
 					{
 						evict = false;
 						break;
@@ -559,13 +551,13 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 				if (evict)
 				{
-					if (trace.Active) trace.Log("Evicting live intervals");
+					if (trace.Active) trace.Log("  Evicting live intervals");
 
 					liveIntervalUnion.Evict(intersections);
 
 					foreach (var intersection in intersections)
 					{
-						if (trace.Active) trace.Log("Evicted: " + intersection.ToString());
+						if (trace.Active) trace.Log("  Evicted: " + intersection.ToString());
 
 						liveInterval.Stage = LiveInterval.AllocationStage.Initial;
 						AddPriorityQueue(intersection);
@@ -573,20 +565,20 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 					liveIntervalUnion.Add(liveInterval);
 
-					if (trace.Active) trace.Log("Assigned live interval to: " + liveIntervalUnion.ToString());
+					if (trace.Active) trace.Log("  Assigned live interval to: " + liveIntervalUnion.ToString());
 
 					return;
 				}
 			}
 
-			if (trace.Active) trace.Log("No live intervals to evicts");
+			if (trace.Active) trace.Log("  No live intervals to evicts");
 
 			// No live intervals to evict!
 
 			// prepare to split live interval
 			if (liveInterval.Stage == LiveInterval.AllocationStage.Initial)
 			{
-				if (trace.Active) trace.Log("re-queued for prespilled stage");
+				if (trace.Active) trace.Log("  Re-queued for prespilled stage");
 				liveInterval.Stage = LiveInterval.AllocationStage.PreSpill;
 				AddPriorityQueue(liveInterval);
 				return;
@@ -595,20 +587,18 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			// split live interval
 			if (liveInterval.Stage == LiveInterval.AllocationStage.PreSpill)
 			{
-				if (trace.Active) trace.Log("attempting to split interval");
+				if (trace.Active) trace.Log("  Attempting to split interval");
 
 				if (TrySplitInterval(liveInterval))
 				{
-					//liveInterval.Stage = LiveIntervalAllocationStage.Initial;
-					//AddPriorityQueue(liveInterval);
-
-					// TODO
+					// TODO: ?
 
 					return;
 				}
 				else
 				{
-					if (trace.Active) trace.Log("re-queued for spillable stage");
+					if (trace.Active) trace.Log("  Re-queued for spillable stage");
+
 					liveInterval.Stage = LiveInterval.AllocationStage.Spillable;
 					AddPriorityQueue(liveInterval);
 					return;
@@ -618,7 +608,8 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			// spill interval to stack slot
 			if (liveInterval.Stage == LiveInterval.AllocationStage.Spillable)
 			{
-				if (trace.Active) trace.Log("spilled interval");
+				if (trace.Active) trace.Log("  Spilled interval");
+
 				spilledIntervals.Add(liveInterval);
 				return;
 			}
@@ -629,18 +620,15 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		private bool TrySplitInterval(LiveInterval liveInterval)
 		{
-			if (TrySimpleIntervalSplit(liveInterval))
+			if (TrySimplePartialFreeIntervalSplit(liveInterval))
 				return true;
 
 			return false;
 		}
 
-		private bool TrySimpleIntervalSplit(LiveInterval liveInterval)
+		private bool TrySimplePartialFreeIntervalSplit(LiveInterval liveInterval)
 		{
-			// FIXME: Search for the largest free hole
-			// FIXME: if none, search for a register used the furthest into the future
-
-			IntersectionResult spillCandidate = null;
+			SlotIndex maxFree = null;
 
 			foreach (var liveIntervalUnion in liveIntervalUnions)
 			{
@@ -650,53 +638,59 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 				if (liveIntervalUnion.IsFloatingPoint != liveInterval.VirtualRegister.IsFloatingPoint)
 					continue;
 
-				var intersection = liveIntervalUnion.GetIntersectionAt(liveInterval.Start);
+				var lastFree = liveIntervalUnion.GetMaximunFreeSlotAfter(liveInterval.Start);
 
-				if (trace.Active) trace.Log("split candidate: " + liveIntervalUnion.ToString() + " at " + intersection.ToString());
+				if (lastFree == null)
+					continue;
 
-				spillCandidate = GetBestIntersectionForSpill(spillCandidate, intersection);
+				Debug.Assert(lastFree > liveInterval.Start);
 
-				if (trace.Active) trace.Log("best candidate (so far): " + liveIntervalUnion.ToString() + " at " + spillCandidate.ToString());
+				if (trace.Active) trace.Log("  Free at " + liveIntervalUnion.ToString() + " up to " + lastFree.ToString());
+
+				if (maxFree == null || maxFree < lastFree)
+					maxFree = lastFree;
 			}
 
-			//if (trace.Active) trace.Log("best candidate: " + liveIntervalUnion.ToString() + " at " + spillCandidate.ToString());
+			if (maxFree == null)
+			{
+				if (trace.Active) trace.Log("  No partial free space available");
+
+				return false;
+			}
+
+			if (trace.Active) trace.Log("  Partial free up to: " + maxFree.ToString());
+
+			SplitInterval(liveInterval, maxFree);
+
+			return true;
+		}
+
+		private bool TrySimpleFurthestIntervalSplit(LiveInterval liveInterval)
+		{
+			SlotIndex maxFree = null;
+
+			foreach (var liveIntervalUnion in liveIntervalUnions)
+			{
+				if (liveIntervalUnion.IsReserved)
+					continue;
+
+				if (liveIntervalUnion.IsFloatingPoint != liveInterval.VirtualRegister.IsFloatingPoint)
+					continue;
+
+				var intersect = liveIntervalUnion.GetLiveIntervalAt(liveInterval.Start);
+
+				if (intersect == null)
+					continue;
+
+				if (intersect.IsPhysicalRegister)
+					continue;
+
+				// TODO: get next use of intersect
+			}
 
 			return false;
 		}
 
-		private IntersectionResult GetBestIntersectionForSpill(IntersectionResult a, IntersectionResult b)
-		{
-			if (a == null)
-				return b;
-
-			if (b == null)
-				return a;
-
-			if (a.IsFreeToInfinity)
-				return a;
-
-			if (b.IsFreeToInfinity)
-				return b;
-
-			if (a.IsFree && !b.IsFree)
-				return a;
-
-			if (!a.IsFree && b.IsFree)
-				return b;
-
-			if (a.IsFree && b.IsFree)
-			{
-				if (a.EndOfFree > b.EndOfFree)
-					return a;
-
-				return b;
-			}
-
-			if (a.LiveInterval.Start > b.LiveInterval.Start)
-				return a;
-
-			return b;
-		}
 
 		private void SplitInterval(LiveInterval liveInterval, SlotIndex at)
 		{
@@ -710,6 +704,9 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 			AddPriorityQueue(first);
 			AddPriorityQueue(second);
+
+			if (trace.Active) trace.Log("  Spliting interval 1/2: " + first.ToString());
+			if (trace.Active) trace.Log("  Spliting interval 2/2: " + second.ToString());
 		}
 	}
 }

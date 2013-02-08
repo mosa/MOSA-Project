@@ -26,20 +26,22 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 		}
 
 		public VirtualRegister VirtualRegister { get; private set; }
-		
-		public int SpillCost { get; set; }
-		
+
+		public int SpillValue { get; set; }
+
+		public int SpillCost { get { return SpillValue / (Length + 1); } }
+
 		public LiveIntervalUnion LiveIntervalUnion { get; set; }
 
 		public AllocationStage Stage { get; set; }
-	
-		public Register Register { get { return this.LiveIntervalUnion.Register; } }
+
+		public bool IsPhysicalRegister { get { return VirtualRegister.IsPhysicalRegister; } }
 
 		public LiveInterval(VirtualRegister virtualRegister, SlotIndex start, SlotIndex end)
 			: base(start, end)
 		{
 			this.VirtualRegister = virtualRegister;
-			this.SpillCost = 0;
+			this.SpillValue = 0;
 			this.Stage = AllocationStage.Initial;
 		}
 

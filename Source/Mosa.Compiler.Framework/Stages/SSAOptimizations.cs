@@ -616,7 +616,7 @@ namespace Mosa.Compiler.Framework.Stages
 		}
 
 		/// <summary>
-		/// Simplifies an extended moves on a constant
+		/// Simplifies extended moves with a constant
 		/// </summary>
 		/// <param name="context">The context.</param>
 		private void SimplifyExtendedMove(Context context)
@@ -640,7 +640,7 @@ namespace Mosa.Compiler.Framework.Stages
 		}
 
 		/// <summary>
-		/// Simplifies an subtraction with both operands are the same
+		/// Simplifies subtraction where both operands are the same
 		/// </summary>
 		/// <param name="context">The context.</param>
 		private void SimplifySubtraction(Context context)
@@ -812,33 +812,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 
 		}
-		/// <summary>
-		/// Checks for more.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		private void CheckForMore(Context context)
-		{
-			if (context.IsEmpty)
-				return;
-
-			if (context.OperandCount != 2)
-				return;
-
-			if (context.Instruction is IR.Call || context.Instruction is IR.IntrinsicMethodCall)
-				return;
-
-			Operand result = context.Result;
-			Operand op1 = context.Operand1;
-			Operand op2 = context.Operand2;
-
-			if (op1.IsConstant && op2.IsConstant)
-			{
-				return;
-			}
-
-		}
-
-
+		
 		#region Helpers
 
 		/// <summary>

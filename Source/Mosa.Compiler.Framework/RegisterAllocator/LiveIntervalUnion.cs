@@ -7,6 +7,7 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using System.Diagnostics;
 using System.Collections.Generic;
 
 namespace Mosa.Compiler.Framework.RegisterAllocator
@@ -18,7 +19,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 		protected Register register;
 		protected bool reserved;
 
-		public IList<LiveInterval> LiveIntervals { get { return liveIntervals.AsReadOnly(); } }
+		//public IList<LiveInterval> LiveIntervals { get { return liveIntervals.AsReadOnly(); } }
 
 		public Register Register { get { return register; } }
 
@@ -69,36 +70,57 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			return false;
 		}
 
-		public IntersectionResult GetIntersectionAt(SlotIndex slotIndex)
+		public LiveInterval GetLiveIntervalAt(SlotIndex slotIndex)
 		{
-			SlotIndex maxSlotIndex = null;
+			foreach (var liveInterval in liveIntervals)
+			{
+				if (liveInterval.Contains(slotIndex))
+					return liveInterval;
+			}
+
+			return null;
+		}
+
+		public LiveInterval GetNextLiveIntervalAt(SlotIndex slotIndex)
+		{
+			LiveInterval nextLiveInterval = null;
 
 			foreach (var liveInterval in liveIntervals)
 			{
 				if (liveInterval.Contains(slotIndex))
-				{
-					return new IntersectionResult(liveInterval);
-				}
+					return null;
 
-				if (liveInterval.Start < slotIndex)
+				if (liveInterval.End < slotIndex)
 					continue;
 
-				if (maxSlotIndex == null)
-				{
-					maxSlotIndex = liveInterval.Start;
-					continue;
-				}
+				if (nextLiveInterval == null || liveInterval.Start < nextLiveInterval.Start)
+					nextLiveInterval = liveInterval;
+			}
 
-				if (liveInterval.Start < maxSlotIndex)
+			return nextLiveInterval;
+		}
+
+		public SlotIndex GetMaximunFreeSlotAfter(SlotIndex slotIndex)
+		{
+			SlotIndex lastFree = null;
+
+			foreach (var liveInterval in liveIntervals)
+			{
+				if (liveInterval.Contains(slotIndex))
+					return null;
+
+				if (liveInterval.End <= slotIndex)
+					continue;
+
+				if (lastFree == null || liveInterval.Start < lastFree)
 				{
-					maxSlotIndex = liveInterval.Start;
+					Debug.Assert(liveInterval.Start > slotIndex);
+
+					lastFree = liveInterval.Start;
 				}
 			}
 
-			if (maxSlotIndex == null)
-				return IntersectionResult.FreeToInfinity;
-
-			return new IntersectionResult(maxSlotIndex);
+			return lastFree;
 		}
 
 		public List<LiveInterval> GetIntersections(LiveInterval liveInterval)
