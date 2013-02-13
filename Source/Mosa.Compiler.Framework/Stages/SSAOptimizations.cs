@@ -147,7 +147,10 @@ namespace Mosa.Compiler.Framework.Stages
 			if (context.ResultCount != 1)
 				return;
 
-			if (context.Instruction is IR.Move && context.Operand1 == context.Result)
+			if (!context.Result.IsVirtualRegister)
+				return;
+
+			if (context.Instruction is IR.Move && context.Operand1.IsVirtualRegister && context.Operand1 == context.Result)
 			{
 				if (trace.Active) trace.Log("REMOVED:\t" + context.ToString());
 				AddOperandUsageToWorkList(context);
@@ -178,6 +181,9 @@ namespace Mosa.Compiler.Framework.Stages
 				return;
 
 			if (!(context.Instruction is IR.Move))
+				return;
+
+			if (!context.Result.IsVirtualRegister)
 				return;
 
 			if (!context.Operand1.IsConstant)
@@ -237,6 +243,9 @@ namespace Mosa.Compiler.Framework.Stages
 				return;
 
 			if (context.Operand1.IsConstant)
+				return;
+
+			if (!context.Result.IsVirtualRegister)
 				return;
 
 			Debug.Assert(context.Result.Definitions.Count == 1);
@@ -304,6 +313,9 @@ namespace Mosa.Compiler.Framework.Stages
 				  context.Instruction is IR.MulSigned || context.Instruction is IR.MulUnsigned ||
 				  context.Instruction is IR.DivSigned || context.Instruction is IR.DivUnsigned
 				 ))
+				return;
+
+			if (!context.Result.IsVirtualRegister)
 				return;
 
 			Operand result = context.Result;
@@ -455,6 +467,9 @@ namespace Mosa.Compiler.Framework.Stages
 			if (!(context.Instruction is IR.IntegerCompare))
 				return;
 
+			if (!context.Result.IsVirtualRegister)
+				return;
+
 			Operand result = context.Result;
 			Operand op1 = context.Operand1;
 			Operand op2 = context.Operand2;
@@ -497,6 +512,9 @@ namespace Mosa.Compiler.Framework.Stages
 			if (!(context.Instruction is IR.AddSigned || context.Instruction is IR.AddUnsigned || context.Instruction is IR.SubSigned || context.Instruction is IR.SubUnsigned))
 				return;
 
+			if (!context.Result.IsVirtualRegister)
+				return;
+
 			Operand result = context.Result;
 			Operand op1 = context.Operand1;
 			Operand op2 = context.Operand2;
@@ -531,6 +549,9 @@ namespace Mosa.Compiler.Framework.Stages
 				return;
 
 			if (!(context.Instruction is IR.MulSigned || context.Instruction is IR.MulUnsigned || context.Instruction is IR.MulFloat))
+				return;
+
+			if (!context.Result.IsVirtualRegister)
 				return;
 
 			Operand result = context.Result;
@@ -586,6 +607,9 @@ namespace Mosa.Compiler.Framework.Stages
 			if (!(context.Instruction is IR.DivSigned || context.Instruction is IR.DivUnsigned))
 				return;
 
+			if (!context.Result.IsVirtualRegister)
+				return;
+
 			Operand result = context.Result;
 			Operand op1 = context.Operand1;
 			Operand op2 = context.Operand2;
@@ -627,6 +651,9 @@ namespace Mosa.Compiler.Framework.Stages
 			if (!(context.Instruction is IR.ZeroExtendedMove || context.Instruction is IR.SignExtendedMove))
 				return;
 
+			if (!context.Result.IsVirtualRegister)
+				return;
+
 			Operand result = context.Result;
 			Operand op1 = context.Operand1;
 
@@ -651,6 +678,9 @@ namespace Mosa.Compiler.Framework.Stages
 			if (!(context.Instruction is IR.SubSigned || context.Instruction is IR.SubUnsigned))
 				return;
 
+			if (!context.Result.IsVirtualRegister)
+				return;
+
 			Operand result = context.Result;
 			Operand op1 = context.Operand1;
 			Operand op2 = context.Operand2;
@@ -673,6 +703,9 @@ namespace Mosa.Compiler.Framework.Stages
 				return;
 
 			if (!(context.Instruction is IR.LogicalAnd || context.Instruction is IR.LogicalOr))
+				return;
+
+			if (!context.Result.IsVirtualRegister)
 				return;
 
 			Operand result = context.Result;
@@ -729,6 +762,9 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (!(context.Instruction is IR.IntegerCompareBranch))
 				return;
+
+			//if (!context.Result.IsVirtualRegister)
+			//	return;
 
 			Operand result = context.Result;
 			Operand op1 = context.Operand1;
@@ -812,7 +848,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 
 		}
-		
+
 		#region Helpers
 
 		/// <summary>

@@ -130,7 +130,8 @@ namespace Mosa.Compiler.Framework
 		private static void PatchBeginInvoke(BaseMethodCompiler methodCompiler)
 		{
 			Context context = CreateMethodStructure(methodCompiler, true);
-			context.AppendInstruction(IRInstruction.Return, Operand.GetNull());
+			context.AppendInstruction(IRInstruction.Return, null, Operand.GetNull());
+			context.SetBranch(methodCompiler.BasicBlocks.EpilogueBlock);
 		}
 
 		private static void PatchEndInvoke(BaseMethodCompiler methodCompiler)
