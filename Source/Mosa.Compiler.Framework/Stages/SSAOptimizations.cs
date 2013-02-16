@@ -248,11 +248,14 @@ namespace Mosa.Compiler.Framework.Stages
 			if (!context.Result.IsVirtualRegister)
 				return;
 
+			if (!context.Operand1.IsVirtualRegister)
+				return;
+
 			Debug.Assert(context.Result.Definitions.Count == 1);
 
 			// FIXME: does not work on ptr or I4 types - probably because of signed extension, or I8/U8 - probably because 64-bit
-			if (!(CanCopyPropagation(context.Result) && CanCopyPropagation(context.Operand1)))
-				return;
+			//if (!(CanCopyPropagation(context.Result) && CanCopyPropagation(context.Operand1)))
+			//	return;
 
 			Operand destinationOperand = context.Result;
 			Operand sourceOperand = context.Operand1;
@@ -845,7 +848,6 @@ namespace Mosa.Compiler.Framework.Stages
 			target.PreviousBlocks.Remove(currentBlock);
 
 			// TODO: if target block no longer has any predecessors (or the only predecessor is itself), remove all instructions from it.
-
 
 		}
 

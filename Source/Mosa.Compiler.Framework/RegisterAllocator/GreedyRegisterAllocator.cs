@@ -667,7 +667,8 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		private bool TrySimpleFurthestIntervalSplit(LiveInterval liveInterval)
 		{
-			SlotIndex maxFree = null;
+			SlotIndex furthestSlot = null;
+			LiveInterval furthestIntersect = null;
 
 			foreach (var liveIntervalUnion in liveIntervalUnions)
 			{
@@ -685,10 +686,42 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 				if (intersect.IsPhysicalRegister)
 					continue;
 
+				var minUseSlot = GetNextUsePosition(intersect.VirtualRegister, liveInterval.Start);
+
 				// TODO: get next use of intersect
+				if (furthestIntersect == null)
+				{
+					furthestIntersect = intersect;
+					furthestSlot = minUseSlot;
+					// if furtherSlot is null, this might be an ideal range to split
+					continue;
+				}
+
+				// TODO
+				
 			}
 
 			return false;
+		}
+
+		private SlotIndex GetNextUsePosition(VirtualRegister virtualRegister, SlotIndex start)
+		{
+			SlotIndex minSlot = null;
+
+			foreach (var useSlot in virtualRegister.UsePositions)
+			{
+				if (useSlot > start)
+				{
+					if (minSlot == null || useSlot < minSlot)
+					{
+						minSlot = useSlot;
+						continue;
+					}
+
+				}
+			}
+
+			return minSlot;
 		}
 
 

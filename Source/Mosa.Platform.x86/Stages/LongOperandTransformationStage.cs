@@ -1234,6 +1234,7 @@ namespace Mosa.Platform.x86.Stages
 						context.AppendInstruction(X86.Mov, op0H, Operand.CreateConstant((uint)0));
 						break;
 					}
+				case CilElementType.Char: goto case CilElementType.U2;
 				case CilElementType.U1:
 					{
 						Operand v1 = AllocateVirtualRegister(BuiltInSigType.UInt32);
@@ -1247,7 +1248,6 @@ namespace Mosa.Platform.x86.Stages
 						break;
 					}
 				case CilElementType.U2: goto case CilElementType.U1;
-
 				case CilElementType.I4:
 					{
 						Operand v1 = AllocateVirtualRegister(BuiltInSigType.Int32);
@@ -1271,7 +1271,6 @@ namespace Mosa.Platform.x86.Stages
 						context.AppendInstruction(X86.Mov, op0H, v3);
 						break;
 					}
-
 				case CilElementType.U8:
 					{
 						context.SetInstruction(X86.Movzx, op0L, op1L);
