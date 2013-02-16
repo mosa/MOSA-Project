@@ -623,6 +623,9 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			if (TrySimplePartialFreeIntervalSplit(liveInterval))
 				return true;
 
+			if (TrySimpleFurthestIntervalSplit(liveInterval))
+				return true;
+
 			return false;
 		}
 
@@ -688,18 +691,28 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 				var minUseSlot = GetNextUsePosition(intersect.VirtualRegister, liveInterval.Start);
 
-				// TODO: get next use of intersect
+				// IDEA: if minUseSlot is null, this might be an ideal range to split, since there are no uses in the range
+
 				if (furthestIntersect == null)
 				{
 					furthestIntersect = intersect;
 					furthestSlot = minUseSlot;
-					// if furtherSlot is null, this might be an ideal range to split
 					continue;
 				}
 
-				// TODO
-				
+				if (minUseSlot == null || furthestSlot == null || minUseSlot > furthestSlot)
+				{
+					furthestIntersect = intersect;
+					furthestSlot = minUseSlot;
+				}
+
 			}
+
+			// TODO:
+			// evict furthestIntersect
+			// split furthestIntersect at furthestSlot
+			// split liveInterval at furthestSlot
+			// re-queue new intervals
 
 			return false;
 		}
