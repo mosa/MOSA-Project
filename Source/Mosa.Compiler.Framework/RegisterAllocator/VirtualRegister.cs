@@ -58,6 +58,16 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			usePositions.AddIfNew(position);
 		}
 
+		public void Add(LiveInterval liveInterval)
+		{
+			liveIntervals.Add(liveInterval);
+		}
+
+		public void Remove(LiveInterval liveInterval)
+		{
+			liveIntervals.Remove(liveInterval);
+		}
+
 		public void AddLiveInterval(Interval interval)
 		{
 			AddLiveInterval(interval.Start, interval.End);

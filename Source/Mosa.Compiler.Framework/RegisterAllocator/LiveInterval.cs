@@ -67,5 +67,10 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 		{
 			return VirtualRegister.ToString() + " at " + base.ToString();
 		}
+
+		public void Evict()
+		{
+			this.LiveIntervalUnion.Evict(this);
+		}
 	}
 }

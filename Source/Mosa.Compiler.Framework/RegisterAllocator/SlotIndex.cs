@@ -72,6 +72,14 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		public static bool operator !=(SlotIndex s1, SlotIndex s2)
 		{
+			bool ns1 = object.ReferenceEquals(null, s1);
+			bool ns2 = object.ReferenceEquals(null, s2);
+
+			if (ns1 && ns2)
+				return false;
+			else if ((ns1 && !ns2) || (!ns1 && ns2))
+				return true;
+
 			return s1.SlotNumber != s2.SlotNumber;
 		}
 

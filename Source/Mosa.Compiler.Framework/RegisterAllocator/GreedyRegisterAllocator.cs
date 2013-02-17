@@ -671,7 +671,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 		private bool TrySimpleFurthestIntervalSplit(LiveInterval liveInterval)
 		{
 			SlotIndex furthestSlot = null;
-			LiveInterval furthestIntersect = null;
+			LiveInterval candidateLiveInterval = null;
 
 			foreach (var liveIntervalUnion in liveIntervalUnions)
 			{
@@ -691,30 +691,52 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 				var minUseSlot = GetNextUsePosition(intersect.VirtualRegister, liveInterval.Start);
 
-				// IDEA: if minUseSlot is null, this might be an ideal range to split, since there are no uses in the range
+				if (trace.Active) trace.Log("  Allocated " + intersect.ToString() + " next use " + (minUseSlot != null ? minUseSlot.ToString() : "none"));
 
-				if (furthestIntersect == null)
+				if (candidateLiveInterval == null)
 				{
-					furthestIntersect = intersect;
+					candidateLiveInterval = intersect;
 					furthestSlot = minUseSlot;
+
+					if (furthestSlot == null)
+						break;
+
 					continue;
 				}
 
-				if (minUseSlot == null || furthestSlot == null || minUseSlot > furthestSlot)
+				if (minUseSlot == null || minUseSlot > furthestSlot)
 				{
-					furthestIntersect = intersect;
+					candidateLiveInterval = intersect;
 					furthestSlot = minUseSlot;
 				}
 
 			}
 
-			// TODO:
-			// evict furthestIntersect
-			// split furthestIntersect at furthestSlot
-			// split liveInterval at furthestSlot
-			// re-queue new intervals
+			if (candidateLiveInterval == null)
+			{
+				if (trace.Active) trace.Log("  No allocated interval available to split");
 
-			return false;
+				return false;
+			}
+
+			if (trace.Active) trace.Log("  Found allocated interval to split: " + candidateLiveInterval.ToString());
+			if (trace.Active) trace.Log("  Next use is: " + (furthestSlot != null ? furthestSlot.ToString() : "none"));
+
+			// evict furthestIntersect
+			candidateLiveInterval.Evict();
+			if (trace.Active) trace.Log("  Evicted: " + candidateLiveInterval.ToString());
+
+			// split furthestIntersect 
+			var splitLocation = furthestSlot == null ? liveInterval.End : furthestSlot;
+			SplitInterval(candidateLiveInterval, splitLocation);
+
+			// split liveInterval at furthestSlot
+			if (furthestSlot != null)
+			{
+				SplitInterval(liveInterval, furthestSlot);
+			}
+
+			return true;
 		}
 
 		private SlotIndex GetNextUsePosition(VirtualRegister virtualRegister, SlotIndex start)
@@ -737,13 +759,17 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			return minSlot;
 		}
 
-
 		private void SplitInterval(LiveInterval liveInterval, SlotIndex at)
 		{
 			// TODO: Find start/end ranges based on uses
+			var virtualRegister = liveInterval.VirtualRegister;
 
-			var first = new LiveInterval(liveInterval.VirtualRegister, liveInterval.Start, at);
-			var second = new LiveInterval(liveInterval.VirtualRegister, at, liveInterval.End);
+			var first = new LiveInterval(virtualRegister, liveInterval.Start, at);
+			var second = new LiveInterval(virtualRegister, at, liveInterval.End);
+
+			virtualRegister.Remove(liveInterval);
+			virtualRegister.Add(first);
+			virtualRegister.Add(second);
 
 			CalculateSpillCost(first);
 			CalculateSpillCost(second);
@@ -751,8 +777,8 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			AddPriorityQueue(first);
 			AddPriorityQueue(second);
 
-			if (trace.Active) trace.Log("  Spliting interval 1/2: " + first.ToString());
-			if (trace.Active) trace.Log("  Spliting interval 2/2: " + second.ToString());
+			if (trace.Active) trace.Log("  Split interval 1/2: " + first.ToString());
+			if (trace.Active) trace.Log("  Split interval 2/2: " + second.ToString());
 		}
 	}
 }
