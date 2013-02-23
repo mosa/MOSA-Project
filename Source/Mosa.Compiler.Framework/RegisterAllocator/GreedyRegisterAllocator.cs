@@ -623,8 +623,8 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			if (TrySimplePartialFreeIntervalSplit(liveInterval))
 				return true;
 
-			if (TrySimpleFurthestIntervalSplit(liveInterval))
-				return true;
+			//if (TrySimpleFurthestIntervalSplit(liveInterval))
+			//	return true;
 
 			return false;
 		}
@@ -691,20 +691,20 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 				var minUseSlot = GetNextUsePosition(intersect.VirtualRegister, liveInterval.Start);
 
-				if (trace.Active) trace.Log("  Allocated " + intersect.ToString() + " next use " + (minUseSlot != null ? minUseSlot.ToString() : "none"));
+				if (minUseSlot == null)
+				{
+					minUseSlot = intersect.End;
+				}
+
+				if (trace.Active) trace.Log("  Allocated " + intersect.ToString() + " next use/end " + minUseSlot.ToString());
 
 				if (candidateLiveInterval == null)
 				{
 					candidateLiveInterval = intersect;
 					furthestSlot = minUseSlot;
 
-					if (furthestSlot == null)
-						break;
-
-					continue;
 				}
-
-				if (minUseSlot == null || minUseSlot > furthestSlot)
+				else if (minUseSlot > furthestSlot)
 				{
 					candidateLiveInterval = intersect;
 					furthestSlot = minUseSlot;
@@ -720,20 +720,20 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			}
 
 			if (trace.Active) trace.Log("  Found allocated interval to split: " + candidateLiveInterval.ToString());
-			if (trace.Active) trace.Log("  Next use is: " + (furthestSlot != null ? furthestSlot.ToString() : "none"));
+			if (trace.Active) trace.Log("  Next use is: " +furthestSlot.ToString());
 
 			// evict furthestIntersect
 			candidateLiveInterval.Evict();
 			if (trace.Active) trace.Log("  Evicted: " + candidateLiveInterval.ToString());
 
 			// split furthestIntersect 
-			var splitLocation = furthestSlot == null ? liveInterval.End : furthestSlot;
+			var splitLocation = furthestSlot < liveInterval.End ? furthestSlot : liveInterval.End;
 			SplitInterval(candidateLiveInterval, splitLocation);
 
 			// split liveInterval at furthestSlot
 			if (furthestSlot != null)
 			{
-				SplitInterval(liveInterval, furthestSlot);
+				SplitInterval(liveInterval, splitLocation);
 			}
 
 			return true;
