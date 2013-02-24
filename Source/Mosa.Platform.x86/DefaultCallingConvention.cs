@@ -112,9 +112,10 @@ namespace Mosa.Platform.x86
 				return;
 
 			Operand esp = Operand.CreateCPURegister(BuiltInSigType.IntPtr, GeneralPurposeRegister.ESP);
+			Operand edx = Operand.CreateCPURegister(BuiltInSigType.IntPtr, GeneralPurposeRegister.ESP);
 
 			ctx.AppendInstruction(X86.Sub, esp, esp, Operand.CreateConstant(esp.Type, stackSize));
-			ctx.AppendInstruction(X86.Mov, Operand.CreateCPURegister(architecture.NativeType, GeneralPurposeRegister.EDX), esp);
+			ctx.AppendInstruction(X86.Mov, edx, esp);
 		}
 
 		private void FreeStackAfterCall(Context ctx, int stackSize)
