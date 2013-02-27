@@ -7,9 +7,11 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using System;
+
 namespace Mosa.Compiler.Framework.RegisterAllocator
 {
-	public class SlotIndex
+	public class SlotIndex : IComparable 
 	{
 
 		private InstructionSet instructionSet;
@@ -94,6 +96,13 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 		public override int GetHashCode()
 		{
 			return SlotNumber;
+		}
+
+		int IComparable.CompareTo(Object o)
+		{
+			SlotIndex slotIndex = o as SlotIndex;
+
+			return (index - slotIndex.index);
 		}
 
 		public override string ToString()

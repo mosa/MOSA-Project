@@ -25,6 +25,10 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			Max = 2,
 		}
 
+		private SortedList<SlotIndex, SlotIndex> usePositions = new SortedList<SlotIndex, SlotIndex>();
+
+		private SortedList<SlotIndex, SlotIndex> defPositions = new SortedList<SlotIndex, SlotIndex>();
+
 		public VirtualRegister VirtualRegister { get; private set; }
 
 		public int SpillValue { get; set; }
@@ -35,14 +39,42 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		public AllocationStage Stage { get; set; }
 
+		public IList<SlotIndex> UsePositions { get { return usePositions.Keys; } }
+
+		public IList<SlotIndex> DefPositions { get { return defPositions.Keys; } }
+
+		public bool IsEmpty { get { return usePositions.Count == 0 && defPositions.Count == 0; } }
+
 		public bool IsPhysicalRegister { get { return VirtualRegister.IsPhysicalRegister; } }
 
-		public LiveInterval(VirtualRegister virtualRegister, SlotIndex start, SlotIndex end)
+		private LiveInterval(VirtualRegister virtualRegister, SlotIndex start, SlotIndex end, IList<SlotIndex> uses, IList<SlotIndex> defs)
 			: base(start, end)
 		{
 			this.VirtualRegister = virtualRegister;
 			this.SpillValue = 0;
 			this.Stage = AllocationStage.Initial;
+
+			foreach (var use in uses)
+			{
+				if (Contains(use))
+				{
+					usePositions.Add(use, use);
+				}
+			}
+
+			foreach (var def in defs)
+			{
+				if (Contains(def))
+				{
+					defPositions.Add(def, def);
+				}
+			}
+		}
+
+		public LiveInterval(VirtualRegister virtualRegister, SlotIndex start, SlotIndex end)
+			: this(virtualRegister, start, end, virtualRegister.UsePositions, virtualRegister.DefPositions)
+		{
+			
 		}
 
 		public LiveInterval CreateExpandedLiveInterval(LiveInterval interval)
@@ -65,12 +97,17 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		public override string ToString()
 		{
-			return VirtualRegister.ToString() + " at " + base.ToString();
+			return VirtualRegister.ToString() + " between " + base.ToString();
 		}
 
 		public void Evict()
 		{
 			this.LiveIntervalUnion.Evict(this);
+		}
+
+		public LiveInterval Split(SlotIndex start, SlotIndex end)
+		{
+			return new LiveInterval(VirtualRegister, start, end, usePositions.Keys, defPositions.Keys);
 		}
 	}
 }

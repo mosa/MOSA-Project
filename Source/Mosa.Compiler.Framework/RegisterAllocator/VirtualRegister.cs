@@ -16,7 +16,10 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 	public sealed class VirtualRegister
 	{
 		private List<LiveInterval> liveIntervals = new List<LiveInterval>(1);
-		private List<SlotIndex> usePositions = new List<SlotIndex>();
+		
+		private SortedList<SlotIndex, SlotIndex> usePositions = new SortedList<SlotIndex, SlotIndex>();
+		
+		private SortedList<SlotIndex, SlotIndex> defPositions = new SortedList<SlotIndex, SlotIndex>();
 
 		public Operand VirtualRegisterOperand { get; private set; }
 
@@ -28,7 +31,9 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		public int Count { get { return liveIntervals.Count; } }
 
-		public List<SlotIndex> UsePositions { get { return usePositions; } }
+		public IList<SlotIndex> UsePositions { get { return usePositions.Keys; } }
+
+		public IList<SlotIndex> DefPositions { get { return defPositions.Keys; } }
 
 		public LiveInterval LastRange { get { return liveIntervals.Count == 0 ? null : liveIntervals[liveIntervals.Count - 1]; } }
 
@@ -54,8 +59,18 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		public void AddUsePosition(SlotIndex position)
 		{
-			//Debug.Assert(!usePositions.Contains(position));
-			usePositions.AddIfNew(position);
+			if (!usePositions.ContainsKey(position))
+			{
+				usePositions.Add(position, position);
+			}
+		}
+
+		public void AddDefPosition(SlotIndex position)
+		{
+			if (!defPositions.ContainsKey(position))
+			{
+				defPositions.Add(position, position);
+			}
 		}
 
 		public void Add(LiveInterval liveInterval)

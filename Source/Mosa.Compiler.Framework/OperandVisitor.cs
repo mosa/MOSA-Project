@@ -90,15 +90,6 @@ namespace Mosa.Compiler.Framework
 			}
 		}
 
-		public IEnumerable<Operand> Temp
-		{
-			get
-			{
-				// TODO: add scratch registers (register which are not in Operand.Results)
-				yield break;
-			}
-		}
-
 	}
 
 }

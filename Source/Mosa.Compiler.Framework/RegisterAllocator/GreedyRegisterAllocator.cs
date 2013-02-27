@@ -145,7 +145,6 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 				sectionTrace.Log(" LiveOut:  " + ToString(block.LiveOut));
 			}
 
-
 			foreach (var virtualRegister in virtualRegisters)
 			{
 				if (virtualRegister.IsPhysicalRegister)
@@ -157,19 +156,44 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 					registerTrace.Log("Virtual Register # " + virtualRegister.VirtualRegisterOperand.Index.ToString());
 				}
 
-				registerTrace.Log("Live Intervals (" + virtualRegister.LiveIntervals.Count.ToString() + ")");
+				StringBuilder sb = new StringBuilder();
+				sb.Append("Live Intervals (" + virtualRegister.LiveIntervals.Count.ToString() + "): ");
 
 				foreach (var liveInterval in virtualRegister.LiveIntervals)
 				{
-					registerTrace.Log(" [" + liveInterval.Start.ToString() + ", " + liveInterval.End.ToString() + "]");
+					sb.Append("[" + liveInterval.Start.ToString() + ", " + liveInterval.End.ToString() + "],");
 				}
 
-				registerTrace.Log("Use Positions (" + virtualRegister.UsePositions.Count.ToString() + ")");
+				if (sb[sb.Length - 1] == ',')
+					sb.Length = sb.Length - 1;
+
+				registerTrace.Log(sb.ToString());
+
+				sb.Length = 0;
+				sb.Append("Use Positions (" + virtualRegister.UsePositions.Count.ToString() + "): ");
 
 				foreach (var use in virtualRegister.UsePositions)
 				{
-					registerTrace.Log(" " + use.ToString());
+					sb.Append(use.ToString() + ",");
 				}
+
+				if (sb[sb.Length - 1] == ',')
+					sb.Length = sb.Length - 1;
+
+				registerTrace.Log(sb.ToString());
+
+				sb.Length = 0;
+				sb.Append("Def Positions (" + virtualRegister.DefPositions.Count.ToString() + "): ");
+
+				foreach (var use in virtualRegister.DefPositions)
+				{
+					sb.Append(use.ToString() + ",");
+				}
+
+				if (sb[sb.Length - 1] == ',')
+					sb.Length = sb.Length - 1;
+
+				registerTrace.Log(sb.ToString());
 			}
 		}
 
@@ -380,19 +404,9 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 							}
 
 							if (!register.IsPhysicalRegister)
-								register.AddUsePosition(currentSlotIndex);
-						}
-
-						foreach (var result in visitor.Temp)
-						{
-							var register = virtualRegisters[GetIndex(result)];
-
-							if (register.IsReserved)
-								continue;
-
-							register.AddLiveInterval(currentSlotIndex, prevSlotIndex);
-							if (!register.IsPhysicalRegister)
-								register.AddUsePosition(currentSlotIndex);
+							{
+								register.AddDefPosition(currentSlotIndex);
+							}
 						}
 
 						foreach (var result in visitor.Input)
@@ -404,7 +418,9 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 							register.AddLiveInterval(block.From, prevSlotIndex);
 							if (!register.IsPhysicalRegister)
+							{
 								register.AddUsePosition(currentSlotIndex);
+							}
 						}
 
 						prevSlotIndex = currentSlotIndex;
@@ -437,6 +453,11 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			foreach (var use in liveInterval.VirtualRegister.UsePositions)
 			{
 				spillvalue += (100 * SlotIncrement) * (1 + GetLoopDepth(use));
+			}
+
+			foreach (var use in liveInterval.VirtualRegister.DefPositions)
+			{
+				spillvalue += (115 * SlotIncrement) * (1 + GetLoopDepth(use));
 			}
 
 			liveInterval.SpillValue = spillvalue * 100;
@@ -591,8 +612,6 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 				if (TrySplitInterval(liveInterval))
 				{
-					// TODO: ?
-
 					return;
 				}
 				else
@@ -620,11 +639,14 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		private bool TrySplitInterval(LiveInterval liveInterval)
 		{
+			if (liveInterval.IsEmpty)
+				return false; 
+
 			if (TrySimplePartialFreeIntervalSplit(liveInterval))
 				return true;
 
-			//if (TrySimpleFurthestIntervalSplit(liveInterval))
-			//	return true;
+			if (TrySimpleFurthestIntervalSplit(liveInterval))
+				return true;
 
 			return false;
 		}
@@ -689,7 +711,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 				if (intersect.IsPhysicalRegister)
 					continue;
 
-				var minUseSlot = GetNextUsePosition(intersect.VirtualRegister, liveInterval.Start);
+				var minUseSlot = GetNextDefOrUsePosition(intersect.VirtualRegister, liveInterval.Start);
 
 				if (minUseSlot == null)
 				{
@@ -702,14 +724,12 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 				{
 					candidateLiveInterval = intersect;
 					furthestSlot = minUseSlot;
-
 				}
 				else if (minUseSlot > furthestSlot)
 				{
 					candidateLiveInterval = intersect;
 					furthestSlot = minUseSlot;
 				}
-
 			}
 
 			if (candidateLiveInterval == null)
@@ -720,13 +740,13 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			}
 
 			if (trace.Active) trace.Log("  Found allocated interval to split: " + candidateLiveInterval.ToString());
-			if (trace.Active) trace.Log("  Next use is: " +furthestSlot.ToString());
+			if (trace.Active) trace.Log("  Next use is: " + furthestSlot.ToString());
 
 			// evict furthestIntersect
 			candidateLiveInterval.Evict();
 			if (trace.Active) trace.Log("  Evicted: " + candidateLiveInterval.ToString());
 
-			// split furthestIntersect 
+			// split furthestIntersect
 			var splitLocation = furthestSlot < liveInterval.End ? furthestSlot : liveInterval.End;
 			SplitInterval(candidateLiveInterval, splitLocation);
 
@@ -739,10 +759,11 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			return true;
 		}
 
-		private SlotIndex GetNextUsePosition(VirtualRegister virtualRegister, SlotIndex start)
+		private SlotIndex GetNextDefOrUsePosition(VirtualRegister virtualRegister, SlotIndex start)
 		{
 			SlotIndex minSlot = null;
 
+			// FIXME: use positions are sorted
 			foreach (var useSlot in virtualRegister.UsePositions)
 			{
 				if (useSlot > start)
@@ -752,7 +773,18 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 						minSlot = useSlot;
 						continue;
 					}
+				}
+			}
 
+			foreach (var useSlot in virtualRegister.DefPositions)
+			{
+				if (useSlot > start)
+				{
+					if (minSlot == null || useSlot < minSlot)
+					{
+						minSlot = useSlot;
+						continue;
+					}
 				}
 			}
 
@@ -761,11 +793,13 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		private void SplitInterval(LiveInterval liveInterval, SlotIndex at)
 		{
-			// TODO: Find start/end ranges based on uses
+			// TODO: adjust split point to be basic block bondaries, when beneficial
+			// TODO: adjusting the split point to neareset use/def location.
+
 			var virtualRegister = liveInterval.VirtualRegister;
 
-			var first = new LiveInterval(virtualRegister, liveInterval.Start, at);
-			var second = new LiveInterval(virtualRegister, at, liveInterval.End);
+			var first = liveInterval.Split(liveInterval.Start, at);
+			var second = liveInterval.Split(at, liveInterval.End);
 
 			virtualRegister.Remove(liveInterval);
 			virtualRegister.Add(first);
