@@ -8,10 +8,11 @@
  */
 
 using System;
+using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework.RegisterAllocator
 {
-	public class SlotIndex : IComparable 
+	public class SlotIndex : IComparable
 	{
 
 		private InstructionSet instructionSet;
@@ -20,12 +21,16 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		public SlotIndex(InstructionSet instructionSet, int index)
 		{
+			Debug.Assert(index >= 0);
+
 			this.instructionSet = instructionSet;
 			this.index = index;
 		}
 
 		public SlotIndex(Context context)
 		{
+			Debug.Assert(context.Index >= 0);
+
 			this.instructionSet = context.InstructionSet;
 			this.index = context.Index;
 		}
@@ -109,6 +114,9 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 		{
 			return SlotNumber.ToString();
 		}
+
+		public SlotIndex Next { get { return new SlotIndex(instructionSet, instructionSet.Next(index)); } }
+		public SlotIndex Previous { get { return new SlotIndex(instructionSet, instructionSet.Previous(index)); } }
 
 	}
 }

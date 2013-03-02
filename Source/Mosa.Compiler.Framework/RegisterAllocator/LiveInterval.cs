@@ -74,7 +74,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 		public LiveInterval(VirtualRegister virtualRegister, SlotIndex start, SlotIndex end)
 			: this(virtualRegister, start, end, virtualRegister.UsePositions, virtualRegister.DefPositions)
 		{
-			
+
 		}
 
 		public LiveInterval CreateExpandedLiveInterval(LiveInterval interval)
@@ -108,6 +108,66 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 		public LiveInterval Split(SlotIndex start, SlotIndex end)
 		{
 			return new LiveInterval(VirtualRegister, start, end, usePositions.Keys, defPositions.Keys);
+		}
+
+		private SlotIndex GetNext(IList<SlotIndex> slots, SlotIndex start)
+		{
+			int cnt = slots.Count;
+
+			for (int i = 0; i < cnt; i++)
+			{
+				var slot = slots[i];
+
+				if (slot < start)
+				{
+					return slot;
+				}
+			}
+
+			return null;
+		}
+
+		private SlotIndex GetPrevious(IList<SlotIndex> slots, SlotIndex start)
+		{
+			for (int i = slots.Count - 1; i >= 0; i--)
+			{
+				var slot = slots[i];
+
+				if (slot < start)
+				{
+					return slot;
+				}
+			}
+
+			return null;
+		}
+
+		private SlotIndex GetLowestNotNull(SlotIndex a, SlotIndex b)
+		{
+			if (a == null)
+				return b;
+			if (b == null)
+				return a;
+			return (a < b) ? a : b;
+		}
+
+		private SlotIndex GetHighestNotNull(SlotIndex a, SlotIndex b)
+		{
+			if (a == null)
+				return b;
+			if (b == null)
+				return a;
+			return (a < b) ? a : b;
+		}
+
+		public SlotIndex GetNextDefOrUsePosition(SlotIndex at)
+		{
+			return GetLowestNotNull(GetNext(UsePositions, at), GetNext(DefPositions, at));
+		}
+
+		public SlotIndex GetPreviousDefOrUsePosition(SlotIndex at)
+		{
+			return GetHighestNotNull(GetPrevious(UsePositions, at), GetPrevious(DefPositions, at));
 		}
 	}
 }
