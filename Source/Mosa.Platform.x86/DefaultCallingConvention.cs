@@ -64,7 +64,7 @@ namespace Mosa.Platform.x86
 			 * of a type, the this argument is moved to ECX right before the call.
 			 */
 
-			Operand invokeTarget = context.Operand1;
+			Operand target = context.Operand1;
 			Operand result = context.Result;
 
 			Stack<Operand> operands = BuildOperandStack(context);
@@ -80,7 +80,11 @@ namespace Mosa.Platform.x86
 				PushOperands(context, operands, stackSize);
 			}
 
-			context.AppendInstruction(X86.Call, null, invokeTarget);
+			Operand edx = Operand.CreateCPURegister(BuiltInSigType.IntPtr, GeneralPurposeRegister.EDX);
+
+			context.AppendInstruction(X86.Mov, edx, target);
+
+			context.AppendInstruction(X86.Call, null, edx);
 
 			if (stackSize != 0)
 			{
@@ -90,12 +94,12 @@ namespace Mosa.Platform.x86
 			CleanupReturnValue(context, result);
 		}
 
-		private Stack<Operand> BuildOperandStack(Context ctx)
+		private Stack<Operand> BuildOperandStack(Context context)
 		{
-			Stack<Operand> operandStack = new Stack<Operand>(ctx.OperandCount);
+			Stack<Operand> operandStack = new Stack<Operand>(context.OperandCount);
 			int index = 0;
 
-			foreach (Operand operand in ctx.Operands)
+			foreach (Operand operand in context.Operands)
 			{
 				if (index++ > 0)
 				{
@@ -106,28 +110,28 @@ namespace Mosa.Platform.x86
 			return operandStack;
 		}
 
-		private void ReserveStackSizeForCall(Context ctx, int stackSize)
+		private void ReserveStackSizeForCall(Context context, int stackSize)
 		{
 			if (stackSize == 0)
 				return;
 
 			Operand esp = Operand.CreateCPURegister(BuiltInSigType.IntPtr, GeneralPurposeRegister.ESP);
-			Operand edx = Operand.CreateCPURegister(BuiltInSigType.IntPtr, GeneralPurposeRegister.ESP);
+			Operand edx = Operand.CreateCPURegister(BuiltInSigType.IntPtr, GeneralPurposeRegister.EDX);
 
-			ctx.AppendInstruction(X86.Sub, esp, esp, Operand.CreateConstant(esp.Type, stackSize));
-			ctx.AppendInstruction(X86.Mov, edx, esp);
+			context.AppendInstruction(X86.Sub, esp, esp, Operand.CreateConstant(BuiltInSigType.IntPtr, stackSize));
+			context.AppendInstruction(X86.Mov, edx, esp);
 		}
 
-		private void FreeStackAfterCall(Context ctx, int stackSize)
+		private void FreeStackAfterCall(Context context, int stackSize)
 		{
 			if (stackSize == 0)
 				return;
 
 			Operand esp = Operand.CreateCPURegister(BuiltInSigType.IntPtr, GeneralPurposeRegister.ESP);
-			ctx.AppendInstruction(X86.Add, esp, esp, Operand.CreateConstant(BuiltInSigType.IntPtr, stackSize));
+			context.AppendInstruction(X86.Add, esp, esp, Operand.CreateConstant(BuiltInSigType.IntPtr, stackSize));
 		}
 
-		private void CleanupReturnValue(Context ctx, Operand result)
+		private void CleanupReturnValue(Context context, Operand result)
 		{
 			if (result == null)
 				return;
@@ -138,22 +142,22 @@ namespace Mosa.Platform.x86
 			{
 				Operand edx = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.EDX);
 
-				ctx.AppendInstruction(X86.Mov, result.Low, eax);
-				ctx.AppendInstruction(X86.Mov, result.High, edx);
+				context.AppendInstruction(X86.Mov, result.Low, eax);
+				context.AppendInstruction(X86.Mov, result.High, edx);
 			}
 			else
 			{
-				ctx.AppendInstruction(X86.Mov, result, eax);
+				context.AppendInstruction(X86.Mov, result, eax);
 			}
 		}
 
 		/// <summary>
 		/// Calculates the remaining space.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
+		/// <param name="context">The context.</param>
 		/// <param name="operandStack">The operand stack.</param>
 		/// <param name="space">The space.</param>
-		private void PushOperands(Context ctx, Stack<Operand> operandStack, int space)
+		private void PushOperands(Context context, Stack<Operand> operandStack, int space)
 		{
 			while (operandStack.Count != 0)
 			{
@@ -163,18 +167,18 @@ namespace Mosa.Platform.x86
 				architecture.GetTypeRequirements(operand.Type, out size, out alignment);
 
 				space -= size;
-				Push(ctx, operand, space, size);
+				Push(context, operand, space, size);
 			}
 		}
 
 		/// <summary>
 		/// Pushes the specified instructions.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
+		/// <param name="context">The context.</param>
 		/// <param name="op">The op.</param>
 		/// <param name="stackSize">Size of the stack.</param>
 		/// <param name="parameterSize">Size of the parameter.</param>
-		private void Push(Context ctx, Operand op, int stackSize, int parameterSize)
+		private void Push(Context context, Operand op, int stackSize, int parameterSize)
 		{
 			if (op.IsMemoryAddress)
 			{
@@ -182,7 +186,7 @@ namespace Mosa.Platform.x86
 				{
 					for (int i = 0; i < parameterSize; i += 4)
 					{
-						ctx.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(op.Type, GeneralPurposeRegister.EDX, stackSize + i), Operand.CreateMemoryAddress(op.Type, op.OffsetBaseRegister, op.Offset + i));
+						context.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(op.Type, GeneralPurposeRegister.EDX, stackSize + i), Operand.CreateMemoryAddress(op.Type, op.OffsetBaseRegister, op.Offset + i));
 					}
 
 					return;
@@ -204,8 +208,8 @@ namespace Mosa.Platform.x86
 
 					case StackTypeCode.Int64:
 						{
-							ctx.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(op.Type, GeneralPurposeRegister.EDX, stackSize), op.Low);
-							ctx.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(op.Type, GeneralPurposeRegister.EDX, stackSize + 4), op.High);
+							context.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(op.Type, GeneralPurposeRegister.EDX, stackSize), op.Low);
+							context.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(op.Type, GeneralPurposeRegister.EDX, stackSize + 4), op.High);
 						}
 						return;
 
@@ -213,18 +217,18 @@ namespace Mosa.Platform.x86
 						throw new NotSupportedException();
 				}
 
-				ctx.AppendInstruction(X86.Mov, rop, op);
+				context.AppendInstruction(X86.Mov, rop, op);
 				op = rop;
 			}
 			else if (op.StackType == StackTypeCode.Int64)
 			{
-				ctx.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(BuiltInSigType.Int32, GeneralPurposeRegister.EDX, stackSize), op.Low);
-				ctx.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(BuiltInSigType.Int32, GeneralPurposeRegister.EDX, stackSize + 4), op.High);
+				context.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(BuiltInSigType.Int32, GeneralPurposeRegister.EDX, stackSize), op.Low);
+				context.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(BuiltInSigType.Int32, GeneralPurposeRegister.EDX, stackSize + 4), op.High);
 
 				return;
 			}
 
-			ctx.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(op.Type, GeneralPurposeRegister.EDX, stackSize), op);
+			context.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(op.Type, GeneralPurposeRegister.EDX, stackSize), op);
 		}
 
 		/// <summary>

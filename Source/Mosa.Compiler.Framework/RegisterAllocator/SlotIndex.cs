@@ -107,7 +107,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 		{
 			SlotIndex slotIndex = o as SlotIndex;
 
-			return (index - slotIndex.index);
+			return (SlotNumber - slotIndex.SlotNumber);
 		}
 
 		public override string ToString()
@@ -115,8 +115,36 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			return SlotNumber.ToString();
 		}
 
-		public SlotIndex Next { get { return new SlotIndex(instructionSet, instructionSet.Next(index)); } }
-		public SlotIndex Previous { get { return new SlotIndex(instructionSet, instructionSet.Previous(index)); } }
+		public SlotIndex Next
+		{
+			get
+			{
+				int next = instructionSet.Next(index);
+
+				while (instructionSet.Data[next].Instruction == null)
+				{
+					next = instructionSet.Next(next);
+				}
+
+				return new SlotIndex(instructionSet, next);
+			}
+		}
+		
+		public SlotIndex Previous
+		{
+			get
+			{
+				int previous = instructionSet.Previous(index);
+
+				while (instructionSet.Data[previous].Instruction == null)
+				{
+					previous = instructionSet.Previous(previous);
+				}
+
+
+				return new SlotIndex(instructionSet, previous);
+			}
+		}
 
 	}
 }

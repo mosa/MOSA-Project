@@ -118,7 +118,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			{
 				var slot = slots[i];
 
-				if (slot < start)
+				if (slot > start)
 				{
 					return slot;
 				}
@@ -157,7 +157,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 				return b;
 			if (b == null)
 				return a;
-			return (a < b) ? a : b;
+			return (a > b) ? a : b;
 		}
 
 		public SlotIndex GetNextDefOrUsePosition(SlotIndex at)

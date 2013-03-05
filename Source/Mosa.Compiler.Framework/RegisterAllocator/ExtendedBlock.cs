@@ -46,7 +46,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		public bool Contains(SlotIndex slotIndex)
 		{
-			return Interval.Contains(slotIndex);
+			return Interval.Contains(slotIndex) || slotIndex == Interval.End;
 		}
 
 		public bool Contains(Context context)
