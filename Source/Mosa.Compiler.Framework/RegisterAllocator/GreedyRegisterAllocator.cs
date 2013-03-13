@@ -690,8 +690,8 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			if (TrySimplePartialFreeIntervalSplit(liveInterval))
 				return true;
 
-			if (TrySimpleFurthestIntervalSplit(liveInterval))
-				return true;
+			//if (TrySimpleFurthestIntervalSplit(liveInterval))
+			//	return true;
 
 			return false;
 		}
@@ -730,7 +730,15 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 			if (trace.Active) trace.Log("  Partial free up to: " + maxFree.ToString());
 
-			OptimalSplitInterval(liveInterval, maxFree);
+			// can not split on use/def position
+			if (liveInterval.UsePositions.Contains(maxFree))
+				return false;
+
+			// can not split on use/def position
+			if (liveInterval.DefPositions.Contains(maxFree))
+				return false;
+
+			SplitInterval(liveInterval, maxFree);
 
 			return true;
 		}
@@ -893,6 +901,19 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			if (trace.Active) trace.Log("  Split interval 1/3: " + first.ToString());
 			if (trace.Active) trace.Log("  Split interval 2/3: " + middle.ToString());
 			if (trace.Active) trace.Log("  Split interval 3/3: " + last.ToString());
+		}
+
+		void ResolveDataFlow()
+		{
+			foreach (var from in extendedBlocks)
+			{
+				foreach (var nextBlock in from.BasicBlock.NextBlocks)
+				{
+					var to = extendedBlocks[nextBlock.Sequence];
+
+					// TODO
+				}
+			}
 		}
 	}
 }

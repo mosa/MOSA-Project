@@ -24,14 +24,14 @@ namespace Mosa.Compiler.InternalTrace
 		{
 			Run(
 				methodCompiler.InternalTrace,
-				stage,
+				methodCompiler.FormatStageName(stage),
 				methodCompiler.Method,
 				methodCompiler.InstructionSet,
 				methodCompiler.BasicBlocks
 			);
 		}
 
-		public static void Run(IInternalTrace internalLog, IPipelineStage stage, RuntimeMethod method, InstructionSet instructionSet, BasicBlocks basicBlocks)
+		public static void Run(IInternalTrace internalLog, string stage, RuntimeMethod method, InstructionSet instructionSet, BasicBlocks basicBlocks)
 		{
 			if (internalLog == null)
 				return;
@@ -39,12 +39,12 @@ namespace Mosa.Compiler.InternalTrace
 			if (internalLog.TraceListener == null)
 				return;
 
-			if (!internalLog.TraceFilter.IsMatch(method, stage.Name))
+			if (!internalLog.TraceFilter.IsMatch(method, stage))
 				return;
 
 			StringBuilder text = new StringBuilder();
 
-			text.AppendLine(String.Format("IR representation of method {0} after stage {1}:", method, stage.Name));
+			text.AppendLine(String.Format("IR representation of method {0} after stage {1}:", method, stage));
 			text.AppendLine();
 
 			if (basicBlocks.Count > 0)
@@ -72,7 +72,7 @@ namespace Mosa.Compiler.InternalTrace
 				LogInstructions(text, new Context(instructionSet, 0));
 			}
 
-			internalLog.TraceListener.SubmitInstructionTraceInformation(method, stage.Name, text.ToString());
+			internalLog.TraceListener.SubmitInstructionTraceInformation(method, stage, text.ToString());
 		}
 
 		private static string ListBlocks(IList<BasicBlock> blocks)

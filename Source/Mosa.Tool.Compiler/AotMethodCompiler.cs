@@ -53,6 +53,7 @@ namespace Mosa.Tool.Compiler
 				new PlatformIntrinsicTransformationStage(),
 				new PlatformStubStage(),
 				
+				new	EdgeSplitStage(),
 				new GreedyRegisterAllocatorStage(),
 				new StackLayoutStage(),
 				//new CodeGenerationStage(), 

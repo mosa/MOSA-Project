@@ -50,6 +50,7 @@ namespace Mosa.Tool.TypeExplorer
 
 				new CheckPlatformOperandCountStage(),
 
+				new	EdgeSplitStage(),
 				new GreedyRegisterAllocatorStage(),
 				new StackLayoutStage(),
 

@@ -39,7 +39,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Holds the pipeline of the compiler.
 		/// </summary>
-		protected readonly CompilerPipeline pipeline;
+		private readonly CompilerPipeline pipeline;
 
 		/// <summary>
 		///
@@ -84,22 +84,22 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Holds the type system during compilation
 		/// </summary>
-		protected readonly ITypeSystem typeSystem;
+		private readonly ITypeSystem typeSystem;
 
 		/// <summary>
 		/// Holds the type layout interface
 		/// </summary>
-		protected readonly ITypeLayout typeLayout;
+		private readonly ITypeLayout typeLayout;
 
 		/// <summary>
 		/// Holds the modules type system
 		/// </summary>
-		protected readonly ITypeModule moduleTypeSystem;
+		private readonly ITypeModule moduleTypeSystem;
 
 		/// <summary>
 		/// Holds the internal logging interface
 		/// </summary>
-		protected readonly IInternalTrace internalTrace;
+		private readonly IInternalTrace internalTrace;
 
 		/// <summary>
 		/// Holds the exception clauses
@@ -430,6 +430,11 @@ namespace Mosa.Compiler.Framework
 			}
 
 			return null;
+		}
+
+		public string FormatStageName(IPipelineStage stage)
+		{
+			return "[" + Pipeline.GetPosition(stage).ToString("00") + "] " + stage.Name;
 		}
 
 		/// <summary>

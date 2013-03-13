@@ -13,13 +13,11 @@ using Mosa.Compiler.Metadata.Signatures;
 
 namespace Mosa.Compiler.Framework
 {
-
 	/// <summary>
 	/// Implements a base framework for architectures.
 	/// </summary>
 	public abstract class BaseArchitecture : IArchitecture
 	{
-
 		/// <summary>
 		/// Holds the calling conversion
 		/// </summary>
@@ -32,7 +30,7 @@ namespace Mosa.Compiler.Framework
 		/// The endianness.
 		/// </value>
 		public abstract Endianness Endianness { get; }
-		
+
 		/// <summary>
 		/// Gets the type of the elf machine.
 		/// </summary>

@@ -20,6 +20,18 @@ namespace Mosa.Compiler.Framework.Platform
 	public abstract class BasePlatformTransformationStage : BaseCodeTransformationStage
 	{
 
+		protected virtual string Platform { get { return "Generic"; } }
+
+		#region IPipelineStage Members
+
+		/// <summary>
+		/// Retrieves the name of the compilation stage.
+		/// </summary>
+		/// <value>The name of the compilation stage.</value>
+		public override string Name { get { return Platform + "." + base.Name; } }
+
+		#endregion // IPipelineStage Members
+
 		#region Common Internals
 
 		/// <summary>

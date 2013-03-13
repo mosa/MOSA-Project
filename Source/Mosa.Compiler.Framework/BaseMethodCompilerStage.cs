@@ -285,7 +285,7 @@ namespace Mosa.Compiler.Framework
 			{
 				current.BasicBlock.NextBlocks.Add(nextBlock);
 				nextBlock.PreviousBlocks.Add(ctx.BasicBlock);
-			
+
 				ctx.AppendInstruction(IRInstruction.Jmp, nextBlock);
 			}
 
@@ -301,12 +301,12 @@ namespace Mosa.Compiler.Framework
 
 		public CompilerTrace CreateTrace()
 		{
-			return new CompilerTrace(this.methodCompiler.InternalTrace, this.methodCompiler.Method, this.Name);
+			return new CompilerTrace(this.methodCompiler.InternalTrace, this.methodCompiler.Method, this.methodCompiler.FormatStageName(this as IPipelineStage));
 		}
 
 		public CompilerTrace CreateTrace(string section)
 		{
-			return new CompilerTrace(this.methodCompiler.InternalTrace, this.methodCompiler.Method, this.Name, section);
+			return new CompilerTrace(this.methodCompiler.InternalTrace, this.methodCompiler.Method, this.methodCompiler.FormatStageName(this as IPipelineStage), section);
 		}
 
 		#endregion

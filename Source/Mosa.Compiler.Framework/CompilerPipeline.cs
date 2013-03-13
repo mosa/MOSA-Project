@@ -201,6 +201,26 @@ namespace Mosa.Compiler.Framework
 			pipeline.Remove(stage);
 		}
 
+		/// <summary>
+		/// Gets the position.
+		/// </summary>
+		/// <param name="stage">The stage.</param>
+		/// <returns></returns>
+		/// <exception cref="System.ArgumentNullException">@stage</exception>
+		public int GetPosition(IPipelineStage stage)
+		{
+			if (stage == null)
+				throw new ArgumentNullException(@"stage");
+
+			for (int i = 0; i < pipeline.Count; i++)
+			{
+				if (object.ReferenceEquals(pipeline[i], stage))
+					return i;
+			}
+
+			throw new ArgumentNullException(@"missing stage to insert before");
+		}
+
 		#endregion // Methods
 
 		#region IEnumerable members
@@ -235,6 +255,5 @@ namespace Mosa.Compiler.Framework
 
 			return result;
 		}
-
 	}
 }

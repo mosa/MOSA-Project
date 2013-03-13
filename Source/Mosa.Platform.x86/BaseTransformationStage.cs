@@ -25,19 +25,7 @@ namespace Mosa.Platform.x86
 	public abstract class BaseTransformationStage : BasePlatformTransformationStage
 	{
 
-		#region Data members
-
-		#endregion // Data members
-
-		#region IPipelineStage Members
-
-		/// <summary>
-		/// Retrieves the name of the compilation stage.
-		/// </summary>
-		/// <value>The name of the compilation stage.</value>
-		public override string Name { get { return "x86." + this.GetType().Name; } }
-
-		#endregion // IPipelineStage Members
+		protected override string Platform { get { return "x86"; } }
 
 		#region Emit Constant Methods
 
