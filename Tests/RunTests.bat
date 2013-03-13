@@ -1,6 +1,6 @@
 
 CD ..\Source
-rem CALL Compile-Debug.bat
+CALL Compile-Debug.bat
 CD ..\Tests
 
 IF EXIST "%ProgramFiles(x86)%\Gallio\bin\Gallio.Echo.exe" SET GALLIO="%ProgramFiles(x86)%\Gallio\bin\Gallio.Echo.exe"
@@ -10,7 +10,7 @@ IF NOT EXIST reports MKDIR reports
 
 IF NOT EXIST bin MKDIR bin
 
-DELETE bin\*.dll
+DEL bin\*.dll
 
 COPY ..\bin\*.dll bin
 
