@@ -110,10 +110,11 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			// Populate Priority Queue
 			PopulatePriorityQueue();
 
-			//// Process Priority Queue
+			// Process Priority Queue
 			ProcessPriorityQueue();
 
-			// MORE
+			// Resolve Data Flow
+			//ResolveDataFlow();
 		}
 
 		private static string ToString(BitArray bitArray)
@@ -380,7 +381,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 					if (i != blockMax)
 					{
-						register.AddLiveInterval(block.From, extendedBlocks[i + 1].From);
+						register.AddLiveInterval(block.Start, extendedBlocks[i + 1].Start);
 					}
 					else
 					{
@@ -446,7 +447,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 								register.AddUsePosition(currentSlotIndex);
 							}
 
-							register.AddLiveInterval(block.From, prevSlotIndex);
+							register.AddLiveInterval(block.Start, prevSlotIndex);
 						}
 
 						prevSlotIndex = currentSlotIndex;
@@ -478,12 +479,12 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		private SlotIndex GetBlockEnd(SlotIndex slotIndex)
 		{
-			return GetContainingBlock(slotIndex).To;
+			return GetContainingBlock(slotIndex).End;
 		}
 
 		private SlotIndex GetBlockStart(SlotIndex slotIndex)
 		{
-			return GetContainingBlock(slotIndex).From;
+			return GetContainingBlock(slotIndex).Start;
 		}
 
 		private void CalculateSpillCost(LiveInterval liveInterval)
@@ -903,7 +904,20 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			if (trace.Active) trace.Log("  Split interval 3/3: " + last.ToString());
 		}
 
-		void ResolveDataFlow()
+		private IEnumerable<VirtualRegister> GetVirtualRegisters(BitArray array)
+		{
+			for (int i = 0; i < array.Count; i++)
+			{
+				if (array.Get(i))
+				{
+					var virtualRegister = virtualRegisters[i];
+					if (!virtualRegister.IsPhysicalRegister)
+						yield return virtualRegister;
+				}
+			}
+		}
+
+		private void ResolveDataFlow()
 		{
 			foreach (var from in extendedBlocks)
 			{
@@ -911,6 +925,25 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 				{
 					var to = extendedBlocks[nextBlock.Sequence];
 
+					foreach (var virtualRegister in GetVirtualRegisters(to.LiveIn))
+					{
+						var fromLiveInterval = virtualRegister.GetIntervalAt(from.End);
+						var toLiveInterval = virtualRegister.GetIntervalAt(to.Start);
+
+						Debug.Assert(fromLiveInterval != null);
+						Debug.Assert(toLiveInterval != null);
+
+						if (fromLiveInterval.AssignedPhysicalRegister != toLiveInterval.AssignedPhysicalRegister)
+						{
+							// add to resolver
+							// TODO
+						}
+					}
+
+					// determine location to insert resolving moves
+					// TODO
+
+					// insert resolving moves
 					// TODO
 				}
 			}

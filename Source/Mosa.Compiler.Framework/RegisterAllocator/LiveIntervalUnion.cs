@@ -19,8 +19,6 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 		protected Register register;
 		protected bool reserved;
 
-		//public IList<LiveInterval> LiveIntervals { get { return liveIntervals.AsReadOnly(); } }
-
 		public Register Register { get { return register; } }
 
 		public bool IsFloatingPoint { get { return register.IsFloatingPoint; } }

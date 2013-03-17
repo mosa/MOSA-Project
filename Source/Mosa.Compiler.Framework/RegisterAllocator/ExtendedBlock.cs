@@ -20,8 +20,8 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 		public int LoopDepth { get; private set; }
 
 		public Interval Interval { get; set; }		
-		public SlotIndex From { get { return Interval.Start; } }
-		public SlotIndex To { get { return Interval.End; } }
+		public SlotIndex Start { get { return Interval.Start; } }
+		public SlotIndex End { get { return Interval.End; } }
 
 		public BitArray LiveGen { get; set; }
 

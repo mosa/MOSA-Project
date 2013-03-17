@@ -8,17 +8,15 @@
  */
 
 using System.Collections.Generic;
-using System.Diagnostics;
-using Mosa.Compiler.Common;
 
 namespace Mosa.Compiler.Framework.RegisterAllocator
 {
 	public sealed class VirtualRegister
 	{
 		private List<LiveInterval> liveIntervals = new List<LiveInterval>(1);
-		
+
 		private SortedList<SlotIndex, SlotIndex> usePositions = new SortedList<SlotIndex, SlotIndex>();
-		
+
 		private SortedList<SlotIndex, SlotIndex> defPositions = new SortedList<SlotIndex, SlotIndex>();
 
 		public Operand VirtualRegisterOperand { get; private set; }
@@ -133,6 +131,22 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 			// new range is after the last range
 			liveIntervals.Add(new LiveInterval(this, start, end));
+		}
+
+		/// <summary>
+		/// Gets the interval at.
+		/// </summary>
+		/// <param name="at">At.</param>
+		/// <returns></returns>
+		public LiveInterval GetIntervalAt(SlotIndex at)
+		{
+			foreach (var liveInterval in liveIntervals)
+			{
+				if (liveInterval.Contains(at))
+					return liveInterval;
+			}
+
+			return null;
 		}
 
 		/// <summary>

@@ -12,10 +12,8 @@ using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework.RegisterAllocator
 {
-
 	public class LiveInterval : Interval
 	{
-
 		public enum AllocationStage
 		{
 			Initial = 0,
@@ -47,6 +45,10 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		public bool IsPhysicalRegister { get { return VirtualRegister.IsPhysicalRegister; } }
 
+		//public bool IsAssignedSpillSlot { get { return AssignedPhysicalRegister == null; } }
+
+		public Register AssignedPhysicalRegister { get { return LiveIntervalUnion == null ? null : LiveIntervalUnion.Register; } }
+
 		private LiveInterval(VirtualRegister virtualRegister, SlotIndex start, SlotIndex end, IList<SlotIndex> uses, IList<SlotIndex> defs)
 			: base(start, end)
 		{
@@ -74,7 +76,6 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 		public LiveInterval(VirtualRegister virtualRegister, SlotIndex start, SlotIndex end)
 			: this(virtualRegister, start, end, virtualRegister.UsePositions, virtualRegister.DefPositions)
 		{
-
 		}
 
 		public LiveInterval CreateExpandedLiveInterval(LiveInterval interval)

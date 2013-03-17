@@ -100,7 +100,7 @@ namespace Mosa.Platform.x86.Stages
 					linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuildInPatch.I4, section, (int)stream.Position, 0, entry.Name, 0);
 					stream.Position += typeLayout.NativePointerSize;
 
-					// 2. Store the length (it copied in by the next loop)
+					// 2. Store the length (its copied in by the next loop)
 					stream.Write((uint)entry.Length, Endianness.Little);
 
 					// 3. Store the pointer to the method description table (the linker writes the actual entry)
