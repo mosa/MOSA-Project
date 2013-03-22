@@ -25,7 +25,7 @@ namespace Mosa.Compiler.Framework
 		public virtual void Run()
 		{
 			for (int index = 0; index < basicBlocks.Count; index++)
-				for (Context ctx = new Context(instructionSet, basicBlocks[index]); !ctx.IsLastInstruction; ctx.GotoNext())
+				for (Context ctx = new Context(instructionSet, basicBlocks[index]); !ctx.IsBlockEndInstruction; ctx.GotoNext())
 					if (!ctx.IsEmpty)
 						ctx.Clone().Visit(this);
 		}

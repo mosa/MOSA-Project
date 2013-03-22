@@ -195,7 +195,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="block">The current block.</param>
 		private void BuildBlockLinks(BasicBlock block)
 		{
-			for (Context ctx = CreateContext(block); !ctx.IsLastInstruction; ctx.GotoNext())
+			for (Context ctx = CreateContext(block); !ctx.IsBlockEndInstruction; ctx.GotoNext())
 			{
 				switch (ctx.Instruction.FlowControl)
 				{

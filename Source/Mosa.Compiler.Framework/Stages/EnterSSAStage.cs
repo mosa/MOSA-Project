@@ -134,7 +134,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="block">The block.</param>
 		private void RenameVariables(BasicBlock block)
 		{
-			for (var context = new Context(instructionSet, block); !context.IsLastInstruction; context.GotoNext())
+			for (var context = new Context(instructionSet, block); !context.IsBlockEndInstruction; context.GotoNext())
 			{
 				if (!(context.Instruction is Phi))
 				{
@@ -166,7 +166,7 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				var j = WhichPredecessor(s, block); // ???
 
-				for (var context = new Context(instructionSet, s); !context.IsLastInstruction; context.GotoNext())
+				for (var context = new Context(instructionSet, s); !context.IsBlockEndInstruction; context.GotoNext())
 				{
 					if (!(context.Instruction is Phi))
 						continue;
@@ -186,7 +186,7 @@ namespace Mosa.Compiler.Framework.Stages
 				RenameVariables(s);
 			}
 
-			for (var context = new Context(instructionSet, block); !context.IsLastInstruction; context.GotoNext())
+			for (var context = new Context(instructionSet, block); !context.IsBlockEndInstruction; context.GotoNext())
 			{
 				if (!context.IsEmpty && context.Result != null && context.Result.IsVirtualRegister)
 				{

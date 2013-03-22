@@ -129,7 +129,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 				return new SlotIndex(instructionSet, next);
 			}
 		}
-		
+
 		public SlotIndex Previous
 		{
 			get
@@ -141,10 +141,24 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 					previous = instructionSet.Previous(previous);
 				}
 
-
 				return new SlotIndex(instructionSet, previous);
 			}
 		}
 
+		public bool IsBlockStartInstruction
+		{
+			get
+			{
+				return instructionSet.Data[index].Instruction is IR.BlockStart;
+			}
+		}
+
+		public bool IsBlockEndInstruction
+		{
+			get
+			{
+				return instructionSet.Data[index].Instruction is IR.BlockEnd;
+			}
+		}
 	}
 }

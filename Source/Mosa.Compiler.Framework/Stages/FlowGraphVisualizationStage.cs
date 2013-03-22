@@ -100,7 +100,7 @@ namespace Mosa.Compiler.Framework.Stages
 				int field = 0;
 				int i = 0;
 
-				for (Context ctx = new Context(instructionSet, block); !ctx.IsLastInstruction; ctx.GotoNext())
+				for (Context ctx = new Context(instructionSet, block); !ctx.IsBlockEndInstruction; ctx.GotoNext())
 				{
 					if (ctx.IsEmpty)
 						continue;

@@ -483,7 +483,7 @@ namespace Mosa.Compiler.Framework
 		/// <value>
 		/// 	<c>true</c> if this is the first instruction; otherwise, <c>false</c>.
 		/// </value>
-		public bool IsStartInstruction
+		public bool IsBlockStartInstruction
 		{
 			get { return Instruction is IR.BlockStart; }
 		}
@@ -492,7 +492,7 @@ namespace Mosa.Compiler.Framework
 		/// Gets a value indicating whether this is the last instruction.
 		/// </summary>
 		/// <value><c>true</c> if this is the last instruction; otherwise, <c>false</c>.</value>
-		public bool IsLastInstruction
+		public bool IsBlockEndInstruction
 		{
 			get { return Instruction is IR.BlockEnd; }
 		}
@@ -606,7 +606,7 @@ namespace Mosa.Compiler.Framework
 		{
 			while (true)
 			{
-				if (IsStartInstruction)
+				if (IsBlockStartInstruction)
 					break;
 
 				GotoPrevious();
@@ -635,7 +635,7 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		public Context InsertBefore()
 		{
-			Debug.Assert(!IsStartInstruction);
+			Debug.Assert(!IsBlockStartInstruction);
 
 			int label = Label;
 			int beforeIndex = instructionSet.InsertBefore(index);

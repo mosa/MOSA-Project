@@ -81,7 +81,7 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				BlockStart(block);
 
-				for (Context context = new Context(instructionSet, block); !context.IsLastInstruction; context.GotoNext())
+				for (Context context = new Context(instructionSet, block); !context.IsBlockEndInstruction; context.GotoNext())
 				{
 					if (!(context.IsEmpty || context.Instruction == IRInstruction.BlockStart))
 					{

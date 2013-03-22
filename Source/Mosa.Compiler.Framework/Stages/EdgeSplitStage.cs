@@ -72,7 +72,7 @@ namespace Mosa.Compiler.Framework.Stages
 			// Replace any jump/branch target in block a with z
 			ctx = new Context(instructionSet, a, a.EndIndex);
 
-			Debug.Assert(ctx.IsLastInstruction);
+			Debug.Assert(ctx.IsBlockEndInstruction);
 
 			ctx.GotoPrevious();
 

@@ -112,7 +112,7 @@ namespace Mosa.Compiler.InternalTrace
 				text.AppendFormat(" {0}", ctx.Instruction.ToString(ctx));
 				text.AppendLine();
 
-				if (ctx.IsLastInstruction)
+				if (ctx.IsBlockEndInstruction)
 					return;
 			}
 		}

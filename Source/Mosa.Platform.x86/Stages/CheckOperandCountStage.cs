@@ -24,7 +24,7 @@ namespace Mosa.Platform.x86.Stages
 
 			foreach (var block in basicBlocks)
 			{
-				for (var context = new Context(this.instructionSet, block); !context.IsLastInstruction; context.GotoNext())
+				for (var context = new Context(this.instructionSet, block); !context.IsBlockEndInstruction; context.GotoNext())
 				{
 					if (!(context.Instruction is X86Instruction))
 						continue;

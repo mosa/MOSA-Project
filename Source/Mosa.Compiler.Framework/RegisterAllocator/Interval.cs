@@ -60,6 +60,11 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			return (slotIndex >= Start && slotIndex < End);
 		}
 
+		public bool ContainsIncludingAtEnd(SlotIndex slotIndex)
+		{
+			return (slotIndex >= Start && slotIndex <= End);
+		}
+
 		public override string ToString()
 		{
 			return "[" + Start.ToString() + ", " + End.ToString() + "]";

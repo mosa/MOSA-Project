@@ -42,7 +42,7 @@ namespace Mosa.Compiler.Framework.Stages
 			// initialize worklist
 			foreach (BasicBlock block in basicBlocks)
 			{
-				for (Context ctx = new Context(instructionSet, block); !ctx.IsLastInstruction; ctx.GotoNext())
+				for (Context ctx = new Context(instructionSet, block); !ctx.IsBlockEndInstruction; ctx.GotoNext())
 				{
 					if (ctx.IsEmpty)
 						continue;

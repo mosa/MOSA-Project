@@ -89,7 +89,7 @@ namespace Mosa.Compiler.Framework.Stages
 		private void CollectAssignments()
 		{
 			foreach (var block in basicBlocks)
-				for (var context = new Context(instructionSet, block); !context.IsLastInstruction; context.GotoNext())
+				for (var context = new Context(instructionSet, block); !context.IsBlockEndInstruction; context.GotoNext())
 					if (!context.IsEmpty && context.Result != null)
 						if (context.Result.IsVirtualRegister)
 							AddToAssignments(context.Result, block);

@@ -58,7 +58,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 			foreach (var use in uses)
 			{
-				if (Contains(use))
+				if (use == end || ContainsIncludingAtEnd(use))
 				{
 					usePositions.Add(use, use);
 				}
@@ -66,7 +66,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 			foreach (var def in defs)
 			{
-				if (Contains(def))
+				if (ContainsIncludingAtEnd(def))
 				{
 					defPositions.Add(def, def);
 				}

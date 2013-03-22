@@ -79,26 +79,35 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			return null;
 		}
 
-		public LiveInterval GetNextLiveIntervalAt(SlotIndex slotIndex)
+		/// <summary>
+		/// Gets the intersections.
+		/// </summary>
+		/// <param name="liveInterval">The live interval.</param>
+		/// <returns></returns>
+		public List<LiveInterval> GetIntersections(LiveInterval liveInterval)
 		{
-			LiveInterval nextLiveInterval = null;
+			List<LiveInterval> intersections = null;
 
-			foreach (var liveInterval in liveIntervals)
+			foreach (var interval in liveIntervals)
 			{
-				if (liveInterval.Contains(slotIndex))
-					return null;
+				if (interval.Intersects(liveInterval))
+				{
+					if (intersections == null)
+						intersections = new List<LiveInterval>();
 
-				if (liveInterval.End < slotIndex)
-					continue;
-
-				if (nextLiveInterval == null || liveInterval.Start < nextLiveInterval.Start)
-					nextLiveInterval = liveInterval;
+					intersections.Add(interval);
+				}
 			}
 
-			return nextLiveInterval;
+			return intersections;
 		}
 
-		public SlotIndex GetMaximunFreeSlotAfter(SlotIndex slotIndex)
+		/// <summary>
+		/// Gets the next used.
+		/// </summary>
+		/// <param name="slotIndex">Index of the slot.</param>
+		/// <returns></returns>
+		public SlotIndex GetNextUsed(SlotIndex slotIndex)
 		{
 			SlotIndex lastFree = null;
 
@@ -119,24 +128,6 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			}
 
 			return lastFree;
-		}
-
-		public List<LiveInterval> GetIntersections(LiveInterval liveInterval)
-		{
-			List<LiveInterval> intersections = null;
-
-			foreach (var interval in liveIntervals)
-			{
-				if (interval.Intersects(liveInterval))
-				{
-					if (intersections == null)
-						intersections = new List<LiveInterval>();
-
-					intersections.Add(interval);
-				}
-			}
-
-			return intersections;
 		}
 
 		public override string ToString()

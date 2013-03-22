@@ -158,7 +158,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="operandStack">The operand stack.</param>
 		private void AssignOperands(BasicBlock block, Stack<Operand> operandStack)
 		{
-			for (var ctx = new Context(instructionSet, block); !ctx.IsLastInstruction; ctx.GotoNext())
+			for (var ctx = new Context(instructionSet, block); !ctx.IsBlockEndInstruction; ctx.GotoNext())
 			{
 				if (ctx.IsEmpty)
 					continue;

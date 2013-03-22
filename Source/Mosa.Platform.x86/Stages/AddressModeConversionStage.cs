@@ -29,7 +29,7 @@ namespace Mosa.Platform.x86.Stages
 		public override void Run()
 		{
 			foreach (BasicBlock block in basicBlocks)
-				for (Context ctx = CreateContext(block); !ctx.IsLastInstruction; ctx.GotoNext())
+				for (Context ctx = CreateContext(block); !ctx.IsBlockEndInstruction; ctx.GotoNext())
 					if (!ctx.IsEmpty)
 						if (ctx.OperandCount == 2 && ctx.ResultCount == 1)
 							ThreeTwoAddressConversion(ctx);
