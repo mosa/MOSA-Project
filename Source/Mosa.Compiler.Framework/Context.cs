@@ -311,11 +311,11 @@ namespace Mosa.Compiler.Framework
 					{
 						if (value.OffsetBase != null)
 						{
-							value.OffsetBase.Uses.Remove(index);
+							value.OffsetBase.Uses.Add(index);
 						}
 						if (value.SSAParent != null)
 						{
-							value.SSAParent.Uses.Remove(index);
+							value.SSAParent.Uses.Add(index);
 						}
 					}
 				}

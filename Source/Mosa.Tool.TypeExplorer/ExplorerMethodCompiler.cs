@@ -45,7 +45,6 @@ namespace Mosa.Tool.TypeExplorer
 				(compilerOptions.EnableSSA && compilerOptions.EnableSSAOptimizations) ? new SSAOptimizations() : null,
 				(compilerOptions.EnableSSA) ? new LeaveSSA() : null,
 
-				new PlatformIntrinsicTransformationStage(),
 				new PlatformStubStage(),
 
 				new CheckPlatformOperandCountStage(),

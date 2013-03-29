@@ -99,7 +99,6 @@
     <Compile Include="Instructions\AddSD.cs" />
     <Compile Include="Stages\BuildStackStage.cs" />
     <Compile Include="Stages\SimpleDeadCodeRemovalStage.cs" />
-    <Compile Include="X86InstructionExtensions.cs" />
     <Compile Include="Instructions\MulSD.cs" />
     <Compile Include="Instructions\DivSD.cs" />
     <Compile Include="Instructions\RoundSD.cs" />

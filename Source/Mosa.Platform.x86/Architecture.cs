@@ -186,15 +186,15 @@ namespace Mosa.Platform.x86
 				new IMethodCompilerStage[]
 				{
 					new CheckOperandCountStage(),
+					new PlatformIntrinsicTransformationStage(),
 					new LongOperandTransformationStage(),
 
-					//new AddressModeConversionStage(),
 					new IRTransformationStage(),
 				    new TweakTransformationStage(),
 
-				    //new MemToMemConversionStage(),
 					new FixedRegisterAssignmentStage(),
 					new SimpleDeadCodeRemovalStage(),
+				    new AddressModeConversionStage(),
 				});
 
 			// FIXME: Disabled for now
