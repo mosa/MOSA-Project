@@ -49,16 +49,19 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		public Register AssignedPhysicalRegister { get { return LiveIntervalUnion == null ? null : LiveIntervalUnion.Register; } }
 
+		public bool ForceSpilled { get; set; }
+
 		private LiveInterval(VirtualRegister virtualRegister, SlotIndex start, SlotIndex end, IList<SlotIndex> uses, IList<SlotIndex> defs)
 			: base(start, end)
 		{
 			this.VirtualRegister = virtualRegister;
 			this.SpillValue = 0;
 			this.Stage = AllocationStage.Initial;
+			this.ForceSpilled = false; 
 
 			foreach (var use in uses)
 			{
-				if (use == end || ContainsIncludingAtEnd(use))
+				if (Contains(use))
 				{
 					usePositions.Add(use, use);
 				}
@@ -66,7 +69,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 			foreach (var def in defs)
 			{
-				if (ContainsIncludingAtEnd(def))
+				if (Contains(def))
 				{
 					defPositions.Add(def, def);
 				}
