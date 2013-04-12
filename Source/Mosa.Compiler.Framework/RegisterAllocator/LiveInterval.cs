@@ -17,10 +17,10 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 		public enum AllocationStage
 		{
 			Initial = 0,
-			PreSpill = 1,
-			Spillable = 2,
-
-			Max = 2,
+			SplitLevel1 = 1,
+			SplitLevel2 = 2,
+			Spillable = 3,
+			Max = 4,
 		}
 
 		private SortedList<SlotIndex, SlotIndex> usePositions = new SortedList<SlotIndex, SlotIndex>();
@@ -51,29 +51,48 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		public bool ForceSpilled { get; set; }
 
+		public SlotIndex Minimum { get; private set; }
+		public SlotIndex Maximum { get; private set; }
+
 		private LiveInterval(VirtualRegister virtualRegister, SlotIndex start, SlotIndex end, IList<SlotIndex> uses, IList<SlotIndex> defs)
 			: base(start, end)
 		{
 			this.VirtualRegister = virtualRegister;
 			this.SpillValue = 0;
 			this.Stage = AllocationStage.Initial;
-			this.ForceSpilled = false; 
+			this.ForceSpilled = false;
+
+			SlotIndex max = null;
+			SlotIndex min = null;
 
 			foreach (var use in uses)
 			{
 				if (Contains(use))
 				{
 					usePositions.Add(use, use);
+
+					if (max == null || use > max)
+						max = use;
+					if (min == null || use < min)
+						min = use;
 				}
 			}
-
+			
 			foreach (var def in defs)
 			{
 				if (Contains(def))
 				{
 					defPositions.Add(def, def);
+
+					if (max == null || def > max)
+						max = def;
+					if (min == null || def < min)
+						min = def;
 				}
 			}
+
+			this.Minimum = min;
+			this.Maximum = max;
 		}
 
 		public LiveInterval(VirtualRegister virtualRegister, SlotIndex start, SlotIndex end)

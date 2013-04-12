@@ -11,10 +11,10 @@ using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework.RegisterAllocator
 {
-
 	public class Interval
 	{
 		public SlotIndex Start { get; private set; }
+
 		public SlotIndex End { get; private set; }
 
 		public Interval(SlotIndex start, SlotIndex end)

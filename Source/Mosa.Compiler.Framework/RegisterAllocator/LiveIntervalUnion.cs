@@ -103,25 +103,25 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 		}
 
 		/// <summary>
-		/// Gets the next used.
+		/// Gets the next live range.
 		/// </summary>
-		/// <param name="slotIndex">Index of the slot.</param>
+		/// <param name="after">Index of the slot.</param>
 		/// <returns></returns>
-		public SlotIndex GetNextUsed(SlotIndex slotIndex)
+		public SlotIndex GetNextLiveRange(SlotIndex after)
 		{
 			SlotIndex lastFree = null;
 
 			foreach (var liveInterval in liveIntervals)
 			{
-				if (liveInterval.Contains(slotIndex))
+				if (liveInterval.Contains(after))
 					return null;
 
-				if (liveInterval.End <= slotIndex)
+				if (liveInterval.End <= after)
 					continue;
 
 				if (lastFree == null || liveInterval.Start < lastFree)
 				{
-					Debug.Assert(liveInterval.Start > slotIndex);
+					Debug.Assert(liveInterval.Start > after);
 
 					lastFree = liveInterval.Start;
 				}
