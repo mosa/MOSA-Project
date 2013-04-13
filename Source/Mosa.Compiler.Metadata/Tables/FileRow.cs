@@ -12,28 +12,28 @@ using System.IO;
 namespace Mosa.Compiler.Metadata.Tables
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public struct FileRow
 	{
 		#region Data members
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private FileAttributes flags;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private HeapIndexToken name;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private HeapIndexToken hashValue;
 
-		#endregion // Data members
+		#endregion Data members
 
 		#region Construction
 
@@ -50,7 +50,7 @@ namespace Mosa.Compiler.Metadata.Tables
 			this.hashValue = hashValue;
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Properties
 
@@ -81,6 +81,6 @@ namespace Mosa.Compiler.Metadata.Tables
 			get { return hashValue; }
 		}
 
-		#endregion // Properties
+		#endregion Properties
 	}
 }

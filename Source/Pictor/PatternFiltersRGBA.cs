@@ -12,24 +12,25 @@ namespace Pictor
 	public interface IPatternFilter
 	{
 		int Dilation();
+
 		unsafe void PixelHighResolution(RasterBuffer buf, RGBA_Bytes* p, int x, int y);
 	}
 
 	//=======================================================pattern_filter_nn
-	//template<class ColorT> 
+	//template<class ColorT>
 	/*
 	struct pattern_filter_nn
 	{
 		typedef ColorT RGBA_Bytes;
 		static uint Dilation() { return 0; }
 
-		static void pixel_low_res(RGBA_Bytes** buf, 
+		static void pixel_low_res(RGBA_Bytes** buf,
 											 RGBA_Bytes* p, int x, int y)
 		{
 			*p = buf[y][x];
 		}
 
-		static void PixelHighResolution(RGBA_Bytes** buf, 
+		static void PixelHighResolution(RGBA_Bytes** buf,
 											  RGBA_Bytes* p, int x, int y)
 		{
 			*p = buf[y >> line_subpixel_shift]
@@ -41,7 +42,10 @@ namespace Pictor
 	//===========================================pattern_filter_bilinear_rgba
 	public struct pattern_filter_bilinear_RGBA_Bytes : IPatternFilter
 	{
-		public int Dilation() { return 1; }
+		public int Dilation()
+		{
+			return 1;
+		}
 
 		public unsafe void pixel_low_res(RGBA_Bytes** buf, RGBA_Bytes* p, int x, int y)
 		{

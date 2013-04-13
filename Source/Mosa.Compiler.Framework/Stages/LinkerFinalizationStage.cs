@@ -7,13 +7,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
-using System.Collections.Generic;
-using Mosa.Compiler.Metadata;
-using Mosa.Compiler.Metadata.Signatures;
-using Mosa.Compiler.TypeSystem;
-using Mosa.Compiler.Linker;
-
 namespace Mosa.Compiler.Framework.Stages
 {
 	/// <summary>
@@ -21,7 +14,6 @@ namespace Mosa.Compiler.Framework.Stages
 	/// </summary>
 	public sealed class LinkerFinalizationStage : BaseCompilerStage, ICompilerStage
 	{
-
 		#region ICompilerStage members
 
 		void ICompilerStage.Setup(BaseCompiler compiler)
@@ -34,7 +26,6 @@ namespace Mosa.Compiler.Framework.Stages
 			linker.GeneratedFile();
 		}
 
-		#endregion // ICompilerStage members
-
+		#endregion ICompilerStage members
 	}
 }

@@ -14,7 +14,7 @@ using Mosa.Compiler.Metadata;
 namespace Mosa.Compiler.TypeSystem
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public abstract class RuntimeMember : RuntimeObject
 	{
@@ -35,7 +35,7 @@ namespace Mosa.Compiler.TypeSystem
 		/// </summary>
 		private string name;
 
-		#endregion // Data members
+		#endregion Data members
 
 		#region Construction
 
@@ -52,7 +52,7 @@ namespace Mosa.Compiler.TypeSystem
 			this.attributes = new List<RuntimeAttribute>();
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Properties
 
@@ -96,11 +96,11 @@ namespace Mosa.Compiler.TypeSystem
 			}
 		}
 
-		#endregion // Properties
+		#endregion Properties
 
 		#region Methods
 
-		#endregion // Methods
+		#endregion Methods
 
 		#region IRuntimeAttributable Members
 
@@ -129,6 +129,6 @@ namespace Mosa.Compiler.TypeSystem
 			return result;
 		}
 
-		#endregion // IRuntimeAttributable Members
+		#endregion IRuntimeAttributable Members
 	}
 }

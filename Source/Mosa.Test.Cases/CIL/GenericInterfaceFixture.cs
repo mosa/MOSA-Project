@@ -4,7 +4,7 @@
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com> 
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  *
  */
 
@@ -16,11 +16,11 @@ namespace Mosa.Test.Cases.CIL
 {
 	[TestFixture]
 	[Importance(Importance.Critical)]
+
 	//[Category(@"Compiler")]
 	//[Description(@"Tests support for interfaces.")]
 	public class GenericInterfaceFixture : TestCompilerAdapter
 	{
-
 		public GenericInterfaceFixture()
 		{
 			settings.AddReference("Mosa.Test.Collection.dll");

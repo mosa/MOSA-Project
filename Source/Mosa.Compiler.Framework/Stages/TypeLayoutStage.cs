@@ -8,7 +8,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -24,7 +23,6 @@ namespace Mosa.Compiler.Framework.Stages
 	/// </summary>
 	public sealed class TypeLayoutStage : BaseCompilerStage, ICompilerStage
 	{
-
 		#region ICompilerStage members
 
 		void ICompilerStage.Run()
@@ -56,7 +54,7 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 		}
 
-		#endregion // ICompilerStage members
+		#endregion ICompilerStage members
 
 		private void BuildTypeInterfaceSlots(RuntimeType type)
 		{
@@ -202,7 +200,6 @@ namespace Mosa.Compiler.Framework.Stages
 				}
 				offset += typeLayout.NativePointerSize;
 			}
-
 		}
 
 		private void AskLinkerToCreateArray(string tableName, byte[] array)
@@ -247,6 +244,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			// The linker section to move this field into
 			SectionKind section;
+
 			// Does this field have an RVA?
 			if (field.RVA != 0)
 			{
@@ -290,6 +288,5 @@ namespace Mosa.Compiler.Framework.Stages
 				stream.Write(data, 0, size);
 			}
 		}
-
 	}
 }

@@ -12,12 +12,12 @@ using System;
 namespace Mosa.Compiler.Metadata.Signatures
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public class MethodSpecSignature : Signature
 	{
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private SigType[] types;
 
@@ -54,6 +54,5 @@ namespace Mosa.Compiler.Metadata.Signatures
 			for (int i = 0; i < genArgCount; i++)
 				types[i] = SigType.ParseTypeSignature(reader);
 		}
-
 	}
 }

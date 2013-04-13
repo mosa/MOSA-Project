@@ -7,18 +7,16 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
 using System.IO;
 using Mosa.Compiler.Linker;
 
 namespace Mosa.Tool.TypeExplorer
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public sealed class ExplorerLinkerSection : ExtendedLinkerSection
 	{
-
 		#region Construction
 
 		/// <summary>
@@ -33,7 +31,6 @@ namespace Mosa.Tool.TypeExplorer
 			stream = new MemoryStream();
 		}
 
-		#endregion // Construction
-
+		#endregion Construction
 	}
 }

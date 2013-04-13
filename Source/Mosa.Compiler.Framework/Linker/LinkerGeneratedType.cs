@@ -44,7 +44,7 @@ namespace Mosa.Compiler.Framework.Linker
 			this.methods = new List<RuntimeMethod>();
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		public void AddMethod(RuntimeMethod method)
 		{

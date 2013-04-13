@@ -4,7 +4,7 @@
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com> 
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 using System;
@@ -30,17 +30,17 @@ namespace Mosa.Test.System
 		private ITypeSystem typeSystem;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private CompilerSettings cacheSettings = null;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private static string tempDirectory;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private ILinker linker;
 
@@ -48,7 +48,7 @@ namespace Mosa.Test.System
 		private static uint memorySize = 1024 * 1024 * 2; // 2Mb
 		private long memoryAllocated = 0;
 
-		#endregion // Data members
+		#endregion Data members
 
 		#region Construction
 
@@ -60,7 +60,7 @@ namespace Mosa.Test.System
 			ResetMemory();
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Properties
 
@@ -93,13 +93,12 @@ namespace Mosa.Test.System
 
 				if (memoryAllocated == 0)
 					throw new OutOfMemoryException();
-
 			}
 
 			unsafe
 			{
 				((uint*)memoryPtr)[0] = (uint)memoryAllocated;
-				((uint*)memoryPtr)[1] = (uint)memoryAllocated; 
+				((uint*)memoryPtr)[1] = (uint)memoryAllocated;
 				((uint*)memoryPtr)[2] = memorySize;
 			}
 		}
@@ -132,7 +131,7 @@ namespace Mosa.Test.System
 
 			LinkerSymbol symbol = linker.GetSymbol(runtimeMethod.FullName);
 			LinkerSection section = linker.GetSection(symbol.Section);
-			
+
 			long address = symbol.VirtualAddress + section.VirtualAddress;
 
 			// Create a delegate for the test method
@@ -228,6 +227,5 @@ namespace Mosa.Test.System
 
 			return TestCaseCompiler.Compile(typeSystem);
 		}
-
 	}
 }

@@ -7,16 +7,13 @@
  *  Simon Wollwage (rootnode) <rootnode@mosa-project.org>
  */
 
-using System;
-using System.Collections.Generic;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Metadata.Signatures;
-using Mosa.Compiler.TypeSystem;
 
 namespace Mosa.Platform.x86.Intrinsic
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public sealed class GetEIP : IIntrinsicPlatformMethod
 	{
@@ -37,6 +34,6 @@ namespace Mosa.Platform.x86.Intrinsic
 			context.AppendInstruction(X86.Mov, result, eax);
 		}
 
-		#endregion // Methods
+		#endregion Methods
 	}
 }

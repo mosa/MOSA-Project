@@ -21,7 +21,7 @@ namespace Mosa.Platform.x86.Instructions
 
 		private static readonly OpCode opcode = new OpCode(new byte[] { 0x0F, 0xA2 }); // Move imm32 to r/m32
 
-		#endregion // Data Members
+		#endregion Data Members
 
 		#region Construction
 
@@ -33,7 +33,7 @@ namespace Mosa.Platform.x86.Instructions
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Methods
 
@@ -57,6 +57,6 @@ namespace Mosa.Platform.x86.Instructions
 			visitor.CpuId(context);
 		}
 
-		#endregion // Methods
+		#endregion Methods
 	}
 }

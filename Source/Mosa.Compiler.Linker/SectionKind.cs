@@ -36,6 +36,5 @@ namespace Mosa.Compiler.Linker
 		/// The .bss section is a chunk of memory initialized to zero by the loader.
 		/// </remarks>
 		BSS = 3,
-
 	}
 }

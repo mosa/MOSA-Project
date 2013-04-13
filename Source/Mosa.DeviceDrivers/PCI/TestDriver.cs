@@ -20,7 +20,7 @@ namespace Mosa.DeviceDrivers.PCI
 	public class TestDriver : HardwareDevice, IHardwareDevice
 	{
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public class CommandRegister : IOPortRegister
 		{
@@ -29,7 +29,10 @@ namespace Mosa.DeviceDrivers.PCI
 			/// </summary>
 			/// <param name="ioPort">The io port.</param>
 			/// <param name="bits">The bits.</param>
-			public CommandRegister(IReadWriteIOPort ioPort, byte bits) : base(ioPort, bits) { }
+			public CommandRegister(IReadWriteIOPort ioPort, byte bits)
+				: base(ioPort, bits)
+			{
+			}
 
 			/// <summary>
 			/// Gets or sets a value indicating whether this <see cref="CommandRegister"/> is enabled.
@@ -45,24 +48,26 @@ namespace Mosa.DeviceDrivers.PCI
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IReadWriteIOPort TestPort;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected CommandRegister Command;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected SpinLock spinLock;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="TestDriver"/> class.
 		/// </summary>
-		public TestDriver() { }
+		public TestDriver()
+		{
+		}
 
 		/// <summary>
 		/// Setups this hardware device driver
@@ -86,12 +91,18 @@ namespace Mosa.DeviceDrivers.PCI
 		/// Starts this hardware device.
 		/// </summary>
 		/// <returns></returns>
-		public override DeviceDriverStartStatus Start() { return DeviceDriverStartStatus.Failed; }
+		public override DeviceDriverStartStatus Start()
+		{
+			return DeviceDriverStartStatus.Failed;
+		}
 
 		/// <summary>
 		/// Called when an interrupt is received.
 		/// </summary>
 		/// <returns></returns>
-		public override bool OnInterrupt() { return false; }
+		public override bool OnInterrupt()
+		{
+			return false;
+		}
 	}
 }

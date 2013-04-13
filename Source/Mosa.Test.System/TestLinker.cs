@@ -8,12 +8,7 @@
  */
 
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Runtime.InteropServices;
 using Mosa.Compiler.Common;
-using Mosa.Compiler.Framework;
 using Mosa.Compiler.Linker;
 
 namespace Mosa.Test.System
@@ -24,7 +19,6 @@ namespace Mosa.Test.System
 	/// </summary>
 	public class TestLinker : BaseLinker
 	{
-
 		#region Construction
 
 		/// <summary>
@@ -42,7 +36,6 @@ namespace Mosa.Test.System
 			Endianness = Endianness.Little;	// x86
 		}
 
-		#endregion // Construction
-
+		#endregion Construction
 	}
 }

@@ -13,7 +13,6 @@ using System;
 using System.Diagnostics;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.IR;
-using Mosa.Compiler.Framework.Platform;
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Compiler.TypeSystem;
@@ -28,7 +27,6 @@ namespace Mosa.Platform.x86.Stages
 	/// </remarks>
 	public sealed class IRTransformationStage : BaseTransformationStage, IIRVisitor, IMethodCompilerStage
 	{
-
 		#region IMethodCompilerStage
 
 		/// <summary>
@@ -40,7 +38,7 @@ namespace Mosa.Platform.x86.Stages
 			base.Setup(methodCompiler);
 		}
 
-		#endregion // IMethodCompilerStage
+		#endregion IMethodCompilerStage
 
 		#region IIRVisitor
 
@@ -178,6 +176,7 @@ namespace Mosa.Platform.x86.Stages
 					case ConditionCode.Equal:
 						context.AppendInstruction(X86.Comiss, null, left, right);
 						break;
+
 					case ConditionCode.NotEqual: goto case ConditionCode.Equal;
 					case ConditionCode.UnsignedGreaterOrEqual: goto case ConditionCode.Equal;
 					case ConditionCode.UnsignedGreaterThan: goto case ConditionCode.Equal;
@@ -186,6 +185,7 @@ namespace Mosa.Platform.x86.Stages
 					case ConditionCode.GreaterOrEqual:
 						context.AppendInstruction(X86.Comiss, null, left, right);
 						break;
+
 					case ConditionCode.GreaterThan: goto case ConditionCode.GreaterOrEqual;
 					case ConditionCode.LessOrEqual: goto case ConditionCode.GreaterOrEqual;
 					case ConditionCode.LessThan: goto case ConditionCode.GreaterOrEqual;
@@ -198,6 +198,7 @@ namespace Mosa.Platform.x86.Stages
 					case ConditionCode.Equal:
 						context.AppendInstruction(X86.Comisd, null, left, right);
 						break;
+
 					case ConditionCode.NotEqual: goto case ConditionCode.Equal;
 					case ConditionCode.UnsignedGreaterOrEqual: goto case ConditionCode.Equal;
 					case ConditionCode.UnsignedGreaterThan: goto case ConditionCode.Equal;
@@ -206,6 +207,7 @@ namespace Mosa.Platform.x86.Stages
 					case ConditionCode.GreaterOrEqual:
 						context.AppendInstruction(X86.Comisd, null, left, right);
 						break;
+
 					case ConditionCode.GreaterThan: goto case ConditionCode.GreaterOrEqual;
 					case ConditionCode.LessOrEqual: goto case ConditionCode.GreaterOrEqual;
 					case ConditionCode.LessThan: goto case ConditionCode.GreaterOrEqual;
@@ -367,7 +369,6 @@ namespace Mosa.Platform.x86.Stages
 				context.AppendInstruction(X86.Add, v1, v1, offsetOperand);
 				context.AppendInstruction(X86.Mov, result, Operand.CreateMemoryAddress(v1.Type, v1, offset));
 			}
-
 		}
 
 		/// <summary>
@@ -957,6 +958,7 @@ namespace Mosa.Platform.x86.Stages
 					else
 						context.ReplaceInstructionOnly(X86.Cvttss2si);
 					break;
+
 				case CilElementType.I8: return; // FIXME: throw new NotSupportedException();
 				case CilElementType.U1: goto case CilElementType.U4;
 				case CilElementType.U2: goto case CilElementType.U4;
@@ -979,8 +981,10 @@ namespace Mosa.Platform.x86.Stages
 
 			// Push exception object onto stack
 			context.SetInstruction(X86.Push, null, context.Operand1);
+
 			// Save entire CPU context onto stack
 			context.AppendInstruction(X86.Pushad);
+
 			// Call exception handling
 			context.AppendInstruction(X86.Call, null, throwMethod);
 		}
@@ -1012,7 +1016,7 @@ namespace Mosa.Platform.x86.Stages
 				throw new NotSupportedException();
 		}
 
-		#endregion //  IIRVisitor
+		#endregion IIRVisitor
 
 		#region IIRVisitor - Unused
 
@@ -1020,27 +1024,35 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for PrologueInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.Prologue(Context context) { }
+		void IIRVisitor.Prologue(Context context)
+		{
+		}
 
 		/// <summary>
 		/// Visitation function for EpilogueInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.Epilogue(Context context) { }
+		void IIRVisitor.Epilogue(Context context)
+		{
+		}
 
 		/// <summary>
 		/// Visitation function for PhiInstruction"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.Phi(Context context) { }
+		void IIRVisitor.Phi(Context context)
+		{
+		}
 
 		/// <summary>
 		/// Visitation function for intrinsic the method call.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.IntrinsicMethodCall(Context context) { }
+		void IIRVisitor.IntrinsicMethodCall(Context context)
+		{
+		}
 
-		#endregion // IIRVisitor - Unused
+		#endregion IIRVisitor - Unused
 
 		#region Internals
 
@@ -1120,6 +1132,6 @@ namespace Mosa.Platform.x86.Stages
 			}
 		}
 
-		#endregion // Internals
+		#endregion Internals
 	}
 }

@@ -4,7 +4,6 @@ namespace Mosa.Compiler.Metadata
 {
 	public static class GenericSigTypeResolver
 	{
-
 		public static SigType Resolve(SigType sigType, SigType[] genericArguments)
 		{
 			if (genericArguments == null)

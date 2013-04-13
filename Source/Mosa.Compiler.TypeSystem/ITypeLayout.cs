@@ -9,13 +9,10 @@
 
 using System.Collections.Generic;
 
-
 namespace Mosa.Compiler.TypeSystem
 {
-
 	public interface ITypeLayout
 	{
-
 		/// <summary>
 		/// Gets the type system.
 		/// </summary>
@@ -88,7 +85,5 @@ namespace Mosa.Compiler.TypeSystem
 		/// Get a list of interfaces
 		/// </summary>
 		IList<RuntimeType> Interfaces { get; }
-
-
 	}
 }

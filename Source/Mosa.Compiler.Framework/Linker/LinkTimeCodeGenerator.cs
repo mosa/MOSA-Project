@@ -8,7 +8,6 @@
  */
 
 using System;
-using Mosa.Compiler.Framework;
 using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Compiler.TypeSystem;
 
@@ -19,7 +18,6 @@ namespace Mosa.Compiler.Framework.Linker
 	/// </summary>
 	public static class LinkTimeCodeGenerator
 	{
-
 		#region Methods
 
 		/// <summary>
@@ -66,7 +64,7 @@ namespace Mosa.Compiler.Framework.Linker
 
 			// Create the method
 			// HACK: <$> prevents the method from being called from CIL
-            LinkerGeneratedMethod method = new LinkerGeneratedMethod(typeSystem.InternalTypeModule, "<$>" + methodName, compilerGeneratedType, BuiltInSigType.Void, false, false, new SigType[0]);
+			LinkerGeneratedMethod method = new LinkerGeneratedMethod(typeSystem.InternalTypeModule, "<$>" + methodName, compilerGeneratedType, BuiltInSigType.Void, false, false, new SigType[0]);
 			compilerGeneratedType.AddMethod(method);
 
 			//compiler.Scheduler.TrackMethodInvoked(method);
@@ -77,6 +75,6 @@ namespace Mosa.Compiler.Framework.Linker
 			return method;
 		}
 
-		#endregion // Methods
+		#endregion Methods
 	}
 }

@@ -20,7 +20,6 @@ namespace Mosa.Platform.x86.Instructions
 	/// </summary>
 	public sealed class Setcc : X86Instruction
 	{
-
 		#region Data Members
 
 		private static readonly OpCode E = new OpCode(new byte[] { 0x0F, 0x94 });
@@ -40,8 +39,8 @@ namespace Mosa.Platform.x86.Instructions
 		private static readonly OpCode Z = new OpCode(new byte[] { 0x0F, 0x94 });
 		private static readonly OpCode NZ = new OpCode(new byte[] { 0x0F, 0x95 });
 
-		#endregion
-		
+		#endregion Data Members
+
 		#region Construction
 
 		/// <summary>
@@ -52,7 +51,7 @@ namespace Mosa.Platform.x86.Instructions
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Methods
 
@@ -99,6 +98,6 @@ namespace Mosa.Platform.x86.Instructions
 			visitor.Setcc(context);
 		}
 
-		#endregion // Methods
+		#endregion Methods
 	}
 }

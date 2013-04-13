@@ -1,10 +1,9 @@
-
 namespace Mosa.HelloWorld.x86.Tests
 {
 	public class ExceptionTest : KernelTest
 	{
 		public ExceptionTest()
-			: base("EX") 
+			: base("EX")
 		{
 			testMethods.Add(ExceptionTest1);
 			testMethods.Add(ExceptionTest2);
@@ -49,7 +48,6 @@ namespace Mosa.HelloWorld.x86.Tests
 
 			return (c == 41);
 		}
-
 
 		public static bool ExceptionTest3()
 		{

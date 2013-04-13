@@ -10,7 +10,7 @@
 namespace Mosa.Compiler.LinkerFormat.Elf64
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public enum Version : uint
 	{
@@ -18,6 +18,7 @@ namespace Mosa.Compiler.LinkerFormat.Elf64
 		/// Invalid version
 		/// </summary>
 		None = 0x00,
+
 		/// <summary>
 		/// Currrent version
 		/// </summary>

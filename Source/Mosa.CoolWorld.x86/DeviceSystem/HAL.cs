@@ -10,17 +10,17 @@
 namespace Mosa.DeviceSystem
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public static class HAL
 	{
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		static private IHardwareAbstraction hardwareAbstraction;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public delegate void HandleInterrupt(byte irq, byte error);
 
@@ -52,6 +52,7 @@ namespace Mosa.DeviceSystem
 		{
 			//Mosa.Kernel.x86.Debug.Trace("Enter HAL.ProcessInterrupt");
 			handleInterrupt(irq, error);
+
 			//Mosa.Kernel.x86.Debug.Trace("Exit HAL.ProcessInterrupt");
 		}
 
@@ -123,4 +124,3 @@ namespace Mosa.DeviceSystem
 		}
 	}
 }
-

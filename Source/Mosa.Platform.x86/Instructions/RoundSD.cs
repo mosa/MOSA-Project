@@ -13,13 +13,12 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.x86.Instructions
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public class RoundSD : X86Instruction
 	{
-
 		private static readonly OpCode opcode = new OpCode(new byte[] { 0x66, 0x0F, 0x3A, 0x0B });
-		
+
 		#region Construction
 
 		/// <summary>
@@ -30,7 +29,7 @@ namespace Mosa.Platform.x86.Instructions
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		/// <summary>
 		/// Computes the opcode.
@@ -43,6 +42,7 @@ namespace Mosa.Platform.x86.Instructions
 		{
 			return opcode;
 		}
+
 		/// <summary>
 		/// Allows visitor based dispatch for this instruction object.
 		/// </summary>

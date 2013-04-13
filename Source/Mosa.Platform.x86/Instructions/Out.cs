@@ -25,7 +25,7 @@ namespace Mosa.Platform.x86.Instructions
 		private static readonly OpCode C_R_32 = new OpCode(new byte[] { 0xE7 });
 		private static readonly OpCode R_R_32 = new OpCode(new byte[] { 0xEF });
 
-		#endregion // Data Members
+		#endregion Data Members
 
 		/// <summary>
 		/// Initializes a new instance of <see cref="Out"/>.
@@ -46,7 +46,7 @@ namespace Mosa.Platform.x86.Instructions
 		/// <returns></returns>
 		protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
 		{
-			// FIXME: This method is not called. 
+			// FIXME: This method is not called.
 			if (IsByte(third))
 			{
 				if ((source.IsConstant) && (third.IsRegister)) return C_R_8;
@@ -82,6 +82,6 @@ namespace Mosa.Platform.x86.Instructions
 			visitor.Out(context);
 		}
 
-		#endregion // Methods
+		#endregion Methods
 	}
 }

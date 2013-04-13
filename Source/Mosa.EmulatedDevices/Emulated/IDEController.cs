@@ -19,7 +19,7 @@ namespace Mosa.EmulatedDevices.Emulated
 	public class IDEController : IHardwareDevice, IIOPortDevice
 	{
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected enum DeviceStatus
 		{
@@ -27,14 +27,17 @@ namespace Mosa.EmulatedDevices.Emulated
 			/// IDE Device is ready and waiting for instructions
 			/// </summary>
 			Ready,
+
 			/// <summary>
 			/// IDE Device is busy reading
 			/// </summary>
 			ReadingSector,
+
 			/// <summary>
 			/// IDE Device is busy writing
 			/// </summary>
 			WritingSector,
+
 			/// <summary>
 			/// IDE Device shall report itself
 			/// </summary>
@@ -42,72 +45,72 @@ namespace Mosa.EmulatedDevices.Emulated
 		};
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public const ushort PrimaryIOBase = 0x1F0;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected ushort ioBase;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected byte commandStatus;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected byte featureAndError;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected byte lbaLow;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected byte lbaHigh;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected byte lbaMid;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected byte deviceHead;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected byte sectorCount;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected byte numDrives;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected FileStream[] driveFiles;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected byte[] bufferData;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected ushort bufferIndex;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected DeviceStatus status;
 
@@ -278,7 +281,7 @@ namespace Mosa.EmulatedDevices.Emulated
 				}
 			}
 
-			commandStatus = (byte)(commandStatus | 0x40);  // set drive ready status bit			
+			commandStatus = (byte)(commandStatus | 0x40);  // set drive ready status bit
 		}
 
 		/// <summary>
@@ -363,16 +366,19 @@ namespace Mosa.EmulatedDevices.Emulated
 
 			data.Fill(0, 0, 512);
 
-			// fixed drive and over 5Mb/sec     
+			// fixed drive and over 5Mb/sec
 			data.SetUShort(0x00, 0x140);
+
 			// Serial Number
 			data.Fill(0x0A * 2, d, 20);
 			data.SetByte(0x0A * 2, d);
+
 			// Firmware version
 			data.Fill(0x17 * 2, d, 8);
 			data.SetChar(0x17 * 2 + 0, '1');
 			data.SetChar(0x17 * 2 + 1, '.');
 			data.SetChar(0x17 * 2 + 2, '0');
+
 			// Model Number
 			data.Fill(0x1B * 2, d, 40);
 			data.SetChar(0x17 * 2 + 0, 'D');
@@ -381,6 +387,7 @@ namespace Mosa.EmulatedDevices.Emulated
 			data.SetChar(0x17 * 2 + 3, 'V');
 			data.SetChar(0x17 * 2 + 4, 'E');
 			data.SetByte(0x1B * 2 + 5, d);
+
 			// lba28
 			data.SetUInt(0x3C * 2, (uint)(driveFiles[drive].Length / 512));
 
@@ -397,16 +404,19 @@ namespace Mosa.EmulatedDevices.Emulated
 		{
 			switch (data)
 			{
-				case 0x20: // lba28 read w/ retry                         
+				case 0x20: // lba28 read w/ retry
 					ReadLBA28IntoBuffer();
 					break;
+
 				case 0x21: // lba28 read
 					ReadLBA28IntoBuffer();
 					break;
+
 				case 0xEC: // identify drive
 					IdentifyDrive();
 					break;
-				//case 0x30: // lba28 write 
+
+				//case 0x30: // lba28 write
 				//        status = DeviceStatus.WritingSector;
 				//        break;
 				default: break;

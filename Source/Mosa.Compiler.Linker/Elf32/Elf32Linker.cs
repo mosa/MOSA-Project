@@ -8,7 +8,6 @@
  */
 
 using System;
-using System.Collections.Generic;
 using System.IO;
 using Mosa.Compiler.Common;
 using Mosa.Compiler.LinkerFormat.Elf32;
@@ -17,15 +16,14 @@ using Mosa.Compiler.LinkerFormat.Elf;
 namespace Mosa.Compiler.Linker.Elf32
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public class Elf32Linker : BaseLinker
 	{
-
 		#region Constants
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private const uint FILE_SECTION_ALIGNMENT = 0x200;
 
@@ -34,20 +32,21 @@ namespace Mosa.Compiler.Linker.Elf32
 		/// </summary>
 		private const uint SECTION_ALIGNMENT = 0x1000;
 
-		#endregion // Constants
+		#endregion Constants
 
 		#region Data members
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private readonly NullSection nullSection;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private readonly StringTableSection stringTableSection;
 
-		#endregion // Data members
+		#endregion Data members
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Elf32Linker"/> class.

@@ -6,19 +6,19 @@
  * Authors:
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  */
+
 using System;
 
 namespace Pictor.VertexSource
 {
-
 	//=======================================================span_gouraud_rgba
 	public sealed class span_gouraud_rgba : span_gouraud, ISpanGenerator
 	{
-		bool m_swap;
-		int m_y2;
-		rgba_calc m_rgba1;
-		rgba_calc m_rgba2;
-		rgba_calc m_rgba3;
+		private bool m_swap;
+		private int m_y2;
+		private rgba_calc m_rgba1;
+		private rgba_calc m_rgba2;
+		private rgba_calc m_rgba3;
 
 		public enum ESubpixelScale
 		{
@@ -78,7 +78,10 @@ namespace Pictor.VertexSource
 		};
 
 		//--------------------------------------------------------------------
-		public span_gouraud_rgba() { }
+		public span_gouraud_rgba()
+		{
+		}
+
 		public span_gouraud_rgba(RGBA_Bytes c1,
 						  RGBA_Bytes c2,
 						  RGBA_Bytes c3,
@@ -135,13 +138,14 @@ namespace Pictor.VertexSource
 			{
 				// Upper part (second subtriangle)
 				m_rgba3.Calculate(y - m_rgba3.m_1dy);
+
 				//-------------------------
 				pc2 = m_rgba3;
 			}
 
 			if (m_swap)
 			{
-				// It means that the triangle is oriented clockwise, 
+				// It means that the triangle is oriented clockwise,
 				// so that we need to swap the controlling structures
 				//-------------------------
 				rgba_calc t = pc2;
@@ -160,7 +164,7 @@ namespace Pictor.VertexSource
 			DdaLineInterpolator b = new DdaLineInterpolator(pc1.m_b, pc2.m_b, (uint)nlen, 14);
 			DdaLineInterpolator a = new DdaLineInterpolator(pc1.m_a, pc2.m_a, (uint)nlen, 14);
 
-			// Calculate the starting point of the Gradient with subpixel 
+			// Calculate the starting point of the Gradient with subpixel
 			// accuracy and correct (roll back) the interpolators.
 			// This operation will also Clip the beginning of the Span
 			// if necessary.
@@ -175,9 +179,9 @@ namespace Pictor.VertexSource
 			int vr, vg, vb, va;
 			uint lim = 255;
 
-			// Beginning part of the Span. Since we rolled back the 
+			// Beginning part of the Span. Since we rolled back the
 			// interpolators, the Color values may have overflowed.
-			// So that, we render the beginning part with checking 
+			// So that, we render the beginning part with checking
 			// for overflow. It lasts until "Start" is positive;
 			// typically it's 1-2 pixels, but may be more in some cases.
 			//-------------------------
@@ -207,7 +211,7 @@ namespace Pictor.VertexSource
 
 			// Middle part, no checking for overflow.
 			// Actual spans can be longer than the calculated length
-			// because of anti-aliasing, thus, the interpolators can 
+			// because of anti-aliasing, thus, the interpolators can
 			// overflow. But while "nlen" is positive we are safe.
 			//-------------------------
 			while (len != 0 && nlen > 0)

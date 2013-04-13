@@ -7,16 +7,12 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System.Collections.Generic;
-using System.IO;
-using Mosa.Compiler.Framework;
 using Mosa.Compiler.Linker;
 
 namespace Mosa.Tool.TypeExplorer
 {
-	class ExplorerLinker : BaseLinker
+	internal class ExplorerLinker : BaseLinker
 	{
-
 		#region Construction
 
 		/// <summary>
@@ -33,8 +29,6 @@ namespace Mosa.Tool.TypeExplorer
 			Sections.Add(new ExplorerLinkerSection(SectionKind.BSS, @".bss", 0));
 		}
 
-		#endregion // Construction
-
+		#endregion Construction
 	}
-
 }

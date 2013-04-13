@@ -7,12 +7,10 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-using Mosa.Compiler.Metadata;
-
 namespace Mosa.Compiler.Framework
 {
 	/// <summary>
-	/// This interface provides support to emit calling convention 
+	/// This interface provides support to emit calling convention
 	/// specific code.
 	/// </summary>
 	public interface ICallingConvention
@@ -52,6 +50,5 @@ namespace Mosa.Compiler.Framework
 		/// Retrieves the offset of the first parameter From the stack frame start.
 		/// </summary>
 		int OffsetOfFirstParameter { get; }
-
 	}
 }

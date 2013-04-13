@@ -139,13 +139,13 @@ namespace Mosa.Compiler.Framework.IR
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void Return(Context context);
-		
+
 		/// <summary>
 		/// Visitation function for InternalReturn.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void InternalReturn(Context context);
-		
+
 		/// <summary>
 		/// Visitation function for ShiftLeft.
 		/// </summary>

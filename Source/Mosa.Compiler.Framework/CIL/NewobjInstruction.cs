@@ -11,7 +11,6 @@ using System.Diagnostics;
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Loader;
 using Mosa.Compiler.Metadata.Signatures;
-using Mosa.Compiler.Metadata.Tables;
 using Mosa.Compiler.TypeSystem;
 
 namespace Mosa.Compiler.Framework.CIL
@@ -61,7 +60,7 @@ namespace Mosa.Compiler.Framework.CIL
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Properties
 
@@ -77,7 +76,7 @@ namespace Mosa.Compiler.Framework.CIL
 			}
 		}
 
-		#endregion // Properties
+		#endregion Properties
 
 		#region Methods
 
@@ -142,7 +141,7 @@ namespace Mosa.Compiler.Framework.CIL
 		{
 			// Validate the operands...
 			int offset = (ctx.InvokeTarget.HasExplicitThis ? 1 : 0);
-            Debug.Assert(ctx.OperandCount == ctx.InvokeTarget.SigParameters.Length - offset, @"Operand count doesn't match parameter count.");
+			Debug.Assert(ctx.OperandCount == ctx.InvokeTarget.SigParameters.Length - offset, @"Operand count doesn't match parameter count.");
 		}
 
 		/// <summary>
@@ -156,7 +155,5 @@ namespace Mosa.Compiler.Framework.CIL
 		}
 
 		#endregion Methods
-
-
 	}
 }

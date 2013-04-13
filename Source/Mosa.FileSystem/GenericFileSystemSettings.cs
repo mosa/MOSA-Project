@@ -27,7 +27,7 @@ namespace Mosa.FileSystem
 		/// </summary>
 		public string VolumeLabel;
 
-		#endregion // Data members
+		#endregion Data members
 
 		#region Construction
 
@@ -39,6 +39,6 @@ namespace Mosa.FileSystem
 			VolumeLabel = "New Volume";
 		}
 
-		#endregion // Construction
+		#endregion Construction
 	}
 }

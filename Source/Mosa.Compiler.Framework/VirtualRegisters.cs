@@ -15,18 +15,17 @@ using Mosa.Compiler.Metadata.Signatures;
 namespace Mosa.Compiler.Framework
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public sealed class VirtualRegisters : IEnumerable<Operand>
 	{
-
 		#region Data members
 
 		private List<Operand> virtualRegisters = new List<Operand>();
 
 		//private int sequenceStart;
 
-		#endregion // Data members
+		#endregion Data members
 
 		#region Properties
 
@@ -34,7 +33,7 @@ namespace Mosa.Compiler.Framework
 
 		public Operand this[int index] { get { return virtualRegisters[index]; } }
 
-		#endregion // Properties
+		#endregion Properties
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="VirtualRegisters"/> class.
@@ -63,7 +62,7 @@ namespace Mosa.Compiler.Framework
 		{
 			int index = virtualRegisters.Count + 1;
 
-			Operand virtualRegister = name == null ? Operand.CreateVirtualRegister(type, index) : Operand.CreateVirtualRegister(type, index, name); 
+			Operand virtualRegister = name == null ? Operand.CreateVirtualRegister(type, index) : Operand.CreateVirtualRegister(type, index, name);
 
 			virtualRegisters.Add(virtualRegister);
 
@@ -93,6 +92,5 @@ namespace Mosa.Compiler.Framework
 		{
 			return GetEnumerator();
 		}
-
 	}
 }

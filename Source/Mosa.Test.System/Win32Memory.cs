@@ -31,7 +31,7 @@ namespace Mosa.Test.System
 			VirtualFree(new IntPtr(address), (uint)size, VirtualAllocTypes.MEM_RELEASE);
 		}
 
-		#endregion // IMemoryPageManager Members
+		#endregion IMemoryPageManager Members
 
 		#region Win32 P/Invoke
 
@@ -71,6 +71,6 @@ namespace Mosa.Test.System
 		[DllImport("kernel32.dll", SetLastError = true, PreserveSig = true)]
 		private static unsafe extern IntPtr VirtualAlloc(IntPtr lpAddress, uint dwSize, VirtualAllocTypes flAllocationType, AccessProtectionFlags flProtect);
 
-		#endregion // Win32 P/Invoke
+		#endregion Win32 P/Invoke
 	}
 }

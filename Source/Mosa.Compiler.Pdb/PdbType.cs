@@ -13,7 +13,7 @@ using System.IO;
 namespace Mosa.Compiler.Pdb
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public abstract class PdbType
 	{
@@ -33,7 +33,7 @@ namespace Mosa.Compiler.Pdb
 		private string name;
 		private string unknown3;
 
-		#endregion // Data Members
+		#endregion Data Members
 
 		#region Construction
 
@@ -59,7 +59,7 @@ namespace Mosa.Compiler.Pdb
 			CvUtil.PadToBoundary(reader, 4);
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Properties
 
@@ -111,6 +111,6 @@ namespace Mosa.Compiler.Pdb
 			get { return this.symbol_size; }
 		}
 
-		#endregion // Properties
+		#endregion Properties
 	}
 }

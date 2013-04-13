@@ -21,8 +21,8 @@ namespace Mosa.Platform.x86.Instructions
 
 		private static readonly OpCode opcode = new OpCode(new byte[] { 0x9C });
 
-		#endregion
-		
+		#endregion Data members
+
 		#region Construction
 
 		/// <summary>
@@ -33,12 +33,12 @@ namespace Mosa.Platform.x86.Instructions
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Methods
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="destination"></param>
 		/// <param name="source"></param>
@@ -59,6 +59,6 @@ namespace Mosa.Platform.x86.Instructions
 			visitor.Pushfd(context);
 		}
 
-		#endregion // Methods
+		#endregion Methods
 	}
 }

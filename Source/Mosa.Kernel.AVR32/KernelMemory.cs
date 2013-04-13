@@ -36,6 +36,5 @@ namespace Mosa.Kernel.AVR32
 			_used = _used + size;
 			return at;
 		}
-
 	}
 }

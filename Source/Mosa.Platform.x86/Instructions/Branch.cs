@@ -19,7 +19,6 @@ namespace Mosa.Platform.x86.Instructions
 	/// </summary>
 	public sealed class Branch : X86Instruction
 	{
-		
 		#region Construction
 
 		/// <summary>
@@ -30,7 +29,7 @@ namespace Mosa.Platform.x86.Instructions
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Data Members
 
@@ -47,7 +46,7 @@ namespace Mosa.Platform.x86.Instructions
 		private static readonly byte[] JNS = new byte[] { 0x0F, 0x89 };
 		private static readonly byte[] JS = new byte[] { 0x0F, 0x88 };
 
-		#endregion
+		#endregion Data Members
 
 		#region Methods
 
@@ -58,7 +57,6 @@ namespace Mosa.Platform.x86.Instructions
 		/// <param name="emitter">The emitter.</param>
 		protected override void Emit(Context context, MachineCodeEmitter emitter)
 		{
-
 			switch (context.ConditionCode)
 			{
 				case IR.ConditionCode.Equal:
@@ -124,7 +122,6 @@ namespace Mosa.Platform.x86.Instructions
 			visitor.Branch(context);
 		}
 
-		#endregion // Methods
-
+		#endregion Methods
 	}
 }

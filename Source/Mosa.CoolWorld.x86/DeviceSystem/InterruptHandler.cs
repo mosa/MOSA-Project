@@ -10,20 +10,22 @@
 namespace Mosa.DeviceSystem
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public class InterruptHandler : IInterruptHandler
 	{
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected InterruptManager interruptManager;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected byte irq;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IHardwareDevice hardwareDevice;
 

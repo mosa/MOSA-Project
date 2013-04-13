@@ -7,7 +7,6 @@
  *  Michael Fröhlich (grover) <sharpos@michaelruck.de>
  */
 
-using Mosa.Compiler.Linker;
 using Mosa.Compiler.TypeSystem;
 using Mosa.Compiler.Framework.Linker;
 

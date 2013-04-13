@@ -18,11 +18,11 @@ namespace Mosa.Compiler.Framework.Stages
 	{
 		#region Data members
 
-		LoopAwareBlockOrder loopAwareBlockOrder;
+		private LoopAwareBlockOrder loopAwareBlockOrder;
 
-		CompilerTrace trace;
+		private CompilerTrace trace;
 
-		#endregion // Data members
+		#endregion Data members
 
 		#region IMethodCompilerStage Members
 
@@ -63,9 +63,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 				trace.Log("Block " + block.ToString() + " #" + block.Sequence.ToString() + " -> Depth: " + depth.ToString() + " index: " + depthindex.ToString());
 			}
-
 		}
 
-		#endregion // Methods
+		#endregion IMethodCompilerStage Members
 	}
 }

@@ -16,13 +16,11 @@ using Mosa.Compiler.TypeSystem;
 
 namespace Mosa.Compiler.Framework
 {
-
 	/// <summary>
 	/// Provides context for transformations.
 	/// </summary>
 	public sealed class Context
 	{
-
 		#region Data members
 
 		/// <summary>
@@ -40,7 +38,7 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		private BasicBlock block;
 
-		#endregion // Data members
+		#endregion Data members
 
 		#region Properties
 
@@ -262,7 +260,6 @@ namespace Mosa.Compiler.Framework
 						yield return instructionSet.Data[index].GetAdditionalOperand(i);
 			}
 		}
-
 
 		/// <summary>
 		/// Gets all results.
@@ -515,7 +512,7 @@ namespace Mosa.Compiler.Framework
 			get { return new Context(instructionSet, instructionSet.Previous(index)); }
 		}
 
-		#endregion // Properties
+		#endregion Properties
 
 		#region Construction
 
@@ -561,7 +558,7 @@ namespace Mosa.Compiler.Framework
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Methods
 
@@ -843,6 +840,7 @@ namespace Mosa.Compiler.Framework
 			Operand2 = operand2;
 			Operand3 = operand3;
 		}
+
 		/// <summary>
 		/// Sets the instruction.
 		/// </summary>
@@ -1255,7 +1253,6 @@ namespace Mosa.Compiler.Framework
 			return String.Format("L_{0:X4}: {1}", Label, Instruction.ToString(this));
 		}
 
-		#endregion // Methods
+		#endregion Methods
 	};
-
 }

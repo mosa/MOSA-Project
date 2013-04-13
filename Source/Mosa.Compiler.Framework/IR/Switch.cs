@@ -11,7 +11,6 @@ namespace Mosa.Compiler.Framework.IR
 {
 	public class Switch : BaseIRInstruction
 	{
-		
 		#region Construction
 
 		/// <summary>
@@ -22,7 +21,7 @@ namespace Mosa.Compiler.Framework.IR
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		public override void Visit(IIRVisitor visitor, Context context)
 		{

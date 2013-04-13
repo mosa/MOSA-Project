@@ -6,14 +6,14 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-
 using Mosa.ClassLib;
 
 namespace Mosa.HelloWorld.x86.Tests
 {
 	public class Generic2Test : KernelTest
 	{
-		public Generic2Test() : base("Gen-N") 
+		public Generic2Test()
+			: base("Gen-N")
 		{
 			testMethods.Add(GenericTest1);
 			testMethods.Add(GenericTest2);

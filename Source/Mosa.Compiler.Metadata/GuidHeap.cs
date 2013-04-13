@@ -12,13 +12,11 @@ using System.Diagnostics;
 
 namespace Mosa.Compiler.Metadata
 {
-
 	/// <summary>
 	/// Represents the GUID heap in the .NET provider.
 	/// </summary>
 	public sealed class GuidHeap : Heap
 	{
-
 		#region Construction
 
 		/// <summary>
@@ -32,7 +30,7 @@ namespace Mosa.Compiler.Metadata
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Methods
 
@@ -57,6 +55,6 @@ namespace Mosa.Compiler.Metadata
 			return new Guid(BitConverter.ToInt32(buffer, realOffset), BitConverter.ToInt16(buffer, realOffset + 4), BitConverter.ToInt16(buffer, realOffset + 6), buffer[realOffset + 8], buffer[realOffset + 9], buffer[realOffset + 10], buffer[realOffset + 11], buffer[realOffset + 12], buffer[realOffset + 13], buffer[realOffset + 14], buffer[realOffset + 8]);
 		}
 
-		#endregion // Methods
+		#endregion Methods
 	}
 }

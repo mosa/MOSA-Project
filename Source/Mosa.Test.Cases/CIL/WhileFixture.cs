@@ -16,13 +16,13 @@ namespace Mosa.Test.Cases.CIL
 	[TestFixture]
 	public class WhileFixture : TestCompilerAdapter
 	{
-
 		public WhileFixture()
 		{
 			settings.AddReference("Mosa.Test.Collection.dll");
 		}
 
 		#region WhileIncI4 test
+
 		// Tests basic increment loop
 
 		[Row(0, 20)]
@@ -34,9 +34,10 @@ namespace Mosa.Test.Cases.CIL
 			Assert.AreEqual<int>(limit - start, Run<int>("Mosa.Test.Collection", "WhileTests", "WhileIncI4", start, limit));
 		}
 
-		#endregion
+		#endregion WhileIncI4 test
 
 		#region WhileDecI4 test
+
 		// Tests basic decrement loop.
 
 		[Row(20, 0)]
@@ -48,9 +49,10 @@ namespace Mosa.Test.Cases.CIL
 			Assert.AreEqual<int>(start - limit, Run<int>("Mosa.Test.Collection", "WhileTests", "WhileDecI4", start, limit));
 		}
 
-		#endregion
+		#endregion WhileDecI4 test
 
 		#region WhileFalse() test
+
 		// Tests while(false)
 		// Ensures "unreachable code" is never reached.
 
@@ -61,7 +63,7 @@ namespace Mosa.Test.Cases.CIL
 			Assert.IsFalse(Run<bool>("Mosa.Test.Collection", "WhileTests", "WhileFalse"));
 		}
 
-		#endregion
+		#endregion WhileFalse() test
 
 		#region WhileContinueBreak() test
 
@@ -77,7 +79,7 @@ namespace Mosa.Test.Cases.CIL
 			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "WhileTests", "WhileContinueBreak"));
 		}
 
-		#endregion
+		#endregion WhileContinueBreak() test
 
 		#region WhileOverflowIncI1 test
 
@@ -92,7 +94,7 @@ namespace Mosa.Test.Cases.CIL
 			Assert.AreEqual<int>(expect, Run<int>("Mosa.Test.Collection", "WhileTests", "WhileOverflowIncI1", start, limit));
 		}
 
-		#endregion
+		#endregion WhileOverflowIncI1 test
 
 		#region WhileOverflowDecI1 test
 
@@ -107,7 +109,7 @@ namespace Mosa.Test.Cases.CIL
 			Assert.AreEqual<int>(expect, Run<int>("Mosa.Test.Collection", "WhileTests", "WhileOverflowDecI1", start, limit));
 		}
 
-		#endregion
+		#endregion WhileOverflowDecI1 test
 
 		#region WhileNestedEqualsI4 test
 
@@ -126,6 +128,6 @@ namespace Mosa.Test.Cases.CIL
 			Assert.AreEqual<int>(expect, Run<int>("Mosa.Test.Collection", "WhileTests", "WhileNestedEqualsI4", initialStatus, wantedStatus, start, limit));
 		}
 
-		#endregion
+		#endregion WhileNestedEqualsI4 test
 	}
 }

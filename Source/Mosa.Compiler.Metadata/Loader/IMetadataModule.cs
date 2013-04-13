@@ -9,7 +9,6 @@
 
 using System.IO;
 
-
 namespace Mosa.Compiler.Metadata.Loader
 {
 	/// <summary>
@@ -17,7 +16,6 @@ namespace Mosa.Compiler.Metadata.Loader
 	/// </summary>
 	public interface IMetadataModule
 	{
-
 		/// <summary>
 		/// Gets the entry point of the module.
 		/// </summary>

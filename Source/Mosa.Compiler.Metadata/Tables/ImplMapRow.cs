@@ -7,38 +7,36 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-
-
 namespace Mosa.Compiler.Metadata.Tables
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public struct ImplMapRow
 	{
 		#region Data members
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private PInvokeAttributes _mappingFlags;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private Token _memberForwardedTableIdx;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private HeapIndexToken _importNameStringIdx;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private Token _importScopeTableIdx;
 
-		#endregion // Data members
+		#endregion Data members
 
 		#region Construction
 
@@ -58,7 +56,7 @@ namespace Mosa.Compiler.Metadata.Tables
 			_importScopeTableIdx = importScopeTableIdx;
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Properties
 
@@ -98,6 +96,6 @@ namespace Mosa.Compiler.Metadata.Tables
 			get { return _importScopeTableIdx; }
 		}
 
-		#endregion // Properties
+		#endregion Properties
 	}
 }

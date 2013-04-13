@@ -10,7 +10,6 @@
 
 using System;
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Metadata.Signatures;
 
 namespace Mosa.Platform.x86.Instructions
 {
@@ -19,14 +18,13 @@ namespace Mosa.Platform.x86.Instructions
 	/// </summary>
 	public class Shld : X86Instruction
 	{
-
 		#region Data Members
 
 		private static readonly OpCode RM = new OpCode(new byte[] { 0x0F, 0xA5 });
 		private static readonly OpCode C = new OpCode(new byte[] { 0x0F, 0xA4 });
 
-		#endregion // Data Members
-		
+		#endregion Data Members
+
 		#region Construction
 
 		/// <summary>
@@ -37,7 +35,7 @@ namespace Mosa.Platform.x86.Instructions
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Methods
 
@@ -80,6 +78,6 @@ namespace Mosa.Platform.x86.Instructions
 			visitor.Shrd(context);
 		}
 
-		#endregion // Methods
+		#endregion Methods
 	}
 }

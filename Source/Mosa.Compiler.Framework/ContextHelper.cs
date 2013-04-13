@@ -7,15 +7,11 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Mosa.Compiler.Framework.IR;
 
 namespace Mosa.Compiler.Framework
 {
-	static class ContextHelper
+	internal static class ContextHelper
 	{
 		public static Context CreateNewBlockWithContext(InstructionSet instructionSet, BasicBlocks basicBlocks, int label)
 		{

@@ -61,7 +61,7 @@ namespace Mosa.DeviceSystem
 		{
 			// Start drivers for ISA devices
 			StartISADevices();
-	
+
 			// Start drivers for PCI devices
 			StartPCIDevices();
 		}
@@ -188,7 +188,6 @@ namespace Mosa.DeviceSystem
 						resourceManager.ReleaseResources(hardwareResources);
 					}
 				}
-
 			}
 		}
 	}

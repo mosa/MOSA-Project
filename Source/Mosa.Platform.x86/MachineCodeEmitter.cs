@@ -23,7 +23,6 @@ namespace Mosa.Platform.x86
 	/// </summary>
 	public sealed class MachineCodeEmitter : BaseCodeEmitter, IDisposable
 	{
-
 		/// <summary>
 		/// Initializes a new instance of the <see cref="MachineCodeEmitter"/> class.
 		/// </summary>
@@ -192,7 +191,6 @@ namespace Mosa.Platform.x86
 			{
 				codeStream.Write(displacement.Offset, Endianness.Little);
 			}
-
 		}
 
 		/// <summary>
@@ -201,7 +199,6 @@ namespace Mosa.Platform.x86
 		/// <param name="op">The immediate operand to emit.</param>
 		private void WriteImmediate(Operand op)
 		{
-
 			if (op.IsStackLocal || op.IsMemoryAddress)
 			{
 				// Add the displacement
@@ -233,32 +230,40 @@ namespace Mosa.Platform.x86
 					case CilElementType.I1:
 						codeStream.WriteByte(Convert.ToByte(op.Value));
 						break;
+
 					case CilElementType.I2:
 						codeStream.Write(Convert.ToInt16(op.Value), Endianness.Little);
 						break;
+
 					case CilElementType.I4:
 						goto case CilElementType.I;
 					case CilElementType.U1:
 						codeStream.WriteByte(Convert.ToByte(op.Value));
 						break;
+
 					case CilElementType.Char:
 						goto case CilElementType.U2;
 					case CilElementType.U2:
 						codeStream.Write((ushort)Convert.ToUInt64(op.Value), Endianness.Little);
 						break;
+
 					case CilElementType.Ptr:
 					case CilElementType.U4:
 						codeStream.Write((uint)Convert.ToUInt64(op.Value), Endianness.Little);
 						break;
+
 					case CilElementType.I8:
 						codeStream.Write(Convert.ToInt64(op.Value), Endianness.Little);
 						break;
+
 					case CilElementType.U8:
 						codeStream.Write(Convert.ToUInt64(op.Value), Endianness.Little);
 						break;
+
 					case CilElementType.R4:
 						codeStream.Write(Endian.ConvertToUInt32(Convert.ToSingle(op.Value)), Endianness.Little);
 						break;
+
 					case CilElementType.R8:
 						goto default;
 					case CilElementType.Object:
@@ -275,7 +280,6 @@ namespace Mosa.Platform.x86
 			{
 				throw new NotImplementedException();
 			}
-
 		}
 
 		/// <summary>
@@ -350,6 +354,7 @@ namespace Mosa.Platform.x86
 							codeStream.Write(Convert.ToUInt32(op.Value), Endianness.Little);
 						}
 						break;
+
 					case CilElementType.I1:
 						codeStream.WriteByte(Convert.ToByte(op.Value));
 						break;
@@ -357,28 +362,35 @@ namespace Mosa.Platform.x86
 					case CilElementType.I2:
 						codeStream.Write(Convert.ToInt16(op.Value), Endianness.Little);
 						break;
+
 					case CilElementType.I4:
 						goto case CilElementType.I;
 					case CilElementType.U1:
 						codeStream.WriteByte(Convert.ToByte(op.Value));
 						break;
+
 					case CilElementType.Char:
 						goto case CilElementType.U2;
 					case CilElementType.U2:
 						codeStream.Write(Convert.ToUInt16(op.Value), Endianness.Little);
 						break;
+
 					case CilElementType.U4:
 						codeStream.Write(Convert.ToUInt32(op.Value), Endianness.Little);
 						break;
+
 					case CilElementType.I8:
 						codeStream.Write(Convert.ToInt64(op.Value), Endianness.Little);
 						break;
+
 					case CilElementType.U8:
 						codeStream.Write(Convert.ToUInt64(op.Value), Endianness.Little);
 						break;
+
 					case CilElementType.R4:
 						codeStream.Write(Endian.ConvertToUInt32(Convert.ToSingle(op.Value)), Endianness.Little);
 						break;
+
 					case CilElementType.R8:
 						goto default;
 					default:
@@ -438,6 +450,7 @@ namespace Mosa.Platform.x86
 				// mod = 11b, reg = rop1, r/m = rop2
 				modRM = (byte)((3 << 6) | (op1.Register.RegisterCode << 3) | op2.Register.RegisterCode);
 			}
+
 			// Check for register/memory combinations
 			else if (mop2 != null && mop2.OffsetBaseRegister != null)
 			{
@@ -478,6 +491,7 @@ namespace Mosa.Platform.x86
 			else if (op1IsRegister)
 			{
 				modRM = (byte)(modRM.GetValueOrDefault() | (3 << 6) | op1.Register.RegisterCode);
+
 				//if (op2 is SymbolOperand)
 				//    displacement = op2;
 			}
@@ -485,6 +499,6 @@ namespace Mosa.Platform.x86
 			return modRM;
 		}
 
-		#endregion // Code Generation
+		#endregion Code Generation
 	}
 }

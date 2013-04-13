@@ -13,7 +13,6 @@ namespace Mosa.Compiler.Verifier
 {
 	public abstract class BaseVerificationStage
 	{
-
 		protected VerifyAssembly verifyAssembly;
 		protected IMetadataProvider metadata;
 
@@ -35,7 +34,5 @@ namespace Mosa.Compiler.Verifier
 		{
 			verifyAssembly.AddVerificationEntry(new VerificationEntry(verifyAssembly.Module.Name, VerificationType.Error, section, error, description));
 		}
-
 	}
 }
-

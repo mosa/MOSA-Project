@@ -79,7 +79,7 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		private readonly PlugSystem plugSystem;
 
-		#endregion // Data members
+		#endregion Data members
 
 		#region Construction
 
@@ -110,7 +110,7 @@ namespace Mosa.Compiler.Framework
 			this.plugSystem = new PlugSystem();
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Properties
 
@@ -174,7 +174,7 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		public PlugSystem PlugSystem { get { return plugSystem; } }
 
-		#endregion // Properties
+		#endregion Properties
 
 		#region Methods
 
@@ -256,7 +256,7 @@ namespace Mosa.Compiler.Framework
 		{
 		}
 
-		#endregion // Methods
+		#endregion Methods
 
 		#region Helper Methods
 
@@ -280,6 +280,6 @@ namespace Mosa.Compiler.Framework
 			counters.UpdateCounter(name, count);
 		}
 
-		#endregion
+		#endregion Helper Methods
 	}
 }

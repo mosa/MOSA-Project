@@ -23,11 +23,11 @@ namespace Mosa.Compiler.Framework.CIL
 		#region Data members
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private readonly SigType typeRef;
 
-		#endregion // Data members
+		#endregion Data members
 
 		#region Construction
 
@@ -43,36 +43,45 @@ namespace Mosa.Compiler.Framework.CIL
 				case OpCode.Stelem_i1:
 					typeRef = BuiltInSigType.SByte;
 					break;
+
 				case OpCode.Stelem_i2:
 					typeRef = BuiltInSigType.Int16;
 					break;
+
 				case OpCode.Stelem_i4:
 					typeRef = BuiltInSigType.Int32;
 					break;
+
 				case OpCode.Stelem_i8:
 					typeRef = BuiltInSigType.Int64;
 					break;
+
 				case OpCode.Stelem_i:
 					typeRef = BuiltInSigType.IntPtr;
 					break;
+
 				case OpCode.Stelem_r4:
 					typeRef = BuiltInSigType.Single;
 					break;
+
 				case OpCode.Stelem_r8:
 					typeRef = BuiltInSigType.Double;
 					break;
+
 				case OpCode.Stelem_ref: // FIXME: Really object?
 					typeRef = BuiltInSigType.Object;
 					break;
+
 				case OpCode.Stelem:
 					typeRef = null;
 					break;
+
 				default:
 					throw new NotImplementedException("Not implemented: " + opcode);
 			}
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Methods
 
@@ -106,6 +115,5 @@ namespace Mosa.Compiler.Framework.CIL
 		}
 
 		#endregion Methods
-
 	}
 }

@@ -16,7 +16,7 @@ namespace Mosa.Compiler.Pdb
 	/// <summary>
 	/// Contains utility functions to parse CodeView/PDB files.
 	/// </summary>
-	static class CvUtil
+	internal static class CvUtil
 	{
 		/// <summary>
 		/// Reads a variable length C-style zero-terminated string.
@@ -67,7 +67,7 @@ namespace Mosa.Compiler.Pdb
 			}
 			while (term == -1);
 
-			// We've found the terminating index, reposition the 
+			// We've found the terminating index, reposition the
 			// stream after the \0
 			reader.BaseStream.Position = pos + term + 1;
 
@@ -90,6 +90,5 @@ namespace Mosa.Compiler.Pdb
 			if (mod > 0)
 				reader.BaseStream.Position += (byteBoundary - mod);
 		}
-
 	}
 }

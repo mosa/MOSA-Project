@@ -7,22 +7,21 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-
 namespace Mosa.Compiler.Metadata.Tables
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public struct TypeSpecRow
 	{
 		#region Data members
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private HeapIndexToken _signatureBlobIdx;
 
-		#endregion // Data members
+		#endregion Data members
 
 		#region Construction
 
@@ -35,7 +34,7 @@ namespace Mosa.Compiler.Metadata.Tables
 			_signatureBlobIdx = signatureBlobIdx;
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Properties
 
@@ -48,6 +47,6 @@ namespace Mosa.Compiler.Metadata.Tables
 			get { return _signatureBlobIdx; }
 		}
 
-		#endregion // Properties
+		#endregion Properties
 	}
 }

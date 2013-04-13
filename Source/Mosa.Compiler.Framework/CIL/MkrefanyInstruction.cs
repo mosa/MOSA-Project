@@ -14,7 +14,7 @@ using Mosa.Compiler.Metadata;
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public sealed class MkrefanyInstruction : UnaryInstruction
 	{
@@ -29,7 +29,7 @@ namespace Mosa.Compiler.Framework.CIL
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Methods
 
@@ -52,6 +52,7 @@ namespace Mosa.Compiler.Framework.CIL
 				_typeRef = MetadataTypeReference.FromToken(decoder.Metadata, token);
 				_results[0] = CreateResultOperand(MetadataTypeReference.FromName(decoder.Metadata, @"System", @"TypedReference"));
 			 */
+
 			// FIXME: Validate the operands
 			// FIXME: Do verification
 		}
@@ -67,6 +68,5 @@ namespace Mosa.Compiler.Framework.CIL
 		}
 
 		#endregion Methods
-
 	}
 }

@@ -6,7 +6,7 @@
  * Authors:
  *  Michael Fröhlich (grover) <michael.ruck@michaelruck.de>
  *  Kai P. Reisert <kpreisert@googlemail.com>
- *  
+ *
  */
 
 using System;
@@ -21,7 +21,6 @@ namespace Mosa.Test.Cases.OLD
 	[TestFixture]
 	public class Ceq : TestCompilerAdapter
 	{
-
 		private static string CreateConstantTestCode(string typeIn, string constLeft, string constRight)
 		{
 			if (String.IsNullOrEmpty(constRight))
@@ -77,10 +76,11 @@ namespace Mosa.Test.Cases.OLD
 			bool res = Run<bool>(string.Empty, @"Test", @"CeqConstant", b);
 			Assert.IsTrue(result == res);
 		}
-		#endregion
+
+		#endregion B
 
 		#region C
-	
+
 		[Row(false, 0, 'a')]
 		[Row(false, '-', '.')]
 		[Row(true, 'a', 'a')]
@@ -102,10 +102,11 @@ namespace Mosa.Test.Cases.OLD
 			bool res = Run<bool>(string.Empty, @"Test", @"CeqConstant", b);
 			Assert.IsTrue(result == res);
 		}
-		#endregion
+
+		#endregion C
 
 		#region I1
-		
+
 		[Row(true, 0, 0)]
 		[Row(false, -17, 42)]
 		[Row(true, sbyte.MinValue, sbyte.MinValue)]
@@ -129,10 +130,11 @@ namespace Mosa.Test.Cases.OLD
 			bool res = Run<bool>(string.Empty, @"Test", @"CeqConstant", b);
 			Assert.IsTrue(result == res);
 		}
-		#endregion
+
+		#endregion I1
 
 		#region I2
-		
+
 		[Row(true, 0, 0)]
 		[Row(false, -17, 42)]
 		[Row(true, short.MinValue, short.MinValue)]
@@ -156,10 +158,11 @@ namespace Mosa.Test.Cases.OLD
 			bool res = Run<bool>(string.Empty, @"Test", @"CeqConstant", b);
 			Assert.IsTrue(result == res);
 		}
-		#endregion
+
+		#endregion I2
 
 		#region I4
-		
+
 		[Row(true, 0, 0)]
 		[Row(false, -17, 42)]
 		[Row(true, int.MinValue, int.MinValue)]
@@ -183,10 +186,11 @@ namespace Mosa.Test.Cases.OLD
 			bool res = Run<bool>(string.Empty, @"Test", @"CeqConstant", b);
 			Assert.IsTrue(result == res);
 		}
-		#endregion
+
+		#endregion I4
 
 		#region I8
-		
+
 		[Row(true, 0, 0)]
 		[Row(false, -17, 42)]
 		[Row(true, long.MinValue, long.MinValue)]
@@ -210,10 +214,11 @@ namespace Mosa.Test.Cases.OLD
 			bool res = Run<bool>(string.Empty, @"Test", @"CeqConstant", b);
 			Assert.IsTrue(result == res);
 		}
-		#endregion
+
+		#endregion I8
 
 		#region U1
-		
+
 		[Row(true, 0, 0)]
 		[Row(false, 17, 142)]
 		[Row(true, byte.MaxValue, byte.MaxValue)]
@@ -237,10 +242,11 @@ namespace Mosa.Test.Cases.OLD
 			bool res = Run<bool>(string.Empty, @"Test", @"CeqConstant", b);
 			Assert.IsTrue(result == res);
 		}
-		#endregion
+
+		#endregion U1
 
 		#region U2
-	
+
 		[Row(true, 0, 0)]
 		[Row(false, 17, 142)]
 		[Row(true, ushort.MaxValue, ushort.MaxValue)]
@@ -253,7 +259,6 @@ namespace Mosa.Test.Cases.OLD
 			Assert.IsTrue(result == res);
 		}
 
-	
 		[Row(true, 0, 0)]
 		[Row(false, 17, 142)]
 		[Row(true, ushort.MaxValue, ushort.MaxValue)]
@@ -265,10 +270,11 @@ namespace Mosa.Test.Cases.OLD
 			bool res = Run<bool>(string.Empty, @"Test", @"CeqConstant", b);
 			Assert.IsTrue(result == res);
 		}
-		#endregion
+
+		#endregion U2
 
 		#region U4
-		
+
 		[Row(true, 0, 0)]
 		[Row(false, 17, 142)]
 		[Row(true, uint.MaxValue, uint.MaxValue)]
@@ -292,10 +298,11 @@ namespace Mosa.Test.Cases.OLD
 			bool res = Run<bool>(string.Empty, @"Test", @"CeqConstant", b);
 			Assert.IsTrue(result == res);
 		}
-		#endregion
+
+		#endregion U4
 
 		#region U8
-		
+
 		[Row(true, 0, 0)]
 		[Row(false, 17, 142)]
 		[Row(true, ulong.MaxValue, ulong.MaxValue)]
@@ -319,10 +326,11 @@ namespace Mosa.Test.Cases.OLD
 			bool res = Run<bool>(string.Empty, @"Test", @"CeqConstant", b);
 			Assert.IsTrue(result == res);
 		}
-		#endregion
+
+		#endregion U8
 
 		#region R4
-		
+
 		[Row(true, 0f, 0f)]
 		[Row(true, 13.9f, 13.9f)]
 		[Row(true, 11.91262f, 11.91262f)]
@@ -350,10 +358,11 @@ namespace Mosa.Test.Cases.OLD
 			bool res = Run<bool>(string.Empty, @"Test", @"CeqConstant", b);
 			Assert.IsTrue(result == res);
 		}
-		#endregion
+
+		#endregion R4
 
 		#region R8
-		
+
 		[Row(true, 0.0, 0.0)]
 		[Row(false, -17.0, 42.5)]
 		[Row(true, 1.79769313486231E+308, 1.79769313486231E+308)]
@@ -377,6 +386,7 @@ namespace Mosa.Test.Cases.OLD
 			bool res = Run<bool>(string.Empty, @"Test", @"CeqConstant", b);
 			Assert.IsTrue(result == res);
 		}
-		#endregion
+
+		#endregion R8
 	}
 }

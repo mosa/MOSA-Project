@@ -57,7 +57,7 @@ namespace Mosa.Compiler.Linker
 
 		public static ulong GetFinalMask(Patch[] patches)
 		{
-			ulong final =0;
+			ulong final = 0;
 
 			foreach (var patch in patches)
 			{

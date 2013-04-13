@@ -38,7 +38,7 @@ namespace Mosa.Compiler.TypeSystem
 		/// </summary>
 		private const byte ATTRIBUTE_EMPTY_STRING_LEN = 0x00;
 
-		#endregion // Constants
+		#endregion Constants
 
 		#region Methods
 
@@ -70,14 +70,14 @@ namespace Mosa.Compiler.TypeSystem
 
 				object[] args = new object[parameters];
 				for (int idx = 0; idx < parameters; idx++)
-                    args[idx] = ParseFixedArg(reader, attributeCtor.SigParameters[idx]);
+					args[idx] = ParseFixedArg(reader, attributeCtor.SigParameters[idx]);
 
 				// Create the attribute instance
 				return args;
 			}
 		}
 
-		#endregion // Methods
+		#endregion Methods
 
 		#region Internals
 
@@ -303,6 +303,6 @@ namespace Mosa.Compiler.TypeSystem
 			return result;
 		}
 
-		#endregion // Internals
+		#endregion Internals
 	}
 }

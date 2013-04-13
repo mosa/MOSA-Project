@@ -13,7 +13,7 @@ namespace Mosa.TestWorld.x86.Tests
 	public class StringTest : KernelTest
 	{
 		public StringTest()
-			: base("String") 
+			: base("String")
 		{
 			testMethods.Add(ConcatTest1);
 			testMethods.Add(ConcatTest2);

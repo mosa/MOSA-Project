@@ -12,7 +12,6 @@ using Mosa.Platform.x86.Intrinsic;
 
 namespace Mosa.CoolWorld.x86.HAL
 {
-
 	/// <summary>
 	/// Implementation of IReadWriteIOPort
 	/// </summary>
@@ -26,6 +25,7 @@ namespace Mosa.CoolWorld.x86.HAL
 		{
 			this.address = address;
 		}
+
 		/// <summary>
 		/// Read8s this instance.
 		/// </summary>
@@ -34,6 +34,7 @@ namespace Mosa.CoolWorld.x86.HAL
 		{
 			return Native.In8(address);
 		}
+
 		/// <summary>
 		/// Read16s this instance.
 		/// </summary>
@@ -42,6 +43,7 @@ namespace Mosa.CoolWorld.x86.HAL
 		{
 			return Native.In16(address);
 		}
+
 		/// <summary>
 		/// Read32s this instance.
 		/// </summary>
@@ -50,6 +52,7 @@ namespace Mosa.CoolWorld.x86.HAL
 		{
 			return Native.In32(address);
 		}
+
 		/// <summary>
 		/// Write8s the specified data.
 		/// </summary>
@@ -58,6 +61,7 @@ namespace Mosa.CoolWorld.x86.HAL
 		{
 			Native.Out8(address, data);
 		}
+
 		/// <summary>
 		/// Write16s the specified data.
 		/// </summary>
@@ -66,6 +70,7 @@ namespace Mosa.CoolWorld.x86.HAL
 		{
 			Native.Out16(address, data);
 		}
+
 		/// <summary>
 		/// Write32s the specified data.
 		/// </summary>
@@ -75,5 +80,4 @@ namespace Mosa.CoolWorld.x86.HAL
 			Native.Out32(address, data);
 		}
 	}
-
 }

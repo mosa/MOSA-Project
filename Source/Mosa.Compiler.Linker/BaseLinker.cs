@@ -22,7 +22,6 @@ namespace Mosa.Compiler.Linker
 	/// </summary>
 	public abstract class BaseLinker : ILinker
 	{
-
 		#region Data members
 
 		/// <summary>
@@ -41,7 +40,7 @@ namespace Mosa.Compiler.Linker
 		private readonly Dictionary<string, List<LinkRequest>> linkRequests = new Dictionary<string, List<LinkRequest>>();
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private readonly List<ExtendedLinkerSection> sections = new List<ExtendedLinkerSection>();
 
@@ -82,7 +81,7 @@ namespace Mosa.Compiler.Linker
 		/// </summary>
 		private uint sectionAlignment;
 
-		#endregion // Data members
+		#endregion Data members
 
 		#region Properties
 
@@ -182,7 +181,7 @@ namespace Mosa.Compiler.Linker
 			set { machineID = value; }
 		}
 
-		#endregion // Properties
+		#endregion Properties
 
 		#region Construction
 
@@ -196,7 +195,7 @@ namespace Mosa.Compiler.Linker
 			symbolsResolved = false;
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region ILinker Members
 
@@ -208,7 +207,7 @@ namespace Mosa.Compiler.Linker
 			// Layout the sections
 			LayoutSections();
 
-			// Resolve all symbols 
+			// Resolve all symbols
 			Resolve();
 
 			// Persist the file now
@@ -308,7 +307,7 @@ namespace Mosa.Compiler.Linker
 			list.Add(new LinkRequest(linkType, patches, symbolName, symbolOffset, methodRelativeBase, targetSymbol, targetOffset));
 		}
 
-		#endregion //  ILinker Members
+		#endregion ILinker Members
 
 		/// <summary>
 		/// Verifies the parameters.
@@ -473,6 +472,6 @@ namespace Mosa.Compiler.Linker
 			text.ApplyPatch(offset, linkType, value, mask, Endianness);
 		}
 
-		#endregion // Internals
+		#endregion Internals
 	}
 }

@@ -7,7 +7,6 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-
 namespace Mosa.Compiler.Framework.IR
 {
 	/// <summary>
@@ -39,6 +38,5 @@ namespace Mosa.Compiler.Framework.IR
 		{
 			visitor.MulSigned(context);
 		}
-
 	}
 }

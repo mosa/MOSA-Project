@@ -18,13 +18,11 @@ using Mosa.Compiler.Metadata;
 
 namespace Mosa.Platform.x86
 {
-
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public abstract class BaseTransformationStage : BasePlatformTransformationStage
 	{
-
 		protected override string Platform { get { return "x86"; } }
 
 		#region Emit Constant Methods
@@ -96,7 +94,6 @@ namespace Mosa.Platform.x86
 			return Operand.CreateLabel(cop.Type, name);
 		}
 
-		#endregion // Emit Methods
-
+		#endregion Emit Constant Methods
 	}
 }

@@ -16,7 +16,7 @@ namespace Mosa.Compiler.Pdb
 	/// <summary>
 	/// A read-only PDB type.
 	/// </summary>
-	class PdbReadType : PdbType
+	internal class PdbReadType : PdbType
 	{
 		#region Data Members
 
@@ -25,7 +25,7 @@ namespace Mosa.Compiler.Pdb
 		/// </summary>
 		private PdbReader pdbReader;
 
-		#endregion // Data Members
+		#endregion Data Members
 
 		#region Construction
 
@@ -43,7 +43,7 @@ namespace Mosa.Compiler.Pdb
 			this.pdbReader = pdbReader;
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region PdbType Overrides
 
@@ -70,11 +70,11 @@ namespace Mosa.Compiler.Pdb
 			}
 		}
 
-		#endregion // PdbType Overrides
+		#endregion PdbType Overrides
 
 		#region Types
 
-		class CvTypeSymbolEnumerator : CvSymbolEnumerator
+		private class CvTypeSymbolEnumerator : CvSymbolEnumerator
 		{
 			private int size;
 
@@ -100,6 +100,6 @@ namespace Mosa.Compiler.Pdb
 			}
 		}
 
-		#endregion // Types
+		#endregion Types
 	}
 }

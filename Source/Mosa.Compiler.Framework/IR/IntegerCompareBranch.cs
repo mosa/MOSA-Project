@@ -15,7 +15,7 @@ namespace Mosa.Compiler.Framework.IR
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Methods
 
@@ -29,6 +29,6 @@ namespace Mosa.Compiler.Framework.IR
 			visitor.IntegerCompareBranch(context);
 		}
 
-		#endregion
+		#endregion Methods
 	}
 }

@@ -10,7 +10,7 @@
 namespace Mosa.Compiler.Framework.IR
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public sealed class Throw : OneOperandInstruction
 	{

@@ -27,7 +27,7 @@ namespace Mosa.Compiler.Metadata.Loader
 
 		private List<IMetadataModule> modules = new List<IMetadataModule>();
 
-		#endregion // Data members
+		#endregion Data members
 
 		#region Construction
 
@@ -38,7 +38,7 @@ namespace Mosa.Compiler.Metadata.Loader
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region IAssemblyLoader
 
@@ -91,7 +91,7 @@ namespace Mosa.Compiler.Metadata.Loader
 				((IAssemblyLoader)this).AddPrivatePath(path);
 		}
 
-		#endregion // IAssemblyLoader
+		#endregion IAssemblyLoader
 
 		#region Internals
 
@@ -201,7 +201,6 @@ namespace Mosa.Compiler.Metadata.Loader
 			return privatePaths;
 		}
 
-		#endregion // Internals
-
+		#endregion Internals
 	}
 }

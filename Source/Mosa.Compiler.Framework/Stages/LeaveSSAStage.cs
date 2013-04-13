@@ -10,7 +10,6 @@
 
 using System.Diagnostics;
 using Mosa.Compiler.Framework.IR;
-using Mosa.Compiler.Framework.CIL;
 
 namespace Mosa.Compiler.Framework.Stages
 {
@@ -46,7 +45,6 @@ namespace Mosa.Compiler.Framework.Stages
 					{
 						context.Result = context.Result.SSAParent;
 					}
-
 				}
 			}
 		}
@@ -94,6 +92,5 @@ namespace Mosa.Compiler.Framework.Stages
 			if (destination != source)
 				context.AppendInstruction(IRInstruction.Move, destination, source);
 		}
-
 	}
 }

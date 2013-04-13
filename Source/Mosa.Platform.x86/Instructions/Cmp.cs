@@ -32,8 +32,8 @@ namespace Mosa.Platform.x86.Instructions
 		private static readonly OpCode M_R_16 = new OpCode(new byte[] { 0x66, 0x39 });
 		private static readonly OpCode R_M_16 = new OpCode(new byte[] { 0x66, 0x3B });
 
-		#endregion
-		
+		#endregion Data Member
+
 		#region Construction
 
 		/// <summary>
@@ -44,7 +44,7 @@ namespace Mosa.Platform.x86.Instructions
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Methods
 
@@ -94,7 +94,7 @@ namespace Mosa.Platform.x86.Instructions
 
 			throw new ArgumentException(String.Format(@"x86.Cmp: No opcode for operand types {0} and {1}.", source, third));
 		}
-		
+
 		/// Allows visitor based dispatch for this instruction object.
 		/// </summary>
 		/// <param name="visitor">The visitor object.</param>
@@ -104,6 +104,6 @@ namespace Mosa.Platform.x86.Instructions
 			visitor.Cmp(context);
 		}
 
-		#endregion // Methods
+		#endregion Methods
 	}
 }

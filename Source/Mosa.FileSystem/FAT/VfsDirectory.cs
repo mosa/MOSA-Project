@@ -12,12 +12,12 @@ using Mosa.FileSystem.VFS;
 namespace Mosa.FileSystem.FAT
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public class VfsDirectory : DirectoryNode
 	{
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected uint directoryCluster;
 
@@ -116,6 +116,5 @@ namespace Mosa.FileSystem.FAT
 
 			fs.Delete(targetCluster, location.DirectorySector, location.DirectorySectorIndex);
 		}
-
 	}
 }

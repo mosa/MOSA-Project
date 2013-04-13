@@ -24,6 +24,5 @@ namespace Mosa.Test.System.Numbers
 			foreach (T value in values)
 				list.AddIfNew<T>(value);
 		}
-
 	}
 }

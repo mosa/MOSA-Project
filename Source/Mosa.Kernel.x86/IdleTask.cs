@@ -9,9 +9,8 @@ using Mosa.Platform.x86.Intrinsic;
 
 namespace Mosa.Kernel.x86
 {
-
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public static class IdleTask
 	{
@@ -28,6 +27,5 @@ namespace Mosa.Kernel.x86
 				Native.Hlt();	// wait for interrupt
 			}
 		}
-
 	}
 }

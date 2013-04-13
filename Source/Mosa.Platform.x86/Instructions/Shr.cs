@@ -11,7 +11,6 @@
 using System;
 
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Metadata.Signatures;
 
 namespace Mosa.Platform.x86.Instructions
 {
@@ -20,15 +19,14 @@ namespace Mosa.Platform.x86.Instructions
 	/// </summary>
 	public sealed class Shr : X86Instruction
 	{
-
 		#region Data Members
 
 		private static readonly OpCode C = new OpCode(new byte[] { 0xC1 }, 5);
 		private static readonly OpCode C1 = new OpCode(new byte[] { 0xD1 }, 5);
 		private static readonly OpCode RM = new OpCode(new byte[] { 0xD3 }, 5);
 
-		#endregion
-		
+		#endregion Data Members
+
 		#region Construction
 
 		/// <summary>
@@ -39,7 +37,7 @@ namespace Mosa.Platform.x86.Instructions
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Methods
 
@@ -86,6 +84,6 @@ namespace Mosa.Platform.x86.Instructions
 			visitor.Shr(context);
 		}
 
-		#endregion // Methods
+		#endregion Methods
 	}
 }

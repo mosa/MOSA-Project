@@ -7,11 +7,10 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-
 namespace Mosa.Compiler.Metadata
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public enum IndexType
 	{

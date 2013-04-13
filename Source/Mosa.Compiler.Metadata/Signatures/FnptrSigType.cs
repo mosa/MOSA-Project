@@ -7,7 +7,6 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-
 namespace Mosa.Compiler.Metadata.Signatures
 {
 	/// <summary>
@@ -22,7 +21,7 @@ namespace Mosa.Compiler.Metadata.Signatures
 		/// </summary>
 		private HeapIndexToken heapIndexToken;
 
-		#endregion // Data members
+		#endregion Data members
 
 		#region Construction
 
@@ -36,7 +35,7 @@ namespace Mosa.Compiler.Metadata.Signatures
 			heapIndexToken = token;
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Properties
 
@@ -46,7 +45,7 @@ namespace Mosa.Compiler.Metadata.Signatures
 		/// <value>The token.</value>
 		public HeapIndexToken Token { get { return heapIndexToken; } }
 
-		#endregion // Properties
+		#endregion Properties
 
 		#region SigType Overrides
 
@@ -66,6 +65,6 @@ namespace Mosa.Compiler.Metadata.Signatures
 			return (base.Equals(other) == true && heapIndexToken == fst.heapIndexToken);
 		}
 
-		#endregion // SigType Overrides
+		#endregion SigType Overrides
 	}
 }

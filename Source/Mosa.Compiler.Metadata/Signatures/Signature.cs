@@ -13,11 +13,10 @@ using System.Diagnostics;
 namespace Mosa.Compiler.Metadata.Signatures
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public abstract class Signature
 	{
-
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Signature"/> class.
 		/// </summary>
@@ -95,6 +94,5 @@ namespace Mosa.Compiler.Metadata.Signatures
 				return new MethodSignature(reader);
 			}
 		}
-
 	}
 }

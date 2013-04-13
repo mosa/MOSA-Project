@@ -9,7 +9,6 @@
 
 namespace Mosa.DeviceSystem
 {
-
 	/// <summary>
 	/// Interface to IOPort without any read/write permissions
 	/// </summary>
@@ -32,11 +31,13 @@ namespace Mosa.DeviceSystem
 		/// </summary>
 		/// <returns></returns>
 		byte Read8();
+
 		/// <summary>
 		/// Read16s this instance.
 		/// </summary>
 		/// <returns></returns>
 		ushort Read16();
+
 		/// <summary>
 		/// Read32s this instance.
 		/// </summary>
@@ -54,11 +55,13 @@ namespace Mosa.DeviceSystem
 		/// </summary>
 		/// <param name="data">The data.</param>
 		void Write8(byte data);
+
 		/// <summary>
 		/// Write16s the specified data.
 		/// </summary>
 		/// <param name="data">The data.</param>
 		void Write16(ushort data);
+
 		/// <summary>
 		/// Write32s the specified data.
 		/// </summary>

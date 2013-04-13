@@ -7,11 +7,10 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-
 namespace System.Collections
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public interface IList : ICollection, IEnumerable
 	{

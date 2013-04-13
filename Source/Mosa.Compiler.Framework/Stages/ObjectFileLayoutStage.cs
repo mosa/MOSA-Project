@@ -8,8 +8,6 @@
  *  Bruce Markham (illuminus) <illuminus86@gmail.com>
  */
 
-using System;
-using Mosa.Compiler.Framework;
 using Mosa.Compiler.Linker;
 
 namespace Mosa.Compiler.Framework.Stages
@@ -19,7 +17,6 @@ namespace Mosa.Compiler.Framework.Stages
 	/// </summary>
 	public sealed class ObjectFileLayoutStage : BaseCompilerStage, ICompilerStage, IPipelineStage
 	{
-
 		#region ICompilerStage Overrides
 
 		void ICompilerStage.Setup(BaseCompiler compiler)
@@ -36,7 +33,7 @@ namespace Mosa.Compiler.Framework.Stages
 			LayoutSymbols();
 		}
 
-		#endregion // ICompilerStage Overrides
+		#endregion ICompilerStage Overrides
 
 		#region Methods
 
@@ -98,7 +95,6 @@ namespace Mosa.Compiler.Framework.Stages
 			return (value + (alignment - (value % alignment)));
 		}
 
-		#endregion // Methods
-
+		#endregion Methods
 	}
 }

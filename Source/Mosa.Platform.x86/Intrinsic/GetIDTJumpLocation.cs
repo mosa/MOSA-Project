@@ -8,11 +8,9 @@
  */
 
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Metadata.Signatures;
-using Mosa.Compiler.TypeSystem;
 using Mosa.Compiler.Framework.IR;
 
 namespace Mosa.Platform.x86.Intrinsic
@@ -52,6 +50,6 @@ namespace Mosa.Platform.x86.Intrinsic
 			context.SetInstruction(IRInstruction.Move, context.Result, Operand.CreateSymbol(BuiltInSigType.Ptr, @"Mosa.Tools.Compiler.LinkerGenerated.<$>InterruptISR" + irq.ToString() + "()"));
 		}
 
-		#endregion // Methods
+		#endregion Methods
 	}
 }

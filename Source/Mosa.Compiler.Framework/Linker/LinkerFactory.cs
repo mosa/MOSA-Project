@@ -15,7 +15,7 @@ using Mosa.Compiler.Linker.Elf64;
 namespace Mosa.Compiler.Framework.Linker
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public static class LinkerFactory
 	{

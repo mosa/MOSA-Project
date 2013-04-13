@@ -7,11 +7,10 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-
 namespace Mosa.DeviceSystem.PCI
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public interface IDeviceResource
 	{

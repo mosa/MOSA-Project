@@ -7,7 +7,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-
 namespace System.Runtime.InteropServices
 {
 	[AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct, Inherited = false)]
@@ -26,11 +25,10 @@ namespace System.Runtime.InteropServices
 		{
 			lkind = layoutKind;
 		}
-	
+
 		public LayoutKind Value
 		{
 			get { return lkind; }
 		}
-
 	}
 }

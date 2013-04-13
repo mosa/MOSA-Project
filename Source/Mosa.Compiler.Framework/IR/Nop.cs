@@ -7,11 +7,10 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-
 namespace Mosa.Compiler.Framework.IR
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public sealed class Nop : BaseIRInstruction
 	{
@@ -25,7 +24,7 @@ namespace Mosa.Compiler.Framework.IR
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Instruction
 
@@ -39,6 +38,6 @@ namespace Mosa.Compiler.Framework.IR
 			visitor.Nop(context);
 		}
 
-		#endregion // Instruction
+		#endregion Instruction
 	}
 }

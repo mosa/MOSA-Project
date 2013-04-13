@@ -10,7 +10,7 @@
 namespace Mosa.ClassLib
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public static class Math
 	{
@@ -80,5 +80,4 @@ namespace Mosa.ClassLib
 			if (a >= b) return a; else return b;
 		}
 	}
-
 }

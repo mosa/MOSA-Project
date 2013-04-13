@@ -4,7 +4,7 @@
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com> 
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 using System;
@@ -19,7 +19,6 @@ namespace Mosa.Test.Cases.CIL
 	[Importance(Importance.Critical)]
 	public class Int64Fixture : TestCompilerAdapter
 	{
-
 		public Int64Fixture()
 		{
 			settings.AddReference("Mosa.Test.Collection.dll");
@@ -65,7 +64,7 @@ namespace Mosa.Test.Cases.CIL
 		{
 			if (a == long.MinValue && b == -1)
 				Assert.Inconclusive("TODO: Overflow exception not implemented");
-			
+
 			Assert.AreEqual(Int64Tests.RemI8I8(a, b), Run<long>("Mosa.Test.Collection", "Int64Tests", "RemI8I8", a, b));
 		}
 
@@ -160,6 +159,5 @@ namespace Mosa.Test.Cases.CIL
 		{
 			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "Int64Tests", "Ldelema", index, value));
 		}
-
 	}
 }

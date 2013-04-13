@@ -7,23 +7,15 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
-using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.IR;
-using Mosa.Compiler.Framework.Platform;
-using Mosa.Compiler.Metadata;
-using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Compiler.Framework.RegisterAllocator;
-using Mosa.Compiler.InternalTrace;
 
 namespace Mosa.Compiler.Framework.Stages
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public sealed class GreedyRegisterAllocatorStage : BaseMethodCompilerStage, IMethodCompilerStage
 	{
-
 		#region IMethodCompilerStage Members
 
 		/// <summary>
@@ -38,9 +30,6 @@ namespace Mosa.Compiler.Framework.Stages
 			return;
 		}
 
-		#endregion // IMethodCompilerStage Members
-
+		#endregion IMethodCompilerStage Members
 	}
 }
-
-

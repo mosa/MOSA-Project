@@ -12,7 +12,7 @@ using System.IO;
 namespace Mosa.Compiler.Framework
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public enum ExceptionHandlerType : byte
 	{
@@ -38,41 +38,47 @@ namespace Mosa.Compiler.Framework
 	}
 
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public class ExceptionHandlingClause
 	{
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public ExceptionHandlerType ExceptionHandler;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public int TryOffset;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public int TryLength;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public int HandlerOffset;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public int HandlerLength;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public uint ClassToken;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public int FilterOffset;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public int TryEnd
 		{
@@ -80,7 +86,7 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public int HandlerEnd
 		{
@@ -145,10 +151,8 @@ namespace Mosa.Compiler.Framework
 			}
 			else
 			{
-				reader.ReadInt32();				
+				reader.ReadInt32();
 			}
 		}
-
-
 	}
 }

@@ -32,7 +32,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </summary>
 		private BasicBlock prologue;
 
-		#endregion // Data members
+		#endregion Data members
 
 		#region IMethodCompilerStage members
 
@@ -82,7 +82,7 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 		}
 
-		#endregion // IMethodCompilerStage members
+		#endregion IMethodCompilerStage members
 
 		/// <summary>
 		/// Finds all targets.

@@ -88,6 +88,5 @@ namespace Mosa.Compiler.Metadata.Signatures
 				reader.SkipByte();
 			}
 		}
-
 	}
 }

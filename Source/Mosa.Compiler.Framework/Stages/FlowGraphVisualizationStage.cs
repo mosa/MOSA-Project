@@ -20,31 +20,36 @@ namespace Mosa.Compiler.Framework.Stages
 		#region Data members
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IArchitecture arch;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private BasicBlock firstBlock;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected BitArray workArray;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected Stack<BasicBlock> workList;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		static protected Dictionary<string, int> methodCount = new Dictionary<string, int>();
-		/// <summary>
-		/// 
-		/// </summary>
-		System.IO.StreamWriter dotFile = null;
 
-		#endregion // Data members
+		/// <summary>
+		///
+		/// </summary>
+		private System.IO.StreamWriter dotFile = null;
+
+		#endregion Data members
 
 		#region IMethodCompilerStage Members
 
@@ -79,8 +84,10 @@ namespace Mosa.Compiler.Framework.Stages
 			IPipelineStage previousStage = methodCompiler.GetStage(typeof(IMethodCompilerStage));
 
 			dotFile.WriteLine("subgraph cluster" + methodName + "_FlowGraph {");
+
 			//dotFile.WriteLine("label = \"Method: " + methodName + "(" + methodCompiler.Method.Signature + ") after " + previousStage.Name + "\"");
 			dotFile.WriteLine("label = \"Method: " + methodName + " after " + previousStage.Name + "\"");
+
 			//dotFile.WriteLine("graph [rankdir = \"TB\"];");
 
 			string nodes = string.Empty;
@@ -93,6 +100,7 @@ namespace Mosa.Compiler.Framework.Stages
 				string nextNode = string.Empty;
 
 				nodeName = methodName + "_" + block.ToString();
+
 				//nodeName = nodeName.Replace("-", "_");
 
 				nodeContent += "<tr><td bgcolor=\"black\" align=\"center\" colspan=\"4\"><font face=\"Courier\" color=\"white\">L_" + block.Label.ToString("x4") + "</font></td></tr>";
@@ -117,7 +125,6 @@ namespace Mosa.Compiler.Framework.Stages
 					else
 						color = "#CFD6CEff";
 
-
 					nodeContent += "<tr height=\"20\"><td bgcolor=\"white\" align=\"right\" width=\"20\"><img src=\"icon.png\"/></td><td bgcolor=\"white\" align=\"right\">" + (i++) + "</td><td bgcolor=\"" + color + "\" align=\"center\" colspan=\"2\"><font face=\"Courier\">" + inst + "</font></td></tr>";
 
 					++field;
@@ -128,7 +135,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 				if (nodeContent != string.Empty)
 					nodes += "\"" + nodeName + "\" [label = <<table border=\"1\" cellborder=\"0\" cellpadding=\"3\" bgcolor=\"white\">" + nodeContent + "</table>> shape = \"Mrecord\"];\r\n";
-
 
 				foreach (BasicBlock nextBlock in block.NextBlocks)
 				{
@@ -144,7 +150,7 @@ namespace Mosa.Compiler.Framework.Stages
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public void Open()
 		{
@@ -162,7 +168,7 @@ namespace Mosa.Compiler.Framework.Stages
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public void Close()
 		{
@@ -170,6 +176,6 @@ namespace Mosa.Compiler.Framework.Stages
 			dotFile.Close();
 		}
 
-		#endregion // Methods
+		#endregion IMethodCompilerStage Members
 	}
 }

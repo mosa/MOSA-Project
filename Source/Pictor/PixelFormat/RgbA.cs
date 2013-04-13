@@ -8,10 +8,10 @@
  */
 #define USE_BLENDER
 
-
 namespace Pictor.PixelFormat
 {
 	/*
+
 		//=========================================================multiplier_rgba
 		template<class ColorT, class Order> struct multiplier_rgba
 		{
@@ -34,7 +34,6 @@ namespace Pictor.PixelFormat
 					p[Order::B] = value_type((p[Order::B] * a + ColorT::BaseMask) >> ColorT::BaseShift);
 				}
 			}
-
 
 			//--------------------------------------------------------------------
 			static void DeMultiply(value_type* p)
@@ -94,7 +93,6 @@ namespace Pictor.PixelFormat
 		private:
 			const GammaLut& m_gamma;
 		};
-	
 
 		//=============================================================blender_rgba
 		template<class ColorT, class Order> struct blender_rgba
@@ -103,16 +101,16 @@ namespace Pictor.PixelFormat
 			typedef Order order_type;
 			typedef typename color_type::value_type value_type;
 			typedef typename color_type::calc_type calc_type;
-			enum base_scale_e 
-			{ 
+			enum base_scale_e
+			{
 				BaseShift = color_type::BaseShift,
 				BaseMask  = color_type::BaseMask
 			};
 
 			//--------------------------------------------------------------------
-			static void BlendPixel(value_type* p, 
+			static void BlendPixel(value_type* p,
 											 uint cr, uint cg, uint cb,
-											 uint alpha, 
+											 uint alpha,
 											 uint cover=0)
 			{
 				calc_type r = p[Order::R];
@@ -126,27 +124,36 @@ namespace Pictor.PixelFormat
 			}
 		};
 	 */
+
 	public interface IBlender
 	{
 		uint NumPixelBits { get; }
 
 		int OrderR { get; }
+
 		int OrderG { get; }
+
 		int OrderB { get; }
+
 		int OrderA { get; }
 
 		unsafe void BlendPixel(byte* p, uint cr, uint cg, uint cb, uint alpha);
+
 		unsafe void BlendPixel(byte* p, uint cr, uint cg, uint cb, uint alpha, uint cover);
 	}
 
 	public class BlenderBaseBGRA
 	{
 		public uint NumPixelBits { get { return 32; } }
+
 		public enum Order { R = 2, G = 1, B = 0, A = 3 };
 
 		public int OrderR { get { return (int)Order.R; } }
+
 		public int OrderG { get { return (int)Order.G; } }
+
 		public int OrderB { get { return (int)Order.B; } }
+
 		public int OrderA { get { return (int)Order.A; } }
 
 		public const byte base_mask = 255;
@@ -154,7 +161,6 @@ namespace Pictor.PixelFormat
 
 	public sealed class BlenderBGRA : BlenderBaseBGRA, IBlender
 	{
-
 		unsafe public void BlendPixel(byte* p, uint cr, uint cg, uint cb, uint alpha, uint cover)
 		{
 			BlendPixel(p, cr, cg, cb, alpha);
@@ -217,7 +223,6 @@ namespace Pictor.PixelFormat
 				p[(int)Order.A] = (byte)((alpha + a) - ((alpha * a + base_mask) >> (int)RGBA_Bytes.BaseShift));
 			}
 		}
-
 	};
 
 	public sealed class BlenderPreMultBGRA : BlenderBaseBGRA, IBlender
@@ -247,7 +252,6 @@ namespace Pictor.PixelFormat
 				p[(int)Order.A] = (byte)(base_mask - ((OneOverAlpha * (base_mask - p[(int)Order.A])) >> (int)RGBA_Bytes.BaseShift));
 			}
 		}
-
 	};
 
 	public sealed class BlenderPreMultClampedBGRA : BlenderBaseBGRA, IBlender
@@ -271,10 +275,10 @@ namespace Pictor.PixelFormat
 			p[(int)Order.B] = (byte)System.Math.Min((((p[(int)Order.B] * OneOverAlpha) >> (int)RGBA_Bytes.BaseShift) + cr), base_mask);
 			p[(int)Order.A] = (byte)System.Math.Min((base_mask - ((OneOverAlpha * (base_mask - p[(int)Order.A])) >> (int)RGBA_Bytes.BaseShift)), base_mask);
 		}
-
 	};
 
 	/*
+
 //======================================================blender_rgba_plain
 template<class ColorT, class Order> struct blender_rgba_plain
 {
@@ -285,7 +289,7 @@ template<class ColorT, class Order> struct blender_rgba_plain
 	enum base_scale_e { BaseShift = color_type::BaseShift };
 
 	//--------------------------------------------------------------------
-	static void BlendPixel(value_type* p, 
+	static void BlendPixel(value_type* p,
 									 uint cr, uint cg, uint cb,
 									 uint alpha,
 									 uint cover=0)
@@ -303,16 +307,6 @@ template<class ColorT, class Order> struct blender_rgba_plain
 	}
 };
 
-
-
-
-
-
-
-
-
-
-
 //=========================================================comp_op_rgba_clear
 template<class ColorT, class Order> struct comp_op_rgba_clear
 {
@@ -320,12 +314,12 @@ template<class ColorT, class Order> struct comp_op_rgba_clear
 	typedef Order order_type;
 	typedef typename color_type::value_type value_type;
 	enum base_scale_e
-	{ 
+	{
 		BaseShift = color_type::BaseShift,
 		BaseMask  = color_type::BaseMask
 	};
 
-	static void BlendPixel(value_type* p, 
+	static void BlendPixel(value_type* p,
 									 uint, uint, uint, uint,
 									 uint cover)
 	{
@@ -339,7 +333,7 @@ template<class ColorT, class Order> struct comp_op_rgba_clear
 		}
 		else
 		{
-			p[0] = p[1] = p[2] = p[3] = 0; 
+			p[0] = p[1] = p[2] = p[3] = 0;
 		}
 	}
 };
@@ -351,8 +345,8 @@ template<class ColorT, class Order> struct comp_op_rgba_src
 	typedef Order order_type;
 	typedef typename color_type::value_type value_type;
 
-	static void BlendPixel(value_type* p, 
-									 uint sr, uint sg, uint sb, 
+	static void BlendPixel(value_type* p,
+									 uint sr, uint sg, uint sb,
 									 uint sa, uint cover)
 	{
 		if(cover < 255)
@@ -380,8 +374,8 @@ template<class ColorT, class Order> struct comp_op_rgba_dst
 	typedef Order order_type;
 	typedef typename color_type::value_type value_type;
 
-	static void BlendPixel(value_type*, 
-									 uint, uint, uint, 
+	static void BlendPixel(value_type*,
+									 uint, uint, uint,
 									 uint, uint)
 	{
 	}
@@ -395,15 +389,15 @@ template<class ColorT, class Order> struct comp_op_rgba_src_over
 	typedef typename color_type::value_type value_type;
 	typedef typename color_type::calc_type calc_type;
 	enum base_scale_e
-	{ 
+	{
 		BaseShift = color_type::BaseShift,
 		BaseMask  = color_type::BaseMask
 	};
 
 	//   Dca' = Sca + Dca.(1 - Sa)
-	//   Da'  = Sa + Da - Sa.Da 
-	static void BlendPixel(value_type* p, 
-									 uint sr, uint sg, uint sb, 
+	//   Da'  = Sa + Da - Sa.Da
+	static void BlendPixel(value_type* p,
+									 uint sr, uint sg, uint sb,
 									 uint sa, uint cover)
 	{
 		if(cover < 255)
@@ -429,15 +423,15 @@ template<class ColorT, class Order> struct comp_op_rgba_dst_over
 	typedef typename color_type::value_type value_type;
 	typedef typename color_type::calc_type calc_type;
 	enum base_scale_e
-	{ 
+	{
 		BaseShift = color_type::BaseShift,
 		BaseMask  = color_type::BaseMask
 	};
 
 	// Dca' = Dca + Sca.(1 - Da)
-	// Da'  = Sa + Da - Sa.Da 
-	static void BlendPixel(value_type* p, 
-									 uint sr, uint sg, uint sb, 
+	// Da'  = Sa + Da - Sa.Da
+	static void BlendPixel(value_type* p,
+									 uint sr, uint sg, uint sb,
 									 uint sa, uint cover)
 	{
 		if(cover < 255)
@@ -463,15 +457,15 @@ template<class ColorT, class Order> struct comp_op_rgba_src_in
 	typedef typename color_type::value_type value_type;
 	typedef typename color_type::calc_type calc_type;
 	enum base_scale_e
-	{ 
+	{
 		BaseShift = color_type::BaseShift,
 		BaseMask  = color_type::BaseMask
 	};
 
 	// Dca' = Sca.Da
-	// Da'  = Sa.Da 
-	static void BlendPixel(value_type* p, 
-									 uint sr, uint sg, uint sb, 
+	// Da'  = Sa.Da
+	static void BlendPixel(value_type* p,
+									 uint sr, uint sg, uint sb,
 									 uint sa, uint cover)
 	{
 		calc_type da = p[Order::A];
@@ -501,15 +495,15 @@ template<class ColorT, class Order> struct comp_op_rgba_dst_in
 	typedef typename color_type::value_type value_type;
 	typedef typename color_type::calc_type calc_type;
 	enum base_scale_e
-	{ 
+	{
 		BaseShift = color_type::BaseShift,
 		BaseMask  = color_type::BaseMask
 	};
 
 	// Dca' = Dca.Sa
-	// Da'  = Sa.Da 
-	static void BlendPixel(value_type* p, 
-									 uint, uint, uint, 
+	// Da'  = Sa.Da
+	static void BlendPixel(value_type* p,
+									 uint, uint, uint,
 									 uint sa, uint cover)
 	{
 		if(cover < 255)
@@ -531,15 +525,15 @@ template<class ColorT, class Order> struct comp_op_rgba_src_out
 	typedef typename color_type::value_type value_type;
 	typedef typename color_type::calc_type calc_type;
 	enum base_scale_e
-	{ 
+	{
 		BaseShift = color_type::BaseShift,
 		BaseMask  = color_type::BaseMask
 	};
 
 	// Dca' = Sca.(1 - Da)
-	// Da'  = Sa.(1 - Da) 
-	static void BlendPixel(value_type* p, 
-									 uint sr, uint sg, uint sb, 
+	// Da'  = Sa.(1 - Da)
+	static void BlendPixel(value_type* p,
+									 uint sr, uint sg, uint sb,
 									 uint sa, uint cover)
 	{
 		calc_type da = BaseMask - p[Order::A];
@@ -569,15 +563,15 @@ template<class ColorT, class Order> struct comp_op_rgba_dst_out
 	typedef typename color_type::value_type value_type;
 	typedef typename color_type::calc_type calc_type;
 	enum base_scale_e
-	{ 
+	{
 		BaseShift = color_type::BaseShift,
 		BaseMask  = color_type::BaseMask
 	};
 
-	// Dca' = Dca.(1 - Sa) 
-	// Da'  = Da.(1 - Sa) 
-	static void BlendPixel(value_type* p, 
-									 uint, uint, uint, 
+	// Dca' = Dca.(1 - Sa)
+	// Da'  = Da.(1 - Sa)
+	static void BlendPixel(value_type* p,
+									 uint, uint, uint,
 									 uint sa, uint cover)
 	{
 		if(cover < 255)
@@ -600,15 +594,15 @@ template<class ColorT, class Order> struct comp_op_rgba_src_atop
 	typedef typename color_type::value_type value_type;
 	typedef typename color_type::calc_type calc_type;
 	enum base_scale_e
-	{ 
+	{
 		BaseShift = color_type::BaseShift,
 		BaseMask  = color_type::BaseMask
 	};
 
 	// Dca' = Sca.Da + Dca.(1 - Sa)
 	// Da'  = Da
-	static void BlendPixel(value_type* p, 
-									 uint sr, uint sg, uint sb, 
+	static void BlendPixel(value_type* p,
+									 uint sr, uint sg, uint sb,
 									 uint sa, uint cover)
 	{
 		if(cover < 255)
@@ -634,15 +628,15 @@ template<class ColorT, class Order> struct comp_op_rgba_dst_atop
 	typedef typename color_type::value_type value_type;
 	typedef typename color_type::calc_type calc_type;
 	enum base_scale_e
-	{ 
+	{
 		BaseShift = color_type::BaseShift,
 		BaseMask  = color_type::BaseMask
 	};
 
 	// Dca' = Dca.Sa + Sca.(1 - Da)
-	// Da'  = Sa 
-	static void BlendPixel(value_type* p, 
-									 uint sr, uint sg, uint sb, 
+	// Da'  = Sa
+	static void BlendPixel(value_type* p,
+									 uint sr, uint sg, uint sb,
 									 uint sa, uint cover)
 	{
 		calc_type da = BaseMask - p[Order::A];
@@ -656,7 +650,6 @@ template<class ColorT, class Order> struct comp_op_rgba_dst_atop
 			p[Order::G] = (value_type)(((p[Order::G] * alpha + 255) >> 8) + ((sg * cover + 255) >> 8));
 			p[Order::B] = (value_type)(((p[Order::B] * alpha + 255) >> 8) + ((sb * cover + 255) >> 8));
 			p[Order::A] = (value_type)(((p[Order::A] * alpha + 255) >> 8) + ((sa * cover + 255) >> 8));
-
 		}
 		else
 		{
@@ -676,15 +669,15 @@ template<class ColorT, class Order> struct comp_op_rgba_xor
 	typedef typename color_type::value_type value_type;
 	typedef typename color_type::calc_type calc_type;
 	enum base_scale_e
-	{ 
+	{
 		BaseShift = color_type::BaseShift,
 		BaseMask  = color_type::BaseMask
 	};
 
 	// Dca' = Sca.(1 - Da) + Dca.(1 - Sa)
-	// Da'  = Sa + Da - 2.Sa.Da 
-	static void BlendPixel(value_type* p, 
-									 uint sr, uint sg, uint sb, 
+	// Da'  = Sa + Da - 2.Sa.Da
+	static void BlendPixel(value_type* p,
+									 uint sr, uint sg, uint sb,
 									 uint sa, uint cover)
 	{
 		if(cover < 255)
@@ -714,15 +707,15 @@ template<class ColorT, class Order> struct comp_op_rgba_plus
 	typedef typename color_type::value_type value_type;
 	typedef typename color_type::calc_type calc_type;
 	enum base_scale_e
-	{ 
+	{
 		BaseShift = color_type::BaseShift,
 		BaseMask  = color_type::BaseMask
 	};
 
 	// Dca' = Sca + Dca
-	// Da'  = Sa + Da 
-	static void BlendPixel(value_type* p, 
-									 uint sr, uint sg, uint sb, 
+	// Da'  = Sa + Da
+	static void BlendPixel(value_type* p,
+									 uint sr, uint sg, uint sb,
 									 uint sa, uint cover)
 	{
 		if(cover < 255)
@@ -754,15 +747,15 @@ template<class ColorT, class Order> struct comp_op_rgba_minus
 	typedef typename color_type::value_type value_type;
 	typedef typename color_type::calc_type calc_type;
 	enum base_scale_e
-	{ 
+	{
 		BaseShift = color_type::BaseShift,
 		BaseMask  = color_type::BaseMask
 	};
 
 	// Dca' = Dca - Sca
 	// Da' = 1 - (1 - Sa).(1 - Da)
-	static void BlendPixel(value_type* p, 
-									 uint sr, uint sg, uint sb, 
+	static void BlendPixel(value_type* p,
+									 uint sr, uint sg, uint sb,
 									 uint sa, uint cover)
 	{
 		if(cover < 255)
@@ -781,6 +774,7 @@ template<class ColorT, class Order> struct comp_op_rgba_minus
 			p[Order::G] = (dg > BaseMask) ? 0 : dg;
 			p[Order::B] = (db > BaseMask) ? 0 : db;
 			p[Order::A] = (value_type)(sa + p[Order::A] - ((sa * p[Order::A] + BaseMask) >> BaseShift));
+
 			//p[Order::A] = (value_type)(BaseMask - (((BaseMask - sa) * (BaseMask - p[Order::A]) + BaseMask) >> BaseShift));
 		}
 	}
@@ -794,15 +788,15 @@ template<class ColorT, class Order> struct comp_op_rgba_multiply
 	typedef typename color_type::value_type value_type;
 	typedef typename color_type::calc_type calc_type;
 	enum base_scale_e
-	{ 
+	{
 		BaseShift = color_type::BaseShift,
 		BaseMask  = color_type::BaseMask
 	};
 
 	// Dca' = Sca.Dca + Sca.(1 - Da) + Dca.(1 - Sa)
-	// Da'  = Sa + Da - Sa.Da 
-	static void BlendPixel(value_type* p, 
-									 uint sr, uint sg, uint sb, 
+	// Da'  = Sa + Da - Sa.Da
+	static void BlendPixel(value_type* p,
+									 uint sr, uint sg, uint sb,
 									 uint sa, uint cover)
 	{
 		if(cover < 255)
@@ -835,15 +829,15 @@ template<class ColorT, class Order> struct comp_op_rgba_screen
 	typedef typename color_type::value_type value_type;
 	typedef typename color_type::calc_type calc_type;
 	enum base_scale_e
-	{ 
+	{
 		BaseShift = color_type::BaseShift,
 		BaseMask  = color_type::BaseMask
 	};
 
 	// Dca' = Sca + Dca - Sca.Dca
-	// Da'  = Sa + Da - Sa.Da 
-	static void BlendPixel(value_type* p, 
-									 uint sr, uint sg, uint sb, 
+	// Da'  = Sa + Da - Sa.Da
+	static void BlendPixel(value_type* p,
+									 uint sr, uint sg, uint sb,
 									 uint sa, uint cover)
 	{
 		if(cover < 255)
@@ -875,7 +869,7 @@ template<class ColorT, class Order> struct comp_op_rgba_overlay
 	typedef typename color_type::value_type value_type;
 	typedef typename color_type::calc_type calc_type;
 	enum base_scale_e
-	{ 
+	{
 		BaseShift = color_type::BaseShift,
 		BaseMask  = color_type::BaseMask
 	};
@@ -884,10 +878,10 @@ template<class ColorT, class Order> struct comp_op_rgba_overlay
 	//   Dca' = 2.Sca.Dca + Sca.(1 - Da) + Dca.(1 - Sa)
 	// otherwise
 	//   Dca' = Sa.Da - 2.(Da - Dca).(Sa - Sca) + Sca.(1 - Da) + Dca.(1 - Sa)
-	// 
+	//
 	// Da' = Sa + Da - Sa.Da
-	static void BlendPixel(value_type* p, 
-									 uint sr, uint sg, uint sb, 
+	static void BlendPixel(value_type* p,
+									 uint sr, uint sg, uint sb,
 									 uint sa, uint cover)
 	{
 		if(cover < 255)
@@ -907,23 +901,22 @@ template<class ColorT, class Order> struct comp_op_rgba_overlay
 			calc_type da   = p[Order::A];
 			calc_type sada = sa * p[Order::A];
 
-			p[Order::R] = (value_type)(((2*dr < da) ? 
-				2*sr*dr + sr*d1a + dr*s1a : 
+			p[Order::R] = (value_type)(((2*dr < da) ?
+				2*sr*dr + sr*d1a + dr*s1a :
 				sada - 2*(da - dr)*(sa - sr) + sr*d1a + dr*s1a + BaseMask) >> BaseShift);
 
-			p[Order::G] = (value_type)(((2*dg < da) ? 
-				2*sg*dg + sg*d1a + dg*s1a : 
+			p[Order::G] = (value_type)(((2*dg < da) ?
+				2*sg*dg + sg*d1a + dg*s1a :
 				sada - 2*(da - dg)*(sa - sg) + sg*d1a + dg*s1a + BaseMask) >> BaseShift);
 
-			p[Order::B] = (value_type)(((2*db < da) ? 
-				2*sb*db + sb*d1a + db*s1a : 
+			p[Order::B] = (value_type)(((2*db < da) ?
+				2*sb*db + sb*d1a + db*s1a :
 				sada - 2*(da - db)*(sa - sb) + sb*d1a + db*s1a + BaseMask) >> BaseShift);
 
 			p[Order::A] = (value_type)(sa + da - ((sa * da + BaseMask) >> BaseShift));
 		}
 	}
 };
-
 
 template<class T> inline T sd_min(T a, T b) { return (a < b) ? a : b; }
 template<class T> inline T sd_max(T a, T b) { return (a > b) ? a : b; }
@@ -936,15 +929,15 @@ template<class ColorT, class Order> struct comp_op_rgba_darken
 	typedef typename color_type::value_type value_type;
 	typedef typename color_type::calc_type calc_type;
 	enum base_scale_e
-	{ 
+	{
 		BaseShift = color_type::BaseShift,
 		BaseMask  = color_type::BaseMask
 	};
 
 	// Dca' = min(Sca.Da, Dca.Sa) + Sca.(1 - Da) + Dca.(1 - Sa)
-	// Da'  = Sa + Da - Sa.Da 
-	static void BlendPixel(value_type* p, 
-									 uint sr, uint sg, uint sb, 
+	// Da'  = Sa + Da - Sa.Da
+	static void BlendPixel(value_type* p,
+									 uint sr, uint sg, uint sb,
 									 uint sa, uint cover)
 	{
 		if(cover < 255)
@@ -979,15 +972,15 @@ template<class ColorT, class Order> struct comp_op_rgba_lighten
 	typedef typename color_type::value_type value_type;
 	typedef typename color_type::calc_type calc_type;
 	enum base_scale_e
-	{ 
+	{
 		BaseShift = color_type::BaseShift,
 		BaseMask  = color_type::BaseMask
 	};
 
 	// Dca' = max(Sca.Da, Dca.Sa) + Sca.(1 - Da) + Dca.(1 - Sa)
-	// Da'  = Sa + Da - Sa.Da 
-	static void BlendPixel(value_type* p, 
-									 uint sr, uint sg, uint sb, 
+	// Da'  = Sa + Da - Sa.Da
+	static void BlendPixel(value_type* p,
+									 uint sr, uint sg, uint sb,
 									 uint sa, uint cover)
 	{
 		if(cover < 255)
@@ -1023,7 +1016,7 @@ template<class ColorT, class Order> struct comp_op_rgba_color_dodge
 	typedef typename color_type::calc_type calc_type;
 	typedef typename color_type::long_type long_type;
 	enum base_scale_e
-	{ 
+	{
 		BaseShift = color_type::BaseShift,
 		BaseMask  = color_type::BaseMask
 	};
@@ -1033,9 +1026,9 @@ template<class ColorT, class Order> struct comp_op_rgba_color_dodge
 	// otherwise
 	//   Dca' = Dca.Sa/(1-Sca/Sa) + Sca.(1 - Da) + Dca.(1 - Sa)
 	//
-	// Da'  = Sa + Da - Sa.Da 
-	static void BlendPixel(value_type* p, 
-									 uint sr, uint sg, uint sb, 
+	// Da'  = Sa + Da - Sa.Da
+	static void BlendPixel(value_type* p,
+									 uint sr, uint sg, uint sb,
 									 uint sa, uint cover)
 	{
 		if(cover < 255)
@@ -1061,15 +1054,15 @@ template<class ColorT, class Order> struct comp_op_rgba_color_dodge
 			long_type sbda = sb * da;
 			long_type sada = sa * da;
 
-			p[Order::R] = (value_type)((srda + drsa >= sada) ? 
+			p[Order::R] = (value_type)((srda + drsa >= sada) ?
 				(sada + sr * d1a + dr * s1a + BaseMask) >> BaseShift :
 				drsa / (BaseMask - (sr << BaseShift) / sa) + ((sr * d1a + dr * s1a + BaseMask) >> BaseShift));
 
-			p[Order::G] = (value_type)((sgda + dgsa >= sada) ? 
+			p[Order::G] = (value_type)((sgda + dgsa >= sada) ?
 				(sada + sg * d1a + dg * s1a + BaseMask) >> BaseShift :
 				dgsa / (BaseMask - (sg << BaseShift) / sa) + ((sg * d1a + dg * s1a + BaseMask) >> BaseShift));
 
-			p[Order::B] = (value_type)((sbda + dbsa >= sada) ? 
+			p[Order::B] = (value_type)((sbda + dbsa >= sada) ?
 				(sada + sb * d1a + db * s1a + BaseMask) >> BaseShift :
 				dbsa / (BaseMask - (sb << BaseShift) / sa) + ((sb * d1a + db * s1a + BaseMask) >> BaseShift));
 
@@ -1087,7 +1080,7 @@ template<class ColorT, class Order> struct comp_op_rgba_color_burn
 	typedef typename color_type::calc_type calc_type;
 	typedef typename color_type::long_type long_type;
 	enum base_scale_e
-	{ 
+	{
 		BaseShift = color_type::BaseShift,
 		BaseMask  = color_type::BaseMask
 	};
@@ -1096,10 +1089,10 @@ template<class ColorT, class Order> struct comp_op_rgba_color_burn
 	//   Dca' = Sca.(1 - Da) + Dca.(1 - Sa)
 	// otherwise
 	//   Dca' = Sa.(Sca.Da + Dca.Sa - Sa.Da)/Sca + Sca.(1 - Da) + Dca.(1 - Sa)
-	// 
-	// Da'  = Sa + Da - Sa.Da 
-	static void BlendPixel(value_type* p, 
-									 uint sr, uint sg, uint sb, 
+	//
+	// Da'  = Sa + Da - Sa.Da
+	static void BlendPixel(value_type* p,
+									 uint sr, uint sg, uint sb,
 									 uint sa, uint cover)
 	{
 		if(cover < 255)
@@ -1125,15 +1118,15 @@ template<class ColorT, class Order> struct comp_op_rgba_color_burn
 			long_type sbda = sb * da;
 			long_type sada = sa * da;
 
-			p[Order::R] = (value_type)(((srda + drsa <= sada) ? 
+			p[Order::R] = (value_type)(((srda + drsa <= sada) ?
 				sr * d1a + dr * s1a :
 				sa * (srda + drsa - sada) / sr + sr * d1a + dr * s1a + BaseMask) >> BaseShift);
 
-			p[Order::G] = (value_type)(((sgda + dgsa <= sada) ? 
+			p[Order::G] = (value_type)(((sgda + dgsa <= sada) ?
 				sg * d1a + dg * s1a :
 				sa * (sgda + dgsa - sada) / sg + sg * d1a + dg * s1a + BaseMask) >> BaseShift);
 
-			p[Order::B] = (value_type)(((sbda + dbsa <= sada) ? 
+			p[Order::B] = (value_type)(((sbda + dbsa <= sada) ?
 				sb * d1a + db * s1a :
 				sa * (sbda + dbsa - sada) / sb + sb * d1a + db * s1a + BaseMask) >> BaseShift);
 
@@ -1151,7 +1144,7 @@ template<class ColorT, class Order> struct comp_op_rgba_hard_light
 	typedef typename color_type::calc_type calc_type;
 	typedef typename color_type::long_type long_type;
 	enum base_scale_e
-	{ 
+	{
 		BaseShift = color_type::BaseShift,
 		BaseMask  = color_type::BaseMask
 	};
@@ -1160,10 +1153,10 @@ template<class ColorT, class Order> struct comp_op_rgba_hard_light
 	//    Dca' = 2.Sca.Dca + Sca.(1 - Da) + Dca.(1 - Sa)
 	// otherwise
 	//    Dca' = Sa.Da - 2.(Da - Dca).(Sa - Sca) + Sca.(1 - Da) + Dca.(1 - Sa)
-	// 
+	//
 	// Da'  = Sa + Da - Sa.Da
-	static void BlendPixel(value_type* p, 
-									 uint sr, uint sg, uint sb, 
+	static void BlendPixel(value_type* p,
+									 uint sr, uint sg, uint sb,
 									 uint sa, uint cover)
 	{
 		if(cover < 255)
@@ -1183,16 +1176,16 @@ template<class ColorT, class Order> struct comp_op_rgba_hard_light
 			calc_type da   = p[Order::A];
 			calc_type sada = sa * da;
 
-			p[Order::R] = (value_type)(((2*sr < sa) ? 
-				2*sr*dr + sr*d1a + dr*s1a : 
+			p[Order::R] = (value_type)(((2*sr < sa) ?
+				2*sr*dr + sr*d1a + dr*s1a :
 				sada - 2*(da - dr)*(sa - sr) + sr*d1a + dr*s1a + BaseMask) >> BaseShift);
 
-			p[Order::G] = (value_type)(((2*sg < sa) ? 
-				2*sg*dg + sg*d1a + dg*s1a : 
+			p[Order::G] = (value_type)(((2*sg < sa) ?
+				2*sg*dg + sg*d1a + dg*s1a :
 				sada - 2*(da - dg)*(sa - sg) + sg*d1a + dg*s1a + BaseMask) >> BaseShift);
 
-			p[Order::B] = (value_type)(((2*sb < sa) ? 
-				2*sb*db + sb*d1a + db*s1a : 
+			p[Order::B] = (value_type)(((2*sb < sa) ?
+				2*sb*db + sb*d1a + db*s1a :
 				sada - 2*(da - db)*(sa - sb) + sb*d1a + db*s1a + BaseMask) >> BaseShift);
 
 			p[Order::A] = (value_type)(sa + da - ((sa * da + BaseMask) >> BaseShift));
@@ -1209,7 +1202,7 @@ template<class ColorT, class Order> struct comp_op_rgba_soft_light
 	typedef typename color_type::calc_type calc_type;
 	typedef typename color_type::long_type long_type;
 	enum base_scale_e
-	{ 
+	{
 		BaseShift = color_type::BaseShift,
 		BaseMask  = color_type::BaseMask
 	};
@@ -1220,11 +1213,11 @@ template<class ColorT, class Order> struct comp_op_rgba_soft_light
 	//   Dca' = Dca.(Sa + (1 - Dca/Da).(2.Sca - Sa).(3 - 8.Dca/Da)) + Sca.(1 - Da) + Dca.(1 - Sa)
 	// otherwise
 	//   Dca' = (Dca.Sa + ((Dca/Da)^(0.5).Da - Dca).(2.Sca - Sa)) + Sca.(1 - Da) + Dca.(1 - Sa)
-	// 
-	// Da'  = Sa + Da - Sa.Da 
+	//
+	// Da'  = Sa + Da - Sa.Da
 
-	static void BlendPixel(value_type* p, 
-									 uint r, uint g, uint b, 
+	static void BlendPixel(value_type* p,
+									 uint r, uint g, uint b,
 									 uint a, uint cover)
 	{
 		double sr = double(r * cover) / (BaseMask * 255);
@@ -1271,16 +1264,16 @@ template<class ColorT, class Order> struct comp_op_rgba_difference
 	typedef typename color_type::calc_type calc_type;
 	typedef typename color_type::long_type long_type;
 	enum base_scale_e
-	{ 
+	{
 		BaseShift = color_type::BaseShift,
 		base_scale = color_type::base_scale,
 		BaseMask  = color_type::BaseMask
 	};
 
 	// Dca' = Sca + Dca - 2.min(Sca.Da, Dca.Sa)
-	// Da'  = Sa + Da - Sa.Da 
-	static void BlendPixel(value_type* p, 
-									 uint sr, uint sg, uint sb, 
+	// Da'  = Sa + Da - Sa.Da
+	static void BlendPixel(value_type* p,
+									 uint sr, uint sg, uint sb,
 									 uint sa, uint cover)
 	{
 		if(cover < 255)
@@ -1313,15 +1306,15 @@ template<class ColorT, class Order> struct comp_op_rgba_exclusion
 	typedef typename color_type::calc_type calc_type;
 	typedef typename color_type::long_type long_type;
 	enum base_scale_e
-	{ 
+	{
 		BaseShift = color_type::BaseShift,
 		BaseMask  = color_type::BaseMask
 	};
 
 	// Dca' = (Sca.Da + Dca.Sa - 2.Sca.Dca) + Sca.(1 - Da) + Dca.(1 - Sa)
-	// Da'  = Sa + Da - Sa.Da 
-	static void BlendPixel(value_type* p, 
-									 uint sr, uint sg, uint sb, 
+	// Da'  = Sa + Da - Sa.Da
+	static void BlendPixel(value_type* p,
+									 uint sr, uint sg, uint sb,
 									 uint sa, uint cover)
 	{
 		if(cover < 255)
@@ -1356,14 +1349,13 @@ template<class ColorT, class Order> struct comp_op_rgba_contrast
 	typedef typename color_type::calc_type calc_type;
 	typedef typename color_type::long_type long_type;
 	enum base_scale_e
-	{ 
+	{
 		BaseShift = color_type::BaseShift,
 		BaseMask  = color_type::BaseMask
 	};
 
-
-	static void BlendPixel(value_type* p, 
-									 uint sr, uint sg, uint sb, 
+	static void BlendPixel(value_type* p,
+									 uint sr, uint sg, uint sb,
 									 uint sa, uint cover)
 	{
 		if(cover < 255)
@@ -1380,9 +1372,9 @@ template<class ColorT, class Order> struct comp_op_rgba_contrast
 		long_type d2a = da >> 1;
 		uint s2a = sa >> 1;
 
-		int r = (int)((((dr - d2a) * int((sr - s2a)*2 + BaseMask)) >> BaseShift) + d2a); 
-		int g = (int)((((dg - d2a) * int((sg - s2a)*2 + BaseMask)) >> BaseShift) + d2a); 
-		int b = (int)((((db - d2a) * int((sb - s2a)*2 + BaseMask)) >> BaseShift) + d2a); 
+		int r = (int)((((dr - d2a) * int((sr - s2a)*2 + BaseMask)) >> BaseShift) + d2a);
+		int g = (int)((((dg - d2a) * int((sg - s2a)*2 + BaseMask)) >> BaseShift) + d2a);
+		int b = (int)((((db - d2a) * int((sb - s2a)*2 + BaseMask)) >> BaseShift) + d2a);
 
 		r = (r < 0) ? 0 : r;
 		g = (g < 0) ? 0 : g;
@@ -1403,15 +1395,15 @@ template<class ColorT, class Order> struct comp_op_rgba_invert
 	typedef typename color_type::calc_type calc_type;
 	typedef typename color_type::long_type long_type;
 	enum base_scale_e
-	{ 
+	{
 		BaseShift = color_type::BaseShift,
 		BaseMask  = color_type::BaseMask
 	};
 
 	// Dca' = (Da - Dca) * Sa + Dca.(1 - Sa)
-	// Da'  = Sa + Da - Sa.Da 
-	static void BlendPixel(value_type* p, 
-									 uint sr, uint sg, uint sb, 
+	// Da'  = Sa + Da - Sa.Da
+	static void BlendPixel(value_type* p,
+									 uint sr, uint sg, uint sb,
 									 uint sa, uint cover)
 	{
 		sa = (sa * cover + 255) >> 8;
@@ -1439,15 +1431,15 @@ template<class ColorT, class Order> struct comp_op_rgba_invert_rgb
 	typedef typename color_type::calc_type calc_type;
 	typedef typename color_type::long_type long_type;
 	enum base_scale_e
-	{ 
+	{
 		BaseShift = color_type::BaseShift,
 		BaseMask  = color_type::BaseMask
 	};
 
 	// Dca' = (Da - Dca) * Sca + Dca.(1 - Sa)
-	// Da'  = Sa + Da - Sa.Da 
-	static void BlendPixel(value_type* p, 
-									 uint sr, uint sg, uint sb, 
+	// Da'  = Sa + Da - Sa.Da
+	static void BlendPixel(value_type* p,
+									 uint sr, uint sg, uint sb,
 									 uint sa, uint cover)
 	{
 		if(cover < 255)
@@ -1472,17 +1464,13 @@ template<class ColorT, class Order> struct comp_op_rgba_invert_rgb
 	}
 };
 
-
-
-
-
 //======================================================comp_op_table_rgba
 template<class ColorT, class Order> struct comp_op_table_rgba
 {
 	typedef typename ColorT::value_type value_type;
-	typedef void (*comp_op_func_type)(value_type* p, 
-									  uint cr, 
-									  uint cg, 
+	typedef void (*comp_op_func_type)(value_type* p,
+									  uint cr,
+									  uint cg,
 									  uint cb,
 									  uint ca,
 									  uint cover);
@@ -1490,9 +1478,9 @@ template<class ColorT, class Order> struct comp_op_table_rgba
 };
 
 //==========================================================g_comp_op_func
-template<class ColorT, class Order> 
+template<class ColorT, class Order>
 typename comp_op_table_rgba<ColorT, Order>::comp_op_func_type
-comp_op_table_rgba<ColorT, Order>::g_comp_op_func[] = 
+comp_op_table_rgba<ColorT, Order>::g_comp_op_func[] =
 {
 	comp_op_rgba_clear      <ColorT,Order>::BlendPixel,
 	comp_op_rgba_src        <ColorT,Order>::BlendPixel,
@@ -1524,7 +1512,6 @@ comp_op_table_rgba<ColorT, Order>::g_comp_op_func[] =
 	comp_op_rgba_invert_rgb <ColorT,Order>::BlendPixel,
 	0
 };
-
 
 //==============================================================comp_op_e
 enum comp_op_e
@@ -1561,12 +1548,6 @@ enum comp_op_e
 	end_of_comp_op_e
 };
 
-
-
-
-
-
-
 //====================================================comp_op_adaptor_rgba
 template<class ColorT, class Order> struct comp_op_adaptor_rgba
 {
@@ -1574,18 +1555,18 @@ template<class ColorT, class Order> struct comp_op_adaptor_rgba
 	typedef ColorT color_type;
 	typedef typename color_type::value_type value_type;
 	enum base_scale_e
-	{  
+	{
 		BaseShift = color_type::BaseShift,
-		BaseMask  = color_type::BaseMask 
+		BaseMask  = color_type::BaseMask
 	};
 
-	static void BlendPixel(uint op, value_type* p, 
+	static void BlendPixel(uint op, value_type* p,
 									 uint cr, uint cg, uint cb,
 									 uint ca,
 									 uint cover)
 	{
 		comp_op_table_rgba<ColorT, Order>::g_comp_op_func[op]
-			(p, (cr * ca + BaseMask) >> BaseShift, 
+			(p, (cr * ca + BaseMask) >> BaseShift,
 				(cg * ca + BaseMask) >> BaseShift,
 				(cb * ca + BaseMask) >> BaseShift,
 				 ca, cover);
@@ -1599,12 +1580,12 @@ template<class ColorT, class Order> struct comp_op_adaptor_clip_to_dst_rgba
 	typedef ColorT color_type;
 	typedef typename color_type::value_type value_type;
 	enum base_scale_e
-	{  
+	{
 		BaseShift = color_type::BaseShift,
-		BaseMask  = color_type::BaseMask 
+		BaseMask  = color_type::BaseMask
 	};
 
-	static void BlendPixel(uint op, value_type* p, 
+	static void BlendPixel(uint op, value_type* p,
 									 uint cr, uint cg, uint cb,
 									 uint ca,
 									 uint cover)
@@ -1614,10 +1595,10 @@ template<class ColorT, class Order> struct comp_op_adaptor_clip_to_dst_rgba
 		cb = (cb * ca + BaseMask) >> BaseShift;
 		uint da = p[Order::A];
 		comp_op_table_rgba<ColorT, Order>::g_comp_op_func[op]
-			(p, (cr * da + BaseMask) >> BaseShift, 
-				(cg * da + BaseMask) >> BaseShift, 
-				(cb * da + BaseMask) >> BaseShift, 
-				(ca * da + BaseMask) >> BaseShift, 
+			(p, (cr * da + BaseMask) >> BaseShift,
+				(cg * da + BaseMask) >> BaseShift,
+				(cb * da + BaseMask) >> BaseShift,
+				(ca * da + BaseMask) >> BaseShift,
 				cover);
 	}
 };
@@ -1629,12 +1610,12 @@ template<class ColorT, class Order> struct comp_op_adaptor_rgba_pre
 	typedef ColorT color_type;
 	typedef typename color_type::value_type value_type;
 	enum base_scale_e
-	{  
+	{
 		BaseShift = color_type::BaseShift,
-		BaseMask  = color_type::BaseMask 
+		BaseMask  = color_type::BaseMask
 	};
 
-	static void BlendPixel(uint op, value_type* p, 
+	static void BlendPixel(uint op, value_type* p,
 									 uint cr, uint cg, uint cb,
 									 uint ca,
 									 uint cover)
@@ -1650,22 +1631,22 @@ template<class ColorT, class Order> struct comp_op_adaptor_clip_to_dst_rgba_pre
 	typedef ColorT color_type;
 	typedef typename color_type::value_type value_type;
 	enum base_scale_e
-	{  
+	{
 		BaseShift = color_type::BaseShift,
-		BaseMask  = color_type::BaseMask 
+		BaseMask  = color_type::BaseMask
 	};
 
-	static void BlendPixel(uint op, value_type* p, 
+	static void BlendPixel(uint op, value_type* p,
 									 uint cr, uint cg, uint cb,
 									 uint ca,
 									 uint cover)
 	{
 		uint da = p[Order::A];
 		comp_op_table_rgba<ColorT, Order>::g_comp_op_func[op]
-			(p, (cr * da + BaseMask) >> BaseShift, 
-				(cg * da + BaseMask) >> BaseShift, 
-				(cb * da + BaseMask) >> BaseShift, 
-				(ca * da + BaseMask) >> BaseShift, 
+			(p, (cr * da + BaseMask) >> BaseShift,
+				(cg * da + BaseMask) >> BaseShift,
+				(cb * da + BaseMask) >> BaseShift,
+				(ca * da + BaseMask) >> BaseShift,
 				cover);
 	}
 };
@@ -1677,18 +1658,18 @@ template<class BlenderPre> struct comp_adaptor_rgba
 	typedef typename BlenderPre::color_type color_type;
 	typedef typename color_type::value_type value_type;
 	enum base_scale_e
-	{  
+	{
 		BaseShift = color_type::BaseShift,
-		BaseMask  = color_type::BaseMask 
+		BaseMask  = color_type::BaseMask
 	};
 
-	static void BlendPixel(uint op, value_type* p, 
+	static void BlendPixel(uint op, value_type* p,
 									 uint cr, uint cg, uint cb,
 									 uint ca,
 									 uint cover)
 	{
-		BlenderPre::BlendPixel(p, 
-							  (cr * ca + BaseMask) >> BaseShift, 
+		BlenderPre::BlendPixel(p,
+							  (cr * ca + BaseMask) >> BaseShift,
 							  (cg * ca + BaseMask) >> BaseShift,
 							  (cb * ca + BaseMask) >> BaseShift,
 							  ca, cover);
@@ -1702,12 +1683,12 @@ template<class BlenderPre> struct comp_adaptor_clip_to_dst_rgba
 	typedef typename BlenderPre::color_type color_type;
 	typedef typename color_type::value_type value_type;
 	enum base_scale_e
-	{  
+	{
 		BaseShift = color_type::BaseShift,
-		BaseMask  = color_type::BaseMask 
+		BaseMask  = color_type::BaseMask
 	};
 
-	static void BlendPixel(uint op, value_type* p, 
+	static void BlendPixel(uint op, value_type* p,
 									 uint cr, uint cg, uint cb,
 									 uint ca,
 									 uint cover)
@@ -1716,11 +1697,11 @@ template<class BlenderPre> struct comp_adaptor_clip_to_dst_rgba
 		cg = (cg * ca + BaseMask) >> BaseShift;
 		cb = (cb * ca + BaseMask) >> BaseShift;
 		uint da = p[OrderA];
-		BlenderPre::BlendPixel(p, 
-							  (cr * da + BaseMask) >> BaseShift, 
-							  (cg * da + BaseMask) >> BaseShift, 
-							  (cb * da + BaseMask) >> BaseShift, 
-							  (ca * da + BaseMask) >> BaseShift, 
+		BlenderPre::BlendPixel(p,
+							  (cr * da + BaseMask) >> BaseShift,
+							  (cg * da + BaseMask) >> BaseShift,
+							  (cb * da + BaseMask) >> BaseShift,
+							  (ca * da + BaseMask) >> BaseShift,
 							  cover);
 	}
 };
@@ -1732,32 +1713,30 @@ template<class BlenderPre> struct comp_adaptor_clip_to_dst_rgba_pre
 	typedef typename BlenderPre::color_type color_type;
 	typedef typename color_type::value_type value_type;
 	enum base_scale_e
-	{  
+	{
 		BaseShift = color_type::BaseShift,
-		BaseMask  = color_type::BaseMask 
+		BaseMask  = color_type::BaseMask
 	};
 
-	static void BlendPixel(uint op, value_type* p, 
+	static void BlendPixel(uint op, value_type* p,
 									 uint cr, uint cg, uint cb,
 									 uint ca,
 									 uint cover)
 	{
 		uint da = p[OrderA];
-		BlenderPre::BlendPixel(p, 
-							  (cr * da + BaseMask) >> BaseShift, 
-							  (cg * da + BaseMask) >> BaseShift, 
-							  (cb * da + BaseMask) >> BaseShift, 
-							  (ca * da + BaseMask) >> BaseShift, 
+		BlenderPre::BlendPixel(p,
+							  (cr * da + BaseMask) >> BaseShift,
+							  (cg * da + BaseMask) >> BaseShift,
+							  (cb * da + BaseMask) >> BaseShift,
+							  (ca * da + BaseMask) >> BaseShift,
 							  cover);
 	}
 };
 
-
-
-
 */
+
 	//===============================================copy_or_blend_rgba_wrapper
-	//template<class Blender> 
+	//template<class Blender>
 	public static class CopyOrBlendBGRAWrapper
 	{
 		//private IBlender m_Blender;
@@ -1766,7 +1745,7 @@ template<class BlenderPre> struct comp_adaptor_clip_to_dst_rgba_pre
 		//typedef typename color_type::value_type value_type;
 		//typedef typename color_type::calc_type calc_type;
 
-		enum Order
+		private enum Order
 		{
 			R = 2,
 			G = 1,
@@ -1774,7 +1753,7 @@ template<class BlenderPre> struct comp_adaptor_clip_to_dst_rgba_pre
 			A = 3
 		};
 
-		const byte base_mask = 255;
+		private const byte base_mask = 255;
 
 		//--------------------------------------------------------------------
 		public unsafe static void CopyOrBlendPixel(IBlender Blender, byte* p, uint cr, uint cg, uint cb, uint alpha)
@@ -1824,10 +1803,9 @@ template<class BlenderPre> struct comp_adaptor_clip_to_dst_rgba_pre
 	};
 
 	//=================================================pixfmt_alpha_blend_rgba
-	//template<class Blender, class RenBuf, class PixelT = int32u> 
+	//template<class Blender, class RenBuf, class PixelT = int32u>
 	public sealed class FormatRGBA : IPixelFormat
 	{
-
 		private RasterBuffer m_rbuf;
 		private IBlender m_Blender;
 		private int OrderR;
@@ -1835,9 +1813,10 @@ template<class BlenderPre> struct comp_adaptor_clip_to_dst_rgba_pre
 		private int OrderB;
 		private int OrderA;
 
-		const byte base_mask = 255;
+		private const byte base_mask = 255;
 
 		public uint PixelWidthInBytes { get { return 4; } }
+
 		//--------------------------------------------------------------------
 		public FormatRGBA(RasterBuffer rb, IBlender blender, GammaLookupTable gammaTable)
 			: this(rb, blender)
@@ -1872,10 +1851,14 @@ template<class BlenderPre> struct comp_adaptor_clip_to_dst_rgba_pre
 			}
 		}
 
-		public void attach(RasterBuffer rb) { m_rbuf = rb; }
+		public void attach(RasterBuffer rb)
+		{
+			m_rbuf = rb;
+		}
 
 		//--------------------------------------------------------------------
 		/*
+
 		//template<class PixFmt>
 		public bool Attach(PixFmt& pixf, int x1, int y1, int x2, int y2)
 		{
@@ -1883,7 +1866,7 @@ template<class BlenderPre> struct comp_adaptor_clip_to_dst_rgba_pre
 			if(r.Clip(RectI(0, 0, pixf.Width()-1, pixf.Height()-1)))
 			{
 				int Stride = pixf.Stride();
-				m_rbuf->Attach(pixf.PixelPointer(r.x1, Stride < 0 ? r.y2 : r.y1), 
+				m_rbuf->Attach(pixf.PixelPointer(r.x1, Stride < 0 ? r.y2 : r.y1),
 							   (r.x2 - r.x1) + 1,
 							   (r.y2 - r.y1) + 1,
 							   Stride);
@@ -1898,10 +1881,12 @@ template<class BlenderPre> struct comp_adaptor_clip_to_dst_rgba_pre
 		{
 			get { return m_rbuf.Width(); }
 		}
+
 		public uint Height
 		{
 			get { return m_rbuf.Height(); }
 		}
+
 		public int Stride
 		{
 			get { return m_rbuf.StrideInBytes(); }
@@ -1912,7 +1897,12 @@ template<class BlenderPre> struct comp_adaptor_clip_to_dst_rgba_pre
 		{
 			get { return m_rbuf; }
 		}
-		unsafe public byte* RowPointer(int y) { return m_rbuf.GetPixelPointer(y); }
+
+		unsafe public byte* RowPointer(int y)
+		{
+			return m_rbuf.GetPixelPointer(y);
+		}
+
 		//unsafe public const_row_info row(int y) { return m_rbuf.row(y); }
 
 		//--------------------------------------------------------------------
@@ -1943,7 +1933,9 @@ template<class BlenderPre> struct comp_adaptor_clip_to_dst_rgba_pre
 				return new RGBA_Bytes();
 			}
 		}
+
 		/*
+
 		//--------------------------------------------------------------------
 		public IColorType Pixel(int x, int y)
 		{
@@ -1952,11 +1944,13 @@ template<class BlenderPre> struct comp_adaptor_clip_to_dst_rgba_pre
 			{
 				p += x << 2;
 				return p;
-				//return color_type(p[OrderR], 
-				  //                p[OrderG], 
-					//              p[OrderB], 
+
+				//return color_type(p[OrderR],
+				  //                p[OrderG],
+					//              p[OrderB],
 					  //            p[OrderA]);
 				m_rbuf.ren();
+
 				//ren()
 			}
 			return color_type::no_color();
@@ -1968,6 +1962,7 @@ template<class BlenderPre> struct comp_adaptor_clip_to_dst_rgba_pre
 		{
 			byte* p = m_rbuf.GetPixelPointer(y) + (x << 2);
 			((int*)p)[0] = ((int*)c)[0];
+
 			//p[OrderR] = c.r;
 			//p[OrderG] = c.g;
 			//p[OrderB] = c.b;
@@ -1979,8 +1974,8 @@ template<class BlenderPre> struct comp_adaptor_clip_to_dst_rgba_pre
 		{
 			/*
 			cob_type::CopyOrBlendPixel(
-				(value_type*)m_rbuf->RowPointer(x, y, 1) + (x << 2), 
-				c.r, c.g, c.b, c.a, 
+				(value_type*)m_rbuf->RowPointer(x, y, 1) + (x << 2),
+				c.r, c.g, c.b, c.a,
 				cover);*/
 		}
 
@@ -2240,7 +2235,6 @@ template<class BlenderPre> struct comp_adaptor_clip_to_dst_rgba_pre
 			while (--len != 0);
 		}
 
-
 		//--------------------------------------------------------------------
 		public unsafe void CopyVerticalColorSpan(int x, int y, uint len, RGBA_Bytes* colors)
 		{
@@ -2346,9 +2340,11 @@ template<class BlenderPre> struct comp_adaptor_clip_to_dst_rgba_pre
 						(int)len * 4);
 			}
 		}
+
 		/*
+
 		//--------------------------------------------------------------------
-		//template<class Function> 
+		//template<class Function>
 		public void for_each_pixel(Function f)
 		{
 			uint y;
@@ -2358,7 +2354,7 @@ template<class BlenderPre> struct comp_adaptor_clip_to_dst_rgba_pre
 				if(r.ptr)
 				{
 					uint len = r.x2 - r.x1 + 1;
-					value_type* p = 
+					value_type* p =
 						(value_type*)m_rbuf->RowPointer(r.x1, y, len) + (r.x1 << 2);
 					do
 					{
@@ -2383,29 +2379,31 @@ template<class BlenderPre> struct comp_adaptor_clip_to_dst_rgba_pre
 		}
 
 		//--------------------------------------------------------------------
-		//template<class GammaLut> 
+		//template<class GammaLut>
 		public void apply_gamma_dir(GammaLut g)
 		{
 			for_each_pixel(apply_gamma_dir_rgba<color_type, order_type, GammaLut>(g));
 		}
 
 		//--------------------------------------------------------------------
-		//template<class GammaLut> 
+		//template<class GammaLut>
 		 */
+
 		public void apply_gamma_inv(GammaLookupTable g)
 		{
 			throw new System.NotImplementedException();
+
 			//for_each_pixel(apply_gamma_inv_rgba<color_type, order_type, GammaLut>(g));
 		}
 
 		/*
 
 		//--------------------------------------------------------------------
-		//template<class RenBuf2> 
+		//template<class RenBuf2>
 
 		//--------------------------------------------------------------------
 		//template<class SrcPixelFormatRenderer>
-		public void blend_from(SrcPixelFormatRenderer from, 
+		public void blend_from(SrcPixelFormatRenderer from,
 						int xdst, int ydst,
 						int xsrc, int ysrc,
 						uint len,
@@ -2416,7 +2414,7 @@ template<class BlenderPre> struct comp_adaptor_clip_to_dst_rgba_pre
 			if(psrc)
 			{
 				psrc += xsrc << 2;
-				value_type* pdst = 
+				value_type* pdst =
 					(value_type*)m_rbuf->RowPointer(xdst, ydst, len) + (xdst << 2);
 				int incp = 4;
 				if(xdst > xsrc)
@@ -2428,9 +2426,9 @@ template<class BlenderPre> struct comp_adaptor_clip_to_dst_rgba_pre
 
 				if(cover == 255)
 				{
-					do 
+					do
 					{
-						cob_type::CopyOrBlendPixel(pdst, 
+						cob_type::CopyOrBlendPixel(pdst,
 													psrc[src_order::R],
 													psrc[src_order::G],
 													psrc[src_order::B],
@@ -2442,9 +2440,9 @@ template<class BlenderPre> struct comp_adaptor_clip_to_dst_rgba_pre
 				}
 				else
 				{
-					do 
+					do
 					{
-						cob_type::CopyOrBlendPixel(pdst, 
+						cob_type::CopyOrBlendPixel(pdst,
 													psrc[src_order::R],
 													psrc[src_order::G],
 													psrc[src_order::B],
@@ -2460,7 +2458,7 @@ template<class BlenderPre> struct comp_adaptor_clip_to_dst_rgba_pre
 
 		//--------------------------------------------------------------------
 		//template<class SrcPixelFormatRenderer>
-		public void blend_from_color(SrcPixelFormatRenderer from, 
+		public void blend_from_color(SrcPixelFormatRenderer from,
 							  color_type Color,
 							  int xdst, int ydst,
 							  int xsrc, int ysrc,
@@ -2471,11 +2469,11 @@ template<class BlenderPre> struct comp_adaptor_clip_to_dst_rgba_pre
 			src_value_type* psrc = (src_value_type*)from.RowPointer(ysrc);
 			if(psrc)
 			{
-				value_type* pdst = 
+				value_type* pdst =
 					(value_type*)m_rbuf->RowPointer(xdst, ydst, len) + (xdst << 2);
-				do 
+				do
 				{
-					cob_type::CopyOrBlendPixel(pdst, 
+					cob_type::CopyOrBlendPixel(pdst,
 												Color.r, Color.g, Color.b, Color.a,
 												(*psrc * cover + BaseMask) >> BaseShift);
 					++psrc;
@@ -2487,7 +2485,7 @@ template<class BlenderPre> struct comp_adaptor_clip_to_dst_rgba_pre
 
 		//--------------------------------------------------------------------
 		//template<class SrcPixelFormatRenderer>
-		public void blend_from_lut(SrcPixelFormatRenderer from, 
+		public void blend_from_lut(SrcPixelFormatRenderer from,
 							color_type* color_lut,
 							int xdst, int ydst,
 							int xsrc, int ysrc,
@@ -2498,15 +2496,15 @@ template<class BlenderPre> struct comp_adaptor_clip_to_dst_rgba_pre
 			src_value_type* psrc = (src_value_type*)from.RowPointer(ysrc);
 			if(psrc)
 			{
-				value_type* pdst = 
+				value_type* pdst =
 					(value_type*)m_rbuf->RowPointer(xdst, ydst, len) + (xdst << 2);
 
 				if(cover == 255)
 				{
-					do 
+					do
 					{
 						color_type& Color = color_lut[*psrc];
-						cob_type::CopyOrBlendPixel(pdst, 
+						cob_type::CopyOrBlendPixel(pdst,
 													Color.r, Color.g, Color.b, Color.a);
 						++psrc;
 						pdst += 4;
@@ -2515,10 +2513,10 @@ template<class BlenderPre> struct comp_adaptor_clip_to_dst_rgba_pre
 				}
 				else
 				{
-					do 
+					do
 					{
 						color_type& Color = color_lut[*psrc];
-						cob_type::CopyOrBlendPixel(pdst, 
+						cob_type::CopyOrBlendPixel(pdst,
 													Color.r, Color.g, Color.b, Color.a,
 													cover);
 						++psrc;
@@ -2531,14 +2529,13 @@ template<class BlenderPre> struct comp_adaptor_clip_to_dst_rgba_pre
 		 */
 	};
 
-
 	/*
-
 
 		//================================================pixfmt_custom_blend_rgba
 		template<class Blender, class RenBuf> class pixfmt_custom_blend_rgba
 		{
 		public:
+
 			//typedef RenBuf   rbuf_type;
 			//typedef typename rbuf_type::row_data row_data;
 			typedef Blender  blender_type;
@@ -2551,13 +2548,12 @@ template<class BlenderPre> struct comp_adaptor_clip_to_dst_rgba_pre
 				BaseShift = color_type::BaseShift,
 				base_scale = color_type::base_scale,
 				BaseMask  = color_type::BaseMask,
-				pix_width  = sizeof(value_type) * 4 
+				pix_width  = sizeof(value_type) * 4
 			};
-
 
 			//--------------------------------------------------------------------
 			pixfmt_custom_blend_rgba() : m_rbuf(0), m_comp_op(3) {}
-			explicit pixfmt_custom_blend_rgba(rendering_buffer rb, uint comp_op=3) : 
+			explicit pixfmt_custom_blend_rgba(rendering_buffer rb, uint comp_op=3) :
 				m_rbuf(&rb),
 				m_comp_op(comp_op)
 			{}
@@ -2571,7 +2567,7 @@ template<class BlenderPre> struct comp_adaptor_clip_to_dst_rgba_pre
 				if(r.Clip(RectI(0, 0, pixf.Width()-1, pixf.Height()-1)))
 				{
 					int Stride = pixf.Stride();
-					m_rbuf->Attach(pixf.PixelPointer(r.x1, Stride < 0 ? r.y2 : r.y1), 
+					m_rbuf->Attach(pixf.PixelPointer(r.x1, Stride < 0 ? r.y2 : r.y1),
 								   (r.x2 - r.x1) + 1,
 								   (r.y2 - r.y1) + 1,
 								   Stride);
@@ -2618,9 +2614,9 @@ template<class BlenderPre> struct comp_adaptor_clip_to_dst_rgba_pre
 			color_type Pixel(int x, int y) const
 			{
 				const value_type* p = (value_type*)m_rbuf->RowPointer(y) + (x << 2);
-				return color_type(p[OrderR], 
-								  p[OrderG], 
-								  p[OrderB], 
+				return color_type(p[OrderR],
+								  p[OrderG],
+								  p[OrderB],
 								  p[OrderA]);
 			}
 
@@ -2628,8 +2624,8 @@ template<class BlenderPre> struct comp_adaptor_clip_to_dst_rgba_pre
 			unsafe void CopyPixel(int x, int y, byte* c)
 			{
 				blender_type::BlendPixel(
-					m_comp_op, 
-					(value_type*)m_rbuf->RowPointer(x, y, 1) + (x << 2), 
+					m_comp_op,
+					(value_type*)m_rbuf->RowPointer(x, y, 1) + (x << 2),
 					c.r, c.g, c.b, c.a, 255);
 			}
 
@@ -2637,9 +2633,9 @@ template<class BlenderPre> struct comp_adaptor_clip_to_dst_rgba_pre
 			void BlendPixel(int x, int y, const color_type& c, byte cover)
 			{
 				blender_type::BlendPixel(
-					m_comp_op, 
+					m_comp_op,
 					(value_type*)m_rbuf->RowPointer(x, y, 1) + (x << 2),
-					c.r, c.g, c.b, c.a, 
+					c.r, c.g, c.b, c.a,
 					cover);
 			}
 
@@ -2661,7 +2657,7 @@ template<class BlenderPre> struct comp_adaptor_clip_to_dst_rgba_pre
 				do
 				{
 					blender_type::BlendPixel(
-						m_comp_op, 
+						m_comp_op,
 						(value_type*)m_rbuf->RowPointer(x, y++, 1) + (x << 2),
 						c.r, c.g, c.b, c.a, 255);
 				}
@@ -2669,10 +2665,9 @@ template<class BlenderPre> struct comp_adaptor_clip_to_dst_rgba_pre
 			}
 
 			//--------------------------------------------------------------------
-			void BlendHorizontalLine(int x, int y, uint len, 
+			void BlendHorizontalLine(int x, int y, uint len,
 							 const color_type& c, byte cover)
 			{
-
 				value_type* p = (value_type*)m_rbuf->RowPointer(x, y, len) + (x << 2);
 				do
 				{
@@ -2683,30 +2678,29 @@ template<class BlenderPre> struct comp_adaptor_clip_to_dst_rgba_pre
 			}
 
 			//--------------------------------------------------------------------
-			void BlendVerticalLine(int x, int y, uint len, 
+			void BlendVerticalLine(int x, int y, uint len,
 							 const color_type& c, byte cover)
 			{
-
 				do
 				{
 					blender_type::BlendPixel(
-						m_comp_op, 
-						(value_type*)m_rbuf->RowPointer(x, y++, 1) + (x << 2), 
-						c.r, c.g, c.b, c.a, 
+						m_comp_op,
+						(value_type*)m_rbuf->RowPointer(x, y++, 1) + (x << 2),
+						c.r, c.g, c.b, c.a,
 						cover);
 				}
 				while(--len);
 			}
 
 			//--------------------------------------------------------------------
-			void BlendSolidHorizontalSpan(int x, int y, uint len, 
+			void BlendSolidHorizontalSpan(int x, int y, uint len,
 								   const color_type& c, const byte* covers)
 			{
 				value_type* p = (value_type*)m_rbuf->RowPointer(x, y, len) + (x << 2);
-				do 
+				do
 				{
-					blender_type::BlendPixel(m_comp_op, 
-											p, c.r, c.g, c.b, c.a, 
+					blender_type::BlendPixel(m_comp_op,
+											p, c.r, c.g, c.b, c.a,
 											*covers++);
 					p += 4;
 				}
@@ -2714,15 +2708,15 @@ template<class BlenderPre> struct comp_adaptor_clip_to_dst_rgba_pre
 			}
 
 			//--------------------------------------------------------------------
-			void BlendSolidVerticalSpan(int x, int y, uint len, 
+			void BlendSolidVerticalSpan(int x, int y, uint len,
 								   const color_type& c, const byte* covers)
 			{
-				do 
+				do
 				{
 					blender_type::BlendPixel(
-						m_comp_op, 
-						(value_type*)m_rbuf->RowPointer(x, y++, 1) + (x << 2), 
-						c.r, c.g, c.b, c.a, 
+						m_comp_op,
+						(value_type*)m_rbuf->RowPointer(x, y++, 1) + (x << 2),
+						c.r, c.g, c.b, c.a,
 						*covers++);
 				}
 				while(--len);
@@ -2730,12 +2724,11 @@ template<class BlenderPre> struct comp_adaptor_clip_to_dst_rgba_pre
 
 			//--------------------------------------------------------------------
 			void CopyHorizontalColorSpan(int x, int y,
-								  uint len, 
+								  uint len,
 								  const color_type* Colors)
 			{
-
 				value_type* p = (value_type*)m_rbuf->RowPointer(x, y, len) + (x << 2);
-				do 
+				do
 				{
 					p[OrderR] = Colors->r;
 					p[OrderG] = Colors->g;
@@ -2749,10 +2742,10 @@ template<class BlenderPre> struct comp_adaptor_clip_to_dst_rgba_pre
 
 			//--------------------------------------------------------------------
 			void CopyVerticalColorSpan(int x, int y,
-								  uint len, 
+								  uint len,
 								  const color_type* Colors)
 			{
-				do 
+				do
 				{
 					value_type* p = (value_type*)m_rbuf->RowPointer(x, y++, 1) + (x << 2);
 					p[OrderR] = Colors->r;
@@ -2765,20 +2758,20 @@ template<class BlenderPre> struct comp_adaptor_clip_to_dst_rgba_pre
 			}
 
 			//--------------------------------------------------------------------
-			void BlendHorizontalColorSpan(int x, int y, uint len, 
-								   const color_type* Colors, 
+			void BlendHorizontalColorSpan(int x, int y, uint len,
+								   const color_type* Colors,
 								   const byte* covers,
 								   byte cover)
 			{
 				value_type* p = (value_type*)m_rbuf->RowPointer(x, y, len) + (x << 2);
-				do 
+				do
 				{
-					blender_type::BlendPixel(m_comp_op, 
-											p, 
-											Colors->r, 
-											Colors->g, 
-											Colors->b, 
-											Colors->a, 
+					blender_type::BlendPixel(m_comp_op,
+											p,
+											Colors->r,
+											Colors->g,
+											Colors->b,
+											Colors->a,
 											covers ? *covers++ : cover);
 					p += 4;
 					++Colors;
@@ -2787,16 +2780,16 @@ template<class BlenderPre> struct comp_adaptor_clip_to_dst_rgba_pre
 			}
 
 			//--------------------------------------------------------------------
-			void BlendVerticalColorSpan(int x, int y, uint len, 
-								   const color_type* Colors, 
+			void BlendVerticalColorSpan(int x, int y, uint len,
+								   const color_type* Colors,
 								   const byte* covers,
 								   byte cover)
 			{
-				do 
+				do
 				{
 					blender_type::BlendPixel(
-						m_comp_op, 
-						(value_type*)m_rbuf->RowPointer(x, y++, 1) + (x << 2), 
+						m_comp_op,
+						(value_type*)m_rbuf->RowPointer(x, y++, 1) + (x << 2),
 						Colors->r,
 						Colors->g,
 						Colors->b,
@@ -2805,7 +2798,6 @@ template<class BlenderPre> struct comp_adaptor_clip_to_dst_rgba_pre
 					++Colors;
 				}
 				while(--len);
-
 			}
 
 			//--------------------------------------------------------------------
@@ -2818,7 +2810,7 @@ template<class BlenderPre> struct comp_adaptor_clip_to_dst_rgba_pre
 					if(r.ptr)
 					{
 						uint len = r.x2 - r.x1 + 1;
-						value_type* p = 
+						value_type* p =
 							(value_type*)m_rbuf->RowPointer(r.x1, y, len) + (r.x1 << 2);
 						do
 						{
@@ -2855,7 +2847,7 @@ template<class BlenderPre> struct comp_adaptor_clip_to_dst_rgba_pre
 			}
 
 			//--------------------------------------------------------------------
-			template<class RenBuf2> void CopyFrom(const RenBuf2& from, 
+			template<class RenBuf2> void CopyFrom(const RenBuf2& from,
 												   int xdst, int ydst,
 												   int xsrc, int ysrc,
 												   uint len)
@@ -2863,15 +2855,15 @@ template<class BlenderPre> struct comp_adaptor_clip_to_dst_rgba_pre
 				const byte* p = from.RowPointer(ysrc);
 				if(p)
 				{
-					memmove(m_rbuf->RowPointer(xdst, ydst, len) + xdst * pix_width, 
-							p + xsrc * pix_width, 
+					memmove(m_rbuf->RowPointer(xdst, ydst, len) + xdst * pix_width,
+							p + xsrc * pix_width,
 							len * pix_width);
 				}
 			}
 
 			//--------------------------------------------------------------------
-			template<class SrcPixelFormatRenderer> 
-			void blend_from(const SrcPixelFormatRenderer& from, 
+			template<class SrcPixelFormatRenderer>
+			void blend_from(const SrcPixelFormatRenderer& from,
 							int xdst, int ydst,
 							int xsrc, int ysrc,
 							uint len,
@@ -2882,7 +2874,7 @@ template<class BlenderPre> struct comp_adaptor_clip_to_dst_rgba_pre
 				if(psrc)
 				{
 					psrc += xsrc << 2;
-					value_type* pdst = 
+					value_type* pdst =
 						(value_type*)m_rbuf->RowPointer(xdst, ydst, len) + (xdst << 2);
 
 					int incp = 4;
@@ -2893,10 +2885,10 @@ template<class BlenderPre> struct comp_adaptor_clip_to_dst_rgba_pre
 						incp = -4;
 					}
 
-					do 
+					do
 					{
-						blender_type::BlendPixel(m_comp_op, 
-												pdst, 
+						blender_type::BlendPixel(m_comp_op,
+												pdst,
 												psrc[src_order::R],
 												psrc[src_order::G],
 												psrc[src_order::B],
@@ -2911,7 +2903,7 @@ template<class BlenderPre> struct comp_adaptor_clip_to_dst_rgba_pre
 
 			//--------------------------------------------------------------------
 			template<class SrcPixelFormatRenderer>
-			void blend_from_color(const SrcPixelFormatRenderer& from, 
+			void blend_from_color(const SrcPixelFormatRenderer& from,
 								  const color_type& Color,
 								  int xdst, int ydst,
 								  int xsrc, int ysrc,
@@ -2922,12 +2914,12 @@ template<class BlenderPre> struct comp_adaptor_clip_to_dst_rgba_pre
 				const src_value_type* psrc = (src_value_type*)from.RowPointer(ysrc);
 				if(psrc)
 				{
-					value_type* pdst = 
+					value_type* pdst =
 						(value_type*)m_rbuf->RowPointer(xdst, ydst, len) + (xdst << 2);
-					do 
+					do
 					{
 						blender_type::BlendPixel(m_comp_op,
-												pdst, 
+												pdst,
 												Color.r, Color.g, Color.b, Color.a,
 												(*psrc * cover + BaseMask) >> BaseShift);
 						++psrc;
@@ -2939,7 +2931,7 @@ template<class BlenderPre> struct comp_adaptor_clip_to_dst_rgba_pre
 
 			//--------------------------------------------------------------------
 			template<class SrcPixelFormatRenderer>
-			void blend_from_lut(const SrcPixelFormatRenderer& from, 
+			void blend_from_lut(const SrcPixelFormatRenderer& from,
 								const color_type* color_lut,
 								int xdst, int ydst,
 								int xsrc, int ysrc,
@@ -2950,13 +2942,13 @@ template<class BlenderPre> struct comp_adaptor_clip_to_dst_rgba_pre
 				const src_value_type* psrc = (src_value_type*)from.RowPointer(ysrc);
 				if(psrc)
 				{
-					value_type* pdst = 
+					value_type* pdst =
 						(value_type*)m_rbuf->RowPointer(xdst, ydst, len) + (xdst << 2);
-					do 
+					do
 					{
 						const color_type& Color = color_lut[*psrc];
 						blender_type::BlendPixel(m_comp_op,
-												pdst, 
+												pdst,
 												Color.r, Color.g, Color.b, Color.a,
 												cover);
 						++psrc;
@@ -2970,9 +2962,6 @@ template<class BlenderPre> struct comp_adaptor_clip_to_dst_rgba_pre
 			rendering_buffer m_rbuf;
 			uint m_comp_op;
 		};
-
-
-
 
 		//-----------------------------------------------------------------------
 		typedef blender_rgba<rgba8, OrderRGBA> blender_rgba32; //----blender_rgba32
@@ -2999,7 +2988,6 @@ template<class BlenderPre> struct comp_adaptor_clip_to_dst_rgba_pre
 		typedef blender_rgba_pre<rgba16, OrderARGB> blender_argb64_pre; //----blender_argb64_pre
 		typedef blender_rgba_pre<rgba16, OrderABGR> blender_abgr64_pre; //----blender_abgr64_pre
 		typedef blender_rgba_pre<rgba16, OrderBGRA> blender_bgra64_pre; //----blender_bgra64_pre
-
 
 		//-----------------------------------------------------------------------
 		typedef int32u pixel32_type;
@@ -3030,5 +3018,5 @@ template<class BlenderPre> struct comp_adaptor_clip_to_dst_rgba_pre
 		typedef pixfmt_alpha_blend_rgba<blender_bgra64_pre, rendering_buffer, pixel64_type> pixfmt_bgra64_pre; //----pixfmt_bgra64_pre
 	*/
 }
-//#endif
 
+//#endif

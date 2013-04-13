@@ -13,7 +13,6 @@ namespace Mosa.Compiler.Common
 {
 	public static class StreamExtension
 	{
-
 		/// <summary>
 		/// Writes the specified stream.
 		/// </summary>
@@ -174,6 +173,5 @@ namespace Mosa.Compiler.Common
 		{
 			stream.Write((ulong)value, endianness);
 		}
-		
 	}
 }

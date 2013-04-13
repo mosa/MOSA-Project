@@ -14,9 +14,8 @@ using Mosa.Compiler.Metadata.Tables;
 
 namespace Mosa.Tool.MetadataExplorer.Tables
 {
-
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public class MethodDefRowExt : TableRow
 	{
@@ -41,6 +40,7 @@ namespace Mosa.Tool.MetadataExplorer.Tables
 			yield return Value("SignatureBlobIdx", row.SignatureBlobIdx);
 
 			MethodSignature signature = new MethodSignature(Metadata, row.SignatureBlobIdx);
+
 			//yield return Value("Signature Token", signature.Token);
 			yield return Value("Signature Generic Parameters", signature.GenericParameterCount.ToString());
 		}

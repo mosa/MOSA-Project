@@ -63,31 +63,31 @@ namespace Mosa.Compiler.TypeSystem
 		private readonly IList<RuntimeType> interfaces;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private readonly bool isValueType;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private readonly bool isDelegate;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private readonly bool isEnum;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private IList<GenericParameter> genericParameters;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private string fullname;
 
-		#endregion // Data members
+		#endregion Data members
 
 		#region Construction
 
@@ -135,7 +135,7 @@ namespace Mosa.Compiler.TypeSystem
 			this.genericParameters = new List<GenericParameter>();
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Properties
 
@@ -326,7 +326,7 @@ namespace Mosa.Compiler.TypeSystem
 			protected set { genericParameters = value; }
 		}
 
-		#endregion // Properties
+		#endregion Properties
 
 		#region Methods
 
@@ -354,8 +354,8 @@ namespace Mosa.Compiler.TypeSystem
 		/// </summary>
 		/// <param name="c">The type to compare with the current type.</param>
 		/// <returns>
-		/// <c>true</c> if the Type represented by the c parameter and the current Type represent classes, and the 
-		/// class represented by the current Type derives From the class represented by c; otherwise, <c>false</c>. 
+		/// <c>true</c> if the Type represented by the c parameter and the current Type represent classes, and the
+		/// class represented by the current Type derives From the class represented by c; otherwise, <c>false</c>.
 		/// This method also returns <c>false</c> if c and the current Type represent the same class.
 		/// </returns>
 		public bool IsSubclassOf(RuntimeType c)
@@ -379,7 +379,7 @@ namespace Mosa.Compiler.TypeSystem
 			return false;
 		}
 
-		#endregion // Methods
+		#endregion Methods
 
 		#region Object Overrides
 
@@ -394,7 +394,7 @@ namespace Mosa.Compiler.TypeSystem
 			return this.FullName;
 		}
 
-		#endregion // Object Overrides
+		#endregion Object Overrides
 
 		public RuntimeMethod FindMethod(string name)
 		{
@@ -407,6 +407,7 @@ namespace Mosa.Compiler.TypeSystem
 			}
 
 			return null;
+
 			//throw new MissingMethodException(Name, name);
 		}
 
@@ -426,6 +427,5 @@ namespace Mosa.Compiler.TypeSystem
 			else
 				return false;
 		}
-
 	}
 }

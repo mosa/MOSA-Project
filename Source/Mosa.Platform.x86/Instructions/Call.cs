@@ -22,8 +22,8 @@ namespace Mosa.Platform.x86.Instructions
 		private static readonly OpCode RegCall = new OpCode(new byte[] { 0xFF }, 2);
 		private static readonly byte[] LabelCall = new byte[] { 0xE8 };
 
-		#endregion // Data Member
-		
+		#endregion Data Member
+
 		#region Construction
 
 		/// <summary>
@@ -34,13 +34,13 @@ namespace Mosa.Platform.x86.Instructions
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Properties
 
 		public override FlowControl FlowControl { get { return FlowControl.Call; } }
 
-		#endregion // Properties
+		#endregion Properties
 
 		#region Methods
 
@@ -78,7 +78,6 @@ namespace Mosa.Platform.x86.Instructions
 			visitor.Call(context);
 		}
 
-		#endregion // Methods
-
+		#endregion Methods
 	}
 }

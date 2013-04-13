@@ -695,7 +695,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			if (level < 1)
 				return false;
 
-			// 
+			//
 
 			return false;
 		}

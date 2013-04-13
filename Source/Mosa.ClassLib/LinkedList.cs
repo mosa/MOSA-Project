@@ -19,23 +19,23 @@ namespace Mosa.ClassLib
 	public class LinkedList<T> : IEnumerable<T>, ICollection<T>
 	{
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <typeparam name="U"></typeparam>
 		public class LinkedListNode<U>
 		{
 			/// <summary>
-			/// 
+			///
 			/// </summary>
 			public U value;
 
 			/// <summary>
-			/// 
+			///
 			/// </summary>
 			public LinkedListNode<U> next;
 
 			/// <summary>
-			/// 
+			///
 			/// </summary>
 			public LinkedListNode<U> previous;
 
@@ -51,16 +51,15 @@ namespace Mosa.ClassLib
 				this.next = next;
 				this.previous = previous;
 			}
-
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected LinkedListNode<T> first;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected int count;
 
@@ -79,9 +78,9 @@ namespace Mosa.ClassLib
 		/// <returns>
 		/// The number of elements contained in the <see cref="T:ICollection`1"/>.
 		/// </returns>
-		public int Count 
-		{ 
-			get 
+		public int Count
+		{
+			get
 			{
 				var result = 0;
 				var node = First;
@@ -91,11 +90,11 @@ namespace Mosa.ClassLib
 					result++;
 				}
 				return result;
-			} 
+			}
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public LinkedListNode<T> First
 		{
@@ -106,7 +105,7 @@ namespace Mosa.ClassLib
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected LinkedListNode<T> last;
 
@@ -459,13 +458,13 @@ namespace Mosa.ClassLib
 
 		public struct Enumerator : IEnumerator<T>, IEnumerator
 		{
-			const string VersionKey = "version";
-			const string IndexKey = "index";
-			const string ListKey = "list";
+			private const string VersionKey = "version";
+			private const string IndexKey = "index";
+			private const string ListKey = "list";
 
-			LinkedList<T> list;
-			LinkedListNode<T> current;
-			int index;
+			private LinkedList<T> list;
+			private LinkedListNode<T> current;
+			private int index;
 
 			internal Enumerator(LinkedList<T> parent)
 			{

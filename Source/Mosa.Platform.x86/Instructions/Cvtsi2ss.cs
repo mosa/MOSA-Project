@@ -17,13 +17,12 @@ namespace Mosa.Platform.x86.Instructions
 	/// </summary>
 	public sealed class Cvtsi2ss : X86Instruction
 	{
-	
 		#region Data members
 
 		private static readonly OpCode opcode = new OpCode(new byte[] { 0xF3, 0x0F, 0x2A });
 
-		#endregion
-		
+		#endregion Data members
+
 		#region Construction
 
 		/// <summary>
@@ -34,7 +33,7 @@ namespace Mosa.Platform.x86.Instructions
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Methods
 
@@ -60,6 +59,6 @@ namespace Mosa.Platform.x86.Instructions
 			visitor.Cvtsi2ss(context);
 		}
 
-		#endregion // Methods
+		#endregion Methods
 	}
 }

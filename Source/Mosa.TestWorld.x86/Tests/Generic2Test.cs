@@ -103,14 +103,15 @@ namespace Mosa.TestWorld.x86.Tests
 
 			return first.value == 9;
 		}
-
 	}
 
 	public class IntClass
 	{
 		public int value;
 
-		public IntClass(int value) { this.value = value; }
+		public IntClass(int value)
+		{
+			this.value = value;
+		}
 	}
-
 }

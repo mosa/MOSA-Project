@@ -7,7 +7,6 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-using System;
 using System.Collections.Generic;
 using System.IO;
 using Mosa.Compiler.Common;
@@ -18,7 +17,7 @@ namespace Mosa.Compiler.Linker
 	/// Interface to the linker
 	/// </summary>
 	/// <remarks>
-	/// The linker collects runtime specific requests in order to resolve a metadata object to its physical virtual 
+	/// The linker collects runtime specific requests in order to resolve a metadata object to its physical virtual
 	/// address in memory. All link requests require the metadata object, the request virtual address
 	/// and a relative flag. These are used to either resolve the request immediately or patch the code during
 	/// a later linker stage, when all methods and fields have been compiled.
@@ -81,7 +80,7 @@ namespace Mosa.Compiler.Linker
 		/// </value>
 		uint MachineID { get; set; }
 
-		#endregion // Properties
+		#endregion Properties
 
 		#region Methods
 
@@ -135,6 +134,6 @@ namespace Mosa.Compiler.Linker
 		/// </summary>
 		void GeneratedFile();
 
-		#endregion // Methods
+		#endregion Methods
 	}
 }

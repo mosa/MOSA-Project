@@ -15,7 +15,7 @@ using Mosa.FileSystem.FAT;
 namespace Mosa.Utility.BootImage
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public class Generator
 	{
@@ -36,8 +36,7 @@ namespace Mosa.Utility.BootImage
 				foreach (var file in options.IncludeFiles)
 				{
 					blockCount += ((uint)file.Content.Length / 512) + 1;
-				}				
-
+				}
 			}
 
 			DiskGeometry diskGeometry = new Mosa.DeviceSystem.DiskGeometry();
@@ -76,7 +75,7 @@ namespace Mosa.Utility.BootImage
 				// Create master boot block record
 				MasterBootBlock mbr = new MasterBootBlock(diskDevice);
 
-				// Setup partition entry					
+				// Setup partition entry
 				mbr.DiskSignature = 0x12345678;
 				mbr.Partitions[0].Bootable = true;
 				mbr.Partitions[0].StartLBA = diskGeometry.SectorsPerTrack;
@@ -198,7 +197,7 @@ namespace Mosa.Utility.BootImage
 
 					if (patchArea < fat.ClusterSizeInBytes)
 					{
-						// Set up the totals 
+						// Set up the totals
 						firstCluster.SetUShort(patchArea, (ushort)(fileSize >> 2));
 						firstCluster.SetUShort(patchArea + 2, (ushort)(sectorCount - 1));
 
@@ -231,7 +230,6 @@ namespace Mosa.Utility.BootImage
 						// Write patched cluster back to disk
 						fat.WriteCluster(location.FirstCluster, firstCluster.Data);
 					}
-
 				}
 			}
 
@@ -247,8 +245,6 @@ namespace Mosa.Utility.BootImage
 
 				diskDevice.WriteBlock(blockCount, 1, footer);
 			}
-
 		}
-
 	}
 }

@@ -1,5 +1,4 @@
-﻿
-namespace Pictor.UI
+﻿namespace Pictor.UI
 {
 	public class KeyEventArgs// : EventArgs
 	{
@@ -11,6 +10,7 @@ namespace Pictor.UI
 		{
 			m_KeyData = keyData;
 		}
+
 		public virtual bool Alt
 		{
 			get
@@ -18,6 +18,7 @@ namespace Pictor.UI
 				return (m_KeyData & Keys.Alt) != 0;
 			}
 		}
+
 		public bool Control
 		{
 			get
@@ -45,6 +46,7 @@ namespace Pictor.UI
 				return (m_KeyData & ~(Keys.Control | Keys.Shift | Keys.Alt));
 			}
 		}
+
 		public Keys KeyData
 		{
 			get
@@ -52,6 +54,7 @@ namespace Pictor.UI
 				return m_KeyData;
 			}
 		}
+
 		public int KeyValue
 		{
 			get

@@ -17,29 +17,30 @@ namespace Pictor
 		{
 			get;
 		}
+
 		double CalculateWeight(double x);
 	};
 
 	//-----------------------------------------------------ImageFilterLookUpTable
 	public class ImageFilterLookUpTable
 	{
-		double m_radius;
-		uint m_diameter;
-		int m_start;
-		ArrayPOD<short> m_weight_array;
+		private double m_radius;
+		private uint m_diameter;
+		private int m_start;
+		private ArrayPOD<short> m_weight_array;
 
 		public enum EImageFilterScale
 		{
 			Shift = 14,                      //----Shift
-			Scale = 1 << Shift, //----Scale 
-			Mask = Scale - 1   //----Mask 
+			Scale = 1 << Shift, //----Scale
+			Mask = Scale - 1   //----Mask
 		};
 
 		public enum EImageSubpixelScale
 		{
 			Shift = 8,                         //----Shift
-			Scale = 1 << Shift, //----Scale 
-			Mask = Scale - 1   //----Mask 
+			Scale = 1 << Shift, //----Scale
+			Mask = Scale - 1   //----Mask
 		};
 
 		public void Calculate(IImageFilterFunction filter)
@@ -79,23 +80,38 @@ namespace Pictor
 		public ImageFilterLookUpTable(IImageFilterFunction filter)
 			: this(filter, true)
 		{
-
 		}
+
 		public ImageFilterLookUpTable(IImageFilterFunction filter, bool normalization)
 		{
 			m_weight_array = new ArrayPOD<short>(256);
 			Calculate(filter, normalization);
 		}
 
-		public double radius() { return m_radius; }
-		public uint diameter() { return m_diameter; }
-		public int start() { return m_start; }
-		public unsafe short[] weight_array() { return m_weight_array.Array; }
+		public double radius()
+		{
+			return m_radius;
+		}
+
+		public uint diameter()
+		{
+			return m_diameter;
+		}
+
+		public int start()
+		{
+			return m_start;
+		}
+
+		public unsafe short[] weight_array()
+		{
+			return m_weight_array.Array;
+		}
 
 		//--------------------------------------------------------------------
-		// This function normalizes integer values and corrects the rounding 
+		// This function normalizes integer values and corrects the rounding
 		// errors. It doesn't do anything with the source floating point values
-		// (m_weight_array_dbl), it corrects only integers according to the rule 
+		// (m_weight_array_dbl), it corrects only integers according to the rule
 		// of 1.0 which means that any sum of Pixel weights must be equal to 1.0.
 		// So, the filter function must produce a graph of the proper shape.
 		//--------------------------------------------------------------------
@@ -174,16 +190,16 @@ namespace Pictor
 		{
 			Calculate(m_filter_function);
 		}
-	
+
 		private IImageFilter m_filter_function;
 	};
 	 */
-
 
 	//-----------------------------------------------BilinearImageFilter
 	public struct BilinearImageFilter : IImageFilterFunction
 	{
 		public double Radius { get { return 1.0; } }
+
 		public double CalculateWeight(double x)
 		{
 			return 1.0 - x;
@@ -194,6 +210,7 @@ namespace Pictor
 	public struct HanningImageFilter : IImageFilterFunction
 	{
 		public double Radius { get { return 1.0; } }
+
 		public double CalculateWeight(double x)
 		{
 			return 0.5 + 0.5 * Math.Cos(Math.PI * x);
@@ -204,6 +221,7 @@ namespace Pictor
 	public struct HammingImageFilter : IImageFilterFunction
 	{
 		public double Radius { get { return 1.0; } }
+
 		public double CalculateWeight(double x)
 		{
 			return 0.54 + 0.46 * Math.Cos(Math.PI * x);
@@ -214,6 +232,7 @@ namespace Pictor
 	public struct HermiteImageFilter : IImageFilterFunction
 	{
 		public double Radius { get { return 1.0; } }
+
 		public double CalculateWeight(double x)
 		{
 			return (2.0 * x - 3.0) * x * x + 1.0;
@@ -224,6 +243,7 @@ namespace Pictor
 	public struct QuadricImageFilter : IImageFilterFunction
 	{
 		public double Radius { get { return 1.5; } }
+
 		public double CalculateWeight(double x)
 		{
 			double t;
@@ -242,6 +262,7 @@ namespace Pictor
 		}
 
 		public double Radius { get { return 2.0; } }
+
 		public double CalculateWeight(double x)
 		{
 			return
@@ -260,8 +281,8 @@ namespace Pictor
 		public KaiserImageFilter()
 			: this(6.33)
 		{
-
 		}
+
 		public KaiserImageFilter(double b)
 		{
 			a = (b);
@@ -270,6 +291,7 @@ namespace Pictor
 		}
 
 		public double Radius { get { return 1.0; } }
+
 		public double CalculateWeight(double x)
 		{
 			return bessel_i0(a * Math.Sqrt(1.0 - x * x)) * i0a;
@@ -297,6 +319,7 @@ namespace Pictor
 	public struct CatromImageFilter : IImageFilterFunction
 	{
 		public double Radius { get { return 2.0; } }
+
 		public double CalculateWeight(double x)
 		{
 			if (x < 1.0) return 0.5 * (2.0 + x * x * (-5.0 + x * 3.0));
@@ -314,7 +337,6 @@ namespace Pictor
 		public MitchellImageFilter()
 			: this(1.0 / 3.0, 1.0 / 3.0)
 		{
-
 		}
 
 		public MitchellImageFilter(double b, double c)
@@ -329,6 +351,7 @@ namespace Pictor
 		}
 
 		public double Radius { get { return 2.0; } }
+
 		public double CalculateWeight(double x)
 		{
 			if (x < 1.0) return p0 + x * x * (p2 + x * p3);
@@ -337,11 +360,11 @@ namespace Pictor
 		}
 	};
 
-
 	//----------------------------------------------Spline16ImageFilter
 	public struct Spline16ImageFilter : IImageFilterFunction
 	{
 		public double Radius { get { return 2.0; } }
+
 		public double CalculateWeight(double x)
 		{
 			if (x < 1.0)
@@ -352,11 +375,11 @@ namespace Pictor
 		}
 	};
 
-
 	//---------------------------------------------Spline36ImageFilter
 	public struct Spline36ImageFilter : IImageFilterFunction
 	{
 		public double Radius { get { return 3.0; } }
+
 		public double CalculateWeight(double x)
 		{
 			if (x < 1.0)
@@ -371,28 +394,27 @@ namespace Pictor
 		}
 	};
 
-
 	//----------------------------------------------GaussianImageFilter
 	public struct GaussianImageFilter : IImageFilterFunction
 	{
 		public double Radius { get { return 2.0; } }
+
 		public double CalculateWeight(double x)
 		{
 			return Math.Exp(-2.0 * x * x) * Math.Sqrt(2.0 / Math.PI);
 		}
 	};
 
-
 	//------------------------------------------------BesselImageFilter
 	public struct BesselImageFilter : IImageFilterFunction
 	{
 		public double Radius { get { return 3.2383; } }
+
 		public double CalculateWeight(double x)
 		{
 			return (x == 0.0) ? Math.PI / 4.0 : PictorMath.Bessel(Math.PI * x, 1) / (2.0 * x);
 		}
 	};
-
 
 	//-------------------------------------------------SincImageFilter
 	public class SincImageFilter : IImageFilterFunction
@@ -401,7 +423,9 @@ namespace Pictor
 		{
 			m_radius = (r < 2.0 ? 2.0 : r);
 		}
+
 		public double Radius { get { return m_radius; } }
+
 		public double CalculateWeight(double x)
 		{
 			if (x == 0.0) return 1.0;
@@ -412,7 +436,6 @@ namespace Pictor
 		private double m_radius;
 	};
 
-
 	//-----------------------------------------------LanczosImageFilter
 	public class LanczosImageFilter : IImageFilterFunction
 	{
@@ -420,7 +443,9 @@ namespace Pictor
 		{
 			m_radius = (r < 2.0 ? 2.0 : r);
 		}
+
 		public double Radius { get { return m_radius; } }
+
 		public double CalculateWeight(double x)
 		{
 			if (x == 0.0) return 1.0;
@@ -429,6 +454,7 @@ namespace Pictor
 			double xr = x / m_radius;
 			return (Math.Sin(x) / x) * (Math.Sin(xr) / xr);
 		}
+
 		private double m_radius;
 	};
 

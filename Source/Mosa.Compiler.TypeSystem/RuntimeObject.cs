@@ -7,7 +7,6 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-
 using Mosa.Compiler.Metadata;
 
 namespace Mosa.Compiler.TypeSystem
@@ -29,7 +28,7 @@ namespace Mosa.Compiler.TypeSystem
 		/// </summary>
 		private readonly ITypeModule module;
 
-		#endregion // Data members
+		#endregion Data members
 
 		#region Construction
 
@@ -44,7 +43,7 @@ namespace Mosa.Compiler.TypeSystem
 			this.token = token;
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Properties
 
@@ -65,6 +64,6 @@ namespace Mosa.Compiler.TypeSystem
 			get { return module; }
 		}
 
-		#endregion // Properties
+		#endregion Properties
 	}
 }

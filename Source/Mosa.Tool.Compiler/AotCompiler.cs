@@ -12,7 +12,6 @@ using System.IO;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Stages;
 using Mosa.Compiler.InternalTrace;
-using Mosa.Compiler.Linker;
 using Mosa.Compiler.Metadata.Loader;
 using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Compiler.TypeSystem;
@@ -22,7 +21,6 @@ namespace Mosa.Tool.Compiler
 {
 	public class AotCompiler : BaseCompiler
 	{
-
 		/// <summary>
 		/// Initializes a new instance of the <see cref="AotCompiler"/> class.
 		/// </summary>
@@ -33,9 +31,8 @@ namespace Mosa.Tool.Compiler
 		/// <param name="internalTrace">The internal trace.</param>
 		/// <param name="compilerOptions">The compiler options.</param>
 		public AotCompiler(IArchitecture architecture, ITypeSystem typeSystem, ITypeLayout typeLayout, IInternalTrace internalTrace, CompilerOptions compilerOptions)
-			: base(architecture, typeSystem, typeLayout, new CompilationScheduler(typeSystem, true), internalTrace, null, compilerOptions) 
+			: base(architecture, typeSystem, typeLayout, new CompilationScheduler(typeSystem, true), internalTrace, null, compilerOptions)
 		{
-
 		}
 
 		/// <summary>
@@ -96,15 +93,19 @@ namespace Mosa.Tool.Compiler
 			AotCompiler aot = new AotCompiler(compilerOptions.Architecture, typeSystem, typeLayout, internalTrace, compilerOptions);
 
 			aot.Pipeline.AddRange(new ICompilerStage[] {
+
 				//compilerOptions.BootCompilerStage,
 				new MethodPipelineExportStage(),
 				new PlugStage(),
 				new MethodCompilerSchedulerStage(),
 				new TypeInitializerSchedulerStage(),
+
 				//compilerOptions.BootCompilerStage,
 				new TypeLayoutStage(),
+
 				//new MetadataStage(),
 				new ObjectFileLayoutStage(),
+
 				//new LinkerFinalizationStage(),
 			});
 

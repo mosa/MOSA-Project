@@ -13,6 +13,7 @@ namespace Pictor.UI
 				object holder = Activator.CreateInstance(theme.GetType("Pictor.Theme"));
 				object result = theme.GetType("Pictor.Theme").InvokeMember("CreateButton", System.Reflection.BindingFlags.Default | System.Reflection.BindingFlags.InvokeMethod, null, holder, new object[] { x, y, lable });
 				return result as ButtonWidget;
+
 				//return (ButtonWidget)theme.GetModule("Pictor.Theme").GetMethod("CreateButton", new Type[] { typeof(double), typeof(double), typeof(string) }).Invoke(null, new object[] { x, y, lable });
 			}
 			else
@@ -27,6 +28,7 @@ namespace Pictor.UI
 				object holder = Activator.CreateInstance(theme.GetType("Pictor.Theme"));
 				object result = theme.GetType("Pictor.Theme").InvokeMember("CreateButton", System.Reflection.BindingFlags.Default | System.Reflection.BindingFlags.InvokeMethod, null, holder, new object[] { x, y, lable, textHeight, textPadding, borderWidth, borderRadius });
 				return result as ButtonWidget;
+
 				//return (ButtonWidget)theme.GetModule("Pictor.Theme").GetMethod("CreateButton", new Type[] { typeof(double), typeof(double), typeof(string) }).Invoke(null, new object[] { x, y, lable });
 			}
 			else

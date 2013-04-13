@@ -52,6 +52,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 		public bool ForceSpilled { get; set; }
 
 		public SlotIndex Minimum { get; private set; }
+
 		public SlotIndex Maximum { get; private set; }
 
 		private LiveInterval(VirtualRegister virtualRegister, SlotIndex start, SlotIndex end, IList<SlotIndex> uses, IList<SlotIndex> defs)
@@ -77,7 +78,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 						min = use;
 				}
 			}
-			
+
 			foreach (var def in defs)
 			{
 				if (Contains(def))

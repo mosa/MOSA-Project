@@ -21,8 +21,8 @@ namespace Mosa.Platform.x86.Instructions
 
 		private static readonly OpCode opcode = new OpCode(new byte[] { 0xF3, 0x0F, 0x5C }); // SUBSS
 
-		#endregion // Data Members
-		
+		#endregion Data Members
+
 		#region Construction
 
 		/// <summary>
@@ -33,9 +33,10 @@ namespace Mosa.Platform.x86.Instructions
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Methods
+
 		/// <summary>
 		/// Computes the opcode.
 		/// </summary>
@@ -47,6 +48,7 @@ namespace Mosa.Platform.x86.Instructions
 		{
 			return opcode;
 		}
+
 		/// <summary>
 		/// Allows visitor based dispatch for this instruction object.
 		/// </summary>
@@ -57,6 +59,6 @@ namespace Mosa.Platform.x86.Instructions
 			visitor.SubSS(context);
 		}
 
-		#endregion // Methods
+		#endregion Methods
 	}
 }

@@ -7,9 +7,7 @@
  *  Kai P. Reisert <kpreisert@googlemail.com>
  */
 
-using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using Mosa.Compiler.Framework.CIL;
 using Mosa.Compiler.Linker;
 using Mosa.Compiler.Metadata.Signatures;
@@ -19,7 +17,6 @@ namespace Mosa.Compiler.Framework.Stages
 {
 	public class StaticAllocationResolutionStage : BaseMethodCompilerStage, IMethodCompilerStage
 	{
-
 		void IMethodCompilerStage.Run()
 		{
 			if (methodCompiler.Method.Name == @".cctor")

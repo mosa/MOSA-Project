@@ -14,7 +14,7 @@ using Mosa.Compiler.Metadata;
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public sealed class LdtokenInstruction : LoadInstruction
 	{
@@ -29,7 +29,7 @@ namespace Mosa.Compiler.Framework.CIL
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Methods
 
@@ -71,6 +71,7 @@ namespace Mosa.Compiler.Framework.CIL
 					break;
 
 				case TokenTypes.MemberRef:
+
 					// Field or Method
 					{
 						MemberReference memberRef = MetadataMemberReference.FromToken(decoder.Metadata, _token);

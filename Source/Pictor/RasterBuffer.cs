@@ -19,7 +19,9 @@ namespace Pictor
 		unsafe byte* GetBuffer();
 
 		uint Width();
+
 		uint Height();
+
 		int StrideInBytes();
 
 		uint StrideInBytesAbs();
@@ -33,13 +35,13 @@ namespace Pictor
 
 	public sealed class RasterBuffer : IRasterBuffer
 	{
-		unsafe byte* m_BufferPointer;    // Pointer to rendering buffer Data
-		unsafe byte* m_FirstPixelPointer;  // Pointer to first Pixel depending on Stride 
-		uint m_Width;  // Width in pixels
-		uint m_Height; // Height in pixels
-		uint m_BitsPerPixel;
-		uint m_BytesPerPixel;
-		int m_StrideInBytes; // Number of bytes per row. Can be < 0
+		private unsafe byte* m_BufferPointer;    // Pointer to rendering buffer Data
+		private unsafe byte* m_FirstPixelPointer;  // Pointer to first Pixel depending on Stride
+		private uint m_Width;  // Width in pixels
+		private uint m_Height; // Height in pixels
+		private uint m_BitsPerPixel;
+		private uint m_BytesPerPixel;
+		private int m_StrideInBytes; // Number of bytes per row. Can be < 0
 
 		//-------------------------------------------------------------------
 		public RasterBuffer()
@@ -88,11 +90,25 @@ namespace Pictor
 		}
 
 		//--------------------------------------------------------------------
-		public unsafe byte* GetBuffer() { return m_BufferPointer; }
+		public unsafe byte* GetBuffer()
+		{
+			return m_BufferPointer;
+		}
 
-		public uint Width() { return m_Width; }
-		public uint Height() { return m_Height; }
-		public int StrideInBytes() { return m_StrideInBytes; }
+		public uint Width()
+		{
+			return m_Width;
+		}
+
+		public uint Height()
+		{
+			return m_Height;
+		}
+
+		public int StrideInBytes()
+		{
+			return m_StrideInBytes;
+		}
 
 		public uint StrideInBytesAbs()
 		{

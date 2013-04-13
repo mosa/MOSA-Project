@@ -7,7 +7,6 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-
 namespace Mosa.Compiler.Framework.IR
 {
 	/// <summary>
@@ -17,7 +16,6 @@ namespace Mosa.Compiler.Framework.IR
 	/// </summary>
 	public sealed class Phi : BaseIRInstruction
 	{
-		
 		#region Construction
 
 		/// <summary>
@@ -28,7 +26,7 @@ namespace Mosa.Compiler.Framework.IR
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Methods
 
@@ -42,6 +40,6 @@ namespace Mosa.Compiler.Framework.IR
 			visitor.Phi(context);
 		}
 
-		#endregion // Methods
+		#endregion Methods
 	}
 }

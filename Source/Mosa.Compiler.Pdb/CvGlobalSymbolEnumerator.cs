@@ -12,7 +12,7 @@ using System.IO;
 
 namespace Mosa.Compiler.Pdb
 {
-	class CvGlobalSymbolEnumerator : CvSymbolEnumerator
+	internal class CvGlobalSymbolEnumerator : CvSymbolEnumerator
 	{
 		public CvGlobalSymbolEnumerator(PdbStream stream) :
 			base(stream)

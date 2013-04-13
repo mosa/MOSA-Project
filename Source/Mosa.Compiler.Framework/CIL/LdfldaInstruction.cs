@@ -15,7 +15,7 @@ using Mosa.Compiler.TypeSystem.Cil;
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public sealed class LdfldaInstruction : UnaryInstruction
 	{
@@ -30,7 +30,7 @@ namespace Mosa.Compiler.Framework.CIL
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Methods
 

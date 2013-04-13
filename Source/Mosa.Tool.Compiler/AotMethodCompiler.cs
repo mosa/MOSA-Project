@@ -21,7 +21,6 @@ namespace Mosa.Tool.Compiler
 	/// </summary>
 	public sealed class AotMethodCompiler : BaseMethodCompiler
 	{
-
 		#region Construction
 
 		/// <summary>
@@ -42,25 +41,25 @@ namespace Mosa.Tool.Compiler
 				new OperandAssignmentStage(),
 				new StaticAllocationResolutionStage(),
 				new CILTransformationStage(),
-					
+
 				(compilerOptions.EnableSSA) ? new EdgeSplitStage() : null,
 				(compilerOptions.EnableSSA) ? new DominanceCalculationStage() : null,
 				(compilerOptions.EnableSSA) ? new PhiPlacementStage() : null,
 				(compilerOptions.EnableSSA) ? new EnterSSAStage() : null,
 				(compilerOptions.EnableSSA && compilerOptions.EnableSSAOptimizations) ? new SSAOptimizations() : null,
 				(compilerOptions.EnableSSA) ? new LeaveSSA() : null,
-					
+
 				new PlatformStubStage(),
-				
+
 				new	EdgeSplitStage(),
 				new GreedyRegisterAllocatorStage(),
 				new StackLayoutStage(),
-				//new CodeGenerationStage(), 
 
+				//new CodeGenerationStage(),
 			});
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region BaseMethodCompiler Overrides
 
@@ -80,6 +79,6 @@ namespace Mosa.Tool.Compiler
 			base.EndCompile();
 		}
 
-		#endregion // BaseMethodCompiler Overrides
+		#endregion BaseMethodCompiler Overrides
 	}
 }

@@ -20,4 +20,3 @@ namespace Mosa.Compiler.Framework
 		int LocalsSize { get; }
 	}
 }
-

@@ -33,18 +33,25 @@ namespace Mosa.Kernel.x86
 		{
 			// Disable all interrupts
 			Native.Out8((ushort)(com + COM_Interrupt), 0x00);
+
 			// Enable DLAB (set baud rate divisor)
 			Native.Out8((ushort)(com + COM_ModemControl), 0x80);
+
 			// Set divisor to 3 (lo byte) 115200 baud
 			Native.Out8((ushort)(com + COM_Data), 0x01);
+
 			// (hi byte)
 			Native.Out8((ushort)(com + COM_Interrupt), 0x00);
+
 			// 8 bits, no parity, one stop bit
 			Native.Out8((ushort)(com + COM_ModemControl), 0x03);
+
 			// Enable FIFO, clear them, with 14-byte threshold
 			Native.Out8((ushort)(com + COM_LineControl), 0xC7);
+
 			// IRQs enabled, RTS/DSR set
 			Native.Out8((ushort)(com + COM_LineStatus), 0x0B);
+
 			// Enable all interrupts
 			Native.Out8((ushort)(com + COM_Interrupt), 0x0F);
 		}
@@ -84,7 +91,5 @@ namespace Mosa.Kernel.x86
 			foreach (var c in message)
 				Write(com, (byte)c);
 		}
-
-
 	}
 }

@@ -7,7 +7,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
@@ -27,7 +26,7 @@ namespace Mosa.Compiler.Framework.CIL
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Methods Overrides
 
@@ -44,7 +43,6 @@ namespace Mosa.Compiler.Framework.CIL
 			ctx.Result = compiler.CreateVirtualRegister(ctx.Operand1.Type);
 		}
 
-
 		/// <summary>
 		/// Allows visitor based dispatch for this instruction object.
 		/// </summary>
@@ -55,6 +53,6 @@ namespace Mosa.Compiler.Framework.CIL
 			visitor.UnaryArithmetic(context);
 		}
 
-		#endregion // Methods Overrides
+		#endregion Methods Overrides
 	}
 }

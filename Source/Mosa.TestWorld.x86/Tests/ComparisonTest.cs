@@ -13,7 +13,7 @@ namespace Mosa.TestWorld.x86.Tests
 	public class ComparisonTest : KernelTest
 	{
 		public ComparisonTest()
-			: base("Comparison") 
+			: base("Comparison")
 		{
 			testMethods.Add(CompareTest1);
 			testMethods.Add(CompareTest2);
@@ -34,6 +34,5 @@ namespace Mosa.TestWorld.x86.Tests
 		{
 			return ComparisonTests.CompareEqualI2I8(-1, -1);
 		}
-	
 	}
 }

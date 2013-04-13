@@ -6,13 +6,13 @@
  * Authors:
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  */
+
 using System;
 using path_commands_e = Pictor.Path.EPathCommands;
 using path_flags_e = Pictor.Path.EPathFlags;
 
 namespace Pictor.VertexSource
 {
-
 	//----------------------------------------------------------------ellipse
 	public class Ellipse : IVertexSource
 	{
@@ -40,13 +40,11 @@ namespace Pictor.VertexSource
 		public Ellipse(double OriginX, double OriginY, double RadiusX, double RadiusY)
 			: this(OriginX, OriginY, RadiusX, RadiusY, 0, false)
 		{
-
 		}
 
 		public Ellipse(double OriginX, double OriginY, double RadiusX, double RadiusY, uint num_steps)
 			: this(OriginX, OriginY, RadiusX, RadiusY, num_steps, false)
 		{
-
 		}
 
 		public Ellipse(double OriginX, double OriginY, double RadiusX, double RadiusY,
@@ -99,7 +97,6 @@ namespace Pictor.VertexSource
 			}
 		}
 
-
 		public void Rewind(uint path_id)
 		{
 			m_step = 0;
@@ -132,8 +129,4 @@ namespace Pictor.VertexSource
 	};
 }
 
-
-
 //#endif
-
-

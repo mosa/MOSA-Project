@@ -7,10 +7,8 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System.Collections.Generic;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Metadata.Signatures;
-using Mosa.Compiler.TypeSystem;
 using Mosa.Compiler.Framework.IR;
 
 namespace Mosa.Platform.x86.Intrinsic
@@ -20,7 +18,6 @@ namespace Mosa.Platform.x86.Intrinsic
 	/// </summary>
 	public class GetMethodLookupTable : IIntrinsicPlatformMethod
 	{
-
 		#region Methods
 
 		/// <summary>
@@ -33,7 +30,6 @@ namespace Mosa.Platform.x86.Intrinsic
 			context.SetInstruction(IRInstruction.Move, context.Result, Operand.CreateSymbol(BuiltInSigType.Ptr, @"<$>methodLookupTable"));
 		}
 
-		#endregion // Methods
-
+		#endregion Methods
 	}
 }

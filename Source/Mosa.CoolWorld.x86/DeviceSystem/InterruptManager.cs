@@ -17,17 +17,17 @@ namespace Mosa.DeviceSystem
 	public class InterruptManager
 	{
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public const ushort MaxInterrupts = 16;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected LinkedList<IHardwareDevice>[] interruptHandlers;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected SpinLock spinLock;
 
@@ -48,7 +48,7 @@ namespace Mosa.DeviceSystem
 		/// <param name="irq">The irq.</param>
 		public void ProcessInterrupt(byte irq, byte error)
 		{
-			//Mosa.Kernel.x86.Debug.Trace("Enter InterruptManager.ProcessInterrupt");		
+			//Mosa.Kernel.x86.Debug.Trace("Enter InterruptManager.ProcessInterrupt");
 
 			//spinLock.Enter();
 			var handlers = interruptHandlers[irq];
@@ -60,7 +60,7 @@ namespace Mosa.DeviceSystem
 			//    hardwareDevice.OnInterrupt();
 			//}
 
-			//spinLock.Exit();	
+			//spinLock.Exit();
 		}
 
 		/// <summary>
@@ -98,6 +98,5 @@ namespace Mosa.DeviceSystem
 				spinLock.Exit();
 			}
 		}
-
 	}
 }

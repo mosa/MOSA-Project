@@ -11,9 +11,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Pipes;
-using System.Net.Sockets;
-using System.Text;
-using System.Threading;
 
 namespace Mosa.Utility.DebugEngine
 {
@@ -174,9 +171,9 @@ namespace Mosa.Utility.DebugEngine
 
 		// Message format:	[MAGIC]-ID-CODE-LEN-CHECKSUM-DATA
 
-		byte[] buffer = new byte[4096 + 5 * 4 + 1];
-		int index = 0;
-		int length = -1;
+		private byte[] buffer = new byte[4096 + 5 * 4 + 1];
+		private int index = 0;
+		private int length = -1;
 
 		private void BadDataAbort()
 		{
@@ -240,9 +237,6 @@ namespace Mosa.Utility.DebugEngine
 			{
 				// nothing for now
 			}
-
 		}
-
-
 	}
 }

@@ -64,43 +64,43 @@ namespace Mosa.Compiler.TypeSystem
 		private RuntimeField[] fields;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private RuntimeMember[] memberRef;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private RuntimeType[] typeRef;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private RuntimeType[] genericParamConstraint;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private Dictionary<Token, string> externals;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private Dictionary<HeapIndexToken, string> strings;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private Dictionary<HeapIndexToken, Signature> signatures;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private int[] tableRows = new int[TableCount];
 
 		private const int TableCount = ((int)TableType.GenericParamConstraint >> 24) + 1;
 
-		#endregion // Data members
+		#endregion Data members
 
 		#region Construction
 
@@ -150,7 +150,7 @@ namespace Mosa.Compiler.TypeSystem
 			LoadExternals();
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Internals
 
@@ -557,7 +557,6 @@ namespace Mosa.Compiler.TypeSystem
 
 				declaringType.Interfaces.Add(interfaceType);
 			}
-
 		}
 
 		/// <summary>
@@ -762,10 +761,12 @@ namespace Mosa.Compiler.TypeSystem
 				switch (owner.Table)
 				{
 					case TableType.Assembly:
+
 						// AttributeTargets.Assembly
 						break;
 
 					case TableType.TypeDef:
+
 						// AttributeTargets.Class
 						// AttributeTargets.Delegate
 						// AttributeTargets.Enum
@@ -775,34 +776,41 @@ namespace Mosa.Compiler.TypeSystem
 						break;
 
 					case TableType.MethodDef:
+
 						// AttributeTargets.Constructor
 						// AttributeTargets.Method
 						methods[owner.RID - 1].CustomAttributes.Add(runtimeAttribute);
 						break;
 
 					case TableType.Event:
+
 						// AttributeTargets.Event
 						break;
 
 					case TableType.Field:
+
 						// AttributeTargets.Field
 						fields[owner.RID - 1].CustomAttributes.Add(runtimeAttribute);
 						break;
 
 					case TableType.GenericParam:
+
 						// AttributeTargets.GenericParameter
 						break;
 
 					case TableType.Module:
+
 						// AttributeTargets.Module
 						break;
 
 					case TableType.Param:
+
 						// AttributeTargets.Parameter
 						// AttributeTargets.ReturnValue
 						break;
 
 					case TableType.Property:
+
 						// AttributeTargets.StackFrameIndex
 						break;
 
@@ -810,7 +818,6 @@ namespace Mosa.Compiler.TypeSystem
 					//    throw new NotImplementedException();
 				}
 			}
-
 		}
 
 		/// <summary>
@@ -920,7 +927,7 @@ namespace Mosa.Compiler.TypeSystem
 			}
 		}
 
-		#endregion
+		#endregion Internals
 
 		#region ITypeModule interface
 
@@ -1036,6 +1043,7 @@ namespace Mosa.Compiler.TypeSystem
 					return memberRef[token.RID - 1] as RuntimeMethod;
 
 				case TableType.MethodSpec:
+
 					//TODO
 					//    return DecodeMethodSpec(token);
 					//    break;
@@ -1100,7 +1108,6 @@ namespace Mosa.Compiler.TypeSystem
 						return genericType;
 					}
 				}
-
 			}
 
 			return null;
@@ -1120,7 +1127,7 @@ namespace Mosa.Compiler.TypeSystem
 			return name;
 		}
 
-		#endregion
+		#endregion ITypeModule interface
 
 		/// <summary>
 		/// Returns a <see cref="System.String"/> that represents this instance.
@@ -1134,5 +1141,3 @@ namespace Mosa.Compiler.TypeSystem
 		}
 	}
 }
-
-

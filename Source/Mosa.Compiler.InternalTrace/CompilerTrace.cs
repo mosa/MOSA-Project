@@ -14,7 +14,7 @@ namespace Mosa.Compiler.InternalTrace
 	public class CompilerTrace
 	{
 		private IInternalTrace internalTrace;
-		
+
 		public string Stage { get; set; }
 
 		public RuntimeMethod Method { get; set; }

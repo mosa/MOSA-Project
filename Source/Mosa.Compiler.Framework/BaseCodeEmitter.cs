@@ -24,7 +24,6 @@ namespace Mosa.Compiler.Framework
 	/// </summary>
 	public class BaseCodeEmitter : IDisposable, ICodeEmitter
 	{
-
 		#region Types
 
 		/// <summary>
@@ -65,7 +64,7 @@ namespace Mosa.Compiler.Framework
 			}
 		}
 
-		#endregion // Types
+		#endregion Types
 
 		#region Data members
 
@@ -104,7 +103,7 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		protected readonly List<Patch> patches = new List<Patch>();
 
-		#endregion
+		#endregion Data members
 
 		#region IDisposable Members
 
@@ -118,7 +117,7 @@ namespace Mosa.Compiler.Framework
 			codeStream.Flush();
 		}
 
-		#endregion // IDisposable Members
+		#endregion IDisposable Members
 
 		#region ICodeEmitter Members
 
@@ -179,9 +178,9 @@ namespace Mosa.Compiler.Framework
 		{
 			/*
 			 * Labels are used to resolve branches inside a procedure. Branches outside
-			 * of procedures are handled differently, t.b.d. 
-			 * 
-			 * So we store the current instruction offset with the label info to be able to 
+			 * of procedures are handled differently, t.b.d.
+			 *
+			 * So we store the current instruction offset with the label info to be able to
 			 * resolve jumps to this location.
 			 *
 			 */
@@ -218,7 +217,7 @@ namespace Mosa.Compiler.Framework
 			get { return codeStream.Position; }
 		}
 
-		#endregion // ICodeEmitter Members
+		#endregion ICodeEmitter Members
 
 		#region Code Generation Members
 
@@ -242,7 +241,6 @@ namespace Mosa.Compiler.Framework
 			codeStream.Write(buffer, offset, count);
 		}
 
-		#endregion
-
+		#endregion Code Generation Members
 	}
 }

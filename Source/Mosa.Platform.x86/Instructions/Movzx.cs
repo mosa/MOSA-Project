@@ -20,14 +20,13 @@ namespace Mosa.Platform.x86.Instructions
 	/// </summary>
 	public sealed class Movzx : X86Instruction
 	{
-
 		#region Data Members
 
 		private static readonly OpCode R_X8 = new OpCode(new byte[] { 0x0F, 0xB6 });
 		private static readonly OpCode R_X16 = new OpCode(new byte[] { 0x0F, 0xB7 });
 
-		#endregion
-		
+		#endregion Data Members
+
 		#region Construction
 
 		/// <summary>
@@ -38,7 +37,7 @@ namespace Mosa.Platform.x86.Instructions
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Methods
 
@@ -65,12 +64,14 @@ namespace Mosa.Platform.x86.Instructions
 						if ((destination.IsRegister) && (source.IsMemoryAddress)) return R_X8;
 					}
 					break;
+
 				case CilElementType.Char: goto case CilElementType.U2;
 				case CilElementType.U2: goto case CilElementType.I2;
 				case CilElementType.I2:
 					if ((destination.IsRegister) && (source.IsRegister)) return R_X16;
 					if ((destination.IsRegister) && (source.IsMemoryAddress)) return R_X16;
 					break;
+
 				case CilElementType.Boolean: goto case CilElementType.I1;
 				default:
 
@@ -90,6 +91,6 @@ namespace Mosa.Platform.x86.Instructions
 			visitor.Movzx(context);
 		}
 
-		#endregion
+		#endregion Methods
 	}
 }

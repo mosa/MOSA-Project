@@ -16,7 +16,10 @@ namespace Mosa.Internal
 		private const uint nativeIntSize = 4;
 
 		// This method will be plugged by "Mosa.Kernel.AVR32.KernelMemory.AllocateMemory"
-		private static uint AllocateMemory(uint size) { return 0; }
+		private static uint AllocateMemory(uint size)
+		{
+			return 0;
+		}
 
 		public static void* AllocateObject(void* methodTable, uint classSize)
 		{
@@ -276,7 +279,6 @@ namespace Mosa.Internal
 
 		public static void Throw(uint something)
 		{
-
 		}
 
 		public static uint GetSizeOfObject(void* obj)
@@ -297,7 +299,5 @@ namespace Mosa.Internal
 
 			return sizeOf;
 		}
-
-
 	}
 }

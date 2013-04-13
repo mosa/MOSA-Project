@@ -17,7 +17,6 @@ namespace Mosa.Compiler.TypeSystem
 {
 	public interface ITypeModule
 	{
-
 		/// <summary>
 		/// Gets the type system.
 		/// </summary>

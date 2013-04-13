@@ -7,7 +7,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System.Diagnostics;
 using Mosa.Compiler.Framework;
 
 namespace Mosa.Platform.x86.Instructions
@@ -17,19 +16,18 @@ namespace Mosa.Platform.x86.Instructions
 	/// </summary>
 	public sealed class Jmp : X86Instruction
 	{
-
 		#region Data Members
 
 		private static readonly byte[] JMP = new byte[] { 0xE9 };
 		private static readonly OpCode JMP_R = new OpCode(new byte[] { 0xFF }, 4);
 
-		#endregion
+		#endregion Data Members
 
 		#region Properties
 
 		public override FlowControl FlowControl { get { return FlowControl.Branch; } }
 
-		#endregion // Properties
+		#endregion Properties
 
 		#region Construction
 
@@ -41,7 +39,7 @@ namespace Mosa.Platform.x86.Instructions
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Methods
 
@@ -80,7 +78,6 @@ namespace Mosa.Platform.x86.Instructions
 			visitor.Add(context);
 		}
 
-		#endregion // Methods
-
+		#endregion Methods
 	}
 }

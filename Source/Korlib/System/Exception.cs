@@ -27,7 +27,10 @@ namespace System
 		/// Initializes a new instance of the <see cref="Exception"/> class.
 		/// </summary>
 		/// <param name="message">The message.</param>
-		public Exception(string message) { this.message = message; }
+		public Exception(string message)
+		{
+			this.message = message;
+		}
 
 		/// <summary>
 		/// Gets the message.

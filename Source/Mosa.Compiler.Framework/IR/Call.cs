@@ -1,5 +1,4 @@
-﻿
-namespace Mosa.Compiler.Framework.IR
+﻿namespace Mosa.Compiler.Framework.IR
 {
 	/// <summary>
 	/// Intermediate representation of call context.
@@ -16,7 +15,7 @@ namespace Mosa.Compiler.Framework.IR
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region IRInstruction Overrides
 
@@ -30,6 +29,6 @@ namespace Mosa.Compiler.Framework.IR
 			visitor.Call(context);
 		}
 
-		#endregion // IRInstruction Overrides
+		#endregion IRInstruction Overrides
 	}
 }

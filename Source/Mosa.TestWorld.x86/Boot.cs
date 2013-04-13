@@ -5,16 +5,14 @@
  *
  */
 
-using System;
 using Mosa.TestWorld.x86.Tests;
 using Mosa.Kernel.x86;
-using Mosa.Kernel.x86.Smbios;
 using Mosa.Platform.x86.Intrinsic;
 
 namespace Mosa.TestWorld.x86
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public static class Boot
 	{
@@ -57,9 +55,8 @@ namespace Mosa.TestWorld.x86
 			CMOS cmos = new CMOS();
 
 			KernelTest.RunTests();
-            Mosa.Test.AssemblyB.Test.Test1();
-            Mosa.Test.AssemblyC.Test.Test1();
-
+			Mosa.Test.AssemblyB.Test.Test1();
+			Mosa.Test.AssemblyC.Test.Test1();
 
 			byte last = 0;
 
@@ -77,7 +74,7 @@ namespace Mosa.TestWorld.x86
 				Native.Hlt();
 			}
 		}
-        
+
 		/// <summary>
 		/// Displays the seconds.
 		/// </summary>
@@ -149,7 +146,7 @@ namespace Mosa.TestWorld.x86
 			}
 			else if (interrupt == 0x20)
 			{
-				// Timer Interrupt! Switch Tasks!	
+				// Timer Interrupt! Switch Tasks!
 			}
 			else
 			{

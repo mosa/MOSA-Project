@@ -24,7 +24,7 @@ namespace Mosa.Compiler.LinkerFormat.PE
 		/// </summary>
 		public const ushort DOS_HEADER_MAGIC = 0x5A4D;
 
-		#endregion // Constants
+		#endregion Constants
 
 		#region Data members
 
@@ -183,11 +183,11 @@ namespace Mosa.Compiler.LinkerFormat.PE
 		/// </summary>
 		public uint e_lfanew;
 
-		#endregion // Data members
+		#endregion Data members
 
 		#region Construction
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Methods
 
@@ -271,6 +271,6 @@ namespace Mosa.Compiler.LinkerFormat.PE
 			writer.Write(e_lfanew);
 		}
 
-		#endregion // Methods
+		#endregion Methods
 	}
 }

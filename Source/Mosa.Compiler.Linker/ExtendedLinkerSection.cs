@@ -4,7 +4,7 @@
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com> 
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 using System;
@@ -25,7 +25,7 @@ namespace Mosa.Compiler.Linker
 		/// </summary>
 		protected Stream stream;
 
-		#endregion // Data members
+		#endregion Data members
 
 		#region Construction
 
@@ -40,7 +40,7 @@ namespace Mosa.Compiler.Linker
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Properties
 
@@ -50,7 +50,7 @@ namespace Mosa.Compiler.Linker
 		/// <value>The length of the section in bytes.</value>
 		public override long Length { get { return stream.Length; } }
 
-		#endregion // Properties
+		#endregion Properties
 
 		#region Methods
 
@@ -157,12 +157,15 @@ namespace Mosa.Compiler.Linker
 				case LinkType.I1:
 					current = (ulong)stream.ReadByte();
 					break;
+
 				case LinkType.I2:
 					current = (ulong)stream.ReadUInt16(endianness);
 					break;
+
 				case LinkType.I4:
 					current = (ulong)stream.ReadUInt32(endianness);
 					break;
+
 				case LinkType.I8:
 					current = (ulong)stream.ReadUInt64(endianness);
 					break;
@@ -177,12 +180,15 @@ namespace Mosa.Compiler.Linker
 				case LinkType.I1:
 					stream.WriteByte((byte)current);
 					break;
+
 				case LinkType.I2:
 					stream.Write((ushort)current, endianness);
 					break;
+
 				case LinkType.I4:
 					stream.Write((uint)current, endianness);
 					break;
+
 				case LinkType.I8:
 					stream.Write((ulong)current, endianness);
 					break;
@@ -191,7 +197,6 @@ namespace Mosa.Compiler.Linker
 			//stream.Position = pos;
 		}
 
-		#endregion // Methods
-
+		#endregion Methods
 	}
 }

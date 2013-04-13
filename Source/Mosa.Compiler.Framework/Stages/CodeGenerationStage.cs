@@ -12,7 +12,6 @@ using System.Diagnostics;
 using System.IO;
 using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.Framework.Platform;
-using Mosa.Compiler.InternalTrace;
 
 namespace Mosa.Compiler.Framework.Stages
 {
@@ -21,7 +20,6 @@ namespace Mosa.Compiler.Framework.Stages
 	/// </summary>
 	public class CodeGenerationStage : BaseMethodCompilerStage, IMethodCompilerStage, IPipelineStage
 	{
-
 		#region Data members
 
 		/// <summary>
@@ -30,17 +28,17 @@ namespace Mosa.Compiler.Framework.Stages
 		protected static Stream codeStream;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected ICodeEmitter codeEmitter;
 
-		#endregion // Data members
+		#endregion Data members
 
 		#region Properties
 
 		public ICodeEmitter CodeEmitter { get { return codeEmitter; } }
 
-		#endregion // Properties
+		#endregion Properties
 
 		#region Methods
 
@@ -142,6 +140,6 @@ namespace Mosa.Compiler.Framework.Stages
 			codeEmitter.Dispose();
 		}
 
-		#endregion // Methods
+		#endregion Methods
 	}
 }

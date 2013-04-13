@@ -7,17 +7,12 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
-using Mosa.Compiler.Common;
 
 namespace Mosa.Compiler.Framework
 {
-
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public sealed class OperandVisitor
 	{
@@ -72,7 +67,6 @@ namespace Mosa.Compiler.Framework
 						}
 					}
 				}
-
 			}
 		}
 
@@ -89,8 +83,5 @@ namespace Mosa.Compiler.Framework
 				}
 			}
 		}
-
 	}
-
 }
-

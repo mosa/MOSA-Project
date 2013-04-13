@@ -18,7 +18,6 @@ namespace Mosa.Compiler.Framework.IR
 	/// </remarks>
 	public abstract class OneOperandInstruction : BaseIRInstruction
 	{
-
 		#region Construction
 
 		/// <summary>
@@ -38,7 +37,6 @@ namespace Mosa.Compiler.Framework.IR
 		{
 		}
 
-		#endregion // Construction
-
+		#endregion Construction
 	}
 }

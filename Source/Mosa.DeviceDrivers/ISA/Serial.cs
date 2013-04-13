@@ -21,237 +21,276 @@ namespace Mosa.DeviceDrivers.ISA
 	public class Serial : HardwareDevice, IDevice, IHardwareDevice, ISerialDevice
 	{
 		/// <summary>
-		/// Receive Buffer Register (read only)		
+		/// Receive Buffer Register (read only)
 		/// </summary>
 		protected IReadOnlyIOPort rbrBase;
+
 		/// <summary>
-		/// Transmitter Holding Register (write only)		
+		/// Transmitter Holding Register (write only)
 		/// </summary>
 		protected IWriteOnlyIOPort thrBase;
+
 		/// <summary>
-		/// Interrupt Enable Register		
+		/// Interrupt Enable Register
 		/// </summary>
 		protected IReadWriteIOPort ierBase;
+
 		/// <summary>
 		/// Divisor Latch (LSB and MSB)
 		/// </summary>
 		protected IReadWriteIOPort dllBase;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IReadWriteIOPort dlmBase;
+
 		/// <summary>
-		/// Interrupt Identification Register (read only)		
+		/// Interrupt Identification Register (read only)
 		/// </summary>
 		protected IReadOnlyIOPort iirBase;
+
 		/// <summary>
-		/// FIFO Control Register (write only, 16550+ only)		
+		/// FIFO Control Register (write only, 16550+ only)
 		/// </summary>
 		protected IWriteOnlyIOPort fcrBase;
+
 		/// <summary>
-		/// Line Control Register		
+		/// Line Control Register
 		/// </summary>
 		protected IReadWriteIOPort lcrBase;
+
 		/// <summary>
-		/// Modem Control Register		
+		/// Modem Control Register
 		/// </summary>
 		protected IReadWriteIOPort mcrBase;
+
 		/// <summary>
-		/// Line Status Register		
+		/// Line Status Register
 		/// </summary>
 		protected IReadWriteIOPort lsrBase;
+
 		/// <summary>
-		/// Modem Status Register		
+		/// Modem Status Register
 		/// </summary>
 		protected IReadWriteIOPort msrBase;
+
 		/// <summary>
 		/// Scratch Register (16450+ and some 8250s, special use with some boards)
 		/// </summary>
 		protected IReadWriteIOPort scrBase;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected SpinLock spinLock;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected const ushort fifoSize = 256;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected byte[] fifoBuffer;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected uint fifoStart;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected uint fifoEnd;
 
 		#region Flags
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		[System.Flags]
 		private enum IER : byte
 		{
 			/// <summary>
-			/// 
+			///
 			/// </summary>
 			DR = 0x01, // Data ready, it is generated if data waits to be read by the CPU.
+
 			/// <summary>
-			/// 
+			///
 			/// </summary>
 			THRE = 0x02, // THR Empty, this interrupt tells the CPU to write characters to the THR.
+
 			/// <summary>
-			/// 
+			///
 			/// </summary>
 			SI = 0x04, // Status interrupt. It informs the CPU of occurred transmission errors during reception.
+
 			/// <summary>
-			/// 
+			///
 			/// </summary>
 			MSI = 0x08 // Modem status interrupt. It is triggered whenever one of the delta-bits is set (see MSR).
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		[System.Flags]
 		private enum FCR : byte
 		{
 			/// <summary>
-			/// 
+			///
 			/// </summary>
 			Enabled = 0x01, // FIFO enable.
+
 			/// <summary>
-			/// 
+			///
 			/// </summary>
 			CLR_RCVR = 0x02, // Clear receiver FIFO. This bit is self-clearing.
+
 			/// <summary>
-			/// 
+			///
 			/// </summary>
 			CLR_XMIT = 0x04, // Clear transmitter FIFO. This bit is self-clearing.
+
 			/// <summary>
-			/// 
+			///
 			/// </summary>
 			DMA = 0x08, // DMA mode
+
 			// Receiver FIFO trigger level
 			/// <summary>
-			/// 
+			///
 			/// </summary>
 			TL1 = 0x00,
+
 			/// <summary>
-			/// 
+			///
 			/// </summary>
 			TL4 = 0x40,
+
 			/// <summary>
-			/// 
+			///
 			/// </summary>
 			TL8 = 0x80,
+
 			/// <summary>
-			/// 
+			///
 			/// </summary>
 			TL14 = 0xC0,
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		[System.Flags]
 		private enum LCR : byte
 		{
 			// Word length
 			/// <summary>
-			/// 
+			///
 			/// </summary>
 			CS5 = 0x00, // 5bits
+
 			/// <summary>
-			/// 
+			///
 			/// </summary>
 			CS6 = 0x01, // 6bits
+
 			/// <summary>
-			/// 
+			///
 			/// </summary>
 			CS7 = 0x02, // 7bits
+
 			/// <summary>
-			/// 
+			///
 			/// </summary>
 			CS8 = 0x03, // 8bits
+
 			// Stop bit
 			/// <summary>
-			/// 
+			///
 			/// </summary>
 			ST1 = 0x00, // 1
+
 			/// <summary>
-			/// 
+			///
 			/// </summary>
 			ST2 = 0x04, // 2
+
 			// Parity
 			/// <summary>
-			/// 
+			///
 			/// </summary>
 			PNO = 0x00, // None
+
 			/// <summary>
-			/// 
+			///
 			/// </summary>
 			POD = 0x08, // Odd
+
 			/// <summary>
-			/// 
+			///
 			/// </summary>
 			PEV = 0x18, // Even
+
 			/// <summary>
-			/// 
+			///
 			/// </summary>
-			PMK = 0x28, // Mark 
+			PMK = 0x28, // Mark
+
 			/// <summary>
-			/// 
+			///
 			/// </summary>
 			PSP = 0x38, // Space
 
 			/// <summary>
-			/// 
+			///
 			/// </summary>
 			BRK = 0x40,
+
 			/// <summary>
-			/// 
+			///
 			/// </summary>
 			DLAB = 0x80,
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		[System.Flags]
 		private enum MCR : byte
 		{
 			/// <summary>
-			/// 
+			///
 			/// </summary>
 			DTR = 0x01,
+
 			/// <summary>
-			/// 
+			///
 			/// </summary>
 			RTS = 0x02,
+
 			/// <summary>
-			/// 
+			///
 			/// </summary>
 			OUT1 = 0x04,
+
 			/// <summary>
-			/// 
+			///
 			/// </summary>
 			OUT2 = 0x08,
+
 			/// <summary>
-			/// 
+			///
 			/// </summary>
 			LOOP = 0x10,
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		[System.Flags]
 		private enum LSR : byte
@@ -260,26 +299,32 @@ namespace Mosa.DeviceDrivers.ISA
 			/// Data Ready. Reset by reading RBR (but only if the RX FIFO is empty, 16550+).
 			/// </summary>
 			DR = 0x01,
+
 			/// <summary>
 			/// Overrun Error. Reset by reading LSR. Indicates loss of data.
 			/// </summary>
 			OE = 0x02,
+
 			/// <summary>
 			/// Parity Error. Indicates transmission error. Reset by LSR.
 			/// </summary>
 			PE = 0x04,
+
 			/// <summary>
 			/// Framing Error. Indicates missing stop bit. Reset by LSR.
 			/// </summary>
 			FE = 0x08,
+
 			/// <summary>
 			/// Break Indicator. Set if RxD is 'space' for more than 1 word ('break'). Reset by reading LSR.
 			/// </summary>
 			BI = 0x10,
+
 			/// <summary>
 			/// Transmitter Holding Register Empty. Indicates that a new word can be written to THR. Reset by writing THR.
 			/// </summary>
 			THRE = 0x20,
+
 			/// <summary>
 			/// Transmitter Empty. Indicates that no transmission is running. Reset by reading LSR.
 			/// </summary>
@@ -287,51 +332,60 @@ namespace Mosa.DeviceDrivers.ISA
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		[System.Flags]
 		private enum MSR : byte
 		{
 			/// <summary>
-			/// 
+			///
 			/// </summary>
 			DCTS = 0x01,
+
 			/// <summary>
-			/// 
+			///
 			/// </summary>
 			DDSR = 0x02,
+
 			/// <summary>
-			/// 
+			///
 			/// </summary>
 			DRI = 0x04,
+
 			/// <summary>
-			/// 
+			///
 			/// </summary>
 			DDCD = 0x08,
+
 			/// <summary>
-			/// 
+			///
 			/// </summary>
 			CTS = 0x10,
+
 			/// <summary>
-			/// 
+			///
 			/// </summary>
 			DSR = 0x20,
+
 			/// <summary>
-			/// 
+			///
 			/// </summary>
 			RI = 0x40,
+
 			/// <summary>
-			/// 
+			///
 			/// </summary>
 			DCD = 0x80
 		}
 
-		#endregion
+		#endregion Flags
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Serial"/> class.
 		/// </summary>
-		public Serial() { }
+		public Serial()
+		{
+		}
 
 		/// <summary>
 		/// Setups this hardware device driver

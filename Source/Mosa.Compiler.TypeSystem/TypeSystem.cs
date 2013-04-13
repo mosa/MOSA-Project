@@ -21,7 +21,7 @@ namespace Mosa.Compiler.TypeSystem
 	public sealed class TypeSystem : ITypeSystem
 	{
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private List<ITypeModule> typeModules = new List<ITypeModule>();
 
@@ -223,7 +223,7 @@ namespace Mosa.Compiler.TypeSystem
 			return genericType;
 		}
 
-		#endregion // ITypeSystem interface
+		#endregion ITypeSystem interface
 
 		/// <summary>
 		/// Initializes the internal type module.

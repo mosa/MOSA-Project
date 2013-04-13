@@ -8,7 +8,6 @@
  */
 
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Linker;
 using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Compiler.TypeSystem;
 using Mosa.Compiler.Framework.Linker;
@@ -16,13 +15,11 @@ using Mosa.Compiler.Framework.IR;
 
 namespace Mosa.Platform.x86.Stages
 {
-
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public sealed class InterruptVectorStage : BaseCompilerStage, ICompilerStage, IPipelineStage
 	{
-
 		#region ICompilerStage Members
 
 		void ICompilerStage.Setup(BaseCompiler compiler)
@@ -38,7 +35,7 @@ namespace Mosa.Platform.x86.Stages
 			CreateInterruptVectors();
 		}
 
-		#endregion // ICompilerStage Members
+		#endregion ICompilerStage Members
 
 		#region Internal
 

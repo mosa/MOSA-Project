@@ -7,15 +7,13 @@
  *  Simon Wollwage (rootnode) <rootnode@mosa-project.org>
  */
 
-using System.Collections.Generic;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Metadata.Signatures;
-using Mosa.Compiler.TypeSystem;
 
 namespace Mosa.Platform.x86.Intrinsic
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public sealed class RestoreContext : IIntrinsicPlatformMethod
 	{
@@ -28,7 +26,6 @@ namespace Mosa.Platform.x86.Intrinsic
 		/// <param name="typeSystem">The type system.</param>
 		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, BaseMethodCompiler methodCompiler)
 		{
-			
 			// Retrieve register context
 			//context.SetInstruction(CPUx86.Instruction.MovInstruction, new RegisterOperand(BuiltInSigType.UInt32, GeneralPurposeRegister.EAX), Operand.CreateMemoryAddress(BuiltInSigType.UInt32, GeneralPurposeRegister.ESP, new IntPtr(28)));
 
@@ -49,12 +46,12 @@ namespace Mosa.Platform.x86.Intrinsic
 			// Restore registers
 			context.SetInstruction(X86.Mov, Operand.CreateCPURegister(BuiltInSigType.UInt32, GeneralPurposeRegister.ESP), context.Operand1);
 
-
 			// Jmp to EIP (stored in EDX)
 			context.AppendInstruction(X86.Jmp, null, edx);
+
 			//context.SetOperand(0, edx);
 		}
 
-		#endregion // Methods
+		#endregion Methods
 	}
 }

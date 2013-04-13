@@ -10,77 +10,77 @@
 namespace Mosa.FileSystem.FAT
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public class FatFileStream : System.IO.Stream
 	{
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected uint startCluster;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected uint currentCluster;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected uint directorySector;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected uint directorySectorIndex;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected uint nthCluster;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected long position;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected long length;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected long lengthOnDisk;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected bool read;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected bool write;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected byte[] data;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected bool dirty;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected uint clusterSize;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected FatFileSystem fs;
 
@@ -114,7 +114,7 @@ namespace Mosa.FileSystem.FAT
 			this.position = 0;
 			this.dirty = false;
 
-			this.nthCluster = System.UInt32.MaxValue; // Not positioned yet 
+			this.nthCluster = System.UInt32.MaxValue; // Not positioned yet
 
 			this.lengthOnDisk = fs.GetFileSize(directorySector, directorySectorIndex);
 			this.length = this.lengthOnDisk;
@@ -516,7 +516,6 @@ namespace Mosa.FileSystem.FAT
 			//    position += size;
 			//    remaining -= size;
 			//}
-
 		}
 
 		/// <summary>

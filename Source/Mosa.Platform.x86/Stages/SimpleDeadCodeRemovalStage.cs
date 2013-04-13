@@ -8,7 +8,6 @@
  */
 
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.InternalTrace;
 
 namespace Mosa.Platform.x86.Stages
 {
@@ -61,6 +60,6 @@ namespace Mosa.Platform.x86.Stages
 			}
 		}
 
-		#endregion // IMethodCompilerStage Members
+		#endregion IMethodCompilerStage Members
 	}
 }

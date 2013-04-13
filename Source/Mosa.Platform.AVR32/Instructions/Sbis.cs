@@ -12,11 +12,10 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.AVR32.Instructions
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public class Sbis : AVR32Instruction
 	{
-			
 		#region Construction
 
 		/// <summary>
@@ -27,7 +26,7 @@ namespace Mosa.Platform.AVR32.Instructions
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Methods
 
@@ -51,7 +50,6 @@ namespace Mosa.Platform.AVR32.Instructions
 			visitor.Sbis(context);
 		}
 
-		#endregion // Methods
-
+		#endregion Methods
 	}
 }

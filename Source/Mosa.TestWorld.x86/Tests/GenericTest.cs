@@ -7,10 +7,10 @@
 
 namespace Mosa.TestWorld.x86.Tests
 {
-
 	public class GenericTest : KernelTest
 	{
-		public GenericTest() : base("Gen-T") 
+		public GenericTest()
+			: base("Gen-T")
 		{
 			testMethods.Add(GenericTest1);
 			testMethods.Add(GenericTest2);
@@ -130,6 +130,7 @@ namespace Mosa.TestWorld.x86.Tests
 	public interface IGenericInterface<T>
 	{
 		int Return10();
+
 		T ReturnIt();
 	}
 
@@ -137,11 +138,25 @@ namespace Mosa.TestWorld.x86.Tests
 	{
 		public T value;
 
-		public T GetValue() { return value; }
-		public void SetValue(T value) { this.value = value; }
+		public T GetValue()
+		{
+			return value;
+		}
 
-		public int Return10() { return 10; }
-		public T ReturnIt() { return value; }
+		public void SetValue(T value)
+		{
+			this.value = value;
+		}
+
+		public int Return10()
+		{
+			return 10;
+		}
+
+		public T ReturnIt()
+		{
+			return value;
+		}
 	}
 
 	public class TestObject
@@ -155,5 +170,4 @@ namespace Mosa.TestWorld.x86.Tests
 			B = b;
 		}
 	}
-
 }

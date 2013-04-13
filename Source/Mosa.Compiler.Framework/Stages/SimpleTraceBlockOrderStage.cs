@@ -17,7 +17,6 @@ namespace Mosa.Compiler.Framework.Stages
 	/// </summary>
 	public class SimpleTraceBlockOrderStage : BaseMethodCompilerStage, IMethodCompilerStage, IPipelineStage, IBlockOrderStage
 	{
-
 		/// <summary>
 		/// Runs the specified compiler.
 		/// </summary>
@@ -58,7 +57,5 @@ namespace Mosa.Compiler.Framework.Stages
 
 			basicBlocks.ReorderBlocks(ordered);
 		}
-
-
 	}
 }

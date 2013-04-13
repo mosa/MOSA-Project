@@ -10,7 +10,7 @@
 namespace Mosa.DeviceSystem
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public interface IMemoryRegion
 	{
@@ -19,6 +19,7 @@ namespace Mosa.DeviceSystem
 		/// </summary>
 		/// <value>The base address.</value>
 		uint BaseAddress { get; }
+
 		/// <summary>
 		/// Gets the size.
 		/// </summary>
@@ -32,5 +33,4 @@ namespace Mosa.DeviceSystem
 		/// <returns></returns>
 		bool Contains(uint address);
 	}
-
 }

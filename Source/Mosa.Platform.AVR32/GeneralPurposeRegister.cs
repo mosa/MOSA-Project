@@ -102,7 +102,7 @@ namespace Mosa.Platform.AVR32
 			LR = 14
 		}
 
-		#endregion // Types
+		#endregion Types
 
 		#region Static data members
 
@@ -181,7 +181,7 @@ namespace Mosa.Platform.AVR32
 		/// </summary>
 		public static readonly GeneralPurposeRegister LR = new GeneralPurposeRegister(14, GPR.LR);
 
-		#endregion // Static data members
+		#endregion Static data members
 
 		#region Data members
 
@@ -190,7 +190,7 @@ namespace Mosa.Platform.AVR32
 		/// </summary>
 		private readonly GPR _gpr;
 
-		#endregion // Data members
+		#endregion Data members
 
 		#region Construction
 
@@ -205,7 +205,7 @@ namespace Mosa.Platform.AVR32
 			_gpr = gpr;
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Properties
 
@@ -241,7 +241,7 @@ namespace Mosa.Platform.AVR32
 			get { return 32; }
 		}
 
-		#endregion // Properties
+		#endregion Properties
 
 		#region Methods
 
@@ -274,6 +274,6 @@ namespace Mosa.Platform.AVR32
 			return _gpr.ToString();
 		}
 
-		#endregion // Methods
+		#endregion Methods
 	}
 }

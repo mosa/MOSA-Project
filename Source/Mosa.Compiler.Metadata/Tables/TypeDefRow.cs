@@ -7,18 +7,17 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-
 namespace Mosa.Compiler.Metadata.Tables
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public struct TypeDefRow
 	{
 		#region Data members
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private TypeAttributes flags;
 
@@ -44,11 +43,11 @@ namespace Mosa.Compiler.Metadata.Tables
 		private Token fieldList;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private Token methodList;
 
-		#endregion // Data members
+		#endregion Data members
 
 		#region Construction
 
@@ -72,7 +71,7 @@ namespace Mosa.Compiler.Metadata.Tables
 			this.methodList = methodList;
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Properties
 
@@ -130,6 +129,6 @@ namespace Mosa.Compiler.Metadata.Tables
 			get { return methodList; }
 		}
 
-		#endregion // Properties
+		#endregion Properties
 	}
 }

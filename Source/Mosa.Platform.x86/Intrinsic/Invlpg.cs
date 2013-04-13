@@ -7,9 +7,7 @@
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  */
 
-using System.Collections.Generic;
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.TypeSystem;
 
 namespace Mosa.Platform.x86.Intrinsic
 {
@@ -18,7 +16,6 @@ namespace Mosa.Platform.x86.Intrinsic
 	/// </summary>
 	public sealed class Invlpg : IIntrinsicPlatformMethod
 	{
-
 		#region Methods
 
 		/// <summary>
@@ -31,6 +28,6 @@ namespace Mosa.Platform.x86.Intrinsic
 			context.SetInstruction(X86.Invlpg, null, context.Operand1);
 		}
 
-		#endregion // Methods
+		#endregion Methods
 	}
 }

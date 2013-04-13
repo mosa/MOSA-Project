@@ -7,24 +7,23 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-
 namespace System.IO
 {
 	/// Abstract implementation of the "IO.Stream" class
 	[Serializable]
-	public abstract class Stream : IDisposable // MarshalByRefObject, 
+	public abstract class Stream : IDisposable // MarshalByRefObject,
 	{
 		//public static readonly Stream Null = new NullStream ();
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected Stream()
 		{
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public abstract bool CanRead
 		{
@@ -32,7 +31,7 @@ namespace System.IO
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public abstract bool CanSeek
 		{
@@ -40,7 +39,7 @@ namespace System.IO
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public abstract bool CanWrite
 		{
@@ -48,7 +47,7 @@ namespace System.IO
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public virtual bool CanTimeout
 		{
@@ -59,7 +58,7 @@ namespace System.IO
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public abstract long Length
 		{
@@ -67,7 +66,7 @@ namespace System.IO
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public abstract long Position
 		{
@@ -76,44 +75,44 @@ namespace System.IO
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public abstract void Flush();
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public abstract int Read(byte[] buffer, int offset, int count);
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public abstract int ReadByte();
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public abstract long Seek(long offset, SeekOrigin origin);
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public abstract void SetLength(long value);
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public abstract void Write(byte[] buffer, int offset, int count);
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public abstract void WriteByte(byte value);
 
 		//		delegate void WriteDelegate (byte[] buffer, int offset, int count);
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public virtual int ReadTimeout
 		{
@@ -129,7 +128,7 @@ namespace System.IO
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public virtual int WriteTimeout
 		{
@@ -145,7 +144,7 @@ namespace System.IO
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public static Stream Synchronized(Stream stream)
 		{
@@ -153,9 +152,8 @@ namespace System.IO
 			return null;
 		}
 
-
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public virtual IAsyncResult BeginRead(byte[] buffer, int offset, int count, AsyncCallback cback, object state)
 		{
@@ -164,7 +162,7 @@ namespace System.IO
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public virtual IAsyncResult BeginWrite(byte[] buffer, int offset, int count, AsyncCallback cback, object state)
 		{
@@ -173,7 +171,7 @@ namespace System.IO
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public virtual int EndRead(IAsyncResult async_result)
 		{
@@ -182,7 +180,7 @@ namespace System.IO
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public virtual void EndWrite(IAsyncResult async_result)
 		{
@@ -190,7 +188,7 @@ namespace System.IO
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public void Dispose()
 		{
@@ -198,14 +196,14 @@ namespace System.IO
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected virtual void Dispose(bool disposing)
 		{
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public virtual void Close()
 		{
@@ -213,7 +211,7 @@ namespace System.IO
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		void IDisposable.Dispose()
 		{
@@ -222,21 +220,21 @@ namespace System.IO
 	}
 
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public class AsyncResult
 	{
 	}
 
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public class IAsyncResult
 	{
 	}
 
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public class AsyncCallback
 	{

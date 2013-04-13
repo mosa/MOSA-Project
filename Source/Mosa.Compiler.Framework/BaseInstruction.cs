@@ -13,7 +13,7 @@ using System.Text;
 namespace Mosa.Compiler.Framework
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public abstract class BaseInstruction
 	{
@@ -29,7 +29,7 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		protected byte resultDefaultCount;
 
-		#endregion // Data members
+		#endregion Data members
 
 		#region Properties
 
@@ -55,7 +55,7 @@ namespace Mosa.Compiler.Framework
 		/// </remarks>
 		public virtual FlowControl FlowControl { get { return FlowControl.Next; } }
 
-		#endregion // Properties
+		#endregion Properties
 
 		#region Construction
 
@@ -70,7 +70,7 @@ namespace Mosa.Compiler.Framework
 			operandDefaultCount = operandCount;
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Methods
 
@@ -160,7 +160,7 @@ namespace Mosa.Compiler.Framework
 			//{
 			//	s.Append(" [more]");
 			//}
-			//else 
+			//else
 			if (context.OperandCount > 0)
 			{
 				s.Length = s.Length - 1;
@@ -250,6 +250,6 @@ namespace Mosa.Compiler.Framework
 			}
 		}
 
-		#endregion //  Methods
+		#endregion Methods
 	}
 }

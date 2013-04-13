@@ -10,46 +10,53 @@ using System.IO;
 namespace Mosa.Compiler.LinkerFormat.Elf32
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public class ProgramHeader
 	{
 		/// <summary>
-		/// This member tells what kind of segment this array element describes or how to 
+		/// This member tells what kind of segment this array element describes or how to
 		/// interpret the array element's information.
 		/// </summary>
 		public ProgramHeaderType Type;
+
 		/// <summary>
-		/// This member gives the offset from the beginning of the file at which the first byte 
+		/// This member gives the offset from the beginning of the file at which the first byte
 		/// of the segment resides.
 		/// </summary>
 		public uint Offset;
+
 		/// <summary>
-		/// This member gives the virtual virtualAddress at which the first byte of the segment resides 
-		/// in memory. 
+		/// This member gives the virtual virtualAddress at which the first byte of the segment resides
+		/// in memory.
 		/// </summary>
 		public uint VirtualAddress;
+
 		/// <summary>
-		/// On systems for which physical addressing is relevant, this member is reserved for 
-		/// the segment's physical virtualAddress. 
+		/// On systems for which physical addressing is relevant, this member is reserved for
+		/// the segment's physical virtualAddress.
 		/// </summary>
 		public uint PhysicalAddress;
+
 		/// <summary>
-		/// This member gives the number of bytes in the file image of the segment; it may be 
+		/// This member gives the number of bytes in the file image of the segment; it may be
 		/// zero.
 		/// </summary>
 		public uint FileSize;
+
 		/// <summary>
-		/// This member gives the number of bytes in the memory image of the segment; it 
+		/// This member gives the number of bytes in the memory image of the segment; it
 		/// may be zero.
 		/// </summary>
 		public uint MemorySize;
+
 		/// <summary>
 		/// This member gives flags relevant to the segment.
 		/// </summary>
 		public ProgramHeaderFlags Flags;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public uint Alignment;
 

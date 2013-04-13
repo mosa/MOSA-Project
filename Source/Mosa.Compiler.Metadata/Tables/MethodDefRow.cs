@@ -9,47 +9,46 @@
 
 //using System.Reflection;
 
-
 namespace Mosa.Compiler.Metadata.Tables
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public struct MethodDefRow
 	{
 		#region Data members
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private uint _rva;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private MethodImplAttributes _implFlags;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private MethodAttributes _flags;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private HeapIndexToken _nameStringIdx;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private HeapIndexToken _signatureBlobIdx;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private Token _paramList;
 
-		#endregion // Data members
+		#endregion Data members
 
 		#region Construction
 
@@ -73,7 +72,7 @@ namespace Mosa.Compiler.Metadata.Tables
 			this._paramList = paramList;
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Properties
 
@@ -131,6 +130,6 @@ namespace Mosa.Compiler.Metadata.Tables
 			get { return _paramList; }
 		}
 
-		#endregion // Properties
+		#endregion Properties
 	}
 }

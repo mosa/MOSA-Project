@@ -4,7 +4,7 @@
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com> 
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 using System;
@@ -29,12 +29,11 @@ namespace Mosa.Test.CodeDomCompiler
 		private static TempFileCollection temps = new TempFileCollection(TempDirectory, false);
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private static string tempDirectory;
 
-
-		#endregion // Data members
+		#endregion Data members
 
 		#region Properties
 
@@ -107,10 +106,8 @@ namespace Mosa.Test.CodeDomCompiler
 			}
 			else
 				throw new NotSupportedException();
-
 		}
 
-		#endregion // Construction
-
+		#endregion Construction
 	}
 }

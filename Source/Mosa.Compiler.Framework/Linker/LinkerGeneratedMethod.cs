@@ -22,7 +22,7 @@ namespace Mosa.Compiler.Framework.Linker
 	{
 		#region Data Members
 
-		#endregion // Data Members
+		#endregion Data Members
 
 		#region Construction
 
@@ -48,7 +48,6 @@ namespace Mosa.Compiler.Framework.Linker
 			this.Parameters = new List<RuntimeParameter>();
 		}
 
-		#endregion // Construction
-
+		#endregion Construction
 	}
 }

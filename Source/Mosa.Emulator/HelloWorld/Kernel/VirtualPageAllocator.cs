@@ -21,6 +21,7 @@ namespace Mosa.Kernel.x86
 	{
 		// Location of bitmap starts at 21MB
 		private static uint _bitmap = 1024 * 1024 * 21; // 0x1500000
+
 		private static uint _pages;
 
 		/// <summary>
@@ -100,7 +101,6 @@ namespace Mosa.Kernel.x86
 
 					if (at - first == pages)
 					{
-
 						for (uint index = 0; index < pages; index++)
 							SetPageStatus(first + index, false);
 
@@ -125,6 +125,5 @@ namespace Mosa.Kernel.x86
 			for (uint index = 0; index < count; index++)
 				SetPageStatus(start + index, true);
 		}
-
 	}
 }

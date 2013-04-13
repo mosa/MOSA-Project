@@ -12,12 +12,12 @@ using Mosa.ClassLib;
 namespace Mosa.DeviceSystem
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public class DiskControllerManager
 	{
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IDeviceManager deviceManager;
 
@@ -25,7 +25,10 @@ namespace Mosa.DeviceSystem
 		/// Initializes a new instance of the <see cref="DiskControllerManager"/> class.
 		/// </summary>
 		/// <param name="deviceManager">The device manager.</param>
-		public DiskControllerManager(IDeviceManager deviceManager) { this.deviceManager = deviceManager; }
+		public DiskControllerManager(IDeviceManager deviceManager)
+		{
+			this.deviceManager = deviceManager;
+		}
 
 		/// <summary>
 		/// Creates the devices.

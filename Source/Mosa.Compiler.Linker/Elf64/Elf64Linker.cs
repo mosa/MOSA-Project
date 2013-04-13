@@ -7,8 +7,6 @@
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  */
 
-using System;
-using System.Collections.Generic;
 using System.IO;
 using Mosa.Compiler.Common;
 using Mosa.Compiler.LinkerFormat.Elf64;
@@ -17,23 +15,23 @@ using Mosa.Compiler.LinkerFormat.Elf;
 namespace Mosa.Compiler.Linker.Elf64
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public class Elf64Linker : BaseLinker
 	{
-
 		#region Data members
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private NullSection nullSection;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private StringTableSection stringTableSection;
 
-		#endregion // Data members
+		#endregion Data members
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Elf64Linker"/> class.

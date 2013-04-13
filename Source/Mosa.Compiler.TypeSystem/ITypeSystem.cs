@@ -18,7 +18,6 @@ namespace Mosa.Compiler.TypeSystem
 {
 	public interface ITypeSystem
 	{
-
 		/// <summary>
 		/// Loads the modules.
 		/// </summary>

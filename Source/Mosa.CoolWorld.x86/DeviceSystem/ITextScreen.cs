@@ -23,7 +23,7 @@ namespace Mosa.DeviceSystem
 		/// Sets the cursor.
 		/// </summary>
 		/// <param name="cursorX">The cursor X.</param>
-		/// <param name="cursorY">The cursor Y.</param>	
+		/// <param name="cursorY">The cursor Y.</param>
 		void SetCursor(ushort cursorX, ushort cursorY);
 
 		/// <summary>

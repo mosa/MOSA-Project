@@ -11,10 +11,8 @@ using System.Collections.Generic;
 
 namespace Mosa.Compiler.Verifier
 {
-
 	public class VerificationOptions
 	{
-
 		#region Properties
 
 		/// <summary>
@@ -27,7 +25,7 @@ namespace Mosa.Compiler.Verifier
 		/// Gets or sets the paths.
 		/// </summary>
 		/// <value>The paths.</value>
-		public IList<string> Paths { get; set;}
+		public IList<string> Paths { get; set; }
 
 		/// <summary>
 		/// Gets or sets a value indicating whether [metadata validation].
@@ -48,8 +46,8 @@ namespace Mosa.Compiler.Verifier
 		public bool IncludingWarnings { get; set; }
 
 		/// <summary>
-		/// Gets or sets a value indicating whether [mosa specific validation] to performed. 
-		/// This might might be necessary when MOSA does not implement a specific feature and 
+		/// Gets or sets a value indicating whether [mosa specific validation] to performed.
+		/// This might might be necessary when MOSA does not implement a specific feature and
 		/// wish the verifier to detected it early.
 		/// </summary>
 		/// <value>
@@ -57,7 +55,7 @@ namespace Mosa.Compiler.Verifier
 		/// </value>
 		public bool MosaSpecificValidation { get; set; }
 
-		#endregion // Properties
+		#endregion Properties
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="VerificationOptions"/> class.

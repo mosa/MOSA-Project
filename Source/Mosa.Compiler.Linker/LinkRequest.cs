@@ -7,8 +7,6 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-using System;
-
 namespace Mosa.Compiler.Linker
 {
 	/// <summary>
@@ -53,7 +51,7 @@ namespace Mosa.Compiler.Linker
 		/// </summary>
 		private readonly Patch[] patches;
 
-		#endregion // Data members
+		#endregion Data members
 
 		#region Construction
 
@@ -78,7 +76,7 @@ namespace Mosa.Compiler.Linker
 			this.patches = patches;
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Properties
 
@@ -140,6 +138,6 @@ namespace Mosa.Compiler.Linker
 			get { return patches; }
 		}
 
-		#endregion // Properties
+		#endregion Properties
 	}
 }

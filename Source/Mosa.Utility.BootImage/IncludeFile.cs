@@ -12,7 +12,7 @@ using System.IO;
 namespace Mosa.Utility.BootImage
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public class IncludeFile
 	{

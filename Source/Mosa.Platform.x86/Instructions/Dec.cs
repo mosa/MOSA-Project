@@ -18,14 +18,13 @@ namespace Mosa.Platform.x86.Instructions
 	/// </summary>
 	public sealed class Dec : X86Instruction
 	{
-
 		#region Data Members
 
 		private static readonly OpCode DEC8 = new OpCode(new byte[] { 0xFE }, 1);
 		private static readonly OpCode DEC16 = new OpCode(new byte[] { 0x66, 0xFF }, 1);
 		private static readonly OpCode DEC32 = new OpCode(new byte[] { 0xFF }, 1);
 
-		#endregion
+		#endregion Data Members
 
 		#region Construction
 
@@ -37,9 +36,10 @@ namespace Mosa.Platform.x86.Instructions
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Methods
+
 		/// <summary>
 		/// Computes the opcode.
 		/// </summary>
@@ -66,6 +66,6 @@ namespace Mosa.Platform.x86.Instructions
 			visitor.Dec(context);
 		}
 
-		#endregion // Methods
+		#endregion Methods
 	}
 }

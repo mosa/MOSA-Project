@@ -15,7 +15,7 @@ namespace System.Reflection
 	[SerializableAttribute]
 	public abstract class MemberInfo
 	{
-		protected MemberInfo () 
+		protected MemberInfo()
 		{
 		}
 	}

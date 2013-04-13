@@ -13,19 +13,24 @@ namespace Pictor
 {
 	// Supported byte orders for RGB and RGBA Pixel formats
 	//=======================================================================
-	struct OrderRGB { enum rgb_e { R = 0, G = 1, B = 2, rgb_tag }; };       //----OrderRGB
-	struct OrderBGR { enum bgr_e { B = 0, G = 1, R = 2, rgb_tag }; };       //----OrderBGR
-	struct OrderRGBA { enum rgba_e { R = 0, G = 1, B = 2, A = 3, rgba_tag }; }; //----OrderRGBA
-	struct OrderARGB { enum argb_e { A = 0, R = 1, G = 2, B = 3, rgba_tag }; }; //----OrderARGB
-	struct OrderABGR { enum abgr_e { A = 0, B = 1, G = 2, R = 3, rgba_tag }; }; //----OrderABGR
-	struct OrderBGRA { enum bgra_e { B = 0, G = 1, R = 2, A = 3, rgba_tag }; }; //----OrderBGRA
+	internal struct OrderRGB { private enum rgb_e { R = 0, G = 1, B = 2, rgb_tag }; };       //----OrderRGB
+
+	internal struct OrderBGR { private enum bgr_e { B = 0, G = 1, R = 2, rgb_tag }; };       //----OrderBGR
+
+	internal struct OrderRGBA { private enum rgba_e { R = 0, G = 1, B = 2, A = 3, rgba_tag }; }; //----OrderRGBA
+
+	internal struct OrderARGB { private enum argb_e { A = 0, R = 1, G = 2, B = 3, rgba_tag }; }; //----OrderARGB
+
+	internal struct OrderABGR { private enum abgr_e { A = 0, B = 1, G = 2, R = 3, rgba_tag }; }; //----OrderABGR
+
+	internal struct OrderBGRA { private enum bgra_e { B = 0, G = 1, R = 2, A = 3, rgba_tag }; }; //----OrderBGRA
 
 	//====================================================================rgba
 	public struct RGBA_Doubles : IColorType
 	{
-		const int base_shift = 8;
-		const uint base_scale = (uint)(1 << base_shift);
-		const uint base_mask = base_scale - 1;
+		private const int base_shift = 8;
+		private const uint base_scale = (uint)(1 << base_shift);
+		private const uint base_mask = base_scale - 1;
 
 		public double m_r;
 		public double m_g;
@@ -33,8 +38,11 @@ namespace Pictor
 		public double m_a;
 
 		public uint R_Byte { get { return (uint)Basics.UnsignedRound(m_r * (double)base_mask); } set { m_r = (double)value / (double)base_mask; } }
+
 		public uint G_Byte { get { return (uint)Basics.UnsignedRound(m_g * (double)base_mask); } set { m_g = (double)value / (double)base_mask; } }
+
 		public uint B_Byte { get { return (uint)Basics.UnsignedRound(m_b * (double)base_mask); } set { m_b = (double)value / (double)base_mask; } }
+
 		public uint A_Byte { get { return (uint)Basics.UnsignedRound(m_a * (double)base_mask); } set { m_a = (double)value / (double)base_mask; } }
 
 		//--------------------------------------------------------------------
@@ -70,7 +78,6 @@ namespace Pictor
 		public RGBA_Doubles(double wavelen)
 			: this(wavelen, 1.0)
 		{
-
 		}
 
 		public RGBA_Doubles(double wavelen, double gamma)
@@ -156,7 +163,6 @@ namespace Pictor
 			return this;
 		}
 
-
 		//--------------------------------------------------------------------
 		public RGBA_Bytes Gradient(RGBA_Bytes c_8, double k)
 		{
@@ -170,7 +176,10 @@ namespace Pictor
 		}
 
 		//--------------------------------------------------------------------
-		public static IColorType no_color() { return (IColorType)new RGBA_Doubles(0, 0, 0, 0); }
+		public static IColorType no_color()
+		{
+			return (IColorType)new RGBA_Doubles(0, 0, 0, 0);
+		}
 
 		//--------------------------------------------------------------------
 		public static RGBA_Doubles from_wavelength(double wl)
@@ -272,10 +281,11 @@ namespace Pictor
 	public struct RGBA_Bytes : IColorType
 	{
 		public const int cover_shift = 8;
-		public const int cover_size = 1 << cover_shift;  //----cover_size 
-		public const int cover_mask = cover_size - 1;    //----cover_mask 
-		//public const int CoverNone  = 0,                 //----CoverNone 
-		//public const int CoverFull  = cover_mask         //----CoverFull 
+		public const int cover_size = 1 << cover_shift;  //----cover_size
+		public const int cover_mask = cover_size - 1;    //----cover_mask
+
+		//public const int CoverNone  = 0,                 //----CoverNone
+		//public const int CoverFull  = cover_mask         //----CoverFull
 
 		public const int BaseShift = 8;
 		public const uint base_scale = (uint)(1 << BaseShift);
@@ -287,8 +297,11 @@ namespace Pictor
 		public byte m_A;
 
 		public uint R_Byte { get { return (uint)m_R; } set { m_R = (byte)value; } }
+
 		public uint G_Byte { get { return (uint)m_G; } set { m_G = (byte)value; } }
+
 		public uint B_Byte { get { return (uint)m_B; } set { m_B = (byte)value; } }
+
 		public uint A_Byte { get { return (uint)m_A; } set { m_A = (byte)value; } }
 
 		//--------------------------------------------------------------------
@@ -338,7 +351,7 @@ namespace Pictor
 		}
 
 		//--------------------------------------------------------------------
-		RGBA_Bytes(RGBA_Doubles c, double a_)
+		private RGBA_Bytes(RGBA_Doubles c, double a_)
 		{
 			m_R = ((byte)Basics.UnsignedRound(c.m_r * (double)base_mask));
 			m_G = ((byte)Basics.UnsignedRound(c.m_g * (double)base_mask));
@@ -347,7 +360,7 @@ namespace Pictor
 		}
 
 		//--------------------------------------------------------------------
-		RGBA_Bytes(RGBA_Bytes c, uint a_)
+		private RGBA_Bytes(RGBA_Bytes c, uint a_)
 		{
 			m_R = (byte)c.m_R;
 			m_G = (byte)c.m_G;
@@ -374,7 +387,7 @@ namespace Pictor
 		}
 
 		//--------------------------------------------------------------------
-		void clear()
+		private void clear()
 		{
 			m_R = m_G = m_B = m_A = 0;
 		}
@@ -430,7 +443,10 @@ namespace Pictor
 			B_Byte = gamma.Dir((byte)B_Byte);
 		}
 
-		public static IColorType no_color() { return new RGBA_Bytes(0, 0, 0, 0); }
+		public static IColorType no_color()
+		{
+			return new RGBA_Bytes(0, 0, 0, 0);
+		}
 
 		//-------------------------------------------------------------rgb8_packed
 		static public RGBA_Bytes rgb8_packed(uint v)

@@ -142,7 +142,7 @@ namespace Mosa.Platform.x86.Stages
 			}
 		}
 
-		#endregion  // Windows Class
+		#endregion Window Class
 
 		#region IMethodCompilerStage Members
 
@@ -166,7 +166,7 @@ namespace Mosa.Platform.x86.Stages
 					}
 		}
 
-		#endregion // IMethodCompilerStage Members
+		#endregion IMethodCompilerStage Members
 
 		/// <summary>
 		/// Removes the nop.

@@ -12,12 +12,13 @@ using Mosa.DeviceSystem;
 namespace Mosa.EmulatedKernel
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public class Memory : IMemory
 	{
 		private uint _address;
 		private uint _size;
+
 		//private uint _end;
 
 		/// <summary>
@@ -29,6 +30,7 @@ namespace Mosa.EmulatedKernel
 		{
 			_address = address;
 			_size = size;
+
 			//_end = address + size - 1;
 		}
 
@@ -189,6 +191,5 @@ namespace Mosa.EmulatedKernel
 				offset++;
 			}
 		}
-
 	}
 }

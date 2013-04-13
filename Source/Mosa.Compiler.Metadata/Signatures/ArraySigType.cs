@@ -39,7 +39,7 @@ namespace Mosa.Compiler.Metadata.Signatures
 		/// </summary>
 		private int[] lowbounds;
 
-		#endregion // Data members
+		#endregion Data members
 
 		#region Construction
 
@@ -62,7 +62,7 @@ namespace Mosa.Compiler.Metadata.Signatures
 			this.lowbounds = lowBounds;
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Properties
 
@@ -90,7 +90,7 @@ namespace Mosa.Compiler.Metadata.Signatures
 		/// <value>The low bounds.</value>
 		public int[] LowBounds { get { return lowbounds; } }
 
-		#endregion // Properties
+		#endregion Properties
 
 		#region SigType Overrides
 
@@ -129,7 +129,7 @@ namespace Mosa.Compiler.Metadata.Signatures
 			return result;
 		}
 
-		#endregion // SigType Overrides
+		#endregion SigType Overrides
 
 		/// <summary>
 		/// Expresses the array type reference in a meaningful, symbol-friendly string form
@@ -140,6 +140,7 @@ namespace Mosa.Compiler.Metadata.Signatures
 			StringBuilder sb = new StringBuilder();
 			sb.Append(this.ElementType.ToSymbolPart());
 			sb.Append('[');
+
 			// Don't write a comma for rank 1 on purpose...
 			for (int x = 1; x < this.Rank; x++)
 			{

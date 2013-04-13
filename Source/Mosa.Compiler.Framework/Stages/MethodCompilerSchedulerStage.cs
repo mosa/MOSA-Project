@@ -16,7 +16,7 @@ namespace Mosa.Compiler.Framework.Stages
 	{
 		#region Data Members
 
-		#endregion // Data Members
+		#endregion Data Members
 
 		public MethodCompilerSchedulerStage()
 		{
@@ -39,6 +39,6 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 		}
 
-		#endregion // ICompilerStage members
+		#endregion ICompilerStage members
 	}
 }

@@ -12,7 +12,7 @@ using System;
 namespace Mosa.Compiler.Metadata.Signatures
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public class LocalVariableSignature : Signature
 	{
@@ -83,6 +83,5 @@ namespace Mosa.Compiler.Metadata.Signatures
 				}
 			}
 		}
-
 	}
 }

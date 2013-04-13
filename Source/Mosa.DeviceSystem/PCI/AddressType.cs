@@ -7,7 +7,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-
 namespace Mosa.DeviceSystem.PCI
 {
 	/// <summary>
@@ -19,10 +18,12 @@ namespace Mosa.DeviceSystem.PCI
 		/// Port IO Address Region
 		/// </summary>
 		IO,
+
 		/// <summary>
 		/// Memory Address Region
 		/// </summary>
 		Memory,
+
 		/// <summary>
 		/// Undefined Address Region
 		/// </summary>

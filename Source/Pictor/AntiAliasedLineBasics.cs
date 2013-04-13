@@ -34,6 +34,7 @@ namespace Pictor
 	{
 		//---------------------------------------------------------------------
 		public int x1, y1, x2, y2, dx, dy, sx, sy;
+
 		public bool vertical;
 		public int inc;
 		public int len;
@@ -51,19 +52,20 @@ namespace Pictor
 		//   [1]          |          [0]
 		//       . (3)011 | 001(1) .
 		//         .      |      .
-		//           .    |    . 
-		//             .  |  . 
+		//           .    |    .
+		//             .  |  .
 		//    (2)010     .|.     000(0)
 		// <2> ----------.+.----------- <0>
 		//    (6)110   .  |  .   100(4)
 		//           .    |    .
 		//         .      |      .
 		//       .        |        .
-		//         (7)111 | 101(5) 
+		//         (7)111 | 101(5)
 		//   [2]          |          [3]
-		//               <3> 
-		//                                                        0,1,2,3,4,5,6,7 
+		//               <3>
+		//                                                        0,1,2,3,4,5,6,7
 		public static byte[] s_orthogonal_quadrant = { 0, 0, 1, 1, 3, 3, 2, 2 };
+
 		public static byte[] s_diagonal_quadrant = { 0, 1, 2, 1, 0, 3, 2, 3 };
 
 		//---------------------------------------------------------------------
@@ -88,6 +90,7 @@ namespace Pictor
 		{
 			get { return s_orthogonal_quadrant[octant]; }
 		}
+
 		public uint DiagonalQuadrant
 		{
 			get { return s_diagonal_quadrant[octant]; }
@@ -139,8 +142,9 @@ namespace Pictor
 
 		//-------------------------------------------------------------------------
 		public const int line_mr_subpixel_shift = 4;                           //----line_mr_subpixel_shift
-		public const int line_mr_subpixel_scale = 1 << line_mr_subpixel_shift; //----line_mr_subpixel_scale 
-		public const int line_mr_subpixel_mask = line_mr_subpixel_scale - 1;   //----line_mr_subpixel_mask 
+
+		public const int line_mr_subpixel_scale = 1 << line_mr_subpixel_shift; //----line_mr_subpixel_scale
+		public const int line_mr_subpixel_mask = line_mr_subpixel_scale - 1;   //----line_mr_subpixel_mask
 
 		//------------------------------------------------------------------line_mr
 		public static int line_mr(int x)

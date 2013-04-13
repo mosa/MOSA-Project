@@ -9,7 +9,6 @@
 
 using System.Collections.Generic;
 
-
 namespace Mosa.Test.System.Numbers
 {
 	public static class B
@@ -22,6 +21,5 @@ namespace Mosa.Test.System.Numbers
 				yield return false;
 			}
 		}
-
 	}
 }

@@ -10,29 +10,33 @@
 namespace Mosa.DeviceSystem
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public class IOPortResources
 	{
 		// All legacy ISA cards occupy the IO region from 0x0100 through 0x3FF
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public const ushort StartLegacyISAPort = 0x0100;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public const ushort EndLegacyISAPort = 0x3FF;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public const ushort MaxPorts = 0xFFFF;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public bool[] portUsed;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected SpinLock spinLock;
 
@@ -68,6 +72,7 @@ namespace Mosa.DeviceSystem
 		{
 			//Mosa.Kernel.x86.Screen.Write('J');
 			IReadWriteIOPort port2 = HAL.RequestIOPort((ushort)(port + offset));
+
 			//Mosa.Kernel.x86.Screen.Write('K');
 			return port2;
 		}
@@ -118,6 +123,5 @@ namespace Mosa.DeviceSystem
 
 			spinLock.Exit();
 		}
-
 	}
 }

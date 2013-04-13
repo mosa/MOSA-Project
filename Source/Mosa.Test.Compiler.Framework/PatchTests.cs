@@ -8,16 +8,13 @@
  */
 
 using MbUnit.Framework;
-using Mosa.Compiler.Framework;
 using Mosa.Compiler.Linker;
 
 namespace Mosa.Test.Compiler.Framework
 {
-
 	[TestFixture]
 	public class PatchTests
 	{
-
 		[Test]
 		public void Patch1()
 		{

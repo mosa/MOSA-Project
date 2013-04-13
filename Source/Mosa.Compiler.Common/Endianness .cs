@@ -7,9 +7,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
-using System.Runtime.InteropServices;
-
 namespace Mosa.Compiler.Common
 {
 	public enum Endianness { Little, Big };

@@ -38,6 +38,5 @@ namespace Mosa.Compiler.Framework.IR
 		{
 			visitor.AddUnsigned(context);
 		}
-
 	}
 }

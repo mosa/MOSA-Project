@@ -20,17 +20,17 @@ namespace Mosa.Kernel.x86
 		private static uint _multibootsignature = 0x200000;
 
 		/// <summary>
-		/// Location of the Multiboot Structure 
+		/// Location of the Multiboot Structure
 		/// </summary>
-		public static uint MultibootStructure {get ; private set; }
+		public static uint MultibootStructure { get; private set; }
 
 		/// <summary>
-		/// Magic value that indicates that kernel was loaded by a Multiboot-compliant boot loader 
+		/// Magic value that indicates that kernel was loaded by a Multiboot-compliant boot loader
 		/// </summary>
 		public const uint MultibootMagic = 0x2BADB002;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private static uint _memoryMapCount = 0;
 
@@ -48,7 +48,7 @@ namespace Mosa.Kernel.x86
 			MultibootStructure = 0x0;
 			SetMultibootLocation(Native.Get32(_multibootptr), Native.Get32(_multibootsignature));
 		}
-		
+
 		/// <summary>
 		/// Sets the multiboot location, if given the proper magic value
 		/// </summary>

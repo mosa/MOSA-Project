@@ -5,7 +5,7 @@
  *
  * Authors:
  *  Michael Fröhlich (grover) <michael.ruck@michaelruck.de>
- *  
+ *
  */
 
 using MbUnit.Framework;
@@ -17,11 +17,11 @@ namespace Mosa.Test.Cases.CIL
 {
 	[TestFixture]
 	[Importance(Importance.Critical)]
+
 	//[Category(@"Basic types")]
 	//[Description(@"Tests support for the basic type System.Boolean")]
 	public class BooleanFixture : TestCompilerAdapter
 	{
-
 		public BooleanFixture()
 		{
 			settings.AddReference("Mosa.Test.Collection.dll");

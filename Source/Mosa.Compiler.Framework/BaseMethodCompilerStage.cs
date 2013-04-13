@@ -9,7 +9,6 @@
  */
 
 using System;
-using System.Diagnostics;
 using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.InternalTrace;
 using Mosa.Compiler.Metadata.Loader;
@@ -80,7 +79,7 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		protected int nativePointerAlignment;
 
-		#endregion // Data members
+		#endregion Data members
 
 		#region IPipelineStage Members
 
@@ -90,7 +89,7 @@ namespace Mosa.Compiler.Framework
 		/// <value>The name of the compilation stage.</value>
 		public virtual string Name { get { return this.GetType().Name; } }
 
-		#endregion // IPipelineStage Members
+		#endregion IPipelineStage Members
 
 		#region IMethodCompilerStage members
 
@@ -115,7 +114,7 @@ namespace Mosa.Compiler.Framework
 			architecture.GetTypeRequirements(BuiltInSigType.IntPtr, out nativePointerSize, out nativePointerAlignment);
 		}
 
-		#endregion // IMethodCompilerStage members
+		#endregion IMethodCompilerStage members
 
 		#region Methods
 
@@ -163,7 +162,7 @@ namespace Mosa.Compiler.Framework
 			return methodCompiler.VirtualRegisters.Allocate(type);
 		}
 
-		#endregion
+		#endregion Methods
 
 		#region Block Operations
 
@@ -295,7 +294,7 @@ namespace Mosa.Compiler.Framework
 			return nextContext;
 		}
 
-		#endregion
+		#endregion Block Operations
 
 		#region Trace Helper Methods
 
@@ -309,7 +308,7 @@ namespace Mosa.Compiler.Framework
 			return new CompilerTrace(this.methodCompiler.InternalTrace, this.methodCompiler.Method, this.methodCompiler.FormatStageName(this as IPipelineStage), section);
 		}
 
-		#endregion
+		#endregion Trace Helper Methods
 
 		/// <summary>
 		/// Updates the counter.
@@ -338,24 +337,28 @@ namespace Mosa.Compiler.Framework
 				case CIL.OpCode.Bgt_s: return IR.ConditionCode.GreaterThan;
 				case CIL.OpCode.Ble_s: return IR.ConditionCode.LessOrEqual;
 				case CIL.OpCode.Blt_s: return IR.ConditionCode.LessThan;
+
 				// Unsigned
 				case CIL.OpCode.Bne_un_s: return IR.ConditionCode.NotEqual;
 				case CIL.OpCode.Bge_un_s: return IR.ConditionCode.UnsignedGreaterOrEqual;
 				case CIL.OpCode.Bgt_un_s: return IR.ConditionCode.UnsignedGreaterThan;
 				case CIL.OpCode.Ble_un_s: return IR.ConditionCode.UnsignedLessOrEqual;
 				case CIL.OpCode.Blt_un_s: return IR.ConditionCode.UnsignedLessThan;
+
 				// Long form signed
 				case CIL.OpCode.Beq: goto case CIL.OpCode.Beq_s;
 				case CIL.OpCode.Bge: goto case CIL.OpCode.Bge_s;
 				case CIL.OpCode.Bgt: goto case CIL.OpCode.Bgt_s;
 				case CIL.OpCode.Ble: goto case CIL.OpCode.Ble_s;
 				case CIL.OpCode.Blt: goto case CIL.OpCode.Blt_s;
+
 				// Long form unsigned
 				case CIL.OpCode.Bne_un: goto case CIL.OpCode.Bne_un_s;
 				case CIL.OpCode.Bge_un: goto case CIL.OpCode.Bge_un_s;
 				case CIL.OpCode.Bgt_un: goto case CIL.OpCode.Bgt_un_s;
 				case CIL.OpCode.Ble_un: goto case CIL.OpCode.Ble_un_s;
 				case CIL.OpCode.Blt_un: goto case CIL.OpCode.Blt_un_s;
+
 				// Compare
 				case CIL.OpCode.Ceq: return IR.ConditionCode.Equal;
 				case CIL.OpCode.Cgt: return IR.ConditionCode.GreaterThan;
@@ -415,10 +418,8 @@ namespace Mosa.Compiler.Framework
 				case IR.ConditionCode.NotSigned: return IR.ConditionCode.Signed;
 				default: throw new NotSupportedException();
 			}
-
 		}
 
-		#endregion // Utility Methods
-
+		#endregion Utility Methods
 	}
 }

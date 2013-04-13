@@ -21,7 +21,7 @@ namespace Mosa.Compiler.Framework
 	/// The stage exposes the IDominanceProvider interface for other compilation stages to allow
 	/// them to use the calculated dominance properties.
 	/// <para/>
-	/// The implementation is based on "A Simple, Fast Dominance Algorithm" by Keith D. Cooper, 
+	/// The implementation is based on "A Simple, Fast Dominance Algorithm" by Keith D. Cooper,
 	/// Timothy J. Harvey, and Ken Kennedy, Rice University in Houston, Texas, USA.
 	/// </remarks>
 	public sealed class SimpleFastDominance : IDominanceProvider
@@ -41,14 +41,14 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Holds the dominance frontier of individual blocks.
 		/// </summary>
-		Dictionary<BasicBlock, List<BasicBlock>> domFrontierOfBlock = new Dictionary<BasicBlock, List<BasicBlock>>();
+		private Dictionary<BasicBlock, List<BasicBlock>> domFrontierOfBlock = new Dictionary<BasicBlock, List<BasicBlock>>();
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private Dictionary<BasicBlock, List<BasicBlock>> children = new Dictionary<BasicBlock, List<BasicBlock>>();
 
-		#endregion // Data members
+		#endregion Data members
 
 		/// <summary>
 		/// Performs stage specific processing on the compiler context.
@@ -173,11 +173,9 @@ namespace Mosa.Compiler.Framework
 							doms.TryGetValue(runner, out newrunner);
 							runner = newrunner;
 						}
-
 					}
 				}
 			}
-
 		}
 
 		/// <summary>
@@ -277,7 +275,7 @@ namespace Mosa.Compiler.Framework
 				return new List<BasicBlock>(); // Empty List
 		}
 
-		#endregion // IDominanceProvider Members
+		#endregion IDominanceProvider Members
 
 		#region Internals
 
@@ -311,7 +309,6 @@ namespace Mosa.Compiler.Framework
 			return finger1;
 		}
 
-		#endregion // Internals
-
+		#endregion Internals
 	}
 }

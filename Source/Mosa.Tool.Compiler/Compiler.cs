@@ -5,7 +5,7 @@
  *
  * Authors:
  *  Kai P. Reisert <kpreisert@googlemail.com>
- *  Pascal Delprat (pdelprat) <pascal.delprat@online.fr>  
+ *  Pascal Delprat (pdelprat) <pascal.delprat@online.fr>
  */
 
 using System;
@@ -14,7 +14,6 @@ using System.IO;
 using System.Text;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Linker;
-using Mosa.Tool.Compiler.Stages;
 using NDesk.Options;
 
 namespace Mosa.Tool.Compiler
@@ -69,6 +68,7 @@ namespace Mosa.Tool.Compiler
 			inputFiles = new List<FileInfo>();
 
 			#region Setup general options
+
 			optionSet.Add(
 				"v|version",
 				"Display version information.",
@@ -119,7 +119,7 @@ namespace Mosa.Tool.Compiler
 					inputFiles.Add(file);
 				});
 
-			#endregion
+			#endregion Setup general options
 
 			#region Setup options
 
@@ -271,9 +271,11 @@ namespace Mosa.Tool.Compiler
 						case "text":
 							compilerOptions.Multiboot.VideoMode = 1;
 							break;
+
 						case "graphics":
 							compilerOptions.Multiboot.VideoMode = 0;
 							break;
+
 						default:
 							throw new OptionException("Invalid value for multiboot video mode: " + v, "multiboot-video-mode");
 					}
@@ -343,8 +345,7 @@ namespace Mosa.Tool.Compiler
 				}
 			);
 
-			#endregion // Setup options
-
+			#endregion Setup options
 		}
 
 		#endregion Constructors
@@ -569,6 +570,6 @@ namespace Mosa.Tool.Compiler
 			}
 		}
 
-		#endregion
+		#endregion Internal Methods
 	}
 }

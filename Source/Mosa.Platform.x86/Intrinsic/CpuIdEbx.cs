@@ -7,10 +7,8 @@
  *  Simon Wollwage (rootnode) <rootnode@mosa-project.org>
  */
 
-using System.Collections.Generic;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Metadata.Signatures;
-using Mosa.Compiler.TypeSystem;
 
 namespace Mosa.Platform.x86.Intrinsic
 {
@@ -19,7 +17,6 @@ namespace Mosa.Platform.x86.Intrinsic
 	/// </summary>
 	public sealed class CpuIdEbx : IIntrinsicPlatformMethod
 	{
-
 		#region Methods
 
 		/// <summary>
@@ -40,7 +37,6 @@ namespace Mosa.Platform.x86.Intrinsic
 			context.AppendInstruction(X86.Mov, result, reg);
 		}
 
-		#endregion // Methods
-
+		#endregion Methods
 	}
 }

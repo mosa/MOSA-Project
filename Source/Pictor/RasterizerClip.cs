@@ -7,13 +7,12 @@
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  */
 
-
 using poly_subpixel_scale_e = Pictor.Basics.PolySubpixelScale;
 
 namespace Pictor
 {
 	//--------------------------------------------------------EPolyMaxCoord
-	enum EPolyMaxCoord
+	internal enum EPolyMaxCoord
 	{
 		poly_max_coord = (1 << 30) - 1 //----poly_max_coord
 	};
@@ -21,6 +20,7 @@ namespace Pictor
 	public interface IVectorClipper
 	{
 		int UpScale(double v);
+
 		int DownScale(int v);
 
 		void ClipBox(int x1, int y1, int x2, int y2);
@@ -28,20 +28,37 @@ namespace Pictor
 		void ResetClipping();
 
 		void MoveTo(int x1, int y1);
+
 		void LineTo(AntiAliasedRasterizerCells ras, int x2, int y2);
 	};
 
 	//------------------------------------------------------rasterizer_sl_clip
-	class VectorClipper_DoClip : IVectorClipper
+	internal class VectorClipper_DoClip : IVectorClipper
 	{
-		int MulDiv(double a, double b, double c)
+		private int MulDiv(double a, double b, double c)
 		{
 			return Basics.Round(a * b / c);
 		}
-		int xi(int v) { return v; }
-		int yi(int v) { return v; }
-		public int UpScale(double v) { return Basics.Round(v * (int)poly_subpixel_scale_e.Scale); }
-		public int DownScale(int v) { return v; }
+
+		private int xi(int v)
+		{
+			return v;
+		}
+
+		private int yi(int v)
+		{
+			return v;
+		}
+
+		public int UpScale(double v)
+		{
+			return Basics.Round(v * (int)poly_subpixel_scale_e.Scale);
+		}
+
+		public int DownScale(int v)
+		{
+			return v;
+		}
 
 		//--------------------------------------------------------------------
 		public VectorClipper_DoClip()
@@ -232,19 +249,34 @@ namespace Pictor
 	};
 
 	//---------------------------------------------------rasterizer_sl_no_clip
-	class VectorClipper_NoClip : IVectorClipper
+	internal class VectorClipper_NoClip : IVectorClipper
 	{
 		public VectorClipper_NoClip()
 		{
-
 		}
 
-		public int UpScale(double v) { return Basics.Round(v * (int)poly_subpixel_scale_e.Scale); }
-		public int DownScale(int v) { return v; }
+		public int UpScale(double v)
+		{
+			return Basics.Round(v * (int)poly_subpixel_scale_e.Scale);
+		}
 
-		public void ResetClipping() { }
-		public void ClipBox(int x1, int y1, int x2, int y2) { }
-		public void MoveTo(int x1, int y1) { m_x1 = x1; m_y1 = y1; }
+		public int DownScale(int v)
+		{
+			return v;
+		}
+
+		public void ResetClipping()
+		{
+		}
+
+		public void ClipBox(int x1, int y1, int x2, int y2)
+		{
+		}
+
+		public void MoveTo(int x1, int y1)
+		{
+			m_x1 = x1; m_y1 = y1;
+		}
 
 		public void LineTo(AntiAliasedRasterizerCells ras, int x2, int y2)
 		{

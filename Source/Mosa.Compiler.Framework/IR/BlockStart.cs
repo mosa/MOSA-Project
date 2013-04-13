@@ -7,14 +7,12 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-
 namespace Mosa.Compiler.Framework.IR
 {
 	/// <summary>
 	/// </summary>
 	public sealed class BlockStart : BaseIRInstruction
 	{
-
 		#region Construction
 
 		/// <summary>
@@ -25,7 +23,7 @@ namespace Mosa.Compiler.Framework.IR
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Methods
 
@@ -39,6 +37,6 @@ namespace Mosa.Compiler.Framework.IR
 			// None
 		}
 
-		#endregion // Methods
+		#endregion Methods
 	}
 }

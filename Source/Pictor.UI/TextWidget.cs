@@ -6,8 +6,8 @@
 //                  larsbrubaker@gmail.com
 // Copyright (C) 2007
 //
-// Permission to copy, use, modify, sell and distribute this software 
-// is granted provided this copyright notice appears in all copies. 
+// Permission to copy, use, modify, sell and distribute this software
+// is granted provided this copyright notice appears in all copies.
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -28,18 +28,18 @@ namespace Pictor.UI
 	//------------------------------------------------------------------------
 	public class TextWidget : SimpleVertexSourceWidget
 	{
-		double m_BorderSize;
-		double m_Thickness;
-		double m_CapsHeight;
+		private double m_BorderSize;
+		private double m_Thickness;
+		private double m_CapsHeight;
 
-		double[] m_vx = new double[32];
-		double[] m_vy = new double[32];
+		private double[] m_vx = new double[32];
+		private double[] m_vy = new double[32];
 
-		GsvText m_text;
-		StrokeConverter m_text_poly;
-		IColorType m_text_color;
+		private GsvText m_text;
+		private StrokeConverter m_text_poly;
+		private IColorType m_text_color;
 
-		uint m_idx;
+		private uint m_idx;
 
 		public TextWidget(string Text, double left, double bottom, double CapitalHeight)
 			: base(0, 0, 0, 0)
@@ -129,6 +129,7 @@ namespace Pictor.UI
 		{
 			get { return 1; }
 		}
+
 		public override void Rewind(uint idx)
 		{
 			m_idx = idx;
@@ -177,7 +178,6 @@ namespace Pictor.UI
 
 			return cmd;
 		}
-
 
 		public IColorType TextColor
 		{

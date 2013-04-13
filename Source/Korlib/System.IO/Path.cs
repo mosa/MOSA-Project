@@ -23,6 +23,5 @@ namespace System.IO
 		/// Alterative Directory Separator
 		/// </summary>
 		public static readonly char AltDirectorySeparatorChar = '\\';
-
 	}
 }

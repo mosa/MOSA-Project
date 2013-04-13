@@ -13,7 +13,7 @@ using Mosa.Platform.x86.Intrinsic;
 namespace Mosa.HelloWorld.x86
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public static class Boot
 	{
@@ -186,6 +186,7 @@ namespace Mosa.HelloWorld.x86
 			CpuInfo cpuInfo = new CpuInfo();
 
 			#region Vendor
+
 			Console.Color = Colors.Green;
 			Console.Write(@"Vendor:   ");
 			Console.Color = Colors.White;
@@ -193,38 +194,48 @@ namespace Mosa.HelloWorld.x86
 			cpuInfo.PrintVendorString(Console);
 
 			Console.WriteLine();
-			#endregion
+
+			#endregion Vendor
 
 			#region Brand
+
 			Console.Color = Colors.Green;
 			Console.Write(@"Brand:    ");
 			Console.Color = Colors.White;
 			cpuInfo.PrintBrandString(Console);
 			Console.WriteLine();
-			#endregion
+
+			#endregion Brand
 
 			#region Stepping
+
 			Console.Color = Colors.Green;
 			Console.Write(@"Stepping: ");
 			Console.Color = Colors.White;
 			Console.Write(cpuInfo.Stepping, 16, 2);
-			#endregion
+
+			#endregion Stepping
 
 			#region Model
+
 			Console.Color = Colors.Green;
 			Console.Write(@" Model: ");
 			Console.Color = Colors.White;
 			Console.Write(cpuInfo.Model, 16, 2);
-			#endregion
+
+			#endregion Model
 
 			#region Family
+
 			Console.Color = Colors.Green;
 			Console.Write(@" Family: ");
 			Console.Color = Colors.White;
 			Console.Write(cpuInfo.Family, 16, 2);
-			#endregion
+
+			#endregion Family
 
 			#region Type
+
 			Console.Color = Colors.Green;
 			Console.Write(@" Type: ");
 			Console.Color = Colors.White;
@@ -235,7 +246,8 @@ namespace Mosa.HelloWorld.x86
 			Console.Write(@"Cores:    ");
 			Console.Color = Colors.White;
 			Console.Write(cpuInfo.NumberOfCores, 16, 2);
-			#endregion
+
+			#endregion Type
 
 			Console.Row = 19;
 			for (uint index = 0; index < 80; index++)
@@ -389,7 +401,7 @@ namespace Mosa.HelloWorld.x86
 			}
 			else if (interrupt == 0x20)
 			{
-				// Timer Interrupt! Switch Tasks!	
+				// Timer Interrupt! Switch Tasks!
 			}
 			else
 			{

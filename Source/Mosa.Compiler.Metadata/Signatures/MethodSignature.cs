@@ -12,38 +12,38 @@ using System;
 namespace Mosa.Compiler.Metadata.Signatures
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public class MethodSignature : Signature
 	{
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		//private CallingConvention callingConvention;
 		private MethodCallingConvention methodCallingConvention;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private int genericParameterCount;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private bool hasExplicitThis;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private bool hasThis;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private SigType[] parameters;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private SigType returnType;
 
@@ -209,25 +209,28 @@ namespace Mosa.Compiler.Metadata.Signatures
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private const byte DEFAULT = 0x00;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private const byte VARARG = 0x05;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private const byte GENERIC = 0x10;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private const byte HAS_THIS = 0x20;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private const byte HAS_EXPLICIT_THIS = 0x40;
-
 	}
 }

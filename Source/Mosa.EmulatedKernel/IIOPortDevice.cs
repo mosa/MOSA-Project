@@ -7,11 +7,10 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-
 namespace Mosa.EmulatedKernel
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public interface IIOPortDevice
 	{
@@ -37,7 +36,7 @@ namespace Mosa.EmulatedKernel
 		uint Read32(ushort port);
 
 		/// <summary>
-		/// Writes to the specified port. 
+		/// Writes to the specified port.
 		/// </summary>
 		/// <param name="port"></param>
 		/// <param name="data"></param>

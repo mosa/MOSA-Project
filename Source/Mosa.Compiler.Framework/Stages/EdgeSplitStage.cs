@@ -19,7 +19,6 @@ namespace Mosa.Compiler.Framework.Stages
 	/// </summary>
 	public class EdgeSplitStage : BaseCodeTransformationStage, IMethodCompilerStage, IPipelineStage
 	{
-
 		/// <summary>
 		/// Performs stage specific processing on the compiler context.
 		/// </summary>

@@ -50,7 +50,7 @@ namespace Mosa.Compiler.Linker
 		/// </summary>
 		private long sectionAddress;
 
-		#endregion // Data members
+		#endregion Data members
 
 		#region Construction
 
@@ -75,7 +75,7 @@ namespace Mosa.Compiler.Linker
 			this.sectionAddress = sectionAddress;
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Properties
 
@@ -147,6 +147,6 @@ namespace Mosa.Compiler.Linker
 			return this.name;
 		}
 
-		#endregion // Properties
+		#endregion Properties
 	}
 }

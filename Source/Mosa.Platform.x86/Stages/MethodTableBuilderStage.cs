@@ -8,7 +8,6 @@
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  */
 
-using System;
 using System.Collections.Generic;
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework;
@@ -22,14 +21,13 @@ namespace Mosa.Platform.x86.Stages
 	///		4 bytes: Pointer to method
 	///		4 bytes: Length of method
 	///		4 bytes: Pointer to method description entry
-	///		
+	///
 	/// The method description entry has the format:
 	///		4 bytes: Pointer to exception clause table
 	///		4 bytes: GC tracking info
 	/// </summary>
 	public class MethodTableBuilderStage : BaseCompilerStage, ICompilerStage
 	{
-
 		/// <summary>
 		/// Setups the specified compiler.
 		/// </summary>
@@ -146,6 +144,5 @@ namespace Mosa.Platform.x86.Stages
 			// TODO
 			return 0;
 		}
-
 	}
 }

@@ -10,7 +10,7 @@
 namespace Mosa.DeviceSystem
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public interface IHardwareAbstraction
 	{
@@ -67,4 +67,3 @@ namespace Mosa.DeviceSystem
 		uint GetPhysicalAddress(IMemory memory);
 	}
 }
-

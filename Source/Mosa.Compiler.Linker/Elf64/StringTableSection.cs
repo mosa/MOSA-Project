@@ -7,19 +7,18 @@
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  */
 
-using System;
 using System.Collections.Generic;
 using System.IO;
 
 namespace Mosa.Compiler.Linker.Elf64
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public class StringTableSection : Elf64LinkerSection
 	{
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected static List<byte> stringTable = new List<byte>();
 

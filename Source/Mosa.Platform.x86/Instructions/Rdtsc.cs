@@ -17,7 +17,6 @@ namespace Mosa.Platform.x86.Instructions
 	/// </summary>
 	public sealed class Rdtsc : X86Instruction
 	{
-		
 		#region Construction
 
 		/// <summary>
@@ -28,7 +27,7 @@ namespace Mosa.Platform.x86.Instructions
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Methods
 
@@ -42,6 +41,6 @@ namespace Mosa.Platform.x86.Instructions
 			visitor.Rdtsc(context);
 		}
 
-		#endregion // Methods
+		#endregion Methods
 	}
 }

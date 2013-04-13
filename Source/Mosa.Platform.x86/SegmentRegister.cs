@@ -56,7 +56,7 @@ namespace Mosa.Platform.x86
 			GS = 5
 		}
 
-		#endregion // Types
+		#endregion Types
 
 		#region Static data members
 
@@ -90,7 +90,7 @@ namespace Mosa.Platform.x86
 		/// </summary>
 		public static readonly SegmentRegister SS = new SegmentRegister(SegmentType.SS, 21);
 
-		#endregion // Static data members
+		#endregion Static data members
 
 		/// <summary>
 		/// Stores the general purpose register identified by this object instance.
@@ -109,7 +109,7 @@ namespace Mosa.Platform.x86
 			this.segment = segment;
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Properties
 
@@ -134,6 +134,7 @@ namespace Mosa.Platform.x86
 		{
 			get { return false; }
 		}
+
 		/// <summary>
 		/// Segment registers do not support floating point operations.
 		/// </summary>
@@ -150,7 +151,7 @@ namespace Mosa.Platform.x86
 			get { return 16; }
 		}
 
-		#endregion // Properties
+		#endregion Properties
 
 		#region Methods
 
@@ -183,6 +184,6 @@ namespace Mosa.Platform.x86
 			return segment.ToString();
 		}
 
-		#endregion // Methods
+		#endregion Methods
 	}
 }

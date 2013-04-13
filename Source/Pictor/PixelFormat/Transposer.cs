@@ -18,12 +18,12 @@ namespace Pictor.PixelFormat
 		{
 		}
 
-
 		//--------------------------------------------------------------------
 		public override uint Width
 		{
 			get { return PixelFormat.Height; }
 		}
+
 		public override uint Height
 		{
 			get { return PixelFormat.Width; }

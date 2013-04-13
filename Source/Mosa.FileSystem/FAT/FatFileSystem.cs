@@ -13,15 +13,14 @@ using Mosa.FileSystem.VFS;
 
 namespace Mosa.FileSystem.FAT
 {
-
 	#region Constants
 
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	internal struct BootSector
 	{
-		internal const uint JumpInstruction = 0x00; // 3 
+		internal const uint JumpInstruction = 0x00; // 3
 		internal const uint EOMName = 0x03;	// 8 - "IBM  3.3", "MSDOS5.0", "MSWIN4.1", "FreeDOS"
 		internal const uint BytesPerSector = 0x0B;	// 2 - common value 512
 		internal const uint SectorsPerCluster = 0x0D;	// 1 - valid 1 to 128
@@ -66,7 +65,7 @@ namespace Mosa.FileSystem.FAT
 	}
 
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	internal struct FSInfo
 	{
@@ -81,7 +80,7 @@ namespace Mosa.FileSystem.FAT
 	}
 
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	internal struct Entry
 	{
@@ -102,7 +101,7 @@ namespace Mosa.FileSystem.FAT
 	}
 
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	internal struct FileNameAttribute
 	{
@@ -112,122 +111,122 @@ namespace Mosa.FileSystem.FAT
 		internal const uint Deleted = 0xE5;
 	}
 
-	#endregion
+	#endregion Constants
 
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public class FatFileSystem : GenericFileSystem
 	{
 		// Limitation: Long file names are not supported
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private FatType fatType;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private uint endOfClusterMark;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private uint badClusterMark;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private uint reservedClusterMark;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private uint fatMask;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private uint bytesPerSector;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private byte sectorsPerCluster;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private byte reservedSectors;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private byte nbrFats;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private uint rootEntries;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private uint totalClusters;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private uint rootDirSectors;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private uint firstDataSector;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private uint totalSectors;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private uint dataSectors;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private uint dataAreaStart;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private uint entriesPerSector;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private uint firstRootDirectorySector;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private uint rootCluster32;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private uint fatEntries;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private uint clusterSizeInBytes;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public interface ICompare
 		{
@@ -251,7 +250,11 @@ namespace Mosa.FileSystem.FAT
 		/// Initializes a new instance of the <see cref="FAT"/> class.
 		/// </summary>
 		/// <param name="partition">The partition.</param>
-		public FatFileSystem(IPartitionDevice partition) : base(partition) { ReadBootSector(); }
+		public FatFileSystem(IPartitionDevice partition)
+			: base(partition)
+		{
+			ReadBootSector();
+		}
 
 		/// <summary>
 		/// Gets the type of the settings.
@@ -263,7 +266,10 @@ namespace Mosa.FileSystem.FAT
 		/// Creates the VFS mount.
 		/// </summary>
 		/// <returns></returns>
-		public override IFileSystem CreateVFSMount() { return new VfsFileSystem(this); }
+		public override IFileSystem CreateVFSMount()
+		{
+			return new VfsFileSystem(this);
+		}
 
 		/// <summary>
 		/// Gets a value indicating whether this instance is read only.
@@ -274,7 +280,7 @@ namespace Mosa.FileSystem.FAT
 		public bool IsReadOnly { get { return true; } }
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public uint ClusterSizeInBytes { get { return clusterSizeInBytes; } }
 
@@ -371,7 +377,7 @@ namespace Mosa.FileSystem.FAT
 				return false;
 			}
 
-			// Some basic checks 
+			// Some basic checks
 			if ((nbrFats == 0) || (nbrFats > 2) || (totalSectors == 0) || (sectorsPerFat == 0))
 				return false;
 
@@ -407,7 +413,7 @@ namespace Mosa.FileSystem.FAT
 				fatEntries = sectorsPerFat * blockSize / 4;
 			}
 
-			// More basic checks 
+			// More basic checks
 			if ((fatType == FatType.FAT32) && (rootCluster32 == 0))
 				return false;
 
@@ -581,10 +587,12 @@ namespace Mosa.FileSystem.FAT
 				BinaryFormat infoSector = new BinaryFormat(512);
 
 				infoSector.SetUInt(FSInfo.FSI_LeadSignature, 0x41615252);
+
 				//FSInfo.FSI_Reserved1
 				infoSector.SetUInt(FSInfo.FSI_StructureSigature, 0x61417272);
 				infoSector.SetUInt(FSInfo.FSI_FreeCount, 0xFFFFFFFF);
 				infoSector.SetUInt(FSInfo.FSI_NextFree, 0xFFFFFFFF);
+
 				//FSInfo.FSI_Reserved2
 				bootSector.SetUInt(FSInfo.FSI_TrailSignature, 0xAA550000);
 
@@ -646,7 +654,6 @@ namespace Mosa.FileSystem.FAT
 			// Create Empty Root Directory
 			if (fatType == FatType.FAT32)
 			{
-
 			}
 			else
 			{
@@ -986,7 +993,6 @@ namespace Mosa.FileSystem.FAT
 
 				for (uint index = 0; index < entriesPerSector; index++)
 				{
-
 					if (compare.Compare(directory.Data, index * 32, fatType))
 					{
 						FatFileAttributes attribute = (FatFileAttributes)directory.GetByte((index * Entry.EntrySize) + Entry.FileAttributes);
@@ -1001,7 +1007,7 @@ namespace Mosa.FileSystem.FAT
 
 				if ((startCluster == 0) && (fatType != FatType.FAT32))
 				{
-					// FAT12/16 Root directory 
+					// FAT12/16 Root directory
 					if (increment >= rootDirSectors)
 						return new FatFileLocation();
 
@@ -1017,6 +1023,7 @@ namespace Mosa.FileSystem.FAT
 						activeSector = startCluster + increment;
 						continue;
 					}
+
 					// exiting cluster
 
 					// goto next cluster (if any)
@@ -1419,6 +1426,5 @@ namespace Mosa.FileSystem.FAT
 
 		//    return file;
 		//}
-
 	}
 }

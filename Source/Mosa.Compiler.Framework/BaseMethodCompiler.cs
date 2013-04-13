@@ -123,7 +123,7 @@ namespace Mosa.Compiler.Framework
 
 		private bool stopMethodCompiler;
 
-		#endregion // Data Members
+		#endregion Data Members
 
 		#region Construction
 
@@ -161,7 +161,7 @@ namespace Mosa.Compiler.Framework
 			this.stopMethodCompiler = false;
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Properties
 
@@ -257,7 +257,7 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		public VirtualRegisters VirtualRegisters { get { return virtualRegisters; } }
 
-		#endregion // Properties
+		#endregion Properties
 
 		#region Methods
 
@@ -448,7 +448,6 @@ namespace Mosa.Compiler.Framework
 			return method.ToString();
 		}
 
-		#endregion // Methods
-
+		#endregion Methods
 	}
 }

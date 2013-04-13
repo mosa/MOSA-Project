@@ -7,13 +7,11 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-
 namespace Mosa.Compiler.Metadata
 {
-
 	public struct Token
 	{
-		readonly uint token;
+		private readonly uint token;
 
 		public int RID
 		{

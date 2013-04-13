@@ -7,17 +7,14 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-
 using Mosa.Compiler.Metadata;
 
 namespace Mosa.Tool.MetadataExplorer.Tables
 {
-
 	public static class Resolver
 	{
 		public static TableRow GetTableRow(IMetadataProvider metadata, Token token)
 		{
-
 			switch (token.Table)
 			{
 				case TableType.File: return new FileRowExt(metadata, metadata.ReadFileRow(token));

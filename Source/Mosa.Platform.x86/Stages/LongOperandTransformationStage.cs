@@ -14,10 +14,8 @@ using System;
 using System.Diagnostics;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.IR;
-using Mosa.Compiler.Framework.Platform;
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Signatures;
-using Mosa.Platform.x86.Instructions;
 
 namespace Mosa.Platform.x86.Stages
 {
@@ -30,8 +28,7 @@ namespace Mosa.Platform.x86.Stages
 	/// </remarks>
 	public sealed class LongOperandTransformationStage : BaseTransformationStage, IIRVisitor
 	{
-
-		Operand operandConstantZero = Operand.CreateConstant((int)0);
+		private Operand operandConstantZero = Operand.CreateConstant((int)0);
 
 		#region Utility Methods
 
@@ -81,14 +78,14 @@ namespace Mosa.Platform.x86.Stages
 		private void ExpandAdd(Context context)
 		{
 			/* This function transforms the ADD into the following sequence of x86 instructions:
-			 * 
+			 *
 			 * mov eax, [op1]       ; Move lower 32-bits of the first operand into eax
 			 * add eax, [op2]       ; Add lower 32-bits of second operand to eax
 			 * mov [result], eax    ; Save the result into the lower 32-bits of the result operand
 			 * mov eax, [op1+4]     ; Move upper 32-bits of the first operand into eax
 			 * adc eax, [op2+4]     ; Add upper 32-bits of the second operand to eax
 			 * mov [result+4], eax  ; Save the result into the upper 32-bits of the result operand
-			 * 
+			 *
 			 */
 
 			Operand op0H, op1H, op2H, op0L, op1L, op2L;
@@ -114,14 +111,14 @@ namespace Mosa.Platform.x86.Stages
 		private void ExpandSub(Context context)
 		{
 			/* This function transforms the SUB into the following sequence of x86 instructions:
-			 * 
+			 *
 			 * mov eax, [op1]       ; Move lower 32-bits of the first operand into eax
 			 * sub eax, [op2]       ; Sub lower 32-bits of second operand to eax
 			 * mov [result], eax    ; Save the result into the lower 32-bits of the result operand
 			 * mov eax, [op1+4]     ; Move upper 32-bits of the first operand into eax
 			 * sbb eax, [op2+4]     ; Sub with borrow upper 32-bits of the second operand to eax
 			 * mov [result+4], eax  ; Save the result into the upper 32-bits of the result operand
-			 * 
+			 *
 			 */
 
 			Operand op0H, op1H, op2H, op0L, op1L, op2L;
@@ -184,10 +181,12 @@ namespace Mosa.Platform.x86.Stages
 			//newBlocks[2].AppendInstruction(X86.Mul, eax, v2);
 			newBlocks[2].AppendInstruction2(X86.Mul, edx, eax, edx, eax, v2);
 			newBlocks[2].AppendInstruction(X86.Mov, v1, eax);
+
 			//newBlocks[2].AppendInstruction(X86.Mov, eax, op1L);
 			//newBlocks[2].AppendInstruction(X86.Mul, eax, op2H);
 			newBlocks[2].AppendInstruction2(X86.Mul, edx, eax, edx, eax, op2H);
 			newBlocks[2].AppendInstruction(X86.Add, v1, v1, eax);
+
 			//newBlocks[2].AppendInstruction(X86.Mov, eax, op1L);
 			//newBlocks[2].AppendInstruction(X86.Mul, eax, v2);
 			newBlocks[2].AppendInstruction2(X86.Mul, edx, eax, edx, op1L, v2);
@@ -314,7 +313,7 @@ namespace Mosa.Platform.x86.Stages
 			// mov     eax,LOWORD(DVND) ; edx:eax <- remainder:lo word of dividend
 			// div     ecx             ; eax <- low order bits of quotient
 			// mov     edx,ebx         ; edx:eax <- quotient
-			// jmp     short L4        ; set sign, restore stack and return			
+			// jmp     short L4        ; set sign, restore stack and return
 
 			newBlocks[5].AppendInstruction(X86.Mov, ecx, op2L);
 			newBlocks[5].AppendInstruction(X86.Mov, v8, Operand.CreateConstant(0));
@@ -371,10 +370,12 @@ namespace Mosa.Platform.x86.Stages
 
 			newBlocks[8].AppendInstruction2(X86.Div, eax, edx, eax, edx, ecx);
 			newBlocks[8].AppendInstruction(X86.Mov, esi, eax);
+
 			//newBlocks[8].AppendInstruction(X86.Mul, eax, op2H);
 			newBlocks[8].AppendInstruction2(X86.Mul, edx, eax, edx, eax, op2H);
 			newBlocks[8].AppendInstruction(X86.Mov, ecx, eax);
 			newBlocks[8].AppendInstruction(X86.Mov, eax, op2L);
+
 			//newBlocks[8].AppendInstruction(X86.Mul, eax, esi);
 			newBlocks[8].AppendInstruction2(X86.Mul, edx, eax, edx, eax, esi);
 			newBlocks[8].AppendInstruction(X86.Mov, ecx, eax);
@@ -612,9 +613,11 @@ namespace Mosa.Platform.x86.Stages
 
 			newBlocks[8].AppendInstruction2(X86.Div, eax, edx, eax, edx, ecx);
 			newBlocks[8].AppendInstruction(X86.Mov, ecx, eax);
+
 			//newBlocks[8].AppendInstruction(X86.Mul, eax, op2H);
 			newBlocks[8].AppendInstruction2(X86.Mul, edx, eax, edx, eax, op2H);
 			newBlocks[8].AppendInstruction(X86.Xchg, ecx, eax);
+
 			//newBlocks[8].AppendInstruction(X86.Mul, eax, op2L);
 			newBlocks[8].AppendInstruction2(X86.Mul, edx, eax, edx, eax, op2L);
 			newBlocks[8].AppendInstruction(X86.Add, edx, edx, ecx);
@@ -732,10 +735,12 @@ namespace Mosa.Platform.x86.Stages
 
 			newBlocks[4].AppendInstruction2(X86.Div, eax, edx, eax, edx, ebx);
 			newBlocks[4].AppendInstruction(X86.Mov, esi, eax);
+
 			//newBlocks[4].AppendInstruction(X86.Mul, eax, op2H);
 			newBlocks[4].AppendInstruction2(X86.Mul, edx, eax, edx, eax, op2H);
 			newBlocks[4].AppendInstruction(X86.Mov, ecx, eax);
 			newBlocks[4].AppendInstruction(X86.Mov, eax, op2L);
+
 			//newBlocks[4].AppendInstruction(X86.Mul, eax, esi);
 			newBlocks[4].AppendInstruction2(X86.Mul, edx, eax, edx, eax, esi);
 			newBlocks[4].AppendInstruction(X86.Add, edx, edx, ecx);
@@ -849,9 +854,11 @@ namespace Mosa.Platform.x86.Stages
 
 			newBlocks[4].AppendInstruction2(X86.Div, eax, edx, eax, edx, ebx);
 			newBlocks[4].AppendInstruction(X86.Mov, ecx, eax);
+
 			//newBlocks[4].AppendInstruction(X86.Mul, eax, op2H);
 			newBlocks[4].AppendInstruction2(X86.Mul, edx, eax, edx, eax, op2H);
 			newBlocks[4].AppendInstruction(X86.Xchg, ecx, eax);
+
 			//newBlocks[4].AppendInstruction(X86.Mul, eax, op2L);
 			newBlocks[4].AppendInstruction2(X86.Mul, edx, eax, edx, eax, op2L);
 			newBlocks[4].AppendInstruction(X86.Add, edx, edx, ecx);
@@ -959,6 +966,7 @@ namespace Mosa.Platform.x86.Stages
 			// ; remaining code from current basic block
 			newBlocks[5].AppendInstruction(X86.Mov, op0H, edx);
 			newBlocks[5].AppendInstruction(X86.Mov, op0L, eax);
+
 			//newBlocks[5].AppendInstruction(X86.Pop, ecx);
 			newBlocks[5].AppendInstruction(X86.Jmp, nextBlock.BasicBlock);
 			LinkBlocks(newBlocks[5], nextBlock);
@@ -1287,7 +1295,6 @@ namespace Mosa.Platform.x86.Stages
 				default:
 					throw new NotSupportedException();
 			}
-
 		}
 
 		/// <summary>
@@ -1467,6 +1474,7 @@ namespace Mosa.Platform.x86.Stages
 
 			// Compare low dwords
 			newBlocks[1].AppendInstruction(X86.Cmp, null, op1L, op2L);
+
 			// Set the unsigned result...
 			newBlocks[1].AppendInstruction(X86.Branch, GetUnsignedConditionCode(conditionCode), target);
 			newBlocks[1].AppendInstruction(X86.Jmp, nextBlock.BasicBlock);
@@ -1508,6 +1516,7 @@ namespace Mosa.Platform.x86.Stages
 
 			// Compare low dwords
 			newBlocks[1].AppendInstruction(X86.Cmp, null, op1L, op2L);
+
 			// Set the unsigned result...
 			newBlocks[1].AppendInstruction(X86.Branch, GetUnsignedConditionCode(conditionCode), newBlocks[2].BasicBlock);
 			newBlocks[1].AppendInstruction(X86.Jmp, newBlocks[3].BasicBlock);
@@ -1553,7 +1562,7 @@ namespace Mosa.Platform.x86.Stages
 			return false;
 		}
 
-		#endregion // Utility Methods
+		#endregion Utility Methods
 
 		#region IIRVisitor
 
@@ -1883,7 +1892,6 @@ namespace Mosa.Platform.x86.Stages
 					SplitLongOperand(operand, out op0L, out op0H);
 				}
 			}
-
 		}
 
 		/// <summary>
@@ -1908,7 +1916,7 @@ namespace Mosa.Platform.x86.Stages
 			}
 		}
 
-		#endregion // IIRVisitor
+		#endregion IIRVisitor
 
 		#region IIRVisitor - Unused
 
@@ -1916,102 +1924,137 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for InternalReturn.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.InternalReturn(Context context) { }
+		void IIRVisitor.InternalReturn(Context context)
+		{
+		}
 
 		/// <summary>
 		/// Visitation function for RemFloatInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.RemFloat(Context context) { }
+		void IIRVisitor.RemFloat(Context context)
+		{
+		}
 
 		/// <summary>
 		/// Visitation function for SubFloatInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.SubFloat(Context context) { }
+		void IIRVisitor.SubFloat(Context context)
+		{
+		}
 
 		/// <summary>
 		/// Visitation function for SwitchInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.Switch(Context context) { }
+		void IIRVisitor.Switch(Context context)
+		{
+		}
 
 		/// <summary>
 		/// Visitation function for AddFInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.AddFloat(Context context) { }
+		void IIRVisitor.AddFloat(Context context)
+		{
+		}
 
 		/// <summary>
 		/// Visitation function for DivFInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.DivFloat(Context context) { }
+		void IIRVisitor.DivFloat(Context context)
+		{
+		}
+
 		/// <summary>
 		/// Visitation function for BreakInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.Break(Context context) { }
+		void IIRVisitor.Break(Context context)
+		{
+		}
 
 		/// <summary>
 		/// Visitation function for AddressOfInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.AddressOf(Context context) { }
+		void IIRVisitor.AddressOf(Context context)
+		{
+		}
 
 		/// <summary>
 		/// Visitation function for intrinsic the method call.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.IntrinsicMethodCall(Context context) { }
+		void IIRVisitor.IntrinsicMethodCall(Context context)
+		{
+		}
 
 		/// <summary>
 		/// Visitation function for EpilogueInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.Epilogue(Context context) { }
+		void IIRVisitor.Epilogue(Context context)
+		{
+		}
 
 		/// <summary>
 		/// Visitation function for FloatingPointCompareInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.FloatCompare(Context context) { }
+		void IIRVisitor.FloatCompare(Context context)
+		{
+		}
 
 		/// <summary>
 		/// Visitation function for FloatingPointToIntegerConversionInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.FloatToIntegerConversion(Context context) { }
+		void IIRVisitor.FloatToIntegerConversion(Context context)
+		{
+		}
 
 		/// <summary>
 		/// Visitation function for IntegerToFloatingPointConversionInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.IntegerToFloatConversion(Context context) { }
+		void IIRVisitor.IntegerToFloatConversion(Context context)
+		{
+		}
 
 		/// <summary>
 		/// Visitation function for JmpInstruction instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.Jmp(Context context) { }
+		void IIRVisitor.Jmp(Context context)
+		{
+		}
 
 		/// <summary>
 		/// Visitation function for PhiInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.Phi(Context context) { }
+		void IIRVisitor.Phi(Context context)
+		{
+		}
 
 		/// <summary>
 		/// Visitation function for PrologueInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.Prologue(Context context) { }
+		void IIRVisitor.Prologue(Context context)
+		{
+		}
 
 		/// <summary>
 		/// Visitation function for NopInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.Nop(Context context) { }
+		void IIRVisitor.Nop(Context context)
+		{
+		}
 
 		/// <summary>
 		/// Visitation function for MulFloatInstruction.
@@ -2025,15 +2068,18 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for ThrowInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.Throw(Context context) { }
+		void IIRVisitor.Throw(Context context)
+		{
+		}
 
 		/// <summary>
 		/// Visitation function for ExceptionPrologueInstruction"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.ExceptionPrologue(Context context) { }
+		void IIRVisitor.ExceptionPrologue(Context context)
+		{
+		}
 
-		#endregion // IIRVisitor - Unused
-
+		#endregion IIRVisitor - Unused
 	}
 }

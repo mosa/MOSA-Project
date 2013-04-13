@@ -13,7 +13,6 @@ using System.Text;
 
 namespace Mosa.Compiler.Metadata
 {
-
 	/// <summary>
 	/// Provides a access to the strings in the .NET provider user string heap.
 	/// </summary>
@@ -32,7 +31,7 @@ namespace Mosa.Compiler.Metadata
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Methods
 
@@ -48,6 +47,7 @@ namespace Mosa.Compiler.Metadata
 				throw new ArgumentException(@"Invalid token value.", @"token");
 
 			int offset = (int)(token & HeapIndexToken.RowIndexMask);
+
 			// Argument checks
 			if (0 == offset)
 			{
@@ -59,6 +59,7 @@ namespace Mosa.Compiler.Metadata
 			int realOffset = ValidateOffset(offset);
 			int length = CalculatePrefixLength(ref realOffset);
 			Debug.Assert(1 == (length & 1), @"Invalid string length read from metadata - corrupt string?");
+
 			//token = (TokenTypes)((int)TokenTypes.UserString | realOffset + length - this._offset);
 			if (0 == length)
 				return String.Empty;
@@ -66,6 +67,6 @@ namespace Mosa.Compiler.Metadata
 			return Encoding.Unicode.GetString(buffer, realOffset, length - 1);
 		}
 
-		#endregion // Methods
+		#endregion Methods
 	}
 }

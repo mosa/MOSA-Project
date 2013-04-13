@@ -22,7 +22,6 @@ namespace Mosa.Platform.AVR32.Instructions
 	/// </summary>
 	public class Mul : AVR32Instruction
 	{
-		
 		#region Construction
 
 		/// <summary>
@@ -33,7 +32,7 @@ namespace Mosa.Platform.AVR32.Instructions
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Methods
 
@@ -78,7 +77,6 @@ namespace Mosa.Platform.AVR32.Instructions
 			visitor.Mul(context);
 		}
 
-		#endregion // Methods
-
+		#endregion Methods
 	}
 }

@@ -23,7 +23,7 @@ namespace Mosa.Compiler.Framework.IR
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Overrides
 
@@ -48,6 +48,6 @@ namespace Mosa.Compiler.Framework.IR
 			visitor.InternalReturn(context);
 		}
 
-		#endregion // OneOperandInstruction Overrides
+		#endregion Overrides
 	}
 }

@@ -17,7 +17,6 @@ namespace Mosa.Test.Cases.CIL
 	[TestFixture]
 	public class ExceptionHandlingFixture : TestCompilerAdapter
 	{
-
 		public ExceptionHandlingFixture()
 		{
 			settings.AddReference("Mosa.Test.Collection.dll");
@@ -40,12 +39,11 @@ namespace Mosa.Test.Cases.CIL
 		{
 			Assert.AreEqual(ExceptionHandlingTests.TryFinally3(), Run<int>("Mosa.Test.Collection", "ExceptionHandlingTests", "TryFinally3"));
 		}
+
 		[Test]
 		public void TryFinally4()
 		{
 			Assert.AreEqual(ExceptionHandlingTests.TryFinally4(), Run<int>("Mosa.Test.Collection", "ExceptionHandlingTests", "TryFinally4"));
 		}
-
-
 	}
 }

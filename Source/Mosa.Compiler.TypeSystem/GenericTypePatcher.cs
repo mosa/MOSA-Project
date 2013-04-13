@@ -25,15 +25,17 @@ namespace Mosa.Compiler.TypeSystem
 	public sealed class GenericTypePatcher
 	{
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private uint typeTokenCounter = 0;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private uint signatureTokenCounter = 0;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private ITypeSystem typeSystem;
 
@@ -52,7 +54,7 @@ namespace Mosa.Compiler.TypeSystem
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private List<GenericEntry> patchedTypes = new List<GenericEntry>();
 

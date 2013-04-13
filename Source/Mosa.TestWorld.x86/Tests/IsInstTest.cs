@@ -9,18 +9,23 @@
 namespace Mosa.TestWorld.x86.Tests
 {
 	public interface IAA { }
+
 	public interface IBB { }
+
 	public interface ICC { }
 
 	public class AA : IAA { }
+
 	public class BB : AA, IBB { }
+
 	public class CC { }
+
 	public class DD : BB { }
 
 	public class IsInstTest : KernelTest
 	{
 		public IsInstTest()
-			: base("Inst") 
+			: base("Inst")
 		{
 			testMethods.Add(IsInstTest1);
 			testMethods.Add(IsInstTest2);
@@ -84,7 +89,6 @@ namespace Mosa.TestWorld.x86.Tests
 			return !(o is CC);
 		}
 
-
 		public static bool IsInstTest8()
 		{
 			object o = new AA();
@@ -112,7 +116,5 @@ namespace Mosa.TestWorld.x86.Tests
 
 			return !(o is IBB);
 		}
-
 	}
-
 }

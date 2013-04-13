@@ -24,7 +24,7 @@ namespace Mosa.Compiler.Metadata.Signatures
 		/// </summary>
 		private CilElementType type;
 
-		#endregion // Data members
+		#endregion Data members
 
 		#region Construction
 
@@ -37,7 +37,7 @@ namespace Mosa.Compiler.Metadata.Signatures
 			this.type = type;
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Properties
 
@@ -55,7 +55,7 @@ namespace Mosa.Compiler.Metadata.Signatures
 		/// </value>
 		public bool IsOpenGenericParameter { get { return (type == CilElementType.Var || type == CilElementType.MVar); } }
 
-		#endregion // Properties
+		#endregion Properties
 
 		#region Object Overrides
 
@@ -70,7 +70,7 @@ namespace Mosa.Compiler.Metadata.Signatures
 			return type.ToString();
 		}
 
-		#endregion // Object Overrides
+		#endregion Object Overrides
 
 		#region Methods
 
@@ -122,7 +122,7 @@ namespace Mosa.Compiler.Metadata.Signatures
 			}
 		}
 
-		#endregion // Methods
+		#endregion Methods
 
 		#region Static methods
 
@@ -250,7 +250,6 @@ namespace Mosa.Compiler.Metadata.Signatures
 				default:
 					throw new NotSupportedException(@"Unsupported CIL element type: " + type);
 			}
-
 		}
 
 		/// <summary>
@@ -401,7 +400,7 @@ namespace Mosa.Compiler.Metadata.Signatures
 			return new SZArraySigType(customMods, elementType);
 		}
 
-		#endregion // Static methods
+		#endregion Static methods
 
 		#region IEquatable<SigType> Members
 
@@ -417,7 +416,7 @@ namespace Mosa.Compiler.Metadata.Signatures
 			return (type == other.type);
 		}
 
-		#endregion // IEquatable<SigType> Members
+		#endregion IEquatable<SigType> Members
 
 		/// <summary>
 		/// Expresses the signature element information in a string form differentiating it from other signature
@@ -427,7 +426,7 @@ namespace Mosa.Compiler.Metadata.Signatures
 		/// base of this method, then replace that with an exception thrower.</remarks>
 		public virtual string ToSymbolPart()
 		{
-			// If it's not a subclass of SigType and it is trivial to express, do it here. 
+			// If it's not a subclass of SigType and it is trivial to express, do it here.
 			// Otherwise, call the virtual method ToSymbolPart() and hope that it is overridden so that it doesn't throw a NotImplementedException
 			switch (this.Type)
 			{
@@ -459,6 +458,7 @@ namespace Mosa.Compiler.Metadata.Signatures
 					return "string";
 				case CilElementType.ValueType:
 					return "valuetype";	// FIXME: HACK?
+
 				//throw new NotImplementedException();
 				case CilElementType.Class:
 					throw new NotImplementedException();
@@ -478,6 +478,7 @@ namespace Mosa.Compiler.Metadata.Signatures
 					throw new NotImplementedException();
 				case CilElementType.Object:
 					return "object";	// FIXME: HACK?
+
 				//throw new NotImplementedException();
 				case CilElementType.SZArray:
 					throw new NotImplementedException();

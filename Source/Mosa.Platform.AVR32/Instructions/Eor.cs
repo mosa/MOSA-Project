@@ -20,7 +20,6 @@ namespace Mosa.Platform.AVR32.Instructions
 	/// </summary>
 	public class Eor : AVR32Instruction
 	{
-		
 		#region Construction
 
 		/// <summary>
@@ -31,7 +30,7 @@ namespace Mosa.Platform.AVR32.Instructions
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Methods
 
@@ -62,7 +61,6 @@ namespace Mosa.Platform.AVR32.Instructions
 			visitor.Eor(context);
 		}
 
-		#endregion // Methods
-
+		#endregion Methods
 	}
 }

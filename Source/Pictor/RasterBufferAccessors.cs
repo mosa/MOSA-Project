@@ -6,6 +6,7 @@
  * Authors:
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  */
+
 using System.Runtime.InteropServices;
 using Pictor.PixelFormat;
 
@@ -14,7 +15,9 @@ namespace Pictor
 	public interface IRasterBufferAccessor
 	{
 		unsafe byte* Span(int x, int y, uint len);
+
 		unsafe byte* NextX();
+
 		unsafe byte* NextY();
 
 		IPixelFormat PixelFormat
@@ -30,12 +33,13 @@ namespace Pictor
 		unsafe private byte* m_pBackBufferColor;
 		private int m_x, m_x0, m_y;
 		unsafe private byte* m_pix_ptr;
-		uint m_PixelWidthInBytes;
+		private uint m_PixelWidthInBytes;
 
 		public RasterBufferAccessorClip(IPixelFormat pixf, RGBA_Doubles bk)
 		{
 			m_pixf = pixf;
 			m_PixelWidthInBytes = m_pixf.PixelWidthInBytes;
+
 			//pixfmt_alpha_blend_bgra32.MakePixel(m_bk_buf, bk);
 			unsafe
 			{
@@ -64,7 +68,7 @@ namespace Pictor
 			m_pixf = pixf;
 		}
 
-		IPixelFormat GetPixelFormat()
+		private IPixelFormat GetPixelFormat()
 		{
 			return m_pixf;
 		}
@@ -128,6 +132,7 @@ namespace Pictor
 	};
 
 	/*
+
 		//--------------------------------------------------image_accessor_no_clip
 		template<class PixFmt> class image_accessor_no_clip
 		{
@@ -139,8 +144,8 @@ namespace Pictor
 			enum pix_width_e { pix_width = pixfmt_type::pix_width };
 
 			image_accessor_no_clip() {}
-			explicit image_accessor_no_clip(pixfmt_type& pixf) : 
-				PixelFormat(&pixf) 
+			explicit image_accessor_no_clip(pixfmt_type& pixf) :
+				PixelFormat(&pixf)
 			{}
 
 			void Attach(pixfmt_type& pixf)
@@ -178,7 +183,7 @@ namespace Pictor
 		private IPixelFormat m_pixf;
 		private int m_x, m_x0, m_y;
 		unsafe private byte* m_pix_ptr;
-		uint m_PixelWidthInBytes;
+		private uint m_PixelWidthInBytes;
 
 		public RasterBufferAccessorClamp(IPixelFormat pixf)
 		{
@@ -186,7 +191,7 @@ namespace Pictor
 			m_PixelWidthInBytes = m_pixf.PixelWidthInBytes;
 		}
 
-		void Attach(IPixelFormat pixf)
+		private void Attach(IPixelFormat pixf)
 		{
 			m_pixf = pixf;
 		}
@@ -258,6 +263,7 @@ namespace Pictor
 			return Pixel;
 		}
 	};
+
 	/*
 
 		//-----------------------------------------------------image_accessor_wrap
@@ -271,9 +277,9 @@ namespace Pictor
 			enum pix_width_e { pix_width = pixfmt_type::pix_width };
 
 			image_accessor_wrap() {}
-			explicit image_accessor_wrap(pixfmt_type& pixf) : 
-				PixelFormat(&pixf), 
-				m_wrap_x(pixf.Width()), 
+			explicit image_accessor_wrap(pixfmt_type& pixf) :
+				PixelFormat(&pixf),
+				m_wrap_x(pixf.Width()),
 				m_wrap_y(pixf.Height())
 			{}
 
@@ -309,23 +315,20 @@ namespace Pictor
 			WrapY              m_wrap_y;
 		};
 
-
-
-
 		//--------------------------------------------------------wrap_mode_repeat
 		class wrap_mode_repeat
 		{
 		public:
 			wrap_mode_repeat() {}
-			wrap_mode_repeat(uint Size) : 
-				m_size(Size), 
+			wrap_mode_repeat(uint Size) :
+				m_size(Size),
 				m_add(Size * (0x3FFFFFFF / Size)),
 				m_value(0)
 			{}
 
 			uint operator() (int v)
-			{ 
-				return m_value = (uint(v) + m_add) % m_size; 
+			{
+				return m_value = (uint(v) + m_add) % m_size;
 			}
 
 			uint operator++ ()
@@ -340,7 +343,6 @@ namespace Pictor
 			uint m_value;
 		};
 
-
 		//---------------------------------------------------wrap_mode_repeat_pow2
 		class wrap_mode_repeat_pow2
 		{
@@ -353,7 +355,7 @@ namespace Pictor
 				m_mask >>= 1;
 			}
 			uint operator() (int v)
-			{ 
+			{
 				return m_value = uint(v) & m_mask;
 			}
 			uint operator++ ()
@@ -367,7 +369,6 @@ namespace Pictor
 			uint m_value;
 		};
 
-
 		//----------------------------------------------wrap_mode_repeat_auto_pow2
 		class wrap_mode_repeat_auto_pow2
 		{
@@ -380,8 +381,8 @@ namespace Pictor
 				m_value(0)
 			{}
 
-			uint operator() (int v) 
-			{ 
+			uint operator() (int v)
+			{
 				if(m_mask) return m_value = uint(v) & m_mask;
 				return m_value = (uint(v) + m_add) % m_size;
 			}
@@ -399,21 +400,20 @@ namespace Pictor
 			uint m_value;
 		};
 
-
 		//-------------------------------------------------------wrap_mode_reflect
 		class wrap_mode_reflect
 		{
 		public:
 			wrap_mode_reflect() {}
-			wrap_mode_reflect(uint Size) : 
-				m_size(Size), 
+			wrap_mode_reflect(uint Size) :
+				m_size(Size),
 				m_size2(Size * 2),
 				m_add(m_size2 * (0x3FFFFFFF / m_size2)),
 				m_value(0)
 			{}
 
 			uint operator() (int v)
-			{ 
+			{
 				m_value = (uint(v) + m_add) % m_size2;
 				if(m_value >= m_size) return m_size2 - m_value - 1;
 				return m_value;
@@ -433,8 +433,6 @@ namespace Pictor
 			uint m_value;
 		};
 
-
-
 		//--------------------------------------------------wrap_mode_reflect_pow2
 		class wrap_mode_reflect_pow2
 		{
@@ -444,14 +442,14 @@ namespace Pictor
 			{
 				m_mask = 1;
 				m_size = 1;
-				while(m_mask < Size) 
+				while(m_mask < Size)
 				{
 					m_mask = (m_mask << 1) | 1;
 					m_size <<= 1;
 				}
 			}
 			uint operator() (int v)
-			{ 
+			{
 				m_value = uint(v) & m_mask;
 				if(m_value >= m_size) return m_mask - m_value;
 				return m_value;
@@ -469,8 +467,6 @@ namespace Pictor
 			uint m_value;
 		};
 
-
-
 		//---------------------------------------------wrap_mode_reflect_auto_pow2
 		class wrap_mode_reflect_auto_pow2
 		{
@@ -484,12 +480,12 @@ namespace Pictor
 				m_value(0)
 			{}
 
-			uint operator() (int v) 
-			{ 
-				m_value = m_mask ? uint(v) & m_mask : 
+			uint operator() (int v)
+			{
+				m_value = m_mask ? uint(v) & m_mask :
 								  (uint(v) + m_add) % m_size2;
 				if(m_value >= m_size) return m_size2 - m_value - 1;
-				return m_value;            
+				return m_value;
 			}
 			uint operator++ ()
 			{

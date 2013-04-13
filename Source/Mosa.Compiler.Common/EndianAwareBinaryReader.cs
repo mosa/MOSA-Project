@@ -11,10 +11,8 @@ using System.IO;
 
 namespace Mosa.Compiler.Common
 {
-
 	public class EndianAwareBinaryReader : BinaryReader
 	{
-
 		private bool swap = false;
 
 		public EndianAwareBinaryReader(Stream input, Endianness endianness)
@@ -36,5 +34,4 @@ namespace Mosa.Compiler.Common
 			return swap ? Endian.Swap(value) : value;
 		}
 	}
-
 }

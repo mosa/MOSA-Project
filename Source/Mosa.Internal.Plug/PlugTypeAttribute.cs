@@ -21,5 +21,4 @@ namespace Mosa.Internal.Plug
 			this.target = target;
 		}
 	}
-
 }

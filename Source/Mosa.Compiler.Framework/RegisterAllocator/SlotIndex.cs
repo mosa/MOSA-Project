@@ -14,7 +14,6 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 {
 	public class SlotIndex : IComparable
 	{
-
 		private InstructionSet instructionSet;
 
 		private int index;

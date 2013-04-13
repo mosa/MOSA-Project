@@ -19,6 +19,7 @@ namespace Pictor.PixelFormat
 		///<param name="y"></param>
 		///<returns></returns>
 		byte Pixel(int x, int y);
+
 		///<summary>
 		///</summary>
 		///<param name="x"></param>
@@ -26,6 +27,7 @@ namespace Pictor.PixelFormat
 		///<param name="val"></param>
 		///<returns></returns>
 		byte CombinePixel(int x, int y, byte val);
+
 		///<summary>
 		///</summary>
 		///<param name="x"></param>
@@ -33,6 +35,7 @@ namespace Pictor.PixelFormat
 		///<param name="dst"></param>
 		///<param name="numPixel"></param>
 		unsafe void FillHorizontalSpan(int x, int y, byte* dst, int numPixel);
+
 		///<summary>
 		///</summary>
 		///<param name="x"></param>
@@ -40,6 +43,7 @@ namespace Pictor.PixelFormat
 		///<param name="dst"></param>
 		///<param name="numPixel"></param>
 		unsafe void FillVerticalSpan(int x, int y, byte* dst, int numPixel);
+
 		///<summary>
 		///</summary>
 		///<param name="x"></param>
@@ -47,6 +51,7 @@ namespace Pictor.PixelFormat
 		///<param name="dst"></param>
 		///<param name="numPixel"></param>
 		unsafe void CombineHorizontalSpanFullCover(int x, int y, byte* dst, int numPixel);
+
 		///<summary>
 		///</summary>
 		///<param name="x"></param>
@@ -54,6 +59,7 @@ namespace Pictor.PixelFormat
 		///<param name="dst"></param>
 		///<param name="numPixel"></param>
 		unsafe void CombineHorizontalSpan(int x, int y, byte* dst, int numPixel);
+
 		///<summary>
 		///</summary>
 		///<param name="x"></param>
@@ -67,16 +73,18 @@ namespace Pictor.PixelFormat
 	///</summary>
 	public sealed class AlphaMaskByteUnclipped : IAlphaMask
 	{
-		RasterBuffer _rasterBuffer;
-		readonly uint _step;
-		readonly uint _offset;
+		private RasterBuffer _rasterBuffer;
+		private readonly uint _step;
+		private readonly uint _offset;
 
 		///<summary>
 		///</summary>
 		public static int CoverShift = 8;
+
 		///<summary>
 		///</summary>
 		public static int CoverNone = 0;
+
 		///<summary>
 		///</summary>
 		public static int CoverFull = 255;
@@ -96,7 +104,10 @@ namespace Pictor.PixelFormat
 		///<summary>
 		///</summary>
 		///<param name="rbuf"></param>
-		public void Attach(RasterBuffer rbuf) { _rasterBuffer = rbuf; }
+		public void Attach(RasterBuffer rbuf)
+		{
+			_rasterBuffer = rbuf;
+		}
 
 		public byte Pixel(int x, int y)
 		{
@@ -177,16 +188,18 @@ namespace Pictor.PixelFormat
 	///</summary>
 	public sealed class AlphaMaskByteClipped : IAlphaMask
 	{
-		RasterBuffer _rasterBuffer;
-		readonly uint _step;
-		readonly uint _offset;
+		private RasterBuffer _rasterBuffer;
+		private readonly uint _step;
+		private readonly uint _offset;
 
 		///<summary>
 		///</summary>
 		public static int CoverShift = 8;
+
 		///<summary>
 		///</summary>
 		public static int CoverNone = 0;
+
 		///<summary>
 		///</summary>
 		public static int CoverFull = 255;

@@ -8,11 +8,7 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
-using System.Diagnostics;
-using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Metadata.Signatures;
 
 namespace Mosa.Platform.x86.Instructions
 {
@@ -21,15 +17,14 @@ namespace Mosa.Platform.x86.Instructions
 	/// </summary>
 	public sealed class Sar : X86Instruction
 	{
-
-		#region  Data Members
+		#region Data Members
 
 		private static readonly OpCode C = new OpCode(new byte[] { 0xC1 }, 7);
 		private static readonly OpCode C1 = new OpCode(new byte[] { 0xD1 }, 7);
 		private static readonly OpCode RM = new OpCode(new byte[] { 0xD3 }, 7);
 
-		#endregion
-		
+		#endregion Data Members
+
 		#region Construction
 
 		/// <summary>
@@ -40,7 +35,7 @@ namespace Mosa.Platform.x86.Instructions
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Methods
 
@@ -74,6 +69,6 @@ namespace Mosa.Platform.x86.Instructions
 			visitor.Sar(context);
 		}
 
-		#endregion // Methods
+		#endregion Methods
 	}
 }

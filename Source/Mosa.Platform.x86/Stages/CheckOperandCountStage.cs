@@ -12,7 +12,7 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.x86.Stages
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public class CheckOperandCountStage : BaseMethodCompilerStage, IMethodCompilerStage, IPipelineStage
 	{
@@ -21,7 +21,6 @@ namespace Mosa.Platform.x86.Stages
 		/// </summary>
 		void IMethodCompilerStage.Run()
 		{
-
 			foreach (var block in basicBlocks)
 			{
 				for (var context = new Context(this.instructionSet, block); !context.IsBlockEndInstruction; context.GotoNext())
@@ -34,11 +33,8 @@ namespace Mosa.Platform.x86.Stages
 					{
 						context.Marked = true;
 					}
-
 				}
 			}
-
 		}
-
 	}
 }

@@ -7,7 +7,6 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-using System;
 using System.IO;
 using Mosa.Compiler.Common;
 
@@ -18,7 +17,6 @@ namespace Mosa.Compiler.Linker.PE
 	/// </summary>
 	public class PELinkerSection : ExtendedLinkerSection
 	{
-
 		#region Construction
 
 		/// <summary>
@@ -33,7 +31,7 @@ namespace Mosa.Compiler.Linker.PE
 			stream = new MemoryStream();
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Methods
 
@@ -46,7 +44,6 @@ namespace Mosa.Compiler.Linker.PE
 			stream.WriteTo(writer.BaseStream);
 		}
 
-		#endregion // Methods
-
+		#endregion Methods
 	}
 }

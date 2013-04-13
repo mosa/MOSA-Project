@@ -7,7 +7,6 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-
 namespace Mosa.Compiler.Framework.IR
 {
 	/// <summary>
@@ -23,7 +22,7 @@ namespace Mosa.Compiler.Framework.IR
 	/// operand, the result is undefined.
 	/// <para/>
 	/// The most significant bits will be filled with zeroes by this context. To preserve
-	/// the sign of the shifted value (inserting ones if it is negative), use the 
+	/// the sign of the shifted value (inserting ones if it is negative), use the
 	/// <see cref="ArithmeticShiftRight"/> instead.
 	/// </remarks>
 	public sealed class ShiftRight : ThreeOperandInstruction
@@ -37,7 +36,7 @@ namespace Mosa.Compiler.Framework.IR
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region ThreeOperandInstruction Overrides
 
@@ -51,6 +50,6 @@ namespace Mosa.Compiler.Framework.IR
 			visitor.ShiftRight(context);
 		}
 
-		#endregion // ThreeOperandInstruction Overrides
+		#endregion ThreeOperandInstruction Overrides
 	}
 }

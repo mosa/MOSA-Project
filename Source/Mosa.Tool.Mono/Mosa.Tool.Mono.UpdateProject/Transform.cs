@@ -96,7 +96,6 @@ namespace Mosa.Tool.Mono.UpdateProject
 				else if (trim.StartsWith("using ") && trim.Contains(";"))
 				{
 					usings.Add(linenbr);
-
 				}
 				else if (trim.StartsWith("namespace "))
 				{
@@ -600,7 +599,8 @@ namespace Mosa.Tool.Mono.UpdateProject
 			foreach (MethodNode method in currentNode.Methods)
 			{
 				string extra = string.Empty;
-//				bool endif = false;
+
+				//				bool endif = false;
 
 				for (int i = method.Start; i <= method.End; i++)
 				{
@@ -613,16 +613,17 @@ namespace Mosa.Tool.Mono.UpdateProject
 
 					if (trim.StartsWith("#"))
 					{
-//						if (trim.Contains("#endif"))
-//							endif = false;
-//						else
-//							if (trim.Contains("#if"))
-//								endif = true;
+						//						if (trim.Contains("#endif"))
+						//							endif = false;
+						//						else
+						//							if (trim.Contains("#if"))
+						//								endif = true;
 						output.Add(trim);
 					}
 					else
 						output.Add(tabs + '\t' + trim);
 				}
+
 				//if (endif)
 				//    output.Add("#endif");
 			}
@@ -757,15 +758,19 @@ namespace Mosa.Tool.Mono.UpdateProject
 					case "public":
 						accept = true;
 						break;
+
 					case "private":
 						accept = true;
 						break;
+
 					case "protected":
 						accept = true;
 						break;
+
 					case "unsafe":
 						accept = true;
 						break;
+
 					default:
 						break;
 				}
@@ -1117,7 +1122,7 @@ namespace Mosa.Tool.Mono.UpdateProject
 			}
 		}
 
-		#endregion
+		#endregion Nested type: ClassNode
 
 		#region Nested type: MethodNode
 
@@ -1140,6 +1145,6 @@ namespace Mosa.Tool.Mono.UpdateProject
 			}
 		}
 
-		#endregion
+		#endregion Nested type: MethodNode
 	}
 }

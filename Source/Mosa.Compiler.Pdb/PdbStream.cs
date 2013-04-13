@@ -50,7 +50,7 @@ namespace Mosa.Compiler.Pdb
 		/// </summary>
 		private Stream stream;
 
-		#endregion // Data Members
+		#endregion Data Members
 
 		#region Construction
 
@@ -73,7 +73,7 @@ namespace Mosa.Compiler.Pdb
 			SwitchPage();
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Stream Overrides
 
@@ -252,7 +252,7 @@ namespace Mosa.Compiler.Pdb
 			throw new NotSupportedException();
 		}
 
-		#endregion // Stream Overrides
+		#endregion Stream Overrides
 
 		#region Internals
 
@@ -274,6 +274,6 @@ namespace Mosa.Compiler.Pdb
 			}
 		}
 
-		#endregion // Internals
+		#endregion Internals
 	}
 }

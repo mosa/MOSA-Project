@@ -12,7 +12,7 @@ namespace Pictor
 	public static class ClipLiangBarsky
 	{
 		//------------------------------------------------------------------------
-		enum ClippingFlags
+		private enum ClippingFlags
 		{
 			x1Clipped = 4,
 			x2Clipped = 1,
@@ -23,7 +23,7 @@ namespace Pictor
 		};
 
 		//----------------------------------------------------------GetClippingFlags
-		// Determine the clipping code of the Vertex according to the 
+		// Determine the clipping code of the Vertex according to the
 		// Cyrus-Beck Line clipping algorithm
 		//
 		//        |        |
@@ -39,7 +39,7 @@ namespace Pictor
 		//        |        |
 		//  ClipBox.x1  ClipBox.x2
 		//
-		// 
+		//
 		//template<class T>
 		public static uint GetClippingFlags(int x, int y, RectI clip_box)
 		{
@@ -56,14 +56,12 @@ namespace Pictor
 			return (uint)((x > clip_box.x2 ? 1 : 0) | ((x < clip_box.x1 ? 1 : 0) << 2));
 		}
 
-
 		//--------------------------------------------------------ClippingFlagsY
 		//template<class T>
 		public static uint ClippingFlagsY(int y, RectI clip_box)
 		{
 			return (uint)(((y > clip_box.y2 ? 1 : 0) << 1) | ((y < clip_box.y1 ? 1 : 0) << 3));
 		}
-
 
 		//-------------------------------------------------------ClipLiangbarsky
 		//template<class T>
@@ -98,7 +96,7 @@ namespace Pictor
 
 			if (deltay == 0.0)
 			{
-				// bump off of the horizontal 
+				// bump off of the horizontal
 				deltay = (y1 > clip_box.y1) ? -nearzero : nearzero;
 			}
 
@@ -217,7 +215,6 @@ namespace Pictor
 			return np;
 		}
 
-
 		//----------------------------------------------------------------------------
 		//template<class T>
 		public static bool ClipMovePoint(int x1, int y1, int x2, int y2,
@@ -316,6 +313,5 @@ namespace Pictor
 		}
 	}
 }
-
 
 //#endif

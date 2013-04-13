@@ -7,7 +7,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
 using System.IO;
 
 using Mosa.Compiler.Common;
@@ -21,7 +20,6 @@ namespace Mosa.Compiler.Framework.Stages
 	/// </summary>
 	public sealed class MetadataStage : BaseCompilerStage, ICompilerStage
 	{
-
 		#region ICompilerStage members
 
 		void ICompilerStage.Setup(BaseCompiler compiler)
@@ -34,7 +32,7 @@ namespace Mosa.Compiler.Framework.Stages
 			CreateAssemblyListTable();
 		}
 
-		#endregion // ICompilerStage members
+		#endregion ICompilerStage members
 
 		private void EmitStringWithLength(EndianAwareBinaryWriter stream, string value)
 		{
@@ -148,6 +146,7 @@ namespace Mosa.Compiler.Framework.Stages
 					// 2. Metadata Token
 					//writer.Write((uint)type.Token.ToUInt32());
 					writer.Write((uint)0); //FIXME: ^^^
+
 					// 3. Pointer to Name
 					linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuildInPatch.I4, typeTableSymbol, (int)writer.Position, 0, typeNameSymbol, 0);
 					writer.Position += typeLayout.NativePointerSize;
@@ -163,9 +162,6 @@ namespace Mosa.Compiler.Framework.Stages
 					writer.WriteByte((byte)(type.IsInterface ? 1 : 0));
 				}
 			}
-
 		}
-
-
 	}
 }

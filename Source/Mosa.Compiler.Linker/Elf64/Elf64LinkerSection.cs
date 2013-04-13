@@ -7,19 +7,18 @@
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  */
 
-using System;
 using System.IO;
 using Mosa.Compiler.Common;
 
 namespace Mosa.Compiler.Linker.Elf64
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public class Elf64LinkerSection : ExtendedLinkerSection
 	{
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected SectionHeader header = new SectionHeader();
 
@@ -62,6 +61,5 @@ namespace Mosa.Compiler.Linker.Elf64
 			Header.Size = (uint)Length;
 			Header.Write(writer);
 		}
-
 	}
 }

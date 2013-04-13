@@ -21,7 +21,10 @@ namespace Pictor.VertexSource
 			m_Transform = InTransform;
 		}
 
-		public void Attach(IVertexSource VertexSource) { m_VertexSource = VertexSource; }
+		public void Attach(IVertexSource VertexSource)
+		{
+			m_VertexSource = VertexSource;
+		}
 
 		public void Rewind(uint path_id)
 		{

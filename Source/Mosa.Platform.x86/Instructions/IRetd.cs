@@ -18,7 +18,6 @@ namespace Mosa.Platform.x86.Instructions
 	/// </summary>
 	public sealed class IRetd : X86Instruction
 	{
-		
 		#region Construction
 
 		/// <summary>
@@ -29,7 +28,7 @@ namespace Mosa.Platform.x86.Instructions
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		/// <summary>
 		/// Gets the flow control.
@@ -59,6 +58,6 @@ namespace Mosa.Platform.x86.Instructions
 			visitor.Iretd(context);
 		}
 
-		#endregion // Methods
+		#endregion Methods
 	}
 }

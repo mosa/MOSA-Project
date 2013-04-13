@@ -7,7 +7,6 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-
 namespace Mosa.Compiler.Framework.IR
 {
 	/// <summary>
@@ -27,7 +26,7 @@ namespace Mosa.Compiler.Framework.IR
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Methods
 
@@ -62,6 +61,6 @@ namespace Mosa.Compiler.Framework.IR
 				Visit(visitor as IIRVisitor, context);
 		}
 
-		#endregion // Methods
+		#endregion Methods
 	}
 }

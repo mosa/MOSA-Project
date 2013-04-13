@@ -7,7 +7,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
 using System.Collections.Generic;
 using System.IO;
 using Mosa.Compiler.Common;
@@ -31,7 +30,7 @@ namespace Mosa.Platform.x86.Stages
 
 		private ICodeEmitter codeEmitter;
 
-		#endregion // Data members
+		#endregion Data members
 
 		#region IMethodCompilerStage members
 
@@ -53,7 +52,7 @@ namespace Mosa.Platform.x86.Stages
 			EmitProtectedBlockTable();
 		}
 
-		#endregion // IMethodCompilerStage members
+		#endregion IMethodCompilerStage members
 
 		private void AssignBlocksToClauses()
 		{
@@ -80,7 +79,6 @@ namespace Mosa.Platform.x86.Stages
 					blockExceptions.Add(block, clause);
 				}
 			}
-
 		}
 
 		private ExceptionHandlingClause FindExceptionClause(BasicBlock block)
@@ -105,7 +103,9 @@ namespace Mosa.Platform.x86.Stages
 			public ExceptionHandlerType Kind;
 			public uint Start;
 			public uint End;
+
 			public uint Length { get { return End - Start; } }
+
 			public uint Handler;
 
 			public uint Filter;
@@ -163,7 +163,7 @@ namespace Mosa.Platform.x86.Stages
 					}
 					else if (prev.Start == end && prev.Kind == kind && prev.Handler == handler && prev.Filter == filter && prev.Type == type)
 					{
-						// merge protected blocks sequence						
+						// merge protected blocks sequence
 						prev.Start = start;
 					}
 					else
@@ -202,7 +202,7 @@ namespace Mosa.Platform.x86.Stages
 						}
 						else if (entry.Kind == ExceptionHandlerType.Filter)
 						{
-							// TODO: There are no plans in the short term to support filtered exception clause as C# does not use them 
+							// TODO: There are no plans in the short term to support filtered exception clause as C# does not use them
 							writer.Position += nativePointerSize;
 						}
 						else
@@ -215,8 +215,6 @@ namespace Mosa.Platform.x86.Stages
 					writer.Position += typeLayout.NativePointerSize;
 				}
 			}
-
 		}
-
 	}
 }

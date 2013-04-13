@@ -10,7 +10,7 @@
 namespace Mosa.Compiler.Framework.Stages
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public class CheckIROperandCountStage : BaseMethodCompilerStage, IMethodCompilerStage, IPipelineStage
 	{
@@ -19,7 +19,6 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </summary>
 		void IMethodCompilerStage.Run()
 		{
-
 			foreach (var block in basicBlocks)
 			{
 				for (var context = new Context(this.instructionSet, block); !context.IsBlockEndInstruction; context.GotoNext())
@@ -38,11 +37,8 @@ namespace Mosa.Compiler.Framework.Stages
 					{
 						context.Marked = true;
 					}
-
 				}
 			}
-
 		}
-
 	}
 }

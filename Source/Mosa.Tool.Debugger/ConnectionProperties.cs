@@ -8,18 +8,9 @@
  */
 
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Text;
-using System.IO;
-using System.IO.Ports;
 using System.IO.Pipes;
-using System.Net;
 using System.Net.Sockets;
-using System.Windows.Forms;
 using Mosa.Utility.DebugEngine;
-using WeifenLuo.WinFormsUI.Docking;
 
 namespace Mosa.Tool.Debugger
 {
@@ -70,12 +61,14 @@ namespace Mosa.Tool.Debugger
 					case 0:
 						var client = new TcpClient(tbServerName.Text.Trim(), Convert.ToInt32(tbPort.Text));
 						DebugEngine.Stream = new DebugNetworkStream(client.Client, true);
-						break;		
+						break;
+
 					case 2:
 						var pipeStream = new NamedPipeClientStream(".", tbNamedPipe.Text.Trim(), PipeDirection.InOut);
 						pipeStream.Connect();
 						DebugEngine.Stream = pipeStream;
 						break;
+
 					//case 2:
 					//    var server = new TcpListener(Convert.ToInt32(tbPort.Text));
 					//    DebugEngine.Stream = new DebugNetworkStream(server.AcceptSocket(), true);
@@ -90,7 +83,6 @@ namespace Mosa.Tool.Debugger
 					Status = "Connected!";
 					MainForm.SignalConnect();
 				}
-
 			}
 			catch (Exception ex)
 			{
@@ -108,6 +100,5 @@ namespace Mosa.Tool.Debugger
 				MainForm.SignalDisconnect();
 			}
 		}
-
 	}
 }

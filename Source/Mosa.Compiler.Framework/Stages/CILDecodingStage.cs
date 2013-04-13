@@ -16,7 +16,6 @@ using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Compiler.Metadata.Tables;
-using Mosa.Compiler.Framework;
 using Mosa.Compiler.TypeSystem;
 using Mosa.Compiler.TypeSystem.Cil;
 
@@ -40,7 +39,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </summary>
 		private EndianAwareBinaryReader codeReader;
 
-		#endregion // Data members
+		#endregion Data members
 
 		#region IMethodCompilerStage Members
 
@@ -105,7 +104,7 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 		}
 
-		#endregion // IMethodCompilerStage Members
+		#endregion IMethodCompilerStage Members
 
 		#region Internals
 
@@ -130,6 +129,7 @@ namespace Mosa.Compiler.Framework.Stages
 					break;
 
 				case MethodFlags.FatFormat:
+
 					// Read second byte of flags
 					header.Flags = (MethodFlags)(reader.ReadByte() << 8 | (byte)header.Flags);
 					if (MethodFlags.ValidHeader != (header.Flags & MethodFlags.HeaderSizeMask))
@@ -255,7 +255,7 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 		}
 
-		#endregion // Internals
+		#endregion Internals
 
 		#region BaseInstructionDecoder Members
 
@@ -384,7 +384,6 @@ namespace Mosa.Compiler.Framework.Stages
 			return new Token((uint)codeReader.ReadInt32());
 		}
 
-		#endregion
-
+		#endregion BaseInstructionDecoder Members
 	}
 }

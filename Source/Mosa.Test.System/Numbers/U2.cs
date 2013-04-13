@@ -9,7 +9,6 @@
 
 using System.Collections.Generic;
 
-
 namespace Mosa.Test.System.Numbers
 {
 	public static class U2
@@ -47,6 +46,5 @@ namespace Mosa.Test.System.Numbers
 
 			return list;
 		}
-
 	}
 }

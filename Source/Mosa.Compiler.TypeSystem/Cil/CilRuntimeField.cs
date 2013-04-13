@@ -20,7 +20,7 @@ namespace Mosa.Compiler.TypeSystem.Cil
 	{
 		#region Data Members
 
-		#endregion // Data Members
+		#endregion Data Members
 
 		#region Construction
 
@@ -59,7 +59,6 @@ namespace Mosa.Compiler.TypeSystem.Cil
 			this.Attributes = genericField.Attributes;
 		}
 
-		#endregion // Construction
-
+		#endregion Construction
 	}
 }

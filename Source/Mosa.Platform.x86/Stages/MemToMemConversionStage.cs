@@ -12,18 +12,16 @@
 using System.Diagnostics;
 
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Platform;
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Signatures;
 
 namespace Mosa.Platform.x86.Stages
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public sealed class MemToMemConversionStage : BaseTransformationStage, IMethodCompilerStage
 	{
-
 		#region IMethodCompilerStage Members
 
 		/// <summary>
@@ -62,7 +60,7 @@ namespace Mosa.Platform.x86.Stages
 			}
 		}
 
-		#endregion // IMethodCompilerStage Members
+		#endregion IMethodCompilerStage Members
 
 		private void HandleMemoryToMemoryOperation(Context ctx)
 		{

@@ -32,10 +32,12 @@ namespace Mosa.Tool.TypeExplorer
 				new StackSetupStage(),
 				new ExceptionPrologueStage(),
 				new OperandAssignmentStage(),
+
 				//new SingleUseMarkerStage(),
 				//new OperandUsageAnalyzerStage(),
 				new StaticAllocationResolutionStage(),
 				new CILTransformationStage(),
+
 				//new CheckIROperandCountStage(),
 
 				(compilerOptions.EnableSSA) ? new EdgeSplitStage() : null,

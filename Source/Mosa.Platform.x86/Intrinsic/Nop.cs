@@ -7,18 +7,15 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System.Collections.Generic;
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.TypeSystem;
 
 namespace Mosa.Platform.x86.Intrinsic
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public class Nop : IIntrinsicPlatformMethod
 	{
-
 		#region Methods
 
 		/// <summary>
@@ -31,7 +28,6 @@ namespace Mosa.Platform.x86.Intrinsic
 			context.SetInstruction(X86.Nop);
 		}
 
-		#endregion // Methods
-
+		#endregion Methods
 	}
 }

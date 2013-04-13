@@ -10,6 +10,7 @@
 using Mosa.DeviceDrivers.ISA;
 using Mosa.DeviceSystem;
 using Mosa.DeviceSystem.PCI;
+
 //using Mosa.Kernel.x86;
 
 namespace Mosa.CoolWorld.x86
@@ -167,11 +168,13 @@ namespace Mosa.CoolWorld.x86
 			StartDevice(pciAttributes, PCI);
 			StartDevice(keyboardDeviceAttributes, Keyboard);
 			StartDevice(cmosAttributes, CMOS);
+
 			//StartDevice(vgaTextAttributes, VGAText);
 
 			PCIControllerManager pciController = new PCIControllerManager(deviceManager);
 
 			Boot.Console.Write("Probing PCI devices...");
+
 			//pciController.CreatePCIDevices();
 			Boot.Console.WriteLine("[Completed]");
 		}

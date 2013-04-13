@@ -13,10 +13,10 @@
 // distribute, sublicense, and/or sell copies of the Software, and to
 // permit persons to whom the Software is furnished to do so, subject to
 // the following conditions:
-// 
+//
 // The above copyright notice and this permission notice shall be
 // included in all copies or substantial portions of the Software.
-// 
+//
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
 // EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
 // MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
@@ -46,7 +46,7 @@
 //    type: [=:]
 //    sep: ( [^{}]+ | '{' .+ '}' )?
 //    aliases: ( name type sep ) ( '|' name type sep )*
-// 
+//
 // Each '|'-delimited name is an alias for the associated action.  If the
 // format string ends in a '=', it has a required value.  If the format
 // string ends in a ':', it has an optional value.  If neither '=' or ':'
@@ -147,12 +147,10 @@ using NDesk.Options;
 
 namespace NDesk.Options
 {
-
 	public class OptionValueCollection : IList, IList<string>
 	{
-
-		List<string> values = new List<string>();
-		OptionContext c;
+		private List<string> values = new List<string>();
+		private OptionContext c;
 
 		internal OptionValueCollection(OptionContext c)
 		{
@@ -160,44 +158,123 @@ namespace NDesk.Options
 		}
 
 		#region ICollection
-		void ICollection.CopyTo(Array array, int index) { (values as ICollection).CopyTo(array, index); }
+
+		void ICollection.CopyTo(Array array, int index)
+		{
+			(values as ICollection).CopyTo(array, index);
+		}
+
 		bool ICollection.IsSynchronized { get { return (values as ICollection).IsSynchronized; } }
+
 		object ICollection.SyncRoot { get { return (values as ICollection).SyncRoot; } }
-		#endregion
+
+		#endregion ICollection
 
 		#region ICollection<T>
-		public void Add(string item) { values.Add(item); }
-		public void Clear() { values.Clear(); }
-		public bool Contains(string item) { return values.Contains(item); }
-		public void CopyTo(string[] array, int arrayIndex) { values.CopyTo(array, arrayIndex); }
-		public bool Remove(string item) { return values.Remove(item); }
+
+		public void Add(string item)
+		{
+			values.Add(item);
+		}
+
+		public void Clear()
+		{
+			values.Clear();
+		}
+
+		public bool Contains(string item)
+		{
+			return values.Contains(item);
+		}
+
+		public void CopyTo(string[] array, int arrayIndex)
+		{
+			values.CopyTo(array, arrayIndex);
+		}
+
+		public bool Remove(string item)
+		{
+			return values.Remove(item);
+		}
+
 		public int Count { get { return values.Count; } }
+
 		public bool IsReadOnly { get { return false; } }
-		#endregion
+
+		#endregion ICollection<T>
 
 		#region IEnumerable
-		IEnumerator IEnumerable.GetEnumerator() { return values.GetEnumerator(); }
-		#endregion
+
+		IEnumerator IEnumerable.GetEnumerator()
+		{
+			return values.GetEnumerator();
+		}
+
+		#endregion IEnumerable
 
 		#region IEnumerable<T>
-		public IEnumerator<string> GetEnumerator() { return values.GetEnumerator(); }
-		#endregion
+
+		public IEnumerator<string> GetEnumerator()
+		{
+			return values.GetEnumerator();
+		}
+
+		#endregion IEnumerable<T>
 
 		#region IList
-		int IList.Add(object value) { return (values as IList).Add(value); }
-		bool IList.Contains(object value) { return (values as IList).Contains(value); }
-		int IList.IndexOf(object value) { return (values as IList).IndexOf(value); }
-		void IList.Insert(int index, object value) { (values as IList).Insert(index, value); }
-		void IList.Remove(object value) { (values as IList).Remove(value); }
-		void IList.RemoveAt(int index) { (values as IList).RemoveAt(index); }
+
+		int IList.Add(object value)
+		{
+			return (values as IList).Add(value);
+		}
+
+		bool IList.Contains(object value)
+		{
+			return (values as IList).Contains(value);
+		}
+
+		int IList.IndexOf(object value)
+		{
+			return (values as IList).IndexOf(value);
+		}
+
+		void IList.Insert(int index, object value)
+		{
+			(values as IList).Insert(index, value);
+		}
+
+		void IList.Remove(object value)
+		{
+			(values as IList).Remove(value);
+		}
+
+		void IList.RemoveAt(int index)
+		{
+			(values as IList).RemoveAt(index);
+		}
+
 		bool IList.IsFixedSize { get { return false; } }
+
 		object IList.this[int index] { get { return this[index]; } set { (values as IList)[index] = value; } }
-		#endregion
+
+		#endregion IList
 
 		#region IList<T>
-		public int IndexOf(string item) { return values.IndexOf(item); }
-		public void Insert(int index, string item) { values.Insert(index, item); }
-		public void RemoveAt(int index) { values.RemoveAt(index); }
+
+		public int IndexOf(string item)
+		{
+			return values.IndexOf(item);
+		}
+
+		public void Insert(int index, string item)
+		{
+			values.Insert(index, item);
+		}
+
+		public void RemoveAt(int index)
+		{
+			values.RemoveAt(index);
+		}
 
 		private void AssertValid(int index)
 		{
@@ -224,7 +301,8 @@ namespace NDesk.Options
 				values[index] = value;
 			}
 		}
-		#endregion
+
+		#endregion IList<T>
 
 		public List<string> ToList()
 		{
@@ -294,11 +372,11 @@ namespace NDesk.Options
 
 	public abstract class Option
 	{
-		string prototype, description;
-		string[] names;
-		OptionValueType type;
-		int count;
-		string[] separators;
+		private string prototype, description;
+		private string[] names;
+		private OptionValueType type;
+		private int count;
+		private string[] separators;
 
 		protected Option(string prototype, string description)
 			: this(prototype, description, 1)
@@ -338,8 +416,11 @@ namespace NDesk.Options
 		}
 
 		public string Prototype { get { return prototype; } }
+
 		public string Description { get { return description; } }
+
 		public OptionValueType OptionValueType { get { return type; } }
+
 		public int MaxValueCount { get { return count; } }
 
 		public string[] GetNames()
@@ -375,9 +456,10 @@ namespace NDesk.Options
 		}
 
 		internal string[] Names { get { return names; } }
+
 		internal string[] ValueSeparators { get { return separators; } }
 
-		static readonly char[] NameTerminator = new char[] { '=', ':' };
+		private static readonly char[] NameTerminator = new char[] { '=', ':' };
 
 		private OptionValueType ParsePrototype()
 		{
@@ -436,6 +518,7 @@ namespace NDesk.Options
 								"prototype");
 						start = i + 1;
 						break;
+
 					case '}':
 						if (start == -1)
 							throw new ArgumentException(
@@ -444,6 +527,7 @@ namespace NDesk.Options
 						seps.Add(name.Substring(start, i - start));
 						start = -1;
 						break;
+
 					default:
 						if (start == -1)
 							seps.Add(name[i].ToString());
@@ -526,7 +610,7 @@ namespace NDesk.Options
 			this.localizer = localizer;
 		}
 
-		Converter<string, string> localizer;
+		private Converter<string, string> localizer;
 
 		public Converter<string, string> MessageLocalizer
 		{
@@ -539,6 +623,7 @@ namespace NDesk.Options
 				throw new ArgumentNullException("option");
 			if (item.Names != null && item.Names.Length > 0)
 				return item.Names[0];
+
 			// This should never happen, as it's invalid for Option to be
 			// constructed w/o any names.
 			throw new InvalidOperationException("Option has no names!");
@@ -569,6 +654,7 @@ namespace NDesk.Options
 		{
 			base.RemoveItem(index);
 			Option p = Items[index];
+
 			// KeyedCollection.RemoveItem() handles the 0th item
 			for (int i = 1; i < p.Names.Length; ++i)
 			{
@@ -611,9 +697,9 @@ namespace NDesk.Options
 			return this;
 		}
 
-		sealed class ActionOption : Option
+		private sealed class ActionOption : Option
 		{
-			Action<OptionValueCollection> action;
+			private Action<OptionValueCollection> action;
 
 			public ActionOption(string prototype, string description, int count, Action<OptionValueCollection> action)
 				: base(prototype, description, count)
@@ -659,9 +745,9 @@ namespace NDesk.Options
 			return this;
 		}
 
-		sealed class ActionOption<T> : Option
+		private sealed class ActionOption<T> : Option
 		{
-			Action<T> action;
+			private Action<T> action;
 
 			public ActionOption(string prototype, string description, Action<T> action)
 				: base(prototype, description, 1)
@@ -677,9 +763,9 @@ namespace NDesk.Options
 			}
 		}
 
-		sealed class ActionOption<TKey, TValue> : Option
+		private sealed class ActionOption<TKey, TValue> : Option
 		{
-			OptionAction<TKey, TValue> action;
+			private OptionAction<TKey, TValue> action;
 
 			public ActionOption(string prototype, string description, OptionAction<TKey, TValue> action)
 				: base(prototype, description, 2)
@@ -751,6 +837,7 @@ namespace NDesk.Options
 			return r;
 		}
 #else
+
 		public List<string> Parse(IEnumerable<string> arguments)
 		{
 			OptionContext c = CreateOptionContext();
@@ -778,6 +865,7 @@ namespace NDesk.Options
 				c.Option.Invoke(c);
 			return unprocessed;
 		}
+
 #endif
 
 		private static bool Unprocessed(ICollection<string> extra, Option def, OptionContext c, string argument)
@@ -841,6 +929,7 @@ namespace NDesk.Options
 						c.OptionValues.Add(n);
 						c.Option.Invoke(c);
 						break;
+
 					case OptionValueType.Optional:
 					case OptionValueType.Required:
 						ParseValue(v, c);
@@ -848,9 +937,11 @@ namespace NDesk.Options
 				}
 				return true;
 			}
+
 			// no match; is it a bool option?
 			if (ParseBool(argument, n, c))
 				return true;
+
 			// is it a bundled option?
 			if (ParseBundledValue(f, string.Concat(n + s + v), c))
 				return true;
@@ -919,6 +1010,7 @@ namespace NDesk.Options
 					case OptionValueType.None:
 						Invoke(c, opt, n, p);
 						break;
+
 					case OptionValueType.Optional:
 					case OptionValueType.Required:
 						{
@@ -972,7 +1064,7 @@ namespace NDesk.Options
 			}
 		}
 
-		bool WriteOptionPrototype(TextWriter o, Option p, ref int written)
+		private bool WriteOptionPrototype(TextWriter o, Option p, ref int written)
 		{
 			string[] names = p.Names;
 
@@ -1022,7 +1114,7 @@ namespace NDesk.Options
 			return true;
 		}
 
-		static int GetNextOptionIndex(string[] names, int i)
+		private static int GetNextOptionIndex(string[] names, int i)
 		{
 			while (i < names.Length && names[i] == "<>")
 			{
@@ -1031,7 +1123,7 @@ namespace NDesk.Options
 			return i;
 		}
 
-		static void Write(TextWriter o, ref int n, string s)
+		private static void Write(TextWriter o, ref int n, string s)
 		{
 			n += s.Length;
 			o.Write(s);
@@ -1082,6 +1174,7 @@ namespace NDesk.Options
 						else if (start < 0)
 							start = i + 1;
 						break;
+
 					case '}':
 						if (start < 0)
 						{
@@ -1096,11 +1189,13 @@ namespace NDesk.Options
 							start = -1;
 						}
 						break;
+
 					case ':':
 						if (start < 0)
 							goto default;
 						start = i + 1;
 						break;
+
 					default:
 						if (start < 0)
 							sb.Append(description[i]);
@@ -1164,6 +1259,7 @@ namespace NDesk.Options
 					case ';':
 						sep = i;
 						break;
+
 					case '\n':
 						return i;
 				}
@@ -1174,4 +1270,3 @@ namespace NDesk.Options
 		}
 	}
 }
-

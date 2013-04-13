@@ -8,8 +8,6 @@
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  */
 
-using System.Collections.Generic;
-using Mosa.Compiler.Metadata;
 using Mosa.Compiler.TypeSystem;
 using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.Metadata.Signatures;
@@ -17,11 +15,10 @@ using Mosa.Compiler.Metadata.Signatures;
 namespace Mosa.Compiler.Framework
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public static class DelegatePatcher
 	{
-
 		/// <summary>
 		/// Patches the delegate.
 		/// </summary>
@@ -124,7 +121,6 @@ namespace Mosa.Compiler.Framework
 				b3.SetOperand(0, opReturn);
 			}
 			methodCompiler.BasicBlocks.LinkBlocks(b3.BasicBlock, methodCompiler.BasicBlocks.EpilogueBlock);
-
 		}
 
 		private static void PatchBeginInvoke(BaseMethodCompiler methodCompiler)
@@ -159,6 +155,7 @@ namespace Mosa.Compiler.Framework
 		{
 			// Create the prologue block
 			var context = ContextHelper.CreateNewBlockWithContext(instructionSet, basicBlocks, BasicBlock.PrologueLabel);
+
 			// Add a jump instruction to the first block from the prologue
 			context.AppendInstruction(IRInstruction.Jmp);
 			context.SetBranch(0);
@@ -185,6 +182,5 @@ namespace Mosa.Compiler.Framework
 
 			return GetField(type.BaseType, name);
 		}
-
 	}
 }

@@ -8,7 +8,7 @@
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  *  Michael Fröhlich (grover) <michael.ruck@michaelruck.de>
  *  Kai P. Reisert <kpreisert@googlemail.com>
- *  
+ *
  */
 
 using MbUnit.Framework;
@@ -20,18 +20,17 @@ namespace Mosa.Test.Cases.OLD
 	[TestFixture]
 	public class CallWithConstant : TestCompilerAdapter
 	{
-
 		private static string CreateConstantTestCode(string name, string type, string constant)
 		{
 			return @"
 				static class Test {
-					static bool " + name + "(" + type + " value) { return value == " + name + "_Target(" + constant + @"); } 
+					static bool " + name + "(" + type + " value) { return value == " + name + "_Target(" + constant + @"); }
 					static " + type + " " + name + "_Target(" + type + @" value) { return value; }
 				}";
 		}
 
 		#region B
-		
+
 		[Row(true)]
 		[Row(false)]
 		[Test]
@@ -40,10 +39,11 @@ namespace Mosa.Test.Cases.OLD
 			settings.CodeSource = CreateConstantTestCode("CallConstantB", "bool", value.ToString().ToLower());
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "CallConstantB", value));
 		}
-		#endregion
+
+		#endregion B
 
 		#region C
-		
+
 		[Row('a')]
 		[Row('Z')]
 		[Row('-')]
@@ -54,10 +54,11 @@ namespace Mosa.Test.Cases.OLD
 			settings.CodeSource = CreateConstantTestCode("CallConstantC", "char", "'" + value.ToString() + "'");
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "CallConstantC", value));
 		}
-		#endregion
+
+		#endregion C
 
 		#region I1
-		
+
 		[Row(0)]
 		[Row(-48)]
 		[Row(sbyte.MinValue)]
@@ -68,10 +69,11 @@ namespace Mosa.Test.Cases.OLD
 			settings.CodeSource = CreateConstantTestCode("CallConstantI1", "sbyte", value.ToString());
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "CallConstantI1", value));
 		}
-		#endregion
+
+		#endregion I1
 
 		#region U1
-		
+
 		[Row(1)]
 		[Row(2)]
 		[Row(5)]
@@ -88,10 +90,11 @@ namespace Mosa.Test.Cases.OLD
 			settings.CodeSource = CreateConstantTestCode("CallConstantU1", "byte", value.ToString());
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "CallConstantU1", value));
 		}
-		#endregion
+
+		#endregion U1
 
 		#region I2
-		
+
 		[Row(0)]
 		[Row(-48)]
 		[Row(short.MinValue)]
@@ -102,10 +105,11 @@ namespace Mosa.Test.Cases.OLD
 			settings.CodeSource = CreateConstantTestCode("CallConstantI2", "short", value.ToString());
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "CallConstantI2", value));
 		}
-		#endregion
+
+		#endregion I2
 
 		#region U2
-		
+
 		[Row(1)]
 		[Row(2)]
 		[Row(5)]
@@ -120,10 +124,11 @@ namespace Mosa.Test.Cases.OLD
 			settings.CodeSource = CreateConstantTestCode("CallConstantU2", "ushort", value.ToString());
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "CallConstantU2", value));
 		}
-		#endregion
+
+		#endregion U2
 
 		#region I4
-	
+
 		[Row(0)]
 		[Row(-48)]
 		[Row(int.MinValue)]
@@ -134,10 +139,11 @@ namespace Mosa.Test.Cases.OLD
 			settings.CodeSource = CreateConstantTestCode("CallConstantI4", "int", value.ToString());
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "CallConstantI4", value));
 		}
-		#endregion
+
+		#endregion I4
 
 		#region U4
-		
+
 		[Row(0)]
 		[Row(1)]
 		[Row(2)]
@@ -153,10 +159,11 @@ namespace Mosa.Test.Cases.OLD
 			settings.CodeSource = CreateConstantTestCode("CallConstantU4", "uint", value.ToString());
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "CallConstantU4", value));
 		}
-		#endregion
+
+		#endregion U4
 
 		#region I8
-		
+
 		[Row(0)]
 		[Row(-48)]
 		[Row(long.MinValue)]
@@ -167,10 +174,11 @@ namespace Mosa.Test.Cases.OLD
 			settings.CodeSource = CreateConstantTestCode("CallConstantI8", "long", value.ToString());
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "CallConstantI8", value));
 		}
-		#endregion
+
+		#endregion I8
 
 		#region U8
-		
+
 		[Row(0)]
 		[Row(1)]
 		[Row(2)]
@@ -186,7 +194,7 @@ namespace Mosa.Test.Cases.OLD
 			settings.CodeSource = CreateConstantTestCode("CallConstantU8", "ulong", value.ToString());
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "CallConstantU8", value));
 		}
-		#endregion
 
+		#endregion U8
 	}
 }

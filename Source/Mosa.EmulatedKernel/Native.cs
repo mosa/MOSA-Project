@@ -10,11 +10,10 @@
 namespace Mosa.Platform.x86.Intrinsic
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public static class Native
 	{
-
 		/// <summary>
 		/// Outs the specified address.
 		/// </summary>
@@ -194,28 +193,42 @@ namespace Mosa.Platform.x86.Intrinsic
 		/// Loads the IDT
 		/// </summary>
 		/// <param name="address">The address.</param>
-		public static void Lidt(uint address) { return; }
+		public static void Lidt(uint address)
+		{
+			return;
+		}
 
 		/// <summary>
 		/// Wraps the x86 hlt instruction
 		/// </summary>
-		public static void Hlt() { return; }
+		public static void Hlt()
+		{
+			return;
+		}
 
 		/// <summary>
 		/// Wraps the x86 sti instruction to enable interrupts
 		/// </summary>
-		public static void Sti() { return; }
+		public static void Sti()
+		{
+			return;
+		}
 
 		/// <summary>
 		/// Wraps the x86 cli instruction to disable interrupts
 		/// </summary>
-		public static void Cli() { return; }
+		public static void Cli()
+		{
+			return;
+		}
 
 		/// <summary>
 		/// Jumps the global interrupt handler.
 		/// </summary>
 		/// <returns></returns>
-		public static void JumpProcessInterrupt() { }
+		public static void JumpProcessInterrupt()
+		{
+		}
 
 		/// <summary>
 		/// Sets the control register.
@@ -233,6 +246,7 @@ namespace Mosa.Platform.x86.Intrinsic
 		{
 			//Mosa.EmulatedKernel.MemoryDispatch.CR2 = status;
 		}
+
 		/// <summary>
 		/// Sets the control register.
 		/// </summary>
@@ -285,6 +299,5 @@ namespace Mosa.Platform.x86.Intrinsic
 		public static void SwitchTask(uint esp)
 		{
 		}
-
 	}
 }

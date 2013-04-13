@@ -5,7 +5,7 @@
  *
  * Authors:
  *  Michael Fröhlich (grover) <michael.ruck@michaelruck.de>
- *  
+ *
  */
 
 using MbUnit.Framework;
@@ -19,7 +19,6 @@ namespace Mosa.Test.Cases.OLD.CIL
 	[Category(@"Memory Model")]
 	public class PinnedFixture : TestCompilerAdapter
 	{
-
 		static readonly string TestCode = @"
 			public class PinsAMemberClass
 			{

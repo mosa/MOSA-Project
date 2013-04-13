@@ -7,28 +7,30 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-
 namespace Mosa.DeviceSystem.PCI
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public class BaseAddress
 	{
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected uint address;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected uint size;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected AddressType region;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected bool prefetchable;
 
@@ -41,13 +43,13 @@ namespace Mosa.DeviceSystem.PCI
 		/// <summary>
 		/// Gets the size.
 		/// </summary>
-		/// <value>The size.</value>		
+		/// <value>The size.</value>
 		public uint Size { get { return size; } }
 
 		/// <summary>
 		/// Gets the region.
 		/// </summary>
-		/// <value>The region.</value>		
+		/// <value>The region.</value>
 		public AddressType Region { get { return region; } }
 
 		/// <summary>
@@ -90,6 +92,5 @@ namespace Mosa.DeviceSystem.PCI
 
 			return "Memory at 0x" + address.ToString("X") + " [size=" + size.ToString() + "] (non-prefetchable)";
 		}
-
 	}
 }

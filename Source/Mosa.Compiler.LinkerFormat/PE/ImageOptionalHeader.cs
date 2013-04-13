@@ -29,7 +29,7 @@ namespace Mosa.Compiler.LinkerFormat.PE
 		/// </summary>
 		public const ushort IMAGE_OPTIONAL_HEADER_MAGIC = 0x10b;
 
-		#endregion // Constants
+		#endregion Constants
 
 		#region Data members
 
@@ -196,7 +196,7 @@ namespace Mosa.Compiler.LinkerFormat.PE
 		/// </summary>
 		public ImageDataDirectory[] DataDirectory;
 
-		#endregion // Data members
+		#endregion Data members
 
 		#region Methods
 
@@ -293,6 +293,6 @@ namespace Mosa.Compiler.LinkerFormat.PE
 				dd.Write(writer);
 		}
 
-		#endregion // Methods
+		#endregion Methods
 	}
 }

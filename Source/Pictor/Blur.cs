@@ -6,16 +6,18 @@
  * Authors:
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  */
+
 using System;
 using Pictor.PixelFormat;
 
 namespace Pictor
 {
 	/*
-	//template<class T> 
+
+	//template<class T>
 	struct stack_blur_tables
 	{
-		public static ushort[] g_stack_blur8_mul = 
+		public static ushort[] g_stack_blur8_mul =
 		{
 			512,512,456,512,328,456,335,512,405,328,271,456,388,335,292,512,
 			454,405,364,328,298,271,496,456,420,388,360,335,312,292,273,512,
@@ -35,20 +37,20 @@ namespace Pictor
 			289,287,285,282,280,278,275,273,271,269,267,265,263,261,259
 		};
 
-		public static byte[] g_stack_blur8_shr = 
+		public static byte[] g_stack_blur8_shr =
 		{
-			  9, 11, 12, 13, 13, 14, 14, 15, 15, 15, 15, 16, 16, 16, 16, 17, 
-			 17, 17, 17, 17, 17, 17, 18, 18, 18, 18, 18, 18, 18, 18, 18, 19, 
+			  9, 11, 12, 13, 13, 14, 14, 15, 15, 15, 15, 16, 16, 16, 16, 17,
+			 17, 17, 17, 17, 17, 17, 18, 18, 18, 18, 18, 18, 18, 18, 18, 19,
 			 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 20, 20, 20,
 			 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 21,
 			 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21,
-			 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 22, 22, 22, 22, 22, 22, 
+			 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 22, 22, 22, 22, 22, 22,
 			 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22,
-			 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 23, 
+			 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 23,
 			 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23,
 			 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23,
-			 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 
-			 23, 23, 23, 23, 23, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 
+			 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23,
+			 23, 23, 23, 23, 23, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24,
 			 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24,
 			 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24,
 			 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24,
@@ -57,17 +59,17 @@ namespace Pictor
 	};
 
 	//==============================================================stack_blur
-	//template<class ColorT, class CalculatorT> 
+	//template<class ColorT, class CalculatorT>
 	class stack_blur
 	{
 		//private pod_vector<color_type> m_buf;
 		//private pod_vector<color_type> m_stack;
 		uint BaseMask = 255;
 
-		enum order_e 
-		{ 
-			R = 2, 
-			G = 1, 
+		enum order_e
+		{
+			R = 2,
+			G = 1,
 			B = 0,
 			A = 3
 		};
@@ -136,7 +138,7 @@ namespace Pictor
 					else        sum.calc_pix(m_buf[x], div_sum);
 
 					sum.sub(sum_out);
-		   
+
 					stack_start = stack_ptr + div - Radius;
 					if(stack_start >= div) stack_start -= div;
 					stack_pix = &m_stack[stack_start];
@@ -146,12 +148,12 @@ namespace Pictor
 					xp = x + Radius + 1;
 					if(xp > wm) xp = wm;
 					pix = img.Pixel(xp, y);
-			
+
 					*stack_pix = pix;
-			
+
 					sum_in.Add(pix);
 					sum.Add(sum_in);
-			
+
 					++stack_ptr;
 					if(stack_ptr >= div) stack_ptr = 0;
 					stack_pix = &m_stack[stack_ptr];
@@ -223,8 +225,8 @@ namespace Pictor
 					}
 					for(i = 1; i <= rx; i++)
 					{
-						if(i <= wm) src_pix_ptr += Img::pix_step; 
-						pix = *src_pix_ptr; 
+						if(i <= wm) src_pix_ptr += Img::pix_step;
+						pix = *src_pix_ptr;
 						stack[i + rx] = pix;
 						sum    += pix * (rx + 1 - i);
 						sum_in += pix;
@@ -241,23 +243,23 @@ namespace Pictor
 						dst_pix_ptr += Img::pix_step;
 
 						sum -= sum_out;
-		   
+
 						stack_start = stack_ptr + div - rx;
 						if(stack_start >= div) stack_start -= div;
 						sum_out -= stack[stack_start];
 
-						if(xp < wm) 
+						if(xp < wm)
 						{
 							src_pix_ptr += Img::pix_step;
 							pix = *src_pix_ptr;
 							++xp;
 						}
-			
+
 						stack[stack_start] = pix;
-			
+
 						sum_in += pix;
 						sum    += sum_in;
-			
+
 						++stack_ptr;
 						if(stack_ptr >= div) stack_ptr = 0;
 						stack_pix = stack[stack_ptr];
@@ -291,8 +293,8 @@ namespace Pictor
 					}
 					for(i = 1; i <= ry; i++)
 					{
-						if(i <= hm) src_pix_ptr += Stride; 
-						pix = *src_pix_ptr; 
+						if(i <= hm) src_pix_ptr += Stride;
+						pix = *src_pix_ptr;
 						stack[i + ry] = pix;
 						sum    += pix * (ry + 1 - i);
 						sum_in += pix;
@@ -309,23 +311,23 @@ namespace Pictor
 						dst_pix_ptr += Stride;
 
 						sum -= sum_out;
-		   
+
 						stack_start = stack_ptr + div - ry;
 						if(stack_start >= div) stack_start -= div;
 						sum_out -= stack[stack_start];
 
-						if(yp < hm) 
+						if(yp < hm)
 						{
 							src_pix_ptr += Stride;
 							pix = *src_pix_ptr;
 							++yp;
 						}
-			
+
 						stack[stack_start] = pix;
-			
+
 						sum_in += pix;
 						sum    += sum_in;
-			
+
 						++stack_ptr;
 						if(stack_ptr >= div) stack_ptr = 0;
 						stack_pix = stack[stack_ptr];
@@ -381,14 +383,14 @@ namespace Pictor
 
 				for(y = 0; y < h; y++)
 				{
-					sum_r = 
-					sum_g = 
-					sum_b = 
-					sum_in_r = 
-					sum_in_g = 
-					sum_in_b = 
-					sum_out_r = 
-					sum_out_g = 
+					sum_r =
+					sum_g =
+					sum_b =
+					sum_in_r =
+					sum_in_g =
+					sum_in_b =
+					sum_out_r =
+					sum_out_g =
 					sum_out_b = 0;
 
 					src_pix_ptr = img.PixelPointer(0, y);
@@ -407,7 +409,7 @@ namespace Pictor
 					}
 					for(i = 1; i <= rx; i++)
 					{
-						if(i <= wm) src_pix_ptr += Img::pix_width; 
+						if(i <= wm) src_pix_ptr += Img::pix_width;
 						stack_pix_ptr = &stack[i + rx];
 						stack_pix_ptr->r = src_pix_ptr[R];
 						stack_pix_ptr->g = src_pix_ptr[G];
@@ -435,7 +437,7 @@ namespace Pictor
 						sum_r -= sum_out_r;
 						sum_g -= sum_out_g;
 						sum_b -= sum_out_b;
-		   
+
 						stack_start = stack_ptr + div - rx;
 						if(stack_start >= div) stack_start -= div;
 						stack_pix_ptr = &stack[stack_start];
@@ -444,23 +446,23 @@ namespace Pictor
 						sum_out_g -= stack_pix_ptr->g;
 						sum_out_b -= stack_pix_ptr->b;
 
-						if(xp < wm) 
+						if(xp < wm)
 						{
 							src_pix_ptr += Img::pix_width;
 							++xp;
 						}
-			
+
 						stack_pix_ptr->r = src_pix_ptr[R];
 						stack_pix_ptr->g = src_pix_ptr[G];
 						stack_pix_ptr->b = src_pix_ptr[B];
-			
+
 						sum_in_r += src_pix_ptr[R];
 						sum_in_g += src_pix_ptr[G];
 						sum_in_b += src_pix_ptr[B];
 						sum_r    += sum_in_r;
 						sum_g    += sum_in_g;
 						sum_b    += sum_in_b;
-			
+
 						++stack_ptr;
 						if(stack_ptr >= div) stack_ptr = 0;
 						stack_pix_ptr = &stack[stack_ptr];
@@ -486,14 +488,14 @@ namespace Pictor
 				int Stride = img.Stride();
 				for(x = 0; x < w; x++)
 				{
-					sum_r = 
-					sum_g = 
-					sum_b = 
-					sum_in_r = 
-					sum_in_g = 
-					sum_in_b = 
-					sum_out_r = 
-					sum_out_g = 
+					sum_r =
+					sum_g =
+					sum_b =
+					sum_in_r =
+					sum_in_g =
+					sum_in_b =
+					sum_out_r =
+					sum_out_g =
 					sum_out_b = 0;
 
 					src_pix_ptr = img.PixelPointer(x, 0);
@@ -512,7 +514,7 @@ namespace Pictor
 					}
 					for(i = 1; i <= ry; i++)
 					{
-						if(i <= hm) src_pix_ptr += Stride; 
+						if(i <= hm) src_pix_ptr += Stride;
 						stack_pix_ptr = &stack[i + ry];
 						stack_pix_ptr->r = src_pix_ptr[R];
 						stack_pix_ptr->g = src_pix_ptr[G];
@@ -540,7 +542,7 @@ namespace Pictor
 						sum_r -= sum_out_r;
 						sum_g -= sum_out_g;
 						sum_b -= sum_out_b;
-		   
+
 						stack_start = stack_ptr + div - ry;
 						if(stack_start >= div) stack_start -= div;
 
@@ -549,23 +551,23 @@ namespace Pictor
 						sum_out_g -= stack_pix_ptr->g;
 						sum_out_b -= stack_pix_ptr->b;
 
-						if(yp < hm) 
+						if(yp < hm)
 						{
 							src_pix_ptr += Stride;
 							++yp;
 						}
-			
+
 						stack_pix_ptr->r = src_pix_ptr[R];
 						stack_pix_ptr->g = src_pix_ptr[G];
 						stack_pix_ptr->b = src_pix_ptr[B];
-			
+
 						sum_in_r += src_pix_ptr[R];
 						sum_in_g += src_pix_ptr[G];
 						sum_in_b += src_pix_ptr[B];
 						sum_r    += sum_in_r;
 						sum_g    += sum_in_g;
 						sum_b    += sum_in_b;
-			
+
 						++stack_ptr;
 						if(stack_ptr >= div) stack_ptr = 0;
 						stack_pix_ptr = &stack[stack_ptr];
@@ -628,17 +630,17 @@ namespace Pictor
 
 				for(y = 0; y < h; y++)
 				{
-					sum_r = 
-					sum_g = 
-					sum_b = 
-					sum_a = 
-					sum_in_r = 
-					sum_in_g = 
-					sum_in_b = 
-					sum_in_a = 
-					sum_out_r = 
-					sum_out_g = 
-					sum_out_b = 
+					sum_r =
+					sum_g =
+					sum_b =
+					sum_a =
+					sum_in_r =
+					sum_in_g =
+					sum_in_b =
+					sum_in_a =
+					sum_out_r =
+					sum_out_g =
+					sum_out_b =
 					sum_out_a = 0;
 
 					src_pix_ptr = img.PixelPointer(0, y);
@@ -660,7 +662,7 @@ namespace Pictor
 					}
 					for(i = 1; i <= rx; i++)
 					{
-						if(i <= wm) src_pix_ptr += Img::pix_width; 
+						if(i <= wm) src_pix_ptr += Img::pix_width;
 						stack_pix_ptr = &stack[i + rx];
 						stack_pix_ptr->r = src_pix_ptr[R];
 						stack_pix_ptr->g = src_pix_ptr[G];
@@ -693,7 +695,7 @@ namespace Pictor
 						sum_g -= sum_out_g;
 						sum_b -= sum_out_b;
 						sum_a -= sum_out_a;
-		   
+
 						stack_start = stack_ptr + div - rx;
 						if(stack_start >= div) stack_start -= div;
 						stack_pix_ptr = &stack[stack_start];
@@ -703,17 +705,17 @@ namespace Pictor
 						sum_out_b -= stack_pix_ptr->b;
 						sum_out_a -= stack_pix_ptr->a;
 
-						if(xp < wm) 
+						if(xp < wm)
 						{
 							src_pix_ptr += Img::pix_width;
 							++xp;
 						}
-			
+
 						stack_pix_ptr->r = src_pix_ptr[R];
 						stack_pix_ptr->g = src_pix_ptr[G];
 						stack_pix_ptr->b = src_pix_ptr[B];
 						stack_pix_ptr->a = src_pix_ptr[A];
-			
+
 						sum_in_r += src_pix_ptr[R];
 						sum_in_g += src_pix_ptr[G];
 						sum_in_b += src_pix_ptr[B];
@@ -722,7 +724,7 @@ namespace Pictor
 						sum_g    += sum_in_g;
 						sum_b    += sum_in_b;
 						sum_a    += sum_in_a;
-			
+
 						++stack_ptr;
 						if(stack_ptr >= div) stack_ptr = 0;
 						stack_pix_ptr = &stack[stack_ptr];
@@ -750,17 +752,17 @@ namespace Pictor
 				int Stride = img.Stride();
 				for(x = 0; x < w; x++)
 				{
-					sum_r = 
-					sum_g = 
-					sum_b = 
-					sum_a = 
-					sum_in_r = 
-					sum_in_g = 
-					sum_in_b = 
-					sum_in_a = 
-					sum_out_r = 
-					sum_out_g = 
-					sum_out_b = 
+					sum_r =
+					sum_g =
+					sum_b =
+					sum_a =
+					sum_in_r =
+					sum_in_g =
+					sum_in_b =
+					sum_in_a =
+					sum_out_r =
+					sum_out_g =
+					sum_out_b =
 					sum_out_a = 0;
 
 					src_pix_ptr = img.PixelPointer(x, 0);
@@ -782,7 +784,7 @@ namespace Pictor
 					}
 					for(i = 1; i <= ry; i++)
 					{
-						if(i <= hm) src_pix_ptr += Stride; 
+						if(i <= hm) src_pix_ptr += Stride;
 						stack_pix_ptr = &stack[i + ry];
 						stack_pix_ptr->r = src_pix_ptr[R];
 						stack_pix_ptr->g = src_pix_ptr[G];
@@ -815,7 +817,7 @@ namespace Pictor
 						sum_g -= sum_out_g;
 						sum_b -= sum_out_b;
 						sum_a -= sum_out_a;
-		   
+
 						stack_start = stack_ptr + div - ry;
 						if(stack_start >= div) stack_start -= div;
 
@@ -825,17 +827,17 @@ namespace Pictor
 						sum_out_b -= stack_pix_ptr->b;
 						sum_out_a -= stack_pix_ptr->a;
 
-						if(yp < hm) 
+						if(yp < hm)
 						{
 							src_pix_ptr += Stride;
 							++yp;
 						}
-			
+
 						stack_pix_ptr->r = src_pix_ptr[R];
 						stack_pix_ptr->g = src_pix_ptr[G];
 						stack_pix_ptr->b = src_pix_ptr[B];
 						stack_pix_ptr->a = src_pix_ptr[A];
-			
+
 						sum_in_r += src_pix_ptr[R];
 						sum_in_g += src_pix_ptr[G];
 						sum_in_b += src_pix_ptr[B];
@@ -844,7 +846,7 @@ namespace Pictor
 						sum_g    += sum_in_g;
 						sum_b    += sum_in_b;
 						sum_a    += sum_in_a;
-			
+
 						++stack_ptr;
 						if(stack_ptr >= div) stack_ptr = 0;
 						stack_pix_ptr = &stack[stack_ptr];
@@ -864,18 +866,18 @@ namespace Pictor
 	};
 
 	//====================================================stack_blur_calc_rgba
-	//template<class T=uint> 
+	//template<class T=uint>
 	struct stack_blur_calc_rgba
 	{
 		//typedef T value_type;
 		uint r,g,b,a;
 
-		void Clear() 
-		{ 
-			r = g = b = a = 0; 
+		void Clear()
+		{
+			r = g = b = a = 0;
 		}
 
-		//template<class ArgT> 
+		//template<class ArgT>
 		void Add(uint v)
 		{
 			r += v.r;
@@ -884,7 +886,7 @@ namespace Pictor
 			a += v.a;
 		}
 
-		//template<class ArgT> 
+		//template<class ArgT>
 		void Add(uint v, uint k)
 		{
 			r += v.r * k;
@@ -893,7 +895,7 @@ namespace Pictor
 			a += v.a * k;
 		}
 
-		//template<class ArgT> 
+		//template<class ArgT>
 		void sub(uint v)
 		{
 			r -= v.r;
@@ -902,7 +904,7 @@ namespace Pictor
 			a -= v.a;
 		}
 
-		//template<class ArgT> 
+		//template<class ArgT>
 		void calc_pix(uint v, uint div)
 		{
 			//typedef typename ArgT::value_type value_type;
@@ -912,7 +914,7 @@ namespace Pictor
 			v.a = value_type(a / div);
 		}
 
-		//template<class ArgT> 
+		//template<class ArgT>
 		void calc_pix(uint v, uint mul, uint shr)
 		{
 			//typedef typename ArgT::value_type value_type;
@@ -923,20 +925,19 @@ namespace Pictor
 		}
 	};
 
-
 	//=====================================================stack_blur_calc_rgb
-	//template<class T=uint> 
+	//template<class T=uint>
 	struct stack_blur_calc_rgb
 	{
 		//typedef T value_type;
 		uint r,g,b;
 
-		void Clear() 
-		{ 
-			r = g = b = 0; 
+		void Clear()
+		{
+			r = g = b = 0;
 		}
 
-		//template<class ArgT> 
+		//template<class ArgT>
 		void Add(uint v)
 		{
 			r += v.r;
@@ -944,7 +945,7 @@ namespace Pictor
 			b += v.b;
 		}
 
-		//template<class ArgT> 
+		//template<class ArgT>
 		void Add(uint v, uint k)
 		{
 			r += v.r * k;
@@ -952,7 +953,7 @@ namespace Pictor
 			b += v.b * k;
 		}
 
-		//template<class ArgT> 
+		//template<class ArgT>
 		void sub(uint v)
 		{
 			r -= v.r;
@@ -960,7 +961,7 @@ namespace Pictor
 			b -= v.b;
 		}
 
-		//template<class ArgT> 
+		//template<class ArgT>
 		void calc_pix(uint v, uint div)
 		{
 			typedef typename ArgT::value_type value_type;
@@ -969,7 +970,7 @@ namespace Pictor
 			v.b = value_type(b / div);
 		}
 
-		//template<class ArgT> 
+		//template<class ArgT>
 		void calc_pix(uint v, uint mul, uint shr)
 		{
 			typedef typename ArgT::value_type value_type;
@@ -979,45 +980,44 @@ namespace Pictor
 		}
 	};
 
-
 	//====================================================stack_blur_calc_gray
-	//template<class T=uint> 
+	//template<class T=uint>
 	struct stack_blur_calc_gray
 	{
 		//typedef T value_type;
 		uint v;
 
-		void Clear() 
-		{ 
-			v = 0; 
+		void Clear()
+		{
+			v = 0;
 		}
 
-		//template<class ArgT> 
+		//template<class ArgT>
 		void Add(uint a)
 		{
 			v += a.v;
 		}
 
-		//template<class ArgT> 
+		//template<class ArgT>
 		void Add(uint a, uint k)
 		{
 			v += a.v * k;
 		}
 
-		//template<class ArgT> 
+		//template<class ArgT>
 		void sub(uint a)
 		{
 			v -= a.v;
 		}
 
-		//template<class ArgT> 
+		//template<class ArgT>
 		void calc_pix(uint a, uint div)
 		{
 			//typedef typename ArgT::value_type value_type;
 			a.v = (uint)(v / div);
 		}
 
-		//template<class ArgT> 
+		//template<class ArgT>
 		void calc_pix(uint a, uint mul, uint shr)
 		{
 			//typedef typename ArgT::value_type value_type;
@@ -1044,10 +1044,10 @@ namespace Pictor
 	//===========================================================RecursiveBlur
 	public sealed class RecursiveBlur
 	{
-		VectorPOD<RecursizeBlurCalculator> m_sum1;
-		VectorPOD<RecursizeBlurCalculator> m_sum2;
-		VectorPOD<RGBA_Bytes> m_buf;
-		RecursizeBlurCalculator m_RecursizeBlurCalculatorFactory;
+		private VectorPOD<RecursizeBlurCalculator> m_sum1;
+		private VectorPOD<RecursizeBlurCalculator> m_sum2;
+		private VectorPOD<RGBA_Bytes> m_buf;
+		private RecursizeBlurCalculator m_RecursizeBlurCalculatorFactory;
 
 		public RecursiveBlur(RecursizeBlurCalculator recursizeBluerCalculatorFactory)
 		{

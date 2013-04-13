@@ -3,8 +3,8 @@
 // Copyright (C) 2007 Lars Brubaker
 //                  larsbrubaker@gmail.com
 //
-// Permission to copy, use, modify, sell and distribute this software 
-// is granted provided this copyright notice appears in all copies. 
+// Permission to copy, use, modify, sell and distribute this software
+// is granted provided this copyright notice appears in all copies.
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -20,21 +20,23 @@ namespace Pictor.UI
 	//----------------------------------------------------------cbox_ctrl_impl
 	public class Window : UIWidget
 	{
-		TextWidget caption;
-		ButtonWidget closeButton;
-		double m_X;
-		double m_Y;
-		double m_BorderWidth;
-		double m_TextPadding;
-		double m_BorderRadius;
-		double m_width;
-		double m_height;
+		private TextWidget caption;
+		private ButtonWidget closeButton;
+		private double m_X;
+		private double m_Y;
+		private double m_BorderWidth;
+		private double m_TextPadding;
+		private double m_BorderRadius;
+		private double m_width;
+		private double m_height;
 
-		double mouseX;
-		double mouseY;
+		private double mouseX;
+		private double mouseY;
 
 		public double BorderWidth { get { return m_BorderWidth; } set { m_BorderWidth = value; } }
+
 		public double TextPadding { get { return m_TextPadding; } set { m_TextPadding = value; } }
+
 		public double BorderRadius { get { return m_BorderRadius; } set { m_BorderRadius = value; } }
 
 		public Window(double x, double y, double width, double height, string lable)

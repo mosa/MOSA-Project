@@ -9,8 +9,6 @@
 
 using System;
 using System.Collections.Generic;
-using Mosa.Compiler.Linker;
-using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Compiler.TypeSystem;
 
 namespace Mosa.Compiler.Framework.Stages
@@ -25,7 +23,7 @@ namespace Mosa.Compiler.Framework.Stages
 		protected RuntimeType plugTypeAttribute;
 		protected RuntimeType plugMethodAttribute;
 
-		#endregion // Data members
+		#endregion Data members
 
 		#region ICompilerStage members
 
@@ -56,7 +54,6 @@ namespace Mosa.Compiler.Framework.Stages
 					{
 						plugTypeTarget = (string)parameters[0];
 					}
-
 				}
 
 				foreach (RuntimeMethod method in type.Methods)
@@ -155,7 +152,7 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 		}
 
-		#endregion // ICompilerStage members
+		#endregion ICompilerStage members
 
 		private void Patch(RuntimeMethod targetMethod, RuntimeMethod method)
 		{
@@ -250,7 +247,5 @@ namespace Mosa.Compiler.Framework.Stages
 
 			return target.Substring(pos + 1);
 		}
-
 	}
 }
-

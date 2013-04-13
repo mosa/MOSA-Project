@@ -9,7 +9,6 @@
 
 namespace System.Runtime.InteropServices
 {
-
 	[ComVisible(true)]
 	public enum UnmanagedType
 	{
@@ -49,5 +48,4 @@ namespace System.Runtime.InteropServices
 		CustomMarshaler = 44,
 		Error = 45
 	}
-
 }

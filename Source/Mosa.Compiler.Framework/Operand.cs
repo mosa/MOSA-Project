@@ -73,7 +73,7 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		private RuntimeMember runtimeMember;
 
-		#endregion // Data members
+		#endregion Data members
 
 		#region Properties
 
@@ -288,7 +288,7 @@ namespace Mosa.Compiler.Framework
 		/// </value>
 		public bool IsFloatingPoint { get { return (Type.Type == CilElementType.R4 || Type.Type == CilElementType.R8); } }
 
-		#endregion // Properties
+		#endregion Properties
 
 		#region Construction
 
@@ -315,7 +315,7 @@ namespace Mosa.Compiler.Framework
 			uses = new List<int>();
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Static Factory Constructors
 
@@ -341,6 +341,7 @@ namespace Mosa.Compiler.Framework
 		{
 			return CreateConstant(BuiltInSigType.UInt32, value);
 		}
+
 		/// <summary>
 		/// Creates a new constant <see cref="Operand"/> for the given integral value.
 		/// </summary>
@@ -584,6 +585,7 @@ namespace Mosa.Compiler.Framework
 			}
 
 			operand.parent = longOperand;
+
 			//operand.SplitParent = longOperand;
 
 			Debug.Assert(longOperand.Low == null);
@@ -629,6 +631,7 @@ namespace Mosa.Compiler.Framework
 			}
 
 			operand.parent = longOperand;
+
 			//operand.SplitParent = longOperand;
 
 			Debug.Assert(longOperand.High == null);
@@ -638,7 +641,7 @@ namespace Mosa.Compiler.Framework
 			return operand;
 		}
 
-		#endregion // Static Factory Constructors
+		#endregion Static Factory Constructors
 
 		#region Object Overrides
 
@@ -692,7 +695,6 @@ namespace Mosa.Compiler.Framework
 					s.Append("/low");
 			}
 
-
 			if (IsConstant)
 			{
 				s.Append(' ');
@@ -708,7 +710,6 @@ namespace Mosa.Compiler.Framework
 				s.Append(' ');
 				s.Append(runtimeMember.ToString());
 			}
-
 
 			if (IsCPURegister)
 			{
@@ -731,7 +732,6 @@ namespace Mosa.Compiler.Framework
 					else
 						s.AppendFormat("[{0}-{1:X}h]", Register.ToString(), -Offset);
 				}
-
 			}
 
 			s.AppendFormat(" [{0}]", sigType);
@@ -739,7 +739,7 @@ namespace Mosa.Compiler.Framework
 			return s.ToString().Replace("  ", " ").Trim();
 		}
 
-		#endregion // Object Overrides
+		#endregion Object Overrides
 
 		#region Static Methods
 
@@ -808,6 +808,6 @@ namespace Mosa.Compiler.Framework
 			}
 		}
 
-		#endregion // Static Methods
+		#endregion Static Methods
 	}
 }

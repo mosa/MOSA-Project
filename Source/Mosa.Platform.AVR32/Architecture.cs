@@ -5,7 +5,7 @@
  *
  * Authors:
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- *  Pascal Delprat (pdelprat) <pascal.delprat@online.fr> 
+ *  Pascal Delprat (pdelprat) <pascal.delprat@online.fr>
  */
 
 using System;
@@ -17,14 +17,12 @@ using Mosa.Compiler.Metadata.Signatures;
 
 namespace Mosa.Platform.AVR32
 {
-
 	/// <summary>
 	/// This class provides a common base class for architecture
 	/// specific operations.
 	/// </summary>
 	public class Architecture : BaseArchitecture
 	{
-
 		/// <summary>
 		/// Gets the endianness of the target architecture.
 		/// </summary>
@@ -153,7 +151,6 @@ namespace Mosa.Platform.AVR32
 			//assemblyCompilerPipeline.InsertAfterLast<TypeLayoutStage>(
 			//    new MethodTableBuilderStage()
 			//);
-
 		}
 
 		/// <summary>
@@ -162,13 +159,13 @@ namespace Mosa.Platform.AVR32
 		/// <param name="methodCompilerPipeline">The method compiler pipeline to extend.</param>
 		public override void ExtendMethodCompilerPipeline(CompilerPipeline methodCompilerPipeline)
 		{
-
 			methodCompilerPipeline.InsertAfterLast<PlatformStubStage>(
 				new IMethodCompilerStage[]
 				{
 					//new LongOperandTransformationStage(),
 					//new AddressModeConversionStage(),
 					new IRTransformationStage(),
+
 					//new TweakTransformationStage(),
 					//new MemToMemConversionStage(),
 				});

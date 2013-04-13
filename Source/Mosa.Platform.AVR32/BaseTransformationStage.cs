@@ -11,18 +11,15 @@ using Mosa.Compiler.Framework.Platform;
 
 namespace Mosa.Platform.AVR32
 {
-
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public abstract class BaseTransformationStage : BasePlatformTransformationStage
 	{
-
 		protected override string Platform { get { return "AVR32"; } }
 
 		#region Emit Methods
 
-		#endregion // Emit Methods
-
+		#endregion Emit Methods
 	}
 }

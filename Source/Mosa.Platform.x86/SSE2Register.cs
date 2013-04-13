@@ -66,7 +66,7 @@ namespace Mosa.Platform.x86
 		/// </summary>
 		public static readonly SSE2Register XMM7 = new SSE2Register(15, 7);
 
-		#endregion // Static data members
+		#endregion Static data members
 
 		#region Data members
 
@@ -75,7 +75,7 @@ namespace Mosa.Platform.x86
 		/// </summary>
 		private readonly int registerCode;
 
-		#endregion // Data members
+		#endregion Data members
 
 		#region Construction
 
@@ -90,7 +90,7 @@ namespace Mosa.Platform.x86
 			this.registerCode = registerCode;
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Properties
 
@@ -126,7 +126,7 @@ namespace Mosa.Platform.x86
 			get { return 128; }
 		}
 
-		#endregion // Properties
+		#endregion Properties
 
 		#region Methods
 
@@ -149,6 +149,6 @@ namespace Mosa.Platform.x86
 			return String.Format("XMM#{0}", registerCode);
 		}
 
-		#endregion // Methods
+		#endregion Methods
 	}
 }

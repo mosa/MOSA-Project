@@ -7,18 +7,16 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-
 namespace Mosa.Compiler.Framework.Platform
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public abstract class BasePlatformInstruction : BaseInstruction
 	{
+		#region Data members
 
-		#region  Data members
-
-		#endregion
+		#endregion Data members
 
 		#region Construction
 
@@ -32,7 +30,7 @@ namespace Mosa.Compiler.Framework.Platform
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Methods
 
@@ -43,6 +41,6 @@ namespace Mosa.Compiler.Framework.Platform
 		/// <param name="emitter">The emitter.</param>
 		public abstract void Emit(Context context, ICodeEmitter emitter);
 
-		#endregion //  Methods
+		#endregion Methods
 	}
 }

@@ -1,4 +1,3 @@
-
 using Mosa.Platform.x86.Intrinsic;
 
 namespace Mosa.Kernel.x86.Smbios

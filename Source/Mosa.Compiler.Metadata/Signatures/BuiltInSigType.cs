@@ -58,6 +58,5 @@ namespace Mosa.Compiler.Metadata.Signatures
 		}
 
 		public string TypeName { get { return this.typeName; } }
-
 	}
 }

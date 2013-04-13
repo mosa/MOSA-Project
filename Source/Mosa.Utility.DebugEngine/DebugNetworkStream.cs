@@ -7,10 +7,7 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
-using System.Collections.Generic;
 using System.Net.Sockets;
-using System.Net;
 
 namespace Mosa.Utility.DebugEngine
 {

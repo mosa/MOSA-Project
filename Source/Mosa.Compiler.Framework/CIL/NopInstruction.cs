@@ -7,11 +7,10 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public sealed class NopInstruction : BaseCILInstruction
 	{
@@ -26,7 +25,7 @@ namespace Mosa.Compiler.Framework.CIL
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Methods
 
@@ -40,7 +39,6 @@ namespace Mosa.Compiler.Framework.CIL
 			visitor.Nop(context);
 		}
 
-		#endregion // Methods
-
+		#endregion Methods
 	}
 }

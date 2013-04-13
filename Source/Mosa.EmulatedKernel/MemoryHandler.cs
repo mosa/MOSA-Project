@@ -7,33 +7,35 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-
 namespace Mosa.EmulatedKernel
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public class MemoryHandler
 	{
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public uint Address;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public uint Size;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public uint Type;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public MemoryDispatch.MemoryRead8 read8;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public MemoryDispatch.MemoryWrite8 write8;
 
@@ -77,5 +79,4 @@ namespace Mosa.EmulatedKernel
 			return string.Format("Memory: {0:X10}-{1:X10} Length: {2:X10}", Address, Address + Size, Size);
 		}
 	}
-
 }

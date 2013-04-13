@@ -20,6 +20,7 @@ namespace Mosa.DeviceSystem
 		/// </summary>
 		/// <param name="c">The character.</param>
 		void Write(byte c);
+
 		/// <summary>
 		/// Reads the byte.
 		/// </summary>

@@ -7,19 +7,15 @@
  *  Michael Fröhlich (grover) <michael.ruck@michaelruck.de>
  */
 
-using System;
-using System.IO;
-
 using Mosa.Compiler.Linker;
 
 namespace Mosa.Test.System
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public sealed class TestLinkerSection : ExtendedLinkerSection
 	{
-
 		#region Construction
 
 		/// <summary>
@@ -37,7 +33,6 @@ namespace Mosa.Test.System
 			stream = vms;
 		}
 
-		#endregion // Construction
-
+		#endregion Construction
 	}
 }

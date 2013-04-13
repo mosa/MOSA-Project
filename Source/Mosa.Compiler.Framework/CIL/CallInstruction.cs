@@ -7,8 +7,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-
-
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
@@ -30,7 +28,7 @@ namespace Mosa.Compiler.Framework.CIL
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Properties
 
@@ -43,7 +41,7 @@ namespace Mosa.Compiler.Framework.CIL
 			get { return InvokeSupportFlags.MemberRef | InvokeSupportFlags.MethodDef | InvokeSupportFlags.MethodSpec; }
 		}
 
-		#endregion // Properties
+		#endregion Properties
 
 		#region Methods
 
@@ -57,7 +55,6 @@ namespace Mosa.Compiler.Framework.CIL
 			visitor.Call(context);
 		}
 
-		#endregion // Methods
-
+		#endregion Methods
 	}
 }

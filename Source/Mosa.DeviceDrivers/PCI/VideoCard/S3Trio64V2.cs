@@ -18,42 +18,48 @@ namespace Mosa.DeviceDrivers.PCI.VideoCard
 	public class S3Trio64V2 : HardwareDevice, IDevice, IPixelPaletteGraphicsDevice
 	{
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		internal struct Register
 		{
 			/// <summary>
-			/// 
+			///
 			/// </summary>
 			internal const ushort VgaEnable = 0x13;
+
 			/// <summary>
-			/// 
+			///
 			/// </summary>
 			internal const ushort MiscOutRead = 0x1c;
+
 			/// <summary>
-			/// 
+			///
 			/// </summary>
 			internal const ushort MiscOutWrite = 0x12;
+
 			/// <summary>
-			/// 
+			///
 			/// </summary>
 			internal const ushort CrtcIndex = 0x24;
+
 			/// <summary>
-			/// 
+			///
 			/// </summary>
 			internal const ushort CrtcData = 0x25;
+
 			/// <summary>
-			/// 
+			///
 			/// </summary>
 			internal const ushort SequenceIndex = 0x14;
+
 			/// <summary>
-			/// 
+			///
 			/// </summary>
 			internal const ushort SequenceData = 0x15;
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		internal struct CommandRegister
 		{
@@ -64,14 +70,15 @@ namespace Mosa.DeviceDrivers.PCI.VideoCard
 			/// to 2048 solves it.
 			/// </summary>
 			internal const ushort CursorBytes = 2084;
+
 			/// <summary>
-			/// 
+			///
 			/// </summary>
 			internal const ushort AdvFuncCntl = 0x4738;
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		internal enum DisplayModeState
 		{
@@ -79,18 +86,22 @@ namespace Mosa.DeviceDrivers.PCI.VideoCard
 			/// Display is turned on
 			/// </summary>
 			On = 0x00,
+
 			/// <summary>
 			/// Display is on standby
 			/// </summary>
 			StandBy = 0x10,
+
 			/// <summary>
 			/// Display is in suspend mode
 			/// </summary>
 			Suspend = 0x40,
+
 			/// <summary>
 			/// Display is turned off
 			/// </summary>
 			Off = 0x50,
+
 			/// <summary>
 			/// Used when current modestate is unknown
 			/// </summary>
@@ -98,48 +109,49 @@ namespace Mosa.DeviceDrivers.PCI.VideoCard
 		}
 
 		#region Members
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IMemory memory;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IFrameBuffer frameBuffer;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IReadWriteIOPort lfbControllerIndex;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IReadWriteIOPort enhMapControllerIndex;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IReadWriteIOPort vgaEnableController;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IReadWriteIOPort miscOutputReader;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IReadWriteIOPort miscOutputWriter;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IReadWriteIOPort crtcControllerIndex;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IReadWriteIOPort crtcControllerData;
 
@@ -154,12 +166,14 @@ namespace Mosa.DeviceDrivers.PCI.VideoCard
 		protected IReadWriteIOPort seqControllerData;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IWriteOnlyIOPort outportWrite;
-		#endregion
+
+		#endregion Members
 
 		#region Properties, PixelPaletteGraphicsDevice
+
 		/// <summary>
 		/// Gets the size of the palette.
 		/// </summary>
@@ -195,18 +209,22 @@ namespace Mosa.DeviceDrivers.PCI.VideoCard
 				return 0;
 			}
 		}
-		#endregion
+
+		#endregion Properties, PixelPaletteGraphicsDevice
 
 		#region Construction
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public S3Trio64V2()
 		{
 		}
-		#endregion
+
+		#endregion Construction
 
 		#region HardwareDevice
+
 		/// <summary>
 		/// Setups this hardware device driver
 		/// </summary>
@@ -215,6 +233,7 @@ namespace Mosa.DeviceDrivers.PCI.VideoCard
 		{
 			// Store reference to hardware resources
 			this.hardwareResources = hardwareResources;
+
 			// Set the driver's name
 			base.name = "S3Trio64V2";
 
@@ -285,9 +304,11 @@ namespace Mosa.DeviceDrivers.PCI.VideoCard
 		{
 			return true;
 		}
-		#endregion
+
+		#endregion HardwareDevice
 
 		#region PixelPaletteGraphicsDevice
+
 		/// <summary>
 		/// Writes the pixel.
 		/// </summary>
@@ -335,11 +356,13 @@ namespace Mosa.DeviceDrivers.PCI.VideoCard
 		{
 			return new Color();
 		}
-		#endregion
+
+		#endregion PixelPaletteGraphicsDevice
 
 		#region S3Trio
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="dpmsMode"></param>
 		/// <returns></returns>
@@ -354,15 +377,19 @@ namespace Mosa.DeviceDrivers.PCI.VideoCard
 			{
 				case DisplayModeState.On:
 					break;
+
 				case DisplayModeState.StandBy:
 					sr0D |= 0x10;
 					break;
+
 				case DisplayModeState.Suspend:
 					sr0D |= 0x40;
 					break;
+
 				case DisplayModeState.Off:
 					sr0D |= 0x50;
 					break;
+
 				case DisplayModeState.Unknown:
 					return false;
 				default:
@@ -375,7 +402,7 @@ namespace Mosa.DeviceDrivers.PCI.VideoCard
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <returns></returns>
 		private DisplayModeState GetDisplayModeState()
@@ -387,26 +414,32 @@ namespace Mosa.DeviceDrivers.PCI.VideoCard
 				case 0:
 					mode = DisplayModeState.On;
 					break;
+
 				case 0x10:
 					mode = DisplayModeState.StandBy;
 					break;
+
 				case 0x40:
 					mode = DisplayModeState.Suspend;
 					break;
+
 				case 0x50:
 					mode = DisplayModeState.Off;
 					break;
+
 				default:
 					break;
 			}
 
 			return mode;
 		}
-		#endregion
+
+		#endregion S3Trio
 
 		#region Helper
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="index"></param>
 		/// <param name="value"></param>
@@ -417,7 +450,7 @@ namespace Mosa.DeviceDrivers.PCI.VideoCard
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="index"></param>
 		/// <param name="value"></param>
@@ -429,7 +462,7 @@ namespace Mosa.DeviceDrivers.PCI.VideoCard
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="index"></param>
 		/// <returns></returns>
@@ -448,6 +481,7 @@ namespace Mosa.DeviceDrivers.PCI.VideoCard
 		{
 			// Select target register
 			seqControllerIndex.Write8(index);
+
 			// Write masked value to register
 			seqControllerData.Write8(value);
 		}
@@ -462,6 +496,7 @@ namespace Mosa.DeviceDrivers.PCI.VideoCard
 		{
 			// Select target register
 			seqControllerIndex.Write8(index);
+
 			// Write masked value to register
 			seqControllerData.Write8((byte)((crtcControllerData.Read8() & ~mask) | (value & mask)));
 		}
@@ -476,9 +511,11 @@ namespace Mosa.DeviceDrivers.PCI.VideoCard
 		{
 			// Select register
 			seqControllerIndex.Write8(index);
+
 			// Read contained value
 			return seqControllerData.Read8();
 		}
-		#endregion
+
+		#endregion Helper
 	}
 }

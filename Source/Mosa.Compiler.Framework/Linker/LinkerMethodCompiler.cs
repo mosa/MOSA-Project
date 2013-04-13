@@ -7,7 +7,6 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Stages;
 using Mosa.Compiler.TypeSystem;
 
@@ -34,12 +33,13 @@ namespace Mosa.Compiler.Framework.Linker
 				new LoopAwareBlockOrderStage(),
 				new PlatformStubStage(),
 				new StackLayoutStage(),
+
 				//new CodeGenerationStage(),
 			});
 
 			compiler.Architecture.ExtendMethodCompilerPipeline(this.Pipeline);
 		}
 
-		#endregion // Construction
+		#endregion Construction
 	}
 }

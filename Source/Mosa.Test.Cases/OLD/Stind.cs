@@ -5,7 +5,7 @@
  *
  * Authors:
  *  Bruce Markham (<mailto:illuminus86@gmail.com>)
- *  
+ *
  */
 
 using System;
@@ -16,7 +16,6 @@ using Mosa.Test.System;
 
 namespace Mosa.Test.Cases.OLD
 {
-
 	[TestFixture]
 	public unsafe class Stind : TestCompilerAdapter
 	{
@@ -67,9 +66,9 @@ namespace Mosa.Test.Cases.OLD
 		public unsafe void DereffedVoidPtrAssign_I2(short a)
 		{
 			settings.CodeSource = CreateDereferencedVoidPointerAssignmentTestCode("short", "I2");
-			
+
 			void* address = (void*)Marshal.AllocHGlobal(sizeof(short));
-			
+
 			Run<bool>(string.Empty, "Test", "DereffedVoidPtrAssign_I2", a, (IntPtr)address);
 			bool success = (*(short*)address == a);
 			Marshal.FreeHGlobal((IntPtr)address);
@@ -132,7 +131,7 @@ namespace Mosa.Test.Cases.OLD
 		[Test]
 		public unsafe void DereffedVoidPtrAssign_U1(byte a)
 		{
-			settings.CodeSource = CreateDereferencedVoidPointerAssignmentTestCode("byte", "U1");			
+			settings.CodeSource = CreateDereferencedVoidPointerAssignmentTestCode("byte", "U1");
 
 			void* address = (void*)Marshal.AllocHGlobal(sizeof(byte));
 			Run<bool>(string.Empty, "Test", "DereffedVoidPtrAssign_U1", a, (IntPtr)address);
@@ -176,7 +175,7 @@ namespace Mosa.Test.Cases.OLD
 		public void DereffedVoidPtrAssign_U4(uint a)
 		{
 			settings.CodeSource = CreateDereferencedVoidPointerAssignmentTestCode("uint", "U4");
-			
+
 			void* address = (void*)Marshal.AllocHGlobal(sizeof(uint));
 			Run<bool>(string.Empty, "Test", "DereffedVoidPtrAssign_U4", a, (IntPtr)address);
 			bool success = (*(uint*)address == a);
@@ -196,7 +195,7 @@ namespace Mosa.Test.Cases.OLD
 		public unsafe void DereffedVoidPtrAssign_U8(ulong a)
 		{
 			settings.CodeSource = CreateDereferencedVoidPointerAssignmentTestCode("ulong", "U8");
-			
+
 			void* address = (void*)Marshal.AllocHGlobal(sizeof(ulong));
 			Run<bool>(string.Empty, "Test", "DereffedVoidPtrAssign_U8", a, (IntPtr)address);
 			bool success = (*(ulong*)address == a);
@@ -207,6 +206,6 @@ namespace Mosa.Test.Cases.OLD
 
 		#endregion U8
 
-		#endregion
+		#endregion DereffedVoidPtrAssign
 	}
 }

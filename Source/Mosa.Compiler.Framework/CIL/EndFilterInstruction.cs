@@ -6,13 +6,13 @@
  * Authors:
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
- 
+
 using System;
 
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public sealed class EndFilterInstruction : UnaryInstruction
 	{
@@ -27,7 +27,7 @@ namespace Mosa.Compiler.Framework.CIL
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Methods
 
@@ -54,6 +54,5 @@ namespace Mosa.Compiler.Framework.CIL
 		}
 
 		#endregion Methods
-
 	}
 }

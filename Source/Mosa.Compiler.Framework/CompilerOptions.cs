@@ -11,10 +11,8 @@ using Mosa.Compiler.Linker;
 
 namespace Mosa.Compiler.Framework
 {
-
 	public class CompilerOptions
 	{
-
 		#region Structures
 
 		/// <summary>
@@ -23,8 +21,11 @@ namespace Mosa.Compiler.Framework
 		public struct MultibootStruct
 		{
 			public uint? VideoMode { get; set; }
+
 			public uint? VideoWidth { get; set; }
+
 			public uint? VideoHeight { get; set; }
+
 			public uint? VideoDepth { get; set; }
 		}
 
@@ -34,6 +35,7 @@ namespace Mosa.Compiler.Framework
 		public struct PortableExecutableStruct
 		{
 			public bool? SetChecksum { get; set; }
+
 			//public uint? FileAlignment { get; set; }
 			//public uint? SectionAlignment { get; set; }
 		}
@@ -46,7 +48,7 @@ namespace Mosa.Compiler.Framework
 			//public uint FileAlignment { get; set; }
 		}
 
-		#endregion // Structures
+		#endregion Structures
 
 		#region Properties
 
@@ -132,7 +134,7 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		public string MethodPipelineExportDirectory { get; set; }
 
-		#endregion // Properties
+		#endregion Properties
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="CompilerOptions"/> class.

@@ -7,11 +7,10 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public sealed class PopInstruction : UnaryInstruction
 	{
@@ -25,7 +24,7 @@ namespace Mosa.Compiler.Framework.CIL
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Methods
 
@@ -39,7 +38,6 @@ namespace Mosa.Compiler.Framework.CIL
 			visitor.Pop(context);
 		}
 
-		#endregion // Methods
-
+		#endregion Methods
 	}
 }

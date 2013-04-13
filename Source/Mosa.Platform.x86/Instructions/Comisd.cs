@@ -8,7 +8,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
 using System.Diagnostics;
 using Mosa.Compiler.Framework;
 
@@ -23,7 +22,7 @@ namespace Mosa.Platform.x86.Instructions
 
 		private static readonly OpCode opcode = new OpCode(new byte[] { 0x66, 0x0F, 0x2F });
 
-		#endregion
+		#endregion Data Members
 
 		#region Construction
 
@@ -35,7 +34,7 @@ namespace Mosa.Platform.x86.Instructions
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Methods
 
@@ -63,7 +62,6 @@ namespace Mosa.Platform.x86.Instructions
 			visitor.Comisd(context);
 		}
 
-		#endregion // Methods
-
+		#endregion Methods
 	}
 }

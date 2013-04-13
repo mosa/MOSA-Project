@@ -36,7 +36,7 @@ namespace Mosa.Compiler.TypeSystem
 		/// </summary>
 		private SigType sigType;
 
-		#endregion // Data members
+		#endregion Data members
 
 		#region Construction
 
@@ -60,7 +60,8 @@ namespace Mosa.Compiler.TypeSystem
 			base(module, token, declaringType)
 		{
 		}
-		#endregion // Construction
+
+		#endregion Construction
 
 		#region Properties
 
@@ -109,11 +110,11 @@ namespace Mosa.Compiler.TypeSystem
 			get { return SigType.IsOpenGenericParameter; }
 		}
 
-		#endregion // Properties
+		#endregion Properties
 
 		#region Methods
 
-		#endregion // Methods
+		#endregion Methods
 
 		#region Object Overrides
 
@@ -140,7 +141,6 @@ namespace Mosa.Compiler.TypeSystem
 			return name;
 		}
 
-		#endregion // Object Overrides
-
+		#endregion Object Overrides
 	}
 }

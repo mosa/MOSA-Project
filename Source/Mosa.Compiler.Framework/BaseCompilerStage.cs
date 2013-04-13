@@ -8,7 +8,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
 using Mosa.Compiler.InternalTrace;
 using Mosa.Compiler.Linker;
 using Mosa.Compiler.TypeSystem;
@@ -47,7 +46,7 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		protected ILinker linker;
 
-		#endregion // Data members
+		#endregion Data members
 
 		#region IPipelineStage Members
 
@@ -57,7 +56,7 @@ namespace Mosa.Compiler.Framework
 		/// <value>The name of the compilation stage.</value>
 		public virtual string Name { get { return this.GetType().Name; } }
 
-		#endregion // IPipelineStage Members
+		#endregion IPipelineStage Members
 
 		#region ICompilerStage members
 
@@ -70,7 +69,7 @@ namespace Mosa.Compiler.Framework
 			linker = compiler.Linker;
 		}
 
-		#endregion // ICompilerStage members
+		#endregion ICompilerStage members
 
 		#region Helper Methods
 
@@ -84,7 +83,6 @@ namespace Mosa.Compiler.Framework
 			compiler.InternalTrace.TraceListener.SubmitDebugStageInformation(method, stage, line);
 		}
 
-		#endregion
-
+		#endregion Helper Methods
 	}
 }

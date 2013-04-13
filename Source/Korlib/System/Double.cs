@@ -10,7 +10,7 @@
 namespace System
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public struct Double
 	{
@@ -103,6 +103,5 @@ namespace System
 			return (f != f);
 #pragma warning restore
 		}
-
 	}
 }

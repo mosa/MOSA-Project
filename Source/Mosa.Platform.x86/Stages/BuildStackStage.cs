@@ -43,7 +43,7 @@ namespace Mosa.Platform.x86.Stages
 			UpdateReturns();
 		}
 
-		#endregion // IMethodCompilerStage
+		#endregion IMethodCompilerStage
 
 		/// <summary>
 		/// Updates the prologue.

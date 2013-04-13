@@ -10,7 +10,7 @@
 namespace Mosa.Compiler.Framework.IR
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public sealed class Break : BaseIRInstruction
 	{
@@ -24,7 +24,7 @@ namespace Mosa.Compiler.Framework.IR
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Instruction
 
@@ -38,6 +38,6 @@ namespace Mosa.Compiler.Framework.IR
 			visitor.Break(context);
 		}
 
-		#endregion // Instruction
+		#endregion Instruction
 	}
 }

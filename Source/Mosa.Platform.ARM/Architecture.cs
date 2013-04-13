@@ -15,14 +15,12 @@ using Mosa.Compiler.Metadata.Signatures;
 
 namespace Mosa.Platform.ARM
 {
-
 	/// <summary>
 	/// This class provides a common base class for architecture
 	/// specific operations.
 	/// </summary>
 	public class Architecture : BaseArchitecture
 	{
-
 		public override Endianness Endianness { get { return Endianness.Big; } }
 
 		/// <summary>
@@ -130,7 +128,6 @@ namespace Mosa.Platform.ARM
 			//assemblyCompilerPipeline.InsertAfterLast<TypeLayoutStage>(
 			//    new MethodTableBuilderStage()
 			//);
-
 		}
 
 		/// <summary>
@@ -139,7 +136,6 @@ namespace Mosa.Platform.ARM
 		/// <param name="methodCompilerPipeline">The method compiler pipeline to extend.</param>
 		public override void ExtendMethodCompilerPipeline(CompilerPipeline methodCompilerPipeline)
 		{
-
 			//methodCompilerPipeline.InsertAfterLast<PlatformStubStage>(
 			//    new IMethodCompilerStage[]
 			//    {
@@ -187,6 +183,7 @@ namespace Mosa.Platform.ARM
 		{
 			// TODO
 			return null;
+
 			//return new MachineCodeEmitter();
 		}
 	}

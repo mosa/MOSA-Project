@@ -18,13 +18,16 @@ namespace Mosa.Kernel.x86
 	{
 		// Location for memory map starts at 28MB
 		private const uint StartLocation = 1024 * 1024 * 28;
+
 		// Reserve memory up to 32MB
 		public const uint ReserveMemory = 1024 * 1024 * 32;
+
 		// Maximum memory usage (4GB)
 		public const uint MaximumMemory = 0xFFFFFFFF;
 
 		// Start of memory map
 		private static uint _map;
+
 		// Current position in map data structure
 		private static uint _at;
 
@@ -75,7 +78,7 @@ namespace Mosa.Kernel.x86
 			if ((start > MaximumMemory) || (start + size < ReserveMemory))
 				return;
 
-			// Normalize 
+			// Normalize
 			uint normstart = (uint)((start + PageSize - 1) & ~(PageSize - 1));
 			uint normend = (uint)((start + size) & ~(PageSize - 1));
 			uint normsize = (uint)(normend - normstart);

@@ -19,6 +19,8 @@ namespace System
 		/// <summary>
 		/// Initializes a new instance of the System.FlagsAttribute class.
 		/// </summary>
-		public FlagsAttribute() { }
+		public FlagsAttribute()
+		{
+		}
 	}
 }

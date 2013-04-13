@@ -37,8 +37,8 @@ namespace Mosa.Platform.x86.Instructions
 		private static readonly OpCode CR_R = new OpCode(new byte[] { 0x0F, 0x22 });
 		private static readonly OpCode SR_R = new OpCode(new byte[] { 0x8E });
 
-		#endregion // Data Members
-		
+		#endregion Data Members
+
 		#region Construction
 
 		/// <summary>
@@ -49,7 +49,7 @@ namespace Mosa.Platform.x86.Instructions
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Methods
 
@@ -123,6 +123,6 @@ namespace Mosa.Platform.x86.Instructions
 			visitor.Mov(context);
 		}
 
-		#endregion
+		#endregion Methods
 	}
 }

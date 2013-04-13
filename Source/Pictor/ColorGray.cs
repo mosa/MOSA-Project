@@ -9,22 +9,20 @@
 
 namespace Pictor
 {
-
 	//===================================================================Gray8
 	public struct Gray8
 	{
-		const int base_shift = 8;
-		const uint base_scale = (uint)(1 << base_shift);
-		const uint base_mask = base_scale - 1;
+		private const int base_shift = 8;
+		private const uint base_scale = (uint)(1 << base_shift);
+		private const uint base_mask = base_scale - 1;
 
-		byte v;
-		byte a;
+		private byte v;
+		private byte a;
 
 		//--------------------------------------------------------------------
 		public Gray8(uint v_)
 			: this(v_, (uint)base_mask)
 		{
-
 		}
 
 		public Gray8(uint v_, uint a_)
@@ -34,7 +32,7 @@ namespace Pictor
 		}
 
 		//--------------------------------------------------------------------
-		Gray8(Gray8 c, uint a_)
+		private Gray8(Gray8 c, uint a_)
 		{
 			v = (c.v);
 			a = (byte)(a_);
@@ -46,7 +44,6 @@ namespace Pictor
 			v = ((byte)Basics.UnsignedRound((0.299 * c.R_Byte + 0.587 * c.G_Byte + 0.114 * c.B_Byte) * (double)(base_mask)));
 			a = ((byte)Basics.UnsignedRound(c.A_Byte * (double)(base_mask)));
 		}
-
 
 		//--------------------------------------------------------------------
 		public Gray8(RGBA_Doubles c, double a_)
@@ -81,6 +78,7 @@ namespace Pictor
 			a = 0;
 			return this;
 		}
+
 		//--------------------------------------------------------------------
 		public double Opacity
 		{
@@ -92,7 +90,6 @@ namespace Pictor
 				a = (byte)Basics.UnsignedRound(value * (double)(base_mask));
 			}
 		}
-
 
 		//--------------------------------------------------------------------
 		public Gray8 PreMultiply()
@@ -147,13 +144,14 @@ namespace Pictor
 		}
 
 		/*
+
 		//--------------------------------------------------------------------
 		void Add(Gray8 c, uint cover)
 		{
 			uint cv, ca;
 			if(cover == cover_mask)
 			{
-				if (c.a == BaseMask) 
+				if (c.a == BaseMask)
 				{
 					*this = c;
 				}

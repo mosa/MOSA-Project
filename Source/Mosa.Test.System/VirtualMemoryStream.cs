@@ -16,7 +16,7 @@ namespace Mosa.Test.System
 	/// Provides a stream around virtual memory.
 	/// </summary>
 	/// <remarks>
-	/// The virtual memory allocated by this stream is readable, writable and executable to be able to run 
+	/// The virtual memory allocated by this stream is readable, writable and executable to be able to run
 	/// the compiled native code.
 	/// </remarks>
 	public sealed class VirtualMemoryStream : UnmanagedMemoryStream
@@ -29,11 +29,11 @@ namespace Mosa.Test.System
 		private long memory;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private uint size;
 
-		#endregion // Data members
+		#endregion Data members
 
 		#region Construction
 
@@ -45,7 +45,7 @@ namespace Mosa.Test.System
 		public unsafe VirtualMemoryStream(uint size)
 		{
 			memory = Win32Memory.Allocate(0, size, PageProtectionFlags.Read | PageProtectionFlags.Write | PageProtectionFlags.Execute);
-			
+
 			if (memory == 0)
 				throw new OutOfMemoryException();
 
@@ -53,7 +53,7 @@ namespace Mosa.Test.System
 			this.size = size;
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Disposal
 
@@ -72,7 +72,7 @@ namespace Mosa.Test.System
 			}
 		}
 
-		#endregion // Disposal
+		#endregion Disposal
 
 		#region Properties
 
@@ -85,6 +85,6 @@ namespace Mosa.Test.System
 			get { return memory; }
 		}
 
-		#endregion // Properties
+		#endregion Properties
 	}
 }

@@ -39,7 +39,7 @@ namespace Mosa.Compiler.Linker
 		/// </summary>
 		private LinkerSymbol symbol;
 
-		#endregion // Data members
+		#endregion Data members
 
 		#region Construction
 
@@ -62,7 +62,7 @@ namespace Mosa.Compiler.Linker
 			this.stream = stream;
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Stream Overrides
 
@@ -277,23 +277,23 @@ namespace Mosa.Compiler.Linker
 		/// <exception cref="T:System.ArgumentException">
 		/// The sum of <paramref name="offset"/> and <paramref name="count"/> is larger than the buffer length.
 		///   </exception>
-		///   
+		///
 		/// <exception cref="T:System.ArgumentNullException">
 		///   <paramref name="buffer"/> is null.
 		///   </exception>
-		///   
+		///
 		/// <exception cref="T:System.ArgumentOutOfRangeException">
 		///   <paramref name="offset"/> or <paramref name="count"/> is negative.
 		///   </exception>
-		///   
+		///
 		/// <exception cref="T:System.IO.IOException">
 		/// An I/O error occurs.
 		///   </exception>
-		///   
+		///
 		/// <exception cref="T:System.NotSupportedException">
 		/// The stream does not support reading.
 		///   </exception>
-		///   
+		///
 		/// <exception cref="T:System.ObjectDisposedException">
 		/// Methods were called after the stream was closed.
 		///   </exception>
@@ -351,11 +351,11 @@ namespace Mosa.Compiler.Linker
 		/// <exception cref="T:System.IO.IOException">
 		/// An I/O error occurs.
 		///   </exception>
-		///   
+		///
 		/// <exception cref="T:System.NotSupportedException">
 		/// The stream does not support seeking, such as if the stream is constructed from a pipe or console output.
 		///   </exception>
-		///   
+		///
 		/// <exception cref="T:System.ObjectDisposedException">
 		/// Methods were called after the stream was closed.
 		///   </exception>
@@ -396,9 +396,9 @@ namespace Mosa.Compiler.Linker
 		/// </summary>
 		/// <param name="value">The desired length of the current stream in bytes.</param>
 		/// <exception cref="T:System.IO.IOException">An I/O error occurs. </exception>
-		///   
+		///
 		/// <exception cref="T:System.NotSupportedException">The stream does not support both writing and seeking, such as if the stream is constructed from a pipe or console output. </exception>
-		///   
+		///
 		/// <exception cref="T:System.ObjectDisposedException">Methods were called after the stream was closed. </exception>
 		public override void SetLength(long value)
 		{
@@ -414,17 +414,17 @@ namespace Mosa.Compiler.Linker
 		/// <param name="offset">The zero-based byte offset in <paramref name="buffer"/> at which to begin copying bytes to the current stream.</param>
 		/// <param name="count">The number of bytes to be written to the current stream.</param>
 		/// <exception cref="T:System.ArgumentException">The sum of <paramref name="offset"/> and <paramref name="count"/> is greater than the buffer length. </exception>
-		///   
+		///
 		/// <exception cref="T:System.ArgumentNullException">
 		///   <paramref name="buffer"/> is null. </exception>
-		///   
+		///
 		/// <exception cref="T:System.ArgumentOutOfRangeException">
 		///   <paramref name="offset"/> or <paramref name="count"/> is negative. </exception>
-		///   
+		///
 		/// <exception cref="T:System.IO.IOException">An I/O error occurs. </exception>
-		///   
+		///
 		/// <exception cref="T:System.NotSupportedException">The stream does not support writing. </exception>
-		///   
+		///
 		/// <exception cref="T:System.ObjectDisposedException">Methods were called after the stream was closed. </exception>
 		public override void Write(byte[] buffer, int offset, int count)
 		{
@@ -465,6 +465,6 @@ namespace Mosa.Compiler.Linker
 			stream.WriteByte(value);
 		}
 
-		#endregion // Stream Overrides
+		#endregion Stream Overrides
 	}
 }

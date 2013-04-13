@@ -11,7 +11,6 @@ using System;
 using System.Diagnostics;
 
 using Mosa.Compiler.Metadata;
-using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Compiler.TypeSystem;
 using Mosa.Compiler.TypeSystem.Cil;
 
@@ -30,7 +29,6 @@ namespace Mosa.Compiler.Framework.CIL
 	/// </summary>
 	public abstract class InvokeInstruction : BaseCILInstruction
 	{
-
 		#region Types
 
 		/// <summary>
@@ -43,25 +41,29 @@ namespace Mosa.Compiler.Framework.CIL
 			/// Specifies that the invoke instruction supports member references.
 			/// </summary>
 			MemberRef = 1,
+
 			/// <summary>
 			/// Specifies that the invoke instruction supports member definitions.
 			/// </summary>
 			MethodDef = 2,
+
 			/// <summary>
 			/// Specifies that the invoke instruction supports member specifications.
 			/// </summary>
 			MethodSpec = 4,
+
 			/// <summary>
 			/// Specifies that the invoke instruction supports call site invocations.
 			/// </summary>
 			CallSite = 8,
+
 			/// <summary>
 			/// Specifies support for all method invocation targets.
 			/// </summary>
 			All = MemberRef | MethodDef | MethodSpec | CallSite
 		}
 
-		#endregion // Types
+		#endregion Types
 
 		#region Construction
 
@@ -74,7 +76,7 @@ namespace Mosa.Compiler.Framework.CIL
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Properties
 
@@ -94,7 +96,7 @@ namespace Mosa.Compiler.Framework.CIL
 		/// </summary>
 		protected abstract InvokeSupportFlags InvokeSupport { get; }
 
-		#endregion // Properties
+		#endregion Properties
 
 		#region Methods
 
@@ -128,6 +130,7 @@ namespace Mosa.Compiler.Framework.CIL
 			//for (int i = 0; i < ctx.OperandCount; i++)
 			//{
 			/* FIXME: Check implicit conversions
+
 			// if (ops[i] != null) {
 				Debug.Assert(_operands[i].Type == _parameterTypes[i]);
 				if (_operands[i].Type != _parameterTypes[i])
@@ -136,6 +139,7 @@ namespace Mosa.Compiler.Framework.CIL
 					throw new ExecutionEngineException(@"Invalid operand types.");
 				}
 			*/
+
 			//}
 		}
 
@@ -251,6 +255,6 @@ namespace Mosa.Compiler.Framework.CIL
 			return result;
 		}
 
-		#endregion // Methods
+		#endregion Methods
 	}
 }

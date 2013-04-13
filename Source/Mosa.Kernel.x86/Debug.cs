@@ -7,15 +7,13 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-
 namespace Mosa.Kernel.x86
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public static class Debug
 	{
-
 		private static uint Count = 0;
 
 		public static void Trace(string location)
@@ -31,7 +29,6 @@ namespace Mosa.Kernel.x86
 			Console.Write(" - Trace: ");
 			Console.Write(location);
 			Console.WriteLine();
-
 		}
 	}
 }

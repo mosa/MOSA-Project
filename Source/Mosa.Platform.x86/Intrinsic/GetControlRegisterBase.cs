@@ -7,10 +7,8 @@
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  */
 
-using System.Collections.Generic;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Metadata.Signatures;
-using Mosa.Compiler.TypeSystem;
 using Mosa.Compiler.Framework.IR;
 
 namespace Mosa.Platform.x86.Intrinsic
@@ -20,7 +18,6 @@ namespace Mosa.Platform.x86.Intrinsic
 	/// </summary>
 	internal class GetControlRegisterBase : IIntrinsicPlatformMethod
 	{
-
 		private ControlRegister control;
 
 		/// <summary>
@@ -42,13 +39,12 @@ namespace Mosa.Platform.x86.Intrinsic
 		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, BaseMethodCompiler methodCompiler)
 		{
 			Operand result = context.Result;
-			Operand imm = methodCompiler.CreateVirtualRegister(BuiltInSigType.UInt32); 
+			Operand imm = methodCompiler.CreateVirtualRegister(BuiltInSigType.UInt32);
 
 			context.SetInstruction(IRInstruction.Move, imm, Operand.CreateCPURegister(BuiltInSigType.UInt32, control));
 			context.AppendInstruction(IRInstruction.Move, result, imm);
 		}
 
-		#endregion // Methods
-
+		#endregion Methods
 	}
 }
