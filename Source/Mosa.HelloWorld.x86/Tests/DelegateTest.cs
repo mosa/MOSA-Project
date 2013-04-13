@@ -32,6 +32,5 @@ namespace Mosa.HelloWorld.x86.Tests
 
 			return ret == 4560;
 		}
-
 	}
 }

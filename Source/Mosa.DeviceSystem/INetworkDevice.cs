@@ -10,7 +10,7 @@
 namespace Mosa.DeviceSystem
 {
 	/// <summary>
-	/// Interface to a network device 
+	/// Interface to a network device
 	/// </summary>
 	public interface INetworkDevice
 	{

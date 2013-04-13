@@ -14,17 +14,17 @@ using Mosa.Compiler.Common;
 namespace Mosa.Compiler.Linker.Elf32
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public class Section : LinkerSection
 	{
-
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected SectionHeader header = new SectionHeader();
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected MemoryStream stream;
 
@@ -136,6 +136,6 @@ namespace Mosa.Compiler.Linker.Elf32
 			stream.Write(new byte[pad], 0, pad);
 		}
 
-		#endregion // Internals
+		#endregion Internals
 	}
 }

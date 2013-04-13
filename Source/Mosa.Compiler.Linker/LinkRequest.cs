@@ -48,7 +48,7 @@ namespace Mosa.Compiler.Linker
 		/// </summary>
 		private readonly IntPtr offset;
 
-		#endregion // Data members
+		#endregion Data members
 
 		#region Construction
 
@@ -71,7 +71,7 @@ namespace Mosa.Compiler.Linker
 			this.offset = offset;
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Properties
 
@@ -125,6 +125,6 @@ namespace Mosa.Compiler.Linker
 			get { return offset; }
 		}
 
-		#endregion // Properties
+		#endregion Properties
 	}
 }

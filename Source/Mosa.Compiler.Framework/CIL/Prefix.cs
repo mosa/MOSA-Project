@@ -7,7 +7,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
@@ -21,7 +20,7 @@ namespace Mosa.Compiler.Framework.CIL
 		Unaligned = 0x01,
 
 		/// <summary>
-		/// Indicates a volatile memory access, e.g. this memory access should not be optimized away and always 
+		/// Indicates a volatile memory access, e.g. this memory access should not be optimized away and always
 		/// needs to go to memory.
 		/// </summary>
 		Volatile = 0x02,

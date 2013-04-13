@@ -7,7 +7,7 @@
  *  Alex Lyman <mail.alex.lyman@gmail.com>
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  *  Michael Fröhlich (grover) <michael.ruck@michaelruck.de>
- *  
+ *
  */
 
 using System;
@@ -22,8 +22,6 @@ namespace Mosa.Test.Cases.OLD
 	[TestFixture]
 	public class Div : TestCompilerAdapter
 	{
-		
-
 		private static string CreateConstantTestCode(string name, string typeIn, string typeOut, string constLeft, string constRight)
 		{
 			if (String.IsNullOrEmpty(constRight))
@@ -85,7 +83,7 @@ namespace Mosa.Test.Cases.OLD
 		}
 
 		#region C
-		
+
 		//[Row(0, 'a')]
 		//[Row('-', '.')]
 		[Row('a', 'Z')]
@@ -105,10 +103,11 @@ namespace Mosa.Test.Cases.OLD
 			settings.CodeSource = CreateConstantTestCodeWithReturn("DivConstantCLeft", "char", "int", "'" + a.ToString() + "'", null);
 			Assert.AreEqual(a / b, Run<int>(string.Empty, "Test", "DivConstantCLeft", (a / b), (char)b));
 		}
-		#endregion
+
+		#endregion C
 
 		#region I1
-		
+
 		[Row(23, 21)]
 		[Row(2, -17)]
 		[Row(0, 0, ExpectedException = typeof(DivideByZeroException))]
@@ -130,10 +129,11 @@ namespace Mosa.Test.Cases.OLD
 			settings.CodeSource = CreateConstantTestCode("DivConstantI1Left", "sbyte", "int", a.ToString(), null);
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "DivConstantI1Left", (a / b), b));
 		}
-		#endregion
+
+		#endregion I1
 
 		#region U1
-		
+
 		[Row(23, 21)]
 		[Row(17, 1)]
 		[Row(0, 0, ExpectedException = typeof(DivideByZeroException))]
@@ -155,10 +155,11 @@ namespace Mosa.Test.Cases.OLD
 			settings.CodeSource = CreateConstantTestCode("DivConstantU1Left", "byte", "uint", a.ToString(), null);
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "DivConstantU1Left", (uint)(a / b), b));
 		}
-		#endregion
+
+		#endregion U1
 
 		#region I2
-		
+
 		[Row(-23, 21)]
 		[Row(17, 1)]
 		[Row(0, 0, ExpectedException = typeof(DivideByZeroException))]
@@ -180,10 +181,11 @@ namespace Mosa.Test.Cases.OLD
 			settings.CodeSource = CreateConstantTestCode("DivConstantI2Left", "short", "int", a.ToString(), null);
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "DivConstantI2Left", (a / b), b));
 		}
-		#endregion
+
+		#endregion I2
 
 		#region U2
-	
+
 		[Row(23, 21)]
 		[Row(148, 23)]
 		[Row(17, 1)]
@@ -207,10 +209,11 @@ namespace Mosa.Test.Cases.OLD
 			settings.CodeSource = CreateConstantTestCode("DivConstantU2Left", "ushort", "uint", a.ToString(), null);
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "DivConstantU2Left", (uint)(a / b), b));
 		}
-		#endregion
+
+		#endregion U2
 
 		#region I4
-	
+
 		[Row(-23, 21)]
 		[Row(-23, 148)]
 		[Row(17, 1)]
@@ -234,10 +237,11 @@ namespace Mosa.Test.Cases.OLD
 			settings.CodeSource = CreateConstantTestCode("DivConstantI4Left", "int", "int", a.ToString(), null);
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "DivConstantI4Left", (a / b), b));
 		}
-		#endregion
+
+		#endregion I4
 
 		#region U4
-	
+
 		[Row(1, 2)]
 		[Row(23, 21)]
 		[Row(0, 0, ExpectedException = typeof(DivideByZeroException))]
@@ -261,14 +265,15 @@ namespace Mosa.Test.Cases.OLD
 			settings.CodeSource = CreateConstantTestCode("DivConstantU4Left", "uint", "uint", a.ToString(), null);
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "DivConstantU4Left", (uint)(a / b), b));
 		}
-		#endregion
+
+		#endregion U4
 
 		#region U8
-	
-		#endregion
+
+		#endregion U8
 
 		#region I8
-		
+
 		[Row(-23, 21)]
 		[Row(-23, 148)]
 		[Row(17, 1)]
@@ -293,13 +298,14 @@ namespace Mosa.Test.Cases.OLD
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "DivConstantI8Left", (a / b), b));
 		}
 
-		#endregion
+		#endregion I8
 
 		#region R4
-		
+
 		[Row(23f, 148.0016f)]
 		[Row(17.2f, 1f)]
 		[Row(0f, 0f)]
+
 		//[Row(float.MinValue, float.MaxValue)]
 		[Test]
 		public void DivConstantR4Right(float a, float b)
@@ -311,18 +317,19 @@ namespace Mosa.Test.Cases.OLD
 		[Row(23f, 148.0016f)]
 		[Row(17.2f, 1f)]
 		[Row(0f, 0f)]
+
 		//[Row(float.MinValue, float.MaxValue)]
 		[Test]
 		public void DivConstantR4Left(float a, float b)
 		{
-
 			settings.CodeSource = CreateConstantTestCode("DivConstantR4Left", "float", "float", a.ToString(CultureInfo.InvariantCulture) + "f", null);
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "DivConstantR4Left", (a / b), b));
 		}
-		#endregion
+
+		#endregion R4
 
 		#region R8
-		
+
 		[Row(23, 148.0016)]
 		[Row(17.2, 1.0)]
 		[Row(0.0, 0.0)]
@@ -344,6 +351,7 @@ namespace Mosa.Test.Cases.OLD
 			settings.CodeSource = CreateConstantTestCode("DivConstantR8Left", "double", "double", a.ToString(CultureInfo.InvariantCulture), null);
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "DivConstantR8Left", (a / b), b));
 		}
-		#endregion
+
+		#endregion R8
 	}
 }

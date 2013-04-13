@@ -14,7 +14,6 @@ namespace Mosa.DeviceSystem
 	/// </summary>
 	public class FrameBuffer24bpp : FrameBuffer, IFrameBuffer
 	{
-
 		/// <summary>
 		/// Initializes a new instance of the <see cref="FrameBuffer24bpp"/> class.
 		/// </summary>

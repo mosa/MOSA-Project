@@ -26,56 +26,64 @@ namespace Mosa.DeviceDrivers.ISA
 		#region Definitions
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected const byte IRQBaseSize = 0x08;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected const byte MasterIRQBase = 0x20;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected const byte SlaveIRQBase = MasterIRQBase + IRQBaseSize;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected const byte EOI = 0x20;
 
-		#endregion
+		#endregion Definitions
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IReadWriteIOPort masterCommandPort;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IReadWriteIOPort masterDataPort;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IReadWriteIOPort slaveCommandPort;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IReadWriteIOPort slaveDataPort;
 
 		// Interrupt masks must be tracked via the driver
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected byte masterInterruptMask;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected byte slaveInterruptMask;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="PIC"/> class.
 		/// </summary>
-		public PIC() { }
+		public PIC()
+		{
+		}
 
 		/// <summary>
 		/// Setups this hardware device driver
@@ -111,19 +119,25 @@ namespace Mosa.DeviceDrivers.ISA
 
 			// ICW1 - Set Initialize Controller & Expect ICW4
 			masterCommandPort.Write8(0x11);
-			// ICW2 - interrupt offset 
+
+			// ICW2 - interrupt offset
 			masterDataPort.Write8(MasterIRQBase);
+
 			// ICW3
 			masterDataPort.Write8(0x04);
+
 			// ICW4 - Set 8086 Mode
 			masterDataPort.Write8(0x01);
 
 			// ICW1 - Set Initialize Controller & Expect ICW4
 			slaveCommandPort.Write8(0x11);
-			// ICW2 - interrupt offset 
+
+			// ICW2 - interrupt offset
 			slaveDataPort.Write8(SlaveIRQBase);
+
 			// ICW3
 			slaveDataPort.Write8(0x02);
+
 			// ICW4 - Set 8086 Mode
 			slaveDataPort.Write8(0x01);
 
@@ -141,7 +155,10 @@ namespace Mosa.DeviceDrivers.ISA
 		/// Called when an interrupt is received.
 		/// </summary>
 		/// <returns></returns>
-		public override bool OnInterrupt() { return false; }
+		public override bool OnInterrupt()
+		{
+			return false;
+		}
 
 		/// <summary>
 		/// Sends the end of interrupt.
@@ -262,4 +279,3 @@ namespace Mosa.DeviceDrivers.ISA
 		}
 	}
 }
-

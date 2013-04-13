@@ -16,7 +16,6 @@ namespace Mosa.Platform.x86.Instructions
 	/// </summary>
 	public sealed class Pushad : X86Instruction
 	{
-
 		#region Methods
 
 		/// <summary>
@@ -51,6 +50,6 @@ namespace Mosa.Platform.x86.Instructions
 			visitor.Pushad(context);
 		}
 
-		#endregion // Methods
+		#endregion Methods
 	}
 }

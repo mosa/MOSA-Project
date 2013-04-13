@@ -29,7 +29,6 @@ namespace Mosa.Platform.x86.Stages
 	/// </remarks>
 	public sealed class LongOperandTransformationStage : BaseTransformationStage, IIRVisitor, IPlatformStage
 	{
-
 		#region Utility Methods
 
 		/// <summary>
@@ -105,14 +104,14 @@ namespace Mosa.Platform.x86.Stages
 		private void ExpandAdd(Context context)
 		{
 			/* This function transforms the ADD into the following sequence of x86 instructions:
-			 * 
+			 *
 			 * mov eax, [op1]       ; Move lower 32-bits of the first operand into eax
 			 * add eax, [op2]       ; Add lower 32-bits of second operand to eax
 			 * mov [result], eax    ; Save the result into the lower 32-bits of the result operand
 			 * mov eax, [op1+4]     ; Move upper 32-bits of the first operand into eax
 			 * adc eax, [op2+4]     ; Add upper 32-bits of the second operand to eax
 			 * mov [result+4], eax  ; Save the result into the upper 32-bits of the result operand
-			 * 
+			 *
 			 */
 
 			// This only works for memory operands (can't store I8/U8 in a register.)
@@ -142,14 +141,14 @@ namespace Mosa.Platform.x86.Stages
 		private void ExpandSub(Context context)
 		{
 			/* This function transforms the SUB into the following sequence of x86 instructions:
-			 * 
+			 *
 			 * mov eax, [op1]       ; Move lower 32-bits of the first operand into eax
 			 * sub eax, [op2]       ; Sub lower 32-bits of second operand to eax
 			 * mov [result], eax    ; Save the result into the lower 32-bits of the result operand
 			 * mov eax, [op1+4]     ; Move upper 32-bits of the first operand into eax
 			 * sbb eax, [op2+4]     ; Sub with borrow upper 32-bits of the second operand to eax
 			 * mov [result+4], eax  ; Save the result into the upper 32-bits of the result operand
-			 * 
+			 *
 			 */
 
 			// This only works for memory operands (can't store I8/U8 in a register.)
@@ -439,6 +438,7 @@ namespace Mosa.Platform.x86.Stages
 			LinkBlocks(newBlocks[13], newBlocks[14]);
 
 			;
+
 			// ; Just the cleanup left to do.  edx:eax contains the quotient.  Set the sign
 			// ; according to the save value, cleanup the stack, and return.
 			// ;
@@ -1303,6 +1303,7 @@ namespace Mosa.Platform.x86.Stages
 					context.AppendInstruction(X86.Mov, op0L, eax);
 					context.AppendInstruction(X86.Mov, op0H, edx);
 					break;
+
 				case CilElementType.U4:
 					context.SetInstruction(X86.Movzx, eax, op1L);
 					context.AppendInstruction(X86.Cdq);
@@ -1324,7 +1325,6 @@ namespace Mosa.Platform.x86.Stages
 				default:
 					throw new NotSupportedException();
 			}
-
 		}
 
 		/// <summary>
@@ -1480,6 +1480,7 @@ namespace Mosa.Platform.x86.Stages
 
 			// Compare low dwords
 			newBlocks[1].SetInstruction(X86.Cmp, null, op1L, op2L);
+
 			// Set the unsigned result...
 			newBlocks[1].AppendInstruction(X86.Branch, GetUnsignedConditionCode(conditionCode), target);
 			newBlocks[1].AppendInstruction(X86.Jmp, nextBlock.BasicBlock);
@@ -1521,6 +1522,7 @@ namespace Mosa.Platform.x86.Stages
 
 			// Compare low dwords
 			newBlocks[1].SetInstruction(X86.Cmp, null, op1L, op2L);
+
 			// Set the unsigned result...
 			newBlocks[1].AppendInstruction(X86.Branch, GetUnsignedConditionCode(conditionCode), newBlocks[2].BasicBlock);
 			newBlocks[1].AppendInstruction(X86.Jmp, newBlocks[3].BasicBlock);
@@ -1573,7 +1575,7 @@ namespace Mosa.Platform.x86.Stages
 			return IsInt64(op) || IsDouble(op);
 		}
 
-		#endregion // Utility Methods
+		#endregion Utility Methods
 
 		#region IIRVisitor
 
@@ -1902,7 +1904,7 @@ namespace Mosa.Platform.x86.Stages
 			}
 		}
 
-		#endregion // IIRVisitor
+		#endregion IIRVisitor
 
 		#region IIRVisitor - Unused
 
@@ -1910,122 +1912,162 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for RemFInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.RemFloat(Context context) { }
+		void IIRVisitor.RemFloat(Context context)
+		{
+		}
 
 		/// <summary>
 		/// Visitation function for SubFInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.SubFloat(Context context) { }
+		void IIRVisitor.SubFloat(Context context)
+		{
+		}
 
 		/// <summary>
 		/// Visitation function for SwitchInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.Switch(Context context) { }
+		void IIRVisitor.Switch(Context context)
+		{
+		}
 
 		/// <summary>
 		/// Visitation function for AddFInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.AddFloat(Context context) { }
+		void IIRVisitor.AddFloat(Context context)
+		{
+		}
 
 		/// <summary>
 		/// Visitation function for DivFInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.DivFloat(Context context) { }
+		void IIRVisitor.DivFloat(Context context)
+		{
+		}
+
 		/// <summary>
 		/// Visitation function for BreakInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.Break(Context context) { }
+		void IIRVisitor.Break(Context context)
+		{
+		}
 
 		/// <summary>
 		/// Visitation function for AddressOfInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.AddressOf(Context context) { }
+		void IIRVisitor.AddressOf(Context context)
+		{
+		}
 
 		/// <summary>
 		/// Visitation function for CallInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.Call(Context context) { }
+		void IIRVisitor.Call(Context context)
+		{
+		}
 
 		/// <summary>
 		/// Visitation function for intrinsic the method call.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.IntrinsicMethodCall(Context context) {}
+		void IIRVisitor.IntrinsicMethodCall(Context context)
+		{
+		}
 
 		/// <summary>
 		/// Visitation function for EpilogueInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.Epilogue(Context context) { }
+		void IIRVisitor.Epilogue(Context context)
+		{
+		}
 
 		/// <summary>
 		/// Visitation function for FloatingPointCompareInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.FloatCompare(Context context) { }
+		void IIRVisitor.FloatCompare(Context context)
+		{
+		}
 
 		/// <summary>
 		/// Visitation function for FloatingPointToIntegerConversionInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.FloatToIntegerConversion(Context context) { }
+		void IIRVisitor.FloatToIntegerConversion(Context context)
+		{
+		}
 
 		/// <summary>
 		/// Visitation function for IntegerToFloatingPointConversionInstruction instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.IntegerToFloatConversion(Context context) { }
+		void IIRVisitor.IntegerToFloatConversion(Context context)
+		{
+		}
 
 		/// <summary>
 		/// Visitation function for JmpInstruction instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.Jmp(Context context) { }
+		void IIRVisitor.Jmp(Context context)
+		{
+		}
 
 		/// <summary>
 		/// Visitation function for PhiInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.Phi(Context context) { }
+		void IIRVisitor.Phi(Context context)
+		{
+		}
 
 		/// <summary>
 		/// Visitation function for PrologueInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.Prologue(Context context) { }
+		void IIRVisitor.Prologue(Context context)
+		{
+		}
 
 		/// <summary>
 		/// Visitation function for ReturnInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.Return(Context context) { }
+		void IIRVisitor.Return(Context context)
+		{
+		}
 
 		/// <summary>
 		/// Visitation function for NopInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.Nop(Context context) { }
+		void IIRVisitor.Nop(Context context)
+		{
+		}
 
 		/// <summary>
 		/// Visitation function for ThrowInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.Throw(Context context) { }
+		void IIRVisitor.Throw(Context context)
+		{
+		}
 
 		/// <summary>
 		/// Visitation function for ExceptionPrologueInstruction"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.ExceptionPrologue(Context context) { }
+		void IIRVisitor.ExceptionPrologue(Context context)
+		{
+		}
 
-		#endregion // IIRVisitor - Unused
-
+		#endregion IIRVisitor - Unused
 	}
 }

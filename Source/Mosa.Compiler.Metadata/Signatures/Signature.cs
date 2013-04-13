@@ -13,12 +13,12 @@ using System.Diagnostics;
 namespace Mosa.Compiler.Metadata.Signatures
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public abstract class Signature
 	{
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private HeapIndexToken token;
 

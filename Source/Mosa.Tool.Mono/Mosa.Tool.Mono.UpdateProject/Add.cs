@@ -14,7 +14,7 @@ using System.Xml;
 namespace Mosa.Tool.Mono.UpdateProject
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	internal class Add
 	{
@@ -69,6 +69,5 @@ namespace Mosa.Tool.Mono.UpdateProject
 
 			File.WriteAllText(file, reader.ReadToEnd().Replace("xmlns=\"\" ", string.Empty));
 		}
-
 	}
 }

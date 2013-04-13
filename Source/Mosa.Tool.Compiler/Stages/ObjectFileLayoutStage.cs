@@ -81,7 +81,7 @@ namespace Mosa.Tool.Compiler.Stages
 			return (value + (alignment - (value % alignment)));
 		}
 
-		#endregion // Methods
+		#endregion Methods
 
 		#region ICompilerStage Overrides
 
@@ -100,6 +100,6 @@ namespace Mosa.Tool.Compiler.Stages
 			LayoutSymbols();
 		}
 
-		#endregion // ICompilerStage Overrides
+		#endregion ICompilerStage Overrides
 	}
 }

@@ -41,7 +41,6 @@ namespace Mosa.Tool.Mono.UpdateProject
 				if (options.UpdateProjectFiles)
 					foreach (string project in options.Projects)
 						Add.Process(project);
-
 			}
 			catch (Exception e)
 			{
@@ -51,6 +50,5 @@ namespace Mosa.Tool.Mono.UpdateProject
 
 			return 0;
 		}
-
 	}
 }

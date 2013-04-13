@@ -13,7 +13,7 @@ using System.IO;
 namespace Mosa.Compiler.Linker.Elf64
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public class NullSection : Section
 	{

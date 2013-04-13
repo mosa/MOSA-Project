@@ -18,7 +18,7 @@ namespace Mosa.Test.System
 {
 	public delegate void CCtor();
 
-	class TestCaseCompiler : BaseCompiler
+	internal class TestCaseCompiler : BaseCompiler
 	{
 		private readonly Queue<CCtor> cctorQueue = new Queue<CCtor>();
 
@@ -106,6 +106,5 @@ namespace Mosa.Test.System
 		{
 			cctorQueue.Enqueue(cctor);
 		}
-
 	}
 }

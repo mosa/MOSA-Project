@@ -18,6 +18,8 @@ namespace System
 		/// <summary>
 		/// Initializes a new instance of the System.SerializableAttribute class.
 		/// </summary>
-		public SerializableAttribute() { }
+		public SerializableAttribute()
+		{
+		}
 	}
 }

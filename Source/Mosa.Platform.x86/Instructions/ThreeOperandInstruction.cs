@@ -19,7 +19,6 @@ namespace Mosa.Platform.x86.Instructions
 	/// </remarks>
 	public abstract class ThreeOperandInstruction : X86Instruction
 	{
-
 		#region Construction
 
 		/// <summary>
@@ -30,7 +29,6 @@ namespace Mosa.Platform.x86.Instructions
 		{
 		}
 
-		#endregion // Construction
-
+		#endregion Construction
 	}
 }

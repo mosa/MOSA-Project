@@ -7,7 +7,6 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Signatures;
 
@@ -20,7 +19,7 @@ namespace Mosa.Compiler.TypeSystem.Cil
 	{
 		#region Data Members
 
-		#endregion // Data Members
+		#endregion Data Members
 
 		#region Construction
 
@@ -44,7 +43,6 @@ namespace Mosa.Compiler.TypeSystem.Cil
 			base.RVA = rva;
 		}
 
-		#endregion // Construction
-
+		#endregion Construction
 	}
 }

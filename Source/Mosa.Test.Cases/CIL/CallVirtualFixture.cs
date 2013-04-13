@@ -5,7 +5,7 @@
  *
  * Authors:
  *  Michael Fröhlich (grover) <michael.ruck@michaelruck.de>
- *  
+ *
  */
 
 using MbUnit.Framework;
@@ -16,6 +16,7 @@ namespace Mosa.Test.Cases.CIL
 {
 	[TestFixture]
 	[Importance(Importance.Critical)]
+
 	//[Category(@"Method calls")]
 	//[Description(@"Tests proper method table building and virtual call support.")]
 	public class CallVirtualFixture : TestCompilerAdapter
@@ -38,6 +39,5 @@ namespace Mosa.Test.Cases.CIL
 			int result = Run<int>("Mosa.Test.Collection", @"VirtualDerived", @"TestBaseCall");
 			Assert.AreEqual(12, result);
 		}
-
 	}
 }

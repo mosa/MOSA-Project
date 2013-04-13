@@ -16,7 +16,6 @@ namespace Mosa.Platform.x86.Instructions
 	/// </summary>
 	public sealed class Pause : X86Instruction
 	{
-
 		#region Methods
 
 		/// <summary>
@@ -40,7 +39,6 @@ namespace Mosa.Platform.x86.Instructions
 			visitor.Pause(context);
 		}
 
-		#endregion // Methods
-
+		#endregion Methods
 	}
 }

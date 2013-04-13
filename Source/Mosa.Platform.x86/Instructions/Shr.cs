@@ -19,7 +19,6 @@ namespace Mosa.Platform.x86.Instructions
 	/// </summary>
 	public sealed class Shr : TwoOperandInstruction
 	{
-
 		#region Data Members
 
 		private static readonly OpCode R = new OpCode(new byte[] { 0xD3 }, 5);
@@ -27,7 +26,7 @@ namespace Mosa.Platform.x86.Instructions
 		private static readonly OpCode R_C = new OpCode(new byte[] { 0xC1 }, 5);
 		private static readonly OpCode M_C = new OpCode(new byte[] { 0xC1 }, 5);
 
-		#endregion
+		#endregion Data Members
 
 		#region Methods
 
@@ -76,6 +75,6 @@ namespace Mosa.Platform.x86.Instructions
 			visitor.Shr(context);
 		}
 
-		#endregion // Methods
+		#endregion Methods
 	}
 }

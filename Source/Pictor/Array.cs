@@ -6,11 +6,13 @@
  * Authors:
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  */
+
 namespace Pictor
 {
 	public interface IDataContainer<T>
 	{
 		T[] Array { get; }
+
 		void RemoveLast();
 	}
 
@@ -80,10 +82,10 @@ namespace Pictor
 				return m_array;
 			}
 		}
+
 		private T[] m_array;
 		private uint m_size;
 	};
-
 
 	//--------------------------------------------------------------pod_vector
 	// A simple class template to store Plain Old Data, a vector
@@ -154,10 +156,13 @@ namespace Pictor
 			}
 		}
 
-		public uint Capacity() { return m_capacity; }
+		public uint Capacity()
+		{
+			return m_capacity;
+		}
 
-		// Allocate n elements. All Data is lost, 
-		// but elements can be accessed in range 0...Size-1. 
+		// Allocate n elements. All Data is lost,
+		// but elements can be accessed in range 0...Size-1.
 		public void Allocate(uint size)
 		{
 			Allocate(size, 0);
@@ -191,7 +196,7 @@ namespace Pictor
 		}
 
 #pragma warning disable 649
-		static T zeroed_object;
+		private static T zeroed_object;
 #pragma warning restore 649
 
 		public void Zero()
@@ -212,7 +217,11 @@ namespace Pictor
 			m_array[m_size++] = v;
 		}
 
-		public void PushBack(T v) { m_array[m_size++] = v; }
+		public void PushBack(T v)
+		{
+			m_array[m_size++] = v;
+		}
+
 		public void InsertAt(uint pos, T val)
 		{
 			if (pos >= m_size)
@@ -230,8 +239,15 @@ namespace Pictor
 			++m_size;
 		}
 
-		public void IncSize(uint size) { m_size += size; }
-		public uint Size() { return m_size; }
+		public void IncSize(uint size)
+		{
+			m_size += size;
+		}
+
+		public uint Size()
+		{
+			return m_size;
+		}
 
 		public T this[uint i]
 		{
@@ -240,6 +256,7 @@ namespace Pictor
 				return m_array[i];
 			}
 		}
+
 		public T this[int i]
 		{
 			get
@@ -256,22 +273,43 @@ namespace Pictor
 			}
 		}
 
-		public T At(uint i) { return m_array[i]; }
-		public T ValueAt(uint i) { return m_array[i]; }
+		public T At(uint i)
+		{
+			return m_array[i];
+		}
 
-		public T[] Data() { return m_array; }
+		public T ValueAt(uint i)
+		{
+			return m_array[i];
+		}
 
-		public void RemoveAll() { m_size = 0; }
-		public void Clear() { m_size = 0; }
-		public void CutAt(uint num) { if (num < m_size) m_size = num; }
+		public T[] Data()
+		{
+			return m_array;
+		}
+
+		public void RemoveAll()
+		{
+			m_size = 0;
+		}
+
+		public void Clear()
+		{
+			m_size = 0;
+		}
+
+		public void CutAt(uint num)
+		{
+			if (num < m_size) m_size = num;
+		}
 	};
 
 	//----------------------------------------------------------range_adaptor
 	public class VectorPOD_RangeAdaptor
 	{
-		VectorPOD<uint> m_array;
-		uint m_start;
-		uint m_size;
+		private VectorPOD<uint> m_array;
+		private uint m_start;
+		private uint m_size;
 
 		public VectorPOD_RangeAdaptor(VectorPOD<uint> array, uint start, uint size)
 		{
@@ -280,7 +318,11 @@ namespace Pictor
 			m_size = (size);
 		}
 
-		public uint Size() { return m_size; }
+		public uint Size()
+		{
+			return m_size;
+		}
+
 		public uint this[uint i]
 		{
 			get
@@ -293,7 +335,15 @@ namespace Pictor
 				m_array.Array[m_start + i] = value;
 			}
 		}
-		public uint At(uint i) { return m_array.Array[m_start + i]; }
-		public uint ValueAt(uint i) { return m_array.Array[m_start + i]; }
+
+		public uint At(uint i)
+		{
+			return m_array.Array[m_start + i];
+		}
+
+		public uint ValueAt(uint i)
+		{
+			return m_array.Array[m_start + i];
+		}
 	};
 }

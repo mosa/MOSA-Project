@@ -16,7 +16,6 @@ namespace Mosa.Compiler.Metadata.Loader
 	/// </summary>
 	public interface IAssemblyLoader
 	{
-
 		/// <summary>
 		/// Loads the named assembly.
 		/// </summary>
@@ -41,6 +40,5 @@ namespace Mosa.Compiler.Metadata.Loader
 		/// </summary>
 		/// <param name="path">The path to append to the assembly search path.</param>
 		void AddPrivatePath(string path);
-
 	}
 }

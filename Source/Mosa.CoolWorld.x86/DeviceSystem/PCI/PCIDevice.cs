@@ -7,11 +7,10 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-
 namespace Mosa.DeviceSystem.PCI
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public class PCIDevice : Device, IDevice, IPCIDevice, IDeviceResource
 	{
@@ -19,48 +18,52 @@ namespace Mosa.DeviceSystem.PCI
 
 		internal struct PCICommand
 		{
-			internal const ushort IO = 0x1; // Enable response in I/O space 
-			internal const ushort Memort = 0x2; //  Enable response in memory space 
-			internal const ushort Master = 0x4; //  Enable bus mastering 
-			internal const ushort Special = 0x8; //  Enable response to special cycles 
-			internal const ushort Invalidate = 0x10; //  Use memory write and invalidate 
-			internal const ushort VGA_Pallete = 0x20; //  Enable palette snooping 
-			internal const ushort Parity = 0x40; //  Enable parity checking 
-			internal const ushort Wait = 0x80; //  Enable address/data stepping 
-			internal const ushort SERR = 0x100; //  Enable SERR 
-			internal const ushort Fast_Back = 0x200; //  Enable back-to-back writes 
+			internal const ushort IO = 0x1; // Enable response in I/O space
+			internal const ushort Memort = 0x2; //  Enable response in memory space
+			internal const ushort Master = 0x4; //  Enable bus mastering
+			internal const ushort Special = 0x8; //  Enable response to special cycles
+			internal const ushort Invalidate = 0x10; //  Use memory write and invalidate
+			internal const ushort VGA_Pallete = 0x20; //  Enable palette snooping
+			internal const ushort Parity = 0x40; //  Enable parity checking
+			internal const ushort Wait = 0x80; //  Enable address/data stepping
+			internal const ushort SERR = 0x100; //  Enable SERR
+			internal const ushort Fast_Back = 0x200; //  Enable back-to-back writes
 		}
 
-		#endregion
+		#endregion PCICommand
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IPCIController pciController;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected byte bus;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected byte slot;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected byte function;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected BaseAddress[] baseAddresses;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected byte memoryRegionCount;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected byte ioPortRegionCount;
 
@@ -69,11 +72,13 @@ namespace Mosa.DeviceSystem.PCI
 		/// </summary>
 		/// <value>The bus.</value>
 		public byte Bus { get { return bus; } }
+
 		/// <summary>
 		/// Gets the slot.
 		/// </summary>
 		/// <value>The slot.</value>
 		public byte Slot { get { return slot; } }
+
 		/// <summary>
 		/// Gets the function.
 		/// </summary>
@@ -85,41 +90,49 @@ namespace Mosa.DeviceSystem.PCI
 		/// </summary>
 		/// <value>The vendor ID.</value>
 		public ushort VendorID { get { return pciController.ReadConfig16(Bus, Slot, Function, 0x00); } }
+
 		/// <summary>
 		/// Gets the device ID.
 		/// </summary>
 		/// <value>The device ID.</value>
 		public ushort DeviceID { get { return pciController.ReadConfig16(Bus, Slot, Function, 0x02); } }
+
 		/// <summary>
 		/// Gets the revision ID.
 		/// </summary>
 		/// <value>The revision ID.</value>
 		public byte RevisionID { get { return pciController.ReadConfig8(Bus, Slot, Function, 0x08); } }
+
 		/// <summary>
 		/// Gets the class code.
 		/// </summary>
 		/// <value>The class code.</value>
 		public byte ClassCode { get { return pciController.ReadConfig8(Bus, Slot, Function, 0x0A); } }
+
 		/// <summary>
 		/// Gets the prog IF.
 		/// </summary>
 		/// <value>The prog IF.</value>
 		public byte ProgIF { get { return pciController.ReadConfig8(Bus, Slot, Function, 0x0B); } }
+
 		/// <summary>
 		/// Gets the sub class code.
 		/// </summary>
 		/// <value>The sub class code.</value>
 		public byte SubClassCode { get { return pciController.ReadConfig8(Bus, Slot, Function, 0x09); } }
+
 		/// <summary>
 		/// Gets the sub vendor ID.
 		/// </summary>
 		/// <value>The sub vendor ID.</value>
 		public ushort SubVendorID { get { return pciController.ReadConfig8(Bus, Slot, Function, 0x0C); } }
+
 		/// <summary>
 		/// Gets the sub device ID.
 		/// </summary>
 		/// <value>The sub device ID.</value>
 		public ushort SubDeviceID { get { return pciController.ReadConfig8(Bus, Slot, Function, 0x0E); } }
+
 		/// <summary>
 		/// Gets the IRQ.
 		/// </summary>
@@ -241,6 +254,5 @@ namespace Mosa.DeviceSystem.PCI
 		{
 			deviceStatus = DeviceStatus.Online;
 		}
-
 	}
 }

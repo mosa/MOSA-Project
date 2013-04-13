@@ -24,11 +24,11 @@ namespace Mosa.Compiler.Framework.Stages
 		#region Data members
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private ILinker linker;
 
-		#endregion // Data members
+		#endregion Data members
 
 		#region ICompilerStage members
 
@@ -43,7 +43,7 @@ namespace Mosa.Compiler.Framework.Stages
 			CreateAssemblyListTable();
 		}
 
-		#endregion // ICompilerStage members
+		#endregion ICompilerStage members
 
 		private void EmitStringWithLength(EndianAwareBinaryWriter stream, string value)
 		{
@@ -172,9 +172,6 @@ namespace Mosa.Compiler.Framework.Stages
 					writer.WriteByte((byte)(type.IsInterface ? 1 : 0));
 				}
 			}
-
 		}
-
-
 	}
 }

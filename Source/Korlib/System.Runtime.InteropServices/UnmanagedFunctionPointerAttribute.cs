@@ -7,10 +7,8 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-
 namespace System.Runtime.InteropServices
 {
-
 	[AttributeUsage(AttributeTargets.Delegate, Inherited = false, AllowMultiple = false), ComVisible(true)]
 	public sealed class UnmanagedFunctionPointerAttribute : Attribute
 	{

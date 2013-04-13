@@ -7,7 +7,6 @@
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  */
 
-
 using Mosa.Compiler.Framework;
 
 namespace Mosa.Platform.x86.Instructions
@@ -17,7 +16,6 @@ namespace Mosa.Platform.x86.Instructions
 	/// </summary>
 	public sealed class Stos : X86Instruction
 	{
-
 		#region Methods
 
 		/// <summary>
@@ -50,6 +48,6 @@ namespace Mosa.Platform.x86.Instructions
 			visitor.Stosd(context);
 		}
 
-		#endregion // Methods
+		#endregion Methods
 	}
 }

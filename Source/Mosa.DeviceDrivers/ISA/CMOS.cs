@@ -18,24 +18,26 @@ namespace Mosa.DeviceDrivers.ISA
 	public class CMOS : HardwareDevice, IDevice, IHardwareDevice
 	{
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IReadWriteIOPort commandPort;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IReadWriteIOPort dataPort;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected SpinLock spinLock;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
-		public CMOS() { }
+		public CMOS()
+		{
+		}
 
 		/// <summary>
 		/// Setups this hardware device driver

@@ -12,22 +12,22 @@ using Mosa.ClassLib;
 namespace Mosa.DeviceSystem
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public class DeviceManager : IDeviceManager
 	{
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private LinkedList<IDevice> devices;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private SpinLock spinLock;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public DeviceManager()
 		{
@@ -70,7 +70,7 @@ namespace Mosa.DeviceSystem
 
 			return list;
 		}
-	
+
 		public LinkedList<IDevice> GetDevices(IFindDevice match1, IFindDevice match2, IFindDevice match3)
 		{
 			spinLock.Enter();

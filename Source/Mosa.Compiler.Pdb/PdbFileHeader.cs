@@ -36,7 +36,7 @@ namespace Mosa.Compiler.Pdb
 			0x0D, 0x0A, 0x1A, 0x44, 0x53, 0x00, 0x00, 0x00
 		};
 
-		#endregion // Constants
+		#endregion Constants
 
 		#region Data Members
 
@@ -75,7 +75,7 @@ namespace Mosa.Compiler.Pdb
 		/// </summary>
 		public int dwIndexPage;
 
-		#endregion // Data Members
+		#endregion Data Members
 
 		#region Methods
 
@@ -134,6 +134,6 @@ namespace Mosa.Compiler.Pdb
 			return true;
 		}
 
-		#endregion // Methods
+		#endregion Methods
 	}
 }

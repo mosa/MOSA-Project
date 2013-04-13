@@ -7,11 +7,10 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public sealed class BreakInstruction : BaseCILInstruction
 	{
@@ -26,7 +25,7 @@ namespace Mosa.Compiler.Framework.CIL
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Method
 
@@ -40,6 +39,6 @@ namespace Mosa.Compiler.Framework.CIL
 			visitor.Break(context);
 		}
 
-		#endregion // Method
+		#endregion Method
 	}
 }

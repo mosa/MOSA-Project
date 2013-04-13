@@ -6,7 +6,7 @@
  * Authors:
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  *  Michael Fröhlich (grover) <michael.ruck@michaelruck.de>
- *  
+ *
  */
 
 using System;
@@ -21,7 +21,6 @@ namespace Mosa.Test.Cases.OLD
 	[TestFixture]
 	public class Cgt : TestCompilerAdapter
 	{
-		
 		private static string CreateConstantTestCode(string typeIn, string constLeft, string constRight)
 		{
 			if (String.IsNullOrEmpty(constRight))
@@ -51,9 +50,8 @@ namespace Mosa.Test.Cases.OLD
 				throw new NotSupportedException();
 			}
 		}
-		
+
 		#region C
-	
 
 		[Row(0, 'a')]
 		[Row('-', '.')]
@@ -76,10 +74,11 @@ namespace Mosa.Test.Cases.OLD
 			bool res = Run<bool>(string.Empty, @"Test", @"CgtConstant", b);
 			Assert.IsTrue((a > b) == res);
 		}
-		#endregion
+
+		#endregion C
 
 		#region I1
-		
+
 		[Row(0, 0)]
 		[Row(-17, 42)]
 		[Row(sbyte.MinValue, sbyte.MinValue)]
@@ -103,10 +102,11 @@ namespace Mosa.Test.Cases.OLD
 			bool res = Run<bool>(string.Empty, @"Test", @"CgtConstant", b);
 			Assert.IsTrue((a > b) == res);
 		}
-		#endregion
+
+		#endregion I1
 
 		#region I2
-		
+
 		[Row(0, 0)]
 		[Row(-17, 42)]
 		[Row(short.MinValue, short.MinValue)]
@@ -130,10 +130,11 @@ namespace Mosa.Test.Cases.OLD
 			bool res = Run<bool>(string.Empty, @"Test", @"CgtConstant", b);
 			Assert.IsTrue((a > b) == res);
 		}
-		#endregion
+
+		#endregion I2
 
 		#region I4
-		
+
 		[Row(0, 0)]
 		[Row(-17, 42)]
 		[Row(int.MinValue, int.MinValue)]
@@ -157,10 +158,11 @@ namespace Mosa.Test.Cases.OLD
 			bool res = Run<bool>(string.Empty, @"Test", @"CgtConstant", b);
 			Assert.IsTrue((a > b) == res);
 		}
-		#endregion
+
+		#endregion I4
 
 		#region I8
-		
+
 		[Row(0, 0)]
 		[Row(-17, 42)]
 		[Row(long.MinValue + 1, long.MinValue)]
@@ -190,10 +192,11 @@ namespace Mosa.Test.Cases.OLD
 			bool res = Run<bool>(string.Empty, @"Test", @"CgtConstant", b);
 			Assert.IsTrue((a > b) == res);
 		}
-		#endregion
+
+		#endregion I8
 
 		#region U1
-		
+
 		[Row(0, 0)]
 		[Row(17, 142)]
 		[Row(byte.MaxValue, byte.MaxValue)]
@@ -217,10 +220,11 @@ namespace Mosa.Test.Cases.OLD
 			bool res = Run<bool>(string.Empty, @"Test", @"CgtConstant", b);
 			Assert.IsTrue((a > b) == res);
 		}
-		#endregion
+
+		#endregion U1
 
 		#region U2
-	
+
 		[Row(0, 0)]
 		[Row(17, 142)]
 		[Row(ushort.MaxValue, ushort.MaxValue)]
@@ -244,10 +248,11 @@ namespace Mosa.Test.Cases.OLD
 			bool res = Run<bool>(string.Empty, @"Test", @"CgtConstant", b);
 			Assert.IsTrue((a > b) == res);
 		}
-		#endregion
+
+		#endregion U2
 
 		#region U4
-	
+
 		[Row(0, 0)]
 		[Row(17, 142)]
 		[Row(uint.MaxValue, uint.MaxValue)]
@@ -271,10 +276,11 @@ namespace Mosa.Test.Cases.OLD
 			bool res = Run<bool>(string.Empty, @"Test", @"CgtConstant", b);
 			Assert.IsTrue((a > b) == res);
 		}
-		#endregion
+
+		#endregion U4
 
 		#region U8
-		
+
 		[Row(0, 0)]
 		[Row(17, 142)]
 		[Row(ulong.MaxValue, ulong.MaxValue)]
@@ -298,10 +304,11 @@ namespace Mosa.Test.Cases.OLD
 			bool res = Run<bool>(string.Empty, @"Test", @"CgtConstant", b);
 			Assert.IsTrue((a > b) == res);
 		}
-		#endregion
+
+		#endregion U8
 
 		#region R4
-	
+
 		[Row(0.0f, 0.0f)]
 		[Row(1.0f, 1.0f)]
 		[Row(Single.MinValue, Single.MinValue + 10)]
@@ -330,7 +337,8 @@ namespace Mosa.Test.Cases.OLD
 			bool res = Run<bool>(string.Empty, @"Test", @"CgtConstant", b);
 			Assert.IsTrue((a > b) == res);
 		}
-		#endregion
+
+		#endregion R4
 
 		#region R8
 
@@ -357,6 +365,7 @@ namespace Mosa.Test.Cases.OLD
 			bool res = Run<bool>(string.Empty, @"Test", @"CgtConstant", b);
 			Assert.IsTrue((a > b) == res);
 		}
-		#endregion
+
+		#endregion R8
 	}
 }

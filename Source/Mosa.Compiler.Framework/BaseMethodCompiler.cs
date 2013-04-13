@@ -9,7 +9,6 @@
  */
 
 using System;
-using System.Collections.Generic;
 using System.IO;
 using Mosa.Compiler.InternalTrace;
 using Mosa.Compiler.Linker;
@@ -34,7 +33,6 @@ namespace Mosa.Compiler.Framework
 	/// </remarks>
 	public class BaseMethodCompiler
 	{
-
 		#region Data Members
 
 		/// <summary>
@@ -43,7 +41,7 @@ namespace Mosa.Compiler.Framework
 		protected readonly CompilerPipeline pipeline;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private readonly ICompilationScheduler compilationScheduler;
 
@@ -129,7 +127,7 @@ namespace Mosa.Compiler.Framework
 
 		private bool stopMethodCompiler;
 
-		#endregion // Data Members
+		#endregion Data Members
 
 		#region Construction
 
@@ -167,7 +165,7 @@ namespace Mosa.Compiler.Framework
 			this.stopMethodCompiler = false;
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Properties
 
@@ -263,7 +261,7 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		public VirtualRegisterLayout VirtualRegisterLayout { get { return virtualRegisterLayout; } }
 
-		#endregion // Properties
+		#endregion Properties
 
 		#region Methods
 
@@ -278,9 +276,9 @@ namespace Mosa.Compiler.Framework
 			foreach (var localVariable in localsSig.Locals)
 			{
 				locals[index++] = stackLayout.AllocateStackOperand(localVariable.Type, true);
+
 				//Scheduler.ScheduleTypeForCompilation(localVariable.Type); // TODO
 			}
-
 		}
 
 		/// <summary>
@@ -310,7 +308,6 @@ namespace Mosa.Compiler.Framework
 
 				stackLayout.SetStackParameter(index++, method.Parameters[paramIndex], parameterType);
 			}
-
 		}
 
 		/// <summary>
@@ -347,7 +344,10 @@ namespace Mosa.Compiler.Framework
 		/// Stops the method compiler.
 		/// </summary>
 		/// <returns></returns>
-		public void StopMethodCompiler() { stopMethodCompiler = true; } 
+		public void StopMethodCompiler()
+		{
+			stopMethodCompiler = true;
+		}
 
 		/// <summary>
 		/// Creates a new virtual register operand.
@@ -444,7 +444,6 @@ namespace Mosa.Compiler.Framework
 			return null;
 		}
 
-		#endregion // Methods
-
+		#endregion Methods
 	}
 }

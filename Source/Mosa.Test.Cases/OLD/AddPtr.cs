@@ -14,7 +14,6 @@ using Mosa.Test.System;
 
 namespace Mosa.Test.Cases.OLD
 {
-
 	[TestFixture]
 	public class AddPtr : TestCompilerAdapter
 	{
@@ -93,7 +92,7 @@ namespace Mosa.Test.Cases.OLD
 		public unsafe void AddCPtrI4Left(int a, int b)
 		{
 			settings.CodeSource = CreateTestCode("char*", "int", "char*");
-			
+
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "AddPtr", a, b, (int)((char*)a + (int)b)));
 		}
 
@@ -104,7 +103,7 @@ namespace Mosa.Test.Cases.OLD
 		public unsafe void AddCPtrI8Left(int a, int b)
 		{
 			settings.CodeSource = CreateTestCode("char*", "long", "char*");
-			
+
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "AddPtr", a, b, (int)((char*)a + (long)b)));
 		}
 
@@ -115,7 +114,7 @@ namespace Mosa.Test.Cases.OLD
 		public unsafe void AddCPtrI4Right(int a, int b)
 		{
 			settings.CodeSource = CreateTestCode("int", "char*", "char*");
-			
+
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "AddPtr", b, a, (int)((char*)a + (int)b)));
 		}
 
@@ -126,7 +125,7 @@ namespace Mosa.Test.Cases.OLD
 		public unsafe void AddCPtrI8Right(int a, int b)
 		{
 			settings.CodeSource = CreateTestCode("long", "char*", "char*");
-			
+
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "AddPtr", b, a, (int)((char*)a + (int)b)));
 		}
 
@@ -137,7 +136,7 @@ namespace Mosa.Test.Cases.OLD
 		public unsafe void AddConstantCPtrI4Left(int a, int b)
 		{
 			settings.CodeSource = CreateConstantLeftTestCode("char*", "int", b.ToString());
-			
+
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "AddPtr", a, (int)((char*)a + (int)b)));
 		}
 
@@ -148,7 +147,7 @@ namespace Mosa.Test.Cases.OLD
 		public unsafe void AddConstantCPtrI8Left(int a, int b)
 		{
 			settings.CodeSource = CreateConstantLeftTestCode("char*", "long", b.ToString());
-			
+
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "AddPtr", a, (int)((char*)a + (long)b)));
 		}
 
@@ -159,7 +158,7 @@ namespace Mosa.Test.Cases.OLD
 		public unsafe void AddConstantCPtrI4Right(int a, int b)
 		{
 			settings.CodeSource = CreateConstantRightTestCode("char*", "int", b.ToString());
-			
+
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "AddPtr", a, (int)((char*)a + (int)b)));
 		}
 
@@ -170,10 +169,11 @@ namespace Mosa.Test.Cases.OLD
 		public unsafe void AddConstantCPtrI8Right(int a, int b)
 		{
 			settings.CodeSource = CreateConstantLeftTestCode("char*", "long", b.ToString());
-			
+
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "AddPtr", a, (int)((char*)a + (long)b)));
 		}
-		#endregion
+
+		#endregion C
 
 		#region U1
 
@@ -184,7 +184,7 @@ namespace Mosa.Test.Cases.OLD
 		public unsafe void AddU1PtrI4Left(int a, int b)
 		{
 			settings.CodeSource = CreateTestCode("byte*", "int", "byte*");
-			
+
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "AddPtr", a, b, (int)((byte*)a + (int)b)));
 		}
 
@@ -195,7 +195,7 @@ namespace Mosa.Test.Cases.OLD
 		public unsafe void AddU1PtrI8Left(int a, int b)
 		{
 			settings.CodeSource = CreateTestCode("byte*", "long", "byte*");
-			
+
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "AddPtr", a, b, (int)((byte*)a + (long)b)));
 		}
 
@@ -206,7 +206,7 @@ namespace Mosa.Test.Cases.OLD
 		public unsafe void AddU1PtrI4Right(int a, int b)
 		{
 			settings.CodeSource = CreateTestCode("int", "byte*", "byte*");
-			
+
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "AddPtr", b, a, (int)((byte*)a + (int)b)));
 		}
 
@@ -217,7 +217,7 @@ namespace Mosa.Test.Cases.OLD
 		public unsafe void AddU1PtrI8Right(int a, int b)
 		{
 			settings.CodeSource = CreateTestCode("long", "byte*", "byte*");
-			
+
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "AddPtr", b, a, (int)((byte*)a + (int)b)));
 		}
 
@@ -228,7 +228,7 @@ namespace Mosa.Test.Cases.OLD
 		public unsafe void AddConstantU1PtrI4Left(int a, int b)
 		{
 			settings.CodeSource = CreateConstantLeftTestCode("byte*", "int", b.ToString());
-			
+
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "AddPtr", a, (int)((byte*)a + (int)b)));
 		}
 
@@ -239,7 +239,7 @@ namespace Mosa.Test.Cases.OLD
 		public unsafe void AddConstantU1PtrI8Left(int a, int b)
 		{
 			settings.CodeSource = CreateConstantLeftTestCode("byte*", "long", b.ToString());
-			
+
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "AddPtr", a, (int)((byte*)a + (long)b)));
 		}
 
@@ -250,7 +250,7 @@ namespace Mosa.Test.Cases.OLD
 		public unsafe void AddConstantU1PtrI4Right(int a, int b)
 		{
 			settings.CodeSource = CreateConstantRightTestCode("byte*", "int", b.ToString());
-			
+
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "AddPtr", a, (int)((byte*)a + (int)b)));
 		}
 
@@ -261,11 +261,11 @@ namespace Mosa.Test.Cases.OLD
 		public unsafe void AddConstantU1PtrI8Right(int a, int b)
 		{
 			settings.CodeSource = CreateConstantRightTestCode("byte*", "long", b.ToString());
-			
+
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "AddPtr", a, (int)((byte*)a + (long)b)));
 		}
 
-		#endregion
+		#endregion U1
 
 		#region I4
 
@@ -276,7 +276,7 @@ namespace Mosa.Test.Cases.OLD
 		public unsafe void AddI4PtrI4Left(int a, int b)
 		{
 			settings.CodeSource = CreateTestCode("int*", "int", "int*");
-			
+
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "AddPtr", a, b, (int)((int*)a + (int)b)));
 		}
 
@@ -287,7 +287,7 @@ namespace Mosa.Test.Cases.OLD
 		public unsafe void AddI4PtrI8Left(int a, int b)
 		{
 			settings.CodeSource = CreateTestCode("int*", "long", "int*");
-			
+
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "AddPtr", a, b, (int)((int*)a + (long)b)));
 		}
 
@@ -298,7 +298,7 @@ namespace Mosa.Test.Cases.OLD
 		public unsafe void AddI4PtrI4Right(int a, int b)
 		{
 			settings.CodeSource = CreateTestCode("int", "int*", "int*");
-			
+
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "AddPtr", b, a, (int)((int*)a + (int)b)));
 		}
 
@@ -309,7 +309,7 @@ namespace Mosa.Test.Cases.OLD
 		public unsafe void AddI4PtrI8Right(int a, int b)
 		{
 			settings.CodeSource = CreateTestCode("long", "int*", "int*");
-			
+
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "AddPtr", b, a, (int)((int*)a + (long)b)));
 		}
 
@@ -320,7 +320,7 @@ namespace Mosa.Test.Cases.OLD
 		public unsafe void AddConstantI4PtrI4Left(int a, int b)
 		{
 			settings.CodeSource = CreateConstantLeftTestCode("int*", "int", b.ToString());
-			
+
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "AddPtr", a, (int)((int*)a + (int)b)));
 		}
 
@@ -331,7 +331,7 @@ namespace Mosa.Test.Cases.OLD
 		public unsafe void AddConstantI4PtrI8Left(int a, int b)
 		{
 			settings.CodeSource = CreateConstantLeftTestCode("int*", "long", b.ToString());
-			
+
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "AddPtr", a, (int)((int*)a + (long)b)));
 		}
 
@@ -342,7 +342,7 @@ namespace Mosa.Test.Cases.OLD
 		public unsafe void AddConstantI4PtrI4Right(int a, int b)
 		{
 			settings.CodeSource = CreateConstantRightTestCode("int*", "int", b.ToString());
-			
+
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "AddPtr", a, (int)((int*)a + (int)b)));
 		}
 
@@ -353,10 +353,11 @@ namespace Mosa.Test.Cases.OLD
 		public unsafe void AddConstantI4PtrI8Right(int a, int b)
 		{
 			settings.CodeSource = CreateConstantRightTestCode("int*", "long", b.ToString());
-			
+
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "AddPtr", a, (int)((int*)a + (long)b)));
 		}
-		#endregion
+
+		#endregion I4
 
 		#region I8
 
@@ -367,7 +368,7 @@ namespace Mosa.Test.Cases.OLD
 		public unsafe void AddI8PtrI4Left(int a, int b)
 		{
 			settings.CodeSource = CreateTestCode("long*", "int", "long*");
-			
+
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "AddPtr", a, b, (int)((long*)a + (int)b)));
 		}
 
@@ -378,7 +379,7 @@ namespace Mosa.Test.Cases.OLD
 		public unsafe void AddI8PtrI8Left(int a, int b)
 		{
 			settings.CodeSource = CreateTestCode("long*", "long", "long*");
-			
+
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "AddPtr", a, b, (int)((long*)a + (long)b)));
 		}
 
@@ -389,7 +390,7 @@ namespace Mosa.Test.Cases.OLD
 		public unsafe void AddI8PtrI4Right(int a, int b)
 		{
 			settings.CodeSource = CreateTestCode("int", "long*", "long*");
-			
+
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "AddPtr", b, a, (int)((long*)a + (int)b)));
 		}
 
@@ -400,7 +401,7 @@ namespace Mosa.Test.Cases.OLD
 		public unsafe void AddI8PtrI8Right(int a, int b)
 		{
 			settings.CodeSource = CreateTestCode("long", "long*", "long*");
-			
+
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "AddPtr", b, a, (int)((long*)a + (long)b)));
 		}
 
@@ -411,7 +412,7 @@ namespace Mosa.Test.Cases.OLD
 		public unsafe void AddConstantI8PtrI4Left(int a, int b)
 		{
 			settings.CodeSource = CreateConstantLeftTestCode("long*", "int", b.ToString());
-			
+
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "AddPtr", a, (int)((long*)a + (int)b)));
 		}
 
@@ -422,7 +423,7 @@ namespace Mosa.Test.Cases.OLD
 		public unsafe void AddConstantI8PtrI8Left(int a, int b)
 		{
 			settings.CodeSource = CreateConstantLeftTestCode("long*", "long", b.ToString());
-			
+
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "AddPtr", a, (int)((long*)a + (long)b)));
 		}
 
@@ -433,7 +434,7 @@ namespace Mosa.Test.Cases.OLD
 		public unsafe void AddConstantI8PtrI4Right(int a, int b)
 		{
 			settings.CodeSource = CreateConstantRightTestCode("long*", "int", b.ToString());
-			
+
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "AddPtr", a, (int)((long*)a + (int)b)));
 		}
 
@@ -444,10 +445,11 @@ namespace Mosa.Test.Cases.OLD
 		public unsafe void AddConstantI8PtrI8Right(int a, int b)
 		{
 			settings.CodeSource = CreateConstantRightTestCode("long*", "long", b.ToString());
-			
+
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "AddPtr", a, (int)((long*)a + (long)b)));
 		}
-		#endregion
+
+		#endregion I8
 
 		#region R8
 
@@ -458,7 +460,7 @@ namespace Mosa.Test.Cases.OLD
 		public unsafe void AddR8PtrI4Left(int a, int b)
 		{
 			settings.CodeSource = CreateTestCode("double*", "int", "double*");
-			
+
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "AddPtr", a, b, (int)((double*)a + (int)b)));
 		}
 
@@ -469,7 +471,7 @@ namespace Mosa.Test.Cases.OLD
 		public unsafe void AddR8PtrI8Left(int a, int b)
 		{
 			settings.CodeSource = CreateTestCode("double*", "long", "double*");
-			
+
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "AddPtr", a, b, (int)((double*)a + (long)b)));
 		}
 
@@ -480,7 +482,7 @@ namespace Mosa.Test.Cases.OLD
 		public unsafe void AddR8PtrI4Right(int a, int b)
 		{
 			settings.CodeSource = CreateTestCode("long", "double*", "double*");
-			
+
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "AddPtr", b, a, (int)((double*)a + (long)b)));
 		}
 
@@ -491,7 +493,7 @@ namespace Mosa.Test.Cases.OLD
 		public unsafe void AddR8PtrI8Right(int a, int b)
 		{
 			settings.CodeSource = CreateTestCode("long", "double*", "double*");
-			
+
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "AddPtr", b, a, (int)((double*)a + (long)b)));
 		}
 
@@ -502,7 +504,7 @@ namespace Mosa.Test.Cases.OLD
 		public unsafe void AddConstantR8PtrI4Left(int a, int b)
 		{
 			settings.CodeSource = CreateConstantLeftTestCode("double*", "int", b.ToString());
-			
+
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "AddPtr", a, (int)((double*)a + (int)b)));
 		}
 
@@ -513,7 +515,7 @@ namespace Mosa.Test.Cases.OLD
 		public unsafe void AddConstantR8PtrI8Left(int a, int b)
 		{
 			settings.CodeSource = CreateConstantLeftTestCode("double*", "long", b.ToString());
-			
+
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "AddPtr", a, (int)((double*)a + (long)b)));
 		}
 
@@ -524,7 +526,7 @@ namespace Mosa.Test.Cases.OLD
 		public unsafe void AddConstantR8PtrI4Right(int a, int b)
 		{
 			settings.CodeSource = CreateConstantRightTestCode("double*", "int", b.ToString());
-			
+
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "AddPtr", a, (int)((double*)a + (int)b)));
 		}
 
@@ -535,10 +537,10 @@ namespace Mosa.Test.Cases.OLD
 		public unsafe void AddConstantR8PtrI8Right(int a, int b)
 		{
 			settings.CodeSource = CreateConstantRightTestCode("double*", "long", b.ToString());
-			
+
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "AddPtr", a, (int)((double*)a + (long)b)));
 		}
 
-		#endregion
+		#endregion R8
 	}
 }

@@ -6,6 +6,7 @@
  * Authors:
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  */
+
 using System;
 
 namespace Pictor.PixelFormat
@@ -14,13 +15,14 @@ namespace Pictor.PixelFormat
 	///</summary>
 	public sealed class AlphaMaskAdaptor : PixelFormatProxy
 	{
-		IAlphaMask _alphaMask;
-		readonly ArrayPOD<byte> _span;
+		private IAlphaMask _alphaMask;
+		private readonly ArrayPOD<byte> _span;
 
-		enum ESpanExtraTail { SpanExtraTail = 256 };
-		const byte CoverFull = 255;
+		private enum ESpanExtraTail { SpanExtraTail = 256 };
 
-		void ReallocateSpan(int len)
+		private const byte CoverFull = 255;
+
+		private void ReallocateSpan(int len)
 		{
 			if (len > _span.Size)
 			{
@@ -28,12 +30,12 @@ namespace Pictor.PixelFormat
 			}
 		}
 
-		void InitSpan(int len)
+		private void InitSpan(int len)
 		{
 			InitSpan(len, CoverFull);
 		}
 
-		void InitSpan(int len, byte cover)
+		private void InitSpan(int len, byte cover)
 		{
 			ReallocateSpan(len);
 			unsafe
@@ -45,7 +47,7 @@ namespace Pictor.PixelFormat
 			}
 		}
 
-		unsafe void InitSpan(int len, byte* covers)
+		private unsafe void InitSpan(int len, byte* covers)
 		{
 			ReallocateSpan(len);
 			byte[] array = _span.Array;
@@ -54,7 +56,6 @@ namespace Pictor.PixelFormat
 				array[i] = *covers++;
 			}
 		}
-
 
 		///<summary>
 		///</summary>
@@ -75,6 +76,7 @@ namespace Pictor.PixelFormat
 		{
 			PixelFormat = pixf;
 		}
+
 		///<summary>
 		///</summary>
 		///<param name="mask"></param>
@@ -202,6 +204,7 @@ namespace Pictor.PixelFormat
 				{
 					_alphaMask.CombineVerticalSpan(x, y1, pBuffer, len);
 					throw new System.NotImplementedException("BlendSolidVerticalSpan does not take a y2 yet");
+
 					//PixelFormat.BlendSolidVerticalSpan(x, y1, y2, c, pBuffer);
 				}
 			}

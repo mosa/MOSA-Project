@@ -7,11 +7,10 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-
 namespace System.Collections.Generic
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	/// <typeparam name="T"></typeparam>
 	public interface IEnumerable<T> : IEnumerable

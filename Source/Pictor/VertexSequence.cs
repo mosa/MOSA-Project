@@ -9,19 +9,18 @@
 
 namespace Pictor
 {
-
 	//----------------------------------------------------------vertex_sequence
-	// Modified Pictor::pod_vector. The Data is interpreted as a sequence 
+	// Modified Pictor::pod_vector. The Data is interpreted as a sequence
 	// of vertices. It means that the type T must expose:
 	//
 	// bool T::operator() (const T& val)
-	// 
+	//
 	// that is called every time a new Vertex is being added. The main purpose
-	// of this operator is the possibility to Calculate some values during 
+	// of this operator is the possibility to Calculate some values during
 	// adding and to return true if the Vertex fits some criteria or false if
-	// it doesn't. In the last case the new Vertex is not added. 
-	// 
-	// The simple example is filtering coinciding vertices with calculation 
+	// it doesn't. In the last case the new Vertex is not added.
+	//
+	// The simple example is filtering coinciding vertices with calculation
 	// of the distance between the current and previous ones:
 	//
 	//    struct VertexDistance
@@ -44,12 +43,13 @@ namespace Pictor
 	//        }
 	//    };
 	//
-	// Function close() calls this operator and removes the last Vertex if 
+	// Function close() calls this operator and removes the last Vertex if
 	// necessary.
 	//------------------------------------------------------------------------
-	//template<class T, unsigned S=6> 
+	//template<class T, unsigned S=6>
 	public class vertex_sequence : VectorPOD<VertexDistance>
-	//public class vertex_sequence<TypeOfVertex> : pod_vector<TypeOfVertex> where TypeOfVertex : 
+
+	//public class vertex_sequence<TypeOfVertex> : pod_vector<TypeOfVertex> where TypeOfVertex :
 	{
 		//typedef pod_vector<T, S> base_type;
 
@@ -108,7 +108,7 @@ namespace Pictor
 	};
 
 	//-------------------------------------------------------------VertexDistance
-	// Vertex (x, y) with the distance to the next one. The last Vertex has 
+	// Vertex (x, y) with the distance to the next one. The last Vertex has
 	// distance between the last and the first points if the polygon is closed
 	// and 0.0 if it's a polyline.
 	public struct VertexDistance
@@ -132,8 +132,8 @@ namespace Pictor
 		}
 	};
 
-
 	/*
+
 	//--------------------------------------------------------vertex_dist_cmd
 	// Save as the above but with additional "command" Value
 	struct vertex_dist_cmd : VertexDistance
@@ -143,7 +143,7 @@ namespace Pictor
 		vertex_dist_cmd() {}
 		vertex_dist_cmd(double x_, double y_, unsigned cmd_) :
 			base (x_, y_)
-			
+
 		{
 			cmd = cmd;
 		}

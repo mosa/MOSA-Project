@@ -5,7 +5,7 @@
  *
  * Authors:
  *  Michael Fröhlich (grover) <michael.ruck@michaelruck.de>
- *  
+ *
  */
 
 using MbUnit.Framework;
@@ -16,6 +16,7 @@ namespace Mosa.Test.Cases.CIL
 {
 	[TestFixture]
 	[Importance(Importance.Critical)]
+
 	//[Category(@"Object support")]
 	//[Description(@"Tests new operator, type checking and virtual method calls.")]
 	public class NewobjFixture : TestCompilerAdapter
@@ -52,6 +53,5 @@ namespace Mosa.Test.Cases.CIL
 			bool result = Run<bool>("Mosa.Test.Collection", @"TestNewobjDerivedClass", @"NewobjTestWithThreeArgs");
 			Assert.IsTrue(result);
 		}
-
 	}
 }

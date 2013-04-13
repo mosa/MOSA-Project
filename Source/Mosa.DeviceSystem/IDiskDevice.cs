@@ -10,7 +10,7 @@
 namespace Mosa.DeviceSystem
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public interface IDiskDevice
 	{
@@ -57,6 +57,5 @@ namespace Mosa.DeviceSystem
 		/// <param name="data">The data.</param>
 		/// <returns></returns>
 		bool WriteBlock(uint block, uint count, byte[] data);
-
 	}
 }

@@ -19,17 +19,17 @@ namespace Mosa.Platform.x86.Instructions
 	/// </summary>
 	public sealed class Sar : TwoOperandInstruction
 	{
-
-		#region  Data Members
+		#region Data Members
 
 		private static readonly OpCode R = new OpCode(new byte[] { 0xD3 }, 7);
 		private static readonly OpCode M = new OpCode(new byte[] { 0xD3 }, 7);
 		private static readonly OpCode R_C = new OpCode(new byte[] { 0xC1 }, 7);
 		private static readonly OpCode M_C = new OpCode(new byte[] { 0xC1 }, 7);
 
-		#endregion
+		#endregion Data Members
 
 		#region Methods
+
 		/// <summary>
 		/// Computes the opcode.
 		/// </summary>
@@ -74,6 +74,6 @@ namespace Mosa.Platform.x86.Instructions
 			visitor.Sar(context);
 		}
 
-		#endregion // Methods
+		#endregion Methods
 	}
 }

@@ -7,9 +7,8 @@
 
 namespace Mosa.Kernel.x86
 {
-
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public class ConsoleManager
 	{
@@ -62,6 +61,5 @@ namespace Mosa.Kernel.x86
 
 			Mosa.Kernel.x86.Screen.RawWrite(row, column, chr, color);
 		}
-
 	}
 }

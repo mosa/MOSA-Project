@@ -7,7 +7,6 @@
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  */
 
-
 namespace Mosa.Compiler.Framework.IR
 {
 	/// <summary>
@@ -24,7 +23,7 @@ namespace Mosa.Compiler.Framework.IR
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region ThreeOperandInstruction Overrides
 
@@ -38,6 +37,6 @@ namespace Mosa.Compiler.Framework.IR
 			visitor.LogicalXor(context);
 		}
 
-		#endregion // ThreeOperandInstruction Overrides
+		#endregion ThreeOperandInstruction Overrides
 	}
 }

@@ -8,7 +8,7 @@
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  *  Michael Fröhlich (grover) <michael.ruck@michaelruck.de>
  *  Kai P. Reisert <kpreisert@googlemail.com>
- * 
+ *
  */
 
 using System;
@@ -23,7 +23,6 @@ namespace Mosa.Test.Cases.OLD
 	[TestFixture]
 	public class Mul : TestCompilerAdapter
 	{
-		
 		private static string CreateConstantTestCode(string name, string typeIn, string typeOut, string constLeft, string constRight)
 		{
 			if (String.IsNullOrEmpty(constRight))
@@ -55,7 +54,7 @@ namespace Mosa.Test.Cases.OLD
 		}
 
 		#region C
-	
+
 		[Row(0, 'a')]
 		[Row('-', '.')]
 		[Row('a', 'Z')]
@@ -75,10 +74,11 @@ namespace Mosa.Test.Cases.OLD
 			settings.CodeSource = CreateConstantTestCode("MulConstantCLeft", "char", "char", "'" + a.ToString() + "'", null);
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "MulConstantCLeft", (char)(a * b), b));
 		}
-		#endregion
+
+		#endregion C
 
 		#region I1
-		
+
 		[Row(23, 21)]
 		[Row(2, -17)]
 		[Row(0, 0)]
@@ -100,10 +100,11 @@ namespace Mosa.Test.Cases.OLD
 			settings.CodeSource = CreateConstantTestCode("MulConstantI1Left", "sbyte", "int", a.ToString(), null);
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "MulConstantI1Left", (a * b), b));
 		}
-		#endregion
+
+		#endregion I1
 
 		#region U1
-		
+
 		[Row(23, 21)]
 		[Row(17, 1)]
 		[Row(0, 0)]
@@ -125,10 +126,11 @@ namespace Mosa.Test.Cases.OLD
 			settings.CodeSource = CreateConstantTestCode("MulConstantU1Left", "byte", "uint", a.ToString(), null);
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "MulConstantU1Left", (uint)(a * b), b));
 		}
-		#endregion
+
+		#endregion U1
 
 		#region I2
-	
+
 		[Row(-23, 21)]
 		[Row(17, 1)]
 		[Row(0, 0)]
@@ -150,11 +152,13 @@ namespace Mosa.Test.Cases.OLD
 			settings.CodeSource = CreateConstantTestCode("MulConstantI2Left", "short", "int", a.ToString(), null);
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "MulConstantI2Left", (a * b), b));
 		}
-		#endregion
+
+		#endregion I2
 
 		#region U2
-	
+
 		[Row(23, 21)]
+
 		//[Row(23, 148)] FIXME: Uncommenting this crashes the testrunner
 		[Row(17, 1)]
 		[Row(0, 0)]
@@ -167,6 +171,7 @@ namespace Mosa.Test.Cases.OLD
 		}
 
 		[Row(23, 21)]
+
 		//[Row(23, 148)] FIXME: Uncommenting this crashes the testrunner
 		[Row(17, 1)]
 		[Row(0, 0)]
@@ -177,11 +182,13 @@ namespace Mosa.Test.Cases.OLD
 			settings.CodeSource = CreateConstantTestCode("MulConstantU2Left", "ushort", "uint", a.ToString(), null);
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "MulConstantU2Left", (uint)(a * b), b));
 		}
-		#endregion
+
+		#endregion U2
 
 		#region I4
-	
+
 		[Row(-23, 21)]
+
 		//[Row(-23, 148)] FIXME: Uncommenting this crashes the testrunner
 		[Row(17, 1)]
 		[Row(0, 0)]
@@ -194,6 +201,7 @@ namespace Mosa.Test.Cases.OLD
 		}
 
 		[Row(-23, 21)]
+
 		//[Row(-23, 148)] FIXME: Uncommenting this crashes the testrunner
 		[Row(17, 1)]
 		[Row(0, 0)]
@@ -204,11 +212,13 @@ namespace Mosa.Test.Cases.OLD
 			settings.CodeSource = CreateConstantTestCode("MulConstantI4Left", "int", "int", a.ToString(), null);
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "MulConstantI4Left", (a * b), b));
 		}
-		#endregion
+
+		#endregion I4
 
 		#region U4
-	
+
 		[Row(23, 21)]
+
 		//[Row(23, 148)] FIXME: Uncommenting this crashes the testrunner
 		[Row(17, 1)]
 		[Row(0, 0)]
@@ -221,6 +231,7 @@ namespace Mosa.Test.Cases.OLD
 		}
 
 		[Row(23, 21)]
+
 		//[Row(23, 148)] FIXME: Uncommenting this crashes the testrunner
 		[Row(17, 1)]
 		[Row(0, 0)]
@@ -231,10 +242,11 @@ namespace Mosa.Test.Cases.OLD
 			settings.CodeSource = CreateConstantTestCode("MulConstantU4Left", "uint", "uint", a.ToString(), null);
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "MulConstantU4Left", (uint)(a * b), b));
 		}
-		#endregion
+
+		#endregion U4
 
 		#region I8
-	
+
 		[Row(-23, 148)]
 		[Row(17, 1)]
 		[Row(0, 0)]
@@ -256,10 +268,11 @@ namespace Mosa.Test.Cases.OLD
 			settings.CodeSource = CreateConstantTestCode("MulConstantI8Left", "long", "long", a.ToString(), null);
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "MulConstantI8Left", (a * b), b));
 		}
-		#endregion
+
+		#endregion I8
 
 		#region U8
-	
+
 		[Row(23, 148)]
 		[Row(17, 1)]
 		[Row(0, 0)]
@@ -279,14 +292,16 @@ namespace Mosa.Test.Cases.OLD
 		public void MulConstantU8Left(ulong a, ulong b)
 		{
 			settings.CodeSource = CreateConstantTestCode("MulConstantU8Left", "ulong", "ulong", a.ToString(), null);
+
 			// left side constant
 			settings.CodeSource = "static class Test { static bool MulConstantU8Left(ulong expect, ulong b) { return expect == (" + a.ToString() + " * b); } }";
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "MulConstantU8Left", (ulong)(a * b), b));
 		}
-		#endregion
+
+		#endregion U8
 
 		#region R4
-	
+
 		[Row(23f, 148.0016f)]
 		[Row(17.2f, 1f)]
 		[Row(0f, 0f)]
@@ -308,10 +323,11 @@ namespace Mosa.Test.Cases.OLD
 			settings.CodeSource = CreateConstantTestCode("MulConstantR4Left", "float", "float", a.ToString(CultureInfo.InvariantCulture) + "f", null);
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "MulConstantR4Left", (a * b), b));
 		}
-		#endregion
+
+		#endregion R4
 
 		#region R8
-		
+
 		[Row(23, 148.0016)]
 		[Row(17.2, 1.0)]
 		[Row(0.0, 0.0)]
@@ -333,6 +349,7 @@ namespace Mosa.Test.Cases.OLD
 			settings.CodeSource = CreateConstantTestCode("MulConstantR8Left", "double", "double", a.ToString(CultureInfo.InvariantCulture), null);
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "MulConstantR8Left", (a * b), b));
 		}
-		#endregion
+
+		#endregion R8
 	}
 }

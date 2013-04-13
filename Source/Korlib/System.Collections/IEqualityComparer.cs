@@ -7,11 +7,10 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-
 namespace System.Collections
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public interface IEqualityComparer
 	{
@@ -30,7 +29,7 @@ namespace System.Collections
 		/// </summary>
 		/// <param name="obj">The obj.</param>
 		/// <returns>
-		/// A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table. 
+		/// A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table.
 		/// </returns>
 		int GetHashCode(object obj);
 	}

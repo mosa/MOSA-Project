@@ -12,11 +12,10 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.AVR32.Instructions
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public class Rol : AVR32Instruction
 	{
-
 		#region Methods
 
 		/// <summary>
@@ -39,7 +38,6 @@ namespace Mosa.Platform.AVR32.Instructions
 			visitor.Rol(context);
 		}
 
-		#endregion // Methods
-
+		#endregion Methods
 	}
 }

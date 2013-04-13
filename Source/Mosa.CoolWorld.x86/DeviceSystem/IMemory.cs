@@ -73,7 +73,5 @@ namespace Mosa.DeviceSystem
 		/// <param name="index">The index.</param>
 		/// <param name="value">The value.</param>
 		void Write32(uint index, uint value);
-
 	}
-
 }

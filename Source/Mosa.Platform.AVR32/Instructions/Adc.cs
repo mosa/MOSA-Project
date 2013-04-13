@@ -20,7 +20,6 @@ namespace Mosa.Platform.AVR32.Instructions
 	/// </summary>
 	public class Adc : AVR32Instruction
 	{
-
 		#region Methods
 
 		/// <summary>
@@ -50,7 +49,6 @@ namespace Mosa.Platform.AVR32.Instructions
 			visitor.Adc(context);
 		}
 
-		#endregion // Methods
-
+		#endregion Methods
 	}
 }

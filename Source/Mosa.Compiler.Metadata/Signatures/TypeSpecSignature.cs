@@ -7,16 +7,15 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-
 namespace Mosa.Compiler.Metadata.Signatures
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public class TypeSpecSignature : Signature
 	{
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private SigType type;
 
@@ -28,7 +27,8 @@ namespace Mosa.Compiler.Metadata.Signatures
 		{
 			get { return type; }
 		}
-				/// <summary>
+
+		/// <summary>
 		/// Initializes a new instance of the <see cref="TypeSpecSignature"/> class.
 		/// </summary>
 		/// <param name="reader">The reader.</param>

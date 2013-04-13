@@ -38,7 +38,7 @@ namespace Mosa.Compiler.TypeSystem
 		/// </summary>
 		private const byte ATTRIBUTE_EMPTY_STRING_LEN = 0x00;
 
-		#endregion // Constants
+		#endregion Constants
 
 		#region Methods
 
@@ -77,7 +77,7 @@ namespace Mosa.Compiler.TypeSystem
 			}
 		}
 
-		#endregion // Methods
+		#endregion Methods
 
 		#region Internals
 
@@ -303,6 +303,6 @@ namespace Mosa.Compiler.TypeSystem
 			return result;
 		}
 
-		#endregion // Internals
+		#endregion Internals
 	}
 }

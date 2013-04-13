@@ -14,7 +14,6 @@ using Mosa.Compiler.Framework.IR;
 
 namespace Mosa.Compiler.Framework.Intrinsics
 {
-
 	public sealed class InternalAllocateString : IIntrinsicInternalMethod
 	{
 		private const string StringClassMethodTableSymbolName = @"System.String$mtable";

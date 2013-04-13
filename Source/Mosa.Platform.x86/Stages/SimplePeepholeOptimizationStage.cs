@@ -16,11 +16,10 @@ using Mosa.Compiler.Framework.Platform;
 namespace Mosa.Platform.x86.Stages
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public sealed class SimplePeepholeOptimizationStage : BaseTransformationStage, IMethodCompilerStage, IPlatformStage
 	{
-
 		#region Window Class
 
 		/// <summary>
@@ -145,7 +144,7 @@ namespace Mosa.Platform.x86.Stages
 			}
 		}
 
-		#endregion  // Windows Class
+		#endregion Window Class
 
 		#region IMethodCompilerStage Members
 
@@ -169,7 +168,7 @@ namespace Mosa.Platform.x86.Stages
 					}
 		}
 
-		#endregion // IMethodCompilerStage Members
+		#endregion IMethodCompilerStage Members
 
 		/// <summary>
 		/// Removes the nop.

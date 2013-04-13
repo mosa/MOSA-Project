@@ -23,7 +23,7 @@ namespace Mosa.Platform.x86.Instructions
 		private static readonly OpCode Register = new OpCode(new byte[] { 0x0F, 0xAD }, 4);
 		private static readonly OpCode Constant = new OpCode(new byte[] { 0x0F, 0xAC }, 4);
 
-		#endregion // Data Members
+		#endregion Data Members
 
 		#region Methods
 
@@ -71,6 +71,6 @@ namespace Mosa.Platform.x86.Instructions
 			visitor.Shrd(context);
 		}
 
-		#endregion // Methods
+		#endregion Methods
 	}
 }

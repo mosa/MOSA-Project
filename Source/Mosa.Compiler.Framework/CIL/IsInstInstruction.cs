@@ -7,14 +7,13 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Signatures;
 
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public sealed class IsInstInstruction : UnaryInstruction
 	{
@@ -29,7 +28,7 @@ namespace Mosa.Compiler.Framework.CIL
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Methods
 
@@ -43,7 +42,8 @@ namespace Mosa.Compiler.Framework.CIL
 			// Decode base classes first
 			base.Decode(ctx, decoder);
 
-			Token token = decoder.DecodeTokenType();			
+			Token token = decoder.DecodeTokenType();
+
 			//RuntimeType type = decoder.TypeModule.GetType(token);
 
 			ctx.Result = decoder.Compiler.CreateVirtualRegister(new ClassSigType(token));

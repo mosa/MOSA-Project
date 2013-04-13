@@ -7,7 +7,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-
 namespace Mosa.FileSystem.FAT
 {
 	/// <summary>
@@ -19,14 +18,15 @@ namespace Mosa.FileSystem.FAT
 		/// Represents a 12-bit FAT.
 		/// </summary>
 		FAT12 = 12,
+
 		/// <summary>
 		/// Represents a 16-bit FAT.
 		/// </summary>
 		FAT16 = 16,
+
 		/// <summary>
 		/// Represents a 32-bit FAT.
 		/// </summary>
 		FAT32 = 32
 	}
-
 }

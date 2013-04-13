@@ -42,20 +42,25 @@ namespace Mosa.Tool.MakeIsoImage
 					switch (args[i].Trim())
 					{
 						case "-boot":
-//							iso.AddBootFile(args[i], new System.IO.FileInfo(args[i]));
+
+							//							iso.AddBootFile(args[i], new System.IO.FileInfo(args[i]));
 							options.BootFileName = args[++i];
 							break;
+
 						case "-boot-load-size":
 							short bootLoadSize;
 							if (short.TryParse(args[++i], out bootLoadSize))
 								options.BootLoadSize = bootLoadSize;
 							break;
+
 						case "-boot-info-table":
 							options.BootInfoTable = true;
 							break;
+
 						case "-label":
 							options.VolumeLabel = args[++i];
 							break;
+
 						default:
 							break;
 					}
@@ -94,6 +99,5 @@ namespace Mosa.Tool.MakeIsoImage
 
 			return 0;
 		}
-
 	}
 }

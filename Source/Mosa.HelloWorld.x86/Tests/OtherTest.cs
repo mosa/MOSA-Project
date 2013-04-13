@@ -6,11 +6,8 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using Mosa.ClassLib;
-
 namespace Mosa.HelloWorld.x86.Tests
 {
-
 	public class OtherTest : KernelTest
 	{
 		public OtherTest()
@@ -33,6 +30,5 @@ namespace Mosa.HelloWorld.x86.Tests
 		{
 			return StaticValue == 0x200000;
 		}
-
 	}
 }

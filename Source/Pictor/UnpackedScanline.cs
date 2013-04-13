@@ -7,29 +7,28 @@
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  */
 
-
 namespace Pictor
 {
 	//=============================================================scanline_u8
 	//
 	// Unpacked scanline container class
 	//
-	// This class is used to transfer Data from a scanline rasterizer 
-	// to the rendering buffer. It's organized very simple. The class stores 
-	// information of horizontal spans to render it into a Pixel-map buffer. 
-	// Each Span has staring X, length, and an array of bytes that determine the 
-	// cover-values for each Pixel. 
-	// Before using this class you should know the minimal and maximal Pixel 
+	// This class is used to transfer Data from a scanline rasterizer
+	// to the rendering buffer. It's organized very simple. The class stores
+	// information of horizontal spans to render it into a Pixel-map buffer.
+	// Each Span has staring X, length, and an array of bytes that determine the
+	// cover-values for each Pixel.
+	// Before using this class you should know the minimal and maximal Pixel
 	// Coordinates of your scanline. The protocol of using is:
 	// 1. Reset(MinX, MaxX)
-	// 2. AddCell() / AddSpan() - accumulate scanline. 
+	// 2. AddCell() / AddSpan() - accumulate scanline.
 	//    When forming one scanline the next X coordinate must be always greater
 	//    than the last stored one, i.e. it works only with ordered Coordinates.
 	// 3. Call Finalize(y) and render the scanline.
 	// 3. Call ResetSpans() to Prepare for the new scanline.
-	//    
+	//
 	// 4. Rendering:
-	// 
+	//
 	// Scanline provides an iterator class that allows you to extract
 	// the spans and the cover values for each Pixel. Be aware that clipping
 	// has not been done yet, so you should perform it yourself.
@@ -43,10 +42,10 @@ namespace Pictor
 	// ************************************
 	//
 	// scanline_u8::const_iterator Span = sl.Begin();
-	// 
-	// unsigned char* row = m_rbuf->row(y); // The the address of the beginning 
+	//
+	// unsigned char* row = m_rbuf->row(y); // The the address of the beginning
 	//                                      // of the current row
-	// 
+	//
 	// unsigned NumberOfSpans = sl.NumberOfSpans(); // Number of spans. It's guaranteed that
 	//                                      // NumberOfSpans is always greater than 0.
 	//
@@ -57,7 +56,7 @@ namespace Pictor
 	//
 	//     int num_pix = Span->len;              // Number of pixels of the Span.
 	//                                           // Always greater than 0, still it's
-	//                                           // better to use "int" instead of 
+	//                                           // better to use "int" instead of
 	//                                           // "unsigned" because it's more
 	//                                           // convenient for clipping
 	//     int x = Span->x;
@@ -68,24 +67,24 @@ namespace Pictor
 	//     **************************************
 	//
 	//     unsigned char* dst = row + x;  // Calculate the Start address of the row.
-	//                                    // In this case we assume a simple 
+	//                                    // In this case we assume a simple
 	//                                    // grayscale image 1-byte per Pixel.
 	//     do
 	//     {
-	//         *dst++ = *covers++;        // Hypotetical rendering. 
+	//         *dst++ = *covers++;        // Hypotetical rendering.
 	//     }
 	//     while(--num_pix);
 	//
 	//     ++Span;
-	// } 
+	// }
 	// while(--NumberOfSpans);  // NumberOfSpans cannot be 0, so this loop is quite safe
 	//------------------------------------------------------------------------
 	//
 	// The question is: why should we accumulate the whole scanline when we
 	// could render just separate spans when they're ready?
-	// That's because using the scanline is generally faster. When is consists 
+	// That's because using the scanline is generally faster. When is consists
 	// of more than one Span the conditions for the processor cash system
-	// are better, because switching between two different areas of memory 
+	// are better, because switching between two different areas of memory
 	// (that can be very large) occurs less frequently.
 	//------------------------------------------------------------------------
 	public sealed class UnpackedScanline : IScanline
@@ -146,6 +145,7 @@ namespace Pictor
 		}
 
 		/*
+
 		//--------------------------------------------------------------------
 		unsafe public void add_cells(int x, uint len, byte* covers)
 		{
@@ -206,11 +206,16 @@ namespace Pictor
 		}
 
 		//--------------------------------------------------------------------
-		public int y() { return m_y; }
+		public int y()
+		{
+			return m_y;
+		}
+
 		public uint NumberOfSpans
 		{
 			get { return (uint)m_span_index; }
 		}
+
 		public ScanlineSpan Begin
 		{
 			get

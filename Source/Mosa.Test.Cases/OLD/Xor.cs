@@ -8,7 +8,7 @@
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  *  Michael Fröhlich (grover) <michael.ruck@michaelruck.de>
  *  Kai P. Reisert <kpreisert@googlemail.com>
- *  
+ *
  */
 
 using System;
@@ -22,7 +22,6 @@ namespace Mosa.Test.Cases.OLD
 	[TestFixture]
 	public class Xor : TestCompilerAdapter
 	{
-		
 		private static string CreateConstantTestCode(string name, string typeIn, string typeOut, string constLeft, string constRight)
 		{
 			if (String.IsNullOrEmpty(constRight))
@@ -54,7 +53,7 @@ namespace Mosa.Test.Cases.OLD
 		}
 
 		#region B
-		
+
 		[Row(true, true)]
 		[Row(true, false)]
 		[Row(false, false)]
@@ -76,7 +75,8 @@ namespace Mosa.Test.Cases.OLD
 			settings.CodeSource = CreateConstantTestCode("XorConstantBLeft", "bool", "bool", a.ToString().ToLower(), null);
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "XorConstantBLeft", (a ^ b), b));
 		}
-		#endregion
+
+		#endregion B
 
 		#region C
 
@@ -99,10 +99,11 @@ namespace Mosa.Test.Cases.OLD
 			settings.CodeSource = CreateConstantTestCode("XorConstantCLeft", "char", "char", "'" + a.ToString() + "'", null);
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "XorConstantCLeft", (char)(a ^ b), b));
 		}
-		#endregion
+
+		#endregion C
 
 		#region I1
-		
+
 		[Row(-42, 48)]
 		[Row(17, 1)]
 		[Row(0, 0)]
@@ -124,10 +125,11 @@ namespace Mosa.Test.Cases.OLD
 			settings.CodeSource = CreateConstantTestCode("XorConstantI1Left", "sbyte", "int", a.ToString(), null);
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "XorConstantI1Left", (a ^ b), b));
 		}
-		#endregion
+
+		#endregion I1
 
 		#region U1
-		
+
 		[Row(23, 148)]
 		[Row(17, 1)]
 		[Row(0, 0)]
@@ -149,10 +151,11 @@ namespace Mosa.Test.Cases.OLD
 			settings.CodeSource = CreateConstantTestCode("XorConstantU1Left", "byte", "uint", a.ToString(), null);
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "XorConstantU1Left", (uint)(a ^ b), b));
 		}
-		#endregion
+
+		#endregion U1
 
 		#region I2
-		
+
 		[Row(-23, 148)]
 		[Row(17, 1)]
 		[Row(0, 0)]
@@ -174,10 +177,11 @@ namespace Mosa.Test.Cases.OLD
 			settings.CodeSource = CreateConstantTestCode("XorConstantI2Left", "short", "int", a.ToString(), null);
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "XorConstantI2Left", (a ^ b), b));
 		}
-		#endregion
+
+		#endregion I2
 
 		#region U2
-		
+
 		[Row(23, 148)]
 		[Row(17, 1)]
 		[Row(0, 0)]
@@ -199,10 +203,11 @@ namespace Mosa.Test.Cases.OLD
 			settings.CodeSource = CreateConstantTestCode("XorConstantU2Left", "ushort", "uint", a.ToString(), null);
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "XorConstantU2Left", (uint)(a ^ b), b));
 		}
-		#endregion
+
+		#endregion U2
 
 		#region I4
-		
+
 		[Row(-23, 148)]
 		[Row(17, 1)]
 		[Row(0, 0)]
@@ -224,10 +229,11 @@ namespace Mosa.Test.Cases.OLD
 			settings.CodeSource = CreateConstantTestCode("XorConstantI4Left", "int", "int", a.ToString(), null);
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "XorConstantI4Left", (a ^ b), b));
 		}
-		#endregion
+
+		#endregion I4
 
 		#region U4
-		
+
 		[Row(23, 148)]
 		[Row(17, 1)]
 		[Row(0, 0)]
@@ -249,10 +255,11 @@ namespace Mosa.Test.Cases.OLD
 			settings.CodeSource = CreateConstantTestCode("XorConstantU4Left", "uint", "uint", a.ToString(), null);
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "XorConstantU4Left", (uint)(a ^ b), b));
 		}
-		#endregion
+
+		#endregion U4
 
 		#region I8
-	
+
 		[Row(-23, 148)]
 		[Row(17, 1)]
 		[Row(0, 0)]
@@ -275,10 +282,11 @@ namespace Mosa.Test.Cases.OLD
 			settings.CodeSource = CreateConstantTestCode("XorConstantI8Left", "long", "long", a.ToString(), null);
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "XorConstantI8Left", (a ^ b), b));
 		}
-		#endregion
+
+		#endregion I8
 
 		#region U8
-		
+
 		[Row(23, 148)]
 		[Row(17, 1)]
 		[Row(0, 0)]
@@ -300,6 +308,7 @@ namespace Mosa.Test.Cases.OLD
 			settings.CodeSource = CreateConstantTestCode("XorConstantU8Left", "ulong", "ulong", a.ToString(), null);
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "XorConstantU8Left", (ulong)(a ^ b), b));
 		}
-		#endregion
+
+		#endregion U8
 	}
 }

@@ -8,31 +8,30 @@ using Mosa.Compiler.TypeSystem.Cil;
 
 namespace Mosa.Compiler.TypeSystem.Generic
 {
-
 	public class CilGenericType : RuntimeType
 	{
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private readonly CilRuntimeType baseGenericType;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private readonly GenericInstSigType signature;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private readonly SigType[] genericArguments;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private readonly bool containsOpenGenericArguments;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public ITypeModule InstantiationModule { get; private set; }
 
@@ -56,7 +55,7 @@ namespace Mosa.Compiler.TypeSystem.Generic
 
 			if (this.baseGenericType.IsNested)
 			{
-				// TODO: find generic type 
+				// TODO: find generic type
 
 				;
 			}
@@ -138,6 +137,7 @@ namespace Mosa.Compiler.TypeSystem.Generic
 					throw new NotImplementedException(@"Failing to resolve VarMSigType in GenericType.");
 
 				case CilElementType.SZArray:
+
 					// FIXME
 					return null;
 
@@ -182,7 +182,6 @@ namespace Mosa.Compiler.TypeSystem.Generic
 				var genericInstanceField = new CilGenericField(Module, field, signature, this);
 				Fields.Add(genericInstanceField);
 			}
-
 		}
 
 		private bool CheckContainsOpenGenericParameters()
@@ -227,6 +226,7 @@ namespace Mosa.Compiler.TypeSystem.Generic
 									if (SigType.Equals(GenericArguments, runtimetypegeneric.GenericArguments))
 									{
 										matchedInterfaceType = runtimetype;
+
 										//Interfaces.Add(runtimetype);
 										break;
 									}
@@ -241,9 +241,6 @@ namespace Mosa.Compiler.TypeSystem.Generic
 						continue;
 				}
 			}
-
 		}
-
 	}
 }
-

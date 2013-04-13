@@ -10,27 +10,27 @@
 namespace Mosa.DeviceSystem
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public class PartitionDevice : Device, IDevice, IPartitionDevice
 	{
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private IDiskDevice diskDevice;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private uint startBlock;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private uint blockCount;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private bool readOnly;
 
@@ -127,6 +127,5 @@ namespace Mosa.DeviceSystem
 		{
 			return diskDevice.WriteBlock(block + startBlock, count, data);
 		}
-
 	}
 }

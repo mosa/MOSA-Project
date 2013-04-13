@@ -7,27 +7,26 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-
 namespace Mosa.Compiler.Metadata.Tables
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public struct NestedClassRow
 	{
 		#region Data members
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private Token nestedClass;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private Token enclosingClass;
 
-		#endregion // Data members
+		#endregion Data members
 
 		#region Construction
 
@@ -42,7 +41,7 @@ namespace Mosa.Compiler.Metadata.Tables
 			this.enclosingClass = enclosingClass;
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Properties
 
@@ -64,6 +63,6 @@ namespace Mosa.Compiler.Metadata.Tables
 			get { return enclosingClass; }
 		}
 
-		#endregion // Properties
+		#endregion Properties
 	}
 }

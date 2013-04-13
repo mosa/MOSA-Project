@@ -18,7 +18,6 @@ namespace Mosa.Compiler.Framework.Stages
 	/// </summary>
 	public sealed class StackLayoutStage : BaseMethodCompilerStage, IMethodCompilerStage, IStackLayoutProvider, IPipelineStage
 	{
-
 		#region Data members
 
 		/// <summary>
@@ -26,7 +25,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </summary>
 		private int localsSize;
 
-		#endregion // Data members
+		#endregion Data members
 
 		/// <summary>
 		/// Runs the specified method compiler.
@@ -60,7 +59,7 @@ namespace Mosa.Compiler.Framework.Stages
 			get { return localsSize; }
 		}
 
-		#endregion // IStackLayoutStage Members
+		#endregion IStackLayoutStage Members
 
 		#region Internals
 
@@ -164,7 +163,7 @@ namespace Mosa.Compiler.Framework.Stages
 		private static void OrderVariables(List<Operand> locals, ICallingConvention callingConvention)
 		{
 			// Sort the list by stack size requirements - this moves equally sized operands closer together,
-			// in the hope that this reduces padding on the stack to enforce HW alignment requirements.			 
+			// in the hope that this reduces padding on the stack to enforce HW alignment requirements.
 			locals.Sort(delegate(Operand op1, Operand op2)
 			{
 				int size1, size2, alignment;
@@ -174,6 +173,6 @@ namespace Mosa.Compiler.Framework.Stages
 			});
 		}
 
-		#endregion // Internals
+		#endregion Internals
 	}
 }

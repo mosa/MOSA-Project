@@ -7,7 +7,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Tables;
 
@@ -15,7 +14,6 @@ namespace Mosa.Compiler.Verifier.TableStage
 {
 	public class AssemblyRef : BaseTableVerificationStage
 	{
-
 		protected override void Run()
 		{
 			int rows = metadata.GetRowCount(TableType.AssemblyRef);
@@ -43,7 +41,7 @@ namespace Mosa.Compiler.Verifier.TableStage
 					}
 				}
 
-				// 5. Name shall index a non-empty string, in the String heap 
+				// 5. Name shall index a non-empty string, in the String heap
 				switch (CheckName(row.Name))
 				{
 					case 0: break;
@@ -89,10 +87,7 @@ namespace Mosa.Compiler.Verifier.TableStage
 
 					AddSpecificationError("22.5-7", "The AssemblyRef table shall contain no duplicates", "Duplicate found", token);
 				}
-
 			}
 		}
-
 	}
 }
-

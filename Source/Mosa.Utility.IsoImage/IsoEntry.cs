@@ -7,7 +7,6 @@
  *  Royce Mitchell III (royce3) <royce3 [at] gmail [dot] com>
  */
 
-
 namespace Mosa.Utility.IsoImage
 {
 	internal class IsoEntry
@@ -25,7 +24,7 @@ namespace Mosa.Utility.IsoImage
 		}
 
 		public virtual bool IsFile { get { return false; } }
+
 		public virtual bool IsFolder { get { return false; } }
 	}
-
 }

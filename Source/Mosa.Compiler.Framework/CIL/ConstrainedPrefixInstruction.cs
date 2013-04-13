@@ -7,7 +7,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Compiler.TypeSystem;
@@ -16,7 +15,7 @@ using Mosa.Compiler.TypeSystem.Generic;
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public sealed class ConstrainedPrefixInstruction : PrefixInstruction
 	{
@@ -31,7 +30,7 @@ namespace Mosa.Compiler.Framework.CIL
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Methods
 
@@ -76,7 +75,6 @@ namespace Mosa.Compiler.Framework.CIL
 					ctx.RuntimeType = instantiationModule.GetType(classSigType.Token);
 				}
 			}
-
 		}
 
 		public override string ToString(Context context)
@@ -92,6 +90,5 @@ namespace Mosa.Compiler.Framework.CIL
 		}
 
 		#endregion Methods
-
 	}
 }

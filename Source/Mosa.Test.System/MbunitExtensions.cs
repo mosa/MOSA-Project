@@ -117,7 +117,7 @@ namespace Mosa.Test.System
 		}
 	}
 
-	#endregion
+	#endregion Series
 
 	[AttributeUsage(PatternAttributeTargets.DataContext, AllowMultiple = false, Inherited = true)]
 	public class I4SmallAttribute : DataAttribute
@@ -301,7 +301,7 @@ namespace Mosa.Test.System
 		}
 	}
 
-	#endregion
+	#endregion Series Above Zero
 
 	#region Series Below Zero
 
@@ -404,7 +404,7 @@ namespace Mosa.Test.System
 		}
 	}
 
-	#endregion
+	#endregion Series Below Zero
 
 	#region Series Not Zero
 
@@ -507,7 +507,7 @@ namespace Mosa.Test.System
 		}
 	}
 
-	#endregion
+	#endregion Series Not Zero
 
 	#region Series Up To 8
 
@@ -610,7 +610,7 @@ namespace Mosa.Test.System
 		}
 	}
 
-	#endregion
+	#endregion Series Up To 8
 
 	#region Series Up To 16
 
@@ -713,7 +713,7 @@ namespace Mosa.Test.System
 		}
 	}
 
-	#endregion
+	#endregion Series Up To 16
 
 	#region Series Up To 32
 
@@ -816,6 +816,5 @@ namespace Mosa.Test.System
 		}
 	}
 
-	#endregion
-
+	#endregion Series Up To 32
 }

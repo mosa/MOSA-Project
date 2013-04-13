@@ -14,9 +14,8 @@ using Mosa.Compiler.Metadata.Tables;
 
 namespace Mosa.Tool.MetadataExplorer.Tables
 {
-
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public class TypeSpecRowExt : TableRow
 	{
@@ -37,7 +36,6 @@ namespace Mosa.Tool.MetadataExplorer.Tables
 			TypeSpecSignature signature = new TypeSpecSignature(Metadata, row.SignatureBlobIdx);
 			yield return Value("Signature Token", signature.Token);
 			yield return Value("Signature Type", signature.Type.ToString());
-
 		}
 	}
 }

@@ -10,7 +10,7 @@
 namespace System
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public class Array
 	{
@@ -25,7 +25,7 @@ namespace System
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public void SetValue(object value, int index)
 		{
@@ -33,7 +33,7 @@ namespace System
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public object GetValue(int index)
 		{
@@ -42,7 +42,7 @@ namespace System
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public static void Copy(Array sourceArray, int sourceIndex, Array destinationArray, int destinationIndex, int length)
 		{

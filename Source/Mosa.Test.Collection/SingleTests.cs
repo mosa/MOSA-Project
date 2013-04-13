@@ -4,16 +4,13 @@
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com> 
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
-
 
 namespace Mosa.Test.Collection
 {
-
 	public static class SingleTests
 	{
-
 		public static bool AddR4R4(float expected, float first, float second)
 		{
 			return expected == (first + second);

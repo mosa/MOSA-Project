@@ -12,11 +12,10 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.AVR32.Instructions
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public class Reti : AVR32Instruction
 	{
-
 		#region Methods
 
 		/// <summary>
@@ -39,7 +38,6 @@ namespace Mosa.Platform.AVR32.Instructions
 			visitor.Reti(context);
 		}
 
-		#endregion // Methods
-
+		#endregion Methods
 	}
 }

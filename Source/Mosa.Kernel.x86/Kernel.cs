@@ -12,11 +12,10 @@ using Mosa.Kernel.x86.Smbios;
 namespace Mosa.Kernel.x86
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public static class Kernel
 	{
-
 		public static void Setup()
 		{
 			SmbiosManager.Setup();
@@ -31,6 +30,7 @@ namespace Mosa.Kernel.x86
 			TaskManager.Setup();
 			SmbiosManager.Setup();
 			ConsoleManager.Setup();
+
 			//Serial.Setup();
 		}
 	}

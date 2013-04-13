@@ -7,18 +7,17 @@
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  */
 
-
 namespace Pictor
 {
 	//----------------------------------------------------------------BSpline
 	// A very simple class of Bi-cubic Spline Interpolation.
-	// First call Init(num, x[], y[]) where num - number of source points, 
-	// x, y - arrays of X and Y values respectively. Here Y must be a function 
+	// First call Init(num, x[], y[]) where num - number of source points,
+	// x, y - arrays of X and Y values respectively. Here Y must be a function
 	// of X. It means that all the X-Coordinates must be arranged in the ascending
-	// order. 
-	// Then call Get(x) that calculates a Value Y for the respective X. 
+	// order.
+	// Then call Get(x) that calculates a Value Y for the respective X.
 	// The class supports extrapolation, i.e. you can call Get(x) where x is
-	// outside the given with Init() X-range. Extrapolation is a simple linear 
+	// outside the given with Init() X-range. Extrapolation is a simple linear
 	// function.
 	//------------------------------------------------------------------------
 	public sealed class BSpline
@@ -63,7 +62,6 @@ namespace Pictor
 			Init(num, x, y);
 		}
 
-
 		//------------------------------------------------------------------------
 		public void Init(int max)
 		{
@@ -78,7 +76,6 @@ namespace Pictor
 			m_last_idx = -1;
 		}
 
-
 		//------------------------------------------------------------------------
 		public void AddPoint(double x, double y)
 		{
@@ -89,7 +86,6 @@ namespace Pictor
 				++m_num;
 			}
 		}
-
 
 		//------------------------------------------------------------------------
 		public void Prepare()
@@ -153,8 +149,6 @@ namespace Pictor
 			m_last_idx = -1;
 		}
 
-
-
 		//------------------------------------------------------------------------
 		public void Init(int num, double[] x, double[] y)
 		{
@@ -171,9 +165,8 @@ namespace Pictor
 			m_last_idx = -1;
 		}
 
-
 		//------------------------------------------------------------------------
-		void BSearch(int n, int xOffset, double x0, out int i)
+		private void BSearch(int n, int xOffset, double x0, out int i)
 		{
 			int j = n - 1;
 			int k;
@@ -186,10 +179,8 @@ namespace Pictor
 			}
 		}
 
-
-
 		//------------------------------------------------------------------------
-		double Interpolation(double x, int i)
+		private double Interpolation(double x, int i)
 		{
 			int j = i + 1;
 			double d = m_am[m_xOffset + i] - m_am[m_xOffset + j];
@@ -200,9 +191,8 @@ namespace Pictor
 				   ((m_am[m_yOffset + j] - m_am[j] * p) * r + (m_am[m_yOffset + i] - m_am[i] * p) * h) / d;
 		}
 
-
 		//------------------------------------------------------------------------
-		double ExtrapolationLeft(double x)
+		private double ExtrapolationLeft(double x)
 		{
 			double d = m_am[m_xOffset + 1] - m_am[m_xOffset + 0];
 			return (-d * m_am[1] / 6 + (m_am[m_yOffset + 1] - m_am[m_yOffset + 0]) / d) *
@@ -211,7 +201,7 @@ namespace Pictor
 		}
 
 		//------------------------------------------------------------------------
-		double ExtrapolationRight(double x)
+		private double ExtrapolationRight(double x)
 		{
 			double d = m_am[m_xOffset + m_num - 1] - m_am[m_xOffset + m_num - 2];
 			return (d * m_am[m_num - 2] / 6 + (m_am[m_yOffset + m_num - 1] - m_am[m_yOffset + m_num - 2]) / d) *
@@ -238,7 +228,6 @@ namespace Pictor
 			}
 			return 0.0;
 		}
-
 
 		//------------------------------------------------------------------------
 		public double GetStateful(double x)

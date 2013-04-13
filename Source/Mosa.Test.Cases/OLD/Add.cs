@@ -23,7 +23,6 @@ namespace Mosa.Test.Cases.OLD
 	[TestFixture]
 	public class Add : TestCompilerAdapter
 	{
-		
 		private static string CreateConstantTestCode(string name, string typeIn, string typeOut, string constLeft, string constRight)
 		{
 			if (String.IsNullOrEmpty(constRight))
@@ -75,7 +74,8 @@ namespace Mosa.Test.Cases.OLD
 			settings.CodeSource = CreateConstantTestCode("AddConstantCLeft", "char", "char", "'" + a.ToString() + "'", null);
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "AddConstantCLeft", (char)(a + b), b));
 		}
-		#endregion
+
+		#endregion C
 
 		#region I1
 
@@ -108,10 +108,11 @@ namespace Mosa.Test.Cases.OLD
 			settings.CodeSource = "static class Test { static bool AddConstantI1Right(int expect, sbyte a) { return expect == (a + 1); } }";
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "AddConstantI1Right", a + 1, a));
 		}
-		#endregion
+
+		#endregion I1
 
 		#region U1
-	
+
 		[Row(23, 148)]
 		[Row(17, 1)]
 		[Row(0, 0)]
@@ -133,10 +134,11 @@ namespace Mosa.Test.Cases.OLD
 			settings.CodeSource = CreateConstantTestCode("AddConstantU1Left", "byte", "uint", a.ToString(), null);
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "AddConstantU1Left", (uint)(a + b), b));
 		}
-		#endregion
+
+		#endregion U1
 
 		#region I2
-		
+
 		[Row(-23, 148)]
 		[Row(17, 1)]
 		[Row(0, 0)]
@@ -158,10 +160,11 @@ namespace Mosa.Test.Cases.OLD
 			settings.CodeSource = CreateConstantTestCode("AddConstantI2Left", "short", "int", a.ToString(), null);
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "AddConstantI2Left", (a + b), b));
 		}
-		#endregion
+
+		#endregion I2
 
 		#region U2
-		
+
 		[Row(23, 148)]
 		[Row(17, 1)]
 		[Row(0, 0)]
@@ -183,10 +186,11 @@ namespace Mosa.Test.Cases.OLD
 			settings.CodeSource = CreateConstantTestCode("AddConstantU2Left", "ushort", "uint", a.ToString(), null);
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "AddConstantU2Left", (uint)(a + b), b));
 		}
-		#endregion
+
+		#endregion U2
 
 		#region I4
-		
+
 		[Row(-23, 148)]
 		[Row(17, 1)]
 		[Row(0, 0)]
@@ -208,10 +212,11 @@ namespace Mosa.Test.Cases.OLD
 			settings.CodeSource = CreateConstantTestCode("AddConstantI4Left", "int", "int", a.ToString(), null);
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "AddConstantI4Left", (a + b), b));
 		}
-		#endregion
+
+		#endregion I4
 
 		#region U4
-		
+
 		[Row(23, 148)]
 		[Row(17, 1)]
 		[Row(0, 0)]
@@ -233,7 +238,8 @@ namespace Mosa.Test.Cases.OLD
 			settings.CodeSource = CreateConstantTestCode("AddConstantU4Left", "uint", "uint", a.ToString(), null);
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "AddConstantU4Left", (uint)(a + b), b));
 		}
-		#endregion
+
+		#endregion U4
 
 		#region I8
 
@@ -251,6 +257,7 @@ namespace Mosa.Test.Cases.OLD
 		//[Row(-23, 148)]
 		//[Row(17, 1)]
 		[Row(0, 0)]
+
 		//[Row(long.MinValue, long.MaxValue)]
 		[Test]
 		public void AddConstantI8Left(long a, long b)
@@ -258,10 +265,11 @@ namespace Mosa.Test.Cases.OLD
 			settings.CodeSource = CreateConstantTestCode("AddConstantI8Left", "long", "long", a.ToString(), null);
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "AddConstantI8Left", (a + b), b));
 		}
-		#endregion
+
+		#endregion I8
 
 		#region U8
-		
+
 		[Row(23, 148)]
 		[Row(17, 1)]
 		[Row(0, 0)]
@@ -283,13 +291,15 @@ namespace Mosa.Test.Cases.OLD
 			settings.CodeSource = CreateConstantTestCode("AddConstantU8Left", "ulong", "ulong", a.ToString(), null);
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "AddConstantU8Left", (ulong)(a + b), b));
 		}
-		#endregion
+
+		#endregion U8
 
 		#region R4
-		
+
 		[Row(23f, 148.0016f)]
 		[Row(17.2f, 1f)]
 		[Row(0f, 0f)]
+
 		// Obsolete. This test just fails because we're calculating with higher precision
 		// [Row(float.MinValue, float.MaxValue)]
 		[Test]
@@ -302,6 +312,7 @@ namespace Mosa.Test.Cases.OLD
 		[Row(23f, 148.0016f)]
 		[Row(17.2f, 1f)]
 		[Row(0f, 0f)]
+
 		// Obsolete. This test just fails because we're calculating with higher precision
 		// [Row(float.MinValue, float.MaxValue)]
 		[Test]
@@ -311,7 +322,7 @@ namespace Mosa.Test.Cases.OLD
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "AddConstantR4Left", (a + b), b));
 		}
 
-		#endregion
+		#endregion R4
 
 		#region R8
 
@@ -321,6 +332,7 @@ namespace Mosa.Test.Cases.OLD
 		[Row(-1.2, 2.11)]
 		[Row(0.0, 0.0)]
 		[Row(-17.1, -2.3)]
+
 		// (MinValue, X) Cases
 		[Row(double.MinValue, 0.0)]
 		[Row(double.MinValue, 1.2)]
@@ -330,6 +342,7 @@ namespace Mosa.Test.Cases.OLD
 		[Row(double.MinValue, -1.5)]
 		[Row(double.MinValue, -17.99)]
 		[Row(double.MinValue, -123.235)]
+
 		// (MaxValue, X) Cases
 		[Row(double.MaxValue, 0.0)]
 		[Row(double.MaxValue, 1.67)]
@@ -339,6 +352,7 @@ namespace Mosa.Test.Cases.OLD
 		[Row(double.MaxValue, -1.1497)]
 		[Row(double.MaxValue, -17.12)]
 		[Row(double.MaxValue, -123.34)]
+
 		// (X, MinValue) Cases
 		[Row(0.0, double.MinValue)]
 		[Row(1.2, double.MinValue)]
@@ -348,6 +362,7 @@ namespace Mosa.Test.Cases.OLD
 		[Row(-1.78, double.MinValue)]
 		[Row(-17.59, double.MinValue)]
 		[Row(-123.41, double.MinValue)]
+
 		// (X, MaxValue) Cases
 		[Row(0.0, double.MaxValue)]
 		[Row(1.00012, double.MaxValue)]
@@ -357,6 +372,7 @@ namespace Mosa.Test.Cases.OLD
 		[Row(-1.045, double.MaxValue)]
 		[Row(-17.0002501, double.MaxValue)]
 		[Row(-123.023, double.MaxValue)]
+
 		// Extremvaluecases
 		[Row(double.MinValue, double.MaxValue)]
 		[Row(1.0f, double.NaN)]
@@ -394,6 +410,6 @@ namespace Mosa.Test.Cases.OLD
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "AddConstantR8Left", (a + b), b));
 		}
 
-		#endregion
+		#endregion R8
 	}
 }

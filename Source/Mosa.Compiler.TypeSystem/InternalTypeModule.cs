@@ -26,21 +26,21 @@ namespace Mosa.Compiler.TypeSystem
 		private readonly ITypeSystem typeSystem;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private readonly List<RuntimeType> types;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private readonly List<RuntimeMethod> methods;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private readonly HashSet<string> typeNames;
 
-		#endregion // Data members
+		#endregion Data members
 
 		#region Construction
 
@@ -58,7 +58,7 @@ namespace Mosa.Compiler.TypeSystem
 			this.typeNames = new HashSet<string>();
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region ITypeModule interface
 
@@ -188,7 +188,7 @@ namespace Mosa.Compiler.TypeSystem
 			return null;
 		}
 
-		#endregion
+		#endregion ITypeModule interface
 
 		/// <summary>
 		/// Adds the type.

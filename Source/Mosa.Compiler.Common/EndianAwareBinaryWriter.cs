@@ -12,10 +12,8 @@ using System.Text;
 
 namespace Mosa.Compiler.Common
 {
-
 	public class EndianAwareBinaryWriter : BinaryWriter
 	{
-
 		private bool swap = false;
 
 		public EndianAwareBinaryWriter(Stream input, Encoding encoding, bool isLittleEndian)
@@ -67,5 +65,4 @@ namespace Mosa.Compiler.Common
 
 		public long Position { get { return BaseStream.Position; } set { BaseStream.Position = value; } }
 	}
-
 }

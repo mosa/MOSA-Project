@@ -12,7 +12,7 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.x86.Instructions
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public sealed class Lea : TwoOperandInstruction
 	{
@@ -20,11 +20,12 @@ namespace Mosa.Platform.x86.Instructions
 
 		private static readonly OpCode opcode = new OpCode(new byte[] { 0x8D });
 
-		#endregion // Data Members
+		#endregion Data Members
 
 		#region Methods
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="ctx"></param>
 		/// <param name="emitter"></param>
@@ -46,9 +47,7 @@ namespace Mosa.Platform.x86.Instructions
 			{
 				emitter.Emit(opcode, context.Result, context.Operand1);
 			}
-
 		}
-
 
 		/// <summary>
 		/// Allows visitor based dispatch for this instruction object.
@@ -60,7 +59,6 @@ namespace Mosa.Platform.x86.Instructions
 			visitor.Lea(context);
 		}
 
-		#endregion // Methods
-
+		#endregion Methods
 	}
 }

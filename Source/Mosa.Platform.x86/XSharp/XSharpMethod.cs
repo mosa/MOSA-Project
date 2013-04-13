@@ -13,10 +13,8 @@ using Mosa.Compiler.Framework;
 
 namespace Mosa.Platform.x86.XSharp
 {
-
 	public abstract class XSharpMethod
 	{
-
 		protected enum Flags
 		{
 			Zero,
@@ -111,7 +109,7 @@ namespace Mosa.Platform.x86.XSharp
 			set { Move(ediRegister, value); }
 		}
 
-		#endregion
+		#endregion CPU Registers
 
 		internal void Move(Register destination, Register source)
 		{
@@ -145,7 +143,7 @@ namespace Mosa.Platform.x86.XSharp
 			get { return label; }
 			set
 			{
-				// TODO: 
+				// TODO:
 				// 1. first check if block already created with that label
 				// 2. create new block, if necessary
 				label = value;
@@ -230,7 +228,7 @@ namespace Mosa.Platform.x86.XSharp
 
 		protected void JumpIf(Flags flag, string target)
 		{
-			// TODO			
+			// TODO
 		}
 
 		public void Increment(Register register)
@@ -279,7 +277,5 @@ namespace Mosa.Platform.x86.XSharp
 		}
 
 		public abstract void Assemble();
-
 	}
-
 }

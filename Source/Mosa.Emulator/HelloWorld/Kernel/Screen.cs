@@ -9,9 +9,8 @@ using Mosa.Platform.x86.Intrinsic;
 
 namespace Mosa.Kernel.x86
 {
-
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public static class Screen
 	{
@@ -20,17 +19,17 @@ namespace Mosa.Kernel.x86
 		private static byte color = 0;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public const uint Columns = 80;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public const uint Rows = 40;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public static uint Column
 		{
@@ -39,7 +38,7 @@ namespace Mosa.Kernel.x86
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public static uint Row
 		{
@@ -69,7 +68,7 @@ namespace Mosa.Kernel.x86
 		}
 
 		/// <summary>
-		/// Nexts 
+		/// Nexts
 		/// </summary>
 		private static void Next()
 		{
@@ -214,6 +213,5 @@ namespace Mosa.Kernel.x86
 			Row = y;
 			Skip(count);
 		}
-
 	}
 }

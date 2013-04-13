@@ -7,10 +7,8 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-
 namespace System.Runtime.InteropServices
 {
-
 	/// <summary>
 	/// Implementation of the "System.Runtime.InteropServices.ComVisibleAttribute" class
 	/// </summary>
@@ -22,11 +20,10 @@ namespace System.Runtime.InteropServices
 	[ComVisible(true)]
 	public sealed class ComVisibleAttribute : Attribute
 	{
-
 		private bool Visible = false;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public ComVisibleAttribute(bool visibility)
 		{

@@ -13,7 +13,7 @@ namespace Mosa.FileSystem.VFS
 	/// <summary>
 	/// Implements path resolution functionality for the Mosa.VFS.VirtualFileSystem.
 	/// </summary>
-	class PathResolver
+	internal class PathResolver
 	{
 		#region Constants
 
@@ -28,7 +28,7 @@ namespace Mosa.FileSystem.VFS
 		// </summary>
 		//private static readonly char[] splitChars = new char[] { Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar };
 
-		#endregion // Constants
+		#endregion Constants
 
 		#region Data members
 
@@ -47,7 +47,7 @@ namespace Mosa.FileSystem.VFS
 		/// </summary>
 		private int depth;
 
-		#endregion // Data members
+		#endregion Data members
 
 		#region Construction
 
@@ -58,7 +58,7 @@ namespace Mosa.FileSystem.VFS
 			depth = PathResolver.MAX_SYMLINKS_TO_FOLLOW;
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Static methods
 
@@ -110,7 +110,7 @@ namespace Mosa.FileSystem.VFS
 			return resolver.Resolve(ref path, flags);
 		}
 
-		#endregion // Static methods
+		#endregion Static methods
 
 		#region Methods
 
@@ -141,8 +141,10 @@ namespace Mosa.FileSystem.VFS
 
 			// Current path component
 			string item;
+
 			// Loop index
 			int index = 0;
+
 			// Perform an access check on the root directory
 			AccessCheck.Perform(currentDirectory, AccessMode.Traverse, AccessCheckFlags.None);
 
@@ -230,6 +232,6 @@ namespace Mosa.FileSystem.VFS
 			return currentDirectory;
 		}
 
-		#endregion // Methods
+		#endregion Methods
 	}
 }

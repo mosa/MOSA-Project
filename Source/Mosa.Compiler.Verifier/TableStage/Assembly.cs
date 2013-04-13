@@ -1,5 +1,4 @@
-﻿
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Tables;
@@ -8,7 +7,6 @@ namespace Mosa.Compiler.Verifier.TableStage
 {
 	public class Assembly : BaseTableVerificationStage
 	{
-
 		protected override void Run()
 		{
 			int rows = metadata.GetRowCount(TableType.Assembly);
@@ -32,7 +30,7 @@ namespace Mosa.Compiler.Verifier.TableStage
 				AddSpecificationError("22.2-2", "HashAlgId shall be one of the specified values", "Invalid Hash Algorithm ID", token);
 			}
 
-			// 4. Flags shall have only those values set that are specified 
+			// 4. Flags shall have only those values set that are specified
 			if (!IsAssemblyFlags((int)row.Flags))
 			{
 				AddSpecificationError("22.2-4", "Flags shall have only those values set that are specified", "Invalid Hash Algorithm ID", token);
@@ -53,7 +51,6 @@ namespace Mosa.Compiler.Verifier.TableStage
 				case 0: break;
 				case 1: AddSpecificationError("22.2-9", "If Culture is non-null, it shall index a single string from the list specified", "Invalid or Missing Culture", token); break;
 			}
-
 		}
 
 		protected static List<int> validHashAlgID = new List<int>() { 0x0000, 0x8003, 0x8004 };
@@ -68,7 +65,5 @@ namespace Mosa.Compiler.Verifier.TableStage
 		{
 			return validAssemblyFlags.Contains(flag);
 		}
-
 	}
 }
-

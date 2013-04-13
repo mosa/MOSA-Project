@@ -29,7 +29,7 @@ namespace Mosa.Compiler.LinkerFormat.PE
 		/// </summary>
 		public const ushort IMAGE_FILE_DLL = 0x2000;
 
-		#endregion // Constants
+		#endregion Constants
 
 		#region Data members
 
@@ -68,7 +68,7 @@ namespace Mosa.Compiler.LinkerFormat.PE
 		/// </summary>
 		public ushort Characteristics;
 
-		#endregion // Data members
+		#endregion Data members
 
 		#region Methods
 
@@ -108,6 +108,6 @@ namespace Mosa.Compiler.LinkerFormat.PE
 			writer.Write(this.Characteristics);
 		}
 
-		#endregion // Methods
+		#endregion Methods
 	}
 }

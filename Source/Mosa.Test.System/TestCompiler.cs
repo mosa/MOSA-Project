@@ -4,7 +4,7 @@
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com> 
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 using System;
@@ -29,17 +29,17 @@ namespace Mosa.Test.System
 		private ITypeSystem typeSystem;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private CompilerSettings cacheSettings = null;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private static string tempDirectory;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private TestAssemblyLinker linker;
 
@@ -47,7 +47,7 @@ namespace Mosa.Test.System
 		private static uint memorySize = 1024 * 1024 * 2; // 2Mb
 		private IntPtr memoryAllocated = IntPtr.Zero;
 
-		#endregion // Data members
+		#endregion Data members
 
 		#region Construction
 
@@ -59,7 +59,7 @@ namespace Mosa.Test.System
 			ResetMemory();
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Properties
 
@@ -92,13 +92,12 @@ namespace Mosa.Test.System
 
 				if (memoryAllocated == IntPtr.Zero)
 					throw new OutOfMemoryException();
-
 			}
 
 			unsafe
 			{
 				((uint*)memoryPtr)[0] = (uint)memoryAllocated.ToInt32();
-				((uint*)memoryPtr)[1] = (uint)memoryAllocated.ToInt32(); 
+				((uint*)memoryPtr)[1] = (uint)memoryAllocated.ToInt32();
 				((uint*)memoryPtr)[2] = memorySize;
 			}
 		}
@@ -226,6 +225,5 @@ namespace Mosa.Test.System
 
 			return linker;
 		}
-
 	}
 }

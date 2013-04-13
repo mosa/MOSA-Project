@@ -21,14 +21,14 @@ namespace Mosa.Platform.x86.Instructions
 
 		private static readonly OpCode opcode = new OpCode(new byte[] { 0xF7 }, 7);
 
-		#endregion // Data Members
+		#endregion Data Members
 
 		#region Methods
 
 		/// <summary>
 		/// Gets the additional output registers.
 		/// </summary>
-		public override RegisterBitmap AdditionalOutputRegisters { get { return new RegisterBitmap(GeneralPurposeRegister.EAX,GeneralPurposeRegister.EDX); } }
+		public override RegisterBitmap AdditionalOutputRegisters { get { return new RegisterBitmap(GeneralPurposeRegister.EAX, GeneralPurposeRegister.EDX); } }
 
 		/// <summary>
 		/// Gets the additional input registers.
@@ -70,7 +70,6 @@ namespace Mosa.Platform.x86.Instructions
 			visitor.IDiv(context);
 		}
 
-		#endregion // Methods
-
+		#endregion Methods
 	}
 }

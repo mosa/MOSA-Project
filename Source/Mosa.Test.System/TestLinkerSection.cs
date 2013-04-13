@@ -15,7 +15,7 @@ using Mosa.Compiler.Linker;
 namespace Mosa.Test.System
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public sealed class TestLinkerSection : LinkerSection
 	{
@@ -26,7 +26,7 @@ namespace Mosa.Test.System
 		/// </summary>
 		private Stream stream;
 
-		#endregion // Data members
+		#endregion Data members
 
 		#region Construction
 
@@ -41,7 +41,7 @@ namespace Mosa.Test.System
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Methods
 
@@ -69,7 +69,7 @@ namespace Mosa.Test.System
 			return stream;
 		}
 
-		#endregion // Methods
+		#endregion Methods
 
 		#region LinkerSection Overrides
 
@@ -82,6 +82,6 @@ namespace Mosa.Test.System
 			get { return (this.stream != null ? this.stream.Length : 0); }
 		}
 
-		#endregion // LinkerSection Overrides
+		#endregion LinkerSection Overrides
 	}
 }

@@ -7,7 +7,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-
 namespace Mosa.DeviceSystem
 {
 	/// <summary>
@@ -16,7 +15,7 @@ namespace Mosa.DeviceSystem
 	public class MACAddress
 	{
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected byte[] address;
 
@@ -39,7 +38,10 @@ namespace Mosa.DeviceSystem
 		/// Initializes a new instance of the <see cref="MACAddress"/> class.
 		/// </summary>
 		/// <param name="mac">The mac.</param>
-		public MACAddress(MACAddress mac) : this(mac.address) { }
+		public MACAddress(MACAddress mac)
+			: this(mac.address)
+		{
+		}
 
 		/// <summary>
 		/// Compares to.

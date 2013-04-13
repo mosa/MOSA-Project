@@ -7,13 +7,12 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
 using System.Collections.Generic;
 
 namespace Mosa.Compiler.Framework
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public class Counters
 	{
@@ -43,4 +42,3 @@ namespace Mosa.Compiler.Framework
 		}
 	}
 }
-

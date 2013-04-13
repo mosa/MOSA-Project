@@ -12,11 +12,9 @@ using System;
 using Mosa.Compiler.InternalTrace;
 using Mosa.Compiler.TypeSystem;
 using Mosa.Compiler.Linker;
-using Mosa.Compiler.Framework.Linker;
 
 namespace Mosa.Compiler.Framework
 {
-
 	/// <summary>
 	/// Base class for just-in-time and ahead-of-time compilers, which use
 	/// the Mosa.Compiler.Framework framework.
@@ -80,7 +78,7 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		private readonly PlugSystem plugSystem;
 
-		#endregion // Data members
+		#endregion Data members
 
 		#region Construction
 
@@ -111,7 +109,7 @@ namespace Mosa.Compiler.Framework
 			this.plugSystem = new PlugSystem();
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Properties
 
@@ -175,7 +173,7 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		public PlugSystem PlugSystem { get { return plugSystem; } }
 
-		#endregion // Properties
+		#endregion Properties
 
 		#region Methods
 
@@ -214,7 +212,7 @@ namespace Mosa.Compiler.Framework
 		/// Executes the compiler using the configured stages.
 		/// </summary>
 		/// <remarks>
-		/// The method iterates the compilation stage chain and runs each 
+		/// The method iterates the compilation stage chain and runs each
 		/// stage on the input.
 		/// </remarks>
 		public void Compile()
@@ -246,14 +244,18 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Called when compilation is about to begin.
 		/// </summary>
-		protected virtual void BeginCompile() { }
+		protected virtual void BeginCompile()
+		{
+		}
 
 		/// <summary>
 		/// Called when compilation has completed.
 		/// </summary>
-		protected virtual void EndCompile() { }
+		protected virtual void EndCompile()
+		{
+		}
 
-		#endregion // Methods
+		#endregion Methods
 
 		#region Helper Methods
 
@@ -277,6 +279,6 @@ namespace Mosa.Compiler.Framework
 			counters.UpdateCounter(name, count);
 		}
 
-		#endregion
+		#endregion Helper Methods
 	}
 }

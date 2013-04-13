@@ -12,29 +12,32 @@ using Mosa.DeviceSystem.PCI;
 namespace Mosa.DeviceSystem
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public class HardwareResources : IHardwareResources
 	{
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IResourceManager resourceManager;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IIOPortRegion[] ioPortRegions;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IMemoryRegion[] memoryRegions;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IInterruptHandler interruptHandler;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IDeviceResource deviceResource;
 
@@ -159,7 +162,5 @@ namespace Mosa.DeviceSystem
 		/// </summary>
 		/// <value>The PCI device resource.</value>
 		public IDeviceResource DeviceResource { get { return deviceResource; } }
-
 	}
-
 }

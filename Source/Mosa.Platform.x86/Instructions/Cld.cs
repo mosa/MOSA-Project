@@ -8,7 +8,6 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-
 using Mosa.Compiler.Framework;
 
 namespace Mosa.Platform.x86.Instructions
@@ -18,7 +17,6 @@ namespace Mosa.Platform.x86.Instructions
 	/// </summary>
 	public sealed class Cld : X86Instruction
 	{
-
 		#region Methods
 
 		/// <summary>
@@ -31,6 +29,6 @@ namespace Mosa.Platform.x86.Instructions
 			visitor.Cld(context);
 		}
 
-		#endregion // Methods
+		#endregion Methods
 	}
 }

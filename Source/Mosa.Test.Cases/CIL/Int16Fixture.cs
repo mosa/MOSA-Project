@@ -4,7 +4,7 @@
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com> 
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 using System;
@@ -19,7 +19,6 @@ namespace Mosa.Test.Cases.CIL
 	[Importance(Importance.Critical)]
 	public class Int16Fixture : TestCompilerAdapter
 	{
-
 		public Int16Fixture()
 		{
 			settings.AddReference("Mosa.Test.Collection.dll");
@@ -156,6 +155,5 @@ namespace Mosa.Test.Cases.CIL
 		{
 			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "Int16Tests", "Ldelema", index, value));
 		}
-
 	}
 }

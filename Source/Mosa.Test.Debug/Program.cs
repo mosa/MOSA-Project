@@ -1,10 +1,9 @@
-﻿
-using Mosa.Test.Cases.CIL;
+﻿using Mosa.Test.Cases.CIL;
 using Mosa.Test.Compiler.Framework;
 
 namespace Mosa.Test.Debug
 {
-	class Program
+	internal class Program
 	{
 		public static void Main()
 		{
@@ -51,7 +50,7 @@ namespace Mosa.Test.Debug
 			//    callVirtualFixture.TestBaseCall();
 			//    callVirtualFixture.TestVirtualCall();
 			//}
-			
+
 			ComparisonFixture Comparison = new ComparisonFixture();
 			Comparison.CompareEqualI2I8(-1, -1);
 

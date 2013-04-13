@@ -26,7 +26,7 @@ namespace Mosa.Platform.x86.Instructions
 		private static readonly OpCode POP_GS = new OpCode(new byte[] { 0x0F, 0xA1 });
 		private static readonly OpCode POP_SS = new OpCode(new byte[] { 0x0F, 0xA9 });
 
-		#endregion
+		#endregion Data Members
 
 		#region Construction
 
@@ -38,7 +38,7 @@ namespace Mosa.Platform.x86.Instructions
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Methods
 
@@ -86,6 +86,6 @@ namespace Mosa.Platform.x86.Instructions
 			visitor.Pop(context);
 		}
 
-		#endregion // Methods
+		#endregion Methods
 	}
 }

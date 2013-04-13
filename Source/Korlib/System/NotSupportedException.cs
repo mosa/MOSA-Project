@@ -30,6 +30,5 @@ namespace System
 			base(message)
 		{
 		}
-
 	}
 }

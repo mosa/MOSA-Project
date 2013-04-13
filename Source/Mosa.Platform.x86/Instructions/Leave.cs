@@ -7,17 +7,15 @@
  *  Simon Wollwage (rootnode) <rootnode@mosa-project.org>
  */
 
-
 using Mosa.Compiler.Framework;
 
 namespace Mosa.Platform.x86.Instructions
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public sealed class Leave : X86Instruction
 	{
-
 		#region Methods
 
 		/// <summary>
@@ -40,7 +38,6 @@ namespace Mosa.Platform.x86.Instructions
 			emitter.WriteByte(0xC9);
 		}
 
-		#endregion // Methods
-
+		#endregion Methods
 	}
 }

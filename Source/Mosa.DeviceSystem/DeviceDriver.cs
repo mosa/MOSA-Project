@@ -12,7 +12,7 @@ using Mosa.ClassLib;
 namespace Mosa.DeviceSystem
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public class DeviceDriver
 	{

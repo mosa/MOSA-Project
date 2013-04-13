@@ -12,25 +12,21 @@ using Mosa.Compiler.Framework;
 
 namespace Mosa.Test.Compiler.Framework
 {
-
 	#region Extension Helper
 
 	internal static class BasicBlocksHelp
 	{
-
 		public static void CreateBlock(this BasicBlocks basicBlocks, int index)
 		{
 			basicBlocks.CreateBlock(index);
 		}
-
 	}
 
-	#endregion
+	#endregion Extension Helper
 
 	[TestFixture]
 	public class BlockTests
 	{
-
 		public static BasicBlocks Scenario1
 		{
 			get
@@ -72,7 +68,7 @@ namespace Mosa.Test.Compiler.Framework
 				//#  |    |      |
 				//#  |    3 <----+
 				//#  |    |
-				//#  +--> 4			
+				//#  +--> 4
 
 				BasicBlocks basicBlocks = new BasicBlocks();
 

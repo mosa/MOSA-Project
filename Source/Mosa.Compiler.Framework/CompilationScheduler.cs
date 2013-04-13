@@ -7,11 +7,8 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
-using System.Diagnostics;
 using System.Collections.Generic;
 using Mosa.Compiler.Common;
-using Mosa.Compiler.InternalTrace;
 using Mosa.Compiler.TypeSystem;
 
 namespace Mosa.Compiler.Framework.Stages
@@ -21,7 +18,6 @@ namespace Mosa.Compiler.Framework.Stages
 	/// </summary>
 	public sealed class CompilationScheduler : ICompilationScheduler
 	{
-
 		#region Data Members
 
 		private readonly List<RuntimeType> typesAllocated = new List<RuntimeType>();
@@ -35,7 +31,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private readonly bool compileAllMethods;
 
-		#endregion // Data Members
+		#endregion Data Members
 
 		public CompilationScheduler(ITypeSystem typeSystem, bool compileAllMethods)
 		{
@@ -91,7 +87,7 @@ namespace Mosa.Compiler.Framework.Stages
 			return methodScheduled.Contains(method);
 		}
 
-		#endregion // ICompilationSchedulerStage members
+		#endregion ICompilationScheduler members
 
 		private void CompileType(RuntimeType type)
 		{
@@ -116,7 +112,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private void CompileMethod(RuntimeMethod method)
 		{
-			// Can not compile an (open) generic method 
+			// Can not compile an (open) generic method
 			if (method.IsGeneric)
 				return;
 
@@ -140,6 +136,5 @@ namespace Mosa.Compiler.Framework.Stages
 
 			return methodQueue.Dequeue();
 		}
-
 	}
 }

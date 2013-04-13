@@ -4,16 +4,13 @@
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com> 
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
-
 
 namespace Mosa.Test.Collection
 {
-
 	public static class ExceptionHandlingTests
 	{
-
 		public static int TryFinally1()
 		{
 			int a = 10;
@@ -118,6 +115,5 @@ namespace Mosa.Test.Collection
 
 			return a;
 		}
-
 	}
 }

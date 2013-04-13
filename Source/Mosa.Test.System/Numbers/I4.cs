@@ -9,7 +9,6 @@
 
 using System.Collections.Generic;
 
-
 namespace Mosa.Test.System.Numbers
 {
 	public static class I4

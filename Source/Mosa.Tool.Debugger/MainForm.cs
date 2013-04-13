@@ -8,11 +8,6 @@
  */
 
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
 using Mosa.Utility.DebugEngine;
@@ -23,8 +18,8 @@ namespace Mosa.Tool.Debugger
 	{
 		public DebugServerEngine DebugEngine = new DebugServerEngine();
 
-		ConnectionProperties connectionProperties = new ConnectionProperties();
-		DispatchOutput dispatchOutput = new DispatchOutput();
+		private ConnectionProperties connectionProperties = new ConnectionProperties();
+		private DispatchOutput dispatchOutput = new DispatchOutput();
 
 		public string Status { set { this.toolStripStatusLabel1.Text = value; } }
 
@@ -83,7 +78,6 @@ namespace Mosa.Tool.Debugger
 			{
 				(response.Sender as DockContent).BeginInvoke(response.SenderMethod, new object[] { response });
 			}
-
 		}
 
 		private void toolStripButton1_Click(object sender, EventArgs e)
@@ -99,7 +93,6 @@ namespace Mosa.Tool.Debugger
 
 		private void toolStripButton2_Click(object sender, EventArgs e)
 		{
-
 			var memoryView = new MemoryView();
 			memoryView.Show(dockPanel, DockState.Document);
 		}

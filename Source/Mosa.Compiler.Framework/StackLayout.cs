@@ -4,14 +4,14 @@
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com> 
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 using System.Collections.Generic;
 using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Compiler.TypeSystem;
 
-// NOTE: Eventually all temporary stack locals will be converted to virtual registers and 
+// NOTE: Eventually all temporary stack locals will be converted to virtual registers and
 //       removed from this StackLayout class except for spill slots
 
 namespace Mosa.Compiler.Framework
@@ -21,7 +21,6 @@ namespace Mosa.Compiler.Framework
 	/// </summary>
 	public sealed class StackLayout
 	{
-
 		#region Data members
 
 		private IArchitecture architecture;
@@ -34,9 +33,9 @@ namespace Mosa.Compiler.Framework
 
 		private int localVariableCount = 0;
 
-		private int stackLocalTempCount = 0;	
+		private int stackLocalTempCount = 0;
 
-		#endregion // Data members
+		#endregion Data members
 
 		#region Properties
 
@@ -68,7 +67,7 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		public int StackLocalTempCount { get { return stackLocalTempCount; } }
 
-		#endregion // Properties
+		#endregion Properties
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="StackLayout"/> class.
@@ -136,6 +135,5 @@ namespace Mosa.Compiler.Framework
 		{
 			return parameters[index];
 		}
-
 	}
 }

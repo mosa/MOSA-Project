@@ -13,7 +13,7 @@ using Mosa.Platform.x86.Intrinsic;
 namespace Mosa.CoolWorld.x86
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public static class Boot
 	{
@@ -29,7 +29,7 @@ namespace Mosa.CoolWorld.x86
 			IDT.SetInterruptHandler(ProcessInterrupt);
 
 			Console = ConsoleManager.Controller.Boot;
-			
+
 			Console.Clear();
 			Console.Color = Colors.White;
 			Console.BackgroundColor = Colors.Green;
@@ -94,7 +94,6 @@ namespace Mosa.CoolWorld.x86
 							ConsoleManager.Controller.Active = ConsoleManager.Controller.Boot;
 						else if (keyevent.KeyType == KeyType.F2)
 							ConsoleManager.Controller.Active = ConsoleManager.Controller.Debug;
-
 					}
 					Debug.Trace("Main.Main Key Character: " + ((uint)keyevent.Character).ToString());
 				}
@@ -119,7 +118,7 @@ namespace Mosa.CoolWorld.x86
 
 		public static void PrintDone()
 		{
-			InBrackets("Done", Colors.White, Colors.LightGreen); 
+			InBrackets("Done", Colors.White, Colors.LightGreen);
 			Console.WriteLine();
 		}
 
@@ -171,7 +170,7 @@ namespace Mosa.CoolWorld.x86
 			}
 			else if (interrupt == 0x20)
 			{
-				// Timer Interrupt! Switch Tasks!	
+				// Timer Interrupt! Switch Tasks!
 			}
 			else if (interrupt >= 0x20 && interrupt < 0x30)
 			{
@@ -181,6 +180,7 @@ namespace Mosa.CoolWorld.x86
 				Console.Write(interrupt, 16, 2);
 
 				Mosa.DeviceSystem.HAL.ProcessInterrupt((byte)(interrupt - 0x20), errorCode);
+
 				//Debug.Trace("Returned from HAL.ProcessInterrupt");
 			}
 
@@ -189,6 +189,5 @@ namespace Mosa.CoolWorld.x86
 			Console.Color = col;
 			Console.BackgroundColor = back;
 		}
-
 	}
 }

@@ -1,4 +1,3 @@
-
 using Mosa.Compiler.Metadata.Signatures;
 
 namespace Mosa.Compiler.TypeSystem.Generic
@@ -17,11 +16,11 @@ namespace Mosa.Compiler.TypeSystem.Generic
 		{
 			this.Signature = signature;
 			this.Attributes = genericField.Attributes;
+
 			//TODO
 			//this.SetAttributes(genericField.CustomAttributes);
 
 			base.Name = genericField.Name;
 		}
-
 	}
 }

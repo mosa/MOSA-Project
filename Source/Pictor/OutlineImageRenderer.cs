@@ -14,6 +14,7 @@ using AGG.PixelFormat;
 namespace AGG
 {
 	/*
+
 	//========================================================line_image_scale
 	public class line_image_scale
 	{
@@ -31,8 +32,8 @@ namespace AGG
 		public double width()  { return m_source.width(); }
 		public double height() { return m_height; }
 
-		public RGBA_Bytes pixel(int x, int y) 
-		{ 
+		public RGBA_Bytes pixel(int x, int y)
+		{
 			double src_y = (y + 0.5) * m_scale - 0.5;
 			int h  = m_source.height() - 1;
 			int y1 = ufloor(src_y);
@@ -44,7 +45,6 @@ namespace AGG
 	};
 
 	 */
-
 
 	//======================================================line_image_pattern
 	public class line_image_pattern
@@ -184,8 +184,8 @@ namespace AGG
 		//--------------------------------------------------------------------
 		public unsafe void pixel(RGBA_Bytes* p, int x, int y)
 		{
-			m_filter.pixel_high_res(m_buf, 
-									 p, 
+			m_filter.pixel_high_res(m_buf,
+									 p,
 									 x % m_width_hr + m_dilation_hr,
 									 y + m_offset_y_hr);
 		}
@@ -195,13 +195,13 @@ namespace AGG
 	};
 
 	/*
-	
+
 	//=================================================line_image_pattern_pow2
-	public class line_image_pattern_pow2 : 
+	public class line_image_pattern_pow2 :
 		line_image_pattern<IPatternFilter>
 	{
 		uint m_mask;
-	
+
 		//--------------------------------------------------------------------
 		public line_image_pattern_pow2(IPatternFilter filter) :
 			line_image_pattern<IPatternFilter>(filter), m_mask(line_subpixel_mask) {}
@@ -212,13 +212,13 @@ namespace AGG
 		{
 			create(src);
 		}
-			
+
 		//--------------------------------------------------------------------
 		public void create(RasterBuffer src)
 		{
 			line_image_pattern<IPatternFilter>::create(src);
 			m_mask = 1;
-			while(m_mask < base_type::m_width) 
+			while(m_mask < base_type::m_width)
 			{
 				m_mask <<= 1;
 				m_mask |= 1;
@@ -232,14 +232,14 @@ namespace AGG
 		public void pixel(RGBA_Bytes* p, int x, int y)
 		{
 			base_type::m_filter->pixel_high_res(
-					base_type::m_buf.rows(), 
+					base_type::m_buf.rows(),
 					p,
 					(x & m_mask) + base_type::m_dilation_hr,
 					y + base_type::m_offset_y_hr);
 		}
 	};
-	 */    
-	
+	 */
+
 	//===================================================distance_interpolator4
 	public class distance_interpolator4
 	{
@@ -261,7 +261,7 @@ namespace AGG
 		//---------------------------------------------------------------------
 		public distance_interpolator4() {}
 		public distance_interpolator4(int x1,  int y1, int x2, int y2,
-							   int sx,  int sy, int ex, int ey, 
+							   int sx,  int sy, int ex, int ey,
 							   int len, double scale, int x, int y)
 		{
 			m_dx=(x2 - x1);
@@ -299,60 +299,60 @@ namespace AGG
 		}
 
 		//---------------------------------------------------------------------
-		public void inc_x() 
-		{ 
-			m_dist += m_dy; 
-			m_dist_start += m_dy_start; 
-			m_dist_pict += m_dy_pict; 
-			m_dist_end += m_dy_end; 
+		public void inc_x()
+		{
+			m_dist += m_dy;
+			m_dist_start += m_dy_start;
+			m_dist_pict += m_dy_pict;
+			m_dist_end += m_dy_end;
 		}
 
 		//---------------------------------------------------------------------
-		public void dec_x() 
-		{ 
-			m_dist -= m_dy; 
-			m_dist_start -= m_dy_start; 
-			m_dist_pict -= m_dy_pict; 
-			m_dist_end -= m_dy_end; 
+		public void dec_x()
+		{
+			m_dist -= m_dy;
+			m_dist_start -= m_dy_start;
+			m_dist_pict -= m_dy_pict;
+			m_dist_end -= m_dy_end;
 		}
 
 		//---------------------------------------------------------------------
-		public void inc_y() 
-		{ 
-			m_dist -= m_dx; 
-			m_dist_start -= m_dx_start; 
-			m_dist_pict -= m_dx_pict; 
-			m_dist_end -= m_dx_end; 
+		public void inc_y()
+		{
+			m_dist -= m_dx;
+			m_dist_start -= m_dx_start;
+			m_dist_pict -= m_dx_pict;
+			m_dist_end -= m_dx_end;
 		}
 
 		//---------------------------------------------------------------------
-		public void dec_y() 
-		{ 
-			m_dist += m_dx; 
-			m_dist_start += m_dx_start; 
-			m_dist_pict += m_dx_pict; 
-			m_dist_end += m_dx_end; 
+		public void dec_y()
+		{
+			m_dist += m_dx;
+			m_dist_start += m_dx_start;
+			m_dist_pict += m_dx_pict;
+			m_dist_end += m_dx_end;
 		}
 
 		//---------------------------------------------------------------------
 		public void inc_x(int dy)
 		{
-			m_dist       += m_dy; 
-			m_dist_start += m_dy_start; 
-			m_dist_pict  += m_dy_pict; 
+			m_dist       += m_dy;
+			m_dist_start += m_dy_start;
+			m_dist_pict  += m_dy_pict;
 			m_dist_end   += m_dy_end;
 			if(dy > 0)
 			{
-				m_dist       -= m_dx; 
-				m_dist_start -= m_dx_start; 
-				m_dist_pict  -= m_dx_pict; 
+				m_dist       -= m_dx;
+				m_dist_start -= m_dx_start;
+				m_dist_pict  -= m_dx_pict;
 				m_dist_end   -= m_dx_end;
 			}
 			if(dy < 0)
 			{
-				m_dist       += m_dx; 
-				m_dist_start += m_dx_start; 
-				m_dist_pict  += m_dx_pict; 
+				m_dist       += m_dx;
+				m_dist_start += m_dx_start;
+				m_dist_pict  += m_dx_pict;
 				m_dist_end   += m_dx_end;
 			}
 		}
@@ -360,22 +360,22 @@ namespace AGG
 		//---------------------------------------------------------------------
 		public void dec_x(int dy)
 		{
-			m_dist       -= m_dy; 
-			m_dist_start -= m_dy_start; 
-			m_dist_pict  -= m_dy_pict; 
+			m_dist       -= m_dy;
+			m_dist_start -= m_dy_start;
+			m_dist_pict  -= m_dy_pict;
 			m_dist_end   -= m_dy_end;
 			if(dy > 0)
 			{
-				m_dist       -= m_dx; 
-				m_dist_start -= m_dx_start; 
-				m_dist_pict  -= m_dx_pict; 
+				m_dist       -= m_dx;
+				m_dist_start -= m_dx_start;
+				m_dist_pict  -= m_dx_pict;
 				m_dist_end   -= m_dx_end;
 			}
 			if(dy < 0)
 			{
-				m_dist       += m_dx; 
-				m_dist_start += m_dx_start; 
-				m_dist_pict  += m_dx_pict; 
+				m_dist       += m_dx;
+				m_dist_start += m_dx_start;
+				m_dist_pict  += m_dx_pict;
 				m_dist_end   += m_dx_end;
 			}
 		}
@@ -383,22 +383,22 @@ namespace AGG
 		//---------------------------------------------------------------------
 		public void inc_y(int dx)
 		{
-			m_dist       -= m_dx; 
-			m_dist_start -= m_dx_start; 
-			m_dist_pict  -= m_dx_pict; 
+			m_dist       -= m_dx;
+			m_dist_start -= m_dx_start;
+			m_dist_pict  -= m_dx_pict;
 			m_dist_end   -= m_dx_end;
 			if(dx > 0)
 			{
-				m_dist       += m_dy; 
-				m_dist_start += m_dy_start; 
-				m_dist_pict  += m_dy_pict; 
+				m_dist       += m_dy;
+				m_dist_start += m_dy_start;
+				m_dist_pict  += m_dy_pict;
 				m_dist_end   += m_dy_end;
 			}
 			if(dx < 0)
 			{
-				m_dist       -= m_dy; 
-				m_dist_start -= m_dy_start; 
-				m_dist_pict  -= m_dy_pict; 
+				m_dist       -= m_dy;
+				m_dist_start -= m_dy_start;
+				m_dist_pict  -= m_dy_pict;
 				m_dist_end   -= m_dy_end;
 			}
 		}
@@ -406,22 +406,22 @@ namespace AGG
 		//---------------------------------------------------------------------
 		public void dec_y(int dx)
 		{
-			m_dist       += m_dx; 
-			m_dist_start += m_dx_start; 
-			m_dist_pict  += m_dx_pict; 
+			m_dist       += m_dx;
+			m_dist_start += m_dx_start;
+			m_dist_pict  += m_dx_pict;
 			m_dist_end   += m_dx_end;
 			if(dx > 0)
 			{
-				m_dist       += m_dy; 
-				m_dist_start += m_dy_start; 
-				m_dist_pict  += m_dy_pict; 
+				m_dist       += m_dy;
+				m_dist_start += m_dy_start;
+				m_dist_pict  += m_dy_pict;
 				m_dist_end   += m_dy_end;
 			}
 			if(dx < 0)
 			{
-				m_dist       -= m_dy; 
-				m_dist_start -= m_dy_start; 
-				m_dist_pict  -= m_dy_pict; 
+				m_dist       -= m_dy;
+				m_dist_start -= m_dy_start;
+				m_dist_pict  -= m_dy_pict;
 				m_dist_end   -= m_dy_end;
 			}
 		}
@@ -444,13 +444,12 @@ namespace AGG
 		public int len()      { return m_len;      }
 	};
 
-
 	//==================================================line_interpolator_image
 	public class line_interpolator_image
 	{
 		line_parameters m_lp;
 		dda2_line_interpolator m_li;
-		distance_interpolator4 m_di; 
+		distance_interpolator4 m_di;
 		IPixelFormat         m_ren;
 		int m_plen;
 		int m_x;
@@ -470,14 +469,14 @@ namespace AGG
 
 		//---------------------------------------------------------------------
 		public line_interpolator_image(IPixelFormat ren, line_parameters lp,
-								int sx, int sy, int ex, int ey, 
+								int sx, int sy, int ex, int ey,
 								int pattern_start,
 								double scale_x)
 		{
 			m_lp=(lp);
 			m_li = new dda2_line_interpolator(lp.vertical ? line_dbl_hr(lp.x2 - lp.x1) :
 							   line_dbl_hr(lp.y2 - lp.y1),
-				 lp.vertical ? abs(lp.y2 - lp.y1) : 
+				 lp.vertical ? abs(lp.y2 - lp.y1) :
 							   abs(lp.x2 - lp.x1) + 1);
 			m_di = new distance_interpolator4(lp.x1, lp.y1, lp.x2, lp.y2, sx, sy, ex, ey, lp.len, scale_x,
 				 lp.x1 & ~line_subpixel_mask, lp.y1 & ~line_subpixel_mask);
@@ -489,12 +488,13 @@ namespace AGG
 			m_count=((lp.vertical ? abs((lp.y2 >> line_subpixel_shift) - m_y) :
 								   abs((lp.x2 >> line_subpixel_shift) - m_x)));
 			m_width=(ren.subpixel_width());
+
 			//m_max_extent(m_width >> (line_subpixel_shift - 2));
 			m_max_extent=((m_width + LineAABasics.line_subpixel_scale) >> line_subpixel_shift);
 			m_start=(pattern_start + (m_max_extent + 2) * ren.pattern_width());
 			m_step=(0);
 
-			dda2_line_interpolator li = new dda2_line_interpolator(0, lp.vertical ? 
+			dda2_line_interpolator li = new dda2_line_interpolator(0, lp.vertical ?
 											  (lp.dy << LineAABasics.line_subpixel_shift) :
 											  (lp.dx << LineAABasics.line_subpixel_shift),
 										   lp.len);
@@ -526,7 +526,7 @@ namespace AGG
 
 					m_old_x = m_x;
 
-					dist1_start = dist2_start = m_di.dist_start(); 
+					dist1_start = dist2_start = m_di.dist_start();
 
 					int dx = 0;
 					if(dist1_start < 0) ++npix;
@@ -559,7 +559,7 @@ namespace AGG
 
 					m_old_y = m_y;
 
-					dist1_start = dist2_start = m_di.dist_start(); 
+					dist1_start = dist2_start = m_di.dist_start();
 
 					int dy = 0;
 					if(dist1_start < 0) ++npix;
@@ -631,7 +631,7 @@ namespace AGG
 				dist_end   -= m_di.dx_end();
 				p1->clear();
 				if(dist_end > 0 && dist_start <= 0)
-				{   
+				{
 					if(m_lp.inc > 0) dist = -dist;
 					m_ren.pixel(p1, dist_pict, s2 - dist);
 					++npix;
@@ -652,17 +652,17 @@ namespace AGG
 				--p0;
 				p0->clear();
 				if(dist_end > 0 && dist_start <= 0)
-				{   
+				{
 					if(m_lp.inc > 0) dist = -dist;
 					m_ren.pixel(p0, dist_pict, s2 + dist);
 					++npix;
 				}
 				++dy;
 			}
-			m_ren.blend_color_vspan(m_x, 
-									m_y - dy + 1, 
-									(uint)(p1 - p0), 
-									p0); 
+			m_ren.blend_color_vspan(m_x,
+									m_y - dy + 1,
+									(uint)(p1 - p0),
+									p0);
 			return npix && ++m_step < m_count;
 		}
 
@@ -715,7 +715,7 @@ namespace AGG
 				dist_end   += m_di.dy_end();
 				p1->clear();
 				if(dist_end > 0 && dist_start <= 0)
-				{   
+				{
 					if(m_lp.inc > 0) dist = -dist;
 					m_ren.pixel(p1, dist_pict, s2 + dist);
 					++npix;
@@ -736,20 +736,19 @@ namespace AGG
 				--p0;
 				p0->clear();
 				if(dist_end > 0 && dist_start <= 0)
-				{   
+				{
 					if(m_lp.inc > 0) dist = -dist;
 					m_ren.pixel(p0, dist_pict, s2 - dist);
 					++npix;
 				}
 				++dx;
 			}
-			m_ren.blend_color_hspan(m_x - dx + 1, 
-									m_y, 
-									(uint)(p1 - p0), 
+			m_ren.blend_color_hspan(m_x - dx + 1,
+									m_y,
+									(uint)(p1 - p0),
 									p0);
 			return npix && ++m_step < m_count;
 		}
-
 
 		//---------------------------------------------------------------------
 		public int  pattern_end() { return m_start + m_di.len(); }
@@ -761,7 +760,7 @@ namespace AGG
 	};
 
 	//===================================================renderer_outline_image
-	//template<class BaseRenderer, class ImagePattern> 
+	//template<class BaseRenderer, class ImagePattern>
 	public class renderer_outline_image
 	{
 		IPixelFormat m_ren;
@@ -838,6 +837,7 @@ namespace AGG
 		public static bool accurate_join_only() { return true; }
 
 		/*
+
 		//-------------------------------------------------------------------------
 		public void semidot(Cmp, int, int, int, int)
 		{
@@ -865,7 +865,7 @@ namespace AGG
 		 */
 
 		//-------------------------------------------------------------------------
-		public void line3_no_clip(line_parameters lp, 
+		public void line3_no_clip(line_parameters lp,
 						   int sx, int sy, int ex, int ey)
 		{
 			if(lp.len > LineAABasics.line_max_length)
@@ -878,12 +878,12 @@ namespace AGG
 				line3_no_clip(lp2, mx, my, (lp.x2 + ex) >> 1, (lp.y2 + ey) >> 1);
 				return;
 			}
-			
+
 			LineAABasics.fix_degenerate_bisectrix_start(lp, ref sx, ref sy);
 			LineAABasics.fix_degenerate_bisectrix_end(lp, ref ex, ref ey);
-			line_interpolator_image li = new line_interpolator_image(*this, lp, 
-												  sx, sy, 
-												  ex, ey, 
+			line_interpolator_image li = new line_interpolator_image(*this, lp,
+												  sx, sy,
+												  ex, ey,
 												  m_start, m_scale_x);
 			if(li.vertical())
 			{
@@ -897,7 +897,7 @@ namespace AGG
 		}
 
 		//-------------------------------------------------------------------------
-		public void line3(line_parameters lp, 
+		public void line3(line_parameters lp,
 				   int sx, int sy, int ex, int ey)
 		{
 			if(m_clipping)
@@ -912,12 +912,12 @@ namespace AGG
 				{
 					if(flags)
 					{
-						line_parameters lp2(x1, y1, x2, y2, 
+						line_parameters lp2(x1, y1, x2, y2,
 										   uround(calc_distance(x1, y1, x2, y2)));
 						if(flags & 1)
 						{
 							m_start += uround(calc_distance(lp.x1, lp.y1, x1, y1) / m_scale_x);
-							sx = x1 + (y2 - y1); 
+							sx = x1 + (y2 - y1);
 							sy = y1 - (x2 - x1);
 						}
 						else
@@ -930,7 +930,7 @@ namespace AGG
 						}
 						if(flags & 2)
 						{
-							ex = x2 + (y2 - y1); 
+							ex = x2 + (y2 - y1);
 							ey = y2 - (x2 - x1);
 						}
 						else

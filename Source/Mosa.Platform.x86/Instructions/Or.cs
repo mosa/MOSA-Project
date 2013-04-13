@@ -18,7 +18,6 @@ namespace Mosa.Platform.x86.Instructions
 	/// </summary>
 	public sealed class Or : TwoOperandInstruction
 	{
-
 		#region Data Members
 
 		private static readonly OpCode R_C = new OpCode(new byte[] { 0x81 }, 1);
@@ -27,7 +26,7 @@ namespace Mosa.Platform.x86.Instructions
 		private static readonly OpCode R_R = new OpCode(new byte[] { 0x0B });
 		private static readonly OpCode M_R = new OpCode(new byte[] { 0x09 });
 
-		#endregion // Data Members
+		#endregion Data Members
 
 		#region Methods
 
@@ -59,6 +58,6 @@ namespace Mosa.Platform.x86.Instructions
 			visitor.Or(context);
 		}
 
-		#endregion // Methods
+		#endregion Methods
 	}
 }

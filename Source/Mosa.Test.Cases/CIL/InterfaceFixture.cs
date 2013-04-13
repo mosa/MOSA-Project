@@ -16,11 +16,11 @@ namespace Mosa.Test.Cases.CIL
 {
 	[TestFixture]
 	[Importance(Importance.Critical)]
+
 	//[Category(@"Compiler")]
 	//[Description(@"Tests support for interfaces.")]
 	public class InterfaceFixture : TestCompilerAdapter
 	{
-
 		public InterfaceFixture()
 		{
 			settings.AddReference("Mosa.Test.Collection.dll");
@@ -43,6 +43,5 @@ namespace Mosa.Test.Cases.CIL
 		{
 			Assert.AreEqual(InterfaceTests.InterfaceTest3(), Run<int>("Mosa.Test.Collection", "InterfaceTests", "InterfaceTest3"));
 		}
-
 	}
 }

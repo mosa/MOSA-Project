@@ -5,7 +5,7 @@
  *
  * Authors:
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
- *  
+ *
  */
 
 namespace Mosa.Compiler.Framework.IR
@@ -15,7 +15,6 @@ namespace Mosa.Compiler.Framework.IR
 	/// </summary>
 	public sealed class FloatCompare : ThreeOperandInstruction
 	{
-
 		#region Construction
 
 		/// <summary>
@@ -25,7 +24,7 @@ namespace Mosa.Compiler.Framework.IR
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region ThreeOperandInstruction Overrides
 
@@ -39,6 +38,6 @@ namespace Mosa.Compiler.Framework.IR
 			visitor.FloatCompare(context);
 		}
 
-		#endregion // ThreeOperandInstruction Overrides
+		#endregion ThreeOperandInstruction Overrides
 	}
 }

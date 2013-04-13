@@ -7,18 +7,16 @@
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  */
 
-
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Linker;
 
 namespace Mosa.Tool.Compiler.Stages
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public class PortableExecutableLinkerStage : Mosa.Compiler.Linker.PE.Linker, IPipelineStage, ICompilerStage, ILinker
 	{
-
 		#region IPipelineStage
 
 		/// <summary>
@@ -28,7 +26,7 @@ namespace Mosa.Tool.Compiler.Stages
 
 		string IPipelineStage.Name { get { return @"Portable Executable File Linker"; } }
 
-		#endregion // IPipelineStage Members
+		#endregion IPipelineStage
 
 		#region ICompilerStage members
 
@@ -47,6 +45,6 @@ namespace Mosa.Tool.Compiler.Stages
 				this.SetChecksum = compiler.CompilerOptions.PortableExecutable.SetChecksum.Value;
 		}
 
-		#endregion // ICompilerStage members
+		#endregion ICompilerStage members
 	}
 }

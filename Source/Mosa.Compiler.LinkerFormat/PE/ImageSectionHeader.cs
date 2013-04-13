@@ -70,7 +70,7 @@ namespace Mosa.Compiler.LinkerFormat.PE
 		/// </summary>
 		public uint Characteristics;
 
-		#endregion // Data members
+		#endregion Data members
 
 		#region Methods
 
@@ -118,6 +118,6 @@ namespace Mosa.Compiler.LinkerFormat.PE
 			writer.Write(this.Characteristics);
 		}
 
-		#endregion // Methods
+		#endregion Methods
 	}
 }

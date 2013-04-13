@@ -7,11 +7,10 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-
 namespace Mosa.DeviceSystem
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public static class VHD
 	{
@@ -32,7 +31,7 @@ namespace Mosa.DeviceSystem
 			internal const uint DiskGeometry = 56; // 4
 			internal const uint DiskGeometryCylinders = 56; // 2
 			internal const uint DiskGeometryHeads = 58; // 1
-			internal const uint DiskGeometrySectors = 59; // 1			
+			internal const uint DiskGeometrySectors = 59; // 1
 			internal const uint DiskType = 60; // 4
 			internal const uint Checksum = 64; // 4
 			internal const uint UniqueId = 68; // 16
@@ -40,7 +39,7 @@ namespace Mosa.DeviceSystem
 			internal const uint Reserved = 85; // 427
 		}
 
-		#endregion
+		#endregion Constants
 
 		/// <summary>
 		/// Creates the VHD footer.

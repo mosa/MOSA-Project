@@ -5,7 +5,7 @@
  *
  * Authors:
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- *  Pascal Delprat (pdelprat) <pascal.delprat@online.fr>     
+ *  Pascal Delprat (pdelprat) <pascal.delprat@online.fr>
  */
 
 using System;
@@ -20,7 +20,7 @@ namespace Mosa.Platform.AVR32
 	/// <summary>
 	/// Implements the CIL default calling convention for AVR32.
 	/// </summary>
-	sealed class DefaultCallingConvention : ICallingConvention
+	internal sealed class DefaultCallingConvention : ICallingConvention
 	{
 		#region Data members
 
@@ -35,7 +35,7 @@ namespace Mosa.Platform.AVR32
 		private static readonly Register[] ReturnFPRegisters = new Register[] { /* TODO */ };
 		private static readonly Register[] CalleeSavedRegisters = new Register[] { /* TODO */ };
 
-		#endregion // Data members
+		#endregion Data members
 
 		#region Construction
 
@@ -52,7 +52,7 @@ namespace Mosa.Platform.AVR32
 			this.architecture = architecture;
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region ICallingConvention Members
 
@@ -146,7 +146,6 @@ namespace Mosa.Platform.AVR32
 			}
 		}
 
-
 		/// <summary>
 		/// Calculates the remaining space.
 		/// </summary>
@@ -225,6 +224,7 @@ namespace Mosa.Platform.AVR32
 						break;
 
 					case StackTypeCode.F:
+
 						// TODO:
 						//rop = new RegisterOperand(op.Type, SSE2Register.XMM0);
 						rop = null;
@@ -233,6 +233,7 @@ namespace Mosa.Platform.AVR32
 					case StackTypeCode.Int64:
 						{
 							Debug.Assert(op.IsMemoryAddress, @"I8/U8 arg is not in a memory operand.");
+
 							//Operand r8 = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.R8);
 
 							//Operand opL, opH;
@@ -307,7 +308,6 @@ namespace Mosa.Platform.AVR32
 			}
 			else if (size == 8 && (operand.Type.Type == CilElementType.R4 || operand.Type.Type == CilElementType.R8))
 			{
-
 				if (!(operand.IsMemoryAddress))
 				{
 					// Move the operand to memory by prepending an instruction
@@ -353,10 +353,10 @@ namespace Mosa.Platform.AVR32
 				 * the stack frame. [EBP-08h] (The first stack slot available for
 				 * locals is [EBP], so we're reserving two 32-bit ints for
 				 * system/compiler use as described below.
-				 * 
+				 *
 				 * The first 4 bytes are used to hold the start of the method,
 				 * so that we can embed floating point constants in our PIC.
-				 * 
+				 *
 				 */
 				return -4;
 			}
@@ -369,10 +369,10 @@ namespace Mosa.Platform.AVR32
 				/*
 				 * The first parameter is offset by 8 bytes from the start of
 				 * the stack frame. [EBP+08h].
-				 * 
+				 *
 				 * - [EBP+04h] holds the EDX register, which was pushed by the prologue instruction.
 				 * - [EBP+08h] holds the return address, which was pushed by the call instruction.
-				 * 
+				 *
 				 */
 				return 8;
 			}
@@ -404,6 +404,7 @@ namespace Mosa.Platform.AVR32
 
 			return Return32BitRegisters;
 		}
-		#endregion // ICallingConvention Members
+
+		#endregion ICallingConvention Members
 	}
 }

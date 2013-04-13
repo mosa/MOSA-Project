@@ -17,7 +17,6 @@ using Mosa.FileSystem.FAT;
 
 namespace Mosa.Emulator
 {
-
 	/// <summary>
 	/// Program with CLR emulated devices
 	/// </summary>
@@ -27,7 +26,7 @@ namespace Mosa.Emulator
 		/// The main entry point for the application.
 		/// </summary>
 		[STAThread]
-		static void Main()
+		private static void Main()
 		{
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
@@ -124,7 +123,7 @@ namespace Mosa.Emulator
 			mbr.Partitions[0].PartitionType = PartitionType.FAT12;
 			mbr.Write();
 
-			// Create partition device 
+			// Create partition device
 			PartitionDevice partitionDevice = new PartitionDevice(ramDiskDevice, mbr.Partitions[0], false);
 
 			// Set FAT settings
@@ -148,11 +147,10 @@ namespace Mosa.Emulator
 			// Get a list of all devices
 			devices = Mosa.DeviceSystem.Setup.DeviceManager.GetAllDevices();
 
-			// Print them 
+			// Print them
 			screen.WriteLine("Devices: ");
 			foreach (IDevice device in devices)
 			{
-
 				screen.Write(device.Name);
 				screen.Write(" [");
 
@@ -199,6 +197,7 @@ namespace Mosa.Emulator
 
 					screen.Write("  Vendor:0x");
 					screen.Write(pciDevice.VendorID.ToString("X"));
+
 					//screen.Write(" [");
 					//screen.Write(DeviceTable.Lookup(pciDevice.VendorID));
 					//screen.WriteLine("]");
@@ -207,6 +206,7 @@ namespace Mosa.Emulator
 					screen.Write(pciDevice.DeviceID.ToString("X"));
 					screen.Write(" Rev:0x");
 					screen.Write(pciDevice.RevisionID.ToString("X"));
+
 					//screen.Write(" [");
 					//screen.Write(DeviceTable.Lookup(pciDevice.VendorID, pciDevice.DeviceID));
 					//screen.WriteLine("]");
@@ -284,6 +284,5 @@ namespace Mosa.Emulator
 
 			return;
 		}
-
 	}
 }

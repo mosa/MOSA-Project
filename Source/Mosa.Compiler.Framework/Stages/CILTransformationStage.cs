@@ -33,14 +33,13 @@ namespace Mosa.Compiler.Framework.Stages
 	/// </remarks>
 	public sealed class CILTransformationStage : BaseCodeTransformationStage, CIL.ICILVisitor, IPipelineStage
 	{
-
 		#region Data members
 
-		#endregion // Data members
+		#endregion Data members
 
 		#region IMethodCompilerStage Members
 
-		#endregion // IMethodCompilerStage Members
+		#endregion IMethodCompilerStage Members
 
 		#region ICILVisitor
 
@@ -160,6 +159,7 @@ namespace Mosa.Compiler.Framework.Stages
 		void CIL.ICILVisitor.Ldsflda(Context context)
 		{
 			context.SetInstruction(IRInstruction.AddressOf, context.Result, Operand.CreateRuntimeMember(context.RuntimeField));
+
 			//context.AppendInstruction(IRInstruction.Move, context.Result, context.Operand1);
 		}
 
@@ -305,22 +305,26 @@ namespace Mosa.Compiler.Framework.Stages
 				case CIL.OpCode.And:
 					context.SetInstruction(IRInstruction.LogicalAnd, context.Result, context.Operand1, context.Operand2);
 					break;
+
 				case CIL.OpCode.Or:
 					context.SetInstruction(IRInstruction.LogicalOr, context.Result, context.Operand1, context.Operand2);
 					break;
+
 				case CIL.OpCode.Xor:
 					context.SetInstruction(IRInstruction.LogicalXor, context.Result, context.Operand1, context.Operand2);
 					break;
+
 				case CIL.OpCode.Div_un:
 					context.SetInstruction(IRInstruction.DivU, context.Result, context.Operand1, context.Operand2);
 					break;
+
 				case CIL.OpCode.Rem_un:
 					context.SetInstruction(IRInstruction.RemU, context.Result, context.Operand1, context.Operand2);
 					break;
+
 				default:
 					throw new NotSupportedException();
 			}
-
 		}
 
 		/// <summary>
@@ -334,12 +338,15 @@ namespace Mosa.Compiler.Framework.Stages
 				case CIL.OpCode.Shl:
 					context.SetInstruction(IRInstruction.ShiftLeft, context.Result, context.Operand1, context.Operand2);
 					break;
+
 				case CIL.OpCode.Shr:
 					context.SetInstruction(IRInstruction.ArithmeticShiftRight, context.Result, context.Operand1, context.Operand2);
 					break;
+
 				case CIL.OpCode.Shr_un:
 					context.SetInstruction(IRInstruction.ShiftRight, context.Result, context.Operand1, context.Operand2);
 					break;
+
 				default:
 					throw new NotSupportedException();
 			}
@@ -505,6 +512,7 @@ namespace Mosa.Compiler.Framework.Stages
 				var alignment = 0;
 				this.architecture.GetTypeRequirements(builtInSigType, out elementSize, out alignment);
 			}
+
 			// Handle classes and structs
 			else if (elementSigType is ClassSigType)
 			{
@@ -621,7 +629,6 @@ namespace Mosa.Compiler.Framework.Stages
 			return result;
 		}
 
-
 		/// <summary>
 		/// Visitation function for Castclass instruction.
 		/// </summary>
@@ -677,6 +684,7 @@ namespace Mosa.Compiler.Framework.Stages
 		void CIL.ICILVisitor.Unbox(Context context)
 		{
 			throw new NotSupportedException();
+
 			//ReplaceWithVmCall(context, VmCall.Unbox);
 		}
 
@@ -797,7 +805,6 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				context.SetInstruction(IRInstruction.IntegerCompare, code, context.Result, context.Operand1, context.Operand2);
 			}
-
 		}
 
 		/// <summary>
@@ -845,7 +852,7 @@ namespace Mosa.Compiler.Framework.Stages
 			context.Remove();
 		}
 
-		#endregion // ICILVisitor
+		#endregion ICILVisitor
 
 		#region ICILVisitor - Unused
 
@@ -869,7 +876,7 @@ namespace Mosa.Compiler.Framework.Stages
 			 * into the generated image. This won't work this way forever: As soon as we'll support
 			 * a real AppDomain and real string interning, this code will have to go away and will
 			 * be replaced by a proper VM call.
-			 * 
+			 *
 			 */
 
 			ILinker linker = methodCompiler.Linker;
@@ -896,7 +903,6 @@ namespace Mosa.Compiler.Framework.Stages
 					Debug.Assert(stringData.Length == referencedString.Length * 2, @"Byte array of string data doesn't match expected string data length");
 					stream.Write(stringData);
 				}
-
 			}
 
 			Operand source = Operand.CreateSymbol(BuiltInSigType.String, symbolName);
@@ -1210,7 +1216,7 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 			else if (type.FullName == "System.Int16")
 			{
-				//ReplaceWithVmCall(context, VmCall.UnboxInt32); 
+				//ReplaceWithVmCall(context, VmCall.UnboxInt32);
 				ReplaceWithVmCall(context, VmCall.UnboxInt16);
 			}
 			else if (type.FullName == "System.UInt16")
@@ -1295,7 +1301,6 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			context.SetInstruction(IRInstruction.Return);
 		}
-
 
 		private ExceptionHandlingClause FindImmediateClause(Context context)
 		{
@@ -1425,6 +1430,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			Replace(context, IRInstruction.SubF, IRInstruction.SubS, IRInstruction.SubU);
 		}
+
 		/// <summary>
 		/// Visitation function for Mul instruction.
 		/// </summary>
@@ -1452,7 +1458,7 @@ namespace Mosa.Compiler.Framework.Stages
 			Replace(context, IRInstruction.RemF, IRInstruction.RemS, IRInstruction.RemU);
 		}
 
-		#endregion // ICILVisitor
+		#endregion ICILVisitor - Unused
 
 		#region Internals
 
@@ -1577,7 +1583,6 @@ namespace Mosa.Compiler.Framework.Stages
 				case CilElementType.Char: goto case CilElementType.U2;
 				case CilElementType.Boolean: goto case CilElementType.U2;
 
-
 				default:
 					result = sigType;
 					break;
@@ -1587,7 +1592,7 @@ namespace Mosa.Compiler.Framework.Stages
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private enum ConvType
 		{
@@ -1638,7 +1643,7 @@ namespace Mosa.Compiler.Framework.Stages
 		}
 
 		private static readonly BaseIRInstruction[][] s_convTable = new BaseIRInstruction[13][] {
-			/* I1 */ new BaseIRInstruction[13] { 
+			/* I1 */ new BaseIRInstruction[13] {
 				/* I1 */ IRInstruction.Move,
 				/* I2 */ IRInstruction.LogicalAnd,
 				/* I4 */ IRInstruction.LogicalAnd,
@@ -1653,7 +1658,7 @@ namespace Mosa.Compiler.Framework.Stages
 				/* U  */ IRInstruction.LogicalAnd,
 				/* Ptr*/ IRInstruction.LogicalAnd,
 			},
-			/* I2 */ new BaseIRInstruction[13] { 
+			/* I2 */ new BaseIRInstruction[13] {
 				/* I1 */ IRInstruction.SignExtendedMove,
 				/* I2 */ IRInstruction.Move,
 				/* I4 */ IRInstruction.LogicalAnd,
@@ -1668,7 +1673,7 @@ namespace Mosa.Compiler.Framework.Stages
 				/* U  */ IRInstruction.LogicalAnd,
 				/* Ptr*/ IRInstruction.LogicalAnd,
 			},
-			/* I4 */ new BaseIRInstruction[13] { 
+			/* I4 */ new BaseIRInstruction[13] {
 				/* I1 */ IRInstruction.SignExtendedMove,
 				/* I2 */ IRInstruction.SignExtendedMove,
 				/* I4 */ IRInstruction.Move,
@@ -1889,9 +1894,11 @@ namespace Mosa.Compiler.Framework.Stages
 				case ConvType.I4:
 					mask = 0xFFFFFFFF;
 					break;
+
 				case ConvType.I8:
 					mask = 0x0;
 					break;
+
 				case ConvType.U1:
 					mask = 0xFF;
 					return IRInstruction.ZeroExtendedMove;
@@ -1901,19 +1908,26 @@ namespace Mosa.Compiler.Framework.Stages
 				case ConvType.U4:
 					mask = 0xFFFFFFFF;
 					break;
+
 				case ConvType.U8:
 					mask = 0x0;
 					break;
+
 				case ConvType.R4:
 					break;
+
 				case ConvType.R8:
 					break;
+
 				case ConvType.I:
 					break;
+
 				case ConvType.U:
 					break;
+
 				case ConvType.Ptr:
 					break;
+
 				default:
 					Debug.Assert(false);
 					throw new NotSupportedException();
@@ -2101,6 +2115,6 @@ namespace Mosa.Compiler.Framework.Stages
 			return name;
 		}
 
-		#endregion // Internals
+		#endregion Internals
 	}
 }

@@ -12,12 +12,12 @@ using System.Collections.Generic;
 namespace Mosa.EmulatedKernel
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public class PCIBus
 	{
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected List<PCIDevice> devices;
 

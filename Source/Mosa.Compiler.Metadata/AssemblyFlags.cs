@@ -2,7 +2,6 @@ using System;
 
 namespace Mosa.Compiler.Metadata
 {
-
 	[Flags]
 	public enum AssemblyAttributes : uint
 	{

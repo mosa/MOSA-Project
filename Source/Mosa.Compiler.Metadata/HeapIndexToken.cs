@@ -11,11 +11,9 @@ using System;
 
 namespace Mosa.Compiler.Metadata
 {
-
 	[Flags]
 	public enum HeapIndexToken
 	{
-		
 		/// <summary>
 		/// Special constant to represent a user string heap token.
 		/// </summary>
@@ -42,7 +40,7 @@ namespace Mosa.Compiler.Metadata
 		TableMask = 0x7F000000,
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		RowIndexMask = 0x00FFFFFF
 	}

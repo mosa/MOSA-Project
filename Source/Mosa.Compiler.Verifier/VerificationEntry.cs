@@ -16,10 +16,15 @@ namespace Mosa.Compiler.Verifier
 	public class VerificationEntry
 	{
 		public string Assembly { get; private set; }
+
 		public VerificationType Type { get; private set; }
+
 		public string Section { get; private set; }
+
 		public string Rule { get; private set; }
+
 		public string Description { get; private set; }
+
 		public Token Location { get; private set; }
 
 		public VerificationEntry(string assembly, VerificationType type, string section, string error, string description, Token token)
@@ -44,7 +49,7 @@ namespace Mosa.Compiler.Verifier
 				+ Description
 				+ (string.IsNullOrEmpty(Assembly) ? string.Empty : " in " + Assembly)
 				+ (Location == Token.Zero ? string.Empty : " at " + Location.ToString())
-				+ ". (" + Section + ") " 
+				+ ". (" + Section + ") "
 				+ Rule;
 		}
 	}

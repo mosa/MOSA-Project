@@ -58,6 +58,6 @@ namespace Mosa.Compiler.Framework
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 	}
 }

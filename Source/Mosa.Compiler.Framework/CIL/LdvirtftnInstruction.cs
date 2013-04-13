@@ -14,7 +14,7 @@ using Mosa.Compiler.Metadata;
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public sealed class LdvirtftnInstruction : UnaryInstruction
 	{
@@ -29,7 +29,7 @@ namespace Mosa.Compiler.Framework.CIL
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Methods
 
@@ -45,6 +45,7 @@ namespace Mosa.Compiler.Framework.CIL
 
 			Token token = decoder.DecodeTokenType();
 			throw new NotImplementedException();
+
 			//  _function = MetadataMemberReference.FromToken(decoder.Metadata, token);
 
 			// Setup the result
@@ -63,6 +64,5 @@ namespace Mosa.Compiler.Framework.CIL
 		}
 
 		#endregion Methods
-
 	}
 }

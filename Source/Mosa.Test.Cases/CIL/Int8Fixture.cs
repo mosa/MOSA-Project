@@ -4,7 +4,7 @@
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com> 
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 using System;
@@ -19,7 +19,6 @@ namespace Mosa.Test.Cases.CIL
 	[Importance(Importance.Critical)]
 	public class Int8Fixture : TestCompilerAdapter
 	{
-
 		public Int8Fixture()
 		{
 			settings.AddReference("Mosa.Test.Collection.dll");
@@ -47,8 +46,8 @@ namespace Mosa.Test.Cases.CIL
 		public void DivI1I1([I1]sbyte a, [I1NotZero]sbyte b)
 		{
 			if (a == sbyte.MinValue && b == -1)
-				Assert.Inconclusive("TODO: Overflow exception not implemented"); 
-			
+				Assert.Inconclusive("TODO: Overflow exception not implemented");
+
 			Assert.AreEqual(Int8Tests.DivI1I1(a, b), Run<int>("Mosa.Test.Collection", "Int8Tests", "DivI1I1", a, b));
 		}
 
@@ -157,6 +156,5 @@ namespace Mosa.Test.Cases.CIL
 		{
 			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "Int8Tests", "Ldelema", index, value));
 		}
-
 	}
 }

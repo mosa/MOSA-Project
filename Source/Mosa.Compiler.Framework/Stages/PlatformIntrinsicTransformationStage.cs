@@ -8,20 +8,16 @@
  */
 
 using System;
-using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.Framework.Platform;
-using Mosa.Compiler.Metadata;
-using Mosa.Compiler.Metadata.Signatures;
 
 namespace Mosa.Compiler.Framework.Stages
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public sealed class PlatformIntrinsicTransformationStage : BaseMethodCompilerStage, IMethodCompilerStage, IPlatformStage
 	{
-
 		#region IMethodCompilerStage Members
 
 		/// <summary>
@@ -58,9 +54,6 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 		}
 
-		#endregion // IMethodCompilerStage Members
-
+		#endregion IMethodCompilerStage Members
 	}
 }
-
-

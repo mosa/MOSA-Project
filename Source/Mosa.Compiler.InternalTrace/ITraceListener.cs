@@ -11,10 +11,10 @@ using Mosa.Compiler.TypeSystem;
 
 namespace Mosa.Compiler.InternalTrace
 {
-
 	public interface ITraceListener
 	{
 		void SubmitInstructionTraceInformation(RuntimeMethod method, string stage, string log);
+
 		void SubmitDebugStageInformation(RuntimeMethod method, string stage, string line);
 	}
 }

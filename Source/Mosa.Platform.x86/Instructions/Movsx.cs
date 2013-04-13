@@ -18,13 +18,12 @@ namespace Mosa.Platform.x86.Instructions
 	/// </summary>
 	public sealed class Movsx : TwoOperandInstruction
 	{
-
 		#region Data Members
 
 		private static readonly OpCode R_X8 = new OpCode(new byte[] { 0x0F, 0xBE });
 		private static readonly OpCode R_X16 = new OpCode(new byte[] { 0x0F, 0xBF });
 
-		#endregion
+		#endregion Data Members
 
 		#region Methods
 
@@ -60,12 +59,14 @@ namespace Mosa.Platform.x86.Instructions
 						if ((destination.IsRegister) && (source.IsMemoryAddress)) return R_X8;
 					}
 					break;
+
 				case CilElementType.Char: goto case CilElementType.U2;
 				case CilElementType.U2: goto case CilElementType.I2;
 				case CilElementType.I2:
 					if ((destination.IsRegister) && (source.IsRegister)) return R_X16;
 					if ((destination.IsRegister) && (source.IsMemoryAddress)) return R_X16;
 					break;
+
 				default:
 					break;
 			}
@@ -83,6 +84,6 @@ namespace Mosa.Platform.x86.Instructions
 			visitor.Movsx(context);
 		}
 
-		#endregion
+		#endregion Methods
 	}
 }

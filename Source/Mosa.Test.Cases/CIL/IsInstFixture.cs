@@ -4,8 +4,8 @@
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com> 
- *  
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
+ *
  */
 
 using MbUnit.Framework;
@@ -17,7 +17,6 @@ namespace Mosa.Test.Cases.CIL
 	[TestFixture]
 	public class IsInstFixture : TestCompilerAdapter
 	{
-
 		public IsInstFixture()
 		{
 			settings.AddReference("Mosa.Test.Collection.dll");

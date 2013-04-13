@@ -30,105 +30,124 @@ namespace Mosa.DeviceDrivers.ISA
 			internal const byte VerticalDisplayEnableEnd = 0x12;
 		}
 
-		#endregion
+		#endregion Definitions
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IReadWriteIOPort miscellaneousOutput;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IReadWriteIOPort crtControllerIndex;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IReadWriteIOPort crtControllerData;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IReadWriteIOPort crtControllerIndexColor;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IReadWriteIOPort crtControllerDataColor;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IWriteOnlyIOPort miscellaneousOutputWrite;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IReadWriteIOPort sequencerAddress;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IReadWriteIOPort sequencerData;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IReadWriteIOPort graphicsControllerAddress;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IReadWriteIOPort graphicsControllerData;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IReadWriteIOPort inputStatus1ReadB;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IReadWriteIOPort attributeAddress;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IReadWriteIOPort attributeData;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IMemory memory;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IReadWriteIOPort activeControllerIndex;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IReadWriteIOPort activeControllerData;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected bool colorMode = false;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected uint offset = 0x8000;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected byte width = 80;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected byte height = 25;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected byte bytePerChar = 2;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected TextColor defaultBackground = TextColor.White;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="VGAText"/> class.
 		/// </summary>
-		public VGAText() { }
+		public VGAText()
+		{
+		}
 
 		/// <summary>
 		/// Setups this hardware device driver
@@ -200,7 +219,10 @@ namespace Mosa.DeviceDrivers.ISA
 		/// Called when an interrupt is received.
 		/// </summary>
 		/// <returns></returns>
-		public override bool OnInterrupt() { return true; }
+		public override bool OnInterrupt()
+		{
+			return true;
+		}
 
 		/// <summary>
 		/// Sends the command.
@@ -337,31 +359,31 @@ namespace Mosa.DeviceDrivers.ISA
 				sequencerData.Write8(settings[1 + i]);
 			}
 
-			// Unlock CRTC registers 
+			// Unlock CRTC registers
 			crtControllerIndexColor.Write8(0x03);
 			crtControllerDataColor.Write8((byte)(crtControllerData.Read8() | 0x80));
 			crtControllerIndexColor.Write8(0x11);
 			crtControllerDataColor.Write8((byte)(crtControllerData.Read8() & ~0x80));
 
-			// Make sure they remain unlocked 
+			// Make sure they remain unlocked
 			settings[0x03] = (byte)(settings[0x03] | 0x80);
 			settings[0x11] = (byte)(settings[0x11] & ~0x80);
 
-			// Write CRTC regs 
+			// Write CRTC regs
 			for (byte i = 0; i < 25; i++)
 			{
 				crtControllerIndexColor.Write8(i);
 				crtControllerDataColor.Write8(settings[6 + i]);
 			}
 
-			// Write GRAPHICS CONTROLLER regs 
+			// Write GRAPHICS CONTROLLER regs
 			for (byte i = 0; i < 9; i++)
 			{
 				graphicsControllerAddress.Write8(i);
 				graphicsControllerData.Write8(settings[31 + i]);
 			}
 
-			// Write ATTRIBUTE CONTROLLER regs 
+			// Write ATTRIBUTE CONTROLLER regs
 			for (byte i = 0; i < 21; i++)
 			{
 				inputStatus1ReadB.Read8();
@@ -395,7 +417,6 @@ namespace Mosa.DeviceDrivers.ISA
 			0x0C, 0x00, 0x0F, 0x08, 0x00
 		};
 
-		#endregion
-
+		#endregion Modes
 	}
 }

@@ -35,10 +35,9 @@ namespace Mosa.Compiler.Linker
 				new CodeGenerationStage(),
 			});
 
-
 			compiler.Architecture.ExtendMethodCompilerPipeline(this.Pipeline);
 		}
 
-		#endregion // Construction
+		#endregion Construction
 	}
 }

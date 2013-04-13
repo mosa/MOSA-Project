@@ -12,9 +12,8 @@ using System.Text;
 
 namespace Mosa.Test.System
 {
-	static class DelegateUtility
+	internal static class DelegateUtility
 	{
-
 		static public string GetDelegteName(object ret, params object[] parameters)
 		{
 			object[] total = new object[parameters.Length + 1];
@@ -43,7 +42,7 @@ namespace Mosa.Test.System
 			return name.ToString();
 		}
 
-		static string GetTypePartName(object t)
+		private static string GetTypePartName(object t)
 		{
 			if (t == null) return "V";
 
@@ -109,7 +108,7 @@ namespace Mosa.Test.System
 			return prototype.ToString();
 		}
 
-		static string AddReturnMarshalAttribute(string t)
+		private static string AddReturnMarshalAttribute(string t)
 		{
 			if (t == "char")
 				return "[return: MarshalAs(UnmanagedType.U2)]";
@@ -117,7 +116,7 @@ namespace Mosa.Test.System
 				return null;
 		}
 
-		static string AddMarshalAttribute(string t)
+		private static string AddMarshalAttribute(string t)
 		{
 			if (t == "char")
 				return "[MarshalAs(UnmanagedType.U2)]" + t;
@@ -125,7 +124,7 @@ namespace Mosa.Test.System
 				return t;
 		}
 
-		static string GetTypeFromPartName(string p)
+		private static string GetTypeFromPartName(string p)
 		{
 			switch (p)
 			{

@@ -29,7 +29,7 @@ namespace Mosa.Compiler.Framework.CIL
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Methods
 
@@ -66,7 +66,6 @@ namespace Mosa.Compiler.Framework.CIL
 			visitor.Stsfld(context);
 		}
 
-		#endregion // Methods
-
+		#endregion Methods
 	}
 }

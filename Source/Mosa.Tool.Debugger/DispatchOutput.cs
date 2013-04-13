@@ -7,20 +7,12 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Text;
-using System.Windows.Forms;
-using WeifenLuo.WinFormsUI.Docking;
 using Mosa.Utility.DebugEngine;
 
 namespace Mosa.Tool.Debugger
 {
 	public partial class DispatchOutput : DebuggerDockContent
 	{
-
 		private string[] events;
 		private int eventIndex;
 
@@ -90,6 +82,5 @@ namespace Mosa.Tool.Debugger
 				listBox1.Items.Add(events[start]);
 			}
 		}
-
 	}
 }

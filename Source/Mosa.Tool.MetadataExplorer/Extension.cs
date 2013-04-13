@@ -7,15 +7,12 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-
 using Mosa.Compiler.Metadata;
 
 namespace Mosa.Tool.MetadataExplorer
 {
-
 	public static class Extension
 	{
-
 		public static string FormatToString(this HeapIndexToken token)
 		{
 			return ((int)token).ToString("X8");
@@ -30,6 +27,5 @@ namespace Mosa.Tool.MetadataExplorer
 		{
 			return token.ToInt32().ToString("X8");
 		}
-
 	}
 }

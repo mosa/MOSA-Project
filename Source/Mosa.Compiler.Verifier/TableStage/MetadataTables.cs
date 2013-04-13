@@ -13,10 +13,9 @@ namespace Mosa.Compiler.Verifier.TableStage
 {
 	public class MetadataTables : BaseVerificationStage
 	{
-
 		protected override void Run()
 		{
-			List<BaseVerificationStage> stages = new List<BaseVerificationStage>() { 
+			List<BaseVerificationStage> stages = new List<BaseVerificationStage>() {
 				new Assembly(),
 				new AssemblyRef(),
 				new ClassLayout()
@@ -29,9 +28,6 @@ namespace Mosa.Compiler.Verifier.TableStage
 				if (verifyAssembly.Verify.HasError)
 					return;
 			}
-
 		}
-
 	}
 }
-

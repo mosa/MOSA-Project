@@ -15,7 +15,7 @@ using Mosa.Compiler.Metadata.Signatures;
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public sealed class LdelemInstruction : BinaryInstruction
 	{
@@ -36,36 +36,47 @@ namespace Mosa.Compiler.Framework.CIL
 				case OpCode.Ldelem_i1:
 					elementType = BuiltInSigType.SByte;
 					break;
+
 				case OpCode.Ldelem_i2:
 					elementType = BuiltInSigType.Int16;
 					break;
+
 				case OpCode.Ldelem_i4:
 					elementType = BuiltInSigType.Int32;
 					break;
+
 				case OpCode.Ldelem_i8:
 					elementType = BuiltInSigType.Int64;
 					break;
+
 				case OpCode.Ldelem_u1:
 					elementType = BuiltInSigType.Byte;
 					break;
+
 				case OpCode.Ldelem_u2:
 					elementType = BuiltInSigType.UInt16;
 					break;
+
 				case OpCode.Ldelem_u4:
 					elementType = BuiltInSigType.UInt32;
 					break;
+
 				case OpCode.Ldelem_i:
 					elementType = BuiltInSigType.IntPtr;
 					break;
+
 				case OpCode.Ldelem_r4:
 					elementType = BuiltInSigType.Single;
 					break;
+
 				case OpCode.Ldelem_r8:
 					elementType = BuiltInSigType.Double;
 					break;
+
 				case OpCode.Ldelem_ref: // FIXME: Really object?
 					elementType = BuiltInSigType.Object;
 					break;
+
 				default:
 					throw new NotImplementedException();
 			}

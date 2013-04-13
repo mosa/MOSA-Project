@@ -29,7 +29,7 @@ namespace Mosa.Compiler.LinkerFormat.PE
 		/// </summary>
 		public int Size;
 
-		#endregion // Data members
+		#endregion Data members
 
 		#region Methods
 
@@ -56,6 +56,6 @@ namespace Mosa.Compiler.LinkerFormat.PE
 			writer.Write(this.Size);
 		}
 
-		#endregion // Methods
+		#endregion Methods
 	}
 }

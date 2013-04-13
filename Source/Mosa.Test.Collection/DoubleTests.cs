@@ -4,16 +4,13 @@
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com> 
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
-
 
 namespace Mosa.Test.Collection
 {
-
 	public static class DoubleTests
 	{
-
 		public static bool AddR8R8(double expected, double first, double second)
 		{
 			return expected == (first + second);

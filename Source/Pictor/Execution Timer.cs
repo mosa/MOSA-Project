@@ -15,7 +15,7 @@ namespace Pictor
 //         [DllImport("Kernel32.dll")]
 //         private static extern bool QueryPerformanceCounter(
 //             out long lpPerformanceCount);
-// 
+//
 //         [DllImport("Kernel32.dll")]
 //         private static extern bool QueryPerformanceFrequency(
 //             out long lpFrequency);
@@ -72,6 +72,7 @@ namespace Pictor
 			if (m_RecurseLevel == 0)
 			{
 				long NowTime = Environment.TickCount;
+
 				//QueryPerformanceCounter(out NowTime);
 				long TotalTime = NowTime - m_LastStartTime;
 				m_LastStartTime = 0;

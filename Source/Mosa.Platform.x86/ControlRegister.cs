@@ -46,7 +46,7 @@ namespace Mosa.Platform.x86
 			CR4 = 4,
 		}
 
-		#endregion // Types
+		#endregion Types
 
 		#region Static data members
 
@@ -70,7 +70,7 @@ namespace Mosa.Platform.x86
 		/// </summary>
 		public static readonly ControlRegister CR4 = new ControlRegister(ControlRegisterType.CR4);
 
-		#endregion // Static data members
+		#endregion Static data members
 
 		/// <summary>
 		/// Stores the general purpose register identified by this object instance.
@@ -89,7 +89,7 @@ namespace Mosa.Platform.x86
 			this.control = control;
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Properties
 
@@ -123,7 +123,7 @@ namespace Mosa.Platform.x86
 			get { return 32; }
 		}
 
-		#endregion // Properties
+		#endregion Properties
 
 		#region Methods
 
@@ -156,6 +156,6 @@ namespace Mosa.Platform.x86
 			return control.ToString();
 		}
 
-		#endregion // Methods
+		#endregion Methods
 	}
 }

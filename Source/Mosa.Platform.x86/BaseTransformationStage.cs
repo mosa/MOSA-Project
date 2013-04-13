@@ -18,16 +18,14 @@ using Mosa.Compiler.Metadata;
 
 namespace Mosa.Platform.x86
 {
-
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public abstract class BaseTransformationStage : BasePlatformTransformationStage
 	{
-
 		#region Data members
 
-		#endregion // Data members
+		#endregion Data members
 
 		#region IPipelineStage Members
 
@@ -37,7 +35,7 @@ namespace Mosa.Platform.x86
 		/// <value>The name of the compilation stage.</value>
 		public override string Name { get { return "x86." + this.GetType().Name; } }
 
-		#endregion // IPipelineStage Members
+		#endregion IPipelineStage Members
 
 		#region Emit Constant Methods
 
@@ -103,13 +101,13 @@ namespace Mosa.Platform.x86
 					}
 				}
 			}
+
 			// FIXME: Attach the label operand to the linker symbol
 			// FIXME: Rename the operand to SymbolOperand
 			// FIXME: Use the provided name to link
 			return Operand.CreateLabel(cop.Type, name);
 		}
 
-		#endregion // Emit Methods
-
+		#endregion Emit Constant Methods
 	}
 }

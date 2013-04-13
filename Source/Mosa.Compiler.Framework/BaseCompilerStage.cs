@@ -42,7 +42,7 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		protected ITypeLayout typeLayout;
 
-		#endregion // Data members
+		#endregion Data members
 
 		#region IPipelineStage Members
 
@@ -52,7 +52,7 @@ namespace Mosa.Compiler.Framework
 		/// <value>The name of the compilation stage.</value>
 		public virtual string Name { get { return this.GetType().Name; } }
 
-		#endregion // IPipelineStage Members
+		#endregion IPipelineStage Members
 
 		#region ICompilerStage members
 
@@ -64,7 +64,7 @@ namespace Mosa.Compiler.Framework
 			typeLayout = compiler.TypeLayout;
 		}
 
-		#endregion // ICompilerStage members
+		#endregion ICompilerStage members
 
 		#region Methods
 
@@ -82,7 +82,7 @@ namespace Mosa.Compiler.Framework
 			return linker;
 		}
 
-		#endregion // Methods
+		#endregion Methods
 
 		#region Helper Methods
 
@@ -96,7 +96,6 @@ namespace Mosa.Compiler.Framework
 			compiler.InternalTrace.TraceListener.SubmitDebugStageInformation(method, stage, line);
 		}
 
-		#endregion
-
+		#endregion Helper Methods
 	}
 }

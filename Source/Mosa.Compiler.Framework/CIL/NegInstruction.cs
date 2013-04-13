@@ -12,7 +12,7 @@ using System;
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public sealed class NegInstruction : UnaryArithmeticInstruction
 	{
@@ -32,7 +32,7 @@ namespace Mosa.Compiler.Framework.CIL
 			StackTypeCode.Unknown
 		};
 
-		#endregion // Data members
+		#endregion Data members
 
 		#region Construction
 
@@ -45,7 +45,7 @@ namespace Mosa.Compiler.Framework.CIL
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Methods
 
@@ -77,6 +77,5 @@ namespace Mosa.Compiler.Framework.CIL
 		}
 
 		#endregion Methods
-
 	}
 }

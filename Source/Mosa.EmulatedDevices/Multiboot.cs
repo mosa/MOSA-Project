@@ -11,13 +11,11 @@ using Mosa.EmulatedKernel;
 
 namespace Mosa.EmulatedDevices
 {
-
 	/// <summary>
 	/// Emulates the Multiboot environment
 	/// </summary>
 	public static class Multiboot
 	{
-
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Multiboot"/> class.
 		/// </summary>

@@ -3,8 +3,8 @@
 // Copyright (C) 2007 Lars Brubaker
 //                  larsbrubaker@gmail.com
 //
-// Permission to copy, use, modify, sell and distribute this software 
-// is granted provided this copyright notice appears in all copies. 
+// Permission to copy, use, modify, sell and distribute this software
+// is granted provided this copyright notice appears in all copies.
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -20,17 +20,18 @@ namespace Pictor.UI
 	//----------------------------------------------------------cbox_ctrl_impl
 	public class ButtonWidget : UIWidget
 	{
-		TextWidget m_ButtonText;
-		bool m_MouseDownOnButton = false;
-		bool m_MouseOverButton = false;
-		bool m_DrawHoverEffect = true;
-		double m_X;
-		double m_Y;
-		double m_BorderWidth;
-		double m_TextPadding;
-		double m_BorderRadius;
+		private TextWidget m_ButtonText;
+		private bool m_MouseDownOnButton = false;
+		private bool m_MouseOverButton = false;
+		private bool m_DrawHoverEffect = true;
+		private double m_X;
+		private double m_Y;
+		private double m_BorderWidth;
+		private double m_TextPadding;
+		private double m_BorderRadius;
 
 		public delegate void ButtonEventHandler(ButtonWidget button);
+
 		public event ButtonEventHandler ButtonClick;
 
 		protected bool MouseDownOnButton
@@ -46,7 +47,9 @@ namespace Pictor.UI
 		}
 
 		public double BorderWidth { get { return m_BorderWidth; } set { m_BorderWidth = value; } }
+
 		public double TextPadding { get { return m_TextPadding; } set { m_TextPadding = value; } }
+
 		public double BorderRadius { get { return m_BorderRadius; } set { m_BorderRadius = value; } }
 
 		public ButtonWidget()

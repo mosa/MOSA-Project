@@ -20,7 +20,6 @@ namespace Mosa.Platform.x86.Intrinsic
 	/// </summary>
 	public class GetMethodLookupTable : IIntrinsicPlatformMethod
 	{
-
 		#region Methods
 
 		/// <summary>
@@ -33,7 +32,6 @@ namespace Mosa.Platform.x86.Intrinsic
 			context.SetInstruction(IR.IRInstruction.Move, context.Result, Operand.CreateSymbol(BuiltInSigType.Ptr, @"<$>methodLookupTable"));
 		}
 
-		#endregion // Methods
-
+		#endregion Methods
 	}
 }

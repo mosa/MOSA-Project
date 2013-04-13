@@ -16,7 +16,7 @@ using Mosa.Compiler.TypeSystem;
 namespace Mosa.Compiler.Framework
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public struct InstructionData
 	{
@@ -63,11 +63,11 @@ namespace Mosa.Compiler.Framework
 		public object Other;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private uint packed;
 
-		#endregion // Data members
+		#endregion Data members
 
 		#region Properties
 
@@ -187,7 +187,7 @@ namespace Mosa.Compiler.Framework
 			set { Other = value; }
 		}
 
-		#endregion // Properties
+		#endregion Properties
 
 		#region Methods
 
@@ -288,6 +288,6 @@ namespace Mosa.Compiler.Framework
 			return str;
 		}
 
-		#endregion
+		#endregion Methods
 	}
 }

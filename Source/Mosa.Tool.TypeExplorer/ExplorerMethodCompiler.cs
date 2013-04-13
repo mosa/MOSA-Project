@@ -13,7 +13,7 @@ using Mosa.Compiler.TypeSystem;
 
 namespace Mosa.Tool.TypeExplorer
 {
-	class ExplorerMethodCompiler : BaseMethodCompiler
+	internal class ExplorerMethodCompiler : BaseMethodCompiler
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ExplorerMethodCompiler"/> class.
@@ -31,11 +31,12 @@ namespace Mosa.Tool.TypeExplorer
 				new BasicBlockBuilderStage(),
 				new ExceptionPrologueStage(),
 				new OperandAssignmentStage(),
+
 				//new SingleUseMarkerStage(),
 				//new OperandUsageAnalyzerStage(),
 				new StaticAllocationResolutionStage(),
 				new CILTransformationStage(),
-				
+
 				(compilerOptions.EnableSSA && compilerOptions.EnableSSAOptimizations) ? new LocalVariablePromotionStage() : null,
 				(compilerOptions.EnableSSA) ? new EdgeSplitStage() : null,
 				(compilerOptions.EnableSSA) ? new DominanceCalculationStage() : null,
@@ -43,16 +44,16 @@ namespace Mosa.Tool.TypeExplorer
 				(compilerOptions.EnableSSA) ? new EnterSSAStage() : null,
 				(compilerOptions.EnableSSA && compilerOptions.EnableSSAOptimizations) ? new SSAOptimizations() : null,
 				(compilerOptions.EnableSSA) ? new LeaveSSA() : null,
-				
+
 				new StackLayoutStage(),
 				new PlatformIntrinsicTransformationStage(),
 				new PlatformStubStage(),
 				new LoopAwareBlockOrderStage(),
+
 				//new SimpleTraceBlockOrderStage(),
 				//new SimpleRegisterAllocatorStage(),
 				new CodeGenerationStage(),
 			});
 		}
-
 	}
 }

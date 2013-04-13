@@ -61,7 +61,7 @@ namespace Mosa.Platform.x86
 		/// </summary>
 		public static readonly MMXRegister MM7 = new MMXRegister(15, 7);
 
-		#endregion // Static data members
+		#endregion Static data members
 
 		#region Data members
 
@@ -70,7 +70,7 @@ namespace Mosa.Platform.x86
 		/// </summary>
 		private int _registerCode;
 
-		#endregion // Data members
+		#endregion Data members
 
 		#region Construction
 
@@ -85,7 +85,7 @@ namespace Mosa.Platform.x86
 			_registerCode = registerCode;
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Properties
 
@@ -113,7 +113,7 @@ namespace Mosa.Platform.x86
 			get { return 64; }
 		}
 
-		#endregion // Properties
+		#endregion Properties
 
 		#region Methods
 
@@ -136,6 +136,6 @@ namespace Mosa.Platform.x86
 			return String.Format("MM{0}", _registerCode);
 		}
 
-		#endregion // Methods
+		#endregion Methods
 	}
 }

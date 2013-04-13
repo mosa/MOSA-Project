@@ -12,12 +12,12 @@ using Mosa.DeviceSystem;
 namespace Mosa.EmulatedKernel
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public static class IOPortDispatch
 	{
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		static private IOPortHandler portHandler = new IOPortHandler();
 
@@ -26,42 +26,60 @@ namespace Mosa.EmulatedKernel
 		/// </summary>
 		/// <param name="port">The port.</param>
 		/// <returns></returns>
-		public static byte Read8(ushort port) { return portHandler.Read8(port); }
+		public static byte Read8(ushort port)
+		{
+			return portHandler.Read8(port);
+		}
 
 		/// <summary>
 		/// Reads the specified port.
 		/// </summary>
 		/// <param name="port">The port.</param>
 		/// <returns></returns>
-		public static ushort Read16(ushort port) { return portHandler.Read16(port); }
+		public static ushort Read16(ushort port)
+		{
+			return portHandler.Read16(port);
+		}
 
 		/// <summary>
 		/// Reads the specified port.
 		/// </summary>
 		/// <param name="port">The port.</param>
 		/// <returns></returns>
-		public static uint Read32(ushort port) { return portHandler.Read32(port); }
+		public static uint Read32(ushort port)
+		{
+			return portHandler.Read32(port);
+		}
 
 		/// <summary>
 		/// Writes the specified port.
 		/// </summary>
 		/// <param name="port">The port.</param>
 		/// <param name="data">The data.</param>
-		public static void Write8(ushort port, byte data) { portHandler.Write8(port, data); }
+		public static void Write8(ushort port, byte data)
+		{
+			portHandler.Write8(port, data);
+		}
 
 		/// <summary>
 		/// Writes the specified port.
 		/// </summary>
 		/// <param name="port">The port.</param>
 		/// <param name="data">The data.</param>
-		public static void Write16(ushort port, ushort data) { portHandler.Write16(port, data); }
+		public static void Write16(ushort port, ushort data)
+		{
+			portHandler.Write16(port, data);
+		}
 
 		/// <summary>
 		/// Writes the specified port.
 		/// </summary>
 		/// <param name="port">The port.</param>
 		/// <param name="data">The data.</param>
-		public static void Write32(ushort port, uint data) { portHandler.Write32(port, data); }
+		public static void Write32(ushort port, uint data)
+		{
+			portHandler.Write32(port, data);
+		}
 
 		/// <summary>
 		/// Registers the IO port.

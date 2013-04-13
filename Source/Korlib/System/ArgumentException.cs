@@ -15,7 +15,7 @@ namespace System
 	public class ArgumentException : Exception
 	{
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected string paramName;
 

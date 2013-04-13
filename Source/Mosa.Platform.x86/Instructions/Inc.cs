@@ -24,7 +24,7 @@ namespace Mosa.Platform.x86.Instructions
 		private static readonly OpCode INC16 = new OpCode(new byte[] { 0x66, 0xFF }, 0);
 		private static readonly OpCode INC32 = new OpCode(new byte[] { 0xFF }, 0);
 
-		#endregion // Data Members
+		#endregion Data Members
 
 		#region Construction
 
@@ -36,7 +36,7 @@ namespace Mosa.Platform.x86.Instructions
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Methods
 
@@ -66,6 +66,6 @@ namespace Mosa.Platform.x86.Instructions
 			visitor.Inc(context);
 		}
 
-		#endregion // Methods
+		#endregion Methods
 	}
 }

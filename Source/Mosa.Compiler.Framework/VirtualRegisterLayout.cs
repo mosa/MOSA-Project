@@ -17,7 +17,6 @@ namespace Mosa.Compiler.Framework
 	/// </summary>
 	public sealed class VirtualRegisterLayout
 	{
-
 		#region Data members
 
 		private IArchitecture architecture;
@@ -26,11 +25,11 @@ namespace Mosa.Compiler.Framework
 
 		private StackLayout stackLayout;
 
-		#endregion // Data members
+		#endregion Data members
 
 		#region Properties
 
-		#endregion // Properties
+		#endregion Properties
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="VirtualRegisterLayout"/> class.
@@ -56,7 +55,5 @@ namespace Mosa.Compiler.Framework
 
 			return virtualRegister;
 		}
-
-
 	}
 }

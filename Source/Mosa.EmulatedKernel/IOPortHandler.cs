@@ -7,16 +7,15 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-
 namespace Mosa.EmulatedKernel
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public class IOPortHandler
 	{
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private static IIOPortDevice[] ports = new IIOPortDevice[ushort.MaxValue];
 
@@ -115,5 +114,4 @@ namespace Mosa.EmulatedKernel
 			ports[port].Write32(port, data);
 		}
 	}
-
 }

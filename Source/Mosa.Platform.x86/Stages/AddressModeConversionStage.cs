@@ -16,11 +16,10 @@ using Mosa.Compiler.Metadata;
 namespace Mosa.Platform.x86.Stages
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public sealed class AddressModeConversionStage : BaseTransformationStage, IPipelineStage
 	{
-
 		#region IMethodCompilerStage Members
 
 		/// <summary>
@@ -35,7 +34,7 @@ namespace Mosa.Platform.x86.Stages
 							ThreeTwoAddressConversion(ctx);
 		}
 
-		#endregion // IMethodCompilerStage Members
+		#endregion IMethodCompilerStage Members
 
 		/// <summary>
 		/// Converts the given instruction from three address format to a two address format.
@@ -102,6 +101,5 @@ namespace Mosa.Platform.x86.Stages
 
 			ctx.AppendInstruction(X86.Mov, result, eax);
 		}
-
 	}
 }

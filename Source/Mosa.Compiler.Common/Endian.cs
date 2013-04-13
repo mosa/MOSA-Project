@@ -35,11 +35,12 @@ namespace Mosa.Compiler.Common
 		[StructLayout(LayoutKind.Explicit)]
 		private struct Union4
 		{
-		
 			[FieldOffset(0)]
 			public float Single;
+
 			[FieldOffset(0)]
 			public int Int32;
+
 			[FieldOffset(0)]
 			public uint UInt32;
 		}

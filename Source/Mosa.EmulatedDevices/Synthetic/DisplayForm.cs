@@ -7,30 +7,32 @@ using Mosa.DeviceSystem;
 namespace Mosa.EmulatedDevices.Synthetic
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public partial class DisplayForm : Form
 	{
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public Bitmap bitmap;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public Graphics graphic;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public volatile bool Changed = false;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private volatile bool Resized = false;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public Keyboard.KeyPressed onKeyPressed;
 
@@ -78,9 +80,11 @@ namespace Mosa.EmulatedDevices.Synthetic
 
 		private void DisplayForm_Paint(object sender, PaintEventArgs e)
 		{
-			lock (bitmap) {
+			lock (bitmap)
+			{
 				e.Graphics.DrawImage(bitmap, 0, 0, bitmap.Width, bitmap.Height);
-				if (Resized) {
+				if (Resized)
+				{
 					Width = bitmap.Width + 12;
 					Height = bitmap.Height + 10;
 					Resized = true;
@@ -109,6 +113,5 @@ namespace Mosa.EmulatedDevices.Synthetic
 			if (this == Setup.PrimaryDisplayForm)
 				Environment.Exit(0);
 		}
-
 	}
 }

@@ -4,7 +4,7 @@
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com> 
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 using System.Collections.Generic;
@@ -45,7 +45,7 @@ namespace Mosa.Test.CodeDomCompiler
 		/// </summary>
 		private bool doNotReferenceMscorlib;
 
-		#endregion // Data members
+		#endregion Data members
 
 		#region Construction
 
@@ -74,7 +74,7 @@ namespace Mosa.Test.CodeDomCompiler
 			references = new List<string>(settings.references);
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Properties
 
@@ -97,7 +97,7 @@ namespace Mosa.Test.CodeDomCompiler
 			get { return codeSource; }
 			set { codeSource = value; }
 		}
-		
+
 		/// <summary>
 		/// Gets or sets the code source.
 		/// </summary>
@@ -107,7 +107,7 @@ namespace Mosa.Test.CodeDomCompiler
 			get { return additionalSource; }
 			set { additionalSource = value; }
 		}
-		
+
 		/// <summary>
 		/// Gets or sets a value indicating whether unsafe code is used in the test.
 		/// </summary>
@@ -139,7 +139,7 @@ namespace Mosa.Test.CodeDomCompiler
 			get { return references; }
 		}
 
-		#endregion // Properties
+		#endregion Properties
 
 		public void AddReference(string file)
 		{
@@ -174,7 +174,6 @@ namespace Mosa.Test.CodeDomCompiler
 					return false;
 
 			return true;
-
 		}
 	}
 }

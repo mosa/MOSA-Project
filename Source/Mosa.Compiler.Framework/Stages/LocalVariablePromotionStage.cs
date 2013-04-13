@@ -8,8 +8,6 @@
  */
 
 using System.Collections.Generic;
-using System.Diagnostics;
-using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Common;
 
@@ -20,7 +18,6 @@ namespace Mosa.Compiler.Framework.Stages
 	/// </summary>
 	public class LocalVariablePromotionStage : BaseMethodCompilerStage, IMethodCompilerStage, IPipelineStage
 	{
-
 		private List<Operand> localVariablesInExceptions = new List<Operand>();
 
 		#region ICompilerStage members
@@ -79,7 +76,7 @@ namespace Mosa.Compiler.Framework.Stages
 				}
 			}
 		}
-		#endregion ICompilerStage members
 
+		#endregion ICompilerStage members
 	}
 }

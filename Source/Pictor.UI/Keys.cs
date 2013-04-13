@@ -1,5 +1,4 @@
-﻿
-namespace Pictor.UI
+﻿namespace Pictor.UI
 {
 	public enum Keys
 	{

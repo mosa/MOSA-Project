@@ -5,7 +5,7 @@
  *
  * Authors:
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- *  Pascal Delprat (pdelprat) <pascal.delprat@online.fr>   
+ *  Pascal Delprat (pdelprat) <pascal.delprat@online.fr>
  */
 
 using Mosa.Compiler.Framework;
@@ -56,7 +56,6 @@ namespace Mosa.Platform.AVR32.Instructions
 			visitor.Call(context);
 		}
 
-		#endregion // Methods
-
+		#endregion Methods
 	}
 }

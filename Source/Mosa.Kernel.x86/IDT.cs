@@ -12,7 +12,7 @@ using Mosa.Platform.x86.Intrinsic;
 namespace Mosa.Kernel.x86
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public static class IDT
 	{
@@ -35,7 +35,7 @@ namespace Mosa.Kernel.x86
 			internal const byte TotalSize = 0x08;
 		}
 
-		#endregion
+		#endregion Data members
 
 		public static void Setup()
 		{
@@ -376,6 +376,5 @@ namespace Mosa.Kernel.x86
 
 			ProgrammableInterruptController.SendEndOfInterrupt(interrupt);
 		}
-
 	}
 }

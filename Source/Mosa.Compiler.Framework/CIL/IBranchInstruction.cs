@@ -21,6 +21,6 @@ namespace Mosa.Compiler.Framework.CIL
 		/// </summary>
 		bool IsConditional { get; }
 
-		#endregion // Properties
+		#endregion Properties
 	}
 }

@@ -6,8 +6,8 @@
 //                  larsbrubaker@gmail.com
 // Copyright (C) 2007
 //
-// Permission to copy, use, modify, sell and distribute this software 
-// is granted provided this copyright notice appears in all copies. 
+// Permission to copy, use, modify, sell and distribute this software
+// is granted provided this copyright notice appears in all copies.
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -56,7 +56,6 @@ namespace Pictor.UI
 			get
 			{
 				return m_Visible;
-
 			}
 			set
 			{
@@ -223,7 +222,6 @@ namespace Pictor.UI
 
 		public virtual void OnClosed()
 		{
-
 		}
 
 		public void PointToClient(ref double screenPointX, ref double screenPointY)
@@ -312,7 +310,6 @@ namespace Pictor.UI
 
 		protected void FocusPrevious()
 		{
-
 		}
 
 		public virtual void OnKeyDown(KeyEventArgs keyEvent)
@@ -378,7 +375,10 @@ namespace Pictor.UI
 			m_Transform = value;
 		}
 
-		public double Scale() { return GetTransform().GetScale(); }
+		public double Scale()
+		{
+			return GetTransform().GetScale();
+		}
 	};
 
 	abstract public class SimpleVertexSourceWidget : UIWidget, IVertexSource
@@ -392,10 +392,15 @@ namespace Pictor.UI
 		{
 			get;
 		}
+
 		public abstract void Rewind(uint path_id);
+
 		public abstract uint Vertex(out double x, out double y);
 
-		public virtual IColorType Color(uint i) { return (IColorType)new RGBA_Doubles(); }
+		public virtual IColorType Color(uint i)
+		{
+			return (IColorType)new RGBA_Doubles();
+		}
 
 		public override void OnDraw()
 		{

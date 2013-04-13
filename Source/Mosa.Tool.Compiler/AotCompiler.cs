@@ -22,7 +22,6 @@ namespace Mosa.Tool.Compiler
 {
 	public class AotCompiler : BaseCompiler
 	{
-
 		/// <summary>
 		/// Initializes a new instance of the <see cref="AotCompiler"/> class.
 		/// </summary>
@@ -35,7 +34,6 @@ namespace Mosa.Tool.Compiler
 		public AotCompiler(IArchitecture architecture, ILinker linker, ITypeSystem typeSystem, ITypeLayout typeLayout, IInternalTrace internalTrace, CompilerOptions compilerOptions)
 			: base(architecture, typeSystem, typeLayout, new CompilationScheduler(typeSystem, true), internalTrace, compilerOptions)
 		{
-
 		}
 
 		/// <summary>

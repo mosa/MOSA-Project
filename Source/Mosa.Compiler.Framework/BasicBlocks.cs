@@ -13,14 +13,14 @@ using System.Collections.Generic;
 namespace Mosa.Compiler.Framework
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public sealed class BasicBlocks : IEnumerable<BasicBlock>
 	{
 		#region Data members
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private readonly List<BasicBlock> basicBlocks = new List<BasicBlock>();
 
@@ -30,20 +30,21 @@ namespace Mosa.Compiler.Framework
 		private readonly Dictionary<int, BasicBlock> basicBlocksByLabel = new Dictionary<int, BasicBlock>();
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private readonly List<BasicBlock> headBlocks = new List<BasicBlock>();
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private BasicBlock prologueBlock = null;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private BasicBlock epilogueBlock = null;
 
-		#endregion
+		#endregion Data members
 
 		#region Construction
 
@@ -54,7 +55,7 @@ namespace Mosa.Compiler.Framework
 		{
 		}
 
-		#endregion
+		#endregion Construction
 
 		#region Properties
 
@@ -122,7 +123,7 @@ namespace Mosa.Compiler.Framework
 			}
 		}
 
-		#endregion
+		#endregion Properties
 
 		#region Methods
 
@@ -179,6 +180,7 @@ namespace Mosa.Compiler.Framework
 			basicBlocksByLabel.Add(label, basicBlock);
 			return basicBlock;
 		}
+
 		/// <summary>
 		/// Links the blocks.
 		/// </summary>
@@ -248,7 +250,7 @@ namespace Mosa.Compiler.Framework
 			epilogueBlock = null;
 		}
 
-		#endregion
+		#endregion Methods
 
 		public List<BasicBlock> GetConnectedBlocksStartingAtHead(BasicBlock start)
 		{

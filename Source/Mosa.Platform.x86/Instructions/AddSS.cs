@@ -16,12 +16,11 @@ namespace Mosa.Platform.x86.Instructions
 	/// </summary>
 	public sealed class AddSS : TwoOperandInstruction
 	{
-
 		#region Data Members
 
 		private static readonly OpCode opcode = new OpCode(new byte[] { 0xF3, 0x0F, 0x58 });
 
-		#endregion // Data Members
+		#endregion Data Members
 
 		#region Methods
 
@@ -36,6 +35,7 @@ namespace Mosa.Platform.x86.Instructions
 		{
 			return opcode;
 		}
+
 		/// <summary>
 		/// Allows visitor based dispatch for this instruction object.
 		/// </summary>
@@ -46,7 +46,6 @@ namespace Mosa.Platform.x86.Instructions
 			visitor.AddSs(context);
 		}
 
-		#endregion
-
+		#endregion Methods
 	}
 }

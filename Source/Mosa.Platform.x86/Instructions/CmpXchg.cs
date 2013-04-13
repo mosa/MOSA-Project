@@ -24,7 +24,7 @@ namespace Mosa.Platform.x86.Instructions
 
 		private static readonly OpCode RM_R = new OpCode(new byte[] { 0x0F, 0xB1 });
 
-		#endregion //Data Member
+		#endregion Data Member
 
 		#region Methods
 
@@ -60,6 +60,6 @@ namespace Mosa.Platform.x86.Instructions
 			visitor.CmpXchg(context);
 		}
 
-		#endregion // Methods
+		#endregion Methods
 	}
 }

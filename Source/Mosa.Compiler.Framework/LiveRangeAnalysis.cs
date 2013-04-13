@@ -7,23 +7,19 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using Mosa.Compiler.Common;
 
 namespace Mosa.Compiler.Framework
 {
-
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public sealed class LiveRangeAnalysis
 	{
-
 		public struct LiveRange
 		{
 			int Start { get; set; }
+
 			int End { get; set; }
 
 			public LiveRange(int start, int end)
@@ -39,7 +35,9 @@ namespace Mosa.Compiler.Framework
 			public List<LiveRange> liveRanges = new List<LiveRange>(1);
 
 			public Operand Operand { get; private set; }
+
 			public List<LiveRange> LiveRanges { get { return liveRanges; } }
+
 			public int Count { get { return liveRanges.Count; } }
 
 			public void AddRange(LiveRange liveRange)
@@ -57,6 +55,7 @@ namespace Mosa.Compiler.Framework
 		private BasicBlocks basicBlocks;
 		private TemporaryLiveRange[] temporaryLiveRanges;
 		private int[] instructionNumbering;
+
 		//private int[] contextIndexToBlock;
 
 		/// <summary>
@@ -123,8 +122,5 @@ namespace Mosa.Compiler.Framework
 
 			// TODO
 		}
-
 	}
-
 }
-

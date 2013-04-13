@@ -21,7 +21,7 @@ namespace Mosa.Compiler.TypeSystem.Cil
 	{
 		#region Data Members
 
-		#endregion // Data Members
+		#endregion Data Members
 
 		#region Construction
 
@@ -48,7 +48,6 @@ namespace Mosa.Compiler.TypeSystem.Cil
 			this.Parameters = new List<RuntimeParameter>();
 		}
 
-		#endregion // Construction
-
+		#endregion Construction
 	}
 }

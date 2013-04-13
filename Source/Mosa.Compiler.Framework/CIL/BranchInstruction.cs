@@ -7,12 +7,10 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-
-
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public class BranchInstruction : BaseCILInstruction, IBranchInstruction
 	{
@@ -27,7 +25,7 @@ namespace Mosa.Compiler.Framework.CIL
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Properties
 
@@ -42,7 +40,7 @@ namespace Mosa.Compiler.Framework.CIL
 		/// </remarks>
 		public override FlowControl FlowControl { get { return FlowControl.Branch; } }
 
-		#endregion // Properties
+		#endregion Properties
 
 		#region Methods
 
@@ -91,6 +89,5 @@ namespace Mosa.Compiler.Framework.CIL
 		/// </summary>
 		/// <value></value>
 		public bool IsConditional { get { return false; } }
-
 	}
 }

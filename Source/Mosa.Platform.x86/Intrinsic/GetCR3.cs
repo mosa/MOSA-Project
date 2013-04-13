@@ -11,11 +11,10 @@
 namespace Mosa.Platform.x86.Intrinsic
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	internal sealed class GetCR3 : GetControlRegisterBase
 	{
-
 		/// <summary>
 		/// Initializes a new instance of the <see cref="GetCR3"/> class.
 		/// </summary>
@@ -23,6 +22,5 @@ namespace Mosa.Platform.x86.Intrinsic
 			: base(ControlRegister.CR3)
 		{
 		}
-
 	}
 }

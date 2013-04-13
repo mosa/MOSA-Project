@@ -14,11 +14,10 @@ using Mosa.Utility.BootImage;
 namespace Mosa.Tool.CreateBootImage
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
-	class Program
+	internal class Program
 	{
-
 		public static Options Parse(string filename)
 		{
 			Options options = new Options();
@@ -59,7 +58,6 @@ namespace Mosa.Tool.CreateBootImage
 			reader.Close();
 
 			return options;
-
 		}
 
 		/// <summary>
@@ -67,7 +65,7 @@ namespace Mosa.Tool.CreateBootImage
 		/// </summary>
 		/// <param name="args">The args.</param>
 		/// <returns></returns>
-		static int Main(string[] args)
+		private static int Main(string[] args)
 		{
 			Console.WriteLine();
 			Console.WriteLine("MakeImageBoot v1.1 [www.mosa-project.org]");
@@ -114,6 +112,5 @@ namespace Mosa.Tool.CreateBootImage
 
 			return 0;
 		}
-
 	}
 }

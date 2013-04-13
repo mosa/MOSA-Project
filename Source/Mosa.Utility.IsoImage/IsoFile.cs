@@ -12,7 +12,6 @@ using System.IO;
 
 namespace Mosa.Utility.IsoImage
 {
-
 	internal class IsoFile : IsoEntry
 	{
 		[FlagsAttribute]
@@ -63,5 +62,4 @@ namespace Mosa.Utility.IsoImage
 
 		public override bool IsFile { get { return true; } }
 	}
-
 }

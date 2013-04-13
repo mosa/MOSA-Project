@@ -13,7 +13,7 @@ using Mosa.Compiler.Framework.IR;
 namespace Mosa.Compiler.Framework.Stages
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public class LeaveSSA : BaseMethodCompilerStage, IMethodCompilerStage, IPipelineStage
 	{
@@ -98,6 +98,5 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			return context.Instruction is Jmp || context.Instruction is IntegerCompareBranch;
 		}
-
 	}
 }

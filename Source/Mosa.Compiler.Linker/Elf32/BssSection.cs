@@ -12,7 +12,7 @@ using System;
 namespace Mosa.Compiler.Linker.Elf32
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public class BssSection : Section
 	{

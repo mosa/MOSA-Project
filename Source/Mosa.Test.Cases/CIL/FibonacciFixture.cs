@@ -17,7 +17,6 @@ namespace Mosa.Test.Cases.CIL
 	[TestFixture]
 	public class FibonacciFixture : TestCompilerAdapter
 	{
-
 		public FibonacciFixture()
 		{
 			settings.AddReference("Mosa.Test.Collection.dll");

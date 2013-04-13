@@ -8,13 +8,11 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-
 using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Compiler.TypeSystem.Cil;
 
 namespace Mosa.Compiler.TypeSystem.Generic
 {
-
 	internal class CilGenericMethod : RuntimeMethod
 	{
 		/// <summary>
@@ -34,6 +32,5 @@ namespace Mosa.Compiler.TypeSystem.Generic
 			this.Parameters = genericMethod.Parameters;
 			base.Name = genericMethod.Name;
 		}
-
 	}
 }

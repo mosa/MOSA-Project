@@ -12,59 +12,68 @@ using Mosa.ClassLib;
 namespace Mosa.DeviceSystem
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public class NetworkDevicePacketBuffer
 	{
 		/// <summary>
-		/// Network Device Packet Buffer 
+		/// Network Device Packet Buffer
 		/// </summary>
 		/// <remarks>
 		/// This class setups a transmit and receive between buffers between the Network Device and the TCP stack.
-		/// Network devices will not have to setup their own in-memory buffers when hardware buffers become full. 
+		/// Network devices will not have to setup their own in-memory buffers when hardware buffers become full.
 		/// </remarks>
 		protected INetworkDevice networkDevice;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected LinkedList<byte[]> transmitQueue;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected LinkedList<byte[]> receiveQueue;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected uint maxTransmitQueue;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected uint maxReceiveQueue;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected uint countTransmitPackets;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected uint countReceivePackets;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected uint discardedTransmitPackets;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected uint discardedReceivePackets;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected SpinLock transmitLock;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected SpinLock receiveLock;
-
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="NetworkDevicePacketBuffer"/> class.

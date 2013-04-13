@@ -14,8 +14,7 @@ using Mosa.Compiler.TypeSystem;
 
 namespace Mosa.Tool.TypeExplorer
 {
-
-	class ExplorerCompiler : BaseCompiler
+	internal class ExplorerCompiler : BaseCompiler
 	{
 		/// <summary>
 		/// Prevents a default instance of the <see cref="ExplorerCompiler"/> class from being created.
@@ -72,6 +71,5 @@ namespace Mosa.Tool.TypeExplorer
 
 			compiler.Compile();
 		}
-
 	}
 }

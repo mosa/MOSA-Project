@@ -4,12 +4,11 @@
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com> 
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 namespace Mosa.Test.Collection
 {
-
 	public static class WhileTests
 	{
 		public static int WhileIncI4(int start, int limit)
@@ -129,6 +128,5 @@ namespace Mosa.Test.Collection
 
 			return count;
 		}
-
 	}
 }

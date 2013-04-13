@@ -10,7 +10,7 @@
 namespace System
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public struct UInt16
 	{
@@ -50,6 +50,5 @@ namespace System
 		{
 			return _value;
 		}
-
 	}
 }

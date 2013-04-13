@@ -38,7 +38,7 @@ namespace Mosa.Compiler.Framework.Stages
 					GetRegisterUsage(ctx, ref inputRegisters, ref outputRegisters);
 
 					Debug.WriteLine(String.Format("L_{0:X4}: {1}", ctx.Label, ctx.Instruction.ToString(ctx)));
-					
+
 					if (outputRegisters.HasValue)
 					{
 						Debug.Write("\t OUTPUT: ");
@@ -55,12 +55,11 @@ namespace Mosa.Compiler.Framework.Stages
 					{
 						Debug.WriteLine("");
 					}
-
 				}
 			}
 		}
 
-		protected void GetRegisterUsage(Context context,  ref RegisterBitmap inputRegisters, ref RegisterBitmap outputRegisters)
+		protected void GetRegisterUsage(Context context, ref RegisterBitmap inputRegisters, ref RegisterBitmap outputRegisters)
 		{
 			BasePlatformInstruction instruction = context.Instruction as BasePlatformInstruction;
 
@@ -102,7 +101,5 @@ namespace Mosa.Compiler.Framework.Stages
 
 			return list.ToString();
 		}
-
-
 	}
 }

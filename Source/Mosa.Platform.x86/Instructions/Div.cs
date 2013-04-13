@@ -21,7 +21,7 @@ namespace Mosa.Platform.x86.Instructions
 
 		private static readonly OpCode opcode = new OpCode(new byte[] { 0xF7 }, 6);
 
-		#endregion // Data Members
+		#endregion Data Members
 
 		#region Methods
 
@@ -70,6 +70,6 @@ namespace Mosa.Platform.x86.Instructions
 			visitor.Div(context);
 		}
 
-		#endregion // Methods
+		#endregion Methods
 	}
 }

@@ -14,11 +14,12 @@ namespace Pictor
 	//===================================================DdaLineInterpolator
 	public sealed class DdaLineInterpolator
 	{
-		int m_y;
-		int m_inc;
-		int m_dy;
+		private int m_y;
+		private int m_inc;
+		private int m_dy;
+
 		//int m_YShift;
-		int m_FractionShift;
+		private int m_FractionShift;
 
 		//--------------------------------------------------------------------
 		public DdaLineInterpolator(int FractionShift)
@@ -63,19 +64,27 @@ namespace Pictor
 			m_dy -= m_inc * (int)n;
 		}
 
-
 		//--------------------------------------------------------------------
-		public int y() { return m_y + (m_dy >> (m_FractionShift)); } // - m_YShift)); }
-		public int dy() { return m_dy; }
+		public int y()
+		{
+			return m_y + (m_dy >> (m_FractionShift));
+		} // - m_YShift)); }
+
+		public int dy()
+		{
+			return m_dy;
+		}
 	};
 
 	//=================================================Dda2LineInterpolator
 	public sealed class Dda2LineInterpolator
 	{
-		enum save_size_e { save_size = 2 };
+		private enum save_size_e { save_size = 2 };
 
 		//--------------------------------------------------------------------
-		public Dda2LineInterpolator() { }
+		public Dda2LineInterpolator()
+		{
+		}
 
 		//-------------------------------------------- Forward-adjusted Line
 		public Dda2LineInterpolator(int y1, int y2, int count)
@@ -130,6 +139,7 @@ namespace Pictor
 		}
 
 		/*
+
 		//--------------------------------------------------------------------
 		public void save(save_data_type* Data)
 		{
@@ -184,12 +194,26 @@ namespace Pictor
 		}
 
 		//--------------------------------------------------------------------
-		public int mod() { return m_mod; }
-		public int rem() { return m_rem; }
-		public int lft() { return m_lft; }
+		public int mod()
+		{
+			return m_mod;
+		}
+
+		public int rem()
+		{
+			return m_rem;
+		}
+
+		public int lft()
+		{
+			return m_lft;
+		}
 
 		//--------------------------------------------------------------------
-		public int y() { return m_y; }
+		public int y()
+		{
+			return m_y;
+		}
 
 		private int m_cnt;
 		private int m_lft;
@@ -198,18 +222,17 @@ namespace Pictor
 		private int m_y;
 	};
 
-
 	//---------------------------------------------LineBresenhamInterpolator
 	public sealed class LineBresenhamInterpolator
 	{
-		int m_x1_lr;
-		int m_y1_lr;
-		int m_x2_lr;
-		int m_y2_lr;
-		bool m_ver;
-		uint m_len;
-		int m_inc;
-		Dda2LineInterpolator m_interpolator;
+		private int m_x1_lr;
+		private int m_y1_lr;
+		private int m_x2_lr;
+		private int m_y2_lr;
+		private bool m_ver;
+		private uint m_len;
+		private int m_inc;
+		private Dda2LineInterpolator m_interpolator;
 
 		public enum subpixel_scale_e
 		{
@@ -219,7 +242,10 @@ namespace Pictor
 		};
 
 		//--------------------------------------------------------------------
-		public static int line_lr(int v) { return v >> (int)subpixel_scale_e.subpixel_shift; }
+		public static int line_lr(int v)
+		{
+			return v >> (int)subpixel_scale_e.subpixel_shift;
+		}
 
 		//--------------------------------------------------------------------
 		public LineBresenhamInterpolator(int x1, int y1, int x2, int y2)
@@ -245,9 +271,20 @@ namespace Pictor
 		}
 
 		//--------------------------------------------------------------------
-		public bool is_ver() { return m_ver; }
-		public uint len() { return m_len; }
-		public int inc() { return m_inc; }
+		public bool is_ver()
+		{
+			return m_ver;
+		}
+
+		public uint len()
+		{
+			return m_len;
+		}
+
+		public int inc()
+		{
+			return m_inc;
+		}
 
 		//--------------------------------------------------------------------
 		public void hstep()
@@ -264,11 +301,34 @@ namespace Pictor
 		}
 
 		//--------------------------------------------------------------------
-		public int x1() { return m_x1_lr; }
-		public int y1() { return m_y1_lr; }
-		public int x2() { return line_lr(m_interpolator.y()); }
-		public int y2() { return line_lr(m_interpolator.y()); }
-		public int x2_hr() { return m_interpolator.y(); }
-		public int y2_hr() { return m_interpolator.y(); }
+		public int x1()
+		{
+			return m_x1_lr;
+		}
+
+		public int y1()
+		{
+			return m_y1_lr;
+		}
+
+		public int x2()
+		{
+			return line_lr(m_interpolator.y());
+		}
+
+		public int y2()
+		{
+			return line_lr(m_interpolator.y());
+		}
+
+		public int x2_hr()
+		{
+			return m_interpolator.y();
+		}
+
+		public int y2_hr()
+		{
+			return m_interpolator.y();
+		}
 	};
 }

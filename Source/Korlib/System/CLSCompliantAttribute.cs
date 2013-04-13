@@ -7,7 +7,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-
 namespace System
 {
 	/// <summary>
@@ -15,7 +14,7 @@ namespace System
 	/// </summary>
 	public sealed class CLSCompliantAttribute : Attribute
 	{
-		bool is_compliant;
+		private bool is_compliant;
 
 		public CLSCompliantAttribute(bool isCompliant)
 		{

@@ -9,18 +9,18 @@
 
 namespace Mosa.DeviceSystem
 {
-
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public class IOPortRegister
 	{
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IReadWriteIOPort ioPort;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected byte bits;
 
@@ -215,7 +215,6 @@ namespace Mosa.DeviceSystem
 		{
 			return SetBits(ioPort.Read16(), value, startbit, bits);
 		}
-
 
 		/// <summary>
 		/// Sets the bits.

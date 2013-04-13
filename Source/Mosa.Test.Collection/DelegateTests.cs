@@ -4,9 +4,8 @@
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
- *  Kai Patrick Reisert <kpreisert@googlemail.com> 
+ *  Kai Patrick Reisert <kpreisert@googlemail.com>
  */
-
 
 namespace Mosa.Test.Collection
 {
@@ -16,7 +15,7 @@ namespace Mosa.Test.Collection
 
 		#region DelegateVoid
 
-		delegate void DelegateVoid();
+		private delegate void DelegateVoid();
 
 		public static bool DefineDelegate()
 		{
@@ -60,11 +59,11 @@ namespace Mosa.Test.Collection
 			status += 2;
 		}
 
-		#endregion
+		#endregion DelegateVoid
 
 		#region DelegateParameters
 
-		delegate void DelegateParameters(int a, int b);
+		private delegate void DelegateParameters(int a, int b);
 
 		public static int CallDelegateParameters(int a, int b)
 		{
@@ -79,11 +78,11 @@ namespace Mosa.Test.Collection
 			status = a * 10000 + b;
 		}
 
-		#endregion
+		#endregion DelegateParameters
 
 		#region DelegateReturn
 
-		delegate int DelegateReturn();
+		private delegate int DelegateReturn();
 
 		public static int CallDelegateReturn(int a)
 		{
@@ -97,11 +96,11 @@ namespace Mosa.Test.Collection
 			return status + 3;
 		}
 
-		#endregion
+		#endregion DelegateReturn
 
 		#region DelegateParametersReturn
 
-		delegate int DelegateParametersReturn(int a, int b);
+		private delegate int DelegateParametersReturn(int a, int b);
 
 		public static int CallDelegateParametersReturn(int a, int b)
 		{
@@ -115,11 +114,11 @@ namespace Mosa.Test.Collection
 			return a * 10000 + b;
 		}
 
-		#endregion
+		#endregion DelegateParametersReturn
 
 		#region DelegateBox
 
-		delegate object DelegateBox(int p);
+		private delegate object DelegateBox(int p);
 
 		public static int CallDelegateBox(int p)
 		{
@@ -133,11 +132,11 @@ namespace Mosa.Test.Collection
 			return p;
 		}
 
-		#endregion
+		#endregion DelegateBox
 
 		#region DelegateGenericReturn
 
-		delegate T DelegateGenericReturn<T>();
+		private delegate T DelegateGenericReturn<T>();
 
 		public static int CallDelegateGenericReturn(int a)
 		{
@@ -196,7 +195,7 @@ namespace Mosa.Test.Collection
 			return b;
 		}
 
-		#endregion
+		#endregion DelegateGenericReturn
 
 		#region DelegateGenericTarget (disabled)
 
@@ -213,7 +212,7 @@ namespace Mosa.Test.Collection
 		//{
 		//}
 
-		#endregion
+		#endregion DelegateGenericTarget (disabled)
 
 		#region DelegateGenericTargetReturn (disabled)
 
@@ -230,7 +229,7 @@ namespace Mosa.Test.Collection
 		//    return p;
 		//}
 
-		#endregion
+		#endregion DelegateGenericTargetReturn (disabled)
 
 		#region InstanceDelegate
 
@@ -278,6 +277,6 @@ namespace Mosa.Test.Collection
 			return AA.StatusStatic;
 		}
 
-		#endregion
+		#endregion InstanceDelegate
 	}
 }

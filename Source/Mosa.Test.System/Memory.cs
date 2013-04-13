@@ -7,10 +7,8 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-
 namespace Mosa.Test.System
 {
-
 	/// <summary>
 	/// Provides central runtime entry points for various features.
 	/// </summary>
@@ -23,7 +21,6 @@ namespace Mosa.Test.System
 		/// </summary>
 		public static IMemoryPageManager MemoryPageManager = new Win32MemoryPageManager();
 
-		#endregion // Data members
-
+		#endregion Data members
 	}
 }

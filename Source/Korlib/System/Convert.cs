@@ -14,7 +14,6 @@ namespace System
 	/// </summary>
 	public static class Convert
 	{
-
 		public static bool ToBoolean(bool value)
 		{
 			return value;
@@ -69,6 +68,7 @@ namespace System
 		{
 			return (value != 0);
 		}
+
 		public static int ToInt32(bool value)
 		{
 			return value ? 1 : 0;

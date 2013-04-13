@@ -16,7 +16,6 @@ namespace Mosa.Platform.x86.Instructions
 	/// </summary>
 	public sealed class Hlt : X86Instruction
 	{
-
 		#region Methods
 
 		/// <summary>
@@ -39,6 +38,6 @@ namespace Mosa.Platform.x86.Instructions
 			visitor.Hlt(context);
 		}
 
-		#endregion // Methods
+		#endregion Methods
 	}
 }

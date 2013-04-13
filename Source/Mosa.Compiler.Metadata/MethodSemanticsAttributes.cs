@@ -9,7 +9,6 @@ using System;
 
 namespace Mosa.Compiler.Metadata
 {
-
 	[Flags]
 	public enum MethodSemanticsAttributes : ushort
 	{

@@ -22,10 +22,9 @@ namespace Mosa.Compiler.Framework.CIL
 
 		// FIXME
 		private static StackTypeCode[] _conversionTable = new StackTypeCode[] {
-
 		};
 
-		#endregion // Data members
+		#endregion Data members
 
 		#region Construction
 
@@ -38,7 +37,7 @@ namespace Mosa.Compiler.Framework.CIL
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Methods
 
@@ -125,6 +124,5 @@ namespace Mosa.Compiler.Framework.CIL
 		}
 
 		#endregion Methods
-
 	}
 }

@@ -14,13 +14,11 @@ using Mosa.Compiler.TypeSystem;
 
 namespace Mosa.Platform.x86.Stages
 {
-
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public sealed class InterruptVectorStage : BaseCompilerStage, ICompilerStage, IPipelineStage
 	{
-
 		#region ICompilerStage Members
 
 		void ICompilerStage.Setup(BaseCompiler compiler)
@@ -36,7 +34,7 @@ namespace Mosa.Platform.x86.Stages
 			CreateInterruptVectors();
 		}
 
-		#endregion // ICompilerStage Members
+		#endregion ICompilerStage Members
 
 		#region Internal
 

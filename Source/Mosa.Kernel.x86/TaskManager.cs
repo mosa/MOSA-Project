@@ -12,14 +12,15 @@ using Mosa.Platform.x86.Intrinsic;
 namespace Mosa.Kernel.x86
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public static class TaskManager
 	{
 		private static uint _defaultStackSize = 1024 * 1024 * 4; // 4MB
 		private static uint _slots = 4096 * 8;
 		private static uint _table;
-		private static uint _currenttask; // Not SMP 
+		private static uint _currenttask; // Not SMP
+
 		//private static uint _lock = 0;
 
 		#region Data members
@@ -65,7 +66,7 @@ namespace Mosa.Kernel.x86
 			public static readonly uint InitialSize = 54;
 		}
 
-		#endregion
+		#endregion Data members
 
 		/// <summary>
 		/// Setups the task manager.
@@ -115,6 +116,7 @@ namespace Mosa.Kernel.x86
 			uint task = GetTaskLocation(slot);
 			uint stack = ProcessManager.AllocateMemory(processid, _defaultStackSize);
 			uint stacktop = stack + _defaultStackSize;
+
 			// TODO: Add guard pages before and after stack
 
 			// Setup Task Entry

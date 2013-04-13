@@ -7,11 +7,10 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-
 namespace Mosa.DeviceSystem
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public static class VDI
 	{
@@ -19,7 +18,7 @@ namespace Mosa.DeviceSystem
 
 		internal struct VHIHeaderOffset
 		{
-			internal const uint HeaderText = 0x0; // 64 
+			internal const uint HeaderText = 0x0; // 64
 			internal const uint ImageSignature = 0x40; // 4
 			internal const uint Version = 0x44; // 4
 			internal const uint HeaderSize = 0x48; // 4
@@ -40,12 +39,12 @@ namespace Mosa.DeviceSystem
 			internal const uint UUID = 0x188; // 16
 			internal const uint UUIDLastSnap = 0x198; // 16
 			internal const uint UUIDLink = 0x1A8; // 16
-			internal const uint UUIDParent = 0x1B8; // 16			
+			internal const uint UUIDParent = 0x1B8; // 16
 		}
 
 		internal const string HeaderText = "<<< Sun xVM VirtualBox Disk Image >>>";
 
-		#endregion
+		#endregion Constants
 
 		/// <summary>
 		/// Creates the header.
@@ -80,7 +79,6 @@ namespace Mosa.DeviceSystem
 			binaryHeader.SetBytes(VHIHeaderOffset.UUID, guid, 0, 16);
 			binaryHeader.SetBytes(VHIHeaderOffset.UUIDLastSnap, lastSnapGuid, 0, 16);
 
-
 			return binaryHeader.Data;
 		}
 
@@ -101,8 +99,8 @@ namespace Mosa.DeviceSystem
 				binaryMap.SetUInt(i * 4, i);
 
 			return binaryMap.Data;
-
 		}
+
 		/// <summary>
 		/// Gets the size of the aligned.
 		/// </summary>

@@ -18,10 +18,12 @@ namespace Mosa.Compiler.Verifier
 {
 	public class VerifyAssembly
 	{
-
 		public VerificationOptions Options { get; protected set; }
+
 		internal IMetadataProvider Metadata { get; private set; }
+
 		internal IMetadataModule Module { get; private set; }
+
 		internal Verify Verify { get; private set; }
 
 		/// <summary>
@@ -66,7 +68,7 @@ namespace Mosa.Compiler.Verifier
 
 		protected void VerifyMetadata()
 		{
-			List<BaseVerificationStage> stages = new List<BaseVerificationStage>() { 
+			List<BaseVerificationStage> stages = new List<BaseVerificationStage>() {
 				new MetadataTables()
 			};
 
@@ -78,7 +80,5 @@ namespace Mosa.Compiler.Verifier
 					return;
 			}
 		}
-
 	}
 }
-

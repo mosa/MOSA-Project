@@ -8,10 +8,8 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-
 namespace Mosa.FileSystem.VFS
 {
-
 	/// <summary>
 	/// Interface, which a filesystem driver must implement.
 	/// </summary>
@@ -19,7 +17,7 @@ namespace Mosa.FileSystem.VFS
 	/// A filesystem driver, which implements this interface should register itself beneath /proc/filesystems
 	/// to make the filesystem available for mounting and other operations.
 	/// </remarks>
-	interface IFileSystemService
+	internal interface IFileSystemService
 	{
 		#region Properties
 
@@ -28,7 +26,7 @@ namespace Mosa.FileSystem.VFS
 		/// </summary>
 		GenericFileSystemSettings SettingsType { get; }
 
-		#endregion // Properties
+		#endregion Properties
 
 		#region Methods
 
@@ -55,6 +53,6 @@ namespace Mosa.FileSystem.VFS
 		/// <returns>The created and mounted filesystem.</returns>
 		bool Format(GenericFileSystemSettings settings);
 
-		#endregion // Methods
+		#endregion Methods
 	}
 }

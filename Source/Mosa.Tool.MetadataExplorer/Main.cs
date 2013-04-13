@@ -77,7 +77,6 @@ namespace Mosa.Tool.MetadataExplorer
 						rowNode.Nodes.Add(rowValueNode);
 					}
 				}
-
 			}
 
 			treeView.EndUpdate();
@@ -97,6 +96,5 @@ namespace Mosa.Tool.MetadataExplorer
 		{
 			UpdateTree();
 		}
-
 	}
 }

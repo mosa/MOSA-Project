@@ -17,7 +17,6 @@ namespace Mosa.Platform.x86.Instructions
 	/// </summary>
 	public sealed class Sub : TwoOperandInstruction
 	{
-
 		#region Data Members
 
 		private static readonly OpCode O_C = new OpCode(new byte[] { 0x81 }, 5);
@@ -25,7 +24,7 @@ namespace Mosa.Platform.x86.Instructions
 		private static readonly OpCode R_O_16 = new OpCode(new byte[] { 0x66, 0x2B });
 		private static readonly OpCode M_R = new OpCode(new byte[] { 0x29 });
 
-		#endregion
+		#endregion Data Members
 
 		#region Methods
 
@@ -63,6 +62,6 @@ namespace Mosa.Platform.x86.Instructions
 			throw new ArgumentException(@"No opcode for operand type.");
 		}
 
-		#endregion // Methods
+		#endregion Methods
 	}
 }

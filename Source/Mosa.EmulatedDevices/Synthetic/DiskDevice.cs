@@ -18,12 +18,12 @@ namespace Mosa.EmulatedDevices.Synthetic
 	public class DiskDevice : Device, IDiskDevice
 	{
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected FileStream diskFile;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public uint BlockOffset = 0;
 

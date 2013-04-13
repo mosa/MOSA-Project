@@ -10,36 +10,36 @@
 namespace Pictor.VertexSource
 {
 	//---------------------------------------------------------------CurveConverter
-	// Curve converter class. Any path storage can have Bezier curves defined 
-	// by their control points. There're two types of curves supported: Curve3 
+	// Curve converter class. Any path storage can have Bezier curves defined
+	// by their control points. There're two types of curves supported: Curve3
 	// and Curve4. Curve3 is a conic Bezier curve with 2 endpoints and 1 control
 	// point. Curve4 has 2 control points (4 points in total) and can be used
-	// to interpolate more complicated curves. Curve4, unlike Curve3 can be used 
-	// to approximate arcs, both circular and elliptical. Curves are approximated 
-	// with straight lines and one of the approaches is just to store the whole 
-	// sequence of vertices that approximate our curve. It takes additional 
-	// memory, and At the same time the consecutive vertices can be calculated 
-	// on demand. 
+	// to interpolate more complicated curves. Curve4, unlike Curve3 can be used
+	// to approximate arcs, both circular and elliptical. Curves are approximated
+	// with straight lines and one of the approaches is just to store the whole
+	// sequence of vertices that approximate our curve. It takes additional
+	// memory, and At the same time the consecutive vertices can be calculated
+	// on demand.
 	//
 	// Initially, path storages are not suppose to keep all the vertices of the
 	// curves (although, nothing prevents us from doing so). Instead, path_storage
 	// keeps only vertices, needed to Calculate a curve on demand. Those vertices
-	// are marked with special commands. So, if the path_storage contains curves 
-	// (which are not real curves yet), and we render this storage directly, 
-	// all we will see is only 2 or 3 straight Line segments (for Curve3 and 
-	// Curve4 respectively). If we need to see real curves drawn we need to 
-	// include this class into the conversion pipeline. 
+	// are marked with special commands. So, if the path_storage contains curves
+	// (which are not real curves yet), and we render this storage directly,
+	// all we will see is only 2 or 3 straight Line segments (for Curve3 and
+	// Curve4 respectively). If we need to see real curves drawn we need to
+	// include this class into the conversion pipeline.
 	//
-	// Class CurveConverter recognizes commands Curve3 and Curve4 
-	// and converts these vertices into a MoveTo/LineTo sequence. 
+	// Class CurveConverter recognizes commands Curve3 and Curve4
+	// and converts these vertices into a MoveTo/LineTo sequence.
 	//-----------------------------------------------------------------------
 	public class CurveConverter : IVertexSource
 	{
-		IVertexSource m_source;
-		double m_last_x;
-		double m_last_y;
-		Curve3 m_curve3;
-		Curve4 m_curve4;
+		private IVertexSource m_source;
+		private double m_last_x;
+		private double m_last_y;
+		private Curve3 m_curve3;
+		private Curve4 m_curve4;
 
 		public CurveConverter(IVertexSource source)
 		{
@@ -50,7 +50,10 @@ namespace Pictor.VertexSource
 			m_last_y = (0.0);
 		}
 
-		public void Attach(IVertexSource source) { m_source = source; }
+		public void Attach(IVertexSource source)
+		{
+			m_source = source;
+		}
 
 		public Curves.ECurveApproximationMethod ApproximationMethod
 		{

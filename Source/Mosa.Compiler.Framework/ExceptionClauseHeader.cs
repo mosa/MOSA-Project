@@ -12,12 +12,12 @@ using System.Collections.Generic;
 namespace Mosa.Compiler.Framework
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public sealed class ExceptionClauseHeader
 	{
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private List<ExceptionHandlingClause> clauses = new List<ExceptionHandlingClause>();
 
@@ -38,6 +38,5 @@ namespace Mosa.Compiler.Framework
 		{
 			this.Clauses.Add(clause);
 		}
-
 	}
 }

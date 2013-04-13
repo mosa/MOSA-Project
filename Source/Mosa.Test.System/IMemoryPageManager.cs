@@ -43,6 +43,5 @@ namespace Mosa.Test.System
 		/// <param name="protectionFlags">The new set of protection flags.</param>
 		/// <returns>The old protection flags of the first page in the range of memory. </returns>
 		PageProtectionFlags Protect(IntPtr address, ulong size, PageProtectionFlags protectionFlags);
-
 	}
 }

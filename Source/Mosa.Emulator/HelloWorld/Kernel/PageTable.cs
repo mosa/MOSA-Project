@@ -12,7 +12,7 @@ using Mosa.Platform.x86.Intrinsic;
 namespace Mosa.Kernel.x86
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public static class PageTable
 	{
@@ -61,6 +61,5 @@ namespace Mosa.Kernel.x86
 		{
 			return Native.Get32(_pageTable + ((address >> 12) * 4)) & 0xFFF;
 		}
-
 	}
 }

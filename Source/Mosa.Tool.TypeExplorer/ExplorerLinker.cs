@@ -15,12 +15,12 @@ using Mosa.Compiler.Linker;
 
 namespace Mosa.Tool.TypeExplorer
 {
-	class ExplorerLinker : BaseLinkerStage, ILinker, IPipelineStage
+	internal class ExplorerLinker : BaseLinkerStage, ILinker, IPipelineStage
 	{
 		public override void Run()
 		{
 			// DO NOTHING
-			return; 
+			return;
 		}
 
 		public override long LoadSectionAlignment
@@ -79,7 +79,5 @@ namespace Mosa.Tool.TypeExplorer
 		{
 			return;
 		}
-
 	}
-
 }

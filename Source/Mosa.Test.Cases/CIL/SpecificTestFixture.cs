@@ -17,7 +17,6 @@ namespace Mosa.Test.Cases.CIL
 	[TestFixture]
 	public class SpecificTestFixture : TestCompilerAdapter
 	{
-
 		public SpecificTestFixture()
 		{
 			settings.AddReference("Mosa.Test.Collection.dll");
@@ -34,13 +33,11 @@ namespace Mosa.Test.Cases.CIL
 		{
 			Assert.AreEqual<int>(SpecificTests.R4ToI4(value), Run<int>("Mosa.Test.Collection", "SpecificTests", "R4ToI4", value));
 		}
-		
+
 		[Test]
 		public void R8ToI4([R8FitsI4] double value)
 		{
 			Assert.AreEqual<int>(SpecificTests.R8ToI4(value), Run<int>("Mosa.Test.Collection", "SpecificTests", "R8ToI4", value));
 		}
-
-
 	}
 }

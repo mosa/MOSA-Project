@@ -17,22 +17,22 @@ namespace Mosa.EmulatedDevices.Emulated
 	public class PCIController : PCIDevice, IHardwareDevice, IIOPortDevice
 	{
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public const ushort StandardIOBase = 0xCF8;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected ushort ioBase;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected uint address;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected PCIBus pciBus;
 
@@ -223,6 +223,7 @@ namespace Mosa.EmulatedDevices.Emulated
 
 			return pciDevice.ReadConfig8((byte)(address & 0xFF));
 		}
+
 		/// <summary>
 		/// Writes the configuration.
 		/// </summary>
@@ -244,6 +245,5 @@ namespace Mosa.EmulatedDevices.Emulated
 
 			pciDevice.WriteConfig32(registry, data & barMask & GetWriteMask32(registry));
 		}
-
 	}
 }

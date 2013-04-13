@@ -14,12 +14,12 @@ using System.IO;
 namespace Mosa.Compiler.Linker.Elf64
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public class StringTableSection : Section
 	{
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected static List<byte> stringTable = new List<byte>();
 

@@ -16,7 +16,7 @@ namespace Mosa.Compiler.TypeSystem.Cil
 	/// <summary>
 	/// Runtime representation of a CIL type.
 	/// </summary>
-	sealed class CilRuntimeType : RuntimeType
+	internal sealed class CilRuntimeType : RuntimeType
 	{
 		#region Data Members
 
@@ -30,7 +30,7 @@ namespace Mosa.Compiler.TypeSystem.Cil
 		/// </summary>
 		private readonly RuntimeType enclosingType;
 
-		#endregion // Data Members
+		#endregion Data Members
 
 		#region Construction
 
@@ -66,7 +66,7 @@ namespace Mosa.Compiler.TypeSystem.Cil
 			}
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Methods
 
@@ -81,6 +81,6 @@ namespace Mosa.Compiler.TypeSystem.Cil
 			}
 		}
 
-		#endregion // Methods
+		#endregion Methods
 	}
 }

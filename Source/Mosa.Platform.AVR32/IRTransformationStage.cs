@@ -5,7 +5,7 @@
  *
  * Authors:
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- *  Pascal Delprat (pdelprat) <pascal.delprat@online.fr> 
+ *  Pascal Delprat (pdelprat) <pascal.delprat@online.fr>
  */
 
 using System;
@@ -26,7 +26,6 @@ namespace Mosa.Platform.AVR32
 	/// </remarks>
 	public sealed class IRTransformationStage : BaseTransformationStage, IIRVisitor, IMethodCompilerStage, IPlatformStage
 	{
-
 		private int stackSize;
 
 		#region IMethodCompilerStage
@@ -46,7 +45,7 @@ namespace Mosa.Platform.AVR32
 			Debug.Assert((stackSize % 4) == 0, @"Stack size of method can't be divided by 4!!");
 		}
 
-		#endregion // IMethodCompilerStage
+		#endregion IMethodCompilerStage
 
 		#region IIRVisitor
 
@@ -75,22 +74,18 @@ namespace Mosa.Platform.AVR32
 			else
 				if ((result.IsMemoryAddress) && (operand.IsConstant))
 				{
-
 				}
 				else
 					if ((result.IsRegister) && (operand.IsMemoryAddress))
 					{
-
 					}
 					else
 						if ((result.IsRegister) && (operand.IsRegister))
 						{
-
 						}
 						else
 							if ((result.IsMemoryAddress) && (operand.IsRegister))
 							{
-
 							}
 							else
 								if ((result.IsMemoryAddress) && (context.Operand1.IsMemoryAddress))
@@ -276,17 +271,14 @@ namespace Mosa.Platform.AVR32
 				else
 					if ((result.IsRegister) && (operand.IsMemoryAddress))
 					{
-
 					}
 					else
 						if ((result.IsRegister) && (operand.IsRegister))
 						{
-
 						}
 						else
 							if ((result.IsMemoryAddress) && (operand.IsRegister))
 							{
-
 							}
 							else
 								if ((result.IsMemoryAddress) && (context.Operand1.IsMemoryAddress))
@@ -333,6 +325,7 @@ namespace Mosa.Platform.AVR32
 		{
 			Operand result = context.Result;
 			Operand operand = context.Operand1;
+
 			//context.Operand1 = EmitConstant(context.Operand1);
 
 			if (context.Result.StackType == StackTypeCode.F)
@@ -378,8 +371,6 @@ namespace Mosa.Platform.AVR32
 			{
 				//context.SetInstruction(Instruction.St, result, operand);
 			}
-
-
 		}
 
 		/// <summary>
@@ -397,12 +388,12 @@ namespace Mosa.Platform.AVR32
 			Operand r7 = Operand.CreateCPURegister(I, GeneralPurposeRegister.R7);
 			Operand r6 = Operand.CreateCPURegister(I, GeneralPurposeRegister.R6);
 
-			/* 
-			 * If you want to stop at the header of an emitted function, just set breakFlag 
-			 * to true in the following line. It will issue a breakpoint instruction. Note 
-			 * that if you debug using visual studio you must enable unmanaged code 
-			 * debugging, otherwise the function will never return and the breakpoint will 
-			 * never appear. 
+			/*
+			 * If you want to stop at the header of an emitted function, just set breakFlag
+			 * to true in the following line. It will issue a breakpoint instruction. Note
+			 * that if you debug using visual studio you must enable unmanaged code
+			 * debugging, otherwise the function will never return and the breakpoint will
+			 * never appear.
 			 */
 			bool breakFlag = false; // TODO: Turn this into a compiler option
 
@@ -419,10 +410,13 @@ namespace Mosa.Platform.AVR32
 
 			// push ebp
 			context.SetInstruction(AVR32.Push, null, r11);
+
 			// mov ebp, esp
 			context.AppendInstruction(AVR32.Mov, r11, sp);
+
 			// sub esp, localsSize
 			context.AppendInstruction(AVR32.Sub, sp, Operand.CreateConstant(I, -stackSize));
+
 			// push ebx
 			context.AppendInstruction(AVR32.Push, null, r12);
 
@@ -436,6 +430,7 @@ namespace Mosa.Platform.AVR32
 			context.AppendInstruction(AVR32.Add, r7, r6);
 			context.AppendInstruction(AVR32.Mov, r10, Operand.CreateConstant(I, -(int)(stackSize >> 2)));
 			context.AppendInstruction(AVR32.Eor, r8, r8);
+
 			// TODO:
 			//context.AppendInstruction(Instruction.Rep);
 			//context.AppendInstruction(Instruction.Stosd);
@@ -475,11 +470,14 @@ namespace Mosa.Platform.AVR32
 
 			// pop ebx
 			context.SetInstruction(AVR32.Pop, r12);
+
 			// add esp, -localsSize
 			context.AppendInstruction(AVR32.Mov, r7, Operand.CreateConstant(I, -stackSize));
 			context.AppendInstruction(AVR32.Add, sp, r7);
+
 			// pop ebp
 			context.AppendInstruction(AVR32.Pop, r11);
+
 			// ret
 			context.AppendInstruction(AVR32.Ret);
 		}
@@ -746,7 +744,7 @@ namespace Mosa.Platform.AVR32
 		{
 		}
 
-		#endregion //  IIRVisitor
+		#endregion IIRVisitor
 
 		#region IIRVisitor - Unused
 
@@ -754,15 +752,18 @@ namespace Mosa.Platform.AVR32
 		/// Visitation function for IntegerToFloatingPointConversion.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.IntegerToFloatConversion(Context context) { }
+		void IIRVisitor.IntegerToFloatConversion(Context context)
+		{
+		}
 
 		/// <summary>
 		/// Visitation function for Phi.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.Phi(Context context) { }
+		void IIRVisitor.Phi(Context context)
+		{
+		}
 
-		#endregion // IIRVisitor - Unused
-
+		#endregion IIRVisitor - Unused
 	}
 }

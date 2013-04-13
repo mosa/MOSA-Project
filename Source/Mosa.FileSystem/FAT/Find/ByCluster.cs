@@ -12,12 +12,12 @@ using Mosa.ClassLib;
 namespace Mosa.FileSystem.FAT.Find
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public class ByCluster : FatFileSystem.ICompare
 	{
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected uint cluster;
 

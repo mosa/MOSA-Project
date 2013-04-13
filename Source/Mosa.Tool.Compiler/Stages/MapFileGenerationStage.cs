@@ -31,7 +31,7 @@ namespace Mosa.Tool.Compiler.Stages
 		/// </summary>
 		private TextWriter writer;
 
-		#endregion // Data members
+		#endregion Data members
 
 		#region Construction
 
@@ -42,7 +42,7 @@ namespace Mosa.Tool.Compiler.Stages
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region ICompilerStage Members
 
@@ -82,7 +82,7 @@ namespace Mosa.Tool.Compiler.Stages
 			}
 		}
 
-		#endregion // ICompilerStage Members
+		#endregion ICompilerStage Members
 
 		#region Internals
 
@@ -137,6 +137,6 @@ namespace Mosa.Tool.Compiler.Stages
 			}
 		}
 
-		#endregion // Internals
+		#endregion Internals
 	}
 }

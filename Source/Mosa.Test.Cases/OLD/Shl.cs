@@ -8,7 +8,7 @@
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  *  Michael Fröhlich (grover) <michael.ruck@michaelruck.de>
  *  Kai P. Reisert <kpreisert@googlemail.com>
- *  
+ *
  */
 
 using System;
@@ -21,7 +21,6 @@ namespace Mosa.Test.Cases.OLD
 	[TestFixture]
 	public class Shl : TestCompilerAdapter
 	{
-		
 		private static string CreateTestCodeWithReturn(string name, string typeInA, string typeInB, string typeOut)
 		{
 			return @"
@@ -115,10 +114,11 @@ namespace Mosa.Test.Cases.OLD
 			settings.CodeSource = CreateConstantTestCodeWithReturn("ShlConstantCLeft", "char", "int", "'" + a.ToString() + "'", null);
 			Assert.AreEqual(a << b, Run<int>(string.Empty, "Test", "ShlConstantCLeft", (char)(a << b), b));
 		}
-		#endregion
+
+		#endregion C
 
 		#region I1
-		
+
 		[Row(-42, 48)]
 		[Row(17, 1)]
 		[Row(0, 0)]
@@ -140,10 +140,11 @@ namespace Mosa.Test.Cases.OLD
 			settings.CodeSource = CreateConstantTestCode("ShlConstantI1Left", "sbyte", "int", a.ToString(), null);
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "ShlConstantI1Left", (a << b), b));
 		}
-		#endregion
+
+		#endregion I1
 
 		#region I2
-		
+
 		[Row(-23, 148)]
 		[Row(17, 1)]
 		[Row(0, 0)]
@@ -165,10 +166,11 @@ namespace Mosa.Test.Cases.OLD
 			settings.CodeSource = CreateConstantTestCode("ShlConstantI2Left", "short", "int", a.ToString(), null);
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "ShlConstantI2Left", (a << b), b));
 		}
-		#endregion
+
+		#endregion I2
 
 		#region I4
-	
+
 		[Row(-23, 148)]
 		[Row(17, 1)]
 		[Row(0, 0)]
@@ -190,10 +192,11 @@ namespace Mosa.Test.Cases.OLD
 			settings.CodeSource = CreateConstantTestCode("ShlConstantI4Left", "int", "int", a.ToString(), null);
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "ShlConstantI4Left", (a << b), b));
 		}
-		#endregion
+
+		#endregion I4
 
 		#region I8
-	
+
 		[Row(1, 1)]
 		[Row(1, 0)]
 		[Row(0, 1)]
@@ -226,6 +229,7 @@ namespace Mosa.Test.Cases.OLD
 			settings.CodeSource = CreateConstantTestCode("ShlConstantI8Left", "int", "long", a.ToString(), null);
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "ShlConstantI8Left", (a << b), b));
 		}
-		#endregion
+
+		#endregion I8
 	}
 }

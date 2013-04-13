@@ -10,28 +10,28 @@
 namespace Mosa.Compiler.Metadata.Tables
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public struct AssemblyOSRow
 	{
 		#region Data members
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private int platformID;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private int majorVersion;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private int minorVersion;
 
-		#endregion // Data members
+		#endregion Data members
 
 		#region Construction
 
@@ -48,7 +48,7 @@ namespace Mosa.Compiler.Metadata.Tables
 			this.minorVersion = minorVersion;
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Properties
 
@@ -79,6 +79,6 @@ namespace Mosa.Compiler.Metadata.Tables
 			get { return minorVersion; }
 		}
 
-		#endregion // Properties
+		#endregion Properties
 	}
 }

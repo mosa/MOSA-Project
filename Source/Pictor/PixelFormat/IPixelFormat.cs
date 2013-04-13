@@ -6,6 +6,7 @@
  * Authors:
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  */
+
 namespace Pictor.PixelFormat
 {
 	public interface IPixelFormat
@@ -16,12 +17,14 @@ namespace Pictor.PixelFormat
 		{
 			get;
 		}
+
 		///<summary>
 		///</summary>
 		uint Height
 		{
 			get;
 		}
+
 		///<summary>
 		///</summary>
 		int Stride
@@ -42,12 +45,14 @@ namespace Pictor.PixelFormat
 		///<param name="y"></param>
 		///<returns></returns>
 		RGBA_Bytes Pixel(int x, int y);
+
 		///<summary>
 		///</summary>
 		///<param name="x"></param>
 		///<param name="y"></param>
 		///<param name="c"></param>
 		unsafe void CopyPixel(int x, int y, byte* c);
+
 		///<summary>
 		///</summary>
 		///<param name="from"></param>
@@ -63,6 +68,7 @@ namespace Pictor.PixelFormat
 		///<param name="p"></param>
 		///<param name="c"></param>
 		unsafe void MakePixel(byte* p, IColorType c);
+
 		///<summary>
 		///</summary>
 		///<param name="x"></param>
@@ -78,6 +84,7 @@ namespace Pictor.PixelFormat
 		///<param name="len"></param>
 		///<param name="c"></param>
 		void CopyHorizontalLine(int x, int y, uint len, RGBA_Bytes c);
+
 		///<summary>
 		///</summary>
 		///<param name="x"></param>
@@ -94,6 +101,7 @@ namespace Pictor.PixelFormat
 		///<param name="c"></param>
 		///<param name="cover"></param>
 		void BlendHorizontalLine(int x, int y, int x2, RGBA_Bytes c, byte cover);
+
 		///<summary>
 		///</summary>
 		///<param name="x"></param>
@@ -110,6 +118,7 @@ namespace Pictor.PixelFormat
 		///<param name="len"></param>
 		///<param name="colors"></param>
 		unsafe void CopyHorizontalColorSpan(int x, int y, uint len, RGBA_Bytes* colors);
+
 		///<summary>
 		///</summary>
 		///<param name="x"></param>
@@ -126,6 +135,7 @@ namespace Pictor.PixelFormat
 		///<param name="c"></param>
 		///<param name="covers"></param>
 		unsafe void BlendSolidHorizontalSpan(int x, int y, uint len, RGBA_Bytes c, byte* covers);
+
 		///<summary>
 		///</summary>
 		///<param name="x"></param>
@@ -144,6 +154,7 @@ namespace Pictor.PixelFormat
 		///<param name="covers"></param>
 		///<param name="cover"></param>
 		unsafe void BlendHorizontalColorSpan(int x, int y, uint len, RGBA_Bytes* colors, byte* covers, byte cover);
+
 		///<summary>
 		///</summary>
 		///<param name="x"></param>
@@ -166,6 +177,7 @@ namespace Pictor.PixelFormat
 		///<param name="y"></param>
 		///<returns></returns>
 		unsafe byte* RowPointer(int y);
+
 		///<summary>
 		///</summary>
 		///<param name="x"></param>

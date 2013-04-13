@@ -21,7 +21,6 @@ namespace Mosa.Platform.AVR32.Instructions
 	/// </summary>
 	public class St : AVR32Instruction
 	{
-
 		#region Methods
 
 		/// <summary>
@@ -48,7 +47,6 @@ namespace Mosa.Platform.AVR32.Instructions
 			}
 			else
 				throw new Exception("Not supported combination of operands");
-
 		}
 
 		/// <summary>
@@ -61,7 +59,6 @@ namespace Mosa.Platform.AVR32.Instructions
 			visitor.St(context);
 		}
 
-		#endregion // Methods
-
+		#endregion Methods
 	}
 }

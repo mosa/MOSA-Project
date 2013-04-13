@@ -7,27 +7,26 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-
 namespace Mosa.Compiler.Metadata.Tables
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public struct FieldLayoutRow
 	{
 		#region Data members
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private uint offset;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private Token field;
 
-		#endregion // Data members
+		#endregion Data members
 
 		#region Construction
 
@@ -42,7 +41,7 @@ namespace Mosa.Compiler.Metadata.Tables
 			this.field = field;
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Properties
 
@@ -64,6 +63,6 @@ namespace Mosa.Compiler.Metadata.Tables
 			get { return field; }
 		}
 
-		#endregion // Properties
+		#endregion Properties
 	}
 }

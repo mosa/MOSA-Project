@@ -10,7 +10,7 @@
 namespace Mosa.DeviceSystem
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public interface IPartitionDevice
 	{

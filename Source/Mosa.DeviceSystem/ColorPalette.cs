@@ -9,19 +9,18 @@
 
 namespace Mosa.DeviceSystem
 {
-
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public class ColorPalette
 	{
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected ushort entries;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected Color[] colors;
 
@@ -664,7 +663,6 @@ namespace Mosa.DeviceSystem
 			return palette;
 		}
 
-		#endregion
-
+		#endregion Standard Palette
 	}
 }

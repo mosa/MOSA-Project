@@ -14,9 +14,8 @@ using Mosa.Compiler.Metadata.Tables;
 
 namespace Mosa.Tool.MetadataExplorer.Tables
 {
-
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public class AssemblyRowExt : TableRow
 	{

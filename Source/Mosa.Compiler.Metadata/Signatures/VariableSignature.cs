@@ -120,6 +120,5 @@ namespace Mosa.Compiler.Metadata.Signatures
 				}
 			}
 		}
-
 	}
 }

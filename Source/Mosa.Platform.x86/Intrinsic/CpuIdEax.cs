@@ -19,7 +19,6 @@ namespace Mosa.Platform.x86.Intrinsic
 	/// </summary>
 	public sealed class CpuIdEax : IIntrinsicPlatformMethod
 	{
-
 		#region Methods
 
 		/// <summary>
@@ -40,7 +39,6 @@ namespace Mosa.Platform.x86.Intrinsic
 			context.AppendInstruction(X86.Mov, result, reg);
 		}
 
-		#endregion // Methods
-
+		#endregion Methods
 	}
 }

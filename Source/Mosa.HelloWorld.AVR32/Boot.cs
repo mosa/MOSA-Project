@@ -5,15 +5,13 @@
  *
  */
 
-
 namespace Mosa.HelloWorld.AVR32
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public static class Boot
 	{
-
 		/// <summary>
 		/// Mains this instance.
 		/// </summary>
@@ -23,9 +21,7 @@ namespace Mosa.HelloWorld.AVR32
 
 			while (true)
 			{
-				
 			}
 		}
-
 	}
 }

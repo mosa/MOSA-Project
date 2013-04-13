@@ -55,6 +55,6 @@ namespace Mosa.Compiler.Linker
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 	}
 }

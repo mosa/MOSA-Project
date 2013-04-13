@@ -7,7 +7,6 @@
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  */
 
-
 //#ifndef AGG_GAMMA_LUT_INCLUDED
 //#define AGG_GAMMA_LUT_INCLUDED
 
@@ -18,14 +17,14 @@ using System;
 
 namespace Pictor
 {
-	//template<class LoResT=int8u, class HiResT=int8u, unsigned GammaShift=8, unsigned HiResShift=8> 
+	//template<class LoResT=int8u, class HiResT=int8u, unsigned GammaShift=8, unsigned HiResShift=8>
 	public class GammaLookupTable
 	{
 		private double m_gamma;
 		private byte[] m_dir_gamma;
 		private byte[] m_inv_gamma;
 
-		enum GammaScale
+		private enum GammaScale
 		{
 			Shift = 8,
 			Size = 1 << Shift,
@@ -81,4 +80,3 @@ namespace Pictor
 		}
 	};
 }
-

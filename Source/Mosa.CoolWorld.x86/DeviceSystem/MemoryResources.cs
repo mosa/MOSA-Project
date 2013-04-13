@@ -12,17 +12,17 @@ using Mosa.ClassLib;
 namespace Mosa.DeviceSystem
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public class MemoryResources
 	{
-
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected LinkedList<IMemoryRegion> memoryRegions;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected SpinLock spinLock;
 

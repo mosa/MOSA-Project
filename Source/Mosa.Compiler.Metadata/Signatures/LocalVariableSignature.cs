@@ -12,7 +12,7 @@ using System;
 namespace Mosa.Compiler.Metadata.Signatures
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public class LocalVariableSignature : Signature
 	{
@@ -67,7 +67,7 @@ namespace Mosa.Compiler.Metadata.Signatures
 			: base(signature.Token)
 		{
 			locals = new VariableSignature[signature.locals.Length];
-		
+
 			for (int i = 0; i < signature.locals.Length; i++)
 				locals[i] = new VariableSignature(signature.locals[i], genericArguments);
 		}

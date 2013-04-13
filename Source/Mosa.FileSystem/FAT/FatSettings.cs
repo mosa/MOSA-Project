@@ -10,32 +10,32 @@
 namespace Mosa.FileSystem.FAT
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public class FatSettings : GenericFileSystemSettings
 	{
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public FatType FATType;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public byte[] SerialID;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public bool FloppyMedia;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected byte[] osBootCode;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public byte[] OSBootCode
 		{
@@ -63,10 +63,12 @@ namespace Mosa.FileSystem.FAT
 		/// Sectors Per Track
 		/// </summary>
 		public ushort SectorsPerTrack;
+
 		/// <summary>
 		/// Number of Heads
 		/// </summary>
 		public ushort NumberOfHeads;
+
 		/// <summary>
 		/// Hidden Sectors
 		/// </summary>

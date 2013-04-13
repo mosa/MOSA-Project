@@ -7,11 +7,10 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public sealed class CpblkInstruction : NaryInstruction
 	{
@@ -26,7 +25,7 @@ namespace Mosa.Compiler.Framework.CIL
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Method
 
@@ -40,7 +39,6 @@ namespace Mosa.Compiler.Framework.CIL
 			visitor.Cpblk(context);
 		}
 
-		#endregion // Method
-
+		#endregion Method
 	}
 }

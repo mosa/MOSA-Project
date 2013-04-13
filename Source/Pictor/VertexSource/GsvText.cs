@@ -6,13 +6,14 @@
  * Authors:
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  */
+
 using System;
 
 namespace Pictor.VertexSource
 {
 	public sealed class GsvText : IVertexSource
 	{
-		enum EStatus
+		private enum EStatus
 		{
 			initial,
 			next_char,
@@ -20,24 +21,24 @@ namespace Pictor.VertexSource
 			glyph
 		};
 
-		double m_StartX;
-		double m_CurrentX;
-		double m_CurrentY;
-		double m_WidthRatioOfHeight;
-		double m_FontSize;
-		double m_SpaceBetweenCharacters;
-		double m_SpaceBetweenLines;
-		string m_Text;
-		int m_CurrentCharacterIndex;
-		byte[] m_font;
-		EStatus m_status;
-		bool m_big_endian;
-		int m_StartOfIndicesIndex;
-		int m_StartOfGlyphsIndex;
-		int m_BeginGlyphIndex;
-		int m_EndGlyphIndex;
-		double m_WidthScaleRatio;
-		double m_HeightScaleRatio;
+		private double m_StartX;
+		private double m_CurrentX;
+		private double m_CurrentY;
+		private double m_WidthRatioOfHeight;
+		private double m_FontSize;
+		private double m_SpaceBetweenCharacters;
+		private double m_SpaceBetweenLines;
+		private string m_Text;
+		private int m_CurrentCharacterIndex;
+		private byte[] m_font;
+		private EStatus m_status;
+		private bool m_big_endian;
+		private int m_StartOfIndicesIndex;
+		private int m_StartOfGlyphsIndex;
+		private int m_BeginGlyphIndex;
+		private int m_EndGlyphIndex;
+		private double m_WidthScaleRatio;
+		private double m_HeightScaleRatio;
 
 		public double AscenderHeight
 		{
@@ -46,6 +47,7 @@ namespace Pictor.VertexSource
 				return m_FontSize * .15;
 			}
 		}
+
 		public double DescenderHeight
 		{
 			get
@@ -351,7 +353,7 @@ namespace Pictor.VertexSource
 
 	internal static class CGSVDefaultFont
 	{
-		static public byte[] gsv_default_font = 
+		static public byte[] gsv_default_font =
 		{
 			0x40,0x00,0x6c,0x0f,0x15,0x00,0x0e,0x00,0xf9,0xff,
 			0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,

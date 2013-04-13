@@ -11,7 +11,7 @@ using Mosa.Compiler.Verifier;
 
 namespace Mosa.Tool.Verifier
 {
-	static class ParseOptions
+	internal static class ParseOptions
 	{
 		public static bool Parse(VerificationOptions options, string[] args)
 		{

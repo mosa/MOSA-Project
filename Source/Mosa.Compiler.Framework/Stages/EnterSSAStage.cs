@@ -14,11 +14,10 @@ using Mosa.Compiler.Framework.IR;
 namespace Mosa.Compiler.Framework.Stages
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public sealed class EnterSSAStage : BaseMethodCompilerStage, IMethodCompilerStage, IPipelineStage
 	{
-
 		private PhiPlacementStage phiPlacementStage;
 		private Dictionary<Operand, Stack<int>> variables;
 		private Dictionary<Operand, int> counts;
@@ -189,7 +188,6 @@ namespace Mosa.Compiler.Framework.Stages
 					var index = variables[op].Pop();
 				}
 			}
-
 		}
 
 		/// <summary>
@@ -205,7 +203,5 @@ namespace Mosa.Compiler.Framework.Stages
 					return i;
 			return -1;
 		}
-
-
 	}
 }

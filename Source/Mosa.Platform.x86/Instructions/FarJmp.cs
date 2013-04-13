@@ -7,7 +7,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-
 using Mosa.Compiler.Framework;
 
 namespace Mosa.Platform.x86.Instructions
@@ -17,7 +16,6 @@ namespace Mosa.Platform.x86.Instructions
 	/// </summary>
 	public sealed class FarJmp : X86Instruction
 	{
-
 		#region Methods
 
 		/// <summary>
@@ -40,7 +38,6 @@ namespace Mosa.Platform.x86.Instructions
 			visitor.Add(context);
 		}
 
-		#endregion // Methods
-
+		#endregion Methods
 	}
 }

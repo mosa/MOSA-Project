@@ -17,13 +17,12 @@ using Mosa.Compiler.Metadata.Signatures;
 
 namespace Mosa.Platform.x86.Stages
 {
-
 	/*
 	 * FIXME:
 	 * - Allow video mode options to be controlled by the command line
 	 * - Allow the specification of additional load modules on the command line
 	 * - Write the multiboot compliant entry point, which parses the the boot
-	 *   information structure and populates the appropriate fields in the 
+	 *   information structure and populates the appropriate fields in the
 	 *   KernelBoot entry.
 	 */
 
@@ -35,7 +34,7 @@ namespace Mosa.Platform.x86.Stages
 	/// the data section of the binary file and also creates a multiboot
 	/// compliant entry point into the binary.<para/>
 	/// The header and entry point written by this stage is compliant with
-	/// the specification at 
+	/// the specification at
 	/// http://www.gnu.org/software/grub/manual/multiboot/multiboot.html.
 	/// </remarks>
 	public sealed class Multiboot0695Stage : BaseCompilerStage, ICompilerStage, IPipelineStage
@@ -72,7 +71,7 @@ namespace Mosa.Platform.x86.Stages
 		/// </summary>
 		private const uint HEADER_MB_FLAG_NON_ELF_BINARY = 0x00010000U;
 
-		#endregion // Constants
+		#endregion Constants
 
 		#region Data members
 
@@ -103,7 +102,7 @@ namespace Mosa.Platform.x86.Stages
 		/// </summary>
 		private bool secondStage;
 
-		#endregion // Data members
+		#endregion Data members
 
 		#region Construction
 
@@ -119,7 +118,7 @@ namespace Mosa.Platform.x86.Stages
 			secondStage = false;
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region ICompilerStage Members
 
@@ -174,7 +173,7 @@ namespace Mosa.Platform.x86.Stages
 			}
 		}
 
-		#endregion // ICompilerStage Members
+		#endregion ICompilerStage Members
 
 		#region Internals
 
@@ -194,16 +193,22 @@ namespace Mosa.Platform.x86.Stages
 				{
 					// flags - multiboot flags
 					uint flags = /*HEADER_MB_FLAG_VIDEO_MODES_REQUIRED | */HEADER_MB_FLAG_MEMORY_INFO_REQUIRED | HEADER_MB_FLAG_MODULES_PAGE_ALIGNED;
-					// The multiboot header checksum 
+
+					// The multiboot header checksum
 					uint csum = 0;
+
 					// header_addr is the load virtualAddress of the multiboot header
 					uint header_addr = 0;
+
 					// load_addr is the base virtualAddress of the binary in memory
 					uint load_addr = 0;
+
 					// load_end_addr holds the virtualAddress past the last byte to load From the image
 					uint load_end_addr = 0;
+
 					// bss_end_addr is the virtualAddress of the last byte to be zeroed out
 					uint bss_end_addr = 0;
+
 					// entry_point the load virtualAddress of the entry point to invoke
 
 					// entry_point the load virtualAddress of the entry point to invoke
@@ -245,6 +250,6 @@ namespace Mosa.Platform.x86.Stages
 			}
 		}
 
-		#endregion // Internals
+		#endregion Internals
 	}
 }

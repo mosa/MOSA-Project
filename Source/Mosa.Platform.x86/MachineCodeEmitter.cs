@@ -23,7 +23,6 @@ namespace Mosa.Platform.x86
 	/// </summary>
 	public sealed class MachineCodeEmitter : BaseCodeEmitter, IDisposable
 	{
-
 		/// <summary>
 		/// Initializes a new instance of the <see cref="MachineCodeEmitter"/> class.
 		/// </summary>
@@ -191,7 +190,6 @@ namespace Mosa.Platform.x86
 			{
 				codeStream.Write(displacement.Offset.ToInt32(), true);
 			}
-
 		}
 
 		/// <summary>
@@ -200,11 +198,10 @@ namespace Mosa.Platform.x86
 		/// <param name="op">The immediate operand to emit.</param>
 		private void WriteImmediate(Operand op)
 		{
-
 			if (op.IsLocalVariable || op.IsStackTemp || op.IsMemoryAddress)
 			{
 				// Add the displacement
-				codeStream.Write(op .Offset.ToInt32(), true);
+				codeStream.Write(op.Offset.ToInt32(), true);
 			}
 			else if (op.IsConstant)
 			{
@@ -232,32 +229,40 @@ namespace Mosa.Platform.x86
 					case CilElementType.I1:
 						codeStream.WriteByte(Convert.ToByte(op.Value));
 						break;
+
 					case CilElementType.I2:
 						codeStream.Write(Convert.ToInt16(op.Value), true);
 						break;
+
 					case CilElementType.I4:
 						goto case CilElementType.I;
 					case CilElementType.U1:
 						codeStream.WriteByte(Convert.ToByte(op.Value));
 						break;
+
 					case CilElementType.Char:
 						goto case CilElementType.U2;
 					case CilElementType.U2:
 						codeStream.Write((ushort)Convert.ToUInt64(op.Value), true);
 						break;
+
 					case CilElementType.Ptr:
 					case CilElementType.U4:
 						codeStream.Write((uint)Convert.ToUInt64(op.Value), true);
 						break;
+
 					case CilElementType.I8:
 						codeStream.Write(Convert.ToInt64(op.Value), true);
 						break;
+
 					case CilElementType.U8:
 						codeStream.Write(Convert.ToUInt64(op.Value), true);
 						break;
+
 					case CilElementType.R4:
 						codeStream.Write(Endian.ConvertToUInt32(Convert.ToSingle(op.Value)), true);
 						break;
+
 					case CilElementType.R8:
 						goto default;
 					case CilElementType.Object:
@@ -274,7 +279,6 @@ namespace Mosa.Platform.x86
 			{
 				throw new NotImplementedException();
 			}
-
 		}
 
 		/// <summary>
@@ -349,6 +353,7 @@ namespace Mosa.Platform.x86
 							codeStream.Write(Convert.ToUInt32(op.Value), true);
 						}
 						break;
+
 					case CilElementType.I1:
 						codeStream.WriteByte(Convert.ToByte(op.Value));
 						break;
@@ -356,28 +361,35 @@ namespace Mosa.Platform.x86
 					case CilElementType.I2:
 						codeStream.Write(Convert.ToInt16(op.Value), true);
 						break;
+
 					case CilElementType.I4:
 						goto case CilElementType.I;
 					case CilElementType.U1:
 						codeStream.WriteByte(Convert.ToByte(op.Value));
 						break;
+
 					case CilElementType.Char:
 						goto case CilElementType.U2;
 					case CilElementType.U2:
 						codeStream.Write(Convert.ToUInt16(op.Value), true);
 						break;
+
 					case CilElementType.U4:
 						codeStream.Write(Convert.ToUInt32(op.Value), true);
 						break;
+
 					case CilElementType.I8:
 						codeStream.Write(Convert.ToInt64(op.Value), true);
 						break;
+
 					case CilElementType.U8:
 						codeStream.Write(Convert.ToUInt64(op.Value), true);
 						break;
+
 					case CilElementType.R4:
 						codeStream.Write(Endian.ConvertToUInt32(Convert.ToSingle(op.Value)), true);
 						break;
+
 					case CilElementType.R8:
 						goto default;
 					default:
@@ -421,9 +433,9 @@ namespace Mosa.Platform.x86
 			if (!op1IsRegister && op2IsRegister)
 			{
 				// Swap the memory operands
-				op1 = op2; 
+				op1 = op2;
 				op2 = null;
-				mop2 = mop1; 
+				mop2 = mop1;
 				mop1 = null;
 				op1IsRegister = op2IsRegister;
 				op2IsRegister = false;
@@ -437,6 +449,7 @@ namespace Mosa.Platform.x86
 				// mod = 11b, reg = rop1, r/m = rop2
 				modRM = (byte)((3 << 6) | (op1.Register.RegisterCode << 3) | op2.Register.RegisterCode);
 			}
+
 			// Check for register/memory combinations
 			else if (mop2 != null && mop2.Base != null)
 			{
@@ -477,6 +490,7 @@ namespace Mosa.Platform.x86
 			else if (op1IsRegister)
 			{
 				modRM = (byte)(modRM.GetValueOrDefault() | (3 << 6) | op1.Register.RegisterCode);
+
 				//if (op2 is SymbolOperand)
 				//    displacement = op2;
 			}
@@ -484,6 +498,6 @@ namespace Mosa.Platform.x86
 			return modRM;
 		}
 
-		#endregion // Code Generation
+		#endregion Code Generation
 	}
 }

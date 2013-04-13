@@ -7,11 +7,10 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public sealed class NoPrefixInstruction : PrefixInstruction
 	{
@@ -26,7 +25,7 @@ namespace Mosa.Compiler.Framework.CIL
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Methods Overrides
 
@@ -45,8 +44,6 @@ namespace Mosa.Compiler.Framework.CIL
 			ctx.Other = nocheck;
 		}
 
-		#endregion // Methods Overrides
-
-
+		#endregion Methods Overrides
 	}
 }

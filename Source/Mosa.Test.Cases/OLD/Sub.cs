@@ -8,23 +8,20 @@
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  *  Michael Fröhlich (grover) <michael.ruck@michaelruck.de>
  *  Kai P. Reisert <kpreisert@googlemail.com>
- *  
+ *
  */
 
 using System;
 using System.Globalization;
-
 
 using MbUnit.Framework;
 using Mosa.Test.System;
 
 namespace Mosa.Test.Cases.OLD
 {
-
 	[TestFixture]
 	public class Sub : TestCompilerAdapter
 	{
-
 		private static string CreateConstantTestCode(string name, string typeIn, string typeOut, string constLeft, string constRight)
 		{
 			if (String.IsNullOrEmpty(constRight))
@@ -56,7 +53,7 @@ namespace Mosa.Test.Cases.OLD
 		}
 
 		#region C
-	
+
 		[Row(0, 'a')]
 		[Row('-', '.')]
 		[Row('a', 'Z')]
@@ -76,7 +73,8 @@ namespace Mosa.Test.Cases.OLD
 			settings.CodeSource = CreateConstantTestCode("SubConstantCLeft", "char", "int", "'" + a.ToString() + "'", null);
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "SubConstantCLeft", (a - b), b));
 		}
-		#endregion
+
+		#endregion C
 
 		#region I1
 
@@ -104,10 +102,11 @@ namespace Mosa.Test.Cases.OLD
 			settings.CodeSource = CreateConstantTestCode("SubConstantI1Left", "sbyte", "int", a.ToString(), null);
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "SubConstantI1Left", (a - b), b));
 		}
+
 		#endregion I1
 
 		#region I2
-		
+
 		[Row(-23, 148)]
 		[Row(17, 1)]
 		[Row(0, 0)]
@@ -129,10 +128,11 @@ namespace Mosa.Test.Cases.OLD
 			settings.CodeSource = CreateConstantTestCode("SubConstantI2Left", "short", "int", a.ToString(), null);
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "SubConstantI2Left", (a - b), b));
 		}
-		#endregion
+
+		#endregion I2
 
 		#region U2
-		
+
 		[Row(23, 148)]
 		[Row(17, 1)]
 		[Row(0, 0)]
@@ -154,10 +154,11 @@ namespace Mosa.Test.Cases.OLD
 			settings.CodeSource = CreateConstantTestCode("SubConstantU2Left", "ushort", "int", a.ToString(), null);
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "SubConstantU2Left", (a - b), b));
 		}
-		#endregion
+
+		#endregion U2
 
 		#region I4
-		
+
 		[Row(-23, 148)]
 		[Row(17, 1)]
 		[Row(0, 0)]
@@ -179,10 +180,11 @@ namespace Mosa.Test.Cases.OLD
 			settings.CodeSource = CreateConstantTestCode("SubConstantI4Left", "int", "int", a.ToString(), null);
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "SubConstantI4Left", (a - b), b));
 		}
-		#endregion
+
+		#endregion I4
 
 		#region I8
-		
+
 		[Row(-23, 148)]
 		[Row(17, 1)]
 		[Row(0, 0)]
@@ -204,10 +206,11 @@ namespace Mosa.Test.Cases.OLD
 			settings.CodeSource = CreateConstantTestCode("SubConstantI8Left", "long", "long", a.ToString(), null);
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "SubConstantI8Left", (a - b), b));
 		}
-		#endregion
+
+		#endregion I8
 
 		#region R4
-		
+
 		[Row(23f, 148.0016f)]
 		[Row(17.2f, 1f)]
 		[Row(0f, 0f)]
@@ -221,6 +224,7 @@ namespace Mosa.Test.Cases.OLD
 		[Row(23f, 148.0016f)]
 		[Row(17.2f, 1f)]
 		[Row(0f, 0f)]
+
 		// Obsolete, because of higher precision
 		// [Row(-17.0002501f, float.MaxValue)]
 		[Test]
@@ -229,10 +233,11 @@ namespace Mosa.Test.Cases.OLD
 			settings.CodeSource = CreateConstantTestCode("SubConstantR4Left", "float", "float", a.ToString(CultureInfo.InvariantCulture) + "f", null);
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "SubConstantR4Left", (a - b), b));
 		}
-		#endregion
+
+		#endregion R4
 
 		#region R8
-		
+
 		[Row(23, 148.0016)]
 		[Row(17.2, 1.0)]
 		[Row(0.0, 0.0)]
@@ -254,7 +259,7 @@ namespace Mosa.Test.Cases.OLD
 			settings.CodeSource = CreateConstantTestCode("SubConstantR8Left", "double", "double", a.ToString(CultureInfo.InvariantCulture), null);
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "SubConstantR8Left", (a - b), b));
 		}
-		#endregion
 
+		#endregion R8
 	}
 }

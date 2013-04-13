@@ -18,9 +18,8 @@ using Mosa.Compiler.TypeSystem;
 
 namespace Mosa.Test.System
 {
-	class TestCaseMethodCompiler : BaseMethodCompiler
+	internal class TestCaseMethodCompiler : BaseMethodCompiler
 	{
-
 		private IntPtr address = IntPtr.Zero;
 
 		public IntPtr Address { get { return address; } }
@@ -41,22 +40,23 @@ namespace Mosa.Test.System
 				new OperandAssignmentStage(),
 				new StaticAllocationResolutionStage(),
 				new CILTransformationStage(),
-				
-				new LocalVariablePromotionStage(), 
+
+				new LocalVariablePromotionStage(),
 				new	EdgeSplitStage(),
 				new DominanceCalculationStage(),
 				new PhiPlacementStage(),
 				new EnterSSAStage(),
 				new SSAOptimizations(),
 				new LeaveSSA(),
-				
+
 				new StackLayoutStage(),
 				new PlatformIntrinsicTransformationStage(),
 				new PlatformStubStage(),
 				new LoopAwareBlockOrderStage(),
+
 				//new SimpleTraceBlockOrderStage(),
 				//new ReverseBlockOrderStage(),  // reverse all the basic blocks and see if it breaks anything
-				new CodeGenerationStage(),				
+				new CodeGenerationStage(),
 			});
 		}
 
@@ -89,6 +89,6 @@ namespace Mosa.Test.System
 			base.EndCompile();
 		}
 
-		#endregion // BaseMethodCompiler Overrides
+		#endregion BaseMethodCompiler Overrides
 	}
 }

@@ -16,7 +16,6 @@ namespace Mosa.Test.Compiler.Framework
 	[TestFixture]
 	public class LoopAwareBlockOrderTests
 	{
-
 		internal static void Dump(BasicBlocks basicBlocks, LoopAwareBlockOrder loopAwareBlockOrder)
 		{
 			int index = 0;
@@ -38,7 +37,6 @@ namespace Mosa.Test.Compiler.Framework
 
 				Console.WriteLine("Block " + block.ToString() + " #" + block.Sequence.ToString() + " -> Depth: " + depth.ToString() + " index: " + depthindex.ToString());
 			}
-
 		}
 
 		[Test]
@@ -76,6 +74,5 @@ namespace Mosa.Test.Compiler.Framework
 
 			Dump(basicBlocks, loopAwareBlockOrder);
 		}
-
 	}
 }

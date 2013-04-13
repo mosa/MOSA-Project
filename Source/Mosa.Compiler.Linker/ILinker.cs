@@ -70,7 +70,7 @@ namespace Mosa.Compiler.Linker
 		/// <value>The virtual section alignment.</value>
 		long VirtualSectionAlignment { get; }
 
-		#endregion // Properties
+		#endregion Properties
 
 		#region Methods
 
@@ -118,6 +118,6 @@ namespace Mosa.Compiler.Linker
 		/// <param name="offset">An offset to apply to the link target.</param>
 		void Link(LinkType linkType, string symbolName, int methodOffset, int methodRelativeBase, string targetSymbol, IntPtr offset);
 
-		#endregion // Methods
+		#endregion Methods
 	}
 }

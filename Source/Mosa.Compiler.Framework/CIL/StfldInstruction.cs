@@ -30,7 +30,7 @@ namespace Mosa.Compiler.Framework.CIL
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Methods Overrides
 
@@ -69,6 +69,6 @@ namespace Mosa.Compiler.Framework.CIL
 			visitor.Stfld(context);
 		}
 
-		#endregion // Methods Overrides
+		#endregion Methods Overrides
 	}
 }

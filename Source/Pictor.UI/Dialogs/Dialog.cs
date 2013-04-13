@@ -1,18 +1,17 @@
-﻿
-namespace Pictor.UI.Dialogs
+﻿namespace Pictor.UI.Dialogs
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public class Dialog : Window
 	{
 		/// <summary>
-		/// 
+		///
 		/// </summary>
-		bool running = true;
+		private bool running = true;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="x"></param>
 		/// <param name="y"></param>

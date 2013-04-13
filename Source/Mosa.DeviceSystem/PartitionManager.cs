@@ -10,12 +10,12 @@
 namespace Mosa.DeviceSystem
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public class PartitionManager
 	{
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IDeviceManager deviceManager;
 
@@ -23,7 +23,10 @@ namespace Mosa.DeviceSystem
 		/// Initializes a new instance of the <see cref="PartitionManager"/> class.
 		/// </summary>
 		/// <param name="deviceManager">The device manager.</param>
-		public PartitionManager(IDeviceManager deviceManager) { this.deviceManager = deviceManager; }
+		public PartitionManager(IDeviceManager deviceManager)
+		{
+			this.deviceManager = deviceManager;
+		}
 
 		/// <summary>
 		/// Creates the partition devices.
@@ -44,7 +47,6 @@ namespace Mosa.DeviceSystem
 						if (mbr.Partitions[i].PartitionType != PartitionType.Empty)
 							deviceManager.Add(new PartitionDevice(diskDevice, mbr.Partitions[i], false));
 			}
-
 		}
 	}
 }

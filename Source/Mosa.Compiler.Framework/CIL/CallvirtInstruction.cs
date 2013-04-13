@@ -7,11 +7,10 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public sealed class CallvirtInstruction : InvokeInstruction
 	{
@@ -26,7 +25,7 @@ namespace Mosa.Compiler.Framework.CIL
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Properties
 
@@ -39,7 +38,7 @@ namespace Mosa.Compiler.Framework.CIL
 			get { return InvokeSupportFlags.MemberRef | InvokeSupportFlags.MethodDef | InvokeSupportFlags.MethodSpec; }
 		}
 
-		#endregion // Properties
+		#endregion Properties
 
 		#region Methods
 
@@ -53,6 +52,6 @@ namespace Mosa.Compiler.Framework.CIL
 			visitor.Callvirt(context);
 		}
 
-		#endregion // Methods
+		#endregion Methods
 	}
 }

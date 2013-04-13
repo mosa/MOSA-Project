@@ -11,9 +11,8 @@ using Mosa.ClassLib;
 
 namespace Mosa.DeviceSystem
 {
-
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public class GUIDPartitionTable
 	{
@@ -43,11 +42,12 @@ namespace Mosa.DeviceSystem
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected bool valid;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IDiskDevice diskDevice;
 

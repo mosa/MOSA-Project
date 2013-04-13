@@ -16,13 +16,11 @@ using Mosa.Compiler.Metadata.Tables;
 
 namespace Mosa.Compiler.Metadata
 {
-
 	/// <summary>
 	/// Provides convenient access to the provider table heap.
 	/// </summary>
 	public sealed class TableHeap : Heap
 	{
-
 		#region Types
 
 		/// <summary>
@@ -32,7 +30,7 @@ namespace Mosa.Compiler.Metadata
 		/// <returns>The size of the record for the given heap sizes.</returns>
 		private delegate int SizeofDelegate(IMetadataProvider heap);
 
-		#endregion // Types
+		#endregion Types
 
 		#region Static members
 
@@ -59,7 +57,7 @@ namespace Mosa.Compiler.Metadata
 
 		private const int TableCount = ((int)TableType.GenericParamConstraint >> 24) + 1;
 
-		#endregion // Static members
+		#endregion Static members
 
 		#region Data members
 
@@ -100,7 +98,7 @@ namespace Mosa.Compiler.Metadata
 
 		private IMetadataProvider _metadataProvider;
 
-		#endregion // Data members
+		#endregion Data members
 
 		#region Construction
 
@@ -246,7 +244,7 @@ namespace Mosa.Compiler.Metadata
 			return sizes;
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Properties
 
@@ -268,7 +266,7 @@ namespace Mosa.Compiler.Metadata
 			}
 		}
 
-		#endregion // Properties
+		#endregion Properties
 
 		#region Methods
 
@@ -379,7 +377,7 @@ namespace Mosa.Compiler.Metadata
 			return reader;
 		}
 
-		#endregion // Methods
+		#endregion Methods
 
 		#region IMetadataProvider members
 
@@ -1175,6 +1173,6 @@ namespace Mosa.Compiler.Metadata
 			}
 		}
 
-		#endregion // IMetadataProvider members
+		#endregion IMetadataProvider members
 	}
 }
