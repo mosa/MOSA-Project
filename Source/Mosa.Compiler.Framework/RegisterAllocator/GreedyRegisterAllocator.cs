@@ -629,7 +629,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			// prepare to split live interval
 			if (liveInterval.Stage == LiveInterval.AllocationStage.Initial)
 			{
-				if (trace.Active) trace.Log("  Re-queued for prespilled stage");
+				if (trace.Active) trace.Log("  Re-queued for split level 1 stage");
 				liveInterval.Stage = LiveInterval.AllocationStage.SplitLevel1;
 				AddPriorityQueue(liveInterval);
 				return;
@@ -645,7 +645,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 					return;
 				}
 
-				// Move to spill stage
+				// Move to split level 2 stage
 				if (trace.Active) trace.Log("  Re-queued for split interval - level 2");
 
 				liveInterval.Stage = LiveInterval.AllocationStage.SplitLevel2;
@@ -677,6 +677,12 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 				if (trace.Active) trace.Log("  Spilled interval");
 
 				spilledIntervals.Add(liveInterval);
+
+				if (!liveInterval.IsEmpty)
+				{
+					return;
+				}
+
 				return;
 			}
 
@@ -692,10 +698,11 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			if (TrySimplePartialFreeIntervalSplit(liveInterval))
 				return true;
 
-			if (level < 1)
+			if (level <= 1)
 				return false;
 
-			//
+			if (IntervalSplitAtFirstUseOrDef(liveInterval))
+				return true;
 
 			return false;
 		}
@@ -737,7 +744,11 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 				return false;
 			}
 
-			Debug.Assert(!furthestUsed.IsBlockStartInstruction);
+			//Debug.Assert(!furthestUsed.IsBlockStartInstruction);
+			if (furthestUsed.IsBlockStartInstruction)
+			{
+				return false;
+			}
 
 			var lastFree = furthestUsed.Previous;
 
@@ -783,26 +794,64 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			return true;
 		}
 
-		private void SplitInterval(LiveInterval liveInterval, SlotIndex at)
+		private bool IntervalSplitAtFirstUseOrDef(LiveInterval liveInterval)
 		{
+			// last resort
+
+			if (liveInterval.IsEmpty)
+				return false;
+
+			SlotIndex at;
+
+			var firstUse = liveInterval.UsePositions.Count != 0 ? liveInterval.UsePositions[0] : null;
+			var firstDef = liveInterval.DefPositions.Count != 0 ? liveInterval.DefPositions[0] : null;
+
+			at = firstDef;
+
+			if (at == null)
+				at = firstUse;
+			else if (firstUse != null && firstUse < at)
+				at = firstUse;
+
+			var atNext = at.Next;
+
+			if (liveInterval.Start == at && liveInterval.End == atNext)
+			{
+				if (trace.Active) trace.Log("  Interval already smallest");
+				return false;
+			}
+
+			if (trace.Active) trace.Log(" Splitting around first use/def");
+
 			var virtualRegister = liveInterval.VirtualRegister;
 
-			var first = liveInterval.Split(liveInterval.Start, at);
-			var second = liveInterval.Split(at, liveInterval.End);
-
 			virtualRegister.Remove(liveInterval);
-			virtualRegister.Add(first);
-			virtualRegister.Add(second);
 
-			CalculateSpillCost(first);
-			CalculateSpillCost(second);
+			if (liveInterval.Start != at)
+			{
+				var first = liveInterval.Split(liveInterval.Start, at);
+				CalculateSpillCost(first);
+				virtualRegister.Add(first);
+				AddPriorityQueue(first);
+				if (trace.Active) trace.Log("  First Split : " + first.ToString());
+			}
 
-			AddPriorityQueue(first);
-			AddPriorityQueue(second);
+			var middle = liveInterval.Split(at, atNext);
+			CalculateSpillCost(middle);
+			virtualRegister.Add(middle);
+			AddPriorityQueue(middle);
+			if (trace.Active) trace.Log("  Middle Split: " + middle.ToString());
 
-			if (trace.Active) trace.Log("  Split at: " + at.ToString());
-			if (trace.Active) trace.Log("  Split interval 1/2: " + first.ToString());
-			if (trace.Active) trace.Log("  Split interval 2/2: " + second.ToString());
+			if (liveInterval.End != atNext)
+			{
+				var last = liveInterval.Split(atNext, liveInterval.End);
+				CalculateSpillCost(last);
+				virtualRegister.Add(last);
+				AddPriorityQueue(last);
+				if (trace.Active) trace.Log("  Last Split  : " + last.ToString());
+			}
+
+			return true;
 		}
 
 		private IEnumerable<VirtualRegister> GetVirtualRegisters(BitArray array)
