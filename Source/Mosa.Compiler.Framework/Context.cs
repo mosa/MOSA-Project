@@ -1258,6 +1258,21 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
+		/// Sets the result by index.
+		/// </summary>
+		/// <param name="opIndex">The index.</param>
+		/// <param name="operand">The operand.</param>
+		public void SetResult(int opIndex, Operand operand)
+		{
+			switch (opIndex)
+			{
+				case 0: Result = operand; return;
+				case 1: Result2 = operand; return;
+				default: throw new System.IndexOutOfRangeException();
+			}
+		}
+
+		/// <summary>
 		/// Returns a <see cref="System.String"/> that represents this instance.
 		/// </summary>
 		/// <returns>
