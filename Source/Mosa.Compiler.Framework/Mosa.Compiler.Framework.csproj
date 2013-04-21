@@ -89,7 +89,6 @@
     <Compile Include="RegisterAllocator\LiveInterval.cs" />
     <Compile Include="RegisterAllocator\VirtualRegister.cs" />
     <Compile Include="RegisterAllocator\GreedyRegisterAllocator.cs" />
-    <Compile Include="OperandVisitor.cs" />
     <Compile Include="Linker\LinkerFactory.cs" />
     <Compile Include="Stages\StackSetupStage.cs" />
     <Compile Include="Stages\GreedyRegisterAllocatorStage.cs" />
@@ -345,9 +344,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="IMethodCompilerStage.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="IStackLayoutProvider.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="BaseMethodCompiler.cs">

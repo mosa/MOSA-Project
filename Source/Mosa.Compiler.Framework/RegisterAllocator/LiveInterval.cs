@@ -7,12 +7,13 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework.RegisterAllocator
 {
-	public class LiveInterval : Interval
+	public class LiveInterval : Interval	// alternative name is LiveRange
 	{
 		public enum AllocationStage
 		{
@@ -31,7 +32,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		public int SpillValue { get; set; }
 
-		public int SpillCost { get { return SpillValue / (Length + 1); } }
+		public int SpillCost { get { return NeverSpill ? Int32.MaxValue : (SpillValue / (Length + 1)); } }
 
 		public LiveIntervalUnion LiveIntervalUnion { get; set; }
 
@@ -45,11 +46,13 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		public bool IsPhysicalRegister { get { return VirtualRegister.IsPhysicalRegister; } }
 
-		//public bool IsAssignedSpillSlot { get { return AssignedPhysicalRegister == null; } }
-
 		public Register AssignedPhysicalRegister { get { return LiveIntervalUnion == null ? null : LiveIntervalUnion.Register; } }
 
+		public Operand AssignedPhysicalOperand { get; set; }
+
 		public bool ForceSpilled { get; set; }
+
+		public bool NeverSpill { get; set; }
 
 		public SlotIndex Minimum { get; private set; }
 
@@ -62,6 +65,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			this.SpillValue = 0;
 			this.Stage = AllocationStage.Initial;
 			this.ForceSpilled = false;
+			this.NeverSpill = false;
 
 			SlotIndex max = null;
 			SlotIndex min = null;

@@ -1193,6 +1193,21 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
+		/// Gets the result.
+		/// </summary>
+		/// <param name="opIndex">The index.</param>
+		/// <returns></returns>
+		public Operand GetResult(int opIndex)
+		{
+			switch (opIndex)
+			{
+				case 0: return Result;
+				case 1: return Result2;
+				default: throw new System.IndexOutOfRangeException();
+			}
+		}
+
+		/// <summary>
 		/// Adds the operand.
 		/// </summary>
 		/// <param name="operand">The operand.</param>

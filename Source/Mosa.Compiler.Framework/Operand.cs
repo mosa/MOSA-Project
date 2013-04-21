@@ -26,7 +26,7 @@ namespace Mosa.Compiler.Framework
 		#region Data members
 
 		[Flags]
-		private enum OperandType { Undefined = 0, Constant = 1, StackLocal = 2, Parameter = 4, LocalVariable = 8, Symbol = 16, Register = 32, CPURegister = 64, SSA = 128, RuntimeMember = 256, MemoryAddress = 512, VirtualRegister = 1024, Label = 2048 };
+		private enum OperandType { Undefined = 0, Constant = 1, StackLocal = 2, Parameter = 4, Symbol = 16, CPURegister = 64, SSA = 128, RuntimeMember = 256, MemoryAddress = 512, VirtualRegister = 1024, Label = 2048 };
 
 		/// <summary>
 		///
@@ -160,11 +160,6 @@ namespace Mosa.Compiler.Framework
 		public Operand SplitParent { get { return !IsSSA ? parent : null; } private set { parent = value; } }
 
 		/// <summary>
-		/// Determines if the operand is a register.
-		/// </summary>
-		public bool IsRegister { get { return (operandType & OperandType.Register) == OperandType.Register; } }
-
-		/// <summary>
 		/// Determines if the operand is a constant variable.
 		/// </summary>
 		public bool IsConstant { get { return (operandType & OperandType.Constant) == OperandType.Constant; } }
@@ -178,6 +173,11 @@ namespace Mosa.Compiler.Framework
 		/// Determines if the operand is a label operand.
 		/// </summary>
 		public bool IsLabel { get { return (operandType & OperandType.Label) == OperandType.Label; } }
+
+		/// <summary>
+		/// Determines if the operand is a register.
+		/// </summary>
+		public bool IsRegister { get { return IsVirtualRegister || IsCPURegister; } }
 
 		/// <summary>
 		/// Determines if the operand is a virtual register operand.
@@ -392,10 +392,8 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		public static Operand CreateVirtualRegister(SigType sigType, int index)
 		{
-			Operand operand = new Operand(sigType, OperandType.Register | OperandType.VirtualRegister);
+			Operand operand = new Operand(sigType, OperandType.VirtualRegister);
 			operand.index = index;
-
-			//operand.sequence = sequence;
 			return operand;
 		}
 
@@ -408,29 +406,9 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		public static Operand CreateVirtualRegister(SigType sigType, int index, string name)
 		{
-			Operand operand = new Operand(sigType, OperandType.Register | OperandType.VirtualRegister);
+			Operand operand = new Operand(sigType, OperandType.VirtualRegister);
 			operand.Name = name;
 			operand.index = index;
-			return operand;
-		}
-
-		/// <summary>
-		/// Creates a new local variable <see cref="Operand"/>.
-		/// </summary>
-		/// <param name="type">The type.</param>
-		/// <param name="register">The register.</param>
-		/// <param name="index">The index.</param>
-		/// <param name="name">The name.</param>
-		/// <returns></returns>
-		public static Operand CreateLocalVariable(SigType type, Register register, int index, string name)
-		{
-			Operand operand = new Operand(type, OperandType.MemoryAddress | OperandType.StackLocal | OperandType.LocalVariable);
-			operand.Name = name;
-			operand.register = register;
-			operand.index = index;
-
-			//operand.sequence = index;
-			operand.Offset = -index * 4; // FIXME: 4 is platform dependent!
 			return operand;
 		}
 
@@ -442,7 +420,7 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		public static Operand CreateCPURegister(SigType sigType, Register register)
 		{
-			Operand operand = new Operand(sigType, OperandType.Register | OperandType.CPURegister);
+			Operand operand = new Operand(sigType, OperandType.CPURegister);
 			operand.register = register;
 			return operand;
 		}
@@ -531,9 +509,21 @@ namespace Mosa.Compiler.Framework
 			Operand operand = new Operand(type, OperandType.MemoryAddress | OperandType.Parameter);
 			operand.register = register;
 			operand.index = index; // param.Position;
-
 			//operand.sequence = index;
 			operand.Offset = param.Position * 4; // FIXME: 4 is platform dependent!
+			return operand;
+		}
+
+		/// <summary>
+		/// Creates the stack local.
+		/// </summary>
+		/// <param name="sigType">Type of the sig.</param>
+		/// <param name="index">The index.</param>
+		/// <returns></returns>
+		public static Operand CreateStackLocal(SigType sigType, int index)
+		{
+			Operand operand = new Operand(sigType, OperandType.StackLocal);
+			operand.index = index;
 			return operand;
 		}
 

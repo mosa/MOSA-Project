@@ -274,7 +274,7 @@ namespace Mosa.Compiler.Framework
 					? compiler.GenericTypePatcher.PatchSignatureType(Method.Module, Method.DeclaringType as CilGenericType, type.Token)
 					: new ClassSigType(type.Token);
 
-				stackLayout.SetStackParameter(index++, new RuntimeParameter(@"this", 2, ParameterAttributes.In), signatureType);
+				stackLayout.SetStackParameter(index++, new RuntimeParameter("this", 2, ParameterAttributes.In), signatureType); // position 2?
 			}
 
 			for (int paramIndex = 0; paramIndex < method.SigParameters.Length; paramIndex++)
@@ -339,8 +339,6 @@ namespace Mosa.Compiler.Framework
 		public Operand CreateVirtualRegister(SigType type)
 		{
 			return virtualRegisters.Allocate(type);
-
-			//return stackLayout.AllocateStackOperand(type, false);
 		}
 
 		/// <summary>
@@ -360,7 +358,6 @@ namespace Mosa.Compiler.Framework
 		/// <exception cref="System.ArgumentOutOfRangeException">The <paramref name="index"/> is not valid.</exception>
 		public Operand GetLocalOperand(int index)
 		{
-			//return stackLayout.GetStackOperand(index);
 			return virtualRegisters[index];
 		}
 
@@ -393,7 +390,6 @@ namespace Mosa.Compiler.Framework
 
 			foreach (var localVariable in localSigTypes)
 			{
-				//locals[index++] = stackLayout.AllocateLocalVariableOperand(localVariable);
 				locals[index++] = VirtualRegisters.Allocate(localVariable);
 
 				//Scheduler.ScheduleTypeForCompilation(localVariable); // TODO

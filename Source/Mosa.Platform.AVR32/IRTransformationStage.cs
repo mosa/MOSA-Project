@@ -37,9 +37,7 @@ namespace Mosa.Platform.AVR32
 		{
 			base.Setup(methodCompiler);
 
-			IStackLayoutProvider stackLayoutProvider = methodCompiler.Pipeline.FindFirst<IStackLayoutProvider>();
-
-			stackSize = (stackLayoutProvider == null) ? 0 : stackLayoutProvider.LocalsSize;
+			stackSize = methodCompiler.StackLayout.StackSize;
 
 			Debug.Assert((stackSize % 4) == 0, @"Stack size of method can't be divided by 4!!");
 		}

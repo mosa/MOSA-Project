@@ -11,7 +11,7 @@ using System.Collections.Generic;
 
 namespace Mosa.Compiler.Framework.RegisterAllocator
 {
-	public sealed class VirtualRegister
+	public sealed class VirtualRegister	// alternative name is LiveInterval
 	{
 		private List<LiveInterval> liveIntervals = new List<LiveInterval>(1);
 
@@ -25,6 +25,8 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		public bool IsPhysicalRegister { get { return VirtualRegisterOperand == null; } }
 
+		public bool IsVirtualRegister { get { return VirtualRegisterOperand != null; } }
+
 		public List<LiveInterval> LiveIntervals { get { return liveIntervals; } }
 
 		public int Count { get { return liveIntervals.Count; } }
@@ -37,22 +39,28 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		public LiveInterval FirstRange { get { return liveIntervals.Count == 0 ? null : liveIntervals[0]; } }
 
-		public int SpillSlot { get; set; }
+		public Operand SpillSlotOperand { get; set; }
 
 		public bool IsFloatingPoint { get { return VirtualRegisterOperand.IsFloatingPoint; } }
 
 		public bool IsReserved { get; private set; }
 
+		public bool IsSpilled { get; set; }
+
+		public bool IsUsed { get { return Count != 0; } }
+
 		public VirtualRegister(Operand virtualRegister)
 		{
 			this.VirtualRegisterOperand = virtualRegister;
 			this.IsReserved = false;
+			this.IsSpilled = false;
 		}
 
 		public VirtualRegister(Register physicalRegister, bool reserved)
 		{
 			this.PhysicalRegister = physicalRegister;
 			this.IsReserved = reserved;
+			this.IsSpilled = false;
 		}
 
 		public void AddUsePosition(SlotIndex position)
@@ -158,9 +166,13 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 		public override string ToString()
 		{
 			if (IsPhysicalRegister)
+			{
 				return PhysicalRegister.ToString();
+			}
 			else
+			{
 				return VirtualRegisterOperand.ToString();
+			}
 		}
 	}
 }

@@ -26,6 +26,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		private BasicBlocks basicBlocks;
 		private InstructionSet instructionSet;
+		private StackLayout stackLayout;
 		private int virtualRegisterCount;
 		private int physicalRegisterCount;
 		private int registerCount;
@@ -44,12 +45,63 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		private CompilerTrace trace;
 
-		public GreedyRegisterAllocator(BasicBlocks basicBlocks, VirtualRegisters compilerVirtualRegisters, InstructionSet instructionSet, IArchitecture architecture, CompilerTrace trace)
+		private sealed class OperandVisitor
+		{
+			private Context context;
+
+			public OperandVisitor(Context context)
+			{
+				this.context = context;
+			}
+
+			public IEnumerable<Operand> Input
+			{
+				get
+				{
+					foreach (Operand operand in context.Operands)
+					{
+						if (operand.IsVirtualRegister || operand.IsCPURegister)
+						{
+							yield return operand;
+						}
+						else if (operand.IsMemoryAddress && operand.OffsetBase != null)
+						{
+							yield return operand.OffsetBase;
+						}
+					}
+
+					foreach (Operand operand in context.Results)
+					{
+						if (operand.IsMemoryAddress && operand.OffsetBase != null)
+						{
+							yield return operand.OffsetBase;
+						}
+					}
+				}
+			}
+
+			public IEnumerable<Operand> Output
+			{
+				get
+				{
+					foreach (Operand operand in context.Results)
+					{
+						if (operand.IsVirtualRegister || operand.IsCPURegister)
+						{
+							yield return operand;
+						}
+					}
+				}
+			}
+		}
+
+		public GreedyRegisterAllocator(BasicBlocks basicBlocks, VirtualRegisters compilerVirtualRegisters, InstructionSet instructionSet, StackLayout stackLayout, IArchitecture architecture, CompilerTrace trace)
 		{
 			this.trace = trace;
 
 			this.basicBlocks = basicBlocks;
 			this.instructionSet = instructionSet;
+			this.stackLayout = stackLayout;
 
 			this.virtualRegisterCount = compilerVirtualRegisters.Count;
 			this.physicalRegisterCount = architecture.RegisterSet.Length;
@@ -104,6 +156,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			// Computer Global Live Sets
 			ComputeGlobalLiveSets();
 
+			// Build the live intervals
 			BuildLiveIntervals();
 
 			TraceLiveIntervals();
@@ -119,6 +172,12 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 			// Process Priority Queue
 			ProcessPriorityQueue();
+
+			// Create spill slots operands
+			CreateSpillSlotOperands();
+
+			// Create physical register operands
+			CreatePhysicalRegisterOperands();
 
 			// Resolve Data Flow
 			//ResolveDataFlow();
@@ -492,7 +551,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 					if (liveInterval.VirtualRegister.IsPhysicalRegister)
 					{
 						// fixed and not spillable
-						liveInterval.SpillValue = Int32.MaxValue;
+						liveInterval.NeverSpill = true;
 					}
 					else
 					{
@@ -677,11 +736,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 				if (trace.Active) trace.Log("  Spilled interval");
 
 				spilledIntervals.Add(liveInterval);
-
-				if (!liveInterval.IsEmpty)
-				{
-					return;
-				}
+				liveInterval.VirtualRegister.IsSpilled = true;
 
 				return;
 			}
@@ -1002,6 +1057,106 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 						virtualRegister.LiveIntervals[i] = middle;
 						virtualRegister.Add(first);
 						virtualRegister.Add(last);
+					}
+				}
+			}
+		}
+
+		private void CreateSpillSlotOperands()
+		{
+			foreach (var register in virtualRegisters)
+			{
+				if (!register.IsSpilled)
+					continue;
+
+				Debug.Assert(register.IsVirtualRegister);
+				register.SpillSlotOperand = stackLayout.AddStackLocal(register.VirtualRegisterOperand.Type);
+			}
+		}
+
+		private void CreatePhysicalRegisterOperands()
+		{
+			foreach (var register in virtualRegisters)
+			{
+				if (!register.IsUsed || register.IsPhysicalRegister)
+					continue;
+
+				foreach (var liveInterval in register.LiveIntervals)
+				{
+					if (liveInterval.AssignedPhysicalRegister == null)
+						continue;
+
+					liveInterval.AssignedPhysicalOperand = Operand.CreateCPURegister(liveInterval.VirtualRegister.VirtualRegisterOperand.Type, liveInterval.AssignedPhysicalRegister);
+				}
+			}
+		}
+
+		private void AssignRegisters()
+		{
+			foreach (var register in virtualRegisters)
+			{
+				if (!register.IsUsed || register.IsPhysicalRegister)
+					continue;
+
+				foreach (var liveInterval in register.LiveIntervals)
+				{
+					foreach (var use in liveInterval.UsePositions)
+					{
+						Context context = new Context(instructionSet, use.Index);
+						AssignPhysicalRegistersToInstructions(context, liveInterval.VirtualRegister.VirtualRegisterOperand, liveInterval.AssignedPhysicalOperand == null ? liveInterval.VirtualRegister.SpillSlotOperand : liveInterval.AssignedPhysicalOperand);
+					}
+
+					foreach (var use in liveInterval.DefPositions)
+					{
+						Context context = new Context(instructionSet, use.Index);
+						AssignPhysicalRegistersToInstructions(context, liveInterval.VirtualRegister.VirtualRegisterOperand, liveInterval.AssignedPhysicalOperand == null ? liveInterval.VirtualRegister.SpillSlotOperand : liveInterval.AssignedPhysicalOperand);
+					}
+				}
+			}
+		}
+
+		private void AssignPhysicalRegistersToInstructions(Context context, Operand old, Operand replacement)
+		{
+			for (int i = 0; i < context.OperandCount; i++)
+			{
+				var operand = context.GetOperand(i);
+
+				if (operand.IsVirtualRegister)
+				{
+					if (operand == old)
+					{
+						context.SetOperand(i, replacement);
+						continue;
+					}
+				}
+				else if (operand.IsMemoryAddress && operand.OffsetBase != null)
+				{
+					if (operand.OffsetBase == old)
+					{
+						// FIXME: Creates a lot of duplicate single operands
+						context.SetOperand(i, Operand.CreateMemoryAddress(operand.Type, replacement, operand.Offset));
+					}
+				}
+			}
+
+			for (int i = 0; i < context.ResultCount; i++)
+			{
+				var operand = context.GetResult(i);
+
+				if (operand.IsVirtualRegister)
+				{
+					if (operand == old)
+					{
+						context.SetOperand(i, replacement);
+						continue;
+					}
+				}
+				else if (operand.IsMemoryAddress && operand.OffsetBase != null)
+				{
+					if (operand.OffsetBase == old)
+					{
+						// FIXME: Creates a lot of duplicate single operands
+						context.SetOperand(i, Operand.CreateMemoryAddress(operand.Type, replacement, operand.Offset));
 					}
 				}
 			}
