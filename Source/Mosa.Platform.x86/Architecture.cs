@@ -243,5 +243,27 @@ namespace Mosa.Platform.x86
 		{
 			return new MachineCodeEmitter();
 		}
+
+		/// <summary>
+		/// Makes the move.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <param name="Source">The source.</param>
+		/// <param name="Destination">The destination.</param>
+		public override void MakeMove(Context context, Operand Source, Operand Destination)
+		{
+			if (Source.Type.Type == CilElementType.R4)
+			{
+				context.SetInstruction(X86.Movss, Destination, Source);
+			}
+			else if (Source.Type.Type == CilElementType.R8)
+			{
+				context.SetInstruction(X86.Movsd, Destination, Source);
+			}
+			else
+			{
+				context.SetInstruction(X86.Mov, Destination, Source);
+			}
+		}
 	}
 }

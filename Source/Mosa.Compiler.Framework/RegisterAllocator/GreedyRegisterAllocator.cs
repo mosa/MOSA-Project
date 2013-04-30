@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using Mosa.Compiler.Common;
 using Mosa.Compiler.InternalTrace;
+using Mosa.Compiler.Framework.IR;
 
 namespace Mosa.Compiler.Framework.RegisterAllocator
 {
@@ -27,6 +28,8 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 		private BasicBlocks basicBlocks;
 		private InstructionSet instructionSet;
 		private StackLayout stackLayout;
+		private IArchitecture architecture;
+
 		private int virtualRegisterCount;
 		private int physicalRegisterCount;
 		private int registerCount;
@@ -102,6 +105,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			this.basicBlocks = basicBlocks;
 			this.instructionSet = instructionSet;
 			this.stackLayout = stackLayout;
+			this.architecture = architecture;
 
 			this.virtualRegisterCount = compilerVirtualRegisters.Count;
 			this.physicalRegisterCount = architecture.RegisterSet.Length;
@@ -159,6 +163,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			// Build the live intervals
 			BuildLiveIntervals();
 
+			// Generate trace information
 			TraceLiveIntervals();
 
 			// Split Intervals at Call Sites
@@ -179,8 +184,14 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			// Create physical register operands
 			CreatePhysicalRegisterOperands();
 
+			// Insert spill moves
+			InsertSpillMoves();
+
+			// Assign phyiscal registers
+			AssignRegisters();
+
 			// Resolve Data Flow
-			//ResolveDataFlow();
+			ResolveDataFlow();
 		}
 
 		private static string ToString(BitArray bitArray)
@@ -924,6 +935,8 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		private void ResolveDataFlow()
 		{
+			var resolverTrace = new CompilerTrace(trace, "ResolveDataFlow");
+
 			foreach (var from in extendedBlocks)
 			{
 				foreach (var nextBlock in from.BasicBlock.NextBlocks)
@@ -935,21 +948,41 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 						//if (virtualRegister.IsPhysicalRegister)
 						//continue;
 
-						var fromLiveInterval = virtualRegister.GetIntervalAt(from.End);
+						var fromLiveInterval = virtualRegister.GetIntervalAtOrEndsAt(from.End);
 						var toLiveInterval = virtualRegister.GetIntervalAt(to.Start);
+
+						// determine where to insert resolving moves (preference is in TO block if available)
+						bool insertAtBottomOfFromBlock = to.BasicBlock.PreviousBlocks.Count == 1;
 
 						Debug.Assert(fromLiveInterval != null);
 						Debug.Assert(toLiveInterval != null);
 
 						if (fromLiveInterval.AssignedPhysicalRegister != toLiveInterval.AssignedPhysicalRegister)
 						{
-							// add to resolver
-							// TODO
+							if (resolverTrace.Active)
+							{
+								resolverTrace.Log("REGISTER: " + fromLiveInterval.VirtualRegister.ToString());
+								resolverTrace.Log("    FROM: " + from.ToString().PadRight(7) + (fromLiveInterval.AssignedPhysicalOperand != null ? fromLiveInterval.AssignedPhysicalOperand.Register.ToString() : "STACK"));
+								resolverTrace.Log("      TO: " + to.ToString().PadRight(7) + (toLiveInterval.AssignedPhysicalOperand != null ? toLiveInterval.AssignedPhysicalOperand.Register.ToString() : "STACK"));
+
+								resolverTrace.Log("  INSERT: " + (insertAtBottomOfFromBlock ? "FROM (top)" : "TO (bottom)"));
+								resolverTrace.Log("");
+							}
+
+							// interval was spilled (spill moves are inserted elsewhere)
+							if (toLiveInterval.AssignedPhysicalOperand == null)
+								continue;
+
+							Debug.Assert(from.BasicBlock.NextBlocks.Count == 1 || to.BasicBlock.PreviousBlocks.Count == 1);
+
+							// TODO - stores move for resolver
 						}
 					}
 
 					// determine location to insert resolving moves
 					// TODO
+
+					// sort resolving moves
 
 					// insert resolving moves
 					// TODO
@@ -1091,6 +1124,26 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			}
 		}
 
+		private void InsertSpillMoves()
+		{
+			foreach (var register in virtualRegisters)
+			{
+				if (!register.IsUsed || register.IsPhysicalRegister || !register.IsSpilled)
+					continue;
+
+				foreach (var liveInterval in register.LiveIntervals)
+				{
+					foreach (var def in liveInterval.DefPositions)
+					{
+						Context context = new Context(instructionSet, def.Index);
+						context.AppendInstruction(IRInstruction.Nop);
+
+						architecture.MakeMove(context, register.SpillSlotOperand, register.VirtualRegisterOperand);
+					}
+				}
+			}
+		}
+
 		private void AssignRegisters()
 		{
 			foreach (var register in virtualRegisters)
@@ -1103,13 +1156,13 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 					foreach (var use in liveInterval.UsePositions)
 					{
 						Context context = new Context(instructionSet, use.Index);
-						AssignPhysicalRegistersToInstructions(context, liveInterval.VirtualRegister.VirtualRegisterOperand, liveInterval.AssignedPhysicalOperand == null ? liveInterval.VirtualRegister.SpillSlotOperand : liveInterval.AssignedPhysicalOperand);
+						AssignPhysicalRegistersToInstructions(context, register.VirtualRegisterOperand, liveInterval.AssignedPhysicalOperand == null ? liveInterval.VirtualRegister.SpillSlotOperand : liveInterval.AssignedPhysicalOperand);
 					}
 
-					foreach (var use in liveInterval.DefPositions)
+					foreach (var def in liveInterval.DefPositions)
 					{
-						Context context = new Context(instructionSet, use.Index);
-						AssignPhysicalRegistersToInstructions(context, liveInterval.VirtualRegister.VirtualRegisterOperand, liveInterval.AssignedPhysicalOperand == null ? liveInterval.VirtualRegister.SpillSlotOperand : liveInterval.AssignedPhysicalOperand);
+						Context context = new Context(instructionSet, def.Index);
+						AssignPhysicalRegistersToInstructions(context, register.VirtualRegisterOperand, liveInterval.AssignedPhysicalOperand == null ? liveInterval.VirtualRegister.SpillSlotOperand : liveInterval.AssignedPhysicalOperand);
 					}
 				}
 			}

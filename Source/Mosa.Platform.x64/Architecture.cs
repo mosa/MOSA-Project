@@ -200,5 +200,10 @@ namespace Mosa.Platform.x64
 
 			//return new MachineCodeEmitter();
 		}
+
+		public override void MakeMove(Context context, Operand Source, Operand Destination)
+		{
+			// TODO
+		}
 	}
 }

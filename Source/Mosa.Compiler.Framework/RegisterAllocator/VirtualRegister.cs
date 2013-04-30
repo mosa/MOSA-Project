@@ -158,6 +158,22 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 		}
 
 		/// <summary>
+		/// Gets the interval at or ends at.
+		/// </summary>
+		/// <param name="at">At.</param>
+		/// <returns></returns>
+		public LiveInterval GetIntervalAtOrEndsAt(SlotIndex at)
+		{
+			foreach (var liveInterval in liveIntervals)
+			{
+				if (liveInterval.Contains(at) || at == liveInterval.End)
+					return liveInterval;
+			}
+
+			return null;
+		}
+
+		/// <summary>
 		/// Returns a <see cref="System.String" /> that represents this instance.
 		/// </summary>
 		/// <returns>

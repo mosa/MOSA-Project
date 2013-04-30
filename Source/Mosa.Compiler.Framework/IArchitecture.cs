@@ -111,6 +111,14 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		ICodeEmitter GetCodeEmitter();
 
+		/// <summary>
+		/// Makes the move.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <param name="Source">The source.</param>
+		/// <param name="Destination">The destination.</param>
+		void MakeMove(Context context, Operand Source, Operand Destination);
+
 		#endregion Methods
 	}
 }
