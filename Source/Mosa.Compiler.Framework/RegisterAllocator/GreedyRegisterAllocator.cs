@@ -933,15 +933,70 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			}
 		}
 
+		private class Move
+		{
+			public BasicBlock SourceBlock { get; set; }
+			public BasicBlock DestinationBlock { get; set; }
+			public Operand Source { get; set; }
+			public Operand Destination { get; set; }
+			public BasicBlock AnchorBlock { get; set; }
+
+			public Move(BasicBlock sourceBlock, BasicBlock destinationBlock, Operand source, Operand destination, BasicBlock anchorBlock)
+			{
+				SourceBlock = sourceBlock;
+				DestinationBlock = destinationBlock;
+				Source = source;
+				Destination = destination;
+				AnchorBlock = anchorBlock;
+			}
+		}
+
+		private void SortMoveIntoList(List<Move> moves, Move move)
+		{
+			if (move.Destination.IsStackLocal || moves.Count == 0)
+			{
+				moves.Add(move);
+				return;
+			}
+
+			var src = move.Source;
+			for (int at = 0; at < moves.Count; at++)
+			{
+				if (moves[at].Destination == src)
+				{
+					moves.Insert(at, move);
+					return;
+				}
+				at++;
+			}
+
+			moves.Add(move);
+		}
+
 		private void ResolveDataFlow()
 		{
 			var resolverTrace = new CompilerTrace(trace, "ResolveDataFlow");
+
+			List<Move>[,] moves = new List<Move>[2, basicBlocks.Count];
 
 			foreach (var from in extendedBlocks)
 			{
 				foreach (var nextBlock in from.BasicBlock.NextBlocks)
 				{
 					var to = extendedBlocks[nextBlock.Sequence];
+
+					// determine where to insert resolving moves 
+					bool fromAnchorFlag = (from.BasicBlock.NextBlocks.Count == 1);
+
+					ExtendedBlock anchor = fromAnchorFlag ? from : to;
+
+					List<Move> anchorList = moves[fromAnchorFlag ? 0 : 1, anchor.Sequence];
+
+					if (anchorList == null)
+					{
+						anchorList = new List<Move>();
+						moves[fromAnchorFlag ? 0 : 1, anchor.Sequence] = anchorList;
+					}
 
 					foreach (var virtualRegister in GetVirtualRegisters(to.LiveIn))
 					{
@@ -951,21 +1006,19 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 						var fromLiveInterval = virtualRegister.GetIntervalAtOrEndsAt(from.End);
 						var toLiveInterval = virtualRegister.GetIntervalAt(to.Start);
 
-						// determine where to insert resolving moves (preference is in TO block if available)
-						bool insertAtBottomOfFromBlock = to.BasicBlock.PreviousBlocks.Count == 1;
-
 						Debug.Assert(fromLiveInterval != null);
 						Debug.Assert(toLiveInterval != null);
 
 						if (fromLiveInterval.AssignedPhysicalRegister != toLiveInterval.AssignedPhysicalRegister)
 						{
+
 							if (resolverTrace.Active)
 							{
 								resolverTrace.Log("REGISTER: " + fromLiveInterval.VirtualRegister.ToString());
 								resolverTrace.Log("    FROM: " + from.ToString().PadRight(7) + (fromLiveInterval.AssignedPhysicalOperand != null ? fromLiveInterval.AssignedPhysicalOperand.Register.ToString() : "STACK"));
 								resolverTrace.Log("      TO: " + to.ToString().PadRight(7) + (toLiveInterval.AssignedPhysicalOperand != null ? toLiveInterval.AssignedPhysicalOperand.Register.ToString() : "STACK"));
 
-								resolverTrace.Log("  INSERT: " + (insertAtBottomOfFromBlock ? "FROM (top)" : "TO (bottom)"));
+								resolverTrace.Log("  INSERT: " + (fromAnchorFlag ? "FROM (bottom)" : "TO (top)"));
 								resolverTrace.Log("");
 							}
 
@@ -975,19 +1028,35 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 							Debug.Assert(from.BasicBlock.NextBlocks.Count == 1 || to.BasicBlock.PreviousBlocks.Count == 1);
 
-							// TODO - stores move for resolver
+							Move move = new Move(
+								from.BasicBlock,
+								to.BasicBlock,
+								fromLiveInterval.AssignedPhysicalOperand != null ? fromLiveInterval.AssignedPhysicalOperand : virtualRegister.SpillSlotOperand,
+								toLiveInterval.AssignedPhysicalOperand != null ? toLiveInterval.AssignedPhysicalOperand : virtualRegister.SpillSlotOperand,
+								anchor.BasicBlock
+							);
+
+							SortMoveIntoList(anchorList, move);
 						}
 					}
 
-					// determine location to insert resolving moves
-					// TODO
+				}
+			}
 
-					// sort resolving moves
+			for (int b = 0; b < basicBlocks.Count; b++)
+			{
+				for (int fromTag = 0; fromTag < 2; fromTag++)
+				{
+					List<Move> anchorList = moves[fromTag, b];
+
+					if (anchorList == null)
+						continue;
 
 					// insert resolving moves
 					// TODO
 				}
 			}
+
 		}
 
 		private SlotIndex GetLowOptimalSplitLocation(LiveInterval liveInterval, SlotIndex from, bool check)
