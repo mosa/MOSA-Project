@@ -380,7 +380,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Sets the signature of local variables in the method.
 		/// </summary>
-		/// <param name="localVariableSignature">The local variable signature of the _method.</param>
+		/// <param name="localSigTypes">The local sig types.</param>
 		public void SetLocalVariableSignature(SigType[] localSigTypes)
 		{
 			Debug.Assert(localSigTypes != null, "localVariableSignature");

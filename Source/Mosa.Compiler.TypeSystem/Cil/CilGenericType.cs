@@ -40,12 +40,12 @@ namespace Mosa.Compiler.TypeSystem.Cil
 		public ITypeModule InstantiationModule { get; private set; }
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="CilGenericType"/> class.
+		/// Initializes a new instance of the <see cref="CilGenericType" /> class.
 		/// </summary>
 		/// <param name="typeModule">The type module.</param>
 		/// <param name="token">The token.</param>
 		/// <param name="baseGenericType">Type of the base generic.</param>
-		/// <param name="genericTypeInstanceSignature">The generic type instance signature.</param>
+		/// <param name="genericArguments">The generic arguments.</param>
 		public CilGenericType(ITypeModule typeModule, Token token, RuntimeType baseGenericType, SigType[] genericArguments) :
 			base(baseGenericType.Module, token, baseGenericType.BaseType)
 		{

@@ -22,10 +22,9 @@ namespace Mosa.Tool.Compiler
 	public class AotCompiler : BaseCompiler
 	{
 		/// <summary>
-		/// Initializes a new instance of the <see cref="AotCompiler"/> class.
+		/// Initializes a new instance of the <see cref="AotCompiler" /> class.
 		/// </summary>
 		/// <param name="architecture">The architecture.</param>
-		/// <param name="linker">The linker.</param>
 		/// <param name="typeSystem">The type system.</param>
 		/// <param name="typeLayout">The type layout.</param>
 		/// <param name="internalTrace">The internal trace.</param>

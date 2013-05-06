@@ -244,7 +244,6 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Creates empty blocks.
 		/// </summary>
-		/// <param name="label">The label.</param>
 		/// <param name="blocks">The Blocks.</param>
 		/// <returns></returns>
 		protected Context[] CreateNewBlocksWithContexts(int blocks)
