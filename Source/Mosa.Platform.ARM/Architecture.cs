@@ -187,7 +187,7 @@ namespace Mosa.Platform.ARM
 			//return new MachineCodeEmitter();
 		}
 
-		public override void MakeMove(Context context, Operand Source, Operand Destination)
+		public override void AppendMakeMove(Context context, Operand Destination, Operand Source)
 		{
 			// TODO
 		}

@@ -509,6 +509,7 @@ namespace Mosa.Compiler.Framework
 			Operand operand = new Operand(type, OperandType.MemoryAddress | OperandType.Parameter);
 			operand.register = register;
 			operand.index = index; // param.Position;
+
 			//operand.sequence = index;
 			operand.Offset = param.Position * 4; // FIXME: 4 is platform dependent!
 			return operand;

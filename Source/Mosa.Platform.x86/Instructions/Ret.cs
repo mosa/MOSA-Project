@@ -28,6 +28,16 @@ namespace Mosa.Platform.x86.Instructions
 
 		#endregion Construction
 
+		#region Properties
+
+		/// <summary>
+		/// Gets the flow control.
+		/// </summary>
+		/// <value>The flow control.</value>
+		public override FlowControl FlowControl { get { return FlowControl.Return; } }
+
+		#endregion Properties
+
 		#region Methods
 
 		/// <summary>

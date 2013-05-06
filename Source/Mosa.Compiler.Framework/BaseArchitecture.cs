@@ -133,6 +133,6 @@ namespace Mosa.Compiler.Framework
 		/// <param name="context">The context.</param>
 		/// <param name="Source">The source.</param>
 		/// <param name="Destination">The destination.</param>
-		public abstract void MakeMove(Context context, Operand Source, Operand Destination);
+		public abstract void AppendMakeMove(Context context, Operand Destination, Operand Source);
 	}
 }

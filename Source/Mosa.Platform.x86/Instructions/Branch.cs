@@ -31,6 +31,12 @@ namespace Mosa.Platform.x86.Instructions
 
 		#endregion Construction
 
+		#region Properties
+
+		public override FlowControl FlowControl { get { return FlowControl.ConditionalBranch; } }
+
+		#endregion Properties
+
 		#region Data Members
 
 		private static readonly byte[] JAE = new byte[] { 0x0F, 0x83 };

@@ -115,9 +115,9 @@ namespace Mosa.Compiler.Framework
 		/// Makes the move.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		/// <param name="Source">The source.</param>
 		/// <param name="Destination">The destination.</param>
-		void MakeMove(Context context, Operand Source, Operand Destination);
+		/// <param name="Source">The source.</param>
+		void AppendMakeMove(Context context, Operand Destination, Operand Source);
 
 		#endregion Methods
 	}

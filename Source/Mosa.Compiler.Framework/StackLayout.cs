@@ -86,7 +86,9 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		public Operand AddStackLocal(SigType type)
 		{
-			return Operand.CreateStackLocal(type, stackLocal.Count);
+			var local = Operand.CreateStackLocal(type, stackLocal.Count);
+			stackLocal.Add(local);
+			return local;
 		}
 
 		/// <summary>

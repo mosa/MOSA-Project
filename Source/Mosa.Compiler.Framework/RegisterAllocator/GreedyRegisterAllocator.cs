@@ -624,6 +624,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			{
 				if (trace.Active) trace.Log("  Forced spilled interval");
 
+				liveInterval.VirtualRegister.IsSpilled = true;
 				spilledIntervals.Add(liveInterval);
 				return;
 			}
@@ -746,8 +747,9 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			{
 				if (trace.Active) trace.Log("  Spilled interval");
 
-				spilledIntervals.Add(liveInterval);
+				//liveInterval.Stage = LiveInterval.AllocationStage.Spilled
 				liveInterval.VirtualRegister.IsSpilled = true;
+				spilledIntervals.Add(liveInterval);
 
 				return;
 			}
@@ -936,18 +938,24 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 		private class Move
 		{
 			public BasicBlock SourceBlock { get; set; }
-			public BasicBlock DestinationBlock { get; set; }
-			public Operand Source { get; set; }
-			public Operand Destination { get; set; }
-			public BasicBlock AnchorBlock { get; set; }
 
-			public Move(BasicBlock sourceBlock, BasicBlock destinationBlock, Operand source, Operand destination, BasicBlock anchorBlock)
+			public BasicBlock DestinationBlock { get; set; }
+
+			public Operand Source { get; set; }
+
+			public Operand Destination { get; set; }
+
+			public Move(BasicBlock sourceBlock, BasicBlock destinationBlock, Operand source, Operand destination)
 			{
+				Debug.Assert(sourceBlock != null);
+				Debug.Assert(destinationBlock != null);
+				Debug.Assert(source != null);
+				Debug.Assert(destination != null);
+
 				SourceBlock = sourceBlock;
 				DestinationBlock = destinationBlock;
 				Source = source;
 				Destination = destination;
-				AnchorBlock = anchorBlock;
 			}
 		}
 
@@ -985,7 +993,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 				{
 					var to = extendedBlocks[nextBlock.Sequence];
 
-					// determine where to insert resolving moves 
+					// determine where to insert resolving moves
 					bool fromAnchorFlag = (from.BasicBlock.NextBlocks.Count == 1);
 
 					ExtendedBlock anchor = fromAnchorFlag ? from : to;
@@ -1011,7 +1019,6 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 						if (fromLiveInterval.AssignedPhysicalRegister != toLiveInterval.AssignedPhysicalRegister)
 						{
-
 							if (resolverTrace.Active)
 							{
 								resolverTrace.Log("REGISTER: " + fromLiveInterval.VirtualRegister.ToString());
@@ -1032,14 +1039,12 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 								from.BasicBlock,
 								to.BasicBlock,
 								fromLiveInterval.AssignedPhysicalOperand != null ? fromLiveInterval.AssignedPhysicalOperand : virtualRegister.SpillSlotOperand,
-								toLiveInterval.AssignedPhysicalOperand != null ? toLiveInterval.AssignedPhysicalOperand : virtualRegister.SpillSlotOperand,
-								anchor.BasicBlock
+								toLiveInterval.AssignedPhysicalOperand != null ? toLiveInterval.AssignedPhysicalOperand : virtualRegister.SpillSlotOperand
 							);
 
 							SortMoveIntoList(anchorList, move);
 						}
 					}
-
 				}
 			}
 
@@ -1052,11 +1057,25 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 					if (anchorList == null)
 						continue;
 
-					// insert resolving moves
-					// TODO
+					Context context = new Context(instructionSet, basicBlocks[b], fromTag == 0 ? basicBlocks[b].EndIndex : basicBlocks[b].StartIndex);
+
+					if (fromTag == 0)
+					{
+						context.GotoPrevious();
+
+						while (context.IsEmpty || context.Instruction.FlowControl == FlowControl.Branch || context.Instruction.FlowControl == FlowControl.ConditionalBranch || context.Instruction.FlowControl == FlowControl.Return)
+						{
+							context.GotoPrevious();
+						}
+					}
+
+					foreach (var move in anchorList)
+					{
+						architecture.AppendMakeMove(context, move.Destination, move.Source);
+						context.Marked = true;
+					}
 				}
 			}
-
 		}
 
 		private SlotIndex GetLowOptimalSplitLocation(LiveInterval liveInterval, SlotIndex from, bool check)
@@ -1205,9 +1224,8 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 					foreach (var def in liveInterval.DefPositions)
 					{
 						Context context = new Context(instructionSet, def.Index);
-						context.AppendInstruction(IRInstruction.Nop);
 
-						architecture.MakeMove(context, register.SpillSlotOperand, register.VirtualRegisterOperand);
+						architecture.AppendMakeMove(context, register.SpillSlotOperand, liveInterval.AssignedPhysicalOperand);
 					}
 				}
 			}
