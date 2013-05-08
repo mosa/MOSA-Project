@@ -50,6 +50,8 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		public Operand AssignedPhysicalOperand { get; set; }
 
+		public Operand AssignedOperand { get { return (AssignedPhysicalRegister != null) ? AssignedPhysicalOperand : VirtualRegister.SpillSlotOperand; } }
+
 		public bool ForceSpilled { get; set; }
 
 		public bool NeverSpill { get; set; }

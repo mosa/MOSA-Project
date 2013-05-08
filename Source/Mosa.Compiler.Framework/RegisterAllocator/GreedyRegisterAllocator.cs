@@ -154,28 +154,31 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			// Number all the instructions in block order
 			NumberInstructions();
 
-			// Computer Local Live Sets
+			// Computer local live sets
 			ComputeLocalLiveSets();
 
-			// Computer Global Live Sets
+			// Computer global live sets
 			ComputeGlobalLiveSets();
 
 			// Build the live intervals
 			BuildLiveIntervals();
 
-			// Generate trace information
-			TraceLiveIntervals();
+			// Generate trace information for blocks
+			TraceBlocks();
 
-			// Split Intervals at Call Sites
+			// Generate trace information for live intervals
+			TraceLiveIntervals("InitialLiveIntervals");
+
+			// Split intervals at call sites
 			SplitIntervalsAtCallSites();
 
-			// Calculate Spill Costs for Live Intervals
+			// Calculate spill costs for live intervals
 			CalculateSpillCosts();
 
-			// Populate Priority Queue
+			// Populate priority queue
 			PopulatePriorityQueue();
 
-			// Process Priority Queue
+			// Process priority queue
 			ProcessPriorityQueue();
 
 			// Create spill slots operands
@@ -187,11 +190,17 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			// Insert spill moves
 			InsertSpillMoves();
 
-			// Assign phyiscal registers
+			// Assign physical registers
 			AssignRegisters();
 
-			// Resolve Data Flow
+			// Insert register moves 
+			InsertRegisterMoves();
+
+			// Resolve data flow
 			ResolveDataFlow();
+
+			// Generate trace information for live intervals
+			TraceLiveIntervals("PostLiveIntervals");
 		}
 
 		private static string ToString(BitArray bitArray)
@@ -206,13 +215,12 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			return builder.ToString();
 		}
 
-		private void TraceLiveIntervals()
+		private void TraceBlocks()
 		{
 			if (!trace.Active)
 				return;
 
 			var sectionTrace = new CompilerTrace(trace, "Extended Blocks");
-			var registerTrace = new CompilerTrace(trace, "Registers");
 
 			foreach (var block in extendedBlocks)
 			{
@@ -222,6 +230,14 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 				sectionTrace.Log(" LiveKill: " + ToString(block.LiveKill));
 				sectionTrace.Log(" LiveOut:  " + ToString(block.LiveOut));
 			}
+		}
+
+		private void TraceLiveIntervals(string stage)
+		{
+			if (!trace.Active)
+				return;
+
+			var registerTrace = new CompilerTrace(trace, stage);
 
 			foreach (var virtualRegister in virtualRegisters)
 			{
@@ -935,149 +951,6 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			}
 		}
 
-		private class Move
-		{
-			public BasicBlock SourceBlock { get; set; }
-
-			public BasicBlock DestinationBlock { get; set; }
-
-			public Operand Source { get; set; }
-
-			public Operand Destination { get; set; }
-
-			public Move(BasicBlock sourceBlock, BasicBlock destinationBlock, Operand source, Operand destination)
-			{
-				Debug.Assert(sourceBlock != null);
-				Debug.Assert(destinationBlock != null);
-				Debug.Assert(source != null);
-				Debug.Assert(destination != null);
-
-				SourceBlock = sourceBlock;
-				DestinationBlock = destinationBlock;
-				Source = source;
-				Destination = destination;
-			}
-		}
-
-		private void SortMoveIntoList(List<Move> moves, Move move)
-		{
-			if (move.Destination.IsStackLocal || moves.Count == 0)
-			{
-				moves.Add(move);
-				return;
-			}
-
-			var src = move.Source;
-			for (int at = 0; at < moves.Count; at++)
-			{
-				if (moves[at].Destination == src)
-				{
-					moves.Insert(at, move);
-					return;
-				}
-				at++;
-			}
-
-			moves.Add(move);
-		}
-
-		private void ResolveDataFlow()
-		{
-			var resolverTrace = new CompilerTrace(trace, "ResolveDataFlow");
-
-			List<Move>[,] moves = new List<Move>[2, basicBlocks.Count];
-
-			foreach (var from in extendedBlocks)
-			{
-				foreach (var nextBlock in from.BasicBlock.NextBlocks)
-				{
-					var to = extendedBlocks[nextBlock.Sequence];
-
-					// determine where to insert resolving moves
-					bool fromAnchorFlag = (from.BasicBlock.NextBlocks.Count == 1);
-
-					ExtendedBlock anchor = fromAnchorFlag ? from : to;
-
-					List<Move> anchorList = moves[fromAnchorFlag ? 0 : 1, anchor.Sequence];
-
-					if (anchorList == null)
-					{
-						anchorList = new List<Move>();
-						moves[fromAnchorFlag ? 0 : 1, anchor.Sequence] = anchorList;
-					}
-
-					foreach (var virtualRegister in GetVirtualRegisters(to.LiveIn))
-					{
-						//if (virtualRegister.IsPhysicalRegister)
-						//continue;
-
-						var fromLiveInterval = virtualRegister.GetIntervalAtOrEndsAt(from.End);
-						var toLiveInterval = virtualRegister.GetIntervalAt(to.Start);
-
-						Debug.Assert(fromLiveInterval != null);
-						Debug.Assert(toLiveInterval != null);
-
-						if (fromLiveInterval.AssignedPhysicalRegister != toLiveInterval.AssignedPhysicalRegister)
-						{
-							if (resolverTrace.Active)
-							{
-								resolverTrace.Log("REGISTER: " + fromLiveInterval.VirtualRegister.ToString());
-								resolverTrace.Log("    FROM: " + from.ToString().PadRight(7) + (fromLiveInterval.AssignedPhysicalOperand != null ? fromLiveInterval.AssignedPhysicalOperand.Register.ToString() : "STACK"));
-								resolverTrace.Log("      TO: " + to.ToString().PadRight(7) + (toLiveInterval.AssignedPhysicalOperand != null ? toLiveInterval.AssignedPhysicalOperand.Register.ToString() : "STACK"));
-
-								resolverTrace.Log("  INSERT: " + (fromAnchorFlag ? "FROM (bottom)" : "TO (top)"));
-								resolverTrace.Log("");
-							}
-
-							// interval was spilled (spill moves are inserted elsewhere)
-							if (toLiveInterval.AssignedPhysicalOperand == null)
-								continue;
-
-							Debug.Assert(from.BasicBlock.NextBlocks.Count == 1 || to.BasicBlock.PreviousBlocks.Count == 1);
-
-							Move move = new Move(
-								from.BasicBlock,
-								to.BasicBlock,
-								fromLiveInterval.AssignedPhysicalOperand != null ? fromLiveInterval.AssignedPhysicalOperand : virtualRegister.SpillSlotOperand,
-								toLiveInterval.AssignedPhysicalOperand != null ? toLiveInterval.AssignedPhysicalOperand : virtualRegister.SpillSlotOperand
-							);
-
-							SortMoveIntoList(anchorList, move);
-						}
-					}
-				}
-			}
-
-			for (int b = 0; b < basicBlocks.Count; b++)
-			{
-				for (int fromTag = 0; fromTag < 2; fromTag++)
-				{
-					List<Move> anchorList = moves[fromTag, b];
-
-					if (anchorList == null)
-						continue;
-
-					Context context = new Context(instructionSet, basicBlocks[b], fromTag == 0 ? basicBlocks[b].EndIndex : basicBlocks[b].StartIndex);
-
-					if (fromTag == 0)
-					{
-						context.GotoPrevious();
-
-						while (context.IsEmpty || context.Instruction.FlowControl == FlowControl.Branch || context.Instruction.FlowControl == FlowControl.ConditionalBranch || context.Instruction.FlowControl == FlowControl.Return)
-						{
-							context.GotoPrevious();
-						}
-					}
-
-					foreach (var move in anchorList)
-					{
-						architecture.AppendMakeMove(context, move.Destination, move.Source);
-						context.Marked = true;
-					}
-				}
-			}
-		}
-
 		private SlotIndex GetLowOptimalSplitLocation(LiveInterval liveInterval, SlotIndex from, bool check)
 		{
 			Debug.Assert(liveInterval.Start != from);
@@ -1301,5 +1174,217 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 				}
 			}
 		}
+
+		private class Move
+		{
+			public BasicBlock SourceBlock { get; set; }
+
+			public BasicBlock DestinationBlock { get; set; }
+
+			public Operand Source { get; set; }
+
+			public Operand Destination { get; set; }
+
+			public Move(BasicBlock sourceBlock, BasicBlock destinationBlock, Operand source, Operand destination)
+			{
+				Debug.Assert(sourceBlock != null);
+				Debug.Assert(destinationBlock != null);
+				Debug.Assert(source != null);
+				Debug.Assert(destination != null);
+
+				SourceBlock = sourceBlock;
+				DestinationBlock = destinationBlock;
+				Source = source;
+				Destination = destination;
+			}
+		}
+
+		private void SortMoveIntoList(List<Move> moves, Move move)
+		{
+			if (move.Destination.IsStackLocal || moves.Count == 0)
+			{
+				moves.Add(move);
+				return;
+			}
+
+			var src = move.Source;
+			for (int at = 0; at < moves.Count; at++)
+			{
+				if (moves[at].Destination == src)
+				{
+					moves.Insert(at, move);
+					return;
+				}
+				at++;
+			}
+
+			moves.Add(move);
+		}
+
+		private void ResolveDataFlow()
+		{
+			var resolverTrace = new CompilerTrace(trace, "ResolveDataFlow");
+
+			List<Move>[,] moves = new List<Move>[2, basicBlocks.Count];
+
+			foreach (var from in extendedBlocks)
+			{
+				foreach (var nextBlock in from.BasicBlock.NextBlocks)
+				{
+					var to = extendedBlocks[nextBlock.Sequence];
+
+					// determine where to insert resolving moves
+					bool fromAnchorFlag = (from.BasicBlock.NextBlocks.Count == 1);
+
+					ExtendedBlock anchor = fromAnchorFlag ? from : to;
+
+					List<Move> anchorList = moves[fromAnchorFlag ? 0 : 1, anchor.Sequence];
+
+					if (anchorList == null)
+					{
+						anchorList = new List<Move>();
+						moves[fromAnchorFlag ? 0 : 1, anchor.Sequence] = anchorList;
+					}
+
+					foreach (var virtualRegister in GetVirtualRegisters(to.LiveIn))
+					{
+						//if (virtualRegister.IsPhysicalRegister)
+						//continue;
+
+						var fromLiveInterval = virtualRegister.GetIntervalAtOrEndsAt(from.End);
+						var toLiveInterval = virtualRegister.GetIntervalAt(to.Start);
+
+						Debug.Assert(fromLiveInterval != null);
+						Debug.Assert(toLiveInterval != null);
+
+						if (fromLiveInterval.AssignedPhysicalRegister != toLiveInterval.AssignedPhysicalRegister)
+						{
+							if (resolverTrace.Active)
+							{
+								resolverTrace.Log("REGISTER: " + fromLiveInterval.VirtualRegister.ToString());
+								resolverTrace.Log("    FROM: " + from.ToString().PadRight(7) + fromLiveInterval.AssignedOperand.ToString());
+								resolverTrace.Log("      TO: " + to.ToString().PadRight(7) + toLiveInterval.AssignedOperand.ToString());
+
+								resolverTrace.Log("  INSERT: " + (fromAnchorFlag ? "FROM (bottom)" : "TO (top)"));
+								resolverTrace.Log("");
+							}
+
+							// interval was spilled (spill moves are inserted elsewhere)
+							if (toLiveInterval.AssignedPhysicalOperand == null)
+								continue;
+
+							Debug.Assert(from.BasicBlock.NextBlocks.Count == 1 || to.BasicBlock.PreviousBlocks.Count == 1);
+
+							Move move = new Move(
+								from.BasicBlock,
+								to.BasicBlock,
+								fromLiveInterval.AssignedOperand,
+								toLiveInterval.AssignedOperand
+							);
+
+							SortMoveIntoList(anchorList, move);
+						}
+					}
+				}
+			}
+
+			for (int b = 0; b < basicBlocks.Count; b++)
+			{
+				for (int fromTag = 0; fromTag < 2; fromTag++)
+				{
+					List<Move> anchorList = moves[fromTag, b];
+
+					if (anchorList == null)
+						continue;
+
+					Context context = new Context(instructionSet, basicBlocks[b], fromTag == 0 ? basicBlocks[b].EndIndex : basicBlocks[b].StartIndex);
+
+					if (fromTag == 0)
+					{
+						context.GotoPrevious();
+
+						while (context.IsEmpty || context.Instruction.FlowControl == FlowControl.Branch || context.Instruction.FlowControl == FlowControl.ConditionalBranch || context.Instruction.FlowControl == FlowControl.Return)
+						{
+							context.GotoPrevious();
+						}
+					}
+
+					foreach (var move in anchorList)
+					{
+						architecture.AppendMakeMove(context, move.Destination, move.Source);
+						//context.Marked = true;
+					}
+				}
+			}
+		}
+
+		private void InsertRegisterMoves()
+		{
+			var insertTrace = new CompilerTrace(trace, "InsertRegisterMoves");
+
+			// collect edge slot indexes
+			Dictionary<SlotIndex, ExtendedBlock> blockEdges = new Dictionary<SlotIndex, ExtendedBlock>();
+
+			foreach (var block in extendedBlocks)
+			{
+				blockEdges.Add(block.Start, block);
+				blockEdges.Add(block.End, block);
+			}
+
+			foreach (var virtualRegister in virtualRegisters)
+			{
+				if (virtualRegister.IsPhysicalRegister)
+					continue;
+
+				if (virtualRegister.LiveIntervals.Count <= 1)
+					continue;
+
+				foreach (var currentInterval in virtualRegister.LiveIntervals)
+				{
+					if (blockEdges.ContainsKey(currentInterval.End))
+						continue;
+
+					// List is not sorted, so scan thru each one
+					foreach (var nextInterval in virtualRegister.LiveIntervals)
+					{
+						if (nextInterval.Start == currentInterval.End)
+						{
+							// next interval is stack - stores to stack are done elsewhere
+							if (nextInterval.AssignedPhysicalOperand == null)
+								break;
+
+							// check if source and destination operands of the move are the same
+							if (nextInterval.AssignedOperand == currentInterval.AssignedOperand || 
+								nextInterval.AssignedOperand.Register == currentInterval.AssignedOperand.Register)
+								break;
+
+							Context context = new Context(instructionSet, currentInterval.End.Index);
+							context.GotoPrevious();
+
+							architecture.AppendMakeMove(context,
+								nextInterval.AssignedOperand,
+								currentInterval.AssignedOperand
+							);
+
+							context.Marked = true;
+
+							if (insertTrace.Active)
+							{
+								insertTrace.Log("REGISTER: " + virtualRegister.ToString());
+								insertTrace.Log("POSITION: " + currentInterval.End.ToString());
+								insertTrace.Log("    FROM: " + currentInterval.AssignedOperand.ToString());
+								insertTrace.Log("      TO: " + nextInterval.AssignedOperand.ToString());
+
+								insertTrace.Log("");
+							}
+
+							break;
+						}
+					}
+
+				}
+			}
+		}
+
 	}
 }
