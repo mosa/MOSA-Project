@@ -25,6 +25,33 @@ namespace Mosa.Platform.AVR32
 
 		#region Code Generation Members
 
+		protected override void ResolvePatches()
+		{
+			// Save the current position
+			long currentPosition = codeStream.Position;
+
+			foreach (Patch p in Patches)
+			{
+				long labelPosition;
+				if (!TryGetLabel(p.Label, out labelPosition))
+				{
+					throw new ArgumentException(@"Missing label while resolving patches.", @"label");
+				}
+
+				codeStream.Position = p.Position;
+
+				// Compute relative branch offset
+				int relOffset = (int)labelPosition - ((int)p.Position + 4);
+
+				// Write relative offset to stream
+				byte[] bytes = BitConverter.GetBytes(relOffset);
+				codeStream.Write(bytes, 0, bytes.Length);
+			}
+
+			// Reset the position
+			codeStream.Position = currentPosition;
+		}
+
 		/// <summary>
 		/// Writes the unsigned short.
 		/// </summary>
@@ -69,7 +96,7 @@ namespace Mosa.Platform.AVR32
 			linker.Link(
 				LinkType.RelativeOffset | LinkType.I4,
 				BuildInPatch.I4,
-				compiler.Method.ToString(),
+				MethodName,
 				(int)(codeStream.Position - codeStreamBasePosition),
 				(int)(codeStream.Position - codeStreamBasePosition) + 4,
 				symbolOperand.Name,

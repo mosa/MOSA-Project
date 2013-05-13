@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.Metadata;
+using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Compiler.InternalTrace;
 
 namespace Mosa.Compiler.Framework.Stages
@@ -225,9 +226,33 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 		}
 
-		private bool CanCopyPropagation(Operand operand)
+		private bool CanCopyPropagation(Operand result, Operand destination)
 		{
-			return !(operand.Type.Type == CilElementType.Ptr || operand.Type.Type == CilElementType.I4);
+			if (result.Type.Type != CilElementType.Ptr && destination.Type.Type != CilElementType.Ptr)
+				return true;
+
+			if (result.Type.Type != destination.Type.Type)
+				return false;
+
+			return GetElementType(result.Type) == GetElementType(destination.Type);
+		}
+
+		private static SigType GetElementType(SigType sigType)
+		{
+			// code copied from IRTransofmrationStage.cs
+			PtrSigType pointerType = sigType as PtrSigType;
+			if (pointerType != null)
+			{
+				return pointerType.ElementType;
+			}
+
+			RefSigType referenceType = sigType as RefSigType;
+			if (referenceType != null)
+			{
+				return referenceType.ElementType;
+			}
+
+			return sigType;
 		}
 
 		/// <summary>
@@ -253,9 +278,9 @@ namespace Mosa.Compiler.Framework.Stages
 
 			Debug.Assert(context.Result.Definitions.Count == 1);
 
-			// FIXME: does not work on ptr or I4 types - probably because of signed extension, or I8/U8 - probably because 64-bit
-			//if (!(CanCopyPropagation(context.Result) && CanCopyPropagation(context.Operand1)))
-			//	return;
+			// If the pointer or reference types are different, we can not copy propagation because type information would be lost.
+			if (!CanCopyPropagation(context.Result, context.Operand1))
+				return;
 
 			Operand destinationOperand = context.Result;
 			Operand sourceOperand = context.Operand1;

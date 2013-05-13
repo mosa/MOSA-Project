@@ -141,7 +141,7 @@ namespace Mosa.Compiler.Framework
 			var basicBlocks = methodCompiler.BasicBlocks;
 			CreatePrologueAndEpilogueBlocks(methodCompiler.InstructionSet, basicBlocks);
 
-			var context = ContextHelper.CreateNewBlockWithContext(methodCompiler.InstructionSet, basicBlocks);
+			var context = ContextHelper.CreateNewBlockWithContext(methodCompiler.InstructionSet, basicBlocks, 0);
 
 			basicBlocks.LinkBlocks(basicBlocks.PrologueBlock, context.BasicBlock);
 

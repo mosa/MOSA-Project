@@ -546,17 +546,17 @@ namespace Mosa.Platform.x86.Stages
 		{
 			Debug.Assert(context.BranchTargets != null);
 
-			//if (context.Operand1 != null)
-			//{
-			//	callingConvention.MoveReturnValue(context, context.Operand1);
-			//	context.AppendInstruction(X86.Jmp);
-			//	context.SetBranch(Int32.MaxValue);
-			//}
-			//else
-			//{
-			//	context.SetInstruction(X86.Jmp);
-			//	context.SetBranch(Int32.MaxValue);
-			//}
+			if (context.Operand1 != null)
+			{
+				callingConvention.MoveReturnValue(context, context.Operand1);
+				context.AppendInstruction(X86.Jmp);
+				context.SetBranch(Int32.MaxValue);
+			}
+			else
+			{
+				context.SetInstruction(X86.Jmp);
+				context.SetBranch(Int32.MaxValue);
+			}
 		}
 
 		/// <summary>
@@ -897,23 +897,6 @@ namespace Mosa.Platform.x86.Stages
 			context.ReplaceInstructionOnly(X86.Movsx);
 		}
 
-		private static SigType GetElementType(SigType sigType)
-		{
-			PtrSigType pointerType = sigType as PtrSigType;
-			if (pointerType != null)
-			{
-				return pointerType.ElementType;
-			}
-
-			RefSigType referenceType = sigType as RefSigType;
-			if (referenceType != null)
-			{
-				return referenceType.ElementType;
-			}
-
-			return sigType;
-		}
-
 		/// <summary>
 		/// Visitation function for Call.
 		/// </summary>
@@ -1130,6 +1113,23 @@ namespace Mosa.Platform.x86.Stages
 				case ConditionCode.UnsignedLessOrEqual: context.ConditionCode = ConditionCode.UnsignedGreaterThan; break;
 				case ConditionCode.UnsignedLessThan: context.ConditionCode = ConditionCode.UnsignedGreaterOrEqual; break;
 			}
+		}
+
+		private static SigType GetElementType(SigType sigType)
+		{
+			PtrSigType pointerType = sigType as PtrSigType;
+			if (pointerType != null)
+			{
+				return pointerType.ElementType;
+			}
+
+			RefSigType referenceType = sigType as RefSigType;
+			if (referenceType != null)
+			{
+				return referenceType.ElementType;
+			}
+
+			return sigType;
 		}
 
 		#endregion Internals

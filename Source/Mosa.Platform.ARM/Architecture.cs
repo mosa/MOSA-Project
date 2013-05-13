@@ -191,5 +191,13 @@ namespace Mosa.Platform.ARM
 		{
 			// TODO
 		}
+
+		/// <summary>
+		/// Gets the jump instruction for the platform.
+		/// </summary>
+		/// <value>
+		/// The jump instruction.
+		/// </value>
+		public override BaseInstruction JumpInstruction { get { /* TODO */ return null; } }
 	}
 }

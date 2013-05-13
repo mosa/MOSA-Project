@@ -51,11 +51,11 @@ namespace Mosa.Tool.Compiler
 
 				new PlatformStubStage(),
 
-				new	EdgeSplitStage(),
+				new	PlatformEdgeSplitStage(),
 				new GreedyRegisterAllocatorStage(),
 				new StackLayoutStage(),
 
-				//new CodeGenerationStage(),
+				new CodeGenerationStage(),
 			});
 		}
 

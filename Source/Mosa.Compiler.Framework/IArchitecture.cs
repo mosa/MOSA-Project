@@ -71,6 +71,14 @@ namespace Mosa.Compiler.Framework
 		/// </value>
 		string PlatformName { get; }
 
+		/// <summary>
+		/// Gets the jump instruction.
+		/// </summary>
+		/// <value>
+		/// The jump instruction.
+		/// </value>
+		BaseInstruction JumpInstruction { get; }
+
 		#endregion Properties
 
 		#region Methods

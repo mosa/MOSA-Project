@@ -52,7 +52,7 @@ namespace Mosa.Platform.x86
 			linker.Link(
 				LinkType.RelativeOffset | LinkType.I4,
 				BuildInPatch.I4,
-				compiler.Method.ToString(),
+				MethodName,
 				(int)(codeStream.Position - codeStreamBasePosition),
 				(int)(codeStream.Position - codeStreamBasePosition) + 4,
 				symbolOperand.Name,
@@ -174,17 +174,17 @@ namespace Mosa.Platform.x86
 
 			if (displacement.IsRuntimeMember)
 			{
-				linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuildInPatch.I4, compiler.Method.FullName, pos, 0, displacement.RuntimeMember.ToString(), displacement.Offset);
+				linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuildInPatch.I4, MethodName, pos, 0, displacement.RuntimeMember.ToString(), displacement.Offset);
 				codeStream.Position += 4;
 			}
 			else if (displacement.IsSymbol)
 			{
-				linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuildInPatch.I4, compiler.Method.FullName, pos, 0, displacement.Name, 0);
+				linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuildInPatch.I4, MethodName, pos, 0, displacement.Name, 0);
 				codeStream.Position += 4;
 			}
 			else if (displacement.IsLabel)
 			{
-				linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuildInPatch.I4, compiler.Method.FullName, pos, 0, displacement.Name, 0);
+				linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuildInPatch.I4, MethodName, pos, 0, displacement.Name, 0);
 				codeStream.Position += 4;
 			}
 			else
@@ -295,7 +295,7 @@ namespace Mosa.Platform.x86
 			long position;
 
 			// Did we see the label?
-			if (labels.TryGetValue(label, out position))
+			if (TryGetLabel(label, out position))
 			{
 				// Yes, calculate the relative offset
 				relOffset = (int)position - ((int)codeStream.Position + 4);
@@ -303,11 +303,38 @@ namespace Mosa.Platform.x86
 			else
 			{
 				// Forward jump, we can't resolve yet - store a patch
-				patches.Add(new Patch(label, codeStream.Position));
+				AddPatch(label, codeStream.Position);
 			}
 
 			// Emit the relative jump offset (zero if we don't know it yet!)
 			codeStream.Write(relOffset, Endianness.Little);
+		}
+
+		protected override void ResolvePatches()
+		{
+			// Save the current position
+			long currentPosition = codeStream.Position;
+
+			foreach (Patch p in Patches)
+			{
+				long labelPosition;
+				if (!TryGetLabel(p.Label, out labelPosition))
+				{
+					throw new ArgumentException(@"Missing label while resolving patches.", @"label");
+				}
+
+				codeStream.Position = p.Position;
+
+				// Compute relative branch offset
+				int relOffset = (int)labelPosition - ((int)p.Position + 4);
+
+				// Write relative offset to stream
+				byte[] bytes = BitConverter.GetBytes(relOffset);
+				codeStream.Write(bytes, 0, bytes.Length);
+			}
+
+			// Reset the position
+			codeStream.Position = currentPosition;
 		}
 
 		/// <summary>

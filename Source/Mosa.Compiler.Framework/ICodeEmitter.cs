@@ -9,6 +9,7 @@
 
 using System;
 using System.IO;
+using Mosa.Compiler.Linker;
 
 namespace Mosa.Compiler.Framework
 {
@@ -22,7 +23,7 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		/// <param name="compiler">The compiler.</param>
 		/// <param name="codeStream">The code stream.</param>
-		void Initialize(BaseMethodCompiler compiler, Stream codeStream);
+		void Initialize(string methodName, ILinker linker, Stream codeStream);
 
 		/// <summary>
 		/// Emits a label into the code stream.

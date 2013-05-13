@@ -234,10 +234,14 @@ namespace Mosa.Compiler.Linker
 
 			//symbol.VirtualAddress = linkerSection.VirtualAddress + stream.Position;
 
-			Debug.Assert(!symbols.ContainsKey(symbol.Name));
+			// HACK - 
+			if (!symbols.ContainsKey(symbol.Name))
+				symbols.Add(symbol.Name, symbol);
+
+			// Debug.Assert(!symbols.ContainsKey(symbol.Name));
 
 			// Save the symbol for later use
-			symbols.Add(symbol.Name, symbol);
+			//symbols.Add(symbol.Name, symbol);
 
 			return new LinkerStream(symbol, stream, size);
 		}

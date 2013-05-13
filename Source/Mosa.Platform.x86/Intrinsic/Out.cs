@@ -25,7 +25,7 @@ namespace Mosa.Platform.x86.Intrinsic
 		/// <param name="typeSystem">The type system.</param>
 		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, BaseMethodCompiler methodCompiler)
 		{
-			context.AppendInstruction(X86.Out, null, context.Operand1, context.Operand2);
+			context.SetInstruction(X86.Out, null, context.Operand1, context.Operand2);
 		}
 
 		#endregion Methods

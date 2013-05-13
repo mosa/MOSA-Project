@@ -128,11 +128,19 @@ namespace Mosa.Compiler.Framework
 		public abstract ICodeEmitter GetCodeEmitter();
 
 		/// <summary>
-		/// Makes the move.
+		/// Appends a move instruction
 		/// </summary>
 		/// <param name="context">The context.</param>
 		/// <param name="Source">The source.</param>
 		/// <param name="Destination">The destination.</param>
 		public abstract void AppendMakeMove(Context context, Operand Destination, Operand Source);
+
+		/// <summary>
+		/// Gets the jump instruction for the platform.
+		/// </summary>
+		/// <value>
+		/// The jump instruction.
+		/// </value>
+		public abstract BaseInstruction JumpInstruction { get; }
 	}
 }

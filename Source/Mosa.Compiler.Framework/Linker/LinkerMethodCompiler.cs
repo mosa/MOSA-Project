@@ -34,7 +34,7 @@ namespace Mosa.Compiler.Framework.Linker
 				new PlatformStubStage(),
 				new StackLayoutStage(),
 
-				//new CodeGenerationStage(),
+				new CodeGenerationStage(),
 			});
 
 			compiler.Architecture.ExtendMethodCompilerPipeline(this.Pipeline);

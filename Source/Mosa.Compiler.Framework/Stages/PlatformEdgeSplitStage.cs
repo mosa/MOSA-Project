@@ -17,7 +17,7 @@ namespace Mosa.Compiler.Framework.Stages
 	///	This stage removes critical edges by inserting empty basic blocks. Some SSA optimizations and the flow
 	///	control resolution in the register allocator require that all critical edges are removed.
 	/// </summary>
-	public class EdgeSplitStage : BaseEdgeSplitStage, IMethodCompilerStage, IPipelineStage
+	public class PlatformEdgeSplitStage : BaseEdgeSplitStage, IMethodCompilerStage, IPipelineStage
 	{
 
 		/// <summary>
@@ -27,7 +27,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			base.Setup(methodCompiler);
 
-			jumpInstruction = IRInstruction.Jmp;
+			jumpInstruction = methodCompiler.Architecture.JumpInstruction;
 		}
 
 	}

@@ -33,14 +33,7 @@ namespace Mosa.Compiler.Framework.Stages
 	/// </remarks>
 	public sealed class CILTransformationStage : BaseCodeTransformationStage, CIL.ICILVisitor, IPipelineStage
 	{
-		#region Data members
-
-		#endregion Data members
-
-		#region IMethodCompilerStage Members
-
-		#endregion IMethodCompilerStage Members
-
+		
 		#region ICILVisitor
 
 		/// <summary>

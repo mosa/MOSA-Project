@@ -51,13 +51,11 @@ namespace Mosa.Tool.TypeExplorer
 
 				new CheckPlatformOperandCountStage(),
 
-				new	EdgeSplitStage(),
+				new	PlatformEdgeSplitStage(),
 				new GreedyRegisterAllocatorStage(),
 				new StackLayoutStage(),
 
-				//new LoopAwareBlockOrderStage(),
-
-				//new CodeGenerationStage(), // Disabled for now
+				new CodeGenerationStage(), 
 			});
 		}
 	}

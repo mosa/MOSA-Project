@@ -81,20 +81,20 @@ namespace Mosa.Compiler.Framework.Stages
 
 				for (Context context = new Context(instructionSet, block); !context.IsBlockEndInstruction; context.GotoNext())
 				{
-					if (!(context.IsEmpty || context.Instruction == IRInstruction.BlockStart))
-					{
-						BasePlatformInstruction instruction = context.Instruction as BasePlatformInstruction;
+					if (context.IsEmpty || context.Instruction == IRInstruction.BlockStart)
+						continue;
 
-						if (instruction != null)
+					BasePlatformInstruction instruction = context.Instruction as BasePlatformInstruction;
+
+					if (instruction != null)
+					{
+						instruction.Emit(context, codeEmitter);
+					}
+					else
+					{
+						if (architecture.PlatformName != "Null")
 						{
-							instruction.Emit(context, codeEmitter);
-						}
-						else
-						{
-							if (architecture.PlatformName != "Null")
-							{
-								trace.Log(InternalTrace.CompilerEvent.Error, "Missing Code Transformation: " + context.ToString());
-							}
+							trace.Log(InternalTrace.CompilerEvent.Error, "Missing Code Transformation: " + context.ToString());
 						}
 					}
 				}
@@ -109,7 +109,7 @@ namespace Mosa.Compiler.Framework.Stages
 		protected virtual void BeginGenerate()
 		{
 			codeEmitter = architecture.GetCodeEmitter();
-			codeEmitter.Initialize(methodCompiler, codeStream);
+			codeEmitter.Initialize(methodCompiler.Method.FullName, methodCompiler.Linker, codeStream);
 		}
 
 		/// <summary>

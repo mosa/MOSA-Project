@@ -523,7 +523,7 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		public static Operand CreateStackLocal(SigType sigType, int index)
 		{
-			Operand operand = new Operand(sigType, OperandType.StackLocal);
+			Operand operand = new Operand(sigType, OperandType.StackLocal | OperandType.MemoryAddress);
 			operand.index = index;
 			return operand;
 		}
@@ -725,7 +725,18 @@ namespace Mosa.Compiler.Framework
 				}
 			}
 
-			s.AppendFormat(" [{0}]", sigType);
+			if (sigType is PtrSigType)
+			{
+				s.AppendFormat(" [{0}-{1}]", sigType, (sigType as PtrSigType).ElementType);
+			}
+			else if (sigType is RefSigType)
+			{
+				s.AppendFormat(" [{0}-{1}]", sigType, (sigType as RefSigType).ElementType);
+			}
+			else
+			{
+				s.AppendFormat(" [{0}]", sigType);
+			}
 
 			return s.ToString().Replace("  ", " ").Trim();
 		}

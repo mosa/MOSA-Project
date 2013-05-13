@@ -12,6 +12,7 @@ using System;
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Stages;
+using Mosa.Compiler.Framework.RegisterAllocator;
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Platform.x86.Stages;
@@ -185,7 +186,7 @@ namespace Mosa.Platform.x86
 			methodCompilerPipeline.InsertAfterLast<PlatformStubStage>(
 				new IMethodCompilerStage[]
 				{
-					new CheckOperandCountStage(),
+					//new CheckOperandCountStage(),
 					new PlatformIntrinsicTransformationStage(),
 					new LongOperandTransformationStage(),
 
@@ -197,9 +198,8 @@ namespace Mosa.Platform.x86
 				    new AddressModeConversionStage(),
 				});
 
-			// FIXME: Disabled for now
-			//methodCompilerPipeline.InsertAfterLast<IBlockOrderStage>(
-			//    new SimplePeepholeOptimizationStage()
+			//methodCompilerPipeline.InsertAfterLast<GreedyRegisterAllocatorStage>(
+			//	new SimplePeepholeOptimizationStage()
 			//);
 
 			methodCompilerPipeline.InsertAfterLast<StackLayoutStage>(
@@ -211,8 +211,6 @@ namespace Mosa.Platform.x86
 			//    new ExceptionLayoutStage()
 			//);
 
-			// FIXME: Disabled for now
-			//methodCompilerPipeline.Add(new ExceptionLayoutStage());
 		}
 
 		/// <summary>
@@ -245,11 +243,11 @@ namespace Mosa.Platform.x86
 		}
 
 		/// <summary>
-		/// Makes the move.
+		/// Appends a move instruction
 		/// </summary>
 		/// <param name="context">The context.</param>
-		/// <param name="Source">The source.</param>
 		/// <param name="Destination">The destination.</param>
+		/// <param name="Source">The source.</param>
 		public override void AppendMakeMove(Context context, Operand Destination, Operand Source)
 		{
 			if (Source.Type.Type == CilElementType.R4)
@@ -265,5 +263,13 @@ namespace Mosa.Platform.x86
 				context.AppendInstruction(X86.Mov, Destination, Source);
 			}
 		}
+
+		/// <summary>
+		/// Gets the jump instruction for the platform.
+		/// </summary>
+		/// <value>
+		/// The jump instruction.
+		/// </value>
+		public override BaseInstruction JumpInstruction { get { return X86.Jmp; } }
 	}
 }

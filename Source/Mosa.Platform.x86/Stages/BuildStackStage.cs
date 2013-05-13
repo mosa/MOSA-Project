@@ -34,7 +34,6 @@ namespace Mosa.Platform.x86.Stages
 
 			UpdatePrologue();
 			UpdateEpilogue();
-			UpdateReturns();
 		}
 
 		#endregion IMethodCompilerStage
@@ -73,41 +72,6 @@ namespace Mosa.Platform.x86.Stages
 				Debug.Assert(epilogueContext.Instruction is Epilogue);
 
 				AddEpilogueInstructions(epilogueContext);
-			}
-		}
-
-		/// <summary>
-		/// Updates the returns.
-		/// </summary>
-		private void UpdateReturns()
-		{
-			// Update Return(s)
-			foreach (var block in basicBlocks)
-			{
-				// optimization - the return instruction is always the last instruction of the block
-				Context ctx = new Context(instructionSet, block, block.EndIndex);
-
-				ctx.GotoPrevious();
-
-				while (ctx.IsEmpty)
-				{
-					ctx.GotoPrevious();
-				}
-
-				if (ctx.Instruction is Return)
-				{
-					if (ctx.Operand1 != null)
-					{
-						callingConvention.MoveReturnValue(ctx, ctx.Operand1);
-						ctx.AppendInstruction(X86.Jmp);
-						ctx.SetBranch(Int32.MaxValue);
-					}
-					else
-					{
-						ctx.SetInstruction(X86.Jmp);
-						ctx.SetBranch(Int32.MaxValue);
-					}
-				}
 			}
 		}
 
