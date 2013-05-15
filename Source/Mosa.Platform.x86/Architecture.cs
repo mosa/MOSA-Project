@@ -198,10 +198,6 @@ namespace Mosa.Platform.x86
 				    new AddressModeConversionStage(),
 				});
 
-			//methodCompilerPipeline.InsertAfterLast<GreedyRegisterAllocatorStage>(
-			//	new SimplePeepholeOptimizationStage()
-			//);
-
 			methodCompilerPipeline.InsertAfterLast<StackLayoutStage>(
 				new BuildStackStage()
 			);

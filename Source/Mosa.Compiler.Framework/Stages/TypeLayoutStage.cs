@@ -29,8 +29,6 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			foreach (RuntimeType type in typeSystem.GetAllTypes())
 			{
-				//Debug.WriteLine(type.ToString());
-				//Debug.Flush();
 
 				if (type.IsModule || type.IsGeneric)
 					continue;
@@ -40,7 +38,9 @@ namespace Mosa.Compiler.Framework.Stages
 
 				// Only create method tables for generic types in the internal type module
 				if (type is CilGenericType && !(type.Module is InternalTypeModule))
-					continue;
+				{
+					//continue;
+				}
 
 				if (!type.IsInterface)
 				{

@@ -363,7 +363,6 @@ namespace Mosa.Compiler.Linker
 				}
 			}
 
-			Debug.Assert(linkRequests.Count == 0, @"AssemblyLinker has found unresolved symbols.");
 			if (linkRequests.Count != 0)
 			{
 				StringBuilder sb = new StringBuilder();
