@@ -29,7 +29,7 @@ namespace Mosa.Platform.x86.Instructions
 		/// Initializes a new instance of <see cref="Mul"/>.
 		/// </summary>
 		public Mul() :
-			base(2, 3)
+			base(1, 2)
 		{
 		}
 

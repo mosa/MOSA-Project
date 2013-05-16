@@ -7,11 +7,11 @@
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  */
 
+using Mosa.Compiler.Framework;
+using Mosa.Compiler.Framework.IR;
+using Mosa.Compiler.Metadata.Signatures;
 using System;
 using System.Diagnostics;
-using Mosa.Compiler.Framework;
-using Mosa.Compiler.Metadata.Signatures;
-using Mosa.Compiler.Framework.IR;
 
 namespace Mosa.Platform.x86.Intrinsic
 {

@@ -7,15 +7,15 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
 using Mosa.Compiler.Framework;
+using System;
 
 namespace Mosa.Platform.x86.Instructions
 {
 	/// <summary>
 	///
 	/// </summary>
-	public sealed class Add : X86Instruction
+	public sealed class Add : TwoOperandInstruction
 	{
 		#region Data Members
 
@@ -26,18 +26,6 @@ namespace Mosa.Platform.x86.Instructions
 		private static readonly OpCode M_R = new OpCode(new byte[] { 0x01 });
 
 		#endregion Data Members
-
-		#region Construction
-
-		/// <summary>
-		/// Initializes a new instance of <see cref="Add"/>.
-		/// </summary>
-		public Add() :
-			base(1, 2)
-		{
-		}
-
-		#endregion Construction
 
 		#region Methods
 

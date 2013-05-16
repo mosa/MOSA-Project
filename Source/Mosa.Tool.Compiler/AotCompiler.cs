@@ -7,8 +7,6 @@
  *  Michael Fröhlich (grover) <sharpos@michaelruck.de>
  */
 
-using System.Collections.Generic;
-using System.IO;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Stages;
 using Mosa.Compiler.InternalTrace;
@@ -16,6 +14,8 @@ using Mosa.Compiler.Metadata.Loader;
 using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Compiler.TypeSystem;
 using Mosa.Tool.Compiler.Stages;
+using System.Collections.Generic;
+using System.IO;
 
 namespace Mosa.Tool.Compiler
 {
@@ -96,7 +96,6 @@ namespace Mosa.Tool.Compiler
 			AotCompiler aot = new AotCompiler(compilerOptions.Architecture, typeSystem, typeLayout, internalTrace, compilerOptions);
 
 			aot.Pipeline.AddRange(new ICompilerStage[] {
-
 				compilerOptions.BootCompilerStage,
 				new MethodPipelineExportStage(),
 				new PlugStage(),
@@ -110,6 +109,7 @@ namespace Mosa.Tool.Compiler
 				new ObjectFileLayoutStage(),
 
 				new LinkerFinalizationStage(),
+				compilerOptions.MapFile != null ? new MapFileGenerationStage() : null
 			});
 
 			aot.Run();

@@ -8,15 +8,15 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
 using Mosa.Compiler.Framework;
+using System;
 
 namespace Mosa.Platform.x86.Instructions
 {
 	/// <summary>
 	/// Representations the x86 and instruction.
 	/// </summary>
-	public sealed class And : X86Instruction
+	public sealed class And : TwoOperandInstruction
 	{
 		#region Data Members
 
@@ -27,18 +27,6 @@ namespace Mosa.Platform.x86.Instructions
 		private static readonly OpCode M_R = new OpCode(new byte[] { 0x21 });
 
 		#endregion Data Members
-
-		#region Construction
-
-		/// <summary>
-		/// Initializes a new instance of <see cref="And"/>.
-		/// </summary>
-		public And() :
-			base(1, 2)
-		{
-		}
-
-		#endregion Construction
 
 		#region Methods
 

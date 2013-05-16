@@ -8,16 +8,15 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
-
 using Mosa.Compiler.Framework;
+using System;
 
 namespace Mosa.Platform.x86.Instructions
 {
 	/// <summary>
 	/// Representations the x86 xor instruction.
 	/// </summary>
-	public sealed class Xor : X86Instruction
+	public sealed class Xor : TwoOperandInstruction
 	{
 		#region Data Members
 
@@ -28,18 +27,6 @@ namespace Mosa.Platform.x86.Instructions
 		private static readonly OpCode M_C = new OpCode(new byte[] { 0x81 }, 6);
 
 		#endregion Data Members
-
-		#region Construction
-
-		/// <summary>
-		/// Initializes a new instance of <see cref="Xor"/>.
-		/// </summary>
-		public Xor() :
-			base(1, 2)
-		{
-		}
-
-		#endregion Construction
 
 		#region Methods
 

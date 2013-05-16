@@ -41,6 +41,7 @@ namespace Mosa.Compiler.Linker.PE
 		/// <param name="writer">The writer.</param>
 		public void Write(BinaryWriter writer)
 		{
+			stream.Seek(0, SeekOrigin.Begin);
 			stream.WriteTo(writer.BaseStream);
 		}
 

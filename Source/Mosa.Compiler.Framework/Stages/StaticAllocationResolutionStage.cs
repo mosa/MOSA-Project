@@ -7,11 +7,11 @@
  *  Kai P. Reisert <kpreisert@googlemail.com>
  */
 
-using System.Collections.Generic;
 using Mosa.Compiler.Framework.CIL;
 using Mosa.Compiler.Linker;
 using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Compiler.TypeSystem;
+using System.Collections.Generic;
 
 namespace Mosa.Compiler.Framework.Stages
 {

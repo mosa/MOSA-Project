@@ -8,11 +8,11 @@
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  */
 
-using System.Collections.Generic;
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Linker;
 using Mosa.Compiler.TypeSystem;
+using System.Collections.Generic;
 
 namespace Mosa.Platform.x86.Stages
 {

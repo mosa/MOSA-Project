@@ -7,9 +7,9 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
+using Mosa.Compiler.Common;
 using System.Collections.Generic;
 using System.IO;
-using Mosa.Compiler.Common;
 
 namespace Mosa.Compiler.Linker
 {

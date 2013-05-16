@@ -9,12 +9,12 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
-using System.IO;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Platform;
 using Mosa.Compiler.Linker;
 using Mosa.Compiler.Metadata;
+using System;
+using System.IO;
 
 namespace Mosa.Platform.x86
 {

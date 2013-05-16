@@ -8,12 +8,12 @@
  *  Kai P. Reisert <kpreisert@googlemail.com>
  */
 
-using System.IO;
-using System.Text;
 using Mosa.Compiler.Framework;
+using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.Linker;
 using Mosa.Compiler.Metadata.Signatures;
-using Mosa.Compiler.Framework.Linker;
+using System.IO;
+using System.Text;
 
 namespace Mosa.Platform.x86.Stages
 {

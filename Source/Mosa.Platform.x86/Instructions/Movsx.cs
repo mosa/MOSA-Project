@@ -8,9 +8,9 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Metadata;
+using System;
 
 namespace Mosa.Platform.x86.Instructions
 {

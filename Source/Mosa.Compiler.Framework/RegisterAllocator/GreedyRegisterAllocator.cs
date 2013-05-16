@@ -7,14 +7,13 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using Mosa.Compiler.Common;
+using Mosa.Compiler.InternalTrace;
 using System;
-using System.Text;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
-using Mosa.Compiler.Common;
-using Mosa.Compiler.InternalTrace;
-using Mosa.Compiler.Framework.IR;
+using System.Text;
 
 namespace Mosa.Compiler.Framework.RegisterAllocator
 {
@@ -193,7 +192,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			// Assign physical registers
 			AssignRegisters();
 
-			// Insert register moves 
+			// Insert register moves
 			InsertRegisterMoves();
 
 			// Resolve data flow
@@ -1354,7 +1353,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 								break;
 
 							// check if source and destination operands of the move are the same
-							if (nextInterval.AssignedOperand == currentInterval.AssignedOperand || 
+							if (nextInterval.AssignedOperand == currentInterval.AssignedOperand ||
 								nextInterval.AssignedOperand.Register == currentInterval.AssignedOperand.Register)
 								break;
 
@@ -1381,10 +1380,8 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 							break;
 						}
 					}
-
 				}
 			}
 		}
-
 	}
 }

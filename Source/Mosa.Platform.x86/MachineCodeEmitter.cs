@@ -10,11 +10,11 @@
  *  Scott Balmos <sbalmos@fastmail.fm>
  */
 
-using System;
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Linker;
 using Mosa.Compiler.Metadata;
+using System;
 
 namespace Mosa.Platform.x86
 {

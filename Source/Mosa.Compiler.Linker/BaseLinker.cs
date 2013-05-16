@@ -8,12 +8,12 @@
  *  Bruce Markham (illuminus) <illuminus86@gmail.com>
  */
 
+using Mosa.Compiler.Common;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
-using Mosa.Compiler.Common;
 
 namespace Mosa.Compiler.Linker
 {
@@ -234,7 +234,7 @@ namespace Mosa.Compiler.Linker
 
 			//symbol.VirtualAddress = linkerSection.VirtualAddress + stream.Position;
 
-			// HACK - 
+			// HACK -
 			if (!symbols.ContainsKey(symbol.Name))
 				symbols.Add(symbol.Name, symbol);
 

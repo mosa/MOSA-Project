@@ -8,14 +8,13 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
 */
 
-using System;
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Stages;
-using Mosa.Compiler.Framework.RegisterAllocator;
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Platform.x86.Stages;
+using System;
 
 namespace Mosa.Platform.x86
 {
@@ -206,7 +205,6 @@ namespace Mosa.Platform.x86
 			//methodCompilerPipeline.InsertAfterLast<CodeGenerationStage>(
 			//    new ExceptionLayoutStage()
 			//);
-
 		}
 
 		/// <summary>

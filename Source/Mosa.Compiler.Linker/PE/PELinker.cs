@@ -8,12 +8,12 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using Mosa.Compiler.Common;
+using Mosa.Compiler.LinkerFormat.PE;
 using System;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
-using Mosa.Compiler.Common;
-using Mosa.Compiler.LinkerFormat.PE;
 
 namespace Mosa.Compiler.Linker.PE
 {

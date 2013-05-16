@@ -8,9 +8,9 @@
  */
 
 using Mosa.Compiler.Framework;
+using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Compiler.TypeSystem;
-using Mosa.Compiler.Framework.Linker;
 
 namespace Mosa.Platform.x86.Stages
 {

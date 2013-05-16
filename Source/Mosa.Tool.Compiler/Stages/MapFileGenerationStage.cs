@@ -7,11 +7,11 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
+using Mosa.Compiler.Framework;
+using Mosa.Compiler.Linker;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using Mosa.Compiler.Framework;
-using Mosa.Compiler.Linker;
 
 namespace Mosa.Tool.Compiler.Stages
 {

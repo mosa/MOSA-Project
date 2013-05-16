@@ -8,8 +8,8 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
 using Mosa.Compiler.Framework;
+using System;
 
 namespace Mosa.Platform.x86.Instructions
 {
@@ -26,7 +26,7 @@ namespace Mosa.Platform.x86.Instructions
 		private static readonly OpCode R_R_16 = new OpCode(new byte[] { 0x66, 0x87 });
 
 		#endregion Data Members
-
+		
 		#region Construction
 
 		/// <summary>

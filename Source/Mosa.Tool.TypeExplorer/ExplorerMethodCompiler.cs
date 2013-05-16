@@ -55,7 +55,7 @@ namespace Mosa.Tool.TypeExplorer
 				new GreedyRegisterAllocatorStage(),
 				new StackLayoutStage(),
 
-				new CodeGenerationStage(), 
+				new CodeGenerationStage(),
 			});
 		}
 	}

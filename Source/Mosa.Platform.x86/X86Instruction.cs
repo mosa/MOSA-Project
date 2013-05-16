@@ -17,8 +17,6 @@ namespace Mosa.Platform.x86
 	/// </summary>
 	public abstract class X86Instruction : BasePlatformInstruction
 	{
-		//static protected RegisterBitmap NoRegisters = new RegisterBitmap();
-
 		#region Construction
 
 		/// <summary>

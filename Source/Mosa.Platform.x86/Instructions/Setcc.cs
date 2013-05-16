@@ -8,9 +8,8 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
-
 using Mosa.Compiler.Framework;
+using System;
 using IR = Mosa.Compiler.Framework.IR;
 
 namespace Mosa.Platform.x86.Instructions

@@ -15,25 +15,13 @@ namespace Mosa.Platform.x86.Instructions
 	/// <summary>
 	///
 	/// </summary>
-	public sealed class Lea : X86Instruction
+	public sealed class Lea : TwoOperandInstruction
 	{
 		#region Data Members
 
 		private static readonly OpCode opcode = new OpCode(new byte[] { 0x8D });
 
 		#endregion Data Members
-
-		#region Construction
-
-		/// <summary>
-		/// Initializes a new instance of <see cref="Lea" />.
-		/// </summary>
-		public Lea() :
-			base(1, 1)
-		{
-		}
-
-		#endregion Construction
 
 		#region Methods
 
