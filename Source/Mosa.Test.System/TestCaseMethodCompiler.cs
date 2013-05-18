@@ -7,14 +7,14 @@
  *  Michael Fröhlich (grover) <michael.ruck@michaelruck.de>
  */
 
-using System;
-using System.IO;
-using System.Runtime.InteropServices;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Stages;
 using Mosa.Compiler.Linker;
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.TypeSystem;
+using System;
+using System.IO;
+using System.Runtime.InteropServices;
 
 namespace Mosa.Test.System
 {
@@ -34,12 +34,12 @@ namespace Mosa.Test.System
 		public long Address { get { return address; } }
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="TestCaseMethodCompiler"/> class.
+		/// Initializes a new instance of the <see cref="TestCaseMethodCompiler" /> class.
 		/// </summary>
 		/// <param name="compiler">The compiler.</param>
 		/// <param name="method">The method.</param>
 		public TestCaseMethodCompiler(TestCaseCompiler compiler, RuntimeMethod method)
-			: base(compiler, method, null)
+			: base(compiler, method, null, null)
 		{
 			// Populate the pipeline
 			Pipeline.AddRange(new IMethodCompilerStage[] {

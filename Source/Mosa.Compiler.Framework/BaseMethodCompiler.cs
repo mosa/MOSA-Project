@@ -128,12 +128,13 @@ namespace Mosa.Compiler.Framework
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="BaseMethodCompiler"/> class.
+		/// Initializes a new instance of the <see cref="BaseMethodCompiler" /> class.
 		/// </summary>
 		/// <param name="compiler">The assembly compiler.</param>
 		/// <param name="method">The method to compile by this instance.</param>
+		/// <param name="basicBlocks">The basic blocks.</param>
 		/// <param name="instructionSet">The instruction set.</param>
-		protected BaseMethodCompiler(BaseCompiler compiler, RuntimeMethod method, InstructionSet instructionSet)
+		protected BaseMethodCompiler(BaseCompiler compiler, RuntimeMethod method, BasicBlocks basicBlocks, InstructionSet instructionSet)
 		{
 			this.compiler = compiler;
 			this.method = method;
@@ -146,7 +147,7 @@ namespace Mosa.Compiler.Framework
 			this.internalTrace = Compiler.InternalTrace;
 			this.linker = compiler.Linker;
 
-			this.basicBlocks = new BasicBlocks();
+			this.basicBlocks = basicBlocks ?? new BasicBlocks();
 
 			this.instructionSet = instructionSet ?? new InstructionSet(256);
 

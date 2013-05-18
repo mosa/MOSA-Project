@@ -45,13 +45,16 @@ namespace Mosa.Platform.x86.Stages
 			// Update prologue Block
 			var prologueBlock = this.basicBlocks.PrologueBlock;
 
-			Context prologueContext = new Context(instructionSet, prologueBlock);
+			if (prologueBlock != null)
+			{
+				Context prologueContext = new Context(instructionSet, prologueBlock);
 
-			prologueContext.GotoNext();
+				prologueContext.GotoNext();
 
-			Debug.Assert(prologueContext.Instruction is Prologue);
+				Debug.Assert(prologueContext.Instruction is Prologue);
 
-			AddPrologueInstructions(prologueContext);
+				AddPrologueInstructions(prologueContext);
+			}
 		}
 
 		/// <summary>

@@ -8,9 +8,9 @@
  */
 
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.TypeSystem;
-using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.Framework.IR;
+using Mosa.Compiler.Framework.Linker;
+using Mosa.Compiler.TypeSystem;
 
 namespace Mosa.Tool.Compiler.Stages
 {
@@ -27,12 +27,20 @@ namespace Mosa.Tool.Compiler.Stages
 	{
 		#region Data Members
 
+		/// <summary>
+		/// The instruction set
+		/// </summary>
 		private InstructionSet instructionSet;
 
 		/// <summary>
 		/// Hold the current context
 		/// </summary>
 		private Context ctx;
+
+		/// <summary>
+		/// The basic blocks
+		/// </summary>
+		private BasicBlocks basicBlocks;
 
 		/// <summary>
 		/// Holds the method for the type initalizer
@@ -48,12 +56,12 @@ namespace Mosa.Tool.Compiler.Stages
 		/// </summary>
 		public TypeInitializerSchedulerStage()
 		{
-			instructionSet = new InstructionSet(1024);
-			ctx = new Context(instructionSet);
+			basicBlocks = new BasicBlocks();
+			instructionSet = new InstructionSet(25);
+			ctx = ContextHelper.CreateNewBlockWithContext(instructionSet, basicBlocks);
+			basicBlocks.AddHeaderBlock(ctx.BasicBlock);
 
 			ctx.AppendInstruction(IRInstruction.Prologue);
-
-			//ctx.Other = 0; // stacksize
 		}
 
 		#endregion Construction
@@ -94,9 +102,7 @@ namespace Mosa.Tool.Compiler.Stages
 
 			ctx.AppendInstruction(IRInstruction.Epilogue);
 
-			//ctx.Other = 0;
-
-			method = LinkTimeCodeGenerator.Compile(compiler, @"AssemblyInit", instructionSet, typeSystem);
+			method = LinkTimeCodeGenerator.Compile(compiler, @"AssemblyInit", basicBlocks, instructionSet, typeSystem);
 		}
 
 		#endregion ICompilerStage Members

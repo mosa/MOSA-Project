@@ -24,12 +24,12 @@ namespace Mosa.Tool.Compiler
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="AotMethodCompiler"/> class.
+		/// Initializes a new instance of the <see cref="AotMethodCompiler" /> class.
 		/// </summary>
 		/// <param name="compiler">The compiler.</param>
 		/// <param name="method">The method.</param>
 		public AotMethodCompiler(BaseCompiler compiler, RuntimeMethod method)
-			: base(compiler, method, null)
+			: base(compiler, method, null, null)
 		{
 			var compilerOptions = compiler.CompilerOptions;
 
@@ -41,20 +41,16 @@ namespace Mosa.Tool.Compiler
 				new OperandAssignmentStage(),
 				new StaticAllocationResolutionStage(),
 				new CILTransformationStage(),
-
 				(compilerOptions.EnableSSA) ? new EdgeSplitStage() : null,
 				(compilerOptions.EnableSSA) ? new DominanceCalculationStage() : null,
 				(compilerOptions.EnableSSA) ? new PhiPlacementStage() : null,
 				(compilerOptions.EnableSSA) ? new EnterSSAStage() : null,
 				(compilerOptions.EnableSSA && compilerOptions.EnableSSAOptimizations) ? new SSAOptimizations() : null,
 				(compilerOptions.EnableSSA) ? new LeaveSSA() : null,
-
 				new PlatformStubStage(),
-
 				new	PlatformEdgeSplitStage(),
 				new GreedyRegisterAllocatorStage(),
 				new StackLayoutStage(),
-
 				new CodeGenerationStage(),
 			});
 		}

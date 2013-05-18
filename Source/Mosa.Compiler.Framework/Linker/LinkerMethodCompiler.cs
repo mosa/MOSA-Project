@@ -17,23 +17,21 @@ namespace Mosa.Compiler.Framework.Linker
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="LinkerMethodCompiler"/> class.
+		/// Initializes a new instance of the <see cref="LinkerMethodCompiler" /> class.
 		/// </summary>
 		/// <param name="compiler">The assembly compiler executing this method compiler.</param>
 		/// <param name="method">The metadata of the method to compile.</param>
+		/// <param name="basicBlocks">The basic blocks.</param>
 		/// <param name="instructionSet">The instruction set.</param>
-		public LinkerMethodCompiler(BaseCompiler compiler, RuntimeMethod method, InstructionSet instructionSet)
-			: base(compiler, method, instructionSet)
+		public LinkerMethodCompiler(BaseCompiler compiler, RuntimeMethod method, BasicBlocks basicBlocks, InstructionSet instructionSet)
+			: base(compiler, method, basicBlocks, instructionSet)
 		{
-			Context context = ContextHelper.CreateNewBlockWithContext(instructionSet, this.BasicBlocks, BasicBlock.PrologueLabel);
-			BasicBlocks.AddHeaderBlock(context.BasicBlock);
-
 			this.Pipeline.AddRange(new IMethodCompilerStage[] {
-				new StackSetupStage(),
-				new LoopAwareBlockOrderStage(),
+				//new StackSetupStage(),
 				new PlatformStubStage(),
+				//new PlatformEdgeSplitStage(),
+				//new GreedyRegisterAllocatorStage(),
 				new StackLayoutStage(),
-
 				new CodeGenerationStage(),
 			});
 

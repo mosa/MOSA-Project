@@ -11,7 +11,7 @@ using Mosa.Compiler.Framework.IR;
 
 namespace Mosa.Compiler.Framework
 {
-	internal static class ContextHelper
+	public static class ContextHelper
 	{
 		public static Context CreateNewBlockWithContext(InstructionSet instructionSet, BasicBlocks basicBlocks, int label)
 		{

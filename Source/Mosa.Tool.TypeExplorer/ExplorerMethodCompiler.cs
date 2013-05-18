@@ -16,12 +16,12 @@ namespace Mosa.Tool.TypeExplorer
 	internal class ExplorerMethodCompiler : BaseMethodCompiler
 	{
 		/// <summary>
-		/// Initializes a new instance of the <see cref="ExplorerMethodCompiler"/> class.
+		/// Initializes a new instance of the <see cref="ExplorerMethodCompiler" /> class.
 		/// </summary>
 		/// <param name="compiler">The compiler.</param>
 		/// <param name="method">The method.</param>
 		public ExplorerMethodCompiler(ExplorerCompiler compiler, RuntimeMethod method)
-			: base(compiler, method, null)
+			: base(compiler, method, null, null)
 		{
 			var compilerOptions = Compiler.CompilerOptions;
 

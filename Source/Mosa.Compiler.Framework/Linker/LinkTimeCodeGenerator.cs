@@ -7,9 +7,9 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-using System;
 using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Compiler.TypeSystem;
+using System;
 
 namespace Mosa.Compiler.Framework.Linker
 {
@@ -25,12 +25,13 @@ namespace Mosa.Compiler.Framework.Linker
 		/// </summary>
 		/// <param name="compiler">The assembly compiler used to compile this method.</param>
 		/// <param name="methodName">The name of the created method.</param>
+		/// <param name="typeSystem">The type system.</param>
 		/// <returns></returns>
-		/// <exception cref="System.ArgumentNullException"><paramref name="compiler"/> or <paramref name="methodName"/>  is null.</exception>
-		/// <exception cref="System.ArgumentException"><paramref name="methodName"/> is invalid.</exception>
+		/// <exception cref="System.ArgumentNullException"><paramref name="compiler" /> or <paramref name="methodName" />  is null.</exception>
+		/// <exception cref="System.ArgumentException"><paramref name="methodName" /> is invalid.</exception>
 		public static LinkerGeneratedMethod Compile(BaseCompiler compiler, string methodName, ITypeSystem typeSystem)
 		{
-			return Compile(compiler, methodName, null, typeSystem);
+			return Compile(compiler, methodName, null, null, typeSystem);
 		}
 
 		/// <summary>
@@ -38,11 +39,13 @@ namespace Mosa.Compiler.Framework.Linker
 		/// </summary>
 		/// <param name="compiler">The assembly compiler used to compile this method.</param>
 		/// <param name="methodName">The name of the created method.</param>
+		/// <param name="basicBlocks">The basic blocks.</param>
 		/// <param name="instructionSet">The instruction set.</param>
+		/// <param name="typeSystem">The type system.</param>
 		/// <returns></returns>
-		/// <exception cref="System.ArgumentNullException"><paramref name="compiler"/>, <paramref name="methodName"/> or <paramref name="instructionSet"/> is null.</exception>
-		/// <exception cref="System.ArgumentException"><paramref name="methodName"/> is invalid.</exception>
-		public static LinkerGeneratedMethod Compile(BaseCompiler compiler, string methodName, InstructionSet instructionSet, ITypeSystem typeSystem)
+		/// <exception cref="System.ArgumentNullException"><paramref name="compiler" />, <paramref name="methodName" /> or <paramref name="instructionSet" /> is null.</exception>
+		/// <exception cref="System.ArgumentException"><paramref name="methodName" /> is invalid.</exception>
+		public static LinkerGeneratedMethod Compile(BaseCompiler compiler, string methodName, BasicBlocks basicBlocks, InstructionSet instructionSet, ITypeSystem typeSystem)
 		{
 			if (compiler == null)
 				throw new ArgumentNullException(@"compiler");
@@ -69,7 +72,7 @@ namespace Mosa.Compiler.Framework.Linker
 
 			//compiler.Scheduler.TrackMethodInvoked(method);
 
-			LinkerMethodCompiler methodCompiler = new LinkerMethodCompiler(compiler, method, instructionSet);
+			LinkerMethodCompiler methodCompiler = new LinkerMethodCompiler(compiler, method, basicBlocks, instructionSet);
 			methodCompiler.Compile();
 
 			return method;

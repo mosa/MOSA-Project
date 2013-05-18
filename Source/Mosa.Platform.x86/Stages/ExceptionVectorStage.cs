@@ -57,8 +57,10 @@ namespace Mosa.Platform.x86.Stages
 
 			Operand esp = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.ESP);
 
-			InstructionSet instructionSet = new InstructionSet(100);
-			Context ctx = new Context(instructionSet);
+			BasicBlocks basicBlocks = new BasicBlocks();
+			InstructionSet instructionSet = new InstructionSet(25);
+			Context ctx = ContextHelper.CreateNewBlockWithContext(instructionSet, basicBlocks);
+			basicBlocks.AddHeaderBlock(ctx.BasicBlock);
 
 			// TODO - setup stack for call to the managed exception handler
 
@@ -68,7 +70,7 @@ namespace Mosa.Platform.x86.Stages
 			//3. Call the managed exception handler
 			ctx.AppendInstruction(X86.Call, null, exceptionMethod);
 
-			LinkTimeCodeGenerator.Compile(this.compiler, @"ExceptionVector", instructionSet, typeSystem);
+			LinkTimeCodeGenerator.Compile(this.compiler, @"ExceptionVector", basicBlocks, instructionSet, typeSystem);
 		}
 
 		#endregion Internal

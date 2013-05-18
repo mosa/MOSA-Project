@@ -152,8 +152,10 @@ namespace Mosa.Platform.x86.Stages
 				Operand eax = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.EAX);
 				Operand ebx = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.EBX);
 
-				InstructionSet instructionSet = new InstructionSet(16);
-				Context ctx = new Context(instructionSet);
+				BasicBlocks basicBlocks = new BasicBlocks();
+				InstructionSet instructionSet = new InstructionSet(25);
+				Context ctx = ContextHelper.CreateNewBlockWithContext(instructionSet, basicBlocks);
+				basicBlocks.AddHeaderBlock(ctx.BasicBlock);
 
 				ctx.AppendInstruction(X86.Mov, ecx, Operand.CreateConstant(BuiltInSigType.Int32, 0x200000));
 				ctx.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(BuiltInSigType.Int32, ecx, 0), eax);
@@ -164,7 +166,7 @@ namespace Mosa.Platform.x86.Stages
 				ctx.AppendInstruction(X86.Call, null, entryPoint);
 				ctx.AppendInstruction(X86.Ret);
 
-				LinkerGeneratedMethod method = LinkTimeCodeGenerator.Compile(this.compiler, @"MultibootInit", instructionSet, typeSystem);
+				LinkerGeneratedMethod method = LinkTimeCodeGenerator.Compile(this.compiler, @"MultibootInit", basicBlocks, instructionSet, typeSystem);
 				linker.EntryPoint = linker.GetSymbol(method.FullName);
 			}
 		}
