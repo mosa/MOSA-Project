@@ -63,8 +63,7 @@ namespace Mosa.Compiler.Linker
 		public virtual Stream Allocate(int size, int alignment)
 		{
 			// Do we need to ensure a specific alignment?
-			if (alignment > 1)
-				InsertPadding(alignment);
+			InsertPadding(alignment);
 
 			return stream;
 		}
@@ -75,9 +74,16 @@ namespace Mosa.Compiler.Linker
 		/// <param name="alignment">The alignment.</param>
 		protected void InsertPadding(int alignment)
 		{
+			if (alignment == 0)
+				return;
+
 			long address = VirtualAddress + stream.Length;
-			int pad = (int)(alignment - (address % alignment));
-			stream.WriteZeroBytes(pad);
+			int mod = (int)(address % alignment);
+
+			if (mod == 0)
+				return;
+
+			stream.WriteZeroBytes(alignment - mod);
 		}
 
 		/// <summary>
@@ -141,7 +147,7 @@ namespace Mosa.Compiler.Linker
 
 		public void ApplyPatch(long offset, LinkType linkType, ulong value, ulong mask, Endianness endianness)
 		{
-			long pos = stream.Position;
+			long originalPosition = stream.Position;
 			stream.Position = offset;
 
 			ulong current = 0;
@@ -171,7 +177,7 @@ namespace Mosa.Compiler.Linker
 					break;
 			}
 
-			stream.Position = pos;
+			stream.Position = offset;
 			current = (current & ~mask) | value;
 
 			// Apply the patch
@@ -194,7 +200,7 @@ namespace Mosa.Compiler.Linker
 					break;
 			}
 
-			//stream.Position = pos;
+			stream.Position = originalPosition;
 		}
 
 		#endregion Methods
