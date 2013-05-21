@@ -12,7 +12,7 @@ using System.Collections.Generic;
 namespace Mosa.Compiler.Framework.Stages
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public class MultipleDefinitionMarkerStage : BaseMethodCompilerStage, IMethodCompilerStage, IPipelineStage
 	{
@@ -43,11 +43,8 @@ namespace Mosa.Compiler.Framework.Stages
 					{
 						list.Add(context.Result, context.Index);
 					}
-
 				}
 			}
-
 		}
-
 	}
 }

@@ -7,21 +7,23 @@ namespace Mosa.HelloWorld.x86.Tests
 	public class KernelTest
 	{
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private string testName = string.Empty;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <returns></returns>
 		protected delegate bool TestMethod();
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected LinkedList<TestMethod> testMethods = new LinkedList<TestMethod>();
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="testName"></param>
 		protected KernelTest(string testName)
@@ -30,7 +32,7 @@ namespace Mosa.HelloWorld.x86.Tests
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="flag"></param>
 		public void PrintResult(bool flag)
@@ -50,7 +52,7 @@ namespace Mosa.HelloWorld.x86.Tests
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public static void RunTests()
 		{

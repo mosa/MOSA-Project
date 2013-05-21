@@ -14,7 +14,7 @@ using System.IO;
 
 namespace Mosa.Compiler.Pdb
 {
-	class CvLineEnumerator : IEnumerable<CvLine>
+	internal class CvLineEnumerator : IEnumerable<CvLine>
 	{
 		#region Data Members
 
@@ -38,7 +38,7 @@ namespace Mosa.Compiler.Pdb
 		/// </summary>
 		private int functionAddress = 0;
 
-		#endregion // Data Members
+		#endregion Data Members
 
 		#region Construction
 
@@ -49,7 +49,7 @@ namespace Mosa.Compiler.Pdb
 			this.offset = offset;
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region IEnumerable<object> Members
 
@@ -60,9 +60,9 @@ namespace Mosa.Compiler.Pdb
 			// nextBlockOffset: The number of bytes to skip to get to the next block (skip after reading nextBlockOffset!)
 			// start: The function start address whose line number information is provided.
 			// seg: The segment of the function
-			// size: The number of entries in the 
+			// size: The number of entries in the
 			// fileOffset: Offset to access corresponding file information
-			// numberOfLines: The number of lines 
+			// numberOfLines: The number of lines
 			// sizeOfLines: The size of the lines in bytes
 			int header, nextBlockOffset, start, seg, size, fileOffset, numberOfLines, sizeOfLines;
 
@@ -73,8 +73,10 @@ namespace Mosa.Compiler.Pdb
 				do
 				{
 					header = reader.ReadInt32();
+
 					//Debug.Assert(header == 0x000000F2, @"CvLineEnumerator: Header magic invalid for PDB v7.00");
 					if (header != 0x000000F2)
+
 						// Skip this, assume no line numbers
 						yield break;
 
@@ -127,7 +129,7 @@ namespace Mosa.Compiler.Pdb
 			}
 		}
 
-		#endregion // IEnumerable<object> Members
+		#endregion IEnumerable<object> Members
 
 		#region IEnumerable Members
 
@@ -136,6 +138,6 @@ namespace Mosa.Compiler.Pdb
 			return GetEnumerator();
 		}
 
-		#endregion // IEnumerable Members
+		#endregion IEnumerable Members
 	}
 }

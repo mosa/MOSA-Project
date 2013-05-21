@@ -16,10 +16,8 @@ namespace Mosa.Test.Compiler.Framework
 	[TestFixture]
 	public class SimpleFastDominanceTests
 	{
-
 		internal static void Dump(BasicBlocks basicBlocks, IDominanceProvider provider)
 		{
-
 			foreach (var b in basicBlocks)
 			{
 				Console.WriteLine(b.ToString() + " -> " + provider.GetImmediateDominator(b));

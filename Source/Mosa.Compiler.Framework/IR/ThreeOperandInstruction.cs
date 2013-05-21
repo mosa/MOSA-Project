@@ -7,7 +7,6 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-
 namespace Mosa.Compiler.Framework.IR
 {
 	/// <summary>
@@ -20,7 +19,6 @@ namespace Mosa.Compiler.Framework.IR
 	/// </remarks>
 	public abstract class ThreeOperandInstruction : BaseIRInstruction
 	{
-
 		#region Construction
 
 		/// <summary>
@@ -31,7 +29,6 @@ namespace Mosa.Compiler.Framework.IR
 		{
 		}
 
-		#endregion // Construction
-
+		#endregion Construction
 	}
 }

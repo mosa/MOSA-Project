@@ -15,7 +15,7 @@ namespace Mosa.Test.System
 	/// <summary>
 	/// Provides implementation of IMemoryPageManager based on Win32 virtual memory.
 	/// </summary>
-	sealed class Win32MemoryPageManager : IMemoryPageManager
+	internal sealed class Win32MemoryPageManager : IMemoryPageManager
 	{
 		#region IMemoryPageManager Members
 
@@ -39,7 +39,7 @@ namespace Mosa.Test.System
 			throw new NotImplementedException();
 		}
 
-		#endregion // IMemoryPageManager Members
+		#endregion IMemoryPageManager Members
 
 		#region Win32 P/Invoke
 
@@ -79,6 +79,6 @@ namespace Mosa.Test.System
 		[DllImport("kernel32.dll", SetLastError = true, PreserveSig = true)]
 		private static unsafe extern IntPtr VirtualAlloc(IntPtr lpAddress, uint dwSize, VirtualAllocTypes flAllocationType, AccessProtectionFlags flProtect);
 
-		#endregion // Win32 P/Invoke
+		#endregion Win32 P/Invoke
 	}
 }

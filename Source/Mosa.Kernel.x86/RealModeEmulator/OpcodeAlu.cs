@@ -13,117 +13,1756 @@ namespace Mosa.Kernel.x86.RealModeEmulator
 {
     public static partial class RealEmulator
     {
+        #region ALU Part 1
+
         public static unsafe uint Op_ADD_RM(ref State state, uint param)
         {
             uint ret;
-            const uint width = 8;
-            byte* dest, src;
+            const byte width = 8;
+            byte v;
+            byte* dest = (byte*)0, src = (byte*)0;
             ret = Int_ParseModRM(ref state, &dest, &src, 0);
-            if (ret != 0) return ret;
-            do
-            {
-                byte __v = (byte)(*dest + *src);
-                state.Flags &= (ushort)(0x004 | 0x040 | 0x080 | 0x800 | 0x001 | 0x010);
-                state.Flags |= (ushort)((*dest & (1 << (int)(width - 1))) == (*src & (1 << (int)(width - 1))) && (__v & (1 << (int)(width - 1))) != (*dest & (1 << (int)(width - 1))) ? 0x800 : 0);
-                if (*dest != 0)
-                    state.Flags |= (ushort)((__v <= *src) ? 0x001 : 0);
-                else
-                    state.Flags |= (ushort)((__v < *src) ? 0x001 : 0);
-
-                if ((*dest & 15) != 0)
-                    state.Flags |= (ushort)((__v & (byte)15) <= (*src & 15) ? 0x010 : 0);
-                else
-                    state.Flags |= (ushort)((__v & (byte)15) < (*src & 15) ? 0x010 : 0);
-
-                *dest = __v;
-            } while (false);
-
-            do
-            {
-                ushort flag = 0x40 | 0x080 | 0x004;
-                state.Flags &= (ushort)~flag;
-                state.Flags |= (ushort)((*dest == 0) ? 0x040 : 0);
-                //state.Flags |= (ushort)((*dest >> (byte)(width - 1)) ? 0x080 : 0); // Unknown failure, cannot port at this moment
-                state.Flags |= (ushort)((((*dest >> 7) ^ (*dest >> 6) ^ (*dest >> 5) ^ (*dest >> 4) ^ (*dest >> 3) ^ (*dest >> 2) ^ (*dest >> 1) ^ *dest) & 1) == 0 ? 0x004 : 0);
-            } while (false);
-
-            return ErrorCodes.ERR_OK;
+            if (ret != 0)
+                return ret;
+            v = (byte)(*dest + *src);
+            ushort flag = (Flags.FLAG_PF | Flags.FLAG_ZF | Flags.FLAG_SF | Flags.FLAG_OF | Flags.FLAG_CF | Flags.FLAG_AF);
+            state.Flags &= (ushort)~flag;
+            state.Flags |= (ushort)((*dest & (1 << (width - 1))) == (*src & (1 << (width - 1))) && (v & (1 << (width - 1))) != (*dest & (1 << (width - 1))) ? Flags.FLAG_OF : 0);
+            if (*dest != 0)
+                state.Flags |= (ushort)((v <= *src) ? Flags.FLAG_CF : 0);
+            else
+                state.Flags |= (ushort)((v < *src) ? Flags.FLAG_CF : 0);
+            if ((*dest & 15) != 0)
+                state.Flags |= (ushort)((v & 15) <= (*src & 15) ? Flags.FLAG_AF : 0);
+            else
+                state.Flags |= (ushort)((v & 15) < (*src & 15) ? Flags.FLAG_AF : 0);
+            SET_COMM_FLAGS(ref state, v, width);
+            if (dest != (byte*)0)
+                *dest = v;
+            return 0;
         }
 
-        /*public static unsafe uint Op_ADD_RMX(State state, uint param)
+        public static unsafe uint Op_ADD_RMX(ref State state, uint param)
         {
             uint ret;
-            void *destPtr=0, *srcPtr=0;
-            ret = Int_ParseModRMX(state, (void*)&destPtr, (void*)&srcPtr, 0);
-            if(ret) return ret; if(state.Decoder.bOverrideOperand)
+            void* destPtr = (void*)0, srcPtr = (void*)0;
+            ret = Int_ParseModRMX(ref state, (ushort**)&destPtr, (ushort**)&srcPtr, 0);
+            if (ret != 0)
+                return ret;
+            if (state.Decoder.bOverrideOperand)
             {
-                uint *dest=destPtr, *src=srcPtr;
-                int width=32;
-                do
-                {
-                    typeof(*dest) __v = *dest + *src;
-                    state.Flags &= ~(0x004|0x040|0x080|0x800|0x001|0x010);
-                    state.Flags |= (*dest&(1ULL << (width-1))) == (*src&(1ULL << (width-1))) && (__v&(1ULL << (width-1))) != (*dest&(1ULL << (width-1))) ? 0x800 : 0;
-                    if( *dest )
-                        state.Flags |= (__v <= *src) ? 0x001 : 0;
-                    else
-                        state.Flags |= (__v < *src) ? 0x001 : 0;
-                    if( *dest&15 )
-                        state.Flags |= (__v&15) <= (*src&15) ? 0x010 : 0;
-                    else
-                        state.Flags |= (__v&15) < (*src&15) ? 0x010 : 0;
-                    *dest = __v;
-                }while(0);
-                do
-                {
-                    state.Flags &= ~(0x040|0x080|0x004);
-                    state.Flags |= ((*dest) == 0) ? 0x040 : 0;
-                    state.Flags |= ((*dest) >> ((width)-1)) ? 0x080 : 0;
-                    state.Flags |= ((((*dest)>>7)^((*dest)>>6)^((*dest)>>5)^((*dest)>>4)^((*dest)>>3)^((*dest)>>2)^((*dest)>>1)^(*dest))&1) == 0 ? 0x004 : 0;
-                }while(0);
+                uint v;
+                uint* dest = (uint*)destPtr, src = (uint*)srcPtr;
+                byte width = 32;
+                v = (uint)(*dest + *src);
+                ushort flag = (Flags.FLAG_PF | Flags.FLAG_ZF | Flags.FLAG_SF | Flags.FLAG_OF | Flags.FLAG_CF | Flags.FLAG_AF);
+                state.Flags &= (ushort)~flag;
+                state.Flags |= (ushort)((*dest & (1 << (width - 1))) == (*src & (1 << (width - 1))) && (v & (1 << (width - 1))) != (*dest & (1 << (width - 1))) ? Flags.FLAG_OF : 0);
+                if (*dest != 0)
+                    state.Flags |= (ushort)((v <= *src) ? Flags.FLAG_CF : 0);
+                else
+                    state.Flags |= (ushort)((v < *src) ? Flags.FLAG_CF : 0);
+                if ((*dest & 15) != 0)
+                    state.Flags |= (ushort)((v & 15) <= (*src & 15) ? Flags.FLAG_AF : 0);
+                else
+                    state.Flags |= (ushort)((v & 15) < (*src & 15) ? Flags.FLAG_AF : 0);
+                SET_COMM_FLAGS(ref state, v, width);
+                if (dest != (uint*)0)
+                    *dest = v;
             }
             else
             {
-                ushort *dest=destPtr, *src=srcPtr;
-                int width=16;
-                do
-                {
-                    typeof(*dest) __v = *dest + *src;
-                    state.Flags &= ~(0x004|0x040|0x080|0x800|0x001|0x010);
-                    state.Flags |= (*dest&(1ULL << (width-1))) == (*src&(1ULL << (width-1))) && (__v&(1ULL << (width-1))) != (*dest&(1ULL << (width-1))) ? 0x800 : 0;
-                    if( *dest )
-                        state.Flags |= (__v <= *src) ? 0x001 : 0;
-                    else
-                        state.Flags |= (__v < *src) ? 0x001 : 0;
-                    if( *dest&15 )
-                        state.Flags |= (__v&15) <= (*src&15) ? 0x010 : 0;
-                    else
-                        state.Flags |= (__v&15) < (*src&15) ? 0x010 : 0;
-                    *dest = __v;
-                }while(0);
-                do
-                {
-                    state.Flags &= ~(0x040|0x080|0x004);
-                    state.Flags |= ((*dest) == 0) ? 0x040 : 0;
-                    state.Flags |= ((*dest) >> ((width)-1)) ? 0x080 : 0;
-                    state.Flags |= ((((*dest)>>7)^((*dest)>>6)^((*dest)>>5)^((*dest)>>4)^((*dest)>>3)^((*dest)>>2)^((*dest)>>1)^(*dest))&1) == 0 ? 0x004 : 0;
-                }while(0);
+                ushort v;
+                ushort* dest = (ushort*)destPtr, src = (ushort*)srcPtr;
+                byte width = 16;
+                v = (ushort)(*dest + *src);
+                ushort flag = (Flags.FLAG_PF | Flags.FLAG_ZF | Flags.FLAG_SF | Flags.FLAG_OF | Flags.FLAG_CF | Flags.FLAG_AF);
+                state.Flags &= (ushort)~flag;
+                state.Flags |= (ushort)((*dest & (1 << (width - 1))) == (*src & (1 << (width - 1))) && (v & (1 << (width - 1))) != (*dest & (1 << (width - 1))) ? Flags.FLAG_OF : 0);
+                if (*dest != 0)
+                    state.Flags |= (ushort)((v <= *src) ? Flags.FLAG_CF : 0);
+                else
+                    state.Flags |= (ushort)((v < *src) ? Flags.FLAG_CF : 0);
+                if ((*dest & 15) != 0)
+                    state.Flags |= (ushort)((v & 15) <= (*src & 15) ? Flags.FLAG_AF : 0);
+                else
+                    state.Flags |= (ushort)((v & 15) < (*src & 15) ? Flags.FLAG_AF : 0);
+                SET_COMM_FLAGS(ref state, v, width);
+                if (dest != (ushort*)0)
+                    *dest = v;
             }
             return 0;
         }
-        public static unsafe uint Op_ADD_MR(State state, uint param) { uint ret; const uint width = 8; byte* dest = 0, src = 0; ret = Int_ParseModRM(state, &src, &dest, 1); if(ret) return ret; do{ typeof(*dest) __v = *dest + *src; state.Flags &= ~(0x004|0x040|0x080|0x800|0x001|0x010); state.Flags |= (*dest&(1ULL << (width-1))) == (*src&(1ULL << (width-1))) && (__v&(1ULL << (width-1))) != (*dest&(1ULL << (width-1))) ? 0x800 : 0; if( *dest ) state.Flags |= (__v <= *src) ? 0x001 : 0; else state.Flags |= (__v < *src) ? 0x001 : 0; if( *dest&15 ) state.Flags |= (__v&15) <= (*src&15) ? 0x010 : 0; else state.Flags |= (__v&15) < (*src&15) ? 0x010 : 0; *dest = __v; }while(0); do{ state.Flags &= ~(0x040|0x080|0x004); state.Flags |= ((*dest) == 0) ? 0x040 : 0; state.Flags |= ((*dest) >> ((width)-1)) ? 0x080 : 0; state.Flags |= ((((*dest)>>7)^((*dest)>>6)^((*dest)>>5)^((*dest)>>4)^((*dest)>>3)^((*dest)>>2)^((*dest)>>1)^(*dest))&1) == 0 ? 0x004 : 0; }while(0); return 0; } public static unsafe uint Op_ADD_MRX(State state, uint param) { uint ret; void *destPtr=0, *srcPtr=0; ret = Int_ParseModRMX(state, (void*)&srcPtr, (void*)&destPtr, 1); if(ret) return ret; if(state.Decoder.bOverrideOperand) { uint *dest=destPtr, *src=srcPtr; int width=32; do{ typeof(*dest) __v = *dest + *src; state.Flags &= ~(0x004|0x040|0x080|0x800|0x001|0x010); state.Flags |= (*dest&(1ULL << (width-1))) == (*src&(1ULL << (width-1))) && (__v&(1ULL << (width-1))) != (*dest&(1ULL << (width-1))) ? 0x800 : 0; if( *dest ) state.Flags |= (__v <= *src) ? 0x001 : 0; else state.Flags |= (__v < *src) ? 0x001 : 0; if( *dest&15 ) state.Flags |= (__v&15) <= (*src&15) ? 0x010 : 0; else state.Flags |= (__v&15) < (*src&15) ? 0x010 : 0; *dest = __v; }while(0); do{ state.Flags &= ~(0x040|0x080|0x004); state.Flags |= ((*dest) == 0) ? 0x040 : 0; state.Flags |= ((*dest) >> ((width)-1)) ? 0x080 : 0; state.Flags |= ((((*dest)>>7)^((*dest)>>6)^((*dest)>>5)^((*dest)>>4)^((*dest)>>3)^((*dest)>>2)^((*dest)>>1)^(*dest))&1) == 0 ? 0x004 : 0; }while(0); } else { ushort *dest=destPtr, *src=srcPtr; int width=16; do{ typeof(*dest) __v = *dest + *src; state.Flags &= ~(0x004|0x040|0x080|0x800|0x001|0x010); state.Flags |= (*dest&(1ULL << (width-1))) == (*src&(1ULL << (width-1))) && (__v&(1ULL << (width-1))) != (*dest&(1ULL << (width-1))) ? 0x800 : 0; if( *dest ) state.Flags |= (__v <= *src) ? 0x001 : 0; else state.Flags |= (__v < *src) ? 0x001 : 0; if( *dest&15 ) state.Flags |= (__v&15) <= (*src&15) ? 0x010 : 0; else state.Flags |= (__v&15) < (*src&15) ? 0x010 : 0; *dest = __v; }while(0); do{ state.Flags &= ~(0x040|0x080|0x004); state.Flags |= ((*dest) == 0) ? 0x040 : 0; state.Flags |= ((*dest) >> ((width)-1)) ? 0x080 : 0; state.Flags |= ((((*dest)>>7)^((*dest)>>6)^((*dest)>>5)^((*dest)>>4)^((*dest)>>3)^((*dest)>>2)^((*dest)>>1)^(*dest))&1) == 0 ? 0x004 : 0; }while(0); } return 0; } public static unsafe uint Op_ADD_AI(State state, uint param) { const uint width = 8; byte srcData; byte *dest=&state.AX.B.L, *src=&srcData; do{int r;byte v; r=Int_Read8(state,state.CS,state.IP+state.Decoder.IPOffset,&v); if(r) return r; state.Decoder.IPOffset++; (srcData) = v; }while(0); ; do{ typeof(*dest) __v = *dest + *src; state.Flags &= ~(0x004|0x040|0x080|0x800|0x001|0x010); state.Flags |= (*dest&(1ULL << (width-1))) == (*src&(1ULL << (width-1))) && (__v&(1ULL << (width-1))) != (*dest&(1ULL << (width-1))) ? 0x800 : 0; if( *dest ) state.Flags |= (__v <= *src) ? 0x001 : 0; else state.Flags |= (__v < *src) ? 0x001 : 0; if( *dest&15 ) state.Flags |= (__v&15) <= (*src&15) ? 0x010 : 0; else state.Flags |= (__v&15) < (*src&15) ? 0x010 : 0; *dest = __v; }while(0); do{ state.Flags &= ~(0x040|0x080|0x004); state.Flags |= ((*dest) == 0) ? 0x040 : 0; state.Flags |= ((*dest) >> ((width)-1)) ? 0x080 : 0; state.Flags |= ((((*dest)>>7)^((*dest)>>6)^((*dest)>>5)^((*dest)>>4)^((*dest)>>3)^((*dest)>>2)^((*dest)>>1)^(*dest))&1) == 0 ? 0x004 : 0; }while(0); return 0; } public static unsafe uint Op_ADD_AIX(State state, uint param) { uint srcData; if(state.Decoder.bOverrideOperand) { uint *dest=&state.AX.D, *src=(void*)&srcData; int width=32; do{int r;uint v; r=Int_Read32(state,state.CS,state.IP+state.Decoder.IPOffset,&v); if(r) return r; state.Decoder.IPOffset+=4; (*src) = v; }while(0); ; do{ typeof(*dest) __v = *dest + *src; state.Flags &= ~(0x004|0x040|0x080|0x800|0x001|0x010); state.Flags |= (*dest&(1ULL << (width-1))) == (*src&(1ULL << (width-1))) && (__v&(1ULL << (width-1))) != (*dest&(1ULL << (width-1))) ? 0x800 : 0; if( *dest ) state.Flags |= (__v <= *src) ? 0x001 : 0; else state.Flags |= (__v < *src) ? 0x001 : 0; if( *dest&15 ) state.Flags |= (__v&15) <= (*src&15) ? 0x010 : 0; else state.Flags |= (__v&15) < (*src&15) ? 0x010 : 0; *dest = __v; }while(0); do{ state.Flags &= ~(0x040|0x080|0x004); state.Flags |= ((*dest) == 0) ? 0x040 : 0; state.Flags |= ((*dest) >> ((width)-1)) ? 0x080 : 0; state.Flags |= ((((*dest)>>7)^((*dest)>>6)^((*dest)>>5)^((*dest)>>4)^((*dest)>>3)^((*dest)>>2)^((*dest)>>1)^(*dest))&1) == 0 ? 0x004 : 0; }while(0); } else { ushort *dest=&state.AX.W, *src=(void*)&srcData; int width=16; do{int r;ushort v; r=Int_Read16(state,state.CS,state.IP+state.Decoder.IPOffset,&v); if(r) return r; state.Decoder.IPOffset+=2; (*src) = v; }while(0); ; do{ typeof(*dest) __v = *dest + *src; state.Flags &= ~(0x004|0x040|0x080|0x800|0x001|0x010); state.Flags |= (*dest&(1ULL << (width-1))) == (*src&(1ULL << (width-1))) && (__v&(1ULL << (width-1))) != (*dest&(1ULL << (width-1))) ? 0x800 : 0; if( *dest ) state.Flags |= (__v <= *src) ? 0x001 : 0; else state.Flags |= (__v < *src) ? 0x001 : 0; if( *dest&15 ) state.Flags |= (__v&15) <= (*src&15) ? 0x010 : 0; else state.Flags |= (__v&15) < (*src&15) ? 0x010 : 0; *dest = __v; }while(0); do{ state.Flags &= ~(0x040|0x080|0x004); state.Flags |= ((*dest) == 0) ? 0x040 : 0; state.Flags |= ((*dest) >> ((width)-1)) ? 0x080 : 0; state.Flags |= ((((*dest)>>7)^((*dest)>>6)^((*dest)>>5)^((*dest)>>4)^((*dest)>>3)^((*dest)>>2)^((*dest)>>1)^(*dest))&1) == 0 ? 0x004 : 0; }while(0); } return 0; }
-        /*public static unsafe uint Op_OR_RM(State state, uint param) { uint ret; const uint width = 8; byte* dest = 0, src = 0; ret = Int_ParseModRM(state, &dest, &src, 0); if(ret) return ret; *dest |= *src; state.Flags &= ~(0x004|0x040|0x080|0x800|0x001); do{ state.Flags &= ~(0x040|0x080|0x004); state.Flags |= ((*dest) == 0) ? 0x040 : 0; state.Flags |= ((*dest) >> ((width)-1)) ? 0x080 : 0; state.Flags |= ((((*dest)>>7)^((*dest)>>6)^((*dest)>>5)^((*dest)>>4)^((*dest)>>3)^((*dest)>>2)^((*dest)>>1)^(*dest))&1) == 0 ? 0x004 : 0; }while(0); return 0; } public static unsafe uint Op_OR_RMX(State state, uint param) { uint ret; void *destPtr=0, *srcPtr=0; ret = Int_ParseModRMX(state, (void*)&destPtr, (void*)&srcPtr, 0); if(ret) return ret; if(state.Decoder.bOverrideOperand) { uint *dest=destPtr, *src=srcPtr; int width=32; *dest |= *src; state.Flags &= ~(0x004|0x040|0x080|0x800|0x001); do{ state.Flags &= ~(0x040|0x080|0x004); state.Flags |= ((*dest) == 0) ? 0x040 : 0; state.Flags |= ((*dest) >> ((width)-1)) ? 0x080 : 0; state.Flags |= ((((*dest)>>7)^((*dest)>>6)^((*dest)>>5)^((*dest)>>4)^((*dest)>>3)^((*dest)>>2)^((*dest)>>1)^(*dest))&1) == 0 ? 0x004 : 0; }while(0); } else { ushort *dest=destPtr, *src=srcPtr; int width=16; *dest |= *src; state.Flags &= ~(0x004|0x040|0x080|0x800|0x001); do{ state.Flags &= ~(0x040|0x080|0x004); state.Flags |= ((*dest) == 0) ? 0x040 : 0; state.Flags |= ((*dest) >> ((width)-1)) ? 0x080 : 0; state.Flags |= ((((*dest)>>7)^((*dest)>>6)^((*dest)>>5)^((*dest)>>4)^((*dest)>>3)^((*dest)>>2)^((*dest)>>1)^(*dest))&1) == 0 ? 0x004 : 0; }while(0); } return 0; } public static unsafe uint Op_OR_MR(State state, uint param) { uint ret; const uint width = 8; byte* dest = 0, src = 0; ret = Int_ParseModRM(state, &src, &dest, 1); if(ret) return ret; *dest |= *src; state.Flags &= ~(0x004|0x040|0x080|0x800|0x001); do{ state.Flags &= ~(0x040|0x080|0x004); state.Flags |= ((*dest) == 0) ? 0x040 : 0; state.Flags |= ((*dest) >> ((width)-1)) ? 0x080 : 0; state.Flags |= ((((*dest)>>7)^((*dest)>>6)^((*dest)>>5)^((*dest)>>4)^((*dest)>>3)^((*dest)>>2)^((*dest)>>1)^(*dest))&1) == 0 ? 0x004 : 0; }while(0); return 0; } public static unsafe uint Op_OR_MRX(State state, uint param) { uint ret; void *destPtr=0, *srcPtr=0; ret = Int_ParseModRMX(state, (void*)&srcPtr, (void*)&destPtr, 1); if(ret) return ret; if(state.Decoder.bOverrideOperand) { uint *dest=destPtr, *src=srcPtr; int width=32; *dest |= *src; state.Flags &= ~(0x004|0x040|0x080|0x800|0x001); do{ state.Flags &= ~(0x040|0x080|0x004); state.Flags |= ((*dest) == 0) ? 0x040 : 0; state.Flags |= ((*dest) >> ((width)-1)) ? 0x080 : 0; state.Flags |= ((((*dest)>>7)^((*dest)>>6)^((*dest)>>5)^((*dest)>>4)^((*dest)>>3)^((*dest)>>2)^((*dest)>>1)^(*dest))&1) == 0 ? 0x004 : 0; }while(0); } else { ushort *dest=destPtr, *src=srcPtr; int width=16; *dest |= *src; state.Flags &= ~(0x004|0x040|0x080|0x800|0x001); do{ state.Flags &= ~(0x040|0x080|0x004); state.Flags |= ((*dest) == 0) ? 0x040 : 0; state.Flags |= ((*dest) >> ((width)-1)) ? 0x080 : 0; state.Flags |= ((((*dest)>>7)^((*dest)>>6)^((*dest)>>5)^((*dest)>>4)^((*dest)>>3)^((*dest)>>2)^((*dest)>>1)^(*dest))&1) == 0 ? 0x004 : 0; }while(0); } return 0; } public static unsafe uint Op_OR_AI(State state, uint param) { const uint width = 8; byte srcData; byte *dest=&state.AX.B.L, *src=&srcData; do{int r;byte v; r=Int_Read8(state,state.CS,state.IP+state.Decoder.IPOffset,&v); if(r) return r; state.Decoder.IPOffset++; (srcData) = v; }while(0); ; *dest |= *src; state.Flags &= ~(0x004|0x040|0x080|0x800|0x001); do{ state.Flags &= ~(0x040|0x080|0x004); state.Flags |= ((*dest) == 0) ? 0x040 : 0; state.Flags |= ((*dest) >> ((width)-1)) ? 0x080 : 0; state.Flags |= ((((*dest)>>7)^((*dest)>>6)^((*dest)>>5)^((*dest)>>4)^((*dest)>>3)^((*dest)>>2)^((*dest)>>1)^(*dest))&1) == 0 ? 0x004 : 0; }while(0); return 0; } public static unsafe uint Op_OR_AIX(State state, uint param) { uint srcData; if(state.Decoder.bOverrideOperand) { uint *dest=&state.AX.D, *src=(void*)&srcData; int width=32; do{int r;uint v; r=Int_Read32(state,state.CS,state.IP+state.Decoder.IPOffset,&v); if(r) return r; state.Decoder.IPOffset+=4; (*src) = v; }while(0); ; *dest |= *src; state.Flags &= ~(0x004|0x040|0x080|0x800|0x001); do{ state.Flags &= ~(0x040|0x080|0x004); state.Flags |= ((*dest) == 0) ? 0x040 : 0; state.Flags |= ((*dest) >> ((width)-1)) ? 0x080 : 0; state.Flags |= ((((*dest)>>7)^((*dest)>>6)^((*dest)>>5)^((*dest)>>4)^((*dest)>>3)^((*dest)>>2)^((*dest)>>1)^(*dest))&1) == 0 ? 0x004 : 0; }while(0); } else { ushort *dest=&state.AX.W, *src=(void*)&srcData; int width=16; do{int r;ushort v; r=Int_Read16(state,state.CS,state.IP+state.Decoder.IPOffset,&v); if(r) return r; state.Decoder.IPOffset+=2; (*src) = v; }while(0); ; *dest |= *src; state.Flags &= ~(0x004|0x040|0x080|0x800|0x001); do{ state.Flags &= ~(0x040|0x080|0x004); state.Flags |= ((*dest) == 0) ? 0x040 : 0; state.Flags |= ((*dest) >> ((width)-1)) ? 0x080 : 0; state.Flags |= ((((*dest)>>7)^((*dest)>>6)^((*dest)>>5)^((*dest)>>4)^((*dest)>>3)^((*dest)>>2)^((*dest)>>1)^(*dest))&1) == 0 ? 0x004 : 0; }while(0); } return 0; }
-        public static unsafe uint Op_ADC_RM(State state, uint param) { uint ret; const uint width = 8; byte* dest = 0, src = 0; ret = Int_ParseModRM(state, &dest, &src, 0); if(ret) return ret; do{ typeof(*dest) __v = *dest + *src + ((state.Flags & 0x001) ? 1 : 0); state.Flags &= ~(0x004|0x040|0x080|0x800|0x001|0x010); state.Flags |= (*dest&(1ULL << (width-1))) == (*src&(1ULL << (width-1))) && (__v&(1ULL << (width-1))) != (*dest&(1ULL << (width-1))) ? 0x800 : 0; if( *dest ) state.Flags |= (__v <= *src) ? 0x001 : 0; else state.Flags |= (__v < *src) ? 0x001 : 0; if( *dest&15 ) state.Flags |= (__v&15) <= (*src&15) ? 0x010 : 0; else state.Flags |= (__v&15) < (*src&15) ? 0x010 : 0; if(*dest && __v == *src ) state.Flags |= 0x001; *dest = __v; }while(0); do{ state.Flags &= ~(0x040|0x080|0x004); state.Flags |= ((*dest) == 0) ? 0x040 : 0; state.Flags |= ((*dest) >> ((width)-1)) ? 0x080 : 0; state.Flags |= ((((*dest)>>7)^((*dest)>>6)^((*dest)>>5)^((*dest)>>4)^((*dest)>>3)^((*dest)>>2)^((*dest)>>1)^(*dest))&1) == 0 ? 0x004 : 0; }while(0); return 0; } public static unsafe uint Op_ADC_RMX(State state, uint param) { uint ret; void *destPtr=0, *srcPtr=0; ret = Int_ParseModRMX(state, (void*)&destPtr, (void*)&srcPtr, 0); if(ret) return ret; if(state.Decoder.bOverrideOperand) { uint *dest=destPtr, *src=srcPtr; int width=32; do{ typeof(*dest) __v = *dest + *src + ((state.Flags & 0x001) ? 1 : 0); state.Flags &= ~(0x004|0x040|0x080|0x800|0x001|0x010); state.Flags |= (*dest&(1ULL << (width-1))) == (*src&(1ULL << (width-1))) && (__v&(1ULL << (width-1))) != (*dest&(1ULL << (width-1))) ? 0x800 : 0; if( *dest ) state.Flags |= (__v <= *src) ? 0x001 : 0; else state.Flags |= (__v < *src) ? 0x001 : 0; if( *dest&15 ) state.Flags |= (__v&15) <= (*src&15) ? 0x010 : 0; else state.Flags |= (__v&15) < (*src&15) ? 0x010 : 0; if(*dest && __v == *src ) state.Flags |= 0x001; *dest = __v; }while(0); do{ state.Flags &= ~(0x040|0x080|0x004); state.Flags |= ((*dest) == 0) ? 0x040 : 0; state.Flags |= ((*dest) >> ((width)-1)) ? 0x080 : 0; state.Flags |= ((((*dest)>>7)^((*dest)>>6)^((*dest)>>5)^((*dest)>>4)^((*dest)>>3)^((*dest)>>2)^((*dest)>>1)^(*dest))&1) == 0 ? 0x004 : 0; }while(0); } else { ushort *dest=destPtr, *src=srcPtr; int width=16; do{ typeof(*dest) __v = *dest + *src + ((state.Flags & 0x001) ? 1 : 0); state.Flags &= ~(0x004|0x040|0x080|0x800|0x001|0x010); state.Flags |= (*dest&(1ULL << (width-1))) == (*src&(1ULL << (width-1))) && (__v&(1ULL << (width-1))) != (*dest&(1ULL << (width-1))) ? 0x800 : 0; if( *dest ) state.Flags |= (__v <= *src) ? 0x001 : 0; else state.Flags |= (__v < *src) ? 0x001 : 0; if( *dest&15 ) state.Flags |= (__v&15) <= (*src&15) ? 0x010 : 0; else state.Flags |= (__v&15) < (*src&15) ? 0x010 : 0; if(*dest && __v == *src ) state.Flags |= 0x001; *dest = __v; }while(0); do{ state.Flags &= ~(0x040|0x080|0x004); state.Flags |= ((*dest) == 0) ? 0x040 : 0; state.Flags |= ((*dest) >> ((width)-1)) ? 0x080 : 0; state.Flags |= ((((*dest)>>7)^((*dest)>>6)^((*dest)>>5)^((*dest)>>4)^((*dest)>>3)^((*dest)>>2)^((*dest)>>1)^(*dest))&1) == 0 ? 0x004 : 0; }while(0); } return 0; } public static unsafe uint Op_ADC_MR(State state, uint param) { uint ret; const uint width = 8; byte* dest = 0, src = 0; ret = Int_ParseModRM(state, &src, &dest, 1); if(ret) return ret; do{ typeof(*dest) __v = *dest + *src + ((state.Flags & 0x001) ? 1 : 0); state.Flags &= ~(0x004|0x040|0x080|0x800|0x001|0x010); state.Flags |= (*dest&(1ULL << (width-1))) == (*src&(1ULL << (width-1))) && (__v&(1ULL << (width-1))) != (*dest&(1ULL << (width-1))) ? 0x800 : 0; if( *dest ) state.Flags |= (__v <= *src) ? 0x001 : 0; else state.Flags |= (__v < *src) ? 0x001 : 0; if( *dest&15 ) state.Flags |= (__v&15) <= (*src&15) ? 0x010 : 0; else state.Flags |= (__v&15) < (*src&15) ? 0x010 : 0; if(*dest && __v == *src ) state.Flags |= 0x001; *dest = __v; }while(0); do{ state.Flags &= ~(0x040|0x080|0x004); state.Flags |= ((*dest) == 0) ? 0x040 : 0; state.Flags |= ((*dest) >> ((width)-1)) ? 0x080 : 0; state.Flags |= ((((*dest)>>7)^((*dest)>>6)^((*dest)>>5)^((*dest)>>4)^((*dest)>>3)^((*dest)>>2)^((*dest)>>1)^(*dest))&1) == 0 ? 0x004 : 0; }while(0); return 0; } public static unsafe uint Op_ADC_MRX(State state, uint param) { uint ret; void *destPtr=0, *srcPtr=0; ret = Int_ParseModRMX(state, (void*)&srcPtr, (void*)&destPtr, 1); if(ret) return ret; if(state.Decoder.bOverrideOperand) { uint *dest=destPtr, *src=srcPtr; int width=32; do{ typeof(*dest) __v = *dest + *src + ((state.Flags & 0x001) ? 1 : 0); state.Flags &= ~(0x004|0x040|0x080|0x800|0x001|0x010); state.Flags |= (*dest&(1ULL << (width-1))) == (*src&(1ULL << (width-1))) && (__v&(1ULL << (width-1))) != (*dest&(1ULL << (width-1))) ? 0x800 : 0; if( *dest ) state.Flags |= (__v <= *src) ? 0x001 : 0; else state.Flags |= (__v < *src) ? 0x001 : 0; if( *dest&15 ) state.Flags |= (__v&15) <= (*src&15) ? 0x010 : 0; else state.Flags |= (__v&15) < (*src&15) ? 0x010 : 0; if(*dest && __v == *src ) state.Flags |= 0x001; *dest = __v; }while(0); do{ state.Flags &= ~(0x040|0x080|0x004); state.Flags |= ((*dest) == 0) ? 0x040 : 0; state.Flags |= ((*dest) >> ((width)-1)) ? 0x080 : 0; state.Flags |= ((((*dest)>>7)^((*dest)>>6)^((*dest)>>5)^((*dest)>>4)^((*dest)>>3)^((*dest)>>2)^((*dest)>>1)^(*dest))&1) == 0 ? 0x004 : 0; }while(0); } else { ushort *dest=destPtr, *src=srcPtr; int width=16; do{ typeof(*dest) __v = *dest + *src + ((state.Flags & 0x001) ? 1 : 0); state.Flags &= ~(0x004|0x040|0x080|0x800|0x001|0x010); state.Flags |= (*dest&(1ULL << (width-1))) == (*src&(1ULL << (width-1))) && (__v&(1ULL << (width-1))) != (*dest&(1ULL << (width-1))) ? 0x800 : 0; if( *dest ) state.Flags |= (__v <= *src) ? 0x001 : 0; else state.Flags |= (__v < *src) ? 0x001 : 0; if( *dest&15 ) state.Flags |= (__v&15) <= (*src&15) ? 0x010 : 0; else state.Flags |= (__v&15) < (*src&15) ? 0x010 : 0; if(*dest && __v == *src ) state.Flags |= 0x001; *dest = __v; }while(0); do{ state.Flags &= ~(0x040|0x080|0x004); state.Flags |= ((*dest) == 0) ? 0x040 : 0; state.Flags |= ((*dest) >> ((width)-1)) ? 0x080 : 0; state.Flags |= ((((*dest)>>7)^((*dest)>>6)^((*dest)>>5)^((*dest)>>4)^((*dest)>>3)^((*dest)>>2)^((*dest)>>1)^(*dest))&1) == 0 ? 0x004 : 0; }while(0); } return 0; } public static unsafe uint Op_ADC_AI(State state, uint param) { const uint width = 8; byte srcData; byte *dest=&state.AX.B.L, *src=&srcData; do{int r;byte v; r=Int_Read8(state,state.CS,state.IP+state.Decoder.IPOffset,&v); if(r) return r; state.Decoder.IPOffset++; (srcData) = v; }while(0); ; do{ typeof(*dest) __v = *dest + *src + ((state.Flags & 0x001) ? 1 : 0); state.Flags &= ~(0x004|0x040|0x080|0x800|0x001|0x010); state.Flags |= (*dest&(1ULL << (width-1))) == (*src&(1ULL << (width-1))) && (__v&(1ULL << (width-1))) != (*dest&(1ULL << (width-1))) ? 0x800 : 0; if( *dest ) state.Flags |= (__v <= *src) ? 0x001 : 0; else state.Flags |= (__v < *src) ? 0x001 : 0; if( *dest&15 ) state.Flags |= (__v&15) <= (*src&15) ? 0x010 : 0; else state.Flags |= (__v&15) < (*src&15) ? 0x010 : 0; if(*dest && __v == *src ) state.Flags |= 0x001; *dest = __v; }while(0); do{ state.Flags &= ~(0x040|0x080|0x004); state.Flags |= ((*dest) == 0) ? 0x040 : 0; state.Flags |= ((*dest) >> ((width)-1)) ? 0x080 : 0; state.Flags |= ((((*dest)>>7)^((*dest)>>6)^((*dest)>>5)^((*dest)>>4)^((*dest)>>3)^((*dest)>>2)^((*dest)>>1)^(*dest))&1) == 0 ? 0x004 : 0; }while(0); return 0; } public static unsafe uint Op_ADC_AIX(State state, uint param) { uint srcData; if(state.Decoder.bOverrideOperand) { uint *dest=&state.AX.D, *src=(void*)&srcData; int width=32; do{int r;uint v; r=Int_Read32(state,state.CS,state.IP+state.Decoder.IPOffset,&v); if(r) return r; state.Decoder.IPOffset+=4; (*src) = v; }while(0); ; do{ typeof(*dest) __v = *dest + *src + ((state.Flags & 0x001) ? 1 : 0); state.Flags &= ~(0x004|0x040|0x080|0x800|0x001|0x010); state.Flags |= (*dest&(1ULL << (width-1))) == (*src&(1ULL << (width-1))) && (__v&(1ULL << (width-1))) != (*dest&(1ULL << (width-1))) ? 0x800 : 0; if( *dest ) state.Flags |= (__v <= *src) ? 0x001 : 0; else state.Flags |= (__v < *src) ? 0x001 : 0; if( *dest&15 ) state.Flags |= (__v&15) <= (*src&15) ? 0x010 : 0; else state.Flags |= (__v&15) < (*src&15) ? 0x010 : 0; if(*dest && __v == *src ) state.Flags |= 0x001; *dest = __v; }while(0); do{ state.Flags &= ~(0x040|0x080|0x004); state.Flags |= ((*dest) == 0) ? 0x040 : 0; state.Flags |= ((*dest) >> ((width)-1)) ? 0x080 : 0; state.Flags |= ((((*dest)>>7)^((*dest)>>6)^((*dest)>>5)^((*dest)>>4)^((*dest)>>3)^((*dest)>>2)^((*dest)>>1)^(*dest))&1) == 0 ? 0x004 : 0; }while(0); } else { ushort *dest=&state.AX.W, *src=(void*)&srcData; int width=16; do{int r;ushort v; r=Int_Read16(state,state.CS,state.IP+state.Decoder.IPOffset,&v); if(r) return r; state.Decoder.IPOffset+=2; (*src) = v; }while(0); ; do{ typeof(*dest) __v = *dest + *src + ((state.Flags & 0x001) ? 1 : 0); state.Flags &= ~(0x004|0x040|0x080|0x800|0x001|0x010); state.Flags |= (*dest&(1ULL << (width-1))) == (*src&(1ULL << (width-1))) && (__v&(1ULL << (width-1))) != (*dest&(1ULL << (width-1))) ? 0x800 : 0; if( *dest ) state.Flags |= (__v <= *src) ? 0x001 : 0; else state.Flags |= (__v < *src) ? 0x001 : 0; if( *dest&15 ) state.Flags |= (__v&15) <= (*src&15) ? 0x010 : 0; else state.Flags |= (__v&15) < (*src&15) ? 0x010 : 0; if(*dest && __v == *src ) state.Flags |= 0x001; *dest = __v; }while(0); do{ state.Flags &= ~(0x040|0x080|0x004); state.Flags |= ((*dest) == 0) ? 0x040 : 0; state.Flags |= ((*dest) >> ((width)-1)) ? 0x080 : 0; state.Flags |= ((((*dest)>>7)^((*dest)>>6)^((*dest)>>5)^((*dest)>>4)^((*dest)>>3)^((*dest)>>2)^((*dest)>>1)^(*dest))&1) == 0 ? 0x004 : 0; }while(0); } return 0; }
-        public static unsafe uint Op_SBB_RM(State state, uint param) { uint ret; const uint width = 8; byte* dest = 0, src = 0; ret = Int_ParseModRM(state, &dest, &src, 0); if(ret) return ret; int c = (state.Flags & 0x001) ? 1 : 0; uint64_t r = (*src + c); typeof(*dest) v = *dest - r; state.Flags &= ~(0x800|0x001|0x010); state.Flags |= (*dest < r) ? 0x001 : 0; state.Flags |= ((*dest&15) < (r&15)) ? 0x010 : 0; typeof(*dest) _sub_tmp = ( ((*dest ^ r) & (*dest ^ v)) & (1ULL<<(width-1)) ); if( _sub_tmp ) state.Flags |= 0x800; *dest = v; do{ state.Flags &= ~(0x040|0x080|0x004); state.Flags |= ((*dest) == 0) ? 0x040 : 0; state.Flags |= ((*dest) >> ((width)-1)) ? 0x080 : 0; state.Flags |= ((((*dest)>>7)^((*dest)>>6)^((*dest)>>5)^((*dest)>>4)^((*dest)>>3)^((*dest)>>2)^((*dest)>>1)^(*dest))&1) == 0 ? 0x004 : 0; }while(0); return 0; } public static unsafe uint Op_SBB_RMX(State state, uint param) { uint ret; void *destPtr=0, *srcPtr=0; ret = Int_ParseModRMX(state, (void*)&destPtr, (void*)&srcPtr, 0); if(ret) return ret; if(state.Decoder.bOverrideOperand) { uint *dest=destPtr, *src=srcPtr; int width=32; int c = (state.Flags & 0x001) ? 1 : 0; uint64_t r = (*src + c); typeof(*dest) v = *dest - r; state.Flags &= ~(0x800|0x001|0x010); state.Flags |= (*dest < r) ? 0x001 : 0; state.Flags |= ((*dest&15) < (r&15)) ? 0x010 : 0; typeof(*dest) _sub_tmp = ( ((*dest ^ r) & (*dest ^ v)) & (1ULL<<(width-1)) ); if( _sub_tmp ) state.Flags |= 0x800; *dest = v; do{ state.Flags &= ~(0x040|0x080|0x004); state.Flags |= ((*dest) == 0) ? 0x040 : 0; state.Flags |= ((*dest) >> ((width)-1)) ? 0x080 : 0; state.Flags |= ((((*dest)>>7)^((*dest)>>6)^((*dest)>>5)^((*dest)>>4)^((*dest)>>3)^((*dest)>>2)^((*dest)>>1)^(*dest))&1) == 0 ? 0x004 : 0; }while(0); } else { ushort *dest=destPtr, *src=srcPtr; int width=16; int c = (state.Flags & 0x001) ? 1 : 0; uint64_t r = (*src + c); typeof(*dest) v = *dest - r; state.Flags &= ~(0x800|0x001|0x010); state.Flags |= (*dest < r) ? 0x001 : 0; state.Flags |= ((*dest&15) < (r&15)) ? 0x010 : 0; typeof(*dest) _sub_tmp = ( ((*dest ^ r) & (*dest ^ v)) & (1ULL<<(width-1)) ); if( _sub_tmp ) state.Flags |= 0x800; *dest = v; do{ state.Flags &= ~(0x040|0x080|0x004); state.Flags |= ((*dest) == 0) ? 0x040 : 0; state.Flags |= ((*dest) >> ((width)-1)) ? 0x080 : 0; state.Flags |= ((((*dest)>>7)^((*dest)>>6)^((*dest)>>5)^((*dest)>>4)^((*dest)>>3)^((*dest)>>2)^((*dest)>>1)^(*dest))&1) == 0 ? 0x004 : 0; }while(0); } return 0; } public static unsafe uint Op_SBB_MR(State state, uint param) { uint ret; const uint width = 8; byte* dest = 0, src = 0; ret = Int_ParseModRM(state, &src, &dest, 1); if(ret) return ret; int c = (state.Flags & 0x001) ? 1 : 0; uint64_t r = (*src + c); typeof(*dest) v = *dest - r; state.Flags &= ~(0x800|0x001|0x010); state.Flags |= (*dest < r) ? 0x001 : 0; state.Flags |= ((*dest&15) < (r&15)) ? 0x010 : 0; typeof(*dest) _sub_tmp = ( ((*dest ^ r) & (*dest ^ v)) & (1ULL<<(width-1)) ); if( _sub_tmp ) state.Flags |= 0x800; *dest = v; do{ state.Flags &= ~(0x040|0x080|0x004); state.Flags |= ((*dest) == 0) ? 0x040 : 0; state.Flags |= ((*dest) >> ((width)-1)) ? 0x080 : 0; state.Flags |= ((((*dest)>>7)^((*dest)>>6)^((*dest)>>5)^((*dest)>>4)^((*dest)>>3)^((*dest)>>2)^((*dest)>>1)^(*dest))&1) == 0 ? 0x004 : 0; }while(0); return 0; } public static unsafe uint Op_SBB_MRX(State state, uint param) { uint ret; void *destPtr=0, *srcPtr=0; ret = Int_ParseModRMX(state, (void*)&srcPtr, (void*)&destPtr, 1); if(ret) return ret; if(state.Decoder.bOverrideOperand) { uint *dest=destPtr, *src=srcPtr; int width=32; int c = (state.Flags & 0x001) ? 1 : 0; uint64_t r = (*src + c); typeof(*dest) v = *dest - r; state.Flags &= ~(0x800|0x001|0x010); state.Flags |= (*dest < r) ? 0x001 : 0; state.Flags |= ((*dest&15) < (r&15)) ? 0x010 : 0; typeof(*dest) _sub_tmp = ( ((*dest ^ r) & (*dest ^ v)) & (1ULL<<(width-1)) ); if( _sub_tmp ) state.Flags |= 0x800; *dest = v; do{ state.Flags &= ~(0x040|0x080|0x004); state.Flags |= ((*dest) == 0) ? 0x040 : 0; state.Flags |= ((*dest) >> ((width)-1)) ? 0x080 : 0; state.Flags |= ((((*dest)>>7)^((*dest)>>6)^((*dest)>>5)^((*dest)>>4)^((*dest)>>3)^((*dest)>>2)^((*dest)>>1)^(*dest))&1) == 0 ? 0x004 : 0; }while(0); } else { ushort *dest=destPtr, *src=srcPtr; int width=16; int c = (state.Flags & 0x001) ? 1 : 0; uint64_t r = (*src + c); typeof(*dest) v = *dest - r; state.Flags &= ~(0x800|0x001|0x010); state.Flags |= (*dest < r) ? 0x001 : 0; state.Flags |= ((*dest&15) < (r&15)) ? 0x010 : 0; typeof(*dest) _sub_tmp = ( ((*dest ^ r) & (*dest ^ v)) & (1ULL<<(width-1)) ); if( _sub_tmp ) state.Flags |= 0x800; *dest = v; do{ state.Flags &= ~(0x040|0x080|0x004); state.Flags |= ((*dest) == 0) ? 0x040 : 0; state.Flags |= ((*dest) >> ((width)-1)) ? 0x080 : 0; state.Flags |= ((((*dest)>>7)^((*dest)>>6)^((*dest)>>5)^((*dest)>>4)^((*dest)>>3)^((*dest)>>2)^((*dest)>>1)^(*dest))&1) == 0 ? 0x004 : 0; }while(0); } return 0; } public static unsafe uint Op_SBB_AI(State state, uint param) { const uint width = 8; byte srcData; byte *dest=&state.AX.B.L, *src=&srcData; do{int r;byte v; r=Int_Read8(state,state.CS,state.IP+state.Decoder.IPOffset,&v); if(r) return r; state.Decoder.IPOffset++; (srcData) = v; }while(0); ; int c = (state.Flags & 0x001) ? 1 : 0; uint64_t r = (*src + c); typeof(*dest) v = *dest - r; state.Flags &= ~(0x800|0x001|0x010); state.Flags |= (*dest < r) ? 0x001 : 0; state.Flags |= ((*dest&15) < (r&15)) ? 0x010 : 0; typeof(*dest) _sub_tmp = ( ((*dest ^ r) & (*dest ^ v)) & (1ULL<<(width-1)) ); if( _sub_tmp ) state.Flags |= 0x800; *dest = v; do{ state.Flags &= ~(0x040|0x080|0x004); state.Flags |= ((*dest) == 0) ? 0x040 : 0; state.Flags |= ((*dest) >> ((width)-1)) ? 0x080 : 0; state.Flags |= ((((*dest)>>7)^((*dest)>>6)^((*dest)>>5)^((*dest)>>4)^((*dest)>>3)^((*dest)>>2)^((*dest)>>1)^(*dest))&1) == 0 ? 0x004 : 0; }while(0); return 0; } public static unsafe uint Op_SBB_AIX(State state, uint param) { uint srcData; if(state.Decoder.bOverrideOperand) { uint *dest=&state.AX.D, *src=(void*)&srcData; int width=32; do{int r;uint v; r=Int_Read32(state,state.CS,state.IP+state.Decoder.IPOffset,&v); if(r) return r; state.Decoder.IPOffset+=4; (*src) = v; }while(0); ; int c = (state.Flags & 0x001) ? 1 : 0; uint64_t r = (*src + c); typeof(*dest) v = *dest - r; state.Flags &= ~(0x800|0x001|0x010); state.Flags |= (*dest < r) ? 0x001 : 0; state.Flags |= ((*dest&15) < (r&15)) ? 0x010 : 0; typeof(*dest) _sub_tmp = ( ((*dest ^ r) & (*dest ^ v)) & (1ULL<<(width-1)) ); if( _sub_tmp ) state.Flags |= 0x800; *dest = v; do{ state.Flags &= ~(0x040|0x080|0x004); state.Flags |= ((*dest) == 0) ? 0x040 : 0; state.Flags |= ((*dest) >> ((width)-1)) ? 0x080 : 0; state.Flags |= ((((*dest)>>7)^((*dest)>>6)^((*dest)>>5)^((*dest)>>4)^((*dest)>>3)^((*dest)>>2)^((*dest)>>1)^(*dest))&1) == 0 ? 0x004 : 0; }while(0); } else { ushort *dest=&state.AX.W, *src=(void*)&srcData; int width=16; do{int r;ushort v; r=Int_Read16(state,state.CS,state.IP+state.Decoder.IPOffset,&v); if(r) return r; state.Decoder.IPOffset+=2; (*src) = v; }while(0); ; int c = (state.Flags & 0x001) ? 1 : 0; uint64_t r = (*src + c); typeof(*dest) v = *dest - r; state.Flags &= ~(0x800|0x001|0x010); state.Flags |= (*dest < r) ? 0x001 : 0; state.Flags |= ((*dest&15) < (r&15)) ? 0x010 : 0; typeof(*dest) _sub_tmp = ( ((*dest ^ r) & (*dest ^ v)) & (1ULL<<(width-1)) ); if( _sub_tmp ) state.Flags |= 0x800; *dest = v; do{ state.Flags &= ~(0x040|0x080|0x004); state.Flags |= ((*dest) == 0) ? 0x040 : 0; state.Flags |= ((*dest) >> ((width)-1)) ? 0x080 : 0; state.Flags |= ((((*dest)>>7)^((*dest)>>6)^((*dest)>>5)^((*dest)>>4)^((*dest)>>3)^((*dest)>>2)^((*dest)>>1)^(*dest))&1) == 0 ? 0x004 : 0; }while(0); } return 0; }
-        public static unsafe uint Op_AND_RM(State state, uint param) { uint ret; const uint width = 8; byte* dest = 0, src = 0; ret = Int_ParseModRM(state, &dest, &src, 0); if(ret) return ret; *dest &= *src; state.Flags &= ~(0x004|0x040|0x080|0x800|0x001); do{ state.Flags &= ~(0x040|0x080|0x004); state.Flags |= ((*dest) == 0) ? 0x040 : 0; state.Flags |= ((*dest) >> ((width)-1)) ? 0x080 : 0; state.Flags |= ((((*dest)>>7)^((*dest)>>6)^((*dest)>>5)^((*dest)>>4)^((*dest)>>3)^((*dest)>>2)^((*dest)>>1)^(*dest))&1) == 0 ? 0x004 : 0; }while(0); return 0; } public static unsafe uint Op_AND_RMX(State state, uint param) { uint ret; void *destPtr=0, *srcPtr=0; ret = Int_ParseModRMX(state, (void*)&destPtr, (void*)&srcPtr, 0); if(ret) return ret; if(state.Decoder.bOverrideOperand) { uint *dest=destPtr, *src=srcPtr; int width=32; *dest &= *src; state.Flags &= ~(0x004|0x040|0x080|0x800|0x001); do{ state.Flags &= ~(0x040|0x080|0x004); state.Flags |= ((*dest) == 0) ? 0x040 : 0; state.Flags |= ((*dest) >> ((width)-1)) ? 0x080 : 0; state.Flags |= ((((*dest)>>7)^((*dest)>>6)^((*dest)>>5)^((*dest)>>4)^((*dest)>>3)^((*dest)>>2)^((*dest)>>1)^(*dest))&1) == 0 ? 0x004 : 0; }while(0); } else { ushort *dest=destPtr, *src=srcPtr; int width=16; *dest &= *src; state.Flags &= ~(0x004|0x040|0x080|0x800|0x001); do{ state.Flags &= ~(0x040|0x080|0x004); state.Flags |= ((*dest) == 0) ? 0x040 : 0; state.Flags |= ((*dest) >> ((width)-1)) ? 0x080 : 0; state.Flags |= ((((*dest)>>7)^((*dest)>>6)^((*dest)>>5)^((*dest)>>4)^((*dest)>>3)^((*dest)>>2)^((*dest)>>1)^(*dest))&1) == 0 ? 0x004 : 0; }while(0); } return 0; } public static unsafe uint Op_AND_MR(State state, uint param) { uint ret; const uint width = 8; byte* dest = 0, src = 0; ret = Int_ParseModRM(state, &src, &dest, 1); if(ret) return ret; *dest &= *src; state.Flags &= ~(0x004|0x040|0x080|0x800|0x001); do{ state.Flags &= ~(0x040|0x080|0x004); state.Flags |= ((*dest) == 0) ? 0x040 : 0; state.Flags |= ((*dest) >> ((width)-1)) ? 0x080 : 0; state.Flags |= ((((*dest)>>7)^((*dest)>>6)^((*dest)>>5)^((*dest)>>4)^((*dest)>>3)^((*dest)>>2)^((*dest)>>1)^(*dest))&1) == 0 ? 0x004 : 0; }while(0); return 0; } public static unsafe uint Op_AND_MRX(State state, uint param) { uint ret; void *destPtr=0, *srcPtr=0; ret = Int_ParseModRMX(state, (void*)&srcPtr, (void*)&destPtr, 1); if(ret) return ret; if(state.Decoder.bOverrideOperand) { uint *dest=destPtr, *src=srcPtr; int width=32; *dest &= *src; state.Flags &= ~(0x004|0x040|0x080|0x800|0x001); do{ state.Flags &= ~(0x040|0x080|0x004); state.Flags |= ((*dest) == 0) ? 0x040 : 0; state.Flags |= ((*dest) >> ((width)-1)) ? 0x080 : 0; state.Flags |= ((((*dest)>>7)^((*dest)>>6)^((*dest)>>5)^((*dest)>>4)^((*dest)>>3)^((*dest)>>2)^((*dest)>>1)^(*dest))&1) == 0 ? 0x004 : 0; }while(0); } else { ushort *dest=destPtr, *src=srcPtr; int width=16; *dest &= *src; state.Flags &= ~(0x004|0x040|0x080|0x800|0x001); do{ state.Flags &= ~(0x040|0x080|0x004); state.Flags |= ((*dest) == 0) ? 0x040 : 0; state.Flags |= ((*dest) >> ((width)-1)) ? 0x080 : 0; state.Flags |= ((((*dest)>>7)^((*dest)>>6)^((*dest)>>5)^((*dest)>>4)^((*dest)>>3)^((*dest)>>2)^((*dest)>>1)^(*dest))&1) == 0 ? 0x004 : 0; }while(0); } return 0; } public static unsafe uint Op_AND_AI(State state, uint param) { const uint width = 8; byte srcData; byte *dest=&state.AX.B.L, *src=&srcData; do{int r;byte v; r=Int_Read8(state,state.CS,state.IP+state.Decoder.IPOffset,&v); if(r) return r; state.Decoder.IPOffset++; (srcData) = v; }while(0); ; *dest &= *src; state.Flags &= ~(0x004|0x040|0x080|0x800|0x001); do{ state.Flags &= ~(0x040|0x080|0x004); state.Flags |= ((*dest) == 0) ? 0x040 : 0; state.Flags |= ((*dest) >> ((width)-1)) ? 0x080 : 0; state.Flags |= ((((*dest)>>7)^((*dest)>>6)^((*dest)>>5)^((*dest)>>4)^((*dest)>>3)^((*dest)>>2)^((*dest)>>1)^(*dest))&1) == 0 ? 0x004 : 0; }while(0); return 0; } public static unsafe uint Op_AND_AIX(State state, uint param) { uint srcData; if(state.Decoder.bOverrideOperand) { uint *dest=&state.AX.D, *src=(void*)&srcData; int width=32; do{int r;uint v; r=Int_Read32(state,state.CS,state.IP+state.Decoder.IPOffset,&v); if(r) return r; state.Decoder.IPOffset+=4; (*src) = v; }while(0); ; *dest &= *src; state.Flags &= ~(0x004|0x040|0x080|0x800|0x001); do{ state.Flags &= ~(0x040|0x080|0x004); state.Flags |= ((*dest) == 0) ? 0x040 : 0; state.Flags |= ((*dest) >> ((width)-1)) ? 0x080 : 0; state.Flags |= ((((*dest)>>7)^((*dest)>>6)^((*dest)>>5)^((*dest)>>4)^((*dest)>>3)^((*dest)>>2)^((*dest)>>1)^(*dest))&1) == 0 ? 0x004 : 0; }while(0); } else { ushort *dest=&state.AX.W, *src=(void*)&srcData; int width=16; do{int r;ushort v; r=Int_Read16(state,state.CS,state.IP+state.Decoder.IPOffset,&v); if(r) return r; state.Decoder.IPOffset+=2; (*src) = v; }while(0); ; *dest &= *src; state.Flags &= ~(0x004|0x040|0x080|0x800|0x001); do{ state.Flags &= ~(0x040|0x080|0x004); state.Flags |= ((*dest) == 0) ? 0x040 : 0; state.Flags |= ((*dest) >> ((width)-1)) ? 0x080 : 0; state.Flags |= ((((*dest)>>7)^((*dest)>>6)^((*dest)>>5)^((*dest)>>4)^((*dest)>>3)^((*dest)>>2)^((*dest)>>1)^(*dest))&1) == 0 ? 0x004 : 0; }while(0); } return 0; }
-        public static unsafe uint Op_SUB_RM(State state, uint param) { uint ret; const uint width = 8; byte* dest = 0, src = 0; ret = Int_ParseModRM(state, &dest, &src, 0); if(ret) return ret; typeof(*dest) r = *src; typeof(*dest) v = *dest - r; state.Flags &= ~(0x004|0x040|0x080|0x800|0x001|0x010); state.Flags |= (*dest < r) ? 0x001 : 0; state.Flags |= ((*dest&15) < (r&15)) ? 0x010 : 0; typeof(*dest) _sub_tmp = ( ((*dest ^ r) & (*dest ^ v)) & (1ULL<<(width-1)) ); if( _sub_tmp ) state.Flags |= 0x800; *dest = v; do{ state.Flags &= ~(0x040|0x080|0x004); state.Flags |= ((*dest) == 0) ? 0x040 : 0; state.Flags |= ((*dest) >> ((width)-1)) ? 0x080 : 0; state.Flags |= ((((*dest)>>7)^((*dest)>>6)^((*dest)>>5)^((*dest)>>4)^((*dest)>>3)^((*dest)>>2)^((*dest)>>1)^(*dest))&1) == 0 ? 0x004 : 0; }while(0); return 0; } public static unsafe uint Op_SUB_RMX(State state, uint param) { uint ret; void *destPtr=0, *srcPtr=0; ret = Int_ParseModRMX(state, (void*)&destPtr, (void*)&srcPtr, 0); if(ret) return ret; if(state.Decoder.bOverrideOperand) { uint *dest=destPtr, *src=srcPtr; int width=32; typeof(*dest) r = *src; typeof(*dest) v = *dest - r; state.Flags &= ~(0x004|0x040|0x080|0x800|0x001|0x010); state.Flags |= (*dest < r) ? 0x001 : 0; state.Flags |= ((*dest&15) < (r&15)) ? 0x010 : 0; typeof(*dest) _sub_tmp = ( ((*dest ^ r) & (*dest ^ v)) & (1ULL<<(width-1)) ); if( _sub_tmp ) state.Flags |= 0x800; *dest = v; do{ state.Flags &= ~(0x040|0x080|0x004); state.Flags |= ((*dest) == 0) ? 0x040 : 0; state.Flags |= ((*dest) >> ((width)-1)) ? 0x080 : 0; state.Flags |= ((((*dest)>>7)^((*dest)>>6)^((*dest)>>5)^((*dest)>>4)^((*dest)>>3)^((*dest)>>2)^((*dest)>>1)^(*dest))&1) == 0 ? 0x004 : 0; }while(0); } else { ushort *dest=destPtr, *src=srcPtr; int width=16; typeof(*dest) r = *src; typeof(*dest) v = *dest - r; state.Flags &= ~(0x004|0x040|0x080|0x800|0x001|0x010); state.Flags |= (*dest < r) ? 0x001 : 0; state.Flags |= ((*dest&15) < (r&15)) ? 0x010 : 0; typeof(*dest) _sub_tmp = ( ((*dest ^ r) & (*dest ^ v)) & (1ULL<<(width-1)) ); if( _sub_tmp ) state.Flags |= 0x800; *dest = v; do{ state.Flags &= ~(0x040|0x080|0x004); state.Flags |= ((*dest) == 0) ? 0x040 : 0; state.Flags |= ((*dest) >> ((width)-1)) ? 0x080 : 0; state.Flags |= ((((*dest)>>7)^((*dest)>>6)^((*dest)>>5)^((*dest)>>4)^((*dest)>>3)^((*dest)>>2)^((*dest)>>1)^(*dest))&1) == 0 ? 0x004 : 0; }while(0); } return 0; } public static unsafe uint Op_SUB_MR(State state, uint param) { uint ret; const uint width = 8; byte* dest = 0, src = 0; ret = Int_ParseModRM(state, &src, &dest, 1); if(ret) return ret; typeof(*dest) r = *src; typeof(*dest) v = *dest - r; state.Flags &= ~(0x004|0x040|0x080|0x800|0x001|0x010); state.Flags |= (*dest < r) ? 0x001 : 0; state.Flags |= ((*dest&15) < (r&15)) ? 0x010 : 0; typeof(*dest) _sub_tmp = ( ((*dest ^ r) & (*dest ^ v)) & (1ULL<<(width-1)) ); if( _sub_tmp ) state.Flags |= 0x800; *dest = v; do{ state.Flags &= ~(0x040|0x080|0x004); state.Flags |= ((*dest) == 0) ? 0x040 : 0; state.Flags |= ((*dest) >> ((width)-1)) ? 0x080 : 0; state.Flags |= ((((*dest)>>7)^((*dest)>>6)^((*dest)>>5)^((*dest)>>4)^((*dest)>>3)^((*dest)>>2)^((*dest)>>1)^(*dest))&1) == 0 ? 0x004 : 0; }while(0); return 0; } public static unsafe uint Op_SUB_MRX(State state, uint param) { uint ret; void *destPtr=0, *srcPtr=0; ret = Int_ParseModRMX(state, (void*)&srcPtr, (void*)&destPtr, 1); if(ret) return ret; if(state.Decoder.bOverrideOperand) { uint *dest=destPtr, *src=srcPtr; int width=32; typeof(*dest) r = *src; typeof(*dest) v = *dest - r; state.Flags &= ~(0x004|0x040|0x080|0x800|0x001|0x010); state.Flags |= (*dest < r) ? 0x001 : 0; state.Flags |= ((*dest&15) < (r&15)) ? 0x010 : 0; typeof(*dest) _sub_tmp = ( ((*dest ^ r) & (*dest ^ v)) & (1ULL<<(width-1)) ); if( _sub_tmp ) state.Flags |= 0x800; *dest = v; do{ state.Flags &= ~(0x040|0x080|0x004); state.Flags |= ((*dest) == 0) ? 0x040 : 0; state.Flags |= ((*dest) >> ((width)-1)) ? 0x080 : 0; state.Flags |= ((((*dest)>>7)^((*dest)>>6)^((*dest)>>5)^((*dest)>>4)^((*dest)>>3)^((*dest)>>2)^((*dest)>>1)^(*dest))&1) == 0 ? 0x004 : 0; }while(0); } else { ushort *dest=destPtr, *src=srcPtr; int width=16; typeof(*dest) r = *src; typeof(*dest) v = *dest - r; state.Flags &= ~(0x004|0x040|0x080|0x800|0x001|0x010); state.Flags |= (*dest < r) ? 0x001 : 0; state.Flags |= ((*dest&15) < (r&15)) ? 0x010 : 0; typeof(*dest) _sub_tmp = ( ((*dest ^ r) & (*dest ^ v)) & (1ULL<<(width-1)) ); if( _sub_tmp ) state.Flags |= 0x800; *dest = v; do{ state.Flags &= ~(0x040|0x080|0x004); state.Flags |= ((*dest) == 0) ? 0x040 : 0; state.Flags |= ((*dest) >> ((width)-1)) ? 0x080 : 0; state.Flags |= ((((*dest)>>7)^((*dest)>>6)^((*dest)>>5)^((*dest)>>4)^((*dest)>>3)^((*dest)>>2)^((*dest)>>1)^(*dest))&1) == 0 ? 0x004 : 0; }while(0); } return 0; } public static unsafe uint Op_SUB_AI(State state, uint param) { const uint width = 8; byte srcData; byte *dest=&state.AX.B.L, *src=&srcData; do{int r;byte v; r=Int_Read8(state,state.CS,state.IP+state.Decoder.IPOffset,&v); if(r) return r; state.Decoder.IPOffset++; (srcData) = v; }while(0); ; typeof(*dest) r = *src; typeof(*dest) v = *dest - r; state.Flags &= ~(0x004|0x040|0x080|0x800|0x001|0x010); state.Flags |= (*dest < r) ? 0x001 : 0; state.Flags |= ((*dest&15) < (r&15)) ? 0x010 : 0; typeof(*dest) _sub_tmp = ( ((*dest ^ r) & (*dest ^ v)) & (1ULL<<(width-1)) ); if( _sub_tmp ) state.Flags |= 0x800; *dest = v; do{ state.Flags &= ~(0x040|0x080|0x004); state.Flags |= ((*dest) == 0) ? 0x040 : 0; state.Flags |= ((*dest) >> ((width)-1)) ? 0x080 : 0; state.Flags |= ((((*dest)>>7)^((*dest)>>6)^((*dest)>>5)^((*dest)>>4)^((*dest)>>3)^((*dest)>>2)^((*dest)>>1)^(*dest))&1) == 0 ? 0x004 : 0; }while(0); return 0; } public static unsafe uint Op_SUB_AIX(State state, uint param) { uint srcData; if(state.Decoder.bOverrideOperand) { uint *dest=&state.AX.D, *src=(void*)&srcData; int width=32; do{int r;uint v; r=Int_Read32(state,state.CS,state.IP+state.Decoder.IPOffset,&v); if(r) return r; state.Decoder.IPOffset+=4; (*src) = v; }while(0); ; typeof(*dest) r = *src; typeof(*dest) v = *dest - r; state.Flags &= ~(0x004|0x040|0x080|0x800|0x001|0x010); state.Flags |= (*dest < r) ? 0x001 : 0; state.Flags |= ((*dest&15) < (r&15)) ? 0x010 : 0; typeof(*dest) _sub_tmp = ( ((*dest ^ r) & (*dest ^ v)) & (1ULL<<(width-1)) ); if( _sub_tmp ) state.Flags |= 0x800; *dest = v; do{ state.Flags &= ~(0x040|0x080|0x004); state.Flags |= ((*dest) == 0) ? 0x040 : 0; state.Flags |= ((*dest) >> ((width)-1)) ? 0x080 : 0; state.Flags |= ((((*dest)>>7)^((*dest)>>6)^((*dest)>>5)^((*dest)>>4)^((*dest)>>3)^((*dest)>>2)^((*dest)>>1)^(*dest))&1) == 0 ? 0x004 : 0; }while(0); } else { ushort *dest=&state.AX.W, *src=(void*)&srcData; int width=16; do{int r;ushort v; r=Int_Read16(state,state.CS,state.IP+state.Decoder.IPOffset,&v); if(r) return r; state.Decoder.IPOffset+=2; (*src) = v; }while(0); ; typeof(*dest) r = *src; typeof(*dest) v = *dest - r; state.Flags &= ~(0x004|0x040|0x080|0x800|0x001|0x010); state.Flags |= (*dest < r) ? 0x001 : 0; state.Flags |= ((*dest&15) < (r&15)) ? 0x010 : 0; typeof(*dest) _sub_tmp = ( ((*dest ^ r) & (*dest ^ v)) & (1ULL<<(width-1)) ); if( _sub_tmp ) state.Flags |= 0x800; *dest = v; do{ state.Flags &= ~(0x040|0x080|0x004); state.Flags |= ((*dest) == 0) ? 0x040 : 0; state.Flags |= ((*dest) >> ((width)-1)) ? 0x080 : 0; state.Flags |= ((((*dest)>>7)^((*dest)>>6)^((*dest)>>5)^((*dest)>>4)^((*dest)>>3)^((*dest)>>2)^((*dest)>>1)^(*dest))&1) == 0 ? 0x004 : 0; }while(0); } return 0; }
-        public static unsafe uint Op_XOR_RM(State state, uint param) { uint ret; const uint width = 8; byte* dest = 0, src = 0; ret = Int_ParseModRM(state, &dest, &src, 0); if(ret) return ret; *dest ^= *src; state.Flags &= ~(0x004|0x040|0x080|0x800|0x001); do{ state.Flags &= ~(0x040|0x080|0x004); state.Flags |= ((*dest) == 0) ? 0x040 : 0; state.Flags |= ((*dest) >> ((width)-1)) ? 0x080 : 0; state.Flags |= ((((*dest)>>7)^((*dest)>>6)^((*dest)>>5)^((*dest)>>4)^((*dest)>>3)^((*dest)>>2)^((*dest)>>1)^(*dest))&1) == 0 ? 0x004 : 0; }while(0); return 0; } public static unsafe uint Op_XOR_RMX(State state, uint param) { uint ret; void *destPtr=0, *srcPtr=0; ret = Int_ParseModRMX(state, (void*)&destPtr, (void*)&srcPtr, 0); if(ret) return ret; if(state.Decoder.bOverrideOperand) { uint *dest=destPtr, *src=srcPtr; int width=32; *dest ^= *src; state.Flags &= ~(0x004|0x040|0x080|0x800|0x001); do{ state.Flags &= ~(0x040|0x080|0x004); state.Flags |= ((*dest) == 0) ? 0x040 : 0; state.Flags |= ((*dest) >> ((width)-1)) ? 0x080 : 0; state.Flags |= ((((*dest)>>7)^((*dest)>>6)^((*dest)>>5)^((*dest)>>4)^((*dest)>>3)^((*dest)>>2)^((*dest)>>1)^(*dest))&1) == 0 ? 0x004 : 0; }while(0); } else { ushort *dest=destPtr, *src=srcPtr; int width=16; *dest ^= *src; state.Flags &= ~(0x004|0x040|0x080|0x800|0x001); do{ state.Flags &= ~(0x040|0x080|0x004); state.Flags |= ((*dest) == 0) ? 0x040 : 0; state.Flags |= ((*dest) >> ((width)-1)) ? 0x080 : 0; state.Flags |= ((((*dest)>>7)^((*dest)>>6)^((*dest)>>5)^((*dest)>>4)^((*dest)>>3)^((*dest)>>2)^((*dest)>>1)^(*dest))&1) == 0 ? 0x004 : 0; }while(0); } return 0; } public static unsafe uint Op_XOR_MR(State state, uint param) { uint ret; const uint width = 8; byte* dest = 0, src = 0; ret = Int_ParseModRM(state, &src, &dest, 1); if(ret) return ret; *dest ^= *src; state.Flags &= ~(0x004|0x040|0x080|0x800|0x001); do{ state.Flags &= ~(0x040|0x080|0x004); state.Flags |= ((*dest) == 0) ? 0x040 : 0; state.Flags |= ((*dest) >> ((width)-1)) ? 0x080 : 0; state.Flags |= ((((*dest)>>7)^((*dest)>>6)^((*dest)>>5)^((*dest)>>4)^((*dest)>>3)^((*dest)>>2)^((*dest)>>1)^(*dest))&1) == 0 ? 0x004 : 0; }while(0); return 0; } public static unsafe uint Op_XOR_MRX(State state, uint param) { uint ret; void *destPtr=0, *srcPtr=0; ret = Int_ParseModRMX(state, (void*)&srcPtr, (void*)&destPtr, 1); if(ret) return ret; if(state.Decoder.bOverrideOperand) { uint *dest=destPtr, *src=srcPtr; int width=32; *dest ^= *src; state.Flags &= ~(0x004|0x040|0x080|0x800|0x001); do{ state.Flags &= ~(0x040|0x080|0x004); state.Flags |= ((*dest) == 0) ? 0x040 : 0; state.Flags |= ((*dest) >> ((width)-1)) ? 0x080 : 0; state.Flags |= ((((*dest)>>7)^((*dest)>>6)^((*dest)>>5)^((*dest)>>4)^((*dest)>>3)^((*dest)>>2)^((*dest)>>1)^(*dest))&1) == 0 ? 0x004 : 0; }while(0); } else { ushort *dest=destPtr, *src=srcPtr; int width=16; *dest ^= *src; state.Flags &= ~(0x004|0x040|0x080|0x800|0x001); do{ state.Flags &= ~(0x040|0x080|0x004); state.Flags |= ((*dest) == 0) ? 0x040 : 0; state.Flags |= ((*dest) >> ((width)-1)) ? 0x080 : 0; state.Flags |= ((((*dest)>>7)^((*dest)>>6)^((*dest)>>5)^((*dest)>>4)^((*dest)>>3)^((*dest)>>2)^((*dest)>>1)^(*dest))&1) == 0 ? 0x004 : 0; }while(0); } return 0; } public static unsafe uint Op_XOR_AI(State state, uint param) { const uint width = 8; byte srcData; byte *dest=&state.AX.B.L, *src=&srcData; do{int r;byte v; r=Int_Read8(state,state.CS,state.IP+state.Decoder.IPOffset,&v); if(r) return r; state.Decoder.IPOffset++; (srcData) = v; }while(0); ; *dest ^= *src; state.Flags &= ~(0x004|0x040|0x080|0x800|0x001); do{ state.Flags &= ~(0x040|0x080|0x004); state.Flags |= ((*dest) == 0) ? 0x040 : 0; state.Flags |= ((*dest) >> ((width)-1)) ? 0x080 : 0; state.Flags |= ((((*dest)>>7)^((*dest)>>6)^((*dest)>>5)^((*dest)>>4)^((*dest)>>3)^((*dest)>>2)^((*dest)>>1)^(*dest))&1) == 0 ? 0x004 : 0; }while(0); return 0; } public static unsafe uint Op_XOR_AIX(State state, uint param) { uint srcData; if(state.Decoder.bOverrideOperand) { uint *dest=&state.AX.D, *src=(void*)&srcData; int width=32; do{int r;uint v; r=Int_Read32(state,state.CS,state.IP+state.Decoder.IPOffset,&v); if(r) return r; state.Decoder.IPOffset+=4; (*src) = v; }while(0); ; *dest ^= *src; state.Flags &= ~(0x004|0x040|0x080|0x800|0x001); do{ state.Flags &= ~(0x040|0x080|0x004); state.Flags |= ((*dest) == 0) ? 0x040 : 0; state.Flags |= ((*dest) >> ((width)-1)) ? 0x080 : 0; state.Flags |= ((((*dest)>>7)^((*dest)>>6)^((*dest)>>5)^((*dest)>>4)^((*dest)>>3)^((*dest)>>2)^((*dest)>>1)^(*dest))&1) == 0 ? 0x004 : 0; }while(0); } else { ushort *dest=&state.AX.W, *src=(void*)&srcData; int width=16; do{int r;ushort v; r=Int_Read16(state,state.CS,state.IP+state.Decoder.IPOffset,&v); if(r) return r; state.Decoder.IPOffset+=2; (*src) = v; }while(0); ; *dest ^= *src; state.Flags &= ~(0x004|0x040|0x080|0x800|0x001); do{ state.Flags &= ~(0x040|0x080|0x004); state.Flags |= ((*dest) == 0) ? 0x040 : 0; state.Flags |= ((*dest) >> ((width)-1)) ? 0x080 : 0; state.Flags |= ((((*dest)>>7)^((*dest)>>6)^((*dest)>>5)^((*dest)>>4)^((*dest)>>3)^((*dest)>>2)^((*dest)>>1)^(*dest))&1) == 0 ? 0x004 : 0; }while(0); } return 0; }
-        public static unsafe uint Op_CMP_RM(State state, uint param) { uint ret; const uint width = 8; byte* dest = 0, src = 0; ret = Int_ParseModRM(state, &dest, &src, 0); if(ret) return ret; typeof(*dest) r = *src; typeof(*dest) v = *dest - r; typeof(*dest) hack = 0; state.Flags &= ~(0x004|0x040|0x080|0x800|0x001|0x010); state.Flags |= (*dest < r) ? 0x001 : 0; state.Flags |= ((*dest&15) < (r&15)) ? 0x010 : 0; typeof(*dest) _sub_tmp = ( ((*dest ^ r) & (*dest ^ v)) & (1ULL<<(width-1)) ); if( _sub_tmp ) state.Flags |= 0x800; dest = &hack; *dest = v; do{ state.Flags &= ~(0x040|0x080|0x004); state.Flags |= ((*dest) == 0) ? 0x040 : 0; state.Flags |= ((*dest) >> ((width)-1)) ? 0x080 : 0; state.Flags |= ((((*dest)>>7)^((*dest)>>6)^((*dest)>>5)^((*dest)>>4)^((*dest)>>3)^((*dest)>>2)^((*dest)>>1)^(*dest))&1) == 0 ? 0x004 : 0; }while(0); return 0; } public static unsafe uint Op_CMP_RMX(State state, uint param) { uint ret; void *destPtr=0, *srcPtr=0; ret = Int_ParseModRMX(state, (void*)&destPtr, (void*)&srcPtr, 0); if(ret) return ret; if(state.Decoder.bOverrideOperand) { uint *dest=destPtr, *src=srcPtr; int width=32; typeof(*dest) r = *src; typeof(*dest) v = *dest - r; typeof(*dest) hack = 0; state.Flags &= ~(0x004|0x040|0x080|0x800|0x001|0x010); state.Flags |= (*dest < r) ? 0x001 : 0; state.Flags |= ((*dest&15) < (r&15)) ? 0x010 : 0; typeof(*dest) _sub_tmp = ( ((*dest ^ r) & (*dest ^ v)) & (1ULL<<(width-1)) ); if( _sub_tmp ) state.Flags |= 0x800; dest = &hack; *dest = v; do{ state.Flags &= ~(0x040|0x080|0x004); state.Flags |= ((*dest) == 0) ? 0x040 : 0; state.Flags |= ((*dest) >> ((width)-1)) ? 0x080 : 0; state.Flags |= ((((*dest)>>7)^((*dest)>>6)^((*dest)>>5)^((*dest)>>4)^((*dest)>>3)^((*dest)>>2)^((*dest)>>1)^(*dest))&1) == 0 ? 0x004 : 0; }while(0); } else { ushort *dest=destPtr, *src=srcPtr; int width=16; typeof(*dest) r = *src; typeof(*dest) v = *dest - r; typeof(*dest) hack = 0; state.Flags &= ~(0x004|0x040|0x080|0x800|0x001|0x010); state.Flags |= (*dest < r) ? 0x001 : 0; state.Flags |= ((*dest&15) < (r&15)) ? 0x010 : 0; typeof(*dest) _sub_tmp = ( ((*dest ^ r) & (*dest ^ v)) & (1ULL<<(width-1)) ); if( _sub_tmp ) state.Flags |= 0x800; dest = &hack; *dest = v; do{ state.Flags &= ~(0x040|0x080|0x004); state.Flags |= ((*dest) == 0) ? 0x040 : 0; state.Flags |= ((*dest) >> ((width)-1)) ? 0x080 : 0; state.Flags |= ((((*dest)>>7)^((*dest)>>6)^((*dest)>>5)^((*dest)>>4)^((*dest)>>3)^((*dest)>>2)^((*dest)>>1)^(*dest))&1) == 0 ? 0x004 : 0; }while(0); } return 0; } public static unsafe uint Op_CMP_MR(State state, uint param) { uint ret; const uint width = 8; byte* dest = 0, src = 0; ret = Int_ParseModRM(state, &src, &dest, 1); if(ret) return ret; typeof(*dest) r = *src; typeof(*dest) v = *dest - r; typeof(*dest) hack = 0; state.Flags &= ~(0x004|0x040|0x080|0x800|0x001|0x010); state.Flags |= (*dest < r) ? 0x001 : 0; state.Flags |= ((*dest&15) < (r&15)) ? 0x010 : 0; typeof(*dest) _sub_tmp = ( ((*dest ^ r) & (*dest ^ v)) & (1ULL<<(width-1)) ); if( _sub_tmp ) state.Flags |= 0x800; dest = &hack; *dest = v; do{ state.Flags &= ~(0x040|0x080|0x004); state.Flags |= ((*dest) == 0) ? 0x040 : 0; state.Flags |= ((*dest) >> ((width)-1)) ? 0x080 : 0; state.Flags |= ((((*dest)>>7)^((*dest)>>6)^((*dest)>>5)^((*dest)>>4)^((*dest)>>3)^((*dest)>>2)^((*dest)>>1)^(*dest))&1) == 0 ? 0x004 : 0; }while(0); return 0; } public static unsafe uint Op_CMP_MRX(State state, uint param) { uint ret; void *destPtr=0, *srcPtr=0; ret = Int_ParseModRMX(state, (void*)&srcPtr, (void*)&destPtr, 1); if(ret) return ret; if(state.Decoder.bOverrideOperand) { uint *dest=destPtr, *src=srcPtr; int width=32; typeof(*dest) r = *src; typeof(*dest) v = *dest - r; typeof(*dest) hack = 0; state.Flags &= ~(0x004|0x040|0x080|0x800|0x001|0x010); state.Flags |= (*dest < r) ? 0x001 : 0; state.Flags |= ((*dest&15) < (r&15)) ? 0x010 : 0; typeof(*dest) _sub_tmp = ( ((*dest ^ r) & (*dest ^ v)) & (1ULL<<(width-1)) ); if( _sub_tmp ) state.Flags |= 0x800; dest = &hack; *dest = v; do{ state.Flags &= ~(0x040|0x080|0x004); state.Flags |= ((*dest) == 0) ? 0x040 : 0; state.Flags |= ((*dest) >> ((width)-1)) ? 0x080 : 0; state.Flags |= ((((*dest)>>7)^((*dest)>>6)^((*dest)>>5)^((*dest)>>4)^((*dest)>>3)^((*dest)>>2)^((*dest)>>1)^(*dest))&1) == 0 ? 0x004 : 0; }while(0); } else { ushort *dest=destPtr, *src=srcPtr; int width=16; typeof(*dest) r = *src; typeof(*dest) v = *dest - r; typeof(*dest) hack = 0; state.Flags &= ~(0x004|0x040|0x080|0x800|0x001|0x010); state.Flags |= (*dest < r) ? 0x001 : 0; state.Flags |= ((*dest&15) < (r&15)) ? 0x010 : 0; typeof(*dest) _sub_tmp = ( ((*dest ^ r) & (*dest ^ v)) & (1ULL<<(width-1)) ); if( _sub_tmp ) state.Flags |= 0x800; dest = &hack; *dest = v; do{ state.Flags &= ~(0x040|0x080|0x004); state.Flags |= ((*dest) == 0) ? 0x040 : 0; state.Flags |= ((*dest) >> ((width)-1)) ? 0x080 : 0; state.Flags |= ((((*dest)>>7)^((*dest)>>6)^((*dest)>>5)^((*dest)>>4)^((*dest)>>3)^((*dest)>>2)^((*dest)>>1)^(*dest))&1) == 0 ? 0x004 : 0; }while(0); } return 0; } public static unsafe uint Op_CMP_AI(State state, uint param) { const uint width = 8; byte srcData; byte *dest=&state.AX.B.L, *src=&srcData; do{int r;byte v; r=Int_Read8(state,state.CS,state.IP+state.Decoder.IPOffset,&v); if(r) return r; state.Decoder.IPOffset++; (srcData) = v; }while(0); ; typeof(*dest) r = *src; typeof(*dest) v = *dest - r; typeof(*dest) hack = 0; state.Flags &= ~(0x004|0x040|0x080|0x800|0x001|0x010); state.Flags |= (*dest < r) ? 0x001 : 0; state.Flags |= ((*dest&15) < (r&15)) ? 0x010 : 0; typeof(*dest) _sub_tmp = ( ((*dest ^ r) & (*dest ^ v)) & (1ULL<<(width-1)) ); if( _sub_tmp ) state.Flags |= 0x800; dest = &hack; *dest = v; do{ state.Flags &= ~(0x040|0x080|0x004); state.Flags |= ((*dest) == 0) ? 0x040 : 0; state.Flags |= ((*dest) >> ((width)-1)) ? 0x080 : 0; state.Flags |= ((((*dest)>>7)^((*dest)>>6)^((*dest)>>5)^((*dest)>>4)^((*dest)>>3)^((*dest)>>2)^((*dest)>>1)^(*dest))&1) == 0 ? 0x004 : 0; }while(0); return 0; } public static unsafe uint Op_CMP_AIX(State state, uint param) { uint srcData; if(state.Decoder.bOverrideOperand) { uint *dest=&state.AX.D, *src=(void*)&srcData; int width=32; do{int r;uint v; r=Int_Read32(state,state.CS,state.IP+state.Decoder.IPOffset,&v); if(r) return r; state.Decoder.IPOffset+=4; (*src) = v; }while(0); ; typeof(*dest) r = *src; typeof(*dest) v = *dest - r; typeof(*dest) hack = 0; state.Flags &= ~(0x004|0x040|0x080|0x800|0x001|0x010); state.Flags |= (*dest < r) ? 0x001 : 0; state.Flags |= ((*dest&15) < (r&15)) ? 0x010 : 0; typeof(*dest) _sub_tmp = ( ((*dest ^ r) & (*dest ^ v)) & (1ULL<<(width-1)) ); if( _sub_tmp ) state.Flags |= 0x800; dest = &hack; *dest = v; do{ state.Flags &= ~(0x040|0x080|0x004); state.Flags |= ((*dest) == 0) ? 0x040 : 0; state.Flags |= ((*dest) >> ((width)-1)) ? 0x080 : 0; state.Flags |= ((((*dest)>>7)^((*dest)>>6)^((*dest)>>5)^((*dest)>>4)^((*dest)>>3)^((*dest)>>2)^((*dest)>>1)^(*dest))&1) == 0 ? 0x004 : 0; }while(0); } else { ushort *dest=&state.AX.W, *src=(void*)&srcData; int width=16; do{int r;ushort v; r=Int_Read16(state,state.CS,state.IP+state.Decoder.IPOffset,&v); if(r) return r; state.Decoder.IPOffset+=2; (*src) = v; }while(0); ; typeof(*dest) r = *src; typeof(*dest) v = *dest - r; typeof(*dest) hack = 0; state.Flags &= ~(0x004|0x040|0x080|0x800|0x001|0x010); state.Flags |= (*dest < r) ? 0x001 : 0; state.Flags |= ((*dest&15) < (r&15)) ? 0x010 : 0; typeof(*dest) _sub_tmp = ( ((*dest ^ r) & (*dest ^ v)) & (1ULL<<(width-1)) ); if( _sub_tmp ) state.Flags |= 0x800; dest = &hack; *dest = v; do{ state.Flags &= ~(0x040|0x080|0x004); state.Flags |= ((*dest) == 0) ? 0x040 : 0; state.Flags |= ((*dest) >> ((width)-1)) ? 0x080 : 0; state.Flags |= ((((*dest)>>7)^((*dest)>>6)^((*dest)>>5)^((*dest)>>4)^((*dest)>>3)^((*dest)>>2)^((*dest)>>1)^(*dest))&1) == 0 ? 0x004 : 0; }while(0); } return 0; }
 
-        public static unsafe uint Op_TEST_MR(State state, uint param) { uint ret; const uint width = 8; byte* dest = 0, src = 0; ret = Int_ParseModRM(state, &src, &dest, 1); if(ret) return ret; typeof(*dest) v = *dest & *src; dest = &v; state.Flags &= ~(0x800|0x001); do{ state.Flags &= ~(0x040|0x080|0x004); state.Flags |= ((*dest) == 0) ? 0x040 : 0; state.Flags |= ((*dest) >> ((width)-1)) ? 0x080 : 0; state.Flags |= ((((*dest)>>7)^((*dest)>>6)^((*dest)>>5)^((*dest)>>4)^((*dest)>>3)^((*dest)>>2)^((*dest)>>1)^(*dest))&1) == 0 ? 0x004 : 0; }while(0); return 0; }
-        public static unsafe uint Op_TEST_MRX(State state, uint param) { uint ret; void *destPtr=0, *srcPtr=0; ret = Int_ParseModRMX(state, (void*)&srcPtr, (void*)&destPtr, 1); if(ret) return ret; if(state.Decoder.bOverrideOperand) { uint *dest=destPtr, *src=srcPtr; int width=32; typeof(*dest) v = *dest & *src; dest = &v; state.Flags &= ~(0x800|0x001); do{ state.Flags &= ~(0x040|0x080|0x004); state.Flags |= ((*dest) == 0) ? 0x040 : 0; state.Flags |= ((*dest) >> ((width)-1)) ? 0x080 : 0; state.Flags |= ((((*dest)>>7)^((*dest)>>6)^((*dest)>>5)^((*dest)>>4)^((*dest)>>3)^((*dest)>>2)^((*dest)>>1)^(*dest))&1) == 0 ? 0x004 : 0; }while(0); } else { ushort *dest=destPtr, *src=srcPtr; int width=16; typeof(*dest) v = *dest & *src; dest = &v; state.Flags &= ~(0x800|0x001); do{ state.Flags &= ~(0x040|0x080|0x004); state.Flags |= ((*dest) == 0) ? 0x040 : 0; state.Flags |= ((*dest) >> ((width)-1)) ? 0x080 : 0; state.Flags |= ((((*dest)>>7)^((*dest)>>6)^((*dest)>>5)^((*dest)>>4)^((*dest)>>3)^((*dest)>>2)^((*dest)>>1)^(*dest))&1) == 0 ? 0x004 : 0; }while(0); } return 0; }
-        public static unsafe uint Op_TEST_AI(State state, uint param) { const uint width = 8; byte srcData; byte *dest=&state.AX.B.L, *src=&srcData; do{int r;byte v; r=Int_Read8(state,state.CS,state.IP+state.Decoder.IPOffset,&v); if(r) return r; state.Decoder.IPOffset++; (srcData) = v; }while(0); ; typeof(*dest) v = *dest & *src; dest = &v; state.Flags &= ~(0x800|0x001); do{ state.Flags &= ~(0x040|0x080|0x004); state.Flags |= ((*dest) == 0) ? 0x040 : 0; state.Flags |= ((*dest) >> ((width)-1)) ? 0x080 : 0; state.Flags |= ((((*dest)>>7)^((*dest)>>6)^((*dest)>>5)^((*dest)>>4)^((*dest)>>3)^((*dest)>>2)^((*dest)>>1)^(*dest))&1) == 0 ? 0x004 : 0; }while(0); return 0; }
-        public static unsafe uint Op_TEST_AIX(State state, uint param) { uint srcData; if(state.Decoder.bOverrideOperand) { uint *dest=&state.AX.D, *src=(void*)&srcData; int width=32; do{int r;uint v; r=Int_Read32(state,state.CS,state.IP+state.Decoder.IPOffset,&v); if(r) return r; state.Decoder.IPOffset+=4; (*src) = v; }while(0); ; typeof(*dest) v = *dest & *src; dest = &v; state.Flags &= ~(0x800|0x001); do{ state.Flags &= ~(0x040|0x080|0x004); state.Flags |= ((*dest) == 0) ? 0x040 : 0; state.Flags |= ((*dest) >> ((width)-1)) ? 0x080 : 0; state.Flags |= ((((*dest)>>7)^((*dest)>>6)^((*dest)>>5)^((*dest)>>4)^((*dest)>>3)^((*dest)>>2)^((*dest)>>1)^(*dest))&1) == 0 ? 0x004 : 0; }while(0); } else { ushort *dest=&state.AX.W, *src=(void*)&srcData; int width=16; do{int r;ushort v; r=Int_Read16(state,state.CS,state.IP+state.Decoder.IPOffset,&v); if(r) return r; state.Decoder.IPOffset+=2; (*src) = v; }while(0); ; typeof(*dest) v = *dest & *src; dest = &v; state.Flags &= ~(0x800|0x001); do{ state.Flags &= ~(0x040|0x080|0x004); state.Flags |= ((*dest) == 0) ? 0x040 : 0; state.Flags |= ((*dest) >> ((width)-1)) ? 0x080 : 0; state.Flags |= ((((*dest)>>7)^((*dest)>>6)^((*dest)>>5)^((*dest)>>4)^((*dest)>>3)^((*dest)>>2)^((*dest)>>1)^(*dest))&1) == 0 ? 0x004 : 0; }while(0); } return 0; }
-    */
+        public static unsafe uint Op_ADD_MR(ref State state, uint param)
+        {
+            uint ret;
+            const byte width = 8;
+            byte v;
+            byte* dest = (byte*)0, src = (byte*)0;
+            ret = Int_ParseModRM(ref state, &src, &dest, 1);
+            if (ret != 0)
+                return ret;
+            v = (byte)(*dest + *src);
+            ushort flag = (Flags.FLAG_PF | Flags.FLAG_ZF | Flags.FLAG_SF | Flags.FLAG_OF | Flags.FLAG_CF | Flags.FLAG_AF);
+            state.Flags &= (ushort)~flag;
+            state.Flags |= (ushort)((*dest & (1 << (width - 1))) == (*src & (1 << (width - 1))) && (v & (1 << (width - 1))) != (*dest & (1 << (width - 1))) ? Flags.FLAG_OF : 0);
+            if (*dest != 0)
+                state.Flags |= (ushort)((v <= *src) ? Flags.FLAG_CF : 0);
+            else
+                state.Flags |= (ushort)((v < *src) ? Flags.FLAG_CF : 0);
+            if ((*dest & 15) != 0)
+                state.Flags |= (ushort)((v & 15) <= (*src & 15) ? Flags.FLAG_AF : 0);
+            else
+                state.Flags |= (ushort)((v & 15) < (*src & 15) ? Flags.FLAG_AF : 0);
+            SET_COMM_FLAGS(ref state, v, width);
+            if (dest != (byte*)0)
+                *dest = v;
+            return 0;
+        }
+
+        public static unsafe uint Op_ADD_MRX(ref State state, uint param)
+        {
+            uint ret;
+            void* destPtr = (void*)0, srcPtr = (void*)0;
+            ret = Int_ParseModRMX(ref state, (ushort**)&srcPtr, (ushort**)&destPtr, 1);
+            if (ret != 0)
+                return ret;
+            if (state.Decoder.bOverrideOperand)
+            {
+                uint v;
+                uint* dest = (uint*)destPtr, src = (uint*)srcPtr;
+                byte width = 32;
+                v = (uint)(*dest + *src);
+                ushort flag = (Flags.FLAG_PF | Flags.FLAG_ZF | Flags.FLAG_SF | Flags.FLAG_OF | Flags.FLAG_CF | Flags.FLAG_AF);
+                state.Flags &= (ushort)~flag;
+                state.Flags |= (ushort)((*dest & (1 << (width - 1))) == (*src & (1 << (width - 1))) && (v & (1 << (width - 1))) != (*dest & (1 << (width - 1))) ? Flags.FLAG_OF : 0);
+                if (*dest != 0)
+                    state.Flags |= (ushort)((v <= *src) ? Flags.FLAG_CF : 0);
+                else
+                    state.Flags |= (ushort)((v < *src) ? Flags.FLAG_CF : 0);
+                if ((*dest & 15) != 0)
+                    state.Flags |= (ushort)((v & 15) <= (*src & 15) ? Flags.FLAG_AF : 0);
+                else
+                    state.Flags |= (ushort)((v & 15) < (*src & 15) ? Flags.FLAG_AF : 0);
+                SET_COMM_FLAGS(ref state, v, width);
+                if (dest != (uint*)0)
+                    *dest = v;
+            }
+            else
+            {
+                ushort v;
+                ushort* dest = (ushort*)destPtr, src = (ushort*)srcPtr;
+                byte width = 16;
+                v = (ushort)(*dest + *src);
+                ushort flag = (Flags.FLAG_PF | Flags.FLAG_ZF | Flags.FLAG_SF | Flags.FLAG_OF | Flags.FLAG_CF | Flags.FLAG_AF);
+                state.Flags &= (ushort)~flag;
+                state.Flags |= (ushort)((*dest & (1 << (width - 1))) == (*src & (1 << (width - 1))) && (v & (1 << (width - 1))) != (*dest & (1 << (width - 1))) ? Flags.FLAG_OF : 0);
+                if (*dest != 0)
+                    state.Flags |= (ushort)((v <= *src) ? Flags.FLAG_CF : 0);
+                else
+                    state.Flags |= (ushort)((v < *src) ? Flags.FLAG_CF : 0);
+                if ((*dest & 15) != 0)
+                    state.Flags |= (ushort)((v & 15) <= (*src & 15) ? Flags.FLAG_AF : 0);
+                else
+                    state.Flags |= (ushort)((v & 15) < (*src & 15) ? Flags.FLAG_AF : 0);
+                SET_COMM_FLAGS(ref state, v, width);
+                if (dest != (ushort*)0)
+                    *dest = v;
+            }
+            return 0;
+        }
+
+        public static unsafe uint Op_ADD_AI(ref State state, uint param)
+        {
+            const byte width = 8;
+            byte srcData, v;
+            byte* dest = (byte*)state.AX.Address, src = &srcData;
+            uint ret = READ_INSTR8(ref state, ref srcData);
+            if (ret != 0)
+                return ret;
+            v = (byte)(*dest + *src);
+            ushort flag = (Flags.FLAG_PF | Flags.FLAG_ZF | Flags.FLAG_SF | Flags.FLAG_OF | Flags.FLAG_CF | Flags.FLAG_AF);
+            state.Flags &= (ushort)~flag;
+            state.Flags |= (ushort)((*dest & (1 << (width - 1))) == (*src & (1 << (width - 1))) && (v & (1 << (width - 1))) != (*dest & (1 << (width - 1))) ? Flags.FLAG_OF : 0);
+            if (*dest != 0)
+                state.Flags |= (ushort)((v <= *src) ? Flags.FLAG_CF : 0);
+            else
+                state.Flags |= (ushort)((v < *src) ? Flags.FLAG_CF : 0);
+            if ((*dest & 15) != 0)
+                state.Flags |= (ushort)((v & 15) <= (*src & 15) ? Flags.FLAG_AF : 0);
+            else
+                state.Flags |= (ushort)((v & 15) < (*src & 15) ? Flags.FLAG_AF : 0);
+            SET_COMM_FLAGS(ref state, v, width);
+            if (dest != (byte*)0)
+                *dest = v;
+            return 0;
+        }
+
+        public static unsafe uint Op_ADD_AIX(ref State state, uint param)
+        {
+            if (state.Decoder.bOverrideOperand)
+            {
+                uint srcData, v;
+                uint* dest = (uint*)state.AX.Address, src = &srcData;
+                byte width = 32;
+                uint ret = READ_INSTR32(ref state, ref srcData);
+                if (ret != 0)
+                    return ret;
+                v = (uint)(*dest + *src);
+                ushort flag = (Flags.FLAG_PF | Flags.FLAG_ZF | Flags.FLAG_SF | Flags.FLAG_OF | Flags.FLAG_CF | Flags.FLAG_AF);
+                state.Flags &= (ushort)~flag;
+                state.Flags |= (ushort)((*dest & (1 << (width - 1))) == (*src & (1 << (width - 1))) && (v & (1 << (width - 1))) != (*dest & (1 << (width - 1))) ? Flags.FLAG_OF : 0);
+                if (*dest != 0)
+                    state.Flags |= (ushort)((v <= *src) ? Flags.FLAG_CF : 0);
+                else
+                    state.Flags |= (ushort)((v < *src) ? Flags.FLAG_CF : 0);
+                if ((*dest & 15) != 0)
+                    state.Flags |= (ushort)((v & 15) <= (*src & 15) ? Flags.FLAG_AF : 0);
+                else
+                    state.Flags |= (ushort)((v & 15) < (*src & 15) ? Flags.FLAG_AF : 0);
+                SET_COMM_FLAGS(ref state, v, width);
+                if (dest != (uint*)0)
+                    *dest = v;
+            }
+            else
+            {
+                ushort srcData, v;
+                ushort* dest = (ushort*)state.AX.Address, src = &srcData;
+                byte width = 16;
+                uint ret = READ_INSTR16(ref state, ref srcData);
+                if (ret != 0)
+                    return ret;
+                v = (ushort)(*dest + *src);
+                ushort flag = (Flags.FLAG_PF | Flags.FLAG_ZF | Flags.FLAG_SF | Flags.FLAG_OF | Flags.FLAG_CF | Flags.FLAG_AF);
+                state.Flags &= (ushort)~flag;
+                state.Flags |= (ushort)((*dest & (1 << (width - 1))) == (*src & (1 << (width - 1))) && (v & (1 << (width - 1))) != (*dest & (1 << (width - 1))) ? Flags.FLAG_OF : 0);
+                if (*dest != 0)
+                    state.Flags |= (ushort)((v <= *src) ? Flags.FLAG_CF : 0);
+                else
+                    state.Flags |= (ushort)((v < *src) ? Flags.FLAG_CF : 0);
+                if ((*dest & 15) != 0)
+                    state.Flags |= (ushort)((v & 15) <= (*src & 15) ? Flags.FLAG_AF : 0);
+                else
+                    state.Flags |= (ushort)((v & 15) < (*src & 15) ? Flags.FLAG_AF : 0);
+                SET_COMM_FLAGS(ref state, v, width);
+                if (dest != (ushort*)0)
+                    *dest = v;
+            }
+            return 0;
+        }
+
+        public static unsafe uint Op_OR_RM(ref State state, uint param)
+        {
+            uint ret;
+            const byte width = 8;
+            byte v;
+            byte* dest = (byte*)0, src = (byte*)0;
+            ret = Int_ParseModRM(ref state, &dest, &src, 0);
+            if (ret != 0)
+                return ret;
+            v = (byte)(*dest | *src);
+            ushort flag = (Flags.FLAG_PF | Flags.FLAG_ZF | Flags.FLAG_SF | Flags.FLAG_OF | Flags.FLAG_CF);
+            state.Flags &= (ushort)~flag;
+            SET_COMM_FLAGS(ref state, v, width);
+            if (dest != (byte*)0)
+                *dest = v;
+            return 0;
+        }
+
+        public static unsafe uint Op_OR_RMX(ref State state, uint param)
+        {
+            uint ret;
+            void* destPtr = (void*)0, srcPtr = (void*)0;
+            ret = Int_ParseModRMX(ref state, (ushort**)&destPtr, (ushort**)&srcPtr, 0);
+            if (ret != 0)
+                return ret;
+            if (state.Decoder.bOverrideOperand)
+            {
+                uint v;
+                uint* dest = (uint*)destPtr, src = (uint*)srcPtr;
+                byte width = 32;
+                v = (uint)(*dest | *src);
+                ushort flag = (Flags.FLAG_PF | Flags.FLAG_ZF | Flags.FLAG_SF | Flags.FLAG_OF | Flags.FLAG_CF);
+                state.Flags &= (ushort)~flag;
+                SET_COMM_FLAGS(ref state, v, width);
+                if (dest != (uint*)0)
+                    *dest = v;
+            }
+            else
+            {
+                ushort v;
+                ushort* dest = (ushort*)destPtr, src = (ushort*)srcPtr;
+                byte width = 16;
+                v = (ushort)(*dest | *src);
+                ushort flag = (Flags.FLAG_PF | Flags.FLAG_ZF | Flags.FLAG_SF | Flags.FLAG_OF | Flags.FLAG_CF);
+                state.Flags &= (ushort)~flag;
+                SET_COMM_FLAGS(ref state, v, width);
+                if (dest != (ushort*)0)
+                    *dest = v;
+            }
+            return 0;
+        }
+
+        public static unsafe uint Op_OR_MR(ref State state, uint param)
+        {
+            uint ret;
+            const byte width = 8;
+            byte v;
+            byte* dest = (byte*)0, src = (byte*)0;
+            ret = Int_ParseModRM(ref state, &src, &dest, 1);
+            if (ret != 0)
+                return ret;
+            v = (byte)(*dest | *src);
+            ushort flag = (Flags.FLAG_PF | Flags.FLAG_ZF | Flags.FLAG_SF | Flags.FLAG_OF | Flags.FLAG_CF);
+            state.Flags &= (ushort)~flag;
+            SET_COMM_FLAGS(ref state, v, width);
+            if (dest != (byte*)0)
+                *dest = v;
+            return 0;
+        }
+
+        public static unsafe uint Op_OR_MRX(ref State state, uint param)
+        {
+            uint ret;
+            void* destPtr = (void*)0, srcPtr = (void*)0;
+            ret = Int_ParseModRMX(ref state, (ushort**)&srcPtr, (ushort**)&destPtr, 1);
+            if (ret != 0)
+                return ret;
+            if (state.Decoder.bOverrideOperand)
+            {
+                uint v;
+                uint* dest = (uint*)destPtr, src = (uint*)srcPtr;
+                byte width = 32;
+                v = (uint)(*dest | *src);
+                ushort flag = (Flags.FLAG_PF | Flags.FLAG_ZF | Flags.FLAG_SF | Flags.FLAG_OF | Flags.FLAG_CF);
+                state.Flags &= (ushort)~flag;
+                SET_COMM_FLAGS(ref state, v, width);
+                if (dest != (uint*)0)
+                    *dest = v;
+            }
+            else
+            {
+                ushort v;
+                ushort* dest = (ushort*)destPtr, src = (ushort*)srcPtr;
+                byte width = 16;
+                v = (ushort)(*dest | *src);
+                ushort flag = (Flags.FLAG_PF | Flags.FLAG_ZF | Flags.FLAG_SF | Flags.FLAG_OF | Flags.FLAG_CF);
+                state.Flags &= (ushort)~flag;
+                SET_COMM_FLAGS(ref state, v, width);
+                if (dest != (ushort*)0)
+                    *dest = v;
+            }
+            return 0;
+        }
+
+        public static unsafe uint Op_OR_AI(ref State state, uint param)
+        {
+            const byte width = 8;
+            byte srcData, v;
+            byte* dest = (byte*)state.AX.Address, src = &srcData;
+            uint ret = READ_INSTR8(ref state, ref srcData);
+            if (ret != 0)
+                return ret;
+            v = (byte)(*dest | *src);
+            ushort flag = (Flags.FLAG_PF | Flags.FLAG_ZF | Flags.FLAG_SF | Flags.FLAG_OF | Flags.FLAG_CF);
+            state.Flags &= (ushort)~flag;
+            SET_COMM_FLAGS(ref state, v, width);
+            if (dest != (byte*)0)
+                *dest = v;
+            return 0;
+        }
+
+        public static unsafe uint Op_OR_AIX(ref State state, uint param)
+        {
+            if (state.Decoder.bOverrideOperand)
+            {
+                uint srcData, v;
+                uint* dest = (uint*)state.AX.Address, src = &srcData;
+                byte width = 32;
+                uint ret = READ_INSTR32(ref state, ref srcData);
+                if (ret != 0)
+                    return ret;
+                v = (uint)(*dest | *src);
+                ushort flag = (Flags.FLAG_PF | Flags.FLAG_ZF | Flags.FLAG_SF | Flags.FLAG_OF | Flags.FLAG_CF);
+                state.Flags &= (ushort)~flag;
+                SET_COMM_FLAGS(ref state, v, width);
+                if (dest != (uint*)0)
+                    *dest = v;
+            }
+            else
+            {
+                ushort srcData, v;
+                ushort* dest = (ushort*)state.AX.Address, src = &srcData;
+                byte width = 16;
+                uint ret = READ_INSTR16(ref state, ref srcData);
+                if (ret != 0)
+                    return ret;
+                v = (ushort)(*dest | *src);
+                ushort flag = (Flags.FLAG_PF | Flags.FLAG_ZF | Flags.FLAG_SF | Flags.FLAG_OF | Flags.FLAG_CF);
+                state.Flags &= (ushort)~flag;
+                SET_COMM_FLAGS(ref state, v, width);
+                if (dest != (ushort*)0)
+                    *dest = v;
+            }
+            return 0;
+        }
+
+        public static unsafe uint Op_ADC_RM(ref State state, uint param)
+        {
+            uint ret;
+            const byte width = 8;
+            byte v;
+            byte* dest = (byte*)0, src = (byte*)0;
+            ret = Int_ParseModRM(ref state, &dest, &src, 0);
+            if (ret != 0)
+                return ret;
+            v = (byte)(*dest + *src + ((state.Flags & Flags.FLAG_CF) == Flags.FLAG_CF ? 1 : 0));
+            ushort flag = (Flags.FLAG_PF | Flags.FLAG_ZF | Flags.FLAG_SF | Flags.FLAG_OF | Flags.FLAG_CF | Flags.FLAG_AF);
+            state.Flags &= (ushort)~flag;
+            state.Flags |= (ushort)((*dest & (1 << (width - 1))) == (*src & (1 << (width - 1))) && (v & (1 << (width - 1))) != (*dest & (1 << (width - 1))) ? Flags.FLAG_OF : 0);
+            if (*dest != 0)
+                state.Flags |= (ushort)((v <= *src) ? Flags.FLAG_CF : 0);
+            else
+                state.Flags |= (ushort)((v < *src) ? Flags.FLAG_CF : 0);
+            if ((*dest & 15) != 0)
+                state.Flags |= (ushort)((v & 15) <= (*src & 15) ? Flags.FLAG_AF : 0);
+            else
+                state.Flags |= (ushort)((v & 15) < (*src & 15) ? Flags.FLAG_AF : 0);
+            if (*dest != 0 && v == *src)
+                state.Flags |= Flags.FLAG_CF;
+            SET_COMM_FLAGS(ref state, v, width);
+            if (dest != (byte*)0)
+                *dest = v;
+            return 0;
+        }
+
+        public static unsafe uint Op_ADC_RMX(ref State state, uint param)
+        {
+            uint ret;
+            void* destPtr = (void*)0, srcPtr = (void*)0;
+            ret = Int_ParseModRMX(ref state, (ushort**)&destPtr, (ushort**)&srcPtr, 0);
+            if (ret != 0)
+                return ret;
+            if (state.Decoder.bOverrideOperand)
+            {
+                uint v;
+                uint* dest = (uint*)destPtr, src = (uint*)srcPtr;
+                byte width = 32;
+                v = (uint)(*dest + *src + ((state.Flags & Flags.FLAG_CF) == Flags.FLAG_CF ? 1 : 0));
+                ushort flag = (Flags.FLAG_PF | Flags.FLAG_ZF | Flags.FLAG_SF | Flags.FLAG_OF | Flags.FLAG_CF | Flags.FLAG_AF);
+                state.Flags &= (ushort)~flag;
+                state.Flags |= (ushort)((*dest & (1 << (width - 1))) == (*src & (1 << (width - 1))) && (v & (1 << (width - 1))) != (*dest & (1 << (width - 1))) ? Flags.FLAG_OF : 0);
+                if (*dest != 0)
+                    state.Flags |= (ushort)((v <= *src) ? Flags.FLAG_CF : 0);
+                else
+                    state.Flags |= (ushort)((v < *src) ? Flags.FLAG_CF : 0);
+                if ((*dest & 15) != 0)
+                    state.Flags |= (ushort)((v & 15) <= (*src & 15) ? Flags.FLAG_AF : 0);
+                else
+                    state.Flags |= (ushort)((v & 15) < (*src & 15) ? Flags.FLAG_AF : 0);
+                if (*dest != 0 && v == *src)
+                    state.Flags |= Flags.FLAG_CF;
+                SET_COMM_FLAGS(ref state, v, width);
+                if (dest != (uint*)0)
+                    *dest = v;
+            }
+            else
+            {
+                ushort v;
+                ushort* dest = (ushort*)destPtr, src = (ushort*)srcPtr;
+                byte width = 16;
+                v = (ushort)(*dest + *src + ((state.Flags & Flags.FLAG_CF) == Flags.FLAG_CF ? 1 : 0));
+                ushort flag = (Flags.FLAG_PF | Flags.FLAG_ZF | Flags.FLAG_SF | Flags.FLAG_OF | Flags.FLAG_CF | Flags.FLAG_AF);
+                state.Flags &= (ushort)~flag;
+                state.Flags |= (ushort)((*dest & (1 << (width - 1))) == (*src & (1 << (width - 1))) && (v & (1 << (width - 1))) != (*dest & (1 << (width - 1))) ? Flags.FLAG_OF : 0);
+                if (*dest != 0)
+                    state.Flags |= (ushort)((v <= *src) ? Flags.FLAG_CF : 0);
+                else
+                    state.Flags |= (ushort)((v < *src) ? Flags.FLAG_CF : 0);
+                if ((*dest & 15) != 0)
+                    state.Flags |= (ushort)((v & 15) <= (*src & 15) ? Flags.FLAG_AF : 0);
+                else
+                    state.Flags |= (ushort)((v & 15) < (*src & 15) ? Flags.FLAG_AF : 0);
+                if (*dest != 0 && v == *src)
+                    state.Flags |= Flags.FLAG_CF;
+                SET_COMM_FLAGS(ref state, v, width);
+                if (dest != (ushort*)0)
+                    *dest = v;
+            }
+            return 0;
+        }
+
+        public static unsafe uint Op_ADC_MR(ref State state, uint param)
+        {
+            uint ret;
+            const byte width = 8;
+            byte v;
+            byte* dest = (byte*)0, src = (byte*)0;
+            ret = Int_ParseModRM(ref state, &src, &dest, 1);
+            if (ret != 0)
+                return ret;
+            v = (byte)(*dest + *src + ((state.Flags & Flags.FLAG_CF) == Flags.FLAG_CF ? 1 : 0));
+            ushort flag = (Flags.FLAG_PF | Flags.FLAG_ZF | Flags.FLAG_SF | Flags.FLAG_OF | Flags.FLAG_CF | Flags.FLAG_AF);
+            state.Flags &= (ushort)~flag;
+            state.Flags |= (ushort)((*dest & (1 << (width - 1))) == (*src & (1 << (width - 1))) && (v & (1 << (width - 1))) != (*dest & (1 << (width - 1))) ? Flags.FLAG_OF : 0);
+            if (*dest != 0)
+                state.Flags |= (ushort)((v <= *src) ? Flags.FLAG_CF : 0);
+            else
+                state.Flags |= (ushort)((v < *src) ? Flags.FLAG_CF : 0);
+            if ((*dest & 15) != 0)
+                state.Flags |= (ushort)((v & 15) <= (*src & 15) ? Flags.FLAG_AF : 0);
+            else
+                state.Flags |= (ushort)((v & 15) < (*src & 15) ? Flags.FLAG_AF : 0);
+            if (*dest != 0 && v == *src)
+                state.Flags |= Flags.FLAG_CF;
+            SET_COMM_FLAGS(ref state, v, width);
+            if (dest != (byte*)0)
+                *dest = v;
+            return 0;
+        }
+
+        public static unsafe uint Op_ADC_MRX(ref State state, uint param)
+        {
+            uint ret;
+            void* destPtr = (void*)0, srcPtr = (void*)0;
+            ret = Int_ParseModRMX(ref state, (ushort**)&srcPtr, (ushort**)&destPtr, 1);
+            if (ret != 0)
+                return ret;
+            if (state.Decoder.bOverrideOperand)
+            {
+                uint v;
+                uint* dest = (uint*)destPtr, src = (uint*)srcPtr;
+                byte width = 32;
+                v = (uint)(*dest + *src + ((state.Flags & Flags.FLAG_CF) == Flags.FLAG_CF ? 1 : 0));
+                ushort flag = (Flags.FLAG_PF | Flags.FLAG_ZF | Flags.FLAG_SF | Flags.FLAG_OF | Flags.FLAG_CF | Flags.FLAG_AF);
+                state.Flags &= (ushort)~flag;
+                state.Flags |= (ushort)((*dest & (1 << (width - 1))) == (*src & (1 << (width - 1))) && (v & (1 << (width - 1))) != (*dest & (1 << (width - 1))) ? Flags.FLAG_OF : 0);
+                if (*dest != 0)
+                    state.Flags |= (ushort)((v <= *src) ? Flags.FLAG_CF : 0);
+                else
+                    state.Flags |= (ushort)((v < *src) ? Flags.FLAG_CF : 0);
+                if ((*dest & 15) != 0)
+                    state.Flags |= (ushort)((v & 15) <= (*src & 15) ? Flags.FLAG_AF : 0);
+                else
+                    state.Flags |= (ushort)((v & 15) < (*src & 15) ? Flags.FLAG_AF : 0);
+                if (*dest != 0 && v == *src)
+                    state.Flags |= Flags.FLAG_CF;
+                SET_COMM_FLAGS(ref state, v, width);
+                if (dest != (uint*)0)
+                    *dest = v;
+            }
+            else
+            {
+                ushort v;
+                ushort* dest = (ushort*)destPtr, src = (ushort*)srcPtr;
+                byte width = 16;
+                v = (ushort)(*dest + *src + ((state.Flags & Flags.FLAG_CF) == Flags.FLAG_CF ? 1 : 0));
+                ushort flag = (Flags.FLAG_PF | Flags.FLAG_ZF | Flags.FLAG_SF | Flags.FLAG_OF | Flags.FLAG_CF | Flags.FLAG_AF);
+                state.Flags &= (ushort)~flag;
+                state.Flags |= (ushort)((*dest & (1 << (width - 1))) == (*src & (1 << (width - 1))) && (v & (1 << (width - 1))) != (*dest & (1 << (width - 1))) ? Flags.FLAG_OF : 0);
+                if (*dest != 0)
+                    state.Flags |= (ushort)((v <= *src) ? Flags.FLAG_CF : 0);
+                else
+                    state.Flags |= (ushort)((v < *src) ? Flags.FLAG_CF : 0);
+                if ((*dest & 15) != 0)
+                    state.Flags |= (ushort)((v & 15) <= (*src & 15) ? Flags.FLAG_AF : 0);
+                else
+                    state.Flags |= (ushort)((v & 15) < (*src & 15) ? Flags.FLAG_AF : 0);
+                if (*dest != 0 && v == *src)
+                    state.Flags |= Flags.FLAG_CF;
+                SET_COMM_FLAGS(ref state, v, width);
+                if (dest != (ushort*)0)
+                    *dest = v;
+            }
+            return 0;
+        }
+
+        public static unsafe uint Op_ADC_AI(ref State state, uint param)
+        {
+            const byte width = 8;
+            byte srcData, v;
+            byte* dest = (byte*)state.AX.Address, src = &srcData;
+            uint ret = READ_INSTR8(ref state, ref srcData);
+            if (ret != 0)
+                return ret;
+            v = (byte)(*dest + *src + ((state.Flags & Flags.FLAG_CF) == Flags.FLAG_CF ? 1 : 0));
+            ushort flag = (Flags.FLAG_PF | Flags.FLAG_ZF | Flags.FLAG_SF | Flags.FLAG_OF | Flags.FLAG_CF | Flags.FLAG_AF);
+            state.Flags &= (ushort)~flag;
+            state.Flags |= (ushort)((*dest & (1 << (width - 1))) == (*src & (1 << (width - 1))) && (v & (1 << (width - 1))) != (*dest & (1 << (width - 1))) ? Flags.FLAG_OF : 0);
+            if (*dest != 0)
+                state.Flags |= (ushort)((v <= *src) ? Flags.FLAG_CF : 0);
+            else
+                state.Flags |= (ushort)((v < *src) ? Flags.FLAG_CF : 0);
+            if ((*dest & 15) != 0)
+                state.Flags |= (ushort)((v & 15) <= (*src & 15) ? Flags.FLAG_AF : 0);
+            else
+                state.Flags |= (ushort)((v & 15) < (*src & 15) ? Flags.FLAG_AF : 0);
+            if (*dest != 0 && v == *src)
+                state.Flags |= Flags.FLAG_CF;
+            SET_COMM_FLAGS(ref state, v, width);
+            if (dest != (byte*)0)
+                *dest = v;
+            return 0;
+        }
+
+        public static unsafe uint Op_ADC_AIX(ref State state, uint param)
+        {
+            if (state.Decoder.bOverrideOperand)
+            {
+                uint srcData, v;
+                uint* dest = (uint*)state.AX.Address, src = &srcData;
+                byte width = 32;
+                uint ret = READ_INSTR32(ref state, ref srcData);
+                if (ret != 0)
+                    return ret;
+                v = (uint)(*dest + *src + ((state.Flags & Flags.FLAG_CF) == Flags.FLAG_CF ? 1 : 0));
+                ushort flag = (Flags.FLAG_PF | Flags.FLAG_ZF | Flags.FLAG_SF | Flags.FLAG_OF | Flags.FLAG_CF | Flags.FLAG_AF);
+                state.Flags &= (ushort)~flag;
+                state.Flags |= (ushort)((*dest & (1 << (width - 1))) == (*src & (1 << (width - 1))) && (v & (1 << (width - 1))) != (*dest & (1 << (width - 1))) ? Flags.FLAG_OF : 0);
+                if (*dest != 0)
+                    state.Flags |= (ushort)((v <= *src) ? Flags.FLAG_CF : 0);
+                else
+                    state.Flags |= (ushort)((v < *src) ? Flags.FLAG_CF : 0);
+                if ((*dest & 15) != 0)
+                    state.Flags |= (ushort)((v & 15) <= (*src & 15) ? Flags.FLAG_AF : 0);
+                else
+                    state.Flags |= (ushort)((v & 15) < (*src & 15) ? Flags.FLAG_AF : 0);
+                if (*dest != 0 && v == *src)
+                    state.Flags |= Flags.FLAG_CF;
+                SET_COMM_FLAGS(ref state, v, width);
+                if (dest != (uint*)0)
+                    *dest = v;
+            }
+            else
+            {
+                ushort srcData, v;
+                ushort* dest = (ushort*)state.AX.Address, src = &srcData;
+                byte width = 16;
+                uint ret = READ_INSTR16(ref state, ref srcData);
+                if (ret != 0)
+                    return ret;
+                v = (ushort)(*dest + *src + ((state.Flags & Flags.FLAG_CF) == Flags.FLAG_CF ? 1 : 0));
+                ushort flag = (Flags.FLAG_PF | Flags.FLAG_ZF | Flags.FLAG_SF | Flags.FLAG_OF | Flags.FLAG_CF | Flags.FLAG_AF);
+                state.Flags &= (ushort)~flag;
+                state.Flags |= (ushort)((*dest & (1 << (width - 1))) == (*src & (1 << (width - 1))) && (v & (1 << (width - 1))) != (*dest & (1 << (width - 1))) ? Flags.FLAG_OF : 0);
+                if (*dest != 0)
+                    state.Flags |= (ushort)((v <= *src) ? Flags.FLAG_CF : 0);
+                else
+                    state.Flags |= (ushort)((v < *src) ? Flags.FLAG_CF : 0);
+                if ((*dest & 15) != 0)
+                    state.Flags |= (ushort)((v & 15) <= (*src & 15) ? Flags.FLAG_AF : 0);
+                else
+                    state.Flags |= (ushort)((v & 15) < (*src & 15) ? Flags.FLAG_AF : 0);
+                if (*dest != 0 && v == *src)
+                    state.Flags |= Flags.FLAG_CF;
+                SET_COMM_FLAGS(ref state, v, width);
+                if (dest != (ushort*)0)
+                    *dest = v;
+            }
+            return 0;
+        }
+
+        public static unsafe uint Op_SBB_RM(ref State state, uint param)
+        {
+            uint ret;
+            const byte width = 8;
+            byte v;
+            byte* dest = (byte*)0, src = (byte*)0;
+            ret = Int_ParseModRM(ref state, &dest, &src, 0);
+            if (ret != 0)
+                return ret;
+            uint c = (uint)((state.Flags & Flags.FLAG_CF) == Flags.FLAG_CF ? 1 : 0);
+            ulong r = (*src + c);
+            v = (byte)(*dest - r);
+            ushort flag = (Flags.FLAG_OF | Flags.FLAG_CF | Flags.FLAG_AF);
+            state.Flags &= (ushort)~flag;
+            state.Flags |= (ushort)((*dest < r) ? Flags.FLAG_CF : 0);
+            state.Flags |= (ushort)(((ulong)(*dest & 15) < (r & 15) - c) ? Flags.FLAG_AF : 0);
+            uint _sub_tmp = (uint)(((*dest ^ r) & (ulong)(*dest ^ v)) & (1 << (width - 1)));
+            if (_sub_tmp != 0)
+                state.Flags |= Flags.FLAG_OF;
+            SET_COMM_FLAGS(ref state, v, width);
+            if (dest != (byte*)0)
+                *dest = v;
+            return 0;
+        }
+
+        public static unsafe uint Op_SBB_RMX(ref State state, uint param)
+        {
+            uint ret;
+            void* destPtr = (void*)0, srcPtr = (void*)0;
+            ret = Int_ParseModRMX(ref state, (ushort**)&destPtr, (ushort**)&srcPtr, 0);
+            if (ret != 0)
+                return ret;
+            if (state.Decoder.bOverrideOperand)
+            {
+                uint v;
+                uint* dest = (uint*)destPtr, src = (uint*)srcPtr;
+                byte width = 32;
+                uint c = (uint)((state.Flags & Flags.FLAG_CF) == Flags.FLAG_CF ? 1 : 0);
+                ulong r = (*src + c);
+                v = (uint)(*dest - r);
+                ushort flag = (Flags.FLAG_OF | Flags.FLAG_CF | Flags.FLAG_AF);
+                state.Flags &= (ushort)~flag;
+                state.Flags |= (ushort)((*dest < r) ? Flags.FLAG_CF : 0);
+                state.Flags |= (ushort)(((*dest & 15) < (r & 15) - c) ? Flags.FLAG_AF : 0);
+                uint _sub_tmp = (uint)(((*dest ^ r) & (ulong)(*dest ^ v)) & (ulong)(1 << (width - 1)));
+                if (_sub_tmp != 0)
+                    state.Flags |= Flags.FLAG_OF;
+                SET_COMM_FLAGS(ref state, v, width);
+                if (dest != (uint*)0)
+                    *dest = v;
+            }
+            else
+            {
+                ushort v;
+                ushort* dest = (ushort*)destPtr, src = (ushort*)srcPtr;
+                byte width = 16;
+                uint c = (uint)((state.Flags & Flags.FLAG_CF) == Flags.FLAG_CF ? 1 : 0);
+                ulong r = (*src + c);
+                v = (ushort)(*dest - r);
+                ushort flag = (Flags.FLAG_OF | Flags.FLAG_CF | Flags.FLAG_AF);
+                state.Flags &= (ushort)~flag;
+                state.Flags |= (ushort)((*dest < r) ? Flags.FLAG_CF : 0);
+                state.Flags |= (ushort)(((ulong)(*dest & 15) < (r & 15) - c) ? Flags.FLAG_AF : 0);
+                uint _sub_tmp = (uint)(((*dest ^ r) & (ulong)(*dest ^ v)) & (ulong)(1 << (width - 1)));
+                if (_sub_tmp != 0)
+                    state.Flags |= Flags.FLAG_OF;
+                SET_COMM_FLAGS(ref state, v, width);
+                if (dest != (ushort*)0)
+                    *dest = v;
+            }
+            return 0;
+        }
+
+        public static unsafe uint Op_SBB_MR(ref State state, uint param)
+        {
+            uint ret;
+            const byte width = 8;
+            byte v;
+            byte* dest = (byte*)0, src = (byte*)0;
+            ret = Int_ParseModRM(ref state, &src, &dest, 1);
+            if (ret != 0)
+                return ret;
+            uint c = (uint)((state.Flags & Flags.FLAG_CF) == Flags.FLAG_CF ? 1 : 0);
+            ulong r = (*src + c);
+            v = (byte)(*dest - r);
+            ushort flag = (Flags.FLAG_OF | Flags.FLAG_CF | Flags.FLAG_AF);
+            state.Flags &= (ushort)~flag;
+            state.Flags |= (ushort)((*dest < r) ? Flags.FLAG_CF : 0);
+            state.Flags |= (ushort)(((ulong)(*dest & 15) < (r & 15) - c) ? Flags.FLAG_AF : 0);
+            uint _sub_tmp = (uint)(((*dest ^ r) & (ulong)(*dest ^ v)) & (1 << (width - 1)));
+            if (_sub_tmp != 0)
+                state.Flags |= Flags.FLAG_OF;
+            SET_COMM_FLAGS(ref state, v, width);
+            if (dest != (byte*)0)
+                *dest = v;
+            return 0;
+        }
+
+        public static unsafe uint Op_SBB_MRX(ref State state, uint param)
+        {
+            uint ret;
+            void* destPtr = (void*)0, srcPtr = (void*)0;
+            ret = Int_ParseModRMX(ref state, (ushort**)&srcPtr, (ushort**)&destPtr, 1);
+            if (ret != 0)
+                return ret;
+            if (state.Decoder.bOverrideOperand)
+            {
+                uint v;
+                uint* dest = (uint*)destPtr, src = (uint*)srcPtr;
+                byte width = 32;
+                uint c = (uint)((state.Flags & Flags.FLAG_CF) == Flags.FLAG_CF ? 1 : 0);
+                ulong r = (*src + c);
+                v = (uint)(*dest - r);
+                ushort flag = (Flags.FLAG_OF | Flags.FLAG_CF | Flags.FLAG_AF);
+                state.Flags &= (ushort)~flag;
+                state.Flags |= (ushort)((*dest < r) ? Flags.FLAG_CF : 0);
+                state.Flags |= (ushort)(((*dest & 15) < (r & 15) - c) ? Flags.FLAG_AF : 0);
+                uint _sub_tmp = (uint)(((*dest ^ r) & (*dest ^ v)) & (ulong)(1 << (width - 1)));
+                if (_sub_tmp != 0)
+                    state.Flags |= Flags.FLAG_OF;
+                SET_COMM_FLAGS(ref state, v, width);
+                if (dest != (uint*)0)
+                    *dest = v;
+            }
+            else
+            {
+                ushort v;
+                ushort* dest = (ushort*)destPtr, src = (ushort*)srcPtr;
+                byte width = 16;
+                uint c = (uint)((state.Flags & Flags.FLAG_CF) == Flags.FLAG_CF ? 1 : 0);
+                ulong r = (*src + c);
+                v = (ushort)(*dest - r);
+                ushort flag = (Flags.FLAG_OF | Flags.FLAG_CF | Flags.FLAG_AF);
+                state.Flags &= (ushort)~flag;
+                state.Flags |= (ushort)((*dest < r) ? Flags.FLAG_CF : 0);
+                state.Flags |= (ushort)(((ulong)(*dest & 15) < (r & 15) - c) ? Flags.FLAG_AF : 0);
+                uint _sub_tmp = (uint)(((*dest ^ r) & (ulong)(*dest ^ v)) & (ulong)(1 << (width - 1)));
+                if (_sub_tmp != 0)
+                    state.Flags |= Flags.FLAG_OF;
+                SET_COMM_FLAGS(ref state, v, width);
+                if (dest != (ushort*)0)
+                    *dest = v;
+            }
+            return 0;
+        }
+
+        public static unsafe uint Op_SBB_AI(ref State state, uint param)
+        {
+            const byte width = 8;
+            byte srcData, v;
+            byte* dest = (byte*)state.AX.Address, src = &srcData;
+            uint ret = READ_INSTR8(ref state, ref srcData);
+            if (ret != 0)
+                return ret;
+            uint c = (uint)((state.Flags & Flags.FLAG_CF) == Flags.FLAG_CF ? 1 : 0);
+            ulong r = (*src + c);
+            v = (byte)(*dest - r);
+            ushort flag = (Flags.FLAG_OF | Flags.FLAG_CF | Flags.FLAG_AF);
+            state.Flags &= (ushort)~flag;
+            state.Flags |= (ushort)((*dest < r) ? Flags.FLAG_CF : 0);
+            state.Flags |= (ushort)(((ulong)(*dest & 15) < (r & 15) - c) ? Flags.FLAG_AF : 0);
+            uint _sub_tmp = (uint)(((*dest ^ r) & (ulong)(*dest ^ v)) & (1 << (width - 1)));
+            if (_sub_tmp != 0)
+                state.Flags |= Flags.FLAG_OF;
+            SET_COMM_FLAGS(ref state, v, width);
+            if (dest != (byte*)0)
+                *dest = v;
+            return 0;
+        }
+
+        public static unsafe uint Op_SBB_AIX(ref State state, uint param)
+        {
+            if (state.Decoder.bOverrideOperand)
+            {
+                uint srcData, v;
+                uint* dest = (uint*)state.AX.Address, src = &srcData;
+                byte width = 32;
+                uint ret = READ_INSTR32(ref state, ref srcData);
+                if (ret != 0)
+                    return ret;
+                uint c = (uint)((state.Flags & Flags.FLAG_CF) == Flags.FLAG_CF ? 1 : 0);
+                ulong r = (*src + c);
+                v = (uint)(*dest - r);
+                ushort flag = (Flags.FLAG_OF | Flags.FLAG_CF | Flags.FLAG_AF);
+                state.Flags &= (ushort)~flag;
+                state.Flags |= (ushort)((*dest < r) ? Flags.FLAG_CF : 0);
+                state.Flags |= (ushort)(((*dest & 15) < (r & 15) - c) ? Flags.FLAG_AF : 0);
+                uint _sub_tmp = (uint)(((*dest ^ r) & (*dest ^ v)) & (ulong)(1 << (width - 1)));
+                if (_sub_tmp != 0)
+                    state.Flags |= Flags.FLAG_OF;
+                SET_COMM_FLAGS(ref state, v, width);
+                if (dest != (uint*)0)
+                    *dest = v;
+            }
+            else
+            {
+                ushort srcData, v;
+                ushort* dest = (ushort*)state.AX.Address, src = &srcData;
+                byte width = 16;
+                uint ret = READ_INSTR16(ref state, ref srcData);
+                if (ret != 0)
+                    return ret;
+                uint c = (uint)((state.Flags & Flags.FLAG_CF) == Flags.FLAG_CF ? 1 : 0);
+                ulong r = (*src + c);
+                v = (ushort)(*dest - r);
+                ushort flag = (Flags.FLAG_OF | Flags.FLAG_CF | Flags.FLAG_AF);
+                state.Flags &= (ushort)~flag;
+                state.Flags |= (ushort)((*dest < r) ? Flags.FLAG_CF : 0);
+                state.Flags |= (ushort)(((ulong)(*dest & 15) < (r & 15) - c) ? Flags.FLAG_AF : 0);
+                uint _sub_tmp = (uint)(((*dest ^ r) & (ulong)(*dest ^ v)) & (ulong)(1 << (width - 1)));
+                if (_sub_tmp != 0)
+                    state.Flags |= Flags.FLAG_OF;
+                SET_COMM_FLAGS(ref state, v, width);
+                if (dest != (ushort*)0)
+                    *dest = v;
+            }
+            return 0;
+        }
+
+        public static unsafe uint Op_AND_RM(ref State state, uint param)
+        {
+            uint ret;
+            const byte width = 8;
+            byte v;
+            byte* dest = (byte*)0, src = (byte*)0;
+            ret = Int_ParseModRM(ref state, &dest, &src, 0);
+            if (ret != 0)
+                return ret;
+            v = (byte)(*dest & *src);
+            ushort flag = (Flags.FLAG_PF | Flags.FLAG_ZF | Flags.FLAG_SF | Flags.FLAG_OF | Flags.FLAG_CF);
+            state.Flags &= (ushort)~flag;
+            SET_COMM_FLAGS(ref state, v, width);
+            if (dest != (byte*)0)
+                *dest = v;
+            return 0;
+        }
+
+        public static unsafe uint Op_AND_RMX(ref State state, uint param)
+        {
+            uint ret;
+            void* destPtr = (void*)0, srcPtr = (void*)0;
+            ret = Int_ParseModRMX(ref state, (ushort**)&destPtr, (ushort**)&srcPtr, 0);
+            if (ret != 0)
+                return ret;
+            if (state.Decoder.bOverrideOperand)
+            {
+                uint v;
+                uint* dest = (uint*)destPtr, src = (uint*)srcPtr;
+                byte width = 32;
+                v = (uint)(*dest & *src);
+                ushort flag = (Flags.FLAG_PF | Flags.FLAG_ZF | Flags.FLAG_SF | Flags.FLAG_OF | Flags.FLAG_CF);
+                state.Flags &= (ushort)~flag;
+                SET_COMM_FLAGS(ref state, v, width);
+                if (dest != (uint*)0)
+                    *dest = v;
+            }
+            else
+            {
+                ushort v;
+                ushort* dest = (ushort*)destPtr, src = (ushort*)srcPtr;
+                byte width = 16;
+                v = (ushort)(*dest & *src);
+                ushort flag = (Flags.FLAG_PF | Flags.FLAG_ZF | Flags.FLAG_SF | Flags.FLAG_OF | Flags.FLAG_CF);
+                state.Flags &= (ushort)~flag;
+                SET_COMM_FLAGS(ref state, v, width);
+                if (dest != (ushort*)0)
+                    *dest = v;
+            }
+            return 0;
+        }
+
+        public static unsafe uint Op_AND_MR(ref State state, uint param)
+        {
+            uint ret;
+            const byte width = 8;
+            byte v;
+            byte* dest = (byte*)0, src = (byte*)0;
+            ret = Int_ParseModRM(ref state, &src, &dest, 1);
+            if (ret != 0)
+                return ret;
+            v = (byte)(*dest & *src);
+            ushort flag = (Flags.FLAG_PF | Flags.FLAG_ZF | Flags.FLAG_SF | Flags.FLAG_OF | Flags.FLAG_CF);
+            state.Flags &= (ushort)~flag;
+            SET_COMM_FLAGS(ref state, v, width);
+            if (dest != (byte*)0)
+                *dest = v;
+            return 0;
+        }
+
+        public static unsafe uint Op_AND_MRX(ref State state, uint param)
+        {
+            uint ret;
+            void* destPtr = (void*)0, srcPtr = (void*)0;
+            ret = Int_ParseModRMX(ref state, (ushort**)&srcPtr, (ushort**)&destPtr, 1);
+            if (ret != 0)
+                return ret;
+            if (state.Decoder.bOverrideOperand)
+            {
+                uint v;
+                uint* dest = (uint*)destPtr, src = (uint*)srcPtr;
+                byte width = 32;
+                v = (uint)(*dest & *src);
+                ushort flag = (Flags.FLAG_PF | Flags.FLAG_ZF | Flags.FLAG_SF | Flags.FLAG_OF | Flags.FLAG_CF);
+                state.Flags &= (ushort)~flag;
+                SET_COMM_FLAGS(ref state, v, width);
+                if (dest != (uint*)0)
+                    *dest = v;
+            }
+            else
+            {
+                ushort v;
+                ushort* dest = (ushort*)destPtr, src = (ushort*)srcPtr;
+                byte width = 16;
+                v = (ushort)(*dest & *src);
+                ushort flag = (Flags.FLAG_PF | Flags.FLAG_ZF | Flags.FLAG_SF | Flags.FLAG_OF | Flags.FLAG_CF);
+                state.Flags &= (ushort)~flag;
+                SET_COMM_FLAGS(ref state, v, width);
+                if (dest != (ushort*)0)
+                    *dest = v;
+            }
+            return 0;
+        }
+
+        public static unsafe uint Op_AND_AI(ref State state, uint param)
+        {
+            const byte width = 8;
+            byte srcData, v;
+            byte* dest = (byte*)state.AX.Address, src = &srcData;
+            uint ret = READ_INSTR8(ref state, ref srcData);
+            if (ret != 0)
+                return ret;
+            v = (byte)(*dest & *src);
+            ushort flag = (Flags.FLAG_PF | Flags.FLAG_ZF | Flags.FLAG_SF | Flags.FLAG_OF | Flags.FLAG_CF);
+            state.Flags &= (ushort)~flag;
+            SET_COMM_FLAGS(ref state, v, width);
+            if (dest != (byte*)0)
+                *dest = v;
+            return 0;
+        }
+
+        public static unsafe uint Op_AND_AIX(ref State state, uint param)
+        {
+            if (state.Decoder.bOverrideOperand)
+            {
+                uint srcData, v;
+                uint* dest = (uint*)state.AX.Address, src = &srcData;
+                byte width = 32;
+                uint ret = READ_INSTR32(ref state, ref srcData);
+                if (ret != 0)
+                    return ret;
+                v = (uint)(*dest & *src);
+                ushort flag = (Flags.FLAG_PF | Flags.FLAG_ZF | Flags.FLAG_SF | Flags.FLAG_OF | Flags.FLAG_CF);
+                state.Flags &= (ushort)~flag;
+                SET_COMM_FLAGS(ref state, v, width);
+                if (dest != (uint*)0)
+                    *dest = v;
+            }
+            else
+            {
+                ushort srcData, v;
+                ushort* dest = (ushort*)state.AX.Address, src = &srcData;
+                byte width = 16;
+                uint ret = READ_INSTR16(ref state, ref srcData);
+                if (ret != 0)
+                    return ret;
+                v = (ushort)(*dest & *src);
+                ushort flag = (Flags.FLAG_PF | Flags.FLAG_ZF | Flags.FLAG_SF | Flags.FLAG_OF | Flags.FLAG_CF);
+                state.Flags &= (ushort)~flag;
+                SET_COMM_FLAGS(ref state, v, width);
+                if (dest != (ushort*)0)
+                    *dest = v;
+            }
+            return 0;
+        }
+
+        public static unsafe uint Op_SUB_RM(ref State state, uint param)
+        {
+            uint ret;
+            const byte width = 8;
+            byte v;
+            byte* dest = (byte*)0, src = (byte*)0;
+            ret = Int_ParseModRM(ref state, &dest, &src, 0);
+            if (ret != 0)
+                return ret;
+            const uint c = 0;
+            uint r = *src;
+            v = (byte)(*dest - r);
+            ushort flag = (Flags.FLAG_PF | Flags.FLAG_ZF | Flags.FLAG_SF | Flags.FLAG_OF | Flags.FLAG_CF | Flags.FLAG_AF);
+            state.Flags &= (ushort)~flag;
+            state.Flags |= (ushort)((*dest < r) ? Flags.FLAG_CF : 0);
+            state.Flags |= (ushort)(((*dest & 15) < (r & 15) - c) ? Flags.FLAG_AF : 0);
+            uint _sub_tmp = (uint)(((*dest ^ r) & (*dest ^ v)) & (1 << (width - 1)));
+            if (_sub_tmp != 0)
+                state.Flags |= Flags.FLAG_OF;
+            SET_COMM_FLAGS(ref state, v, width);
+            if (dest != (byte*)0)
+                *dest = v;
+            return 0;
+        }
+
+        public static unsafe uint Op_SUB_RMX(ref State state, uint param)
+        {
+            uint ret;
+            void* destPtr = (void*)0, srcPtr = (void*)0;
+            ret = Int_ParseModRMX(ref state, (ushort**)&destPtr, (ushort**)&srcPtr, 0);
+            if (ret != 0)
+                return ret;
+            if (state.Decoder.bOverrideOperand)
+            {
+                uint v;
+                uint* dest = (uint*)destPtr, src = (uint*)srcPtr;
+                byte width = 32;
+                const uint c = 0;
+                uint r = *src;
+                v = (uint)(*dest - r);
+                ushort flag = (Flags.FLAG_PF | Flags.FLAG_ZF | Flags.FLAG_SF | Flags.FLAG_OF | Flags.FLAG_CF | Flags.FLAG_AF);
+                state.Flags &= (ushort)~flag;
+                state.Flags |= (ushort)((*dest < r) ? Flags.FLAG_CF : 0);
+                state.Flags |= (ushort)(((*dest & 15) < (r & 15) - c) ? Flags.FLAG_AF : 0);
+                uint _sub_tmp = (uint)(((*dest ^ r) & (*dest ^ v)) & (1 << (width - 1)));
+                if (_sub_tmp != 0)
+                    state.Flags |= Flags.FLAG_OF;
+                SET_COMM_FLAGS(ref state, v, width);
+                if (dest != (uint*)0)
+                    *dest = v;
+            }
+            else
+            {
+                ushort v;
+                ushort* dest = (ushort*)destPtr, src = (ushort*)srcPtr;
+                byte width = 16;
+                const uint c = 0;
+                uint r = *src;
+                v = (ushort)(*dest - r);
+                ushort flag = (Flags.FLAG_PF | Flags.FLAG_ZF | Flags.FLAG_SF | Flags.FLAG_OF | Flags.FLAG_CF | Flags.FLAG_AF);
+                state.Flags &= (ushort)~flag;
+                state.Flags |= (ushort)((*dest < r) ? Flags.FLAG_CF : 0);
+                state.Flags |= (ushort)(((*dest & 15) < (r & 15) - c) ? Flags.FLAG_AF : 0);
+                uint _sub_tmp = (uint)(((*dest ^ r) & (*dest ^ v)) & (1 << (width - 1)));
+                if (_sub_tmp != 0)
+                    state.Flags |= Flags.FLAG_OF;
+                SET_COMM_FLAGS(ref state, v, width);
+                if (dest != (ushort*)0)
+                    *dest = v;
+            }
+            return 0;
+        }
+
+        public static unsafe uint Op_SUB_MR(ref State state, uint param)
+        {
+            uint ret;
+            const byte width = 8;
+            byte v;
+            byte* dest = (byte*)0, src = (byte*)0;
+            ret = Int_ParseModRM(ref state, &src, &dest, 1);
+            if (ret != 0)
+                return ret;
+            const uint c = 0;
+            uint r = *src;
+            v = (byte)(*dest - r);
+            ushort flag = (Flags.FLAG_PF | Flags.FLAG_ZF | Flags.FLAG_SF | Flags.FLAG_OF | Flags.FLAG_CF | Flags.FLAG_AF);
+            state.Flags &= (ushort)~flag;
+            state.Flags |= (ushort)((*dest < r) ? Flags.FLAG_CF : 0);
+            state.Flags |= (ushort)(((*dest & 15) < (r & 15) - c) ? Flags.FLAG_AF : 0);
+            uint _sub_tmp = (uint)(((*dest ^ r) & (*dest ^ v)) & (1 << (width - 1)));
+            if (_sub_tmp != 0)
+                state.Flags |= Flags.FLAG_OF;
+            SET_COMM_FLAGS(ref state, v, width);
+            if (dest != (byte*)0)
+                *dest = v;
+            return 0;
+        }
+
+        public static unsafe uint Op_SUB_MRX(ref State state, uint param)
+        {
+            uint ret;
+            void* destPtr = (void*)0, srcPtr = (void*)0;
+            ret = Int_ParseModRMX(ref state, (ushort**)&srcPtr, (ushort**)&destPtr, 1);
+            if (ret != 0)
+                return ret;
+            if (state.Decoder.bOverrideOperand)
+            {
+                uint v;
+                uint* dest = (uint*)destPtr, src = (uint*)srcPtr;
+                byte width = 32;
+                const uint c = 0;
+                uint r = *src;
+                v = (uint)(*dest - r);
+                ushort flag = (Flags.FLAG_PF | Flags.FLAG_ZF | Flags.FLAG_SF | Flags.FLAG_OF | Flags.FLAG_CF | Flags.FLAG_AF);
+                state.Flags &= (ushort)~flag;
+                state.Flags |= (ushort)((*dest < r) ? Flags.FLAG_CF : 0);
+                state.Flags |= (ushort)(((*dest & 15) < (r & 15) - c) ? Flags.FLAG_AF : 0);
+                uint _sub_tmp = (uint)(((*dest ^ r) & (*dest ^ v)) & (1 << (width - 1)));
+                if (_sub_tmp != 0)
+                    state.Flags |= Flags.FLAG_OF;
+                SET_COMM_FLAGS(ref state, v, width);
+                if (dest != (uint*)0)
+                    *dest = v;
+            }
+            else
+            {
+                ushort v;
+                ushort* dest = (ushort*)destPtr, src = (ushort*)srcPtr;
+                byte width = 16;
+                const uint c = 0;
+                uint r = *src;
+                v = (ushort)(*dest - r);
+                ushort flag = (Flags.FLAG_PF | Flags.FLAG_ZF | Flags.FLAG_SF | Flags.FLAG_OF | Flags.FLAG_CF | Flags.FLAG_AF);
+                state.Flags &= (ushort)~flag;
+                state.Flags |= (ushort)((*dest < r) ? Flags.FLAG_CF : 0);
+                state.Flags |= (ushort)(((*dest & 15) < (r & 15) - c) ? Flags.FLAG_AF : 0);
+                uint _sub_tmp = (uint)(((*dest ^ r) & (*dest ^ v)) & (1 << (width - 1)));
+                if (_sub_tmp != 0)
+                    state.Flags |= Flags.FLAG_OF;
+                SET_COMM_FLAGS(ref state, v, width);
+                if (dest != (ushort*)0)
+                    *dest = v;
+            }
+            return 0;
+        }
+
+        public static unsafe uint Op_SUB_AI(ref State state, uint param)
+        {
+            const byte width = 8;
+            byte srcData, v;
+            byte* dest = (byte*)state.AX.Address, src = &srcData;
+            uint ret = READ_INSTR8(ref state, ref srcData);
+            if (ret != 0)
+                return ret;
+            const uint c = 0;
+            uint r = *src;
+            v = (byte)(*dest - r);
+            ushort flag = (Flags.FLAG_PF | Flags.FLAG_ZF | Flags.FLAG_SF | Flags.FLAG_OF | Flags.FLAG_CF | Flags.FLAG_AF);
+            state.Flags &= (ushort)~flag;
+            state.Flags |= (ushort)((*dest < r) ? Flags.FLAG_CF : 0);
+            state.Flags |= (ushort)(((*dest & 15) < (r & 15) - c) ? Flags.FLAG_AF : 0);
+            uint _sub_tmp = (uint)(((*dest ^ r) & (*dest ^ v)) & (1 << (width - 1)));
+            if (_sub_tmp != 0)
+                state.Flags |= Flags.FLAG_OF;
+            SET_COMM_FLAGS(ref state, v, width);
+            if (dest != (byte*)0)
+                *dest = v;
+            return 0;
+        }
+
+        public static unsafe uint Op_SUB_AIX(ref State state, uint param)
+        {
+            if (state.Decoder.bOverrideOperand)
+            {
+                uint srcData, v;
+                uint* dest = (uint*)state.AX.Address, src = &srcData;
+                byte width = 32;
+                uint ret = READ_INSTR32(ref state, ref srcData);
+                if (ret != 0)
+                    return ret;
+                const uint c = 0;
+                uint r = *src;
+                v = (uint)(*dest - r);
+                ushort flag = (Flags.FLAG_PF | Flags.FLAG_ZF | Flags.FLAG_SF | Flags.FLAG_OF | Flags.FLAG_CF | Flags.FLAG_AF);
+                state.Flags &= (ushort)~flag;
+                state.Flags |= (ushort)((*dest < r) ? Flags.FLAG_CF : 0);
+                state.Flags |= (ushort)(((*dest & 15) < (r & 15) - c) ? Flags.FLAG_AF : 0);
+                uint _sub_tmp = (uint)(((*dest ^ r) & (*dest ^ v)) & (1 << (width - 1)));
+                if (_sub_tmp != 0)
+                    state.Flags |= Flags.FLAG_OF;
+                SET_COMM_FLAGS(ref state, v, width);
+                if (dest != (uint*)0)
+                    *dest = v;
+            }
+            else
+            {
+                ushort srcData, v;
+                ushort* dest = (ushort*)state.AX.Address, src = &srcData;
+                byte width = 16;
+                uint ret = READ_INSTR16(ref state, ref srcData);
+                if (ret != 0)
+                    return ret;
+                const uint c = 0;
+                uint r = *src;
+                v = (ushort)(*dest - r);
+                ushort flag = (Flags.FLAG_PF | Flags.FLAG_ZF | Flags.FLAG_SF | Flags.FLAG_OF | Flags.FLAG_CF | Flags.FLAG_AF);
+                state.Flags &= (ushort)~flag;
+                state.Flags |= (ushort)((*dest < r) ? Flags.FLAG_CF : 0);
+                state.Flags |= (ushort)(((*dest & 15) < (r & 15) - c) ? Flags.FLAG_AF : 0);
+                uint _sub_tmp = (uint)(((*dest ^ r) & (*dest ^ v)) & (1 << (width - 1)));
+                if (_sub_tmp != 0)
+                    state.Flags |= Flags.FLAG_OF;
+                SET_COMM_FLAGS(ref state, v, width);
+                if (dest != (ushort*)0)
+                    *dest = v;
+            }
+            return 0;
+        }
+
+        public static unsafe uint Op_XOR_RM(ref State state, uint param)
+        {
+            uint ret;
+            const byte width = 8;
+            byte v;
+            byte* dest = (byte*)0, src = (byte*)0;
+            ret = Int_ParseModRM(ref state, &dest, &src, 0);
+            if (ret != 0)
+                return ret;
+            v = (byte)(*dest ^ *src);
+            ushort flag = (Flags.FLAG_PF | Flags.FLAG_ZF | Flags.FLAG_SF | Flags.FLAG_OF | Flags.FLAG_CF);
+            state.Flags &= (ushort)~flag;
+            SET_COMM_FLAGS(ref state, v, width);
+            if (dest != (byte*)0)
+                *dest = v;
+            return 0;
+        }
+
+        public static unsafe uint Op_XOR_RMX(ref State state, uint param)
+        {
+            uint ret;
+            void* destPtr = (void*)0, srcPtr = (void*)0;
+            ret = Int_ParseModRMX(ref state, (ushort**)&destPtr, (ushort**)&srcPtr, 0);
+            if (ret != 0)
+                return ret;
+            if (state.Decoder.bOverrideOperand)
+            {
+                uint v;
+                uint* dest = (uint*)destPtr, src = (uint*)srcPtr;
+                byte width = 32;
+                v = (uint)(*dest ^ *src);
+                ushort flag = (Flags.FLAG_PF | Flags.FLAG_ZF | Flags.FLAG_SF | Flags.FLAG_OF | Flags.FLAG_CF);
+                state.Flags &= (ushort)~flag;
+                SET_COMM_FLAGS(ref state, v, width);
+                if (dest != (uint*)0)
+                    *dest = v;
+            }
+            else
+            {
+                ushort v;
+                ushort* dest = (ushort*)destPtr, src = (ushort*)srcPtr;
+                byte width = 16;
+                v = (ushort)(*dest ^ *src);
+                ushort flag = (Flags.FLAG_PF | Flags.FLAG_ZF | Flags.FLAG_SF | Flags.FLAG_OF | Flags.FLAG_CF);
+                state.Flags &= (ushort)~flag;
+                SET_COMM_FLAGS(ref state, v, width);
+                if (dest != (ushort*)0)
+                    *dest = v;
+            }
+            return 0;
+        }
+
+        public static unsafe uint Op_XOR_MR(ref State state, uint param)
+        {
+            uint ret;
+            const byte width = 8;
+            byte v;
+            byte* dest = (byte*)0, src = (byte*)0;
+            ret = Int_ParseModRM(ref state, &src, &dest, 1);
+            if (ret != 0)
+                return ret;
+            v = (byte)(*dest ^ *src);
+            ushort flag = (Flags.FLAG_PF | Flags.FLAG_ZF | Flags.FLAG_SF | Flags.FLAG_OF | Flags.FLAG_CF);
+            state.Flags &= (ushort)~flag;
+            SET_COMM_FLAGS(ref state, v, width);
+            if (dest != (byte*)0)
+                *dest = v;
+            return 0;
+        }
+
+        public static unsafe uint Op_XOR_MRX(ref State state, uint param)
+        {
+            uint ret;
+            void* destPtr = (void*)0, srcPtr = (void*)0;
+            ret = Int_ParseModRMX(ref state, (ushort**)&srcPtr, (ushort**)&destPtr, 1);
+            if (ret != 0)
+                return ret;
+            if (state.Decoder.bOverrideOperand)
+            {
+                uint v;
+                uint* dest = (uint*)destPtr, src = (uint*)srcPtr;
+                byte width = 32;
+                v = (uint)(*dest ^ *src);
+                ushort flag = (Flags.FLAG_PF | Flags.FLAG_ZF | Flags.FLAG_SF | Flags.FLAG_OF | Flags.FLAG_CF);
+                state.Flags &= (ushort)~flag;
+                SET_COMM_FLAGS(ref state, v, width);
+                if (dest != (uint*)0)
+                    *dest = v;
+            }
+            else
+            {
+                ushort v;
+                ushort* dest = (ushort*)destPtr, src = (ushort*)srcPtr;
+                byte width = 16;
+                v = (ushort)(*dest ^ *src);
+                ushort flag = (Flags.FLAG_PF | Flags.FLAG_ZF | Flags.FLAG_SF | Flags.FLAG_OF | Flags.FLAG_CF);
+                state.Flags &= (ushort)~flag;
+                SET_COMM_FLAGS(ref state, v, width);
+                if (dest != (ushort*)0)
+                    *dest = v;
+            }
+            return 0;
+        }
+
+        public static unsafe uint Op_XOR_AI(ref State state, uint param)
+        {
+            const byte width = 8;
+            byte srcData, v;
+            byte* dest = (byte*)state.AX.Address, src = &srcData;
+            uint ret = READ_INSTR8(ref state, ref srcData);
+            if (ret != 0)
+                return ret;
+            v = (byte)(*dest ^ *src);
+            ushort flag = (Flags.FLAG_PF | Flags.FLAG_ZF | Flags.FLAG_SF | Flags.FLAG_OF | Flags.FLAG_CF);
+            state.Flags &= (ushort)~flag;
+            SET_COMM_FLAGS(ref state, v, width);
+            if (dest != (byte*)0)
+                *dest = v;
+            return 0;
+        }
+
+        public static unsafe uint Op_XOR_AIX(ref State state, uint param)
+        {
+            if (state.Decoder.bOverrideOperand)
+            {
+                uint srcData, v;
+                uint* dest = (uint*)state.AX.Address, src = &srcData;
+                byte width = 32;
+                uint ret = READ_INSTR32(ref state, ref srcData);
+                if (ret != 0)
+                    return ret;
+                v = (uint)(*dest ^ *src);
+                ushort flag = (Flags.FLAG_PF | Flags.FLAG_ZF | Flags.FLAG_SF | Flags.FLAG_OF | Flags.FLAG_CF);
+                state.Flags &= (ushort)~flag;
+                SET_COMM_FLAGS(ref state, v, width);
+                if (dest != (uint*)0)
+                    *dest = v;
+            }
+            else
+            {
+                ushort srcData, v;
+                ushort* dest = (ushort*)state.AX.Address, src = &srcData;
+                byte width = 16;
+                uint ret = READ_INSTR16(ref state, ref srcData);
+                if (ret != 0)
+                    return ret;
+                v = (ushort)(*dest ^ *src);
+                ushort flag = (Flags.FLAG_PF | Flags.FLAG_ZF | Flags.FLAG_SF | Flags.FLAG_OF | Flags.FLAG_CF);
+                state.Flags &= (ushort)~flag;
+                SET_COMM_FLAGS(ref state, v, width);
+                if (dest != (ushort*)0)
+                    *dest = v;
+            }
+            return 0;
+        }
+
+        public static unsafe uint Op_CMP_RM(ref State state, uint param)
+        {
+            uint ret;
+            const byte width = 8;
+            byte v;
+            byte* dest = (byte*)0, src = (byte*)0;
+            ret = Int_ParseModRM(ref state, &dest, &src, 0);
+            if (ret != 0)
+                return ret;
+            const uint c = 0;
+            byte r = *src;
+            v = (byte)(*dest - r);
+            ushort flag = (Flags.FLAG_PF | Flags.FLAG_ZF | Flags.FLAG_SF | Flags.FLAG_OF | Flags.FLAG_CF | Flags.FLAG_AF);
+            state.Flags &= (ushort)~flag;
+            state.Flags |= (ushort)((*dest < r) ? Flags.FLAG_CF : 0);
+            state.Flags |= (ushort)(((*dest & 15) < (r & 15) - c) ? Flags.FLAG_AF : 0);
+            uint _sub_tmp = (uint)(((*dest ^ r) & (*dest ^ v)) & (1 << (width - 1)));
+            if (_sub_tmp != 0)
+                state.Flags |= Flags.FLAG_OF;
+            dest = null;
+            SET_COMM_FLAGS(ref state, v, width);
+            if (dest != (byte*)0)
+                *dest = v;
+            return 0;
+        }
+
+        public static unsafe uint Op_CMP_RMX(ref State state, uint param)
+        {
+            uint ret;
+            void* destPtr = (void*)0, srcPtr = (void*)0;
+            ret = Int_ParseModRMX(ref state, (ushort**)&destPtr, (ushort**)&srcPtr, 0);
+            if (ret != 0)
+                return ret;
+            if (state.Decoder.bOverrideOperand)
+            {
+                uint v;
+                uint* dest = (uint*)destPtr, src = (uint*)srcPtr;
+                byte width = 32;
+                const uint c = 0;
+                uint r = *src;
+                v = (uint)(*dest - r);
+                ushort flag = (Flags.FLAG_PF | Flags.FLAG_ZF | Flags.FLAG_SF | Flags.FLAG_OF | Flags.FLAG_CF | Flags.FLAG_AF);
+                state.Flags &= (ushort)~flag;
+                state.Flags |= (ushort)((*dest < r) ? Flags.FLAG_CF : 0);
+                state.Flags |= (ushort)(((*dest & 15) < (r & 15) - c) ? Flags.FLAG_AF : 0);
+                uint _sub_tmp = (uint)(((*dest ^ r) & (*dest ^ v)) & (1 << (width - 1)));
+                if (_sub_tmp != 0)
+                    state.Flags |= Flags.FLAG_OF;
+                dest = null;
+                SET_COMM_FLAGS(ref state, v, width);
+                if (dest != (uint*)0)
+                    *dest = v;
+            }
+            else
+            {
+                ushort v;
+                ushort* dest = (ushort*)destPtr, src = (ushort*)srcPtr;
+                byte width = 16;
+                const uint c = 0;
+                ushort r = *src;
+                v = (ushort)(*dest - r);
+                ushort flag = (Flags.FLAG_PF | Flags.FLAG_ZF | Flags.FLAG_SF | Flags.FLAG_OF | Flags.FLAG_CF | Flags.FLAG_AF);
+                state.Flags &= (ushort)~flag;
+                state.Flags |= (ushort)((*dest < r) ? Flags.FLAG_CF : 0);
+                state.Flags |= (ushort)(((*dest & 15) < (r & 15) - c) ? Flags.FLAG_AF : 0);
+                uint _sub_tmp = (uint)(((*dest ^ r) & (*dest ^ v)) & (1 << (width - 1)));
+                if (_sub_tmp != 0)
+                    state.Flags |= Flags.FLAG_OF;
+                dest = null;
+                SET_COMM_FLAGS(ref state, v, width);
+                if (dest != (ushort*)0)
+                    *dest = v;
+            }
+            return 0;
+        }
+
+        public static unsafe uint Op_CMP_MR(ref State state, uint param)
+        {
+            uint ret;
+            const byte width = 8;
+            byte v;
+            byte* dest = (byte*)0, src = (byte*)0;
+            ret = Int_ParseModRM(ref state, &src, &dest, 1);
+            if (ret != 0)
+                return ret;
+            const uint c = 0;
+            byte r = *src;
+            v = (byte)(*dest - r);
+            ushort flag = (Flags.FLAG_PF | Flags.FLAG_ZF | Flags.FLAG_SF | Flags.FLAG_OF | Flags.FLAG_CF | Flags.FLAG_AF);
+            state.Flags &= (ushort)~flag;
+            state.Flags |= (ushort)((*dest < r) ? Flags.FLAG_CF : 0);
+            state.Flags |= (ushort)(((*dest & 15) < (r & 15) - c) ? Flags.FLAG_AF : 0);
+            uint _sub_tmp = (uint)(((*dest ^ r) & (*dest ^ v)) & (1 << (width - 1)));
+            if (_sub_tmp != 0)
+                state.Flags |= Flags.FLAG_OF;
+            dest = null;
+            SET_COMM_FLAGS(ref state, v, width);
+            if (dest != (byte*)0)
+                *dest = v;
+            return 0;
+        }
+
+        public static unsafe uint Op_CMP_MRX(ref State state, uint param)
+        {
+            uint ret;
+            void* destPtr = (void*)0, srcPtr = (void*)0;
+            ret = Int_ParseModRMX(ref state, (ushort**)&srcPtr, (ushort**)&destPtr, 1);
+            if (ret != 0)
+                return ret;
+            if (state.Decoder.bOverrideOperand)
+            {
+                uint v;
+                uint* dest = (uint*)destPtr, src = (uint*)srcPtr;
+                byte width = 32;
+                const uint c = 0;
+                uint r = *src;
+                v = (uint)(*dest - r);
+                ushort flag = (Flags.FLAG_PF | Flags.FLAG_ZF | Flags.FLAG_SF | Flags.FLAG_OF | Flags.FLAG_CF | Flags.FLAG_AF);
+                state.Flags &= (ushort)~flag;
+                state.Flags |= (ushort)((*dest < r) ? Flags.FLAG_CF : 0);
+                state.Flags |= (ushort)(((*dest & 15) < (r & 15) - c) ? Flags.FLAG_AF : 0);
+                uint _sub_tmp = (uint)(((*dest ^ r) & (*dest ^ v)) & (1 << (width - 1)));
+                if (_sub_tmp != 0)
+                    state.Flags |= Flags.FLAG_OF;
+                dest = null;
+                SET_COMM_FLAGS(ref state, v, width);
+                if (dest != (uint*)0)
+                    *dest = v;
+            }
+            else
+            {
+                ushort v;
+                ushort* dest = (ushort*)destPtr, src = (ushort*)srcPtr;
+                byte width = 16;
+                const uint c = 0;
+                ushort r = *src;
+                v = (ushort)(*dest - r);
+                ushort flag = (Flags.FLAG_PF | Flags.FLAG_ZF | Flags.FLAG_SF | Flags.FLAG_OF | Flags.FLAG_CF | Flags.FLAG_AF);
+                state.Flags &= (ushort)~flag;
+                state.Flags |= (ushort)((*dest < r) ? Flags.FLAG_CF : 0);
+                state.Flags |= (ushort)(((*dest & 15) < (r & 15) - c) ? Flags.FLAG_AF : 0);
+                uint _sub_tmp = (uint)(((*dest ^ r) & (*dest ^ v)) & (1 << (width - 1)));
+                if (_sub_tmp != 0)
+                    state.Flags |= Flags.FLAG_OF;
+                dest = null;
+                SET_COMM_FLAGS(ref state, v, width);
+                if (dest != (ushort*)0)
+                    *dest = v;
+            }
+            return 0;
+        }
+
+        public static unsafe uint Op_CMP_AI(ref State state, uint param)
+        {
+            const byte width = 8;
+            byte srcData, v;
+            byte* dest = (byte*)state.AX.Address, src = &srcData;
+            uint ret = READ_INSTR8(ref state, ref srcData);
+            if (ret != 0)
+                return ret;
+            const uint c = 0;
+            byte r = *src;
+            v = (byte)(*dest - r);
+            ushort flag = (Flags.FLAG_PF | Flags.FLAG_ZF | Flags.FLAG_SF | Flags.FLAG_OF | Flags.FLAG_CF | Flags.FLAG_AF);
+            state.Flags &= (ushort)~flag;
+            state.Flags |= (ushort)((*dest < r) ? Flags.FLAG_CF : 0);
+            state.Flags |= (ushort)(((*dest & 15) < (r & 15) - c) ? Flags.FLAG_AF : 0);
+            uint _sub_tmp = (uint)(((*dest ^ r) & (*dest ^ v)) & (1 << (width - 1)));
+            if (_sub_tmp != 0)
+                state.Flags |= Flags.FLAG_OF;
+            dest = null;
+            SET_COMM_FLAGS(ref state, v, width);
+            if (dest != (byte*)0)
+                *dest = v;
+            return 0;
+        }
+
+        public static unsafe uint Op_CMP_AIX(ref State state, uint param)
+        {
+            if (state.Decoder.bOverrideOperand)
+            {
+                uint srcData, v;
+                uint* dest = (uint*)state.AX.Address, src = &srcData;
+                byte width = 32;
+                uint ret = READ_INSTR32(ref state, ref srcData);
+                if (ret != 0)
+                    return ret;
+                const uint c = 0;
+                uint r = *src;
+                v = (uint)(*dest - r);
+                ushort flag = (Flags.FLAG_PF | Flags.FLAG_ZF | Flags.FLAG_SF | Flags.FLAG_OF | Flags.FLAG_CF | Flags.FLAG_AF);
+                state.Flags &= (ushort)~flag;
+                state.Flags |= (ushort)((*dest < r) ? Flags.FLAG_CF : 0);
+                state.Flags |= (ushort)(((*dest & 15) < (r & 15) - c) ? Flags.FLAG_AF : 0);
+                uint _sub_tmp = (uint)(((*dest ^ r) & (*dest ^ v)) & (1 << (width - 1)));
+                if (_sub_tmp != 0)
+                    state.Flags |= Flags.FLAG_OF;
+                dest = null;
+                SET_COMM_FLAGS(ref state, v, width);
+                if (dest != (uint*)0)
+                    *dest = v;
+            }
+            else
+            {
+                ushort srcData, v;
+                ushort* dest = (ushort*)state.AX.Address, src = &srcData;
+                byte width = 16;
+                uint ret = READ_INSTR16(ref state, ref srcData);
+                if (ret != 0)
+                    return ret;
+                const uint c = 0;
+                ushort r = *src;
+                v = (ushort)(*dest - r);
+                ushort flag = (Flags.FLAG_PF | Flags.FLAG_ZF | Flags.FLAG_SF | Flags.FLAG_OF | Flags.FLAG_CF | Flags.FLAG_AF);
+                state.Flags &= (ushort)~flag;
+                state.Flags |= (ushort)((*dest < r) ? Flags.FLAG_CF : 0);
+                state.Flags |= (ushort)(((*dest & 15) < (r & 15) - c) ? Flags.FLAG_AF : 0);
+                uint _sub_tmp = (uint)(((*dest ^ r) & (*dest ^ v)) & (1 << (width - 1)));
+                if (_sub_tmp != 0)
+                    state.Flags |= Flags.FLAG_OF;
+                dest = null;
+                SET_COMM_FLAGS(ref state, v, width);
+                if (dest != (ushort*)0)
+                    *dest = v;
+            }
+            return 0;
+        }
+
+        #endregion
+
+        #region ALU Part 2
+
+        public static unsafe uint Op_TEST_MR(ref State state, uint param)
+        {
+            uint ret;
+            const byte width = 8;
+            byte v;
+            byte* dest = (byte*)0, src = (byte*)0;
+            ret = Int_ParseModRM(ref state, &src, &dest, 1);
+            if (ret != 0)
+                return ret;
+            v = (byte)((*dest) & (*src));
+            ushort flag = (Flags.FLAG_OF | Flags.FLAG_CF);
+            state.Flags &= (ushort)~flag;
+            dest = null;
+            SET_COMM_FLAGS(ref state, v, width);
+            if (dest != (byte*)0)
+                *dest = v;
+            return 0;
+        }
+
+        public static unsafe uint Op_TEST_MRX(ref State state, uint param)
+        {
+            uint ret;
+            void* destPtr = (void*)0, srcPtr = (void*)0;
+            ret = Int_ParseModRMX(ref state, (ushort**)&srcPtr, (ushort**)&destPtr, 1);
+            if (ret != 0)
+                return ret;
+            if (state.Decoder.bOverrideOperand)
+            {
+                uint v;
+                uint* dest = (uint*)destPtr, src = (uint*)srcPtr;
+                byte width = 32;
+                v = (byte)((*dest) & (*src));
+                ushort flag = (Flags.FLAG_OF | Flags.FLAG_CF);
+                state.Flags &= (ushort)~flag;
+                dest = null;
+                SET_COMM_FLAGS(ref state, v, width);
+                if (dest != (uint*)0)
+                    *dest = v;
+            }
+            else
+            {
+                ushort v;
+                ushort* dest = (ushort*)destPtr, src = (ushort*)srcPtr;
+                byte width = 16;
+                v = (byte)((*dest) & (*src));
+                ushort flag = (Flags.FLAG_OF | Flags.FLAG_CF);
+                state.Flags &= (ushort)~flag;
+                dest = null;
+                SET_COMM_FLAGS(ref state, v, width);
+                if (dest != (ushort*)0)
+                    *dest = v;
+            }
+            return 0;
+        }
+
+        public static unsafe uint Op_TEST_AI(ref State state, uint param)
+        {
+            const byte width = 8;
+            byte srcData, v;
+            byte* dest = (byte*)state.AX.Address, src = &srcData;
+            uint ret = READ_INSTR8(ref state, ref srcData);
+            if (ret != 0)
+                return ret;
+            v = (byte)((*dest) & (*src));
+            ushort flag = (Flags.FLAG_OF | Flags.FLAG_CF);
+            state.Flags &= (ushort)~flag;
+            dest = null;
+            SET_COMM_FLAGS(ref state, v, width);
+            if (dest != (byte*)0)
+                *dest = v;
+            return 0;
+        }
+
+        public static unsafe uint Op_TEST_AIX(ref State state, uint param)
+        {
+            if (state.Decoder.bOverrideOperand)
+            {
+                uint srcData, v;
+                uint* dest = (uint*)state.AX.Address, src = &srcData;
+                byte width = 32;
+                uint ret = READ_INSTR32(ref state, ref srcData);
+                if (ret != 0)
+                    return ret;
+                v = (byte)((*dest) & (*src));
+                ushort flag = (Flags.FLAG_OF | Flags.FLAG_CF);
+                state.Flags &= (ushort)~flag;
+                dest = null;
+                SET_COMM_FLAGS(ref state, v, width);
+                if (dest != (uint*)0)
+                    *dest = v;
+            }
+            else
+            {
+                ushort srcData, v;
+                ushort* dest = (ushort*)state.AX.Address, src = &srcData;
+                byte width = 16;
+                uint ret = READ_INSTR16(ref state, ref srcData);
+                if (ret != 0)
+                    return ret;
+                v = (byte)((*dest) & (*src));
+                ushort flag = (Flags.FLAG_OF | Flags.FLAG_CF);
+                state.Flags &= (ushort)~flag;
+                dest = null;
+                SET_COMM_FLAGS(ref state, v, width);
+                if (dest != (ushort*)0)
+                    *dest = v;
+            }
+            return 0;
+        }
+
+
+        #endregion
+
+        #region ALU Part 3
+
+
+
+        #endregion
+
     }
 }

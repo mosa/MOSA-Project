@@ -14,11 +14,10 @@ using Mosa.Compiler.LinkerFormat.Elf;
 namespace Mosa.Tool.Compiler.Stages
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public class Elf64LinkerStage : Mosa.Compiler.Linker.Elf64.Linker, IPipelineStage, ICompilerStage, ILinker
 	{
-
 		#region IPipelineStage
 
 		/// <summary>
@@ -27,18 +26,19 @@ namespace Mosa.Tool.Compiler.Stages
 		/// <value>The name of the compilation stage.</value>
 		string IPipelineStage.Name { get { return @"Executable and Linking Format (ELF) Linker [64 Bit]"; } }
 
-		#endregion // IPipelineStage Members
+		#endregion IPipelineStage
 
 		#region ICompilerStage members
 
 		public void Setup(BaseCompiler compiler)
 		{
 			this.OutputFile = compiler.CompilerOptions.OutputFile;
+
 			//this.FileAlignment = compiler.CompilerOptions.Elf64.FileAlignment;
 			this.IsLittleEndian = compiler.Architecture.IsLittleEndian;
 			this.Machine = (MachineType)compiler.Architecture.ElfMachineType;
 		}
 
-		#endregion // ICompilerStage members
+		#endregion ICompilerStage members
 	}
 }

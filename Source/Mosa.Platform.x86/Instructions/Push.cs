@@ -30,8 +30,7 @@ namespace Mosa.Platform.x86.Instructions
 		private static readonly OpCode PUSH_FS = new OpCode(new byte[] { 0x0F, 0xA0 });
 		private static readonly OpCode PUSH_GS = new OpCode(new byte[] { 0x0F, 0xA8 });
 
-
-		#endregion
+		#endregion Data Members
 
 		#region Construction
 
@@ -43,7 +42,7 @@ namespace Mosa.Platform.x86.Instructions
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Methods
 
@@ -91,6 +90,6 @@ namespace Mosa.Platform.x86.Instructions
 			visitor.Push(context);
 		}
 
-		#endregion // Methods
+		#endregion Methods
 	}
 }

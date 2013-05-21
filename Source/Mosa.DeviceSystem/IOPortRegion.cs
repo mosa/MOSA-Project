@@ -10,16 +10,17 @@
 namespace Mosa.DeviceSystem
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public class IOPortRegion : IIOPortRegion
 	{
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected ushort baseIOPort;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected ushort size;
 
@@ -28,6 +29,7 @@ namespace Mosa.DeviceSystem
 		/// </summary>
 		/// <value>The base IO port.</value>
 		public ushort BaseIOPort { get { return baseIOPort; } }
+
 		/// <summary>
 		/// Gets the size.
 		/// </summary>
@@ -44,7 +46,5 @@ namespace Mosa.DeviceSystem
 			this.baseIOPort = baseIOPort;
 			this.size = size;
 		}
-
 	}
-
 }

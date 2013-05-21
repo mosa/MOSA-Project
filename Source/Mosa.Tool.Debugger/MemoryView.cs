@@ -8,15 +8,12 @@
  */
 
 using System;
-using System.Windows.Forms;
-using System.Threading;
 using Mosa.Utility.DebugEngine;
-using WeifenLuo.WinFormsUI.Docking;
 
 namespace Mosa.Tool.Debugger
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public partial class MemoryView : DebuggerDockContent
 	{
@@ -131,7 +128,6 @@ namespace Mosa.Tool.Debugger
 			{
 				Status = "ERROR: Invalid memory location";
 			}
-
 		}
 
 		private void tbMemory_TextChanged(object sender, EventArgs e)
@@ -163,7 +159,5 @@ namespace Mosa.Tool.Debugger
 		{
 			UpdateForm();
 		}
-
-
 	}
 }

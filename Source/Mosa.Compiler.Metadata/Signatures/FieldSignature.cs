@@ -12,11 +12,10 @@ using System;
 namespace Mosa.Compiler.Metadata.Signatures
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public sealed class FieldSignature : VariableSignature
 	{
-
 		private const int Field = 0x06;
 
 		/// <summary>
@@ -94,6 +93,5 @@ namespace Mosa.Compiler.Metadata.Signatures
 
 			base.ParseSignature(reader);
 		}
-
 	}
 }

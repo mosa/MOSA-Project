@@ -13,7 +13,6 @@ namespace Mosa.Compiler.Common
 {
 	public static class ListExtension
 	{
-
 		/// <summary>
 		/// Adds if new.
 		/// </summary>
@@ -28,6 +27,5 @@ namespace Mosa.Compiler.Common
 
 			list.Add(item);
 		}
-
 	}
 }

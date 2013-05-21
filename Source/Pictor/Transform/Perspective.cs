@@ -6,6 +6,7 @@
  * Authors:
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  */
+
 using System;
 
 namespace Pictor.Transform
@@ -155,6 +156,7 @@ namespace Pictor.Transform
 					sx = shy = w0 = shx = sy = w1 = tx = ty = w2 = 0.0;
 					return false;
 				}
+
 				// General case
 				//---------------
 				double u = (dx * dy2 - dy * dx2) / den;
@@ -178,7 +180,6 @@ namespace Pictor.Transform
 			Invert();
 			return true;
 		}
-
 
 		//--------------------------------------------------------- Operations
 		public Perspective FromAffine(Affine a)
@@ -447,15 +448,14 @@ namespace Pictor.Transform
 		}
 
 		// Inverse transformation of x and y. It works slow because
-		// it explicitly inverts the matrix on every call. For massive 
-		// operations it's better to Invert() the matrix and then use 
-		// direct transformations. 
+		// it explicitly inverts the matrix on every call. For massive
+		// operations it's better to Invert() the matrix and then use
+		// direct transformations.
 		public void InverseTransform(ref double x, ref double y)
 		{
 			Perspective t = new Perspective(this);
 			if (t.Invert()) t.Transform(ref x, ref y);
 		}
-
 
 		//---------------------------------------------------------- Auxiliary
 		public double Determinant
@@ -467,18 +467,27 @@ namespace Pictor.Transform
 					   tx * (shy * w1 - sy * w0);
 			}
 		}
+
 		public double ReciprocalDeterminant
 		{
 			get { return 1.0 / Determinant; }
 		}
 
-		public bool IsValid() { return IsValid(affine_epsilon); }
+		public bool IsValid()
+		{
+			return IsValid(affine_epsilon);
+		}
+
 		public bool IsValid(double epsilon)
 		{
 			return Math.Abs(sx) > epsilon && Math.Abs(sy) > epsilon && Math.Abs(w2) > epsilon;
 		}
 
-		public bool IsIdentity() { return IsIdentity(affine_epsilon); }
+		public bool IsIdentity()
+		{
+			return IsIdentity(affine_epsilon);
+		}
+
 		public bool IsIdentity(double epsilon)
 		{
 			return Basics.IsEqualEps(sx, 1.0, epsilon) &&
@@ -510,7 +519,7 @@ namespace Pictor.Transform
 				   Basics.IsEqualEps(w2, m.w2, epsilon);
 		}
 
-		// Determine the major affine parameters. Use with caution 
+		// Determine the major affine parameters. Use with caution
 		// considering possible degenerate cases.
 		public double Scale()
 		{
@@ -518,6 +527,7 @@ namespace Pictor.Transform
 			double y = 0.707106781 * shy + 0.707106781 * sy;
 			return Math.Sqrt(x * x + y * y);
 		}
+
 		public double Rotation()
 		{
 			double x1 = 0.0;
@@ -528,11 +538,13 @@ namespace Pictor.Transform
 			Transform(ref x2, ref y2);
 			return Math.Atan2(y2 - y1, x2 - x1);
 		}
+
 		public void Translation(out double dx, out double dy)
 		{
 			dx = tx;
 			dy = ty;
 		}
+
 		public void Scaling(out double x, out double y)
 		{
 			double x1 = 0.0;
@@ -546,6 +558,7 @@ namespace Pictor.Transform
 			x = x2 - x1;
 			y = y2 - y1;
 		}
+
 		public void AbsoluteScaling(out double x, out double y)
 		{
 			x = Math.Sqrt(sx * sx + shx * shx);
@@ -555,17 +568,20 @@ namespace Pictor.Transform
 		//--------------------------------------------------------------------
 		public sealed class IteratorX
 		{
-			double den;
-			double den_step;
-			double nom_x;
-			double nom_x_step;
-			double nom_y;
-			double nom_y_step;
+			private double den;
+			private double den_step;
+			private double nom_x;
+			private double nom_x_step;
+			private double nom_y;
+			private double nom_y_step;
 
 			public double x;
 			public double y;
 
-			public IteratorX() { }
+			public IteratorX()
+			{
+			}
+
 			public IteratorX(double px, double py, double step, Perspective m)
 			{
 				den = (px * m.w0 + py * m.w1 + m.w2);

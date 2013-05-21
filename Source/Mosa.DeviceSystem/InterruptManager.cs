@@ -17,17 +17,17 @@ namespace Mosa.DeviceSystem
 	public class InterruptManager
 	{
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public const ushort MaxInterrupts = 16;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected LinkedList<IHardwareDevice>[] interruptHandlers;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected SpinLock spinLock;
 
@@ -95,6 +95,5 @@ namespace Mosa.DeviceSystem
 				spinLock.Exit();
 			}
 		}
-
 	}
 }

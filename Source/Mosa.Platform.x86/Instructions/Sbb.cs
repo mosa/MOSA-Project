@@ -18,7 +18,6 @@ namespace Mosa.Platform.x86.Instructions
 	/// </summary>
 	public sealed class Sbb : TwoOperandInstruction
 	{
-
 		#region Data Members
 
 		private static readonly OpCode R_C = new OpCode(new byte[] { 0x81 }, 3);
@@ -27,11 +26,12 @@ namespace Mosa.Platform.x86.Instructions
 		private static readonly OpCode M_R = new OpCode(new byte[] { 0x19 });
 		private static readonly OpCode R_M = new OpCode(new byte[] { 0x1B });
 
-		#endregion // Data Members
+		#endregion Data Members
 
 		#region Methods
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="destination"></param>
 		/// <param name="source"></param>
@@ -57,6 +57,6 @@ namespace Mosa.Platform.x86.Instructions
 			visitor.Sbb(context);
 		}
 
-		#endregion // Methods
+		#endregion Methods
 	}
 }

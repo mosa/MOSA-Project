@@ -9,16 +9,13 @@
 
 using System.Diagnostics;
 
-
 namespace Mosa.Compiler.InternalTrace
 {
 	public class DebugCompilerEventListener : ICompilerEventListener
 	{
-
 		void ICompilerEventListener.SubmitTraceEvent(CompilerEvent compilerStage, string info)
 		{
 			Debug.WriteLine(compilerStage.ToString() + ": " + info);
 		}
-
 	}
 }

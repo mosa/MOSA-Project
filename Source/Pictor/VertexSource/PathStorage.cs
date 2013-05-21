@@ -6,15 +6,16 @@
  * Authors:
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  */
+
 using System;
 
 namespace Pictor.VertexSource
 {
 	//---------------------------------------------------------------path_base
-	// A container to store vertices with their flags. 
-	// A path consists of a number of contours separated with "MoveTo" 
+	// A container to store vertices with their flags.
+	// A path consists of a number of contours separated with "MoveTo"
 	// commands. The path storage can keep and maintain more than one
-	// path. 
+	// path.
 	// To navigate to the beginning of a particular path, use Rewind(path_id);
 	// Where path_id is what start_new_path() returns. So, when you call
 	// start_new_path() you need to store its return Value somewhere else
@@ -24,15 +25,15 @@ namespace Pictor.VertexSource
 	//------------------------------------------------------------------------
 	public class PathStorage : IVertexSource, IVertexDest
 	{
-
 		#region InternalVertexStarge
+
 		private class VertexStorage
 		{
-			uint m_num_vertices;
-			uint m_allocated_vertices;
-			double[] m_coord_x;
-			double[] m_coord_y;
-			uint[] m_CommandAndFlags;
+			private uint m_num_vertices;
+			private uint m_allocated_vertices;
+			private double[] m_coord_x;
+			private double[] m_coord_y;
+			private uint[] m_CommandAndFlags;
 
 			public void free_all()
 			{
@@ -198,7 +199,8 @@ namespace Pictor.VertexSource
 				}
 			}
 		};
-		#endregion
+
+		#endregion InternalVertexStarge
 
 		private VertexStorage m_vertices;
 		private uint m_iterator;
@@ -226,8 +228,15 @@ namespace Pictor.VertexSource
 			}
 		}
 
-		public void RemoveAll() { m_vertices.remove_all(); m_iterator = 0; }
-		public void free_all() { m_vertices.free_all(); m_iterator = 0; }
+		public void RemoveAll()
+		{
+			m_vertices.remove_all(); m_iterator = 0;
+		}
+
+		public void free_all()
+		{
+			m_vertices.free_all(); m_iterator = 0;
+		}
 
 		// Make path functions
 		//--------------------------------------------------------------------
@@ -239,7 +248,6 @@ namespace Pictor.VertexSource
 			}
 			return m_vertices.total_vertices();
 		}
-
 
 		public void rel_to_abs(ref double x, ref double y)
 		{
@@ -320,7 +328,7 @@ namespace Pictor.VertexSource
 
 				// Ensure radii are valid
 				//-------------------------
-				if(rx < epsilon || ry < epsilon) 
+				if(rx < epsilon || ry < epsilon)
 				{
 					LineTo(x, y);
 					return;
@@ -523,9 +531,9 @@ namespace Pictor.VertexSource
 			return m_vertices.vertex(m_iterator++, out x, out y);
 		}
 
-		// Arrange the orientation of a polygon, all polygons in a path, 
-		// or in all paths. After calling arrange_orientations() or 
-		// arrange_orientations_all_paths(), all the polygons will have 
+		// Arrange the orientation of a polygon, all polygons in a path,
+		// or in all paths. After calling arrange_orientations() or
+		// arrange_orientations_all_paths(), all the polygons will have
 		// the same orientation, i.e. Clockwise or CounterClockwise
 		//--------------------------------------------------------------------
 		public uint arrange_polygon_orientation(uint start, Path.EPathFlags orientation)
@@ -592,7 +600,7 @@ namespace Pictor.VertexSource
 			}
 		}
 
-		// Flip all vertices horizontally or vertically, 
+		// Flip all vertices horizontally or vertically,
 		// between x1 and x2, or between y1 and y2 respectively
 		//--------------------------------------------------------------------
 		public void flip_x(double x1, double x2)
@@ -636,7 +644,6 @@ namespace Pictor.VertexSource
 			}
 		}
 
-
 		public void close_polygon()
 		{
 			close_polygon((uint)Path.EPathFlags.None);
@@ -665,13 +672,12 @@ namespace Pictor.VertexSource
 		}
 
 		//--------------------------------------------------------------------
-		// Join path. The path is joined with the existing one, that is, 
+		// Join path. The path is joined with the existing one, that is,
 		// it behaves as if the pen of a plotter was always down (drawing)
-		//template<class VertexSource> 
+		//template<class VertexSource>
 		public void join_path(PathStorage vs)
 		{
 			join_path(vs, 0);
-
 		}
 
 		public void join_path(PathStorage vs, uint path_id)
@@ -716,7 +722,8 @@ namespace Pictor.VertexSource
 		}
 
 		/*
-		// Concatenate polygon/polyline. 
+
+		// Concatenate polygon/polyline.
 		//--------------------------------------------------------------------
 		void concat_poly(T* Data, uint num_points, bool closed)
 		{

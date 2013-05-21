@@ -12,19 +12,19 @@ using Mosa.DeviceSystem.PCI;
 namespace Mosa.DeviceSystem
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public class FindDevice
 	{
 		// Helper Find Classes
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public class WithParent : IFindDevice
 		{
 			/// <summary>
-			/// 
+			///
 			/// </summary>
 			private readonly IDevice parent;
 
@@ -51,12 +51,12 @@ namespace Mosa.DeviceSystem
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public class WithName : IFindDevice
 		{
 			/// <summary>
-			/// 
+			///
 			/// </summary>
 			private string name;
 
@@ -68,6 +68,7 @@ namespace Mosa.DeviceSystem
 			{
 				this.name = name;
 			}
+
 			/// <summary>
 			/// Determines whether the specified device is match.
 			/// </summary>
@@ -82,14 +83,16 @@ namespace Mosa.DeviceSystem
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public class IsOnline : IFindDevice
 		{
 			/// <summary>
 			/// Initializes a new instance of the <see cref="IsOnline"/> class.
 			/// </summary>
-			public IsOnline() { }
+			public IsOnline()
+			{
+			}
 
 			/// <summary>
 			/// Determines whether the specified device is match.
@@ -105,14 +108,16 @@ namespace Mosa.DeviceSystem
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public class IsAvailable : IFindDevice
 		{
 			/// <summary>
 			/// Initializes a new instance of the <see cref="IsAvailable"/> class.
 			/// </summary>
-			public IsAvailable() { }
+			public IsAvailable()
+			{
+			}
 
 			/// <summary>
 			/// Determines whether the specified device is match.
@@ -128,12 +133,12 @@ namespace Mosa.DeviceSystem
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public class WithStatus : IFindDevice
 		{
 			/// <summary>
-			/// 
+			///
 			/// </summary>
 			protected DeviceStatus deviceStatus;
 
@@ -141,7 +146,10 @@ namespace Mosa.DeviceSystem
 			/// Initializes a new instance of the <see cref="WithStatus"/> class.
 			/// </summary>
 			/// <param name="deviceStatus">The device status.</param>
-			public WithStatus(DeviceStatus deviceStatus) { this.deviceStatus = deviceStatus; }
+			public WithStatus(DeviceStatus deviceStatus)
+			{
+				this.deviceStatus = deviceStatus;
+			}
 
 			/// <summary>
 			/// Determines whether the specified device is match.
@@ -172,14 +180,16 @@ namespace Mosa.DeviceSystem
 		//}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public class IsPCIDevice : IFindDevice
 		{
 			/// <summary>
 			/// Initializes a new instance of the <see cref="IsPCIDevice"/> class.
 			/// </summary>
-			public IsPCIDevice() { }
+			public IsPCIDevice()
+			{
+			}
 
 			/// <summary>
 			/// Determines whether the specified device is match.
@@ -195,14 +205,16 @@ namespace Mosa.DeviceSystem
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public class IsDiskDevice : IFindDevice
 		{
 			/// <summary>
 			/// Initializes a new instance of the <see cref="IsPCIDevice"/> class.
 			/// </summary>
-			public IsDiskDevice() { }
+			public IsDiskDevice()
+			{
+			}
 
 			/// <summary>
 			/// Determines whether the specified device is match.
@@ -218,14 +230,16 @@ namespace Mosa.DeviceSystem
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public class IsDiskControllerDevice : IFindDevice
 		{
 			/// <summary>
 			/// Initializes a new instance of the <see cref="IsDiskControllerDevice"/> class.
 			/// </summary>
-			public IsDiskControllerDevice() { }
+			public IsDiskControllerDevice()
+			{
+			}
 
 			/// <summary>
 			/// Determines whether the specified device is match.
@@ -239,15 +253,18 @@ namespace Mosa.DeviceSystem
 				return device is IDiskControllerDevice;
 			}
 		}
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public class IsPCIController : IFindDevice
 		{
 			/// <summary>
 			/// Initializes a new instance of the <see cref="IsPCIController"/> class.
 			/// </summary>
-			public IsPCIController() { }
+			public IsPCIController()
+			{
+			}
 
 			/// <summary>
 			/// Determines whether the specified device is match.
@@ -263,14 +280,16 @@ namespace Mosa.DeviceSystem
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public class IsPartitionDevice : IFindDevice
 		{
 			/// <summary>
 			/// Initializes a new instance of the <see cref="IsPartitionDevice"/> class.
 			/// </summary>
-			public IsPartitionDevice() { }
+			public IsPartitionDevice()
+			{
+			}
 
 			/// <summary>
 			/// Determines whether the specified device is match.

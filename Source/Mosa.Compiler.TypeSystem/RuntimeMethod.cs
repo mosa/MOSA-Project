@@ -49,7 +49,7 @@ namespace Mosa.Compiler.TypeSystem
 		private uint rva;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private readonly IList<GenericParameter> genericParameters;
 
@@ -63,7 +63,7 @@ namespace Mosa.Compiler.TypeSystem
 		/// </summary>
 		private string methodName;
 
-		#endregion // Data members
+		#endregion Data members
 
 		#region Construction
 
@@ -78,7 +78,7 @@ namespace Mosa.Compiler.TypeSystem
 			this.genericParameters = new List<GenericParameter>();
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Properties
 
@@ -251,7 +251,7 @@ namespace Mosa.Compiler.TypeSystem
 			}
 		}
 
-		#endregion // Properties
+		#endregion Properties
 
 		#region Object Overrides
 
@@ -266,7 +266,6 @@ namespace Mosa.Compiler.TypeSystem
 			return FullName;
 		}
 
-		#endregion // Object Overrides
-
+		#endregion Object Overrides
 	}
 }

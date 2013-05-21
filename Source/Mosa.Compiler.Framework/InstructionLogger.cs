@@ -100,7 +100,7 @@ namespace Mosa.Compiler.InternalTrace
 			{
 				if (ctx.IsEmpty)
 					continue;
-				
+
 				if (ctx.Marked)
 					text.AppendFormat("L_{0:X4}* {1}", ctx.Label, ctx.Instruction.ToString(ctx));
 				else
@@ -108,8 +108,6 @@ namespace Mosa.Compiler.InternalTrace
 
 				text.AppendLine();
 			}
-
 		}
-
 	}
 }

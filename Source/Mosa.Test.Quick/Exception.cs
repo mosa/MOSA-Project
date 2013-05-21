@@ -9,7 +9,6 @@ using System;
 
 namespace Mosa.Test.Quick.Tests
 {
-
 	public class ExceptionTest
 	{
 		public static int Test1()
@@ -91,7 +90,5 @@ namespace Mosa.Test.Quick.Tests
 		//        b = 7;
 		//    }
 		//}
-
 	}
-
 }

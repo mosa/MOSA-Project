@@ -5,7 +5,7 @@
  *
  * Authors:
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- *  Pascal Delprat (pdelprat) <pascal.delprat@online.fr> 
+ *  Pascal Delprat (pdelprat) <pascal.delprat@online.fr>
  */
 
 using System;
@@ -20,7 +20,6 @@ namespace Mosa.Platform.AVR32.Instructions
 	/// </summary>
 	public class Rjmp : AVR32Instruction
 	{
-
 		#region Methods
 
 		/// <summary>
@@ -48,7 +47,6 @@ namespace Mosa.Platform.AVR32.Instructions
 			visitor.Rjmp(context);
 		}
 
-		#endregion // Methods
-
+		#endregion Methods
 	}
 }

@@ -9,11 +9,12 @@
 
 namespace Pictor
 {
-
 	public interface ISpanInterpolator
 	{
 		void Begin(double x, double y, uint len);
+
 		void Coordinates(out int x, out int y);
+
 		void Next();
 
 		Transform.ITransform Transformer
@@ -21,7 +22,9 @@ namespace Pictor
 			get;
 			set;
 		}
+
 		void ReSynchronize(double xe, double ye, uint len);
+
 		void LocalScale(out int x, out int y);
 	};
 
@@ -40,7 +43,10 @@ namespace Pictor
 		};
 
 		//--------------------------------------------------------------------
-		public LinearSpanInterpolator() { }
+		public LinearSpanInterpolator()
+		{
+		}
+
 		public LinearSpanInterpolator(Transform.ITransform trans)
 		{
 			m_trans = trans;
@@ -117,8 +123,9 @@ namespace Pictor
 	};
 
 	/*
+
 		//=====================================span_interpolator_linear_subdiv
-		template<class Transformer = ITransformer, uint SubpixelShift = 8> 
+		template<class Transformer = ITransformer, uint SubpixelShift = 8>
 		class span_interpolator_linear_subdiv
 		{
 		public:
@@ -130,15 +137,14 @@ namespace Pictor
 				Scale = 1 << subpixel_shift
 			};
 
-
 			//----------------------------------------------------------------
 			span_interpolator_linear_subdiv() :
 				m_subdiv_shift(4),
 				m_subdiv_size(1 << m_subdiv_shift),
 				m_subdiv_mask(m_subdiv_size - 1) {}
 
-			span_interpolator_linear_subdiv(const trans_type& trans, 
-											uint SubdivisionShift = 4) : 
+			span_interpolator_linear_subdiv(const trans_type& trans,
+											uint SubdivisionShift = 4) :
 				m_subdiv_shift(SubdivisionShift),
 				m_subdiv_size(1 << m_subdiv_shift),
 				m_subdiv_mask(m_subdiv_size - 1),
@@ -161,7 +167,7 @@ namespace Pictor
 
 			//----------------------------------------------------------------
 			uint SubdivisionShift() const { return m_subdiv_shift; }
-			void SubdivisionShift(uint shift) 
+			void SubdivisionShift(uint shift)
 			{
 				m_subdiv_shift = shift;
 				m_subdiv_size = 1 << m_subdiv_shift;

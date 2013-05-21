@@ -10,31 +10,32 @@
 namespace Mosa.DeviceSystem
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public abstract class FrameBuffer : IFrameBuffer
 	{
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected uint width;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected uint height;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IMemory memory;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected uint offset;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected uint bytesPerLine;
 
@@ -74,5 +75,4 @@ namespace Mosa.DeviceSystem
 		/// <param name="y">The y.</param>
 		public abstract void SetPixel(uint color, uint x, uint y);
 	}
-
 }

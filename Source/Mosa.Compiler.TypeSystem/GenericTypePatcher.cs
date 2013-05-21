@@ -24,18 +24,19 @@ namespace Mosa.Compiler.TypeSystem
 	public sealed class GenericTypePatcher : IGenericTypePatcher
 	{
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private uint typeTokenCounter = 0;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private uint signatureTokenCounter = 0;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private ITypeSystem typeSystem;
-
 
 		private struct GenericEntry
 		{
@@ -52,7 +53,7 @@ namespace Mosa.Compiler.TypeSystem
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private List<GenericEntry> patchedTypes = new List<GenericEntry>();
 
@@ -109,12 +110,11 @@ namespace Mosa.Compiler.TypeSystem
 		private void AddPatchedType(CilGenericType openType, SigType[] signature, CilGenericType patchedType)
 		{
 			(typeSystem.InternalTypeModule as InternalTypeModule).AddType(patchedType);
-			
+
 			GenericEntry genericEntry = new GenericEntry(openType, signature, patchedType);
 
 			patchedTypes.Add(genericEntry);
 		}
-
 
 		/// <summary>
 		/// Patches the type.
@@ -191,7 +191,7 @@ namespace Mosa.Compiler.TypeSystem
 				var signature = new GenericInstSigType(sigtype, genericArguments);
 
 				patchedType = new CilGenericType(enclosingType.InstantiationModule, typeToken, openType.BaseGenericType, signature);
-				
+
 				AddPatchedType(openType, genericArguments, patchedType);
 			}
 

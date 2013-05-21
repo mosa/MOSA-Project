@@ -36,8 +36,6 @@ namespace Mosa.Tool.Mono.UpdateProject
 			second.Close();
 
 			return (byte1 == byte2);
-
 		}
-
 	}
 }

@@ -7,7 +7,6 @@
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  */
 
-
 namespace Pictor
 {
 	public struct ScanlineSpan
@@ -20,8 +19,11 @@ namespace Pictor
 	public interface IScanline
 	{
 		void Finalize(int y);
+
 		void Reset(int min_x, int max_x);
+
 		void ResetSpans();
+
 		uint NumberOfSpans
 		{
 			get;
@@ -31,10 +33,15 @@ namespace Pictor
 		{
 			get;
 		}
+
 		ScanlineSpan GetNextScanlineSpan();
+
 		int y();
+
 		byte[] GetCovers();
+
 		void AddCell(int x, uint cover);
+
 		void AddSpan(int x, int len, uint cover);
 	};
 }

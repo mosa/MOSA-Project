@@ -14,10 +14,10 @@ using poly_subpixel_scale_e = Pictor.Basics.PolySubpixelScale;
 namespace Pictor
 {
 	//==================================================AntiAliasedRasterizerScanline
-	// Polygon rasterizer that is used to render filled polygons with 
-	// high-quality Anti-Aliasing. Internally, by default, the class uses 
-	// integer Coordinates in format 24.8, i.e. 24 bits for integer part 
-	// and 8 bits for fractional - see Shift. This class can be 
+	// Polygon rasterizer that is used to render filled polygons with
+	// high-quality Anti-Aliasing. Internally, by default, the class uses
+	// integer Coordinates in format 24.8, i.e. 24 bits for integer part
+	// and 8 bits for fractional - see Shift. This class can be
 	// used in the following  way:
 	//
 	// 1. FillingRule(FillingRule ft) - optional.
@@ -26,20 +26,20 @@ namespace Pictor
 	//
 	// 3. Reset()
 	//
-	// 4. MoveTo(x, y) / LineTo(x, y) - make the polygon. One can create 
+	// 4. MoveTo(x, y) / LineTo(x, y) - make the polygon. One can create
 	//    more than one contour, but each contour must consist of At least 3
 	//    vertices, i.e. MoveTo(x1, y1); LineTo(x2, y2); LineTo(x3, y3);
 	//    is the absolute minimum of vertices that define a triangle.
 	//    The algorithm does not check either the number of vertices nor
-	//    coincidence of their Coordinates, but in the worst case it just 
+	//    coincidence of their Coordinates, but in the worst case it just
 	//    won't draw anything.
-	//    The orger of the vertices (clockwise or counterclockwise) 
+	//    The orger of the vertices (clockwise or counterclockwise)
 	//    is important when using the non-zero filling rule (NonZero).
 	//    In this case the Vertex order of all the contours must be the same
 	//    if you want your intersecting polygons to be without "holes".
-	//    You actually can use different vertices order. If the contours do not 
-	//    intersect each other the order is not important anyway. If they do, 
-	//    contours with the same Vertex order will be rendered without "holes" 
+	//    You actually can use different vertices order. If the contours do not
+	//    intersect each other the order is not important anyway. If they do,
+	//    contours with the same Vertex order will be rendered without "holes"
 	//    while the intersecting contours with different orders will have "holes".
 	//
 	// FillingRule() and Gamma() can be called anytime before "sweeping".
@@ -47,8 +47,11 @@ namespace Pictor
 	public interface IRasterizer
 	{
 		int MinX();
+
 		int MinY();
+
 		int MaxX();
+
 		int MaxY();
 
 		IGammaFunction Gamma
@@ -57,9 +60,13 @@ namespace Pictor
 		}
 
 		bool SweepScanline(IScanline sl);
+
 		void Reset();
+
 		void AddPath(IVertexSource vs);
+
 		void AddPath(IVertexSource vs, uint path_id);
+
 		bool RewindScanlines();
 	}
 
@@ -113,6 +120,7 @@ namespace Pictor
 		}
 
 		/*
+
 		//--------------------------------------------------------------------
 		public AntiAliasedRasterizerScanline(IClipper rasterizer_sl_clip, IGammaFunction gamma_function)
 		{
@@ -170,15 +178,16 @@ namespace Pictor
 		}
 
 		/*
+
 		//--------------------------------------------------------------------
-		public uint apply_gamma(uint cover) 
-		{ 
+		public uint apply_gamma(uint cover)
+		{
 			return (uint)m_gamma[cover];
 		}
 		 */
 
 		//--------------------------------------------------------------------
-		void MoveTo(int x, int y)
+		private void MoveTo(int x, int y)
 		{
 			if (m_outline.IsSorted) Reset();
 			if (m_auto_close) ClosePolygon();
@@ -188,7 +197,7 @@ namespace Pictor
 		}
 
 		//------------------------------------------------------------------------
-		void LineTo(int x, int y)
+		private void LineTo(int x, int y)
 		{
 			m_VectorClipper.LineTo(m_outline,
 							  m_VectorClipper.DownScale(x),
@@ -213,6 +222,7 @@ namespace Pictor
 							  m_VectorClipper.UpScale(x),
 							  m_VectorClipper.UpScale(y));
 			m_status = Status.LineTo;
+
 			//DebugFile.Print("x=" + x.ToString() + " y=" + y.ToString() + "\n");
 		}
 
@@ -225,7 +235,7 @@ namespace Pictor
 			}
 		}
 
-		void AddVertex(double x, double y, uint PathAndFlags)
+		private void AddVertex(double x, double y, uint PathAndFlags)
 		{
 			if (Path.IsMoveTo(PathAndFlags))
 			{
@@ -246,8 +256,9 @@ namespace Pictor
 				}
 			}
 		}
+
 		//------------------------------------------------------------------------
-		void Edge(int x1, int y1, int x2, int y2)
+		private void Edge(int x1, int y1, int x2, int y2)
 		{
 			if (m_outline.IsSorted) Reset();
 			m_VectorClipper.MoveTo(m_VectorClipper.DownScale(x1), m_VectorClipper.DownScale(y1));
@@ -258,7 +269,7 @@ namespace Pictor
 		}
 
 		//------------------------------------------------------------------------
-		void EdgeD(double x1, double y1, double x2, double y2)
+		private void EdgeD(double x1, double y1, double x2, double y2)
 		{
 			if (m_outline.IsSorted) Reset();
 			m_VectorClipper.MoveTo(m_VectorClipper.UpScale(x1), m_VectorClipper.UpScale(y1));
@@ -295,13 +306,28 @@ namespace Pictor
 		}
 
 		//--------------------------------------------------------------------
-		public int MinX() { return m_outline.MinX(); }
-		public int MinY() { return m_outline.MinY(); }
-		public int MaxX() { return m_outline.MaxX(); }
-		public int MaxY() { return m_outline.MaxY(); }
+		public int MinX()
+		{
+			return m_outline.MinX();
+		}
+
+		public int MinY()
+		{
+			return m_outline.MinY();
+		}
+
+		public int MaxX()
+		{
+			return m_outline.MaxX();
+		}
+
+		public int MaxY()
+		{
+			return m_outline.MaxY();
+		}
 
 		//--------------------------------------------------------------------
-		void Sort()
+		private void Sort()
 		{
 			if (m_auto_close) ClosePolygon();
 			m_outline.SortCells();
@@ -321,7 +347,7 @@ namespace Pictor
 		}
 
 		//------------------------------------------------------------------------
-		bool NavigateScanline(int y)
+		private bool NavigateScanline(int y)
 		{
 			if (m_auto_close) ClosePolygon();
 			m_outline.SortCells();
@@ -359,6 +385,7 @@ namespace Pictor
 #if use_timers
         static CNamedTimer SweepSacanLine = new CNamedTimer("SweepSacanLine");
 #endif
+
 		//--------------------------------------------------------------------
 		public bool SweepScanline(IScanline sl)
 		{
@@ -443,9 +470,10 @@ namespace Pictor
 		}
 
 		//--------------------------------------------------------------------
-		bool HitTest(int tx, int ty)
+		private bool HitTest(int tx, int ty)
 		{
 			if (!NavigateScanline(ty)) return false;
+
 			//ScanlineHitTest sl(tx);
 			//SweepScanline(sl);
 			//return sl.hit();

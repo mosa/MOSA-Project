@@ -18,7 +18,6 @@ namespace Mosa.Platform.x86.Intrinsic
 	/// </summary>
 	public sealed class Invlpg : IIntrinsicPlatformMethod
 	{
-
 		#region Methods
 
 		/// <summary>
@@ -31,6 +30,6 @@ namespace Mosa.Platform.x86.Intrinsic
 			context.SetInstruction(X86.Invlpg, null, context.Operand1);
 		}
 
-		#endregion // Methods
+		#endregion Methods
 	}
 }

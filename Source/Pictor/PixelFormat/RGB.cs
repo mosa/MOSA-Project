@@ -6,6 +6,7 @@
  * Authors:
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  */
+
 using System;
 
 namespace Pictor.PixelFormat
@@ -17,6 +18,7 @@ namespace Pictor.PixelFormat
 		///<summary>
 		///</summary>
 		public uint NumPixelBits { get { return 24; } }
+
 		///<summary>
 		///</summary>
 		public enum Order { R = 2, G = 1, B = 0 };
@@ -24,12 +26,15 @@ namespace Pictor.PixelFormat
 		///<summary>
 		///</summary>
 		public int OrderR { get { return (int)Order.R; } }
+
 		///<summary>
 		///</summary>
 		public int OrderG { get { return (int)Order.G; } }
+
 		///<summary>
 		///</summary>
 		public int OrderB { get { return (int)Order.B; } }
+
 		///<summary>
 		///</summary>
 		public int OrderA { get { return -1; } }
@@ -138,7 +143,6 @@ namespace Pictor.PixelFormat
 				p[(int)Order.B] = _gamma.Inv((byte)(((cb - b) * alpha + (b << RGBA_Bytes.BaseShift)) >> RGBA_Bytes.BaseShift));
 			}
 		}
-
 	};
 
 	///<summary>
@@ -182,7 +186,6 @@ namespace Pictor.PixelFormat
 				p[(int)Order.B] = (byte)(((p[(int)Order.B] * oneOverAlpha) >> RGBA_Bytes.BaseShift) + cb);
 			}
 		}
-
 	};
 
 	///<summary>
@@ -219,7 +222,6 @@ namespace Pictor.PixelFormat
 			p[(int)Order.G] = (byte)System.Math.Min((((p[(int)Order.G] * oneOverAlpha) >> RGBA_Bytes.BaseShift) + cg), BaseMask);
 			p[(int)Order.B] = (byte)System.Math.Min((((p[(int)Order.B] * oneOverAlpha) >> RGBA_Bytes.BaseShift) + cb), BaseMask);
 		}
-
 	};
 
 	///<summary>
@@ -260,14 +262,14 @@ namespace Pictor.PixelFormat
 	///</summary>
 	public static class CopyOrBlendBGRWrapper
 	{
-		enum Order
+		private enum Order
 		{
 			R = 2,
 			G = 1,
 			B = 0,
 		};
 
-		const byte BaseMask = 255;
+		private const byte BaseMask = 255;
 
 		///<summary>
 		///</summary>
@@ -336,15 +338,14 @@ namespace Pictor.PixelFormat
 	///</summary>
 	public sealed class FormatRGB : IPixelFormat
 	{
-
 		private RasterBuffer _rasterBuffer;
 		private IBlender _blender;
 		private int _orderR;
 		private int _orderG;
 		private int _orderB;
 
-		const byte BaseMask = 255;
-		const int PixelWidth = 3;
+		private const byte BaseMask = 255;
+		private const int PixelWidth = 3;
 
 		public uint PixelWidthInBytes
 		{
@@ -392,7 +393,10 @@ namespace Pictor.PixelFormat
 			}
 		}
 
-		public void Attach(RasterBuffer rb) { _rasterBuffer = rb; }
+		public void Attach(RasterBuffer rb)
+		{
+			_rasterBuffer = rb;
+		}
 
 		///<summary>
 		///</summary>
@@ -424,10 +428,12 @@ namespace Pictor.PixelFormat
 		{
 			get { return _rasterBuffer.Width(); }
 		}
+
 		public uint Height
 		{
 			get { return _rasterBuffer.Height(); }
 		}
+
 		public int Stride
 		{
 			get { return _rasterBuffer.StrideInBytes(); }
@@ -438,7 +444,11 @@ namespace Pictor.PixelFormat
 		{
 			get { return _rasterBuffer; }
 		}
-		unsafe public byte* RowPointer(int y) { return _rasterBuffer.GetPixelPointer(y); }
+
+		unsafe public byte* RowPointer(int y)
+		{
+			return _rasterBuffer.GetPixelPointer(y);
+		}
 
 		//--------------------------------------------------------------------
 		unsafe public byte* PixelPointer(int x, int y)
@@ -484,8 +494,8 @@ namespace Pictor.PixelFormat
 		{
 			/*
 			cob_type::CopyOrBlendPixel(
-				(value_type*)_rasterBuffer->RowPointer(x, y, 1)  + x + x + x, 
-				c.r, c.g, c.b, c.a, 
+				(value_type*)_rasterBuffer->RowPointer(x, y, 1)  + x + x + x,
+				c.r, c.g, c.b, c.a,
 				cover);*/
 		}
 
@@ -523,7 +533,6 @@ namespace Pictor.PixelFormat
 			}
 			while (--len != 0);
 		}
-
 
 		//--------------------------------------------------------------------
 		public void BlendHorizontalLine(int x1, int y, int x2, RGBA_Bytes c, byte cover)
@@ -841,4 +850,3 @@ namespace Pictor.PixelFormat
 		}
 	}
 }
-

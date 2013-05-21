@@ -8,16 +8,13 @@
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  */
 
-
-
 namespace Mosa.Platform.x86.Intrinsic
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public sealed class SetCR0 : SetControlRegisterBase
 	{
-
 		/// <summary>
 		/// Initializes a new instance of the <see cref="SetCR0"/> class.
 		/// </summary>
@@ -25,6 +22,5 @@ namespace Mosa.Platform.x86.Intrinsic
 			: base(ControlRegister.CR0)
 		{
 		}
-
 	}
 }

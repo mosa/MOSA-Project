@@ -12,7 +12,6 @@ using System.IO;
 
 namespace Mosa.Compiler.Metadata
 {
-
 	/// <summary>
 	/// Base class for provider heaps.
 	/// </summary>
@@ -35,7 +34,7 @@ namespace Mosa.Compiler.Metadata
 		/// </summary>
 		protected int _size;
 
-		#endregion // Data members
+		#endregion Data members
 
 		#region Construction
 
@@ -55,7 +54,7 @@ namespace Mosa.Compiler.Metadata
 			_size = size;
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Properties
 
@@ -81,7 +80,7 @@ namespace Mosa.Compiler.Metadata
 			}
 		}
 
-		#endregion // Properties
+		#endregion Properties
 
 		#region Methods
 
@@ -148,7 +147,7 @@ namespace Mosa.Compiler.Metadata
 			writer.Write(_metadata, _offset, _size);
 		}
 
-		#endregion // Methods
+		#endregion Methods
 
 		#region Static methods
 
@@ -185,6 +184,6 @@ namespace Mosa.Compiler.Metadata
 			throw new ArgumentException(@"Invalid heap type.", @"type");
 		}
 
-		#endregion // Static methods
+		#endregion Static methods
 	}
 }

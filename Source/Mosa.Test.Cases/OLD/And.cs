@@ -8,7 +8,7 @@
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  *  Michael Fröhlich (grover) <michael.ruck@michaelruck.de>
  *  Kai P. Reisert <kpreisert@googlemail.com>
- * 
+ *
  */
 
 using System;
@@ -21,7 +21,6 @@ namespace Mosa.Test.Cases.OLD
 	[TestFixture]
 	public class AndFixture : TestCompilerAdapter
 	{
-
 		private static string CreateConstantTestCode(string name, string typeIn, string typeOut, string constLeft, string constRight)
 		{
 			if (String.IsNullOrEmpty(constRight))
@@ -75,7 +74,8 @@ namespace Mosa.Test.Cases.OLD
 			settings.CodeSource = CreateConstantTestCode("AndConstantBLeft", "bool", "bool", a.ToString().ToLower(), null);
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "AndConstantBLeft", (a & b), b));
 		}
-		#endregion
+
+		#endregion B
 
 		#region C
 
@@ -98,7 +98,8 @@ namespace Mosa.Test.Cases.OLD
 			settings.CodeSource = CreateConstantTestCode("AndConstantCLeft", "char", "char", "'" + a.ToString() + "'", null);
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "AndConstantCLeft", (char)(a & b), b));
 		}
-		#endregion
+
+		#endregion C
 
 		#region I1
 
@@ -123,7 +124,8 @@ namespace Mosa.Test.Cases.OLD
 			settings.CodeSource = CreateConstantTestCode("AndConstantI1Left", "sbyte", "int", a.ToString(), null);
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "AndConstantI1Left", (a & b), b));
 		}
-		#endregion
+
+		#endregion I1
 
 		#region I2
 
@@ -148,7 +150,8 @@ namespace Mosa.Test.Cases.OLD
 			settings.CodeSource = CreateConstantTestCode("AndConstantI2Left", "short", "int", a.ToString(), null);
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "AndConstantI2Left", (a & b), b));
 		}
-		#endregion
+
+		#endregion I2
 
 		#region I4
 
@@ -173,7 +176,8 @@ namespace Mosa.Test.Cases.OLD
 			settings.CodeSource = CreateConstantTestCode("AndConstantI4Left", "int", "int", a.ToString(), null);
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "AndConstantI4Left", (a & b), b));
 		}
-		#endregion
+
+		#endregion I4
 
 		#region I8
 
@@ -198,6 +202,7 @@ namespace Mosa.Test.Cases.OLD
 			settings.CodeSource = CreateConstantTestCode("AndConstantI8Left", "long", "long", a.ToString(), null);
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "AndConstantI8Left", (a & b), b));
 		}
-		#endregion
+
+		#endregion I8
 	}
 }

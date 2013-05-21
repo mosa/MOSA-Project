@@ -4,7 +4,7 @@
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com> 
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 using System.Collections;
@@ -13,11 +13,10 @@ using Mosa.Compiler.Framework.Platform;
 namespace Mosa.Compiler.Framework.Stages
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public sealed class SimpleRegisterAllocatorStage : BaseMethodCompilerStage, IMethodCompilerStage, IPipelineStage
 	{
-
 		#region Data members
 
 		private CPURegister[] cpuRegister = new CPURegister[64];
@@ -25,7 +24,7 @@ namespace Mosa.Compiler.Framework.Stages
 		private BitArray traversed;
 		private BitArray analyzed;
 
-		#endregion // Data members
+		#endregion Data members
 
 		private class CPURegister
 		{
@@ -98,14 +97,10 @@ namespace Mosa.Compiler.Framework.Stages
 				RegisterBitmap outputRegisters = new RegisterBitmap();
 
 				GetRegisterUsage(ctx, ref inputRegisters, ref outputRegisters);
-
-
 			}
 
 			return current;
 		}
-
-
 
 		// Copied from RegisterUsageAnaluzerStage.cs
 		private void GetRegisterUsage(Context context, ref RegisterBitmap inputRegisters, ref RegisterBitmap outputRegisters)

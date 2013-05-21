@@ -11,7 +11,6 @@ using System.Diagnostics;
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Loader;
 using Mosa.Compiler.Metadata.Signatures;
-using Mosa.Compiler.Metadata.Tables;
 using Mosa.Compiler.TypeSystem;
 
 namespace Mosa.Compiler.Framework.CIL
@@ -61,7 +60,7 @@ namespace Mosa.Compiler.Framework.CIL
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Properties
 
@@ -77,7 +76,7 @@ namespace Mosa.Compiler.Framework.CIL
 			}
 		}
 
-		#endregion // Properties
+		#endregion Properties
 
 		#region Methods
 
@@ -96,7 +95,7 @@ namespace Mosa.Compiler.Framework.CIL
 			 * passed. So we do as if it doesn't exist. Upon instruction expansion a call
 			 * to the allocator is inserted and its result is the this pointer passed. This
 			 * must be done by expansion though...
-			 * 
+			 *
 			 */
 
 			// Remove the this argument from the invocation, it's not on the stack yet.
@@ -157,7 +156,5 @@ namespace Mosa.Compiler.Framework.CIL
 		}
 
 		#endregion Methods
-
-
 	}
 }

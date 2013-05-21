@@ -5,7 +5,7 @@
  *
  * Authors:
  *  Michael Fröhlich (grover) <michael.ruck@michaelruck.de>
- *  
+ *
  */
 
 using MbUnit.Framework;
@@ -14,14 +14,13 @@ using Mosa.Test.System;
 
 namespace Mosa.Test.Cases.CIL
 {
-
 	[TestFixture]
 	[Importance(Importance.Critical)]
+
 	//[Category(@"Basic types")]
 	//[Description(@"Tests support for the basic type System.String")]
 	public class StringFixture : TestCompilerAdapter
 	{
-
 		public StringFixture()
 		{
 			settings.AddReference("Mosa.Test.Collection.dll");

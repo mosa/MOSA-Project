@@ -7,7 +7,6 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-
 namespace Mosa.Compiler.Framework.IR
 {
 	/// <summary>
@@ -18,7 +17,6 @@ namespace Mosa.Compiler.Framework.IR
 	/// </remarks>
 	public sealed class ZeroExtendedMove : TwoOperandInstruction
 	{
-
 		#region TwoOperandInstruction Overrides
 
 		/// <summary>
@@ -31,6 +29,6 @@ namespace Mosa.Compiler.Framework.IR
 			visitor.ZeroExtendedMove(context);
 		}
 
-		#endregion // TwoOperandInstruction Overrides
+		#endregion TwoOperandInstruction Overrides
 	}
 }

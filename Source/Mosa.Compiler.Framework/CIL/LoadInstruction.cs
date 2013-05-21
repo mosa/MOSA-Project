@@ -6,7 +6,7 @@
  * Authors:
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  *  Michael Fröhlich (aka grover, Michael Ruck) <sharpos@michaelruck.de>
- *  
+ *
  */
 
 using Mosa.Compiler.Metadata.Signatures;
@@ -14,7 +14,7 @@ using Mosa.Compiler.Metadata.Signatures;
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public class LoadInstruction : BaseCILInstruction
 	{
@@ -39,7 +39,7 @@ namespace Mosa.Compiler.Framework.CIL
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		public static Operand CreateResultOperand(IInstructionDecoder decoder, StackTypeCode operandType, SigType operandSigType)
 		{

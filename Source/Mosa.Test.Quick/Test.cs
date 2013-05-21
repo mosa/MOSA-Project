@@ -5,11 +5,12 @@
  *
  */
 
-
 namespace Mosa.Test.Quick.Tests
 {
 	public class AA { }
+
 	public class BB : AA { }
+
 	public class CC { }
 
 	public class Test
@@ -90,25 +91,45 @@ namespace Mosa.Test.Quick.Tests
 	{
 		public T value;
 
-		public T Get() { return value; }
-		public void Set(T value) { this.value = value; }
+		public T Get()
+		{
+			return value;
+		}
+
+		public void Set(T value)
+		{
+			this.value = value;
+		}
 
 		public class NestedClass
 		{
 			public T nestedValue;
 
-			public T Get() { return nestedValue; }
-			public void Set(T value) { this.nestedValue = value; }
+			public T Get()
+			{
+				return nestedValue;
+			}
+
+			public void Set(T value)
+			{
+				this.nestedValue = value;
+			}
 		}
 
 		public class GenericNestedClass<S>
 		{
 			public S nestedValue;
 
-			public S Get() { return nestedValue; }
-			public void Set(S value) { this.nestedValue = value; }
-		}
+			public S Get()
+			{
+				return nestedValue;
+			}
 
+			public void Set(S value)
+			{
+				this.nestedValue = value;
+			}
+		}
 	}
 
 	public class ClosedClass : Parent<int>
@@ -120,21 +141,29 @@ namespace Mosa.Test.Quick.Tests
 	{
 		public int Kvalue;
 
-		public void SetK(int kValue) { this.Kvalue = kValue; }
+		public void SetK(int kValue)
+		{
+			this.Kvalue = kValue;
+		}
 	}
 
 	public class KK : K
 	{
 		public int KKvalue;
 
-		public void SetKK(int kkValue) { this.KKvalue = kkValue; }
+		public void SetKK(int kkValue)
+		{
+			this.KKvalue = kkValue;
+		}
 	}
 
 	public class KKK : KK
 	{
 		public int KKKvalue;
 
-		public void SetKKK(int kkkValue) { this.KKKvalue = kkkValue; }
+		public void SetKKK(int kkkValue)
+		{
+			this.KKKvalue = kkkValue;
+		}
 	}
-
 }

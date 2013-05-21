@@ -12,17 +12,17 @@ using Mosa.Compiler.Metadata;
 namespace Mosa.Compiler.TypeSystem
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public class GenericParameter
 	{
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private readonly GenericParameterAttributes flags;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private readonly string name;
 
@@ -59,6 +59,5 @@ namespace Mosa.Compiler.TypeSystem
 		{
 			return name;
 		}
-
 	}
 }

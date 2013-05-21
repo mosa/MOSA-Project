@@ -6,6 +6,7 @@
  * Authors:
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  */
+
 using image_subpixel_scale_e = Pictor.ImageFilterLookUpTable.EImageSubpixelScale;
 
 namespace Pictor
@@ -13,18 +14,21 @@ namespace Pictor
 	public interface ISpanGenerator
 	{
 		void Prepare();
+
 		unsafe void Generate(RGBA_Bytes* span, int x, int y, uint len);
 	};
 
 	//-------------------------------------------------------SpanImageFilter
 	public abstract class SpanImageFilter : ISpanGenerator
 	{
-		public SpanImageFilter() { }
+		public SpanImageFilter()
+		{
+		}
+
 		public SpanImageFilter(IRasterBufferAccessor src,
 			ISpanInterpolator interpolator)
 			: this(src, interpolator, null)
 		{
-
 		}
 
 		public SpanImageFilter(IRasterBufferAccessor src,
@@ -38,21 +42,56 @@ namespace Pictor
 			m_dx_int = ((int)image_subpixel_scale_e.Scale / 2);
 			m_dy_int = ((int)image_subpixel_scale_e.Scale / 2);
 		}
-		public void attach(IRasterBufferAccessor v) { m_src = v; }
+
+		public void attach(IRasterBufferAccessor v)
+		{
+			m_src = v;
+		}
 
 		public unsafe abstract void Generate(RGBA_Bytes* span, int x, int y, uint len);
 
 		//--------------------------------------------------------------------
-		public IRasterBufferAccessor source() { return m_src; }
-		public ImageFilterLookUpTable filter() { return m_filter; }
-		public int filter_dx_int() { return (int)m_dx_int; }
-		public int filter_dy_int() { return (int)m_dy_int; }
-		public double filter_dx_dbl() { return m_dx_dbl; }
-		public double filter_dy_dbl() { return m_dy_dbl; }
+		public IRasterBufferAccessor source()
+		{
+			return m_src;
+		}
+
+		public ImageFilterLookUpTable filter()
+		{
+			return m_filter;
+		}
+
+		public int filter_dx_int()
+		{
+			return (int)m_dx_int;
+		}
+
+		public int filter_dy_int()
+		{
+			return (int)m_dy_int;
+		}
+
+		public double filter_dx_dbl()
+		{
+			return m_dx_dbl;
+		}
+
+		public double filter_dy_dbl()
+		{
+			return m_dy_dbl;
+		}
 
 		//--------------------------------------------------------------------
-		public void interpolator(ISpanInterpolator v) { m_interpolator = v; }
-		public void filter(ImageFilterLookUpTable v) { m_filter = v; }
+		public void interpolator(ISpanInterpolator v)
+		{
+			m_interpolator = v;
+		}
+
+		public void filter(ImageFilterLookUpTable v)
+		{
+			m_filter = v;
+		}
+
 		public void filter_offset(double dx, double dy)
 		{
 			m_dx_dbl = dx;
@@ -60,16 +99,26 @@ namespace Pictor
 			m_dx_int = (uint)Basics.Round(dx * (int)image_subpixel_scale_e.Scale);
 			m_dy_int = (uint)Basics.Round(dy * (int)image_subpixel_scale_e.Scale);
 		}
-		public void filter_offset(double d) { filter_offset(d, d); }
+
+		public void filter_offset(double d)
+		{
+			filter_offset(d, d);
+		}
 
 		//--------------------------------------------------------------------
-		public ISpanInterpolator interpolator() { return m_interpolator; }
+		public ISpanInterpolator interpolator()
+		{
+			return m_interpolator;
+		}
 
 		//--------------------------------------------------------------------
-		public void Prepare() { }
+		public void Prepare()
+		{
+		}
 
 		//--------------------------------------------------------------------
 		private IRasterBufferAccessor m_src;
+
 		private ISpanInterpolator m_interpolator;
 		protected ImageFilterLookUpTable m_filter;
 		private double m_dx_dbl;
@@ -80,10 +129,9 @@ namespace Pictor
 
 	/*
 
-
 	//==============================================span_image_resample_affine
-	//template<class Source> 
-	public class span_image_resample_affine : 
+	//template<class Source>
+	public class span_image_resample_affine :
 		SpanImageFilter//<Source, LinearSpanInterpolator<trans_affine> >
 	{
 		//typedef Source IImageAccessor;
@@ -99,7 +147,7 @@ namespace Pictor
 		}
 
 		//--------------------------------------------------------------------
-		public span_image_resample_affine(IImageAccessor src, 
+		public span_image_resample_affine(IImageAccessor src,
 								   ISpanInterpolator inter,
 								   ImageFilterLookUpTable filter) : base(src, inter, filter)
 		{
@@ -107,7 +155,6 @@ namespace Pictor
 			m_blur_x(1.0);
 			m_blur_y(1.0);
 		}
-
 
 		//--------------------------------------------------------------------
 		public int  ScaleLimit() { return UnsignedRound(m_scale_limit); }
@@ -121,7 +168,7 @@ namespace Pictor
 		public void Blur(double v) { m_blur_x = m_blur_y = v; }
 
 		//--------------------------------------------------------------------
-		public void Prepare() 
+		public void Prepare()
 		{
 			double xScale;
 			double yScale;
@@ -165,7 +212,6 @@ namespace Pictor
 
 	 */
 
-
 	//=====================================================SpanImageResample
 	public abstract class SpanImageResample
 		: SpanImageFilter
@@ -184,23 +230,25 @@ namespace Pictor
 		//public abstract unsafe void Generate(rgba8* Span, int x, int y, uint len);
 
 		//--------------------------------------------------------------------
-		int ScaleLimit
+		private int ScaleLimit
 		{
 			get { return m_scale_limit; }
 			set { m_scale_limit = value; }
 		}
 
 		//--------------------------------------------------------------------
-		double xBlur
+		private double xBlur
 		{
 			get { return (double)(m_blur_x) / (double)((int)image_subpixel_scale_e.Scale); }
 			set { m_blur_x = (int)Basics.UnsignedRound(value * (double)((int)image_subpixel_scale_e.Scale)); }
 		}
-		double yBlur
+
+		private double yBlur
 		{
 			get { return (double)(m_blur_y) / (double)((int)image_subpixel_scale_e.Scale); }
 			set { m_blur_y = (int)Basics.UnsignedRound(value * (double)((int)image_subpixel_scale_e.Scale)); }
 		}
+
 		public double Blur
 		{
 			set { m_blur_x = m_blur_y = (int)Basics.UnsignedRound(value * (double)((int)image_subpixel_scale_e.Scale)); }
@@ -224,8 +272,8 @@ namespace Pictor
 			if (ry < (int)image_subpixel_scale_e.Scale) ry = (int)image_subpixel_scale_e.Scale;
 		}
 
-		int m_scale_limit;
-		int m_blur_x;
-		int m_blur_y;
+		private int m_scale_limit;
+		private int m_blur_x;
+		private int m_blur_y;
 	};
 }

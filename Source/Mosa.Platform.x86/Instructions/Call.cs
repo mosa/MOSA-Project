@@ -7,7 +7,6 @@
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  */
 
-
 using Mosa.Compiler.Framework;
 
 namespace Mosa.Platform.x86.Instructions
@@ -22,7 +21,7 @@ namespace Mosa.Platform.x86.Instructions
 		private static readonly OpCode RegCall = new OpCode(new byte[] { 0xFF }, 2);
 		private static readonly byte[] LabelCall = new byte[] { 0xE8 };
 
-		#endregion // Data Member
+		#endregion Data Member
 
 		#region Methods
 
@@ -65,7 +64,6 @@ namespace Mosa.Platform.x86.Instructions
 			visitor.Call(context);
 		}
 
-		#endregion // Methods
-
+		#endregion Methods
 	}
 }

@@ -15,7 +15,6 @@ using System.Text;
 
 namespace Mosa.Utility.IsoImage
 {
-
 	/// <summary>
 	/// This class is responsible for encoding types of data to the filestream and also keeping track
 	/// of our current file position.
@@ -75,6 +74,7 @@ namespace Mosa.Utility.IsoImage
 			name = name.Substring(0, System.Math.Min(name.Length, 8)).Replace('.', '_').Replace(' ', '_');
 			ext = ext.Substring(0, System.Math.Min(ext.Length, 4));
 #else
+
 				// make sure Name isn't too long, 1st pass ( trying to preserve extension )
 				int total = name.Length + ext.Length;
 				const int max_length = (256 - 34);
@@ -88,6 +88,7 @@ namespace Mosa.Utility.IsoImage
 			name += ext;
 
 #if !ROCKRIDGE
+
 				// make sure Name isn't too long, 2nd pass ( if 1st pass failed, then extension is too long - sacrifice it now )
 				if (name.Length > max_length)
 					name = name.Substring(0, max_length);

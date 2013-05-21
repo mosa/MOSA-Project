@@ -22,7 +22,6 @@ namespace Mosa.Compiler.Framework.Stages
 	/// </summary>
 	public class GenericsResolverStage : BaseCompilerStage, ICompilerStage, IPipelineStage
 	{
-
 		#region ICompilerStage members
 
 		void ICompilerStage.Run()
@@ -35,7 +34,7 @@ namespace Mosa.Compiler.Framework.Stages
 						continue;
 
 					// TODO:
-					// Scan for every instantiation for this method 
+					// Scan for every instantiation for this method
 					// and create new methods for every instantiation type.
 					// Then add them to a HashMap Type -> Method
 					// and also add them to the method list.
@@ -51,7 +50,7 @@ namespace Mosa.Compiler.Framework.Stages
 		#endregion ICompilerStage members
 
 		/// <summary>
-		/// Determines if the given method is a method 
+		/// Determines if the given method is a method
 		/// of a generic class that uses a generic parameter.
 		/// </summary>
 		/// <param name="method">The method to check</param>

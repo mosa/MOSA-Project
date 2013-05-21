@@ -89,19 +89,23 @@ namespace Pictor.PixelFormat
 		{
 			get { return m_clip_box; }
 		}
-		int MinX
+
+		private int MinX
 		{
 			get { return m_clip_box.x1; }
 		}
-		int MinY
+
+		private int MinY
 		{
 			get { return m_clip_box.y1; }
 		}
-		int MaxX
+
+		private int MaxX
 		{
 			get { return m_clip_box.x2; }
 		}
-		int MaxY
+
+		private int MaxY
 		{
 			get { return m_clip_box.y2; }
 		}
@@ -111,18 +115,22 @@ namespace Pictor.PixelFormat
 		{
 			get { return m_clip_box; }
 		}
+
 		public int BoundingMinX
 		{
 			get { return m_clip_box.x1; }
 		}
+
 		public int BoundingMinY
 		{
 			get { return m_clip_box.y1; }
 		}
+
 		public int BoundingMaxX
 		{
 			get { return m_clip_box.x2; }
 		}
+
 		public int BoundingMaxY
 		{
 			get { return m_clip_box.y2; }
@@ -141,7 +149,6 @@ namespace Pictor.PixelFormat
 				}
 			}
 		}
-
 
 		//--------------------------------------------------------------------
 		public override unsafe void CopyPixel(int x, int y, byte* c)
@@ -239,6 +246,7 @@ namespace Pictor.PixelFormat
 		}
 
 		/*
+
 		//--------------------------------------------------------------------
 		public void copy_bar(int x1, int y1, int x2, int y2, IColorType c)
 		{
@@ -255,7 +263,7 @@ namespace Pictor.PixelFormat
 		}
 
 		//--------------------------------------------------------------------
-		public void blend_bar(int x1, int y1, int x2, int y2, 
+		public void blend_bar(int x1, int y1, int x2, int y2,
 					   IColorType c, byte cover)
 		{
 			RectI rc(x1, y1, x2, y2);
@@ -267,8 +275,8 @@ namespace Pictor.PixelFormat
 				{
 					m_ren->BlendHorizontalLine(rc.x1,
 									   y,
-									   uint(rc.x2 - rc.x1 + 1), 
-									   c, 
+									   uint(rc.x2 - rc.x1 + 1),
+									   c,
 									   cover);
 				}
 			}
@@ -318,7 +326,6 @@ namespace Pictor.PixelFormat
 			base.BlendSolidVerticalSpan(x, y, len, c, covers);
 		}
 
-
 		//--------------------------------------------------------------------
 		public override unsafe void CopyHorizontalColorSpan(int x, int y, uint len, RGBA_Bytes* colors)
 		{
@@ -340,7 +347,6 @@ namespace Pictor.PixelFormat
 			}
 			base.CopyHorizontalColorSpan(x, y, len, colors);
 		}
-
 
 		//--------------------------------------------------------------------
 		public override unsafe void CopyVerticalColorSpan(int x, int y, uint len, RGBA_Bytes* colors)
@@ -369,6 +375,7 @@ namespace Pictor.PixelFormat
 							   RGBA_Bytes* colors, byte* covers)
 		{
 			throw new System.NotImplementedException();
+
 			//BlendHorizontalColorSpan(x, y, len, Colors, covers, CoverFull);
 		}
 
@@ -517,24 +524,24 @@ namespace Pictor.PixelFormat
 		}
 
 		/*
+
 		//--------------------------------------------------------------------
 		//template<class SrcPixelFormatRenderer>
 		public void blend_from(rendering_buffer src)
 		{
 			blend_from(src, 0, 0, 0, Pictor::CoverFull)
-
 		}
 
-		public void blend_from(rendering_buffer src, 
-						ref RectI rect_src_ptr, 
-						int dx, 
+		public void blend_from(rendering_buffer src,
+						ref RectI rect_src_ptr,
+						int dx,
 						int dy,
 						byte cover)
 		{
 			RectI rsrc(0, 0, src.Width(), src.Height());
 			if(rect_src_ptr)
 			{
-				rsrc.x1 = rect_src_ptr->x1; 
+				rsrc.x1 = rect_src_ptr->x1;
 				rsrc.y1 = rect_src_ptr->y1;
 				rsrc.x2 = rect_src_ptr->x2 + 1;
 				rsrc.y2 = rect_src_ptr->y2 + 1;
@@ -595,22 +602,22 @@ namespace Pictor.PixelFormat
 
 		//--------------------------------------------------------------------
 		//template<class SrcPixelFormatRenderer>
-		public void blend_from_color(rendering_buffer src, 
+		public void blend_from_color(rendering_buffer src,
 							  IColorType Color)
 		{
 			blend_from_color(src, Color, h0, 0, 0, Pictor::CoverFull)
 		}
-		public void blend_from_color(rendering_buffer src, 
+		public void blend_from_color(rendering_buffer src,
 							  IColorType Color,
-							  ref RectI rect_src_ptr, 
-							  int dx, 
+							  ref RectI rect_src_ptr,
+							  int dx,
 							  int dy,
 							  byte cover)
 		{
 			RectI rsrc(0, 0, src.Width(), src.Height());
 			if(rect_src_ptr)
 			{
-				rsrc.x1 = rect_src_ptr->x1; 
+				rsrc.x1 = rect_src_ptr->x1;
 				rsrc.y1 = rect_src_ptr->y1;
 				rsrc.x2 = rect_src_ptr->x2 + 1;
 				rsrc.y2 = rect_src_ptr->y2 + 1;
@@ -671,23 +678,24 @@ namespace Pictor.PixelFormat
 		}
 
 	/*
+
 		//--------------------------------------------------------------------
 		//template<class SrcPixelFormatRenderer>
 		public void blend_from_lut(rendering_buffer src, IColorType color_lut)
 		{
 			blend_from_lut(rendering_buffer src, IColorType color_lut, 0, 0, 0, Pictor::CoverFull);
 		}
-		public void blend_from_lut(rendering_buffer src, 
+		public void blend_from_lut(rendering_buffer src,
 							IColorType color_lut,
-							ref RectI rect_src_ptr, 
-							int dx, 
+							ref RectI rect_src_ptr,
+							int dx,
 							int dy,
 							byte cover)
 		{
 			RectI rsrc(0, 0, src.Width(), src.Height());
 			if(rect_src_ptr)
 			{
-				rsrc.x1 = rect_src_ptr->x1; 
+				rsrc.x1 = rect_src_ptr->x1;
 				rsrc.y1 = rect_src_ptr->y1;
 				rsrc.x2 = rect_src_ptr->x2 + 1;
 				rsrc.y2 = rect_src_ptr->y2 + 1;

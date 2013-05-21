@@ -7,11 +7,8 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-
-
 namespace Mosa.Compiler.InternalTrace
 {
-
 	public interface ICompilerEventListener
 	{
 		void SubmitTraceEvent(CompilerEvent compilerStage, string info);

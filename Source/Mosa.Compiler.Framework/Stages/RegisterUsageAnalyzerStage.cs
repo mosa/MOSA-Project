@@ -20,7 +20,6 @@ namespace Mosa.Compiler.Framework.Stages
 	/// </summary>
 	public class RegisterUsageAnalyzerStage : BaseMethodCompilerStage, IMethodCompilerStage, IPipelineStage
 	{
-
 		protected RegisterBitmap[] top;
 		protected RegisterBitmap[] bottom;
 		protected BitArray analyzed;
@@ -86,6 +85,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			return;
 		}
+
 		protected void AnalyzeBlock(BasicBlock block)
 		{
 			if (analyzed.Get(block.Sequence))
@@ -174,6 +174,5 @@ namespace Mosa.Compiler.Framework.Stages
 			outputRegisters = usage.GetOutputRegisters(context);
 			inputRegisters = usage.GetInputRegisters(context);
 		}
-
 	}
 }

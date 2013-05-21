@@ -6,8 +6,8 @@
 //                  larsbrubaker@gmail.com
 // Copyright (C) 2007
 //
-// Permission to copy, use, modify, sell and distribute this software 
-// is granted provided this copyright notice appears in all copies. 
+// Permission to copy, use, modify, sell and distribute this software
+// is granted provided this copyright notice appears in all copies.
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -28,21 +28,21 @@ namespace Pictor.UI
 	//--------------------------------------------------------slider_ctrl_impl
 	public class SliderWidget : SimpleVertexSourceWidget
 	{
-		double m_border_width;
-		double m_border_extra;
-		double m_text_thickness;
-		double m_value;
-		double m_preview_value;
-		double m_min;
-		double m_max;
-		uint m_num_steps;
-		bool m_descending;
-		string m_label = "";
-		double m_xs1;
-		double m_ys1;
-		double m_xs2;
-		double m_ys2;
-		double m_pdx;
+		private double m_border_width;
+		private double m_border_extra;
+		private double m_text_thickness;
+		private double m_value;
+		private double m_preview_value;
+		private double m_min;
+		private double m_max;
+		private uint m_num_steps;
+		private bool m_descending;
+		private string m_label = "";
+		private double m_xs1;
+		private double m_ys1;
+		private double m_xs2;
+		private double m_ys2;
+		private double m_pdx;
 		protected bool m_mouse_move;
 		private RGBA_Doubles m_background_color;
 		private RGBA_Doubles m_triangle_color;
@@ -50,17 +50,17 @@ namespace Pictor.UI
 		private RGBA_Doubles m_pointer_preview_color;
 		private RGBA_Doubles m_pointer_color;
 
-		double[] m_vx = new double[32];
-		double[] m_vy = new double[32];
+		private double[] m_vx = new double[32];
+		private double[] m_vy = new double[32];
 
-		VertexSource.Ellipse m_ellipse;
+		private VertexSource.Ellipse m_ellipse;
 
-		uint m_idx;
-		uint m_vertex;
+		private uint m_idx;
+		private uint m_vertex;
 
-		GsvText m_text;
-		StrokeConverter m_text_poly;
-		PathStorage m_storage;
+		private GsvText m_text;
+		private StrokeConverter m_text_poly;
+		private PathStorage m_storage;
 
 		public SliderWidget(double x1, double y1, double x2, double y2)
 			: base(x1, y1, x2, y2)
@@ -97,18 +97,41 @@ namespace Pictor.UI
 			CalculateBox();
 		}
 
-		public void Range(double min, double max) { m_min = min; m_max = max; }
-		public void NumberOfSteps(uint num) { m_num_steps = num; }
+		public void Range(double min, double max)
+		{
+			m_min = min; m_max = max;
+		}
+
+		public void NumberOfSteps(uint num)
+		{
+			m_num_steps = num;
+		}
+
 		public void Label(String fmt)
 		{
 			m_label = fmt;
 		}
-		public void text_thickness(double t) { m_text_thickness = t; }
 
-		public bool Descending() { return m_descending; }
-		public void Descending(bool v) { m_descending = v; }
+		public void text_thickness(double t)
+		{
+			m_text_thickness = t;
+		}
 
-		public double Value() { return m_value * (m_max - m_min) + m_min; }
+		public bool Descending()
+		{
+			return m_descending;
+		}
+
+		public void Descending(bool v)
+		{
+			m_descending = v;
+		}
+
+		public double Value()
+		{
+			return m_value * (m_max - m_min) + m_min;
+		}
+
 		public void Value(double value)
 		{
 			m_preview_value = (value - m_min) / (m_max - m_min);
@@ -276,7 +299,6 @@ namespace Pictor.UI
 						32);
 					break;
 
-
 				case 4:                 // pointer
 					NormalizeValue(false);
 					m_ellipse.Init(m_xs1 + (m_xs2 - m_xs1) * m_value,
@@ -331,6 +353,7 @@ namespace Pictor.UI
 
 				case 2:
 					PathAndFlags = m_text_poly.Vertex(out x, out y);
+
 					//return (uint)Path.path_commands_e.path_cmd_stop;
 					break;
 
@@ -385,8 +408,15 @@ namespace Pictor.UI
 			return ret;
 		}
 
-		public void BackgroundColor(RGBA_Doubles c) { m_background_color = c; }
-		public void PointerColor(RGBA_Doubles c) { m_pointer_color = c; }
+		public void BackgroundColor(RGBA_Doubles c)
+		{
+			m_background_color = c;
+		}
+
+		public void PointerColor(RGBA_Doubles c)
+		{
+			m_pointer_color = c;
+		}
 
 		public override IColorType Color(uint i)
 		{

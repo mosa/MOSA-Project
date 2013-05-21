@@ -19,7 +19,6 @@ namespace Mosa.Platform.x86.Intrinsic
 	/// </summary>
 	public sealed class Lidt : IIntrinsicPlatformMethod
 	{
-
 		#region Methods
 
 		/// <summary>
@@ -34,7 +33,6 @@ namespace Mosa.Platform.x86.Intrinsic
 			context.AppendInstruction(X86.Lidt, null, operand);
 		}
 
-		#endregion // Methods
-
+		#endregion Methods
 	}
 }

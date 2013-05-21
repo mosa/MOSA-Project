@@ -52,6 +52,6 @@ namespace Mosa.Platform.x86.Intrinsic
 			context.SetInstruction(IR.IRInstruction.Move, context.Result, Operand.CreateSymbol(BuiltInSigType.Ptr, @"Mosa.Tools.Compiler.LinkerGenerated.<$>InterruptISR" + irq.ToString() + "()"));
 		}
 
-		#endregion // Methods
+		#endregion Methods
 	}
 }

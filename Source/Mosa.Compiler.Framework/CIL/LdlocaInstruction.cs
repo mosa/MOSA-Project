@@ -7,13 +7,12 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-
 using Mosa.Compiler.Metadata.Signatures;
 
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public sealed class LdlocaInstruction : LoadInstruction
 	{
@@ -27,7 +26,7 @@ namespace Mosa.Compiler.Framework.CIL
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Methods
 
@@ -43,7 +42,7 @@ namespace Mosa.Compiler.Framework.CIL
 
 			ushort locIdx;
 
-			// Opcode specific handling 
+			// Opcode specific handling
 			if (opcode == OpCode.Ldloca_s)
 			{
 				byte loc = decoder.DecodeByte();
@@ -70,6 +69,5 @@ namespace Mosa.Compiler.Framework.CIL
 		}
 
 		#endregion Methods
-
 	}
 }

@@ -13,11 +13,10 @@ using Mosa.Compiler.Framework.Platform;
 namespace Mosa.Platform.x86
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public abstract class X86Instruction : BasePlatformInstruction, IRegisterUsage
 	{
-
 		static protected RegisterBitmap NoRegisters = new RegisterBitmap();
 
 		#region Construction
@@ -48,7 +47,7 @@ namespace Mosa.Platform.x86
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Methods
 
@@ -85,7 +84,7 @@ namespace Mosa.Platform.x86
 			emitter.Emit(opCode, context.Result, context.Operand1, context.Operand2);
 		}
 
-		#endregion // Methods
+		#endregion Methods
 
 		#region Operand Overrides
 
@@ -123,7 +122,7 @@ namespace Mosa.Platform.x86
 			get { return null; }
 		}
 
-		#endregion // Operand Overrides
+		#endregion Operand Overrides
 
 		#region Typesizes
 
@@ -257,7 +256,7 @@ namespace Mosa.Platform.x86
 			return IsUnsignedLong(operand) || IsSignedLong(operand);
 		}
 
-		#endregion
+		#endregion Typesizes
 
 		#region IRegisterUsage
 
@@ -315,7 +314,7 @@ namespace Mosa.Platform.x86
 		/// </summary>
 		public virtual RegisterBitmap AdditionalInputRegisters { get { return NoRegisters; } }
 
-		#endregion // IRegisterUsage
+		#endregion IRegisterUsage
 
 		/// <summary>
 		/// Gets the register.
@@ -340,7 +339,5 @@ namespace Mosa.Platform.x86
 
 			return null;
 		}
-
-
 	}
 }

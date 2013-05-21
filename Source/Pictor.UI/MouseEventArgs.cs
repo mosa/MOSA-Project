@@ -1,5 +1,4 @@
-﻿
-namespace Pictor.UI
+﻿namespace Pictor.UI
 {
 	public class MouseEventArgs// : EventArgs
 	{
@@ -28,11 +27,16 @@ namespace Pictor.UI
 		}
 
 		public MouseButtons Button { get { return m_Button; } }
+
 		public int Clicks { get { return m_Clicks; } }
+
 		public int WheelDelta { get { return m_WheelDelta; } }
+
 		//public Point Location { get; }
 		public double X { get { return m_X; } }
+
 		public double Y { get { return m_Y; } }
+
 		public bool Handled { get { return m_Handled; } set { m_Handled = value; } }
 	}
 }

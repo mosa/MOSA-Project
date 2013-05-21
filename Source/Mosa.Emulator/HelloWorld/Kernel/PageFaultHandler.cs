@@ -12,11 +12,10 @@ using Mosa.Platform.x86.Intrinsic;
 namespace Mosa.Kernel.x86
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public static class PageFaultHandler
 	{
-
 		/// <summary>
 		/// Handle Page Faults
 		/// </summary>

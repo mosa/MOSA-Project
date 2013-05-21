@@ -15,11 +15,12 @@ namespace Mosa.DeviceSystem
 	public class PixelPaletteGraphicsAdapter : IPixelGraphicsDevice
 	{
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IPixelPaletteGraphicsDevice pixelPaletteGraphicsDevice;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected ColorPalette colorPalette;
 

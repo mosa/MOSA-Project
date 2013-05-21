@@ -10,7 +10,7 @@
 namespace System
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public struct Boolean
 	{

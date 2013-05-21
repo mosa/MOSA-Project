@@ -56,6 +56,9 @@ namespace Mosa.Kernel.x86.RealModeEmulator
             INT3 = 0xCC, INT_I = 0xCD,
             IRET = 0xCF,
 
+            //DIV_R = 0xFA, DIV_RX = 0xFB,
+            //DIV_M = 0xFA, DIV_MX = 0xFB,
+
             MOV_AMo = 0xA0, MOV_AMoX = 0xA1,
             MOV_MoA = 0xA2, MOV_MoAX = 0xA3,
             MOV_RI_AL = 0xB0 | GPRegisters.AL, MOV_RI_BL = 0xB0 | GPRegisters.BL, MOV_RI_CL = 0xB0 | GPRegisters.CL, MOV_RI_DL = 0xB0 | GPRegisters.DL,
@@ -66,6 +69,10 @@ namespace Mosa.Kernel.x86.RealModeEmulator
             MOV_MR = 0x88, MOV_MRX = 0x89,
             MOV_RM = 0x8A, MOV_RMX = 0x8B,
             MOV_RS = 0x8C, MOV_SR = 0x8E,
+            //MOV_MS = 0x8C, MOV_SM = 0x8E,
+            
+            //MUL_R = 0xF6, MUL_RX = 0xF7,
+            //MUL_M = 0xF6, MUL_MX = 0xF7,
 
             NOP = 0x90,
             XCHG_AA = 0x90, XCHG_AB = 0x90 | GPRegisters.BL,
@@ -87,7 +94,7 @@ namespace Mosa.Kernel.x86.RealModeEmulator
             PUSH_CX = 0x50 | GPRegisters.CL, PUSH_DX = 0x50 | GPRegisters.DL,
             PUSH_SP = 0x50 | GPRegisters.AH, PUSH_BP = 0x50 | GPRegisters.CH,
             PUSH_SI = 0x50 | GPRegisters.DH, PUSH_DI = 0x50 | GPRegisters.BH,
-
+            // PUSH_MX = 0xFF,	// - TODO: Check (maybe 0x87)
             PUSH_ES = 0x06 | (SRegisters.SREG_ES << 3), PUSH_CS = 0x06 | (SRegisters.SREG_CS << 3),
             PUSH_SS = 0x06 | (SRegisters.SREG_SS << 3), PUSH_DS = 0x06 | (SRegisters.SREG_DS << 3),
             PUSH_I8 = 0x6A, PUSH_I = 0x68,
@@ -133,8 +140,10 @@ namespace Mosa.Kernel.x86.RealModeEmulator
             INSB = 0x6C, INSW = 0x6D,
             OUTSB = 0x6E, OUTSW = 0x6F,
 
+            // Unimplemented
             FPU_ARITH = 0xDC,
 
+            // Overrides
             OVR_ES = 0x26,
             OVR_CS = 0x2E,
             OVR_SS = 0x36,
@@ -145,6 +154,27 @@ namespace Mosa.Kernel.x86.RealModeEmulator
             LOOP = 0xE2;
         };
 
+        public static uint PARITY8(uint value)
+        {
+            return (uint)(((value >> 7) ^ (value >> 6) ^ (value >> 5) ^ (value >> 4) ^ (value >> 3) ^ (value >> 2) ^ (value >> 1) ^ (value)) & 1);
+        }
+
+        public static uint SET_COMM_FLAGS(ref State state, uint value, ushort width)
+        {
+            ushort flags = (Flags.FLAG_ZF | Flags.FLAG_SF | Flags.FLAG_PF);
+            state.Flags &= (ushort)~flags;
+            state.Flags |= (ushort)((value == 0) ? Flags.FLAG_ZF : 0);
+            state.Flags |= (ushort)(((value >> (width - 1)) != 0) ? Flags.FLAG_SF : 0);
+            state.Flags |= (ushort)((PARITY8(value) == 0) ? Flags.FLAG_PF : 0);
+            return ErrorCodes.ERR_OK;
+        }
+
+        /// <summary>
+        /// Reads 1 byte as an unsigned byte from CS:IP and increases IP by 1.
+        /// </summary>
+        /// <param name="state">The State struct instance</param>
+        /// <param name="destination">The destination variable</param>
+        /// <returns>Operation Success</returns>
         public static unsafe uint READ_INSTR8(ref State state, ref byte destination)
         {
             byte value = 0;
@@ -155,6 +185,28 @@ namespace Mosa.Kernel.x86.RealModeEmulator
             return ErrorCodes.ERR_OK;
         }
 
+        /// <summary>
+        /// Reads 1 byte as an signed byte from CS:IP and increases IP by 1. (NOT FULLY IMPLEMENTED)
+        /// </summary>
+        /// <param name="state">The State struct instance</param>
+        /// <param name="destination">The destination variable</param>
+        /// <returns>Operation Success</returns>
+        public static unsafe uint READ_INSTR8S(ref State state, ref byte destination)
+        {
+            byte value = 0;
+            uint err = Int_Read8(ref state, state.CS, (ushort)(state.IP + state.Decoder.IPOffset), &value);
+            if (err != ErrorCodes.ERR_OK) return err;
+            state.Decoder.IPOffset++;
+            destination = value;
+            return ErrorCodes.ERR_OK;
+        }
+
+        /// <summary>
+        /// Reads 2 bytes as an unsigned short from CS:IP and increases IP by 2.
+        /// </summary>
+        /// <param name="state">The State struct instance</param>
+        /// <param name="destination">The destination variable</param>
+        /// <returns>Operation Success</returns>
         public static unsafe uint READ_INSTR16(ref State state, ref ushort destination)
         {
             ushort value = 0;
@@ -165,6 +217,12 @@ namespace Mosa.Kernel.x86.RealModeEmulator
             return ErrorCodes.ERR_OK;
         }
 
+        /// <summary>
+        /// Reads 4 bytes as an unsigned integer from CS:IP and increases IP by 4.
+        /// </summary>
+        /// <param name="state">The State struct instance</param>
+        /// <param name="destination">The destination variable</param>
+        /// <returns>Operation Success</returns>
         public static unsafe uint READ_INSTR32(ref State state, ref uint destination)
         {
             uint value = 0;
@@ -293,10 +351,12 @@ namespace Mosa.Kernel.x86.RealModeEmulator
         {
             switch(code)
             {
-                case 0: return (ushort*)state.AddressES;
-                case 1: return (ushort*)state.AddressCS;
-                case 2: return (ushort*)state.AddressSS;
-                case 3: return (ushort*)state.AddressDS;
+                case SRegisters.SREG_ES: return (ushort*)state.AddressES;
+                case SRegisters.SREG_CS: return (ushort*)state.AddressCS;
+                case SRegisters.SREG_SS: return (ushort*)state.AddressSS;
+                case SRegisters.SREG_DS: return (ushort*)state.AddressDS;
+                case SRegisters.SREG_FS: return (ushort*)state.AddressFS;
+                case SRegisters.SREG_GS: return (ushort*)state.AddressGS;
                 default: return (ushort*)0;
             }
         }

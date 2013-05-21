@@ -14,11 +14,10 @@ using Mosa.Compiler.TypeSystem;
 namespace Mosa.Platform.AVR32.Intrinsic
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public class Nop : IIntrinsicPlatformMethod
 	{
-
 		#region Methods
 
 		/// <summary>
@@ -31,7 +30,6 @@ namespace Mosa.Platform.AVR32.Intrinsic
 			context.SetInstruction(AVR32.Nop);
 		}
 
-		#endregion // Methods
-
+		#endregion Methods
 	}
 }

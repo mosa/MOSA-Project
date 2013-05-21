@@ -10,25 +10,25 @@
 namespace Mosa.Emulator
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public class EmulatorDemo : Pictor.UI.EmulatorPlatform.PlatformSupport
 	{
-		double[] m_x = new double[2];
-		double[] m_y = new double[2];
-		double m_dx;
-		double m_dy;
-		int m_idx;
-		Pictor.UI.ButtonWidget button;
-		Pictor.UI.ButtonWidget white;
-		Pictor.UI.ButtonWidget blue;
-		Pictor.UI.ButtonWidget reset;
-		Pictor.RGBA_Bytes background;
-		Pictor.UI.CheckBoxWidget border;
-		Pictor.UI.SliderWidget alpha;
-		Pictor.UI.SliderWidget radius;
+		private double[] m_x = new double[2];
+		private double[] m_y = new double[2];
+		private double m_dx;
+		private double m_dy;
+		private int m_idx;
+		private Pictor.UI.ButtonWidget button;
+		private Pictor.UI.ButtonWidget white;
+		private Pictor.UI.ButtonWidget blue;
+		private Pictor.UI.ButtonWidget reset;
+		private Pictor.RGBA_Bytes background;
+		private Pictor.UI.CheckBoxWidget border;
+		private Pictor.UI.SliderWidget alpha;
+		private Pictor.UI.SliderWidget radius;
 
-		Pictor.UI.Dialogs.YesNoDialog dialog;
+		private Pictor.UI.Dialogs.YesNoDialog dialog;
 
 		public EmulatorDemo(PixelFormats format, Pictor.UI.PlatformSupportAbstract.ERenderOrigin RenderOrigin)
 			: base(format, RenderOrigin)
@@ -49,6 +49,7 @@ namespace Mosa.Emulator
 			radius = new Pictor.UI.SliderWidget(10, 30, 590, 39);
 			alpha.Range(0, 255);
 			alpha.Value(255);
+
 			//alpha.BackgroundColor(new Pictor.RGBA_Doubles(255, 255, 255));
 
 			radius.Label("Radius = {0:F3}");
@@ -89,7 +90,6 @@ namespace Mosa.Emulator
 			m_x[0] = 100; m_y[0] = 100;
 			m_x[1] = 500; m_y[1] = 350;
 		}
-
 
 		public override void OnDraw()
 		{
@@ -179,7 +179,6 @@ namespace Mosa.Emulator
 			base.OnMouseDown(mouseEvent);
 		}
 
-
 		public override void OnMouseMove(Pictor.UI.MouseEventArgs mouseEvent)
 		{
 			if (mouseEvent.Button == Pictor.UI.MouseButtons.Left)
@@ -211,6 +210,5 @@ namespace Mosa.Emulator
 				app.Run();
 			}
 		}
-
 	}
 }

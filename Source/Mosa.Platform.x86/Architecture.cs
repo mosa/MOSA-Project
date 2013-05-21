@@ -18,14 +18,12 @@ using Mosa.Platform.x86.Stages;
 
 namespace Mosa.Platform.x86
 {
-
 	/// <summary>
 	/// This class provides a common base class for architecture
 	/// specific operations.
 	/// </summary>
 	public class Architecture : BasicArchitecture
 	{
-
 		/// <summary>
 		/// Gets a value indicating whether this architecture is little-endian.
 		/// </summary>
@@ -61,7 +59,7 @@ namespace Mosa.Platform.x86
 
 			////////////////////////////////////////////////////////
 			// MMX floating point registers
-			////////////////////////////////////////////////////////			
+			////////////////////////////////////////////////////////
 			MMXRegister.MM0,
 			MMXRegister.MM1,
 			MMXRegister.MM2,
@@ -184,7 +182,6 @@ namespace Mosa.Platform.x86
 			compilerPipeline.InsertAfterLast<TypeLayoutStage>(
 				new MethodTableBuilderStage()
 			);
-
 		}
 
 		/// <summary>
@@ -215,7 +212,7 @@ namespace Mosa.Platform.x86
 				new ExceptionLayoutStage()
 			);
 		}
-		
+
 		/// <summary>
 		/// Gets the type memory requirements.
 		/// </summary>

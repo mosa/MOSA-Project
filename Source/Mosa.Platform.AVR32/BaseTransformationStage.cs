@@ -11,16 +11,14 @@ using Mosa.Compiler.Framework.Platform;
 
 namespace Mosa.Platform.AVR32
 {
-
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public abstract class BaseTransformationStage : BasePlatformTransformationStage
 	{
-
 		#region Data members
 
-		#endregion // Data members
+		#endregion Data members
 
 		#region IPipelineStage Members
 
@@ -30,11 +28,10 @@ namespace Mosa.Platform.AVR32
 		/// <value>The name of the compilation stage.</value>
 		public override string Name { get { return "AVR32." + this.GetType().Name; } }
 
-		#endregion // IPipelineStage Members
+		#endregion IPipelineStage Members
 
 		#region Emit Methods
 
-		#endregion // Emit Methods
-
+		#endregion Emit Methods
 	}
 }

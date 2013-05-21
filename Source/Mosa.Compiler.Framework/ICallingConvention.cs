@@ -12,7 +12,7 @@ using Mosa.Compiler.Metadata;
 namespace Mosa.Compiler.Framework
 {
 	/// <summary>
-	/// This interface provides support to emit calling convention 
+	/// This interface provides support to emit calling convention
 	/// specific code.
 	/// </summary>
 	public interface ICallingConvention
@@ -64,6 +64,5 @@ namespace Mosa.Compiler.Framework
 		/// <param name="returnType">Type of the return.</param>
 		/// <returns></returns>
 		Register[] GetReturnRegisters(CilElementType returnType);
-
 	}
 }

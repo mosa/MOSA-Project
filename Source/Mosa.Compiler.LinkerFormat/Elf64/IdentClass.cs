@@ -18,10 +18,12 @@ namespace Mosa.Compiler.LinkerFormat.Elf64
 		/// Invalid class
 		/// </summary>
 		ClassNone = 0x00,
+
 		/// <summary>
 		/// 32-bit objects
 		/// </summary>
 		Class32 = 0x01,
+
 		/// <summary>
 		/// 64-bit objects
 		/// </summary>

@@ -15,13 +15,17 @@ namespace Mosa.Kernel.x86
     public static class VBE
     {
         /// <summary>
+        /// Struct instance of a Real Mode Emulator State
+        /// </summary>
+        private static RealEmulator.State state;
+
+        /// <summary>
         /// 
         /// </summary>
         public unsafe static void Setup()
         {
-            uint mem = KernelMemory.AllocateMemory(0x100000);
-            uint reg = KernelMemory.AllocateMemory(0x34);
-            RealEmulator.State state = RealEmulator.CreateState(mem, reg);
+            // Setup our state
+            RealEmulator.CreateState(out state);
         }
     }
 }

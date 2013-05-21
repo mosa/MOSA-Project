@@ -38,7 +38,7 @@ namespace Mosa.Compiler.Linker
 		/// </summary>
 		private string name;
 
-		#endregion // Data members
+		#endregion Data members
 
 		#region Construction
 
@@ -55,7 +55,7 @@ namespace Mosa.Compiler.Linker
 			this.name = name;
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Properties
 
@@ -66,7 +66,8 @@ namespace Mosa.Compiler.Linker
 		public IntPtr VirtualAddress
 		{
 			get { return this.virtualAddress; }
-			/* internal protected  */ set { this.virtualAddress = value; }
+			/* internal protected  */
+			set { this.virtualAddress = value; }
 		}
 
 		/// <summary>
@@ -118,6 +119,6 @@ namespace Mosa.Compiler.Linker
 			return this.name;
 		}
 
-		#endregion // Properties
+		#endregion Properties
 	}
 }

@@ -14,7 +14,6 @@ namespace System
 	/// </summary>
 	public class Activator
 	{
-
 		public static T CreateInstance<T>()
 		{
 			return (T)CreateInstance(typeof(T));

@@ -104,5 +104,4 @@ namespace Mosa.DeviceSystem
 		/// <param name="count">The count.</param>
 		void Write32(uint index, uint value, byte count);
 	}
-
 }

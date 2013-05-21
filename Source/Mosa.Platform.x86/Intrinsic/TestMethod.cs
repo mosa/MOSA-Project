@@ -7,14 +7,12 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-
 using Mosa.Platform.x86.XSharp;
 
 namespace Mosa.Platform.x86.Intrinsic
 {
-	class TestMethod : XSharpMethod
+	internal class TestMethod : XSharpMethod
 	{
-
 		public override void Assemble()
 		{
 			EDX.Push();

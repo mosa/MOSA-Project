@@ -10,7 +10,7 @@
 namespace System
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public struct UInt64
 	{
@@ -40,6 +40,5 @@ namespace System
 		{
 			return (int)_value;
 		}
-
 	}
 }

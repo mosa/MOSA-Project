@@ -18,40 +18,46 @@ namespace Mosa.DeviceDrivers.ISA
 	public class StandardKeyboard : HardwareDevice, IDevice, IHardwareDevice, IKeyboardDevice
 	{
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IReadWriteIOPort commandPort;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IReadWriteIOPort dataPort;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected const ushort fifoSize = 256;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected byte[] fifoBuffer;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected uint fifoStart;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected uint fifoEnd;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected SpinLock spinLock;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="StandardKeyboard"/> class.
 		/// </summary>
-		public StandardKeyboard() { }
+		public StandardKeyboard()
+		{
+		}
 
 		/// <summary>
 		/// Setups the standard keyboard driver
@@ -165,6 +171,7 @@ namespace Mosa.DeviceDrivers.ISA
 			AddToFIFO(scancode);
 
 			spinLock.Exit();
+
 			//Mosa.Kernel.x86.Debug.Trace("Exit StandardKeyboard.ReadScanCode");
 		}
 

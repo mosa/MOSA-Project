@@ -16,7 +16,7 @@ using Mosa.Compiler.TypeSystem;
 namespace Mosa.Platform.x86.Intrinsic
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public sealed class GetEIP : IIntrinsicPlatformMethod
 	{
@@ -40,6 +40,6 @@ namespace Mosa.Platform.x86.Intrinsic
 			context.AppendInstruction(X86.Push, null, eax);
 		}
 
-		#endregion // Methods
+		#endregion Methods
 	}
 }

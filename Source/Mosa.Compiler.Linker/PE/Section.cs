@@ -19,7 +19,6 @@ namespace Mosa.Compiler.Linker.PE
 	/// </summary>
 	public class Section : LinkerSection
 	{
-
 		#region Data members
 
 		/// <summary>
@@ -27,7 +26,7 @@ namespace Mosa.Compiler.Linker.PE
 		/// </summary>
 		private MemoryStream stream;
 
-		#endregion // Data members
+		#endregion Data members
 
 		#region Construction
 
@@ -43,7 +42,7 @@ namespace Mosa.Compiler.Linker.PE
 			stream = new MemoryStream();
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Methods
 
@@ -105,7 +104,7 @@ namespace Mosa.Compiler.Linker.PE
 			stream.WriteTo(writer.BaseStream);
 		}
 
-		#endregion // Methods
+		#endregion Methods
 
 		#region LinkerSection Overrides
 
@@ -118,7 +117,7 @@ namespace Mosa.Compiler.Linker.PE
 			get { return stream.Length; }
 		}
 
-		#endregion // LinkerSection Overrides
+		#endregion LinkerSection Overrides
 
 		#region Internals
 
@@ -136,6 +135,6 @@ namespace Mosa.Compiler.Linker.PE
 			}
 		}
 
-		#endregion // Internals
+		#endregion Internals
 	}
 }

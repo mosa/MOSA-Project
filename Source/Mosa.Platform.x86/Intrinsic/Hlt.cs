@@ -18,7 +18,6 @@ namespace Mosa.Platform.x86.Intrinsic
 	/// </summary>
 	public class Hlt : IIntrinsicPlatformMethod
 	{
-
 		#region Methods
 
 		/// <summary>
@@ -31,7 +30,6 @@ namespace Mosa.Platform.x86.Intrinsic
 			context.SetInstruction(X86.Hlt);
 		}
 
-		#endregion // Methods
-
+		#endregion Methods
 	}
 }

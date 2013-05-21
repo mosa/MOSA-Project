@@ -25,7 +25,7 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		private List<IPipelineStage> pipeline;
 
-		#endregion // Data members
+		#endregion Data members
 
 		#region Construction
 
@@ -37,7 +37,7 @@ namespace Mosa.Compiler.Framework
 			pipeline = new List<IPipelineStage>();
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Properties
 
@@ -59,7 +59,7 @@ namespace Mosa.Compiler.Framework
 			get { return pipeline[index]; }
 		}
 
-		#endregion // Properties
+		#endregion Properties
 
 		#region Methods
 
@@ -201,7 +201,7 @@ namespace Mosa.Compiler.Framework
 			pipeline.Remove(stage);
 		}
 
-		#endregion // Methods
+		#endregion Methods
 
 		#region IEnumerable members
 
@@ -216,7 +216,7 @@ namespace Mosa.Compiler.Framework
 			return pipeline.GetEnumerator();
 		}
 
-		#endregion // IEnumerable members
+		#endregion IEnumerable members
 
 		/// <summary>
 		/// Finds this instance.
@@ -235,6 +235,5 @@ namespace Mosa.Compiler.Framework
 
 			return result;
 		}
-
 	}
 }

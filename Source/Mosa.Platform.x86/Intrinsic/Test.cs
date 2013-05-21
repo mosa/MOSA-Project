@@ -7,7 +7,6 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-
 using System.Collections.Generic;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.TypeSystem;
@@ -19,7 +18,6 @@ namespace Mosa.Platform.x86.Intrinsic
 	/// </summary>
 	public sealed class Test : IIntrinsicPlatformMethod
 	{
-
 		#region Methods
 
 		/// <summary>
@@ -32,6 +30,6 @@ namespace Mosa.Platform.x86.Intrinsic
 			context.SetInstruction(X86.Mov, context.Result, context.Operand1);
 		}
 
-		#endregion
+		#endregion Methods
 	}
 }

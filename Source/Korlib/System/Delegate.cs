@@ -7,8 +7,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System.Runtime.InteropServices;
-
 namespace System
 {
 	/// <summary>
@@ -28,6 +26,5 @@ namespace System
 			this.instance = instance;
 			this.methodPointer = methodPointer;
 		}
-
 	}
 }

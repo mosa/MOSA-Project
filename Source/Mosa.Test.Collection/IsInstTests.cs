@@ -4,23 +4,27 @@
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com> 
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 namespace Mosa.Test.Collection
 {
 	public interface IAA { }
+
 	public interface IBB { }
+
 	public interface ICC { }
 
 	public class AA : IAA { }
+
 	public class BB : AA, IBB { }
+
 	public class CC { }
+
 	public class DD : BB { }
 
 	public static class IsInstTests
 	{
-
 		public static bool IsInstTest1()
 		{
 			object o = new AA();
@@ -69,7 +73,6 @@ namespace Mosa.Test.Collection
 
 			return (o is CC);
 		}
-
 
 		public static bool IsInstTest8()
 		{
@@ -141,5 +144,4 @@ namespace Mosa.Test.Collection
 		//    return (o is char);
 		//}
 	}
-
 }

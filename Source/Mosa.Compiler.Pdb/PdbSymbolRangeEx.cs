@@ -11,7 +11,7 @@ using System.IO;
 
 namespace Mosa.Compiler.Pdb
 {
-	class PdbSymbolRangeEx
+	internal class PdbSymbolRangeEx
 	{
 		private short segment;
 		private short pad1;

@@ -20,7 +20,7 @@ namespace Mosa.Compiler.Framework.Stages
 	public class PhiPlacementStage : BaseMethodCompilerStage, IMethodCompilerStage, IPipelineStage
 	{
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public enum PhiPlacementStrategy
 		{
@@ -30,11 +30,12 @@ namespace Mosa.Compiler.Framework.Stages
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private PhiPlacementStrategy strategy;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private Dictionary<Operand, List<BasicBlock>> assignments = new Dictionary<Operand, List<BasicBlock>>();
 
@@ -144,7 +145,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 			context.OperandCount = (byte)block.PreviousBlocks.Count;
 		}
-
 
 		/// <summary>
 		/// Places the phi functions minimal.

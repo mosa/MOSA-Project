@@ -7,7 +7,6 @@
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  */
 
-
 namespace Pictor
 {
 	public class QuickSortAntiAliasedCell
@@ -72,14 +71,12 @@ namespace Pictor
 				{
 					n--;
 				}
-
 			}
 			if (pivot != n)
 			{
 				AntiAliasingCell temp2 = dataToSort[n];
 				dataToSort[n] = dataToSort[pivot];
 				dataToSort[pivot] = temp2;
-
 			}
 			return n;
 		}
@@ -147,14 +144,12 @@ namespace Pictor
 				{
 					n--;
 				}
-
 			}
 			if (pivot != n)
 			{
 				uint temp2 = dataToSort[n];
 				dataToSort[n] = dataToSort[pivot];
 				dataToSort[pivot] = temp2;
-
 			}
 			return n;
 		}

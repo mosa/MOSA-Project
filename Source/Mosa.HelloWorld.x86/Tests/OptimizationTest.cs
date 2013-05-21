@@ -6,7 +6,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-
 namespace Mosa.HelloWorld.x86.Tests
 {
 	public class OptimizationTest : KernelTest
@@ -181,6 +180,5 @@ namespace Mosa.HelloWorld.x86.Tests
 
 			return c;
 		}
-
 	}
 }

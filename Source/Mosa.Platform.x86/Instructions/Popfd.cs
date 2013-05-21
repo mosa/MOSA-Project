@@ -7,9 +7,7 @@
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  */
 
-
 using Mosa.Compiler.Framework;
-
 
 namespace Mosa.Platform.x86.Instructions
 {
@@ -18,12 +16,11 @@ namespace Mosa.Platform.x86.Instructions
 	/// </summary>
 	public sealed class Popfd : X86Instruction
 	{
-
 		#region Data members
 
 		private static readonly OpCode opcode = new OpCode(new byte[] { 0x9D });
 
-		#endregion
+		#endregion Data members
 
 		#region Methods
 
@@ -49,6 +46,6 @@ namespace Mosa.Platform.x86.Instructions
 			visitor.Popfd(context);
 		}
 
-		#endregion // Methods
+		#endregion Methods
 	}
 }

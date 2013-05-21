@@ -13,42 +13,42 @@ namespace Mosa.Kernel.x86.RealModeEmulator
 {
     public static partial class RealEmulator
     {
-        public static uint Op_CALL_N(ref State state, uint param)
+        public static unsafe uint Op_CALL_N(ref State state, uint param)
         {
             uint err;
             ushort dist = 0;
 
-            err = Int_Read16(state, state.CS, (ushort)(state.IP + state.Decoder.IPOffset), ref dist);
+            err = Int_Read16(ref state, state.CS, (ushort)(state.IP + state.Decoder.IPOffset), &dist);
             if (err != ErrorCodes.ERR_OK) return err;
 
             state.Decoder.IPOffset += 2;
             state.SP.W -= 2;
 
-            err = Int_Write16(state, state.SS, state.SP.W, (ushort)(state.IP + state.Decoder.IPOffset));
+            err = Int_Write16(ref state, state.SS, state.SP.W, (ushort)(state.IP + state.Decoder.IPOffset));
             if (err != ErrorCodes.ERR_OK) return err;
 
             state.IP += dist;
             return ErrorCodes.ERR_OK;
         }
 
-        public static uint Op_CALL_F(ref State state, uint param)
+        public static unsafe uint Op_CALL_F(ref State state, uint param)
         {
             uint err;
             ushort ofs = 0, seg = 0;
-            err = Int_Read16(state, state.CS, (ushort)(state.IP + state.Decoder.IPOffset), ref ofs);
+            err = Int_Read16(ref state, state.CS, (ushort)(state.IP + state.Decoder.IPOffset), &ofs);
             if (err != ErrorCodes.ERR_OK) return err;
             state.Decoder.IPOffset += 2;
 
-            err = Int_Read16(state, state.CS, (ushort)(state.IP + state.Decoder.IPOffset), ref seg);
+            err = Int_Read16(ref state, state.CS, (ushort)(state.IP + state.Decoder.IPOffset), &seg);
             if (err != ErrorCodes.ERR_OK) return err;
             state.Decoder.IPOffset += 2;
 
             state.SP.W -= 2;
-            err = Int_Write16(state, state.SS, state.SP.W, (state.CS));
+            err = Int_Write16(ref state, state.SS, state.SP.W, (state.CS));
             if (err != ErrorCodes.ERR_OK) return err;
 
             state.SP.W -= 2;
-            err = Int_Write16(state, state.SS, state.SP.W, (ushort)(state.IP + state.Decoder.IPOffset));
+            err = Int_Write16(ref state, state.SS, state.SP.W, (ushort)(state.IP + state.Decoder.IPOffset));
             if (err != ErrorCodes.ERR_OK) return err;
             state.CS = seg;
             state.IP = ofs;
@@ -56,10 +56,10 @@ namespace Mosa.Kernel.x86.RealModeEmulator
             return ErrorCodes.ERR_OK;
         }
 
-        public static uint Op_RET_N(ref State state, uint param)
+        public static unsafe uint Op_RET_N(ref State state, uint param)
         {
             ushort ofs = 0;
-            uint err = Int_Read16(state, state.SS, state.SP.W, ref ofs);
+            uint err = Int_Read16(ref state, state.SS, state.SP.W, &ofs);
             if (err != ErrorCodes.ERR_OK) return err;
             state.SP.W += 2;
 
@@ -68,15 +68,15 @@ namespace Mosa.Kernel.x86.RealModeEmulator
             return ErrorCodes.ERR_OK;
         }
 
-        public static uint Op_RET_F(ref State state, uint param)
+        public static unsafe uint Op_RET_F(ref State state, uint param)
         {
             uint err = 0;
             ushort ofs = 0, seg = 0;
-            err = Int_Read16(state, state.SS, state.SP.W, ref ofs);
+            err = Int_Read16(ref state, state.SS, state.SP.W, &ofs);
             if (err != ErrorCodes.ERR_OK) return err;
             state.SP.W += 2;
 
-            err = Int_Read16(state, state.SS, state.SP.W, ref seg);
+            err = Int_Read16(ref state, state.SS, state.SP.W, &seg);
             if (err != ErrorCodes.ERR_OK) return err;
             state.SP.W += 2;
 
@@ -86,16 +86,16 @@ namespace Mosa.Kernel.x86.RealModeEmulator
             return ErrorCodes.ERR_OK;
         }
 
-        public static uint Op_RET_iN(ref State state, uint param)
+        public static unsafe uint Op_RET_iN(ref State state, uint param)
         {
             uint err;
             ushort ofs = 0;
             ushort popSize = 0;
-            err = Int_Read16(state, state.CS, (ushort)(state.IP + state.Decoder.IPOffset), ref popSize);
+            err = Int_Read16(ref state, state.CS, (ushort)(state.IP + state.Decoder.IPOffset), &popSize);
             if (err != ErrorCodes.ERR_OK) return err;
             state.Decoder.IPOffset += 2;
 
-            err = Int_Read16(state, state.SS, state.SP.W, ref ofs);
+            err = Int_Read16(ref state, state.SS, state.SP.W, &ofs);
             if (err != ErrorCodes.ERR_OK) return err;
             state.SP.W += 2;
 
@@ -105,20 +105,20 @@ namespace Mosa.Kernel.x86.RealModeEmulator
             return ErrorCodes.ERR_OK;
         }
 
-        public static uint Op_RET_iF(ref State state, uint param)
+        public static unsafe uint Op_RET_iF(ref State state, uint param)
         {
             uint err;
             ushort ofs = 0, seg = 0;
             ushort popSize = 0;
-            err = Int_Read16(state, state.CS, (ushort)(state.IP + state.Decoder.IPOffset), ref popSize);
+            err = Int_Read16(ref state, state.CS, (ushort)(state.IP + state.Decoder.IPOffset), &popSize);
             if (err != ErrorCodes.ERR_OK) return err;
             state.Decoder.IPOffset += 2;
 
-            err = Int_Read16(state, state.SS, state.SP.W, ref ofs);
+            err = Int_Read16(ref state, state.SS, state.SP.W, &ofs);
             if (err != ErrorCodes.ERR_OK) return err;
             state.SP.W += 2;
 
-            err = Int_Read16(state, state.SS, state.SP.W, ref seg);
+            err = Int_Read16(ref state, state.SS, state.SP.W, &seg);
             if (err != ErrorCodes.ERR_OK) return err;
             state.SP.W += 2;
 
@@ -134,9 +134,9 @@ namespace Mosa.Kernel.x86.RealModeEmulator
             uint err;
             ushort seg = 0, ofs = 0;
 
-            err = Int_Read16(state, 0, (ushort)(number * 4 + 0), ref ofs);
+            err = Int_Read16(ref state, 0, (ushort)(number * 4 + 0), &ofs);
             if (err != ErrorCodes.ERR_OK) return err;
-            err = Int_Read16(state, 0, (ushort)(number * 4 + 2), ref seg);
+            err = Int_Read16(ref state, 0, (ushort)(number * 4 + 2), &seg);
             if (err != ErrorCodes.ERR_OK) return err;
 
             if (ofs == 0 && seg == 0)
@@ -148,20 +148,20 @@ namespace Mosa.Kernel.x86.RealModeEmulator
             if (seg == 0xB800 && ofs == number)
             {
                 //if( state.HLECallbacks[Num] )
-                    state.HLECallbacks[number](state, number);
+                    state.HLECallbacks[number](ref state, number);
                 return ErrorCodes.ERR_OK;
             }
 
             state.SP.W -= 2;
-            err = Int_Write16(state, state.SS, state.SP.W, (state.Flags));
+            err = Int_Write16(ref state, state.SS, state.SP.W, state.Flags);
             if (err != ErrorCodes.ERR_OK) return err;
 
             state.SP.W -= 2;
-            err = Int_Write16(state, state.SS, state.SP.W, (state.CS));
+            err = Int_Write16(ref state, state.SS, state.SP.W, state.CS);
             if (err != ErrorCodes.ERR_OK) return err;
 
             state.SP.W -= 2;
-            err = Int_Write16(state, state.SS, state.SP.W, (ushort)(state.IP + state.Decoder.IPOffset));
+            err = Int_Write16(ref state, state.SS, state.SP.W, (ushort)(state.IP + state.Decoder.IPOffset));
             if (err != ErrorCodes.ERR_OK) return err;
 
             state.IP = ofs;
@@ -181,10 +181,10 @@ namespace Mosa.Kernel.x86.RealModeEmulator
             return _CallInterrupt(ref state, 3);
         }
 
-        public static uint Op_INT_I(ref State state, uint param)
+        public static unsafe uint Op_INT_I(ref State state, uint param)
         {
             byte num = 0;
-            uint err = Int_Read8(state, state.CS, (ushort)(state.IP + state.Decoder.IPOffset), ref num);
+            uint err = Int_Read8(ref state, state.CS, (ushort)(state.IP + state.Decoder.IPOffset), &num);
             if (err != ErrorCodes.ERR_OK) return err;
             state.Decoder.IPOffset++;
             return _CallInterrupt(ref state, num);
@@ -198,21 +198,21 @@ namespace Mosa.Kernel.x86.RealModeEmulator
                 return ErrorCodes.ERR_OK;
         }
 
-        public static uint Op_IRET_z(ref State state, uint param)
+        public static unsafe uint Op_IRET_z(ref State state, uint param)
         {
             uint err = 0;
             ushort v = 0;
-            err = Int_Read16(state, state.SS, state.SP.W, ref v);
+            err = Int_Read16(ref state, state.SS, state.SP.W, &v);
             if (err != ErrorCodes.ERR_OK) return err;
             state.SP.W += 2;
             state.IP = v;
 
-            err = Int_Read16(state, state.SS, state.SP.W, ref v);
+            err = Int_Read16(ref state, state.SS, state.SP.W, &v);
             if (err != ErrorCodes.ERR_OK) return err;
             state.SP.W += 2;
             state.CS = v;
 
-            err = Int_Read16(state, state.SS, state.SP.W, ref v);
+            err = Int_Read16(ref state, state.SS, state.SP.W, &v);
             if (err != ErrorCodes.ERR_OK) return err;
             state.SP.W += 2;
             state.Flags = v;

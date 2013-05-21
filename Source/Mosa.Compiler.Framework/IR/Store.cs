@@ -7,21 +7,19 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-
 namespace Mosa.Compiler.Framework.IR
 {
 	/// <summary>
 	/// Stores a value to a memory pointer.
 	/// </summary>
 	/// <remarks>
-	/// The store instruction stores the value in the given memory pointer with offset. 
+	/// The store instruction stores the value in the given memory pointer with offset.
 	/// The first operand is the memory base.
 	/// The second operand is the memory base offset.
 	/// The third is the value to store.
 	/// </remarks>
 	public sealed class Store : BaseIRInstruction
 	{
-
 		#region Construction
 
 		/// <summary>
@@ -32,7 +30,7 @@ namespace Mosa.Compiler.Framework.IR
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Methods
 
@@ -46,6 +44,6 @@ namespace Mosa.Compiler.Framework.IR
 			visitor.Store(context);
 		}
 
-		#endregion // Methods
+		#endregion Methods
 	}
 }

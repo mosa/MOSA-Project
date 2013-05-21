@@ -12,8 +12,8 @@ using poly_subpixel_scale_e = Pictor.Basics.PolySubpixelScale;
 namespace Pictor
 {
 	//-----------------------------------------------------------------AntiAliasingCell
-	// A Pixel cell. There're no constructors defined and it was done 
-	// intentionally in order to avoid extra overhead when allocating an 
+	// A Pixel cell. There're no constructors defined and it was done
+	// intentionally in order to avoid extra overhead when allocating an
 	// array of cells.
 	public struct AntiAliasingCell// : IPixelCell
 	{
@@ -64,7 +64,7 @@ namespace Pictor
 	//-----------------------------------------------------AntiAliasedRasterizerCells
 	// An internal class that implements the main rasterization algorithm.
 	// Used in the rasterizer. Should not be used directly.
-	//template<class Cell> 
+	//template<class Cell>
 	public sealed class AntiAliasedRasterizerCells
 	{
 		private uint m_num_used_cells;
@@ -73,13 +73,13 @@ namespace Pictor
 		private VectorPOD<SortedY> m_sorted_y;
 		private QuickSortAntiAliasedCell m_QSorter;
 
-		AntiAliasingCell m_curr_cell;
-		AntiAliasingCell m_style_cell;
-		int m_min_x;
-		int m_min_y;
-		int m_max_x;
-		int m_max_y;
-		bool m_sorted;
+		private AntiAliasingCell m_curr_cell;
+		private AntiAliasingCell m_style_cell;
+		private int m_min_x;
+		private int m_min_y;
+		private int m_max_x;
+		private int m_max_y;
+		private bool m_sorted;
 
 		private enum ECellBlockScale
 		{
@@ -129,7 +129,7 @@ namespace Pictor
 			m_style_cell.Style = style_cell;
 		}
 
-		enum dx_limit_e { dx_limit = 16384 << Basics.PolySubpixelScale.Shift };
+		private enum dx_limit_e { dx_limit = 16384 << Basics.PolySubpixelScale.Shift };
 
 		public void Line(int x1, int y1, int x2, int y2)
 		{
@@ -177,7 +177,7 @@ namespace Pictor
 
 			//Vertical Line - we have to Calculate Start and End cells,
 			//and then - the common values of the area and coverage for
-			//all cells of the Line. We know exactly there's only one 
+			//all cells of the Line. We know exactly there's only one
 			//cell, so, we don't have to call RenderHorizontalLine().
 			incr = 1;
 			if (dx == 0)
@@ -278,15 +278,31 @@ namespace Pictor
 			RenderHorizontalLine(ey1, x_from, poly_subpixel_scale - first, x2, fy2);
 		}
 
-		public int MinX() { return m_min_x; }
-		public int MinY() { return m_min_y; }
-		public int MaxX() { return m_max_x; }
-		public int MaxY() { return m_max_y; }
+		public int MinX()
+		{
+			return m_min_x;
+		}
+
+		public int MinY()
+		{
+			return m_min_y;
+		}
+
+		public int MaxX()
+		{
+			return m_max_x;
+		}
+
+		public int MaxY()
+		{
+			return m_max_y;
+		}
 
 #if use_timers
         static CNamedTimer SortCellsTimer = new CNamedTimer("SortCellsTimer");
         static CNamedTimer QSortTimer = new CNamedTimer("QSortTimer");
 #endif
+
 		public void SortCells()
 		{
 			if (m_sorted) return; //Perform Sort only the first time.
@@ -302,6 +318,7 @@ namespace Pictor
 #if use_timers
             SortCellsTimer.Start();
 #endif
+
 			// Allocate the array of cell pointers
 			m_sorted_cells.Allocate(m_num_used_cells);
 
@@ -342,6 +359,7 @@ namespace Pictor
 #if use_timers
             QSortTimer.Start();
 #endif
+
 			// Finally arrange the X-arrays
 			for (uint i = 0; i < SortedYSize; i++)
 			{
@@ -417,7 +435,7 @@ namespace Pictor
                     int a = 12;
                 }
 
-                DebugFile.Print(m_num_used_cells.ToString() 
+                DebugFile.Print(m_num_used_cells.ToString()
                     + ". x=" + m_curr_cell.m_x.ToString()
                     + " y=" + m_curr_cell.m_y.ToString()
                     + " area=" + m_curr_cell.m_area.ToString()
@@ -539,14 +557,14 @@ namespace Pictor
 			m_curr_cell.area += (fx2 + (int)poly_subpixel_scale_e.Scale - first) * delta;
 		}
 
-		static void SwapCells(AntiAliasingCell a, AntiAliasingCell b)
+		private static void SwapCells(AntiAliasingCell a, AntiAliasingCell b)
 		{
 			AntiAliasingCell temp = a;
 			a = b;
 			b = temp;
 		}
 
-		enum qsort { qsort_threshold = 9 };
+		private enum qsort { qsort_threshold = 9 };
 	}
 
 	//------------------------------------------------------ScanlineHitTest
@@ -561,16 +579,24 @@ namespace Pictor
 			m_hit = false;
 		}
 
-		public void ResetSpans() { }
-		public void Finalize(int nothing) { }
+		public void ResetSpans()
+		{
+		}
+
+		public void Finalize(int nothing)
+		{
+		}
+
 		public void AddCell(int x, uint nothing)
 		{
 			if (m_x == x) m_hit = true;
 		}
+
 		public void AddSpan(int x, int len, uint nothing)
 		{
 			if (m_x >= x && m_x < x + len) m_hit = true;
 		}
+
 		public uint NumberOfSpans
 		{
 			get
@@ -578,9 +604,11 @@ namespace Pictor
 				return 1;
 			}
 		}
-		public bool hit() { return m_hit; }
 
-
+		public bool hit()
+		{
+			return m_hit;
+		}
 
 		public void Reset(int min_x, int max_x)
 		{
@@ -594,14 +622,17 @@ namespace Pictor
 				throw new System.NotImplementedException();
 			}
 		}
+
 		public ScanlineSpan GetNextScanlineSpan()
 		{
 			throw new System.NotImplementedException();
 		}
+
 		public int y()
 		{
 			throw new System.NotImplementedException();
 		}
+
 		public byte[] GetCovers()
 		{
 			throw new System.NotImplementedException();

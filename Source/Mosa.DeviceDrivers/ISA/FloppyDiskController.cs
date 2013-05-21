@@ -15,7 +15,6 @@
 // http://www.isdaman.com/alsos/hardware/fdc/floppy.htm
 // http://www.osdev.org/phpBB2/viewtopic.php?t=13538
 
-
 using Mosa.DeviceSystem;
 
 namespace Mosa.DeviceDrivers.ISA
@@ -27,7 +26,6 @@ namespace Mosa.DeviceDrivers.ISA
 	[ISADeviceDriver(AutoLoad = false, BasePort = 0x0370, PortRange = 8, IRQ = 5, ForceOption = "fdc2", Platforms = PlatformArchitecture.X86AndX64)]
 	public class FloppyDiskController : HardwareDevice, IDevice, IHardwareDevice, IDiskControllerDevice
 	{
-
 		#region Definitions
 
 		internal struct FIFOCommand
@@ -73,176 +71,195 @@ namespace Mosa.DeviceDrivers.ISA
 			internal const uint MaxBytesPerTrack = MaxSectorsPerTracks * BytesPerSector;
 		};
 
-		#endregion
+		#endregion Definitions
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public enum FloppyDriveType
 		{
 			/// <summary>
-			/// 
+			///
 			/// </summary>
 			None,
+
 			/// <summary>
-			/// 
+			///
 			/// </summary>
 			Floppy_5_25,
+
 			/// <summary>
-			/// 
+			///
 			/// </summary>
 			Floppy_3_5,
+
 			/// <summary>
-			/// 
+			///
 			/// </summary>
 			Unknown
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public struct FloppyDriveInfo
 		{
 			/// <summary>
-			/// 
+			///
 			/// </summary>
 			public FloppyDriveType Type;
+
 			/// <summary>
-			/// 
+			///
 			/// </summary>
 			public uint KiloByteSize;
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public struct FloppyMediaInfo
 		{
 			/// <summary>
-			/// 
+			///
 			/// </summary>
 			public uint SectorsPerTrack;
+
 			/// <summary>
-			/// 
+			///
 			/// </summary>
 			public uint TotalTracks;
+
 			/// <summary>
-			/// 
+			///
 			/// </summary>
 			public byte Gap1Length;
+
 			/// <summary>
-			/// 
+			///
 			/// </summary>
 			public byte Gap2Length;
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected struct LastSeek
 		{
 			/// <summary>
-			/// 
+			///
 			/// </summary>
 			public bool calibrated;
+
 			/// <summary>
-			/// 
+			///
 			/// </summary>
 			public uint drive;
+
 			/// <summary>
-			/// 
+			///
 			/// </summary>
 			public byte track;
+
 			/// <summary>
-			/// 
+			///
 			/// </summary>
 			public byte head;
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected struct TrackCache
 		{
 			/// <summary>
-			/// 
+			///
 			/// </summary>
 			public byte[] buffer;
+
 			/// <summary>
-			/// 
+			///
 			/// </summary>
 			public bool valid;
+
 			/// <summary>
-			/// 
+			///
 			/// </summary>
 			public byte track;
+
 			/// <summary>
-			/// 
+			///
 			/// </summary>
 			public byte head;
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected SpinLock spinLock;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected bool enchancedController = false;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public const uint DrivesPerController = 2; // the maximum supported
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected FloppyDriveInfo[] floppyDrives;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected FloppyMediaInfo[] floppyMedia;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected TrackCache[] trackCache;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected LastSeek[] lastSeek;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IReadWriteIOPort commandPort;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IReadWriteIOPort dataPort;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IReadWriteIOPort configPort;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IReadWriteIOPort statusPort;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IDMAChannel floppyDMA;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected bool interruptSet = false;
 
 		//protected enum OperationPending
-		//{ 
+		//{
 		//    None,
 		//    Read,
 		//    Write,
@@ -303,6 +320,7 @@ namespace Mosa.DeviceDrivers.ISA
 				// default
 				floppyMedia[drive].SectorsPerTrack = 18;
 				floppyMedia[drive].TotalTracks = 80;
+
 				//TODO: for 5.25, Gap1 = 0x2A and Gap2 = 0x50
 				floppyMedia[drive].Gap1Length = 0x1B;	// 27
 				floppyMedia[drive].Gap2Length = 0x54;
@@ -316,9 +334,9 @@ namespace Mosa.DeviceDrivers.ISA
 			GetByte();
 			GetByte();
 
-			configPort.Write8(0x00); // 500 Kb/s (MFM)			
+			configPort.Write8(0x00); // 500 Kb/s (MFM)
 
-			// Set step rate to 3ms & head unload time to 240ms 
+			// Set step rate to 3ms & head unload time to 240ms
 			SendByte(FIFOCommand.Specify);
 			SendByte((((16 - (3)) << 4) | ((240 / 16))));
 
@@ -407,7 +425,7 @@ namespace Mosa.DeviceDrivers.ISA
 				if (ReadBlock(drive, CHSToLBA(drive, floppyMedia[drive].TotalTracks - 1, 0, floppyMedia[drive].SectorsPerTrack - 1), 1, temp))
 					return true;
 
-				// unable to read floppy media 
+				// unable to read floppy media
 				floppyMedia[drive].TotalTracks = 0;
 				floppyMedia[drive].SectorsPerTrack = 0;
 
@@ -417,7 +435,6 @@ namespace Mosa.DeviceDrivers.ISA
 			{
 				spinLock.Exit();
 			}
-
 		}
 
 		/// <summary>
@@ -654,7 +671,7 @@ namespace Mosa.DeviceDrivers.ISA
 					lastSeek[drive].calibrated = true;
 					lastSeek[drive].track = 0;
 					lastSeek[drive].head = 2;	// invalid head (required)
-					return true;	// Note: motor is left on				
+					return true;	// Note: motor is left on
 				}
 			}
 
@@ -707,7 +724,6 @@ namespace Mosa.DeviceDrivers.ISA
 					lastSeek[drive].head = head;
 					return true;
 				}
-
 			}
 
 			return false;
@@ -889,16 +905,17 @@ namespace Mosa.DeviceDrivers.ISA
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected enum SectorOperation
 		{
 			/// <summary>
-			/// 
+			///
 			/// </summary>
 			Read,
+
 			/// <summary>
-			/// 
+			///
 			/// </summary>
 			Write
 		}
@@ -943,12 +960,12 @@ namespace Mosa.DeviceDrivers.ISA
 						SendByte(FIFOCommand.ReadSector | FIFOCommand.MFMModeMask);
 
 					SendByte((byte)((byte)drive | (head << 2)));	// 0:0:0:0:0:HD:US1:US0 = head and drive
-					SendByte(track);// C: 
+					SendByte(track);// C:
 					SendByte(head);	// H: first head (should match with above)
 					SendByte((byte)(sector + 1));	// R: first sector, strangely counts from 1
-					SendByte(2);	// N: bytes/sector, 128*2^x (x=2 -> 512) 
+					SendByte(2);	// N: bytes/sector, 128*2^x (x=2 -> 512)
 					SendByte((byte)(sector + count)); // EOT
-					SendByte(floppyMedia[drive].Gap1Length);	// GPL: GAP3 length, 27 is default for 3.5" 
+					SendByte(floppyMedia[drive].Gap1Length);	// GPL: GAP3 length, 27 is default for 3.5"
 					SendByte(0xFF);	// DTL: (bytes to transfer) = unused
 
 					if (!WaitForInterrupt(3000))
@@ -960,6 +977,7 @@ namespace Mosa.DeviceDrivers.ISA
 
 					byte trk = GetByte();	// track (cylinder)
 					byte rhe = GetByte();	// head
+
 					//byte sec = GetByte();	// sector number
 					GetByte(); // sector number
 					byte bps = GetByte();	// bytes per sector
@@ -1068,11 +1086,9 @@ namespace Mosa.DeviceDrivers.ISA
 					TurnOffMotor(drive);
 					break;
 				}
-
 			}
 
 			return false;
 		}
-
 	}
 }

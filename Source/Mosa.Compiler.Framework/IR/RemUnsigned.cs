@@ -9,7 +9,6 @@
 
 namespace Mosa.Compiler.Framework.IR
 {
-
 	/// <summary>
 	/// Intermediate representation of the unsigned remainder operation.
 	/// </summary>
@@ -31,6 +30,5 @@ namespace Mosa.Compiler.Framework.IR
 		{
 			visitor.RemUnsigned(context);
 		}
-
 	}
 }

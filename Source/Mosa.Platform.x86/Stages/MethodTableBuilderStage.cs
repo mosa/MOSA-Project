@@ -22,16 +22,15 @@ namespace Mosa.Platform.x86.Stages
 	///		4 bytes: Pointer to method
 	///		4 bytes: Length of method
 	///		4 bytes: Pointer to method description entry
-	///		
+	///
 	/// The method description entry has the format:
 	///		4 bytes: Pointer to exception clause table
 	///		4 bytes: GC tracking info
 	/// </summary>
 	public class MethodTableBuilderStage : BaseCompilerStage, ICompilerStage
 	{
-
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private ILinker linker;
 
@@ -105,9 +104,9 @@ namespace Mosa.Platform.x86.Stages
 					// 1. Store address (the linker writes the actual entry)
 					linker.Link(LinkType.AbsoluteAddress | LinkType.NativeI4, section, (int)stream.Position, 0, entry.Name, IntPtr.Zero);
 					stream.Position += typeLayout.NativePointerSize;
-					
+
 					// 2. Store the length (it copied in by the next loop)
-					stream.Write((uint)entry.Length, true); 
+					stream.Write((uint)entry.Length, true);
 
 					// 3. Store the pointer to the method description table (the linker writes the actual entry)
 					linker.Link(LinkType.AbsoluteAddress | LinkType.NativeI4, section, (int)stream.Position, 0, entry.Name + "$mdtable", IntPtr.Zero);
@@ -152,6 +151,5 @@ namespace Mosa.Platform.x86.Stages
 			// TODO
 			return 0;
 		}
-
 	}
 }

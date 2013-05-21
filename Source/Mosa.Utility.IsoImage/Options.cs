@@ -11,10 +11,8 @@ using System.Collections.Generic;
 
 namespace Mosa.Utility.IsoImage
 {
-	
-
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public class Options
 	{
@@ -30,7 +28,5 @@ namespace Mosa.Utility.IsoImage
 		public Options()
 		{
 		}
-
-
 	}
 }

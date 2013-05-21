@@ -28,7 +28,6 @@ namespace Mosa.Platform.x86.Stages
 	/// </remarks>
 	public sealed class IRTransformationStage : BaseTransformationStage, IIRVisitor, IMethodCompilerStage, IPlatformStage
 	{
-
 		private int stackSize;
 
 		#region IMethodCompilerStage
@@ -48,7 +47,7 @@ namespace Mosa.Platform.x86.Stages
 			Debug.Assert((stackSize % 4) == 0, @"Stack size of method can't be divided by 4!!");
 		}
 
-		#endregion // IMethodCompilerStage
+		#endregion IMethodCompilerStage
 
 		#region IIRVisitor
 
@@ -116,6 +115,7 @@ namespace Mosa.Platform.x86.Stages
 			var opRes = context.Result;
 
 			Operand register = Operand.CreateCPURegister(opRes.Type, GeneralPurposeRegister.EAX);
+
 			//VirtualRegisterOperand register = AllocateVirtualRegister(opRes.Type);
 
 			context.Result = register;
@@ -204,6 +204,7 @@ namespace Mosa.Platform.x86.Stages
 					case ConditionCode.Equal:
 						context.AppendInstruction(X86.Comiss, null, left, right);
 						break;
+
 					case ConditionCode.NotEqual: goto case ConditionCode.Equal;
 					case ConditionCode.UnsignedGreaterOrEqual: goto case ConditionCode.Equal;
 					case ConditionCode.UnsignedGreaterThan: goto case ConditionCode.Equal;
@@ -212,6 +213,7 @@ namespace Mosa.Platform.x86.Stages
 					case ConditionCode.GreaterOrEqual:
 						context.AppendInstruction(X86.Comiss, null, left, right);
 						break;
+
 					case ConditionCode.GreaterThan: goto case ConditionCode.GreaterOrEqual;
 					case ConditionCode.LessOrEqual: goto case ConditionCode.GreaterOrEqual;
 					case ConditionCode.LessThan: goto case ConditionCode.GreaterOrEqual;
@@ -224,6 +226,7 @@ namespace Mosa.Platform.x86.Stages
 					case ConditionCode.Equal:
 						context.AppendInstruction(X86.Comisd, null, left, right);
 						break;
+
 					case ConditionCode.NotEqual: goto case ConditionCode.Equal;
 					case ConditionCode.UnsignedGreaterOrEqual: goto case ConditionCode.Equal;
 					case ConditionCode.UnsignedGreaterThan: goto case ConditionCode.Equal;
@@ -232,6 +235,7 @@ namespace Mosa.Platform.x86.Stages
 					case ConditionCode.GreaterOrEqual:
 						context.AppendInstruction(X86.Comisd, null, left, right);
 						break;
+
 					case ConditionCode.GreaterThan: goto case ConditionCode.GreaterOrEqual;
 					case ConditionCode.LessOrEqual: goto case ConditionCode.GreaterOrEqual;
 					case ConditionCode.LessThan: goto case ConditionCode.GreaterOrEqual;
@@ -243,10 +247,11 @@ namespace Mosa.Platform.x86.Stages
 			Operand ebx = Operand.CreateCPURegister(BuiltInSigType.Byte, GeneralPurposeRegister.EBX);
 			Operand ecx = Operand.CreateCPURegister(BuiltInSigType.Byte, GeneralPurposeRegister.ECX);
 			Operand edx = Operand.CreateCPURegister(BuiltInSigType.Byte, GeneralPurposeRegister.EDX);
+
 			//VirtualRegisterOperand eax = AllocateVirtualRegister(BuiltInSigType.Byte);
 			//VirtualRegisterOperand ebx = AllocateVirtualRegister(BuiltInSigType.Byte);
 			//VirtualRegisterOperand ecx = AllocateVirtualRegister(BuiltInSigType.Byte);
-			//VirtualRegisterOperand edx = AllocateVirtualRegister(BuiltInSigType.Byte); 
+			//VirtualRegisterOperand edx = AllocateVirtualRegister(BuiltInSigType.Byte);
 
 			context.AppendInstruction(X86.Pushfd);
 
@@ -353,7 +358,8 @@ namespace Mosa.Platform.x86.Stages
 			if (resultOperand != null)
 			{
 				Operand eax = Operand.CreateCPURegister(BuiltInSigType.Byte, GeneralPurposeRegister.EAX);
-				//VirtualRegisterOperand eax = AllocateVirtualRegister(BuiltInSigType.Byte); 
+
+				//VirtualRegisterOperand eax = AllocateVirtualRegister(BuiltInSigType.Byte);
 
 				if (IsUnsigned(resultOperand))
 					context.AppendInstruction(X86.Setcc, GetUnsignedConditionCode(condition), eax);
@@ -579,12 +585,12 @@ namespace Mosa.Platform.x86.Stages
 			Operand edi = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.EDI);
 			Operand edx = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.EDX);
 
-			/* 
-			 * If you want to stop at the header of an emitted function, just set breakFlag 
-			 * to true in the following line. It will issue a breakpoint instruction. Note 
-			 * that if you debug using visual studio you must enable unmanaged code 
-			 * debugging, otherwise the function will never return and the breakpoint will 
-			 * never appear. 
+			/*
+			 * If you want to stop at the header of an emitted function, just set breakFlag
+			 * to true in the following line. It will issue a breakpoint instruction. Note
+			 * that if you debug using visual studio you must enable unmanaged code
+			 * debugging, otherwise the function will never return and the breakpoint will
+			 * never appear.
 			 */
 			bool breakFlag = false; // TODO: Turn this into a compiler option
 
@@ -600,10 +606,13 @@ namespace Mosa.Platform.x86.Stages
 
 			// push ebp
 			context.SetInstruction(X86.Push, null, ebp);
+
 			// mov ebp, esp
 			context.AppendInstruction(X86.Mov, ebp, esp);
+
 			// sub esp, localsSize
 			context.AppendInstruction(X86.Sub, esp, Operand.CreateConstant(BuiltInSigType.Int32, -stackSize));
+
 			// push ebx
 			context.AppendInstruction(X86.Push, null, ebx);
 
@@ -624,7 +633,6 @@ namespace Mosa.Platform.x86.Stages
 				// push edx
 				context.AppendInstruction(X86.Push, null, edx);
 			}
-
 		}
 
 		/// <summary>
@@ -651,14 +659,19 @@ namespace Mosa.Platform.x86.Stages
 
 			// pop ecx
 			context.SetInstruction(X86.Pop, ecx);
+
 			// pop edi
 			context.AppendInstruction(X86.Pop, edi);
+
 			// pop ebx
 			context.AppendInstruction(X86.Pop, ebx);
+
 			// add esp, -localsSize
 			context.AppendInstruction(X86.Add, esp, Operand.CreateConstant(BuiltInSigType.IntPtr, -stackSize));
+
 			// pop ebp
 			context.AppendInstruction(X86.Pop, ebp);
+
 			// ret
 			context.AppendInstruction(X86.Ret);
 		}
@@ -1030,6 +1043,7 @@ namespace Mosa.Platform.x86.Stages
 					else
 						context.ReplaceInstructionOnly(X86.Cvttss2si);
 					break;
+
 				case CilElementType.I8: return; // FIXME: throw new NotSupportedException();
 				case CilElementType.U1: goto case CilElementType.U4;
 				case CilElementType.U2: goto case CilElementType.U4;
@@ -1052,8 +1066,10 @@ namespace Mosa.Platform.x86.Stages
 
 			// Push exception object onto stack
 			context.SetInstruction(X86.Push, null, context.Operand1);
+
 			// Save entire CPU context onto stack
 			context.AppendInstruction(X86.Pushad);
+
 			// Call exception handling
 			context.AppendInstruction(X86.Call, null, throwMethod);
 		}
@@ -1085,7 +1101,7 @@ namespace Mosa.Platform.x86.Stages
 				throw new NotSupportedException();
 		}
 
-		#endregion //  IIRVisitor
+		#endregion IIRVisitor
 
 		#region IIRVisitor - Unused
 
@@ -1093,15 +1109,19 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for PhiInstruction"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.Phi(Context context) { }
+		void IIRVisitor.Phi(Context context)
+		{
+		}
 
 		/// <summary>
 		/// Visitation function for intrinsic the method call.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.IntrinsicMethodCall(Context context) { }
+		void IIRVisitor.IntrinsicMethodCall(Context context)
+		{
+		}
 
-		#endregion // IIRVisitor - Unused
+		#endregion IIRVisitor - Unused
 
 		#region Internals
 
@@ -1193,6 +1213,6 @@ namespace Mosa.Platform.x86.Stages
 			}
 		}
 
-		#endregion // Internals
+		#endregion Internals
 	}
 }

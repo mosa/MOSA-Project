@@ -36,7 +36,7 @@ namespace Mosa.Test.Cases.OLD.CIL
 					}
 				}";
 		}
-		
+
 		[Test]
 		[Row(true)]
 		[Row(false)]

@@ -14,7 +14,6 @@ namespace Mosa.Test.System.Numbers
 {
 	public static class Series
 	{
-
 		#region Utilities
 
 		public static IEnumerable<int> GetUpTo(int end)
@@ -38,13 +37,13 @@ namespace Mosa.Test.System.Numbers
 			}
 		}
 
-		#endregion
+		#endregion Utilities
 
 		#region B Types
 
 		public static IEnumerable<bool> B { get { return Numbers.B.Series; } }
 
-		#endregion
+		#endregion B Types
 
 		#region C Types
 
@@ -80,7 +79,7 @@ namespace Mosa.Test.System.Numbers
 			get { foreach (char a in GetUpTo(32)) yield return a; }
 		}
 
-		#endregion
+		#endregion C Types
 
 		#region I1 Types
 
@@ -116,7 +115,7 @@ namespace Mosa.Test.System.Numbers
 			get { foreach (sbyte a in GetUpTo(32)) yield return a; }
 		}
 
-		#endregion
+		#endregion I1 Types
 
 		#region U1 Types
 
@@ -152,7 +151,7 @@ namespace Mosa.Test.System.Numbers
 			get { foreach (byte a in GetUpTo(32)) yield return a; }
 		}
 
-		#endregion
+		#endregion U1 Types
 
 		#region I2 Types
 
@@ -188,7 +187,7 @@ namespace Mosa.Test.System.Numbers
 			get { foreach (short a in GetUpTo(32)) yield return a; }
 		}
 
-		#endregion
+		#endregion I2 Types
 
 		#region U2 Types
 
@@ -224,7 +223,7 @@ namespace Mosa.Test.System.Numbers
 			get { foreach (ushort a in GetUpTo(32)) yield return a; }
 		}
 
-		#endregion
+		#endregion U2 Types
 
 		#region I4 Types
 
@@ -260,7 +259,7 @@ namespace Mosa.Test.System.Numbers
 			get { foreach (int a in GetUpTo(32)) yield return a; }
 		}
 
-		#endregion
+		#endregion I4 Types
 
 		#region U4 Types
 
@@ -295,7 +294,8 @@ namespace Mosa.Test.System.Numbers
 		{
 			get { foreach (uint a in GetUpTo(8)) yield return a; }
 		}
-		#endregion
+
+		#endregion U4 Types
 
 		#region I8 Types
 
@@ -331,7 +331,7 @@ namespace Mosa.Test.System.Numbers
 			get { foreach (long a in GetUpTo(32)) yield return a; }
 		}
 
-		#endregion
+		#endregion I8 Types
 
 		#region U8 Types
 
@@ -366,7 +366,8 @@ namespace Mosa.Test.System.Numbers
 		{
 			get { foreach (ulong a in GetUpTo(32)) yield return a; }
 		}
-		#endregion
+
+		#endregion U8 Types
 
 		#region R4 Types
 
@@ -422,7 +423,7 @@ namespace Mosa.Test.System.Numbers
 			get { foreach (float a in R4) if (!float.IsNaN(a) && a <= Int32.MaxValue && a >= Int32.MinValue) yield return a; }
 		}
 
-		#endregion
+		#endregion R4 Types
 
 		#region R8 Types
 
@@ -478,6 +479,6 @@ namespace Mosa.Test.System.Numbers
 			get { foreach (double a in R8) if (!double.IsNaN(a) && a <= Int32.MaxValue && a >= Int32.MinValue) yield return a; }
 		}
 
-		#endregion
+		#endregion R8 Types
 	}
 }

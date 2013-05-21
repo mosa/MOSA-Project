@@ -11,19 +11,18 @@ using Mosa.EmulatedKernel;
 
 namespace Mosa.EmulatedDevices.Emulated
 {
-
 	/// <summary>
-	/// Emulates the RAM Chip 
+	/// Emulates the RAM Chip
 	/// </summary>
 	public class RAMChip : IHardwareDevice
 	{
-
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected uint addressBase = 0xB0000;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected byte[] memory;
 

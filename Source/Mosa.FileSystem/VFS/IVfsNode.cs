@@ -15,7 +15,6 @@ namespace Mosa.FileSystem.VFS
 	/// </summary>
 	public interface IVfsNode
 	{
-
 		#region Properties
 
 		// <summary>
@@ -28,7 +27,7 @@ namespace Mosa.FileSystem.VFS
 		/// </summary>
 		VfsNodeType NodeType { get; }
 
-		#endregion // Properties
+		#endregion Properties
 
 		#region Methods
 
@@ -83,6 +82,6 @@ namespace Mosa.FileSystem.VFS
 		/// <exception cref="System.NotSupportedException">The object does not support removal this way. There's most likely an object specific API to remove this IVfsNode.</exception>
 		void Delete(IVfsNode child, DirectoryEntry dentry);
 
-		#endregion // Methods
+		#endregion Methods
 	}
 }

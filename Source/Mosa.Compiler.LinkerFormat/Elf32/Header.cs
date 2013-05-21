@@ -15,84 +15,97 @@ using Mosa.Compiler.LinkerFormat.Elf;
 namespace Mosa.Compiler.LinkerFormat.Elf32
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public class Header
 	{
 		/// <summary>
-		/// The initial bytes mark the file as an object file and provide machine-independent 
-		/// data with which to decode and interpret the file's contents.  
+		/// The initial bytes mark the file as an object file and provide machine-independent
+		/// data with which to decode and interpret the file's contents.
 		/// </summary>
 		public byte[] Ident = new byte[16];
+
 		/// <summary>
 		/// This member identifies the object file type
 		/// </summary>
 		public FileType Type;
+
 		/// <summary>
 		/// This member's value specifies the required architecture for an individual file.
 		/// </summary>
 		public MachineType Machine;
+
 		/// <summary>
-		/// This member identifies the object file version. 
+		/// This member identifies the object file version.
 		/// </summary>
 		public Version Version;
+
 		/// <summary>
-		/// This member gives the virtual virtualAddress to which the system first transfers control, 
-		/// thus starting the process. If the file has no associated entry point, this member holds 
-		/// zero. 
+		/// This member gives the virtual virtualAddress to which the system first transfers control,
+		/// thus starting the process. If the file has no associated entry point, this member holds
+		/// zero.
 		/// </summary>
 		public uint EntryAddress;
+
 		/// <summary>
-		/// This member holds the program header table's file offset in bytes. If the file has no 
-		/// program header table, this member holds zero. 
+		/// This member holds the program header table's file offset in bytes. If the file has no
+		/// program header table, this member holds zero.
 		/// </summary>
 		public uint ProgramHeaderOffset;
+
 		/// <summary>
-		/// This member holds the section header table's file offset in bytes. If the file has no 
-		/// section header table, this member holds zero. 
+		/// This member holds the section header table's file offset in bytes. If the file has no
+		/// section header table, this member holds zero.
 		/// </summary>
 		public uint SectionHeaderOffset;
+
 		/// <summary>
-		/// This member holds processor-specific flags associated with the file. Flag names 
+		/// This member holds processor-specific flags associated with the file. Flag names
 		/// take the form EF_machine_flag.
 		/// </summary>
 		public uint Flags;
+
 		/// <summary>
-		/// This member holds the ELF header's size in bytes. 
+		/// This member holds the ELF header's size in bytes.
 		/// </summary>
 		public ushort ElfHeaderSize;
+
 		/// <summary>
-		/// This member holds the size in bytes of one entry in the file's program header table; 
-		/// all entries are the same size. 
+		/// This member holds the size in bytes of one entry in the file's program header table;
+		/// all entries are the same size.
 		/// </summary>
 		public ushort ProgramHeaderEntrySize;
+
 		/// <summary>
-		/// This member holds the number of entries in the program header table. Thus the 
-		/// product of ProgramHeaderEntrySize and ProgramHeaderNumber gives the table's size in bytes. If a file 
-		/// has no program header table,  ProgramHeaderNumber holds the value zero. 
+		/// This member holds the number of entries in the program header table. Thus the
+		/// product of ProgramHeaderEntrySize and ProgramHeaderNumber gives the table's size in bytes. If a file
+		/// has no program header table,  ProgramHeaderNumber holds the value zero.
 		/// </summary>
 		public ushort ProgramHeaderNumber;
+
 		/// <summary>
-		/// This member holds a section header's size in bytes. A section header is one entry 
+		/// This member holds a section header's size in bytes. A section header is one entry
 		/// in the section header table; all entries are the same size.
 		/// </summary>
 		public ushort SectionHeaderEntrySize;
+
 		/// <summary>
-		/// This member holds the number of entries in the section header table. Thus the 
-		/// product of SectionHeaderEntrySize and SectionHeaderNumber gives the section header table's size in 
-		/// bytes. If a file has no section header table,  SectionHeaderNumber holds the value zero. 
+		/// This member holds the number of entries in the section header table. Thus the
+		/// product of SectionHeaderEntrySize and SectionHeaderNumber gives the section header table's size in
+		/// bytes. If a file has no section header table,  SectionHeaderNumber holds the value zero.
 		/// </summary>
 		public ushort SectionHeaderNumber;
+
 		/// <summary>
-		/// This member holds the section header table index of the entry associated with the 
-		/// section name string table. If the file has no section name string table, this member 
-		/// holds the value  SHN_UNDEF. See "Sections" and "String Table" below for more 
-		/// information. 
+		/// This member holds the section header table index of the entry associated with the
+		/// section name string table. If the file has no section name string table, this member
+		/// holds the value  SHN_UNDEF. See "Sections" and "String Table" below for more
+		/// information.
 		/// </summary>
 		public ushort SectionHeaderStringIndex;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public static readonly byte[] MagicNumber = new byte[] { 0x7F, (byte)'E', (byte)'L', (byte)'F' };
 
@@ -175,13 +188,15 @@ namespace Mosa.Compiler.LinkerFormat.Elf32
 
 			// Store class
 			Ident[4] = (byte)identClass;
+
 			// Store data flags
 			Ident[5] = (byte)data;
+
 			// Version has to be current, otherwise the file won't load
 			Ident[6] = (byte)Version.Current;
 			Version = Version.Current;
 
-			// Set padding byte to 
+			// Set padding byte to
 			Ident[7] = 0x07;
 
 			for (int i = 8; i < 16; ++i)

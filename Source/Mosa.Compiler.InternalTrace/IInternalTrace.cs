@@ -7,14 +7,14 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-
-
 namespace Mosa.Compiler.InternalTrace
 {
 	public interface IInternalTrace
 	{
 		ITraceListener TraceListener { get; set; }
+
 		ITraceFilter TraceFilter { get; set; }
+
 		ICompilerEventListener CompilerEventListener { get; set; }
 	}
 }

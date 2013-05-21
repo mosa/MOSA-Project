@@ -7,7 +7,6 @@
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  */
 
-
 using System.Collections.Generic;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.TypeSystem;
@@ -19,7 +18,6 @@ namespace Mosa.Platform.x86.Intrinsic
 	/// </summary>
 	public sealed class Out : IIntrinsicPlatformMethod
 	{
-
 		#region Methods
 
 		/// <summary>
@@ -40,7 +38,6 @@ namespace Mosa.Platform.x86.Intrinsic
 			context.AppendInstruction(X86.Out, null, edx, eax);
 		}
 
-		#endregion // Methods
-
+		#endregion Methods
 	}
 }

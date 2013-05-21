@@ -9,7 +9,6 @@
 
 // FIXME PG
 
-
 namespace Mosa.Compiler.Framework.Stages
 {
 	/// <summary>
@@ -19,9 +18,9 @@ namespace Mosa.Compiler.Framework.Stages
 	{
 		#region Data members
 
-		LoopAwareBlockOrder loopAwareBlockOrder;
+		private LoopAwareBlockOrder loopAwareBlockOrder;
 
-		#endregion // Data members
+		#endregion Data members
 
 		#region IMethodCompilerStage Members
 
@@ -59,9 +58,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 				Trace("Block " + block.ToString() + " #" + block.Sequence.ToString() + " -> Depth: " + depth.ToString() + " index: " + depthindex.ToString());
 			}
-
 		}
 
-		#endregion // Methods
+		#endregion IMethodCompilerStage Members
 	}
 }

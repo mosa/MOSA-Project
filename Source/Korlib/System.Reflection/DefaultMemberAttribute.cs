@@ -26,8 +26,11 @@ namespace System.Reflection
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
-		public DefaultMemberAttribute(string member) { this.member = member; }
+		public DefaultMemberAttribute(string member)
+		{
+			this.member = member;
+		}
 	}
 }

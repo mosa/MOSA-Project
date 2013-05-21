@@ -6,6 +6,7 @@
  * Authors:
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  */
+
 using System;
 
 namespace Pictor
@@ -14,7 +15,7 @@ namespace Pictor
 	//template<uint Rows, uint Cols>
 	public static class PivotMatrix
 	{
-		static void SwapArraysIndex1(double[,] a1, uint a1Index0, double[,] a2, uint a2Index0)
+		private static void SwapArraysIndex1(double[,] a1, uint a1Index0, double[,] a2, uint a2Index0)
 		{
 			int Cols = a1.GetLength(1);
 			if (a2.GetLength(1) != Cols)
@@ -60,11 +61,9 @@ namespace Pictor
 		}
 	};
 
-
-
 	//===============================================================EquationSimulator
 	//template<uint Size, uint RightCols>
-	struct EquationSimulator
+	internal struct EquationSimulator
 	{
 		public static bool Solve(double[,] left,
 						  double[,] right,
@@ -121,7 +120,6 @@ namespace Pictor
 				}
 			}
 
-
 			for (int k = 0; k < RightCols; k++)
 			{
 				int m;
@@ -136,6 +134,5 @@ namespace Pictor
 			}
 			return true;
 		}
-
 	};
 }

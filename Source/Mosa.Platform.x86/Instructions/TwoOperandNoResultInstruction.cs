@@ -18,7 +18,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// </summary>
 	/// <remarks>
 	/// The <see cref="TwoOperandNoResultInstruction"/> is the base class for
-	/// x86 instructions using two operands but neither is s result. It 
+	/// x86 instructions using two operands but neither is s result. It
 	/// provides properties to easily access the individual operands.
 	/// </remarks>
 	public abstract class TwoOperandNoResultInstruction : X86Instruction
@@ -33,7 +33,7 @@ namespace Mosa.Platform.x86.Instructions
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		/// <summary>
 		/// Computes the opcode.

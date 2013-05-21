@@ -12,7 +12,7 @@ using Mosa.Compiler.Metadata.Signatures;
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public sealed class UnboxAnyInstruction : UnaryInstruction
 	{
@@ -27,7 +27,7 @@ namespace Mosa.Compiler.Framework.CIL
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Methods
 
@@ -64,7 +64,7 @@ namespace Mosa.Compiler.Framework.CIL
 				ctx.Result = decoder.Compiler.CreateVirtualRegister(BuiltInSigType.Double);
 			else if (type.FullName == "System.Char")
 				ctx.Result = decoder.Compiler.CreateVirtualRegister(BuiltInSigType.Char);
-		
+
 			ctx.RuntimeType = type;
 		}
 
@@ -78,7 +78,6 @@ namespace Mosa.Compiler.Framework.CIL
 			visitor.UnboxAny(context);
 		}
 
-		#endregion // Methods
-
+		#endregion Methods
 	}
 }

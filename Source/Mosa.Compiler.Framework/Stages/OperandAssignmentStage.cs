@@ -15,21 +15,22 @@ using Mosa.Compiler.Framework.CIL;
 namespace Mosa.Compiler.Framework.Stages
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public sealed class OperandAssignmentStage : BaseMethodCompilerStage, IMethodCompilerStage
 	{
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private sealed class WorkItem
 		{
 			/// <summary>
-			/// 
+			///
 			/// </summary>
 			public BasicBlock Block;
+
 			/// <summary>
-			/// 
+			///
 			/// </summary>
 			public Stack<Operand> IncomingStack;
 
@@ -46,23 +47,27 @@ namespace Mosa.Compiler.Framework.Stages
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private Queue<WorkItem> workList = new Queue<WorkItem>();
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private BitArray processed;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private BitArray enqueued;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private Stack<Operand>[] outgoingStack;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private Stack<Operand>[] scheduledMoves;
 
@@ -259,6 +264,5 @@ namespace Mosa.Compiler.Framework.Stages
 			if (ctx.Instruction is CIL.DupInstruction)
 				currentStack.Push(ctx.Result);
 		}
-
 	}
 }

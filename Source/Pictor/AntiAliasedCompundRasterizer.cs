@@ -19,40 +19,41 @@ namespace Pictor
 		///<summary>
 		///</summary>
 		LayerUnsorted,
+
 		///<summary>
 		///</summary>
 		LayerDirect,
+
 		///<summary>
 		///</summary>
 		LayerInverse
 	};
 
-
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	sealed public class AntiAliasedCompundRasterizer : IRasterizer
 	{
-		readonly AntiAliasedRasterizerCells _rasterizer;
-		readonly IVectorClipper _vectorClipper;
-		Basics.FillingRule _fillingRule;
-		ELayerOrder _layerOrder;
-		readonly VectorPOD<StyleInfo> _activeStyles;
-		readonly VectorPOD<uint> _activeStyleTable;
-		readonly VectorPOD<byte> _activeStyleMask;
-		readonly VectorPOD<AntiAliasingCell> _cells;
-		readonly VectorPOD<byte> _coverBuffer;
-		readonly VectorPOD<uint> _masterAlpha;
+		private readonly AntiAliasedRasterizerCells _rasterizer;
+		private readonly IVectorClipper _vectorClipper;
+		private Basics.FillingRule _fillingRule;
+		private ELayerOrder _layerOrder;
+		private readonly VectorPOD<StyleInfo> _activeStyles;
+		private readonly VectorPOD<uint> _activeStyleTable;
+		private readonly VectorPOD<byte> _activeStyleMask;
+		private readonly VectorPOD<AntiAliasingCell> _cells;
+		private readonly VectorPOD<byte> _coverBuffer;
+		private readonly VectorPOD<uint> _masterAlpha;
 
-		int _minStyle;
-		int _maxStyle;
-		int _startX;
-		int _startY;
-		int _scanY;
-		int _scanlineStart;
-		uint _scanlineLength;
+		private int _minStyle;
+		private int _maxStyle;
+		private int _startX;
+		private int _startY;
+		private int _scanY;
+		private int _scanlineStart;
+		private uint _scanlineLength;
 
-		struct StyleInfo
+		private struct StyleInfo
 		{
 			internal uint StartCell;
 			internal uint NumCells;
@@ -113,7 +114,7 @@ namespace Pictor
 			_scanlineLength = 0;
 		}
 
-		Basics.FillingRule FillingRule
+		private Basics.FillingRule FillingRule
 		{
 			set
 			{
@@ -121,7 +122,7 @@ namespace Pictor
 			}
 		}
 
-		ELayerOrder LayerOrder
+		private ELayerOrder LayerOrder
 		{
 			set
 			{
@@ -129,7 +130,7 @@ namespace Pictor
 			}
 		}
 
-		void ClipBox(double x1, double y1,
+		private void ClipBox(double x1, double y1,
 													double x2, double y2)
 		{
 			Reset();
@@ -137,7 +138,7 @@ namespace Pictor
 							   _vectorClipper.UpScale(x2), _vectorClipper.UpScale(y2));
 		}
 
-		void ResetClipping()
+		private void ResetClipping()
 		{
 			Reset();
 			_vectorClipper.ResetClipping();
@@ -200,7 +201,7 @@ namespace Pictor
 							  _vectorClipper.UpScale(y));
 		}
 
-		void AddVertex(double x, double y, uint cmd)
+		private void AddVertex(double x, double y, uint cmd)
 		{
 			if (Path.IsMoveTo(cmd))
 			{
@@ -216,7 +217,7 @@ namespace Pictor
 			}
 		}
 
-		void Edge(int x1, int y1, int x2, int y2)
+		private void Edge(int x1, int y1, int x2, int y2)
 		{
 			if (_rasterizer.IsSorted) Reset();
 			_vectorClipper.MoveTo(_vectorClipper.DownScale(x1), _vectorClipper.DownScale(y1));
@@ -225,7 +226,7 @@ namespace Pictor
 							  _vectorClipper.DownScale(y2));
 		}
 
-		void EdgeD(double x1, double y1,
+		private void EdgeD(double x1, double y1,
 												  double x2, double y2)
 		{
 			if (_rasterizer.IsSorted) Reset();
@@ -235,7 +236,7 @@ namespace Pictor
 							  _vectorClipper.UpScale(y2));
 		}
 
-		void Sort()
+		private void Sort()
 		{
 			_rasterizer.SortCells();
 		}
@@ -378,11 +379,13 @@ namespace Pictor
 				{
 					QuickSortRangeAdaptorUint mQSorter = new QuickSortRangeAdaptorUint();
 					mQSorter.Sort(ra);
+
 					//quick_sort(ra, uint_greater);
 				}
 				else
 				{
 					throw new NotImplementedException();
+
 					//QuickSortRangeAdaptorUint m_QSorter = new QuickSortRangeAdaptorUint();
 					//m_QSorter.Sort(ra);
 					//quick_sort(ra, uint_less);
@@ -402,7 +405,7 @@ namespace Pictor
 			return _activeStyleTable[styleIndex + 1] + (uint)_minStyle - 1;
 		}
 
-		bool NavigateScanline(int y)
+		private bool NavigateScanline(int y)
 		{
 			_rasterizer.SortCells();
 			if (_rasterizer.TotalCells == 0)
@@ -423,7 +426,7 @@ namespace Pictor
 			return true;
 		}
 
-		bool HitTest(int tx, int ty)
+		private bool HitTest(int tx, int ty)
 		{
 			if (!NavigateScanline(ty))
 			{
@@ -441,13 +444,13 @@ namespace Pictor
 			return sl.hit();
 		}
 
-		byte[] AllocateCoverBuffer(uint len)
+		private byte[] AllocateCoverBuffer(uint len)
 		{
 			_coverBuffer.Allocate(len, 256);
 			return _coverBuffer.Array;
 		}
 
-		void MasterAlpha(int style, double alpha)
+		private void MasterAlpha(int style, double alpha)
 		{
 			if (style >= 0)
 			{
@@ -488,36 +491,66 @@ namespace Pictor
 		///<summary>
 		///</summary>
 		///<returns></returns>
-		public int MinX() { return _rasterizer.MinX(); }
-		///<summary>
-		///</summary>
-		///<returns></returns>
-		public int MinY() { return _rasterizer.MinY(); }
-		///<summary>
-		///</summary>
-		///<returns></returns>
-		public int MaxX() { return _rasterizer.MaxX(); }
-		///<summary>
-		///</summary>
-		///<returns></returns>
-		public int MaxY() { return _rasterizer.MaxY(); }
-		///<summary>
-		///</summary>
-		///<returns></returns>
-		public int MinStyle() { return _minStyle; }
-		///<summary>
-		///</summary>
-		///<returns></returns>
-		public int MaxStyle() { return _maxStyle; }
+		public int MinX()
+		{
+			return _rasterizer.MinX();
+		}
 
 		///<summary>
 		///</summary>
 		///<returns></returns>
-		public int ScanlineStart() { return _scanlineStart; }
+		public int MinY()
+		{
+			return _rasterizer.MinY();
+		}
+
 		///<summary>
 		///</summary>
 		///<returns></returns>
-		public uint ScanlineLength() { return _scanlineLength; }
+		public int MaxX()
+		{
+			return _rasterizer.MaxX();
+		}
+
+		///<summary>
+		///</summary>
+		///<returns></returns>
+		public int MaxY()
+		{
+			return _rasterizer.MaxY();
+		}
+
+		///<summary>
+		///</summary>
+		///<returns></returns>
+		public int MinStyle()
+		{
+			return _minStyle;
+		}
+
+		///<summary>
+		///</summary>
+		///<returns></returns>
+		public int MaxStyle()
+		{
+			return _maxStyle;
+		}
+
+		///<summary>
+		///</summary>
+		///<returns></returns>
+		public int ScanlineStart()
+		{
+			return _scanlineStart;
+		}
+
+		///<summary>
+		///</summary>
+		///<returns></returns>
+		public uint ScanlineLength()
+		{
+			return _scanlineLength;
+		}
 
 		///<summary>
 		///</summary>

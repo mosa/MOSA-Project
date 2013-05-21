@@ -7,34 +7,36 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-
 namespace Mosa.Compiler.Metadata.Tables
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public struct AssemblyRefOSRow
 	{
 		#region Data members
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private uint platformId;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private uint majorVersion;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private uint minorVersion;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private Token assemblyRef;
 
-		#endregion // Data members
+		#endregion Data members
 
 		#region Construction
 
@@ -53,7 +55,7 @@ namespace Mosa.Compiler.Metadata.Tables
 			this.assemblyRef = assemblyRef;
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Properties
 
@@ -93,6 +95,6 @@ namespace Mosa.Compiler.Metadata.Tables
 			get { return assemblyRef; }
 		}
 
-		#endregion // Properties
+		#endregion Properties
 	}
 }

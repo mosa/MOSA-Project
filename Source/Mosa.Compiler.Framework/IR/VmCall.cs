@@ -7,7 +7,6 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-
 namespace Mosa.Compiler.Framework.IR
 {
 	/// <summary>
@@ -35,6 +34,7 @@ namespace Mosa.Compiler.Framework.IR
 		/// </summary>
 		/// BoxInt8,
 		BoxChar,
+
 		BoxBool,
 		BoxInt8,
 		BoxUInt8,
@@ -90,7 +90,7 @@ namespace Mosa.Compiler.Framework.IR
 		/// The method call represents a runtime defined memory set method.
 		/// </summary>
 		/// <remarks>
-		/// The memset method is similar to the memset function in C runtime libraries. It fills a block 
+		/// The memset method is similar to the memset function in C runtime libraries. It fills a block
 		/// of memory with a specific value.
 		/// </remarks>
 		Memset,
@@ -109,6 +109,7 @@ namespace Mosa.Compiler.Framework.IR
 		/// Unboxes a value type.
 		/// </summary>
 		UnboxChar,
+
 		UnboxBool,
 		UnboxInt8,
 		UnboxUInt8,

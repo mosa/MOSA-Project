@@ -19,7 +19,6 @@ namespace Mosa.Platform.x86.Intrinsic
 	/// </summary>
 	public sealed class Lgdt : IIntrinsicPlatformMethod
 	{
-
 		#region Methods
 
 		/// <summary>
@@ -49,7 +48,6 @@ namespace Mosa.Platform.x86.Intrinsic
 			context.AppendInstruction(X86.FarJmp);
 		}
 
-		#endregion // Methods
-
+		#endregion Methods
 	}
 }

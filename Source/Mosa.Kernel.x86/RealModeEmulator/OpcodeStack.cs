@@ -13,7 +13,7 @@ namespace Mosa.Kernel.x86.RealModeEmulator
 {
     public static partial class RealEmulator
     {
-        public static unsafe uint Op_PUSH_Segment(ref State state, uint param)
+        public static unsafe uint Op_PUSH_Seg(ref State state, uint param)
         {
             ushort* ptr = Segment(ref state, param);
             state.SP.W -= 2;
@@ -22,7 +22,7 @@ namespace Mosa.Kernel.x86.RealModeEmulator
             return ErrorCodes.ERR_OK;
         }
 
-        public static unsafe uint Op_POP_Segment(ref State state, uint param)
+        public static unsafe uint Op_POP_Seg(ref State state, uint param)
         {
             ushort* ptr = Segment(ref state, param);
             uint err = Int_Read16(ref state, state.SS, state.SP.W, ptr);

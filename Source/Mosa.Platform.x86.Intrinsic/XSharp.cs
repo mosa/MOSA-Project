@@ -16,10 +16,7 @@ namespace Mosa.Platform.x86.Intrinsic
 	/// </summary>
 	public static class XSharp
 	{
-
 		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.TestMethod, Mosa.Platform.x86")]
 		public extern static void TestMethod();
-
-
 	}
 }

@@ -7,7 +7,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System.Diagnostics;
 using System.Collections.Generic;
 using Mosa.Compiler.Framework.IR;
 
@@ -18,8 +17,6 @@ namespace Mosa.Compiler.Framework.Stages
 	/// </summary>
 	public class EdgeSplitStage : BaseCodeTransformationStage, IMethodCompilerStage, IPipelineStage
 	{
-
-
 		/// <summary>
 		/// Performs stage specific processing on the compiler context.
 		/// </summary>
@@ -46,10 +43,9 @@ namespace Mosa.Compiler.Framework.Stages
 				if (edge.Key.NextBlocks.Count > 1 || edge.Value.PreviousBlocks.Count > 1)
 					SplitEdge(edge.Key, edge.Value);
 			}
-
 		}
 
-		void SplitEdge(BasicBlock a, BasicBlock b)
+		private void SplitEdge(BasicBlock a, BasicBlock b)
 		{
 			// Create new block z
 			var z = basicBlocks.CreateBlock();
@@ -62,7 +58,7 @@ namespace Mosa.Compiler.Framework.Stages
 			a.NextBlocks.Remove(b);
 			b.PreviousBlocks.Remove(a);
 
-			// Link a to z 
+			// Link a to z
 			a.NextBlocks.Add(z);
 			z.PreviousBlocks.Add(a);
 
@@ -88,7 +84,6 @@ namespace Mosa.Compiler.Framework.Stages
 				}
 				ctx.GotoPrevious();
 			}
-
 		}
 	}
 }

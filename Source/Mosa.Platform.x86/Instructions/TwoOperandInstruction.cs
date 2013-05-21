@@ -32,7 +32,7 @@ namespace Mosa.Platform.x86.Instructions
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		/// <summary>
 		/// Computes the opcode.
@@ -56,6 +56,5 @@ namespace Mosa.Platform.x86.Instructions
 			OpCode opCode = ComputeOpCode(context.Result, context.Operand1, null);
 			emitter.Emit(opCode, context.Result, context.Operand1);
 		}
-
 	}
 }

@@ -15,7 +15,7 @@ using Pictor.VertexSource;
 namespace Pictor
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public interface IStyleHandler
 	{
@@ -27,14 +27,14 @@ namespace Pictor
 		bool IsSolid(uint style);
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="style"></param>
 		/// <returns></returns>
 		RGBA_Bytes Color(uint style);
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="span"></param>
 		/// <param name="x"></param>
@@ -45,47 +45,47 @@ namespace Pictor
 	};
 
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public class Renderer
 	{
 		/// <summary>
-		/// 
+		///
 		/// </summary>
-		const int cover_full = 255;
+		private const int cover_full = 255;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IPixelFormat m_PixelFormat;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected AntiAliasedScanlineRasterizer m_Rasterizer;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IScanline m_Scanline;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected GsvText TextPath;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected StrokeConverter StrockedText;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected Stack<Affine> m_AffineTransformStack = new Stack<Affine>();
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="PixelFormat"></param>
 		/// <param name="Rasterizer"></param>
@@ -102,7 +102,7 @@ namespace Pictor
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <returns></returns>
 		public Affine PopTransform()
@@ -116,7 +116,7 @@ namespace Pictor
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public void PushTransform()
 		{
@@ -129,7 +129,7 @@ namespace Pictor
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <returns></returns>
 		public Affine Transform
@@ -143,7 +143,7 @@ namespace Pictor
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public AntiAliasedScanlineRasterizer Rasterizer
 		{
@@ -154,7 +154,7 @@ namespace Pictor
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public IScanline ScanlineCache
 		{
@@ -165,7 +165,7 @@ namespace Pictor
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public IPixelFormat PixelFormat
 		{
@@ -176,7 +176,7 @@ namespace Pictor
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="vertexSource"></param>
 		/// <param name="idx"></param>
@@ -194,7 +194,7 @@ namespace Pictor
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="vertexSource"></param>
 		/// <param name="color"></param>
@@ -204,7 +204,7 @@ namespace Pictor
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="color"></param>
 		public void Clear(IColorType color)
@@ -221,6 +221,7 @@ namespace Pictor
 #if use_timers
 		static CNamedTimer PrepareTimer = new CNamedTimer("Prepare");
 #endif
+
 		//========================================================render_scanlines
 		public static void RenderSolid(IPixelFormat pixFormat, IRasterizer rasterizer, IScanline scanLine, RGBA_Bytes color)
 		{
@@ -230,6 +231,7 @@ namespace Pictor
 #if use_timers
 				PrepareTimer.Start();
 #endif
+
 				//renderer.Prepare();
 #if use_timers
 				PrepareTimer.Stop();
@@ -240,14 +242,17 @@ namespace Pictor
 				}
 			}
 		}
-		#endregion
+
+		#endregion RenderSolid
 
 		#region RenderSolidSingleScanLine
+
 #if use_timers
 		static CNamedTimer render_scanline_aa_solidTimer = new CNamedTimer("render_scanline_aa_solid");
 		static CNamedTimer render_scanline_aa_solid_blend_solid_hspan = new CNamedTimer("render_scanline_aa_solid_blend_solid_hspan");
 		static CNamedTimer render_scanline_aa_solid_blend_hline = new CNamedTimer("render_scanline_aa_solid_blend_hline");
 #endif
+
 		//================================================render_scanline_aa_solid
 		private static void RenderSolidSingleScanLine(IPixelFormat pixFormat, IScanline scanLine, RGBA_Bytes color)
 		{
@@ -295,13 +300,16 @@ namespace Pictor
 			render_scanline_aa_solidTimer.Stop();
 #endif
 		}
-		#endregion
+
+		#endregion RenderSolidSingleScanLine
 
 		#region RenderSolidAllPaths
+
 #if use_timers
 		static CNamedTimer AddPathTimer = new CNamedTimer("AddPath");
 		static CNamedTimer RenderSLTimer = new CNamedTimer("RenderSLs");
 #endif
+
 		//========================================================render_all_paths
 		public static void RenderSolidAllPaths(IPixelFormat pixFormat,
 			IRasterizer ras,
@@ -323,7 +331,6 @@ namespace Pictor
 				AddPathTimer.Stop();
 #endif
 
-
 #if use_timers
 				RenderSLTimer.Start();
 #endif
@@ -333,14 +340,17 @@ namespace Pictor
 #endif
 			}
 		}
-		#endregion
+
+		#endregion RenderSolidAllPaths
 
 		#region GenerateAndRenderSingleScanline
-		static VectorPOD<RGBA_Bytes> tempSpanColors = new VectorPOD<RGBA_Bytes>();
+
+		private static VectorPOD<RGBA_Bytes> tempSpanColors = new VectorPOD<RGBA_Bytes>();
 
 #if use_timers
 		static CNamedTimer blend_color_hspan = new CNamedTimer("blend_color_hspan");
 #endif
+
 		//======================================================render_scanline_aa
 		private static void GenerateAndRenderSingleScanline(IScanline sl, IPixelFormat ren,
 								SpanAllocator alloc, ISpanGenerator span_gen)
@@ -383,9 +393,11 @@ namespace Pictor
 				}
 			}
 		}
-		#endregion
+
+		#endregion GenerateAndRenderSingleScanline
 
 		#region GenerateAndRender
+
 		//=====================================================render_scanlines_aa
 		public static void GenerateAndRender(IRasterizer ras, IScanline sl, IPixelFormat ren,
 								 SpanAllocator alloc, ISpanGenerator span_gen)
@@ -400,9 +412,11 @@ namespace Pictor
 				}
 			}
 		}
-		#endregion
+
+		#endregion GenerateAndRender
 
 		#region RenderCompound
+
 		public static void RenderCompound(AntiAliasedCompundRasterizer ras,
 									   IScanline sl_aa,
 									   IScanline sl_bin,
@@ -593,7 +607,8 @@ namespace Pictor
 #endif
 			}
 		}
-		#endregion
+
+		#endregion RenderCompound
 
 		public void DrawString(string Text, double x, double y)
 		{
@@ -620,6 +635,7 @@ namespace Pictor
 	}
 
 	/*
+
 	//==============================================renderer_scanline_aa_solid
 	public class renderer_scanline_aa_solid : IRenderer
 	{
@@ -627,7 +643,7 @@ namespace Pictor
 		private IColorType m_color;
 
 		//--------------------------------------------------------------------
-		public renderer_scanline_aa_solid(IPixelFormat ren) 
+		public renderer_scanline_aa_solid(IPixelFormat ren)
 		{
 			m_ren = ren;
 			m_color = new rgba(0,0,0,1);
@@ -637,7 +653,7 @@ namespace Pictor
 		{
 			m_ren = ren;
 		}
-		
+
 		//--------------------------------------------------------------------
 		public IColorType Color
 		{
@@ -662,7 +678,7 @@ namespace Pictor
 	};
 
 	//====================================================renderer_scanline_aa
-	template<class BaseRenderer, class SpanAllocator, class SpanGenerator> 
+	template<class BaseRenderer, class SpanAllocator, class SpanGenerator>
 	class renderer_scanline_aa
 	{
 	public:
@@ -672,22 +688,22 @@ namespace Pictor
 
 		//--------------------------------------------------------------------
 		renderer_scanline_aa() : m_ren(0), m_alloc(0), m_span_gen(0) {}
-		renderer_scanline_aa(base_ren_type& ren, 
-							 alloc_type& alloc, 
+		renderer_scanline_aa(base_ren_type& ren,
+							 alloc_type& alloc,
 							 span_gen_type& span_gen) :
 			m_ren(&ren),
 			m_alloc(&alloc),
 			m_span_gen(&span_gen)
 		{}
-		void Attach(base_ren_type& ren, 
-					alloc_type& alloc, 
+		void Attach(base_ren_type& ren,
+					alloc_type& alloc,
 					span_gen_type& span_gen)
 		{
 			m_ren = &ren;
 			m_alloc = &alloc;
 			m_span_gen = &span_gen;
 		}
-		
+
 		//--------------------------------------------------------------------
 		void Prepare() { m_span_gen->Prepare(); }
 
@@ -704,21 +720,21 @@ namespace Pictor
 	};
 
 	//===============================================render_scanline_bin_solid
-	template<class Scanline, class BaseRenderer, class ColorT> 
-	void render_scanline_bin_solid(const Scanline& sl, 
-								   BaseRenderer& ren, 
+	template<class Scanline, class BaseRenderer, class ColorT>
+	void render_scanline_bin_solid(const Scanline& sl,
+								   BaseRenderer& ren,
 								   const ColorT& Color)
 	{
 		uint NumberOfSpans = sl.NumberOfSpans();
 		typename Scanline::const_iterator Span = sl.Begin();
 		for(;;)
 		{
-			ren.BlendHorizontalLine(Span->x, 
-							sl.y(), 
-							Span->x - 1 + ((Span->len < 0) ? 
-											  -Span->len : 
-											   Span->len), 
-							   Color, 
+			ren.BlendHorizontalLine(Span->x,
+							sl.y(),
+							Span->x - 1 + ((Span->len < 0) ?
+											  -Span->len :
+											   Span->len),
+							   Color,
 							   CoverFull);
 			if(--NumberOfSpans == 0) break;
 			++Span;
@@ -726,16 +742,16 @@ namespace Pictor
 	}
 
 	//==============================================render_scanlines_bin_solid
-	template<class Rasterizer, class Scanline, 
+	template<class Rasterizer, class Scanline,
 			 class BaseRenderer, class ColorT>
-	void render_scanlines_bin_solid(Rasterizer& ras, Scanline& sl, 
+	void render_scanlines_bin_solid(Rasterizer& ras, Scanline& sl,
 									BaseRenderer& ren, const ColorT& Color)
 	{
 		if(ras.RewindScanlines())
 		{
 			// Explicitly convert "Color" to the BaseRenderer Color type.
 			// For example, it can be called with Color type "rgba", while
-			// "rgba8" is needed. Otherwise it will be implicitly 
+			// "rgba8" is needed. Otherwise it will be implicitly
 			// converted in the loop many times.
 			//----------------------
 			typename BaseRenderer::color_type ren_color(Color);
@@ -745,7 +761,7 @@ namespace Pictor
 			{
 				//render_scanline_bin_solid(sl, ren, ren_color);
 
-				// This code is equivalent to the above call (copy/paste). 
+				// This code is equivalent to the above call (copy/paste).
 				// It's just a "manual" optimization for old compilers,
 				// like Microsoft Visual C++ v6.0
 				//-------------------------------
@@ -753,12 +769,12 @@ namespace Pictor
 				typename Scanline::const_iterator Span = sl.Begin();
 				for(;;)
 				{
-					ren.BlendHorizontalLine(Span->x, 
-									sl.y(), 
-									Span->x - 1 + ((Span->len < 0) ? 
-													  -Span->len : 
-													   Span->len), 
-									   ren_color, 
+					ren.BlendHorizontalLine(Span->x,
+									sl.y(),
+									Span->x - 1 + ((Span->len < 0) ?
+													  -Span->len :
+													   Span->len),
+									   ren_color,
 									   CoverFull);
 					if(--NumberOfSpans == 0) break;
 					++Span;
@@ -781,7 +797,7 @@ namespace Pictor
 		{
 			m_ren = &ren;
 		}
-		
+
 		//--------------------------------------------------------------------
 		void Color(const color_type& c) { m_color = c; }
 		const color_type& Color() const { return m_color; }
@@ -794,16 +810,16 @@ namespace Pictor
 		{
 			render_scanline_bin_solid(sl, *m_ren, m_color);
 		}
-		
+
 	private:
 		base_ren_type* m_ren;
 		color_type m_color;
 	};
 
 	//======================================================render_scanline_bin
-	template<class Scanline, class BaseRenderer, 
-			 class SpanAllocator, class SpanGenerator> 
-	void render_scanline_bin(const Scanline& sl, BaseRenderer& ren, 
+	template<class Scanline, class BaseRenderer,
+			 class SpanAllocator, class SpanGenerator>
+	void render_scanline_bin(const Scanline& sl, BaseRenderer& ren,
 							 SpanAllocator& alloc, SpanGenerator& span_gen)
 	{
 		int y = sl.y();
@@ -817,16 +833,16 @@ namespace Pictor
 			if(len < 0) len = -len;
 			typename BaseRenderer::color_type* Colors = alloc.Allocate(len);
 			span_gen.Generate(Colors, x, y, len);
-			ren.BlendHorizontalColorSpan(x, y, len, Colors, 0, CoverFull); 
+			ren.BlendHorizontalColorSpan(x, y, len, Colors, 0, CoverFull);
 			if(--NumberOfSpans == 0) break;
 			++Span;
 		}
 	}
 
 	//=====================================================render_scanlines_bin
-	template<class Rasterizer, class Scanline, class BaseRenderer, 
+	template<class Rasterizer, class Scanline, class BaseRenderer,
 			 class SpanAllocator, class SpanGenerator>
-	void render_scanlines_bin(Rasterizer& ras, Scanline& sl, BaseRenderer& ren, 
+	void render_scanlines_bin(Rasterizer& ras, Scanline& sl, BaseRenderer& ren,
 							  SpanAllocator& alloc, SpanGenerator& span_gen)
 	{
 		if(ras.RewindScanlines())
@@ -841,7 +857,7 @@ namespace Pictor
 	}
 
 	//====================================================renderer_scanline_bin
-	template<class BaseRenderer, class SpanAllocator, class SpanGenerator> 
+	template<class BaseRenderer, class SpanAllocator, class SpanGenerator>
 	class renderer_scanline_bin
 	{
 	public:
@@ -851,22 +867,22 @@ namespace Pictor
 
 		//--------------------------------------------------------------------
 		renderer_scanline_bin() : m_ren(0), m_alloc(0), m_span_gen(0) {}
-		renderer_scanline_bin(base_ren_type& ren, 
-							  alloc_type& alloc, 
+		renderer_scanline_bin(base_ren_type& ren,
+							  alloc_type& alloc,
 							  span_gen_type& span_gen) :
 			m_ren(&ren),
 			m_alloc(&alloc),
 			m_span_gen(&span_gen)
 		{}
-		void Attach(base_ren_type& ren, 
-					alloc_type& alloc, 
+		void Attach(base_ren_type& ren,
+					alloc_type& alloc,
 					span_gen_type& span_gen)
 		{
 			m_ren = &ren;
 			m_alloc = &alloc;
 			m_span_gen = &span_gen;
 		}
-		
+
 		//--------------------------------------------------------------------
 		void Prepare() { m_span_gen->Prepare(); }
 
@@ -883,12 +899,12 @@ namespace Pictor
 	};
 
 	//=======================================render_scanlines_compound_layered
-	template<class Rasterizer, 
-			 class ScanlineAA, 
-			 class BaseRenderer, 
+	template<class Rasterizer,
+			 class ScanlineAA,
+			 class BaseRenderer,
 			 class SpanAllocator,
 			 class StyleHandler>
-	void render_scanlines_compound_layered(Rasterizer& ras, 
+	void render_scanlines_compound_layered(Rasterizer& ras,
 										   ScanlineAA& sl_aa,
 										   BaseRenderer& ren,
 										   SpanAllocator& alloc,
@@ -934,14 +950,14 @@ namespace Pictor
 							for(;;)
 							{
 								len = span_aa->len;
-								sh.GenerateSpan(color_span, 
-												 span_aa->x, 
-												 sl_aa.y(), 
-												 len, 
+								sh.GenerateSpan(color_span,
+												 span_aa->x,
+												 sl_aa.y(),
+												 len,
 												 Style);
 
-								ren.BlendHorizontalColorSpan(span_aa->x, 
-													  sl_aa.y(), 
+								ren.BlendHorizontalColorSpan(span_aa->x,
+													  sl_aa.y(),
 													  span_aa->len,
 													  color_span,
 													  span_aa->covers);
@@ -958,10 +974,10 @@ namespace Pictor
 
 					if(sl_len)
 					{
-						MemClear(mix_buffer + sl_start - MinX, 
+						MemClear(mix_buffer + sl_start - MinX,
 							   sl_len * sizeof(color_type));
 
-						MemClear(cover_buffer + sl_start - MinX, 
+						MemClear(cover_buffer + sl_start - MinX,
 							   sl_len * sizeof(cover_type));
 
 						int sl_y = 0x7FFFFFFF;
@@ -1022,10 +1038,10 @@ namespace Pictor
 										len = span_aa->len;
 										Colors = mix_buffer + span_aa->x - MinX;
 										cspan  = color_span;
-										sh.GenerateSpan(cspan, 
-														 span_aa->x, 
-														 sl_aa.y(), 
-														 len, 
+										sh.GenerateSpan(cspan,
+														 span_aa->x,
+														 sl_aa.y(),
+														 len,
 														 Style);
 										src_covers = span_aa->covers;
 										dst_covers = cover_buffer + span_aa->x - MinX;
@@ -1053,8 +1069,8 @@ namespace Pictor
 								}
 							}
 						}
-						ren.BlendHorizontalColorSpan(sl_start, 
-											  sl_y, 
+						ren.BlendHorizontalColorSpan(sl_start,
+											  sl_y,
 											  sl_len,
 											  mix_buffer + sl_start - MinX,
 											  0,

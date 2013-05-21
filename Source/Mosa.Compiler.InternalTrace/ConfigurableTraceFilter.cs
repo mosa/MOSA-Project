@@ -43,15 +43,15 @@ namespace Mosa.Compiler.InternalTrace
 			if (ExcludeInternalMethods && method.Contains("<$>"))
 				return false;
 
-			if (!Compare(TypeMatch,Type,type))
+			if (!Compare(TypeMatch, Type, type))
 				return false;
 
 			if (!Compare(MethodMatch, Method, method))
 				return false;
-	
+
 			if (!Compare(StageMatch, Stage, stage))
 				return false;
-			    
+
 			return true;
 		}
 

@@ -65,7 +65,7 @@ namespace Mosa.Compiler.Framework.IR
 		UnsignedLessOrEqual,
 
 		/// <summary>
-		/// Not unsigned 
+		/// Not unsigned
 		/// </summary>
 		NotSigned,
 

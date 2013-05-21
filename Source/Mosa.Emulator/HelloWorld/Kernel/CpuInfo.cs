@@ -18,7 +18,6 @@ namespace Mosa.Kernel.x86
 
 		public void Setup()
 		{
-
 		}
 
 		public ulong NumberOfCores
@@ -114,7 +113,6 @@ namespace Mosa.Kernel.x86
 			if (identifier != 0x20202020)
 				for (int i = 0; i < 4; ++i)
 					PrintBrandPart(identifier, i, ref whitespace);
-
 
 			identifier = Native.CpuIdEbx(param);
 			if (identifier != 0x20202020)

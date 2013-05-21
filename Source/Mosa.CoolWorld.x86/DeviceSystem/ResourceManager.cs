@@ -7,24 +7,25 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-
 namespace Mosa.DeviceSystem
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public class ResourceManager : IResourceManager
 	{
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IOPortResources ioPortResources;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected MemoryResources memoryResources;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected InterruptManager interruptManager;
 

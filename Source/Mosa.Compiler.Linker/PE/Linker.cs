@@ -35,7 +35,7 @@ namespace Mosa.Compiler.Linker.PE
 		/// </summary>
 		private const uint SECTION_ALIGNMENT = 0x1000;
 
-		#endregion // Constants
+		#endregion Constants
 
 		#region Data members
 
@@ -79,7 +79,7 @@ namespace Mosa.Compiler.Linker.PE
 		/// </summary>
 		private bool symbolsResolved;
 
-		#endregion // Data members
+		#endregion Data members
 
 		#region Construction
 
@@ -95,7 +95,7 @@ namespace Mosa.Compiler.Linker.PE
 			this.setChecksum = true;
 
 			// Create the default section set
-			this.sections = new Dictionary<SectionKind, LinkerSection>() 
+			this.sections = new Dictionary<SectionKind, LinkerSection>()
 			{
 				{ SectionKind.Text, new Section(SectionKind.Text, @".text", new IntPtr(this.BaseAddress + this.sectionAlignment)) },
 				{ SectionKind.Data, new Section(SectionKind.Data, @".data", IntPtr.Zero) },
@@ -104,7 +104,7 @@ namespace Mosa.Compiler.Linker.PE
 			};
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Properties
 
@@ -154,7 +154,7 @@ namespace Mosa.Compiler.Linker.PE
 			}
 		}
 
-		#endregion // Properties
+		#endregion Properties
 
 		#region AssembyLinkerStageBase Overrides
 
@@ -173,6 +173,7 @@ namespace Mosa.Compiler.Linker.PE
 
 			// Retrieve the text section
 			Section text = (Section)GetSection(SectionKind.Text);
+
 			// Calculate the patch offset
 			long offset = (methodAddress - text.VirtualAddress.ToInt64()) + methodOffset;
 
@@ -276,7 +277,7 @@ namespace Mosa.Compiler.Linker.PE
 			CreatePEFile();
 		}
 
-		#endregion // AssembyLinkerStageBase Overrides
+		#endregion AssembyLinkerStageBase Overrides
 
 		#region Internals
 
@@ -331,6 +332,7 @@ namespace Mosa.Compiler.Linker.PE
 		private void LayoutSections()
 		{
 			/*
+
 						// Reset the size of the image
 						this.virtualSizeOfImage = this.sectionAlignment;
 						this.fileSizeOfImage = this.fileAlignment;
@@ -361,6 +363,7 @@ namespace Mosa.Compiler.Linker.PE
 
 						this.sections = usedSections;
 			*/
+
 			// We've resolved all symbols, allow IsResolved to succeed
 			symbolsResolved = true;
 		}
@@ -452,7 +455,7 @@ namespace Mosa.Compiler.Linker.PE
 			ntHeaders.OptionalHeader.NumberOfRvaAndSizes = ImageOptionalHeader.IMAGE_NUMBEROF_DIRECTORY_ENTRIES;
 			ntHeaders.OptionalHeader.DataDirectory = new ImageDataDirectory[ImageOptionalHeader.IMAGE_NUMBEROF_DIRECTORY_ENTRIES];
 
-			// Populate the CIL data directory 
+			// Populate the CIL data directory
 			ntHeaders.OptionalHeader.DataDirectory[14].VirtualAddress = 0;// (uint)GetSymbol(CLI_HEADER.SymbolName).VirtualAddress.ToInt64();
 			ntHeaders.OptionalHeader.DataDirectory[14].Size = 0; // CLI_HEADER.Length;
 
@@ -621,6 +624,6 @@ namespace Mosa.Compiler.Linker.PE
 			return csum;
 		}
 
-		#endregion // Internals
+		#endregion Internals
 	}
 }

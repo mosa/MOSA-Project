@@ -13,32 +13,32 @@ using Mosa.FileSystem.VFS;
 namespace Mosa.FileSystem
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public abstract class GenericFileSystem
 	{
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IPartitionDevice partition;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected uint blockSize;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected bool valid;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected string volumeLabel;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected byte[] serialNbr;
 
@@ -78,6 +78,5 @@ namespace Mosa.FileSystem
 		/// </summary>
 		/// <value>The serial number.</value>
 		public byte[] SerialNumber { get { return serialNbr; } }
-
 	}
 }

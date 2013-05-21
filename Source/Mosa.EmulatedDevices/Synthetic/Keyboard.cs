@@ -20,7 +20,7 @@ namespace Mosa.EmulatedDevices.Synthetic
 	public class Keyboard : Device, IKeyboard
 	{
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public delegate void KeyPressed(Key key);
 

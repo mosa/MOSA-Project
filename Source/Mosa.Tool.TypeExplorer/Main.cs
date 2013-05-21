@@ -326,7 +326,7 @@ namespace Mosa.Tool.TypeExplorer
 			stringbuilder.AppendLine(line);
 		}
 
-		void Compile()
+		private void Compile()
 		{
 			compileStartTime = DateTime.Now;
 			methodStages.Clear();
@@ -493,7 +493,6 @@ namespace Mosa.Tool.TypeExplorer
 				{
 					using (PdbReader reader = new PdbReader(fileStream))
 					{
-
 						tbResult.AppendText("Global symbols: \n");
 						tbResult.AppendText("======================\n");
 						foreach (CvSymbol symbol in reader.GlobalSymbols)
@@ -589,7 +588,6 @@ namespace Mosa.Tool.TypeExplorer
 			Compile();
 			UpdateTree();
 		}
-
 	}
 
 	public class ViewNode<T> : TreeNode

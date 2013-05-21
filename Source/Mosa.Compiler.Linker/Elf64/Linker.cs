@@ -16,20 +16,22 @@ using Mosa.Compiler.LinkerFormat.Elf64;
 namespace Mosa.Compiler.Linker.Elf64
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public class Linker : BaseLinker
 	{
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private List<LinkerSection> sections;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private NullSection nullSection;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private StringTableSection stringTableSection;
 
@@ -119,6 +121,7 @@ namespace Mosa.Compiler.Linker.Elf64
 
 			// Retrieve the text section
 			Section text = (Section)GetSection(SectionKind.Text);
+
 			// Calculate the patch offset
 			long offset = (methodAddress - text.VirtualAddress.ToInt64()) + methodOffset;
 
@@ -160,6 +163,7 @@ namespace Mosa.Compiler.Linker.Elf64
 		{
 			address = 0;
 			return true;
+
 			//return base.IsResolved(symbol, out virtualAddress);*/
 		}
 

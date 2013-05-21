@@ -14,7 +14,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Text;
 
-using Mosa.Compiler.Framework;
 using Mosa.Compiler.Linker;
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.TypeSystem;
@@ -53,7 +52,7 @@ namespace Mosa.Compiler.Framework.Linker
 		/// </summary>
 		private readonly Dictionary<string, LinkerSymbol> symbols;
 
-		#endregion // Data members
+		#endregion Data members
 
 		#region Construction
 
@@ -67,7 +66,7 @@ namespace Mosa.Compiler.Framework.Linker
 			symbols = new Dictionary<string, LinkerSymbol>();
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region ICompilerStage Members
 
@@ -108,7 +107,7 @@ namespace Mosa.Compiler.Framework.Linker
 			}
 		}
 
-		#endregion // ICompilerStage Members
+		#endregion ICompilerStage Members
 
 		#region Methods
 
@@ -126,7 +125,7 @@ namespace Mosa.Compiler.Framework.Linker
 		{
 		}
 
-		#endregion // Methods
+		#endregion Methods
 
 		#region IAssemblyLinker Members
 
@@ -226,7 +225,6 @@ namespace Mosa.Compiler.Framework.Linker
 			{
 				throw new LinkerException(String.Format(@"Symbol {0} defined multiple times.", name), argx);
 			}
-
 		}
 
 		/// <summary>
@@ -301,7 +299,7 @@ namespace Mosa.Compiler.Framework.Linker
 			list.Add(new LinkRequest(linkType, symbolName, methodOffset, methodRelativeBase, targetSymbol, offset));
 		}
 
-		#endregion // IAssemblyLinker Members
+		#endregion IAssemblyLinker Members
 
 		public BaseCompiler Compiler
 		{
@@ -367,6 +365,6 @@ namespace Mosa.Compiler.Framework.Linker
 			}
 		}
 
-		#endregion // Internals
+		#endregion Internals
 	}
 }

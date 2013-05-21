@@ -7,8 +7,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-
-
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
@@ -27,7 +25,7 @@ namespace Mosa.Compiler.Framework.CIL
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Properties
 
@@ -42,7 +40,7 @@ namespace Mosa.Compiler.Framework.CIL
 		/// </remarks>
 		public override FlowControl FlowControl { get { return FlowControl.Switch; } }
 
-		#endregion // Properties
+		#endregion Properties
 
 		#region Methods Overrides
 
@@ -76,7 +74,6 @@ namespace Mosa.Compiler.Framework.CIL
 			visitor.Switch(context);
 		}
 
-		#endregion // Methods Overrides
-
+		#endregion Methods Overrides
 	}
 }

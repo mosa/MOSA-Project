@@ -18,7 +18,6 @@ namespace Mosa.Platform.x86.Instructions
 	/// </summary>
 	public sealed class Shl : TwoOperandInstruction
 	{
-
 		#region Data Members
 
 		private static readonly OpCode R_C = new OpCode(new byte[] { 0xC1 }, 4);
@@ -26,11 +25,12 @@ namespace Mosa.Platform.x86.Instructions
 		private static readonly OpCode R = new OpCode(new byte[] { 0xD3 }, 4);
 		private static readonly OpCode M = new OpCode(new byte[] { 0xD3 }, 4);
 
-		#endregion
+		#endregion Data Members
 
 		#region Methods
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="destination"></param>
 		/// <param name="source"></param>
@@ -74,6 +74,6 @@ namespace Mosa.Platform.x86.Instructions
 			visitor.Shl(context);
 		}
 
-		#endregion // Methods
+		#endregion Methods
 	}
 }

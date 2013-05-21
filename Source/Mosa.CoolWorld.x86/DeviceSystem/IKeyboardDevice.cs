@@ -20,5 +20,4 @@ namespace Mosa.DeviceSystem
 		/// <returns></returns>
 		byte GetScanCode();
 	}
-
 }

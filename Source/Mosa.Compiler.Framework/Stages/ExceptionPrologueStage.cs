@@ -18,13 +18,11 @@ namespace Mosa.Compiler.Framework.Stages
 	/// </summary>
 	public class ExceptionPrologueStage : BaseMethodCompilerStage, IMethodCompilerStage
 	{
-
 		/// <summary>
 		/// Runs the specified compiler.
 		/// </summary>
 		void IMethodCompilerStage.Run()
 		{
-			
 			// Handler Code
 			foreach (ExceptionHandlingClause clause in methodCompiler.ExceptionClauseHeader.Clauses)
 			{
@@ -42,9 +40,8 @@ namespace Mosa.Compiler.Framework.Stages
 					Operand exceptionObject = methodCompiler.CreateVirtualRegister(sigType);
 
 					context.SetInstruction(IR.IRInstruction.ExceptionPrologue, exceptionObject);
-				}	
+				}
 			}
 		}
-
 	}
 }

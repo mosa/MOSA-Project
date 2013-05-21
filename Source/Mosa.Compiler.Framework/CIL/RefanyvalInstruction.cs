@@ -14,7 +14,7 @@ using Mosa.Compiler.Metadata;
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public sealed class RefanyvalInstruction : UnaryInstruction
 	{
@@ -29,7 +29,7 @@ namespace Mosa.Compiler.Framework.CIL
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Methods
 

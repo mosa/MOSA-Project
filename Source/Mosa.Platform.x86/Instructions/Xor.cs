@@ -26,13 +26,13 @@ namespace Mosa.Platform.x86.Instructions
 		private static readonly OpCode M_R = new OpCode(new byte[] { 0x31 });
 		private static readonly OpCode M_C = new OpCode(new byte[] { 0x81 }, 6);
 
-		#endregion // Data Members
+		#endregion Data Members
 
 		#region Methods
 
 		public override RegisterBitmap GetInputRegisters(Context context)
 		{
-			// Special case when the input register does not matter, example: XOR EAX, EAX. 
+			// Special case when the input register does not matter, example: XOR EAX, EAX.
 
 			if (context.Result.IsCPURegister && context.Operand1.IsCPURegister && context.Result.Register == context.Operand1.Register)
 				return NoRegisters;
@@ -68,6 +68,6 @@ namespace Mosa.Platform.x86.Instructions
 			visitor.Xor(context);
 		}
 
-		#endregion // Methods
+		#endregion Methods
 	}
 }

@@ -1,4 +1,5 @@
 using image_filter_scale_e = Pictor.ImageFilterLookUpTable.EImageFilterScale;
+
 /*
  * (c) 2008 MOSA - The Managed Operating System Alliance
  *
@@ -7,6 +8,7 @@ using image_filter_scale_e = Pictor.ImageFilterLookUpTable.EImageFilterScale;
  * Authors:
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  */
+
 using image_subpixel_scale_e = Pictor.ImageFilterLookUpTable.EImageSubpixelScale;
 
 namespace Pictor
@@ -19,9 +21,9 @@ namespace Pictor
 		private int OrderB;
 		private int OrderA;
 
-		const int base_shift = 8;
-		const uint base_scale = (uint)(1 << base_shift);
-		const uint base_mask = base_scale - 1;
+		private const int base_shift = 8;
+		private const uint base_scale = (uint)(1 << base_shift);
+		private const uint base_mask = base_scale - 1;
 
 		public SpanImageFilterRGBANN(IRasterBufferAccessor src, ISpanInterpolator inter)
 			: base(src, inter, null)
@@ -45,6 +47,7 @@ namespace Pictor
 				int x_lr = x_hr >> (int)image_subpixel_scale_e.Shift;
 				int y_lr = y_hr >> (int)image_subpixel_scale_e.Shift;
 				byte* fg_ptr = pSourceRenderingBuffer.GetPixelPointer(y_lr) + (x_lr << 2);
+
 				//byte* fg_ptr = spanInterpolator.Span(x_lr, y_lr, 1);
 				(*span).m_R = fg_ptr[OrderR];
 				(*span).m_G = fg_ptr[OrderG];
@@ -64,9 +67,9 @@ namespace Pictor
 		private int OrderB;
 		private int OrderA;
 
-		const int base_shift = 8;
-		const uint base_scale = (uint)(1 << base_shift);
-		const uint base_mask = base_scale - 1;
+		private const int base_shift = 8;
+		private const uint base_scale = (uint)(1 << base_shift);
+		private const uint base_mask = base_scale - 1;
 
 		public SpanImageFilterRGBABilinear(IRasterBufferAccessor src, ISpanInterpolator inter)
 			: base(src, inter, null)
@@ -80,6 +83,7 @@ namespace Pictor
 #if use_timers
             static CNamedTimer Generate_Span = new CNamedTimer("Generate_Span rgba");
 #endif
+
 		public unsafe void Generate(out RGBA_Bytes destPixel, int x, int y)
 		{
 			base.interpolator().Begin(x + base.filter_dx_dbl(), y + base.filter_dy_dbl(), 1);
@@ -234,7 +238,6 @@ namespace Pictor
 					(*span).m_A = (byte)fg[OrderA];
 					++span;
 					spanInterpolator.Next();
-
 				} while (--len != 0);
 			}
 #if use_timers
@@ -242,7 +245,6 @@ namespace Pictor
 #endif
 		}
 	};
-
 
 	//====================================SpanImageFilterRGBABilinearClip
 	public class SpanImageFilterRGBABilinearClip : SpanImageFilter
@@ -253,9 +255,9 @@ namespace Pictor
 		private int OrderA;
 		private RGBA_Bytes m_back_color;
 
-		const int base_shift = 8;
-		const uint base_scale = (uint)(1 << base_shift);
-		const uint base_mask = base_scale - 1;
+		private const int base_shift = 8;
+		private const uint base_scale = (uint)(1 << base_shift);
+		private const uint base_mask = base_scale - 1;
 
 		public SpanImageFilterRGBABilinearClip(IRasterBufferAccessor src,
 			IColorType back_color, ISpanInterpolator inter)
@@ -268,13 +270,20 @@ namespace Pictor
 			OrderA = src.PixelFormat.Blender.OrderA;
 		}
 
-		public IColorType background_color() { return m_back_color; }
-		public void background_color(IColorType v) { m_back_color = v.GetAsRGBA_Bytes(); }
+		public IColorType background_color()
+		{
+			return m_back_color;
+		}
 
+		public void background_color(IColorType v)
+		{
+			m_back_color = v.GetAsRGBA_Bytes();
+		}
 
 #if use_timers
             static CNamedTimer Generate_Span = new CNamedTimer("Generate_Span rgba clip");
 #endif
+
 		public unsafe override void Generate(RGBA_Bytes* span, int x, int y, uint len)
 		{
 #if use_timers
@@ -413,7 +422,6 @@ namespace Pictor
 					(*span).m_A = (byte)fg[3];
 					++span;
 					spanInterpolator.Next();
-
 				} while (--len != 0);
 			}
 #if use_timers
@@ -448,9 +456,8 @@ namespace Pictor
 
 	/*
 
-
 	//==============================================span_image_filter_rgba_2x2
-	//template<class Source, class Interpolator> 
+	//template<class Source, class Interpolator>
 	public class span_image_filter_rgba_2x2 : SpanImageFilter//<Source, Interpolator>
 	{
 		//typedef Source source_type;
@@ -468,24 +475,23 @@ namespace Pictor
 
 		//--------------------------------------------------------------------
 		public span_image_filter_rgba_2x2() {}
-		public span_image_filter_rgba_2x2(pixfmt_alpha_blend_bgra32 src, 
+		public span_image_filter_rgba_2x2(pixfmt_alpha_blend_bgra32 src,
 								   interpolator_type inter,
 								   ImageFilterLookUpTable filter) :
-			base(src, inter, filter) 
+			base(src, inter, filter)
 		{}
-
 
 		//--------------------------------------------------------------------
 		public void Generate(color_type* Span, int x, int y, unsigned len)
 		{
-			base.Interpolator().Begin(x + base.filter_dx_dbl(), 
+			base.Interpolator().Begin(x + base.filter_dx_dbl(),
 											y + base.filter_dy_dbl(), len);
 
 			calc_type fg[4];
 
 			byte *fg_ptr;
-			int16* weight_array = base.filter().weight_array() + 
-										((base.filter().diameter()/2 - 1) << 
+			int16* weight_array = base.filter().weight_array() +
+										((base.filter().diameter()/2 - 1) <<
 										  Shift);
 
 			do
@@ -508,9 +514,9 @@ namespace Pictor
 				y_hr &= Mask;
 
 				fg_ptr = base.source().Span(x_lr, y_lr, 2);
-				weight = (weight_array[x_hr + Scale] * 
-						  weight_array[y_hr + Scale] + 
-						  (int)EImageFilterScale.Scale / 2) >> 
+				weight = (weight_array[x_hr + Scale] *
+						  weight_array[y_hr + Scale] +
+						  (int)EImageFilterScale.Scale / 2) >>
 						  Shift;
 				fg[0] += weight * *fg_ptr++;
 				fg[1] += weight * *fg_ptr++;
@@ -518,9 +524,9 @@ namespace Pictor
 				fg[3] += weight * *fg_ptr;
 
 				fg_ptr = base.source().NextX();
-				weight = (weight_array[x_hr] * 
-						  weight_array[y_hr + Scale] + 
-						  (int)EImageFilterScale.Scale / 2) >> 
+				weight = (weight_array[x_hr] *
+						  weight_array[y_hr + Scale] +
+						  (int)EImageFilterScale.Scale / 2) >>
 						  Shift;
 				fg[0] += weight * *fg_ptr++;
 				fg[1] += weight * *fg_ptr++;
@@ -528,9 +534,9 @@ namespace Pictor
 				fg[3] += weight * *fg_ptr;
 
 				fg_ptr = base.source().NextY();
-				weight = (weight_array[x_hr + Scale] * 
-						  weight_array[y_hr] + 
-						  (int)EImageFilterScale.Scale / 2) >> 
+				weight = (weight_array[x_hr + Scale] *
+						  weight_array[y_hr] +
+						  (int)EImageFilterScale.Scale / 2) >>
 						  Shift;
 				fg[0] += weight * *fg_ptr++;
 				fg[1] += weight * *fg_ptr++;
@@ -538,9 +544,9 @@ namespace Pictor
 				fg[3] += weight * *fg_ptr;
 
 				fg_ptr = base.source().NextX();
-				weight = (weight_array[x_hr] * 
-						  weight_array[y_hr] + 
-						  (int)EImageFilterScale.Scale / 2) >> 
+				weight = (weight_array[x_hr] *
+						  weight_array[y_hr] +
+						  (int)EImageFilterScale.Scale / 2) >>
 						  Shift;
 				fg[0] += weight * *fg_ptr++;
 				fg[1] += weight * *fg_ptr++;
@@ -563,15 +569,12 @@ namespace Pictor
 				Span->a = (byte)fg[OrderA];
 				++Span;
 				++base.Interpolator();
-
 			} while(--len);
 		}
 	};
 
-
-
 	//==================================================span_image_filter_rgba
-	//template<class Source, class Interpolator> 
+	//template<class Source, class Interpolator>
 	public class span_image_filter_rgba : SpanImageFilter//<Source, Interpolator>
 	{
 		//typedef Source source_type;
@@ -589,16 +592,16 @@ namespace Pictor
 
 		//--------------------------------------------------------------------
 		public span_image_filter_rgba() {}
-		public span_image_filter_rgba(pixfmt_alpha_blend_bgra32 src, 
+		public span_image_filter_rgba(pixfmt_alpha_blend_bgra32 src,
 							   interpolator_type inter,
 							   ImageFilterLookUpTable filter) :
-			base(src, inter, &filter) 
+			base(src, inter, &filter)
 		{}
 
 		//--------------------------------------------------------------------
 		public void Generate(color_type* Span, int x, int y, unsigned len)
 		{
-			base.Interpolator().Begin(x + base.filter_dx_dbl(), 
+			base.Interpolator().Begin(x + base.filter_dx_dbl(),
 											y + base.filter_dy_dbl(), len);
 
 			int fg[4];
@@ -608,7 +611,7 @@ namespace Pictor
 			int          Start        = base.filter().Start();
 			int16* weight_array = base.filter().weight_array();
 
-			int x_count; 
+			int x_count;
 			int weight_y;
 
 			do
@@ -618,8 +621,8 @@ namespace Pictor
 				x -= base.filter_dx_int();
 				y -= base.filter_dy_int();
 
-				int x_hr = x; 
-				int y_hr = y; 
+				int x_hr = x;
+				int y_hr = y;
 
 				int x_lr = x_hr >> Shift;
 				int y_lr = y_hr >> Shift;
@@ -630,8 +633,8 @@ namespace Pictor
 				unsigned y_count = diameter;
 
 				y_hr = Mask - (y_hr & Mask);
-				fg_ptr = base.source().Span(x_lr + Start, 
-																	 y_lr + Start, 
+				fg_ptr = base.source().Span(x_lr + Start,
+																	 y_lr + Start,
 																	 diameter);
 				for(;;)
 				{
@@ -640,8 +643,8 @@ namespace Pictor
 					x_hr = Mask - x_fract;
 					for(;;)
 					{
-						int weight = (weight_y * weight_array[x_hr] + 
-									 (int)EImageFilterScale.Scale / 2) >> 
+						int weight = (weight_y * weight_array[x_hr] +
+									 (int)EImageFilterScale.Scale / 2) >>
 									 Shift;
 
 						fg[0] += weight * *fg_ptr++;
@@ -680,7 +683,6 @@ namespace Pictor
 				Span->a = (byte)fg[OrderA];
 				++Span;
 				++base.Interpolator();
-
 			} while(--len);
 		}
 	};
@@ -704,17 +706,16 @@ namespace Pictor
 
 		//--------------------------------------------------------------------
 		public span_image_resample_rgba_affine() {}
-		public span_image_resample_rgba_affine(pixfmt_alpha_blend_bgra32 src, 
+		public span_image_resample_rgba_affine(pixfmt_alpha_blend_bgra32 src,
 										interpolator_type inter,
 										ImageFilterLookUpTable filter) :
-			base(src, inter, filter) 
+			base(src, inter, filter)
 		{}
-
 
 		//--------------------------------------------------------------------
 		public void Generate(color_type* Span, int x, int y, unsigned len)
 		{
-			base.Interpolator().Begin(x + base.filter_dx_dbl(), 
+			base.Interpolator().Begin(x + base.filter_dx_dbl(),
 											y + base.filter_dy_dbl(), len);
 
 			long_type fg[4];
@@ -723,8 +724,8 @@ namespace Pictor
 			int filter_scale = diameter << Shift;
 			int radius_x     = (diameter * base.m_rx) >> 1;
 			int radius_y     = (diameter * base.m_ry) >> 1;
-			int len_x_lr     = 
-				(diameter * base.m_rx + Mask) >> 
+			int len_x_lr     =
+				(diameter * base.m_rx + Mask) >>
 					Shift;
 
 			int16* weight_array = base.filter().weight_array();
@@ -739,13 +740,13 @@ namespace Pictor
 				fg[0] = fg[1] = fg[2] = fg[3] = (int)EImageFilterScale.Scale / 2;
 
 				int y_lr = y >> Shift;
-				int y_hr = ((Mask - (y & Mask)) * 
-								base.m_ry_inv) >> 
+				int y_hr = ((Mask - (y & Mask)) *
+								base.m_ry_inv) >>
 									Shift;
 				int total_weight = 0;
 				int x_lr = x >> Shift;
-				int x_hr = ((Mask - (x & Mask)) * 
-								base.m_rx_inv) >> 
+				int x_hr = ((Mask - (x & Mask)) *
+								base.m_rx_inv) >>
 									Shift;
 
 				int x_hr2 = x_hr;
@@ -756,8 +757,8 @@ namespace Pictor
 					x_hr = x_hr2;
 					for(;;)
 					{
-						int weight = (weight_y * weight_array[x_hr] + 
-									 (int)EImageFilterScale.Scale / 2) >> 
+						int weight = (weight_y * weight_array[x_hr] +
+									 (int)EImageFilterScale.Scale / 2) >>
 									 downscale_shift;
 
 						fg[0] += *fg_ptr++ * weight;
@@ -935,8 +936,4 @@ namespace Pictor
 	};
 }
 
-
 //#endif
-
-
-

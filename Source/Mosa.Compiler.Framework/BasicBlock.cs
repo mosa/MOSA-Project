@@ -57,7 +57,7 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		private List<BasicBlock> previousBlocks;
 
-		#endregion
+		#endregion Data members
 
 		#region Construction
 
@@ -77,7 +77,7 @@ namespace Mosa.Compiler.Framework
 			this.hintTarget = -1;
 		}
 
-		#endregion
+		#endregion Construction
 
 		#region Properties
 
@@ -151,7 +151,7 @@ namespace Mosa.Compiler.Framework
 			set { hintTarget = value; }
 		}
 
-		#endregion
+		#endregion Properties
 
 		#region Methods
 
@@ -164,6 +164,6 @@ namespace Mosa.Compiler.Framework
 			return String.Format("L_{0:X4}", Label);
 		}
 
-		#endregion
+		#endregion Methods
 	}
 }

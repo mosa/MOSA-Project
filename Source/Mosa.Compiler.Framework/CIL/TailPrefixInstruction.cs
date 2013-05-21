@@ -7,11 +7,10 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public sealed class TailPrefixInstruction : PrefixInstruction
 	{
@@ -26,7 +25,7 @@ namespace Mosa.Compiler.Framework.CIL
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Methods Overrides
 
@@ -41,8 +40,6 @@ namespace Mosa.Compiler.Framework.CIL
 			base.Decode(ctx, decoder);
 		}
 
-		#endregion // Methods Overrides
-
-
+		#endregion Methods Overrides
 	}
 }

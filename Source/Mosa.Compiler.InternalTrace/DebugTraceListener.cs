@@ -24,6 +24,5 @@ namespace Mosa.Compiler.InternalTrace
 		{
 			Debug.WriteLine(stage + ": " + line);
 		}
-
 	}
 }

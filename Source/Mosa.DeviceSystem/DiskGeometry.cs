@@ -7,7 +7,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-
 namespace Mosa.DeviceSystem
 {
 	/// <summary>
@@ -19,10 +18,12 @@ namespace Mosa.DeviceSystem
 		/// Cylinder
 		/// </summary>
 		public ushort Cylinders;
+
 		/// <summary>
 		/// Head
 		/// </summary>
 		public byte Heads;
+
 		/// <summary>
 		/// Sector
 		/// </summary>
@@ -85,7 +86,5 @@ namespace Mosa.DeviceSystem
 
 			Cylinders = (ushort)(cylinderTimesHeads / Heads);
 		}
-
-
 	}
 }

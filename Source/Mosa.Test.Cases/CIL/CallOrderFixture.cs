@@ -8,7 +8,7 @@
  *  Simon Wollwage (rootnode) <kintarothink-in-co.de>
  *  Michael Fröhlich (grover) <michael.ruckmichaelruck.de>
  *  Kai P. Reisert <kpreisertgooglemail.com>
- *  
+ *
  */
 
 using MbUnit.Framework;
@@ -20,7 +20,6 @@ namespace Mosa.Test.Cases.CIL
 	[TestFixture]
 	public class CallOrderFixture : TestCompilerAdapter
 	{
-
 		public CallOrderFixture()
 		{
 			settings.AddReference("Mosa.Test.Collection.dll");
@@ -91,6 +90,5 @@ namespace Mosa.Test.Cases.CIL
 		{
 			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "CallOrderTests", "CallOrderU4_U8_U8_U8", (uint)1, (ulong)2, (ulong)3, (ulong)4));
 		}
-
 	}
 }

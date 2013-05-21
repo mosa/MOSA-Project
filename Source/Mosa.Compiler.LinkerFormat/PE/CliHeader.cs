@@ -29,7 +29,7 @@ namespace Mosa.Compiler.LinkerFormat.PE
 		/// </summary>
 		public const string SymbolName = @".cil.header";
 
-		#endregion // Constants
+		#endregion Constants
 
 		#region Data members
 
@@ -95,7 +95,7 @@ namespace Mosa.Compiler.LinkerFormat.PE
 
 		// FIXME: public byte[] ImageHash;
 
-		#endregion // Data members
+		#endregion Data members
 
 		#region Methods
 
@@ -139,6 +139,6 @@ namespace Mosa.Compiler.LinkerFormat.PE
 			ManagedNativeHeader.Write(writer);
 		}
 
-		#endregion // Methods
+		#endregion Methods
 	}
 }

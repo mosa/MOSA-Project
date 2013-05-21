@@ -10,23 +10,40 @@ using Mosa.Internal.Plug;
 
 namespace Mosa.HelloWorld.x86.Tests
 {
-	class PlugTestCase
+	internal class PlugTestCase
 	{
 		// Incomplete implementations that plugs will implement
-		public static int Double(int a) { return 0; }
-		public static int AddOne(int a) { return 0; }
-		public int AddZ2Z(int z) { return 0; }
+		public static int Double(int a)
+		{
+			return 0;
+		}
+
+		public static int AddOne(int a)
+		{
+			return 0;
+		}
+
+		public int AddZ2Z(int z)
+		{
+			return 0;
+		}
 	}
 
 	[PlugType("Mosa.HelloWorld.x86.Tests.PlugTestCase")]
-	static class PlugTestImplementation
+	internal static class PlugTestImplementation
 	{
-		public static int AddOne(int a) { return a + 1; }
+		public static int AddOne(int a)
+		{
+			return a + 1;
+		}
 
 		[PlugMethod("Mosa.HelloWorld.x86.Tests.PlugTestCase.Double")]
 		public static int Double(int a) { return a + a; }
 
-		public static int AddZ2Z(ref PlugTestCase plugTestCase, int z) { return z + z; }
+		public static int AddZ2Z(ref PlugTestCase plugTestCase, int z)
+		{
+			return z + z;
+		}
 	}
 
 	public class PlugTestTest : KernelTest
@@ -54,6 +71,5 @@ namespace Mosa.HelloWorld.x86.Tests
 			PlugTestCase test = new PlugTestCase();
 			return test.AddZ2Z(11) == 22;
 		}
-
 	}
 }

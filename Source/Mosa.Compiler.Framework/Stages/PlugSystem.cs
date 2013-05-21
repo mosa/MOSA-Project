@@ -7,21 +7,18 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
 using System.Collections.Generic;
-using Mosa.Compiler.Linker;
-using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Compiler.TypeSystem;
 
 namespace Mosa.Compiler.Framework
 {
-	public class PlugSystem 
+	public class PlugSystem
 	{
 		#region Data members
 
 		protected Dictionary<RuntimeMethod, RuntimeMethod> plugMethods = new Dictionary<RuntimeMethod, RuntimeMethod>();
 
-		#endregion // Data members
+		#endregion Data members
 
 		/// <summary>
 		/// Gets the plug.
@@ -41,8 +38,5 @@ namespace Mosa.Compiler.Framework
 		{
 			plugMethods.Add(methodToPlug, plug);
 		}
-
-
 	}
 }
-

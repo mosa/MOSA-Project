@@ -15,11 +15,10 @@ using Mosa.Compiler.Metadata;
 namespace Mosa.Compiler.Framework.Stages
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public sealed class SSAOptimizations : BaseMethodCompilerStage, IMethodCompilerStage, IPipelineStage
 	{
-
 		private int instructionsRemoved = 0;
 
 		private Stack<int> worklist = new Stack<int>();
@@ -61,7 +60,7 @@ namespace Mosa.Compiler.Framework.Stages
 			worklist = null;
 		}
 
-		#endregion // IMethodCompilerStage Members
+		#endregion IMethodCompilerStage Members
 
 		private void Do(Context context)
 		{
@@ -82,6 +81,7 @@ namespace Mosa.Compiler.Framework.Stages
 			DeadCodeElimination(context);
 			ConstantFoldingIntegerCompare(context);
 			FoldIntegerCompareBranch(context);
+
 			//CheckForMore(context);
 		}
 
@@ -89,7 +89,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Adds to work list.
 		/// </summary>
 		/// <param name="index">The index.</param>
-		void AddToWorkList(int index)
+		private void AddToWorkList(int index)
 		{
 			// work list never gets very large, so the check is inexpensive
 			if (!worklist.Contains(index))
@@ -100,7 +100,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Adds the operand usage and definitions to work list.
 		/// </summary>
 		/// <param name="operand">The operand.</param>
-		void AddOperandUsageToWorkList(Operand operand)
+		private void AddOperandUsageToWorkList(Operand operand)
 		{
 			foreach (int index in operand.Uses)
 			{
@@ -117,7 +117,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Adds the all the operands usage and definitions to work list.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void AddOperandUsageToWorkList(Context context)
+		private void AddOperandUsageToWorkList(Context context)
 		{
 			if (context.Result != null)
 			{
@@ -160,6 +160,7 @@ namespace Mosa.Compiler.Framework.Stages
 				AddOperandUsageToWorkList(context);
 				context.SetInstruction(IRInstruction.Nop);
 				instructionsRemoved++;
+
 				//context.Remove();
 				return;
 			}
@@ -174,6 +175,7 @@ namespace Mosa.Compiler.Framework.Stages
 			AddOperandUsageToWorkList(context);
 			context.SetInstruction(IRInstruction.Nop);
 			instructionsRemoved++;
+
 			//context.Remove();
 			return;
 		}
@@ -224,7 +226,6 @@ namespace Mosa.Compiler.Framework.Stages
 				if (propogated)
 					AddToWorkList(index);
 			}
-
 		}
 
 		private bool CanCopyPropagation(Operand operand)
@@ -288,7 +289,6 @@ namespace Mosa.Compiler.Framework.Stages
 						if (IsLogging) Trace("AFTER: \t" + ctx.ToString());
 					}
 				}
-
 			}
 
 			Debug.Assert(destinationOperand.Uses.Count == 0);
@@ -297,6 +297,7 @@ namespace Mosa.Compiler.Framework.Stages
 			AddOperandUsageToWorkList(context);
 			context.SetInstruction(IRInstruction.Nop);
 			instructionsRemoved++;
+
 			//context.Remove();
 		}
 
@@ -452,7 +453,6 @@ namespace Mosa.Compiler.Framework.Stages
 				context.SetInstruction(IRInstruction.Move, context.Result, constant);
 				if (IsLogging) Trace("AFTER: \t" + context.ToString());
 			}
-
 		}
 
 		/// <summary>
@@ -487,6 +487,7 @@ namespace Mosa.Compiler.Framework.Stages
 				case ConditionCode.GreaterThan: compareResult = (op1.ValueAsLongInteger > op2.ValueAsLongInteger); break;
 				case ConditionCode.LessOrEqual: compareResult = (op1.ValueAsLongInteger <= op2.ValueAsLongInteger); break;
 				case ConditionCode.LessThan: compareResult = (op1.ValueAsLongInteger < op2.ValueAsLongInteger); break;
+
 				// TODO: Add more
 				default: return;
 			}
@@ -530,7 +531,6 @@ namespace Mosa.Compiler.Framework.Stages
 				if (IsLogging) Trace("AFTER: \t" + context.ToString());
 				return;
 			}
-
 		}
 
 		/// <summary>
@@ -726,7 +726,6 @@ namespace Mosa.Compiler.Framework.Stages
 			// TODO: Add more strength reductions especially for AND w/ 0xFF, 0xFFFF, 0xFFFFFFFF, etc when source or destination are same or smaller
 		}
 
-
 		/// <summary>
 		/// Folds the integer compare branch.
 		/// </summary>
@@ -771,6 +770,7 @@ namespace Mosa.Compiler.Framework.Stages
 				case ConditionCode.GreaterThan: compareResult = (op1.ValueAsLongInteger > op2.ValueAsLongInteger); break;
 				case ConditionCode.LessOrEqual: compareResult = (op1.ValueAsLongInteger <= op2.ValueAsLongInteger); break;
 				case ConditionCode.LessThan: compareResult = (op1.ValueAsLongInteger < op2.ValueAsLongInteger); break;
+
 				// TODO: Add more
 				default: return;
 			}
@@ -821,9 +821,8 @@ namespace Mosa.Compiler.Framework.Stages
 			target.PreviousBlocks.Remove(currentBlock);
 
 			// TODO: if target block no longer has any predecessors (or the only predecessor is itself), remove all instructions from it.
-
-
 		}
+
 		/// <summary>
 		/// Checks for more.
 		/// </summary>
@@ -847,9 +846,7 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				return;
 			}
-
 		}
-
 
 		#region Helpers
 
@@ -938,7 +935,6 @@ namespace Mosa.Compiler.Framework.Stages
 			return (op1.ValueAsLongInteger == op2.ValueAsLongInteger);
 		}
 
-		#endregion //Helpers
-
+		#endregion Helpers
 	}
 }

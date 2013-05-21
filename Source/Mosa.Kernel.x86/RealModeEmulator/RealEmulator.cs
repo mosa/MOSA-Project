@@ -35,9 +35,9 @@ namespace Mosa.Kernel.x86.RealModeEmulator
         /// <summary>
         /// Emulator error code enum
         /// </summary>
-        public static struct ErrorCodes
+        public static class ErrorCodes
         {
-            public static const ushort // Define the type for the struct elements
+            public const ushort // Define the type for the struct elements
             ERR_OK = 0, // No error
             ERR_CONTINUE = 1, // Internal non-error, continue decoding
             ERR_INVAL = 2, // Bad parameter passed to emulator
@@ -47,16 +47,17 @@ namespace Mosa.Kernel.x86.RealModeEmulator
             ERR_BUG = 6, // Bug in the emulator
             ERR_BREAK = 7, // Breakpoint hit
             ERR_HALT = 8, // CPU halted
+            ERR_FCNRET = 9, // Magic CS/IP Reached, function return
 
-            ERR_LAST = 9; // Size of the error enum
+            ERR_LAST = 10; // Size of the error enum
         }
 
         /// <summary>
         /// Flags enum
         /// </summary>
-        public static struct Flags
+        public static class Flags
         {
-            public static const ushort // Define the type for the struct elements
+            public const ushort // Define the type for the struct elements
             FLAG_CF = 0x001, // Carry flag
             FLAG_PF = 0x004, // Parity flag
             FLAG_AF = 0x010, // Adjust flag
@@ -73,9 +74,9 @@ namespace Mosa.Kernel.x86.RealModeEmulator
         /// <summary>
         /// General Purpose Registers enum
         /// </summary>
-        public static struct GPRegisters
+        public static class GPRegisters
         {
-            public static const byte // Define the type for the struct elements
+            public const byte // Define the type for the struct elements
             AL = 0x0,
             CL = 0x1,
             DL = 0x2,
@@ -89,9 +90,9 @@ namespace Mosa.Kernel.x86.RealModeEmulator
         /// <summary>
         /// General Purpose X Registers enum
         /// </summary>
-        public static struct GPRegistersX
+        public static class GPRegistersX
         {
-            public static const byte // Define the type for the struct elements
+            public const byte // Define the type for the struct elements
             AX = 0x0,
             CX = 0x1,
             DX = 0x2,
@@ -105,23 +106,32 @@ namespace Mosa.Kernel.x86.RealModeEmulator
         /// <summary>
         /// Special Registers enum
         /// </summary>
-        public static struct SRegisters
+        public static class SRegisters
         {
-            public static const byte // Define the type for the struct elements
+            public const byte // Define the type for the struct elements
             SREG_ES = 0x0,
             SREG_CS = 0x1,
             SREG_SS = 0x2,
-            SREG_DS = 0x3;
+            SREG_DS = 0x3,
+            SREG_FS = 0x4, // added 386
+            SREG_GS = 0x5;
         }
 
         /// <summary>
         /// Create a new Real Emulator State
         /// </summary>
         /// <returns>The State instance</returns>
-        public static unsafe State CreateState(uint memory, uint registers)
+        public static unsafe void CreateState(out State state)
         {
             // Create a new Real Emulator State instance
-            State state = new State();
+            state = new State();
+
+            // Setup memory address and registers
+            uint regmem = KernelMemory.AllocateMemory(0x3C);
+            state.Memory = KernelMemory.AllocateMemory(0x100000);
+            for (int i = 0; i < 8; i++)
+                state.Registers[i] = new Register((uint)(regmem + (i * 4)));
+            state.SegmentAddress = regmem + 32;
 
             // Initial stack
             state.Flags = Flags.FLAG_DEFAULT;
@@ -130,14 +140,8 @@ namespace Mosa.Kernel.x86.RealModeEmulator
             state.CS = 0xF000;
             state.IP = 0xFFF0;
 
-            // Setup memory address and registers
-            state.Memory = (uint*)memory;
-            for (int i = 0; i < 8; i++)
-                state.Registers[i] = new Register((uint)(registers + (i * 4)));
-            state.SegmentAddress = registers + 32;
-
             // Return the new state
-            return state;
+            //return state;
         }
 
         public static unsafe uint Int_CallInterrupt(ref State state, uint number)
@@ -186,31 +190,44 @@ namespace Mosa.Kernel.x86.RealModeEmulator
             uint err;
             for (; ; )
             {
-                if (state.IP == 0xFFFF && state.CS == 0xFFFF)
+                err = RunOne(ref state);
+                if (err == ErrorCodes.ERR_FCNRET)
                     return ErrorCodes.ERR_OK;
-                if (state.CS == 0xB800 && state.IP < 0x100)
-                {
-
-                    if (state.HLECallbacks[state.IP] != null)
-                        state.HLECallbacks[state.IP](ref state, state.IP);
-
-                    caOperations[0xCF].Function(ref state, 0);
-                    continue;
-                }
-                err = Int_DoOpcode(ref state);
-                switch (err)
-                {
-                    case ErrorCodes.ERR_OK:
-                        break;
-                    case ErrorCodes.ERR_DIVIDE:
-                        err = Int_CallInterrupt(ref state, 0);
-                        if (err != ErrorCodes.ERR_OK) return err;
-                        break;
-
-                    default:
-                        return err;
-                }
+                if (err != ErrorCodes.ERR_OK)
+                    return err;
             }
+        }
+
+        public static uint RunOne(ref State state)
+        {
+            if (state.IP == 0xFFFF && state.CS == 0xFFFF)
+                return ErrorCodes.ERR_FCNRET;
+
+            if (state.CS == 0xB800 && state.IP < 0x100)
+            {
+
+                if (state.HLECallbacks[state.IP] != null)
+                    state.HLECallbacks[state.IP](ref state, state.IP);
+
+                caOperations[0xCF].Function(ref state, 0);
+                return 0;
+            }
+
+            uint err = Int_DoOpcode(ref state);
+            switch (err)
+            {
+                case ErrorCodes.ERR_OK:
+                    break;
+                case ErrorCodes.ERR_DIVIDE:
+                    err = Int_CallInterrupt(ref state, 0);
+                    if (err != 0) return err;
+                    break;
+
+                default:
+                    return err;
+            }
+
+            return ErrorCodes.ERR_OK;
         }
 
         public static unsafe uint Int_DoOpcode(ref State state)
@@ -293,8 +310,8 @@ namespace Mosa.Kernel.x86.RealModeEmulator
         public static unsafe uint Op_Ext_0F(ref State state, uint param)
         {
             byte extra;
-            uint ret = Int_Read8(ref state, state.CS, (ushort)(state.IP + state.Decoder.IPOffset), &extra);
-            if (ret != 0) return ret;
+            uint err = Int_Read8(ref state, state.CS, (ushort)(state.IP + state.Decoder.IPOffset), &extra);
+            if (err != ErrorCodes.ERR_OK) return err;
             state.Decoder.IPOffset++;
 
             if (caOperations0F[extra].Function == null)
@@ -308,49 +325,41 @@ namespace Mosa.Kernel.x86.RealModeEmulator
 
         public static unsafe uint Op_Unary_M(ref State state, uint param)
         {
-            const uint width = 8;
-            uint ret, op_num;
+            const byte width = 8;
+            uint err, op_num;
             byte* dest;
 
-            ret = Int_GetModRM(ref state, null, &op_num, null);
-            if (ret != 0) return ret;
+            err = Int_GetModRM(ref state, null, &op_num, null);
+            if (err != ErrorCodes.ERR_OK) return err;
             state.Decoder.IPOffset--;
 
             switch (op_num)
             {
                 case 0:
-                    ret = Int_ParseModRM(ref state, null, &dest, 0);
-                    if (ret != 0) return ret;
+                    err = Int_ParseModRM(ref state, null, &dest, 0);
+                    if (err != ErrorCodes.ERR_OK) return err;
                     (*dest)++;
                     ushort flag = (0x800 | 0x040 | 0x080 | 0x004 | 0x010);
                     state.Flags &= (ushort)~flag;
-                    if (*dest == (1 << (int)(width - 1)))
+                    if (*dest == (1 << (width - 1)))
                         state.Flags |= 0x800;
                     if ((*dest & 15) == 0)
                         state.Flags |= 0x010;
 
-                    flag = (0x040 | 0x080 | 0x004);
-                    state.Flags &= (ushort)~flag;
-                    state.Flags |= (ushort)((*dest == 0) ? 0x040 : 0);
-                    //state.Flags |= (ushort)((*dest >> (width - 1)) ? 0x080 : 0); // Unknown failure, unable to port code at this time
-                    state.Flags |= (ushort)(((((*dest) >> 7) ^ ((*dest) >> 6) ^ ((*dest) >> 5) ^ ((*dest) >> 4) ^ ((*dest) >> 3) ^ ((*dest) >> 2) ^ ((*dest) >> 1) ^ (*dest)) & 1) == 0 ? 0x004 : 0);
+                    SET_COMM_FLAGS(ref state, *dest, width);
                     break;
                 case 1:
-                    ret = Int_ParseModRM(ref state, null, &dest, 0);
-                    if (ret != 0) return ret;
+                    err = Int_ParseModRM(ref state, null, &dest, 0);
+                    if (err != ErrorCodes.ERR_OK) return err;
                     (*dest)--;
                     flag = (0x800 | 0x010);
                     state.Flags &= (ushort)~flag;
-                    if (*dest + 1 == (1 << (int)(width - 1)))
+                    if (*dest + 1 == (1 << (width - 1)))
                         state.Flags |= 0x800;
                     if ((*dest & 15) + 1 == 16)
                         state.Flags |= 0x010;
 
-                    flag = (0x040 | 0x080 | 0x004);
-                    state.Flags &= (ushort)~flag;
-                    state.Flags |= (ushort)((*dest == 0) ? 0x040 : 0);
-                    //state.Flags |= (ushort)((*dest) >> (width - 1)) ? 0x080 : 0); // Unknown failure, unable to port code at this time
-                    state.Flags |= (ushort)(((((*dest) >> 7) ^ ((*dest) >> 6) ^ ((*dest) >> 5) ^ ((*dest) >> 4) ^ ((*dest) >> 3) ^ ((*dest) >> 2) ^ ((*dest) >> 1) ^ (*dest)) & 1) == 0 ? 0x004 : 0);
+                    SET_COMM_FLAGS(ref state, *dest, width);
                     break;
                 default:
                     //printf(" - Unary M /%i unimplemented\n", op_num);
@@ -360,72 +369,58 @@ namespace Mosa.Kernel.x86.RealModeEmulator
             return ErrorCodes.ERR_OK;
         }
 
-        public static unsafe uint Op_Unary_MX(ref State state, int param)
+        public static unsafe uint Op_Unary_MX(ref State state, uint param)
         {
-            uint ret, op_num, mod, mmm;
+            uint err, op_num, mod, mmm;
 
-            ret = Int_GetModRM(ref state, &mod, &op_num, &mmm);
-            if (ret != 0) return ret;
+            err = Int_GetModRM(ref state, &mod, &op_num, &mmm);
+            if (err != ErrorCodes.ERR_OK) return err;
             state.Decoder.IPOffset--;
 
             if (state.Decoder.bOverrideOperand)
             {
                 uint* dest;
-                const uint width = 32;
+                // Cannot have this variable constant otherwise IDE throws error
+                //const byte width = 32;
+                byte width = 32;
                 switch (op_num)
                 {
                     case 0:
-                        ret = Int_ParseModRMX(ref state, null, (ushort**)&dest, 0);
-                        if (ret != 0) return ret;
+                        err = Int_ParseModRMX(ref state, null, (ushort**)&dest, 0);
+                        if (err != ErrorCodes.ERR_OK) return err;
                         (*dest)++;
                         ushort flag = (0x800 | 0x040 | 0x080 | 0x004 | 0x010);
                         state.Flags &= (ushort)~flag;
-                        //if (*dest == (1 << (int)(width - 1))) // Error received
-                        //    state.Flags |= 0x800;
+                        if (*dest == (1 << (width - 1)))
+                            state.Flags |= 0x800;
                         if ((*dest & 15) == 0)
                             state.Flags |= 0x010;
 
-                        flag = (0x040 | 0x080 | 0x004);
-                        state.Flags &= (ushort)~flag;
-                        state.Flags |= (ushort)((*dest == 0) ? 0x040 : 0);
-                        //state.Flags |= (ushort)(((*dest) >> ((width) - 1)) ? 0x080 : 0); // Unknown failure, unable to port code at this time
-                        state.Flags |= (ushort)(((((*dest) >> 7) ^ ((*dest) >> 6) ^ ((*dest) >> 5) ^ ((*dest) >> 4) ^ ((*dest) >> 3) ^ ((*dest) >> 2) ^ ((*dest) >> 1) ^ (*dest)) & 1) == 0 ? 0x004 : 0);
+                        SET_COMM_FLAGS(ref state, *dest, width);
 
-                        flag = (0x040 | 0x080 | 0x004);
-                        state.Flags &= (ushort)~flag;
-                        state.Flags |= (ushort)((*dest == 0) ? 0x040 : 0);
-                        //state.Flags |= (ushort)((*dest) >> ((width) - 1)) ? 0x080 : 0); // Unknown failure, unable to port code at this time
-                        state.Flags |= (ushort)(((((*dest) >> 7) ^ ((*dest) >> 6) ^ ((*dest) >> 5) ^ ((*dest) >> 4) ^ ((*dest) >> 3) ^ ((*dest) >> 2) ^ ((*dest) >> 1) ^ (*dest)) & 1) == 0 ? 0x004 : 0);
+                        SET_COMM_FLAGS(ref state, *dest, width);
                         break;
                     case 1:
-                        ret = Int_ParseModRMX(ref state, null, (ushort**)&dest, 0);
-                        if (ret != 0) return ret;
+                        err = Int_ParseModRMX(ref state, null, (ushort**)&dest, 0);
+                        if (err != ErrorCodes.ERR_OK) return err;
                         (*dest)--;
                         flag = (0x800 | 0x010);
                         state.Flags &= (ushort)~flag;
-                        //if (*dest + 1 == (1 << (int)(width - 1))) Error received
-                        //    state.Flags |= 0x800;
+                        if (*dest + 1 == (1 << (width - 1)))
+                            state.Flags |= 0x800;
                         if ((*dest & 15) + 1 == 16)
                             state.Flags |= 0x010;
 
-                        flag = (0x040 | 0x080 | 0x004);
-                        state.Flags &= (ushort)~flag;
-                        state.Flags |= (ushort)((*dest == 0) ? 0x040 : 0);
-                        //state.Flags |= (ushort)(((*dest) >> ((width) - 1)) ? 0x080 : 0); // Unknown failure, unable to port code at this time
-                        state.Flags |= (ushort)(((((*dest) >> 7) ^ ((*dest) >> 6) ^ ((*dest) >> 5) ^ ((*dest) >> 4) ^ ((*dest) >> 3) ^ ((*dest) >> 2) ^ ((*dest) >> 1) ^ (*dest)) & 1) == 0 ? 0x004 : 0);
+                        SET_COMM_FLAGS(ref state, *dest, width);
 
-                        flag = (0x040 | 0x080 | 0x004);
-                        state.Flags &= (ushort)~flag;
-                        state.Flags |= (ushort)((*dest == 0) ? 0x040 : 0);
-                        //state.Flags |= (ushort)(((*dest) >> ((width) - 1)) ? 0x080 : 0); // Unknown failure, unable to port code at this time
-                        state.Flags |= (ushort)(((((*dest) >> 7) ^ ((*dest) >> 6) ^ ((*dest) >> 5) ^ ((*dest) >> 4) ^ ((*dest) >> 3) ^ ((*dest) >> 2) ^ ((*dest) >> 1) ^ (*dest)) & 1) == 0 ? 0x004 : 0);
+                        SET_COMM_FLAGS(ref state, *dest, width);
                         break;
                     case 6:
-                        ret = Int_ParseModRMX(ref state, null, (ushort**)&dest, 0);
-                        if (ret != 0) return ret;
+                        err = Int_ParseModRMX(ref state, null, (ushort**)&dest, 0);
+                        if (err != ErrorCodes.ERR_OK) return err;
                         state.SP.W -= 2;
-                        ret = Int_Write16(ref state, state.SS, state.SP.W, (ushort)(*dest));
-                        if (ret != 0)return ret;
+                        err = Int_Write16(ref state, state.SS, state.SP.W, (ushort)(*dest));
+                        if (err != ErrorCodes.ERR_OK) return err;
                         break;
                     default:
                         //printf(" - Unary MX (32) /%i unimplemented\n", op_num);
@@ -435,12 +430,12 @@ namespace Mosa.Kernel.x86.RealModeEmulator
             else
             {
                 ushort* dest;
-                const int width = 16;
+                const byte width = 16;
                 switch (op_num)
                 {
                     case 0:
-                        ret = Int_ParseModRMX(ref state, null, &dest, 0);
-                        if (ret != 0) return ret;
+                        err = Int_ParseModRMX(ref state, null, &dest, 0);
+                        if (err != ErrorCodes.ERR_OK) return err;
                         (*dest)++;
                         ushort flag = (0x800 | 0x040 | 0x080 | 0x004 | 0x010);
                         state.Flags &= (ushort)~flag;
@@ -449,21 +444,13 @@ namespace Mosa.Kernel.x86.RealModeEmulator
                         if ((*dest & 15) == 0)
                             state.Flags |= 0x010;
 
-                        flag = (0x040 | 0x080 | 0x004);
-                        state.Flags &= (ushort)~flag;
-                        state.Flags |= (ushort)((*dest == 0) ? 0x040 : 0);
-                        //state.Flags |= (ushort)(((*dest) >> ((width) - 1)) ? 0x080 : 0); // Unknown failure, unable to port code at this time
-                        state.Flags |= (ushort)(((((*dest) >> 7) ^ ((*dest) >> 6) ^ ((*dest) >> 5) ^ ((*dest) >> 4) ^ ((*dest) >> 3) ^ ((*dest) >> 2) ^ ((*dest) >> 1) ^ (*dest)) & 1) == 0 ? 0x004 : 0);
-                        
-                        flag = (0x040 | 0x080 | 0x004);
-                        state.Flags &= (ushort)~flag;
-                        state.Flags |= (ushort)((*dest == 0) ? 0x040 : 0);
-                        //state.Flags |= (ushort)(((*dest) >> ((width) - 1)) ? 0x080 : 0); // Unknown failure, unable to port code at this time
-                        state.Flags |= (ushort)(((((*dest) >> 7) ^ ((*dest) >> 6) ^ ((*dest) >> 5) ^ ((*dest) >> 4) ^ ((*dest) >> 3) ^ ((*dest) >> 2) ^ ((*dest) >> 1) ^ (*dest)) & 1) == 0 ? 0x004 : 0);
+                        SET_COMM_FLAGS(ref state, *dest, width);
+
+                        SET_COMM_FLAGS(ref state, *dest, width);
                         break;
                     case 1:
-                        ret = Int_ParseModRMX(ref state, null, &dest, 0);
-                        if (ret != 0) return ret;
+                        err = Int_ParseModRMX(ref state, null, &dest, 0);
+                        if (err != ErrorCodes.ERR_OK) return err;
                         (*dest)--;
 
                         flag = (0x800 | 0x010);
@@ -473,61 +460,53 @@ namespace Mosa.Kernel.x86.RealModeEmulator
                         if ((*dest & 15) + 1 == 16)
                             state.Flags |= 0x010;
 
-                        flag = (0x040 | 0x080 | 0x004);
-                        state.Flags &= (ushort)~flag;
-                        state.Flags |= (ushort)((*dest == 0) ? 0x040 : 0);
-                        //state.Flags |= (ushort)(((*dest) >> ((width) - 1)) ? 0x080 : 0); // Unknown failure, unable to port code at this time
-                        state.Flags |= (ushort)(((((*dest) >> 7) ^ ((*dest) >> 6) ^ ((*dest) >> 5) ^ ((*dest) >> 4) ^ ((*dest) >> 3) ^ ((*dest) >> 2) ^ ((*dest) >> 1) ^ (*dest)) & 1) == 0 ? 0x004 : 0);
-                        
-                        flag = (0x040 | 0x080 | 0x004);
-                        state.Flags &= (ushort)~flag;
-                        state.Flags |= (ushort)((*dest == 0) ? 0x040 : 0);
-                        //state.Flags |= (ushort)(((*dest) >> ((width) - 1)) ? 0x080 : 0); // Unknown failure, unable to port code at this time
-                        state.Flags |= (ushort)(((((*dest) >> 7) ^ ((*dest) >> 6) ^ ((*dest) >> 5) ^ ((*dest) >> 4) ^ ((*dest) >> 3) ^ ((*dest) >> 2) ^ ((*dest) >> 1) ^ (*dest)) & 1) == 0 ? 0x004 : 0);
+                        SET_COMM_FLAGS(ref state, *dest, width);
+
+                        SET_COMM_FLAGS(ref state, *dest, width);
                         break;
                     case 2:
-                        ret = Int_ParseModRMX(ref state, null, &dest, 0);
-                        if (ret != 0) return ret;
+                        err = Int_ParseModRMX(ref state, null, &dest, 0);
+                        if (err != ErrorCodes.ERR_OK) return err;
                         state.SP.W -= 2;
-                        ret = Int_Write16(ref state, state.SS, state.SP.W, ((ushort)(state.IP + state.Decoder.IPOffset)));
-                        if (ret != 0) return ret;
+                        err = Int_Write16(ref state, state.SS, state.SP.W, ((ushort)(state.IP + state.Decoder.IPOffset)));
+                        if (err != ErrorCodes.ERR_OK) return err;
                         state.IP = *dest;
                         state.Decoder.bDontChangeIP = true;
                         break;
                     case 3:
                         if (mod == 3) return ErrorCodes.ERR_UNDEFOPCODE;
-                        ret = Int_ParseModRMX(ref state, null, &dest, 0);
-                        if (ret != 0) return ret;
+                        err = Int_ParseModRMX(ref state, null, &dest, 0);
+                        if (err != ErrorCodes.ERR_OK) return err;
                         state.SP.W -= 2;
-                        ret = Int_Write16(ref state, state.SS, state.SP.W, (state.CS));
-                        if (ret != 0) return ret;
+                        err = Int_Write16(ref state, state.SS, state.SP.W, (state.CS));
+                        if (err != ErrorCodes.ERR_OK) return err;
                         state.SP.W -= 2;
-                        ret = Int_Write16(ref state, state.SS, state.SP.W, ((ushort)(state.IP + state.Decoder.IPOffset)));
-                        if (ret != 0) return ret;
+                        err = Int_Write16(ref state, state.SS, state.SP.W, ((ushort)(state.IP + state.Decoder.IPOffset)));
+                        if (err != ErrorCodes.ERR_OK) return err;
                         state.IP = dest[0];
                         state.CS = dest[1];
                         state.Decoder.bDontChangeIP = true;
                         break;
                     case 4:
-                        ret = Int_ParseModRMX(ref state, null, &dest, 0);
-                        if (ret != 0) return ret;
+                        err = Int_ParseModRMX(ref state, null, &dest, 0);
+                        if (err != 0) return err;
                         state.IP = *dest;
                         state.Decoder.bDontChangeIP = true;
                         break;
                     case 5:
                         if (mod == 3) return ErrorCodes.ERR_UNDEFOPCODE;
-                        ret = Int_ParseModRMX(ref state, null, &dest, 0);
-                        if (ret != 0) return ret;
+                        err = Int_ParseModRMX(ref state, null, &dest, 0);
+                        if (err != 0) return err;
                         state.IP = dest[0];
                         state.CS = dest[1];
                         state.Decoder.bDontChangeIP = true;
                         break;
                     case 6:
-                        ret = Int_ParseModRMX(ref state, null, &dest, 0);
-                        if (ret != 0) return ret;
+                        err = Int_ParseModRMX(ref state, null, &dest, 0);
+                        if (err != 0) return err;
                         state.SP.W -= 2;
-                        ret = Int_Write16(ref state, state.SS, state.SP.W, (*dest));
-                        if (ret != 0)return ret;
+                        err = Int_Write16(ref state, state.SS, state.SP.W, (*dest));
+                        if (err != 0)return err;
                         break;
 
                     default:

@@ -8,7 +8,6 @@
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  */
 
-
 using System.Collections.Generic;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Metadata.Signatures;
@@ -18,11 +17,10 @@ using IR = Mosa.Compiler.Framework.IR;
 namespace Mosa.Platform.x86.Intrinsic
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public class SetControlRegisterBase : IIntrinsicPlatformMethod
 	{
-
 		private ControlRegister control;
 
 		/// <summary>
@@ -52,7 +50,6 @@ namespace Mosa.Platform.x86.Intrinsic
 			context.AppendInstruction(IR.IRInstruction.Move, cr, eax);
 		}
 
-		#endregion // Methods
-
+		#endregion Methods
 	}
 }

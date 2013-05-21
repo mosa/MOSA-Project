@@ -12,23 +12,23 @@ using Mosa.DeviceSystem;
 
 namespace Mosa.EmulatedKernel
 {
-
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public static class MemoryDispatch
 	{
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public static uint CR0;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public static uint CR3;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public static List<MemoryHandler> MemorySegments = new List<MemoryHandler>();
 
@@ -224,12 +224,12 @@ namespace Mosa.EmulatedKernel
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public delegate byte MemoryRead8(uint address);
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public delegate void MemoryWrite8(uint address, byte value);
 	}

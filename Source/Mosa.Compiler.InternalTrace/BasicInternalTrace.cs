@@ -7,8 +7,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-
-
 namespace Mosa.Compiler.InternalTrace
 {
 	public class BasicInternalTrace : IInternalTrace

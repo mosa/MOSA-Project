@@ -9,13 +9,12 @@
 
 namespace Pictor
 {
-
 	//=============================================================BinaryScanline
-	// 
-	// This is binary scaline container which supports the interface 
-	// used in the rasterizer::render(). See description of agg_scanline_u8 
+	//
+	// This is binary scaline container which supports the interface
+	// used in the rasterizer::render(). See description of agg_scanline_u8
 	// for details.
-	// 
+	//
 	//------------------------------------------------------------------------
 	public sealed class BinaryScanline : IScanline
 	{
@@ -84,6 +83,7 @@ namespace Pictor
 		}
 
 		/*
+
 		//--------------------------------------------------------------------
 		public void add_cells(int x, uint len, void*)
 		{
@@ -105,11 +105,16 @@ namespace Pictor
 		}
 
 		//--------------------------------------------------------------------
-		public int y() { return m_y; }
+		public int y()
+		{
+			return m_y;
+		}
+
 		public uint NumberOfSpans
 		{
 			get { return (uint)m_span_index; }
 		}
+
 		public ScanlineSpan Begin
 		{
 			get
@@ -125,8 +130,8 @@ namespace Pictor
 		}
 	};
 
-
 	/*
+
 //===========================================================scanline32_bin
 class scanline32_bin
 {
@@ -143,7 +148,6 @@ public:
 		coord_type len;
 	};
 	typedef pod_bvector<Span, 4> span_array_type;
-
 
 	//--------------------------------------------------------------------
 	class_iterator
@@ -163,7 +167,6 @@ public:
 		span_array_type& m_spans;
 		uint               m_span_idx;
 	};
-
 
 	//--------------------------------------------------------------------
 	scanline32_bin() : m_max_len(0), m_last_x(0x7FFFFFF0) {}
@@ -210,9 +213,9 @@ public:
 	}
 
 	//--------------------------------------------------------------------
-	void Finalize(int y) 
-	{ 
-		m_y = y; 
+	void Finalize(int y)
+	{
+		m_y = y;
 	}
 
 	//--------------------------------------------------------------------

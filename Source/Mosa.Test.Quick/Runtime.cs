@@ -34,6 +34,7 @@ namespace Mosa.Internal
 			void* memory = (void*)AllocateMemory(allocationSize);
 
 			uint* destination = (uint*)memory;
+
 			// FIXME: Memset((byte*)destination, 0, (int)allocationSize);
 			destination[0] = (uint)methodTable;
 			destination[1] = 0; // No sync block initially
@@ -71,6 +72,5 @@ namespace Mosa.Internal
 		{
 			return false; // TODO
 		}
-
 	}
 }

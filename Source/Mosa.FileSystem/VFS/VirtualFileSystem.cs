@@ -8,7 +8,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-
 namespace Mosa.FileSystem.VFS
 {
 	/// <summary>
@@ -20,7 +19,6 @@ namespace Mosa.FileSystem.VFS
 	/// </remarks>
 	public sealed class VirtualFileSystem : IFileSystem, IFileSystemService
 	{
-
 		#region Data members
 
 		/// <summary>
@@ -33,7 +31,7 @@ namespace Mosa.FileSystem.VFS
 		/// </summary>
 		private static DirectoryEntry rootNode;
 
-		#endregion // Data members
+		#endregion Data members
 
 		#region Construction
 
@@ -52,7 +50,7 @@ namespace Mosa.FileSystem.VFS
 			// FIXME: Add an entry of the virtual file system to /system/filesystems
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Static Properties
 
@@ -60,7 +58,7 @@ namespace Mosa.FileSystem.VFS
 		// we have a process structure supporting jails.
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public static DirectoryEntry RootDirectoryEntry
 		{
@@ -70,12 +68,12 @@ namespace Mosa.FileSystem.VFS
 			}
 		}
 
-		#endregion // Static members
+		#endregion Static Properties
 
 		#region Static Methods
 
 		/// <summary>
-		/// Checks if the caller has access to the inode 
+		/// Checks if the caller has access to the inode
 		/// </summary>
 		/// <param name="path">The resource to check permissions for.</param>
 		/// <param name="mode"></param>
@@ -116,6 +114,7 @@ namespace Mosa.FileSystem.VFS
 
 			// Yes, we do have write access. Create the new vfs node
 			IVfsNode node = parent.Node.Create(path, type, settings);
+
 			// FIXME: Assert(null != node);
 			DirectoryEntry entry = DirectoryEntry.Allocate(parent, path, node);
 
@@ -130,6 +129,7 @@ namespace Mosa.FileSystem.VFS
 		public static void ChangeDirectory(string path)
 		{
 			DirectoryEntry entry = PathResolver.Resolve(rootNode, ref path);
+
 			// FIXME: Set the current directory in the thread execution block
 		}
 
@@ -143,6 +143,7 @@ namespace Mosa.FileSystem.VFS
 			if (null != entry)
 			{
 				AccessCheck.Perform(entry, AccessMode.Delete, AccessCheckFlags.None);
+
 				//entry.Node.Delete();
 				entry.Parent.Node.Delete(entry.Node, entry);
 				entry.Release();
@@ -172,7 +173,7 @@ namespace Mosa.FileSystem.VFS
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="path"></param>
 		/// <param name="access"></param>
@@ -183,8 +184,8 @@ namespace Mosa.FileSystem.VFS
 			DirectoryEntry entry = PathResolver.Resolve(rootNode, ref path);
 
 			/* HINT:
-			 * 
-			 * 1. Do we really need to pass the FileShare flags down to the inode? 
+			 *
+			 * 1. Do we really need to pass the FileShare flags down to the inode?
 			 * 2. Shouldn't we have some sort of lock deamon governing shared access?
 			 *
 			 * Ansers:
@@ -206,9 +207,11 @@ namespace Mosa.FileSystem.VFS
 				case System.IO.FileAccess.Read:
 					modeFlags = AccessMode.Read;
 					break;
+
 				case System.IO.FileAccess.Write:
 					modeFlags = AccessMode.Write;
 					break;
+
 				case System.IO.FileAccess.ReadWrite:
 					modeFlags = AccessMode.Read | AccessMode.Write;
 					break;
@@ -220,13 +223,13 @@ namespace Mosa.FileSystem.VFS
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="old"></param>
 		/// <param name="newname"></param>
 		public static void Rename(string old, string newname)
 		{
-			// FIXME: 
+			// FIXME:
 			throw new System.NotImplementedException();
 		}
 
@@ -255,7 +258,7 @@ namespace Mosa.FileSystem.VFS
 		//}
 
 		/// <summary>
-		/// Retrieves a 
+		/// Retrieves a
 		/// </summary>
 		/// <param name="path"></param>
 		/// <returns></returns>
@@ -271,7 +274,7 @@ namespace Mosa.FileSystem.VFS
 		/// </summary>
 		/// <param name="path">The path identifying the filesystem to unmount.</param>
 		/// <remarks>
-		/// In contrast to Posix this does not have to be the root directory of the filesystem. Any path in the filesystem will unmount the 
+		/// In contrast to Posix this does not have to be the root directory of the filesystem. Any path in the filesystem will unmount the
 		/// entire tree.
 		/// </remarks>
 		/// FIXME: Which exceptions can be thrown.
@@ -279,11 +282,11 @@ namespace Mosa.FileSystem.VFS
 		/// FIXME: We need to check the FS tree for in use status and throw an InvalidOperationException?
 		public static void Unmount(string path)
 		{
-			// FIXME: 
+			// FIXME:
 			throw new System.NotImplementedException();
 		}
 
-		#endregion // Methods
+		#endregion Static Methods
 
 		#region IFileSystem Members
 
@@ -294,7 +297,7 @@ namespace Mosa.FileSystem.VFS
 			get { return VirtualFileSystem.rootDirectory; }
 		}
 
-		#endregion // IFileSystem Members
+		#endregion IFileSystem Members
 
 		#region IFileSystemService Members
 
@@ -312,6 +315,6 @@ namespace Mosa.FileSystem.VFS
 			throw new System.NotSupportedException();
 		}
 
-		#endregion // IFileSystemService Members
+		#endregion IFileSystemService Members
 	}
 }

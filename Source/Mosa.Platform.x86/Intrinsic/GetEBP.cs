@@ -20,7 +20,6 @@ namespace Mosa.Platform.x86.Intrinsic
 	/// </summary>
 	public class GetEBP : IIntrinsicPlatformMethod
 	{
-
 		#region Methods
 
 		/// <summary>
@@ -33,7 +32,6 @@ namespace Mosa.Platform.x86.Intrinsic
 			context.SetInstruction(IR.IRInstruction.Move, context.Result, Operand.CreateCPURegister(BuiltInSigType.UInt32, GeneralPurposeRegister.EBP));
 		}
 
-		#endregion // Methods
-
+		#endregion Methods
 	}
 }

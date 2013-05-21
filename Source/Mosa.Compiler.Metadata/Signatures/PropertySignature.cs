@@ -12,7 +12,7 @@ using System;
 namespace Mosa.Compiler.Metadata.Signatures
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public class PropertySignature : Signature
 	{

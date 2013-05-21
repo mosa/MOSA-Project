@@ -18,17 +18,17 @@ namespace Mosa.EmulatedDevices.Emulated
 	public class CMOS : IHardwareDevice, IIOPortDevice
 	{
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public const ushort StandardIOBase = 0x70;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected ushort ioBase;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected byte index = 0;
 
@@ -171,6 +171,7 @@ namespace Mosa.EmulatedDevices.Emulated
 				case 0x12: return 0;  // Hard Disk Types
 				case 0x13: return 0;  // Typematic Parameters
 				case 0x14: return 0x29;  // Equipment List (80 Column Display + Keyboard + Math Co + 1 Diskette Drive)
+
 				// TODO: And many more
 				default: return 0xFF;
 			}

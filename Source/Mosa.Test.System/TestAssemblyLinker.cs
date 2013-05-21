@@ -23,7 +23,7 @@ namespace Mosa.Test.System
 	/// respect to an executable format.
 	/// </summary>
 	/// <remarks>
-	/// It is similar to the Jit linker. TODO: Move most of this code to the Jit linker and reuse 
+	/// It is similar to the Jit linker. TODO: Move most of this code to the Jit linker and reuse
 	/// the Jit linker.
 	/// </remarks>
 	public class TestAssemblyLinker : BaseLinkerStage, IPipelineStage
@@ -37,7 +37,7 @@ namespace Mosa.Test.System
 
 		//private readonly AllocateMemoryDelegate allocateMemoryHandler;
 
-		#endregion // Data members
+		#endregion Data members
 
 		#region Construction
 
@@ -54,7 +54,7 @@ namespace Mosa.Test.System
 			//this.allocateMemoryHandler = new AllocateMemoryDelegate(global::Mosa.Test.System.HostedRuntime.AllocateMemory);
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region BaseLinkerStage Overrides
 
@@ -128,6 +128,7 @@ namespace Mosa.Test.System
 				VirtualMemoryStream vms = (VirtualMemoryStream)stream.BaseStream;
 				LinkerSymbol symbol = GetSymbol(name);
 				symbol.VirtualAddress = new IntPtr(vms.Base.ToInt64() + vms.Position);
+
 				//Trace.WriteLine("Symbol " + name + " located at 0x" + symbol.VirtualAddress.ToInt32().ToString("x08"));
 			}
 			catch
@@ -155,13 +156,16 @@ namespace Mosa.Test.System
 				case LinkType.RelativeOffset:
 					value = targetAddress - (methodAddress + methodRelativeBase);
 					break;
+
 				case LinkType.AbsoluteAddress:
 					value = targetAddress;
 					break;
+
 				default:
 					throw new NotSupportedException();
 			}
 			long address = methodAddress + methodOffset;
+
 			// Position is a raw memory virtualAddress, we're just storing value there
 			Debug.Assert(0 != value && value == (int)value);
 			int* pAddress = (int*)address;
@@ -181,6 +185,7 @@ namespace Mosa.Test.System
 			IntPtr allocate = Marshal.GetFunctionPointerForDelegate(handler);
 
 			long virtualAddress = allocate.ToInt64();
+
 			//Trace.WriteLine(String.Format("\t{0} at 0x{1:x08}", method, virtualAddress));
 
 			LinkerSymbol symbol = new LinkerSymbol(method, SectionKind.Text, virtualAddress);
@@ -208,6 +213,6 @@ namespace Mosa.Test.System
 			base.Run();
 		}
 
-		#endregion // BaseLinkerStage Overrides
+		#endregion BaseLinkerStage Overrides
 	}
 }

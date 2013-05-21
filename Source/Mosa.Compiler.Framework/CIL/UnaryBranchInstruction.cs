@@ -9,7 +9,6 @@
 
 using System;
 
-
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
@@ -31,7 +30,7 @@ namespace Mosa.Compiler.Framework.CIL
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Properties
 
@@ -46,7 +45,7 @@ namespace Mosa.Compiler.Framework.CIL
 		/// </remarks>
 		public override FlowControl FlowControl { get { return FlowControl.ConditionalBranch; } }
 
-		#endregion // Properties
+		#endregion Properties
 
 		#region Methods
 
@@ -118,6 +117,5 @@ namespace Mosa.Compiler.Framework.CIL
 		/// </summary>
 		/// <value></value>
 		public bool IsConditional { get { return true; } }
-
 	}
 }

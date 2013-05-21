@@ -6,6 +6,7 @@
  * Authors:
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  */
+
 namespace Pictor.VertexSource
 {
 	///<summary>
@@ -16,6 +17,7 @@ namespace Pictor.VertexSource
 		///</summary>
 		///<param name="pathId"></param>
 		void Rewind(uint pathId);
+
 		///<summary>
 		///</summary>
 		///<param name="x"></param>

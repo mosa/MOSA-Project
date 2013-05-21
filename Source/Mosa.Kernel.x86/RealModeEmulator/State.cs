@@ -91,8 +91,10 @@ namespace Mosa.Kernel.x86.RealModeEmulator
             public uint AddressSS { get { return SegmentAddress; } }
             public uint AddressDS { get { return SegmentAddress + 4; } }
             public uint AddressES { get { return SegmentAddress + 8; } }
-            public uint AddressCS { get { return SegmentAddress + 12; } }
-            public uint AddressIP { get { return SegmentAddress + 16; } }
+            public uint AddressFS { get { return SegmentAddress + 12; } }
+            public uint AddressGS { get { return SegmentAddress + 16; } }
+            public uint AddressCS { get { return SegmentAddress + 20; } }
+            public uint AddressIP { get { return SegmentAddress + 24; } }
 
             /// <summary>
             /// Stack Segment
@@ -122,12 +124,30 @@ namespace Mosa.Kernel.x86.RealModeEmulator
             }
 
             /// <summary>
+            /// Extra Segment 2
+            /// </summary>
+            public ushort FS
+            {
+                get { return Native.Get16(SegmentAddress + 12); }
+                set { Native.Set16(SegmentAddress + 12, value); }
+            }
+
+            /// <summary>
+            /// Extra Segment 3
+            /// </summary>
+            public ushort GS
+            {
+                get { return Native.Get16(SegmentAddress + 16); }
+                set { Native.Set16(SegmentAddress + 16, value); }
+            }
+
+            /// <summary>
             /// Code Segment
             /// </summary>
             public ushort CS
             {
-                get { return Native.Get16(SegmentAddress + 12); }
-                set { Native.Set16(SegmentAddress + 12, value); }
+                get { return Native.Get16(SegmentAddress + 20); }
+                set { Native.Set16(SegmentAddress + 20, value); }
             }
 
             /// <summary>
@@ -135,8 +155,8 @@ namespace Mosa.Kernel.x86.RealModeEmulator
             /// </summary>
             public ushort IP
             {
-                get { return Native.Get16(SegmentAddress + 16); }
-                set { Native.Set16(SegmentAddress + 16, value); }
+                get { return Native.Get16(SegmentAddress + 24); }
+                set { Native.Set16(SegmentAddress + 24, value); }
             }
 
             /// <summary>
@@ -145,9 +165,9 @@ namespace Mosa.Kernel.x86.RealModeEmulator
             public ushort Flags;
 
             /// <summary>
-            /// 1MB of mode address space for the emulator
+            /// Memory address of the assigned 1MB
             /// </summary>
-            public unsafe uint* Memory;
+            public unsafe uint Memory;
 
             /// <summary>
             /// Total Executed Instructions

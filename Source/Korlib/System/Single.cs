@@ -10,7 +10,7 @@
 namespace System
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public struct Single
 	{
@@ -70,6 +70,7 @@ namespace System
 			else
 				return 0;
 		}
+
 		public bool Equals(float value)
 		{
 			//return Equals((object)obj);

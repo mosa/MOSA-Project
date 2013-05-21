@@ -13,13 +13,11 @@ using Mosa.Compiler.Metadata;
 
 namespace Mosa.Compiler.Framework.Platform
 {
-
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public abstract class BasePlatformTransformationStage : BaseCodeTransformationStage
 	{
-
 		#region Common Internals
 
 		/// <summary>
@@ -191,6 +189,6 @@ namespace Mosa.Compiler.Framework.Platform
 			return operand.Type.Type == CilElementType.Ptr;
 		}
 
-		#endregion // Common Internals
+		#endregion Common Internals
 	}
 }

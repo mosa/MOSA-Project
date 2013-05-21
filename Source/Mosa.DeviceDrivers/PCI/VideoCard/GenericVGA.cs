@@ -11,7 +11,7 @@ using Mosa.DeviceSystem;
 
 /*
  * Portions of this device driver was adapted from:
- * 
+ *
  * Sets VGA-compatible video modes without using the BIOS
  * Chris Giese <geezer@execpc.com>	http://www.execpc.com/~geezer
  * This code is public domain (no copyright).
@@ -51,127 +51,149 @@ namespace Mosa.DeviceDrivers.PCI.VideoCard
 			internal const byte LightPenLow = 0x11;
 		}
 
-		#endregion
+		#endregion Definitions
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IWriteOnlyIOPort miscellaneousOutputWrite;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IReadWriteIOPort crtControllerIndex;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IReadWriteIOPort crtControllerData;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IReadWriteIOPort crtControllerIndexColor;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IReadWriteIOPort crtControllerDataColor;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IReadWriteIOPort dacPaletteMask;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IReadWriteIOPort dacIndexWrite;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IReadWriteIOPort dacIndexRead;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IReadWriteIOPort dacData;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IReadOnlyIOPort inputStatus1;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IReadOnlyIOPort miscellaneousOutputRead;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IReadWriteIOPort sequencerAddress;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IReadWriteIOPort sequencerData;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IReadWriteIOPort graphicsControllerAddress;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IReadWriteIOPort graphicsControllerData;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IMemory memory;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IReadWriteIOPort activeControllerIndex;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IReadWriteIOPort activeControllerData;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IReadWriteIOPort inputStatus1ReadB;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IReadWriteIOPort attributeAddress;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IReadWriteIOPort attributeData;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected uint offset = 0x8000;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected ushort width;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected ushort height;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected ushort colors;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private enum WriteMethod : byte { Pixel1, Pixel2, Pixel4p, Pixel8, Pixel8x };
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private WriteMethod writeMethod;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="GenericVGA"/> class.
 		/// </summary>
-		public GenericVGA() { }
+		public GenericVGA()
+		{
+		}
 
 		/// <summary>
 		/// Setups this hardware device driver
@@ -224,7 +246,10 @@ namespace Mosa.DeviceDrivers.PCI.VideoCard
 		/// Called when an interrupt is received.
 		/// </summary>
 		/// <returns></returns>
-		public override bool OnInterrupt() { return true; }
+		public override bool OnInterrupt()
+		{
+			return true;
+		}
 
 		/// <summary>
 		/// Sends the command.
@@ -270,6 +295,7 @@ namespace Mosa.DeviceDrivers.PCI.VideoCard
 				else
 					memory.Write8((uint)(address & 0x0F), (byte)(colorIndex));
 			}
+
 			// TODO: Support more video modes
 		}
 
@@ -285,6 +311,7 @@ namespace Mosa.DeviceDrivers.PCI.VideoCard
 			{
 				return memory.Read8((uint)(y * 320 + x));
 			}
+
 			// TODO: Support more video modes
 			return 0;
 		}
@@ -369,31 +396,31 @@ namespace Mosa.DeviceDrivers.PCI.VideoCard
 				sequencerData.Write8(settings[1 + i]);
 			}
 
-			// Unlock CRTC registers 
+			// Unlock CRTC registers
 			crtControllerIndexColor.Write8(0x03);
 			crtControllerDataColor.Write8((byte)(crtControllerData.Read8() | 0x80));
 			crtControllerIndexColor.Write8(0x11);
 			crtControllerDataColor.Write8((byte)(crtControllerData.Read8() & ~0x80));
 
-			// Make sure they remain unlocked 
+			// Make sure they remain unlocked
 			settings[0x03] = (byte)(settings[0x03] | 0x80);
 			settings[0x11] = (byte)(settings[0x11] & ~0x80);
 
-			// Write CRTC regs 
+			// Write CRTC regs
 			for (byte i = 0; i < 25; i++)
 			{
 				crtControllerIndexColor.Write8(i);
 				crtControllerDataColor.Write8(settings[6 + i]);
 			}
 
-			// Write GRAPHICS CONTROLLER regs 
+			// Write GRAPHICS CONTROLLER regs
 			for (byte i = 0; i < 9; i++)
 			{
 				graphicsControllerAddress.Write8(i);
 				graphicsControllerData.Write8(settings[31 + i]);
 			}
 
-			// Write ATTRIBUTE CONTROLLER regs 
+			// Write ATTRIBUTE CONTROLLER regs
 			for (byte i = 0; i < 21; i++)
 			{
 				inputStatus1ReadB.Read8();
@@ -417,9 +444,11 @@ namespace Mosa.DeviceDrivers.PCI.VideoCard
 			{
 				case 4: { WriteSettings(VGA320x200x4); width = 320; height = 200; colors = 4; writeMethod = WriteMethod.Pixel2; return true; }
 				case 5: { WriteSettings(VGA320x200x4); width = 320; height = 200; colors = 4; writeMethod = WriteMethod.Pixel2; return true; }
+
 				//case 11: { WriteSettings(VGA640x480x2); width = 640; height = 480; colors = 2; writeMethod = WriteMethod.xxx; return true; }
 				//case 12: { WriteSettings(VGA640x480x16); width = 640; height = 480; colors = 16; writeMethod = WriteMethod.xxx; return true; }
 				case 13: { WriteSettings(VGA320x200x256); width = 320; height = 200; colors = 256; writeMethod = WriteMethod.Pixel8; return true; }
+
 				// Custom Standard Modes:
 				//case 99: { WriteSettings(VGA720x480x16); width = 720; height = 480; colors = 16; writeMethod = WriteMethod.xxx; return true; }
 				default: { return false; }
@@ -523,6 +552,6 @@ namespace Mosa.DeviceDrivers.PCI.VideoCard
 			0x01, 0x00, 0x0F, 0x00, 0x00
 		};
 
-		#endregion
+		#endregion Modes
 	}
 }

@@ -11,14 +11,13 @@ using Mosa.ClassLib;
 
 namespace Mosa.FileSystem.FAT.Find
 {
-
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public class WithName : FatFileSystem.ICompare
 	{
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected string name;
 

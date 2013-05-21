@@ -16,12 +16,11 @@ namespace Mosa.Platform.x86.Instructions
 	/// </summary>
 	public sealed class AddSD : TwoOperandInstruction
 	{
-
 		#region Data Members
 
 		private static readonly OpCode opcode = new OpCode(new byte[] { 0xF2, 0x0F, 0x58 });
 
-		#endregion // Data Members
+		#endregion Data Members
 
 		#region Methods
 
@@ -33,9 +32,10 @@ namespace Mosa.Platform.x86.Instructions
 		/// <param name="third">The third operand.</param>
 		/// <returns></returns>
 		protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
-		{			
+		{
 			return opcode;
 		}
+
 		/// <summary>
 		/// Allows visitor based dispatch for this instruction object.
 		/// </summary>
@@ -46,7 +46,6 @@ namespace Mosa.Platform.x86.Instructions
 			visitor.AddSs(context);
 		}
 
-		#endregion
-
+		#endregion Methods
 	}
 }

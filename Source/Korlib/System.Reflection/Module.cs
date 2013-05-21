@@ -11,6 +11,5 @@ namespace System.Reflection
 {
 	public class Module
 	{
-
 	}
 }

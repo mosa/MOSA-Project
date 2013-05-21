@@ -33,7 +33,7 @@ namespace Mosa.Compiler.Metadata.Signatures
 		/// </summary>
 		private SigType[] genericArguments;
 
-		#endregion // Data members
+		#endregion Data members
 
 		#region Construction
 
@@ -50,7 +50,7 @@ namespace Mosa.Compiler.Metadata.Signatures
 			this.containsGenericParameters = CheckContainsOpenGenericParameters();
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Properties
 
@@ -81,7 +81,7 @@ namespace Mosa.Compiler.Metadata.Signatures
 			get { return containsGenericParameters; }
 		}
 
-		#endregion // Properties
+		#endregion Properties
 
 		#region SigType Overrides
 
@@ -107,6 +107,7 @@ namespace Mosa.Compiler.Metadata.Signatures
 
 			if (!SigType.Equals(this.genericArguments, gist.genericArguments))
 				return false;
+
 			// END TEMP
 
 			return (base.Equals(other) && this.baseType == gist.baseType && SigType.Equals(this.genericArguments, gist.genericArguments));
@@ -123,7 +124,7 @@ namespace Mosa.Compiler.Metadata.Signatures
 			return base.ToString() + " " + baseType.ToString();
 		}
 
-		#endregion // SigType Overrides
+		#endregion SigType Overrides
 
 		/// <summary>
 		/// Expresses the generic instance type in a meaningful, symbol-friendly string form

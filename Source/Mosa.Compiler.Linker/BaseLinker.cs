@@ -48,18 +48,18 @@ namespace Mosa.Compiler.Linker
 		/// A dictionary containing all symbol seen in the assembly.
 		/// </summary>
 		private readonly Dictionary<string, LinkerSymbol> symbols;
-	
+
 		/// <summary>
 		/// Flag is the target platform is little-endian
 		/// </summary>
 		protected bool IsLittleEndian;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected MachineType Machine;
 
-		#endregion // Data members
+		#endregion Data members
 
 		#region Construction
 
@@ -73,7 +73,7 @@ namespace Mosa.Compiler.Linker
 			symbols = new Dictionary<string, LinkerSymbol>();
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		/// <summary>
 		/// Performs stage specific processing on the compiler context.
@@ -122,7 +122,7 @@ namespace Mosa.Compiler.Linker
 		/// <param name="targetAddress">The position in code, where it should be patched.</param>
 		protected abstract void ApplyPatch(LinkType linkType, long methodAddress, long methodOffset, long methodRelativeBase, long targetAddress);
 
-		#endregion // Methods
+		#endregion Methods
 
 		#region ILinker Members
 
@@ -209,7 +209,7 @@ namespace Mosa.Compiler.Linker
 
 				// Create a linker symbol for the name
 				LinkerSymbol symbol = new LinkerSymbol(name, section, baseStream.Position);
-				
+
 				// Save the symbol for later use
 				if (!symbols.ContainsKey(symbol.Name)) // FIXME: Remove this line when generic patch is fixed! It duplicates generic types
 					symbols.Add(symbol.Name, symbol);
@@ -223,7 +223,6 @@ namespace Mosa.Compiler.Linker
 			{
 				throw new LinkerException(String.Format(@"Symbol {0} defined multiple times.", name), argx);
 			}
-
 		}
 
 		/// <summary>
@@ -303,7 +302,7 @@ namespace Mosa.Compiler.Linker
 			list.Add(new LinkRequest(linkType, symbolName, methodOffset, methodRelativeBase, targetSymbol, offset));
 		}
 
-		#endregion // ILinker Members
+		#endregion ILinker Members
 
 		#region Internals
 
@@ -352,6 +351,6 @@ namespace Mosa.Compiler.Linker
 			}
 		}
 
-		#endregion // Internals
+		#endregion Internals
 	}
 }

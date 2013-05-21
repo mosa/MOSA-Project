@@ -12,13 +12,11 @@ using Mosa.Compiler.Metadata.Signatures;
 
 namespace Mosa.Compiler.Framework
 {
-
 	/// <summary>
 	/// Implements a basic framework for architectures.
 	/// </summary>
 	public abstract class BasicArchitecture : IArchitecture
 	{
-
 		/// <summary>
 		/// Holds the calling conversion
 		/// </summary>

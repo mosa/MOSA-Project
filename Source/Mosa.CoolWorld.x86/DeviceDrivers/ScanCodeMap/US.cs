@@ -238,7 +238,6 @@ namespace Mosa.DeviceDrivers.ScanCodeMap
 			{
 				if (scancode == 0xE0)
 				{
-
 					key.KeyType = KeyType.RegularKey;
 
 					if (((scancode & 0x80) != 0) || (keyState == KeyState.EscapeBreak))

@@ -10,7 +10,7 @@
 namespace System.IO
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public enum FileAccess
 	{
@@ -18,10 +18,12 @@ namespace System.IO
 		/// Read
 		/// </summary>
 		Read,
+
 		/// <summary>
 		/// Write
 		/// </summary>
 		Write,
+
 		/// <summary>
 		/// Read and Write
 		/// </summary>

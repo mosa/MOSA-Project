@@ -7,36 +7,35 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-
 namespace Mosa.DeviceSystem
 {
 	/// <summary>
-	/// Implements a key 
+	/// Implements a key
 	/// </summary>
 	public class Key
 	{
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected KeyType keyType;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected char character;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected bool control;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected bool alt;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected bool shift;
 
@@ -85,7 +84,7 @@ namespace Mosa.DeviceSystem
 		/// <summary>
 		/// Gets or sets a value indicating whether the alt key is pressed.
 		/// </summary>
-		/// <value><c>true</c> if alt key pressed; otherwise, <c>false</c>.</value>	
+		/// <value><c>true</c> if alt key pressed; otherwise, <c>false</c>.</value>
 		public bool Alt { get { return alt; } set { alt = value; } }
 
 		/// <summary>
@@ -94,6 +93,4 @@ namespace Mosa.DeviceSystem
 		/// <value><c>true</c> if shift key pressed; otherwise, <c>false</c>.</value>
 		public bool Shift { get { return shift; } set { shift = value; } }
 	}
-
-
 }

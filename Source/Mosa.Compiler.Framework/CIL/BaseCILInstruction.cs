@@ -7,11 +7,10 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public abstract class BaseCILInstruction : BaseInstruction
 	{
@@ -22,7 +21,7 @@ namespace Mosa.Compiler.Framework.CIL
 		/// </summary>
 		protected readonly OpCode opcode;
 
-		#endregion // Data members
+		#endregion Data members
 
 		#region Properties
 
@@ -32,7 +31,7 @@ namespace Mosa.Compiler.Framework.CIL
 		/// <value>The op code.</value>
 		public OpCode OpCode { get { return opcode; } }
 
-		#endregion // Properties
+		#endregion Properties
 
 		#region Construction
 
@@ -69,7 +68,7 @@ namespace Mosa.Compiler.Framework.CIL
 			this.opcode = opCode;
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Methods
 
@@ -129,6 +128,6 @@ namespace Mosa.Compiler.Framework.CIL
 			return "CIL." + code;
 		}
 
-		#endregion //  Overrides
+		#endregion Methods
 	}
 }

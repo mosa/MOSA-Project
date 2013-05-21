@@ -19,7 +19,6 @@ namespace Mosa.Compiler.Linker
 	/// </summary>
 	public static class LinkTimeCodeGenerator
 	{
-
 		#region Methods
 
 		/// <summary>
@@ -79,6 +78,6 @@ namespace Mosa.Compiler.Linker
 			return method;
 		}
 
-		#endregion // Methods
+		#endregion Methods
 	}
 }

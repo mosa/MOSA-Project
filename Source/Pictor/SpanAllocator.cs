@@ -6,6 +6,7 @@
  * Authors:
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  */
+
 namespace Pictor
 {
 	//----------------------------------------------------------SpanAllocator
@@ -23,8 +24,8 @@ namespace Pictor
 		{
 			if (span_len > m_span.Size)
 			{
-				// To reduce the number of reallocs we align the 
-				// span_len to 256 Color elements. 
+				// To reduce the number of reallocs we align the
+				// span_len to 256 Color elements.
 				// Well, I just like this number and it looks reasonable.
 				//-----------------------
 				m_span.Resize((((int)span_len + 255) >> 8) << 8);
@@ -36,6 +37,7 @@ namespace Pictor
 		{
 			get { return m_span; }
 		}
+
 		public uint MaximalSpanLength
 		{
 			get { return m_span.Size; }

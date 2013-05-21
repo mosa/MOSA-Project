@@ -10,7 +10,6 @@
 using System;
 using System.Diagnostics;
 
-
 namespace Mosa.Compiler.InternalTrace
 {
 	public class BasicCompilerEventListener : ICompilerEventListener
@@ -115,7 +114,6 @@ namespace Mosa.Compiler.InternalTrace
 
 				default: break;
 			}
-
 		}
 	}
 }

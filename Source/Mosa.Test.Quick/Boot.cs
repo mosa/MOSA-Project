@@ -7,13 +7,11 @@
 
 namespace Mosa.Test.Quick
 {
-
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public static class Boot
 	{
-
 		/// <summary>
 		///
 		/// </summary>

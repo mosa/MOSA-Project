@@ -6,6 +6,7 @@
  * Authors:
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  */
+
 using System;
 using System.IO;
 
@@ -13,7 +14,7 @@ namespace Pictor
 {
 	static public class DebugFile
 	{
-		static bool m_FileOpenedOnce = false;
+		private static bool m_FileOpenedOnce = false;
 
 		public static void Print(String message)
 		{
@@ -65,7 +66,6 @@ namespace Pictor
 			{
 				throw new System.NotImplementedException();
 			}
-
 		}
 
 		public static unsafe void memset(Byte* pDest, byte ByteVal, int Count)
@@ -138,7 +138,7 @@ namespace Pictor
 		}
 
 		//------------------------------------------------------------IsEqualEps
-		//template<class T> 
+		//template<class T>
 		public static bool IsEqualEps(double v1, double v2, double epsilon)
 		{
 			return Math.Abs(v1 - v2) <= (double)(epsilon);
@@ -184,18 +184,17 @@ namespace Pictor
 		}
 
 		//----------------------------------------------------PolySubpixelScale
-		// These constants determine the subpixel accuracy, to be more precise, 
-		// the number of bits of the fractional part of the Coordinates. 
+		// These constants determine the subpixel accuracy, to be more precise,
+		// the number of bits of the fractional part of the Coordinates.
 		// The possible coordinate capacity in bits can be calculated by formula:
 		// sizeof(int) * 8 - Shift, i.e, for 32-bit integers and
 		// 8-bits fractional part the capacity is 24 bits.
 		public enum PolySubpixelScale
 		{
 			Shift = 8,                      //----Shift
-			Scale = 1 << Shift, //----Scale 
-			Mask = Scale - 1,  //----Mask 
+			Scale = 1 << Shift, //----Scale
+			Mask = Scale - 1,  //----Mask
 		};
-
 	};
 
 	public struct RectI
@@ -300,9 +299,10 @@ namespace Pictor
 			y1 = r1.y1;
 			x2 = r1.x2;
 			x2 = r1.y2;
-			// First process m_x2,m_y2 because the other order 
-			// results in Internal Compiler Error under 
-			// Microsoft Visual C++ .NET 2003 69462-335-0000007-18038 in 
+
+			// First process m_x2,m_y2 because the other order
+			// results in Internal Compiler Error under
+			// Microsoft Visual C++ .NET 2003 69462-335-0000007-18038 in
 			// case of "Maximize Speed" optimization option.
 			//-----------------
 			if (x2 > r2.x2) x2 = r2.x2;
@@ -310,7 +310,6 @@ namespace Pictor
 			if (x1 < r2.x1) x1 = r2.x1;
 			if (y1 < r2.y1) y1 = r2.y1;
 		}
-
 
 		//---------------------------------------------------------UniteRectangles
 		public void UniteRectangles(RectI r1, RectI r2)
@@ -494,9 +493,10 @@ namespace Pictor
 			m_y1 = r1.y1;
 			m_x2 = r1.x2;
 			m_x2 = r1.y2;
-			// First process m_x2,m_y2 because the other order 
-			// results in Internal Compiler Error under 
-			// Microsoft Visual C++ .NET 2003 69462-335-0000007-18038 in 
+
+			// First process m_x2,m_y2 because the other order
+			// results in Internal Compiler Error under
+			// Microsoft Visual C++ .NET 2003 69462-335-0000007-18038 in
 			// case of "Maximize Speed" optimization option.
 			//-----------------
 			if (m_x2 > r2.x2) m_x2 = r2.x2;
@@ -504,7 +504,6 @@ namespace Pictor
 			if (m_x1 < r2.x1) m_x1 = r2.x1;
 			if (m_y1 < r2.y1) m_y1 = r2.y1;
 		}
-
 
 		//---------------------------------------------------------UniteRectangles
 		public void UniteRectangles(RectD r1, RectD r2)
@@ -533,26 +532,26 @@ namespace Pictor
 		//---------------------------------------------------------EPathCommands
 		public enum EPathCommands
 		{
-			Stop = 0,        //----Stop    
-			MoveTo = 1,        //----MoveTo 
-			LineTo = 2,        //----LineTo 
-			Curve3 = 3,        //----Curve3  
-			Curve4 = 4,        //----Curve4  
+			Stop = 0,        //----Stop
+			MoveTo = 1,        //----MoveTo
+			LineTo = 2,        //----LineTo
+			Curve3 = 3,        //----Curve3
+			Curve4 = 4,        //----Curve4
 			CurveN = 5,        //----CurveN
 			Catrom = 6,        //----Catrom
 			UBSpline = 7,        //----UBSpline
 			EndPoly = 0x0F,     //----EndPoly
-			Mask = 0x0F      //----Mask    
+			Mask = 0x0F      //----Mask
 		};
 
 		//------------------------------------------------------------EPathFlags
 		public enum EPathFlags
 		{
-			None = 0,         //----None 
-			CounterClockwise = 0x10,      //----CounterClockwise  
-			Clockwise = 0x20,      //----Clockwise   
+			None = 0,         //----None
+			CounterClockwise = 0x10,      //----CounterClockwise
+			Clockwise = 0x20,      //----Clockwise
 			Close = 0x40,      //----Close
-			Mask = 0xF0       //----Mask 
+			Mask = 0xF0       //----Mask
 		};
 
 		//---------------------------------------------------------------IsVertex
@@ -667,6 +666,7 @@ namespace Pictor
 		}
 
 		/*
+
 		//---------------------------------------------------------set_orientation
 		public static EPathCommands set_orientation(uint c, EPathFlags o)
 		{
@@ -743,6 +743,7 @@ namespace Pictor
 	public struct PointD
 	{
 		public double x, y;
+
 		public PointD(double x_, double y_)
 		{
 			x = x_;

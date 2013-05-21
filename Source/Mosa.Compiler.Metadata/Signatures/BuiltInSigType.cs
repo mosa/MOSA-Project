@@ -1,5 +1,3 @@
-
-
 namespace Mosa.Compiler.Metadata.Signatures
 {
 	public class BuiltInSigType : SigType
@@ -51,6 +49,5 @@ namespace Mosa.Compiler.Metadata.Signatures
 		}
 
 		public string TypeName { get { return this.typeName; } }
-
 	}
 }

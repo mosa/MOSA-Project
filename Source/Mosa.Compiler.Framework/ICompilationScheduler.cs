@@ -10,7 +10,6 @@ using Mosa.Compiler.TypeSystem;
 
 namespace Mosa.Compiler.Framework
 {
-
 	public interface ICompilationScheduler
 	{
 		/// <summary>

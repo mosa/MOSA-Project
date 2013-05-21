@@ -17,7 +17,6 @@ namespace Mosa.FileSystem.VFS
 	/// </summary>
 	public abstract class NodeBase : IVfsNode
 	{
-
 		#region Data members
 
 		/// <summary>
@@ -30,9 +29,10 @@ namespace Mosa.FileSystem.VFS
 		/// </summary>
 		private VfsNodeType type;
 
-		#endregion // Data members
+		#endregion Data members
 
 		#region Construction
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="NodeBase"/> class.
 		/// </summary>
@@ -44,9 +44,10 @@ namespace Mosa.FileSystem.VFS
 			this.type = type;
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region IVfsNode members
+
 		/// <summary>
 		/// Gets the file system.
 		/// </summary>
@@ -105,6 +106,6 @@ namespace Mosa.FileSystem.VFS
 		/// <param name="entry">The entry.</param>
 		public abstract void Delete(IVfsNode child, DirectoryEntry entry);
 
-		#endregion // IVfsNode members
+		#endregion IVfsNode members
 	}
 }

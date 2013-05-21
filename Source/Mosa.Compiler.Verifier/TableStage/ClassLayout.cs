@@ -72,7 +72,7 @@ namespace Mosa.Compiler.Verifier.TableStage
 				if ((typeDefRow.Flags & TypeAttributes.LayoutMask) == TypeAttributes.ExplicitLayout)
 				{
 					//	o if Parent indexes a ValueType, then ClassSize shall be less than 1 MByte (0x100000 bytes) [ERROR]
-					
+
 					//	o PackingSize shall be 0. (It makes no sense to provide explicit offsets for each field, as well as a packing size.) [ERROR]
 					if (row.PackingSize != 0)
 					{
@@ -83,10 +83,7 @@ namespace Mosa.Compiler.Verifier.TableStage
 				//6. Note that an ExplicitLayout type might result in a verifiable type, provided the layout does not create a type whose fields overlap.
 
 				//7. Layout along the length of an inheritance chain shall follow the rules specified above (starting at ‘highest’ Type, with no ‘holes’, etc.) [ERROR]
-
 			}
 		}
-
 	}
 }
-

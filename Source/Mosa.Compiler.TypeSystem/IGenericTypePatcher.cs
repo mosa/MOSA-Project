@@ -7,7 +7,6 @@
  *  Simon Wollwage (rootnode) <rootnode@mosa-project.org>
  */
 
-
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Compiler.TypeSystem.Generic;
@@ -15,7 +14,7 @@ using Mosa.Compiler.TypeSystem.Generic;
 namespace Mosa.Compiler.TypeSystem
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public interface IGenericTypePatcher
 	{
@@ -27,6 +26,7 @@ namespace Mosa.Compiler.TypeSystem
 		/// <param name="openType">Type of the open.</param>
 		/// <returns></returns>
 		RuntimeType PatchType(ITypeModule typeModule, CilGenericType enclosingType, CilGenericType openType);
+
 		/// <summary>
 		/// Patches the field.
 		/// </summary>
@@ -35,6 +35,7 @@ namespace Mosa.Compiler.TypeSystem
 		/// <param name="openField">The open field.</param>
 		/// <returns></returns>
 		RuntimeField PatchField(ITypeModule typeModule, CilGenericType closedType, RuntimeField openField);
+
 		/// <summary>
 		/// Patches the method.
 		/// </summary>
@@ -43,12 +44,14 @@ namespace Mosa.Compiler.TypeSystem
 		/// <param name="openMethod">The open method.</param>
 		/// <returns></returns>
 		RuntimeMethod PatchMethod(ITypeModule typeModule, CilGenericType enclosingType, RuntimeMethod openMethod);
+
 		/// <summary>
 		/// Patches the type of the signature.
 		/// </summary>
 		/// <param name="token">The token.</param>
 		/// <returns></returns>
 		SigType PatchSignatureType(ITypeModule typemodule, RuntimeType enclosingType, Token token);
+
 		/// <summary>
 		/// Closes the generic arguments.
 		/// </summary>

@@ -7,7 +7,6 @@
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  */
 
-
 namespace Pictor
 {
 	/*
@@ -16,12 +15,13 @@ namespace Pictor
 	class distance_interpolator0
 	{
 	public:
+
 		//---------------------------------------------------------------------
 		distance_interpolator0() {}
 		distance_interpolator0(int x1, int y1, int x2, int y2, int x, int y) :
 			m_dx(line_mr(x2) - line_mr(x1)),
 			m_dy(line_mr(y2) - line_mr(y1)),
-			m_dist((line_mr(x + line_subpixel_scale/2) - line_mr(x2)) * m_dy - 
+			m_dist((line_mr(x + line_subpixel_scale/2) - line_mr(x2)) * m_dy -
 				   (line_mr(y + line_subpixel_scale/2) - line_mr(y2)) * m_dx)
 		{
 			m_dx <<= line_mr_subpixel_shift;
@@ -33,6 +33,7 @@ namespace Pictor
 		int  dist() { return m_dist; }
 
 	private:
+
 		//---------------------------------------------------------------------
 		int m_dx;
 		int m_dy;
@@ -43,18 +44,19 @@ namespace Pictor
 	class distance_interpolator00
 	{
 	public:
+
 		//---------------------------------------------------------------------
 		distance_interpolator00() {}
-		distance_interpolator00(int xc, int yc, 
-								int x1, int y1, int x2, int y2, 
+		distance_interpolator00(int xc, int yc,
+								int x1, int y1, int x2, int y2,
 								int x,  int y) :
 			m_dx1(line_mr(x1) - line_mr(xc)),
 			m_dy1(line_mr(y1) - line_mr(yc)),
 			m_dx2(line_mr(x2) - line_mr(xc)),
 			m_dy2(line_mr(y2) - line_mr(yc)),
-			m_dist1((line_mr(x + line_subpixel_scale/2) - line_mr(x1)) * m_dy1 - 
+			m_dist1((line_mr(x + line_subpixel_scale/2) - line_mr(x1)) * m_dy1 -
 					(line_mr(y + line_subpixel_scale/2) - line_mr(y1)) * m_dx1),
-			m_dist2((line_mr(x + line_subpixel_scale/2) - line_mr(x2)) * m_dy2 - 
+			m_dist2((line_mr(x + line_subpixel_scale/2) - line_mr(x2)) * m_dy2 -
 					(line_mr(y + line_subpixel_scale/2) - line_mr(y2)) * m_dx2)
 		{
 			m_dx1 <<= line_mr_subpixel_shift;
@@ -69,6 +71,7 @@ namespace Pictor
 		int  dist2() { return m_dist2; }
 
 	private:
+
 		//---------------------------------------------------------------------
 		int m_dx1;
 		int m_dy1;
@@ -82,12 +85,13 @@ namespace Pictor
 	class distance_interpolator1
 	{
 	public:
+
 		//---------------------------------------------------------------------
 		distance_interpolator1() {}
 		distance_interpolator1(int x1, int y1, int x2, int y2, int x, int y) :
 			m_dx(x2 - x1),
 			m_dy(y2 - y1),
-			m_dist(Round(double(x + line_subpixel_scale/2 - x2) * double(m_dy) - 
+			m_dist(Round(double(x + line_subpixel_scale/2 - x2) * double(m_dy) -
 						  double(y + line_subpixel_scale/2 - y2) * double(m_dx)))
 		{
 			m_dx <<= line_subpixel_shift;
@@ -103,33 +107,34 @@ namespace Pictor
 		//---------------------------------------------------------------------
 		void inc_x(int dy)
 		{
-			m_dist += m_dy; 
-			if(dy > 0) m_dist -= m_dx; 
-			if(dy < 0) m_dist += m_dx; 
+			m_dist += m_dy;
+			if(dy > 0) m_dist -= m_dx;
+			if(dy < 0) m_dist += m_dx;
 		}
 
 		//---------------------------------------------------------------------
 		void dec_x(int dy)
 		{
-			m_dist -= m_dy; 
-			if(dy > 0) m_dist -= m_dx; 
-			if(dy < 0) m_dist += m_dx; 
+			m_dist -= m_dy;
+			if(dy > 0) m_dist -= m_dx;
+			if(dy < 0) m_dist += m_dx;
 		}
 
 		//---------------------------------------------------------------------
 		void inc_y(int dx)
 		{
-			m_dist -= m_dx; 
-			if(dx > 0) m_dist += m_dy; 
-			if(dx < 0) m_dist -= m_dy; 
+			m_dist -= m_dx;
+			if(dx > 0) m_dist += m_dy;
+			if(dx < 0) m_dist -= m_dy;
 		}
 
 		void dec_y(int dx)
+
 		//---------------------------------------------------------------------
 		{
-			m_dist += m_dx; 
-			if(dx > 0) m_dist += m_dy; 
-			if(dx < 0) m_dist -= m_dy; 
+			m_dist += m_dx;
+			if(dx > 0) m_dist += m_dy;
+			if(dx < 0) m_dist -= m_dy;
 		}
 
 		//---------------------------------------------------------------------
@@ -138,20 +143,18 @@ namespace Pictor
 		int dy()   { return m_dy;   }
 
 	private:
+
 		//---------------------------------------------------------------------
 		int m_dx;
 		int m_dy;
 		int m_dist;
 	};
 
-
-
-
-
 	//===================================================distance_interpolator2
 	class distance_interpolator2
 	{
 	public:
+
 		//---------------------------------------------------------------------
 		distance_interpolator2() {}
 		distance_interpolator2(int x1, int y1, int x2, int y2,
@@ -161,10 +164,10 @@ namespace Pictor
 			m_dx_start(line_mr(sx) - line_mr(x1)),
 			m_dy_start(line_mr(sy) - line_mr(y1)),
 
-			m_dist(Round(double(x + line_subpixel_scale/2 - x2) * double(m_dy) - 
+			m_dist(Round(double(x + line_subpixel_scale/2 - x2) * double(m_dy) -
 						  double(y + line_subpixel_scale/2 - y2) * double(m_dx))),
 
-			m_dist_start((line_mr(x + line_subpixel_scale/2) - line_mr(sx)) * m_dy_start - 
+			m_dist_start((line_mr(x + line_subpixel_scale/2) - line_mr(sx)) * m_dy_start -
 						 (line_mr(y + line_subpixel_scale/2) - line_mr(sy)) * m_dx_start)
 		{
 			m_dx       <<= line_subpixel_shift;
@@ -180,10 +183,10 @@ namespace Pictor
 			m_dx_start(line_mr(ex) - line_mr(x2)),
 			m_dy_start(line_mr(ey) - line_mr(y2)),
 
-			m_dist(Round(double(x + line_subpixel_scale/2 - x2) * double(m_dy) - 
+			m_dist(Round(double(x + line_subpixel_scale/2 - x2) * double(m_dy) -
 						  double(y + line_subpixel_scale/2 - y2) * double(m_dx))),
 
-			m_dist_start((line_mr(x + line_subpixel_scale/2) - line_mr(ex)) * m_dy_start - 
+			m_dist_start((line_mr(x + line_subpixel_scale/2) - line_mr(ex)) * m_dy_start -
 						 (line_mr(y + line_subpixel_scale/2) - line_mr(ey)) * m_dx_start)
 		{
 			m_dx       <<= line_subpixel_shift;
@@ -191,7 +194,6 @@ namespace Pictor
 			m_dx_start <<= line_mr_subpixel_shift;
 			m_dy_start <<= line_mr_subpixel_shift;
 		}
-
 
 		//---------------------------------------------------------------------
 		void inc_x() { m_dist += m_dy; m_dist_start += m_dy_start; }
@@ -202,68 +204,68 @@ namespace Pictor
 		//---------------------------------------------------------------------
 		void inc_x(int dy)
 		{
-			m_dist       += m_dy; 
-			m_dist_start += m_dy_start; 
+			m_dist       += m_dy;
+			m_dist_start += m_dy_start;
 			if(dy > 0)
 			{
-				m_dist       -= m_dx; 
-				m_dist_start -= m_dx_start; 
+				m_dist       -= m_dx;
+				m_dist_start -= m_dx_start;
 			}
 			if(dy < 0)
 			{
-				m_dist       += m_dx; 
-				m_dist_start += m_dx_start; 
+				m_dist       += m_dx;
+				m_dist_start += m_dx_start;
 			}
 		}
 
 		//---------------------------------------------------------------------
 		void dec_x(int dy)
 		{
-			m_dist       -= m_dy; 
-			m_dist_start -= m_dy_start; 
+			m_dist       -= m_dy;
+			m_dist_start -= m_dy_start;
 			if(dy > 0)
 			{
-				m_dist       -= m_dx; 
-				m_dist_start -= m_dx_start; 
+				m_dist       -= m_dx;
+				m_dist_start -= m_dx_start;
 			}
 			if(dy < 0)
 			{
-				m_dist       += m_dx; 
-				m_dist_start += m_dx_start; 
+				m_dist       += m_dx;
+				m_dist_start += m_dx_start;
 			}
 		}
 
 		//---------------------------------------------------------------------
 		void inc_y(int dx)
 		{
-			m_dist       -= m_dx; 
-			m_dist_start -= m_dx_start; 
+			m_dist       -= m_dx;
+			m_dist_start -= m_dx_start;
 			if(dx > 0)
 			{
-				m_dist       += m_dy; 
-				m_dist_start += m_dy_start; 
+				m_dist       += m_dy;
+				m_dist_start += m_dy_start;
 			}
 			if(dx < 0)
 			{
-				m_dist       -= m_dy; 
-				m_dist_start -= m_dy_start; 
+				m_dist       -= m_dy;
+				m_dist_start -= m_dy_start;
 			}
 		}
 
 		//---------------------------------------------------------------------
 		void dec_y(int dx)
 		{
-			m_dist       += m_dx; 
-			m_dist_start += m_dx_start; 
+			m_dist       += m_dx;
+			m_dist_start += m_dx_start;
 			if(dx > 0)
 			{
-				m_dist       += m_dy; 
-				m_dist_start += m_dy_start; 
+				m_dist       += m_dy;
+				m_dist_start += m_dy_start;
 			}
 			if(dx < 0)
 			{
-				m_dist       -= m_dy; 
-				m_dist_start -= m_dy_start; 
+				m_dist       -= m_dy;
+				m_dist_start -= m_dy_start;
 			}
 		}
 
@@ -281,6 +283,7 @@ namespace Pictor
 		int dy_end()   { return m_dy_start; }
 
 	private:
+
 		//---------------------------------------------------------------------
 		int m_dx;
 		int m_dy;
@@ -291,18 +294,15 @@ namespace Pictor
 		int m_dist_start;
 	};
 
-
-
-
-
 	//===================================================distance_interpolator3
 	class distance_interpolator3
 	{
 	public:
+
 		//---------------------------------------------------------------------
 		distance_interpolator3() {}
 		distance_interpolator3(int x1, int y1, int x2, int y2,
-							   int sx, int sy, int ex, int ey, 
+							   int sx, int sy, int ex, int ey,
 							   int x,  int y) :
 			m_dx(x2 - x1),
 			m_dy(y2 - y1),
@@ -311,13 +311,13 @@ namespace Pictor
 			m_dx_end(line_mr(ex) - line_mr(x2)),
 			m_dy_end(line_mr(ey) - line_mr(y2)),
 
-			m_dist(Round(double(x + line_subpixel_scale/2 - x2) * double(m_dy) - 
+			m_dist(Round(double(x + line_subpixel_scale/2 - x2) * double(m_dy) -
 						  double(y + line_subpixel_scale/2 - y2) * double(m_dx))),
 
-			m_dist_start((line_mr(x + line_subpixel_scale/2) - line_mr(sx)) * m_dy_start - 
+			m_dist_start((line_mr(x + line_subpixel_scale/2) - line_mr(sx)) * m_dy_start -
 						 (line_mr(y + line_subpixel_scale/2) - line_mr(sy)) * m_dx_start),
 
-			m_dist_end((line_mr(x + line_subpixel_scale/2) - line_mr(ex)) * m_dy_end - 
+			m_dist_end((line_mr(x + line_subpixel_scale/2) - line_mr(ex)) * m_dy_end -
 					   (line_mr(y + line_subpixel_scale/2) - line_mr(ey)) * m_dx_end)
 		{
 			m_dx       <<= line_subpixel_shift;
@@ -337,19 +337,19 @@ namespace Pictor
 		//---------------------------------------------------------------------
 		void inc_x(int dy)
 		{
-			m_dist       += m_dy; 
-			m_dist_start += m_dy_start; 
+			m_dist       += m_dy;
+			m_dist_start += m_dy_start;
 			m_dist_end   += m_dy_end;
 			if(dy > 0)
 			{
-				m_dist       -= m_dx; 
-				m_dist_start -= m_dx_start; 
+				m_dist       -= m_dx;
+				m_dist_start -= m_dx_start;
 				m_dist_end   -= m_dx_end;
 			}
 			if(dy < 0)
 			{
-				m_dist       += m_dx; 
-				m_dist_start += m_dx_start; 
+				m_dist       += m_dx;
+				m_dist_start += m_dx_start;
 				m_dist_end   += m_dx_end;
 			}
 		}
@@ -357,19 +357,19 @@ namespace Pictor
 		//---------------------------------------------------------------------
 		void dec_x(int dy)
 		{
-			m_dist       -= m_dy; 
-			m_dist_start -= m_dy_start; 
+			m_dist       -= m_dy;
+			m_dist_start -= m_dy_start;
 			m_dist_end   -= m_dy_end;
 			if(dy > 0)
 			{
-				m_dist       -= m_dx; 
-				m_dist_start -= m_dx_start; 
+				m_dist       -= m_dx;
+				m_dist_start -= m_dx_start;
 				m_dist_end   -= m_dx_end;
 			}
 			if(dy < 0)
 			{
-				m_dist       += m_dx; 
-				m_dist_start += m_dx_start; 
+				m_dist       += m_dx;
+				m_dist_start += m_dx_start;
 				m_dist_end   += m_dx_end;
 			}
 		}
@@ -377,19 +377,19 @@ namespace Pictor
 		//---------------------------------------------------------------------
 		void inc_y(int dx)
 		{
-			m_dist       -= m_dx; 
-			m_dist_start -= m_dx_start; 
+			m_dist       -= m_dx;
+			m_dist_start -= m_dx_start;
 			m_dist_end   -= m_dx_end;
 			if(dx > 0)
 			{
-				m_dist       += m_dy; 
-				m_dist_start += m_dy_start; 
+				m_dist       += m_dy;
+				m_dist_start += m_dy_start;
 				m_dist_end   += m_dy_end;
 			}
 			if(dx < 0)
 			{
-				m_dist       -= m_dy; 
-				m_dist_start -= m_dy_start; 
+				m_dist       -= m_dy;
+				m_dist_start -= m_dy_start;
 				m_dist_end   -= m_dy_end;
 			}
 		}
@@ -397,19 +397,19 @@ namespace Pictor
 		//---------------------------------------------------------------------
 		void dec_y(int dx)
 		{
-			m_dist       += m_dx; 
-			m_dist_start += m_dx_start; 
+			m_dist       += m_dx;
+			m_dist_start += m_dx_start;
 			m_dist_end   += m_dx_end;
 			if(dx > 0)
 			{
-				m_dist       += m_dy; 
-				m_dist_start += m_dy_start; 
+				m_dist       += m_dy;
+				m_dist_start += m_dy_start;
 				m_dist_end   += m_dy_end;
 			}
 			if(dx < 0)
 			{
-				m_dist       -= m_dy; 
-				m_dist_start -= m_dy_start; 
+				m_dist       -= m_dy;
+				m_dist_start -= m_dy_start;
 				m_dist_end   -= m_dy_end;
 			}
 		}
@@ -428,6 +428,7 @@ namespace Pictor
 		int dy_end()   { return m_dy_end;   }
 
 	private:
+
 		//---------------------------------------------------------------------
 		int m_dx;
 		int m_dy;
@@ -441,10 +442,6 @@ namespace Pictor
 		int m_dist_end;
 	};
 
-
-
-
-	
 	//================================================line_interpolator_aa_base
 	template<class Renderer> class line_interpolator_aa_base
 	{
@@ -453,7 +450,7 @@ namespace Pictor
 
 		//---------------------------------------------------------------------
 		enum max_half_width_e
-		{ 
+		{
 			max_half_width = 64
 		};
 
@@ -462,7 +459,7 @@ namespace Pictor
 			m_lp(&lp),
 			m_li(lp.vertical ? line_dbl_hr(lp.x2 - lp.x1) :
 							   line_dbl_hr(lp.y2 - lp.y1),
-				 lp.vertical ? abs(lp.y2 - lp.y1) : 
+				 lp.vertical ? abs(lp.y2 - lp.y1) :
 							   abs(lp.x2 - lp.x1) + 1),
 			m_ren(ren),
 			m_len((lp.vertical == (lp.inc > 0)) ? -lp.len : lp.len),
@@ -473,11 +470,12 @@ namespace Pictor
 			m_count((lp.vertical ? abs((lp.y2 >> line_subpixel_shift) - m_y) :
 								   abs((lp.x2 >> line_subpixel_shift) - m_x))),
 			m_width(ren.subpixel_width()),
+
 			//m_max_extent(m_width >> (line_subpixel_shift - 2)),
 			m_max_extent((m_width + line_subpixel_mask) >> line_subpixel_shift),
 			m_step(0)
 		{
-			Pictor::Dda2LineInterpolator li(0, lp.vertical ? 
+			Pictor::Dda2LineInterpolator li(0, lp.vertical ?
 											  (lp.dy << Pictor::line_subpixel_shift) :
 											  (lp.dx << Pictor::line_subpixel_shift),
 										   lp.len);
@@ -530,7 +528,7 @@ namespace Pictor
 
 	private:
 		line_interpolator_aa_base(line_interpolator_aa_base<Renderer>&);
-		line_interpolator_aa_base<Renderer>& 
+		line_interpolator_aa_base<Renderer>&
 			operator = (line_interpolator_aa_base<Renderer>&);
 
 	protected:
@@ -550,12 +548,6 @@ namespace Pictor
 		byte m_covers[max_half_width * 2 + 4];
 	};
 
-
-
-
-
-
-
 	//====================================================line_interpolator_aa0
 	template<class Renderer> class line_interpolator_aa0 :
 	public line_interpolator_aa_base<Renderer>
@@ -567,7 +559,7 @@ namespace Pictor
 		//---------------------------------------------------------------------
 		line_interpolator_aa0(renderer_type& ren, LineParameters& lp) :
 			line_interpolator_aa_base<Renderer>(ren, lp),
-			m_di(lp.x1, lp.y1, lp.x2, lp.y2, 
+			m_di(lp.x1, lp.y1, lp.x2, lp.y2,
 				 lp.x1 & ~line_subpixel_mask, lp.y1 & ~line_subpixel_mask)
 		{
 			base_type::m_li.adjust_forward();
@@ -597,9 +589,9 @@ namespace Pictor
 				*--p0 = (byte)base_type::m_ren.cover(dist);
 				++dy;
 			}
-			base_type::m_ren.BlendSolidVerticalSpan(base_type::m_x, 
-											   base_type::m_y - dy + 1, 
-											   uint(p1 - p0), 
+			base_type::m_ren.BlendSolidVerticalSpan(base_type::m_x,
+											   base_type::m_y - dy + 1,
+											   uint(p1 - p0),
 											   p0);
 			return ++base_type::m_step < base_type::m_count;
 		}
@@ -628,26 +620,21 @@ namespace Pictor
 				*--p0 = (byte)base_type::m_ren.cover(dist);
 				++dx;
 			}
-			base_type::m_ren.BlendSolidHorizontalSpan(base_type::m_x - dx + 1, 
+			base_type::m_ren.BlendSolidHorizontalSpan(base_type::m_x - dx + 1,
 											   base_type::m_y,
-											   uint(p1 - p0), 
+											   uint(p1 - p0),
 											   p0);
 			return ++base_type::m_step < base_type::m_count;
 		}
 
 	private:
 		line_interpolator_aa0(line_interpolator_aa0<Renderer>&);
-		line_interpolator_aa0<Renderer>& 
+		line_interpolator_aa0<Renderer>&
 			operator = (line_interpolator_aa0<Renderer>&);
 
 		//---------------------------------------------------------------------
-		distance_interpolator1 m_di; 
+		distance_interpolator1 m_di;
 	};
-
-
-
-
-
 
 	//====================================================line_interpolator_aa1
 	template<class Renderer> class line_interpolator_aa1 :
@@ -658,7 +645,7 @@ namespace Pictor
 		typedef line_interpolator_aa_base<Renderer> base_type;
 
 		//---------------------------------------------------------------------
-		line_interpolator_aa1(renderer_type& ren, LineParameters& lp, 
+		line_interpolator_aa1(renderer_type& ren, LineParameters& lp,
 							  int sx, int sy) :
 			line_interpolator_aa_base<Renderer>(ren, lp),
 			m_di(lp.x1, lp.y1, lp.x2, lp.y2, sx, sy,
@@ -682,7 +669,7 @@ namespace Pictor
 
 					base_type::m_old_x = base_type::m_x;
 
-					dist1_start = dist2_start = m_di.dist_start(); 
+					dist1_start = dist2_start = m_di.dist_start();
 
 					int dx = 0;
 					if(dist1_start < 0) ++npix;
@@ -714,7 +701,7 @@ namespace Pictor
 
 					base_type::m_old_y = base_type::m_y;
 
-					dist1_start = dist2_start = m_di.dist_start(); 
+					dist1_start = dist2_start = m_di.dist_start();
 
 					int dy = 0;
 					if(dist1_start < 0) ++npix;
@@ -761,7 +748,7 @@ namespace Pictor
 				dist_start -= m_di.dx_start();
 				*p1 = 0;
 				if(dist_start <= 0)
-				{   
+				{
 					*p1 = (byte)base_type::m_ren.cover(dist);
 				}
 				++p1;
@@ -775,15 +762,15 @@ namespace Pictor
 				dist_start += m_di.dx_start();
 				*--p0 = 0;
 				if(dist_start <= 0)
-				{   
+				{
 					*p0 = (byte)base_type::m_ren.cover(dist);
 				}
 				++dy;
 			}
 
-			base_type::m_ren.BlendSolidVerticalSpan(base_type::m_x, 
+			base_type::m_ren.BlendSolidVerticalSpan(base_type::m_x,
 											   base_type::m_y - dy + 1,
-											   uint(p1 - p0), 
+											   uint(p1 - p0),
 											   p0);
 			return ++base_type::m_step < base_type::m_count;
 		}
@@ -813,7 +800,7 @@ namespace Pictor
 				dist_start += m_di.dy_start();
 				*p1 = 0;
 				if(dist_start <= 0)
-				{   
+				{
 					*p1 = (byte)base_type::m_ren.cover(dist);
 				}
 				++p1;
@@ -827,37 +814,26 @@ namespace Pictor
 				dist_start -= m_di.dy_start();
 				*--p0 = 0;
 				if(dist_start <= 0)
-				{   
+				{
 					*p0 = (byte)base_type::m_ren.cover(dist);
 				}
 				++dx;
 			}
-			base_type::m_ren.BlendSolidHorizontalSpan(base_type::m_x - dx + 1, 
+			base_type::m_ren.BlendSolidHorizontalSpan(base_type::m_x - dx + 1,
 											   base_type::m_y,
-											   uint(p1 - p0), 
+											   uint(p1 - p0),
 											   p0);
 			return ++base_type::m_step < base_type::m_count;
 		}
 
 	private:
 		line_interpolator_aa1(line_interpolator_aa1<Renderer>&);
-		line_interpolator_aa1<Renderer>& 
+		line_interpolator_aa1<Renderer>&
 			operator = (line_interpolator_aa1<Renderer>&);
 
 		//---------------------------------------------------------------------
-		distance_interpolator2 m_di; 
+		distance_interpolator2 m_di;
 	};
-
-
-
-
-
-
-
-
-
-
-
 
 	//====================================================line_interpolator_aa2
 	template<class Renderer> class line_interpolator_aa2 :
@@ -868,10 +844,10 @@ namespace Pictor
 		typedef line_interpolator_aa_base<Renderer> base_type;
 
 		//---------------------------------------------------------------------
-		line_interpolator_aa2(renderer_type& ren, LineParameters& lp, 
+		line_interpolator_aa2(renderer_type& ren, LineParameters& lp,
 							  int ex, int ey) :
 			line_interpolator_aa_base<Renderer>(ren, lp),
-			m_di(lp.x1, lp.y1, lp.x2, lp.y2, ex, ey, 
+			m_di(lp.x1, lp.y1, lp.x2, lp.y2, ex, ey,
 				 lp.x1 & ~line_subpixel_mask, lp.y1 & ~line_subpixel_mask,
 				 0)
 		{
@@ -906,7 +882,7 @@ namespace Pictor
 				dist_end -= m_di.dx_end();
 				*p1 = 0;
 				if(dist_end > 0)
-				{   
+				{
 					*p1 = (byte)base_type::m_ren.cover(dist);
 					++npix;
 				}
@@ -921,15 +897,15 @@ namespace Pictor
 				dist_end += m_di.dx_end();
 				*--p0 = 0;
 				if(dist_end > 0)
-				{   
+				{
 					*p0 = (byte)base_type::m_ren.cover(dist);
 					++npix;
 				}
 				++dy;
 			}
 			base_type::m_ren.BlendSolidVerticalSpan(base_type::m_x,
-											   base_type::m_y - dy + 1, 
-											   uint(p1 - p0), 
+											   base_type::m_y - dy + 1,
+											   uint(p1 - p0),
 											   p0);
 			return npix && ++base_type::m_step < base_type::m_count;
 		}
@@ -961,7 +937,7 @@ namespace Pictor
 				dist_end += m_di.dy_end();
 				*p1 = 0;
 				if(dist_end > 0)
-				{   
+				{
 					*p1 = (byte)base_type::m_ren.cover(dist);
 					++npix;
 				}
@@ -976,36 +952,27 @@ namespace Pictor
 				dist_end -= m_di.dy_end();
 				*--p0 = 0;
 				if(dist_end > 0)
-				{   
+				{
 					*p0 = (byte)base_type::m_ren.cover(dist);
 					++npix;
 				}
 				++dx;
 			}
 			base_type::m_ren.BlendSolidHorizontalSpan(base_type::m_x - dx + 1,
-											   base_type::m_y, 
-											   uint(p1 - p0), 
+											   base_type::m_y,
+											   uint(p1 - p0),
 											   p0);
 			return npix && ++base_type::m_step < base_type::m_count;
 		}
 
 	private:
 		line_interpolator_aa2(line_interpolator_aa2<Renderer>&);
-		line_interpolator_aa2<Renderer>& 
+		line_interpolator_aa2<Renderer>&
 			operator = (line_interpolator_aa2<Renderer>&);
 
 		//---------------------------------------------------------------------
-		distance_interpolator2 m_di; 
+		distance_interpolator2 m_di;
 	};
-
-
-
-
-
-
-
-
-
 
 	//====================================================line_interpolator_aa3
 	template<class Renderer> class line_interpolator_aa3 :
@@ -1016,10 +983,10 @@ namespace Pictor
 		typedef line_interpolator_aa_base<Renderer> base_type;
 
 		//---------------------------------------------------------------------
-		line_interpolator_aa3(renderer_type& ren, LineParameters& lp, 
+		line_interpolator_aa3(renderer_type& ren, LineParameters& lp,
 							  int sx, int sy, int ex, int ey) :
 			line_interpolator_aa_base<Renderer>(ren, lp),
-			m_di(lp.x1, lp.y1, lp.x2, lp.y2, sx, sy, ex, ey, 
+			m_di(lp.x1, lp.y1, lp.x2, lp.y2, sx, sy, ex, ey,
 				 lp.x1 & ~line_subpixel_mask, lp.y1 & ~line_subpixel_mask)
 		{
 			int dist1_start;
@@ -1038,7 +1005,7 @@ namespace Pictor
 
 					base_type::m_old_x = base_type::m_x;
 
-					dist1_start = dist2_start = m_di.dist_start(); 
+					dist1_start = dist2_start = m_di.dist_start();
 
 					int dx = 0;
 					if(dist1_start < 0) ++npix;
@@ -1069,7 +1036,7 @@ namespace Pictor
 
 					base_type::m_old_y = base_type::m_y;
 
-					dist1_start = dist2_start = m_di.dist_start(); 
+					dist1_start = dist2_start = m_di.dist_start();
 
 					int dy = 0;
 					if(dist1_start < 0) ++npix;
@@ -1090,7 +1057,6 @@ namespace Pictor
 			base_type::m_li.adjust_forward();
 			base_type::m_step -= base_type::m_max_extent;
 		}
-
 
 		//---------------------------------------------------------------------
 		bool step_hor()
@@ -1125,7 +1091,7 @@ namespace Pictor
 				dist_end   -= m_di.dx_end();
 				*p1 = 0;
 				if(dist_end > 0 && dist_start <= 0)
-				{   
+				{
 					*p1 = (byte)base_type::m_ren.cover(dist);
 					++npix;
 				}
@@ -1142,15 +1108,15 @@ namespace Pictor
 				dist_end   += m_di.dx_end();
 				*--p0 = 0;
 				if(dist_end > 0 && dist_start <= 0)
-				{   
+				{
 					*p0 = (byte)base_type::m_ren.cover(dist);
 					++npix;
 				}
 				++dy;
 			}
 			base_type::m_ren.BlendSolidVerticalSpan(base_type::m_x,
-											   base_type::m_y - dy + 1, 
-											   uint(p1 - p0), 
+											   base_type::m_y - dy + 1,
+											   uint(p1 - p0),
 											   p0);
 			return npix && ++base_type::m_step < base_type::m_count;
 		}
@@ -1188,7 +1154,7 @@ namespace Pictor
 				dist_end   += m_di.dy_end();
 				*p1 = 0;
 				if(dist_end > 0 && dist_start <= 0)
-				{   
+				{
 					*p1 = (byte)base_type::m_ren.cover(dist);
 					++npix;
 				}
@@ -1205,33 +1171,32 @@ namespace Pictor
 				dist_end   -= m_di.dy_end();
 				*--p0 = 0;
 				if(dist_end > 0 && dist_start <= 0)
-				{   
+				{
 					*p0 = (byte)base_type::m_ren.cover(dist);
 					++npix;
 				}
 				++dx;
 			}
 			base_type::m_ren.BlendSolidHorizontalSpan(base_type::m_x - dx + 1,
-											   base_type::m_y, 
-											   uint(p1 - p0), 
+											   base_type::m_y,
+											   uint(p1 - p0),
 											   p0);
 			return npix && ++base_type::m_step < base_type::m_count;
 		}
 
 	private:
 		line_interpolator_aa3(line_interpolator_aa3<Renderer>&);
-		line_interpolator_aa3<Renderer>& 
+		line_interpolator_aa3<Renderer>&
 			operator = (line_interpolator_aa3<Renderer>&);
 
 		//---------------------------------------------------------------------
-		distance_interpolator3 m_di; 
+		distance_interpolator3 m_di;
 	};
-
 
 	//==========================================================line_profile_aa
 	//
-	// See Implementation agg_line_profile_aa.cpp 
-	// 
+	// See Implementation agg_line_profile_aa.cpp
+	//
 	public class line_profile_aa
 	{
 		const int subpixel_shift = 8;
@@ -1249,7 +1214,7 @@ namespace Pictor
 		double                m_smoother_width;
 
 		//---------------------------------------------------------------------
-		
+
 		//---------------------------------------------------------------------
 		public line_profile_aa()
 		{
@@ -1277,7 +1242,7 @@ namespace Pictor
 
 		//---------------------------------------------------------------------
 		public void Gamma(IGammaFunction gamma_function)
-		{ 
+		{
 			int i;
 			for(i = 0; i < aa_scale; i++)
 			{
@@ -1296,7 +1261,7 @@ namespace Pictor
 
 			w -= m_smoother_width;
 			double s = m_smoother_width;
-			if(w < 0.0) 
+			if(w < 0.0)
 			{
 				s += w;
 				w = 0.0;
@@ -1363,15 +1328,15 @@ namespace Pictor
 
 			for(i = 0; i < subpixel_smoother_width; i++)
 			{
-				ch[ch_smoother++] = 
-					m_gamma[(uint)((base_val - 
-									  base_val * 
+				ch[ch_smoother++] =
+					m_gamma[(uint)((base_val -
+									  base_val *
 									  ((double)(i) / subpixel_smoother_width)) * aa_mask)];
 			}
 
-			uint n_smoother = profile_size() - 
-								  subpixel_smoother_width - 
-								  subpixel_center_width - 
+			uint n_smoother = profile_size() -
+								  subpixel_smoother_width -
+								  subpixel_center_width -
 								  Scale*2;
 
 			val = m_gamma[0];
@@ -1393,7 +1358,7 @@ namespace Pictor
 	{
 		private renderer_base m_ren;
 		private IColorType m_color;
-		line_profile_aa m_profile; 
+		line_profile_aa m_profile;
 		RectI                 m_clip_box;
 		bool                   m_clipping;
 
@@ -1454,7 +1419,7 @@ namespace Pictor
 		//-------------------------------------------------------------------------
 		//template<class Cmp>
 		public void semidot_hline(Cmp cmp,
-						   int xc1, int yc1, int xc2, int yc2, 
+						   int xc1, int yc1, int xc2, int yc2,
 						   int x1,  int y1,  int x2)
 		{
 			byte covers[line_interpolator_aa_base<renderer_outline_aa>::max_half_width * 2 + 4];
@@ -1483,14 +1448,14 @@ namespace Pictor
 				di.inc_x();
 			}
 			while(++x1 <= x2);
-			m_ren->BlendSolidHorizontalSpan(x0, y1, 
-									 uint(p1 - p0), 
-									 Color(), 
+			m_ren->BlendSolidHorizontalSpan(x0, y1,
+									 uint(p1 - p0),
+									 Color(),
 									 p0);
 		}
 
 		//-------------------------------------------------------------------------
-		//template<class Cmp> 
+		//template<class Cmp>
 		public void semidot(Cmp cmp, int xc1, int yc1, int xc2, int yc2)
 		{
 			if(m_clipping && GetClippingFlags(xc1, yc1, m_clip_box)) return;
@@ -1524,11 +1489,11 @@ namespace Pictor
 		}
 
 		//-------------------------------------------------------------------------
-		public void pie_hline(int xc, int yc, int xp1, int yp1, int xp2, int yp2, 
+		public void pie_hline(int xc, int yc, int xp1, int yp1, int xp2, int yp2,
 					   int xh1, int yh1, int xh2)
 		{
 			if(m_clipping && GetClippingFlags(xc, yc, m_clip_box)) return;
-		   
+
 			byte covers[line_interpolator_aa_base<renderer_outline_aa>::max_half_width * 2 + 4];
 			byte* p0 = covers;
 			byte* p1 = covers;
@@ -1556,12 +1521,11 @@ namespace Pictor
 				di.inc_x();
 			}
 			while(++xh1 <= xh2);
-			m_ren->BlendSolidHorizontalSpan(xh0, yh1, 
-									 uint(p1 - p0), 
-									 Color(), 
+			m_ren->BlendSolidHorizontalSpan(xh0, yh1,
+									 uint(p1 - p0),
+									 Color(),
 									 p0);
 		}
-
 
 		//-------------------------------------------------------------------------
 		public void pie(int xc, int yc, int x1, int y1, int x2, int y2)
@@ -1634,7 +1598,7 @@ namespace Pictor
 				{
 					if(flags)
 					{
-						LineParameters lp2(x1, y1, x2, y2, 
+						LineParameters lp2(x1, y1, x2, y2,
 										   UnsignedRound(CalculateDistance(x1, y1, x2, y2)));
 						line0_no_clip(lp2);
 					}
@@ -1674,7 +1638,6 @@ namespace Pictor
 			}
 		}
 
-
 		//-------------------------------------------------------------------------
 		public void line1(LineParameters lp, int sx, int sy)
 		{
@@ -1689,11 +1652,11 @@ namespace Pictor
 				{
 					if(flags)
 					{
-						LineParameters lp2(x1, y1, x2, y2, 
+						LineParameters lp2(x1, y1, x2, y2,
 										   UnsignedRound(CalculateDistance(x1, y1, x2, y2)));
 						if(flags & 1)
 						{
-							sx = x1 + (y2 - y1); 
+							sx = x1 + (y2 - y1);
 							sy = y1 - (x2 - x1);
 						}
 						else
@@ -1756,11 +1719,11 @@ namespace Pictor
 				{
 					if(flags)
 					{
-						LineParameters lp2(x1, y1, x2, y2, 
+						LineParameters lp2(x1, y1, x2, y2,
 										   UnsignedRound(CalculateDistance(x1, y1, x2, y2)));
 						if(flags & 2)
 						{
-							ex = x2 + (y2 - y1); 
+							ex = x2 + (y2 - y1);
 							ey = y2 - (x2 - x1);
 						}
 						else
@@ -1786,7 +1749,7 @@ namespace Pictor
 		}
 
 		//-------------------------------------------------------------------------
-		public void line3_no_clip(LineParameters lp, 
+		public void line3_no_clip(LineParameters lp,
 						   int sx, int sy, int ex, int ey)
 		{
 			if(lp.len > line_max_length)
@@ -1814,7 +1777,7 @@ namespace Pictor
 		}
 
 		//-------------------------------------------------------------------------
-		public void line3(LineParameters lp, 
+		public void line3(LineParameters lp,
 				   int sx, int sy, int ex, int ey)
 		{
 			if(m_clipping)
@@ -1828,11 +1791,11 @@ namespace Pictor
 				{
 					if(flags)
 					{
-						LineParameters lp2(x1, y1, x2, y2, 
+						LineParameters lp2(x1, y1, x2, y2,
 										   UnsignedRound(CalculateDistance(x1, y1, x2, y2)));
 						if(flags & 1)
 						{
-							sx = x1 + (y2 - y1); 
+							sx = x1 + (y2 - y1);
 							sy = y1 - (x2 - x1);
 						}
 						else
@@ -1845,7 +1808,7 @@ namespace Pictor
 						}
 						if(flags & 2)
 						{
-							ex = x2 + (y2 - y1); 
+							ex = x2 + (y2 - y1);
 							ey = y2 - (x2 - x1);
 						}
 						else

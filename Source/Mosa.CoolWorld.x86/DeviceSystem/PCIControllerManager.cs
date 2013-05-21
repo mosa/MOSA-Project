@@ -12,12 +12,12 @@ using Mosa.ClassLib;
 namespace Mosa.DeviceSystem
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public class PCIControllerManager
 	{
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IDeviceManager deviceManager;
 
@@ -25,7 +25,10 @@ namespace Mosa.DeviceSystem
 		/// Initializes a new instance of the <see cref="PCIControllerManager"/> class.
 		/// </summary>
 		/// <param name="deviceManager">The device manager.</param>
-		public PCIControllerManager(IDeviceManager deviceManager) { this.deviceManager = deviceManager; }
+		public PCIControllerManager(IDeviceManager deviceManager)
+		{
+			this.deviceManager = deviceManager;
+		}
 
 		/// <summary>
 		/// Probes for a PCI device.

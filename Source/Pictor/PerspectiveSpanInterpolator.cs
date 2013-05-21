@@ -6,13 +6,15 @@
  * Authors:
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  */
+
 using System;
 
 namespace Pictor
 {
 	/*
+
 	//===========================================span_interpolator_persp_exact
-	//template<uint SubpixelShift = 8> 
+	//template<uint SubpixelShift = 8>
 	class span_interpolator_persp_exact
 	{
 	public:
@@ -29,24 +31,24 @@ namespace Pictor
 
 		//--------------------------------------------------------------------
 		// Arbitrary quadrangle transformations
-		span_interpolator_persp_exact(double[] src, double[] dst) 
+		span_interpolator_persp_exact(double[] src, double[] dst)
 		{
 			QuadToQuad(src, dst);
 		}
 
 		//--------------------------------------------------------------------
-		// Direct transformations 
-		span_interpolator_persp_exact(double x1, double y1, 
-									  double x2, double y2, 
+		// Direct transformations
+		span_interpolator_persp_exact(double x1, double y1,
+									  double x2, double y2,
 									  double[] quad)
 		{
 			RectangleToQuad(x1, y1, x2, y2, quad);
 		}
 
 		//--------------------------------------------------------------------
-		// Reverse transformations 
-		span_interpolator_persp_exact(double[] quad, 
-									  double x1, double y1, 
+		// Reverse transformations
+		span_interpolator_persp_exact(double[] quad,
+									  double x1, double y1,
 									  double x2, double y2)
 		{
 			QuadToRectangle(quad, x1, y1, x2, y2);
@@ -62,7 +64,7 @@ namespace Pictor
 
 		//--------------------------------------------------------------------
 		// Set the direct transformations, i.e., rectangle -> quadrangle
-		void RectangleToQuad(double x1, double y1, double x2, double y2, 
+		void RectangleToQuad(double x1, double y1, double x2, double y2,
 						  double[] quad)
 		{
 			double src[8];
@@ -73,10 +75,9 @@ namespace Pictor
 			QuadToQuad(src, quad);
 		}
 
-
 		//--------------------------------------------------------------------
 		// Set the reverse transformations, i.e., quadrangle -> rectangle
-		void QuadToRectangle(double[] quad, 
+		void QuadToRectangle(double[] quad,
 						  double x1, double y1, double x2, double y2)
 		{
 			double dst[8];
@@ -136,15 +137,14 @@ namespace Pictor
 			m_scale_y = Dda2LineInterpolator(sy1, sy2, len);
 		}
 
-
 		//----------------------------------------------------------------
 		void ReSynchronize(double xe, double ye, uint len)
 		{
-			// Assume x1,y1 are equal to the ones At the previous End point 
+			// Assume x1,y1 are equal to the ones At the previous End point
 			int sx1 = m_scale_x.y();
 			int sy1 = m_scale_y.y();
 
-			// Calculate transformed Coordinates At x2,y2 
+			// Calculate transformed Coordinates At x2,y2
 			double xt = xe;
 			double yt = ye;
 			m_trans_dir.Transform(&xt, &yt);
@@ -174,8 +174,6 @@ namespace Pictor
 			m_scale_y = Dda2LineInterpolator(sy1, sy2, len);
 		}
 
-
-
 		//----------------------------------------------------------------
 		void operator++()
 		{
@@ -203,7 +201,7 @@ namespace Pictor
 		{
 			m_trans_dir.Transform(x, y);
 		}
-		
+
 	private:
 		trans_type             m_trans_dir;
 		trans_type             m_trans_inv;
@@ -213,20 +211,19 @@ namespace Pictor
 	};
 	 */
 
-
 	//============================================PerspectiveLerpSpanInterpolator
-	//template<uint SubpixelShift = 8> 
+	//template<uint SubpixelShift = 8>
 	public class PerspectiveLerpSpanInterpolator : ISpanInterpolator
 	{
-		Transform.Perspective m_trans_dir;
-		Transform.Perspective m_trans_inv;
-		Dda2LineInterpolator m_coord_x;
-		Dda2LineInterpolator m_coord_y;
-		Dda2LineInterpolator m_scale_x;
-		Dda2LineInterpolator m_scale_y;
+		private Transform.Perspective m_trans_dir;
+		private Transform.Perspective m_trans_inv;
+		private Dda2LineInterpolator m_coord_x;
+		private Dda2LineInterpolator m_coord_y;
+		private Dda2LineInterpolator m_scale_x;
+		private Dda2LineInterpolator m_scale_y;
 
-		const int subpixel_shift = 8;
-		const int subpixel_scale = 1 << subpixel_shift;
+		private const int subpixel_shift = 8;
+		private const int subpixel_scale = 1 << subpixel_shift;
 
 		//--------------------------------------------------------------------
 		public PerspectiveLerpSpanInterpolator()
@@ -244,7 +241,7 @@ namespace Pictor
 		}
 
 		//--------------------------------------------------------------------
-		// Direct transformations 
+		// Direct transformations
 		public PerspectiveLerpSpanInterpolator(double x1, double y1,
 									 double x2, double y2,
 									 double[] quad)
@@ -254,7 +251,7 @@ namespace Pictor
 		}
 
 		//--------------------------------------------------------------------
-		// Reverse transformations 
+		// Reverse transformations
 		public PerspectiveLerpSpanInterpolator(double[] quad,
 									 double x1, double y1,
 									 double x2, double y2)
@@ -283,7 +280,6 @@ namespace Pictor
 			QuadToQuad(src, quad);
 		}
 
-
 		//--------------------------------------------------------------------
 		// Set the reverse transformations, i.e., quadrangle -> rectangle
 		public void QuadToRectangle(double[] quad,
@@ -310,7 +306,7 @@ namespace Pictor
 		//----------------------------------------------------------------
 		public void Begin(double x, double y, uint len)
 		{
-			// Calculate transformed Coordinates At x1,y1 
+			// Calculate transformed Coordinates At x1,y1
 			double xt = x;
 			double yt = y;
 			m_trans_dir.Transform(ref xt, ref yt);
@@ -337,7 +333,7 @@ namespace Pictor
 			dy -= y;
 			int sy1 = (int)Basics.UnsignedRound(subpixel_scale / Math.Sqrt(dx * dx + dy * dy)) >> subpixel_shift;
 
-			// Calculate transformed Coordinates At x2,y2 
+			// Calculate transformed Coordinates At x2,y2
 			x += len;
 			xt = x;
 			yt = y;
@@ -368,17 +364,16 @@ namespace Pictor
 			m_scale_y = new Dda2LineInterpolator(sy1, sy2, (int)len);
 		}
 
-
 		//----------------------------------------------------------------
 		public void ReSynchronize(double xe, double ye, uint len)
 		{
-			// Assume x1,y1 are equal to the ones At the previous End point 
+			// Assume x1,y1 are equal to the ones At the previous End point
 			int x1 = m_coord_x.y();
 			int y1 = m_coord_y.y();
 			int sx1 = m_scale_x.y();
 			int sy1 = m_scale_y.y();
 
-			// Calculate transformed Coordinates At x2,y2 
+			// Calculate transformed Coordinates At x2,y2
 			double xt = xe;
 			double yt = ye;
 			m_trans_dir.Transform(ref xt, ref yt);

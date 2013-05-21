@@ -10,17 +10,17 @@
 namespace Mosa.DeviceSystem
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public static class HAL
 	{
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		static private IHardwareAbstraction hardwareAbstraction;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public delegate void HandleInterrupt(byte irq);
 
@@ -121,4 +121,3 @@ namespace Mosa.DeviceSystem
 		}
 	}
 }
-

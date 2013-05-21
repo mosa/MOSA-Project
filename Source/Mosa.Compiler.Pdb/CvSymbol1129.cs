@@ -7,10 +7,9 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-
 namespace Mosa.Compiler.Pdb
 {
-	class CvSymbol1129
+	internal class CvSymbol1129
 	{
 	}
 }

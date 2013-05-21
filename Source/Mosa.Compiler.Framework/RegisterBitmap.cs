@@ -21,7 +21,7 @@ namespace Mosa.Compiler.Framework
 
 		private ulong map;
 
-		#endregion
+		#endregion Data members
 
 		public RegisterBitmap(Register register)
 		{

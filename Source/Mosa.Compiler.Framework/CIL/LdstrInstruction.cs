@@ -7,14 +7,13 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Signatures;
 
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public sealed class LdstrInstruction : BaseCILInstruction
 	{
@@ -30,7 +29,7 @@ namespace Mosa.Compiler.Framework.CIL
 			return;
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Methods
 
@@ -73,6 +72,5 @@ namespace Mosa.Compiler.Framework.CIL
 		}
 
 		#endregion Methods
-
 	}
 }

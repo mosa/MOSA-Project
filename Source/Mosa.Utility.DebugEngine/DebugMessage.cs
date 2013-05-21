@@ -7,11 +7,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
 namespace Mosa.Utility.DebugEngine
 {
 	public delegate void SenderMesseageDelegate(DebugMessage response);
@@ -19,12 +14,17 @@ namespace Mosa.Utility.DebugEngine
 	public class DebugMessage
 	{
 		public int ID { get; internal set; }
+
 		public int Code { get; private set; }
+
 		public byte[] CommandData { get; private set; }
+
 		public byte[] ResponseData { get; internal set; }
+
 		public object Other { get; private set; }
 
 		public object Sender { get; protected set; }
+
 		public SenderMesseageDelegate SenderMethod { get; protected set; }
 
 		public int Checksum { get { return 0; } } // TODO
@@ -73,6 +73,5 @@ namespace Mosa.Utility.DebugEngine
 		{
 			return (uint)((ResponseData[index] << 24) | (ResponseData[index + 1] << 16) | (ResponseData[index + 2] << 8) | (ResponseData[index + 3]));
 		}
-
 	}
 }

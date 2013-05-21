@@ -11,7 +11,6 @@ using Mosa.Compiler.Metadata.Signatures;
 
 namespace Mosa.Compiler.Framework
 {
-
 	/// <summary>
 	/// Interface to allow compiler stages to perform architecture specific operations.
 	/// </summary>
@@ -59,7 +58,7 @@ namespace Mosa.Compiler.Framework
 		Register StackFrameRegister { get; }
 
 		/// <summary>
-		/// Returns the stack pointer register of the architecture. 
+		/// Returns the stack pointer register of the architecture.
 		/// </summary>
 		Register StackPointerRegister { get; }
 
@@ -71,7 +70,7 @@ namespace Mosa.Compiler.Framework
 		/// </value>
 		string PlatformName { get; }
 
-		#endregion // Properties
+		#endregion Properties
 
 		#region Methods
 
@@ -111,6 +110,6 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		ICodeEmitter GetCodeEmitter();
 
-		#endregion // Methods
+		#endregion Methods
 	}
 }

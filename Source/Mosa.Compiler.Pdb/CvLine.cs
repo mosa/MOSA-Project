@@ -51,7 +51,7 @@ namespace Mosa.Compiler.Pdb
 		/// </summary>
 		private readonly int endCol;
 
-		#endregion // Data Members
+		#endregion Data Members
 
 		#region Construction
 
@@ -72,7 +72,7 @@ namespace Mosa.Compiler.Pdb
 			this.endCol = endCol;
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Properties
 
@@ -121,7 +121,7 @@ namespace Mosa.Compiler.Pdb
 			get { return this.endCol; }
 		}
 
-		#endregion // Properties
+		#endregion Properties
 
 		#region Object Overrides
 
@@ -136,6 +136,6 @@ namespace Mosa.Compiler.Pdb
 			return String.Format("Line {0} columns {1}-{2} at {3:x4}:{4:x8}", this.line, this.startCol, this.endCol, this.segment, this.offset);
 		}
 
-		#endregion // Object Overrides
+		#endregion Object Overrides
 	}
 }

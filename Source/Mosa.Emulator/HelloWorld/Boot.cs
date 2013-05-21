@@ -14,11 +14,10 @@ using Mosa.Kernel.x86.Smbios;
 namespace Mosa.HelloWorld.x86
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public static class Boot
 	{
-
 		/// <summary>
 		/// Mains this instance.
 		/// </summary>
@@ -183,6 +182,7 @@ namespace Mosa.HelloWorld.x86
 			CpuInfo cpuInfo = new CpuInfo();
 
 			#region Vendor
+
 			Screen.Color = Colors.Green;
 			Screen.Write(@"Vendor:   ");
 			Screen.Color = Colors.White;
@@ -190,38 +190,48 @@ namespace Mosa.HelloWorld.x86
 			cpuInfo.PrintVendorString();
 
 			Screen.NextLine();
-			#endregion
+
+			#endregion Vendor
 
 			#region Brand
+
 			Screen.Color = Colors.Green;
 			Screen.Write(@"Brand:    ");
 			Screen.Color = Colors.White;
 			cpuInfo.PrintBrandString();
 			Screen.NextLine();
-			#endregion
+
+			#endregion Brand
 
 			#region Stepping
+
 			Screen.Color = Colors.Green;
 			Screen.Write(@"Stepping: ");
 			Screen.Color = Colors.White;
 			Screen.Write(cpuInfo.Stepping, 16, 2);
-			#endregion
+
+			#endregion Stepping
 
 			#region Model
+
 			Screen.Color = Colors.Green;
 			Screen.Write(@" Model: ");
 			Screen.Color = Colors.White;
 			Screen.Write(cpuInfo.Model, 16, 2);
-			#endregion
+
+			#endregion Model
 
 			#region Family
+
 			Screen.Color = Colors.Green;
 			Screen.Write(@" Family: ");
 			Screen.Color = Colors.White;
 			Screen.Write(cpuInfo.Family, 16, 2);
-			#endregion
+
+			#endregion Family
 
 			#region Type
+
 			Screen.Color = Colors.Green;
 			Screen.Write(@" Type: ");
 			Screen.Color = Colors.White;
@@ -232,7 +242,8 @@ namespace Mosa.HelloWorld.x86
 			Screen.Write(@"Cores:    ");
 			Screen.Color = Colors.White;
 			Screen.Write(cpuInfo.NumberOfCores, 16, 2);
-			#endregion
+
+			#endregion Type
 
 			//Multiboot.Dump(4,53);
 
@@ -346,7 +357,7 @@ namespace Mosa.HelloWorld.x86
 			}
 			else if (interrupt == 0x20)
 			{
-				// Timer Interrupt! Switch Tasks!	
+				// Timer Interrupt! Switch Tasks!
 			}
 			else
 			{

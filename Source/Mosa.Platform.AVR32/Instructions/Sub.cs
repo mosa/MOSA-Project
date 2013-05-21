@@ -5,7 +5,7 @@
  *
  * Authors:
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- *  Pascal Delprat (pdelprat) <pascal.delprat@online.fr>  
+ *  Pascal Delprat (pdelprat) <pascal.delprat@online.fr>
  */
 
 using System;
@@ -13,7 +13,6 @@ using Mosa.Compiler.Framework;
 
 namespace Mosa.Platform.AVR32.Instructions
 {
-
 	/// <summary>
 	/// Sub Instruction
 	/// Supported Format:
@@ -93,7 +92,6 @@ namespace Mosa.Platform.AVR32.Instructions
 			visitor.Sub(context);
 		}
 
-		#endregion // Methods
-
+		#endregion Methods
 	}
 }

@@ -8,7 +8,6 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-
 using Mosa.Compiler.Framework;
 
 namespace Mosa.Platform.x86.Instructions
@@ -18,7 +17,6 @@ namespace Mosa.Platform.x86.Instructions
 	/// </summary>
 	public sealed class IRetd : X86Instruction
 	{
-
 		/// <summary>
 		/// Gets the flow control.
 		/// </summary>
@@ -47,6 +45,6 @@ namespace Mosa.Platform.x86.Instructions
 			visitor.Iretd(context);
 		}
 
-		#endregion // Methods
+		#endregion Methods
 	}
 }

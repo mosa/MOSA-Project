@@ -10,44 +10,47 @@
 namespace Mosa.FileSystem.FAT
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public class FatFileLocation
 	{
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public bool Valid;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public uint FirstCluster;
 
 		/// <summary>
-		///  
+		///
 		/// </summary>
 		public uint DirectorySector;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public uint DirectorySectorIndex;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private bool directory;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public bool IsDirectory { get { return directory; } }
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="FatFileLocation"/> class.
 		/// </summary>
-		public FatFileLocation() { this.Valid = false; }
+		public FatFileLocation()
+		{
+			this.Valid = false;
+		}
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="FatFileLocation"/> class.
@@ -65,5 +68,4 @@ namespace Mosa.FileSystem.FAT
 			this.directory = directory;
 		}
 	}
-
 }

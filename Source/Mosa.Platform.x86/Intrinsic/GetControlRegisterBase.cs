@@ -20,7 +20,6 @@ namespace Mosa.Platform.x86.Intrinsic
 	/// </summary>
 	internal class GetControlRegisterBase : IIntrinsicPlatformMethod
 	{
-
 		private ControlRegister control;
 
 		/// <summary>
@@ -49,7 +48,6 @@ namespace Mosa.Platform.x86.Intrinsic
 			context.AppendInstruction(IR.IRInstruction.Move, result, imm);
 		}
 
-		#endregion // Methods
-
+		#endregion Methods
 	}
 }

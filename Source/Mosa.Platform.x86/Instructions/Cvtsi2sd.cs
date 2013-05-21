@@ -16,12 +16,11 @@ namespace Mosa.Platform.x86.Instructions
 	/// </summary>
 	public sealed class Cvtsi2sd : TwoOperandInstruction
 	{
-
 		#region Data members
 
 		private static readonly OpCode opcode = new OpCode(new byte[] { 0xF2, 0x0F, 0x2A });
 
-		#endregion
+		#endregion Data members
 
 		#region Methods
 
@@ -47,6 +46,6 @@ namespace Mosa.Platform.x86.Instructions
 			visitor.Cvtsi2sd(context);
 		}
 
-		#endregion // Methods
+		#endregion Methods
 	}
 }

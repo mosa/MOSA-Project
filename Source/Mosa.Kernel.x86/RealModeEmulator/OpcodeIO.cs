@@ -93,10 +93,10 @@ namespace Mosa.Kernel.x86.RealModeEmulator
             return ErrorCodes.ERR_OK;
         }
 
-        public static uint Op_IN_AI(ref State state, uint param)
+        public static unsafe uint Op_IN_AI(ref State state, uint param)
         {
             byte port = 0;
-            uint err = Int_Read8(state, state.CS, (ushort)(state.IP + state.Decoder.IPOffset), ref port);
+            uint err = Int_Read8(ref state, state.CS, (ushort)(state.IP + state.Decoder.IPOffset), &port);
             if (err != ErrorCodes.ERR_OK) return err;
             state.Decoder.IPOffset++;
             state.AX.L = inb(port);
@@ -104,10 +104,10 @@ namespace Mosa.Kernel.x86.RealModeEmulator
             return ErrorCodes.ERR_OK;
         }
 
-        public static uint Op_IN_AIX(ref State state, uint param)
+        public static unsafe uint Op_IN_AIX(ref State state, uint param)
         {
             byte port = 0;
-            uint err = Int_Read8(state, state.CS, (ushort)(state.IP + state.Decoder.IPOffset), ref port);
+            uint err = Int_Read8(ref state, state.CS, (ushort)(state.IP + state.Decoder.IPOffset), &port);
             if (err != ErrorCodes.ERR_OK) return err;
             state.Decoder.IPOffset++;
 
@@ -142,20 +142,20 @@ namespace Mosa.Kernel.x86.RealModeEmulator
             return ErrorCodes.ERR_OK;
         }
 
-        public static uint Op_OUT_AI(ref State state, uint param)
+        public static unsafe uint Op_OUT_AI(ref State state, uint param)
         {
             byte port = 0;
-            uint err = Int_Read8(state, state.CS, (ushort)(state.IP + state.Decoder.IPOffset), ref port);
+            uint err = Int_Read8(ref state, state.CS, (ushort)(state.IP + state.Decoder.IPOffset), &port);
             if (err != ErrorCodes.ERR_OK) return err;
             state.Decoder.IPOffset++;
             outb(port, state.AX.L);
             return ErrorCodes.ERR_OK;
         }
 
-        public static uint Op_OUT_AIX(ref State state, uint param)
+        public static unsafe uint Op_OUT_AIX(ref State state, uint param)
         {
             byte port = 0;
-            uint err = Int_Read8(state, state.CS, (ushort)(state.IP + state.Decoder.IPOffset), ref port);
+            uint err = Int_Read8(ref state, state.CS, (ushort)(state.IP + state.Decoder.IPOffset), &port);
             if (err != ErrorCodes.ERR_OK) return err;
             state.Decoder.IPOffset++;
 

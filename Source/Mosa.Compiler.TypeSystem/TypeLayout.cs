@@ -78,7 +78,7 @@ namespace Mosa.Compiler.TypeSystem
 		/// </summary>
 		private Dictionary<RuntimeType, List<RuntimeMethod>> typeMethodTables = new Dictionary<RuntimeType, List<RuntimeMethod>>();
 
-		#endregion // Data members
+		#endregion Data members
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="TypeLayout"/> class.
@@ -249,7 +249,7 @@ namespace Mosa.Compiler.TypeSystem
 		/// </summary>
 		IList<RuntimeType> ITypeLayout.Interfaces { get { return interfaces.AsReadOnly(); } }
 
-		#endregion // ITypeLayout
+		#endregion ITypeLayout members
 
 		#region Internal - Layout
 
@@ -350,6 +350,7 @@ namespace Mosa.Compiler.TypeSystem
 				if (!field.IsStaticField)
 				{
 					int fieldSize = GetMemorySize(field.SignatureType);
+
 					//int fieldAlignment = GetAlignmentSize(field.SignatureType);
 
 					// Pad the field in the type
@@ -386,7 +387,7 @@ namespace Mosa.Compiler.TypeSystem
 			}
 		}
 
-		#endregion
+		#endregion Internal - Layout
 
 		#region Internal - Interface
 
@@ -459,7 +460,7 @@ namespace Mosa.Compiler.TypeSystem
 			return fullName.Substring(fullName.LastIndexOf(".") + 1);
 		}
 
-		#endregion
+		#endregion Internal - Interface
 
 		#region Internal
 
@@ -609,7 +610,6 @@ namespace Mosa.Compiler.TypeSystem
 			}
 		}
 
-		#endregion
-
+		#endregion Internal
 	}
 }

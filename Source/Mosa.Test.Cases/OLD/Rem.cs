@@ -8,7 +8,7 @@
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  *  Michael Fröhlich (grover) <michael.ruck@michaelruck.de>
  *  Kai P. Reisert <kpreisert@googlemail.com>
- *  
+ *
  */
 
 using System;
@@ -21,7 +21,6 @@ namespace Mosa.Test.Cases.OLD
 	[TestFixture]
 	public class Rem : TestCompilerAdapter
 	{
-		
 		private static string CreateTestCodeWithReturn(string name, string typeIn, string typeOut)
 		{
 			return @"
@@ -85,22 +84,25 @@ namespace Mosa.Test.Cases.OLD
 			settings.CodeSource = CreateConstantTestCode("RemConstantCLeft", "char", "char", "'" + a.ToString() + "'", null);
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "RemConstantCLeft", (char)(a % b), b));
 		}
-		#endregion
+
+		#endregion C
 
 		#region I1
-		
+
 		[Row(1, 2)]
 		[Row(23, 21)]
 		[Row(1, -2)]
 		[Row(-1, 2)]
 		[Row(0, 0, ExpectedException = typeof(DivideByZeroException))]
 		[Row(-17, -2)]
+
 		// And reverse
 		[Row(2, 1)]
 		[Row(21, 23)]
 		[Row(-2, 1)]
 		[Row(2, -1)]
 		[Row(-2, -17)]
+
 		// (MinValue, X) Cases
 		[Row(sbyte.MinValue, 0, ExpectedException = typeof(DivideByZeroException))]
 		[Row(sbyte.MinValue, 1)]
@@ -110,6 +112,7 @@ namespace Mosa.Test.Cases.OLD
 		[Row(sbyte.MinValue, -1)]
 		[Row(sbyte.MinValue, -17)]
 		[Row(sbyte.MinValue, -123)]
+
 		// (MaxValue, X) Cases
 		[Row(sbyte.MaxValue, 0, ExpectedException = typeof(DivideByZeroException))]
 		[Row(sbyte.MaxValue, 1)]
@@ -119,6 +122,7 @@ namespace Mosa.Test.Cases.OLD
 		[Row(sbyte.MaxValue, -1)]
 		[Row(sbyte.MaxValue, -17)]
 		[Row(sbyte.MaxValue, -123)]
+
 		// (X, MinValue) Cases
 		[Row(0, sbyte.MinValue)]
 		[Row(1, sbyte.MinValue)]
@@ -128,6 +132,7 @@ namespace Mosa.Test.Cases.OLD
 		[Row(-1, sbyte.MinValue)]
 		[Row(-17, sbyte.MinValue)]
 		[Row(-123, sbyte.MinValue)]
+
 		// (X, MaxValue) Cases
 		[Row(0, sbyte.MaxValue)]
 		[Row(1, sbyte.MaxValue)]
@@ -137,6 +142,7 @@ namespace Mosa.Test.Cases.OLD
 		[Row(-1, sbyte.MaxValue)]
 		[Row(-17, sbyte.MaxValue)]
 		[Row(-123, sbyte.MaxValue)]
+
 		// Extremvaluecases
 		[Row(sbyte.MinValue, sbyte.MaxValue)]
 		[Row(sbyte.MaxValue, sbyte.MinValue)]
@@ -169,13 +175,15 @@ namespace Mosa.Test.Cases.OLD
 			settings.CodeSource = CreateConstantTestCode("RemConstantI1Left", "sbyte", "sbyte", a.ToString(), null);
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "RemConstantI1Left", (sbyte)(a % b), b));
 		}
-		#endregion
+
+		#endregion I1
 
 		#region U1
-		
+
 		[Row(23, 21)]
 		[Row(17, 1)]
 		[Row(0, 0, ExpectedException = typeof(DivideByZeroException))]
+
 		//[Row(byte.MinValue, byte.MaxValue)] FIXME: Uncommenting this lets the test runner freeze
 		[Test]
 		public void RemConstantU1Right(byte a, byte b)
@@ -194,10 +202,11 @@ namespace Mosa.Test.Cases.OLD
 			settings.CodeSource = CreateConstantTestCode("RemConstantU1Left", "byte", "byte", a.ToString(), null);
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "RemConstantU1Left", (byte)(a % b), b));
 		}
-		#endregion
+
+		#endregion U1
 
 		#region I2
-		
+
 		[Row(-23, 21)]
 		[Row(17, 1)]
 		[Row(0, 0, ExpectedException = typeof(DivideByZeroException))]
@@ -219,10 +228,11 @@ namespace Mosa.Test.Cases.OLD
 			settings.CodeSource = CreateConstantTestCode("RemConstantI2Left", "short", "short", a.ToString(), null);
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "RemConstantI2Left", (short)(a % b), b));
 		}
-		#endregion
+
+		#endregion I2
 
 		#region U2
-	
+
 		[Row(23, 21)]
 		[Row(148, 23)]
 		[Row(17, 1)]
@@ -246,10 +256,11 @@ namespace Mosa.Test.Cases.OLD
 			settings.CodeSource = CreateConstantTestCode("RemConstantU2Left", "ushort", "ushort", a.ToString(), null);
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "RemConstantU2Left", (ushort)(a % b), b));
 		}
-		#endregion
+
+		#endregion U2
 
 		#region I4
-		
+
 		[Row(-23, 21)]
 		[Row(-23, 148)]
 		[Row(17, 1)]
@@ -273,10 +284,11 @@ namespace Mosa.Test.Cases.OLD
 			settings.CodeSource = CreateConstantTestCode("RemConstantI4Left", "int", "int", a.ToString(), null);
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "RemConstantI4Left", (a % b), b));
 		}
-		#endregion
+
+		#endregion I4
 
 		#region U4
-		
+
 		[Row(1, 2)]
 		[Row(23, 21)]
 		[Row(0, 0, ExpectedException = typeof(DivideByZeroException))]
@@ -300,22 +312,25 @@ namespace Mosa.Test.Cases.OLD
 			settings.CodeSource = CreateConstantTestCode("RemConstantU4Left", "uint", "uint", a.ToString(), null);
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "RemConstantU4Left", (uint)(a % b), b));
 		}
-		#endregion
+
+		#endregion U4
 
 		#region I8
-	
+
 		[Row(1, 2)]
 		[Row(23, 21)]
 		[Row(1, -2)]
 		[Row(-1, 2)]
 		[Row(0, 0, ExpectedException = typeof(DivideByZeroException))]
 		[Row(-17, -2)]
+
 		// And reverse
 		[Row(2, 1)]
 		[Row(21, 23)]
 		[Row(-2, 1)]
 		[Row(2, -1)]
 		[Row(-2, -17)]
+
 		// (MinValue, X) Cases
 		[Row(long.MinValue, 0, ExpectedException = typeof(DivideByZeroException))]
 		[Row(long.MinValue, 1)]
@@ -325,6 +340,7 @@ namespace Mosa.Test.Cases.OLD
 		[Row(long.MinValue, -1, ExpectedException = typeof(OverflowException))]
 		[Row(long.MinValue, -17)]
 		[Row(long.MinValue, -123)]
+
 		// (MaxValue, X) Cases
 		[Row(long.MaxValue, 0, ExpectedException = typeof(DivideByZeroException))]
 		[Row(long.MaxValue, 1)]
@@ -334,6 +350,7 @@ namespace Mosa.Test.Cases.OLD
 		[Row(long.MaxValue, -1)]
 		[Row(long.MaxValue, -17)]
 		[Row(long.MaxValue, -123)]
+
 		// (X, MinValue) Cases
 		[Row(0, long.MinValue)]
 		[Row(1, long.MinValue)]
@@ -343,6 +360,7 @@ namespace Mosa.Test.Cases.OLD
 		[Row(-1, long.MinValue)]
 		[Row(-17, long.MinValue)]
 		[Row(-123, long.MinValue)]
+
 		// (X, MaxValue) Cases
 		[Row(0, long.MaxValue)]
 		[Row(1, long.MaxValue)]
@@ -352,6 +370,7 @@ namespace Mosa.Test.Cases.OLD
 		[Row(-1, long.MaxValue)]
 		[Row(-17, long.MaxValue)]
 		[Row(-123, long.MaxValue)]
+
 		// Extremvaluecases
 		[Row(long.MinValue, long.MaxValue)]
 		[Row(long.MaxValue, long.MinValue)]
@@ -384,10 +403,11 @@ namespace Mosa.Test.Cases.OLD
 			settings.CodeSource = CreateConstantTestCode("RemConstantI8Left", "long", "long", a.ToString(), null);
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "RemConstantI8Left", (a % b), b));
 		}
-		#endregion
+
+		#endregion I8
 
 		#region U8
-		
+
 		[Row(23, 148)]
 		[Row(17, 1)]
 		[Row(0, 0, ExpectedException = typeof(DivideByZeroException))]
@@ -409,6 +429,7 @@ namespace Mosa.Test.Cases.OLD
 			settings.CodeSource = CreateConstantTestCode("RemConstantU8Left", "ulong", "ulong", a.ToString(), null);
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "RemConstantU8Left", (ulong)(a % b), b));
 		}
-		#endregion
+
+		#endregion U8
 	}
 }

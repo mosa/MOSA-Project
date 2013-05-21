@@ -7,16 +7,13 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-
 namespace Mosa.Compiler.Framework.Platform
 {
-
 	/// <summary>
 	/// This interface is used to present opcode constraints to the register allocator.
 	/// </summary>
 	public interface IRegisterUsage
 	{
-
 		/// <summary>
 		/// Gets the output registers.
 		/// </summary>
@@ -48,7 +45,5 @@ namespace Mosa.Compiler.Framework.Platform
 		/// Gets the additional input registers.
 		/// </summary>
 		RegisterBitmap AdditionalInputRegisters { get; }
-
 	}
-
 }

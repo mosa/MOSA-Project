@@ -7,13 +7,12 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-
 namespace System.Collections.Generic
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
-	class IEqualityComparer
+	internal class IEqualityComparer
 	{
 	}
 }

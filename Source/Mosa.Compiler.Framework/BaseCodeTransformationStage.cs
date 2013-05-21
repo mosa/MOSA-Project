@@ -16,7 +16,6 @@ namespace Mosa.Compiler.Framework
 	/// </summary>
 	public abstract class BaseCodeTransformationStage : BaseMethodCompilerStage, IMethodCompilerStage, IVisitor
 	{
-
 		#region IMethodCompilerStage Members
 
 		/// <summary>
@@ -30,7 +29,7 @@ namespace Mosa.Compiler.Framework
 						ctx.Clone().Visit(this);
 		}
 
-		#endregion // IMethodCompilerStage Members
+		#endregion IMethodCompilerStage Members
 
 		#region Block Operations
 
@@ -167,7 +166,6 @@ namespace Mosa.Compiler.Framework
 			return CreateContext(nextBlock);
 		}
 
-		#endregion
-
+		#endregion Block Operations
 	}
 }

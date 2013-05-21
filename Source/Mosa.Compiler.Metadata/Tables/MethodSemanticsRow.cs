@@ -7,33 +7,31 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-
-
 namespace Mosa.Compiler.Metadata.Tables
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public struct MethodSemanticsRow
 	{
 		#region Data members
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private MethodSemanticsAttributes _semantics;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private Token _method;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private Token _association;
 
-		#endregion // Data members
+		#endregion Data members
 
 		#region Construction
 
@@ -51,7 +49,7 @@ namespace Mosa.Compiler.Metadata.Tables
 			_association = association;
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Properties
 
@@ -82,6 +80,6 @@ namespace Mosa.Compiler.Metadata.Tables
 			get { return _association; }
 		}
 
-		#endregion // Properties
+		#endregion Properties
 	}
 }

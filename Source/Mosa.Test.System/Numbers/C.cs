@@ -9,7 +9,6 @@
 
 using System.Collections.Generic;
 
-
 namespace Mosa.Test.System.Numbers
 {
 	public static class C
@@ -53,6 +52,5 @@ namespace Mosa.Test.System.Numbers
 
 			return list;
 		}
-
 	}
 }

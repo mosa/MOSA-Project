@@ -19,7 +19,6 @@ namespace Mosa.Platform.x86.Intrinsic
 	/// </summary>
 	public sealed class CpuId : IIntrinsicPlatformMethod
 	{
-
 		#region Methods
 
 		/// <summary>
@@ -32,7 +31,6 @@ namespace Mosa.Platform.x86.Intrinsic
 			context.SetInstruction(X86.CpuId, context.Result, context.Operand1);
 		}
 
-		#endregion // Methods
-
+		#endregion Methods
 	}
 }

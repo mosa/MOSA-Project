@@ -11,18 +11,21 @@ using System;
 
 namespace Mosa.Platform.x86.XSharp
 {
-
-
 	public class IndexedRegister
 	{
 		protected int index;
 		protected Register register;
 
 		protected XSharpMethod XSharpMethod { get { return register.XSharpMethod; } }
+
 		internal Register Register { get { return register; } }
+
 		internal int Index { get { return index; } }
 
-		internal IndexedRegister(Register register, int index) { this.register = register; this.index = index; }
+		internal IndexedRegister(Register register, int index)
+		{
+			this.register = register; this.index = index;
+		}
 
 		public object Value
 		{

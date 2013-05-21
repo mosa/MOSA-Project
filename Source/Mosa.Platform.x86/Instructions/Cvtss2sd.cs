@@ -18,12 +18,11 @@ namespace Mosa.Platform.x86.Instructions
 	/// </summary>
 	public class Cvtss2sd : TwoOperandInstruction
 	{
-
 		#region Data Members
 
 		private static readonly OpCode opcode = new OpCode(new byte[] { 0xF3, 0x0F, 0x5A });
 
-		#endregion
+		#endregion Data Members
 
 		#region Methods
 
@@ -38,7 +37,7 @@ namespace Mosa.Platform.x86.Instructions
 		{
 			if ((destination.IsRegister) && (source.IsRegister)) return opcode;
 			if ((destination.IsRegister) && (source.IsMemoryAddress)) return opcode;
-			
+
 			throw new ArgumentException(@"No opcode for operand type.");
 		}
 
@@ -52,6 +51,6 @@ namespace Mosa.Platform.x86.Instructions
 			visitor.Cvtss2sd(context);
 		}
 
-		#endregion // Methods
+		#endregion Methods
 	}
 }

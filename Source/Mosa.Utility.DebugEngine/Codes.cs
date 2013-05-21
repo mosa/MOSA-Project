@@ -7,11 +7,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
 namespace Mosa.Utility.DebugEngine
 {
 	public static class Codes
@@ -32,6 +27,5 @@ namespace Mosa.Utility.DebugEngine
 		public const int WriteMemory = 1011;
 		public const int ReadCR3 = 1012;
 		public const int Scattered32BitReadMemory = 1013;
-
 	}
 }

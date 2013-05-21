@@ -18,13 +18,12 @@ namespace Mosa.Platform.x86.Instructions
 	/// </summary>
 	public sealed class Movss : TwoOperandInstruction
 	{
-
 		#region Data Members
 
 		private static readonly OpCode R = new OpCode(new byte[] { 0xF3, 0x0F, 0x10 });
 		private static readonly OpCode M_R = new OpCode(new byte[] { 0xF3, 0x0F, 0x11 });
 
-		#endregion
+		#endregion Data Members
 
 		#region Methods
 
@@ -62,6 +61,6 @@ namespace Mosa.Platform.x86.Instructions
 			visitor.Movss(context);
 		}
 
-		#endregion
+		#endregion Methods
 	}
 }

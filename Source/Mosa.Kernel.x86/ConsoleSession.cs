@@ -7,9 +7,8 @@
 
 namespace Mosa.Kernel.x86
 {
-
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public class ConsoleSession
 	{
@@ -21,17 +20,17 @@ namespace Mosa.Kernel.x86
 		protected ConsoleManager consoleManager;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public readonly uint Columns;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public readonly uint Rows;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public uint Column
 		{
@@ -40,7 +39,7 @@ namespace Mosa.Kernel.x86
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public uint Row
 		{
@@ -95,7 +94,6 @@ namespace Mosa.Kernel.x86
 				Column = 0;
 				Row++;
 			}
-
 		}
 
 		/// <summary>
@@ -143,6 +141,7 @@ namespace Mosa.Kernel.x86
 			Write(value);
 			WriteLine();
 		}
+
 		/// <summary>
 		/// Goto the top.
 		/// </summary>
@@ -238,7 +237,7 @@ namespace Mosa.Kernel.x86
 			for (uint i = 0; i < skip; i++)
 				Next();
 		}
-		
+
 		/// <summary>
 		/// Writes the specified value.
 		/// </summary>

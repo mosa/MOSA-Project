@@ -21,7 +21,6 @@ namespace Mosa.Platform.AVR32.Intrinsic
 		[DllImportAttribute(@"Mosa.Platform.AVR32.Intrinsic.Nop, Mosa.Platform.AVR32")]
 		public extern static void Nop();
 
-		#endregion
-
+		#endregion Intrinsic
 	}
 }

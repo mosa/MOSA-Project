@@ -16,9 +16,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// </summary>
 	public sealed class Cdq : X86Instruction
 	{
-		
 		#region Methods
-
 
 		/// <summary>
 		/// Gets the additional output registers.
@@ -50,6 +48,6 @@ namespace Mosa.Platform.x86.Instructions
 			visitor.Cdq(context);
 		}
 
-		#endregion //  Methods
+		#endregion Methods
 	}
 }

@@ -15,14 +15,12 @@ using Mosa.Compiler.Metadata.Signatures;
 
 namespace Mosa.Platform.ARM
 {
-
 	/// <summary>
 	/// This class provides a common base class for architecture
 	/// specific operations.
 	/// </summary>
 	public class Architecture : BasicArchitecture
 	{
-
 		/// <summary>
 		/// Gets a value indicating whether this architecture is little-endian.
 		/// </summary>
@@ -56,7 +54,7 @@ namespace Mosa.Platform.ARM
 		/// Initializes a new instance of the <see cref="Architecture"/> class.
 		/// </summary>
 		/// <param name="architectureFeatures">The features this architecture supports.</param>
-		private Architecture(ArchitectureFeatureFlags architectureFeatures) 
+		private Architecture(ArchitectureFeatureFlags architectureFeatures)
 		{
 			this.architectureFeatures = architectureFeatures;
 		}
@@ -136,7 +134,6 @@ namespace Mosa.Platform.ARM
 			//assemblyCompilerPipeline.InsertAfterLast<TypeLayoutStage>(
 			//    new MethodTableBuilderStage()
 			//);
-
 		}
 
 		/// <summary>
@@ -145,7 +142,6 @@ namespace Mosa.Platform.ARM
 		/// <param name="methodCompilerPipeline">The method compiler pipeline to extend.</param>
 		public override void ExtendMethodCompilerPipeline(CompilerPipeline methodCompilerPipeline)
 		{
-
 			//methodCompilerPipeline.InsertAfterLast<PlatformStubStage>(
 			//    new IMethodCompilerStage[]
 			//    {
@@ -211,6 +207,7 @@ namespace Mosa.Platform.ARM
 		{
 			// TODO
 			return null;
+
 			//return new MachineCodeEmitter();
 		}
 	}

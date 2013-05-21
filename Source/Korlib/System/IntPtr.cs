@@ -16,7 +16,7 @@ namespace System
 	public unsafe struct IntPtr
 	{
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private void* _value;
 
@@ -37,10 +37,10 @@ namespace System
 			_value = value;
 		}
 
-
 		public static int Size
 		{
 			get { return 4; }
+
 			//get { return sizeof(void*); } // not supported yet
 		}
 
@@ -128,6 +128,5 @@ namespace System
 		//{
 		//    return value._value;
 		//}
-
 	}
 }

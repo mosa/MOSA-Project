@@ -11,11 +11,10 @@ namespace System
 {
 	public class Object
 	{
-
 		public Object()
 		{
 		}
-	
+
 		public virtual bool Equals(object obj)
 		{
 			return false;

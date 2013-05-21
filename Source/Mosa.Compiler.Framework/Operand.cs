@@ -22,14 +22,13 @@ namespace Mosa.Compiler.Framework
 	/// </summary>
 	public sealed class Operand
 	{
-
 		#region Data members
 
 		[Flags]
 		private enum OperandType { Undefined = 0, Constant = 1, StackLocal = 2, Parameter = 4, LocalVariable = 8, Symbol = 16, Register = 32, CPURegister = 64, SSA = 128, RuntimeMember = 256, MemoryAddress = 512, VirtualRegister = 1024, Label = 2048 };
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private readonly OperandType operandType;
 
@@ -54,7 +53,7 @@ namespace Mosa.Compiler.Framework
 		private object value;
 
 		/// <summary>
-		/// Holds the name 
+		/// Holds the name
 		/// </summary>
 		private string name;
 
@@ -84,11 +83,11 @@ namespace Mosa.Compiler.Framework
 		private Operand ssaOperand;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private int ssaVersion;
 
-		#endregion // Data members
+		#endregion Data members
 
 		#region Properties
 
@@ -198,7 +197,7 @@ namespace Mosa.Compiler.Framework
 		public bool IsParameter { get { return (operandType & OperandType.Parameter) == OperandType.Parameter; } }
 
 		/// <summary>
-		/// Determines if the operand is a stack temp operand. 
+		/// Determines if the operand is a stack temp operand.
 		/// </summary>
 		public bool IsStackTemp { get { return IsStackLocal && !IsLocalVariable && !IsParameter; } }
 
@@ -248,12 +247,13 @@ namespace Mosa.Compiler.Framework
 				throw new CompilationException("Not an integer");
 			}
 		}
+
 		/// <summary>
 		/// Returns the stack type of the operand.
 		/// </summary>
 		public StackTypeCode StackType { get { return StackTypeFromSigType(sigType); } }
 
-		#endregion // Properties
+		#endregion Properties
 
 		#region Construction
 
@@ -280,7 +280,7 @@ namespace Mosa.Compiler.Framework
 			uses = new List<int>();
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Static Factory Constructors
 
@@ -425,6 +425,7 @@ namespace Mosa.Compiler.Framework
 			operand.offset = new IntPtr(-index * 4);
 			return operand;
 		}
+
 		/// <summary>
 		/// Creates a new runtime member <see cref="Operand"/>.
 		/// </summary>
@@ -501,7 +502,7 @@ namespace Mosa.Compiler.Framework
 			return operand;
 		}
 
-		#endregion // Static Factory Constructors
+		#endregion Static Factory Constructors
 
 		#region Methods
 
@@ -512,7 +513,6 @@ namespace Mosa.Compiler.Framework
 		/// <param name="instructionSet">The instruction set.</param>
 		public void Replace(Operand replacement, InstructionSet instructionSet)
 		{
-
 			// Iterate all definition sites first
 			foreach (int index in Definitions.ToArray())
 			{
@@ -525,7 +525,6 @@ namespace Mosa.Compiler.Framework
 					{
 						ctx.Result = replacement;
 					}
-
 				}
 			}
 
@@ -548,7 +547,7 @@ namespace Mosa.Compiler.Framework
 			}
 		}
 
-		#endregion // Methods
+		#endregion Methods
 
 		#region Object Overrides
 
@@ -634,7 +633,7 @@ namespace Mosa.Compiler.Framework
 			return s.ToString();
 		}
 
-		#endregion // Object Overrides
+		#endregion Object Overrides
 
 		#region Static Methods
 
@@ -703,8 +702,6 @@ namespace Mosa.Compiler.Framework
 			}
 		}
 
-		#endregion // Static Methods
-
+		#endregion Static Methods
 	}
 }
-

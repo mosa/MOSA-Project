@@ -16,13 +16,12 @@ using Mosa.Compiler.LinkerFormat.Elf32;
 namespace Mosa.Compiler.Linker.Elf32
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public class Linker : BaseLinker
 	{
-
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private const uint FileSectionAlignment = 0x200;
 
@@ -30,26 +29,32 @@ namespace Mosa.Compiler.Linker.Elf32
 		/// Specifies the default section alignment in virtual memory.
 		/// </summary>
 		private const uint SectionAlignment = 0x1000;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private readonly List<LinkerSection> sections;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private readonly NullSection nullSection;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private readonly StringTableSection stringTableSection;
+
 		/// <summary>
 		/// Holds the file alignment used for this ELF32 file.
 		/// </summary>
 		private uint fileAlignment;
+
 		/// <summary>
 		/// Holds the section alignment used for this ELF32 file.
 		/// </summary>
 		private readonly uint sectionAlignment;
+
 		/// <summary>
 		/// Flag, if the symbols have been resolved.
 		/// </summary>
@@ -66,6 +71,7 @@ namespace Mosa.Compiler.Linker.Elf32
 				return sections;
 			}
 		}
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Linker"/> class.
 		/// </summary>
@@ -171,6 +177,7 @@ namespace Mosa.Compiler.Linker.Elf32
 
 			// Retrieve the text section
 			Section text = (Section)GetSection(SectionKind.Text);
+
 			// Calculate the patch offset
 			long offset = (methodAddress - text.VirtualAddress.ToInt64()) + methodOffset;
 

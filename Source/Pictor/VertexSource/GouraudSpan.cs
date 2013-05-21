@@ -6,17 +6,17 @@
  * Authors:
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  */
+
 namespace Pictor.VertexSource
 {
-
 	//============================================================span_gouraud
 	public class span_gouraud : IVertexSource
 	{
-		coord_type[] m_coord = new coord_type[3];
-		double[] m_x = new double[8];
-		double[] m_y = new double[8];
-		uint[] m_cmd = new uint[8];
-		uint m_vertex;
+		private coord_type[] m_coord = new coord_type[3];
+		private double[] m_x = new double[8];
+		private double[] m_y = new double[8];
+		private uint[] m_cmd = new uint[8];
+		private uint m_vertex;
 
 		public struct coord_type
 		{
@@ -56,9 +56,9 @@ namespace Pictor.VertexSource
 
 		//--------------------------------------------------------------------
 		// Sets the triangle and dilates it if needed.
-		// The trick here is to Calculate beveled joins in the vertices of the 
-		// triangle and render it as a 6-Vertex polygon. 
-		// It's necessary to achieve numerical stability. 
+		// The trick here is to Calculate beveled joins in the vertices of the
+		// triangle and render it as a 6-Vertex polygon.
+		// It's necessary to achieve numerical stability.
 		// However, the Coordinates to interpolate Colors are calculated
 		// as miter joins (CalculateIntersection).
 		public void triangle(double x1, double y1,

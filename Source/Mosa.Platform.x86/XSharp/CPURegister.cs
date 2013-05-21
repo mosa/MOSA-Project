@@ -10,6 +10,4 @@
 namespace Mosa.Platform.x86.XSharp
 {
 	internal enum CPURegister { ESP, EBP, EDX, EAX, EBX, ECX, ESI, EDI };
-
-
 }

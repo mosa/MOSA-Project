@@ -9,8 +9,6 @@
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  */
 
-using Mosa.Internal.Plug;
-
 namespace Mosa.Internal
 {
 	public unsafe static class Runtime
@@ -18,7 +16,10 @@ namespace Mosa.Internal
 		private const uint nativeIntSize = 4;
 
 		// This method will be plugged by "Mosa.Kernel.x86.KernelMemory.AllocateMemory"
-		private static uint AllocateMemory(uint size) { return 0; }
+		private static uint AllocateMemory(uint size)
+		{
+			return 0;
+		}
 
 		public static void* AllocateObject(void* methodTable, uint classSize)
 		{
@@ -278,7 +279,6 @@ namespace Mosa.Internal
 
 		public static void Throw(uint something)
 		{
-
 		}
 
 		public static uint GetSizeOfObject(void* obj)
@@ -299,7 +299,5 @@ namespace Mosa.Internal
 
 			return sizeOf;
 		}
-
-
 	}
 }

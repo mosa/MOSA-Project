@@ -32,6 +32,6 @@ namespace Mosa.Platform.x86.Intrinsic
 			context.Remove();
 		}
 
-		#endregion // Methods
+		#endregion Methods
 	}
 }

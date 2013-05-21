@@ -12,7 +12,7 @@ using Mosa.DeviceSystem;
 namespace Mosa.FileSystem
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public interface IFileSystemDevice
 	{

@@ -57,7 +57,6 @@ namespace Mosa.HelloWorld.x86.Tests
 			return (c == 41);
 		}
 
-
 		public static bool ExceptionTest3()
 		{
 			int a = 10;

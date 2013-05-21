@@ -15,7 +15,6 @@ namespace Mosa.Compiler.Verifier
 {
 	public abstract class BaseTableVerificationStage : BaseVerificationStage
 	{
-
 		protected bool IsValidStringIndex(HeapIndexToken token)
 		{
 			// TODO:
@@ -94,7 +93,5 @@ namespace Mosa.Compiler.Verifier
 
 			return false;
 		}
-
 	}
 }
-

@@ -13,12 +13,12 @@ using Mosa.Compiler.Metadata;
 
 namespace Mosa.Tool.MetadataExplorer.Tables
 {
-
 	public abstract class TableRow
 	{
 		private IMetadataProvider metadata;
 
 		public abstract string Name { get; }
+
 		public IMetadataProvider Metadata { get { return metadata; } }
 
 		public TableRow(IMetadataProvider metadata)

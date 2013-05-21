@@ -7,31 +7,30 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-
 namespace Mosa.DeviceSystem
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public class DiskDevice : Device, IDiskDevice, IDevice
 	{
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private IDiskControllerDevice diskController;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private uint driveNbr;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private uint totalSectors;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private bool readOnly;
 
@@ -110,6 +109,5 @@ namespace Mosa.DeviceSystem
 		{
 			return diskController.WriteBlock(driveNbr, block, count, data);
 		}
-
 	}
 }

@@ -5,7 +5,7 @@
  *
  * Authors:
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- *  Pascal Delprat (pdelprat) <pascal.delprat@online.fr>    
+ *  Pascal Delprat (pdelprat) <pascal.delprat@online.fr>
  */
 
 using System;
@@ -16,11 +16,10 @@ using Mosa.Compiler.Metadata;
 namespace Mosa.Platform.AVR32
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public abstract class AVR32Instruction : BaseInstruction
 	{
-
 		#region Construction
 
 		/// <summary>
@@ -49,7 +48,7 @@ namespace Mosa.Platform.AVR32
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Methods
 
@@ -86,7 +85,7 @@ namespace Mosa.Platform.AVR32
 			Emit(context, emitter as MachineCodeEmitter);
 		}
 
-		#endregion // Methods
+		#endregion Methods
 
 		#region Operand Overrides
 
@@ -119,7 +118,7 @@ namespace Mosa.Platform.AVR32
 				Visit(visitor as IAVR32Visitor, context);
 		}
 
-		#endregion // Overrides
+		#endregion Operand Overrides
 
 		protected bool Is8Bit(uint value)
 		{
@@ -181,6 +180,5 @@ namespace Mosa.Platform.AVR32
 					throw new NotSupportedException(String.Format(@"CilElementType.{0} is not supported.", op.Type.Type));
 			}
 		}
-
 	}
 }

@@ -13,17 +13,17 @@ using Mosa.DeviceSystem.PCI;
 namespace Mosa.DeviceSystem
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public class DeviceDriverRegistry
 	{
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected PlatformArchitecture platformArchitecture;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected LinkedList<DeviceDriver> deviceDrivers;
 
@@ -117,5 +117,4 @@ namespace Mosa.DeviceSystem
 			}
 		}
 	}
-
 }

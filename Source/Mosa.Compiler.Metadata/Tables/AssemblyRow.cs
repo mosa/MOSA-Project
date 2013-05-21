@@ -7,55 +7,61 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-
-
 namespace Mosa.Compiler.Metadata.Tables
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public struct AssemblyRow
 	{
 		#region Data members
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private AssemblyHashAlgorithm hashAlgId;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private ushort majorVersion;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private ushort minorVersion;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private ushort buildNumber;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private ushort revisionNumber;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private AssemblyAttributes flags;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private HeapIndexToken publicKey;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private HeapIndexToken name;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private HeapIndexToken culture;
 
-		#endregion // Data members
+		#endregion Data members
 
 		#region Construction
 
@@ -86,7 +92,7 @@ namespace Mosa.Compiler.Metadata.Tables
 			this.culture = culture;
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Properties
 
@@ -97,6 +103,7 @@ namespace Mosa.Compiler.Metadata.Tables
 		public AssemblyHashAlgorithm HashAlgId
 		{
 			get { return hashAlgId; }
+
 			//set { hashAlgId = value; }
 		}
 
@@ -107,6 +114,7 @@ namespace Mosa.Compiler.Metadata.Tables
 		public ushort MajorVersion
 		{
 			get { return majorVersion; }
+
 			//set { majorVersion = value; }
 		}
 
@@ -169,6 +177,6 @@ namespace Mosa.Compiler.Metadata.Tables
 			get { return culture; }
 		}
 
-		#endregion // Properties
+		#endregion Properties
 	}
 }

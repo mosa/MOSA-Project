@@ -66,7 +66,6 @@ namespace Mosa.Tool.Mono.UpdateSource
 
 					System.IO.File.WriteAllLines(source, lines.ToArray());
 				}
-
 			}
 			catch (Exception e)
 			{
@@ -76,6 +75,5 @@ namespace Mosa.Tool.Mono.UpdateSource
 
 			return 0;
 		}
-
 	}
 }

@@ -15,34 +15,38 @@ namespace Mosa.Compiler.Framework.Stages
 {
 	/// <summary>
 	/// A stage to compute local common subexpression elimination
-	/// according to Steven S. Muchnick, Advanced Compiler Design 
+	/// according to Steven S. Muchnick, Advanced Compiler Design
 	/// and Implementation (Morgan Kaufmann, 1997) pp. 378-396
 	/// </summary>
 	public class LocalCSE : BaseMethodCompilerStage, IMethodCompilerStage, IPipelineStage
 	{
 		/// <summary>
-		/// 
+		///
 		/// </summary>
-		struct AEBinExp
+		private struct AEBinExp
 		{
 			/// <summary>
-			/// 
+			///
 			/// </summary>
 			public readonly int Position;
+
 			/// <summary>
-			/// 
+			///
 			/// </summary>
 			public readonly Operand Operand1;
+
 			/// <summary>
-			/// 
+			///
 			/// </summary>
 			public readonly Operation Operator;
+
 			/// <summary>
-			/// 
+			///
 			/// </summary>
 			public readonly Operand Operand2;
+
 			/// <summary>
-			/// 
+			///
 			/// </summary>
 			public readonly Operand Var;
 
@@ -65,32 +69,37 @@ namespace Mosa.Compiler.Framework.Stages
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
-		enum Operation
+		private enum Operation
 		{
 			/// <summary>
-			/// 
+			///
 			/// </summary>
 			None,
+
 			/// <summary>
-			/// 
+			///
 			/// </summary>
 			Add,
+
 			/// <summary>
-			/// 
+			///
 			/// </summary>
 			Mul,
+
 			/// <summary>
-			/// 
+			///
 			/// </summary>
 			And,
+
 			/// <summary>
-			/// 
+			///
 			/// </summary>
 			Or,
+
 			/// <summary>
-			/// 
+			///
 			/// </summary>
 			Xor
 		}
@@ -117,7 +126,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			for (; !ctx.EndOfInstruction; ctx.GotoNext())
 			{
-				BaseInstruction instruction = ctx.Instruction; 
+				BaseInstruction instruction = ctx.Instruction;
 				Operand temp = null;
 				bool found = false;
 
@@ -154,15 +163,19 @@ namespace Mosa.Compiler.Framework.Stages
 									case Operation.Add:
 										inserted.SetInstruction(CIL.CILInstruction.Get(CIL.OpCode.Add), temp, aeb.Operand1, aeb.Operand2);
 										break;
+
 									case Operation.Mul:
 										inserted.SetInstruction(CIL.CILInstruction.Get(CIL.OpCode.Mul), temp, aeb.Operand1, aeb.Operand2);
 										break;
+
 									case Operation.Or:
 										inserted.SetInstruction(CIL.CILInstruction.Get(CIL.OpCode.Or), temp, aeb.Operand1, aeb.Operand2);
 										break;
+
 									case Operation.Xor:
 										inserted.SetInstruction(CIL.CILInstruction.Get(CIL.OpCode.Xor), temp, aeb.Operand1, aeb.Operand2);
 										break;
+
 									default:
 										break;
 								}
@@ -200,6 +213,7 @@ namespace Mosa.Compiler.Framework.Stages
 							opr = Operation.Mul;
 						else if (instruction is IR.LogicalAnd)
 							opr = Operation.And;
+
 						// Insert new tuple
 						AEB.Add(new AEBinExp(ctx.Index, ctx.Operand1, opr, ctx.Operand2, null));
 					}

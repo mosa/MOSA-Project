@@ -14,6 +14,7 @@ namespace Mosa.Compiler.InternalTrace
 	public interface ITraceFilter
 	{
 		bool IsMatch(RuntimeMethod method, string stage);
+
 		bool IsLogging { get; }
 	}
 }

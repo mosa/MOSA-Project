@@ -7,15 +7,13 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-
 namespace Mosa.Compiler.Metadata.Signatures
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public class MethodReferenceSignature : MethodSignature
 	{
-
 		/// <summary>
 		/// Initializes a new instance of the <see cref="MethodReferenceSignature"/> class.
 		/// </summary>

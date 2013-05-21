@@ -10,8 +10,6 @@
 using System;
 using System.IO;
 
-using Mosa.Compiler.Linker;
-
 namespace Mosa.Compiler.Framework
 {
 	/// <summary>
@@ -51,4 +49,3 @@ namespace Mosa.Compiler.Framework
 		long CurrentPosition { get; }
 	}
 }
-

@@ -13,7 +13,7 @@ using System.IO;
 namespace Mosa.Compiler.Pdb
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public class CvFunctionSymbol3 : CvSymbol
 	{

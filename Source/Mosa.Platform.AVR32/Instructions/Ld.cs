@@ -5,7 +5,7 @@
  *
  * Authors:
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- *  Pascal Delprat (pdelprat) <pascal.delprat@online.fr>    
+ *  Pascal Delprat (pdelprat) <pascal.delprat@online.fr>
  */
 
 using System;
@@ -60,7 +60,6 @@ namespace Mosa.Platform.AVR32.Instructions
 			visitor.Ld(context);
 		}
 
-		#endregion // Methods
-
+		#endregion Methods
 	}
 }

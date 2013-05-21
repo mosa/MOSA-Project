@@ -11,7 +11,6 @@ namespace Mosa.Kernel.x86
 {
 	public class CpuInfo
 	{
-	
 		public ulong NumberOfCores
 		{
 			get
@@ -89,7 +88,7 @@ namespace Mosa.Kernel.x86
 		{
 			if (SupportsBrandString)
 			{
-				PrintBrand(console,(uint)0x80000002);
+				PrintBrand(console, (uint)0x80000002);
 				PrintBrand(console, (uint)0x80000003);
 				PrintBrand(console, (uint)0x80000004);
 				return;

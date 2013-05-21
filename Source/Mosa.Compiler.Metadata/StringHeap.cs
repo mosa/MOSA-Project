@@ -13,7 +13,6 @@ using System.Text;
 
 namespace Mosa.Compiler.Metadata
 {
-
 	/// <summary>
 	/// Provides a access to the strings in the .NET provider string heap.
 	/// </summary>
@@ -32,7 +31,7 @@ namespace Mosa.Compiler.Metadata
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Methods
 
@@ -59,6 +58,6 @@ namespace Mosa.Compiler.Metadata
 			return Encoding.UTF8.GetString(buffer, realOffset, endOffset - realOffset);
 		}
 
-		#endregion // Methods
+		#endregion Methods
 	}
 }

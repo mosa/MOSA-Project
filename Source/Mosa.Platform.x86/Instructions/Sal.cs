@@ -17,13 +17,12 @@ namespace Mosa.Platform.x86.Instructions
 	/// </summary>
 	public sealed class Sal : TwoOperandInstruction
 	{
-
 		#region Data Members
 
 		private static readonly OpCode RM = new OpCode(new byte[] { 0xD3 }, 4);
 		private static readonly OpCode RMC = new OpCode(new byte[] { 0xC1 }, 4);
 
-		#endregion
+		#endregion Data Members
 
 		#region Methods
 
@@ -52,6 +51,6 @@ namespace Mosa.Platform.x86.Instructions
 			visitor.Sal(context);
 		}
 
-		#endregion // Methods
+		#endregion Methods
 	}
 }

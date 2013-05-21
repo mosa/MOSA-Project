@@ -6,9 +6,8 @@ using Mosa.Test.System;
 
 namespace Mosa.Test.Cases.OLD
 {
-
 	[TestFixture]
-	class StaticFieldInit : TestCompilerAdapter
+	internal class StaticFieldInit : TestCompilerAdapter
 	{
 		private static string testCode = @"
 			using System;

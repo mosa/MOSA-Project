@@ -12,11 +12,10 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.x86.Instructions
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public sealed class Ret : X86Instruction
 	{
-
 		#region Methods
 
 		/// <summary>
@@ -29,7 +28,6 @@ namespace Mosa.Platform.x86.Instructions
 			emitter.WriteByte(0xC3);
 		}
 
-		#endregion // Methods
-
+		#endregion Methods
 	}
 }

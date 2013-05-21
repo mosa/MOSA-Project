@@ -39,7 +39,7 @@ namespace Mosa.Tool.Compiler.Stages
 		/// </summary>
 		private LinkerGeneratedMethod method;
 
-		#endregion // Data Members
+		#endregion Data Members
 
 		#region Construction
 
@@ -52,10 +52,11 @@ namespace Mosa.Tool.Compiler.Stages
 			ctx = new Context(instructionSet);
 
 			ctx.AppendInstruction(IR.IRInstruction.Prologue);
+
 			//ctx.Other = 0; // stacksize
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Properties
 
@@ -68,7 +69,7 @@ namespace Mosa.Tool.Compiler.Stages
 			get { return method; }
 		}
 
-		#endregion
+		#endregion Properties
 
 		#region ICompilerStage Members
 
@@ -92,12 +93,13 @@ namespace Mosa.Tool.Compiler.Stages
 			}
 
 			ctx.AppendInstruction(IR.IRInstruction.Epilogue);
+
 			//ctx.Other = 0;
 
 			method = LinkTimeCodeGenerator.Compile(compiler, @"AssemblyInit", instructionSet, typeSystem);
 		}
 
-		#endregion // ICompilerStage Members
+		#endregion ICompilerStage Members
 
 		#region Methods
 
@@ -111,7 +113,6 @@ namespace Mosa.Tool.Compiler.Stages
 			ctx.AppendInstruction(IR.IRInstruction.Call, null, symbolOperand);
 		}
 
-		#endregion // Methods
-
+		#endregion Methods
 	}
 }

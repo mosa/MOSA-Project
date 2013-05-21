@@ -10,7 +10,7 @@
 namespace Mosa.DeviceSystem
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public class GenericPartition
 	{
@@ -29,7 +29,10 @@ namespace Mosa.DeviceSystem
 		/// Initializes a new instance of the <see cref="GenericPartition"/> class.
 		/// </summary>
 		/// <param name="index">The index.</param>
-		public GenericPartition(uint index) { this.index = index; }
+		public GenericPartition(uint index)
+		{
+			this.index = index;
+		}
 
 		/// <summary>
 		/// Gets or sets a value indicating whether this <see cref="GenericPartition"/> is bootable.

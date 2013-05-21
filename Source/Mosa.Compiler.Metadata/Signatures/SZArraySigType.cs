@@ -28,7 +28,7 @@ namespace Mosa.Compiler.Metadata.Signatures
 		/// </summary>
 		private SigType _elementType;
 
-		#endregion // Data members
+		#endregion Data members
 
 		#region Construction
 
@@ -44,7 +44,7 @@ namespace Mosa.Compiler.Metadata.Signatures
 			_elementType = type;
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Properties
 
@@ -60,7 +60,7 @@ namespace Mosa.Compiler.Metadata.Signatures
 		/// <value>The type of the array elements.</value>
 		public SigType ElementType { get { return _elementType; } }
 
-		#endregion // Properties
+		#endregion Properties
 
 		#region SigType Overrides
 
@@ -80,7 +80,7 @@ namespace Mosa.Compiler.Metadata.Signatures
 			return (base.Equals(other) == true && _elementType.Equals(szast._elementType) && CustomMod.Equals(_customMods, szast._customMods));
 		}
 
-		#endregion // SigType Overrides
+		#endregion SigType Overrides
 
 		/// <summary>
 		/// Expresses the array type reference in a meaningful, symbol-friendly string form

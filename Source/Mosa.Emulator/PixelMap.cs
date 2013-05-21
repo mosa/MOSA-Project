@@ -6,8 +6,8 @@
 //                  larsbrubaker@gmail.com
 // Copyright (C) 2007
 //
-// Permission to copy, use, modify, sell and distribute this software 
-// is granted provided this copyright notice appears in all copies. 
+// Permission to copy, use, modify, sell and distribute this software
+// is granted provided this copyright notice appears in all copies.
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -18,7 +18,7 @@
 //----------------------------------------------------------------------------
 //
 // class platform_support
-// 
+//
 //----------------------------------------------------------------------------
 //#define USE_OPENGL
 
@@ -28,15 +28,15 @@ using System.Drawing.Imaging;
 namespace Pictor.UI.EmulatorPlatform
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public class PixelMap //: IRenderingBuffer
 	{
-		Bitmap m_bmp;
-		BitmapData m_bmd;
+		private Bitmap m_bmp;
+		private BitmapData m_bmd;
 
-		unsafe byte* m_buf;
-		uint m_BitsPerPixel;
+		private unsafe byte* m_buf;
+		private uint m_BitsPerPixel;
 
 		~PixelMap()
 		{
@@ -47,7 +47,7 @@ namespace Pictor.UI.EmulatorPlatform
 		{
 		}
 
-		unsafe void destroy()
+		private unsafe void destroy()
 		{
 			m_bmp = null;
 			m_buf = null;
@@ -91,13 +91,12 @@ namespace Pictor.UI.EmulatorPlatform
 			m_bmd = m_bmp.LockBits(new Rectangle(0, 0, m_bmp.Width, m_bmp.Height), System.Drawing.Imaging.ImageLockMode.ReadWrite, m_bmp.PixelFormat);
 			m_buf = (byte*)m_bmd.Scan0;
 
-
 			m_bmp.UnlockBits(m_bmd);
 			m_bmd = null;
 			m_buf = null;
 		}
 
-		unsafe void Clear(uint clear_val)
+		private unsafe void Clear(uint clear_val)
 		{
 			if (m_buf != null)
 			{
@@ -179,7 +178,9 @@ namespace Pictor.UI.EmulatorPlatform
 			return m_bmd.Stride;
 		}
 
-		public uint bpp() { return m_BitsPerPixel; }
+		public uint bpp()
+		{
+			return m_BitsPerPixel;
+		}
 	}
-
 }
