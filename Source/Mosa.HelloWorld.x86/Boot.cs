@@ -25,6 +25,20 @@ namespace Mosa.HelloWorld.x86
 		public static void Main()
 		{
 			Mosa.Kernel.x86.Kernel.Setup();
+			//Dummy();
+
+			while (true)
+			{
+			}
+		}
+
+		public static void Dummy()
+		{
+		}
+
+		public static void Run()
+		{
+			Mosa.Kernel.x86.Kernel.Setup();
 			DebugClient.Setup(Serial.COM1);
 			IDT.SetInterruptHandler(ProcessInterrupt);
 

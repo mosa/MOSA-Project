@@ -23,6 +23,30 @@ namespace Mosa.TestWorld.x86
 		/// </summary>
 		public static void Main()
 		{
+			RunTests();
+
+			while (true)
+			{
+			}
+		}
+
+		public static void RunTests()
+		{
+			//Screen.Clear();
+			Native.Set8(0x0B8000, 65);
+			Native.Set8(0x0B8002, 66);
+			//Screen.Column = 0;
+			//Screen.Row = 1;
+			//Screen.Color = 3;
+			Screen.Write('X');
+			//Screen.Write('Z');
+		}
+
+		/// <summary>
+		/// Mains this instance.
+		/// </summary>
+		public static void Main2()
+		{
 			Mosa.Kernel.x86.Kernel.Setup();
 			DebugClient.Setup(Serial.COM1);
 			IDT.SetInterruptHandler(ProcessInterrupt);

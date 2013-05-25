@@ -10,6 +10,9 @@ IF EXIST "%ProgramFiles%\Java\jre7\bin\java.exe" SET JAVABIN="%ProgramFiles%\Jav
 IF EXIST "%ProgramFiles(x86)%\Java\jdk1.7.0\bin\java.exe" SET JAVABIN="%ProgramFiles(x86)%\Java\jdk1.7.0\bin\java.exe"
 IF EXIST "%ProgramFiles%\Java\jdk1.7.0\bin\java.exe" SET JAVABIN="%ProgramFiles%\Java\jdk1.7.0\bin\java.exe"
 
+IF EXIST "%ProgramFiles(x86)%\Java\jre7\bin\java.exe" SET JAVABIN="%ProgramFiles(x86)%\Java\jre7\bin\java.exe"
+IF EXIST "%ProgramFiles%\Java\jre7\bin\java.exe" SET JAVABIN="%ProgramFiles%\Java\jre7\bin\java.exe"
+
 %JAVABIN% -jar JPCApplication.jar -hda ..\..\Run\build\bootimage.img -boot hda
 
 pause

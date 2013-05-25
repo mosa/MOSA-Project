@@ -16,7 +16,7 @@ namespace Mosa.Kernel.x86
 	{
 		public static uint column = 0;
 		public static uint row = 0;
-		private static byte color = 0;
+		private static byte color = 23;
 
 		/// <summary>
 		///

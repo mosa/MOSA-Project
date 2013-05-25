@@ -35,11 +35,11 @@ namespace Mosa.Platform.x86.Instructions
 			Operand mop = context.Operand1;
 			byte[] code;
 
-			if (mop.OffsetBaseRegister != null)
+			if (mop.EffectiveOffsetBase != null)
 			{
 				code = new byte[] { 0x8D, 0x84, (4 << 3) };
 				code[1] |= (byte)((context.Result.Register.RegisterCode & 0x07));
-				code[2] |= (byte)((mop.OffsetBaseRegister.RegisterCode & 0x07));
+				code[2] |= (byte)((mop.EffectiveOffsetBase.RegisterCode & 0x07));
 
 				emitter.Write(code, 0, code.Length);
 				emitter.EmitImmediate(mop);

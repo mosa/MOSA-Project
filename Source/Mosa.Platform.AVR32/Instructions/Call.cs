@@ -53,7 +53,7 @@ namespace Mosa.Platform.AVR32.Instructions
 			{
 				if (context.Operand1.IsMemoryAddress)
 				{
-					emitter.EmitRegisterOperandWithK16(0x101, (byte)context.Operand1.OffsetBaseRegister.RegisterCode, (ushort)context.Operand1.Offset);
+					emitter.EmitRegisterOperandWithK16(0x101, (byte)context.Operand1.EffectiveOffsetBase.RegisterCode, (ushort)context.Operand1.Offset); //???
 				}
 			}
 		}

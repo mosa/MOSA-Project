@@ -219,7 +219,7 @@ namespace Mosa.Platform.AVR32
 				context.AppendInstruction(AVR32.Add, r8, r8);
 			}
 
-			context.AppendInstruction(AVR32.Ld, result, Operand.CreateMemoryAddress(r8.Type, GeneralPurposeRegister.R8, offsetPtr));
+			//context.AppendInstruction(AVR32.Ld, result, Operand.CreateMemoryAddress(r8.Type, GeneralPurposeRegister.R8, offsetPtr));
 		}
 
 		/// <summary>
@@ -548,7 +548,7 @@ namespace Mosa.Platform.AVR32
 				context.AppendInstruction(AVR32.Add, r8, r8);
 			}
 
-			context.AppendInstruction(AVR32.Ld, Operand.CreateMemoryAddress(value.Type, GeneralPurposeRegister.R8, offsetPtr), r9);
+			//context.AppendInstruction(AVR32.Ld, Operand.CreateMemoryAddress(value.Type, GeneralPurposeRegister.R8, offsetPtr), r9);
 		}
 
 		/// <summary>

@@ -189,7 +189,7 @@ namespace Mosa.Platform.x86
 			}
 			else
 			{
-				codeStream.Write(displacement.Offset, Endianness.Little);
+				codeStream.Write((int)displacement.Offset, Endianness.Little);
 			}
 		}
 
@@ -479,14 +479,14 @@ namespace Mosa.Platform.x86
 			}
 
 			// Check for register/memory combinations
-			else if (mop2 != null && mop2.OffsetBaseRegister != null)
+			else if (mop2 != null && mop2.EffectiveOffsetBase != null)
 			{
 				// mod = 10b, reg = rop1, r/m = mop2
-				modRM = (byte)(modRM.GetValueOrDefault() | (2 << 6) | (byte)mop2.OffsetBaseRegister.RegisterCode);
+				modRM = (byte)(modRM.GetValueOrDefault() | (2 << 6) | (byte)mop2.EffectiveOffsetBase.RegisterCode);
 				if (op1 != null)
 					modRM |= (byte)(op1.Register.RegisterCode << 3);
 				displacement = mop2;
-				if (mop2.OffsetBaseRegister.RegisterCode == 4)
+				if (mop2.EffectiveOffsetBase.RegisterCode == 4)
 					sib = 0xA4;
 			}
 			else if (mop2 != null)
@@ -497,14 +497,14 @@ namespace Mosa.Platform.x86
 					modRM |= (byte)(op1.Register.RegisterCode << 3);
 				displacement = mop2;
 			}
-			else if (mop1 != null && mop1.OffsetBaseRegister != null)
+			else if (mop1 != null && mop1.EffectiveOffsetBase != null)
 			{
 				// mod = 10b, r/m = mop1, reg = rop2
-				modRM = (byte)(modRM.GetValueOrDefault() | (2 << 6) | mop1.OffsetBaseRegister.RegisterCode);
+				modRM = (byte)(modRM.GetValueOrDefault() | (2 << 6) | mop1.EffectiveOffsetBase.RegisterCode);
 				if (op2IsRegister)
 					modRM |= (byte)(op2.Register.RegisterCode << 3);
 				displacement = mop1;
-				if (mop1.OffsetBaseRegister.RegisterCode == 4)
+				if (mop1.EffectiveOffsetBase.RegisterCode == 4)
 					sib = 0xA4;
 			}
 			else if (mop1 != null)

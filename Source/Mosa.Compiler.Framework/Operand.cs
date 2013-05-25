@@ -108,9 +108,12 @@ namespace Mosa.Compiler.Framework
 		public Operand OffsetBase { get { return offsetBase; } private set { offsetBase = value; } }
 
 		/// <summary>
-		/// Retrieves the base register, where the operand is located.
+		/// Gets the effective base.
 		/// </summary>
-		public Register OffsetBaseRegister { get { return register; } }
+		/// <value>
+		/// The effective base.
+		/// </value>
+		public Register EffectiveOffsetBase { get { return offsetBase != null ? offsetBase.register : register; } }
 
 		/// <summary>
 		/// Gets the base operand.
@@ -425,20 +428,6 @@ namespace Mosa.Compiler.Framework
 			return operand;
 		}
 
-		/// <summary>
-		/// Creates a new memory address <see cref="Operand"/>.
-		/// </summary>
-		/// <param name="sigType">Type of the sig.</param>
-		/// <param name="baseRegister">The base register.</param>
-		/// <param name="offset">The offset.</param>
-		/// <returns></returns>
-		public static Operand CreateMemoryAddress(SigType sigType, Register baseRegister, long offset) // TODO: Remove this method as virtual registers get implemented
-		{
-			Operand operand = new Operand(sigType, OperandType.MemoryAddress);
-			operand.register = baseRegister;
-			operand.Offset = offset;
-			return operand;
-		}
 
 		/// <summary>
 		/// Creates a new memory address <see cref="Operand"/>.
@@ -519,11 +508,13 @@ namespace Mosa.Compiler.Framework
 		/// Creates the stack local.
 		/// </summary>
 		/// <param name="sigType">Type of the sig.</param>
+		/// <param name="register">The register.</param>
 		/// <param name="index">The index.</param>
 		/// <returns></returns>
-		public static Operand CreateStackLocal(SigType sigType, int index)
+		public static Operand CreateStackLocal(SigType sigType, Register register, int index)
 		{
 			Operand operand = new Operand(sigType, OperandType.StackLocal | OperandType.MemoryAddress);
+			operand.register = register;
 			operand.index = index;
 			return operand;
 		}

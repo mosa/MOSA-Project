@@ -12,6 +12,7 @@ using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Signatures;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Mosa.Platform.x86
 {
@@ -65,23 +66,21 @@ namespace Mosa.Platform.x86
 			Operand target = context.Operand1;
 			Operand result = context.Result;
 
+			Operand edx = Operand.CreateCPURegister(BuiltInSigType.IntPtr, GeneralPurposeRegister.EDX);
+
 			Stack<Operand> operands = BuildOperandStack(context);
 
 			int stackSize = CalculateStackSizeForParameters(operands);
 
 			context.SetInstruction(X86.Nop);
 
-			ReserveStackSizeForCall(context, stackSize);
-
 			if (stackSize != 0)
 			{
-				PushOperands(context, operands, stackSize);
+				ReserveStackSizeForCall(context, stackSize, edx);
+				PushOperands(context, operands, stackSize, edx);
 			}
 
-			Operand edx = Operand.CreateCPURegister(BuiltInSigType.IntPtr, GeneralPurposeRegister.EDX);
-
 			context.AppendInstruction(X86.Mov, edx, target);
-
 			context.AppendInstruction(X86.Call, null, edx);
 
 			if (stackSize != 0)
@@ -108,13 +107,12 @@ namespace Mosa.Platform.x86
 			return operandStack;
 		}
 
-		private void ReserveStackSizeForCall(Context context, int stackSize)
+		private void ReserveStackSizeForCall(Context context, int stackSize, Operand edx)
 		{
-			if (stackSize == 0)
-				return;
+			Debug.Assert(stackSize != 0);
 
 			Operand esp = Operand.CreateCPURegister(BuiltInSigType.IntPtr, GeneralPurposeRegister.ESP);
-			Operand edx = Operand.CreateCPURegister(BuiltInSigType.IntPtr, GeneralPurposeRegister.EDX);
+			//Operand edx = Operand.CreateCPURegister(BuiltInSigType.IntPtr, GeneralPurposeRegister.EDX);
 
 			context.AppendInstruction(X86.Sub, esp, esp, Operand.CreateConstant(BuiltInSigType.IntPtr, stackSize));
 			context.AppendInstruction(X86.Mov, edx, esp);
@@ -155,7 +153,7 @@ namespace Mosa.Platform.x86
 		/// <param name="context">The context.</param>
 		/// <param name="operandStack">The operand stack.</param>
 		/// <param name="space">The space.</param>
-		private void PushOperands(Context context, Stack<Operand> operandStack, int space)
+		private void PushOperands(Context context, Stack<Operand> operandStack, int space, Operand edx)
 		{
 			while (operandStack.Count != 0)
 			{
@@ -165,7 +163,7 @@ namespace Mosa.Platform.x86
 				architecture.GetTypeRequirements(operand.Type, out size, out alignment);
 
 				space -= size;
-				Push(context, operand, space, size);
+				Push(context, operand, space, size, edx);
 			}
 		}
 
@@ -176,7 +174,9 @@ namespace Mosa.Platform.x86
 		/// <param name="op">The op.</param>
 		/// <param name="stackSize">Size of the stack.</param>
 		/// <param name="parameterSize">Size of the parameter.</param>
-		private void Push(Context context, Operand op, int stackSize, int parameterSize)
+		/// <param name="edx">The edx.</param>
+		/// <exception cref="System.NotSupportedException"></exception>
+		private void Push(Context context, Operand op, int stackSize, int parameterSize, Operand edx)
 		{
 			if (op.IsMemoryAddress)
 			{
@@ -184,7 +184,9 @@ namespace Mosa.Platform.x86
 				{
 					for (int i = 0; i < parameterSize; i += 4)
 					{
-						context.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(op.Type, GeneralPurposeRegister.EDX, stackSize + i), Operand.CreateMemoryAddress(op.Type, op.OffsetBaseRegister, op.Offset + i));
+						context.AppendInstruction(X86.Mov,
+							Operand.CreateMemoryAddress(op.Type, edx, stackSize + i),
+							Operand.CreateMemoryAddress(op.Type, edx, op.Offset + i));
 					}
 
 					return;
@@ -197,7 +199,7 @@ namespace Mosa.Platform.x86
 					case StackTypeCode.Ptr: goto case StackTypeCode.N;
 					case StackTypeCode.Int32: goto case StackTypeCode.N;
 					case StackTypeCode.N:
-						rop = Operand.CreateCPURegister(op.Type, GeneralPurposeRegister.EAX);
+						rop = edx;
 						break;
 
 					case StackTypeCode.F:
@@ -206,10 +208,11 @@ namespace Mosa.Platform.x86
 
 					case StackTypeCode.Int64:
 						{
-							context.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(op.Type, GeneralPurposeRegister.EDX, stackSize), op.Low);
-							context.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(op.Type, GeneralPurposeRegister.EDX, stackSize + 4), op.High);
+							context.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(op.Type, edx, stackSize), op.Low);
+							context.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(op.Type, edx, stackSize + 4), op.High);
+							return;
+
 						}
-						return;
 
 					default:
 						throw new NotSupportedException();
@@ -220,13 +223,13 @@ namespace Mosa.Platform.x86
 			}
 			else if (op.StackType == StackTypeCode.Int64)
 			{
-				context.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(BuiltInSigType.Int32, GeneralPurposeRegister.EDX, stackSize), op.Low);
-				context.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(BuiltInSigType.Int32, GeneralPurposeRegister.EDX, stackSize + 4), op.High);
+				context.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(BuiltInSigType.Int32, edx, stackSize), op.Low);
+				context.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(BuiltInSigType.Int32, edx, stackSize + 4), op.High);
 
 				return;
 			}
 
-			context.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(op.Type, GeneralPurposeRegister.EDX, stackSize), op);
+			context.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(op.Type, edx, stackSize), op);
 		}
 
 		/// <summary>
