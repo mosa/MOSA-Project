@@ -369,6 +369,7 @@ namespace Mosa.Compiler.Linker
 				sb.AppendLine(@"Unresolved symbols:");
 				foreach (string member in linkRequests.Keys)
 				{
+	
 					sb.AppendFormat("\t{0}\r\n", member);
 				}
 
@@ -398,7 +399,7 @@ namespace Mosa.Compiler.Linker
 		{
 			virtualAddress = 0;
 
-			if (!symbolsResolved)
+			if (!SymbolsResolved)
 				return false;
 
 			LinkerSymbol linkerSymbol;

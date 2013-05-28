@@ -39,8 +39,7 @@ namespace Mosa.Test.System
 				new PlugStage(),
 				new MethodCompilerSchedulerStage(),
 				new TypeLayoutStage(),
-
-				//new MetadataStage(),
+				new MetadataStage(),
 				new LinkerFinalizationStage(),
 			});
 
@@ -59,15 +58,24 @@ namespace Mosa.Test.System
 			// FIXME: get from architecture
 			TypeLayout typeLayout = new TypeLayout(typeSystem, 4, 4);
 
-			IInternalTrace internalLog = new BasicInternalTrace();
-			(internalLog.CompilerEventListener as BasicCompilerEventListener).DebugOutput = false;
-			(internalLog.CompilerEventListener as BasicCompilerEventListener).ConsoleOutput = false;
+			IInternalTrace internalTrace = new BasicInternalTrace();
+			//(internalTrace.CompilerEventListener as BasicCompilerEventListener).DebugOutput = true;
+			//(internalTrace.CompilerEventListener as BasicCompilerEventListener).ConsoleOutput = true;
+			//(internalTrace.CompilerEventListener as BasicCompilerEventListener).Quiet = false;
+
+			ConfigurableTraceFilter filter = new ConfigurableTraceFilter();
+			filter.MethodMatch = MatchType.None;
+			filter.StageMatch = MatchType.None;
+			filter.TypeMatch = MatchType.None;
+			filter.ExcludeInternalMethods = false;
+
+			internalTrace.TraceFilter = filter;
 
 			var linker = new TestLinker();
 
 			CompilerOptions compilerOptions = new CompilerOptions();
 
-			TestCaseCompiler compiler = new TestCaseCompiler(architecture, typeSystem, typeLayout, internalLog, linker, compilerOptions);
+			TestCaseCompiler compiler = new TestCaseCompiler(architecture, typeSystem, typeLayout, internalTrace, linker, compilerOptions);
 			compiler.Compile();
 
 			return linker;

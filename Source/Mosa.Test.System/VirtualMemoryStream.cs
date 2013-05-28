@@ -49,7 +49,7 @@ namespace Mosa.Test.System
 			if (memory == 0)
 				throw new OutOfMemoryException();
 
-			base.Initialize((byte*)memory, size, size, FileAccess.Write);
+			base.Initialize((byte*)memory, size, size, FileAccess.ReadWrite);
 			this.size = size;
 		}
 

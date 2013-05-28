@@ -43,27 +43,23 @@ namespace Mosa.Test.System
 		{
 			// Populate the pipeline
 			Pipeline.AddRange(new IMethodCompilerStage[] {
-				new CILDecodingStage(),
+					new CILDecodingStage(),
 				new BasicBlockBuilderStage(),
 				new StackSetupStage(),
 				new ExceptionPrologueStage(),
 				new OperandAssignmentStage(),
 				new StaticAllocationResolutionStage(),
 				new CILTransformationStage(),
-
-				new	EdgeSplitStage(),
+				new EdgeSplitStage(),
 				new DominanceCalculationStage(),
 				new PhiPlacementStage(),
 				new EnterSSAStage(),
 				new SSAOptimizations(),
 				new LeaveSSA(),
-
-				new StackLayoutStage(),
 				new PlatformStubStage(),
-				new LoopAwareBlockOrderStage(),
-
-				//new SimpleTraceBlockOrderStage(),
-				//new ReverseBlockOrderStage(),  // reverse all the basic blocks and see if it breaks anything
+				new	PlatformEdgeSplitStage(),
+				new GreedyRegisterAllocatorStage(),
+				new StackLayoutStage(),
 				new CodeGenerationStage(),
 			});
 		}
