@@ -211,7 +211,6 @@ namespace Mosa.Platform.x86
 							context.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(op.Type, edx, stackSize), op.Low);
 							context.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(op.Type, edx, stackSize + 4), op.High);
 							return;
-
 						}
 
 					default:

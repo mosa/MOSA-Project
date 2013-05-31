@@ -23,10 +23,10 @@ namespace Mosa.Tool.TypeExplorer
 			LoadSectionAlignment = 1;
 			SectionAlignment = 1;
 
-			Sections.Add(new ExplorerLinkerSection(SectionKind.Text, @".text", this.BaseAddress + SectionAlignment));
-			Sections.Add(new ExplorerLinkerSection(SectionKind.Data, @".data", 0));
-			Sections.Add(new ExplorerLinkerSection(SectionKind.ROData, @".rodata", 0));
-			Sections.Add(new ExplorerLinkerSection(SectionKind.BSS, @".bss", 0));
+			AddSection(new ExplorerLinkerSection(SectionKind.Text, @".text", this.BaseAddress + SectionAlignment));
+			AddSection(new ExplorerLinkerSection(SectionKind.Data, @".data", 0));
+			AddSection(new ExplorerLinkerSection(SectionKind.ROData, @".rodata", 0));
+			AddSection(new ExplorerLinkerSection(SectionKind.BSS, @".bss", 0));
 		}
 
 		#endregion Construction

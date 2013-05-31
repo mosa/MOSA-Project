@@ -30,7 +30,6 @@ namespace Mosa.Compiler.Framework.Stages
 		void ICompilerStage.Run()
 		{
 			LayoutSections();
-			LayoutSymbols();
 		}
 
 		#endregion ICompilerStage Overrides
@@ -67,20 +66,6 @@ namespace Mosa.Compiler.Framework.Stages
 				// Update the virtual size
 				virtualSizeOfImage += section.Length;
 				virtualSizeOfImage = AlignValue(virtualSizeOfImage, sectionAlignment);
-			}
-		}
-
-		/// <summary>
-		/// Lays the symbols out according to their offset in the section.
-		/// </summary>
-		private void LayoutSymbols()
-		{
-			// Adjust the symbol addresses
-			foreach (LinkerSymbol symbol in linker.Symbols)
-			{
-				LinkerSection section = linker.GetSection(symbol.Section);
-				symbol.Offset = section.Offset + symbol.SectionAddress;
-				symbol.VirtualAddress = section.VirtualAddress + symbol.SectionAddress;
 			}
 		}
 

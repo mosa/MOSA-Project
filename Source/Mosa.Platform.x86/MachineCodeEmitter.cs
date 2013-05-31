@@ -23,13 +23,7 @@ namespace Mosa.Platform.x86
 	/// </summary>
 	public sealed class MachineCodeEmitter : BaseCodeEmitter, IDisposable
 	{
-		/// <summary>
-		/// Initializes a new instance of the <see cref="MachineCodeEmitter"/> class.
-		/// </summary>
-		public MachineCodeEmitter()
-		{
-		}
-
+	
 		#region Code Generation
 
 		/// <summary>
@@ -37,7 +31,7 @@ namespace Mosa.Platform.x86
 		/// </summary>
 		/// <param name="code">The branch instruction code.</param>
 		/// <param name="dest">The destination label.</param>
-		public void EmitBranch(byte[] code, int dest)
+		public void EmitRelativeBranch(byte[] code, int dest)
 		{
 			codeStream.Write(code, 0, code.Length);
 			EmitRelativeBranchTarget(dest);
@@ -47,7 +41,7 @@ namespace Mosa.Platform.x86
 		/// Calls the specified target.
 		/// </summary>
 		/// <param name="symbolOperand">The symbol operand.</param>
-		public void Call(Operand symbolOperand)
+		public void EmitCallSite(Operand symbolOperand)
 		{
 			linker.Link(
 				LinkType.RelativeOffset | LinkType.I4,
@@ -168,7 +162,7 @@ namespace Mosa.Platform.x86
 		/// Emits the displacement operand.
 		/// </summary>
 		/// <param name="displacement">The displacement operand.</param>
-		public void WriteDisplacement(Operand displacement)
+		private void WriteDisplacement(Operand displacement)
 		{
 			int pos = (int)(codeStream.Position - codeStreamBasePosition);
 

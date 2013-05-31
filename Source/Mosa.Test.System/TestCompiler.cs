@@ -130,7 +130,7 @@ namespace Mosa.Test.System
 			Debug.Assert(delegateType != null, delegateName);
 
 			LinkerSymbol symbol = linker.GetSymbol(runtimeMethod.FullName);
-			LinkerSection section = linker.GetSection(symbol.Section);
+			LinkerSection section = linker.GetSection(symbol.SectionKind);
 
 			long address = symbol.VirtualAddress + section.VirtualAddress;
 

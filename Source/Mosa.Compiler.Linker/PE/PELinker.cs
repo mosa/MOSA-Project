@@ -68,10 +68,10 @@ namespace Mosa.Compiler.Linker.PE
 			this.LoadSectionAlignment = FILE_SECTION_ALIGNMENT;
 			this.setChecksum = true;
 
-			Sections.Add(new PELinkerSection(SectionKind.Text, @".text", this.BaseAddress + SectionAlignment));
-			Sections.Add(new PELinkerSection(SectionKind.Data, @".data", 0));
-			Sections.Add(new PELinkerSection(SectionKind.ROData, @".rodata", 0));
-			Sections.Add(new PELinkerSection(SectionKind.BSS, @".bss", 0));
+			AddSection(new PELinkerSection(SectionKind.Text, @".text", this.BaseAddress + SectionAlignment));
+			AddSection(new PELinkerSection(SectionKind.Data, @".data", 0));
+			AddSection(new PELinkerSection(SectionKind.ROData, @".rodata", 0));
+			AddSection(new PELinkerSection(SectionKind.BSS, @".bss", 0));
 		}
 
 		#endregion Construction
@@ -155,48 +155,6 @@ namespace Mosa.Compiler.Linker.PE
 					}
 				}
 			}
-		}
-
-		/// <summary>
-		/// Adjusts the section addresses and performs a proper layout.
-		/// </summary>
-		protected override void LayoutSections()
-		{
-			/*
-
-			// Reset the size of the image
-			this.virtualSizeOfImage = this.sectionAlignment;
-			this.fileSizeOfImage = this.fileAlignment;
-
-			// Move all sections to their right positions
-			Dictionary<SectionKind, LinkerSection> usedSections = new Dictionary<SectionKind, LinkerSection>();
-			foreach (LinkerSection ls in this.sections.Values)
-			{
-				// Only use a section with something inside
-				if (ls.Length != 0)
-				{
-					// Set the section virtualAddress
-					ls.Address = new IntPtr(this.BaseAddress + this.virtualSizeOfImage);
-					ls.Offset = this.fileSizeOfImage;
-
-					// Update the file size
-					this.fileSizeOfImage += (uint)ls.Length;
-					this.fileSizeOfImage = AlignValue(this.fileSizeOfImage, this.fileAlignment);
-
-					// Update the virtual size
-					this.virtualSizeOfImage += (uint)ls.Length;
-					this.virtualSizeOfImage = AlignValue(this.virtualSizeOfImage, this.sectionAlignment);
-
-					// Copy the section
-					usedSections.Add(ls.SectionKind, ls);
-				}
-			}
-
-			this.sections = usedSections;
-			*/
-
-			// We've resolved all symbols, allow IsResolved to succeed
-			SymbolsResolved = true;
 		}
 
 		#endregion BaseLinker Overrides

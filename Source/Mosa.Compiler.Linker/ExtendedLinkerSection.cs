@@ -92,7 +92,7 @@ namespace Mosa.Compiler.Linker
 		/// <param name="linkType">Type of the link.</param>
 		/// <returns></returns>
 		/// <exception cref="System.InvalidProgramException"></exception>
-		public int SizeOfLinkType(LinkType linkType)
+		private int SizeOfLinkType(LinkType linkType)
 		{
 			switch (linkType & LinkType.SizeMask)
 			{
@@ -106,45 +106,13 @@ namespace Mosa.Compiler.Linker
 		}
 
 		/// <summary>
-		/// Patches the section at the given offset with the specified value.
+		/// Applies the patch.
 		/// </summary>
 		/// <param name="offset">The offset.</param>
 		/// <param name="linkType">Type of the link.</param>
 		/// <param name="value">The value.</param>
-		public void ApplyPatch(long offset, LinkType linkType, long value, Endianness endianness)
-		{
-			long pos = stream.Position;
-			stream.Position = offset;
-
-			int linkSize = SizeOfLinkType(linkType);
-			if (stream.Position + linkSize > stream.Length)
-			{
-				stream.SetLength(stream.Position + linkSize);
-			}
-
-			// Apply the patch
-			switch (linkType & LinkType.SizeMask)
-			{
-				case LinkType.I1:
-					stream.WriteByte((byte)value);
-					break;
-
-				case LinkType.I2:
-					stream.Write((ushort)value, endianness);
-					break;
-
-				case LinkType.I4:
-					stream.Write((uint)value, endianness);
-					break;
-
-				case LinkType.I8:
-					stream.Write((ulong)value, endianness);
-					break;
-			}
-
-			stream.Position = pos;
-		}
-
+		/// <param name="mask">The mask.</param>
+		/// <param name="endianness">The endianness.</param>
 		public void ApplyPatch(long offset, LinkType linkType, ulong value, ulong mask, Endianness endianness)
 		{
 			long originalPosition = stream.Position;

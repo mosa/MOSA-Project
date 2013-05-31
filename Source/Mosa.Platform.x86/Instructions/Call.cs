@@ -53,14 +53,14 @@ namespace Mosa.Platform.x86.Instructions
 		{
 			if (context.OperandCount == 0)
 			{
-				emitter.EmitBranch(LabelCall, context.BranchTargets[0]);
+				emitter.EmitRelativeBranch(LabelCall, context.BranchTargets[0]);
 				return;
 			}
 
 			if (context.Operand1.IsSymbol)
 			{
 				emitter.WriteByte(0xE8);
-				emitter.Call(context.Operand1);
+				emitter.EmitCallSite(context.Operand1);
 			}
 			else
 			{

@@ -25,16 +25,6 @@ namespace Mosa.Compiler.Linker
 		#region Data members
 
 		/// <summary>
-		/// Holds the base virtualAddress of the link result.
-		/// </summary>
-		private long baseAddress;
-
-		/// <summary>
-		/// Holds the entry point of the compiled binary.
-		/// </summary>
-		private LinkerSymbol entryPoint;
-
-		/// <summary>
 		/// Holds all unresolved link requests.
 		/// </summary>
 		private readonly Dictionary<string, List<LinkRequest>> linkRequests = new Dictionary<string, List<LinkRequest>>();
@@ -42,44 +32,12 @@ namespace Mosa.Compiler.Linker
 		/// <summary>
 		///
 		/// </summary>
-		private readonly List<ExtendedLinkerSection> sections = new List<ExtendedLinkerSection>();
-
-		/// <summary>
-		/// Holds the output file of the linker.
-		/// </summary>
-		private string outputFile;
+		private readonly ExtendedLinkerSection[] sections = new ExtendedLinkerSection[4];
 
 		/// <summary>
 		/// A dictionary containing all symbol seen in the assembly.
 		/// </summary>
 		private readonly Dictionary<string, LinkerSymbol> symbols = new Dictionary<string, LinkerSymbol>();
-
-		/// <summary>
-		/// Flag is the target platform is little-endian
-		/// </summary>
-		private Endianness endianness;
-
-		/// <summary>
-		/// Gets or sets the machine type (depends on platform)
-		/// </summary>
-		/// <value>
-		/// </value>
-		private uint machineID;
-
-		/// <summary>
-		/// Holds the file alignment used for this ELF32 file.
-		/// </summary>
-		private uint loadSectionAlignment;
-
-		/// <summary>
-		/// Flag, if the symbols have been resolved.
-		/// </summary>
-		private bool symbolsResolved;
-
-		/// <summary>
-		/// Holds the section alignment
-		/// </summary>
-		private uint sectionAlignment;
 
 		#endregion Data members
 
@@ -89,30 +47,19 @@ namespace Mosa.Compiler.Linker
 		/// Gets the base virtualAddress.
 		/// </summary>
 		/// <value>The base virtualAddress.</value>
-		public long BaseAddress
-		{
-			get { return baseAddress; }
-		}
+		public long BaseAddress { get; private set; }
 
 		/// <summary>
 		/// Gets the entry point symbol.
 		/// </summary>
 		/// <value>The entry point symbol.</value>
-		public LinkerSymbol EntryPoint
-		{
-			get { return entryPoint; }
-			set { entryPoint = value; }
-		}
+		public LinkerSymbol EntryPoint { get; set; }
 
 		/// <summary>
 		/// Gets the load alignment of sections.
 		/// </summary>
 		/// <value>The load alignment.</value>
-		public uint LoadSectionAlignment
-		{
-			get { return loadSectionAlignment; }
-			protected set { loadSectionAlignment = value; }
-		}
+		public uint LoadSectionAlignment { get; protected set; }
 
 		/// <summary>
 		/// Gets or sets a value indicating whether symbols are resolved.
@@ -120,27 +67,19 @@ namespace Mosa.Compiler.Linker
 		/// <value>
 		///   <c>true</c> if [symbols are resolved]; otherwise, <c>false</c>.
 		/// </value>
-		public bool SymbolsResolved
-		{
-			get { return symbolsResolved; }
-			protected set { symbolsResolved = value; }
-		}
+		public bool SymbolsResolved { get; protected set; }
 
 		/// <summary>
 		/// Gets or sets the output file of the linker.
 		/// </summary>
 		/// <value>The output file.</value>
-		public string OutputFile
-		{
-			get { return outputFile; }
-			set { outputFile = value; }
-		}
+		public string OutputFile { get; set; }
 
 		/// <summary>
 		/// Retrieves the collection of sections created during compilation.
 		/// </summary>
 		/// <value>The sections collection.</value>
-		public IList<ExtendedLinkerSection> Sections { get { return sections; } }
+		public ExtendedLinkerSection[] Sections { get { return sections; } }
 
 		/// <summary>
 		/// Retrieves the collection of _symbols known by the linker.
@@ -155,31 +94,17 @@ namespace Mosa.Compiler.Linker
 		/// Gets or sets the section alignment in bytes.
 		/// </summary>
 		/// <value>The section alignment in bytes.</value>
-		public uint SectionAlignment
-		{
-			get { return sectionAlignment; }
-			protected set { sectionAlignment = value; }
-		}
+		public uint SectionAlignment { get; set; }
 
 		/// <summary>
 		/// Flag is the target platform is little-endian
 		/// </summary>
-		public Endianness Endianness
-		{
-			get { return endianness; }
-			set { endianness = value; }
-		}
+		public Endianness Endianness { get; set; }
 
 		/// <summary>
 		/// Gets or sets the machine type (depends on platform)
 		/// </summary>
-		/// <value>
-		/// </value>
-		public uint MachineID
-		{
-			get { return machineID; }
-			set { machineID = value; }
-		}
+		public uint MachineID { get; set; }
 
 		#endregion Properties
 
@@ -190,9 +115,9 @@ namespace Mosa.Compiler.Linker
 		/// </summary>
 		protected BaseLinker()
 		{
-			baseAddress = 0x00400000; // Use the Win32 default for now, FIXME
-			sectionAlignment = 0x1000; // default 1K
-			symbolsResolved = false;
+			BaseAddress = 0x00400000; // Use the Win32 default for now, FIXME
+			SectionAlignment = 0x1000; // default 1K
+			SymbolsResolved = false;
 		}
 
 		#endregion Construction
@@ -205,13 +130,22 @@ namespace Mosa.Compiler.Linker
 		void ILinker.GeneratedFile()
 		{
 			// Layout the sections
-			LayoutSections();
+			LayoutSymbols();
 
 			// Resolve all symbols
 			Resolve();
 
 			// Persist the file now
 			CreateFile();
+		}
+
+		/// <summary>
+		/// Adds the section.
+		/// </summary>
+		/// <param name="section">The section.</param>
+		public void AddSection(ExtendedLinkerSection section)
+		{
+			sections[(int)section.SectionKind] = section;
 		}
 
 		/// <summary>
@@ -290,7 +224,7 @@ namespace Mosa.Compiler.Linker
 		/// </summary>
 		/// <param name="linkType">The type of link required.</param>
 		/// <param name="patches">The patches.</param>
-		/// <param name="symbolName">The symbol name the patched code belongs to.</param>
+		/// <param name="symbolName">The symbol name that is being patched.</param>
 		/// <param name="symbolOffset">The offset inside the method where the patch is placed.</param>
 		/// <param name="methodRelativeBase">The base virtualAddress, if a relative link is required.</param>
 		/// <param name="targetSymbol">The linker symbol name to link against.</param>
@@ -327,9 +261,17 @@ namespace Mosa.Compiler.Linker
 		/// <summary>
 		/// Layouts the sections.
 		/// </summary>
-		protected virtual void LayoutSections()
+		protected virtual void LayoutSymbols()
 		{
-			return;
+			foreach (LinkerSymbol symbol in Symbols)
+			{
+				LinkerSection ls = GetSection(symbol.SectionKind);
+				symbol.Offset = ls.Offset + symbol.SectionAddress;
+				symbol.VirtualAddress = ls.VirtualAddress + symbol.SectionAddress;
+			}
+
+			// We've resolved all symbols, allow IsResolved to succeed
+			SymbolsResolved = true;
 		}
 
 		/// <summary>
@@ -347,29 +289,28 @@ namespace Mosa.Compiler.Linker
 		/// </summary>
 		protected void Resolve()
 		{
-			long address;
-
 			// Check if we have unresolved requests and try to link them
 			List<string> members = new List<string>(linkRequests.Keys);
 			foreach (string member in members)
 			{
+				long address;
+
 				// Is the runtime member resolved?
 				if (IsResolved(member, out address))
 				{
 					// Yes, patch up the method
-					List<LinkRequest> link = linkRequests[member];
-					PatchRequests(address, link);
+					var links = linkRequests[member];
+					PatchRequests(address, links);
 					linkRequests.Remove(member);
 				}
 			}
 
 			if (linkRequests.Count != 0)
 			{
-				StringBuilder sb = new StringBuilder();
+				var sb = new StringBuilder();
 				sb.AppendLine(@"Unresolved symbols:");
 				foreach (string member in linkRequests.Keys)
 				{
-	
 					sb.AppendFormat("\t{0}\r\n", member);
 				}
 
@@ -418,11 +359,11 @@ namespace Mosa.Compiler.Linker
 		/// <param name="requests">A list of requests to patch.</param>
 		private void PatchRequests(long virtualAddress, IEnumerable<LinkRequest> requests)
 		{
-			long methodAddress;
-
 			foreach (LinkRequest request in requests)
 			{
-				if (!IsResolved(request.LinkSymbol, out methodAddress))
+				long methodAddress;
+
+				if (!IsResolved(request.SymbolName, out methodAddress))
 					throw new InvalidOperationException(@"Method not compiled - but making link requests??");
 
 				// Patch the code stream

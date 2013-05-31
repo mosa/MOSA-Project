@@ -27,6 +27,12 @@ namespace Mosa.Compiler.Linker
 		#region Properties
 
 		/// <summary>
+		/// Adds the section.
+		/// </summary>
+		/// <param name="section">The section.</param>
+		void AddSection(ExtendedLinkerSection section);
+
+		/// <summary>
 		/// Gets the base address.
 		/// </summary>
 		/// <value>The base address.</value>
@@ -48,7 +54,7 @@ namespace Mosa.Compiler.Linker
 		/// Retrieves the collection of sections created during compilation.
 		/// </summary>
 		/// <value>The sections collection.</value>
-		IList<ExtendedLinkerSection> Sections { get; }
+		ExtendedLinkerSection[] Sections { get; }
 
 		/// <summary>
 		/// Retrieves the collection of symbols known by the linker.

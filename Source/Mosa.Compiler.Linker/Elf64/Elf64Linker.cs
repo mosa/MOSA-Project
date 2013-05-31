@@ -39,10 +39,10 @@ namespace Mosa.Compiler.Linker.Elf64
 		public Elf64Linker()
 		{
 			// Create the default section set
-			Sections.Add(new CodeSection());
-			Sections.Add(new DataSection());
-			Sections.Add(new RoDataSection());
-			Sections.Add(new BssSection());
+			AddSection(new CodeSection());
+			AddSection(new DataSection());
+			AddSection(new RoDataSection());
+			AddSection(new BssSection());
 
 			nullSection = new NullSection();
 			stringTableSection = new StringTableSection();
@@ -58,7 +58,7 @@ namespace Mosa.Compiler.Linker.Elf64
 				Header header = new Header();
 				header.Type = FileType.Executable;
 				header.Machine = (MachineType)MachineID;
-				header.SectionHeaderNumber = (ushort)(Sections.Count + 2);
+				header.SectionHeaderNumber = (ushort)(Sections.Length + 2);
 				header.SectionHeaderOffset = header.ElfHeaderSize;
 
 				header.CreateIdent(IdentClass.Class64, IdentData.Data2LSB, null);
@@ -104,13 +104,5 @@ namespace Mosa.Compiler.Linker.Elf64
 			}
 		}
 
-		/// <summary>
-		/// Adjusts the section addresses and performs a proper layout.
-		/// </summary>
-		protected override void LayoutSections()
-		{
-			// We've resolved all symbols, allow IsResolved to succeed
-			SymbolsResolved = true;
-		}
 	}
 }

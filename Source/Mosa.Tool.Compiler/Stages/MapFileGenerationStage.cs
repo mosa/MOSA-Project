@@ -121,7 +121,7 @@ namespace Mosa.Tool.Compiler.Stages
 			writer.WriteLine("Offset           Virtual          Length           Section Symbol");
 			foreach (var symbol in sorted)
 			{
-				writer.WriteLine("{0:x16} {1:x16} {2:x16} {3} {4}", symbol.Offset, symbol.VirtualAddress, symbol.Length, symbol.Section.ToString().PadRight(7), symbol.Name);
+				writer.WriteLine("{0:x16} {1:x16} {2:x16} {3} {4}", symbol.Offset, symbol.VirtualAddress, symbol.Length, symbol.SectionKind.ToString().PadRight(7), symbol.Name);
 			}
 
 			LinkerSymbol entryPoint = linker.EntryPoint;

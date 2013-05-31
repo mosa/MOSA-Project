@@ -8,11 +8,11 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
-using Mosa.Compiler.InternalTrace;
-using Mosa.Compiler.TypeSystem;
-using Mosa.Compiler.Linker;
 using Mosa.Compiler.Framework.Linker;
+using Mosa.Compiler.InternalTrace;
+using Mosa.Compiler.Linker;
+using Mosa.Compiler.TypeSystem;
+using System;
 
 namespace Mosa.Compiler.Framework
 {

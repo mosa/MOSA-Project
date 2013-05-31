@@ -54,10 +54,10 @@ namespace Mosa.Compiler.Linker.Elf32
 		public Elf32Linker()
 		{
 			// Create the default section set
-			Sections.Add(new CodeSection());
-			Sections.Add(new DataSection());
-			Sections.Add(new RoDataSection());
-			Sections.Add(new BssSection());
+			AddSection(new CodeSection());
+			AddSection(new DataSection());
+			AddSection(new RoDataSection());
+			AddSection(new BssSection());
 
 			LoadSectionAlignment = FILE_SECTION_ALIGNMENT;
 			SectionAlignment = SECTION_ALIGNMENT;
@@ -91,7 +91,7 @@ namespace Mosa.Compiler.Linker.Elf32
 				Header header = new Header();
 				header.Type = FileType.Executable;
 				header.Machine = (MachineType)MachineID;
-				header.SectionHeaderNumber = (ushort)(Sections.Count + 2);
+				header.SectionHeaderNumber = (ushort)(Sections.Length + 2);
 				header.SectionHeaderOffset = header.ElfHeaderSize;
 
 				header.CreateIdent(IdentClass.Class32, Endianness == Endianness.Little ? IdentData.Data2LSB : IdentData.Data2MSB, null);
@@ -153,13 +153,5 @@ namespace Mosa.Compiler.Linker.Elf32
 			}
 		}
 
-		/// <summary>
-		/// Adjusts the section addresses and performs a proper layout.
-		/// </summary>
-		protected override void LayoutSections()
-		{
-			// We've resolved all symbols, allow IsResolved to succeed
-			SymbolsResolved = true;
-		}
 	}
 }

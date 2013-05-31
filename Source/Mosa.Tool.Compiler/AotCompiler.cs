@@ -105,13 +105,10 @@ namespace Mosa.Tool.Compiler
 				new PlugStage(),
 				new MethodCompilerSchedulerStage(),
 				new TypeInitializerSchedulerStage(),
-
 				compilerOptions.BootCompilerStage,
 				new TypeLayoutStage(),
-
 				new MetadataStage(),
 				new ObjectFileLayoutStage(),
-
 				new LinkerFinalizationStage(),
 				compilerOptions.MapFile != null ? new MapFileGenerationStage() : null
 			});
