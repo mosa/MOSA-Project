@@ -7,10 +7,10 @@
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  */
 
-using System.IO;
 using Mosa.Compiler.Common;
-using Mosa.Compiler.LinkerFormat.Elf64;
 using Mosa.Compiler.LinkerFormat.Elf;
+using Mosa.Compiler.LinkerFormat.Elf64;
+using System.IO;
 
 namespace Mosa.Compiler.Linker.Elf64
 {
@@ -103,6 +103,5 @@ namespace Mosa.Compiler.Linker.Elf64
 					section.WriteHeader(writer);
 			}
 		}
-
 	}
 }

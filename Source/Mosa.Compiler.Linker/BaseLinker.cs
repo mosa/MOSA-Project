@@ -13,7 +13,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Text;
 
 namespace Mosa.Compiler.Linker
 {
@@ -193,30 +192,13 @@ namespace Mosa.Compiler.Linker
 		/// <summary>
 		/// Retrieves a linker symbol.
 		/// </summary>
-		/// <param name="symbolName">The name of the symbol to retrieve.</param>
+		/// <param name="name">The name of the symbol to retrieve.</param>
 		/// <returns>The named linker symbol.</returns>
-		/// <exception cref="System.ArgumentNullException"><paramref name="symbolName"/> is null.</exception>
+		/// <exception cref="System.ArgumentNullException"><paramref name="name"/> is null.</exception>
 		/// <exception cref="System.ArgumentException">There's no symbol of the given name.</exception>
-		LinkerSymbol ILinker.GetSymbol(string symbolName)
+		LinkerSymbol ILinker.GetSymbol(string name)
 		{
-			if (symbolName == null)
-				throw new ArgumentNullException(@"symbolName");
-
-			LinkerSymbol result;
-			if (!symbols.TryGetValue(symbolName, out result))
-				throw new ArgumentException(@"Symbol not compiled.", @"member");
-
-			return result;
-		}
-
-		/// <summary>
-		/// Determines if a given symbol name is already in use by the linker.
-		/// </summary>
-		/// <param name="symbolName">The symbol name.</param>
-		/// <returns><c>true</c> if the symbol name is already used; <c>false</c> otherwise.</returns>
-		bool ILinker.HasSymbol(string symbolName)
-		{
-			return symbols.ContainsKey(symbolName);
+			return this.GetSymbol(name);
 		}
 
 		/// <summary>
@@ -226,10 +208,10 @@ namespace Mosa.Compiler.Linker
 		/// <param name="patches">The patches.</param>
 		/// <param name="symbolName">The symbol name that is being patched.</param>
 		/// <param name="symbolOffset">The offset inside the method where the patch is placed.</param>
-		/// <param name="methodRelativeBase">The base virtualAddress, if a relative link is required.</param>
+		/// <param name="relativeBase">The base virtualAddress, if a relative link is required.</param>
 		/// <param name="targetSymbol">The linker symbol name to link against.</param>
 		/// <param name="targetOffset">An offset to apply to the link target.</param>
-		void ILinker.Link(LinkType linkType, Patch[] patches, string symbolName, int symbolOffset, int methodRelativeBase, string targetSymbol, long targetOffset)
+		void ILinker.Link(LinkType linkType, Patch[] patches, string symbolName, int symbolOffset, int relativeBase, string targetSymbol, long targetOffset)
 		{
 			Debug.Assert(symbolName != null, @"Symbol can't be null.");
 			if (symbolName == null)
@@ -242,7 +224,7 @@ namespace Mosa.Compiler.Linker
 				linkRequests.Add(targetSymbol, list);
 			}
 
-			list.Add(new LinkRequest(linkType, patches, symbolName, symbolOffset, methodRelativeBase, targetSymbol, targetOffset));
+			list.Add(new LinkRequest(linkType, patches, symbolName, symbolOffset, relativeBase, targetSymbol, targetOffset));
 		}
 
 		#endregion ILinker Members
@@ -285,40 +267,6 @@ namespace Mosa.Compiler.Linker
 		#region Internals
 
 		/// <summary>
-		/// Performs stage specific processing on the compiler context.
-		/// </summary>
-		protected void Resolve()
-		{
-			// Check if we have unresolved requests and try to link them
-			List<string> members = new List<string>(linkRequests.Keys);
-			foreach (string member in members)
-			{
-				long address;
-
-				// Is the runtime member resolved?
-				if (IsResolved(member, out address))
-				{
-					// Yes, patch up the method
-					var links = linkRequests[member];
-					PatchRequests(address, links);
-					linkRequests.Remove(member);
-				}
-			}
-
-			if (linkRequests.Count != 0)
-			{
-				var sb = new StringBuilder();
-				sb.AppendLine(@"Unresolved symbols:");
-				foreach (string member in linkRequests.Keys)
-				{
-					sb.AppendFormat("\t{0}\r\n", member);
-				}
-
-				throw new LinkerException(sb.ToString());
-			}
-		}
-
-		/// <summary>
 		/// Gets the section.
 		/// </summary>
 		/// <param name="sectionKind">Kind of the section.</param>
@@ -329,51 +277,66 @@ namespace Mosa.Compiler.Linker
 		}
 
 		/// <summary>
-		/// Determines whether the specified symbol is resolved.
+		/// Gets the symbol.
 		/// </summary>
-		/// <param name="symbol">The symbol.</param>
-		/// <param name="virtualAddress">The virtualAddress.</param>
-		/// <returns>
-		///   <c>true</c> if the specified symbol is resolved; otherwise, <c>false</c>.
-		/// </returns>
-		protected bool IsResolved(string symbol, out long virtualAddress)
+		/// <param name="name">Name of the symbol.</param>
+		/// <returns></returns>
+		private LinkerSymbol GetSymbol(string name)
 		{
-			virtualAddress = 0;
+			if (name == null)
+				throw new ArgumentNullException(@"symbolName");
 
-			if (!SymbolsResolved)
-				return false;
-
-			LinkerSymbol linkerSymbol;
-			if (symbols.TryGetValue(symbol, out linkerSymbol))
+			LinkerSymbol result;
+			if (!symbols.TryGetValue(name, out result))
 			{
-				virtualAddress = linkerSymbol.VirtualAddress;
+				return null;
 			}
 
-			return (virtualAddress != 0);
+			return result;
+		}
+
+		/// <summary>
+		/// Performs stage specific processing on the compiler context.
+		/// </summary>
+		protected void Resolve()
+		{
+			// Check if we have unresolved requests and try to link them
+			foreach (var request in linkRequests)
+			{
+				var targetSymbol = GetSymbol(request.Key);
+
+				if (targetSymbol == null)
+				{
+					throw new LinkerException("Missing Symbol: " + request.Key);
+				}
+
+				PatchRequests(request.Value, targetSymbol.VirtualAddress);
+			}
 		}
 
 		/// <summary>
 		/// Patches all requests in the given link request list.
 		/// </summary>
-		/// <param name="virtualAddress">The virtualAddress of the member.</param>
 		/// <param name="requests">A list of requests to patch.</param>
-		private void PatchRequests(long virtualAddress, IEnumerable<LinkRequest> requests)
+		/// <param name="targetAddress">The virtualAddress of the member.</param>
+		private void PatchRequests(IEnumerable<LinkRequest> requests, long targetAddress)
 		{
 			foreach (LinkRequest request in requests)
 			{
-				long methodAddress;
+				var symbol = GetSymbol(request.SymbolName);
 
-				if (!IsResolved(request.SymbolName, out methodAddress))
-					throw new InvalidOperationException(@"Method not compiled - but making link requests??");
+				ExtendedLinkerSection section = GetSection(symbol.SectionKind) as ExtendedLinkerSection;
 
 				// Patch the code stream
 				ApplyPatch(
 					request.LinkType,
 					request.Patches,
-					methodAddress,
+					section,
+					symbol.VirtualAddress,
 					request.SymbolOffset,
-					request.MethodRelativeBase,
-					virtualAddress + request.TargetOffset);
+					request.SymbolRelativeBase,
+					targetAddress + request.TargetOffset
+				);
 			}
 		}
 
@@ -382,21 +345,18 @@ namespace Mosa.Compiler.Linker
 		/// </summary>
 		/// <param name="linkType">Type of the link.</param>
 		/// <param name="patches">The patches.</param>
-		/// <param name="methodAddress">The virtual virtualAddress of the method whose code is being patched.</param>
-		/// <param name="methodOffset">The value to store at the position in code.</param>
-		/// <param name="methodRelativeBase">The method relative base.</param>
+		/// <param name="symbolVirtualAddress">The virtual virtualAddress of the method whose code is being patched.</param>
+		/// <param name="symbolOffset">The value to store at the position in code.</param>
+		/// <param name="symbolRelativeBase">The method relative base.</param>
 		/// <param name="targetAddress">The position in code, where it should be patched.</param>
 		/// <exception cref="System.InvalidOperationException"></exception>
-		private void ApplyPatch(LinkType linkType, Patch[] patches, long methodAddress, long methodOffset, long methodRelativeBase, long targetAddress)
+		private void ApplyPatch(LinkType linkType, Patch[] patches, ExtendedLinkerSection section, long symbolVirtualAddress, long symbolOffset, long symbolRelativeBase, long targetAddress)
 		{
 			if (!SymbolsResolved)
 				throw new InvalidOperationException(@"Can't apply patches - symbols not resolved.");
 
-			// Retrieve the text section
-			ExtendedLinkerSection text = GetSection(SectionKind.Text) as ExtendedLinkerSection;
-
 			// Calculate the patch offset
-			long offset = (methodAddress - text.VirtualAddress) + methodOffset;
+			long offset = (symbolVirtualAddress - section.VirtualAddress) + symbolOffset;
 
 			if ((linkType & LinkType.KindMask) == LinkType.AbsoluteAddress)
 			{
@@ -407,14 +367,14 @@ namespace Mosa.Compiler.Linker
 			else
 			{
 				// Change the absolute into a relative offset
-				targetAddress = targetAddress - (methodAddress + methodRelativeBase);
+				targetAddress = targetAddress - (symbolVirtualAddress + symbolRelativeBase);
 			}
 
 			ulong value = Patch.GetResult(patches, (ulong)targetAddress);
 			ulong mask = Patch.GetFinalMask(patches);
 
 			// Save the stream position
-			text.ApplyPatch(offset, linkType, value, mask, Endianness);
+			section.ApplyPatch(offset, linkType, value, mask, Endianness);
 		}
 
 		#endregion Internals

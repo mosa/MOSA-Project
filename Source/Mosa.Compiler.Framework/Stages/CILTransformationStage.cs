@@ -33,7 +33,7 @@ namespace Mosa.Compiler.Framework.Stages
 	/// </remarks>
 	public sealed class CILTransformationStage : BaseCodeTransformationStage, CIL.ICILVisitor, IPipelineStage
 	{
-		
+
 		#region ICILVisitor
 
 		/// <summary>
@@ -878,10 +878,9 @@ namespace Mosa.Compiler.Framework.Stages
 
 			string symbolName = @"$ldstr$" + assembly.Name + "$" + context.TokenType.ToString("x");
 
-			if (!linker.HasSymbol(symbolName))
+			if (linker.GetSymbol(symbolName) == null)
 			{
-				// HACK: These strings should actually go into .rodata, but we can't link that right now.
-				using (Stream stream = linker.Allocate(symbolName, SectionKind.Text, 0, nativePointerAlignment))
+				using (Stream stream = linker.Allocate(symbolName, SectionKind.ROData, 0, nativePointerAlignment))
 				{
 					// Method table and sync block
 					linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuildInPatch.I4, symbolName, 0, 0, @"System.String$mtable", 0);

@@ -65,9 +65,10 @@ namespace Mosa.Platform.x86.Stages
 
 				foreach (var method in type.Methods)
 				{
-					if (linker.HasSymbol(method.ToString()))
+					var symbol = linker.GetSymbol(method.FullName);
+					if (symbol != null)
 					{
-						table.Add(linker.GetSymbol(method.FullName));
+						table.Add(symbol);
 
 						if (!methods.Contains(method))
 							methods.Add(method);

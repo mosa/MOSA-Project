@@ -7,7 +7,6 @@
  *  Michael Fröhlich (grover) <michael.ruck@michaelruck.de>
  */
 
-using System;
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Linker;
 

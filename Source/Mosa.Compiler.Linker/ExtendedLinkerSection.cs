@@ -7,9 +7,9 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using Mosa.Compiler.Common;
 using System;
 using System.IO;
-using Mosa.Compiler.Common;
 
 namespace Mosa.Compiler.Linker
 {

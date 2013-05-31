@@ -7,8 +7,8 @@
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  */
 
-using System.IO;
 using Mosa.Compiler.Common;
+using System.IO;
 
 namespace Mosa.Compiler.Linker.Elf64
 {

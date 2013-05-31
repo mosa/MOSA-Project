@@ -132,7 +132,7 @@ namespace Mosa.Test.System
 			LinkerSymbol symbol = linker.GetSymbol(runtimeMethod.FullName);
 			LinkerSection section = linker.GetSection(symbol.SectionKind);
 
-			long address = symbol.VirtualAddress + section.VirtualAddress;
+			long address = symbol.VirtualAddress; // +section.VirtualAddress;
 
 			// Create a delegate for the test method
 			Delegate fn = Marshal.GetDelegateForFunctionPointer(

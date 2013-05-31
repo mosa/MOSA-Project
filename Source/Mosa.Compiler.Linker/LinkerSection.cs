@@ -14,7 +14,6 @@ namespace Mosa.Compiler.Linker
 	/// </summary>
 	public abstract class LinkerSection
 	{
-		
 		#region Construction
 
 		/// <summary>
@@ -38,7 +37,7 @@ namespace Mosa.Compiler.Linker
 		/// Gets the virtual address of the section.
 		/// </summary>
 		/// <value>The virtual address.</value>
-		public long VirtualAddress { get; set;}
+		public long VirtualAddress { get; set; }
 
 		/// <summary>
 		/// Gets the length of the section in bytes.
@@ -53,7 +52,7 @@ namespace Mosa.Compiler.Linker
 		/// Gets the name.
 		/// </summary>
 		/// <value>The name.</value>
-		public string Name  { get; set;}
+		public string Name { get; set; }
 
 		/// <summary>
 		/// Gets or sets the file offset of the section.

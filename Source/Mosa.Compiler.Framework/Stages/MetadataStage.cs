@@ -105,7 +105,9 @@ namespace Mosa.Compiler.Framework.Stages
 					foreach (var type in typeModule.GetAllTypes())
 					{
 						if (!type.IsModule && !(type.Module is InternalTypeModule))
+						{
 							linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuildInPatch.I4, assemblyTableSymbol, (int)writer.Position, 0, type.FullName + @"$dtable", 0);
+						}
 
 						writer.Position += typeLayout.NativePointerSize;
 					}
