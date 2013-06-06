@@ -33,13 +33,19 @@ namespace Mosa.TestWorld.x86
 		public static void RunTests()
 		{
 			//Screen.Clear();
-			Native.Set8(0x0B8000, 65);
-			Native.Set8(0x0B8002, 66);
+			//Native.Set8(0x0B8000, 65);
+			//Native.Set8(0x0B8002, 66);
 			//Screen.Column = 0;
 			//Screen.Row = 1;
 			//Screen.Color = 3;
-			Screen.Write('X');
-			//Screen.Write('Z');
+			Screen.Write('Q');
+			Write('X', 3);
+		}
+
+		public static void Write(char chr, byte color)
+		{
+			Native.Set8(0x0B8000, (byte)chr);
+			Native.Set8(0x0B8001, color);
 		}
 
 		/// <summary>

@@ -7,7 +7,7 @@ namespace Mosa.Test.Debug
 	{
 		public static void Main()
 		{
-			LoopAwareBlockOrderTests.LoopAwareBlockOrder1();
+			//LoopAwareBlockOrderTests.LoopAwareBlockOrder1();
 
 			//SimpleFastDominanceTests.DominanceCalculation1();
 			//SimpleFastDominanceTests.DominanceCalculation2();
@@ -26,8 +26,8 @@ namespace Mosa.Test.Debug
 			Int32Fixture int32Fixture = new Int32Fixture();
 			int32Fixture.AddI4I4(0, 0);
 
-			CallFixture call = new CallFixture();
-			call.CallU1((byte)1);
+			//CallFixture call = new CallFixture();
+			//call.CallU1((byte)1);
 
 			//Int32Fixture int32Fixture = new Int32Fixture();
 			//BooleanFixture booleanFixture = new BooleanFixture();

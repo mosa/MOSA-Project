@@ -143,8 +143,12 @@ namespace Mosa.Test.System
 			// Reset Memory
 			ResetMemory();
 
+			Debug.WriteLine("Executing: " + runtimeMethod.FullName);
+
 			// Execute the test method
 			object tempResult = fn.DynamicInvoke(parameters);
+
+			Debug.WriteLine("Done");
 
 			try
 			{
@@ -158,6 +162,7 @@ namespace Mosa.Test.System
 				Assert.Fail(@"Failed to convert result {0} of type {1} to type {2}.", tempResult, tempResult.GetType(), typeof(T));
 				throw e;
 			}
+
 		}
 
 		// Might not keep this as a public method

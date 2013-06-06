@@ -113,6 +113,9 @@ namespace Mosa.Platform.x86.Stages
 				// Uncomment this line to enable breakpoints within Bochs
 				//context.AppendInstruction(CPUx86.Instruction.BochsDebug);
 			}
+
+			// save all registers - for testing
+			//context.AppendInstruction(X86.Pushad, null, ebp);
 		}
 
 		/// <summary>
@@ -126,6 +129,9 @@ namespace Mosa.Platform.x86.Stages
 
 			// add esp, -localsSize
 			context.SetInstruction(X86.Add, esp, esp, Operand.CreateConstant(BuiltInSigType.IntPtr, -methodCompiler.StackLayout.StackSize));
+			
+			// restore all registers - for testing
+			//context.AppendInstruction(X86.Popad, null, ebp);
 
 			// pop ebp
 			context.AppendInstruction(X86.Pop, ebp);

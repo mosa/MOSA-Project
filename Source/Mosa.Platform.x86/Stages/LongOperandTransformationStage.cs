@@ -1474,8 +1474,6 @@ namespace Mosa.Platform.x86.Stages
 
 			// Compare low dwords
 			newBlocks[1].AppendInstruction(X86.Cmp, null, op1L, op2L);
-
-			// Set the unsigned result...
 			newBlocks[1].AppendInstruction(X86.Branch, GetUnsignedConditionCode(conditionCode), target);
 			newBlocks[1].AppendInstruction(X86.Jmp, nextBlock.BasicBlock);
 			LinkBlocks(newBlocks[1], target);

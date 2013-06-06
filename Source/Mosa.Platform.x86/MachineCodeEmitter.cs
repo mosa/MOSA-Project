@@ -471,7 +471,6 @@ namespace Mosa.Platform.x86
 				// mod = 11b, reg = rop1, r/m = rop2
 				modRM = (byte)((3 << 6) | (op1.Register.RegisterCode << 3) | op2.Register.RegisterCode);
 			}
-
 			// Check for register/memory combinations
 			else if (mop2 != null && mop2.EffectiveOffsetBase != null)
 			{

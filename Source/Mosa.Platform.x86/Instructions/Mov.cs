@@ -67,28 +67,28 @@ namespace Mosa.Platform.x86.Instructions
 				else if (source.Register is SegmentRegister)
 					throw new ArgumentException(@"TODO: No opcode for move from segment register");
 
-			if ((destination.IsRegister) && (source.IsConstant)) return RM_C;
-			if ((destination.IsMemoryAddress) && (source.IsConstant))
+			if (destination.IsRegister && source.IsConstant) return RM_C;
+			if (destination.IsMemoryAddress && source.IsConstant)
 			{
 				if (IsByte(source)) return RM_C_U8;
 				return RM_C;
 			}
-			if ((destination.IsRegister) && (source.IsSymbol)) return RM_C;
-			if ((destination.IsMemoryAddress) && (source.IsSymbol)) return RM_C;
+			if (destination.IsRegister && source.IsSymbol) return RM_C;
+			if (destination.IsMemoryAddress && source.IsSymbol) return RM_C;
 
-			if ((destination.IsRegister) && (source.IsRegister))
+			if (destination.IsRegister && source.IsRegister)
 			{
-				if (IsByte(source) || IsByte(destination)) return RM_R_U8;
+				if (IsByte(source) || IsByte(destination)) return R_M_U8;
 				if (IsChar(source) || IsChar(destination) || IsShort(source) || IsShort(destination)) return R_R_16;
 				return R_RM;
 			}
-			if ((destination.IsRegister) && (source.IsMemoryAddress))
+			if (destination.IsRegister && source.IsMemoryAddress)
 			{
 				if (IsByte(destination)) return R_M_U8;
 				if (IsChar(destination) || IsShort(destination)) return R_M_16;
 				return R_RM;
 			}
-			if ((destination.IsMemoryAddress) && (source.IsRegister))
+			if (destination.IsMemoryAddress && source.IsRegister)
 			{
 				if (IsByte(destination)) return RM_R_U8;
 				if (IsChar(destination) || IsShort(destination)) return M_R_16;

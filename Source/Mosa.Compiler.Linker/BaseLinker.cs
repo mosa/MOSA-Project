@@ -223,7 +223,7 @@ namespace Mosa.Compiler.Linker
 				list = new List<LinkRequest>();
 				linkRequests.Add(targetSymbol, list);
 			}
-
+			
 			list.Add(new LinkRequest(linkType, patches, symbolName, symbolOffset, relativeBase, targetSymbol, targetOffset));
 		}
 

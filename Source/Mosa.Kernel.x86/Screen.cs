@@ -103,9 +103,9 @@ namespace Mosa.Kernel.x86
 			uint address = (0x0B8000 + ((Row * Columns + Column) * 2));
 
 			Native.Set8(address, (byte)chr);
-			Native.Set8(address + 1, color);
+			//Native.Set8(address + 1, color);
 
-			Next();
+			//Next();
 		}
 
 		/// <summary>
