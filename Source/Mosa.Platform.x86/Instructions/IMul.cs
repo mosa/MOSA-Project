@@ -15,20 +15,20 @@ namespace Mosa.Platform.x86.Instructions
 	/// <summary>
 	/// Intermediate representation of the mul instruction.
 	/// </summary>
-	public sealed class Mul : X86Instruction
+	public sealed class IMul : X86Instruction
 	{
 		#region Data Members
 
-		private static readonly OpCode opcode = new OpCode(new byte[] { 0xF7 }, 4);
+		private static readonly OpCode opcode = new OpCode(new byte[] { 0xF0, 0xAF });
 
 		#endregion Data Members
 
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of <see cref="Mul"/>.
+		/// Initializes a new instance of <see cref="IMul"/>.
 		/// </summary>
-		public Mul() :
+		public IMul() :
 			base(2, 2)
 		{
 		}
@@ -54,7 +54,7 @@ namespace Mosa.Platform.x86.Instructions
 		/// <param name="context">The context.</param>
 		public override void Visit(IX86Visitor visitor, Context context)
 		{
-			visitor.Mul(context);
+			visitor.IMul(context);
 		}
 
 		#endregion Methods

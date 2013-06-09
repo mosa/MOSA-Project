@@ -149,6 +149,11 @@ namespace Mosa.Platform.x86
 		/// <summary>
 		///
 		/// </summary>
+		public static readonly IMul IMul = new IMul();
+
+		/// <summary>
+		///
+		/// </summary>
 		public static readonly Neg Neg = new Neg();
 
 		/// <summary>

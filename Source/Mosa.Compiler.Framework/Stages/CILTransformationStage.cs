@@ -1455,11 +1455,11 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private static void Replace(Context context, BaseInstruction floatingPointInstruction, BaseInstruction signedInstruction, BaseInstruction unsignedInstruction)
 		{
-			if (IsFloatingPoint(context))
+			if (IsFloatingPoint(context.Result))
 			{
 				context.ReplaceInstructionOnly(floatingPointInstruction);
 			}
-			else if (IsUnsigned(context))
+			else if (IsUnsigned(context.Result))
 			{
 				context.ReplaceInstructionOnly(unsignedInstruction);
 			}
@@ -1467,11 +1467,6 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				context.ReplaceInstructionOnly(signedInstruction);
 			}
-		}
-
-		private static bool IsUnsigned(Context context)
-		{
-			return IsUnsigned(context.Result);
 		}
 
 		private static bool IsUnsigned(Operand operand)
@@ -1484,9 +1479,9 @@ namespace Mosa.Compiler.Framework.Stages
 				   || type == CilElementType.U8;
 		}
 
-		private static bool IsFloatingPoint(Context context)
+		private static bool IsFloatingPoint(Operand operand)
 		{
-			return context.Result.StackType == StackTypeCode.F;
+			return operand.StackType == StackTypeCode.F;
 		}
 
 		/// <summary>

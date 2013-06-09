@@ -8,6 +8,7 @@
 using Mosa.TestWorld.x86.Tests;
 using Mosa.Kernel.x86;
 using Mosa.Platform.x86.Intrinsic;
+using Mosa.Test.Collection;
 
 namespace Mosa.TestWorld.x86
 {
@@ -23,6 +24,8 @@ namespace Mosa.TestWorld.x86
 		/// </summary>
 		public static void Main()
 		{
+			uint result = UInt32Tests.MulU4U4(10, 20);
+
 			RunTests();
 
 			while (true)

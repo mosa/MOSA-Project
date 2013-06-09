@@ -96,14 +96,16 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IX86Visitor.Mul(Context context)
 		{
-			// NOTE: NUL reg/mem32 - Multiplies a 32-bit register or memory operand by the contents of the EAX register and stores the result in the EDX:EAX register.
-			// TRANSFORM: NUL (EAX:EDX) <= EAX, EDX, [v3]
-			if (context.Result.IsCPURegister && context.Result2.IsCPURegister & context.Operand1.IsCPURegister && context.Operand2.IsCPURegister)
-				return;
+			// NOTE: MUL reg/mem32 - Multiplies a 32-bit register or memory operand by the contents of the EAX register and stores the result in the EDX:EAX register.
+			// TRANSFORM: MUL (EAX:EDX) <= EAX,  [v3]
+			if (context.Result.IsCPURegister && context.Result2.IsCPURegister & context.Operand1.IsCPURegister)
+				if (context.Result.Register == GeneralPurposeRegister.EAX &&
+					context.Result2.Register == GeneralPurposeRegister.EDX &&
+					context.Operand1.Register == GeneralPurposeRegister.EAX)
+					return;
 
 			Operand operand1 = context.Operand1;
 			Operand operand2 = context.Operand2;
-			Operand operand3 = context.Operand3;
 			Operand result = context.Result;
 			Operand result2 = context.Result2;
 
@@ -111,10 +113,9 @@ namespace Mosa.Platform.x86.Stages
 			Operand EDX = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.EDX);
 
 			context.SetInstruction(X86.Mov, EAX, operand1);
-			context.AppendInstruction(X86.Mov, EDX, operand2);
-			context.AppendInstruction2(X86.Mul, EDX, EAX, EDX, EAX, operand3);
-			context.AppendInstruction(X86.Mov, result, EDX);
-			context.AppendInstruction(X86.Mov, result2, EAX);
+			context.AppendInstruction2(X86.Mul, EAX, EDX, EAX, operand2);
+			context.AppendInstruction(X86.Mov, result, EAX);
+			context.AppendInstruction(X86.Mov, result2, EDX);
 		}
 
 		/// <summary>
@@ -142,6 +143,15 @@ namespace Mosa.Platform.x86.Stages
 			context.AppendInstruction2(X86.Div, EDX, EAX, EDX, EAX, operand3);
 			context.AppendInstruction(X86.Mov, result, EDX);
 			context.AppendInstruction(X86.Mov, result2, EAX);
+		}
+
+		/// <summary>
+		/// Visitation function for <see cref="IMul.IDiv" /> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IX86Visitor.IMul(Context context)
+		{
+			//TODO
 		}
 
 		/// <summary>
@@ -820,10 +830,11 @@ namespace Mosa.Platform.x86.Stages
 			Operand operand2 = context.Operand2;
 			Operand result = context.Result;
 
-			Operand ECX = Operand.CreateCPURegister(BuiltInSigType.Byte, GeneralPurposeRegister.ECX);
+			Operand ECX = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.ECX);
 
 			context.SetInstruction(X86.Mov, ECX, operand2);
-			context.AppendInstruction(X86.Sar, result, operand1, ECX);
+			context.AppendInstruction(X86.Mov, result, operand1);
+			context.AppendInstruction(X86.Sar, result, result, ECX);
 		}
 	}
 }

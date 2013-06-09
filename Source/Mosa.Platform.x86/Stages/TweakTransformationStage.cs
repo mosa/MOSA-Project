@@ -165,10 +165,18 @@ namespace Mosa.Platform.x86.Stages
 		}
 
 		/// <summary>
-		/// Visitation function for <see cref="IX86Visitor.IDiv"/> instructions.
+		/// Visitation function for <see cref="IX86Visitor.IDiv" /> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IX86Visitor.IDiv(Context context)
+		{
+		}
+
+		/// <summary>
+		/// Visitation function for <see cref="IMul.IDiv" /> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IX86Visitor.IMul(Context context)
 		{
 		}
 

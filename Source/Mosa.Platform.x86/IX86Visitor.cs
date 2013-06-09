@@ -95,6 +95,12 @@ namespace Mosa.Platform.x86
 		void IDiv(Context context);
 
 		/// <summary>
+		/// IMul instruction
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IMul(Context context);
+		
+		/// <summary>
 		/// AddSs instruction
 		/// </summary>
 		/// <param name="context">The context.</param>
