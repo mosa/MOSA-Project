@@ -189,7 +189,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IX86Visitor.Sar(Context context)
 		{
-			HandleShiftOperation(context);
+			HandleShiftOperation(context, X86.Sar);
 		}
 
 		/// <summary>
@@ -198,7 +198,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IX86Visitor.Sal(Context context)
 		{
-			HandleShiftOperation(context);
+			HandleShiftOperation(context, X86.Shl);
 		}
 
 		/// <summary>
@@ -207,7 +207,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IX86Visitor.Shl(Context context)
 		{
-			HandleShiftOperation(context);
+			HandleShiftOperation(context, X86.Shl);
 		}
 
 		/// <summary>
@@ -216,7 +216,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IX86Visitor.Shr(Context context)
 		{
-			HandleShiftOperation(context);
+			HandleShiftOperation(context, X86.Shr);
 		}
 
 		/// <summary>
@@ -225,7 +225,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IX86Visitor.Rcr(Context context)
 		{
-			HandleShiftOperation(context);
+			HandleShiftOperation(context, X86.Rcr);
 		}
 
 		/// <summary>
@@ -818,7 +818,7 @@ namespace Mosa.Platform.x86.Stages
 
 		#endregion IX86Visitor - Unused
 
-		private void HandleShiftOperation(Context context)
+		private void HandleShiftOperation(Context context, BaseInstruction instruction)
 		{
 			if (context.Operand2.IsConstant)
 				return;
@@ -834,7 +834,7 @@ namespace Mosa.Platform.x86.Stages
 
 			context.SetInstruction(X86.Mov, ECX, operand2);
 			context.AppendInstruction(X86.Mov, result, operand1);
-			context.AppendInstruction(X86.Sar, result, result, ECX);
+			context.AppendInstruction(instruction, result, result, ECX);
 		}
 	}
 }
