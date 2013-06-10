@@ -10,6 +10,7 @@
 
 using Mosa.Compiler.Framework;
 using System;
+using System.Diagnostics;
 
 namespace Mosa.Platform.x86.Instructions
 {
@@ -93,6 +94,19 @@ namespace Mosa.Platform.x86.Instructions
 			}
 
 			throw new ArgumentException(String.Format(@"x86.Cmp: No opcode for operand types {0} and {1}.", source, third));
+		}
+
+		/// <summary>
+		/// Emits the specified platform instruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <param name="emitter">The emitter.</param>
+		protected override void Emit(Context context, MachineCodeEmitter emitter)
+		{
+			Debug.Assert(context.Result == null);
+
+			OpCode opCode = ComputeOpCode(null, context.Operand1, context.Operand2);
+			emitter.Emit(opCode, context.Operand1, context.Operand2);
 		}
 
 		/// Allows visitor based dispatch for this instruction object.
