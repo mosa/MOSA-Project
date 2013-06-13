@@ -628,7 +628,7 @@ namespace Mosa.Platform.x86.Stages
 		}
 
 		/// <summary>
-		/// Visitation function for MulFInstruction.
+		/// Visitation function for MulFloat.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IIRVisitor.MulFloat(Context context)
@@ -642,7 +642,7 @@ namespace Mosa.Platform.x86.Stages
 		}
 
 		/// <summary>
-		/// Visitation function for SubFInstruction.
+		/// Visitation function for SubFloat.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IIRVisitor.SubFloat(Context context)
@@ -656,7 +656,7 @@ namespace Mosa.Platform.x86.Stages
 		}
 
 		/// <summary>
-		/// Visitation function for SubSInstruction.
+		/// Visitation function for SubSigned.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IIRVisitor.SubSigned(Context context)
@@ -667,7 +667,7 @@ namespace Mosa.Platform.x86.Stages
 		}
 
 		/// <summary>
-		/// Visitation function for SubUInstruction.
+		/// Visitation function for SubUnsigned.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IIRVisitor.SubUnsigned(Context context)
@@ -678,7 +678,7 @@ namespace Mosa.Platform.x86.Stages
 		}
 
 		/// <summary>
-		/// Visitation function for MulSInstruction.
+		/// Visitation function for MulSigned.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IIRVisitor.MulSigned(Context context)
@@ -710,7 +710,7 @@ namespace Mosa.Platform.x86.Stages
 		}
 
 		/// <summary>
-		/// Visitation function for DivSInstruction.
+		/// Visitation function for DivSigned.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IIRVisitor.DivSigned(Context context)
@@ -725,12 +725,13 @@ namespace Mosa.Platform.x86.Stages
 			Operand v2 = AllocateVirtualRegister(BuiltInSigType.UInt32);
 			Operand v3 = AllocateVirtualRegister(BuiltInSigType.Int32);
 
+			// FIXME
 			context.SetInstruction2(X86.Cdq, v1, v2, operand1);
 			context.AppendInstruction2(X86.IDiv, result, v3, v1, v2, operand2);
 		}
 
 		/// <summary>
-		/// Visitation function for DivUInstruction.
+		/// Visitation function for DivUnsigned.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IIRVisitor.DivUnsigned(Context context)
@@ -741,10 +742,12 @@ namespace Mosa.Platform.x86.Stages
 			Operand operand2 = context.Operand2;
 			Operand result = context.Result;
 
+			Operand v1 = AllocateVirtualRegister(BuiltInSigType.UInt32);
 			Operand v2 = AllocateVirtualRegister(BuiltInSigType.UInt32);
-			Operand v3 = AllocateVirtualRegister(BuiltInSigType.Int32);
 
-			context.SetInstruction2(X86.IDiv, result, v3, Operand.CreateConstant((uint)0x0), v2, operand2);
+			context.SetInstruction(X86.Mov, v1, Operand.CreateConstant((uint)0x0));
+			context.AppendInstruction2(X86.Div, v1, v2, v1, operand1, operand2);
+			context.AppendInstruction(X86.Mov, result, v1);
 		}
 
 		/// <summary>
@@ -763,12 +766,13 @@ namespace Mosa.Platform.x86.Stages
 			Operand v2 = AllocateVirtualRegister(BuiltInSigType.UInt32);
 			Operand v3 = AllocateVirtualRegister(BuiltInSigType.Int32);
 
+			// FIXME
 			context.SetInstruction2(X86.Cdq, v1, v2, operand1);
 			context.AppendInstruction2(X86.IDiv, result, v3, v1, v2, operand2);
 		}
 
 		/// <summary>
-		/// Visitation function for RemUInstruction.
+		/// Visitation function for RemUnsigned.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IIRVisitor.RemUnsigned(Context context)
@@ -779,13 +783,16 @@ namespace Mosa.Platform.x86.Stages
 			Operand operand1 = context.Operand1;
 			Operand operand2 = context.Operand2;
 
+			Operand v1 = AllocateVirtualRegister(BuiltInSigType.UInt32);
 			Operand v2 = AllocateVirtualRegister(BuiltInSigType.UInt32);
 
-			context.SetInstruction2(X86.Div, result, v2, operand1, Operand.CreateConstant((uint)0x0), operand2);
+			context.SetInstruction(X86.Mov, v1, Operand.CreateConstant((uint)0x0));
+			context.AppendInstruction2(X86.Div, v1, v2, v1, operand1, operand2);
+			context.AppendInstruction(X86.Mov, result, v2);
 		}
 
 		/// <summary>
-		/// Visitation function for RemF.
+		/// Visitation function for RemFloat.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IIRVisitor.RemFloat(Context context)

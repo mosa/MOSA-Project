@@ -86,6 +86,12 @@ namespace Mosa.Platform.x86.Stages
 			Operand ebp = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.EBP);
 			Operand esp = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.ESP);
 
+			//Operand eax = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.EAX);
+			Operand edx = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.EDX);
+			Operand edi = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.EDI);
+			Operand ecx = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.ECX);
+			Operand ebx = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.EBX);
+
 			bool breakFlag = false; // TODO: Turn this into a compiler option
 
 			/*
@@ -96,13 +102,8 @@ namespace Mosa.Platform.x86.Stages
 			 * never appear.
 			 */
 
-			// push ebp
 			context.SetInstruction(X86.Push, null, ebp);
-
-			// mov ebp, esp
 			context.AppendInstruction(X86.Mov, ebp, esp);
-
-			// sub esp, localsSize
 			context.AppendInstruction(X86.Sub, esp, esp, Operand.CreateConstant(-methodCompiler.StackLayout.StackSize));
 
 			if (breakFlag)
@@ -114,8 +115,10 @@ namespace Mosa.Platform.x86.Stages
 				//context.AppendInstruction(CPUx86.Instruction.BochsDebug);
 			}
 
-			// save all registers - for testing
-			//context.AppendInstruction(X86.Pushad, null, ebp);
+			context.AppendInstruction(X86.Push, null, edx);
+			context.AppendInstruction(X86.Push, null, edi);
+			context.AppendInstruction(X86.Push, null, ecx);
+			context.AppendInstruction(X86.Push, null, ebx);
 		}
 
 		/// <summary>
@@ -127,16 +130,17 @@ namespace Mosa.Platform.x86.Stages
 			Operand ebp = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.EBP);
 			Operand esp = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.ESP);
 
-			// add esp, -localsSize
-			context.SetInstruction(X86.Add, esp, esp, Operand.CreateConstant(BuiltInSigType.IntPtr, -methodCompiler.StackLayout.StackSize));
-			
-			// restore all registers - for testing
-			//context.AppendInstruction(X86.Popad, null, ebp);
+			Operand edx = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.EDX);
+			Operand edi = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.EDI);
+			Operand ecx = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.ECX);
+			Operand ebx = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.EBX);
 
-			// pop ebp
+			context.SetInstruction(X86.Pop, ebx);
+			context.AppendInstruction(X86.Pop, ecx);
+			context.AppendInstruction(X86.Pop, edi);
+			context.AppendInstruction(X86.Pop, edx);
+			context.AppendInstruction(X86.Add, esp, esp, Operand.CreateConstant(BuiltInSigType.IntPtr, -methodCompiler.StackLayout.StackSize));
 			context.AppendInstruction(X86.Pop, ebp);
-
-			// ret
 			context.AppendInstruction(X86.Ret);
 		}
 	}

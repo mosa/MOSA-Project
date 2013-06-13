@@ -312,7 +312,7 @@ namespace Mosa.Platform.x86
 				 * so that we can embed floating point constants in our PIC.
 				 *
 				 */
-				return -4;
+				return 0;
 			}
 		}
 

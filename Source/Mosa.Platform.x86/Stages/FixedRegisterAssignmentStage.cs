@@ -25,9 +25,6 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IX86Visitor.In(Context context)
 		{
-			// TRANSFORM: IN EAX <= EDX
-			// OPTIONAL TODO: IN EAX, imm8
-
 			if (context.Result.IsCPURegister && context.Operand1.IsCPURegister)
 				return;
 
@@ -96,9 +93,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IX86Visitor.Mul(Context context)
 		{
-			// NOTE: MUL reg/mem32 - Multiplies a 32-bit register or memory operand by the contents of the EAX register and stores the result in the EDX:EAX register.
-			// TRANSFORM: MUL (EAX:EDX) <= EAX,  [v3]
-			if (context.Result.IsCPURegister && context.Result2.IsCPURegister & context.Operand1.IsCPURegister)
+			if (context.Result.IsCPURegister && context.Result2.IsCPURegister & context.Operand1.IsCPURegister && context.Operand2.IsRegister)
 				if (context.Result.Register == GeneralPurposeRegister.EAX &&
 					context.Result2.Register == GeneralPurposeRegister.EDX &&
 					context.Operand1.Register == GeneralPurposeRegister.EAX)
@@ -113,9 +108,21 @@ namespace Mosa.Platform.x86.Stages
 			Operand EDX = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.EDX);
 
 			context.SetInstruction(X86.Mov, EAX, operand1);
-			context.AppendInstruction2(X86.Mul, EAX, EDX, EAX, operand2);
+
+			if (operand2.IsRegister)
+			{
+				context.AppendInstruction2(X86.Mul, EAX, EDX, EAX, operand2);
+			}
+			else
+			{
+				Operand v3 = AllocateVirtualRegister(BuiltInSigType.Int32);
+				context.AppendInstruction(X86.Mov, v3, operand2);
+				context.AppendInstruction2(X86.Mul, EAX, EDX, EAX, v3);
+			}
+
 			context.AppendInstruction(X86.Mov, result, EAX);
 			context.AppendInstruction(X86.Mov, result2, EDX);
+
 		}
 
 		/// <summary>
@@ -124,10 +131,12 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IX86Visitor.Div(Context context)
 		{
-			// NOTE: DIV reg/mem32 - Perform unsigned division of EDX:EAX by the contents of a 32-bit register or memory location and store the quotient in EAX and the remainder in EDX.
-			// TRANSFORM: DIV (EAX:EDX) <= EAX, EDX, [v3]
-			if (context.Result.IsCPURegister && context.Result2.IsCPURegister & context.Operand1.IsCPURegister && context.Operand2.IsCPURegister)
-				return;
+			if (context.Result.IsCPURegister && context.Result2.IsCPURegister & context.Operand1.IsCPURegister)
+				if (context.Result.Register == GeneralPurposeRegister.EDX &&
+					context.Result2.Register == GeneralPurposeRegister.EAX &&
+					context.Operand1.Register == GeneralPurposeRegister.EDX &&
+					context.Operand2.Register == GeneralPurposeRegister.EAX)
+					return;
 
 			Operand operand1 = context.Operand1;
 			Operand operand2 = context.Operand2;
@@ -138,15 +147,16 @@ namespace Mosa.Platform.x86.Stages
 			Operand EAX = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.EAX);
 			Operand EDX = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.EDX);
 
-			context.SetInstruction(X86.Mov, EAX, operand1);
-			context.AppendInstruction(X86.Mov, EDX, operand2);
+			context.SetInstruction(X86.Mov, EDX, operand1);
+			context.AppendInstruction(X86.Mov, EAX, operand2);
 			context.AppendInstruction2(X86.Div, EDX, EAX, EDX, EAX, operand3);
-			context.AppendInstruction(X86.Mov, result, EDX);
-			context.AppendInstruction(X86.Mov, result2, EAX);
+			context.AppendInstruction(X86.Mov, result, EAX);
+			context.AppendInstruction(X86.Mov, result2, EDX);
+
 		}
 
 		/// <summary>
-		/// Visitation function for <see cref="IMul.IDiv" /> instructions.
+		/// Visitation function for <see cref="IX86Visitor.IMul" /> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IX86Visitor.IMul(Context context)
@@ -160,8 +170,6 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IX86Visitor.IDiv(Context context)
 		{
-			// NOTE: IDIV reg/mem32 - Perform signed division of EDX:EAX by the contents of a 32-bit register or memory location and store the quotient in EAX and the remainder in EDX.
-			// TRANSFORM: IDIV (EAX:EDX) <= EAX, EDX [v3]
 			if (context.Result.IsCPURegister && context.Result2.IsCPURegister & context.Operand1.IsCPURegister && context.Operand2.IsCPURegister)
 				return;
 
@@ -180,8 +188,6 @@ namespace Mosa.Platform.x86.Stages
 			context.AppendInstruction(X86.Mov, result, EDX);
 			context.AppendInstruction(X86.Mov, result2, EAX);
 		}
-
-		// TODO:
 
 		/// <summary>
 		/// Visitation function for <see cref="IX86Visitor.Sar"/> instructions.

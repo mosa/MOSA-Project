@@ -87,7 +87,7 @@ namespace Mosa.Test.System
 			MethodAttributes attrs = MethodAttributes.SpecialName | MethodAttributes.RTSpecialName | MethodAttributes.Static;
 			if ((Method.Attributes & attrs) == attrs && Method.Name == ".cctor")
 			{
-				Debug.WriteLine("Executing: " + Method.FullName);
+				//Debug.WriteLine("Executing: " + Method.FullName);
 				CCtor cctor = (CCtor)Marshal.GetDelegateForFunctionPointer(new IntPtr(address), typeof(CCtor));
 				(Compiler as TestCaseCompiler).QueueCCtorForInvocationAfterCompilation(cctor);
 			}
