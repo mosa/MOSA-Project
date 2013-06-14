@@ -37,6 +37,13 @@ namespace Mosa.Platform.x86.Stages
 
 		#endregion IMethodCompilerStage
 
+		public bool SaveRegisters { get; set; }
+
+		public BuildStackStage()
+		{
+			SaveRegisters = true;
+		}
+
 		/// <summary>
 		/// Updates the prologue.
 		/// </summary>
@@ -104,7 +111,10 @@ namespace Mosa.Platform.x86.Stages
 
 			context.SetInstruction(X86.Push, null, ebp);
 			context.AppendInstruction(X86.Mov, ebp, esp);
-			context.AppendInstruction(X86.Sub, esp, esp, Operand.CreateConstant(-methodCompiler.StackLayout.StackSize));
+			if (methodCompiler.StackLayout.StackSize != 0)
+			{
+				context.AppendInstruction(X86.Sub, esp, esp, Operand.CreateConstant(-methodCompiler.StackLayout.StackSize));
+			}
 
 			if (breakFlag)
 			{
@@ -115,10 +125,13 @@ namespace Mosa.Platform.x86.Stages
 				//context.AppendInstruction(CPUx86.Instruction.BochsDebug);
 			}
 
-			context.AppendInstruction(X86.Push, null, edx);
-			context.AppendInstruction(X86.Push, null, edi);
-			context.AppendInstruction(X86.Push, null, ecx);
-			context.AppendInstruction(X86.Push, null, ebx);
+			if (SaveRegisters)
+			{
+				context.AppendInstruction(X86.Push, null, edx);
+				context.AppendInstruction(X86.Push, null, edi);
+				context.AppendInstruction(X86.Push, null, ecx);
+				context.AppendInstruction(X86.Push, null, ebx);
+			}
 		}
 
 		/// <summary>
@@ -135,11 +148,21 @@ namespace Mosa.Platform.x86.Stages
 			Operand ecx = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.ECX);
 			Operand ebx = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.EBX);
 
-			context.SetInstruction(X86.Pop, ebx);
-			context.AppendInstruction(X86.Pop, ecx);
-			context.AppendInstruction(X86.Pop, edi);
-			context.AppendInstruction(X86.Pop, edx);
-			context.AppendInstruction(X86.Add, esp, esp, Operand.CreateConstant(BuiltInSigType.IntPtr, -methodCompiler.StackLayout.StackSize));
+			context.SetInstruction(X86.Nop);
+
+			if (SaveRegisters)
+			{
+				context.AppendInstruction(X86.Pop, ebx);
+				context.AppendInstruction(X86.Pop, ecx);
+				context.AppendInstruction(X86.Pop, edi);
+				context.AppendInstruction(X86.Pop, edx);
+			}
+
+			if (methodCompiler.StackLayout.StackSize != 0)
+			{
+				context.AppendInstruction(X86.Add, esp, esp, Operand.CreateConstant(BuiltInSigType.IntPtr, -methodCompiler.StackLayout.StackSize));
+			}
+
 			context.AppendInstruction(X86.Pop, ebp);
 			context.AppendInstruction(X86.Ret);
 		}

@@ -68,9 +68,6 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IX86Visitor.Cdq(Context context)
 		{
-			// NOTE: Sign-extend EAX into EDX:EAX.
-			// TRANSFORM: CDQ (EDX:EAX) <= EAX.
-
 			if (context.Result.IsCPURegister && context.Result2.IsCPURegister & context.Operand1.IsCPURegister)
 				return;
 
@@ -152,7 +149,6 @@ namespace Mosa.Platform.x86.Stages
 			context.AppendInstruction2(X86.Div, EDX, EAX, EDX, EAX, operand3);
 			context.AppendInstruction(X86.Mov, result, EAX);
 			context.AppendInstruction(X86.Mov, result2, EDX);
-
 		}
 
 		/// <summary>
@@ -170,8 +166,13 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IX86Visitor.IDiv(Context context)
 		{
-			if (context.Result.IsCPURegister && context.Result2.IsCPURegister & context.Operand1.IsCPURegister && context.Operand2.IsCPURegister)
-				return;
+			if (context.Result.IsCPURegister && context.Result2.IsCPURegister &
+				context.Operand1.IsCPURegister && context.Operand2.IsCPURegister)
+				if (context.Result.Register == GeneralPurposeRegister.EDX &&
+					context.Result2.Register == GeneralPurposeRegister.EAX &&
+					context.Operand1.Register == GeneralPurposeRegister.EDX &&
+					context.Operand2.Register == GeneralPurposeRegister.EAX)
+					return;
 
 			Operand operand1 = context.Operand1;
 			Operand operand2 = context.Operand2;
@@ -182,11 +183,22 @@ namespace Mosa.Platform.x86.Stages
 			Operand EAX = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.EAX);
 			Operand EDX = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.EDX);
 
-			context.SetInstruction(X86.Mov, EAX, operand1);
-			context.AppendInstruction(X86.Mov, EDX, operand2);
-			context.AppendInstruction2(X86.IDiv, EDX, EAX, EDX, EAX, operand3);
-			context.AppendInstruction(X86.Mov, result, EDX);
+			context.SetInstruction(X86.Mov, EDX, operand1);
+			context.AppendInstruction(X86.Mov, EAX, operand2);
+
+			if (operand3.IsRegister)
+			{
+				context.AppendInstruction2(X86.IDiv, EDX, EAX, EDX, EAX, operand3);
+			}
+			else
+			{
+				Operand v3 = AllocateVirtualRegister(BuiltInSigType.Int32);
+				context.AppendInstruction(X86.Mov, v3, operand3);
+				context.AppendInstruction2(X86.IDiv, EDX, EAX, EDX, EAX, v3);
+			}
+
 			context.AppendInstruction(X86.Mov, result2, EAX);
+			context.AppendInstruction(X86.Mov, result, EDX);
 		}
 
 		/// <summary>
