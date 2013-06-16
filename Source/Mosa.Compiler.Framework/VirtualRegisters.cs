@@ -7,10 +7,10 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System.Diagnostics;
+using Mosa.Compiler.Metadata.Signatures;
 using System.Collections;
 using System.Collections.Generic;
-using Mosa.Compiler.Metadata.Signatures;
+using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework
 {

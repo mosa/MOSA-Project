@@ -119,7 +119,6 @@ namespace Mosa.Platform.x86.Stages
 
 			context.AppendInstruction(X86.Mov, result, EAX);
 			context.AppendInstruction(X86.Mov, result2, EDX);
-
 		}
 
 		/// <summary>

@@ -20,11 +20,9 @@ namespace Mosa.Platform.x86.Instructions
 	{
 		#region Data members
 
-		private static readonly OpCode R_C = new OpCode(new byte[] { 0x81 }, 2);
-		private static readonly OpCode M_C = R_C;
-		private static readonly OpCode R_R = new OpCode(new byte[] { 0x11 });
-		private static readonly OpCode M_R = R_R;
-		private static readonly OpCode R_M = new OpCode(new byte[] { 0x13 });
+		private static readonly OpCode RM_C = new OpCode(new byte[] { 0x81 }, 2);
+		private static readonly OpCode R_RM = new OpCode(new byte[] { 0x13 });
+		private static readonly OpCode M_R = new OpCode(new byte[] { 0x11 });
 
 		#endregion Data members
 
@@ -39,11 +37,11 @@ namespace Mosa.Platform.x86.Instructions
 		/// <returns></returns>
 		protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
 		{
-			if (destination.IsRegister && third.IsConstant) return R_C;
-			if (destination.IsRegister && third.IsRegister) return R_R;
-			if (destination.IsRegister && third.IsMemoryAddress) return R_M;
+			if (destination.IsRegister && third.IsConstant) return RM_C;
+			if (destination.IsRegister && third.IsRegister) return R_RM;
+			if (destination.IsRegister && third.IsMemoryAddress) return R_RM;
 			if (destination.IsMemoryAddress && third.IsRegister) return M_R;
-			if (destination.IsMemoryAddress && third.IsConstant) return M_C;
+			if (destination.IsMemoryAddress && third.IsConstant) return RM_C;
 
 			throw new ArgumentException(@"No opcode for operand type.");
 		}

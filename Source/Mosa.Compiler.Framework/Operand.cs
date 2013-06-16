@@ -8,13 +8,13 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Text;
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Compiler.TypeSystem;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Text;
 
 namespace Mosa.Compiler.Framework
 {
@@ -428,7 +428,6 @@ namespace Mosa.Compiler.Framework
 			return operand;
 		}
 
-
 		/// <summary>
 		/// Creates a new memory address <see cref="Operand"/>.
 		/// </summary>
@@ -567,8 +566,6 @@ namespace Mosa.Compiler.Framework
 			}
 
 			operand.parent = longOperand;
-
-			//operand.SplitParent = longOperand;
 
 			Debug.Assert(longOperand.Low == null);
 			longOperand.Low = operand;

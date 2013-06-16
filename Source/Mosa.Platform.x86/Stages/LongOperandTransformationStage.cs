@@ -36,7 +36,7 @@ namespace Mosa.Platform.x86.Stages
 		{
 			if (operand.StackType == StackTypeCode.Int64)
 			{
-				methodCompiler.VirtualRegisters.SplitLongOperand(operand, 0, 4);
+				methodCompiler.VirtualRegisters.SplitLongOperand(operand, 4, 0);
 				operandLow = operand.Low;
 				operandHigh = operand.High;
 				return;

@@ -28,7 +28,7 @@ namespace Mosa.Compiler.Framework.Stages
 			LayoutStackVariables();
 
 			// Layout parameters
-			LayoutParameters(methodCompiler);
+			LayoutParameters();
 		}
 
 		#region Internals
@@ -46,19 +46,21 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Lays out all parameters of the method.
 		/// </summary>
 		/// <param name="compiler">The method compiler providing the parameters.</param>
-		private void LayoutParameters(BaseMethodCompiler compiler)
+		private void LayoutParameters()
 		{
-			List<Operand> paramOps = new List<Operand>();
+			List<Operand> parameters = new List<Operand>();
 
 			int offset = 0;
 
-			if (compiler.Method.HasThis || compiler.Method.HasExplicitThis)
+			if (methodCompiler.Method.HasThis || methodCompiler.Method.HasExplicitThis)
 				++offset;
 
-			for (int i = 0; i < compiler.Method.Parameters.Count + offset; ++i)
-				paramOps.Add(compiler.GetParameterOperand(i));
+			for (int i = 0; i < methodCompiler.Method.Parameters.Count + offset; ++i)
+			{
+				parameters.Add(methodCompiler.GetParameterOperand(i));
+			}
 
-			LayoutVariables(paramOps, callingConvention, callingConvention.OffsetOfFirstParameter, -1);
+			LayoutVariables(parameters, callingConvention, callingConvention.OffsetOfFirstParameter, -1);
 		}
 
 		/// <summary>
@@ -98,7 +100,19 @@ namespace Mosa.Compiler.Framework.Stages
 					offset += (padding + size);
 				}
 
+				long existing = operand.Offset;
 				operand.Offset = thisOffset;
+
+				// adjust split children
+				if (operand.Low != null)
+				{
+					operand.Low.Offset = thisOffset + (operand.Low.Offset - existing);
+				}
+
+				if (operand.High != null)
+				{
+					operand.High.Offset = thisOffset + (operand.High.Offset - existing);
+				}
 			}
 
 			return offset;
