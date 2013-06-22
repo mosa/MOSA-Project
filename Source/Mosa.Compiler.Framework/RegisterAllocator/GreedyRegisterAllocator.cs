@@ -1097,7 +1097,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 					{
 						Context context = new Context(instructionSet, def.Index);
 
-						architecture.AppendMakeMove(context, register.SpillSlotOperand, liveInterval.AssignedPhysicalOperand);
+						architecture.InsertMove(context, register.SpillSlotOperand, liveInterval.AssignedPhysicalOperand);
 					}
 				}
 			}
@@ -1174,57 +1174,11 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			}
 		}
 
-		private class Move
-		{
-			public BasicBlock SourceBlock { get; set; }
-
-			public BasicBlock DestinationBlock { get; set; }
-
-			public Operand Source { get; set; }
-
-			public Operand Destination { get; set; }
-
-			public Move(BasicBlock sourceBlock, BasicBlock destinationBlock, Operand source, Operand destination)
-			{
-				Debug.Assert(sourceBlock != null);
-				Debug.Assert(destinationBlock != null);
-				Debug.Assert(source != null);
-				Debug.Assert(destination != null);
-
-				SourceBlock = sourceBlock;
-				DestinationBlock = destinationBlock;
-				Source = source;
-				Destination = destination;
-			}
-		}
-
-		private void SortMoveIntoList(List<Move> moves, Move move)
-		{
-			if (move.Destination.IsStackLocal || moves.Count == 0)
-			{
-				moves.Add(move);
-				return;
-			}
-
-			var src = move.Source;
-			for (int at = 0; at < moves.Count; at++)
-			{
-				if (moves[at].Destination == src)
-				{
-					moves.Insert(at, move);
-					return;
-				}
-				at++;
-			}
-
-			moves.Add(move);
-		}
-
 		private void ResolveDataFlow()
 		{
 			var resolverTrace = new CompilerTrace(trace, "ResolveDataFlow");
 
-			List<Move>[,] moves = new List<Move>[2, basicBlocks.Count];
+			MoveResolver[,] moveResolvers = new MoveResolver[2, basicBlocks.Count];
 
 			foreach (var from in extendedBlocks)
 			{
@@ -1237,12 +1191,12 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 					ExtendedBlock anchor = fromAnchorFlag ? from : to;
 
-					List<Move> anchorList = moves[fromAnchorFlag ? 0 : 1, anchor.Sequence];
+					MoveResolver moveResolver = moveResolvers[fromAnchorFlag ? 0 : 1, anchor.Sequence];
 
-					if (anchorList == null)
+					if (moveResolver == null)
 					{
-						anchorList = new List<Move>();
-						moves[fromAnchorFlag ? 0 : 1, anchor.Sequence] = anchorList;
+						moveResolver = new MoveResolver(anchor.BasicBlock, from.BasicBlock, to.BasicBlock);
+						moveResolvers[fromAnchorFlag ? 0 : 1, anchor.Sequence] = moveResolver;
 					}
 
 					foreach (var virtualRegister in GetVirtualRegisters(to.LiveIn))
@@ -1274,14 +1228,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 							Debug.Assert(from.BasicBlock.NextBlocks.Count == 1 || to.BasicBlock.PreviousBlocks.Count == 1);
 
-							Move move = new Move(
-								from.BasicBlock,
-								to.BasicBlock,
-								fromLiveInterval.AssignedOperand,
-								toLiveInterval.AssignedOperand
-							);
-
-							SortMoveIntoList(anchorList, move);
+							moveResolver.AddMove(fromLiveInterval.AssignedOperand, toLiveInterval.AssignedOperand);
 						}
 					}
 				}
@@ -1291,28 +1238,12 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			{
 				for (int fromTag = 0; fromTag < 2; fromTag++)
 				{
-					List<Move> anchorList = moves[fromTag, b];
+					MoveResolver moveResolver = moveResolvers[fromTag, b];
 
-					if (anchorList == null)
+					if (moveResolver == null)
 						continue;
 
-					Context context = new Context(instructionSet, basicBlocks[b], fromTag == 0 ? basicBlocks[b].EndIndex : basicBlocks[b].StartIndex);
-
-					if (fromTag == 0)
-					{
-						context.GotoPrevious();
-
-						while (context.IsEmpty || context.Instruction.FlowControl == FlowControl.Branch || context.Instruction.FlowControl == FlowControl.ConditionalBranch || context.Instruction.FlowControl == FlowControl.Return)
-						{
-							context.GotoPrevious();
-						}
-					}
-
-					foreach (var move in anchorList)
-					{
-						architecture.AppendMakeMove(context, move.Destination, move.Source);
-						//context.Marked = true;
-					}
+					moveResolver.InsertResolvingMoves(architecture, instructionSet);
 				}
 			}
 		}
@@ -1360,7 +1291,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 							Context context = new Context(instructionSet, currentInterval.End.Index);
 							context.GotoPrevious();
 
-							architecture.AppendMakeMove(context,
+							architecture.InsertMove(context,
 								nextInterval.AssignedOperand,
 								currentInterval.AssignedOperand
 							);

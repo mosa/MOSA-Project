@@ -5,6 +5,7 @@
  *
  * Authors:
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 using System;
@@ -128,12 +129,20 @@ namespace Mosa.Compiler.Framework
 		public abstract ICodeEmitter GetCodeEmitter();
 
 		/// <summary>
-		/// Appends a move instruction
+		/// Create platform move.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		/// <param name="Source">The source.</param>
 		/// <param name="Destination">The destination.</param>
-		public abstract void AppendMakeMove(Context context, Operand Destination, Operand Source);
+		/// <param name="Source">The source.</param>
+		public abstract void InsertMove(Context context, Operand Destination, Operand Source);
+
+		/// <summary>
+		/// Create platform exchange registers.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <param name="Destination">The destination.</param>
+		/// <param name="Source">The source.</param>
+		public abstract void InsertExchange(Context context, Operand Destination, Operand Source);
 
 		/// <summary>
 		/// Gets the jump instruction for the platform.

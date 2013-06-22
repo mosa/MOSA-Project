@@ -5,6 +5,7 @@
  *
  * Authors:
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 using System.Collections.Generic;
@@ -45,7 +46,6 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <summary>
 		/// Lays out all parameters of the method.
 		/// </summary>
-		/// <param name="compiler">The method compiler providing the parameters.</param>
 		private void LayoutParameters()
 		{
 			List<Operand> parameters = new List<Operand>();

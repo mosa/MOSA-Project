@@ -237,12 +237,12 @@ namespace Mosa.Platform.x86
 		}
 
 		/// <summary>
-		/// Appends a move instruction
+		/// Create platform move.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		/// <param name="Destination">The destination.</param>
 		/// <param name="Source">The source.</param>
-		public override void AppendMakeMove(Context context, Operand Destination, Operand Source)
+		public override void InsertMove(Context context, Operand Destination, Operand Source)
 		{
 			if (Source.Type.Type == CilElementType.R4)
 			{
@@ -255,6 +255,28 @@ namespace Mosa.Platform.x86
 			else
 			{
 				context.AppendInstruction(X86.Mov, Destination, Source);
+			}
+		}
+
+		/// <summary>
+		/// Creates the swap.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <param name="Destination">The destination.</param>
+		/// <param name="Source">The source.</param>
+		public override void InsertExchange(Context context, Operand Destination, Operand Source)
+		{
+			if (Source.Type.Type == CilElementType.R4)
+			{
+				// TODO
+			}
+			else if (Source.Type.Type == CilElementType.R8)
+			{
+				// TODO
+			}
+			else
+			{
+				context.AppendInstruction2(X86.Xchg, Destination, Source, Source, Destination);
 			}
 		}
 

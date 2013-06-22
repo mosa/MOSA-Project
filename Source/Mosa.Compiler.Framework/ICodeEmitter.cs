@@ -21,7 +21,8 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Initializes the specified emitter.
 		/// </summary>
-		/// <param name="compiler">The compiler.</param>
+		/// <param name="methodName">Name of the method.</param>
+		/// <param name="linker">The linker.</param>
 		/// <param name="codeStream">The code stream.</param>
 		void Initialize(string methodName, ILinker linker, Stream codeStream);
 

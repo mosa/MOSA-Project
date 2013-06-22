@@ -187,7 +187,24 @@ namespace Mosa.Platform.ARM
 			//return new MachineCodeEmitter();
 		}
 
-		public override void AppendMakeMove(Context context, Operand Destination, Operand Source)
+		/// <summary>
+		/// Create platform move.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <param name="Destination">The destination.</param>
+		/// <param name="Source">The source.</param>
+		public override void InsertMove(Context context, Operand Destination, Operand Source)
+		{
+			// TODO
+		}
+
+		/// <summary>
+		/// Create platform exchange registers.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <param name="Destination">The destination.</param>
+		/// <param name="Source">The source.</param>
+		public override void InsertExchange(Context context, Operand Destination, Operand Source)
 		{
 			// TODO
 		}

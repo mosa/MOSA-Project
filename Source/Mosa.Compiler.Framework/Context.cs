@@ -169,7 +169,10 @@ namespace Mosa.Compiler.Framework
 				}
 				if (value != null)
 				{
-					value.Uses.Add(index);
+					if (!value.IsCPURegister)
+					{
+						value.Uses.Add(index);
+					}
 					if (value.IsMemoryAddress && value.OffsetBase != null)
 					{
 						value.OffsetBase.Uses.Add(index);
@@ -200,7 +203,10 @@ namespace Mosa.Compiler.Framework
 				}
 				if (value != null)
 				{
-					value.Uses.Add(index);
+					if (!value.IsCPURegister)
+					{
+						value.Uses.Add(index);
+					}
 					if (value.IsMemoryAddress && value.OffsetBase != null)
 					{
 						value.OffsetBase.Uses.Add(index);
@@ -230,7 +236,10 @@ namespace Mosa.Compiler.Framework
 				}
 				if (value != null)
 				{
-					value.Uses.Add(index);
+					if (!value.IsCPURegister)
+					{
+						value.Uses.Add(index);
+					}
 					if (value.IsMemoryAddress && value.OffsetBase != null)
 					{
 						value.OffsetBase.Uses.Add(index);
@@ -303,7 +312,10 @@ namespace Mosa.Compiler.Framework
 				}
 				if (value != null)
 				{
-					value.Definitions.Add(index);
+					if (!value.IsCPURegister)
+					{
+						value.Definitions.Add(index);
+					}
 					if (value.IsMemoryAddress)
 					{
 						if (value.OffsetBase != null)
@@ -333,6 +345,10 @@ namespace Mosa.Compiler.Framework
 				if (current != null)
 				{
 					current.Definitions.Remove(index);
+					if (!value.IsCPURegister)
+					{
+						value.Definitions.Add(index);
+					}
 					if (current.IsMemoryAddress)
 					{
 						if (current.OffsetBase != null)

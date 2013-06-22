@@ -5,6 +5,7 @@
  *
  * Authors:
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 using Mosa.Compiler.Common;
@@ -120,12 +121,20 @@ namespace Mosa.Compiler.Framework
 		ICodeEmitter GetCodeEmitter();
 
 		/// <summary>
-		/// Makes the move.
+		/// Insert platform move.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		/// <param name="Destination">The destination.</param>
 		/// <param name="Source">The source.</param>
-		void AppendMakeMove(Context context, Operand Destination, Operand Source);
+		void InsertMove(Context context, Operand Destination, Operand Source);
+
+		/// <summary>
+		/// Insert platform exchange registers.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <param name="Destination">The destination.</param>
+		/// <param name="Source">The source.</param>
+		void InsertExchange(Context context, Operand Destination, Operand Source);
 
 		#endregion Methods
 	}
