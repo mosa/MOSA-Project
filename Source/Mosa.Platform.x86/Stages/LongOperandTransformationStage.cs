@@ -1035,53 +1035,44 @@ namespace Mosa.Platform.x86.Stages
 			Operand ecx = AllocateVirtualRegister(BuiltInSigType.Int32);
 
 			Context nextBlock = Split(context, false);
-			Context[] newBlocks = CreateNewBlocksWithContexts(6);
+			Context[] newBlocks = CreateNewBlocksWithContexts(4);
 
 			// Handle shifts of 64 bits or more (if shifting 64 bits or more, the result
 			// depends only on the high order bit of edx).
-			context.SetInstruction(X86.Jmp, newBlocks[0].BasicBlock);
-			LinkBlocks(context, newBlocks[0]);
+			context.SetInstruction(X86.Mov, ecx, count);
+			context.AppendInstruction(X86.Cmp, null, ecx, Operand.CreateConstant((int)64));
+			context.AppendInstruction(X86.Branch, ConditionCode.UnsignedGreaterOrEqual, newBlocks[3].BasicBlock);
+			context.AppendInstruction(X86.Jmp, newBlocks[0].BasicBlock);
+			LinkBlocks(context, newBlocks[3], newBlocks[0]);
 
-			newBlocks[0].AppendInstruction(X86.Mov, ecx, count);
-			newBlocks[0].AppendInstruction(X86.Mov, edx, op1H);
-			newBlocks[0].AppendInstruction(X86.Mov, eax, op1L);
-			newBlocks[0].AppendInstruction(X86.Cmp, null, ecx, Operand.CreateConstant((int)64));
-			newBlocks[0].AppendInstruction(X86.Branch, ConditionCode.UnsignedGreaterOrEqual, newBlocks[4].BasicBlock);
+			newBlocks[0].AppendInstruction(X86.Cmp, null, ecx, Operand.CreateConstant((int)32));
+			newBlocks[0].AppendInstruction(X86.Branch, ConditionCode.UnsignedGreaterOrEqual, newBlocks[2].BasicBlock);
 			newBlocks[0].AppendInstruction(X86.Jmp, newBlocks[1].BasicBlock);
-			LinkBlocks(newBlocks[0], newBlocks[4], newBlocks[1]);
+			LinkBlocks(newBlocks[0], newBlocks[2], newBlocks[1]);
 
-			newBlocks[1].AppendInstruction(X86.Cmp, null, ecx, Operand.CreateConstant((int)32));
-			newBlocks[1].AppendInstruction(X86.Branch, ConditionCode.UnsignedGreaterOrEqual, newBlocks[3].BasicBlock);
-			newBlocks[1].AppendInstruction(X86.Jmp, newBlocks[2].BasicBlock);
-			LinkBlocks(newBlocks[1], newBlocks[3], newBlocks[2]);
-
-			newBlocks[2].AppendInstruction(X86.Shrd, eax, eax, edx, ecx);
-			newBlocks[2].AppendInstruction(X86.Shr, edx, edx, ecx);
-			newBlocks[2].AppendInstruction(X86.Jmp, newBlocks[5].BasicBlock);
-			LinkBlocks(newBlocks[2], newBlocks[5]);
+			newBlocks[1].AppendInstruction(X86.Mov, op0H, op1H);
+			newBlocks[1].AppendInstruction(X86.Mov, op0L, op1L);
+			newBlocks[1].AppendInstruction(X86.Shrd, op0L, op0L, op0H, ecx);
+			newBlocks[1].AppendInstruction(X86.Shr, op0H, op0H, ecx);
+			newBlocks[1].AppendInstruction(X86.Jmp, nextBlock.BasicBlock);
+			LinkBlocks(newBlocks[1], nextBlock.BasicBlock);
 
 			// Handle shifts of between 32 and 63 bits
 			// MORE32:
-			newBlocks[3].AppendInstruction(X86.Mov, eax, edx);
-			newBlocks[4].AppendInstruction(X86.Mov, edx, Operand.CreateConstant((int)0x0));
-			newBlocks[3].AppendInstruction(X86.And, ecx, ecx, Operand.CreateConstant((int)0x1F));
-			newBlocks[3].AppendInstruction(X86.Sar, eax, eax, ecx);
-			newBlocks[3].AppendInstruction(X86.Jmp, newBlocks[5].BasicBlock);
-			LinkBlocks(newBlocks[3], newBlocks[5]);
+			newBlocks[2].AppendInstruction(X86.Mov, op0L, op1H);
+			newBlocks[2].AppendInstruction(X86.Mov, op0H, Operand.CreateConstant((int)0x0));
+			newBlocks[2].AppendInstruction(X86.And, ecx, ecx, Operand.CreateConstant((int)0x1F));
+			newBlocks[2].AppendInstruction(X86.Sar, op0L, op0L, ecx);
+			newBlocks[2].AppendInstruction(X86.Jmp, nextBlock.BasicBlock);
+			LinkBlocks(newBlocks[2], nextBlock.BasicBlock);
 
 			// Return double precision 0 or -1, depending on the sign of edx
 			// RETSIGN:
-			newBlocks[4].AppendInstruction(X86.Mov, edx, Operand.CreateConstant((int)0x0));
-			newBlocks[4].AppendInstruction(X86.Mov, eax, Operand.CreateConstant((int)0x0));
-			newBlocks[4].AppendInstruction(X86.Jmp, newBlocks[5].BasicBlock);
-			LinkBlocks(newBlocks[4], newBlocks[5]);
+			newBlocks[3].AppendInstruction(X86.Mov, op0H, Operand.CreateConstant((int)0x0));
+			newBlocks[3].AppendInstruction(X86.Mov, op0L, op0H);
+			newBlocks[3].AppendInstruction(X86.Jmp, nextBlock.BasicBlock);
+			LinkBlocks(newBlocks[3], nextBlock.BasicBlock);
 
-			// done:
-			// ; remaining code from current basic block
-			newBlocks[5].AppendInstruction(X86.Mov, op0H, edx);
-			newBlocks[5].AppendInstruction(X86.Mov, op0L, eax);
-			newBlocks[5].AppendInstruction(X86.Jmp, nextBlock.BasicBlock);
-			LinkBlocks(newBlocks[5], nextBlock);
 		}
 
 		/// <summary>
