@@ -7,6 +7,7 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using System.Diagnostics;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Metadata.Signatures;
 
@@ -243,6 +244,56 @@ namespace Mosa.Platform.x86.Stages
 		void IX86Visitor.Rcr(Context context)
 		{
 			HandleShiftOperation(context, X86.Rcr);
+		}
+
+		/// <summary>
+		/// Visitation function for <see cref="IX86Visitor.Shld"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IX86Visitor.Shld(Context context)
+		{
+			if (context.Operand3.IsConstant || context.Operand3.IsCPURegister)
+				return;
+
+			if (context.Operand3.Register == GeneralPurposeRegister.ECX)
+				return;
+
+			Operand operand1 = context.Operand1;
+			Operand operand2 = context.Operand2;
+			Operand operand3 = context.Operand3;
+			Operand result = context.Result;
+
+			Debug.Assert(result == operand1);
+
+			Operand ECX = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.ECX);
+
+			context.SetInstruction(X86.Mov, ECX, operand3);
+			context.AppendInstruction(X86.Shld, result, operand1, operand2, ECX);
+		}
+
+		/// <summary>
+		/// Visitation function for <see cref="IX86Visitor.Shrd"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IX86Visitor.Shrd(Context context)
+		{
+			if (context.Operand3.IsConstant || context.Operand3.IsCPURegister)
+				return;
+
+			if (context.Operand3.Register == GeneralPurposeRegister.ECX)
+				return;
+
+			Operand operand1 = context.Operand1;
+			Operand operand2 = context.Operand2;
+			Operand operand3 = context.Operand3;
+			Operand result = context.Result;
+
+			Debug.Assert(result == operand1);
+
+			Operand ECX = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.ECX);
+
+			context.SetInstruction(X86.Mov, ECX, operand3);
+			context.AppendInstruction(X86.Shrd, result, operand1, operand2, ECX);
 		}
 
 		/// <summary>
@@ -486,22 +537,6 @@ namespace Mosa.Platform.x86.Stages
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IX86Visitor.Setcc(Context context)
-		{
-		}
-
-		/// <summary>
-		/// Visitation function for <see cref="IX86Visitor.Shld"/> instructions.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void IX86Visitor.Shld(Context context)
-		{
-		}
-
-		/// <summary>
-		/// Visitation function for <see cref="IX86Visitor.Shrd"/> instructions.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void IX86Visitor.Shrd(Context context)
 		{
 		}
 
@@ -837,10 +872,7 @@ namespace Mosa.Platform.x86.Stages
 
 		private void HandleShiftOperation(Context context, BaseInstruction instruction)
 		{
-			if (context.Operand2.IsConstant)
-				return;
-
-			if (context.Operand2.IsCPURegister)
+			if (context.Operand2.IsConstant || context.Operand2.IsCPURegister)
 				return;
 
 			Operand operand1 = context.Operand1;

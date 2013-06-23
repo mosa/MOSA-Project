@@ -31,7 +31,7 @@ namespace Mosa.Platform.x86.Instructions
 		/// Initializes a new instance of <see cref="Shld"/>.
 		/// </summary>
 		public Shld() :
-			base(1, 2)
+			base(1, 3)
 		{
 		}
 
@@ -58,13 +58,13 @@ namespace Mosa.Platform.x86.Instructions
 		/// <param name="emitter">The emitter.</param>
 		protected override void Emit(Context context, MachineCodeEmitter emitter)
 		{
-			if (context.Operand2.IsConstant)
+			if (context.Operand3.IsConstant)
 			{
-				emitter.Emit(C, context.Result, context.Operand2);
+				emitter.Emit(C, context.Operand2, context.Result, context.Operand3);
 			}
 			else
 			{
-				emitter.Emit(RM, context.Operand1, null);
+				emitter.Emit(RM, context.Operand2, context.Result);
 			}
 		}
 
@@ -75,7 +75,7 @@ namespace Mosa.Platform.x86.Instructions
 		/// <param name="context">The context.</param>
 		public override void Visit(IX86Visitor visitor, Context context)
 		{
-			visitor.Shrd(context);
+			visitor.Shld(context);
 		}
 
 		#endregion Methods

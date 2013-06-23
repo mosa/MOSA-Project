@@ -51,26 +51,6 @@ namespace Mosa.Platform.x86.Stages
 			throw new InvalidProgramException("@can not split" + operand.ToString());
 		}
 
-		//private static void SplitFromNonConstantOperand(Operand operand, out Operand operandLow, out Operand operandHigh)
-		//{
-		//    SigType HighType = (operand.Type.Type == CilElementType.I8) ? BuiltInSigType.Int32 : BuiltInSigType.UInt32;
-
-		//    // No, could be a member or a plain memory operand
-		//    if (operand.IsRuntimeMember)
-		//    {
-		//        // We need to keep the member reference, otherwise the linker can't fixup
-		//        // the member address.
-		//        operandLow = Operand.CreateRuntimeMember(BuiltInSigType.UInt32, operand.RuntimeMember, operand.Offset);
-		//        operandHigh = Operand.CreateRuntimeMember(HighType, operand.RuntimeMember, new IntPtr(operand.Offset.ToInt64() + 4));
-		//    }
-		//    else
-		//    {
-		//        // Plain memory, we can handle it here
-		//        operandLow = Operand.CreateMemoryAddress(BuiltInSigType.UInt32, operand.OffsetBase, operand.Offset);
-		//        operandHigh = Operand.CreateMemoryAddress(HighType, operand.OffsetBase, new IntPtr(operand.Offset.ToInt64() + 4));
-		//    }
-		//}
-
 		/// <summary>
 		/// Expands the add instruction for 64-bit operands.
 		/// </summary>
@@ -936,12 +916,12 @@ namespace Mosa.Platform.x86.Stages
 			newBlocks[0].AppendInstruction(X86.Jmp, newBlocks[1].BasicBlock);
 			LinkBlocks(newBlocks[0], newBlocks[4], newBlocks[1]);
 
-			newBlocks[1].AppendInstruction(X86.Cmp, null, ecx, Operand.CreateConstant(BuiltInSigType.Byte, 32));
+			newBlocks[1].AppendInstruction(X86.Cmp, null, ecx, Operand.CreateConstant(BuiltInSigType.Int32, 32));
 			newBlocks[1].AppendInstruction(X86.Branch, ConditionCode.UnsignedGreaterOrEqual, newBlocks[3].BasicBlock);
 			newBlocks[1].AppendInstruction(X86.Jmp, newBlocks[2].BasicBlock);
 			LinkBlocks(newBlocks[1], newBlocks[3], newBlocks[2]);
 
-			newBlocks[2].AppendInstruction(X86.Shrd, edx, eax, ecx);
+			newBlocks[2].AppendInstruction(X86.Shrd, eax, eax, edx, ecx);
 			newBlocks[2].AppendInstruction(X86.Sar, edx, edx, ecx);
 			newBlocks[2].AppendInstruction(X86.Jmp, newBlocks[5].BasicBlock);
 			LinkBlocks(newBlocks[2], newBlocks[5]);
@@ -949,7 +929,7 @@ namespace Mosa.Platform.x86.Stages
 			// Handle shifts of between 32 and 63 bits
 			// MORE32:
 			newBlocks[3].AppendInstruction(X86.Mov, eax, edx);
-			newBlocks[3].AppendInstruction(X86.Sar, edx, edx, Operand.CreateConstant(BuiltInSigType.Byte, (sbyte)0x1F));
+			newBlocks[3].AppendInstruction(X86.Sar, edx, edx, Operand.CreateConstant(BuiltInSigType.Int32, (int)0x1F));
 			newBlocks[3].AppendInstruction(X86.And, ecx, ecx, Operand.CreateConstant((int)0x1F));
 			newBlocks[3].AppendInstruction(X86.Sar, eax, eax, ecx);
 			newBlocks[3].AppendInstruction(X86.Jmp, newBlocks[5].BasicBlock);
@@ -957,7 +937,7 @@ namespace Mosa.Platform.x86.Stages
 
 			// Return double precision 0 or -1, depending on the sign of edx
 			// RETSIGN:
-			newBlocks[4].AppendInstruction(X86.Sar, edx, edx, Operand.CreateConstant(BuiltInSigType.Byte, (sbyte)0x1F));
+			newBlocks[4].AppendInstruction(X86.Sar, edx, edx, Operand.CreateConstant(BuiltInSigType.Int32, (int)0x1F));
 			newBlocks[4].AppendInstruction(X86.Mov, eax, edx);
 			newBlocks[4].AppendInstruction(X86.Jmp, newBlocks[5].BasicBlock);
 			LinkBlocks(newBlocks[4], newBlocks[5]);
@@ -966,8 +946,6 @@ namespace Mosa.Platform.x86.Stages
 			// ; remaining code from current basic block
 			newBlocks[5].AppendInstruction(X86.Mov, op0H, edx);
 			newBlocks[5].AppendInstruction(X86.Mov, op0L, eax);
-
-			//newBlocks[5].AppendInstruction(X86.Pop, ecx);
 			newBlocks[5].AppendInstruction(X86.Jmp, nextBlock.BasicBlock);
 			LinkBlocks(newBlocks[5], nextBlock);
 		}
@@ -990,8 +968,6 @@ namespace Mosa.Platform.x86.Stages
 			Operand edx = AllocateVirtualRegister(BuiltInSigType.Int32);
 			Operand ecx = AllocateVirtualRegister(BuiltInSigType.Int32);
 
-			Operand cl = AllocateVirtualRegister(BuiltInSigType.Byte);
-
 			Context nextBlock = Split(context, false);
 			Context[] newBlocks = CreateNewBlocksWithContexts(6);
 
@@ -1013,8 +989,8 @@ namespace Mosa.Platform.x86.Stages
 			newBlocks[1].AppendInstruction(X86.Jmp, newBlocks[2].BasicBlock);
 			LinkBlocks(newBlocks[1], newBlocks[3], newBlocks[2]);
 
-			newBlocks[2].AppendInstruction(X86.Shld, eax, edx, cl);
-			newBlocks[2].AppendInstruction(X86.Shl, eax, eax, cl);
+			newBlocks[2].AppendInstruction(X86.Shld, edx, edx, eax, ecx);
+			newBlocks[2].AppendInstruction(X86.Shl, eax, eax, ecx);
 			newBlocks[2].AppendInstruction(X86.Jmp, newBlocks[5].BasicBlock);
 			LinkBlocks(newBlocks[2], newBlocks[5]);
 
@@ -1051,15 +1027,15 @@ namespace Mosa.Platform.x86.Stages
 			Operand count = context.Operand2;
 
 			Operand op0H, op1H, op0L, op1L;
-			SplitLongOperand(context.Operand1, out op0L, out op0H);
-			SplitLongOperand(context.Operand2, out op1L, out op1H);
+			SplitLongOperand(context.Result, out op0L, out op0H);
+			SplitLongOperand(context.Operand1, out op1L, out op1H);
 
 			Operand eax = AllocateVirtualRegister(BuiltInSigType.Int32);
 			Operand edx = AllocateVirtualRegister(BuiltInSigType.Int32);
-			Operand ecx = AllocateVirtualRegister(BuiltInSigType.Byte);
+			Operand ecx = AllocateVirtualRegister(BuiltInSigType.Int32);
 
-			Context[] newBlocks = CreateNewBlocksWithContexts(6);
 			Context nextBlock = Split(context, false);
+			Context[] newBlocks = CreateNewBlocksWithContexts(6);
 
 			// Handle shifts of 64 bits or more (if shifting 64 bits or more, the result
 			// depends only on the high order bit of edx).
@@ -1079,25 +1055,24 @@ namespace Mosa.Platform.x86.Stages
 			newBlocks[1].AppendInstruction(X86.Jmp, newBlocks[2].BasicBlock);
 			LinkBlocks(newBlocks[1], newBlocks[3], newBlocks[2]);
 
-			newBlocks[2].AppendInstruction(X86.Shrd, eax, edx, ecx);
-			newBlocks[2].AppendInstruction(X86.Sar, edx, edx, ecx);
+			newBlocks[2].AppendInstruction(X86.Shrd, eax, eax, edx, ecx);
+			newBlocks[2].AppendInstruction(X86.Shr, edx, edx, ecx);
 			newBlocks[2].AppendInstruction(X86.Jmp, newBlocks[5].BasicBlock);
 			LinkBlocks(newBlocks[2], newBlocks[5]);
 
 			// Handle shifts of between 32 and 63 bits
 			// MORE32:
 			newBlocks[3].AppendInstruction(X86.Mov, eax, edx);
-			newBlocks[3].AppendInstruction(X86.Mov, ecx, Operand.CreateConstant(BuiltInSigType.Byte, (byte)0x1F));
-			newBlocks[3].AppendInstruction(X86.Sar, edx, edx, ecx);
+			newBlocks[4].AppendInstruction(X86.Mov, edx, Operand.CreateConstant((int)0x0));
 			newBlocks[3].AppendInstruction(X86.And, ecx, ecx, Operand.CreateConstant((int)0x1F));
-			newBlocks[3].AppendInstruction(X86.Sar, eax, eax, Operand.CreateConstant(BuiltInSigType.Byte, (byte)0x1F));
+			newBlocks[3].AppendInstruction(X86.Sar, eax, eax, ecx);
 			newBlocks[3].AppendInstruction(X86.Jmp, newBlocks[5].BasicBlock);
 			LinkBlocks(newBlocks[3], newBlocks[5]);
 
 			// Return double precision 0 or -1, depending on the sign of edx
 			// RETSIGN:
-			newBlocks[4].AppendInstruction(X86.Sar, edx, edx, Operand.CreateConstant(BuiltInSigType.Byte, (byte)0x1F)); // Signed byte? 0x1F ?
-			newBlocks[4].AppendInstruction(X86.Mov, eax, edx);
+			newBlocks[4].AppendInstruction(X86.Mov, edx, Operand.CreateConstant((int)0x0));
+			newBlocks[4].AppendInstruction(X86.Mov, eax, Operand.CreateConstant((int)0x0));
 			newBlocks[4].AppendInstruction(X86.Jmp, newBlocks[5].BasicBlock);
 			LinkBlocks(newBlocks[4], newBlocks[5]);
 
