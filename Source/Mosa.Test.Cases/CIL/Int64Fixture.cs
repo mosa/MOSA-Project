@@ -101,6 +101,19 @@ namespace Mosa.Test.Cases.CIL
 		}
 
 		[Test]
+		public void ShiftLeftU8U8([I8]long a, [I1UpTo32]byte b)
+		{
+			Assert.AreEqual(Int64Tests.ShiftLeftI8I8(a, b), Run<long>("Mosa.Test.Collection", "Int64Tests", "ShiftLeftI8I8", a, b));
+		}
+
+		[Test]
+		[Pending]
+		public void ShiftRightU8U8([I8]long a, [I1UpTo32]byte b)
+		{
+			Assert.AreEqual(Int64Tests.ShiftRightI8I8(a, b), Run<long>("Mosa.Test.Collection", "Int64Tests", "ShiftRightI8I8", a, b));
+		}
+
+		[Test]
 		public void CeqI8I8([I8]long a, [I8]long b)
 		{
 			Assert.AreEqual(Int64Tests.CeqI8I8(a, b), Run<bool>("Mosa.Test.Collection", "Int64Tests", "CeqI8I8", a, b));
