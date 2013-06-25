@@ -55,12 +55,17 @@ namespace Mosa.Test.Collection
 			return (a == 1 && b == 2 && c == 3 && d == 4);
 		}
 
-		public static bool CallOrderU8(ulong a, ulong b, ulong c, ulong d)
+		public static bool CallOrderI8I8I8I8(long a, long b, long c, long d)
 		{
 			return (a == 1 && b == 2 && c == 3 && d == 4);
 		}
 
-		public static bool CallOrderU4_U8_U8_U8(uint a, ulong b, ulong c, ulong d)
+		public static bool CallOrderU8U8U8U8(ulong a, ulong b, ulong c, ulong d)
+		{
+			return (a == 1 && b == 2 && c == 3 && d == 4);
+		}
+
+		public static bool CallOrderU4U8U8U8(uint a, ulong b, ulong c, ulong d)
 		{
 			return (a == 1 && b == 2 && c == 3 && d == 4);
 		}
