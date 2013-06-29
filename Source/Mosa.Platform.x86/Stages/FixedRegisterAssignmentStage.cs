@@ -92,8 +92,8 @@ namespace Mosa.Platform.x86.Stages
 		void IX86Visitor.Mul(Context context)
 		{
 			if (context.Result.IsCPURegister && context.Result2.IsCPURegister & context.Operand1.IsCPURegister && context.Operand2.IsRegister)
-				if (context.Result.Register == GeneralPurposeRegister.EAX &&
-					context.Result2.Register == GeneralPurposeRegister.EDX &&
+				if (context.Result.Register == GeneralPurposeRegister.EDX &&
+					context.Result2.Register == GeneralPurposeRegister.EAX &&
 					context.Operand1.Register == GeneralPurposeRegister.EAX)
 					return;
 
@@ -102,24 +102,24 @@ namespace Mosa.Platform.x86.Stages
 			Operand result = context.Result;
 			Operand result2 = context.Result2;
 
-			Operand EAX = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.EAX);
-			Operand EDX = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.EDX);
+			Operand eax = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.EAX);
+			Operand edx = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.EDX);
 
-			context.SetInstruction(X86.Mov, EAX, operand1);
+			context.SetInstruction(X86.Mov, eax, operand1);
 
 			if (operand2.IsRegister)
 			{
-				context.AppendInstruction2(X86.Mul, EAX, EDX, EAX, operand2);
+				context.AppendInstruction2(X86.Mul, edx, eax, eax, operand2);
 			}
 			else
 			{
 				Operand v3 = AllocateVirtualRegister(BuiltInSigType.Int32);
 				context.AppendInstruction(X86.Mov, v3, operand2);
-				context.AppendInstruction2(X86.Mul, EAX, EDX, EAX, v3);
+				context.AppendInstruction2(X86.Mul, edx, eax, eax, v3);
 			}
 
-			context.AppendInstruction(X86.Mov, result, EAX);
-			context.AppendInstruction(X86.Mov, result2, EDX);
+			context.AppendInstruction(X86.Mov, result, edx);
+			context.AppendInstruction(X86.Mov, result2, eax);
 		}
 
 		/// <summary>

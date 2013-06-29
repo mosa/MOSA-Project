@@ -595,7 +595,7 @@ namespace Mosa.Compiler.Framework
 			if (longOperand.IsConstant)
 			{
 				operand = new Operand(BuiltInSigType.UInt32, OperandType.Constant);
-				operand.Value = ((uint)longOperand.ValueAsLongInteger >> 32) & uint.MaxValue;
+				operand.Value = ((uint)((ulong)(longOperand.ValueAsLongInteger) >> 32)) & uint.MaxValue;
 			}
 			else if (longOperand.IsMemoryAddress)
 			{

@@ -19,7 +19,7 @@ namespace Mosa.Platform.x86.Instructions
 	{
 		#region Data Members
 
-		private static readonly OpCode opcode = new OpCode(new byte[] { 0xF0, 0xAF });
+		private static readonly OpCode opcode = new OpCode(new byte[] { 0x0F, 0xAF });
 
 		#endregion Data Members
 
@@ -29,7 +29,7 @@ namespace Mosa.Platform.x86.Instructions
 		/// Initializes a new instance of <see cref="IMul"/>.
 		/// </summary>
 		public IMul() :
-			base(2, 2)
+			base(1, 2)
 		{
 		}
 
@@ -44,7 +44,7 @@ namespace Mosa.Platform.x86.Instructions
 		/// <param name="emitter">The emitter.</param>
 		protected override void Emit(Context context, MachineCodeEmitter emitter)
 		{
-			emitter.Emit(opcode, context.Operand2, null);
+			emitter.Emit(opcode, context.Result, context.Operand2);
 		}
 
 		/// <summary>
