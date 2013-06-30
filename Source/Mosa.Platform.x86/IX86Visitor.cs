@@ -53,6 +53,12 @@ namespace Mosa.Platform.x86
 		void Cmp(Context context);
 
 		/// <summary>
+		/// Cmovs the specified context.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void Cmov(Context context);
+
+		/// <summary>
 		/// Or instruction
 		/// </summary>
 		/// <param name="context">The context.</param>
@@ -99,7 +105,7 @@ namespace Mosa.Platform.x86
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IMul(Context context);
-		
+
 		/// <summary>
 		/// AddSs instruction
 		/// </summary>

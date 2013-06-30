@@ -8,12 +8,12 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-using System;
 using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.InternalTrace;
 using Mosa.Compiler.Metadata.Loader;
 using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Compiler.TypeSystem;
+using System;
 
 namespace Mosa.Compiler.Framework
 {
@@ -415,6 +415,12 @@ namespace Mosa.Compiler.Framework
 				case IR.ConditionCode.UnsignedLessThan: return IR.ConditionCode.UnsignedGreaterOrEqual;
 				case IR.ConditionCode.Signed: return IR.ConditionCode.NotSigned;
 				case IR.ConditionCode.NotSigned: return IR.ConditionCode.Signed;
+				case IR.ConditionCode.Parity: return IR.ConditionCode.NoParity;
+				case IR.ConditionCode.NoParity: return IR.ConditionCode.Parity;
+				case IR.ConditionCode.Carry: return IR.ConditionCode.NoCarry;
+				case IR.ConditionCode.NoCarry: return IR.ConditionCode.Carry;
+				case IR.ConditionCode.Overflow: return IR.ConditionCode.NoOverflow;
+				case IR.ConditionCode.NoOverflow: return IR.ConditionCode.Overflow;
 				default: throw new NotSupportedException();
 			}
 		}

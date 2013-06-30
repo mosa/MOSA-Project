@@ -39,18 +39,26 @@ namespace Mosa.Platform.x86.Instructions
 
 		#region Data Members
 
-		private static readonly byte[] JAE = new byte[] { 0x0F, 0x83 };
-		private static readonly byte[] JNE = new byte[] { 0x0F, 0x85 };
-		private static readonly byte[] JL = new byte[] { 0x0F, 0x8C };
-		private static readonly byte[] JLE = new byte[] { 0x0F, 0x8E };
-		private static readonly byte[] JG = new byte[] { 0x0F, 0x8F };
-		private static readonly byte[] JGE = new byte[] { 0x0F, 0x8D };
-		private static readonly byte[] JE = new byte[] { 0x0F, 0x84 };
-		private static readonly byte[] JBE = new byte[] { 0x0F, 0x86 };
-		private static readonly byte[] JA = new byte[] { 0x0F, 0x87 };
-		private static readonly byte[] JB = new byte[] { 0x0F, 0x82 };
-		private static readonly byte[] JNS = new byte[] { 0x0F, 0x89 };
-		private static readonly byte[] JS = new byte[] { 0x0F, 0x88 };
+		private static readonly byte[] JO = new byte[] { 0x0F, 0x80 };	// Overflow (OF = 1)
+		private static readonly byte[] JNO = new byte[] { 0x0F, 0x81 };	// NoOverflow (OF = 0)
+		private static readonly byte[] JC = new byte[] { 0x0F, 0x82 };	// Carry (CF = 1)
+		private static readonly byte[] JB = new byte[] { 0x0F, 0x82 };	// UnsignedLessThan (CF = 1)
+		private static readonly byte[] JAE = new byte[] { 0x0F, 0x83 };	// UnsignedGreaterOrEqual (CF = 0)
+		private static readonly byte[] JNC = new byte[] { 0x0F, 0x83 };	// NoCarry (CF = 0)
+		private static readonly byte[] JE = new byte[] { 0x0F, 0x84 };	// Equal (ZF = 1)
+		private static readonly byte[] JZ = new byte[] { 0x0F, 0x84 };	// Zero (ZF = 1)
+		private static readonly byte[] JNE = new byte[] { 0x0F, 0x85 }; // NotEqual (ZF = 0)
+		private static readonly byte[] JNZ = new byte[] { 0x0F, 0x85 }; // NotZero (ZF = 0)
+		private static readonly byte[] JBE = new byte[] { 0x0F, 0x86 };	// UnsignedLessOrEqual (CF = 1 or ZF = 1)
+		private static readonly byte[] JA = new byte[] { 0x0F, 0x87 };	// UnsignedGreaterThan (CF = 0 and ZF = 0)
+		private static readonly byte[] JS = new byte[] { 0x0F, 0x88 };	// Signed (SF = 1)
+		private static readonly byte[] JNS = new byte[] { 0x0F, 0x89 };	// NotSigned (SF = 0)
+		private static readonly byte[] JP = new byte[] { 0x0F, 0x8A };	// Parity (PF = 1)
+		private static readonly byte[] JNP = new byte[] { 0x0F, 0x8B };	// NoParity (PF = 0)
+		private static readonly byte[] JL = new byte[] { 0x0F, 0x8C };	// LessThan (SF <> OF)
+		private static readonly byte[] JGE = new byte[] { 0x0F, 0x8D };	// GreaterOrEqual (SF = OF)
+		private static readonly byte[] JLE = new byte[] { 0x0F, 0x8E }; // LessOrEqual (ZF = 1 or SF <> OF)
+		private static readonly byte[] JG = new byte[] { 0x0F, 0x8F };	// GreaterThan (ZF = 0 and SF = OF)
 
 		#endregion Data Members
 
@@ -63,59 +71,35 @@ namespace Mosa.Platform.x86.Instructions
 		/// <param name="emitter">The emitter.</param>
 		protected override void Emit(Context context, MachineCodeEmitter emitter)
 		{
+			byte[] opcode = null;
+
 			switch (context.ConditionCode)
 			{
-				case IR.ConditionCode.Equal:
-					emitter.EmitRelativeBranch(JE, context.BranchTargets[0]);
-					break;
-
-				case IR.ConditionCode.GreaterOrEqual:
-					emitter.EmitRelativeBranch(JGE, context.BranchTargets[0]);
-					break;
-
-				case IR.ConditionCode.GreaterThan:
-					emitter.EmitRelativeBranch(JG, context.BranchTargets[0]);
-					break;
-
-				case IR.ConditionCode.LessOrEqual:
-					emitter.EmitRelativeBranch(JLE, context.BranchTargets[0]);
-					break;
-
-				case IR.ConditionCode.LessThan:
-					emitter.EmitRelativeBranch(JL, context.BranchTargets[0]);
-					break;
-
-				case IR.ConditionCode.NotEqual:
-					emitter.EmitRelativeBranch(JNE, context.BranchTargets[0]);
-					break;
-
-				case IR.ConditionCode.UnsignedGreaterOrEqual:
-					emitter.EmitRelativeBranch(JAE, context.BranchTargets[0]);
-					break;
-
-				case IR.ConditionCode.UnsignedGreaterThan:
-					emitter.EmitRelativeBranch(JA, context.BranchTargets[0]);
-					break;
-
-				case IR.ConditionCode.UnsignedLessOrEqual:
-					emitter.EmitRelativeBranch(JBE, context.BranchTargets[0]);
-					break;
-
-				case IR.ConditionCode.UnsignedLessThan:
-					emitter.EmitRelativeBranch(JB, context.BranchTargets[0]);
-					break;
-
-				case IR.ConditionCode.NotSigned:
-					emitter.EmitRelativeBranch(JNS, context.BranchTargets[0]);
-					break;
-
-				case IR.ConditionCode.Signed:
-					emitter.EmitRelativeBranch(JS, context.BranchTargets[0]);
-					break;
-
+				case IR.ConditionCode.Equal: opcode = JE; break;
+				case IR.ConditionCode.NotEqual: opcode = JNE; break;
+				case IR.ConditionCode.Zero: opcode = JZ; break;
+				case IR.ConditionCode.NoZero: opcode = JNZ; break;
+				case IR.ConditionCode.GreaterOrEqual: opcode = JGE; break;
+				case IR.ConditionCode.GreaterThan: opcode = JG; break;
+				case IR.ConditionCode.LessOrEqual: opcode = JLE; break;
+				case IR.ConditionCode.LessThan: opcode = JL; break;
+				case IR.ConditionCode.UnsignedGreaterOrEqual: opcode = JAE; break;
+				case IR.ConditionCode.UnsignedGreaterThan: opcode = JA; break;
+				case IR.ConditionCode.UnsignedLessOrEqual: opcode = JBE; break;
+				case IR.ConditionCode.UnsignedLessThan: opcode = JB; break;
+				case IR.ConditionCode.Signed: opcode = JS; break;
+				case IR.ConditionCode.NotSigned: opcode = JNS; break;
+				case IR.ConditionCode.Carry: opcode = JC; break;
+				case IR.ConditionCode.NoCarry: opcode = JNC; break;
+				case IR.ConditionCode.Overflow: opcode = JO; break;
+				case IR.ConditionCode.NoOverflow: opcode = JNO; break;
+				case IR.ConditionCode.Parity: opcode = JP; break;
+				case IR.ConditionCode.NoParity: opcode = JNP; break;
 				default:
 					throw new NotSupportedException();
 			}
+
+			emitter.EmitRelativeBranch(opcode, context.BranchTargets[0]);
 		}
 
 		/// <summary>

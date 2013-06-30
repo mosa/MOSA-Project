@@ -10,7 +10,7 @@
 namespace Mosa.Compiler.Framework.IR
 {
 	/// <summary>
-	/// Specifies condition codes for <see cref="ConditionCode"/>.
+	/// Specifies condition codes for <see cref="ConditionCode" />.
 	/// </summary>
 	public enum ConditionCode
 	{
@@ -103,5 +103,15 @@ namespace Mosa.Compiler.Framework.IR
 		/// No zero flag
 		/// </summary>
 		NoZero,
+
+		/// <summary>
+		/// Overflow flag
+		/// </summary>
+		Overflow,
+
+		/// <summary>
+		/// No Overflow flag
+		/// </summary>
+		NoOverflow,
 	}
 }

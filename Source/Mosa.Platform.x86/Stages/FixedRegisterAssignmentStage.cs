@@ -317,6 +317,14 @@ namespace Mosa.Platform.x86.Stages
 		#region IX86Visitor - Unused
 
 		/// <summary>
+		/// Visitation function for <see cref="IX86Visitor.Cmov"/> instructions.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void IX86Visitor.Cmov(Context ctx)
+		{
+		}
+
+		/// <summary>
 		/// Visitation function for <see cref="IX86Visitor.Mov"/> instructions.
 		/// </summary>
 		/// <param name="ctx">The context.</param>

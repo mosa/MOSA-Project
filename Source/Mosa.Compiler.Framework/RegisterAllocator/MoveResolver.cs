@@ -7,7 +7,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 
@@ -24,6 +23,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 		protected class Move
 		{
 			public Operand Source { get; set; }
+
 			public Operand Destination { get; set; }
 
 			public Move(Operand source, Operand destination)
@@ -170,6 +170,5 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 			CreateMemoryMoves(architecture, context);
 		}
-
 	}
 }
