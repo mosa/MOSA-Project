@@ -690,7 +690,7 @@ namespace Mosa.Platform.x86.Stages
 			Operand operand2 = context.Operand2;
 
 			Operand v1 = AllocateVirtualRegister(BuiltInSigType.UInt32);
-			context.SetInstruction2(X86.Mul, result, v1, operand1, operand2);
+			context.SetInstruction2(X86.Mul, v1, result, operand1, operand2);
 		}
 
 		/// <summary>
@@ -706,7 +706,7 @@ namespace Mosa.Platform.x86.Stages
 			Operand operand2 = context.Operand2;
 
 			Operand v1 = AllocateVirtualRegister(BuiltInSigType.UInt32);
-			context.SetInstruction2(X86.Mul, result, v1, operand1, operand2);
+			context.SetInstruction2(X86.Mul, v1, result, operand1, operand2);
 		}
 
 		/// <summary>
