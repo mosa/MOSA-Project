@@ -37,7 +37,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		public LiveInterval LastRange { get { return liveIntervals.Count == 0 ? null : liveIntervals[liveIntervals.Count - 1]; } }
 
-		public LiveInterval FirstRange { get { return liveIntervals.Count == 0 ? null : liveIntervals[0]; } }
+		public LiveInterval FirstRange { get { return liveIntervals.Count == 0 ? null : liveIntervals[0]; } set { liveIntervals[0] = value; } }
 
 		public Operand SpillSlotOperand { get; set; }
 
@@ -114,16 +114,19 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 					liveRange = liveRange.CreateExpandedLiveRange(start, end);
 					liveIntervals[i] = liveRange;
 
-					if (i + 1 < liveIntervals.Count)
+					for (int z = i + 1; z < liveIntervals.Count; z++) 
 					{
-						var nextLiveRange = liveIntervals[i + 1];
-						if (liveRange.IsAdjacent(start, end) || liveRange.Intersects(start, end))
+						var nextLiveRange = liveIntervals[z];
+						if (liveRange.IsAdjacent(nextLiveRange) || liveRange.Intersects(nextLiveRange))
 						{
 							liveRange = liveRange.CreateExpandedLiveInterval(nextLiveRange);
 							liveIntervals[i] = liveRange;
+							liveIntervals.RemoveAt(z);
 
-							liveIntervals.RemoveAt(i + 1);
+							continue;
 						}
+
+						return;
 					}
 
 					return;

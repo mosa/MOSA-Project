@@ -146,7 +146,18 @@ namespace Mosa.Platform.x86.Stages
 
 			context.SetInstruction(X86.Mov, EDX, operand1);
 			context.AppendInstruction(X86.Mov, EAX, operand2);
-			context.AppendInstruction2(X86.Div, EDX, EAX, EDX, EAX, operand3);
+		
+			if (operand3.IsRegister)
+			{
+				context.AppendInstruction2(X86.Div, EDX, EAX, EDX, EAX, operand3);
+			}
+			else
+			{
+				Operand v3 = AllocateVirtualRegister(BuiltInSigType.Int32);
+				context.AppendInstruction(X86.Mov, v3, operand3);
+				context.AppendInstruction2(X86.Div, EDX, EAX, EDX, EAX, v3);
+			}
+
 			context.AppendInstruction(X86.Mov, result, EAX);
 			context.AppendInstruction(X86.Mov, result2, EDX);
 		}

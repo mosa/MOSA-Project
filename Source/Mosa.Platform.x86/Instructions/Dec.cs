@@ -32,7 +32,7 @@ namespace Mosa.Platform.x86.Instructions
 		/// Initializes a new instance of <see cref="Dec"/>.
 		/// </summary>
 		public Dec() :
-			base(1, 0)
+			base(1, 1)
 		{
 		}
 

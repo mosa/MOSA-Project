@@ -56,11 +56,11 @@ namespace Mosa.Compiler.InternalTrace
 				case MatchType.None: return false;
 				case MatchType.Any: return true;
 				case MatchType.Contains: return name.Contains(matchString);
-				case MatchType.StartsWith: return name.Contains(matchString);
+				case MatchType.StartsWith: return name.StartsWith(matchString);
 				case MatchType.Exact: return String.Compare(name, matchString) == 0;
 				case MatchType.Except: return String.Compare(name, matchString) != 0;
 				case MatchType.NotContains: return !name.Contains(matchString);
-				case MatchType.NotStartsWith: return !name.Contains(matchString);
+				case MatchType.NotStartsWith: return !name.StartsWith(matchString);
 
 				case MatchType.Exclude: return !matchString.Contains(name);
 
