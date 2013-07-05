@@ -630,6 +630,13 @@ namespace Mosa.Compiler.Framework
 					s.Append(' ');
 
 			s.AppendFormat("[{0}]", sigType);
+
+			PtrSigType pointerType = sigType as PtrSigType;
+			if (pointerType != null)
+			{
+				s.AppendFormat("-{0}", pointerType.ElementType);
+			}
+
 			return s.ToString();
 		}
 
