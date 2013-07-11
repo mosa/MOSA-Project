@@ -66,18 +66,6 @@
     <Compile Include="ConsoleManager.cs" />
     <Compile Include="ConsoleSession.cs" />
     <Compile Include="DebugClient.cs" />
-    <Compile Include="RealModeEmulator\Internals.cs" />
-    <Compile Include="RealModeEmulator\OpcodeAlu.cs" />
-    <Compile Include="RealModeEmulator\OpcodeCall.cs" />
-    <Compile Include="RealModeEmulator\OpcodeFlags.cs" />
-    <Compile Include="RealModeEmulator\OpcodeFunctions.cs" />
-    <Compile Include="RealModeEmulator\OpcodeIO.cs" />
-    <Compile Include="RealModeEmulator\OpcodePrefixes.cs" />
-    <Compile Include="RealModeEmulator\OpcodeStack.cs" />
-    <Compile Include="RealModeEmulator\OpcodeTable.cs" />
-    <Compile Include="RealModeEmulator\RealEmulator.cs" />
-    <Compile Include="RealModeEmulator\Register.cs" />
-    <Compile Include="RealModeEmulator\State.cs" />
     <Compile Include="Serial.cs" />
     <Compile Include="Debug.cs" />
     <Compile Include="KernelMemory.cs" />
@@ -103,7 +91,6 @@
     <Compile Include="Smbios\SmbiosManager.cs" />
     <Compile Include="Smbios\SmbiosStructure.cs" />
     <Compile Include="TaskManager.cs" />
-    <Compile Include="VBE.cs" />
     <Compile Include="VirtualPageAllocator.cs" />
   </ItemGroup>
   <ItemGroup>
