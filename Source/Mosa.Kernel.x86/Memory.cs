@@ -38,5 +38,19 @@ namespace Mosa.Kernel.x86
 			for (uint at = start; at < (start + bytes); at = at + 4)
 				Native.Set32(at, 0);
 		}
+
+        /// <summary>
+        /// Copies a section of memory of the specified length.
+        /// </summary>
+        /// <param name="from">The address to start copying from.</param>
+        /// <param name="to">The address to copy to.</param>
+        /// <param name="length">The length to copy in bytes.</param>
+        public static void Copy(uint from, uint to, uint length)
+        {
+            for (uint at = 0; at < length; at++)
+            {
+                Native.Set8((to + at), Native.Get8(from + at));
+            }
+        }
 	}
 }
