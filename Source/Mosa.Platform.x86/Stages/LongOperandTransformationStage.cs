@@ -142,7 +142,7 @@ namespace Mosa.Platform.x86.Stages
 			Operand v20 = AllocateVirtualRegister(BuiltInSigType.Int32);
 			Operand v12 = AllocateVirtualRegister(BuiltInSigType.Int32);
 
-			// unoptimized 
+			// unoptimized
 			context.SetInstruction(X86.Mov, eax, op2L);					// mov     eax, [ebp+16]	// 2l
 			context.AppendInstruction(X86.Mov, v20, eax);				// mov     [ebp-20], eax
 			context.AppendInstruction(X86.Mov, eax, v20);				// mov     eax, [ebp-20]

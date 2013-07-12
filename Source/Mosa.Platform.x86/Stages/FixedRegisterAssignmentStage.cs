@@ -7,9 +7,9 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System.Diagnostics;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Metadata.Signatures;
+using System.Diagnostics;
 
 namespace Mosa.Platform.x86.Stages
 {
@@ -146,7 +146,7 @@ namespace Mosa.Platform.x86.Stages
 
 			context.SetInstruction(X86.Mov, EDX, operand1);
 			context.AppendInstruction(X86.Mov, EAX, operand2);
-		
+
 			if (operand3.IsRegister)
 			{
 				context.AppendInstruction2(X86.Div, EDX, EAX, EDX, EAX, operand3);
