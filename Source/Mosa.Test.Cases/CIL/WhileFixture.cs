@@ -8,7 +8,7 @@
  */
 
 using MbUnit.Framework;
-
+using Mosa.Test.Collection;
 using Mosa.Test.System;
 
 namespace Mosa.Test.Cases.CIL
@@ -80,6 +80,38 @@ namespace Mosa.Test.Cases.CIL
 		}
 
 		#endregion WhileContinueBreak() test
+
+		#region WhileContinueBreak2B() test
+
+		// Tests while(true)
+		// Tests break;
+		// Tests continue;
+		// Tests "unreachable code" after a continue or break is never reached.
+
+		[Row()]
+		[Test]
+		public void WhileContinueBreak2B()
+		{
+			Assert.AreEqual<int>(WhileTests.WhileContinueBreak2B(), Run<int>("Mosa.Test.Collection", "WhileTests", "WhileContinueBreak2B"));
+		}
+
+		#endregion WhileContinueBreak2B() test
+
+		#region WhileContinueBreak2() test
+
+		// Tests while(true)
+		// Tests break;
+		// Tests continue;
+		// Tests "unreachable code" after a continue or break is never reached.
+
+		[Row()]
+		[Test]
+		public void WhileContinueBreak2()
+		{
+			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "WhileTests", "WhileContinueBreak2"));
+		}
+
+		#endregion WhileContinueBreak2() test
 
 		#region WhileOverflowIncI1 test
 

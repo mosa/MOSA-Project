@@ -201,6 +201,11 @@ namespace Mosa.Platform.x86
 				new BuildStackStage()
 			);
 
+			methodCompilerPipeline.InsertBefore<CodeGenerationStage>(
+				new FinalTweakTransformationStage()
+			);
+
+			
 			// FIXME: Disabled for now
 			//methodCompilerPipeline.InsertAfterLast<CodeGenerationStage>(
 			//    new ExceptionLayoutStage()

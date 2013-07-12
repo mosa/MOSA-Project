@@ -143,12 +143,12 @@ namespace Mosa.Test.System
 			// Reset Memory
 			ResetMemory();
 
-			Debug.WriteLine("Executing: " + runtimeMethod.FullName);
+			//Debug.WriteLine("Executing: " + runtimeMethod.FullName);
 
 			// Execute the test method
 			object tempResult = fn.DynamicInvoke(parameters);
 
-			Debug.WriteLine("Done");
+			//Debug.WriteLine("Done");
 
 			try
 			{

@@ -10,77 +10,15 @@
  */
 
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Metadata;
-using Mosa.Compiler.Metadata.Signatures;
-using System.Diagnostics;
 
 namespace Mosa.Platform.x86.Stages
 {
 	/// <summary>
 	///
 	/// </summary>
-	public sealed class TweakTransformationStage : BaseTransformationStage, IX86Visitor, IMethodCompilerStage
+	public sealed class FinalTweakTransformationStage : BaseTransformationStage, IX86Visitor, IMethodCompilerStage
 	{
 		#region IX86Visitor
-
-		/// <summary>
-		/// Visitation function for <see cref="IX86Visitor.Mov"/> instructions.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void IX86Visitor.Mov(Context ctx)
-		{
-			Debug.Assert(!ctx.Result.IsConstant);
-
-			if (ctx.Operand1.IsConstant && ctx.Operand1.StackType == StackTypeCode.F)
-			{
-				ctx.Operand1 = EmitConstant(ctx.Operand1);
-			}
-
-			// Check that we're not dealing with floating point values
-			if (ctx.Result.StackType == StackTypeCode.F || ctx.Operand1.StackType == StackTypeCode.F)
-			{
-				if (ctx.Result.Type.Type == CilElementType.R4)
-				{
-					ctx.SetInstruction(X86.Movss, ctx.Result, ctx.Operand1);
-				}
-				else if (ctx.Result.Type.Type == CilElementType.R8)
-				{
-					ctx.SetInstruction(X86.Movsd, ctx.Result, ctx.Operand1);
-				}
-			}
-		}
-
-		/// <summary>
-		/// Visitation function for <see cref="IX86Visitor.Cvttsd2si"/> instructions.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void IX86Visitor.Cvttsd2si(Context ctx)
-		{
-			Operand result = ctx.Result;
-
-			if (!result.IsRegister)
-			{
-				Operand register = AllocateVirtualRegister(result.Type);
-				ctx.Result = register;
-				ctx.AppendInstruction(X86.Mov, result, register);
-			}
-		}
-
-		/// <summary>
-		/// Visitation function for <see cref="IX86Visitor.Cvttss2si"/> instructions.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void IX86Visitor.Cvttss2si(Context ctx)
-		{
-			Operand result = ctx.Result;
-			Operand register = AllocateVirtualRegister(result.Type);
-
-			if (!result.IsRegister)
-			{
-				ctx.Result = register;
-				ctx.AppendInstruction(X86.Mov, result, register);
-			}
-		}
 
 		/// <summary>
 		/// Visitation function for <see cref="IX86Visitor.Movsx"/> instructions.
@@ -88,11 +26,15 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IX86Visitor.Movsx(Context context)
 		{
-			if (Is32Bit(context.Operand1))
+			// Movsx can not use ESI or EDI registers
+			if (context.Operand1.IsCPURegister && (context.Operand1.Register == GeneralPurposeRegister.ESI || context.Operand1.Register == GeneralPurposeRegister.EDI))
 			{
-				Debug.Assert(Is32Bit(context.Result));
+				Operand source = context.Operand1;
+				Operand dest = context.Result;
 
 				context.ReplaceInstructionOnly(X86.Mov);
+				context.AppendInstruction(X86.Add, dest, dest, Operand.CreateConstant((uint)0xFFFFFF00));
+				context.AppendInstruction(X86.Xor, dest, dest, Operand.CreateConstant((uint)0xFFFFFF00));
 			}
 		}
 
@@ -102,12 +44,51 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IX86Visitor.Movzx(Context context)
 		{
-			if (Is32Bit(context.Operand1))
+			// Movsx can not use ESI or EDI registers
+			if (context.Operand1.IsCPURegister && (context.Operand1.Register == GeneralPurposeRegister.ESI || context.Operand1.Register == GeneralPurposeRegister.EDI))
 			{
-				//Debug.Assert(Is32Bit(context.Result));
+				Operand source = context.Operand1;
+				Operand dest = context.Result;
 
 				context.ReplaceInstructionOnly(X86.Mov);
+				context.AppendInstruction(X86.And, dest, dest, Operand.CreateConstant((uint)0xFF));
 			}
+		}
+
+		#endregion IX86Visitor
+
+		#region IX86Visitor - Unused
+
+		/// <summary>
+		/// Visitation function for <see cref="IX86Visitor.Mov"/> instructions.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void IX86Visitor.Mov(Context ctx)
+		{
+		}
+
+		/// <summary>
+		/// Visitation function for <see cref="IX86Visitor.Cvtss2sd"/> instructions.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void IX86Visitor.Cvtss2sd(Context ctx)
+		{
+		}
+
+		/// <summary>
+		/// Visitation function for <see cref="IX86Visitor.Cvttsd2si"/> instructions.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void IX86Visitor.Cvttsd2si(Context ctx)
+		{
+		}
+
+		/// <summary>
+		/// Visitation function for <see cref="IX86Visitor.Cvttss2si"/> instructions.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void IX86Visitor.Cvttss2si(Context ctx)
+		{
 		}
 
 		/// <summary>
@@ -116,33 +97,6 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="ctx">The context.</param>
 		void IX86Visitor.Cmp(Context ctx)
 		{
-			Operand left = ctx.Operand1;
-			Operand right = ctx.Operand2;
-
-			if (left.IsConstant)
-			{
-				Operand ecx = AllocateVirtualRegister(left.Type);
-				Context before = ctx.InsertBefore();
-
-				before.AppendInstruction(X86.Mov, ecx, left);
-				ctx.Operand1 = ecx;
-			}
-
-			if (right.IsConstant && !Is32Bit(left))
-			{
-				Operand edx = AllocateVirtualRegister(BuiltInSigType.Int32);
-				Context before = ctx.InsertBefore();
-
-				if (IsSigned(left))
-				{
-					before.AppendInstruction(X86.Movsx, edx, left);
-				}
-				else
-				{
-					before.AppendInstruction(X86.Movzx, edx, left);
-				}
-				ctx.Operand1 = edx;
-			}
 		}
 
 		/// <summary>
@@ -151,7 +105,6 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IX86Visitor.Sar(Context context)
 		{
-			ConvertShiftConstantToByte(context);
 		}
 
 		/// <summary>
@@ -160,7 +113,6 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IX86Visitor.Shl(Context context)
 		{
-			ConvertShiftConstantToByte(context);
 		}
 
 		/// <summary>
@@ -169,7 +121,6 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IX86Visitor.Shr(Context context)
 		{
-			ConvertShiftConstantToByte(context);
 		}
 
 		/// <summary>
@@ -178,26 +129,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IX86Visitor.Call(Context context)
 		{
-			// FIXME: Result operand should be used instead of Operand1 for the result
-			// FIXME: Move to FixedRegisterAssignmentStage
-			Operand destinationOperand = context.Operand1;
-
-			if (destinationOperand == null || destinationOperand.IsSymbol)
-				return;
-
-			if (!destinationOperand.IsRegister)
-			{
-				Context before = context.InsertBefore();
-				Operand eax = AllocateVirtualRegister(BuiltInSigType.IntPtr);
-
-				before.SetInstruction(X86.Mov, eax, destinationOperand);
-				context.Operand1 = eax;
-			}
 		}
-
-		#endregion IX86Visitor
-
-		#region IX86Visitor - Unused
 
 		/// <summary>
 		/// Visitation function for <see cref="IX86Visitor.Mul"/> instructions.
@@ -388,14 +320,6 @@ namespace Mosa.Platform.x86.Stages
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IX86Visitor.Rcr(Context context)
-		{
-		}
-
-		/// <summary>
-		/// Visitation function for <see cref="IX86Visitor.Cvtss2sd"/> instructions.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void IX86Visitor.Cvtss2sd(Context ctx)
 		{
 		}
 
@@ -808,20 +732,5 @@ namespace Mosa.Platform.x86.Stages
 		}
 
 		#endregion IX86Visitor - Unused
-
-		/// <summary>
-		/// Adjusts the shift constant.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		private void ConvertShiftConstantToByte(Context context)
-		{
-			if (!context.Operand2.IsConstant)
-				return;
-
-			if (context.Operand2.Type.Type == CilElementType.U1)
-				return;
-
-			context.Operand2 = Operand.CreateConstant(BuiltInSigType.Byte, context.Operand2.Value);
-		}
 	}
 }
