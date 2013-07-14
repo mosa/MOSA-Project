@@ -553,6 +553,14 @@ namespace Mosa.Compiler.Framework
 				operand = new Operand(BuiltInSigType.UInt32, OperandType.Constant);
 				operand.Value = longOperand.ValueAsLongInteger & uint.MaxValue;
 			}
+			else if (longOperand.IsRuntimeMember)
+			{
+				operand = new Operand(BuiltInSigType.UInt32, OperandType.MemoryAddress | OperandType.RuntimeMember);
+				operand.runtimeMember = longOperand.RuntimeMember;
+				operand.OffsetBase = longOperand.OffsetBase;
+				operand.Offset = longOperand.Offset + offset;
+				operand.Register = longOperand.Register;
+			}
 			else if (longOperand.IsMemoryAddress)
 			{
 				operand = new Operand(BuiltInSigType.UInt32, OperandType.MemoryAddress);
@@ -596,6 +604,14 @@ namespace Mosa.Compiler.Framework
 			{
 				operand = new Operand(BuiltInSigType.UInt32, OperandType.Constant);
 				operand.Value = ((uint)((ulong)(longOperand.ValueAsLongInteger) >> 32)) & uint.MaxValue;
+			}
+			else if (longOperand.IsRuntimeMember)
+			{
+				operand = new Operand(BuiltInSigType.UInt32, OperandType.MemoryAddress | OperandType.RuntimeMember);
+				operand.runtimeMember = longOperand.RuntimeMember;
+				operand.OffsetBase = longOperand.OffsetBase;
+				operand.Offset = longOperand.Offset + offset;
+				operand.Register = longOperand.Register;
 			}
 			else if (longOperand.IsMemoryAddress)
 			{
@@ -704,12 +720,19 @@ namespace Mosa.Compiler.Framework
 					else
 						s.AppendFormat("[{0}-{1:X}h]", OffsetBase.ToString(), -Offset);
 				}
-				if (Register != null)
+				else if (Register != null)
 				{
 					if (Offset > 0)
 						s.AppendFormat("[{0}+{1:X}h]", Register.ToString(), Offset);
 					else
 						s.AppendFormat("[{0}-{1:X}h]", Register.ToString(), -Offset);
+				}
+				else if (IsRuntimeMember && IsSplitChild)
+				{
+					if (Offset > 0)
+						s.AppendFormat("+{0:X}h", Offset);
+					else
+						s.AppendFormat("-{0:X}h", -Offset);
 				}
 			}
 

@@ -7,10 +7,10 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-using System;
-using System.Collections.Generic;
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.TypeSystem;
+using System;
+using System.Collections.Generic;
 
 namespace Mosa.Compiler.Framework.Linker
 {
@@ -31,16 +31,8 @@ namespace Mosa.Compiler.Framework.Linker
 		/// <param name="name">The name.</param>
 		/// <param name="baseType">Type of the base.</param>
 		public LinkerGeneratedType(ITypeModule moduleTypeSystem, string nameSpace, string name, RuntimeType baseType) :
-			base(moduleTypeSystem, Token.Zero, baseType)
+			base(moduleTypeSystem, Token.Zero, name, baseType, nameSpace)
 		{
-			if (nameSpace == null)
-				throw new ArgumentNullException(@"namespace");
-			if (name == null)
-				throw new ArgumentNullException(@"name");
-
-			base.Namespace = nameSpace;
-			base.Name = name;
-
 			this.methods = new List<RuntimeMethod>();
 		}
 

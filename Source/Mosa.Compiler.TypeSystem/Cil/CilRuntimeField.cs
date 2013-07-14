@@ -36,9 +36,8 @@ namespace Mosa.Compiler.TypeSystem.Cil
 		/// <param name="declaringType">Type of the declaring.</param>
 		/// <param name="attributes">The attributes.</param>
 		public CilRuntimeField(ITypeModule module, string name, SigType sigType, Token token, uint offset, uint rva, RuntimeType declaringType, FieldAttributes attributes) :
-			base(module, token, declaringType)
+			base(module, name, declaringType, token)
 		{
-			this.Name = name;
 			this.SigType = sigType;
 			base.Attributes = attributes;
 			base.RVA = rva;
@@ -52,9 +51,8 @@ namespace Mosa.Compiler.TypeSystem.Cil
 		/// <param name="sigType">Type of the sig.</param>
 		/// <param name="declaringType">Type of the declaring.</param>
 		public CilRuntimeField(ITypeModule module, RuntimeField genericField, SigType sigType, CilGenericType declaringType) :
-			base(module, declaringType)
+			base(module, declaringType, genericField.Name)
 		{
-			this.Name = genericField.Name;
 			this.SigType = sigType;
 			this.Attributes = genericField.Attributes;
 		}

@@ -7,9 +7,9 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
+using Mosa.Compiler.Metadata;
 using System;
 using System.Collections.Generic;
-using Mosa.Compiler.Metadata;
 
 namespace Mosa.Compiler.TypeSystem
 {
@@ -45,11 +45,12 @@ namespace Mosa.Compiler.TypeSystem
 		/// <param name="module">The module.</param>
 		/// <param name="token">Holds the token of this runtime metadata.</param>
 		/// <param name="declaringType">The declaring type of the member.</param>
-		protected RuntimeMember(ITypeModule module, Token token, RuntimeType declaringType) :
+		protected RuntimeMember(ITypeModule module, string name, RuntimeType declaringType, Token token) :
 			base(module, token)
 		{
 			this.declaringType = declaringType;
 			this.attributes = new List<RuntimeAttribute>();
+			this.name = name;		
 		}
 
 		#endregion Construction
@@ -71,13 +72,6 @@ namespace Mosa.Compiler.TypeSystem
 		public string Name
 		{
 			get { return this.name; }
-			protected set
-			{
-				if (value == null)
-					throw new ArgumentNullException(@"value");
-
-				this.name = value;
-			}
 		}
 
 		/// <summary>
@@ -87,22 +81,12 @@ namespace Mosa.Compiler.TypeSystem
 		public List<RuntimeAttribute> CustomAttributes
 		{
 			get { return attributes; }
-			protected set
-			{
-				if (value == null)
-					throw new ArgumentNullException(@"value");
-
-				attributes = value;
-			}
+			protected set { attributes = value; }
 		}
 
 		#endregion Properties
 
 		#region Methods
-
-		#endregion Methods
-
-		#region IRuntimeAttributable Members
 
 		/// <summary>
 		/// Determines if the given attribute type is applied.
@@ -129,6 +113,6 @@ namespace Mosa.Compiler.TypeSystem
 			return result;
 		}
 
-		#endregion IRuntimeAttributable Members
+		#endregion Methods
 	}
 }

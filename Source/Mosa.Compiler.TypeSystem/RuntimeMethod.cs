@@ -8,12 +8,12 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
-using System.Collections.Generic;
-using System.Text;
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Loader;
 using Mosa.Compiler.Metadata.Signatures;
+using System;
+using System.Collections.Generic;
+using System.Text;
 
 namespace Mosa.Compiler.TypeSystem
 {
@@ -58,14 +58,14 @@ namespace Mosa.Compiler.TypeSystem
 		private readonly IList<GenericParameter> genericParameters;
 
 		/// <summary>
-		/// Holds the full method name
-		/// </summary>
-		private string fullName;
-
-		/// <summary>
 		/// Holds the method name
 		/// </summary>
 		private string methodName;
+
+		/// <summary>
+		/// Holds the fullname (declaring type + name)
+		/// </summary>
+		private string fullname;
 
 		#endregion Data members
 
@@ -76,15 +76,36 @@ namespace Mosa.Compiler.TypeSystem
 		/// </summary>
 		/// <param name="token">The token.</param>
 		/// <param name="declaringType">The type, which declared this method.</param>
-		public RuntimeMethod(ITypeModule module, Token token, RuntimeType declaringType) :
-			base(module, token, declaringType)
+		public RuntimeMethod(ITypeModule module, string name, Token token, RuntimeType declaringType, IList<RuntimeParameter> parameters, SigType[] sigParameters) :
+			base(module, name, declaringType, token)
 		{
 			this.genericParameters = new List<GenericParameter>();
+			this.parameters = parameters ?? new List<RuntimeParameter>();
+			this.sigParameters = sigParameters;
 		}
 
 		#endregion Construction
 
 		#region Properties
+
+		/// <summary>
+		/// Gets the full name.
+		/// </summary>
+		/// <value>
+		/// The full name.
+		/// </value>
+		public string FullName
+		{
+			get
+			{
+				if (fullname == null)
+				{
+					fullname = (DeclaringType == null) ? MethodName : String.Format("{0}.{1}", DeclaringType.FullName, MethodName);
+				}
+
+				return fullname;
+			}
+		}
 
 		/// <summary>
 		/// Retrieves the method attributes.
@@ -171,7 +192,6 @@ namespace Mosa.Compiler.TypeSystem
 		public IList<RuntimeParameter> Parameters
 		{
 			get { return parameters; }
-			protected set { parameters = value; }
 		}
 
 		public bool HasThis
@@ -195,7 +215,7 @@ namespace Mosa.Compiler.TypeSystem
 		public SigType[] SigParameters
 		{
 			get { return sigParameters; }
-			protected set { sigParameters = value; }
+			//protected set { sigParameters = value; }
 		}
 
 		/// <summary>
@@ -215,23 +235,6 @@ namespace Mosa.Compiler.TypeSystem
 		public IList<GenericParameter> GenericParameters
 		{
 			get { return genericParameters; }
-		}
-
-		/// <summary>
-		/// Gets the full name.
-		/// </summary>
-		/// <value>The full name.</value>
-		public string FullName
-		{
-			get
-			{
-				if (fullName == null)
-				{
-					fullName = DeclaringType.ToString() + '.' + MethodName;
-				}
-
-				return fullName;
-			}
 		}
 
 		/// <summary>

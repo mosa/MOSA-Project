@@ -213,7 +213,10 @@ namespace Mosa.Compiler.TypeSystem
 
 				case CilElementType.GenericInst:
 					var genericBaseType = typeModule.GetType(genericInstSigType.BaseType.Token);
-					genericType = new CilGenericType(typeModule, token, genericBaseType, genericInstSigType.GenericArguments);
+
+					string name = CilGenericType.GetGenericTypeName(typeModule, genericBaseType as CilRuntimeType, genericInstSigType.GenericArguments);
+
+					genericType = new CilGenericType(typeModule, token, name, genericBaseType, genericInstSigType.GenericArguments);
 					break;
 
 				default:

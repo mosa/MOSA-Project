@@ -136,7 +136,9 @@ namespace Mosa.Compiler.TypeSystem
 				var sigtype = new TypeSigType(signatureToken, CilElementType.Var);
 				var signature = new GenericInstSigType(sigtype, genericArguments);
 
-				patchedType = new CilGenericType(enclosingType.InstantiationModule, typeToken, openType.BaseGenericType, signature.GenericArguments);
+				string name = CilGenericType.GetGenericTypeName(enclosingType.InstantiationModule, openType.BaseGenericType as CilRuntimeType, signature.GenericArguments);
+
+				patchedType = new CilGenericType(enclosingType.InstantiationModule, typeToken, name, openType.BaseGenericType, signature.GenericArguments);
 				AddPatchedType(openType, genericArguments, patchedType);
 			}
 
@@ -163,7 +165,9 @@ namespace Mosa.Compiler.TypeSystem
 				var sigtype = new TypeSigType(signatureToken, CilElementType.Var);
 				var signature = new GenericInstSigType(sigtype, genericArguments);
 
-				patchedType = new CilGenericType(enclosingType.InstantiationModule, typeToken, openType.BaseGenericType, signature.GenericArguments);
+				string name = CilGenericType.GetGenericTypeName(enclosingType.InstantiationModule, openType.BaseGenericType as CilRuntimeType, signature.GenericArguments);
+
+				patchedType = new CilGenericType(enclosingType.InstantiationModule, typeToken, name, openType.BaseGenericType, signature.GenericArguments);
 				AddPatchedType(openType, genericArguments, patchedType);
 			}
 
@@ -191,7 +195,9 @@ namespace Mosa.Compiler.TypeSystem
 				var sigtype = new TypeSigType(signatureToken, CilElementType.Var);
 				var signature = new GenericInstSigType(sigtype, genericArguments);
 
-				patchedType = new CilGenericType(enclosingType.InstantiationModule, typeToken, openType.BaseGenericType, signature.GenericArguments);
+				string name = CilGenericType.GetGenericTypeName(enclosingType.InstantiationModule, openType.BaseGenericType as CilRuntimeType, signature.GenericArguments);
+
+				patchedType = new CilGenericType(enclosingType.InstantiationModule, typeToken, name, openType.BaseGenericType, signature.GenericArguments);
 
 				AddPatchedType(openType, genericArguments, patchedType);
 			}

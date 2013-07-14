@@ -33,19 +33,11 @@ namespace Mosa.Compiler.Framework.Linker
 		/// <param name="name">The name of the method.</param>
 		/// <param name="declaringType">Type of the declaring.</param>
 		public LinkerGeneratedMethod(ITypeModule typeSystem, string name, RuntimeType declaringType, SigType returnType, bool hasThis, bool hasExplicitThis, SigType[] sigParameters) :
-			base(typeSystem, Token.Zero, declaringType)
+			base(typeSystem, name, Token.Zero, declaringType, null, sigParameters)
 		{
-			if (name == null)
-				throw new ArgumentNullException(@"name");
-
-			base.Name = name;
-
 			this.ReturnType = returnType;
 			this.HasThis = hasThis;
 			this.HasExplicitThis = hasExplicitThis;
-			this.SigParameters = sigParameters;
-
-			this.Parameters = new List<RuntimeParameter>();
 		}
 
 		#endregion Construction

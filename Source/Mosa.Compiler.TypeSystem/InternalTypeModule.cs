@@ -7,12 +7,11 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System.Collections.Generic;
-using System.Diagnostics;
-
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Loader;
 using Mosa.Compiler.TypeSystem.Cil;
+using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Mosa.Compiler.TypeSystem
 {

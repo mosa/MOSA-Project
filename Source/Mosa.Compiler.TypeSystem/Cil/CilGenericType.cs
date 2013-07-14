@@ -8,12 +8,11 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using Mosa.Compiler.Metadata;
+using Mosa.Compiler.Metadata.Signatures;
 using System;
 using System.Diagnostics;
 using System.Text;
-
-using Mosa.Compiler.Metadata;
-using Mosa.Compiler.Metadata.Signatures;
 
 namespace Mosa.Compiler.TypeSystem.Cil
 {
@@ -46,15 +45,14 @@ namespace Mosa.Compiler.TypeSystem.Cil
 		/// <param name="token">The token.</param>
 		/// <param name="baseGenericType">Type of the base generic.</param>
 		/// <param name="genericArguments">The generic arguments.</param>
-		public CilGenericType(ITypeModule typeModule, Token token, RuntimeType baseGenericType, SigType[] genericArguments) :
-			base(baseGenericType.Module, token, baseGenericType.BaseType)
+		public CilGenericType(ITypeModule typeModule, Token token, string name, RuntimeType baseGenericType, SigType[] genericArguments) :
+			base(baseGenericType.Module, token, name, baseGenericType.BaseType, baseGenericType.Namespace) 
 		{
 			Debug.Assert(baseGenericType is CilRuntimeType);
 
 			this.baseGenericType = baseGenericType as CilRuntimeType;
 			this.InstantiationModule = typeModule;
 			base.Attributes = baseGenericType.Attributes;
-			base.Namespace = baseGenericType.Namespace;
 
 			if (this.baseGenericType.IsNested)
 			{
@@ -64,9 +62,7 @@ namespace Mosa.Compiler.TypeSystem.Cil
 			}
 
 			// TODO: if this is a nested types, add enclosing type(s) into genericArguments first
-			this.genericArguments = genericArguments;
-
-			base.Name = GetName(typeModule);
+			this.genericArguments = genericArguments;			
 
 			ResolveMethods();
 			ResolveFields();
@@ -88,7 +84,7 @@ namespace Mosa.Compiler.TypeSystem.Cil
 			get { return baseGenericType; }
 		}
 
-		private string GetName(ITypeModule typeModule)
+		public static string GetGenericTypeName(ITypeModule typeModule, RuntimeType baseGenericType, SigType[] genericArguments)
 		{
 			var sb = new StringBuilder();
 			sb.AppendFormat("{0}<", baseGenericType.Name);

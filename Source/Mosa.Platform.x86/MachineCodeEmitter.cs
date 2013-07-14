@@ -14,6 +14,7 @@ using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Linker;
 using Mosa.Compiler.Metadata;
+using Mosa.Compiler.TypeSystem;
 using System;
 
 namespace Mosa.Platform.x86
@@ -23,7 +24,6 @@ namespace Mosa.Platform.x86
 	/// </summary>
 	public sealed class MachineCodeEmitter : BaseCodeEmitter, IDisposable
 	{
-	
 		#region Code Generation
 
 		/// <summary>
@@ -166,9 +166,14 @@ namespace Mosa.Platform.x86
 		{
 			int pos = (int)(codeStream.Position - codeStreamBasePosition);
 
-			if (displacement.IsRuntimeMember)
+			if (displacement.IsLabel)
 			{
-				linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuildInPatch.I4, MethodName, pos, 0, displacement.RuntimeMember.ToString(), displacement.Offset);
+				linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuildInPatch.I4, MethodName, pos, 0, displacement.Name, 0);
+				codeStream.Position += 4;
+			}
+			else if (displacement.IsRuntimeMember)
+			{
+				linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuildInPatch.I4, MethodName, pos, 0, ((displacement.RuntimeMember) as RuntimeField).FullName, displacement.Offset);
 				codeStream.Position += 4;
 			}
 			else if (displacement.IsSymbol)
@@ -176,11 +181,7 @@ namespace Mosa.Platform.x86
 				linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuildInPatch.I4, MethodName, pos, 0, displacement.Name, 0);
 				codeStream.Position += 4;
 			}
-			else if (displacement.IsLabel)
-			{
-				linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuildInPatch.I4, MethodName, pos, 0, displacement.Name, 0);
-				codeStream.Position += 4;
-			}
+
 			else
 			{
 				codeStream.Write((int)displacement.Offset, Endianness.Little);

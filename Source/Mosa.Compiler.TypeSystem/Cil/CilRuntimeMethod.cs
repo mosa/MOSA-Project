@@ -40,19 +40,15 @@ namespace Mosa.Compiler.TypeSystem.Cil
 		/// <param name="methodImplAttributes">The method impl attributes.</param>
 		/// <param name="rva">The rva.</param>
 		public CilRuntimeMethod(ITypeModule module, string name, SigType returnType, bool hasThis, bool hasExplicitThis, SigType[] sigParameters, Token token, RuntimeType declaringType, MethodAttributes methodAttributes, MethodImplAttributes methodImplAttributes, uint rva) :
-			base(module, token, declaringType)
+			base(module, name, token, declaringType, null, sigParameters)
 		{
 			base.Attributes = methodAttributes;
 			base.ImplAttributes = methodImplAttributes;
 			base.Rva = rva;
-			this.Name = name;
 
 			this.ReturnType = returnType;
 			this.HasThis = hasThis;
 			this.HasExplicitThis = hasExplicitThis;
-			this.SigParameters = sigParameters;
-
-			this.Parameters = new List<RuntimeParameter>();
 		}
 
 		/// <summary>
@@ -66,18 +62,15 @@ namespace Mosa.Compiler.TypeSystem.Cil
 		/// <param name="sigParameters">The sig parameters.</param>
 		/// <param name="declaringType">Type of the declaring.</param>
 		public CilRuntimeMethod(ITypeModule module, CilRuntimeMethod genericMethod, SigType returnType, bool hasThis, bool hasExplicitThis, SigType[] sigParameters, RuntimeType declaringType) :
-			base(module, genericMethod.Token, declaringType)
+			base(module, genericMethod.Name, genericMethod.Token, declaringType, genericMethod.Parameters, sigParameters)
 		{
 			this.Attributes = genericMethod.Attributes;
 			this.ImplAttributes = genericMethod.ImplAttributes;
 			this.Rva = genericMethod.Rva;
-			this.Parameters = genericMethod.Parameters;
-			base.Name = genericMethod.Name;
 
 			this.ReturnType = returnType;
 			this.HasThis = hasThis;
 			this.HasExplicitThis = hasExplicitThis;
-			this.SigParameters = sigParameters;
 		}
 
 		#endregion Construction

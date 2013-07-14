@@ -100,11 +100,11 @@ namespace Mosa.Test.System
 		{
 			base.EndCompile();
 
-			//while (cctorQueue.Count > 0)
-			//{
-			//	CCtor cctor = cctorQueue.Dequeue();
-			//	cctor();
-			//}
+			while (cctorQueue.Count > 0)
+			{
+				CCtor cctor = cctorQueue.Dequeue();
+				cctor();
+			}
 		}
 
 		/// <summary>

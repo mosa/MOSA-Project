@@ -561,7 +561,9 @@ namespace Mosa.Compiler.Framework.Stages
 				{
 					if (!(classType is CilGenericType))
 					{
-						classType = new CilGenericType(classType.Module, classType.Token, classType, (thisReference.Type as GenericInstSigType).GenericArguments);
+						string name = CilGenericType.GetGenericTypeName(classType.Module, classType, (thisReference.Type as GenericInstSigType).GenericArguments);
+
+						classType = new CilGenericType(classType.Module, classType.Token, name, classType, (thisReference.Type as GenericInstSigType).GenericArguments);
 					}
 
 					classType = methodCompiler.Compiler.GenericTypePatcher.PatchType(this.typeModule, methodCompiler.Method.DeclaringType as CilGenericType, classType as CilGenericType);
