@@ -101,6 +101,7 @@
     <Compile Include="Instructions\TwoOperandInstruction.cs" />
     <Compile Include="Instructions\AddSD.cs" />
     <Compile Include="Stages\BuildStackStage.cs" />
+    <Compile Include="Stages\JumpPeepholeOptimizationStage.cs" />
     <Compile Include="Stages\FinalTweakTransformationStage.cs" />
     <Compile Include="Stages\SimpleDeadCodeRemovalStage.cs" />
     <Compile Include="Instructions\MulSD.cs" />
@@ -161,7 +162,6 @@
     <Compile Include="Instructions\Jmp.cs" />
     <Compile Include="Instructions\Lea.cs" />
     <Compile Include="Stages\Multiboot0695Stage.cs" />
-    <Compile Include="Stages\SimplePeepholeOptimizationStage.cs" />
     <Compile Include="Stages\MemToMemConversionStage.cs" />
     <Compile Include="Instructions\Call.cs" />
     <Compile Include="Instructions\Movsd.cs" />

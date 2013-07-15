@@ -204,7 +204,10 @@ namespace Mosa.Platform.x86
 			methodCompilerPipeline.InsertBefore<CodeGenerationStage>(
 				new FinalTweakTransformationStage()
 			);
-
+			
+			methodCompilerPipeline.InsertBefore<CodeGenerationStage>(
+				new JumpPeepholeOptimizationStage()
+			);
 			
 			// FIXME: Disabled for now
 			//methodCompilerPipeline.InsertAfterLast<CodeGenerationStage>(
