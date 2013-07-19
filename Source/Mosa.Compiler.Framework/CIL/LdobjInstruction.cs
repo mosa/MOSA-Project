@@ -107,7 +107,7 @@ namespace Mosa.Compiler.Framework.CIL
 			}
 
 			// Push the loaded value
-			ctx.Result = LoadInstruction.CreateResultOperand(decoder, Operand.StackTypeFromSigType(sigType), sigType);
+			ctx.Result = LoadInstruction.CreateResultOperand(decoder, sigType);
 			ctx.SigType = sigType;
 		}
 

@@ -53,7 +53,7 @@ namespace Mosa.Compiler.Framework.CIL
 			}
 
 			var sigType = ctx.RuntimeField.SigType;
-			ctx.Result = LoadInstruction.CreateResultOperand(decoder, Operand.StackTypeFromSigType(sigType), sigType);
+			ctx.Result = LoadInstruction.CreateResultOperand(decoder,  sigType);
 		}
 
 		/// <summary>

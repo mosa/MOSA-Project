@@ -357,9 +357,6 @@ namespace Mosa.Platform.x86.Stages
 
 			if (offsetOperand.IsConstant)
 			{
-				//Operand v1 = AllocateVirtualRegister(baseOperand.Type);
-				//context.SetInstruction(X86.Mov, v1, baseOperand);
-				//offset = offsetOperand.ValueAsLongInteger;
 				context.SetInstruction(X86.Mov, result, Operand.CreateMemoryAddress(baseOperand.Type, baseOperand, offsetOperand.ValueAsLongInteger));
 			}
 			else
@@ -382,11 +379,11 @@ namespace Mosa.Platform.x86.Stages
 			var type = context.SigType;
 			var offset = context.Operand2;
 
-			var eax = AllocateVirtualRegister(BuiltInSigType.Int32);
+			var v1 = AllocateVirtualRegister(BuiltInSigType.Int32);
 			var elementType = GetElementType(type);
 			long offsetPtr = 0;
 
-			context.SetInstruction(X86.Mov, eax, source);
+			context.SetInstruction(X86.Mov, v1, source);
 
 			if (offset.IsConstant)
 			{
@@ -394,10 +391,10 @@ namespace Mosa.Platform.x86.Stages
 			}
 			else
 			{
-				context.AppendInstruction(X86.Add, eax, eax, offset);
+				context.AppendInstruction(X86.Add, v1, v1, offset);
 			}
 
-			context.AppendInstruction(X86.Movsx, destination, Operand.CreateMemoryAddress(elementType, eax, offsetPtr));
+			context.AppendInstruction(X86.Movsx, destination, Operand.CreateMemoryAddress(elementType, v1, offsetPtr));
 		}
 
 		/// <summary>
@@ -413,24 +410,21 @@ namespace Mosa.Platform.x86.Stages
 
 			Debug.Assert(offset != null);
 
-			Operand eax = AllocateVirtualRegister(source.Type);
-			SigType elementType = GetElementType(source.Type);
+			Operand v1 = AllocateVirtualRegister(source.Type);
+			SigType elementType = GetElementType(type);
 			long offsetPtr = 0;
 
-			context.SetInstruction(X86.Mov, eax, source);
+			context.SetInstruction(X86.Mov, v1, source);
 
 			if (offset.IsConstant)
 			{
 				offsetPtr = (long)offset.ValueAsLongInteger;
 			}
-
-			if (elementType.Type == CilElementType.Char ||
-				elementType.Type == CilElementType.U1 ||
-				elementType.Type == CilElementType.U2)
+			else
 			{
-				context.AppendInstruction(X86.Add, eax, eax, offset);
+				context.AppendInstruction(X86.Add, v1, v1, offset);
 			}
-			context.AppendInstruction(X86.Movzx, destination, Operand.CreateMemoryAddress(elementType, eax, offsetPtr));
+			context.AppendInstruction(X86.Movzx, destination, Operand.CreateMemoryAddress(elementType, v1, offsetPtr));
 		}
 
 		/// <summary>

@@ -391,9 +391,9 @@ namespace Mosa.Compiler.Framework
 
 			foreach (var localVariable in localSigTypes)
 			{
-				locals[index++] = VirtualRegisters.Allocate(localVariable);
-
-				//Scheduler.ScheduleTypeForCompilation(localVariable); // TODO
+				locals[index++] = VirtualRegisters.Allocate(Operand.NormalizeSigType(localVariable));
+			
+				//Scheduler.ScheduleTypeForCompilation(sigtype); // TODO
 			}
 		}
 

@@ -118,29 +118,6 @@ namespace Mosa.Compiler.Framework.CIL
 		public override void Resolve(Context ctx, BaseMethodCompiler compiler)
 		{
 			base.Resolve(ctx, compiler);
-
-			int paramCount = ctx.InvokeTarget.SigParameters.Length;
-
-			if (ctx.InvokeTarget.HasThis && !ctx.InvokeTarget.HasExplicitThis)
-				paramCount++;
-
-			// Validate the operands...
-			Debug.Assert(ctx.OperandCount == paramCount, @"Operand count doesn't match parameter count.");
-
-			//for (int i = 0; i < ctx.OperandCount; i++)
-			//{
-			/* FIXME: Check implicit conversions
-
-			// if (ops[i] != null) {
-				Debug.Assert(_operands[i].Type == _parameterTypes[i]);
-				if (_operands[i].Type != _parameterTypes[i])
-				{
-					// FIXME: Determine if we can do an implicit conversion
-					throw new ExecutionEngineException(@"Invalid operand types.");
-				}
-			*/
-
-			//}
 		}
 
 		/// <summary>
@@ -225,7 +202,8 @@ namespace Mosa.Compiler.Framework.CIL
 			if (invokeTarget.ReturnType.Type != CilElementType.Void)
 			{
 				ctx.ResultCount = 1;
-				ctx.Result = compiler.CreateVirtualRegister(invokeTarget.ReturnType);
+				//ctx.Result = compiler.CreateVirtualRegister(invokeTarget.ReturnType);
+				ctx.Result = compiler.CreateVirtualRegister(Operand.NormalizeSigType(invokeTarget.ReturnType));
 			}
 			else
 				ctx.ResultCount = 0;

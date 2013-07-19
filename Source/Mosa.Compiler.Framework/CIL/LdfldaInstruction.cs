@@ -67,7 +67,7 @@ namespace Mosa.Compiler.Framework.CIL
 			}
 
 			SigType sigType = new RefSigType(ctx.RuntimeField.SigType);
-			ctx.Result = LoadInstruction.CreateResultOperand(decoder, Operand.StackTypeFromSigType(sigType), sigType);
+			ctx.Result = LoadInstruction.CreateResultOperand(decoder, sigType);
 		}
 
 		/// <summary>

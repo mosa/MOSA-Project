@@ -763,43 +763,37 @@ namespace Mosa.Compiler.Framework
 		/// <returns>The equivalent stack type code.</returns>
 		public static StackTypeCode StackTypeFromSigType(SigType type)
 		{
-			StackTypeCode result = StackTypeCode.Unknown;
 			switch (type.Type)
 			{
-				case CilElementType.Void:
-					break;
-
-				case CilElementType.Boolean: result = StackTypeCode.Int32; break;
-				case CilElementType.Char: result = StackTypeCode.Int32; break;
-				case CilElementType.I1: result = StackTypeCode.Int32; break;
-				case CilElementType.U1: result = StackTypeCode.Int32; break;
-				case CilElementType.I2: result = StackTypeCode.Int32; break;
-				case CilElementType.U2: result = StackTypeCode.Int32; break;
-				case CilElementType.I4: result = StackTypeCode.Int32; break;
-				case CilElementType.U4: result = StackTypeCode.Int32; break;
-				case CilElementType.I8: result = StackTypeCode.Int64; break;
-				case CilElementType.U8: result = StackTypeCode.Int64; break;
-				case CilElementType.R4: result = StackTypeCode.F; break;
-				case CilElementType.R8: result = StackTypeCode.F; break;
-				case CilElementType.I: result = StackTypeCode.N; break;
-				case CilElementType.U: result = StackTypeCode.N; break;
-				case CilElementType.Ptr: result = StackTypeCode.Ptr; break;
-				case CilElementType.ByRef: result = StackTypeCode.Ptr; break;
-				case CilElementType.Object: result = StackTypeCode.O; break;
-				case CilElementType.String: result = StackTypeCode.O; break;
-				case CilElementType.ValueType: result = StackTypeCode.O; break;
-				case CilElementType.Type: result = StackTypeCode.O; break;
-				case CilElementType.Class: result = StackTypeCode.O; break;
-				case CilElementType.GenericInst: result = StackTypeCode.O; break;
-				case CilElementType.Array: result = StackTypeCode.O; break;
-				case CilElementType.SZArray: result = StackTypeCode.O; break;
-				case CilElementType.Var: result = StackTypeCode.O; break;
-
+				case CilElementType.Void: return StackTypeCode.Unknown;
+				case CilElementType.Boolean: return StackTypeCode.Int32;
+				case CilElementType.Char: return StackTypeCode.Int32;
+				case CilElementType.I1: return StackTypeCode.Int32;
+				case CilElementType.U1: return StackTypeCode.Int32;
+				case CilElementType.I2: return StackTypeCode.Int32;
+				case CilElementType.U2: return StackTypeCode.Int32;
+				case CilElementType.I4: return StackTypeCode.Int32;
+				case CilElementType.U4: return StackTypeCode.Int32;
+				case CilElementType.I8: return StackTypeCode.Int64;
+				case CilElementType.U8: return StackTypeCode.Int64;
+				case CilElementType.R4: return StackTypeCode.F;
+				case CilElementType.R8: return StackTypeCode.F;
+				case CilElementType.I: return StackTypeCode.N;
+				case CilElementType.U: return StackTypeCode.N;
+				case CilElementType.Ptr: return StackTypeCode.Ptr;
+				case CilElementType.ByRef: return StackTypeCode.Ptr;
+				case CilElementType.Object: return StackTypeCode.O;
+				case CilElementType.String: return StackTypeCode.O;
+				case CilElementType.ValueType: return StackTypeCode.O;
+				case CilElementType.Type: return StackTypeCode.O;
+				case CilElementType.Class: return StackTypeCode.O;
+				case CilElementType.GenericInst: return StackTypeCode.O;
+				case CilElementType.Array: return StackTypeCode.O;
+				case CilElementType.SZArray: return StackTypeCode.O;
+				case CilElementType.Var: return StackTypeCode.O;
 				default:
 					throw new NotSupportedException(String.Format(@"Can't transform SigType of CilElementType.{0} to StackTypeCode.", type.Type));
 			}
-
-			return result;
 		}
 
 		/// <summary>
@@ -818,6 +812,22 @@ namespace Mosa.Compiler.Framework
 				case StackTypeCode.N: return BuiltInSigType.IntPtr;
 				default:
 					throw new NotSupportedException(@"Can't convert stack type code to SigType.");
+			}
+		}
+
+		public static SigType NormalizeSigType(SigType type)
+		{
+			switch (type.Type)
+			{
+				case CilElementType.Boolean: return new SigType(CilElementType.I4);
+				case CilElementType.Char: return new SigType(CilElementType.I4);
+				case CilElementType.I1: return new SigType(CilElementType.I4);
+				case CilElementType.U1: return new SigType(CilElementType.I4);
+				case CilElementType.I2: return new SigType(CilElementType.I4);
+				case CilElementType.U2: return new SigType(CilElementType.I4);
+				case CilElementType.U4: return new SigType(CilElementType.I4);
+				case CilElementType.U8: return new SigType(CilElementType.I8);
+				default: return type;
 			}
 		}
 

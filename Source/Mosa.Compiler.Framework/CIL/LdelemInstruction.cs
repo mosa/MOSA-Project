@@ -102,7 +102,7 @@ namespace Mosa.Compiler.Framework.CIL
 				sigType = new ClassSigType(token);
 			}
 
-			ctx.Result = LoadInstruction.CreateResultOperand(decoder, Operand.StackTypeFromSigType(sigType), sigType);
+			ctx.Result = LoadInstruction.CreateResultOperand(decoder, sigType);
 		}
 
 		/// <summary>

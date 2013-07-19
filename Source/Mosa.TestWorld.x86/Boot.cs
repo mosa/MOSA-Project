@@ -24,8 +24,7 @@ namespace Mosa.TestWorld.x86
 		/// </summary>
 		public static void Main()
 		{
-			uint result1 = UInt32Tests.MulU4U4(10, 20);
-			uint result2 = UInt32Tests.DivU4U4(10, 20);
+			StringTests.FirstCharacterMustMatch();
 
 			RunTests();
 
