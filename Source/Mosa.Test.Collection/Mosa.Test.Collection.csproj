@@ -114,14 +114,14 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>GenericCallTests.tt</DependentUpon>
     </Compile>
-    <None Include="InitobjTests.tt">
+    <None Include="InitStructTests.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>InitobjTests.cs</LastGenOutput>
+      <LastGenOutput>InitStructTests.cs</LastGenOutput>
     </None>
-    <Compile Include="InitobjTests.cs">
+    <Compile Include="InitStructTests.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>InitobjTests.tt</DependentUpon>
+      <DependentUpon>InitStructTests.tt</DependentUpon>
     </Compile>
     <Compile Include="StructTests.cs">
       <DependentUpon>StructTests.tt</DependentUpon>

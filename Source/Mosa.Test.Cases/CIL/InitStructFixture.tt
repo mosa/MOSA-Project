@@ -8,18 +8,18 @@ using Mosa.Test.Collection;
 namespace Mosa.Test.Cases.CIL
 {
 	[TestFixture]
-	public class Initobj : TestCompilerAdapter
+	public class InitStruct : TestCompilerAdapter
 	{
-		public Initobj()
+		public InitStruct()
 		{
 			settings.AddReference("Mosa.Test.Collection.dll");
 		}
 <# foreach (KeyValuePair<string, string> primitive in PrimitivesWithCharAndObject) { #>
 
 		[Test]
-		public void Initobj<#= primitive.Value #>()
+		public void InitStruct<#= primitive.Value #>()
 		{
-			Assert.AreEqual(InitobjTests.InitobjTest<#= primitive.Value #>(), Run<<#= primitive.Key #>>("Mosa.Test.Collection", "InitobjTests", "InitobjTest<#= primitive.Value #>"));
+			Assert.AreEqual(InitStructTests.InitStruct<#= primitive.Value #>(), Run<<#= primitive.Key #>>("Mosa.Test.Collection", "InitStructTests", "InitStruct<#= primitive.Value #>"));
 		}
 <# } #>
 

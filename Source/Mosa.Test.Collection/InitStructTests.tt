@@ -11,19 +11,19 @@
 
 namespace Mosa.Test.Collection
 {
-	public struct InitobjTestsStruct
+	public struct InitStruct
 	{
 <# foreach (KeyValuePair<string, string> primitives in PrimitivesWithCharAndObject) { #>
 		public <#= primitives.Key #> Value<#= primitives.Value #>;
 <# } #>
 	}
 
-	public static class InitobjTests
+	public static class InitStructTests
 	{
 <# foreach (KeyValuePair<string, string> primitives in PrimitivesWithCharAndObject) {#>
-		public static <#= primitives.Key #> InitobjTest<#= primitives.Value #>()
+		public static <#= primitives.Key #> InitStruct<#= primitives.Value #>()
 		{
-			InitobjTestsStruct d = new InitobjTestsStruct();
+			InitStruct d = new InitStruct();
 			return d.Value<#= primitives.Value #>;
 		}
 

@@ -126,9 +126,9 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>StaticFieldFixture.cs</LastGenOutput>
     </None>
-    <None Include="CIL\InitobjFixture.tt">
+    <None Include="CIL\InitStructFixture.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>InitobjFixture.cs</LastGenOutput>
+      <LastGenOutput>InitStructFixture.cs</LastGenOutput>
     </None>
     <Compile Include="CIL\IsInstFixture.cs" />
     <Compile Include="CIL\ConvFixture.cs">
@@ -141,10 +141,10 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>GenericCallFixture.tt</DependentUpon>
     </Compile>
-    <Compile Include="CIL\InitobjFixture.cs">
+    <Compile Include="CIL\InitStructFixture.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>InitobjFixture.tt</DependentUpon>
+      <DependentUpon>InitStructFixture.tt</DependentUpon>
     </Compile>
     <Compile Include="CIL\LdargaFixture.cs">
       <AutoGen>True</AutoGen>
