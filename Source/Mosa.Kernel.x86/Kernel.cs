@@ -18,7 +18,6 @@ namespace Mosa.Kernel.x86
 	{
 		public static void Setup()
 		{
-			SmbiosManager.Setup();
 			Multiboot.Setup();
 			ProgrammableInterruptController.Setup();
 			GDT.Setup();
@@ -26,10 +25,10 @@ namespace Mosa.Kernel.x86
 			PageFrameAllocator.Setup();
 			PageTable.Setup();
 			VirtualPageAllocator.Setup();
-			ProcessManager.Setup();
-			TaskManager.Setup();
-			SmbiosManager.Setup();
-			ConsoleManager.Setup();
+			//ProcessManager.Setup();
+			//TaskManager.Setup();
+			//SmbiosManager.Setup();
+			//ConsoleManager.Setup();
 
 			//Serial.Setup();
 		}

@@ -56,61 +56,25 @@ namespace Mosa.Compiler.Framework.CIL
 			switch (opcode)
 			{
 				case OpCode.Conv_u: goto case OpCode.Conv_i;
-				case OpCode.Conv_i:
-					resultType = compiler.Architecture.NativeType;
-					break;
-
-				case OpCode.Conv_i1:
-					resultType = BuiltInSigType.SByte;
-					break;
-
-				case OpCode.Conv_i2:
-					resultType = BuiltInSigType.Int16;
-					break;
-
-				case OpCode.Conv_i4:
-					resultType = BuiltInSigType.Int32;
-					break;
-
-				case OpCode.Conv_i8:
-					resultType = BuiltInSigType.Int64;
-					break;
-
-				case OpCode.Conv_r4:
-					resultType = BuiltInSigType.Single;
-					break;
-
-				case OpCode.Conv_r8:
-					resultType = BuiltInSigType.Double;
-					break;
-
-				case OpCode.Conv_u1:
-					resultType = BuiltInSigType.Byte;
-					break;
-
-				case OpCode.Conv_u2:
-					resultType = BuiltInSigType.UInt16;
-					break;
-
-				case OpCode.Conv_u4:
-					resultType = BuiltInSigType.UInt32;
-					break;
-
-				case OpCode.Conv_u8:
-					resultType = BuiltInSigType.UInt64;
-					break;
-
+				case OpCode.Conv_i: resultType = compiler.Architecture.NativeType; break;
+				case OpCode.Conv_i1: resultType = BuiltInSigType.SByte; break;
+				case OpCode.Conv_i2: resultType = BuiltInSigType.Int16; break;
+				case OpCode.Conv_i4: resultType = BuiltInSigType.Int32; break;
+				case OpCode.Conv_i8: resultType = BuiltInSigType.Int64; break;
+				case OpCode.Conv_r4: resultType = BuiltInSigType.Single; break;
+				case OpCode.Conv_r8: resultType = BuiltInSigType.Double; break;
+				case OpCode.Conv_u1: resultType = BuiltInSigType.Byte; break;
+				case OpCode.Conv_u2: resultType = BuiltInSigType.UInt16; break;
+				case OpCode.Conv_u4: resultType = BuiltInSigType.UInt32; break;
+				case OpCode.Conv_u8: resultType = BuiltInSigType.UInt64; break;
 				case OpCode.Conv_ovf_i: goto case OpCode.Conv_i;
 				case OpCode.Conv_ovf_u: goto case OpCode.Conv_i;
-
 				case OpCode.Conv_ovf_i_un: goto case OpCode.Conv_i;
 				case OpCode.Conv_ovf_u_un: goto case OpCode.Conv_i;
-
-				default:
-					throw new NotSupportedException(@"Overflow checking conversions not supported.");
+				default: throw new NotSupportedException(@"Overflow checking conversions not supported.");
 			}
 
-			ctx.Result = compiler.CreateVirtualRegister(resultType);
+			ctx.Result = compiler.CreateVirtualRegister(Operand.NormalizeSigType(resultType));
 		}
 
 		/// <summary>

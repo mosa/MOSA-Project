@@ -10,6 +10,7 @@
  */
 
 using Mosa.Compiler.Framework;
+using Mosa.Compiler.Metadata.Signatures;
 
 namespace Mosa.Platform.x86.Stages
 {
@@ -55,17 +56,29 @@ namespace Mosa.Platform.x86.Stages
 			}
 		}
 
+		/// <summary>
+		/// Visitation function for <see cref="IX86Visitor.Movzx"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IX86Visitor.Mov(Context context)
+		{
+			// Movsx can not use ESI or EDI registers
+			if (context.Operand1.IsCPURegister && (context.Operand1.Register == GeneralPurposeRegister.ESI || context.Operand1.Register == GeneralPurposeRegister.EDI))
+			{
+				Operand source = context.Operand1;
+				Operand dest = context.Result;
+
+				Operand EAX = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.EAX);
+
+				context.SetInstruction2(X86.Xchg, EAX, source, source, EAX);
+				context.AppendInstruction(X86.Mov, dest, EAX);
+				context.AppendInstruction2(X86.Xchg, source, EAX, EAX, source);
+			}
+		}
+
 		#endregion IX86Visitor
 
 		#region IX86Visitor - Unused
-
-		/// <summary>
-		/// Visitation function for <see cref="IX86Visitor.Mov"/> instructions.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void IX86Visitor.Mov(Context ctx)
-		{
-		}
 
 		/// <summary>
 		/// Visitation function for <see cref="IX86Visitor.Cvtss2sd"/> instructions.

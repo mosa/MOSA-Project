@@ -5,10 +5,10 @@
  *
  */
 
-using Mosa.TestWorld.x86.Tests;
 using Mosa.Kernel.x86;
 using Mosa.Platform.x86.Intrinsic;
 using Mosa.Test.Collection;
+using Mosa.TestWorld.x86.Tests;
 
 namespace Mosa.TestWorld.x86
 {
@@ -24,9 +24,21 @@ namespace Mosa.TestWorld.x86
 		/// </summary>
 		public static void Main()
 		{
-			StringTests.FirstCharacterMustMatch();
+			Write('Q', 3);
 
-			RunTests();
+			Screen.Color = 0x0;
+			Screen.Clear();
+			Screen.GotoTop();
+			Screen.Color = 0x0E;
+			Screen.Write('M');
+			Screen.Write('O');
+			Screen.Write('S');
+			Screen.Write('A');
+			Screen.Write(' ');
+			Screen.Write('O');
+			Screen.Write('S');
+
+			//RunTests();
 
 			while (true)
 			{
@@ -35,14 +47,7 @@ namespace Mosa.TestWorld.x86
 
 		public static void RunTests()
 		{
-			//Screen.Clear();
-			//Native.Set8(0x0B8000, 65);
-			//Native.Set8(0x0B8002, 66);
-			//Screen.Column = 0;
-			//Screen.Row = 1;
-			//Screen.Color = 3;
-			Screen.Write('Q');
-			Write('X', 3);
+			TestNewobjBaseClass c = new TestNewobjBaseClass();
 		}
 
 		public static void Write(char chr, byte color)
@@ -56,7 +61,7 @@ namespace Mosa.TestWorld.x86
 		/// </summary>
 		public static void Main2()
 		{
-			Mosa.Kernel.x86.Kernel.Setup();
+			//Mosa.Kernel.x86.Kernel.Setup();
 			DebugClient.Setup(Serial.COM1);
 			IDT.SetInterruptHandler(ProcessInterrupt);
 
