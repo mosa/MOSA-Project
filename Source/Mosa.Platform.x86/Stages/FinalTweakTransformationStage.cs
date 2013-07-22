@@ -57,13 +57,13 @@ namespace Mosa.Platform.x86.Stages
 		}
 
 		/// <summary>
-		/// Visitation function for <see cref="IX86Visitor.Movzx"/> instructions.
+		/// Visitation function for <see cref="IX86Visitor.Mov"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IX86Visitor.Mov(Context context)
 		{
-			// Movsx can not use ESI or EDI registers
-			if (context.Operand1.IsCPURegister && (context.Operand1.Register == GeneralPurposeRegister.ESI || context.Operand1.Register == GeneralPurposeRegister.EDI))
+			// Mov can not use ESI or EDI registers with 8 or 16 bit memory
+			if (context.Operand1.IsCPURegister && context.Result.IsMemoryAddress && !Is32Bit(context.Result) && (context.Operand1.Register == GeneralPurposeRegister.ESI || context.Operand1.Register == GeneralPurposeRegister.EDI))
 			{
 				Operand source = context.Operand1;
 				Operand dest = context.Result;
