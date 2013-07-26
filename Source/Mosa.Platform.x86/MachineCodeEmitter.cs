@@ -45,7 +45,7 @@ namespace Mosa.Platform.x86
 		{
 			linker.Link(
 				LinkType.RelativeOffset | LinkType.I4,
-				BuildInPatch.I4,
+				BuiltInPatch.I4,
 				MethodName,
 				(int)(codeStream.Position - codeStreamBasePosition),
 				(int)(codeStream.Position - codeStreamBasePosition) + 4,
@@ -168,17 +168,17 @@ namespace Mosa.Platform.x86
 
 			if (displacement.IsLabel)
 			{
-				linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuildInPatch.I4, MethodName, pos, 0, displacement.Name, 0);
+				linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuiltInPatch.I4, MethodName, pos, 0, displacement.Name, 0);
 				codeStream.Position += 4;
 			}
 			else if (displacement.IsRuntimeMember)
 			{
-				linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuildInPatch.I4, MethodName, pos, 0, ((displacement.RuntimeMember) as RuntimeField).FullName, displacement.Offset);
+				linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuiltInPatch.I4, MethodName, pos, 0, ((displacement.RuntimeMember) as RuntimeField).FullName, displacement.Offset);
 				codeStream.Position += 4;
 			}
 			else if (displacement.IsSymbol)
 			{
-				linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuildInPatch.I4, MethodName, pos, 0, displacement.Name, 0);
+				linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuiltInPatch.I4, MethodName, pos, 0, displacement.Name, 0);
 				codeStream.Position += 4;
 			}
 

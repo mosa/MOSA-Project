@@ -12,7 +12,7 @@ namespace Mosa.Compiler.Linker
 	/// <summary>
 	///
 	/// </summary>
-	public static class BuildInPatch
+	public static class BuiltInPatch
 	{
 		public readonly static Patch[] I1 = new Patch[] { new Patch(0, 8, 0) };
 		public readonly static Patch[] I2 = new Patch[] { new Patch(0, 16, 0) };

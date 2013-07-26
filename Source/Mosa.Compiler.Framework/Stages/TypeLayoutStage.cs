@@ -179,7 +179,7 @@ namespace Mosa.Compiler.Framework.Stages
 				{
 					if (!string.IsNullOrEmpty(link))
 					{
-						compiler.Linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuildInPatch.I4, methodTableName, offset, 0, link, 0);
+						compiler.Linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuiltInPatch.I4, methodTableName, offset, 0, link, 0);
 					}
 
 					offset += typeLayout.NativePointerSize;
@@ -195,7 +195,7 @@ namespace Mosa.Compiler.Framework.Stages
 				{
 					//if (compiler.Scheduler.IsMethodScheduled(method))
 					{
-						compiler.Linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuildInPatch.I4, methodTableName, offset, 0, method.FullName, 0);
+						compiler.Linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuiltInPatch.I4, methodTableName, offset, 0, method.FullName, 0);
 					}
 				}
 				offset += typeLayout.NativePointerSize;

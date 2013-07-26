@@ -35,7 +35,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseLinker.cs" />
-    <Compile Include="BuildInPatch.cs" />
+    <Compile Include="BuiltInPatch.cs" />
     <Compile Include="Patch.cs" />
     <Compile Include="ExtendedLinkerSection.cs" />
     <Compile Include="LinkerType.cs" />

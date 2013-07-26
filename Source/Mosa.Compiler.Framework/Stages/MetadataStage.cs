@@ -54,7 +54,7 @@ namespace Mosa.Compiler.Framework.Stages
 					// 2. Pointers to assemblies
 					foreach (var module in typeSystem.TypeModules)
 					{
-						linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuildInPatch.I4, assemblyListSymbol, (int)writer.Position, 0, module.Name + "$atable", 0);
+						linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuiltInPatch.I4, assemblyListSymbol, (int)writer.Position, 0, module.Name + "$atable", 0);
 						writer.Position += typeLayout.NativePointerSize;
 					}
 				}
@@ -95,7 +95,7 @@ namespace Mosa.Compiler.Framework.Stages
 				using (EndianAwareBinaryWriter writer = new EndianAwareBinaryWriter(stream, architecture.Endianness))
 				{
 					// 1. Pointer to Assembly Name
-					linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuildInPatch.I4, assemblyTableSymbol, 0, 0, assemblyNameSymbol, 0);
+					linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuiltInPatch.I4, assemblyTableSymbol, 0, 0, assemblyNameSymbol, 0);
 					writer.Position += typeLayout.NativePointerSize;
 
 					// 2. Number of types
@@ -106,7 +106,7 @@ namespace Mosa.Compiler.Framework.Stages
 					{
 						if (!type.IsModule && !(type.Module is InternalTypeModule))
 						{
-							linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuildInPatch.I4, assemblyTableSymbol, (int)writer.Position, 0, type.FullName + @"$dtable", 0);
+							linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuiltInPatch.I4, assemblyTableSymbol, (int)writer.Position, 0, type.FullName + @"$dtable", 0);
 						}
 
 						writer.Position += typeLayout.NativePointerSize;
@@ -150,11 +150,11 @@ namespace Mosa.Compiler.Framework.Stages
 					writer.Write((uint)0); //FIXME: ^^^
 
 					// 3. Pointer to Name
-					linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuildInPatch.I4, typeTableSymbol, (int)writer.Position, 0, typeNameSymbol, 0);
+					linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuiltInPatch.I4, typeTableSymbol, (int)writer.Position, 0, typeNameSymbol, 0);
 					writer.Position += typeLayout.NativePointerSize;
 
 					// 4. Pointer to Assembly Definition
-					linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuildInPatch.I4, typeTableSymbol, (int)writer.Position, 0, assemblySymbol, 0);
+					linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuiltInPatch.I4, typeTableSymbol, (int)writer.Position, 0, assemblySymbol, 0);
 					writer.Position += typeLayout.NativePointerSize;
 
 					// 5. TODO: Constructor that accept no parameters, if any, for this type
