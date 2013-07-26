@@ -78,7 +78,7 @@ namespace Mosa.Platform.x86.Instructions
 						default: throw new InvalidOperationException(@"unable to emit opcode for segment register");
 					}
 			}
-			emitter.Emit(PUSH, context.Operand1, null, null);
+			emitter.Emit(PUSH, context.Operand1);
 		}
 
 		/// <summary>
