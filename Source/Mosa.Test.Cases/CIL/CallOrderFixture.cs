@@ -78,11 +78,23 @@ namespace Mosa.Test.Cases.CIL
 		{
 			Assert.AreEqual(CallOrderTests.CallOrderI4I4I4I4_2((int)1, (int)2, (int)3, (int)4), Run<int>("Mosa.Test.Collection", "CallOrderTests", "CallOrderI4I4I4I4_2", (int)1, (int)2, (int)3, (int)4));
 		}
-		
+
 		[Test]
 		public void CallOrderI8I8I8I8()
 		{
 			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "CallOrderTests", "CallOrderI8I8I8I8", (long)1, (long)2, (long)3, (long)4));
+		}
+
+		[Test]
+		public void CallOrderU8()
+		{
+			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "CallOrderTests", "CallOrderU8", (ulong)1));
+		}
+
+		[Test]
+		public void CallOrderU8U8()
+		{
+			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "CallOrderTests", "CallOrderU8U8", (ulong)1, (ulong)2));
 		}
 
 		[Test]

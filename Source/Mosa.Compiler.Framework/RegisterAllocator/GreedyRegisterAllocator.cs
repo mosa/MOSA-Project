@@ -303,7 +303,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 			// The re-ordering is not strictly necessary; however, it reduces "holes" in live ranges.
 			// Less "holes" increase readability of the debug logs.
-			basicBlocks.ReorderBlocks(loopAwareBlockOrder.NewBlockOrder);
+			//basicBlocks.ReorderBlocks(loopAwareBlockOrder.NewBlockOrder);
 
 			// Allocate and setup extended blocks
 			for (int i = 0; i < basicBlocks.Count; i++)

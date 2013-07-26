@@ -60,6 +60,16 @@ namespace Mosa.Test.Collection
 			return (a == 1 && b == 2 && c == 3 && d == 4);
 		}
 
+		public static bool CallOrderU8(ulong a)
+		{
+			return (a == 1);
+		}
+
+		public static bool CallOrderU8U8(ulong a, ulong b)
+		{
+			return (a == 1 && b == 2);
+		}
+
 		public static bool CallOrderU8U8U8U8(ulong a, ulong b, ulong c, ulong d)
 		{
 			return (a == 1 && b == 2 && c == 3 && d == 4);
@@ -74,5 +84,6 @@ namespace Mosa.Test.Collection
 		{
 			return a + (b * 10) + (c * 100) + (d * 1000);
 		}
+
 	}
 }

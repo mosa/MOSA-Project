@@ -25,25 +25,25 @@ namespace Mosa.Test.Cases.CIL
 		}
 
 		[Test]
-		public void AddI2_I2([I2]short a, [I2]short b)
+		public void AddI2I2([I2]short a, [I2]short b)
 		{
 			Assert.AreEqual(Int16Tests.AddI2I2(a, b), Run<int>("Mosa.Test.Collection", "Int16Tests", "AddI2I2", a, b));
 		}
 
 		[Test]
-		public void SubI2_I2([I2]short a, [I2]short b)
+		public void SubI2I2([I2]short a, [I2]short b)
 		{
 			Assert.AreEqual(Int16Tests.SubI2I2(a, b), Run<int>("Mosa.Test.Collection", "Int16Tests", "SubI2I2", a, b));
 		}
 
 		[Test]
-		public void MulI2_I2([I2]short a, [I2]short b)
+		public void MulI2I2([I2]short a, [I2]short b)
 		{
 			Assert.AreEqual(Int16Tests.MulI2I2(a, b), Run<int>("Mosa.Test.Collection", "Int16Tests", "MulI2I2", a, b));
 		}
 
 		[Test]
-		public void DivI2_I2([I2]short a, [I2NotZero]short b)
+		public void DivI2I2([I2]short a, [I2NotZero]short b)
 		{
 			if (a == short.MinValue && b == -1)
 				Assert.Inconclusive("TODO: Overflow exception not implemented");
@@ -54,20 +54,20 @@ namespace Mosa.Test.Cases.CIL
 		[Test]
 		[Pending]
 		[ExpectedException(typeof(DivideByZeroException))]
-		public void DivI2_I2DivideByZeroException([I2]short a)
+		public void DivI2I2DivideByZeroException([I2]short a)
 		{
 			Assert.AreEqual(Int16Tests.DivI2I2(a, (short)0), Run<int>("Mosa.Test.Collection", "Int16Tests", "DivI2I2", a, (short)0));
 		}
 
 		[Test]
-		public void RemI2_I2([I2]short a, [I2NotZero]short b)
+		public void RemI2I2([I2]short a, [I2NotZero]short b)
 		{
 			Assert.AreEqual(Int16Tests.RemI2I2(a, b), Run<int>("Mosa.Test.Collection", "Int16Tests", "RemI2I2", a, b));
 		}
 
 		[Test]
 		[ExpectedException(typeof(DivideByZeroException))]
-		public void RemI2_I2DivideByZeroException([I2]short a)
+		public void RemI2I2DivideByZeroException([I2]short a)
 		{
 			Assert.AreEqual(Int16Tests.RemI2I2(a, (short)0), Run<int>("Mosa.Test.Collection", "Int16Tests", "RemI2I2", a, (short)0));
 		}
@@ -79,49 +79,49 @@ namespace Mosa.Test.Cases.CIL
 		}
 
 		[Test]
-		public void AndI2_I2([I2]short a, [I2]short b)
+		public void AndI2I2([I2]short a, [I2]short b)
 		{
 			Assert.AreEqual(Int16Tests.AndI2I2(a, b), Run<int>("Mosa.Test.Collection", "Int16Tests", "AndI2I2", a, b));
 		}
 
 		[Test]
-		public void OrI2_I2([I2]short a, [I2]short b)
+		public void OrI2I2([I2]short a, [I2]short b)
 		{
 			Assert.AreEqual(Int16Tests.OrI2I2(a, b), Run<int>("Mosa.Test.Collection", "Int16Tests", "OrI2I2", a, b));
 		}
 
 		[Test]
-		public void XorI2_I2([I2]short a, [I2]short b)
+		public void XorI2I2([I2]short a, [I2]short b)
 		{
 			Assert.AreEqual(Int16Tests.XorI2I2(a, b), Run<int>("Mosa.Test.Collection", "Int16Tests", "XorI2I2", a, b));
 		}
 
 		[Test]
-		public void CeqI2_I2([I2]short a, [I2]short b)
+		public void CeqI2I2([I2]short a, [I2]short b)
 		{
 			Assert.AreEqual(Int16Tests.CeqI2I2(a, b), Run<bool>("Mosa.Test.Collection", "Int16Tests", "CeqI2I2", a, b));
 		}
 
 		[Test]
-		public void CltI2_I2([I2]short a, [I2]short b)
+		public void CltI2I2([I2]short a, [I2]short b)
 		{
 			Assert.AreEqual(Int16Tests.CltI2I2(a, b), Run<bool>("Mosa.Test.Collection", "Int16Tests", "CltI2I2", a, b));
 		}
 
 		[Test]
-		public void CgtI2_I2([I2]short a, [I2]short b)
+		public void CgtI2I2([I2]short a, [I2]short b)
 		{
 			Assert.AreEqual(Int16Tests.CgtI2I2(a, b), Run<bool>("Mosa.Test.Collection", "Int16Tests", "CgtI2I2", a, b));
 		}
 
 		[Test]
-		public void CleI2_I2([I2]short a, [I2]short b)
+		public void CleI2I2([I2]short a, [I2]short b)
 		{
 			Assert.AreEqual(Int16Tests.CleI2I2(a, b), Run<bool>("Mosa.Test.Collection", "Int16Tests", "CleI2I2", a, b));
 		}
 
 		[Test]
-		public void CgeI2_I2([I2]short a, [I2]short b)
+		public void CgeI2I2([I2]short a, [I2]short b)
 		{
 			Assert.AreEqual(Int16Tests.CgeI2I2(a, b), Run<bool>("Mosa.Test.Collection", "Int16Tests", "CgeI2I2", a, b));
 		}

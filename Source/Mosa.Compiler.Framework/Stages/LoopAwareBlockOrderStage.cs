@@ -38,7 +38,9 @@ namespace Mosa.Compiler.Framework.Stages
 			basicBlocks.ReorderBlocks(loopAwareBlockOrder.NewBlockOrder);
 
 			if (trace.Active)
-				DumpTrace();
+			{ 
+				DumpTrace(); 
+			}
 		}
 
 		private void DumpTrace()

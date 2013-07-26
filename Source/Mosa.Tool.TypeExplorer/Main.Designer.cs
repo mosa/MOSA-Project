@@ -345,9 +345,10 @@
 			this.cbStages.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.cbStages.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.cbStages.FormattingEnabled = true;
+			this.cbStages.ItemHeight = 13;
 			this.cbStages.Location = new System.Drawing.Point(55, 7);
 			this.cbStages.Margin = new System.Windows.Forms.Padding(4);
-			this.cbStages.MaxDropDownItems = 20;
+			this.cbStages.MaxDropDownItems = 40;
 			this.cbStages.Name = "cbStages";
 			this.cbStages.Size = new System.Drawing.Size(242, 21);
 			this.cbStages.TabIndex = 38;
@@ -380,7 +381,7 @@
 			this.tabPage2.TabIndex = 1;
 			this.tabPage2.Text = "Debug";
 			// 
-			// cbOtherStages
+			// cbDebugStages
 			// 
 			this.cbDebugStages.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.cbDebugStages.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -388,7 +389,7 @@
 			this.cbDebugStages.Location = new System.Drawing.Point(55, 7);
 			this.cbDebugStages.Margin = new System.Windows.Forms.Padding(4);
 			this.cbDebugStages.MaxDropDownItems = 20;
-			this.cbDebugStages.Name = "cbOtherStages";
+			this.cbDebugStages.Name = "cbDebugStages";
 			this.cbDebugStages.Size = new System.Drawing.Size(242, 21);
 			this.cbDebugStages.TabIndex = 40;
 			this.cbDebugStages.SelectedIndexChanged += new System.EventHandler(this.cbDebugStages_SelectedIndexChanged);

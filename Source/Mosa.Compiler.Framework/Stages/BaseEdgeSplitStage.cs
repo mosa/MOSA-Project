@@ -42,49 +42,34 @@ namespace Mosa.Compiler.Framework.Stages
 			foreach (var edge in worklist)
 			{
 				if (edge.Key.NextBlocks.Count > 1 || edge.Value.PreviousBlocks.Count > 1)
-					SplitEdge(edge.Key, edge.Value);
+				{ 
+					SplitEdge(edge.Key, edge.Value); 
+				}
 			}
 		}
 
-		private void SplitEdge(BasicBlock a, BasicBlock b)
+		private void SplitEdge(BasicBlock from, BasicBlock to)
 		{
 			// Create new block z
 			Context ctx = CreateNewBlockWithContext();
-			ctx.AppendInstruction(jumpInstruction, b);
+			ctx.AppendInstruction(jumpInstruction, to);
 			ctx.Label = -1;
 
-			var z = ctx.BasicBlock;
+			var js = ctx.BasicBlock;
 
 			// Unlink blocks
-			a.NextBlocks.Remove(b);
-			b.PreviousBlocks.Remove(a);
+			from.NextBlocks.Remove(to);
+			to.PreviousBlocks.Remove(from);
 
-			// Link a to z
-			a.NextBlocks.Add(z);
-			z.PreviousBlocks.Add(a);
+			// Link (from) to js
+			from.NextBlocks.Add(js);
+			js.PreviousBlocks.Add(from);
 
-			// Link z to b
-			b.PreviousBlocks.Add(z);
-			z.NextBlocks.Add(b);
+			// Link z to (to)
+			to.PreviousBlocks.Add(js);
+			js.NextBlocks.Add(to);
 
-			// Replace any jump/branch target in block a with z
-			ctx = new Context(instructionSet, a, a.EndIndex);
-
-			Debug.Assert(ctx.IsBlockEndInstruction);
-
-			ctx.GotoPrevious();
-
-			// Find branch or jump to b and replace it with z
-			while (ctx.BranchTargets != null)
-			{
-				int[] targets = ctx.BranchTargets;
-				for (int index = 0; index < targets.Length; index++)
-				{
-					if (targets[index] == b.Label)
-						targets[index] = z.Label;
-				}
-				ctx.GotoPrevious();
-			}
+			ReplaceBranchTargets(from, to, js);
 		}
 	}
 }

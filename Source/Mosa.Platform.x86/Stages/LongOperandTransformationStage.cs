@@ -57,17 +57,6 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		private void ExpandAdd(Context context)
 		{
-			/* This function transforms the ADD into the following sequence of x86 instructions:
-			 *
-			 * mov eax, [op1]       ; Move lower 32-bits of the first operand into eax
-			 * add eax, [op2]       ; Add lower 32-bits of second operand to eax
-			 * mov [result], eax    ; Save the result into the lower 32-bits of the result operand
-			 * mov eax, [op1+4]     ; Move upper 32-bits of the first operand into eax
-			 * adc eax, [op2+4]     ; Add upper 32-bits of the second operand to eax
-			 * mov [result+4], eax  ; Save the result into the upper 32-bits of the result operand
-			 *
-			 */
-
 			Operand op0H, op1H, op2H, op0L, op1L, op2L;
 			SplitLongOperand(context.Result, out op0L, out op0H);
 			SplitLongOperand(context.Operand1, out op1L, out op1H);
@@ -90,17 +79,6 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		private void ExpandSub(Context context)
 		{
-			/* This function transforms the SUB into the following sequence of x86 instructions:
-			 *
-			 * mov eax, [op1]       ; Move lower 32-bits of the first operand into eax
-			 * sub eax, [op2]       ; Sub lower 32-bits of second operand to eax
-			 * mov [result], eax    ; Save the result into the lower 32-bits of the result operand
-			 * mov eax, [op1+4]     ; Move upper 32-bits of the first operand into eax
-			 * sbb eax, [op2+4]     ; Sub with borrow upper 32-bits of the second operand to eax
-			 * mov [result+4], eax  ; Save the result into the upper 32-bits of the result operand
-			 *
-			 */
-
 			Operand op0H, op1H, op2H, op0L, op1L, op2L;
 			SplitLongOperand(context.Result, out op0L, out op0H);
 			SplitLongOperand(context.Operand1, out op1L, out op1H);
@@ -138,28 +116,29 @@ namespace Mosa.Platform.x86.Stages
 			Operand eax = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.EAX);
 			Operand edx = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.EDX);
 			Operand ebx = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.EBX);
+
 			Operand v16 = AllocateVirtualRegister(BuiltInSigType.Int32);
 			Operand v20 = AllocateVirtualRegister(BuiltInSigType.Int32);
 			Operand v12 = AllocateVirtualRegister(BuiltInSigType.Int32);
 
 			// unoptimized
-			context.SetInstruction(X86.Mov, eax, op2L);					// mov     eax, [ebp+16]	// 2l
-			context.AppendInstruction(X86.Mov, v20, eax);				// mov     [ebp-20], eax
-			context.AppendInstruction(X86.Mov, eax, v20);				// mov     eax, [ebp-20]
-			context.AppendInstruction2(X86.Mul, edx, eax, eax, op1L);	// mul     [ebp+8]			// 1l
-			context.AppendInstruction(X86.Mov, v16, eax);				// mov     [ebp-16], eax
-			context.AppendInstruction(X86.Mov, v12, edx);				// mov     [ebp-12], edx
-			context.AppendInstruction(X86.Mov, eax, op1L);				// mov     eax, [ebp+8]		// 1l
-			context.AppendInstruction(X86.Mov, ebx, eax);				// mov     ebx, eax
-			context.AppendInstruction(X86.IMul, ebx, ebx, op2H);		// imul    ebx, [ebp+20]	// 2h
-			context.AppendInstruction(X86.Mov, eax, v12);				// mov     eax, [ebp-12]
-			context.AppendInstruction(X86.Add, eax, eax, ebx);			// add     eax, ebx
-			context.AppendInstruction(X86.Mov, ebx, op2L);				// mov     ebx, [ebp+16]	// 2l
-			context.AppendInstruction(X86.IMul, ebx, ebx, op1H);		// imul    ebx, [ebp+12]	// 1h
-			context.AppendInstruction(X86.Add, eax, eax, ebx);			// add     eax, ebx
-			context.AppendInstruction(X86.Mov, v12, eax);				// mov     [ebp-12], eax
-			context.AppendInstruction(X86.Mov, op0L, v16);				// mov     eax, [ebp-16]
-			context.AppendInstruction(X86.Mov, op0H, v12);				// mov     edx, [ebp-12]
+			context.SetInstruction(X86.Mov, eax, op2L);
+			context.AppendInstruction(X86.Mov, v20, eax);
+			context.AppendInstruction(X86.Mov, eax, v20);
+			context.AppendInstruction2(X86.Mul, edx, eax, eax, op1L);
+			context.AppendInstruction(X86.Mov, v16, eax);
+			context.AppendInstruction(X86.Mov, v12, edx);
+			context.AppendInstruction(X86.Mov, eax, op1L);
+			context.AppendInstruction(X86.Mov, ebx, eax);
+			context.AppendInstruction(X86.IMul, ebx, ebx, op2H);
+			context.AppendInstruction(X86.Mov, eax, v12);
+			context.AppendInstruction(X86.Add, eax, eax, ebx);
+			context.AppendInstruction(X86.Mov, ebx, op2L);
+			context.AppendInstruction(X86.IMul, ebx, ebx, op1H);
+			context.AppendInstruction(X86.Add, eax, eax, ebx);
+			context.AppendInstruction(X86.Mov, v12, eax);
+			context.AppendInstruction(X86.Mov, op0L, v16);
+			context.AppendInstruction(X86.Mov, op0H, v12);
 		}
 
 		/// <summary>
@@ -175,32 +154,26 @@ namespace Mosa.Platform.x86.Stages
 			SplitLongOperand(context.Operand2, out op2L, out op2H);
 
 			Context[] newBlocks = CreateNewBlocksWithContexts(17);
-			Context nextBlock = Split(context, false);
+			Context nextBlock = Split(context);
 
-			Operand eax = AllocateVirtualRegister(BuiltInSigType.Int32);
-			Operand edx = AllocateVirtualRegister(BuiltInSigType.Int32);
-			Operand ebx = AllocateVirtualRegister(BuiltInSigType.Int32);
-			Operand ecx = AllocateVirtualRegister(BuiltInSigType.Int32);
-			Operand edi = AllocateVirtualRegister(BuiltInSigType.Int32);
-			Operand esi = AllocateVirtualRegister(BuiltInSigType.Int32);
+			//Operand eax = AllocateVirtualRegister(BuiltInSigType.Int32);
+			//Operand edx = AllocateVirtualRegister(BuiltInSigType.Int32);
+			//Operand ebx = AllocateVirtualRegister(BuiltInSigType.Int32);
+			//Operand ecx = AllocateVirtualRegister(BuiltInSigType.Int32);
+			//Operand edi = AllocateVirtualRegister(BuiltInSigType.Int32);
+			//Operand esi = AllocateVirtualRegister(BuiltInSigType.Int32);
+
+			Operand eax = Operand.CreateCPURegister(BuiltInSigType.UInt32, GeneralPurposeRegister.EAX);
+			Operand ebx = Operand.CreateCPURegister(BuiltInSigType.UInt32, GeneralPurposeRegister.EBX);
+			Operand edx = Operand.CreateCPURegister(BuiltInSigType.UInt32, GeneralPurposeRegister.EDX);
+			Operand ecx = Operand.CreateCPURegister(BuiltInSigType.UInt32, GeneralPurposeRegister.ECX);
+			Operand edi = Operand.CreateCPURegister(BuiltInSigType.UInt32, GeneralPurposeRegister.EDI);
+			Operand esi = Operand.CreateCPURegister(BuiltInSigType.UInt32, GeneralPurposeRegister.ESI);
 
 			Operand v8 = AllocateVirtualRegister(BuiltInSigType.Int32);
 
 			Operand ConstantByte1 = Operand.CreateConstant(BuiltInSigType.Byte, 1);
 
-			// ; Determine sign of the result (edi = 0 if result is positive, non-zero
-			// ; otherwise) and make operands positive.
-			// xor     edi,edi         ; result sign assumed positive
-			// mov     eax,HIWORD(DVND) ; hi word of a
-			// or      eax,eax         ; test to see if signed
-			// jge     short L1        ; skip rest if a is already positive
-			// inc     edi             ; complement result sign flag
-			// mov     edx,LOWORD(DVND) ; lo word of a
-			// neg     eax             ; make a positive
-			// neg     edx
-			// sbb     eax,0
-			// mov     HIWORD(DVND),eax ; save positive value
-			// mov     LOWORD(DVND),edx
 			context.SetInstruction(X86.Jmp, newBlocks[0].BasicBlock);
 			LinkBlocks(context, newBlocks[0]);
 
@@ -221,18 +194,6 @@ namespace Mosa.Platform.x86.Stages
 			newBlocks[1].AppendInstruction(X86.Jmp, newBlocks[2].BasicBlock);
 			LinkBlocks(newBlocks[1], newBlocks[2]);
 
-			// L1:
-			//
-			// mov     eax,HIWORD(DVSR) ; hi word of b
-			// or      eax,eax         ; test to see if signed
-			// jge     short L2        ; skip rest if b is already positive
-			// inc     edi             ; complement the result sign flag
-			// mov     edx,LOWORD(DVSR) ; lo word of a
-			// neg     eax             ; make b positive
-			// neg     edx
-			// sbb     eax,0
-			// mov     HIWORD(DVSR),eax ; save positive value
-			// mov     LOWORD(DVSR),edx
 			newBlocks[2].AppendInstruction(X86.Mov, eax, op2H);
 			newBlocks[2].AppendInstruction(X86.Or, eax, eax, eax);
 			newBlocks[2].AppendInstruction(X86.Branch, ConditionCode.GreaterOrEqual, newBlocks[4].BasicBlock);
@@ -240,7 +201,7 @@ namespace Mosa.Platform.x86.Stages
 			LinkBlocks(newBlocks[2], newBlocks[3], newBlocks[4]);
 
 			newBlocks[3].AppendInstruction(X86.Inc, edi, edi);
-			newBlocks[3].AppendInstruction(X86.Mov, edx, op2L); // ??
+			newBlocks[3].AppendInstruction(X86.Mov, edx, op2L);
 			newBlocks[3].AppendInstruction(X86.Neg, eax, eax);
 			newBlocks[3].AppendInstruction(X86.Neg, edx, edx);
 			newBlocks[3].AppendInstruction(X86.Sbb, eax, eax, Operand.CreateConstant((int)0));
@@ -249,52 +210,22 @@ namespace Mosa.Platform.x86.Stages
 			newBlocks[3].AppendInstruction(X86.Jmp, newBlocks[4].BasicBlock);
 			LinkBlocks(newBlocks[3], newBlocks[4]);
 
-			// L2:
-			//
-			// ;
-			// ; Now do the divide.  First look to see if the divisor is less than 4194304K.
-			// ; If so, then we can use a simple algorithm with word divides, otherwise
-			// ; things get a little more complex.
-			// ;
-			// ; NOTE - eax currently contains the high order word of DVSR
-			// ;
-			//
-			// or      eax,eax         ; check to see if divisor < 4194304K
-			// jnz     short L3        ; nope, gotta do this the hard way
-
 			newBlocks[4].AppendInstruction(X86.Or, eax, eax, eax);
-			newBlocks[4].AppendInstruction(X86.Branch, ConditionCode.NoZero, newBlocks[6].BasicBlock);
+			newBlocks[4].AppendInstruction(X86.Branch, ConditionCode.NotEqual, newBlocks[6].BasicBlock);
 			newBlocks[4].AppendInstruction(X86.Jmp, newBlocks[5].BasicBlock);
 			LinkBlocks(newBlocks[4], newBlocks[5], newBlocks[6]);
-
-			// mov     ecx,LOWORD(DVSR) ; load divisor
-			// mov     eax,HIWORD(DVND) ; load high word of dividend
-			// xor     edx,edx
-			// div     ecx             ; eax <- high order bits of quotient
-			// mov     ebx,eax         ; save high bits of quotient
-			// mov     eax,LOWORD(DVND) ; edx:eax <- remainder:lo word of dividend
-			// div     ecx             ; eax <- low order bits of quotient
-			// mov     edx,ebx         ; edx:eax <- quotient
-			// jmp     short L4        ; set sign, restore stack and return
 
 			newBlocks[5].AppendInstruction(X86.Mov, ecx, op2L);
 			newBlocks[5].AppendInstruction(X86.Mov, eax, op1H);
 			newBlocks[5].AppendInstruction(X86.Mov, edx, Operand.CreateConstant(0));
 			newBlocks[5].AppendInstruction2(X86.Div, edx, eax, edx, eax, ecx);
 			newBlocks[5].AppendInstruction(X86.Mov, ebx, eax);
-			newBlocks[5].AppendInstruction(X86.Mov, eax, op1H);
+			newBlocks[5].AppendInstruction(X86.Mov, eax, op1L);
 			newBlocks[5].AppendInstruction2(X86.Div, edx, eax, edx, eax, ecx);
 			newBlocks[5].AppendInstruction(X86.Mov, edx, ebx);
 			newBlocks[5].AppendInstruction(X86.Jmp, newBlocks[14].BasicBlock);
 			LinkBlocks(newBlocks[5], newBlocks[14]);
 
-			// Here we do it the hard way.  Remember, eax contains the high word of DVSR
-			//
-			// L3:
-			//        mov     ebx,eax         ; ebx:ecx <- divisor
-			//        mov     ecx,LOWORD(DVSR)
-			//        mov     edx,HIWORD(DVND) ; edx:eax <- dividend
-			//        mov     eax,LOWORD(DVND)
 			newBlocks[6].AppendInstruction(X86.Mov, ebx, eax);
 			newBlocks[6].AppendInstruction(X86.Mov, ecx, op2L);
 			newBlocks[6].AppendInstruction(X86.Mov, edx, op1H);
@@ -302,46 +233,21 @@ namespace Mosa.Platform.x86.Stages
 			newBlocks[6].AppendInstruction(X86.Jmp, newBlocks[7].BasicBlock);
 			LinkBlocks(newBlocks[6], newBlocks[7]);
 
-			// L5:
-			//
-			// shr     ebx,1           ; shift divisor right one bit
-			// rcr     ecx,1
-			// shr     edx,1           ; shift dividend right one bit
-			// rcr     eax,1
-			// or      ebx,ebx
-			// jnz     short L5        ; loop until divisor < 4194304K
-			// div     ecx             ; now divide, ignore remainder
-			// mov     esi,eax         ; save quotient
-
-			// ; We may be off by one, so to check, we will multiply the quotient
-			// ; by the divisor and check the result against the original dividend
-			// ; Note that we must also check for overflow, which can occur if the
-			// ; dividend is close to 2**64 and the quotient is off by 1.
-
-			// mul     dword ptr HIWORD(DVSR) ; QUOT * HIWORD(DVSR)
-			// mov     ecx,eax
-			// mov     eax,LOWORD(DVSR)
-			// mul     esi             ; QUOT * LOWORD(DVSR)
-			// add     edx,ecx         ; EDX:EAX = QUOT * DVSR
-			// jc      short L6        ; carry means Quotient is off by 1
 			newBlocks[7].AppendInstruction(X86.Shr, ebx, ebx, ConstantByte1);
 			newBlocks[7].AppendInstruction(X86.Rcr, ecx, ecx, ConstantByte1);
 			newBlocks[7].AppendInstruction(X86.Shr, edx, edx, ConstantByte1);
 			newBlocks[7].AppendInstruction(X86.Rcr, eax, eax, ConstantByte1);
 			newBlocks[7].AppendInstruction(X86.Or, ebx, ebx, ebx);
-			newBlocks[7].AppendInstruction(X86.Branch, ConditionCode.NotEqual, newBlocks[7].BasicBlock);
+			newBlocks[7].AppendInstruction(X86.Branch, ConditionCode.NoZero, newBlocks[7].BasicBlock);
 			newBlocks[7].AppendInstruction(X86.Jmp, newBlocks[8].BasicBlock);
 			LinkBlocks(newBlocks[7], newBlocks[7], newBlocks[8]);
 
-			newBlocks[8].AppendInstruction2(X86.Div, eax, edx, eax, edx, ecx);
+			newBlocks[8].AppendInstruction2(X86.Div, edx, eax, edx, eax, ecx);
 			newBlocks[8].AppendInstruction(X86.Mov, esi, eax);
-
-			newBlocks[8].AppendInstruction2(X86.Mul, edx, eax, eax, op2H);
+			newBlocks[8].AppendInstruction2(X86.Mul, edx, eax, edx, eax, op2H);
 			newBlocks[8].AppendInstruction(X86.Mov, ecx, eax);
 			newBlocks[8].AppendInstruction(X86.Mov, eax, op2L);
-
 			newBlocks[8].AppendInstruction2(X86.Mul, edx, eax, eax, esi);
-			newBlocks[8].AppendInstruction(X86.Mov, ecx, eax);
 			newBlocks[8].AppendInstruction(X86.Add, edx, edx, ecx);
 			newBlocks[8].AppendInstruction(X86.Branch, ConditionCode.UnsignedLessThan, newBlocks[12].BasicBlock);
 			newBlocks[8].AppendInstruction(X86.Jmp, newBlocks[9].BasicBlock);
@@ -361,26 +267,15 @@ namespace Mosa.Platform.x86.Stages
 			newBlocks[11].AppendInstruction(X86.Jmp, newBlocks[12].BasicBlock);
 			LinkBlocks(newBlocks[11], newBlocks[12], newBlocks[13]);
 
-			// L6:
 			newBlocks[12].AppendInstruction(X86.Dec, esi, esi);
 			newBlocks[12].AppendInstruction(X86.Jmp, newBlocks[13].BasicBlock);
 			LinkBlocks(newBlocks[12], newBlocks[13]);
 
-			// L7:
 			newBlocks[13].AppendInstruction(X86.Mov, edx, Operand.CreateConstant((uint)0));
 			newBlocks[13].AppendInstruction(X86.Mov, eax, esi);
 			newBlocks[13].AppendInstruction(X86.Jmp, newBlocks[14].BasicBlock);
 			LinkBlocks(newBlocks[13], newBlocks[14]);
 
-			// ; Just the cleanup left to do.  edx:eax contains the quotient.  Set the sign
-			// ; according to the save value, cleanup the stack, and return.
-			// ;
-			// L4:
-			//        dec     edi             ; check to see if result is negative
-			//        jnz     short L8        ; if EDI == 0, result should be negative
-			//        neg     edx             ; otherwise, negate the result
-			//        neg     eax
-			//        sbb     edx,0
 			newBlocks[14].AppendInstruction(X86.Dec, edi, edi);
 			newBlocks[14].AppendInstruction(X86.Branch, ConditionCode.NotEqual, newBlocks[16].BasicBlock);
 			newBlocks[14].AppendInstruction(X86.Jmp, newBlocks[15].BasicBlock);
@@ -419,21 +314,8 @@ namespace Mosa.Platform.x86.Stages
 			Operand v8 = AllocateVirtualRegister(BuiltInSigType.Int32);
 
 			Context[] newBlocks = CreateNewBlocksWithContexts(16);
-			Context nextBlock = Split(context, false);
+			Context nextBlock = Split(context);
 
-			// Determine sign of the result (edi = 0 if result is positive, non-zero
-			// otherwise) and make operands positive.
-			//    xor     edi,edi         ; result sign assumed positive
-			//mov     eax,HIWORD(DVND) ; hi word of a
-			//or      eax,eax         ; test to see if signed
-			//jge     short L1        ; skip rest if a is already positive
-			//inc     edi             ; complement result sign flag bit
-			//mov     edx,LOWORD(DVND) ; lo word of a
-			//neg     eax             ; make a positive
-			//neg     edx
-			//sbb     eax,0
-			//mov     HIWORD(DVND),eax ; save positive value
-			//mov     LOWORD(DVND),edx
 			context.SetInstruction(X86.Jmp, newBlocks[0].BasicBlock);
 			LinkBlocks(context, newBlocks[0]);
 
@@ -454,17 +336,6 @@ namespace Mosa.Platform.x86.Stages
 			newBlocks[1].AppendInstruction(X86.Jmp, newBlocks[2].BasicBlock);
 			LinkBlocks(newBlocks[1], newBlocks[2]);
 
-			// L1:
-			//
-			// mov     eax,HIWORD(DVSR) ; hi word of b
-			// or      eax,eax         ; test to see if signed
-			// jge     short L2        ; skip rest if b is already positive
-			// mov     edx,LOWORD(DVSR) ; lo word of b
-			// neg     eax             ; make b positive
-			// neg     edx
-			// sbb     eax,0
-			// mov     HIWORD(DVSR),eax ; save positive value
-			// mov     LOWORD(DVSR),edx
 			newBlocks[2].AppendInstruction(X86.Mov, eax, op2H);
 			newBlocks[2].AppendInstruction(X86.Or, eax, eax, eax);
 			newBlocks[2].AppendInstruction(X86.Branch, ConditionCode.GreaterOrEqual, newBlocks[4].BasicBlock);
@@ -480,26 +351,6 @@ namespace Mosa.Platform.x86.Stages
 			newBlocks[3].AppendInstruction(X86.Jmp, newBlocks[4].BasicBlock);
 			LinkBlocks(newBlocks[3], newBlocks[4]);
 
-			// L2:
-			//
-			//
-			// Now do the divide.  First look to see if the divisor is less than 4194304K.
-			// If so, then we can use a simple algorithm with word divides, otherwise
-			// things get a little more complex.
-			//
-			// NOTE - eax currently contains the high order word of DVSR
-			//
-			//
-			// or      eax,eax         ; check to see if divisor < 4194304K
-			// jnz     short L3        ; nope, gotta do this the hard way
-			// mov     ecx,LOWORD(DVSR) ; load divisor
-			// mov     eax,HIWORD(DVND) ; load high word of dividend
-			// xor     edx,edx
-			// div     ecx             ; eax <- high order bits of quotient
-			// mov     eax,LOWORD(DVND) ; edx:eax <- remainder:lo word of dividend
-			// div     ecx             ; eax <- low order bits of quotient
-			// mov     edx,ebx         ; edx:eax <- quotient
-			// jmp     short L4        ; set sign, restore stack and return
 			newBlocks[4].AppendInstruction(X86.Or, eax, eax, eax);
 			newBlocks[4].AppendInstruction(X86.Branch, ConditionCode.NotEqual, newBlocks[6].BasicBlock);
 			newBlocks[4].AppendInstruction(X86.Jmp, newBlocks[5].BasicBlock);
@@ -515,55 +366,12 @@ namespace Mosa.Platform.x86.Stages
 			newBlocks[5].AppendInstruction(X86.Jmp, newBlocks[15].BasicBlock);
 			LinkBlocks(newBlocks[5], newBlocks[14], newBlocks[15]);
 
-			// Here we do it the hard way.  Remember, eax contains the high word of DVSR
-			//
-			// L3:
-			//        mov     ebx,eax         ; ebx:ecx <- divisor
-			//        mov     ecx,LOWORD(DVSR)
-			//        mov     edx,HIWORD(DVND) ; edx:eax <- dividend
-			//        mov     eax,LOWORD(DVND)
 			newBlocks[6].AppendInstruction(X86.Mov, ebx, eax);
 			newBlocks[6].AppendInstruction(X86.Mov, ecx, op2L);
 			newBlocks[6].AppendInstruction(X86.Mov, edx, op1H);
 			newBlocks[6].AppendInstruction(X86.Mov, eax, op1L);
 			newBlocks[6].AppendInstruction(X86.Jmp, newBlocks[7].BasicBlock);
 			LinkBlocks(newBlocks[6], newBlocks[7]);
-
-			// L5:
-			//
-			//  shr     ebx,1           ; shift divisor right one bit
-			//  rcr     ecx,1
-			//  shr     edx,1           ; shift dividend right one bit
-			//  rcr     eax,1
-			//  or      ebx,ebx
-			//  jnz     short L5        ; loop until divisor < 4194304K
-			//  div     ecx             ; now divide, ignore remainder
-
-			//
-			// We may be off by one, so to check, we will multiply the quotient
-			// by the divisor and check the result against the orignal dividend
-			// Note that we must also check for overflow, which can occur if the
-			// dividend is close to 2**64 and the quotient is off by 1.
-			//
-
-			//  mov     ecx,eax         ; save a copy of quotient in ECX
-			//  mul     dword ptr HIWORD(DVSR)
-			//  xchg    ecx,eax         ; save product, get quotient in EAX
-			//  mul     dword ptr LOWORD(DVSR)
-			//  add     edx,ecx         ; EDX:EAX = QUOT * DVSR
-			//  jc      short L6        ; carry means Quotient is off by 1
-
-			//
-			// do long compare here between original dividend and the result of the
-			// multiply in edx:eax.  If original is larger or equal, we are ok, otherwise
-			// subtract the original divisor from the result.
-			//
-
-			//  cmp     edx,HIWORD(DVND) ; compare hi words of result and original
-			//  ja      short L6        ; if result > original, do subtract
-			//  jb      short L7        ; if result < original, we are ok
-			//  cmp     eax,LOWORD(DVND) ; hi words are equal, compare lo words
-			//  jbe     short L7        ; if less or equal we are ok, else subtract
 
 			newBlocks[7].AppendInstruction(X86.Shr, ebx, ebx, Operand.CreateConstant(BuiltInSigType.Byte, 1));
 			newBlocks[7].AppendInstruction(X86.Rcr, ecx, ecx, Operand.CreateConstant(BuiltInSigType.Byte, 1)); // RCR
@@ -576,12 +384,8 @@ namespace Mosa.Platform.x86.Stages
 
 			newBlocks[8].AppendInstruction2(X86.Div, eax, edx, eax, edx, ecx);
 			newBlocks[8].AppendInstruction(X86.Mov, ecx, eax);
-
-			//newBlocks[8].AppendInstruction(X86.Mul, eax, op2H);
 			newBlocks[8].AppendInstruction2(X86.Mul, edx, eax, eax, op2H);
 			newBlocks[8].AppendInstruction(X86.Xchg, ecx, eax);
-
-			//newBlocks[8].AppendInstruction(X86.Mul, eax, op2L);
 			newBlocks[8].AppendInstruction2(X86.Mul, edx, eax, eax, op2L);
 			newBlocks[8].AppendInstruction(X86.Add, edx, edx, ecx);
 			newBlocks[8].AppendInstruction(X86.Branch, ConditionCode.UnsignedLessThan, newBlocks[12].BasicBlock);
@@ -602,18 +406,11 @@ namespace Mosa.Platform.x86.Stages
 			newBlocks[11].AppendInstruction(X86.Jmp, newBlocks[12].BasicBlock);
 			LinkBlocks(newBlocks[11], newBlocks[13], newBlocks[12]);
 
-			// L6:
 			newBlocks[12].AppendInstruction(X86.Sub, eax, eax, op2L);
 			newBlocks[12].AppendInstruction(X86.Sbb, edx, edx, op2H);
 			newBlocks[12].AppendInstruction(X86.Jmp, newBlocks[13].BasicBlock);
 			LinkBlocks(newBlocks[13], newBlocks[13]);
 
-			// L7:
-			//
-			// Calculate remainder by subtracting the result from the original dividend.
-			// Since the result is already in a register, we will do the subtract in the
-			// opposite direction and negate the result if necessary.
-			//
 			newBlocks[13].AppendInstruction(X86.Sub, eax, eax, op1L);
 			newBlocks[13].AppendInstruction(X86.Sbb, edx, edx, op1H);
 			newBlocks[13].AppendInstruction(X86.Dec, edi, edi);
@@ -621,10 +418,6 @@ namespace Mosa.Platform.x86.Stages
 			newBlocks[13].AppendInstruction(X86.Jmp, newBlocks[14].BasicBlock);
 			LinkBlocks(newBlocks[13], newBlocks[14], newBlocks[15]);
 
-			// L4:
-			//        neg     edx             ; otherwise, negate the result
-			//        neg     eax
-			//        sbb     edx,0
 			newBlocks[14].AppendInstruction(X86.Neg, edx, edx);
 			newBlocks[14].AppendInstruction(X86.Neg, eax, eax);
 			newBlocks[14].AppendInstruction(X86.Sbb, edx, edx, Operand.CreateConstant((int)0));
@@ -663,7 +456,7 @@ namespace Mosa.Platform.x86.Stages
 			Operand esi = Operand.CreateCPURegister(BuiltInSigType.UInt32, GeneralPurposeRegister.ESI);
 
 			Context[] newBlocks = CreateNewBlocksWithContexts(12);
-			Context nextBlock = Split(context, false);
+			Context nextBlock = Split(context);
 
 			context.SetInstruction(X86.Jmp, newBlocks[0].BasicBlock);
 			LinkBlocks(context, newBlocks[0]);
@@ -685,7 +478,6 @@ namespace Mosa.Platform.x86.Stages
 			newBlocks[1].AppendInstruction(X86.Jmp, newBlocks[10].BasicBlock);
 			LinkBlocks(newBlocks[1], newBlocks[10]);
 
-			// L1
 			newBlocks[2].AppendInstruction(X86.Mov, ecx, eax);
 			newBlocks[2].AppendInstruction(X86.Mov, ebx, op2L);
 			newBlocks[2].AppendInstruction(X86.Mov, edx, op1H);
@@ -693,7 +485,6 @@ namespace Mosa.Platform.x86.Stages
 			newBlocks[2].AppendInstruction(X86.Jmp, newBlocks[3].BasicBlock);
 			LinkBlocks(newBlocks[2], newBlocks[3]);
 
-			// L3
 			newBlocks[3].AppendInstruction(X86.Shr, ecx, ecx, Operand.CreateConstant(BuiltInSigType.Byte, 1));
 			newBlocks[3].AppendInstruction(X86.Rcr, ebx, ebx, Operand.CreateConstant(BuiltInSigType.Byte, 1)); // RCR
 			newBlocks[3].AppendInstruction(X86.Shr, edx, edx, Operand.CreateConstant(BuiltInSigType.Byte, 1));
@@ -728,18 +519,15 @@ namespace Mosa.Platform.x86.Stages
 			newBlocks[7].AppendInstruction(X86.Jmp, newBlocks[8].BasicBlock);
 			LinkBlocks(newBlocks[7], newBlocks[9], newBlocks[8]);
 
-			// L4:
 			newBlocks[8].AppendInstruction(X86.Dec, esi, esi);
 			newBlocks[8].AppendInstruction(X86.Jmp, newBlocks[9].BasicBlock);
 			LinkBlocks(newBlocks[8], newBlocks[9]);
 
-			// L5
 			newBlocks[9].AppendInstruction(X86.Mov, edx, Operand.CreateConstant((uint)0));
 			newBlocks[9].AppendInstruction(X86.Mov, eax, esi);
 			newBlocks[9].AppendInstruction(X86.Jmp, newBlocks[10].BasicBlock);
 			LinkBlocks(newBlocks[9], newBlocks[10]);
 
-			// L2
 			newBlocks[10].AppendInstruction(X86.Mov, op0L, eax);
 			newBlocks[10].AppendInstruction(X86.Mov, op0H, edx);
 			newBlocks[10].AppendInstruction(X86.Jmp, nextBlock.BasicBlock);
@@ -768,21 +556,8 @@ namespace Mosa.Platform.x86.Stages
 			Operand ecx = Operand.CreateCPURegister(BuiltInSigType.UInt32, GeneralPurposeRegister.ECX);
 
 			Context[] newBlocks = CreateNewBlocksWithContexts(11);
-			Context nextBlock = Split(context, false);
+			Context nextBlock = Split(context);
 
-			// Determine sign of the result (edi = 0 if result is positive, non-zero
-			// otherwise) and make operands positive.
-			//    xor     edi,edi         ; result sign assumed positive
-			//mov     eax,HIWORD(DVND) ; hi word of a
-			//or      eax,eax         ; test to see if signed
-			//jge     short L1        ; skip rest if a is already positive
-			//inc     edi             ; complement result sign flag bit
-			//mov     edx,LOWORD(DVND) ; lo word of a
-			//neg     eax             ; make a positive
-			//neg     edx
-			//sbb     eax,0
-			//mov     HIWORD(DVND),eax ; save positive value
-			//mov     LOWORD(DVND),edx
 			context.SetInstruction(X86.Jmp, newBlocks[0].BasicBlock);
 			LinkBlocks(context, newBlocks[0]);
 
@@ -803,7 +578,6 @@ namespace Mosa.Platform.x86.Stages
 			newBlocks[1].AppendInstruction(X86.Jmp, newBlocks[10].BasicBlock);
 			LinkBlocks(newBlocks[1], newBlocks[10]);
 
-			// L1:
 			newBlocks[2].AppendInstruction(X86.Mov, ecx, eax);
 			newBlocks[2].AppendInstruction(X86.Mov, ebx, op2L);
 			newBlocks[2].AppendInstruction(X86.Mov, edx, op1H);
@@ -811,7 +585,6 @@ namespace Mosa.Platform.x86.Stages
 			newBlocks[2].AppendInstruction(X86.Jmp, newBlocks[3].BasicBlock);
 			LinkBlocks(newBlocks[2], newBlocks[3]);
 
-			// L3:
 			newBlocks[3].AppendInstruction(X86.Shr, ecx, ecx, Operand.CreateConstant(BuiltInSigType.Byte, 1));
 			newBlocks[3].AppendInstruction(X86.Rcr, ebx, ebx, Operand.CreateConstant(BuiltInSigType.Byte, 1)); // RCR
 			newBlocks[3].AppendInstruction(X86.Shr, edx, edx, Operand.CreateConstant(BuiltInSigType.Byte, 1));
@@ -845,13 +618,11 @@ namespace Mosa.Platform.x86.Stages
 			newBlocks[7].AppendInstruction(X86.Jmp, newBlocks[3].BasicBlock);
 			LinkBlocks(newBlocks[7], newBlocks[9], newBlocks[3]);
 
-			// L4:
 			newBlocks[8].AppendInstruction(X86.Sub, eax, eax, op2L);
 			newBlocks[8].AppendInstruction(X86.Sbb, edx, edx, op2H);
 			newBlocks[8].AppendInstruction(X86.Jmp, newBlocks[9].BasicBlock);
 			LinkBlocks(newBlocks[8], newBlocks[9]);
 
-			// L5:
 			newBlocks[9].AppendInstruction(X86.Sub, eax, eax, op1L);
 			newBlocks[9].AppendInstruction(X86.Sbb, edx, edx, op1H);
 			newBlocks[9].AppendInstruction(X86.Neg, edx, edx);
@@ -885,14 +656,11 @@ namespace Mosa.Platform.x86.Stages
 			Operand ecx = AllocateVirtualRegister(BuiltInSigType.Int32);
 
 			Context[] newBlocks = CreateNewBlocksWithContexts(6);
-			Context nextBlock = Split(context, false);
+			Context nextBlock = Split(context);
 
-			// Handle shifts of 64 bits or more (if shifting 64 bits or more, the result
-			// depends only on the high order bit of edx).
 			context.SetInstruction(X86.Jmp, newBlocks[0].BasicBlock);
 			LinkBlocks(context, newBlocks[0]);
 
-			//newBlocks[0].AppendInstruction(X86.Push, null, ecx);
 			newBlocks[0].AppendInstruction(X86.Mov, ecx, count);
 			newBlocks[0].AppendInstruction(X86.Mov, edx, op1H);
 			newBlocks[0].AppendInstruction(X86.Mov, eax, op1L);
@@ -911,8 +679,6 @@ namespace Mosa.Platform.x86.Stages
 			newBlocks[2].AppendInstruction(X86.Jmp, newBlocks[5].BasicBlock);
 			LinkBlocks(newBlocks[2], newBlocks[5]);
 
-			// Handle shifts of between 32 and 63 bits
-			// MORE32:
 			newBlocks[3].AppendInstruction(X86.Mov, eax, edx);
 			newBlocks[3].AppendInstruction(X86.Sar, edx, edx, Operand.CreateConstant(BuiltInSigType.Int32, (int)0x1F));
 			newBlocks[3].AppendInstruction(X86.And, ecx, ecx, Operand.CreateConstant((int)0x1F));
@@ -920,15 +686,11 @@ namespace Mosa.Platform.x86.Stages
 			newBlocks[3].AppendInstruction(X86.Jmp, newBlocks[5].BasicBlock);
 			LinkBlocks(newBlocks[3], nextBlock);
 
-			// Return double precision 0 or -1, depending on the sign of edx
-			// RETSIGN:
 			newBlocks[4].AppendInstruction(X86.Sar, edx, edx, Operand.CreateConstant(BuiltInSigType.Int32, (int)0x1F));
 			newBlocks[4].AppendInstruction(X86.Mov, eax, edx);
 			newBlocks[4].AppendInstruction(X86.Jmp, newBlocks[5].BasicBlock);
 			LinkBlocks(newBlocks[4], newBlocks[5]);
 
-			// done:
-			// ; remaining code from current basic block
 			newBlocks[5].AppendInstruction(X86.Mov, op0H, edx);
 			newBlocks[5].AppendInstruction(X86.Mov, op0L, eax);
 			newBlocks[5].AppendInstruction(X86.Jmp, nextBlock.BasicBlock);
@@ -953,11 +715,9 @@ namespace Mosa.Platform.x86.Stages
 			Operand edx = AllocateVirtualRegister(BuiltInSigType.Int32);
 			Operand ecx = AllocateVirtualRegister(BuiltInSigType.Int32);
 
-			Context nextBlock = Split(context, false);
+			Context nextBlock = Split(context);
 			Context[] newBlocks = CreateNewBlocksWithContexts(6);
 
-			// Handle shifts of 64 bits or more (if shifting 64 bits or more, the result
-			// depends only on the high order bit of edx).
 			context.SetInstruction(X86.Jmp, newBlocks[0].BasicBlock);
 			LinkBlocks(context, newBlocks[0]);
 
@@ -979,8 +739,6 @@ namespace Mosa.Platform.x86.Stages
 			newBlocks[2].AppendInstruction(X86.Jmp, newBlocks[5].BasicBlock);
 			LinkBlocks(newBlocks[2], newBlocks[5]);
 
-			// Handle shifts of between 32 and 63 bits
-			// MORE32:
 			newBlocks[3].AppendInstruction(X86.Mov, edx, eax);
 			newBlocks[3].AppendInstruction(X86.Mov, eax, Operand.CreateConstant((uint)0));
 			newBlocks[3].AppendInstruction(X86.And, ecx, ecx, Operand.CreateConstant(BuiltInSigType.Int32, 0x1F));
@@ -988,15 +746,11 @@ namespace Mosa.Platform.x86.Stages
 			newBlocks[3].AppendInstruction(X86.Jmp, newBlocks[5].BasicBlock);
 			LinkBlocks(newBlocks[3], newBlocks[5]);
 
-			// Return double precision 0 or -1, depending on the sign of edx
-			// RETZERO:
 			newBlocks[4].AppendInstruction(X86.Mov, eax, Operand.CreateConstant((uint)0));
 			newBlocks[4].AppendInstruction(X86.Mov, edx, Operand.CreateConstant((uint)0));
 			newBlocks[4].AppendInstruction(X86.Jmp, newBlocks[5].BasicBlock);
 			LinkBlocks(newBlocks[4], newBlocks[5]);
 
-			// done:
-			// ; remaining code from current basic block
 			newBlocks[5].AppendInstruction(X86.Mov, op0H, edx);
 			newBlocks[5].AppendInstruction(X86.Mov, op0L, eax);
 			newBlocks[5].AppendInstruction(X86.Jmp, nextBlock.BasicBlock);
@@ -1019,11 +773,9 @@ namespace Mosa.Platform.x86.Stages
 			Operand edx = AllocateVirtualRegister(BuiltInSigType.Int32);
 			Operand ecx = AllocateVirtualRegister(BuiltInSigType.Int32);
 
-			Context nextBlock = Split(context, false);
+			Context nextBlock = Split(context);
 			Context[] newBlocks = CreateNewBlocksWithContexts(4);
 
-			// Handle shifts of 64 bits or more (if shifting 64 bits or more, the result
-			// depends only on the high order bit of edx).
 			context.SetInstruction(X86.Mov, ecx, count);
 			context.AppendInstruction(X86.Cmp, null, ecx, Operand.CreateConstant((int)64));
 			context.AppendInstruction(X86.Branch, ConditionCode.UnsignedGreaterOrEqual, newBlocks[3].BasicBlock);
@@ -1042,8 +794,6 @@ namespace Mosa.Platform.x86.Stages
 			newBlocks[1].AppendInstruction(X86.Jmp, nextBlock.BasicBlock);
 			LinkBlocks(newBlocks[1], nextBlock.BasicBlock);
 
-			// Handle shifts of between 32 and 63 bits
-			// MORE32:
 			newBlocks[2].AppendInstruction(X86.Mov, op0L, op1H);
 			newBlocks[2].AppendInstruction(X86.Mov, op0H, Operand.CreateConstant((int)0x0));
 			newBlocks[2].AppendInstruction(X86.And, ecx, ecx, Operand.CreateConstant((int)0x1F));
@@ -1051,8 +801,6 @@ namespace Mosa.Platform.x86.Stages
 			newBlocks[2].AppendInstruction(X86.Jmp, nextBlock.BasicBlock);
 			LinkBlocks(newBlocks[2], nextBlock.BasicBlock);
 
-			// Return double precision 0 or -1, depending on the sign of edx
-			// RETSIGN:
 			newBlocks[3].AppendInstruction(X86.Mov, op0H, Operand.CreateConstant((int)0x0));
 			newBlocks[3].AppendInstruction(X86.Mov, op0L, op0H);
 			newBlocks[3].AppendInstruction(X86.Jmp, nextBlock.BasicBlock);
@@ -1400,15 +1148,21 @@ namespace Mosa.Platform.x86.Stages
 		{
 			Debug.Assert(context.BranchTargets.Length == 1);
 
-			BasicBlock target = basicBlocks.GetByLabel(context.BranchTargets[0]);
-
 			Operand op1L, op1H, op2L, op2H;
 			SplitLongOperand(context.Operand1, out op1L, out op1H);
 			SplitLongOperand(context.Operand2, out op2L, out op2H);
 
-			Context[] newBlocks = CreateNewBlocksWithContexts(2);
+			BasicBlock target = basicBlocks.GetByLabel(context.BranchTargets[0]);
 			ConditionCode conditionCode = context.ConditionCode;
-			Context nextBlock = Split(context, false);
+
+			Context nextBlock = Split(context);
+			Context[] newBlocks = CreateNewBlocksWithContexts(2);
+
+			// FIXME: If the conditional branch and unconditional branch are the same, this could cause a problem
+			target.PreviousBlocks.Remove(context.BasicBlock);
+
+			// The block is being split on the condition, so the new next block has too one many next blocks!
+			nextBlock.BasicBlock.NextBlocks.Remove(target);
 
 			// Compare high dwords
 			context.SetInstruction(X86.Cmp, null, op1H, op2H);
@@ -1445,9 +1199,10 @@ namespace Mosa.Platform.x86.Stages
 			SplitLongOperand(op1, out op1L, out op1H);
 			SplitLongOperand(op2, out op2L, out op2H);
 
-			Context[] newBlocks = CreateNewBlocksWithContexts(4);
 			ConditionCode conditionCode = context.ConditionCode;
-			Context nextBlock = Split(context, false);
+
+			Context nextBlock = Split(context);
+			Context[] newBlocks = CreateNewBlocksWithContexts(4);
 
 			// Compare high dwords
 			context.SetInstruction(X86.Cmp, null, op1H, op2H);

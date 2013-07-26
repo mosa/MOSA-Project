@@ -14,6 +14,7 @@ using Mosa.Compiler.Metadata.Loader;
 using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Compiler.TypeSystem;
 using System;
+using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework
 {
@@ -261,13 +262,12 @@ namespace Mosa.Compiler.Framework
 		/// Splits the block.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		/// <param name="addJump">if set to <c>true</c> [add jump].</param>
 		/// <returns></returns>
-		protected Context Split(Context ctx, bool addJump)
+		protected Context Split(Context ctx)
 		{
 			Context current = ctx.Clone();
 
-			Context next = ctx.Next;
+			Context next = ctx.Clone();
 			next.AppendInstruction(IRInstruction.BlockStart);
 			BasicBlock nextBlock = basicBlocks.CreateBlockWithAutoLabel(next.Index, current.BasicBlock.EndIndex);
 			Context nextContext = new Context(instructionSet, nextBlock);
@@ -275,22 +275,108 @@ namespace Mosa.Compiler.Framework
 			foreach (BasicBlock block in current.BasicBlock.NextBlocks)
 			{
 				nextBlock.NextBlocks.Add(block);
+				block.PreviousBlocks.Remove(current.BasicBlock);
+				block.PreviousBlocks.Add(nextBlock);
 			}
 
 			current.BasicBlock.NextBlocks.Clear();
-
-			if (addJump)
-			{
-				current.BasicBlock.NextBlocks.Add(nextBlock);
-				nextBlock.PreviousBlocks.Add(ctx.BasicBlock);
-
-				ctx.AppendInstruction(IRInstruction.Jmp, nextBlock);
-			}
 
 			current.AppendInstruction(IRInstruction.BlockEnd);
 			current.BasicBlock.EndIndex = current.Index;
 
 			return nextContext;
+		}
+
+		/// <summary>
+		/// Determines whether [is empty block with single jump] [the specified block].
+		/// </summary>
+		/// <param name="block">The block.</param>
+		/// <returns>
+		///   <c>true</c> if [is empty block with single jump] [the specified block]; otherwise, <c>false</c>.
+		/// </returns>
+		protected bool IsEmptyBlockWithSingleJump(BasicBlock block)
+		{
+			if (block.NextBlocks.Count != 1)
+				return false;
+
+			var ctx = new Context(instructionSet, block);
+
+			Debug.Assert(ctx.IsBlockStartInstruction);
+			ctx.GotoNext();
+
+			while (!ctx.IsBlockEndInstruction)
+			{
+				if (!ctx.IsEmpty)
+				{
+					if (ctx.Instruction.FlowControl != FlowControl.Branch)
+						return false;
+				}
+
+				ctx.GotoNext();
+			}
+
+			return true;
+		}
+
+		/// <summary>
+		/// Empties the block of all instructions.
+		/// </summary>
+		/// <param name="block">The block.</param>
+		protected void EmptyBlockOfAllInstructions(BasicBlock block)
+		{
+			var ctx = new Context(instructionSet, block);
+			Debug.Assert(ctx.IsBlockStartInstruction);
+			ctx.GotoNext();
+
+			while (!ctx.IsBlockEndInstruction)
+			{
+				if (!ctx.IsEmpty)
+				{
+					ctx.Remove();
+				}
+
+				ctx.GotoNext();
+			}
+		}
+
+		/// <summary>
+		/// Replaces the branch targets.
+		/// </summary>
+		/// <param name="block">The current from block.</param>
+		/// <param name="oldTarget">The current destination block.</param>
+		/// <param name="newTarget">The new target block.</param>
+		protected void ReplaceBranchTargets(BasicBlock block, BasicBlock oldTarget, BasicBlock newTarget)
+		{
+			// Replace any jump/branch target in block (from) with js
+			var ctx = new Context(instructionSet, block, block.EndIndex);
+			Debug.Assert(ctx.IsBlockEndInstruction);
+
+			do
+			{
+				ctx.GotoPrevious();
+			}
+			while (ctx.IsEmpty);
+
+			// Find branch or jump to (to) and replace it with js
+			//while (ctx.BranchTargets != null)
+			while (!ctx.IsBlockStartInstruction)
+			{
+				if (ctx.BranchTargets != null)
+				{
+					int[] targets = ctx.BranchTargets;
+					for (int index = 0; index < targets.Length; index++)
+					{
+						if (targets[index] == oldTarget.Label)
+							targets[index] = newTarget.Label;
+					}
+				}
+
+				do
+				{
+					ctx.GotoPrevious();
+				}
+				while (ctx.IsEmpty);
+			}
 		}
 
 		#endregion Block Operations

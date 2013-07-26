@@ -92,6 +92,7 @@
     <Compile Include="RegisterAllocator\GreedyRegisterAllocator.cs" />
     <Compile Include="Linker\LinkerFactory.cs" />
     <Compile Include="Stages\BaseEdgeSplitStage.cs" />
+    <Compile Include="Stages\EmptyBlockRemovalStage.cs" />
     <Compile Include="Stages\PlatformEdgeSplitStage.cs" />
     <Compile Include="Stages\StackSetupStage.cs" />
     <Compile Include="Stages\GreedyRegisterAllocatorStage.cs" />

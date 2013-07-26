@@ -61,6 +61,8 @@ namespace Mosa.Test.System
 				new	PlatformEdgeSplitStage(),
 				new GreedyRegisterAllocatorStage(),
 				new StackLayoutStage(),
+				new EmptyBlockRemovalStage(),
+				new LoopAwareBlockOrderStage(),
 				new CodeGenerationStage(),
 			});
 		}
