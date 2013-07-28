@@ -83,7 +83,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 				{
 					var move = moves[i];
 
-					if (!move.Source.IsCPURegister || !move.Destination.IsCPURegister)
+					if (!(move.Source.IsCPURegister || move.Destination.IsCPURegister))
 						continue;
 
 					int other = FindIndex(move.Destination.Register, true);
@@ -92,6 +92,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 						continue;
 
 					architecture.InsertMove(context, move.Destination, move.Source);
+					context.Marked = true;
 
 					moves.RemoveAt(i);
 
@@ -112,7 +113,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 				{
 					var move = moves[i];
 
-					if (!move.Source.IsCPURegister || !move.Destination.IsCPURegister)
+					if (!(move.Source.IsCPURegister || move.Destination.IsCPURegister))
 						continue;
 
 					int other = FindIndex(move.Destination.Register, true);
@@ -121,6 +122,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 						continue;
 
 					architecture.InsertExchange(context, moves[other].Source, move.Source);
+					context.Marked = true;
 					moves[other].Source = move.Source;
 					moves.RemoveAt(i);
 
@@ -141,7 +143,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			{
 				var move = moves[i];
 
-				if (!move.Source.IsCPURegister || move.Destination.IsCPURegister)
+				if (!(move.Source.IsCPURegister || move.Destination.IsCPURegister))
 					continue;
 
 				architecture.InsertMove(context, move.Destination, move.Source);
@@ -159,6 +161,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			{
 				context.GotoPrevious();
 
+				// Note: This won't work for expanded switch statements... but we can't insert into the end of those blocks anyway
 				while (context.IsEmpty || context.Instruction.FlowControl == FlowControl.Branch || context.Instruction.FlowControl == FlowControl.ConditionalBranch || context.Instruction.FlowControl == FlowControl.Return)
 				{
 					context.GotoPrevious();
@@ -167,8 +170,9 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 			TrySimpleMoves(architecture, context);
 			TryExchange(architecture, context);
-
 			CreateMemoryMoves(architecture, context);
+
+			Debug.Assert(moves.Count == 0);
 		}
 	}
 }

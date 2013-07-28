@@ -54,7 +54,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (trace.Active)
 			{
 				trace.Log("====== Removing: " + block.ToString() + " # " + block.Sequence);
-				trace.Log("     New Target: " + block.ToString());
+				trace.Log("     New Target: " + target.ToString());
 				foreach (var from in block.PreviousBlocks)
 				{
 					trace.Log("Previous Blocks: " + from.ToString());

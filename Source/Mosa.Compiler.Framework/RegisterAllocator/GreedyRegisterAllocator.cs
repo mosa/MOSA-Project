@@ -166,7 +166,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			TraceBlocks();
 
 			// Generate trace information for live intervals
-			TraceLiveIntervals("InitialLiveIntervals");
+			TraceLiveIntervals("InitialLiveIntervals", false);
 
 			// Split intervals at call sites
 			SplitIntervalsAtCallSites();
@@ -199,7 +199,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			ResolveDataFlow();
 
 			// Generate trace information for live intervals
-			TraceLiveIntervals("PostLiveIntervals");
+			TraceLiveIntervals("PostLiveIntervals", true);
 		}
 
 		private static string ToString(BitArray bitArray)
@@ -231,7 +231,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			}
 		}
 
-		private void TraceLiveIntervals(string stage)
+		private void TraceLiveIntervals(string stage, bool operand)
 		{
 			if (!trace.Active)
 				return;
@@ -249,7 +249,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 					registerTrace.Log("Virtual Register # " + virtualRegister.VirtualRegisterOperand.Index.ToString());
 				}
 
-				registerTrace.Log("Live Intervals (" + virtualRegister.LiveIntervals.Count.ToString() + "): " + LiveIntervalsToString(virtualRegister.LiveIntervals));
+				registerTrace.Log("Live Intervals (" + virtualRegister.LiveIntervals.Count.ToString() + "): " + LiveIntervalsToString(virtualRegister.LiveIntervals, operand));
 
 				registerTrace.Log("Def Positions (" + virtualRegister.DefPositions.Count.ToString() + "): " + SlotsToString(virtualRegister.DefPositions));
 				registerTrace.Log("Use Positions (" + virtualRegister.UsePositions.Count.ToString() + "): " + SlotsToString(virtualRegister.UsePositions));
@@ -258,6 +258,11 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		private String LiveIntervalsToString(List<LiveInterval> liveIntervals)
 		{
+			return LiveIntervalsToString(liveIntervals, false);
+		}
+
+		private String LiveIntervalsToString(List<LiveInterval> liveIntervals, bool operand)
+		{
 			if (liveIntervals.Count == 0)
 				return string.Empty;
 
@@ -265,7 +270,10 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 			foreach (var liveInterval in liveIntervals)
 			{
-				sb.Append("[" + liveInterval.Start.ToString() + ", " + liveInterval.End.ToString() + "],");
+				if (operand && !liveInterval.IsPhysicalRegister)
+					sb.Append("[" + liveInterval.Start.ToString() + ", " + liveInterval.End.ToString() + "]/" + liveInterval.AssignedOperand.ToString() + ",");
+				else
+					sb.Append("[" + liveInterval.Start.ToString() + ", " + liveInterval.End.ToString() + "],");
 			}
 
 			if (sb[sb.Length - 1] == ',')
@@ -320,6 +328,11 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 			foreach (BasicBlock block in basicBlocks)
 			{
+				if (number.Active)
+				{
+
+				}
+
 				for (Context context = new Context(instructionSet, block); ; context.GotoNext())
 				{
 					if (!context.IsEmpty)
@@ -327,7 +340,17 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 						context.SlotNumber = index;
 						index = index + SlotIncrement;
 
-						number.Log(context.SlotNumber.ToString() + " = " + context.ToString());
+						if (number.Active)
+						{
+							if (context.IsBlockStartInstruction)
+							{
+								number.Log(context.SlotNumber.ToString() + " = " + context.ToString() + " # " + block.ToString());
+							}
+							else
+							{
+								number.Log(context.SlotNumber.ToString() + " = " + context.ToString());
+							}
+						}
 					}
 
 					if (context.IsBlockEndInstruction)
@@ -1130,6 +1153,8 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 						Context context = new Context(instructionSet, def.Index);
 
 						architecture.InsertMove(context, register.SpillSlotOperand, liveInterval.AssignedPhysicalOperand);
+
+						context.Marked = true;
 					}
 				}
 			}
@@ -1247,10 +1272,10 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 							if (resolverTrace.Active)
 							{
 								resolverTrace.Log("REGISTER: " + fromLiveInterval.VirtualRegister.ToString());
-								resolverTrace.Log("    FROM: " + from.ToString().PadRight(7) + fromLiveInterval.AssignedOperand.ToString());
-								resolverTrace.Log("      TO: " + to.ToString().PadRight(7) + toLiveInterval.AssignedOperand.ToString());
+								resolverTrace.Log("    FROM: " + from.ToString().PadRight(7) + " " + fromLiveInterval.AssignedOperand.ToString());
+								resolverTrace.Log("      TO: " + to.ToString().PadRight(7) + " " + toLiveInterval.AssignedOperand.ToString());
 
-								resolverTrace.Log("  INSERT: " + (fromAnchorFlag ? "FROM (bottom)" : "TO (top)"));
+								resolverTrace.Log("  INSERT: " + (fromAnchorFlag ? "FROM (bottom)" : "TO (top)") + ((toLiveInterval.AssignedPhysicalOperand == null) ? "  ****SKIPPED***" : string.Empty));
 								resolverTrace.Log("");
 							}
 

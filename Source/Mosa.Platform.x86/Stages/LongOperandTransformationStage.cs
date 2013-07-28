@@ -28,7 +28,8 @@ namespace Mosa.Platform.x86.Stages
 	/// </remarks>
 	public sealed class LongOperandTransformationStage : BaseTransformationStage, IIRVisitor
 	{
-		private Operand operandConstantZero = Operand.CreateConstant((int)0);
+		private Operand constantZero = Operand.CreateConstant((int)0);
+		private Operand constantByte1 = Operand.CreateConstant(BuiltInSigType.Byte, 1);
 
 		#region Utility Methods
 
@@ -44,7 +45,7 @@ namespace Mosa.Platform.x86.Stages
 			else if (operand.StackType == StackTypeCode.Int32 || operand.StackType == StackTypeCode.Ptr)
 			{
 				operandLow = operand;
-				operandHigh = operandConstantZero;
+				operandHigh = constantZero;
 				return;
 			}
 
@@ -170,10 +171,6 @@ namespace Mosa.Platform.x86.Stages
 			Operand edi = Operand.CreateCPURegister(BuiltInSigType.UInt32, GeneralPurposeRegister.EDI);
 			Operand esi = Operand.CreateCPURegister(BuiltInSigType.UInt32, GeneralPurposeRegister.ESI);
 
-			Operand v8 = AllocateVirtualRegister(BuiltInSigType.Int32);
-
-			Operand ConstantByte1 = Operand.CreateConstant(BuiltInSigType.Byte, 1);
-
 			context.SetInstruction(X86.Jmp, newBlocks[0].BasicBlock);
 			LinkBlocks(context, newBlocks[0]);
 
@@ -233,12 +230,12 @@ namespace Mosa.Platform.x86.Stages
 			newBlocks[6].AppendInstruction(X86.Jmp, newBlocks[7].BasicBlock);
 			LinkBlocks(newBlocks[6], newBlocks[7]);
 
-			newBlocks[7].AppendInstruction(X86.Shr, ebx, ebx, ConstantByte1);
-			newBlocks[7].AppendInstruction(X86.Rcr, ecx, ecx, ConstantByte1);
-			newBlocks[7].AppendInstruction(X86.Shr, edx, edx, ConstantByte1);
-			newBlocks[7].AppendInstruction(X86.Rcr, eax, eax, ConstantByte1);
+			newBlocks[7].AppendInstruction(X86.Shr, ebx, ebx, constantByte1);
+			newBlocks[7].AppendInstruction(X86.Rcr, ecx, ecx, constantByte1);
+			newBlocks[7].AppendInstruction(X86.Shr, edx, edx, constantByte1);
+			newBlocks[7].AppendInstruction(X86.Rcr, eax, eax, constantByte1);
 			newBlocks[7].AppendInstruction(X86.Or, ebx, ebx, ebx);
-			newBlocks[7].AppendInstruction(X86.Branch, ConditionCode.NoZero, newBlocks[7].BasicBlock);
+			newBlocks[7].AppendInstruction(X86.Branch, ConditionCode.NotEqual, newBlocks[7].BasicBlock);
 			newBlocks[7].AppendInstruction(X86.Jmp, newBlocks[8].BasicBlock);
 			LinkBlocks(newBlocks[7], newBlocks[7], newBlocks[8]);
 
