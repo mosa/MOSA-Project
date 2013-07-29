@@ -27,7 +27,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IX86Visitor.Movsx(Context context)
 		{
-			// Movsx can not use ESI or EDI registers
+			// Movsx can not use ESI or EDI registers  
 			if (context.Operand1.IsCPURegister && (context.Operand1.Register == GeneralPurposeRegister.ESI || context.Operand1.Register == GeneralPurposeRegister.EDI))
 			{
 				Operand source = context.Operand1;
@@ -73,6 +73,27 @@ namespace Mosa.Platform.x86.Stages
 				context.SetInstruction2(X86.Xchg, EAX, source, source, EAX);
 				context.AppendInstruction(X86.Mov, dest, EAX);
 				context.AppendInstruction2(X86.Xchg, source, EAX, EAX, source);
+			}
+		}
+
+
+		/// <summary>
+		/// Visitation function for <see cref="IX86Visitor.Setcc"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IX86Visitor.Setcc(Context context)
+		{
+			// SETcc can not use ESI or EDI registers
+			if (context.Result.IsCPURegister && (context.Result.Register == GeneralPurposeRegister.ESI || context.Result.Register == GeneralPurposeRegister.EDI))
+			{
+				Operand result = context.Result;
+				var condition = context.ConditionCode;
+
+				Operand EAX = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.EAX);
+
+				context.SetInstruction2(X86.Xchg, EAX, result, result, EAX);
+				context.AppendInstruction(X86.Setcc, condition, EAX);
+				context.AppendInstruction2(X86.Xchg, result, EAX, EAX, result);
 			}
 		}
 
@@ -357,14 +378,6 @@ namespace Mosa.Platform.x86.Stages
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IX86Visitor.Cvtsd2ss(Context context)
-		{
-		}
-
-		/// <summary>
-		/// Visitation function for <see cref="IX86Visitor.Setcc"/> instructions.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void IX86Visitor.Setcc(Context context)
 		{
 		}
 
