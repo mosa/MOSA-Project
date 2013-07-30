@@ -214,6 +214,7 @@ namespace Mosa.Compiler.Framework.Stages
 					{
 						propogated = true;
 
+						if (trace.Active) trace.Log("SimpleConstantPropagation");
 						if (trace.Active) trace.Log("BEFORE:\t" + ctx.ToString());
 						AddOperandUsageToWorkList(operand);
 						ctx.SetOperand(i, sourceOperand);
@@ -804,6 +805,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (context.BranchTargets[0] == context.Next.BranchTargets[0])
 			{
+				if (trace.Active) trace.Log("FoldIntegerCompareBranch-1");
 				if (trace.Active) trace.Log("REMOVED:\t" + context.ToString());
 				AddOperandUsageToWorkList(context);
 				context.SetInstruction(IRInstruction.Nop);
@@ -829,6 +831,8 @@ namespace Mosa.Compiler.Framework.Stages
 			Debug.Assert(context.Next.Instruction is IR.Jmp);
 
 			BasicBlock target;
+
+			if (trace.Active) trace.Log("FoldIntegerCompareBranch-2");
 
 			if (compareResult)
 			{

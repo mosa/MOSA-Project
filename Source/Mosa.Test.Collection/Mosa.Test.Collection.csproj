@@ -101,6 +101,7 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>StructTests.cs</LastGenOutput>
     </None>
+    <Compile Include="GeneralTests.cs" />
     <Compile Include="SpecificTests.cs" />
     <Compile Include="ForeachTests.cs">
       <AutoGen>True</AutoGen>
