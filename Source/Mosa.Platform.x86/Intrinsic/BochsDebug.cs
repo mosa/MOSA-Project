@@ -27,7 +27,8 @@ namespace Mosa.Platform.x86.Intrinsic
 		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, BaseMethodCompiler methodCompiler)
 		{
 			// xchg	bx, bx
-			context.SetInstruction(X86.Xchg, Operand.CreateCPURegister(BuiltInSigType.UInt16, GeneralPurposeRegister.EBX), Operand.CreateCPURegister(BuiltInSigType.UInt16, GeneralPurposeRegister.EBX));
+			var bx = Operand.CreateCPURegister(BuiltInSigType.UInt16, GeneralPurposeRegister.EBX);
+			context.SetInstruction2(X86.Xchg, bx, bx, bx, bx);
 		}
 
 		#endregion Methods

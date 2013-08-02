@@ -53,6 +53,10 @@ namespace Mosa.Test.Debug
 			//ComparisonFixture Comparison = new ComparisonFixture();
 			//Comparison.CompareEqualI2I8(-1, -1);
 
+			RegisterAllocatorFixture general = new RegisterAllocatorFixture();
+
+			general.RegisterPressure7(1, 2, 3, 4, 5, 6, 7);
+
 			return;
 		}
 	}

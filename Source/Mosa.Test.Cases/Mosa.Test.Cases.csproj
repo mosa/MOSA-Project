@@ -87,7 +87,7 @@
     </Compile>
     <Compile Include="CIL\CallVirtualFixture.cs" />
     <Compile Include="CIL\CharFixture.cs" />
-    <Compile Include="CIL\GeneralFixture.cs" />
+    <Compile Include="CIL\RegisterAllocatorFixture.cs" />
     <Compile Include="CIL\SpecificTestFixture.cs" />
     <Compile Include="CIL\DelegateFixture.cs" />
     <Compile Include="CIL\ExceptionHandlingFixture.cs" />

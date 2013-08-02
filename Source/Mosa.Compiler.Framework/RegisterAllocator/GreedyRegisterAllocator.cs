@@ -330,7 +330,6 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			{
 				if (number.Active)
 				{
-
 				}
 
 				for (Context context = new Context(instructionSet, block); ; context.GotoNext())
@@ -693,6 +692,17 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 				liveInterval.VirtualRegister.IsSpilled = true;
 				spilledIntervals.Add(liveInterval);
+				return;
+			}
+
+			// For now, empty intervals will stay spilled
+			if (liveInterval.IsEmpty)
+			{
+				if (trace.Active) trace.Log("  Spilled");
+
+				liveInterval.VirtualRegister.IsSpilled = true;
+				spilledIntervals.Add(liveInterval);
+
 				return;
 			}
 

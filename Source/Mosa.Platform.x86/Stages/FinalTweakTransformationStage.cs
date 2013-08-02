@@ -27,7 +27,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IX86Visitor.Movsx(Context context)
 		{
-			// Movsx can not use ESI or EDI registers  
+			// Movsx can not use ESI or EDI registers
 			if (context.Operand1.IsCPURegister && (context.Operand1.Register == GeneralPurposeRegister.ESI || context.Operand1.Register == GeneralPurposeRegister.EDI))
 			{
 				Operand source = context.Operand1;
@@ -75,7 +75,6 @@ namespace Mosa.Platform.x86.Stages
 				context.AppendInstruction2(X86.Xchg, source, EAX, EAX, source);
 			}
 		}
-
 
 		/// <summary>
 		/// Visitation function for <see cref="IX86Visitor.Setcc"/> instructions.

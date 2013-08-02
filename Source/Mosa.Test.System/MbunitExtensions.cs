@@ -752,7 +752,7 @@ namespace Mosa.Test.System
 			dataSource.AddDataSet(new ValueSequenceDataSet(Series.I4UpTo32, GetMetadata(), false));
 		}
 	}
-
+	
 	[AttributeUsage(PatternAttributeTargets.DataContext, AllowMultiple = false, Inherited = true)]
 	public class I8UpTo32Attribute : DataAttribute
 	{
@@ -817,4 +817,32 @@ namespace Mosa.Test.System
 	}
 
 	#endregion Series Up To 32
+
+	[AttributeUsage(PatternAttributeTargets.DataContext, AllowMultiple = false, Inherited = true)]
+	public class FewScatteredAI4Attribute : DataAttribute
+	{
+		protected override void PopulateDataSource(IPatternScope scope, DataSource dataSource, ICodeElementInfo codeElement)
+		{
+			dataSource.AddDataSet(new ValueSequenceDataSet(Series.FewScatteredAI4, GetMetadata(), false));
+		}
+	}
+
+	[AttributeUsage(PatternAttributeTargets.DataContext, AllowMultiple = false, Inherited = true)]
+	public class FewScatteredBI4Attribute : DataAttribute
+	{
+		protected override void PopulateDataSource(IPatternScope scope, DataSource dataSource, ICodeElementInfo codeElement)
+		{
+			dataSource.AddDataSet(new ValueSequenceDataSet(Series.FewScatteredBI4, GetMetadata(), false));
+		}
+	}
+
+	[AttributeUsage(PatternAttributeTargets.DataContext, AllowMultiple = false, Inherited = true)]
+	public class FewScatteredCI4Attribute : DataAttribute
+	{
+		protected override void PopulateDataSource(IPatternScope scope, DataSource dataSource, ICodeElementInfo codeElement)
+		{
+			dataSource.AddDataSet(new ValueSequenceDataSet(Series.FewScatteredCI4, GetMetadata(), false));
+		}
+	}
+
 }

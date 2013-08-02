@@ -78,7 +78,7 @@ namespace Mosa.Platform.x86.Instructions
 				case IR.ConditionCode.Equal: opcode = JE; break;
 				case IR.ConditionCode.NotEqual: opcode = JNE; break;
 				case IR.ConditionCode.Zero: opcode = JZ; break;
-				case IR.ConditionCode.NoZero: opcode = JNZ; break;
+				case IR.ConditionCode.NotZero: opcode = JNZ; break;
 				case IR.ConditionCode.GreaterOrEqual: opcode = JGE; break;
 				case IR.ConditionCode.GreaterThan: opcode = JG; break;
 				case IR.ConditionCode.LessOrEqual: opcode = JLE; break;

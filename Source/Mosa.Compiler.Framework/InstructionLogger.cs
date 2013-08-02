@@ -105,11 +105,13 @@ namespace Mosa.Compiler.InternalTrace
 
 				if (ctx.Marked)
 					text.AppendFormat("*");
+				else
+					text.AppendFormat(" ");
 
 				//if (ctx.SlotNumber != 0)
 				//	text.AppendFormat("/{0}", ctx.SlotNumber.ToString());
 
-				text.AppendFormat(" {0}", ctx.Instruction.ToString(ctx));
+				text.AppendFormat("{0}", ctx.Instruction.ToString(ctx));
 				text.AppendLine();
 
 				if (ctx.IsBlockEndInstruction)

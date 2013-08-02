@@ -238,13 +238,13 @@ namespace Mosa.Compiler.Framework
 				case IR.ConditionCode.UnsignedGreaterThan: return @"greater (U)";
 				case IR.ConditionCode.UnsignedLessOrEqual: return @"less or equal (U)";
 				case IR.ConditionCode.UnsignedLessThan: return @"less (U)";
-				case IR.ConditionCode.NotSigned: return @"unsigned";
+				case IR.ConditionCode.NotSigned: return @"not signed";
 				case IR.ConditionCode.Signed: return @"signed";
 				case IR.ConditionCode.Zero: return @"zero";
-				case IR.ConditionCode.NoZero: return @"nozero";
-				case IR.ConditionCode.NoParity: return @"noparity";
+				case IR.ConditionCode.NotZero: return @"not zero";
+				case IR.ConditionCode.NoParity: return @"no parity";
 				case IR.ConditionCode.Carry: return @"carry";
-				case IR.ConditionCode.NoCarry: return @"nocarry";
+				case IR.ConditionCode.NoCarry: return @"no carry";
 
 				default: throw new NotSupportedException();
 			}

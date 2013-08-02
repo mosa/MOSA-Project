@@ -7,16 +7,16 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using MbUnit.Framework;
+using Mosa.Compiler.Linker;
+using Mosa.Compiler.Metadata.Loader;
+using Mosa.Compiler.TypeSystem;
+using Mosa.Test.CodeDomCompiler;
 using System;
 using System.CodeDom.Compiler;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
-using MbUnit.Framework;
-using Mosa.Compiler.Metadata.Loader;
-using Mosa.Compiler.TypeSystem;
-using Mosa.Test.CodeDomCompiler;
-using Mosa.Compiler.Linker;
 
 namespace Mosa.Test.System
 {
@@ -162,7 +162,6 @@ namespace Mosa.Test.System
 				Assert.Fail(@"Failed to convert result {0} of type {1} to type {2}.", tempResult, tempResult.GetType(), typeof(T));
 				throw e;
 			}
-
 		}
 
 		// Might not keep this as a public method

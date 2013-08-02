@@ -102,7 +102,7 @@ namespace Mosa.Compiler.Framework.IR
 		/// <summary>
 		/// No zero flag
 		/// </summary>
-		NoZero,
+		NotZero,
 
 		/// <summary>
 		/// Overflow flag

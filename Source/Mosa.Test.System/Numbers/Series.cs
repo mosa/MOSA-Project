@@ -259,6 +259,21 @@ namespace Mosa.Test.System.Numbers
 			get { foreach (int a in GetUpTo(32)) yield return a; }
 		}
 
+		public static IEnumerable<int> FewScatteredAI4
+		{
+			get { yield return 1; yield return 51; }
+		}
+
+		public static IEnumerable<int> FewScatteredBI4
+		{
+			get { yield return 101; yield return 9999; }
+		}
+
+		public static IEnumerable<int> FewScatteredCI4
+		{
+			get { yield return 33; yield return 99; }
+		}
+
 		#endregion I4 Types
 
 		#region U4 Types

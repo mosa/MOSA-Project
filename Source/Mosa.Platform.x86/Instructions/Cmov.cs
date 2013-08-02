@@ -72,7 +72,7 @@ namespace Mosa.Platform.x86.Instructions
 				case IR.ConditionCode.Equal: opcode = CMOVO; break;
 				case IR.ConditionCode.NotEqual: opcode = CMOVNE; break;
 				case IR.ConditionCode.Zero: opcode = CMOVZ; break;
-				case IR.ConditionCode.NoZero: opcode = CMOVNZ; break;
+				case IR.ConditionCode.NotZero: opcode = CMOVNZ; break;
 				case IR.ConditionCode.GreaterOrEqual: opcode = CMOVGE; break;
 				case IR.ConditionCode.GreaterThan: opcode = CMOVG; break;
 				case IR.ConditionCode.LessOrEqual: opcode = CMOVLE; break;

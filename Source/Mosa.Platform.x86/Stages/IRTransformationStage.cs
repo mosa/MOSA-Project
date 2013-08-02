@@ -128,7 +128,7 @@ namespace Mosa.Platform.x86.Stages
 			ConditionCode setnp = ConditionCode.NoParity;
 			ConditionCode setnc = ConditionCode.NoCarry;
 			ConditionCode setc = ConditionCode.Carry;
-			ConditionCode setnz = ConditionCode.NoZero;
+			ConditionCode setnz = ConditionCode.NotZero;
 			ConditionCode setz = ConditionCode.Zero;
 			ConditionCode code = context.ConditionCode;
 

@@ -15,7 +15,6 @@ using Mosa.Compiler.TypeSystem;
 using System;
 using System.IO;
 using System.Runtime.InteropServices;
-using System.Diagnostics;
 
 namespace Mosa.Test.System
 {

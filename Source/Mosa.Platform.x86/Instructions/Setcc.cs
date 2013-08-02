@@ -80,7 +80,7 @@ namespace Mosa.Platform.x86.Instructions
 				case IR.ConditionCode.NoCarry: opcode = NC; break;
 				case IR.ConditionCode.Carry: opcode = C; break;
 				case IR.ConditionCode.Zero: opcode = Z; break;
-				case IR.ConditionCode.NoZero: opcode = NZ; break;
+				case IR.ConditionCode.NotZero: opcode = NZ; break;
 				default: throw new NotSupportedException();
 			}
 

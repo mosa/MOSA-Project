@@ -66,7 +66,6 @@ namespace Mosa.Test.Collection
 				{
 					continue;
 				}
-
 			}
 
 			return count == 20;
@@ -91,7 +90,6 @@ namespace Mosa.Test.Collection
 				{
 					continue;
 				}
-
 			}
 
 			return start == limit && count == 20;
@@ -116,7 +114,6 @@ namespace Mosa.Test.Collection
 				{
 					continue;
 				}
-
 			}
 
 			return count;
