@@ -39,5 +39,12 @@ namespace Mosa.Test.Cases.CIL
 		{
 			Assert.AreEqual(RegisterAllocatorTests.Pressure7B(a, b, c, d, e, f, g), Run<int>("Mosa.Test.Collection", "RegisterAllocatorTests", "Pressure7B", a, b, c, d, e, f, g));
 		}
+
+
+		[Test]
+		public void RegisterPressure7C([FewScatteredAI4]int a, [FewScatteredBI4]int b, [FewScatteredCI4]int c, [FewScatteredAI4]int d, [FewScatteredBI4]int e, [FewScatteredCI4]int f, [FewScatteredAI4]int g)
+		{
+			Assert.AreEqual(RegisterAllocatorTests.Pressure7C(a, b, c, d, e, f, g), Run<int>("Mosa.Test.Collection", "RegisterAllocatorTests", "Pressure7C", a, b, c, d, e, f, g));
+		}
 	}
 }

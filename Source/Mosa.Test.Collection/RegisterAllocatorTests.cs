@@ -68,7 +68,7 @@ namespace Mosa.Test.Collection
 				j++; c++; d--;
 			}
 
-			int z = (((((((a >> b) + c / (d * e) - f) * g) - h) * j) * k) >> 2) + a % b + c * d + e / (f * g);
+			int z = (((((((a >> b) + c * (d * e) - f) * g) - h) * j) * k) >> 2) + a % b + c * d + e % (f * g + 1);
 
 			if (z % 2 == c)
 			{
@@ -77,10 +77,26 @@ namespace Mosa.Test.Collection
 			}
 			else
 			{
-				z = z * a / e;
+				z = z * a / (e + 1);
 			}
 
 			return z;
+		}
+
+
+		public static int Pressure7C(int a, int b, int c, int d, int e, int f, int g)
+		{
+			int z = a + b + c + d + e + f + g;
+			int q = 0;
+			int y = 10;
+
+			for (int i = 1; i < 20; i++)
+			{
+				z = z + a * b * c * d * e * f * g + i * q;
+				q = q + z - 1;
+			}
+
+			return z * 10;
 		}
 	}
 }

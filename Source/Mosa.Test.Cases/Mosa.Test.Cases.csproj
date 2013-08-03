@@ -87,6 +87,7 @@
     </Compile>
     <Compile Include="CIL\CallVirtualFixture.cs" />
     <Compile Include="CIL\CharFixture.cs" />
+    <Compile Include="CIL\NewDerivedObjectFixture.cs" />
     <Compile Include="CIL\RegisterAllocatorFixture.cs" />
     <Compile Include="CIL\SpecificTestFixture.cs" />
     <Compile Include="CIL\DelegateFixture.cs" />
@@ -177,7 +178,7 @@
     <Compile Include="CIL\Int32Fixture.cs" />
     <Compile Include="CIL\Int64Fixture.cs" />
     <Compile Include="CIL\InterfaceFixture.cs" />
-    <Compile Include="CIL\NewobjFixture.cs" />
+    <Compile Include="CIL\NewObjectFixture.cs" />
     <Compile Include="OLD\PinnedFixture.cs" />
     <Compile Include="CIL\SingleFixture.cs" />
     <Compile Include="CIL\StringFixture.cs" />

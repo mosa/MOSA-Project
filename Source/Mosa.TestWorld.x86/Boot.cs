@@ -38,7 +38,9 @@ namespace Mosa.TestWorld.x86
 			Screen.Write('O');
 			Screen.Write('S');
 
-			//RunTests();
+			RunTests();
+
+			Screen.Write("!");
 
 			while (true)
 			{
@@ -47,7 +49,9 @@ namespace Mosa.TestWorld.x86
 
 		public static void RunTests()
 		{
-			TestNewobjBaseClass c = new TestNewobjBaseClass();
+			NewObjectTests o = new NewObjectTests();
+			int i = o.Test();
+			Screen.Write((uint)i);
 		}
 
 		public static void Write(char chr, byte color)

@@ -37,11 +37,6 @@ namespace Mosa.Test.System
 		/// <summary>
 		///
 		/// </summary>
-		private static string tempDirectory;
-
-		/// <summary>
-		///
-		/// </summary>
 		private ILinker linker;
 
 		private static long memoryPtr = 0x21700000; // Location for pointer to allocated memory!
@@ -61,26 +56,6 @@ namespace Mosa.Test.System
 		}
 
 		#endregion Construction
-
-		#region Properties
-
-		private static string TempDirectory
-		{
-			get
-			{
-				if (tempDirectory == null)
-				{
-					tempDirectory = Path.Combine(Path.GetTempPath(), "mosa.tmp");
-					if (!Directory.Exists(tempDirectory))
-					{
-						Directory.CreateDirectory(tempDirectory);
-					}
-				}
-				return tempDirectory;
-			}
-		}
-
-		#endregion Properties
 
 		protected void ResetMemory()
 		{

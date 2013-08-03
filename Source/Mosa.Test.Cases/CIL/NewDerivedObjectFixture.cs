@@ -19,38 +19,38 @@ namespace Mosa.Test.Cases.CIL
 
 	//[Category(@"Object support")]
 	//[Description(@"Tests new operator, type checking and virtual method calls.")]
-	public class NewobjFixture : TestCompilerAdapter
+	public class NewDerivedObjectFixture : TestCompilerAdapter
 	{
-		public NewobjFixture()
+		public NewDerivedObjectFixture()
 		{
 			settings.AddReference("Mosa.Test.Collection.dll");
 		}
 
 		[Test]
-		public void TestNewobjWithoutArgs()
+		public void NewDerivedObjectWithoutArgs()
 		{
-			bool result = Run<bool>("Mosa.Test.Collection", @"TestNewobjDerivedClass", @"NewobjWithoutArgs");
+			bool result = Run<bool>("Mosa.Test.Collection", @"DerivedNewObjectTests", @"WithoutArgs");
 			Assert.IsTrue(result);
 		}
 
 		[Test]
-		public void TestNewobjWithOneArg()
+		public void NewDerivedObjectWithOneArg()
 		{
-			bool result = Run<bool>("Mosa.Test.Collection", @"TestNewobjDerivedClass", @"NewobjTestWithOneArg");
+			bool result = Run<bool>("Mosa.Test.Collection", @"DerivedNewObjectTests", @"WithOneArg");
 			Assert.IsTrue(result);
 		}
 
 		[Test]
-		public void TestNewobjWithTwoArgs()
+		public void NewDerivedObjectjWithTwoArgs()
 		{
-			bool result = Run<bool>("Mosa.Test.Collection", @"TestNewobjDerivedClass", @"NewobjTestWithTwoArgs");
+			bool result = Run<bool>("Mosa.Test.Collection", @"DerivedNewObjectTests", @"WithTwoArgs");
 			Assert.IsTrue(result);
 		}
 
 		[Test]
-		public void TestNewobjWithThreeArgs()
+		public void NewDerivedObjectWithThreeArgs()
 		{
-			bool result = Run<bool>("Mosa.Test.Collection", @"TestNewobjDerivedClass", @"NewobjTestWithThreeArgs");
+			bool result = Run<bool>("Mosa.Test.Collection", @"DerivedNewObjectTests", @"WithThreeArgs");
 			Assert.IsTrue(result);
 		}
 	}
