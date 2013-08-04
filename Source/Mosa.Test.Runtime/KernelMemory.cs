@@ -13,14 +13,12 @@ namespace Mosa.Kernel.Test
 {
 	public class KernelMemory
 	{
+		// const doesn't work below (workaround)
 		private static uint memoryPtr = 0x21700000;	// Location for pointer to allocated memory!
 
 		[PlugMethod("Mosa.Internal.Runtime.AllocateMemory")]
 		static unsafe public uint AllocateMemory(uint size)
 		{
-			if (memoryPtr == 0)
-				memoryPtr = 0x21700000;	// workaround
-
 			uint alloc = ((uint*)memoryPtr)[0];
 			((uint*)memoryPtr)[0] = alloc + size;
 
