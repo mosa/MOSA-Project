@@ -33,12 +33,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 				if (assignment != null && CheckAssignmentForCompliance(allocation, assignment))
 				{
-					//Debug.WriteLine(@"StaticAllocationResolutionStage: Static allocation of object possible.");
 					PerformStaticAllocationOf(allocation, assignment);
-				}
-				else
-				{
-					//Debug.WriteLine(@"StaticAllocationResolutionStage: Can't statically allocate object.");
 				}
 			}
 		}
@@ -98,13 +93,10 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				for (Context context = new Context(instructionSet, block); !context.IsBlockEndInstruction; context.GotoNext())
 				{
-					if (!context.IsEmpty)
+					if (!context.IsEmpty && (context.Instruction is NewobjInstruction || context.Instruction is NewarrInstruction))
 					{
-						if (context.Instruction is NewobjInstruction || context.Instruction is NewarrInstruction)
-						{
-							//Debug.WriteLine(@"StaticAllocationResolutionStage: Found a newobj or newarr instruction.");
-							yield return context.Clone();
-						}
+						//Debug.WriteLine(@"StaticAllocationResolutionStage: Found a newobj or newarr instruction.");
+						yield return context.Clone();
 					}
 				}
 			}
@@ -113,12 +105,20 @@ namespace Mosa.Compiler.Framework.Stages
 		private Context SeekAssignmentOfAllocatedObject(Context allocation)
 		{
 			Context next = allocation.Next;
-			if (next.IsBlockEndInstruction || !(next.Instruction is StsfldInstruction))
+
+			while (next.IsEmpty)
 			{
-				next = null;
+				next.GotoNext();
 			}
 
-			return next;
+			if (next.IsBlockEndInstruction || !(next.Instruction is StsfldInstruction))
+			{
+				return null;
+			}
+			else
+			{
+				return next;
+			}
 		}
 
 		private bool CheckAssignmentForCompliance(Context allocation, Context assignment)
