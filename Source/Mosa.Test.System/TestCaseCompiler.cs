@@ -7,12 +7,12 @@
  *  Michael Fröhlich (grover) <michael.ruck@michaelruck.de>
  */
 
-using System.Collections.Generic;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Stages;
 using Mosa.Compiler.InternalTrace;
-using Mosa.Compiler.TypeSystem;
 using Mosa.Compiler.Linker;
+using Mosa.Compiler.TypeSystem;
+using System.Collections.Generic;
 using x86 = Mosa.Platform.x86;
 
 namespace Mosa.Test.System

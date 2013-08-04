@@ -43,6 +43,5 @@ namespace Mosa.Kernel.x86
 		//	_used = _used + size;
 		//	return at;
 		//}
-
 	}
 }

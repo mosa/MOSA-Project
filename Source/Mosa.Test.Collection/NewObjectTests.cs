@@ -21,7 +21,5 @@ namespace Mosa.Test.Collection
 			NewObjectTests d = new NewObjectTests();
 			return d != null;
 		}
-
 	}
-
 }

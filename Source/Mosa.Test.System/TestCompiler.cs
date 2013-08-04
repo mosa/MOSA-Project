@@ -15,7 +15,6 @@ using Mosa.Test.CodeDomCompiler;
 using System;
 using System.CodeDom.Compiler;
 using System.Diagnostics;
-using System.IO;
 using System.Runtime.InteropServices;
 
 namespace Mosa.Test.System
