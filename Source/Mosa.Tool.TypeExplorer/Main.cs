@@ -7,11 +7,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
-using System.Windows.Forms;
 using Mosa.Compiler.Common;
 using Mosa.Compiler.InternalTrace;
 using Mosa.Compiler.Metadata;
@@ -19,6 +14,11 @@ using Mosa.Compiler.Metadata.Loader;
 using Mosa.Compiler.Pdb;
 using Mosa.Compiler.TypeSystem;
 using Mosa.Compiler.TypeSystem.Cil;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Text;
+using System.Windows.Forms;
 
 namespace Mosa.Tool.TypeExplorer
 {
@@ -120,7 +120,7 @@ namespace Mosa.Tool.TypeExplorer
 
 		public void LoadAssembly(string filename)
 		{
-			if (Path.GetFileName(filename) == "Mosa.Test.Collection.dll")
+			if (Path.GetFileName(filename) == "Mosa.Test.Collection.dll" || Path.GetFileName(filename) == "Mosa.Test.Runtime.dll")
 			{
 				includeTestKorlibToolStripMenuItem.Checked = true;
 			}

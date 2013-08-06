@@ -93,7 +93,7 @@ namespace Mosa.Tool.Compiler.Stages
 		{
 			ITypeModule mainTypeModule = typeSystem.MainTypeModule;
 
-			if (mainTypeModule.MetadataModule.EntryPoint.RID != 0)
+			if (mainTypeModule != null && mainTypeModule.MetadataModule.EntryPoint.RID != 0)
 			{
 				RuntimeMethod entrypoint = mainTypeModule.GetMethod(mainTypeModule.MetadataModule.EntryPoint);
 

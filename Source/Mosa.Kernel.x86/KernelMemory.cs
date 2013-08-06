@@ -14,7 +14,7 @@ namespace Mosa.Kernel.x86
 	/// <summary>
 	/// Kernel Memory Allocator - This is a pure HACK!
 	/// </summary>
-	public class KernelMemory
+	public static class KernelMemory
 	{
 		static private uint _heap = 0x300000;
 		static private uint _size = 0;

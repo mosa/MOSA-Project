@@ -162,14 +162,14 @@
   <data name="toolStripButton2.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAGjSURBVDhPjZHJSgNBEIYbwZN48ir4AJ486EX07nLx7FFf
-        QhB8AHNRUXBFXMAFAkZBEjBRVDCKiETjxC2EGEWzGhMTZ/utnunJgjjkh6Kaqv7+nqphlhKJwaKiDEiY
-        Z0CAQVH6wrFYvyza9tKkBpc8QiCmgT3KQfNs1HJdW+La/1KlhssSsEyxw8wz1TKhTji9N9h0X2Ft14/V
-        Xf+4wMqSHXR5mmKCQ1wb5pfMUWxYNWBh+xAdvcN/TcJBptz5mnRM0mWaH8/1gI9ysQ2INguc3lhzw3N6
-        Y5isuM4cAqcR1P6L0gj8RXq9tBOMGTDX1Mq+AVshcDLIdR+VgEXKj3XG2azNctaQomqGiWUkcFN6onVU
-        e2icgZOglxYgOUJ/YF6ggK7ryBdkvCfzhkF7z1C1gaUl57FAqvUjq0h9FhB5+7Q3mNv0CqQsVdORzf/g
-        NZ7DfSRlbzCz7hFYWYWignj6G+FYBoGHuL0Bb1aKLy7zVUT0PQspnMTF7VvtBpWLe4ymcR36wMnVS+0G
-        lYu7fUrAH3jFwXmkNgOe7cLWgDdrCcYY+wUZRTc/X6Gc6QAAAABJRU5ErkJggg==
+        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAGkSURBVDhPjZFNSwJRFIYvQStp1TboB7RqUZuofeWmdcv6
+        E0LQD6hNRUFZEX2AFQh9QBT0RQWZhIQpY1YipmJqaWnazDhv587cUSMafOFwLufc571zzjBTmcxwWVGG
+        JDgZ4GdQlMFIPG6XRdtaFcm2KzsIxCywTzlonPVaoXdLXPtfqmS7rQIrFDvMOFMtF+qB++Qem4c+rO95
+        sLbnmRBYTfIkXZ6lmOIQl8v4kgUKl1kDFrfP0D0w+tckEmRK4LhVwzRdpvnx3AycUi53ArE2gdMb64c4
+        urrXTVZ3rycFTiOodm91BP4ivV7dCcZ1mGtm9UCHzRA4GRT6zqvAEuXHJv1s1OY5q0tRK7qJaSRwQ1qm
+        Y6wSbpmDm6CXdiDroD/gFCigaRqKJRmpbFE36Oof+W1gatl9IZDf+pZVvOVLiCbz1gYLmycCqUmtaPgo
+        fiORLuAh+mZtMLdxJLCaSmUF6fcvROI5+MNpawPerBdfXO6zjFjqA1IkC28g2bhB/eIeY++4C73i0vfS
+        uEH94gJPGXj8CRzfRBsz4NkqLA14s5FgjLEfDTs3O3hw7iYAAAAASUVORK5CYII=
 </value>
   </data>
   <data name="toolStripButton4.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
@@ -191,6 +191,6 @@
 </value>
   </data>
   <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>45</value>
+    <value>46</value>
   </metadata>
 </root>

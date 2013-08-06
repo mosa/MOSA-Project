@@ -8,13 +8,13 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Linker;
 using Mosa.Compiler.TypeSystem;
 using Mosa.Compiler.TypeSystem.Cil;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 
 namespace Mosa.Compiler.Framework.Stages
 {
@@ -29,7 +29,6 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			foreach (RuntimeType type in typeSystem.GetAllTypes())
 			{
-
 				if (type.IsModule || type.IsGeneric)
 					continue;
 
@@ -248,8 +247,7 @@ namespace Mosa.Compiler.Framework.Stages
 			// Does this field have an RVA?
 			if (field.RVA != 0)
 			{
-				// FIXME: Move a static field into ROData, if it is read-only and can be initialized
-				// using static analysis
+				// FIXME: Move a static field into ROData, if it is read-only and can be initialized using static analysis
 				section = SectionKind.Data;
 			}
 			else

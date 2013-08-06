@@ -11,10 +11,10 @@ using Mosa.Internal.Plug;
 
 namespace Mosa.Kernel.Test
 {
-	public class KernelMemory
+	public static class KernelMemory
 	{
 		// const doesn't work below (workaround)
-		private static uint memoryPtr = 0x21700000;	// Location for pointer to allocated memory!
+		private const uint memoryPtr = 0x21700000;	// Location for pointer to allocated memory!
 
 		[PlugMethod("Mosa.Internal.Runtime.AllocateMemory")]
 		static unsafe public uint AllocateMemory(uint size)

@@ -7,11 +7,11 @@
  *  Simon Wollwage (rootnode) <rootnode@mosa-project.org>
  */
 
+using Mosa.Compiler.Framework.IR;
+using Mosa.Compiler.Framework.Platform;
 using System;
 using System.Diagnostics;
 using System.IO;
-using Mosa.Compiler.Framework.IR;
-using Mosa.Compiler.Framework.Platform;
 
 namespace Mosa.Compiler.Framework.Stages
 {
