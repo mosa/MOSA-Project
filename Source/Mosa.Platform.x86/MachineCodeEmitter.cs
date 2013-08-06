@@ -181,7 +181,10 @@ namespace Mosa.Platform.x86
 				linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuiltInPatch.I4, MethodName, pos, 0, displacement.Name, 0);
 				codeStream.Position += 4;
 			}
-
+			else if (displacement.IsMemoryAddress && displacement.OffsetBase != null && displacement.OffsetBase.IsConstant)
+			{
+				codeStream.Write((int)(displacement.OffsetBase.ValueAsLongInteger + displacement.Offset), Endianness.Little);
+			}
 			else
 			{
 				codeStream.Write((int)displacement.Offset, Endianness.Little);
