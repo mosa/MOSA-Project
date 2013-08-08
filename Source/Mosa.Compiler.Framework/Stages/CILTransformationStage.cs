@@ -700,74 +700,16 @@ namespace Mosa.Compiler.Framework.Stages
 			var value = context.Operand1;
 			var result = context.Result;
 
-			RuntimeType type;
-			VmCall vmCall;
+			Debug.Assert(result.Type is ClassSigType);
+			var type = typeModule.GetType((result.Type as ClassSigType).Token);
 
-			if (context.Operand1.Type.Type == CilElementType.Char)
-			{
-				type = typeSystem.GetType("mscorlib", "System", "Char");
-				vmCall = VmCall.BoxChar;
-			}
-			else if (context.Operand1.Type.Type == CilElementType.Boolean)
-			{
-				type = typeSystem.GetType("mscorlib", "System", "Boolean");
-				vmCall = VmCall.BoxBool;
-			}
-			else if (context.Operand1.Type.Type == CilElementType.I1)
-			{
-				type = typeSystem.GetType("mscorlib", "System", "SByte");
-				vmCall = VmCall.BoxInt8;
-			}
-			else if (context.Operand1.Type.Type == CilElementType.U1)
-			{
-				type = typeSystem.GetType("mscorlib", "System", "Byte");
-				vmCall = VmCall.BoxUInt8;
-			}
-			else if (context.Operand1.Type.Type == CilElementType.I2)
-			{
-				type = typeSystem.GetType("mscorlib", "System", "Int16");
-				vmCall = VmCall.BoxInt16;
-			}
-			else if (context.Operand1.Type.Type == CilElementType.U2)
-			{
-				type = typeSystem.GetType("mscorlib", "System", "UInt16");
-				vmCall = VmCall.BoxUInt16;
-			}
-			else if (context.Operand1.Type.Type == CilElementType.I4)
-			{
-				type = typeSystem.GetType("mscorlib", "System", "Int32");
-				vmCall = VmCall.BoxInt32;
-			}
-			else if (context.Operand1.Type.Type == CilElementType.U4)
-			{
-				type = typeSystem.GetType("mscorlib", "System", "UInt32");
-				vmCall = VmCall.BoxUInt32;
-			}
-			else if (context.Operand1.Type.Type == CilElementType.I8)
-			{
-				type = typeSystem.GetType("mscorlib", "System", "Int64");
-				vmCall = VmCall.BoxInt64;
-			}
-			else if (context.Operand1.Type.Type == CilElementType.U8)
-			{
-				type = typeSystem.GetType("mscorlib", "System", "UInt64");
-				vmCall = VmCall.BoxUInt64;
-			}
-			else if (context.Operand1.Type.Type == CilElementType.R4)
-			{
-				type = typeSystem.GetType("mscorlib", "System", "Single");
-				vmCall = VmCall.BoxSingle;
-			}
-			else if (context.Operand1.Type.Type == CilElementType.R8)
-			{
-				type = typeSystem.GetType("mscorlib", "System", "Double");
-				vmCall = VmCall.BoxDouble;
-			}
-			else
+			if (!type.IsValueType)
 			{
 				context.ReplaceInstructionOnly(IRInstruction.Move);
 				return;
 			}
+
+			var vmCall = TypeToVmBoxCall(type);
 
 			context.SetInstruction(IRInstruction.Nop);
 			ReplaceWithVmCall(context, vmCall);
@@ -1191,60 +1133,13 @@ namespace Mosa.Compiler.Framework.Stages
 			var type = context.RuntimeType;
 			var result = context.Result;
 
-			if (type.FullName == "System.Boolean")
-			{
-				ReplaceWithVmCall(context, VmCall.UnboxBool);
-			}
-			else if (type.FullName == "System.Char")
-			{
-				ReplaceWithVmCall(context, VmCall.UnboxChar);
-			}
-			else if (type.FullName == "System.SByte")
-			{
-				ReplaceWithVmCall(context, VmCall.UnboxInt8);
-			}
-			else if (type.FullName == "System.Byte")
-			{
-				ReplaceWithVmCall(context, VmCall.UnboxUInt8);
-			}
-			else if (type.FullName == "System.Int16")
-			{
-				//ReplaceWithVmCall(context, VmCall.UnboxInt32);
-				ReplaceWithVmCall(context, VmCall.UnboxInt16);
-			}
-			else if (type.FullName == "System.UInt16")
-			{
-				ReplaceWithVmCall(context, VmCall.UnboxUInt32);
-			}
-			else if (type.FullName == "System.Int32")
-			{
-				ReplaceWithVmCall(context, VmCall.UnboxInt32);
-			}
-			else if (type.FullName == "System.UInt32")
-			{
-				ReplaceWithVmCall(context, VmCall.UnboxUInt32);
-			}
-			else if (type.FullName == "System.Int64")
-			{
-				ReplaceWithVmCall(context, VmCall.UnboxInt64);
-			}
-			else if (type.FullName == "System.UInt64")
-			{
-				ReplaceWithVmCall(context, VmCall.UnboxUInt64);
-			}
-			else if (type.FullName == "System.Single")
-			{
-				ReplaceWithVmCall(context, VmCall.UnboxSingle);
-			}
-			else if (type.FullName == "System.Double")
-			{
-				ReplaceWithVmCall(context, VmCall.UnboxDouble);
-			}
-			else
+			if (!type.IsValueType)
 			{
 				context.ReplaceInstructionOnly(IRInstruction.Move);
 				return;
 			}
+
+			ReplaceWithVmCall(context, TypeToVmUnboxCall(type));
 
 			context.SetOperand(1, value);
 			context.OperandCount = 2;
@@ -1582,7 +1477,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <summary>
 		///
 		/// </summary>
-		private enum ConvType
+		private enum ConvertType
 		{
 			I1 = 0,
 			I2 = 1,
@@ -1600,30 +1495,30 @@ namespace Mosa.Compiler.Framework.Stages
 		}
 
 		/// <summary>
-		/// Converts a <see cref="CilElementType"/> to <see cref="ConvType"/>
+		/// Converts a <see cref="CilElementType" /> to <see cref="ConvertType" />
 		/// </summary>
-		/// <param name="cet">The CilElementType to convert.</param>
-		/// <returns>The equivalent ConvType.</returns>
-		/// <exception cref="T:System.NotSupportedException"><paramref name="cet"/> can't be converted.</exception>
-		private ConvType ConvTypeFromCilType(CilElementType cet)
+		/// <param name="cet">The cet.</param>
+		/// <returns></returns>
+		/// <exception cref="System.NotSupportedException"></exception>
+		private ConvertType ConvTypeFromCilType(CilElementType cet)
 		{
 			switch (cet)
 			{
-				case CilElementType.Char: return ConvType.U2;
-				case CilElementType.I1: return ConvType.I1;
-				case CilElementType.I2: return ConvType.I2;
-				case CilElementType.I4: return ConvType.I4;
-				case CilElementType.I8: return ConvType.I8;
-				case CilElementType.U1: return ConvType.U1;
-				case CilElementType.U2: return ConvType.U2;
-				case CilElementType.U4: return ConvType.U4;
-				case CilElementType.U8: return ConvType.U8;
-				case CilElementType.R4: return ConvType.R4;
-				case CilElementType.R8: return ConvType.R8;
-				case CilElementType.I: return ConvType.I;
-				case CilElementType.U: return ConvType.U;
-				case CilElementType.Ptr: return ConvType.Ptr;
-				case CilElementType.ByRef: return ConvType.Ptr;
+				case CilElementType.Char: return ConvertType.U2;
+				case CilElementType.I1: return ConvertType.I1;
+				case CilElementType.I2: return ConvertType.I2;
+				case CilElementType.I4: return ConvertType.I4;
+				case CilElementType.I8: return ConvertType.I8;
+				case CilElementType.U1: return ConvertType.U1;
+				case CilElementType.U2: return ConvertType.U2;
+				case CilElementType.U4: return ConvertType.U4;
+				case CilElementType.U8: return ConvertType.U8;
+				case CilElementType.R4: return ConvertType.R4;
+				case CilElementType.R8: return ConvertType.R8;
+				case CilElementType.I: return ConvertType.I;
+				case CilElementType.U: return ConvertType.U;
+				case CilElementType.Ptr: return ConvertType.Ptr;
+				case CilElementType.ByRef: return ConvertType.Ptr;
 			}
 
 			// Requested CilElementType is not supported
@@ -1833,8 +1728,8 @@ namespace Mosa.Compiler.Framework.Stages
 			Operand destinationOperand = context.Result;
 			Operand sourceOperand = context.Operand1;
 
-			ConvType ctDest = ConvTypeFromCilType(destinationOperand.Type.Type);
-			ConvType ctSrc = ConvTypeFromCilType(sourceOperand.Type.Type);
+			ConvertType ctDest = ConvTypeFromCilType(destinationOperand.Type.Type);
+			ConvertType ctSrc = ConvTypeFromCilType(sourceOperand.Type.Type);
 
 			BaseIRInstruction type = s_convTable[(int)ctDest][(int)ctSrc];
 			if (type == null)
@@ -1871,51 +1766,51 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 		}
 
-		private BaseInstruction ComputeExtensionTypeAndMask(ConvType destinationType, ref uint mask)
+		private BaseInstruction ComputeExtensionTypeAndMask(ConvertType destinationType, ref uint mask)
 		{
 			switch (destinationType)
 			{
-				case ConvType.I1:
+				case ConvertType.I1:
 					mask = 0xFF;
 					return IRInstruction.SignExtendedMove;
-				case ConvType.I2:
+				case ConvertType.I2:
 					mask = 0xFFFF;
 					return IRInstruction.SignExtendedMove;
-				case ConvType.I4:
+				case ConvertType.I4:
 					mask = 0xFFFFFFFF;
 					break;
 
-				case ConvType.I8:
+				case ConvertType.I8:
 					mask = 0x0;
 					break;
 
-				case ConvType.U1:
+				case ConvertType.U1:
 					mask = 0xFF;
 					return IRInstruction.ZeroExtendedMove;
-				case ConvType.U2:
+				case ConvertType.U2:
 					mask = 0xFFFF;
 					return IRInstruction.ZeroExtendedMove;
-				case ConvType.U4:
+				case ConvertType.U4:
 					mask = 0xFFFFFFFF;
 					break;
 
-				case ConvType.U8:
+				case ConvertType.U8:
 					mask = 0x0;
 					break;
 
-				case ConvType.R4:
+				case ConvertType.R4:
 					break;
 
-				case ConvType.R8:
+				case ConvertType.R8:
 					break;
 
-				case ConvType.I:
+				case ConvertType.I:
 					break;
 
-				case ConvType.U:
+				case ConvertType.U:
 					break;
 
-				case ConvType.Ptr:
+				case ConvertType.Ptr:
 					break;
 
 				default:
@@ -2108,6 +2003,49 @@ namespace Mosa.Compiler.Framework.Stages
 			return name;
 		}
 
+		private static VmCall TypeToVmBoxCall(RuntimeType type)
+		{
+			Debug.Assert(type.IsValueType);
+
+			switch (type.FullName)
+			{
+				case "System.Char": return VmCall.BoxChar;
+				case "System.Boolean": return VmCall.BoxChar;
+				case "System.SByte": return VmCall.BoxInt8;
+				case "System.Byte": return VmCall.BoxUInt8;
+				case "System.Int16": return VmCall.BoxInt16;
+				case "System.UInt16": return VmCall.BoxUInt16;
+				case "System.Int32": return VmCall.BoxInt32;
+				case "System.UInt32": return VmCall.BoxUInt32;
+				case "System.Int64": return VmCall.BoxInt64;
+				case "System.UInt64": return VmCall.BoxUInt64;
+				case "System.Single": return VmCall.BoxSingle;
+				case "System.Double": return VmCall.BoxDouble;
+				default: throw new InvalidProgramException();
+			}
+		}
+
+		private static VmCall TypeToVmUnboxCall(RuntimeType type)
+		{
+			Debug.Assert(type.IsValueType);
+
+			switch (type.FullName)
+			{
+				case "System.Char": return VmCall.UnboxChar;
+				case "System.Boolean": return VmCall.UnboxChar;
+				case "System.SByte": return VmCall.UnboxInt8;
+				case "System.Byte": return VmCall.UnboxUInt8;
+				case "System.Int16": return VmCall.UnboxInt16;
+				case "System.UInt16": return VmCall.UnboxUInt16;
+				case "System.Int32": return VmCall.UnboxInt32;
+				case "System.UInt32": return VmCall.UnboxUInt32;
+				case "System.Int64": return VmCall.UnboxInt64;
+				case "System.UInt64": return VmCall.UnboxUInt64;
+				case "System.Single": return VmCall.UnboxSingle;
+				case "System.Double": return VmCall.UnboxDouble;
+				default: throw new InvalidProgramException();
+			}
+		}
 		#endregion Internals
 	}
 }
