@@ -125,6 +125,20 @@ namespace Mosa.Compiler.Framework
 				s.Append("]");
 			}
 
+			if (context.RuntimeType != null)
+			{
+				s.Append(" [");
+				s.Append(context.RuntimeType.FullName);
+				s.Append("]");
+			}
+
+			if (context.RuntimeField != null)
+			{
+				s.Append(" [");
+				s.Append(context.RuntimeField.FullName);
+				s.Append("]");
+			}
+
 			string mod = GetModifier(context);
 			if (mod != null)
 			{

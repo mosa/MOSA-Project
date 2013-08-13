@@ -80,13 +80,11 @@ namespace Mosa.Platform.x86
 				PushOperands(context, operands, stackSize, edx);
 			}
 
+			//context.AppendInstruction(X86.Call, null, target);
 			context.AppendInstruction(X86.Mov, edx, target);
 			context.AppendInstruction(X86.Call, null, edx);
-
-			if (stackSize != 0)
-			{
-				FreeStackAfterCall(context, stackSize);
-			}
+			
+			FreeStackAfterCall(context, stackSize);
 
 			CleanupReturnValue(context, result);
 		}
@@ -109,10 +107,10 @@ namespace Mosa.Platform.x86
 
 		private void ReserveStackSizeForCall(Context context, int stackSize, Operand edx)
 		{
-			Debug.Assert(stackSize != 0);
+			if (stackSize == 0)
+				return;
 
 			Operand esp = Operand.CreateCPURegister(BuiltInSigType.IntPtr, GeneralPurposeRegister.ESP);
-			//Operand edx = Operand.CreateCPURegister(BuiltInSigType.IntPtr, GeneralPurposeRegister.EDX);
 
 			context.AppendInstruction(X86.Sub, esp, esp, Operand.CreateConstant(BuiltInSigType.IntPtr, stackSize));
 			context.AppendInstruction(X86.Mov, edx, esp);
@@ -261,34 +259,35 @@ namespace Mosa.Platform.x86
 			int size, alignment;
 			architecture.GetTypeRequirements(operand.Type, out size, out alignment);
 
-			// FIXME: Do not issue a move, if the operand is already the destination register
 			if (size == 4 || size == 2 || size == 1)
 			{
 				context.SetInstruction(X86.Mov, Operand.CreateCPURegister(operand.Type, GeneralPurposeRegister.EAX), operand);
 				return;
 			}
-			else if (size == 8 && (operand.Type.Type == CilElementType.R4 || operand.Type.Type == CilElementType.R8))
+			else if (operand.Type.Type == CilElementType.R4)
 			{
-				context.SetInstruction(X86.Mov, Operand.CreateCPURegister(operand.Type, SSE2Register.XMM0), operand);
+				context.SetInstruction(X86.Movss, Operand.CreateCPURegister(operand.Type, SSE2Register.XMM0), operand);
 				return;
 			}
-			else if (size == 8 && (operand.Type.Type == CilElementType.I8 || operand.Type.Type == CilElementType.U8))
+			else if (operand.Type.Type == CilElementType.R8)
+			{
+				context.SetInstruction(X86.Movsd, Operand.CreateCPURegister(operand.Type, SSE2Register.XMM0), operand);
+				return;
+			}
+			else if (operand.Type.Type == CilElementType.I8 || operand.Type.Type == CilElementType.U8)
 			{
 				SigType HighType = (operand.Type.Type == CilElementType.I8) ? BuiltInSigType.Int32 : BuiltInSigType.UInt32;
 
 				Operand opL = operand.Low;
 				Operand opH = operand.High;
 
-				// Like Win32: EDX:EAX
 				context.SetInstruction(X86.Mov, Operand.CreateCPURegister(BuiltInSigType.UInt32, GeneralPurposeRegister.EAX), opL);
 				context.AppendInstruction(X86.Mov, Operand.CreateCPURegister(HighType, GeneralPurposeRegister.EDX), opH);
 
 				return;
 			}
-			else
-			{
-				throw new NotSupportedException();
-			}
+
+			throw new NotSupportedException();
 		}
 
 		void ICallingConvention.GetStackRequirements(Operand stackOperand, out int size, out int alignment)

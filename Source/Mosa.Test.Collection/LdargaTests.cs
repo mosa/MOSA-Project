@@ -23,7 +23,7 @@ namespace Mosa.Test.Collection
 			 return expect.Equals(a);
 		}
 
-		private static void  LdargaChangeValueRefU1(byte expect, ref byte a)
+		private static void LdargaChangeValueRefU1(byte expect, ref byte a)
 		{
 			a = expect;
 		}
@@ -44,7 +44,7 @@ namespace Mosa.Test.Collection
 			 return expect.Equals(a);
 		}
 
-		private static void  LdargaChangeValueRefU2(ushort expect, ref ushort a)
+		private static void LdargaChangeValueRefU2(ushort expect, ref ushort a)
 		{
 			a = expect;
 		}
@@ -65,7 +65,7 @@ namespace Mosa.Test.Collection
 			 return expect.Equals(a);
 		}
 
-		private static void  LdargaChangeValueRefU4(uint expect, ref uint a)
+		private static void LdargaChangeValueRefU4(uint expect, ref uint a)
 		{
 			a = expect;
 		}
@@ -86,7 +86,7 @@ namespace Mosa.Test.Collection
 			 return expect.Equals(a);
 		}
 
-		private static void  LdargaChangeValueRefU8(ulong expect, ref ulong a)
+		private static void LdargaChangeValueRefU8(ulong expect, ref ulong a)
 		{
 			a = expect;
 		}
@@ -107,7 +107,7 @@ namespace Mosa.Test.Collection
 			 return expect.Equals(a);
 		}
 
-		private static void  LdargaChangeValueRefI1(sbyte expect, ref sbyte a)
+		private static void LdargaChangeValueRefI1(sbyte expect, ref sbyte a)
 		{
 			a = expect;
 		}
@@ -128,7 +128,7 @@ namespace Mosa.Test.Collection
 			 return expect.Equals(a);
 		}
 
-		private static void  LdargaChangeValueRefI2(short expect, ref short a)
+		private static void LdargaChangeValueRefI2(short expect, ref short a)
 		{
 			a = expect;
 		}
@@ -149,7 +149,7 @@ namespace Mosa.Test.Collection
 			 return expect.Equals(a);
 		}
 
-		private static void  LdargaChangeValueRefI4(int expect, ref int a)
+		private static void LdargaChangeValueRefI4(int expect, ref int a)
 		{
 			a = expect;
 		}
@@ -170,7 +170,7 @@ namespace Mosa.Test.Collection
 			 return expect.Equals(a);
 		}
 
-		private static void  LdargaChangeValueRefI8(long expect, ref long a)
+		private static void LdargaChangeValueRefI8(long expect, ref long a)
 		{
 			a = expect;
 		}
@@ -191,7 +191,7 @@ namespace Mosa.Test.Collection
 			 return expect.Equals(a);
 		}
 
-		private static void  LdargaChangeValueRefR4(float expect, ref float a)
+		private static void LdargaChangeValueRefR4(float expect, ref float a)
 		{
 			a = expect;
 		}
@@ -212,7 +212,7 @@ namespace Mosa.Test.Collection
 			 return expect.Equals(a);
 		}
 
-		private static void  LdargaChangeValueRefR8(double expect, ref double a)
+		private static void LdargaChangeValueRefR8(double expect, ref double a)
 		{
 			a = expect;
 		}
@@ -233,7 +233,7 @@ namespace Mosa.Test.Collection
 			 return expect.Equals(a);
 		}
 
-		private static void  LdargaChangeValueRefC(char expect, ref char a)
+		private static void LdargaChangeValueRefC(char expect, ref char a)
 		{
 			a = expect;
 		}

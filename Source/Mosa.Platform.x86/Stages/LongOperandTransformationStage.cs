@@ -1125,10 +1125,8 @@ namespace Mosa.Platform.x86.Stages
 			SplitLongOperand(context.Operand3, out op0L, out op0H);
 
 			Operand v1 = AllocateVirtualRegister(BuiltInSigType.UInt32);
-			Operand v2 = AllocateVirtualRegister(BuiltInSigType.UInt32);
-			Operand v3 = AllocateVirtualRegister(BuiltInSigType.UInt32);
 
-			// Fortunately in 32-bit mode, we can't have 64-bit offsets, so this plain add should suffice.
+			// Fortunately in 32-bit mode, we can't have 64-bit offsets, so this plan add should suffice.
 			if (offset.IsConstant && offset.ValueAsLongInteger == 0)
 			{
 				context.SetInstruction(X86.Mov, v1, address);
@@ -1138,10 +1136,8 @@ namespace Mosa.Platform.x86.Stages
 				context.SetInstruction(X86.Add, v1, address, offset);
 			}
 
-			context.AppendInstruction(X86.Mov, v1, op0L);
-			context.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(BuiltInSigType.UInt32, v2, 0), v1);
-			context.AppendInstruction(X86.Mov, v3, op0H);
-			context.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(BuiltInSigType.UInt32, v3, 4), v1);
+			context.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(BuiltInSigType.UInt32, v1, 0), op0L);
+			context.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(BuiltInSigType.UInt32, v1, 4), op0H);
 		}
 
 		/// <summary>

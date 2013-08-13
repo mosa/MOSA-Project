@@ -19,57 +19,68 @@ namespace Mosa.Test.Cases.CIL
 		}
 
 		#region CheckValue
-				[Test]
+				
+		[Test]
 		public void LdargaCheckValueU1([U1]byte a)
 		{
 			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "LdargaTests", "LdargaCheckValueU1", a, a));
 		}
-				[Test]
+				
+		[Test]
 		public void LdargaCheckValueU2([U2]ushort a)
 		{
 			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "LdargaTests", "LdargaCheckValueU2", a, a));
 		}
-				[Test]
+				
+		[Test]
 		public void LdargaCheckValueU4([U4]uint a)
 		{
 			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "LdargaTests", "LdargaCheckValueU4", a, a));
 		}
-				[Test]
+				
+		[Test]
 		public void LdargaCheckValueU8([U8]ulong a)
 		{
 			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "LdargaTests", "LdargaCheckValueU8", a, a));
 		}
-				[Test]
+				
+		[Test]
 		public void LdargaCheckValueI1([I1]sbyte a)
 		{
 			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "LdargaTests", "LdargaCheckValueI1", a, a));
 		}
-				[Test]
+				
+		[Test]
 		public void LdargaCheckValueI2([I2]short a)
 		{
 			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "LdargaTests", "LdargaCheckValueI2", a, a));
 		}
-				[Test]
+				
+		[Test]
 		public void LdargaCheckValueI4([I4]int a)
 		{
 			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "LdargaTests", "LdargaCheckValueI4", a, a));
 		}
-				[Test]
+				
+		[Test]
 		public void LdargaCheckValueI8([I8]long a)
 		{
 			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "LdargaTests", "LdargaCheckValueI8", a, a));
 		}
-				[Test]
+				
+		[Test]
 		public void LdargaCheckValueR4([R4]float a)
 		{
 			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "LdargaTests", "LdargaCheckValueR4", a, a));
 		}
-				[Test]
+				
+		[Test]
 		public void LdargaCheckValueR8([R8]double a)
 		{
 			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "LdargaTests", "LdargaCheckValueR8", a, a));
 		}
-				[Test]
+				
+		[Test]
 		public void LdargaCheckValueC([C]char a)
 		{
 			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "LdargaTests", "LdargaCheckValueC", a, a));

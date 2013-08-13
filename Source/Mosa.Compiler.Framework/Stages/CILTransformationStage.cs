@@ -699,11 +699,20 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			var value = context.Operand1;
 			var result = context.Result;
+			var type = context.RuntimeType;
 
-			Debug.Assert(result.Type is ClassSigType);
-			var type = typeModule.GetType((result.Type as ClassSigType).Token);
+			// this type resolution is a hack
+			if (type == null)
+			{
+				var sigType = result.Type as ValueTypeSigType;
 
-			if (!type.IsValueType)
+				if (sigType != null)
+				{
+					type = typeModule.GetType(sigType.Token);
+				}
+			}
+
+			if (type == null || !type.IsValueType)
 			{
 				context.ReplaceInstructionOnly(IRInstruction.Move);
 				return;
@@ -711,8 +720,14 @@ namespace Mosa.Compiler.Framework.Stages
 
 			var vmCall = TypeToVmBoxCall(type);
 
+			if (!vmCall.HasValue)
+			{
+				context.ReplaceInstructionOnly(IRInstruction.Move);
+				return;
+			}
+
 			context.SetInstruction(IRInstruction.Nop);
-			ReplaceWithVmCall(context, vmCall);
+			ReplaceWithVmCall(context, vmCall.Value);
 
 			var methodTableSymbol = GetMethodTableSymbol(type);
 			var classSize = typeLayout.GetTypeSize(type);
@@ -2003,7 +2018,7 @@ namespace Mosa.Compiler.Framework.Stages
 			return name;
 		}
 
-		private static VmCall TypeToVmBoxCall(RuntimeType type)
+		private static VmCall? TypeToVmBoxCall(RuntimeType type)
 		{
 			Debug.Assert(type.IsValueType);
 
@@ -2021,7 +2036,7 @@ namespace Mosa.Compiler.Framework.Stages
 				case "System.UInt64": return VmCall.BoxUInt64;
 				case "System.Single": return VmCall.BoxSingle;
 				case "System.Double": return VmCall.BoxDouble;
-				default: throw new InvalidProgramException();
+				default: return null;
 			}
 		}
 

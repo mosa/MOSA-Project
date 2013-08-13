@@ -20,6 +20,7 @@ namespace Mosa.Test.Cases.CIL
 
 		#region CheckValue
 		<# foreach (KeyValuePair<string, string> number in NumbersWithChar) { #>
+		
 		[Test]
 		public void LdargaCheckValue<#= number.Value #>([<#= number.Value #>]<#= number.Key #> a)
 		{
