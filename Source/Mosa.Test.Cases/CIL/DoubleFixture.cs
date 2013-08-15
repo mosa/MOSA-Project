@@ -129,5 +129,11 @@ namespace Mosa.Test.Cases.CIL
 		{
 			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "DoubleTests", "Ldelema", index, value));
 		}
+
+		[Test]
+		public void IsNaN([R8Number]double value)
+		{
+			Assert.AreEqual(DoubleTests.IsNaN(value), Run<bool>("Mosa.Test.Collection", "DoubleTests", "IsNaN", value));
+		}
 	}
 }

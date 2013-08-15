@@ -83,7 +83,7 @@ namespace Mosa.Platform.x86
 			//context.AppendInstruction(X86.Call, null, target);
 			context.AppendInstruction(X86.Mov, edx, target);
 			context.AppendInstruction(X86.Call, null, edx);
-			
+
 			FreeStackAfterCall(context, stackSize);
 
 			CleanupReturnValue(context, result);
@@ -196,26 +196,20 @@ namespace Mosa.Platform.x86
 					case StackTypeCode.O: goto case StackTypeCode.N;
 					case StackTypeCode.Ptr: goto case StackTypeCode.N;
 					case StackTypeCode.Int32: goto case StackTypeCode.N;
-					case StackTypeCode.N:
-						rop = edx;
-						break;
-
-					case StackTypeCode.F:
-						rop = Operand.CreateCPURegister(op.Type, SSE2Register.XMM0);
-						break;
-
+					case StackTypeCode.N: rop = edx; break;
+					case StackTypeCode.F: rop = Operand.CreateCPURegister(op.Type, SSE2Register.XMM0); break;
 					case StackTypeCode.Int64:
 						{
 							context.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(op.Type, edx, stackSize), op.Low);
 							context.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(op.Type, edx, stackSize + 4), op.High);
 							return;
 						}
-
 					default:
 						throw new NotSupportedException();
 				}
 
-				context.AppendInstruction(X86.Mov, rop, op);
+				architecture.InsertMove(context, rop, op);
+				//context.AppendInstruction(X86.Mov, rop, op);
 				op = rop;
 			}
 			else if (op.StackType == StackTypeCode.Int64)
@@ -226,7 +220,8 @@ namespace Mosa.Platform.x86
 				return;
 			}
 
-			context.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(op.Type, edx, stackSize), op);
+			architecture.InsertMove(context, Operand.CreateMemoryAddress(op.Type, edx, stackSize), op);
+			//context.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(op.Type, edx, stackSize), op);
 		}
 
 		/// <summary>

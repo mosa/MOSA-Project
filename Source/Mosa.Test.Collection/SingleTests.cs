@@ -7,6 +7,8 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using System;
+
 namespace Mosa.Test.Collection
 {
 	public static class SingleTests
@@ -118,5 +120,11 @@ namespace Mosa.Test.Collection
 		{
 			destination = value;
 		}
+
+		public static bool IsNaN(float value)
+		{
+			return Single.IsNaN(value);
+		}
+
 	}
 }

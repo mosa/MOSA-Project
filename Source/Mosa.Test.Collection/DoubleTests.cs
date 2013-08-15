@@ -7,6 +7,8 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using System;
+
 namespace Mosa.Test.Collection
 {
 	public static class DoubleTests
@@ -117,6 +119,11 @@ namespace Mosa.Test.Collection
 		private static void SetValueInRefValue(ref double destination, double value)
 		{
 			destination = value;
+		}
+
+		public static bool IsNaN(double value)
+		{
+			return Double.IsNaN(value);
 		}
 	}
 }

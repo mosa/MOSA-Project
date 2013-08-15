@@ -39,5 +39,11 @@ namespace Mosa.Test.Cases.CIL
 		{
 			Assert.AreEqual<int>(SpecificTests.R8ToI4(value), Run<int>("Mosa.Test.Collection", "SpecificTests", "R8ToI4", value));
 		}
+
+		[Test]
+		public void IsNaN()
+		{
+			Assert.AreEqual<bool>(SpecificTests.IsNaN(), Run<bool>("Mosa.Test.Collection", "SpecificTests", "IsNaN"));
+		}
 	}
 }

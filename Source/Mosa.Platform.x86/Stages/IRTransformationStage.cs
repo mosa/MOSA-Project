@@ -220,7 +220,7 @@ namespace Mosa.Platform.x86.Stages
 			Operand ecx = AllocateVirtualRegister(BuiltInSigType.Byte);
 			Operand edx = AllocateVirtualRegister(BuiltInSigType.Byte);
 
-			context.AppendInstruction(X86.Pushfd);
+			//context.AppendInstruction(X86.Pushfd);
 
 			if (code == ConditionCode.Equal)
 			{
@@ -286,7 +286,7 @@ namespace Mosa.Platform.x86.Stages
 				context.AppendInstruction(X86.Or, eax, eax, edx);
 			}
 			context.AppendInstruction(X86.Movzx, resultOperand, eax);
-			context.AppendInstruction(X86.Popfd);
+			//context.AppendInstruction(X86.Popfd);
 		}
 
 		/// <summary>
