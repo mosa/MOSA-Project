@@ -3,7 +3,7 @@
 ###############################################################
 
 # how much memory the emulated machine will have
-megs: 64
+megs: 128
 
 # filename of ROM images
 romimage: file=..\..\Tools\Bochs\BIOS-bochs-latest
@@ -28,3 +28,6 @@ log: bochsout.txt
 
 # disable the mouse, since DLX is text only
 mouse: enabled=0
+
+# enable sse
+cpuid: mmx=1, sep=1, sse=sse4_2, apic=xapic, aes=1, movbe=1, xsave=1
