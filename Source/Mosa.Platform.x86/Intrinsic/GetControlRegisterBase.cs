@@ -41,8 +41,8 @@ namespace Mosa.Platform.x86.Intrinsic
 			Operand result = context.Result;
 			Operand imm = methodCompiler.CreateVirtualRegister(BuiltInSigType.UInt32);
 
-			context.SetInstruction(IRInstruction.Move, imm, Operand.CreateCPURegister(BuiltInSigType.UInt32, control));
-			context.AppendInstruction(IRInstruction.Move, result, imm);
+			context.SetInstruction(X86.MovCR, imm, Operand.CreateCPURegister(BuiltInSigType.UInt32, control));
+			context.AppendInstruction(X86.Mov, result, imm);
 		}
 
 		#endregion Methods

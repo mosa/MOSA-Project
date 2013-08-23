@@ -24,7 +24,7 @@ namespace Mosa.TestWorld.x86
 		/// </summary>
 		public static void Main()
 		{
-			Write('Q', 3);
+			Write('*', 3);
 
 			Screen.Color = 0x0;
 			Screen.Clear();
@@ -37,178 +37,78 @@ namespace Mosa.TestWorld.x86
 			Screen.Write(' ');
 			Screen.Write('O');
 			Screen.Write('S');
-
-			RunTests();
-
 			Screen.Write("!");
 
-			while (true)
-			{
-			}
-		}
+			SSE.Setup();
+			Write('0', 0x0E);
+			//DebugClient.Setup(Serial.COM1);
+			IDT.SetInterruptHandler(null);
+			Write('1', 0x0E);
+			Multiboot.Setup();
+			Write('2', 0x0E);
+			ProgrammableInterruptController.Setup();
+			Write('3', 0x0E);
+			GDT.Setup();
+			Write('4', 0x0E);
+			IDT.Setup();
+			Write('5', 0x0E);
+			PageFrameAllocator.Setup();
+			Write('6', 0x0E);
+			//PageTable.Setup();
+			//VirtualPageAllocator.Setup();
+			Write('7', 0x0E);
 
-		public static void RunTests()
-		{
-			NewObjectTests o = new NewObjectTests();
-			int i = o.Test();
-			Screen.Write((uint)i);
-		}
+			RunTests();
+			Write('8', 0x0E);
 
-		public static void Write(char chr, byte color)
-		{
-			Native.Set8(0x0B8000, (byte)chr);
-			Native.Set8(0x0B8001, color);
-		}
+			//CMOS cmos = new CMOS();
+			//Screen.Write("7");
 
-		/// <summary>
-		/// Mains this instance.
-		/// </summary>
-		public static void Main2()
-		{
-			//Mosa.Kernel.x86.Kernel.Setup();
-			DebugClient.Setup(Serial.COM1);
-			IDT.SetInterruptHandler(ProcessInterrupt);
+			//Screen.Write("8");
 
-			Console = ConsoleManager.Controller.Boot;
+			//Console = ConsoleManager.Controller.Boot;
 
-			Console.Clear();
-			Console.Color = Colors.Yellow;
-			Console.BackgroundColor = Colors.Black;
+			//Screen.Write("9");
 
-			Console.Write(@"MOSA OS Version 1.2 '");
-			Console.Color = Colors.Red;
-			Console.Write(@"Titan");
-			Console.Color = Colors.Yellow;
-			Console.Write(@"'                                Copyright 2008-2012");
-			Console.WriteLine();
+			//Console.Clear();
+			////Console.Write(@"www.mosa-project.org");
 
-			Console.Row = 23;
-			for (uint index = 0; index < 80; index++)
-			{
-				Console.Column = index;
-				Console.Write((char)205);
-			}
+			//Screen.Write("0");
 
-			Console.Goto(24, 29);
-			Console.Color = Colors.Yellow;
-
-			Console.Write(@"www.mosa-project.org");
-
-			CMOS cmos = new CMOS();
-
-			KernelTest.RunTests();
-			Mosa.Test.AssemblyB.Test.Test1();
-			Mosa.Test.AssemblyC.Test.Test1();
-
-			byte last = 0;
+			//byte last = 0;
 
 			while (true)
 			{
-				DisplayTime(cmos);
+				//Screen.Write("-");
 
-				if (cmos.Second != last)
-				{
-					last = cmos.Second;
-					DebugClient.SendAlive();
-				}
+				//if (cmos.Second != last)
+				//{
+				//	last = cmos.Second;
+				//	//DebugClient.SendAlive();
+				//	Screen.Write(".");
+				//}
 
-				DebugClient.Process();
+				//DebugClient.Process();
+
 				Native.Hlt();
 			}
 		}
 
-		/// <summary>
-		/// Displays the seconds.
-		/// </summary>
-		private static void DisplayTime(CMOS cmos)
-		{
-			Console.Goto(24, 52);
-			Console.Color = Colors.Green;
-			Console.Write(@"Time: ");
-
-			byte bcd = 10;
-
-			if (cmos.BCD)
-				bcd = 16;
-
-			Console.Color = Colors.White;
-			Console.Write(cmos.Hour, bcd, 2);
-			Console.Color = Colors.Gray;
-			Console.Write(':');
-			Console.Color = Colors.White;
-			Console.Write(cmos.Minute, bcd, 2);
-			Console.Color = Colors.Gray;
-			Console.Write(':');
-			Console.Color = Colors.White;
-			Console.Write(cmos.Second, bcd, 2);
-			Console.Write(' ');
-			Console.Color = Colors.Gray;
-			Console.Write('(');
-			Console.Color = Colors.White;
-			Console.Write(cmos.Month, bcd, 2);
-			Console.Color = Colors.Gray;
-			Console.Write('/');
-			Console.Color = Colors.White;
-			Console.Write(cmos.Day, bcd, 2);
-			Console.Color = Colors.Gray;
-			Console.Write('/');
-			Console.Color = Colors.White;
-			Console.Write('2');
-			Console.Write('0');
-			Console.Write(cmos.Year, bcd, 2);
-			Console.Color = Colors.Gray;
-			Console.Write(')');
-		}
-
-		private static uint counter = 0;
-
 		public static void ProcessInterrupt(byte interrupt, byte errorCode)
 		{
-			uint c = Console.Column;
-			uint r = Console.Row;
-			byte col = Console.Color;
-			byte back = Console.BackgroundColor;
-
-			Console.Column = 31;
-			Console.Row = 0;
-			Console.Color = Colors.Cyan;
-			Console.BackgroundColor = Colors.Black;
-
-			counter++;
-			Console.Write(counter, 10, 7);
-			Console.Write(':');
-			Console.Write(interrupt, 16, 2);
-			Console.Write(':');
-			Console.Write(errorCode, 16, 2);
-
-			if (interrupt == 14)
-			{
-				// Page Fault!
-				PageFaultHandler.Fault(errorCode);
-			}
-			else if (interrupt == 0x20)
-			{
-				// Timer Interrupt! Switch Tasks!
-			}
-			else
-			{
-				Console.Write('-');
-				Console.Write(counter, 10, 7);
-				Console.Write(':');
-				Console.Write(interrupt, 16, 2);
-
-				if (interrupt == 0x21)
-				{
-					byte scancode = Keyboard.ReadScanCode();
-					Console.Write('-');
-					Console.Write(scancode, 16, 2);
-				}
-			}
-
-			Console.Column = c;
-			Console.Row = r;
-			Console.Color = col;
-			Console.BackgroundColor = back;
+			Screen.Write("!");
 		}
+
+		public static void RunTests()
+		{
+			DoubleTests.CeqR8R8(1d, 2d);
+		}
+
+		public static void Write(char chr, byte color)
+		{
+			Native.Set8(0x0B8040, (byte)chr);
+			Native.Set8(0x0B8041, color);
+		}
+
 	}
 }

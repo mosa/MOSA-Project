@@ -7,8 +7,8 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System.Diagnostics;
 using Mosa.Compiler.Framework;
+using System.Diagnostics;
 
 namespace Mosa.Platform.x86.Stages
 {
@@ -17,8 +17,8 @@ namespace Mosa.Platform.x86.Stages
 	/// </summary>
 	public sealed class JumpPeepholeOptimizationStage : BaseTransformationStage, IMethodCompilerStage
 	{
-		// TODO: 
-		// 1. If first branch is to the next basic block, 
+		// TODO:
+		// 1. If first branch is to the next basic block,
 		//       then swap branch condition, replace branch target with jump target, and remove jump instruction.
 		//           part of code: ConditionCode = GetOppositeConditionCode(ConditionCode);
 		// 2. If the basic block contains only a single jump instruction, rewrite all jumps to avoid it.

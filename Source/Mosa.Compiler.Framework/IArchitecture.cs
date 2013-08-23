@@ -124,17 +124,17 @@ namespace Mosa.Compiler.Framework
 		/// Insert platform move.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		/// <param name="Destination">The destination.</param>
-		/// <param name="Source">The source.</param>
-		void InsertMove(Context context, Operand Destination, Operand Source);
+		/// <param name="destination">The destination.</param>
+		/// <param name="source">The source.</param>
+		void InsertMove(Context context, Operand destination, Operand source);
 
 		/// <summary>
 		/// Insert platform exchange registers.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		/// <param name="Destination">The destination.</param>
-		/// <param name="Source">The source.</param>
-		void InsertExchange(Context context, Operand Destination, Operand Source);
+		/// <param name="destination">The destination.</param>
+		/// <param name="source">The source.</param>
+		void InsertExchange(Context context, Operand destination, Operand source);
 
 		#endregion Methods
 	}

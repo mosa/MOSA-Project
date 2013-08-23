@@ -159,6 +159,7 @@ namespace Mosa.Compiler.Framework
 			set
 			{
 				Operand current = instructionSet.Data[index].Operand1;
+				if (current == value) return;
 				if (current != null)
 				{
 					current.Uses.Remove(index);
@@ -193,6 +194,7 @@ namespace Mosa.Compiler.Framework
 			set
 			{
 				Operand current = instructionSet.Data[index].Operand2;
+				if (current == value) return; 
 				if (current != null)
 				{
 					current.Uses.Remove(index);
@@ -226,6 +228,7 @@ namespace Mosa.Compiler.Framework
 			set
 			{
 				Operand current = instructionSet.Data[index].Operand3;
+				if (current == value) return; 
 				if (current != null)
 				{
 					current.Uses.Remove(index);
@@ -1248,7 +1251,7 @@ namespace Mosa.Compiler.Framework
 				default:
 					{
 						Operand current = instructionSet.Data[index].GetAdditionalOperand(opIndex);
-
+						if (current == operand) return;
 						if (current != null)
 						{
 							current.Uses.Remove(index);

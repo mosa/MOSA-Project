@@ -144,6 +144,11 @@ namespace Mosa.Platform.x86
 		/// <summary>
 		///
 		/// </summary>
+		public static readonly MovCR MovCR = new MovCR();
+
+		/// <summary>
+		///
+		/// </summary>
 		public static readonly Mul Mul = new Mul();
 
 		/// <summary>

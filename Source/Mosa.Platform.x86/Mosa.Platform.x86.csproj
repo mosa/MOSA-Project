@@ -97,10 +97,12 @@
     </Compile>
     <Compile Include="BaseTransformationStage.cs" />
     <Compile Include="Instructions\Cmov.cs" />
+    <Compile Include="Instructions\MovCR.cs" />
     <Compile Include="Instructions\IMul.cs" />
     <Compile Include="Instructions\TwoOperandInstruction.cs" />
     <Compile Include="Instructions\AddSD.cs" />
     <Compile Include="Stages\BuildStackStage.cs" />
+    <Compile Include="Stages\FloatPointStage.cs" />
     <Compile Include="Stages\JumpPeepholeOptimizationStage.cs" />
     <Compile Include="Stages\FinalTweakTransformationStage.cs" />
     <Compile Include="Stages\SimpleDeadCodeRemovalStage.cs" />

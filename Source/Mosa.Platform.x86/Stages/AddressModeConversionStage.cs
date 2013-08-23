@@ -37,20 +37,21 @@ namespace Mosa.Platform.x86.Stages
 		/// <summary>
 		/// Converts the given instruction from three address format to a two address format.
 		/// </summary>
-		/// <param name="ctx">The conversion context.</param>
-		private void ThreeTwoAddressConversion(Context ctx)
+		/// <param name="context">The conversion context.</param>
+		private void ThreeTwoAddressConversion(Context context)
 		{
-			if (!(ctx.Instruction is X86Instruction))
+			if (!(context.Instruction is X86Instruction))
 				return;
 
-			if (!(ctx.OperandCount >= 1 && ctx.ResultCount >= 1 && ctx.Result != ctx.Operand1))
+			if (!(context.OperandCount >= 1 && context.ResultCount >= 1 && context.Result != context.Operand1))
 				return;
 
-			Operand result = ctx.Result;
-			Operand op1 = ctx.Operand1;
+			Operand result = context.Result;
+			Operand operand1 = context.Operand1;
 
-			ctx.InsertBefore().SetInstruction(X86.Mov, result, op1);
-			ctx.Operand1 = result;
+			context.Operand1 = result;
+
+			context.InsertBefore().SetInstruction(GetMove(result, operand1), result, operand1);
 
 			return;
 		}

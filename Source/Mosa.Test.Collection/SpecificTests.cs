@@ -7,6 +7,8 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using System;
+
 namespace Mosa.Test.Collection
 {
 	public static class SpecificTests
@@ -79,5 +81,18 @@ namespace Mosa.Test.Collection
 		{
 			return (int)value;
 		}
+
+		public static bool IsNaN()
+		{
+			double d = 12;
+
+			return Double.IsNaN(d);
+		}
+
+		public static bool CeqR8R8()
+		{
+			return DoubleTests.CeqR8R8(1d, 2d);
+		}
+
 	}
 }

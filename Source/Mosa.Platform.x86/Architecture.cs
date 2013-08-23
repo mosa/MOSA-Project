@@ -195,6 +195,7 @@ namespace Mosa.Platform.x86
 					new FixedRegisterAssignmentStage(),
 					new SimpleDeadCodeRemovalStage(),
 				    new AddressModeConversionStage(),
+					new FloatPointStage(),
 				});
 
 			methodCompilerPipeline.InsertAfterLast<StackLayoutStage>(
@@ -208,7 +209,7 @@ namespace Mosa.Platform.x86
 			methodCompilerPipeline.InsertBefore<CodeGenerationStage>(
 				new JumpPeepholeOptimizationStage()
 			);
-			
+
 			// FIXME: Disabled for now
 			//methodCompilerPipeline.InsertAfterLast<CodeGenerationStage>(
 			//    new ExceptionLayoutStage()
@@ -230,7 +231,8 @@ namespace Mosa.Platform.x86
 			{
 				case CilElementType.U8: size = 8; alignment = 4; break;
 				case CilElementType.I8: size = 8; alignment = 4; break;
-				case CilElementType.R8: size = alignment = 8; break;
+				case CilElementType.R8: size = 8; alignment = 16; break;
+				case CilElementType.R4: size = 4; alignment = 8; break;
 				default: size = alignment = 4; break;
 			}
 		}
@@ -248,43 +250,32 @@ namespace Mosa.Platform.x86
 		/// Create platform move.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		/// <param name="Destination">The destination.</param>
-		/// <param name="Source">The source.</param>
-		public override void InsertMove(Context context, Operand Destination, Operand Source)
+		/// <param name="destination">The destination.</param>
+		/// <param name="source">The source.</param>
+		public override void InsertMove(Context context, Operand destination, Operand source)
 		{
-			if (Source.Type.Type == CilElementType.R4)
-			{
-				context.AppendInstruction(X86.Movss, Destination, Source);
-			}
-			else if (Source.Type.Type == CilElementType.R8)
-			{
-				context.AppendInstruction(X86.Movsd, Destination, Source);
-			}
-			else
-			{
-				context.AppendInstruction(X86.Mov, Destination, Source);
-			}
+			context.AppendInstruction(BaseTransformationStage.GetMove(destination, source), destination, source);
 		}
 
 		/// <summary>
 		/// Creates the swap.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		/// <param name="Destination">The destination.</param>
-		/// <param name="Source">The source.</param>
-		public override void InsertExchange(Context context, Operand Destination, Operand Source)
+		/// <param name="destination">The destination.</param>
+		/// <param name="source">The source.</param>
+		public override void InsertExchange(Context context, Operand destination, Operand source)
 		{
-			if (Source.Type.Type == CilElementType.R4)
+			if (source.Type.Type == CilElementType.R4)
 			{
 				// TODO
 			}
-			else if (Source.Type.Type == CilElementType.R8)
+			else if (source.Type.Type == CilElementType.R8)
 			{
 				// TODO
 			}
 			else
 			{
-				context.AppendInstruction2(X86.Xchg, Destination, Source, Source, Destination);
+				context.AppendInstruction2(X86.Xchg, destination, source, source, destination);
 			}
 		}
 

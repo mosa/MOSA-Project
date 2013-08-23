@@ -45,5 +45,11 @@ namespace Mosa.Test.Cases.CIL
 		{
 			Assert.AreEqual<bool>(SpecificTests.IsNaN(), Run<bool>("Mosa.Test.Collection", "SpecificTests", "IsNaN"));
 		}
+
+		[Test]
+		public void CeqR8R8()
+		{
+			Assert.AreEqual<bool>(SpecificTests.CeqR8R8(), Run<bool>("Mosa.Test.Collection", "SpecificTests", "CeqR8R8"));
+		}
 	}
 }

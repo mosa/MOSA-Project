@@ -44,8 +44,8 @@ namespace Mosa.Platform.x86.Intrinsic
 			Operand eax = Operand.CreateCPURegister(BuiltInSigType.UInt32, GeneralPurposeRegister.EAX);
 			Operand cr = Operand.CreateCPURegister(BuiltInSigType.UInt32, control);
 
-			context.SetInstruction(IRInstruction.Move, eax, operand1);
-			context.AppendInstruction(IRInstruction.Move, cr, eax);
+			context.SetInstruction(X86.Mov, eax, operand1);
+			context.AppendInstruction(X86.MovCR, cr, eax);
 		}
 
 		#endregion Methods

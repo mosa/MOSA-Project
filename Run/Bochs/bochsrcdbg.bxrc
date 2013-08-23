@@ -29,3 +29,8 @@ log: bochsout.txt
 # disable the mouse, since DLX is text only
 mouse: enabled=0
 magic_break: enabled=1
+
+# enable sse
+cpuid: mmx=1, sep=1, sse=sse4_2, apic=xapic, aes=1, movbe=1, xsave=1
+
+

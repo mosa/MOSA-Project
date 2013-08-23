@@ -111,8 +111,8 @@ namespace Mosa.Platform.x86.Stages
 		void IIRVisitor.FloatCompare(Context context)
 		{
 			Operand resultOperand = context.Result;
-			Operand left = EmitConstant(context.Operand1);
-			Operand right = EmitConstant(context.Operand2);
+			Operand left = EmitFloatingPointConstant(context.Operand1);
+			Operand right = EmitFloatingPointConstant(context.Operand2);
 
 			context.Operand1 = left;
 			context.Operand2 = right;
@@ -220,8 +220,6 @@ namespace Mosa.Platform.x86.Stages
 			Operand ecx = AllocateVirtualRegister(BuiltInSigType.Byte);
 			Operand edx = AllocateVirtualRegister(BuiltInSigType.Byte);
 
-			//context.AppendInstruction(X86.Pushfd);
-
 			if (code == ConditionCode.Equal)
 			{
 				context.AppendInstruction(X86.Setcc, setz, eax);
@@ -286,7 +284,6 @@ namespace Mosa.Platform.x86.Stages
 				context.AppendInstruction(X86.Or, eax, eax, edx);
 			}
 			context.AppendInstruction(X86.Movzx, resultOperand, eax);
-			//context.AppendInstruction(X86.Popfd);
 		}
 
 		/// <summary>
@@ -295,7 +292,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IIRVisitor.IntegerCompareBranch(Context context)
 		{
-			EmitOperandConstants(context);
+			EmitFloatingPointConstants(context);
 
 			int target = context.BranchTargets[0];
 			var condition = context.ConditionCode;
@@ -313,7 +310,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IIRVisitor.IntegerCompare(Context context)
 		{
-			EmitOperandConstants(context);
+			EmitFloatingPointConstants(context);
 
 			var condition = context.ConditionCode;
 			var resultOperand = context.Result;
@@ -357,14 +354,18 @@ namespace Mosa.Platform.x86.Stages
 
 			if (offsetOperand.IsConstant)
 			{
-				context.SetInstruction(X86.Mov, result, Operand.CreateMemoryAddress(baseOperand.Type, baseOperand, offsetOperand.ValueAsLongInteger));
+				Operand mem = Operand.CreateMemoryAddress(baseOperand.Type, baseOperand, offsetOperand.ValueAsLongInteger);
+
+				context.SetInstruction(GetMove(result, mem), result, mem);
 			}
 			else
 			{
 				Operand v1 = AllocateVirtualRegister(baseOperand.Type);
+				Operand mem = Operand.CreateMemoryAddress(v1.Type, v1, offset);
+
 				context.SetInstruction(X86.Mov, v1, baseOperand);
 				context.AppendInstruction(X86.Add, v1, v1, offsetOperand);
-				context.AppendInstruction(X86.Mov, result, Operand.CreateMemoryAddress(v1.Type, v1, offset));
+				context.AppendInstruction(GetMove(result, mem), result, mem);
 			}
 		}
 
@@ -479,57 +480,35 @@ namespace Mosa.Platform.x86.Stages
 		{
 			Operand result = context.Result;
 			Operand operand = context.Operand1;
-			context.Operand1 = EmitConstant(context.Operand1);
 
-			if (context.Result.StackType == StackTypeCode.F)
+			X86Instruction instruction = X86.Mov;
+
+			if (result.StackType == StackTypeCode.F)
 			{
-				Debug.Assert(context.Operand1.StackType == StackTypeCode.F, @"Move can't convert to floating point type.");
-				if (context.Result.Type.Type == context.Operand1.Type.Type)
+				Debug.Assert(operand.StackType == StackTypeCode.F, @"Move can't convert to floating point type.");
+
+				if (result.Type.Type == operand.Type.Type)
 				{
-					if (context.Result.Type.Type == CilElementType.R4)
-						MoveFloatingPoint(context, X86.Movss);
-					else if (context.Result.Type.Type == CilElementType.R8)
-						MoveFloatingPoint(context, X86.Movsd);
+					if (result.Type.Type == CilElementType.R4)
+					{
+						instruction = X86.Movss;
+					}
+					else if (result.Type.Type == CilElementType.R8)
+					{
+						instruction = X86.Movsd;
+					}
 				}
-				else if (context.Result.Type.Type == CilElementType.R8)
+				else if (result.Type.Type == CilElementType.R8)
 				{
-					context.SetInstruction(X86.Cvtss2sd, context.Result, context.Operand1);
+					instruction = X86.Cvtss2sd;
 				}
-				else if (context.Result.Type.Type == CilElementType.R4)
+				else if (result.Type.Type == CilElementType.R4)
 				{
-					context.SetInstruction(X86.Cvtsd2ss, context.Result, context.Operand1);
+					instruction = X86.Cvtsd2ss;
 				}
 			}
-			else
-			{
-				if (context.Result.IsMemoryAddress && context.Operand1.IsMemoryAddress)
-				{
-					Operand load = AllocateVirtualRegister(BuiltInSigType.IntPtr);
-					Operand store = AllocateVirtualRegister(operand.Type);
 
-					if (!Is32Bit(operand) && IsSigned(operand))
-						context.SetInstruction(X86.Movsx, load, operand);
-					else if (!Is32Bit(operand) && IsUnsigned(operand))
-						context.SetInstruction(X86.Movzx, load, operand);
-					else
-						context.SetInstruction(X86.Mov, load, operand);
-
-					context.AppendInstruction(X86.Mov, result, store);
-				}
-				else
-					context.ReplaceInstructionOnly(X86.Mov);
-			}
-		}
-
-		private void MoveFloatingPoint(Context context, X86Instruction instruction)
-		{
-			Operand result = context.Result;
-			Operand operand = context.Operand1;
-
-			Operand xmm0 = AllocateVirtualRegister(context.Result.Type);
-
-			context.SetInstruction(instruction, xmm0, operand);
-			context.AppendInstruction(instruction, result, xmm0);
+			context.ReplaceInstructionOnly(instruction);
 		}
 
 		/// <summary>
@@ -618,7 +597,9 @@ namespace Mosa.Platform.x86.Stages
 				context.AppendInstruction(X86.Add, eax, eax, offset);
 			}
 
-			context.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(value.Type, eax, offsetPtr), edx);
+			Operand mem = Operand.CreateMemoryAddress(value.Type, eax, offsetPtr);
+
+			context.AppendInstruction(GetMove(mem, edx), mem, edx);
 		}
 
 		/// <summary>
@@ -656,7 +637,7 @@ namespace Mosa.Platform.x86.Stages
 		void IIRVisitor.SubSigned(Context context)
 		{
 			//EmitResultConstants(context);
-			EmitOperandConstants(context);
+			EmitFloatingPointConstants(context);
 			context.ReplaceInstructionOnly(X86.Sub);
 		}
 
@@ -667,7 +648,7 @@ namespace Mosa.Platform.x86.Stages
 		void IIRVisitor.SubUnsigned(Context context)
 		{
 			//EmitResultConstants(context);
-			EmitOperandConstants(context);
+			EmitFloatingPointConstants(context);
 			context.ReplaceInstructionOnly(X86.Sub);
 		}
 
@@ -677,7 +658,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IIRVisitor.MulSigned(Context context)
 		{
-			EmitOperandConstants(context);
+			EmitFloatingPointConstants(context);
 
 			Operand result = context.Result;
 			Operand operand1 = context.Operand1;
@@ -693,7 +674,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IIRVisitor.MulUnsigned(Context context)
 		{
-			EmitOperandConstants(context);
+			EmitFloatingPointConstants(context);
 
 			Operand result = context.Result;
 			Operand operand1 = context.Operand1;
@@ -709,7 +690,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IIRVisitor.DivSigned(Context context)
 		{
-			EmitOperandConstants(context);
+			EmitFloatingPointConstants(context);
 
 			Operand operand1 = context.Operand1;
 			Operand operand2 = context.Operand2;
@@ -729,7 +710,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IIRVisitor.DivUnsigned(Context context)
 		{
-			EmitOperandConstants(context);
+			EmitFloatingPointConstants(context);
 
 			Operand operand1 = context.Operand1;
 			Operand operand2 = context.Operand2;
@@ -749,7 +730,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IIRVisitor.RemSigned(Context context)
 		{
-			EmitOperandConstants(context);
+			EmitFloatingPointConstants(context);
 
 			Operand result = context.Result;
 			Operand operand1 = context.Operand1;
@@ -770,7 +751,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IIRVisitor.RemUnsigned(Context context)
 		{
-			EmitOperandConstants(context);
+			EmitFloatingPointConstants(context);
 
 			Operand result = context.Result;
 			Operand operand1 = context.Operand1;
@@ -1069,7 +1050,7 @@ namespace Mosa.Platform.x86.Stages
 		/// </remarks>
 		private void HandleCommutativeOperation(Context context, BaseInstruction instruction)
 		{
-			EmitOperandConstants(context);
+			EmitFloatingPointConstants(context);
 			context.ReplaceInstructionOnly(instruction);
 		}
 
@@ -1080,7 +1061,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="instruction">The instruction to transform.</param>
 		private void HandleShiftOperation(Context context, BaseInstruction instruction)
 		{
-			EmitOperandConstants(context);
+			EmitFloatingPointConstants(context);
 			context.ReplaceInstructionOnly(instruction);
 		}
 

@@ -215,7 +215,7 @@ namespace Mosa.Platform.AVR32
 		/// <param name="context">The context.</param>
 		/// <param name="Destination">The destination.</param>
 		/// <param name="Source">The source.</param>
-		public override void InsertMove(Context context, Operand Destination, Operand Source)
+		public override void InsertMove(Context context, Operand destination, Operand source)
 		{
 			// TODO
 		}
@@ -226,7 +226,7 @@ namespace Mosa.Platform.AVR32
 		/// <param name="context">The context.</param>
 		/// <param name="Destination">The destination.</param>
 		/// <param name="Source">The source.</param>
-		public override void InsertExchange(Context context, Operand Destination, Operand Source)
+		public override void InsertExchange(Context context, Operand destination, Operand source)
 		{
 			// TODO 
 		}

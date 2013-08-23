@@ -26,26 +26,21 @@ namespace Mosa.Platform.x86.Stages
 		/// <summary>
 		/// Visitation function for <see cref="IX86Visitor.Mov"/> instructions.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void IX86Visitor.Mov(Context ctx)
+		/// <param name="context">The context.</param>
+		void IX86Visitor.Mov(Context context)
 		{
-			Debug.Assert(!ctx.Result.IsConstant);
+			Debug.Assert(!context.Result.IsConstant);
 
-			if (ctx.Operand1.IsConstant && ctx.Operand1.StackType == StackTypeCode.F)
+			// Convert moves to float moves, if necessary
+			if (context.Result.StackType == StackTypeCode.F || context.Operand1.StackType == StackTypeCode.F)
 			{
-				ctx.Operand1 = EmitConstant(ctx.Operand1);
-			}
-
-			// Check that we're not dealing with floating point values
-			if (ctx.Result.StackType == StackTypeCode.F || ctx.Operand1.StackType == StackTypeCode.F)
-			{
-				if (ctx.Result.Type.Type == CilElementType.R4)
+				if (context.Result.Type.Type == CilElementType.R4)
 				{
-					ctx.SetInstruction(X86.Movss, ctx.Result, ctx.Operand1);
+					context.SetInstruction(X86.Movss, context.Result, context.Operand1);
 				}
-				else if (ctx.Result.Type.Type == CilElementType.R8)
+				else if (context.Result.Type.Type == CilElementType.R8)
 				{
-					ctx.SetInstruction(X86.Movsd, ctx.Result, ctx.Operand1);
+					context.SetInstruction(X86.Movsd, context.Result, context.Operand1);
 				}
 			}
 		}
@@ -53,32 +48,32 @@ namespace Mosa.Platform.x86.Stages
 		/// <summary>
 		/// Visitation function for <see cref="IX86Visitor.Cvttsd2si"/> instructions.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void IX86Visitor.Cvttsd2si(Context ctx)
+		/// <param name="context">The context.</param>
+		void IX86Visitor.Cvttsd2si(Context context)
 		{
-			Operand result = ctx.Result;
+			Operand result = context.Result;
 
 			if (!result.IsRegister)
 			{
 				Operand register = AllocateVirtualRegister(result.Type);
-				ctx.Result = register;
-				ctx.AppendInstruction(X86.Mov, result, register);
+				context.Result = register;
+				context.AppendInstruction(X86.Mov, result, register);
 			}
 		}
 
 		/// <summary>
 		/// Visitation function for <see cref="IX86Visitor.Cvttss2si"/> instructions.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void IX86Visitor.Cvttss2si(Context ctx)
+		/// <param name="context">The context.</param>
+		void IX86Visitor.Cvttss2si(Context context)
 		{
-			Operand result = ctx.Result;
+			Operand result = context.Result;
 			Operand register = AllocateVirtualRegister(result.Type);
 
 			if (!result.IsRegister)
 			{
-				ctx.Result = register;
-				ctx.AppendInstruction(X86.Mov, result, register);
+				context.Result = register;
+				context.AppendInstruction(X86.Mov, result, register);
 			}
 		}
 
@@ -104,8 +99,6 @@ namespace Mosa.Platform.x86.Stages
 		{
 			if (Is32Bit(context.Operand1))
 			{
-				//Debug.Assert(Is32Bit(context.Result));
-
 				context.ReplaceInstructionOnly(X86.Mov);
 			}
 		}
@@ -113,25 +106,25 @@ namespace Mosa.Platform.x86.Stages
 		/// <summary>
 		/// Visitation function for <see cref="IX86Visitor.Cmp"/> instructions.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void IX86Visitor.Cmp(Context ctx)
+		/// <param name="context">The context.</param>
+		void IX86Visitor.Cmp(Context context)
 		{
-			Operand left = ctx.Operand1;
-			Operand right = ctx.Operand2;
+			Operand left = context.Operand1;
+			Operand right = context.Operand2;
 
 			if (left.IsConstant)
 			{
 				Operand ecx = AllocateVirtualRegister(left.Type);
-				Context before = ctx.InsertBefore();
+				Context before = context.InsertBefore();
 
 				before.AppendInstruction(X86.Mov, ecx, left);
-				ctx.Operand1 = ecx;
+				context.Operand1 = ecx;
 			}
 
 			if (right.IsConstant && !Is32Bit(left))
 			{
 				Operand edx = AllocateVirtualRegister(BuiltInSigType.Int32);
-				Context before = ctx.InsertBefore();
+				Context before = context.InsertBefore();
 
 				if (IsSigned(left))
 				{
@@ -141,7 +134,7 @@ namespace Mosa.Platform.x86.Stages
 				{
 					before.AppendInstruction(X86.Movzx, edx, left);
 				}
-				ctx.Operand1 = edx;
+				context.Operand1 = edx;
 			}
 		}
 
@@ -193,6 +186,22 @@ namespace Mosa.Platform.x86.Stages
 				before.SetInstruction(X86.Mov, eax, destinationOperand);
 				context.Operand1 = eax;
 			}
+		}
+
+		/// <summary>
+		/// Visitation function for <see cref="IX86Visitor.Movsd"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IX86Visitor.Movsd(Context context)
+		{
+		}
+
+		/// <summary>
+		/// Visitation function for <see cref="IX86Visitor.Movss" /> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IX86Visitor.Movss(Context context)
+		{
 		}
 
 		#endregion IX86Visitor
@@ -788,22 +797,6 @@ namespace Mosa.Platform.x86.Stages
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IX86Visitor.Out(Context context)
-		{
-		}
-
-		/// <summary>
-		/// Movsses instruction
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void IX86Visitor.Movss(Context context)
-		{
-		}
-
-		/// <summary>
-		/// Movsds instruction
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void IX86Visitor.Movsd(Context context)
 		{
 		}
 
