@@ -15,7 +15,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// <summary>
 	/// Intermediate representation of the SSE multiplication operation.
 	/// </summary>
-	public sealed class MulSS : X86Instruction
+	public sealed class Mulss : X86Instruction
 	{
 		#region Data Members
 
@@ -26,9 +26,9 @@ namespace Mosa.Platform.x86.Instructions
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of <see cref="MulSS"/>.
+		/// Initializes a new instance of <see cref="Mulss"/>.
 		/// </summary>
-		public MulSS() :
+		public Mulss() :
 			base(1, 2)
 		{
 		}

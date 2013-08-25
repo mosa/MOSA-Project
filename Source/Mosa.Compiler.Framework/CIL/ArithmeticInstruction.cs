@@ -8,6 +8,7 @@
  */
 
 using System;
+using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Signatures;
 
 namespace Mosa.Compiler.Framework.CIL
@@ -106,6 +107,12 @@ namespace Mosa.Compiler.Framework.CIL
 			if (result != StackTypeCode.Ptr)
 			{
 				resultType = Operand.SigTypeFromStackType(result);
+
+				// HACK
+				if (ctx.Operand1.Type.Type == CilElementType.R4 && ctx.Operand2.Type.Type == CilElementType.R4)
+				{
+					resultType = BuiltInSigType.Single;
+				}
 			}
 			else
 			{

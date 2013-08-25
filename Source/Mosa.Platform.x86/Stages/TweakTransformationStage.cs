@@ -17,7 +17,7 @@ using System.Diagnostics;
 namespace Mosa.Platform.x86.Stages
 {
 	/// <summary>
-	///
+	/// TODO: Add pre-IR decomposition stage to account for platform operand requirements (and avoid it here)
 	/// </summary>
 	public sealed class TweakTransformationStage : BaseTransformationStage, IX86Visitor, IMethodCompilerStage
 	{
@@ -60,7 +60,7 @@ namespace Mosa.Platform.x86.Stages
 				context.AppendInstruction(X86.Mov, result, register);
 			}
 		}
-
+		
 		/// <summary>
 		/// Visitation function for <see cref="IX86Visitor.Cvttss2si"/> instructions.
 		/// </summary>
@@ -74,6 +74,38 @@ namespace Mosa.Platform.x86.Stages
 			{
 				context.Result = register;
 				context.AppendInstruction(X86.Mov, result, register);
+			}
+		}
+
+		/// <summary>
+		/// Visitation function for <see cref="IX86Visitor.Cvtss2sd" /> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IX86Visitor.Cvtss2sd(Context context)
+		{
+			Operand result = context.Result;
+
+			if (!result.IsRegister)
+			{
+				Operand register = AllocateVirtualRegister(result.Type);
+				context.Result = register;
+				context.AppendInstruction(X86.Movsd, result, register);
+			}
+		}
+
+		/// <summary>
+		/// Visitation function for <see cref="IX86Visitor.Cvtsd2ss"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IX86Visitor.Cvtsd2ss(Context context)
+		{
+			Operand result = context.Result;
+
+			if (!result.IsRegister)
+			{
+				Operand register = AllocateVirtualRegister(result.Type);
+				context.Result = register;
+				context.AppendInstruction(X86.Movss, result, register);
 			}
 		}
 
@@ -401,19 +433,12 @@ namespace Mosa.Platform.x86.Stages
 		}
 
 		/// <summary>
-		/// Visitation function for <see cref="IX86Visitor.Cvtss2sd"/> instructions.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void IX86Visitor.Cvtss2sd(Context ctx)
-		{
-		}
-
-		/// <summary>
 		/// Visitation function for <see cref="IX86Visitor.Cvtsi2ss"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IX86Visitor.Cvtsi2ss(Context context)
 		{
+			
 		}
 
 		/// <summary>
@@ -421,14 +446,6 @@ namespace Mosa.Platform.x86.Stages
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IX86Visitor.Cvtsi2sd(Context context)
-		{
-		}
-
-		/// <summary>
-		/// Visitation function for <see cref="IX86Visitor.Cvtsd2ss"/> instructions.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void IX86Visitor.Cvtsd2ss(Context context)
 		{
 		}
 

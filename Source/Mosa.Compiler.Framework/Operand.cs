@@ -819,14 +819,15 @@ namespace Mosa.Compiler.Framework
 		{
 			switch (type.Type)
 			{
-				case CilElementType.Boolean: return new SigType(CilElementType.U4);
-				case CilElementType.Char: return new SigType(CilElementType.U4);
-				case CilElementType.I1: return new SigType(CilElementType.I4);
-				case CilElementType.I2: return new SigType(CilElementType.I4);
-				case CilElementType.U1: return new SigType(CilElementType.U4);
-				case CilElementType.U2: return new SigType(CilElementType.U4);
-				case CilElementType.U4: return new SigType(CilElementType.U4);
-				case CilElementType.U8: return new SigType(CilElementType.U8);
+				case CilElementType.Boolean: return BuiltInSigType.UInt32;
+				case CilElementType.Char: return BuiltInSigType.UInt32;
+				case CilElementType.I1: return BuiltInSigType.Int32;
+				case CilElementType.I2: return BuiltInSigType.Int32;
+				case CilElementType.U1: return BuiltInSigType.UInt32;
+				case CilElementType.U2: return BuiltInSigType.UInt32;
+				case CilElementType.U4: return BuiltInSigType.UInt32;
+				case CilElementType.U8: return BuiltInSigType.UInt64;
+				//case CilElementType.R4: return BuiltInSigType.Int64;
 				default: return type;
 			}
 		}

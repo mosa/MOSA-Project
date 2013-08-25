@@ -67,11 +67,9 @@ namespace Mosa.Platform.x86.Stages
 		void IIRVisitor.AddFloat(Context context)
 		{
 			if (context.Result.Type.Type == CilElementType.R4)
-				HandleCommutativeOperation(context, X86.AddSS);
+				HandleCommutativeOperation(context, X86.Addss);
 			else
-				HandleCommutativeOperation(context, X86.AddSD);
-
-			ExtendToR8(context);
+				HandleCommutativeOperation(context, X86.Addsd);
 		}
 
 		/// <summary>
@@ -81,11 +79,9 @@ namespace Mosa.Platform.x86.Stages
 		void IIRVisitor.DivFloat(Context context)
 		{
 			if (context.Result.Type.Type == CilElementType.R4)
-				HandleCommutativeOperation(context, X86.DivSS);
+				HandleCommutativeOperation(context, X86.Divss);
 			else
-				HandleCommutativeOperation(context, X86.DivSD);
-
-			ExtendToR8(context);
+				HandleCommutativeOperation(context, X86.Divsd);
 		}
 
 		/// <summary>
@@ -126,6 +122,17 @@ namespace Mosa.Platform.x86.Stages
 				case ConditionCode.UnsignedGreaterThan: condition = ConditionCode.GreaterThan; break;
 				case ConditionCode.UnsignedLessOrEqual: condition = ConditionCode.LessOrEqual; break;
 				case ConditionCode.UnsignedLessThan: condition = ConditionCode.LessThan; break;
+			}
+
+			// TODO - Move the following to its own pre-IR decomposition stage for this instruction
+			// Swap, if necessary, the operands to place register operand first than memory operand
+			// otherwise the memory operand will have to be loaded into a register
+			if ((condition == ConditionCode.Equal || condition == ConditionCode.NotEqual) && left.IsMemoryAddress && !right.IsMemoryAddress)
+			{
+				// swap order of operands to move
+				var t = left;
+				left = right;
+				right = t;
 			}
 
 			Context before = context.InsertBefore();
@@ -225,7 +232,7 @@ namespace Mosa.Platform.x86.Stages
 						context.AppendInstruction(X86.Setcc, ConditionCode.UnsignedGreaterThan, result);
 						break;
 					}
-				case ConditionCode.GreaterThan:	/* working */
+				case ConditionCode.GreaterThan:
 					{
 						//	a>b and a<b		
 						//	mov	eax, 0	
@@ -237,7 +244,7 @@ namespace Mosa.Platform.x86.Stages
 						context.AppendInstruction(X86.Setcc, ConditionCode.UnsignedGreaterThan, result);
 						break;
 					}
-				case ConditionCode.LessOrEqual:	/* working */
+				case ConditionCode.LessOrEqual:
 					{
 						//	a<=b and a>=b			
 						//	mov	eax, 0	
@@ -588,11 +595,9 @@ namespace Mosa.Platform.x86.Stages
 		void IIRVisitor.MulFloat(Context context)
 		{
 			if (context.Result.Type.Type == CilElementType.R4)
-				HandleCommutativeOperation(context, X86.MulSS);
+				HandleCommutativeOperation(context, X86.Mulss);
 			else
-				HandleCommutativeOperation(context, X86.MulSD);
-
-			ExtendToR8(context);
+				HandleCommutativeOperation(context, X86.Mulsd);
 		}
 
 		/// <summary>
@@ -602,11 +607,9 @@ namespace Mosa.Platform.x86.Stages
 		void IIRVisitor.SubFloat(Context context)
 		{
 			if (context.Result.Type.Type == CilElementType.R4)
-				HandleCommutativeOperation(context, X86.SubSS);
+				HandleCommutativeOperation(context, X86.Subss);
 			else
-				HandleCommutativeOperation(context, X86.SubSD);
-
-			ExtendToR8(context);
+				HandleCommutativeOperation(context, X86.Subsd);
 		}
 
 		/// <summary>
@@ -751,11 +754,9 @@ namespace Mosa.Platform.x86.Stages
 		void IIRVisitor.RemFloat(Context context)
 		{
 			if (context.Result.Type.Type == CilElementType.R4)
-				HandleCommutativeOperation(context, X86.DivSS);
+				HandleCommutativeOperation(context, X86.Divss);
 			else
-				HandleCommutativeOperation(context, X86.DivSD);
-
-			ExtendToR8(context);
+				HandleCommutativeOperation(context, X86.Divsd);
 
 			Operand destination = context.Result;
 			Operand source = context.Operand1;
@@ -774,9 +775,9 @@ namespace Mosa.Platform.x86.Stages
 			newBlocks[0].AppendInstruction(X86.Movsd, xmm6, destination);
 
 			if (source.Type.Type == CilElementType.R4)
-				newBlocks[0].AppendInstruction(X86.DivSS, destination, destination, source);
+				newBlocks[0].AppendInstruction(X86.Divss, destination, destination, source);
 			else
-				newBlocks[0].AppendInstruction(X86.DivSD, destination, destination, source);
+				newBlocks[0].AppendInstruction(X86.Divsd, destination, destination, source);
 
 			newBlocks[0].AppendInstruction(X86.Cvttsd2si, edx, destination);
 
@@ -788,14 +789,14 @@ namespace Mosa.Platform.x86.Stages
 			newBlocks[1].AppendInstruction(X86.Cvtsi2sd, destination, edx);
 
 			if (xmm5.Type.Type == CilElementType.R4)
-				newBlocks[1].AppendInstruction(X86.MulSS, destination, destination, xmm5);
+				newBlocks[1].AppendInstruction(X86.Mulss, destination, destination, xmm5);
 			else
-				newBlocks[1].AppendInstruction(X86.MulSD, destination, destination, xmm5);
+				newBlocks[1].AppendInstruction(X86.Mulsd, destination, destination, xmm5);
 
 			if (destination.Type.Type == CilElementType.R4)
-				newBlocks[1].AppendInstruction(X86.SubSS, xmm6, xmm6, destination);
+				newBlocks[1].AppendInstruction(X86.Subss, xmm6, xmm6, destination);
 			else
-				newBlocks[1].AppendInstruction(X86.SubSD, xmm6, xmm6, destination);
+				newBlocks[1].AppendInstruction(X86.Subsd, xmm6, xmm6, destination);
 
 			newBlocks[1].AppendInstruction(X86.Movsd, destination, xmm6);
 			newBlocks[1].AppendInstruction(X86.Jmp, nextBlock.BasicBlock);
@@ -993,29 +994,6 @@ namespace Mosa.Platform.x86.Stages
 		#endregion IIRVisitor - Unused
 
 		#region Internals
-
-		/// <summary>
-		/// Extends to r8.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		private void ExtendToR8(Context context)
-		{
-			Operand xmm5 = AllocateVirtualRegister(BuiltInSigType.Double);
-			Operand xmm6 = AllocateVirtualRegister(BuiltInSigType.Double);
-			Context before = context.InsertBefore();
-
-			if (context.Result.Type.Type == CilElementType.R4)
-			{
-				before.SetInstruction(X86.Cvtss2sd, xmm5, context.Result);
-				context.Result = xmm5;
-			}
-
-			if (context.Operand1.Type.Type == CilElementType.R4)
-			{
-				before.SetInstruction(X86.Cvtss2sd, xmm6, context.Operand1);
-				context.Operand1 = xmm6;
-			}
-		}
 
 		/// <summary>
 		/// Special handling for commutative operations.

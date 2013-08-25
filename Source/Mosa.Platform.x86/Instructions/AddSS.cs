@@ -15,7 +15,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// <summary>
 	/// Intermediate representation of the SSE addition instruction.
 	/// </summary>
-	public sealed class AddSS : TwoOperandInstruction
+	public sealed class Addss : TwoOperandInstruction
 	{
 		#region Data Members
 

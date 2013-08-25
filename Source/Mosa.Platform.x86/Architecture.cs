@@ -195,7 +195,7 @@ namespace Mosa.Platform.x86
 					new FixedRegisterAssignmentStage(),
 					new SimpleDeadCodeRemovalStage(),
 				    new AddressModeConversionStage(),
-					new FloatPointStage(),
+					new FloatingPointStage(),
 				});
 
 			methodCompilerPipeline.InsertAfterLast<StackLayoutStage>(

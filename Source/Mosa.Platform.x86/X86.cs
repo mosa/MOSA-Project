@@ -204,42 +204,42 @@ namespace Mosa.Platform.x86
 		/// <summary>
 		///
 		/// </summary>
-		public static readonly AddSS AddSS = new AddSS();
+		public static readonly Addss Addss = new Addss();
 
 		/// <summary>
 		///
 		/// </summary>
-		public static readonly AddSD AddSD = new AddSD();
+		public static readonly Addsd Addsd = new Addsd();
 
 		/// <summary>
 		///
 		/// </summary>
-		public static readonly DivSS DivSS = new DivSS();
+		public static readonly DivSS Divss = new DivSS();
 
 		/// <summary>
 		///
 		/// </summary>
-		public static readonly DivSD DivSD = new DivSD();
+		public static readonly DivSD Divsd = new DivSD();
 
 		/// <summary>
 		///
 		/// </summary>
-		public static readonly MulSS MulSS = new MulSS();
+		public static readonly Mulss Mulss = new Mulss();
 
 		/// <summary>
 		///
 		/// </summary>
-		public static readonly MulSD MulSD = new MulSD();
+		public static readonly Mulsd Mulsd = new Mulsd();
 
 		/// <summary>
 		///
 		/// </summary>
-		public static readonly SubSS SubSS = new SubSS();
+		public static readonly Subss Subss = new Subss();
 
 		/// <summary>
 		///
 		/// </summary>
-		public static readonly SubSD SubSD = new SubSD();
+		public static readonly Subsd Subsd = new Subsd();
 
 		/// <summary>
 		///
@@ -439,7 +439,7 @@ namespace Mosa.Platform.x86
 		/// <summary>
 		///
 		/// </summary>
-		public static readonly RoundSS SseRound = new RoundSS();
+		public static readonly Roundss SseRound = new Roundss();
 
 		/// <summary>
 		///

@@ -15,14 +15,14 @@ namespace Mosa.Platform.x86.Instructions
 	/// <summary>
 	///
 	/// </summary>
-	public class RoundSS : X86Instruction
+	public class Roundss : X86Instruction
 	{
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of <see cref="RoundSS"/>.
+		/// Initializes a new instance of <see cref="Roundss"/>.
 		/// </summary>
-		public RoundSS() :
+		public Roundss() :
 			base(1, 2)
 		{
 		}

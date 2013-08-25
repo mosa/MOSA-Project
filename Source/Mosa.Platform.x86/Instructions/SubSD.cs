@@ -15,7 +15,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// <summary>
 	/// Intermediate representation of an SSE based subtraction instruction.
 	/// </summary>
-	public sealed class SubSD : TwoOperandInstruction
+	public sealed class Subsd : TwoOperandInstruction
 	{
 		#region Data Members
 

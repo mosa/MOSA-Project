@@ -15,7 +15,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// <summary>
 	/// Intermediate representation of the SSE multiplication operation.
 	/// </summary>
-	public sealed class MulSD : X86Instruction
+	public sealed class Mulsd : X86Instruction
 	{
 		#region Data Members
 
@@ -26,9 +26,9 @@ namespace Mosa.Platform.x86.Instructions
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of <see cref="MulSD"/>.
+		/// Initializes a new instance of <see cref="Mulsd"/>.
 		/// </summary>
-		public MulSD() :
+		public Mulsd() :
 			base(1, 2)
 		{
 		}
