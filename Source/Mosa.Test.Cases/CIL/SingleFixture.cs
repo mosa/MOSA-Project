@@ -77,6 +77,12 @@ namespace Mosa.Test.Cases.CIL
 		}
 
 		[Test]
+		public void CneqR4R4([R4Number]float a, [R4Number]float b)
+		{
+			Assert.AreEqual(SingleTests.CneqR4R4(a, b), Run<bool>("Mosa.Test.Collection", "SingleTests", "CneqR4R4", a, b));
+		}
+
+		[Test]
 		public void CltR4R4([R4Number]float a, [R4Number]float b)
 		{
 			Assert.AreEqual(SingleTests.CltR4R4(a, b), Run<bool>("Mosa.Test.Collection", "SingleTests", "CltR4R4", a, b));

@@ -110,180 +110,159 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IIRVisitor.FloatCompare(Context context)
 		{
-			Operand resultOperand = context.Result;
-			Operand left = EmitFloatingPointConstant(context.Operand1);
-			Operand right = EmitFloatingPointConstant(context.Operand2);
+			EmitFloatingPointConstants(context);
 
-			context.Operand1 = left;
-			context.Operand2 = right;
+			Operand result = context.Result;
+			Operand left = context.Operand1;
+			Operand right = context.Operand2;
+			ConditionCode condition = context.ConditionCode;
 
-			// Swap the operands if necessary...
-			if (left.IsMemoryAddress && right.IsRegister)
-			{
-				SwapComparisonOperands(context);
-				left = context.Operand1;
-				right = context.Operand2;
-			}
-
-			ConditionCode setnp = ConditionCode.NoParity;
-			ConditionCode setnc = ConditionCode.NoCarry;
-			ConditionCode setc = ConditionCode.Carry;
-			ConditionCode setnz = ConditionCode.NotZero;
-			ConditionCode setz = ConditionCode.Zero;
-			ConditionCode code = context.ConditionCode;
-
-			context.SetInstruction(X86.Nop);
-
-			// x86 is messed up :(
-			switch (code)
+			// normalize condition
+			switch (condition)
 			{
 				case ConditionCode.Equal: break;
 				case ConditionCode.NotEqual: break;
-				case ConditionCode.UnsignedGreaterOrEqual: code = ConditionCode.GreaterOrEqual; break;
-				case ConditionCode.UnsignedGreaterThan: code = ConditionCode.GreaterThan; break;
-				case ConditionCode.UnsignedLessOrEqual: code = ConditionCode.LessOrEqual; break;
-				case ConditionCode.UnsignedLessThan: code = ConditionCode.LessThan; break;
+				case ConditionCode.UnsignedGreaterOrEqual: condition = ConditionCode.GreaterOrEqual; break;
+				case ConditionCode.UnsignedGreaterThan: condition = ConditionCode.GreaterThan; break;
+				case ConditionCode.UnsignedLessOrEqual: condition = ConditionCode.LessOrEqual; break;
+				case ConditionCode.UnsignedLessThan: condition = ConditionCode.LessThan; break;
 			}
 
-			if (!(left.IsRegister))
-			{
-				Operand xmm2 = AllocateVirtualRegister(left.Type);
-				if (left.Type.Type == CilElementType.R4)
-					context.AppendInstruction(X86.Movss, xmm2, left);
-				else
-					context.AppendInstruction(X86.Movsd, xmm2, left);
-				left = xmm2;
-			}
+			Context before = context.InsertBefore();
 
 			// Compare using the smallest precision
 			if (left.Type.Type == CilElementType.R4 && right.Type.Type == CilElementType.R8)
 			{
 				Operand rop = AllocateVirtualRegister(BuiltInSigType.Single);
-				context.AppendInstruction(X86.Cvtsd2ss, rop, right);
+				before.SetInstruction(X86.Cvtsd2ss, rop, right);
 				right = rop;
 			}
 			if (left.Type.Type == CilElementType.R8 && right.Type.Type == CilElementType.R4)
 			{
 				Operand rop = AllocateVirtualRegister(BuiltInSigType.Single);
-				context.AppendInstruction(X86.Cvtsd2ss, rop, left);
+				before.SetInstruction(X86.Cvtsd2ss, rop, left);
 				left = rop;
 			}
 
+			X86Instruction instruction = null;
 			if (left.Type.Type == CilElementType.R4)
 			{
-				switch (code)
-				{
-					case ConditionCode.Equal:
-						context.AppendInstruction(X86.Comiss, null, left, right);
-						break;
-
-					case ConditionCode.NotEqual: goto case ConditionCode.Equal;
-					case ConditionCode.UnsignedGreaterOrEqual: goto case ConditionCode.Equal;
-					case ConditionCode.UnsignedGreaterThan: goto case ConditionCode.Equal;
-					case ConditionCode.UnsignedLessOrEqual: goto case ConditionCode.Equal;
-					case ConditionCode.UnsignedLessThan: goto case ConditionCode.Equal;
-					case ConditionCode.GreaterOrEqual:
-						context.AppendInstruction(X86.Comiss, null, left, right);
-						break;
-
-					case ConditionCode.GreaterThan: goto case ConditionCode.GreaterOrEqual;
-					case ConditionCode.LessOrEqual: goto case ConditionCode.GreaterOrEqual;
-					case ConditionCode.LessThan: goto case ConditionCode.GreaterOrEqual;
-				}
+				instruction = X86.Ucomiss;
 			}
 			else
 			{
-				switch (code)
-				{
-					case ConditionCode.Equal:
-						context.AppendInstruction(X86.Comisd, null, left, right);
+				instruction = X86.Ucomisd;
+			}
+
+			switch (condition)
+			{
+				case ConditionCode.Equal:
+					{
+						//  a==b		
+						//	mov	eax, 1
+						//	ucomisd	xmm0, xmm1
+						//	jp	L3
+						//	jne	L3
+						//	ret	
+						//L3:		
+						//	mov	eax, 0
+
+						Context[] newBlocks = CreateNewBlocksWithContexts(2);
+						Context nextBlock = Split(context);
+
+						context.SetInstruction(X86.Mov, result, Operand.CreateConstant(1));
+						context.AppendInstruction(instruction, null, left, right);
+						context.AppendInstruction(X86.Branch, ConditionCode.Parity, newBlocks[1].BasicBlock);
+						context.AppendInstruction(X86.Jmp, newBlocks[0].BasicBlock);
+						LinkBlocks(context, newBlocks[0], newBlocks[1]);
+
+						newBlocks[0].AppendInstruction(X86.Branch, ConditionCode.NotEqual, newBlocks[1].BasicBlock);
+						newBlocks[0].AppendInstruction(X86.Jmp, nextBlock.BasicBlock);
+						LinkBlocks(newBlocks[0], newBlocks[1], nextBlock);
+
+						newBlocks[1].AppendInstruction(X86.Mov, result, Operand.CreateConstant(0));
+						newBlocks[1].AppendInstruction(X86.Jmp, nextBlock.BasicBlock);
+						LinkBlocks(newBlocks[1], nextBlock);
+
 						break;
+					}
+				case ConditionCode.NotEqual:
+					{
+						//  a!=b			
+						//	mov	eax, 1	
+						//	ucomisd	xmm0, xmm1	
+						//	jp	L5	
+						//	setne	al	
+						//	movzx	eax, al	
+						//L5:			
 
-					case ConditionCode.NotEqual: goto case ConditionCode.Equal;
-					case ConditionCode.UnsignedGreaterOrEqual: goto case ConditionCode.Equal;
-					case ConditionCode.UnsignedGreaterThan: goto case ConditionCode.Equal;
-					case ConditionCode.UnsignedLessOrEqual: goto case ConditionCode.Equal;
-					case ConditionCode.UnsignedLessThan: goto case ConditionCode.Equal;
-					case ConditionCode.GreaterOrEqual:
-						context.AppendInstruction(X86.Comisd, null, left, right);
+						Context[] newBlocks = CreateNewBlocksWithContexts(1);
+						Context nextBlock = Split(context);
+
+						context.SetInstruction(X86.Mov, result, Operand.CreateConstant(1));
+						context.AppendInstruction(instruction, null, left, right);
+						context.AppendInstruction(X86.Branch, ConditionCode.Parity, nextBlock.BasicBlock);
+						context.AppendInstruction(X86.Jmp, newBlocks[0].BasicBlock);
+						LinkBlocks(context, nextBlock, newBlocks[0]);
+
+						newBlocks[0].AppendInstruction(X86.Setcc, ConditionCode.NotEqual, result);
+						newBlocks[0].AppendInstruction(X86.Movzx, result, result);
+						newBlocks[0].AppendInstruction(X86.Jmp, newBlocks[0].BasicBlock);
+						LinkBlocks(newBlocks[0], newBlocks[0]);
+
 						break;
+					}
 
-					case ConditionCode.GreaterThan: goto case ConditionCode.GreaterOrEqual;
-					case ConditionCode.LessOrEqual: goto case ConditionCode.GreaterOrEqual;
-					case ConditionCode.LessThan: goto case ConditionCode.GreaterOrEqual;
-				}
+				case ConditionCode.LessThan:
+					{
+						//	a>b and a<b		
+						//	mov	eax, 0	
+						//	ucomisd	xmm1, xmm0	
+						//	seta	al	
+
+						context.SetInstruction(X86.Mov, result, Operand.CreateConstant(0));
+						context.AppendInstruction(instruction, null, right, left);
+						context.AppendInstruction(X86.Setcc, ConditionCode.UnsignedGreaterThan, result);
+						break;
+					}
+				case ConditionCode.GreaterThan:	/* working */
+					{
+						//	a>b and a<b		
+						//	mov	eax, 0	
+						//	ucomisd	xmm0, xmm1	
+						//	seta	al	
+
+						context.SetInstruction(X86.Mov, result, Operand.CreateConstant(0));
+						context.AppendInstruction(instruction, null, left, right);
+						context.AppendInstruction(X86.Setcc, ConditionCode.UnsignedGreaterThan, result);
+						break;
+					}
+				case ConditionCode.LessOrEqual:	/* working */
+					{
+						//	a<=b and a>=b			
+						//	mov	eax, 0	
+						//	ucomisd	xmm1, xmm0	
+						//	setae	al	
+
+						context.SetInstruction(X86.Mov, result, Operand.CreateConstant(0));
+						context.AppendInstruction(instruction, null, left, right);
+						context.AppendInstruction(X86.Setcc, ConditionCode.NoCarry, result);
+						break;
+					}
+				case ConditionCode.GreaterOrEqual:
+					{
+						//	a<=b and a>=b			
+						//	mov	eax, 0	
+						//	ucomisd	xmm0, xmm1	
+						//	setae	al	
+
+						context.SetInstruction(X86.Mov, result, Operand.CreateConstant(0));
+						context.AppendInstruction(instruction, null, right, left);
+						context.AppendInstruction(X86.Setcc, ConditionCode.NoCarry, result);
+						break;
+					}
 			}
 
-			// Determine the result
-			Operand eax = AllocateVirtualRegister(BuiltInSigType.Byte);
-			Operand ebx = AllocateVirtualRegister(BuiltInSigType.Byte);
-			Operand ecx = AllocateVirtualRegister(BuiltInSigType.Byte);
-			Operand edx = AllocateVirtualRegister(BuiltInSigType.Byte);
-
-			if (code == ConditionCode.Equal)
-			{
-				context.AppendInstruction(X86.Setcc, setz, eax);
-				context.AppendInstruction(X86.Setcc, setnp, ebx);
-				context.AppendInstruction(X86.Setcc, setnc, ecx);
-				context.AppendInstruction(X86.Setcc, setnz, edx);
-				context.AppendInstruction(X86.And, eax, eax, ebx);
-				context.AppendInstruction(X86.And, eax, eax, ecx);
-				context.AppendInstruction(X86.Or, ebx, ebx, ecx);
-				context.AppendInstruction(X86.Or, ebx, ebx, edx);
-				context.AppendInstruction(X86.And, eax, eax, ebx);
-				context.AppendInstruction(X86.And, eax, eax, Operand.CreateConstant((int)1));
-			}
-			else if (code == ConditionCode.NotEqual)
-			{
-				context.AppendInstruction(X86.Setcc, setz, eax);
-				context.AppendInstruction(X86.Setcc, setnp, ebx);
-				context.AppendInstruction(X86.Setcc, setnc, ecx);
-				context.AppendInstruction(X86.Setcc, setnz, edx);
-				context.AppendInstruction(X86.And, eax, eax, ebx);
-				context.AppendInstruction(X86.And, eax, eax, ecx);
-				context.AppendInstruction(X86.Or, ebx, ebx, ecx);
-				context.AppendInstruction(X86.Or, ebx, ebx, edx);
-				context.AppendInstruction(X86.Not, ebx, ebx);
-				context.AppendInstruction(X86.Or, eax, eax, ebx);
-				context.AppendInstruction(X86.And, eax, eax, Operand.CreateConstant((int)1));
-			}
-			else if (code == ConditionCode.GreaterThan)
-			{
-				context.AppendInstruction(X86.Setcc, setnz, eax);
-				context.AppendInstruction(X86.Setcc, setnp, ebx);
-				context.AppendInstruction(X86.Setcc, setnc, ecx);
-				context.AppendInstruction(X86.And, eax, eax, ebx);
-				context.AppendInstruction(X86.And, eax, eax, ecx);
-			}
-			else if (code == ConditionCode.LessThan)
-			{
-				context.AppendInstruction(X86.Setcc, setnz, eax);
-				context.AppendInstruction(X86.Setcc, setnp, ebx);
-				context.AppendInstruction(X86.Setcc, setc, ecx);
-				context.AppendInstruction(X86.And, eax, eax, ebx);
-				context.AppendInstruction(X86.And, eax, eax, ecx);
-			}
-			else if (code == ConditionCode.GreaterOrEqual)
-			{
-				context.AppendInstruction(X86.Setcc, setnz, eax);
-				context.AppendInstruction(X86.Setcc, setnp, ebx);
-				context.AppendInstruction(X86.Setcc, setnc, ecx);
-				context.AppendInstruction(X86.Setcc, setz, edx);
-				context.AppendInstruction(X86.And, eax, eax, ebx);
-				context.AppendInstruction(X86.And, eax, eax, ecx);
-				context.AppendInstruction(X86.Or, eax, eax, edx);
-			}
-			else if (code == ConditionCode.LessOrEqual)
-			{
-				context.AppendInstruction(X86.Setcc, setnz, eax);
-				context.AppendInstruction(X86.Setcc, setnp, ebx);
-				context.AppendInstruction(X86.Setcc, setc, ecx);
-				context.AppendInstruction(X86.Setcc, setz, edx);
-				context.AppendInstruction(X86.And, eax, eax, ebx);
-				context.AppendInstruction(X86.And, eax, eax, ecx);
-				context.AppendInstruction(X86.Or, eax, eax, edx);
-			}
-			context.AppendInstruction(X86.Movzx, resultOperand, eax);
 		}
 
 		/// <summary>

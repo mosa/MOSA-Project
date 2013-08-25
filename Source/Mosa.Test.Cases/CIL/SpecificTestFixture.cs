@@ -51,5 +51,29 @@ namespace Mosa.Test.Cases.CIL
 		{
 			Assert.AreEqual<bool>(SpecificTests.CeqR8R8(), Run<bool>("Mosa.Test.Collection", "SpecificTests", "CeqR8R8"));
 		}
+
+		[Test]
+		public void R8IsPositiveInfinity1()
+		{
+			Assert.AreEqual<bool>(SpecificTests.R8IsPositiveInfinity1(), Run<bool>("Mosa.Test.Collection", "SpecificTests", "R8IsPositiveInfinity1"));
+		}
+
+		[Test]
+		public void R8R8IsNegativeInfinity1()
+		{
+			Assert.AreEqual<bool>(SpecificTests.R8IsNegativeInfinity1(), Run<bool>("Mosa.Test.Collection", "SpecificTests", "R8IsNegativeInfinity1"));
+		}
+
+		[Test]
+		public void R8IsPositiveInfinity2()
+		{
+			Assert.AreEqual<bool>(SpecificTests.R8IsPositiveInfinity2(), Run<bool>("Mosa.Test.Collection", "SpecificTests", "R8IsPositiveInfinity2"));
+		}
+
+		[Test]
+		public void R8R8IsNegativeInfinity2()
+		{
+			Assert.AreEqual<bool>(SpecificTests.R8IsNegativeInfinity2(), Run<bool>("Mosa.Test.Collection", "SpecificTests", "R8IsNegativeInfinity2"));
+		}
 	}
 }

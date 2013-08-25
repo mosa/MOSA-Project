@@ -118,7 +118,7 @@ namespace Mosa.Compiler.Framework
 		{
 			StringBuilder s = new StringBuilder(ToString());
 
-			if (context.Other is IR.ConditionCode)
+			if (context.Other is ConditionCode)
 			{
 				s.Append(" [");
 				s.Append(GetConditionString(context.ConditionCode));
@@ -238,27 +238,28 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		/// <param name="conditioncode">The conditioncode.</param>
 		/// <returns></returns>
-		protected string GetConditionString(IR.ConditionCode conditioncode)
+		protected string GetConditionString(ConditionCode conditioncode)
 		{
 			switch (conditioncode)
 			{
-				case IR.ConditionCode.Equal: return @"equal";
-				case IR.ConditionCode.GreaterOrEqual: return @"greater or equal";
-				case IR.ConditionCode.GreaterThan: return @"greater";
-				case IR.ConditionCode.LessOrEqual: return @"less or equal";
-				case IR.ConditionCode.LessThan: return @"less";
-				case IR.ConditionCode.NotEqual: return @"not equal";
-				case IR.ConditionCode.UnsignedGreaterOrEqual: return @"greater or equal (U)";
-				case IR.ConditionCode.UnsignedGreaterThan: return @"greater (U)";
-				case IR.ConditionCode.UnsignedLessOrEqual: return @"less or equal (U)";
-				case IR.ConditionCode.UnsignedLessThan: return @"less (U)";
-				case IR.ConditionCode.NotSigned: return @"not signed";
-				case IR.ConditionCode.Signed: return @"signed";
-				case IR.ConditionCode.Zero: return @"zero";
-				case IR.ConditionCode.NotZero: return @"not zero";
-				case IR.ConditionCode.NoParity: return @"no parity";
-				case IR.ConditionCode.Carry: return @"carry";
-				case IR.ConditionCode.NoCarry: return @"no carry";
+				case ConditionCode.Equal: return @"equal";
+				case ConditionCode.GreaterOrEqual: return @"greater or equal";
+				case ConditionCode.GreaterThan: return @"greater";
+				case ConditionCode.LessOrEqual: return @"less or equal";
+				case ConditionCode.LessThan: return @"less";
+				case ConditionCode.NotEqual: return @"not equal";
+				case ConditionCode.UnsignedGreaterOrEqual: return @"greater or equal (U)";
+				case ConditionCode.UnsignedGreaterThan: return @"greater (U)";
+				case ConditionCode.UnsignedLessOrEqual: return @"less or equal (U)";
+				case ConditionCode.UnsignedLessThan: return @"less (U)";
+				case ConditionCode.NotSigned: return @"not signed";
+				case ConditionCode.Signed: return @"signed";
+				case ConditionCode.Zero: return @"zero";
+				case ConditionCode.NotZero: return @"not zero";
+				case ConditionCode.Parity: return @"parity";
+				case ConditionCode.NoParity: return @"no parity";
+				case ConditionCode.Carry: return @"carry";
+				case ConditionCode.NoCarry: return @"no carry";
 
 				default: throw new NotSupportedException();
 			}

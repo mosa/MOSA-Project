@@ -47,23 +47,23 @@ namespace System
 
 		public int CompareTo(double value)
 		{
-			if (IsPositiveInfinity(_value))
-				if (IsPositiveInfinity(value))
-					return 0;
-			if (IsNegativeInfinity(_value))
-				if (IsNegativeInfinity(value))
-					return 0;
+			//if (IsPositiveInfinity(_value))
+			//	if (IsPositiveInfinity(value))
+			//		return 0;
+			//if (IsNegativeInfinity(_value))
+			//	if (IsNegativeInfinity(value))
+			//		return 0;
 
-			if (IsNaN(value)) if (IsNaN(_value))
-					return 0;
-				else
-					return 1;
+			//if (IsNaN(value)) if (IsNaN(_value))
+			//		return 0;
+			//	else
+			//		return 1;
 
-			if (IsNaN(_value))
-				if (IsNaN(value))
-					return 0;
-				else
-					return -1;
+			//if (IsNaN(_value))
+			//	if (IsNaN(value))
+			//		return 0;
+			//	else
+			//		return -1;
 
 			if (_value > value)
 				return 1;

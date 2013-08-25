@@ -191,9 +191,9 @@ namespace Mosa.Compiler.Framework
 		/// Gets or sets the condition code.
 		/// </summary>
 		/// <value>The condition code.</value>
-		public IR.ConditionCode ConditionCode
+		public ConditionCode ConditionCode
 		{
-			get { return (IR.ConditionCode)Other; }
+			get { return (ConditionCode)Other; }
 			set { Other = value; }
 		}
 

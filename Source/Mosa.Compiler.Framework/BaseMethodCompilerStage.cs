@@ -412,23 +412,23 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		/// <param name="opcode">The opcode.</param>
 		/// <returns></returns>
-		public static IR.ConditionCode ConvertCondition(CIL.OpCode opcode)
+		public static ConditionCode ConvertCondition(CIL.OpCode opcode)
 		{
 			switch (opcode)
 			{
 				// Signed
-				case CIL.OpCode.Beq_s: return IR.ConditionCode.Equal;
-				case CIL.OpCode.Bge_s: return IR.ConditionCode.GreaterOrEqual;
-				case CIL.OpCode.Bgt_s: return IR.ConditionCode.GreaterThan;
-				case CIL.OpCode.Ble_s: return IR.ConditionCode.LessOrEqual;
-				case CIL.OpCode.Blt_s: return IR.ConditionCode.LessThan;
+				case CIL.OpCode.Beq_s: return ConditionCode.Equal;
+				case CIL.OpCode.Bge_s: return ConditionCode.GreaterOrEqual;
+				case CIL.OpCode.Bgt_s: return ConditionCode.GreaterThan;
+				case CIL.OpCode.Ble_s: return ConditionCode.LessOrEqual;
+				case CIL.OpCode.Blt_s: return ConditionCode.LessThan;
 
 				// Unsigned
-				case CIL.OpCode.Bne_un_s: return IR.ConditionCode.NotEqual;
-				case CIL.OpCode.Bge_un_s: return IR.ConditionCode.UnsignedGreaterOrEqual;
-				case CIL.OpCode.Bgt_un_s: return IR.ConditionCode.UnsignedGreaterThan;
-				case CIL.OpCode.Ble_un_s: return IR.ConditionCode.UnsignedLessOrEqual;
-				case CIL.OpCode.Blt_un_s: return IR.ConditionCode.UnsignedLessThan;
+				case CIL.OpCode.Bne_un_s: return ConditionCode.NotEqual;
+				case CIL.OpCode.Bge_un_s: return ConditionCode.UnsignedGreaterOrEqual;
+				case CIL.OpCode.Bgt_un_s: return ConditionCode.UnsignedGreaterThan;
+				case CIL.OpCode.Ble_un_s: return ConditionCode.UnsignedLessOrEqual;
+				case CIL.OpCode.Blt_un_s: return ConditionCode.UnsignedLessThan;
 
 				// Long form signed
 				case CIL.OpCode.Beq: goto case CIL.OpCode.Beq_s;
@@ -445,11 +445,11 @@ namespace Mosa.Compiler.Framework
 				case CIL.OpCode.Blt_un: goto case CIL.OpCode.Blt_un_s;
 
 				// Compare
-				case CIL.OpCode.Ceq: return IR.ConditionCode.Equal;
-				case CIL.OpCode.Cgt: return IR.ConditionCode.GreaterThan;
-				case CIL.OpCode.Cgt_un: return IR.ConditionCode.UnsignedGreaterThan;
-				case CIL.OpCode.Clt: return IR.ConditionCode.LessThan;
-				case CIL.OpCode.Clt_un: return IR.ConditionCode.UnsignedLessThan;
+				case CIL.OpCode.Ceq: return ConditionCode.Equal;
+				case CIL.OpCode.Cgt: return ConditionCode.GreaterThan;
+				case CIL.OpCode.Cgt_un: return ConditionCode.UnsignedGreaterThan;
+				case CIL.OpCode.Clt: return ConditionCode.LessThan;
+				case CIL.OpCode.Clt_un: return ConditionCode.UnsignedLessThan;
 
 				default: throw new NotImplementedException();
 			}
@@ -460,20 +460,20 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		/// <param name="conditionCode">The condition code to get an unsigned form from.</param>
 		/// <returns>The unsigned form of the given condition code.</returns>
-		protected static IR.ConditionCode GetUnsignedConditionCode(IR.ConditionCode conditionCode)
+		protected static ConditionCode GetUnsignedConditionCode(ConditionCode conditionCode)
 		{
 			switch (conditionCode)
 			{
-				case IR.ConditionCode.Equal: break;
-				case IR.ConditionCode.NotEqual: break;
-				case IR.ConditionCode.GreaterOrEqual: return IR.ConditionCode.UnsignedGreaterOrEqual;
-				case IR.ConditionCode.GreaterThan: return IR.ConditionCode.UnsignedGreaterThan;
-				case IR.ConditionCode.LessOrEqual: return IR.ConditionCode.UnsignedLessOrEqual;
-				case IR.ConditionCode.LessThan: return IR.ConditionCode.UnsignedLessThan;
-				case IR.ConditionCode.UnsignedGreaterOrEqual: break;
-				case IR.ConditionCode.UnsignedGreaterThan: break;
-				case IR.ConditionCode.UnsignedLessOrEqual: break;
-				case IR.ConditionCode.UnsignedLessThan: break;
+				case ConditionCode.Equal: break;
+				case ConditionCode.NotEqual: break;
+				case ConditionCode.GreaterOrEqual: return ConditionCode.UnsignedGreaterOrEqual;
+				case ConditionCode.GreaterThan: return ConditionCode.UnsignedGreaterThan;
+				case ConditionCode.LessOrEqual: return ConditionCode.UnsignedLessOrEqual;
+				case ConditionCode.LessThan: return ConditionCode.UnsignedLessThan;
+				case ConditionCode.UnsignedGreaterOrEqual: break;
+				case ConditionCode.UnsignedGreaterThan: break;
+				case ConditionCode.UnsignedLessOrEqual: break;
+				case ConditionCode.UnsignedLessThan: break;
 				default: throw new NotSupportedException();
 			}
 
@@ -485,28 +485,28 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		/// <param name="conditionCode">The condition code.</param>
 		/// <returns></returns>
-		protected static IR.ConditionCode GetOppositeConditionCode(IR.ConditionCode conditionCode)
+		protected static ConditionCode GetOppositeConditionCode(ConditionCode conditionCode)
 		{
 			switch (conditionCode)
 			{
-				case IR.ConditionCode.Equal: return IR.ConditionCode.NotEqual;
-				case IR.ConditionCode.NotEqual: return IR.ConditionCode.Equal;
-				case IR.ConditionCode.GreaterOrEqual: return IR.ConditionCode.LessThan;
-				case IR.ConditionCode.GreaterThan: return IR.ConditionCode.LessOrEqual;
-				case IR.ConditionCode.LessOrEqual: return IR.ConditionCode.GreaterThan;
-				case IR.ConditionCode.LessThan: return IR.ConditionCode.GreaterOrEqual;
-				case IR.ConditionCode.UnsignedGreaterOrEqual: return IR.ConditionCode.UnsignedLessThan;
-				case IR.ConditionCode.UnsignedGreaterThan: return IR.ConditionCode.UnsignedLessOrEqual;
-				case IR.ConditionCode.UnsignedLessOrEqual: return IR.ConditionCode.UnsignedGreaterThan;
-				case IR.ConditionCode.UnsignedLessThan: return IR.ConditionCode.UnsignedGreaterOrEqual;
-				case IR.ConditionCode.Signed: return IR.ConditionCode.NotSigned;
-				case IR.ConditionCode.NotSigned: return IR.ConditionCode.Signed;
-				case IR.ConditionCode.Parity: return IR.ConditionCode.NoParity;
-				case IR.ConditionCode.NoParity: return IR.ConditionCode.Parity;
-				case IR.ConditionCode.Carry: return IR.ConditionCode.NoCarry;
-				case IR.ConditionCode.NoCarry: return IR.ConditionCode.Carry;
-				case IR.ConditionCode.Overflow: return IR.ConditionCode.NoOverflow;
-				case IR.ConditionCode.NoOverflow: return IR.ConditionCode.Overflow;
+				case ConditionCode.Equal: return ConditionCode.NotEqual;
+				case ConditionCode.NotEqual: return ConditionCode.Equal;
+				case ConditionCode.GreaterOrEqual: return ConditionCode.LessThan;
+				case ConditionCode.GreaterThan: return ConditionCode.LessOrEqual;
+				case ConditionCode.LessOrEqual: return ConditionCode.GreaterThan;
+				case ConditionCode.LessThan: return ConditionCode.GreaterOrEqual;
+				case ConditionCode.UnsignedGreaterOrEqual: return ConditionCode.UnsignedLessThan;
+				case ConditionCode.UnsignedGreaterThan: return ConditionCode.UnsignedLessOrEqual;
+				case ConditionCode.UnsignedLessOrEqual: return ConditionCode.UnsignedGreaterThan;
+				case ConditionCode.UnsignedLessThan: return ConditionCode.UnsignedGreaterOrEqual;
+				case ConditionCode.Signed: return ConditionCode.NotSigned;
+				case ConditionCode.NotSigned: return ConditionCode.Signed;
+				case ConditionCode.Parity: return ConditionCode.NoParity;
+				case ConditionCode.NoParity: return ConditionCode.Parity;
+				case ConditionCode.Carry: return ConditionCode.NoCarry;
+				case ConditionCode.NoCarry: return ConditionCode.Carry;
+				case ConditionCode.Overflow: return ConditionCode.NoOverflow;
+				case ConditionCode.NoOverflow: return ConditionCode.Overflow;
 				default: throw new NotSupportedException();
 			}
 		}

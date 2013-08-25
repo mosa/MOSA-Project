@@ -7,12 +7,12 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Compiler.TypeSystem;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework
 {
@@ -194,7 +194,7 @@ namespace Mosa.Compiler.Framework
 			set
 			{
 				Operand current = instructionSet.Data[index].Operand2;
-				if (current == value) return; 
+				if (current == value) return;
 				if (current != null)
 				{
 					current.Uses.Remove(index);
@@ -228,7 +228,7 @@ namespace Mosa.Compiler.Framework
 			set
 			{
 				Operand current = instructionSet.Data[index].Operand3;
-				if (current == value) return; 
+				if (current == value) return;
 				if (current != null)
 				{
 					current.Uses.Remove(index);
@@ -477,7 +477,7 @@ namespace Mosa.Compiler.Framework
 		/// Gets or sets the condition code.
 		/// </summary>
 		/// <value>The condition code.</value>
-		public IR.ConditionCode ConditionCode
+		public ConditionCode ConditionCode
 		{
 			get { return instructionSet.Data[index].ConditionCode; }
 			set { instructionSet.Data[index].ConditionCode = value; }
@@ -753,7 +753,7 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		/// <param name="instruction">The instruction.</param>
 		/// <param name="code">The code.</param>
-		public void SetInstruction(BaseInstruction instruction, IR.ConditionCode code)
+		public void SetInstruction(BaseInstruction instruction, ConditionCode code)
 		{
 			SetInstruction(instruction);
 			ConditionCode = code;
@@ -765,7 +765,7 @@ namespace Mosa.Compiler.Framework
 		/// <param name="instruction">The instruction.</param>
 		/// <param name="code">The code.</param>
 		/// <param name="block">The block.</param>
-		public void SetInstruction(BaseInstruction instruction, IR.ConditionCode code, BasicBlock block)
+		public void SetInstruction(BaseInstruction instruction, ConditionCode code, BasicBlock block)
 		{
 			SetInstruction(instruction);
 			ConditionCode = code;
@@ -779,7 +779,7 @@ namespace Mosa.Compiler.Framework
 		/// <param name="code">The code.</param>
 		/// <param name="block">The block.</param>
 		/// <param name="branchHint">if set to <c>true</c> [branch hint].</param>
-		public void SetInstruction(BaseInstruction instruction, IR.ConditionCode code, BasicBlock block, bool branchHint)
+		public void SetInstruction(BaseInstruction instruction, ConditionCode code, BasicBlock block, bool branchHint)
 		{
 			SetInstruction(instruction, code, block);
 			BranchHint = branchHint;
@@ -882,7 +882,22 @@ namespace Mosa.Compiler.Framework
 		/// <param name="result">The result.</param>
 		/// <param name="operand1">The operand1.</param>
 		/// <param name="operand2">The operand2.</param>
-		public void SetInstruction(BaseInstruction instruction, IR.ConditionCode condition, Operand result, Operand operand1, Operand operand2)
+		public void SetInstruction(BaseInstruction instruction, ConditionCode condition, Operand result, Operand operand1)
+		{
+			SetInstruction(instruction, 1, (byte)((result == null) ? 0 : 1));
+			Result = result;
+			Operand1 = operand1;
+			ConditionCode = condition;
+		}
+
+		/// <summary>
+		/// Sets the instruction.
+		/// </summary>
+		/// <param name="instruction">The instruction.</param>
+		/// <param name="result">The result.</param>
+		/// <param name="operand1">The operand1.</param>
+		/// <param name="operand2">The operand2.</param>
+		public void SetInstruction(BaseInstruction instruction, ConditionCode condition, Operand result, Operand operand1, Operand operand2)
 		{
 			SetInstruction(instruction, 2, (byte)((result == null) ? 0 : 1));
 			Result = result;
@@ -934,7 +949,7 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		/// <param name="instruction">The instruction to append.</param>
 		/// <param name="code">The condition code.</param>
-		public void AppendInstruction(BaseInstruction instruction, IR.ConditionCode code)
+		public void AppendInstruction(BaseInstruction instruction, ConditionCode code)
 		{
 			AppendInstruction();
 			SetInstruction(instruction);
@@ -947,7 +962,7 @@ namespace Mosa.Compiler.Framework
 		/// <param name="instruction">The instruction to append.</param>
 		/// <param name="code">The condition code.</param>
 		/// <param name="result">The result operand.</param>
-		public void AppendInstruction(BaseInstruction instruction, IR.ConditionCode code, Operand result)
+		public void AppendInstruction(BaseInstruction instruction, ConditionCode code, Operand result)
 		{
 			AppendInstruction();
 			SetInstruction(instruction, result);
@@ -993,7 +1008,7 @@ namespace Mosa.Compiler.Framework
 		/// <param name="instruction">The instruction to append.</param>
 		/// <param name="code">The condition code.</param>
 		/// <param name="block">The basic block.</param>
-		public void AppendInstruction(BaseInstruction instruction, IR.ConditionCode code, BasicBlock block)
+		public void AppendInstruction(BaseInstruction instruction, ConditionCode code, BasicBlock block)
 		{
 			AppendInstruction();
 			SetInstruction(instruction, code, block);
@@ -1006,7 +1021,7 @@ namespace Mosa.Compiler.Framework
 		/// <param name="code">The condition code.</param>
 		/// <param name="block">The basic block.</param>
 		/// <param name="branchHint">The branch hint value.</param>
-		public void AppendInstruction(BaseInstruction instruction, IR.ConditionCode code, BasicBlock block, bool branchHint)
+		public void AppendInstruction(BaseInstruction instruction, ConditionCode code, BasicBlock block, bool branchHint)
 		{
 			AppendInstruction(instruction, code, block);
 			BranchHint = branchHint;
@@ -1086,7 +1101,21 @@ namespace Mosa.Compiler.Framework
 		/// <param name="result">The result operand.</param>
 		/// <param name="operand1">The first operand.</param>
 		/// <param name="operand2">The second operand.</param>
-		public void AppendInstruction(BaseInstruction instruction, IR.ConditionCode condition, Operand result, Operand operand1, Operand operand2)
+		public void AppendInstruction(BaseInstruction instruction, ConditionCode condition, Operand result, Operand operand1)
+		{
+			AppendInstruction();
+			SetInstruction(instruction, condition, result, operand1);
+		}
+
+		/// <summary>
+		/// Appends an instruction after the current index.
+		/// </summary>
+		/// <param name="instruction">The instruction to append.</param>
+		/// <param name="condition">The condition.</param>
+		/// <param name="result">The result operand.</param>
+		/// <param name="operand1">The first operand.</param>
+		/// <param name="operand2">The second operand.</param>
+		public void AppendInstruction(BaseInstruction instruction, ConditionCode condition, Operand result, Operand operand1, Operand operand2)
 		{
 			AppendInstruction();
 			SetInstruction(instruction, condition, result, operand1, operand2);

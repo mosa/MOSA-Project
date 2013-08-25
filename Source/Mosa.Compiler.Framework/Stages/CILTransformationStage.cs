@@ -746,7 +746,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="context">The context.</param>
 		void CIL.ICILVisitor.BinaryComparison(Context context)
 		{
-			IR.ConditionCode code = ConvertCondition((context.Instruction as CIL.BaseCILInstruction).OpCode);
+			ConditionCode code = ConvertCondition((context.Instruction as CIL.BaseCILInstruction).OpCode);
 
 			if (context.Operand1.StackType == StackTypeCode.F)
 			{

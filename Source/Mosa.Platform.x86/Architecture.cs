@@ -231,8 +231,7 @@ namespace Mosa.Platform.x86
 			{
 				case CilElementType.U8: size = 8; alignment = 4; break;
 				case CilElementType.I8: size = 8; alignment = 4; break;
-				case CilElementType.R8: size = 8; alignment = 16; break;
-				case CilElementType.R4: size = 4; alignment = 8; break;
+				case CilElementType.R8: size = alignment = 8; break;
 				default: size = alignment = 4; break;
 			}
 		}

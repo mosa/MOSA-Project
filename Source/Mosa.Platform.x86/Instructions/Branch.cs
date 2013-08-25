@@ -10,7 +10,6 @@
 
 using Mosa.Compiler.Framework;
 using System;
-using IR = Mosa.Compiler.Framework.IR;
 
 namespace Mosa.Platform.x86.Instructions
 {
@@ -75,26 +74,26 @@ namespace Mosa.Platform.x86.Instructions
 
 			switch (context.ConditionCode)
 			{
-				case IR.ConditionCode.Equal: opcode = JE; break;
-				case IR.ConditionCode.NotEqual: opcode = JNE; break;
-				case IR.ConditionCode.Zero: opcode = JZ; break;
-				case IR.ConditionCode.NotZero: opcode = JNZ; break;
-				case IR.ConditionCode.GreaterOrEqual: opcode = JGE; break;
-				case IR.ConditionCode.GreaterThan: opcode = JG; break;
-				case IR.ConditionCode.LessOrEqual: opcode = JLE; break;
-				case IR.ConditionCode.LessThan: opcode = JL; break;
-				case IR.ConditionCode.UnsignedGreaterOrEqual: opcode = JAE; break;
-				case IR.ConditionCode.UnsignedGreaterThan: opcode = JA; break;
-				case IR.ConditionCode.UnsignedLessOrEqual: opcode = JBE; break;
-				case IR.ConditionCode.UnsignedLessThan: opcode = JB; break;
-				case IR.ConditionCode.Signed: opcode = JS; break;
-				case IR.ConditionCode.NotSigned: opcode = JNS; break;
-				case IR.ConditionCode.Carry: opcode = JC; break;
-				case IR.ConditionCode.NoCarry: opcode = JNC; break;
-				case IR.ConditionCode.Overflow: opcode = JO; break;
-				case IR.ConditionCode.NoOverflow: opcode = JNO; break;
-				case IR.ConditionCode.Parity: opcode = JP; break;
-				case IR.ConditionCode.NoParity: opcode = JNP; break;
+				case ConditionCode.Equal: opcode = JE; break;
+				case ConditionCode.NotEqual: opcode = JNE; break;
+				case ConditionCode.Zero: opcode = JZ; break;
+				case ConditionCode.NotZero: opcode = JNZ; break;
+				case ConditionCode.GreaterOrEqual: opcode = JGE; break;
+				case ConditionCode.GreaterThan: opcode = JG; break;
+				case ConditionCode.LessOrEqual: opcode = JLE; break;
+				case ConditionCode.LessThan: opcode = JL; break;
+				case ConditionCode.UnsignedGreaterOrEqual: opcode = JAE; break;
+				case ConditionCode.UnsignedGreaterThan: opcode = JA; break;
+				case ConditionCode.UnsignedLessOrEqual: opcode = JBE; break;
+				case ConditionCode.UnsignedLessThan: opcode = JB; break;
+				case ConditionCode.Signed: opcode = JS; break;
+				case ConditionCode.NotSigned: opcode = JNS; break;
+				case ConditionCode.Carry: opcode = JC; break;
+				case ConditionCode.NoCarry: opcode = JNC; break;
+				case ConditionCode.Overflow: opcode = JO; break;
+				case ConditionCode.NoOverflow: opcode = JNO; break;
+				case ConditionCode.Parity: opcode = JP; break;
+				case ConditionCode.NoParity: opcode = JNP; break;
 				default:
 					throw new NotSupportedException();
 			}

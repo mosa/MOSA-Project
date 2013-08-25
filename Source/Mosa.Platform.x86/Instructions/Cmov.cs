@@ -10,7 +10,6 @@
 
 using Mosa.Compiler.Framework;
 using System;
-using IR = Mosa.Compiler.Framework.IR;
 
 namespace Mosa.Platform.x86.Instructions
 {
@@ -69,26 +68,26 @@ namespace Mosa.Platform.x86.Instructions
 
 			switch (context.ConditionCode)
 			{
-				case IR.ConditionCode.Equal: opcode = CMOVO; break;
-				case IR.ConditionCode.NotEqual: opcode = CMOVNE; break;
-				case IR.ConditionCode.Zero: opcode = CMOVZ; break;
-				case IR.ConditionCode.NotZero: opcode = CMOVNZ; break;
-				case IR.ConditionCode.GreaterOrEqual: opcode = CMOVGE; break;
-				case IR.ConditionCode.GreaterThan: opcode = CMOVG; break;
-				case IR.ConditionCode.LessOrEqual: opcode = CMOVLE; break;
-				case IR.ConditionCode.LessThan: opcode = CMOVL; break;
-				case IR.ConditionCode.UnsignedGreaterOrEqual: opcode = CMOVNB; break;
-				case IR.ConditionCode.UnsignedGreaterThan: opcode = CMOVA; break;
-				case IR.ConditionCode.UnsignedLessOrEqual: opcode = CMOVBE; break;
-				case IR.ConditionCode.UnsignedLessThan: opcode = CMOVB; break;
-				case IR.ConditionCode.Signed: opcode = CMOVS; break;
-				case IR.ConditionCode.NotSigned: opcode = CMOVNS; break;
-				case IR.ConditionCode.Carry: opcode = CMOVC; break;
-				case IR.ConditionCode.NoCarry: opcode = CMOVNC; break;
-				case IR.ConditionCode.Overflow: opcode = CMOVO; break;
-				case IR.ConditionCode.NoOverflow: opcode = CMOVNO; break;
-				case IR.ConditionCode.Parity: opcode = CMOVP; break;
-				case IR.ConditionCode.NoParity: opcode = CMOVNP; break;
+				case ConditionCode.Equal: opcode = CMOVO; break;
+				case ConditionCode.NotEqual: opcode = CMOVNE; break;
+				case ConditionCode.Zero: opcode = CMOVZ; break;
+				case ConditionCode.NotZero: opcode = CMOVNZ; break;
+				case ConditionCode.GreaterOrEqual: opcode = CMOVGE; break;
+				case ConditionCode.GreaterThan: opcode = CMOVG; break;
+				case ConditionCode.LessOrEqual: opcode = CMOVLE; break;
+				case ConditionCode.LessThan: opcode = CMOVL; break;
+				case ConditionCode.UnsignedGreaterOrEqual: opcode = CMOVNB; break;
+				case ConditionCode.UnsignedGreaterThan: opcode = CMOVA; break;
+				case ConditionCode.UnsignedLessOrEqual: opcode = CMOVBE; break;
+				case ConditionCode.UnsignedLessThan: opcode = CMOVB; break;
+				case ConditionCode.Signed: opcode = CMOVS; break;
+				case ConditionCode.NotSigned: opcode = CMOVNS; break;
+				case ConditionCode.Carry: opcode = CMOVC; break;
+				case ConditionCode.NoCarry: opcode = CMOVNC; break;
+				case ConditionCode.Overflow: opcode = CMOVO; break;
+				case ConditionCode.NoOverflow: opcode = CMOVNO; break;
+				case ConditionCode.Parity: opcode = CMOVP; break;
+				case ConditionCode.NoParity: opcode = CMOVNP; break;
 				default:
 					throw new NotSupportedException();
 			}

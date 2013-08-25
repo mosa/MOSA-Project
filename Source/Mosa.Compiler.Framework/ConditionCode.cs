@@ -7,7 +7,7 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-namespace Mosa.Compiler.Framework.IR
+namespace Mosa.Compiler.Framework
 {
 	/// <summary>
 	/// Specifies condition codes for <see cref="ConditionCode" />.

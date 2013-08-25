@@ -77,6 +77,12 @@ namespace Mosa.Test.Cases.CIL
 		}
 
 		[Test]
+		public void CneqR8R8([R8Number]double a, [R8Number]double b)
+		{
+			Assert.AreEqual(DoubleTests.CneqR8R8(a, b), Run<bool>("Mosa.Test.Collection", "DoubleTests", "CneqR8R8", a, b));
+		}
+
+		[Test]
 		public void CltR8R8([R8Number]double a, [R8Number]double b)
 		{
 			Assert.AreEqual(DoubleTests.CltR8R8(a, b), Run<bool>("Mosa.Test.Collection", "DoubleTests", "CltR8R8", a, b));

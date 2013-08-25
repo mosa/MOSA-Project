@@ -263,7 +263,7 @@
     <Compile Include="IR\AddressOf.cs" />
     <Compile Include="IR\ArithmeticShiftRight.cs" />
     <Compile Include="IR\Call.cs" />
-    <Compile Include="IR\ConditionCode.cs" />
+    <Compile Include="ConditionCode.cs" />
     <Compile Include="IR\Nop.cs" />
     <Compile Include="IR\IRInstruction.cs" />
     <Compile Include="IR\Epilogue.cs" />

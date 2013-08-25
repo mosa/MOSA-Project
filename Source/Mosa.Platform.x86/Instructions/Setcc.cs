@@ -10,7 +10,6 @@
 
 using Mosa.Compiler.Framework;
 using System;
-using IR = Mosa.Compiler.Framework.IR;
 
 namespace Mosa.Platform.x86.Instructions
 {
@@ -65,22 +64,22 @@ namespace Mosa.Platform.x86.Instructions
 
 			switch (context.ConditionCode)
 			{
-				case IR.ConditionCode.Equal: opcode = E; break;
-				case IR.ConditionCode.LessThan: opcode = LT; break;
-				case IR.ConditionCode.LessOrEqual: opcode = LE; break;
-				case IR.ConditionCode.GreaterOrEqual: opcode = GE; break;
-				case IR.ConditionCode.GreaterThan: opcode = GT; break;
-				case IR.ConditionCode.NotEqual: opcode = NE; break;
-				case IR.ConditionCode.UnsignedGreaterOrEqual: opcode = UGE; break;
-				case IR.ConditionCode.UnsignedGreaterThan: opcode = UGT; break;
-				case IR.ConditionCode.UnsignedLessOrEqual: opcode = ULE; break;
-				case IR.ConditionCode.UnsignedLessThan: opcode = ULT; break;
-				case IR.ConditionCode.Parity: opcode = P; break;
-				case IR.ConditionCode.NoParity: opcode = NP; break;
-				case IR.ConditionCode.NoCarry: opcode = NC; break;
-				case IR.ConditionCode.Carry: opcode = C; break;
-				case IR.ConditionCode.Zero: opcode = Z; break;
-				case IR.ConditionCode.NotZero: opcode = NZ; break;
+				case ConditionCode.Equal: opcode = E; break;
+				case ConditionCode.LessThan: opcode = LT; break;
+				case ConditionCode.LessOrEqual: opcode = LE; break;
+				case ConditionCode.GreaterOrEqual: opcode = GE; break;
+				case ConditionCode.GreaterThan: opcode = GT; break;
+				case ConditionCode.NotEqual: opcode = NE; break;
+				case ConditionCode.UnsignedGreaterOrEqual: opcode = UGE; break;
+				case ConditionCode.UnsignedGreaterThan: opcode = UGT; break;
+				case ConditionCode.UnsignedLessOrEqual: opcode = ULE; break;
+				case ConditionCode.UnsignedLessThan: opcode = ULT; break;
+				case ConditionCode.Parity: opcode = P; break;
+				case ConditionCode.NoParity: opcode = NP; break;
+				case ConditionCode.NoCarry: opcode = NC; break;
+				case ConditionCode.Carry: opcode = C; break;
+				case ConditionCode.Zero: opcode = Z; break;
+				case ConditionCode.NotZero: opcode = NZ; break;
 				default: throw new NotSupportedException();
 			}
 

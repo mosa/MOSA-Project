@@ -61,32 +61,22 @@ namespace Mosa.TestWorld.x86
 			RunTests();
 			Write('8', 0x0E);
 
-			//CMOS cmos = new CMOS();
-			//Screen.Write("7");
+			CMOS cmos = new CMOS();
+			Write('9', 0x0E);
 
-			//Screen.Write("8");
+			//Console.Write(@"www.mosa-project.org");
 
-			//Console = ConsoleManager.Controller.Boot;
-
-			//Screen.Write("9");
-
-			//Console.Clear();
-			////Console.Write(@"www.mosa-project.org");
-
-			//Screen.Write("0");
-
-			//byte last = 0;
+			byte last = 0;
 
 			while (true)
 			{
-				//Screen.Write("-");
 
-				//if (cmos.Second != last)
-				//{
-				//	last = cmos.Second;
-				//	//DebugClient.SendAlive();
-				//	Screen.Write(".");
-				//}
+				if (cmos.Second != last)
+				{
+					last = cmos.Second;
+					//DebugClient.SendAlive();
+					Screen.Write(".");
+				}
 
 				//DebugClient.Process();
 
@@ -101,7 +91,9 @@ namespace Mosa.TestWorld.x86
 
 		public static void RunTests()
 		{
-			DoubleTests.CeqR8R8(1d, 2d);
+			DoubleTests.CeqR8R8(1d, 1d);
+			//if (DoubleTests.AddR8R8(1d, 1d) == 2d)
+			//	Screen.Write("!");
 		}
 
 		public static void Write(char chr, byte color)

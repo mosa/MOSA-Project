@@ -88,8 +88,8 @@ namespace Mosa.Tool.Compiler
 			TypeLayout typeLayout = new TypeLayout(typeSystem, nativePointerSize, nativePointerAlignment);
 
 			ConfigurableTraceFilter filter = new ConfigurableTraceFilter();
-			filter.MethodMatch = MatchType.Exact; // MatchType.NotContains
-			filter.Method = "Write"; //  "InterruptISR";
+			filter.MethodMatch = MatchType.Contains; // MatchType.NotContains
+			filter.Method = "NaN"; //  "InterruptISR";
 			filter.StageMatch = MatchType.Any;
 			filter.TypeMatch = MatchType.Any;
 			filter.ExcludeInternalMethods = false;

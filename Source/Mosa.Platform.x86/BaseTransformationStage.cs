@@ -53,9 +53,9 @@ namespace Mosa.Platform.x86
 		{
 			if (context.OperandCount > 0)
 				context.Operand1 = EmitFloatingPointConstant(context.Operand1);
-			else if (context.OperandCount > 1)
+			if (context.OperandCount > 1)
 				context.Operand2 = EmitFloatingPointConstant(context.Operand2);
-			else if (context.OperandCount > 2)
+			if (context.OperandCount > 2)
 				context.Operand3 = EmitFloatingPointConstant(context.Operand3);
 		}
 

@@ -63,6 +63,11 @@ namespace Mosa.Test.Collection
 			return (first.CompareTo(second) == 0);
 		}
 
+		public static bool CneqR8R8(double first, double second)
+		{
+			return (first.CompareTo(second) != 0);
+		}
+
 		public static bool CltR8R8(double first, double second)
 		{
 			return (first.CompareTo(second) < 0);
