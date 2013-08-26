@@ -10,7 +10,7 @@
 using System.IO;
 using Mosa.Compiler.Linker;
 
-namespace Mosa.Tool.TypeExplorer
+namespace Mosa.Tool.Explorer
 {
 	/// <summary>
 	///

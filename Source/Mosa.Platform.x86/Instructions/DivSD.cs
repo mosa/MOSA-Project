@@ -15,26 +15,14 @@ namespace Mosa.Platform.x86.Instructions
 	/// <summary>
 	/// Intermediate representation of the SSE division instruction.
 	/// </summary>
-	public sealed class Divsd : X86Instruction
+	public sealed class Divsd : TwoOperandInstruction
 	{
 		#region Data Members
 
 		private static readonly OpCode opcode = new OpCode(new byte[] { 0xF2, 0x0F, 0x5E });
 
 		#endregion Data Members
-
-		#region Construction
-
-		/// <summary>
-		/// Initializes a new instance of <see cref="Divsd"/>.
-		/// </summary>
-		public Divsd() :
-			base(1, 2)
-		{
-		}
-
-		#endregion Construction
-
+		
 		#region Methods
 
 		/// <summary>

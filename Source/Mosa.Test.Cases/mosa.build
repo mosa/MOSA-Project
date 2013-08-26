@@ -18,6 +18,8 @@
                     <include name="CIL/BoxingFixture.cs"/>
                     <include name="CIL/CallVirtualFixture.cs"/>
                     <include name="CIL/CharFixture.cs"/>
+                    <include name="CIL/NewDerivedObjectFixture.cs"/>
+                    <include name="CIL/RegisterAllocatorFixture.cs"/>
                     <include name="CIL/SpecificTestFixture.cs"/>
                     <include name="CIL/DelegateFixture.cs"/>
                     <include name="CIL/ExceptionHandlingFixture.cs"/>
@@ -36,7 +38,7 @@
                     <include name="CIL/IsInstFixture.cs"/>
                     <include name="CIL/ConvFixture.cs"/>
                     <include name="CIL/GenericCallFixture.cs"/>
-                    <include name="CIL/InitobjFixture.cs"/>
+                    <include name="CIL/InitStructFixture.cs"/>
                     <include name="CIL/LdargaFixture.cs"/>
                     <include name="CIL/LdlocaFixture.cs"/>
                     <include name="CIL/StaticFieldFixture.cs"/>
@@ -47,7 +49,7 @@
                     <include name="CIL/Int32Fixture.cs"/>
                     <include name="CIL/Int64Fixture.cs"/>
                     <include name="CIL/InterfaceFixture.cs"/>
-                    <include name="CIL/NewobjFixture.cs"/>
+                    <include name="CIL/NewObjectFixture.cs"/>
                     <include name="OLD/PinnedFixture.cs"/>
                     <include name="CIL/SingleFixture.cs"/>
                     <include name="CIL/StringFixture.cs"/>

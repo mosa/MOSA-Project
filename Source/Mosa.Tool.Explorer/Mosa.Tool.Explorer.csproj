@@ -8,8 +8,8 @@
     <ProjectGuid>{49D8DA65-FC99-4C63-ADC6-1B07260F674F}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Mosa.Tool.TypeExplorer</RootNamespace>
-    <AssemblyName>Mosa.Tool.TypeExplorer</AssemblyName>
+    <RootNamespace>Mosa.Tool.Explorer</RootNamespace>
+    <AssemblyName>Mosa.Tool.Explorer</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -31,7 +31,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>Mosa.Tool.TypeExplorer.Program</StartupObject>
+    <StartupObject>Mosa.Tool.Explorer.Program</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />

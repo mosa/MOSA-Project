@@ -3,7 +3,7 @@ using System.CodeDom.Compiler;
 using System.Windows.Forms;
 using Mosa.Test.CodeDomCompiler;
 
-namespace Mosa.Tool.TypeExplorer
+namespace Mosa.Tool.Explorer
 {
 	public partial class CodeForm : Form
 	{

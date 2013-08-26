@@ -15,26 +15,14 @@ namespace Mosa.Platform.x86.Instructions
 	/// <summary>
 	/// Intermediate representation of the SSE multiplication operation.
 	/// </summary>
-	public sealed class Mulss : X86Instruction
+	public sealed class Mulss : TwoOperandInstruction
 	{
 		#region Data Members
 
 		private static readonly OpCode opcode = new OpCode(new byte[] { 0xF3, 0x0F, 0x59 });
 
 		#endregion Data Members
-
-		#region Construction
-
-		/// <summary>
-		/// Initializes a new instance of <see cref="Mulss"/>.
-		/// </summary>
-		public Mulss() :
-			base(1, 2)
-		{
-		}
-
-		#endregion Construction
-
+		
 		#region Methods
 
 		/// <summary>

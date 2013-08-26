@@ -9,7 +9,7 @@
 
 using Mosa.Compiler.Linker;
 
-namespace Mosa.Tool.TypeExplorer
+namespace Mosa.Tool.Explorer
 {
 	internal class ExplorerLinker : BaseLinker
 	{

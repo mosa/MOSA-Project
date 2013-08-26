@@ -16,6 +16,7 @@
 		<sources>
                     <include name="ConsoleManager.cs"/>
                     <include name="ConsoleSession.cs"/>
+                    <include name="SSE.cs"/>
                     <include name="DebugClient.cs"/>
                     <include name="Serial.cs"/>
                     <include name="Debug.cs"/>

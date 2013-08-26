@@ -19,7 +19,7 @@
                     <include name="IR/BlockStart.cs"/>
                     <include name="IR/BlockEnd.cs"/>
                     <include name="IR/InternalReturn.cs"/>
-                    <include name="RegisterAllocator/IntersectionResult.cs"/>
+                    <include name="RegisterAllocator/MoveResolver.cs"/>
                     <include name="RegisterAllocator/Interval.cs"/>
                     <include name="RegisterAllocator/SlotIndex.cs"/>
                     <include name="RegisterAllocator/LiveIntervalUnion.cs"/>
@@ -27,8 +27,10 @@
                     <include name="RegisterAllocator/LiveInterval.cs"/>
                     <include name="RegisterAllocator/VirtualRegister.cs"/>
                     <include name="RegisterAllocator/GreedyRegisterAllocator.cs"/>
-                    <include name="OperandVisitor.cs"/>
                     <include name="Linker/LinkerFactory.cs"/>
+                    <include name="Stages/BaseEdgeSplitStage.cs"/>
+                    <include name="Stages/EmptyBlockRemovalStage.cs"/>
+                    <include name="Stages/PlatformEdgeSplitStage.cs"/>
                     <include name="Stages/StackSetupStage.cs"/>
                     <include name="Stages/GreedyRegisterAllocatorStage.cs"/>
                     <include name="Stages/LinkerFinalizationStage.cs"/>
@@ -198,7 +200,7 @@
                     <include name="IR/AddressOf.cs"/>
                     <include name="IR/ArithmeticShiftRight.cs"/>
                     <include name="IR/Call.cs"/>
-                    <include name="IR/ConditionCode.cs"/>
+                    <include name="ConditionCode.cs"/>
                     <include name="IR/Nop.cs"/>
                     <include name="IR/IRInstruction.cs"/>
                     <include name="IR/Epilogue.cs"/>
@@ -236,7 +238,6 @@
                     <include name="Stages/ReverseBlockOrderStage.cs"/>
                     <include name="RuntimeMethodData.cs"/>
                     <include name="Stages/SimpleTraceBlockOrderStage.cs"/>
-                    <include name="Stages/LocalCSEStage.cs"/>
                     <include name="Linker/LinkerGeneratedMethod.cs"/>
                     <include name="Linker/LinkerGeneratedType.cs"/>
                     <include name="Linker/LinkerMethodCompiler.cs"/>
@@ -256,7 +257,6 @@
                     <include name="IDominanceProvider.cs"/>
                     <include name="CIL/IInstructionDecoder.cs"/>
                     <include name="IMethodCompilerStage.cs"/>
-                    <include name="IStackLayoutProvider.cs"/>
                     <include name="BaseMethodCompiler.cs"/>
                     <include name="Operand.cs"/>
                     <include name="Register.cs"/>

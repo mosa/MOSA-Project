@@ -9,6 +9,7 @@
  */
 
 using Mosa.Compiler.Framework;
+using Mosa.Compiler.Metadata;
 using System.Diagnostics;
 
 namespace Mosa.Platform.x86.Instructions
@@ -50,9 +51,10 @@ namespace Mosa.Platform.x86.Instructions
 		{
 			Debug.Assert(source.IsMemoryAddress);
 
-			// TODO: support 32 bit too
-
-			return m64fp;
+			if (source.Type.Type == CilElementType.R4)
+				return m32fp;
+			else
+				return m64fp;
 		}
 
 		/// <summary>
@@ -73,7 +75,7 @@ namespace Mosa.Platform.x86.Instructions
 		/// <param name="context">The context.</param>
 		public override void Visit(IX86Visitor visitor, Context context)
 		{
-			return; 
+			return;
 		}
 
 		#endregion Methods

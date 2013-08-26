@@ -76,7 +76,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Compiler.Common", "Mos
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Compiler.TypeSystem", "Mosa.Compiler.TypeSystem\Mosa.Compiler.TypeSystem.csproj", "{5F30A68E-05BF-40EA-B576-5EBCDE520449}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Tool.TypeExplorer", "Mosa.Tool.TypeExplorer\Mosa.Tool.TypeExplorer.csproj", "{49D8DA65-FC99-4C63-ADC6-1B07260F674F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Tool.Explorer", "Mosa.Tool.Explorer\Mosa.Tool.Explorer.csproj", "{49D8DA65-FC99-4C63-ADC6-1B07260F674F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Tool.MetadataExplorer", "Mosa.Tool.MetadataExplorer\Mosa.Tool.MetadataExplorer.csproj", "{59A68DB8-5C96-45BB-889A-DD35486E9077}"
 EndProject

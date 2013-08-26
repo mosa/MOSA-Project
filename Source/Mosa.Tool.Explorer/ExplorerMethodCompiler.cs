@@ -11,7 +11,7 @@ using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Stages;
 using Mosa.Compiler.TypeSystem;
 
-namespace Mosa.Tool.TypeExplorer
+namespace Mosa.Tool.Explorer
 {
 	internal class ExplorerMethodCompiler : BaseMethodCompiler
 	{

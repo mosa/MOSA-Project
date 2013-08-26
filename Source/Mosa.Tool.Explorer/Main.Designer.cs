@@ -1,4 +1,4 @@
-﻿namespace Mosa.Tool.TypeExplorer
+﻿namespace Mosa.Tool.Explorer
 {
 	partial class Main
 	{
@@ -479,7 +479,7 @@
 			this.Controls.Add(this.splitContainer1);
 			this.MainMenuStrip = this.menuStrip1;
 			this.Name = "Main";
-			this.Text = "MOSA Type Explorer 2";
+			this.Text = "MOSA Explorer II";
 			this.Load += new System.EventHandler(this.Main_Load);
 			this.statusStrip1.ResumeLayout(false);
 			this.statusStrip1.PerformLayout();

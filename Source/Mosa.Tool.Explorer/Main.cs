@@ -20,7 +20,7 @@ using System.IO;
 using System.Text;
 using System.Windows.Forms;
 
-namespace Mosa.Tool.TypeExplorer
+namespace Mosa.Tool.Explorer
 {
 	public partial class Main : Form, ICompilerEventListener, ITraceListener
 	{

@@ -15,7 +15,7 @@
 	    <csc target="library" output="${outputDirectory}/Mosa.Compiler.Linker.dll" debug="${debug}" unsafe="true" nostdlib="false">
 		<sources>
                     <include name="BaseLinker.cs"/>
-                    <include name="BuildInPatch.cs"/>
+                    <include name="BuiltInPatch.cs"/>
                     <include name="Patch.cs"/>
                     <include name="ExtendedLinkerSection.cs"/>
                     <include name="LinkerType.cs"/>

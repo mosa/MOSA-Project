@@ -12,7 +12,7 @@ using Mosa.Compiler.Framework.Stages;
 using Mosa.Compiler.InternalTrace;
 using Mosa.Compiler.TypeSystem;
 
-namespace Mosa.Tool.TypeExplorer
+namespace Mosa.Tool.Explorer
 {
 	internal class ExplorerCompiler : BaseCompiler
 	{
