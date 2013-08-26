@@ -39,10 +39,12 @@ namespace Mosa.Platform.x86.Stages
 		#endregion IMethodCompilerStage
 
 		public bool SaveRegisters { get; set; }
+		public bool InsertBreaks { get; set; }
 
 		public BuildStackStage()
 		{
 			SaveRegisters = true;
+			InsertBreaks = false;
 		}
 
 		/// <summary>
@@ -100,16 +102,6 @@ namespace Mosa.Platform.x86.Stages
 			Operand ecx = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.ECX);
 			Operand ebx = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.EBX);
 
-			bool breakFlag = false; // TODO: Turn this into a compiler option
-
-			/*
-			 * If you want to stop at the header of an emitted function, just set breakFlag
-			 * to true in the following line. It will issue a breakpoint instruction. Note
-			 * that if you debug using visual studio you must enable unmanaged code
-			 * debugging, otherwise the function will never return and the breakpoint will
-			 * never appear.
-			 */
-
 			context.SetInstruction(X86.Push, null, ebp);
 			context.AppendInstruction(X86.Mov, ebp, esp);
 			if (methodCompiler.StackLayout.StackSize != 0)
@@ -117,8 +109,12 @@ namespace Mosa.Platform.x86.Stages
 				context.AppendInstruction(X86.Sub, esp, esp, Operand.CreateConstant(-methodCompiler.StackLayout.StackSize));
 			}
 
-			if (breakFlag)
+			if (InsertBreaks) // && !methodCompiler.Method.FullName.Contains("cctor"))
 			{
+				 //Note that if you debug using visual studio you must enable unmanaged code
+				 //debugging, otherwise the function will never return and the breakpoint will
+				 //never appear.
+
 				// int 3
 				context.AppendInstruction(X86.Break);
 

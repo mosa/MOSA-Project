@@ -15,7 +15,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// <summary>
 	/// Intermediate representation of the SSE division instruction.
 	/// </summary>
-	public sealed class DivSD : X86Instruction
+	public sealed class Divsd : X86Instruction
 	{
 		#region Data Members
 
@@ -26,9 +26,9 @@ namespace Mosa.Platform.x86.Instructions
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of <see cref="DivSD"/>.
+		/// Initializes a new instance of <see cref="Divsd"/>.
 		/// </summary>
-		public DivSD() :
+		public Divsd() :
 			base(1, 2)
 		{
 		}

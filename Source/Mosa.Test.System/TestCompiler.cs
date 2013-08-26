@@ -85,7 +85,8 @@ namespace Mosa.Test.System
 			RuntimeMethod runtimeMethod = FindMethod(
 				ns,
 				type,
-				method
+				method,
+				parameters
 			);
 
 			Debug.Assert(runtimeMethod != null, runtimeMethod.ToString());
@@ -163,7 +164,7 @@ namespace Mosa.Test.System
 		/// <param name="type">The type, which contains the sought method.</param>
 		/// <param name="method">The method to find.</param>
 		/// <returns>An instance of <see cref="RuntimeMethod"/>.</returns>
-		private RuntimeMethod FindMethod(string ns, string type, string method)
+		private RuntimeMethod FindMethod(string ns, string type, string method, params object[] parameters)
 		{
 			foreach (RuntimeType t in typeSystem.GetAllTypes())
 			{
@@ -178,7 +179,10 @@ namespace Mosa.Test.System
 				{
 					if (m.Name == method)
 					{
-						return m;
+						if (m.Parameters.Count == parameters.Length)
+						{
+							return m;
+						}
 					}
 				}
 

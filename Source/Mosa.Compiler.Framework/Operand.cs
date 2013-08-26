@@ -827,7 +827,7 @@ namespace Mosa.Compiler.Framework
 				case CilElementType.U2: return BuiltInSigType.UInt32;
 				case CilElementType.U4: return BuiltInSigType.UInt32;
 				case CilElementType.U8: return BuiltInSigType.UInt64;
-				//case CilElementType.R4: return BuiltInSigType.Int64;
+				case CilElementType.R4: return BuiltInSigType.Double;
 				default: return type;
 			}
 		}

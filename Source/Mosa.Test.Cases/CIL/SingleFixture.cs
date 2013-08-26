@@ -18,6 +18,8 @@ namespace Mosa.Test.Cases.CIL
 	[Importance(Importance.Critical)]
 	public class SingleFixture : TestCompilerAdapter
 	{
+		private float Tolerance = 0.0000001f;
+
 		public SingleFixture()
 		{
 			settings.AddReference("Mosa.Test.Collection.dll");
@@ -26,25 +28,25 @@ namespace Mosa.Test.Cases.CIL
 		[Test]
 		public void AddR4R4([R4Number]float a, [R4Number]float b)
 		{
-			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "SingleTests", "AddR4R4", SingleTests.AddR4R4(a, b), a, b));
+			Assert.AreApproximatelyEqual(SingleTests.AddR4R4(a, b), Run<float>("Mosa.Test.Collection", "SingleTests", "AddR4R4", a, b), Tolerance);
 		}
-
+		
 		[Test]
 		public void SubR4R4([R4Number]float a, [R4Number]float b)
 		{
-			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "SingleTests", "SubR4R4", SingleTests.SubR4R4(a, b), a, b));
+			Assert.AreApproximatelyEqual(SingleTests.SubR4R4(a, b), Run<float>("Mosa.Test.Collection", "SingleTests", "SubR4R4", a, b), Tolerance);
 		}
 
 		[Test]
 		public void MulR4R4([R4Number]float a, [R4Number]float b)
 		{
-			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "SingleTests", "MulR4R4", SingleTests.MulR4R4(a, b), a, b));
+			Assert.AreApproximatelyEqual(SingleTests.MulR4R4(a, b), Run<float>("Mosa.Test.Collection", "SingleTests", "MulR4R4", a, b), Tolerance);
 		}
 
 		[Test]
 		public void DivR4R4([R4Number]float a, [R4NumberNotZero]float b)
 		{
-			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "SingleTests", "DivR4R4", SingleTests.DivR4R4(a, b), a, b));
+			Assert.AreApproximatelyEqual(SingleTests.DivR4R4(a, b), Run<float>("Mosa.Test.Collection", "SingleTests", "DivR4R4", a, b), Tolerance);
 		}
 
 		[Test]
@@ -52,14 +54,13 @@ namespace Mosa.Test.Cases.CIL
 		[ExpectedException(typeof(DivideByZeroException))]
 		public void DivR4R4DivideByZeroException([R4Number]float a)
 		{
-			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "SingleTests", "DivR4R4", SingleTests.DivR4R4(a, (float)0), a, (float)0));
+			Run<float>("Mosa.Test.Collection", "SingleTests", "DivR4R4", (float)0, a, (float)0);
 		}
 
 		[Test]
-		[Pending]
 		public void RemR4R4([R4Number]float a, [R4NumberNotZero]float b)
 		{
-			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "SingleTests", "RemR4R4", SingleTests.RemR4R4(a, b), a, b));
+			Assert.AreApproximatelyEqual(SingleTests.RemR4R4(a, b), Run<float>("Mosa.Test.Collection", "SingleTests", "RemR4R4", a, b), Tolerance);
 		}
 
 		[Test]
@@ -67,7 +68,7 @@ namespace Mosa.Test.Cases.CIL
 		[ExpectedException(typeof(DivideByZeroException))]
 		public void RemR4R4DivideByZeroException([R4Number]float a)
 		{
-			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "SingleTests", "RemR4R4", SingleTests.RemR4R4(a, (float)0), a, (float)0));
+			Run<float>("Mosa.Test.Collection", "SingleTests", "RemR4R4", (float)0, a, (float)0);
 		}
 
 		[Test]

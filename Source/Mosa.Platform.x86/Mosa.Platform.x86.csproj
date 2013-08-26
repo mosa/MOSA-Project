@@ -97,6 +97,7 @@
     </Compile>
     <Compile Include="BaseTransformationStage.cs" />
     <Compile Include="Instructions\Cmov.cs" />
+    <Compile Include="Instructions\Fld.cs" />
     <Compile Include="Instructions\MovCR.cs" />
     <Compile Include="Instructions\IMul.cs" />
     <Compile Include="Instructions\TwoOperandInstruction.cs" />
@@ -107,7 +108,7 @@
     <Compile Include="Stages\FinalTweakTransformationStage.cs" />
     <Compile Include="Stages\SimpleDeadCodeRemovalStage.cs" />
     <Compile Include="Instructions\Mulsd.cs" />
-    <Compile Include="Instructions\DivSD.cs" />
+    <Compile Include="Instructions\Divsd.cs" />
     <Compile Include="Instructions\Roundsd.cs" />
     <Compile Include="Instructions\Subsd.cs" />
     <Compile Include="Stages\AddressModeConversionStage.cs" />
@@ -231,7 +232,7 @@
     <Compile Include="Instructions\Shrd.cs" />
     <Compile Include="Instructions\Shr.cs" />
     <Compile Include="Instructions\Addss.cs" />
-    <Compile Include="Instructions\DivSS.cs" />
+    <Compile Include="Instructions\Divss.cs" />
     <Compile Include="Instructions\Mulss.cs" />
     <Compile Include="Instructions\Subss.cs" />
     <Compile Include="Instructions\Sub.cs" />

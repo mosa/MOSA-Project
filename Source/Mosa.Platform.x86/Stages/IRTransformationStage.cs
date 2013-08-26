@@ -507,7 +507,17 @@ namespace Mosa.Platform.x86.Stages
 
 			if (context.Operand1 != null)
 			{
+				if (context.Operand1.StackType == StackTypeCode.F)
+				{
+					// HACK - to support test suit on windows
+					Operand stack = methodCompiler.StackLayout.AddStackLocal(context.Operand1.Type);
+					Context before = context.InsertBefore();
+					architecture.InsertMove(before, stack, context.Operand1);
+					before.AppendInstruction(X86.Fld, null, stack);
+				}
+
 				callingConvention.MoveReturnValue(context, context.Operand1);
+
 				context.AppendInstruction(X86.Jmp);
 				context.SetBranch(Int32.MaxValue);
 			}

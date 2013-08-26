@@ -22,8 +22,8 @@ namespace Mosa.Test.Debug
 			//add.AddConstantCLeft('a', 'Z');
 			//add.AddConstantCLeft('a', 'Z');
 
-			var uint32Fixture = new UInt32Fixture();
-			uint32Fixture.DivU4U4(10, 20);
+			//var uint32Fixture = new UInt32Fixture();
+			//uint32Fixture.DivU4U4(10, 20);
 
 			//CallFixture call = new CallFixture();
 			//call.CallU1((byte)1);
@@ -53,9 +53,11 @@ namespace Mosa.Test.Debug
 			//ComparisonFixture Comparison = new ComparisonFixture();
 			//Comparison.CompareEqualI2I8(-1, -1);
 
-			RegisterAllocatorFixture general = new RegisterAllocatorFixture();
+			//RegisterAllocatorFixture general = new RegisterAllocatorFixture();
+			//general.RegisterPressure7(1, 2, 3, 4, 5, 6, 7);
 
-			general.RegisterPressure7(1, 2, 3, 4, 5, 6, 7);
+			var d = new DoubleFixture();
+			d.AddR8R8(10, 10);
 
 			return;
 		}

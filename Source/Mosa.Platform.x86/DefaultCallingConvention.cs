@@ -267,6 +267,7 @@ namespace Mosa.Platform.x86
 			else if (operand.Type.Type == CilElementType.R8)
 			{
 				context.SetInstruction(X86.Movsd, Operand.CreateCPURegister(operand.Type, SSE2Register.XMM0), operand);
+				
 				return;
 			}
 			else if (operand.Type.Type == CilElementType.I8 || operand.Type.Type == CilElementType.U8)

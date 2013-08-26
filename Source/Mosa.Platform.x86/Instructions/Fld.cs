@@ -9,27 +9,29 @@
  */
 
 using Mosa.Compiler.Framework;
+using System.Diagnostics;
 
 namespace Mosa.Platform.x86.Instructions
 {
 	/// <summary>
-	/// Intermediate representation of the SSE division instruction.
+	/// Representations the x86 FldSt instruction.
 	/// </summary>
-	public sealed class Divss : X86Instruction
+	public sealed class Fld : X86Instruction
 	{
 		#region Data Members
 
-		private static readonly OpCode opcode = new OpCode(new byte[] { 0xF3, 0x0F, 0x5E });
+		private static readonly OpCode m32fp = new OpCode(new byte[] { 0xD9 }, 0);
+		private static readonly OpCode m64fp = new OpCode(new byte[] { 0xDD }, 0);
 
 		#endregion Data Members
 
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of <see cref="Divss"/>.
+		/// Initializes a new instance of <see cref="Fld"/>.
 		/// </summary>
-		public Divss() :
-			base(1, 2)
+		public Fld() :
+			base(0, 2)
 		{
 		}
 
@@ -46,7 +48,22 @@ namespace Mosa.Platform.x86.Instructions
 		/// <returns></returns>
 		protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
 		{
-			return opcode;
+			Debug.Assert(source.IsMemoryAddress);
+
+			// TODO: support 32 bit too
+
+			return m64fp;
+		}
+
+		/// <summary>
+		/// Emits the specified platform instruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <param name="emitter">The emitter.</param>
+		protected override void Emit(Context context, MachineCodeEmitter emitter)
+		{
+			OpCode code = ComputeOpCode(context.Result, context.Operand1, context.Operand2);
+			emitter.Emit(code, context.Operand1, null);
 		}
 
 		/// <summary>
@@ -56,7 +73,7 @@ namespace Mosa.Platform.x86.Instructions
 		/// <param name="context">The context.</param>
 		public override void Visit(IX86Visitor visitor, Context context)
 		{
-			visitor.DivSS(context);
+			return; 
 		}
 
 		#endregion Methods

@@ -18,6 +18,8 @@ namespace Mosa.Test.Cases.CIL
 	[Importance(Importance.Critical)]
 	public class DoubleFixture : TestCompilerAdapter
 	{
+		private double Tolerance = 0.0000001d;
+
 		public DoubleFixture()
 		{
 			settings.AddReference("Mosa.Test.Collection.dll");
@@ -26,25 +28,25 @@ namespace Mosa.Test.Cases.CIL
 		[Test]
 		public void AddR8R8([R8Number]double a, [R8Number]double b)
 		{
-			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "DoubleTests", "AddR8R8", DoubleTests.AddR8R8(a, b), a, b));
+			Assert.AreApproximatelyEqual(DoubleTests.AddR8R8(a, b), Run<double>("Mosa.Test.Collection", "DoubleTests", "AddR8R8", a, b), Tolerance);
 		}
-
+		
 		[Test]
 		public void SubR8R8([R8Number]double a, [R8Number]double b)
 		{
-			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "DoubleTests", "SubR8R8", DoubleTests.SubR8R8(a, b), a, b));
+			Assert.AreApproximatelyEqual(DoubleTests.SubR8R8(a, b), Run<double>("Mosa.Test.Collection", "DoubleTests", "SubR8R8", a, b), Tolerance);
 		}
 
 		[Test]
 		public void MulR8R8([R8Number]double a, [R8Number]double b)
 		{
-			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "DoubleTests", "MulR8R8", DoubleTests.MulR8R8(a, b), a, b));
+			Assert.AreApproximatelyEqual(DoubleTests.MulR8R8(a, b), Run<double>("Mosa.Test.Collection", "DoubleTests", "MulR8R8", a, b), Tolerance);
 		}
 
 		[Test]
 		public void DivR8R8([R8Number]double a, [R8NumberNotZero]double b)
 		{
-			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "DoubleTests", "DivR8R8", DoubleTests.DivR8R8(a, b), a, b));
+			Assert.AreApproximatelyEqual(DoubleTests.DivR8R8(a, b), Run<double>("Mosa.Test.Collection", "DoubleTests", "DivR8R8", a, b), Tolerance);
 		}
 
 		[Test]
@@ -52,14 +54,13 @@ namespace Mosa.Test.Cases.CIL
 		[ExpectedException(typeof(DivideByZeroException))]
 		public void DivR8R8DivideByZeroException([R8Number]double a)
 		{
-			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "DoubleTests", "DivR8R8", DoubleTests.DivR8R8(a, (double)0), a, (double)0));
+			Run<double>("Mosa.Test.Collection", "DoubleTests", "DivR8R8", (double)0, a, (double)0);
 		}
 
 		[Test]
-		[Pending]
 		public void RemR8R8([R8Number]double a, [R8NumberNotZero]double b)
 		{
-			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "DoubleTests", "RemR8R8", DoubleTests.RemR8R8(a, b), a, b));
+			Assert.AreApproximatelyEqual(DoubleTests.RemR8R8(a, b), Run<double>("Mosa.Test.Collection", "DoubleTests", "RemR8R8", a, b), Tolerance);
 		}
 
 		[Test]
@@ -67,7 +68,7 @@ namespace Mosa.Test.Cases.CIL
 		[ExpectedException(typeof(DivideByZeroException))]
 		public void RemR8R8DivideByZeroException([R8Number]double a)
 		{
-			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "DoubleTests", "RemR8R8", DoubleTests.RemR8R8(a, (double)0), a, (double)0));
+			Run<double>("Mosa.Test.Collection", "DoubleTests", "RemR8R8", (double)0, a, (double)0);
 		}
 
 		[Test]

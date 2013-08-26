@@ -214,12 +214,12 @@ namespace Mosa.Platform.x86
 		/// <summary>
 		///
 		/// </summary>
-		public static readonly DivSS Divss = new DivSS();
+		public static readonly Divss Divss = new Divss();
 
 		/// <summary>
 		///
 		/// </summary>
-		public static readonly DivSD Divsd = new DivSD();
+		public static readonly Divsd Divsd = new Divsd();
 
 		/// <summary>
 		///
@@ -445,5 +445,10 @@ namespace Mosa.Platform.x86
 		///
 		/// </summary>
 		public static readonly Lock Lock = new Lock();
+
+		/// <summary>
+		///
+		/// </summary>
+		public static readonly Fld Fld = new Fld();
 	}
 }
