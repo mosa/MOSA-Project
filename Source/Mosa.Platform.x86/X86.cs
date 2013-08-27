@@ -439,8 +439,13 @@ namespace Mosa.Platform.x86
 		/// <summary>
 		///
 		/// </summary>
-		public static readonly Roundss SseRound = new Roundss();
-
+		public static readonly Roundss Roundss = new Roundss();
+		
+		/// <summary>
+		///
+		/// </summary>
+		public static readonly Roundsd Roundsd = new Roundsd();
+		
 		/// <summary>
 		///
 		/// </summary>

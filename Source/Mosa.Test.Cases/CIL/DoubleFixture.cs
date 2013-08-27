@@ -58,7 +58,7 @@ namespace Mosa.Test.Cases.CIL
 		}
 
 		[Test]
-		public void RemR8R8([R8Number]double a, [R8NumberNotZero]double b)
+		public void RemR8R8([R8NumberNotExtremes]double a, [R8NumberNotExtremesOrZero]double b)
 		{
 			Assert.AreApproximatelyEqual(DoubleTests.RemR8R8(a, b), Run<double>("Mosa.Test.Collection", "DoubleTests", "RemR8R8", a, b), Tolerance);
 		}
@@ -138,7 +138,7 @@ namespace Mosa.Test.Cases.CIL
 		}
 
 		[Test]
-		public void IsNaN([R8Number]double value)
+		public void IsNaN([R8]double value)
 		{
 			Assert.AreEqual(DoubleTests.IsNaN(value), Run<bool>("Mosa.Test.Collection", "DoubleTests", "IsNaN", value));
 		}

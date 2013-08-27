@@ -174,6 +174,24 @@ namespace Mosa.Test.System
 	}
 
 	[AttributeUsage(PatternAttributeTargets.DataContext, AllowMultiple = false, Inherited = true)]
+	public class R4NumberNotExtremesAttribute : DataAttribute
+	{
+		protected override void PopulateDataSource(IPatternScope scope, DataSource dataSource, ICodeElementInfo codeElement)
+		{
+			dataSource.AddDataSet(new ValueSequenceDataSet(Series.R4NumberNotExtremes, GetMetadata(), false));
+		}
+	}
+
+	[AttributeUsage(PatternAttributeTargets.DataContext, AllowMultiple = false, Inherited = true)]
+	public class R4NumberNotExtremesOrZeroAttribute : DataAttribute
+	{
+		protected override void PopulateDataSource(IPatternScope scope, DataSource dataSource, ICodeElementInfo codeElement)
+		{
+			dataSource.AddDataSet(new ValueSequenceDataSet(Series.R4NumberNotExtremesOrZero, GetMetadata(), false));
+		}
+	}
+	
+	[AttributeUsage(PatternAttributeTargets.DataContext, AllowMultiple = false, Inherited = true)]
 	public class R8NumberNotZeroAttribute : DataAttribute
 	{
 		protected override void PopulateDataSource(IPatternScope scope, DataSource dataSource, ICodeElementInfo codeElement)
@@ -181,7 +199,25 @@ namespace Mosa.Test.System
 			dataSource.AddDataSet(new ValueSequenceDataSet(Series.R8NumberNotZero, GetMetadata(), false));
 		}
 	}
-
+	
+	[AttributeUsage(PatternAttributeTargets.DataContext, AllowMultiple = false, Inherited = true)]
+	public class R8NumberNotExtremesAttribute : DataAttribute
+	{
+		protected override void PopulateDataSource(IPatternScope scope, DataSource dataSource, ICodeElementInfo codeElement)
+		{
+			dataSource.AddDataSet(new ValueSequenceDataSet(Series.R8NumberNotExtremes, GetMetadata(), false));
+		}
+	}
+	
+	[AttributeUsage(PatternAttributeTargets.DataContext, AllowMultiple = false, Inherited = true)]
+	public class R8NumberNotExtremesOrZeroAttribute : DataAttribute
+	{
+		protected override void PopulateDataSource(IPatternScope scope, DataSource dataSource, ICodeElementInfo codeElement)
+		{
+			dataSource.AddDataSet(new ValueSequenceDataSet(Series.R8NumberNotExtremesOrZero, GetMetadata(), false));
+		}
+	}
+	
 	[AttributeUsage(PatternAttributeTargets.DataContext, AllowMultiple = false, Inherited = true)]
 	public class R4FitsI4Attribute : DataAttribute
 	{

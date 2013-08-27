@@ -94,24 +94,25 @@ namespace Mosa.Test.Collection
 			return DoubleTests.CeqR8R8(1d, 2d);
 		}
 
-		public static bool R8IsPositiveInfinity1()
+		public static bool R8IsPositiveInfinityTrue()
 		{
 			return Double.IsPositiveInfinity(Double.PositiveInfinity);
 		}
 
-		public static bool R8IsNegativeInfinity1()
+		public static bool R8IsNegativeInfinityFalse()
 		{
 			return Double.IsNegativeInfinity(Double.PositiveInfinity);
 		}
 
-		public static bool R8IsPositiveInfinity2()
+		public static bool R8IsNegativeInfinityTrue()
+		{
+			return Double.IsNegativeInfinity(Double.NegativeInfinity);
+		}
+
+		public static bool R8IsPositiveInfinityFalse()
 		{
 			return Double.IsPositiveInfinity(Double.NegativeInfinity);
 		}
 
-		public static bool R8IsNegativeInfinity2()
-		{
-			return Double.IsNegativeInfinity(Double.NegativeInfinity);
-		}
 	}
 }

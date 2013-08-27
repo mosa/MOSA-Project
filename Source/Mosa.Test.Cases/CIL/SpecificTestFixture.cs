@@ -39,41 +39,30 @@ namespace Mosa.Test.Cases.CIL
 		{
 			Assert.AreEqual<int>(SpecificTests.R8ToI4(value), Run<int>("Mosa.Test.Collection", "SpecificTests", "R8ToI4", value));
 		}
-
+		
 		[Test]
-		public void IsNaN()
+		public void R8IsPositiveInfinityTrue()
 		{
-			Assert.AreEqual<bool>(SpecificTests.IsNaN(), Run<bool>("Mosa.Test.Collection", "SpecificTests", "IsNaN"));
+			Assert.AreEqual<bool>(SpecificTests.R8IsPositiveInfinityTrue(), Run<bool>("Mosa.Test.Collection", "SpecificTests", "R8IsPositiveInfinityTrue"));
 		}
 
 		[Test]
-		public void CeqR8R8()
+		public void R8IsNegativeInfinityFalse()
 		{
-			Assert.AreEqual<bool>(SpecificTests.CeqR8R8(), Run<bool>("Mosa.Test.Collection", "SpecificTests", "CeqR8R8"));
+			Assert.AreEqual<bool>(SpecificTests.R8IsNegativeInfinityFalse(), Run<bool>("Mosa.Test.Collection", "SpecificTests", "R8IsNegativeInfinityFalse"));
 		}
 
 		[Test]
-		public void R8IsPositiveInfinity1()
+		public void R8IsNegativeInfinityTrue()
 		{
-			Assert.AreEqual<bool>(SpecificTests.R8IsPositiveInfinity1(), Run<bool>("Mosa.Test.Collection", "SpecificTests", "R8IsPositiveInfinity1"));
+			Assert.AreEqual<bool>(SpecificTests.R8IsNegativeInfinityTrue(), Run<bool>("Mosa.Test.Collection", "SpecificTests", "R8IsNegativeInfinityTrue"));
 		}
 
 		[Test]
-		public void R8R8IsNegativeInfinity1()
+		public void R8IsPositiveInfinityFalse()
 		{
-			Assert.AreEqual<bool>(SpecificTests.R8IsNegativeInfinity1(), Run<bool>("Mosa.Test.Collection", "SpecificTests", "R8IsNegativeInfinity1"));
+			Assert.AreEqual<bool>(SpecificTests.R8IsPositiveInfinityFalse(), Run<bool>("Mosa.Test.Collection", "SpecificTests", "R8IsPositiveInfinityFalse"));
 		}
 
-		[Test]
-		public void R8IsPositiveInfinity2()
-		{
-			Assert.AreEqual<bool>(SpecificTests.R8IsPositiveInfinity2(), Run<bool>("Mosa.Test.Collection", "SpecificTests", "R8IsPositiveInfinity2"));
-		}
-
-		[Test]
-		public void R8R8IsNegativeInfinity2()
-		{
-			Assert.AreEqual<bool>(SpecificTests.R8IsNegativeInfinity2(), Run<bool>("Mosa.Test.Collection", "SpecificTests", "R8IsNegativeInfinity2"));
-		}
 	}
 }

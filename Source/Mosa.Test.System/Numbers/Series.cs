@@ -403,6 +403,16 @@ namespace Mosa.Test.System.Numbers
 			get { foreach (float a in R8) if (a != 0) if (!float.IsNaN(a) && !float.IsInfinity(a)) yield return a; }
 		}
 
+		public static IEnumerable<float> R4NumberNotExtremes
+		{
+			get { foreach (float a in R4Number) if (!(float.MaxValue == a) && !(float.MinValue == a)) yield return a; }
+		}
+
+		public static IEnumerable<float> R4NumberNotExtremesOrZero
+		{
+			get { foreach (float a in R4NumberNotExtremes) if (a != 0) yield return a; }
+		}
+
 		public static IEnumerable<float> R4NotZero
 		{
 			get { foreach (float a in R4) if (a != 0) yield return a; }
@@ -457,6 +467,16 @@ namespace Mosa.Test.System.Numbers
 		public static IEnumerable<double> R8NumberNotZero
 		{
 			get { foreach (double a in R8) if (a != 0) if (!double.IsNaN(a) && !double.IsInfinity(a)) yield return a; }
+		}
+
+		public static IEnumerable<double> R8NumberNotExtremes
+		{
+			get { foreach (double a in R8Number) if (!(double.MaxValue == a) && !(double.MinValue == a)) yield return a; }
+		}
+
+		public static IEnumerable<double> R8NumberNotExtremesOrZero
+		{
+			get { foreach (double a in R8NumberNotExtremes) if (a != 0) yield return a; }
 		}
 
 		public static IEnumerable<double> R8NotZero

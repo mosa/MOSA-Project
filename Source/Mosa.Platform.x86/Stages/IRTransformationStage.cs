@@ -769,32 +769,14 @@ namespace Mosa.Platform.x86.Stages
 			Operand operand1 = context.Operand1;
 			Operand operand2 = context.Operand2;
 
-			Context[] newBlocks = CreateNewBlocksWithContexts(2);
-			Context nextBlock = Split(context);
-
 			Operand xmm1 = AllocateVirtualRegister(BuiltInSigType.Double);
 			Operand xmm2 = AllocateVirtualRegister(BuiltInSigType.Double);
 			Operand xmm3 = AllocateVirtualRegister(BuiltInSigType.Double);
-			Operand v1 = AllocateVirtualRegister(BuiltInSigType.Int32);
-
-			LinkBlocks(context, newBlocks[0]);
 
 			context.SetInstruction(X86.Divsd, xmm1, operand1, operand2);
-			context.AppendInstruction(X86.Cvttsd2si, v1, xmm1);
-			context.AppendInstruction(X86.Cmp, null, v1, Operand.CreateConstant((int)0));
-			context.AppendInstruction(X86.Branch, ConditionCode.Equal, newBlocks[1].BasicBlock);
-			context.AppendInstruction(X86.Jmp, newBlocks[0].BasicBlock);
-			LinkBlocks(context, newBlocks[0], newBlocks[1]);
-
-			newBlocks[0].AppendInstruction(X86.Cvtsi2sd, xmm2, v1);
-			newBlocks[0].AppendInstruction(X86.Mulsd, xmm3, operand2, xmm2);
-			newBlocks[0].AppendInstruction(X86.Subsd, result, operand1, xmm3);
-			newBlocks[0].AppendInstruction(X86.Jmp, nextBlock.BasicBlock);
-			LinkBlocks(newBlocks[0], nextBlock);
-
-			newBlocks[1].AppendInstruction(X86.Movsd, result, operand1);
-			newBlocks[1].AppendInstruction(X86.Jmp, nextBlock.BasicBlock);
-			LinkBlocks(newBlocks[1], nextBlock);
+			context.AppendInstruction(X86.Roundsd, xmm2, xmm1, Operand.CreateConstant(BuiltInSigType.Byte, 0x3));
+			context.AppendInstruction(X86.Mulsd, xmm3, operand2, xmm2);
+			context.AppendInstruction(X86.Subsd, result, operand1, xmm3);
 		}
 
 		/// <summary>

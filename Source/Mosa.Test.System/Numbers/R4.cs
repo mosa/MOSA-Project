@@ -43,8 +43,13 @@ namespace Mosa.Test.System.Numbers
 			list.Add(23f);
 			list.Add(12321452132.561f);
 
-			// Get negatives
-			list.AddIfNew(GetNegatives(list));
+			// negatives
+			list.Add(-1);
+			list.Add(-2);
+			list.Add(-1.00012f);
+			list.Add(-17.0002501f);
+			list.Add(-23f);
+			list.Add(-12321452132.561f);
 
 			list.Sort();
 

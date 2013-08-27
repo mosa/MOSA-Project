@@ -43,25 +43,18 @@ namespace Mosa.Test.System.Numbers
 			list.Add(23);
 			list.Add(12321452132.561);
 
-			// Get negatives
-			list.AddIfNew(GetNegatives(list));
+			// negatives
+			list.Add(-1);
+			list.Add(-2);
+			list.Add(-1.00012);
+			list.Add(-17.0002501);
+			list.Add(-23);
+			list.Add(-12321452132.561);
 
 			list.Sort();
 
 			return list;
 		}
 
-		private static IList<double> GetNegatives(IList<double> list)
-		{
-			List<double> negs = new List<double>();
-
-			foreach (double value in list)
-			{
-				if (value > 0)
-					negs.AddIfNew<double>((double)-value);
-			}
-
-			return negs;
-		}
 	}
 }

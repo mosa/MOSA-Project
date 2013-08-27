@@ -18,7 +18,7 @@ namespace Mosa.Test.Cases.CIL
 	[Importance(Importance.Critical)]
 	public class SingleFixture : TestCompilerAdapter
 	{
-		private float Tolerance = 0.0000001f;
+		private float Tolerance = 0.000001f;
 
 		public SingleFixture()
 		{
@@ -58,7 +58,7 @@ namespace Mosa.Test.Cases.CIL
 		}
 
 		[Test]
-		public void RemR4R4([R4Number]float a, [R4NumberNotZero]float b)
+		public void RemR4R4([R4NumberNotExtremes]float a, [R4NumberNotExtremesOrZero] float b)
 		{
 			Assert.AreApproximatelyEqual(SingleTests.RemR4R4(a, b), Run<float>("Mosa.Test.Collection", "SingleTests", "RemR4R4", a, b), Tolerance);
 		}
@@ -138,7 +138,7 @@ namespace Mosa.Test.Cases.CIL
 		}
 
 		[Test]
-		public void IsNaN([R4Number]float value)
+		public void IsNaN([R4]float value)
 		{
 			Assert.AreEqual(SingleTests.IsNaN(value), Run<bool>("Mosa.Test.Collection", "SingleTests", "IsNaN", value));
 		}
