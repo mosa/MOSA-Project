@@ -763,58 +763,38 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IIRVisitor.RemFloat(Context context)
 		{
-			if (context.Result.Type.Type == CilElementType.R4)
-				HandleCommutativeOperation(context, X86.Divss);
-			else
-				HandleCommutativeOperation(context, X86.Divsd);
+			EmitFloatingPointConstants(context);
 
-			Operand destination = context.Result;
-			Operand source = context.Operand1;
+			Operand result = context.Result;
+			Operand operand1 = context.Operand1;
+			Operand operand2 = context.Operand2;
 
-			Context[] newBlocks = CreateNewBlocksWithContexts(3);
+			Context[] newBlocks = CreateNewBlocksWithContexts(2);
 			Context nextBlock = Split(context);
 
-			Operand xmm5 = AllocateVirtualRegister(BuiltInSigType.Double);
-			Operand xmm6 = AllocateVirtualRegister(BuiltInSigType.Double);
-			Operand edx = AllocateVirtualRegister(BuiltInSigType.Int32);
+			Operand xmm1 = AllocateVirtualRegister(BuiltInSigType.Double);
+			Operand xmm2 = AllocateVirtualRegister(BuiltInSigType.Double);
+			Operand xmm3 = AllocateVirtualRegister(BuiltInSigType.Double);
+			Operand v1 = AllocateVirtualRegister(BuiltInSigType.Int32);
 
-			context.SetInstruction(X86.Jmp, newBlocks[0].BasicBlock);
 			LinkBlocks(context, newBlocks[0]);
 
-			newBlocks[0].AppendInstruction(X86.Movsd, xmm5, source);
-			newBlocks[0].AppendInstruction(X86.Movsd, xmm6, destination);
+			context.SetInstruction(X86.Divsd, xmm1, operand1, operand2);
+			context.AppendInstruction(X86.Cvttsd2si, v1, xmm1);
+			context.AppendInstruction(X86.Cmp, null, v1, Operand.CreateConstant((int)0));
+			context.AppendInstruction(X86.Branch, ConditionCode.Equal, newBlocks[1].BasicBlock);
+			context.AppendInstruction(X86.Jmp, newBlocks[0].BasicBlock);
+			LinkBlocks(context, newBlocks[0], newBlocks[1]);
 
-			if (source.Type.Type == CilElementType.R4)
-				newBlocks[0].AppendInstruction(X86.Divss, destination, destination, source);
-			else
-				newBlocks[0].AppendInstruction(X86.Divsd, destination, destination, source);
+			newBlocks[0].AppendInstruction(X86.Cvtsi2sd, xmm2, v1);
+			newBlocks[0].AppendInstruction(X86.Mulsd, xmm3, operand2, xmm2);
+			newBlocks[0].AppendInstruction(X86.Subsd, result, operand1, xmm3);
+			newBlocks[0].AppendInstruction(X86.Jmp, nextBlock.BasicBlock);
+			LinkBlocks(newBlocks[0], nextBlock);
 
-			newBlocks[0].AppendInstruction(X86.Cvttsd2si, edx, destination);
-
-			newBlocks[0].AppendInstruction(X86.Cmp, null, edx, Operand.CreateConstant((int)0));
-			newBlocks[0].AppendInstruction(X86.Branch, ConditionCode.Equal, newBlocks[2].BasicBlock);
-			newBlocks[0].AppendInstruction(X86.Jmp, newBlocks[1].BasicBlock);
-			LinkBlocks(newBlocks[0], newBlocks[1], newBlocks[2]);
-
-			newBlocks[1].AppendInstruction(X86.Cvtsi2sd, destination, edx);
-
-			if (xmm5.Type.Type == CilElementType.R4)
-				newBlocks[1].AppendInstruction(X86.Mulss, destination, destination, xmm5);
-			else
-				newBlocks[1].AppendInstruction(X86.Mulsd, destination, destination, xmm5);
-
-			if (destination.Type.Type == CilElementType.R4)
-				newBlocks[1].AppendInstruction(X86.Subss, xmm6, xmm6, destination);
-			else
-				newBlocks[1].AppendInstruction(X86.Subsd, xmm6, xmm6, destination);
-
-			newBlocks[1].AppendInstruction(X86.Movsd, destination, xmm6);
+			newBlocks[1].AppendInstruction(X86.Movsd, result, operand1);
 			newBlocks[1].AppendInstruction(X86.Jmp, nextBlock.BasicBlock);
 			LinkBlocks(newBlocks[1], nextBlock);
-
-			newBlocks[2].AppendInstruction(X86.Movsd, destination, xmm6);
-			newBlocks[2].AppendInstruction(X86.Jmp, nextBlock.BasicBlock);
-			LinkBlocks(newBlocks[2], nextBlock);
 		}
 
 		/// <summary>

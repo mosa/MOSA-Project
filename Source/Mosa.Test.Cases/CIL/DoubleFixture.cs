@@ -18,7 +18,7 @@ namespace Mosa.Test.Cases.CIL
 	[Importance(Importance.Critical)]
 	public class DoubleFixture : TestCompilerAdapter
 	{
-		private double Tolerance = 0.0000001d;
+		private double Tolerance = 0.000001d;
 
 		public DoubleFixture()
 		{
