@@ -594,13 +594,13 @@ namespace Mosa.Platform.x86.Stages
 			if (value.Type.Type == CilElementType.R8 && GetElementType(baseOperand.Type).Type == CilElementType.R4)
 			{
 				Operand xmm1 = AllocateVirtualRegister(BuiltInSigType.Single);
-				context.InsertBefore().AppendInstruction(X86.Cvtss2sd, xmm1, value);
+				context.InsertBefore().AppendInstruction(X86.Cvtsd2ss, xmm1, value);
 				value = xmm1;
 			}
 			else
 			{
-				Operand v2 = AllocateVirtualRegister(baseOperand.Type);
-				context.AppendInstruction(X86.Mov, v2, value); // FIXME
+				Operand v2 = AllocateVirtualRegister(value.Type);
+				context.InsertBefore().AppendInstruction(X86.Mov, v2, value); // FIXME
 				value = v2;
 			}
 
@@ -608,7 +608,7 @@ namespace Mosa.Platform.x86.Stages
 			{
 				Operand mem = Operand.CreateMemoryAddress(baseOperand.Type, baseOperand, offsetOperand.ValueAsLongInteger);
 
-				context.AppendInstruction(GetMove(mem, value), mem, value);
+				context.SetInstruction(GetMove(mem, value), mem, value);
 			}
 			else
 			{
