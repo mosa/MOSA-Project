@@ -336,23 +336,35 @@ namespace Mosa.Platform.x86.Stages
 			Operand result = context.Result;
 			Operand baseOperand = context.Operand1;
 			Operand offsetOperand = context.Operand2;
-			long offset = 0;
 
 			if (offsetOperand.IsConstant)
 			{
 				Operand mem = Operand.CreateMemoryAddress(baseOperand.Type, baseOperand, offsetOperand.ValueAsLongInteger);
 
-				context.SetInstruction(GetMove(result, mem), result, mem);
+				var mov = GetMove(result, mem);
+
+				if (result.Type.Type == CilElementType.R8 && GetElementType(mem.Type).Type == CilElementType.R4)
+					mov = X86.Cvtss2sd;
+
+				context.SetInstruction(mov, result, mem);
 			}
 			else
 			{
 				Operand v1 = AllocateVirtualRegister(baseOperand.Type);
-				Operand mem = Operand.CreateMemoryAddress(v1.Type, v1, offset);
+				Operand mem = Operand.CreateMemoryAddress(v1.Type, v1, 0);
 
 				context.SetInstruction(X86.Mov, v1, baseOperand);
 				context.AppendInstruction(X86.Add, v1, v1, offsetOperand);
-				context.AppendInstruction(GetMove(result, mem), result, mem);
+
+				var mov = GetMove(result, mem);
+
+				if (result.Type.Type == CilElementType.R8 && GetElementType(mem.Type).Type == CilElementType.R4)
+					mov = X86.Cvtss2sd;
+
+				context.AppendInstruction(mov, result, mem);
 			}
+
+			
 		}
 
 		/// <summary>
@@ -573,29 +585,41 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IIRVisitor.Store(Context context)
 		{
-			Operand destination = context.Operand1;
-			Operand offset = context.Operand2;
+			Operand baseOperand = context.Operand1;
+			Operand offsetOperand = context.Operand2;
 			Operand value = context.Operand3;
 
-			Operand eax = AllocateVirtualRegister(destination.Type);
-			Operand edx = AllocateVirtualRegister(value.Type);
+			//Operand value = AllocateVirtualRegister(value.Type);
 
-			context.SetInstruction(X86.Mov, eax, destination);
-			context.AppendInstruction(X86.Mov, edx, value);
-
-			long offsetPtr = 0;
-			if (offset.IsConstant)
+			if (value.Type.Type == CilElementType.R8 && GetElementType(baseOperand.Type).Type == CilElementType.R4)
 			{
-				offsetPtr = (long)offset.ValueAsLongInteger;
+				Operand xmm1 = AllocateVirtualRegister(BuiltInSigType.Single);
+				context.InsertBefore().AppendInstruction(X86.Cvtss2sd, xmm1, value);
+				value = xmm1;
 			}
 			else
 			{
-				context.AppendInstruction(X86.Add, eax, eax, offset);
+				Operand v2 = AllocateVirtualRegister(baseOperand.Type);
+				context.AppendInstruction(X86.Mov, v2, value); // FIXME
+				value = v2;
 			}
 
-			Operand mem = Operand.CreateMemoryAddress(value.Type, eax, offsetPtr);
+			if (offsetOperand.IsConstant)
+			{
+				Operand mem = Operand.CreateMemoryAddress(baseOperand.Type, baseOperand, offsetOperand.ValueAsLongInteger);
 
-			context.AppendInstruction(GetMove(mem, edx), mem, edx);
+				context.AppendInstruction(GetMove(mem, value), mem, value);
+			}
+			else
+			{
+				Operand v1 = AllocateVirtualRegister(baseOperand.Type);
+				Operand mem = Operand.CreateMemoryAddress(baseOperand.Type, v1, 0);
+
+				context.SetInstruction(X86.Mov, v1, baseOperand);
+				context.AppendInstruction(X86.Add, v1, v1, offsetOperand);
+				context.AppendInstruction(GetMove(mem, value), mem, value);
+			}
+
 		}
 
 		/// <summary>

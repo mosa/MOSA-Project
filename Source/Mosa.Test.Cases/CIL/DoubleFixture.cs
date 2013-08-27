@@ -58,7 +58,7 @@ namespace Mosa.Test.Cases.CIL
 		}
 
 		[Test]
-		public void RemR8R8([R8NumberNotExtremes]double a, [R8NumberNotExtremesOrZero]double b)
+		public void RemR8R8([R8NumberNoExtremes]double a, [R8NumberNoExtremesOrZero] double b)
 		{
 			Assert.AreApproximatelyEqual(DoubleTests.RemR8R8(a, b), Run<double>("Mosa.Test.Collection", "DoubleTests", "RemR8R8", a, b), Tolerance);
 		}

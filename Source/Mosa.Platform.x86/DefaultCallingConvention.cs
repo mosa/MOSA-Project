@@ -130,10 +130,15 @@ namespace Mosa.Platform.x86
 			if (result == null)
 				return;
 
-			Operand eax = Operand.CreateCPURegister(result.Type, GeneralPurposeRegister.EAX);
-
-			if (result.StackType == StackTypeCode.Int64)
+			if (result.StackType == StackTypeCode.F)
 			{
+				Operand xmm0 = Operand.CreateCPURegister(result.Type, SSE2Register.XMM0);
+				context.AppendInstruction(X86.Movsd, result, xmm0);
+
+			}
+			else if (result.StackType == StackTypeCode.Int64)
+			{
+				Operand eax = Operand.CreateCPURegister(result.Type, GeneralPurposeRegister.EAX);
 				Operand edx = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.EDX);
 
 				context.AppendInstruction(X86.Mov, result.Low, eax);
@@ -141,6 +146,7 @@ namespace Mosa.Platform.x86
 			}
 			else
 			{
+				Operand eax = Operand.CreateCPURegister(result.Type, GeneralPurposeRegister.EAX);
 				context.AppendInstruction(X86.Mov, result, eax);
 			}
 		}

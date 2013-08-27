@@ -7,235 +7,256 @@ namespace Mosa.Test.Collection
 	public static class LdargaTests 
 	{
 	
-		public static bool LdargaCheckValueU1(byte expect, byte a) 
+		public static byte LdargaCheckValueU1(byte a) 
 		{
-			return LdargaCheckValueRefU1(expect, ref a);
+			return LdargaCheckValueRefU1(ref a);
 		}
 
-		private static bool LdargaCheckValueRefU1(byte expect, ref byte a)
+		private static byte LdargaCheckValueRefU1(ref byte a)
 		{
-			return (expect.Equals(a));
+			return a;
+		}
+				
+		public static byte LdargaChangeValueU1(byte a, byte b)
+		{
+			LdargaChangeValueRefU1(ref a,b);
+			return a;
 		}
 
-		public static bool LdargaChangeValueU1(byte expect, byte a) 
+		private static void LdargaChangeValueRefU1(ref byte a, byte b)
 		{
-			 LdargaChangeValueRefU1(expect, ref a);
-			 return expect.Equals(a);
-		}
-
-		private static void LdargaChangeValueRefU1(byte expect, ref byte a)
-		{
-			a = expect;
+			a = b;
 		}
 	
-		public static bool LdargaCheckValueU2(ushort expect, ushort a) 
+		public static ushort LdargaCheckValueU2(ushort a) 
 		{
-			return LdargaCheckValueRefU2(expect, ref a);
+			return LdargaCheckValueRefU2(ref a);
 		}
 
-		private static bool LdargaCheckValueRefU2(ushort expect, ref ushort a)
+		private static ushort LdargaCheckValueRefU2(ref ushort a)
 		{
-			return (expect.Equals(a));
+			return a;
+		}
+				
+		public static ushort LdargaChangeValueU2(ushort a, ushort b)
+		{
+			LdargaChangeValueRefU2(ref a,b);
+			return a;
 		}
 
-		public static bool LdargaChangeValueU2(ushort expect, ushort a) 
+		private static void LdargaChangeValueRefU2(ref ushort a, ushort b)
 		{
-			 LdargaChangeValueRefU2(expect, ref a);
-			 return expect.Equals(a);
-		}
-
-		private static void LdargaChangeValueRefU2(ushort expect, ref ushort a)
-		{
-			a = expect;
+			a = b;
 		}
 	
-		public static bool LdargaCheckValueU4(uint expect, uint a) 
+		public static uint LdargaCheckValueU4(uint a) 
 		{
-			return LdargaCheckValueRefU4(expect, ref a);
+			return LdargaCheckValueRefU4(ref a);
 		}
 
-		private static bool LdargaCheckValueRefU4(uint expect, ref uint a)
+		private static uint LdargaCheckValueRefU4(ref uint a)
 		{
-			return (expect.Equals(a));
+			return a;
+		}
+				
+		public static uint LdargaChangeValueU4(uint a, uint b)
+		{
+			LdargaChangeValueRefU4(ref a,b);
+			return a;
 		}
 
-		public static bool LdargaChangeValueU4(uint expect, uint a) 
+		private static void LdargaChangeValueRefU4(ref uint a, uint b)
 		{
-			 LdargaChangeValueRefU4(expect, ref a);
-			 return expect.Equals(a);
-		}
-
-		private static void LdargaChangeValueRefU4(uint expect, ref uint a)
-		{
-			a = expect;
+			a = b;
 		}
 	
-		public static bool LdargaCheckValueU8(ulong expect, ulong a) 
+		public static ulong LdargaCheckValueU8(ulong a) 
 		{
-			return LdargaCheckValueRefU8(expect, ref a);
+			return LdargaCheckValueRefU8(ref a);
 		}
 
-		private static bool LdargaCheckValueRefU8(ulong expect, ref ulong a)
+		private static ulong LdargaCheckValueRefU8(ref ulong a)
 		{
-			return (expect.Equals(a));
+			return a;
+		}
+				
+		public static ulong LdargaChangeValueU8(ulong a, ulong b)
+		{
+			LdargaChangeValueRefU8(ref a,b);
+			return a;
 		}
 
-		public static bool LdargaChangeValueU8(ulong expect, ulong a) 
+		private static void LdargaChangeValueRefU8(ref ulong a, ulong b)
 		{
-			 LdargaChangeValueRefU8(expect, ref a);
-			 return expect.Equals(a);
-		}
-
-		private static void LdargaChangeValueRefU8(ulong expect, ref ulong a)
-		{
-			a = expect;
+			a = b;
 		}
 	
-		public static bool LdargaCheckValueI1(sbyte expect, sbyte a) 
+		public static sbyte LdargaCheckValueI1(sbyte a) 
 		{
-			return LdargaCheckValueRefI1(expect, ref a);
+			return LdargaCheckValueRefI1(ref a);
 		}
 
-		private static bool LdargaCheckValueRefI1(sbyte expect, ref sbyte a)
+		private static sbyte LdargaCheckValueRefI1(ref sbyte a)
 		{
-			return (expect.Equals(a));
+			return a;
+		}
+				
+		public static sbyte LdargaChangeValueI1(sbyte a, sbyte b)
+		{
+			LdargaChangeValueRefI1(ref a,b);
+			return a;
 		}
 
-		public static bool LdargaChangeValueI1(sbyte expect, sbyte a) 
+		private static void LdargaChangeValueRefI1(ref sbyte a, sbyte b)
 		{
-			 LdargaChangeValueRefI1(expect, ref a);
-			 return expect.Equals(a);
-		}
-
-		private static void LdargaChangeValueRefI1(sbyte expect, ref sbyte a)
-		{
-			a = expect;
+			a = b;
 		}
 	
-		public static bool LdargaCheckValueI2(short expect, short a) 
+		public static short LdargaCheckValueI2(short a) 
 		{
-			return LdargaCheckValueRefI2(expect, ref a);
+			return LdargaCheckValueRefI2(ref a);
 		}
 
-		private static bool LdargaCheckValueRefI2(short expect, ref short a)
+		private static short LdargaCheckValueRefI2(ref short a)
 		{
-			return (expect.Equals(a));
+			return a;
+		}
+				
+		public static short LdargaChangeValueI2(short a, short b)
+		{
+			LdargaChangeValueRefI2(ref a,b);
+			return a;
 		}
 
-		public static bool LdargaChangeValueI2(short expect, short a) 
+		private static void LdargaChangeValueRefI2(ref short a, short b)
 		{
-			 LdargaChangeValueRefI2(expect, ref a);
-			 return expect.Equals(a);
-		}
-
-		private static void LdargaChangeValueRefI2(short expect, ref short a)
-		{
-			a = expect;
+			a = b;
 		}
 	
-		public static bool LdargaCheckValueI4(int expect, int a) 
+		public static int LdargaCheckValueI4(int a) 
 		{
-			return LdargaCheckValueRefI4(expect, ref a);
+			return LdargaCheckValueRefI4(ref a);
 		}
 
-		private static bool LdargaCheckValueRefI4(int expect, ref int a)
+		private static int LdargaCheckValueRefI4(ref int a)
 		{
-			return (expect.Equals(a));
+			return a;
+		}
+				
+		public static int LdargaChangeValueI4(int a, int b)
+		{
+			LdargaChangeValueRefI4(ref a,b);
+			return a;
 		}
 
-		public static bool LdargaChangeValueI4(int expect, int a) 
+		private static void LdargaChangeValueRefI4(ref int a, int b)
 		{
-			 LdargaChangeValueRefI4(expect, ref a);
-			 return expect.Equals(a);
-		}
-
-		private static void LdargaChangeValueRefI4(int expect, ref int a)
-		{
-			a = expect;
+			a = b;
 		}
 	
-		public static bool LdargaCheckValueI8(long expect, long a) 
+		public static long LdargaCheckValueI8(long a) 
 		{
-			return LdargaCheckValueRefI8(expect, ref a);
+			return LdargaCheckValueRefI8(ref a);
 		}
 
-		private static bool LdargaCheckValueRefI8(long expect, ref long a)
+		private static long LdargaCheckValueRefI8(ref long a)
 		{
-			return (expect.Equals(a));
+			return a;
+		}
+				
+		public static long LdargaChangeValueI8(long a, long b)
+		{
+			LdargaChangeValueRefI8(ref a,b);
+			return a;
 		}
 
-		public static bool LdargaChangeValueI8(long expect, long a) 
+		private static void LdargaChangeValueRefI8(ref long a, long b)
 		{
-			 LdargaChangeValueRefI8(expect, ref a);
-			 return expect.Equals(a);
-		}
-
-		private static void LdargaChangeValueRefI8(long expect, ref long a)
-		{
-			a = expect;
+			a = b;
 		}
 	
-		public static bool LdargaCheckValueR4(float expect, float a) 
+		public static float LdargaCheckValueR4(float a) 
 		{
-			return LdargaCheckValueRefR4(expect, ref a);
+			return LdargaCheckValueRefR4(ref a);
 		}
 
-		private static bool LdargaCheckValueRefR4(float expect, ref float a)
+		private static float LdargaCheckValueRefR4(ref float a)
 		{
-			return (expect.Equals(a));
+			return a;
+		}
+				
+		public static float LdargaChangeValueR4(float a, float b)
+		{
+			LdargaChangeValueRefR4(ref a,b);
+			return a;
 		}
 
-		public static bool LdargaChangeValueR4(float expect, float a) 
+		private static void LdargaChangeValueRefR4(ref float a, float b)
 		{
-			 LdargaChangeValueRefR4(expect, ref a);
-			 return expect.Equals(a);
-		}
-
-		private static void LdargaChangeValueRefR4(float expect, ref float a)
-		{
-			a = expect;
+			a = b;
 		}
 	
-		public static bool LdargaCheckValueR8(double expect, double a) 
+		public static double LdargaCheckValueR8(double a) 
 		{
-			return LdargaCheckValueRefR8(expect, ref a);
+			return LdargaCheckValueRefR8(ref a);
 		}
 
-		private static bool LdargaCheckValueRefR8(double expect, ref double a)
+		private static double LdargaCheckValueRefR8(ref double a)
 		{
-			return (expect.Equals(a));
+			return a;
+		}
+				
+		public static double LdargaChangeValueR8(double a, double b)
+		{
+			LdargaChangeValueRefR8(ref a,b);
+			return a;
 		}
 
-		public static bool LdargaChangeValueR8(double expect, double a) 
+		private static void LdargaChangeValueRefR8(ref double a, double b)
 		{
-			 LdargaChangeValueRefR8(expect, ref a);
-			 return expect.Equals(a);
-		}
-
-		private static void LdargaChangeValueRefR8(double expect, ref double a)
-		{
-			a = expect;
+			a = b;
 		}
 	
-		public static bool LdargaCheckValueC(char expect, char a) 
+		public static char LdargaCheckValueC(char a) 
 		{
-			return LdargaCheckValueRefC(expect, ref a);
+			return LdargaCheckValueRefC(ref a);
 		}
 
-		private static bool LdargaCheckValueRefC(char expect, ref char a)
+		private static char LdargaCheckValueRefC(ref char a)
 		{
-			return (expect.Equals(a));
+			return a;
+		}
+				
+		public static char LdargaChangeValueC(char a, char b)
+		{
+			LdargaChangeValueRefC(ref a,b);
+			return a;
 		}
 
-		public static bool LdargaChangeValueC(char expect, char a) 
+		private static void LdargaChangeValueRefC(ref char a, char b)
 		{
-			 LdargaChangeValueRefC(expect, ref a);
-			 return expect.Equals(a);
+			a = b;
+		}
+	
+		public static bool LdargaCheckValueB(bool a) 
+		{
+			return LdargaCheckValueRefB(ref a);
 		}
 
-		private static void LdargaChangeValueRefC(char expect, ref char a)
+		private static bool LdargaCheckValueRefB(ref bool a)
 		{
-			a = expect;
+			return a;
+		}
+				
+		public static bool LdargaChangeValueB(bool a, bool b)
+		{
+			LdargaChangeValueRefB(ref a,b);
+			return a;
+		}
+
+		private static void LdargaChangeValueRefB(ref bool a, bool b)
+		{
+			a = b;
 		}
 		}
 }

@@ -47,6 +47,9 @@
 	List<KeyValuePair<string, string>> NumbersWithChar = new List<KeyValuePair<string, string>>(Numbers);
 	NumbersWithChar.Add(new KeyValuePair<string, string>("char", "C"));	
 
+	List<KeyValuePair<string, string>> NumbersWithCharAndBool = new List<KeyValuePair<string, string>>(NumbersWithChar);
+	NumbersWithCharAndBool.Add(new KeyValuePair<string, string>("bool", "B"));	
+
 	List<KeyValuePair<string, string>> Primitives = new List<KeyValuePair<string, string>>(Numbers);
 	Primitives.Add(new KeyValuePair<string, string>("bool", "B"));
 	

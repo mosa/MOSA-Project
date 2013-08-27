@@ -148,11 +148,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>InitStructFixture.tt</DependentUpon>
     </Compile>
-    <Compile Include="CIL\LdargaFixture.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>LdargaFixture.tt</DependentUpon>
-    </Compile>
     <Compile Include="CIL\LdlocaFixture.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -173,6 +168,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ConditionalOperatorFixture.tt</DependentUpon>
     </Compile>
+    <Compile Include="CIL\LdargaFixture.cs" />
     <Compile Include="OLD\GenericMethodMemberFixture.cs" />
     <Compile Include="OLD\GenericTypeFixture.cs" />
     <Compile Include="CIL\Int32Fixture.cs" />
@@ -226,10 +222,6 @@
     <None Include="CIL\LdlocaFixture.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>LdlocaFixture.cs</LastGenOutput>
-    </None>
-    <None Include="CIL\LdargaFixture.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>LdargaFixture.cs</LastGenOutput>
     </None>
     <Compile Include="CIL\CallOrderFixture.cs" />
     <Compile Include="OLD\Div.cs" />

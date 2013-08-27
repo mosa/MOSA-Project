@@ -89,6 +89,10 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>ForeachTests.cs</LastGenOutput>
     </None>
+    <None Include="LdargaTests.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>LdargaTests.cs</LastGenOutput>
+    </None>
     <None Include="StaticFieldTests.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>StaticFieldTests.cs</LastGenOutput>
@@ -101,6 +105,11 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>StructTests.cs</LastGenOutput>
     </None>
+    <Compile Include="LdargaTests.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>LdargaTests.tt</DependentUpon>
+    </Compile>
     <Compile Include="NewObjectTests.cs" />
     <Compile Include="RegisterAllocatorTests.cs" />
     <Compile Include="SpecificTests.cs" />
@@ -148,11 +157,6 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="LdargaTests.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>LdargaTests.tt</DependentUpon>
-    </Compile>
     <Compile Include="WhileTests.cs" />
     <Compile Include="StringTests.cs" />
     <Compile Include="SingleTests.cs" />
@@ -189,10 +193,6 @@
     <None Include="LdlocaTests.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>LdlocaTests.cs</LastGenOutput>
-    </None>
-    <None Include="LdargaTests.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>LdargaTests.cs</LastGenOutput>
     </None>
   </ItemGroup>
   <ItemGroup>

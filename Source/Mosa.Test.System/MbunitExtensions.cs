@@ -174,20 +174,20 @@ namespace Mosa.Test.System
 	}
 
 	[AttributeUsage(PatternAttributeTargets.DataContext, AllowMultiple = false, Inherited = true)]
-	public class R4NumberNotExtremesAttribute : DataAttribute
+	public class R4NumberNoExtremesAttribute : DataAttribute
 	{
 		protected override void PopulateDataSource(IPatternScope scope, DataSource dataSource, ICodeElementInfo codeElement)
 		{
-			dataSource.AddDataSet(new ValueSequenceDataSet(Series.R4NumberNotExtremes, GetMetadata(), false));
+			dataSource.AddDataSet(new ValueSequenceDataSet(Series.R4NumberNoExtremes, GetMetadata(), false));
 		}
 	}
 
 	[AttributeUsage(PatternAttributeTargets.DataContext, AllowMultiple = false, Inherited = true)]
-	public class R4NumberNotExtremesOrZeroAttribute : DataAttribute
+	public class R4NumberNoExtremesOrZeroAttribute : DataAttribute
 	{
 		protected override void PopulateDataSource(IPatternScope scope, DataSource dataSource, ICodeElementInfo codeElement)
 		{
-			dataSource.AddDataSet(new ValueSequenceDataSet(Series.R4NumberNotExtremesOrZero, GetMetadata(), false));
+			dataSource.AddDataSet(new ValueSequenceDataSet(Series.R4NumberNoExtremesOrZero, GetMetadata(), false));
 		}
 	}
 	
@@ -201,20 +201,20 @@ namespace Mosa.Test.System
 	}
 	
 	[AttributeUsage(PatternAttributeTargets.DataContext, AllowMultiple = false, Inherited = true)]
-	public class R8NumberNotExtremesAttribute : DataAttribute
+	public class R8NumberNoExtremesAttribute : DataAttribute
 	{
 		protected override void PopulateDataSource(IPatternScope scope, DataSource dataSource, ICodeElementInfo codeElement)
 		{
-			dataSource.AddDataSet(new ValueSequenceDataSet(Series.R8NumberNotExtremes, GetMetadata(), false));
+			dataSource.AddDataSet(new ValueSequenceDataSet(Series.R8NumberNoExtremes, GetMetadata(), false));
 		}
 	}
 	
 	[AttributeUsage(PatternAttributeTargets.DataContext, AllowMultiple = false, Inherited = true)]
-	public class R8NumberNotExtremesOrZeroAttribute : DataAttribute
+	public class R8NumberNoExtremesOrZeroAttribute : DataAttribute
 	{
 		protected override void PopulateDataSource(IPatternScope scope, DataSource dataSource, ICodeElementInfo codeElement)
 		{
-			dataSource.AddDataSet(new ValueSequenceDataSet(Series.R8NumberNotExtremesOrZero, GetMetadata(), false));
+			dataSource.AddDataSet(new ValueSequenceDataSet(Series.R8NumberNoExtremesOrZero, GetMetadata(), false));
 		}
 	}
 	

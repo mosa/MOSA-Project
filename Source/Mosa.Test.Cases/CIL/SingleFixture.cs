@@ -58,7 +58,7 @@ namespace Mosa.Test.Cases.CIL
 		}
 
 		[Test]
-		public void RemR4R4([R4NumberNotExtremes]float a, [R4NumberNotExtremesOrZero] float b)
+		public void RemR4R4([R4NumberNoExtremes]float a, [R4NumberNoExtremesOrZero] float b)
 		{
 			Assert.AreApproximatelyEqual(SingleTests.RemR4R4(a, b), Run<float>("Mosa.Test.Collection", "SingleTests", "RemR4R4", a, b), Tolerance);
 		}

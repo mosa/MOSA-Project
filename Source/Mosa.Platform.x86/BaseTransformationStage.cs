@@ -26,9 +26,9 @@ namespace Mosa.Platform.x86
 		protected override string Platform { get { return "x86"; } }
 
 		public static X86Instruction GetMove(Operand Destination, Operand Source)
-		{
+		{			
 			//Debug.Assert(Destination.Type.Type == Source.Type.Type);
-
+			
 			if (Source.Type.Type == CilElementType.R4)
 			{
 				return X86.Movss;

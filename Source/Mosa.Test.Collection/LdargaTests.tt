@@ -6,27 +6,27 @@ namespace Mosa.Test.Collection
 
 	public static class LdargaTests 
 	{
-	<# foreach (KeyValuePair<string, string> number in NumbersWithChar) { #>
+	<# foreach (KeyValuePair<string, string> number in NumbersWithCharAndBool) { #>
 
-		public static bool LdargaCheckValue<#= number.Value #>(<#= number.Key #> expect, <#= number.Key #> a) 
+		public static <#= number.Key #> LdargaCheckValue<#= number.Value #>(<#= number.Key #> a) 
 		{
-			return LdargaCheckValueRef<#= number.Value #>(expect, ref a);
+			return LdargaCheckValueRef<#= number.Value #>(ref a);
 		}
 
-		private static bool LdargaCheckValueRef<#= number.Value #>(<#= number.Key #> expect, ref <#= number.Key #> a)
+		private static <#= number.Key #> LdargaCheckValueRef<#= number.Value #>(ref <#= number.Key #> a)
 		{
-			return (expect.Equals(a));
+			return a;
+		}
+				
+		public static <#= number.Key #> LdargaChangeValue<#= number.Value #>(<#= number.Key #> a, <#= number.Key #> b)
+		{
+			LdargaChangeValueRef<#= number.Value #>(ref a,b);
+			return a;
 		}
 
-		public static bool LdargaChangeValue<#= number.Value #>(<#= number.Key #> expect, <#= number.Key #> a) 
+		private static void LdargaChangeValueRef<#= number.Value #>(ref <#= number.Key #> a, <#= number.Key #> b)
 		{
-			 LdargaChangeValueRef<#= number.Value #>(expect, ref a);
-			 return expect.Equals(a);
-		}
-
-		private static void LdargaChangeValueRef<#= number.Value #>(<#= number.Key #> expect, ref <#= number.Key #> a)
-		{
-			a = expect;
+			a = b;
 		}
 	<# } #>
 	}
