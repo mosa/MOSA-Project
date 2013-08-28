@@ -66,8 +66,6 @@ namespace Mosa.Compiler.Framework
 		{
 			// check if instance is null (if so, it's a static call to the methodPointer)
 
-			Operand thisOperand = methodCompiler.Parameters[0];
-
 			RuntimeField methodPointerField = GetField(methodCompiler.Method.DeclaringType, "methodPointer");
 			int methodPointerOffset = methodCompiler.TypeLayout.GetFieldOffset(methodPointerField);
 			Operand methodPointerOffsetOperand = Operand.CreateConstant(BuiltInSigType.IntPtr, methodPointerOffset);
@@ -76,17 +74,28 @@ namespace Mosa.Compiler.Framework
 			int instanceOffset = methodCompiler.TypeLayout.GetFieldOffset(instanceField);
 			Operand instanceOffsetOperand = Operand.CreateConstant(BuiltInSigType.IntPtr, instanceOffset);
 
+
+			Context b0 = CreateMethodStructure(methodCompiler, false);
+			Context b1 = CreateNewBlock(methodCompiler);
+			Context b2 = CreateNewBlock(methodCompiler);
+			Context b3 = CreateNewBlock(methodCompiler);
+
+			Operand[] vrs = new Operand[methodCompiler.Parameters.Length];
+
+			for (int i = 0; i < methodCompiler.Parameters.Length; i++)
+			{
+				vrs[i] = methodCompiler.VirtualRegisters.Allocate(methodCompiler.Parameters[i].Type);
+				b0.AppendInstruction(IRInstruction.Move, vrs[i], methodCompiler.Parameters[i]);
+			}
+
+			Operand thisOperand = vrs[0];
+
 			Operand opMethod = methodCompiler.VirtualRegisters.Allocate(BuiltInSigType.UInt32);
 			Operand opInstance = methodCompiler.VirtualRegisters.Allocate(thisOperand.Type);
 			Operand opCompare = methodCompiler.VirtualRegisters.Allocate(BuiltInSigType.Int32);
 
 			Operand opReturn = withReturn ? methodCompiler.VirtualRegisters.Allocate(BuiltInSigType.Object) : null;
 			Operand c0 = Operand.CreateConstant((int)0);
-
-			Context b0 = CreateMethodStructure(methodCompiler, false);
-			Context b1 = CreateNewBlock(methodCompiler);
-			Context b2 = CreateNewBlock(methodCompiler);
-			Context b3 = CreateNewBlock(methodCompiler);
 
 			b0.AppendInstruction(IRInstruction.Load, opMethod, thisOperand, methodPointerOffsetOperand);
 			b0.AppendInstruction(IRInstruction.Load, opInstance, thisOperand, instanceOffsetOperand);
@@ -101,7 +110,7 @@ namespace Mosa.Compiler.Framework
 			b1.InvokeMethod = methodCompiler.Method;
 			for (int i = 1; i < methodCompiler.Parameters.Length; i++)
 			{
-				b1.AddOperand(methodCompiler.Parameters[i]);
+				b1.AddOperand(vrs[i]);
 			}
 			b1.AppendInstruction(IRInstruction.Jmp, b3.BasicBlock);
 			methodCompiler.BasicBlocks.LinkBlocks(b1.BasicBlock, b3.BasicBlock);
@@ -110,7 +119,7 @@ namespace Mosa.Compiler.Framework
 			b2.InvokeMethod = methodCompiler.Method;
 			for (int i = 1; i < methodCompiler.Parameters.Length; i++)
 			{
-				b2.AddOperand(methodCompiler.Parameters[i]);
+				b2.AddOperand(vrs[i]);
 			}
 			b2.AddOperand(opInstance);
 

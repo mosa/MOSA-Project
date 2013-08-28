@@ -616,10 +616,8 @@ namespace Mosa.Compiler.Framework.Stages
 		void CIL.ICILVisitor.Castclass(Context context)
 		{
 			// TODO!
-			// We don't need to check the result, if the icall fails, it'll happily throw
-			// the InvalidCastException.
-			//context.Remove();
-			ReplaceWithVmCall(context, VmCall.Castclass);
+			//ReplaceWithVmCall(context, VmCall.Castclass);
+			context.ReplaceInstructionOnly(IRInstruction.Move); // HACK!
 		}
 
 		/// <summary>

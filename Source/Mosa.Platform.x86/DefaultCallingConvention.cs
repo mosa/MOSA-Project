@@ -72,9 +72,9 @@ namespace Mosa.Platform.x86
 
 			Operand edx = Operand.CreateCPURegister(BuiltInSigType.IntPtr, GeneralPurposeRegister.EDX);
 
-			Stack<Operand> operands = BuildOperandStack(context);
+			List<Operand> operands = BuildOperands(context);
 
-			int stackSize = CalculateStackSizeForParameters(operands);
+			int stackSize = CalculateStackSizeForParameters(operands, method);
 
 			context.Remove();
 
@@ -92,20 +92,20 @@ namespace Mosa.Platform.x86
 			CleanupReturnValue(context, result);
 		}
 
-		private Stack<Operand> BuildOperandStack(Context context)
+		private List<Operand> BuildOperands(Context context)
 		{
-			Stack<Operand> operandStack = new Stack<Operand>(context.OperandCount);
+			List<Operand> operands = new List<Operand>(context.OperandCount - 1);
 			int index = 0;
 
 			foreach (Operand operand in context.Operands)
 			{
 				if (index++ > 0)
 				{
-					operandStack.Push(operand);
+					operands.Add(operand);
 				}
 			}
 
-			return operandStack;
+			return operands;
 		}
 
 		private void ReserveStackSizeForCall(Context context, int stackSize, Operand edx)
@@ -158,20 +158,29 @@ namespace Mosa.Platform.x86
 		/// </summary>
 		/// <param name="context">The context.</param>
 		/// <param name="method">The method.</param>
-		/// <param name="operandStack">The operand stack.</param>
+		/// <param name="operands">The operand stack.</param>
 		/// <param name="space">The space.</param>
 		/// <param name="edx">The edx.</param>
-		private void PushOperands(Context context, RuntimeMethod method, Stack<Operand> operandStack, int space, Operand edx)
+		private void PushOperands(Context context, RuntimeMethod method, List<Operand> operands, int space, Operand edx)
 		{
-			Debug.Assert((method.Parameters.Count + (method.HasThis ? 1 : 0) == operandStack.Count) ||
-						(method.DeclaringType.IsDelegate && method.Parameters.Count == operandStack.Count));
+			Debug.Assert((method.Parameters.Count + (method.HasThis ? 1 : 0) == operands.Count) ||
+						(method.DeclaringType.IsDelegate && method.Parameters.Count == operands.Count));
 
-			while (operandStack.Count != 0)
+			int offset = method.Parameters.Count - operands.Count;
+
+			for (int index = operands.Count - 1; index >= 0; index--)
 			{
-				Operand operand = operandStack.Pop();
+				Operand operand = operands[index];
+
+				SigType param = (index + offset >= 0) ? method.SigParameters[index + offset] : null;
 
 				int size, alignment;
 				architecture.GetTypeRequirements(operand.Type, out size, out alignment);
+
+				if (param != null && operand.Type.Type == CilElementType.R8 && param.Type == CilElementType.R4)
+				{
+					size = 4; alignment = 4;
+				}
 
 				space -= size;
 				Push(context, operand, space, size, edx);
@@ -189,43 +198,46 @@ namespace Mosa.Platform.x86
 		/// <exception cref="System.NotSupportedException"></exception>
 		private void Push(Context context, Operand op, int stackSize, int parameterSize, Operand edx)
 		{
+			Debug.Assert(!op.IsMemoryAddress);
+
 			if (op.IsMemoryAddress)
 			{
 				if (op.Type.Type == CilElementType.ValueType)
 				{
 					for (int i = 0; i < parameterSize; i += 4)
 					{
-						context.AppendInstruction(X86.Mov,
-							Operand.CreateMemoryAddress(op.Type, edx, stackSize + i),
-							Operand.CreateMemoryAddress(op.Type, edx, op.Offset + i));
+						context.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(op.Type, edx, stackSize + i), Operand.CreateMemoryAddress(op.Type, edx, op.Offset + i));
 					}
 
 					return;
 				}
 
-				Operand rop;
-				switch (op.StackType)
+				if (op.StackType == StackTypeCode.F)
 				{
-					case StackTypeCode.O: goto case StackTypeCode.N;
-					case StackTypeCode.Ptr: goto case StackTypeCode.N;
-					case StackTypeCode.Int32: goto case StackTypeCode.N;
-					case StackTypeCode.N: rop = edx; break;
-					case StackTypeCode.F: rop = Operand.CreateCPURegister(op.Type, SSE2Register.XMM0); break;
-					case StackTypeCode.Int64:
-						{
-							context.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(op.Type, edx, stackSize), op.Low);
-							context.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(op.Type, edx, stackSize + 4), op.High);
-							return;
-						}
-					default:
-						throw new NotSupportedException();
+					Operand xmm1 = Operand.CreateCPURegister(op.Type, SSE2Register.XMM0);
+
+					if (op.Type.Type == CilElementType.R8 && stackSize == 4)
+					{
+						context.AppendInstruction(X86.Cvtsd2ss, xmm1, op);
+					}
+					context.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(edx.Type, edx, stackSize), xmm1);
+
+					return;
 				}
 
-				architecture.InsertMove(context, rop, op);
-				//context.AppendInstruction(X86.Mov, rop, op);
-				op = rop;
+				if (op.StackType == StackTypeCode.Int64)
+				{
+					context.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(op.Type, edx, stackSize), op.Low);
+					context.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(op.Type, edx, stackSize + 4), op.High);
+					return;
+				}
+
+				context.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(edx.Type, edx, stackSize), op);
+
+				return;
 			}
-			else if (op.StackType == StackTypeCode.Int64)
+			
+			if (op.StackType == StackTypeCode.Int64)
 			{
 				context.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(BuiltInSigType.Int32, edx, stackSize), op.Low);
 				context.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(BuiltInSigType.Int32, edx, stackSize + 4), op.High);
@@ -233,26 +245,53 @@ namespace Mosa.Platform.x86
 				return;
 			}
 
+			if (op.StackType == StackTypeCode.F)
+			{
+				Operand xmm1 = Operand.CreateCPURegister(op.Type, SSE2Register.XMM0);
+
+				if (op.Type.Type == CilElementType.R8 && stackSize == 4)
+				{
+					context.AppendInstruction(X86.Cvtsd2ss, xmm1, op);
+				}
+				context.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(edx.Type, edx, stackSize), xmm1);
+
+				return;
+			}
+
 			architecture.InsertMove(context, Operand.CreateMemoryAddress(op.Type, edx, stackSize), op);
-			//context.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(op.Type, edx, stackSize), op);
 		}
 
 		/// <summary>
 		/// Calculates the stack size for parameters.
 		/// </summary>
 		/// <param name="operands">The operands.</param>
+		/// <param name="method">The method.</param>
 		/// <returns></returns>
-		private int CalculateStackSizeForParameters(IEnumerable<Operand> operands)
+		private int CalculateStackSizeForParameters(List<Operand> operands, RuntimeMethod method)
 		{
+			Debug.Assert((method.Parameters.Count + (method.HasThis ? 1 : 0) == operands.Count) ||
+			(method.DeclaringType.IsDelegate && method.Parameters.Count == operands.Count));
+
+			int offset = method.Parameters.Count - operands.Count;
 			int result = 0;
 
-			foreach (Operand op in operands)
+			for (int index = operands.Count - 1; index >= 0; index--)
 			{
+				Operand operand = operands[index];
+
 				int size, alignment;
-				architecture.GetTypeRequirements(op.Type, out size, out alignment);
+				architecture.GetTypeRequirements(operand.Type, out size, out alignment);
+
+				SigType param = (index + offset >= 0) ? method.SigParameters[index + offset] : null;
+
+				if (param != null && operand.Type.Type == CilElementType.R8 && param.Type == CilElementType.R4)
+				{
+					size = 4; alignment = 4;
+				}
 
 				result += size;
 			}
+
 			return result;
 		}
 

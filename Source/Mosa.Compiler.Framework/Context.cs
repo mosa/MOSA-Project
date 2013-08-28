@@ -886,9 +886,9 @@ namespace Mosa.Compiler.Framework
 		/// Sets the instruction.
 		/// </summary>
 		/// <param name="instruction">The instruction.</param>
+		/// <param name="condition">The condition.</param>
 		/// <param name="result">The result.</param>
 		/// <param name="operand1">The operand1.</param>
-		/// <param name="operand2">The operand2.</param>
 		public void SetInstruction(BaseInstruction instruction, ConditionCode condition, Operand result, Operand operand1)
 		{
 			SetInstruction(instruction, 1, (byte)((result == null) ? 0 : 1));
@@ -1106,7 +1106,6 @@ namespace Mosa.Compiler.Framework
 		/// <param name="condition">The condition.</param>
 		/// <param name="result">The result operand.</param>
 		/// <param name="operand1">The first operand.</param>
-		/// <param name="operand2">The second operand.</param>
 		public void AppendInstruction(BaseInstruction instruction, ConditionCode condition, Operand result, Operand operand1)
 		{
 			AppendInstruction();
