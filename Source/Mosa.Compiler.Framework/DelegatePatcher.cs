@@ -8,9 +8,9 @@
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  */
 
-using Mosa.Compiler.TypeSystem;
 using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.Metadata.Signatures;
+using Mosa.Compiler.TypeSystem;
 
 namespace Mosa.Compiler.Framework
 {
@@ -98,6 +98,7 @@ namespace Mosa.Compiler.Framework
 			methodCompiler.BasicBlocks.LinkBlocks(b0.BasicBlock, b2.BasicBlock);
 
 			b1.AppendInstruction(IRInstruction.Call, opReturn, opMethod);
+			b1.InvokeMethod = methodCompiler.Method;
 			for (int i = 1; i < methodCompiler.Parameters.Length; i++)
 			{
 				b1.AddOperand(methodCompiler.Parameters[i]);
@@ -106,6 +107,7 @@ namespace Mosa.Compiler.Framework
 			methodCompiler.BasicBlocks.LinkBlocks(b1.BasicBlock, b3.BasicBlock);
 
 			b2.AppendInstruction(IRInstruction.Call, opReturn, opMethod);
+			b2.InvokeMethod = methodCompiler.Method;
 			for (int i = 1; i < methodCompiler.Parameters.Length; i++)
 			{
 				b2.AddOperand(methodCompiler.Parameters[i]);

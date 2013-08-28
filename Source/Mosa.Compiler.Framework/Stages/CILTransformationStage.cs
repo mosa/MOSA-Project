@@ -8,11 +8,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Text;
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.CIL;
 using Mosa.Compiler.Framework.IR;
@@ -22,6 +17,11 @@ using Mosa.Compiler.Metadata.Loader;
 using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Compiler.TypeSystem;
 using Mosa.Compiler.TypeSystem.Cil;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Text;
 
 namespace Mosa.Compiler.Framework.Stages
 {
@@ -33,7 +33,6 @@ namespace Mosa.Compiler.Framework.Stages
 	/// </remarks>
 	public sealed class CILTransformationStage : BaseCodeTransformationStage, CIL.ICILVisitor, IPipelineStage
 	{
-
 		#region ICILVisitor
 
 		/// <summary>
@@ -162,7 +161,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="context">The context.</param>
 		void CIL.ICILVisitor.Ldftn(Context context)
 		{
-			context.SetInstruction(IRInstruction.Move, context.Result, Operand.CreateSymbolFromMethod(context.InvokeTarget));
+			context.SetInstruction(IRInstruction.Move, context.Result, Operand.CreateSymbolFromMethod(context.InvokeMethod));
 		}
 
 		/// <summary>
@@ -245,11 +244,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (ProcessExternalCall(context))
 				return;
 
-			// Create a symbol operand for the invocation target
-			RuntimeMethod invokeTarget = context.InvokeTarget;
-			Operand symbolOperand = Operand.CreateSymbolFromMethod(invokeTarget);
-
-			ProcessInvokeInstruction(context, symbolOperand, context.Result, new List<Operand>(context.Operands));
+			ProcessInvokeInstruction(context, context.InvokeMethod, context.Result, new List<Operand>(context.Operands));
 		}
 
 		/// <summary>
@@ -261,7 +256,7 @@ namespace Mosa.Compiler.Framework.Stages
 			Operand destinationOperand = context.GetOperand(context.OperandCount - 1);
 			context.OperandCount -= 1;
 
-			ProcessInvokeInstruction(context, destinationOperand, context.Result, new List<Operand>(context.Operands));
+			ProcessInvokeInstruction(context, context.InvokeMethod, context.Result, new List<Operand>(context.Operands));
 		}
 
 		/// <summary>
@@ -397,53 +392,50 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="context">The context.</param>
 		void CIL.ICILVisitor.Callvirt(Context context)
 		{
-			RuntimeMethod invokeTarget = context.InvokeTarget;
-
+			RuntimeMethod method = context.InvokeMethod;
 			Operand resultOperand = context.Result;
-			var operands = new List<Operand>(context.Operands);
+			List<Operand> operands = new List<Operand>(context.Operands);
 
 			if (context.Previous.Instruction is ConstrainedPrefixInstruction)
 			{
 				var type = context.Previous.RuntimeType;
 
-				foreach (var method in type.Methods)
+				foreach (var m in type.Methods)
 				{
-					if (method.Name == invokeTarget.Name)
+					if (method.Name == method.Name)
 					{
-						if (method.Matches(invokeTarget))
+						if (method.Matches(method))
 						{
-							invokeTarget = method;
+							method = m;
 							break;
 						}
 					}
 				}
 
-				//context.Previous.SetInstruction(IRInstruction.Nop);
 				context.Previous.Remove();
 
-				Operand symbolOperand = Operand.CreateSymbolFromMethod(invokeTarget);
-				ProcessInvokeInstruction(context, symbolOperand, resultOperand, operands);
+				ProcessInvokeInstruction(context, method, resultOperand, operands);
 
 				return;
 			}
 
-			if ((invokeTarget.Attributes & MethodAttributes.Virtual) == MethodAttributes.Virtual)
+			if ((method.Attributes & MethodAttributes.Virtual) == MethodAttributes.Virtual)
 			{
 				Operand thisPtr = context.Operand1;
 
 				Operand methodTable = methodCompiler.CreateVirtualRegister(BuiltInSigType.IntPtr);
 				Operand methodPtr = methodCompiler.CreateVirtualRegister(BuiltInSigType.IntPtr);
 
-				if (!invokeTarget.DeclaringType.IsInterface)
+				if (!method.DeclaringType.IsInterface)
 				{
-					int methodTableOffset = CalculateMethodTableOffset(invokeTarget) + (nativePointerSize * 5);
+					int methodTableOffset = CalculateMethodTableOffset(method) + (nativePointerSize * 5);
 					context.SetInstruction(IRInstruction.Load, methodTable, thisPtr, Operand.CreateConstant(0));
 					context.AppendInstruction(IRInstruction.Load, methodPtr, methodTable, Operand.CreateConstant((int)methodTableOffset));
 				}
 				else
 				{
-					int methodTableOffset = CalculateMethodTableOffset(invokeTarget);
-					int slotOffset = CalculateInterfaceSlotOffset(invokeTarget);
+					int methodTableOffset = CalculateMethodTableOffset(method);
+					int slotOffset = CalculateInterfaceSlotOffset(method);
 
 					Operand interfaceSlotPtr = methodCompiler.CreateVirtualRegister(BuiltInSigType.IntPtr);
 					Operand interfaceMethodTablePtr = methodCompiler.CreateVirtualRegister(BuiltInSigType.IntPtr);
@@ -455,16 +447,13 @@ namespace Mosa.Compiler.Framework.Stages
 				}
 
 				context.AppendInstruction(IRInstruction.Nop);
-				ProcessInvokeInstruction(context, methodPtr, resultOperand, operands);
+				ProcessInvokeInstruction(context, method, methodPtr, resultOperand, operands);
 			}
 			else
 			{
 				// FIXME: Callvirt imposes a null-check. For virtual calls this is done implicitly, but for non-virtual calls
 				// we have to make this explicitly somehow.
-
-				// Create a symbol operand for the invocation target
-				Operand symbolOperand = Operand.CreateSymbolFromMethod(invokeTarget);
-				ProcessInvokeInstruction(context, symbolOperand, resultOperand, operands);
+				ProcessInvokeInstruction(context, method, resultOperand, operands);
 			}
 		}
 
@@ -570,7 +559,6 @@ namespace Mosa.Compiler.Framework.Stages
 				}
 
 				Context before = context.InsertBefore();
-				before.SetInstruction(IRInstruction.Nop);
 
 				ReplaceWithVmCall(before, VmCall.AllocateObject);
 
@@ -578,16 +566,14 @@ namespace Mosa.Compiler.Framework.Stages
 
 				before.SetOperand(1, methodTableSymbol);
 				before.SetOperand(2, Operand.CreateConstant((int)typeLayout.GetTypeSize(classType)));
-				before.OperandCount = 2;
+				before.OperandCount = 3;
 				before.Result = thisReference;
 
 				// Result is the this pointer, now invoke the real constructor
-				Operand symbolOperand = Operand.CreateSymbolFromMethod(context.InvokeTarget);
+				List<Operand> operands = new List<Operand>(context.Operands);
+				operands.Insert(0, thisReference);
 
-				List<Operand> ctorOperands = new List<Operand>(context.Operands);
-
-				ctorOperands.Insert(0, thisReference);
-				ProcessInvokeInstruction(context, symbolOperand, null, ctorOperands);
+				ProcessInvokeInstruction(context, context.InvokeMethod, null, operands);
 			}
 		}
 
@@ -1788,9 +1774,11 @@ namespace Mosa.Compiler.Framework.Stages
 				case ConvertType.I1:
 					mask = 0xFF;
 					return IRInstruction.SignExtendedMove;
+
 				case ConvertType.I2:
 					mask = 0xFFFF;
 					return IRInstruction.SignExtendedMove;
+
 				case ConvertType.I4:
 					mask = 0xFFFFFFFF;
 					break;
@@ -1802,9 +1790,11 @@ namespace Mosa.Compiler.Framework.Stages
 				case ConvertType.U1:
 					mask = 0xFF;
 					return IRInstruction.ZeroExtendedMove;
+
 				case ConvertType.U2:
 					mask = 0xFFFF;
 					return IRInstruction.ZeroExtendedMove;
+
 				case ConvertType.U4:
 					mask = 0xFFFFFFFF;
 					break;
@@ -1850,10 +1840,10 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </remarks>
 		private bool ProcessExternalCall(Context context)
 		{
-			if ((context.InvokeTarget.Attributes & MethodAttributes.PInvokeImpl) != MethodAttributes.PInvokeImpl)
+			if ((context.InvokeMethod.Attributes & MethodAttributes.PInvokeImpl) != MethodAttributes.PInvokeImpl)
 				return false;
 
-			string external = context.InvokeTarget.Module.GetExternalName(context.InvokeTarget.Token);
+			string external = context.InvokeMethod.Module.GetExternalName(context.InvokeMethod.Token);
 
 			//TODO: Verify!
 
@@ -1880,31 +1870,49 @@ namespace Mosa.Compiler.Framework.Stages
 		}
 
 		/// <summary>
+		/// Processes the invoke instruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <param name="method">The method.</param>
+		/// <param name="resultOperand">The result operand.</param>
+		/// <param name="operands">The operands.</param>
+		private void ProcessInvokeInstruction(Context context, RuntimeMethod method, Operand resultOperand, List<Operand> operands)
+		{
+			Operand symbolOperand = Operand.CreateSymbolFromMethod(method);
+			ProcessInvokeInstruction(context, method, symbolOperand, resultOperand, operands);
+		}
+
+		/// <summary>
 		/// Processes a method call instruction.
 		/// </summary>
 		/// <param name="context">The transformation context.</param>
-		/// <param name="destinationOperand">The operand, which holds the call destination.</param>
+		/// <param name="method">The method.</param>
 		/// <param name="resultOperand">The result operand.</param>
 		/// <param name="operands">The operands.</param>
-		private void ProcessInvokeInstruction(Context context, Operand destinationOperand, Operand resultOperand, List<Operand> operands)
+		private void ProcessInvokeInstruction(Context context, RuntimeMethod method, Operand symbolOperand, Operand resultOperand, List<Operand> operands)
 		{
+			Debug.Assert(method != null);
+
 			context.SetInstruction(IRInstruction.Call, (byte)(operands.Count + 1), (byte)(resultOperand == null ? 0 : 1));
+			context.InvokeMethod = method;
 
 			if (resultOperand != null)
+			{
 				context.SetResult(resultOperand);
+			}
 
-			int operandIndex = 0;
-			context.SetOperand(operandIndex++, destinationOperand);
+			int index = 0;
+			context.SetOperand(index++, symbolOperand);
 			foreach (Operand op in operands)
 			{
-				context.SetOperand(operandIndex++, op);
+				context.SetOperand(index++, op);
 			}
 		}
 
 		private bool CanSkipDueToRecursiveSystemObjectCtorCall(Context context)
 		{
 			RuntimeMethod currentMethod = methodCompiler.Method;
-			RuntimeMethod invokeTarget = context.InvokeTarget;
+			RuntimeMethod invokeTarget = context.InvokeMethod;
 
 			// Skip recursive System.Object ctor calls.
 			if (currentMethod.DeclaringType.FullName == @"System.Object" &&
@@ -1979,11 +1987,12 @@ namespace Mosa.Compiler.Framework.Stages
 			context.ReplaceInstructionOnly(IRInstruction.Call);
 			context.SetOperand(0, Operand.CreateSymbolFromMethod(method));
 			context.OperandCount = 1;
+			context.InvokeMethod = method;
 		}
 
 		private bool ReplaceWithInternalCall(Context context)
 		{
-			var method = context.InvokeTarget;
+			var method = context.InvokeMethod;
 
 			bool internalCall = ((method.ImplAttributes & MethodImplAttributes.InternalCall) == MethodImplAttributes.InternalCall);
 
@@ -1992,12 +2001,11 @@ namespace Mosa.Compiler.Framework.Stages
 				string replacementMethod = this.BuildInternalCallName(method);
 
 				method = method.DeclaringType.FindMethod(replacementMethod);
-				context.InvokeTarget = method;
 
 				Operand result = context.Result;
 				List<Operand> operands = new List<Operand>(context.Operands);
 
-				ProcessInvokeInstruction(context, Operand.CreateSymbolFromMethod(method), result, operands);
+				ProcessInvokeInstruction(context, method, result, operands);
 			}
 
 			return internalCall;
@@ -2061,6 +2069,7 @@ namespace Mosa.Compiler.Framework.Stages
 				default: throw new InvalidProgramException();
 			}
 		}
+
 		#endregion Internals
 	}
 }

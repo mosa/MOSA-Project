@@ -197,10 +197,10 @@ namespace Mosa.Compiler.Framework
 				}
 			}
 
-			if (context.InvokeTarget != null)
+			if (context.InvokeMethod != null)
 			{
 				s.Append(" {");
-				s.Append(context.InvokeTarget.FullName);
+				s.Append(context.InvokeMethod.FullName);
 				s.Append("}");
 			}
 

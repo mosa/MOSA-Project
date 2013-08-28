@@ -101,10 +101,10 @@ namespace Mosa.Compiler.Framework.CIL
 			ctx.OperandCount--;
 
 			// Get the type to allocate
-			SigType sigType = CreateSignatureTypeFor(decoder.Compiler.Assembly, ctor, ctx.InvokeTarget.DeclaringType);
+			SigType sigType = CreateSignatureTypeFor(decoder.Compiler.Assembly, ctor, ctx.InvokeMethod.DeclaringType);
 
-			decoder.Compiler.Scheduler.TrackMethodInvoked(ctx.InvokeTarget);
-			decoder.Compiler.Scheduler.TrackTypeAllocated(ctx.InvokeTarget.DeclaringType);
+			decoder.Compiler.Scheduler.TrackMethodInvoked(ctx.InvokeMethod);
+			decoder.Compiler.Scheduler.TrackTypeAllocated(ctx.InvokeMethod.DeclaringType);
 
 			// Set a return value according to the type of the object allocated
 			ctx.Result = decoder.Compiler.CreateVirtualRegister(sigType);
@@ -140,8 +140,8 @@ namespace Mosa.Compiler.Framework.CIL
 		public override void Resolve(Context ctx, BaseMethodCompiler compiler)
 		{
 			// Validate the operands...
-			int offset = (ctx.InvokeTarget.HasExplicitThis ? 1 : 0);
-			Debug.Assert(ctx.OperandCount == ctx.InvokeTarget.SigParameters.Length - offset, @"Operand count doesn't match parameter count.");
+			int offset = (ctx.InvokeMethod.HasExplicitThis ? 1 : 0);
+			Debug.Assert(ctx.OperandCount == ctx.InvokeMethod.SigParameters.Length - offset, @"Operand count doesn't match parameter count.");
 		}
 
 		/// <summary>

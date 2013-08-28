@@ -447,10 +447,10 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Holds the function being called.
 		/// </summary>
-		public RuntimeMethod InvokeTarget
+		public RuntimeMethod InvokeMethod
 		{
-			get { return instructionSet.Data[index].InvokeTarget; }
-			set { instructionSet.Data[index].InvokeTarget = value; }
+			get { return instructionSet.Data[index].InvokeMethod; }
+			set { instructionSet.Data[index].InvokeMethod = value; }
 		}
 
 		/// <summary>
@@ -663,15 +663,22 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Remove this instruction.
+		/// Remove this instruction (to be replaced shortly)
 		/// </summary>
 		public void Remove()
 		{
 			int label = Label;
 			Clear();
 
-			//Instruction = null;
 			Label = label; // maintain label for this node
+		}
+
+		/// <summary>
+		/// delete this instruction (not to be replaced)
+		/// </summary>
+		public void Delete()
+		{
+			Clear();
 		}
 
 		/// <summary>
@@ -734,7 +741,7 @@ namespace Mosa.Compiler.Framework
 		public void SetInstruction(BaseInstruction instruction, RuntimeMethod target)
 		{
 			SetInstruction(instruction);
-			InvokeTarget = target;
+			InvokeMethod = target;
 		}
 
 		/// <summary>
@@ -981,14 +988,13 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Appends an instruction after the current index.
 		/// </summary>
 		/// <param name="instruction">The instruction to append.</param>
 		/// <param name="target">The invoke target.</param>
 		public void AppendInstruction(BaseInstruction instruction, RuntimeMethod target)
 		{
 			AppendInstruction(instruction);
-			InvokeTarget = target;
+			InvokeMethod = target;
 		}
 
 		/// <summary>

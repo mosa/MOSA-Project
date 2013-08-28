@@ -38,7 +38,30 @@ namespace Mosa.Compiler.Framework.Stages
 
 		public ICodeEmitter CodeEmitter { get { return codeEmitter; } }
 
+		public bool EmitBinary { get; set; }
+
 		#endregion Properties
+
+		#region Construction
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="CodeGenerationStage"/> class.
+		/// </summary>
+		public CodeGenerationStage()
+		{
+			EmitBinary = true;
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="CodeGenerationStage" /> class.
+		/// </summary>
+		/// <param name="emitBinary">if set to <c>true</c> [emit binary].</param>
+		public CodeGenerationStage(bool emitBinary)
+		{
+			EmitBinary = emitBinary;
+		}
+
+		#endregion Construction
 
 		#region Methods
 
@@ -47,6 +70,9 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </summary>
 		void IMethodCompilerStage.Run()
 		{
+			if (!EmitBinary)
+				return;
+
 			// Retrieve a stream to place the code into
 			using (codeStream = methodCompiler.RequestCodeStream())
 			{

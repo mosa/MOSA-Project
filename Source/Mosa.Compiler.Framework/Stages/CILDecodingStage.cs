@@ -7,9 +7,6 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-using System;
-using System.Diagnostics;
-using System.IO;
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.CIL;
 using Mosa.Compiler.Framework.IR;
@@ -18,6 +15,9 @@ using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Compiler.Metadata.Tables;
 using Mosa.Compiler.TypeSystem;
 using Mosa.Compiler.TypeSystem.Cil;
+using System;
+using System.Diagnostics;
+using System.IO;
 
 namespace Mosa.Compiler.Framework.Stages
 {

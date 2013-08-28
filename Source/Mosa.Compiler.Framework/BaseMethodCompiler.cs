@@ -8,9 +8,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
-using System.Diagnostics;
-using System.IO;
 using Mosa.Compiler.InternalTrace;
 using Mosa.Compiler.Linker;
 using Mosa.Compiler.Metadata;
@@ -18,6 +15,9 @@ using Mosa.Compiler.Metadata.Loader;
 using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Compiler.TypeSystem;
 using Mosa.Compiler.TypeSystem.Cil;
+using System;
+using System.Diagnostics;
+using System.IO;
 
 namespace Mosa.Compiler.Framework
 {
@@ -392,7 +392,7 @@ namespace Mosa.Compiler.Framework
 			foreach (var localVariable in localSigTypes)
 			{
 				locals[index++] = VirtualRegisters.Allocate(Operand.NormalizeSigType(localVariable));
-			
+
 				//Scheduler.ScheduleTypeForCompilation(sigtype); // TODO
 			}
 		}

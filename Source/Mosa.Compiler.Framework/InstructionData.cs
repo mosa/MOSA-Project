@@ -8,10 +8,10 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-using System.Diagnostics;
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Compiler.TypeSystem;
+using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework
 {
@@ -130,10 +130,10 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Gets or sets the invoke target.
+		/// Gets or sets the invoke target method.
 		/// </summary>
-		/// <value>The invoke target.</value>
-		public RuntimeMethod InvokeTarget
+		/// <value>The invoke target method.</value>
+		public RuntimeMethod InvokeMethod
 		{
 			get
 			{

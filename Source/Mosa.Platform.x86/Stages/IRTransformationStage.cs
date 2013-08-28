@@ -165,13 +165,13 @@ namespace Mosa.Platform.x86.Stages
 			{
 				case ConditionCode.Equal:
 					{
-						//  a==b		
+						//  a==b
 						//	mov	eax, 1
 						//	ucomisd	xmm0, xmm1
 						//	jp	L3
 						//	jne	L3
-						//	ret	
-						//L3:		
+						//	ret
+						//L3:
 						//	mov	eax, 0
 
 						Context[] newBlocks = CreateNewBlocksWithContexts(2);
@@ -195,13 +195,13 @@ namespace Mosa.Platform.x86.Stages
 					}
 				case ConditionCode.NotEqual:
 					{
-						//  a!=b			
-						//	mov	eax, 1	
-						//	ucomisd	xmm0, xmm1	
-						//	jp	L5	
-						//	setne	al	
-						//	movzx	eax, al	
-						//L5:			
+						//  a!=b
+						//	mov	eax, 1
+						//	ucomisd	xmm0, xmm1
+						//	jp	L5
+						//	setne	al
+						//	movzx	eax, al
+						//L5:
 
 						Context[] newBlocks = CreateNewBlocksWithContexts(1);
 						Context nextBlock = Split(context);
@@ -222,10 +222,10 @@ namespace Mosa.Platform.x86.Stages
 
 				case ConditionCode.LessThan:
 					{
-						//	a>b and a<b		
-						//	mov	eax, 0	
-						//	ucomisd	xmm1, xmm0	
-						//	seta	al	
+						//	a>b and a<b
+						//	mov	eax, 0
+						//	ucomisd	xmm1, xmm0
+						//	seta	al
 
 						context.SetInstruction(X86.Mov, result, Operand.CreateConstant(0));
 						context.AppendInstruction(instruction, null, right, left);
@@ -234,10 +234,10 @@ namespace Mosa.Platform.x86.Stages
 					}
 				case ConditionCode.GreaterThan:
 					{
-						//	a>b and a<b		
-						//	mov	eax, 0	
-						//	ucomisd	xmm0, xmm1	
-						//	seta	al	
+						//	a>b and a<b
+						//	mov	eax, 0
+						//	ucomisd	xmm0, xmm1
+						//	seta	al
 
 						context.SetInstruction(X86.Mov, result, Operand.CreateConstant(0));
 						context.AppendInstruction(instruction, null, left, right);
@@ -246,10 +246,10 @@ namespace Mosa.Platform.x86.Stages
 					}
 				case ConditionCode.LessOrEqual:
 					{
-						//	a<=b and a>=b			
-						//	mov	eax, 0	
-						//	ucomisd	xmm1, xmm0	
-						//	setae	al	
+						//	a<=b and a>=b
+						//	mov	eax, 0
+						//	ucomisd	xmm1, xmm0
+						//	setae	al
 
 						context.SetInstruction(X86.Mov, result, Operand.CreateConstant(0));
 						context.AppendInstruction(instruction, null, left, right);
@@ -258,10 +258,10 @@ namespace Mosa.Platform.x86.Stages
 					}
 				case ConditionCode.GreaterOrEqual:
 					{
-						//	a<=b and a>=b			
-						//	mov	eax, 0	
-						//	ucomisd	xmm0, xmm1	
-						//	setae	al	
+						//	a<=b and a>=b
+						//	mov	eax, 0
+						//	ucomisd	xmm0, xmm1
+						//	setae	al
 
 						context.SetInstruction(X86.Mov, result, Operand.CreateConstant(0));
 						context.AppendInstruction(instruction, null, right, left);
@@ -269,7 +269,6 @@ namespace Mosa.Platform.x86.Stages
 						break;
 					}
 			}
-
 		}
 
 		/// <summary>
@@ -363,8 +362,6 @@ namespace Mosa.Platform.x86.Stages
 
 				context.AppendInstruction(mov, result, mem);
 			}
-
-			
 		}
 
 		/// <summary>
@@ -619,7 +616,6 @@ namespace Mosa.Platform.x86.Stages
 				context.AppendInstruction(X86.Add, v1, v1, offsetOperand);
 				context.AppendInstruction(GetMove(mem, value), mem, value);
 			}
-
 		}
 
 		/// <summary>

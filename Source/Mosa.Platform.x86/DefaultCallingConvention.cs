@@ -10,6 +10,7 @@
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Signatures;
+using Mosa.Compiler.TypeSystem;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -65,6 +66,9 @@ namespace Mosa.Platform.x86
 
 			Operand target = context.Operand1;
 			Operand result = context.Result;
+			RuntimeMethod method = context.InvokeMethod;
+
+			Debug.Assert(method != null);
 
 			Operand edx = Operand.CreateCPURegister(BuiltInSigType.IntPtr, GeneralPurposeRegister.EDX);
 
@@ -72,20 +76,19 @@ namespace Mosa.Platform.x86
 
 			int stackSize = CalculateStackSizeForParameters(operands);
 
-			context.SetInstruction(X86.Nop);
+			context.Remove();
 
 			if (stackSize != 0)
 			{
 				ReserveStackSizeForCall(context, stackSize, edx);
-				PushOperands(context, operands, stackSize, edx);
+				PushOperands(context, method, operands, stackSize, edx);
 			}
 
-			//context.AppendInstruction(X86.Call, null, target);
+			// the mov/call two-instructions combo is to help facilitate the register allocator
 			context.AppendInstruction(X86.Mov, edx, target);
 			context.AppendInstruction(X86.Call, null, edx);
 
 			FreeStackAfterCall(context, stackSize);
-
 			CleanupReturnValue(context, result);
 		}
 
@@ -134,7 +137,6 @@ namespace Mosa.Platform.x86
 			{
 				Operand xmm0 = Operand.CreateCPURegister(result.Type, SSE2Register.XMM0);
 				context.AppendInstruction(X86.Movsd, result, xmm0);
-
 			}
 			else if (result.StackType == StackTypeCode.Int64)
 			{
@@ -155,10 +157,15 @@ namespace Mosa.Platform.x86
 		/// Calculates the remaining space.
 		/// </summary>
 		/// <param name="context">The context.</param>
+		/// <param name="method">The method.</param>
 		/// <param name="operandStack">The operand stack.</param>
 		/// <param name="space">The space.</param>
-		private void PushOperands(Context context, Stack<Operand> operandStack, int space, Operand edx)
+		/// <param name="edx">The edx.</param>
+		private void PushOperands(Context context, RuntimeMethod method, Stack<Operand> operandStack, int space, Operand edx)
 		{
+			Debug.Assert((method.Parameters.Count + (method.HasThis ? 1 : 0) == operandStack.Count) ||
+						(method.DeclaringType.IsDelegate && method.Parameters.Count == operandStack.Count));
+
 			while (operandStack.Count != 0)
 			{
 				Operand operand = operandStack.Pop();
@@ -273,7 +280,7 @@ namespace Mosa.Platform.x86
 			else if (operand.Type.Type == CilElementType.R8)
 			{
 				context.SetInstruction(X86.Movsd, Operand.CreateCPURegister(operand.Type, SSE2Register.XMM0), operand);
-				
+
 				return;
 			}
 			else if (operand.Type.Type == CilElementType.I8 || operand.Type.Type == CilElementType.U8)

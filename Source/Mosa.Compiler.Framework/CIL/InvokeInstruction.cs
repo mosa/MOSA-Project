@@ -7,12 +7,11 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
-using System.Diagnostics;
-
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.TypeSystem;
 using Mosa.Compiler.TypeSystem.Cil;
+using System;
+using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework.CIL
 {
@@ -176,39 +175,32 @@ namespace Mosa.Compiler.Framework.CIL
 		/// <summary>
 		/// Sets the invoke target.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
+		/// <param name="context">The context.</param>
 		/// <param name="compiler">The compiler.</param>
 		/// <param name="method">The method.</param>
-		private static void SetInvokeTarget(Context ctx, BaseMethodCompiler compiler, RuntimeMethod method)
+		private static void SetInvokeTarget(Context context, BaseMethodCompiler compiler, RuntimeMethod method)
 		{
 			if (method == null)
 				throw new ArgumentNullException(@"method");
 
-			// Signature of the call target
-			// Number of parameters required for the call
-
-			ctx.InvokeTarget = method;
-
-			// Retrieve the target signature
-			var invokeTarget = ctx.InvokeTarget;
+			context.InvokeMethod = method;
 
 			// Fix the parameter list
-			int paramCount = invokeTarget.SigParameters.Length;
+			int paramCount = method.SigParameters.Length;
 
-			if (invokeTarget.HasThis && !invokeTarget.HasExplicitThis)
+			if (method.HasThis && !method.HasExplicitThis)
 				paramCount++;
 
 			// Setup operands for parameters and the return value
-			if (invokeTarget.ReturnType.Type != CilElementType.Void)
+			if (method.ReturnType.Type != CilElementType.Void)
 			{
-				ctx.ResultCount = 1;
-				//ctx.Result = compiler.CreateVirtualRegister(invokeTarget.ReturnType);
-				ctx.Result = compiler.CreateVirtualRegister(Operand.NormalizeSigType(invokeTarget.ReturnType));
+				context.ResultCount = 1;
+				context.Result = compiler.CreateVirtualRegister(Operand.NormalizeSigType(method.ReturnType));
 			}
 			else
-				ctx.ResultCount = 0;
+				context.ResultCount = 0;
 
-			ctx.OperandCount = (byte)paramCount;
+			context.OperandCount = (byte)paramCount;
 		}
 
 		/// <summary>

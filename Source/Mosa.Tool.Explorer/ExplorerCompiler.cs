@@ -16,6 +16,8 @@ namespace Mosa.Tool.Explorer
 {
 	internal class ExplorerCompiler : BaseCompiler
 	{
+		private bool emitBinary;
+
 		/// <summary>
 		/// Prevents a default instance of the <see cref="ExplorerCompiler" /> class from being created.
 		/// </summary>
@@ -24,9 +26,11 @@ namespace Mosa.Tool.Explorer
 		/// <param name="typeLayout">The type layout.</param>
 		/// <param name="internalTrace">The internal trace.</param>
 		/// <param name="compilerOptions">The compiler options.</param>
-		public ExplorerCompiler(IArchitecture architecture, ITypeSystem typeSystem, ITypeLayout typeLayout, IInternalTrace internalTrace, CompilerOptions compilerOptions) :
+		public ExplorerCompiler(IArchitecture architecture, ITypeSystem typeSystem, ITypeLayout typeLayout, IInternalTrace internalTrace, CompilerOptions compilerOptions, bool emitBinary) :
 			base(architecture, typeSystem, typeLayout, new CompilationScheduler(typeSystem, true), internalTrace, new ExplorerLinker(), compilerOptions)
 		{
+			this.emitBinary = emitBinary;
+
 			// Build the assembly compiler pipeline
 			Pipeline.AddRange(new ICompilerStage[] {
 				new PlugStage(),
@@ -48,10 +52,10 @@ namespace Mosa.Tool.Explorer
 		/// </returns>
 		public override BaseMethodCompiler CreateMethodCompiler(RuntimeMethod method)
 		{
-			return new ExplorerMethodCompiler(this, method);
+			return new ExplorerMethodCompiler(this, method, emitBinary);
 		}
 
-		public static void Compile(ITypeSystem typeSystem, ITypeLayout typeLayout, IInternalTrace internalTrace, string platform, bool enabledSSA)
+		public static void Compile(ITypeSystem typeSystem, ITypeLayout typeLayout, IInternalTrace internalTrace, string platform, bool enabledSSA, bool emitBinary)
 		{
 			IArchitecture architecture;
 
@@ -67,7 +71,7 @@ namespace Mosa.Tool.Explorer
 			compilerOptions.EnableSSA = enabledSSA;
 			compilerOptions.EnableSSAOptimizations = enabledSSA && enabledSSA;
 
-			ExplorerCompiler compiler = new ExplorerCompiler(architecture, typeSystem, typeLayout, internalTrace, compilerOptions);
+			ExplorerCompiler compiler = new ExplorerCompiler(architecture, typeSystem, typeLayout, internalTrace, compilerOptions, emitBinary);
 
 			compiler.Compile();
 		}

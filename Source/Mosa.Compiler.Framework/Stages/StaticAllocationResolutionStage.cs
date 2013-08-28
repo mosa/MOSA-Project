@@ -40,7 +40,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private void PerformStaticAllocationOf(Context allocation, Context assignment)
 		{
-			RuntimeType allocatedType = allocation.InvokeTarget.DeclaringType;
+			RuntimeType allocatedType = allocation.InvokeMethod.DeclaringType;
 
 			// Allocate a linker symbol to refer to for this allocation. Use the destination field name as the linker symbol name.
 			string symbolName = assignment.RuntimeField.ToString() + @"<<$cctor";
@@ -126,7 +126,7 @@ namespace Mosa.Compiler.Framework.Stages
 			// Only direct assignment without any casts is compliant. We can't perform casts or anything alike here,
 			// as that is hard to complete at this point of time.
 
-			RuntimeType allocationType = allocation.InvokeTarget.DeclaringType;
+			RuntimeType allocationType = allocation.InvokeMethod.DeclaringType;
 			RuntimeType storageType = assignment.RuntimeField.DeclaringType;
 
 			return ReferenceEquals(allocationType, storageType);

@@ -7,10 +7,10 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
 using MbUnit.Framework;
 using Mosa.Test.Collection;
 using Mosa.Test.System;
+using System;
 
 namespace Mosa.Test.Cases.CIL
 {
@@ -30,7 +30,7 @@ namespace Mosa.Test.Cases.CIL
 		{
 			Assert.AreApproximatelyEqual(DoubleTests.AddR8R8(a, b), Run<double>("Mosa.Test.Collection", "DoubleTests", "AddR8R8", a, b), Tolerance);
 		}
-		
+
 		[Test]
 		public void SubR8R8([R8Number]double a, [R8Number]double b)
 		{

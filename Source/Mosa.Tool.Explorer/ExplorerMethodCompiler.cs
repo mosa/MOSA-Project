@@ -20,7 +20,7 @@ namespace Mosa.Tool.Explorer
 		/// </summary>
 		/// <param name="compiler">The compiler.</param>
 		/// <param name="method">The method.</param>
-		public ExplorerMethodCompiler(ExplorerCompiler compiler, RuntimeMethod method)
+		public ExplorerMethodCompiler(ExplorerCompiler compiler, RuntimeMethod method, bool emitBinary)
 			: base(compiler, method, null, null)
 		{
 			var compilerOptions = Compiler.CompilerOptions;
@@ -50,7 +50,7 @@ namespace Mosa.Tool.Explorer
 				new StackLayoutStage(),
 				new EmptyBlockRemovalStage(),
 				new LoopAwareBlockOrderStage(),
-				new CodeGenerationStage(),
+				new CodeGenerationStage(emitBinary),
 			});
 		}
 	}

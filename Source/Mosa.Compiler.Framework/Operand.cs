@@ -131,7 +131,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Retrieves the runtime member.
 		/// </summary>
-		public RuntimeMember RuntimeMember { get { return runtimeMember; } }
+		public RuntimeMember RuntimeMember { get { return runtimeMember; } private set { runtimeMember = value; } }
 
 		/// <summary>
 		/// Gets the ssa version.
@@ -384,7 +384,9 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		public static Operand CreateSymbolFromMethod(RuntimeMethod method)
 		{
-			return CreateSymbol(BuiltInSigType.IntPtr, method.FullName);
+			Operand operand = CreateSymbol(BuiltInSigType.IntPtr, method.FullName);
+			operand.RuntimeMember = method;
+			return operand;
 		}
 
 		/// <summary>

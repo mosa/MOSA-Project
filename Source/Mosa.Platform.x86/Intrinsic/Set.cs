@@ -33,7 +33,7 @@ namespace Mosa.Platform.x86.Intrinsic
 
 			Operand edx = methodCompiler.CreateVirtualRegister(dest.Type);
 			Operand eax = methodCompiler.CreateVirtualRegister(value.Type);
-			Operand memory = Operand.CreateMemoryAddress(new SigType(context.InvokeTarget.SigParameters[1].Type), edx, 0);
+			Operand memory = Operand.CreateMemoryAddress(new SigType(context.InvokeMethod.SigParameters[1].Type), edx, 0);
 
 			context.SetInstruction(X86.Mov, edx, dest);
 			context.AppendInstruction(X86.Mov, eax, value);

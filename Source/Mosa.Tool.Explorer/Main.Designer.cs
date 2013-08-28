@@ -48,6 +48,7 @@
 			this.showSizes = new System.Windows.Forms.ToolStripMenuItem();
 			this.includeTestKorlibToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.enableSSAToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.enableBinaryCodeGenerationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
 			this.treeView = new System.Windows.Forms.TreeView();
 			this.splitContainer1 = new System.Windows.Forms.SplitContainer();
@@ -208,7 +209,8 @@
             this.showTokenValues,
             this.showSizes,
             this.includeTestKorlibToolStripMenuItem,
-            this.enableSSAToolStripMenuItem});
+            this.enableSSAToolStripMenuItem,
+            this.enableBinaryCodeGenerationToolStripMenuItem});
 			this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
 			this.optionsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
 			this.optionsToolStripMenuItem.Text = "Options";
@@ -219,7 +221,7 @@
 			this.showTokenValues.CheckOnClick = true;
 			this.showTokenValues.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.showTokenValues.Name = "showTokenValues";
-			this.showTokenValues.Size = new System.Drawing.Size(210, 22);
+			this.showTokenValues.Size = new System.Drawing.Size(237, 22);
 			this.showTokenValues.Text = "Show Token Values";
 			this.showTokenValues.Click += new System.EventHandler(this.showTokenValues_Click);
 			// 
@@ -229,7 +231,7 @@
 			this.showSizes.CheckOnClick = true;
 			this.showSizes.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.showSizes.Name = "showSizes";
-			this.showSizes.Size = new System.Drawing.Size(210, 22);
+			this.showSizes.Size = new System.Drawing.Size(237, 22);
 			this.showSizes.Text = "Show Sizes";
 			this.showSizes.Click += new System.EventHandler(this.showSizes_Click);
 			// 
@@ -237,7 +239,7 @@
 			// 
 			this.includeTestKorlibToolStripMenuItem.CheckOnClick = true;
 			this.includeTestKorlibToolStripMenuItem.Name = "includeTestKorlibToolStripMenuItem";
-			this.includeTestKorlibToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
+			this.includeTestKorlibToolStripMenuItem.Size = new System.Drawing.Size(237, 22);
 			this.includeTestKorlibToolStripMenuItem.Text = "Include Test Components";
 			// 
 			// enableSSAToolStripMenuItem
@@ -246,8 +248,17 @@
 			this.enableSSAToolStripMenuItem.CheckOnClick = true;
 			this.enableSSAToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.enableSSAToolStripMenuItem.Name = "enableSSAToolStripMenuItem";
-			this.enableSSAToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
+			this.enableSSAToolStripMenuItem.Size = new System.Drawing.Size(237, 22);
 			this.enableSSAToolStripMenuItem.Text = "Enable SSA";
+			// 
+			// enableBinaryCodeGenerationToolStripMenuItem
+			// 
+			this.enableBinaryCodeGenerationToolStripMenuItem.Checked = true;
+			this.enableBinaryCodeGenerationToolStripMenuItem.CheckOnClick = true;
+			this.enableBinaryCodeGenerationToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.enableBinaryCodeGenerationToolStripMenuItem.Name = "enableBinaryCodeGenerationToolStripMenuItem";
+			this.enableBinaryCodeGenerationToolStripMenuItem.Size = new System.Drawing.Size(237, 22);
+			this.enableBinaryCodeGenerationToolStripMenuItem.Text = "Enable Binary Code Generation";
 			// 
 			// openFileDialog
 			// 
@@ -534,5 +545,6 @@
 		private System.Windows.Forms.TabPage tabPage2;
 		private System.Windows.Forms.ComboBox cbDebugStages;
 		private System.Windows.Forms.RichTextBox rbOtherResult;
+		private System.Windows.Forms.ToolStripMenuItem enableBinaryCodeGenerationToolStripMenuItem;
 	}
 }
