@@ -74,7 +74,6 @@ namespace Mosa.Compiler.Framework
 			int instanceOffset = methodCompiler.TypeLayout.GetFieldOffset(instanceField);
 			Operand instanceOffsetOperand = Operand.CreateConstant(BuiltInSigType.IntPtr, instanceOffset);
 
-
 			Context b0 = CreateMethodStructure(methodCompiler, false);
 			Context b1 = CreateNewBlock(methodCompiler);
 			Context b2 = CreateNewBlock(methodCompiler);

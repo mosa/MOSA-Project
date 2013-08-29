@@ -1,9 +1,15 @@
-﻿using MbUnit.Framework;
+﻿/*
+ * (c) 2008 MOSA - The Managed Operating System Alliance
+ *
+ * Licensed under the terms of the New BSD License.
+ *
+ * Authors:
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
+ */
+
+using MbUnit.Framework;
 using Mosa.Test.System;
 using Mosa.Test.System.Numbers;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Mosa.Test.Cases.CIL
 {

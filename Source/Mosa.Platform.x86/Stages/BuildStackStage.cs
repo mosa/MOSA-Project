@@ -109,7 +109,7 @@ namespace Mosa.Platform.x86.Stages
 				context.AppendInstruction(X86.Sub, esp, esp, Operand.CreateConstant(-methodCompiler.StackLayout.StackSize));
 			}
 
-			if (InsertBreaks) // && !methodCompiler.Method.FullName.Contains("cctor"))
+			if (InsertBreaks)// && !methodCompiler.Method.FullName.Equals(".cctor"))
 			{
 				 //Note that if you debug using visual studio you must enable unmanaged code
 				 //debugging, otherwise the function will never return and the breakpoint will

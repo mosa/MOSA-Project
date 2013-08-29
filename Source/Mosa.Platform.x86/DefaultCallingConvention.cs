@@ -200,43 +200,6 @@ namespace Mosa.Platform.x86
 		{
 			Debug.Assert(!op.IsMemoryAddress);
 
-			if (op.IsMemoryAddress)
-			{
-				if (op.Type.Type == CilElementType.ValueType)
-				{
-					for (int i = 0; i < parameterSize; i += 4)
-					{
-						context.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(op.Type, edx, stackSize + i), Operand.CreateMemoryAddress(op.Type, edx, op.Offset + i));
-					}
-
-					return;
-				}
-
-				if (op.StackType == StackTypeCode.F)
-				{
-					Operand xmm1 = Operand.CreateCPURegister(op.Type, SSE2Register.XMM0);
-
-					if (op.Type.Type == CilElementType.R8 && stackSize == 4)
-					{
-						context.AppendInstruction(X86.Cvtsd2ss, xmm1, op);
-					}
-					context.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(edx.Type, edx, stackSize), xmm1);
-
-					return;
-				}
-
-				if (op.StackType == StackTypeCode.Int64)
-				{
-					context.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(op.Type, edx, stackSize), op.Low);
-					context.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(op.Type, edx, stackSize + 4), op.High);
-					return;
-				}
-
-				context.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(edx.Type, edx, stackSize), op);
-
-				return;
-			}
-			
 			if (op.StackType == StackTypeCode.Int64)
 			{
 				context.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(BuiltInSigType.Int32, edx, stackSize), op.Low);
@@ -247,14 +210,16 @@ namespace Mosa.Platform.x86
 
 			if (op.StackType == StackTypeCode.F)
 			{
-				Operand xmm1 = Operand.CreateCPURegister(op.Type, SSE2Register.XMM0);
-
-				if (op.Type.Type == CilElementType.R8 && stackSize == 4)
+				if (op.Type.Type == CilElementType.R8 && parameterSize == 4)
 				{
+					Operand xmm1 = Operand.CreateCPURegister(BuiltInSigType.Single, SSE2Register.XMM0);
 					context.AppendInstruction(X86.Cvtsd2ss, xmm1, op);
+					architecture.InsertMove(context, Operand.CreateMemoryAddress(edx.Type, edx, stackSize), xmm1);
 				}
-				context.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(edx.Type, edx, stackSize), xmm1);
-
+				else
+				{
+					architecture.InsertMove(context, Operand.CreateMemoryAddress(edx.Type, edx, stackSize), op);
+				}
 				return;
 			}
 

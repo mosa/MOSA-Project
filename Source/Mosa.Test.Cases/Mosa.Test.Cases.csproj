@@ -80,11 +80,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CIL\BooleanFixture.cs" />
-    <Compile Include="CIL\BoxingFixture.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>BoxingFixture.tt</DependentUpon>
-    </Compile>
+    <Compile Include="CIL\BoxingFixture.cs" />
     <Compile Include="CIL\CallVirtualFixture.cs" />
     <Compile Include="CIL\CharFixture.cs" />
     <Compile Include="CIL\NewDerivedObjectFixture.cs" />
@@ -190,10 +186,6 @@
     <None Include="CIL\ComparisonFixture.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>ComparisonFixture.cs</LastGenOutput>
-    </None>
-    <None Include="CIL\BoxingFixture.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>BoxingFixture.cs</LastGenOutput>
     </None>
     <None Include="CIL\GenericCallFixture.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
