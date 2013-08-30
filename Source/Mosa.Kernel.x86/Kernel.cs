@@ -28,7 +28,7 @@ namespace Mosa.Kernel.x86
 			//ProcessManager.Setup();
 			//TaskManager.Setup();
 			//SmbiosManager.Setup();
-			//ConsoleManager.Setup();
+			ConsoleManager.Setup();
 
 			//Serial.Setup();
 		}

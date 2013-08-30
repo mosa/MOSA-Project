@@ -117,6 +117,7 @@ namespace Mosa.Tool.Compiler.Stages
 		{
 			Operand symbolOperand = Operand.CreateSymbolFromMethod(method);
 			ctx.AppendInstruction(IRInstruction.Call, null, symbolOperand);
+			ctx.InvokeMethod = method;
 		}
 
 		#endregion Methods

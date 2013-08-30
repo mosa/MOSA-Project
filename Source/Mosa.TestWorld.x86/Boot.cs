@@ -24,8 +24,6 @@ namespace Mosa.TestWorld.x86
 		/// </summary>
 		public static void Main()
 		{
-			Write('*', 3);
-
 			Screen.Color = 0x0;
 			Screen.Clear();
 			Screen.GotoTop();
@@ -38,33 +36,39 @@ namespace Mosa.TestWorld.x86
 			Screen.Write('O');
 			Screen.Write('S');
 			Screen.Write("!");
+			Screen.Write(" ");
 
 			SSE.Setup();
-			Write('0', 0x0E);
+			Screen.Write('0');
 			//DebugClient.Setup(Serial.COM1);
 			IDT.SetInterruptHandler(null);
-			Write('1', 0x0E);
+			Screen.Write('1');
 			Multiboot.Setup();
-			Write('2', 0x0E);
+			Screen.Write('2');
 			ProgrammableInterruptController.Setup();
-			Write('3', 0x0E);
+			Screen.Write('3');
 			GDT.Setup();
-			Write('4', 0x0E);
+			Screen.Write('4');
 			IDT.Setup();
-			Write('5', 0x0E);
+			Screen.Write('5');
 			PageFrameAllocator.Setup();
-			Write('6', 0x0E);
-			//PageTable.Setup();
-			//VirtualPageAllocator.Setup();
-			Write('7', 0x0E);
-
-			RunTests();
-			Write('8', 0x0E);
-
+			Screen.Write('6');
+			PageTable.Setup();
+			Screen.Write('7');
+			VirtualPageAllocator.Setup();
+			Screen.Write('8');
+			ConsoleManager.Setup();
+			Screen.Write('9');
 			CMOS cmos = new CMOS();
-			Write('9', 0x0E);
+			Screen.Write('0');
+			Console = ConsoleManager.Controller.Boot;
+			Screen.Write('A');
 
-			//Console.Write(@"www.mosa-project.org");
+			Console.Color = 0x0E;
+			Console.BackgroundColor = 1;
+			Console.WriteLine();
+			Console.WriteLine();
+			Console.WriteLine("MOSA is alive!");
 
 			byte last = 0;
 
@@ -75,7 +79,7 @@ namespace Mosa.TestWorld.x86
 				{
 					last = cmos.Second;
 					//DebugClient.SendAlive();
-					Screen.Write(".");
+					Screen.Write('.');
 				}
 
 				//DebugClient.Process();
@@ -86,20 +90,7 @@ namespace Mosa.TestWorld.x86
 
 		public static void ProcessInterrupt(byte interrupt, byte errorCode)
 		{
-			Screen.Write("!");
-		}
-
-		public static void RunTests()
-		{
-			DoubleTests.CeqR8R8(1d, 1d);
-			//if (DoubleTests.AddR8R8(1d, 1d) == 2d)
-			//	Screen.Write("!");
-		}
-
-		public static void Write(char chr, byte color)
-		{
-			Native.Set8(0x0B8040, (byte)chr);
-			Native.Set8(0x0B8041, color);
+			//Write2('X', 0x0E);
 		}
 
 	}

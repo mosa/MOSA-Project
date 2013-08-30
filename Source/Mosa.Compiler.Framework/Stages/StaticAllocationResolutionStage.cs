@@ -54,10 +54,10 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 
 			// Issue a load request before the newobj and before the assignment.
-			Operand symbol1 = this.InsertLoadBeforeInstruction(allocation, symbolName, assignment.RuntimeField.SigType);
+			Operand symbol1 = InsertLoadBeforeInstruction(allocation, symbolName, assignment.RuntimeField.SigType);
 			allocation.Operand1 = symbol1;
 
-			Operand symbol2 = this.InsertLoadBeforeInstruction(assignment, symbolName, assignment.RuntimeField.SigType);
+			Operand symbol2 = InsertLoadBeforeInstruction(assignment, symbolName, assignment.RuntimeField.SigType);
 			assignment.Operand1 = symbol2;
 
 			// Change the newobj to a call and increase the operand count to include the this ptr.
