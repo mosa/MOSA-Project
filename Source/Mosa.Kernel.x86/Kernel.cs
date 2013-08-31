@@ -29,7 +29,7 @@ namespace Mosa.Kernel.x86
 			VirtualPageAllocator.Setup();
 			//ProcessManager.Setup();
 			//TaskManager.Setup();
-			//SmbiosManager.Setup();
+			SmbiosManager.Setup();
 			ConsoleManager.Setup();
 
 			//Serial.Setup();
