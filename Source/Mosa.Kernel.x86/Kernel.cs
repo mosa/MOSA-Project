@@ -18,6 +18,8 @@ namespace Mosa.Kernel.x86
 	{
 		public static void Setup()
 		{
+			IDT.SetInterruptHandler(null);
+			SSE.Setup();
 			Multiboot.Setup();
 			ProgrammableInterruptController.Setup();
 			GDT.Setup();
