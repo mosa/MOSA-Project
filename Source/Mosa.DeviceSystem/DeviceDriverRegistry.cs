@@ -100,21 +100,32 @@ namespace Mosa.DeviceSystem
 
 			foreach (System.Type type in types)
 			{
-				object[] attributes = type.GetCustomAttributes(typeof(IDeviceDriver), false);
-
-				foreach (object attribute in attributes)
-					if (((attribute as IDeviceDriver).Platforms & platformArchitecture) != 0)
-					{
-						DeviceDriver deviceDriver = new DeviceDriver(attribute as IDeviceDriver, type);
-
-						object[] memAttributes = type.GetCustomAttributes(typeof(DeviceDriverPhysicalMemoryAttribute), false);
-
-						foreach (object memAttribute in memAttributes)
-							deviceDriver.Add(memAttribute as DeviceDriverPhysicalMemoryAttribute);
-
-						deviceDrivers.Add(deviceDriver);
-					}
+                RegisterDeviceDriver(type);
 			}
 		}
+
+        /// <summary>
+        /// Registers a device driver.
+        /// </summary>
+        /// <param name="type">The driver class type</param>
+        public void RegisterDeviceDriver(System.Type type)
+        {
+            object[] attributes = type.GetCustomAttributes(typeof(IDeviceDriver), false);
+
+            foreach (object attribute in attributes)
+            {
+                if (((attribute as IDeviceDriver).Platforms & platformArchitecture) != 0)
+                {
+                    DeviceDriver deviceDriver = new DeviceDriver(attribute as IDeviceDriver, type);
+
+                    object[] memAttributes = type.GetCustomAttributes(typeof(DeviceDriverPhysicalMemoryAttribute), false);
+
+                    foreach (object memAttribute in memAttributes)
+                        deviceDriver.Add(memAttribute as DeviceDriverPhysicalMemoryAttribute);
+
+                    deviceDrivers.Add(deviceDriver);
+                }
+            }
+        }
 	}
 }
