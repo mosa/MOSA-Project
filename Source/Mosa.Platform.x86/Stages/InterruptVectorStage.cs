@@ -66,12 +66,12 @@ namespace Mosa.Platform.x86.Stages
 
 				ctx.AppendInstruction(X86.Cli);
 				if (i <= 7 || i >= 16 | i == 9) // For IRQ 8, 10, 11, 12, 13, 14 the cpu will automatically pushed the error code
-					ctx.AppendInstruction(X86.Push, null, Operand.CreateConstant(BuiltInSigType.SByte, 0x0));
-				ctx.AppendInstruction(X86.Push, null, Operand.CreateConstant(BuiltInSigType.SByte, (byte)i));
+					ctx.AppendInstruction(X86.Push, null, Operand.CreateConstant((uint)0x0));
+				ctx.AppendInstruction(X86.Push, null, Operand.CreateConstant((uint)i));
 				ctx.AppendInstruction(X86.Pushad);
 				ctx.AppendInstruction(X86.Call, null, interruptMethod);
 				ctx.AppendInstruction(X86.Popad);
-				ctx.AppendInstruction(X86.Add, esp, esp, Operand.CreateConstant((int)0x08));
+				ctx.AppendInstruction(X86.Add, esp, esp, Operand.CreateConstant((uint)0x08));
 				ctx.AppendInstruction(X86.Sti);
 				ctx.AppendInstruction(X86.IRetd);
 

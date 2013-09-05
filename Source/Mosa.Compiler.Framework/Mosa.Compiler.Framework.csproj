@@ -180,7 +180,6 @@
     <Compile Include="Stages\MethodCompilerSchedulerStage.cs" />
     <Compile Include="Stages\PlatformStubStage.cs" />
     <Compile Include="IIntrinsicPlatformMethod.cs" />
-    <Compile Include="IBlockOrderStage.cs" />
     <Compile Include="IPipelineStage.cs" />
     <Compile Include="Stages\CILTransformationStage.cs" />
     <Compile Include="CIL\ConstrainedPrefixInstruction.cs" />

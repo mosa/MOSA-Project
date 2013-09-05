@@ -197,12 +197,12 @@ namespace Mosa.Compiler.Framework
 				}
 			}
 
-			if (context.InvokeMethod != null)
-			{
-				s.Append(" {");
-				s.Append(context.InvokeMethod.FullName);
-				s.Append("}");
-			}
+			//if (context.InvokeMethod != null)
+			//{
+			//	s.Append(" {");
+			//	s.Append(context.InvokeMethod.FullName);
+			//	s.Append("}");
+			//}
 
 			if (context.RuntimeField != null)
 			{

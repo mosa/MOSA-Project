@@ -63,7 +63,9 @@ namespace Mosa.TestWorld.x86
 			Screen.Write('0');
 			Console = ConsoleManager.Controller.Boot;
 			Screen.Write('A');
-
+			IDT.SetInterruptHandler(ProcessInterrupt);
+			Screen.Write('B');
+			
 			Console.Color = 0x0E;
 			Console.BackgroundColor = 1;
 			Console.WriteLine();
@@ -71,10 +73,11 @@ namespace Mosa.TestWorld.x86
 			Console.WriteLine("MOSA is alive!");
 
 			byte last = 0;
+			
+			Console.WriteLine();
 
 			while (true)
 			{
-
 				if (cmos.Second != last)
 				{
 					last = cmos.Second;
@@ -88,10 +91,34 @@ namespace Mosa.TestWorld.x86
 			}
 		}
 
+		//private static uint counter = 0;
+
 		public static void ProcessInterrupt(byte interrupt, byte errorCode)
 		{
-			//Write2('X', 0x0E);
+			//uint c = Console.Column;
+			//uint r = Console.Row;
+			//byte col = Console.Color;
+			//byte back = Console.BackgroundColor;
+
+			//Console.Column = 31;
+			//Console.Row = 0;
+			//Console.Color = Colors.Cyan;
+			//Console.BackgroundColor = Colors.Black;
+
+			//counter++;
+
+			//Console.Write(counter, 10, 7);
+			//Console.Write(':');
+			//Console.Write(interrupt, 16, 2);
+			//Console.Write(':');
+			//Console.Write(errorCode, 16, 2);
+
+			//Console.Column = c;
+			//Console.Row = r;
+			//Console.Color = col;
+			//Console.BackgroundColor = back;
 		}
+
 
 	}
 }

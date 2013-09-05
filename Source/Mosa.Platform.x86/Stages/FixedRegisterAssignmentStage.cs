@@ -26,7 +26,9 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IX86Visitor.In(Context context)
 		{
-			if (context.Result.IsCPURegister && context.Operand1.IsCPURegister)
+			if (context.Result.IsCPURegister && context.Operand1.IsCPURegister &&
+				context.Result.Register == GeneralPurposeRegister.EAX &&
+				context.Operand1.Register == GeneralPurposeRegister.EDX)
 				return;
 
 			Operand result = context.Result;
@@ -49,7 +51,9 @@ namespace Mosa.Platform.x86.Stages
 			// TRANSFORM: OUT <= EDX, EAX
 			// OPTIONAL TODO: IN imm8, EAX
 
-			if (context.Operand1.IsCPURegister && context.Operand2.IsCPURegister)
+			if (context.Operand1.IsCPURegister && context.Operand2.IsCPURegister &&
+				context.Operand1.Register == GeneralPurposeRegister.EDX &&
+				context.Operand2.Register == GeneralPurposeRegister.EAX)
 				return;
 
 			Operand operand1 = context.Operand1;
@@ -69,7 +73,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IX86Visitor.Cdq(Context context)
 		{
-			if (context.Result.IsCPURegister && context.Result2.IsCPURegister & context.Operand1.IsCPURegister)
+			if (context.Result.IsCPURegister && context.Result2.IsCPURegister && context.Operand1.IsCPURegister)
 				return;
 
 			Operand operand1 = context.Operand1;
@@ -91,7 +95,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IX86Visitor.Mul(Context context)
 		{
-			if (context.Result.IsCPURegister && context.Result2.IsCPURegister & context.Operand1.IsCPURegister && context.Operand2.IsRegister)
+			if (context.Result.IsCPURegister && context.Result2.IsCPURegister && context.Operand1.IsCPURegister && context.Operand2.IsRegister)
 				if (context.Result.Register == GeneralPurposeRegister.EDX &&
 					context.Result2.Register == GeneralPurposeRegister.EAX &&
 					context.Operand1.Register == GeneralPurposeRegister.EAX)
@@ -128,7 +132,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IX86Visitor.Div(Context context)
 		{
-			if (context.Result.IsCPURegister && context.Result2.IsCPURegister & context.Operand1.IsCPURegister)
+			if (context.Result.IsCPURegister && context.Result2.IsCPURegister && context.Operand1.IsCPURegister)
 				if (context.Result.Register == GeneralPurposeRegister.EDX &&
 					context.Result2.Register == GeneralPurposeRegister.EAX &&
 					context.Operand1.Register == GeneralPurposeRegister.EDX &&
