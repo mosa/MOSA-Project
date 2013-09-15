@@ -43,10 +43,7 @@ namespace Mosa.Compiler.Linker
 		/// Gets the length of the section in bytes.
 		/// </summary>
 		/// <value>The length of the section in bytes.</value>
-		public abstract long Length
-		{
-			get;
-		}
+		public abstract long Length { get; }
 
 		/// <summary>
 		/// Gets the name.

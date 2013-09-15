@@ -173,7 +173,7 @@ namespace Mosa.Platform.x86
 			}
 			else if (displacement.IsRuntimeMember)
 			{
-				linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuiltInPatch.I4, MethodName, pos, 0, ((displacement.RuntimeMember) as RuntimeField).FullName, displacement.Offset);
+				linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuiltInPatch.I4, MethodName, pos, 0, ((displacement.RuntimeMember) as RuntimeField).FullName, displacement.Displacement);
 				codeStream.Position += 4;
 			}
 			else if (displacement.IsSymbol)
@@ -183,11 +183,11 @@ namespace Mosa.Platform.x86
 			}
 			else if (displacement.IsMemoryAddress && displacement.OffsetBase != null && displacement.OffsetBase.IsConstant)
 			{
-				codeStream.Write((int)(displacement.OffsetBase.ValueAsLongInteger + displacement.Offset), Endianness.Little);
+				codeStream.Write((int)(displacement.OffsetBase.ValueAsLongInteger + displacement.Displacement), Endianness.Little);
 			}
 			else
 			{
-				codeStream.Write((int)displacement.Offset, Endianness.Little);
+				codeStream.Write((int)displacement.Displacement, Endianness.Little);
 			}
 		}
 
@@ -200,7 +200,7 @@ namespace Mosa.Platform.x86
 			if (op.IsStackLocal || op.IsMemoryAddress)
 			{
 				// Add the displacement
-				codeStream.Write((int)op.Offset, Endianness.Little);
+				codeStream.Write((int)op.Displacement, Endianness.Little);
 			}
 			else if (op.IsConstant)
 			{
@@ -342,9 +342,9 @@ namespace Mosa.Platform.x86
 		{
 			codeStream.WriteByte(0xEA);
 
-			// HACK: Determines the IP address of current instruction, should use the linker instead
+			// HACK: Determines the EIP address of current instruction, should use the linker instead
 			LinkerSection linkerSection = linker.GetSection(SectionKind.Text);
-			if (linkerSection != null) // To assist TypeExplorer, which returns null from GetSection method
+			if (linkerSection != null) // The Explorer Tool returns null
 			{
 				codeStream.Write((int)(linkerSection.VirtualAddress + linkerSection.Length + 6), Endianness.Little);
 			}
@@ -362,7 +362,7 @@ namespace Mosa.Platform.x86
 			if (op.IsStackLocal || op.IsMemoryAddress)
 			{
 				// Add the displacement
-				codeStream.Write((int)op.Offset, Endianness.Little);
+				codeStream.Write((int)op.Displacement, Endianness.Little);
 			}
 			else if (op.IsConstant)
 			{

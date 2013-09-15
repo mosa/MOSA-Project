@@ -65,7 +65,9 @@
 			this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
 			this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
 			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+			this.toolStripButton3 = new System.Windows.Forms.ToolStripButton();
 			this.toolStripButton4 = new System.Windows.Forms.ToolStripButton();
+			this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
 			this.cbPlatform = new System.Windows.Forms.ComboBox();
 			label2 = new System.Windows.Forms.Label();
 			label1 = new System.Windows.Forms.Label();
@@ -425,7 +427,9 @@
             this.toolStripButton1,
             this.toolStripButton2,
             this.toolStripSeparator1,
-            this.toolStripButton4});
+            this.toolStripButton3,
+            this.toolStripButton4,
+            this.toolStripSeparator2});
 			this.toolStrip1.Location = new System.Drawing.Point(0, 24);
 			this.toolStrip1.Name = "toolStrip1";
 			this.toolStrip1.Size = new System.Drawing.Size(811, 25);
@@ -455,14 +459,28 @@
 			this.toolStripSeparator1.Name = "toolStripSeparator1";
 			this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
 			// 
+			// toolStripButton3
+			// 
+			this.toolStripButton3.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton3.Image")));
+			this.toolStripButton3.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.toolStripButton3.Name = "toolStripButton3";
+			this.toolStripButton3.Size = new System.Drawing.Size(70, 22);
+			this.toolStripButton3.Text = "Emulate";
+			this.toolStripButton3.Click += new System.EventHandler(this.toolStripButton3_Click_1);
+			// 
 			// toolStripButton4
 			// 
 			this.toolStripButton4.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton4.Image")));
 			this.toolStripButton4.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButton4.Name = "toolStripButton4";
-			this.toolStripButton4.Size = new System.Drawing.Size(75, 22);
-			this.toolStripButton4.Text = "Compile:";
+			this.toolStripButton4.Size = new System.Drawing.Size(72, 22);
+			this.toolStripButton4.Text = "Compile";
 			this.toolStripButton4.Click += new System.EventHandler(this.toolStripButton4_Click);
+			// 
+			// toolStripSeparator2
+			// 
+			this.toolStripSeparator2.Name = "toolStripSeparator2";
+			this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
 			// 
 			// cbPlatform
 			// 
@@ -473,7 +491,7 @@
             "x86II",
             "AVR32",
             "Null"});
-			this.cbPlatform.Location = new System.Drawing.Point(213, 26);
+			this.cbPlatform.Location = new System.Drawing.Point(329, 25);
 			this.cbPlatform.Name = "cbPlatform";
 			this.cbPlatform.Size = new System.Drawing.Size(58, 21);
 			this.cbPlatform.TabIndex = 28;
@@ -546,5 +564,7 @@
 		private System.Windows.Forms.ComboBox cbDebugStages;
 		private System.Windows.Forms.RichTextBox rbOtherResult;
 		private System.Windows.Forms.ToolStripMenuItem enableBinaryCodeGenerationToolStripMenuItem;
+		private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+		private System.Windows.Forms.ToolStripButton toolStripButton3;
 	}
 }

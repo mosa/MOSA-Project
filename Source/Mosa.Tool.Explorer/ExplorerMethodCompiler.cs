@@ -20,8 +20,11 @@ namespace Mosa.Tool.Explorer
 		/// </summary>
 		/// <param name="compiler">The compiler.</param>
 		/// <param name="method">The method.</param>
-		public ExplorerMethodCompiler(ExplorerCompiler compiler, RuntimeMethod method, bool emitBinary)
-			: base(compiler, method, null, null)
+		/// <param name="basicBlocks">The basic blocks.</param>
+		/// <param name="instructionSet">The instruction set.</param>
+		/// <param name="emitBinary">if set to <c>true</c> [emit binary].</param>
+		public ExplorerMethodCompiler(ExplorerCompiler compiler, RuntimeMethod method, BasicBlocks basicBlocks, InstructionSet instructionSet, bool emitBinary)
+			: base(compiler, method, basicBlocks, instructionSet)
 		{
 			var compilerOptions = Compiler.CompilerOptions;
 

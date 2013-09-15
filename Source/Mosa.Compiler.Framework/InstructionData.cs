@@ -63,6 +63,11 @@ namespace Mosa.Compiler.Framework
 		public Operand Result2;
 
 		/// <summary>
+		/// The condition code
+		/// </summary>
+		public ConditionCode ConditionCode;
+
+		/// <summary>
 		///  Holds the branch targets
 		/// </summary>
 		public int[] BranchTargets;
@@ -184,16 +189,6 @@ namespace Mosa.Compiler.Framework
 		public HeapIndexToken TokenType
 		{
 			get { return (HeapIndexToken)Other; }
-			set { Other = value; }
-		}
-
-		/// <summary>
-		/// Gets or sets the condition code.
-		/// </summary>
-		/// <value>The condition code.</value>
-		public ConditionCode ConditionCode
-		{
-			get { return (ConditionCode)Other; }
 			set { Other = value; }
 		}
 

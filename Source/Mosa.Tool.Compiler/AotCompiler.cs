@@ -50,12 +50,14 @@ namespace Mosa.Tool.Compiler
 		/// Creates the method compiler.
 		/// </summary>
 		/// <param name="method">The method.</param>
+		/// <param name="basicBlocks">The basic blocks.</param>
+		/// <param name="instructionSet">The instruction set.</param>
 		/// <returns>
 		/// An instance of a MethodCompilerBase for the given type/method pair.
 		/// </returns>
-		public override BaseMethodCompiler CreateMethodCompiler(RuntimeMethod method)
+		public override BaseMethodCompiler CreateMethodCompiler(RuntimeMethod method, BasicBlocks basicBlocks, InstructionSet instructionSet)
 		{
-			return new AotMethodCompiler(this, method);
+			return new AotMethodCompiler(this, method, basicBlocks, instructionSet);
 		}
 
 		/// <summary>
@@ -88,8 +90,8 @@ namespace Mosa.Tool.Compiler
 			TypeLayout typeLayout = new TypeLayout(typeSystem, nativePointerSize, nativePointerAlignment);
 
 			ConfigurableTraceFilter filter = new ConfigurableTraceFilter();
-			filter.MethodMatch = MatchType.Contains; // MatchType.NotContains
-			filter.Method = "NaN"; //  "InterruptISR";
+			filter.MethodMatch = MatchType.None;
+			filter.Method = string.Empty;
 			filter.StageMatch = MatchType.Any;
 			filter.TypeMatch = MatchType.Any;
 			filter.ExcludeInternalMethods = false;

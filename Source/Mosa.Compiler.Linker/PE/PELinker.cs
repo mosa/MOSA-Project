@@ -256,48 +256,38 @@ namespace Mosa.Compiler.Linker.PE
 
 			// Write the section headers
 			uint address = this.LoadSectionAlignment;
+			
 			foreach (LinkerSection section in Sections)
 			{
-				if (section.Length > 0)
+				if (section.Length == 0)
+					continue;
+
+				ImageSectionHeader image = new ImageSectionHeader();
+				image.Name = section.Name;
+				image.VirtualSize = (uint)section.Length;
+				image.VirtualAddress = (uint)(section.VirtualAddress - this.BaseAddress);
+
+				if (section.SectionKind != SectionKind.BSS)
+					image.SizeOfRawData = (uint)section.Length;
+
+				image.PointerToRawData = address;
+				image.PointerToRelocations = 0;
+				image.PointerToLinenumbers = 0;
+				image.NumberOfRelocations = 0;
+				image.NumberOfLinenumbers = 0;
+
+				switch (section.SectionKind)
 				{
-					ImageSectionHeader ish = new ImageSectionHeader();
-					ish.Name = section.Name;
-					ish.VirtualSize = (uint)section.Length;
-					ish.VirtualAddress = (uint)(section.VirtualAddress - this.BaseAddress);
-
-					if (section.SectionKind != SectionKind.BSS)
-						ish.SizeOfRawData = (uint)section.Length;
-
-					ish.PointerToRawData = address;
-					ish.PointerToRelocations = 0;
-					ish.PointerToLinenumbers = 0;
-					ish.NumberOfRelocations = 0;
-					ish.NumberOfLinenumbers = 0;
-
-					switch (section.SectionKind)
-					{
-						case SectionKind.BSS:
-							ish.Characteristics = 0x40000000 | 0x80000000 | 0x00000080;
-							break;
-
-						case SectionKind.Data:
-							ish.Characteristics = 0x40000000 | 0x80000000 | 0x00000040;
-							break;
-
-						case SectionKind.ROData:
-							ish.Characteristics = 0x40000000 | 0x00000040;
-							break;
-
-						case SectionKind.Text:
-							ish.Characteristics = 0x20000000 | 0x40000000 | 0x80000000 | 0x00000020;
-							break;
-					}
-
-					ish.Write(writer);
-
-					address += (uint)section.Length;
-					address = AlignValue(address, LoadSectionAlignment);
+					case SectionKind.BSS: image.Characteristics = 0x40000000 | 0x80000000 | 0x00000080; break;
+					case SectionKind.Data: image.Characteristics = 0x40000000 | 0x80000000 | 0x00000040; break;
+					case SectionKind.ROData: image.Characteristics = 0x40000000 | 0x00000040; break;
+					case SectionKind.Text: image.Characteristics = 0x20000000 | 0x40000000 | 0x80000000 | 0x00000020; break;
 				}
+
+				image.Write(writer);
+
+				address += (uint)section.Length;
+				address = AlignValue(address, LoadSectionAlignment);
 			}
 
 			WritePaddingToPosition(writer, LoadSectionAlignment);
@@ -329,7 +319,7 @@ namespace Mosa.Compiler.Linker.PE
 				// Only use a section with something inside
 				if (sections.Length > 0)
 				{
-					sectionEnd = (uint)(sections.VirtualAddress + AlignValue(sections.Length, SectionAlignment));
+					sectionEnd = (uint)(sections.VirtualAddress + AlignValue((uint)sections.Length, SectionAlignment));
 
 					if (sectionEnd > virtualSizeOfImage)
 						virtualSizeOfImage = sectionEnd;
@@ -339,29 +329,20 @@ namespace Mosa.Compiler.Linker.PE
 			return virtualSizeOfImage - (uint)BaseAddress;
 		}
 
-		private long GetSectionAddress(SectionKind sectionKind)
+		private uint GetSectionAddress(SectionKind sectionKind)
 		{
-			return GetSection(sectionKind).VirtualAddress;
+			return (uint)GetSection(sectionKind).VirtualAddress;
 		}
 
-		private long GetSectionLength(SectionKind sectionKind)
+		private uint GetSectionLength(SectionKind sectionKind)
 		{
-			return GetSection(sectionKind).Length;
-		}
-
-		private long AlignValue(long value, uint alignment)
-		{
-			long off = (value % alignment);
-			if (0 != off)
-				value += (alignment - off);
-
-			return value;
+			return (uint)GetSection(sectionKind).Length;
 		}
 
 		private uint AlignValue(uint value, uint alignment)
 		{
 			uint off = (value % alignment);
-			if (0 != off)
+			if (off != 0)
 				value += (alignment - off);
 
 			return value;
@@ -378,7 +359,11 @@ namespace Mosa.Compiler.Linker.PE
 			Debug.Assert(position <= address, @"Passed the address.");
 			if (position < address)
 			{
-				writer.Write(new byte[address - position]);
+				//writer.Write(new byte[address - position]);
+				for (int i = (int)(address - position); i > 0; i--)
+				{
+					writer.Write((byte)0);
+				}
 			}
 		}
 

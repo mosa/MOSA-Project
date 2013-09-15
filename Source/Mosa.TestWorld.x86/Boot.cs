@@ -7,8 +7,6 @@
 
 using Mosa.Kernel.x86;
 using Mosa.Platform.x86.Intrinsic;
-using Mosa.Test.Collection;
-using Mosa.TestWorld.x86.Tests;
 
 namespace Mosa.TestWorld.x86
 {
@@ -63,9 +61,9 @@ namespace Mosa.TestWorld.x86
 			Screen.Write('0');
 			Console = ConsoleManager.Controller.Boot;
 			Screen.Write('A');
-			IDT.SetInterruptHandler(ProcessInterrupt);
+			//IDT.SetInterruptHandler(ProcessInterrupt);
 			Screen.Write('B');
-			
+
 			Console.Color = 0x0E;
 			Console.BackgroundColor = 1;
 			Console.WriteLine();
@@ -73,7 +71,7 @@ namespace Mosa.TestWorld.x86
 			Console.WriteLine("MOSA is alive!");
 
 			byte last = 0;
-			
+
 			Console.WriteLine();
 
 			while (true)
@@ -118,7 +116,5 @@ namespace Mosa.TestWorld.x86
 			//Console.Color = col;
 			//Console.BackgroundColor = back;
 		}
-
-
 	}
 }

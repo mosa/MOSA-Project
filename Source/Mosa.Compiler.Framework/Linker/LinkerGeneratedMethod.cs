@@ -7,8 +7,6 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-using System;
-using System.Collections.Generic;
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Compiler.TypeSystem;
@@ -20,10 +18,6 @@ namespace Mosa.Compiler.Framework.Linker
 	/// </summary>
 	public sealed class LinkerGeneratedMethod : RuntimeMethod
 	{
-		#region Data Members
-
-		#endregion Data Members
-
 		#region Construction
 
 		/// <summary>

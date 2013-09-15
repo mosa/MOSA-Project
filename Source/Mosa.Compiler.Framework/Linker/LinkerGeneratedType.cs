@@ -9,8 +9,6 @@
 
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.TypeSystem;
-using System;
-using System.Collections.Generic;
 
 namespace Mosa.Compiler.Framework.Linker
 {
@@ -19,12 +17,10 @@ namespace Mosa.Compiler.Framework.Linker
 	/// </summary>
 	public sealed class LinkerGeneratedType : RuntimeType
 	{
-		private readonly List<RuntimeMethod> methods;
-
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="LinkerGeneratedType"/> class.
+		/// Initializes a new instance of the <see cref="LinkerGeneratedType" /> class.
 		/// </summary>
 		/// <param name="moduleTypeSystem">The module type system.</param>
 		/// <param name="nameSpace">The name space.</param>
@@ -33,14 +29,13 @@ namespace Mosa.Compiler.Framework.Linker
 		public LinkerGeneratedType(ITypeModule moduleTypeSystem, string nameSpace, string name, RuntimeType baseType) :
 			base(moduleTypeSystem, Token.Zero, name, baseType, nameSpace)
 		{
-			this.methods = new List<RuntimeMethod>();
 		}
 
 		#endregion Construction
 
 		public void AddMethod(RuntimeMethod method)
 		{
-			this.methods.Add(method);
+			Methods.Add(method);
 		}
 	}
 }

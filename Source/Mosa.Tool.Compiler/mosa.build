@@ -22,7 +22,6 @@
                     <include name="Stages/InstructionStatisticsStage.cs"/>
                     <include name="NDesk.Options.cs"/>
                     <include name="Program.cs"/>
-                    <include name="Stages/TypeInitializerSchedulerStage.cs"/>
 		</sources>
 		<references>
                     <include name="System.dll"/>

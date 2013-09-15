@@ -254,9 +254,6 @@
     <Compile Include="Stages\LongOperandTransformationStage.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Registers.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="SSE2Register.cs">
       <SubType>Code</SubType>
     </Compile>

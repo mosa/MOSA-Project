@@ -9,9 +9,9 @@
  */
 
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.Linker;
 using Mosa.Compiler.Metadata.Signatures;
+using Mosa.Compiler.TypeSystem;
 using System.IO;
 using System.Text;
 
@@ -166,7 +166,8 @@ namespace Mosa.Platform.x86.Stages
 				ctx.AppendInstruction(X86.Call, null, entryPoint);
 				ctx.AppendInstruction(X86.Ret);
 
-				LinkerGeneratedMethod method = LinkTimeCodeGenerator.Compile(this.compiler, @"MultibootInit", basicBlocks, instructionSet, typeSystem);
+				RuntimeMethod method = compiler.CreateLinkerMethod("MultibootInit");
+				compiler.CompileMethod(method, basicBlocks, instructionSet);
 				linker.EntryPoint = linker.GetSymbol(method.FullName);
 			}
 		}

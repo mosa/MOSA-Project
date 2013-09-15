@@ -7,9 +7,9 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System.Drawing;
 using Mosa.EmulatedDevices.Synthetic;
 using Mosa.EmulatedKernel;
+using System.Drawing;
 
 namespace Mosa.EmulatedDevices.Emulated
 {

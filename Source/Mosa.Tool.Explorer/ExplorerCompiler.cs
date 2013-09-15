@@ -47,14 +47,25 @@ namespace Mosa.Tool.Explorer
 		/// Creates a method compiler
 		/// </summary>
 		/// <param name="method">The method to compile.</param>
+		/// <param name="basicBlocks">The basic blocks.</param>
+		/// <param name="instructionSet">The instruction set.</param>
 		/// <returns>
 		/// An instance of a MethodCompilerBase for the given type/method pair.
 		/// </returns>
-		public override BaseMethodCompiler CreateMethodCompiler(RuntimeMethod method)
+		public override BaseMethodCompiler CreateMethodCompiler(RuntimeMethod method, BasicBlocks basicBlocks, InstructionSet instructionSet)
 		{
-			return new ExplorerMethodCompiler(this, method, emitBinary);
+			return new ExplorerMethodCompiler(this, method, basicBlocks, instructionSet, emitBinary);
 		}
 
+		/// <summary>
+		/// Compiles the specified type system.
+		/// </summary>
+		/// <param name="typeSystem">The type system.</param>
+		/// <param name="typeLayout">The type layout.</param>
+		/// <param name="internalTrace">The internal trace.</param>
+		/// <param name="platform">The platform.</param>
+		/// <param name="enabledSSA">if set to <c>true</c> [enabled ssa].</param>
+		/// <param name="emitBinary">if set to <c>true</c> [emit binary].</param>
 		public static void Compile(ITypeSystem typeSystem, ITypeLayout typeLayout, IInternalTrace internalTrace, string platform, bool enabledSSA, bool emitBinary)
 		{
 			IArchitecture architecture;

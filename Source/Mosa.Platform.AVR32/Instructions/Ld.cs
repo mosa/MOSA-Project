@@ -44,7 +44,7 @@ namespace Mosa.Platform.AVR32.Instructions
 		{
 			if (context.Result.IsRegister && context.Operand1.IsMemoryAddress)
 			{
-				long displacement = context.Operand1.Offset;
+				long displacement = context.Operand1.Displacement;
 
 				if (IsBetween(displacement, 0, 124))
 				{

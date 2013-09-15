@@ -8,7 +8,6 @@
  */
 
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Compiler.TypeSystem;
 
@@ -70,7 +69,8 @@ namespace Mosa.Platform.x86.Stages
 			//3. Call the managed exception handler
 			ctx.AppendInstruction(X86.Call, null, exceptionMethod);
 
-			LinkTimeCodeGenerator.Compile(this.compiler, @"ExceptionVector", basicBlocks, instructionSet, typeSystem);
+			var method = compiler.CreateLinkerMethod("ExceptionVector");
+			compiler.CompileMethod(method, basicBlocks, instructionSet);
 		}
 
 		#endregion Internal

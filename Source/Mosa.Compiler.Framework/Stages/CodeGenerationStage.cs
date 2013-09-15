@@ -25,7 +25,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <summary>
 		/// Holds the stream, where code is emitted to.
 		/// </summary>
-		protected static Stream codeStream;
+		protected Stream codeStream;
 
 		/// <summary>
 		///
@@ -110,11 +110,9 @@ namespace Mosa.Compiler.Framework.Stages
 					if (context.IsEmpty || context.Instruction == IRInstruction.BlockStart)
 						continue;
 
-					BasePlatformInstruction instruction = context.Instruction as BasePlatformInstruction;
-
-					if (instruction != null)
+					if (context.Instruction is BasePlatformInstruction)
 					{
-						instruction.Emit(context, codeEmitter);
+						EmitInstruction(context, codeEmitter);
 					}
 					else
 					{
@@ -127,6 +125,16 @@ namespace Mosa.Compiler.Framework.Stages
 
 				BlockEnd(block);
 			}
+		}
+
+		/// <summary>
+		/// Emits the instruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <param name="codeEmitter">The code emitter.</param>
+		protected virtual void EmitInstruction(Context context, ICodeEmitter codeEmitter)
+		{
+			(context.Instruction as BasePlatformInstruction).Emit(context, codeEmitter);
 		}
 
 		/// <summary>

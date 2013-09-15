@@ -1213,7 +1213,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 					if (operand.OffsetBase == old)
 					{
 						// FIXME: Creates a lot of duplicate single operands
-						context.SetOperand(i, Operand.CreateMemoryAddress(operand.Type, replacement, operand.Offset));
+						context.SetOperand(i, Operand.CreateMemoryAddress(operand.Type, replacement, operand.Displacement));
 					}
 				}
 			}
@@ -1235,7 +1235,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 					if (operand.OffsetBase == old)
 					{
 						// FIXME: Creates a lot of duplicate single operands
-						context.SetResult(i, Operand.CreateMemoryAddress(operand.Type, replacement, operand.Offset));
+						context.SetResult(i, Operand.CreateMemoryAddress(operand.Type, replacement, operand.Displacement));
 					}
 				}
 			}

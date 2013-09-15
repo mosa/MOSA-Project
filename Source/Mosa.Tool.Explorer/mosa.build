@@ -39,6 +39,10 @@
                     <include name="${outputDirectory}/Mosa.Compiler.InternalTrace.dll"/>
                     <include name="${outputDirectory}/Mosa.Platform.x86.dll"/>
                     <include name="${outputDirectory}/Mosa.Test.CodeDomCompiler.dll"/>
+                    <include name="${outputDirectory}/Mosa.TinyCPUSimulator.Adaptor.dll"/>
+                    <include name="${outputDirectory}/Mosa.TinyCPUSimulator.x86.Adaptor.dll"/>
+                    <include name="${outputDirectory}/Mosa.TinyCPUSimulator.x86.dll"/>
+                    <include name="${outputDirectory}/Mosa.TinyCPUSimulator.dll"/>
 		</references>
 		<!-- supress warnings -->
 		<nowarn><warning number="${suppresswarnings}"/></nowarn>

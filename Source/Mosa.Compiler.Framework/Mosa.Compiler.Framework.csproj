@@ -115,6 +115,7 @@
     <Compile Include="Stages\LoopAwareBlockOrderStage.cs" />
     <Compile Include="Stages\SSAOptimizations.cs" />
     <Compile Include="Stages\EdgeSplitStage.cs" />
+    <Compile Include="Stages\TypeInitializerSchedulerStage.cs" />
     <Compile Include="VirtualRegisters.cs" />
     <Compile Include="BaseCodeEmitter.cs" />
     <Compile Include="BaseInstruction.cs" />
@@ -302,8 +303,6 @@
     <Compile Include="Stages\SimpleTraceBlockOrderStage.cs" />
     <Compile Include="Linker\LinkerGeneratedMethod.cs" />
     <Compile Include="Linker\LinkerGeneratedType.cs" />
-    <Compile Include="Linker\LinkerMethodCompiler.cs" />
-    <Compile Include="Linker\LinkTimeCodeGenerator.cs" />
     <Compile Include="BaseCompiler.cs">
       <SubType>Code</SubType>
     </Compile>

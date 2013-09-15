@@ -19,11 +19,10 @@ namespace Mosa.Test.System
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="TestLinkerSection"/> class.
+		/// Initializes a new instance of the <see cref="TestLinkerSection" /> class.
 		/// </summary>
 		/// <param name="kind">The kind of the section.</param>
 		/// <param name="name">The name.</param>
-		/// <param name="address">The address.</param>
 		public TestLinkerSection(SectionKind kind, string name) :
 			base(kind, name, 0)
 		{

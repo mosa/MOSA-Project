@@ -21,7 +21,7 @@ namespace Mosa.Test.System
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="TestLinker"/> class.
+		/// Initializes a new instance of the <see cref="TestLinker" /> class.
 		/// </summary>
 		public TestLinker()
 		{

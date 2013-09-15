@@ -28,8 +28,10 @@ namespace Mosa.Tool.Compiler
 		/// </summary>
 		/// <param name="compiler">The compiler.</param>
 		/// <param name="method">The method.</param>
-		public AotMethodCompiler(BaseCompiler compiler, RuntimeMethod method)
-			: base(compiler, method, null, null)
+		/// <param name="basicBlocks">The basic blocks.</param>
+		/// <param name="instructionSet">The instruction set.</param>
+		public AotMethodCompiler(BaseCompiler compiler, RuntimeMethod method, BasicBlocks basicBlocks, InstructionSet instructionSet)
+			: base(compiler, method, basicBlocks, instructionSet)
 		{
 			var compilerOptions = compiler.CompilerOptions;
 

@@ -100,18 +100,18 @@ namespace Mosa.Compiler.Framework.Stages
 					offset += (padding + size);
 				}
 
-				long existing = operand.Offset;
-				operand.Offset = thisOffset;
+				long existing = operand.Displacement;
+				operand.Displacement = thisOffset;
 
 				// adjust split children
 				if (operand.Low != null)
 				{
-					operand.Low.Offset = thisOffset + (operand.Low.Offset - existing);
+					operand.Low.Displacement = thisOffset + (operand.Low.Displacement - existing);
 				}
 
 				if (operand.High != null)
 				{
-					operand.High.Offset = thisOffset + (operand.High.Offset - existing);
+					operand.High.Displacement = thisOffset + (operand.High.Displacement - existing);
 				}
 			}
 

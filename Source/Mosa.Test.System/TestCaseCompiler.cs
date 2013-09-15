@@ -85,12 +85,14 @@ namespace Mosa.Test.System
 		/// Creates a method compiler
 		/// </summary>
 		/// <param name="method">The method to compile.</param>
+		/// <param name="basicBlocks">The basic blocks.</param>
+		/// <param name="instructionSet">The instruction set.</param>
 		/// <returns>
 		/// An instance of a BaseMethodCompiler for the given type/method pair.
 		/// </returns>
-		public override BaseMethodCompiler CreateMethodCompiler(RuntimeMethod method)
+		public override BaseMethodCompiler CreateMethodCompiler(RuntimeMethod method, BasicBlocks basicBlocks, InstructionSet instructionSet)
 		{
-			return new TestCaseMethodCompiler(this, method);
+			return new TestCaseMethodCompiler(this, method, basicBlocks, instructionSet);
 		}
 
 		/// <summary>

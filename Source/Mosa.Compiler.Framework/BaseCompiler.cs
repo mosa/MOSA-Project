@@ -11,6 +11,7 @@
 using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.InternalTrace;
 using Mosa.Compiler.Linker;
+using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Compiler.TypeSystem;
 using System;
 
@@ -182,11 +183,16 @@ namespace Mosa.Compiler.Framework
 		/// Compiles the method.
 		/// </summary>
 		/// <param name="method">The method.</param>
-		public void CompileMethod(RuntimeMethod method)
+		/// <param name="basicBlocks">The basic blocks.</param>
+		/// <param name="instructionSet">The instruction set.</param>
+		public void CompileMethod(RuntimeMethod method, BasicBlocks basicBlocks, InstructionSet instructionSet)
 		{
+			//LinkerMethodCompiler methodCompiler = new LinkerMethodCompiler(this, method, basicBlocks, instructionSet);
+			//methodCompiler.Compile();
+
 			Trace(CompilerEvent.CompilingMethod, method.FullName);
 
-			BaseMethodCompiler methodCompiler = CreateMethodCompiler(method);
+			BaseMethodCompiler methodCompiler = CreateMethodCompiler(method, basicBlocks, instructionSet);
 			Architecture.ExtendMethodCompilerPipeline(methodCompiler.Pipeline);
 
 			methodCompiler.Compile();
@@ -206,8 +212,36 @@ namespace Mosa.Compiler.Framework
 		/// Creates a method compiler
 		/// </summary>
 		/// <param name="method">The method to compile.</param>
+		/// <param name="basicBlocks">The basic blocks.</param>
+		/// <param name="instructionSet">The instruction set.</param>
 		/// <returns></returns>
-		public abstract BaseMethodCompiler CreateMethodCompiler(RuntimeMethod method);
+		public abstract BaseMethodCompiler CreateMethodCompiler(RuntimeMethod method, BasicBlocks basicBlocks, InstructionSet instructionSet);
+		
+		/// <summary>
+		/// Compiles the linker method.
+		/// </summary>
+		/// <param name="methodName">Name of the method.</param>
+		/// <returns></returns>
+		public RuntimeMethod CreateLinkerMethod(string methodName)
+		{
+			LinkerGeneratedType compilerGeneratedType = typeSystem.InternalTypeModule.GetType("Mosa.Tools.Compiler", "LinkerGenerated") as LinkerGeneratedType;
+
+			// Create the type if needed
+			if (compilerGeneratedType == null)
+			{
+				compilerGeneratedType = new LinkerGeneratedType(typeSystem.InternalTypeModule, "Mosa.Tools.Compiler", "LinkerGenerated", null);
+				typeSystem.AddInternalType(compilerGeneratedType);
+
+				//compiler.Scheduler.TrackTypeAllocated(compilerGeneratedType);
+			}
+
+			// Create the method
+			// HACK: <$> prevents the method from being called from CIL
+			LinkerGeneratedMethod method = new LinkerGeneratedMethod(typeSystem.InternalTypeModule, "<$>" + methodName, compilerGeneratedType, BuiltInSigType.Void, false, false, new SigType[0]);
+			compilerGeneratedType.AddMethod(method);
+
+			return method;
+		}
 
 		/// <summary>
 		/// Executes the compiler using the configured stages.
@@ -229,9 +263,6 @@ namespace Mosa.Compiler.Framework
 			foreach (ICompilerStage stage in Pipeline)
 			{
 				Trace(CompilerEvent.CompilerStageStart, stage.Name);
-
-				// Setup Compiler
-				stage.Setup(this);
 
 				// Execute stage
 				stage.Run();

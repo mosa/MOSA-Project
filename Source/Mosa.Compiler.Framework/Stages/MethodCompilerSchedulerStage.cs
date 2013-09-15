@@ -35,7 +35,7 @@ namespace Mosa.Compiler.Framework.Stages
 				if (method == null)
 					break;
 
-				compiler.CompileMethod(method);
+				compiler.CompileMethod(method, null, null);
 			}
 		}
 

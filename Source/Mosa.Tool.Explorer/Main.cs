@@ -8,12 +8,15 @@
  */
 
 using Mosa.Compiler.Common;
+using Mosa.Compiler.Framework;
 using Mosa.Compiler.InternalTrace;
+using Mosa.Compiler.Linker;
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Loader;
 using Mosa.Compiler.Pdb;
 using Mosa.Compiler.TypeSystem;
 using Mosa.Compiler.TypeSystem.Cil;
+using Mosa.TinyCPUSimulator.Adaptor;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -52,6 +55,7 @@ namespace Mosa.Tool.Explorer
 			internalTrace.TraceListener = this;
 			internalTrace.TraceFilter = filter;
 
+			filter.ExcludeInternalMethods = false;
 			filter.MethodMatch = MatchType.Any;
 			filter.StageMatch = MatchType.Exclude;
 			filter.Stage = "PlatformStubStage|ExceptionLayoutStage|DominanceCalculationStage|CodeGenerationStage";
@@ -342,6 +346,50 @@ namespace Mosa.Tool.Explorer
 			toolStripStatusLabel1.Text = "Compiled!";
 		}
 
+		private void RunSimulator()
+		{
+			compileStartTime = DateTime.Now;
+			methodStages.Clear();
+
+			filter.MethodMatch = MatchType.Any;
+
+			string platform = cbPlatform.Text.Trim().ToLower();
+
+			IArchitecture architecture = GetArchitecture(platform);
+			ISimAdapter simAdapter = GetSimAdaptor(platform);
+			ILinker linker = new SimLinker(simAdapter);
+
+			SimCompiler.Compile(typeSystem, typeLayout, internalTrace, enableSSAToolStripMenuItem.Checked, architecture, simAdapter, linker);
+			tabControl1.SelectedTab = tabPage1;
+			rbOtherResult.Text = compileLog.ToString();
+
+			toolStripStatusLabel1.Text = "Compiled!";
+
+			simAdapter.Execute();
+
+			return;
+		}
+
+		private static IArchitecture GetArchitecture(string platform)
+		{
+			switch (platform.ToLower())
+			{
+				case "x86": return Mosa.Platform.x86.Architecture.CreateArchitecture(Mosa.Platform.x86.ArchitectureFeatureFlags.AutoDetect);
+				//case "avr32": return Mosa.Platform.AVR32.Architecture.CreateArchitecture(Mosa.Platform.AVR32.ArchitectureFeatureFlags.AutoDetect);
+				default: return Mosa.Platform.x86.Architecture.CreateArchitecture(Mosa.Platform.x86.ArchitectureFeatureFlags.AutoDetect);
+			}
+		}
+
+		private static ISimAdapter GetSimAdaptor(string platform)
+		{
+			switch (platform.ToLower())
+			{
+				case "x86": return new Mosa.TinyCPUSimulator.x86.Adaptor.SimAdapter();
+				//case "avr32": return Mosa.Platform.AVR32.Architecture.CreateArchitecture(Mosa.Platform.AVR32.ArchitectureFeatureFlags.AutoDetect);
+				default: return new Mosa.TinyCPUSimulator.x86.Adaptor.SimAdapter();
+			}
+		}
+
 		private void nowToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			Compile();
@@ -589,6 +637,12 @@ namespace Mosa.Tool.Explorer
 		private void toolStripButton4_Click(object sender, EventArgs e)
 		{
 			Compile();
+			UpdateTree();
+		}
+
+		private void toolStripButton3_Click_1(object sender, EventArgs e)
+		{
+			RunSimulator();
 			UpdateTree();
 		}
 	}

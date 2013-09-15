@@ -15,6 +15,7 @@ using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Compiler.Metadata.Tables;
 using Mosa.Compiler.TypeSystem;
 using Mosa.Compiler.TypeSystem.Cil;
+using Mosa.Compiler.Framework.Linker;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -48,6 +49,10 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </summary>
 		void IMethodCompilerStage.Run()
 		{
+			// No CIL decoding if this is a linker generated method
+			if (methodCompiler.Method is LinkerGeneratedMethod)
+				return;
+
 			RuntimeMethod plugMethod = methodCompiler.Compiler.PlugSystem.GetPlugMethod(methodCompiler.Method);
 
 			if (plugMethod != null)
@@ -62,9 +67,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (!methodCompiler.Method.HasCode)
 			{
 				if (DelegatePatcher.PatchDelegate(methodCompiler))
-				{
 					return;
-				}
 
 				methodCompiler.StopMethodCompiler();
 				return;

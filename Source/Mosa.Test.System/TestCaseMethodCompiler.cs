@@ -38,8 +38,10 @@ namespace Mosa.Test.System
 		/// </summary>
 		/// <param name="compiler">The compiler.</param>
 		/// <param name="method">The method.</param>
-		public TestCaseMethodCompiler(TestCaseCompiler compiler, RuntimeMethod method)
-			: base(compiler, method, null, null)
+		/// <param name="basicBlocks">The basic blocks.</param>
+		/// <param name="instructionSet">The instruction set.</param>
+		public TestCaseMethodCompiler(TestCaseCompiler compiler, RuntimeMethod method, BasicBlocks basicBlocks, InstructionSet instructionSet)
+			: base(compiler, method, basicBlocks, instructionSet)
 		{
 			// Populate the pipeline
 			Pipeline.AddRange(new IMethodCompilerStage[] {

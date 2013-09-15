@@ -39,11 +39,11 @@
                     <include name="CIL/ConvFixture.cs"/>
                     <include name="CIL/GenericCallFixture.cs"/>
                     <include name="CIL/InitStructFixture.cs"/>
-                    <include name="CIL/LdargaFixture.cs"/>
                     <include name="CIL/LdlocaFixture.cs"/>
                     <include name="CIL/StaticFieldFixture.cs"/>
                     <include name="CIL/StructureFixture.cs"/>
                     <include name="Extra/ConditionalOperatorFixture.cs"/>
+                    <include name="CIL/LdargaFixture.cs"/>
                     <include name="OLD/GenericMethodMemberFixture.cs"/>
                     <include name="OLD/GenericTypeFixture.cs"/>
                     <include name="CIL/Int32Fixture.cs"/>

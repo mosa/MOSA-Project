@@ -27,12 +27,6 @@ namespace Mosa.Compiler.Linker
 		#region Properties
 
 		/// <summary>
-		/// Adds the section.
-		/// </summary>
-		/// <param name="section">The section.</param>
-		void AddSection(ExtendedLinkerSection section);
-
-		/// <summary>
 		/// Gets the base address.
 		/// </summary>
 		/// <value>The base address.</value>
@@ -101,6 +95,12 @@ namespace Mosa.Compiler.Linker
 		Stream Allocate(string name, SectionKind section, int size, int alignment);
 
 		/// <summary>
+		/// Adds the section.
+		/// </summary>
+		/// <param name="section">The section.</param>
+		void AddSection(ExtendedLinkerSection section);
+
+		/// <summary>
 		/// Gets the section.
 		/// </summary>
 		/// <param name="sectionKind">Kind of the section.</param>
@@ -129,9 +129,9 @@ namespace Mosa.Compiler.Linker
 		void Link(LinkType linkType, Patch[] patches, string symbolName, int symbolOffset, int methodRelativeBase, string targetSymbol, long targetOffset);
 
 		/// <summary>
-		/// Executes the linker and generates the final linked file
+		/// Commits the linker and generates the final linked file
 		/// </summary>
-		void GeneratedFile();
+		void Commit();
 
 		#endregion Methods
 	}

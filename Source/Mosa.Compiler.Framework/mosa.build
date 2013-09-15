@@ -52,6 +52,7 @@
                     <include name="Stages/LoopAwareBlockOrderStage.cs"/>
                     <include name="Stages/SSAOptimizations.cs"/>
                     <include name="Stages/EdgeSplitStage.cs"/>
+                    <include name="Stages/TypeInitializerSchedulerStage.cs"/>
                     <include name="VirtualRegisters.cs"/>
                     <include name="BaseCodeEmitter.cs"/>
                     <include name="BaseInstruction.cs"/>
@@ -117,7 +118,6 @@
                     <include name="Stages/MethodCompilerSchedulerStage.cs"/>
                     <include name="Stages/PlatformStubStage.cs"/>
                     <include name="IIntrinsicPlatformMethod.cs"/>
-                    <include name="IBlockOrderStage.cs"/>
                     <include name="IPipelineStage.cs"/>
                     <include name="Stages/CILTransformationStage.cs"/>
                     <include name="CIL/ConstrainedPrefixInstruction.cs"/>
@@ -240,8 +240,6 @@
                     <include name="Stages/SimpleTraceBlockOrderStage.cs"/>
                     <include name="Linker/LinkerGeneratedMethod.cs"/>
                     <include name="Linker/LinkerGeneratedType.cs"/>
-                    <include name="Linker/LinkerMethodCompiler.cs"/>
-                    <include name="Linker/LinkTimeCodeGenerator.cs"/>
                     <include name="BaseCompiler.cs"/>
                     <include name="BaseArchitecture.cs"/>
                     <include name="BasicBlock.cs"/>

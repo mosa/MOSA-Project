@@ -23,7 +23,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		void ICompilerStage.Run()
 		{
-			linker.GeneratedFile();
+			linker.Commit();
 		}
 
 		#endregion ICompilerStage members

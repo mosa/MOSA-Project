@@ -6,6 +6,7 @@
  * Authors:
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  *  Bruce Markham (illuminus) <illuminus86@gmail.com>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 using Mosa.Compiler.Common;
@@ -81,7 +82,7 @@ namespace Mosa.Compiler.Linker
 		public ExtendedLinkerSection[] Sections { get { return sections; } }
 
 		/// <summary>
-		/// Retrieves the collection of _symbols known by the linker.
+		/// Retrieves the collection of symbols known by the linker.
 		/// </summary>
 		/// <value>The symbol collection.</value>
 		public ICollection<LinkerSymbol> Symbols
@@ -126,7 +127,7 @@ namespace Mosa.Compiler.Linker
 		/// <summary>
 		/// Executes the linker and generates the final linked file
 		/// </summary>
-		void ILinker.GeneratedFile()
+		void ILinker.Commit()
 		{
 			// Layout the sections
 			LayoutSymbols();
@@ -167,7 +168,7 @@ namespace Mosa.Compiler.Linker
 
 			//symbol.VirtualAddress = linkerSection.VirtualAddress + stream.Position;
 
-			// HACK -
+			// HACK - to ignore duplicate generic methods
 			if (!symbols.ContainsKey(symbol.Name))
 				symbols.Add(symbol.Name, symbol);
 
@@ -223,7 +224,7 @@ namespace Mosa.Compiler.Linker
 				list = new List<LinkRequest>();
 				linkRequests.Add(targetSymbol, list);
 			}
-			
+
 			list.Add(new LinkRequest(linkType, patches, symbolName, symbolOffset, relativeBase, targetSymbol, targetOffset));
 		}
 

@@ -8,7 +8,6 @@
  */
 
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Compiler.TypeSystem;
 
@@ -75,7 +74,8 @@ namespace Mosa.Platform.x86.Stages
 				ctx.AppendInstruction(X86.Sti);
 				ctx.AppendInstruction(X86.IRetd);
 
-				LinkTimeCodeGenerator.Compile(this.compiler, @"InterruptISR" + i.ToString(), basicBlocks, instructionSet, typeSystem);
+				RuntimeMethod method = compiler.CreateLinkerMethod("InterruptISR" + i.ToString());
+				compiler.CompileMethod(method, basicBlocks, instructionSet);
 			}
 		}
 

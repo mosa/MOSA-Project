@@ -46,13 +46,13 @@ namespace Mosa.Platform.AVR32.Instructions
 			{
 				Operand destination = context.Result;
 
-				if (IsBetween(destination.Offset, 0, 60))
+				if (IsBetween(destination.Displacement, 0, 60))
 				{
-					emitter.EmitTwoRegistersWithK4((byte)destination.EffectiveOffsetBase.RegisterCode, (byte)context.Operand1.Register.RegisterCode, (sbyte)destination.Offset);
+					emitter.EmitTwoRegistersWithK4((byte)destination.EffectiveOffsetBase.RegisterCode, (byte)context.Operand1.Register.RegisterCode, (sbyte)destination.Displacement);
 				}
-				else if (IsBetween(destination.Offset, -32768, 32767))
+				else if (IsBetween(destination.Displacement, -32768, 32767))
 				{
-					emitter.EmitTwoRegistersAndK16(0x14, (byte)destination.EffectiveOffsetBase.RegisterCode, (byte)context.Operand1.Register.RegisterCode, (short)destination.Offset);
+					emitter.EmitTwoRegistersAndK16(0x14, (byte)destination.EffectiveOffsetBase.RegisterCode, (byte)context.Operand1.Register.RegisterCode, (short)destination.Displacement);
 				}
 				else
 					throw new OverflowException();

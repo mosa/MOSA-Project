@@ -8,9 +8,9 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Metadata.Signatures;
+using System;
 
 namespace Mosa.Compiler.Framework
 {

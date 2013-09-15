@@ -126,7 +126,7 @@ namespace Mosa.Compiler.Framework
 		/// <value>
 		/// The offset.
 		/// </value>
-		public long Offset { get; set; }
+		public long Displacement { get; set; }
 
 		/// <summary>
 		/// Retrieves the runtime member.
@@ -441,7 +441,7 @@ namespace Mosa.Compiler.Framework
 		{
 			Operand operand = new Operand(sigType, OperandType.MemoryAddress);
 			operand.OffsetBase = offsetBase;
-			operand.Offset = offset;
+			operand.Displacement = offset;
 			return operand;
 		}
 
@@ -455,7 +455,7 @@ namespace Mosa.Compiler.Framework
 		{
 			Operand operand = new Operand(sigType, OperandType.MemoryAddress | OperandType.Label);
 			operand.Name = label;
-			operand.Offset = 0;
+			operand.Displacement = 0;
 			return operand;
 		}
 
@@ -469,7 +469,7 @@ namespace Mosa.Compiler.Framework
 		public static Operand CreateRuntimeMember(SigType type, RuntimeMember member, int offset)
 		{
 			Operand operand = new Operand(type, OperandType.MemoryAddress | OperandType.RuntimeMember);
-			operand.Offset = offset;
+			operand.Displacement = offset;
 			operand.runtimeMember = member;
 			return operand;
 		}
@@ -482,7 +482,7 @@ namespace Mosa.Compiler.Framework
 		public static Operand CreateRuntimeMember(RuntimeField field)
 		{
 			Operand operand = new Operand(field.SigType, OperandType.MemoryAddress | OperandType.RuntimeMember);
-			operand.Offset = 0;
+			operand.Displacement = 0;
 			operand.runtimeMember = field;
 			return operand;
 		}
@@ -501,7 +501,7 @@ namespace Mosa.Compiler.Framework
 			operand.index = index; // param.Position;
 
 			//operand.sequence = index;
-			operand.Offset = param.Position * 4; // FIXME: 4 is platform dependent!
+			operand.Displacement = param.Position * 4; // FIXME: 4 is platform dependent!
 			return operand;
 		}
 
@@ -560,14 +560,14 @@ namespace Mosa.Compiler.Framework
 				operand = new Operand(BuiltInSigType.UInt32, OperandType.MemoryAddress | OperandType.RuntimeMember);
 				operand.runtimeMember = longOperand.RuntimeMember;
 				operand.OffsetBase = longOperand.OffsetBase;
-				operand.Offset = longOperand.Offset + offset;
+				operand.Displacement = longOperand.Displacement + offset;
 				operand.Register = longOperand.Register;
 			}
 			else if (longOperand.IsMemoryAddress)
 			{
 				operand = new Operand(BuiltInSigType.UInt32, OperandType.MemoryAddress);
 				operand.OffsetBase = longOperand.OffsetBase;
-				operand.Offset = longOperand.Offset + offset;
+				operand.Displacement = longOperand.Displacement + offset;
 				operand.Register = longOperand.Register;
 			}
 			else
@@ -612,14 +612,14 @@ namespace Mosa.Compiler.Framework
 				operand = new Operand(BuiltInSigType.UInt32, OperandType.MemoryAddress | OperandType.RuntimeMember);
 				operand.runtimeMember = longOperand.RuntimeMember;
 				operand.OffsetBase = longOperand.OffsetBase;
-				operand.Offset = longOperand.Offset + offset;
+				operand.Displacement = longOperand.Displacement + offset;
 				operand.Register = longOperand.Register;
 			}
 			else if (longOperand.IsMemoryAddress)
 			{
 				operand = new Operand(BuiltInSigType.UInt32, OperandType.MemoryAddress);
 				operand.OffsetBase = longOperand.OffsetBase;
-				operand.Offset = longOperand.Offset + offset;
+				operand.Displacement = longOperand.Displacement + offset;
 				operand.Register = longOperand.Register;
 			}
 			else
@@ -717,24 +717,24 @@ namespace Mosa.Compiler.Framework
 				s.Append(' ');
 				if (OffsetBase != null)
 				{
-					if (Offset > 0)
-						s.AppendFormat("[{0}+{1:X}h]", OffsetBase.ToString(), Offset);
+					if (Displacement > 0)
+						s.AppendFormat("[{0}+{1:X}h]", OffsetBase.ToString(), Displacement);
 					else
-						s.AppendFormat("[{0}-{1:X}h]", OffsetBase.ToString(), -Offset);
+						s.AppendFormat("[{0}-{1:X}h]", OffsetBase.ToString(), -Displacement);
 				}
 				else if (Register != null)
 				{
-					if (Offset > 0)
-						s.AppendFormat("[{0}+{1:X}h]", Register.ToString(), Offset);
+					if (Displacement > 0)
+						s.AppendFormat("[{0}+{1:X}h]", Register.ToString(), Displacement);
 					else
-						s.AppendFormat("[{0}-{1:X}h]", Register.ToString(), -Offset);
+						s.AppendFormat("[{0}-{1:X}h]", Register.ToString(), -Displacement);
 				}
 				else if (IsRuntimeMember && IsSplitChild)
 				{
-					if (Offset > 0)
-						s.AppendFormat("+{0:X}h", Offset);
+					if (Displacement > 0)
+						s.AppendFormat("+{0:X}h", Displacement);
 					else
-						s.AppendFormat("-{0:X}h", -Offset);
+						s.AppendFormat("-{0:X}h", -Displacement);
 				}
 			}
 

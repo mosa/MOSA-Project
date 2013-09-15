@@ -26,10 +26,10 @@ namespace Mosa.Platform.x86.Instructions
 		private static readonly OpCode GE = new OpCode(new byte[] { 0x0F, 0x9D });
 		private static readonly OpCode GT = new OpCode(new byte[] { 0x0F, 0x9F });
 		private static readonly OpCode NE = new OpCode(new byte[] { 0x0F, 0x95 });
-		private static readonly OpCode UGE = new OpCode(new byte[] { 0x0F, 0x93 });
-		private static readonly OpCode UGT = new OpCode(new byte[] { 0x0F, 0x97 });
-		private static readonly OpCode ULE = new OpCode(new byte[] { 0x0F, 0x96 });
-		private static readonly OpCode ULT = new OpCode(new byte[] { 0x0F, 0x92 });
+		private static readonly OpCode UGE = new OpCode(new byte[] { 0x0F, 0x93 });	// SETAE, SETNB, SETNC
+		private static readonly OpCode UGT = new OpCode(new byte[] { 0x0F, 0x97 }); // SETNBE, SETA
+		private static readonly OpCode ULE = new OpCode(new byte[] { 0x0F, 0x96 }); // SETBE, SETNA
+		private static readonly OpCode ULT = new OpCode(new byte[] { 0x0F, 0x92 });	// SETNAE, SETB, SETC
 		private static readonly OpCode P = new OpCode(new byte[] { 0x0F, 0x9A });
 		private static readonly OpCode NP = new OpCode(new byte[] { 0x0F, 0x9B });
 		private static readonly OpCode NC = new OpCode(new byte[] { 0x0F, 0x93 });

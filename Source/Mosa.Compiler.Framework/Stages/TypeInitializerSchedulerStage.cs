@@ -7,12 +7,10 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.IR;
-using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.TypeSystem;
 
-namespace Mosa.Tool.Compiler.Stages
+namespace Mosa.Compiler.Framework.Stages
 {
 	/// <summary>
 	/// Schedules type initializers and creates a hidden mosacl_main method,
@@ -25,6 +23,8 @@ namespace Mosa.Tool.Compiler.Stages
 	/// </remarks>
 	public sealed class TypeInitializerSchedulerStage : BaseCompilerStage, ICompilerStage, IPipelineStage, ITypeInitializerSchedulerStage
 	{
+		public readonly string TypeInitializerName = "AssemblyInit"; // FullName = Mosa.Tools.Compiler.LinkerGenerated.<$>AssemblyInit
+
 		#region Data Members
 
 		/// <summary>
@@ -35,17 +35,12 @@ namespace Mosa.Tool.Compiler.Stages
 		/// <summary>
 		/// Hold the current context
 		/// </summary>
-		private Context ctx;
+		private Context context;
 
 		/// <summary>
 		/// The basic blocks
 		/// </summary>
 		private BasicBlocks basicBlocks;
-
-		/// <summary>
-		/// Holds the method for the type initalizer
-		/// </summary>
-		private LinkerGeneratedMethod method;
 
 		#endregion Data Members
 
@@ -58,10 +53,10 @@ namespace Mosa.Tool.Compiler.Stages
 		{
 			basicBlocks = new BasicBlocks();
 			instructionSet = new InstructionSet(25);
-			ctx = ContextHelper.CreateNewBlockWithContext(instructionSet, basicBlocks);
-			basicBlocks.AddHeaderBlock(ctx.BasicBlock);
+			context = ContextHelper.CreateNewBlockWithContext(instructionSet, basicBlocks);
+			basicBlocks.AddHeaderBlock(context.BasicBlock);
 
-			ctx.AppendInstruction(IRInstruction.Prologue);
+			context.AppendInstruction(IRInstruction.Prologue);
 		}
 
 		#endregion Construction
@@ -72,10 +67,7 @@ namespace Mosa.Tool.Compiler.Stages
 		/// Gets the intializer method.
 		/// </summary>
 		/// <value>The method.</value>
-		public LinkerGeneratedMethod TypeInitializerMethod
-		{
-			get { return method; }
-		}
+		public RuntimeMethod TypeInitializerMethod { get; private set; }
 
 		#endregion Properties
 
@@ -100,9 +92,13 @@ namespace Mosa.Tool.Compiler.Stages
 				Schedule(entrypoint);
 			}
 
-			ctx.AppendInstruction(IRInstruction.Epilogue);
+			context.AppendInstruction(IRInstruction.Epilogue);
 
-			method = LinkTimeCodeGenerator.Compile(compiler, @"AssemblyInit", basicBlocks, instructionSet, typeSystem);
+			TypeInitializerMethod = compiler.CreateLinkerMethod(TypeInitializerName);
+
+			compiler.CompileMethod(TypeInitializerMethod, basicBlocks, instructionSet);
+
+			//TypeInitializerMethod = compiler.CompileLinkerMethod(TypeInitializerName, basicBlocks, instructionSet);
 		}
 
 		#endregion ICompilerStage Members
@@ -116,8 +112,8 @@ namespace Mosa.Tool.Compiler.Stages
 		public void Schedule(RuntimeMethod method)
 		{
 			Operand symbolOperand = Operand.CreateSymbolFromMethod(method);
-			ctx.AppendInstruction(IRInstruction.Call, null, symbolOperand);
-			ctx.InvokeMethod = method;
+			context.AppendInstruction(IRInstruction.Call, null, symbolOperand);
+			context.InvokeMethod = method;
 		}
 
 		#endregion Methods

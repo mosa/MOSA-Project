@@ -27,6 +27,7 @@
                     <include name="CallTests.cs"/>
                     <include name="ConvTests.cs"/>
                     <include name="CallVirtualTests.cs"/>
+                    <include name="LdargaTests.cs"/>
                     <include name="NewObjectTests.cs"/>
                     <include name="RegisterAllocatorTests.cs"/>
                     <include name="SpecificTests.cs"/>
@@ -42,7 +43,6 @@
                     <include name="StaticFieldTests.cs"/>
                     <include name="SwitchTests.cs"/>
                     <include name="LdlocaTests.cs"/>
-                    <include name="LdargaTests.cs"/>
                     <include name="WhileTests.cs"/>
                     <include name="StringTests.cs"/>
                     <include name="SingleTests.cs"/>

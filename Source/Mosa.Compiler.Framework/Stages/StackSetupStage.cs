@@ -7,8 +7,9 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-using System;
 using Mosa.Compiler.Framework.IR;
+using Mosa.Compiler.Framework.Linker;
+using System;
 
 namespace Mosa.Compiler.Framework.Stages
 {
@@ -22,6 +23,10 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </summary>
 		void IMethodCompilerStage.Run()
 		{
+			// No stack setup if this is a linker generated method
+			if (methodCompiler.Method is LinkerGeneratedMethod)
+				return;
+
 			if (methodCompiler.Compiler.PlugSystem.GetPlugMethod(methodCompiler.Method) != null)
 				return;
 

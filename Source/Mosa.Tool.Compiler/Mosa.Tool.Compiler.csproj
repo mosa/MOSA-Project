@@ -83,9 +83,6 @@
     <Compile Include="Program.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Stages\TypeInitializerSchedulerStage.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <ProjectReference Include="..\Mosa.Compiler.LinkerFormat\Mosa.Compiler.LinkerFormat.csproj">
       <Project>{CC2E6418-C325-4486-B50D-941EC27053F6}</Project>
       <Name>Mosa.Compiler.LinkerFormat</Name>

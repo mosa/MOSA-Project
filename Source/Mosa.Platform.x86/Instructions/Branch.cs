@@ -94,8 +94,7 @@ namespace Mosa.Platform.x86.Instructions
 				case ConditionCode.NoOverflow: opcode = JNO; break;
 				case ConditionCode.Parity: opcode = JP; break;
 				case ConditionCode.NoParity: opcode = JNP; break;
-				default:
-					throw new NotSupportedException();
+				default: throw new NotSupportedException();
 			}
 
 			emitter.EmitRelativeBranch(opcode, context.BranchTargets[0]);
