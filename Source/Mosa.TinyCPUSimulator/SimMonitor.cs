@@ -17,18 +17,21 @@ namespace Mosa.TinyCPUSimulator
 
 		public SimCPU CPU { get; private set; }
 
-		public long BreakAtTick = -1;
+		public ulong BreakAtTick = ulong.MaxValue;
+
+		public bool EnableStep { get; set; }
 
 		public SimMonitor(SimCPU cpu)
 		{
-			this.CPU = cpu;
+			CPU = cpu;
+			EnableStep = false;
 		}
 
 		public bool Break
 		{
 			get
 			{
-				return CPU.Tick == BreakAtTick || breakPoints.Contains(CPU.CurrentInstructionPointer);
+				return EnableStep || CPU.Tick == BreakAtTick || breakPoints.Contains(CPU.CurrentInstructionPointer);
 			}
 		}
 

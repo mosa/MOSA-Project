@@ -351,7 +351,7 @@ namespace Mosa.Tool.Explorer
 			compileStartTime = DateTime.Now;
 			methodStages.Clear();
 
-			filter.MethodMatch = MatchType.Any;
+			filter.MethodMatch = MatchType.None;
 
 			string platform = cbPlatform.Text.Trim().ToLower();
 
@@ -365,7 +365,11 @@ namespace Mosa.Tool.Explorer
 
 			toolStripStatusLabel1.Text = "Compiled!";
 
-			simAdapter.Execute();
+			simAdapter.Monitor.EnableStep = true;
+			simAdapter.Reset();
+
+			SimProcessorX86Form form = new SimProcessorX86Form(simAdapter);
+			form.Show();
 
 			return;
 		}

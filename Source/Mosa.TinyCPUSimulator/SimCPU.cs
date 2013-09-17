@@ -24,13 +24,19 @@ namespace Mosa.TinyCPUSimulator
 
 		public Dictionary<string, ulong> Labels { get; private set; }
 
-		public long Tick { get; private set; }
+		public ulong Tick { get; private set; }
 
 		public SimMonitor Monitor { get; set; }
 
 		public bool IsLittleEndian { get; protected set; }
 
 		public virtual ulong CurrentInstructionPointer { get { return 0; } set { return; } }
+
+		public Dictionary<ulong, KeyValuePair<byte, byte>> MemoryDelta { get; private set; }
+
+		public SimInstruction LastInstruction { get; private set; }
+
+		public ulong LastCurrentInstructionPointer { get; private set; }
 
 		public SimCPU()
 		{
@@ -39,6 +45,7 @@ namespace Mosa.TinyCPUSimulator
 			SimDevices = new List<BaseSimDevice>();
 			PortDevices = new BaseSimDevice[65536];
 			Labels = new Dictionary<string, ulong>();
+			MemoryDelta = new Dictionary<ulong, KeyValuePair<byte, byte>>();
 
 			Tick = 0;
 			IsLittleEndian = true;
@@ -74,6 +81,8 @@ namespace Mosa.TinyCPUSimulator
 		private void InternalWrite8(ulong address, byte value)
 		{
 			RAMBank ram = Find(address);
+
+			MemoryDelta.Add(address, new KeyValuePair<byte, byte>(ram.Read8(address), value));
 
 			if (ram != null)
 				ram.Write8(address, value);
@@ -202,7 +211,7 @@ namespace Mosa.TinyCPUSimulator
 		{
 			Labels.Add(label, address);
 
-			Debug.WriteLine("0x" + address.ToString("X") + ": " + label);
+			//Debug.WriteLine("0x" + address.ToString("X") + ": " + label);
 		}
 
 		public ulong GetLabel(string label)
@@ -263,6 +272,8 @@ namespace Mosa.TinyCPUSimulator
 
 		protected void ExecuteInstruction()
 		{
+			MemoryDelta.Clear();
+
 			try
 			{
 				Debug.Write("0x" + CurrentInstructionPointer.ToString("X") + ": ");
@@ -271,6 +282,9 @@ namespace Mosa.TinyCPUSimulator
 				Tick++;
 
 				Debug.WriteLine(instruction.ToString());
+
+				LastInstruction = instruction;
+				LastCurrentInstructionPointer = CurrentInstructionPointer;
 
 				ExecuteOpcode(instruction);
 			}
@@ -286,11 +300,11 @@ namespace Mosa.TinyCPUSimulator
 
 		public void Execute()
 		{
-			foreach (var pair in InstructionCache)
-			{
-				Debug.WriteLine("0x" + pair.Key.ToString("X") + ": " + pair.Value);
-			}
-			Debug.WriteLine(string.Empty);
+			//foreach (var pair in InstructionCache)
+			//{
+			//	Debug.WriteLine("0x" + pair.Key.ToString("X") + ": " + pair.Value);
+			//}
+			//Debug.WriteLine(string.Empty);
 
 			for (; ; )
 			{
@@ -299,6 +313,19 @@ namespace Mosa.TinyCPUSimulator
 				if (Monitor != null && Monitor.Break)
 					return;
 			}
+		}
+
+		public virtual SimState GetState()
+		{
+			SimState simState = new SimState(Tick, LastInstruction);
+
+			simState.StoreMemoryDelta(MemoryDelta);
+
+			simState.StoreValue("IP.Current", CurrentInstructionPointer.ToString());
+			simState.StoreValue("IP.Last", LastCurrentInstructionPointer.ToString());
+			simState.StoreValue("Instruction.Last", LastInstruction.ToString());
+
+			return simState;
 		}
 	}
 }

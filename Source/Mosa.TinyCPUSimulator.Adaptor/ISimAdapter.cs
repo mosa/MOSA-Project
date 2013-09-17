@@ -12,6 +12,9 @@ using Mosa.Compiler.TypeSystem;
 
 namespace Mosa.TinyCPUSimulator.Adaptor
 {
+	/// <summary>
+	///
+	/// </summary>
 	public interface ISimAdapter
 	{
 		/// <summary>
@@ -26,6 +29,25 @@ namespace Mosa.TinyCPUSimulator.Adaptor
 		/// Executes this simulation/emulation.
 		/// </summary>
 		void Execute();
+
+		/// <summary>
+		/// Resets this simulation/emulation.
+		/// </summary>
+		void Reset();
+
+		/// <summary>
+		/// Gets the state.
+		/// </summary>
+		/// <returns></returns>
+		SimState GetState();
+
+		/// <summary>
+		/// Gets the sim monitor.
+		/// </summary>
+		/// <value>
+		/// The sim monitor.
+		/// </value>
+		SimMonitor Monitor { get; }
 
 		/// <summary>
 		/// Converts the specified method.

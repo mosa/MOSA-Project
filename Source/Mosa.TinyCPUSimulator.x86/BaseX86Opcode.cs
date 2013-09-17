@@ -146,12 +146,21 @@ namespace Mosa.TinyCPUSimulator.x86
 		{
 			Debug.Assert(operand.IsMemory);
 
-			// Memory = Register + (Base * Scale) + Displacement
-			int address = (int)(((operand.Index) as GeneralPurposeRegister).Value * operand.Scale) + operand.Displacement;
+			int address = 0;
 
-			if (operand != null)
+			if (operand.Index != null)
 			{
-				address = address + (int)((operand.Register) as GeneralPurposeRegister).Value;
+				// Memory = Register + (Base * Scale) + Displacement
+				address = (int)(((operand.Index) as GeneralPurposeRegister).Value * operand.Scale);
+			}
+
+			if (operand.Register != null)
+			{
+				address = address + (int)((operand.Register) as GeneralPurposeRegister).Value + operand.Displacement;
+			}
+			else
+			{
+				Debug.Assert(true);
 			}
 
 			return (uint)address;
@@ -177,9 +186,6 @@ namespace Mosa.TinyCPUSimulator.x86
 					return Read(cpu, address, operand.Size);
 				else
 				{
-					//if (operand.IsRelativeToCurrentInstructionPointer)
-					//	return (uint)((uint)cpu.CurrentInstructionPointer - (int)address);
-					//else
 					return address;
 				}
 			}
@@ -207,14 +213,7 @@ namespace Mosa.TinyCPUSimulator.x86
 			{
 				uint address = (uint)cpu.GetLabel(operand.Label);
 
-				if (operand.IsMemory)
-				{
-					Write(cpu, address, value, size);
-				}
-				else
-				{
-					throw new CPUException();
-				}
+				Write(cpu, address, value, size);
 			}
 
 			if (operand.IsMemory)

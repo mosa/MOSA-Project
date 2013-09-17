@@ -30,6 +30,7 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 			//CPU.AddMemory(0x400000, 0x100000, 2);  // 4-5Mb reserved
 
 			var primaryDisplay = new DisplayForm(800, 600);
+			primaryDisplay.Show();
 			primaryDisplay.StartTimer();
 
 			CPU.AddDevice(new PowerUp(CPU));
@@ -40,9 +41,16 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 
 		SimCPU ISimAdapter.SimCPU { get { return this.CPU; } }
 
-		void ISimAdapter.Execute()
+		SimMonitor ISimAdapter.Monitor { get { return this.Monitor; } }
+
+		void ISimAdapter.Reset()
 		{
 			CPU.Reset();
+			CPU.Execute();
+		}
+
+		void ISimAdapter.Execute()
+		{
 			CPU.Execute();
 		}
 
@@ -133,9 +141,17 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 			{
 				return CreateOperand(AdjustRegisterSize(ConvertToRegister(operand.Register), size));
 			}
+			else if (operand.IsLabel)
+			{
+				return CreateLabel(operand.Name);
+			}
+			else if (operand.IsRuntimeMember)
+			{
+				return CreateLabel(((operand.RuntimeMember) as RuntimeField).FullName);
+			}
 			else if (operand.IsMemoryAddress)
 			{
-				return CreateMemoryAddressOperand(size, ConvertToRegister(operand.Register), null, 0, (int)operand.Displacement);
+				return CreateMemoryAddressOperand(size, ConvertToRegister(operand.EffectiveOffsetBase), null, 0, (int)operand.Displacement);
 			}
 			else if (operand.IsSymbol)
 			{

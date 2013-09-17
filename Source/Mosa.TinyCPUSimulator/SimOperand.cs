@@ -128,16 +128,16 @@ namespace Mosa.TinyCPUSimulator
 				string s = "[";
 
 				if (Register != null)
-					s = s + Register.Name + " + ";
+					s = s + Register.Name;
 
 				if (Index != null)
-					s = s + Index.Name;
+					s = s + "+" + Index.Name;
 
-				if (Scale != 1)
-					s = s + " * " + Scale.ToString();
+				if (Scale != 0)
+					s = s + "*" + Scale.ToString();
 
 				if (Immediate != 0)
-					s = s + " + " + Immediate.ToString();
+					s = s + "+" + Immediate.ToString();
 
 				s = s + "]";
 

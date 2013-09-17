@@ -139,14 +139,14 @@ namespace Mosa.TinyCPUSimulator.x86
 			CH = new Legacy8BitHighRegister("CH", ECX);
 			DH = new Legacy8BitHighRegister("DH", EDX);
 
-			XMM0 = new RegisterFloatingPoint("XXM0", 0, RegisterType.FloatingPoint);
-			XMM1 = new RegisterFloatingPoint("XXM1", 1, RegisterType.FloatingPoint);
-			XMM2 = new RegisterFloatingPoint("XXM2", 2, RegisterType.FloatingPoint);
-			XMM3 = new RegisterFloatingPoint("XXM3", 3, RegisterType.FloatingPoint);
-			XMM4 = new RegisterFloatingPoint("XXM4", 4, RegisterType.FloatingPoint);
-			XMM5 = new RegisterFloatingPoint("XXM5", 5, RegisterType.FloatingPoint);
-			XMM6 = new RegisterFloatingPoint("XXM6", 6, RegisterType.FloatingPoint);
-			XMM7 = new RegisterFloatingPoint("XXM7", 7, RegisterType.FloatingPoint);
+			XMM0 = new RegisterFloatingPoint("XMM0", 0, RegisterType.FloatingPoint);
+			XMM1 = new RegisterFloatingPoint("XMM1", 1, RegisterType.FloatingPoint);
+			XMM2 = new RegisterFloatingPoint("XMM2", 2, RegisterType.FloatingPoint);
+			XMM3 = new RegisterFloatingPoint("XMM3", 3, RegisterType.FloatingPoint);
+			XMM4 = new RegisterFloatingPoint("XMM4", 4, RegisterType.FloatingPoint);
+			XMM5 = new RegisterFloatingPoint("XMM5", 5, RegisterType.FloatingPoint);
+			XMM6 = new RegisterFloatingPoint("XMM6", 6, RegisterType.FloatingPoint);
+			XMM7 = new RegisterFloatingPoint("XMM7", 7, RegisterType.FloatingPoint);
 
 			ST0 = new RegisterFloatingPoint("ST0", -1, RegisterType.FloatingPoint);
 
@@ -208,6 +208,66 @@ namespace Mosa.TinyCPUSimulator.x86
 			{
 				throw;
 			}
+		}
+
+		private static string ToHex(uint value)
+		{
+			return "0x" + (string.Format("{0:X}", value).PadLeft(8, '0'));
+		}
+
+		public override SimState GetState()
+		{
+			SimState simState = base.GetState();
+
+			simState.StoreValue("IP.Formatted", ToHex(EIP.Value));
+			simState.StoreValue("EIP", ToHex(EIP.Value));
+			simState.StoreValue("EIP.Last", ToHex((uint)LastCurrentInstructionPointer));
+
+			simState.StoreValue("EAX", ToHex(EAX.Value));
+			simState.StoreValue("EBX", ToHex(EBX.Value));
+			simState.StoreValue("ECX", ToHex(ECX.Value));
+			simState.StoreValue("EDX", ToHex(EDX.Value));
+			simState.StoreValue("ESP", ToHex(ESP.Value));
+			simState.StoreValue("EBP", ToHex(EBP.Value));
+			simState.StoreValue("ESI", ToHex(ESI.Value));
+			simState.StoreValue("EDI", ToHex(EDI.Value));
+
+			simState.StoreValue("CR0", ToHex(CR0.Value));
+			simState.StoreValue("CR2", ToHex(CR2.Value));
+			simState.StoreValue("CR3", ToHex(CR3.Value));
+			simState.StoreValue("CR4", ToHex(CR4.Value));
+
+			simState.StoreValue("XXM0", XMM0.Value.ToString());
+			simState.StoreValue("XXM1", XMM1.Value.ToString());
+			simState.StoreValue("XXM2", XMM2.Value.ToString());
+			simState.StoreValue("XXM3", XMM3.Value.ToString());
+			simState.StoreValue("XXM4", XMM4.Value.ToString());
+			simState.StoreValue("XXM5", XMM5.Value.ToString());
+			simState.StoreValue("XXM6", XMM6.Value.ToString());
+			simState.StoreValue("XXM7", XMM7.Value.ToString());
+
+			simState.StoreValue("FLAGS", FLAGS.Value.ToString());
+			simState.StoreValue("FLAGS.Zero", FLAGS.Zero.ToString());
+			simState.StoreValue("FLAGS.Parity", FLAGS.Parity.ToString());
+			simState.StoreValue("FLAGS.Carry", FLAGS.Carry.ToString());
+			simState.StoreValue("FLAGS.Direction", FLAGS.Direction.ToString());
+			simState.StoreValue("FLAGS.Sign", FLAGS.Sign.ToString());
+			simState.StoreValue("FLAGS.Adjust", FLAGS.Adjust.ToString());
+			simState.StoreValue("FLAGS.Overflow", FLAGS.Overflow.ToString());
+
+			uint ebp = EBP.Value;
+			uint index = 0;
+
+			while (ebp > ESP.Value && index < 32)
+			{
+				simState.StoreValue("StackFrame.Index." + index.ToString(), ToHex(Read32(ebp)));
+				ebp = ebp - 4;
+				index++;
+			}
+
+			simState.StoreValue("StackFrame.Index.Count", index.ToString());
+
+			return simState;
 		}
 	}
 }
