@@ -365,7 +365,7 @@ namespace Mosa.Tool.Explorer
 
 			toolStripStatusLabel1.Text = "Compiled!";
 
-			simAdapter.Monitor.EnableStep = true;
+			simAdapter.Monitor.EnableStepping = true;
 			simAdapter.Reset();
 
 			SimProcessorX86Form form = new SimProcessorX86Form(simAdapter);
@@ -388,9 +388,9 @@ namespace Mosa.Tool.Explorer
 		{
 			switch (platform.ToLower())
 			{
-				case "x86": return new Mosa.TinyCPUSimulator.x86.Adaptor.SimAdapter();
+				case "x86": return new Mosa.TinyCPUSimulator.x86.Adaptor.SimStandardPCAdapter();
 				//case "avr32": return Mosa.Platform.AVR32.Architecture.CreateArchitecture(Mosa.Platform.AVR32.ArchitectureFeatureFlags.AutoDetect);
-				default: return new Mosa.TinyCPUSimulator.x86.Adaptor.SimAdapter();
+				default: return new Mosa.TinyCPUSimulator.x86.Adaptor.SimStandardPCAdapter();
 			}
 		}
 

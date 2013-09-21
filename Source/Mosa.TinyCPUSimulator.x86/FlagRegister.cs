@@ -24,7 +24,7 @@ namespace Mosa.TinyCPUSimulator.x86
 
 		public bool Adjust { get { return GetBit(4); } set { SetBit(4, value); } }
 
-		public bool Zero { get { return GetBit(6); } set { SetBit(7, value); } }
+		public bool Zero { get { return GetBit(6); } set { SetBit(6, value); } }
 
 		public bool Sign { get { return GetBit(7); } set { SetBit(7, value); } }
 

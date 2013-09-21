@@ -24,12 +24,6 @@ namespace Mosa.TinyCPUSimulator.Nunit
 			CPU.AddDevice(new Multiboot(CPU));
 		}
 
-		[SetUp]
-		public void Setup()
-		{
-			Initialize();
-		}
-
 		[TestCase((uint)10, uint.MaxValue)]
 		[TestCase((uint)0, (uint)0)]
 		[TestCase((uint)200, (uint)100)]

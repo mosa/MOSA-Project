@@ -148,6 +148,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.TinyCPUSimulator.x86.A
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.TinyCPUSimulator.Adaptor", "Mosa.TinyCPUSimulator.Adaptor\Mosa.TinyCPUSimulator.Adaptor.csproj", "{50568E2D-5360-4F71-87E0-F6979D2D858A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.TinyCPUSimulator.TestSystem", "Mosa.TinyCPUSimulator.TestSystem\Mosa.TinyCPUSimulator.TestSystem.csproj", "{50568E2D-5360-4F71-87E0-A6979D1D858A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.TinyCPUSimulator.TestSystem.Nunit", "Mosa.TinyCPUSimulator.TestSystem.Nunit\Mosa.TinyCPUSimulator.TestSystem.Nunit.csproj", "{50568E2D-5360-4F71-87E0-A6979D1D858C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -778,6 +782,26 @@ Global
 		{50568E2D-5360-4F71-87E0-F6979D2D858A}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{50568E2D-5360-4F71-87E0-F6979D2D858A}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{50568E2D-5360-4F71-87E0-F6979D2D858A}.Release|x86.ActiveCfg = Release|Any CPU
+		{50568E2D-5360-4F71-87E0-A6979D1D858A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{50568E2D-5360-4F71-87E0-A6979D1D858A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{50568E2D-5360-4F71-87E0-A6979D1D858A}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{50568E2D-5360-4F71-87E0-A6979D1D858A}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{50568E2D-5360-4F71-87E0-A6979D1D858A}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{50568E2D-5360-4F71-87E0-A6979D1D858A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{50568E2D-5360-4F71-87E0-A6979D1D858A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{50568E2D-5360-4F71-87E0-A6979D1D858A}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{50568E2D-5360-4F71-87E0-A6979D1D858A}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{50568E2D-5360-4F71-87E0-A6979D1D858A}.Release|x86.ActiveCfg = Release|Any CPU
+		{50568E2D-5360-4F71-87E0-A6979D1D858C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{50568E2D-5360-4F71-87E0-A6979D1D858C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{50568E2D-5360-4F71-87E0-A6979D1D858C}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{50568E2D-5360-4F71-87E0-A6979D1D858C}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{50568E2D-5360-4F71-87E0-A6979D1D858C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{50568E2D-5360-4F71-87E0-A6979D1D858C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{50568E2D-5360-4F71-87E0-A6979D1D858C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{50568E2D-5360-4F71-87E0-A6979D1D858C}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{50568E2D-5360-4F71-87E0-A6979D1D858C}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{50568E2D-5360-4F71-87E0-A6979D1D858C}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -846,6 +870,8 @@ Global
 		{0E16B66A-57A9-4A02-9E53-C91ED0F2A9EF} = {229DB190-FE03-4BA0-A16C-2EAE7D141EEE}
 		{50568E2D-5360-4F71-87E0-F6979D1D858A} = {229DB190-FE03-4BA0-A16C-2EAE7D141EEE}
 		{50568E2D-5360-4F71-87E0-F6979D2D858A} = {229DB190-FE03-4BA0-A16C-2EAE7D141EEE}
+		{50568E2D-5360-4F71-87E0-A6979D1D858A} = {229DB190-FE03-4BA0-A16C-2EAE7D141EEE}
+		{50568E2D-5360-4F71-87E0-A6979D1D858C} = {229DB190-FE03-4BA0-A16C-2EAE7D141EEE}
 	EndGlobalSection
 	GlobalSection(Performance) = preSolution
 		HasPerformanceSessions = true

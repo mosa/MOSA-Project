@@ -15,7 +15,7 @@ namespace Mosa.TinyCPUSimulator.x86.Opcodes
 		{
 			uint v1 = LoadValue(cpu, instruction.Operand1);
 
-			cpu.EIP.Value = (uint)(cpu.EIP.Value + (int)v1);
+			cpu.EIP.Value = v1;
 		}
 	}
 }

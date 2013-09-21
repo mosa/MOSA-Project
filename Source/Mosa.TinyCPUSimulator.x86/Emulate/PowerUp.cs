@@ -12,6 +12,7 @@ namespace Mosa.TinyCPUSimulator.x86.Emulate
 	public class PowerUp : BaseSimDevice
 	{
 		public readonly uint VectorReset = 0xFFFFFFF0;
+		public readonly string VectorCall = "Mosa.Tools.Compiler.LinkerGenerated.<$>StartUp()";
 
 		public PowerUp(SimCPU simCPU)
 			: base(simCPU)
@@ -25,7 +26,7 @@ namespace Mosa.TinyCPUSimulator.x86.Emulate
 			simCPU.AddMemory(0x00000000, 0x000A0000, 1); // First 640kb
 			simCPU.AddMemory(VectorReset, 0x0000000F, 2); // Vector Reset
 
-			simCPU.AddInstruction(VectorReset, new SimInstruction(Opcode.Call, 4, SimOperand.CreateLabel("Mosa.Tools.Compiler.LinkerGenerated.<$>StartUp()")));
+			simCPU.AddInstruction(VectorReset, new SimInstruction(Opcode.Call, 4, SimOperand.CreateLabel(VectorCall)));
 		}
 
 		public override void Reset()
@@ -37,7 +38,7 @@ namespace Mosa.TinyCPUSimulator.x86.Emulate
 			x86.EBP.Value = x86.ESP.Value;
 
 			// Start EIP
-			x86.EIP.Value = 0xFFFFFFF0;
+			x86.EIP.Value = VectorReset;
 		}
 
 		public override void MemoryWrite(ulong address, byte size)

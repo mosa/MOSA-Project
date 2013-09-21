@@ -27,16 +27,6 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 
 		public override void Initialize()
 		{
-			//CPU.AddMemory(0x400000, 0x100000, 2);  // 4-5Mb reserved
-
-			var primaryDisplay = new DisplayForm(800, 600);
-			primaryDisplay.Show();
-			primaryDisplay.StartTimer();
-
-			CPU.AddDevice(new PowerUp(CPU));
-			CPU.AddDevice(new CMOS(CPU));
-			CPU.AddDevice(new VGAConsole(CPU, primaryDisplay));
-			CPU.AddDevice(new Multiboot(CPU));
 		}
 
 		SimCPU ISimAdapter.SimCPU { get { return this.CPU; } }
@@ -46,7 +36,7 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 		void ISimAdapter.Reset()
 		{
 			CPU.Reset();
-			CPU.Execute();
+			//CPU.Execute();
 		}
 
 		void ISimAdapter.Execute()
@@ -54,7 +44,7 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 			CPU.Execute();
 		}
 
-		SimInstruction ISimAdapter.Convert(RuntimeMethod method, Context context, byte opcodeSize)
+		SimInstruction ISimAdapter.Convert(Context context, RuntimeMethod method, BasicBlocks basicBlocks, byte opcodeSize)
 		{
 			X86Instruction x86Instruction = context.Instruction as X86Instruction;
 
@@ -66,7 +56,7 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 			if (opcode == null)
 				return null;
 
-			var operands = GetOperands(context, method);
+			var operands = GetOperands(context, method, basicBlocks);
 
 			AdjustInstructionOperands(opcode, operands);
 
@@ -87,7 +77,7 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 
 		void ISimAdapter.AddInstruction(ulong address, SimInstruction instruction)
 		{
-			this.Add(address, instruction);
+			Add(address, instruction);
 		}
 
 		void ISimAdapter.SetLabel(string label, ulong address)
@@ -95,7 +85,7 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 			CPU.SetLabel(label, address);
 		}
 
-		private List<SimOperand> GetOperands(Context context, RuntimeMethod method)
+		private List<SimOperand> GetOperands(Context context, RuntimeMethod method, BasicBlocks basicBlocks)
 		{
 			List<SimOperand> operands = new List<SimOperand>();
 
@@ -107,9 +97,11 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 
 			if (context.BranchTargets != null)
 			{
-				foreach (var branch in context.BranchTargets)
+				foreach (var target in context.BranchTargets)
 				{
-					operands.Add(CreateLabel("L_" + branch.ToString() + ":" + method.FullName));
+					var block = basicBlocks.GetByLabel(target);
+
+					operands.Add(CreateLabel(block.ToString() + ":" + method.FullName));
 				}
 			}
 

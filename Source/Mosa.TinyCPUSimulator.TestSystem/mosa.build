@@ -12,21 +12,23 @@
 	
 	<!-- Main build target -->
 	<target name="build">
-	    <csc target="library" output="${outputDirectory}/Mosa.TinyCPUSimulator.x86.Adaptor.dll" debug="${debug}" unsafe="true" nostdlib="false">
+	    <csc target="library" output="${outputDirectory}/Mosa.TinyCPUSimulator.TestSystem.dll" debug="${debug}" unsafe="true" nostdlib="false">
 		<sources>
-                    <include name="SimStandardPCAdapter.cs"/>
-                    <include name="SimAdapter.cs"/>
+                    <include name="BasePlatform.cs"/>
+                    <include name="X86Platform.cs"/>
+                    <include name="TestCompiler.cs"/>
 		</sources>
 		<references>
                     <include name="System.dll"/>
-                    <include name="System.Windows.Forms.dll"/>
                     <include name="${outputDirectory}/Mosa.Compiler.Common.dll"/>
                     <include name="${outputDirectory}/Mosa.Compiler.Framework.dll"/>
+                    <include name="${outputDirectory}/Mosa.Compiler.InternalTrace.dll"/>
                     <include name="${outputDirectory}/Mosa.Compiler.Linker.dll"/>
                     <include name="${outputDirectory}/Mosa.Compiler.Metadata.dll"/>
                     <include name="${outputDirectory}/Mosa.Compiler.TypeSystem.dll"/>
                     <include name="${outputDirectory}/Mosa.Platform.x86.dll"/>
                     <include name="${outputDirectory}/Mosa.TinyCPUSimulator.Adaptor.dll"/>
+                    <include name="${outputDirectory}/Mosa.TinyCPUSimulator.x86.Adaptor.dll"/>
                     <include name="${outputDirectory}/Mosa.TinyCPUSimulator.x86.dll"/>
                     <include name="${outputDirectory}/Mosa.TinyCPUSimulator.dll"/>
 		</references>

@@ -220,9 +220,9 @@ namespace Mosa.TinyCPUSimulator.x86
 			SimState simState = base.GetState();
 
 			simState.StoreValue("IP.Formatted", ToHex(EIP.Value));
-			simState.StoreValue("EIP", ToHex(EIP.Value));
-			simState.StoreValue("EIP.Last", ToHex((uint)LastCurrentInstructionPointer));
+			//simState.StoreValue("EIP.Last", ToHex((uint)LastCurrentInstructionPointer));
 
+			simState.StoreValue("EIP", ToHex(EIP.Value));
 			simState.StoreValue("EAX", ToHex(EAX.Value));
 			simState.StoreValue("EBX", ToHex(EBX.Value));
 			simState.StoreValue("ECX", ToHex(ECX.Value));
@@ -266,6 +266,18 @@ namespace Mosa.TinyCPUSimulator.x86
 			}
 
 			simState.StoreValue("StackFrame.Index.Count", index.ToString());
+
+			uint esp = ESP.Value + 4;
+			index = 0;
+
+			while (index < 16)
+			{
+				simState.StoreValue("Stack.Index." + index.ToString(), ToHex(Read32(esp)));
+				esp = esp + 4;
+				index++;
+			}
+
+			simState.StoreValue("Stack.Index.Count", index.ToString());
 
 			return simState;
 		}

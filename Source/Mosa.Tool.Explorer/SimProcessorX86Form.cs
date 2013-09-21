@@ -21,6 +21,8 @@ namespace Mosa.Tool.Explorer
 			InitializeComponent();
 
 			this.simAdapter = simAdapter;
+			this.simAdapter.Monitor.EnableStepping = true;
+			GetCurrentStateAndUpdate();
 		}
 
 		private void SimProcessorX86Form_Load(object sender, EventArgs e)
@@ -30,14 +32,11 @@ namespace Mosa.Tool.Explorer
 
 		public void Update(SimState simState)
 		{
-			//lbInstructionHistory.Items.Insert(0, simState.Tick.ToString() + ": " + simState.Instruction.ToString());
-			//lbInstructionHistory.Items.Add(simState.Tick.ToString() + " - " + simState.Values["EIP"] + ": " + simState.Instruction.ToString());
-			//lbInstructionHistory.SelectedIndex = lbInstructionHistory.Items.Count - 1;
-
 			lbCurrentFrame.Items.Clear();
 			lbFlags.Items.Clear();
 			lbGPRs.Items.Clear();
 			lbXMMRegisters.Items.Clear();
+			lbStack.Items.Clear();
 
 			lbGPRs.Items.Add("EIP: " + simState.Values["EIP"]);
 			lbGPRs.Items.Add("EAX: " + simState.Values["EAX"]);
@@ -60,7 +59,6 @@ namespace Mosa.Tool.Explorer
 
 			//lbXMMRegisters;
 
-			lbFlags.Items.Add("FLAGS: " + simState.Values["FLAGS"]);
 			lbFlags.Items.Add("Zero: " + simState.Values["FLAGS.Zero"]);
 			lbFlags.Items.Add("Carry: " + simState.Values["FLAGS.Carry"]);
 			lbFlags.Items.Add("Sign: " + simState.Values["FLAGS.Sign"]);
@@ -68,30 +66,65 @@ namespace Mosa.Tool.Explorer
 			lbFlags.Items.Add("Parity: " + simState.Values["FLAGS.Parity"]);
 			lbFlags.Items.Add("Direction: " + simState.Values["FLAGS.Direction"]);
 			lbFlags.Items.Add("Adjust: " + simState.Values["FLAGS.Adjust"]);
+			lbFlags.Items.Add("FLAGS: " + simState.Values["FLAGS"]);
 
 			int count = Convert.ToInt32(simState.Values["StackFrame.Index.Count"]);
 
 			for (int index = 0; index < count; index++)
 			{
-				lbCurrentFrame.Items.Add(index.ToString() + ": " + simState.Values["StackFrame.Index." + index.ToString()]);
+				lbCurrentFrame.Items.Add(index.ToString("D2") + ": " + simState.Values["StackFrame.Index." + index.ToString()]);
 			}
+
+			count = Convert.ToInt32(simState.Values["Stack.Index.Count"]);
+
+			for (int index = count - 1; index >= 0; index--)
+			{
+				lbStack.Items.Add(index.ToString("D2") + ": " + simState.Values["Stack.Index." + index.ToString()]);
+			}
+
+			lbStack.SelectedIndex = lbStack.Items.Count - 1;
 
 		}
 
-		private void button1_Click(object sender, EventArgs e)
+		public void GetCurrentStateAndUpdate()
 		{
-			simAdapter.Execute();
 			var state = simAdapter.GetState();
 
 			lbInstructionHistory.Items.Add(state);
 			lbInstructionHistory.SelectedIndex = lbInstructionHistory.Items.Count - 1;
+		}
 
-			Update(lbInstructionHistory.SelectedItem as SimState);
+		public void ExecuteSteps(int steps)
+		{
+			try
+			{
+				for (int i = 0; i < steps; i++)
+				{
+					simAdapter.Execute();
+					GetCurrentStateAndUpdate();
+				}
+			}
+			catch (CPUException e)
+			{
+				GetCurrentStateAndUpdate();
+				lbInstructionHistory.Items.Add(e);
+			}
+		}
+
+		private void button1_Click(object sender, EventArgs e)
+		{
+			ExecuteSteps(1);
 		}
 
 		private void lbInstructionHistory_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			Update(lbInstructionHistory.SelectedItem as SimState);
+			if (lbInstructionHistory.SelectedItem is SimState)
+				Update(lbInstructionHistory.SelectedItem as SimState);
+		}
+
+		private void button2_Click(object sender, EventArgs e)
+		{
+			ExecuteSteps((int)nvSteps.Value);
 		}
 	}
 }

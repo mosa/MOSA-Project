@@ -1,7 +1,7 @@
-﻿using System;
+﻿using Mosa.Test.CodeDomCompiler;
+using System;
 using System.CodeDom.Compiler;
 using System.Windows.Forms;
-using Mosa.Test.CodeDomCompiler;
 
 namespace Mosa.Tool.Explorer
 {

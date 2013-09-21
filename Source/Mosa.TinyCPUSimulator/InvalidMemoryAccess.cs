@@ -14,9 +14,9 @@ namespace Mosa.TinyCPUSimulator
 	[Serializable]
 	public class InvalidMemoryAccess : CPUException
 	{
-		public long Address { get; private set; }
+		public ulong Address { get; private set; }
 
-		public InvalidMemoryAccess(long address)
+		public InvalidMemoryAccess(ulong address)
 		{
 			this.Address = address;
 		}

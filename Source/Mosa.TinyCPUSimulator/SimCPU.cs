@@ -65,7 +65,7 @@ namespace Mosa.TinyCPUSimulator
 				if (r.Contains(address))
 					return r;
 
-			return null;
+			throw new InvalidMemoryAccess(address);
 		}
 
 		private byte InternalRead8(ulong address)
@@ -209,6 +209,9 @@ namespace Mosa.TinyCPUSimulator
 
 		public void SetLabel(string label, ulong address)
 		{
+			if (Labels.ContainsKey(label))
+				return; // HACK for generics which duplicate methods!
+
 			Labels.Add(label, address);
 
 			//Debug.WriteLine("0x" + address.ToString("X") + ": " + label);
@@ -281,6 +284,9 @@ namespace Mosa.TinyCPUSimulator
 				var instruction = DecodeOpcode(CurrentInstructionPointer);
 				Tick++;
 
+				//if (instruction == null)
+				//	return;
+
 				Debug.WriteLine(instruction.ToString());
 
 				LastInstruction = instruction;
@@ -317,11 +323,12 @@ namespace Mosa.TinyCPUSimulator
 
 		public virtual SimState GetState()
 		{
-			SimState simState = new SimState(Tick, LastInstruction);
+			SimState simState = new SimState(Tick, DecodeOpcode(CurrentInstructionPointer));
 
 			simState.StoreMemoryDelta(MemoryDelta);
 
 			simState.StoreValue("IP.Current", CurrentInstructionPointer.ToString());
+
 			simState.StoreValue("IP.Last", LastCurrentInstructionPointer.ToString());
 			simState.StoreValue("Instruction.Last", LastInstruction.ToString());
 

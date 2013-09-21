@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{50568E2D-5360-4F71-87E0-F6979D1D858A}</ProjectGuid>
+    <ProjectGuid>{50568E2D-5360-4F71-87E0-A6979D1D858C}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Mosa.TinyCPUSimulator.x86.Adaptor</RootNamespace>
-    <AssemblyName>Mosa.TinyCPUSimulator.x86.Adaptor</AssemblyName>
+    <RootNamespace>Mosa.TinyCPUSimulator.TestSystem.Nunit</RootNamespace>
+    <AssemblyName>Mosa.TinyCPUSimulator.TestSystem.Nunit</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -35,11 +35,11 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="nunit.framework, Version=2.6.2.12296, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\3rdParty\nunit.framework.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Windows.Forms" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Mosa.Compiler.Common\Mosa.Compiler.Common.csproj">
@@ -50,29 +50,21 @@
       <Project>{75a12a8a-8c8f-4d1e-801b-689d8f781bf4}</Project>
       <Name>Mosa.Compiler.Framework</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Mosa.Compiler.Linker\Mosa.Compiler.Linker.csproj">
-      <Project>{65866a51-b229-44c5-ac81-87a90fa1741b}</Project>
-      <Name>Mosa.Compiler.Linker</Name>
+    <ProjectReference Include="..\Mosa.Test.Cases\Mosa.Test.Cases.csproj">
+      <Project>{68f4256d-c291-4365-bc09-ae49b902ae59}</Project>
+      <Name>Mosa.Test.Cases</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Mosa.Compiler.Metadata\Mosa.Compiler.Metadata.csproj">
-      <Project>{7033b213-2055-4c6a-b008-d9856267f5d7}</Project>
-      <Name>Mosa.Compiler.Metadata</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Mosa.Compiler.TypeSystem\Mosa.Compiler.TypeSystem.csproj">
-      <Project>{5f30a68e-05bf-40ea-b576-5ebcde520449}</Project>
-      <Name>Mosa.Compiler.TypeSystem</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Mosa.Platform.x86\Mosa.Platform.x86.csproj">
-      <Project>{de30cbe9-50f3-4a3e-bcc9-a8a36348530e}</Project>
-      <Name>Mosa.Platform.x86</Name>
+    <ProjectReference Include="..\Mosa.Test.Collection\Mosa.Test.Collection.csproj">
+      <Project>{067aab6b-447a-45ba-9e0d-dfea886b4f69}</Project>
+      <Name>Mosa.Test.Collection</Name>
     </ProjectReference>
     <ProjectReference Include="..\Mosa.TinyCPUSimulator.Adaptor\Mosa.TinyCPUSimulator.Adaptor.csproj">
       <Project>{50568e2d-5360-4f71-87e0-f6979d2d858a}</Project>
       <Name>Mosa.TinyCPUSimulator.Adaptor</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Mosa.TinyCPUSimulator.x86\Mosa.TinyCPUSimulator.x86.csproj">
-      <Project>{50568e2d-5360-4f71-87e0-e6979d1d858a}</Project>
-      <Name>Mosa.TinyCPUSimulator.x86</Name>
+    <ProjectReference Include="..\Mosa.TinyCPUSimulator.TestSystem\Mosa.TinyCPUSimulator.TestSystem.csproj">
+      <Project>{50568e2d-5360-4f71-87e0-a6979d1d858a}</Project>
+      <Name>Mosa.TinyCPUSimulator.TestSystem</Name>
     </ProjectReference>
     <ProjectReference Include="..\Mosa.TinyCPUSimulator\Mosa.TinyCPUSimulator.csproj">
       <Project>{6f7c06b2-09bf-45bd-8e6b-ae9bf7c7e250}</Project>
@@ -80,8 +72,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="SimStandardPCAdapter.cs" />
-    <Compile Include="SimAdapter.cs" />
+    <Compile Include="Int32Fixture.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

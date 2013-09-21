@@ -52,11 +52,12 @@ namespace Mosa.TinyCPUSimulator.Adaptor
 		/// <summary>
 		/// Converts the specified method.
 		/// </summary>
-		/// <param name="method">The method.</param>
 		/// <param name="context">The context.</param>
+		/// <param name="method">The method.</param>
+		/// <param name="basicBlocks">The basic blocks.</param>
 		/// <param name="opcodeSize">Size of the opcode.</param>
 		/// <returns></returns>
-		SimInstruction Convert(RuntimeMethod method, Context context, byte opcodeSize);
+		SimInstruction Convert(Context context, RuntimeMethod method, BasicBlocks basicBlocks, byte opcodeSize);
 
 		/// <summary>
 		/// Adds the instruction.

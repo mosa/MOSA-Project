@@ -44,7 +44,7 @@ namespace Mosa.TinyCPUSimulator
 
 		public override string ToString()
 		{
-			return "[" + Tick.ToString() + "] " + Values["IP.Formatted"] + ": " + Instruction.ToString();
+			return "[" + Tick.ToString("D5") + "] " + Values["IP.Formatted"] + ": " + (Instruction == null ? "<None>" : Instruction.ToString());
 		}
 	}
 }

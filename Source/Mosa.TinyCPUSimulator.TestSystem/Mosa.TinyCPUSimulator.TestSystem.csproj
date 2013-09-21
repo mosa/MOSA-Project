@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{50568E2D-5360-4F71-87E0-F6979D1D858A}</ProjectGuid>
+    <ProjectGuid>{50568E2D-5360-4F71-87E0-A6979D1D858A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Mosa.TinyCPUSimulator.x86.Adaptor</RootNamespace>
-    <AssemblyName>Mosa.TinyCPUSimulator.x86.Adaptor</AssemblyName>
+    <RootNamespace>Mosa.TinyCPUSimulator.TestSystem</RootNamespace>
+    <AssemblyName>Mosa.TinyCPUSimulator.TestSystem</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -36,10 +36,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.Windows.Forms" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Mosa.Compiler.Common\Mosa.Compiler.Common.csproj">
@@ -49,6 +45,10 @@
     <ProjectReference Include="..\Mosa.Compiler.Framework\Mosa.Compiler.Framework.csproj">
       <Project>{75a12a8a-8c8f-4d1e-801b-689d8f781bf4}</Project>
       <Name>Mosa.Compiler.Framework</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mosa.Compiler.InternalTrace\Mosa.Compiler.InternalTrace.csproj">
+      <Project>{540beac7-a2c3-4c46-9f4a-e6e1df4ef6fc}</Project>
+      <Name>Mosa.Compiler.InternalTrace</Name>
     </ProjectReference>
     <ProjectReference Include="..\Mosa.Compiler.Linker\Mosa.Compiler.Linker.csproj">
       <Project>{65866a51-b229-44c5-ac81-87a90fa1741b}</Project>
@@ -70,6 +70,10 @@
       <Project>{50568e2d-5360-4f71-87e0-f6979d2d858a}</Project>
       <Name>Mosa.TinyCPUSimulator.Adaptor</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Mosa.TinyCPUSimulator.x86.Adaptor\Mosa.TinyCPUSimulator.x86.Adaptor.csproj">
+      <Project>{50568e2d-5360-4f71-87e0-f6979d1d858a}</Project>
+      <Name>Mosa.TinyCPUSimulator.x86.Adaptor</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Mosa.TinyCPUSimulator.x86\Mosa.TinyCPUSimulator.x86.csproj">
       <Project>{50568e2d-5360-4f71-87e0-e6979d1d858a}</Project>
       <Name>Mosa.TinyCPUSimulator.x86</Name>
@@ -80,8 +84,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="SimStandardPCAdapter.cs" />
-    <Compile Include="SimAdapter.cs" />
+    <Compile Include="BasePlatform.cs" />
+    <Compile Include="X86Platform.cs" />
+    <Compile Include="TestCompiler.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

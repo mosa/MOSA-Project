@@ -13,7 +13,7 @@ namespace Mosa.Test.System
 {
 	public class TestCompilerAdapter
 	{
-		static private TestCompiler compiler = new TestCompiler();
+		private static TestCompiler compiler = new TestCompiler();
 
 		protected CompilerSettings settings = new CompilerSettings();
 

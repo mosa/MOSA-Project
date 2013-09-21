@@ -19,19 +19,19 @@ namespace Mosa.TinyCPUSimulator
 
 		public ulong BreakAtTick = ulong.MaxValue;
 
-		public bool EnableStep { get; set; }
+		public bool EnableStepping { get; set; }
 
 		public SimMonitor(SimCPU cpu)
 		{
 			CPU = cpu;
-			EnableStep = false;
+			EnableStepping = false;
 		}
 
 		public bool Break
 		{
 			get
 			{
-				return EnableStep || CPU.Tick == BreakAtTick || breakPoints.Contains(CPU.CurrentInstructionPointer);
+				return EnableStepping || CPU.Tick == BreakAtTick || breakPoints.Contains(CPU.CurrentInstructionPointer);
 			}
 		}
 

@@ -50,12 +50,21 @@ namespace Mosa.TinyCPUSimulator.Adaptor
 			long end = codeEmitter.CurrentPosition;
 			byte opcodeSize = (byte)(end - start);
 
-			var instruction = simAdapter.Convert(methodCompiler.Method, context, opcodeSize);
+			var instruction = simAdapter.Convert(context, methodCompiler.Method, basicBlocks, opcodeSize);
 			instruction.Source = context.ToString(); // context.Instruction.ToString(context);
 
 			simAdapter.AddInstruction((ulong)(sectionAddress + startPosition + start), instruction);
 
 			return;
+		}
+
+		protected override void BlockStart(BasicBlock block)
+		{
+			long current = codeEmitter.CurrentPosition;
+
+			base.BlockStart(block);
+
+			simAdapter.SetLabel(block.ToString() + ":" + methodCompiler.Method.FullName, (ulong)(sectionAddress + startPosition + current));
 		}
 	}
 }

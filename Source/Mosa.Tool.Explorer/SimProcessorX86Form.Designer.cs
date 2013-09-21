@@ -39,16 +39,24 @@
 			this.button1 = new System.Windows.Forms.Button();
 			this.lbFlags = new System.Windows.Forms.ListBox();
 			this.label5 = new System.Windows.Forms.Label();
+			this.lbStack = new System.Windows.Forms.ListBox();
+			this.label6 = new System.Windows.Forms.Label();
+			this.button2 = new System.Windows.Forms.Button();
+			this.nvSteps = new System.Windows.Forms.NumericUpDown();
+			((System.ComponentModel.ISupportInitialize)(this.nvSteps)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// lbInstructionHistory
 			// 
+			this.lbInstructionHistory.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.lbInstructionHistory.Font = new System.Drawing.Font("Lucida Console", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.lbInstructionHistory.FormattingEnabled = true;
 			this.lbInstructionHistory.ItemHeight = 11;
-			this.lbInstructionHistory.Location = new System.Drawing.Point(3, 211);
+			this.lbInstructionHistory.Location = new System.Drawing.Point(3, 180);
 			this.lbInstructionHistory.Name = "lbInstructionHistory";
-			this.lbInstructionHistory.Size = new System.Drawing.Size(651, 158);
+			this.lbInstructionHistory.Size = new System.Drawing.Size(744, 169);
 			this.lbInstructionHistory.TabIndex = 0;
 			this.lbInstructionHistory.SelectedIndexChanged += new System.EventHandler(this.lbInstructionHistory_SelectedIndexChanged);
 			// 
@@ -57,15 +65,15 @@
 			this.lbCurrentFrame.Font = new System.Drawing.Font("Lucida Console", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.lbCurrentFrame.FormattingEnabled = true;
 			this.lbCurrentFrame.ItemHeight = 11;
-			this.lbCurrentFrame.Location = new System.Drawing.Point(534, 25);
+			this.lbCurrentFrame.Location = new System.Drawing.Point(490, 25);
 			this.lbCurrentFrame.Name = "lbCurrentFrame";
-			this.lbCurrentFrame.Size = new System.Drawing.Size(120, 158);
+			this.lbCurrentFrame.Size = new System.Drawing.Size(125, 136);
 			this.lbCurrentFrame.TabIndex = 1;
 			// 
 			// label1
 			// 
 			this.label1.AutoSize = true;
-			this.label1.Location = new System.Drawing.Point(531, 9);
+			this.label1.Location = new System.Drawing.Point(487, 9);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(76, 13);
 			this.label1.TabIndex = 2;
@@ -74,7 +82,7 @@
 			// label2
 			// 
 			this.label2.AutoSize = true;
-			this.label2.Location = new System.Drawing.Point(0, 195);
+			this.label2.Location = new System.Drawing.Point(0, 164);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(94, 13);
 			this.label2.TabIndex = 3;
@@ -87,7 +95,7 @@
 			this.lbGPRs.ItemHeight = 11;
 			this.lbGPRs.Location = new System.Drawing.Point(3, 25);
 			this.lbGPRs.Name = "lbGPRs";
-			this.lbGPRs.Size = new System.Drawing.Size(159, 158);
+			this.lbGPRs.Size = new System.Drawing.Size(155, 136);
 			this.lbGPRs.TabIndex = 4;
 			// 
 			// label3
@@ -104,15 +112,15 @@
 			this.lbXMMRegisters.Font = new System.Drawing.Font("Lucida Console", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.lbXMMRegisters.FormattingEnabled = true;
 			this.lbXMMRegisters.ItemHeight = 11;
-			this.lbXMMRegisters.Location = new System.Drawing.Point(178, 25);
+			this.lbXMMRegisters.Location = new System.Drawing.Point(329, 25);
 			this.lbXMMRegisters.Name = "lbXMMRegisters";
-			this.lbXMMRegisters.Size = new System.Drawing.Size(159, 158);
+			this.lbXMMRegisters.Size = new System.Drawing.Size(155, 136);
 			this.lbXMMRegisters.TabIndex = 6;
 			// 
 			// label4
 			// 
 			this.label4.AutoSize = true;
-			this.label4.Location = new System.Drawing.Point(175, 9);
+			this.label4.Location = new System.Drawing.Point(326, 9);
 			this.label4.Name = "label4";
 			this.label4.Size = new System.Drawing.Size(82, 13);
 			this.label4.TabIndex = 7;
@@ -120,7 +128,8 @@
 			// 
 			// button1
 			// 
-			this.button1.Location = new System.Drawing.Point(247, 377);
+			this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.button1.Location = new System.Drawing.Point(596, 355);
 			this.button1.Name = "button1";
 			this.button1.Size = new System.Drawing.Size(151, 23);
 			this.button1.TabIndex = 8;
@@ -133,25 +142,77 @@
 			this.lbFlags.Font = new System.Drawing.Font("Lucida Console", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.lbFlags.FormattingEnabled = true;
 			this.lbFlags.ItemHeight = 11;
-			this.lbFlags.Location = new System.Drawing.Point(353, 25);
+			this.lbFlags.Location = new System.Drawing.Point(164, 25);
 			this.lbFlags.Name = "lbFlags";
-			this.lbFlags.Size = new System.Drawing.Size(159, 158);
+			this.lbFlags.Size = new System.Drawing.Size(155, 136);
 			this.lbFlags.TabIndex = 9;
 			// 
 			// label5
 			// 
 			this.label5.AutoSize = true;
-			this.label5.Location = new System.Drawing.Point(350, 9);
+			this.label5.Location = new System.Drawing.Point(161, 9);
 			this.label5.Name = "label5";
 			this.label5.Size = new System.Drawing.Size(72, 13);
 			this.label5.TabIndex = 10;
 			this.label5.Text = "Flag Register:";
 			// 
+			// lbStack
+			// 
+			this.lbStack.Font = new System.Drawing.Font("Lucida Console", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.lbStack.FormattingEnabled = true;
+			this.lbStack.ItemHeight = 11;
+			this.lbStack.Location = new System.Drawing.Point(621, 25);
+			this.lbStack.Name = "lbStack";
+			this.lbStack.Size = new System.Drawing.Size(125, 136);
+			this.lbStack.TabIndex = 11;
+			// 
+			// label6
+			// 
+			this.label6.AutoSize = true;
+			this.label6.Location = new System.Drawing.Point(618, 9);
+			this.label6.Name = "label6";
+			this.label6.Size = new System.Drawing.Size(75, 13);
+			this.label6.TabIndex = 12;
+			this.label6.Text = "Current Stack:";
+			// 
+			// button2
+			// 
+			this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.button2.Location = new System.Drawing.Point(3, 355);
+			this.button2.Name = "button2";
+			this.button2.Size = new System.Drawing.Size(171, 23);
+			this.button2.TabIndex = 13;
+			this.button2.Text = "Execute Next X Instructions";
+			this.button2.UseVisualStyleBackColor = true;
+			this.button2.Click += new System.EventHandler(this.button2_Click);
+			// 
+			// nvSteps
+			// 
+			this.nvSteps.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.nvSteps.Location = new System.Drawing.Point(180, 358);
+			this.nvSteps.Maximum = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            0});
+			this.nvSteps.Name = "nvSteps";
+			this.nvSteps.Size = new System.Drawing.Size(53, 20);
+			this.nvSteps.TabIndex = 14;
+			this.nvSteps.Value = new decimal(new int[] {
+            150,
+            0,
+            0,
+            0});
+			// 
 			// SimProcessorX86Form
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(719, 460);
+			this.ClientSize = new System.Drawing.Size(755, 386);
+			this.Controls.Add(this.nvSteps);
+			this.Controls.Add(this.button2);
+			this.Controls.Add(this.label6);
+			this.Controls.Add(this.lbStack);
 			this.Controls.Add(this.label5);
 			this.Controls.Add(this.lbFlags);
 			this.Controls.Add(this.button1);
@@ -166,6 +227,7 @@
 			this.Name = "SimProcessorX86Form";
 			this.Text = "X86 Processor Simulation";
 			this.Load += new System.EventHandler(this.SimProcessorX86Form_Load);
+			((System.ComponentModel.ISupportInitialize)(this.nvSteps)).EndInit();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -184,5 +246,9 @@
 		private System.Windows.Forms.Button button1;
 		private System.Windows.Forms.ListBox lbFlags;
 		private System.Windows.Forms.Label label5;
+		private System.Windows.Forms.ListBox lbStack;
+		private System.Windows.Forms.Label label6;
+		private System.Windows.Forms.Button button2;
+		private System.Windows.Forms.NumericUpDown nvSteps;
 	}
 }
