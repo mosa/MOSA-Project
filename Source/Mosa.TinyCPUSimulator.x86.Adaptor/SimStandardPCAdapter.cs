@@ -22,7 +22,6 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 	{
 		public SimStandardPCAdapter()
 		{
-			Initialize();
 		}
 
 		public override void Initialize()

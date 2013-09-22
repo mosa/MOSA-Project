@@ -13,6 +13,7 @@ using Mosa.Compiler.Linker;
 using Mosa.Compiler.Metadata.Loader;
 using Mosa.Compiler.TypeSystem;
 using Mosa.TinyCPUSimulator.Adaptor;
+using System;
 using System.Diagnostics;
 
 namespace Mosa.TinyCPUSimulator.TestSystem
@@ -106,9 +107,20 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 
 			simAdapter.Execute();
 
-			// TODO: get return value
+			object result = platform.GetResult(simAdapter, runtimeMethod.ReturnType.Type);
 
-			return default(T);
+			try
+			{
+				if (default(T) is ValueType)
+					return (T)result;
+				else
+					return default(T);
+			}
+			catch (InvalidCastException e)
+			{
+				Debug.Assert(false, String.Format(@"Failed to convert result {0} of type {1} to type {2}.", result, result.GetType(), typeof(T).ToString()));
+				throw e;
+			}
 		}
 
 		private RuntimeMethod FindMethod(string ns, string type, string method, params object[] parameters)

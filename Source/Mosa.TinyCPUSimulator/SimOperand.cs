@@ -136,8 +136,8 @@ namespace Mosa.TinyCPUSimulator
 				if (Scale != 0)
 					s = s + "*" + Scale.ToString();
 
-				if (Immediate != 0)
-					s = s + "+" + Immediate.ToString();
+				if (Displacement != 0)
+					s = s + "+" + Displacement.ToString();
 
 				s = s + "]";
 

@@ -34,10 +34,6 @@ namespace Mosa.TinyCPUSimulator
 
 		public Dictionary<ulong, KeyValuePair<byte, byte>> MemoryDelta { get; private set; }
 
-		public SimInstruction LastInstruction { get; private set; }
-
-		public ulong LastCurrentInstructionPointer { get; private set; }
-
 		public SimCPU()
 		{
 			RAMBanks = new List<RAMBank>();
@@ -289,9 +285,6 @@ namespace Mosa.TinyCPUSimulator
 
 				Debug.WriteLine(instruction.ToString());
 
-				LastInstruction = instruction;
-				LastCurrentInstructionPointer = CurrentInstructionPointer;
-
 				ExecuteOpcode(instruction);
 			}
 			catch (InvalidMemoryAccess e)
@@ -328,9 +321,6 @@ namespace Mosa.TinyCPUSimulator
 			simState.StoreMemoryDelta(MemoryDelta);
 
 			simState.StoreValue("IP.Current", CurrentInstructionPointer.ToString());
-
-			simState.StoreValue("IP.Last", LastCurrentInstructionPointer.ToString());
-			simState.StoreValue("Instruction.Last", LastInstruction.ToString());
 
 			return simState;
 		}

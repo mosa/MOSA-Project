@@ -7,9 +7,8 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using NUnit.Framework;
-using Mosa.TinyCPUSimulator.TestSystem;
 using Mosa.Test.Collection;
+using NUnit.Framework;
 
 namespace Mosa.TinyCPUSimulator.TestSystem.Nunit
 {
@@ -31,6 +30,7 @@ namespace Mosa.TinyCPUSimulator.TestSystem.Nunit
 
 		[Test]
 		[TestCase((int)0, (int)0)]
+		[TestCase((int)1, (int)1)]
 		public void AddI4I4(int a, int b)
 		{
 			Assert.AreEqual(Int32Tests.AddI4I4(a, b), testCompiler.Run<int>("Mosa.Test.Collection", "Int32Tests", "AddI4I4", a, b));

@@ -8,6 +8,7 @@
  */
 
 using Mosa.Compiler.Framework;
+using Mosa.Compiler.Metadata;
 using Mosa.Platform.x86;
 using Mosa.TinyCPUSimulator.Adaptor;
 using Mosa.TinyCPUSimulator.x86;
@@ -57,61 +58,75 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 		{
 			var x86 = simAdapter.SimCPU as CPUx86;
 
-			x86.Write32(x86.ESP.Value, value);
 			x86.ESP.Value = x86.ESP.Value - 4;
+			x86.Write32(x86.ESP.Value, value);
 		}
 
 		public override void PopulateStack(ISimAdapter simAdapter, object parameter)
 		{
-			if (parameter == null)
+			if ((parameter == null) || !(parameter is ValueType))
 			{
 				throw new InvalidProgramException();
 			}
 
-			if (parameter is ValueType)
+			if (parameter is Boolean)
 			{
-				if (parameter is Boolean) { WriteStackValue(simAdapter, (bool)parameter ? (uint)1 : (uint)0); return; }
-				if (parameter is Char) { WriteStackValue(simAdapter, (uint)(char)parameter); return; }
-				if (parameter is SByte) { WriteStackValue(simAdapter, (uint)(sbyte)parameter); return; }
-				if (parameter is Int16) { WriteStackValue(simAdapter, (uint)(short)parameter); return; }
-				if (parameter is Int32) { WriteStackValue(simAdapter, (uint)(int)parameter); return; }
-				if (parameter is Byte) { WriteStackValue(simAdapter, (uint)(byte)parameter); return; }
-				if (parameter is UInt16) { WriteStackValue(simAdapter, (uint)(ushort)parameter); return; }
-				if (parameter is UInt32) { WriteStackValue(simAdapter, (uint)(uint)parameter); return; }
-
-				if (parameter is UInt64)
-				{
-					WriteStackValue(simAdapter, (uint)(ulong)parameter);
-					WriteStackValue(simAdapter, (uint)((ulong)parameter >> 32));
-					return;
-				}
-				if (parameter is Int64)
-				{
-					WriteStackValue(simAdapter, (uint)(ulong)parameter);
-					WriteStackValue(simAdapter, (uint)((ulong)parameter >> 32));
-					return;
-				}
-
-				if (parameter is Single)
-				{
-					// TODO
-					WriteStackValue(simAdapter, 0);
-					WriteStackValue(simAdapter, 0);
-					return;
-				}
-				if (parameter is Double)
-				{
-					// TODO
-					WriteStackValue(simAdapter, 0);
-					WriteStackValue(simAdapter, 0);
-					return;
-				}
-
-				//if (parameter is UIntPtr) { WriteStackValue(simAdapter, (uint)parameter); return; }
-				//if (parameter is IntPtr) { WriteStackValue(simAdapter, (uint)parameter); return; }
+				WriteStackValue(simAdapter, (bool)parameter ? (uint)1 : (uint)0);
 			}
-
-			throw new InvalidProgramException();
+			else if (parameter is Char)
+			{
+				WriteStackValue(simAdapter, (uint)(char)parameter);
+			}
+			else if (parameter is SByte)
+			{
+				WriteStackValue(simAdapter, (uint)(sbyte)parameter);
+			}
+			else if (parameter is Int16)
+			{
+				WriteStackValue(simAdapter, (uint)(short)parameter);
+			}
+			else if (parameter is Int32)
+			{
+				WriteStackValue(simAdapter, (uint)(int)parameter);
+			}
+			else if (parameter is Byte)
+			{
+				WriteStackValue(simAdapter, (uint)(byte)parameter);
+			}
+			else if (parameter is UInt16)
+			{
+				WriteStackValue(simAdapter, (uint)(ushort)parameter);
+			}
+			else if (parameter is UInt32)
+			{
+				WriteStackValue(simAdapter, (uint)(uint)parameter);
+			}
+			else if (parameter is UInt64)
+			{
+				WriteStackValue(simAdapter, (uint)(ulong)parameter);
+				WriteStackValue(simAdapter, (uint)((ulong)parameter >> 32));
+			}
+			else if (parameter is Int64)
+			{
+				WriteStackValue(simAdapter, (uint)(ulong)parameter);
+				WriteStackValue(simAdapter, (uint)((ulong)parameter >> 32));
+			}
+			else if (parameter is Single)
+			{
+				// TODO
+				WriteStackValue(simAdapter, 0);
+				WriteStackValue(simAdapter, 0);
+			}
+			else if (parameter is Double)
+			{
+				// TODO
+				WriteStackValue(simAdapter, 0);
+				WriteStackValue(simAdapter, 0);
+			}
+			//else  if (parameter is UIntPtr) { WriteStackValue(simAdapter, (uint)parameter);  }
+			//else  if (parameter is IntPtr) { WriteStackValue(simAdapter, (uint)parameter); }
+			else
+				throw new InvalidProgramException();
 		}
 
 		public override void PopulateStack(ISimAdapter simAdapter, params object[] parameters)
@@ -130,6 +145,18 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 
 			// push the return address on stack
 			WriteStackValue(simAdapter, StopEIP);
+		}
+
+		public override object GetResult(ISimAdapter simAdapter, CilElementType cilElementType)
+		{
+			var x86 = simAdapter.SimCPU as CPUx86;
+
+			if (cilElementType == CilElementType.I4)
+				return (object)(int)x86.EAX.Value;
+			else if (cilElementType == CilElementType.U4)
+				return (object)(uint)x86.EAX.Value;
+
+			return null;
 		}
 	}
 }

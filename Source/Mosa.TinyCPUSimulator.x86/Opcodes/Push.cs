@@ -16,7 +16,7 @@ namespace Mosa.TinyCPUSimulator.x86.Opcodes
 			uint a = LoadValue(cpu, instruction.Operand1);
 			int size = instruction.Operand1.Size;
 
-			Write(cpu, cpu.ESP.Value, a, size);
+			Write(cpu, (uint)(cpu.ESP.Value - (size / 8)), a, size);
 
 			cpu.ESP.Value = (uint)(cpu.ESP.Value - (size / 8));
 		}

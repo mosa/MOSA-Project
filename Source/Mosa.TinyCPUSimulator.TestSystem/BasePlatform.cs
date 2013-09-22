@@ -8,6 +8,7 @@
  */
 
 using Mosa.Compiler.Framework;
+using Mosa.Compiler.Metadata;
 using Mosa.TinyCPUSimulator.Adaptor;
 
 namespace Mosa.TinyCPUSimulator.TestSystem
@@ -34,5 +35,9 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 		public abstract void PopulateStack(ISimAdapter simAdapter, params object[] parameters);
 
 		public abstract void PrepareToExecuteMethod(ISimAdapter simAdapter, ulong address);
+
+		//public abstract T GetResult<T>(ISimAdapter simAdapter);
+
+		public abstract object GetResult(ISimAdapter simAdapter, CilElementType cilElementType);
 	}
 }
