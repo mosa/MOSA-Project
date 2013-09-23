@@ -11,7 +11,7 @@ using System;
 using MbUnit.Framework;
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Test.Compiler.Framework
+namespace Mosa.Compiler.Framework.MbUnit
 {
 	[TestFixture]
 	public class LoopAwareBlockOrderTests

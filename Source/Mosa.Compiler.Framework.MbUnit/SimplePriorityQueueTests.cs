@@ -10,7 +10,7 @@
 using MbUnit.Framework;
 using Mosa.Compiler.Common;
 
-namespace Mosa.Test.Compiler.Framework
+namespace Mosa.Compiler.Framework.MbUnit
 {
 	[TestFixture]
 	public class SimplePriorityQueueTests

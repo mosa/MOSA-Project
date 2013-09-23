@@ -4,12 +4,12 @@
     <ProjectType>Local</ProjectType>
     <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{C286833F-D1CD-4618-98F7-F3A5BA9ECFA1}</ProjectGuid>
+    <ProjectGuid>{C286833F-D1CD-4618-98E7-F3A5BA9ECFA1}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <AssemblyKeyContainerName>
     </AssemblyKeyContainerName>
-    <AssemblyName>Mosa.Test.Compiler.Framework</AssemblyName>
+    <AssemblyName>Mosa.Compiler.Framework.xUnit</AssemblyName>
     <DefaultClientScript>JScript</DefaultClientScript>
     <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
     <DefaultTargetSchema>IE50</DefaultTargetSchema>
@@ -18,7 +18,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>
     </AppDesignerFolder>
-    <RootNamespace>Mosa.Test.Compiler.Framework</RootNamespace>
+    <RootNamespace>Mosa.Compiler.Framework.xUnit</RootNamespace>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <SccProjectName>
@@ -85,14 +85,6 @@
     <DebugType>none</DebugType>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Gallio">
-      <HintPath>..\..\3rdParty\Gallio.dll</HintPath>
-    </Reference>
-    <Reference Include="MbUnit">
-      <HintPath>..\..\3rdParty\MbUnit.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="SimplePriorityQueueTests.cs" />
     <Compile Include="PatchTests.cs" />
     <Compile Include="LoopAwareBlockOrderTests.cs" />
@@ -137,6 +129,16 @@
       <Project>{65866a51-b229-44c5-ac81-87a90fa1741b}</Project>
       <Name>Mosa.Compiler.Linker</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="xunit, Version=1.9.2.1705, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\3rdParty\xunit.dll</HintPath>
+    </Reference>
+    <Reference Include="xunit.extensions, Version=1.9.2.1705, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\3rdParty\xunit.extensions.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />
   <PropertyGroup>

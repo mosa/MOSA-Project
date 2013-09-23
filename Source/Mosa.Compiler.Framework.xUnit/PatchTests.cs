@@ -7,88 +7,88 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using MbUnit.Framework;
+using Xunit;
+using Xunit.Extensions;
 using Mosa.Compiler.Linker;
 
-namespace Mosa.Test.Compiler.Framework
+namespace Mosa.Compiler.Framework.xUnit
 {
-	[TestFixture]
 	public class PatchTests
 	{
-		[Test]
+		[Fact]
 		public void Patch1()
 		{
 			var p = new Patch(0, 4, 0);
-			Assert.AreEqual((ulong)0xF, p.Mask);
+			Assert.Equal((ulong)0xF, p.Mask);
 		}
 
-		[Test]
+		[Fact]
 		public void Patch2()
 		{
 			var p = new Patch(0, 8, 0);
-			Assert.AreEqual((ulong)0xFF, p.Mask);
+			Assert.Equal((ulong)0xFF, p.Mask);
 		}
 
-		[Test]
+		[Fact]
 		public void Patch3()
 		{
 			var p = new Patch(0, 8, 0);
-			Assert.AreEqual((ulong)0xFF, p.Mask);
+			Assert.Equal((ulong)0xFF, p.Mask);
 		}
 
-		[Test]
+		[Fact]
 		public void Patch4()
 		{
 			var p = new Patch(0, 16, 0);
-			Assert.AreEqual((ulong)0xFFFF, p.Mask);
+			Assert.Equal((ulong)0xFFFF, p.Mask);
 		}
 
-		[Test]
+		[Fact]
 		public void Patch5()
 		{
 			var p = new Patch(0, 32, 0);
-			Assert.AreEqual((ulong)0xFFFFFFFF, p.Mask);
+			Assert.Equal((ulong)0xFFFFFFFF, p.Mask);
 		}
 
-		[Test]
+		[Fact]
 		public void Patch6()
 		{
 			var p = new Patch(0, 64, 0);
-			Assert.AreEqual((ulong)0xFFFFFFFFFFFFFFFF, p.Mask);
+			Assert.Equal((ulong)0xFFFFFFFFFFFFFFFF, p.Mask);
 		}
 
-		[Test]
+		[Fact]
 		public void Patch7()
 		{
 			var p = new Patch(1, 4, 0);
-			Assert.AreEqual((ulong)0x1E, p.Mask);
+			Assert.Equal((ulong)0x1E, p.Mask);
 		}
 
-		[Test]
+		[Fact]
 		public void Patch8()
 		{
 			var p = new Patch(1, 8, 0);
-			Assert.AreEqual((ulong)0x1FE, p.Mask);
+			Assert.Equal((ulong)0x1FE, p.Mask);
 		}
 
-		[Test]
+		[Fact]
 		public void Patch1B()
 		{
 			var p = new Patch(0, 4, 0);
 
 			var r = p.GetResult(2);
 
-			Assert.AreEqual((ulong)0x2, r);
+			Assert.Equal((ulong)0x2, r);
 		}
 
-		[Test]
+		[Fact]
 		public void Patch1C()
 		{
 			var p = new Patch(0, 4, 3);
 
 			var r = p.GetResult(2);
 
-			Assert.AreEqual((ulong)0x10, r);
+			Assert.Equal((ulong)0x10, r);
 		}
 	}
 }
