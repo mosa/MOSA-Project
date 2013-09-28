@@ -25,9 +25,9 @@ namespace Mosa.TinyCPUSimulator.x86.Opcodes
 
 			// TODO: exception if v3 is 0
 
-			long v = ((v1 << 32) | v2);
-			long a = v / v3;
-			long r = v % v3;
+			long v = (((long)v1 << 32) | (long)v2);
+			long a = (long)(int)v / (long)(int)v3;
+			long r = (long)(int)v % (long)(int)v3;
 
 			cpu.EAX.Value = (uint)a;
 			cpu.EDX.Value = (uint)r;

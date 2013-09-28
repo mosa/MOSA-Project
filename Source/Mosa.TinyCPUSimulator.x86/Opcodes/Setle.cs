@@ -15,7 +15,7 @@ namespace Mosa.TinyCPUSimulator.x86.Opcodes
 		{
 			if (cpu.FLAGS.Sign != cpu.FLAGS.Overflow)
 			{
-				StoreValue(cpu, instruction.Operand1, 0, 8);
+				StoreValue(cpu, instruction.Operand1, 1, 8);
 			}
 		}
 	}

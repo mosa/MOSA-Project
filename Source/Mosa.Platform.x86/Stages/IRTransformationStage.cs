@@ -302,19 +302,19 @@ namespace Mosa.Platform.x86.Stages
 			var operand1 = context.Operand1;
 			var operand2 = context.Operand2;
 
-			context.SetInstruction(X86.Cmp, null, operand1, operand2);
+			Operand v1 = AllocateVirtualRegister(BuiltInSigType.Byte);
 
-			if (resultOperand != null)
-			{
-				Operand eax = AllocateVirtualRegister(BuiltInSigType.Byte);
+			context.SetInstruction(X86.Mov, v1, Operand.CreateConstant(0));
 
-				if (IsUnsigned(resultOperand))
-					context.AppendInstruction(X86.Setcc, GetUnsignedConditionCode(condition), eax);
-				else
-					context.AppendInstruction(X86.Setcc, condition, eax);
+			context.AppendInstruction(X86.Cmp, null, operand1, operand2);
 
-				context.AppendInstruction(X86.Movzx, resultOperand, eax);
-			}
+			if (IsUnsigned(resultOperand))
+				context.AppendInstruction(X86.Setcc, GetUnsignedConditionCode(condition), v1);
+			else
+				context.AppendInstruction(X86.Setcc, condition, v1);
+
+			context.AppendInstruction(X86.Movzx, resultOperand, v1);
+
 		}
 
 		/// <summary>

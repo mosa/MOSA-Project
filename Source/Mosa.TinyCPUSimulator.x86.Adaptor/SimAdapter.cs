@@ -116,9 +116,10 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 			}
 
 			if (opcode == Opcode.Mul) { operands.RemoveAt(0); }
-			else if (opcode == Opcode.Div) { operands.RemoveAt(0); operands.RemoveAt(1); }
-			else if (opcode == Opcode.Idiv) { }
+			else if (opcode == Opcode.Div) { operands.RemoveAt(0); operands.RemoveAt(0); }
+			else if (opcode == Opcode.Idiv) { operands.RemoveAt(0); operands.RemoveAt(0); }
 			else if (opcode == Opcode.Imul) { operands.RemoveAt(0); }
+			else if (opcode == Opcode.Cdq) { operands.Clear(); }
 		}
 
 		private SimOperand ConvertToOpcodeOperand(Operand operand)
