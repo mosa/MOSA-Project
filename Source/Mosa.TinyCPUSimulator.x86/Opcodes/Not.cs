@@ -16,9 +16,9 @@ namespace Mosa.TinyCPUSimulator.x86.Opcodes
 			uint a = LoadValue(cpu, instruction.Operand1);
 			int size = instruction.Operand2.Size;
 
-			uint r = ~a;
+			uint u = ~a;
 
-			StoreValue(cpu, instruction.Operand1, r, size);
+			StoreValue(cpu, instruction.Operand1, u, size);
 		}
 	}
 }

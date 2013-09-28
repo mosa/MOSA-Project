@@ -81,6 +81,7 @@
                     <include name="../../3rdParty/MbUnit.dll"/>
                     <include name="${outputDirectory}/Mosa.Test.CodeDomCompiler.dll"/>
                     <include name="${outputDirectory}/Mosa.Test.Collection.dll"/>
+                    <include name="${outputDirectory}/Mosa.Test.Numbers.dll"/>
                     <include name="${outputDirectory}/Mosa.Test.System.dll"/>
 		</references>
 		<!-- supress warnings -->

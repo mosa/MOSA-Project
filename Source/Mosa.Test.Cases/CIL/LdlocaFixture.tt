@@ -6,7 +6,7 @@ using System.Text;
 using MbUnit.Framework;
 
 using Mosa.Test.System;
-using Mosa.Test.System.Numbers;
+using Mosa.Test.Numbers;
 
 namespace Mosa.Test.Cases.CIL
 {

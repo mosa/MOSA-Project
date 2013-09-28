@@ -17,13 +17,13 @@ namespace Mosa.TinyCPUSimulator.x86.Opcodes
 			uint b = LoadValue(cpu, instruction.Operand2);
 			int size = instruction.Operand2.Size;
 
-			uint r = a | b;
+			ulong u = a | b;
+			long s = a | b;
 
-			StoreValue(cpu, instruction.Operand1, r, size);
+			StoreValue(cpu, instruction.Operand1, (uint)u, size);
 
-			cpu.FLAGS.Zero = IsZero(r, size);
-			cpu.FLAGS.Sign = IsSign(r, size);
-			cpu.FLAGS.Parity = IsParity(r);
+			UpdateFlags(cpu, size, s, u, true, true, true, false, false);
+
 			cpu.FLAGS.Overflow = false;
 			cpu.FLAGS.Carry = false;
 		}

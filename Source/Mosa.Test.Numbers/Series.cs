@@ -10,7 +10,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Mosa.Test.System.Numbers
+namespace Mosa.Test.Numbers
 {
 	public static class Series
 	{

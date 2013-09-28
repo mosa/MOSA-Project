@@ -17,22 +17,20 @@ namespace Mosa.TinyCPUSimulator.x86.Opcodes
 			uint b = LoadValue(cpu, instruction.Operand2);
 			int size = instruction.Operand2.Size;
 
-			ulong r = (ulong)a + (ulong)b;
+			long s = (long)(int)a + (long)(int)b;
+			ulong u = (ulong)a + (ulong)b;
 
 			if (cpu.FLAGS.Carry)
-				r = r + 1;
+			{
+				s++;
+				u++;
+			}
 
-			StoreValue(cpu, instruction.Operand1, (uint)r, size);
+			StoreValue(cpu, instruction.Operand1, (uint)u, size);
 
-			cpu.FLAGS.Zero = IsZero(r, size);
-			cpu.FLAGS.Sign = IsSign(r, size);
-			cpu.FLAGS.Parity = IsParity(r);
+			UpdateFlags(cpu, size, s, u, true, true, true, true, true);
+
 			cpu.FLAGS.Adjust = IsAdjustAfterAdd(a, b);
-			cpu.FLAGS.Overflow = IsOverflow(r, a, b, size);
-
-			if (size == 32) cpu.FLAGS.Carry = ((r >> 32) != 0);
-			else if (size == 16) cpu.FLAGS.Carry = ((r >> 16) != 0);
-			else if (size == 8) cpu.FLAGS.Carry = ((r >> 8) != 0);
 		}
 	}
 }

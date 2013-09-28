@@ -269,23 +269,37 @@ namespace Mosa.TinyCPUSimulator
 			instruction.Opcode.Execute(this, instruction);
 		}
 
+		public virtual string CompactDump()
+		{
+			return string.Empty;
+		}
+
 		protected void ExecuteInstruction()
 		{
 			MemoryDelta.Clear();
 
 			try
 			{
-				Debug.Write("0x" + CurrentInstructionPointer.ToString("X") + ": ");
+				//if (Monitor.DebugOutput)
+				//	Debug.Write("0x" + CurrentInstructionPointer.ToString("X") + ": ");
 
 				var instruction = DecodeOpcode(CurrentInstructionPointer);
 				Tick++;
 
-				//if (instruction == null)
-				//	return;
+				var PreviousInstructionPointer = CurrentInstructionPointer;
+				var PreviousInstruction = instruction;
 
-				Debug.WriteLine(instruction.ToString());
+				//if (Monitor.DebugOutput)
+				//	Debug.WriteLine(instruction.ToString());
 
 				ExecuteOpcode(instruction);
+
+				if (Monitor.DebugOutput)
+				{
+					Debug.Write(CompactDump());
+					Debug.Write("  0x" + PreviousInstructionPointer.ToString("X") + ": ");
+					Debug.WriteLine(PreviousInstruction.ToString());
+				}
 			}
 			catch (InvalidMemoryAccess e)
 			{
@@ -304,6 +318,9 @@ namespace Mosa.TinyCPUSimulator
 			//	Debug.WriteLine("0x" + pair.Key.ToString("X") + ": " + pair.Value);
 			//}
 			//Debug.WriteLine(string.Empty);
+
+			if (Monitor.DebugOutput)
+				Debug.WriteLine("EIP        EAX        EBX        ECX        EDX        ESI        EDI        ESP        EBP        FLAGS");
 
 			for (; ; )
 			{

@@ -12,7 +12,7 @@
 	
 	<!-- Main build target -->
 	<target name="build">
-	    <csc target="library" output="${outputDirectory}/Mosa.TinyCPUSimulator.TestSystem.Nunit.dll" debug="${debug}" unsafe="true" nostdlib="false">
+	    <csc target="library" output="${outputDirectory}/Mosa.TinyCPUSimulator.TestSystem.xUnit.dll" debug="${debug}" unsafe="true" nostdlib="false">
 		<sources>
                     <include name="Int32Fixture.cs"/>
 		</sources>
@@ -24,6 +24,7 @@
                     <include name="${outputDirectory}/Mosa.Compiler.Framework.dll"/>
                     <include name="${outputDirectory}/Mosa.Test.Cases.dll"/>
                     <include name="${outputDirectory}/Mosa.Test.Collection.dll"/>
+                    <include name="${outputDirectory}/Mosa.Test.Numbers.dll"/>
                     <include name="${outputDirectory}/Mosa.TinyCPUSimulator.Adaptor.dll"/>
                     <include name="${outputDirectory}/Mosa.TinyCPUSimulator.TestSystem.dll"/>
                     <include name="${outputDirectory}/Mosa.TinyCPUSimulator.dll"/>

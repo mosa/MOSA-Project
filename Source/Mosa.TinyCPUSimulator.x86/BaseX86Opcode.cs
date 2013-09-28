@@ -27,41 +27,6 @@ namespace Mosa.TinyCPUSimulator.x86
 		{
 		}
 
-		protected static bool IsZero(ulong v, int size)
-		{
-			if (size == 32) return IsZero((uint)v);
-			else if (size == 16) return IsZero((ushort)v);
-			else if (size == 8) return IsZero((byte)v);
-			else if (size == 64) return IsZero((ulong)v);
-
-			throw new CPUException();
-		}
-
-		protected static bool IsZero(ulong v)
-		{
-			return (v == 0);
-		}
-
-		protected static bool IsZero(uint v)
-		{
-			return (v == 0);
-		}
-
-		protected static bool IsZero(ushort v)
-		{
-			return (v == 0);
-		}
-
-		protected static bool IsZero(byte v)
-		{
-			return (v == 0);
-		}
-
-		protected static bool IsParity(ulong v)
-		{
-			return ((v & 0xF) % 2) == 1;
-		}
-
 		protected static bool IsSign(ulong v, int size)
 		{
 			if (size == 32) return IsSign((uint)v);
@@ -96,50 +61,56 @@ namespace Mosa.TinyCPUSimulator.x86
 			return ((v1 & 0xF) < (v2 & 0xF));
 		}
 
-		// The CARRY flag and OVERFLOW flag in binary arithmetic
-		// http://teaching.idallen.com/dat2343/10f/notes/040_overflow.txt
-
-		protected static bool IsOverflow(ulong r, ulong v1, ulong v2, int size)
+		protected void UpdateFlags(CPUx86 cpu, int size, long s, ulong u, bool zeroFlag, bool parityParity, bool signFlag, bool carryFlag, bool overFlowFlag)
 		{
-			if (size == 32) return IsOverflow((uint)r, (uint)v1, (uint)v2);
-			else if (size == 16) return IsOverflow((ushort)r, (ushort)v1, (ushort)v2);
-			else if (size == 8) return IsOverflow((byte)r, (byte)v1, (byte)v2);
-
-			throw new CPUException();
+			if (size == 32)
+				UpdateFlags32(cpu, s, u, zeroFlag, parityParity, signFlag, carryFlag, overFlowFlag);
+			else if (size == 16)
+				UpdateFlags16(cpu, s, u, zeroFlag, parityParity, signFlag, carryFlag, overFlowFlag);
+			else
+				UpdateFlags8(cpu, s, u, zeroFlag, parityParity, signFlag, carryFlag, overFlowFlag);
 		}
 
-		protected static bool IsOverflow(bool br, bool b1, bool b2)
+		protected void UpdateFlags8(CPUx86 cpu, long s, ulong u, bool zeroFlag, bool parityParity, bool signFlag, bool carryFlag, bool overFlowFlag)
 		{
-			if (b1 && b2 && !br) return true;
-			if (!b1 && !b2 && br) return true;
-			return false;
+			if (zeroFlag)
+				cpu.FLAGS.Zero = ((u & 0xFF) == 0);
+			if (overFlowFlag)
+				cpu.FLAGS.Overflow = (s < byte.MinValue || s > byte.MaxValue);
+			if (carryFlag)
+				cpu.FLAGS.Carry = ((u >> 8) != 0);
+			if (signFlag)
+				cpu.FLAGS.Sign = (((u >> 7) & 0x01) != 0);
+			if (parityParity)
+				cpu.FLAGS.Parity = ((u & 0xFF) % 2) == 1;
 		}
 
-		protected static bool IsOverflow(byte r, byte v1, byte v2)
+		protected void UpdateFlags16(CPUx86 cpu, long s, ulong u, bool zeroFlag, bool parityParity, bool signFlag, bool carryFlag, bool overFlowFlag)
 		{
-			bool b1 = (((v1 >> 8) & 0x1) == 1);
-			bool b2 = (((v2 >> 8) & 0x1) == 1);
-			bool br = (((r >> 8) & 0x1) == 1);
-
-			return IsOverflow(b1, b2, br);
+			if (zeroFlag)
+				cpu.FLAGS.Zero = ((u & 0xFFFF) == 0);
+			if (overFlowFlag)
+				cpu.FLAGS.Overflow = (s < short.MinValue || s > short.MaxValue);
+			if (carryFlag)
+				cpu.FLAGS.Carry = ((u >> 16) != 0);
+			if (signFlag)
+				cpu.FLAGS.Sign = (((u >> 15) & 0x01) != 0);
+			if (parityParity)
+				cpu.FLAGS.Parity = ((u & 0xFF) % 2) == 1;
 		}
 
-		protected static bool IsOverflow(ushort r, ushort v1, ushort v2)
+		protected void UpdateFlags32(CPUx86 cpu, long s, ulong u, bool zeroFlag, bool parityParity, bool signFlag, bool carryFlag, bool overFlowFlag)
 		{
-			bool b1 = (((v1 >> 15) & 0x1) == 1);
-			bool b2 = (((v2 >> 15) & 0x1) == 1);
-			bool br = (((r >> 15) & 0x1) == 1);
-
-			return IsOverflow(b1, b2, br);
-		}
-
-		protected static bool IsOverflow(uint r, uint v1, uint v2)
-		{
-			bool b1 = (((v1 >> 31) & 0x1) == 1);
-			bool b2 = (((v2 >> 31) & 0x1) == 1);
-			bool br = (((r >> 31) & 0x1) == 1);
-
-			return IsOverflow(b1, b2, br);
+			if (zeroFlag)
+				cpu.FLAGS.Zero = ((u & 0xFFFFFFFF) == 0);
+			if (overFlowFlag)
+				cpu.FLAGS.Overflow = (s < int.MinValue || s > int.MaxValue);
+			if (carryFlag)
+				cpu.FLAGS.Carry = ((u >> 32) != 0);
+			if (signFlag)
+				cpu.FLAGS.Sign = (((u >> 31) & 0x01) != 0);
+			if (parityParity)
+				cpu.FLAGS.Parity = ((u & 0xFF) % 2) == 1;
 		}
 
 		protected uint GetAddress(CPUx86 cpu, SimOperand operand)

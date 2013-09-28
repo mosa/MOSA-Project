@@ -9,26 +9,26 @@
 
 using System.Collections.Generic;
 
-namespace Mosa.Test.System.Numbers
+namespace Mosa.Test.Numbers
 {
-	public static class I8
+	public static class I2
 	{
-		private static IList<long> series = null;
+		private static IList<short> series = null;
 
-		public static IEnumerable<long> Series
+		public static IEnumerable<short> Series
 		{
 			get
 			{
 				if (series == null) series = GetSeries();
 
-				foreach (long value in series)
+				foreach (short value in series)
 					yield return value;
 			}
 		}
 
-		public static IList<long> GetSeries()
+		public static IList<short> GetSeries()
 		{
-			List<long> list = new List<long>();
+			List<short> list = new List<short>();
 
 			list.Add(0);
 			list.Add(1);
@@ -43,14 +43,6 @@ namespace Mosa.Test.System.Numbers
 			list.Add(short.MaxValue);
 			list.Add(short.MinValue + 1);
 			list.Add(short.MaxValue - 1);
-			list.Add(int.MinValue);
-			list.Add(int.MaxValue);
-			list.Add(int.MinValue + 1);
-			list.Add(int.MaxValue - 1);
-			list.Add(long.MinValue);
-			list.Add(long.MaxValue);
-			list.Add(long.MinValue + 1);
-			list.Add(long.MaxValue - 1);
 
 			// Get negatives
 			list.AddIfNew(GetNegatives(list));
@@ -60,14 +52,14 @@ namespace Mosa.Test.System.Numbers
 			return list;
 		}
 
-		private static IList<long> GetNegatives(IList<long> list)
+		private static IList<short> GetNegatives(IList<short> list)
 		{
-			List<long> negs = new List<long>();
+			List<short> negs = new List<short>();
 
-			foreach (long value in list)
+			foreach (short value in list)
 			{
 				if (value > 0)
-					negs.AddIfNew<long>((long)-value);
+					negs.AddIfNew<short>((short)-value);
 			}
 
 			return negs;

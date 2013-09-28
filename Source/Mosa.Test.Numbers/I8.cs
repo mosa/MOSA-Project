@@ -9,26 +9,26 @@
 
 using System.Collections.Generic;
 
-namespace Mosa.Test.System.Numbers
+namespace Mosa.Test.Numbers
 {
-	public static class I4
+	public static class I8
 	{
-		private static IList<int> series = null;
+		private static IList<long> series = null;
 
-		public static IEnumerable<int> Series
+		public static IEnumerable<long> Series
 		{
 			get
 			{
 				if (series == null) series = GetSeries();
 
-				foreach (int value in series)
+				foreach (long value in series)
 					yield return value;
 			}
 		}
 
-		public static IList<int> GetSeries()
+		public static IList<long> GetSeries()
 		{
-			List<int> list = new List<int>();
+			List<long> list = new List<long>();
 
 			list.Add(0);
 			list.Add(1);
@@ -47,6 +47,10 @@ namespace Mosa.Test.System.Numbers
 			list.Add(int.MaxValue);
 			list.Add(int.MinValue + 1);
 			list.Add(int.MaxValue - 1);
+			list.Add(long.MinValue);
+			list.Add(long.MaxValue);
+			list.Add(long.MinValue + 1);
+			list.Add(long.MaxValue - 1);
 
 			// Get negatives
 			list.AddIfNew(GetNegatives(list));
@@ -56,14 +60,14 @@ namespace Mosa.Test.System.Numbers
 			return list;
 		}
 
-		private static IList<int> GetNegatives(IList<int> list)
+		private static IList<long> GetNegatives(IList<long> list)
 		{
-			List<int> negs = new List<int>();
+			List<long> negs = new List<long>();
 
-			foreach (int value in list)
+			foreach (long value in list)
 			{
 				if (value > 0)
-					negs.AddIfNew((int)-value);
+					negs.AddIfNew<long>((long)-value);
 			}
 
 			return negs;

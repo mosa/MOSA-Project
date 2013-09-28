@@ -15,6 +15,7 @@
 	    <csc target="library" output="${outputDirectory}/Mosa.TinyCPUSimulator.TestSystem.dll" debug="${debug}" unsafe="true" nostdlib="false">
 		<sources>
                     <include name="BasePlatform.cs"/>
+                    <include name="TestFixture.cs"/>
                     <include name="X86Platform.cs"/>
                     <include name="TestCompiler.cs"/>
 		</sources>
@@ -27,6 +28,7 @@
                     <include name="${outputDirectory}/Mosa.Compiler.Metadata.dll"/>
                     <include name="${outputDirectory}/Mosa.Compiler.TypeSystem.dll"/>
                     <include name="${outputDirectory}/Mosa.Platform.x86.dll"/>
+                    <include name="${outputDirectory}/Mosa.Test.Numbers.dll"/>
                     <include name="${outputDirectory}/Mosa.TinyCPUSimulator.Adaptor.dll"/>
                     <include name="${outputDirectory}/Mosa.TinyCPUSimulator.x86.Adaptor.dll"/>
                     <include name="${outputDirectory}/Mosa.TinyCPUSimulator.x86.dll"/>

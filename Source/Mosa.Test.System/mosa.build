@@ -15,21 +15,7 @@
 	    <csc target="library" output="${outputDirectory}/Mosa.Test.System.dll" debug="${debug}" unsafe="true" nostdlib="false">
 		<sources>
                     <include name="MbunitExtensions.cs"/>
-                    <include name="Numbers/B.cs"/>
-                    <include name="Numbers/Series.cs"/>
                     <include name="DelegateUtility.cs"/>
-                    <include name="Numbers/C.cs"/>
-                    <include name="Numbers/R8.cs"/>
-                    <include name="Numbers/R4.cs"/>
-                    <include name="Numbers/U8.cs"/>
-                    <include name="Numbers/U4.cs"/>
-                    <include name="Numbers/U2.cs"/>
-                    <include name="Numbers/I8.cs"/>
-                    <include name="Numbers/I4.cs"/>
-                    <include name="Numbers/I2.cs"/>
-                    <include name="Numbers/U1.cs"/>
-                    <include name="Numbers/Extension.cs"/>
-                    <include name="Numbers/I1.cs"/>
                     <include name="PageAccessFlags.cs"/>
                     <include name="Prebuilt.cs"/>
                     <include name="TestLinker.cs"/>
@@ -55,6 +41,7 @@
                     <include name="${outputDirectory}/Mosa.Platform.x86.dll"/>
                     <include name="${outputDirectory}/Mosa.Test.CodeDomCompiler.dll"/>
                     <include name="${outputDirectory}/Mosa.Compiler.Framework.dll"/>
+                    <include name="${outputDirectory}/Mosa.Test.Numbers.dll"/>
 		</references>
 		<!-- supress warnings -->
 		<nowarn><warning number="${suppresswarnings}"/></nowarn>

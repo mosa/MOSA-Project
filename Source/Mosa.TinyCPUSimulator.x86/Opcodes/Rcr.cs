@@ -27,18 +27,18 @@ namespace Mosa.TinyCPUSimulator.x86.Opcodes
 			// TODO: for sizes other than 32
 			Debug.Assert(size == 32);
 
-			uint r = (a >> 1);
+			uint u = (a >> 1);
 
 			if (cpu.FLAGS.Carry)
-				r = r | ((uint)1 << (size - 1));
+				u = u | ((uint)1 << (size - 1));
 
 			shift--;
 
-			r = r >> shift;
+			u = u >> shift;
 
-			r = r | (a << (size - shift));
+			u = u | (a << (size - shift));
 
-			StoreValue(cpu, instruction.Operand1, (uint)r, size);
+			StoreValue(cpu, instruction.Operand1, (uint)u, size);
 
 			cpu.FLAGS.Overflow = cpu.FLAGS.Carry ^ IsSign(a, size);
 			cpu.FLAGS.Carry = ((a >> (shift - 1)) & 0x1) == 1;

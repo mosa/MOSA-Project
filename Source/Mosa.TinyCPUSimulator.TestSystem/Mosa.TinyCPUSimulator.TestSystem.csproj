@@ -66,6 +66,10 @@
       <Project>{de30cbe9-50f3-4a3e-bcc9-a8a36348530e}</Project>
       <Name>Mosa.Platform.x86</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Mosa.Test.Numbers\Mosa.Test.Numbers.csproj">
+      <Project>{ad653b6b-ebc7-4e69-93f7-fada40462648}</Project>
+      <Name>Mosa.Test.Numbers</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Mosa.TinyCPUSimulator.Adaptor\Mosa.TinyCPUSimulator.Adaptor.csproj">
       <Project>{50568e2d-5360-4f71-87e0-f6979d2d858a}</Project>
       <Name>Mosa.TinyCPUSimulator.Adaptor</Name>
@@ -85,6 +89,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BasePlatform.cs" />
+    <Compile Include="TestFixture.cs" />
     <Compile Include="X86Platform.cs" />
     <Compile Include="TestCompiler.cs" />
   </ItemGroup>

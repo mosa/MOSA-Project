@@ -7,11 +7,10 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using Mosa.TinyCPUSimulator.x86;
 using Mosa.TinyCPUSimulator.x86.Emulate;
 using Xunit;
 using Xunit.Extensions;
-	 
+
 namespace Mosa.TinyCPUSimulator.x86.xUnit
 {
 	public class OpcodeTests : BaseSetup<CPUx86>
@@ -23,7 +22,7 @@ namespace Mosa.TinyCPUSimulator.x86.xUnit
 			CPU.AddDevice(new PowerUp(CPU));
 			CPU.AddDevice(new Multiboot(CPU));
 		}
-		
+
 		[Theory]
 		[InlineData((uint)10, uint.MaxValue)]
 		[InlineData((uint)0, (uint)0)]
@@ -97,6 +96,75 @@ namespace Mosa.TinyCPUSimulator.x86.xUnit
 			CPU.Execute();
 
 			Assert.Equal(CPU.EBX.Value, (uint)a);
+		}
+
+		[Theory]
+		[InlineData((int)10, int.MaxValue)]
+		[InlineData((int)0, (int)0)]
+		[InlineData((int)0, (int)1)]
+		[InlineData((int)1, (int)0)]
+		[InlineData((int)200, (int)100)]
+		[InlineData((int)100, (int)200)]
+		[InlineData((int)-200, (int)100)]
+		[InlineData((int)-100, (int)200)]
+		[InlineData((int)200, (int)-100)]
+		[InlineData((int)100, (int)-200)]
+		[InlineData((int)int.MaxValue, (int)int.MaxValue)]
+		[InlineData((int)int.MaxValue, (int)int.MinValue)]
+		[InlineData((int)int.MinValue, (int)int.MinValue)]
+		[InlineData((int)int.MaxValue, (int)int.MaxValue)]
+		public void CmpSigned(int a, int b)
+		{
+			Add(Opcode.Mov, 1, CPU.EAX, a);
+			Add(Opcode.Mov, 1, CPU.EBX, b);
+			Add(Opcode.Cmp, 1, CPU.EAX, CPU.EBX);
+
+			Monitor.AddBreakPoint(Address);
+
+			CPU.Execute();
+
+			long r = (long)a - (long)b;
+
+			bool sign = (a - b) < 0;
+			bool zero = (a - b) == 0;
+			bool overflow = r < int.MinValue || r > int.MaxValue;
+			//			bool carry = r > int.MaxValue;
+
+			Assert.True(CPU.FLAGS.Sign == sign, "Expected: Sign = " + sign.ToString());
+			Assert.True(CPU.FLAGS.Zero == zero, "Expected: Zero = " + zero.ToString());
+			Assert.True(CPU.FLAGS.Overflow == overflow, "Expected: Overflow = " + overflow.ToString());
+			//			Assert.True(CPU.FLAGS.Carry == carry, "Expected: Carry = " + carry.ToString());
+		}
+
+
+		[Theory]
+		[InlineData((uint)10, uint.MaxValue)]
+		[InlineData((uint)0, (uint)0)]
+		[InlineData((uint)0, (uint)1)]
+		[InlineData((uint)1, (uint)0)]
+		[InlineData((uint)200, (uint)100)]
+		[InlineData((uint)100, (uint)200)]
+		[InlineData((uint)uint.MaxValue, (uint)uint.MaxValue)]
+		[InlineData((uint)uint.MaxValue, (uint)uint.MinValue)]
+		[InlineData((uint)uint.MinValue, (uint)uint.MinValue)]
+		[InlineData((uint)uint.MaxValue, (uint)uint.MaxValue)]
+		public void CmpUnsigned(uint a, uint b)
+		{
+			Add(Opcode.Mov, 1, CPU.EAX, a);
+			Add(Opcode.Mov, 1, CPU.EBX, b);
+			Add(Opcode.Cmp, 1, CPU.EAX, CPU.EBX);
+
+			Monitor.AddBreakPoint(Address);
+
+			CPU.Execute();
+
+			ulong r = (ulong)a - (ulong)b;
+
+			bool zero = (a - b) == 0;
+			bool carry = r > uint.MaxValue;
+
+			Assert.True(CPU.FLAGS.Zero == zero, "Expected: Zero = " + zero.ToString());
+			Assert.True(CPU.FLAGS.Carry == carry, "Expected: Carry = " + carry.ToString());
 		}
 	}
 }

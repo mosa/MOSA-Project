@@ -7,8 +7,8 @@
     <ProjectGuid>{50568E2D-5360-4F71-87E3-A6979D1D858C}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Mosa.TinyCPUSimulator.TestSystem.Nunit</RootNamespace>
-    <AssemblyName>Mosa.TinyCPUSimulator.TestSystem.Nunit</AssemblyName>
+    <RootNamespace>Mosa.TinyCPUSimulator.TestSystem.xUnit</RootNamespace>
+    <AssemblyName>Mosa.TinyCPUSimulator.TestSystem.xUnit</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -61,6 +61,10 @@
     <ProjectReference Include="..\Mosa.Test.Collection\Mosa.Test.Collection.csproj">
       <Project>{067aab6b-447a-45ba-9e0d-dfea886b4f69}</Project>
       <Name>Mosa.Test.Collection</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mosa.Test.Numbers\Mosa.Test.Numbers.csproj">
+      <Project>{ad653b6b-ebc7-4e69-93f7-fada40462648}</Project>
+      <Name>Mosa.Test.Numbers</Name>
     </ProjectReference>
     <ProjectReference Include="..\Mosa.TinyCPUSimulator.Adaptor\Mosa.TinyCPUSimulator.Adaptor.csproj">
       <Project>{50568e2d-5360-4f71-87e0-f6979d2d858a}</Project>

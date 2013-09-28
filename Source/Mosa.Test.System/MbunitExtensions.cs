@@ -1,9 +1,9 @@
-﻿using System;
-using Gallio.Common.Reflection;
+﻿using Gallio.Common.Reflection;
 using Gallio.Framework.Data;
 using Gallio.Framework.Pattern;
 using MbUnit.Framework;
-using Mosa.Test.System.Numbers;
+using Mosa.Test.Numbers;
+using System;
 
 namespace Mosa.Test.System
 {
@@ -190,7 +190,7 @@ namespace Mosa.Test.System
 			dataSource.AddDataSet(new ValueSequenceDataSet(Series.R4NumberNoExtremesOrZero, GetMetadata(), false));
 		}
 	}
-	
+
 	[AttributeUsage(PatternAttributeTargets.DataContext, AllowMultiple = false, Inherited = true)]
 	public class R8NumberNotZeroAttribute : DataAttribute
 	{
@@ -199,7 +199,7 @@ namespace Mosa.Test.System
 			dataSource.AddDataSet(new ValueSequenceDataSet(Series.R8NumberNotZero, GetMetadata(), false));
 		}
 	}
-	
+
 	[AttributeUsage(PatternAttributeTargets.DataContext, AllowMultiple = false, Inherited = true)]
 	public class R8NumberNoExtremesAttribute : DataAttribute
 	{
@@ -208,7 +208,7 @@ namespace Mosa.Test.System
 			dataSource.AddDataSet(new ValueSequenceDataSet(Series.R8NumberNoExtremes, GetMetadata(), false));
 		}
 	}
-	
+
 	[AttributeUsage(PatternAttributeTargets.DataContext, AllowMultiple = false, Inherited = true)]
 	public class R8NumberNoExtremesOrZeroAttribute : DataAttribute
 	{
@@ -217,7 +217,7 @@ namespace Mosa.Test.System
 			dataSource.AddDataSet(new ValueSequenceDataSet(Series.R8NumberNoExtremesOrZero, GetMetadata(), false));
 		}
 	}
-	
+
 	[AttributeUsage(PatternAttributeTargets.DataContext, AllowMultiple = false, Inherited = true)]
 	public class R4FitsI4Attribute : DataAttribute
 	{
@@ -788,7 +788,7 @@ namespace Mosa.Test.System
 			dataSource.AddDataSet(new ValueSequenceDataSet(Series.I4UpTo32, GetMetadata(), false));
 		}
 	}
-	
+
 	[AttributeUsage(PatternAttributeTargets.DataContext, AllowMultiple = false, Inherited = true)]
 	public class I8UpTo32Attribute : DataAttribute
 	{
@@ -880,5 +880,4 @@ namespace Mosa.Test.System
 			dataSource.AddDataSet(new ValueSequenceDataSet(Series.FewScatteredCI4, GetMetadata(), false));
 		}
 	}
-
 }

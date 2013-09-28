@@ -155,7 +155,8 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 				return (object)(int)x86.EAX.Value;
 			else if (cilElementType == CilElementType.U4)
 				return (object)(uint)x86.EAX.Value;
-
+			else if (cilElementType == CilElementType.Boolean)
+				return (object)(bool)(x86.EAX.Value != 0);
 			return null;
 		}
 	}

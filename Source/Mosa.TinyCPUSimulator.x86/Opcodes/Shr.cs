@@ -22,15 +22,15 @@ namespace Mosa.TinyCPUSimulator.x86.Opcodes
 			if (shift == 0)
 				return; // no changes
 
-			uint r = a >> shift;
+			uint u = a >> shift;
 
-			StoreValue(cpu, instruction.Operand1, (uint)r, size);
+			StoreValue(cpu, instruction.Operand1, (uint)u, size);
+
+			UpdateFlags(cpu, size, (long)u, u, true, true, false, false, false);
 
 			cpu.FLAGS.Overflow = IsSign(a, size);
 			cpu.FLAGS.Carry = ((a >> (shift - 1)) & 0x1) == 1;
-			cpu.FLAGS.Zero = IsZero(r, size);
 			cpu.FLAGS.Sign = false;
-			cpu.FLAGS.Parity = IsParity(r);
 		}
 	}
 }

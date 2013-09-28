@@ -7,6 +7,8 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using System.Text;
+
 namespace Mosa.TinyCPUSimulator.x86
 {
 	/// <summary>
@@ -213,6 +215,19 @@ namespace Mosa.TinyCPUSimulator.x86
 		private static string ToHex(uint value)
 		{
 			return "0x" + (string.Format("{0:X}", value).PadLeft(8, '0'));
+		}
+
+		public override string CompactDump()
+		{
+			//s.AppendLine("EIP        EAX        EBX        ECX        EDX        ESI        EDI        ESP        EBP        FLAGS");
+			return ToHex(EIP.Value) + " " + ToHex(EAX.Value) + " " + ToHex(EBX.Value) + " " + ToHex(ECX.Value) + " " + ToHex(EDX.Value) + " " + ToHex(ESI.Value) + " " + ToHex(EDI.Value) + " " + ToHex(ESP.Value) + " " + ToHex(EBP.Value) + " "
+				+ (FLAGS.Zero ? "Z" : "-")
+				+ (FLAGS.Carry ? "C" : "-")
+				+ (FLAGS.Direction ? "D" : "-")
+				+ (FLAGS.Overflow ? "O" : "-")
+				+ (FLAGS.Parity ? "P" : "-")
+				+ (FLAGS.Sign ? "S" : "-");
+
 		}
 
 		public override SimState GetState()
