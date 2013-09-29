@@ -33,7 +33,7 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 
 		public override ISimAdapter CreateSimAdaptor()
 		{
-			return new SimAdapter();
+			return new SimTestSystemAdapter();
 		}
 
 		public override void InitializeSimulation(ISimAdapter simAdapter)

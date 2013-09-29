@@ -91,6 +91,15 @@ namespace Mosa.TinyCPUSimulator
 			return op;
 		}
 
+
+		public static SimOperand CreateMemoryAddress(int size, ulong immediate)
+		{
+			var op = new SimOperand(size);
+			op.IsMemory = true;
+			op.Immediate = immediate;
+			return op;
+		}
+
 		public static SimOperand CreateLabel(string label)
 		{
 			var op = new SimOperand(32);
@@ -129,6 +138,8 @@ namespace Mosa.TinyCPUSimulator
 
 				if (Register != null)
 					s = s + Register.Name;
+				else
+					s = s + Immediate.ToString();
 
 				if (Index != null)
 					s = s + "+" + Index.Name;

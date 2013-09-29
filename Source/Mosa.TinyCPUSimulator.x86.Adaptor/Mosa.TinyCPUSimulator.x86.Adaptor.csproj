@@ -80,6 +80,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="SimTestSystemAdapter.cs" />
     <Compile Include="SimStandardPCAdapter.cs" />
     <Compile Include="SimAdapter.cs" />
   </ItemGroup>

@@ -131,7 +131,7 @@ namespace Mosa.TinyCPUSimulator.x86
 			}
 			else
 			{
-				Debug.Assert(true);
+				address = (int)operand.Immediate;
 			}
 
 			return (uint)address;

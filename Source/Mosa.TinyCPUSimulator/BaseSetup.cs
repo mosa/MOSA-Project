@@ -80,6 +80,11 @@ namespace Mosa.TinyCPUSimulator
 			return SimOperand.CreateImmediate(value, size);
 		}
 
+		public static SimOperand CreateMemoryAddressOperand(int size, ulong immediate)
+		{
+			return SimOperand.CreateMemoryAddress(size, immediate);
+		}
+
 		public static SimOperand CreateMemoryAddressOperand(int size, SimRegister baseRegister, SimRegister index, int scale, int displacement)
 		{
 			return SimOperand.CreateMemoryAddress(size, baseRegister, index, scale, displacement);

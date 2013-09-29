@@ -17,7 +17,11 @@ namespace Mosa.TinyCPUSimulator.TestSystem.xUnit
 {
 	public class Int32Fixture : TestFixture
 	{
+		public static IEnumerable<object[]> I4 { get { return Combinations.I4; } }
+
 		public static IEnumerable<object[]> I4I4 { get { return Combinations.I4I4; } }
+
+		public static IEnumerable<object[]> SmallI4 { get { return Combinations.SmallI4; } }
 
 		public static IEnumerable<object[]> SmallI4I4 { get { return Combinations.SmallI4I4; } }
 
@@ -93,7 +97,7 @@ namespace Mosa.TinyCPUSimulator.TestSystem.xUnit
 		}
 
 		[Theory]
-		[PropertyData("I4I4")]
+		[PropertyData("I4")]
 		public void RetI4(int a)
 		{
 			Assert.Equal(Int32Tests.RetI4(a), TestCompiler.Run<int>("Mosa.Test.Collection", "Int32Tests", "RetI4", a));
@@ -167,7 +171,7 @@ namespace Mosa.TinyCPUSimulator.TestSystem.xUnit
 		}
 
 		[Theory]
-		[PropertyData("SmallI4I4")]
+		[PropertyData("SmallI4")]
 		public void Ldlen(int length)
 		{
 			Assert.True(TestCompiler.Run<bool>("Mosa.Test.Collection", "Int32Tests", "Ldlen", length));

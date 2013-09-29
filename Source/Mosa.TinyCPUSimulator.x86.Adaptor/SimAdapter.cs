@@ -144,7 +144,14 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 			}
 			else if (operand.IsMemoryAddress)
 			{
-				return CreateMemoryAddressOperand(size, ConvertToRegister(operand.EffectiveOffsetBase), null, 0, (int)operand.Displacement);
+				if (operand.OffsetBase != null && operand.OffsetBase.IsConstant)
+				{
+					return CreateMemoryAddressOperand(size, (ulong)operand.OffsetBase.ValueAsLongInteger);
+				}
+				else
+				{
+					return CreateMemoryAddressOperand(size, ConvertToRegister(operand.EffectiveOffsetBase), null, 0, (int)operand.Displacement);
+				}
 			}
 			else if (operand.IsSymbol)
 			{

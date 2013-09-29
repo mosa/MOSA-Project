@@ -64,6 +64,7 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 			assemblyLoader.LoadModule("mscorlib.dll");
 			assemblyLoader.LoadModule("Mosa.Platform." + platform.Name + ".Intrinsic.dll");
 			assemblyLoader.LoadModule("Mosa.Test.Collection.dll");
+			assemblyLoader.LoadModule("Mosa.Test.Runtime.dll");
 
 			typeSystem.LoadModules(assemblyLoader.Modules);
 
