@@ -164,7 +164,7 @@ namespace Mosa.TinyCPUSimulator.TestSystem.xUnit
 			Assert.Equal(Int32Tests.CgeI4I4(a, b), TestCompiler.Run<bool>("Mosa.Test.Collection", "Int32Tests", "CgeI4I4", a, b));
 		}
 
-		[Theory]
+		[Fact]
 		public void Newarr()
 		{
 			Assert.True(TestCompiler.Run<bool>("Mosa.Test.Collection", "Int32Tests", "Newarr"));
@@ -172,6 +172,7 @@ namespace Mosa.TinyCPUSimulator.TestSystem.xUnit
 
 		[Theory]
 		[PropertyData("SmallI4")]
+		//[InlineData((int)0)]
 		public void Ldlen(int length)
 		{
 			Assert.True(TestCompiler.Run<bool>("Mosa.Test.Collection", "Int32Tests", "Ldlen", length));
@@ -179,6 +180,7 @@ namespace Mosa.TinyCPUSimulator.TestSystem.xUnit
 
 		[Theory]
 		[PropertyData("SmallI4I4")]
+		//[InlineData((int)1, (int)2)]
 		public void StelemI4(int index, int value)
 		{
 			Assert.True(TestCompiler.Run<bool>("Mosa.Test.Collection", "Int32Tests", "Stelem", index, value));
@@ -186,6 +188,7 @@ namespace Mosa.TinyCPUSimulator.TestSystem.xUnit
 
 		[Theory]
 		[PropertyData("SmallI4I4")]
+		//[InlineData((int)1, (int)2)]
 		public void LdelemI4(int index, int value)
 		{
 			Assert.True(TestCompiler.Run<bool>("Mosa.Test.Collection", "Int32Tests", "Ldelem", index, value));
@@ -193,6 +196,7 @@ namespace Mosa.TinyCPUSimulator.TestSystem.xUnit
 
 		[Theory]
 		[PropertyData("SmallI4I4")]
+		//[InlineData((int)1, (int)2)]
 		public void LdelemaI4(int index, int value)
 		{
 			Assert.True(TestCompiler.Run<bool>("Mosa.Test.Collection", "Int32Tests", "Ldelema", index, value));

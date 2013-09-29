@@ -36,8 +36,8 @@ namespace Mosa.Test.Numbers
 		{
 			get
 			{
-				foreach (var i1 in Mosa.Test.Numbers.I4.Series)
-					foreach (var i2 in Mosa.Test.Numbers.Series.I4Small)
+				foreach (var i1 in Mosa.Test.Numbers.Series.I4Small)
+					foreach (var i2 in Mosa.Test.Numbers.I4.Series)
 						yield return new object[2] { i1, i2 };
 			}
 		}

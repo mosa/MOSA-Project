@@ -14,7 +14,7 @@ namespace Mosa.TinyCPUSimulator.x86.Opcodes
 		public override void Execute(CPUx86 cpu, SimInstruction instruction)
 		{
 			int size = 32;
-			uint value = Read(cpu, (uint)(cpu.ESP.Value + (size / 8)), size);
+			uint value = Read(cpu, cpu.ESP.Value, size);
 
 			cpu.ESP.Value = (uint)(cpu.ESP.Value + (size / 8));
 			cpu.EIP.Value = value;

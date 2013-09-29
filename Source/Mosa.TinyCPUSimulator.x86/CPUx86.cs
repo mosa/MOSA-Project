@@ -227,7 +227,7 @@ namespace Mosa.TinyCPUSimulator.x86
 				+ (FLAGS.Overflow ? "O" : "-")
 				+ (FLAGS.Parity ? "P" : "-")
 				+ (FLAGS.Sign ? "S" : "-");
-
+			//"[" + Tick.ToString("D5") + "] "
 		}
 
 		public override SimState GetState()
