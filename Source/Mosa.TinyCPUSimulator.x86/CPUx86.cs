@@ -7,8 +7,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System.Text;
-
 namespace Mosa.TinyCPUSimulator.x86
 {
 	/// <summary>

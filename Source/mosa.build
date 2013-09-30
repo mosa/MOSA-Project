@@ -75,7 +75,7 @@
         <target name="Mosa.Test.AssemblyB" depends="init,Mosa.Test.AssemblyA,"><nant buildfile="Mosa.Test.AssemblyB/mosa.build"/></target>
         <target name="Mosa.Test.AssemblyC" depends="init,Mosa.Test.AssemblyA,"><nant buildfile="Mosa.Test.AssemblyC/mosa.build"/></target>
         <target name="Mosa.TinyCPUSimulator" depends="init,"><nant buildfile="Mosa.TinyCPUSimulator/mosa.build"/></target>
-        <target name="Mosa.TinyCPUSimulator.Debug" depends="init,Mosa.TinyCPUSimulator.x86,Mosa.TinyCPUSimulator,"><nant buildfile="Mosa.TinyCPUSimulator.Debug/mosa.build"/></target>
+        <target name="Mosa.TinyCPUSimulator.Debug" depends="init,Mosa.TinyCPUSimulator.TestSystem.xUnit,Mosa.TinyCPUSimulator.TestSystem,Mosa.TinyCPUSimulator.x86,Mosa.TinyCPUSimulator,"><nant buildfile="Mosa.TinyCPUSimulator.Debug/mosa.build"/></target>
         <target name="Mosa.TinyCPUSimulator.x86" depends="init,Mosa.TinyCPUSimulator,"><nant buildfile="Mosa.TinyCPUSimulator.x86/mosa.build"/></target>
         <target name="Mosa.TinyCPUSimulator.x86.Adaptor" depends="init,Mosa.Compiler.Common,Mosa.Compiler.Framework,Mosa.Compiler.Linker,Mosa.Compiler.Metadata,Mosa.Compiler.TypeSystem,Mosa.Platform.x86,Mosa.TinyCPUSimulator.Adaptor,Mosa.TinyCPUSimulator.x86,Mosa.TinyCPUSimulator,"><nant buildfile="Mosa.TinyCPUSimulator.x86.Adaptor/mosa.build"/></target>
         <target name="Mosa.TinyCPUSimulator.Adaptor" depends="init,Mosa.Compiler.Common,Mosa.Compiler.Framework,Mosa.Compiler.InternalTrace,Mosa.Compiler.Linker,Mosa.Compiler.Metadata,Mosa.Compiler.TypeSystem,Mosa.TinyCPUSimulator,"><nant buildfile="Mosa.TinyCPUSimulator.Adaptor/mosa.build"/></target>

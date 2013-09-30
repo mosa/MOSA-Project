@@ -14,7 +14,7 @@ namespace Mosa.TinyCPUSimulator.x86.Opcodes
 		public override void Execute(CPUx86 cpu, SimInstruction instruction)
 		{
 			uint a = LoadValue(cpu, instruction.Operand1);
-			int size = instruction.Operand2.Size;
+			int size = instruction.Operand1.Size;
 
 			uint u = ~a;
 

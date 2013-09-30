@@ -44,36 +44,16 @@
                     <include name="CIL/StructureFixture.cs"/>
                     <include name="Extra/ConditionalOperatorFixture.cs"/>
                     <include name="CIL/LdargaFixture.cs"/>
-                    <include name="OLD/GenericMethodMemberFixture.cs"/>
-                    <include name="OLD/GenericTypeFixture.cs"/>
                     <include name="CIL/Int32Fixture.cs"/>
                     <include name="CIL/Int64Fixture.cs"/>
                     <include name="CIL/InterfaceFixture.cs"/>
                     <include name="CIL/NewObjectFixture.cs"/>
-                    <include name="OLD/PinnedFixture.cs"/>
                     <include name="CIL/SingleFixture.cs"/>
                     <include name="CIL/StringFixture.cs"/>
                     <include name="CIL/UInt32Fixture.cs"/>
                     <include name="CIL/UInt64Fixture.cs"/>
-                    <include name="OLD/Add.cs"/>
-                    <include name="OLD/AddPtr.cs"/>
-                    <include name="OLD/And.cs"/>
-                    <include name="OLD/CallWithConstant.cs"/>
-                    <include name="OLD/Ceq.cs"/>
-                    <include name="OLD/Cgt.cs"/>
-                    <include name="OLD/Clt.cs"/>
                     <include name="CIL/CallOrderFixture.cs"/>
-                    <include name="OLD/Div.cs"/>
-                    <include name="OLD/Mul.cs"/>
-                    <include name="OLD/Or.cs"/>
-                    <include name="OLD/Rem.cs"/>
-                    <include name="OLD/Shl.cs"/>
-                    <include name="OLD/Shr.cs"/>
-                    <include name="OLD/StaticFieldInit.cs"/>
-                    <include name="OLD/Stind.cs"/>
-                    <include name="OLD/Sub.cs"/>
                     <include name="CIL/WhileFixture.cs"/>
-                    <include name="OLD/Xor.cs"/>
 		</sources>
 		<references>
                     <include name="System.dll"/>

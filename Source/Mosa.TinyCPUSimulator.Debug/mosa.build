@@ -19,6 +19,8 @@
 		</sources>
 		<references>
                     <include name="System.dll"/>
+                    <include name="${outputDirectory}/Mosa.TinyCPUSimulator.TestSystem.xUnit.dll"/>
+                    <include name="${outputDirectory}/Mosa.TinyCPUSimulator.TestSystem.dll"/>
                     <include name="${outputDirectory}/Mosa.TinyCPUSimulator.x86.dll"/>
                     <include name="${outputDirectory}/Mosa.TinyCPUSimulator.dll"/>
 		</references>

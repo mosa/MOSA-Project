@@ -165,24 +165,14 @@
       <DependentUpon>ConditionalOperatorFixture.tt</DependentUpon>
     </Compile>
     <Compile Include="CIL\LdargaFixture.cs" />
-    <Compile Include="OLD\GenericMethodMemberFixture.cs" />
-    <Compile Include="OLD\GenericTypeFixture.cs" />
     <Compile Include="CIL\Int32Fixture.cs" />
     <Compile Include="CIL\Int64Fixture.cs" />
     <Compile Include="CIL\InterfaceFixture.cs" />
     <Compile Include="CIL\NewObjectFixture.cs" />
-    <Compile Include="OLD\PinnedFixture.cs" />
     <Compile Include="CIL\SingleFixture.cs" />
     <Compile Include="CIL\StringFixture.cs" />
     <Compile Include="CIL\UInt32Fixture.cs" />
     <Compile Include="CIL\UInt64Fixture.cs" />
-    <Compile Include="OLD\Add.cs" />
-    <Compile Include="OLD\AddPtr.cs" />
-    <Compile Include="OLD\And.cs" />
-    <Compile Include="OLD\CallWithConstant.cs" />
-    <Compile Include="OLD\Ceq.cs" />
-    <Compile Include="OLD\Cgt.cs" />
-    <Compile Include="OLD\Clt.cs" />
     <None Include="CIL\ComparisonFixture.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>ComparisonFixture.cs</LastGenOutput>
@@ -216,17 +206,7 @@
       <LastGenOutput>LdlocaFixture.cs</LastGenOutput>
     </None>
     <Compile Include="CIL\CallOrderFixture.cs" />
-    <Compile Include="OLD\Div.cs" />
-    <Compile Include="OLD\Mul.cs" />
-    <Compile Include="OLD\Or.cs" />
-    <Compile Include="OLD\Rem.cs" />
-    <Compile Include="OLD\Shl.cs" />
-    <Compile Include="OLD\Shr.cs" />
-    <Compile Include="OLD\StaticFieldInit.cs" />
-    <Compile Include="OLD\Stind.cs" />
-    <Compile Include="OLD\Sub.cs" />
     <Compile Include="CIL\WhileFixture.cs" />
-    <Compile Include="OLD\Xor.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Mosa.Test.CodeDomCompiler\Mosa.Test.CodeDomCompiler.csproj">

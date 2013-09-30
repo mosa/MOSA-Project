@@ -7,6 +7,9 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using Mosa.Test.Numbers;
+using System.Collections.Generic;
+
 namespace Mosa.TinyCPUSimulator.TestSystem
 {
 	public class TestFixture
@@ -27,5 +30,76 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 				return testCompiler;
 			}
 		}
+
+		protected T Run<T>(string ns, string type, string method, params object[] parameters)
+		{
+			return TestCompiler.Run<T>(ns, type, method, parameters);
+		}
+
+		protected T Run<T>(string fullMethodName, params object[] parameters)
+		{
+			int first = fullMethodName.LastIndexOf(".");
+			int second = fullMethodName.LastIndexOf(".", first - 1);
+
+			string ns = fullMethodName.Substring(0, second);
+			string type = fullMethodName.Substring(second + 1, first - second - 1);
+			string method = fullMethodName.Substring(first + 1);
+
+			return TestCompiler.Run<T>(ns, type, method, parameters);
+		}
+
+		public static IEnumerable<object[]> B { get { return Combinations.B; } }
+
+		public static IEnumerable<object[]> BB { get { return Combinations.BB; } }
+
+		public static IEnumerable<object[]> I1 { get { return Combinations.I1; } }
+
+		public static IEnumerable<object[]> I1I1 { get { return Combinations.I1I1; } }
+
+		public static IEnumerable<object[]> I1UpTo32 { get { return Combinations.I1UpTo32; } }
+
+		public static IEnumerable<object[]> I2 { get { return Combinations.I2; } }
+
+		public static IEnumerable<object[]> I2I2 { get { return Combinations.I2I2; } }
+
+		public static IEnumerable<object[]> I4 { get { return Combinations.I4; } }
+
+		public static IEnumerable<object[]> I4I4 { get { return Combinations.I4I4; } }
+
+		public static IEnumerable<object[]> I4Small { get { return Combinations.I4Small; } }
+
+		public static IEnumerable<object[]> I4SmallB { get { return Combinations.I4SmallB; } }
+
+		public static IEnumerable<object[]> I4SmallI4 { get { return Combinations.I4SmallI4; } }
+
+		public static IEnumerable<object[]> I4SmallU4 { get { return Combinations.I4SmallU4; } }
+
+		public static IEnumerable<object[]> I8 { get { return Combinations.I8; } }
+
+		public static IEnumerable<object[]> I8I8 { get { return Combinations.I8I8; } }
+
+		public static IEnumerable<object[]> U1 { get { return Combinations.U1; } }
+
+		public static IEnumerable<object[]> U1U1 { get { return Combinations.U1U1; } }
+
+		public static IEnumerable<object[]> U2 { get { return Combinations.U2; } }
+
+		public static IEnumerable<object[]> U2U2 { get { return Combinations.U2U2; } }
+
+		public static IEnumerable<object[]> U4 { get { return Combinations.U4; } }
+
+		public static IEnumerable<object[]> U4U4 { get { return Combinations.U4U4; } }
+
+		public static IEnumerable<object[]> U8 { get { return Combinations.U8; } }
+
+		public static IEnumerable<object[]> U8U8 { get { return Combinations.U8U8; } }
+
+		public static IEnumerable<object[]> U4I1UpTo32 { get { return Combinations.U4I1UpTo32; } }
+
+		public static IEnumerable<object[]> I4I1UpTo32 { get { return Combinations.I4I1UpTo32; } }
+
+		public static IEnumerable<object[]> U4U1UpTo32 { get { return Combinations.U4U1UpTo32; } }
+
+		public static IEnumerable<object[]> I4U1UpTo32 { get { return Combinations.I4U1UpTo32; } }
 	}
 }

@@ -14,7 +14,9 @@
 	<target name="build">
 	    <csc target="library" output="${outputDirectory}/Mosa.TinyCPUSimulator.TestSystem.xUnit.dll" debug="${debug}" unsafe="true" nostdlib="false">
 		<sources>
+                    <include name="BooleanFixture.cs"/>
                     <include name="Int32Fixture.cs"/>
+                    <include name="UInt32Fixture.cs"/>
 		</sources>
 		<references>
                     <include name="System.dll"/>

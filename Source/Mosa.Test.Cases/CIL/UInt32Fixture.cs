@@ -101,13 +101,13 @@ namespace Mosa.Test.Cases.CIL
 		[Test]
 		public void ShiftLeftU4U4([U4]uint a, [I1UpTo32]byte b)
 		{
-			Assert.AreEqual(UInt32Tests.ShiftLeftU4U4(a, b), Run<uint>("Mosa.Test.Collection", "UInt32Tests", "ShiftLeftU4U4", a, b));
+			Assert.AreEqual(UInt32Tests.ShiftLeftU4U1(a, b), Run<uint>("Mosa.Test.Collection", "UInt32Tests", "ShiftLeftU4U4", a, b));
 		}
 
 		[Test]
 		public void ShiftRightU4U4([U4]uint a, [I1UpTo32]byte b)
 		{
-			Assert.AreEqual(UInt32Tests.ShiftRightU4U4(a, b), Run<uint>("Mosa.Test.Collection", "UInt32Tests", "ShiftRightU4U4", a, b));
+			Assert.AreEqual(UInt32Tests.ShiftRightU4U1(a, b), Run<uint>("Mosa.Test.Collection", "UInt32Tests", "ShiftRightU4U4", a, b));
 		}
 
 		[Test]

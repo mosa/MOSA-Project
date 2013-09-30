@@ -43,6 +43,14 @@
     <Compile Include="TestCPUx86.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Mosa.TinyCPUSimulator.TestSystem.xUnit\Mosa.TinyCPUSimulator.TestSystem.xUnit.csproj">
+      <Project>{50568e2d-5360-4f71-87e3-a6979d1d858c}</Project>
+      <Name>Mosa.TinyCPUSimulator.TestSystem.xUnit</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mosa.TinyCPUSimulator.TestSystem\Mosa.TinyCPUSimulator.TestSystem.csproj">
+      <Project>{50568e2d-5360-4f71-87e0-a6979d1d858a}</Project>
+      <Name>Mosa.TinyCPUSimulator.TestSystem</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Mosa.TinyCPUSimulator.x86\Mosa.TinyCPUSimulator.x86.csproj">
       <Project>{50568e2d-5360-4f71-87e0-e6979d1d858a}</Project>
       <Name>Mosa.TinyCPUSimulator.x86</Name>

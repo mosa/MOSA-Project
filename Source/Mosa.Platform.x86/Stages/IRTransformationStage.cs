@@ -314,7 +314,6 @@ namespace Mosa.Platform.x86.Stages
 				context.AppendInstruction(X86.Setcc, condition, v1);
 
 			context.AppendInstruction(X86.Movzx, resultOperand, v1);
-
 		}
 
 		/// <summary>
