@@ -15,6 +15,11 @@ namespace Mosa.Compiler.Framework
 	public enum ConditionCode
 	{
 		/// <summary>
+		/// The undefined
+		/// </summary>
+		Undefined, 
+
+		/// <summary>
 		/// Equality comparison.
 		/// </summary>
 		Equal,

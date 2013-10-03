@@ -36,6 +36,8 @@ namespace Mosa.TestWorld.x86
 			Screen.Write("!");
 			Screen.Write(" ");
 
+			Test();
+
 			SSE.Setup();
 			Screen.Write('0');
 			//DebugClient.Setup(Serial.COM1);
@@ -115,6 +117,11 @@ namespace Mosa.TestWorld.x86
 			//Console.Row = r;
 			//Console.Color = col;
 			//Console.BackgroundColor = back;
+		}
+
+		public static void Test()
+		{
+			Mosa.Test.Collection.FibonacciTests.Fibonacci(3);
 		}
 	}
 }

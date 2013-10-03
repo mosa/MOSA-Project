@@ -212,19 +212,7 @@ namespace Mosa.Compiler.Framework
 			this.BranchTargets = null;
 			this.Other = null;
 			this.BranchHint = false;
-		}
-
-		/// <summary>
-		/// Clears the instance.
-		/// </summary>
-		public void ClearAbbreviated()
-		{
-			this.Label = -1;
-			this.Instruction = null;
-			this.OperandCount = 0;
-			this.ResultCount = 0;
-			this.BranchTargets = null;
-			this.Other = null;
+			this.ConditionCode = ConditionCode.Undefined;
 		}
 
 		/// <summary>

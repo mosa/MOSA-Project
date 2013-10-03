@@ -137,6 +137,22 @@ namespace Mosa.TinyCPUSimulator.x86
 			return (uint)address;
 		}
 
+		protected uint ResolveLabel(CPUx86 cpu, SimOperand operand)
+		{
+			Debug.Assert(operand.IsLabel);
+
+			uint address = (uint)cpu.GetLabel(operand.Label);
+
+			if (operand.IsMemory)
+			{
+				return Read(cpu, address, operand.Size);
+			}
+			else
+			{
+				return address;
+			}
+		}
+
 		protected uint LoadValue(CPUx86 cpu, SimOperand operand)
 		{
 			if (operand.IsImmediate)
@@ -151,14 +167,7 @@ namespace Mosa.TinyCPUSimulator.x86
 
 			if (operand.IsLabel)
 			{
-				uint address = (uint)cpu.GetLabel(operand.Label);
-
-				if (operand.IsMemory)
-					return Read(cpu, address, operand.Size);
-				else
-				{
-					return address;
-				}
+				return ResolveLabel(cpu, operand);
 			}
 
 			if (operand.IsMemory)
@@ -302,5 +311,16 @@ namespace Mosa.TinyCPUSimulator.x86
 				cpu.Write8(address + 3, b[3]);
 			}
 		}
+
+		protected uint ResolveBranch(CPUx86 cpu, SimOperand operand)
+		{
+			if (operand.IsLabel)
+				return ResolveLabel(cpu, operand);
+			else if (operand.IsImmediate)
+				return (uint)(cpu.EIP.Value + (long)operand.Immediate);
+
+			throw new InvalidProgramException();
+		}
+
 	}
 }

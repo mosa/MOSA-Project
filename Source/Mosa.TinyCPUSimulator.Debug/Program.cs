@@ -21,11 +21,11 @@ namespace Mosa.TinyCPUSimulator.Debug
 
 		private static void Test2()
 		{
-			var int32Fixture = new Int32Fixture();
+			var fixture = new EnumFixture(); // EnumFixture.ItemAMustEqual5
 
-			int32Fixture.AddI4I4(1, 1);
+			fixture.ItemAMustEqual5();
 		}
-
+		
 		private static void Test1()
 		{
 			var test = new TestCPUx86();

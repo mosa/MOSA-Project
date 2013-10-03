@@ -118,7 +118,7 @@ namespace Mosa.Compiler.Framework
 		{
 			StringBuilder s = new StringBuilder(ToString());
 
-			if (context.Other is ConditionCode)
+			if (context.ConditionCode != ConditionCode.Undefined)
 			{
 				s.Append(" [");
 				s.Append(GetConditionString(context.ConditionCode));

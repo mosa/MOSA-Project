@@ -9,14 +9,7 @@
 
 namespace Mosa.TinyCPUSimulator.x86.Opcodes
 {
-	public class Je : BaseX86Opcode
+	public class Je : Jz
 	{
-		public override void Execute(CPUx86 cpu, SimInstruction instruction)
-		{
-			if (cpu.FLAGS.Zero)
-			{
-				cpu.EIP.Value = (uint)(cpu.EIP.Value + (long)instruction.Operand1.Immediate);
-			}
-		}
 	}
 }

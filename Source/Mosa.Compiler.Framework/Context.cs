@@ -759,23 +759,23 @@ namespace Mosa.Compiler.Framework
 		/// Sets the instruction.
 		/// </summary>
 		/// <param name="instruction">The instruction.</param>
-		/// <param name="code">The code.</param>
-		public void SetInstruction(BaseInstruction instruction, ConditionCode code)
+		/// <param name="condition">The code.</param>
+		public void SetInstruction(BaseInstruction instruction, ConditionCode condition)
 		{
 			SetInstruction(instruction);
-			ConditionCode = code;
+			ConditionCode = condition;
 		}
 
 		/// <summary>
 		/// Sets the instruction.
 		/// </summary>
 		/// <param name="instruction">The instruction.</param>
-		/// <param name="code">The code.</param>
+		/// <param name="condition">The code.</param>
 		/// <param name="block">The block.</param>
-		public void SetInstruction(BaseInstruction instruction, ConditionCode code, BasicBlock block)
+		public void SetInstruction(BaseInstruction instruction, ConditionCode condition, BasicBlock block)
 		{
 			SetInstruction(instruction);
-			ConditionCode = code;
+			ConditionCode = condition;
 			SetBranch(block);
 		}
 
@@ -955,25 +955,25 @@ namespace Mosa.Compiler.Framework
 		/// Appends an instruction after the current index.
 		/// </summary>
 		/// <param name="instruction">The instruction to append.</param>
-		/// <param name="code">The condition code.</param>
-		public void AppendInstruction(BaseInstruction instruction, ConditionCode code)
+		/// <param name="condition">The condition code.</param>
+		public void AppendInstruction(BaseInstruction instruction, ConditionCode condition)
 		{
 			AppendInstruction();
 			SetInstruction(instruction);
-			ConditionCode = code;
+			ConditionCode = condition;
 		}
 
 		/// <summary>
 		/// Appends an instruction after the current index.
 		/// </summary>
 		/// <param name="instruction">The instruction to append.</param>
-		/// <param name="code">The condition code.</param>
+		/// <param name="condition">The condition code.</param>
 		/// <param name="result">The result operand.</param>
-		public void AppendInstruction(BaseInstruction instruction, ConditionCode code, Operand result)
+		public void AppendInstruction(BaseInstruction instruction, ConditionCode condition, Operand result)
 		{
 			AppendInstruction();
 			SetInstruction(instruction, result);
-			ConditionCode = code;
+			ConditionCode = condition;
 			Result = result;
 		}
 

@@ -81,7 +81,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BooleanFixture.cs" />
+    <Compile Include="EnumFixture.cs" />
+    <Compile Include="FibonacciFixture.cs" />
     <Compile Include="Int32Fixture.cs" />
+    <Compile Include="NewDerivedObjectFixture.cs" />
+    <Compile Include="NewObjectFixture.cs" />
     <Compile Include="UInt32Fixture.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

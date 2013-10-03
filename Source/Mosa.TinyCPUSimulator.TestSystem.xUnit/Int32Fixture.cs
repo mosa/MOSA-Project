@@ -124,10 +124,7 @@ namespace Mosa.TinyCPUSimulator.TestSystem.xUnit
 		}
 
 		[Theory]
-		//[PropertyData("I4I4")]
-		[InlineData(-2147483648, 0)]
-		[InlineData(127, -1)]
-		[InlineData(255, -127)]
+		[PropertyData("I4I4")]
 		public void CltI4I4(int a, int b)
 		{
 			Assert.Equal(Int32Tests.CltI4I4(a, b), Run<bool>("Mosa.Test.Collection.Int32Tests.CltI4I4", a, b));
