@@ -62,7 +62,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Test.Runtime", "Mosa.T
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Test.Debug", "Mosa.Test.Debug\Mosa.Test.Debug.csproj", "{38D90F00-5CFB-4AF8-85CE-84FCCE20123F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Test.Cases", "Mosa.Test.Cases\Mosa.Test.Cases.csproj", "{68F4256D-C291-4365-BC09-AE49B902AE59}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Test.Collection.MbUnit", "Mosa.Test.Collection.MbUnit\Mosa.Test.Collection.MbUnit.csproj", "{68F4256D-C291-4365-BC09-AE49B902AE59}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Compiler", "Compiler", "{DDBC7F79-A2A1-4D92-9AE7-ADDC838F1E5E}"
 EndProject

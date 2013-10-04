@@ -1,4 +1,4 @@
-﻿using Mosa.Test.Cases.CIL;
+﻿using Mosa.Test.Collection.MbUnit;
 
 namespace Mosa.Test.Debug
 {

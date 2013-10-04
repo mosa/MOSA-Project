@@ -21,7 +21,7 @@ namespace Mosa.TinyCPUSimulator.Debug
 
 		private static void Test2()
 		{
-			var fixture = new EnumFixture(); // EnumFixture.ItemAMustEqual5
+			var fixture = new EnumFixture(); 
 
 			fixture.ItemAMustEqual5();
 		}
