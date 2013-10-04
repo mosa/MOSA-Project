@@ -103,13 +103,13 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 			}
 			else if (parameter is UInt64)
 			{
-				WriteStackValue(simAdapter, (uint)(ulong)parameter);
 				WriteStackValue(simAdapter, (uint)((ulong)parameter >> 32));
+				WriteStackValue(simAdapter, (uint)(ulong)parameter);
 			}
 			else if (parameter is Int64)
 			{
-				WriteStackValue(simAdapter, (uint)(ulong)parameter);
-				WriteStackValue(simAdapter, (uint)((ulong)parameter >> 32));
+				WriteStackValue(simAdapter, (uint)((long)parameter >> 32));
+				WriteStackValue(simAdapter, (uint)(long)parameter);
 			}
 			else if (parameter is Single)
 			{
@@ -126,7 +126,9 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 			//else  if (parameter is UIntPtr) { WriteStackValue(simAdapter, (uint)parameter);  }
 			//else  if (parameter is IntPtr) { WriteStackValue(simAdapter, (uint)parameter); }
 			else
+			{
 				throw new InvalidProgramException();
+			}
 		}
 
 		public override void PopulateStack(ISimAdapter simAdapter, params object[] parameters)
@@ -151,13 +153,21 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 		{
 			var x86 = simAdapter.SimCPU as CPUx86;
 
-			if (cilElementType == CilElementType.I4)
-				return (object)(int)x86.EAX.Value;
-			else if (cilElementType == CilElementType.U4)
-				return (object)(uint)x86.EAX.Value;
-			else if (cilElementType == CilElementType.Boolean)
-				return (object)(bool)(x86.EAX.Value != 0);
-			return null;
+			switch (cilElementType)
+			{
+				case CilElementType.I4: return (object)(int)x86.EAX.Value;
+				case CilElementType.U4: return (object)(uint)x86.EAX.Value;
+				case CilElementType.I1: return (object)(sbyte)x86.EAX.Value;
+				case CilElementType.I2: return (object)(short)x86.EAX.Value;
+				case CilElementType.U1: return (object)(byte)x86.EAX.Value;
+				case CilElementType.U2: return (object)(ushort)x86.EAX.Value;
+				case CilElementType.Char: return (object)(char)x86.EAX.Value;
+				case CilElementType.Boolean: return (object)(bool)(x86.EAX.Value != 0);
+				case CilElementType.I8: return (object)(long)(((ulong)x86.EAX.Value) | ((ulong)x86.EDX.Value << 32));
+				case CilElementType.U8: return (object)(ulong)(((ulong)x86.EAX.Value) | ((ulong)x86.EDX.Value << 32));
+
+				default: return null;
+			}
 		}
 	}
 }

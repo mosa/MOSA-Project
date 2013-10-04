@@ -52,6 +52,8 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 
 		public static IEnumerable<object[]> BB { get { return Combinations.BB; } }
 
+		public static IEnumerable<object[]> C { get { return Combinations.C; } }
+		
 		public static IEnumerable<object[]> I1 { get { return Combinations.I1; } }
 
 		public static IEnumerable<object[]> I1I1 { get { return Combinations.I1I1; } }

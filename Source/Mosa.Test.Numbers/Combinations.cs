@@ -32,6 +32,25 @@ namespace Mosa.Test.Numbers
 			}
 		}
 
+		public static IEnumerable<object[]> C
+		{
+			get
+			{
+				foreach (var i1 in Mosa.Test.Numbers.C.Series)
+					yield return new object[] { i1 };
+			}
+		}
+
+		public static IEnumerable<object[]> CC
+		{
+			get
+			{
+				foreach (var i1 in Mosa.Test.Numbers.C.Series)
+					foreach (var i2 in Mosa.Test.Numbers.C.Series)
+						yield return new object[] { i1, i2 };
+			}
+		}
+
 		public static IEnumerable<object[]> I4SmallB
 		{
 			get
