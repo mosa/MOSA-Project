@@ -88,6 +88,10 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 
 		public static IEnumerable<object[]> U2U2 { get { return Combinations.U2U2; } }
 
+		public static IEnumerable<object[]> U2U1UpTo16 { get { return Combinations.U2U1UpTo16; } }
+
+		public static IEnumerable<object[]> I4SmallU2 { get { return Combinations.I4SmallU2; } }
+
 		public static IEnumerable<object[]> U4 { get { return Combinations.U4; } }
 
 		public static IEnumerable<object[]> U4U4 { get { return Combinations.U4U4; } }
