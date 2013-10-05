@@ -155,16 +155,16 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 
 			switch (cilElementType)
 			{
-				case CilElementType.I4: return (object)(int)x86.EAX.Value;
-				case CilElementType.U4: return (object)(uint)x86.EAX.Value;
 				case CilElementType.I1: return (object)(sbyte)x86.EAX.Value;
 				case CilElementType.I2: return (object)(short)x86.EAX.Value;
+				case CilElementType.I4: return (object)(int)x86.EAX.Value;
+				case CilElementType.I8: return (object)(long)(((ulong)x86.EAX.Value) | ((ulong)x86.EDX.Value << 32));
 				case CilElementType.U1: return (object)(byte)x86.EAX.Value;
 				case CilElementType.U2: return (object)(ushort)x86.EAX.Value;
+				case CilElementType.U4: return (object)(uint)x86.EAX.Value;
+				case CilElementType.U8: return (object)(ulong)(((ulong)x86.EAX.Value) | ((ulong)x86.EDX.Value << 32));
 				case CilElementType.Char: return (object)(char)x86.EAX.Value;
 				case CilElementType.Boolean: return (object)(bool)(x86.EAX.Value != 0);
-				case CilElementType.I8: return (object)(long)(((ulong)x86.EAX.Value) | ((ulong)x86.EDX.Value << 32));
-				case CilElementType.U8: return (object)(ulong)(((ulong)x86.EAX.Value) | ((ulong)x86.EDX.Value << 32));
 
 				default: return null;
 			}

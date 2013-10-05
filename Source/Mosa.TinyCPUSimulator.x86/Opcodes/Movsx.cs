@@ -16,7 +16,30 @@ namespace Mosa.TinyCPUSimulator.x86.Opcodes
 			uint a = LoadValue(cpu, instruction.Operand2);
 			int size = instruction.Operand1.Size;
 
-			StoreValue(cpu, instruction.Operand1, a, size);
+			int s = SignExtend(a, instruction.Operand2.Size, size);
+
+			StoreValue(cpu, instruction.Operand1, (uint)s, size);
+		}
+
+		protected int SignExtend(uint a, int fromsize, int tosize)
+		{
+			if (fromsize == tosize)
+				return (int)a;
+
+			if (tosize == 32)
+			{
+				if (fromsize == 16)
+				{
+					return (int)(short)a;
+				}
+
+				if (fromsize == 8)
+				{
+					return (int)(sbyte)a;
+				}
+			}
+
+			throw new System.NotImplementedException();
 		}
 	}
 }

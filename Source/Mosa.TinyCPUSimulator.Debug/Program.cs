@@ -16,16 +16,23 @@ namespace Mosa.TinyCPUSimulator.Debug
 	{
 		private static void Main(string[] args)
 		{
-			Test2();
+			Test3();
+		}
+
+		private static void Test3()
+		{
+			var fixture = new Int16Fixture();
+
+			fixture.ShiftRightI2I2(-1, 2);
 		}
 
 		private static void Test2()
 		{
-			var fixture = new EnumFixture(); 
+			var fixture = new EnumFixture();
 
 			fixture.ItemAMustEqual5();
 		}
-		
+
 		private static void Test1()
 		{
 			var test = new TestCPUx86();

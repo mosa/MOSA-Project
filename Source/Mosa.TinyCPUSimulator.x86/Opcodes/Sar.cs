@@ -27,7 +27,8 @@ namespace Mosa.TinyCPUSimulator.x86.Opcodes
 
 			if (sign)
 			{
-				u = u | (uint)(1 << (size - 1));
+				uint m = (uint.MaxValue << (int)(32 - shift));
+				u = u | m;
 			}
 
 			StoreValue(cpu, instruction.Operand1, (uint)u, size);

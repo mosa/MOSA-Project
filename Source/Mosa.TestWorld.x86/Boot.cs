@@ -121,7 +121,7 @@ namespace Mosa.TestWorld.x86
 
 		public static void Test()
 		{
-			Mosa.Test.Collection.FibonacciTests.Fibonacci(3);
+			Mosa.Test.Collection.Int16Tests.ShiftRightI2I2(-1, 2);
 		}
 	}
 }

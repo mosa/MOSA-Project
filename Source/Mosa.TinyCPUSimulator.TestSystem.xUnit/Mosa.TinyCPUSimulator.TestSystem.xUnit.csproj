@@ -84,11 +84,20 @@
     <Compile Include="BoxingFixture.cs" />
     <Compile Include="EnumFixture.cs" />
     <Compile Include="FibonacciFixture.cs" />
+    <Compile Include="Int16Fixture.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Int32Fixture.cs" />
+    <Compile Include="Int8Fixture.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="NewDerivedObjectFixture.cs" />
     <Compile Include="NewObjectFixture.cs" />
     <Compile Include="UInt16Fixture.cs" />
     <Compile Include="UInt32Fixture.cs" />
+    <Compile Include="UInt8Fixture.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="WhileFixture.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
