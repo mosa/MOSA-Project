@@ -14,11 +14,10 @@ namespace Mosa.TinyCPUSimulator.x86.Opcodes
 		public override void Execute(CPUx86 cpu, SimInstruction instruction)
 		{
 			uint a = LoadValue(cpu, instruction.Operand1);
-			uint b = LoadValue(cpu, instruction.Operand2);
-			int size = instruction.Operand2.Size;
+			int size = instruction.Operand1.Size;
 
-			long s = (long)(int)a + (long)(int)b;
-			ulong u = (ulong)a + (ulong)b;
+			long s = (long)(int)a;
+			ulong u = (ulong)a;
 
 			s--;
 			u--;
@@ -27,7 +26,7 @@ namespace Mosa.TinyCPUSimulator.x86.Opcodes
 
 			UpdateFlags(cpu, size, s, u, true, true, true, true, true);
 
-			cpu.FLAGS.Adjust = IsAdjustAfterAdd(a, b);
+			cpu.FLAGS.Adjust = IsAdjustAfterAdd(a, 1);
 			//cpu.FLAGS.Overflow = !IsSign(a, size) && IsSign(r, size);
 		}
 	}

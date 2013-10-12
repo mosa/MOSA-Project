@@ -61,6 +61,21 @@ namespace Mosa.TinyCPUSimulator.x86
 			return ((v1 & 0xF) < (v2 & 0xF));
 		}
 
+		protected void UpdateParity(CPUx86 cpu, uint u)
+		{
+			bool parity = false;
+
+			for (int i = 0; i < 8; i++)
+			{
+				if ((u & 0x1) == 1)
+					parity = !parity;
+
+				u = u >> 1;
+			}
+
+			cpu.FLAGS.Parity = parity;
+		}
+
 		protected void UpdateFlags(CPUx86 cpu, int size, long s, ulong u, bool zeroFlag, bool parityParity, bool signFlag, bool carryFlag, bool overFlowFlag)
 		{
 			if (size == 32)
@@ -69,6 +84,8 @@ namespace Mosa.TinyCPUSimulator.x86
 				UpdateFlags16(cpu, s, u, zeroFlag, parityParity, signFlag, carryFlag, overFlowFlag);
 			else
 				UpdateFlags8(cpu, s, u, zeroFlag, parityParity, signFlag, carryFlag, overFlowFlag);
+
+			UpdateParity(cpu, (uint)u);
 		}
 
 		protected void UpdateFlags8(CPUx86 cpu, long s, ulong u, bool zeroFlag, bool parityParity, bool signFlag, bool carryFlag, bool overFlowFlag)
@@ -81,8 +98,6 @@ namespace Mosa.TinyCPUSimulator.x86
 				cpu.FLAGS.Carry = ((u >> 8) != 0);
 			if (signFlag)
 				cpu.FLAGS.Sign = (((u >> 7) & 0x01) != 0);
-			if (parityParity)
-				cpu.FLAGS.Parity = ((u & 0xFF) % 2) == 1;
 		}
 
 		protected void UpdateFlags16(CPUx86 cpu, long s, ulong u, bool zeroFlag, bool parityParity, bool signFlag, bool carryFlag, bool overFlowFlag)
@@ -95,8 +110,6 @@ namespace Mosa.TinyCPUSimulator.x86
 				cpu.FLAGS.Carry = ((u >> 16) != 0);
 			if (signFlag)
 				cpu.FLAGS.Sign = (((u >> 15) & 0x01) != 0);
-			if (parityParity)
-				cpu.FLAGS.Parity = ((u & 0xFF) % 2) == 1;
 		}
 
 		protected void UpdateFlags32(CPUx86 cpu, long s, ulong u, bool zeroFlag, bool parityParity, bool signFlag, bool carryFlag, bool overFlowFlag)
@@ -109,8 +122,6 @@ namespace Mosa.TinyCPUSimulator.x86
 				cpu.FLAGS.Carry = ((u >> 32) != 0);
 			if (signFlag)
 				cpu.FLAGS.Sign = (((u >> 31) & 0x01) != 0);
-			if (parityParity)
-				cpu.FLAGS.Parity = ((u & 0xFF) % 2) == 1;
 		}
 
 		protected uint GetAddress(CPUx86 cpu, SimOperand operand)

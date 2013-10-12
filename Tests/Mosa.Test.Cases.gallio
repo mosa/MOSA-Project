@@ -2,7 +2,7 @@
 <testProject xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.gallio.org/">
   <testPackage shadowCopy="false" debug="false">
     <files>
-      <file>..\bin\Mosa.Test.Cases.dll</file>
+      <file>..\bin\Mosa.Test.Collection.MbUnit.dll</file>
     </files>
     <hintDirectories />
     <excludedFrameworkIds />
@@ -10,7 +10,7 @@
   </testPackage>
   <testFilters>
     <testFilter filterName="LastRun" filterExpr="Id: e4950e7b317e9113" />
-    <testFilter filterName="AutoSave" filterExpr="not *" />
+    <testFilter filterName="AutoSave" filterExpr="" />
   </testFilters>
   <extensionSpecifications />
   <reportDirectory>C:\Users\Phil\AppData\Roaming\Gallio\Icarus\Reports</reportDirectory>

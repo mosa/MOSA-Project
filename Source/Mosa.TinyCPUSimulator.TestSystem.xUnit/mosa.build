@@ -15,12 +15,20 @@
 	    <csc target="library" output="${outputDirectory}/Mosa.TinyCPUSimulator.TestSystem.xUnit.dll" debug="${debug}" unsafe="true" nostdlib="false">
 		<sources>
                     <include name="BooleanFixture.cs"/>
+                    <include name="BoxingFixture.cs"/>
                     <include name="EnumFixture.cs"/>
                     <include name="FibonacciFixture.cs"/>
+                    <include name="Int16Fixture.cs"/>
                     <include name="Int32Fixture.cs"/>
+                    <include name="Int64Fixture.cs"/>
+                    <include name="Int8Fixture.cs"/>
                     <include name="NewDerivedObjectFixture.cs"/>
                     <include name="NewObjectFixture.cs"/>
+                    <include name="UInt16Fixture.cs"/>
                     <include name="UInt32Fixture.cs"/>
+                    <include name="UInt64Fixture.cs"/>
+                    <include name="UInt8Fixture.cs"/>
+                    <include name="WhileFixture.cs"/>
 		</sources>
 		<references>
                     <include name="System.dll"/>

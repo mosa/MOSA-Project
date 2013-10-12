@@ -107,14 +107,14 @@ namespace Mosa.Test.Collection.MbUnit
 		[Test]
 		public void ShiftLeftU8U8([U8]ulong a, [I1UpTo32]byte b)
 		{
-			Assert.AreEqual(UInt64Tests.ShiftLeftU8U8(a, b), Run<ulong>("Mosa.Test.Collection", "UInt64Tests", "ShiftLeftU8U8", a, b));
+			Assert.AreEqual(UInt64Tests.ShiftLeftU8U1(a, b), Run<ulong>("Mosa.Test.Collection", "UInt64Tests", "ShiftLeftU8U8", a, b));
 		}
 
 		[Test]
 		[Pending]
 		public void ShiftRightU8U8([U8]ulong a, [I1UpTo32]byte b)
 		{
-			Assert.AreEqual(UInt64Tests.ShiftRightU8U8(a, b), Run<ulong>("Mosa.Test.Collection", "UInt64Tests", "ShiftRightU8U8", a, b));
+			Assert.AreEqual(UInt64Tests.ShiftRightU8U1(a, b), Run<ulong>("Mosa.Test.Collection", "UInt64Tests", "ShiftRightU8U8", a, b));
 		}
 
 		[Test]

@@ -118,8 +118,12 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 			if (opcode == Opcode.Mul) { operands.RemoveAt(0); }
 			else if (opcode == Opcode.Div) { operands.RemoveAt(0); operands.RemoveAt(0); }
 			else if (opcode == Opcode.Idiv) { operands.RemoveAt(0); operands.RemoveAt(0); }
-			else if (opcode == Opcode.Imul) { operands.RemoveAt(0); }
 			else if (opcode == Opcode.Cdq) { operands.Clear(); }
+			else if (opcode == Opcode.Xchg) { operands.RemoveAt(2); }
+			else if (opcode == Opcode.Imul)
+			{
+				if (operands[0] == operands[1]) operands.RemoveAt(0);
+			}
 		}
 
 		private SimOperand ConvertToOpcodeOperand(Operand operand)
@@ -263,7 +267,7 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 			//if (opcode == Opcode.FarJmp) return true;
 			//if (opcode == Opcode.Fld) return true;
 			if (opcode == Opcode.Idiv) return true;
-			if (opcode == Opcode.Imul) return true;
+			if (opcode == Opcode.Imul) return false;
 			if (opcode == Opcode.Inc) return true;
 			if (opcode == Opcode.Lea) return true;
 			if (opcode == Opcode.Mul) return true;
@@ -290,10 +294,11 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 			if (opcode == Opcode.Subss) return true;
 			//if (opcode == Opcode.Ucomisd) return true;
 			//if (opcode == Opcode.Ucomiss) return true;
-			if (opcode == Opcode.Xchg) return true;
+			//if (opcode == Opcode.Xchg) return true;
 			if (opcode == Opcode.Xor) return true;
 			if (opcode == Opcode.Ucomisd) return true;
 			if (opcode == Opcode.Ucomiss) return true;
+			if (opcode == Opcode.Neg) return true;
 
 			return false;
 		}

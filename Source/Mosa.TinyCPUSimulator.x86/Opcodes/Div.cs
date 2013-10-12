@@ -28,7 +28,7 @@ namespace Mosa.TinyCPUSimulator.x86.Opcodes
 
 			// TODO: exception if v3 is 0
 
-			ulong v = ((v1 << 32) | v2);
+			ulong v = (((ulong)v1 << 32) | v2);
 			ulong a = v / (ulong)v3;
 			ulong r = v % (ulong)v3;
 

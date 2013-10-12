@@ -9,7 +9,7 @@ using Mosa.Test.System;
 using Mosa.Test.Numbers;
 using Mosa.Test.Collection;
 
-namespace Mosa.Test.Cases.FIX.IL.MbUnit
+namespace Mosa.Test.Collection.FIX.IL.MbUnit
 {
 	[TestFixture]
 	public class ConvFixture : TestCompilerAdapter

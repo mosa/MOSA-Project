@@ -12,6 +12,7 @@ using Mosa.Compiler.Framework.Stages;
 using Mosa.Compiler.Linker;
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.TypeSystem;
+using Mosa.Platform.x86.Stages;
 using System;
 using System.IO;
 using System.Runtime.InteropServices;
@@ -70,6 +71,12 @@ namespace Mosa.Test.System
 
 		#region BaseMethodCompiler Overrides
 
+		/// <summary>
+		/// Requests a stream to emit native instructions to.
+		/// </summary>
+		/// <returns>
+		/// A stream object, which can be used to store emitted instructions.
+		/// </returns>
 		public override Stream RequestCodeStream()
 		{
 			LinkerStream stream = base.RequestCodeStream() as LinkerStream;
@@ -79,6 +86,17 @@ namespace Mosa.Test.System
 				address = vms.Base + vms.Position;
 
 			return stream;
+		}
+
+		/// <summary>
+		/// Called before the method compiler begins compiling the method.
+		/// </summary>
+		protected override void BeginCompile()
+		{
+			BuildStackStage stage = Pipeline.FindFirst<BuildStackStage>();
+			stage.SaveRegisters = true;
+
+			base.BeginCompile();
 		}
 
 		/// <summary>

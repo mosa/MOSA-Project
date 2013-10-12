@@ -187,9 +187,6 @@ namespace Mosa.Compiler.Framework
 		/// <param name="instructionSet">The instruction set.</param>
 		public void CompileMethod(RuntimeMethod method, BasicBlocks basicBlocks, InstructionSet instructionSet)
 		{
-			//LinkerMethodCompiler methodCompiler = new LinkerMethodCompiler(this, method, basicBlocks, instructionSet);
-			//methodCompiler.Compile();
-
 			Trace(CompilerEvent.CompilingMethod, method.FullName);
 
 			BaseMethodCompiler methodCompiler = CreateMethodCompiler(method, basicBlocks, instructionSet);

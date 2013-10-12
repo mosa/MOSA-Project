@@ -166,5 +166,39 @@ namespace Mosa.TinyCPUSimulator.x86.xUnit
 			Assert.True(CPU.FLAGS.Zero == zero, "Expected: Zero = " + zero.ToString());
 			Assert.True(CPU.FLAGS.Carry == carry, "Expected: Carry = " + carry.ToString());
 		}
+
+		[Theory]
+		[InlineData((uint)10, (uint)0, false)]
+		[InlineData((uint)0, (uint)1, true)]
+		[InlineData((uint)0, (uint)0, false)]
+		[InlineData((uint)200, (uint)1, false)]
+		[InlineData((uint)200, (uint)31, false)]
+		[InlineData((uint)uint.MaxValue, (uint)3, false)]
+		[InlineData((uint)uint.MaxValue, (uint)3, true)]
+		[InlineData((uint)uint.MaxValue, (uint)31, true)]
+		public void RcrU4U4(uint a, uint b, bool carry)
+		{
+			Add(Opcode.Mov, 1, CPU.EAX, a);
+			if (carry) Add(Opcode.Stc, 1);
+			Add(Opcode.Rcr, 1, CPU.EAX, b);
+
+			Monitor.AddBreakPoint(Address);
+
+			CPU.Execute();
+
+			uint u = a;
+
+			for (int i = 0; i < b; i++)
+			{
+				bool c = (u & 0x1) == 1;
+				u = u >> 1;
+				if (carry)
+					u = u | ((uint)1 << 31);
+				carry = c;
+			}
+
+			Assert.Equal(CPU.EAX.Value, u);
+		}
+
 	}
 }

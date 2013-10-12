@@ -82,11 +82,15 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 
 		public static IEnumerable<object[]> I4SmallI4 { get { return Combinations.I4SmallI4; } }
 
+		public static IEnumerable<object[]> I4SmallI8 { get { return Combinations.I4SmallI8; } }
+
 		public static IEnumerable<object[]> I4SmallU1 { get { return Combinations.I4SmallU1; } }
 
 		public static IEnumerable<object[]> I4SmallU2 { get { return Combinations.I4SmallU2; } }
 
 		public static IEnumerable<object[]> I4SmallU4 { get { return Combinations.I4SmallU4; } }
+
+		public static IEnumerable<object[]> I4SmallU8 { get { return Combinations.I4SmallU8; } }
 
 		public static IEnumerable<object[]> I4I1UpTo32 { get { return Combinations.I4I1UpTo32; } }
 
@@ -95,6 +99,8 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 		public static IEnumerable<object[]> I8 { get { return Combinations.I8; } }
 
 		public static IEnumerable<object[]> I8I8 { get { return Combinations.I8I8; } }
+
+		public static IEnumerable<object[]> I8U1UpTo32 { get { return Combinations.I8U1UpTo32; } }
 
 		public static IEnumerable<object[]> U1 { get { return Combinations.U1; } }
 
@@ -119,5 +125,7 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 		public static IEnumerable<object[]> U8 { get { return Combinations.U8; } }
 
 		public static IEnumerable<object[]> U8U8 { get { return Combinations.U8U8; } }
+
+		public static IEnumerable<object[]> U8U1UpTo32 { get { return Combinations.U8U1UpTo32; } }
 	}
 }

@@ -14,7 +14,7 @@ namespace Mosa.TinyCPUSimulator.x86
 	public static class Opcode
 	{
 		public static BaseX86Opcode Add = new Add();
-		public static BaseX86Opcode Adc = new Add();
+		public static BaseX86Opcode Adc = new Adc();
 		public static BaseX86Opcode And = new And();
 		public static BaseX86Opcode Mov = new Mov();
 		public static BaseX86Opcode Jo = new Jo();

@@ -9,7 +9,7 @@ using Mosa.Test.System;
 using Mosa.Test.Numbers;
 using Mosa.Test.Collection;
 
-namespace Mosa.Test.Cases.Extra.MbUnit
+namespace Mosa.Test.Collection.Extra.MbUnit
 {
 	[TestFixture]
 	public class ConditionalOperatorFixture : TestCompilerAdapter

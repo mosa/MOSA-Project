@@ -29,14 +29,16 @@ namespace Mosa.TinyCPUSimulator.x86.Opcodes
 
 			uint u = (a >> 1);
 
+			shift--;
+
 			if (cpu.FLAGS.Carry)
 				u = u | ((uint)1 << (size - 1));
 
-			shift--;
-
-			u = u >> shift;
-
-			u = u | (a << (size - shift));
+			if (shift != 0)
+			{
+				u = u >> shift;
+				u = u | (a << (size - shift));
+			}
 
 			StoreValue(cpu, instruction.Operand1, (uint)u, size);
 

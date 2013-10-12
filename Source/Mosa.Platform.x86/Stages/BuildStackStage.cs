@@ -20,6 +20,7 @@ namespace Mosa.Platform.x86.Stages
 	/// </summary>
 	public sealed class BuildStackStage : BaseMethodCompilerStage, IMethodCompilerStage, IPipelineStage
 	{
+
 		#region IMethodCompilerStage
 
 		/// <summary>
@@ -40,10 +41,10 @@ namespace Mosa.Platform.x86.Stages
 
 		public bool SaveRegisters { get; set; }
 		public bool InsertBreaks { get; set; }
-
+		
 		public BuildStackStage()
 		{
-			SaveRegisters = true;
+			SaveRegisters = false;
 			InsertBreaks = false;
 		}
 

@@ -25,10 +25,10 @@ namespace Mosa.TinyCPUSimulator.x86.Opcodes
 			uint u = a << shift;
 			bool sign = IsSign(a, size);
 
-			if (cpu.FLAGS.Carry)
-			{
-				u = u | 0x1;
-			}
+			//if (cpu.FLAGS.Carry)
+			//{
+			//	u = u | 0x1;
+			//}
 
 			StoreValue(cpu, instruction.Operand1, (uint)u, size);
 

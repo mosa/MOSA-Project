@@ -36,8 +36,6 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 
 		public abstract void PrepareToExecuteMethod(ISimAdapter simAdapter, ulong address);
 
-		//public abstract T GetResult<T>(ISimAdapter simAdapter);
-
 		public abstract object GetResult(ISimAdapter simAdapter, CilElementType cilElementType);
 	}
 }
