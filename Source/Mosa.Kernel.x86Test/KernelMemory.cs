@@ -9,20 +9,24 @@
 
 using Mosa.Internal.Plug;
 
-namespace Mosa.Kernel.Test
+namespace Mosa.Kernel.x86Test
 {
 	public static class KernelMemory
 	{
-		// const doesn't work below (workaround)
-		private const uint memoryPtr = 0x21700000;	// Location for pointer to allocated memory!
+		private static uint memoryPtr;
 
 		[PlugMethod("Mosa.Internal.Runtime.AllocateMemory")]
-		static unsafe public uint AllocateMemory(uint size)
+		static public uint AllocateMemory(uint size)
 		{
-			uint alloc = ((uint*)memoryPtr)[0];
-			((uint*)memoryPtr)[0] = alloc + size;
-
+			uint alloc = memoryPtr;
+			memoryPtr = alloc + size;
 			return alloc;
+		}
+
+		static private uint SetMemory(uint ptr)
+		{
+			memoryPtr = ptr;
+			return memoryPtr;
 		}
 	}
 }

@@ -105,6 +105,7 @@ namespace Mosa.Platform.x86.Stages
 
 			context.SetInstruction(X86.Push, null, ebp);
 			context.AppendInstruction(X86.Mov, ebp, esp);
+
 			if (methodCompiler.StackLayout.StackSize != 0)
 			{
 				context.AppendInstruction(X86.Sub, esp, esp, Operand.CreateConstant(-methodCompiler.StackLayout.StackSize));

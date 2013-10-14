@@ -114,14 +114,14 @@ namespace Mosa.TinyCPUSimulator.TestSystem.xUnit
 		[PropertyData("I8U1UpTo32")]
 		public void ShiftLeftI8I8(long a, byte b)
 		{
-			Assert.Equal(Int64Tests.ShiftLeftI8I8(a, b), Run<long>("Mosa.Test.Collection.Int64Tests.ShiftLeftI8I8", a, b));
+			Assert.Equal(Int64Tests.ShiftLeftI8U1(a, b), Run<long>("Mosa.Test.Collection.Int64Tests.ShiftLeftI8U1", a, b));
 		}
 
 		[Theory]
 		[PropertyData("I8U1UpTo32")]
 		public void ShiftRightI8I8(long a, byte b)
 		{
-			Assert.Equal(Int64Tests.ShiftRightI8I8(a, b), Run<long>("Mosa.Test.Collection.Int64Tests.ShiftRightI8I8", a, b));
+			Assert.Equal(Int64Tests.ShiftRightI8U1(a, b), Run<long>("Mosa.Test.Collection.Int64Tests.ShiftRightI8U1", a, b));
 		}
 
 		[Theory]

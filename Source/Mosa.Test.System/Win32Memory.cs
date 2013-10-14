@@ -14,24 +14,17 @@ namespace Mosa.Test.System
 {
 	internal static class Win32Memory
 	{
-		#region IMemoryPageManager Members
-
-		internal static long Allocate(long address, ulong size, PageProtectionFlags accessMode)
+		internal static long Allocate(long address, uint size, PageProtectionFlags accessMode)
 		{
-			IntPtr memory = VirtualAlloc(new IntPtr(address), (uint)size, VirtualAllocTypes.MEM_COMMIT | VirtualAllocTypes.MEM_RESERVE, AccessProtectionFlags.PAGE_EXECUTE_READWRITE);
+			IntPtr memory = VirtualAlloc(new IntPtr(address), size, VirtualAllocTypes.MEM_COMMIT | VirtualAllocTypes.MEM_RESERVE, AccessProtectionFlags.PAGE_EXECUTE_READWRITE);
 
 			return memory.ToInt64();
 		}
 
-		internal static void Free(long address, ulong size)
+		internal static void Free(long address, uint size)
 		{
-			if (size > UInt32.MaxValue)
-				throw new ArgumentOutOfRangeException(@"size", size, @"Can't exceed " + UInt32.MaxValue);
-
-			VirtualFree(new IntPtr(address), (uint)size, VirtualAllocTypes.MEM_RELEASE);
+			VirtualFree(new IntPtr(address), size, VirtualAllocTypes.MEM_RELEASE);
 		}
-
-		#endregion IMemoryPageManager Members
 
 		#region Win32 P/Invoke
 

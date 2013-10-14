@@ -124,7 +124,7 @@ namespace Mosa.Tool.Explorer
 
 		public void LoadAssembly(string filename)
 		{
-			if (Path.GetFileName(filename) == "Mosa.Test.Collection.dll" || Path.GetFileName(filename) == "Mosa.Test.Runtime.dll")
+			if (Path.GetFileName(filename) == "Mosa.Test.Collection.dll" || Path.GetFileName(filename) == "Mosa.Kernel.x86Test.dll")
 			{
 				includeTestKorlibToolStripMenuItem.Checked = true;
 			}
@@ -522,7 +522,7 @@ namespace Mosa.Tool.Explorer
 				assemblyLoader.AddPrivatePath(System.IO.Directory.GetCurrentDirectory());
 				assemblyLoader.LoadModule("mscorlib.dll");
 				assemblyLoader.LoadModule("Mosa.Platform." + platform + ".Intrinsic.dll");
-				assemblyLoader.LoadModule("Mosa.Test.Runtime.dll");
+				assemblyLoader.LoadModule("Mosa.Kernel.x86Test.dll");
 			}
 
 			assemblyLoader.AddPrivatePath(System.IO.Path.GetDirectoryName(filename));

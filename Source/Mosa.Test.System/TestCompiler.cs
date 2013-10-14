@@ -38,9 +38,17 @@ namespace Mosa.Test.System
 		/// </summary>
 		private ILinker linker;
 
-		private static long memoryPtr = 0x21700000; // Location for pointer to allocated memory!
-		private static uint memorySize = 1024 * 1024 * 2; // 2Mb
+		/// <summary>
+		/// The memory size to allocate
+		/// </summary>
+		private const uint memorySize = 1024 * 1024 * 128;
+
+		/// <summary>
+		/// The memory allocated
+		/// </summary>
 		private long memoryAllocated = 0;
+
+		private bool setKernelMemory = false;
 
 		#endregion Data members
 
@@ -51,35 +59,39 @@ namespace Mosa.Test.System
 		/// </summary>
 		public TestCompiler()
 		{
-			ResetMemory();
+			AllocateMemory();
 		}
 
 		#endregion Construction
 
-		protected void ResetMemory()
+		protected void AllocateMemory()
 		{
 			if (memoryAllocated == 0)
 			{
-				if (Win32Memory.Allocate(memoryPtr, 1024, PageProtectionFlags.Read | PageProtectionFlags.Write | PageProtectionFlags.WriteCombine) != memoryPtr)
-					throw new OutOfMemoryException();
+				setKernelMemory = false;
 
 				memoryAllocated = Win32Memory.Allocate(0, memorySize, PageProtectionFlags.Read | PageProtectionFlags.Write | PageProtectionFlags.WriteCombine);
 
 				if (memoryAllocated == 0)
 					throw new OutOfMemoryException();
 			}
+		}
 
-			unsafe
-			{
-				((uint*)memoryPtr)[0] = (uint)memoryAllocated;
-				((uint*)memoryPtr)[1] = (uint)memoryAllocated;
-				((uint*)memoryPtr)[2] = memorySize;
-			}
+		protected void SetKernelMemory(CompilerSettings settings)
+		{
+			setKernelMemory = true; // must be before the Run method
+
+			Run<uint>(settings, "Mosa.Kernel.x86Test", "KernelMemory", "SetMemory", new object[] { (uint)memoryAllocated });
 		}
 
 		public T Run<T>(CompilerSettings settings, string ns, string type, string method, params object[] parameters)
 		{
 			CompileTestCode(settings);
+
+			if (!setKernelMemory)
+			{
+				SetKernelMemory(settings);
+			}
 
 			// Find the test method to execute
 			RuntimeMethod runtimeMethod = FindMethod(
@@ -107,23 +119,13 @@ namespace Mosa.Test.System
 			LinkerSymbol symbol = linker.GetSymbol(runtimeMethod.FullName);
 			LinkerSection section = linker.GetSection(symbol.SectionKind);
 
-			long address = symbol.VirtualAddress; // +section.VirtualAddress;
+			long address = symbol.VirtualAddress;
 
 			// Create a delegate for the test method
-			Delegate fn = Marshal.GetDelegateForFunctionPointer(
-				new IntPtr(address),
-				delegateType
-			);
-
-			// Reset Memory
-			ResetMemory();
-
-			//Debug.WriteLine("Executing: " + runtimeMethod.FullName);
+			Delegate fn = Marshal.GetDelegateForFunctionPointer(new IntPtr(address), delegateType);
 
 			// Execute the test method
 			object tempResult = fn.DynamicInvoke(parameters);
-
-			//Debug.WriteLine("Done");
 
 			try
 			{
@@ -148,22 +150,26 @@ namespace Mosa.Test.System
 
 				CompilerResults results = Mosa.Test.CodeDomCompiler.Compiler.ExecuteCompiler(cacheSettings);
 
-				//Console.WriteLine("Executing MOSA compiler...");
-
 				Assert.IsFalse(results.Errors.HasErrors, "Failed to compile source code with native compiler");
 
 				linker = RunMosaCompiler(settings, results.PathToAssembly);
+
+				setKernelMemory = false;
 			}
 		}
 
 		/// <summary>
 		/// Finds a runtime method, which represents the requested method.
 		/// </summary>
-		/// <exception cref="MissingMethodException">The sought method is not found.</exception>
 		/// <param name="ns">The namespace of the sought method.</param>
 		/// <param name="type">The type, which contains the sought method.</param>
 		/// <param name="method">The method to find.</param>
-		/// <returns>An instance of <see cref="RuntimeMethod"/>.</returns>
+		/// <param name="parameters">The parameters.</param>
+		/// <returns>
+		/// An instance of <see cref="RuntimeMethod" />.
+		/// </returns>
+		/// <exception cref="System.MissingMethodException"></exception>
+		/// <exception cref="MissingMethodException">The sought method is not found.</exception>
 		private RuntimeMethod FindMethod(string ns, string type, string method, params object[] parameters)
 		{
 			foreach (RuntimeType t in typeSystem.GetAllTypes())

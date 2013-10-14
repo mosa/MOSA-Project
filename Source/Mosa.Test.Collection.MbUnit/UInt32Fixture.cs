@@ -7,11 +7,10 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
 using MbUnit.Framework;
-using Mosa.Test.Collection;
-using Mosa.Test.System;
 using Mosa.Test.Numbers;
+using Mosa.Test.System;
+using System;
 
 namespace Mosa.Test.Collection.MbUnit
 {

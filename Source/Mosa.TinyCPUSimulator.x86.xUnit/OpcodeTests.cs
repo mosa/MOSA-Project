@@ -136,7 +136,6 @@ namespace Mosa.TinyCPUSimulator.x86.xUnit
 			//			Assert.True(CPU.FLAGS.Carry == carry, "Expected: Carry = " + carry.ToString());
 		}
 
-
 		[Theory]
 		[InlineData((uint)10, uint.MaxValue)]
 		[InlineData((uint)0, (uint)0)]
@@ -199,6 +198,5 @@ namespace Mosa.TinyCPUSimulator.x86.xUnit
 
 			Assert.Equal(CPU.EAX.Value, u);
 		}
-
 	}
 }

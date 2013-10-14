@@ -64,7 +64,7 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 			assemblyLoader.LoadModule("mscorlib.dll");
 			assemblyLoader.LoadModule("Mosa.Platform." + platform.Name + ".Intrinsic.dll");
 			assemblyLoader.LoadModule("Mosa.Test.Collection.dll");
-			assemblyLoader.LoadModule("Mosa.Test.Runtime.dll");
+			assemblyLoader.LoadModule("Mosa.Kernel.x86Test.dll");
 
 			typeSystem.LoadModules(assemblyLoader.Modules);
 
@@ -78,6 +78,7 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 			platform.InitializeSimulation(simAdapter);
 
 			simAdapter.Monitor.EnableStepping = false;
+			simAdapter.Monitor.BreakAtTick = 4000; // nothing should take this long
 			//simAdapter.Monitor.DebugOutput = true;
 		}
 

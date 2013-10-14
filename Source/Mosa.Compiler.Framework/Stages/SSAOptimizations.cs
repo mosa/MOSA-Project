@@ -710,10 +710,6 @@ namespace Mosa.Compiler.Framework.Stages
 				}
 			}
 
-			//*** SimplifyExtendedMove
-			//BEFORE:	L_0005: IR.ZeroExtendedMove V_7<0> [U8] <= const -2 [I4]
-			//AFTER: 	L_0005: IR.Move V_7<0> [U8] <= const -2 [U8]
-
 			AddOperandUsageToWorkList(context);
 			if (trace.Active) trace.Log("*** SimplifyExtendedMove");
 			if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());

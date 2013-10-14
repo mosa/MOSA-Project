@@ -105,12 +105,12 @@ namespace Mosa.Test.System
 			while (cctorQueue.Count > 0)
 			{
 				CCtor cctor = cctorQueue.Dequeue();
-				cctor();
+				//cctor();
 			}
 		}
 
 		/// <summary>
-		/// Queues the C ctor for invocation after compilation.
+		/// Queues the ctor for invocation after compilation.
 		/// </summary>
 		/// <param name="cctor">The cctor.</param>
 		public void QueueCCtorForInvocationAfterCompilation(CCtor cctor)

@@ -8,8 +8,8 @@
     <ProjectGuid>{76CD55B8-DB16-4DF5-849C-8E2CBEF8A81B}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Mosa.Test.Runtime</RootNamespace>
-    <AssemblyName>Mosa.Test.Runtime</AssemblyName>
+    <RootNamespace>Mosa.Kernel.x86Test</RootNamespace>
+    <AssemblyName>Mosa.Kernel.x86Test</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <OldToolsVersion>3.5</OldToolsVersion>

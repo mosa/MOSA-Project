@@ -61,12 +61,12 @@ namespace Mosa.Test.Collection
 			return (~first);
 		}
 
-		public static long ShiftLeftI8I8(long first, byte second)
+		public static long ShiftLeftI8U1(long first, byte second)
 		{
 			return (first << second);
 		}
 
-		public static long ShiftRightI8I8(long first, byte second)
+		public static long ShiftRightI8U1(long first, byte second)
 		{
 			return (first >> second);
 		}

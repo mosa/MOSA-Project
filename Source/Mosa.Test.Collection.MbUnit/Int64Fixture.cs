@@ -101,16 +101,16 @@ namespace Mosa.Test.Collection.MbUnit
 		}
 
 		[Test]
-		public void ShiftLeftU8U8([I8]long a, [I1UpTo32]byte b)
+		public void ShiftLeftI8U1([I8]long a, [I1UpTo32]byte b)
 		{
-			Assert.AreEqual(Int64Tests.ShiftLeftI8I8(a, b), Run<long>("Mosa.Test.Collection", "Int64Tests", "ShiftLeftI8I8", a, b));
+			Assert.AreEqual(Int64Tests.ShiftLeftI8U1(a, b), Run<long>("Mosa.Test.Collection", "Int64Tests", "ShiftLeftI8U1", a, b));
 		}
 
 		[Test]
 		[Pending]
-		public void ShiftRightU8U8([I8]long a, [I1UpTo32]byte b)
+		public void ShiftRightI8U1([I8]long a, [I1UpTo32]byte b)
 		{
-			Assert.AreEqual(Int64Tests.ShiftRightI8I8(a, b), Run<long>("Mosa.Test.Collection", "Int64Tests", "ShiftRightI8I8", a, b));
+			Assert.AreEqual(Int64Tests.ShiftRightI8U1(a, b), Run<long>("Mosa.Test.Collection", "Int64Tests", "ShiftRightI8U1", a, b));
 		}
 
 		[Test]

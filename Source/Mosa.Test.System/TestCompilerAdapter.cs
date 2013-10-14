@@ -7,6 +7,7 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using System.Diagnostics;
 using Mosa.Test.CodeDomCompiler;
 
 namespace Mosa.Test.System
@@ -21,7 +22,7 @@ namespace Mosa.Test.System
 		{
 			settings.AddReference("mscorlib.dll");
 			settings.AddReference("Mosa.Platform.x86.Intrinsic.dll");
-			settings.AddReference("Mosa.Test.Runtime.dll");
+			settings.AddReference("Mosa.Kernel.x86Test.dll");
 		}
 
 		protected T Run<T>(string ns, string type, string method, params object[] parameters)
