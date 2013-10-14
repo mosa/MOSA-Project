@@ -7,11 +7,10 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public sealed class BreakInstruction : BaseCILInstruction
 	{
@@ -22,11 +21,11 @@ namespace Mosa.Compiler.Framework.CIL
 		/// </summary>
 		/// <param name="opcode">The opcode.</param>
 		public BreakInstruction(OpCode opcode)
-			: base(opcode)
+			: base(opcode, 0)
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Method
 
@@ -40,6 +39,6 @@ namespace Mosa.Compiler.Framework.CIL
 			visitor.Break(context);
 		}
 
-		#endregion // Method
+		#endregion Method
 	}
 }

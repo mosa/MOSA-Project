@@ -12,10 +12,21 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.AVR32.Instructions
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public class Sbr : AVR32Instruction
 	{
+		#region Construction
+
+		/// <summary>
+		/// Initializes a new instance of <see cref="Sbr"/>.
+		/// </summary>
+		public Sbr() :
+			base(0, 0)
+		{
+		}
+
+		#endregion Construction
 
 		#region Methods
 
@@ -39,7 +50,6 @@ namespace Mosa.Platform.AVR32.Instructions
 			visitor.Sbr(context);
 		}
 
-		#endregion // Methods
-
+		#endregion Methods
 	}
 }

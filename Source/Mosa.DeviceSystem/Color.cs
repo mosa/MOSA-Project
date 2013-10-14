@@ -18,21 +18,24 @@ namespace Mosa.DeviceSystem
 		/// Red
 		/// </summary>
 		public byte Red;
+
 		/// <summary>
 		/// Green
 		/// </summary>
 		public byte Green;
+
 		/// <summary>
 		/// Blue
 		/// </summary>
 		public byte Blue;
+
 		/// <summary>
 		/// Alpha
 		/// </summary>
 		public byte Alpha;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public static readonly Color Transparent = new Color(0, 0, 0, 0);
 

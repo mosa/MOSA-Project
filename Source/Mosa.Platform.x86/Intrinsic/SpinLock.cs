@@ -7,10 +7,7 @@
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  */
 
-using System.Collections.Generic;
-
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.TypeSystem;
 
 namespace Mosa.Platform.x86.Intrinsic
 {
@@ -26,12 +23,12 @@ namespace Mosa.Platform.x86.Intrinsic
 		/// </summary>
 		/// <param name="context">The context.</param>
 		/// <param name="typeSystem">The type system.</param>
-		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, ITypeSystem typeSystem, IList<RuntimeParameter> parameters)
+		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, BaseMethodCompiler methodCompiler)
 		{
 			// TODO
 			context.Remove();
 		}
 
-		#endregion // Methods
+		#endregion Methods
 	}
 }

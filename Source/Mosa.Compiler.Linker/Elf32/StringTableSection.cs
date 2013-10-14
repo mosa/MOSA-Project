@@ -7,19 +7,18 @@
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  */
 
-using System;
 using System.Collections.Generic;
 using System.IO;
 
 namespace Mosa.Compiler.Linker.Elf32
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
-	public class StringTableSection : Section
+	public class StringTableSection : Elf32LinkerSection
 	{
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected static List<byte> stringTable = new List<byte>();
 
@@ -39,7 +38,7 @@ namespace Mosa.Compiler.Linker.Elf32
 		/// Initializes a new instance of the <see cref="CodeSection"/> class.
 		/// </summary>
 		public StringTableSection()
-			: base(Mosa.Compiler.Linker.SectionKind.Text, @".shstrtab", IntPtr.Zero)
+			: base(Mosa.Compiler.Linker.SectionKind.Text, @".shstrtab", 0)
 		{
 			header.Type = SectionType.StringTable;
 			header.Flags = (SectionAttribute)0;

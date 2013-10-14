@@ -6,8 +6,8 @@
 //                  larsbrubaker@gmail.com
 // Copyright (C) 2007
 //
-// Permission to copy, use, modify, sell and distribute this software 
-// is granted provided this copyright notice appears in all copies. 
+// Permission to copy, use, modify, sell and distribute this software
+// is granted provided this copyright notice appears in all copies.
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -18,7 +18,7 @@
 //----------------------------------------------------------------------------
 //
 // class platform_support
-// 
+//
 //----------------------------------------------------------------------------
 //#define USE_OPENGL
 
@@ -29,7 +29,6 @@ using Pictor.PixelFormat;
 
 namespace Pictor.UI.EmulatorPlatform
 {
-
 	public class PlatformSupport : PlatformSupportAbstract
 	{
 		private Renderer m_ScreenRenderer;
@@ -41,6 +40,7 @@ namespace Pictor.UI.EmulatorPlatform
 		{
 			m_specific = new PlatformSpecificWindow(this, format, RenderOrigin);
 			m_format = format;
+
 			//m_bpp(m_specific->m_bpp),
 			//m_window_flags(0),
 			m_wait_mode = true;
@@ -66,7 +66,10 @@ namespace Pictor.UI.EmulatorPlatform
 			}
 		}
 
-		public override void OnIdle() { }
+		public override void OnIdle()
+		{
+		}
+
 		public override void OnResize(int sx, int sy)
 		{
 			m_Bounds.Bottom = 0;
@@ -83,7 +86,10 @@ namespace Pictor.UI.EmulatorPlatform
 		{
 			return m_ScreenRenderer;
 		}
-		public override void OnControlChanged() { }
+
+		public override void OnControlChanged()
+		{
+		}
 
 		public override void Invalidate()
 		{
@@ -100,7 +106,6 @@ namespace Pictor.UI.EmulatorPlatform
 				(int)System.Math.Ceiling(rectToInvalidate.Height)));
 			m_specific.m_WindowContentNeedsRedraw = true;
 		}
-
 
 		public override void Close()
 		{
@@ -223,7 +228,10 @@ namespace Pictor.UI.EmulatorPlatform
 		}
 
 		//------------------------------------------------------------------------
-		public override string ImageExtension() { return ".bmp"; }
+		public override string ImageExtension()
+		{
+			return ".bmp";
+		}
 
 		//------------------------------------------------------------------------
 		public void start_timer()

@@ -19,7 +19,6 @@ namespace Mosa.FileSystem.VFS
 	/// </remarks>
 	public class DirectoryNode : NodeBase
 	{
-
 		#region Data members
 
 		/// <summary>
@@ -27,7 +26,7 @@ namespace Mosa.FileSystem.VFS
 		/// </summary>
 		private System.Collections.ArrayList nodes;
 
-		#endregion // Data members
+		#endregion Data members
 
 		#region Construction
 
@@ -41,7 +40,7 @@ namespace Mosa.FileSystem.VFS
 			nodes = new System.Collections.ArrayList();
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region IVfsNode members
 
@@ -97,6 +96,6 @@ namespace Mosa.FileSystem.VFS
 			// FIXME: throw new NotImplementedException();
 		}
 
-		#endregion // IVfsNode members
+		#endregion IVfsNode members
 	}
 }

@@ -5,26 +5,37 @@
  *
  * Authors:
  *  Simon Wollwage (rootnode) <rootnode@mosa-project.org>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Metadata.Signatures;
+using System;
 
 namespace Mosa.Platform.x86.Instructions
 {
 	/// <summary>
 	/// Representations the x86 shld instruction.
 	/// </summary>
-	public class Shld : ThreeOperandInstruction
+	public class Shld : X86Instruction
 	{
-
 		#region Data Members
 
-		private static readonly OpCode Register = new OpCode(new byte[] { 0x0F, 0xA5 });
-		private static readonly OpCode Constant = new OpCode(new byte[] { 0x0F, 0xA4 });
+		private static readonly OpCode RM = new OpCode(new byte[] { 0x0F, 0xA5 });
+		private static readonly OpCode C = new OpCode(new byte[] { 0x0F, 0xA4 });
 
-		#endregion // Data Members
+		#endregion Data Members
+
+		#region Construction
+
+		/// <summary>
+		/// Initializes a new instance of <see cref="Shld"/>.
+		/// </summary>
+		public Shld() :
+			base(1, 3)
+		{
+		}
+
+		#endregion Construction
 
 		#region Methods
 
@@ -37,11 +48,7 @@ namespace Mosa.Platform.x86.Instructions
 		/// <returns></returns>
 		protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
 		{
-			if (third.IsRegister)
-				return Register;
-			if (third.IsConstant)
-				return Constant;
-			throw new ArgumentException(@"No opcode for operand type.");
+			throw new NotSupportedException();
 		}
 
 		/// <summary>
@@ -51,15 +58,14 @@ namespace Mosa.Platform.x86.Instructions
 		/// <param name="emitter">The emitter.</param>
 		protected override void Emit(Context context, MachineCodeEmitter emitter)
 		{
-			OpCode opCode = ComputeOpCode(context.Result, context.Operand1, context.Operand2);
-			if (context.Operand2.IsConstant)
+			if (context.Operand3.IsConstant)
 			{
-				// FIXME: Conversion not necessary if constant already byte.
-				Operand op = Operand.CreateConstant(BuiltInSigType.Byte, context.Operand2.Value);
-				emitter.Emit(opCode, context.Result, context.Operand1, op);
+				emitter.Emit(C, context.Operand2, context.Result, context.Operand3);
 			}
 			else
-				emitter.Emit(opCode, context.Result, context.Operand1, context.Operand2);
+			{
+				emitter.Emit(RM, context.Operand2, context.Result);
+			}
 		}
 
 		/// <summary>
@@ -69,9 +75,9 @@ namespace Mosa.Platform.x86.Instructions
 		/// <param name="context">The context.</param>
 		public override void Visit(IX86Visitor visitor, Context context)
 		{
-			visitor.Shrd(context);
+			visitor.Shld(context);
 		}
 
-		#endregion // Methods
+		#endregion Methods
 	}
 }

@@ -10,13 +10,13 @@
 namespace System
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public struct Double
 	{
-		public const double Epsilon = 4.9406564584124650e-324;
-		public const double MaxValue = 1.7976931348623157e308;
-		public const double MinValue = -1.7976931348623157e308;
+		public const double Epsilon = 4.9406564584124650e-324d;
+		public const double MaxValue = 1.7976931348623157e308d;
+		public const double MinValue = -1.7976931348623157e308d;
 		public const double NaN = 0.0d / 0.0d;
 		public const double NegativeInfinity = -1.0d / 0.0d;
 		public const double PositiveInfinity = 1.0d / 0.0d;
@@ -32,12 +32,12 @@ namespace System
 
 		public static bool IsNegativeInfinity(double d)
 		{
-			return d == NegativeInfinity;
+			return (d < 0.0d && (d == NegativeInfinity || d == PositiveInfinity));
 		}
 
 		public static bool IsPositiveInfinity(double d)
 		{
-			return d == PositiveInfinity;
+			return (d > 0.0d && (d == NegativeInfinity || d == PositiveInfinity));
 		}
 
 		public static bool IsInfinity(double d)
@@ -47,14 +47,13 @@ namespace System
 
 		public int CompareTo(double value)
 		{
-			if (IsPositiveInfinity(_value))
-				if (IsPositiveInfinity(value))
-					return 0;
-			if (IsNegativeInfinity(_value))
-				if (IsNegativeInfinity(value))
-					return 0;
+			if (IsPositiveInfinity(_value) && IsPositiveInfinity(value))
+				return 0;
+			if (IsNegativeInfinity(_value) && IsNegativeInfinity(value))
+				return 0;
 
-			if (IsNaN(value)) if (IsNaN(_value))
+			if (IsNaN(value)) 
+				if (IsNaN(_value))
 					return 0;
 				else
 					return 1;
@@ -95,13 +94,6 @@ namespace System
 		public override int GetHashCode()
 		{
 			return (int)_value;
-		}
-
-		public static bool IsNaN(float f)
-		{
-#pragma warning disable 1718
-			return (f != f);
-#pragma warning restore
 		}
 
 	}

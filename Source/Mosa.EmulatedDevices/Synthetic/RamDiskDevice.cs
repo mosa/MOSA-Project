@@ -17,12 +17,12 @@ namespace Mosa.EmulatedDevices.Synthetic
 	public class RamDiskDevice : Device, IDiskDevice
 	{
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected uint totalBlocks;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected byte[] mem;
 

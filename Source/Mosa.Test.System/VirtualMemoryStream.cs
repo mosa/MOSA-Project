@@ -16,7 +16,7 @@ namespace Mosa.Test.System
 	/// Provides a stream around virtual memory.
 	/// </summary>
 	/// <remarks>
-	/// The virtual memory allocated by this stream is readable, writable and executable to be able to run 
+	/// The virtual memory allocated by this stream is readable, writable and executable to be able to run
 	/// the compiled native code.
 	/// </remarks>
 	public sealed class VirtualMemoryStream : UnmanagedMemoryStream
@@ -26,34 +26,34 @@ namespace Mosa.Test.System
 		/// <summary>
 		/// Pointer to the allocated virtual memory to be able to free it later on.
 		/// </summary>
-		private IntPtr memory;
+		private long memory;
 
-		private uint allocationSize;
+		/// <summary>
+		///
+		/// </summary>
+		private uint size;
 
-		private IMemoryPageManager pageManager;
-
-		#endregion // Data members
+		#endregion Data members
 
 		#region Construction
 
 		/// <summary>
 		/// Initializes a new <see cref="VirtualMemoryStream"/> and allocates the requested amount of virtual memory to back it.
 		/// </summary>
-		/// <param name="pageManager"></param>
-		/// <param name="allocationSize">The number of bytes to allocate from virtual memory.</param>
-		public unsafe VirtualMemoryStream(IMemoryPageManager pageManager, uint allocationSize)
+		/// <param name="memoryManager"></param>
+		/// <param name="size">The number of bytes to allocate from virtual memory.</param>
+		public unsafe VirtualMemoryStream(uint size)
 		{
-			this.memory = pageManager.Allocate(IntPtr.Zero, allocationSize, PageProtectionFlags.Read | PageProtectionFlags.Write | PageProtectionFlags.Execute);
-			
-			if (this.memory == IntPtr.Zero)
+			memory = Win32Memory.Allocate(0, size, PageProtectionFlags.Read | PageProtectionFlags.Write | PageProtectionFlags.Execute);
+
+			if (memory == 0)
 				throw new OutOfMemoryException();
 
-			base.Initialize((byte*)memory.ToPointer(), allocationSize, allocationSize, FileAccess.Write);
-			this.allocationSize = allocationSize;
-			this.pageManager = pageManager;
+			base.Initialize((byte*)memory, size, size, FileAccess.ReadWrite);
+			this.size = size;
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Disposal
 
@@ -64,14 +64,15 @@ namespace Mosa.Test.System
 		protected unsafe override void Dispose(bool disposing)
 		{
 			base.Dispose(disposing);
-			if (memory != IntPtr.Zero)
+
+			if (memory != 0)
 			{
-				pageManager.Free(memory, allocationSize);
-				memory = IntPtr.Zero;
+				Win32Memory.Free(memory, size);
+				memory = 0;
 			}
 		}
 
-		#endregion // Disposal
+		#endregion Disposal
 
 		#region Properties
 
@@ -79,11 +80,11 @@ namespace Mosa.Test.System
 		/// Gets the memory base pointer.
 		/// </summary>
 		/// <value>The memory base pointer.</value>
-		public IntPtr Base
+		public long Base
 		{
-			get { return this.memory; }
+			get { return memory; }
 		}
 
-		#endregion // Properties
+		#endregion Properties
 	}
 }

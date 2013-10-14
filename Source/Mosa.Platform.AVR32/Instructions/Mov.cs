@@ -5,7 +5,7 @@
  *
  * Authors:
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- *  Pascal Delprat (pdelprat) <pascal.delprat@online.fr>    
+ *  Pascal Delprat (pdelprat) <pascal.delprat@online.fr>
  */
 
 using System;
@@ -22,6 +22,17 @@ namespace Mosa.Platform.AVR32.Instructions
 	/// </summary>
 	public class Mov : AVR32Instruction
 	{
+		#region Construction
+
+		/// <summary>
+		/// Initializes a new instance of <see cref="Mov"/>.
+		/// </summary>
+		public Mov() :
+			base(1, 1)
+		{
+		}
+
+		#endregion Construction
 
 		#region Methods
 
@@ -65,7 +76,6 @@ namespace Mosa.Platform.AVR32.Instructions
 			visitor.Mov(context);
 		}
 
-		#endregion // Methods
-
+		#endregion Methods
 	}
 }

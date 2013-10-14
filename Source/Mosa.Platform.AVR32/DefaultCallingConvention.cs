@@ -5,7 +5,7 @@
  *
  * Authors:
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- *  Pascal Delprat (pdelprat) <pascal.delprat@online.fr>     
+ *  Pascal Delprat (pdelprat) <pascal.delprat@online.fr>
  */
 
 using System;
@@ -20,7 +20,7 @@ namespace Mosa.Platform.AVR32
 	/// <summary>
 	/// Implements the CIL default calling convention for AVR32.
 	/// </summary>
-	sealed class DefaultCallingConvention : ICallingConvention
+	internal sealed class DefaultCallingConvention : ICallingConvention
 	{
 		#region Data members
 
@@ -29,13 +29,7 @@ namespace Mosa.Platform.AVR32
 		/// </summary>
 		private IArchitecture architecture;
 
-		private static readonly Register[] ReturnVoidRegisters = new Register[] { };
-		private static readonly Register[] Return32BitRegisters = new Register[] { GeneralPurposeRegister.R8 };
-		private static readonly Register[] Return64BitRegisters = new Register[] { GeneralPurposeRegister.R8, GeneralPurposeRegister.R9 };
-		private static readonly Register[] ReturnFPRegisters = new Register[] { /* TODO */ };
-		private static readonly Register[] CalleeSavedRegisters = new Register[] { /* TODO */ };
-
-		#endregion // Data members
+		#endregion Data members
 
 		#region Construction
 
@@ -52,7 +46,7 @@ namespace Mosa.Platform.AVR32
 			this.architecture = architecture;
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region ICallingConvention Members
 
@@ -124,36 +118,35 @@ namespace Mosa.Platform.AVR32
 			}
 		}
 
-		private void FreeStackAfterCall(Context ctx, int stackSize)
+		private void FreeStackAfterCall(Context context, int stackSize)
 		{
 			Operand sp = Operand.CreateCPURegister(BuiltInSigType.IntPtr, GeneralPurposeRegister.SP);
 			Operand r7 = Operand.CreateCPURegister(BuiltInSigType.IntPtr, GeneralPurposeRegister.R7);
 			if (stackSize != 0)
 			{
-				ctx.AppendInstruction(AVR32.Mov, r7, Operand.CreateConstant(BuiltInSigType.IntPtr, stackSize));
-				ctx.AppendInstruction(AVR32.Add, sp, r7);
+				context.AppendInstruction(AVR32.Mov, r7, Operand.CreateConstant(BuiltInSigType.IntPtr, stackSize));
+				context.AppendInstruction(AVR32.Add, sp, r7);
 			}
 		}
 
-		private void CleanupReturnValue(Context ctx, Operand result)
+		private void CleanupReturnValue(Context context, Operand result)
 		{
 			if (result != null)
 			{
 				if (result.StackType == StackTypeCode.Int64)
-					MoveReturnValueTo64Bit(result, ctx);
+					MoveReturnValueTo64Bit(result, context);
 				else
-					MoveReturnValueTo32Bit(result, ctx);
+					MoveReturnValueTo32Bit(result, context);
 			}
 		}
-
 
 		/// <summary>
 		/// Calculates the remaining space.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
+		/// <param name="context">The context.</param>
 		/// <param name="operandStack">The operand stack.</param>
 		/// <param name="space">The space.</param>
-		private void PushOperands(Context ctx, Stack<Operand> operandStack, int space)
+		private void PushOperands(Context context, Stack<Operand> operandStack, int space)
 		{
 			while (operandStack.Count != 0)
 			{
@@ -163,7 +156,7 @@ namespace Mosa.Platform.AVR32
 				architecture.GetTypeRequirements(operand.Type, out size, out alignment);
 
 				space -= size;
-				Push(ctx, operand, space, size);
+				Push(context, operand, space, size);
 			}
 		}
 
@@ -171,19 +164,19 @@ namespace Mosa.Platform.AVR32
 		/// Moves the return value to 32 bit.
 		/// </summary>
 		/// <param name="resultOperand">The result operand.</param>
-		/// <param name="ctx">The context.</param>
-		private void MoveReturnValueTo32Bit(Operand resultOperand, Context ctx)
+		/// <param name="context">The context.</param>
+		private void MoveReturnValueTo32Bit(Operand resultOperand, Context context)
 		{
 			Operand r8 = Operand.CreateCPURegister(resultOperand.Type, GeneralPurposeRegister.R8);
-			ctx.AppendInstruction(AVR32.Mov, resultOperand, r8);
+			context.AppendInstruction(AVR32.Mov, resultOperand, r8);
 		}
 
 		/// <summary>
 		/// Moves the return value to 64 bit.
 		/// </summary>
 		/// <param name="resultOperand">The result operand.</param>
-		/// <param name="ctx">The context.</param>
-		private void MoveReturnValueTo64Bit(Operand resultOperand, Context ctx)
+		/// <param name="context">The context.</param>
+		private void MoveReturnValueTo64Bit(Operand resultOperand, Context context)
 		{
 			//Operand opL, opH;
 			//LongOperandTransformationStage.SplitLongOperand(resultOperand, out opL, out opH);
@@ -198,18 +191,18 @@ namespace Mosa.Platform.AVR32
 		/// <summary>
 		/// Pushes the specified instructions.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
+		/// <param name="context">The context.</param>
 		/// <param name="op">The op.</param>
 		/// <param name="stackSize">Size of the stack.</param>
 		/// <param name="parameterSize">Size of the parameter.</param>
-		private void Push(Context ctx, Operand op, int stackSize, int parameterSize)
+		private void Push(Context context, Operand op, int stackSize, int parameterSize)
 		{
 			if (op.IsMemoryAddress)
 			{
 				if (op.Type.Type == CilElementType.ValueType)
 				{
-					for (int i = 0; i < parameterSize; i += 4)
-						ctx.AppendInstruction(AVR32.Mov, Operand.CreateMemoryAddress(op.Type, GeneralPurposeRegister.R9, new IntPtr(stackSize + i)), Operand.CreateMemoryAddress(op.Type, op.Base, new IntPtr(op.Offset.ToInt64() + i)));
+					//for (int i = 0; i < parameterSize; i += 4)
+					//	context.AppendInstruction(AVR32.Mov, Operand.CreateMemoryAddress(op.Type, GeneralPurposeRegister.R9, stackSize + i), Operand.CreateMemoryAddress(op.Type, op.OffsetBaseRegister, op.Offset + i));
 
 					return;
 				}
@@ -225,6 +218,7 @@ namespace Mosa.Platform.AVR32
 						break;
 
 					case StackTypeCode.F:
+
 						// TODO:
 						//rop = new RegisterOperand(op.Type, SSE2Register.XMM0);
 						rop = null;
@@ -233,6 +227,7 @@ namespace Mosa.Platform.AVR32
 					case StackTypeCode.Int64:
 						{
 							Debug.Assert(op.IsMemoryAddress, @"I8/U8 arg is not in a memory operand.");
+
 							//Operand r8 = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.R8);
 
 							//Operand opL, opH;
@@ -249,7 +244,7 @@ namespace Mosa.Platform.AVR32
 						throw new NotSupportedException();
 				}
 
-				ctx.AppendInstruction(AVR32.Mov, rop, op);
+				context.AppendInstruction(AVR32.Mov, rop, op);
 				op = rop;
 			}
 			else if (op.IsConstant && op.StackType == StackTypeCode.Int64)
@@ -266,7 +261,7 @@ namespace Mosa.Platform.AVR32
 				return;
 			}
 
-			ctx.AppendInstruction(AVR32.Mov, Operand.CreateMemoryAddress(op.Type, GeneralPurposeRegister.R9, new IntPtr(stackSize)), op);
+			//context.AppendInstruction(AVR32.Mov, Operand.CreateMemoryAddress(op.Type, GeneralPurposeRegister.R9, stackSize), op);
 		}
 
 		/// <summary>
@@ -292,9 +287,9 @@ namespace Mosa.Platform.AVR32
 		/// Requests the calling convention to create an appropriate move instruction to populate the return
 		/// value of a method.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
+		/// <param name="context">The context.</param>
 		/// <param name="operand">The operand, that's holding the return value.</param>
-		void ICallingConvention.MoveReturnValue(Context ctx, Operand operand)
+		void ICallingConvention.MoveReturnValue(Context context, Operand operand)
 		{
 			int size, alignment;
 			architecture.GetTypeRequirements(operand.Type, out size, out alignment);
@@ -302,12 +297,11 @@ namespace Mosa.Platform.AVR32
 			// FIXME: Do not issue a move, if the operand is already the destination register
 			if (size == 4 || size == 2 || size == 1)
 			{
-				ctx.SetInstruction(AVR32.Mov, Operand.CreateCPURegister(operand.Type, GeneralPurposeRegister.R8), operand);
+				context.SetInstruction(AVR32.Mov, Operand.CreateCPURegister(operand.Type, GeneralPurposeRegister.R8), operand);
 				return;
 			}
 			else if (size == 8 && (operand.Type.Type == CilElementType.R4 || operand.Type.Type == CilElementType.R8))
 			{
-
 				if (!(operand.IsMemoryAddress))
 				{
 					// Move the operand to memory by prepending an instruction
@@ -353,10 +347,10 @@ namespace Mosa.Platform.AVR32
 				 * the stack frame. [EBP-08h] (The first stack slot available for
 				 * locals is [EBP], so we're reserving two 32-bit ints for
 				 * system/compiler use as described below.
-				 * 
+				 *
 				 * The first 4 bytes are used to hold the start of the method,
 				 * so that we can embed floating point constants in our PIC.
-				 * 
+				 *
 				 */
 				return -4;
 			}
@@ -369,41 +363,15 @@ namespace Mosa.Platform.AVR32
 				/*
 				 * The first parameter is offset by 8 bytes from the start of
 				 * the stack frame. [EBP+08h].
-				 * 
+				 *
 				 * - [EBP+04h] holds the EDX register, which was pushed by the prologue instruction.
 				 * - [EBP+08h] holds the return address, which was pushed by the call instruction.
-				 * 
+				 *
 				 */
 				return 8;
 			}
 		}
 
-		/// <summary>
-		/// Gets the callee saved registers.
-		/// </summary>
-		Register[] ICallingConvention.CalleeSavedRegisters
-		{
-			get { return CalleeSavedRegisters; }
-		}
-
-		/// <summary>
-		/// Gets the return registers.
-		/// </summary>
-		/// <param name="returnType">Type of the return.</param>
-		/// <returns></returns>
-		Register[] ICallingConvention.GetReturnRegisters(CilElementType returnType)
-		{
-			if (returnType == CilElementType.Void)
-				return ReturnVoidRegisters;
-
-			if (returnType == CilElementType.R4 || returnType == CilElementType.R8)
-				return ReturnFPRegisters;
-
-			if (returnType == CilElementType.I8 || returnType == CilElementType.U8)
-				return Return64BitRegisters;
-
-			return Return32BitRegisters;
-		}
-		#endregion // ICallingConvention Members
+		#endregion ICallingConvention Members
 	}
 }

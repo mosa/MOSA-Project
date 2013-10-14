@@ -16,7 +16,7 @@ COPY ..\bin\*.dll bin
 
 CD bin
 
-%GALLIO% /rnf:Tests /rt:Xml-Inline /report-directory:..\reports Mosa.Test.Cases.dll "/filter:Namespace:Mosa.Test.Cases.CIL"
+%GALLIO% /rnf:Tests /rt:Xml-Inline /report-directory:..\reports Mosa.Test.Collection.MbUnit.dll
 
 CD ..
 

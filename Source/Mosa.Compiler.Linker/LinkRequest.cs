@@ -7,8 +7,6 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-using System;
-
 namespace Mosa.Compiler.Linker
 {
 	/// <summary>
@@ -16,115 +14,73 @@ namespace Mosa.Compiler.Linker
 	/// </summary>
 	public sealed class LinkRequest
 	{
-		#region Data members
-
-		/// <summary>
-		/// The method whose code is being patched.
-		/// </summary>
-		private readonly string symbolName;
-
-		/// <summary>
-		/// The position within the code stream where the virtualAddress is patched
-		/// </summary>
-		private readonly int methodOffset;
-
-		/// <summary>
-		/// Holds the relative request flag.
-		/// </summary>
-		private readonly int methodRelativeBase;
-
-		/// <summary>
-		/// The type of the link operation to perform.
-		/// </summary>
-		private readonly LinkType linkType;
-
-		/// <summary>
-		/// Holds the symbol name to link against.
-		/// </summary>
-		private readonly string targetSymbolName;
-
-		/// <summary>
-		/// Holds an offset to apply to the link target.
-		/// </summary>
-		private readonly IntPtr offset;
-
-		#endregion // Data members
-
 		#region Construction
 
 		/// <summary>
 		/// Initializes a new instance of LinkRequest.
 		/// </summary>
 		/// <param name="linkType">Type of the link.</param>
-		/// <param name="symbolName">The method whose code is being patched.</param>
-		/// <param name="methodOffset">The method offset.</param>
-		/// <param name="methodRelativeBase">The method relative base.</param>
-		/// <param name="targetSymbolName">The linker symbol to link against.</param>
-		/// <param name="offset">An offset to apply to the link target.</param>
-		public LinkRequest(LinkType linkType, string symbolName, int methodOffset, int methodRelativeBase, string targetSymbolName, IntPtr offset)
+		/// <param name="patches">The patches.</param>
+		/// <param name="symbolName">The symbol that is being patched.</param>
+		/// <param name="symbolOffset">The symbol offset.</param>
+		/// <param name="relativeBase">The base virtualAddress, if a relative link is required.</param>
+		/// <param name="targetSymbol">The linker symbol to link against.</param>
+		/// <param name="targetOffset">An offset to apply to the link target.</param>
+		public LinkRequest(LinkType linkType, Patch[] patches, string symbolName, int symbolOffset, int relativeBase, string targetSymbol, long targetOffset)
 		{
-			this.symbolName = symbolName;
-			this.methodOffset = methodOffset;
-			this.linkType = linkType;
-			this.methodRelativeBase = methodRelativeBase;
-			this.targetSymbolName = targetSymbolName;
-			this.offset = offset;
+			this.SymbolName = symbolName;
+			this.SymbolOffset = symbolOffset;
+			this.LinkType = linkType;
+			this.SymbolRelativeBase = relativeBase;
+			this.TargetSymbol = targetSymbol;
+			this.TargetOffset = targetOffset;
+			this.Patches = patches;
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Properties
 
 		/// <summary>
 		/// The method whose code is being patched.
 		/// </summary>
-		public string LinkSymbol
-		{
-			get { return symbolName; }
-		}
+		public string SymbolName { get; private set; }
 
 		/// <summary>
 		/// Determines the relative base of the link request.
 		/// </summary>
-		public int MethodRelativeBase
-		{
-			get { return methodRelativeBase; }
-		}
+		public int SymbolRelativeBase { get; private set; }
 
 		/// <summary>
 		/// The type of link required
 		/// </summary>
-		public LinkType LinkType
-		{
-			get { return linkType; }
-		}
+		public LinkType LinkType { get; private set; }
 
 		/// <summary>
-		/// The position within the code stream where the virtualAddress is patched.
+		/// Gets the symbol offset.
 		/// </summary>
-		public int MethodOffset
-		{
-			get { return methodOffset; }
-		}
+		/// <value>
+		/// The symbol offset.
+		/// </value>
+		public int SymbolOffset { get; private set; }
 
 		/// <summary>
 		/// Gets the name of the symbol.
 		/// </summary>
 		/// <value>The name of the symbol.</value>
-		public string TargetSymbolName
-		{
-			get { return targetSymbolName; }
-		}
+		public string TargetSymbol { get; private set; }
 
 		/// <summary>
 		/// Gets the offset to apply to the link target.
 		/// </summary>
 		/// <value>The offset.</value>
-		public IntPtr Offset
-		{
-			get { return offset; }
-		}
+		public long TargetOffset { get; private set; }
 
-		#endregion // Properties
+		/// <summary>
+		/// Gets the patches.
+		/// </summary>
+		public Patch[] Patches { get; private set; }
+
+		#endregion Properties
 	}
 }

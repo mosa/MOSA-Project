@@ -8,19 +8,16 @@
  */
 
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Linker;
 using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Compiler.TypeSystem;
 
 namespace Mosa.Platform.x86.Stages
 {
-
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public sealed class ExceptionVectorStage : BaseCompilerStage, ICompilerStage, IPipelineStage
 	{
-
 		#region ICompilerStage Members
 
 		void ICompilerStage.Setup(BaseCompiler compiler)
@@ -36,10 +33,9 @@ namespace Mosa.Platform.x86.Stages
 			CreateExceptionVector();
 		}
 
-		#endregion // ICompilerStage Members
+		#endregion ICompilerStage Members
 
 		#region Internal
-
 
 		/// <summary>
 		/// Creates the ISR methods.
@@ -60,19 +56,21 @@ namespace Mosa.Platform.x86.Stages
 
 			Operand esp = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.ESP);
 
-			InstructionSet instructionSet = new InstructionSet(100);
-			Context ctx = new Context(instructionSet);
+			BasicBlocks basicBlocks = new BasicBlocks();
+			InstructionSet instructionSet = new InstructionSet(25);
+			Context ctx = ContextHelper.CreateNewBlockWithContext(instructionSet, basicBlocks);
+			basicBlocks.AddHeaderBlock(ctx.BasicBlock);
 
 			// TODO - setup stack for call to the managed exception handler
 
-			//1. 
-			//2. 
-			
+			//1.
+			//2.
+
 			//3. Call the managed exception handler
-			ctx.AppendInstruction(X86.Call, null, exceptionMethod);			
+			ctx.AppendInstruction(X86.Call, null, exceptionMethod);
 
-			LinkTimeCodeGenerator.Compile(this.compiler, @"ExceptionVector", instructionSet, typeSystem);
-
+			var method = compiler.CreateLinkerMethod("ExceptionVector");
+			compiler.CompileMethod(method, basicBlocks, instructionSet);
 		}
 
 		#endregion Internal

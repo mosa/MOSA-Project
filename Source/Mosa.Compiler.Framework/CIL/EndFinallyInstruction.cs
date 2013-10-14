@@ -7,11 +7,10 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public sealed class EndFinallyInstruction : BaseCILInstruction
 	{
@@ -22,11 +21,11 @@ namespace Mosa.Compiler.Framework.CIL
 		/// </summary>
 		/// <param name="opcode">The opcode.</param>
 		public EndFinallyInstruction(OpCode opcode)
-			: base(opcode)
+			: base(opcode, 0)
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		public override FlowControl FlowControl { get { return FlowControl.EndFinally; } }
 
@@ -42,6 +41,6 @@ namespace Mosa.Compiler.Framework.CIL
 			visitor.Endfinally(context);
 		}
 
-		#endregion // Methods
+		#endregion Methods
 	}
 }

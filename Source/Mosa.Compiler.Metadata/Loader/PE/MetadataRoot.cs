@@ -16,7 +16,6 @@ using Mosa.Compiler.Metadata.Tables;
 
 namespace Mosa.Compiler.Metadata.Loader.PE
 {
-
 	/// <summary>
 	/// Metadata root structure according to ISO/IEC 23271:2006 (E), §24.2.1
 	/// </summary>
@@ -30,7 +29,7 @@ namespace Mosa.Compiler.Metadata.Loader.PE
 		/// </summary>
 		private const uint MetadataRootSignature = 0x424A5342;
 
-		#endregion // Constants
+		#endregion Constants
 
 		#region Data members
 
@@ -66,10 +65,10 @@ namespace Mosa.Compiler.Metadata.Loader.PE
 
 		/// <summary>
 		/// Metadata binary byte array.
-		/// </summary>	
+		/// </summary>
 		private byte[] metadata;
 
-		#endregion // Data members
+		#endregion Data members
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="MetadataRoot"/> class.
@@ -165,7 +164,7 @@ namespace Mosa.Compiler.Metadata.Loader.PE
 			return _streams[(int)type];
 		}
 
-		#endregion // Methods
+		#endregion Methods
 
 		#region IMetadataProvider members
 
@@ -658,6 +657,6 @@ namespace Mosa.Compiler.Metadata.Loader.PE
 			return list;
 		}
 
-		#endregion // IMetadataProvider members
+		#endregion IMetadataProvider members
 	}
 }

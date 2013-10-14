@@ -4,15 +4,13 @@
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com> 
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 namespace Mosa.Test.Collection
 {
-
 	public static class Int32Tests
 	{
-
 		public static int AddI4I4(int first, int second)
 		{
 			return (first + second);

@@ -12,7 +12,7 @@ using Mosa.Platform.x86.Intrinsic;
 namespace Mosa.Kernel.x86
 {
 	/// <summary>
-	/// Programmable Interrupt Controller (PIC) 
+	/// Programmable Interrupt Controller (PIC)
 	/// </summary>
 	public static class PIC
 	{
@@ -43,23 +43,31 @@ namespace Mosa.Kernel.x86
 
 			// ICW1 - Set Initialize Controller & Expect ICW4
 			Native.Out8(PIC1_Command, ICW1_Initialization + ICW1_ICW4);
-			// ICW2 - interrupt offset 
+
+			// ICW2 - interrupt offset
 			Native.Out8(PIC1_Data, ICW2_MasterOffset);
+
 			// ICW3
 			Native.Out8(PIC1_Data, 4);
+
 			// ICW4 - Set 8086 Mode
 			Native.Out8(PIC1_Data, ICW4_8086);
+
 			// OCW1
 			Native.Out8(PIC1_Data, masterMask);
 
 			// ICW1 - Set Initialize Controller & Expect ICW4
 			Native.Out8(PIC2_Command, ICW1_Initialization + ICW1_ICW4);
-			// ICW2 - interrupt offset 
+
+			// ICW2 - interrupt offset
 			Native.Out8(PIC2_Data, ICW2_SlaveOffset);
+
 			// ICW3
 			Native.Out8(PIC2_Data, 2);
+
 			// ICW4 - Set 8086 Mode
 			Native.Out8(PIC2_Data, ICW4_8086);
+
 			// OCW1
 			Native.Out8(PIC2_Data, slaveMask);
 		}

@@ -16,7 +16,6 @@ using Mosa.Compiler.Metadata.Loader;
 using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Compiler.Metadata.Tables;
 using Mosa.Compiler.TypeSystem.Cil;
-using Mosa.Compiler.TypeSystem.Generic;
 
 namespace Mosa.Compiler.TypeSystem
 {
@@ -65,43 +64,43 @@ namespace Mosa.Compiler.TypeSystem
 		private RuntimeField[] fields;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private RuntimeMember[] memberRef;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private RuntimeType[] typeRef;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private RuntimeType[] genericParamConstraint;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private Dictionary<Token, string> externals;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private Dictionary<HeapIndexToken, string> strings;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private Dictionary<HeapIndexToken, Signature> signatures;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private int[] tableRows = new int[TableCount];
 
 		private const int TableCount = ((int)TableType.GenericParamConstraint >> 24) + 1;
 
-		#endregion // Data members
+		#endregion Data members
 
 		#region Construction
 
@@ -151,7 +150,7 @@ namespace Mosa.Compiler.TypeSystem
 			LoadExternals();
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Internals
 
@@ -401,10 +400,15 @@ namespace Mosa.Compiler.TypeSystem
 					maxParam = GetMaxTokenValue(TableType.Param).NextRow;
 				}
 
+				var signature = GetMethodSignature(methodDef.SignatureBlobIdx);
+
 				var method = new CilRuntimeMethod(
 					this,
 					GetString(methodDef.NameStringIdx),
-					GetMethodSignature(methodDef.SignatureBlobIdx),
+					signature.ReturnType,
+					signature.HasThis,
+					signature.HasExplicitThis,
+					signature.Parameters,
 					token,
 					declaringType,
 					methodDef.Flags,
@@ -511,7 +515,7 @@ namespace Mosa.Compiler.TypeSystem
 				var field = new CilRuntimeField(
 					this,
 					GetString(fieldRow.Name),
-					GetFieldSignature(fieldRow.Signature),
+					GetFieldSignature(fieldRow.Signature).Type,
 					token,
 					layout,
 					rva,
@@ -549,11 +553,10 @@ namespace Mosa.Compiler.TypeSystem
 					case TableType.TypeSpec: interfaceType = typeSpecs[row.Interface.RID - 1]; break;
 					case TableType.TypeDef: interfaceType = types[row.Interface.RID - 1]; break;
 					default: interfaceType = typeRef[row.Interface.RID - 1]; break;
-				}	
+				}
 
 				declaringType.Interfaces.Add(interfaceType);
 			}
-
 		}
 
 		/// <summary>
@@ -603,10 +606,8 @@ namespace Mosa.Compiler.TypeSystem
 
 				var signature = GetMemberRefSignature(row.SignatureBlobIdx);
 
-				var genericOwnerType = ownerType as CilGenericType;
-
 				RuntimeMember runtimeMember = null;
-				MethodSignature methodSignature = null;
+
 				if (signature is FieldSignature)
 				{
 					foreach (RuntimeField field in ownerType.Fields)
@@ -620,23 +621,19 @@ namespace Mosa.Compiler.TypeSystem
 				}
 				else
 				{
-					methodSignature = signature as MethodSignature;
+					MethodSignature methodSignature = signature as MethodSignature;
 					Debug.Assert(signature is MethodSignature);
 
-					if ((genericOwnerType != null) && (genericOwnerType.GenericArguments.Length != 0))
-					{
-						methodSignature = new MethodSignature(methodSignature, genericOwnerType.GenericArguments);
-					}
+					var genericOwnerType = ownerType as CilGenericType;
+
+					SigType[] sigTypes = GenericSigTypeResolver.Resolve(methodSignature.Parameters, (genericOwnerType == null) ? null : genericOwnerType.GenericArguments);
 
 					foreach (var method in ownerType.Methods)
 					{
-						if (method.Name == name)
+						if (method.Name == name && method.Matches(sigTypes))
 						{
-							if (method.Signature.Matches(methodSignature))
-							{
-								runtimeMember = method;
-								break;
-							}
+							runtimeMember = method;
+							break;
 						}
 					}
 
@@ -647,13 +644,10 @@ namespace Mosa.Compiler.TypeSystem
 
 						foreach (RuntimeMethod method in ownerType.Methods)
 						{
-							if (method.Name == name)
+							if (method.Name == name && method.Matches(sigTypes))
 							{
-								if (method.Signature.Matches(methodSignature))
-								{
-									runtimeMember = method;
-									break;
-								}
+								runtimeMember = method;
+								break;
 							}
 						}
 					}
@@ -767,10 +761,12 @@ namespace Mosa.Compiler.TypeSystem
 				switch (owner.Table)
 				{
 					case TableType.Assembly:
+
 						// AttributeTargets.Assembly
 						break;
 
 					case TableType.TypeDef:
+
 						// AttributeTargets.Class
 						// AttributeTargets.Delegate
 						// AttributeTargets.Enum
@@ -780,34 +776,41 @@ namespace Mosa.Compiler.TypeSystem
 						break;
 
 					case TableType.MethodDef:
+
 						// AttributeTargets.Constructor
 						// AttributeTargets.Method
 						methods[owner.RID - 1].CustomAttributes.Add(runtimeAttribute);
 						break;
 
 					case TableType.Event:
+
 						// AttributeTargets.Event
 						break;
 
 					case TableType.Field:
+
 						// AttributeTargets.Field
 						fields[owner.RID - 1].CustomAttributes.Add(runtimeAttribute);
 						break;
 
 					case TableType.GenericParam:
+
 						// AttributeTargets.GenericParameter
 						break;
 
 					case TableType.Module:
+
 						// AttributeTargets.Module
 						break;
 
 					case TableType.Param:
+
 						// AttributeTargets.Parameter
 						// AttributeTargets.ReturnValue
 						break;
 
 					case TableType.Property:
+
 						// AttributeTargets.StackFrameIndex
 						break;
 
@@ -815,7 +818,6 @@ namespace Mosa.Compiler.TypeSystem
 					//    throw new NotImplementedException();
 				}
 			}
-
 		}
 
 		/// <summary>
@@ -925,7 +927,7 @@ namespace Mosa.Compiler.TypeSystem
 			}
 		}
 
-		#endregion
+		#endregion Internals
 
 		#region ITypeModule interface
 
@@ -1041,6 +1043,7 @@ namespace Mosa.Compiler.TypeSystem
 					return memberRef[token.RID - 1] as RuntimeMethod;
 
 				case TableType.MethodSpec:
+
 					//TODO
 					//    return DecodeMethodSpec(token);
 					//    break;
@@ -1097,7 +1100,7 @@ namespace Mosa.Compiler.TypeSystem
 			{
 				//if (genericType.GenericArguments.First(x => !x.IsOpenGenericParameter) != null)
 				//    return genericType;
-				
+
 				foreach (var sigType in genericType.GenericArguments)
 				{
 					if (!sigType.IsOpenGenericParameter)
@@ -1105,7 +1108,6 @@ namespace Mosa.Compiler.TypeSystem
 						return genericType;
 					}
 				}
-
 			}
 
 			return null;
@@ -1125,7 +1127,7 @@ namespace Mosa.Compiler.TypeSystem
 			return name;
 		}
 
-		#endregion
+		#endregion ITypeModule interface
 
 		/// <summary>
 		/// Returns a <see cref="System.String"/> that represents this instance.
@@ -1139,5 +1141,3 @@ namespace Mosa.Compiler.TypeSystem
 		}
 	}
 }
-
-

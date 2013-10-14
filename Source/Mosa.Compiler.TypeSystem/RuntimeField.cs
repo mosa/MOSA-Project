@@ -7,10 +7,9 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-using System;
-
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Signatures;
+using System;
 
 namespace Mosa.Compiler.TypeSystem
 {
@@ -34,9 +33,14 @@ namespace Mosa.Compiler.TypeSystem
 		/// <summary>
 		/// Holds the type of the field.
 		/// </summary>
-		private FieldSignature signature;
+		private SigType sigType;
 
-		#endregion // Data members
+		/// <summary>
+		/// Holds the fullname (namespace + declaring type + name)
+		/// </summary>
+		private string fullname;
+
+		#endregion Data members
 
 		#region Construction
 
@@ -45,9 +49,10 @@ namespace Mosa.Compiler.TypeSystem
 		/// </summary>
 		/// <param name="module">The module.</param>
 		/// <param name="declaringType">Specifies the type, which contains this field.</param>
-		public RuntimeField(ITypeModule module, RuntimeType declaringType) :
-			base(module, Token.Zero, declaringType)
+		public RuntimeField(ITypeModule module, RuntimeType declaringType, string name) :
+			base(module, name, declaringType, Token.Zero)
 		{
+			this.fullname = (declaringType == null) ? name : String.Format("{0}.{1}", declaringType.FullName, name);
 		}
 
 		/// <summary>
@@ -56,13 +61,26 @@ namespace Mosa.Compiler.TypeSystem
 		/// <param name="module">The module.</param>
 		/// <param name="token">The token.</param>
 		/// <param name="declaringType">Specifies the type, which contains this field.</param>
-		public RuntimeField(ITypeModule module, Token token, RuntimeType declaringType) :
-			base(module, token, declaringType)
+		public RuntimeField(ITypeModule module, string name, RuntimeType declaringType, Token token) :
+			base(module, name, declaringType, token)
 		{
+			this.fullname = (declaringType == null) ? name : String.Format("{0}.{1}", declaringType.FullName, name);
 		}
-		#endregion // Construction
+
+		#endregion Construction
 
 		#region Properties
+
+		/// <summary>
+		/// Gets the full name.
+		/// </summary>
+		/// <value>
+		/// The full name.
+		/// </value>
+		public virtual string FullName
+		{
+			get { return fullname; }
+		}
 
 		/// <summary>
 		/// Gets the attributes of the field.
@@ -84,20 +102,14 @@ namespace Mosa.Compiler.TypeSystem
 			protected set { rva = value; }
 		}
 
-		public FieldSignature Signature
-		{
-			get { return signature; }
-			protected set { signature = value; }
-		}
-
 		/// <summary>
 		/// Gets or sets the type.
 		/// </summary>
 		/// <value>The type.</value>
-		public SigType SignatureType
+		public SigType SigType
 		{
-			get { return this.Signature.Type; }
-			internal set { this.Signature.Type = value; }
+			get { return sigType; }
+			protected set { sigType = value; }
 		}
 
 		public bool IsLiteralField
@@ -112,41 +124,28 @@ namespace Mosa.Compiler.TypeSystem
 
 		public bool ContainsGenericParameter
 		{
-			get { return Signature.Type.IsOpenGenericParameter; }
+			get { return SigType.IsOpenGenericParameter; }
 		}
 
-		#endregion // Properties
+		#endregion Properties
 
 		#region Methods
 
-		#endregion // Methods
+		#endregion Methods
 
 		#region Object Overrides
 
 		/// <summary>
-		/// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
+		/// Returns a <see cref="T:System.String" /> that represents the current <see cref="T:System.Object" />.
 		/// </summary>
 		/// <returns>
-		/// A <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
+		/// A <see cref="T:System.String" /> that represents the current <see cref="T:System.Object" />.
 		/// </returns>
 		public override string ToString()
 		{
-			string name;
-			var declaringType = this.DeclaringType;
-			if (declaringType != null)
-			{
-				var declaringTypeSymbolName = declaringType.ToString();
-				name = String.Format("{0}.{1}", declaringTypeSymbolName, this.Name);
-			}
-			else
-			{
-				name = this.Name;
-			}
-
-			return name;
+			return FullName;
 		}
 
-		#endregion // Object Overrides
-
+		#endregion Object Overrides
 	}
 }

@@ -19,32 +19,36 @@ namespace Mosa.Compiler.Framework
 		#region Data Members
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public InstructionData[] Data;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private int size;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private int[] next;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private int[] prev;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private int used;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private int free;
 
-		#endregion // Data Members
+		#endregion Data Members
 
 		#region Properties
 
@@ -68,7 +72,7 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		public int[] PrevArray { get { return prev; } }
 
-		#endregion
+		#endregion Properties
 
 		#region Methods
 
@@ -179,6 +183,7 @@ namespace Mosa.Compiler.Framework
 			int beforeFree = free;
 
 			free = next[beforeFree];
+
 			//_prev[_free] = -1;
 			Data[beforeFree].Instruction = null;
 			used++;
@@ -190,6 +195,7 @@ namespace Mosa.Compiler.Framework
 		{
 			next[index] = free;
 			prev[index] = -1;
+
 			//_prev[_free] = index;
 			free = index;
 			used--;
@@ -285,34 +291,6 @@ namespace Mosa.Compiler.Framework
 			AddFree(index);
 		}
 
-
-		/// <summary>
-		/// Slices the instruction flow before the current instruction.
-		/// </summary>
-		/// <param name="index">The index.</param>
-		public void SliceBefore(int index)
-		{
-			if (prev[index] == -1)
-				return;
-
-			next[prev[index]] = -1;
-			prev[index] = -1;
-		}
-
-		/// <summary>
-		/// Slices the instruction flow after the current instruction.
-		/// </summary>
-		/// <param name="index">The index.</param>
-		public void SliceAfter(int index)
-		{
-			if (next[index] == -1)
-				return;
-
-			prev[next[index]] = -1;
-			next[index] = -1;
-		}
-
-		#endregion // Methods
-
+		#endregion Methods
 	}
 }

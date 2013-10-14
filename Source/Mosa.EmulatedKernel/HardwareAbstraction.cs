@@ -12,7 +12,7 @@ using Mosa.DeviceSystem;
 namespace Mosa.EmulatedKernel
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public class HardwareAbstraction : IHardwareAbstraction
 	{
@@ -90,4 +90,3 @@ namespace Mosa.EmulatedKernel
 		}
 	}
 }
-

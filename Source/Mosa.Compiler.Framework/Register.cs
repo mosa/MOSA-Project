@@ -23,7 +23,7 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		private int index;
 
-		#endregion // Data members
+		#endregion Data members
 
 		#region Construction
 
@@ -36,7 +36,7 @@ namespace Mosa.Compiler.Framework
 			this.index = index;
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Properties
 
@@ -54,6 +54,11 @@ namespace Mosa.Compiler.Framework
 		public abstract bool IsFloatingPoint { get; }
 
 		/// <summary>
+		/// Determines if this is a integer register.
+		/// </summary>
+		public abstract bool IsInteger { get; }
+
+		/// <summary>
 		/// Holds the machine specific index or code of the register.
 		/// </summary>
 		public abstract int RegisterCode { get; }
@@ -63,7 +68,7 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		public abstract int Width { get; }
 
-		#endregion // Properties
+		#endregion Properties
 
 		#region Methods
 
@@ -74,6 +79,6 @@ namespace Mosa.Compiler.Framework
 		/// <returns>The return value is true if <paramref name="type"/> can be stored in this register.</returns>
 		public abstract bool IsValidSigType(SigType type);
 
-		#endregion // Methods
+		#endregion Methods
 	}
 }

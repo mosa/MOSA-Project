@@ -11,7 +11,6 @@ using System.Diagnostics;
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Loader;
 using Mosa.Compiler.Metadata.Signatures;
-using Mosa.Compiler.Metadata.Tables;
 using Mosa.Compiler.TypeSystem;
 
 namespace Mosa.Compiler.Framework.CIL
@@ -61,7 +60,7 @@ namespace Mosa.Compiler.Framework.CIL
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Properties
 
@@ -77,7 +76,7 @@ namespace Mosa.Compiler.Framework.CIL
 			}
 		}
 
-		#endregion // Properties
+		#endregion Properties
 
 		#region Methods
 
@@ -96,17 +95,16 @@ namespace Mosa.Compiler.Framework.CIL
 			 * passed. So we do as if it doesn't exist. Upon instruction expansion a call
 			 * to the allocator is inserted and its result is the this pointer passed. This
 			 * must be done by expansion though...
-			 * 
 			 */
 
 			// Remove the this argument from the invocation, it's not on the stack yet.
 			ctx.OperandCount--;
 
 			// Get the type to allocate
-			SigType sigType = CreateSignatureTypeFor(decoder.Compiler.Assembly, ctor, ctx.InvokeTarget.DeclaringType);
+			SigType sigType = CreateSignatureTypeFor(decoder.Compiler.Assembly, ctor, ctx.InvokeMethod.DeclaringType);
 
-			decoder.Compiler.Scheduler.TrackMethodInvoked(ctx.InvokeTarget);
-			decoder.Compiler.Scheduler.TrackTypeAllocated(ctx.InvokeTarget.DeclaringType);
+			decoder.Compiler.Scheduler.TrackMethodInvoked(ctx.InvokeMethod);
+			decoder.Compiler.Scheduler.TrackTypeAllocated(ctx.InvokeMethod.DeclaringType);
 
 			// Set a return value according to the type of the object allocated
 			ctx.Result = decoder.Compiler.CreateVirtualRegister(sigType);
@@ -139,11 +137,11 @@ namespace Mosa.Compiler.Framework.CIL
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		/// <param name="compiler">The compiler.</param>
-		public override void Validate(Context ctx, BaseMethodCompiler compiler)
+		public override void Resolve(Context ctx, BaseMethodCompiler compiler)
 		{
 			// Validate the operands...
-			int offset = (ctx.InvokeTarget.Signature.HasExplicitThis ? 1 : 0);
-			Debug.Assert(ctx.OperandCount == ctx.InvokeTarget.Parameters.Count - offset, @"Operand count doesn't match parameter count.");
+			int offset = (ctx.InvokeMethod.HasExplicitThis ? 1 : 0);
+			Debug.Assert(ctx.OperandCount == ctx.InvokeMethod.SigParameters.Length - offset, @"Operand count doesn't match parameter count.");
 		}
 
 		/// <summary>
@@ -157,7 +155,5 @@ namespace Mosa.Compiler.Framework.CIL
 		}
 
 		#endregion Methods
-
-
 	}
 }

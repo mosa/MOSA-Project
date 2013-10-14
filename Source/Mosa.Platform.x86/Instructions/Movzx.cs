@@ -5,37 +5,40 @@
  *
  * Authors:
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
-
-using System;
 
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Metadata;
+using System;
 
 namespace Mosa.Platform.x86.Instructions
 {
 	/// <summary>
 	/// Representations the x86 Movzx instruction.
 	/// </summary>
-	public sealed class Movzx : TwoOperandInstruction
+	public sealed class Movzx : X86Instruction
 	{
-
 		#region Data Members
 
 		private static readonly OpCode R_X8 = new OpCode(new byte[] { 0x0F, 0xB6 });
 		private static readonly OpCode R_X16 = new OpCode(new byte[] { 0x0F, 0xB7 });
 
-		#endregion
+		#endregion Data Members
 
-		#region Methods
+		#region Construction
 
 		/// <summary>
-		/// Gets a value indicating whether [result is input].
+		/// Initializes a new instance of <see cref="Movzx" />.
 		/// </summary>
-		/// <value>
-		///   <c>true</c> if [result is input]; otherwise, <c>false</c>.
-		/// </value>
-		public override bool ResultIsInput { get { return false; } }
+		public Movzx() :
+			base(1, 1)
+		{
+		}
+
+		#endregion Construction
+
+		#region Methods
 
 		/// <summary>
 		/// Computes the opcode.
@@ -60,12 +63,14 @@ namespace Mosa.Platform.x86.Instructions
 						if ((destination.IsRegister) && (source.IsMemoryAddress)) return R_X8;
 					}
 					break;
+
 				case CilElementType.Char: goto case CilElementType.U2;
 				case CilElementType.U2: goto case CilElementType.I2;
 				case CilElementType.I2:
 					if ((destination.IsRegister) && (source.IsRegister)) return R_X16;
 					if ((destination.IsRegister) && (source.IsMemoryAddress)) return R_X16;
 					break;
+
 				case CilElementType.Boolean: goto case CilElementType.I1;
 				default:
 
@@ -85,6 +90,6 @@ namespace Mosa.Platform.x86.Instructions
 			visitor.Movzx(context);
 		}
 
-		#endregion
+		#endregion Methods
 	}
 }

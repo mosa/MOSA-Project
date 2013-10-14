@@ -16,9 +16,10 @@ namespace Mosa.Compiler.Verifier
 {
 	public class Verify
 	{
-
 		protected VerificationOptions options { get; private set; }
+
 		protected IAssemblyLoader assemblyLoader { get; private set; }
+
 		protected List<VerificationEntry> entries = new List<VerificationEntry>();
 
 		/// <summary>
@@ -57,7 +58,7 @@ namespace Mosa.Compiler.Verifier
 		/// Gets a value indicating whether [any errors].
 		/// </summary>
 		/// <value><c>true</c> if [any errors]; otherwise, <c>false</c>.</value>
-		public bool HasError { get; private set;}
+		public bool HasError { get; private set; }
 
 		/// <summary>
 		/// Runs this instance.
@@ -74,8 +75,5 @@ namespace Mosa.Compiler.Verifier
 
 			return !HasError;
 		}
-
-
 	}
 }
-

@@ -12,7 +12,7 @@ using System;
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public sealed class NegInstruction : UnaryArithmeticInstruction
 	{
@@ -32,7 +32,7 @@ namespace Mosa.Compiler.Framework.CIL
 			StackTypeCode.Unknown
 		};
 
-		#endregion // Data members
+		#endregion Data members
 
 		#region Construction
 
@@ -45,7 +45,7 @@ namespace Mosa.Compiler.Framework.CIL
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Methods
 
@@ -54,9 +54,9 @@ namespace Mosa.Compiler.Framework.CIL
 		/// </summary>
 		/// <param name="ctx"></param>
 		/// <param name="compiler">The compiler.</param>
-		public override void Validate(Context ctx, BaseMethodCompiler compiler)
+		public override void Resolve(Context ctx, BaseMethodCompiler compiler)
 		{
-			base.Validate(ctx, compiler);
+			base.Resolve(ctx, compiler);
 
 			// Validate the operand
 			StackTypeCode result = _typeCodes[(int)ctx.Operand1.StackType];
@@ -77,6 +77,5 @@ namespace Mosa.Compiler.Framework.CIL
 		}
 
 		#endregion Methods
-
 	}
 }

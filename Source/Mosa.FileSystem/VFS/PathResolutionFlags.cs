@@ -10,7 +10,6 @@
 
 namespace Mosa.FileSystem.VFS
 {
-
 	/// <summary>
 	/// Flags, which control the operation of the Mosa.Filesystem.VFS.PathResolver.
 	/// </summary>
@@ -42,5 +41,4 @@ namespace Mosa.FileSystem.VFS
 		/// </summary>
 		DoNotFollowSymbolicLinks = 0x00020000,
 	}
-
 }

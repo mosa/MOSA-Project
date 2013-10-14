@@ -4,15 +4,13 @@
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com> 
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 namespace Mosa.Test.Collection
 {
-
 	public static class UInt8Tests
 	{
-
 		public static int AddU1U1(byte first, byte second)
 		{
 			return (first + second);

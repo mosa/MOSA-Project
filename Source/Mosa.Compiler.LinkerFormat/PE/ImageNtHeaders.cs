@@ -24,7 +24,7 @@ namespace Mosa.Compiler.LinkerFormat.PE
 		/// </summary>
 		public const uint PE_SIGNATURE = 0x00004550;
 
-		#endregion // Constants
+		#endregion Constants
 
 		#region Data members
 
@@ -43,7 +43,7 @@ namespace Mosa.Compiler.LinkerFormat.PE
 		/// </summary>
 		public ImageOptionalHeader OptionalHeader;
 
-		#endregion // Data members
+		#endregion Data members
 
 		#region Methods
 
@@ -75,6 +75,6 @@ namespace Mosa.Compiler.LinkerFormat.PE
 			this.OptionalHeader.Write(writer);
 		}
 
-		#endregion // Methods
+		#endregion Methods
 	}
 }

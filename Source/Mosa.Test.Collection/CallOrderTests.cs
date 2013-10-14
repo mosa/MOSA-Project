@@ -4,13 +4,11 @@
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com> 
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
-
 
 namespace Mosa.Test.Collection
 {
-
 	public static class CallOrderTests
 	{
 		public static void CallEmpty()
@@ -57,12 +55,27 @@ namespace Mosa.Test.Collection
 			return (a == 1 && b == 2 && c == 3 && d == 4);
 		}
 
-		public static bool CallOrderU8(ulong a, ulong b, ulong c, ulong d)
+		public static bool CallOrderI8I8I8I8(long a, long b, long c, long d)
 		{
 			return (a == 1 && b == 2 && c == 3 && d == 4);
 		}
 
-		public static bool CallOrderU4_U8_U8_U8(uint a, ulong b, ulong c, ulong d)
+		public static bool CallOrderU8(ulong a)
+		{
+			return (a == 1);
+		}
+
+		public static bool CallOrderU8U8(ulong a, ulong b)
+		{
+			return (a == 1 && b == 2);
+		}
+
+		public static bool CallOrderU8U8U8U8(ulong a, ulong b, ulong c, ulong d)
+		{
+			return (a == 1 && b == 2 && c == 3 && d == 4);
+		}
+
+		public static bool CallOrderU4U8U8U8(uint a, ulong b, ulong c, ulong d)
 		{
 			return (a == 1 && b == 2 && c == 3 && d == 4);
 		}

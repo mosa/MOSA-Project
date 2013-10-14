@@ -10,7 +10,7 @@
 namespace Mosa.DeviceSystem.PCI
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public static class SubClassCodeTable
 	{

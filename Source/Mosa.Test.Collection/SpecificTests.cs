@@ -4,16 +4,15 @@
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com> 
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using System;
 
 namespace Mosa.Test.Collection
 {
-
 	public static class SpecificTests
 	{
-
 		public static uint Test2(uint size)
 		{
 			uint first = 0xFFFFFFFF; // Marker
@@ -33,12 +32,15 @@ namespace Mosa.Test.Collection
 		}
 
 		private static uint PageSize { get { return 4096; } }
-		private const uint ReserveMemory = 1024 * 1024 * 32; 
+
+		private const uint ReserveMemory = 1024 * 1024 * 32;
 		private static uint _pages;
+
 		private static bool GetPageStatus(uint page)  // true = available
 		{
 			return true;
 		}
+
 		private static void SetPageStatus(uint page, bool free)
 		{
 		}
@@ -78,6 +80,38 @@ namespace Mosa.Test.Collection
 		public static int R8ToI4(double value)
 		{
 			return (int)value;
+		}
+
+		public static bool IsNaN()
+		{
+			double d = 12;
+
+			return Double.IsNaN(d);
+		}
+
+		public static bool CeqR8R8()
+		{
+			return DoubleTests.CeqR8R8(1d, 2d);
+		}
+
+		public static bool R8IsPositiveInfinityTrue()
+		{
+			return Double.IsPositiveInfinity(Double.PositiveInfinity);
+		}
+
+		public static bool R8IsNegativeInfinityFalse()
+		{
+			return Double.IsNegativeInfinity(Double.PositiveInfinity);
+		}
+
+		public static bool R8IsNegativeInfinityTrue()
+		{
+			return Double.IsNegativeInfinity(Double.NegativeInfinity);
+		}
+
+		public static bool R8IsPositiveInfinityFalse()
+		{
+			return Double.IsPositiveInfinity(Double.NegativeInfinity);
 		}
 
 	}

@@ -8,10 +8,10 @@ namespace Mosa.Test.Collection
 	{
 		<# foreach (KeyValuePair<string, string> number in NumbersWithChar) { #>
 	
-		public static bool Box<#= number.Value #>(<#= number.Key #> value) 
+		public static <#= number.Key #> Box<#= number.Value #>(<#= number.Key #> value) 
 		{
 			object o = value;
-			return (<#= number.Key #>)o == value;
+			return (<#= number.Key #>)o;
 		}
 
 	<# } #>

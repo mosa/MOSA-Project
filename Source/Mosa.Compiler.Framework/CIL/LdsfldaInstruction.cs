@@ -13,7 +13,7 @@ using Mosa.Compiler.Metadata.Signatures;
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public sealed class LdsfldaInstruction : BaseCILInstruction
 	{

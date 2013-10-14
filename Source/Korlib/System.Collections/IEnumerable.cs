@@ -10,7 +10,7 @@
 namespace System.Collections
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public interface IEnumerable
 	{

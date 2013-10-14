@@ -11,13 +11,13 @@
 namespace Mosa.FileSystem.VFS
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public sealed class FileSystemFactory
 	{
 		/// <summary>
-		/// This function iterates all running file system drivers, which have registered themselves 
-		/// beneath the /system/filesystems and ask them if they can mount this path.			 
+		/// This function iterates all running file system drivers, which have registered themselves
+		/// beneath the /system/filesystems and ask them if they can mount this path.
 		/// </summary>
 		/// <param name="path">The path to the partition</param>
 		/// <returns></returns>

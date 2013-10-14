@@ -7,11 +7,11 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
+using Mosa.Compiler.Framework;
+using Mosa.Compiler.Linker;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using Mosa.Compiler.Framework;
-using Mosa.Compiler.Linker;
 
 namespace Mosa.Tool.Compiler.Stages
 {
@@ -22,8 +22,6 @@ namespace Mosa.Tool.Compiler.Stages
 	{
 		#region Data members
 
-		private ILinker linker;
-
 		public string MapFile { get; set; }
 
 		/// <summary>
@@ -31,7 +29,7 @@ namespace Mosa.Tool.Compiler.Stages
 		/// </summary>
 		private TextWriter writer;
 
-		#endregion // Data members
+		#endregion Data members
 
 		#region Construction
 
@@ -42,14 +40,13 @@ namespace Mosa.Tool.Compiler.Stages
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region ICompilerStage Members
 
 		void ICompilerStage.Setup(BaseCompiler compiler)
 		{
 			base.Setup(compiler);
-			this.linker = RetrieveLinkerFromCompiler();
 			this.MapFile = compiler.CompilerOptions.MapFile;
 		}
 
@@ -82,7 +79,7 @@ namespace Mosa.Tool.Compiler.Stages
 			}
 		}
 
-		#endregion // ICompilerStage Members
+		#endregion ICompilerStage Members
 
 		#region Internals
 
@@ -95,7 +92,7 @@ namespace Mosa.Tool.Compiler.Stages
 			writer.WriteLine("Offset           Virtual          Length           Name                             Class");
 			foreach (LinkerSection section in linker.Sections)
 			{
-				writer.WriteLine("{0:x16} {1:x16} {2:x16} {3} {4}", section.Offset, section.VirtualAddress.ToInt64(), section.Length, section.Name.PadRight(32), section.SectionKind);
+				writer.WriteLine("{0:x16} {1:x16} {2:x16} {3} {4}", section.Offset, section.VirtualAddress, section.Length, section.Name.PadRight(32), section.SectionKind);
 			}
 		}
 
@@ -103,7 +100,7 @@ namespace Mosa.Tool.Compiler.Stages
 		{
 			public int Compare(LinkerSymbol x, LinkerSymbol y)
 			{
-				return (int)(x.VirtualAddress.ToInt64() - y.VirtualAddress.ToInt64());
+				return (int)(x.VirtualAddress - y.VirtualAddress);
 			}
 		}
 
@@ -124,7 +121,7 @@ namespace Mosa.Tool.Compiler.Stages
 			writer.WriteLine("Offset           Virtual          Length           Section Symbol");
 			foreach (var symbol in sorted)
 			{
-				writer.WriteLine("{0:x16} {1:x16} {2:x16} {3} {4}", symbol.Offset, symbol.VirtualAddress.ToInt64(), symbol.Length, symbol.Section.ToString().PadRight(7), symbol.Name);
+				writer.WriteLine("{0:x16} {1:x16} {2:x16} {3} {4}", symbol.Offset, symbol.VirtualAddress, symbol.Length, symbol.SectionKind.ToString().PadRight(7), symbol.Name);
 			}
 
 			LinkerSymbol entryPoint = linker.EntryPoint;
@@ -133,10 +130,10 @@ namespace Mosa.Tool.Compiler.Stages
 				writer.WriteLine();
 				writer.WriteLine("Entry point is {0}", entryPoint.Name);
 				writer.WriteLine("\tat offset {0:x16}", entryPoint.Offset);
-				writer.WriteLine("\tat virtual address {0:x16}", entryPoint.VirtualAddress.ToInt64());
+				writer.WriteLine("\tat virtual address {0:x16}", entryPoint.VirtualAddress);
 			}
 		}
 
-		#endregion // Internals
+		#endregion Internals
 	}
 }

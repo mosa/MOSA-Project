@@ -11,7 +11,6 @@ using Mosa.DeviceSystem;
 
 namespace Mosa.EmulatedDevices.Synthetic
 {
-
 	/// <summary>
 	/// Represents an synthetic pixel graphics Device
 	/// </summary>

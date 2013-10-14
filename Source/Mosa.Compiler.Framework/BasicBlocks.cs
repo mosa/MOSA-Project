@@ -13,14 +13,14 @@ using System.Collections.Generic;
 namespace Mosa.Compiler.Framework
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public sealed class BasicBlocks : IEnumerable<BasicBlock>
 	{
 		#region Data members
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private readonly List<BasicBlock> basicBlocks = new List<BasicBlock>();
 
@@ -30,20 +30,21 @@ namespace Mosa.Compiler.Framework
 		private readonly Dictionary<int, BasicBlock> basicBlocksByLabel = new Dictionary<int, BasicBlock>();
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private readonly List<BasicBlock> headBlocks = new List<BasicBlock>();
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private BasicBlock prologueBlock = null;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private BasicBlock epilogueBlock = null;
 
-		#endregion
+		#endregion Data members
 
 		#region Construction
 
@@ -54,7 +55,7 @@ namespace Mosa.Compiler.Framework
 		{
 		}
 
-		#endregion
+		#endregion Construction
 
 		#region Properties
 
@@ -122,7 +123,7 @@ namespace Mosa.Compiler.Framework
 			}
 		}
 
-		#endregion
+		#endregion Properties
 
 		#region Methods
 
@@ -130,11 +131,26 @@ namespace Mosa.Compiler.Framework
 		/// Creates the block.
 		/// </summary>
 		/// <param name="label">The label.</param>
-		/// <param name="index">The index.</param>
+		/// <param name="start">The start.</param>
+		/// <param name="end">The end.</param>
 		/// <returns></returns>
-		public BasicBlock CreateBlock(int label, int index)
+		public BasicBlock CreateBlock(int label, int start, int end)
 		{
-			BasicBlock basicBlock = new BasicBlock(basicBlocks.Count, label, index);
+			BasicBlock basicBlock = new BasicBlock(basicBlocks.Count, label, start, end);
+			basicBlocks.Add(basicBlock);
+			basicBlocksByLabel.Add(label, basicBlock);
+			return basicBlock;
+		}
+
+		/// <summary>
+		/// Creates the block.
+		/// </summary>
+		/// <param name="label">The label.</param>
+		/// <param name="start">The start.</param>
+		/// <returns></returns>
+		public BasicBlock CreateBlock(int label, int start)
+		{
+			BasicBlock basicBlock = new BasicBlock(basicBlocks.Count, label, start);
 			basicBlocks.Add(basicBlock);
 			basicBlocksByLabel.Add(label, basicBlock);
 			return basicBlock;
@@ -147,7 +163,22 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		public BasicBlock CreateBlock(int label)
 		{
-			BasicBlock basicBlock = new BasicBlock(basicBlocks.Count, label, -1);
+			BasicBlock basicBlock = new BasicBlock(basicBlocks.Count, label, -1, -1);
+			basicBlocks.Add(basicBlock);
+			basicBlocksByLabel.Add(label, basicBlock);
+			return basicBlock;
+		}
+
+		/// <summary>
+		/// Creates the block.
+		/// </summary>
+		/// <param name="start">The start.</param>
+		/// <param name="end">The end.</param>
+		/// <returns></returns>
+		public BasicBlock CreateBlockWithAutoLabel(int start, int end)
+		{
+			int label = basicBlocks.Count + 0x10000000;
+			BasicBlock basicBlock = new BasicBlock(basicBlocks.Count, label, start, end);
 			basicBlocks.Add(basicBlock);
 			basicBlocksByLabel.Add(label, basicBlock);
 			return basicBlock;
@@ -167,18 +198,6 @@ namespace Mosa.Compiler.Framework
 			return basicBlock;
 		}
 
-		/// <summary>
-		/// Creates the block.
-		/// </summary>
-		/// <returns></returns>
-		public BasicBlock CreateBlock()
-		{
-			int label = basicBlocks.Count + 0x10000000;
-			BasicBlock basicBlock = new BasicBlock(basicBlocks.Count, label, -1);
-			basicBlocks.Add(basicBlock);
-			basicBlocksByLabel.Add(label, basicBlock);
-			return basicBlock;
-		}
 		/// <summary>
 		/// Links the blocks.
 		/// </summary>
@@ -234,6 +253,7 @@ namespace Mosa.Compiler.Framework
 		public void ReorderBlocks(IList<BasicBlock> newBlockOrder)
 		{
 			basicBlocks.Clear();
+			basicBlocksByLabel.Clear();
 
 			int sequence = 0;
 			foreach (var block in newBlockOrder)
@@ -242,13 +262,14 @@ namespace Mosa.Compiler.Framework
 				{
 					basicBlocks.Add(block);
 					block.Sequence = sequence++;
+					basicBlocksByLabel.Add(block.Label, block);
 				}
 			}
 
 			epilogueBlock = null;
 		}
 
-		#endregion
+		#endregion Methods
 
 		public List<BasicBlock> GetConnectedBlocksStartingAtHead(BasicBlock start)
 		{

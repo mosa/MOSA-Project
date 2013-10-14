@@ -10,8 +10,8 @@
 namespace Mosa.Compiler.LinkerFormat.Elf32
 {
 	/// <summary>
-	/// Specifies the data encoding of the 
-	/// processor-specific data in the object file. 
+	/// Specifies the data encoding of the
+	/// processor-specific data in the object file.
 	/// </summary>
 	public enum IdentData : byte
 	{
@@ -19,14 +19,16 @@ namespace Mosa.Compiler.LinkerFormat.Elf32
 		/// Invalid data encoding
 		/// </summary>
 		DataNone = 0x00,
+
 		/// <summary>
-		/// Encoding Data2LSB specifies 2's complement values, with the least significant byte 
-		/// occupying the lowest virtualAddress. 
+		/// Encoding Data2LSB specifies 2's complement values, with the least significant byte
+		/// occupying the lowest virtualAddress.
 		/// </summary>
 		Data2LSB = 0x01,
+
 		/// <summary>
-		/// Encoding Data2MSB specifies 2's complement values, with the most significant byte 
-		/// occupying the lowest virtualAddress. 
+		/// Encoding Data2MSB specifies 2's complement values, with the most significant byte
+		/// occupying the lowest virtualAddress.
 		/// </summary>
 		Data2MSB = 0x02,
 	}

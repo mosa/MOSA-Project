@@ -7,8 +7,6 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-using System;
-
 namespace Mosa.Compiler.Linker
 {
 	/// <summary>
@@ -16,46 +14,22 @@ namespace Mosa.Compiler.Linker
 	/// </summary>
 	public abstract class LinkerSection
 	{
-		#region Data members
-
-		/// <summary>
-		/// Holds the sections load virtualAddress.
-		/// </summary>
-		private IntPtr virtualAddress;
-
-		/// <summary>
-		/// Holds the kind of the section.
-		/// </summary>
-		private SectionKind kind;
-
-		/// <summary>
-		/// Holds the file offset of this section.
-		/// </summary>
-		private long offset;
-
-		/// <summary>
-		/// Holds the section name.
-		/// </summary>
-		private string name;
-
-		#endregion // Data members
-
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="LinkerSection"/> class.
+		/// Initializes a new instance of the <see cref="LinkerSection" /> class.
 		/// </summary>
-		/// <param name="kind">The kind of the section.</param>
+		/// <param name="sectionKind">The kind of the section.</param>
 		/// <param name="name">The name.</param>
 		/// <param name="virtualAddress">The virtualAddress.</param>
-		protected LinkerSection(SectionKind kind, string name, IntPtr virtualAddress)
+		protected LinkerSection(SectionKind sectionKind, string name, long virtualAddress)
 		{
-			this.virtualAddress = virtualAddress;
-			this.kind = kind;
-			this.name = name;
+			this.VirtualAddress = virtualAddress;
+			this.SectionKind = sectionKind;
+			this.Name = name;
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Properties
 
@@ -63,49 +37,31 @@ namespace Mosa.Compiler.Linker
 		/// Gets the virtual address of the section.
 		/// </summary>
 		/// <value>The virtual address.</value>
-		public IntPtr VirtualAddress
-		{
-			get { return this.virtualAddress; }
-			/* internal protected  */ set { this.virtualAddress = value; }
-		}
+		public long VirtualAddress { get; set; }
 
 		/// <summary>
 		/// Gets the length of the section in bytes.
 		/// </summary>
 		/// <value>The length of the section in bytes.</value>
-		public abstract long Length
-		{
-			get;
-		}
+		public abstract long Length { get; }
 
 		/// <summary>
 		/// Gets the name.
 		/// </summary>
 		/// <value>The name.</value>
-		public string Name
-		{
-			get { return this.name; }
-		}
+		public string Name { get; set; }
 
 		/// <summary>
 		/// Gets or sets the file offset of the section.
 		/// </summary>
 		/// <value>The file offset.</value>
-		public long Offset
-		{
-			get { return this.offset; }
-			/* internal */
-			set { this.offset = value; }
-		}
+		public long Offset { get; set; }
 
 		/// <summary>
 		/// Gets the kind of the section.
 		/// </summary>
 		/// <value>The kind of the section.</value>
-		public SectionKind SectionKind
-		{
-			get { return this.kind; }
-		}
+		public SectionKind SectionKind { get; set; }
 
 		/// <summary>
 		/// Returns a <see cref="System.String"/> that represents this instance.
@@ -115,9 +71,9 @@ namespace Mosa.Compiler.Linker
 		/// </returns>
 		public override string ToString()
 		{
-			return this.name;
+			return Name;
 		}
 
-		#endregion // Properties
+		#endregion Properties
 	}
 }

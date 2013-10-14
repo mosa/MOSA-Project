@@ -6,7 +6,6 @@
  */
 
 using System;
-using Mosa.HelloWorld.x86.Tests;
 using Mosa.Kernel.x86;
 using Mosa.Kernel.x86.Smbios;
 using Mosa.Platform.x86.Intrinsic;
@@ -14,7 +13,7 @@ using Mosa.Platform.x86.Intrinsic;
 namespace Mosa.HelloWorld.x86
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public static class Boot
 	{
@@ -26,8 +25,8 @@ namespace Mosa.HelloWorld.x86
 		public static void Main()
 		{
 			Mosa.Kernel.x86.Kernel.Setup();
-			DebugClient.Setup(Serial.COM1);
-			IDT.SetInterruptHandler(ProcessInterrupt);
+			//DebugClient.Setup(Serial.COM1);
+			//IDT.SetInterruptHandler(ProcessInterrupt);
 
 			Console = ConsoleManager.Controller.Boot;
 
@@ -184,59 +183,71 @@ namespace Mosa.HelloWorld.x86
 
 			Console.WriteLine();
 
-			CpuInfo cpuInfo = new CpuInfo();
+			//CpuInfo cpuInfo = new CpuInfo();
 
-			#region Vendor
-			Console.Color = Colors.Green;
-			Console.Write(@"Vendor:   ");
-			Console.Color = Colors.White;
+			//#region Vendor
 
-			cpuInfo.PrintVendorString(Console);
+			//Console.Color = Colors.Green;
+			//Console.Write(@"Vendor:   ");
+			//Console.Color = Colors.White;
 
-			Console.WriteLine();
-			#endregion
+			//cpuInfo.PrintVendorString(Console);
 
-			#region Brand
-			Console.Color = Colors.Green;
-			Console.Write(@"Brand:    ");
-			Console.Color = Colors.White;
-			cpuInfo.PrintBrandString(Console);
-			Console.WriteLine();
-			#endregion
+			//Console.WriteLine();
 
-			#region Stepping
-			Console.Color = Colors.Green;
-			Console.Write(@"Stepping: ");
-			Console.Color = Colors.White;
-			Console.Write(cpuInfo.Stepping, 16, 2);
-			#endregion
+			//#endregion Vendor
 
-			#region Model
-			Console.Color = Colors.Green;
-			Console.Write(@" Model: ");
-			Console.Color = Colors.White;
-			Console.Write(cpuInfo.Model, 16, 2);
-			#endregion
+			//#region Brand
 
-			#region Family
-			Console.Color = Colors.Green;
-			Console.Write(@" Family: ");
-			Console.Color = Colors.White;
-			Console.Write(cpuInfo.Family, 16, 2);
-			#endregion
+			//Console.Color = Colors.Green;
+			//Console.Write(@"Brand:    ");
+			//Console.Color = Colors.White;
+			//cpuInfo.PrintBrandString(Console);
+			//Console.WriteLine();
 
-			#region Type
-			Console.Color = Colors.Green;
-			Console.Write(@" Type: ");
-			Console.Color = Colors.White;
+			//#endregion Brand
 
-			Console.Write(cpuInfo.Type, 16, 2);
-			Console.WriteLine();
-			Console.Color = Colors.Green;
-			Console.Write(@"Cores:    ");
-			Console.Color = Colors.White;
-			Console.Write(cpuInfo.NumberOfCores, 16, 2);
-			#endregion
+			//#region Stepping
+
+			//Console.Color = Colors.Green;
+			//Console.Write(@"Stepping: ");
+			//Console.Color = Colors.White;
+			//Console.Write(cpuInfo.Stepping, 16, 2);
+
+			//#endregion Stepping
+
+			//#region Model
+
+			//Console.Color = Colors.Green;
+			//Console.Write(@" Model: ");
+			//Console.Color = Colors.White;
+			//Console.Write(cpuInfo.Model, 16, 2);
+
+			//#endregion Model
+
+			//#region Family
+
+			//Console.Color = Colors.Green;
+			//Console.Write(@" Family: ");
+			//Console.Color = Colors.White;
+			//Console.Write(cpuInfo.Family, 16, 2);
+
+			//#endregion Family
+
+			//#region Type
+
+			//Console.Color = Colors.Green;
+			//Console.Write(@" Type: ");
+			//Console.Color = Colors.White;
+
+			//Console.Write(cpuInfo.Type, 16, 2);
+			//Console.WriteLine();
+			//Console.Color = Colors.Green;
+			//Console.Write(@"Cores:    ");
+			//Console.Color = Colors.White;
+			//Console.Write(cpuInfo.NumberOfCores, 16, 2);
+
+			//#endregion Type
 
 			Console.Row = 19;
 			for (uint index = 0; index < 80; index++)
@@ -275,8 +286,6 @@ namespace Mosa.HelloWorld.x86
 
 			CMOS cmos = new CMOS();
 
-			KernelTest.RunTests();
-
 			byte last = 0;
 
 			while (true)
@@ -287,10 +296,10 @@ namespace Mosa.HelloWorld.x86
 				if (cmos.Second != last)
 				{
 					last = cmos.Second;
-					DebugClient.SendAlive();
+					//DebugClient.SendAlive();
 				}
 
-				DebugClient.Process();
+				//DebugClient.Process();
 				Native.Hlt();
 			}
 		}
@@ -392,7 +401,7 @@ namespace Mosa.HelloWorld.x86
 			}
 			else if (interrupt == 0x20)
 			{
-				// Timer Interrupt! Switch Tasks!	
+				// Timer Interrupt! Switch Tasks!
 			}
 			else
 			{

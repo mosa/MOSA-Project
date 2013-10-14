@@ -8,21 +8,17 @@
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  */
 
-
-using System.Collections.Generic;
 using Mosa.Compiler.Framework;
+using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.Metadata.Signatures;
-using Mosa.Compiler.TypeSystem;
-using IR = Mosa.Compiler.Framework.IR;
 
 namespace Mosa.Platform.x86.Intrinsic
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public class SetControlRegisterBase : IIntrinsicPlatformMethod
 	{
-
 		private ControlRegister control;
 
 		/// <summary>
@@ -41,18 +37,17 @@ namespace Mosa.Platform.x86.Intrinsic
 		/// </summary>
 		/// <param name="context">The context.</param>
 		/// <param name="typeSystem">The type system.</param>
-		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, ITypeSystem typeSystem, IList<RuntimeParameter> parameters)
+		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, BaseMethodCompiler methodCompiler)
 		{
 			Operand operand1 = context.Operand1;
 
 			Operand eax = Operand.CreateCPURegister(BuiltInSigType.UInt32, GeneralPurposeRegister.EAX);
 			Operand cr = Operand.CreateCPURegister(BuiltInSigType.UInt32, control);
 
-			context.SetInstruction(IR.IRInstruction.Move, eax, operand1);
-			context.AppendInstruction(IR.IRInstruction.Move, cr, eax);
+			context.SetInstruction(X86.Mov, eax, operand1);
+			context.AppendInstruction(X86.MovCR, cr, eax);
 		}
 
-		#endregion // Methods
-
+		#endregion Methods
 	}
 }

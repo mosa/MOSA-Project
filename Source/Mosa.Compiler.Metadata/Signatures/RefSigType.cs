@@ -24,7 +24,7 @@ namespace Mosa.Compiler.Metadata.Signatures
 		/// </summary>
 		private SigType elementType;
 
-		#endregion // Data members
+		#endregion Data members
 
 		#region Construction
 
@@ -41,7 +41,7 @@ namespace Mosa.Compiler.Metadata.Signatures
 			this.elementType = type;
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Properties
 
@@ -54,7 +54,7 @@ namespace Mosa.Compiler.Metadata.Signatures
 			get { return this.elementType; }
 		}
 
-		#endregion // Properties
+		#endregion Properties
 
 		#region SigType Overrides
 
@@ -82,11 +82,12 @@ namespace Mosa.Compiler.Metadata.Signatures
 		public override bool Matches(SigType other)
 		{
 			RefSigType refOther = other as RefSigType;
+
 			// FIXME: Do we need to consider custom mods here?
 			return (refOther != null && refOther.elementType.Matches(this.ElementType) == true);
 		}
 
-		#endregion // SigType Overrides
+		#endregion SigType Overrides
 
 		/// <summary>
 		/// Expresses the byref parameter signature component in a meaningful, symbol-friendly string form

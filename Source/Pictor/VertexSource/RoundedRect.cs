@@ -8,6 +8,7 @@
  */
 
 using System;
+
 namespace Pictor.VertexSource
 {
 	//------------------------------------------------------------rounded_rect
@@ -16,17 +17,17 @@ namespace Pictor.VertexSource
 	//
 	public class RoundedRect : IVertexSource
 	{
-		RectD m_Bounds;
-		double m_rx1;
-		double m_ry1;
-		double m_rx2;
-		double m_ry2;
-		double m_rx3;
-		double m_ry3;
-		double m_rx4;
-		double m_ry4;
-		uint m_status;
-		Arc m_arc = new Arc();
+		private RectD m_Bounds;
+		private double m_rx1;
+		private double m_ry1;
+		private double m_rx2;
+		private double m_ry2;
+		private double m_rx3;
+		private double m_ry3;
+		private double m_rx4;
+		private double m_ry4;
+		private uint m_status;
+		private Arc m_arc = new Arc();
 
 		public RoundedRect(double left, double bottom, double right, double top, double r)
 		{
@@ -203,4 +204,3 @@ namespace Pictor.VertexSource
 		}
 	};
 }
-

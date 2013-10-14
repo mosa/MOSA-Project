@@ -7,7 +7,6 @@
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  */
 
-
 namespace Pictor.UI.Dialogs
 {
 	/// <summary>
@@ -15,9 +14,9 @@ namespace Pictor.UI.Dialogs
 	/// </summary>
 	public class YesNoDialog : Dialog
 	{
-		bool result = false;
-		ButtonWidget yesButton;
-		ButtonWidget noButton;
+		private bool result = false;
+		private ButtonWidget yesButton;
+		private ButtonWidget noButton;
 
 		/// <summary>
 		/// Returns the dialog's result.
@@ -34,7 +33,7 @@ namespace Pictor.UI.Dialogs
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="x"></param>
 		/// <param name="y"></param>
@@ -53,7 +52,7 @@ namespace Pictor.UI.Dialogs
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="button"></param>
 		private void Yes(ButtonWidget button)
@@ -63,7 +62,7 @@ namespace Pictor.UI.Dialogs
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="button"></param>
 		private void No(ButtonWidget button)

@@ -50,7 +50,7 @@ namespace Mosa.Compiler.Metadata.Signatures
 		/// </summary>
 		private Token _token;
 
-		#endregion // Data members
+		#endregion Data members
 
 		#region Construction
 
@@ -65,7 +65,7 @@ namespace Mosa.Compiler.Metadata.Signatures
 			_token = token;
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Properties
 
@@ -81,7 +81,7 @@ namespace Mosa.Compiler.Metadata.Signatures
 		/// <value>The token type.</value>
 		public Token Token { get { return _token; } }
 
-		#endregion // Properties
+		#endregion Properties
 
 		#region Static methods
 
@@ -101,7 +101,7 @@ namespace Mosa.Compiler.Metadata.Signatures
 
 				reader.SkipByte();
 
-				Token modType = reader.ReadEncodedTypeDefOrRef(); 
+				Token modType = reader.ReadEncodedTypeDefOrRef();
 				mods.Add(new CustomMod((CustomModType)(type - CilElementType.Required + 1), modType));
 			}
 
@@ -130,7 +130,7 @@ namespace Mosa.Compiler.Metadata.Signatures
 			return result;
 		}
 
-		#endregion // Static methods
+		#endregion Static methods
 
 		#region IEquatable<CustomMod> Members
 
@@ -139,6 +139,6 @@ namespace Mosa.Compiler.Metadata.Signatures
 			return (_token == other._token && _type == other._type);
 		}
 
-		#endregion // IEquatable<CustomMod> Members
+		#endregion IEquatable<CustomMod> Members
 	}
 }

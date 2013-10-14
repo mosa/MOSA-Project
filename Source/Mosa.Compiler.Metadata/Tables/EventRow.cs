@@ -7,33 +7,31 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-
-
 namespace Mosa.Compiler.Metadata.Tables
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public struct EventRow
 	{
 		#region Data members
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private EventAttributes flags;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private HeapIndexToken name;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private Token eventType;
 
-		#endregion // Data members
+		#endregion Data members
 
 		#region Construction
 
@@ -50,7 +48,7 @@ namespace Mosa.Compiler.Metadata.Tables
 			this.eventType = eventType;
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Properties
 
@@ -81,6 +79,6 @@ namespace Mosa.Compiler.Metadata.Tables
 			get { return eventType; }
 		}
 
-		#endregion // Properties
+		#endregion Properties
 	}
 }

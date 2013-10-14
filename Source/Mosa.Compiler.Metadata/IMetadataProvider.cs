@@ -10,7 +10,6 @@
 using System;
 using System.Collections.Generic;
 
-
 using Mosa.Compiler.Metadata.Tables;
 
 namespace Mosa.Compiler.Metadata
@@ -24,7 +23,6 @@ namespace Mosa.Compiler.Metadata
 	/// </remarks>
 	public interface IMetadataProvider
 	{
-
 		/// <summary>
 		/// Returns the number of rows for the specified provider table.
 		/// </summary>

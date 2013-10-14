@@ -7,10 +7,7 @@
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  */
 
-
-using System.Collections.Generic;
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.TypeSystem;
 
 namespace Mosa.Platform.x86.Intrinsic
 {
@@ -19,7 +16,6 @@ namespace Mosa.Platform.x86.Intrinsic
 	/// </summary>
 	public sealed class Out : IIntrinsicPlatformMethod
 	{
-
 		#region Methods
 
 		/// <summary>
@@ -27,20 +23,11 @@ namespace Mosa.Platform.x86.Intrinsic
 		/// </summary>
 		/// <param name="context">The context.</param>
 		/// <param name="typeSystem">The type system.</param>
-		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, ITypeSystem typeSystem, IList<RuntimeParameter> parameters)
+		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, BaseMethodCompiler methodCompiler)
 		{
-			Operand operand1 = context.Operand1;
-			Operand operand2 = context.Operand2;
-
-			Operand edx = Operand.CreateCPURegister(operand1.Type, GeneralPurposeRegister.EDX);
-			Operand eax = Operand.CreateCPURegister(operand2.Type, GeneralPurposeRegister.EAX);
-
-			context.SetInstruction(X86.Mov, edx, operand1);
-			context.AppendInstruction(X86.Mov, eax, operand2);
-			context.AppendInstruction(X86.Out, null, edx, eax);
+			context.SetInstruction(X86.Out, null, context.Operand1, context.Operand2);
 		}
 
-		#endregion // Methods
-
+		#endregion Methods
 	}
 }

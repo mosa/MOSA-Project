@@ -14,7 +14,7 @@ namespace Mosa.Kernel.AVR32
 	/// <summary>
 	/// Kernel Memory Allocator - This is a pure HACK!
 	/// </summary>
-	public class KernelMemory
+	public static class KernelMemory
 	{
 		static private uint _heap = 0;
 		static private uint _size = 0;
@@ -36,6 +36,5 @@ namespace Mosa.Kernel.AVR32
 			_used = _used + size;
 			return at;
 		}
-
 	}
 }

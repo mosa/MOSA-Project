@@ -21,11 +21,12 @@ namespace Mosa.Tool.Compiler.Stages
 	public class InstructionStatisticsStage : BaseMethodCompilerStage, IMethodCompilerStage, IPipelineStage
 	{
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private static DateTime start;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private static DateTime end;
 
@@ -44,8 +45,9 @@ namespace Mosa.Tool.Compiler.Stages
 		/// Total number of compiled instructions.
 		/// </summary>
 		private uint numberOfInstructions;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private uint numberOfMethods;
 
@@ -81,7 +83,7 @@ namespace Mosa.Tool.Compiler.Stages
 			numberOfMethods++;
 
 			foreach (BasicBlock block in basicBlocks)
-				for (Context ctx = CreateContext(block); !ctx.EndOfInstruction; ctx.GotoNext())
+				for (Context ctx = CreateContext(block); !ctx.IsBlockEndInstruction; ctx.GotoNext())
 					Visit(ctx);
 		}
 
@@ -101,7 +103,7 @@ namespace Mosa.Tool.Compiler.Stages
 			writer.WriteLine("Namespace statistics:");
 			writer.WriteLine("---------------------");
 			writer.WriteLine("  - Number of instructions visited in namespace:");
-			
+
 			foreach (string name in namespaces.Keys)
 			{
 				string n = name.Substring(name.LastIndexOf('.') + 1, name.Length - name.LastIndexOf('.') - 1);

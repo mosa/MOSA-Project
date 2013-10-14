@@ -5,7 +5,7 @@
  *
  * Authors:
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- *  Pascal Delprat (pdelprat) <pascal.delprat@online.fr>  
+ *  Pascal Delprat (pdelprat) <pascal.delprat@online.fr>
  */
 
 using System;
@@ -22,6 +22,17 @@ namespace Mosa.Platform.AVR32.Instructions
 	/// </summary>
 	public class Cp : AVR32Instruction
 	{
+		#region Construction
+
+		/// <summary>
+		/// Initializes a new instance of <see cref="Cp"/>.
+		/// </summary>
+		public Cp() :
+			base(0, 0)
+		{
+		}
+
+		#endregion Construction
 
 		#region Methods
 
@@ -50,7 +61,6 @@ namespace Mosa.Platform.AVR32.Instructions
 				}
 				else
 					throw new OverflowException();
-
 			}
 			else
 				throw new Exception("Not supported combination of operands");
@@ -66,7 +76,6 @@ namespace Mosa.Platform.AVR32.Instructions
 			visitor.Cp(context);
 		}
 
-		#endregion // Methods
-
+		#endregion Methods
 	}
 }

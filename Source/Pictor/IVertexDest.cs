@@ -6,6 +6,7 @@
  * Authors:
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  */
+
 namespace Pictor
 {
 	public interface IVertexDest
@@ -13,6 +14,7 @@ namespace Pictor
 		void RemoveAll();
 
 		uint Size();
+
 		void Add(PointD vertex);
 
 		PointD this[int i]

@@ -6,6 +6,7 @@
  * Authors:
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  */
+
 using Pictor.VertexSource;
 
 namespace Pictor
@@ -69,7 +70,7 @@ namespace Pictor
 		}
 
 		//-----------------------------------------------------BoundingRectSingle
-		//template<class VertexSource, class CoordT> 
+		//template<class VertexSource, class CoordT>
 		public static bool BoundingRectSingle(IVertexSource vs, uint path_id,
 								  out double x1, out double y1, out double x2, out double y2)
 		{

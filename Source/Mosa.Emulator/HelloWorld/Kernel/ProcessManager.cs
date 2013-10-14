@@ -12,12 +12,13 @@ using Mosa.Platform.x86.Intrinsic;
 namespace Mosa.Kernel.x86
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public static class ProcessManager
 	{
 		private static uint _slots = 4096;
 		private static uint _table;
+
 		//private static uint _lock = 0;
 
 		#region Data members
@@ -41,7 +42,7 @@ namespace Mosa.Kernel.x86
 			public static readonly uint TotalSize = 24;
 		}
 
-		#endregion
+		#endregion Data members
 
 		/// <summary>
 		/// Setups the process manager.

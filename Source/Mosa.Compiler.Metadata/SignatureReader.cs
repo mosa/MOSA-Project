@@ -19,7 +19,9 @@ namespace Mosa.Compiler.Metadata
 		private int index = 0;
 
 		public int Index { get { return index; } }
+
 		public int Length { get { return buffer.Length; } }
+
 		public byte this[int index] { get { return buffer[index]; } }
 
 		/// <summary>
@@ -115,13 +117,13 @@ namespace Mosa.Compiler.Metadata
 			{
 				index++;
 				ReadEncodedTypeDefOrRef();
-				Debug.WriteLine("Skipping CilElementType.Required or CilElementType.Optional.");
+				//Debug.WriteLine("Skipping CilElementType.Required or CilElementType.Optional.");
 			}
 			return result;
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private static readonly TableType[] _typeDefOrRefEncodedTables2 = new TableType[] { TableType.TypeDef, TableType.TypeRef, TableType.TypeSpec };
 

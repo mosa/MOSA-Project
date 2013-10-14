@@ -39,7 +39,7 @@ namespace Mosa.Utility.IsoImage
 		// * maximum directory depth is 8 ( I can't find any reason why this limitation should exist, and I think one of the specs above relax this anyway )
 		// * (I'm thinking something else, too, haven't decided yet...)
 
-		string isoFileName;
+		private string isoFileName;
 
 		/// <summary>
 		/// Constructor
@@ -191,11 +191,13 @@ namespace Mosa.Utility.IsoImage
 		{
 			// first fix-up path separators
 			path = path.Replace('\\', '/').Trim();
+
 			// check for os-specific leading characters and remove...
 			if (path[1] == ':') // dos
 				path = path.Substring(2);
 			if (path[0] == '/') // dos and unix
 				path = path.Substring(1);
+
 			// remove trailing slash if necessary
 			if (path[path.Length - 1] == '/')
 				path = path.Substring(0, path.Length - 1);
@@ -224,6 +226,7 @@ namespace Mosa.Utility.IsoImage
 				if (e.IsFile)
 				{
 					throw new Exception("cannot create directory \"" + ar[i].Trim() + "\", a file by that Name already exists");
+
 					//return;
 				}
 				f = (IsoFolder)e;
@@ -244,8 +247,10 @@ namespace Mosa.Utility.IsoImage
 		private Generator generator;
 		private int TotalSize;
 		private short LogicalBlockSize;
+
 		//const private short VolumeSetSize; ( don't see a need to customize this value at this time )
 		private int PathTableSize;
+
 		private int LPathTable;
 		private int MPathTable;
 		private int BootCatalog;
@@ -358,6 +363,7 @@ namespace Mosa.Utility.IsoImage
 		private void GenBootCatalog(IsoFile f)
 		{
 			BootCatalog = generator.Index / LogicalBlockSize;
+
 			// write validation entry first... see El Torito section 2.1
 			var ve = new FieldValidator(generator);
 			ve.Byte(1, 1); // Header ID, must be 0x01
@@ -382,6 +388,7 @@ namespace Mosa.Utility.IsoImage
 				ide.Byte(3,2); // 2.88 meg diskette
 			else
 				ide.Byte(4,2);*/
+
 			// Hard Disk ( drive 80 )
 
 			ide.ShortLSB(0, 3, 4); // Load Segment - 0 == default of 0x7C0
@@ -411,6 +418,7 @@ namespace Mosa.Utility.IsoImage
 		private void GenPathTableEx(IsoFolder parentFolder, IsoFolder thisFolder, bool lsb)
 		{
 			var di = new FieldValidator(generator);
+
 			// Path table record ( ECMA-119 section 9.4 )
 			byte[] b_di = generator.IsoName(thisFolder.Name, true);
 			di.Byte((byte)b_di.Length, 1);
@@ -527,6 +535,7 @@ namespace Mosa.Utility.IsoImage
 			byte LEN_DR = (byte)(33 + LEN_FI);
 			bool fi_padding = ((LEN_DR & 1) != 0);
 			if (fi_padding) LEN_DR++;
+
 			// as much as I HATE to do it, I have to generate this data in both passes for now.
 			// I don't yet understand enough about what and how many DR entries have to be made to figure out how to do it "right"
 			byte LEN_SU = 0;
@@ -548,6 +557,7 @@ namespace Mosa.Utility.IsoImage
 			dr.Byte(0, 2); // Extended Attribute Record Length ( 9.1.2 )
 			dr.IntLSBMSB(e.DataBlock, 3, 10); // Location of Extent ( 9.1.3 )
 #if true
+
 			// in this test - I round the data length up to the next multiple of 2048, didn't help fix my booting problem though...
 			dr.IntLSBMSB(((e.DataLength - 1) / 2048 + 1) * 2048, 11, 18); // Data Length ( 9.1.4 )
 #else
@@ -692,6 +702,5 @@ namespace Mosa.Utility.IsoImage
 			generator.WriteFile(f, PrimaryVolumeDescriptor);
 			generator.FinishBlock();
 		}
-
 	}
 }

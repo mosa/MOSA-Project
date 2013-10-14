@@ -5,14 +5,13 @@
  *
  * Authors:
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- *  Pascal Delprat (pdelprat) <pascal.delprat@online.fr> 
+ *  Pascal Delprat (pdelprat) <pascal.delprat@online.fr>
  */
 
 using System;
 using System.Diagnostics;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.IR;
-using Mosa.Compiler.Framework.Platform;
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Signatures;
 
@@ -24,9 +23,8 @@ namespace Mosa.Platform.AVR32
 	/// <remarks>
 	/// This transformation stage transforms IR instructions into their equivalent X86 sequences.
 	/// </remarks>
-	public sealed class IRTransformationStage : BaseTransformationStage, IIRVisitor, IMethodCompilerStage, IPlatformStage
+	public sealed class IRTransformationStage : BaseTransformationStage, IIRVisitor, IMethodCompilerStage
 	{
-
 		private int stackSize;
 
 		#region IMethodCompilerStage
@@ -39,14 +37,12 @@ namespace Mosa.Platform.AVR32
 		{
 			base.Setup(methodCompiler);
 
-			IStackLayoutProvider stackLayoutProvider = methodCompiler.Pipeline.FindFirst<IStackLayoutProvider>();
-
-			stackSize = (stackLayoutProvider == null) ? 0 : stackLayoutProvider.LocalsSize;
+			stackSize = methodCompiler.StackLayout.StackSize;
 
 			Debug.Assert((stackSize % 4) == 0, @"Stack size of method can't be divided by 4!!");
 		}
 
-		#endregion // IMethodCompilerStage
+		#endregion IMethodCompilerStage
 
 		#region IIRVisitor
 
@@ -75,22 +71,18 @@ namespace Mosa.Platform.AVR32
 			else
 				if ((result.IsMemoryAddress) && (operand.IsConstant))
 				{
-
 				}
 				else
 					if ((result.IsRegister) && (operand.IsMemoryAddress))
 					{
-
 					}
 					else
 						if ((result.IsRegister) && (operand.IsRegister))
 						{
-
 						}
 						else
 							if ((result.IsMemoryAddress) && (operand.IsRegister))
 							{
-
 							}
 							else
 								if ((result.IsMemoryAddress) && (context.Operand1.IsMemoryAddress))
@@ -214,12 +206,12 @@ namespace Mosa.Platform.AVR32
 			Operand result = context.Result;
 			Operand operand = context.Operand1;
 			Operand offset = context.Operand2;
-			IntPtr offsetPtr = IntPtr.Zero;
+			long offsetPtr = 0;
 
 			context.SetInstruction(AVR32.Ld, r8, operand);
 			if (offset.IsConstant)
 			{
-				offsetPtr = new IntPtr(Convert.ToInt64(offset.Value));
+				offsetPtr = (long)offset.ValueAsLongInteger;
 			}
 			else
 			{
@@ -227,7 +219,7 @@ namespace Mosa.Platform.AVR32
 				context.AppendInstruction(AVR32.Add, r8, r8);
 			}
 
-			context.AppendInstruction(AVR32.Ld, result, Operand.CreateMemoryAddress(r8.Type, GeneralPurposeRegister.R8, offsetPtr));
+			//context.AppendInstruction(AVR32.Ld, result, Operand.CreateMemoryAddress(r8.Type, GeneralPurposeRegister.R8, offsetPtr));
 		}
 
 		/// <summary>
@@ -276,17 +268,14 @@ namespace Mosa.Platform.AVR32
 				else
 					if ((result.IsRegister) && (operand.IsMemoryAddress))
 					{
-
 					}
 					else
 						if ((result.IsRegister) && (operand.IsRegister))
 						{
-
 						}
 						else
 							if ((result.IsMemoryAddress) && (operand.IsRegister))
 							{
-
 							}
 							else
 								if ((result.IsMemoryAddress) && (context.Operand1.IsMemoryAddress))
@@ -333,6 +322,7 @@ namespace Mosa.Platform.AVR32
 		{
 			Operand result = context.Result;
 			Operand operand = context.Operand1;
+
 			//context.Operand1 = EmitConstant(context.Operand1);
 
 			if (context.Result.StackType == StackTypeCode.F)
@@ -378,8 +368,6 @@ namespace Mosa.Platform.AVR32
 			{
 				//context.SetInstruction(Instruction.St, result, operand);
 			}
-
-
 		}
 
 		/// <summary>
@@ -397,12 +385,12 @@ namespace Mosa.Platform.AVR32
 			Operand r7 = Operand.CreateCPURegister(I, GeneralPurposeRegister.R7);
 			Operand r6 = Operand.CreateCPURegister(I, GeneralPurposeRegister.R6);
 
-			/* 
-			 * If you want to stop at the header of an emitted function, just set breakFlag 
-			 * to true in the following line. It will issue a breakpoint instruction. Note 
-			 * that if you debug using visual studio you must enable unmanaged code 
-			 * debugging, otherwise the function will never return and the breakpoint will 
-			 * never appear. 
+			/*
+			 * If you want to stop at the header of an emitted function, just set breakFlag
+			 * to true in the following line. It will issue a breakpoint instruction. Note
+			 * that if you debug using visual studio you must enable unmanaged code
+			 * debugging, otherwise the function will never return and the breakpoint will
+			 * never appear.
 			 */
 			bool breakFlag = false; // TODO: Turn this into a compiler option
 
@@ -419,10 +407,13 @@ namespace Mosa.Platform.AVR32
 
 			// push ebp
 			context.SetInstruction(AVR32.Push, null, r11);
+
 			// mov ebp, esp
 			context.AppendInstruction(AVR32.Mov, r11, sp);
+
 			// sub esp, localsSize
 			context.AppendInstruction(AVR32.Sub, sp, Operand.CreateConstant(I, -stackSize));
+
 			// push ebx
 			context.AppendInstruction(AVR32.Push, null, r12);
 
@@ -436,6 +427,7 @@ namespace Mosa.Platform.AVR32
 			context.AppendInstruction(AVR32.Add, r7, r6);
 			context.AppendInstruction(AVR32.Mov, r10, Operand.CreateConstant(I, -(int)(stackSize >> 2)));
 			context.AppendInstruction(AVR32.Eor, r8, r8);
+
 			// TODO:
 			//context.AppendInstruction(Instruction.Rep);
 			//context.AppendInstruction(Instruction.Stosd);
@@ -443,8 +435,8 @@ namespace Mosa.Platform.AVR32
 			context.AppendInstruction(AVR32.Pop, r7);
 
 			// Save EDX for int32 return values (or do not save EDX for non-int64 return values)
-			if (methodCompiler.Method.Signature.ReturnType.Type != CilElementType.I8 &&
-				methodCompiler.Method.Signature.ReturnType.Type != CilElementType.U8)
+			if (methodCompiler.Method.ReturnType.Type != CilElementType.I8 &&
+				methodCompiler.Method.ReturnType.Type != CilElementType.U8)
 			{
 				// push edx
 				context.AppendInstruction(AVR32.Push, null, Operand.CreateCPURegister(I, GeneralPurposeRegister.R9));
@@ -465,8 +457,8 @@ namespace Mosa.Platform.AVR32
 			Operand r7 = Operand.CreateCPURegister(I, GeneralPurposeRegister.R7);
 
 			// Load EDX for int32 return values
-			if (methodCompiler.Method.Signature.ReturnType.Type != CilElementType.I8 &&
-				methodCompiler.Method.Signature.ReturnType.Type != CilElementType.U8)
+			if (methodCompiler.Method.ReturnType.Type != CilElementType.I8 &&
+				methodCompiler.Method.ReturnType.Type != CilElementType.U8)
 			{
 				// pop edx
 				context.SetInstruction(AVR32.Pop, r9);
@@ -475,11 +467,14 @@ namespace Mosa.Platform.AVR32
 
 			// pop ebx
 			context.SetInstruction(AVR32.Pop, r12);
+
 			// add esp, -localsSize
 			context.AppendInstruction(AVR32.Mov, r7, Operand.CreateConstant(I, -stackSize));
 			context.AppendInstruction(AVR32.Add, sp, r7);
+
 			// pop ebp
 			context.AppendInstruction(AVR32.Pop, r11);
+
 			// ret
 			context.AppendInstruction(AVR32.Ret);
 		}
@@ -542,10 +537,10 @@ namespace Mosa.Platform.AVR32
 			context.SetInstruction(AVR32.Ld, r8, destination);
 			context.AppendInstruction(AVR32.Ld, r9, value);
 
-			IntPtr offsetPtr = IntPtr.Zero;
+			long offsetPtr = 0;
 			if (offset.IsConstant)
 			{
-				offsetPtr = new IntPtr(Convert.ToInt64(offset.Value));
+				offsetPtr = (long)offset.ValueAsLongInteger;
 			}
 			else
 			{
@@ -553,7 +548,7 @@ namespace Mosa.Platform.AVR32
 				context.AppendInstruction(AVR32.Add, r8, r8);
 			}
 
-			context.AppendInstruction(AVR32.Ld, Operand.CreateMemoryAddress(value.Type, GeneralPurposeRegister.R8, offsetPtr), r9);
+			//context.AppendInstruction(AVR32.Ld, Operand.CreateMemoryAddress(value.Type, GeneralPurposeRegister.R8, offsetPtr), r9);
 		}
 
 		/// <summary>
@@ -746,23 +741,34 @@ namespace Mosa.Platform.AVR32
 		{
 		}
 
-		#endregion //  IIRVisitor
+		#endregion IIRVisitor
 
 		#region IIRVisitor - Unused
+
+		/// <summary>
+		/// Visitation function for InternalReturn.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IIRVisitor.InternalReturn(Context context)
+		{
+		}
 
 		/// <summary>
 		/// Visitation function for IntegerToFloatingPointConversion.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.IntegerToFloatConversion(Context context) { }
+		void IIRVisitor.IntegerToFloatConversion(Context context)
+		{
+		}
 
 		/// <summary>
 		/// Visitation function for Phi.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.Phi(Context context) { }
+		void IIRVisitor.Phi(Context context)
+		{
+		}
 
-		#endregion // IIRVisitor - Unused
-
+		#endregion IIRVisitor - Unused
 	}
 }

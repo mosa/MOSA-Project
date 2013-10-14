@@ -14,7 +14,7 @@ using Mosa.Platform.x86.Intrinsic;
 namespace Mosa.CoolWorld.x86.HAL
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public class HardwareAbstraction : IHardwareAbstraction
 	{
@@ -94,7 +94,5 @@ namespace Mosa.CoolWorld.x86.HAL
 		{
 			return Mosa.Kernel.x86.PageTable.GetPhysicalAddressFromVirtual(memory.Address);
 		}
-
 	}
 }
-

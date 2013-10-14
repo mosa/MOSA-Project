@@ -12,7 +12,7 @@ namespace System
 	/// <summary>
 	/// Supports all classes in the .NET Framework class hierarchy and provides low-level
 	/// services to derived classes. This is the ultimate base class of all classes
-	/// in the .NET Framework; it is the root of the type hierarchy. 
+	/// in the .NET Framework; it is the root of the type hierarchy.
 	/// </summary>
 	[Serializable]
 	public class Object
@@ -40,7 +40,7 @@ namespace System
 		/// </returns>
 		public virtual bool Equals(object obj)
 		{
-			return Object.ReferenceEquals(this, obj);
+			return this == obj;
 		}
 
 		/// <summary>
@@ -54,10 +54,12 @@ namespace System
 		/// </returns>
 		public static bool Equals(object objA, object objB)
 		{
-			if (objA == null && objB == null)
+			if (objA == objB)
 				return true;
-			if (ReferenceEquals(objA, objB))
-				return true;
+
+			if (objA == null || objB == null)
+				return false;
+
 			return objA.Equals(objB);
 		}
 
@@ -107,7 +109,7 @@ namespace System
 		/// </returns>
 		public static bool ReferenceEquals(object objA, object objB)
 		{
-			return false;
+			return (objA == objB);
 		}
 
 		/// <summary>

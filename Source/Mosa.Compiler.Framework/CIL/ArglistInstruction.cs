@@ -9,11 +9,10 @@
 
 using System;
 
-
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public sealed class ArglistInstruction : BaseCILInstruction
 	{
@@ -24,11 +23,11 @@ namespace Mosa.Compiler.Framework.CIL
 		/// </summary>
 		/// <param name="opcode">The opcode.</param>
 		public ArglistInstruction(OpCode opcode)
-			: base(opcode)
+			: base(opcode, 0)
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Methods
 
@@ -56,6 +55,5 @@ namespace Mosa.Compiler.Framework.CIL
 		}
 
 		#endregion Methods
-
 	}
 }

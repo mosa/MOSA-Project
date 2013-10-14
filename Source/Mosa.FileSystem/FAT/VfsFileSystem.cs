@@ -12,12 +12,12 @@ using Mosa.FileSystem.VFS;
 namespace Mosa.FileSystem.FAT
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public class VfsFileSystem : IFileSystemService, IFileSystem
 	{
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected FatFileSystem fat;
 
@@ -83,7 +83,7 @@ namespace Mosa.FileSystem.FAT
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private VfsDirectory root;
 
@@ -100,6 +100,5 @@ namespace Mosa.FileSystem.FAT
 				return root;
 			}
 		}
-
 	}
 }

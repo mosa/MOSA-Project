@@ -7,38 +7,36 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-
-
 namespace Mosa.Compiler.Metadata.Tables
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public struct ManifestResourceRow
 	{
 		#region Data members
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private uint _offset;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private ManifestResourceAttributes _flags;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private HeapIndexToken _nameStringIdx;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private Token _implementation;
 
-		#endregion // Data members
+		#endregion Data members
 
 		#region Construction
 
@@ -58,7 +56,7 @@ namespace Mosa.Compiler.Metadata.Tables
 			_implementation = implementation;
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Properties
 
@@ -98,6 +96,6 @@ namespace Mosa.Compiler.Metadata.Tables
 			get { return _implementation; }
 		}
 
-		#endregion // Properties
+		#endregion Properties
 	}
 }

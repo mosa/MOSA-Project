@@ -7,12 +7,10 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-
-
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public sealed class StargInstruction : StoreInstruction
 	{
@@ -27,7 +25,7 @@ namespace Mosa.Compiler.Framework.CIL
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Methods
 
@@ -52,7 +50,7 @@ namespace Mosa.Compiler.Framework.CIL
 
 			ushort argIdx;
 
-			// Opcode specific handling 
+			// Opcode specific handling
 			if (opcode == OpCode.Starg_s)
 			{
 				byte arg = decoder.DecodeByte();
@@ -82,6 +80,5 @@ namespace Mosa.Compiler.Framework.CIL
 		}
 
 		#endregion Methods
-
 	}
 }

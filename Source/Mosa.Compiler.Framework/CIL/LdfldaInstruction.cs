@@ -10,12 +10,12 @@
 using System.Diagnostics;
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Signatures;
-using Mosa.Compiler.TypeSystem.Generic;
+using Mosa.Compiler.TypeSystem.Cil;
 
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public sealed class LdfldaInstruction : UnaryInstruction
 	{
@@ -30,7 +30,7 @@ namespace Mosa.Compiler.Framework.CIL
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Methods
 
@@ -66,8 +66,8 @@ namespace Mosa.Compiler.Framework.CIL
 				Debug.Assert(!ctx.RuntimeField.ContainsGenericParameter);
 			}
 
-			SigType sigType = new RefSigType(ctx.RuntimeField.SignatureType);
-			ctx.Result = LoadInstruction.CreateResultOperand(decoder, Operand.StackTypeFromSigType(sigType), sigType);
+			SigType sigType = new RefSigType(ctx.RuntimeField.SigType);
+			ctx.Result = LoadInstruction.CreateResultOperand(decoder, sigType);
 		}
 
 		/// <summary>

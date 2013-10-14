@@ -7,65 +7,64 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-
 namespace Mosa.Compiler.Metadata.Signatures
 {
-    /// <summary>
-    /// Specifies a function pointer signature type.
-    /// </summary>
-    public sealed class FnptrSigType : SigType
-    {
-        #region Data members
+	/// <summary>
+	/// Specifies a function pointer signature type.
+	/// </summary>
+	public sealed class FnptrSigType : SigType
+	{
+		#region Data members
 
-        /// <summary>
-        /// The token type of a MethodDef, MethodRef or MethodSpec row, that holds the function signature.
-        /// </summary>
-        private HeapIndexToken _token;
+		/// <summary>
+		/// The token type of a MethodDef, MethodRef or MethodSpec row, that holds the function signature.
+		/// </summary>
+		private HeapIndexToken heapIndexToken;
 
-        #endregion // Data members
+		#endregion Data members
 
-        #region Construction
+		#region Construction
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="FnptrSigType"/> class.
-        /// </summary>
-        /// <param name="token">The token.</param>
-        public FnptrSigType(HeapIndexToken token) :
-            base(CilElementType.FunctionPtr)
-        {
-            _token = token;
-        }
+		/// <summary>
+		/// Initializes a new instance of the <see cref="FnptrSigType"/> class.
+		/// </summary>
+		/// <param name="token">The token.</param>
+		public FnptrSigType(HeapIndexToken token) :
+			base(CilElementType.FunctionPtr)
+		{
+			heapIndexToken = token;
+		}
 
-        #endregion // Construction
+		#endregion Construction
 
-        #region Properties
+		#region Properties
 
-        /// <summary>
-        /// Gets the method definition, reference or specification token.
-        /// </summary>
-        /// <value>The token.</value>
-        public HeapIndexToken Token { get { return _token; } }
+		/// <summary>
+		/// Gets the method definition, reference or specification token.
+		/// </summary>
+		/// <value>The token.</value>
+		public HeapIndexToken Token { get { return heapIndexToken; } }
 
-        #endregion // Properties
+		#endregion Properties
 
-        #region SigType Overrides
+		#region SigType Overrides
 
-        /// <summary>
-        /// Indicates whether the current object is equal to another object of the same type.
-        /// </summary>
-        /// <param name="other">An object to compare with this object.</param>
-        /// <returns>
-        /// true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.
-        /// </returns>
-        public override bool Equals(SigType other)
-        {
-            FnptrSigType fst = other as FnptrSigType;
-            if (null == fst)
-                return false;
+		/// <summary>
+		/// Indicates whether the current object is equal to another object of the same type.
+		/// </summary>
+		/// <param name="other">An object to compare with this object.</param>
+		/// <returns>
+		/// true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.
+		/// </returns>
+		public override bool Equals(SigType other)
+		{
+			FnptrSigType fst = other as FnptrSigType;
+			if (null == fst)
+				return false;
 
-            return (base.Equals(other) == true && _token == fst._token);
-        }
+			return (base.Equals(other) == true && heapIndexToken == fst.heapIndexToken);
+		}
 
-        #endregion // SigType Overrides
-    }
+		#endregion SigType Overrides
+	}
 }

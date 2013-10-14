@@ -13,7 +13,7 @@ using System.IO;
 namespace Mosa.Compiler.Pdb
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public struct PdbTypesHeader
 	{
@@ -35,7 +35,7 @@ namespace Mosa.Compiler.Pdb
 		private int unknown_offset;
 		private int unknown_len;
 
-		#endregion // Data Members
+		#endregion Data Members
 
 		#region Methods
 
@@ -69,6 +69,6 @@ namespace Mosa.Compiler.Pdb
 			return true;
 		}
 
-		#endregion // Methods
+		#endregion Methods
 	}
 }

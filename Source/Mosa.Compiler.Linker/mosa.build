@@ -15,24 +15,28 @@
 	    <csc target="library" output="${outputDirectory}/Mosa.Compiler.Linker.dll" debug="${debug}" unsafe="true" nostdlib="false">
 		<sources>
                     <include name="BaseLinker.cs"/>
-                    <include name="Elf32/Linker.cs"/>
+                    <include name="BuiltInPatch.cs"/>
+                    <include name="Patch.cs"/>
+                    <include name="ExtendedLinkerSection.cs"/>
+                    <include name="LinkerType.cs"/>
+                    <include name="Elf32/Elf32Linker.cs"/>
                     <include name="Elf32/BssSection.cs"/>
                     <include name="Elf32/CodeSection.cs"/>
                     <include name="Elf32/DataSection.cs"/>
                     <include name="Elf32/NullSection.cs"/>
                     <include name="Elf32/RoDataSection.cs"/>
-                    <include name="Elf32/Section.cs"/>
+                    <include name="Elf32/Elf32LinkerSection.cs"/>
                     <include name="Elf32/SectionAttribute.cs"/>
                     <include name="Elf32/SectionHeader.cs"/>
                     <include name="Elf32/SectionType.cs"/>
                     <include name="Elf32/StringTableSection.cs"/>
-                    <include name="Elf64/Linker.cs"/>
+                    <include name="Elf64/Elf64Linker.cs"/>
                     <include name="Elf64/BssSection.cs"/>
                     <include name="Elf64/CodeSection.cs"/>
                     <include name="Elf64/DataSection.cs"/>
                     <include name="Elf64/NullSection.cs"/>
                     <include name="Elf64/RoDataSection.cs"/>
-                    <include name="Elf64/Section.cs"/>
+                    <include name="Elf64/Elf64LinkerSection.cs"/>
                     <include name="Elf64/SectionAttribute.cs"/>
                     <include name="Elf64/SectionHeader.cs"/>
                     <include name="Elf64/SectionType.cs"/>
@@ -44,8 +48,8 @@
                     <include name="LinkerSymbol.cs"/>
                     <include name="LinkRequest.cs"/>
                     <include name="LinkType.cs"/>
-                    <include name="PE/Section.cs"/>
-                    <include name="PE/Linker.cs"/>
+                    <include name="PE/PELinkerSection.cs"/>
+                    <include name="PE/PELinker.cs"/>
                     <include name="SectionKind.cs"/>
 		</sources>
 		<references>

@@ -15,9 +15,8 @@ namespace Mosa.Compiler.Framework.Stages
 	/// <summary>
 	/// The Simple Trace Block Order Stage reorders Blocks to optimize loops and reduce the distance of jumps and branches.
 	/// </summary>
-	public class SimpleTraceBlockOrderStage : BaseMethodCompilerStage, IMethodCompilerStage, IPipelineStage, IBlockOrderStage
+	public class SimpleTraceBlockOrderStage : BaseMethodCompilerStage, IMethodCompilerStage, IPipelineStage
 	{
-
 		/// <summary>
 		/// Runs the specified compiler.
 		/// </summary>
@@ -58,7 +57,5 @@ namespace Mosa.Compiler.Framework.Stages
 
 			basicBlocks.ReorderBlocks(ordered);
 		}
-
-
 	}
 }

@@ -29,7 +29,7 @@ namespace Mosa.Compiler.Pdb
 		/// </summary>
 		private readonly CvEntryType type;
 
-		#endregion // Data Members
+		#endregion Data Members
 
 		#region Construction
 
@@ -44,7 +44,7 @@ namespace Mosa.Compiler.Pdb
 			this.type = type;
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Properties
 
@@ -66,7 +66,7 @@ namespace Mosa.Compiler.Pdb
 			get { return this.type; }
 		}
 
-		#endregion // Properties
+		#endregion Properties
 
 		#region Methods
 
@@ -109,6 +109,6 @@ namespace Mosa.Compiler.Pdb
 			return String.Format("Unknown Symbol ({0:x})", this.type);
 		}
 
-		#endregion // Methods
+		#endregion Methods
 	}
 }

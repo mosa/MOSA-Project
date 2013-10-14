@@ -10,7 +10,7 @@
 namespace Mosa.DeviceSystem
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public interface IFrameBuffer
 	{
@@ -44,5 +44,4 @@ namespace Mosa.DeviceSystem
 
 		//TODO: Add more methods
 	}
-
 }

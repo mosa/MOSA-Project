@@ -38,6 +38,5 @@ namespace Mosa.Kernel.x86
 			for (uint at = start; at < (start + bytes); at = at + 4)
 				Native.Set32(at, 0);
 		}
-
 	}
 }

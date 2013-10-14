@@ -7,7 +7,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-
 namespace System.Collections.Generic
 {
 	/// <summary>
@@ -54,12 +53,12 @@ namespace System.Collections.Generic
 		bool Contains(T item);
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		void CopyTo(T[] array, int arrayIndex);
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		bool Remove(T item);
 	}

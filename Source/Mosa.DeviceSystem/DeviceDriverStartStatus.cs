@@ -10,7 +10,7 @@
 namespace Mosa.DeviceSystem
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public enum DeviceDriverStartStatus
 	{
@@ -18,18 +18,20 @@ namespace Mosa.DeviceSystem
 		/// Started
 		/// </summary>
 		Started,
+
 		/// <summary>
 		/// Not Found
 		/// </summary>
 		NotFound,
+
 		/// <summary>
 		/// Resource Conflict
 		/// </summary>
 		ResourceConflict,
+
 		/// <summary>
 		/// Failed
 		/// </summary>
 		Failed
 	}
-
 }

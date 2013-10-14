@@ -10,17 +10,17 @@
 namespace Mosa.EmulatedKernel
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public class PCIDevice
 	{
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected byte[] config;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected uint[] barMasks;
 

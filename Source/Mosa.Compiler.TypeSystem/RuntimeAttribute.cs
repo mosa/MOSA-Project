@@ -7,7 +7,6 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-
 using Mosa.Compiler.Metadata;
 
 namespace Mosa.Compiler.TypeSystem
@@ -44,7 +43,7 @@ namespace Mosa.Compiler.TypeSystem
 		/// </summary>
 		private byte[] blob;
 
-		#endregion // Data members
+		#endregion Data members
 
 		#region Construction
 
@@ -63,11 +62,11 @@ namespace Mosa.Compiler.TypeSystem
 			this.blobIndex = blobIndex;
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Methods
 
-		#endregion // Methods
+		#endregion Methods
 
 		#region Properties
 
@@ -115,7 +114,6 @@ namespace Mosa.Compiler.TypeSystem
 			}
 		}
 
-		#endregion // Properties
-
+		#endregion Properties
 	}
 }

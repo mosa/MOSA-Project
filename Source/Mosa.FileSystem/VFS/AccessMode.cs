@@ -16,7 +16,6 @@ namespace Mosa.FileSystem.VFS
 	[System.Flags]
 	public enum AccessMode
 	{
-
 		/// <summary>
 		/// Check if the caller has the right to traverse the resource.
 		/// </summary>

@@ -7,20 +7,18 @@
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  */
 
-using System;
-
 namespace Mosa.Compiler.Linker.Elf32
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
-	public class DataSection : Section
+	public class DataSection : Elf32LinkerSection
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="DataSection"/> class.
 		/// </summary>
 		public DataSection()
-			: base(SectionKind.Data, @".data", IntPtr.Zero)
+			: base(SectionKind.Data, @".data", 0)
 		{
 			header.Type = SectionType.ProgBits;
 			header.Flags = SectionAttribute.Alloc | SectionAttribute.Write;

@@ -9,7 +9,7 @@
 
 namespace Pictor.VertexSource
 {
-	class point_d_vector : VectorPOD<PointD>, IVertexDest
+	internal class point_d_vector : VectorPOD<PointD>, IVertexDest
 	{
 		public override void RemoveLast()
 		{
@@ -26,23 +26,24 @@ namespace Pictor.VertexSource
 			base.RemoveAll();
 		}
 	};
+
 	//============================================================VcGenStroke
-	class VcGenStroke : IGenerator
+	internal class VcGenStroke : IGenerator
 	{
-		MathStroke m_stroker;
+		private MathStroke m_stroker;
 
-		vertex_sequence m_src_vertices;
-		point_d_vector m_out_vertices;
+		private vertex_sequence m_src_vertices;
+		private point_d_vector m_out_vertices;
 
-		double m_shorten;
-		uint m_closed;
-		status_e m_status;
-		status_e m_prev_status;
+		private double m_shorten;
+		private uint m_closed;
+		private status_e m_status;
+		private status_e m_prev_status;
 
-		uint m_src_vertex;
-		uint m_out_vertex;
+		private uint m_src_vertex;
+		private uint m_out_vertex;
 
-		enum status_e
+		private enum status_e
 		{
 			initial,
 			ready,
@@ -65,27 +66,90 @@ namespace Pictor.VertexSource
 			m_status = status_e.initial;
 		}
 
-		public void LineCap(MathStroke.ELineCap lc) { m_stroker.LineCap(lc); }
-		public void LineJoin(MathStroke.ELineJoin lj) { m_stroker.LineJoin(lj); }
-		public void InnerJoin(MathStroke.EInnerJoin ij) { m_stroker.InnerJoin(ij); }
+		public void LineCap(MathStroke.ELineCap lc)
+		{
+			m_stroker.LineCap(lc);
+		}
 
-		public MathStroke.ELineCap LineCap() { return m_stroker.LineCap(); }
-		public MathStroke.ELineJoin LineJoin() { return m_stroker.LineJoin(); }
-		public MathStroke.EInnerJoin InnerJoin() { return m_stroker.InnerJoin(); }
+		public void LineJoin(MathStroke.ELineJoin lj)
+		{
+			m_stroker.LineJoin(lj);
+		}
 
-		public void Width(double w) { m_stroker.Width = w; }
-		public void MiterLimit(double ml) { m_stroker.MiterLimit = ml; }
-		public void MiterLimitTheta(double t) { m_stroker.MiterLimitTheta = t; }
-		public void InnerMiterLimit(double ml) { m_stroker.InnerMiterLimit = ml; }
-		public void ApproximationScale(double approx_scale) { m_stroker.ApproximationScale = approx_scale; }
+		public void InnerJoin(MathStroke.EInnerJoin ij)
+		{
+			m_stroker.InnerJoin(ij);
+		}
 
-		public double Width() { return m_stroker.Width; }
-		public double MiterLimit() { return m_stroker.MiterLimit; }
-		public double InnerMiterLimit() { return m_stroker.InnerMiterLimit; }
-		public double ApproximationScale() { return m_stroker.ApproximationScale; }
+		public MathStroke.ELineCap LineCap()
+		{
+			return m_stroker.LineCap();
+		}
 
-		public void Shorten(double s) { m_shorten = s; }
-		public double Shorten() { return m_shorten; }
+		public MathStroke.ELineJoin LineJoin()
+		{
+			return m_stroker.LineJoin();
+		}
+
+		public MathStroke.EInnerJoin InnerJoin()
+		{
+			return m_stroker.InnerJoin();
+		}
+
+		public void Width(double w)
+		{
+			m_stroker.Width = w;
+		}
+
+		public void MiterLimit(double ml)
+		{
+			m_stroker.MiterLimit = ml;
+		}
+
+		public void MiterLimitTheta(double t)
+		{
+			m_stroker.MiterLimitTheta = t;
+		}
+
+		public void InnerMiterLimit(double ml)
+		{
+			m_stroker.InnerMiterLimit = ml;
+		}
+
+		public void ApproximationScale(double approx_scale)
+		{
+			m_stroker.ApproximationScale = approx_scale;
+		}
+
+		public double Width()
+		{
+			return m_stroker.Width;
+		}
+
+		public double MiterLimit()
+		{
+			return m_stroker.MiterLimit;
+		}
+
+		public double InnerMiterLimit()
+		{
+			return m_stroker.InnerMiterLimit;
+		}
+
+		public double ApproximationScale()
+		{
+			return m_stroker.ApproximationScale;
+		}
+
+		public void Shorten(double s)
+		{
+			m_shorten = s;
+		}
+
+		public double Shorten()
+		{
+			return m_shorten;
+		}
 
 		// Vertex Generator Interface
 		public void RemoveAll()
@@ -94,6 +158,7 @@ namespace Pictor.VertexSource
 			m_closed = 0;
 			m_status = status_e.initial;
 		}
+
 		public void AddVertex(double x, double y, uint cmd)
 		{
 			m_status = status_e.initial;

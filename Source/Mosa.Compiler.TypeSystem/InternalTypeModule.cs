@@ -7,12 +7,11 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System.Collections.Generic;
-using System.Diagnostics;
-
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Loader;
-using Mosa.Compiler.TypeSystem.Generic;
+using Mosa.Compiler.TypeSystem.Cil;
+using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Mosa.Compiler.TypeSystem
 {
@@ -26,21 +25,21 @@ namespace Mosa.Compiler.TypeSystem
 		private readonly ITypeSystem typeSystem;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private readonly List<RuntimeType> types;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private readonly List<RuntimeMethod> methods;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private readonly HashSet<string> typeNames;
 
-		#endregion // Data members
+		#endregion Data members
 
 		#region Construction
 
@@ -58,7 +57,7 @@ namespace Mosa.Compiler.TypeSystem
 			this.typeNames = new HashSet<string>();
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region ITypeModule interface
 
@@ -145,9 +144,9 @@ namespace Mosa.Compiler.TypeSystem
 		/// <returns></returns>
 		RuntimeMethod ITypeModule.GetMethod(Token token)
 		{
-			foreach (var method in methods)
-				if (method.Token == token)
-					return method;
+			//foreach (var method in methods)
+			//	if (method.Token == token)
+			//		return method;
 			return null;
 		}
 
@@ -188,7 +187,7 @@ namespace Mosa.Compiler.TypeSystem
 			return null;
 		}
 
-		#endregion
+		#endregion ITypeModule interface
 
 		/// <summary>
 		/// Adds the type.

@@ -11,8 +11,8 @@ namespace Pictor.Transform
 {
 	public sealed class Bilinear : ITransform
 	{
-		readonly double[,] _matrix = new double[4, 2];
-		bool _valid;
+		private readonly double[,] _matrix = new double[4, 2];
+		private bool _valid;
 
 		public Bilinear()
 		{
@@ -40,15 +40,13 @@ namespace Pictor.Transform
 			rect_to_quad(x1, y1, x2, y2, quad);
 		}
 
-
 		//--------------------------------------------------------------------
-		// Reverse transformations 
+		// Reverse transformations
 		public Bilinear(double[] quad,
 					   double x1, double y1, double x2, double y2)
 		{
 			quad_to_rect(quad, x1, y1, x2, y2);
 		}
-
 
 		//--------------------------------------------------------------------
 		// Set the transformations using two arbitrary quadrangles.
@@ -73,7 +71,6 @@ namespace Pictor.Transform
 			_valid = EquationSimulator.Solve(left, right, _matrix);
 		}
 
-
 		//--------------------------------------------------------------------
 		// Set the direct transformations, i.e., rectangle -> quadrangle
 		public void rect_to_quad(double x1, double y1, double x2, double y2,
@@ -86,7 +83,6 @@ namespace Pictor.Transform
 			src[5] = src[7] = y2;
 			quad_to_quad(src, quad);
 		}
-
 
 		//--------------------------------------------------------------------
 		// Set the reverse transformations, i.e., quadrangle -> rectangle
@@ -103,7 +99,10 @@ namespace Pictor.Transform
 
 		//--------------------------------------------------------------------
 		// Check if the equations were solved successfully
-		public bool is_valid() { return _valid; }
+		public bool is_valid()
+		{
+			return _valid;
+		}
 
 		//--------------------------------------------------------------------
 		// Transform a point (x, y)
@@ -116,17 +115,19 @@ namespace Pictor.Transform
 			y = _matrix[0, 1] + _matrix[1, 1] * xy + _matrix[2, 1] * tx + _matrix[3, 1] * ty;
 		}
 
-
 		//--------------------------------------------------------------------
 		public sealed class iterator_x
 		{
-			double inc_x;
-			double inc_y;
+			private double inc_x;
+			private double inc_y;
 
 			public double x;
 			public double y;
 
-			public iterator_x() { }
+			public iterator_x()
+			{
+			}
+
 			public iterator_x(double tx, double ty, double step, double[,] m)
 			{
 				inc_x = (m[1, 0] * step * ty + m[2, 0] * step);

@@ -15,7 +15,6 @@ namespace Mosa.FileSystem.VFS
 	/// </summary>
 	public enum VfsNodeType
 	{
-
 		/// <summary>
 		/// An unknown node type.
 		/// </summary>

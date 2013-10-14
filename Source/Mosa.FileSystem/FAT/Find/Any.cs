@@ -12,19 +12,21 @@ using Mosa.ClassLib;
 namespace Mosa.FileSystem.FAT.Find
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public class Any : FatFileSystem.ICompare
 	{
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected uint cluster;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
-		public Any() { }
+		public Any()
+		{
+		}
 
 		/// <summary>
 		/// Compares the specified data.
@@ -51,5 +53,4 @@ namespace Mosa.FileSystem.FAT.Find
 			return true;
 		}
 	}
-
 }

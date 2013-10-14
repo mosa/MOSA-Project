@@ -143,7 +143,7 @@ namespace Pictor
 		public static bool IntersectionExists(double x1, double y1, double x2, double y2,
 											double x3, double y3, double x4, double y4)
 		{
-			// It's less expensive but you can't control the 
+			// It's less expensive but you can't control the
 			// boundary conditions: Less or LessEqual
 			double dx1 = x2 - x1;
 			double dy1 = y2 - y1;
@@ -154,7 +154,7 @@ namespace Pictor
 				   ((x1 - x4) * dy2 - (y1 - y4) * dx2 < 0.0) !=
 				   ((x2 - x4) * dy2 - (y2 - y4) * dx2 < 0.0);
 
-			// It's is more expensive but more flexible 
+			// It's is more expensive but more flexible
 			// in terms of boundary conditions.
 			//--------------------
 			//double den  = (x2-x1) * (y4-y3) - (y2-y1) * (x4-x3);
@@ -220,6 +220,7 @@ namespace Pictor
 		}
 
 		/*
+
 		//-------------------------------------------------------calc_polygon_area
 		public static double calc_polygon_area(IVertexSource st)
 		{
@@ -337,15 +338,15 @@ namespace Pictor
 		//Fast integer Sqrt - really fast: no cycles, divisions or multiplications
 		public static uint FastSqrt(uint val)
 		{
-			//This code is actually pure C and portable to most 
-			//architectures including 64bit ones. 
+			//This code is actually pure C and portable to most
+			//architectures including 64bit ones.
 			uint t = val;
 			int bit = 0;
 			uint shift = 11;
 
 			//The following piece of code is just an emulation of the
 			//Ix86 assembler command "bsr" (see above). However on old
-			//Intels (like Intel MMX 233MHz) this code is about twice 
+			//Intels (like Intel MMX 233MHz) this code is about twice
 			//as fast as just one "bsr". On PIII and PIV the
 			//bsr is optimized quite well.
 			bit = (int)t >> 24;
@@ -421,6 +422,7 @@ namespace Pictor
 				return 1;
 			}
 			double b1 = 0; // b1 is the Value from the previous iteration
+
 			// Set up a starting order for recurrence
 			int m1 = (int)Math.Abs(x) + 6;
 			if (Math.Abs(x) > 5)

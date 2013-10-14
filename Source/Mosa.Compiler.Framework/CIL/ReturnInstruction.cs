@@ -14,11 +14,10 @@ using Mosa.Compiler.Metadata;
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public sealed class ReturnInstruction : UnaryInstruction, IBranchInstruction
 	{
-
 		#region Construction
 
 		/// <summary>
@@ -30,7 +29,7 @@ namespace Mosa.Compiler.Framework.CIL
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Properties
 
@@ -45,7 +44,7 @@ namespace Mosa.Compiler.Framework.CIL
 		/// </remarks>
 		public override FlowControl FlowControl { get { return FlowControl.Return; } }
 
-		#endregion // Properties
+		#endregion Properties
 
 		#region Methods
 
@@ -62,7 +61,7 @@ namespace Mosa.Compiler.Framework.CIL
 			if (OpCode.Ret != opcode)
 				throw new ArgumentException(@"Invalid opcode.", @"code");
 
-			if (decoder.Method.Signature.ReturnType.Type == CilElementType.Void)
+			if (decoder.Method.ReturnType.Type == CilElementType.Void)
 				ctx.OperandCount = 0;
 			else
 				ctx.OperandCount = 1;
@@ -87,6 +86,5 @@ namespace Mosa.Compiler.Framework.CIL
 		/// </summary>
 		/// <value></value>
 		public bool IsConditional { get { return false; } }
-
 	}
 }

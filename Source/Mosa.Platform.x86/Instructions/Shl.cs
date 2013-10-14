@@ -5,45 +5,52 @@
  *
  * Authors:
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Metadata.Signatures;
+using System;
 
 namespace Mosa.Platform.x86.Instructions
 {
 	/// <summary>
 	/// Representations the x86 shift left instruction.
 	/// </summary>
-	public sealed class Shl : TwoOperandInstruction
+	public sealed class Shl : X86Instruction
 	{
-
 		#region Data Members
 
-		private static readonly OpCode R_C = new OpCode(new byte[] { 0xC1 }, 4);
-		private static readonly OpCode M_C = new OpCode(new byte[] { 0xC1 }, 4);
-		private static readonly OpCode R = new OpCode(new byte[] { 0xD3 }, 4);
-		private static readonly OpCode M = new OpCode(new byte[] { 0xD3 }, 4);
+		private static readonly OpCode C = new OpCode(new byte[] { 0xC1 }, 4);
+		private static readonly OpCode C1 = new OpCode(new byte[] { 0xD1 }, 4);
+		private static readonly OpCode RM = new OpCode(new byte[] { 0xD3 }, 4);
 
-		#endregion
+		#endregion Data Members
+
+		#region Construction
+
+		/// <summary>
+		/// Initializes a new instance of <see cref="Shl"/>.
+		/// </summary>
+		public Shl() :
+			base(1, 2)
+		{
+		}
+
+		#endregion Construction
 
 		#region Methods
+
 		/// <summary>
-		/// 
+		/// Computes the opcode.
 		/// </summary>
-		/// <param name="destination"></param>
-		/// <param name="source"></param>
-		/// <param name="third"></param>
+		/// <param name="destination">The destination operand.</param>
+		/// <param name="source">The source operand.</param>
+		/// <param name="third">The third operand.</param>
 		/// <returns></returns>
+		/// <exception cref="System.ArgumentException"></exception>
 		protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
 		{
-			if (destination.IsRegister && source.IsConstant) return R_C;
-			if (destination.IsMemoryAddress && source.IsConstant) return M_C;
-			if (destination.IsRegister) return R;
-			if (destination.IsMemoryAddress) return M;
-
-			throw new ArgumentException(@"No opcode for operand type.");
+			throw new NotSupportedException();
 		}
 
 		/// <summary>
@@ -53,15 +60,21 @@ namespace Mosa.Platform.x86.Instructions
 		/// <param name="emitter">The emitter.</param>
 		protected override void Emit(Context context, MachineCodeEmitter emitter)
 		{
-			OpCode opCode = ComputeOpCode(context.Result, context.Operand1, context.Operand2);
-			if (context.Operand1.IsConstant)
+			if (context.Operand2.IsConstant)
 			{
-				// FIXME: Conversion not necessary if constant already byte.
-				Operand op = Operand.CreateConstant(BuiltInSigType.Byte, context.Operand1.Value);
-				emitter.Emit(opCode, context.Result, op);
+				if (context.Operand2.ValueAsLongInteger == 1)
+				{
+					emitter.Emit(C1, context.Result, null);
+				}
+				else
+				{
+					emitter.Emit(C, context.Result, context.Operand2);
+				}
 			}
 			else
-				emitter.Emit(opCode, context.Operand1, null);
+			{
+				emitter.Emit(RM, context.Operand1, null);
+			}
 		}
 
 		/// <summary>
@@ -74,6 +87,6 @@ namespace Mosa.Platform.x86.Instructions
 			visitor.Shl(context);
 		}
 
-		#endregion // Methods
+		#endregion Methods
 	}
 }

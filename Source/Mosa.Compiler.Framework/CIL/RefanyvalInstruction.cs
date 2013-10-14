@@ -14,7 +14,7 @@ using Mosa.Compiler.Metadata;
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public sealed class RefanyvalInstruction : UnaryInstruction
 	{
@@ -29,7 +29,7 @@ namespace Mosa.Compiler.Framework.CIL
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Methods
 
@@ -55,9 +55,9 @@ namespace Mosa.Compiler.Framework.CIL
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		/// <param name="compiler">The compiler.</param>
-		public override void Validate(Context ctx, BaseMethodCompiler compiler)
+		public override void Resolve(Context ctx, BaseMethodCompiler compiler)
 		{
-			base.Validate(ctx, compiler);
+			base.Resolve(ctx, compiler);
 
 			// Make sure the base is a typed reference
 			throw new NotImplementedException();

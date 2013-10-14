@@ -5,6 +5,7 @@
  *
  * Authors:
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 using Mosa.Compiler.Framework;
@@ -14,29 +15,27 @@ namespace Mosa.Platform.x86.Instructions
 	/// <summary>
 	/// Representations the x86 compare-exchange instruction.
 	/// </summary>
-	/// <remarks>
-	/// This instruction compares the value of Operand0 and Operand1. If they are
-	/// equal, Operand0 is set to the value of Operand2.
-	/// </remarks>
-	public sealed class CmpXchg : ThreeOperandInstruction
+	public sealed class CmpXchg : X86Instruction
 	{
 		#region Data Member
 
 		private static readonly OpCode RM_R = new OpCode(new byte[] { 0x0F, 0xB1 });
 
-		#endregion //Data Member
+		#endregion Data Member
+
+		#region Construction
+
+		/// <summary>
+		/// Initializes a new instance of <see cref="CmpXchg"/>.
+		/// </summary>
+		public CmpXchg() :
+			base(2, 3)
+		{
+		}
+
+		#endregion Construction
 
 		#region Methods
-
-		/// <summary>
-		/// Gets the additional output registers.
-		/// </summary>
-		public override RegisterBitmap AdditionalOutputRegisters { get { return new RegisterBitmap(GeneralPurposeRegister.EAX); } }
-
-		/// <summary>
-		/// Gets the additional input registers.
-		/// </summary>
-		public override RegisterBitmap AdditionalInputRegisters { get { return new RegisterBitmap(GeneralPurposeRegister.EAX); } }
 
 		/// <summary>
 		/// Computes the opcode.
@@ -60,6 +59,6 @@ namespace Mosa.Platform.x86.Instructions
 			visitor.CmpXchg(context);
 		}
 
-		#endregion // Methods
+		#endregion Methods
 	}
 }

@@ -16,7 +16,6 @@ namespace Mosa.Kernel.x86
 	/// </summary>
 	public static class DebugClient
 	{
-
 		#region Codes
 
 		public static class Codes
@@ -39,7 +38,7 @@ namespace Mosa.Kernel.x86
 			public const int Scattered32BitReadMemory = 1013;
 		}
 
-		#endregion // Codes
+		#endregion Codes
 
 		private static ushort com = Serial.COM1;
 
@@ -144,8 +143,6 @@ namespace Mosa.Kernel.x86
 				Native.Set8(_buffer + _index, b);
 				_index++;
 
-				//SendNumber((int)_index);
-
 				if (_index == 1 && Native.Get8(_buffer) != (byte)'M')
 					BadDataAbort();
 				else if (_index == 2 && Native.Get8(_buffer + 1) != (byte)'O')
@@ -172,7 +169,6 @@ namespace Mosa.Kernel.x86
 
 					BadDataAbort();
 				}
-
 			}
 		}
 
@@ -193,7 +189,6 @@ namespace Mosa.Kernel.x86
 				case Codes.Scattered32BitReadMemory: Scattered32BitReadMemory(); return;
 				default: return;
 			}
-
 		}
 
 		private static void ReadMemory()
@@ -224,7 +219,6 @@ namespace Mosa.Kernel.x86
 				SendInteger(address);
 				SendInteger(Native.Get32(address));
 			}
-
 		}
 	}
 }

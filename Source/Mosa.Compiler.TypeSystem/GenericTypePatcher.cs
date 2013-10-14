@@ -5,6 +5,7 @@
  *
  * Authors:
  *  Simon Wollwage (rootnode) <rootnode@mosa-project.org>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 using System;
@@ -12,7 +13,7 @@ using System.Collections.Generic;
 
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Signatures;
-using Mosa.Compiler.TypeSystem.Generic;
+using Mosa.Compiler.TypeSystem.Cil;
 
 namespace Mosa.Compiler.TypeSystem
 {
@@ -21,21 +22,22 @@ namespace Mosa.Compiler.TypeSystem
 	/// E.g. an instantiation of Foo&lt;T&gt; with "int" for T will replace all occurrences of T
 	/// inside Foo&lt;T&gt; with "int" in each member and each method's instruction stream.
 	/// </summary>
-	public sealed class GenericTypePatcher : IGenericTypePatcher
+	public sealed class GenericTypePatcher
 	{
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private uint typeTokenCounter = 0;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private uint signatureTokenCounter = 0;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private ITypeSystem typeSystem;
-
 
 		private struct GenericEntry
 		{
@@ -52,7 +54,7 @@ namespace Mosa.Compiler.TypeSystem
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private List<GenericEntry> patchedTypes = new List<GenericEntry>();
 
@@ -109,12 +111,11 @@ namespace Mosa.Compiler.TypeSystem
 		private void AddPatchedType(CilGenericType openType, SigType[] signature, CilGenericType patchedType)
 		{
 			(typeSystem.InternalTypeModule as InternalTypeModule).AddType(patchedType);
-			
+
 			GenericEntry genericEntry = new GenericEntry(openType, signature, patchedType);
 
 			patchedTypes.Add(genericEntry);
 		}
-
 
 		/// <summary>
 		/// Patches the type.
@@ -123,7 +124,7 @@ namespace Mosa.Compiler.TypeSystem
 		/// <param name="enclosingType">Type of the enclosing.</param>
 		/// <param name="openType">Type of the open.</param>
 		/// <returns></returns>
-		RuntimeType IGenericTypePatcher.PatchType(ITypeModule typeModule, CilGenericType enclosingType, CilGenericType openType)
+		public RuntimeType PatchType(ITypeModule typeModule, CilGenericType enclosingType, CilGenericType openType)
 		{
 			var genericArguments = CloseGenericArguments(enclosingType, openType);
 
@@ -135,7 +136,9 @@ namespace Mosa.Compiler.TypeSystem
 				var sigtype = new TypeSigType(signatureToken, CilElementType.Var);
 				var signature = new GenericInstSigType(sigtype, genericArguments);
 
-				patchedType = new CilGenericType(enclosingType.InstantiationModule, typeToken, openType.BaseGenericType, signature);
+				string name = CilGenericType.GetGenericTypeName(enclosingType.InstantiationModule, openType.BaseGenericType as CilRuntimeType, signature.GenericArguments);
+
+				patchedType = new CilGenericType(enclosingType.InstantiationModule, typeToken, name, openType.BaseGenericType, signature.GenericArguments);
 				AddPatchedType(openType, genericArguments, patchedType);
 			}
 
@@ -149,7 +152,7 @@ namespace Mosa.Compiler.TypeSystem
 		/// <param name="enclosingType">Type of the enclosing.</param>
 		/// <param name="openMethod">The open method.</param>
 		/// <returns></returns>
-		RuntimeMethod IGenericTypePatcher.PatchMethod(ITypeModule typeModule, CilGenericType enclosingType, RuntimeMethod openMethod)
+		public RuntimeMethod PatchMethod(ITypeModule typeModule, CilGenericType enclosingType, RuntimeMethod openMethod)
 		{
 			var openType = openMethod.DeclaringType as CilGenericType;
 			var genericArguments = CloseGenericArguments(enclosingType, openType);
@@ -162,7 +165,9 @@ namespace Mosa.Compiler.TypeSystem
 				var sigtype = new TypeSigType(signatureToken, CilElementType.Var);
 				var signature = new GenericInstSigType(sigtype, genericArguments);
 
-				patchedType = new CilGenericType(enclosingType.InstantiationModule, typeToken, openType.BaseGenericType, signature);
+				string name = CilGenericType.GetGenericTypeName(enclosingType.InstantiationModule, openType.BaseGenericType as CilRuntimeType, signature.GenericArguments);
+
+				patchedType = new CilGenericType(enclosingType.InstantiationModule, typeToken, name, openType.BaseGenericType, signature.GenericArguments);
 				AddPatchedType(openType, genericArguments, patchedType);
 			}
 
@@ -177,7 +182,7 @@ namespace Mosa.Compiler.TypeSystem
 		/// <param name="enclosingType">Type of the closed.</param>
 		/// <param name="openField">The open field.</param>
 		/// <returns></returns>
-		RuntimeField IGenericTypePatcher.PatchField(ITypeModule typeModule, CilGenericType enclosingType, RuntimeField openField)
+		public RuntimeField PatchField(ITypeModule typeModule, CilGenericType enclosingType, RuntimeField openField)
 		{
 			var openType = openField.DeclaringType as CilGenericType;
 			var genericArguments = CloseGenericArguments(enclosingType, openType);
@@ -190,8 +195,10 @@ namespace Mosa.Compiler.TypeSystem
 				var sigtype = new TypeSigType(signatureToken, CilElementType.Var);
 				var signature = new GenericInstSigType(sigtype, genericArguments);
 
-				patchedType = new CilGenericType(enclosingType.InstantiationModule, typeToken, openType.BaseGenericType, signature);
-				
+				string name = CilGenericType.GetGenericTypeName(enclosingType.InstantiationModule, openType.BaseGenericType as CilRuntimeType, signature.GenericArguments);
+
+				patchedType = new CilGenericType(enclosingType.InstantiationModule, typeToken, name, openType.BaseGenericType, signature.GenericArguments);
+
 				AddPatchedType(openType, genericArguments, patchedType);
 			}
 
@@ -212,7 +219,7 @@ namespace Mosa.Compiler.TypeSystem
 		/// <param name="typemodule"></param>
 		/// <param name="token">The token.</param>
 		/// <returns></returns>
-		SigType IGenericTypePatcher.PatchSignatureType(ITypeModule typemodule, RuntimeType enclosingType, Token token)
+		public SigType PatchSignatureType(ITypeModule typemodule, RuntimeType enclosingType, Token token)
 		{
 			if (typemodule.MetadataModule == null)
 				return new ClassSigType(token);
@@ -272,7 +279,7 @@ namespace Mosa.Compiler.TypeSystem
 		/// <param name="enclosingType">Type of the enclosing.</param>
 		/// <param name="openType">Type of the open.</param>
 		/// <returns></returns>
-		private SigType[] CloseGenericArguments(SigType[] enclosingType, SigType[] openType)
+		public SigType[] CloseGenericArguments(SigType[] enclosingType, SigType[] openType)
 		{
 			var result = new SigType[openType.Length];
 
@@ -288,17 +295,6 @@ namespace Mosa.Compiler.TypeSystem
 		}
 
 		/// <summary>
-		/// Closes the generic arguments.
-		/// </summary>
-		/// <param name="enclosingType">Type of the enclosing.</param>
-		/// <param name="openType">Type of the open.</param>
-		/// <returns></returns>
-		SigType[] IGenericTypePatcher.CloseGenericArguments(SigType[] enclosingType, SigType[] openType)
-		{
-			return CloseGenericArguments(enclosingType, openType);
-		}
-
-		/// <summary>
 		/// Gets the index of the method.
 		/// </summary>
 		/// <param name="method">The method.</param>
@@ -309,7 +305,7 @@ namespace Mosa.Compiler.TypeSystem
 
 			for (int i = 0; i < openType.Methods.Count; ++i)
 			{
-				if (method.Name == openType.Methods[i].Name && method.Signature.Matches(openType.Methods[i].Signature))
+				if (method.Name == openType.Methods[i].Name && method.Matches(openType.Methods[i]))
 				{
 					return i;
 				}

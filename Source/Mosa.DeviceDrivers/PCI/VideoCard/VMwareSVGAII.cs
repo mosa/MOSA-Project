@@ -11,7 +11,7 @@ using Mosa.DeviceSystem;
 
 /*
  * Portions of this code is:
- * 
+ *
  * Copyright 1998-2001, VMware, Inc.
  * Distributed under the terms of the MIT License.
  *
@@ -110,109 +110,134 @@ namespace Mosa.DeviceDrivers.PCI.VideoCard
 			internal const uint DEFINE_ALPHA_CURSOR = 22;
 		}
 
-		#endregion
+		#endregion Definitions
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IReadWriteIOPort indexPort;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IReadWriteIOPort valuePort;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IMemory memory;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IMemory fifo;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IFrameBuffer frameBuffer;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected SpinLock spinLock;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected ushort width;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected ushort height;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected uint version;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected uint offset;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected uint videoRamSize;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected uint maxWidth;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected uint maxHeight;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected uint bitsPerPixel;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected uint bytesPerLine;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected uint redMask;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected uint greenMask;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected uint blueMask;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected uint alphaMask;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected byte redMaskShift;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected byte greenMaskShift;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected byte blueMaskShift;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected byte alphaMaskShift;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected uint capabilities;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="VMwareSVGAII"/> class.
 		/// </summary>
-		public VMwareSVGAII() { }
+		public VMwareSVGAII()
+		{
+		}
 
 		/// <summary>
 		/// Setups this hardware device driver
@@ -264,7 +289,10 @@ namespace Mosa.DeviceDrivers.PCI.VideoCard
 		/// Called when an interrupt is received.
 		/// </summary>
 		/// <returns></returns>
-		public override bool OnInterrupt() { return false; }
+		public override bool OnInterrupt()
+		{
+			return false;
+		}
 
 		/// <summary>
 		/// Sends the command.

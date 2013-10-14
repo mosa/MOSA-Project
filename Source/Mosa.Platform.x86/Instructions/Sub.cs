@@ -5,10 +5,11 @@
  *
  * Authors:
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
 using Mosa.Compiler.Framework;
+using System;
 
 namespace Mosa.Platform.x86.Instructions
 {
@@ -17,7 +18,6 @@ namespace Mosa.Platform.x86.Instructions
 	/// </summary>
 	public sealed class Sub : TwoOperandInstruction
 	{
-
 		#region Data Members
 
 		private static readonly OpCode O_C = new OpCode(new byte[] { 0x81 }, 5);
@@ -25,7 +25,7 @@ namespace Mosa.Platform.x86.Instructions
 		private static readonly OpCode R_O_16 = new OpCode(new byte[] { 0x66, 0x2B });
 		private static readonly OpCode M_R = new OpCode(new byte[] { 0x29 });
 
-		#endregion
+		#endregion Data Members
 
 		#region Methods
 
@@ -48,21 +48,21 @@ namespace Mosa.Platform.x86.Instructions
 		/// <returns></returns>
 		protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
 		{
-			if (source.IsConstant)
+			if (third.IsConstant)
 				return O_C;
 
 			if (destination.IsRegister)
 			{
-				if (IsChar(source))
+				if (IsChar(third))
 					return R_O_16;
 				else
 					return R_O;
 			}
-			if ((destination.IsMemoryAddress) && (source.IsRegister)) return M_R;
+			if ((destination.IsMemoryAddress) && (third.IsRegister)) return M_R;
 
 			throw new ArgumentException(@"No opcode for operand type.");
 		}
 
-		#endregion // Methods
+		#endregion Methods
 	}
 }

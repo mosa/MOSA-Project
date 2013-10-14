@@ -5,8 +5,8 @@
  *
  * Authors:
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
-
 
 using Mosa.Compiler.Framework;
 
@@ -17,6 +17,17 @@ namespace Mosa.Platform.x86.Instructions
 	/// </summary>
 	public sealed class Lock : X86Instruction
 	{
+		#region Construction
+
+		/// <summary>
+		/// Initializes a new instance of <see cref="Lock"/>.
+		/// </summary>
+		public Lock() :
+			base(0, 0)
+		{
+		}
+
+		#endregion Construction
 
 		#region Methods
 
@@ -40,6 +51,6 @@ namespace Mosa.Platform.x86.Instructions
 			visitor.Lock(context);
 		}
 
-		#endregion // Methods
+		#endregion Methods
 	}
 }

@@ -5,6 +5,7 @@
  *
  * Authors:
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 using Mosa.Compiler.Framework;
@@ -16,25 +17,19 @@ namespace Mosa.Platform.x86.Instructions
 	/// </summary>
 	public sealed class Rdmsr : X86Instruction
 	{
-
 		#region Construction
 
 		/// <summary>
 		/// Initializes a new instance of <see cref="Rdtsc"/>.
 		/// </summary>
 		public Rdmsr() :
-			base(0, 1)
+			base(1, 0)
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Methods
-
-		/// <summary>
-		/// Gets the additional output registers.
-		/// </summary>
-		public override RegisterBitmap AdditionalOutputRegisters { get { return new RegisterBitmap(GeneralPurposeRegister.EDX, GeneralPurposeRegister.EAX); } }
 
 		/// <summary>
 		/// Allows visitor based dispatch for this instruction object.
@@ -46,6 +41,6 @@ namespace Mosa.Platform.x86.Instructions
 			visitor.Rdmsr(context);
 		}
 
-		#endregion // Methods
+		#endregion Methods
 	}
 }

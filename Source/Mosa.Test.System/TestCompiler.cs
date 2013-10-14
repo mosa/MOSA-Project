@@ -4,18 +4,18 @@
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com> 
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
-using System.CodeDom.Compiler;
-using System.Diagnostics;
-using System.IO;
-using System.Runtime.InteropServices;
 using MbUnit.Framework;
+using Mosa.Compiler.Linker;
 using Mosa.Compiler.Metadata.Loader;
 using Mosa.Compiler.TypeSystem;
 using Mosa.Test.CodeDomCompiler;
+using System;
+using System.CodeDom.Compiler;
+using System.Diagnostics;
+using System.Runtime.InteropServices;
 
 namespace Mosa.Test.System
 {
@@ -29,25 +29,28 @@ namespace Mosa.Test.System
 		private ITypeSystem typeSystem;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private CompilerSettings cacheSettings = null;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
-		private static string tempDirectory;
+		private ILinker linker;
 
 		/// <summary>
-		/// 
+		/// The memory size to allocate
 		/// </summary>
-		private TestAssemblyLinker linker;
+		private const uint memorySize = 1024 * 1024 * 128;
 
-		private static uint memoryPtr = 0x21700000; // Location for pointer to allocated memory!
-		private static uint memorySize = 1024 * 1024 * 2; // 2Mb
-		private IntPtr memoryAllocated = IntPtr.Zero;
+		/// <summary>
+		/// The memory allocated
+		/// </summary>
+		private long memoryAllocated = 0;
 
-		#endregion // Data members
+		private bool setKernelMemory = false;
+
+		#endregion Data members
 
 		#region Construction
 
@@ -56,62 +59,46 @@ namespace Mosa.Test.System
 		/// </summary>
 		public TestCompiler()
 		{
-			ResetMemory();
+			AllocateMemory();
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
-		#region Properties
-
-		private static string TempDirectory
+		protected void AllocateMemory()
 		{
-			get
+			if (memoryAllocated == 0)
 			{
-				if (tempDirectory == null)
-				{
-					tempDirectory = Path.Combine(Path.GetTempPath(), "mosa.tmp");
-					if (!Directory.Exists(tempDirectory))
-					{
-						Directory.CreateDirectory(tempDirectory);
-					}
-				}
-				return tempDirectory;
+				setKernelMemory = false;
+
+				memoryAllocated = Win32Memory.Allocate(0, memorySize, PageProtectionFlags.Read | PageProtectionFlags.Write | PageProtectionFlags.WriteCombine);
+
+				if (memoryAllocated == 0)
+					throw new OutOfMemoryException();
 			}
 		}
 
-		#endregion Properties
-
-		protected void ResetMemory()
+		protected void SetKernelMemory(CompilerSettings settings)
 		{
-			if (memoryAllocated == IntPtr.Zero)
-			{
-				if (Memory.MemoryPageManager.Allocate(new IntPtr(memoryPtr), 1024, PageProtectionFlags.Read | PageProtectionFlags.Write | PageProtectionFlags.WriteCombine).ToInt32() != memoryPtr)
-					throw new OutOfMemoryException();
+			setKernelMemory = true; // must be before the Run method
 
-				memoryAllocated = Memory.MemoryPageManager.Allocate(IntPtr.Zero, memorySize, PageProtectionFlags.Read | PageProtectionFlags.Write | PageProtectionFlags.WriteCombine);
-
-				if (memoryAllocated == IntPtr.Zero)
-					throw new OutOfMemoryException();
-
-			}
-
-			unsafe
-			{
-				((uint*)memoryPtr)[0] = (uint)memoryAllocated.ToInt32();
-				((uint*)memoryPtr)[1] = (uint)memoryAllocated.ToInt32(); 
-				((uint*)memoryPtr)[2] = memorySize;
-			}
+			Run<uint>(settings, "Mosa.Kernel.x86Test", "KernelMemory", "SetMemory", new object[] { (uint)memoryAllocated });
 		}
 
 		public T Run<T>(CompilerSettings settings, string ns, string type, string method, params object[] parameters)
 		{
 			CompileTestCode(settings);
 
+			if (!setKernelMemory)
+			{
+				SetKernelMemory(settings);
+			}
+
 			// Find the test method to execute
 			RuntimeMethod runtimeMethod = FindMethod(
 				ns,
 				type,
-				method
+				method,
+				parameters
 			);
 
 			Debug.Assert(runtimeMethod != null, runtimeMethod.ToString());
@@ -129,16 +116,13 @@ namespace Mosa.Test.System
 
 			Debug.Assert(delegateType != null, delegateName);
 
-			IntPtr address = linker.GetSymbol(runtimeMethod.ToString()).VirtualAddress;
+			LinkerSymbol symbol = linker.GetSymbol(runtimeMethod.FullName);
+			LinkerSection section = linker.GetSection(symbol.SectionKind);
+
+			long address = symbol.VirtualAddress;
 
 			// Create a delegate for the test method
-			Delegate fn = Marshal.GetDelegateForFunctionPointer(
-				address,
-				delegateType
-			);
-
-			// Reset Memory
-			ResetMemory();
+			Delegate fn = Marshal.GetDelegateForFunctionPointer(new IntPtr(address), delegateType);
 
 			// Execute the test method
 			object tempResult = fn.DynamicInvoke(parameters);
@@ -166,23 +150,27 @@ namespace Mosa.Test.System
 
 				CompilerResults results = Mosa.Test.CodeDomCompiler.Compiler.ExecuteCompiler(cacheSettings);
 
-				//Console.WriteLine("Executing MOSA compiler...");
-
 				Assert.IsFalse(results.Errors.HasErrors, "Failed to compile source code with native compiler");
 
 				linker = RunMosaCompiler(settings, results.PathToAssembly);
+
+				setKernelMemory = false;
 			}
 		}
 
 		/// <summary>
 		/// Finds a runtime method, which represents the requested method.
 		/// </summary>
-		/// <exception cref="MissingMethodException">The sought method is not found.</exception>
 		/// <param name="ns">The namespace of the sought method.</param>
 		/// <param name="type">The type, which contains the sought method.</param>
 		/// <param name="method">The method to find.</param>
-		/// <returns>An instance of <see cref="RuntimeMethod"/>.</returns>
-		private RuntimeMethod FindMethod(string ns, string type, string method)
+		/// <param name="parameters">The parameters.</param>
+		/// <returns>
+		/// An instance of <see cref="RuntimeMethod" />.
+		/// </returns>
+		/// <exception cref="System.MissingMethodException"></exception>
+		/// <exception cref="MissingMethodException">The sought method is not found.</exception>
+		private RuntimeMethod FindMethod(string ns, string type, string method, params object[] parameters)
 		{
 			foreach (RuntimeType t in typeSystem.GetAllTypes())
 			{
@@ -197,7 +185,10 @@ namespace Mosa.Test.System
 				{
 					if (m.Name == method)
 					{
-						return m;
+						if (m.Parameters.Count == parameters.Length)
+						{
+							return m;
+						}
 					}
 				}
 
@@ -207,7 +198,7 @@ namespace Mosa.Test.System
 			throw new MissingMethodException(ns + "." + type, method);
 		}
 
-		private TestAssemblyLinker RunMosaCompiler(CompilerSettings settings, string assemblyFile)
+		private TestLinker RunMosaCompiler(CompilerSettings settings, string assemblyFile)
 		{
 			IAssemblyLoader assemblyLoader = new AssemblyLoader();
 			assemblyLoader.InitializePrivatePaths(settings.References);
@@ -222,10 +213,7 @@ namespace Mosa.Test.System
 			typeSystem = new TypeSystem();
 			typeSystem.LoadModules(assemblyLoader.Modules);
 
-			TestAssemblyLinker linker = TestCaseCompiler.Compile(typeSystem);
-
-			return linker;
+			return TestCaseCompiler.Compile(typeSystem);
 		}
-
 	}
 }

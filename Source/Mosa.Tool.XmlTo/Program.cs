@@ -14,9 +14,9 @@ using System.Xml.Xsl;
 
 namespace Mosa.Tool.XmlTo
 {
-	class Program
+	internal class Program
 	{
-		static int Main(string[] args)
+		private static int Main(string[] args)
 		{
 			Console.WriteLine();
 			Console.WriteLine("XMLTo v0.1 [www.mosa-project.org]");
@@ -24,13 +24,15 @@ namespace Mosa.Tool.XmlTo
 			Console.WriteLine("Written by Philipp Garcia (phil@thinkedge.com)");
 			Console.WriteLine();
 
-			if (args.Length < 3) {
+			if (args.Length < 3)
+			{
 				Console.WriteLine("Usage: XMLTo <xml file> <xsl file> <output file>");
 				Console.Error.WriteLine("ERROR: Missing arguments");
 				return -1;
 			}
 
-			try {
+			try
+			{
 				XPathDocument myXPathDoc = new XPathDocument(args[0]);
 				XslCompiledTransform myXslTrans = new XslCompiledTransform();
 				myXslTrans.Load(args[1]);
@@ -39,11 +41,11 @@ namespace Mosa.Tool.XmlTo
 
 				return 0;
 			}
-			catch (Exception e) {
+			catch (Exception e)
+			{
 				Console.Error.WriteLine("Exception: {0}", e.ToString());
 				return -1;
 			}
-
 		}
 	}
 }

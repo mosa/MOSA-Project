@@ -8,28 +8,26 @@
  */
 
 using System;
-
+using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Signatures;
 
 namespace Mosa.Platform.x64
 {
-
 	/// <summary>
 	/// This class provides a common base class for architecture
 	/// specific operations.
 	/// </summary>
-	public class Architecture : BasicArchitecture
+	public class Architecture : BaseArchitecture
 	{
-
 		/// <summary>
-		/// Gets a value indicating whether this architecture is little-endian.
+		/// Gets the endianness of the target architecture.
 		/// </summary>
 		/// <value>
-		/// 	<c>true</c> if this instance is architecture is little-endian; otherwise, <c>false</c>.
+		/// The endianness.
 		/// </value>
-		public override bool IsLittleEndian { get { return true; } }
+		public override Endianness Endianness { get { return Endianness.Little; } }
 
 		/// <summary>
 		/// Gets the type of the elf machine.
@@ -136,7 +134,6 @@ namespace Mosa.Platform.x64
 			//assemblyCompilerPipeline.InsertAfterLast<TypeLayoutStage>(
 			//    new MethodTableBuilderStage()
 			//);
-
 		}
 
 		/// <summary>
@@ -145,7 +142,6 @@ namespace Mosa.Platform.x64
 		/// <param name="methodCompilerPipeline">The method compiler pipeline to extend.</param>
 		public override void ExtendMethodCompilerPipeline(CompilerPipeline methodCompilerPipeline)
 		{
-
 			//methodCompilerPipeline.InsertAfterLast<PlatformStubStage>(
 			//    new IMethodCompilerStage[]
 			//    {
@@ -169,37 +165,27 @@ namespace Mosa.Platform.x64
 		/// Gets the type memory requirements.
 		/// </summary>
 		/// <param name="signatureType">The signature type.</param>
-		/// <param name="memorySize">Receives the memory size of the type.</param>
+		/// <param name="size">Receives the memory size of the type.</param>
 		/// <param name="alignment">Receives alignment requirements of the type.</param>
-		public override void GetTypeRequirements(SigType signatureType, out int memorySize, out int alignment)
+		public override void GetTypeRequirements(SigType signatureType, out int size, out int alignment)
 		{
 			if (signatureType == null)
 				throw new ArgumentNullException("signatureType");
 
 			switch (signatureType.Type)
 			{
-				case CilElementType.U1: memorySize = alignment = 4; break;
-				case CilElementType.U2: memorySize = alignment = 4; break;
-				case CilElementType.U4: memorySize = alignment = 4; break;
-				case CilElementType.U8: memorySize = 8; alignment = 4; break;
-				case CilElementType.I1: memorySize = alignment = 4; break;
-				case CilElementType.I2: memorySize = alignment = 4; break;
-				case CilElementType.I4: memorySize = alignment = 4; break;
-				case CilElementType.I8: memorySize = 8; alignment = 4; break;
-				case CilElementType.R4: memorySize = alignment = 4; break;
-				case CilElementType.R8: memorySize = alignment = 8; break;
-				case CilElementType.Boolean: memorySize = alignment = 4; break;
-				case CilElementType.Char: memorySize = alignment = 4; break;
+				case CilElementType.U8: size = 8; alignment = 4; break;
+				case CilElementType.I8: size = 8; alignment = 4; break;
+				case CilElementType.R8: size = alignment = 8; break;
 
-				// Platform specific
-				case CilElementType.Ptr: memorySize = alignment = 4; break;
-				case CilElementType.I: memorySize = alignment = 4; break;
-				case CilElementType.U: memorySize = alignment = 4; break;
-				case CilElementType.Object: memorySize = alignment = 4; break;
-				case CilElementType.Class: memorySize = alignment = 4; break;
-				case CilElementType.String: memorySize = alignment = 4; break;
+				case CilElementType.Ptr: size = alignment = 8; break;
+				case CilElementType.I: size = alignment = 8; break;
+				case CilElementType.U: size = alignment = 8; break;
+				case CilElementType.Object: size = alignment = 8; break;
+				case CilElementType.Class: size = alignment = 8; break;
+				case CilElementType.String: size = alignment = 8; break;
 
-				default: memorySize = alignment = 4; break;
+				default: size = alignment = 4; break;
 			}
 		}
 
@@ -211,7 +197,38 @@ namespace Mosa.Platform.x64
 		{
 			// TODO
 			return null;
+
 			//return new MachineCodeEmitter();
 		}
+
+		/// <summary>
+		/// Create platform move.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <param name="destination">The destination.</param>
+		/// <param name="Source">The source.</param>
+		public override void InsertMove(Context context, Operand destination, Operand source)
+		{
+			// TODO
+		}
+
+		/// <summary>
+		/// Create platform exchange registers.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <param name="Destination">The destination.</param>
+		/// <param name="Source">The source.</param>
+		public override void InsertExchange(Context context, Operand destination, Operand source)
+		{
+			// TODO
+		}
+
+		/// <summary>
+		/// Gets the jump instruction for the platform.
+		/// </summary>
+		/// <value>
+		/// The jump instruction.
+		/// </value>
+		public override BaseInstruction JumpInstruction { get { /* TODO */ return null; } }
 	}
 }

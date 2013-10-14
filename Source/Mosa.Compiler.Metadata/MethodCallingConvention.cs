@@ -7,7 +7,6 @@
 
 namespace Mosa.Compiler.Metadata
 {
-
 	public enum MethodCallingConvention : byte
 	{
 		Default = 0x0,

@@ -30,11 +30,11 @@ namespace Mosa.Tool.Compiler.Stages
 		public string MethodPipelineExportDirectory { get; set; }
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private ConfigurableTraceFilter filter = new ConfigurableTraceFilter();
 
-		#endregion // Data members
+		#endregion Data members
 
 		#region Construction
 
@@ -45,7 +45,7 @@ namespace Mosa.Tool.Compiler.Stages
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region ICompilerStage Members
 
@@ -61,14 +61,14 @@ namespace Mosa.Tool.Compiler.Stages
 		/// </summary>
 		void ICompilerStage.Run()
 		{
-			filter.IsLogging = !string.IsNullOrEmpty(MethodPipelineExportDirectory);
+			bool logging = !string.IsNullOrEmpty(MethodPipelineExportDirectory);
 
-			if (filter.IsLogging)
+			if (logging)
 			{
 				filter.MethodMatch = MatchType.Any;
 				filter.StageMatch = MatchType.Exclude;
 				filter.Stage = "PlatformStubStage|ExceptionLayoutStage";
-				
+
 				compiler.InternalTrace.TraceFilter = filter;
 				compiler.InternalTrace.TraceListener = this;
 
@@ -76,7 +76,7 @@ namespace Mosa.Tool.Compiler.Stages
 			}
 		}
 
-		#endregion // ICompilerStage Members
+		#endregion ICompilerStage Members
 
 		#region ITraceListener Members
 
@@ -100,7 +100,6 @@ namespace Mosa.Tool.Compiler.Stages
 			// nothing
 		}
 
-		#endregion // BaseInstructionTraceListener Members
-
+		#endregion ITraceListener Members
 	}
 }

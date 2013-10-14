@@ -7,7 +7,6 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-
 namespace Mosa.Compiler.Metadata.Signatures
 {
 	/// <summary>
@@ -22,7 +21,7 @@ namespace Mosa.Compiler.Metadata.Signatures
 		/// </summary>
 		private int index;
 
-		#endregion // Data members
+		#endregion Data members
 
 		#region Construction
 
@@ -36,7 +35,7 @@ namespace Mosa.Compiler.Metadata.Signatures
 			this.index = index;
 		}
 
-		#endregion // Data members
+		#endregion Construction
 
 		#region Properties
 
@@ -46,7 +45,7 @@ namespace Mosa.Compiler.Metadata.Signatures
 		/// <value>The index.</value>
 		public int Index { get { return index; } }
 
-		#endregion // Properties
+		#endregion Properties
 
 		#region SigType Overrides
 
@@ -77,6 +76,6 @@ namespace Mosa.Compiler.Metadata.Signatures
 			return base.ToString() + "#" + index.ToString();
 		}
 
-		#endregion // SigType Overrides
+		#endregion SigType Overrides
 	}
 }

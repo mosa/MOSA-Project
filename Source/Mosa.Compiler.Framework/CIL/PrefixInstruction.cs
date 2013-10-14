@@ -12,7 +12,7 @@ using System;
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public class PrefixInstruction : BaseCILInstruction
 	{
@@ -40,7 +40,7 @@ namespace Mosa.Compiler.Framework.CIL
 			}
 		}
 
-		#endregion // Properties
+		#endregion Properties
 
 		#region Construction
 
@@ -49,12 +49,10 @@ namespace Mosa.Compiler.Framework.CIL
 		/// </summary>
 		/// <param name="opcode">The opcode.</param>
 		protected PrefixInstruction(OpCode opcode)
-			: base(opcode)
+			: base(opcode, 0)
 		{
 		}
 
-		#endregion // Construction
-
-
+		#endregion Construction
 	}
 }

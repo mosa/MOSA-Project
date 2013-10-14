@@ -15,7 +15,7 @@ using Mosa.Compiler.Metadata.Signatures;
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public sealed class LdsfldInstruction : BaseCILInstruction
 	{
@@ -30,7 +30,7 @@ namespace Mosa.Compiler.Framework.CIL
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Methods
 
@@ -53,10 +53,10 @@ namespace Mosa.Compiler.Framework.CIL
 				;
 			}
 
-			SigType sigType = ctx.RuntimeField.SignatureType;
+			SigType sigType = ctx.RuntimeField.SigType;
 
 			Debug.Assert((ctx.RuntimeField.Attributes & FieldAttributes.Static) == FieldAttributes.Static, @"Static field access on non-static field.");
-			ctx.Result = LoadInstruction.CreateResultOperand(decoder, Operand.StackTypeFromSigType(sigType), sigType);
+			ctx.Result = LoadInstruction.CreateResultOperand(decoder, sigType);
 		}
 
 		/// <summary>
@@ -70,6 +70,5 @@ namespace Mosa.Compiler.Framework.CIL
 		}
 
 		#endregion Methods
-
 	}
 }

@@ -12,22 +12,22 @@ using Mosa.ClassLib;
 namespace Mosa.DeviceSystem
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public class DeviceManager : IDeviceManager
 	{
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private LinkedList<IDevice> devices;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private SpinLock spinLock;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public DeviceManager()
 		{
@@ -35,7 +35,7 @@ namespace Mosa.DeviceSystem
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="device"></param>
 		public void Add(IDevice device)

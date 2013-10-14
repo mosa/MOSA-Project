@@ -7,15 +7,14 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
-using System.Collections.Generic;
-using System.IO;
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Stages;
 using Mosa.Compiler.Linker;
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.TypeSystem;
+using System.Collections.Generic;
+using System.IO;
 
 // FIXME: Splits this class into platform dependent and independent classes. Move platform independent code into Mosa.Compiler.Framework
 
@@ -31,7 +30,7 @@ namespace Mosa.Platform.x86.Stages
 
 		private ICodeEmitter codeEmitter;
 
-		#endregion // Data members
+		#endregion Data members
 
 		#region IMethodCompilerStage members
 
@@ -53,7 +52,7 @@ namespace Mosa.Platform.x86.Stages
 			EmitProtectedBlockTable();
 		}
 
-		#endregion // IMethodCompilerStage members
+		#endregion IMethodCompilerStage members
 
 		private void AssignBlocksToClauses()
 		{
@@ -80,7 +79,6 @@ namespace Mosa.Platform.x86.Stages
 					blockExceptions.Add(block, clause);
 				}
 			}
-
 		}
 
 		private ExceptionHandlingClause FindExceptionClause(BasicBlock block)
@@ -105,7 +103,9 @@ namespace Mosa.Platform.x86.Stages
 			public ExceptionHandlerType Kind;
 			public uint Start;
 			public uint End;
+
 			public uint Length { get { return End - Start; } }
+
 			public uint Handler;
 
 			public uint Filter;
@@ -120,7 +120,6 @@ namespace Mosa.Platform.x86.Stages
 				Type = type;
 				Filter = filter;
 			}
-
 		}
 
 		private void EmitProtectedBlockTable()
@@ -164,7 +163,7 @@ namespace Mosa.Platform.x86.Stages
 					}
 					else if (prev.Start == end && prev.Kind == kind && prev.Handler == handler && prev.Filter == filter && prev.Type == type)
 					{
-						// merge protected blocks sequence						
+						// merge protected blocks sequence
 						prev.Start = start;
 					}
 					else
@@ -183,7 +182,7 @@ namespace Mosa.Platform.x86.Stages
 
 			using (Stream stream = methodCompiler.Linker.Allocate(section, SectionKind.ROData, tableSize, nativePointerAlignment))
 			{
-				using (EndianAwareBinaryWriter writer = new EndianAwareBinaryWriter(stream, architecture.IsLittleEndian))
+				using (EndianAwareBinaryWriter writer = new EndianAwareBinaryWriter(stream, architecture.Endianness))
 				{
 					foreach (ProtectedBlock entry in entries)
 					{
@@ -197,13 +196,13 @@ namespace Mosa.Platform.x86.Stages
 						{
 							// Store method table pointer of the exception object type
 							// The VES exception runtime will uses this to compare exception object types
-							methodCompiler.Linker.Link(LinkType.AbsoluteAddress | LinkType.NativeI4, section, (int)writer.Position, 0, entry.Type.FullName + "$mtable", IntPtr.Zero);
+							methodCompiler.Linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuiltInPatch.I4, section, (int)writer.Position, 0, entry.Type.FullName + "$mtable", 0);
 
 							writer.Position += nativePointerSize;
 						}
 						else if (entry.Kind == ExceptionHandlerType.Filter)
 						{
-							// TODO: There are no plans in the short term to support filtered exception clause as C# does not use them 
+							// TODO: There are no plans in the short term to support filtered exception clause as C# does not use them
 							writer.Position += nativePointerSize;
 						}
 						else
@@ -216,8 +215,6 @@ namespace Mosa.Platform.x86.Stages
 					writer.Position += typeLayout.NativePointerSize;
 				}
 			}
-
 		}
-
 	}
 }

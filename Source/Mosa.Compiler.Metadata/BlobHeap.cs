@@ -12,13 +12,11 @@ using System.Diagnostics;
 
 namespace Mosa.Compiler.Metadata
 {
-
 	/// <summary>
 	/// Provides access to binary blobs in the .NET provider blob heap.
 	/// </summary>
 	public sealed class BlobHeap : Heap
 	{
-
 		#region Construction
 
 		/// <summary>
@@ -32,7 +30,7 @@ namespace Mosa.Compiler.Metadata
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Methods
 
@@ -63,6 +61,6 @@ namespace Mosa.Compiler.Metadata
 			return result;
 		}
 
-		#endregion // Methods
+		#endregion Methods
 	}
 }

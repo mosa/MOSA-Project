@@ -7,10 +7,8 @@
  *  Simon Wollwage (rootnode) <rootnode@mosa-project.org>
  */
 
-using System.Collections.Generic;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Metadata.Signatures;
-using Mosa.Compiler.TypeSystem;
 
 namespace Mosa.Platform.x86.Intrinsic
 {
@@ -19,7 +17,6 @@ namespace Mosa.Platform.x86.Intrinsic
 	/// </summary>
 	public sealed class CpuIdEcx : IIntrinsicPlatformMethod
 	{
-
 		#region Methods
 
 		/// <summary>
@@ -27,7 +24,7 @@ namespace Mosa.Platform.x86.Intrinsic
 		/// </summary>
 		/// <param name="context">The context.</param>
 		/// <param name="typeSystem">The type system.</param>
-		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, ITypeSystem typeSystem, IList<RuntimeParameter> parameters)
+		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, BaseMethodCompiler methodCompiler)
 		{
 			Operand result = context.Result;
 			Operand operand = context.Operand1;
@@ -35,12 +32,11 @@ namespace Mosa.Platform.x86.Intrinsic
 			Operand ecx = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.ECX);
 			Operand reg = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.ECX);
 			context.SetInstruction(X86.Mov, eax, operand);
-			context.AppendInstruction(X86.Xor, ecx, ecx);
+			context.AppendInstruction(X86.Mov, ecx, Operand.CreateConstant((uint)0));
 			context.AppendInstruction(X86.CpuId, eax, eax);
 			context.AppendInstruction(X86.Mov, result, reg);
 		}
 
-		#endregion // Methods
-
+		#endregion Methods
 	}
 }

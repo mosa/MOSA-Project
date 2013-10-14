@@ -7,13 +7,12 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System.Drawing;
 using Mosa.EmulatedDevices.Synthetic;
 using Mosa.EmulatedKernel;
+using System.Drawing;
 
 namespace Mosa.EmulatedDevices.Emulated
 {
-
 	/// <summary>
 	/// Represents an emulated VGA Text Device
 	/// </summary>
@@ -41,86 +40,86 @@ namespace Mosa.EmulatedDevices.Emulated
 			internal const byte VerticalDisplayEnableEnd = 0x12;
 		}
 
-		#endregion
+		#endregion Definitions
 
 		#region Variables
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public const ushort StandardIOBase = 0x03B0;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public const uint StandardAddressBase = 0xB0000;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public const uint StandardMemorySize = 0x10000;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected ushort ioBase;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected byte miscellaneous;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected byte crtControllerIndex;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected byte crtControllerData;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected byte crtControllerIndexColor;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected byte crtControllerDataColor;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected byte[] memory = new byte[StandardMemorySize];
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected uint baseAddress;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected byte height;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected byte width;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected ushort cursorPosition;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected byte lastCommand;
 
-		#endregion
+		#endregion Variables
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="VGAConsole"/> class.
@@ -150,7 +149,6 @@ namespace Mosa.EmulatedDevices.Emulated
 
 			Initialize();
 		}
-
 
 		/// <summary>
 		/// Initializes this instance.

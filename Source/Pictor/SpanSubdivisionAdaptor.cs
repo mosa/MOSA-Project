@@ -7,25 +7,22 @@
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  */
 
-
 namespace Pictor
 {
-
 	//=================================================SpanSubdivisionAdaptor
 	public class SpanSubdivisionAdaptor : ISpanInterpolator
 	{
-		int m_subdiv_shift;
-		int m_subdiv_size;
-		int m_subdiv_mask;
-		ISpanInterpolator m_interpolator;
-		int m_src_x;
-		double m_src_y;
-		uint m_pos;
-		uint m_len;
+		private int m_subdiv_shift;
+		private int m_subdiv_size;
+		private int m_subdiv_mask;
+		private ISpanInterpolator m_interpolator;
+		private int m_src_x;
+		private double m_src_y;
+		private uint m_pos;
+		private uint m_len;
 
-		const int subpixel_shift = 8;
-		const int subpixel_scale = 1 << subpixel_shift;
-
+		private const int subpixel_shift = 8;
+		private const int subpixel_scale = 1 << subpixel_shift;
 
 		//----------------------------------------------------------------
 		public SpanSubdivisionAdaptor(ISpanInterpolator interpolator)
@@ -85,6 +82,7 @@ namespace Pictor
 				m_subdiv_mask = m_subdiv_size - 1;
 			}
 		}
+
 		//----------------------------------------------------------------
 		public void Begin(double x, double y, uint len)
 		{

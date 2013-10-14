@@ -25,7 +25,7 @@ namespace Mosa.Compiler.Metadata.Signatures
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region SigType Overrides
 
@@ -45,6 +45,6 @@ namespace Mosa.Compiler.Metadata.Signatures
 			return (base.Equals(other) == true && this.Token == vtst.Token);
 		}
 
-		#endregion // SigType Overrides
+		#endregion SigType Overrides
 	}
 }

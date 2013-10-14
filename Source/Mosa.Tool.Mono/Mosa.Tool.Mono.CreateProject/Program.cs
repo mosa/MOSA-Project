@@ -132,7 +132,6 @@ namespace Mosa.Tool.Mono.CreateProject
 			{
 				using (TextWriter writer = new StreamWriter(ProjectFile))
 				{
-
 					writer.WriteLine("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
 					writer.WriteLine(
 						"<Project ToolsVersion=\"4.0\" DefaultTargets=\"Build\" xmlns=\"http://schemas.microsoft.com/developer/msbuild/2003\">");
@@ -165,6 +164,7 @@ namespace Mosa.Tool.Mono.CreateProject
 					writer.WriteLine("\t\t<ErrorReport>prompt</ErrorReport>");
 					writer.WriteLine("\t\t<WarningLevel>4</WarningLevel>");
 					writer.WriteLine("\t\t<AllowUnsafeBlocks>true</AllowUnsafeBlocks>");
+
 					//writer.WriteLine("\t\t<NoStdLib>True</NoStdLib>");
 					writer.WriteLine("\t</PropertyGroup>");
 					writer.WriteLine("\t<PropertyGroup Condition=\" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' \">");
@@ -204,9 +204,8 @@ namespace Mosa.Tool.Mono.CreateProject
 					writer.WriteLine("</Project>");
 				}
 			}
-
 		}
 
-		#endregion
+		#endregion Nested type: project
 	}
 }

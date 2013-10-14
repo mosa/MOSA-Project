@@ -6,6 +6,7 @@
  * Authors:
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  */
+
 using System;
 
 namespace Pictor.Transform
@@ -13,26 +14,26 @@ namespace Pictor.Transform
 	//----------------------------------------------------------trans_viewport
 	public sealed class Viewport
 	{
-		double m_world_x1;
-		double m_world_y1;
-		double m_world_x2;
-		double m_world_y2;
-		double m_device_x1;
-		double m_device_y1;
-		double m_device_x2;
-		double m_device_y2;
-		EAspectRatio m_aspect;
-		bool m_is_valid;
-		double m_align_x;
-		double m_align_y;
-		double m_wx1;
-		double m_wy1;
-		double m_wx2;
-		double m_wy2;
-		double m_dx1;
-		double m_dy1;
-		double m_kx;
-		double m_ky;
+		private double m_world_x1;
+		private double m_world_y1;
+		private double m_world_x2;
+		private double m_world_y2;
+		private double m_device_x1;
+		private double m_device_y1;
+		private double m_device_x2;
+		private double m_device_y2;
+		private EAspectRatio m_aspect;
+		private bool m_is_valid;
+		private double m_align_x;
+		private double m_align_y;
+		private double m_wx1;
+		private double m_wy1;
+		private double m_wx2;
+		private double m_wy2;
+		private double m_dx1;
+		private double m_dy1;
+		private double m_kx;
+		private double m_ky;
 
 		public enum EAspectRatio
 		{
@@ -130,14 +131,17 @@ namespace Pictor.Transform
 		{
 			get { return m_is_valid; }
 		}
+
 		public double xAlignment
 		{
 			get { return m_align_x; }
 		}
+
 		public double yAlignment
 		{
 			get { return m_align_y; }
 		}
+
 		public EAspectRatio AspectRatio
 		{
 			get { return m_aspect; }
@@ -176,6 +180,7 @@ namespace Pictor.Transform
 		{
 			get { return m_dx1 - m_wx1 * m_kx; }
 		}
+
 		public double DeviceDy
 		{
 			get { return m_dy1 - m_wy1 * m_ky; }

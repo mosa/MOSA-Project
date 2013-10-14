@@ -42,111 +42,134 @@ namespace Mosa.DeviceDrivers.ISA
 			internal const byte NoAuto = 0x00;
 		}
 
-		#endregion
+		#endregion Definitions
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IReadOnlyIOPort statusRegister;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IWriteOnlyIOPort commandRegister;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IWriteOnlyIOPort requestRegister;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IWriteOnlyIOPort channelMaskRegister;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IWriteOnlyIOPort modeRegister;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IWriteOnlyIOPort byteWordRegister;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IReadOnlyIOPort intermediateRegister;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IWriteOnlyIOPort maskRegister;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IReadWriteIOPort channel0Address;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IReadWriteIOPort channel0Count;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IReadWriteIOPort channel0Page;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IReadWriteIOPort channel1Address;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IReadWriteIOPort channel1Count;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IReadWriteIOPort channel1Page;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IReadWriteIOPort channel2Address;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IReadWriteIOPort channel2Count;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IReadWriteIOPort channel2Page;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IReadWriteIOPort channel3Address;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IReadWriteIOPort channel3Count;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IReadWriteIOPort channel3Page;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IMemory memory0;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IMemory memory1;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IMemory memory2;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IMemory memory3;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="DMA8Bit"/> class.
 		/// </summary>
-		public DMA8Bit() { }
+		public DMA8Bit()
+		{
+		}
 
 		/// <summary>
 		/// Setups this hardware device driver
@@ -203,7 +226,10 @@ namespace Mosa.DeviceDrivers.ISA
 		/// Called when an interrupt is received.
 		/// </summary>
 		/// <returns></returns>
-		public override bool OnInterrupt() { return false; }
+		public override bool OnInterrupt()
+		{
+			return false;
+		}
 
 		/// <summary>
 		/// Setups the channel.
@@ -236,9 +262,9 @@ namespace Mosa.DeviceDrivers.ISA
 			channelMaskRegister.Write8((byte)((byte)channel | 4));
 
 			// Clear any current transfers
-			byteWordRegister.Write8((byte)0xFF);	// reset flip-flop			
+			byteWordRegister.Write8((byte)0xFF);	// reset flip-flop
 
-			// Set Address	
+			// Set Address
 			dmaAddress.Write8((byte)(address & 0xFF)); // low byte
 			dmaAddress.Write8((byte)((address >> 8) & 0xFF)); // high byte
 			dmaPage.Write8((byte)((address >> 16) & 0xFF)); // page
@@ -352,4 +378,3 @@ namespace Mosa.DeviceDrivers.ISA
 		}
 	}
 }
-

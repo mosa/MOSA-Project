@@ -12,28 +12,28 @@ using System.Security.Permissions;
 namespace Mosa.Compiler.Metadata.Tables
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public struct DeclSecurityRow
 	{
 		#region Data members
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private SecurityAction action;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private Token parent;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private HeapIndexToken permissionSet;
 
-		#endregion // Data members
+		#endregion Data members
 
 		#region Construction
 
@@ -50,7 +50,7 @@ namespace Mosa.Compiler.Metadata.Tables
 			this.permissionSet = permissionSet;
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Properties
 
@@ -81,6 +81,6 @@ namespace Mosa.Compiler.Metadata.Tables
 			get { return permissionSet; }
 		}
 
-		#endregion // Properties
+		#endregion Properties
 	}
 }

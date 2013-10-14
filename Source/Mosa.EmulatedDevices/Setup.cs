@@ -7,16 +7,16 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System.Threading;
-using System.Windows.Forms;
 using Mosa.EmulatedDevices.Emulated;
 using Mosa.EmulatedDevices.Synthetic;
 using Mosa.EmulatedKernel;
+using System.Threading;
+using System.Windows.Forms;
 
 namespace Mosa.EmulatedDevices
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public static class Setup
 	{
@@ -33,11 +33,12 @@ namespace Mosa.EmulatedDevices
 			SetupPrimaryDisplayForm();
 
 			// Emulate a ram chip (128Mb)
-			//Mosa.EmulatedDevices.Emulated.RAMChip ramChip1 = 
+			//Mosa.EmulatedDevices.Emulated.RAMChip ramChip1 =
 			new Mosa.EmulatedDevices.Emulated.RAMChip(0, 1024 * 640);
-			//Mosa.EmulatedDevices.Emulated.RAMChip ramChip2 = 
+
+			//Mosa.EmulatedDevices.Emulated.RAMChip ramChip2 =
 			new Mosa.EmulatedDevices.Emulated.RAMChip(1024 * 1024, 1024 * 1024 * 127);
-			
+
 			// Setup PCI Bus
 			PCIBus pciBus = new PCIBus();
 

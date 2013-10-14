@@ -78,7 +78,25 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BasicBlocks.cs" />
-    <Compile Include="LiveRangeAnalysis.cs" />
+    <Compile Include="ContextHelper.cs" />
+    <Compile Include="IR\BlockStart.cs" />
+    <Compile Include="IR\BlockEnd.cs" />
+    <Compile Include="IR\InternalReturn.cs" />
+    <Compile Include="RegisterAllocator\MoveResolver.cs" />
+    <Compile Include="RegisterAllocator\Interval.cs" />
+    <Compile Include="RegisterAllocator\SlotIndex.cs" />
+    <Compile Include="RegisterAllocator\LiveIntervalUnion.cs" />
+    <Compile Include="RegisterAllocator\ExtendedBlock.cs" />
+    <Compile Include="RegisterAllocator\LiveInterval.cs" />
+    <Compile Include="RegisterAllocator\VirtualRegister.cs" />
+    <Compile Include="RegisterAllocator\GreedyRegisterAllocator.cs" />
+    <Compile Include="Linker\LinkerFactory.cs" />
+    <Compile Include="Stages\BaseEdgeSplitStage.cs" />
+    <Compile Include="Stages\EmptyBlockRemovalStage.cs" />
+    <Compile Include="Stages\PlatformEdgeSplitStage.cs" />
+    <Compile Include="Stages\StackSetupStage.cs" />
+    <Compile Include="Stages\GreedyRegisterAllocatorStage.cs" />
+    <Compile Include="Stages\LinkerFinalizationStage.cs" />
     <Compile Include="IIntrinsicInternalMethod.cs" />
     <Compile Include="DelegatePatcher.cs" />
     <Compile Include="ICompilationScheduler.cs" />
@@ -89,15 +107,16 @@
     <Compile Include="SimpleFastDominance.cs" />
     <Compile Include="LoopAwareBlockOrder.cs" />
     <Compile Include="CompilationScheduler.cs" />
+    <Compile Include="Stages\CheckPlatformOperandCountStage.cs" />
+    <Compile Include="Stages\ObjectFileLayoutStage.cs" />
     <Compile Include="Stages\PlatformIntrinsicTransformationStage.cs" />
-    <Compile Include="Stages\PlugSystem.cs" />
-    <Compile Include="Stages\IRCheckStage.cs" />
+    <Compile Include="PlugSystem.cs" />
+    <Compile Include="Stages\CheckIROperandCountStage.cs" />
     <Compile Include="Stages\LoopAwareBlockOrderStage.cs" />
     <Compile Include="Stages\SSAOptimizations.cs" />
     <Compile Include="Stages\EdgeSplitStage.cs" />
-    <Compile Include="Stages\SimpleRegisterAllocatorStage.cs" />
-    <Compile Include="VirtualRegisterLayout.cs" />
-    <Compile Include="Stages\LocalVariablePromotionStage.cs" />
+    <Compile Include="Stages\TypeInitializerSchedulerStage.cs" />
+    <Compile Include="VirtualRegisters.cs" />
     <Compile Include="BaseCodeEmitter.cs" />
     <Compile Include="BaseInstruction.cs" />
     <Compile Include="Stages\BasicBlockBuilderStage.cs" />
@@ -124,11 +143,7 @@
     <Compile Include="BaseCompilerStage.cs" />
     <Compile Include="Platform\BasePlatformInstruction.cs" />
     <Compile Include="Platform\BasePlatformTransformationStage.cs" />
-    <Compile Include="Platform\IRegisterUsage.cs" />
-    <Compile Include="RegisterBitmap.cs" />
     <Compile Include="StackLayout.cs" />
-    <Compile Include="Stages\RegisterUsageAnalyzerStage.cs" />
-    <Compile Include="Stages\OperandUsageAnalyzerStage.cs" />
     <Compile Include="Stages\MultipleDefinitionMarkerStage.cs" />
     <Compile Include="ITypeInitializerSchedulerStage.cs" />
     <Compile Include="Stages\PlugStage.cs" />
@@ -145,7 +160,6 @@
     <Compile Include="Stages\StaticAllocationResolutionStage.cs" />
     <Compile Include="Stages\TypeLayoutStage.cs" />
     <Compile Include="IR\Throw.cs" />
-    <Compile Include="Stages\GenericsResolverStage.cs" />
     <Compile Include="Intrinsics\InternalAllocateString.cs" />
     <Compile Include="IR\AddFloat.cs" />
     <Compile Include="IR\AddSigned.cs" />
@@ -167,7 +181,6 @@
     <Compile Include="Stages\MethodCompilerSchedulerStage.cs" />
     <Compile Include="Stages\PlatformStubStage.cs" />
     <Compile Include="IIntrinsicPlatformMethod.cs" />
-    <Compile Include="IBlockOrderStage.cs" />
     <Compile Include="IPipelineStage.cs" />
     <Compile Include="Stages\CILTransformationStage.cs" />
     <Compile Include="CIL\ConstrainedPrefixInstruction.cs" />
@@ -250,7 +263,7 @@
     <Compile Include="IR\AddressOf.cs" />
     <Compile Include="IR\ArithmeticShiftRight.cs" />
     <Compile Include="IR\Call.cs" />
-    <Compile Include="IR\ConditionCode.cs" />
+    <Compile Include="ConditionCode.cs" />
     <Compile Include="IR\Nop.cs" />
     <Compile Include="IR\IRInstruction.cs" />
     <Compile Include="IR\Epilogue.cs" />
@@ -288,16 +301,12 @@
     <Compile Include="Stages\ReverseBlockOrderStage.cs" />
     <Compile Include="RuntimeMethodData.cs" />
     <Compile Include="Stages\SimpleTraceBlockOrderStage.cs" />
-    <Compile Include="Stages\LocalCSEStage.cs" />
-    <Compile Include="Linker\BaseLinkerStage.cs" />
     <Compile Include="Linker\LinkerGeneratedMethod.cs" />
     <Compile Include="Linker\LinkerGeneratedType.cs" />
-    <Compile Include="Linker\LinkerMethodCompiler.cs" />
-    <Compile Include="Linker\LinkTimeCodeGenerator.cs" />
     <Compile Include="BaseCompiler.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="BasicArchitecture.cs">
+    <Compile Include="BaseArchitecture.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="BasicBlock.cs">
@@ -337,12 +346,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="IMethodCompilerStage.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Platform\IPlatformStage.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="IStackLayoutProvider.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="BaseMethodCompiler.cs">

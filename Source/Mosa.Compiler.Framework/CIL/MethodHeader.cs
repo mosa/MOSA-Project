@@ -12,24 +12,27 @@ using Mosa.Compiler.Metadata;
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public class MethodHeader
 	{
 		/// <summary>
-		/// Header flags 
+		/// Header flags
 		/// </summary>
 		public MethodFlags Flags;
+
 		/// <summary>
-		/// Maximum stack size 
+		/// Maximum stack size
 		/// </summary>
 		public ushort MaxStack;
+
 		/// <summary>
-		/// Size of the code in bytes 
+		/// Size of the code in bytes
 		/// </summary>
 		public uint CodeSize;
+
 		/// <summary>
-		/// Local variable signature token 
+		/// Local variable signature token
 		/// </summary>
 		public Token LocalsSignature;
 	}

@@ -13,7 +13,7 @@ using System.IO;
 namespace Mosa.Compiler.Pdb
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public struct PdbSymbolHeader
 	{
@@ -29,19 +29,21 @@ namespace Mosa.Compiler.Pdb
 		/// Defines the PDB stream, that contains the global symbols.
 		/// </summary>
 		public short gsym_stream;
+
 		private short unknown1;
 
 		/// <summary>
 		/// Defines the size of the modules following this symbol header.
 		/// </summary>
 		public int module_size;
+
 		private int offset_size;
 		private int hash_size;
 		private int srcmodule_size;
 		private int pdbimport_size;
 		private int[] resvd;
 
-		#endregion // Data Members
+		#endregion Data Members
 
 		#region Methods
 
@@ -76,6 +78,6 @@ namespace Mosa.Compiler.Pdb
 			return true;
 		}
 
-		#endregion // Methods
+		#endregion Methods
 	}
 }

@@ -23,9 +23,14 @@ namespace Mosa.Compiler.Framework
 		#region Data members
 
 		/// <summary>
-		/// The index of the block within the instruction set
+		/// The index to the start of the block within the instruction set
 		/// </summary>
-		private int index;
+		private int start;
+
+		/// <summary>
+		/// The index to the end of the block within the instruction set
+		/// </summary>
+		private int end;
 
 		/// <summary>
 		/// The label of the block. (For simplicity this is actually the original instruction offset.)
@@ -33,7 +38,7 @@ namespace Mosa.Compiler.Framework
 		private int label;
 
 		/// <summary>
-		/// The creation sequence number of the block; unique within a method. (For use with stage that require an integer id for blocks starting from 0).
+		/// The creation sequence number of the block; unique within a method. (For use with stages that require an integer id for blocks starting from 0).
 		/// </summary>
 		private int sequence;
 
@@ -43,12 +48,12 @@ namespace Mosa.Compiler.Framework
 		private int hintTarget;
 
 		/// <summary>
-		/// Links this block to all Blocks invoked by the final branch instruction.
+		/// Links this block to all blocks invoked by the final branch instruction.
 		/// </summary>
 		/// <remarks>
-		/// Usually there are two Blocks in this list: The branch destination and
+		/// Usually there are two blocks in this list: The branch destination and
 		/// the immediately following block. If the final branch instruction is a
-		/// switch, there are potentially more Blocks in this list.
+		/// switch, there are potentially more blocks in this list.
 		/// </remarks>
 		private List<BasicBlock> nextBlocks;
 
@@ -57,7 +62,7 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		private List<BasicBlock> previousBlocks;
 
-		#endregion
+		#endregion Data members
 
 		#region Construction
 
@@ -66,28 +71,56 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		/// <param name="sequence">The sequence.</param>
 		/// <param name="label">The label.</param>
-		/// <param name="index">The index.</param>
-		public BasicBlock(int sequence, int label, int index)
+		/// <param name="start">The start.</param>
+		public BasicBlock(int sequence, int label, int start)
 		{
 			nextBlocks = new List<BasicBlock>(2);
 			previousBlocks = new List<BasicBlock>(2);
 			this.sequence = sequence;
 			this.label = label;
-			this.index = index;
+			this.start = start;
+			this.end = -1;
 			this.hintTarget = -1;
 		}
 
-		#endregion
+		/// <summary>
+		/// Initializes common fields of the BasicBlock.
+		/// </summary>
+		/// <param name="sequence">The sequence.</param>
+		/// <param name="label">The label.</param>
+		/// <param name="start">The index.</param>
+		/// <param name="end">The end.</param>
+		public BasicBlock(int sequence, int label, int start, int end)
+		{
+			nextBlocks = new List<BasicBlock>(2);
+			previousBlocks = new List<BasicBlock>(2);
+			this.sequence = sequence;
+			this.label = label;
+			this.start = start;
+			this.end = end;
+			this.hintTarget = -1;
+		}
+
+		#endregion Construction
 
 		#region Properties
 
 		/// <summary>
-		/// The index of the block within the instruction set
+		/// The index to the start of the block within the instruction set
 		/// </summary>
-		public int Index
+		public int StartIndex
 		{
-			get { return index; }
-			set { index = value; }
+			get { return start; }
+			set { start = value; }
+		}
+
+		/// <summary>
+		/// The index to the end of the block within the instruction set
+		/// </summary>
+		public int EndIndex
+		{
+			get { return end; }
+			set { end = value; }
 		}
 
 		/// <summary>
@@ -151,7 +184,7 @@ namespace Mosa.Compiler.Framework
 			set { hintTarget = value; }
 		}
 
-		#endregion
+		#endregion Properties
 
 		#region Methods
 
@@ -164,6 +197,6 @@ namespace Mosa.Compiler.Framework
 			return String.Format("L_{0:X4}", Label);
 		}
 
-		#endregion
+		#endregion Methods
 	}
 }

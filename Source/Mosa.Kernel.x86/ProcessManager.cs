@@ -12,12 +12,13 @@ using Mosa.Platform.x86.Intrinsic;
 namespace Mosa.Kernel.x86
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public static class ProcessManager
 	{
 		private static uint _slots = 4096;
 		private static uint _table;
+
 		//private static uint _lock = 0;
 
 		#region Data members
@@ -41,7 +42,7 @@ namespace Mosa.Kernel.x86
 			public static readonly uint TotalSize = 24;
 		}
 
-		#endregion
+		#endregion Data members
 
 		/// <summary>
 		/// Setups the process manager.
@@ -78,7 +79,7 @@ namespace Mosa.Kernel.x86
 		/// <summary>
 		/// Creates the process.
 		/// </summary>
-        /// <param name="slot">The slot.</param>
+		/// <param name="slot">The slot.</param>
 		/// <returns>The slot.</returns>
 		private static unsafe uint CreateProcess(uint slot)
 		{
@@ -88,8 +89,8 @@ namespace Mosa.Kernel.x86
 			Native.Set32(process + Offset.ProcessID, slot);
 			Native.Set32(process + Offset.MemoryMap, (uint)AllocateMemory(slot, 32U * 4096U));
 			Native.Set32(process + Offset.Lock, 0);
-            Native.Set32(process + Offset.DefaultPriority, 7);
-            Native.Set32(process + Offset.MaximumPriority, 255);
+			Native.Set32(process + Offset.DefaultPriority, 7);
+			Native.Set32(process + Offset.MaximumPriority, 255);
 
 			return slot;
 		}
@@ -100,21 +101,21 @@ namespace Mosa.Kernel.x86
 		/// <param name="slot">The slot.</param>
 		public static void TerminateProcess(uint slot)
 		{
-            uint process = GetProcessLocation(slot);
+			uint process = GetProcessLocation(slot);
 
-            // Set status to terminating 
-            Native.Set32(process + Offset.Status, Status.Terminating);
+			// Set status to terminating
+			Native.Set32(process + Offset.Status, Status.Terminating);
 
-            // Deallocate used memory (pages)
-            uint address = Native.Get32(process + Offset.MemoryMap);
-            DeallocateMemory(slot, address, 32U * 4096U);
+			// Deallocate used memory (pages)
+			uint address = Native.Get32(process + Offset.MemoryMap);
+			DeallocateMemory(slot, address, 32U * 4096U);
 
-            // Now heres the weird part, what do we want to do?
-            // For the moment I haved decided to set the status to
-            // terminated and just leave it, then the process manager
-            // can sift through in the next few cycles and see
-            // whether or not it wants to free the slot.
-            Native.Set32(process + Offset.Status, Status.Terminated);
+			// Now heres the weird part, what do we want to do?
+			// For the moment I haved decided to set the status to
+			// terminated and just leave it, then the process manager
+			// can sift through in the next few cycles and see
+			// whether or not it wants to free the slot.
+			Native.Set32(process + Offset.Status, Status.Terminated);
 		}
 
 		/// <summary>
@@ -132,16 +133,16 @@ namespace Mosa.Kernel.x86
 			return address;
 		}
 
-        /// <summary>
-        /// Deallocates the memory.
-        /// </summary>
-        /// <param name="slot">The slot.</param>
-        /// <param name="address">The address.</param>
-        /// <param name="size">The size.</param>
-        public static void DeallocateMemory(uint slot, uint address, uint size)
-        {
-            UpdateMemoryBitMap(slot, address, size, true);
-        }
+		/// <summary>
+		/// Deallocates the memory.
+		/// </summary>
+		/// <param name="slot">The slot.</param>
+		/// <param name="address">The address.</param>
+		/// <param name="size">The size.</param>
+		public static void DeallocateMemory(uint slot, uint address, uint size)
+		{
+			UpdateMemoryBitMap(slot, address, size, true);
+		}
 
 		/// <summary>
 		/// Updates the memory bit map.

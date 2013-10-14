@@ -7,38 +7,36 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-
-
 namespace Mosa.Compiler.Metadata.Tables
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public struct GenericParamRow
 	{
 		#region Data members
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private ushort number;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private GenericParameterAttributes flags;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private Token owner;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private HeapIndexToken nameStringIdx;
 
-		#endregion // Data members
+		#endregion Data members
 
 		#region Construction
 
@@ -57,7 +55,7 @@ namespace Mosa.Compiler.Metadata.Tables
 			this.nameStringIdx = nameStringIdx;
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Properties
 
@@ -97,6 +95,6 @@ namespace Mosa.Compiler.Metadata.Tables
 			get { return nameStringIdx; }
 		}
 
-		#endregion // Properties
+		#endregion Properties
 	}
 }

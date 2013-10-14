@@ -12,25 +12,24 @@ using Mosa.FileSystem.VFS;
 namespace Mosa.FileSystem.FAT
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public class VfsFile : NodeBase
 	{
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected uint fileCluster;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected uint directorySector;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected uint directoryIndex;
-
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="VfsFile"/> class.

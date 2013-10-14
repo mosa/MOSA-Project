@@ -13,16 +13,17 @@ using System.Collections.Generic;
 namespace Mosa.Utility.BootImage
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public enum FileSystemType { FAT12, FAT16, FAT32 };
+
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public enum ImageFormatType { IMG, VHD, VDI };
 
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public class Options
 	{
@@ -43,7 +44,5 @@ namespace Mosa.Utility.BootImage
 		public Options()
 		{
 		}
-
-
 	}
 }

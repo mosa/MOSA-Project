@@ -38,12 +38,12 @@ namespace Mosa.Compiler.Framework
 
 		private int orderIndex;
 
-		#endregion // Data members
+		#endregion Data members
 
 		#region Priority class
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private class Priority : IComparable<Priority>
 		{
@@ -95,15 +95,23 @@ namespace Mosa.Compiler.Framework
 			}
 		}
 
-		#endregion
+		#endregion Priority class
 
 		#region Properties
 
 		public BasicBlock[] NewBlockOrder { get { return blockOrder; } }
-		public int GetLoopDepth(BasicBlock block) { return loopDepth[block.Sequence]; }
-		public int GetLoopIndex(BasicBlock block) { return loopIndex[block.Sequence]; }
 
-		#endregion // Properties
+		public int GetLoopDepth(BasicBlock block)
+		{
+			return loopDepth[block.Sequence];
+		}
+
+		public int GetLoopIndex(BasicBlock block)
+		{
+			return loopIndex[block.Sequence];
+		}
+
+		#endregion Properties
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="LoopAwareBlockOrder"/> class.
@@ -199,7 +207,7 @@ namespace Mosa.Compiler.Framework
 			return loopMap.Get((l * blockCount) + b.Sequence);
 		}
 
-		#endregion //Helpers
+		#endregion Helpers
 
 		private void MarkLoops()
 		{
@@ -299,10 +307,8 @@ namespace Mosa.Compiler.Framework
 					}
 				}
 			}
-
-
 		}
 
-		#endregion // Methods
+		#endregion Members
 	}
 }

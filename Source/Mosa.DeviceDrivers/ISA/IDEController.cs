@@ -18,16 +18,16 @@ using Mosa.DeviceSystem;
 namespace Mosa.DeviceDrivers.ISA
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	[ISADeviceDriver(AutoLoad = true, BasePort = 0x1F0, PortRange = 8, Platforms = PlatformArchitecture.X86AndX64)]
 	[ISADeviceDriver(AutoLoad = false, BasePort = 0x170, PortRange = 8, ForceOption = "ide2", Platforms = PlatformArchitecture.X86AndX64)]
 	public class IDEController : HardwareDevice, IDevice, IHardwareDevice, IDiskControllerDevice
 	{
-
 		#region Definitions
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		internal struct IDECommands
 		{
@@ -37,7 +37,7 @@ namespace Mosa.DeviceDrivers.ISA
 		};
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		internal struct IdentifyDrive
 		{
@@ -57,109 +57,109 @@ namespace Mosa.DeviceDrivers.ISA
 			internal const uint MaxLBA48 = 100 * 2;	// 3 words
 		}
 
-		#endregion
+		#endregion Definitions
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected SpinLock spinLock;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public const uint DrivesPerConroller = 2; // the maximum supported
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IReadWriteIOPort DataPort;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IReadWriteIOPort FeaturePort;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IReadOnlyIOPort ErrorPort;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IReadWriteIOPort SectorCountPort;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IReadWriteIOPort LBALowPort;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IReadWriteIOPort LBAMidPort;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IReadWriteIOPort LBAHighPort;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IReadWriteIOPort DeviceHeadPort;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IReadOnlyIOPort StatusPort;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IWriteOnlyIOPort CommandPort;
 
 		//protected IRQHandler IdeIRQ;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public enum LBAType
 		{
 			/// <summary>
-			/// 
+			///
 			/// </summary>
 			LBA28,
 
 			/// <summary>
-			/// 
+			///
 			/// </summary>
 			LBA48
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected struct DriveInfo
 		{
 			/// <summary>
-			/// 
+			///
 			/// </summary>
 			public bool Present;
 
 			/// <summary>
-			/// 
+			///
 			/// </summary>
 			public uint MaxLBA;
 
 			/// <summary>
-			/// 
+			///
 			/// </summary>
 			public LBAType LBAType;
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected DriveInfo[] driveInfo;
 
@@ -243,7 +243,10 @@ namespace Mosa.DeviceDrivers.ISA
 		/// Called when an interrupt is received.
 		/// </summary>
 		/// <returns></returns>
-		public override bool OnInterrupt() { return true; }
+		public override bool OnInterrupt()
+		{
+			return true;
+		}
 
 		/// <summary>
 		/// Waits for reqister ready.
@@ -265,17 +268,17 @@ namespace Mosa.DeviceDrivers.ISA
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected enum SectorOperation
 		{
 			/// <summary>
-			/// 
+			///
 			/// </summary>
 			Read,
 
 			/// <summary>
-			/// 
+			///
 			/// </summary>
 			Write
 		}
@@ -379,7 +382,6 @@ namespace Mosa.DeviceDrivers.ISA
 			{
 				for (uint index = 0; index < 256; index++)
 					DataPort.Write16(sector.GetUShort(offset + (index * 2)));
-
 			}
 
 			return true;

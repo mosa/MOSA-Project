@@ -7,11 +7,10 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public sealed class LdlocInstruction : LoadInstruction
 	{
@@ -25,7 +24,7 @@ namespace Mosa.Compiler.Framework.CIL
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Methods
 
@@ -89,8 +88,6 @@ namespace Mosa.Compiler.Framework.CIL
 			visitor.Ldloc(context);
 		}
 
-
 		#endregion Methods
-
 	}
 }

@@ -7,7 +7,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-
 // TODO: Find a better namespace for this and correct this type
 
 namespace Mosa.Compiler.TypeSystem

@@ -4,12 +4,11 @@
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com> 
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 namespace Mosa.Test.Collection
 {
-
 	public interface IInterfaceA
 	{
 		int A();
@@ -18,6 +17,7 @@ namespace Mosa.Test.Collection
 	public interface IInterfaceAB
 	{
 		int A();
+
 		int B();
 	}
 
@@ -37,7 +37,6 @@ namespace Mosa.Test.Collection
 		{
 			return 3;
 		}
-
 	}
 
 	public static class InterfaceTests
@@ -62,5 +61,4 @@ namespace Mosa.Test.Collection
 			return b.A();
 		}
 	}
-
 }

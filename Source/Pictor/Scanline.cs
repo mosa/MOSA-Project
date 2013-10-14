@@ -10,11 +10,11 @@
 namespace Pictor
 {
 	//=============================================================scanline_p8
-	// 
-	// This is a general purpose scanline container which supports the interface 
+	//
+	// This is a general purpose scanline container which supports the interface
 	// used in the rasterizer::render(). See description of scanline_u8
 	// for details.
-	// 
+	//
 	//------------------------------------------------------------------------
 	public sealed class Scanline : IScanline
 	{
@@ -43,8 +43,10 @@ namespace Pictor
 		{
 			m_last_x = 0x7FFFFFF0;
 			m_covers = new ArrayPOD<byte>(1000);
+
 			//m_cover_ptr = null;
 			m_spans = new ArrayPOD<ScanlineSpan>(1000);
+
 			//m_cur_span = null;
 		}
 
@@ -141,11 +143,16 @@ namespace Pictor
 			m_spans.Array[m_span_index].len = 0;
 		}
 
-		public int y() { return m_y; }
+		public int y()
+		{
+			return m_y;
+		}
+
 		public uint NumberOfSpans
 		{
 			get { return (uint)m_span_index; }
 		}
+
 		public ScanlineSpan Begin
 		{
 			get
@@ -161,4 +168,3 @@ namespace Pictor
 		}
 	};
 }
-

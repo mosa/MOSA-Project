@@ -10,7 +10,7 @@
 namespace Mosa.EmulatedKernel
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	static public class PortRange
 	{

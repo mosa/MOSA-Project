@@ -8,16 +8,16 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
-using System.Collections.Generic;
-using System.IO;
 using Mosa.Compiler.InternalTrace;
 using Mosa.Compiler.Linker;
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Loader;
 using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Compiler.TypeSystem;
-using Mosa.Compiler.TypeSystem.Generic;
+using Mosa.Compiler.TypeSystem.Cil;
+using System;
+using System.Diagnostics;
+using System.IO;
 
 namespace Mosa.Compiler.Framework
 {
@@ -34,16 +34,15 @@ namespace Mosa.Compiler.Framework
 	/// </remarks>
 	public class BaseMethodCompiler
 	{
-
 		#region Data Members
 
 		/// <summary>
 		/// Holds the pipeline of the compiler.
 		/// </summary>
-		protected readonly CompilerPipeline pipeline;
+		private readonly CompilerPipeline pipeline;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private readonly ICompilationScheduler compilationScheduler;
 
@@ -61,11 +60,6 @@ namespace Mosa.Compiler.Framework
 		/// Holds a list of operands which represent local variables
 		/// </summary>
 		private Operand[] locals;
-
-		/// <summary>
-		/// Optional signature of stack local variables
-		/// </summary>
-		private LocalVariableSignature localsSig;
 
 		/// <summary>
 		/// The method definition being compiled
@@ -90,22 +84,22 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Holds the type system during compilation
 		/// </summary>
-		protected readonly ITypeSystem typeSystem;
+		private readonly ITypeSystem typeSystem;
 
 		/// <summary>
 		/// Holds the type layout interface
 		/// </summary>
-		protected readonly ITypeLayout typeLayout;
+		private readonly ITypeLayout typeLayout;
 
 		/// <summary>
 		/// Holds the modules type system
 		/// </summary>
-		protected readonly ITypeModule moduleTypeSystem;
+		private readonly ITypeModule moduleTypeSystem;
 
 		/// <summary>
 		/// Holds the internal logging interface
 		/// </summary>
-		protected readonly IInternalTrace internalTrace;
+		private readonly IInternalTrace internalTrace;
 
 		/// <summary>
 		/// Holds the exception clauses
@@ -125,21 +119,22 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Holds the virtual register layout
 		/// </summary>
-		private readonly VirtualRegisterLayout virtualRegisterLayout;
+		private readonly VirtualRegisters virtualRegisters;
 
 		private bool stopMethodCompiler;
 
-		#endregion // Data Members
+		#endregion Data Members
 
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="BaseMethodCompiler"/> class.
+		/// Initializes a new instance of the <see cref="BaseMethodCompiler" /> class.
 		/// </summary>
 		/// <param name="compiler">The assembly compiler.</param>
 		/// <param name="method">The method to compile by this instance.</param>
+		/// <param name="basicBlocks">The basic blocks.</param>
 		/// <param name="instructionSet">The instruction set.</param>
-		protected BaseMethodCompiler(BaseCompiler compiler, RuntimeMethod method, InstructionSet instructionSet)
+		protected BaseMethodCompiler(BaseCompiler compiler, RuntimeMethod method, BasicBlocks basicBlocks, InstructionSet instructionSet)
 		{
 			this.compiler = compiler;
 			this.method = method;
@@ -152,22 +147,22 @@ namespace Mosa.Compiler.Framework
 			this.internalTrace = Compiler.InternalTrace;
 			this.linker = compiler.Linker;
 
-			this.basicBlocks = new BasicBlocks();
+			this.basicBlocks = basicBlocks ?? new BasicBlocks();
 
 			this.instructionSet = instructionSet ?? new InstructionSet(256);
 
 			this.pipeline = new CompilerPipeline();
 
-			this.stackLayout = new StackLayout(architecture, method.Parameters.Count + (method.Signature.HasThis || method.Signature.HasExplicitThis ? 1 : 0));
+			this.stackLayout = new StackLayout(architecture, method.Parameters.Count + (method.HasThis || method.HasExplicitThis ? 1 : 0));
 
-			this.virtualRegisterLayout = new VirtualRegisterLayout(architecture, stackLayout);
+			this.virtualRegisters = new VirtualRegisters(architecture);
 
 			EvaluateParameterOperands();
 
 			this.stopMethodCompiler = false;
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Properties
 
@@ -261,27 +256,11 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets the virtual register layout.
 		/// </summary>
-		public VirtualRegisterLayout VirtualRegisterLayout { get { return virtualRegisterLayout; } }
+		public VirtualRegisters VirtualRegisters { get { return virtualRegisters; } }
 
-		#endregion // Properties
+		#endregion Properties
 
 		#region Methods
-
-		/// <summary>
-		/// Evaluates the local operands.
-		/// </summary>
-		protected void EvaluateLocalVariables()
-		{
-			int index = 0;
-			locals = new Operand[localsSig.Locals.Length];
-
-			foreach (var localVariable in localsSig.Locals)
-			{
-				locals[index++] = stackLayout.AllocateStackOperand(localVariable.Type, true);
-				//Scheduler.ScheduleTypeForCompilation(localVariable.Type); // TODO
-			}
-
-		}
 
 		/// <summary>
 		/// Evaluates the parameter operands.
@@ -290,18 +269,18 @@ namespace Mosa.Compiler.Framework
 		{
 			int index = 0;
 
-			if (method.Signature.HasThis || method.Signature.HasExplicitThis)
+			if (method.HasThis || method.HasExplicitThis)
 			{
 				var signatureType = Method.DeclaringType.ContainsOpenGenericParameters
 					? compiler.GenericTypePatcher.PatchSignatureType(Method.Module, Method.DeclaringType as CilGenericType, type.Token)
 					: new ClassSigType(type.Token);
 
-				stackLayout.SetStackParameter(index++, new RuntimeParameter(@"this", 2, ParameterAttributes.In), signatureType);
+				stackLayout.SetStackParameter(index++, new RuntimeParameter("this", 2, ParameterAttributes.In), signatureType); // position 2?
 			}
 
-			for (int paramIndex = 0; paramIndex < method.Signature.Parameters.Length; paramIndex++)
+			for (int paramIndex = 0; paramIndex < method.SigParameters.Length; paramIndex++)
 			{
-				var parameterType = method.Signature.Parameters[paramIndex];
+				var parameterType = method.SigParameters[paramIndex];
 
 				if (parameterType is GenericInstSigType && (parameterType as GenericInstSigType).ContainsGenericParameters)
 				{
@@ -310,7 +289,6 @@ namespace Mosa.Compiler.Framework
 
 				stackLayout.SetStackParameter(index++, method.Parameters[paramIndex], parameterType);
 			}
-
 		}
 
 		/// <summary>
@@ -347,7 +325,10 @@ namespace Mosa.Compiler.Framework
 		/// Stops the method compiler.
 		/// </summary>
 		/// <returns></returns>
-		public void StopMethodCompiler() { stopMethodCompiler = true; } 
+		public void StopMethodCompiler()
+		{
+			stopMethodCompiler = true;
+		}
 
 		/// <summary>
 		/// Creates a new virtual register operand.
@@ -358,8 +339,7 @@ namespace Mosa.Compiler.Framework
 		/// </returns>
 		public Operand CreateVirtualRegister(SigType type)
 		{
-			//return virtualRegisterLayout.AllocateVirtualRegister(type);
-			return stackLayout.AllocateStackOperand(type, false);
+			return virtualRegisters.Allocate(type);
 		}
 
 		/// <summary>
@@ -379,7 +359,7 @@ namespace Mosa.Compiler.Framework
 		/// <exception cref="System.ArgumentOutOfRangeException">The <paramref name="index"/> is not valid.</exception>
 		public Operand GetLocalOperand(int index)
 		{
-			return stackLayout.GetStackOperand(index);
+			return virtualRegisters[index];
 		}
 
 		/// <summary>
@@ -401,15 +381,20 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Sets the signature of local variables in the method.
 		/// </summary>
-		/// <param name="localVariableSignature">The local variable signature of the _method.</param>
-		public void SetLocalVariableSignature(LocalVariableSignature localVariableSignature)
+		/// <param name="localSigTypes">The local sig types.</param>
+		public void SetLocalVariableSignature(SigType[] localSigTypes)
 		{
-			if (localVariableSignature == null)
-				throw new ArgumentNullException(@"localVariableSignature");
+			Debug.Assert(localSigTypes != null, "localVariableSignature");
 
-			localsSig = localVariableSignature;
+			int index = 0;
+			locals = new Operand[localSigTypes.Length];
 
-			EvaluateLocalVariables();
+			foreach (var localVariable in localSigTypes)
+			{
+				locals[index++] = VirtualRegisters.Allocate(Operand.NormalizeSigType(localVariable));
+
+				//Scheduler.ScheduleTypeForCompilation(sigtype); // TODO
+			}
 		}
 
 		/// <summary>
@@ -444,7 +429,22 @@ namespace Mosa.Compiler.Framework
 			return null;
 		}
 
-		#endregion // Methods
+		public string FormatStageName(IPipelineStage stage)
+		{
+			return "[" + Pipeline.GetPosition(stage).ToString("00") + "] " + stage.Name;
+		}
 
+		/// <summary>
+		/// Returns a <see cref="System.String" /> that represents this instance.
+		/// </summary>
+		/// <returns>
+		/// A <see cref="System.String" /> that represents this instance.
+		/// </returns>
+		public override string ToString()
+		{
+			return method.ToString();
+		}
+
+		#endregion Methods
 	}
 }

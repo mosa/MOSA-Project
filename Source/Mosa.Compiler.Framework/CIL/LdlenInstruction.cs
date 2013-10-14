@@ -14,7 +14,7 @@ using Mosa.Compiler.Metadata.Signatures;
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public sealed class LdlenInstruction : UnaryInstruction
 	{
@@ -29,7 +29,7 @@ namespace Mosa.Compiler.Framework.CIL
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Methods
 
@@ -38,9 +38,9 @@ namespace Mosa.Compiler.Framework.CIL
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		/// <param name="compiler">The compiler.</param>
-		public override void Validate(Context ctx, BaseMethodCompiler compiler)
+		public override void Resolve(Context ctx, BaseMethodCompiler compiler)
 		{
-			base.Validate(ctx, compiler);
+			base.Resolve(ctx, compiler);
 
 			SZArraySigType arrayType = ctx.Operand1.Type as SZArraySigType;
 			if (arrayType == null)
@@ -60,6 +60,5 @@ namespace Mosa.Compiler.Framework.CIL
 		}
 
 		#endregion Methods
-
 	}
 }

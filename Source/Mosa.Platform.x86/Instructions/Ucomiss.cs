@@ -5,23 +5,36 @@
  *
  * Authors:
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
- *
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 using Mosa.Compiler.Framework;
+using System.Diagnostics;
 
 namespace Mosa.Platform.x86.Instructions
 {
 	/// <summary>
 	/// Intermediate representation for the x86 ucomiss instruction.
 	/// </summary>
-	public class Ucomiss : TwoOperandNoResultInstruction
+	public class Ucomiss : X86Instruction
 	{
 		#region Data Members
 
 		private static readonly OpCode opcode = new OpCode(new byte[] { 0x0F, 0x2E });
 
-		#endregion // Data Members
+		#endregion Data Members
+
+		#region Construction
+
+		/// <summary>
+		/// Initializes a new instance of <see cref="Cmp"/>.
+		/// </summary>
+		public Ucomiss() :
+			base(0, 2)
+		{
+		}
+
+		#endregion Construction
 
 		#region Methods
 
@@ -34,8 +47,24 @@ namespace Mosa.Platform.x86.Instructions
 		/// <returns></returns>
 		protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
 		{
+			Debug.Assert(source.IsRegister);
+
 			return opcode;
 		}
+
+		/// <summary>
+		/// Emits the specified platform instruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <param name="emitter">The emitter.</param>
+		protected override void Emit(Context context, MachineCodeEmitter emitter)
+		{
+			Debug.Assert(context.Result == null);
+
+			OpCode opCode = ComputeOpCode(null, context.Operand1, context.Operand2);
+			emitter.Emit(opCode, context.Operand1, context.Operand2);
+		}
+
 		/// <summary>
 		/// Allows visitor based dispatch for this instruction object.
 		/// </summary>
@@ -46,6 +75,6 @@ namespace Mosa.Platform.x86.Instructions
 			visitor.Ucomiss(context);
 		}
 
-		#endregion // Methods
+		#endregion Methods
 	}
 }

@@ -7,20 +7,18 @@
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  */
 
-using System;
-
 namespace Mosa.Compiler.Linker.Elf64
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
-	public class BssSection : Section
+	public class BssSection : Elf64LinkerSection
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="BssSection"/> class.
 		/// </summary>
 		public BssSection()
-			: base(Mosa.Compiler.Linker.SectionKind.BSS, @".bss", IntPtr.Zero)
+			: base(Mosa.Compiler.Linker.SectionKind.BSS, @".bss", 0)
 		{
 			header.Type = SectionType.NoBits;
 			header.Flags = SectionAttribute.Alloc | SectionAttribute.Write;

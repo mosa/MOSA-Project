@@ -5,10 +5,11 @@
  *
  * Authors:
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- *  Pascal Delprat (pdelprat) <pascal.delprat@online.fr> 
+ *  Pascal Delprat (pdelprat) <pascal.delprat@online.fr>
  */
 
 using System;
+using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Stages;
 using Mosa.Compiler.Metadata;
@@ -16,21 +17,19 @@ using Mosa.Compiler.Metadata.Signatures;
 
 namespace Mosa.Platform.AVR32
 {
-
 	/// <summary>
 	/// This class provides a common base class for architecture
 	/// specific operations.
 	/// </summary>
-	public class Architecture : BasicArchitecture
+	public class Architecture : BaseArchitecture
 	{
-
 		/// <summary>
-		/// Gets a value indicating whether this architecture is little-endian.
+		/// Gets the endianness of the target architecture.
 		/// </summary>
 		/// <value>
-		/// 	<c>true</c> if this instance is architecture is little-endian; otherwise, <c>false</c>.
+		/// The endianness.
 		/// </value>
-		public override bool IsLittleEndian { get { return false; } }
+		public override Endianness Endianness { get { return Endianness.Big; } }
 
 		/// <summary>
 		/// Gets the type of the elf machine.
@@ -152,7 +151,6 @@ namespace Mosa.Platform.AVR32
 			//assemblyCompilerPipeline.InsertAfterLast<TypeLayoutStage>(
 			//    new MethodTableBuilderStage()
 			//);
-
 		}
 
 		/// <summary>
@@ -161,13 +159,13 @@ namespace Mosa.Platform.AVR32
 		/// <param name="methodCompilerPipeline">The method compiler pipeline to extend.</param>
 		public override void ExtendMethodCompilerPipeline(CompilerPipeline methodCompilerPipeline)
 		{
-
 			methodCompilerPipeline.InsertAfterLast<PlatformStubStage>(
 				new IMethodCompilerStage[]
 				{
 					//new LongOperandTransformationStage(),
 					//new AddressModeConversionStage(),
 					new IRTransformationStage(),
+
 					//new TweakTransformationStage(),
 					//new MemToMemConversionStage(),
 				});
@@ -185,37 +183,20 @@ namespace Mosa.Platform.AVR32
 		/// Gets the type memory requirements.
 		/// </summary>
 		/// <param name="signatureType">The signature type.</param>
-		/// <param name="memorySize">Receives the memory size of the type.</param>
+		/// <param name="size">Receives the memory size of the type.</param>
 		/// <param name="alignment">Receives alignment requirements of the type.</param>
-		public override void GetTypeRequirements(SigType signatureType, out int memorySize, out int alignment)
+		/// <exception cref="System.ArgumentNullException">signatureType</exception>
+		public override void GetTypeRequirements(SigType signatureType, out int size, out int alignment)
 		{
 			if (signatureType == null)
 				throw new ArgumentNullException("signatureType");
 
 			switch (signatureType.Type)
 			{
-				case CilElementType.U1: memorySize = alignment = 4; break;
-				case CilElementType.U2: memorySize = alignment = 4; break;
-				case CilElementType.U4: memorySize = alignment = 4; break;
-				case CilElementType.U8: memorySize = 8; alignment = 4; break;
-				case CilElementType.I1: memorySize = alignment = 4; break;
-				case CilElementType.I2: memorySize = alignment = 4; break;
-				case CilElementType.I4: memorySize = alignment = 4; break;
-				case CilElementType.I8: memorySize = 8; alignment = 4; break;
-				case CilElementType.R4: memorySize = alignment = 4; break;
-				case CilElementType.R8: memorySize = alignment = 8; break;
-				case CilElementType.Boolean: memorySize = alignment = 4; break;
-				case CilElementType.Char: memorySize = alignment = 4; break;
-
-				// Platform specific
-				case CilElementType.Ptr: memorySize = alignment = 4; break;
-				case CilElementType.I: memorySize = alignment = 4; break;
-				case CilElementType.U: memorySize = alignment = 4; break;
-				case CilElementType.Object: memorySize = alignment = 4; break;
-				case CilElementType.Class: memorySize = alignment = 4; break;
-				case CilElementType.String: memorySize = alignment = 4; break;
-
-				default: memorySize = alignment = 4; break;
+				case CilElementType.U8: size = 8; alignment = 4; break;
+				case CilElementType.I8: size = 8; alignment = 4; break;
+				case CilElementType.R8: size = alignment = 8; break;
+				default: size = alignment = 4; break;
 			}
 		}
 
@@ -227,5 +208,35 @@ namespace Mosa.Platform.AVR32
 		{
 			return new MachineCodeEmitter();
 		}
+
+		/// <summary>
+		/// Create platform move.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <param name="Destination">The destination.</param>
+		/// <param name="Source">The source.</param>
+		public override void InsertMove(Context context, Operand destination, Operand source)
+		{
+			// TODO
+		}
+
+		/// <summary>
+		/// Creates the swap.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <param name="Destination">The destination.</param>
+		/// <param name="Source">The source.</param>
+		public override void InsertExchange(Context context, Operand destination, Operand source)
+		{
+			// TODO 
+		}
+		
+		/// <summary>
+		/// Gets the jump instruction for the platform.
+		/// </summary>
+		/// <value>
+		/// The jump instruction.
+		/// </value>
+		public override BaseInstruction JumpInstruction { get { /* TODO */ return null; } }
 	}
 }

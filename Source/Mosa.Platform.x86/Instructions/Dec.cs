@@ -5,10 +5,11 @@
  *
  * Authors:
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
 using Mosa.Compiler.Framework;
+using System;
 
 namespace Mosa.Platform.x86.Instructions
 {
@@ -17,14 +18,13 @@ namespace Mosa.Platform.x86.Instructions
 	/// </summary>
 	public sealed class Dec : X86Instruction
 	{
-
 		#region Data Members
 
 		private static readonly OpCode DEC8 = new OpCode(new byte[] { 0xFE }, 1);
 		private static readonly OpCode DEC16 = new OpCode(new byte[] { 0x66, 0xFF }, 1);
 		private static readonly OpCode DEC32 = new OpCode(new byte[] { 0xFF }, 1);
 
-		#endregion
+		#endregion Data Members
 
 		#region Construction
 
@@ -32,13 +32,14 @@ namespace Mosa.Platform.x86.Instructions
 		/// Initializes a new instance of <see cref="Dec"/>.
 		/// </summary>
 		public Dec() :
-			base(0, 1)
+			base(1, 1)
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Methods
+
 		/// <summary>
 		/// Computes the opcode.
 		/// </summary>
@@ -56,6 +57,17 @@ namespace Mosa.Platform.x86.Instructions
 		}
 
 		/// <summary>
+		/// Emits the specified platform instruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <param name="emitter">The emitter.</param>
+		protected override void Emit(Context context, MachineCodeEmitter emitter)
+		{
+			OpCode opCode = ComputeOpCode(context.Result, null, null);
+			emitter.Emit(opCode, context.Result);
+		}
+
+		/// <summary>
 		/// Allows visitor based dispatch for this instruction object.
 		/// </summary>
 		/// <param name="visitor">The visitor object.</param>
@@ -65,6 +77,6 @@ namespace Mosa.Platform.x86.Instructions
 			visitor.Dec(context);
 		}
 
-		#endregion // Methods
+		#endregion Methods
 	}
 }

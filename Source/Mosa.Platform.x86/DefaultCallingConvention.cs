@@ -7,20 +7,20 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Signatures;
-using Mosa.Platform.x86.Stages;
+using Mosa.Compiler.TypeSystem;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Mosa.Platform.x86
 {
 	/// <summary>
 	/// Implements the CIL default calling convention for x86.
 	/// </summary>
-	sealed class DefaultCallingConvention : ICallingConvention
+	internal sealed class DefaultCallingConvention : ICallingConvention
 	{
 		#region Data members
 
@@ -29,20 +29,14 @@ namespace Mosa.Platform.x86
 		/// </summary>
 		private IArchitecture architecture;
 
-		private static readonly Register[] ReturnVoidRegisters = new Register[] { };
-		private static readonly Register[] Return32BitRegisters = new Register[] { GeneralPurposeRegister.EAX };
-		private static readonly Register[] Return64BitRegisters = new Register[] { GeneralPurposeRegister.EAX, GeneralPurposeRegister.EDX };
-		private static readonly Register[] ReturnFPRegisters = new Register[] { SSE2Register.XMM0 };
-		private static readonly Register[] CalleeSavedRegisters = new Register[] { GeneralPurposeRegister.EDX, GeneralPurposeRegister.EBX, GeneralPurposeRegister.EDI };
-
-		#endregion // Data members
+		#endregion Data members
 
 		#region Construction
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="DefaultCallingConvention"/>.
 		/// </summary>
-		/// <param name="architecture">The architecture of the calling convention.</param>		
+		/// <param name="architecture">The architecture of the calling convention.</param>
 		public DefaultCallingConvention(IArchitecture architecture)
 		{
 			if (architecture == null)
@@ -51,7 +45,7 @@ namespace Mosa.Platform.x86
 			this.architecture = architecture;
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region ICallingConvention Members
 
@@ -70,218 +64,199 @@ namespace Mosa.Platform.x86
 			 * of a type, the this argument is moved to ECX right before the call.
 			 */
 
-			Operand invokeTarget = context.Operand1;
+			Operand target = context.Operand1;
 			Operand result = context.Result;
+			RuntimeMethod method = context.InvokeMethod;
 
-			Stack<Operand> operands = BuildOperandStack(context);
+			Debug.Assert(method != null);
 
-			int stackSize = CalculateStackSizeForParameters(operands);
+			Operand edx = Operand.CreateCPURegister(BuiltInSigType.IntPtr, GeneralPurposeRegister.EDX);
 
-			context.SetInstruction(X86.Nop);
+			List<Operand> operands = BuildOperands(context);
 
-			ReserveStackSizeForCall(context, stackSize);
+			int stackSize = CalculateStackSizeForParameters(operands, method);
 
-			if (stackSize != 0)
-			{
-				PushOperands(context, operands, stackSize);
-			}
-
-			context.AppendInstruction(X86.Call, null, invokeTarget);
+			context.Remove();
 
 			if (stackSize != 0)
 			{
-				FreeStackAfterCall(context, stackSize);
+				ReserveStackSizeForCall(context, stackSize, edx);
+				PushOperands(context, method, operands, stackSize, edx);
 			}
 
+			// the mov/call two-instructions combo is to help facilitate the register allocator
+			context.AppendInstruction(X86.Mov, edx, target);
+			context.AppendInstruction(X86.Call, null, edx);
+
+			FreeStackAfterCall(context, stackSize);
 			CleanupReturnValue(context, result);
 		}
 
-		private Stack<Operand> BuildOperandStack(Context ctx)
+		private List<Operand> BuildOperands(Context context)
 		{
-			Stack<Operand> operandStack = new Stack<Operand>(ctx.OperandCount);
+			List<Operand> operands = new List<Operand>(context.OperandCount - 1);
 			int index = 0;
 
-			foreach (Operand operand in ctx.Operands)
+			foreach (Operand operand in context.Operands)
 			{
 				if (index++ > 0)
 				{
-					operandStack.Push(operand);
+					operands.Add(operand);
 				}
 			}
 
-			return operandStack;
+			return operands;
 		}
 
-		private void ReserveStackSizeForCall(Context ctx, int stackSize)
+		private void ReserveStackSizeForCall(Context context, int stackSize, Operand edx)
 		{
-			if (stackSize != 0)
-			{
-				Operand esp = Operand.CreateCPURegister(BuiltInSigType.IntPtr, GeneralPurposeRegister.ESP);
+			if (stackSize == 0)
+				return;
 
-				ctx.AppendInstruction(X86.Sub, esp, Operand.CreateConstant(esp.Type, stackSize));
-				ctx.AppendInstruction(X86.Mov, Operand.CreateCPURegister(architecture.NativeType, GeneralPurposeRegister.EDX), esp);
-			}
-		}
-
-		private void FreeStackAfterCall(Context ctx, int stackSize)
-		{
 			Operand esp = Operand.CreateCPURegister(BuiltInSigType.IntPtr, GeneralPurposeRegister.ESP);
-			if (stackSize != 0)
-			{
-				ctx.AppendInstruction(X86.Add, esp, Operand.CreateConstant(BuiltInSigType.IntPtr, stackSize));
-			}
+
+			context.AppendInstruction(X86.Sub, esp, esp, Operand.CreateConstant(BuiltInSigType.IntPtr, stackSize));
+			context.AppendInstruction(X86.Mov, edx, esp);
 		}
 
-		private void CleanupReturnValue(Context ctx, Operand result)
+		private void FreeStackAfterCall(Context context, int stackSize)
 		{
-			if (result != null)
+			if (stackSize == 0)
+				return;
+
+			Operand esp = Operand.CreateCPURegister(BuiltInSigType.IntPtr, GeneralPurposeRegister.ESP);
+			context.AppendInstruction(X86.Add, esp, esp, Operand.CreateConstant(BuiltInSigType.IntPtr, stackSize));
+		}
+
+		private void CleanupReturnValue(Context context, Operand result)
+		{
+			if (result == null)
+				return;
+
+			if (result.StackType == StackTypeCode.F)
 			{
-				if (result.StackType == StackTypeCode.Int64)
-					MoveReturnValueTo64Bit(result, ctx);
-				else
-					MoveReturnValueTo32Bit(result, ctx);
+				Operand xmm0 = Operand.CreateCPURegister(result.Type, SSE2Register.XMM0);
+				context.AppendInstruction(X86.Movsd, result, xmm0);
+			}
+			else if (result.StackType == StackTypeCode.Int64)
+			{
+				Operand eax = Operand.CreateCPURegister(result.Type, GeneralPurposeRegister.EAX);
+				Operand edx = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.EDX);
+
+				context.AppendInstruction(X86.Mov, result.Low, eax);
+				context.AppendInstruction(X86.Mov, result.High, edx);
+			}
+			else
+			{
+				Operand eax = Operand.CreateCPURegister(result.Type, GeneralPurposeRegister.EAX);
+				context.AppendInstruction(X86.Mov, result, eax);
 			}
 		}
 
 		/// <summary>
 		/// Calculates the remaining space.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		/// <param name="operandStack">The operand stack.</param>
+		/// <param name="context">The context.</param>
+		/// <param name="method">The method.</param>
+		/// <param name="operands">The operand stack.</param>
 		/// <param name="space">The space.</param>
-		private void PushOperands(Context ctx, Stack<Operand> operandStack, int space)
+		/// <param name="edx">The edx.</param>
+		private void PushOperands(Context context, RuntimeMethod method, List<Operand> operands, int space, Operand edx)
 		{
-			while (operandStack.Count != 0)
+			Debug.Assert((method.Parameters.Count + (method.HasThis ? 1 : 0) == operands.Count) ||
+						(method.DeclaringType.IsDelegate && method.Parameters.Count == operands.Count));
+
+			int offset = method.Parameters.Count - operands.Count;
+
+			for (int index = operands.Count - 1; index >= 0; index--)
 			{
-				Operand operand = operandStack.Pop();
+				Operand operand = operands[index];
+
+				SigType param = (index + offset >= 0) ? method.SigParameters[index + offset] : null;
 
 				int size, alignment;
 				architecture.GetTypeRequirements(operand.Type, out size, out alignment);
 
+				if (param != null && operand.Type.Type == CilElementType.R8 && param.Type == CilElementType.R4)
+				{
+					size = 4; alignment = 4;
+				}
+
 				space -= size;
-				Push(ctx, operand, space, size);
+				Push(context, operand, space, size, edx);
 			}
-		}
-
-		/// <summary>
-		/// Moves the return value to 32 bit.
-		/// </summary>
-		/// <param name="resultOperand">The result operand.</param>
-		/// <param name="ctx">The context.</param>
-		private void MoveReturnValueTo32Bit(Operand resultOperand, Context ctx)
-		{
-			Operand eax = Operand.CreateCPURegister(resultOperand.Type, GeneralPurposeRegister.EAX);
-			ctx.AppendInstruction(X86.Mov, resultOperand, eax);
-		}
-
-		/// <summary>
-		/// Moves the return value to 64 bit.
-		/// </summary>
-		/// <param name="resultOperand">The result operand.</param>
-		/// <param name="ctx">The context.</param>
-		private void MoveReturnValueTo64Bit(Operand resultOperand, Context ctx)
-		{
-			if (!resultOperand.IsMemoryAddress)
-				return;
-
-			Operand opL, opH;
-			LongOperandTransformationStage.SplitLongOperand(resultOperand, out opL, out opH);
-
-			Operand eax = Operand.CreateCPURegister(BuiltInSigType.UInt32, GeneralPurposeRegister.EAX);
-			Operand edx = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.EDX);
-
-			ctx.AppendInstruction(X86.Mov, opL, eax);
-			ctx.AppendInstruction(X86.Mov, opH, edx);
 		}
 
 		/// <summary>
 		/// Pushes the specified instructions.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
+		/// <param name="context">The context.</param>
 		/// <param name="op">The op.</param>
 		/// <param name="stackSize">Size of the stack.</param>
 		/// <param name="parameterSize">Size of the parameter.</param>
-		private void Push(Context ctx, Operand op, int stackSize, int parameterSize)
+		/// <param name="edx">The edx.</param>
+		/// <exception cref="System.NotSupportedException"></exception>
+		private void Push(Context context, Operand op, int stackSize, int parameterSize, Operand edx)
 		{
-			if (op.IsMemoryAddress)
+			Debug.Assert(!op.IsMemoryAddress);
+
+			if (op.StackType == StackTypeCode.Int64)
 			{
-				if (op.Type.Type == CilElementType.ValueType)
-				{
-					for (int i = 0; i < parameterSize; i += 4)
-						ctx.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(op.Type, GeneralPurposeRegister.EDX, new IntPtr(stackSize + i)), Operand.CreateMemoryAddress(op.Type, op.Base, new IntPtr(op.Offset.ToInt64() + i)));
-
-					return;
-				}
-
-				Operand rop;
-				switch (op.StackType)
-				{
-					case StackTypeCode.O: goto case StackTypeCode.N;
-					case StackTypeCode.Ptr: goto case StackTypeCode.N;
-					case StackTypeCode.Int32: goto case StackTypeCode.N;
-					case StackTypeCode.N:
-						rop = Operand.CreateCPURegister(op.Type, GeneralPurposeRegister.EAX);
-						break;
-
-					case StackTypeCode.F:
-						rop = Operand.CreateCPURegister(op.Type, SSE2Register.XMM0);
-						break;
-
-					case StackTypeCode.Int64:
-						{
-							Debug.Assert(op.IsMemoryAddress, @"I8/U8 arg is not in a memory operand.");
-							Operand eax = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.EAX);
-
-							Operand opL, opH;
-							LongOperandTransformationStage.SplitLongOperand(op, out opL, out opH);
-
-							ctx.AppendInstruction(X86.Mov, eax, opL);
-							ctx.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(op.Type, GeneralPurposeRegister.EDX, new IntPtr(stackSize)), eax);
-							ctx.AppendInstruction(X86.Mov, eax, opH);
-							ctx.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(op.Type, GeneralPurposeRegister.EDX, new IntPtr(stackSize + 4)), eax);
-						}
-						return;
-
-					default:
-						throw new NotSupportedException();
-				}
-
-				ctx.AppendInstruction(X86.Mov, rop, op);
-				op = rop;
-			}
-			else if (op.IsConstant && op.StackType == StackTypeCode.Int64)
-			{
-				Operand opL, opH;
-				Operand eax = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.EAX);
-				LongOperandTransformationStage.SplitLongOperand(op, out opL, out opH);
-
-				ctx.AppendInstruction(X86.Mov, eax, opL);
-				ctx.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(BuiltInSigType.Int32, GeneralPurposeRegister.EDX, new IntPtr(stackSize)), eax);
-				ctx.AppendInstruction(X86.Mov, eax, opH);
-				ctx.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(BuiltInSigType.Int32, GeneralPurposeRegister.EDX, new IntPtr(stackSize + 4)), eax);
+				context.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(BuiltInSigType.Int32, edx, stackSize), op.Low);
+				context.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(BuiltInSigType.Int32, edx, stackSize + 4), op.High);
 
 				return;
 			}
 
-			ctx.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(op.Type, GeneralPurposeRegister.EDX, new IntPtr(stackSize)), op);
+			if (op.StackType == StackTypeCode.F)
+			{
+				if (op.Type.Type == CilElementType.R8 && parameterSize == 4)
+				{
+					Operand xmm1 = Operand.CreateCPURegister(BuiltInSigType.Single, SSE2Register.XMM0);
+					context.AppendInstruction(X86.Cvtsd2ss, xmm1, op);
+					architecture.InsertMove(context, Operand.CreateMemoryAddress(edx.Type, edx, stackSize), xmm1);
+				}
+				else
+				{
+					architecture.InsertMove(context, Operand.CreateMemoryAddress(edx.Type, edx, stackSize), op);
+				}
+				return;
+			}
+
+			architecture.InsertMove(context, Operand.CreateMemoryAddress(op.Type, edx, stackSize), op);
 		}
 
 		/// <summary>
 		/// Calculates the stack size for parameters.
 		/// </summary>
 		/// <param name="operands">The operands.</param>
+		/// <param name="method">The method.</param>
 		/// <returns></returns>
-		private int CalculateStackSizeForParameters(IEnumerable<Operand> operands)
+		private int CalculateStackSizeForParameters(List<Operand> operands, RuntimeMethod method)
 		{
+			Debug.Assert((method.Parameters.Count + (method.HasThis ? 1 : 0) == operands.Count) ||
+			(method.DeclaringType.IsDelegate && method.Parameters.Count == operands.Count));
+
+			int offset = method.Parameters.Count - operands.Count;
 			int result = 0;
 
-			foreach (Operand op in operands)
+			for (int index = operands.Count - 1; index >= 0; index--)
 			{
+				Operand operand = operands[index];
+
 				int size, alignment;
-				architecture.GetTypeRequirements(op.Type, out size, out alignment);
+				architecture.GetTypeRequirements(operand.Type, out size, out alignment);
+
+				SigType param = (index + offset >= 0) ? method.SigParameters[index + offset] : null;
+
+				if (param != null && operand.Type.Type == CilElementType.R8 && param.Type == CilElementType.R4)
+				{
+					size = 4; alignment = 4;
+				}
 
 				result += size;
 			}
+
 			return result;
 		}
 
@@ -296,34 +271,36 @@ namespace Mosa.Platform.x86
 			int size, alignment;
 			architecture.GetTypeRequirements(operand.Type, out size, out alignment);
 
-			// FIXME: Do not issue a move, if the operand is already the destination register
 			if (size == 4 || size == 2 || size == 1)
 			{
 				context.SetInstruction(X86.Mov, Operand.CreateCPURegister(operand.Type, GeneralPurposeRegister.EAX), operand);
 				return;
 			}
-			else if (size == 8 && (operand.Type.Type == CilElementType.R4 || operand.Type.Type == CilElementType.R8))
+			else if (operand.Type.Type == CilElementType.R4)
 			{
-				context.SetInstruction(X86.Mov, Operand.CreateCPURegister(operand.Type, SSE2Register.XMM0), operand);
+				context.SetInstruction(X86.Movss, Operand.CreateCPURegister(operand.Type, SSE2Register.XMM0), operand);
 				return;
 			}
-			else if (size == 8 && (operand.Type.Type == CilElementType.I8 || operand.Type.Type == CilElementType.U8))
+			else if (operand.Type.Type == CilElementType.R8)
+			{
+				context.SetInstruction(X86.Movsd, Operand.CreateCPURegister(operand.Type, SSE2Register.XMM0), operand);
+
+				return;
+			}
+			else if (operand.Type.Type == CilElementType.I8 || operand.Type.Type == CilElementType.U8)
 			{
 				SigType HighType = (operand.Type.Type == CilElementType.I8) ? BuiltInSigType.Int32 : BuiltInSigType.UInt32;
 
-				Operand opL, opH;
-				LongOperandTransformationStage.SplitLongOperand(operand, out opL, out opH);
+				Operand opL = operand.Low;
+				Operand opH = operand.High;
 
-				// Like Win32: EDX:EAX
 				context.SetInstruction(X86.Mov, Operand.CreateCPURegister(BuiltInSigType.UInt32, GeneralPurposeRegister.EAX), opL);
 				context.AppendInstruction(X86.Mov, Operand.CreateCPURegister(HighType, GeneralPurposeRegister.EDX), opH);
 
 				return;
 			}
-			else
-			{
-				throw new NotSupportedException();
-			}
+
+			throw new NotSupportedException();
 		}
 
 		void ICallingConvention.GetStackRequirements(Operand stackOperand, out int size, out int alignment)
@@ -342,12 +319,12 @@ namespace Mosa.Platform.x86
 				 * the stack frame. [EBP-08h] (The first stack slot available for
 				 * locals is [EBP], so we're reserving two 32-bit ints for
 				 * system/compiler use as described below.
-				 * 
+				 *
 				 * The first 4 bytes are used to hold the start of the method,
 				 * so that we can embed floating point constants in our PIC.
-				 * 
+				 *
 				 */
-				return -4;
+				return 0;
 			}
 		}
 
@@ -358,42 +335,15 @@ namespace Mosa.Platform.x86
 				/*
 				 * The first parameter is offset by 8 bytes from the start of
 				 * the stack frame. [EBP+08h].
-				 * 
+				 *
 				 * - [EBP+04h] holds the EDX register, which was pushed by the prologue instruction.
 				 * - [EBP+08h] holds the return address, which was pushed by the call instruction.
-				 * 
+				 *
 				 */
 				return 8;
 			}
 		}
 
-		/// <summary>
-		/// Gets the callee saved registers.
-		/// </summary>
-		Register[] ICallingConvention.CalleeSavedRegisters
-		{
-			get { return CalleeSavedRegisters; }
-		}
-
-		/// <summary>
-		/// Gets the return registers.
-		/// </summary>
-		/// <param name="returnType">Type of the return.</param>
-		/// <returns></returns>
-		Register[] ICallingConvention.GetReturnRegisters(CilElementType returnType)
-		{
-			if (returnType == CilElementType.Void)
-				return ReturnVoidRegisters;
-
-			if (returnType == CilElementType.R4 || returnType == CilElementType.R8)
-				return ReturnFPRegisters;
-
-			if (returnType == CilElementType.I8 || returnType == CilElementType.U8)
-				return Return64BitRegisters;
-
-			return Return32BitRegisters;
-		}
-
-		#endregion // ICallingConvention Members
+		#endregion ICallingConvention Members
 	}
 }

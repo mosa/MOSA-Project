@@ -13,7 +13,6 @@ using System;
 
 namespace Mosa.Utility.IsoImage
 {
-
 	/// <summary>
 	/// This class is used to make sure that we are keeping to the structure offsets as laid out in the specs.
 	/// We create a new instance for each structure we output. It passes the data it needs to output to the Generator class
@@ -183,6 +182,5 @@ namespace Mosa.Utility.IsoImage
 			dt.Byte(0, 7); // TODO FIXME - unsure about how to encode time zone exactly... :(
 			EndField(end);
 		}
-
 	}
 }

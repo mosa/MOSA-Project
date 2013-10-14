@@ -27,12 +27,15 @@
                     <include name="CallTests.cs"/>
                     <include name="ConvTests.cs"/>
                     <include name="CallVirtualTests.cs"/>
+                    <include name="LdargaTests.cs"/>
+                    <include name="NewObjectTests.cs"/>
+                    <include name="RegisterAllocatorTests.cs"/>
                     <include name="SpecificTests.cs"/>
                     <include name="ForeachTests.cs"/>
                     <include name="DelegateTests.cs"/>
                     <include name="ExceptionHandlingTests.cs"/>
                     <include name="GenericCallTests.cs"/>
-                    <include name="InitobjTests.cs"/>
+                    <include name="InitStructTests.cs"/>
                     <include name="StructTests.cs"/>
                     <include name="IsInstTests.cs"/>
                     <include name="FibonacciTests.cs"/>
@@ -40,7 +43,6 @@
                     <include name="StaticFieldTests.cs"/>
                     <include name="SwitchTests.cs"/>
                     <include name="LdlocaTests.cs"/>
-                    <include name="LdargaTests.cs"/>
                     <include name="WhileTests.cs"/>
                     <include name="StringTests.cs"/>
                     <include name="SingleTests.cs"/>
@@ -55,7 +57,7 @@
                     <include name="UInt8Tests.cs"/>
                     <include name="InterfaceTests.cs"/>
                     <include name="EnumTests.cs"/>
-                    <include name="NewobjTests.cs"/>
+                    <include name="DerivedNewObjectTests.cs"/>
 		</sources>
 		<references>
                     <include name="System.dll"/>

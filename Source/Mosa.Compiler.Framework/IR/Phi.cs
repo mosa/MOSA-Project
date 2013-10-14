@@ -7,7 +7,6 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-
 namespace Mosa.Compiler.Framework.IR
 {
 	/// <summary>
@@ -20,13 +19,14 @@ namespace Mosa.Compiler.Framework.IR
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of Phicontext.
+		/// Initializes a new instance of the <see cref="Phi" /> class.
 		/// </summary>
 		public Phi()
+			: base(0, 0)
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Methods
 
@@ -40,6 +40,6 @@ namespace Mosa.Compiler.Framework.IR
 			visitor.Phi(context);
 		}
 
-		#endregion // Methods
+		#endregion Methods
 	}
 }

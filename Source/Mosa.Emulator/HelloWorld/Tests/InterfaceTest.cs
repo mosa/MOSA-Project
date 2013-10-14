@@ -1,10 +1,9 @@
-﻿
-namespace Mosa.HelloWorld.x86.Tests
+﻿namespace Mosa.HelloWorld.x86.Tests
 {
 	public class InterfaceTest : KernelTest
 	{
 		public InterfaceTest()
-			: base("IF") 
+			: base("IF")
 		{
 			testMethods.Add(InterfaceTest1);
 			testMethods.Add(InterfaceTest2);
@@ -22,7 +21,7 @@ namespace Mosa.HelloWorld.x86.Tests
 		{
 			TestClass tc = new TestClass();
 			IInterfaceAB b = tc;
-			bool result =  (b.B() == 3);
+			bool result = (b.B() == 3);
 			return result;
 		}
 
@@ -43,6 +42,7 @@ namespace Mosa.HelloWorld.x86.Tests
 	public interface IInterfaceAB
 	{
 		int A();
+
 		int B();
 	}
 
@@ -62,6 +62,5 @@ namespace Mosa.HelloWorld.x86.Tests
 		{
 			return 3;
 		}
-		
 	}
 }

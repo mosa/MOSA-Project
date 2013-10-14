@@ -15,6 +15,7 @@ namespace Mosa.Utility.IsoImage
 	{
 		//public DirectoryInfo dirInfo;
 		public Dictionary<string, IsoEntry> entries;
+
 		public short PathTableEntry;
 
 		public IsoFolder()
@@ -34,5 +35,4 @@ namespace Mosa.Utility.IsoImage
 
 		public override bool IsFolder { get { return true; } }
 	}
-
 }

@@ -32,7 +32,7 @@ namespace Mosa.Compiler.Framework.CIL
 			new StackTypeCode[] { StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown },
 		};
 
-		#endregion // Operand Table
+		#endregion Operand Table
 
 		#region Construction
 
@@ -45,7 +45,7 @@ namespace Mosa.Compiler.Framework.CIL
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Methods
 
@@ -54,9 +54,9 @@ namespace Mosa.Compiler.Framework.CIL
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		/// <param name="compiler">The compiler.</param>
-		public override void Validate(Context ctx, BaseMethodCompiler compiler)
+		public override void Resolve(Context ctx, BaseMethodCompiler compiler)
 		{
-			base.Validate(ctx, compiler);
+			base.Resolve(ctx, compiler);
 
 			StackTypeCode result = _operandTable[(int)ctx.Operand1.StackType][(int)ctx.Operand2.StackType];
 			Debug.Assert(StackTypeCode.Unknown != result, @"Can't shift with the given stack operands.");
@@ -77,6 +77,5 @@ namespace Mosa.Compiler.Framework.CIL
 		}
 
 		#endregion Methods
-
 	}
 }

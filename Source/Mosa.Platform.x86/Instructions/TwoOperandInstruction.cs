@@ -4,22 +4,17 @@
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
- *  Michael Ruck (grover) <sharpos@michaelruck.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
 using Mosa.Compiler.Framework;
+using System.Diagnostics;
 
 namespace Mosa.Platform.x86.Instructions
 {
 	/// <summary>
-	/// Abstract base class for x86 instructions with two operands.
+	///
 	/// </summary>
-	/// <remarks>
-	/// The <see cref="TwoOperandInstruction"/> is the base class for
-	/// x86 instructions using two operands. It provides properties to
-	/// easily access the individual operands.
-	/// </remarks>
 	public abstract class TwoOperandInstruction : X86Instruction
 	{
 		#region Construction
@@ -28,23 +23,11 @@ namespace Mosa.Platform.x86.Instructions
 		/// Initializes a new instance of <see cref="TwoOperandInstruction"/>.
 		/// </summary>
 		protected TwoOperandInstruction() :
-			base(1, 1)
+			base(1, 2)
 		{
 		}
 
-		#endregion // Construction
-
-		/// <summary>
-		/// Computes the opcode.
-		/// </summary>
-		/// <param name="destination">The destination operand.</param>
-		/// <param name="source">The source operand.</param>
-		/// <param name="third">The third operand.</param>
-		/// <returns></returns>
-		protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
-		{
-			throw new NotSupportedException();
-		}
+		#endregion Construction
 
 		/// <summary>
 		/// Emits the specified platform instruction.
@@ -53,9 +36,9 @@ namespace Mosa.Platform.x86.Instructions
 		/// <param name="emitter">The emitter.</param>
 		protected override void Emit(Context context, MachineCodeEmitter emitter)
 		{
-			OpCode opCode = ComputeOpCode(context.Result, context.Operand1, null);
-			emitter.Emit(opCode, context.Result, context.Operand1);
+			Debug.Assert(context.Result == context.Operand1);
+			OpCode opCode = ComputeOpCode(context.Result, context.Operand1, context.Operand2);
+			emitter.Emit(opCode, context.Result, context.Operand2);
 		}
-
 	}
 }

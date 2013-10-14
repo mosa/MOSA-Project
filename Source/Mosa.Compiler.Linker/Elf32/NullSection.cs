@@ -7,15 +7,14 @@
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  */
 
-using System;
 using System.IO;
 
 namespace Mosa.Compiler.Linker.Elf32
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
-	public class NullSection : Section
+	public class NullSection : Elf32LinkerSection
 	{
 		/// <summary>
 		/// Gets the length of the section in bytes.
@@ -33,7 +32,7 @@ namespace Mosa.Compiler.Linker.Elf32
 		/// Initializes a new instance of the <see cref="CodeSection"/> class.
 		/// </summary>
 		public NullSection()
-			: base(SectionKind.Text, @"", IntPtr.Zero)
+			: base(SectionKind.Text, @"", 0)
 		{
 			header.Name = 0;
 			header.Type = SectionType.Null;

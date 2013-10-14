@@ -18,18 +18,18 @@ using Mosa.Compiler.Metadata.Tables;
 namespace Mosa.Compiler.Metadata.Loader.PE
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public sealed class PortableExecutableImage : IMetadataModule, IDisposable
 	{
 		#region Constants
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private const int CLI_HEADER_DATA_DIRECTORY = 0x0e;
 
-		#endregion // Constants
+		#endregion Constants
 
 		#region Data members
 
@@ -77,7 +77,7 @@ namespace Mosa.Compiler.Metadata.Loader.PE
 		/// </summary>
 		private byte[] metadata;
 
-		#endregion // Data members
+		#endregion Data members
 
 		#region Construction
 
@@ -93,7 +93,7 @@ namespace Mosa.Compiler.Metadata.Loader.PE
 				throw new ArgumentNullException("stream");
 
 			assemblyStream = stream;
-			assemblyReader = new EndianAwareBinaryReader(stream, true);
+			assemblyReader = new EndianAwareBinaryReader(stream, Endianness.Little);
 
 			// Load all headers by visiting them sequentially
 			dosHeader.Read(assemblyReader);
@@ -120,12 +120,12 @@ namespace Mosa.Compiler.Metadata.Loader.PE
 			metadataRoot = new MetadataRoot(metadata);
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Properties
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		Token IMetadataModule.EntryPoint
 		{
@@ -189,7 +189,7 @@ namespace Mosa.Compiler.Metadata.Loader.PE
 		/// <value></value>
 		public byte[] MetadataBinary { get { return metadata; } }
 
-		#endregion // Properties
+		#endregion Properties
 
 		#region Methods
 
@@ -240,7 +240,7 @@ namespace Mosa.Compiler.Metadata.Loader.PE
 			throw new ArgumentException(@"Failed to resolve virtual virtualAddress to disk position.", @"virtualAddress");
 		}
 
-		#endregion // Methods
+		#endregion Methods
 
 		#region IDisposable Members
 
@@ -255,7 +255,7 @@ namespace Mosa.Compiler.Metadata.Loader.PE
 			assemblyStream = null;
 		}
 
-		#endregion // IDisposable Members
+		#endregion IDisposable Members
 
 		public override string ToString()
 		{

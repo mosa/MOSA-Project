@@ -20,6 +20,17 @@ namespace Mosa.Platform.AVR32.Instructions
 	/// </summary>
 	public class Adc : AVR32Instruction
 	{
+		#region Construction
+
+		/// <summary>
+		/// Initializes a new instance of <see cref="Adc"/>.
+		/// </summary>
+		public Adc() :
+			base(0, 0)
+		{
+		}
+
+		#endregion Construction
 
 		#region Methods
 
@@ -50,7 +61,6 @@ namespace Mosa.Platform.AVR32.Instructions
 			visitor.Adc(context);
 		}
 
-		#endregion // Methods
-
+		#endregion Methods
 	}
 }

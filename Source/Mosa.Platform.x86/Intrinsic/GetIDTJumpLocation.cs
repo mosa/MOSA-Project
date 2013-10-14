@@ -7,13 +7,11 @@
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  */
 
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using Mosa.Compiler.Framework;
+using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.Metadata.Signatures;
-using Mosa.Compiler.TypeSystem;
-using IR = Mosa.Compiler.Framework.IR;
+using System;
+using System.Diagnostics;
 
 namespace Mosa.Platform.x86.Intrinsic
 {
@@ -29,7 +27,7 @@ namespace Mosa.Platform.x86.Intrinsic
 		/// </summary>
 		/// <param name="context">The context.</param>
 		/// <param name="typeSystem">The type system.</param>
-		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, ITypeSystem typeSystem, IList<RuntimeParameter> parameters)
+		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, BaseMethodCompiler methodCompiler)
 		{
 			var operand = context.Operand1;
 
@@ -38,7 +36,7 @@ namespace Mosa.Platform.x86.Intrinsic
 				// try to find the constant - a bit of a hack
 				Context def = new Context(context.InstructionSet, operand.Definitions[0]);
 
-				if (def.Instruction is IR.Move && def.Operand1.IsConstant)
+				if (def.Instruction is Move && def.Operand1.IsConstant)
 					operand = def.Operand1;
 			}
 
@@ -49,9 +47,9 @@ namespace Mosa.Platform.x86.Intrinsic
 			if ((irq > 256) || (irq < 0))
 				throw new InvalidOperationException();
 
-			context.SetInstruction(IR.IRInstruction.Move, context.Result, Operand.CreateSymbol(BuiltInSigType.Ptr, @"Mosa.Tools.Compiler.LinkerGenerated.<$>InterruptISR" + irq.ToString() + "()"));
+			context.SetInstruction(IRInstruction.Move, context.Result, Operand.CreateSymbol(BuiltInSigType.Ptr, @"Mosa.Tools.Compiler.LinkerGenerated.<$>InterruptISR" + irq.ToString() + "()"));
 		}
 
-		#endregion // Methods
+		#endregion Methods
 	}
 }

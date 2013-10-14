@@ -5,7 +5,7 @@
  *
  * Authors:
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- *  Pascal Delprat (pdelprat) <pascal.delprat@online.fr>  
+ *  Pascal Delprat (pdelprat) <pascal.delprat@online.fr>
  */
 
 using System;
@@ -19,12 +19,38 @@ namespace Mosa.Platform.AVR32
 	/// </summary>
 	public sealed class MachineCodeEmitter : BaseCodeEmitter, ICodeEmitter, IDisposable
 	{
-
 		public MachineCodeEmitter()
 		{
 		}
 
 		#region Code Generation Members
+
+		protected override void ResolvePatches()
+		{
+			// Save the current position
+			long currentPosition = codeStream.Position;
+
+			foreach (Patch p in Patches)
+			{
+				long labelPosition;
+				if (!TryGetLabel(p.Label, out labelPosition))
+				{
+					throw new ArgumentException(@"Missing label while resolving patches.", @"label");
+				}
+
+				codeStream.Position = p.Position;
+
+				// Compute relative branch offset
+				int relOffset = (int)labelPosition - ((int)p.Position + 4);
+
+				// Write relative offset to stream
+				byte[] bytes = BitConverter.GetBytes(relOffset);
+				codeStream.Write(bytes, 0, bytes.Length);
+			}
+
+			// Reset the position
+			codeStream.Position = currentPosition;
+		}
 
 		/// <summary>
 		/// Writes the unsigned short.
@@ -68,19 +94,19 @@ namespace Mosa.Platform.AVR32
 		public void Call(Operand symbolOperand)
 		{
 			linker.Link(
-				LinkType.RelativeOffset | LinkType.NativeI4,
-				compiler.Method.ToString(),
+				LinkType.RelativeOffset | LinkType.I4,
+				BuiltInPatch.I4,
+				MethodName,
 				(int)(codeStream.Position - codeStreamBasePosition),
 				(int)(codeStream.Position - codeStreamBasePosition) + 4,
 				symbolOperand.Name,
-				IntPtr.Zero
-			);
+				0);
 
 			codeStream.Position += 4;
 		}
 
 		/// <summary>
-		/// Emit with format 9.2.1 
+		/// Emit with format 9.2.1
 		/// </summary>
 		/// <param name="opcode"></param>
 		/// <param name="firstRegister"></param>
@@ -98,7 +124,7 @@ namespace Mosa.Platform.AVR32
 		}
 
 		/// <summary>
-		/// Emit with format 9.2.2 
+		/// Emit with format 9.2.2
 		/// </summary>
 		/// <param name="opcode"></param>
 		/// <param name="register"></param>
@@ -114,7 +140,7 @@ namespace Mosa.Platform.AVR32
 		}
 
 		/// <summary>
-		/// Emit with format 9.2.3 
+		/// Emit with format 9.2.3
 		/// </summary>
 		/// <param name="opcode"></param>
 		/// <param name="first"></param>
@@ -253,7 +279,7 @@ namespace Mosa.Platform.AVR32
 
 			buffer |= 0xE0000000;
 			buffer |= (uint)((opcode & 0x01FF) << 20);
-			buffer |= (uint)(register  << 16);
+			buffer |= (uint)(register << 16);
 			buffer |= (uint)(k16);
 
 			Write(buffer);
@@ -338,7 +364,6 @@ namespace Mosa.Platform.AVR32
 			Write(buffer);
 		}
 
-		#endregion
-
+		#endregion Code Generation Members
 	}
 }

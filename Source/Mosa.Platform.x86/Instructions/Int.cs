@@ -5,6 +5,7 @@
  *
  * Authors:
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 using Mosa.Compiler.Framework;
@@ -20,19 +21,19 @@ namespace Mosa.Platform.x86.Instructions
 
 		private static readonly OpCode opcode = new OpCode(new byte[] { 0xCD });
 
-		#endregion // Data Members
-		
+		#endregion Data Members
+
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of <see cref="Dec"/>.
+		/// Initializes a new instance of <see cref="Int"/>.
 		/// </summary>
 		public Int() :
-			base(1, 0)
+			base(0, 1)
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Methods
 
@@ -58,6 +59,6 @@ namespace Mosa.Platform.x86.Instructions
 			visitor.Int(context);
 		}
 
-		#endregion // Methods
+		#endregion Methods
 	}
 }

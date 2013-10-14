@@ -7,7 +7,6 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-
 namespace Mosa.Compiler.Framework.IR
 {
 	/// <summary>
@@ -24,7 +23,7 @@ namespace Mosa.Compiler.Framework.IR
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Instruction Overrides
 
@@ -38,6 +37,6 @@ namespace Mosa.Compiler.Framework.IR
 			visitor.LogicalAnd(context);
 		}
 
-		#endregion // Instruction Overrides
+		#endregion Instruction Overrides
 	}
 }

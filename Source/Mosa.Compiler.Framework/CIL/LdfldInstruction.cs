@@ -8,13 +8,12 @@
  */
 
 using System.Diagnostics;
-
-using Mosa.Compiler.TypeSystem.Generic;
+using Mosa.Compiler.TypeSystem.Cil;
 
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public sealed class LdfldInstruction : BaseCILInstruction
 	{
@@ -29,7 +28,7 @@ namespace Mosa.Compiler.Framework.CIL
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Methods
 
@@ -53,8 +52,8 @@ namespace Mosa.Compiler.Framework.CIL
 				Debug.Assert(!ctx.RuntimeField.ContainsGenericParameter);
 			}
 
-			var sigType = ctx.RuntimeField.SignatureType;
-			ctx.Result = LoadInstruction.CreateResultOperand(decoder, Operand.StackTypeFromSigType(sigType), sigType);
+			var sigType = ctx.RuntimeField.SigType;
+			ctx.Result = LoadInstruction.CreateResultOperand(decoder,  sigType);
 		}
 
 		/// <summary>
@@ -68,6 +67,5 @@ namespace Mosa.Compiler.Framework.CIL
 		}
 
 		#endregion Methods
-
 	}
 }

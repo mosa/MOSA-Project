@@ -27,7 +27,7 @@ namespace Mosa.Compiler.Metadata.Signatures
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region SigType Overrides
 
@@ -47,7 +47,7 @@ namespace Mosa.Compiler.Metadata.Signatures
 			return (base.Equals(other) == true && this.Token == cst.Token);
 		}
 
-		#endregion // SigType Overrides
+		#endregion SigType Overrides
 
 		/// <summary>
 		/// Expresses the class reference in a meaningful, symbol-friendly string form

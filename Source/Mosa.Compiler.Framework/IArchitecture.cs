@@ -5,13 +5,14 @@
  *
  * Authors:
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using Mosa.Compiler.Common;
 using Mosa.Compiler.Metadata.Signatures;
 
 namespace Mosa.Compiler.Framework
 {
-
 	/// <summary>
 	/// Interface to allow compiler stages to perform architecture specific operations.
 	/// </summary>
@@ -24,12 +25,12 @@ namespace Mosa.Compiler.Framework
 		#region Properties
 
 		/// <summary>
-		/// Gets a value indicating whether this architecture is little-endian.
+		/// Gets the endianness of the target architecture.
 		/// </summary>
 		/// <value>
-		/// 	<c>true</c> if this instance is architecture is little-endian; otherwise, <c>false</c>.
+		/// The endianness.
 		/// </value>
-		bool IsLittleEndian { get; }
+		Endianness Endianness { get; }
 
 		/// <summary>
 		/// Gets the type of the elf machine.
@@ -59,7 +60,7 @@ namespace Mosa.Compiler.Framework
 		Register StackFrameRegister { get; }
 
 		/// <summary>
-		/// Returns the stack pointer register of the architecture. 
+		/// Returns the stack pointer register of the architecture.
 		/// </summary>
 		Register StackPointerRegister { get; }
 
@@ -71,7 +72,15 @@ namespace Mosa.Compiler.Framework
 		/// </value>
 		string PlatformName { get; }
 
-		#endregion // Properties
+		/// <summary>
+		/// Gets the jump instruction.
+		/// </summary>
+		/// <value>
+		/// The jump instruction.
+		/// </value>
+		BaseInstruction JumpInstruction { get; }
+
+		#endregion Properties
 
 		#region Methods
 
@@ -111,6 +120,22 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		ICodeEmitter GetCodeEmitter();
 
-		#endregion // Methods
+		/// <summary>
+		/// Insert platform move.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <param name="destination">The destination.</param>
+		/// <param name="source">The source.</param>
+		void InsertMove(Context context, Operand destination, Operand source);
+
+		/// <summary>
+		/// Insert platform exchange registers.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <param name="destination">The destination.</param>
+		/// <param name="source">The source.</param>
+		void InsertExchange(Context context, Operand destination, Operand source);
+
+		#endregion Methods
 	}
 }

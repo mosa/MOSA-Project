@@ -19,11 +19,15 @@ namespace Mosa.DeviceSystem
 		/// <summary>
 		/// Enters spinlock
 		/// </summary>
-		public void Enter() { }
+		public void Enter()
+		{
+		}
 
 		/// <summary>
 		/// Exits spinlock
 		/// </summary>
-		public void Exit() { }
+		public void Exit()
+		{
+		}
 	}
 }

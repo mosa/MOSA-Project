@@ -12,26 +12,31 @@ namespace Pictor.PixelFormat
 	public interface IBlenderGray : IBlender
 	{
 		unsafe void BlendPixel(byte* p, uint cv, uint alpha);
+
 		unsafe void BlendPixel(byte* p, uint cv, uint alpha, uint cover);
 	}
 
 	//============================================================BlenderGray
-	//template<class ColorT> 
+	//template<class ColorT>
 	public struct BlenderGray : IBlenderGray
 	{
 		public uint NumPixelBits { get { return 8; } }
 
 		public int OrderR { get { return 0; } }
+
 		public int OrderG { get { return 0; } }
+
 		public int OrderB { get { return 0; } }
+
 		public int OrderA { get { return 0; } }
 
-		const int base_shift = 8;
+		private const int base_shift = 8;
 
 		public unsafe void BlendPixel(byte* p, uint cr, uint cg, uint cb, uint alpha)
 		{
 			BlendPixel(p, cr, alpha);
 		}
+
 		public unsafe void BlendPixel(byte* p, uint cr, uint cg, uint cb, uint alpha, uint cover)
 		{
 			BlendPixel(p, cr, alpha);
@@ -54,7 +59,7 @@ namespace Pictor.PixelFormat
 	/*
 
 	//======================================================blender_gray_pre
-	//template<class ColorT> 
+	//template<class ColorT>
 	struct blender_gray_pre
 	{
 		typedef ColorT color_type;
@@ -76,11 +81,9 @@ namespace Pictor.PixelFormat
 			*p = (value_type)(((*p * (color_type::BaseMask - alpha)) >> BaseShift) + cv);
 		}
 	};
-	
-
 
 	//=====================================================apply_gamma_dir_gray
-	//template<class ColorT, class GammaLut> 
+	//template<class ColorT, class GammaLut>
 	class apply_gamma_dir_gray
 	{
 	public:
@@ -97,10 +100,8 @@ namespace Pictor.PixelFormat
 		GammaLut& m_gamma;
 	};
 
-
-
 	//=====================================================apply_gamma_inv_gray
-	//template<class ColorT, class GammaLut> 
+	//template<class ColorT, class GammaLut>
 	class apply_gamma_inv_gray
 	{
 	public:
@@ -119,20 +120,19 @@ namespace Pictor.PixelFormat
 
 	 */
 
-
 	//=================================================pixfmt_alpha_blend_gray
 	//template<class Blender, class RenBuf, uint Step=1, uint Offset=0>
 	public sealed class FormatGray : IPixelFormat
 	{
-		RasterBuffer m_rbuf;
-		uint m_Step;
-		uint m_Offset;
+		private RasterBuffer m_rbuf;
+		private uint m_Step;
+		private uint m_Offset;
 
-		IBlenderGray m_Blender;
+		private IBlenderGray m_Blender;
 
-		const int base_shift = 8;
-		const uint base_scale = (uint)(1 << base_shift);
-		const uint base_mask = base_scale - 1;
+		private const int base_shift = 8;
+		private const uint base_scale = (uint)(1 << base_shift);
+		private const uint base_mask = base_scale - 1;
 
 		//--------------------------------------------------------------------
 		//--------------------------------------------------------------------
@@ -177,10 +177,15 @@ namespace Pictor.PixelFormat
 			}
 		}
 
-		public void attach(RasterBuffer rb) { m_rbuf = rb; }
+		public void attach(RasterBuffer rb)
+		{
+			m_rbuf = rb;
+		}
+
 		//--------------------------------------------------------------------
 
 		/*
+
 		//template<class PixFmt>
 		public bool Attach(PixFmt& pixf, int x1, int y1, int x2, int y2)
 		{
@@ -188,7 +193,7 @@ namespace Pictor.PixelFormat
 			if(r.Clip(RectI(0, 0, pixf.Width()-1, pixf.Height()-1)))
 			{
 				int Stride = pixf.Stride();
-				m_rbuf.Attach(pixf.PixelPointer(r.x1, Stride < 0 ? r.y2 : r.y1), 
+				m_rbuf.Attach(pixf.PixelPointer(r.x1, Stride < 0 ? r.y2 : r.y1),
 							   (r.x2 - r.x1) + 1,
 							   (r.y2 - r.y1) + 1,
 							   Stride);
@@ -203,17 +208,23 @@ namespace Pictor.PixelFormat
 		{
 			get { return m_rbuf.Width(); }
 		}
+
 		public uint Height
 		{
 			get { return m_rbuf.Height(); }
 		}
+
 		public int Stride
 		{
 			get { return m_rbuf.StrideInBytes(); }
 		}
 
 		//--------------------------------------------------------------------
-		unsafe public byte* RowPointer(int y) { return m_rbuf.GetPixelPointer(y); }
+		unsafe public byte* RowPointer(int y)
+		{
+			return m_rbuf.GetPixelPointer(y);
+		}
+
 		//public row_data     row(int y)     { return m_rbuf.row(y); }
 
 		unsafe public byte* PixelPointer(int x, int y)
@@ -240,7 +251,9 @@ namespace Pictor.PixelFormat
 				return new RGBA_Bytes();
 			}
 		}
+
 		/*
+
 	   //--------------------------------------------------------------------
 	   public color_type Pixel(int x, int y)
 	   {
@@ -334,7 +347,6 @@ namespace Pictor.PixelFormat
 				}
 			}
 		}
-
 
 		//--------------------------------------------------------------------
 		public void BlendVerticalLine(int x, int y1, int y2, RGBA_Bytes c, byte cover)
@@ -509,7 +521,6 @@ namespace Pictor.PixelFormat
 			}
 		}
 
-
 		private unsafe void copy_or_blend_pix(byte* p, RGBA_Bytes c)
 		{
 			if (c.m_A != 0)
@@ -584,10 +595,11 @@ namespace Pictor.PixelFormat
 				}
 			}
 		}
+
 		/*
 
 								//--------------------------------------------------------------------
-								//template<class Function> 
+								//template<class Function>
 								public void for_each_pixel(Function f)
 								{
 									uint y;
@@ -612,14 +624,14 @@ namespace Pictor.PixelFormat
 								}
 
 								//--------------------------------------------------------------------
-								//template<class GammaLut> 
+								//template<class GammaLut>
 								public void apply_gamma_dir(GammaLut& g)
 								{
 									for_each_pixel(apply_gamma_dir_gray<color_type, GammaLut>(g));
 								}
 
 								//--------------------------------------------------------------------
-								//template<class GammaLut> 
+								//template<class GammaLut>
 								public void apply_gamma_inv(GammaLut& g)
 								{
 									for_each_pixel(apply_gamma_inv_gray<color_type, GammaLut>(g));
@@ -630,7 +642,7 @@ namespace Pictor.PixelFormat
 
 								//--------------------------------------------------------------------
 								//template<class SrcPixelFormatRenderer>
-								public void blend_from_color(SrcPixelFormatRenderer& from, 
+								public void blend_from_color(SrcPixelFormatRenderer& from,
 													  color_type& Color,
 													  int xdst, int ydst,
 													  int xsrc, int ysrc,
@@ -641,9 +653,9 @@ namespace Pictor.PixelFormat
 									src_value_type* psrc = (src_value_type*)from.RowPointer(ysrc);
 									if(psrc)
 									{
-										byte* pdst = 
+										byte* pdst =
 											(byte*)m_rbuf.RowPointer(xdst, ydst, len) + xdst;
-										do 
+										do
 										{
 											CopyOrBlendPixel(pdst, Color, (*psrc * cover + BaseMask) >> BaseShift);
 											++psrc;
@@ -655,7 +667,7 @@ namespace Pictor.PixelFormat
 
 								//--------------------------------------------------------------------
 								//template<class SrcPixelFormatRenderer>
-								public void blend_from_lut(SrcPixelFormatRenderer& from, 
+								public void blend_from_lut(SrcPixelFormatRenderer& from,
 													color_type* color_lut,
 													int xdst, int ydst,
 													int xsrc, int ysrc,
@@ -666,9 +678,9 @@ namespace Pictor.PixelFormat
 									src_value_type* psrc = (src_value_type*)from.RowPointer(ysrc);
 									if(psrc)
 									{
-										byte* pdst = 
+										byte* pdst =
 											(byte*)m_rbuf.RowPointer(xdst, ydst, len) + xdst;
-										do 
+										do
 										{
 											CopyOrBlendPixel(pdst, color_lut[*psrc], cover);
 											++psrc;

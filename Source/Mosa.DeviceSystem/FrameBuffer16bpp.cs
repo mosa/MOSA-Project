@@ -14,7 +14,6 @@ namespace Mosa.DeviceSystem
 	/// </summary>
 	public class FrameBuffer16bpp : FrameBuffer, IFrameBuffer
 	{
-
 		/// <summary>
 		/// Initializes a new instance of the <see cref="FrameBuffer16bpp"/> class.
 		/// </summary>
@@ -65,5 +64,4 @@ namespace Mosa.DeviceSystem
 			memory.Write16(GetOffset(x, y), (ushort)color);
 		}
 	}
-
 }

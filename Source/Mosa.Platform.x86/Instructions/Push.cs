@@ -5,10 +5,11 @@
  *
  * Authors:
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
 using Mosa.Compiler.Framework;
+using System;
 
 namespace Mosa.Platform.x86.Instructions
 {
@@ -30,8 +31,7 @@ namespace Mosa.Platform.x86.Instructions
 		private static readonly OpCode PUSH_FS = new OpCode(new byte[] { 0x0F, 0xA0 });
 		private static readonly OpCode PUSH_GS = new OpCode(new byte[] { 0x0F, 0xA8 });
 
-
-		#endregion
+		#endregion Data Members
 
 		#region Construction
 
@@ -39,11 +39,11 @@ namespace Mosa.Platform.x86.Instructions
 		/// Initializes a new instance of <see cref="Push"/>.
 		/// </summary>
 		public Push() :
-			base(1, 0)
+			base(0, 1)
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Methods
 
@@ -78,7 +78,7 @@ namespace Mosa.Platform.x86.Instructions
 						default: throw new InvalidOperationException(@"unable to emit opcode for segment register");
 					}
 			}
-			emitter.Emit(PUSH, context.Operand1, null, null);
+			emitter.Emit(PUSH, context.Operand1);
 		}
 
 		/// <summary>
@@ -91,6 +91,6 @@ namespace Mosa.Platform.x86.Instructions
 			visitor.Push(context);
 		}
 
-		#endregion // Methods
+		#endregion Methods
 	}
 }

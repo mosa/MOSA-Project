@@ -1,7 +1,5 @@
-
 namespace Mosa.Compiler.Metadata
 {
-
 	public enum AssemblyHashAlgorithm : uint
 	{
 		None = 0x0000,

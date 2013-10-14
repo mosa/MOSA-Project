@@ -41,7 +41,7 @@ namespace Mosa.Compiler.Pdb
 		/// </summary>
 		private Stream stream;
 
-		#endregion // Data Members
+		#endregion Data Members
 
 		#region Construction
 
@@ -77,8 +77,10 @@ namespace Mosa.Compiler.Pdb
 		{
 			// The root stream length
 			int dwStreamLength = this.header.dwRootBytes;
+
 			// Calculate the number of pages of the root stream
 			int pageCount = (dwStreamLength / this.header.dwPageSize) + 1;
+
 			// Allocate page list
 			int[] pages = new int[pageCount];
 
@@ -115,7 +117,7 @@ namespace Mosa.Compiler.Pdb
 			return new PdbStream(this.stream, this.header.dwPageSize, pages, dwStreamLength);
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region IDisposable Members
 
@@ -132,7 +134,7 @@ namespace Mosa.Compiler.Pdb
 			}
 		}
 
-		#endregion // IDisposable Members
+		#endregion IDisposable Members
 
 		#region Type Stream
 
@@ -151,7 +153,7 @@ namespace Mosa.Compiler.Pdb
 					if (PdbSymbolHeader.Read(reader, out header) == true)
 					{
 						// Now iterate all symbol file headers, which are added per source file.
-						// These map symbols to the files they're contained in via special PDB streams, which in 
+						// These map symbols to the files they're contained in via special PDB streams, which in
 						// turn contain the line information.
 						long fileEnd = reader.BaseStream.Position + header.module_size;
 						while (reader.BaseStream.Position < fileEnd)
@@ -190,6 +192,6 @@ namespace Mosa.Compiler.Pdb
 			}
 		}
 
-		#endregion // Type Stream
+		#endregion Type Stream
 	}
 }

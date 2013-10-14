@@ -20,6 +20,17 @@ namespace Mosa.Platform.AVR32.Instructions
 	/// </summary>
 	public class Eor : AVR32Instruction
 	{
+		#region Construction
+
+		/// <summary>
+		/// Initializes a new instance of <see cref="Eor"/>.
+		/// </summary>
+		public Eor() :
+			base(0, 0)
+		{
+		}
+
+		#endregion Construction
 
 		#region Methods
 
@@ -50,7 +61,6 @@ namespace Mosa.Platform.AVR32.Instructions
 			visitor.Eor(context);
 		}
 
-		#endregion // Methods
-
+		#endregion Methods
 	}
 }

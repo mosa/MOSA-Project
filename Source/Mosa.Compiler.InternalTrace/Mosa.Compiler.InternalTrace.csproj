@@ -66,6 +66,7 @@
     <Compile Include="BasicInternalTrace.cs" />
     <Compile Include="CompilerEvent.cs" />
     <Compile Include="ConfigurableTraceFilter.cs" />
+    <Compile Include="CompilerTrace.cs" />
     <Compile Include="DebugCompilerEventListener.cs" />
     <Compile Include="DebugTraceListener.cs" />
     <Compile Include="ICompilerEventListener.cs" />

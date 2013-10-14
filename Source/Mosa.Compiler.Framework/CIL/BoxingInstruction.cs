@@ -7,11 +7,10 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public class BoxingInstruction : BaseCILInstruction
 	{
@@ -22,11 +21,10 @@ namespace Mosa.Compiler.Framework.CIL
 		/// </summary>
 		/// <param name="opcode">The opcode.</param>
 		public BoxingInstruction(OpCode opcode)
-			: base(opcode)
+			: base(opcode, 0)
 		{
 		}
 
-		#endregion // Construction
-
+		#endregion Construction
 	}
 }

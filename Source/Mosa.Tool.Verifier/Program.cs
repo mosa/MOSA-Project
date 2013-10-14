@@ -59,4 +59,3 @@ namespace Mosa.Tool.Verifier
 		}
 	}
 }
-

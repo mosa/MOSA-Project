@@ -7,7 +7,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Compiler.TypeSystem;
@@ -15,7 +14,7 @@ using Mosa.Compiler.TypeSystem;
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public class BoxInstruction : UnaryInstruction
 	{
@@ -30,7 +29,7 @@ namespace Mosa.Compiler.Framework.CIL
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Methods
 
@@ -56,64 +55,26 @@ namespace Mosa.Compiler.Framework.CIL
 				{
 					var builtInSigType = signatureType as BuiltInSigType;
 					RuntimeType builtInType = null;
+
 					switch (builtInSigType.Type)
 					{
-						case CilElementType.I1:
-							{
-								builtInType = decoder.TypeModule.TypeSystem.GetType("mscorlib", "System", "SByte");
-								break;
-							}
-						case CilElementType.I2:
-							{
-								builtInType = decoder.TypeModule.TypeSystem.GetType("mscorlib", "System", "Int16");
-								break;
-							}
-						case CilElementType.I4:
-							{
-								builtInType = decoder.TypeModule.TypeSystem.GetType("mscorlib", "System", "Int32");
-								break;
-							}
-						case CilElementType.I8:
-							{
-								builtInType = decoder.TypeModule.TypeSystem.GetType("mscorlib", "System", "Int64");
-								break;
-							}
-						case CilElementType.U1:
-							{
-								builtInType = decoder.TypeModule.TypeSystem.GetType("mscorlib", "System", "Byte");
-								break;
-							}
-						case CilElementType.U2:
-							{
-								builtInType = decoder.TypeModule.TypeSystem.GetType("mscorlib", "System", "UInt16");
-								break;
-							}
-						case CilElementType.U4:
-							{
-								builtInType = decoder.TypeModule.TypeSystem.GetType("mscorlib", "System", "UInt32");
-								break;
-							}
-						case CilElementType.U8:
-							{
-								builtInType = decoder.TypeModule.TypeSystem.GetType("mscorlib", "System", "UInt64");
-								break;
-							}
-						case CilElementType.Boolean:
-							{
-								builtInType = decoder.TypeModule.TypeSystem.GetType("mscorlib", "System", "Boolean");
-								break;
-							}
-						case CilElementType.String:
-							{
-								builtInType = decoder.TypeModule.TypeSystem.GetType("mscorlib", "System", "String");
-								break;
-							}
-						default:
-							break;
+						case CilElementType.I1: builtInType = decoder.TypeModule.TypeSystem.GetType("mscorlib", "System", "SByte"); break;
+						case CilElementType.I2: builtInType = decoder.TypeModule.TypeSystem.GetType("mscorlib", "System", "Int16"); break;
+						case CilElementType.I4: builtInType = decoder.TypeModule.TypeSystem.GetType("mscorlib", "System", "Int32"); break;
+						case CilElementType.I8: builtInType = decoder.TypeModule.TypeSystem.GetType("mscorlib", "System", "Int64"); break;
+						case CilElementType.U1: builtInType = decoder.TypeModule.TypeSystem.GetType("mscorlib", "System", "Byte"); break;
+						case CilElementType.U2: builtInType = decoder.TypeModule.TypeSystem.GetType("mscorlib", "System", "UInt16"); break;
+						case CilElementType.U4: builtInType = decoder.TypeModule.TypeSystem.GetType("mscorlib", "System", "UInt32"); break;
+						case CilElementType.U8: builtInType = decoder.TypeModule.TypeSystem.GetType("mscorlib", "System", "UInt64"); break;
+						case CilElementType.Boolean: builtInType = decoder.TypeModule.TypeSystem.GetType("mscorlib", "System", "Boolean"); break;
+						case CilElementType.String: builtInType = decoder.TypeModule.TypeSystem.GetType("mscorlib", "System", "String"); break;
+						default: break;
 					}
+			
 					var valueTypeSignature = new ValueTypeSigType(builtInType.Token);
 					ctx.Result = decoder.Compiler.CreateVirtualRegister(valueTypeSignature);
 					ctx.RuntimeType = builtInType;
+					
 					return;
 				}
 
@@ -128,6 +89,7 @@ namespace Mosa.Compiler.Framework.CIL
 			{
 				ctx.Result = decoder.Compiler.CreateVirtualRegister(decoder.GenericTypePatcher.PatchSignatureType(decoder.TypeModule, decoder.Method.DeclaringType, token));
 			}
+
 			ctx.RuntimeType = decoder.TypeModule.GetType(token);
 		}
 
@@ -142,6 +104,5 @@ namespace Mosa.Compiler.Framework.CIL
 		}
 
 		#endregion Methods
-
 	}
 }

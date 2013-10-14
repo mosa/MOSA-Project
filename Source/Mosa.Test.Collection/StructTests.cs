@@ -1,24 +1,12 @@
-﻿/*
- * (c) 2011 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com> 
- *
- */
-
-
-
-
+﻿ 
+using System;
 
 namespace Mosa.Test.Collection
 {
 
 	public class StructTests
 	{
-	
-		static bool StructTestSet1U1(byte one)
+			static bool StructTestSet1U1(byte one)
 		{
 			Struct1U1 structure;
 			
@@ -37,8 +25,7 @@ namespace Mosa.Test.Collection
 			
 			return (structure.One.Equals(one) && structure.Two.Equals(two) && structure.Three.Equals(three));
 		}
-		
-		static bool StructTestSet1U2(ushort one)
+				static bool StructTestSet1U2(ushort one)
 		{
 			Struct1U2 structure;
 			
@@ -57,8 +44,7 @@ namespace Mosa.Test.Collection
 			
 			return (structure.One.Equals(one) && structure.Two.Equals(two) && structure.Three.Equals(three));
 		}
-		
-		static bool StructTestSet1U4(uint one)
+				static bool StructTestSet1U4(uint one)
 		{
 			Struct1U4 structure;
 			
@@ -77,8 +63,7 @@ namespace Mosa.Test.Collection
 			
 			return (structure.One.Equals(one) && structure.Two.Equals(two) && structure.Three.Equals(three));
 		}
-		
-		static bool StructTestSet1U8(ulong one)
+				static bool StructTestSet1U8(ulong one)
 		{
 			Struct1U8 structure;
 			
@@ -97,8 +82,7 @@ namespace Mosa.Test.Collection
 			
 			return (structure.One.Equals(one) && structure.Two.Equals(two) && structure.Three.Equals(three));
 		}
-		
-		static bool StructTestSet1I1(sbyte one)
+				static bool StructTestSet1I1(sbyte one)
 		{
 			Struct1I1 structure;
 			
@@ -117,8 +101,7 @@ namespace Mosa.Test.Collection
 			
 			return (structure.One.Equals(one) && structure.Two.Equals(two) && structure.Three.Equals(three));
 		}
-		
-		static bool StructTestSet1I2(short one)
+				static bool StructTestSet1I2(short one)
 		{
 			Struct1I2 structure;
 			
@@ -137,8 +120,7 @@ namespace Mosa.Test.Collection
 			
 			return (structure.One.Equals(one) && structure.Two.Equals(two) && structure.Three.Equals(three));
 		}
-		
-		static bool StructTestSet1I4(int one)
+				static bool StructTestSet1I4(int one)
 		{
 			Struct1I4 structure;
 			
@@ -157,8 +139,7 @@ namespace Mosa.Test.Collection
 			
 			return (structure.One.Equals(one) && structure.Two.Equals(two) && structure.Three.Equals(three));
 		}
-		
-		static bool StructTestSet1I8(long one)
+				static bool StructTestSet1I8(long one)
 		{
 			Struct1I8 structure;
 			
@@ -177,8 +158,7 @@ namespace Mosa.Test.Collection
 			
 			return (structure.One.Equals(one) && structure.Two.Equals(two) && structure.Three.Equals(three));
 		}
-		
-		static bool StructTestSet1R4(float one)
+				static bool StructTestSet1R4(float one)
 		{
 			Struct1R4 structure;
 			
@@ -197,8 +177,7 @@ namespace Mosa.Test.Collection
 			
 			return (structure.One.Equals(one) && structure.Two.Equals(two) && structure.Three.Equals(three));
 		}
-		
-		static bool StructTestSet1R8(double one)
+				static bool StructTestSet1R8(double one)
 		{
 			Struct1R8 structure;
 			
@@ -217,8 +196,7 @@ namespace Mosa.Test.Collection
 			
 			return (structure.One.Equals(one) && structure.Two.Equals(two) && structure.Three.Equals(three));
 		}
-		
-		static bool StructTestSet1C(char one)
+				static bool StructTestSet1C(char one)
 		{
 			Struct1C structure;
 			
@@ -238,11 +216,9 @@ namespace Mosa.Test.Collection
 			return (structure.One.Equals(one) && structure.Two.Equals(two) && structure.Three.Equals(three));
 		}
 		
-
 	}
 
-	
-	public struct Struct1U1
+		public struct Struct1U1
 	{
 		public byte One;
 	}
@@ -253,8 +229,7 @@ namespace Mosa.Test.Collection
 		public byte Two;
 		public byte Three;
 	}
-	
-	public struct Struct1U2
+		public struct Struct1U2
 	{
 		public ushort One;
 	}
@@ -265,8 +240,7 @@ namespace Mosa.Test.Collection
 		public ushort Two;
 		public ushort Three;
 	}
-	
-	public struct Struct1U4
+		public struct Struct1U4
 	{
 		public uint One;
 	}
@@ -277,8 +251,7 @@ namespace Mosa.Test.Collection
 		public uint Two;
 		public uint Three;
 	}
-	
-	public struct Struct1U8
+		public struct Struct1U8
 	{
 		public ulong One;
 	}
@@ -289,8 +262,7 @@ namespace Mosa.Test.Collection
 		public ulong Two;
 		public ulong Three;
 	}
-	
-	public struct Struct1I1
+		public struct Struct1I1
 	{
 		public sbyte One;
 	}
@@ -301,8 +273,7 @@ namespace Mosa.Test.Collection
 		public sbyte Two;
 		public sbyte Three;
 	}
-	
-	public struct Struct1I2
+		public struct Struct1I2
 	{
 		public short One;
 	}
@@ -313,8 +284,7 @@ namespace Mosa.Test.Collection
 		public short Two;
 		public short Three;
 	}
-	
-	public struct Struct1I4
+		public struct Struct1I4
 	{
 		public int One;
 	}
@@ -325,8 +295,7 @@ namespace Mosa.Test.Collection
 		public int Two;
 		public int Three;
 	}
-	
-	public struct Struct1I8
+		public struct Struct1I8
 	{
 		public long One;
 	}
@@ -337,8 +306,7 @@ namespace Mosa.Test.Collection
 		public long Two;
 		public long Three;
 	}
-	
-	public struct Struct1R4
+		public struct Struct1R4
 	{
 		public float One;
 	}
@@ -349,8 +317,7 @@ namespace Mosa.Test.Collection
 		public float Two;
 		public float Three;
 	}
-	
-	public struct Struct1R8
+		public struct Struct1R8
 	{
 		public double One;
 	}
@@ -361,8 +328,7 @@ namespace Mosa.Test.Collection
 		public double Two;
 		public double Three;
 	}
-	
-	public struct Struct1C
+		public struct Struct1C
 	{
 		public char One;
 	}
@@ -373,6 +339,5 @@ namespace Mosa.Test.Collection
 		public char Two;
 		public char Three;
 	}
-	
-	
+		
 }

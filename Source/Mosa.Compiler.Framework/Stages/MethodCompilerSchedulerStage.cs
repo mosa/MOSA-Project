@@ -7,11 +7,6 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-using System;
-using System.Collections.Generic;
-using Mosa.Compiler.InternalTrace;
-using Mosa.Compiler.TypeSystem;
-
 namespace Mosa.Compiler.Framework.Stages
 {
 	/// <summary>
@@ -19,15 +14,16 @@ namespace Mosa.Compiler.Framework.Stages
 	/// </summary>
 	public class MethodCompilerSchedulerStage : BaseCompilerStage, ICompilerStage, IPipelineStage
 	{
-
 		#region Data Members
 
-		#endregion // Data Members
+		#endregion Data Members
 
 		public MethodCompilerSchedulerStage()
 		{
 		}
+
 		//		newScheduler = new CompilationScheduler(typeSystem);
+
 		#region ICompilerStage members
 
 		void ICompilerStage.Run()
@@ -39,12 +35,10 @@ namespace Mosa.Compiler.Framework.Stages
 				if (method == null)
 					break;
 
-				compiler.CompileMethod(method);
+				compiler.CompileMethod(method, null, null);
 			}
-						
 		}
 
-		#endregion // ICompilerStage members
-
+		#endregion ICompilerStage members
 	}
 }

@@ -12,7 +12,7 @@ using System;
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public sealed class NotInstruction : UnaryArithmeticInstruction
 	{
@@ -23,15 +23,15 @@ namespace Mosa.Compiler.Framework.CIL
 		/// </summary>
 		private static readonly StackTypeCode[] _opTable = new StackTypeCode[] {
 			StackTypeCode.Unknown,
-			StackTypeCode.Int32,   
-			StackTypeCode.Int64, 
+			StackTypeCode.Int32,
+			StackTypeCode.Int64,
 			StackTypeCode.N,
-			StackTypeCode.Unknown, 
-			StackTypeCode.Unknown, 
+			StackTypeCode.Unknown,
+			StackTypeCode.Unknown,
 			StackTypeCode.Unknown
 		};
 
-		#endregion // Operand Table
+		#endregion Operand Table
 
 		#region Construction
 
@@ -44,7 +44,7 @@ namespace Mosa.Compiler.Framework.CIL
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Methods
 
@@ -53,9 +53,9 @@ namespace Mosa.Compiler.Framework.CIL
 		/// </summary>
 		/// <param name="ctx"></param>
 		/// <param name="compiler">The compiler.</param>
-		public override void Validate(Context ctx, BaseMethodCompiler compiler)
+		public override void Resolve(Context ctx, BaseMethodCompiler compiler)
 		{
-			base.Validate(ctx, compiler);
+			base.Resolve(ctx, compiler);
 
 			// Validate the operand
 			StackTypeCode result = _opTable[(int)ctx.Operand1.StackType];
@@ -76,6 +76,5 @@ namespace Mosa.Compiler.Framework.CIL
 		}
 
 		#endregion Methods
-
 	}
 }

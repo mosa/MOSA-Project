@@ -38,7 +38,7 @@ namespace Mosa.Compiler.TypeSystem
 		/// </summary>
 		private readonly int position;
 
-		#endregion // Data members
+		#endregion Data members
 
 		#region Construction
 
@@ -56,7 +56,7 @@ namespace Mosa.Compiler.TypeSystem
 			this.position = position;
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Properties
 
@@ -108,11 +108,10 @@ namespace Mosa.Compiler.TypeSystem
 			get { return position; }
 		}
 
-		#endregion // Properties
+		#endregion Properties
 
 		#region Methods
 
-		#endregion // Methods
-
+		#endregion Methods
 	}
 }

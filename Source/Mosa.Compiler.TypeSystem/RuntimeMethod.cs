@@ -5,14 +5,15 @@
  *
  * Authors:
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
-
-using System.Collections.Generic;
-using System.Text;
 
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Loader;
 using Mosa.Compiler.Metadata.Signatures;
+using System;
+using System.Collections.Generic;
+using System.Text;
 
 namespace Mosa.Compiler.TypeSystem
 {
@@ -33,10 +34,13 @@ namespace Mosa.Compiler.TypeSystem
 		/// </summary>
 		private MethodAttributes attributes;
 
-		/// <summary>
-		/// Holds the signature of the method.
-		/// </summary>
-		private MethodSignature signature;
+		private bool hasThis;
+
+		private bool hasExplicitThis;
+
+		private SigType returnType;
+
+		private SigType[] sigParameters;
 
 		/// <summary>
 		/// Holds the list of parameters of the method.
@@ -49,21 +53,21 @@ namespace Mosa.Compiler.TypeSystem
 		private uint rva;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private readonly IList<GenericParameter> genericParameters;
-
-		/// <summary>
-		/// Holds the full method name
-		/// </summary>
-		private string fullName;
 
 		/// <summary>
 		/// Holds the method name
 		/// </summary>
 		private string methodName;
 
-		#endregion // Data members
+		/// <summary>
+		/// Holds the fullname (declaring type + name)
+		/// </summary>
+		private string fullname;
+
+		#endregion Data members
 
 		#region Construction
 
@@ -72,15 +76,36 @@ namespace Mosa.Compiler.TypeSystem
 		/// </summary>
 		/// <param name="token">The token.</param>
 		/// <param name="declaringType">The type, which declared this method.</param>
-		public RuntimeMethod(ITypeModule module, Token token, RuntimeType declaringType) :
-			base(module, token, declaringType)
+		public RuntimeMethod(ITypeModule module, string name, Token token, RuntimeType declaringType, IList<RuntimeParameter> parameters, SigType[] sigParameters) :
+			base(module, name, declaringType, token)
 		{
 			this.genericParameters = new List<GenericParameter>();
+			this.parameters = parameters ?? new List<RuntimeParameter>();
+			this.sigParameters = sigParameters;
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Properties
+
+		/// <summary>
+		/// Gets the full name.
+		/// </summary>
+		/// <value>
+		/// The full name.
+		/// </value>
+		public string FullName
+		{
+			get
+			{
+				if (fullname == null)
+				{
+					fullname = (DeclaringType == null) ? MethodName : String.Format("{0}.{1}", DeclaringType.FullName, MethodName);
+				}
+
+				return fullname;
+			}
+		}
 
 		/// <summary>
 		/// Retrieves the method attributes.
@@ -167,17 +192,30 @@ namespace Mosa.Compiler.TypeSystem
 		public IList<RuntimeParameter> Parameters
 		{
 			get { return parameters; }
-			protected set { parameters = value; }
 		}
 
-		/// <summary>
-		/// Retrieves the signature of the method.
-		/// </summary>
-		/// <value>The signature.</value>
-		public MethodSignature Signature
+		public bool HasThis
 		{
-			get { return signature; }
-			protected set { signature = value; }
+			get { return hasThis; }
+			protected set { hasThis = value; }
+		}
+
+		public bool HasExplicitThis
+		{
+			get { return hasExplicitThis; }
+			protected set { hasExplicitThis = value; }
+		}
+
+		public SigType ReturnType
+		{
+			get { return returnType; }
+			protected set { returnType = value; }
+		}
+
+		public SigType[] SigParameters
+		{
+			get { return sigParameters; }
+			//protected set { sigParameters = value; }
 		}
 
 		/// <summary>
@@ -200,23 +238,6 @@ namespace Mosa.Compiler.TypeSystem
 		}
 
 		/// <summary>
-		/// Gets the full name.
-		/// </summary>
-		/// <value>The full name.</value>
-		public string FullName
-		{
-			get
-			{
-				if (fullName == null)
-				{
-					fullName = DeclaringType.ToString() + '.' + MethodName;
-				}
-
-				return fullName;
-			}
-		}
-
-		/// <summary>
 		/// Gets the name of the method.
 		/// </summary>
 		/// <value>The name of the method.</value>
@@ -233,11 +254,10 @@ namespace Mosa.Compiler.TypeSystem
 
 					if (this.Parameters.Count != 0)
 					{
-						var sig = this.Signature;
 						int i = 0;
 						foreach (var p in this.Parameters)
 						{
-							sb.AppendFormat("{0} {1},", sig.Parameters[i++].Type, p.Name);
+							sb.AppendFormat("{0} {1},", SigParameters[i++].Type, p.Name);
 						}
 						sb.Remove(sb.Length - 1, 1);
 					}
@@ -251,7 +271,7 @@ namespace Mosa.Compiler.TypeSystem
 			}
 		}
 
-		#endregion // Properties
+		#endregion Properties
 
 		#region Object Overrides
 
@@ -266,7 +286,90 @@ namespace Mosa.Compiler.TypeSystem
 			return FullName;
 		}
 
-		#endregion // Object Overrides
+		#endregion Object Overrides
 
+		public bool Matches(RuntimeMethod other)
+		{
+			if (object.ReferenceEquals(this, other))
+				return true;
+
+			//if (other.GenericParameterCount != this.GenericParameterCount)
+			//    return false;
+			//if (other.MethodCallingConvention != this.MethodCallingConvention)
+			//    return false;
+
+			if (HasThis != other.HasThis)
+				return false;
+			if (HasExplicitThis != other.HasExplicitThis)
+				return false;
+			if (SigParameters.Length != other.SigParameters.Length)
+				return false;
+			if (!Matches(ReturnType, other.ReturnType))
+				return false;
+
+			return Matches(other.SigParameters);
+		}
+
+		public bool Matches(SigType[] sigTypes)
+		{
+			if (SigParameters.Length != sigTypes.Length)
+				return false;
+
+			for (int i = 0; i < SigParameters.Length; i++)
+			{
+				if (!Matches(SigParameters[i], sigTypes[i]))
+					return false;
+			}
+
+			return true;
+		}
+
+		/// <summary>
+		/// Matches the specified sigtypes.
+		/// </summary>
+		/// <param name="b">The other signature type.</param>
+		/// <returns>True, if the signature type matches.</returns>
+		private static bool Matches(SigType a, SigType b)
+		{
+			if (object.ReferenceEquals(a, b))
+				return true;
+
+			if (b.Type != a.Type)
+				return false;
+
+			switch (a.Type)
+			{
+				case CilElementType.Void:
+				case CilElementType.Boolean:
+				case CilElementType.Char:
+				case CilElementType.I1:
+				case CilElementType.U1:
+				case CilElementType.I2:
+				case CilElementType.U2:
+				case CilElementType.I4:
+				case CilElementType.U4:
+				case CilElementType.I8:
+				case CilElementType.U8:
+				case CilElementType.R4:
+				case CilElementType.R8:
+				case CilElementType.String:
+				case CilElementType.Type:
+				case CilElementType.I:
+				case CilElementType.U:
+				case CilElementType.Object:
+				case CilElementType.Class:
+				case CilElementType.ValueType:
+					return true;
+
+				case CilElementType.SZArray:
+					return a.Equals(b);
+
+				case CilElementType.GenericInst:
+					return true; // this.Equals(other);
+
+				default:
+					throw new NotImplementedException();
+			}
+		}
 	}
 }

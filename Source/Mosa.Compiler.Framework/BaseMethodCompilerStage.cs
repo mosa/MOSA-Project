@@ -8,11 +8,13 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-using System;
+using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.InternalTrace;
 using Mosa.Compiler.Metadata.Loader;
 using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Compiler.TypeSystem;
+using System;
+using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework
 {
@@ -78,7 +80,7 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		protected int nativePointerAlignment;
 
-		#endregion // Data members
+		#endregion Data members
 
 		#region IPipelineStage Members
 
@@ -88,7 +90,7 @@ namespace Mosa.Compiler.Framework
 		/// <value>The name of the compilation stage.</value>
 		public virtual string Name { get { return this.GetType().Name; } }
 
-		#endregion // IPipelineStage Members
+		#endregion IPipelineStage Members
 
 		#region IMethodCompilerStage members
 
@@ -113,7 +115,7 @@ namespace Mosa.Compiler.Framework
 			architecture.GetTypeRequirements(BuiltInSigType.IntPtr, out nativePointerSize, out nativePointerAlignment);
 		}
 
-		#endregion // IMethodCompilerStage members
+		#endregion IMethodCompilerStage members
 
 		#region Methods
 
@@ -158,36 +160,250 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		protected Operand AllocateVirtualRegister(SigType type)
 		{
-			return methodCompiler.VirtualRegisterLayout.AllocateVirtualRegister(type);
+			return methodCompiler.VirtualRegisters.Allocate(type);
 		}
 
-		#endregion
+		#endregion Methods
+
+		#region Block Operations
+
+		/// <summary>
+		/// Links the blocks.
+		/// </summary>
+		/// <param name="source">The source.</param>
+		/// <param name="destination">The destination.</param>
+		protected void LinkBlocks(Context source, BasicBlock destination)
+		{
+			basicBlocks.LinkBlocks(source.BasicBlock, destination);
+		}
+
+		/// <summary>
+		/// Links the blocks.
+		/// </summary>
+		/// <param name="source">The source.</param>
+		/// <param name="destination">The destination.</param>
+		protected void LinkBlocks(Context source, Context destination)
+		{
+			basicBlocks.LinkBlocks(source.BasicBlock, destination.BasicBlock);
+		}
+
+		/// <summary>
+		/// Links the blocks.
+		/// </summary>
+		/// <param name="source">The source.</param>
+		/// <param name="destination">The destination.</param>
+		/// <param name="destination2">The destination2.</param>
+		protected void LinkBlocks(Context source, Context destination, Context destination2)
+		{
+			basicBlocks.LinkBlocks(source.BasicBlock, destination.BasicBlock);
+			basicBlocks.LinkBlocks(source.BasicBlock, destination2.BasicBlock);
+		}
+
+		/// <summary>
+		/// Links the blocks.
+		/// </summary>
+		/// <param name="source">The source.</param>
+		/// <param name="destination">The destination.</param>
+		/// <param name="destination2">The destination2.</param>
+		protected void LinkBlocks(Context source, Context destination, BasicBlock destination2)
+		{
+			basicBlocks.LinkBlocks(source.BasicBlock, destination.BasicBlock);
+			basicBlocks.LinkBlocks(source.BasicBlock, destination2);
+		}
+
+		/// <summary>
+		/// Links the blocks.
+		/// </summary>
+		/// <param name="source">The source.</param>
+		/// <param name="destination">The destination.</param>
+		/// <param name="destination2">The destination2.</param>
+		protected void LinkBlocks(Context source, BasicBlock destination, BasicBlock destination2)
+		{
+			basicBlocks.LinkBlocks(source.BasicBlock, destination);
+			basicBlocks.LinkBlocks(source.BasicBlock, destination2);
+		}
+
+		/// <summary>
+		/// Create an empty block.
+		/// </summary>
+		/// <param name="label">The label.</param>
+		/// <returns></returns>
+		protected Context CreateNewBlockWithContext(int label)
+		{
+			return ContextHelper.CreateNewBlockWithContext(instructionSet, basicBlocks, label);
+		}
+
+		/// <summary>
+		/// Create an empty block.
+		/// </summary>
+		/// <returns></returns>
+		protected Context CreateNewBlockWithContext()
+		{
+			return ContextHelper.CreateNewBlockWithContext(instructionSet, basicBlocks);
+		}
+
+		/// <summary>
+		/// Creates empty blocks.
+		/// </summary>
+		/// <param name="blocks">The Blocks.</param>
+		/// <returns></returns>
+		protected Context[] CreateNewBlocksWithContexts(int blocks)
+		{
+			// Allocate the context array
+			Context[] result = new Context[blocks];
+
+			for (int index = 0; index < blocks; index++)
+				result[index] = CreateNewBlockWithContext();
+
+			return result;
+		}
+
+		/// <summary>
+		/// Splits the block.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		/// <returns></returns>
+		protected Context Split(Context ctx)
+		{
+			Context current = ctx.Clone();
+
+			Context next = ctx.Clone();
+			next.AppendInstruction(IRInstruction.BlockStart);
+			BasicBlock nextBlock = basicBlocks.CreateBlockWithAutoLabel(next.Index, current.BasicBlock.EndIndex);
+			Context nextContext = new Context(instructionSet, nextBlock);
+
+			foreach (BasicBlock block in current.BasicBlock.NextBlocks)
+			{
+				nextBlock.NextBlocks.Add(block);
+				block.PreviousBlocks.Remove(current.BasicBlock);
+				block.PreviousBlocks.Add(nextBlock);
+			}
+
+			current.BasicBlock.NextBlocks.Clear();
+
+			current.AppendInstruction(IRInstruction.BlockEnd);
+			current.BasicBlock.EndIndex = current.Index;
+
+			return nextContext;
+		}
+
+		/// <summary>
+		/// Determines whether [is empty block with single jump] [the specified block].
+		/// </summary>
+		/// <param name="block">The block.</param>
+		/// <returns>
+		///   <c>true</c> if [is empty block with single jump] [the specified block]; otherwise, <c>false</c>.
+		/// </returns>
+		protected bool IsEmptyBlockWithSingleJump(BasicBlock block)
+		{
+			if (block.NextBlocks.Count != 1)
+				return false;
+
+			var ctx = new Context(instructionSet, block);
+
+			Debug.Assert(ctx.IsBlockStartInstruction);
+			ctx.GotoNext();
+
+			while (!ctx.IsBlockEndInstruction)
+			{
+				if (!ctx.IsEmpty)
+				{
+					if (ctx.Instruction.FlowControl != FlowControl.Branch)
+						return false;
+				}
+
+				ctx.GotoNext();
+			}
+
+			return true;
+		}
+
+		/// <summary>
+		/// Empties the block of all instructions.
+		/// </summary>
+		/// <param name="block">The block.</param>
+		protected void EmptyBlockOfAllInstructions(BasicBlock block)
+		{
+			var ctx = new Context(instructionSet, block);
+			Debug.Assert(ctx.IsBlockStartInstruction);
+			ctx.GotoNext();
+
+			while (!ctx.IsBlockEndInstruction)
+			{
+				if (!ctx.IsEmpty)
+				{
+					ctx.Remove();
+				}
+
+				ctx.GotoNext();
+			}
+		}
+
+		/// <summary>
+		/// Replaces the branch targets.
+		/// </summary>
+		/// <param name="block">The current from block.</param>
+		/// <param name="oldTarget">The current destination block.</param>
+		/// <param name="newTarget">The new target block.</param>
+		protected void ReplaceBranchTargets(BasicBlock block, BasicBlock oldTarget, BasicBlock newTarget)
+		{
+			// Replace any jump/branch target in block (from) with js
+			var ctx = new Context(instructionSet, block, block.EndIndex);
+			Debug.Assert(ctx.IsBlockEndInstruction);
+
+			do
+			{
+				ctx.GotoPrevious();
+			}
+			while (ctx.IsEmpty);
+
+			// Find branch or jump to (to) and replace it with js
+			//while (ctx.BranchTargets != null)
+			while (!ctx.IsBlockStartInstruction)
+			{
+				if (ctx.BranchTargets != null)
+				{
+					int[] targets = ctx.BranchTargets;
+					for (int index = 0; index < targets.Length; index++)
+					{
+						if (targets[index] == oldTarget.Label)
+							targets[index] = newTarget.Label;
+					}
+				}
+
+				do
+				{
+					ctx.GotoPrevious();
+				}
+				while (ctx.IsEmpty);
+			}
+		}
+
+		#endregion Block Operations
 
 		#region Trace Helper Methods
 
-		protected void Trace(CompilerEvent compilerEvent, string message)
+		public CompilerTrace CreateTrace()
 		{
-			methodCompiler.InternalTrace.CompilerEventListener.SubmitTraceEvent(compilerEvent, message);
+			return new CompilerTrace(this.methodCompiler.InternalTrace, this.methodCompiler.Method, this.methodCompiler.FormatStageName(this as IPipelineStage));
 		}
 
-		protected void Trace(string line)
+		public CompilerTrace CreateTrace(string section)
 		{
-			methodCompiler.InternalTrace.TraceListener.SubmitDebugStageInformation(methodCompiler.Method, Name, line);
+			return new CompilerTrace(this.methodCompiler.InternalTrace, this.methodCompiler.Method, this.methodCompiler.FormatStageName(this as IPipelineStage), section);
 		}
 
-		protected bool IsLogging { get { return methodCompiler.InternalTrace.TraceFilter.IsLogging; } }
+		#endregion Trace Helper Methods
 
 		/// <summary>
 		/// Updates the counter.
 		/// </summary>
 		/// <param name="name">The name.</param>
 		/// <param name="count">The count.</param>
-		protected void UpdateCounter(string name, int count)
+		public void UpdateCounter(string name, int count)
 		{
 			methodCompiler.Compiler.Counters.UpdateCounter(name, count);
 		}
-
-		#endregion
 
 		#region Utility Methods
 
@@ -196,40 +412,44 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		/// <param name="opcode">The opcode.</param>
 		/// <returns></returns>
-		public static IR.ConditionCode ConvertCondition(CIL.OpCode opcode)
+		public static ConditionCode ConvertCondition(CIL.OpCode opcode)
 		{
 			switch (opcode)
 			{
 				// Signed
-				case CIL.OpCode.Beq_s: return IR.ConditionCode.Equal;
-				case CIL.OpCode.Bge_s: return IR.ConditionCode.GreaterOrEqual;
-				case CIL.OpCode.Bgt_s: return IR.ConditionCode.GreaterThan;
-				case CIL.OpCode.Ble_s: return IR.ConditionCode.LessOrEqual;
-				case CIL.OpCode.Blt_s: return IR.ConditionCode.LessThan;
+				case CIL.OpCode.Beq_s: return ConditionCode.Equal;
+				case CIL.OpCode.Bge_s: return ConditionCode.GreaterOrEqual;
+				case CIL.OpCode.Bgt_s: return ConditionCode.GreaterThan;
+				case CIL.OpCode.Ble_s: return ConditionCode.LessOrEqual;
+				case CIL.OpCode.Blt_s: return ConditionCode.LessThan;
+
 				// Unsigned
-				case CIL.OpCode.Bne_un_s: return IR.ConditionCode.NotEqual;
-				case CIL.OpCode.Bge_un_s: return IR.ConditionCode.UnsignedGreaterOrEqual;
-				case CIL.OpCode.Bgt_un_s: return IR.ConditionCode.UnsignedGreaterThan;
-				case CIL.OpCode.Ble_un_s: return IR.ConditionCode.UnsignedLessOrEqual;
-				case CIL.OpCode.Blt_un_s: return IR.ConditionCode.UnsignedLessThan;
+				case CIL.OpCode.Bne_un_s: return ConditionCode.NotEqual;
+				case CIL.OpCode.Bge_un_s: return ConditionCode.UnsignedGreaterOrEqual;
+				case CIL.OpCode.Bgt_un_s: return ConditionCode.UnsignedGreaterThan;
+				case CIL.OpCode.Ble_un_s: return ConditionCode.UnsignedLessOrEqual;
+				case CIL.OpCode.Blt_un_s: return ConditionCode.UnsignedLessThan;
+
 				// Long form signed
 				case CIL.OpCode.Beq: goto case CIL.OpCode.Beq_s;
 				case CIL.OpCode.Bge: goto case CIL.OpCode.Bge_s;
 				case CIL.OpCode.Bgt: goto case CIL.OpCode.Bgt_s;
 				case CIL.OpCode.Ble: goto case CIL.OpCode.Ble_s;
 				case CIL.OpCode.Blt: goto case CIL.OpCode.Blt_s;
+
 				// Long form unsigned
 				case CIL.OpCode.Bne_un: goto case CIL.OpCode.Bne_un_s;
 				case CIL.OpCode.Bge_un: goto case CIL.OpCode.Bge_un_s;
 				case CIL.OpCode.Bgt_un: goto case CIL.OpCode.Bgt_un_s;
 				case CIL.OpCode.Ble_un: goto case CIL.OpCode.Ble_un_s;
 				case CIL.OpCode.Blt_un: goto case CIL.OpCode.Blt_un_s;
+
 				// Compare
-				case CIL.OpCode.Ceq: return IR.ConditionCode.Equal;
-				case CIL.OpCode.Cgt: return IR.ConditionCode.GreaterThan;
-				case CIL.OpCode.Cgt_un: return IR.ConditionCode.UnsignedGreaterThan;
-				case CIL.OpCode.Clt: return IR.ConditionCode.LessThan;
-				case CIL.OpCode.Clt_un: return IR.ConditionCode.UnsignedLessThan;
+				case CIL.OpCode.Ceq: return ConditionCode.Equal;
+				case CIL.OpCode.Cgt: return ConditionCode.GreaterThan;
+				case CIL.OpCode.Cgt_un: return ConditionCode.UnsignedGreaterThan;
+				case CIL.OpCode.Clt: return ConditionCode.LessThan;
+				case CIL.OpCode.Clt_un: return ConditionCode.UnsignedLessThan;
 
 				default: throw new NotImplementedException();
 			}
@@ -240,20 +460,20 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		/// <param name="conditionCode">The condition code to get an unsigned form from.</param>
 		/// <returns>The unsigned form of the given condition code.</returns>
-		protected static IR.ConditionCode GetUnsignedConditionCode(IR.ConditionCode conditionCode)
+		protected static ConditionCode GetUnsignedConditionCode(ConditionCode conditionCode)
 		{
 			switch (conditionCode)
 			{
-				case IR.ConditionCode.Equal: break;
-				case IR.ConditionCode.NotEqual: break;
-				case IR.ConditionCode.GreaterOrEqual: return IR.ConditionCode.UnsignedGreaterOrEqual;
-				case IR.ConditionCode.GreaterThan: return IR.ConditionCode.UnsignedGreaterThan;
-				case IR.ConditionCode.LessOrEqual: return IR.ConditionCode.UnsignedLessOrEqual;
-				case IR.ConditionCode.LessThan: return IR.ConditionCode.UnsignedLessThan;
-				case IR.ConditionCode.UnsignedGreaterOrEqual: break;
-				case IR.ConditionCode.UnsignedGreaterThan: break;
-				case IR.ConditionCode.UnsignedLessOrEqual: break;
-				case IR.ConditionCode.UnsignedLessThan: break;
+				case ConditionCode.Equal: break;
+				case ConditionCode.NotEqual: break;
+				case ConditionCode.GreaterOrEqual: return ConditionCode.UnsignedGreaterOrEqual;
+				case ConditionCode.GreaterThan: return ConditionCode.UnsignedGreaterThan;
+				case ConditionCode.LessOrEqual: return ConditionCode.UnsignedLessOrEqual;
+				case ConditionCode.LessThan: return ConditionCode.UnsignedLessThan;
+				case ConditionCode.UnsignedGreaterOrEqual: break;
+				case ConditionCode.UnsignedGreaterThan: break;
+				case ConditionCode.UnsignedLessOrEqual: break;
+				case ConditionCode.UnsignedLessThan: break;
 				default: throw new NotSupportedException();
 			}
 
@@ -265,28 +485,32 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		/// <param name="conditionCode">The condition code.</param>
 		/// <returns></returns>
-		protected static IR.ConditionCode GetOppositeConditionCode(IR.ConditionCode conditionCode)
+		protected static ConditionCode GetOppositeConditionCode(ConditionCode conditionCode)
 		{
 			switch (conditionCode)
 			{
-				case IR.ConditionCode.Equal: return IR.ConditionCode.NotEqual;
-				case IR.ConditionCode.NotEqual: return IR.ConditionCode.Equal;
-				case IR.ConditionCode.GreaterOrEqual: return IR.ConditionCode.LessThan;
-				case IR.ConditionCode.GreaterThan: return IR.ConditionCode.LessOrEqual;
-				case IR.ConditionCode.LessOrEqual: return IR.ConditionCode.GreaterThan;
-				case IR.ConditionCode.LessThan: return IR.ConditionCode.GreaterOrEqual;
-				case IR.ConditionCode.UnsignedGreaterOrEqual: return IR.ConditionCode.UnsignedLessThan;
-				case IR.ConditionCode.UnsignedGreaterThan: return IR.ConditionCode.UnsignedLessOrEqual;
-				case IR.ConditionCode.UnsignedLessOrEqual: return IR.ConditionCode.UnsignedGreaterThan;
-				case IR.ConditionCode.UnsignedLessThan: return IR.ConditionCode.UnsignedGreaterOrEqual;
-				case IR.ConditionCode.Signed: return IR.ConditionCode.NotSigned;
-				case IR.ConditionCode.NotSigned: return IR.ConditionCode.Signed;
+				case ConditionCode.Equal: return ConditionCode.NotEqual;
+				case ConditionCode.NotEqual: return ConditionCode.Equal;
+				case ConditionCode.GreaterOrEqual: return ConditionCode.LessThan;
+				case ConditionCode.GreaterThan: return ConditionCode.LessOrEqual;
+				case ConditionCode.LessOrEqual: return ConditionCode.GreaterThan;
+				case ConditionCode.LessThan: return ConditionCode.GreaterOrEqual;
+				case ConditionCode.UnsignedGreaterOrEqual: return ConditionCode.UnsignedLessThan;
+				case ConditionCode.UnsignedGreaterThan: return ConditionCode.UnsignedLessOrEqual;
+				case ConditionCode.UnsignedLessOrEqual: return ConditionCode.UnsignedGreaterThan;
+				case ConditionCode.UnsignedLessThan: return ConditionCode.UnsignedGreaterOrEqual;
+				case ConditionCode.Signed: return ConditionCode.NotSigned;
+				case ConditionCode.NotSigned: return ConditionCode.Signed;
+				case ConditionCode.Parity: return ConditionCode.NoParity;
+				case ConditionCode.NoParity: return ConditionCode.Parity;
+				case ConditionCode.Carry: return ConditionCode.NoCarry;
+				case ConditionCode.NoCarry: return ConditionCode.Carry;
+				case ConditionCode.Overflow: return ConditionCode.NoOverflow;
+				case ConditionCode.NoOverflow: return ConditionCode.Overflow;
 				default: throw new NotSupportedException();
 			}
-
 		}
 
-		#endregion // Utility Methods
-
+		#endregion Utility Methods
 	}
 }

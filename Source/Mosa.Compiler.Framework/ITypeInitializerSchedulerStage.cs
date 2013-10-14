@@ -7,7 +7,6 @@
  *  Michael Fröhlich (grover) <sharpos@michaelruck.de>
  */
 
-using Mosa.Compiler.Linker;
 using Mosa.Compiler.TypeSystem;
 
 namespace Mosa.Compiler.Framework
@@ -17,7 +16,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets the type initializer method.
 		/// </summary>
-		LinkerGeneratedMethod TypeInitializerMethod { get; }
+		RuntimeMethod TypeInitializerMethod { get; }
 
 		/// <summary>
 		/// Schedules the specified method for invocation in the main.

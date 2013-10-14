@@ -12,7 +12,7 @@ using Mosa.DeviceSystem;
 namespace Mosa.FileSystem.FAT
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public class FatService : Device, IDevice, IFileSystemDevice
 	{
@@ -35,6 +35,5 @@ namespace Mosa.FileSystem.FAT
 		{
 			return new FatFileSystem(partition);
 		}
-
 	}
 }

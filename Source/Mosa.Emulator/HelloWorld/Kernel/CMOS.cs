@@ -10,7 +10,7 @@ using Mosa.Platform.x86.Intrinsic;
 namespace Mosa.Kernel.x86
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public class CMOS
 	{
@@ -27,6 +27,7 @@ namespace Mosa.Kernel.x86
 			Native.Nop();
 			Native.Nop();
 			byte result = (byte)Native.In(0x71);
+
 			//Native.Sti();
 			return result;
 		}
@@ -45,6 +46,7 @@ namespace Mosa.Kernel.x86
 			Native.Nop();
 			Native.Nop();
 			Native.Out(0x71, value);
+
 			//Native.Sti();
 		}
 

@@ -27,7 +27,7 @@ namespace Mosa.Compiler.Framework.CIL
 		/// </summary>
 		private readonly SigType valueType;
 
-		#endregion // Data members
+		#endregion Data members
 
 		#region Construction
 
@@ -43,36 +43,45 @@ namespace Mosa.Compiler.Framework.CIL
 				case OpCode.Stind_i1:
 					valueType = BuiltInSigType.SByte;
 					break;
+
 				case OpCode.Stind_i2:
 					valueType = BuiltInSigType.Int16;
 					break;
+
 				case OpCode.Stind_i4:
 					valueType = BuiltInSigType.Int32;
 					break;
+
 				case OpCode.Stind_i8:
 					valueType = BuiltInSigType.Int64;
 					break;
+
 				case OpCode.Stind_r4:
 					valueType = BuiltInSigType.Single;
 					break;
+
 				case OpCode.Stind_r8:
 					valueType = BuiltInSigType.Double;
 					break;
+
 				case OpCode.Stind_i:
 					valueType = BuiltInSigType.IntPtr;
 					break;
+
 				case OpCode.Stind_ref: // FIXME: Really object?
 					valueType = BuiltInSigType.Object;
 					break;
+
 				case OpCode.Stobj:  // FIXME
 					valueType = null;
 					break;
+
 				default:
 					throw new NotImplementedException();
 			}
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Methods
 
@@ -104,9 +113,9 @@ namespace Mosa.Compiler.Framework.CIL
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		/// <param name="compiler">The compiler.</param>
-		public override void Validate(Context ctx, BaseMethodCompiler compiler)
+		public override void Resolve(Context ctx, BaseMethodCompiler compiler)
 		{
-			base.Validate(ctx, compiler);
+			base.Resolve(ctx, compiler);
 
 			//FIXME: Intent?
 			//SigType destType = ctx.Operand1.Type;
@@ -126,6 +135,6 @@ namespace Mosa.Compiler.Framework.CIL
 			visitor.Stobj(context);
 		}
 
-		#endregion // Methods
+		#endregion Methods
 	}
 }

@@ -4,15 +4,13 @@
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com> 
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 namespace Mosa.Test.Collection
 {
-
 	public static class CharTests
 	{
-
 		public static int AddCC(char first, char second)
 		{
 			return (first + second);

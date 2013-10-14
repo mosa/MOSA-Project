@@ -6,8 +6,8 @@
 //                  larsbrubaker@gmail.com
 // Copyright (C) 2007
 //
-// Permission to copy, use, modify, sell and distribute this software 
-// is granted provided this copyright notice appears in all copies. 
+// Permission to copy, use, modify, sell and distribute this software
+// is granted provided this copyright notice appears in all copies.
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -64,6 +64,7 @@ namespace Pictor.UI
 		{
 			get { return 3; }
 		}
+
 		override public void Rewind(uint idx)
 		{
 			m_idx = idx;
@@ -126,7 +127,6 @@ namespace Pictor.UI
 					m_vx[7] = m_Bounds.Left + d2 - t;
 					m_vy[7] = m_Bounds.Bottom + d2;
 					break;
-
 			}
 		}
 
@@ -176,7 +176,10 @@ namespace Pictor.UI
 			return cmd;
 		}
 
-		public void TextThickness(double t) { m_text_thickness = t; }
+		public void TextThickness(double t)
+		{
+			m_text_thickness = t;
+		}
 
 		public void SetFontSize(double fontSize)
 		{
@@ -192,14 +195,25 @@ namespace Pictor.UI
 			m_FontSize = fontSize;
 		}
 
-		public String Label() { return m_label; }
+		public String Label()
+		{
+			return m_label;
+		}
+
 		public void Label(String in_label)
 		{
 			m_label = in_label;
 		}
 
-		public bool Status() { return m_status; }
-		public void Status(bool st) { m_status = st; }
+		public bool Status()
+		{
+			return m_status;
+		}
+
+		public void Status(bool st)
+		{
+			m_status = st;
+		}
 
 		override public bool InRect(double x, double y)
 		{
@@ -236,9 +250,20 @@ namespace Pictor.UI
 			}
 		}
 
-		public void TextColor(IColorType c) { m_text_color = c.GetAsRGBA_Doubles(); }
-		public void InactiveColor(IColorType c) { m_inactive_color = c.GetAsRGBA_Doubles(); }
-		public void ActiveColor(IColorType c) { m_active_color = c.GetAsRGBA_Doubles(); }
+		public void TextColor(IColorType c)
+		{
+			m_text_color = c.GetAsRGBA_Doubles();
+		}
+
+		public void InactiveColor(IColorType c)
+		{
+			m_inactive_color = c.GetAsRGBA_Doubles();
+		}
+
+		public void ActiveColor(IColorType c)
+		{
+			m_active_color = c.GetAsRGBA_Doubles();
+		}
 
 		override public IColorType Color(uint i)
 		{

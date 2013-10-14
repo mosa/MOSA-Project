@@ -1,5 +1,3 @@
-
-
 namespace Mosa.Compiler.Metadata.Signatures
 {
 	public class TypeSigType : SigType
@@ -24,6 +22,5 @@ namespace Mosa.Compiler.Metadata.Signatures
 		{
 			return base.ToString() + " " + this.token.ToString();
 		}
-
 	}
 }

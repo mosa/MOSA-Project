@@ -4,15 +4,13 @@
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com> 
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 namespace Mosa.Test.Collection
 {
-
 	public static class UInt64Tests
 	{
-
 		public static ulong AddU8U8(ulong first, ulong second)
 		{
 			return (first + second);
@@ -63,12 +61,12 @@ namespace Mosa.Test.Collection
 			return (~first);
 		}
 
-		public static ulong ShiftLeftU8U8(ulong first, byte second)
+		public static ulong ShiftLeftU8U1(ulong first, byte second)
 		{
 			return (first << second);
 		}
 
-		public static ulong ShiftRightU8U8(ulong first, byte second)
+		public static ulong ShiftRightU8U1(ulong first, byte second)
 		{
 			return (first >> second);
 		}

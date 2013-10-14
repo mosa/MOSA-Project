@@ -7,11 +7,10 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public sealed class CalliInstruction : InvokeInstruction
 	{
@@ -25,7 +24,7 @@ namespace Mosa.Compiler.Framework.CIL
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Properties
 
@@ -38,7 +37,7 @@ namespace Mosa.Compiler.Framework.CIL
 			get { return InvokeSupportFlags.CallSite; }
 		}
 
-		#endregion // Properties
+		#endregion Properties
 
 		#region Method
 
@@ -52,7 +51,6 @@ namespace Mosa.Compiler.Framework.CIL
 			visitor.Calli(context);
 		}
 
-		#endregion // Method
-
+		#endregion Method
 	}
 }

@@ -23,37 +23,43 @@ namespace Mosa.DeviceDrivers.ISA
 		#region Definitions
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private const byte SquareWave = 0x36;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private const uint Frequency = 1193182;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private const ushort Hz = 100;
 
-		#endregion
+		#endregion Definitions
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IReadWriteIOPort modeControlPort;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IReadWriteIOPort counter0Divisor;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected uint tickCount;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="PIT"/> class.
 		/// </summary>
-		public PIT() { }
+		public PIT()
+		{
+		}
 
 		/// <summary>
 		/// Setups this hardware device driver

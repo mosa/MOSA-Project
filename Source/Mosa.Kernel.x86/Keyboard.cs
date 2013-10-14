@@ -12,7 +12,7 @@ using Mosa.Platform.x86.Intrinsic;
 namespace Mosa.Kernel.x86
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public static class Keyboard
 	{
@@ -24,6 +24,5 @@ namespace Mosa.Kernel.x86
 		{
 			return Native.In8(0x60);
 		}
-
 	}
 }

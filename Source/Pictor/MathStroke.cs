@@ -14,16 +14,16 @@ namespace Pictor
 	//------------------------------------------------------------MathStroke
 	public class MathStroke
 	{
-		double m_width;
-		double m_width_abs;
-		double m_width_eps;
-		int m_width_sign;
-		double m_miter_limit;
-		double m_inner_miter_limit;
-		double m_approx_scale;
-		ELineCap m_line_cap;
-		ELineJoin m_line_join;
-		EInnerJoin m_inner_join;
+		private double m_width;
+		private double m_width_abs;
+		private double m_width_eps;
+		private int m_width_sign;
+		private double m_miter_limit;
+		private double m_inner_miter_limit;
+		private double m_approx_scale;
+		private ELineCap m_line_cap;
+		private ELineJoin m_line_join;
+		private EInnerJoin m_inner_join;
 
 		//-------------------------------------------------------------ELineCap
 		public enum ELineCap
@@ -42,7 +42,6 @@ namespace Pictor
 			bevel_join = 3,
 			miter_join_round = 4
 		};
-
 
 		//-----------------------------------------------------------EInnerJoin
 		public enum EInnerJoin
@@ -67,13 +66,35 @@ namespace Pictor
 			m_inner_join = EInnerJoin.inner_miter;
 		}
 
-		public void LineCap(ELineCap lc) { m_line_cap = lc; }
-		public void LineJoin(ELineJoin lj) { m_line_join = lj; }
-		public void InnerJoin(EInnerJoin ij) { m_inner_join = ij; }
+		public void LineCap(ELineCap lc)
+		{
+			m_line_cap = lc;
+		}
 
-		public ELineCap LineCap() { return m_line_cap; }
-		public ELineJoin LineJoin() { return m_line_join; }
-		public EInnerJoin InnerJoin() { return m_inner_join; }
+		public void LineJoin(ELineJoin lj)
+		{
+			m_line_join = lj;
+		}
+
+		public void InnerJoin(EInnerJoin ij)
+		{
+			m_inner_join = ij;
+		}
+
+		public ELineCap LineCap()
+		{
+			return m_line_cap;
+		}
+
+		public ELineJoin LineJoin()
+		{
+			return m_line_join;
+		}
+
+		public EInnerJoin InnerJoin()
+		{
+			return m_inner_join;
+		}
 
 		public double MiterLimitTheta
 		{
@@ -99,16 +120,19 @@ namespace Pictor
 				m_width_eps = m_width / 1024.0;
 			}
 		}
+
 		public double MiterLimit
 		{
 			get { return m_miter_limit; }
 			set { m_miter_limit = value; }
 		}
+
 		public double InnerMiterLimit
 		{
 			get { return m_inner_miter_limit; }
 			set { m_inner_miter_limit = value; }
 		}
+
 		public double ApproximationScale
 		{
 			get { return m_approx_scale; }
@@ -245,7 +269,7 @@ namespace Pictor
 				// Outer join
 				//---------------
 
-				// Calculate the distance between v1 and 
+				// Calculate the distance between v1 and
 				// the central point of the bevel Line segment
 				//---------------
 				double dx = (dx1 + dx2) / 2;
@@ -254,21 +278,21 @@ namespace Pictor
 
 				if (m_line_join == ELineJoin.round_join || m_line_join == ELineJoin.bevel_join)
 				{
-					// This is an optimization that reduces the number of points 
+					// This is an optimization that reduces the number of points
 					// in cases of almost collinear segments. If there's no
 					// visible difference between bevel and miter joins we'd rather
-					// use miter join because it adds only one point instead of two. 
+					// use miter join because it adds only one point instead of two.
 					//
-					// Here we Calculate the middle point between the bevel points 
-					// and then, the distance between v1 and this middle point. 
-					// At outer joins this distance always less than stroke Width, 
+					// Here we Calculate the middle point between the bevel points
+					// and then, the distance between v1 and this middle point.
+					// At outer joins this distance always less than stroke Width,
 					// because it's actually the Height of an isosceles triangle of
 					// v1 and its two bevel points. If the difference between this
-					// Width and this Value is small (no visible bevel) we can 
-					// Add just one point. 
+					// Width and this Value is small (no visible bevel) we can
+					// Add just one point.
 					//
-					// The constant in the expression makes the result approximately 
-					// the same as in round joins and caps. You can safely comment 
+					// The constant in the expression makes the result approximately
+					// the same as in round joins and caps. You can safely comment
 					// out this entire "if".
 					//-------------------
 					if (m_approx_scale * (m_width_abs - dbevel) < m_width_eps)
@@ -318,7 +342,7 @@ namespace Pictor
 			vc.Add(new PointD(x, y));
 		}
 
-		void CalculateArc(IVertexDest vc,
+		private void CalculateArc(IVertexDest vc,
 					  double x, double y,
 					  double dx1, double dy1,
 					  double dx2, double dy2)
@@ -358,7 +382,7 @@ namespace Pictor
 			AddVertex(vc, x + dx2, y + dy2);
 		}
 
-		void CalculateMiter(IVertexDest vc,
+		private void CalculateMiter(IVertexDest vc,
 						VertexDistance v0,
 						VertexDistance v1,
 						VertexDistance v2,
@@ -396,8 +420,8 @@ namespace Pictor
 			else
 			{
 				// Calculation of the intersection failed, most probably
-				// the three points lie one straight Line. 
-				// First check if v0 and v2 lie on the opposite sides of vector: 
+				// the three points lie one straight Line.
+				// First check if v0 and v2 lie on the opposite sides of vector:
 				// (v1.x, v1.y) -> (v1.x+dx1, v1.y-dy1), that is, the perpendicular
 				// to the Line determined by vertices v0 and v1.
 				// This condition determines whether the next Line segments continues
@@ -408,7 +432,7 @@ namespace Pictor
 				if ((PictorMath.CrossProduct(v0.x, v0.y, v1.x, v1.y, x2, y2) < 0.0) ==
 				   (PictorMath.CrossProduct(v1.x, v1.y, v2.x, v2.y, x2, y2) < 0.0))
 				{
-					// This case means that the next segment continues 
+					// This case means that the next segment continues
 					// the previous one (straight Line)
 					//-----------------
 					AddVertex(vc, v1.x + dx1, v1.y - dy1);
@@ -423,7 +447,8 @@ namespace Pictor
 				switch (lj)
 				{
 					case ELineJoin.miter_join_revert:
-						// For the compatibility with SVG, PDF, etc, 
+
+						// For the compatibility with SVG, PDF, etc,
 						// we use a simple bevel join instead of
 						// "smart" bevel
 						//-------------------
@@ -436,6 +461,7 @@ namespace Pictor
 						break;
 
 					default:
+
 						// If no miter-revert, Calculate new dx1, dy1, dx2, dy2
 						//----------------
 						if (intersection_failed)

@@ -8,15 +8,15 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-using System.Diagnostics;
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Compiler.TypeSystem;
+using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public struct InstructionData
 	{
@@ -31,6 +31,11 @@ namespace Mosa.Compiler.Framework
 		/// Label of the instruction
 		/// </summary>
 		public int Label;
+
+		/// <summary>
+		/// The order slot number (initalized by some stage)
+		/// </summary>
+		public int SlotNumber;
 
 		/// <summary>
 		/// Holds the first operand of the instruction.
@@ -48,9 +53,19 @@ namespace Mosa.Compiler.Framework
 		public Operand Operand3;
 
 		/// <summary>
-		/// Holds the result operands of the instruction.
+		/// Holds the result first operand of the instruction.
 		/// </summary>
 		public Operand Result;
+
+		/// <summary>
+		/// Holds the second result operand of the instruction.
+		/// </summary>
+		public Operand Result2;
+
+		/// <summary>
+		/// The condition code
+		/// </summary>
+		public ConditionCode ConditionCode;
 
 		/// <summary>
 		///  Holds the branch targets
@@ -63,11 +78,11 @@ namespace Mosa.Compiler.Framework
 		public object Other;
 
 		/// <summary>
-		/// 
+		/// Holds a packed value (to save space)
 		/// </summary>
 		private uint packed;
 
-		#endregion // Data members
+		#endregion Data members
 
 		#region Properties
 
@@ -120,10 +135,10 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Gets or sets the invoke target.
+		/// Gets or sets the invoke target method.
 		/// </summary>
-		/// <value>The invoke target.</value>
-		public RuntimeMethod InvokeTarget
+		/// <value>The invoke target method.</value>
+		public RuntimeMethod InvokeMethod
 		{
 			get
 			{
@@ -177,17 +192,7 @@ namespace Mosa.Compiler.Framework
 			set { Other = value; }
 		}
 
-		/// <summary>
-		/// Gets or sets the condition code.
-		/// </summary>
-		/// <value>The condition code.</value>
-		public IR.ConditionCode ConditionCode
-		{
-			get { return (IR.ConditionCode)Other; }
-			set { Other = value; }
-		}
-
-		#endregion // Properties
+		#endregion Properties
 
 		#region Methods
 
@@ -202,23 +207,12 @@ namespace Mosa.Compiler.Framework
 			this.Operand2 = null;
 			this.Operand3 = null;
 			this.Result = null;
+			this.Result2 = null;
 			this.packed = 0;
 			this.BranchTargets = null;
 			this.Other = null;
 			this.BranchHint = false;
-		}
-
-		/// <summary>
-		/// Clears the instance.
-		/// </summary>
-		public void ClearAbbreviated()
-		{
-			this.Label = -1;
-			this.Instruction = null;
-			this.OperandCount = 0;
-			this.ResultCount = 0;
-			this.BranchTargets = null;
-			this.Other = null;
+			this.ConditionCode = ConditionCode.Undefined;
 		}
 
 		/// <summary>
@@ -288,6 +282,6 @@ namespace Mosa.Compiler.Framework
 			return str;
 		}
 
-		#endregion
+		#endregion Methods
 	}
 }

@@ -5,11 +5,11 @@
  *
  * Authors:
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
- */
-
-using System;
+  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
+*/
 
 using Mosa.Compiler.Framework;
+using System;
 
 namespace Mosa.Platform.x86.Instructions
 {
@@ -24,7 +24,7 @@ namespace Mosa.Platform.x86.Instructions
 		private static readonly OpCode INC16 = new OpCode(new byte[] { 0x66, 0xFF }, 0);
 		private static readonly OpCode INC32 = new OpCode(new byte[] { 0xFF }, 0);
 
-		#endregion // Data Members
+		#endregion Data Members
 
 		#region Construction
 
@@ -32,11 +32,11 @@ namespace Mosa.Platform.x86.Instructions
 		/// Initializes a new instance of <see cref="Inc"/>.
 		/// </summary>
 		public Inc() :
-			base(0, 1)
+			base(1, 1)
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Methods
 
@@ -57,6 +57,17 @@ namespace Mosa.Platform.x86.Instructions
 		}
 
 		/// <summary>
+		/// Emits the specified platform instruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <param name="emitter">The emitter.</param>
+		protected override void Emit(Context context, MachineCodeEmitter emitter)
+		{
+			OpCode opCode = ComputeOpCode(context.Result, null, null);
+			emitter.Emit(opCode, context.Result);
+		}
+
+		/// <summary>
 		/// Allows visitor based dispatch for this instruction object.
 		/// </summary>
 		/// <param name="visitor">The visitor object.</param>
@@ -66,6 +77,6 @@ namespace Mosa.Platform.x86.Instructions
 			visitor.Inc(context);
 		}
 
-		#endregion // Methods
+		#endregion Methods
 	}
 }

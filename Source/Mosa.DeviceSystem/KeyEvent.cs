@@ -7,7 +7,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-
 namespace Mosa.DeviceSystem
 {
 	/// <summary>
@@ -16,33 +15,33 @@ namespace Mosa.DeviceSystem
 	public class KeyEvent
 	{
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public enum Press
 		{
 			/// <summary>
-			/// 
+			///
 			/// </summary>
 			Make,
 
 			/// <summary>
-			/// 
+			///
 			/// </summary>
 			Break
 		};
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected KeyType keyType;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected Press press;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected char character;
 
@@ -74,6 +73,4 @@ namespace Mosa.DeviceSystem
 		/// <value>The character.</value>
 		public char Character { get { return character; } set { character = value; } }
 	}
-
-
 }

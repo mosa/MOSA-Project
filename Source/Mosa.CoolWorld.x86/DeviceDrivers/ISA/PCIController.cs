@@ -12,37 +12,38 @@ using Mosa.DeviceSystem;
 namespace Mosa.DeviceDrivers.ISA
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	[ISADeviceDriver(AutoLoad = true, BasePort = 0x0CF8, PortRange = 8, Platforms = PlatformArchitecture.X86AndX64)]
 	public class PCIController : HardwareDevice, IDevice, IHardwareDevice, IPCIController
 	{
-
 		#region Definitions
 
 		private static readonly uint BaseValue = 0x80000000;
 
-		#endregion
+		#endregion Definitions
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected SpinLock spinLock;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IReadWriteIOPort configAddress;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IReadWriteIOPort configData;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="PCIController"/> class.
 		/// </summary>
-		public PCIController() { }
+		public PCIController()
+		{
+		}
 
 		/// <summary>
 		/// Setups this hardware device driver
@@ -95,7 +96,10 @@ namespace Mosa.DeviceDrivers.ISA
 		/// Called when an interrupt is received.
 		/// </summary>
 		/// <returns></returns>
-		public override bool OnInterrupt() { return false; }
+		public override bool OnInterrupt()
+		{
+			return false;
+		}
 
 		/// <summary>
 		/// Gets the index.
@@ -197,6 +201,5 @@ namespace Mosa.DeviceDrivers.ISA
 			configAddress.Write32(GetIndex(bus, slot, function, register));
 			configData.Write8(value);
 		}
-
 	}
 }

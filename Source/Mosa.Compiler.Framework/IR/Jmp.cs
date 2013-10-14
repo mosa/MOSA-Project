@@ -20,11 +20,11 @@ namespace Mosa.Compiler.Framework.IR
 		/// Initializes a new instance of the <see cref="Jmp"/> class.
 		/// </summary>
 		public Jmp()
-			: base(0)
+			: base(1, 0)
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region IRInstruction Overrides
 
@@ -40,6 +40,6 @@ namespace Mosa.Compiler.Framework.IR
 			visitor.Jmp(context);
 		}
 
-		#endregion // IRInstruction Overrides
+		#endregion IRInstruction Overrides
 	}
 }

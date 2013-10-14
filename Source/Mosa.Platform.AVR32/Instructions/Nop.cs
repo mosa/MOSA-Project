@@ -5,7 +5,7 @@
  *
  * Authors:
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- *  Pascal Delprat (pdelprat) <pascal.delprat@online.fr>    
+ *  Pascal Delprat (pdelprat) <pascal.delprat@online.fr>
  */
 
 using Mosa.Compiler.Framework;
@@ -17,6 +17,17 @@ namespace Mosa.Platform.AVR32.Instructions
 	/// </summary>
 	public class Nop : AVR32Instruction
 	{
+		#region Construction
+
+		/// <summary>
+		/// Initializes a new instance of <see cref="Nop" />.
+		/// </summary>
+		public Nop() :
+			base(0, 0)
+		{
+		}
+
+		#endregion Construction
 
 		#region Methods
 
@@ -40,7 +51,6 @@ namespace Mosa.Platform.AVR32.Instructions
 			visitor.Nop(context);
 		}
 
-		#endregion // Methods
-
+		#endregion Methods
 	}
 }

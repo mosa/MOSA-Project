@@ -5,7 +5,7 @@
  *
  * Authors:
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- *  Pascal Delprat (pdelprat) <pascal.delprat@online.fr>    
+ *  Pascal Delprat (pdelprat) <pascal.delprat@online.fr>
  */
 
 using System;
@@ -16,40 +16,23 @@ using Mosa.Compiler.Metadata;
 namespace Mosa.Platform.AVR32
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public abstract class AVR32Instruction : BaseInstruction
 	{
-
 		#region Construction
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="AVR32Instruction"/> class.
 		/// </summary>
-		protected AVR32Instruction()
-		{
-		}
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="AVR32Instruction"/> class.
-		/// </summary>
-		/// <param name="operandCount">The operand count.</param>
-		private AVR32Instruction(byte operandCount)
-			: base(operandCount)
-		{
-		}
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="AVR32Instruction"/> class.
-		/// </summary>
-		/// <param name="operandCount">The operand count.</param>
 		/// <param name="resultCount">The result count.</param>
-		protected AVR32Instruction(byte operandCount, byte resultCount)
-			: base(operandCount, resultCount)
+		/// <param name="operandCount">The operand count.</param>
+		protected AVR32Instruction(byte resultCount, byte operandCount)
+			: base(resultCount, operandCount)
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Methods
 
@@ -86,7 +69,7 @@ namespace Mosa.Platform.AVR32
 			Emit(context, emitter as MachineCodeEmitter);
 		}
 
-		#endregion // Methods
+		#endregion Methods
 
 		#region Operand Overrides
 
@@ -119,7 +102,7 @@ namespace Mosa.Platform.AVR32
 				Visit(visitor as IAVR32Visitor, context);
 		}
 
-		#endregion // Overrides
+		#endregion Operand Overrides
 
 		protected bool Is8Bit(uint value)
 		{
@@ -131,7 +114,7 @@ namespace Mosa.Platform.AVR32
 			return ((value & 0x001FFFFF) != value);
 		}
 
-		protected bool IsBetween(int value, int lo, int hi)
+		protected bool IsBetween(long value, long lo, long hi)
 		{
 			return value >= lo && value <= hi;
 		}
@@ -181,6 +164,5 @@ namespace Mosa.Platform.AVR32
 					throw new NotSupportedException(String.Format(@"CilElementType.{0} is not supported.", op.Type.Type));
 			}
 		}
-
 	}
 }

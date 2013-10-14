@@ -7,7 +7,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System.Diagnostics;
 using Mosa.Compiler.Framework;
 
 namespace Mosa.Platform.x86.Instructions
@@ -17,13 +16,18 @@ namespace Mosa.Platform.x86.Instructions
 	/// </summary>
 	public sealed class Jmp : X86Instruction
 	{
-
 		#region Data Members
 
 		private static readonly byte[] JMP = new byte[] { 0xE9 };
 		private static readonly OpCode JMP_R = new OpCode(new byte[] { 0xFF }, 4);
 
-		#endregion
+		#endregion Data Members
+
+		#region Properties
+
+		public override FlowControl FlowControl { get { return FlowControl.Branch; } }
+
+		#endregion Properties
 
 		#region Construction
 
@@ -31,11 +35,11 @@ namespace Mosa.Platform.x86.Instructions
 		/// Initializes a new instance of <see cref="Jmp"/>.
 		/// </summary>
 		public Jmp() :
-			base(1, 0)
+			base(0, 0)
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Methods
 
@@ -48,14 +52,14 @@ namespace Mosa.Platform.x86.Instructions
 		{
 			if (context.Operand1 == null)
 			{
-				emitter.EmitBranch(JMP, context.BranchTargets[0]);
+				emitter.EmitRelativeBranch(JMP, context.BranchTargets[0]);
 			}
 			else
 			{
 				if (context.Operand1.IsSymbol)
 				{
 					emitter.WriteByte(0xE9);
-					emitter.Call(context.Operand1);
+					emitter.EmitCallSite(context.Operand1);
 				}
 				else if (context.Operand1.IsRegister)
 				{
@@ -74,7 +78,6 @@ namespace Mosa.Platform.x86.Instructions
 			visitor.Add(context);
 		}
 
-		#endregion // Methods
-
+		#endregion Methods
 	}
 }

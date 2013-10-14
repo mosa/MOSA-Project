@@ -16,9 +16,8 @@ namespace Mosa.ClassLib
 	/// </summary>
 	public struct BinaryFormat
 	{
-
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private byte[] data;
 
@@ -26,13 +25,19 @@ namespace Mosa.ClassLib
 		/// Initializes a new instance of the <see cref="BinaryFormat"/> struct.
 		/// </summary>
 		/// <param name="data">The data.</param>
-		public BinaryFormat(byte[] data) { this.data = data; }
+		public BinaryFormat(byte[] data)
+		{
+			this.data = data;
+		}
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="BinaryFormat"/> struct.
 		/// </summary>
 		/// <param name="length">The length.</param>
-		public BinaryFormat(uint length) { this.data = new byte[length]; }
+		public BinaryFormat(uint length)
+		{
+			this.data = new byte[length];
+		}
 
 		/// <summary>
 		/// Gets the length.
@@ -68,14 +73,20 @@ namespace Mosa.ClassLib
 		/// </summary>
 		/// <param name="offset">The offset.</param>
 		/// <returns></returns>
-		public char GetChar(uint offset) { return (char)(data[offset]); }
+		public char GetChar(uint offset)
+		{
+			return (char)(data[offset]);
+		}
 
 		/// <summary>
 		/// Sets the char.
 		/// </summary>
 		/// <param name="offset">The offset.</param>
 		/// <param name="value">The value.</param>
-		public void SetChar(uint offset, char value) { data[offset] = (byte)value; }
+		public void SetChar(uint offset, char value)
+		{
+			data[offset] = (byte)value;
+		}
 
 		/// <summary>
 		/// Gets the chars.
@@ -218,7 +229,10 @@ namespace Mosa.ClassLib
 		/// </summary>
 		/// <param name="offset">The offset.</param>
 		/// <returns></returns>
-		public ushort GetUShort(uint offset) { return (ushort)(data[offset++] | (data[offset++] << 8)); }
+		public ushort GetUShort(uint offset)
+		{
+			return (ushort)(data[offset++] | (data[offset++] << 8));
+		}
 
 		/// <summary>
 		/// Sets the unsigned short.
@@ -283,14 +297,20 @@ namespace Mosa.ClassLib
 		/// </summary>
 		/// <param name="offset">The offset.</param>
 		/// <returns></returns>
-		public byte GetByte(uint offset) { return data[offset]; }
+		public byte GetByte(uint offset)
+		{
+			return data[offset];
+		}
 
 		/// <summary>
 		/// Sets the byte.
 		/// </summary>
 		/// <param name="offset">The offset.</param>
 		/// <param name="value">The value.</param>
-		public void SetByte(uint offset, byte value) { data[offset] = value; }
+		public void SetByte(uint offset, byte value)
+		{
+			data[offset] = value;
+		}
 
 		/// <summary>
 		/// Sets the bytes.

@@ -2,7 +2,7 @@
 
 namespace Mosa.Tool.Mono.UpdateProject
 {
-	class Options
+	internal class Options
 	{
 		public bool CreateMonoFile = false;
 		public bool CreateMosaFile = false;
@@ -27,7 +27,6 @@ namespace Mosa.Tool.Mono.UpdateProject
 		{
 			foreach (string opt in args)
 			{
-
 				if (opt.ToLower().Equals("-mosa")) CreateMosaFile = false;
 				else if (opt.ToLower().Equals("+mosa")) CreateMosaFile = true;
 
@@ -54,7 +53,6 @@ namespace Mosa.Tool.Mono.UpdateProject
 							Files.Add(file);
 				}
 				else if (opt.ToLower().EndsWith(".cs")) Files.Add(opt);
-
 			}
 		}
 	}

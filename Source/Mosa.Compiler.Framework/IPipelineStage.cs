@@ -1,8 +1,7 @@
-﻿
-namespace Mosa.Compiler.Framework
+﻿namespace Mosa.Compiler.Framework
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public interface IPipelineStage
 	{
@@ -11,6 +10,5 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		/// <value>The name of the compilation stage.</value>
 		string Name { get; }
-
 	}
 }

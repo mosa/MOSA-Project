@@ -7,7 +7,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
@@ -27,7 +26,7 @@ namespace Mosa.Compiler.Framework.CIL
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Methods Overrides
 
@@ -36,14 +35,13 @@ namespace Mosa.Compiler.Framework.CIL
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		/// <param name="compiler">The compiler.</param>
-		public override void Validate(Context ctx, BaseMethodCompiler compiler)
+		public override void Resolve(Context ctx, BaseMethodCompiler compiler)
 		{
-			base.Validate(ctx, compiler);
+			base.Resolve(ctx, compiler);
 
 			// Simple result is the same type as the unary argument
 			ctx.Result = compiler.CreateVirtualRegister(ctx.Operand1.Type);
 		}
-
 
 		/// <summary>
 		/// Allows visitor based dispatch for this instruction object.
@@ -55,6 +53,6 @@ namespace Mosa.Compiler.Framework.CIL
 			visitor.UnaryArithmetic(context);
 		}
 
-		#endregion // Methods Overrides
+		#endregion Methods Overrides
 	}
 }

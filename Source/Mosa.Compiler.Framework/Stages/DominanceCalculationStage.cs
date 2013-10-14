@@ -20,13 +20,16 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private Dictionary<BasicBlock, IDominanceProvider> dominanceProviders = new Dictionary<BasicBlock, IDominanceProvider>();
 
-		#endregion // Data members
+		#endregion Data members
 
 		#region Properties
 
-		public IDominanceProvider GetDominanceProvider(BasicBlock basicBlock) { return dominanceProviders[basicBlock]; }
+		public IDominanceProvider GetDominanceProvider(BasicBlock basicBlock)
+		{
+			return dominanceProviders[basicBlock];
+		}
 
-		#endregion // Properties
+		#endregion Properties
 
 		#region IMethodCompilerStage Members
 
@@ -39,7 +42,6 @@ namespace Mosa.Compiler.Framework.Stages
 				dominanceProviders.Add(headBlock, new SimpleFastDominance(basicBlocks, headBlock));
 		}
 
-		#endregion // IMethodCompilerStage Members
-
+		#endregion IMethodCompilerStage Members
 	}
 }

@@ -21,50 +21,45 @@ namespace Mosa.Tool.Compiler
 	/// </summary>
 	public sealed class AotMethodCompiler : BaseMethodCompiler
 	{
-
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="AotMethodCompiler"/> class.
+		/// Initializes a new instance of the <see cref="AotMethodCompiler" /> class.
 		/// </summary>
 		/// <param name="compiler">The compiler.</param>
 		/// <param name="method">The method.</param>
-		public AotMethodCompiler(BaseCompiler compiler, RuntimeMethod method)
-			: base(compiler, method, null)
+		/// <param name="basicBlocks">The basic blocks.</param>
+		/// <param name="instructionSet">The instruction set.</param>
+		public AotMethodCompiler(BaseCompiler compiler, RuntimeMethod method, BasicBlocks basicBlocks, InstructionSet instructionSet)
+			: base(compiler, method, basicBlocks, instructionSet)
 		{
 			var compilerOptions = compiler.CompilerOptions;
 
 			Pipeline.AddRange(new IMethodCompilerStage[] {
 				new CILDecodingStage(),
 				new BasicBlockBuilderStage(),
+				new StackSetupStage(),
 				new ExceptionPrologueStage(),
 				new OperandAssignmentStage(),
 				new StaticAllocationResolutionStage(),
 				new CILTransformationStage(),
-					
-				new IRCheckStage(),
-
-				(compilerOptions.EnableSSA && compilerOptions.EnableSSAOptimizations) ? new LocalVariablePromotionStage() : null,
 				(compilerOptions.EnableSSA) ? new EdgeSplitStage() : null,
 				(compilerOptions.EnableSSA) ? new DominanceCalculationStage() : null,
 				(compilerOptions.EnableSSA) ? new PhiPlacementStage() : null,
 				(compilerOptions.EnableSSA) ? new EnterSSAStage() : null,
 				(compilerOptions.EnableSSA && compilerOptions.EnableSSAOptimizations) ? new SSAOptimizations() : null,
 				(compilerOptions.EnableSSA) ? new LeaveSSA() : null,
-					
-				new StackLayoutStage(),
-				new PlatformIntrinsicTransformationStage(),
 				new PlatformStubStage(),
+				new	PlatformEdgeSplitStage(),
+				new GreedyRegisterAllocatorStage(),
+				new StackLayoutStage(),
+				new EmptyBlockRemovalStage(),
 				new LoopAwareBlockOrderStage(),
-				//new SimpleTraceBlockOrderStage(),
-				//new ReverseBlockOrderStage(),	
-				//new LocalCSE(),
 				new CodeGenerationStage(),
-				//new RegisterUsageAnalyzerStage(),
 			});
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region BaseMethodCompiler Overrides
 
@@ -84,6 +79,6 @@ namespace Mosa.Tool.Compiler
 			base.EndCompile();
 		}
 
-		#endregion // BaseMethodCompiler Overrides
+		#endregion BaseMethodCompiler Overrides
 	}
 }

@@ -7,7 +7,6 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-
 namespace Mosa.Compiler.Framework.IR
 {
 	/// <summary>
@@ -20,31 +19,14 @@ namespace Mosa.Compiler.Framework.IR
 		/// <summary>
 		/// Initializes a new instance of <see cref="BaseIRInstruction"/>.
 		/// </summary>
-		protected BaseIRInstruction()
-			: base()
-		{
-		}
-
-		/// <summary>
-		/// Initializes a new instance of <see cref="BaseIRInstruction"/>.
-		/// </summary>
-		/// <param name="operandCount">Specifies the number of operands of the context.</param>
-		protected BaseIRInstruction(byte operandCount) :
-			base(operandCount)
-		{
-		}
-
-		/// <summary>
-		/// Initializes a new instance of <see cref="BaseIRInstruction"/>.
-		/// </summary>
 		/// <param name="operandCount">Specifies the number of operands of the context.</param>
 		/// <param name="resultCount">Specifies the number of results of the context.</param>
 		protected BaseIRInstruction(byte operandCount, byte resultCount)
-			: base(operandCount, resultCount)
+			: base(resultCount, operandCount)
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Methods
 
@@ -79,6 +61,6 @@ namespace Mosa.Compiler.Framework.IR
 				Visit(visitor as IIRVisitor, context);
 		}
 
-		#endregion // Methods
+		#endregion Methods
 	}
 }

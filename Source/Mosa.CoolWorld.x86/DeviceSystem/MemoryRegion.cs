@@ -10,16 +10,17 @@
 namespace Mosa.DeviceSystem
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public class MemoryRegion : IMemoryRegion
 	{
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected uint baseAddress;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected uint size;
 
@@ -28,6 +29,7 @@ namespace Mosa.DeviceSystem
 		/// </summary>
 		/// <value>The base address.</value>
 		public uint BaseAddress { get { return baseAddress; } }
+
 		/// <summary>
 		/// Gets the size.
 		/// </summary>
@@ -57,5 +59,4 @@ namespace Mosa.DeviceSystem
 			return ((address >= baseAddress) && (address <= baseAddress + size));
 		}
 	}
-
 }

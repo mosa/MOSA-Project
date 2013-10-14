@@ -7,21 +7,16 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
-using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.IR;
-using Mosa.Compiler.Framework.Platform;
-using Mosa.Compiler.Metadata;
-using Mosa.Compiler.Metadata.Signatures;
+using System;
 
 namespace Mosa.Compiler.Framework.Stages
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
-	public sealed class PlatformIntrinsicTransformationStage : BaseMethodCompilerStage, IMethodCompilerStage, IPlatformStage
+	public sealed class PlatformIntrinsicTransformationStage : BaseMethodCompilerStage, IMethodCompilerStage
 	{
-
 		#region IMethodCompilerStage Members
 
 		/// <summary>
@@ -31,7 +26,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			foreach (BasicBlock block in basicBlocks)
 			{
-				for (Context context = CreateContext(block); !context.EndOfInstruction; context.GotoNext())
+				for (Context context = CreateContext(block); !context.IsBlockEndInstruction; context.GotoNext())
 				{
 					if (context.IsEmpty)
 						continue;
@@ -39,7 +34,7 @@ namespace Mosa.Compiler.Framework.Stages
 					if (!(context.Instruction is IntrinsicMethodCall))
 						continue;
 
-					string external = context.InvokeTarget.Module.GetExternalName(context.InvokeTarget.Token);
+					string external = context.InvokeMethod.Module.GetExternalName(context.InvokeMethod.Token);
 
 					//TODO: Verify!
 
@@ -53,14 +48,11 @@ namespace Mosa.Compiler.Framework.Stages
 					if (instance == null)
 						return;
 
-					instance.ReplaceIntrinsicCall(context, typeSystem, methodCompiler.Method.Parameters);
+					instance.ReplaceIntrinsicCall(context, methodCompiler);
 				}
 			}
 		}
 
-		#endregion // IMethodCompilerStage Members
-
+		#endregion IMethodCompilerStage Members
 	}
 }
-
-

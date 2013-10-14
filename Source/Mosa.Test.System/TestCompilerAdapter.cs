@@ -4,17 +4,17 @@
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com> 
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-
+using System.Diagnostics;
 using Mosa.Test.CodeDomCompiler;
 
 namespace Mosa.Test.System
 {
 	public class TestCompilerAdapter
 	{
-		static private TestCompiler compiler = new TestCompiler();
+		private static TestCompiler compiler = new TestCompiler();
 
 		protected CompilerSettings settings = new CompilerSettings();
 
@@ -22,7 +22,7 @@ namespace Mosa.Test.System
 		{
 			settings.AddReference("mscorlib.dll");
 			settings.AddReference("Mosa.Platform.x86.Intrinsic.dll");
-			settings.AddReference("Mosa.Test.Runtime.dll");
+			settings.AddReference("Mosa.Kernel.x86Test.dll");
 		}
 
 		protected T Run<T>(string ns, string type, string method, params object[] parameters)

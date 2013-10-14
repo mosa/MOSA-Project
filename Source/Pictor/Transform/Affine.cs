@@ -6,6 +6,7 @@
  * Authors:
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  */
+
 using System;
 
 namespace Pictor.Transform
@@ -15,32 +16,32 @@ namespace Pictor.Transform
 	/// See Implementation agg_trans_affine.cpp
 	///
 	/// Affine transformation are linear transformations in Cartesian Coordinates
-	/// (strictly speaking not only in Cartesian, but for the beginning we will 
-	/// think so). They are Rotation, Scaling, Translation and skewing.  
-	/// After any affine transformation a Line segment remains a Line segment 
-	/// and it will never become a curve. 
+	/// (strictly speaking not only in Cartesian, but for the beginning we will
+	/// think so). They are Rotation, Scaling, Translation and skewing.
+	/// After any affine transformation a Line segment remains a Line segment
+	/// and it will never become a curve.
 	///
-	/// There will be no math about matrix calculations, since it has been 
+	/// There will be no math about matrix calculations, since it has been
 	/// described many times. Ask yourself a very simple question:
-	/// "why do we need to understand and use some matrix stuff instead of just 
+	/// "why do we need to understand and use some matrix stuff instead of just
 	/// rotating, Scaling and so on". The answers are:
 	///
 	/// 1. Any combination of transformations can be done by only 4 multiplications
 	///    and 4 additions in floating point.
 	/// 2. One matrix transformation is equivalent to the number of consecutive
-	///    discrete transformations, i.e. the matrix "accumulates" all transformations 
-	///    in the order of their settings. Suppose we have 4 transformations: 
+	///    discrete transformations, i.e. the matrix "accumulates" all transformations
+	///    in the order of their settings. Suppose we have 4 transformations:
 	///       * Rotate by 30 degrees,
-	///       * Scale X to 2.0, 
-	///       * Scale Y to 1.5, 
-	///       * move to (100, 100). 
-	///    The result will depend on the order of these transformations, 
+	///       * Scale X to 2.0,
+	///       * Scale Y to 1.5,
+	///       * move to (100, 100).
+	///    The result will depend on the order of these transformations,
 	///    and the advantage of matrix is that the sequence of discret calls:
-	///    Rotate(30), scaleX(2.0), scaleY(1.5), move(100,100) 
+	///    Rotate(30), scaleX(2.0), scaleY(1.5), move(100,100)
 	///    will have exactly the same result as the following matrix transformations:
-	///   
+	///
 	///    affine_matrix m;
-	///    m *= rotate_matrix(30); 
+	///    m *= rotate_matrix(30);
 	///    m *= scaleX_matrix(2.0);
 	///    m *= scaleY_matrix(1.5);
 	///    m *= move_matrix(100,100);
@@ -48,7 +49,7 @@ namespace Pictor.Transform
 	///    m.transform_my_point_at_last(x, y);
 	///
 	/// What is the good of it? In real life we will Set-up the matrix only once
-	/// and then Transform many points, let alone the convenience to Set any 
+	/// and then Transform many points, let alone the convenience to Set any
 	/// combination of transformations.
 	///
 	/// So, how to use it? Very easy - literally as it's shown above. Not quite,
@@ -61,9 +62,9 @@ namespace Pictor.Transform
 	/// m.Transform(x, y);
 	///
 	/// The affine matrix is all you need to perform any linear transformation,
-	/// but all transformations have origin point (0,0). It means that we need to 
+	/// but all transformations have origin point (0,0). It means that we need to
 	/// use 2 translations if we want to Rotate someting around (100,100):
-	/// 
+	///
 	/// m *= Pictor::trans_affine_translation(-100.0, -100.0);         // move to (0,0)
 	/// m *= Pictor::trans_affine_rotation(30.0 * 3.1415926 / 180.0);  // Rotate
 	/// m *= Pictor::trans_affine_translation(100.0, 100.0);           // move back to (100,100)
@@ -245,7 +246,7 @@ namespace Pictor.Transform
 		}
 
 		// Multiply matrix to another one
-		void Multiply(Affine m)
+		private void Multiply(Affine m)
 		{
 			double t0 = sx * m.sx + shy * m.shx;
 			double t2 = shx * m.sx + sy * m.shx;
@@ -275,7 +276,6 @@ namespace Pictor.Transform
 			sx = t0;
 			tx = t4;
 		}
-
 
 		///<summary>
 		///</summary>
@@ -325,7 +325,6 @@ namespace Pictor.Transform
 		{
 			get { return 1.0 / (sx * sy - shy * shx); }
 		}
-
 
 		public double GetScale()
 		{
@@ -425,7 +424,7 @@ namespace Pictor.Transform
 		}
 
 		///<summary>
-		/// Used to Calculate Scaling coefficients in image resampling. 
+		/// Used to Calculate Scaling coefficients in image resampling.
 		/// When there is considerable shear this method gives us much
 		/// better estimation than just sx, sy.
 		///</summary>

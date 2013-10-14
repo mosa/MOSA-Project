@@ -11,7 +11,7 @@
 namespace Mosa.FileSystem.VFS
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public sealed class SymbolicLinkNode : NodeBase
 	{
@@ -22,11 +22,12 @@ namespace Mosa.FileSystem.VFS
 		/// </summary>
 		private string target;
 
-		#endregion // Data members
+		#endregion Data members
 
 		#region Construction
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="fs"></param>
 		/// <param name="target"></param>
@@ -36,7 +37,7 @@ namespace Mosa.FileSystem.VFS
 			this.target = target;
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Properties
 
@@ -51,11 +52,12 @@ namespace Mosa.FileSystem.VFS
 			}
 		}
 
-		#endregion // Properties
+		#endregion Properties
 
 		#region IVfsNode Members
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="name"></param>
 		/// <param name="type"></param>
@@ -69,7 +71,7 @@ namespace Mosa.FileSystem.VFS
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="access"></param>
 		/// <param name="sharing"></param>
@@ -84,7 +86,7 @@ namespace Mosa.FileSystem.VFS
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="child"></param>
 		/// <param name="dentry"></param>
@@ -94,6 +96,6 @@ namespace Mosa.FileSystem.VFS
 			throw new System.NotSupportedException();
 		}
 
-		#endregion // IVfsNode Members
+		#endregion IVfsNode Members
 	}
 }

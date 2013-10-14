@@ -13,70 +13,77 @@ using System.IO;
 namespace Mosa.Compiler.Metadata.Loader
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public sealed class InstructionStream : Stream
 	{
-
 		#region Types
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		[Flags]
-		enum MethodFlags : ushort
+		private enum MethodFlags : ushort
 		{
 			/// <summary>
-			/// 
+			///
 			/// </summary>
 			TinyFormat = 0x02,
+
 			/// <summary>
-			/// 
+			///
 			/// </summary>
 			FatFormat = 0x03,
+
 			/// <summary>
-			/// 
+			///
 			/// </summary>
 			MoreSections = 0x08,
+
 			/// <summary>
-			/// 
+			///
 			/// </summary>
 			InitLocals = 0x10,
+
 			/// <summary>
-			/// 
+			///
 			/// </summary>
 			CodeSizeMask = 0xF000,
+
 			/// <summary>
-			/// 
+			///
 			/// </summary>
 			HeaderMask = 0x0003
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		[Flags]
-		enum MethodDataSectionType
+		private enum MethodDataSectionType
 		{
 			/// <summary>
-			/// 
+			///
 			/// </summary>
 			EHTable = 0x01,
+
 			/// <summary>
-			/// 
+			///
 			/// </summary>
 			OptIL = 0x02,
+
 			/// <summary>
-			/// 
+			///
 			/// </summary>
 			FatFormat = 0x40,
+
 			/// <summary>
-			/// 
+			///
 			/// </summary>
 			MoreSections = 0x80
 		}
 
-		#endregion // Types
+		#endregion Types
 
 		#region Data members
 
@@ -90,7 +97,7 @@ namespace Mosa.Compiler.Metadata.Loader
 		/// </summary>
 		private Stream _stream;
 
-		#endregion // Data members
+		#endregion Data members
 
 		#region Construction
 
@@ -111,7 +118,7 @@ namespace Mosa.Compiler.Metadata.Loader
 			_stream.Position = offset;
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Stream Overrides
 
@@ -316,6 +323,6 @@ namespace Mosa.Compiler.Metadata.Loader
 			throw new NotSupportedException();
 		}
 
-		#endregion // #region Stream Overrides
+		#endregion Stream Overrides
 	}
 }

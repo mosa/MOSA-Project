@@ -10,7 +10,7 @@
 // Port from Cosmos (http://www.codeplex.com/Cosmos) under New BSD License.
 
 // References:
-// http://www.amd.com/files/connectivitysolutions/networking/archivednetworking/19436.pdf 
+// http://www.amd.com/files/connectivitysolutions/networking/archivednetworking/19436.pdf
 
 using Mosa.DeviceSystem;
 
@@ -29,69 +29,83 @@ namespace Mosa.DeviceDrivers.PCI.NetworkCard
 		#region Memory and Ports
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IReadWriteIOPort ioProm1;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IReadWriteIOPort ioProm4;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IReadWriteIOPort rdp;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IReadWriteIOPort rap;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IReadWriteIOPort bdp;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IMemory initBlock;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IMemory buffers;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected MACAddress macAddress;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IMemory txDescriptor;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IMemory rxDescriptor;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected byte nextTXDesc;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected ushort bufferSize;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected NetworkDevicePacketBuffer packetBuffer;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected uint physicalBufferAddress;
 
-		#endregion
+		#endregion Memory and Ports
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="AMDPCNet"/> class.
 		/// </summary>
-		public AMDPCNet() { }
+		public AMDPCNet()
+		{
+		}
 
 		/// <summary>
 		/// Setups this hardware device driver
@@ -221,7 +235,6 @@ namespace Mosa.DeviceDrivers.PCI.NetworkCard
 			// check if (oldest) descriptor is available (Bit 31/OWN = 0 available)
 			if ((txDescriptor.Read32(offset + 1) & 0x80000000) == 0)
 			{
-
 				for (uint i = 0; i < data.Length; i++)
 					buffers.Write8((txd * bufferSize) + i, data[i]);
 
@@ -252,7 +265,6 @@ namespace Mosa.DeviceDrivers.PCI.NetworkCard
 				// Check is 31/OWN bit is not set
 				if ((status & 0x80000000) == 0)
 				{
-
 					ushort length = (ushort)(rxDescriptor.Read16(offset + 0) & 0xFFF);
 					byte[] data = new byte[length];
 
@@ -262,7 +274,7 @@ namespace Mosa.DeviceDrivers.PCI.NetworkCard
 					// if queue fails because it is already full, the packet is discarded
 					packetBuffer.QueuePacketForStack(data);
 
-					// Clear 31/OWN bit 
+					// Clear 31/OWN bit
 					rxDescriptor.Write32(offset + 1, status | 0x80000000);
 				}
 			}

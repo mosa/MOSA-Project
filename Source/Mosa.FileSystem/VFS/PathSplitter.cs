@@ -10,7 +10,7 @@
 
 namespace Mosa.FileSystem.VFS
 {
-	class PathSplitter
+	internal class PathSplitter
 	{
 		protected string path;
 		protected int[] seperators;
@@ -110,5 +110,4 @@ namespace Mosa.FileSystem.VFS
 			return -1;
 		}
 	}
-
 }

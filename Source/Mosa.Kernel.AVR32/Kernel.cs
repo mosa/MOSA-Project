@@ -12,11 +12,10 @@ using Mosa.Platform.AVR32.Intrinsic;
 namespace Mosa.Kernel.AVR32
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public static class Kernel
 	{
-
 		public static void Setup()
 		{
 			Native.Nop();

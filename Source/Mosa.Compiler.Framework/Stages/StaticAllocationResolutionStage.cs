@@ -7,49 +7,40 @@
  *  Kai P. Reisert <kpreisert@googlemail.com>
  */
 
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using Mosa.Compiler.Framework.CIL;
 using Mosa.Compiler.Linker;
 using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Compiler.TypeSystem;
+using System.Collections.Generic;
 
 namespace Mosa.Compiler.Framework.Stages
 {
 	public class StaticAllocationResolutionStage : BaseMethodCompilerStage, IMethodCompilerStage
 	{
-
 		void IMethodCompilerStage.Run()
 		{
-
-			if (this.methodCompiler.Method.Name == @".cctor")
+			if (methodCompiler.Method.Name == @".cctor")
 			{
-				this.AttemptToStaticallyAllocateObjects();
+				AttemptToStaticallyAllocateObjects();
 			}
 		}
 
 		private void AttemptToStaticallyAllocateObjects()
 		{
-			foreach (Context allocation in this.ScanForOperatorNew())
+			foreach (Context allocation in ScanForOperatorNew())
 			{
-				Context assignment = this.SeekAssignmentOfAllocatedObject(allocation);
+				Context assignment = SeekAssignmentOfAllocatedObject(allocation);
 
-				if (assignment != null && this.CheckAssignmentForCompliance(allocation, assignment))
+				if (assignment != null && CheckAssignmentForCompliance(allocation, assignment))
 				{
-					Debug.WriteLine(@"StaticAllocationResolutionStage: Static allocation of object possible.");
-					this.PerformStaticAllocationOf(allocation, assignment);
-				}
-				else
-				{
-					Debug.WriteLine(@"StaticAllocationResolutionStage: Can't statically allocate object.");
+					PerformStaticAllocationOf(allocation, assignment);
 				}
 			}
 		}
 
 		private void PerformStaticAllocationOf(Context allocation, Context assignment)
 		{
-			RuntimeType allocatedType = allocation.InvokeTarget.DeclaringType;
+			RuntimeType allocatedType = allocation.InvokeMethod.DeclaringType;
 
 			// Allocate a linker symbol to refer to for this allocation. Use the destination field name as the linker symbol name.
 			string symbolName = assignment.RuntimeField.ToString() + @"<<$cctor";
@@ -57,16 +48,16 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				// FIXME: Do we have to initialize this?
 				string methodTableSymbol = GetMethodTableForType(allocatedType);
-				
+
 				if (methodTableSymbol != null)
-					methodCompiler.Linker.Link(LinkType.AbsoluteAddress | LinkType.NativeI4, symbolName, 0, 0, methodTableSymbol, IntPtr.Zero);
+					methodCompiler.Linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuiltInPatch.I4, symbolName, 0, 0, methodTableSymbol, 0);
 			}
 
 			// Issue a load request before the newobj and before the assignment.
-			Operand symbol1 = this.InsertLoadBeforeInstruction(allocation, symbolName, assignment.RuntimeField.SignatureType);
+			Operand symbol1 = InsertLoadBeforeInstruction(allocation, symbolName, assignment.RuntimeField.SigType);
 			allocation.Operand1 = symbol1;
 
-			Operand symbol2 = this.InsertLoadBeforeInstruction(assignment, symbolName, assignment.RuntimeField.SignatureType);
+			Operand symbol2 = InsertLoadBeforeInstruction(assignment, symbolName, assignment.RuntimeField.SigType);
 			assignment.Operand1 = symbol2;
 
 			// Change the newobj to a call and increase the operand count to include the this ptr.
@@ -98,18 +89,15 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private IEnumerable<Context> ScanForOperatorNew()
 		{
-			foreach (BasicBlock block in this.basicBlocks)
+			foreach (BasicBlock block in basicBlocks)
 			{
-				Context context = new Context(instructionSet, block);
-				while (!context.EndOfInstruction)
+				for (Context context = new Context(instructionSet, block); !context.IsBlockEndInstruction; context.GotoNext())
 				{
-					if (context.Instruction is NewobjInstruction || context.Instruction is NewarrInstruction)
+					if (!context.IsEmpty && (context.Instruction is NewobjInstruction || context.Instruction is NewarrInstruction))
 					{
-						Debug.WriteLine(@"StaticAllocationResolutionStage: Found a newobj or newarr instruction.");
+						//Debug.WriteLine(@"StaticAllocationResolutionStage: Found a newobj or newarr instruction.");
 						yield return context.Clone();
 					}
-
-					context.GotoNext();
 				}
 			}
 		}
@@ -117,12 +105,20 @@ namespace Mosa.Compiler.Framework.Stages
 		private Context SeekAssignmentOfAllocatedObject(Context allocation)
 		{
 			Context next = allocation.Next;
-			if (next.EndOfInstruction || !(next.Instruction is StsfldInstruction))
+
+			while (next.IsEmpty)
 			{
-				next = null;
+				next.GotoNext();
 			}
 
-			return next;
+			if (next.IsBlockEndInstruction || !(next.Instruction is StsfldInstruction))
+			{
+				return null;
+			}
+			else
+			{
+				return next;
+			}
 		}
 
 		private bool CheckAssignmentForCompliance(Context allocation, Context assignment)
@@ -130,7 +126,7 @@ namespace Mosa.Compiler.Framework.Stages
 			// Only direct assignment without any casts is compliant. We can't perform casts or anything alike here,
 			// as that is hard to complete at this point of time.
 
-			RuntimeType allocationType = allocation.InvokeTarget.DeclaringType;
+			RuntimeType allocationType = allocation.InvokeMethod.DeclaringType;
 			RuntimeType storageType = assignment.RuntimeField.DeclaringType;
 
 			return ReferenceEquals(allocationType, storageType);

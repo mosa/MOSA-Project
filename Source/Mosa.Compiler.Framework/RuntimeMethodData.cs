@@ -3,7 +3,7 @@
 namespace Mosa.Compiler.Framework
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public sealed class RuntimeMethodData
 	{
@@ -15,7 +15,7 @@ namespace Mosa.Compiler.Framework
 		#region Data members
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public RuntimeMethod RuntimeMethod;
 
@@ -24,7 +24,7 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		public Operand[] AdditionalOperands = new Operand[MaxOperands];
 
-		#endregion // Data members
+		#endregion Data members
 
 		#region Construction
 
@@ -43,10 +43,10 @@ namespace Mosa.Compiler.Framework
 			RuntimeMethod = runtimeMethod;
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Properties
 
-		#endregion // Properties
+		#endregion Properties
 	}
 }

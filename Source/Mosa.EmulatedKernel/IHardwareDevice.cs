@@ -7,11 +7,10 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-
 namespace Mosa.EmulatedKernel
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public interface IHardwareDevice
 	{

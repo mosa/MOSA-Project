@@ -26,7 +26,6 @@
                     <include name="Verify.cs"/>
 		</sources>
 		<references>
-                    <include name="System.dll"/>
                     <include name="${outputDirectory}/Mosa.Compiler.Metadata.dll"/>
 		</references>
 		<!-- supress warnings -->

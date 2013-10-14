@@ -6,6 +6,7 @@
  * Authors:
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  */
+
 namespace Pictor.VertexSource
 {
 	///<summary>
@@ -14,27 +15,41 @@ namespace Pictor.VertexSource
 	{
 		///<summary>
 		///</summary>
-		public void RemoveAll() { }
+		public void RemoveAll()
+		{
+		}
+
 		///<summary>
 		///</summary>
 		///<param name="x"></param>
 		///<param name="y"></param>
 		///<param name="unknown"></param>
-		public void AddVertex(double x, double y, uint unknown) { }
+		public void AddVertex(double x, double y, uint unknown)
+		{
+		}
+
 		///<summary>
 		///</summary>
-		public void PrepareSource() { }
+		public void PrepareSource()
+		{
+		}
 
 		///<summary>
 		///</summary>
 		///<param name="unknown"></param>
-		public void Rewind(uint unknown) { }
+		public void Rewind(uint unknown)
+		{
+		}
+
 		///<summary>
 		///</summary>
 		///<param name="x"></param>
 		///<param name="y"></param>
 		///<returns></returns>
-		public uint Vertex(ref double x, ref double y) { return (uint)Path.EPathCommands.Stop; }
+		public uint Vertex(ref double x, ref double y)
+		{
+			return (uint)Path.EPathCommands.Stop;
+		}
 	};
 
 	///<summary>
@@ -78,7 +93,11 @@ namespace Pictor.VertexSource
 		{
 			_markers = markers;
 		}
-		void Attach(IVertexSource source) { _source = source; }
+
+		private void Attach(IVertexSource source)
+		{
+			_source = source;
+		}
 
 		protected IGenerator Generator
 		{

@@ -7,12 +7,12 @@
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  */
 
-
 namespace Pictor
 {
 	/*
+
 	//-----------------------------------------------------------line_aa_vertex
-	// Vertex (x, y) with the distance to the next one. The last Vertex has 
+	// Vertex (x, y) with the distance to the next one. The last Vertex has
 	// the distance between the last and the first points
 	struct line_aa_vertex
 	{
@@ -32,13 +32,13 @@ namespace Pictor
 		{
 			double dx = val.x - x;
 			double dy = val.y - y;
-			return (len = UnsignedRound(sqrt(dx * dx + dy * dy))) > 
+			return (len = UnsignedRound(sqrt(dx * dx + dy * dy))) >
 				   (line_subpixel_scale + line_subpixel_scale / 2);
 		}
 	};
 
 	//=======================================================rasterizer_outline_aa
-	//template<class Renderer, class Coord=LineCoordinate> 
+	//template<class Renderer, class Coord=LineCoordinate>
 	public class rasterizer_outline_aa
 	{
 		Renderer*           m_ren;
@@ -75,24 +75,24 @@ namespace Pictor
 		//typedef line_aa_vertex                  vertex_type;
 		//typedef vertex_sequence<vertex_type, 6> vertex_storage_type;
 
-		public rasterizer_outline_aa(Renderer& ren) : 
-			m_ren(&ren), 
-			m_line_join(ren.accurate_join_only() ? 
-							outline_miter_accurate_join : 
+		public rasterizer_outline_aa(Renderer& ren) :
+			m_ren(&ren),
+			m_line_join(ren.accurate_join_only() ?
+							outline_miter_accurate_join :
 							outline_round_join),
 			m_round_cap(false),
 			m_start_x(0),
 			m_start_y(0)
 		{}
-		
+
 		public void Attach(Renderer& ren) { m_ren = &ren; }
 
 		//------------------------------------------------------------------------
-		public void ELineJoin(outline_aa_join_e join) 
-		{ 
-			m_line_join = m_ren->accurate_join_only() ? 
-				outline_miter_accurate_join : 
-				join; 
+		public void ELineJoin(outline_aa_join_e join)
+		{
+			m_line_join = m_ren->accurate_join_only() ?
+				outline_miter_accurate_join :
+				join;
 		}
 		public bool ELineJoin() const { return m_line_join; }
 
@@ -130,17 +130,17 @@ namespace Pictor
 		//------------------------------------------------------------------------
 		public void AddVertex(double x, double y, unsigned cmd)
 		{
-			if(IsMoveTo(cmd)) 
+			if(IsMoveTo(cmd))
 			{
 				render(false);
 				MoveToD(x, y);
 			}
-			else 
+			else
 			{
 				if(IsEndPoly(cmd))
 				{
 					render(IsClosed(cmd));
-					if(IsClosed(cmd)) 
+					if(IsClosed(cmd))
 					{
 						MoveTo(m_start_x, m_start_y);
 					}
@@ -168,11 +168,10 @@ namespace Pictor
 			render(false);
 		}
 
-
 		//------------------------------------------------------------------------
 		//template<class VertexSource, class ColorStorage, class PathId>
-		public void render_all_paths(VertexSource& vs, 
-							  const ColorStorage& Colors, 
+		public void render_all_paths(VertexSource& vs,
+							  const ColorStorage& Colors,
 							  const PathId& path_id,
 							  unsigned num_paths)
 		{
@@ -183,9 +182,8 @@ namespace Pictor
 			}
 		}
 
-
 		//------------------------------------------------------------------------
-		//template<class Ctrl> 
+		//template<class Ctrl>
 		public void render_ctrl(Ctrl& c)
 		{
 			unsigned i;
@@ -197,17 +195,10 @@ namespace Pictor
 		}
 	};
 
-
-
-
-
-
-
-
 	//----------------------------------------------------------------------------
-	template<class Renderer, class Coord> 
-	void rasterizer_outline_aa<Renderer, Coord>::draw(draw_vars& dv, 
-													  unsigned Start, 
+	template<class Renderer, class Coord>
+	void rasterizer_outline_aa<Renderer, Coord>::draw(draw_vars& dv,
+													  unsigned Start,
 													  unsigned End)
 	{
 		unsigned i;
@@ -217,9 +208,9 @@ namespace Pictor
 		{
 			if(m_line_join == outline_round_join)
 			{
-				dv.xb1 = dv.curr.x1 + (dv.curr.y2 - dv.curr.y1); 
-				dv.yb1 = dv.curr.y1 - (dv.curr.x2 - dv.curr.x1); 
-				dv.xb2 = dv.curr.x2 + (dv.curr.y2 - dv.curr.y1); 
+				dv.xb1 = dv.curr.x1 + (dv.curr.y2 - dv.curr.y1);
+				dv.yb1 = dv.curr.y1 - (dv.curr.x2 - dv.curr.x1);
+				dv.xb2 = dv.curr.x2 + (dv.curr.y2 - dv.curr.y1);
 				dv.yb2 = dv.curr.y2 - (dv.curr.x2 - dv.curr.x1);
 			}
 
@@ -233,7 +224,7 @@ namespace Pictor
 
 			if(m_line_join == outline_round_join && (dv.flags & 2) == 0)
 			{
-				m_ren->pie(dv.curr.x2, dv.curr.y2, 
+				m_ren->pie(dv.curr.x2, dv.curr.y2,
 						   dv.curr.x2 + (dv.curr.y2 - dv.curr.y1),
 						   dv.curr.y2 - (dv.curr.x2 - dv.curr.x1),
 						   dv.curr.x2 + (dv.next.y2 - dv.next.y1),
@@ -246,7 +237,7 @@ namespace Pictor
 			dv.lnext = m_src_vertices[dv.idx].len;
 
 			++dv.idx;
-			if(dv.idx >= m_src_vertices.Size()) dv.idx = 0; 
+			if(dv.idx >= m_src_vertices.Size()) dv.idx = 0;
 
 			v = &m_src_vertices[dv.idx];
 			dv.x2 = v->x;
@@ -265,7 +256,7 @@ namespace Pictor
 
 			case outline_miter_join:
 				dv.flags >>= 1;
-				dv.flags |= ((dv.curr.DiagonalQuadrant() == 
+				dv.flags |= ((dv.curr.DiagonalQuadrant() ==
 							  dv.next.DiagonalQuadrant()) << 1);
 				if((dv.flags & 2) == 0)
 				{
@@ -275,7 +266,7 @@ namespace Pictor
 
 			case outline_round_join:
 				dv.flags >>= 1;
-				dv.flags |= ((dv.curr.DiagonalQuadrant() == 
+				dv.flags |= ((dv.curr.DiagonalQuadrant() ==
 							  dv.next.DiagonalQuadrant()) << 1);
 				break;
 
@@ -287,7 +278,7 @@ namespace Pictor
 		}
 
 	//----------------------------------------------------------------------------
-	template<class Renderer, class Coord> 
+	template<class Renderer, class Coord>
 	void rasterizer_outline_aa<Renderer, Coord>::render(bool ClosePolygon)
 	{
 		m_src_vertices.close(ClosePolygon);
@@ -340,7 +331,7 @@ namespace Pictor
 
 				case outline_miter_join:
 				case outline_round_join:
-					dv.flags = 
+					dv.flags =
 							(prev.DiagonalQuadrant() == dv.curr.DiagonalQuadrant()) |
 						((dv.curr.DiagonalQuadrant() == dv.next.DiagonalQuadrant()) << 1);
 					break;
@@ -380,16 +371,16 @@ namespace Pictor
 					x2    = v->x;
 					y2    = v->y;
 					LineParameters lp(x1, y1, x2, y2, lprev);
-					if(m_round_cap) 
+					if(m_round_cap)
 					{
 						m_ren->semidot(cmp_dist_start, x1, y1, x1 + (y2 - y1), y1 - (x2 - x1));
 					}
-					m_ren->line3(lp, 
-								 x1 + (y2 - y1), 
+					m_ren->line3(lp,
+								 x1 + (y2 - y1),
 								 y1 - (x2 - x1),
-								 x2 + (y2 - y1), 
+								 x2 + (y2 - y1),
 								 y2 - (x2 - x1));
-					if(m_round_cap) 
+					if(m_round_cap)
 					{
 						m_ren->semidot(cmp_dist_end, x2, y2, x2 + (y2 - y1), y2 - (x2 - x1));
 					}
@@ -414,14 +405,14 @@ namespace Pictor
 					LineParameters lp1(x1, y1, x2, y2, lprev);
 					LineParameters lp2(x2, y2, x3, y3, lnext);
 
-					if(m_round_cap) 
+					if(m_round_cap)
 					{
 						m_ren->semidot(cmp_dist_start, x1, y1, x1 + (y2 - y1), y1 - (x2 - x1));
 					}
 
 					if(m_line_join == outline_round_join)
 					{
-						m_ren->line3(lp1, x1 + (y2 - y1), y1 - (x2 - x1), 
+						m_ren->line3(lp1, x1 + (y2 - y1), y1 - (x2 - x1),
 										  x2 + (y2 - y1), y2 - (x2 - x1));
 
 						m_ren->pie(x2, y2, x2 + (y2 - y1), y2 - (x2 - x1),
@@ -439,7 +430,7 @@ namespace Pictor
 						m_ren->line3(lp2, dv.xb1,         dv.yb1,
 										  x3 + (y3 - y2), y3 - (x3 - x2));
 					}
-					if(m_round_cap) 
+					if(m_round_cap)
 					{
 						m_ren->semidot(cmp_dist_end, x3, y3, x3 + (y3 - y2), y3 - (x3 - x2));
 					}
@@ -485,7 +476,7 @@ namespace Pictor
 
 					case outline_miter_join:
 					case outline_round_join:
-						dv.flags = 
+						dv.flags =
 								(prev.DiagonalQuadrant() == dv.curr.DiagonalQuadrant()) |
 							((dv.curr.DiagonalQuadrant() == dv.next.DiagonalQuadrant()) << 1);
 						break;
@@ -495,7 +486,7 @@ namespace Pictor
 						break;
 					}
 
-					if(m_round_cap) 
+					if(m_round_cap)
 					{
 						m_ren->semidot(cmp_dist_start, x1, y1, x1 + (y2 - y1), y1 - (x2 - x1));
 					}
@@ -505,9 +496,9 @@ namespace Pictor
 						{
 							m_ren->line3(prev, x1 + (y2 - y1), y1 - (x2 - x1),
 											   x2 + (y2 - y1), y2 - (x2 - x1));
-							m_ren->pie(prev.x2, prev.y2, 
+							m_ren->pie(prev.x2, prev.y2,
 									   x2 + (y2 - y1), y2 - (x2 - x1),
-									   dv.curr.x1 + (dv.curr.y2 - dv.curr.y1), 
+									   dv.curr.x1 + (dv.curr.y2 - dv.curr.y1),
 									   dv.curr.y1 - (dv.curr.x2 - dv.curr.x1));
 						}
 						else
@@ -519,8 +510,8 @@ namespace Pictor
 					}
 					else
 					{
-						m_ren->line1(prev, 
-									 x1 + (y2 - y1), 
+						m_ren->line1(prev,
+									 x1 + (y2 - y1),
 									 y1 - (x2 - x1));
 					}
 					if((dv.flags & 2) == 0 && m_line_join != outline_round_join)
@@ -534,39 +525,37 @@ namespace Pictor
 					{
 						if(m_line_join == outline_round_join)
 						{
-							m_ren->line3(dv.curr, 
-										 dv.curr.x1 + (dv.curr.y2 - dv.curr.y1), 
+							m_ren->line3(dv.curr,
+										 dv.curr.x1 + (dv.curr.y2 - dv.curr.y1),
 										 dv.curr.y1 - (dv.curr.x2 - dv.curr.x1),
-										 dv.curr.x2 + (dv.curr.y2 - dv.curr.y1), 
+										 dv.curr.x2 + (dv.curr.y2 - dv.curr.y1),
 										 dv.curr.y2 - (dv.curr.x2 - dv.curr.x1));
 						}
 						else
 						{
 							m_ren->line3(dv.curr, dv.xb1, dv.yb1,
-										 dv.curr.x2 + (dv.curr.y2 - dv.curr.y1), 
+										 dv.curr.x2 + (dv.curr.y2 - dv.curr.y1),
 										 dv.curr.y2 - (dv.curr.x2 - dv.curr.x1));
 						}
 					}
 					else
 					{
-						m_ren->line2(dv.curr, 
-									 dv.curr.x2 + (dv.curr.y2 - dv.curr.y1), 
+						m_ren->line2(dv.curr,
+									 dv.curr.x2 + (dv.curr.y2 - dv.curr.y1),
 									 dv.curr.y2 - (dv.curr.x2 - dv.curr.x1));
 					}
-					if(m_round_cap) 
+					if(m_round_cap)
 					{
 						m_ren->semidot(cmp_dist_end, dv.curr.x2, dv.curr.y2,
 									   dv.curr.x2 + (dv.curr.y2 - dv.curr.y1),
 									   dv.curr.y2 - (dv.curr.x2 - dv.curr.x1));
 					}
-
 				}
 				break;
 			}
 		}
 		m_src_vertices.RemoveAll();
 	}
-
 }
 	 */
 }

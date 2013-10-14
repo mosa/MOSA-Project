@@ -6,32 +6,33 @@
  * Authors:
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  */
+
 using System;
+
 namespace Pictor.VertexSource
 {
-
 	//=====================================================================Arc
 	//
-	// See Implementation agg_arc.cpp 
+	// See Implementation agg_arc.cpp
 	//
 	public class Arc
 	{
-		double m_OriginX;
-		double m_OriginY;
+		private double m_OriginX;
+		private double m_OriginY;
 
-		double m_RadiusX;
-		double m_RadiusY;
+		private double m_RadiusX;
+		private double m_RadiusY;
 
-		double m_StartAngle;
-		double m_EndAngle;
-		double m_Scale;
-		EDirection m_Direction;
+		private double m_StartAngle;
+		private double m_EndAngle;
+		private double m_Scale;
+		private EDirection m_Direction;
 
-		double m_CurrentFlatenAngle;
-		double m_FlatenDeltaAngle;
+		private double m_CurrentFlatenAngle;
+		private double m_FlatenDeltaAngle;
 
-		bool m_IsInitialized;
-		uint m_NextPathCommand;
+		private bool m_IsInitialized;
+		private uint m_NextPathCommand;
 
 		public enum EDirection
 		{
@@ -50,7 +51,6 @@ namespace Pictor.VertexSource
 			 double Angle1, double Angle2)
 			: this(OriginX, OriginY, RadiusX, RadiusY, Angle1, Angle2, EDirection.CounterClockWise)
 		{
-
 		}
 
 		public Arc(double OriginX, double OriginY,

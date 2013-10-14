@@ -1,5 +1,4 @@
-﻿
-namespace Mosa.Compiler.Framework.IR
+﻿namespace Mosa.Compiler.Framework.IR
 {
 	/// <summary>
 	/// Intermediate representation of call context.
@@ -12,10 +11,11 @@ namespace Mosa.Compiler.Framework.IR
 		/// Initializes a new instance of the <see cref="Call"/> class.
 		/// </summary>
 		public Call()
+			: base(0, 0)
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region IRInstruction Overrides
 
@@ -29,6 +29,6 @@ namespace Mosa.Compiler.Framework.IR
 			visitor.Call(context);
 		}
 
-		#endregion // IRInstruction Overrides
+		#endregion IRInstruction Overrides
 	}
 }

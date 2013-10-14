@@ -10,28 +10,28 @@
 namespace Mosa.Compiler.Metadata.Tables
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public struct TypeRefRow
 	{
 		#region Data members
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private Token resolutionScope;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private HeapIndexToken typeNameIdx;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private HeapIndexToken typeNamespaceIdx;
 
-		#endregion // Data members
+		#endregion Data members
 
 		#region Construction
 
@@ -48,7 +48,7 @@ namespace Mosa.Compiler.Metadata.Tables
 			this.typeNamespaceIdx = typeNamespaceIdx;
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Properties
 
@@ -79,6 +79,6 @@ namespace Mosa.Compiler.Metadata.Tables
 			get { return typeNamespaceIdx; }
 		}
 
-		#endregion // Properties
+		#endregion Properties
 	}
 }

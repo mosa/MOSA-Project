@@ -8,7 +8,6 @@
  */
 
 using Mosa.DeviceSystem;
-using Mosa.Platform.x86.Intrinsic;
 
 namespace Mosa.DeviceDrivers.ISA
 {
@@ -19,24 +18,26 @@ namespace Mosa.DeviceDrivers.ISA
 	public class CMOS : HardwareDevice, IDevice, IHardwareDevice
 	{
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IReadWriteIOPort commandPort;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IReadWriteIOPort dataPort;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected SpinLock spinLock;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
-		public CMOS() { }
+		public CMOS()
+		{
+		}
 
 		/// <summary>
 		/// Setups this hardware device driver
@@ -121,6 +122,5 @@ namespace Mosa.DeviceDrivers.ISA
 		/// </summary>
 		/// <value>The day.</value>
 		public byte Day { get { return Read(7); } }
-
 	}
 }

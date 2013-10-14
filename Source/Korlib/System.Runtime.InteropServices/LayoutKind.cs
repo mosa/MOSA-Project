@@ -7,7 +7,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-
 namespace System.Runtime.InteropServices
 {
 	[Serializable]
@@ -17,5 +16,4 @@ namespace System.Runtime.InteropServices
 		Explicit = 2,
 		Auto = 3
 	}
-
 }

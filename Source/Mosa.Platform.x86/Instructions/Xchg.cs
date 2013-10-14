@@ -5,17 +5,18 @@
  *
  * Authors:
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
 using Mosa.Compiler.Framework;
+using System;
 
 namespace Mosa.Platform.x86.Instructions
 {
 	/// <summary>
 	/// Representations the x86 xchg instruction.
 	/// </summary>
-	public sealed class Xchg : TwoOperandInstruction
+	public sealed class Xchg : X86Instruction
 	{
 		#region Data Members
 
@@ -24,7 +25,19 @@ namespace Mosa.Platform.x86.Instructions
 		private static readonly OpCode M_R = new OpCode(new byte[] { 0x87 });
 		private static readonly OpCode R_R_16 = new OpCode(new byte[] { 0x66, 0x87 });
 
-		#endregion // Data Members
+		#endregion Data Members
+		
+		#region Construction
+
+		/// <summary>
+		/// Initializes a new instance of <see cref="Xchg"/>.
+		/// </summary>
+		public Xchg() :
+			base(1, 1)
+		{
+		}
+
+		#endregion Construction
 
 		#region Methods
 
@@ -37,11 +50,10 @@ namespace Mosa.Platform.x86.Instructions
 		/// <returns></returns>
 		protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
 		{
-			if (IsShort(destination) && IsShort(source))
-				if ((destination.IsRegister) && (source.IsRegister)) return R_R_16;
-			if ((destination.IsRegister) && (source.IsMemoryAddress)) return R_M;
-			if ((destination.IsRegister) && (source.IsRegister)) return R_R;
-			if ((destination.IsMemoryAddress) && (source.IsRegister)) return M_R;
+			if (IsShort(destination) && IsShort(source) && destination.IsRegister && source.IsRegister) return R_R_16;
+			if (destination.IsRegister && source.IsMemoryAddress) return R_M;
+			if (destination.IsRegister && source.IsRegister) return R_R;
+			if (destination.IsMemoryAddress && source.IsRegister) return M_R;
 
 			throw new ArgumentException(@"No opcode for operand type.");
 		}
@@ -56,6 +68,6 @@ namespace Mosa.Platform.x86.Instructions
 			visitor.Xchg(context);
 		}
 
-		#endregion // Methods
+		#endregion Methods
 	}
 }

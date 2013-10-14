@@ -39,35 +39,40 @@ namespace Mosa.DeviceSystem
 		internal const uint Sectors = 0x0C; // 4
 	}
 
-	#endregion
+	#endregion Definitions
 
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public class MasterBootBlock
 	{
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public const uint MaxMBRPartitions = 4;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IDiskDevice diskDevice;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public GenericPartition[] Partitions;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected uint diskSignature;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected bool valid;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected byte[] code;
 
@@ -171,7 +176,6 @@ namespace Mosa.DeviceSystem
 			return valid;
 		}
 
-
 		/// <summary>
 		/// Writes the master boot block.
 		/// </summary>
@@ -219,6 +223,5 @@ namespace Mosa.DeviceSystem
 
 			return true;
 		}
-
 	}
 }

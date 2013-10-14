@@ -7,14 +7,13 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Signatures;
 
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public sealed class LdftnInstruction : LoadInstruction
 	{
@@ -29,7 +28,7 @@ namespace Mosa.Compiler.Framework.CIL
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Methods
 
@@ -46,9 +45,9 @@ namespace Mosa.Compiler.Framework.CIL
 			// Read the fn token
 			Token token = decoder.DecodeTokenType();
 			ctx.Result = decoder.Compiler.CreateVirtualRegister(BuiltInSigType.IntPtr);
-			ctx.InvokeTarget = decoder.TypeModule.GetMethod(token);
-			
-			decoder.Compiler.Scheduler.TrackMethodInvoked(ctx.InvokeTarget);
+			ctx.InvokeMethod = decoder.TypeModule.GetMethod(token);
+
+			decoder.Compiler.Scheduler.TrackMethodInvoked(ctx.InvokeMethod);
 		}
 
 		/// <summary>
@@ -62,6 +61,5 @@ namespace Mosa.Compiler.Framework.CIL
 		}
 
 		#endregion Methods
-
 	}
 }

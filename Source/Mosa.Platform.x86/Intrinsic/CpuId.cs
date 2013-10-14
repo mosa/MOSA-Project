@@ -7,10 +7,7 @@
  *  Scott Balmos <sbalmos@fastmail.fm>
  */
 
-using System.Collections.Generic;
-
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.TypeSystem;
 
 namespace Mosa.Platform.x86.Intrinsic
 {
@@ -19,7 +16,6 @@ namespace Mosa.Platform.x86.Intrinsic
 	/// </summary>
 	public sealed class CpuId : IIntrinsicPlatformMethod
 	{
-
 		#region Methods
 
 		/// <summary>
@@ -27,12 +23,11 @@ namespace Mosa.Platform.x86.Intrinsic
 		/// </summary>
 		/// <param name="context">The context.</param>
 		/// <param name="typeSystem">The type system.</param>
-		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, ITypeSystem typeSystem, IList<RuntimeParameter> parameters)
+		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, BaseMethodCompiler methodCompiler)
 		{
 			context.SetInstruction(X86.CpuId, context.Result, context.Operand1);
 		}
 
-		#endregion // Methods
-
+		#endregion Methods
 	}
 }

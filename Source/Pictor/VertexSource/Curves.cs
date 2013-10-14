@@ -6,13 +6,13 @@
  * Authors:
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  */
+
 using System;
 
 namespace Pictor.VertexSource
 {
 	public interface ICurve : IVertexSource
 	{
-
 	};
 
 	public static class Curves
@@ -27,6 +27,7 @@ namespace Pictor.VertexSource
 		public static double curve_distance_epsilon = 1e-30;
 		public static double curve_collinearity_epsilon = 1e-30;
 		public static double curve_angle_tolerance_epsilon = 0.01;
+
 		public enum curve_recursion_limit_e { curve_recursion_limit = 32 };
 
 		//-------------------------------------------------------catrom_to_bezier
@@ -61,7 +62,6 @@ namespace Pictor.VertexSource
 									cp[4], cp[5], cp[6], cp[7]);
 		}
 
-
 		//-----------------------------------------------------ubspline_to_bezier
 		public static Curve4Points ubspline_to_bezier(double x1, double y1,
 												double x2, double y2,
@@ -86,7 +86,6 @@ namespace Pictor.VertexSource
 				(y2 + 4 * y3 + y4) / 6);
 		}
 
-
 		//-----------------------------------------------------------------------
 		public static Curve4Points
 		ubspline_to_bezier(Curve4Points cp)
@@ -94,8 +93,6 @@ namespace Pictor.VertexSource
 			return ubspline_to_bezier(cp[0], cp[1], cp[2], cp[3],
 									  cp[4], cp[5], cp[6], cp[7]);
 		}
-
-
 
 		//------------------------------------------------------hermite_to_bezier
 		public static Curve4Points hermite_to_bezier(double x1, double y1,
@@ -121,8 +118,6 @@ namespace Pictor.VertexSource
 				y2);
 		}
 
-
-
 		//-----------------------------------------------------------------------
 		public static Curve4Points
 		hermite_to_bezier(Curve4Points cp)
@@ -130,31 +125,30 @@ namespace Pictor.VertexSource
 			return hermite_to_bezier(cp[0], cp[1], cp[2], cp[3],
 									 cp[4], cp[5], cp[6], cp[7]);
 		}
-
-
 	};
+
 	// See Implementation agg_curves.cpp
 
 	//--------------------------------------------------------------Curve3Inc
 	public sealed class Curve3Inc
 	{
-		int m_num_steps;
-		int m_step;
-		double m_scale;
-		double m_start_x;
-		double m_start_y;
-		double m_end_x;
-		double m_end_y;
-		double m_fx;
-		double m_fy;
-		double m_dfx;
-		double m_dfy;
-		double m_ddfx;
-		double m_ddfy;
-		double m_saved_fx;
-		double m_saved_fy;
-		double m_saved_dfx;
-		double m_saved_dfy;
+		private int m_num_steps;
+		private int m_step;
+		private double m_scale;
+		private double m_start_x;
+		private double m_start_y;
+		private double m_end_x;
+		private double m_end_y;
+		private double m_fx;
+		private double m_fy;
+		private double m_dfx;
+		private double m_dfy;
+		private double m_ddfx;
+		private double m_ddfy;
+		private double m_saved_fx;
+		private double m_saved_fy;
+		private double m_saved_dfx;
+		private double m_saved_dfy;
 
 		public Curve3Inc()
 		{
@@ -173,7 +167,10 @@ namespace Pictor.VertexSource
 			init(x1, y1, x2, y2, x3, y3);
 		}
 
-		public void reset() { m_num_steps = 0; m_step = -1; }
+		public void reset()
+		{
+			m_num_steps = 0; m_step = -1;
+		}
 
 		public void init(double x1, double y1,
 				  double x2, double y2,
@@ -216,9 +213,14 @@ namespace Pictor.VertexSource
 			m_step = m_num_steps;
 		}
 
+		public void approximation_method(Curves.ECurveApproximationMethod method)
+		{
+		}
 
-		public void approximation_method(Curves.ECurveApproximationMethod method) { }
-		public Curves.ECurveApproximationMethod approximation_method() { return Curves.ECurveApproximationMethod.Inc; }
+		public Curves.ECurveApproximationMethod approximation_method()
+		{
+			return Curves.ECurveApproximationMethod.Inc;
+		}
 
 		public void approximation_scale(double s)
 		{
@@ -230,11 +232,23 @@ namespace Pictor.VertexSource
 			return m_scale;
 		}
 
-		public void angle_tolerance(double angle) { }
-		public double angle_tolerance() { return 0.0; }
+		public void angle_tolerance(double angle)
+		{
+		}
 
-		public void cusp_limit(double limit) { }
-		public double cusp_limit() { return 0.0; }
+		public double angle_tolerance()
+		{
+			return 0.0;
+		}
+
+		public void cusp_limit(double limit)
+		{
+		}
+
+		public double cusp_limit()
+		{
+			return 0.0;
+		}
 
 		public void rewind(uint path_id)
 		{
@@ -281,17 +295,16 @@ namespace Pictor.VertexSource
 			--m_step;
 			return (uint)Path.EPathCommands.LineTo;
 		}
-
 	};
 
 	//-------------------------------------------------------------Curve3Div
 	public sealed class Curve3Div
 	{
-		double m_approximation_scale;
-		double m_distance_tolerance_square;
-		double m_angle_tolerance;
-		uint m_count;
-		VectorPOD<PointD> m_points;
+		private double m_approximation_scale;
+		private double m_distance_tolerance_square;
+		private double m_angle_tolerance;
+		private uint m_count;
+		private VectorPOD<PointD> m_points;
 
 		public Curve3Div()
 		{
@@ -311,7 +324,11 @@ namespace Pictor.VertexSource
 			init(x1, y1, x2, y2, x3, y3);
 		}
 
-		public void reset() { m_points.RemoveAll(); m_count = 0; }
+		public void reset()
+		{
+			m_points.RemoveAll(); m_count = 0;
+		}
+
 		public void init(double x1, double y1,
 				  double x2, double y2,
 				  double x3, double y3)
@@ -323,18 +340,43 @@ namespace Pictor.VertexSource
 			m_count = 0;
 		}
 
+		public void approximation_method(Curves.ECurveApproximationMethod method)
+		{
+		}
 
-		public void approximation_method(Curves.ECurveApproximationMethod method) { }
-		public Curves.ECurveApproximationMethod approximation_method() { return Curves.ECurveApproximationMethod.Div; }
+		public Curves.ECurveApproximationMethod approximation_method()
+		{
+			return Curves.ECurveApproximationMethod.Div;
+		}
 
-		public void approximation_scale(double s) { m_approximation_scale = s; }
-		public double approximation_scale() { return m_approximation_scale; }
+		public void approximation_scale(double s)
+		{
+			m_approximation_scale = s;
+		}
 
-		public void angle_tolerance(double a) { m_angle_tolerance = a; }
-		public double angle_tolerance() { return m_angle_tolerance; }
+		public double approximation_scale()
+		{
+			return m_approximation_scale;
+		}
 
-		public void cusp_limit(double limit) { }
-		public double cusp_limit() { return 0.0; }
+		public void angle_tolerance(double a)
+		{
+			m_angle_tolerance = a;
+		}
+
+		public double angle_tolerance()
+		{
+			return m_angle_tolerance;
+		}
+
+		public void cusp_limit(double limit)
+		{
+		}
+
+		public double cusp_limit()
+		{
+			return 0.0;
+		}
 
 		public void rewind(uint idx)
 		{
@@ -457,8 +499,12 @@ namespace Pictor.VertexSource
 	//-------------------------------------------------------------Curve4Points
 	public sealed class Curve4Points
 	{
-		double[] cp = new double[8];
-		public Curve4Points() { }
+		private double[] cp = new double[8];
+
+		public Curve4Points()
+		{
+		}
+
 		public Curve4Points(double x1, double y1,
 					  double x2, double y2,
 					  double x3, double y3,
@@ -467,6 +513,7 @@ namespace Pictor.VertexSource
 			cp[0] = x1; cp[1] = y1; cp[2] = x2; cp[3] = y2;
 			cp[4] = x3; cp[5] = y3; cp[6] = x4; cp[7] = y4;
 		}
+
 		public void init(double x1, double y1,
 				  double x2, double y2,
 				  double x3, double y3,
@@ -488,31 +535,30 @@ namespace Pictor.VertexSource
 		//double& operator [] (uint i)       { return cp[i]; }
 	};
 
-
 	//-------------------------------------------------------------Curve4Inc
 	public sealed class Curve4Inc
 	{
-		int m_num_steps;
-		int m_step;
-		double m_scale;
-		double m_start_x;
-		double m_start_y;
-		double m_end_x;
-		double m_end_y;
-		double m_fx;
-		double m_fy;
-		double m_dfx;
-		double m_dfy;
-		double m_ddfx;
-		double m_ddfy;
-		double m_dddfx;
-		double m_dddfy;
-		double m_saved_fx;
-		double m_saved_fy;
-		double m_saved_dfx;
-		double m_saved_dfy;
-		double m_saved_ddfx;
-		double m_saved_ddfy;
+		private int m_num_steps;
+		private int m_step;
+		private double m_scale;
+		private double m_start_x;
+		private double m_start_y;
+		private double m_end_x;
+		private double m_end_y;
+		private double m_fx;
+		private double m_fy;
+		private double m_dfx;
+		private double m_dfy;
+		private double m_ddfx;
+		private double m_ddfy;
+		private double m_dddfx;
+		private double m_dddfy;
+		private double m_saved_fx;
+		private double m_saved_fy;
+		private double m_saved_dfx;
+		private double m_saved_dfy;
+		private double m_saved_ddfx;
+		private double m_saved_ddfy;
 
 		public Curve4Inc()
 		{
@@ -540,7 +586,11 @@ namespace Pictor.VertexSource
 			init(cp[0], cp[1], cp[2], cp[3], cp[4], cp[5], cp[6], cp[7]);
 		}
 
-		public void Reset() { m_num_steps = 0; m_step = -1; }
+		public void Reset()
+		{
+			m_num_steps = 0; m_step = -1;
+		}
+
 		public void init(double x1, double y1,
 				  double x2, double y2,
 				  double x3, double y3,
@@ -599,14 +649,19 @@ namespace Pictor.VertexSource
 			m_step = m_num_steps;
 		}
 
-
 		public void init(Curve4Points cp)
 		{
 			init(cp[0], cp[1], cp[2], cp[3], cp[4], cp[5], cp[6], cp[7]);
 		}
 
-		public void approximation_method(Curves.ECurveApproximationMethod method) { }
-		public Curves.ECurveApproximationMethod approximation_method() { return Curves.ECurveApproximationMethod.Inc; }
+		public void approximation_method(Curves.ECurveApproximationMethod method)
+		{
+		}
+
+		public Curves.ECurveApproximationMethod approximation_method()
+		{
+			return Curves.ECurveApproximationMethod.Inc;
+		}
 
 		public void approximation_scale(double s)
 		{
@@ -618,11 +673,23 @@ namespace Pictor.VertexSource
 			return m_scale;
 		}
 
-		public void angle_tolerance(double angle) { }
-		public double angle_tolerance() { return 0.0; }
+		public void angle_tolerance(double angle)
+		{
+		}
 
-		public void cusp_limit(double limit) { }
-		public double cusp_limit() { return 0.0; }
+		public double angle_tolerance()
+		{
+			return 0.0;
+		}
+
+		public void cusp_limit(double limit)
+		{
+		}
+
+		public double cusp_limit()
+		{
+			return 0.0;
+		}
 
 		public void rewind(uint path_id)
 		{
@@ -677,19 +744,17 @@ namespace Pictor.VertexSource
 			--m_step;
 			return (uint)Path.EPathCommands.LineTo;
 		}
-
 	};
-
 
 	//-------------------------------------------------------------Curve4Div
 	public sealed class Curve4Div
 	{
-		double m_approximation_scale;
-		double m_distance_tolerance_square;
-		double m_angle_tolerance;
-		double m_cusp_limit;
-		uint m_count;
-		VectorPOD<PointD> m_points;
+		private double m_approximation_scale;
+		private double m_distance_tolerance_square;
+		private double m_angle_tolerance;
+		private double m_cusp_limit;
+		private uint m_count;
+		private VectorPOD<PointD> m_points;
 
 		public Curve4Div()
 		{
@@ -720,7 +785,11 @@ namespace Pictor.VertexSource
 			init(cp[0], cp[1], cp[2], cp[3], cp[4], cp[5], cp[6], cp[7]);
 		}
 
-		public void Reset() { m_points.RemoveAll(); m_count = 0; }
+		public void Reset()
+		{
+			m_points.RemoveAll(); m_count = 0;
+		}
+
 		public void init(double x1, double y1,
 				  double x2, double y2,
 				  double x3, double y3,
@@ -733,24 +802,39 @@ namespace Pictor.VertexSource
 			m_count = 0;
 		}
 
-
 		public void init(Curve4Points cp)
 		{
 			init(cp[0], cp[1], cp[2], cp[3], cp[4], cp[5], cp[6], cp[7]);
 		}
 
-		public void approximation_method(Curves.ECurveApproximationMethod method) { }
+		public void approximation_method(Curves.ECurveApproximationMethod method)
+		{
+		}
 
 		public Curves.ECurveApproximationMethod approximation_method()
 		{
 			return Curves.ECurveApproximationMethod.Div;
 		}
 
-		public void approximation_scale(double s) { m_approximation_scale = s; }
-		public double approximation_scale() { return m_approximation_scale; }
+		public void approximation_scale(double s)
+		{
+			m_approximation_scale = s;
+		}
 
-		public void angle_tolerance(double a) { m_angle_tolerance = a; }
-		public double angle_tolerance() { return m_angle_tolerance; }
+		public double approximation_scale()
+		{
+			return m_approximation_scale;
+		}
+
+		public void angle_tolerance(double a)
+		{
+			m_angle_tolerance = a;
+		}
+
+		public double angle_tolerance()
+		{
+			return m_angle_tolerance;
+		}
 
 		public void cusp_limit(double v)
 		{
@@ -791,7 +875,6 @@ namespace Pictor.VertexSource
 			m_points.Add(new PointD(x4, y4));
 		}
 
-
 		private void recursive_bezier(double x1, double y1,
 							  double x2, double y2,
 							  double x3, double y3,
@@ -818,7 +901,6 @@ namespace Pictor.VertexSource
 			double x1234 = (x123 + x234) / 2;
 			double y1234 = (y123 + y234) / 2;
 
-
 			// Try to approximate the full cubic curve by a single straight Line
 			//------------------
 			double dx = x4 - x1;
@@ -841,6 +923,7 @@ namespace Pictor.VertexSource
 			switch (SwitchCase)
 			{
 				case 0:
+
 					// All collinear OR p1==p4
 					//----------------------
 					k = dx * dx + dy * dy;
@@ -891,6 +974,7 @@ namespace Pictor.VertexSource
 					break;
 
 				case 1:
+
 					// p1,p2,p4 are collinear, p3 is significant
 					//----------------------
 					if (d3 * d3 <= m_distance_tolerance_square * (dx * dx + dy * dy))
@@ -925,6 +1009,7 @@ namespace Pictor.VertexSource
 					break;
 
 				case 2:
+
 					// p1,p3,p4 are collinear, p2 is significant
 					//----------------------
 					if (d2 * d2 <= m_distance_tolerance_square * (dx * dx + dy * dy))
@@ -959,6 +1044,7 @@ namespace Pictor.VertexSource
 					break;
 
 				case 3:
+
 					// Regular case
 					//-----------------
 					if ((d2 + d3) * (d2 + d3) <= m_distance_tolerance_square * (dx * dx + dy * dy))
@@ -1011,15 +1097,14 @@ namespace Pictor.VertexSource
 			recursive_bezier(x1, y1, x12, y12, x123, y123, x1234, y1234, level + 1);
 			recursive_bezier(x1234, y1234, x234, y234, x34, y34, x4, y4, level + 1);
 		}
-
 	};
 
 	//-----------------------------------------------------------------Curve3
 	public sealed class Curve3 : ICurve
 	{
-		Curve3Inc m_curve_inc;
-		Curve3Div m_curve_div;
-		Curves.ECurveApproximationMethod m_approximation_method;
+		private Curve3Inc m_curve_inc;
+		private Curve3Div m_curve_div;
+		private Curves.ECurveApproximationMethod m_approximation_method;
 
 		public Curve3()
 		{
@@ -1027,6 +1112,7 @@ namespace Pictor.VertexSource
 			m_curve_div = new Curve3Div();
 			m_approximation_method = Curves.ECurveApproximationMethod.Div;
 		}
+
 		public Curve3(double x1, double y1,
 			   double x2, double y2,
 			   double x3, double y3)
@@ -1116,14 +1202,12 @@ namespace Pictor.VertexSource
 		}
 	};
 
-
-
 	//-----------------------------------------------------------------Curve4
 	public sealed class Curve4 : ICurve
 	{
-		Curve4Inc m_curve_inc;
-		Curve4Div m_curve_div;
-		Curves.ECurveApproximationMethod m_approximation_method;
+		private Curve4Inc m_curve_inc;
+		private Curve4Div m_curve_div;
+		private Curves.ECurveApproximationMethod m_approximation_method;
 
 		public Curve4()
 		{
@@ -1131,6 +1215,7 @@ namespace Pictor.VertexSource
 			m_curve_div = new Curve4Div();
 			m_approximation_method = Curves.ECurveApproximationMethod.Div;
 		}
+
 		public Curve4(double x1, double y1,
 			   double x2, double y2,
 			   double x3, double y3,

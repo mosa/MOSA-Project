@@ -15,7 +15,7 @@ namespace Mosa.Compiler.Pdb
 	/// <summary>
 	/// Wraps a stream to prevent it from being disposed by a reader/writer.
 	/// </summary>
-	class CvStream : Stream
+	internal class CvStream : Stream
 	{
 		#region Data Members
 
@@ -24,7 +24,7 @@ namespace Mosa.Compiler.Pdb
 		/// </summary>
 		private Stream stream;
 
-		#endregion // Data Members
+		#endregion Data Members
 
 		#region Construction
 
@@ -40,7 +40,7 @@ namespace Mosa.Compiler.Pdb
 			this.stream = stream;
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Stream Overrides
 
@@ -272,7 +272,7 @@ namespace Mosa.Compiler.Pdb
 			this.stream.Write(buffer, offset, count);
 		}
 
-		#endregion // Stream Overrides
+		#endregion Stream Overrides
 
 		#region Internals
 
@@ -285,6 +285,6 @@ namespace Mosa.Compiler.Pdb
 				throw new ObjectDisposedException(@"CvStream");
 		}
 
-		#endregion // Internals
+		#endregion Internals
 	}
 }

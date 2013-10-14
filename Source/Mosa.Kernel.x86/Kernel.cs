@@ -12,14 +12,14 @@ using Mosa.Kernel.x86.Smbios;
 namespace Mosa.Kernel.x86
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public static class Kernel
 	{
-
 		public static void Setup()
 		{
-			SmbiosManager.Setup();
+			IDT.SetInterruptHandler(null);
+			SSE.Setup();
 			Multiboot.Setup();
 			ProgrammableInterruptController.Setup();
 			GDT.Setup();
@@ -27,10 +27,11 @@ namespace Mosa.Kernel.x86
 			PageFrameAllocator.Setup();
 			PageTable.Setup();
 			VirtualPageAllocator.Setup();
-			ProcessManager.Setup();
-			TaskManager.Setup();
+			//ProcessManager.Setup();
+			//TaskManager.Setup();
 			SmbiosManager.Setup();
 			ConsoleManager.Setup();
+
 			//Serial.Setup();
 		}
 	}

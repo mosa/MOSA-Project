@@ -48,6 +48,7 @@ namespace Mosa.DeviceSystem
 		/// <param name="region">The region.</param>
 		/// <returns></returns>
 		IMemory GetMemory(byte region);
+
 		/// <summary>
 		/// Gets the IO port.
 		/// </summary>
@@ -78,5 +79,4 @@ namespace Mosa.DeviceSystem
 		/// <value>The PCI device resource.</value>
 		IDeviceResource DeviceResource { get; }
 	}
-
 }

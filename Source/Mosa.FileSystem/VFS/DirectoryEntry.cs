@@ -11,11 +11,10 @@
 namespace Mosa.FileSystem.VFS
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public sealed class DirectoryEntry
 	{
-
 		#region Static data members
 
 		/// <summary>
@@ -24,7 +23,7 @@ namespace Mosa.FileSystem.VFS
 		[System.ThreadStatic]
 		private static DirectoryEntry currentDirectory = null;
 
-		#endregion // Static data members
+		#endregion Static data members
 
 		#region Data members
 
@@ -39,7 +38,7 @@ namespace Mosa.FileSystem.VFS
 		private string name;
 
 		/// <summary>
-		/// Ptr to the parent directory entry. 
+		/// Ptr to the parent directory entry.
 		/// </summary>
 		/// <remarks>
 		/// If _parent == this, we're at the root directory entry.
@@ -51,22 +50,23 @@ namespace Mosa.FileSystem.VFS
 		/// </summary>
 		private DirectoryEntry child, next;
 
-		#endregion // Data members
+		#endregion Data members
 
 		#region Construction
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public DirectoryEntry()
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Properties
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public string Name
 		{
@@ -77,7 +77,7 @@ namespace Mosa.FileSystem.VFS
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public IVfsNode Node
 		{
@@ -88,7 +88,7 @@ namespace Mosa.FileSystem.VFS
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public DirectoryEntry Parent
 		{
@@ -98,12 +98,12 @@ namespace Mosa.FileSystem.VFS
 			}
 		}
 
-		#endregion // Properties
+		#endregion Properties
 
 		#region Methods
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="name"></param>
 		/// <returns></returns>
@@ -150,7 +150,7 @@ namespace Mosa.FileSystem.VFS
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="parent"></param>
 		/// <param name="name"></param>
@@ -184,12 +184,12 @@ namespace Mosa.FileSystem.VFS
 			parent = null;
 		}
 
-		#endregion // Methods
+		#endregion Methods
 
 		#region Child list functions
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="child"></param>
 		private void InsertChild(DirectoryEntry child)
@@ -222,13 +222,14 @@ namespace Mosa.FileSystem.VFS
 
 						_children.Insert(rmin, child);
 			 */
+
 			// FIXME: Thread safety
 			child.next = this.child;
 			this.child = child;
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="child"></param>
 		private void RemoveChild(DirectoryEntry child)
@@ -251,12 +252,12 @@ namespace Mosa.FileSystem.VFS
 			//			_children.Remove(child);
 		}
 
-		#endregion // Child list functions
+		#endregion Child list functions
 
 		#region Static methods
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public static DirectoryEntry CurrentDirectoryEntry
 		{
@@ -307,6 +308,7 @@ namespace Mosa.FileSystem.VFS
 
 			if (name.Length == 0)
 				throw new System.ArgumentException(@"Invalid directory entry name."); // , @"name"
+
 			// FIXME: Add precondition check for invalid characters
 			// FIXME: Localize exception messages
 			//#endif // #if VFS_NO_EXCEPTIONS
@@ -343,6 +345,6 @@ namespace Mosa.FileSystem.VFS
 			return result;
 		}
 
-		#endregion // Static methods
+		#endregion Static methods
 	}
 }

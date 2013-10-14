@@ -9,9 +9,8 @@
 
 namespace Mosa.Compiler.Framework.CIL
 {
-
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public static class CILInstruction
 	{
@@ -27,7 +26,7 @@ namespace Mosa.Compiler.Framework.CIL
 			get { return opcodeMap; }
 		}
 
-		#endregion // Static Data
+		#endregion Static Data
 
 		/// <summary>
 		/// Gets the instruction.

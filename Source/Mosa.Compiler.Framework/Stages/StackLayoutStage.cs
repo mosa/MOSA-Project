@@ -5,29 +5,18 @@
  *
  * Authors:
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
 using System.Collections.Generic;
-using Mosa.Compiler.Framework.IR;
 
 namespace Mosa.Compiler.Framework.Stages
 {
 	/// <summary>
 	/// Calculates the layout of the stack of the method.
 	/// </summary>
-	public sealed class StackLayoutStage : BaseMethodCompilerStage, IMethodCompilerStage, IStackLayoutProvider, IPipelineStage
+	public sealed class StackLayoutStage : BaseMethodCompilerStage, IMethodCompilerStage, IPipelineStage
 	{
-
-		#region Data members
-
-		/// <summary>
-		/// Holds the total stack requirements of local variables of the compiled method.
-		/// </summary>
-		private int localsSize;
-
-		#endregion // Data members
-
 		/// <summary>
 		/// Runs the specified method compiler.
 		/// </summary>
@@ -40,27 +29,8 @@ namespace Mosa.Compiler.Framework.Stages
 			LayoutStackVariables();
 
 			// Layout parameters
-			LayoutParameters(methodCompiler);
-
-			// Create a prologue instruction
-			Context prologueCtx = new Context(instructionSet, basicBlocks.PrologueBlock).InsertBefore();
-			prologueCtx.SetInstruction(IRInstruction.Prologue);
-			prologueCtx.Label = -1;
-
-			// Create an epilogue instruction
-			Context epilogueCtx = new Context(instructionSet, basicBlocks.EpilogueBlock);
-			epilogueCtx.AppendInstruction(IRInstruction.Epilogue);
-			epilogueCtx.Label = Int32.MaxValue;
+			LayoutParameters();
 		}
-
-		#region IStackLayoutStage Members
-
-		int IStackLayoutProvider.LocalsSize
-		{
-			get { return localsSize; }
-		}
-
-		#endregion // IStackLayoutStage Members
 
 		#region Internals
 
@@ -69,48 +39,28 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </summary>
 		private void LayoutStackVariables()
 		{
-			List<Operand> locals = GetActiveStackVariables();
-
-			// Sort all found locals
-			OrderVariables(locals, callingConvention);
-
-			// Now we assign increasing stack offsets to each variable
-			localsSize = LayoutVariables(locals, callingConvention, callingConvention.OffsetOfFirstLocal, 1);
-		}
-
-		/// <summary>
-		/// Gets the active stack variables.
-		/// </summary>
-		/// <returns></returns>
-		private List<Operand> GetActiveStackVariables()
-		{
-			// Allocate a list of locals
-			List<Operand> locals = new List<Operand>();
-
-			foreach (var operand in methodCompiler.StackLayout.Stack)
-				if (operand.IsLocalVariable || operand.Uses.Count != 0 || operand.Definitions.Count != 0)
-					locals.Add(operand);
-
-			return locals;
+			// assign increasing stack offsets to each variable
+			methodCompiler.StackLayout.StackSize = LayoutVariables(methodCompiler.StackLayout.Stack, callingConvention, callingConvention.OffsetOfFirstLocal, 1);
 		}
 
 		/// <summary>
 		/// Lays out all parameters of the method.
 		/// </summary>
-		/// <param name="compiler">The method compiler providing the parameters.</param>
-		private void LayoutParameters(BaseMethodCompiler compiler)
+		private void LayoutParameters()
 		{
-			List<Operand> paramOps = new List<Operand>();
+			List<Operand> parameters = new List<Operand>();
 
 			int offset = 0;
 
-			if (compiler.Method.Signature.HasThis || compiler.Method.Signature.HasExplicitThis)
+			if (methodCompiler.Method.HasThis || methodCompiler.Method.HasExplicitThis)
 				++offset;
 
-			for (int i = 0; i < compiler.Method.Parameters.Count + offset; ++i)
-				paramOps.Add(compiler.GetParameterOperand(i));
+			for (int i = 0; i < methodCompiler.Method.Parameters.Count + offset; ++i)
+			{
+				parameters.Add(methodCompiler.GetParameterOperand(i));
+			}
 
-			LayoutVariables(paramOps, callingConvention, callingConvention.OffsetOfFirstParameter, -1);
+			LayoutVariables(parameters, callingConvention, callingConvention.OffsetOfFirstParameter, -1);
 		}
 
 		/// <summary>
@@ -121,7 +71,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="offsetOfFirst">Specifies the offset of the first stack operand in the list.</param>
 		/// <param name="direction">The direction.</param>
 		/// <returns></returns>
-		private static int LayoutVariables(List<Operand> locals, ICallingConvention callingConvention, int offsetOfFirst, int direction)
+		private static int LayoutVariables(IList<Operand> locals, ICallingConvention callingConvention, int offsetOfFirst, int direction)
 		{
 			int offset = offsetOfFirst;
 
@@ -150,30 +100,24 @@ namespace Mosa.Compiler.Framework.Stages
 					offset += (padding + size);
 				}
 
-				operand.Offset = new IntPtr(thisOffset);
+				long existing = operand.Displacement;
+				operand.Displacement = thisOffset;
+
+				// adjust split children
+				if (operand.Low != null)
+				{
+					operand.Low.Displacement = thisOffset + (operand.Low.Displacement - existing);
+				}
+
+				if (operand.High != null)
+				{
+					operand.High.Displacement = thisOffset + (operand.High.Displacement - existing);
+				}
 			}
 
 			return offset;
 		}
 
-		/// <summary>
-		/// Sorts all local variables by their size requirements.
-		/// </summary>
-		/// <param name="locals">Holds all local variables to sort..</param>
-		/// <param name="callingConvention">The calling convention used to determine size and alignment requirements.</param>
-		private static void OrderVariables(List<Operand> locals, ICallingConvention callingConvention)
-		{
-			// Sort the list by stack size requirements - this moves equally sized operands closer together,
-			// in the hope that this reduces padding on the stack to enforce HW alignment requirements.			 
-			locals.Sort(delegate(Operand op1, Operand op2)
-			{
-				int size1, size2, alignment;
-				callingConvention.GetStackRequirements(op1, out size1, out alignment);
-				callingConvention.GetStackRequirements(op2, out size2, out alignment);
-				return size2 - size1;
-			});
-		}
-
-		#endregion // Internals
+		#endregion Internals
 	}
 }

@@ -20,6 +20,7 @@ namespace Pictor
 		{
 			get;
 		}
+
 		RGBA_Bytes this[int v]
 		{
 			get;
@@ -37,14 +38,16 @@ namespace Pictor
 
 		public const int downscale_shift = subpixelShift - gradientSubpixelShift;
 
-		ISpanInterpolator m_interpolator;
-		IGradient m_gradient_function;
-		IColorFunction m_color_function;
-		int m_d1;
-		int m_d2;
+		private ISpanInterpolator m_interpolator;
+		private IGradient m_gradient_function;
+		private IColorFunction m_color_function;
+		private int m_d1;
+		private int m_d2;
 
 		//--------------------------------------------------------------------
-		public SpanGradient() { }
+		public SpanGradient()
+		{
+		}
 
 		//--------------------------------------------------------------------
 		public SpanGradient(ISpanInterpolator inter,
@@ -91,7 +94,9 @@ namespace Pictor
 		}
 
 		//--------------------------------------------------------------------
-		public void Prepare() { }
+		public void Prepare()
+		{
+		}
 
 		//--------------------------------------------------------------------
 		public unsafe void Generate(RGBA_Bytes* span, int x, int y, uint len)
@@ -121,9 +126,9 @@ namespace Pictor
 	//=====================================================LinearColorGradient
 	public struct LinearColorGradient : IColorFunction
 	{
-		RGBA_Bytes m_c1;
-		RGBA_Bytes m_c2;
-		int m_size;
+		private RGBA_Bytes m_c1;
+		private RGBA_Bytes m_c2;
+		private int m_size;
 
 		public LinearColorGradient(RGBA_Bytes c1, RGBA_Bytes c2)
 			: this(c1, c2, 256)
@@ -176,7 +181,6 @@ namespace Pictor
 		}
 	};
 
-
 	//==========================================================RadialGradient
 	public class RadialGradient : IGradient
 	{
@@ -199,13 +203,13 @@ namespace Pictor
 	//====================================================RadialFocusGradient
 	public class RadialFocusGradient : IGradient
 	{
-		int m_r;
-		int m_fx;
-		int m_fy;
-		double m_r2;
-		double m_fx2;
-		double m_fy2;
-		double m_mul;
+		private int m_r;
+		private int m_fx;
+		private int m_fy;
+		private double m_r2;
+		private double m_fx2;
+		private double m_fy2;
+		private double m_mul;
 
 		//---------------------------------------------------------------------
 		public RadialFocusGradient()
@@ -235,9 +239,20 @@ namespace Pictor
 		}
 
 		//---------------------------------------------------------------------
-		public double Radius() { return (double)(m_r) / SpanGradient.gradientSubpixelScale; }
-		public double focus_x() { return (double)(m_fx) / SpanGradient.gradientSubpixelScale; }
-		public double focus_y() { return (double)(m_fy) / SpanGradient.gradientSubpixelScale; }
+		public double Radius()
+		{
+			return (double)(m_r) / SpanGradient.gradientSubpixelScale;
+		}
+
+		public double focus_x()
+		{
+			return (double)(m_fx) / SpanGradient.gradientSubpixelScale;
+		}
+
+		public double focus_y()
+		{
+			return (double)(m_fy) / SpanGradient.gradientSubpixelScale;
+		}
 
 		//---------------------------------------------------------------------
 		public int Calculate(int x, int y, int d)
@@ -282,18 +297,22 @@ namespace Pictor
 		}
 	};
 
-
 	//==============================================================xGradient
 	public class xGradient : IGradient
 	{
-		public int Calculate(int x, int y, int d) { return x; }
+		public int Calculate(int x, int y, int d)
+		{
+			return x;
+		}
 	};
-
 
 	//==============================================================yGradient
 	public class yGradient : IGradient
 	{
-		public int Calculate(int x, int y, int d) { return y; }
+		public int Calculate(int x, int y, int d)
+		{
+			return y;
+		}
 	};
 
 	//========================================================DiamondGradient
@@ -338,13 +357,12 @@ namespace Pictor
 	//=================================================GradientRepeatAdaptor
 	public class GradientRepeatAdaptor : IGradient
 	{
-		IGradient m_gradient;
+		private IGradient m_gradient;
 
 		public GradientRepeatAdaptor(IGradient gradient)
 		{
 			m_gradient = gradient;
 		}
-
 
 		public int Calculate(int x, int y, int d)
 		{
@@ -357,7 +375,7 @@ namespace Pictor
 	//================================================GradientReflectAdaptor
 	public class GradientReflectAdaptor : IGradient
 	{
-		IGradient m_gradient;
+		private IGradient m_gradient;
 
 		public GradientReflectAdaptor(IGradient gradient)
 		{
@@ -376,7 +394,7 @@ namespace Pictor
 
 	public class GradientClampAdaptor : IGradient
 	{
-		IGradient m_gradient;
+		private IGradient m_gradient;
 
 		public GradientClampAdaptor(IGradient gradient)
 		{

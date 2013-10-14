@@ -4,15 +4,13 @@
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com> 
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 namespace Mosa.Test.Collection
 {
-
 	public static class UInt32Tests
 	{
-
 		public static uint AddU4U4(uint first, uint second)
 		{
 			return (first + second);
@@ -63,12 +61,12 @@ namespace Mosa.Test.Collection
 			return (~first);
 		}
 
-		public static uint ShiftLeftU4U4(uint first, byte second)
+		public static uint ShiftLeftU4U1(uint first, byte second)
 		{
 			return (first << second);
 		}
 
-		public static uint ShiftRightU4U4(uint first, byte second)
+		public static uint ShiftRightU4U1(uint first, byte second)
 		{
 			return (first >> second);
 		}

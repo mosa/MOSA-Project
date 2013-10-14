@@ -5,17 +5,19 @@
  *
  * Authors:
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
 using Mosa.Compiler.Framework;
+using System;
+using System.Diagnostics;
 
 namespace Mosa.Platform.x86.Instructions
 {
 	/// <summary>
 	/// Representations the x86 cmp instruction.
 	/// </summary>
-	public sealed class Cmp : TwoOperandNoResultInstruction
+	public sealed class Cmp : X86Instruction
 	{
 		#region Data Member
 
@@ -31,7 +33,19 @@ namespace Mosa.Platform.x86.Instructions
 		private static readonly OpCode M_R_16 = new OpCode(new byte[] { 0x66, 0x39 });
 		private static readonly OpCode R_M_16 = new OpCode(new byte[] { 0x66, 0x3B });
 
-		#endregion
+		#endregion Data Member
+
+		#region Construction
+
+		/// <summary>
+		/// Initializes a new instance of <see cref="Cmp"/>.
+		/// </summary>
+		public Cmp() :
+			base(0, 2)
+		{
+		}
+
+		#endregion Construction
 
 		#region Methods
 
@@ -44,7 +58,7 @@ namespace Mosa.Platform.x86.Instructions
 		/// <returns></returns>
 		protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
 		{
-			if ((source.IsMemoryAddress) && (third.IsRegister))
+			if (source.IsMemoryAddress && third.IsRegister)
 			{
 				if (IsByte(source) || IsByte(third))
 					return M_R_8;
@@ -55,7 +69,7 @@ namespace Mosa.Platform.x86.Instructions
 				return M_R;
 			}
 
-			if ((source.IsRegister) && (third.IsMemoryAddress))
+			if (source.IsRegister && third.IsMemoryAddress)
 			{
 				if (IsByte(third) || IsByte(source))
 					return R_M_8;
@@ -66,9 +80,11 @@ namespace Mosa.Platform.x86.Instructions
 				return R_M;
 			}
 
-			if ((source.IsRegister) && (third.IsRegister)) return R_R;
-			if ((source.IsMemoryAddress) && (third.IsConstant)) return M_C;
-			if ((source.IsRegister) && (third.IsConstant))
+			if (source.IsRegister && third.IsRegister) return R_R;
+
+			if (source.IsMemoryAddress && third.IsConstant) return M_C;
+
+			if (source.IsRegister && third.IsConstant)
 			{
 				if (IsByte(third) || IsByte(source))
 					return R_C_8;
@@ -79,9 +95,22 @@ namespace Mosa.Platform.x86.Instructions
 				return R_C;
 			}
 
-			throw new ArgumentException(String.Format(@"x86.CmpInstruction: No opcode for operand types {0} and {1}.", source, third));
+			throw new ArgumentException(String.Format(@"x86.Cmp: No opcode for operand types {0} and {1}.", source, third));
 		}
-		
+
+		/// <summary>
+		/// Emits the specified platform instruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <param name="emitter">The emitter.</param>
+		protected override void Emit(Context context, MachineCodeEmitter emitter)
+		{
+			Debug.Assert(context.Result == null);
+
+			OpCode opCode = ComputeOpCode(null, context.Operand1, context.Operand2);
+			emitter.Emit(opCode, context.Operand1, context.Operand2);
+		}
+
 		/// Allows visitor based dispatch for this instruction object.
 		/// </summary>
 		/// <param name="visitor">The visitor object.</param>
@@ -91,6 +120,6 @@ namespace Mosa.Platform.x86.Instructions
 			visitor.Cmp(context);
 		}
 
-		#endregion // Methods
+		#endregion Methods
 	}
 }

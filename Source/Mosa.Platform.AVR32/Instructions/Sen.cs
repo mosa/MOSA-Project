@@ -12,10 +12,21 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.AVR32.Instructions
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public class Sen : AVR32Instruction
 	{
+		#region Construction
+
+		/// <summary>
+		/// Initializes a new instance of <see cref="Sen"/>.
+		/// </summary>
+		public Sen() :
+			base(0, 0)
+		{
+		}
+
+		#endregion Construction
 
 		#region Methods
 
@@ -39,7 +50,6 @@ namespace Mosa.Platform.AVR32.Instructions
 			visitor.Sen(context);
 		}
 
-		#endregion // Methods
-
+		#endregion Methods
 	}
 }

@@ -4,35 +4,15 @@
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com> 
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using System;
 
 namespace Mosa.Test.Collection
 {
-
 	public static class DoubleTests
 	{
-
-		public static bool AddR8R8(double expected, double first, double second)
-		{
-			return expected == (first + second);
-		}
-
-		public static bool SubR8R8(double expected, double first, double second)
-		{
-			return expected == (first - second);
-		}
-
-		public static bool MulR8R8(double expected, double first, double second)
-		{
-			return expected == (first * second);
-		}
-
-		public static bool DivR8R8(double expected, double first, double second)
-		{
-			return expected == (first / second);
-		}
 
 		public static double AddR8R8(double first, double second)
 		{
@@ -62,6 +42,11 @@ namespace Mosa.Test.Collection
 		public static bool CeqR8R8(double first, double second)
 		{
 			return (first.CompareTo(second) == 0);
+		}
+
+		public static bool CneqR8R8(double first, double second)
+		{
+			return (first.CompareTo(second) != 0);
 		}
 
 		public static bool CltR8R8(double first, double second)
@@ -120,6 +105,11 @@ namespace Mosa.Test.Collection
 		private static void SetValueInRefValue(ref double destination, double value)
 		{
 			destination = value;
+		}
+
+		public static bool IsNaN(double value)
+		{
+			return Double.IsNaN(value);
 		}
 	}
 }

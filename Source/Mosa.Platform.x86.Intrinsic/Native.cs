@@ -35,13 +35,13 @@ namespace Mosa.Platform.x86.Intrinsic
 		public extern static void Cli();
 
 		///// <summary>
-		///// Wraps the x86 cmpxchg instruction 
+		///// Wraps the x86 cmpxchg instruction
 		///// </summary>
 		//[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.CmpXchg, Mosa.Platform.x86")]
 		//public extern static void CmpXchg16(ref short first, short second);
 
 		///// <summary>
-		///// Wraps the x86 cmpxchg instruction 
+		///// Wraps the x86 cmpxchg instruction
 		///// </summary>
 		//[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.CmpXchg, Mosa.Platform.x86")]
 		//public extern static void CmpXchg32(ref int first, int second);
@@ -119,7 +119,7 @@ namespace Mosa.Platform.x86.Intrinsic
 		public extern static void Hlt();
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.Invlpg, Mosa.Platform.x86")]
 		public extern static void Invlpg(uint address);
@@ -149,7 +149,7 @@ namespace Mosa.Platform.x86.Intrinsic
 		public extern static int CpuIdEdx(uint function);
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.BochsDebug, Mosa.Platform.x86")]
 		public extern static void BochsDebug();
@@ -230,49 +230,49 @@ namespace Mosa.Platform.x86.Intrinsic
 		public extern static void SpinUnlock(uint address);
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.Get, Mosa.Platform.x86")]
 		public extern static byte Get8(uint address);
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.Get, Mosa.Platform.x86")]
 		public extern static ushort Get16(uint address);
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.Get, Mosa.Platform.x86")]
 		public extern static uint Get32(uint address);
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.Get, Mosa.Platform.x86")]
 		public extern static ulong Get64(uint address);
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.Set, Mosa.Platform.x86")]
 		public extern static void Set8(uint address, byte value);
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.Set, Mosa.Platform.x86")]
 		public extern static void Set16(uint address, ushort value);
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.Set, Mosa.Platform.x86")]
 		public extern static void Set32(uint address, uint value);
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.Set, Mosa.Platform.x86")]
 		public extern static void Set64(uint address, ulong value);
@@ -297,7 +297,6 @@ namespace Mosa.Platform.x86.Intrinsic
 		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.GetMethodLookupTable, Mosa.Platform.x86")]
 		public extern static uint GetMethodLookupTable(uint ptr);
 
-		#endregion
-
+		#endregion Intrinsic
 	}
 }

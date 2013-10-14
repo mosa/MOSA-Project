@@ -66,7 +66,7 @@ namespace Mosa.Platform.x86
 			EDI = 7
 		}
 
-		#endregion // Types
+		#endregion Types
 
 		#region Static data members
 
@@ -110,7 +110,7 @@ namespace Mosa.Platform.x86
 		/// </summary>
 		public static readonly GeneralPurposeRegister EDI = new GeneralPurposeRegister(7, GPR.EDI);
 
-		#endregion // Static data members
+		#endregion Static data members
 
 		#region Data members
 
@@ -119,7 +119,7 @@ namespace Mosa.Platform.x86
 		/// </summary>
 		private readonly GPR gpr;
 
-		#endregion // Data members
+		#endregion Data members
 
 		#region Construction
 
@@ -134,9 +134,17 @@ namespace Mosa.Platform.x86
 			this.gpr = gpr;
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Properties
+
+		/// <summary>
+		/// General purpose registers support integer operations.
+		/// </summary>
+		public override bool IsInteger
+		{
+			get { return true; }
+		}
 
 		/// <summary>
 		/// General purpose register do not support floating point operations.
@@ -162,7 +170,7 @@ namespace Mosa.Platform.x86
 			get { return 32; }
 		}
 
-		#endregion // Properties
+		#endregion Properties
 
 		#region Methods
 
@@ -195,6 +203,6 @@ namespace Mosa.Platform.x86
 			return gpr.ToString();
 		}
 
-		#endregion // Methods
+		#endregion Methods
 	}
 }

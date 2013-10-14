@@ -4,142 +4,174 @@
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com> 
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 namespace Mosa.Test.Collection
 {
 	public interface IAA { }
+
 	public interface IBB { }
+
 	public interface ICC { }
 
 	public class AA : IAA { }
+
 	public class BB : AA, IBB { }
+
 	public class CC { }
+
 	public class DD : BB { }
 
 	public static class IsInstTests
 	{
-
-		public static bool IsInstTest1()
+		public static bool IsInstAAToAA()
 		{
 			object o = new AA();
 
 			return (o is AA);
 		}
 
-		public static bool IsInstTest2()
+		public static bool IsInstBBToAA()
 		{
 			object o = new BB();
 
 			return (o is AA);
 		}
 
-		public static bool IsInstTest3()
+		public static bool IsInstCCToAA()
 		{
 			object o = new CC();
 
 			return (o is AA);
 		}
 
-		public static bool IsInstTest4()
+		public static bool IsInstCCToBB()
 		{
 			object o = new CC();
 
 			return (o is BB);
 		}
 
-		public static bool IsInstTest5()
+		public static bool IsInstDDToAA()
 		{
 			object o = new DD();
 
 			return (o is AA);
 		}
 
-		public static bool IsInstTest6()
+		public static bool IsInstDDToBB()
 		{
 			object o = new DD();
 
 			return (o is BB);
 		}
 
-		public static bool IsInstTest7()
+		public static bool IsInstDDToCC()
 		{
 			object o = new DD();
 
 			return (o is CC);
 		}
 
-
-		public static bool IsInstTest8()
+		public static bool IsInstAAtoIAA()
 		{
 			object o = new AA();
 
 			return (o is IAA);
 		}
 
-		public static bool IsInstTest9()
+		public static bool IsInstBBToIAA()
 		{
 			object o = new BB();
 
 			return (o is IAA);
 		}
 
-		public static bool IsInstTest10()
+		public static bool IsInstCCToIAA()
 		{
 			object o = new CC();
 
 			return (o is IAA);
 		}
 
-		public static bool IsInstTest11()
+		public static bool IsInstCCToIBB()
 		{
 			object o = new CC();
 
 			return (o is IBB);
 		}
 
-		public static bool IsInstTest12()
+		//public static bool IsInstI4ToI4()
+		//{
+		//	object o = (int)1;
+		//	return (o is int);
+		//}
+
+		public static bool IsInstI4ToI4(int i)
 		{
-			object o = (int)1;
+			object o = i;
 			return (o is int);
 		}
 
-		public static bool IsInstTest13()
+		public static bool IsInstU4ToI4()
 		{
 			object o = (uint)1;
 			return (o is uint);
 		}
 
-		public static bool IsInstTest14()
+		public static bool IsInstI8ToI8()
 		{
 			object o = (long)1;
 			return (o is long);
 		}
 
-		public static bool IsInstTest15()
+		public static bool IsInstU8ToU8()
 		{
 			object o = (ulong)1;
 			return (o is ulong);
 		}
 
-		public static bool IsInstTest16()
+		public static bool IsInstI4ToU4()
 		{
 			object o = (int)1;
 			return (o is uint);
 		}
 
-		public static bool IsInstTest17()
+		public static bool IsInstI1ToI1()
 		{
-			object o = (uint)1;
-			return (o is int);
+			object o = (sbyte)1;
+			return (o is sbyte);
 		}
 
-		//public static bool IsInstTest16()
-		//{
-		//    object o = (char)'A';
-		//    return (o is char);
-		//}
-	}
+		public static bool IsInstI2ToI2()
+		{
+			object o = (short)1;
+			return (o is short);
+		}
 
+		public static bool IsInstU1ToU1()
+		{
+			object o = (byte)1;
+			return (o is byte);
+		}
+
+		public static bool IsInstU2ToU2()
+		{
+			object o = (ushort)1;
+			return (o is ushort);
+		}
+
+		public static bool IsInstCToC()
+		{
+			object o = (char)'A';
+			return (o is char);
+		}
+
+		public static bool IsInstBToB(bool b)
+		{
+			object o = (bool)b;
+			return (o is bool);
+		}
+	}
 }

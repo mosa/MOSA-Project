@@ -16,7 +16,7 @@ namespace Mosa.Compiler.Pdb
 	/// <summary>
 	/// Enumerator for CodeView symbols in a PDB file.
 	/// </summary>
-	abstract class CvSymbolEnumerator : IEnumerable<CvSymbol>
+	internal abstract class CvSymbolEnumerator : IEnumerable<CvSymbol>
 	{
 		#region Data Members
 
@@ -25,7 +25,7 @@ namespace Mosa.Compiler.Pdb
 		/// </summary>
 		private PdbStream stream;
 
-		#endregion // Data Members
+		#endregion Data Members
 
 		#region Construction
 
@@ -42,7 +42,7 @@ namespace Mosa.Compiler.Pdb
 			this.stream = stream;
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Methods
 
@@ -50,7 +50,7 @@ namespace Mosa.Compiler.Pdb
 
 		protected abstract object Prepare(BinaryReader reader);
 
-		#endregion // Methods
+		#endregion Methods
 
 		#region IEnumerable<CvSymbol> Members
 
@@ -86,7 +86,7 @@ namespace Mosa.Compiler.Pdb
 			}
 		}
 
-		#endregion // IEnumerable<CvSymbol> Members
+		#endregion IEnumerable<CvSymbol> Members
 
 		#region IEnumerable Members
 
@@ -101,6 +101,6 @@ namespace Mosa.Compiler.Pdb
 			return GetEnumerator();
 		}
 
-		#endregion // IEnumerable Members
+		#endregion IEnumerable Members
 	}
 }
