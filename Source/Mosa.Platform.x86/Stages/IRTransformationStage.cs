@@ -765,18 +765,6 @@ namespace Mosa.Platform.x86.Stages
 			EmitFloatingPointConstants(context);
 
 			Operand result = context.Result;
-<<<<<<< HEAD
-			Operand operand = context.Operand1;
-			Operand eax = Operand.CreateCPURegister(BuiltInSigType.UInt32, GeneralPurposeRegister.EAX);
-			Operand ecx = Operand.CreateCPURegister(BuiltInSigType.UInt32, GeneralPurposeRegister.ECX);
-			Operand edx = Operand.CreateCPURegister(BuiltInSigType.UInt32, GeneralPurposeRegister.EDX);
-
-			context.SetInstruction(X86.Mov, eax, result);
-			context.AppendInstruction(X86.Mov, ecx, operand);
-			context.AppendInstruction(X86.Xor, edx, edx);
-			context.AppendInstruction(X86.Div, eax, ecx);
-			context.AppendInstruction(X86.Mov, result, edx);
-=======
 			Operand operand1 = context.Operand1;
 			Operand operand2 = context.Operand2;
 
@@ -808,7 +796,6 @@ namespace Mosa.Platform.x86.Stages
 			context.AppendInstruction(X86.Roundsd, xmm2, xmm1, Operand.CreateConstant(BuiltInSigType.Byte, 0x3));
 			context.AppendInstruction(X86.Mulsd, xmm3, operand2, xmm2);
 			context.AppendInstruction(X86.Subsd, result, operand1, xmm3);
->>>>>>> RegisterAllocator
 		}
 
 		/// <summary>
