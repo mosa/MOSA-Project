@@ -197,86 +197,32 @@ namespace Mosa.Platform.x86
 		/// <param name="op">The immediate operand to emit.</param>
 		private void WriteImmediate(Operand op)
 		{
+			if (op.IsRegister)
+				return; // nothing to do.
+
 			if (op.IsStackLocal || op.IsMemoryAddress)
 			{
-				// Add the displacement
 				codeStream.Write((int)op.Displacement, Endianness.Little);
+				return;
 			}
-			else if (op.IsConstant)
+
+			if (!op.IsConstant)
+				throw new InvalidOperationException();
+
+			switch (op.Type.Type)
 			{
-				// Add the immediate
-				switch (op.Type.Type)
-				{
-					case CilElementType.I:
-						try
-						{
-							if (op.Value is Token)
-							{
-								codeStream.Write(((Token)op.Value).ToInt32(), Endianness.Little);
-							}
-							else
-							{
-								codeStream.Write(Convert.ToInt32(op.Value), Endianness.Little);
-							}
-						}
-						catch (OverflowException) // Odd??
-						{
-							codeStream.Write(Convert.ToUInt64(op.Value), Endianness.Little);
-						}
-						break;
+				case CilElementType.Object: goto case CilElementType.I;
+				case CilElementType.Char: goto case CilElementType.U2;
+				case CilElementType.I: goto case CilElementType.I4;
+				case CilElementType.Ptr: goto case CilElementType.U4;
 
-					case CilElementType.I1:
-						codeStream.WriteByte(Convert.ToByte(op.Value));
-						break;
-
-					case CilElementType.I2:
-						codeStream.Write(Convert.ToInt16(op.Value), Endianness.Little);
-						break;
-
-					case CilElementType.I4:
-						goto case CilElementType.I;
-					case CilElementType.U1:
-						codeStream.WriteByte(Convert.ToByte(op.Value));
-						break;
-
-					case CilElementType.Char:
-						goto case CilElementType.U2;
-					case CilElementType.U2:
-						codeStream.Write((ushort)Convert.ToUInt64(op.Value), Endianness.Little);
-						break;
-
-					case CilElementType.Ptr:
-					case CilElementType.U4:
-						codeStream.Write((uint)Convert.ToUInt64(op.Value), Endianness.Little);
-						break;
-
-					case CilElementType.I8:
-						codeStream.Write(Convert.ToInt64(op.Value), Endianness.Little);
-						break;
-
-					case CilElementType.U8:
-						codeStream.Write(Convert.ToUInt64(op.Value), Endianness.Little);
-						break;
-
-					case CilElementType.R4:
-						codeStream.Write(Endian.ConvertToUInt32(Convert.ToSingle(op.Value)), Endianness.Little);
-						break;
-
-					case CilElementType.R8:
-						goto default;
-					case CilElementType.Object:
-						goto case CilElementType.I;
-					default:
-						throw new NotSupportedException(String.Format(@"CilElementType.{0} is not supported.", op.Type.Type));
-				}
-			}
-			else if (op.IsRegister)
-			{
-				// Nothing to do...
-			}
-			else
-			{
-				throw new NotImplementedException();
+				case CilElementType.I1: codeStream.WriteByte(Convert.ToByte(op.Value)); return;
+				case CilElementType.I2: codeStream.Write(Convert.ToInt16(op.Value), Endianness.Little); return;
+				case CilElementType.I4: codeStream.Write(Convert.ToInt32(op.Value), Endianness.Little); return;
+				case CilElementType.U1: codeStream.WriteByte(Convert.ToByte(op.Value)); return;
+				case CilElementType.U2: codeStream.Write(Convert.ToUInt16(op.Value), Endianness.Little); return;
+				case CilElementType.U4: codeStream.Write(Convert.ToUInt32(op.Value), Endianness.Little); return;
+				default: throw new InvalidOperationException(String.Format(@"CilElementType.{0} is not supported.", op.Type.Type));
 			}
 		}
 
@@ -351,85 +297,6 @@ namespace Mosa.Platform.x86
 
 			codeStream.WriteByte(0x08);
 			codeStream.WriteByte(0x00);
-		}
-
-		/// <summary>
-		/// Emits an immediate operand.
-		/// </summary>
-		/// <param name="op">The immediate operand to emit.</param>
-		public void EmitImmediate(Operand op)
-		{
-			if (op.IsStackLocal || op.IsMemoryAddress)
-			{
-				// Add the displacement
-				codeStream.Write((int)op.Displacement, Endianness.Little);
-			}
-			else if (op.IsConstant)
-			{
-				// Add the immediate
-				switch (op.Type.Type)
-				{
-					case CilElementType.I:
-						try
-						{
-							codeStream.Write(Convert.ToInt32(op.Value), Endianness.Little);
-						}
-						catch (OverflowException)
-						{
-							codeStream.Write(Convert.ToUInt32(op.Value), Endianness.Little);
-						}
-						break;
-
-					case CilElementType.I1:
-						codeStream.WriteByte(Convert.ToByte(op.Value));
-						break;
-
-					case CilElementType.I2:
-						codeStream.Write(Convert.ToInt16(op.Value), Endianness.Little);
-						break;
-
-					case CilElementType.I4:
-						goto case CilElementType.I;
-					case CilElementType.U1:
-						codeStream.WriteByte(Convert.ToByte(op.Value));
-						break;
-
-					case CilElementType.Char:
-						goto case CilElementType.U2;
-					case CilElementType.U2:
-						codeStream.Write(Convert.ToUInt16(op.Value), Endianness.Little);
-						break;
-
-					case CilElementType.U4:
-						codeStream.Write(Convert.ToUInt32(op.Value), Endianness.Little);
-						break;
-
-					case CilElementType.I8:
-						codeStream.Write(Convert.ToInt64(op.Value), Endianness.Little);
-						break;
-
-					case CilElementType.U8:
-						codeStream.Write(Convert.ToUInt64(op.Value), Endianness.Little);
-						break;
-
-					case CilElementType.R4:
-						codeStream.Write(Endian.ConvertToUInt32(Convert.ToSingle(op.Value)), Endianness.Little);
-						break;
-
-					case CilElementType.R8:
-						goto default;
-					default:
-						throw new NotSupportedException();
-				}
-			}
-			else if (op.IsRegister)
-			{
-				// Nothing to do...
-			}
-			else
-			{
-				throw new NotImplementedException();
-			}
 		}
 
 		/// <summary>
@@ -515,9 +382,6 @@ namespace Mosa.Platform.x86
 			else if (op1IsRegister)
 			{
 				modRM = (byte)(modRM.GetValueOrDefault() | (3 << 6) | op1.Register.RegisterCode);
-
-				//if (op2 is SymbolOperand)
-				//    displacement = op2;
 			}
 
 			return modRM;

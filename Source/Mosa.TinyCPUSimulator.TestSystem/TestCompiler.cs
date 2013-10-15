@@ -78,7 +78,6 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 			platform.InitializeSimulation(simAdapter);
 
 			simAdapter.Monitor.EnableStepping = false;
-			simAdapter.Monitor.BreakAtTick = 4000; // nothing should take this long
 			//simAdapter.Monitor.DebugOutput = true;
 		}
 
@@ -108,7 +107,11 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 
 			platform.PrepareToExecuteMethod(simAdapter, address);
 
+			simAdapter.Monitor.BreakAtTick = simAdapter.SimCPU.Tick + 100000; // nothing should take this long
 			simAdapter.Execute();
+
+			if (simAdapter.Monitor.BreakAtTick == simAdapter.SimCPU.Tick)
+				throw new Exception("Aborted. Method did not complete under 100000 ticks. " + simAdapter.SimCPU.Tick.ToString());
 
 			object result = platform.GetResult(simAdapter, runtimeMethod.ReturnType.Type);
 
