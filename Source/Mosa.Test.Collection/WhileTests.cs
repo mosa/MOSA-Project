@@ -145,27 +145,26 @@ namespace Mosa.Test.Collection
 			return count;
 		}
 
-		public static int WhileNestedEqualsI4(int initialStatus, int wantedStatus, int start, int limit)
+		public static int WhileNestedEqualsI4(int a, int b, int start, int limit)
 		{
 			int count = 0;
 			int start2 = start;
-			int status = initialStatus;
+			int status = a;
 
-			while (status == initialStatus)
+			while (status == a)
 			{
-				start2 = start;
+				start2 = 1;
 
-				while (start2 < limit)
+				while (start2 < 5)
 				{
 					++start2;
-					++count;
 				}
 
 				++start;
 
 				if (start == limit)
 				{
-					status = wantedStatus;
+					status = b;
 				}
 			}
 
