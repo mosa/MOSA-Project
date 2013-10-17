@@ -12,7 +12,7 @@
 	
 	<!-- Main build target -->
 	<target name="build">
-	    <csc target="library" output="${outputDirectory}/Mosa.Test.Runtime.dll" debug="${debug}" unsafe="true" nostdlib="true">
+	    <csc target="library" output="${outputDirectory}/Mosa.Kernel.x86Test.dll" debug="${debug}" unsafe="true" nostdlib="true">
 		<sources>
                     <include name="KernelMemory.cs"/>
 		</sources>
