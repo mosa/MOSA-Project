@@ -25,27 +25,21 @@ namespace Mosa.Compiler.Framework
 
 		private IArchitecture architecture;
 
-		private int stackMemorySize = 0;
-
-		private List<Operand> stack = new List<Operand>();
+		private List<Operand> stackLocal = new List<Operand>();
 
 		private Operand[] parameters;
-
-		private int localVariableCount = 0;
-
-		private int stackLocalTempCount = 0;
 
 		#endregion Data members
 
 		#region Properties
 
 		/// <summary>
-		/// Gets the size of the stack.
+		/// Gets or sets the size of the stack memory.
 		/// </summary>
 		/// <value>
-		/// The size of the stack.
+		/// The size of the stack memory.
 		/// </value>
-		public int StackMemorySize { get { return stackMemorySize; } set { stackMemorySize = value; } }
+		public int StackSize { get; set; }
 
 		/// <summary>
 		/// Gets the parameters.
@@ -55,17 +49,12 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets the stack.
 		/// </summary>
-		public IList<Operand> Stack { get { return stack.AsReadOnly(); } }
+		public IList<Operand> Stack { get { return stackLocal.AsReadOnly(); } }
 
 		/// <summary>
-		/// Gets the local variable count.
+		/// Gets the stack local count.
 		/// </summary>
-		public int LocalVariableCount { get { return localVariableCount; } }
-
-		/// <summary>
-		/// Gets the stack local temp count.
-		/// </summary>
-		public int StackLocalTempCount { get { return stackLocalTempCount; } }
+		public int StackLocalCount { get { return stackLocal.Count; } }
 
 		#endregion Properties
 
@@ -81,36 +70,25 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Allocates the stack operand.
-		/// </summary>
-		/// <param name="type">The type.</param>
-		/// <returns></returns>
-		public Operand AllocateStackOperand(SigType type, bool localVariable)
-		{
-			Operand stackOperand;
-
-			if (localVariable)
-			{
-				stackOperand = Operand.CreateLocalVariable(type, architecture.StackFrameRegister, ++localVariableCount, null);
-			}
-			else
-			{
-				stackOperand = Operand.CreateStackLocalTemp(type, architecture.StackFrameRegister, ++stackLocalTempCount);
-			}
-
-			stack.Add(stackOperand);
-
-			return stackOperand;
-		}
-
-		/// <summary>
-		/// Gets the stack operand.
+		/// Gets the stack local operand.
 		/// </summary>
 		/// <param name="slot">The slot.</param>
 		/// <returns></returns>
-		public Operand GetStackOperand(int slot)
+		public Operand GetStackLocalOperand(int slot)
 		{
-			return stack[slot];
+			return stackLocal[slot];
+		}
+
+		/// <summary>
+		/// Adds the stack local.
+		/// </summary>
+		/// <param name="type">The type.</param>
+		/// <returns></returns>
+		public Operand AddStackLocal(SigType type)
+		{
+			var local = Operand.CreateStackLocal(type, architecture.StackFrameRegister, stackLocal.Count);
+			stackLocal.Add(local);
+			return local;
 		}
 
 		/// <summary>

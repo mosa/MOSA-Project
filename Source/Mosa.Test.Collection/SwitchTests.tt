@@ -1,5 +1,5 @@
 ﻿// Remove conditional statement after Mono 2.11 is released
-#ifndef __MonoCS__
+#if !__MonoCS__
 
 <#@ include file="TemplateLibrary.txt" #>
 using System;

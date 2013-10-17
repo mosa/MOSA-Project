@@ -5,6 +5,7 @@
  *
  * Authors:
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 using Mosa.Compiler.Framework;
@@ -21,6 +22,18 @@ namespace Mosa.Platform.x86.Instructions
 		private static readonly OpCode opcode = new OpCode(new byte[] { 0x9C });
 
 		#endregion Data members
+
+		#region Construction
+
+		/// <summary>
+		/// Initializes a new instance of <see cref="Pushfd"/>.
+		/// </summary>
+		public Pushfd() :
+			base(0, 0)
+		{
+		}
+
+		#endregion Construction
 
 		#region Methods
 

@@ -5,9 +5,9 @@
  *
  * Authors:
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
 using Mosa.Compiler.Framework;
 
 namespace Mosa.Platform.x86.Instructions
@@ -15,7 +15,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// <summary>
 	/// Intermediate representation of the mul instruction.
 	/// </summary>
-	public sealed class Mul : TwoOperandInstruction
+	public sealed class Mul : X86Instruction
 	{
 		#region Data Members
 
@@ -23,31 +23,19 @@ namespace Mosa.Platform.x86.Instructions
 
 		#endregion Data Members
 
-		#region Methods
+		#region Construction
 
 		/// <summary>
-		/// Gets the additional output registers.
+		/// Initializes a new instance of <see cref="Mul"/>.
 		/// </summary>
-		public override RegisterBitmap AdditionalOutputRegisters { get { return new RegisterBitmap(GeneralPurposeRegister.EAX, GeneralPurposeRegister.EDX); } }
-
-		/// <summary>
-		/// Gets the additional input registers.
-		/// </summary>
-		public override RegisterBitmap AdditionalInputRegisters { get { return new RegisterBitmap(GeneralPurposeRegister.EAX, GeneralPurposeRegister.EDX); } }
-
-		/// <summary>
-		/// Computes the opcode.
-		/// </summary>
-		/// <param name="destination">The destination operand.</param>
-		/// <param name="source">The source operand.</param>
-		/// <param name="third">The third operand.</param>
-		/// <returns></returns>
-		protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
+		public Mul() :
+			base(2, 2)
 		{
-			if (destination == null || destination.IsRegister || destination.IsMemoryAddress) return opcode;
-
-			throw new ArgumentException(@"No opcode for operand type.");
 		}
+
+		#endregion Construction
+
+		#region Methods
 
 		/// <summary>
 		/// Emits the specified platform instruction.
@@ -56,8 +44,7 @@ namespace Mosa.Platform.x86.Instructions
 		/// <param name="emitter">The emitter.</param>
 		protected override void Emit(Context context, MachineCodeEmitter emitter)
 		{
-			OpCode opCode = ComputeOpCode(context.Result, context.Operand1, context.Operand2);
-			emitter.Emit(opCode, context.Operand1, null);
+			emitter.Emit(opcode, context.Operand2, null);
 		}
 
 		/// <summary>

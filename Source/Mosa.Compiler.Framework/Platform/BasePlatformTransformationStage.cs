@@ -18,6 +18,18 @@ namespace Mosa.Compiler.Framework.Platform
 	/// </summary>
 	public abstract class BasePlatformTransformationStage : BaseCodeTransformationStage
 	{
+		protected virtual string Platform { get { return "Generic"; } }
+
+		#region IPipelineStage Members
+
+		/// <summary>
+		/// Retrieves the name of the compilation stage.
+		/// </summary>
+		/// <value>The name of the compilation stage.</value>
+		public override string Name { get { return Platform + "." + base.Name; } }
+
+		#endregion IPipelineStage Members
+
 		#region Common Internals
 
 		/// <summary>
@@ -29,8 +41,8 @@ namespace Mosa.Compiler.Framework.Platform
 		{
 			return (operand.Type.Type == CilElementType.U4)
 				|| (operand.Type.Type == CilElementType.I4)
-				|| IsPointer(operand)
-				|| IsObject(operand);
+				|| IsPointer(operand)		// FIXME: Only on 32-bit platforms is this correct
+				|| IsObject(operand);		// FIXME: Only on 32-bit platforms is this correct
 		}
 
 		/// <summary>

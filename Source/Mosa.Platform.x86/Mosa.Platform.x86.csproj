@@ -67,6 +67,10 @@
       <Project>{0B1011A6-8FCD-4F9E-BBB8-8DB86E23D2E8}</Project>
       <Name>Mosa.Compiler.Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Mosa.Compiler.InternalTrace\Mosa.Compiler.InternalTrace.csproj">
+      <Project>{540beac7-a2c3-4c46-9f4a-e6e1df4ef6fc}</Project>
+      <Name>Mosa.Compiler.InternalTrace</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Mosa.Compiler.Linker\Mosa.Compiler.Linker.csproj">
       <Project>{65866A51-B229-44C5-AC81-87A90FA1741B}</Project>
       <Name>Mosa.Compiler.Linker</Name>
@@ -92,18 +96,28 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="BaseTransformationStage.cs" />
-    <Compile Include="Instructions\AddSD.cs" />
-    <Compile Include="Instructions\MulSD.cs" />
-    <Compile Include="Instructions\DivSD.cs" />
-    <Compile Include="Instructions\RoundSD.cs" />
-    <Compile Include="Instructions\SubSD.cs" />
+    <Compile Include="Instructions\Cmov.cs" />
+    <Compile Include="Instructions\Fld.cs" />
+    <Compile Include="Instructions\MovCR.cs" />
+    <Compile Include="Instructions\IMul.cs" />
+    <Compile Include="Instructions\TwoOperandInstruction.cs" />
+    <Compile Include="Instructions\Addsd.cs" />
+    <Compile Include="Stages\BuildStackStage.cs" />
+    <Compile Include="Stages\FloatingPointStage.cs" />
+    <Compile Include="Stages\JumpPeepholeOptimizationStage.cs" />
+    <Compile Include="Stages\FinalTweakTransformationStage.cs" />
+    <Compile Include="Stages\SimpleDeadCodeRemovalStage.cs" />
+    <Compile Include="Instructions\Mulsd.cs" />
+    <Compile Include="Instructions\Divsd.cs" />
+    <Compile Include="Instructions\Roundsd.cs" />
+    <Compile Include="Instructions\Subsd.cs" />
     <Compile Include="Stages\AddressModeConversionStage.cs" />
     <Compile Include="ControlRegister.cs" />
+    <Compile Include="Stages\FixedRegisterAssignmentStage.cs" />
     <Compile Include="Stages\ExceptionVectorStage.cs" />
-    <Compile Include="Instructions\TwoOperandNoResultInstruction.cs" />
     <Compile Include="Instructions\FarJmp.cs" />
     <Compile Include="Instructions\Leave.cs" />
-    <Compile Include="Instructions\RoundSS.cs" />
+    <Compile Include="Instructions\Roundss.cs" />
     <Compile Include="Stages\ExceptionLayoutStage.cs" />
     <Compile Include="Stages\InterruptVectorStage.cs" />
     <Compile Include="Intrinsic\GetEBP.cs" />
@@ -140,6 +154,7 @@
     <Compile Include="Intrinsic\Nop.cs" />
     <Compile Include="Intrinsic\Out.cs" />
     <Compile Include="Intrinsic\Sti.cs" />
+    <Compile Include="Stages\CheckOperandCountStage.cs" />
     <Compile Include="Stages\MethodTableBuilderStage.cs" />
     <Compile Include="SegmentRegister.cs" />
     <Compile Include="Instructions\Branch.cs" />
@@ -150,8 +165,6 @@
     <Compile Include="Instructions\Jmp.cs" />
     <Compile Include="Instructions\Lea.cs" />
     <Compile Include="Stages\Multiboot0695Stage.cs" />
-    <Compile Include="Stages\SimplePeepholeOptimizationStage.cs" />
-    <Compile Include="Stages\MemToMemConversionStage.cs" />
     <Compile Include="Instructions\Call.cs" />
     <Compile Include="Instructions\Movsd.cs" />
     <Compile Include="Instructions\Movss.cs" />
@@ -211,7 +224,6 @@
     <Compile Include="Instructions\Mov.cs" />
     <Compile Include="Instructions\Mul.cs" />
     <Compile Include="Instructions\Neg.cs" />
-    <Compile Include="Instructions\Sal.cs" />
     <Compile Include="Instructions\Sar.cs" />
     <Compile Include="Instructions\Sbb.cs" />
     <Compile Include="Instructions\Setcc.cs" />
@@ -219,13 +231,11 @@
     <Compile Include="Instructions\Shl.cs" />
     <Compile Include="Instructions\Shrd.cs" />
     <Compile Include="Instructions\Shr.cs" />
-    <Compile Include="Instructions\AddSS.cs" />
-    <Compile Include="Instructions\DivSS.cs" />
-    <Compile Include="Instructions\MulSS.cs" />
-    <Compile Include="Instructions\SubSS.cs" />
+    <Compile Include="Instructions\Addss.cs" />
+    <Compile Include="Instructions\Divss.cs" />
+    <Compile Include="Instructions\Mulss.cs" />
+    <Compile Include="Instructions\Subss.cs" />
     <Compile Include="Instructions\Sub.cs" />
-    <Compile Include="Instructions\ThreeOperandInstruction.cs" />
-    <Compile Include="Instructions\TwoOperandInstruction.cs" />
     <Compile Include="Instructions\Ucomisd.cs" />
     <Compile Include="Instructions\Ucomiss.cs" />
     <Compile Include="OpCode.cs" />
@@ -242,12 +252,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Stages\LongOperandTransformationStage.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="MMXRegister.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Registers.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="SSE2Register.cs">

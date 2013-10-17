@@ -5,18 +5,18 @@
  *
  * Authors:
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
-
 using Mosa.Compiler.Framework;
+using System;
 
 namespace Mosa.Platform.x86.Instructions
 {
 	/// <summary>
 	/// Representations the x86 movss instruction.
 	/// </summary>
-	public sealed class Movss : TwoOperandInstruction
+	public sealed class Movss : X86Instruction
 	{
 		#region Data Members
 
@@ -25,15 +25,19 @@ namespace Mosa.Platform.x86.Instructions
 
 		#endregion Data Members
 
-		#region Methods
+		#region Construction
 
 		/// <summary>
-		/// Gets a value indicating whether [result is input].
+		/// Initializes a new instance of <see cref="Movss"/>.
 		/// </summary>
-		/// <value>
-		///   <c>true</c> if [result is input]; otherwise, <c>false</c>.
-		/// </value>
-		public override bool ResultIsInput { get { return false; } }
+		public Movss() :
+			base(1, 1)
+		{
+		}
+
+		#endregion Construction
+
+		#region Methods
 
 		/// <summary>
 		/// Computes the opcode.

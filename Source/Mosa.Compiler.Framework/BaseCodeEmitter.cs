@@ -22,7 +22,7 @@ namespace Mosa.Compiler.Framework
 	/// <summary>
 	/// Base code emitter.
 	/// </summary>
-	public class BaseCodeEmitter : IDisposable, ICodeEmitter
+	public abstract class BaseCodeEmitter : IDisposable, ICodeEmitter
 	{
 		#region Types
 
@@ -69,11 +69,6 @@ namespace Mosa.Compiler.Framework
 		#region Data members
 
 		/// <summary>
-		/// The compiler that is generating the code.
-		/// </summary>
-		protected BaseMethodCompiler compiler;
-
-		/// <summary>
 		/// The stream used to write machine code bytes to.
 		/// </summary>
 		protected Stream codeStream;
@@ -84,26 +79,37 @@ namespace Mosa.Compiler.Framework
 		protected long codeStreamBasePosition;
 
 		/// <summary>
-		/// List of labels that were emitted.
-		/// </summary>
-		protected readonly Dictionary<int, long> labels = new Dictionary<int, long>();
-
-		/// <summary>
 		/// Holds the linker used to resolve externals.
 		/// </summary>
 		protected ILinker linker;
 
 		/// <summary>
-		/// List of literal patches we need to perform.
+		/// List of labels that were emitted.
 		/// </summary>
-		protected readonly List<Patch> literals = new List<Patch>();
+		private readonly Dictionary<int, long> labels = new Dictionary<int, long>();
 
 		/// <summary>
 		/// Patches we need to perform.
 		/// </summary>
-		protected readonly List<Patch> patches = new List<Patch>();
+		private readonly List<Patch> patches = new List<Patch>();
 
 		#endregion Data members
+
+		/// <summary>
+		/// Gets the name of the method.
+		/// </summary>
+		/// <value>
+		/// The name of the method.
+		/// </value>
+		protected string MethodName { get; private set; }
+
+		/// <summary>
+		/// Gets the patches.
+		/// </summary>
+		/// <value>
+		/// The patches.
+		/// </value>
+		protected IList<Patch> Patches { get { return patches.AsReadOnly(); } }
 
 		#region IDisposable Members
 
@@ -122,52 +128,25 @@ namespace Mosa.Compiler.Framework
 		#region ICodeEmitter Members
 
 		/// <summary>
-		/// Initializes a new instance of <see cref="BaseCodeEmitter"/>.
+		/// Initializes a new instance of <see cref="BaseCodeEmitter" />.
 		/// </summary>
-		/// <param name="compiler">The compiler.</param>
+		/// <param name="methodName">Name of the method.</param>
+		/// <param name="linker">The linker.</param>
 		/// <param name="codeStream">The stream the machine code is written to.</param>
-		void ICodeEmitter.Initialize(BaseMethodCompiler compiler, Stream codeStream)
+		void ICodeEmitter.Initialize(string methodName, ILinker linker, Stream codeStream)
 		{
-			Debug.Assert(null != compiler, @"MachineCodeEmitter needs a method compiler.");
-			if (compiler == null)
-				throw new ArgumentNullException(@"compiler");
-			Debug.Assert(null != codeStream, @"MachineCodeEmitter needs a code stream.");
-			if (codeStream == null)
-				throw new ArgumentNullException(@"codeStream");
+			Debug.Assert(codeStream != null);
+			Debug.Assert(linker != null);
 
-			this.compiler = compiler;
+			this.MethodName = methodName;
+			this.linker = linker;
 			this.codeStream = codeStream;
 			this.codeStreamBasePosition = codeStream.Position;
-			this.linker = compiler.Linker;
 		}
 
 		void ICodeEmitter.ResolvePatches()
 		{
-			// Save the current position
-			long currentPosition = codeStream.Position;
-
-			foreach (Patch p in patches)
-			{
-				long labelPosition;
-				if (!labels.TryGetValue(p.Label, out labelPosition))
-				{
-					throw new ArgumentException(@"Missing label while resolving patches.", @"label");
-				}
-
-				codeStream.Position = p.Position;
-
-				// Compute relative branch offset
-				int relOffset = (int)labelPosition - ((int)p.Position + 4);
-
-				// Write relative offset to stream
-				byte[] bytes = BitConverter.GetBytes(relOffset);
-				codeStream.Write(bytes, 0, bytes.Length);
-			}
-
-			patches.Clear();
-
-			// Reset the position
-			codeStream.Position = currentPosition;
+			ResolvePatches();
 		}
 
 		/// <summary>
@@ -185,12 +164,7 @@ namespace Mosa.Compiler.Framework
 			 *
 			 */
 
-			long labelPosition;
-			if (labels.TryGetValue(label, out labelPosition))
-			{
-				if (labelPosition != codeStream.Position)
-					throw new ArgumentException(@"Label already defined for another code point.", @"label");
-			}
+			Debug.Assert(!labels.ContainsKey(label));
 
 			// Add this label to the label list, so we can resolve the jump later on
 			labels.Add(label, codeStream.Position);
@@ -212,10 +186,7 @@ namespace Mosa.Compiler.Framework
 		/// Gets the current position.
 		/// </summary>
 		/// <value>The current position.</value>
-		long ICodeEmitter.CurrentPosition
-		{
-			get { return codeStream.Position; }
-		}
+		long ICodeEmitter.CurrentPosition { get { return codeStream.Position; } }
 
 		#endregion ICodeEmitter Members
 
@@ -242,5 +213,18 @@ namespace Mosa.Compiler.Framework
 		}
 
 		#endregion Code Generation Members
+
+		protected bool TryGetLabel(int label, out long position)
+		{
+			return labels.TryGetValue(label, out position);
+		}
+
+		protected void AddPatch(int label, long position)
+		{
+			patches.Add(new Patch(label, position));
+		}
+
+		protected abstract void ResolvePatches();
+
 	}
 }

@@ -5,9 +5,9 @@
  *
  * Authors:
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
 using Mosa.Compiler.Framework;
 
 namespace Mosa.Platform.x86.Instructions
@@ -15,39 +15,48 @@ namespace Mosa.Platform.x86.Instructions
 	/// <summary>
 	/// Representations the x86 rotate right instruction.
 	/// </summary>
-	public sealed class Rcr : TwoOperandInstruction
+	public sealed class Rcr : X86Instruction
 	{
-		#region Codes
+		#region Data Members
 
-		private static readonly OpCode opcode = new OpCode(new byte[] { 0xD1 }, 3);
+		private static readonly OpCode C = new OpCode(new byte[] { 0xC1 }, 3);
+		private static readonly OpCode C1 = new OpCode(new byte[] { 0xD1 }, 3);
+		private static readonly OpCode RM = new OpCode(new byte[] { 0xD3 }, 3);
 
-		#endregion Codes
+		#endregion Data Members
+
+		#region Construction
+
+		/// <summary>
+		/// Initializes a new instance of <see cref="Rcr"/>.
+		/// </summary>
+		public Rcr() :
+			base(1, 2)
+		{
+		}
+
+		#endregion Construction
 
 		#region Methods
 
 		/// <summary>
-		/// Computes the opcode.
-		/// </summary>
-		/// <param name="destination">The destination operand.</param>
-		/// <param name="source">The source operand.</param>
-		/// <param name="third">The third operand.</param>
-		/// <returns></returns>
-		protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
-		{
-			if (destination.IsRegister || destination.IsMemoryAddress) return opcode;
-
-			throw new ArgumentException(@"No opcode for operand type.");
-		}
-
-		/// <summary>
 		/// Emits the specified platform instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
+		/// <param name="context">The context.</param>
 		/// <param name="emitter">The emitter.</param>
 		protected override void Emit(Context context, MachineCodeEmitter emitter)
 		{
-			OpCode opCode = ComputeOpCode(context.Result, context.Operand1, null);
-			emitter.Emit(opCode, context.Result, null);
+			if (context.Operand2.IsConstant)
+			{
+				if (context.Operand2.ValueAsLongInteger == 1)
+					emitter.Emit(C1, context.Result, null);
+				else
+					emitter.Emit(C, context.Result, context.Operand2);
+			}
+			else
+			{
+				emitter.Emit(RM, context.Operand1, null);
+			}
 		}
 
 		/// <summary>

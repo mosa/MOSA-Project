@@ -63,32 +63,32 @@ namespace Mosa.Platform.x86
 		/// <summary>
 		/// Represents the CS register.
 		/// </summary>
-		public static readonly SegmentRegister CS = new SegmentRegister(SegmentType.CS, 24);
+		public static readonly SegmentRegister CS = new SegmentRegister(SegmentType.CS, 16);
 
 		/// <summary>
 		/// Represents the DS register.
 		/// </summary>
-		public static readonly SegmentRegister DS = new SegmentRegister(SegmentType.DS, 25);
+		public static readonly SegmentRegister DS = new SegmentRegister(SegmentType.DS, 17);
 
 		/// <summary>
 		/// Represents the ES register.
 		/// </summary>
-		public static readonly SegmentRegister ES = new SegmentRegister(SegmentType.ES, 26);
+		public static readonly SegmentRegister ES = new SegmentRegister(SegmentType.ES, 18);
 
 		/// <summary>
 		/// Represents the FS register.
 		/// </summary>
-		public static readonly SegmentRegister FS = new SegmentRegister(SegmentType.FS, 27);
+		public static readonly SegmentRegister FS = new SegmentRegister(SegmentType.FS, 19);
 
 		/// <summary>
 		/// Represents the GS register.
 		/// </summary>
-		public static readonly SegmentRegister GS = new SegmentRegister(SegmentType.GS, 28);
+		public static readonly SegmentRegister GS = new SegmentRegister(SegmentType.GS, 20);
 
 		/// <summary>
 		/// Represents the SS register.
 		/// </summary>
-		public static readonly SegmentRegister SS = new SegmentRegister(SegmentType.SS, 29);
+		public static readonly SegmentRegister SS = new SegmentRegister(SegmentType.SS, 21);
 
 		#endregion Static data members
 
@@ -128,7 +128,15 @@ namespace Mosa.Platform.x86
 		}
 
 		/// <summary>
-		/// General purpose register do not support floating point operations.
+		/// Segment registers do not support integer operations.
+		/// </summary>
+		public override bool IsInteger
+		{
+			get { return false; }
+		}
+
+		/// <summary>
+		/// Segment registers do not support floating point operations.
 		/// </summary>
 		public override bool IsFloatingPoint
 		{

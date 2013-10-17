@@ -5,11 +5,11 @@
  *
  * Authors:
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
-
 using Mosa.Compiler.Framework;
+using System;
 
 namespace Mosa.Platform.x86.Instructions
 {
@@ -67,7 +67,7 @@ namespace Mosa.Platform.x86.Instructions
 		protected override void Emit(Context context, MachineCodeEmitter emitter)
 		{
 			OpCode opCode = ComputeOpCode(context.Result, null, null);
-			emitter.Emit(opCode, context.Result, null, null);
+			emitter.Emit(opCode, context.Result);
 		}
 
 		/// <summary>

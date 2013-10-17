@@ -6,6 +6,7 @@
  * Authors:
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 using Mosa.Compiler.Framework;
@@ -17,11 +18,27 @@ namespace Mosa.Platform.x86.Instructions
 	/// </summary>
 	public sealed class IRetd : X86Instruction
 	{
+		#region Construction
+
+		/// <summary>
+		/// Initializes a new instance of <see cref="IRetd"/>.
+		/// </summary>
+		public IRetd() :
+			base(0, 0)
+		{
+		}
+
+		#endregion Construction
+
+		#region Properties
+
 		/// <summary>
 		/// Gets the flow control.
 		/// </summary>
 		/// <value>The flow control.</value>
 		public override FlowControl FlowControl { get { return FlowControl.Return; } }
+
+		#endregion Properties
 
 		#region Methods
 

@@ -5,6 +5,7 @@
  *
  * Authors:
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 using Mosa.Compiler.Framework;
@@ -14,9 +15,21 @@ namespace Mosa.Platform.x86.Instructions
 	/// <summary>
 	///
 	/// </summary>
-	public class RoundSD : X86Instruction
+	public class Roundsd : X86Instruction
 	{
 		private static readonly OpCode opcode = new OpCode(new byte[] { 0x66, 0x0F, 0x3A, 0x0B });
+
+		#region Construction
+
+		/// <summary>
+		/// Initializes a new instance of <see cref="Roundsd"/>.
+		/// </summary>
+		public Roundsd() :
+			base(1, 2)
+		{
+		}
+
+		#endregion Construction
 
 		/// <summary>
 		/// Computes the opcode.

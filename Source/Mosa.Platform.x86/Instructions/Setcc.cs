@@ -5,12 +5,11 @@
  *
  * Authors:
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
-
 using Mosa.Compiler.Framework;
-using IR = Mosa.Compiler.Framework.IR;
+using System;
 
 namespace Mosa.Platform.x86.Instructions
 {
@@ -27,10 +26,10 @@ namespace Mosa.Platform.x86.Instructions
 		private static readonly OpCode GE = new OpCode(new byte[] { 0x0F, 0x9D });
 		private static readonly OpCode GT = new OpCode(new byte[] { 0x0F, 0x9F });
 		private static readonly OpCode NE = new OpCode(new byte[] { 0x0F, 0x95 });
-		private static readonly OpCode UGE = new OpCode(new byte[] { 0x0F, 0x93 });
-		private static readonly OpCode UGT = new OpCode(new byte[] { 0x0F, 0x97 });
-		private static readonly OpCode ULE = new OpCode(new byte[] { 0x0F, 0x96 });
-		private static readonly OpCode ULT = new OpCode(new byte[] { 0x0F, 0x92 });
+		private static readonly OpCode UGE = new OpCode(new byte[] { 0x0F, 0x93 });	// SETAE, SETNB, SETNC
+		private static readonly OpCode UGT = new OpCode(new byte[] { 0x0F, 0x97 }); // SETNBE, SETA
+		private static readonly OpCode ULE = new OpCode(new byte[] { 0x0F, 0x96 }); // SETBE, SETNA
+		private static readonly OpCode ULT = new OpCode(new byte[] { 0x0F, 0x92 });	// SETNAE, SETB, SETC
 		private static readonly OpCode P = new OpCode(new byte[] { 0x0F, 0x9A });
 		private static readonly OpCode NP = new OpCode(new byte[] { 0x0F, 0x9B });
 		private static readonly OpCode NC = new OpCode(new byte[] { 0x0F, 0x93 });
@@ -46,21 +45,13 @@ namespace Mosa.Platform.x86.Instructions
 		/// Initializes a new instance of the <see cref="Setcc"/> class.
 		/// </summary>
 		public Setcc()
-			: base(0, 1)
+			: base(1, 0)
 		{
 		}
 
 		#endregion Construction
 
 		#region Methods
-
-		/// <summary>
-		/// Gets a value indicating whether [result is input].
-		/// </summary>
-		/// <value>
-		///   <c>true</c> if [result is input]; otherwise, <c>false</c>.
-		/// </value>
-		public override bool ResultIsInput { get { return false; } }
 
 		/// <summary>
 		/// Emits the specified platform instruction.
@@ -73,22 +64,22 @@ namespace Mosa.Platform.x86.Instructions
 
 			switch (context.ConditionCode)
 			{
-				case IR.ConditionCode.Equal: opcode = E; break;
-				case IR.ConditionCode.LessThan: opcode = LT; break;
-				case IR.ConditionCode.LessOrEqual: opcode = LE; break;
-				case IR.ConditionCode.GreaterOrEqual: opcode = GE; break;
-				case IR.ConditionCode.GreaterThan: opcode = GT; break;
-				case IR.ConditionCode.NotEqual: opcode = NE; break;
-				case IR.ConditionCode.UnsignedGreaterOrEqual: opcode = UGE; break;
-				case IR.ConditionCode.UnsignedGreaterThan: opcode = UGT; break;
-				case IR.ConditionCode.UnsignedLessOrEqual: opcode = ULE; break;
-				case IR.ConditionCode.UnsignedLessThan: opcode = ULT; break;
-				case IR.ConditionCode.Parity: opcode = P; break;
-				case IR.ConditionCode.NoParity: opcode = NP; break;
-				case IR.ConditionCode.NoCarry: opcode = NC; break;
-				case IR.ConditionCode.Carry: opcode = C; break;
-				case IR.ConditionCode.Zero: opcode = Z; break;
-				case IR.ConditionCode.NoZero: opcode = NZ; break;
+				case ConditionCode.Equal: opcode = E; break;
+				case ConditionCode.LessThan: opcode = LT; break;
+				case ConditionCode.LessOrEqual: opcode = LE; break;
+				case ConditionCode.GreaterOrEqual: opcode = GE; break;
+				case ConditionCode.GreaterThan: opcode = GT; break;
+				case ConditionCode.NotEqual: opcode = NE; break;
+				case ConditionCode.UnsignedGreaterOrEqual: opcode = UGE; break;
+				case ConditionCode.UnsignedGreaterThan: opcode = UGT; break;
+				case ConditionCode.UnsignedLessOrEqual: opcode = ULE; break;
+				case ConditionCode.UnsignedLessThan: opcode = ULT; break;
+				case ConditionCode.Parity: opcode = P; break;
+				case ConditionCode.NoParity: opcode = NP; break;
+				case ConditionCode.NoCarry: opcode = NC; break;
+				case ConditionCode.Carry: opcode = C; break;
+				case ConditionCode.Zero: opcode = Z; break;
+				case ConditionCode.NotZero: opcode = NZ; break;
 				default: throw new NotSupportedException();
 			}
 

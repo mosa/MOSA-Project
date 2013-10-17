@@ -1,0 +1,144 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{49D8DA65-FC99-4C63-ADC6-1B07260F674F}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Mosa.Tool.Explorer</RootNamespace>
+    <AssemblyName>Mosa.Tool.Explorer</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\..\bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>Mosa.Tool.Explorer.Program</StartupObject>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CodeForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CodeForm.Designer.cs">
+      <DependentUpon>CodeForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ExplorerCompiler.cs" />
+    <Compile Include="ExplorerLinker.cs" />
+    <Compile Include="ExplorerMethodCompiler.cs" />
+    <Compile Include="Main.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Main.Designer.cs">
+      <DependentUpon>Main.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="ExplorerLinkerSection.cs" />
+    <Compile Include="SimProcessorX86Form.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SimProcessorX86Form.Designer.cs">
+      <DependentUpon>SimProcessorX86Form.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="CodeForm.resx">
+      <DependentUpon>CodeForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Main.resx">
+      <DependentUpon>Main.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SimProcessorX86Form.resx">
+      <DependentUpon>SimProcessorX86Form.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Mosa.Compiler.Common\Mosa.Compiler.Common.csproj">
+      <Project>{0B1011A6-8FCD-4F9E-BBB8-8DB86E23D2E8}</Project>
+      <Name>Mosa.Compiler.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mosa.Compiler.Framework\Mosa.Compiler.Framework.csproj">
+      <Project>{75A12A8A-8C8F-4D1E-801B-689D8F781BF4}</Project>
+      <Name>Mosa.Compiler.Framework</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mosa.Compiler.Linker\Mosa.Compiler.Linker.csproj">
+      <Project>{65866A51-B229-44C5-AC81-87A90FA1741B}</Project>
+      <Name>Mosa.Compiler.Linker</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mosa.Compiler.Metadata\Mosa.Compiler.Metadata.csproj">
+      <Project>{7033B213-2055-4C6A-B008-D9856267F5D7}</Project>
+      <Name>Mosa.Compiler.Metadata</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mosa.Compiler.Pdb\Mosa.Compiler.Pdb.csproj">
+      <Project>{F970F8CB-8FF1-4244-9A31-D00C6D7AABE5}</Project>
+      <Name>Mosa.Compiler.Pdb</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mosa.Compiler.TypeSystem\Mosa.Compiler.TypeSystem.csproj">
+      <Project>{5F30A68E-05BF-40EA-B576-5EBCDE520449}</Project>
+      <Name>Mosa.Compiler.TypeSystem</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mosa.Platform.AVR32\Mosa.Platform.AVR32.csproj">
+      <Project>{F3BB1082-13E3-4B37-ABF4-A3E42C9E7ED9}</Project>
+      <Name>Mosa.Platform.AVR32</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mosa.Compiler.InternalTrace\Mosa.Compiler.InternalTrace.csproj">
+      <Project>{540BEAC7-A2C3-4C46-9F4A-E6E1DF4EF6FC}</Project>
+      <Name>Mosa.Compiler.InternalTrace</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mosa.Platform.x86\Mosa.Platform.x86.csproj">
+      <Project>{DE30CBE9-50F3-4A3E-BCC9-A8A36348530E}</Project>
+      <Name>Mosa.Platform.x86</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mosa.Test.CodeDomCompiler\Mosa.Test.CodeDomCompiler.csproj">
+      <Name>Mosa.Test.CodeDomCompiler</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mosa.TinyCPUSimulator.Adaptor\Mosa.TinyCPUSimulator.Adaptor.csproj">
+      <Project>{50568e2d-5360-4f71-87e0-f6979d2d858a}</Project>
+      <Name>Mosa.TinyCPUSimulator.Adaptor</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mosa.TinyCPUSimulator.x86.Adaptor\Mosa.TinyCPUSimulator.x86.Adaptor.csproj">
+      <Project>{50568e2d-5360-4f71-87e0-f6979d1d858a}</Project>
+      <Name>Mosa.TinyCPUSimulator.x86.Adaptor</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mosa.TinyCPUSimulator.x86\Mosa.TinyCPUSimulator.x86.csproj">
+      <Project>{50568e2d-5360-4f71-87e0-e6979d1d858a}</Project>
+      <Name>Mosa.TinyCPUSimulator.x86</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mosa.TinyCPUSimulator\Mosa.TinyCPUSimulator.csproj">
+      <Project>{6f7c06b2-09bf-45bd-8e6b-ae9bf7c7e250}</Project>
+      <Name>Mosa.TinyCPUSimulator</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

@@ -8,8 +8,7 @@
  */
 
 using System.Diagnostics;
-
-using Mosa.Compiler.TypeSystem.Generic;
+using Mosa.Compiler.TypeSystem.Cil;
 
 namespace Mosa.Compiler.Framework.CIL
 {
@@ -53,8 +52,8 @@ namespace Mosa.Compiler.Framework.CIL
 				Debug.Assert(!ctx.RuntimeField.ContainsGenericParameter);
 			}
 
-			var sigType = ctx.RuntimeField.SignatureType;
-			ctx.Result = LoadInstruction.CreateResultOperand(decoder, Operand.StackTypeFromSigType(sigType), sigType);
+			var sigType = ctx.RuntimeField.SigType;
+			ctx.Result = LoadInstruction.CreateResultOperand(decoder,  sigType);
 		}
 
 		/// <summary>

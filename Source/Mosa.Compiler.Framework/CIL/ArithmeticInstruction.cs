@@ -8,6 +8,7 @@
  */
 
 using System;
+using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Signatures;
 
 namespace Mosa.Compiler.Framework.CIL
@@ -79,9 +80,9 @@ namespace Mosa.Compiler.Framework.CIL
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		/// <param name="compiler">The compiler.</param>
-		public override void Validate(Context ctx, BaseMethodCompiler compiler)
+		public override void Resolve(Context ctx, BaseMethodCompiler compiler)
 		{
-			base.Validate(ctx, compiler);
+			base.Resolve(ctx, compiler);
 
 			StackTypeCode result = StackTypeCode.Unknown;
 			switch (opcode)

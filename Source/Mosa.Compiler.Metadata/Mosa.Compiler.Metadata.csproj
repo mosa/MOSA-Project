@@ -39,6 +39,7 @@
     <Compile Include="AssemblyHashAlgorithm.cs" />
     <Compile Include="BlobHeap.cs" />
     <Compile Include="CilElementType.cs" />
+    <Compile Include="GenericSigTypeResolver.cs" />
     <Compile Include="TableType.cs" />
     <Compile Include="EventAttributes.cs" />
     <Compile Include="FieldAttributes.cs" />

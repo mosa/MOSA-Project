@@ -25,26 +25,10 @@ namespace Mosa.Platform.AVR32
 		/// <summary>
 		/// Initializes a new instance of the <see cref="AVR32Instruction"/> class.
 		/// </summary>
-		protected AVR32Instruction()
-		{
-		}
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="AVR32Instruction"/> class.
-		/// </summary>
-		/// <param name="operandCount">The operand count.</param>
-		private AVR32Instruction(byte operandCount)
-			: base(operandCount)
-		{
-		}
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="AVR32Instruction"/> class.
-		/// </summary>
-		/// <param name="operandCount">The operand count.</param>
 		/// <param name="resultCount">The result count.</param>
-		protected AVR32Instruction(byte operandCount, byte resultCount)
-			: base(operandCount, resultCount)
+		/// <param name="operandCount">The operand count.</param>
+		protected AVR32Instruction(byte resultCount, byte operandCount)
+			: base(resultCount, operandCount)
 		{
 		}
 
@@ -130,7 +114,7 @@ namespace Mosa.Platform.AVR32
 			return ((value & 0x001FFFFF) != value);
 		}
 
-		protected bool IsBetween(int value, int lo, int hi)
+		protected bool IsBetween(long value, long lo, long hi)
 		{
 			return value >= lo && value <= hi;
 		}

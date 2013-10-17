@@ -117,7 +117,7 @@ namespace Mosa.Compiler.Metadata
 			{
 				index++;
 				ReadEncodedTypeDefOrRef();
-				Debug.WriteLine("Skipping CilElementType.Required or CilElementType.Optional.");
+				//Debug.WriteLine("Skipping CilElementType.Required or CilElementType.Optional.");
 			}
 			return result;
 		}

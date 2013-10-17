@@ -7,10 +7,8 @@
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  */
 
-using System.Collections.Generic;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Metadata.Signatures;
-using Mosa.Compiler.TypeSystem;
 
 namespace Mosa.Platform.x86.Intrinsic
 {
@@ -26,13 +24,13 @@ namespace Mosa.Platform.x86.Intrinsic
 		/// </summary>
 		/// <param name="context">The context.</param>
 		/// <param name="typeSystem">The type system.</param>
-		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, ITypeSystem typeSystem, IList<RuntimeParameter> parameters)
+		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, BaseMethodCompiler methodCompiler)
 		{
 			Operand esp = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.ESP);
 
 			context.SetInstruction(X86.Mov, esp, context.Operand1);
 			context.AppendInstruction(X86.Popad);
-			context.AppendInstruction(X86.Add, esp, Operand.CreateConstant(BuiltInSigType.Int32, 0x08));
+			context.AppendInstruction(X86.Add, esp, esp, Operand.CreateConstant(BuiltInSigType.Int32, 0x08));
 			context.AppendInstruction(X86.Sti);
 			context.AppendInstruction(X86.IRetd);
 		}

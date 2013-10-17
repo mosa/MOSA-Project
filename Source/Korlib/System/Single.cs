@@ -23,26 +23,26 @@ namespace System
 
 		internal float _value;
 
-		public static bool IsNaN(float d)
+		public static bool IsNaN(float s)
 		{
 #pragma warning disable 1718
-			return (d != d);
+			return (s != s);
 #pragma warning restore
 		}
 
-		public static bool IsNegativeInfinity(float d)
+		public static bool IsNegativeInfinity(float s)
 		{
-			return (d < 0.0f && (d == NegativeInfinity || d == PositiveInfinity));
+			return (s < 0.0f && (s == NegativeInfinity || s == PositiveInfinity));
 		}
 
-		public static bool IsPositiveInfinity(double d)
+		public static bool IsPositiveInfinity(double s)
 		{
-			return (d > 0.0f && (d == NegativeInfinity || d == PositiveInfinity));
+			return (s > 0.0f && (s == NegativeInfinity || s == PositiveInfinity));
 		}
 
-		public static bool IsInfinity(float d)
+		public static bool IsInfinity(float s)
 		{
-			return (d == PositiveInfinity || d == NegativeInfinity);
+			return (s == PositiveInfinity || s == NegativeInfinity);
 		}
 
 		public int CompareTo(float value)
@@ -52,7 +52,8 @@ namespace System
 			if (IsNegativeInfinity(_value) && IsNegativeInfinity(value))
 				return 0;
 
-			if (IsNaN(value)) if (IsNaN(_value))
+			if (IsNaN(value)) 
+				if (IsNaN(_value))
 					return 0;
 				else
 					return 1;

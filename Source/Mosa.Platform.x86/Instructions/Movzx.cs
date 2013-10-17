@@ -5,19 +5,19 @@
  *
  * Authors:
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
-
-using System;
 
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Metadata;
+using System;
 
 namespace Mosa.Platform.x86.Instructions
 {
 	/// <summary>
 	/// Representations the x86 Movzx instruction.
 	/// </summary>
-	public sealed class Movzx : TwoOperandInstruction
+	public sealed class Movzx : X86Instruction
 	{
 		#region Data Members
 
@@ -26,15 +26,19 @@ namespace Mosa.Platform.x86.Instructions
 
 		#endregion Data Members
 
-		#region Methods
+		#region Construction
 
 		/// <summary>
-		/// Gets a value indicating whether [result is input].
+		/// Initializes a new instance of <see cref="Movzx" />.
 		/// </summary>
-		/// <value>
-		///   <c>true</c> if [result is input]; otherwise, <c>false</c>.
-		/// </value>
-		public override bool ResultIsInput { get { return false; } }
+		public Movzx() :
+			base(1, 1)
+		{
+		}
+
+		#endregion Construction
+
+		#region Methods
 
 		/// <summary>
 		/// Computes the opcode.

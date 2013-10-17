@@ -10,6 +10,7 @@
 using System.Collections.Generic;
 using Mosa.Compiler.Common;
 using Mosa.Compiler.TypeSystem;
+using Mosa.Compiler.TypeSystem.Cil;
 
 namespace Mosa.Compiler.Framework.Stages
 {
@@ -101,10 +102,14 @@ namespace Mosa.Compiler.Framework.Stages
 			if (type.ContainsOpenGenericParameters)
 				return;
 
+			//FIXME
+			// Do not compile generic types outside of the internal type module
+			//if (type is CilGenericType && !(type.Module is InternalTypeModule))
+			//	return;
+
 			if (typeScheduled.Contains(type))
 				return;
 
-			//
 			typeScheduled.Add(type);
 			foreach (var method in type.Methods)
 				CompileMethod(method);
@@ -121,6 +126,11 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (method.IsAbstract)
 				return;
+
+			//FIXME
+			// Do not compile generic methods outside of the internal type module
+			//if (method.DeclaringType is CilGenericType && !(method.DeclaringType.Module is InternalTypeModule))
+			//    return;
 
 			if (methodScheduled.Contains(method))
 				return;

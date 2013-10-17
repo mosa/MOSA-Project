@@ -7,11 +7,12 @@
  *  Michael Fröhlich (grover) <michael.ruck@michaelruck.de>
  */
 
-using System.Collections.Generic;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Stages;
 using Mosa.Compiler.InternalTrace;
+using Mosa.Compiler.Linker;
 using Mosa.Compiler.TypeSystem;
+using System.Collections.Generic;
 using x86 = Mosa.Platform.x86;
 
 namespace Mosa.Test.System
@@ -30,8 +31,8 @@ namespace Mosa.Test.System
 		/// <param name="typeLayout">The type layout.</param>
 		/// <param name="internalTrace">The internal trace.</param>
 		/// <param name="compilerOptions">The compiler options.</param>
-		private TestCaseCompiler(IArchitecture architecture, ITypeSystem typeSystem, ITypeLayout typeLayout, IInternalTrace internalTrace, CompilerOptions compilerOptions) :
-			base(architecture, typeSystem, typeLayout, new CompilationScheduler(typeSystem, true), internalTrace, compilerOptions)
+		private TestCaseCompiler(IArchitecture architecture, ITypeSystem typeSystem, ITypeLayout typeLayout, IInternalTrace internalTrace, ILinker linker, CompilerOptions compilerOptions) :
+			base(architecture, typeSystem, typeLayout, new CompilationScheduler(typeSystem, true), internalTrace, linker, compilerOptions)
 		{
 			// Build the assembly compiler pipeline
 			Pipeline.AddRange(new ICompilerStage[] {
@@ -39,7 +40,7 @@ namespace Mosa.Test.System
 				new MethodCompilerSchedulerStage(),
 				new TypeLayoutStage(),
 				new MetadataStage(),
-				(TestAssemblyLinker)Linker
+				new LinkerFinalizationStage(),
 			});
 
 			architecture.ExtendCompilerPipeline(Pipeline);
@@ -50,23 +51,31 @@ namespace Mosa.Test.System
 		/// </summary>
 		/// <param name="typeSystem">The type system.</param>
 		/// <returns></returns>
-		public static TestAssemblyLinker Compile(ITypeSystem typeSystem)
+		public static TestLinker Compile(ITypeSystem typeSystem)
 		{
 			IArchitecture architecture = x86.Architecture.CreateArchitecture(x86.ArchitectureFeatureFlags.AutoDetect);
 
 			// FIXME: get from architecture
 			TypeLayout typeLayout = new TypeLayout(typeSystem, 4, 4);
 
-			IInternalTrace internalLog = new BasicInternalTrace();
-			(internalLog.CompilerEventListener as BasicCompilerEventListener).DebugOutput = false;
-			(internalLog.CompilerEventListener as BasicCompilerEventListener).ConsoleOutput = false;
+			IInternalTrace internalTrace = new BasicInternalTrace();
+			//(internalTrace.CompilerEventListener as BasicCompilerEventListener).DebugOutput = true;
+			//(internalTrace.CompilerEventListener as BasicCompilerEventListener).ConsoleOutput = true;
+			//(internalTrace.CompilerEventListener as BasicCompilerEventListener).Quiet = false;
 
-			var linker = new TestAssemblyLinker();
+			ConfigurableTraceFilter filter = new ConfigurableTraceFilter();
+			filter.MethodMatch = MatchType.None;
+			filter.StageMatch = MatchType.None;
+			filter.TypeMatch = MatchType.None;
+			filter.ExcludeInternalMethods = false;
+
+			internalTrace.TraceFilter = filter;
+
+			var linker = new TestLinker();
 
 			CompilerOptions compilerOptions = new CompilerOptions();
-			compilerOptions.Linker = linker;
 
-			TestCaseCompiler compiler = new TestCaseCompiler(architecture, typeSystem, typeLayout, internalLog, compilerOptions);
+			TestCaseCompiler compiler = new TestCaseCompiler(architecture, typeSystem, typeLayout, internalTrace, linker, compilerOptions);
 			compiler.Compile();
 
 			return linker;
@@ -76,12 +85,14 @@ namespace Mosa.Test.System
 		/// Creates a method compiler
 		/// </summary>
 		/// <param name="method">The method to compile.</param>
+		/// <param name="basicBlocks">The basic blocks.</param>
+		/// <param name="instructionSet">The instruction set.</param>
 		/// <returns>
-		/// An instance of a MethodCompilerBase for the given type/method pair.
+		/// An instance of a BaseMethodCompiler for the given type/method pair.
 		/// </returns>
-		public override BaseMethodCompiler CreateMethodCompiler(RuntimeMethod method)
+		public override BaseMethodCompiler CreateMethodCompiler(RuntimeMethod method, BasicBlocks basicBlocks, InstructionSet instructionSet)
 		{
-			return new TestCaseMethodCompiler(this, method);
+			return new TestCaseMethodCompiler(this, method, basicBlocks, instructionSet);
 		}
 
 		/// <summary>
@@ -94,12 +105,12 @@ namespace Mosa.Test.System
 			while (cctorQueue.Count > 0)
 			{
 				CCtor cctor = cctorQueue.Dequeue();
-				cctor();
+				//cctor();
 			}
 		}
 
 		/// <summary>
-		/// Queues the C ctor for invocation after compilation.
+		/// Queues the ctor for invocation after compilation.
 		/// </summary>
 		/// <param name="cctor">The cctor.</param>
 		public void QueueCCtorForInvocationAfterCompilation(CCtor cctor)

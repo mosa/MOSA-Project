@@ -18,6 +18,7 @@
                     <include name="AssemblyHashAlgorithm.cs"/>
                     <include name="BlobHeap.cs"/>
                     <include name="CilElementType.cs"/>
+                    <include name="GenericSigTypeResolver.cs"/>
                     <include name="TableType.cs"/>
                     <include name="EventAttributes.cs"/>
                     <include name="FieldAttributes.cs"/>

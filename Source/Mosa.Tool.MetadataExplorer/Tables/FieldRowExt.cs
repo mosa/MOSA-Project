@@ -37,7 +37,8 @@ namespace Mosa.Tool.MetadataExplorer.Tables
 			yield return Value("SignatureBlobIdx", row.Signature);
 
 			FieldSignature signature = new FieldSignature(Metadata, row.Signature);
-			yield return Value("Signature Token", signature.Token);
+
+			//yield return Value("Signature Token", signature.Token);
 			yield return Value("Signature Modifier", signature.Modifier.ToString());
 			yield return Value("Signature Type", signature.Type.ToString());
 		}

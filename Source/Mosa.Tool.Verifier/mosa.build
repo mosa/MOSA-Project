@@ -18,7 +18,6 @@
                     <include name="Program.cs"/>
 		</sources>
 		<references>
-                    <include name="System.dll"/>
                     <include name="${outputDirectory}/Mosa.Compiler.Verifier.dll"/>
 		</references>
 		<!-- supress warnings -->

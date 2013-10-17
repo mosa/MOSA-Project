@@ -5,36 +5,39 @@
  *
  * Authors:
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
-
 using Mosa.Compiler.Framework;
+using System;
 
 namespace Mosa.Platform.x86.Instructions
 {
 	/// <summary>
 	/// Representations the x86 movsd instruction.
 	/// </summary>
-	public sealed class Movsd : TwoOperandInstruction
+	public sealed class Movsd : X86Instruction
 	{
 		#region Data Members
 
-		private static readonly OpCode R_M = new OpCode(new byte[] { 0xF2, 0x0F, 0x10 });
-		private static readonly OpCode R_R = new OpCode(new byte[] { 0xF2, 0x0F, 0x10 });
-		private static readonly OpCode M_R = new OpCode(new byte[] { 0xF2, 0x0F, 0x11 });
+		private static readonly OpCode R_RM = new OpCode(new byte[] { 0xF2, 0x0F, 0x10 });
+		private static readonly OpCode RM_R = new OpCode(new byte[] { 0xF2, 0x0F, 0x11 });
 
 		#endregion Data Members
 
-		#region Methods
+		#region Construction
 
 		/// <summary>
-		/// Gets a value indicating whether [result is input].
+		/// Initializes a new instance of <see cref="Movsd"/>.
 		/// </summary>
-		/// <value>
-		///   <c>true</c> if [result is input]; otherwise, <c>false</c>.
-		/// </value>
-		public override bool ResultIsInput { get { return false; } }
+		public Movsd() :
+			base(1, 1)
+		{
+		}
+
+		#endregion Construction
+
+		#region Methods
 
 		/// <summary>
 		/// Computes the opcode.
@@ -45,9 +48,8 @@ namespace Mosa.Platform.x86.Instructions
 		/// <returns></returns>
 		protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
 		{
-			if ((destination.IsRegister) && (source.IsMemoryAddress)) return R_M;
-			if ((destination.IsRegister) && (source.IsRegister)) return R_R;
-			if ((destination.IsMemoryAddress) && (source.IsRegister)) return M_R;
+			if (destination.IsRegister) return R_RM;
+			if (destination.IsMemoryAddress) return RM_R;
 
 			throw new ArgumentException(@"No opcode for operand type. [" + destination.GetType() + ", " + source.GetType() + ")");
 		}

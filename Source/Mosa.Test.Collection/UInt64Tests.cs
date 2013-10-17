@@ -61,12 +61,12 @@ namespace Mosa.Test.Collection
 			return (~first);
 		}
 
-		public static ulong ShiftLeftU8U8(ulong first, byte second)
+		public static ulong ShiftLeftU8U1(ulong first, byte second)
 		{
 			return (first << second);
 		}
 
-		public static ulong ShiftRightU8U8(ulong first, byte second)
+		public static ulong ShiftRightU8U1(ulong first, byte second)
 		{
 			return (first >> second);
 		}

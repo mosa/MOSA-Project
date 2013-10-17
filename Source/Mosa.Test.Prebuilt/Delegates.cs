@@ -44377,5 +44377,12 @@ namespace Mosa.Test.Prebuilt
 		[return: MarshalAs(UnmanagedType.U2)]
 		delegate char C_C_C_C_C([MarshalAs(UnmanagedType.U2)]char value1, [MarshalAs(UnmanagedType.U2)]char value2, [MarshalAs(UnmanagedType.U2)]char value3, [MarshalAs(UnmanagedType.U2)]char value4);
 
+		delegate int I4_I4_I4_I4_I4_I4(int value1, int value2, int value3, int value4, int value5);
+		delegate int I4_I4_I4_I4_I4_I4_I4(int value1, int value2, int value3, int value4, int value5, int value6);
+		delegate int I4_I4_I4_I4_I4_I4_I4_I4(int value1, int value2, int value3, int value4, int value5, int value6, int value7);
+		delegate int I4_I4_I4_I4_I4_I4_I4_I4_I4(int value1, int value2, int value3, int value4, int value5, int value6, int value7, int value8);
+		delegate int I4_I4_I4_I4_I4_I4_I4_I4_I4_I4(int value1, int value2, int value3, int value4, int value5, int value6, int value7, int value8, int value9);
+		delegate int I4_I4_I4_I4_I4_I4_I4_I4_I4_I4_I4(int value1, int value2, int value3, int value4, int value5, int value6, int value7, int value8, int value9, int value10);
+
 	}
 }

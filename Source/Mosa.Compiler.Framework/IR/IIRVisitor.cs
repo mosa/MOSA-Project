@@ -141,6 +141,12 @@ namespace Mosa.Compiler.Framework.IR
 		void Return(Context context);
 
 		/// <summary>
+		/// Visitation function for InternalReturn.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void InternalReturn(Context context);
+
+		/// <summary>
 		/// Visitation function for ShiftLeft.
 		/// </summary>
 		/// <param name="context">The context.</param>
@@ -189,79 +195,79 @@ namespace Mosa.Compiler.Framework.IR
 		void AddUnsigned(Context context);
 
 		/// <summary>
-		/// Visitation function for AddF.
+		/// Visitation function for AddFloat.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void AddFloat(Context context);
 
 		/// <summary>
-		/// Visitation function for DivF.
+		/// Visitation function for DivFloat.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void DivFloat(Context context);
 
 		/// <summary>
-		/// Visitation function for DivS.
+		/// Visitation function for DivSigned.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void DivSigned(Context context);
 
 		/// <summary>
-		/// Visitation function for DivU.
+		/// Visitation function for DivUnsigned.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void DivUnsigned(Context context);
 
 		/// <summary>
-		/// Visitation function for MulS.
+		/// Visitation function for MulSigned.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void MulSigned(Context context);
 
 		/// <summary>
-		/// Visitation function for MulF.
+		/// Visitation function for MulFloat.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void MulFloat(Context context);
 
 		/// <summary>
-		/// Visitation function for MulU.
+		/// Visitation function for MulUnsigned.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void MulUnsigned(Context context);
 
 		/// <summary>
-		/// Visitation function for SubF.
+		/// Visitation function for SubFloat.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void SubFloat(Context context);
 
 		/// <summary>
-		/// Visitation function for SubS.
+		/// Visitation function for SubSigned.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void SubSigned(Context context);
 
 		/// <summary>
-		/// Visitation function for SubU.
+		/// Visitation function for SubUnsigned.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void SubUnsigned(Context context);
 
 		/// <summary>
-		/// Visitation function for RemF.
+		/// Visitation function for RemFloat.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void RemFloat(Context context);
 
 		/// <summary>
-		/// Visitation function for RemS.
+		/// Visitation function for RemSigned.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void RemSigned(Context context);
 
 		/// <summary>
-		/// Visitation function for RemU.
+		/// Visitation function for RemUnsigned.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void RemUnsigned(Context context);

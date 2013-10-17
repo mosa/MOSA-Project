@@ -8,9 +8,9 @@
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  */
 
-using Mosa.Compiler.TypeSystem;
 using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.Metadata.Signatures;
+using Mosa.Compiler.TypeSystem;
 
 namespace Mosa.Compiler.Framework
 {
@@ -66,8 +66,6 @@ namespace Mosa.Compiler.Framework
 		{
 			// check if instance is null (if so, it's a static call to the methodPointer)
 
-			Operand thisOperand = methodCompiler.Parameters[0];
-
 			RuntimeField methodPointerField = GetField(methodCompiler.Method.DeclaringType, "methodPointer");
 			int methodPointerOffset = methodCompiler.TypeLayout.GetFieldOffset(methodPointerField);
 			Operand methodPointerOffsetOperand = Operand.CreateConstant(BuiltInSigType.IntPtr, methodPointerOffset);
@@ -76,17 +74,27 @@ namespace Mosa.Compiler.Framework
 			int instanceOffset = methodCompiler.TypeLayout.GetFieldOffset(instanceField);
 			Operand instanceOffsetOperand = Operand.CreateConstant(BuiltInSigType.IntPtr, instanceOffset);
 
-			Operand opMethod = methodCompiler.StackLayout.AllocateStackOperand(BuiltInSigType.UInt32, false);
-			Operand opInstance = methodCompiler.StackLayout.AllocateStackOperand(thisOperand.Type, false);
-			Operand opCompare = methodCompiler.StackLayout.AllocateStackOperand(BuiltInSigType.Int32, false);
-
-			Operand opReturn = withReturn ? methodCompiler.StackLayout.AllocateStackOperand(BuiltInSigType.Object, false) : null;
-			Operand c0 = Operand.CreateConstant(BuiltInSigType.Int32, 0);
-
 			Context b0 = CreateMethodStructure(methodCompiler, false);
 			Context b1 = CreateNewBlock(methodCompiler);
 			Context b2 = CreateNewBlock(methodCompiler);
 			Context b3 = CreateNewBlock(methodCompiler);
+
+			Operand[] vrs = new Operand[methodCompiler.Parameters.Length];
+
+			for (int i = 0; i < methodCompiler.Parameters.Length; i++)
+			{
+				vrs[i] = methodCompiler.VirtualRegisters.Allocate(methodCompiler.Parameters[i].Type);
+				b0.AppendInstruction(IRInstruction.Move, vrs[i], methodCompiler.Parameters[i]);
+			}
+
+			Operand thisOperand = vrs[0];
+
+			Operand opMethod = methodCompiler.VirtualRegisters.Allocate(BuiltInSigType.UInt32);
+			Operand opInstance = methodCompiler.VirtualRegisters.Allocate(thisOperand.Type);
+			Operand opCompare = methodCompiler.VirtualRegisters.Allocate(BuiltInSigType.Int32);
+
+			Operand opReturn = withReturn ? methodCompiler.VirtualRegisters.Allocate(BuiltInSigType.Object) : null;
+			Operand c0 = Operand.CreateConstant((int)0);
 
 			b0.AppendInstruction(IRInstruction.Load, opMethod, thisOperand, methodPointerOffsetOperand);
 			b0.AppendInstruction(IRInstruction.Load, opInstance, thisOperand, instanceOffsetOperand);
@@ -98,17 +106,19 @@ namespace Mosa.Compiler.Framework
 			methodCompiler.BasicBlocks.LinkBlocks(b0.BasicBlock, b2.BasicBlock);
 
 			b1.AppendInstruction(IRInstruction.Call, opReturn, opMethod);
+			b1.InvokeMethod = methodCompiler.Method;
 			for (int i = 1; i < methodCompiler.Parameters.Length; i++)
 			{
-				b1.AddOperand(methodCompiler.Parameters[i]);
+				b1.AddOperand(vrs[i]);
 			}
 			b1.AppendInstruction(IRInstruction.Jmp, b3.BasicBlock);
 			methodCompiler.BasicBlocks.LinkBlocks(b1.BasicBlock, b3.BasicBlock);
 
 			b2.AppendInstruction(IRInstruction.Call, opReturn, opMethod);
+			b2.InvokeMethod = methodCompiler.Method;
 			for (int i = 1; i < methodCompiler.Parameters.Length; i++)
 			{
-				b2.AddOperand(methodCompiler.Parameters[i]);
+				b2.AddOperand(vrs[i]);
 			}
 			b2.AddOperand(opInstance);
 
@@ -126,7 +136,8 @@ namespace Mosa.Compiler.Framework
 		private static void PatchBeginInvoke(BaseMethodCompiler methodCompiler)
 		{
 			Context context = CreateMethodStructure(methodCompiler, true);
-			context.AppendInstruction(IRInstruction.Return, Operand.GetNull());
+			context.AppendInstruction(IRInstruction.Return, null, Operand.GetNull());
+			context.SetBranch(methodCompiler.BasicBlocks.EpilogueBlock);
 		}
 
 		private static void PatchEndInvoke(BaseMethodCompiler methodCompiler)
@@ -140,29 +151,12 @@ namespace Mosa.Compiler.Framework
 			var basicBlocks = methodCompiler.BasicBlocks;
 			CreatePrologueAndEpilogueBlocks(methodCompiler.InstructionSet, basicBlocks);
 
-			Context context = new Context(methodCompiler.InstructionSet);
-			context.AppendInstruction(null);
-			context.Label = 0;
+			var context = ContextHelper.CreateNewBlockWithContext(methodCompiler.InstructionSet, basicBlocks, 0);
 
-			var newblock = basicBlocks.CreateBlock(0, context.Index);
-			basicBlocks.LinkBlocks(basicBlocks.PrologueBlock, newblock);
+			basicBlocks.LinkBlocks(basicBlocks.PrologueBlock, context.BasicBlock);
+
 			if (linkEpilogueBlock)
-				basicBlocks.LinkBlocks(newblock, basicBlocks.EpilogueBlock);
-			context.BasicBlock = newblock;
-
-			return context;
-		}
-
-		private static Context CreateNewBlock(BaseMethodCompiler methodCompiler)
-		{
-			var basicBlocks = methodCompiler.BasicBlocks;
-
-			Context context = new Context(methodCompiler.InstructionSet);
-			context.AppendInstruction(null);
-			context.Label = 0;
-
-			var newblock = basicBlocks.CreateBlock(basicBlocks.Count, context.Index);
-			context.BasicBlock = newblock;
+				basicBlocks.LinkBlocks(context.BasicBlock, basicBlocks.EpilogueBlock);
 
 			return context;
 		}
@@ -170,22 +164,22 @@ namespace Mosa.Compiler.Framework
 		private static void CreatePrologueAndEpilogueBlocks(InstructionSet instructionSet, BasicBlocks basicBlocks)
 		{
 			// Create the prologue block
-			Context context = new Context(instructionSet);
+			var context = ContextHelper.CreateNewBlockWithContext(instructionSet, basicBlocks, BasicBlock.PrologueLabel);
 
 			// Add a jump instruction to the first block from the prologue
 			context.AppendInstruction(IRInstruction.Jmp);
 			context.SetBranch(0);
-			context.Label = BasicBlock.PrologueLabel;
-			var prologue = basicBlocks.CreateBlock(BasicBlock.PrologueLabel, context.Index);
+			var prologue = context.BasicBlock;
 			basicBlocks.AddHeaderBlock(prologue);
 
 			// Create the epilogue block
-			context = new Context(instructionSet);
+			context = ContextHelper.CreateNewBlockWithContext(instructionSet, basicBlocks, BasicBlock.EpilogueLabel);
+			var epilogue = context.BasicBlock;
+		}
 
-			// Add null instruction, necessary to generate a block index
-			context.AppendInstruction(null);
-			context.Label = BasicBlock.EpilogueLabel;
-			var epilogue = basicBlocks.CreateBlock(BasicBlock.EpilogueLabel, context.Index);
+		private static Context CreateNewBlock(BaseMethodCompiler methodCompiler)
+		{
+			return ContextHelper.CreateNewBlockWithContext(methodCompiler.InstructionSet, methodCompiler.BasicBlocks);
 		}
 
 		private static RuntimeField GetField(RuntimeType type, string name)

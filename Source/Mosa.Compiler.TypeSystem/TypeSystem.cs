@@ -14,7 +14,7 @@ using System.Diagnostics;
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Loader;
 using Mosa.Compiler.Metadata.Signatures;
-using Mosa.Compiler.TypeSystem.Generic;
+using Mosa.Compiler.TypeSystem.Cil;
 
 namespace Mosa.Compiler.TypeSystem
 {
@@ -213,7 +213,10 @@ namespace Mosa.Compiler.TypeSystem
 
 				case CilElementType.GenericInst:
 					var genericBaseType = typeModule.GetType(genericInstSigType.BaseType.Token);
-					genericType = new CilGenericType(typeModule, token, genericBaseType, genericInstSigType);
+
+					string name = CilGenericType.GetGenericTypeName(typeModule, genericBaseType as CilRuntimeType, genericInstSigType.GenericArguments);
+
+					genericType = new CilGenericType(typeModule, token, name, genericBaseType, genericInstSigType.GenericArguments);
 					break;
 
 				default:

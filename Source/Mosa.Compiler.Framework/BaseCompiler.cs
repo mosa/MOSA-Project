@@ -8,10 +8,12 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
+using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.InternalTrace;
-using Mosa.Compiler.TypeSystem;
 using Mosa.Compiler.Linker;
+using Mosa.Compiler.Metadata.Signatures;
+using Mosa.Compiler.TypeSystem;
+using System;
 
 namespace Mosa.Compiler.Framework
 {
@@ -56,7 +58,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Holds the generic type patcher
 		/// </summary>
-		private IGenericTypePatcher genericTypePatcher;
+		private GenericTypePatcher genericTypePatcher;
 
 		/// <summary>
 		/// Holds the counters
@@ -91,7 +93,7 @@ namespace Mosa.Compiler.Framework
 		/// <param name="compilationScheduler">The compilation scheduler.</param>
 		/// <param name="internalTrace">The internal trace.</param>
 		/// <param name="compilerOptions">The compiler options.</param>
-		protected BaseCompiler(IArchitecture architecture, ITypeSystem typeSystem, ITypeLayout typeLayout, ICompilationScheduler compilationScheduler, IInternalTrace internalTrace, CompilerOptions compilerOptions)
+		protected BaseCompiler(IArchitecture architecture, ITypeSystem typeSystem, ITypeLayout typeLayout, ICompilationScheduler compilationScheduler, IInternalTrace internalTrace, ILinker linker, CompilerOptions compilerOptions)
 		{
 			if (architecture == null)
 				throw new ArgumentNullException(@"architecture");
@@ -105,7 +107,7 @@ namespace Mosa.Compiler.Framework
 			this.genericTypePatcher = new GenericTypePatcher(typeSystem);
 			this.counters = new Counters();
 			this.compilationScheduler = compilationScheduler;
-			this.linker = compilerOptions.Linker;
+			this.linker = (linker != null) ? linker : LinkerFactory.Create(compilerOptions.LinkerType, compilerOptions, architecture);
 			this.plugSystem = new PlugSystem();
 		}
 
@@ -151,7 +153,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets the generic type patcher.
 		/// </summary>
-		public IGenericTypePatcher GenericTypePatcher { get { return genericTypePatcher; } }
+		public GenericTypePatcher GenericTypePatcher { get { return genericTypePatcher; } }
 
 		/// <summary>
 		/// Gets the counters.
@@ -181,11 +183,13 @@ namespace Mosa.Compiler.Framework
 		/// Compiles the method.
 		/// </summary>
 		/// <param name="method">The method.</param>
-		public void CompileMethod(RuntimeMethod method)
+		/// <param name="basicBlocks">The basic blocks.</param>
+		/// <param name="instructionSet">The instruction set.</param>
+		public void CompileMethod(RuntimeMethod method, BasicBlocks basicBlocks, InstructionSet instructionSet)
 		{
 			Trace(CompilerEvent.CompilingMethod, method.FullName);
 
-			BaseMethodCompiler methodCompiler = CreateMethodCompiler(method);
+			BaseMethodCompiler methodCompiler = CreateMethodCompiler(method, basicBlocks, instructionSet);
 			Architecture.ExtendMethodCompilerPipeline(methodCompiler.Pipeline);
 
 			methodCompiler.Compile();
@@ -205,8 +209,36 @@ namespace Mosa.Compiler.Framework
 		/// Creates a method compiler
 		/// </summary>
 		/// <param name="method">The method to compile.</param>
+		/// <param name="basicBlocks">The basic blocks.</param>
+		/// <param name="instructionSet">The instruction set.</param>
 		/// <returns></returns>
-		public abstract BaseMethodCompiler CreateMethodCompiler(RuntimeMethod method);
+		public abstract BaseMethodCompiler CreateMethodCompiler(RuntimeMethod method, BasicBlocks basicBlocks, InstructionSet instructionSet);
+		
+		/// <summary>
+		/// Compiles the linker method.
+		/// </summary>
+		/// <param name="methodName">Name of the method.</param>
+		/// <returns></returns>
+		public RuntimeMethod CreateLinkerMethod(string methodName)
+		{
+			LinkerGeneratedType compilerGeneratedType = typeSystem.InternalTypeModule.GetType("Mosa.Tools.Compiler", "LinkerGenerated") as LinkerGeneratedType;
+
+			// Create the type if needed
+			if (compilerGeneratedType == null)
+			{
+				compilerGeneratedType = new LinkerGeneratedType(typeSystem.InternalTypeModule, "Mosa.Tools.Compiler", "LinkerGenerated", null);
+				typeSystem.AddInternalType(compilerGeneratedType);
+
+				//compiler.Scheduler.TrackTypeAllocated(compilerGeneratedType);
+			}
+
+			// Create the method
+			// HACK: <$> prevents the method from being called from CIL
+			LinkerGeneratedMethod method = new LinkerGeneratedMethod(typeSystem.InternalTypeModule, "<$>" + methodName, compilerGeneratedType, BuiltInSigType.Void, false, false, new SigType[0]);
+			compilerGeneratedType.AddMethod(method);
+
+			return method;
+		}
 
 		/// <summary>
 		/// Executes the compiler using the configured stages.
@@ -228,9 +260,6 @@ namespace Mosa.Compiler.Framework
 			foreach (ICompilerStage stage in Pipeline)
 			{
 				Trace(CompilerEvent.CompilerStageStart, stage.Name);
-
-				// Setup Compiler
-				stage.Setup(this);
 
 				// Execute stage
 				stage.Run();

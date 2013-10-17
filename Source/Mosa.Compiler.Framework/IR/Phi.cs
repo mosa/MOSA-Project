@@ -19,9 +19,10 @@ namespace Mosa.Compiler.Framework.IR
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of Phicontext.
+		/// Initializes a new instance of the <see cref="Phi" /> class.
 		/// </summary>
 		public Phi()
+			: base(0, 0)
 		{
 		}
 

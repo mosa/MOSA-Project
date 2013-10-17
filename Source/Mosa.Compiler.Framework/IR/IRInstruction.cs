@@ -182,12 +182,17 @@ namespace Mosa.Compiler.Framework.IR
 		/// <summary>
 		///
 		/// </summary>
-		public static readonly ShiftLeft ShiftLeft = new ShiftLeft();
+		public static readonly InternalReturn InternalReturn = new InternalReturn();
 
 		/// <summary>
 		///
 		/// </summary>
 		public static readonly ShiftRight ShiftRight = new ShiftRight();
+
+		/// <summary>
+		///
+		/// </summary>
+		public static readonly ShiftLeft ShiftLeft = new ShiftLeft();
 
 		/// <summary>
 		///
@@ -248,5 +253,15 @@ namespace Mosa.Compiler.Framework.IR
 		///
 		/// </summary>
 		public static readonly IntrinsicMethodCall IntrinsicMethodCall = new IntrinsicMethodCall();
+
+		/// <summary>
+		///
+		/// </summary>
+		public static readonly BlockEnd BlockEnd = new BlockEnd();
+
+		/// <summary>
+		///
+		/// </summary>
+		public static readonly BlockStart BlockStart = new BlockStart();
 	}
 }

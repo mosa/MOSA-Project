@@ -62,28 +62,9 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Initializes a new instance of the <see cref="BaseInstruction"/> class.
 		/// </summary>
-		public BaseInstruction()
-		{
-			operandDefaultCount = 0;
-			resultDefaultCount = 0;
-		}
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="BaseInstruction"/> class.
-		/// </summary>
-		/// <param name="operandCount">The operand count.</param>
-		public BaseInstruction(byte operandCount)
-		{
-			operandDefaultCount = operandCount;
-			resultDefaultCount = 0;
-		}
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="BaseInstruction"/> class.
-		/// </summary>
-		/// <param name="operandCount">The operand count.</param>
 		/// <param name="resultCount">The result count.</param>
-		public BaseInstruction(byte operandCount, byte resultCount)
+		/// <param name="operandCount">The operand count.</param>
+		public BaseInstruction(byte resultCount, byte operandCount)
 		{
 			resultDefaultCount = resultCount;
 			operandDefaultCount = operandCount;
@@ -98,7 +79,7 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		/// <param name="compiler">The compiler.</param>
-		public virtual void Validate(Context ctx, BaseMethodCompiler compiler)
+		public virtual void Resolve(Context ctx, BaseMethodCompiler compiler)
 		{
 			/* Default implementation is to do nothing */
 		}
@@ -137,10 +118,24 @@ namespace Mosa.Compiler.Framework
 		{
 			StringBuilder s = new StringBuilder(ToString());
 
-			if (context.Other is IR.ConditionCode)
+			if (context.ConditionCode != ConditionCode.Undefined)
 			{
 				s.Append(" [");
 				s.Append(GetConditionString(context.ConditionCode));
+				s.Append("]");
+			}
+
+			if (context.RuntimeType != null)
+			{
+				s.Append(" [");
+				s.Append(context.RuntimeType.FullName);
+				s.Append("]");
+			}
+
+			if (context.RuntimeField != null)
+			{
+				s.Append(" [");
+				s.Append(context.RuntimeField.FullName);
 				s.Append("]");
 			}
 
@@ -156,25 +151,31 @@ namespace Mosa.Compiler.Framework
 			{
 				s.Append(" ");
 				s.Append(context.Result);
-			}
 
+				if (context.ResultCount == 2)
+				{
+					s.Append(" : ");
+					s.Append(context.Result2);
+				}
+			}
 			if (context.ResultCount > 0 && context.OperandCount > 0)
 			{
-				s.Append(" <-");
+				s.Append(" <=");
 			}
 
-			for (int i = 0; (i < 3) && (i < context.OperandCount); i++)
+			for (int i = 0; i < context.OperandCount; i++)
 			{
 				s.Append(" ");
 				s.Append(context.GetOperand(i));
 				s.Append(",");
 			}
 
-			if (context.OperandCount > 3)
-			{
-				s.Append(" [more]");
-			}
-			else if (context.OperandCount > 0)
+			//if (context.OperandCount > 4)
+			//{
+			//	s.Append(" [more]");
+			//}
+			//else
+			if (context.OperandCount > 0)
 			{
 				s.Length = s.Length - 1;
 			}
@@ -196,17 +197,17 @@ namespace Mosa.Compiler.Framework
 				}
 			}
 
-			if (context.InvokeTarget != null)
-			{
-				s.Append(" {");
-				s.Append(context.InvokeTarget.ToString());
-				s.Append("}");
-			}
+			//if (context.InvokeMethod != null)
+			//{
+			//	s.Append(" {");
+			//	s.Append(context.InvokeMethod.FullName);
+			//	s.Append("}");
+			//}
 
 			if (context.RuntimeField != null)
 			{
 				s.Append(" {");
-				s.Append(context.RuntimeField.ToString());
+				s.Append(context.RuntimeField.FullName);
 				s.Append("}");
 			}
 
@@ -237,27 +238,28 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		/// <param name="conditioncode">The conditioncode.</param>
 		/// <returns></returns>
-		protected string GetConditionString(IR.ConditionCode conditioncode)
+		protected string GetConditionString(ConditionCode conditioncode)
 		{
 			switch (conditioncode)
 			{
-				case IR.ConditionCode.Equal: return @"equal";
-				case IR.ConditionCode.GreaterOrEqual: return @"greater or equal";
-				case IR.ConditionCode.GreaterThan: return @"greater";
-				case IR.ConditionCode.LessOrEqual: return @"less or equal";
-				case IR.ConditionCode.LessThan: return @"less";
-				case IR.ConditionCode.NotEqual: return @"not equal";
-				case IR.ConditionCode.UnsignedGreaterOrEqual: return @"greater or equal (U)";
-				case IR.ConditionCode.UnsignedGreaterThan: return @"greater (U)";
-				case IR.ConditionCode.UnsignedLessOrEqual: return @"less or equal (U)";
-				case IR.ConditionCode.UnsignedLessThan: return @"less (U)";
-				case IR.ConditionCode.NotSigned: return @"unsigned";
-				case IR.ConditionCode.Signed: return @"signed";
-				case IR.ConditionCode.Zero: return @"zero";
-				case IR.ConditionCode.NoZero: return @"nozero";
-				case IR.ConditionCode.NoParity: return @"noparity";
-				case IR.ConditionCode.Carry: return @"carry";
-				case IR.ConditionCode.NoCarry: return @"nocarry";
+				case ConditionCode.Equal: return @"equal";
+				case ConditionCode.GreaterOrEqual: return @"greater or equal";
+				case ConditionCode.GreaterThan: return @"greater";
+				case ConditionCode.LessOrEqual: return @"less or equal";
+				case ConditionCode.LessThan: return @"less";
+				case ConditionCode.NotEqual: return @"not equal";
+				case ConditionCode.UnsignedGreaterOrEqual: return @"greater or equal (U)";
+				case ConditionCode.UnsignedGreaterThan: return @"greater (U)";
+				case ConditionCode.UnsignedLessOrEqual: return @"less or equal (U)";
+				case ConditionCode.UnsignedLessThan: return @"less (U)";
+				case ConditionCode.NotSigned: return @"not signed";
+				case ConditionCode.Signed: return @"signed";
+				case ConditionCode.Zero: return @"zero";
+				case ConditionCode.NotZero: return @"not zero";
+				case ConditionCode.Parity: return @"parity";
+				case ConditionCode.NoParity: return @"no parity";
+				case ConditionCode.Carry: return @"carry";
+				case ConditionCode.NoCarry: return @"no carry";
 
 				default: throw new NotSupportedException();
 			}

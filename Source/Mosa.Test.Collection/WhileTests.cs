@@ -51,7 +51,28 @@ namespace Mosa.Test.Collection
 
 		public static bool WhileContinueBreak()
 		{
-			bool called = false;
+			int limit = 20;
+			int count = 0;
+
+			while (true)
+			{
+				++count;
+
+				if (count == limit)
+				{
+					break;
+				}
+				else
+				{
+					continue;
+				}
+			}
+
+			return count == 20;
+		}
+
+		public static bool WhileContinueBreak2()
+		{
 			int start = 0;
 			int limit = 20;
 			int count = 0;
@@ -69,11 +90,33 @@ namespace Mosa.Test.Collection
 				{
 					continue;
 				}
-
-				called = true;
 			}
 
-			return !called && start == limit && count == 20;
+			return start == limit && count == 20;
+		}
+
+		public static int WhileContinueBreak2B()
+		{
+			int start = 0;
+			int limit = 20;
+			int count = 0;
+
+			while (true)
+			{
+				++count;
+				++start;
+
+				if (start == limit)
+				{
+					break;
+				}
+				else
+				{
+					continue;
+				}
+			}
+
+			return count;
 		}
 
 		public static int WhileOverflowIncI1(byte start, byte limit)
@@ -102,27 +145,26 @@ namespace Mosa.Test.Collection
 			return count;
 		}
 
-		public static int WhileNestedEqualsI4(int initialStatus, int wantedStatus, int start, int limit)
+		public static int WhileNestedEqualsI4(int a, int b, int start, int limit)
 		{
 			int count = 0;
 			int start2 = start;
-			int status = initialStatus;
+			int status = a;
 
-			while (status == initialStatus)
+			while (status == a)
 			{
-				start2 = start;
+				start2 = 1;
 
-				while (start2 < limit)
+				while (start2 < 5)
 				{
 					++start2;
-					++count;
 				}
 
 				++start;
 
 				if (start == limit)
 				{
-					status = wantedStatus;
+					status = b;
 				}
 			}
 

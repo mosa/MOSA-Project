@@ -17,6 +17,18 @@ namespace Mosa.Platform.AVR32.Instructions
 	/// </summary>
 	public class Call : AVR32Instruction
 	{
+		#region Construction
+
+		/// <summary>
+		/// Initializes a new instance of <see cref="Call"/>.
+		/// </summary>
+		public Call() :
+			base(0, 0)
+		{
+		}
+
+		#endregion Construction
+
 		#region Methods
 
 		/// <summary>
@@ -41,7 +53,7 @@ namespace Mosa.Platform.AVR32.Instructions
 			{
 				if (context.Operand1.IsMemoryAddress)
 				{
-					emitter.EmitRegisterOperandWithK16(0x101, (byte)context.Operand1.Base.RegisterCode, (ushort)context.Operand1.Offset);
+					emitter.EmitRegisterOperandWithK16(0x101, (byte)context.Operand1.EffectiveOffsetBase.RegisterCode, (ushort)context.Operand1.Displacement); //???
 				}
 			}
 		}

@@ -108,7 +108,17 @@ namespace Mosa.Platform.x86
 		}
 
 		/// <summary>
-		/// General purpose register do not support floating point operations.
+		/// Control registers do not support integer operations.
+		/// </summary>
+		public override bool IsInteger
+		{
+			get { return false; }
+		}
+
+		/// <summary>
+		///
+		/// <summary>
+		/// Control registers do not support floating point operations.
 		/// </summary>
 		public override bool IsFloatingPoint
 		{

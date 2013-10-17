@@ -291,32 +291,6 @@ namespace Mosa.Compiler.Framework
 			AddFree(index);
 		}
 
-		/// <summary>
-		/// Slices the instruction flow before the current instruction.
-		/// </summary>
-		/// <param name="index">The index.</param>
-		public void SliceBefore(int index)
-		{
-			if (prev[index] == -1)
-				return;
-
-			next[prev[index]] = -1;
-			prev[index] = -1;
-		}
-
-		/// <summary>
-		/// Slices the instruction flow after the current instruction.
-		/// </summary>
-		/// <param name="index">The index.</param>
-		public void SliceAfter(int index)
-		{
-			if (next[index] == -1)
-				return;
-
-			prev[next[index]] = -1;
-			next[index] = -1;
-		}
-
 		#endregion Methods
 	}
 }

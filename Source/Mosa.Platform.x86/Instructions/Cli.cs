@@ -17,6 +17,18 @@ namespace Mosa.Platform.x86.Instructions
 	/// </summary>
 	public sealed class Cli : X86Instruction
 	{
+		#region Construction
+
+		/// <summary>
+		/// Initializes a new instance of <see cref="Cli"/>.
+		/// </summary>
+		public Cli() :
+			base(0, 0)
+		{
+		}
+
+		#endregion Construction
+
 		#region Methods
 
 		/// <summary>

@@ -41,9 +41,14 @@ namespace Mosa.Compiler.Framework.CIL
 
 		#endregion Construction
 
+		public static Operand CreateResultOperand(IInstructionDecoder decoder, SigType operandSigType)
+		{
+			return CreateResultOperand(decoder, Operand.StackTypeFromSigType(operandSigType), operandSigType);
+		}
+
 		public static Operand CreateResultOperand(IInstructionDecoder decoder, StackTypeCode operandType, SigType operandSigType)
 		{
-			if (operandType == StackTypeCode.O || operandType == StackTypeCode.Ptr || operandType == StackTypeCode.F)
+			if (operandType == StackTypeCode.O || operandType == StackTypeCode.Ptr)
 			{
 				return decoder.Compiler.CreateVirtualRegister(operandSigType);
 			}

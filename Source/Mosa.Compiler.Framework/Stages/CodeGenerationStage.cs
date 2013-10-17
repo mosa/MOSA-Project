@@ -7,10 +7,11 @@
  *  Simon Wollwage (rootnode) <rootnode@mosa-project.org>
  */
 
+using Mosa.Compiler.Framework.IR;
+using Mosa.Compiler.Framework.Platform;
 using System;
 using System.Diagnostics;
 using System.IO;
-using Mosa.Compiler.Framework.Platform;
 
 namespace Mosa.Compiler.Framework.Stages
 {
@@ -24,7 +25,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <summary>
 		/// Holds the stream, where code is emitted to.
 		/// </summary>
-		protected static Stream codeStream;
+		protected Stream codeStream;
 
 		/// <summary>
 		///
@@ -37,7 +38,30 @@ namespace Mosa.Compiler.Framework.Stages
 
 		public ICodeEmitter CodeEmitter { get { return codeEmitter; } }
 
+		public bool EmitBinary { get; set; }
+
 		#endregion Properties
+
+		#region Construction
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="CodeGenerationStage"/> class.
+		/// </summary>
+		public CodeGenerationStage()
+		{
+			EmitBinary = true;
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="CodeGenerationStage" /> class.
+		/// </summary>
+		/// <param name="emitBinary">if set to <c>true</c> [emit binary].</param>
+		public CodeGenerationStage(bool emitBinary)
+		{
+			EmitBinary = emitBinary;
+		}
+
+		#endregion Construction
 
 		#region Methods
 
@@ -46,6 +70,9 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </summary>
 		void IMethodCompilerStage.Run()
 		{
+			if (!EmitBinary)
+				return;
+
 			// Retrieve a stream to place the code into
 			using (codeStream = methodCompiler.RequestCodeStream())
 			{
@@ -72,20 +99,27 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </summary>
 		protected virtual void EmitInstructions()
 		{
+			var trace = CreateTrace();
+
 			foreach (BasicBlock block in basicBlocks)
 			{
 				BlockStart(block);
 
-				for (Context context = new Context(instructionSet, block); !context.EndOfInstruction; context.GotoNext())
+				for (Context context = new Context(instructionSet, block); !context.IsBlockEndInstruction; context.GotoNext())
 				{
-					if (!context.IsEmpty)
+					if (context.IsEmpty || context.Instruction == IRInstruction.BlockStart)
+						continue;
+
+					if (context.Instruction is BasePlatformInstruction)
 					{
-						BasePlatformInstruction instruction = context.Instruction as BasePlatformInstruction;
-						if (instruction != null)
-							instruction.Emit(context, codeEmitter);
-						else
-							if (architecture.PlatformName != "Null")
-								Trace(InternalTrace.CompilerEvent.Error, "Missing Code Transformation: " + context.ToString());
+						EmitInstruction(context, codeEmitter);
+					}
+					else
+					{
+						if (architecture.PlatformName != "Null")
+						{
+							trace.Log(InternalTrace.CompilerEvent.Error, "Missing Code Transformation: " + context.ToString());
+						}
 					}
 				}
 
@@ -94,12 +128,22 @@ namespace Mosa.Compiler.Framework.Stages
 		}
 
 		/// <summary>
+		/// Emits the instruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <param name="codeEmitter">The code emitter.</param>
+		protected virtual void EmitInstruction(Context context, ICodeEmitter codeEmitter)
+		{
+			(context.Instruction as BasePlatformInstruction).Emit(context, codeEmitter);
+		}
+
+		/// <summary>
 		/// Begins the generate.
 		/// </summary>
 		protected virtual void BeginGenerate()
 		{
 			codeEmitter = architecture.GetCodeEmitter();
-			codeEmitter.Initialize(methodCompiler, codeStream);
+			codeEmitter.Initialize(methodCompiler.Method.FullName, methodCompiler.Linker, codeStream);
 		}
 
 		/// <summary>

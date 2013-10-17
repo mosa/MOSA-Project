@@ -7,6 +7,7 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using Mosa.Compiler.Linker;
 using System;
 using System.IO;
 
@@ -20,9 +21,10 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Initializes the specified emitter.
 		/// </summary>
-		/// <param name="compiler">The compiler.</param>
+		/// <param name="methodName">Name of the method.</param>
+		/// <param name="linker">The linker.</param>
 		/// <param name="codeStream">The code stream.</param>
-		void Initialize(BaseMethodCompiler compiler, Stream codeStream);
+		void Initialize(string methodName, ILinker linker, Stream codeStream);
 
 		/// <summary>
 		/// Emits a label into the code stream.

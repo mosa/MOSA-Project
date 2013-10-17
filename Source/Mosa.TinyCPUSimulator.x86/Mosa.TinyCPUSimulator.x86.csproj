@@ -1,0 +1,194 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{50568E2D-5360-4F71-87E0-E6979D1D858A}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Mosa.TinyCPUSimulator.x86</RootNamespace>
+    <AssemblyName>Mosa.TinyCPUSimulator.x86</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <NoWarn>0168</NoWarn>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\..\bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <NoWarn>0168</NoWarn>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BaseX86Opcode.cs" />
+    <Compile Include="ControlRegister.cs" />
+    <Compile Include="CR0.cs" />
+    <Compile Include="Emulate\CMOS.cs" />
+    <Compile Include="Emulate\PowerUp.cs" />
+    <Compile Include="Emulate\DisplayForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Emulate\DisplayForm.Designer.cs">
+      <DependentUpon>DisplayForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Emulate\Multiboot.cs" />
+    <Compile Include="Emulate\VGAConsole.cs" />
+    <Compile Include="Opcodes\InternalBreak.cs" />
+    <Compile Include="Opcodes\Roundsd.cs" />
+    <Compile Include="Opcodes\Roundss.cs" />
+    <Compile Include="Opcodes\FarJmp.cs" />
+    <Compile Include="SegmentRegister.cs" />
+    <Compile Include="CPUx86.cs" />
+    <Compile Include="FlagRegister.cs" />
+    <Compile Include="GeneralPurposeRegister.cs" />
+    <Compile Include="Legacy16BitRegister.cs" />
+    <Compile Include="Legacy8BitHighRegister.cs" />
+    <Compile Include="Legacy8BitLowRegister.cs" />
+    <Compile Include="Opcodes.cs" />
+    <Compile Include="Opcodes\Adc.cs" />
+    <Compile Include="Opcodes\Add.cs" />
+    <Compile Include="Opcodes\Addsd.cs" />
+    <Compile Include="Opcodes\Addss.cs" />
+    <Compile Include="Opcodes\And.cs" />
+    <Compile Include="Opcodes\Call.cs" />
+    <Compile Include="Opcodes\Cdq.cs" />
+    <Compile Include="Opcodes\Cli.cs" />
+    <Compile Include="Opcodes\Cmc.cs" />
+    <Compile Include="Opcodes\Cmp.cs" />
+    <Compile Include="Opcodes\Comisd.cs" />
+    <Compile Include="Opcodes\Comiss.cs" />
+    <Compile Include="Opcodes\Ucomisd.cs" />
+    <Compile Include="Opcodes\Ucomiss.cs" />
+    <Compile Include="Opcodes\Sal.cs" />
+    <Compile Include="Opcodes\Setbe.cs" />
+    <Compile Include="Opcodes\Setle.cs" />
+    <Compile Include="Opcodes\Setge.cs" />
+    <Compile Include="Opcodes\Setne.cs" />
+    <Compile Include="Opcodes\Sete.cs" />
+    <Compile Include="Opcodes\Setpe.cs" />
+    <Compile Include="Opcodes\Setp.cs" />
+    <Compile Include="Opcodes\Setnp.cs" />
+    <Compile Include="Opcodes\Cpuid.cs" />
+    <Compile Include="Opcodes\Cvtsd2ss.cs" />
+    <Compile Include="Opcodes\Cvtsi2sd.cs" />
+    <Compile Include="Opcodes\Cvtsi2ss.cs" />
+    <Compile Include="Opcodes\Cvtss2sd.cs" />
+    <Compile Include="Opcodes\Cvttsd2si.cs" />
+    <Compile Include="Opcodes\Cvttss2si.cs" />
+    <Compile Include="Opcodes\Dec.cs" />
+    <Compile Include="Opcodes\Div.cs" />
+    <Compile Include="Opcodes\Divsd.cs" />
+    <Compile Include="Opcodes\Divss.cs" />
+    <Compile Include="Opcodes\Fld.cs" />
+    <Compile Include="Opcodes\Hlt.cs" />
+    <Compile Include="Opcodes\Idiv.cs" />
+    <Compile Include="Opcodes\Imul.cs" />
+    <Compile Include="Opcodes\In.cs" />
+    <Compile Include="Opcodes\Inc.cs" />
+    <Compile Include="Opcodes\Iretd.cs" />
+    <Compile Include="Opcodes\Ja.cs" />
+    <Compile Include="Opcodes\Jae.cs" />
+    <Compile Include="Opcodes\Jb.cs" />
+    <Compile Include="Opcodes\Jbe.cs" />
+    <Compile Include="Opcodes\Jc.cs" />
+    <Compile Include="Opcodes\Je.cs" />
+    <Compile Include="Opcodes\Jg.cs" />
+    <Compile Include="Opcodes\Jge.cs" />
+    <Compile Include="Opcodes\Jl.cs" />
+    <Compile Include="Opcodes\Jle.cs" />
+    <Compile Include="Opcodes\Jmp.cs" />
+    <Compile Include="Opcodes\Jnc.cs" />
+    <Compile Include="Opcodes\Jne.cs" />
+    <Compile Include="Opcodes\Jno.cs" />
+    <Compile Include="Opcodes\Jnp.cs" />
+    <Compile Include="Opcodes\Jns.cs" />
+    <Compile Include="Opcodes\Jnz.cs" />
+    <Compile Include="Opcodes\Jo.cs" />
+    <Compile Include="Opcodes\Jp.cs" />
+    <Compile Include="Opcodes\Js.cs" />
+    <Compile Include="Opcodes\Jz.cs" />
+    <Compile Include="Opcodes\Lea.cs" />
+    <Compile Include="Opcodes\Lgdt.cs" />
+    <Compile Include="Opcodes\Lidt.cs" />
+    <Compile Include="Opcodes\Mov.cs" />
+    <Compile Include="Opcodes\Movsd.cs" />
+    <Compile Include="Opcodes\Movss.cs" />
+    <Compile Include="Opcodes\Movsx.cs" />
+    <Compile Include="Opcodes\Movzx.cs" />
+    <Compile Include="Opcodes\Mul.cs" />
+    <Compile Include="Opcodes\Mulsd.cs" />
+    <Compile Include="Opcodes\Mulss.cs" />
+    <Compile Include="Opcodes\Neg.cs" />
+    <Compile Include="Opcodes\Nop.cs" />
+    <Compile Include="Opcodes\Not.cs" />
+    <Compile Include="Opcodes\Or.cs" />
+    <Compile Include="Opcodes\Out.cs" />
+    <Compile Include="Opcodes\Pop.cs" />
+    <Compile Include="Opcodes\Popad.cs" />
+    <Compile Include="Opcodes\Popfd.cs" />
+    <Compile Include="Opcodes\Push.cs" />
+    <Compile Include="Opcodes\Pushad.cs" />
+    <Compile Include="Opcodes\Pushfd.cs" />
+    <Compile Include="Opcodes\Rcl.cs" />
+    <Compile Include="Opcodes\Rcr.cs" />
+    <Compile Include="Opcodes\Ret.cs" />
+    <Compile Include="Opcodes\Sar.cs" />
+    <Compile Include="Opcodes\Sbb.cs" />
+    <Compile Include="Opcodes\Seta.cs" />
+    <Compile Include="Opcodes\Setc.cs" />
+    <Compile Include="Opcodes\Setg.cs" />
+    <Compile Include="Opcodes\Setl.cs" />
+    <Compile Include="Opcodes\Setnc.cs" />
+    <Compile Include="Opcodes\Setnz.cs" />
+    <Compile Include="Opcodes\Setpo.cs" />
+    <Compile Include="Opcodes\Setz.cs" />
+    <Compile Include="Opcodes\Shl.cs" />
+    <Compile Include="Opcodes\Shld.cs" />
+    <Compile Include="Opcodes\Shr.cs" />
+    <Compile Include="Opcodes\Shrd.cs" />
+    <Compile Include="Opcodes\Stc.cs" />
+    <Compile Include="Opcodes\Sti.cs" />
+    <Compile Include="Opcodes\Sub.cs" />
+    <Compile Include="Opcodes\Subsd.cs" />
+    <Compile Include="Opcodes\Subss.cs" />
+    <Compile Include="Opcodes\Xchg.cs" />
+    <Compile Include="Opcodes\Xor.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Mosa.TinyCPUSimulator\Mosa.TinyCPUSimulator.csproj">
+      <Project>{6f7c06b2-09bf-45bd-8e6b-ae9bf7c7e250}</Project>
+      <Name>Mosa.TinyCPUSimulator</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

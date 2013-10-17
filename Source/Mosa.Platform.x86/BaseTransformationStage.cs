@@ -9,12 +9,12 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
-using System.IO;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Platform;
 using Mosa.Compiler.Linker;
 using Mosa.Compiler.Metadata;
+using System;
+using System.IO;
 
 namespace Mosa.Platform.x86
 {
@@ -23,19 +23,25 @@ namespace Mosa.Platform.x86
 	/// </summary>
 	public abstract class BaseTransformationStage : BasePlatformTransformationStage
 	{
-		#region Data members
+		protected override string Platform { get { return "x86"; } }
 
-		#endregion Data members
+		public static X86Instruction GetMove(Operand Destination, Operand Source)
+		{
+			//Debug.Assert(Destination.Type.Type == Source.Type.Type);
 
-		#region IPipelineStage Members
-
-		/// <summary>
-		/// Retrieves the name of the compilation stage.
-		/// </summary>
-		/// <value>The name of the compilation stage.</value>
-		public override string Name { get { return "x86." + this.GetType().Name; } }
-
-		#endregion IPipelineStage Members
+			if (Source.Type.Type == CilElementType.R4)
+			{
+				return X86.Movss;
+			}
+			else if (Source.Type.Type == CilElementType.R8)
+			{
+				return X86.Movsd;
+			}
+			else
+			{
+				return X86.Mov;
+			}
+		}
 
 		#region Emit Constant Methods
 
@@ -43,30 +49,20 @@ namespace Mosa.Platform.x86
 		/// Emits the constant operands.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		protected void EmitOperandConstants(Context context)
+		protected void EmitFloatingPointConstants(Context context)
 		{
 			if (context.OperandCount > 0)
-				context.Operand1 = EmitConstant(context.Operand1);
-			else if (context.OperandCount > 1)
-				context.Operand2 = EmitConstant(context.Operand2);
-			else if (context.OperandCount > 2)
-				context.Operand3 = EmitConstant(context.Operand3);
-		}
-
-		/// <summary>
-		/// Emits the constant operands.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		protected void EmitResultConstants(Context context)
-		{
-			if (context.ResultCount == 1)
-				context.Result = EmitConstant(context.Result);
+				context.Operand1 = EmitFloatingPointConstant(context.Operand1);
+			if (context.OperandCount > 1)
+				context.Operand2 = EmitFloatingPointConstant(context.Operand2);
+			if (context.OperandCount > 2)
+				context.Operand3 = EmitFloatingPointConstant(context.Operand3);
 		}
 
 		/// <summary>
 		/// This function emits a constant variable into the read-only data section.
 		/// </summary>
-		/// <param name="op">The operand to emit as a constant.</param>
+		/// <param name="dop">The operand to emit as a constant.</param>
 		/// <returns>An operand, which represents the reference to the read-only constant.</returns>
 		/// <remarks>
 		/// This function checks if the given operand needs to be moved into the read-only data
@@ -75,37 +71,32 @@ namespace Mosa.Platform.x86
 		/// This function checks if the given operand needs to be moved and rewires the operand, if
 		/// it must be moved.
 		/// </remarks>
-		protected Operand EmitConstant(Operand cop)
+		protected Operand EmitFloatingPointConstant(Operand operand)
 		{
-			if (!cop.IsConstant)
-				return cop;
-
-			if (!(cop.StackType == StackTypeCode.F || cop.StackType == StackTypeCode.Int64))
-				return cop;
+			if (!operand.IsConstant || operand.StackType != StackTypeCode.F)
+				return operand;
 
 			int size, alignment;
-			architecture.GetTypeRequirements(cop.Type, out size, out alignment);
+			architecture.GetTypeRequirements(operand.Type, out size, out alignment);
 
 			string name = String.Format("C_{0}", Guid.NewGuid());
+
 			using (Stream stream = methodCompiler.Linker.Allocate(name, SectionKind.ROData, size, alignment))
 			{
 				using (BinaryWriter writer = new BinaryWriter(stream))
 				{
-					switch (cop.Type.Type)
+					if (operand.Type.Type == CilElementType.R4)
 					{
-						case CilElementType.R4: writer.Write((float)cop.Value); break;
-						case CilElementType.R8: writer.Write((double)cop.Value); break;
-						case CilElementType.I8: writer.Write((long)cop.Value); break;
-						case CilElementType.U8: writer.Write((ulong)cop.Value); break;
-						default: throw new NotSupportedException();
+						writer.Write((float)operand.Value);
+					}
+					else if (operand.Type.Type == CilElementType.R8)
+					{
+						writer.Write((double)operand.Value);
 					}
 				}
 			}
 
-			// FIXME: Attach the label operand to the linker symbol
-			// FIXME: Rename the operand to SymbolOperand
-			// FIXME: Use the provided name to link
-			return Operand.CreateLabel(cop.Type, name);
+			return Operand.CreateLabel(operand.Type, name);
 		}
 
 		#endregion Emit Constant Methods

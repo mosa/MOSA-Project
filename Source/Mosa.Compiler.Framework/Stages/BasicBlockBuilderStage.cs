@@ -11,6 +11,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using Mosa.Compiler.Framework.IR;
+using Mosa.Compiler.Framework.Linker;
 
 namespace Mosa.Compiler.Framework.Stages
 {
@@ -41,6 +42,10 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </summary>
 		void IMethodCompilerStage.Run()
 		{
+			// No basic block building if this is a linker generated method
+			if (methodCompiler.Method is LinkerGeneratedMethod)
+				return;
+
 			if (methodCompiler.Compiler.PlugSystem.GetPlugMethod(methodCompiler.Method) != null)
 				return;
 
@@ -48,24 +53,19 @@ namespace Mosa.Compiler.Framework.Stages
 				return;
 
 			// Create the prologue block
-			Context context = new Context(instructionSet);
+			Context context = CreateNewBlockWithContext(BasicBlock.PrologueLabel);
 
 			// Add a jump instruction to the first block from the prologue
 			context.AppendInstruction(IRInstruction.Jmp);
 			context.SetBranch(0);
-			context.Label = BasicBlock.PrologueLabel;
-			prologue = basicBlocks.CreateBlock(BasicBlock.PrologueLabel, context.Index);
+			prologue = context.BasicBlock;
 			basicBlocks.AddHeaderBlock(prologue);
 
 			SplitIntoBlocks(0);
 
 			// Create the epilogue block
-			context = new Context(instructionSet);
-
-			// Add null instruction, necessary to generate a block index
-			context.AppendInstruction(null);
-			context.Label = BasicBlock.EpilogueLabel;
-			epilogue = basicBlocks.CreateBlock(BasicBlock.EpilogueLabel, context.Index);
+			context = CreateNewBlockWithContext(BasicBlock.EpilogueLabel);
+			epilogue = context.BasicBlock;
 
 			// Link all the blocks together
 			BuildBlockLinks(prologue);
@@ -100,7 +100,7 @@ namespace Mosa.Compiler.Framework.Stages
 			targets.Add(index, -1);
 
 			// Find out all targets labels
-			for (Context ctx = new Context(instructionSet, index); !ctx.EndOfInstruction; ctx.GotoNext())
+			for (Context ctx = new Context(instructionSet, index); ctx.Index >= 0; ctx.GotoNext())
 			{
 				switch (ctx.Instruction.FlowControl)
 				{
@@ -152,45 +152,46 @@ namespace Mosa.Compiler.Framework.Stages
 					targets.Add(exceptionClause.FilterOffset, -1);
 			}
 
-			bool slice = false;
+			BasicBlock currentBlock = null;
+			Context previous = null;
 
-			for (Context ctx = new Context(instructionSet, index); !ctx.EndOfInstruction; ctx.GotoNext())
+			for (Context ctx = new Context(instructionSet, index); ctx.Index >= 0; ctx.GotoNext())
 			{
-				FlowControl flow;
-
 				if (targets.ContainsKey(ctx.Label))
 				{
-					basicBlocks.CreateBlock(ctx.Label, ctx.Index);
-
-					if (!ctx.IsFirstInstruction)
+					if (currentBlock != null)
 					{
-						Context prev = ctx.Previous;
-						flow = prev.Instruction.FlowControl;
+						previous = ctx.Previous;
+
+						var flow = previous.Instruction.FlowControl;
+
 						if (flow == FlowControl.Next || flow == FlowControl.Call || flow == FlowControl.ConditionalBranch || flow == FlowControl.Switch)
 						{
 							// This jump joins fall-through blocks, by giving them a proper end.
-							prev.AppendInstruction(CIL.CILInstruction.Get(CIL.OpCode.Br));
-							prev.SetBranch(ctx.Label);
-
-							prev.SliceAfter();
+							previous.AppendInstruction(IRInstruction.Jmp);
+							previous.SetBranch(ctx.Label);
 						}
+
+						// Close current block
+						previous.AppendInstruction(IRInstruction.BlockEnd);
+						currentBlock.EndIndex = previous.Index;
 					}
+
+					Context prev = ctx.InsertBefore();
+					prev.SetInstruction(IRInstruction.BlockStart);
+					currentBlock = basicBlocks.CreateBlock(ctx.Label, prev.Index);
 
 					targets.Remove(ctx.Label);
 				}
 
-				if (slice)
-					ctx.SliceBefore();
-
-				flow = ctx.Instruction.FlowControl;
-
-				slice = (flow == FlowControl.Return || flow == FlowControl.Branch || flow == FlowControl.ConditionalBranch || flow == FlowControl.Break || flow == FlowControl.Throw || flow == FlowControl.Leave || flow == FlowControl.EndFinally);
+				previous = ctx.Clone();
 			}
 
-			Debug.Assert(targets.Count <= 1);
+			// Close current block
+			previous.AppendInstruction(IRInstruction.BlockEnd);
+			currentBlock.EndIndex = previous.Index;
 
-			//if (basicBlocks.FindBlock(0) == null)
-			//	basicBlocks.CreateBlock(0, index);
+			Debug.Assert(targets.Count <= 1);
 		}
 
 		/// <summary>
@@ -199,7 +200,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="block">The current block.</param>
 		private void BuildBlockLinks(BasicBlock block)
 		{
-			for (Context ctx = CreateContext(block); !ctx.EndOfInstruction; ctx.GotoNext())
+			for (Context ctx = CreateContext(block); !ctx.IsBlockEndInstruction; ctx.GotoNext())
 			{
 				switch (ctx.Instruction.FlowControl)
 				{
@@ -223,7 +224,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 						int nextIndex = ctx.Index + 1;
 						if (nextIndex < this.instructionSet.Used)
-							FindAndLinkBlock(block, this.instructionSet.Data[nextIndex].Label);
+							FindAndLinkBlock(block, instructionSet.Data[nextIndex].Label);
 
 						continue;
 					case FlowControl.EndFinally: return;

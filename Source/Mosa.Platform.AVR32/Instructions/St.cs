@@ -21,6 +21,18 @@ namespace Mosa.Platform.AVR32.Instructions
 	/// </summary>
 	public class St : AVR32Instruction
 	{
+		#region Construction
+
+		/// <summary>
+		/// Initializes a new instance of <see cref="St"/>.
+		/// </summary>
+		public St() :
+			base(0, 0)
+		{
+		}
+
+		#endregion Construction
+
 		#region Methods
 
 		/// <summary>
@@ -34,13 +46,13 @@ namespace Mosa.Platform.AVR32.Instructions
 			{
 				Operand destination = context.Result;
 
-				if (IsBetween(destination.Offset.ToInt32(), 0, 60))
+				if (IsBetween(destination.Displacement, 0, 60))
 				{
-					emitter.EmitTwoRegistersWithK4((byte)destination.Base.RegisterCode, (byte)context.Operand1.Register.RegisterCode, (sbyte)destination.Offset.ToInt32());
+					emitter.EmitTwoRegistersWithK4((byte)destination.EffectiveOffsetBase.RegisterCode, (byte)context.Operand1.Register.RegisterCode, (sbyte)destination.Displacement);
 				}
-				else if (IsBetween(destination.Offset.ToInt32(), -32768, 32767))
+				else if (IsBetween(destination.Displacement, -32768, 32767))
 				{
-					emitter.EmitTwoRegistersAndK16(0x14, (byte)destination.Base.RegisterCode, (byte)context.Operand1.Register.RegisterCode, (short)destination.Offset.ToInt32());
+					emitter.EmitTwoRegistersAndK16(0x14, (byte)destination.EffectiveOffsetBase.RegisterCode, (byte)context.Operand1.Register.RegisterCode, (short)destination.Displacement);
 				}
 				else
 					throw new OverflowException();

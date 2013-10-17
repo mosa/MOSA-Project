@@ -11,6 +11,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Mosa.Compiler.Framework.CIL;
+using Mosa.Compiler.Framework.IR;
 
 namespace Mosa.Compiler.Framework.Stages
 {
@@ -76,6 +77,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </summary>
 		void IMethodCompilerStage.Run()
 		{
+			//System.Diagnostics.Debug.WriteLine("METHOD: "+this.methodCompiler.Method.ToString());
 			foreach (BasicBlock headBlock in basicBlocks.HeadBlocks)
 				Trace(headBlock);
 		}
@@ -112,7 +114,11 @@ namespace Mosa.Compiler.Framework.Stages
 			var block = workItem.Block;
 
 			operandStack = CreateMovesForIncomingStack(block, operandStack);
+
+			//System.Diagnostics.Debug.WriteLine("IN:    Block: " + block.Label + " Operand Stack Count: " + operandStack.Count);
 			AssignOperands(block, operandStack);
+
+			//System.Diagnostics.Debug.WriteLine("AFTER: Block: " + block.Label + " Operand Stack Count: " + operandStack.Count);
 			operandStack = CreateScheduledMoves(block, operandStack);
 
 			outgoingStack[block.Sequence] = operandStack;
@@ -152,9 +158,12 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="operandStack">The operand stack.</param>
 		private void AssignOperands(BasicBlock block, Stack<Operand> operandStack)
 		{
-			for (var ctx = new Context(instructionSet, block); !ctx.EndOfInstruction; ctx.GotoNext())
+			for (var ctx = new Context(instructionSet, block); !ctx.IsBlockEndInstruction; ctx.GotoNext())
 			{
 				if (ctx.IsEmpty)
+					continue;
+
+				if (ctx.Instruction is IR.BlockEnd || ctx.Instruction is IR.BlockStart)
 					continue;
 
 				if (ctx.Instruction is IR.Jmp)
@@ -168,10 +177,10 @@ namespace Mosa.Compiler.Framework.Stages
 					AssignOperandsFromCILStack(ctx, operandStack);
 					PushResultOperands(ctx, operandStack);
 				}
-				else //if (!(ctx.Instruction is IR.JmpInstruction))
+				else
 				{
 					AssignOperandsFromCILStack(ctx, operandStack);
-					(ctx.Instruction as BaseCILInstruction).Validate(ctx, methodCompiler);
+					(ctx.Instruction as BaseCILInstruction).Resolve(ctx, methodCompiler);
 					PushResultOperands(ctx, operandStack);
 				}
 			}
@@ -214,18 +223,20 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="joinStack">The join stack.</param>
 		private void CreateOutgoingMoves(BasicBlock block, Stack<Operand> operandStack, Stack<Operand> joinStack)
 		{
-			var context = new Context(instructionSet, block);
+			var context = new Context(instructionSet, block, block.EndIndex);
 
-			while (!context.EndOfInstruction && !(context.Instruction is IBranchInstruction))
+			context.GotoPrevious();
+
+			while (context.Instruction is IBranchInstruction || context.Instruction is IR.Jmp)
 			{
-				context.GotoNext();
+				context.GotoPrevious();
 			}
 
 			while (operandStack.Count > 0)
 			{
 				var operand = operandStack.Pop();
 				var destination = joinStack.Pop();
-				context.InsertBefore().SetInstruction(IR.IRInstruction.Move, destination, operand);
+				context.AppendInstruction(IRInstruction.Move, destination, operand);
 			}
 		}
 

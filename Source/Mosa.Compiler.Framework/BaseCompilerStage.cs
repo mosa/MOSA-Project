@@ -8,7 +8,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
 using Mosa.Compiler.InternalTrace;
 using Mosa.Compiler.Linker;
 using Mosa.Compiler.TypeSystem;
@@ -42,6 +41,11 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		protected ITypeLayout typeLayout;
 
+		/// <summary>
+		/// Holds the linker
+		/// </summary>
+		protected ILinker linker;
+
 		#endregion Data members
 
 		#region IPipelineStage Members
@@ -62,27 +66,10 @@ namespace Mosa.Compiler.Framework
 			architecture = compiler.Architecture;
 			typeSystem = compiler.TypeSystem;
 			typeLayout = compiler.TypeLayout;
+			linker = compiler.Linker;
 		}
 
 		#endregion ICompilerStage members
-
-		#region Methods
-
-		/// <summary>
-		/// Retrieves the linker from compiler.
-		/// </summary>
-		/// <returns>The retrieved linker.</returns>
-		protected ILinker RetrieveLinkerFromCompiler()
-		{
-			ILinker linker = compiler.Pipeline.FindFirst<ILinker>();
-
-			if (linker == null)
-				throw new InvalidOperationException(@"A linker is required.");
-
-			return linker;
-		}
-
-		#endregion Methods
 
 		#region Helper Methods
 

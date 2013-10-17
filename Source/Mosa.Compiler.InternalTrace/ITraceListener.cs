@@ -13,7 +13,7 @@ namespace Mosa.Compiler.InternalTrace
 {
 	public interface ITraceListener
 	{
-		void SubmitInstructionTraceInformation(RuntimeMethod method, string stage, string log);
+		void SubmitInstructionTraceInformation(RuntimeMethod method, string stage, string line);
 
 		void SubmitDebugStageInformation(RuntimeMethod method, string stage, string line);
 	}

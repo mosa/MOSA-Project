@@ -7,13 +7,11 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using Mosa.Compiler.Metadata;
+using Mosa.Compiler.TypeSystem;
+using Mosa.Compiler.TypeSystem.Cil;
 using System;
 using System.Diagnostics;
-
-using Mosa.Compiler.Metadata;
-using Mosa.Compiler.Metadata.Signatures;
-using Mosa.Compiler.TypeSystem;
-using Mosa.Compiler.TypeSystem.Generic;
 
 namespace Mosa.Compiler.Framework.CIL
 {
@@ -73,7 +71,7 @@ namespace Mosa.Compiler.Framework.CIL
 		/// </summary>
 		/// <param name="opcode">The opcode.</param>
 		public InvokeInstruction(OpCode opcode)
-			: base(opcode)
+			: base(opcode, 0)
 		{
 		}
 
@@ -116,32 +114,9 @@ namespace Mosa.Compiler.Framework.CIL
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		/// <param name="compiler">The compiler.</param>
-		public override void Validate(Context ctx, BaseMethodCompiler compiler)
+		public override void Resolve(Context ctx, BaseMethodCompiler compiler)
 		{
-			base.Validate(ctx, compiler);
-
-			int paramCount = ctx.InvokeTarget.Signature.Parameters.Length;
-
-			if (ctx.InvokeTarget.Signature.HasThis && !ctx.InvokeTarget.Signature.HasExplicitThis)
-				paramCount++;
-
-			// Validate the operands...
-			Debug.Assert(ctx.OperandCount == paramCount, @"Operand count doesn't match parameter count.");
-
-			//for (int i = 0; i < ctx.OperandCount; i++)
-			//{
-			/* FIXME: Check implicit conversions
-
-			// if (ops[i] != null) {
-				Debug.Assert(_operands[i].Type == _parameterTypes[i]);
-				if (_operands[i].Type != _parameterTypes[i])
-				{
-					// FIXME: Determine if we can do an implicit conversion
-					throw new ExecutionEngineException(@"Invalid operand types.");
-				}
-			*/
-
-			//}
+			base.Resolve(ctx, compiler);
 		}
 
 		/// <summary>
@@ -200,37 +175,32 @@ namespace Mosa.Compiler.Framework.CIL
 		/// <summary>
 		/// Sets the invoke target.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
+		/// <param name="context">The context.</param>
 		/// <param name="compiler">The compiler.</param>
 		/// <param name="method">The method.</param>
-		private static void SetInvokeTarget(Context ctx, BaseMethodCompiler compiler, RuntimeMethod method)
+		private static void SetInvokeTarget(Context context, BaseMethodCompiler compiler, RuntimeMethod method)
 		{
 			if (method == null)
 				throw new ArgumentNullException(@"method");
 
-			// Signature of the call target
-			// Number of parameters required for the call
-
-			ctx.InvokeTarget = method;
-
-			// Retrieve the target signature
-			MethodSignature signature = ctx.InvokeTarget.Signature;
+			context.InvokeMethod = method;
 
 			// Fix the parameter list
-			byte paramCount = (byte)signature.Parameters.Length;
-			if (signature.HasThis && !signature.HasExplicitThis)
+			int paramCount = method.SigParameters.Length;
+
+			if (method.HasThis && !method.HasExplicitThis)
 				paramCount++;
 
 			// Setup operands for parameters and the return value
-			if (signature.ReturnType.Type != CilElementType.Void)
+			if (method.ReturnType.Type != CilElementType.Void)
 			{
-				ctx.ResultCount = 1;
-				ctx.Result = compiler.CreateVirtualRegister(signature.ReturnType);
+				context.ResultCount = 1;
+				context.Result = compiler.CreateVirtualRegister(Operand.NormalizeSigType(method.ReturnType));
 			}
 			else
-				ctx.ResultCount = 0;
+				context.ResultCount = 0;
 
-			ctx.OperandCount = paramCount;
+			context.OperandCount = (byte)paramCount;
 		}
 
 		/// <summary>

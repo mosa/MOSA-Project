@@ -20,6 +20,18 @@ namespace Mosa.Platform.AVR32.Instructions
 	/// </summary>
 	public class Pop : AVR32Instruction
 	{
+		#region Construction
+
+		/// <summary>
+		/// Initializes a new instance of <see cref="Pop"/>.
+		/// </summary>
+		public Pop() :
+			base(0, 0)
+		{
+		}
+
+		#endregion Construction
+
 		#region Methods
 
 		/// <summary>

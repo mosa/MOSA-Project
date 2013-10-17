@@ -5,6 +5,7 @@
  *
  * Authors:
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 using Mosa.Compiler.Framework;
@@ -16,17 +17,19 @@ namespace Mosa.Platform.x86.Instructions
 	/// </summary>
 	public sealed class Cdq : X86Instruction
 	{
+		#region Construction
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Cdq" /> class.
+		/// </summary>
+		public Cdq()
+			: base(2, 1)
+		{
+		}
+
+		#endregion Construction
+
 		#region Methods
-
-		/// <summary>
-		/// Gets the additional output registers.
-		/// </summary>
-		public override RegisterBitmap AdditionalOutputRegisters { get { return new RegisterBitmap(GeneralPurposeRegister.EAX); } }
-
-		/// <summary>
-		/// Gets the additional input registers.
-		/// </summary>
-		public override RegisterBitmap AdditionalInputRegisters { get { return new RegisterBitmap(GeneralPurposeRegister.EAX); } }
 
 		/// <summary>
 		/// Emits the specified platform instruction.

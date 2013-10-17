@@ -5,10 +5,11 @@
  *
  * Authors:
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
 using Mosa.Compiler.Framework;
+using System;
 
 namespace Mosa.Platform.x86.Instructions
 {
@@ -47,17 +48,17 @@ namespace Mosa.Platform.x86.Instructions
 		/// <returns></returns>
 		protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
 		{
-			if (source.IsConstant)
+			if (third.IsConstant)
 				return O_C;
 
 			if (destination.IsRegister)
 			{
-				if (IsChar(source))
+				if (IsChar(third))
 					return R_O_16;
 				else
 					return R_O;
 			}
-			if ((destination.IsMemoryAddress) && (source.IsRegister)) return M_R;
+			if ((destination.IsMemoryAddress) && (third.IsRegister)) return M_R;
 
 			throw new ArgumentException(@"No opcode for operand type.");
 		}

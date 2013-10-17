@@ -6,7 +6,6 @@
  */
 
 using System;
-using Mosa.HelloWorld.x86.Tests;
 using Mosa.Kernel.x86;
 using Mosa.Kernel.x86.Smbios;
 using Mosa.Platform.x86.Intrinsic;
@@ -26,8 +25,8 @@ namespace Mosa.HelloWorld.x86
 		public static void Main()
 		{
 			Mosa.Kernel.x86.Kernel.Setup();
-			DebugClient.Setup(Serial.COM1);
-			IDT.SetInterruptHandler(ProcessInterrupt);
+			//DebugClient.Setup(Serial.COM1);
+			//IDT.SetInterruptHandler(ProcessInterrupt);
 
 			Console = ConsoleManager.Controller.Boot;
 
@@ -184,71 +183,71 @@ namespace Mosa.HelloWorld.x86
 
 			Console.WriteLine();
 
-			CpuInfo cpuInfo = new CpuInfo();
+			//CpuInfo cpuInfo = new CpuInfo();
 
-			#region Vendor
+			//#region Vendor
 
-			Console.Color = Colors.Green;
-			Console.Write(@"Vendor:   ");
-			Console.Color = Colors.White;
+			//Console.Color = Colors.Green;
+			//Console.Write(@"Vendor:   ");
+			//Console.Color = Colors.White;
 
-			cpuInfo.PrintVendorString(Console);
+			//cpuInfo.PrintVendorString(Console);
 
-			Console.WriteLine();
+			//Console.WriteLine();
 
-			#endregion Vendor
+			//#endregion Vendor
 
-			#region Brand
+			//#region Brand
 
-			Console.Color = Colors.Green;
-			Console.Write(@"Brand:    ");
-			Console.Color = Colors.White;
-			cpuInfo.PrintBrandString(Console);
-			Console.WriteLine();
+			//Console.Color = Colors.Green;
+			//Console.Write(@"Brand:    ");
+			//Console.Color = Colors.White;
+			//cpuInfo.PrintBrandString(Console);
+			//Console.WriteLine();
 
-			#endregion Brand
+			//#endregion Brand
 
-			#region Stepping
+			//#region Stepping
 
-			Console.Color = Colors.Green;
-			Console.Write(@"Stepping: ");
-			Console.Color = Colors.White;
-			Console.Write(cpuInfo.Stepping, 16, 2);
+			//Console.Color = Colors.Green;
+			//Console.Write(@"Stepping: ");
+			//Console.Color = Colors.White;
+			//Console.Write(cpuInfo.Stepping, 16, 2);
 
-			#endregion Stepping
+			//#endregion Stepping
 
-			#region Model
+			//#region Model
 
-			Console.Color = Colors.Green;
-			Console.Write(@" Model: ");
-			Console.Color = Colors.White;
-			Console.Write(cpuInfo.Model, 16, 2);
+			//Console.Color = Colors.Green;
+			//Console.Write(@" Model: ");
+			//Console.Color = Colors.White;
+			//Console.Write(cpuInfo.Model, 16, 2);
 
-			#endregion Model
+			//#endregion Model
 
-			#region Family
+			//#region Family
 
-			Console.Color = Colors.Green;
-			Console.Write(@" Family: ");
-			Console.Color = Colors.White;
-			Console.Write(cpuInfo.Family, 16, 2);
+			//Console.Color = Colors.Green;
+			//Console.Write(@" Family: ");
+			//Console.Color = Colors.White;
+			//Console.Write(cpuInfo.Family, 16, 2);
 
-			#endregion Family
+			//#endregion Family
 
-			#region Type
+			//#region Type
 
-			Console.Color = Colors.Green;
-			Console.Write(@" Type: ");
-			Console.Color = Colors.White;
+			//Console.Color = Colors.Green;
+			//Console.Write(@" Type: ");
+			//Console.Color = Colors.White;
 
-			Console.Write(cpuInfo.Type, 16, 2);
-			Console.WriteLine();
-			Console.Color = Colors.Green;
-			Console.Write(@"Cores:    ");
-			Console.Color = Colors.White;
-			Console.Write(cpuInfo.NumberOfCores, 16, 2);
+			//Console.Write(cpuInfo.Type, 16, 2);
+			//Console.WriteLine();
+			//Console.Color = Colors.Green;
+			//Console.Write(@"Cores:    ");
+			//Console.Color = Colors.White;
+			//Console.Write(cpuInfo.NumberOfCores, 16, 2);
 
-			#endregion Type
+			//#endregion Type
 
 			Console.Row = 19;
 			for (uint index = 0; index < 80; index++)
@@ -287,8 +286,6 @@ namespace Mosa.HelloWorld.x86
 
 			CMOS cmos = new CMOS();
 
-			KernelTest.RunTests();
-
 			byte last = 0;
 
 			while (true)
@@ -299,10 +296,10 @@ namespace Mosa.HelloWorld.x86
 				if (cmos.Second != last)
 				{
 					last = cmos.Second;
-					DebugClient.SendAlive();
+					//DebugClient.SendAlive();
 				}
 
-				DebugClient.Process();
+				//DebugClient.Process();
 				Native.Hlt();
 			}
 		}

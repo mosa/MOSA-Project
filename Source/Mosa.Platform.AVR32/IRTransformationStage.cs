@@ -12,7 +12,6 @@ using System;
 using System.Diagnostics;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.IR;
-using Mosa.Compiler.Framework.Platform;
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Signatures;
 
@@ -24,7 +23,7 @@ namespace Mosa.Platform.AVR32
 	/// <remarks>
 	/// This transformation stage transforms IR instructions into their equivalent X86 sequences.
 	/// </remarks>
-	public sealed class IRTransformationStage : BaseTransformationStage, IIRVisitor, IMethodCompilerStage, IPlatformStage
+	public sealed class IRTransformationStage : BaseTransformationStage, IIRVisitor, IMethodCompilerStage
 	{
 		private int stackSize;
 
@@ -38,9 +37,7 @@ namespace Mosa.Platform.AVR32
 		{
 			base.Setup(methodCompiler);
 
-			IStackLayoutProvider stackLayoutProvider = methodCompiler.Pipeline.FindFirst<IStackLayoutProvider>();
-
-			stackSize = (stackLayoutProvider == null) ? 0 : stackLayoutProvider.LocalsSize;
+			stackSize = methodCompiler.StackLayout.StackSize;
 
 			Debug.Assert((stackSize % 4) == 0, @"Stack size of method can't be divided by 4!!");
 		}
@@ -209,12 +206,12 @@ namespace Mosa.Platform.AVR32
 			Operand result = context.Result;
 			Operand operand = context.Operand1;
 			Operand offset = context.Operand2;
-			IntPtr offsetPtr = IntPtr.Zero;
+			long offsetPtr = 0;
 
 			context.SetInstruction(AVR32.Ld, r8, operand);
 			if (offset.IsConstant)
 			{
-				offsetPtr = new IntPtr(Convert.ToInt64(offset.Value));
+				offsetPtr = (long)offset.ValueAsLongInteger;
 			}
 			else
 			{
@@ -222,7 +219,7 @@ namespace Mosa.Platform.AVR32
 				context.AppendInstruction(AVR32.Add, r8, r8);
 			}
 
-			context.AppendInstruction(AVR32.Ld, result, Operand.CreateMemoryAddress(r8.Type, GeneralPurposeRegister.R8, offsetPtr));
+			//context.AppendInstruction(AVR32.Ld, result, Operand.CreateMemoryAddress(r8.Type, GeneralPurposeRegister.R8, offsetPtr));
 		}
 
 		/// <summary>
@@ -438,8 +435,8 @@ namespace Mosa.Platform.AVR32
 			context.AppendInstruction(AVR32.Pop, r7);
 
 			// Save EDX for int32 return values (or do not save EDX for non-int64 return values)
-			if (methodCompiler.Method.Signature.ReturnType.Type != CilElementType.I8 &&
-				methodCompiler.Method.Signature.ReturnType.Type != CilElementType.U8)
+			if (methodCompiler.Method.ReturnType.Type != CilElementType.I8 &&
+				methodCompiler.Method.ReturnType.Type != CilElementType.U8)
 			{
 				// push edx
 				context.AppendInstruction(AVR32.Push, null, Operand.CreateCPURegister(I, GeneralPurposeRegister.R9));
@@ -460,8 +457,8 @@ namespace Mosa.Platform.AVR32
 			Operand r7 = Operand.CreateCPURegister(I, GeneralPurposeRegister.R7);
 
 			// Load EDX for int32 return values
-			if (methodCompiler.Method.Signature.ReturnType.Type != CilElementType.I8 &&
-				methodCompiler.Method.Signature.ReturnType.Type != CilElementType.U8)
+			if (methodCompiler.Method.ReturnType.Type != CilElementType.I8 &&
+				methodCompiler.Method.ReturnType.Type != CilElementType.U8)
 			{
 				// pop edx
 				context.SetInstruction(AVR32.Pop, r9);
@@ -540,10 +537,10 @@ namespace Mosa.Platform.AVR32
 			context.SetInstruction(AVR32.Ld, r8, destination);
 			context.AppendInstruction(AVR32.Ld, r9, value);
 
-			IntPtr offsetPtr = IntPtr.Zero;
+			long offsetPtr = 0;
 			if (offset.IsConstant)
 			{
-				offsetPtr = new IntPtr(Convert.ToInt64(offset.Value));
+				offsetPtr = (long)offset.ValueAsLongInteger;
 			}
 			else
 			{
@@ -551,7 +548,7 @@ namespace Mosa.Platform.AVR32
 				context.AppendInstruction(AVR32.Add, r8, r8);
 			}
 
-			context.AppendInstruction(AVR32.Ld, Operand.CreateMemoryAddress(value.Type, GeneralPurposeRegister.R8, offsetPtr), r9);
+			//context.AppendInstruction(AVR32.Ld, Operand.CreateMemoryAddress(value.Type, GeneralPurposeRegister.R8, offsetPtr), r9);
 		}
 
 		/// <summary>
@@ -747,6 +744,14 @@ namespace Mosa.Platform.AVR32
 		#endregion IIRVisitor
 
 		#region IIRVisitor - Unused
+
+		/// <summary>
+		/// Visitation function for InternalReturn.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IIRVisitor.InternalReturn(Context context)
+		{
+		}
 
 		/// <summary>
 		/// Visitation function for IntegerToFloatingPointConversion.

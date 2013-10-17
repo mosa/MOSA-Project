@@ -5,6 +5,7 @@
  *
  * Authors:
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 using Mosa.Compiler.Metadata;
@@ -24,23 +25,36 @@ namespace Mosa.Compiler.TypeSystem.Cil
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="CilRuntimeField"/> class.
+		/// Initializes a new instance of the <see cref="CilRuntimeField" /> class.
 		/// </summary>
 		/// <param name="module">The module.</param>
 		/// <param name="name">The name.</param>
-		/// <param name="signature">The signature.</param>
+		/// <param name="sigType">Type of the sig.</param>
 		/// <param name="token">The token.</param>
 		/// <param name="offset">The offset.</param>
 		/// <param name="rva">The rva.</param>
 		/// <param name="declaringType">Type of the declaring.</param>
 		/// <param name="attributes">The attributes.</param>
-		public CilRuntimeField(ITypeModule module, string name, FieldSignature signature, Token token, uint offset, uint rva, RuntimeType declaringType, FieldAttributes attributes) :
-			base(module, token, declaringType)
+		public CilRuntimeField(ITypeModule module, string name, SigType sigType, Token token, uint offset, uint rva, RuntimeType declaringType, FieldAttributes attributes) :
+			base(module, name, declaringType, token)
 		{
-			this.Name = name;
-			this.Signature = signature;
+			this.SigType = sigType;
 			base.Attributes = attributes;
 			base.RVA = rva;
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="CilRuntimeField" /> class.
+		/// </summary>
+		/// <param name="module">The module.</param>
+		/// <param name="genericField">The generic field.</param>
+		/// <param name="sigType">Type of the sig.</param>
+		/// <param name="declaringType">Type of the declaring.</param>
+		public CilRuntimeField(ITypeModule module, RuntimeField genericField, SigType sigType, CilGenericType declaringType) :
+			base(module, declaringType, genericField.Name)
+		{
+			this.SigType = sigType;
+			this.Attributes = genericField.Attributes;
 		}
 
 		#endregion Construction

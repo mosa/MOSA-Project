@@ -7,9 +7,9 @@
  *  Simon Wollwage (rootnode) <rootnode@mosa-project.org>
  */
 
+using Mosa.Compiler.Framework.IR;
 using System.Collections.Generic;
 using System.Diagnostics;
-using Mosa.Compiler.Framework.IR;
 
 namespace Mosa.Compiler.Framework.Stages
 {
@@ -37,7 +37,9 @@ namespace Mosa.Compiler.Framework.Stages
 			phiPlacementStage = methodCompiler.Pipeline.FindFirst<PhiPlacementStage>();
 
 			foreach (var headBlock in basicBlocks.HeadBlocks)
+			{
 				EnterSSA(headBlock);
+			}
 
 			ssaOperands = null;
 		}
@@ -97,7 +99,9 @@ namespace Mosa.Compiler.Framework.Stages
 				variables[operand].Push(0);
 
 				if (!ssaOperands.ContainsKey(operand))
+				{
 					ssaOperands.Add(operand, new Operand[operand.Definitions.Count + 1]);
+				}
 			}
 		}
 
@@ -122,13 +126,15 @@ namespace Mosa.Compiler.Framework.Stages
 			return ssaOperand;
 		}
 
+		//
+
 		/// <summary>
 		/// Renames the variables.
 		/// </summary>
 		/// <param name="block">The block.</param>
 		private void RenameVariables(BasicBlock block)
 		{
-			for (var context = new Context(instructionSet, block); !context.EndOfInstruction; context.GotoNext())
+			for (var context = new Context(instructionSet, block); !context.IsBlockEndInstruction; context.GotoNext())
 			{
 				if (!(context.Instruction is Phi))
 				{
@@ -136,7 +142,7 @@ namespace Mosa.Compiler.Framework.Stages
 					{
 						var op = context.GetOperand(i);
 
-						if (op == null || !op.IsStackLocal)
+						if (op == null || !op.IsVirtualRegister)
 							continue;
 
 						Debug.Assert(variables.ContainsKey(op), op.ToString() + " is not in dictionary [block = " + block + "]");
@@ -146,7 +152,7 @@ namespace Mosa.Compiler.Framework.Stages
 					}
 				}
 
-				if (!context.IsEmpty && context.Result != null && context.Result.IsStackLocal)
+				if (!context.IsEmpty && context.Result != null && (context.Result.IsVirtualRegister || context.Result.IsParameter))
 				{
 					var op = context.Result;
 					var index = counts[op];
@@ -160,7 +166,7 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				var j = WhichPredecessor(s, block); // ???
 
-				for (var context = new Context(instructionSet, s); !context.EndOfInstruction; context.GotoNext())
+				for (var context = new Context(instructionSet, s); !context.IsBlockEndInstruction; context.GotoNext())
 				{
 					if (!(context.Instruction is Phi))
 						continue;
@@ -180,11 +186,11 @@ namespace Mosa.Compiler.Framework.Stages
 				RenameVariables(s);
 			}
 
-			for (var context = new Context(instructionSet, block); !context.EndOfInstruction; context.GotoNext())
+			for (var context = new Context(instructionSet, block); !context.IsBlockEndInstruction; context.GotoNext())
 			{
-				if (!context.IsEmpty && context.Result != null && context.Result.IsStackLocal)
+				if (!context.IsEmpty && context.Result != null && context.Result.IsVirtualRegister)
 				{
-					var op = context.Result.SsaOperand;
+					var op = context.Result.SSAParent;
 					var index = variables[op].Pop();
 				}
 			}

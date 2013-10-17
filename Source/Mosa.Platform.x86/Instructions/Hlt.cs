@@ -5,6 +5,7 @@
  *
  * Authors:
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 using Mosa.Compiler.Framework;
@@ -16,6 +17,18 @@ namespace Mosa.Platform.x86.Instructions
 	/// </summary>
 	public sealed class Hlt : X86Instruction
 	{
+		#region Construction
+
+		/// <summary>
+		/// Initializes a new instance of <see cref="Hlt"/>.
+		/// </summary>
+		public Hlt() :
+			base(0, 0)
+		{
+		}
+
+		#endregion Construction
+
 		#region Methods
 
 		/// <summary>

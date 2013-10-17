@@ -9,7 +9,6 @@
 
 using System;
 using System.Collections.Generic;
-using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Compiler.TypeSystem;
 
 namespace Mosa.Compiler.Framework.Stages
@@ -121,7 +120,7 @@ namespace Mosa.Compiler.Framework.Stages
 							{
 								if (targetMethodCandidate.IsStatic)
 								{
-									if (targetMethodCandidate.Signature.Matches(method.Signature))
+									if (targetMethodCandidate.Matches(method))
 									{
 										targetMethod = targetMethodCandidate;
 										break;
@@ -153,6 +152,8 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 		}
 
+		#endregion ICompilerStage members
+
 		private void Patch(RuntimeMethod targetMethod, RuntimeMethod method)
 		{
 			Trace(InternalTrace.CompilerEvent.Plug, targetMethod.FullName + " with " + method.FullName);
@@ -172,23 +173,20 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private bool MatchesWithStaticThis(RuntimeMethod targetMethod, RuntimeMethod plugMethod)
 		{
-			MethodSignature target = targetMethod.Signature;
-			MethodSignature plug = plugMethod.Signature;
-
-			if (!target.ReturnType.Matches(plug.ReturnType))
+			if (!targetMethod.ReturnType.Matches(plugMethod.ReturnType))
 				return false;
 
-			if (target.Parameters.Length != plug.Parameters.Length - 1)
+			if (targetMethod.SigParameters.Length != plugMethod.SigParameters.Length - 1)
 				return false;
 
-			if (plug.Parameters[0].Type != Metadata.CilElementType.ByRef)
+			if (plugMethod.SigParameters[0].Type != Metadata.CilElementType.ByRef)
 				return false;
 
 			// TODO: Compare plug.Parameters[0].Type to the target's type
 
-			for (int i = 0; i < target.Parameters.Length; i++)
+			for (int i = 0; i < targetMethod.SigParameters.Length; i++)
 			{
-				if (!target.Parameters[i].Matches(plug.Parameters[i + 1]))
+				if (!targetMethod.SigParameters[i].Matches(plugMethod.SigParameters[i + 1]))
 					return false;
 			}
 
@@ -249,7 +247,5 @@ namespace Mosa.Compiler.Framework.Stages
 
 			return target.Substring(pos + 1);
 		}
-
-		#endregion ICompilerStage members
 	}
 }

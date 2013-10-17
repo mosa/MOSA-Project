@@ -16,7 +16,7 @@ namespace Mosa.Kernel.x86
 	{
 		public static uint column = 0;
 		public static uint row = 0;
-		private static byte color = 0;
+		private static byte color = 23;
 
 		/// <summary>
 		///
@@ -147,7 +147,7 @@ namespace Mosa.Kernel.x86
 			GotoTop();
 
 			byte c = Color;
-			Color = 0x0A;
+			Color = 0x0;
 
 			for (int i = 0; i < Columns * Rows; i++)
 				Write(' ');

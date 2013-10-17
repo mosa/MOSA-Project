@@ -5,6 +5,7 @@
  *
  * Authors:
  *  Simon Wollwage (rootnode) <rootnode@mosa-project.org>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 using Mosa.Compiler.Framework;
@@ -16,17 +17,19 @@ namespace Mosa.Platform.x86.Instructions
 	/// </summary>
 	public sealed class Leave : X86Instruction
 	{
+		#region Construction
+
+		/// <summary>
+		/// Initializes a new instance of <see cref="Leave"/>.
+		/// </summary>
+		public Leave() :
+			base(0, 0)
+		{
+		}
+
+		#endregion Construction
+
 		#region Methods
-
-		/// <summary>
-		/// Gets the additional output registers.
-		/// </summary>
-		public override RegisterBitmap AdditionalOutputRegisters { get { return new RegisterBitmap(GeneralPurposeRegister.ESP, GeneralPurposeRegister.EBP); } }
-
-		/// <summary>
-		/// Gets the additional input registers.
-		/// </summary>
-		public override RegisterBitmap AdditionalInputRegisters { get { return new RegisterBitmap(GeneralPurposeRegister.EBP); } }
 
 		/// <summary>
 		/// Emits the specified platform instruction.

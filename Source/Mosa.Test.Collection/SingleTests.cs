@@ -7,30 +7,13 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using System;
+
 namespace Mosa.Test.Collection
 {
 	public static class SingleTests
 	{
-		public static bool AddR4R4(float expected, float first, float second)
-		{
-			return expected == (first + second);
-		}
-
-		public static bool SubR4R4(float expected, float first, float second)
-		{
-			return expected == (first - second);
-		}
-
-		public static bool MulR4R4(float expected, float first, float second)
-		{
-			return expected == (first * second);
-		}
-
-		public static bool DivR4R4(float expected, float first, float second)
-		{
-			return expected == (first / second);
-		}
-
+	
 		public static float AddR4R4(float first, float second)
 		{
 			return (first + second);
@@ -59,6 +42,11 @@ namespace Mosa.Test.Collection
 		public static bool CeqR4R4(float first, float second)
 		{
 			return (first.CompareTo(second) == 0);
+		}
+
+		public static bool CneqR4R4(float first, float second)
+		{
+			return (first.CompareTo(second) != 0);
 		}
 
 		public static bool CltR4R4(float first, float second)
@@ -118,5 +106,11 @@ namespace Mosa.Test.Collection
 		{
 			destination = value;
 		}
+
+		public static bool IsNaN(float value)
+		{
+			return Single.IsNaN(value);
+		}
+
 	}
 }

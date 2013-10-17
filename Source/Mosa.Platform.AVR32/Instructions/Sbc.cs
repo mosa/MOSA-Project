@@ -16,6 +16,18 @@ namespace Mosa.Platform.AVR32.Instructions
 	/// </summary>
 	public class Sbc : AVR32Instruction
 	{
+		#region Construction
+
+		/// <summary>
+		/// Initializes a new instance of <see cref="Sbc"/>.
+		/// </summary>
+		public Sbc() :
+			base(0, 0)
+		{
+		}
+
+		#endregion Construction
+
 		#region Methods
 
 		/// <summary>

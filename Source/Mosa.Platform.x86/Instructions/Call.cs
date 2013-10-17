@@ -5,6 +5,7 @@
  *
  * Authors:
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 using Mosa.Compiler.Framework;
@@ -23,12 +24,25 @@ namespace Mosa.Platform.x86.Instructions
 
 		#endregion Data Member
 
-		#region Methods
+		#region Construction
 
 		/// <summary>
-		/// Gets the additional output registers.
+		/// Initializes a new instance of <see cref="Call"/>.
 		/// </summary>
-		public override RegisterBitmap AdditionalOutputRegisters { get { return new RegisterBitmap(GeneralPurposeRegister.ESP); } }
+		public Call() :
+			base(0, 0)
+		{
+		}
+
+		#endregion Construction
+
+		#region Properties
+
+		public override FlowControl FlowControl { get { return FlowControl.Call; } }
+
+		#endregion Properties
+
+		#region Methods
 
 		/// <summary>
 		/// Emits the specified platform instruction.
@@ -39,14 +53,14 @@ namespace Mosa.Platform.x86.Instructions
 		{
 			if (context.OperandCount == 0)
 			{
-				emitter.EmitBranch(LabelCall, context.BranchTargets[0]);
+				emitter.EmitRelativeBranch(LabelCall, context.BranchTargets[0]);
 				return;
 			}
 
 			if (context.Operand1.IsSymbol)
 			{
 				emitter.WriteByte(0xE8);
-				emitter.Call(context.Operand1);
+				emitter.EmitCallSite(context.Operand1);
 			}
 			else
 			{

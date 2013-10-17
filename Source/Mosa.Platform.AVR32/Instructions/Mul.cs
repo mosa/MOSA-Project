@@ -22,6 +22,18 @@ namespace Mosa.Platform.AVR32.Instructions
 	/// </summary>
 	public class Mul : AVR32Instruction
 	{
+		#region Construction
+
+		/// <summary>
+		/// Initializes a new instance of <see cref="Dec"/>.
+		/// </summary>
+		public Mul() :
+			base(2, 3)
+		{
+		}
+
+		#endregion Construction
+
 		#region Methods
 
 		/// <summary>

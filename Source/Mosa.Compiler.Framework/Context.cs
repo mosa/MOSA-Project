@@ -7,12 +7,12 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Compiler.TypeSystem;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework
 {
@@ -24,7 +24,7 @@ namespace Mosa.Compiler.Framework
 		#region Data members
 
 		/// <summary>
-		/// Holds the instruction index operated on.
+		/// Holds the index of the instruction being operated on.
 		/// </summary>
 		private int index;
 
@@ -34,7 +34,7 @@ namespace Mosa.Compiler.Framework
 		private InstructionSet instructionSet;
 
 		/// <summary>
-		/// Holds the block being operated on.
+		/// Holds the basic block of the instruction being operated on.
 		/// </summary>
 		private BasicBlock block;
 
@@ -110,6 +110,16 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
+		/// The order slot number (initalized by some stage)
+		/// </summary>
+		/// <value>The label.</value>
+		public int SlotNumber
+		{
+			get { return instructionSet.Data[index].SlotNumber; }
+			set { instructionSet.Data[index].SlotNumber = value; }
+		}
+
+		/// <summary>
 		/// Gets or sets the label.
 		/// </summary>
 		/// <value>The label.</value>
@@ -120,7 +130,7 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Gets or sets the branch.
+		/// Gets or sets the branch targets.
 		/// </summary>
 		/// <value>
 		/// The branch.
@@ -149,8 +159,27 @@ namespace Mosa.Compiler.Framework
 			set
 			{
 				Operand current = instructionSet.Data[index].Operand1;
-				if (current != null) current.Uses.Remove(index);
-				if (value != null) value.Uses.Add(index);
+				if (current == value) return;
+				if (current != null)
+				{
+					current.Uses.Remove(index);
+					if (current.IsMemoryAddress && current.OffsetBase != null)
+					{
+						current.OffsetBase.Uses.Remove(index);
+					}
+				}
+				if (value != null)
+				{
+					if (!value.IsCPURegister)
+					{
+						value.Uses.Add(index);
+					}
+					if (value.IsMemoryAddress && value.OffsetBase != null)
+					{
+						value.OffsetBase.Uses.Add(index);
+					}
+				}
+
 				instructionSet.Data[index].Operand1 = value;
 			}
 		}
@@ -165,8 +194,26 @@ namespace Mosa.Compiler.Framework
 			set
 			{
 				Operand current = instructionSet.Data[index].Operand2;
-				if (current != null) current.Uses.Remove(index);
-				if (value != null) value.Uses.Add(index);
+				if (current == value) return;
+				if (current != null)
+				{
+					current.Uses.Remove(index);
+					if (current.IsMemoryAddress && current.OffsetBase != null)
+					{
+						current.OffsetBase.Uses.Remove(index);
+					}
+				}
+				if (value != null)
+				{
+					if (!value.IsCPURegister)
+					{
+						value.Uses.Add(index);
+					}
+					if (value.IsMemoryAddress && value.OffsetBase != null)
+					{
+						value.OffsetBase.Uses.Add(index);
+					}
+				}
 				instructionSet.Data[index].Operand2 = value;
 			}
 		}
@@ -181,8 +228,26 @@ namespace Mosa.Compiler.Framework
 			set
 			{
 				Operand current = instructionSet.Data[index].Operand3;
-				if (current != null) current.Uses.Remove(index);
-				if (value != null) value.Uses.Add(index);
+				if (current == value) return;
+				if (current != null)
+				{
+					current.Uses.Remove(index);
+					if (current.IsMemoryAddress && current.OffsetBase != null)
+					{
+						current.OffsetBase.Uses.Remove(index);
+					}
+				}
+				if (value != null)
+				{
+					if (!value.IsCPURegister)
+					{
+						value.Uses.Add(index);
+					}
+					if (value.IsMemoryAddress && value.OffsetBase != null)
+					{
+						value.OffsetBase.Uses.Add(index);
+					}
+				}
 				instructionSet.Data[index].Operand3 = value;
 			}
 		}
@@ -209,6 +274,21 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
+		/// Gets all results.
+		/// </summary>
+		/// <value>The operands.</value>
+		public IEnumerable<Operand> Results
+		{
+			get
+			{
+				if (Result != null)
+					yield return Result;
+				if (Result2 != null)
+					yield return Result2;
+			}
+		}
+
+		/// <summary>
 		/// Gets or sets the result operand.
 		/// </summary>
 		/// <value>The result operand.</value>
@@ -218,9 +298,88 @@ namespace Mosa.Compiler.Framework
 			set
 			{
 				Operand current = instructionSet.Data[index].Result;
-				if (current != null) current.Definitions.Remove(index);
-				if (value != null) value.Definitions.Add(index);
+				if (current != null)
+				{
+					current.Definitions.Remove(index);
+					if (current.IsMemoryAddress)
+					{
+						if (current.OffsetBase != null)
+						{
+							current.OffsetBase.Uses.Remove(index);
+						}
+						if (current.SSAParent != null)
+						{
+							current.SSAParent.Uses.Remove(index);
+						}
+					}
+				}
+				if (value != null)
+				{
+					if (!value.IsCPURegister)
+					{
+						value.Definitions.Add(index);
+					}
+					if (value.IsMemoryAddress)
+					{
+						if (value.OffsetBase != null)
+						{
+							value.OffsetBase.Uses.Add(index);
+						}
+						if (value.SSAParent != null)
+						{
+							value.SSAParent.Uses.Add(index);
+						}
+					}
+				}
 				instructionSet.Data[index].Result = value;
+			}
+		}
+
+		/// <summary>
+		/// Gets or sets the result operand.
+		/// </summary>
+		/// <value>The result operand.</value>
+		public Operand Result2
+		{
+			get { return instructionSet.Data[index].Result2; }
+			set
+			{
+				Operand current = instructionSet.Data[index].Result2;
+				if (current != null)
+				{
+					current.Definitions.Remove(index);
+					if (!value.IsCPURegister)
+					{
+						value.Definitions.Add(index);
+					}
+					if (current.IsMemoryAddress)
+					{
+						if (current.OffsetBase != null)
+						{
+							current.OffsetBase.Uses.Remove(index);
+						}
+						if (current.SSAParent != null)
+						{
+							current.SSAParent.Uses.Remove(index);
+						}
+					}
+				}
+				if (value != null)
+				{
+					value.Definitions.Add(index);
+					if (value.IsMemoryAddress)
+					{
+						if (value.OffsetBase != null)
+						{
+							value.OffsetBase.Uses.Add(index);
+						}
+						if (value.SSAParent != null)
+						{
+							value.SSAParent.Uses.Add(index);
+						}
+					}
+				}
+				instructionSet.Data[index].Result2 = value;
 			}
 		}
 
@@ -288,10 +447,10 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Holds the function being called.
 		/// </summary>
-		public RuntimeMethod InvokeTarget
+		public RuntimeMethod InvokeMethod
 		{
-			get { return instructionSet.Data[index].InvokeTarget; }
-			set { instructionSet.Data[index].InvokeTarget = value; }
+			get { return instructionSet.Data[index].InvokeMethod; }
+			set { instructionSet.Data[index].InvokeMethod = value; }
 		}
 
 		/// <summary>
@@ -318,7 +477,7 @@ namespace Mosa.Compiler.Framework
 		/// Gets or sets the condition code.
 		/// </summary>
 		/// <value>The condition code.</value>
-		public IR.ConditionCode ConditionCode
+		public ConditionCode ConditionCode
 		{
 			get { return instructionSet.Data[index].ConditionCode; }
 			set { instructionSet.Data[index].ConditionCode = value; }
@@ -335,32 +494,23 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Gets a value indicating whether this is the first instruction.
+		/// Gets a value indicating whether this is the start instruction.
 		/// </summary>
 		/// <value>
 		/// 	<c>true</c> if this is the first instruction; otherwise, <c>false</c>.
 		/// </value>
-		public bool IsFirstInstruction
+		public bool IsBlockStartInstruction
 		{
-			get { return instructionSet.Previous(index) < 0; }
+			get { return Instruction is IR.BlockStart; }
 		}
 
 		/// <summary>
 		/// Gets a value indicating whether this is the last instruction.
 		/// </summary>
 		/// <value><c>true</c> if this is the last instruction; otherwise, <c>false</c>.</value>
-		public bool IsLastInstruction
+		public bool IsBlockEndInstruction
 		{
-			get { return instructionSet.Next(index) < 0; }
-		}
-
-		/// <summary>
-		/// Gets a value indicating whether the end of the instruction is reached.
-		/// </summary>
-		/// <value><c>true</c> if the end of the instruction is reached; otherwise, <c>false</c>.</value>
-		public bool EndOfInstruction
-		{
-			get { return index < 0; }
+			get { return Instruction is IR.BlockEnd; }
 		}
 
 		/// <summary>
@@ -414,7 +564,7 @@ namespace Mosa.Compiler.Framework
 		/// <param name="instructionSet">The instruction set.</param>
 		/// <param name="basicBlock">The basic block.</param>
 		public Context(InstructionSet instructionSet, BasicBlock basicBlock)
-			: this(instructionSet, basicBlock, basicBlock.Index)
+			: this(instructionSet, basicBlock, basicBlock.StartIndex)
 		{
 		}
 
@@ -450,15 +600,6 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Clones this context, beginning at the start of the basic block.
-		/// </summary>
-		/// <returns></returns>
-		public Context CloneAtStart()
-		{
-			return new Context(instructionSet, block, block.Index);
-		}
-
-		/// <summary>
 		/// Goes to the next instruction.
 		/// </summary>
 		public void GotoNext()
@@ -475,31 +616,13 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Goes to the last instruction.
-		/// </summary>
-		public void GotoLast()
-		{
-			if (index < 0)
-				return;
-
-			for (; ; )
-			{
-				int next = instructionSet.Next(index);
-				if (next < 0)
-					break;
-
-				index = next;
-			}
-		}
-
-		/// <summary>
 		/// Gotoes the first.
 		/// </summary>
-		public void GotoFirst()
+		public void GotoFirst() // TODO: REMOVE THIS METHOD
 		{
 			while (true)
 			{
-				if (IsFirstInstruction)
+				if (IsBlockStartInstruction)
 					break;
 
 				GotoPrevious();
@@ -528,51 +651,34 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		public Context InsertBefore()
 		{
-			int label = Label;
-			int beforeIndex = -1;
+			Debug.Assert(!IsBlockStartInstruction);
 
-			if (IsFirstInstruction)
-			{
-				Debug.Assert(BasicBlock != null, @"Cannot insert before first instruction without basic block");
-				Debug.Assert(BasicBlock.Index == index, @"Cannot be first instruction since basic block does not start here");
-				beforeIndex = instructionSet.InsertBefore(index);
-				BasicBlock.Index = beforeIndex;
-			}
-			else
-				beforeIndex = instructionSet.InsertBefore(index);
+			int label = Label;
+			int beforeIndex = instructionSet.InsertBefore(index);
 
 			Context ctx = new Context(instructionSet, beforeIndex);
 			ctx.Clear();
-			ctx.Label = label;
+			ctx.Label = label; // assign label to this new node
 			return ctx;
 		}
 
 		/// <summary>
-		/// Slices the instruction flow before the current instruction.
-		/// </summary>
-		public void SliceBefore()
-		{
-			instructionSet.SliceBefore(index);
-		}
-
-		/// <summary>
-		/// Slices the instruction flow after the current instruction.
-		/// </summary>
-		public void SliceAfter()
-		{
-			instructionSet.SliceAfter(index);
-		}
-
-		/// <summary>
-		/// Remove this instance.
+		/// Remove this instruction (to be replaced shortly)
 		/// </summary>
 		public void Remove()
 		{
 			int label = Label;
 			Clear();
 
-			Instruction = null;
-			Label = label;
+			Label = label; // maintain label for this node
+		}
+
+		/// <summary>
+		/// delete this instruction (not to be replaced)
+		/// </summary>
+		public void Delete()
+		{
+			Clear();
 		}
 
 		/// <summary>
@@ -612,6 +718,7 @@ namespace Mosa.Compiler.Framework
 			Operand2 = null;
 			Operand3 = null;
 			Result = null;
+			Result2 = null;
 		}
 
 		/// <summary>
@@ -634,7 +741,7 @@ namespace Mosa.Compiler.Framework
 		public void SetInstruction(BaseInstruction instruction, RuntimeMethod target)
 		{
 			SetInstruction(instruction);
-			InvokeTarget = target;
+			InvokeMethod = target;
 		}
 
 		/// <summary>
@@ -652,23 +759,23 @@ namespace Mosa.Compiler.Framework
 		/// Sets the instruction.
 		/// </summary>
 		/// <param name="instruction">The instruction.</param>
-		/// <param name="code">The code.</param>
-		public void SetInstruction(BaseInstruction instruction, IR.ConditionCode code)
+		/// <param name="condition">The code.</param>
+		public void SetInstruction(BaseInstruction instruction, ConditionCode condition)
 		{
 			SetInstruction(instruction);
-			ConditionCode = code;
+			ConditionCode = condition;
 		}
 
 		/// <summary>
 		/// Sets the instruction.
 		/// </summary>
 		/// <param name="instruction">The instruction.</param>
-		/// <param name="code">The code.</param>
+		/// <param name="condition">The code.</param>
 		/// <param name="block">The block.</param>
-		public void SetInstruction(BaseInstruction instruction, IR.ConditionCode code, BasicBlock block)
+		public void SetInstruction(BaseInstruction instruction, ConditionCode condition, BasicBlock block)
 		{
 			SetInstruction(instruction);
-			ConditionCode = code;
+			ConditionCode = condition;
 			SetBranch(block);
 		}
 
@@ -679,7 +786,7 @@ namespace Mosa.Compiler.Framework
 		/// <param name="code">The code.</param>
 		/// <param name="block">The block.</param>
 		/// <param name="branchHint">if set to <c>true</c> [branch hint].</param>
-		public void SetInstruction(BaseInstruction instruction, IR.ConditionCode code, BasicBlock block, bool branchHint)
+		public void SetInstruction(BaseInstruction instruction, ConditionCode code, BasicBlock block, bool branchHint)
 		{
 			SetInstruction(instruction, code, block);
 			BranchHint = branchHint;
@@ -714,6 +821,57 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		/// <param name="instruction">The instruction.</param>
 		/// <param name="result">The result.</param>
+		/// <param name="result2">The result2.</param>
+		/// <param name="operand1">The operand1.</param>
+		public void SetInstruction2(BaseInstruction instruction, Operand result, Operand result2, Operand operand1)
+		{
+			SetInstruction(instruction, 1, 2);
+			Result = result;
+			Result2 = result2;
+			Operand1 = operand1;
+		}
+
+		/// <summary>
+		/// Sets the instruction.
+		/// </summary>
+		/// <param name="instruction">The instruction.</param>
+		/// <param name="result">The result.</param>
+		/// <param name="result2">The result2.</param>
+		/// <param name="operand1">The operand1.</param>
+		/// <param name="operand2">The operand2.</param>
+		public void SetInstruction2(BaseInstruction instruction, Operand result, Operand result2, Operand operand1, Operand operand2)
+		{
+			SetInstruction(instruction, 2, 2);
+			Result = result;
+			Result2 = result2;
+			Operand1 = operand1;
+			Operand2 = operand2;
+		}
+
+		/// <summary>
+		/// Sets the instruction.
+		/// </summary>
+		/// <param name="instruction">The instruction.</param>
+		/// <param name="result">The result.</param>
+		/// <param name="result2">The result2.</param>
+		/// <param name="operand1">The operand1.</param>
+		/// <param name="operand2">The operand2.</param>
+		/// <param name="operand3">The operand3.</param>
+		public void SetInstruction2(BaseInstruction instruction, Operand result, Operand result2, Operand operand1, Operand operand2, Operand operand3)
+		{
+			SetInstruction(instruction, 3, 2);
+			Result = result;
+			Result2 = result2;
+			Operand1 = operand1;
+			Operand2 = operand2;
+			Operand3 = operand3;
+		}
+
+		/// <summary>
+		/// Sets the instruction.
+		/// </summary>
+		/// <param name="instruction">The instruction.</param>
+		/// <param name="result">The result.</param>
 		/// <param name="operand1">The operand1.</param>
 		/// <param name="operand2">The operand2.</param>
 		public void SetInstruction(BaseInstruction instruction, Operand result, Operand operand1, Operand operand2)
@@ -728,10 +886,25 @@ namespace Mosa.Compiler.Framework
 		/// Sets the instruction.
 		/// </summary>
 		/// <param name="instruction">The instruction.</param>
+		/// <param name="condition">The condition.</param>
+		/// <param name="result">The result.</param>
+		/// <param name="operand1">The operand1.</param>
+		public void SetInstruction(BaseInstruction instruction, ConditionCode condition, Operand result, Operand operand1)
+		{
+			SetInstruction(instruction, 1, (byte)((result == null) ? 0 : 1));
+			Result = result;
+			Operand1 = operand1;
+			ConditionCode = condition;
+		}
+
+		/// <summary>
+		/// Sets the instruction.
+		/// </summary>
+		/// <param name="instruction">The instruction.</param>
 		/// <param name="result">The result.</param>
 		/// <param name="operand1">The operand1.</param>
 		/// <param name="operand2">The operand2.</param>
-		public void SetInstruction(BaseInstruction instruction, IR.ConditionCode condition, Operand result, Operand operand1, Operand operand2)
+		public void SetInstruction(BaseInstruction instruction, ConditionCode condition, Operand result, Operand operand1, Operand operand2)
 		{
 			SetInstruction(instruction, 2, (byte)((result == null) ? 0 : 1));
 			Result = result;
@@ -765,7 +938,9 @@ namespace Mosa.Compiler.Framework
 			int label = -1;
 
 			if (index == -1)
+			{
 				index = instructionSet.InsertAfter(index);
+			}
 			else
 			{
 				label = Label;
@@ -780,25 +955,25 @@ namespace Mosa.Compiler.Framework
 		/// Appends an instruction after the current index.
 		/// </summary>
 		/// <param name="instruction">The instruction to append.</param>
-		/// <param name="code">The condition code.</param>
-		public void AppendInstruction(BaseInstruction instruction, IR.ConditionCode code)
+		/// <param name="condition">The condition code.</param>
+		public void AppendInstruction(BaseInstruction instruction, ConditionCode condition)
 		{
 			AppendInstruction();
 			SetInstruction(instruction);
-			ConditionCode = code;
+			ConditionCode = condition;
 		}
 
 		/// <summary>
 		/// Appends an instruction after the current index.
 		/// </summary>
 		/// <param name="instruction">The instruction to append.</param>
-		/// <param name="code">The condition code.</param>
+		/// <param name="condition">The condition code.</param>
 		/// <param name="result">The result operand.</param>
-		public void AppendInstruction(BaseInstruction instruction, IR.ConditionCode code, Operand result)
+		public void AppendInstruction(BaseInstruction instruction, ConditionCode condition, Operand result)
 		{
 			AppendInstruction();
 			SetInstruction(instruction, result);
-			ConditionCode = code;
+			ConditionCode = condition;
 			Result = result;
 		}
 
@@ -813,14 +988,13 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Appends an instruction after the current index.
 		/// </summary>
 		/// <param name="instruction">The instruction to append.</param>
 		/// <param name="target">The invoke target.</param>
 		public void AppendInstruction(BaseInstruction instruction, RuntimeMethod target)
 		{
 			AppendInstruction(instruction);
-			InvokeTarget = target;
+			InvokeMethod = target;
 		}
 
 		/// <summary>
@@ -840,7 +1014,7 @@ namespace Mosa.Compiler.Framework
 		/// <param name="instruction">The instruction to append.</param>
 		/// <param name="code">The condition code.</param>
 		/// <param name="block">The basic block.</param>
-		public void AppendInstruction(BaseInstruction instruction, IR.ConditionCode code, BasicBlock block)
+		public void AppendInstruction(BaseInstruction instruction, ConditionCode code, BasicBlock block)
 		{
 			AppendInstruction();
 			SetInstruction(instruction, code, block);
@@ -853,7 +1027,7 @@ namespace Mosa.Compiler.Framework
 		/// <param name="code">The condition code.</param>
 		/// <param name="block">The basic block.</param>
 		/// <param name="branchHint">The branch hint value.</param>
-		public void AppendInstruction(BaseInstruction instruction, IR.ConditionCode code, BasicBlock block, bool branchHint)
+		public void AppendInstruction(BaseInstruction instruction, ConditionCode code, BasicBlock block, bool branchHint)
 		{
 			AppendInstruction(instruction, code, block);
 			BranchHint = branchHint;
@@ -887,11 +1061,66 @@ namespace Mosa.Compiler.Framework
 		/// Appends an instruction after the current index.
 		/// </summary>
 		/// <param name="instruction">The instruction to append.</param>
+		/// <param name="result">The result operand.</param>
+		/// <param name="result2">The result2.</param>
+		/// <param name="operand1">The first operand.</param>
+		public void AppendInstruction2(BaseInstruction instruction, Operand result, Operand result2, Operand operand1)
+		{
+			AppendInstruction();
+			SetInstruction2(instruction, result, result2, operand1);
+		}
+
+		/// <summary>
+		/// Appends an instruction after the current index.
+		/// </summary>
+		/// <param name="instruction">The instruction to append.</param>
+		/// <param name="result">The result operand.</param>
+		/// <param name="result2">The result2.</param>
+		/// <param name="operand1">The first operand.</param>
+		/// <param name="operand2">The operand2.</param>
+		public void AppendInstruction2(BaseInstruction instruction, Operand result, Operand result2, Operand operand1, Operand operand2)
+		{
+			AppendInstruction();
+			SetInstruction2(instruction, result, result2, operand1, operand2);
+		}
+
+		/// <summary>
+		/// Appends an instruction after the current index.
+		/// </summary>
+		/// <param name="instruction">The instruction to append.</param>
+		/// <param name="result">The result operand.</param>
+		/// <param name="result2">The result2.</param>
+		/// <param name="operand1">The first operand.</param>
+		/// <param name="operand2">The operand2.</param>
+		/// <param name="operand3">The operand3.</param>
+		public void AppendInstruction2(BaseInstruction instruction, Operand result, Operand result2, Operand operand1, Operand operand2, Operand operand3)
+		{
+			AppendInstruction();
+			SetInstruction2(instruction, result, result2, operand1, operand2, operand3);
+		}
+
+		/// <summary>
+		/// Appends an instruction after the current index.
+		/// </summary>
+		/// <param name="instruction">The instruction to append.</param>
+		/// <param name="condition">The condition.</param>
+		/// <param name="result">The result operand.</param>
+		/// <param name="operand1">The first operand.</param>
+		public void AppendInstruction(BaseInstruction instruction, ConditionCode condition, Operand result, Operand operand1)
+		{
+			AppendInstruction();
+			SetInstruction(instruction, condition, result, operand1);
+		}
+
+		/// <summary>
+		/// Appends an instruction after the current index.
+		/// </summary>
+		/// <param name="instruction">The instruction to append.</param>
 		/// <param name="condition">The condition.</param>
 		/// <param name="result">The result operand.</param>
 		/// <param name="operand1">The first operand.</param>
 		/// <param name="operand2">The second operand.</param>
-		public void AppendInstruction(BaseInstruction instruction, IR.ConditionCode condition, Operand result, Operand operand1, Operand operand2)
+		public void AppendInstruction(BaseInstruction instruction, ConditionCode condition, Operand result, Operand operand1, Operand operand2)
 		{
 			AppendInstruction();
 			SetInstruction(instruction, condition, result, operand1, operand2);
@@ -1017,6 +1246,21 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
+		/// Gets the result.
+		/// </summary>
+		/// <param name="opIndex">The index.</param>
+		/// <returns></returns>
+		public Operand GetResult(int opIndex)
+		{
+			switch (opIndex)
+			{
+				case 0: return Result;
+				case 1: return Result2;
+				default: throw new System.IndexOutOfRangeException();
+			}
+		}
+
+		/// <summary>
 		/// Adds the operand.
 		/// </summary>
 		/// <param name="operand">The operand.</param>
@@ -1041,11 +1285,43 @@ namespace Mosa.Compiler.Framework
 				default:
 					{
 						Operand current = instructionSet.Data[index].GetAdditionalOperand(opIndex);
-						if (current != null) current.Uses.Remove(index);
-						if (operand != null) operand.Uses.Add(index);
+						if (current == operand) return;
+						if (current != null)
+						{
+							current.Uses.Remove(index);
+							if (current.IsMemoryAddress && current.OffsetBase != null)
+							{
+								current.OffsetBase.Uses.Remove(index);
+							}
+						}
+
+						if (operand != null)
+						{
+							operand.Uses.Add(index);
+							if (operand.IsMemoryAddress && operand.OffsetBase != null)
+							{
+								operand.OffsetBase.Uses.Remove(index);
+							}
+						}
+
 						instructionSet.Data[index].SetAdditionalOperand(opIndex, operand);
 						return;
 					}
+			}
+		}
+
+		/// <summary>
+		/// Sets the result by index.
+		/// </summary>
+		/// <param name="opIndex">The index.</param>
+		/// <param name="operand">The operand.</param>
+		public void SetResult(int opIndex, Operand operand)
+		{
+			switch (opIndex)
+			{
+				case 0: Result = operand; return;
+				case 1: Result2 = operand; return;
+				default: throw new System.IndexOutOfRangeException();
 			}
 		}
 

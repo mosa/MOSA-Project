@@ -7,10 +7,8 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-using System.Collections.Generic;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Metadata.Signatures;
-using Mosa.Compiler.TypeSystem;
 
 namespace Mosa.Platform.x86.Intrinsic
 {
@@ -26,11 +24,13 @@ namespace Mosa.Platform.x86.Intrinsic
 		/// </summary>
 		/// <param name="context">The context.</param>
 		/// <param name="typeSystem">The type system.</param>
-		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, ITypeSystem typeSystem, IList<RuntimeParameter> parameters)
+		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, BaseMethodCompiler methodCompiler)
 		{
-			Operand operand = Operand.CreateMemoryAddress(BuiltInSigType.Ptr, GeneralPurposeRegister.EAX, new System.IntPtr(0));
-			context.SetInstruction(X86.Mov, Operand.CreateCPURegister(BuiltInSigType.Ptr, GeneralPurposeRegister.EAX), context.Operand1);
-			context.AppendInstruction(X86.Lidt, null, operand);
+			//context.SetInstruction(X86.Mov, Operand.CreateCPURegister(BuiltInSigType.Ptr, GeneralPurposeRegister.EAX), context.Operand1);
+			//context.AppendInstruction(X86.Lidt, null, Operand.CreateMemoryAddress(BuiltInSigType.Ptr, GeneralPurposeRegister.EAX, 0));
+
+			context.SetInstruction(X86.Lidt, null, Operand.CreateMemoryAddress(BuiltInSigType.Ptr, context.Operand1, 0));
+
 		}
 
 		#endregion Methods

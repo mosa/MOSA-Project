@@ -76,8 +76,8 @@ namespace System
 		{
 			get
 			{
-				if (index < 0 || index >= length)
-					return (char)0; // throw new IndexOutOfRangeException();
+				//if (index < 0 || index >= length)
+				//	return (char)0; // throw new IndexOutOfRangeException();
 
 				char result = (char)0;
 				fixed (char* c = &start_char)

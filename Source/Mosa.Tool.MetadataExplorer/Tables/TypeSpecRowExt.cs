@@ -34,7 +34,8 @@ namespace Mosa.Tool.MetadataExplorer.Tables
 			yield return Value("SignatureBlobIdx", row.SignatureBlobIdx);
 
 			TypeSpecSignature signature = new TypeSpecSignature(Metadata, row.SignatureBlobIdx);
-			yield return Value("Signature Token", signature.Token);
+
+			//yield return Value("Signature Token", signature.Token);
 			yield return Value("Signature Type", signature.Type.ToString());
 		}
 	}

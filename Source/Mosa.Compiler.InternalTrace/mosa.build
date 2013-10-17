@@ -18,6 +18,7 @@
                     <include name="BasicInternalTrace.cs"/>
                     <include name="CompilerEvent.cs"/>
                     <include name="ConfigurableTraceFilter.cs"/>
+                    <include name="CompilerTrace.cs"/>
                     <include name="DebugCompilerEventListener.cs"/>
                     <include name="DebugTraceListener.cs"/>
                     <include name="ICompilerEventListener.cs"/>

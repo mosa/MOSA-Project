@@ -5,10 +5,11 @@
  *
  * Authors:
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
 using Mosa.Compiler.Framework;
+using System;
 
 namespace Mosa.Platform.x86.Instructions
 {
@@ -30,18 +31,14 @@ namespace Mosa.Platform.x86.Instructions
 		#region Methods
 
 		/// <summary>
-		/// Gets the additional output registers.
-		/// </summary>
-		public override RegisterBitmap AdditionalOutputRegisters { get { return new RegisterBitmap(GeneralPurposeRegister.EAX); } }
-
-		/// <summary>
 		/// Computes the op code.
 		/// </summary>
 		/// <param name="destination">The destination.</param>
 		/// <param name="source">The source.</param>
-		/// <param name="empty">The empty.</param>
+		/// <param name="third">The third operand.</param>
 		/// <returns></returns>
-		protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand empty)
+		/// <exception cref="System.ArgumentException"></exception>
+		protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
 		{
 			// FIXME: This method is not called.
 			if (IsByte(source))
