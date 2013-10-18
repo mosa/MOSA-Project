@@ -15,7 +15,7 @@ using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Signatures;
 
-namespace Mosa.Platform.AVR32
+namespace Mosa.Platform.AVR32.Stages
 {
 	/// <summary>
 	/// Transforms IR instructions into their appropriate AVR32.
