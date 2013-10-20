@@ -1,0 +1,164 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <ProjectType>Local</ProjectType>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{0FB92651-3EE8-441D-84F2-C4DFDA68E8A5}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <AssemblyKeyContainerName>
+    </AssemblyKeyContainerName>
+    <AssemblyName>Mosa.Platform.ARMv6</AssemblyName>
+    <DefaultClientScript>JScript</DefaultClientScript>
+    <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
+    <DefaultTargetSchema>IE50</DefaultTargetSchema>
+    <DelaySign>false</DelaySign>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>
+    </AppDesignerFolder>
+    <RootNamespace>Mosa.Platform.ARMv6</RootNamespace>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <UpgradeBackupLocation />
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <BaseAddress>285212672</BaseAddress>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <DebugSymbols>true</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\bin\</OutputPath>
+    <RegisterForComInterop>False</RegisterForComInterop>
+    <RemoveIntegerChecks>False</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>full</DebugType>
+    <NoWarn>0414</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <BaseAddress>285212672</BaseAddress>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>TRACE</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <FileAlignment>4096</FileAlignment>
+    <Optimize>true</Optimize>
+    <OutputPath>..\..\bin\</OutputPath>
+    <RegisterForComInterop>False</RegisterForComInterop>
+    <RemoveIntegerChecks>False</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <WarningLevel>2</WarningLevel>
+    <DebugType>none</DebugType>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Mosa.Compiler.Common\Mosa.Compiler.Common.csproj">
+      <Project>{0b1011a6-8fcd-4f9e-bbb8-8db86e23d2e8}</Project>
+      <Name>Mosa.Compiler.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mosa.Compiler.Linker\Mosa.Compiler.Linker.csproj">
+      <Project>{65866A51-B229-44C5-AC81-87A90FA1741B}</Project>
+      <Name>Mosa.Compiler.Linker</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mosa.Compiler.Metadata\Mosa.Compiler.Metadata.csproj">
+      <Project>{7033B213-2055-4C6A-B008-D9856267F5D7}</Project>
+      <Name>Mosa.Compiler.Metadata</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mosa.Compiler.Framework\Mosa.Compiler.Framework.csproj">
+      <Project>{75A12A8A-8C8F-4D1E-801B-689D8F781BF4}</Project>
+      <Name>Mosa.Compiler.Framework</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mosa.Compiler.TypeSystem\Mosa.Compiler.TypeSystem.csproj">
+      <Project>{5F30A68E-05BF-40EA-B576-5EBCDE520449}</Project>
+      <Name>Mosa.Compiler.TypeSystem</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ARMv6Instruction.cs" />
+    <Compile Include="BaseTransformationStage.cs" />
+    <Compile Include="IARMv6Visitor.cs" />
+    <Compile Include="Instructions\Adc.cs" />
+    <Compile Include="Instructions\Add.cs" />
+    <Compile Include="Instructions\Adr.cs" />
+    <Compile Include="Instructions\And.cs" />
+    <Compile Include="Instructions\Asr.cs" />
+    <Compile Include="Instructions\B.cs" />
+    <Compile Include="Instructions\Bic.cs" />
+    <Compile Include="Instructions\Bkpt.cs" />
+    <Compile Include="Instructions\Bl.cs" />
+    <Compile Include="Instructions\Blx.cs" />
+    <Compile Include="Instructions\Bx.cs" />
+    <Compile Include="Instructions\Cmn.cs" />
+    <Compile Include="Instructions\Cmp.cs" />
+    <Compile Include="Instructions\Dmb.cs" />
+    <Compile Include="Instructions\Dsb.cs" />
+    <Compile Include="Instructions\Eor.cs" />
+    <Compile Include="Instructions\Isb.cs" />
+    <Compile Include="Instructions\Ldm.cs" />
+    <Compile Include="Instructions\Ldmfd.cs" />
+    <Compile Include="Instructions\Ldmia.cs" />
+    <Compile Include="Instructions\Ldr.cs" />
+    <Compile Include="Instructions\Ldrb.cs" />
+    <Compile Include="Instructions\Ldrh.cs" />
+    <Compile Include="Instructions\Ldrsb.cs" />
+    <Compile Include="Instructions\Ldrsh.cs" />
+    <Compile Include="Instructions\Lsl.cs" />
+    <Compile Include="Instructions\Lsr.cs" />
+    <Compile Include="Instructions\Mov.cs" />
+    <Compile Include="Instructions\Mrs.cs" />
+    <Compile Include="Instructions\Msr.cs" />
+    <Compile Include="Instructions\Mul.cs" />
+    <Compile Include="Instructions\Mvn.cs" />
+    <Compile Include="Instructions\Nop.cs" />
+    <Compile Include="Instructions\Orr.cs" />
+    <Compile Include="Instructions\Pop.cs" />
+    <Compile Include="Instructions\Push.cs" />
+    <Compile Include="Instructions\Rev.cs" />
+    <Compile Include="Instructions\Rev16.cs" />
+    <Compile Include="Instructions\Revsh.cs" />
+    <Compile Include="Instructions\Ror.cs" />
+    <Compile Include="Instructions\Rsb.cs" />
+    <Compile Include="Instructions\Sbc.cs" />
+    <Compile Include="Instructions\Sev.cs" />
+    <Compile Include="Instructions\Stm.cs" />
+    <Compile Include="Instructions\Stmea.cs" />
+    <Compile Include="Instructions\Stmia.cs" />
+    <Compile Include="Instructions\Str.cs" />
+    <Compile Include="Instructions\Strb.cs" />
+    <Compile Include="Instructions\Strh.cs" />
+    <Compile Include="Instructions\Sub.cs" />
+    <Compile Include="Instructions\Svc.cs" />
+    <Compile Include="Instructions\Swi.cs" />
+    <Compile Include="Instructions\Sxtb.cs" />
+    <Compile Include="Instructions\Sxth.cs" />
+    <Compile Include="Instructions\Tst.cs" />
+    <Compile Include="Instructions\Uxtb.cs" />
+    <Compile Include="Instructions\Uxth.cs" />
+    <Compile Include="Instructions\Wfe.cs" />
+    <Compile Include="Instructions\Wfi.cs" />
+    <Compile Include="Instructions\Yield.cs" />
+    <Compile Include="MachineCodeEmitter.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Intrinsic\" />
+    <Folder Include="Stages\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+</Project>
