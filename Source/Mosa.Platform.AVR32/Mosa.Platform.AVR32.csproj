@@ -93,7 +93,7 @@
     <Compile Include="GeneralPurposeRegister.cs" />
     <Compile Include="Instructions\Branch.cs" />
     <Compile Include="Intrinsic\Nop.cs" />
-    <Compile Include="IRTransformationStage.cs" />
+    <Compile Include="Stages\IRTransformationStage.cs" />
     <Compile Include="MachineCodeEmitter.cs" />
     <Compile Include="Instructions\Adc.cs" />
     <Compile Include="Instructions\Add.cs" />

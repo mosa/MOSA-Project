@@ -101,7 +101,10 @@ namespace Mosa.Tool.Explorer
 				for (int i = 0; i < steps; i++)
 				{
 					simAdapter.Execute();
-					GetCurrentStateAndUpdate();
+					if (cbRecord.Checked)
+					{
+						GetCurrentStateAndUpdate();
+					}
 				}
 			}
 			catch (CPUException e)

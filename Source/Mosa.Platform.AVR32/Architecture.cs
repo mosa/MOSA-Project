@@ -14,6 +14,7 @@ using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Stages;
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Signatures;
+using Mosa.Platform.AVR32.Stages;
 
 namespace Mosa.Platform.AVR32
 {

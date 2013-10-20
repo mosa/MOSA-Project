@@ -43,6 +43,7 @@
 			this.label6 = new System.Windows.Forms.Label();
 			this.button2 = new System.Windows.Forms.Button();
 			this.nvSteps = new System.Windows.Forms.NumericUpDown();
+			this.cbRecord = new System.Windows.Forms.CheckBox();
 			((System.ComponentModel.ISupportInitialize)(this.nvSteps)).BeginInit();
 			this.SuspendLayout();
 			// 
@@ -196,7 +197,7 @@
             0,
             0});
 			this.nvSteps.Name = "nvSteps";
-			this.nvSteps.Size = new System.Drawing.Size(53, 20);
+			this.nvSteps.Size = new System.Drawing.Size(65, 20);
 			this.nvSteps.TabIndex = 14;
 			this.nvSteps.Value = new decimal(new int[] {
             150,
@@ -204,11 +205,23 @@
             0,
             0});
 			// 
+			// cbRecord
+			// 
+			this.cbRecord.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.cbRecord.AutoSize = true;
+			this.cbRecord.Location = new System.Drawing.Point(529, 359);
+			this.cbRecord.Name = "cbRecord";
+			this.cbRecord.Size = new System.Drawing.Size(61, 17);
+			this.cbRecord.TabIndex = 15;
+			this.cbRecord.Text = "Record";
+			this.cbRecord.UseVisualStyleBackColor = true;
+			// 
 			// SimProcessorX86Form
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(755, 386);
+			this.Controls.Add(this.cbRecord);
 			this.Controls.Add(this.nvSteps);
 			this.Controls.Add(this.button2);
 			this.Controls.Add(this.label6);
@@ -250,5 +263,6 @@
 		private System.Windows.Forms.Label label6;
 		private System.Windows.Forms.Button button2;
 		private System.Windows.Forms.NumericUpDown nvSteps;
+		private System.Windows.Forms.CheckBox cbRecord;
 	}
 }
