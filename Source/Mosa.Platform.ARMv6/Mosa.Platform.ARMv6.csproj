@@ -86,12 +86,73 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ARMv6Instruction.cs" />
+    <Compile Include="BaseTransformationStage.cs" />
     <Compile Include="IARMv6Visitor.cs" />
+    <Compile Include="Instructions\Adc.cs" />
+    <Compile Include="Instructions\Add.cs" />
+    <Compile Include="Instructions\Adr.cs" />
+    <Compile Include="Instructions\And.cs" />
+    <Compile Include="Instructions\Asr.cs" />
+    <Compile Include="Instructions\B.cs" />
+    <Compile Include="Instructions\Bic.cs" />
+    <Compile Include="Instructions\Bkpt.cs" />
+    <Compile Include="Instructions\Bl.cs" />
+    <Compile Include="Instructions\Blx.cs" />
+    <Compile Include="Instructions\Bx.cs" />
+    <Compile Include="Instructions\Cmn.cs" />
+    <Compile Include="Instructions\Cmp.cs" />
+    <Compile Include="Instructions\Dmb.cs" />
+    <Compile Include="Instructions\Dsb.cs" />
+    <Compile Include="Instructions\Eor.cs" />
+    <Compile Include="Instructions\Isb.cs" />
+    <Compile Include="Instructions\Ldm.cs" />
+    <Compile Include="Instructions\Ldmfd.cs" />
+    <Compile Include="Instructions\Ldmia.cs" />
+    <Compile Include="Instructions\Ldr.cs" />
+    <Compile Include="Instructions\Ldrb.cs" />
+    <Compile Include="Instructions\Ldrh.cs" />
+    <Compile Include="Instructions\Ldrsb.cs" />
+    <Compile Include="Instructions\Ldrsh.cs" />
+    <Compile Include="Instructions\Lsl.cs" />
+    <Compile Include="Instructions\Lsr.cs" />
+    <Compile Include="Instructions\Mov.cs" />
+    <Compile Include="Instructions\Mrs.cs" />
+    <Compile Include="Instructions\Msr.cs" />
+    <Compile Include="Instructions\Mul.cs" />
+    <Compile Include="Instructions\Mvn.cs" />
+    <Compile Include="Instructions\Nop.cs" />
+    <Compile Include="Instructions\Orr.cs" />
+    <Compile Include="Instructions\Pop.cs" />
+    <Compile Include="Instructions\Push.cs" />
+    <Compile Include="Instructions\Rev.cs" />
+    <Compile Include="Instructions\Rev16.cs" />
+    <Compile Include="Instructions\Revsh.cs" />
+    <Compile Include="Instructions\Ror.cs" />
+    <Compile Include="Instructions\Rsb.cs" />
+    <Compile Include="Instructions\Sbc.cs" />
+    <Compile Include="Instructions\Sev.cs" />
+    <Compile Include="Instructions\Stm.cs" />
+    <Compile Include="Instructions\Stmea.cs" />
+    <Compile Include="Instructions\Stmia.cs" />
+    <Compile Include="Instructions\Str.cs" />
+    <Compile Include="Instructions\Strb.cs" />
+    <Compile Include="Instructions\Strh.cs" />
+    <Compile Include="Instructions\Sub.cs" />
+    <Compile Include="Instructions\Svc.cs" />
+    <Compile Include="Instructions\Swi.cs" />
+    <Compile Include="Instructions\Sxtb.cs" />
+    <Compile Include="Instructions\Sxth.cs" />
+    <Compile Include="Instructions\Tst.cs" />
+    <Compile Include="Instructions\Uxtb.cs" />
+    <Compile Include="Instructions\Uxth.cs" />
+    <Compile Include="Instructions\Wfe.cs" />
+    <Compile Include="Instructions\Wfi.cs" />
+    <Compile Include="Instructions\Yield.cs" />
     <Compile Include="MachineCodeEmitter.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Instructions\" />
     <Folder Include="Intrinsic\" />
+    <Folder Include="Stages\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />
   <PropertyGroup>
