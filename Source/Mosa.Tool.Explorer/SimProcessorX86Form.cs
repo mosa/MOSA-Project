@@ -129,5 +129,13 @@ namespace Mosa.Tool.Explorer
 		{
 			ExecuteSteps((int)nvSteps.Value);
 		}
+
+		private void button3_Click(object sender, EventArgs e)
+		{
+			simAdapter.Monitor.EnableStepping = false;
+			simAdapter.Monitor.ClearBreakPoints();
+			simAdapter.Monitor.AddBreakPoint(tbLabel.Text);
+			simAdapter.Execute();
+		}
 	}
 }

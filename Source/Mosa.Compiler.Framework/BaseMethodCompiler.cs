@@ -123,6 +123,11 @@ namespace Mosa.Compiler.Framework
 
 		private bool stopMethodCompiler;
 
+		/// <summary>
+		/// Holds the type initializer scheduler stage
+		/// </summary>
+		ITypeInitializerSchedulerStage typeInitializerSchedulerStage;
+
 		#endregion Data Members
 
 		#region Construction
@@ -318,6 +323,8 @@ namespace Mosa.Compiler.Framework
 					break;
 			}
 
+			InitializeType();
+
 			EndCompile();
 		}
 
@@ -398,6 +405,25 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
+		/// Initializes the type.
+		/// </summary>
+		protected virtual void InitializeType()
+		{
+			typeInitializerSchedulerStage = Compiler.Pipeline.FindFirst<ITypeInitializerSchedulerStage>();
+
+			if (typeInitializerSchedulerStage == null)
+				return;
+
+			// If we're compiling a type initializer, run it immediately.
+			const MethodAttributes attrs = MethodAttributes.SpecialName | MethodAttributes.RTSpecialName | MethodAttributes.Static;
+			if ((Method.Attributes & attrs) == attrs && Method.Name == ".cctor")
+			{
+
+				typeInitializerSchedulerStage.Schedule(Method);
+			}
+		}
+
+		/// <summary>
 		/// Called before the method compiler begins compiling the method.
 		/// </summary>
 		protected virtual void BeginCompile()
@@ -446,5 +472,6 @@ namespace Mosa.Compiler.Framework
 		}
 
 		#endregion Methods
+
 	}
 }

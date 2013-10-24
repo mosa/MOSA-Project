@@ -60,25 +60,5 @@ namespace Mosa.Tool.Compiler
 		}
 
 		#endregion Construction
-
-		#region BaseMethodCompiler Overrides
-
-		/// <summary>
-		/// Called after the method compiler has finished compiling the method.
-		/// </summary>
-		protected override void EndCompile()
-		{
-			// If we're compiling a type initializer, run it immediately.
-			const MethodAttributes attrs = MethodAttributes.SpecialName | MethodAttributes.RTSpecialName | MethodAttributes.Static;
-			if ((Method.Attributes & attrs) == attrs && Method.Name == ".cctor")
-			{
-				var typeInitializerSchedulerStage = Compiler.Pipeline.FindFirst<ITypeInitializerSchedulerStage>();
-				typeInitializerSchedulerStage.Schedule(Method);
-			}
-
-			base.EndCompile();
-		}
-
-		#endregion BaseMethodCompiler Overrides
 	}
 }

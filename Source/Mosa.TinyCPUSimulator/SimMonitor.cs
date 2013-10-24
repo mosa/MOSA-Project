@@ -48,5 +48,16 @@ namespace Mosa.TinyCPUSimulator
 			breakPoints.Add(address);
 		}
 
+		public void AddBreakPoint(string label)
+		{
+			ulong address = CPU.GetLabel(label);
+
+			AddBreakPoint(address);
+		}
+
+		public void ClearBreakPoints()
+		{
+			breakPoints.Clear();
+		}
 	}
 }

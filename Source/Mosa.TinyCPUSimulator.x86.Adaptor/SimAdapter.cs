@@ -101,7 +101,7 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 				{
 					var block = basicBlocks.GetByLabel(target);
 
-					operands.Add(CreateLabel(block.ToString() + ":" + method.FullName));
+					operands.Add(CreateLabel(32, block.ToString() + ":" + method.FullName));
 				}
 			}
 
@@ -140,11 +140,17 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 			}
 			else if (operand.IsLabel)
 			{
-				return CreateLabel(operand.Name);
+				if (operand.IsMemoryAddress)
+					return CreateMemoryAddressLabel(size, operand.Name);
+				else
+					return CreateLabel(size, operand.Name);
 			}
 			else if (operand.IsRuntimeMember)
 			{
-				return CreateLabel(((operand.RuntimeMember) as RuntimeField).FullName);
+				if (operand.IsMemoryAddress)
+					return CreateMemoryAddressLabel(size, ((operand.RuntimeMember) as RuntimeField).FullName);
+				else
+					return CreateLabel(size, ((operand.RuntimeMember) as RuntimeField).FullName);
 			}
 			else if (operand.IsMemoryAddress)
 			{
@@ -159,7 +165,10 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 			}
 			else if (operand.IsSymbol)
 			{
-				return CreateLabel(operand.Name);
+				if (operand.IsMemoryAddress)
+					return CreateMemoryAddressLabel(size, operand.Name);
+				else
+					return CreateLabel(size, operand.Name);
 			}
 			return null;
 		}

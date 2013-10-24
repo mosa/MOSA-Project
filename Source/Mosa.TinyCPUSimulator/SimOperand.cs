@@ -100,9 +100,16 @@ namespace Mosa.TinyCPUSimulator
 			return op;
 		}
 
-		public static SimOperand CreateLabel(string label)
+		//public static SimOperand CreateLabel(string label)
+		//{
+		//	var op = new SimOperand(32);
+		//	op.Label = label;
+		//	return op;
+		//}
+
+		public static SimOperand CreateLabel(int size, string label)
 		{
-			var op = new SimOperand(32);
+			var op = new SimOperand(size);
 			op.Label = label;
 			return op;
 		}

@@ -90,9 +90,9 @@ namespace Mosa.TinyCPUSimulator
 			return SimOperand.CreateMemoryAddress(size, baseRegister, index, scale, displacement);
 		}
 
-		public static SimOperand CreateLabel(string label)
+		public static SimOperand CreateLabel(int size, string label)
 		{
-			return SimOperand.CreateLabel(label);
+			return SimOperand.CreateLabel(size, label);
 		}
 
 		public static SimOperand CreateMemoryAddressLabel(int size, string label)

@@ -44,6 +44,8 @@
 			this.button2 = new System.Windows.Forms.Button();
 			this.nvSteps = new System.Windows.Forms.NumericUpDown();
 			this.cbRecord = new System.Windows.Forms.CheckBox();
+			this.tbLabel = new System.Windows.Forms.TextBox();
+			this.button3 = new System.Windows.Forms.Button();
 			((System.ComponentModel.ISupportInitialize)(this.nvSteps)).BeginInit();
 			this.SuspendLayout();
 			// 
@@ -216,11 +218,32 @@
 			this.cbRecord.Text = "Record";
 			this.cbRecord.UseVisualStyleBackColor = true;
 			// 
+			// tbLabel
+			// 
+			this.tbLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.tbLabel.Location = new System.Drawing.Point(367, 356);
+			this.tbLabel.Name = "tbLabel";
+			this.tbLabel.Size = new System.Drawing.Size(156, 20);
+			this.tbLabel.TabIndex = 17;
+			// 
+			// button3
+			// 
+			this.button3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.button3.Location = new System.Drawing.Point(268, 355);
+			this.button3.Name = "button3";
+			this.button3.Size = new System.Drawing.Size(93, 23);
+			this.button3.TabIndex = 18;
+			this.button3.Text = "Execute Until:";
+			this.button3.UseVisualStyleBackColor = true;
+			this.button3.Click += new System.EventHandler(this.button3_Click);
+			// 
 			// SimProcessorX86Form
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(755, 386);
+			this.Controls.Add(this.button3);
+			this.Controls.Add(this.tbLabel);
 			this.Controls.Add(this.cbRecord);
 			this.Controls.Add(this.nvSteps);
 			this.Controls.Add(this.button2);
@@ -264,5 +287,7 @@
 		private System.Windows.Forms.Button button2;
 		private System.Windows.Forms.NumericUpDown nvSteps;
 		private System.Windows.Forms.CheckBox cbRecord;
+		private System.Windows.Forms.TextBox tbLabel;
+		private System.Windows.Forms.Button button3;
 	}
 }

@@ -103,7 +103,7 @@ namespace Mosa.Test.System
 		protected override void EndCompile()
 		{
 			// If we're compiling a type initializer, run it immediately.
-			MethodAttributes attrs = MethodAttributes.SpecialName | MethodAttributes.RTSpecialName | MethodAttributes.Static;
+			const MethodAttributes attrs = MethodAttributes.SpecialName | MethodAttributes.RTSpecialName | MethodAttributes.Static;
 			if ((Method.Attributes & attrs) == attrs && Method.Name == ".cctor")
 			{
 				CCtor cctor = (CCtor)Marshal.GetDelegateForFunctionPointer(new IntPtr(address), typeof(CCtor));
