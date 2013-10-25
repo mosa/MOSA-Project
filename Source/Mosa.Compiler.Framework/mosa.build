@@ -82,7 +82,6 @@
                     <include name="Platform/BasePlatformTransformationStage.cs"/>
                     <include name="StackLayout.cs"/>
                     <include name="Stages/MultipleDefinitionMarkerStage.cs"/>
-                    <include name="ITypeInitializerSchedulerStage.cs"/>
                     <include name="Stages/PlugStage.cs"/>
                     <include name="Stages/ExceptionPrologueStage.cs"/>
                     <include name="IR/ExceptionPrologue.cs"/>

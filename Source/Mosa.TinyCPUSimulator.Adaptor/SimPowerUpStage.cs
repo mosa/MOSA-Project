@@ -9,6 +9,7 @@
 
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.IR;
+using Mosa.Compiler.Framework.Stages;
 using Mosa.Compiler.TypeSystem;
 
 namespace Mosa.TinyCPUSimulator.Adaptor
@@ -40,7 +41,7 @@ namespace Mosa.TinyCPUSimulator.Adaptor
 		/// </summary>
 		void ICompilerStage.Run()
 		{
-			ITypeInitializerSchedulerStage typeInitializerSchedulerStage = compiler.Pipeline.FindFirst<ITypeInitializerSchedulerStage>();
+			TypeInitializerSchedulerStage typeInitializerSchedulerStage = compiler.Pipeline.FindFirst<TypeInitializerSchedulerStage>();
 
 			BasicBlocks basicBlocks = new BasicBlocks();
 			InstructionSet instructionSet = new InstructionSet(25);
@@ -51,7 +52,7 @@ namespace Mosa.TinyCPUSimulator.Adaptor
 
 			context.AppendInstruction(IRInstruction.Call, null, entryPoint);
 			context.InvokeMethod = typeInitializerSchedulerStage.TypeInitializerMethod;
-			context.AppendInstruction(IRInstruction.Break);
+			//context.AppendInstruction(IRInstruction.Break);
 
 			RuntimeMethod method = compiler.CreateLinkerMethod(StartUpName);
 			compiler.CompileMethod(method, basicBlocks, instructionSet);

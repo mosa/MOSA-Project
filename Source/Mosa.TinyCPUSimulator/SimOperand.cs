@@ -91,7 +91,6 @@ namespace Mosa.TinyCPUSimulator
 			return op;
 		}
 
-
 		public static SimOperand CreateMemoryAddress(int size, ulong immediate)
 		{
 			var op = new SimOperand(size);

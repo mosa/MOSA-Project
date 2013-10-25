@@ -145,7 +145,6 @@
     <Compile Include="Platform\BasePlatformTransformationStage.cs" />
     <Compile Include="StackLayout.cs" />
     <Compile Include="Stages\MultipleDefinitionMarkerStage.cs" />
-    <Compile Include="ITypeInitializerSchedulerStage.cs" />
     <Compile Include="Stages\PlugStage.cs" />
     <Compile Include="Stages\ExceptionPrologueStage.cs" />
     <Compile Include="IR\ExceptionPrologue.cs" />

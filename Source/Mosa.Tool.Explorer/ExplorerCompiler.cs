@@ -35,6 +35,7 @@ namespace Mosa.Tool.Explorer
 			Pipeline.AddRange(new ICompilerStage[] {
 				new PlugStage(),
 				new MethodCompilerSchedulerStage(),
+				new TypeInitializerSchedulerStage(),
 				new TypeLayoutStage(),
 
 				//new LinkerFinalizationStage(),

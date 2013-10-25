@@ -332,6 +332,5 @@ namespace Mosa.TinyCPUSimulator.x86
 
 			throw new InvalidProgramException();
 		}
-
 	}
 }

@@ -1,14 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-
-using Mosa.TinyCPUSimulator;
+﻿using Mosa.TinyCPUSimulator;
 using Mosa.TinyCPUSimulator.Adaptor;
+using System;
+using System.Windows.Forms;
 
 namespace Mosa.Tool.Explorer
 {
@@ -27,7 +20,6 @@ namespace Mosa.Tool.Explorer
 
 		private void SimProcessorX86Form_Load(object sender, EventArgs e)
 		{
-
 		}
 
 		public void Update(SimState simState)
@@ -83,7 +75,6 @@ namespace Mosa.Tool.Explorer
 			}
 
 			lbStack.SelectedIndex = lbStack.Items.Count - 1;
-
 		}
 
 		public void GetCurrentStateAndUpdate()
@@ -127,7 +118,9 @@ namespace Mosa.Tool.Explorer
 
 		private void button2_Click(object sender, EventArgs e)
 		{
-			ExecuteSteps((int)nvSteps.Value);
+			int steps = Convert.ToInt32(tbSteps.Text);
+			ExecuteSteps(steps);
+			//tbSteps.Text = "1";
 		}
 
 		private void button3_Click(object sender, EventArgs e)

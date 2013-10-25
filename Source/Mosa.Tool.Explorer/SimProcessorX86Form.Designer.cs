@@ -42,11 +42,10 @@
 			this.lbStack = new System.Windows.Forms.ListBox();
 			this.label6 = new System.Windows.Forms.Label();
 			this.button2 = new System.Windows.Forms.Button();
-			this.nvSteps = new System.Windows.Forms.NumericUpDown();
 			this.cbRecord = new System.Windows.Forms.CheckBox();
 			this.tbLabel = new System.Windows.Forms.TextBox();
 			this.button3 = new System.Windows.Forms.Button();
-			((System.ComponentModel.ISupportInitialize)(this.nvSteps)).BeginInit();
+			this.tbSteps = new System.Windows.Forms.TextBox();
 			this.SuspendLayout();
 			// 
 			// lbInstructionHistory
@@ -183,29 +182,11 @@
 			this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.button2.Location = new System.Drawing.Point(3, 355);
 			this.button2.Name = "button2";
-			this.button2.Size = new System.Drawing.Size(171, 23);
+			this.button2.Size = new System.Drawing.Size(133, 23);
 			this.button2.TabIndex = 13;
-			this.button2.Text = "Execute Next X Instructions";
+			this.button2.Text = "Execute X Instructions:";
 			this.button2.UseVisualStyleBackColor = true;
 			this.button2.Click += new System.EventHandler(this.button2_Click);
-			// 
-			// nvSteps
-			// 
-			this.nvSteps.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.nvSteps.Location = new System.Drawing.Point(180, 358);
-			this.nvSteps.Maximum = new decimal(new int[] {
-            10000,
-            0,
-            0,
-            0});
-			this.nvSteps.Name = "nvSteps";
-			this.nvSteps.Size = new System.Drawing.Size(65, 20);
-			this.nvSteps.TabIndex = 14;
-			this.nvSteps.Value = new decimal(new int[] {
-            150,
-            0,
-            0,
-            0});
 			// 
 			// cbRecord
 			// 
@@ -237,15 +218,23 @@
 			this.button3.UseVisualStyleBackColor = true;
 			this.button3.Click += new System.EventHandler(this.button3_Click);
 			// 
+			// tbSteps
+			// 
+			this.tbSteps.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.tbSteps.Location = new System.Drawing.Point(142, 358);
+			this.tbSteps.Name = "tbSteps";
+			this.tbSteps.Size = new System.Drawing.Size(102, 20);
+			this.tbSteps.TabIndex = 19;
+			// 
 			// SimProcessorX86Form
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(755, 386);
+			this.Controls.Add(this.tbSteps);
 			this.Controls.Add(this.button3);
 			this.Controls.Add(this.tbLabel);
 			this.Controls.Add(this.cbRecord);
-			this.Controls.Add(this.nvSteps);
 			this.Controls.Add(this.button2);
 			this.Controls.Add(this.label6);
 			this.Controls.Add(this.lbStack);
@@ -263,7 +252,6 @@
 			this.Name = "SimProcessorX86Form";
 			this.Text = "X86 Processor Simulation";
 			this.Load += new System.EventHandler(this.SimProcessorX86Form_Load);
-			((System.ComponentModel.ISupportInitialize)(this.nvSteps)).EndInit();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -285,9 +273,9 @@
 		private System.Windows.Forms.ListBox lbStack;
 		private System.Windows.Forms.Label label6;
 		private System.Windows.Forms.Button button2;
-		private System.Windows.Forms.NumericUpDown nvSteps;
 		private System.Windows.Forms.CheckBox cbRecord;
 		private System.Windows.Forms.TextBox tbLabel;
 		private System.Windows.Forms.Button button3;
+		private System.Windows.Forms.TextBox tbSteps;
 	}
 }

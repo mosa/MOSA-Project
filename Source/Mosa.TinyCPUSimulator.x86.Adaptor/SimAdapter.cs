@@ -13,7 +13,6 @@ using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Compiler.TypeSystem;
 using Mosa.Platform.x86;
 using Mosa.TinyCPUSimulator.Adaptor;
-using Mosa.TinyCPUSimulator.x86.Emulate;
 using System.Collections.Generic;
 
 namespace Mosa.TinyCPUSimulator.x86.Adaptor

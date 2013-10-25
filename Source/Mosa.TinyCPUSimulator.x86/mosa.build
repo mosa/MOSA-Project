@@ -18,6 +18,7 @@
                     <include name="ControlRegister.cs"/>
                     <include name="CR0.cs"/>
                     <include name="Emulate/CMOS.cs"/>
+                    <include name="Emulate/MosaKernel.cs"/>
                     <include name="Emulate/PowerUp.cs"/>
                     <include name="Emulate/DisplayForm.cs"/>
                     <include name="Emulate/DisplayForm.Designer.cs"/>

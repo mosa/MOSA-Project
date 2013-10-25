@@ -8,6 +8,7 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using Mosa.Compiler.Framework.Stages;
 using Mosa.Compiler.InternalTrace;
 using Mosa.Compiler.Linker;
 using Mosa.Compiler.Metadata;
@@ -126,7 +127,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Holds the type initializer scheduler stage
 		/// </summary>
-		ITypeInitializerSchedulerStage typeInitializerSchedulerStage;
+		private TypeInitializerSchedulerStage typeInitializerSchedulerStage;
 
 		#endregion Data Members
 
@@ -409,7 +410,7 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		protected virtual void InitializeType()
 		{
-			typeInitializerSchedulerStage = Compiler.Pipeline.FindFirst<ITypeInitializerSchedulerStage>();
+			typeInitializerSchedulerStage = Compiler.Pipeline.FindFirst<TypeInitializerSchedulerStage>();
 
 			if (typeInitializerSchedulerStage == null)
 				return;
@@ -418,7 +419,6 @@ namespace Mosa.Compiler.Framework
 			const MethodAttributes attrs = MethodAttributes.SpecialName | MethodAttributes.RTSpecialName | MethodAttributes.Static;
 			if ((Method.Attributes & attrs) == attrs && Method.Name == ".cctor")
 			{
-
 				typeInitializerSchedulerStage.Schedule(Method);
 			}
 		}
@@ -472,6 +472,5 @@ namespace Mosa.Compiler.Framework
 		}
 
 		#endregion Methods
-
 	}
 }

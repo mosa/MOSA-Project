@@ -16,32 +16,25 @@ namespace Mosa.Kernel.x86
 	/// </summary>
 	public static class KernelMemory
 	{
-		static private uint _heap = 0x300000;
-		static private uint _size = 0;
+		static private uint heap = 0;
+		static private uint allocated = 0;
+		static private uint used = 0;
 
 		[PlugMethod("Mosa.Internal.Runtime.AllocateMemory")]
 		static public uint AllocateMemory(uint size)
 		{
-			uint at = _heap;
-			_heap = _heap + size;
+			if ((heap == 0) || (size > (allocated - used)))
+			{
+				// Go allocate memory
+
+				allocated = 1024 * 1024 * 64; // 64Mb
+				heap = x86.ProcessManager.AllocateMemory(0, allocated);
+				used = 0;
+			}
+
+			uint at = heap + used;
+			used = used + size;
 			return at;
 		}
-
-		//[PlugMethod("Mosa.Internal.Runtime.AllocateMemory")]
-		//static public uint AllocateMemory(uint size)
-		//{
-		//	if ((_heap == 0) || (size > (_size - _used)))
-		//	{
-		//		// Go allocate memory
-
-		//		_size = 1024 * 1024 * 64; // 64Mb
-		//		_heap = x86.ProcessManager.AllocateMemory(0, _size);
-		//		_used = 0;
-		//	}
-
-		//	uint at = _heap + _used;
-		//	_used = _used + size;
-		//	return at;
-		//}
 	}
 }

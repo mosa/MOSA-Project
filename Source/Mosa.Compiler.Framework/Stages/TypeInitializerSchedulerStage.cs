@@ -21,7 +21,7 @@ namespace Mosa.Compiler.Framework.Stages
 	/// by the high-level language compiler by placing cctors in some order in
 	/// metadata.
 	/// </remarks>
-	public sealed class TypeInitializerSchedulerStage : BaseCompilerStage, ICompilerStage, IPipelineStage, ITypeInitializerSchedulerStage
+	public sealed class TypeInitializerSchedulerStage : BaseCompilerStage, ICompilerStage, IPipelineStage
 	{
 		public readonly string TypeInitializerName = "AssemblyInit"; // FullName = Mosa.Tools.Compiler.LinkerGenerated.<$>AssemblyInit
 

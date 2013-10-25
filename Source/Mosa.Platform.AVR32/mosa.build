@@ -22,7 +22,7 @@
                     <include name="GeneralPurposeRegister.cs"/>
                     <include name="Instructions/Branch.cs"/>
                     <include name="Intrinsic/Nop.cs"/>
-                    <include name="IRTransformationStage.cs"/>
+                    <include name="Stages/IRTransformationStage.cs"/>
                     <include name="MachineCodeEmitter.cs"/>
                     <include name="Instructions/Adc.cs"/>
                     <include name="Instructions/Add.cs"/>

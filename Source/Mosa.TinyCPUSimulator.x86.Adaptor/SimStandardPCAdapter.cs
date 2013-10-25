@@ -34,6 +34,8 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 			CPU.AddDevice(new CMOS(CPU));
 			CPU.AddDevice(new VGAConsole(CPU, primaryDisplay));
 			CPU.AddDevice(new Multiboot(CPU));
+			
+			CPU.AddDevice(new MosaKernel(CPU));
 		}
 
 	}
