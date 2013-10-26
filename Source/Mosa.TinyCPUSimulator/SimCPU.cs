@@ -32,6 +32,12 @@ namespace Mosa.TinyCPUSimulator
 
 		public virtual ulong CurrentInstructionPointer { get { return 0; } set { return; } }
 
+		public virtual ulong StackPointer { get { return 0; } set { return; } }
+
+		public virtual ulong FramePointer { get { return 0; } set { return; } }
+		
+		public virtual long PreviousFrameOffset { get { return -4; }  }
+
 		public Dictionary<ulong, KeyValuePair<byte, byte>> MemoryDelta { get; private set; }
 
 		public SimCPU()

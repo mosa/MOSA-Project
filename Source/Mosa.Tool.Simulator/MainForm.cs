@@ -27,6 +27,7 @@ namespace Mosa.Tool.Simulator
 		private GeneralPurposeRegistersView generalPurposeRegistersView = new GeneralPurposeRegistersView();
 		private DisplayView displayView = new DisplayView();
 		private ControlView controlView = new ControlView();
+		private CallStackView callStackView = new CallStackView();
 
 		public IInternalTrace InternalTrace = new BasicInternalTrace();
 		public ConfigurableTraceFilter Filter = new ConfigurableTraceFilter();
@@ -38,7 +39,7 @@ namespace Mosa.Tool.Simulator
 
 		public bool Record = false;
 
-		public string Status { set { this.toolStripStatusLabel1.Text = value; } }
+		public string Status { set { this.toolStripStatusLabel1.Text = value; toolStrip1.Refresh(); } }
 
 		//private Thread excutionThread;
 
@@ -58,12 +59,11 @@ namespace Mosa.Tool.Simulator
 			InternalTrace.TraceFilter = Filter;
 
 			dockPanel.SuspendLayout(true);
-			assembliesView.Show(dockPanel, DockState.DockLeft);
+			assembliesView.Show(dockPanel, DockState.DockLeftAutoHide);
 			generalPurposeRegistersView.Show(dockPanel, DockState.DockRight);
+			callStackView.Show(dockPanel, DockState.DockRight);
 			displayView.Show(dockPanel, DockState.Document);
 			controlView.Show(dockPanel, DockState.DockBottom);
-
-			displayView.StartTimer();
 
 			dockPanel.ResumeLayout(true, true);
 		}
@@ -107,6 +107,8 @@ namespace Mosa.Tool.Simulator
 			if (TypeSystem == null)
 				return;
 
+			Status = "Compiling...";
+
 			string platform = "x86"; // cbPlatform.Text.Trim().ToLower();
 
 			Architecture = GetArchitecture(platform);
@@ -118,6 +120,10 @@ namespace Mosa.Tool.Simulator
 			SimCPU = simAdapter.SimCPU;
 			SimCPU.Monitor.EnableStepping = true;
 			SimCPU.Reset();
+
+			Status = "Compiled.";
+
+			UpdateAll();
 
 			//excutionThread = new Thread(new ThreadStart(SimCPU.Execute));
 		}

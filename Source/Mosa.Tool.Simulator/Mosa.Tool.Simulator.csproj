@@ -55,6 +55,12 @@
     <Compile Include="ControlView.designer.cs">
       <DependentUpon>ControlView.cs</DependentUpon>
     </Compile>
+    <Compile Include="CallStackView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CallStackView.designer.cs">
+      <DependentUpon>CallStackView.cs</DependentUpon>
+    </Compile>
     <Compile Include="DisplayView.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -98,6 +104,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ControlView.resx">
       <DependentUpon>ControlView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CallStackView.resx">
+      <DependentUpon>CallStackView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="DisplayView.resx">
       <DependentUpon>DisplayView.cs</DependentUpon>

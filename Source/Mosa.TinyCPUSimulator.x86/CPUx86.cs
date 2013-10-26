@@ -183,6 +183,10 @@ namespace Mosa.TinyCPUSimulator.x86
 
 		public override ulong CurrentInstructionPointer { get { return EIP.Value; } set { EIP.Value = (uint)value; } }
 
+		public override ulong StackPointer { get { return ESP.Value; } set { ESP.Value = (uint)value; } }
+
+		public override ulong FramePointer { get { return EBP.Value; } set { EBP.Value = (uint)value; } }
+
 		protected override ulong TranslateToPhysical(ulong address)
 		{
 			if ((CR0.Value & 0x80000000) == 0)

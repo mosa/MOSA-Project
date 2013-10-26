@@ -1,6 +1,6 @@
 namespace Mosa.Tool.Simulator
 {
-	partial class AssembliesView : SimulatorDockContent
+	partial class CallStackView : SimulatorDockContent
     {
         /// <summary>
         /// Required designer variable.
@@ -27,41 +27,42 @@ namespace Mosa.Tool.Simulator
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.treeView = new System.Windows.Forms.TreeView();
+			this.textBox1 = new System.Windows.Forms.TextBox();
 			this.SuspendLayout();
 			// 
-			// treeView
+			// textBox1
 			// 
-			this.treeView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+			this.textBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.treeView.Location = new System.Drawing.Point(0, 0);
-			this.treeView.Margin = new System.Windows.Forms.Padding(0);
-			this.treeView.Name = "treeView";
-			this.treeView.Size = new System.Drawing.Size(219, 160);
-			this.treeView.TabIndex = 4;
+			this.textBox1.Location = new System.Drawing.Point(0, 0);
+			this.textBox1.Multiline = true;
+			this.textBox1.Name = "textBox1";
+			this.textBox1.Size = new System.Drawing.Size(216, 156);
+			this.textBox1.TabIndex = 0;
+			this.textBox1.WordWrap = false;
 			// 
-			// AssembliesView
+			// CallStackView
 			// 
-			this.ClientSize = new System.Drawing.Size(219, 162);
-			this.Controls.Add(this.treeView);
-			this.DockAreas = ((WeifenLuo.WinFormsUI.Docking.DockAreas)(((WeifenLuo.WinFormsUI.Docking.DockAreas.Float | WeifenLuo.WinFormsUI.Docking.DockAreas.DockLeft) 
-            | WeifenLuo.WinFormsUI.Docking.DockAreas.DockRight)));
+			this.ClientSize = new System.Drawing.Size(219, 161);
+			this.Controls.Add(this.textBox1);
 			this.HideOnClose = true;
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
-			this.MinimumSize = new System.Drawing.Size(100, 100);
-			this.Name = "AssembliesView";
+			this.MinimumSize = new System.Drawing.Size(235, 200);
+			this.Name = "CallStackView";
 			this.Padding = new System.Windows.Forms.Padding(0, 2, 0, 2);
 			this.ShowHint = WeifenLuo.WinFormsUI.Docking.DockState.DockLeft;
-			this.TabText = "Assemblies";
-			this.Text = "Assemblies";
+			this.TabText = "Call Stack";
+			this.Text = "Call Stack";
 			this.ResumeLayout(false);
+			this.PerformLayout();
 
 		}
 		#endregion
 
-		private System.Windows.Forms.TreeView treeView;
+		private System.Windows.Forms.TextBox textBox1;
+
 
 	}
 }
