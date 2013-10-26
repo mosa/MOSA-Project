@@ -25,10 +25,6 @@ namespace Mosa.TinyCPUSimulator
 			CPU.CurrentInstructionPointer = Address;
 		}
 
-		public virtual void Initialize()
-		{
-		}
-
 		public void Add(SimInstruction instruction)
 		{
 			CPU.AddInstruction(Address, instruction);

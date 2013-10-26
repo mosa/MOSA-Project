@@ -7,27 +7,12 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using Mosa.Compiler.Framework;
-using Mosa.Compiler.Metadata;
-using Mosa.Compiler.Metadata.Signatures;
-using Mosa.Compiler.TypeSystem;
-using Mosa.Platform.x86;
-using Mosa.TinyCPUSimulator.Adaptor;
-using Mosa.TinyCPUSimulator.x86.Emulate;
-using System.Collections.Generic;
-
 namespace Mosa.TinyCPUSimulator.x86.Adaptor
 {
 	public class SimTestSystemAdapter : SimAdapter
 	{
 		public SimTestSystemAdapter()
 		{
-		}
-
-		public override void Initialize()
-		{
-			base.Initialize();
-
 			ulong freeMemPtr = 0x21700000;
 			ulong freeMem = 0xF0000000;
 
@@ -37,6 +22,5 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 
 			CPU.Write32(freeMemPtr, (uint)freeMem);
 		}
-
 	}
 }

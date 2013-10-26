@@ -15,7 +15,7 @@ namespace Mosa.TinyCPUSimulator.x86.Opcodes
 		{
 			if (cpu.FLAGS.Sign != cpu.FLAGS.Overflow)
 			{
-				cpu.EIP.Value = ResolveBranch(cpu,instruction.Operand1);
+				cpu.EIP.Value = ResolveBranch(cpu, instruction.Operand1);
 			}
 		}
 	}

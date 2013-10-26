@@ -176,6 +176,10 @@
     <Compile Include="Opcodes\Xor.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Mosa.TinyCPUSimulator.Adaptor\Mosa.TinyCPUSimulator.Adaptor.csproj">
+      <Project>{50568e2d-5360-4f71-87e0-f6979d2d858a}</Project>
+      <Name>Mosa.TinyCPUSimulator.Adaptor</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Mosa.TinyCPUSimulator\Mosa.TinyCPUSimulator.csproj">
       <Project>{6f7c06b2-09bf-45bd-8e6b-ae9bf7c7e250}</Project>
       <Name>Mosa.TinyCPUSimulator</Name>

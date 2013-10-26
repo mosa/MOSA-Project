@@ -11,8 +11,8 @@ namespace Mosa.TinyCPUSimulator.x86.Emulate
 {
 	public class Multiboot : BaseSimDevice
 	{
-		public readonly uint Magic = 0x2BADB002;
-		public readonly uint MultibootStructure = 0x10090; // same as QEMU
+		public static readonly uint Magic = 0x2BADB002;
+		public static readonly uint MultibootStructure = 0x10090; // same as QEMU
 
 		public Multiboot(SimCPU simCPU)
 			: base(simCPU)
@@ -20,7 +20,7 @@ namespace Mosa.TinyCPUSimulator.x86.Emulate
 		}
 
 		public override void Initialize()
-		{                    
+		{
 			simCPU.AddMemory(0x00200000, 0x08, 2);
 		}
 

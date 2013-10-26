@@ -7,6 +7,7 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using Mosa.TinyCPUSimulator.Adaptor;
 using System.Drawing;
 
 namespace Mosa.TinyCPUSimulator.x86.Emulate
@@ -16,7 +17,11 @@ namespace Mosa.TinyCPUSimulator.x86.Emulate
 	/// </summary>
 	public class VGAConsole : BaseSimDevice
 	{
-		private DisplayForm dislayForm;
+		private ISimDisplay dislayForm;
+
+		private Bitmap bitmap;
+		private Graphics graphic;
+
 		private Font font;
 		private int fontWidth;
 		private int fontHeight;
@@ -138,7 +143,7 @@ namespace Mosa.TinyCPUSimulator.x86.Emulate
 		/// <summary>
 		/// Initializes a new instance of the <see cref="VGAConsole"/> class.
 		/// </summary>
-		public VGAConsole(SimCPU simCPU, DisplayForm dislayForm)
+		public VGAConsole(SimCPU simCPU, ISimDisplay dislayForm)
 			: base(simCPU)
 		{
 			this.dislayForm = dislayForm;
@@ -156,7 +161,10 @@ namespace Mosa.TinyCPUSimulator.x86.Emulate
 			fontWidth = (int)font.SizeInPoints;
 			fontHeight = (int)font.SizeInPoints + 5;
 
-			dislayForm.SetSize(fontWidth * width + 12, fontHeight * height + 10);
+			bitmap = new System.Drawing.Bitmap(fontWidth * width, fontHeight * height, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+			graphic = Graphics.FromImage(bitmap);
+
+			dislayForm.SetBitMap(bitmap);
 		}
 
 		public override void Initialize()
@@ -250,10 +258,10 @@ namespace Mosa.TinyCPUSimulator.x86.Emulate
 			Brush color = new SolidBrush(Color.FromArgb(palette[colorindex, 1], palette[colorindex, 2], palette[colorindex, 3]));
 			Brush background = new SolidBrush(Color.FromArgb(palette[backgroundindex, 1], palette[backgroundindex, 2], palette[backgroundindex, 3]));
 
-			lock (dislayForm.bitmap)
+			lock (bitmap)
 			{
-				dislayForm.graphic.FillRectangle(background, new Rectangle(x * fontWidth, y * fontHeight, fontWidth + 1, fontHeight + 1));
-				dislayForm.graphic.DrawString(c.ToString(), font, color, x * fontWidth, y * fontHeight);
+				graphic.FillRectangle(background, new Rectangle(x * fontWidth, y * fontHeight, fontWidth + 1, fontHeight + 1));
+				graphic.DrawString(c.ToString(), font, color, x * fontWidth, y * fontHeight);
 			}
 			dislayForm.Changed = true;
 		}

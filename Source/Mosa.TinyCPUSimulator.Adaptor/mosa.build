@@ -15,6 +15,7 @@
 	    <csc target="library" output="${outputDirectory}/Mosa.TinyCPUSimulator.Adaptor.dll" debug="${debug}" unsafe="true" nostdlib="false">
 		<sources>
                     <include name="ISimAdapter.cs"/>
+                    <include name="ISimDisplay.cs"/>
                     <include name="SimCodeGeneratorStage.cs"/>
                     <include name="SimCompiler.cs"/>
                     <include name="SimLinker.cs"/>

@@ -69,8 +69,38 @@ namespace Mosa.TinyCPUSimulator.Adaptor
 		/// <summary>
 		/// Sets the label.
 		/// </summary>
-		/// <param name="address">The address.</param>
 		/// <param name="label">The label.</param>
-		void SetLabel(string label, ulong address);
+		/// <param name="address">The address.</param>
+		/// <param name="size">The size.</param>
+		void SetSymbol(string label, ulong address, ulong size);
+
+		/// <summary>
+		/// Finds the symbol.
+		/// </summary>
+		/// <param name="address">The address.</param>
+		/// <returns></returns>
+		SimSymbol FindSymbol(ulong address);
+
+		/// <summary>
+		/// Reads a byte
+		/// </summary>
+		/// <param name="address">The address.</param>
+		/// <returns></returns>
+		byte DirectRead8(ulong address);
+
+		/// <summary>
+		/// Reads a word
+		/// </summary>
+		/// <param name="address">The address.</param>
+		/// <returns></returns>
+		ushort DirectRead16(ulong address);
+
+		/// <summary>
+		/// Reads a integer
+		/// </summary>
+		/// <param name="address">The address.</param>
+		/// <returns></returns>
+		uint DirectRead32(ulong address);
+
 	}
 }

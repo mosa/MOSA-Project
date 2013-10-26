@@ -50,7 +50,7 @@ namespace Mosa.TinyCPUSimulator
 
 		public void AddBreakPoint(string label)
 		{
-			ulong address = CPU.GetLabel(label);
+			ulong address = CPU.GetSymbol(label).Address;
 
 			AddBreakPoint(address);
 		}

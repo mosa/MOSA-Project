@@ -15,7 +15,7 @@ namespace Mosa.TinyCPUSimulator.Debug
 {
 	internal class TestCPUx86 : BaseSetup<CPUx86>
 	{
-		public override void Initialize()
+		public TestCPUx86()
 		{
 			CPU.AddDevice(new PowerUp(CPU));
 			CPU.AddDevice(new Multiboot(CPU));

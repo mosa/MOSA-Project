@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Mosa.TinyCPUSimulator.Adaptor;
+using System;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -7,50 +8,44 @@ namespace Mosa.TinyCPUSimulator.x86.Emulate
 	/// <summary>
 	///
 	/// </summary>
-	public partial class DisplayForm : Form
+	public partial class DisplayForm : Form, ISimDisplay
 	{
 		/// <summary>
 		///
 		/// </summary>
-		public Bitmap bitmap;
+		private Bitmap bitmap;
 
 		/// <summary>
 		///
 		/// </summary>
-		public Graphics graphic;
+		private volatile bool changed = false;
 
 		/// <summary>
 		///
 		/// </summary>
-		public volatile bool Changed = false;
+		private volatile bool resized = false;
 
 		/// <summary>
 		///
 		/// </summary>
-		private volatile bool Resized = false;
-
 		private Timer timer;
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="DisplayForm"/> class.
-		/// </summary>
-		public DisplayForm(int width, int height)
+		bool ISimDisplay.Changed { get { return changed; } set { changed = value; } }
+
+		bool ISimDisplay.Resized { get { return resized; } set { resized = value; } }
+
+		void ISimDisplay.SetBitMap(object bitmap)
 		{
-			InitializeComponent();
-			SetSize(width, height);
-			DoubleBuffered = true;
+			this.bitmap = bitmap as Bitmap;
 		}
 
 		/// <summary>
-		/// Sets the size.
+		/// Initializes a new instance of the <see cref="DisplayForm" /> class.
 		/// </summary>
-		/// <param name="width">The width.</param>
-		/// <param name="height">The height.</param>
-		public void SetSize(int width, int height)
+		public DisplayForm()
 		{
-			bitmap = new System.Drawing.Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
-			graphic = Graphics.FromImage(bitmap);
-			Resized = true;
+			InitializeComponent();
+			DoubleBuffered = true;
 		}
 
 		/// <summary>
@@ -67,7 +62,7 @@ namespace Mosa.TinyCPUSimulator.x86.Emulate
 		private void Timer_Tick(object sender, EventArgs eArgs)
 		{
 			if (sender == timer)
-				if (Changed)
+				if (changed)
 					this.Refresh();
 		}
 
@@ -76,34 +71,15 @@ namespace Mosa.TinyCPUSimulator.x86.Emulate
 			lock (bitmap)
 			{
 				e.Graphics.DrawImage(bitmap, 0, 0, bitmap.Width, bitmap.Height);
-				if (Resized)
+
+				if (resized)
 				{
 					Width = bitmap.Width + 12;
 					Height = bitmap.Height + 10;
-					Resized = true;
+					resized = false;
 				}
-				Changed = false;
+				changed = false;
 			}
-		}
-
-		/// <summary>
-		/// Paints the background of the control.
-		/// </summary>
-		/// <param name="e">A <see cref="T:System.Windows.Forms.PaintEventArgs"/> that contains the event data.</param>
-		protected override void OnPaintBackground(PaintEventArgs e)
-		{
-			//base.OnPaintBackground(e);
-		}
-
-		private void DisplayForm_KeyPress(object sender, KeyPressEventArgs e)
-		{
-			//if (onKeyPressed != null)
-			//	onKeyPressed(new Key(e.KeyChar));
-		}
-
-		private void DisplayForm_FormClosing(object sender, FormClosingEventArgs e)
-		{
-			//Environment.Exit(0);
 		}
 	}
 }

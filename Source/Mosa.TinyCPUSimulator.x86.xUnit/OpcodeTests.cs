@@ -15,7 +15,7 @@ namespace Mosa.TinyCPUSimulator.x86.xUnit
 {
 	public class OpcodeTests : BaseSetup<CPUx86>
 	{
-		public override void Initialize()
+		public OpcodeTests()
 		{
 			CPU.AddMemory(0x400000, 0x100000, 2);  // 4-5Mb reserved
 

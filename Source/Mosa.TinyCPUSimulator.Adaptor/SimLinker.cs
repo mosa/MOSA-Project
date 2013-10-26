@@ -47,7 +47,7 @@ namespace Mosa.TinyCPUSimulator.Adaptor
 
 			foreach (var symbol in Symbols)
 			{
-				SimAdapter.SetLabel(symbol.Name, (ulong)symbol.VirtualAddress);
+				SimAdapter.SetSymbol(symbol.Name, (ulong)symbol.VirtualAddress, (ulong)symbol.Length);
 			}
 		}
 

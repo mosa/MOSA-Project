@@ -152,7 +152,7 @@ namespace Mosa.TinyCPUSimulator.x86
 		{
 			Debug.Assert(operand.IsLabel);
 
-			uint address = (uint)cpu.GetLabel(operand.Label);
+			uint address = (uint)cpu.GetSymbol(operand.Label).Address;
 
 			if (operand.IsMemory)
 			{
@@ -202,7 +202,7 @@ namespace Mosa.TinyCPUSimulator.x86
 
 			if (operand.IsLabel)
 			{
-				uint address = (uint)cpu.GetLabel(operand.Label);
+				uint address = (uint)cpu.GetSymbol(operand.Label).Address;
 
 				Write(cpu, address, value, size);
 			}

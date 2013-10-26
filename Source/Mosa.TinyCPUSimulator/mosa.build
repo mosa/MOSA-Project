@@ -17,6 +17,7 @@
                     <include name="BaseOpcode.cs"/>
                     <include name="BaseSetup.cs"/>
                     <include name="BaseSimDevice.cs"/>
+                    <include name="SimSymbol.cs"/>
                     <include name="SimState.cs"/>
                     <include name="RegisterFloatingPoint.cs"/>
                     <include name="Register32Bit.cs"/>

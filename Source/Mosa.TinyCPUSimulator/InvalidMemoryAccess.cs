@@ -20,5 +20,10 @@ namespace Mosa.TinyCPUSimulator
 		{
 			this.Address = address;
 		}
+
+		public override string ToString()
+		{
+			return "Invalid Memory Access at 0x" + Address.ToString("X");
+		}
 	}
 }

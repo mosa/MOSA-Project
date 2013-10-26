@@ -22,7 +22,7 @@ namespace Mosa.TinyCPUSimulator
 
 		public List<BaseSimDevice> SimDevices { get; private set; }
 
-		public Dictionary<string, ulong> Labels { get; private set; }
+		public Dictionary<string, SimSymbol> Symbols { get; private set; }
 
 		public ulong Tick { get; private set; }
 
@@ -40,7 +40,7 @@ namespace Mosa.TinyCPUSimulator
 			InstructionCache = new Dictionary<ulong, SimInstruction>();
 			SimDevices = new List<BaseSimDevice>();
 			PortDevices = new BaseSimDevice[65536];
-			Labels = new Dictionary<string, ulong>();
+			Symbols = new Dictionary<string, SimSymbol>();
 			MemoryDelta = new Dictionary<ulong, KeyValuePair<byte, byte>>();
 
 			Tick = 0;
@@ -203,26 +203,37 @@ namespace Mosa.TinyCPUSimulator
 			return DirectRead32(TranslateToPhysical(address));
 		}
 
-		public void SetLabel(string label, ulong address)
+		public void SetSymbol(string name, ulong address, ulong size)
 		{
-			if (Labels.ContainsKey(label))
+			if (Symbols.ContainsKey(name))
 				return; // HACK for generics which duplicate methods!
 
-			Labels.Add(label, address);
+			Symbols.Add(name, new SimSymbol(name, address, size));
 
 			//Debug.WriteLine("0x" + address.ToString("X") + ": " + label);
 		}
 
-		public ulong GetLabel(string label)
+		public SimSymbol GetSymbol(string name)
 		{
-			ulong address = 0;
+			SimSymbol symbol = null;
 
-			if (!Labels.TryGetValue(label, out address))
+			if (!Symbols.TryGetValue(name, out symbol))
 			{
 				throw new CPUException();
 			}
 
-			return address;
+			return symbol;
+		}
+
+		public SimSymbol FindSymbol(ulong address)
+		{
+			foreach (var entry in Symbols)
+			{
+				if (address >= entry.Value.Address && address < entry.Value.EndAddress)
+					return entry.Value;
+			}
+
+			return null;
 		}
 
 		public void AddInstruction(ulong address, SimInstruction instruction)

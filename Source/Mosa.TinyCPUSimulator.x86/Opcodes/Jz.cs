@@ -15,7 +15,7 @@ namespace Mosa.TinyCPUSimulator.x86.Opcodes
 		{
 			if (cpu.FLAGS.Zero)
 			{
-				cpu.EIP.Value = ResolveBranch(cpu,instruction.Operand1);
+				cpu.EIP.Value = ResolveBranch(cpu, instruction.Operand1);
 			}
 		}
 	}

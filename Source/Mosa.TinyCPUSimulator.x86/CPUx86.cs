@@ -235,15 +235,15 @@ namespace Mosa.TinyCPUSimulator.x86
 			simState.StoreValue("IP.Formatted", ToHex(EIP.Value));
 			//simState.StoreValue("EIP.Last", ToHex((uint)LastCurrentInstructionPointer));
 
-			simState.StoreValue("EIP", ToHex(EIP.Value));
-			simState.StoreValue("EAX", ToHex(EAX.Value));
-			simState.StoreValue("EBX", ToHex(EBX.Value));
-			simState.StoreValue("ECX", ToHex(ECX.Value));
-			simState.StoreValue("EDX", ToHex(EDX.Value));
-			simState.StoreValue("ESP", ToHex(ESP.Value));
-			simState.StoreValue("EBP", ToHex(EBP.Value));
-			simState.StoreValue("ESI", ToHex(ESI.Value));
-			simState.StoreValue("EDI", ToHex(EDI.Value));
+			simState.StoreValue("Register.1.EIP", ToHex(EIP.Value));
+			simState.StoreValue("Register.2.EAX", ToHex(EAX.Value));
+			simState.StoreValue("Register.3.EBX", ToHex(EBX.Value));
+			simState.StoreValue("Register.4.ECX", ToHex(ECX.Value));
+			simState.StoreValue("Register.5.EDX", ToHex(EDX.Value));
+			simState.StoreValue("Register.6.ESP", ToHex(ESP.Value));
+			simState.StoreValue("Register.7.EBP", ToHex(EBP.Value));
+			simState.StoreValue("Register.8.ESI", ToHex(ESI.Value));
+			simState.StoreValue("Register.9.EDI", ToHex(EDI.Value));
 
 			simState.StoreValue("CR0", ToHex(CR0.Value));
 			simState.StoreValue("CR2", ToHex(CR2.Value));

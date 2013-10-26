@@ -21,11 +21,6 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 	{
 		public SimAdapter()
 		{
-			Initialize();
-		}
-
-		public override void Initialize()
-		{
 		}
 
 		SimCPU ISimAdapter.SimCPU { get { return this.CPU; } }
@@ -79,9 +74,29 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 			Add(address, instruction);
 		}
 
-		void ISimAdapter.SetLabel(string label, ulong address)
+		void ISimAdapter.SetSymbol(string name, ulong address, ulong size)
 		{
-			CPU.SetLabel(label, address);
+			CPU.SetSymbol(name, address, size);
+		}
+
+		SimSymbol ISimAdapter.FindSymbol(ulong address)
+		{
+			return CPU.FindSymbol(address);
+		}
+
+		byte ISimAdapter.DirectRead8(ulong address)
+		{
+			return CPU.DirectRead8(address);
+		}
+
+		ushort ISimAdapter.DirectRead16(ulong address)
+		{
+			return CPU.DirectRead16(address);
+		}
+
+		uint ISimAdapter.DirectRead32(ulong address)
+		{
+			return CPU.DirectRead32(address);
 		}
 
 		private List<SimOperand> GetOperands(Context context, RuntimeMethod method, BasicBlocks basicBlocks)

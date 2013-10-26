@@ -379,19 +379,25 @@ namespace Mosa.Tool.Explorer
 			switch (platform.ToLower())
 			{
 				case "x86": return Mosa.Platform.x86.Architecture.CreateArchitecture(Mosa.Platform.x86.ArchitectureFeatureFlags.AutoDetect);
-				//case "avr32": return Mosa.Platform.AVR32.Architecture.CreateArchitecture(Mosa.Platform.AVR32.ArchitectureFeatureFlags.AutoDetect);
 				default: return Mosa.Platform.x86.Architecture.CreateArchitecture(Mosa.Platform.x86.ArchitectureFeatureFlags.AutoDetect);
 			}
 		}
 
 		private static ISimAdapter GetSimAdaptor(string platform)
 		{
+			var display = new Mosa.TinyCPUSimulator.x86.Emulate.DisplayForm();
+			display.Show();
+			display.StartTimer();
+
+			ISimAdapter simAdapter;
+
 			switch (platform.ToLower())
 			{
-				case "x86": return new Mosa.TinyCPUSimulator.x86.Adaptor.SimStandardPCAdapter();
-				//case "avr32": return Mosa.Platform.AVR32.Architecture.CreateArchitecture(Mosa.Platform.AVR32.ArchitectureFeatureFlags.AutoDetect);
-				default: return new Mosa.TinyCPUSimulator.x86.Adaptor.SimStandardPCAdapter();
+				case "x86": simAdapter = new Mosa.TinyCPUSimulator.x86.Adaptor.SimStandardPCAdapter(display); break;
+				default: simAdapter = new Mosa.TinyCPUSimulator.x86.Adaptor.SimStandardPCAdapter(display); break;
 			}
+
+			return simAdapter;
 		}
 
 		private void nowToolStripMenuItem_Click(object sender, EventArgs e)

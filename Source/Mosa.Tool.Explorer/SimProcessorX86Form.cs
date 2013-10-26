@@ -30,15 +30,15 @@ namespace Mosa.Tool.Explorer
 			lbXMMRegisters.Items.Clear();
 			lbStack.Items.Clear();
 
-			lbGPRs.Items.Add("EIP: " + simState.Values["EIP"]);
-			lbGPRs.Items.Add("EAX: " + simState.Values["EAX"]);
-			lbGPRs.Items.Add("EBX: " + simState.Values["EBX"]);
-			lbGPRs.Items.Add("ECX: " + simState.Values["ECX"]);
-			lbGPRs.Items.Add("EDX: " + simState.Values["EDX"]);
-			lbGPRs.Items.Add("ESP: " + simState.Values["ESP"]);
-			lbGPRs.Items.Add("EBP: " + simState.Values["EBP"]);
-			lbGPRs.Items.Add("ESI: " + simState.Values["ESI"]);
-			lbGPRs.Items.Add("EDI: " + simState.Values["EDI"]);
+			lbGPRs.Items.Add("EIP: " + simState.Values["Register.1.EIP"]);
+			lbGPRs.Items.Add("EAX: " + simState.Values["Register.2.EAX"]);
+			lbGPRs.Items.Add("EBX: " + simState.Values["Register.3.EBX"]);
+			lbGPRs.Items.Add("ECX: " + simState.Values["Register.4.ECX"]);
+			lbGPRs.Items.Add("EDX: " + simState.Values["Register.5.EDX"]);
+			lbGPRs.Items.Add("ESP: " + simState.Values["Register.6.ESP"]);
+			lbGPRs.Items.Add("EBP: " + simState.Values["Register.7.EBP"]);
+			lbGPRs.Items.Add("ESI: " + simState.Values["Register.8.ESI"]);
+			lbGPRs.Items.Add("EDI: " + simState.Values["Register.9.EDI"]);
 
 			//simState.StoreValue("XXM0", XMM0.Value.ToString());
 			//simState.StoreValue("XXM1", XMM1.Value.ToString());
