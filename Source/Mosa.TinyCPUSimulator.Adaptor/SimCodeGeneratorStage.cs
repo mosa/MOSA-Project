@@ -53,7 +53,7 @@ namespace Mosa.TinyCPUSimulator.Adaptor
 			var instruction = simAdapter.Convert(context, methodCompiler.Method, basicBlocks, opcodeSize);
 			instruction.Source = context.ToString(); // context.Instruction.ToString(context);
 
-			simAdapter.AddInstruction((ulong)(sectionAddress + startPosition + start), instruction);
+			simAdapter.SimCPU.AddInstruction((ulong)(sectionAddress + startPosition + start), instruction);
 
 			return;
 		}
@@ -64,7 +64,7 @@ namespace Mosa.TinyCPUSimulator.Adaptor
 
 			base.BlockStart(block);
 
-			simAdapter.SetSymbol(block.ToString() + ":" + methodCompiler.Method.FullName, (ulong)(sectionAddress + startPosition + current), 0);
+			simAdapter.SimCPU.SetSymbol(block.ToString() + ":" + methodCompiler.Method.FullName, (ulong)(sectionAddress + startPosition + current), 0);
 		}
 	}
 }

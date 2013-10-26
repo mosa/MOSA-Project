@@ -14,7 +14,7 @@ namespace Mosa.Tool.Explorer
 			InitializeComponent();
 
 			this.simAdapter = simAdapter;
-			this.simAdapter.Monitor.EnableStepping = true;
+			this.simAdapter.SimCPU.Monitor.EnableStepping = true;
 			GetCurrentStateAndUpdate();
 		}
 
@@ -79,7 +79,7 @@ namespace Mosa.Tool.Explorer
 
 		public void GetCurrentStateAndUpdate()
 		{
-			var state = simAdapter.GetState();
+			var state = simAdapter.SimCPU.GetState();
 
 			lbInstructionHistory.Items.Add(state);
 			lbInstructionHistory.SelectedIndex = lbInstructionHistory.Items.Count - 1;
@@ -91,7 +91,7 @@ namespace Mosa.Tool.Explorer
 			{
 				for (int i = 0; i < steps; i++)
 				{
-					simAdapter.Execute();
+					simAdapter.SimCPU.Execute();
 					if (cbRecord.Checked)
 					{
 						GetCurrentStateAndUpdate();
@@ -125,10 +125,10 @@ namespace Mosa.Tool.Explorer
 
 		private void button3_Click(object sender, EventArgs e)
 		{
-			simAdapter.Monitor.EnableStepping = false;
-			simAdapter.Monitor.ClearBreakPoints();
-			simAdapter.Monitor.AddBreakPoint(tbLabel.Text);
-			simAdapter.Execute();
+			simAdapter.SimCPU.Monitor.EnableStepping = false;
+			simAdapter.SimCPU.Monitor.ClearBreakPoints();
+			simAdapter.SimCPU.Monitor.AddBreakPoint(tbLabel.Text);
+			simAdapter.SimCPU.Execute();
 		}
 	}
 }

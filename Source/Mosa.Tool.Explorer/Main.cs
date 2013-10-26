@@ -365,8 +365,8 @@ namespace Mosa.Tool.Explorer
 
 			toolStripStatusLabel1.Text = "Compiled!";
 
-			simAdapter.Monitor.EnableStepping = true;
-			simAdapter.Reset();
+			simAdapter.SimCPU.Monitor.EnableStepping = true;
+			simAdapter.SimCPU.Reset();
 
 			SimProcessorX86Form form = new SimProcessorX86Form(simAdapter);
 			form.Show();

@@ -160,10 +160,5 @@ namespace Mosa.TinyCPUSimulator
 		{
 			Add(new SimInstruction(opcode, opcodeSize, CreateOperand(register1), CreateImmediate(immediate2)));
 		}
-
-		public virtual SimState GetState()
-		{
-			return CPU.GetState();
-		}
 	}
 }

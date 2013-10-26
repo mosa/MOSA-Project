@@ -72,7 +72,7 @@
 			this.dockPanel.Location = new System.Drawing.Point(0, 28);
 			this.dockPanel.Name = "dockPanel";
 			this.dockPanel.RightToLeftLayout = true;
-			this.dockPanel.Size = new System.Drawing.Size(465, 348);
+			this.dockPanel.Size = new System.Drawing.Size(856, 392);
 			dockPanelGradient1.EndColor = System.Drawing.SystemColors.ControlLight;
 			dockPanelGradient1.StartColor = System.Drawing.SystemColors.ControlLight;
 			autoHideStripSkin1.DockStripGradient = dockPanelGradient1;
@@ -130,7 +130,7 @@
             this.toolStripButton2});
 			this.toolStrip1.Location = new System.Drawing.Point(0, 0);
 			this.toolStrip1.Name = "toolStrip1";
-			this.toolStrip1.Size = new System.Drawing.Size(465, 25);
+			this.toolStrip1.Size = new System.Drawing.Size(856, 25);
 			this.toolStrip1.TabIndex = 28;
 			this.toolStrip1.Text = "toolStrip1";
 			// 
@@ -170,9 +170,9 @@
 			// 
 			this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabel1});
-			this.statusStrip1.Location = new System.Drawing.Point(0, 379);
+			this.statusStrip1.Location = new System.Drawing.Point(0, 423);
 			this.statusStrip1.Name = "statusStrip1";
-			this.statusStrip1.Size = new System.Drawing.Size(465, 22);
+			this.statusStrip1.Size = new System.Drawing.Size(856, 22);
 			this.statusStrip1.TabIndex = 29;
 			this.statusStrip1.Text = "statusStrip1";
 			// 
@@ -191,7 +191,7 @@
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(465, 401);
+			this.ClientSize = new System.Drawing.Size(856, 445);
 			this.Controls.Add(this.statusStrip1);
 			this.Controls.Add(this.toolStrip1);
 			this.Controls.Add(this.dockPanel);

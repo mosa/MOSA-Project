@@ -17,6 +17,7 @@ using Mosa.TinyCPUSimulator;
 using System;
 using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
+using System.Threading;
 
 namespace Mosa.Tool.Simulator
 {
@@ -33,11 +34,13 @@ namespace Mosa.Tool.Simulator
 		public ITypeLayout TypeLayout;
 		public IArchitecture Architecture;
 		public ILinker Linker;
-		public ISimAdapter SimAdapter;
+		public SimCPU SimCPU;
 
 		public bool Record = false;
 
 		public string Status { set { this.toolStripStatusLabel1.Text = value; } }
+
+		//private Thread excutionThread;
 
 		public MainForm()
 		{
@@ -99,7 +102,7 @@ namespace Mosa.Tool.Simulator
 			assembliesView.UpdateTree();
 		}
 
-		private void StartSimulator()
+		public void StartSimulator()
 		{
 			if (TypeSystem == null)
 				return;
@@ -107,14 +110,16 @@ namespace Mosa.Tool.Simulator
 			string platform = "x86"; // cbPlatform.Text.Trim().ToLower();
 
 			Architecture = GetArchitecture(platform);
-			SimAdapter = GetSimAdaptor(platform);
-			Linker = new SimLinker(SimAdapter);
+			var simAdapter = GetSimAdaptor(platform);
+			Linker = new SimLinker(simAdapter);
 
+			SimCompiler.Compile(TypeSystem, TypeLayout, InternalTrace, true, Architecture, simAdapter, Linker);
 
-			SimCompiler.Compile(TypeSystem, TypeLayout, InternalTrace, true, Architecture, SimAdapter, Linker);
+			SimCPU = simAdapter.SimCPU;
+			SimCPU.Monitor.EnableStepping = true;
+			SimCPU.Reset();
 
-			SimAdapter.Monitor.EnableStepping = true;
-			SimAdapter.Reset();
+			//excutionThread = new Thread(new ThreadStart(SimCPU.Execute));
 		}
 
 		private static IArchitecture GetArchitecture(string platform)
@@ -128,15 +133,11 @@ namespace Mosa.Tool.Simulator
 
 		private ISimAdapter GetSimAdaptor(string platform)
 		{
-			ISimAdapter simAdapter;
-
 			switch (platform.ToLower())
 			{
-				case "x86": simAdapter = new Mosa.TinyCPUSimulator.x86.Adaptor.SimStandardPCAdapter(displayView); break;
-				default: simAdapter = new Mosa.TinyCPUSimulator.x86.Adaptor.SimStandardPCAdapter(displayView); break;
+				case "x86": return new Mosa.TinyCPUSimulator.x86.Adaptor.SimStandardPCAdapter(displayView);
+				default: return new Mosa.TinyCPUSimulator.x86.Adaptor.SimStandardPCAdapter(displayView);
 			}
-
-			return simAdapter;
 		}
 
 		private void toolStripButton1_Click(object sender, EventArgs e)
@@ -149,7 +150,7 @@ namespace Mosa.Tool.Simulator
 
 		private void UpdateAll()
 		{
-			if (SimAdapter == null)
+			if (SimCPU == null)
 				return;
 
 			foreach (var dock in dockPanel.Contents)
@@ -163,14 +164,14 @@ namespace Mosa.Tool.Simulator
 
 		public void ExecuteSteps(int steps)
 		{
-			if (SimAdapter == null)
+			if (SimCPU == null)
 				return;
 
 			try
 			{
 				for (int i = 0; i < steps; i++)
 				{
-					SimAdapter.Execute();
+					SimCPU.Execute();
 					if (Record)
 					{
 						GetCurrentStateAndUpdate();
@@ -193,7 +194,7 @@ namespace Mosa.Tool.Simulator
 
 		public void GetCurrentStateAndUpdate()
 		{
-			var state = SimAdapter.GetState();
+			var state = SimCPU.GetState();
 
 			//lbInstructionHistory.Items.Add(state);
 			//lbInstructionHistory.SelectedIndex = lbInstructionHistory.Items.Count - 1;

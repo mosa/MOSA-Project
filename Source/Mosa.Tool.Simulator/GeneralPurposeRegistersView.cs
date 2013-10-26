@@ -64,7 +64,7 @@ namespace Mosa.Tool.Simulator
 
 		public override void Update()
 		{
-			Update(SimAdapter.GetState());
+			Update(SimCPU.GetState());
 
 			this.Refresh();
 		}

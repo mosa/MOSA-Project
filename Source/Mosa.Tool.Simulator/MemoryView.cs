@@ -59,8 +59,7 @@ namespace Mosa.Tool.Simulator
 					string d = string.Empty;
 					for (int x = 0; x < 16; x++)
 					{
-						//byte mem = message.ResponseData[at - start + 8];
-						byte mem = SimAdapter.DirectRead8(at);
+						byte mem = SimCPU.DirectRead8(at);
 
 						if (x % 4 == 0) l = l + ' ';
 						l = l + mem.ToString("X").PadLeft(2, '0');

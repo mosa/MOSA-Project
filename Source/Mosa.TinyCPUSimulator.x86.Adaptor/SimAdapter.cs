@@ -25,19 +25,6 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 
 		SimCPU ISimAdapter.SimCPU { get { return this.CPU; } }
 
-		SimMonitor ISimAdapter.Monitor { get { return this.Monitor; } }
-
-		void ISimAdapter.Reset()
-		{
-			CPU.Reset();
-			//CPU.Execute();
-		}
-
-		void ISimAdapter.Execute()
-		{
-			CPU.Execute();
-		}
-
 		SimInstruction ISimAdapter.Convert(Context context, RuntimeMethod method, BasicBlocks basicBlocks, byte opcodeSize)
 		{
 			X86Instruction x86Instruction = context.Instruction as X86Instruction;
@@ -67,36 +54,6 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 			}
 
 			return instruction;
-		}
-
-		void ISimAdapter.AddInstruction(ulong address, SimInstruction instruction)
-		{
-			Add(address, instruction);
-		}
-
-		void ISimAdapter.SetSymbol(string name, ulong address, ulong size)
-		{
-			CPU.SetSymbol(name, address, size);
-		}
-
-		SimSymbol ISimAdapter.FindSymbol(ulong address)
-		{
-			return CPU.FindSymbol(address);
-		}
-
-		byte ISimAdapter.DirectRead8(ulong address)
-		{
-			return CPU.DirectRead8(address);
-		}
-
-		ushort ISimAdapter.DirectRead16(ulong address)
-		{
-			return CPU.DirectRead16(address);
-		}
-
-		uint ISimAdapter.DirectRead32(ulong address)
-		{
-			return CPU.DirectRead32(address);
 		}
 
 		private List<SimOperand> GetOperands(Context context, RuntimeMethod method, BasicBlocks basicBlocks)

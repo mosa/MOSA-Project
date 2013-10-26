@@ -1,4 +1,4 @@
-﻿using Mosa.TinyCPUSimulator.Adaptor;
+﻿using Mosa.TinyCPUSimulator;
 using WeifenLuo.WinFormsUI.Docking;
 
 namespace Mosa.Tool.Simulator
@@ -12,7 +12,7 @@ namespace Mosa.Tool.Simulator
 
 		public MainForm MainForm { get { return ((this.ParentForm) as MainForm); } }
 
-		public ISimAdapter SimAdapter { get { return ((this.ParentForm) as MainForm).SimAdapter; } }
+		public SimCPU SimCPU { get { return ((this.ParentForm) as MainForm).SimCPU; } }
 
 		public string Status { set { MainForm.Status = value; } }
 

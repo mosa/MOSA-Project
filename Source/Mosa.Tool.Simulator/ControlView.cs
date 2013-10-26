@@ -29,23 +29,33 @@ namespace Mosa.Tool.Simulator
 
 		private void button1_Click(object sender, EventArgs e)
 		{
-			if (MainForm.SimAdapter == null)
+			if (MainForm.SimCPU == null)
 				return;
 
-			MainForm.SimAdapter.Monitor.EnableStepping = true;
+			MainForm.SimCPU.Monitor.EnableStepping = true;
 
 			MainForm.ExecuteSteps(1);
 		}
 
 		private void button2_Click(object sender, EventArgs e)
 		{
-			if (MainForm.SimAdapter == null)
+			if (SimCPU == null)
 				return;
 
-			MainForm.SimAdapter.Monitor.EnableStepping = true;
+			SimCPU.Monitor.EnableStepping = true;
 
 			int steps = Convert.ToInt32(tbSteps.Text);
 			MainForm.ExecuteSteps(steps);
+		}
+
+		private void button3_Click(object sender, EventArgs e)
+		{
+			MainForm.StartSimulator();
+		}
+
+		private void button4_Click(object sender, EventArgs e)
+		{
+
 		}
 	}
 }
