@@ -16,10 +16,20 @@
 		<sources>
                     <include name="ControlView.cs"/>
                     <include name="ControlView.designer.cs"/>
+                    <include name="CallStackView.cs"/>
+                    <include name="CallStackView.designer.cs"/>
+                    <include name="StatusView.cs"/>
+                    <include name="StatusView.designer.cs"/>
+                    <include name="FlagView.cs"/>
+                    <include name="FlagView.designer.cs"/>
+                    <include name="StackView.cs"/>
+                    <include name="StackView.designer.cs"/>
+                    <include name="StackFrameView.cs"/>
+                    <include name="StackFrameView.designer.cs"/>
                     <include name="DisplayView.cs"/>
                     <include name="DisplayView.Designer.cs"/>
-                    <include name="GeneralPurposeRegistersView.cs"/>
-                    <include name="GeneralPurposeRegistersView.designer.cs"/>
+                    <include name="RegisterView.cs"/>
+                    <include name="RegisterView.designer.cs"/>
                     <include name="SimulatorDockContent.cs"/>
                     <include name="SimulatorDockContent.designer.cs"/>
                     <include name="AssembliesView.cs"/>

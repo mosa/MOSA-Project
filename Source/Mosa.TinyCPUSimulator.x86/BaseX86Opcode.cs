@@ -33,7 +33,7 @@ namespace Mosa.TinyCPUSimulator.x86
 			else if (size == 16) return IsSign((ushort)v);
 			else if (size == 8) return IsSign((byte)v);
 
-			throw new CPUException();
+			throw new SimCPUException();
 		}
 
 		protected static bool IsSign(uint v)
@@ -188,7 +188,7 @@ namespace Mosa.TinyCPUSimulator.x86
 				return Read(cpu, address, operand.Size);
 			}
 
-			throw new CPUException();
+			throw new SimCPUException();
 		}
 
 		protected void StoreValue(CPUx86 cpu, SimOperand operand, uint value, int size)
@@ -229,7 +229,7 @@ namespace Mosa.TinyCPUSimulator.x86
 				return ReadFloat(cpu, address, operand.Size);
 			}
 
-			throw new CPUException();
+			throw new SimCPUException();
 		}
 
 		protected void StoreFloatValue(CPUx86 cpu, SimOperand operand, double value, int size)
@@ -255,7 +255,7 @@ namespace Mosa.TinyCPUSimulator.x86
 			else if (size == 16) return cpu.Read16(address);
 			else if (size == 8) return cpu.Read8(address);
 
-			throw new CPUException();
+			throw new SimCPUException();
 		}
 
 		protected void Write(CPUx86 cpu, uint address, uint value, int size)
@@ -294,7 +294,7 @@ namespace Mosa.TinyCPUSimulator.x86
 				return BitConverter.ToSingle(b, 0);
 			}
 
-			throw new CPUException();
+			throw new SimCPUException();
 		}
 
 		protected void WriteFloat(CPUx86 cpu, uint address, double value, int size)

@@ -33,9 +33,9 @@ namespace Mosa.Tool.Simulator
 			if (typeSystem == null)
 				return;
 
-			treeView.Nodes.Clear();
-
 			treeView.BeginUpdate();
+
+			treeView.Nodes.Clear();
 
 			foreach (ITypeModule module in typeSystem.TypeModules)
 			{

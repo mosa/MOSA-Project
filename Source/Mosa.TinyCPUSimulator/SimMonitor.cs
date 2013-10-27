@@ -21,6 +21,8 @@ namespace Mosa.TinyCPUSimulator
 
 		public bool EnableStepping { get; set; }
 
+		public bool BreakOnException = true;
+
 		public bool DebugOutput { get; set; }
 
 		public SimMonitor(SimCPU cpu)
@@ -34,7 +36,7 @@ namespace Mosa.TinyCPUSimulator
 		{
 			get
 			{
-				return EnableStepping || CPU.Tick == BreakAtTick || breakPoints.Contains(CPU.CurrentInstructionPointer);
+				return EnableStepping || CPU.Tick == BreakAtTick || (BreakOnException && CPU.LastException != null) || breakPoints.Contains(CPU.CurrentInstructionPointer);
 			}
 		}
 

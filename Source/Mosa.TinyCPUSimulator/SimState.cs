@@ -15,16 +15,26 @@ namespace Mosa.TinyCPUSimulator
 	{
 		public ulong Tick { get; private set; }
 
+		public ulong IP { get; private set; }
+		
+		public ulong PreviousIP { get; private set; }
+
 		public SimInstruction Instruction { get; private set; }
 
 		public Dictionary<string, string> Values { get; private set; }
 
 		public Dictionary<ulong, KeyValuePair<byte, byte>> MemoryDelta { get; private set; }
 
-		public SimState(ulong tick, SimInstruction instruction)
+		public SimCPUException CPUException { get; private set; }
+
+		public SimState(ulong tick, ulong ip, ulong previousIP, SimCPUException exception, SimInstruction instruction)
 		{
 			Tick = tick;
+			IP = ip;
+			PreviousIP = previousIP;
 			Instruction = instruction;
+			CPUException = exception;
+
 			Values = new Dictionary<string, string>();
 			MemoryDelta = new Dictionary<ulong, KeyValuePair<byte, byte>>();
 		}

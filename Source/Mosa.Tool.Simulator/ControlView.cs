@@ -15,8 +15,6 @@ namespace Mosa.Tool.Simulator
 {
 	public partial class ControlView : SimulatorDockContent
 	{
-		private List<string> registerNames;
-
 		public ControlView()
 		{
 			InitializeComponent();
@@ -24,7 +22,6 @@ namespace Mosa.Tool.Simulator
 
 		public override void Update()
 		{
-			//Update(SimAdapter.GetState());
 		}
 
 		private void button1_Click(object sender, EventArgs e)

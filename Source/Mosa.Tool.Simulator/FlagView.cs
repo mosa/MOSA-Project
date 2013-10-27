@@ -13,11 +13,11 @@ using System.Collections.Generic;
 
 namespace Mosa.Tool.Simulator
 {
-	public partial class GeneralPurposeRegistersView : SimulatorDockContent
+	public partial class FlagView : SimulatorDockContent
 	{
-		private List<string> registerNames;
+		private List<string> listNames;
 
-		public GeneralPurposeRegistersView()
+		public FlagView()
 		{
 			InitializeComponent();
 		}
@@ -27,33 +27,29 @@ namespace Mosa.Tool.Simulator
 			dataGridView1.Rows.Clear();
 		}
 
-		private void UpdateRegisters(SimState simState)
+		private void CreateList(SimState simState)
 		{
-			if (registerNames != null)
+			if (listNames != null)
 				return;
 
-			registerNames = new List<string>();
+			listNames = new List<string>();
 
-			for (int i = 0; i < 64; i++)
+			foreach (var entry in simState.Values)
 			{
-				foreach (var entry in simState.Values)
+				if (entry.Key.StartsWith("FLAGS."))
 				{
-					if (entry.Key.StartsWith("Register." + i.ToString() + "."))
-					{
-						registerNames.Add(entry.Key);
-						break;
-					}
+					listNames.Add(entry.Key);
 				}
 			}
 		}
 
-		private void Update(SimState simState)
+		public override void Update(SimState simState)
 		{
 			dataGridView1.Rows.Clear();
 
-			UpdateRegisters(simState);
+			CreateList(simState);
 
-			foreach (var register in registerNames)
+			foreach (var register in listNames)
 			{
 				string name = register.Substring(register.LastIndexOf(".") + 1);
 				string value = simState.Values[register];

@@ -44,6 +44,8 @@ namespace Mosa.Tool.Simulator
 			// AssembliesView
 			// 
 			this.ClientSize = new System.Drawing.Size(219, 162);
+			this.CloseButton = false;
+			this.CloseButtonVisible = false;
 			this.Controls.Add(this.treeView);
 			this.DockAreas = ((WeifenLuo.WinFormsUI.Docking.DockAreas)(((WeifenLuo.WinFormsUI.Docking.DockAreas.Float | WeifenLuo.WinFormsUI.Docking.DockAreas.DockLeft) 
             | WeifenLuo.WinFormsUI.Docking.DockAreas.DockRight)));

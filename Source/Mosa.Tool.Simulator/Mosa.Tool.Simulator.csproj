@@ -61,17 +61,41 @@
     <Compile Include="CallStackView.designer.cs">
       <DependentUpon>CallStackView.cs</DependentUpon>
     </Compile>
+    <Compile Include="StatusView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="StatusView.designer.cs">
+      <DependentUpon>StatusView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FlagView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FlagView.designer.cs">
+      <DependentUpon>FlagView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="StackView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="StackView.designer.cs">
+      <DependentUpon>StackView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="StackFrameView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="StackFrameView.designer.cs">
+      <DependentUpon>StackFrameView.cs</DependentUpon>
+    </Compile>
     <Compile Include="DisplayView.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="DisplayView.Designer.cs">
       <DependentUpon>DisplayView.cs</DependentUpon>
     </Compile>
-    <Compile Include="GeneralPurposeRegistersView.cs">
+    <Compile Include="RegisterView.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GeneralPurposeRegistersView.designer.cs">
-      <DependentUpon>GeneralPurposeRegistersView.cs</DependentUpon>
+    <Compile Include="RegisterView.designer.cs">
+      <DependentUpon>RegisterView.cs</DependentUpon>
     </Compile>
     <Compile Include="SimulatorDockContent.cs">
       <SubType>Form</SubType>
@@ -108,11 +132,17 @@
     <EmbeddedResource Include="CallStackView.resx">
       <DependentUpon>CallStackView.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="StatusView.resx">
+      <DependentUpon>StatusView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FlagView.resx">
+      <DependentUpon>FlagView.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="DisplayView.resx">
       <DependentUpon>DisplayView.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="GeneralPurposeRegistersView.resx">
-      <DependentUpon>GeneralPurposeRegistersView.cs</DependentUpon>
+    <EmbeddedResource Include="RegisterView.resx">
+      <DependentUpon>RegisterView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SimulatorDockContent.resx">
       <DependentUpon>SimulatorDockContent.cs</DependentUpon>
@@ -133,6 +163,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="StackView.resx">
+      <DependentUpon>StackView.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Mosa.Compiler.Common\Mosa.Compiler.Common.csproj">

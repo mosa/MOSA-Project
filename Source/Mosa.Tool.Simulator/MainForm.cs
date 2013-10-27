@@ -24,10 +24,14 @@ namespace Mosa.Tool.Simulator
 	public partial class MainForm : Form
 	{
 		private AssembliesView assembliesView = new AssembliesView();
-		private GeneralPurposeRegistersView generalPurposeRegistersView = new GeneralPurposeRegistersView();
+		private RegisterView generalPurposeRegistersView = new RegisterView();
 		private DisplayView displayView = new DisplayView();
 		private ControlView controlView = new ControlView();
 		private CallStackView callStackView = new CallStackView();
+		private StackFrameView stackFrameView = new StackFrameView();
+		private StackView stackView = new StackView();
+		private FlagView flagView = new FlagView();
+		private StatusView statusView = new StatusView();
 
 		public IInternalTrace InternalTrace = new BasicInternalTrace();
 		public ConfigurableTraceFilter Filter = new ConfigurableTraceFilter();
@@ -59,11 +63,16 @@ namespace Mosa.Tool.Simulator
 			InternalTrace.TraceFilter = Filter;
 
 			dockPanel.SuspendLayout(true);
+
 			assembliesView.Show(dockPanel, DockState.DockLeftAutoHide);
 			generalPurposeRegistersView.Show(dockPanel, DockState.DockRight);
 			callStackView.Show(dockPanel, DockState.DockRight);
 			displayView.Show(dockPanel, DockState.Document);
+			statusView.Show(dockPanel, DockState.DockBottom);
 			controlView.Show(dockPanel, DockState.DockBottom);
+			stackFrameView.Show(dockPanel, DockState.DockRight);
+			stackView.Show(dockPanel, DockState.DockRight);
+			flagView.Show(dockPanel, DockState.DockRight);
 
 			dockPanel.ResumeLayout(true, true);
 		}
@@ -187,7 +196,7 @@ namespace Mosa.Tool.Simulator
 						UpdateAll();
 				}
 			}
-			catch (CPUException e)
+			catch (SimCPUException e)
 			{
 				GetCurrentStateAndUpdate();
 				//lbInstructionHistory.Items.Add(e);

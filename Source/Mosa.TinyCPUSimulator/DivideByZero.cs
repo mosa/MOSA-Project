@@ -12,7 +12,7 @@ using System;
 namespace Mosa.TinyCPUSimulator
 {
 	[Serializable]
-	public class DivideByZero : CPUException
+	public class DivideByZero : SimCPUException
 	{
 	}
 }

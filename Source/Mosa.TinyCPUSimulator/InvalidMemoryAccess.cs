@@ -12,7 +12,7 @@ using System;
 namespace Mosa.TinyCPUSimulator
 {
 	[Serializable]
-	public class InvalidMemoryAccess : CPUException
+	public class InvalidMemoryAccess : SimCPUException
 	{
 		public ulong Address { get; private set; }
 

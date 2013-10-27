@@ -98,7 +98,7 @@ namespace Mosa.Tool.Explorer
 					}
 				}
 			}
-			catch (CPUException e)
+			catch (SimCPUException e)
 			{
 				GetCurrentStateAndUpdate();
 				lbInstructionHistory.Items.Add(e);

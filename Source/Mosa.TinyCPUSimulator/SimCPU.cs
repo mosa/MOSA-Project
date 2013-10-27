@@ -7,6 +7,7 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 
@@ -31,14 +32,17 @@ namespace Mosa.TinyCPUSimulator
 		public bool IsLittleEndian { get; protected set; }
 
 		public virtual ulong CurrentInstructionPointer { get { return 0; } set { return; } }
+		public virtual ulong PreviousInstructionPointer { get; set; }
 
 		public virtual ulong StackPointer { get { return 0; } set { return; } }
 
 		public virtual ulong FramePointer { get { return 0; } set { return; } }
-		
-		public virtual long PreviousFrameOffset { get { return -4; }  }
+
+		public virtual long PreviousFrameOffset { get { return -4; } }
 
 		public Dictionary<ulong, KeyValuePair<byte, byte>> MemoryDelta { get; private set; }
+
+		public SimCPUException LastException { get; set; }
 
 		public SimCPU()
 		{
@@ -225,7 +229,7 @@ namespace Mosa.TinyCPUSimulator
 
 			if (!Symbols.TryGetValue(name, out symbol))
 			{
-				throw new CPUException();
+				throw new SimCPUException();
 			}
 
 			return symbol;
@@ -272,9 +276,9 @@ namespace Mosa.TinyCPUSimulator
 			}
 		}
 
-		protected virtual SimInstruction DecodeOpcode(ulong address)
+		public virtual SimInstruction DecodeOpcode(ulong address)
 		{
-			var instruction = GetInstruction(CurrentInstructionPointer);
+			var instruction = GetInstruction(address);
 
 			// if instruction is null --- a binary decode would be necessary
 
@@ -300,14 +304,13 @@ namespace Mosa.TinyCPUSimulator
 				//if (Monitor.DebugOutput)
 				//	Debug.Write("0x" + CurrentInstructionPointer.ToString("X") + ": ");
 
-				var instruction = DecodeOpcode(CurrentInstructionPointer);
 				Tick++;
+				LastException = null;
+				PreviousInstructionPointer = CurrentInstructionPointer;
 
-				var PreviousInstructionPointer = CurrentInstructionPointer;
+				var instruction = DecodeOpcode(CurrentInstructionPointer);
+
 				var PreviousInstruction = instruction;
-
-				//if (Monitor.DebugOutput)
-				//	Debug.WriteLine(instruction.ToString());
 
 				ExecuteOpcode(instruction);
 
@@ -318,13 +321,9 @@ namespace Mosa.TinyCPUSimulator
 					Debug.WriteLine(PreviousInstruction.ToString());
 				}
 			}
-			catch (InvalidMemoryAccess e)
+			catch (SimCPUException e)
 			{
-				throw;
-			}
-			catch (DivideByZero e)
-			{
-				throw;
+				LastException = e;
 			}
 		}
 
@@ -350,11 +349,9 @@ namespace Mosa.TinyCPUSimulator
 
 		public virtual SimState GetState()
 		{
-			SimState simState = new SimState(Tick, DecodeOpcode(CurrentInstructionPointer));
+			SimState simState = new SimState(Tick, CurrentInstructionPointer, PreviousInstructionPointer, LastException, DecodeOpcode(CurrentInstructionPointer));
 
 			simState.StoreMemoryDelta(MemoryDelta);
-
-			simState.StoreValue("IP.Current", CurrentInstructionPointer.ToString());
 
 			return simState;
 		}

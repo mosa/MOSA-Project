@@ -22,7 +22,7 @@
                     <include name="RegisterFloatingPoint.cs"/>
                     <include name="Register32Bit.cs"/>
                     <include name="SimMonitor.cs"/>
-                    <include name="CPUException.cs"/>
+                    <include name="SimCPUException.cs"/>
                     <include name="DivideByZero.cs"/>
                     <include name="SimInstruction.cs"/>
                     <include name="InvalidMemoryAccess.cs"/>

@@ -69,7 +69,7 @@
     <Compile Include="RegisterFloatingPoint.cs" />
     <Compile Include="Register32Bit.cs" />
     <Compile Include="SimMonitor.cs" />
-    <Compile Include="CPUException.cs" />
+    <Compile Include="SimCPUException.cs" />
     <Compile Include="DivideByZero.cs" />
     <Compile Include="SimInstruction.cs" />
     <Compile Include="InvalidMemoryAccess.cs" />

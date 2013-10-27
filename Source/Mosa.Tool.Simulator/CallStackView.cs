@@ -25,39 +25,48 @@ namespace Mosa.Tool.Simulator
 		{
 			SimSymbol symbol = SimCPU.FindSymbol(ip);
 
-			textBox1.AppendText("0x" + ip.ToString("X") + " ");
+			string node = "[0x" + ip.ToString("X8") + "] " + (symbol != null ? symbol.Name : "Unknown");
 
-			if (symbol != null)
-				textBox1.AppendText(symbol.Name);
-			else
-				textBox1.AppendText("Unknown");
+			treeView1.Nodes.Add(node);
+		}
+		
+		public override void Update(SimState simState)
+		{
+			treeView1.Nodes.Clear();
 
-			textBox1.AppendText("\n");
+			ulong ip = simState.IP;
+
+			AddSymbol(ip);
+
+			this.Refresh();
 		}
 
 		public override void Update()
 		{
-			textBox1.Clear();
+			Update(SimCPU.GetState());
 
 			ulong ip = SimCPU.CurrentInstructionPointer;
-
-			AddSymbol(ip);
-
 			ulong ebp = SimCPU.FramePointer;
 
-			//for (int i = 0; i < 10; i++)
+			//try
 			//{
-			//	if (ebp == 0)
-			//		break;
+			//	for (int i = 0; i < 10; i++)
+			//	{
+			//		if (ebp == 0)
+			//			break;
 
-			//	ip = SimCPU.DirectRead32((ulong)((long)ebp + SimCPU.PreviousFrameOffset));
+			//		ip = SimCPU.DirectRead32((ulong)((long)ebp + SimCPU.PreviousFrameOffset + SimCPU.PreviousFrameOffset));
 
-			//	if (ip == 0)
-			//		break;
+			//		if (ip == 0)
+			//			break;
 
-			//	AddSymbol(ip);
+			//		AddSymbol(ip);
 
-			//	ebp = SimCPU.DirectRead32(ebp);
+			//		ebp = SimCPU.DirectRead32((ulong)((long)ebp + SimCPU.PreviousFrameOffset));
+			//	}
+			//}
+			//catch (OutOfMemoryException e)
+			//{
 			//}
 
 			this.Refresh();

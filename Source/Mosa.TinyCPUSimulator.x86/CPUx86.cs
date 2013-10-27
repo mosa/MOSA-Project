@@ -198,22 +198,6 @@ namespace Mosa.TinyCPUSimulator.x86
 			return (address & 0xFFF) | (pt & 0xFFFFF000);
 		}
 
-		protected override void ExecuteOpcode(SimInstruction instruction)
-		{
-			try
-			{
-				base.ExecuteOpcode(instruction);
-			}
-			catch (InvalidMemoryAccess e)
-			{
-				throw;
-			}
-			catch (DivideByZero e)
-			{
-				throw;
-			}
-		}
-
 		private static string ToHex(uint value)
 		{
 			return "0x" + (string.Format("{0:X}", value).PadLeft(8, '0'));
