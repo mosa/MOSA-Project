@@ -187,13 +187,23 @@ namespace Mosa.Tool.Simulator
 				for (int i = 0; i < steps; i++)
 				{
 					SimCPU.Execute();
+
 					if (Record)
 					{
 						GetCurrentStateAndUpdate();
 					}
 
-					if (i % 10000 == 0)
+					if (SimCPU.LastException != null)
+					{
 						UpdateAll();
+						return;
+					}
+
+					if (i % 20000 == 0)
+					{
+						UpdateAll();
+					}
+
 				}
 			}
 			catch (SimCPUException e)

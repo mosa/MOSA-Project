@@ -329,12 +329,6 @@ namespace Mosa.TinyCPUSimulator
 
 		public void Execute()
 		{
-			//foreach (var pair in InstructionCache)
-			//{
-			//	Debug.WriteLine("0x" + pair.Key.ToString("X") + ": " + pair.Value);
-			//}
-			//Debug.WriteLine(string.Empty);
-
 			if (Monitor.DebugOutput)
 				Debug.WriteLine("EIP        EAX        EBX        ECX        EDX        ESI        EDI        ESP        EBP        FLAGS");
 
