@@ -54,5 +54,10 @@ namespace Mosa.Tool.Simulator
 		{
 
 		}
+
+		private void cbRecord_CheckedChanged(object sender, EventArgs e)
+		{
+			MainForm.Record = cbRecord.Checked;
+		}
 	}
 }

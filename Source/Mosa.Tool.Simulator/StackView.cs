@@ -31,13 +31,13 @@ namespace Mosa.Tool.Simulator
 			}
 
 			listBox1.SelectedIndex = listBox1.Items.Count - 1;
+
+			this.Refresh();
 		}
 
 		public override void Update()
 		{
 			Update(SimCPU.GetState());
-
-			this.Refresh();
 		}
 	}
 }

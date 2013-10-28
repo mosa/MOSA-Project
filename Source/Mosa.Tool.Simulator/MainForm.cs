@@ -18,6 +18,7 @@ using System;
 using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
 using System.Threading;
+using System.Collections.Generic;
 
 namespace Mosa.Tool.Simulator
 {
@@ -32,6 +33,7 @@ namespace Mosa.Tool.Simulator
 		private StackView stackView = new StackView();
 		private FlagView flagView = new FlagView();
 		private StatusView statusView = new StatusView();
+		private HistoryView historyView = new HistoryView();
 
 		public IInternalTrace InternalTrace = new BasicInternalTrace();
 		public ConfigurableTraceFilter Filter = new ConfigurableTraceFilter();
@@ -42,10 +44,9 @@ namespace Mosa.Tool.Simulator
 		public SimCPU SimCPU;
 
 		public bool Record = false;
+		public List<SimState> SimStates = new List<SimState>();
 
 		public string Status { set { this.toolStripStatusLabel1.Text = value; toolStrip1.Refresh(); } }
-
-		//private Thread excutionThread;
 
 		public MainForm()
 		{
@@ -73,6 +74,7 @@ namespace Mosa.Tool.Simulator
 			stackFrameView.Show(dockPanel, DockState.DockRight);
 			stackView.Show(dockPanel, DockState.DockRight);
 			flagView.Show(dockPanel, DockState.DockRight);
+			historyView.Show(dockPanel, DockState.Document);
 
 			dockPanel.ResumeLayout(true, true);
 		}
@@ -133,8 +135,6 @@ namespace Mosa.Tool.Simulator
 			Status = "Compiled.";
 
 			UpdateAll();
-
-			//excutionThread = new Thread(new ThreadStart(SimCPU.Execute));
 		}
 
 		private static IArchitecture GetArchitecture(string platform)
@@ -177,6 +177,20 @@ namespace Mosa.Tool.Simulator
 			}
 		}
 
+		public void UpdateAll(SimState simState)
+		{
+			if (SimCPU == null)
+				return;
+
+			foreach (var dock in dockPanel.Contents)
+			{
+				if (dock.DockHandler.Content is SimulatorDockContent)
+				{
+					(dock.DockHandler.Content as SimulatorDockContent).Update(simState);
+				}
+			}
+		}
+
 		public void ExecuteSteps(int steps)
 		{
 			if (SimCPU == null)
@@ -195,7 +209,6 @@ namespace Mosa.Tool.Simulator
 
 					if (SimCPU.LastException != null)
 					{
-						UpdateAll();
 						return;
 					}
 
@@ -203,13 +216,7 @@ namespace Mosa.Tool.Simulator
 					{
 						UpdateAll();
 					}
-
 				}
-			}
-			catch (SimCPUException e)
-			{
-				GetCurrentStateAndUpdate();
-				//lbInstructionHistory.Items.Add(e);
 			}
 			finally
 			{
@@ -217,12 +224,10 @@ namespace Mosa.Tool.Simulator
 			}
 		}
 
-		public void GetCurrentStateAndUpdate()
+		protected void GetCurrentStateAndUpdate()
 		{
 			var state = SimCPU.GetState();
-
-			//lbInstructionHistory.Items.Add(state);
-			//lbInstructionHistory.SelectedIndex = lbInstructionHistory.Items.Count - 1;
+			SimStates.Add(state);
 		}
 	}
 }

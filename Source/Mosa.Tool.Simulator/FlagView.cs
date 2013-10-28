@@ -56,13 +56,13 @@ namespace Mosa.Tool.Simulator
 
 				dataGridView1.Rows.Add(name, value);
 			}
+
+			this.Refresh();
 		}
 
 		public override void Update()
 		{
 			Update(SimCPU.GetState());
-
-			this.Refresh();
 		}
 	}
 }

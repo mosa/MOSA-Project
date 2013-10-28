@@ -29,13 +29,13 @@ namespace Mosa.Tool.Simulator
 			{
 				listBox1.Items.Add(index.ToString("D2") + ": " + simState.Values["StackFrame.Index." + index.ToString()]);
 			}
+
+			this.Refresh();
 		}
 
 		public override void Update()
 		{
 			Update(SimCPU.GetState());
-
-			this.Refresh();
 		}
 	}
 }

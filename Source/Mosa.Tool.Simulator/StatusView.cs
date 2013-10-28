@@ -32,13 +32,13 @@ namespace Mosa.Tool.Simulator
 			this.textBox5.Text = "0x" + simState.PreviousIP.ToString("X8");
 
 			this.textBox6.Text = simState.CPUException != null ? simState.CPUException.ToString() : "None";
+		
+			this.Refresh();
 		}
 
 		public override void Update()
 		{
 			Update(SimCPU.GetState());
-
-			this.Refresh();
 		}
 	}
 }

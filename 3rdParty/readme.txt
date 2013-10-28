@@ -9,3 +9,8 @@ Gallio & Mbunit - Automation Platform for .NET (Gallio.dll)
 - http://www.gallio.org
 - Apache License, Version 2.0
 - Used in the MOSA Test Suite for testing the compiler
+
+xUnit.Net - Unit testing tool for the .NET Framework
+- http://xunit.codeplex.com
+- Apache License
+- Used in the MOSA Test Suite for testing the compiler
