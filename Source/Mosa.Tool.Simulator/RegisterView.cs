@@ -15,7 +15,6 @@ namespace Mosa.Tool.Simulator
 {
 	public partial class RegisterView : SimulatorDockContent
 	{
-		private List<string> listNames;
 
 		public RegisterView()
 		{
@@ -27,38 +26,15 @@ namespace Mosa.Tool.Simulator
 			dataGridView1.Rows.Clear();
 		}
 
-		private void CreateList(SimState simState)
-		{
-			if (listNames != null)
-				return;
-
-			listNames = new List<string>();
-
-			for (int i = 0; i < 64; i++)
-			{
-				foreach (var entry in simState.Values)
-				{
-					if (entry.Key.StartsWith("Register." + i.ToString() + "."))
-					{
-						listNames.Add(entry.Key);
-						break;
-					}
-				}
-			}
-		}
-
 		public override void UpdateDock(SimState simState)
 		{
 			dataGridView1.Rows.Clear();
 
-			CreateList(simState);
+			string[] entries = simState.Values["Register.List"] as string[];
 
-			foreach (var register in listNames)
+			foreach (var name in entries)
 			{
-				string name = register.Substring(register.LastIndexOf(".") + 1);
-				string value = simState.Values[register];
-
-				dataGridView1.Rows.Add(name, value);
+				dataGridView1.Rows.Add(name, MainForm.Format(simState.Values["Register." + name]));
 			}
 
 			this.Refresh();

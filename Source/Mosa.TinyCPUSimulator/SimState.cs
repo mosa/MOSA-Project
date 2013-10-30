@@ -16,12 +16,12 @@ namespace Mosa.TinyCPUSimulator
 		public ulong Tick { get; private set; }
 
 		public ulong NextIP { get; private set; }
-		
+
 		public ulong IP { get; private set; }
 
 		public SimInstruction Instruction { get; private set; }
 
-		public Dictionary<string, string> Values { get; private set; }
+		public Dictionary<string, object> Values { get; private set; }
 
 		//public Dictionary<ulong, KeyValuePair<byte, byte>> MemoryDelta { get; private set; }
 
@@ -35,11 +35,11 @@ namespace Mosa.TinyCPUSimulator
 			Instruction = instruction;
 			CPUException = exception;
 
-			Values = new Dictionary<string, string>();
+			Values = new Dictionary<string, object>();
 			//MemoryDelta = new Dictionary<ulong, KeyValuePair<byte, byte>>();
 		}
 
-		public void StoreValue(string name, string value)
+		public void StoreValue(string name, object value)
 		{
 			Values.Add(name, value);
 		}
@@ -54,7 +54,7 @@ namespace Mosa.TinyCPUSimulator
 
 		public override string ToString()
 		{
-			return "[" + Tick.ToString("D5") + "] " + Values["IP.Formatted"] + ": " + (Instruction == null ? "<None>" : Instruction.ToString());
+			return "[" + Tick.ToString("D5") + "] " + IP.ToString("X8") + ": " + (Instruction == null ? "<None>" : Instruction.ToString());
 		}
 	}
 }

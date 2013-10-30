@@ -256,15 +256,10 @@ namespace Mosa.TinyCPUSimulator.x86
 			}
 		}
 
-		private static string ToHex(uint value)
-		{
-			return "0x" + (string.Format("{0:X}", value).PadLeft(8, '0'));
-		}
-
 		public override string CompactDump()
 		{
 			//s.AppendLine("EIP        EAX        EBX        ECX        EDX        ESI        EDI        ESP        EBP        FLAGS");
-			return ToHex(EIP.Value) + " " + ToHex(EAX.Value) + " " + ToHex(EBX.Value) + " " + ToHex(ECX.Value) + " " + ToHex(EDX.Value) + " " + ToHex(ESI.Value) + " " + ToHex(EDI.Value) + " " + ToHex(ESP.Value) + " " + ToHex(EBP.Value) + " "
+			return EIP.Value + " " + EAX.Value + " " + EBX.Value + " " + ECX.Value + " " + EDX.Value + " " + ESI.Value + " " + EDI.Value + " " + ESP.Value + " " + EBP.Value + " "
 				+ (EFLAGS.Zero ? "Z" : "-")
 				+ (EFLAGS.Carry ? "C" : "-")
 				+ (EFLAGS.Direction ? "D" : "-")
@@ -274,51 +269,55 @@ namespace Mosa.TinyCPUSimulator.x86
 			//"[" + Tick.ToString("D5") + "] "
 		}
 
+		private string[] registerList = new string[] { "EIP", "EAX", "EBX", "ECX", "EDX", "ESP", "EBP", "ESI", "EDI", "CR0", "CR2", "CR3", "CR4" };
+		private string[] flagList = new string[] { "Zero", "Parity", "Carry", "Direction", "Sign", "Adjust", "Overflow", "Value" };
+
 		public override SimState GetState()
 		{
 			SimState simState = base.GetState();
 
-			simState.StoreValue("IP.Formatted", ToHex(EIP.Value));
+			simState.StoreValue("Register.List", registerList);
+			simState.StoreValue("Flag.List", flagList);
 
-			simState.StoreValue("Register.1.EIP", ToHex(EIP.Value));
-			simState.StoreValue("Register.2.EAX", ToHex(EAX.Value));
-			simState.StoreValue("Register.3.EBX", ToHex(EBX.Value));
-			simState.StoreValue("Register.4.ECX", ToHex(ECX.Value));
-			simState.StoreValue("Register.5.EDX", ToHex(EDX.Value));
-			simState.StoreValue("Register.6.ESP", ToHex(ESP.Value));
-			simState.StoreValue("Register.7.EBP", ToHex(EBP.Value));
-			simState.StoreValue("Register.8.ESI", ToHex(ESI.Value));
-			simState.StoreValue("Register.9.EDI", ToHex(EDI.Value));
+			simState.StoreValue("Register.EIP", EIP.Value);
+			simState.StoreValue("Register.EAX", EAX.Value);
+			simState.StoreValue("Register.EBX", EBX.Value);
+			simState.StoreValue("Register.ECX", ECX.Value);
+			simState.StoreValue("Register.EDX", EDX.Value);
+			simState.StoreValue("Register.ESP", ESP.Value);
+			simState.StoreValue("Register.EBP", EBP.Value);
+			simState.StoreValue("Register.ESI", ESI.Value);
+			simState.StoreValue("Register.EDI", EDI.Value);
 
-			simState.StoreValue("CR0", ToHex(CR0.Value));
-			simState.StoreValue("CR2", ToHex(CR2.Value));
-			simState.StoreValue("CR3", ToHex(CR3.Value));
-			simState.StoreValue("CR4", ToHex(CR4.Value));
+			simState.StoreValue("Register.CR0", CR0.Value);
+			simState.StoreValue("Register.CR2", CR2.Value);
+			simState.StoreValue("Register.CR3", CR3.Value);
+			simState.StoreValue("Register.CR4", CR4.Value);
 
-			simState.StoreValue("XXM0", XMM0.Value.ToString());
-			simState.StoreValue("XXM1", XMM1.Value.ToString());
-			simState.StoreValue("XXM2", XMM2.Value.ToString());
-			simState.StoreValue("XXM3", XMM3.Value.ToString());
-			simState.StoreValue("XXM4", XMM4.Value.ToString());
-			simState.StoreValue("XXM5", XMM5.Value.ToString());
-			simState.StoreValue("XXM6", XMM6.Value.ToString());
-			simState.StoreValue("XXM7", XMM7.Value.ToString());
+			simState.StoreValue("Register.XXM0", XMM0.Value.ToString());
+			simState.StoreValue("Register.XXM1", XMM1.Value.ToString());
+			simState.StoreValue("Register.XXM2", XMM2.Value.ToString());
+			simState.StoreValue("Register.XXM3", XMM3.Value.ToString());
+			simState.StoreValue("Register.XXM4", XMM4.Value.ToString());
+			simState.StoreValue("Register.XXM5", XMM5.Value.ToString());
+			simState.StoreValue("Register.XXM6", XMM6.Value.ToString());
+			simState.StoreValue("Register.XXM7", XMM7.Value.ToString());
 
-			simState.StoreValue("FLAGS", EFLAGS.Value.ToString());
-			simState.StoreValue("FLAGS.Zero", EFLAGS.Zero.ToString());
-			simState.StoreValue("FLAGS.Parity", EFLAGS.Parity.ToString());
-			simState.StoreValue("FLAGS.Carry", EFLAGS.Carry.ToString());
-			simState.StoreValue("FLAGS.Direction", EFLAGS.Direction.ToString());
-			simState.StoreValue("FLAGS.Sign", EFLAGS.Sign.ToString());
-			simState.StoreValue("FLAGS.Adjust", EFLAGS.Adjust.ToString());
-			simState.StoreValue("FLAGS.Overflow", EFLAGS.Overflow.ToString());
+			simState.StoreValue("Flag.Value", EFLAGS.Value);
+			simState.StoreValue("Flag.Zero", EFLAGS.Zero);
+			simState.StoreValue("Flag.Parity", EFLAGS.Parity);
+			simState.StoreValue("Flag.Carry", EFLAGS.Carry);
+			simState.StoreValue("Flag.Direction", EFLAGS.Direction);
+			simState.StoreValue("Flag.Sign", EFLAGS.Sign);
+			simState.StoreValue("Flag.Adjust", EFLAGS.Adjust);
+			simState.StoreValue("Flag.Overflow", EFLAGS.Overflow);
 
 			uint ebp = EBP.Value;
 			uint index = 0;
 
 			while (ebp > ESP.Value && index < 32)
 			{
-				simState.StoreValue("StackFrame.Index." + index.ToString(), ToHex(Read32(ebp)) + " [" + ToHex(ebp) + "]");
+				simState.StoreValue("StackFrame.Index." + index.ToString(), Read32(ebp).ToString("X8") + " [0x" + ebp.ToString("X8") + "]");
 				ebp = ebp - 4;
 				index++;
 			}
@@ -330,7 +329,7 @@ namespace Mosa.TinyCPUSimulator.x86
 
 			while (index < 16)
 			{
-				simState.StoreValue("Stack.Index." + index.ToString(), ToHex(Read32(esp)) + " [" + ToHex(esp) + "]");
+				simState.StoreValue("Stack.Index." + index.ToString(), Read32(esp).ToString("X8") + " [0x" + esp.ToString("X8") + "]");
 				esp = esp + 4;
 				index++;
 			}

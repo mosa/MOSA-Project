@@ -17,24 +17,26 @@ namespace Mosa.Tool.Simulator
 {
 	public partial class SymbolView : SimulatorDockContent
 	{
-		public List<SymbolEntry> symbols;
+		private List<SymbolEntry> symbols;
 
-		public class SymbolEntry
+		private class SymbolEntry
 		{
 			public LinkerSymbol LinkerSymbol;
+			private bool force32;
 
 			public string Name { get { return LinkerSymbol.Name; } }
 			public long Length { get { return LinkerSymbol.Length; } }
 			//public long VirtualAddress { get { return LinkerSymbol.VirtualAddress; } }
-			public string VirtualAddress { get { return "0x" + LinkerSymbol.VirtualAddress.ToString("X8"); } }
+			public string VirtualAddress { get { return MainForm.Format(LinkerSymbol.VirtualAddress, force32); } }
 			public long Offset { get { return LinkerSymbol.Offset; } }
 			public SectionKind SectionKind { get { return LinkerSymbol.SectionKind; } }
 			//public long SectionAddress { get { return LinkerSymbol.SectionAddress; } }
-			public string SectionAddress { get { return "0x" + LinkerSymbol.SectionAddress.ToString("X8"); } }
+			public string SectionAddress { get { return MainForm.Format(LinkerSymbol.SectionAddress, force32); } }
 
-			public SymbolEntry(LinkerSymbol linkerSymbol)
+			public SymbolEntry(LinkerSymbol linkerSymbol, bool force32)
 			{
 				this.LinkerSymbol = linkerSymbol;
+				this.force32 = force32;
 			}
 		}
 
@@ -49,7 +51,7 @@ namespace Mosa.Tool.Simulator
 
 			foreach (var symbol in MainForm.Linker.Symbols)
 			{
-				symbols.Add(new SymbolEntry(symbol));
+				symbols.Add(new SymbolEntry(symbol, true)); // true == forces 32 bit
 			}
 
 			dataGridView1.DataSource = symbols;

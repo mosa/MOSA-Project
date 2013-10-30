@@ -77,7 +77,7 @@ namespace Mosa.Tool.Simulator
 			flagView.Show(dockPanel, DockState.DockRight);
 			historyView.Show(dockPanel, DockState.Document);
 			symbolView.Show(dockPanel, DockState.Document);
-			
+
 			dockPanel.ResumeLayout(true, true);
 
 			if (CompileOnLaunch != null)
@@ -148,6 +148,37 @@ namespace Mosa.Tool.Simulator
 			UpdateAll();
 		}
 
+		public static string Format(object value)
+		{
+			if (value is string)
+				return value as string;
+			else if (value is uint)
+				return "0x" + ((uint)value).ToString("X8");
+			else if (value is int)
+				return "0x" + ((int)value).ToString("X8");
+			else if (value is ulong)
+				return "0x" + ((ulong)value).ToString("X16");
+			else if (value is long)
+				return "0x" + ((long)value).ToString("X16");
+			else if (value is bool)
+				return (bool)value ? "TRUE" : "FALSE";
+
+			return value.ToString();
+		}
+
+		public static string Format(object value, bool force32)
+		{
+			if (force32)
+			{
+				if (value is ulong)
+					return "0x" + ((ulong)value).ToString("X8");
+				else if (value is long)
+					return "0x" + ((long)value).ToString("X8");
+			}
+
+			return Format(value);
+		}
+
 		private static IArchitecture GetArchitecture(string platform)
 		{
 			switch (platform.ToLower())
@@ -216,6 +247,10 @@ namespace Mosa.Tool.Simulator
 					if (Record)
 					{
 						GetCurrentStateAndUpdate();
+					}
+					else
+					{
+						var state = SimCPU.GetState();
 					}
 
 					if (SimCPU.LastException != null)

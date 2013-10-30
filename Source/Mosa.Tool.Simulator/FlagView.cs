@@ -15,8 +15,6 @@ namespace Mosa.Tool.Simulator
 {
 	public partial class FlagView : SimulatorDockContent
 	{
-		private List<string> listNames;
-
 		public FlagView()
 		{
 			InitializeComponent();
@@ -27,34 +25,15 @@ namespace Mosa.Tool.Simulator
 			dataGridView1.Rows.Clear();
 		}
 
-		private void CreateList(SimState simState)
-		{
-			if (listNames != null)
-				return;
-
-			listNames = new List<string>();
-
-			foreach (var entry in simState.Values)
-			{
-				if (entry.Key.StartsWith("FLAGS."))
-				{
-					listNames.Add(entry.Key);
-				}
-			}
-		}
-
 		public override void UpdateDock(SimState simState)
 		{
 			dataGridView1.Rows.Clear();
 
-			CreateList(simState);
+			string[] entries = simState.Values["Flag.List"] as string[];
 
-			foreach (var register in listNames)
+			foreach (var name in entries)
 			{
-				string name = register.Substring(register.LastIndexOf(".") + 1);
-				string value = simState.Values[register];
-
-				dataGridView1.Rows.Add(name, value);
+				dataGridView1.Rows.Add(name, MainForm.Format(simState.Values["Flag." + name]));
 			}
 
 			this.Refresh();
