@@ -7,15 +7,13 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using Mosa.TinyCPUSimulator;
 using System;
-using System.Collections.Generic;
+using Mosa.TinyCPUSimulator;
 
 namespace Mosa.Tool.Simulator
 {
 	public partial class CallStackView : SimulatorDockContent
 	{
-
 		public CallStackView()
 		{
 			InitializeComponent();
@@ -29,7 +27,7 @@ namespace Mosa.Tool.Simulator
 
 			treeView1.Nodes.Add(node);
 		}
-		
+
 		public override void Update(SimState simState)
 		{
 			treeView1.Nodes.Clear();
@@ -48,26 +46,26 @@ namespace Mosa.Tool.Simulator
 			ulong ip = SimCPU.CurrentInstructionPointer;
 			ulong ebp = SimCPU.FramePointer;
 
-			//try
-			//{
-			//	for (int i = 0; i < 10; i++)
-			//	{
-			//		if (ebp == 0)
-			//			break;
+			try
+			{
+				for (int i = 0; i < 10; i++)
+				{
+					if (ebp == 0)
+						break;
 
-			//		ip = SimCPU.DirectRead32((ulong)((long)ebp + SimCPU.PreviousFrameOffset + SimCPU.PreviousFrameOffset));
+					ip = SimCPU.DirectRead32((ulong)((long)ebp + SimCPU.PreviousFrameOffset));
 
-			//		if (ip == 0)
-			//			break;
+					if (ip == 0)
+						break;
 
-			//		AddSymbol(ip);
+					AddSymbol(ip);
 
-			//		ebp = SimCPU.DirectRead32((ulong)((long)ebp + SimCPU.PreviousFrameOffset));
-			//	}
-			//}
-			//catch (OutOfMemoryException e)
-			//{
-			//}
+					ebp = SimCPU.DirectRead32((ulong)((long)ebp));
+				}
+			}
+			catch (Exception e)
+			{
+			}
 
 			this.Refresh();
 		}

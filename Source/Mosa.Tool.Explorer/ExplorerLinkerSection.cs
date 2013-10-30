@@ -7,8 +7,8 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System.IO;
 using Mosa.Compiler.Linker;
+using System.IO;
 
 namespace Mosa.Tool.Explorer
 {

@@ -58,6 +58,7 @@
     <Compile Include="Opcodes\Roundsd.cs" />
     <Compile Include="Opcodes\Roundss.cs" />
     <Compile Include="Opcodes\FarJmp.cs" />
+    <Compile Include="PageFaultException.cs" />
     <Compile Include="SegmentRegister.cs" />
     <Compile Include="CPUx86.cs" />
     <Compile Include="FlagRegister.cs" />

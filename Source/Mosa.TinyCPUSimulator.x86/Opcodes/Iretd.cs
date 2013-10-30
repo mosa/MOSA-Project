@@ -18,7 +18,7 @@ namespace Mosa.TinyCPUSimulator.x86.Opcodes
 
 			cpu.EIP.Value = Read(cpu, cpu.ESP.Value - (8 * 1), size);
 			// Skip CS
-			cpu.FLAGS.Value = Read(cpu, cpu.ESP.Value - (8 * 3), size);
+			cpu.EFLAGS.Value = Read(cpu, cpu.ESP.Value - (8 * 3), size);
 
 			cpu.ESP.Value = (uint)(cpu.ESP.Value + (size * 3 / 8));
 		}

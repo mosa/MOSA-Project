@@ -13,7 +13,7 @@ namespace Mosa.TinyCPUSimulator.x86.Opcodes
 	{
 		public override void Execute(CPUx86 cpu, SimInstruction instruction)
 		{
-			cpu.FLAGS.Carry = true;
+			cpu.EFLAGS.Carry = true;
 		}
 	}
 }

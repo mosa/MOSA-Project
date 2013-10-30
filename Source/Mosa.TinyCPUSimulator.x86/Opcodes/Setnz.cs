@@ -13,7 +13,7 @@ namespace Mosa.TinyCPUSimulator.x86.Opcodes
 	{
 		public override void Execute(CPUx86 cpu, SimInstruction instruction)
 		{
-			if (!cpu.FLAGS.Zero)
+			if (!cpu.EFLAGS.Zero)
 			{
 				StoreValue(cpu, instruction.Operand1, 1, 8);
 			}

@@ -17,8 +17,17 @@ namespace Mosa.TinyCPUSimulator.x86.Opcodes
 			uint b = LoadValue(cpu, instruction.Operand2);
 			int size = instruction.Operand2.Size;
 
-			StoreValue(cpu, instruction.Operand1, b, size);
-			StoreValue(cpu, instruction.Operand2, a, size);
+			// memory must update happen first due to protential page fault
+			if (instruction.Operand1.IsRegister)
+			{
+				StoreValue(cpu, instruction.Operand2, a, size);
+				StoreValue(cpu, instruction.Operand1, b, size);
+			}
+			else
+			{
+				StoreValue(cpu, instruction.Operand1, b, size);
+				StoreValue(cpu, instruction.Operand2, a, size);
+			}
 		}
 	}
 }

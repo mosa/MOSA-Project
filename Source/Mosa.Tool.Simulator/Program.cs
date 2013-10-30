@@ -18,11 +18,19 @@ namespace Mosa.Tool.Simulator
 		/// The main entry point for the application.
 		/// </summary>
 		[STAThread]
-		private static void Main()
+		private static void Main(string[] args)
 		{
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
-			Application.Run(new MainForm());
+
+			var main = new MainForm();
+
+			if (args.Length != 0)
+			{
+				main.CompileOnLaunch = args[0];
+			}
+
+			Application.Run(main);
 		}
 	}
 }

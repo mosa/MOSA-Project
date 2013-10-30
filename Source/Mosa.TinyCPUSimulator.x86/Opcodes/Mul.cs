@@ -22,8 +22,8 @@ namespace Mosa.TinyCPUSimulator.x86.Opcodes
 			cpu.EAX.Value = (uint)r;
 			cpu.EDX.Value = (uint)(r >> 32);
 
-			cpu.FLAGS.Overflow = ((r >> 32) != 0);
-			cpu.FLAGS.Carry = ((r >> 32) != 0);
+			cpu.EFLAGS.Overflow = ((r >> 32) != 0);
+			cpu.EFLAGS.Carry = ((r >> 32) != 0);
 		}
 	}
 }

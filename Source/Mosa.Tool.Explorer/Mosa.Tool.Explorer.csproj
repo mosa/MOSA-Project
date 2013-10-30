@@ -63,12 +63,6 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="ExplorerLinkerSection.cs" />
-    <Compile Include="SimProcessorX86Form.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="SimProcessorX86Form.Designer.cs">
-      <DependentUpon>SimProcessorX86Form.cs</DependentUpon>
-    </Compile>
     <EmbeddedResource Include="CodeForm.resx">
       <DependentUpon>CodeForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -78,9 +72,6 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="SimProcessorX86Form.resx">
-      <DependentUpon>SimProcessorX86Form.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

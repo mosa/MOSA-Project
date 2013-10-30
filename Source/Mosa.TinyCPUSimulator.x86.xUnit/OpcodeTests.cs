@@ -40,8 +40,8 @@ namespace Mosa.TinyCPUSimulator.x86.xUnit
 			ulong r = (ulong)a + (ulong)b;
 
 			Assert.Equal(CPU.EAX.Value, (a + b) & uint.MaxValue);
-			Assert.Equal(CPU.FLAGS.Carry, r > uint.MaxValue);
-			Assert.False(CPU.FLAGS.Sign);
+			Assert.Equal(CPU.EFLAGS.Carry, r > uint.MaxValue);
+			Assert.False(CPU.EFLAGS.Sign);
 		}
 
 		[Theory]
@@ -130,9 +130,9 @@ namespace Mosa.TinyCPUSimulator.x86.xUnit
 			bool overflow = r < int.MinValue || r > int.MaxValue;
 			//			bool carry = r > int.MaxValue;
 
-			Assert.True(CPU.FLAGS.Sign == sign, "Expected: Sign = " + sign.ToString());
-			Assert.True(CPU.FLAGS.Zero == zero, "Expected: Zero = " + zero.ToString());
-			Assert.True(CPU.FLAGS.Overflow == overflow, "Expected: Overflow = " + overflow.ToString());
+			Assert.True(CPU.EFLAGS.Sign == sign, "Expected: Sign = " + sign.ToString());
+			Assert.True(CPU.EFLAGS.Zero == zero, "Expected: Zero = " + zero.ToString());
+			Assert.True(CPU.EFLAGS.Overflow == overflow, "Expected: Overflow = " + overflow.ToString());
 			//			Assert.True(CPU.FLAGS.Carry == carry, "Expected: Carry = " + carry.ToString());
 		}
 
@@ -162,8 +162,8 @@ namespace Mosa.TinyCPUSimulator.x86.xUnit
 			bool zero = (a - b) == 0;
 			bool carry = r > uint.MaxValue;
 
-			Assert.True(CPU.FLAGS.Zero == zero, "Expected: Zero = " + zero.ToString());
-			Assert.True(CPU.FLAGS.Carry == carry, "Expected: Carry = " + carry.ToString());
+			Assert.True(CPU.EFLAGS.Zero == zero, "Expected: Zero = " + zero.ToString());
+			Assert.True(CPU.EFLAGS.Carry == carry, "Expected: Carry = " + carry.ToString());
 		}
 
 		[Theory]

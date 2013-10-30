@@ -16,8 +16,8 @@ namespace Mosa.Kernel.x86
 	/// </summary>
 	public static class ProcessManager
 	{
-		private static uint _slots = 4096;
-		private static uint _table;
+		private static uint slots = 4096;
+		private static uint table;
 
 		//private static uint _lock = 0;
 
@@ -50,7 +50,7 @@ namespace Mosa.Kernel.x86
 		public static unsafe void Setup()
 		{
 			// Allocate memory for the process table
-			_table = (uint)VirtualPageAllocator.Reserve((uint)(_slots * Offset.TotalSize));
+			table = (uint)VirtualPageAllocator.Reserve((uint)(slots * Offset.TotalSize));
 
 			// Create idle process
 			CreateProcess(0);
@@ -187,7 +187,7 @@ namespace Mosa.Kernel.x86
 		/// <returns></returns>
 		private static uint FindEmptySlot()
 		{
-			for (uint slot = 1; slot < _slots; slot++)
+			for (uint slot = 1; slot < slots; slot++)
 				if (Native.Get32(GetProcessLocation(slot) + Offset.Status) == Status.Empty)
 					return slot;
 
@@ -201,7 +201,7 @@ namespace Mosa.Kernel.x86
 		/// <returns></returns>
 		private static uint GetProcessLocation(uint slot)
 		{
-			return (uint)(_table + (Offset.TotalSize * slot));
+			return (uint)(table + (Offset.TotalSize * slot));
 		}
 	}
 }

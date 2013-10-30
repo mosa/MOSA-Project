@@ -22,7 +22,7 @@ namespace Mosa.TinyCPUSimulator.x86.Opcodes
 
 			UpdateFlags(cpu, size, (long)u, u, true, true, true, false, false);
 
-			cpu.FLAGS.Carry = !cpu.FLAGS.Zero;
+			cpu.EFLAGS.Carry = !cpu.EFLAGS.Zero;
 		}
 	}
 }

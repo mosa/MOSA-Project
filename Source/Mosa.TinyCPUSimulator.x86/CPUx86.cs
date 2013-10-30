@@ -16,7 +16,7 @@ namespace Mosa.TinyCPUSimulator.x86
 	{
 		public Register32Bit EIP { get; private set; }
 
-		public FlagsRegister FLAGS { get; private set; }
+		public FlagsRegister EFLAGS { get; private set; }
 
 		public GeneralPurposeRegister EAX { get; private set; }
 
@@ -102,10 +102,14 @@ namespace Mosa.TinyCPUSimulator.x86
 
 		public SegmentRegister SS { get; private set; }
 
+		public uint GDTR { get; set; }
+
+		public uint IDTR { get; set; }
+
 		public CPUx86()
 		{
 			EIP = new Register32Bit("EIP", 0, RegisterType.InstructionPointer, false);
-			FLAGS = new FlagsRegister();
+			EFLAGS = new FlagsRegister();
 
 			EAX = new GeneralPurposeRegister("EAX", 0);
 			EBX = new GeneralPurposeRegister("EBX", 1);
@@ -163,7 +167,7 @@ namespace Mosa.TinyCPUSimulator.x86
 		public override void Reset()
 		{
 			EIP.Value = 0;
-			FLAGS.Value = 0;
+			EFLAGS.Value = 0;
 			EAX.Value = 0;
 			EBX.Value = 0;
 			ECX.Value = 0;
@@ -177,6 +181,9 @@ namespace Mosa.TinyCPUSimulator.x86
 			CR2.Value = 0;
 			CR3.Value = 0;
 			CR4.Value = 0;
+
+			GDTR = 0;
+			IDTR = 0;
 
 			base.Reset();
 		}
@@ -195,7 +202,58 @@ namespace Mosa.TinyCPUSimulator.x86
 			uint pd = DirectRead32(CR3.Value + ((address >> 22) * 4));
 			uint pt = DirectRead32((pd & 0xFFFFF000) + ((address >> 12 & 0x03FF) * 4));
 
+			if ((pt & 0x1) == 0)
+			{
+				// page not present
+				throw new PageFaultException(address);
+			}
+
 			return (address & 0xFFF) | (pt & 0xFFFFF000);
+		}
+
+
+		protected virtual void ExecuteOpcode(SimInstruction instruction)
+		{
+			uint eip = EIP.Value;
+			uint flag = EFLAGS.Value;
+
+			try
+			{
+				instruction.Opcode.Execute(this, instruction);
+			}
+			catch (PageFaultException e)
+			{
+				LastException = e; // note page fault
+
+				// initiate page fault
+				CR2.Value = (uint)e.Address;
+
+				// Start Interrupt
+				StartInterrupt(14, -1);
+			}
+		}
+
+		private void StartInterrupt(byte vector, int errorCode)
+		{
+			try
+			{
+				uint idt = DirectRead32(IDTR);
+
+				Write32(ESP.Value - (8 * 0), EFLAGS.Value);
+				Write32(ESP.Value - (8 * 1), CS.Value);
+				Write32(ESP.Value - (8 * 2), EIP.Value);
+
+				if (errorCode == 8 || (errorCode >= 10 && errorCode <= 14))
+				{
+					Write32(ESP.Value - (8 * 3), EIP.Value);
+				}
+
+				EIP.Value = DirectRead32((ulong)(idt + vector * 4));
+			}
+			catch (PageFaultException e)
+			{
+				// This is technically a double fault - no support
+			}
 		}
 
 		private static string ToHex(uint value)
@@ -207,12 +265,12 @@ namespace Mosa.TinyCPUSimulator.x86
 		{
 			//s.AppendLine("EIP        EAX        EBX        ECX        EDX        ESI        EDI        ESP        EBP        FLAGS");
 			return ToHex(EIP.Value) + " " + ToHex(EAX.Value) + " " + ToHex(EBX.Value) + " " + ToHex(ECX.Value) + " " + ToHex(EDX.Value) + " " + ToHex(ESI.Value) + " " + ToHex(EDI.Value) + " " + ToHex(ESP.Value) + " " + ToHex(EBP.Value) + " "
-				+ (FLAGS.Zero ? "Z" : "-")
-				+ (FLAGS.Carry ? "C" : "-")
-				+ (FLAGS.Direction ? "D" : "-")
-				+ (FLAGS.Overflow ? "O" : "-")
-				+ (FLAGS.Parity ? "P" : "-")
-				+ (FLAGS.Sign ? "S" : "-");
+				+ (EFLAGS.Zero ? "Z" : "-")
+				+ (EFLAGS.Carry ? "C" : "-")
+				+ (EFLAGS.Direction ? "D" : "-")
+				+ (EFLAGS.Overflow ? "O" : "-")
+				+ (EFLAGS.Parity ? "P" : "-")
+				+ (EFLAGS.Sign ? "S" : "-");
 			//"[" + Tick.ToString("D5") + "] "
 		}
 
@@ -221,7 +279,6 @@ namespace Mosa.TinyCPUSimulator.x86
 			SimState simState = base.GetState();
 
 			simState.StoreValue("IP.Formatted", ToHex(EIP.Value));
-			//simState.StoreValue("EIP.Last", ToHex((uint)LastCurrentInstructionPointer));
 
 			simState.StoreValue("Register.1.EIP", ToHex(EIP.Value));
 			simState.StoreValue("Register.2.EAX", ToHex(EAX.Value));
@@ -247,33 +304,33 @@ namespace Mosa.TinyCPUSimulator.x86
 			simState.StoreValue("XXM6", XMM6.Value.ToString());
 			simState.StoreValue("XXM7", XMM7.Value.ToString());
 
-			simState.StoreValue("FLAGS", FLAGS.Value.ToString());
-			simState.StoreValue("FLAGS.Zero", FLAGS.Zero.ToString());
-			simState.StoreValue("FLAGS.Parity", FLAGS.Parity.ToString());
-			simState.StoreValue("FLAGS.Carry", FLAGS.Carry.ToString());
-			simState.StoreValue("FLAGS.Direction", FLAGS.Direction.ToString());
-			simState.StoreValue("FLAGS.Sign", FLAGS.Sign.ToString());
-			simState.StoreValue("FLAGS.Adjust", FLAGS.Adjust.ToString());
-			simState.StoreValue("FLAGS.Overflow", FLAGS.Overflow.ToString());
+			simState.StoreValue("FLAGS", EFLAGS.Value.ToString());
+			simState.StoreValue("FLAGS.Zero", EFLAGS.Zero.ToString());
+			simState.StoreValue("FLAGS.Parity", EFLAGS.Parity.ToString());
+			simState.StoreValue("FLAGS.Carry", EFLAGS.Carry.ToString());
+			simState.StoreValue("FLAGS.Direction", EFLAGS.Direction.ToString());
+			simState.StoreValue("FLAGS.Sign", EFLAGS.Sign.ToString());
+			simState.StoreValue("FLAGS.Adjust", EFLAGS.Adjust.ToString());
+			simState.StoreValue("FLAGS.Overflow", EFLAGS.Overflow.ToString());
 
 			uint ebp = EBP.Value;
 			uint index = 0;
 
 			while (ebp > ESP.Value && index < 32)
 			{
-				simState.StoreValue("StackFrame.Index." + index.ToString(), ToHex(Read32(ebp)));
+				simState.StoreValue("StackFrame.Index." + index.ToString(), ToHex(Read32(ebp)) + " [" + ToHex(ebp) + "]");
 				ebp = ebp - 4;
 				index++;
 			}
 
 			simState.StoreValue("StackFrame.Index.Count", index.ToString());
 
-			uint esp = ESP.Value + 4;
+			uint esp = ESP.Value;// +4;
 			index = 0;
 
 			while (index < 16)
 			{
-				simState.StoreValue("Stack.Index." + index.ToString(), ToHex(Read32(esp)));
+				simState.StoreValue("Stack.Index." + index.ToString(), ToHex(Read32(esp)) + " [" + ToHex(esp) + "]");
 				esp = esp + 4;
 				index++;
 			}

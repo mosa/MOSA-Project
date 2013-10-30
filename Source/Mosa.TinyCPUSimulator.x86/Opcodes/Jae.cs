@@ -13,7 +13,7 @@ namespace Mosa.TinyCPUSimulator.x86.Opcodes
 	{
 		public override void Execute(CPUx86 cpu, SimInstruction instruction)
 		{
-			if (!cpu.FLAGS.Carry)
+			if (!cpu.EFLAGS.Carry)
 			{
 				cpu.EIP.Value = ResolveBranch(cpu, instruction.Operand1);
 			}

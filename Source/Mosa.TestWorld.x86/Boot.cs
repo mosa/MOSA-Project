@@ -57,14 +57,18 @@ namespace Mosa.TestWorld.x86
 			Screen.Write('7');
 			VirtualPageAllocator.Setup();
 			Screen.Write('8');
-			ConsoleManager.Setup();
+			ProcessManager.Setup();
 			Screen.Write('9');
-			CMOS cmos = new CMOS();
-			Screen.Write('0');
-			Console = ConsoleManager.Controller.Boot;
+			TaskManager.Setup();
 			Screen.Write('A');
-			//IDT.SetInterruptHandler(ProcessInterrupt);
+			ConsoleManager.Setup();
 			Screen.Write('B');
+			CMOS cmos = new CMOS();
+			Screen.Write('C');
+			Console = ConsoleManager.Controller.Boot;
+			Screen.Write('D');
+			//IDT.SetInterruptHandler(ProcessInterrupt);
+			Screen.Write('E');
 
 			Console.Color = 0x0E;
 			Console.BackgroundColor = 1;

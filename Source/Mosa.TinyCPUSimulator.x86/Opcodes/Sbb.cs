@@ -20,7 +20,7 @@ namespace Mosa.TinyCPUSimulator.x86.Opcodes
 			long s = (long)(int)a - (long)(int)b;
 			ulong u = (ulong)a - (ulong)b;
 
-			if (cpu.FLAGS.Carry)
+			if (cpu.EFLAGS.Carry)
 			{
 				s--;
 				u--;
@@ -30,8 +30,8 @@ namespace Mosa.TinyCPUSimulator.x86.Opcodes
 
 			UpdateFlags(cpu, size, s, u, true, true, true, false, true);
 
-			cpu.FLAGS.Carry = ((b + 1) > a);
-			cpu.FLAGS.Adjust = IsAdjustAfterSub(a, b);
+			cpu.EFLAGS.Carry = ((b + 1) > a);
+			cpu.EFLAGS.Adjust = IsAdjustAfterSub(a, b);
 		}
 	}
 }

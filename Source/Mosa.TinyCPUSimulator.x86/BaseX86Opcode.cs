@@ -73,7 +73,7 @@ namespace Mosa.TinyCPUSimulator.x86
 				u = u >> 1;
 			}
 
-			cpu.FLAGS.Parity = parity;
+			cpu.EFLAGS.Parity = parity;
 		}
 
 		protected void UpdateFlags(CPUx86 cpu, int size, long s, ulong u, bool zeroFlag, bool parityParity, bool signFlag, bool carryFlag, bool overFlowFlag)
@@ -91,37 +91,37 @@ namespace Mosa.TinyCPUSimulator.x86
 		protected void UpdateFlags8(CPUx86 cpu, long s, ulong u, bool zeroFlag, bool parityParity, bool signFlag, bool carryFlag, bool overFlowFlag)
 		{
 			if (zeroFlag)
-				cpu.FLAGS.Zero = ((u & 0xFF) == 0);
+				cpu.EFLAGS.Zero = ((u & 0xFF) == 0);
 			if (overFlowFlag)
-				cpu.FLAGS.Overflow = (s < byte.MinValue || s > byte.MaxValue);
+				cpu.EFLAGS.Overflow = (s < byte.MinValue || s > byte.MaxValue);
 			if (carryFlag)
-				cpu.FLAGS.Carry = ((u >> 8) != 0);
+				cpu.EFLAGS.Carry = ((u >> 8) != 0);
 			if (signFlag)
-				cpu.FLAGS.Sign = (((u >> 7) & 0x01) != 0);
+				cpu.EFLAGS.Sign = (((u >> 7) & 0x01) != 0);
 		}
 
 		protected void UpdateFlags16(CPUx86 cpu, long s, ulong u, bool zeroFlag, bool parityParity, bool signFlag, bool carryFlag, bool overFlowFlag)
 		{
 			if (zeroFlag)
-				cpu.FLAGS.Zero = ((u & 0xFFFF) == 0);
+				cpu.EFLAGS.Zero = ((u & 0xFFFF) == 0);
 			if (overFlowFlag)
-				cpu.FLAGS.Overflow = (s < short.MinValue || s > short.MaxValue);
+				cpu.EFLAGS.Overflow = (s < short.MinValue || s > short.MaxValue);
 			if (carryFlag)
-				cpu.FLAGS.Carry = ((u >> 16) != 0);
+				cpu.EFLAGS.Carry = ((u >> 16) != 0);
 			if (signFlag)
-				cpu.FLAGS.Sign = (((u >> 15) & 0x01) != 0);
+				cpu.EFLAGS.Sign = (((u >> 15) & 0x01) != 0);
 		}
 
 		protected void UpdateFlags32(CPUx86 cpu, long s, ulong u, bool zeroFlag, bool parityParity, bool signFlag, bool carryFlag, bool overFlowFlag)
 		{
 			if (zeroFlag)
-				cpu.FLAGS.Zero = ((u & 0xFFFFFFFF) == 0);
+				cpu.EFLAGS.Zero = ((u & 0xFFFFFFFF) == 0);
 			if (overFlowFlag)
-				cpu.FLAGS.Overflow = (s < int.MinValue || s > int.MaxValue);
+				cpu.EFLAGS.Overflow = (s < int.MinValue || s > int.MaxValue);
 			if (carryFlag)
-				cpu.FLAGS.Carry = ((u >> 32) != 0);
+				cpu.EFLAGS.Carry = ((u >> 32) != 0);
 			if (signFlag)
-				cpu.FLAGS.Sign = (((u >> 31) & 0x01) != 0);
+				cpu.EFLAGS.Sign = (((u >> 31) & 0x01) != 0);
 		}
 
 		protected uint GetAddress(CPUx86 cpu, SimOperand operand)

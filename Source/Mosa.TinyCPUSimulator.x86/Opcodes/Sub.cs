@@ -24,7 +24,7 @@ namespace Mosa.TinyCPUSimulator.x86.Opcodes
 
 			UpdateFlags(cpu, size, s, u, true, true, true, true, true);
 
-			cpu.FLAGS.Adjust = IsAdjustAfterSub(a, b);
+			cpu.EFLAGS.Adjust = IsAdjustAfterSub(a, b);
 		}
 	}
 }

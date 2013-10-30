@@ -38,7 +38,7 @@ namespace Mosa.TinyCPUSimulator
 
 		public virtual ulong FramePointer { get { return 0; } set { return; } }
 
-		public virtual long PreviousFrameOffset { get { return -4; } }
+		public virtual long PreviousFrameOffset { get { return 4; } }
 
 		public Dictionary<ulong, KeyValuePair<byte, byte>> MemoryDelta { get; private set; }
 
@@ -59,6 +59,8 @@ namespace Mosa.TinyCPUSimulator
 
 		public virtual void Reset()
 		{
+			Tick = 0;
+
 			foreach (var device in SimDevices)
 			{
 				device.Reset();

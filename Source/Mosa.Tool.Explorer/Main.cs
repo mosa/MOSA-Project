@@ -10,13 +10,11 @@
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.InternalTrace;
-using Mosa.Compiler.Linker;
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Loader;
 using Mosa.Compiler.Pdb;
 using Mosa.Compiler.TypeSystem;
 using Mosa.Compiler.TypeSystem.Cil;
-using Mosa.TinyCPUSimulator.Adaptor;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -346,34 +344,6 @@ namespace Mosa.Tool.Explorer
 			toolStripStatusLabel1.Text = "Compiled!";
 		}
 
-		private void RunSimulator()
-		{
-			compileStartTime = DateTime.Now;
-			methodStages.Clear();
-
-			filter.MethodMatch = MatchType.None;
-
-			string platform = cbPlatform.Text.Trim().ToLower();
-
-			IArchitecture architecture = GetArchitecture(platform);
-			ISimAdapter simAdapter = GetSimAdaptor(platform);
-			ILinker linker = new SimLinker(simAdapter);
-
-			SimCompiler.Compile(typeSystem, typeLayout, internalTrace, enableSSAToolStripMenuItem.Checked, architecture, simAdapter, linker);
-			tabControl1.SelectedTab = tabPage1;
-			rbOtherResult.Text = compileLog.ToString();
-
-			toolStripStatusLabel1.Text = "Compiled!";
-
-			simAdapter.SimCPU.Monitor.EnableStepping = true;
-			simAdapter.SimCPU.Reset();
-
-			SimProcessorX86Form form = new SimProcessorX86Form(simAdapter);
-			form.Show();
-
-			return;
-		}
-
 		private static IArchitecture GetArchitecture(string platform)
 		{
 			switch (platform.ToLower())
@@ -381,23 +351,6 @@ namespace Mosa.Tool.Explorer
 				case "x86": return Mosa.Platform.x86.Architecture.CreateArchitecture(Mosa.Platform.x86.ArchitectureFeatureFlags.AutoDetect);
 				default: return Mosa.Platform.x86.Architecture.CreateArchitecture(Mosa.Platform.x86.ArchitectureFeatureFlags.AutoDetect);
 			}
-		}
-
-		private static ISimAdapter GetSimAdaptor(string platform)
-		{
-			var display = new Mosa.TinyCPUSimulator.x86.Emulate.DisplayForm();
-			display.Show();
-			display.StartTimer();
-
-			ISimAdapter simAdapter;
-
-			switch (platform.ToLower())
-			{
-				case "x86": simAdapter = new Mosa.TinyCPUSimulator.x86.Adaptor.SimStandardPCAdapter(display); break;
-				default: simAdapter = new Mosa.TinyCPUSimulator.x86.Adaptor.SimStandardPCAdapter(display); break;
-			}
-
-			return simAdapter;
 		}
 
 		private void nowToolStripMenuItem_Click(object sender, EventArgs e)
@@ -647,12 +600,6 @@ namespace Mosa.Tool.Explorer
 		private void toolStripButton4_Click(object sender, EventArgs e)
 		{
 			Compile();
-			UpdateTree();
-		}
-
-		private void toolStripButton3_Click_1(object sender, EventArgs e)
-		{
-			RunSimulator();
 			UpdateTree();
 		}
 	}

@@ -29,8 +29,8 @@ namespace Mosa.TinyCPUSimulator.x86.Opcodes
 			cpu.EAX.Value = (uint)r;
 			cpu.EDX.Value = (uint)(((ulong)r) >> 32);
 
-			cpu.FLAGS.Overflow = false;
-			cpu.FLAGS.Carry = false;
+			cpu.EFLAGS.Overflow = false;
+			cpu.EFLAGS.Carry = false;
 		}
 
 		protected void Execute2(CPUx86 cpu, SimInstruction instruction)
@@ -43,8 +43,8 @@ namespace Mosa.TinyCPUSimulator.x86.Opcodes
 
 			StoreValue(cpu, instruction.Operand1, (uint)r, size);
 
-			cpu.FLAGS.Overflow = (((ulong)r) >> 32) != 0;
-			cpu.FLAGS.Carry = cpu.FLAGS.Overflow;
+			cpu.EFLAGS.Overflow = (((ulong)r) >> 32) != 0;
+			cpu.EFLAGS.Carry = cpu.EFLAGS.Overflow;
 		}
 
 		protected void Execute3(CPUx86 cpu, SimInstruction instruction)
@@ -57,8 +57,8 @@ namespace Mosa.TinyCPUSimulator.x86.Opcodes
 
 			StoreValue(cpu, instruction.Operand1, (uint)r, size);
 
-			cpu.FLAGS.Overflow = (((ulong)r) >> 32) != 0;
-			cpu.FLAGS.Carry = cpu.FLAGS.Overflow;
+			cpu.EFLAGS.Overflow = (((ulong)r) >> 32) != 0;
+			cpu.EFLAGS.Carry = cpu.EFLAGS.Overflow;
 		}
 	}
 }

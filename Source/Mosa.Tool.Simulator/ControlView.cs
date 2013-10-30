@@ -9,7 +9,6 @@
 
 using Mosa.TinyCPUSimulator;
 using System;
-using System.Collections.Generic;
 
 namespace Mosa.Tool.Simulator
 {
@@ -47,12 +46,7 @@ namespace Mosa.Tool.Simulator
 
 		private void button3_Click(object sender, EventArgs e)
 		{
-			MainForm.StartSimulator();
-		}
-
-		private void button4_Click(object sender, EventArgs e)
-		{
-
+			MainForm.Restart();
 		}
 
 		private void cbRecord_CheckedChanged(object sender, EventArgs e)

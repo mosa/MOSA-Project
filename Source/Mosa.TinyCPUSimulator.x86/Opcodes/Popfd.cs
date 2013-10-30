@@ -15,7 +15,7 @@ namespace Mosa.TinyCPUSimulator.x86.Opcodes
 		{
 			int size = 32;
 
-			cpu.FLAGS.Value = Read(cpu, cpu.ESP.Value, size);
+			cpu.EFLAGS.Value = Read(cpu, cpu.ESP.Value, size);
 
 			cpu.ESP.Value = (uint)(cpu.ESP.Value + (size / 8));
 		}

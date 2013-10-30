@@ -12,13 +12,12 @@ using Mosa.Compiler.InternalTrace;
 using Mosa.Compiler.Linker;
 using Mosa.Compiler.Metadata.Loader;
 using Mosa.Compiler.TypeSystem;
-using Mosa.TinyCPUSimulator.Adaptor;
 using Mosa.TinyCPUSimulator;
+using Mosa.TinyCPUSimulator.Adaptor;
 using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
-using System.Threading;
-using System.Collections.Generic;
 
 namespace Mosa.Tool.Simulator
 {
@@ -48,13 +47,11 @@ namespace Mosa.Tool.Simulator
 
 		public string Status { set { this.toolStripStatusLabel1.Text = value; toolStrip1.Refresh(); } }
 
+		public string CompileOnLaunch { get; set; }
+
 		public MainForm()
 		{
 			InitializeComponent();
-		}
-
-		private void MainForm_Load(object sender, EventArgs e)
-		{
 			Filter.MethodMatch = MatchType.None;
 			Filter.Method = string.Empty;
 			Filter.StageMatch = MatchType.Any;
@@ -62,7 +59,10 @@ namespace Mosa.Tool.Simulator
 			Filter.ExcludeInternalMethods = false;
 
 			InternalTrace.TraceFilter = Filter;
+		}
 
+		private void MainForm_Load(object sender, EventArgs e)
+		{
 			dockPanel.SuspendLayout(true);
 
 			assembliesView.Show(dockPanel, DockState.DockLeftAutoHide);
@@ -77,6 +77,12 @@ namespace Mosa.Tool.Simulator
 			historyView.Show(dockPanel, DockState.Document);
 
 			dockPanel.ResumeLayout(true, true);
+
+			if (CompileOnLaunch != null)
+			{
+				LoadAssembly(CompileOnLaunch, "x86");
+				StartSimulator();
+			}
 		}
 
 		private void toolStripButton2_Click(object sender, EventArgs e)
@@ -98,7 +104,7 @@ namespace Mosa.Tool.Simulator
 			}
 		}
 
-		protected void LoadAssembly(string filename, string platform)
+		public void LoadAssembly(string filename, string platform)
 		{
 			IAssemblyLoader assemblyLoader = new AssemblyLoader();
 
@@ -228,6 +234,14 @@ namespace Mosa.Tool.Simulator
 		{
 			var state = SimCPU.GetState();
 			SimStates.Add(state);
+		}
+
+		public void Restart()
+		{
+			Record = false;
+			SimStates.Clear();
+			SimCPU.Reset();
+			UpdateAll();
 		}
 	}
 }

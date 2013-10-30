@@ -19,27 +19,27 @@ namespace Mosa.TinyCPUSimulator.x86.Opcodes
 
 			if (double.IsNaN(a) || double.IsNaN(b))
 			{
-				cpu.FLAGS.Zero = true;
-				cpu.FLAGS.Parity = true;
-				cpu.FLAGS.Carry = true;
+				cpu.EFLAGS.Zero = true;
+				cpu.EFLAGS.Parity = true;
+				cpu.EFLAGS.Carry = true;
 			}
 			else if (a == b)
 			{
-				cpu.FLAGS.Zero = true;
-				cpu.FLAGS.Parity = false;
-				cpu.FLAGS.Carry = false;
+				cpu.EFLAGS.Zero = true;
+				cpu.EFLAGS.Parity = false;
+				cpu.EFLAGS.Carry = false;
 			}
 			else if (a > b)
 			{
-				cpu.FLAGS.Zero = false;
-				cpu.FLAGS.Parity = false;
-				cpu.FLAGS.Carry = false;
+				cpu.EFLAGS.Zero = false;
+				cpu.EFLAGS.Parity = false;
+				cpu.EFLAGS.Carry = false;
 			}
 			else
 			{
-				cpu.FLAGS.Zero = false;
-				cpu.FLAGS.Parity = false;
-				cpu.FLAGS.Carry = true;
+				cpu.EFLAGS.Zero = false;
+				cpu.EFLAGS.Parity = false;
+				cpu.EFLAGS.Carry = true;
 			}
 		}
 	}

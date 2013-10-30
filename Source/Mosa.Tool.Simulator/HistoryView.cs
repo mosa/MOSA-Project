@@ -9,7 +9,6 @@
 
 using Mosa.TinyCPUSimulator;
 using System;
-using System.Collections.Generic;
 
 namespace Mosa.Tool.Simulator
 {
@@ -24,6 +23,12 @@ namespace Mosa.Tool.Simulator
 
 		public override void Update(SimState simState)
 		{
+			if (!enable)
+				return;
+
+			if (MainForm.SimStates.Count < lbHistory.Items.Count)
+				lbHistory.Items.Clear();
+
 			while (MainForm.SimStates.Count != lbHistory.Items.Count)
 			{
 				lbHistory.Items.Add(MainForm.SimStates[lbHistory.Items.Count]);
@@ -36,18 +41,15 @@ namespace Mosa.Tool.Simulator
 
 		public override void Update()
 		{
-			if (!enable)
-				return;
-
 			Update(SimCPU.GetState());
 		}
 
 		private void lbHistory_DoubleClick(object sender, EventArgs e)
 		{
 			enable = false;
-			
+
 			MainForm.UpdateAll(lbHistory.SelectedItem as SimState);
-			
+
 			enable = true;
 		}
 	}

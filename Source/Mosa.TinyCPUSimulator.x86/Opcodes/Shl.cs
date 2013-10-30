@@ -34,8 +34,8 @@ namespace Mosa.TinyCPUSimulator.x86.Opcodes
 
 			UpdateFlags(cpu, size, (long)u, u, true, true, true, false, false);
 
-			cpu.FLAGS.Overflow = sign ^ IsSign(u, size);
-			cpu.FLAGS.Carry = sign;
+			cpu.EFLAGS.Overflow = sign ^ IsSign(u, size);
+			cpu.EFLAGS.Carry = sign;
 		}
 	}
 }
