@@ -24,8 +24,6 @@
                     <include name="Program.cs"/>
                     <include name="Properties/Resources.Designer.cs"/>
                     <include name="ExplorerLinkerSection.cs"/>
-                    <include name="SimProcessorX86Form.cs"/>
-                    <include name="SimProcessorX86Form.Designer.cs"/>
 		</sources>
 		<references>
                     <include name="System.dll"/>

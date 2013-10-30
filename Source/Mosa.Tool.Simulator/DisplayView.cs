@@ -79,7 +79,7 @@ namespace Mosa.Tool.Simulator
 			}
 		}
 
-		public override void Update()
+		public override void UpdateDock()
 		{
 			this.Refresh();
 		}

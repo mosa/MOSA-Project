@@ -15,28 +15,28 @@ namespace Mosa.TinyCPUSimulator
 	{
 		public ulong Tick { get; private set; }
 
-		public ulong IP { get; private set; }
+		public ulong NextIP { get; private set; }
 		
-		public ulong PreviousIP { get; private set; }
+		public ulong IP { get; private set; }
 
 		public SimInstruction Instruction { get; private set; }
 
 		public Dictionary<string, string> Values { get; private set; }
 
-		public Dictionary<ulong, KeyValuePair<byte, byte>> MemoryDelta { get; private set; }
+		//public Dictionary<ulong, KeyValuePair<byte, byte>> MemoryDelta { get; private set; }
 
 		public SimCPUException CPUException { get; private set; }
 
-		public SimState(ulong tick, ulong ip, ulong previousIP, SimCPUException exception, SimInstruction instruction)
+		public SimState(ulong tick, ulong ip, SimCPUException exception, SimInstruction instruction, ulong nextIP)
 		{
 			Tick = tick;
 			IP = ip;
-			PreviousIP = previousIP;
+			NextIP = nextIP;
 			Instruction = instruction;
 			CPUException = exception;
 
 			Values = new Dictionary<string, string>();
-			MemoryDelta = new Dictionary<ulong, KeyValuePair<byte, byte>>();
+			//MemoryDelta = new Dictionary<ulong, KeyValuePair<byte, byte>>();
 		}
 
 		public void StoreValue(string name, string value)
@@ -44,13 +44,13 @@ namespace Mosa.TinyCPUSimulator
 			Values.Add(name, value);
 		}
 
-		public void StoreMemoryDelta(Dictionary<ulong, KeyValuePair<byte, byte>> memoryDelta)
-		{
-			foreach (var value in memoryDelta)
-			{
-				MemoryDelta.Add(value.Key, value.Value);
-			}
-		}
+		//public void StoreMemoryDelta(Dictionary<ulong, KeyValuePair<byte, byte>> memoryDelta)
+		//{
+		//	foreach (var value in memoryDelta)
+		//	{
+		//		MemoryDelta.Add(value.Key, value.Value);
+		//	}
+		//}
 
 		public override string ToString()
 		{

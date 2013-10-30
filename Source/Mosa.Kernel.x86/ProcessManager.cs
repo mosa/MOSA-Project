@@ -19,7 +19,7 @@ namespace Mosa.Kernel.x86
 		private static uint slots = 4096;
 		private static uint table;
 
-		//private static uint _lock = 0;
+		//private static uint lock = 0;
 
 		#region Data members
 
@@ -47,10 +47,10 @@ namespace Mosa.Kernel.x86
 		/// <summary>
 		/// Setups the process manager.
 		/// </summary>
-		public static unsafe void Setup()
+		public static void Setup()
 		{
 			// Allocate memory for the process table
-			table = (uint)VirtualPageAllocator.Reserve((uint)(slots * Offset.TotalSize));
+			table = VirtualPageAllocator.Reserve(slots * Offset.TotalSize);
 
 			// Create idle process
 			CreateProcess(0);
@@ -87,7 +87,7 @@ namespace Mosa.Kernel.x86
 
 			Native.Set32(process + Offset.Status, Status.Running);
 			Native.Set32(process + Offset.ProcessID, slot);
-			Native.Set32(process + Offset.MemoryMap, (uint)AllocateMemory(slot, 32U * 4096U));
+			Native.Set32(process + Offset.MemoryMap, AllocateMemory(slot, 32U * 4096U));
 			Native.Set32(process + Offset.Lock, 0);
 			Native.Set32(process + Offset.DefaultPriority, 7);
 			Native.Set32(process + Offset.MaximumPriority, 255);
@@ -110,10 +110,10 @@ namespace Mosa.Kernel.x86
 			uint address = Native.Get32(process + Offset.MemoryMap);
 			DeallocateMemory(slot, address, 32U * 4096U);
 
-			// Now heres the weird part, what do we want to do?
-			// For the moment I haved decided to set the status to
-			// terminated and just leave it, then the process manager
-			// can sift through in the next few cycles and see
+			// Now here's the weird part, what do we want to do?
+			// For the moment decided to set the status to
+			// terminated and just leave it, and let the process manager
+			// can shift through in the next few cycles and see
 			// whether or not it wants to free the slot.
 			Native.Set32(process + Offset.Status, Status.Terminated);
 		}
@@ -201,7 +201,7 @@ namespace Mosa.Kernel.x86
 		/// <returns></returns>
 		private static uint GetProcessLocation(uint slot)
 		{
-			return (uint)(table + (Offset.TotalSize * slot));
+			return table + (Offset.TotalSize * slot);
 		}
 	}
 }

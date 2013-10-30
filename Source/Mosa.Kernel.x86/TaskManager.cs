@@ -16,12 +16,12 @@ namespace Mosa.Kernel.x86
 	/// </summary>
 	public static class TaskManager
 	{
-		private static uint _defaultStackSize = 1024 * 1024 * 4; // 4MB
-		private static uint _slots = 4096 * 8;
-		private static uint _table;
-		private static uint _currenttask; // Not SMP
+		private static uint defaultStackSize = 1024 * 1024 * 4; // 4MB
+		private static uint slots = 4096 * 8;
+		private static uint table;
+		private static uint currenttask; // Not SMP
 
-		//private static uint _lock = 0;
+		//private static uint lock = 0;
 
 		#region Data members
 
@@ -71,18 +71,18 @@ namespace Mosa.Kernel.x86
 		/// <summary>
 		/// Setups the task manager.
 		/// </summary>
-		public static unsafe void Setup()
+		public static  void Setup()
 		{
 			// Allocate memory for the task table
-			_table = (uint)VirtualPageAllocator.Reserve((uint)(_slots * Offset.TotalSize));
+			table = (uint)VirtualPageAllocator.Reserve(slots * Offset.TotalSize);
 
-			uint stack = ProcessManager.AllocateMemory(0, _defaultStackSize);
+			uint stack = ProcessManager.AllocateMemory(0, defaultStackSize);
 
 			// Create idle task
 			CreateTask(0, 0);
 
 			// Set current stack
-			_currenttask = 0;
+			currenttask = 0;
 		}
 
 		/// <summary>
@@ -114,8 +114,8 @@ namespace Mosa.Kernel.x86
 			// TODO: Lock
 
 			uint task = GetTaskLocation(slot);
-			uint stack = ProcessManager.AllocateMemory(processid, _defaultStackSize);
-			uint stacktop = stack + _defaultStackSize;
+			uint stack = ProcessManager.AllocateMemory(processid, defaultStackSize);
+			uint stacktop = stack + defaultStackSize;
 
 			// TODO: Add guard pages before and after stack
 
@@ -166,7 +166,7 @@ namespace Mosa.Kernel.x86
 		/// <returns></returns>
 		private static uint FindEmptySlot()
 		{
-			for (uint slot = 1; slot < _slots; slot++)
+			for (uint slot = 1; slot < slots; slot++)
 				if (Native.Get32(GetTaskLocation(slot) + Offset.Status) == Status.Empty)
 					return slot;
 
@@ -180,13 +180,13 @@ namespace Mosa.Kernel.x86
 		/// <returns></returns>
 		private static uint GetTaskLocation(uint slot)
 		{
-			return (uint)(_table + (Offset.TotalSize * slot));
+			return (uint)(table + (Offset.TotalSize * slot));
 		}
 
 		public static void ThreadOut(uint esp)
 		{
 			// Get Stack Slot Location
-			uint task = GetTaskLocation(_currenttask);
+			uint task = GetTaskLocation(currenttask);
 
 			// Save Stack location
 			Native.Set32(task + Offset.ESP, esp);
@@ -201,10 +201,10 @@ namespace Mosa.Kernel.x86
 			ProgrammableInterruptController.SendEndOfInterrupt(0x20);
 
 			// Update current task
-			_currenttask = nexttask;
+			currenttask = nexttask;
 
 			// Get Stack Slot Location
-			uint task = GetTaskLocation(_currenttask);
+			uint task = GetTaskLocation(currenttask);
 
 			// Get Stack location
 			uint esp = Native.Get32(task + Offset.ESP);

@@ -19,26 +19,26 @@ namespace Mosa.Tool.Simulator
 			InitializeComponent();
 		}
 
-		public override void Update(SimState simState)
+		public override void UpdateDock(SimState simState)
 		{
 			var currentInstruction = SimCPU.DecodeOpcode(simState.IP);
-			var previousInstruction = SimCPU.DecodeOpcode(simState.PreviousIP);
+			var nextInstruction = SimCPU.DecodeOpcode(simState.NextIP);
 
 			this.textBox1.Text = simState.Tick.ToString();
 			this.textBox2.Text = currentInstruction != null ? currentInstruction.ToString() : "-BLANK-";
-			this.textBox3.Text = previousInstruction != null ? previousInstruction.ToString() : "-BLANK-";
+			this.textBox3.Text = nextInstruction != null ? nextInstruction.ToString() : "-BLANK-";
 
 			this.textBox4.Text = "0x" + simState.IP.ToString("X8");
-			this.textBox5.Text = "0x" + simState.PreviousIP.ToString("X8");
+			this.textBox5.Text = "0x" + simState.NextIP.ToString("X8");
 
 			this.textBox6.Text = simState.CPUException != null ? simState.CPUException.ToString() : "None";
 		
 			this.Refresh();
 		}
 
-		public override void Update()
+		public override void UpdateDock()
 		{
-			Update(SimCPU.GetState());
+			UpdateDock(SimCPU.GetState());
 		}
 	}
 }

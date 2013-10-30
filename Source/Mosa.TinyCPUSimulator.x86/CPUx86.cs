@@ -212,7 +212,7 @@ namespace Mosa.TinyCPUSimulator.x86
 		}
 
 
-		protected virtual void ExecuteOpcode(SimInstruction instruction)
+		protected override void ExecuteOpcode(SimInstruction instruction)
 		{
 			uint eip = EIP.Value;
 			uint flag = EFLAGS.Value;

@@ -21,7 +21,7 @@ namespace Mosa.Tool.Simulator
 			InitializeComponent();
 		}
 
-		public override void Update(SimState simState)
+		public override void UpdateDock(SimState simState)
 		{
 			if (!enable)
 				return;
@@ -39,9 +39,9 @@ namespace Mosa.Tool.Simulator
 			this.Refresh();
 		}
 
-		public override void Update()
+		public override void UpdateDock()
 		{
-			Update(SimCPU.GetState());
+			UpdateDock(SimCPU.GetState());
 		}
 
 		private void lbHistory_DoubleClick(object sender, EventArgs e)

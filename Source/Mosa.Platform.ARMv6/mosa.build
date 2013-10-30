@@ -15,6 +15,7 @@
 	    <csc target="library" output="${outputDirectory}/Mosa.Platform.ARMv6.dll" debug="${debug}" unsafe="true" nostdlib="false">
 		<sources>
                     <include name="ARMv6Instruction.cs"/>
+                    <include name="ARMv6.cs"/>
                     <include name="BaseTransformationStage.cs"/>
                     <include name="IARMv6Visitor.cs"/>
                     <include name="Instructions/Adc.cs"/>

@@ -40,7 +40,7 @@ namespace Mosa.TinyCPUSimulator
 
 		public virtual long PreviousFrameOffset { get { return 4; } }
 
-		public Dictionary<ulong, KeyValuePair<byte, byte>> MemoryDelta { get; private set; }
+		//public Dictionary<ulong, KeyValuePair<byte, byte>> MemoryDelta { get; private set; }
 
 		public SimCPUException LastException { get; set; }
 
@@ -51,7 +51,7 @@ namespace Mosa.TinyCPUSimulator
 			SimDevices = new List<BaseSimDevice>();
 			PortDevices = new BaseSimDevice[65536];
 			Symbols = new Dictionary<string, SimSymbol>();
-			MemoryDelta = new Dictionary<ulong, KeyValuePair<byte, byte>>();
+			//MemoryDelta = new Dictionary<ulong, KeyValuePair<byte, byte>>();
 
 			Tick = 0;
 			IsLittleEndian = true;
@@ -90,7 +90,7 @@ namespace Mosa.TinyCPUSimulator
 		{
 			RAMBank ram = Find(address);
 
-			MemoryDelta.Add(address, new KeyValuePair<byte, byte>(ram.Read8(address), value));
+			//MemoryDelta.Add(address, new KeyValuePair<byte, byte>(ram.Read8(address), value));
 
 			if (ram != null)
 				ram.Write8(address, value);
@@ -299,7 +299,7 @@ namespace Mosa.TinyCPUSimulator
 
 		protected void ExecuteInstruction()
 		{
-			MemoryDelta.Clear();
+			//MemoryDelta.Clear();
 
 			try
 			{
@@ -345,9 +345,9 @@ namespace Mosa.TinyCPUSimulator
 
 		public virtual SimState GetState()
 		{
-			SimState simState = new SimState(Tick, CurrentInstructionPointer, PreviousInstructionPointer, LastException, DecodeOpcode(CurrentInstructionPointer));
+			SimState simState = new SimState(Tick, PreviousInstructionPointer, LastException, DecodeOpcode(PreviousInstructionPointer), CurrentInstructionPointer);
 
-			simState.StoreMemoryDelta(MemoryDelta);
+			//simState.StoreMemoryDelta(MemoryDelta);
 
 			return simState;
 		}

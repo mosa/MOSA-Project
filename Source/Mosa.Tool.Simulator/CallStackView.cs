@@ -28,7 +28,7 @@ namespace Mosa.Tool.Simulator
 			treeView1.Nodes.Add(node);
 		}
 
-		public override void Update(SimState simState)
+		public override void UpdateDock(SimState simState)
 		{
 			treeView1.Nodes.Clear();
 
@@ -39,9 +39,9 @@ namespace Mosa.Tool.Simulator
 			this.Refresh();
 		}
 
-		public override void Update()
+		public override void UpdateDock()
 		{
-			Update(SimCPU.GetState());
+			UpdateDock(SimCPU.GetState());
 
 			ulong ip = SimCPU.CurrentInstructionPointer;
 			ulong ebp = SimCPU.FramePointer;

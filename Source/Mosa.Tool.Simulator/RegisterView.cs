@@ -47,7 +47,7 @@ namespace Mosa.Tool.Simulator
 			}
 		}
 
-		public override void Update(SimState simState)
+		public override void UpdateDock(SimState simState)
 		{
 			dataGridView1.Rows.Clear();
 
@@ -64,9 +64,9 @@ namespace Mosa.Tool.Simulator
 			this.Refresh();
 		}
 
-		public override void Update()
+		public override void UpdateDock()
 		{
-			Update(SimCPU.GetState());
+			UpdateDock(SimCPU.GetState());
 		}
 	}
 }

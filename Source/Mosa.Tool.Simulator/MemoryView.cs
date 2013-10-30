@@ -29,7 +29,7 @@ namespace Mosa.Tool.Simulator
 			InitializeComponent();
 		}
 
-		public override void Update()
+		public override void UpdateDock()
 		{
 		}
 

@@ -49,6 +49,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="SymbolView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SymbolView.designer.cs">
+      <DependentUpon>SymbolView.cs</DependentUpon>
+    </Compile>
     <Compile Include="HistoryView.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -138,8 +144,14 @@
     <EmbeddedResource Include="CallStackView.resx">
       <DependentUpon>CallStackView.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="SymbolView.resx">
+      <DependentUpon>SymbolView.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="HistoryView.resx">
       <DependentUpon>HistoryView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StackFrameView.resx">
+      <DependentUpon>StackFrameView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="StatusView.resx">
       <DependentUpon>StatusView.cs</DependentUpon>

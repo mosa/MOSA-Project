@@ -33,6 +33,7 @@ namespace Mosa.Tool.Simulator
 		private FlagView flagView = new FlagView();
 		private StatusView statusView = new StatusView();
 		private HistoryView historyView = new HistoryView();
+		private SymbolView symbolView = new SymbolView();
 
 		public IInternalTrace InternalTrace = new BasicInternalTrace();
 		public ConfigurableTraceFilter Filter = new ConfigurableTraceFilter();
@@ -75,7 +76,8 @@ namespace Mosa.Tool.Simulator
 			stackView.Show(dockPanel, DockState.DockRight);
 			flagView.Show(dockPanel, DockState.DockRight);
 			historyView.Show(dockPanel, DockState.Document);
-
+			symbolView.Show(dockPanel, DockState.Document);
+			
 			dockPanel.ResumeLayout(true, true);
 
 			if (CompileOnLaunch != null)
@@ -140,6 +142,9 @@ namespace Mosa.Tool.Simulator
 
 			Status = "Compiled.";
 
+			GetCurrentStateAndUpdate();
+			symbolView.CreateEntries();
+
 			UpdateAll();
 		}
 
@@ -178,7 +183,7 @@ namespace Mosa.Tool.Simulator
 			{
 				if (dock.DockHandler.Content is SimulatorDockContent)
 				{
-					(dock.DockHandler.Content as SimulatorDockContent).Update();
+					(dock.DockHandler.Content as SimulatorDockContent).UpdateDock();
 				}
 			}
 		}
@@ -192,7 +197,7 @@ namespace Mosa.Tool.Simulator
 			{
 				if (dock.DockHandler.Content is SimulatorDockContent)
 				{
-					(dock.DockHandler.Content as SimulatorDockContent).Update(simState);
+					(dock.DockHandler.Content as SimulatorDockContent).UpdateDock(simState);
 				}
 			}
 		}

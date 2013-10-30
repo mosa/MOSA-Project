@@ -28,6 +28,7 @@
                     <include name="Opcodes/Roundsd.cs"/>
                     <include name="Opcodes/Roundss.cs"/>
                     <include name="Opcodes/FarJmp.cs"/>
+                    <include name="PageFaultException.cs"/>
                     <include name="SegmentRegister.cs"/>
                     <include name="CPUx86.cs"/>
                     <include name="FlagRegister.cs"/>

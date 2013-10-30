@@ -54,9 +54,9 @@ namespace Mosa.Tool.Simulator
 			this.label8.AutoSize = true;
 			this.label8.Location = new System.Drawing.Point(182, 43);
 			this.label8.Name = "label8";
-			this.label8.Size = new System.Drawing.Size(103, 13);
+			this.label8.Size = new System.Drawing.Size(84, 13);
 			this.label8.TabIndex = 26;
-			this.label8.Text = "Previous Instruction:";
+			this.label8.Text = "Next Instruction:";
 			// 
 			// textBox1
 			// 
@@ -88,9 +88,9 @@ namespace Mosa.Tool.Simulator
 			this.label1.AutoSize = true;
 			this.label1.Location = new System.Drawing.Point(182, 2);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(96, 13);
+			this.label1.Size = new System.Drawing.Size(59, 13);
 			this.label1.TabIndex = 28;
-			this.label1.Text = "Current Instruction:";
+			this.label1.Text = "Instruction:";
 			// 
 			// textBox4
 			// 
@@ -113,18 +113,18 @@ namespace Mosa.Tool.Simulator
 			this.label2.AutoSize = true;
 			this.label2.Location = new System.Drawing.Point(90, 43);
 			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(64, 13);
+			this.label2.Size = new System.Drawing.Size(45, 13);
 			this.label2.TabIndex = 32;
-			this.label2.Text = "Previous IP:";
+			this.label2.Text = "Next IP:";
 			// 
 			// label3
 			// 
 			this.label3.AutoSize = true;
 			this.label3.Location = new System.Drawing.Point(90, 2);
 			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(57, 13);
+			this.label3.Size = new System.Drawing.Size(20, 13);
 			this.label3.TabIndex = 33;
-			this.label3.Text = "Current IP:";
+			this.label3.Text = "IP:";
 			// 
 			// textBox6
 			// 

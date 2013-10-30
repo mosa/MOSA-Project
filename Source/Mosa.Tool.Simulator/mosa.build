@@ -14,6 +14,10 @@
 	<target name="build">
 	    <csc target="exe" main="Mosa.Tool.Simulator.Program" output="${outputDirectory}/Mosa.Tool.Simulator.exe" debug="${debug}" unsafe="true" nostdlib="false">
 		<sources>
+                    <include name="SymbolView.cs"/>
+                    <include name="SymbolView.designer.cs"/>
+                    <include name="HistoryView.cs"/>
+                    <include name="HistoryView.designer.cs"/>
                     <include name="ControlView.cs"/>
                     <include name="ControlView.designer.cs"/>
                     <include name="CallStackView.cs"/>
