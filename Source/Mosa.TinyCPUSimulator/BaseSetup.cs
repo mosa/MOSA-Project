@@ -14,14 +14,11 @@ namespace Mosa.TinyCPUSimulator
 	public class BaseSetup<T> where T : SimCPU, new()
 	{
 		protected readonly T CPU;
-		protected readonly SimMonitor Monitor;
 		protected uint Address = 0x00000;
 
 		public BaseSetup()
 		{
 			CPU = new T();
-			Monitor = new SimMonitor(CPU);
-			CPU.Monitor = Monitor;
 			CPU.CurrentInstructionPointer = Address;
 		}
 

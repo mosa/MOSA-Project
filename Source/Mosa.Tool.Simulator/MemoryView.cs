@@ -29,10 +29,6 @@ namespace Mosa.Tool.Simulator
 			InitializeComponent();
 		}
 
-		public override void UpdateDock()
-		{
-		}
-
 		private void UpdateDisplay()
 		{
 			int lines = lbMemory.Height / (lbMemory.Font.Height + 2);

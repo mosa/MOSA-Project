@@ -9,7 +9,6 @@
 
 using Mosa.TinyCPUSimulator;
 using System;
-using System.Collections.Generic;
 
 namespace Mosa.Tool.Simulator
 {
@@ -39,9 +38,5 @@ namespace Mosa.Tool.Simulator
 			this.Refresh();
 		}
 
-		public override void UpdateDock()
-		{
-			UpdateDock(SimCPU.GetState());
-		}
 	}
 }

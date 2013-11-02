@@ -19,28 +19,14 @@ namespace Mosa.Tool.Simulator
 			InitializeComponent();
 		}
 
-		public override void UpdateDock()
-		{
-		}
-
 		private void button1_Click(object sender, EventArgs e)
 		{
-			if (MainForm.SimCPU == null)
-				return;
-
-			MainForm.SimCPU.Monitor.EnableStepping = true;
-
 			MainForm.ExecuteSteps(1);
 		}
 
 		private void button2_Click(object sender, EventArgs e)
 		{
-			if (SimCPU == null)
-				return;
-
-			SimCPU.Monitor.EnableStepping = true;
-
-			int steps = Convert.ToInt32(tbSteps.Text);
+			uint steps = Convert.ToUInt32(tbSteps.Text);
 			MainForm.ExecuteSteps(steps);
 		}
 

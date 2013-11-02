@@ -15,6 +15,7 @@ using Mosa.Compiler.TypeSystem;
 using Mosa.TinyCPUSimulator;
 using Mosa.TinyCPUSimulator.Adaptor;
 using System;
+using System.Threading;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
@@ -50,6 +51,9 @@ namespace Mosa.Tool.Simulator
 
 		public string CompileOnLaunch { get; set; }
 
+		private Thread worker;
+		private object locker = new object();
+
 		public MainForm()
 		{
 			InitializeComponent();
@@ -60,6 +64,10 @@ namespace Mosa.Tool.Simulator
 			Filter.ExcludeInternalMethods = false;
 
 			InternalTrace.TraceFilter = Filter;
+
+			worker = new Thread(ExecuteThread);
+			worker.Name = "SimCPU";
+			worker.Start();
 		}
 
 		private void MainForm_Load(object sender, EventArgs e)
@@ -137,15 +145,18 @@ namespace Mosa.Tool.Simulator
 			SimCompiler.Compile(TypeSystem, TypeLayout, InternalTrace, true, Architecture, simAdapter, Linker);
 
 			SimCPU = simAdapter.SimCPU;
-			SimCPU.Monitor.EnableStepping = true;
+
+			SimCPU.Monitor.OnExecutionStepCompleted(true);
+			SimCPU.Monitor.BreakAtTick = 1;
+			SimCPU.Monitor.UpdateCycle = 20000;
+			SimCPU.Monitor.BreakOnException = true;
+			SimCPU.Monitor.OnStateUpdate = UpdateSimState;
+
 			SimCPU.Reset();
 
 			Status = "Compiled.";
 
-			GetCurrentStateAndUpdate();
 			symbolView.CreateEntries();
-
-			UpdateAll();
 		}
 
 		public static string Format(object value)
@@ -200,27 +211,18 @@ namespace Mosa.Tool.Simulator
 		private void toolStripButton1_Click(object sender, EventArgs e)
 		{
 			if (TypeSystem == null)
+			{
 				LoadAssembly();
+			}
 
 			StartSimulator();
 		}
 
-		private void UpdateAll()
+		public void UpdateAllDocks(SimState simState)
 		{
-			if (SimCPU == null)
+			if (simState == null)
 				return;
 
-			foreach (var dock in dockPanel.Contents)
-			{
-				if (dock.DockHandler.Content is SimulatorDockContent)
-				{
-					(dock.DockHandler.Content as SimulatorDockContent).UpdateDock();
-				}
-			}
-		}
-
-		public void UpdateAll(SimState simState)
-		{
 			if (SimCPU == null)
 				return;
 
@@ -233,55 +235,72 @@ namespace Mosa.Tool.Simulator
 			}
 		}
 
-		public void ExecuteSteps(int steps)
+		private void UpdateSimState(SimState simState)
+		{
+			MethodInvoker method = delegate() { UpdateAllDocks(simState); };
+
+			Invoke(method);
+		}
+
+		private void ExecuteThread()
+		{
+			for (; ; )
+			{
+				if (SimCPU == null)
+				{
+					Thread.Sleep(500);
+					continue;
+				}
+
+				SimCPU.Execute();
+
+				lock (locker)
+				{
+					Monitor.Wait(locker);
+				}
+			}
+		}
+
+		public void Stop()
+		{
+			SimCPU.Monitor.Stop = true;
+		}
+
+		public void ExecuteSteps(uint steps)
 		{
 			if (SimCPU == null)
 				return;
 
-			try
+			SimCPU.Monitor.BreakAtTick += steps;
+			SimCPU.Monitor.Stop = false;
+
+			lock (locker)
 			{
-				for (int i = 0; i < steps; i++)
-				{
-					SimCPU.Execute();
-
-					if (Record)
-					{
-						GetCurrentStateAndUpdate();
-					}
-					else
-					{
-						var state = SimCPU.GetState();
-					}
-
-					if (SimCPU.LastException != null)
-					{
-						return;
-					}
-
-					if (i % 20000 == 0)
-					{
-						UpdateAll();
-					}
-				}
+				Monitor.PulseAll(locker);
 			}
-			finally
-			{
-				UpdateAll();
-			}
-		}
-
-		protected void GetCurrentStateAndUpdate()
-		{
-			var state = SimCPU.GetState();
-			SimStates.Add(state);
 		}
 
 		public void Restart()
 		{
+			if (SimCPU == null)
+				return;
+
 			Record = false;
-			SimStates.Clear();
-			SimCPU.Reset();
-			UpdateAll();
+
+			SimCPU.Monitor.Stop = false;
+
+			lock (locker)
+			{
+				SimStates.Clear();
+				SimCPU.Reset();
+			}
+
+			SimCPU.Monitor.OnExecutionStepCompleted(true);
+			Status = "Simulation Reset.";
+
+			symbolView.CreateEntries();
 		}
+
+
 	}
 }

@@ -7,11 +7,9 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using Mosa.TinyCPUSimulator;
-using Mosa.Compiler.TypeSystem;
-using System;
-using System.Collections.Generic;
 using Mosa.Compiler.Linker;
+using Mosa.TinyCPUSimulator;
+using System.Collections.Generic;
 
 namespace Mosa.Tool.Simulator
 {
@@ -25,11 +23,16 @@ namespace Mosa.Tool.Simulator
 			private bool force32;
 
 			public string Name { get { return LinkerSymbol.Name; } }
+
 			public long Length { get { return LinkerSymbol.Length; } }
+
 			//public long VirtualAddress { get { return LinkerSymbol.VirtualAddress; } }
 			public string VirtualAddress { get { return MainForm.Format(LinkerSymbol.VirtualAddress, force32); } }
+
 			public long Offset { get { return LinkerSymbol.Offset; } }
+
 			public SectionKind SectionKind { get { return LinkerSymbol.SectionKind; } }
+
 			//public long SectionAddress { get { return LinkerSymbol.SectionAddress; } }
 			public string SectionAddress { get { return MainForm.Format(LinkerSymbol.SectionAddress, force32); } }
 
@@ -63,8 +66,5 @@ namespace Mosa.Tool.Simulator
 		{
 		}
 
-		public override void UpdateDock()
-		{
-		}
 	}
 }

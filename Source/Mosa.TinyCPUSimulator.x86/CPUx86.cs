@@ -211,7 +211,6 @@ namespace Mosa.TinyCPUSimulator.x86
 			return (address & 0xFFF) | (pt & 0xFFFFF000);
 		}
 
-
 		protected override void ExecuteOpcode(SimInstruction instruction)
 		{
 			uint eip = EIP.Value;

@@ -33,7 +33,7 @@ namespace Mosa.TinyCPUSimulator.x86.xUnit
 			Add(Opcode.Mov, 1, CPU.EBX, b);
 			Add(Opcode.Add, 1, CPU.EAX, CPU.EBX);
 
-			Monitor.AddBreakPoint(Address);
+			CPU.Monitor.AddBreakPoint(Address);
 
 			CPU.Execute();
 
@@ -54,7 +54,7 @@ namespace Mosa.TinyCPUSimulator.x86.xUnit
 			Add(Opcode.Mov, 1, CPU.EBX, b);
 			Add(Opcode.Mul, 1, CPU.EBX);
 
-			Monitor.AddBreakPoint(Address);
+			CPU.Monitor.AddBreakPoint(Address);
 
 			CPU.Execute();
 
@@ -73,7 +73,7 @@ namespace Mosa.TinyCPUSimulator.x86.xUnit
 			Add(Opcode.Mov, 1, CPU.EAX, a);
 			Add(Opcode.Cvtsi2sd, 1, CPU.XMM0, CPU.EAX);
 
-			Monitor.AddBreakPoint(Address);
+			CPU.Monitor.AddBreakPoint(Address);
 
 			CPU.Execute();
 
@@ -91,7 +91,7 @@ namespace Mosa.TinyCPUSimulator.x86.xUnit
 			Add(Opcode.Cvtsi2sd, 1, CPU.XMM0, CPU.EAX);
 			Add(Opcode.Cvttsd2si, 1, CPU.EBX, CPU.XMM0);
 
-			Monitor.AddBreakPoint(Address);
+			CPU.Monitor.AddBreakPoint(Address);
 
 			CPU.Execute();
 
@@ -119,7 +119,7 @@ namespace Mosa.TinyCPUSimulator.x86.xUnit
 			Add(Opcode.Mov, 1, CPU.EBX, b);
 			Add(Opcode.Cmp, 1, CPU.EAX, CPU.EBX);
 
-			Monitor.AddBreakPoint(Address);
+			CPU.Monitor.AddBreakPoint(Address);
 
 			CPU.Execute();
 
@@ -153,7 +153,7 @@ namespace Mosa.TinyCPUSimulator.x86.xUnit
 			Add(Opcode.Mov, 1, CPU.EBX, b);
 			Add(Opcode.Cmp, 1, CPU.EAX, CPU.EBX);
 
-			Monitor.AddBreakPoint(Address);
+			CPU.Monitor.AddBreakPoint(Address);
 
 			CPU.Execute();
 
@@ -181,7 +181,7 @@ namespace Mosa.TinyCPUSimulator.x86.xUnit
 			if (carry) Add(Opcode.Stc, 1);
 			Add(Opcode.Rcr, 1, CPU.EAX, b);
 
-			Monitor.AddBreakPoint(Address);
+			CPU.Monitor.AddBreakPoint(Address);
 
 			CPU.Execute();
 

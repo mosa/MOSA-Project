@@ -35,9 +35,5 @@ namespace Mosa.Tool.Simulator
 			this.Refresh();
 		}
 
-		public override void UpdateDock()
-		{
-			UpdateDock(SimCPU.GetState());
-		}
 	}
 }

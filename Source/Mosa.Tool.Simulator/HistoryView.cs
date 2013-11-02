@@ -39,16 +39,11 @@ namespace Mosa.Tool.Simulator
 			this.Refresh();
 		}
 
-		public override void UpdateDock()
-		{
-			UpdateDock(SimCPU.GetState());
-		}
-
 		private void lbHistory_DoubleClick(object sender, EventArgs e)
 		{
 			enable = false;
 
-			MainForm.UpdateAll(lbHistory.SelectedItem as SimState);
+			MainForm.UpdateAllDocks(lbHistory.SelectedItem as SimState);
 
 			enable = true;
 		}

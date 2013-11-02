@@ -9,13 +9,11 @@
 
 using Mosa.TinyCPUSimulator;
 using System;
-using System.Collections.Generic;
 
 namespace Mosa.Tool.Simulator
 {
 	public partial class RegisterView : SimulatorDockContent
 	{
-
 		public RegisterView()
 		{
 			InitializeComponent();
@@ -40,9 +38,5 @@ namespace Mosa.Tool.Simulator
 			this.Refresh();
 		}
 
-		public override void UpdateDock()
-		{
-			UpdateDock(SimCPU.GetState());
-		}
 	}
 }

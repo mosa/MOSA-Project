@@ -39,35 +39,35 @@ namespace Mosa.Tool.Simulator
 			this.Refresh();
 		}
 
-		public override void UpdateDock()
-		{
-			UpdateDock(SimCPU.GetState());
+		//public override void UpdateDock()
+		//{
+		//	UpdateDock(SimCPU.GetState());
 
-			ulong ip = SimCPU.CurrentInstructionPointer;
-			ulong ebp = SimCPU.FramePointer;
+		//	ulong ip = SimCPU.CurrentInstructionPointer;
+		//	ulong ebp = SimCPU.FramePointer;
 
-			try
-			{
-				for (int i = 0; i < 10; i++)
-				{
-					if (ebp == 0)
-						break;
+		//	try
+		//	{
+		//		for (int i = 0; i < 10; i++)
+		//		{
+		//			if (ebp == 0)
+		//				break;
 
-					ip = SimCPU.DirectRead32((ulong)((long)ebp + SimCPU.PreviousFrameOffset));
+		//			ip = SimCPU.DirectRead32((ulong)((long)ebp + SimCPU.PreviousFrameOffset));
 
-					if (ip == 0)
-						break;
+		//			if (ip == 0)
+		//				break;
 
-					AddSymbol(ip);
+		//			AddSymbol(ip);
 
-					ebp = SimCPU.DirectRead32((ulong)((long)ebp));
-				}
-			}
-			catch (Exception e)
-			{
-			}
+		//			ebp = SimCPU.DirectRead32((ulong)((long)ebp));
+		//		}
+		//	}
+		//	catch (Exception e)
+		//	{
+		//	}
 
-			this.Refresh();
-		}
+		//	this.Refresh();
+		//}
 	}
 }

@@ -7,7 +7,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 
@@ -27,11 +26,12 @@ namespace Mosa.TinyCPUSimulator
 
 		public ulong Tick { get; private set; }
 
-		public SimMonitor Monitor { get; set; }
+		public SimMonitor Monitor { get; private set; }
 
 		public bool IsLittleEndian { get; protected set; }
 
 		public virtual ulong CurrentInstructionPointer { get { return 0; } set { return; } }
+
 		public virtual ulong PreviousInstructionPointer { get; set; }
 
 		public virtual ulong StackPointer { get { return 0; } set { return; } }
@@ -51,6 +51,7 @@ namespace Mosa.TinyCPUSimulator
 			SimDevices = new List<BaseSimDevice>();
 			PortDevices = new BaseSimDevice[65536];
 			Symbols = new Dictionary<string, SimSymbol>();
+			Monitor = new SimMonitor(this);
 			//MemoryDelta = new Dictionary<ulong, KeyValuePair<byte, byte>>();
 
 			Tick = 0;
@@ -336,10 +337,20 @@ namespace Mosa.TinyCPUSimulator
 
 			for (; ; )
 			{
-				ExecuteInstruction();
+				lock (Monitor)
+				{
+					ExecuteInstruction();
 
-				if (Monitor != null && Monitor.Break)
-					return;
+					bool brk = Monitor.Break;
+
+					Monitor.OnExecutionStepCompleted(brk);
+
+					if (brk)
+					{
+						return;
+					}
+
+				}
 			}
 		}
 

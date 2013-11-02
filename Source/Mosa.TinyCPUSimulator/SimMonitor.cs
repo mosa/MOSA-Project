@@ -11,55 +11,98 @@ using System.Collections.Generic;
 
 namespace Mosa.TinyCPUSimulator
 {
-	public class SimMonitor
+	public sealed class SimMonitor
 	{
-		protected HashSet<ulong> breakPoints = new HashSet<ulong>();
+		public delegate void OnSimStateUpdate(SimState state);
+
+		private HashSet<ulong> breakPoints = new HashSet<ulong>();
 
 		public SimCPU CPU { get; private set; }
 
-		public ulong BreakAtTick = ulong.MaxValue;
+		public bool Stop { get; set; }
 
-		public bool EnableStepping { get; set; }
+		public ulong BreakAtTick { get; set; }
 
 		public bool BreakOnException = true;
 
 		public bool DebugOutput { get; set; }
 
+		public uint UpdateCycle { get; set; }
+
+		public OnSimStateUpdate OnStateUpdate { get; set; }
+
+		public object locker = new object();
+
 		public SimMonitor(SimCPU cpu)
 		{
 			CPU = cpu;
-			EnableStepping = false;
 			DebugOutput = false;
+			UpdateCycle = 1;
+			Stop = false;
 		}
 
 		public bool Break
 		{
 			get
 			{
-				return EnableStepping || CPU.Tick == BreakAtTick || (BreakOnException && CPU.LastException != null) || breakPoints.Contains(CPU.CurrentInstructionPointer);
+				return Stop
+					|| CPU.Tick == BreakAtTick
+					|| (BreakOnException && CPU.LastException != null)
+					|| breakPoints.Contains(CPU.CurrentInstructionPointer);
 			}
 		}
 
 		public void AddBreakPoint(ulong address)
 		{
-			breakPoints.Add(address);
+			lock (locker)
+			{
+				breakPoints.Add(address);
+			}
 		}
 
 		public void AddRemove(ulong address)
 		{
-			breakPoints.Add(address);
+			lock (locker)
+			{
+				breakPoints.Add(address);
+			}
 		}
 
 		public void AddBreakPoint(string label)
 		{
 			ulong address = CPU.GetSymbol(label).Address;
 
-			AddBreakPoint(address);
+			lock (locker)
+			{
+				AddBreakPoint(address);
+			}
 		}
 
 		public void ClearBreakPoints()
 		{
-			breakPoints.Clear();
+			lock (locker)
+			{
+				breakPoints.Clear();
+			}
+		}
+
+		public void OnExecutionStepCompleted(bool force)
+		{
+			if (OnStateUpdate == null)
+				return;
+
+			if (force)
+			{
+				OnStateUpdate(CPU.GetState());
+				return;
+			}
+
+			if (CPU.Tick % UpdateCycle == 0 || CPU.Tick == 0)
+			{
+				OnStateUpdate(CPU.GetState());
+				return;
+			}
+
 		}
 	}
 }
