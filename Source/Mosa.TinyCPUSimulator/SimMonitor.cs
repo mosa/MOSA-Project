@@ -13,7 +13,7 @@ namespace Mosa.TinyCPUSimulator
 {
 	public sealed class SimMonitor
 	{
-		public delegate void OnSimStateUpdate(SimState state);
+		public delegate void OnSimStateUpdate(SimState state, bool forceUpdate);
 
 		private HashSet<ulong> breakPoints = new HashSet<ulong>();
 
@@ -27,8 +27,6 @@ namespace Mosa.TinyCPUSimulator
 
 		public bool DebugOutput { get; set; }
 
-		public uint UpdateCycle { get; set; }
-
 		public OnSimStateUpdate OnStateUpdate { get; set; }
 
 		public object locker = new object();
@@ -37,7 +35,6 @@ namespace Mosa.TinyCPUSimulator
 		{
 			CPU = cpu;
 			DebugOutput = false;
-			UpdateCycle = 1;
 			Stop = false;
 		}
 
@@ -86,23 +83,12 @@ namespace Mosa.TinyCPUSimulator
 			}
 		}
 
-		public void OnExecutionStepCompleted(bool force)
+		public void OnExecutionStepCompleted(bool forceUpdate)
 		{
 			if (OnStateUpdate == null)
 				return;
 
-			if (force)
-			{
-				OnStateUpdate(CPU.GetState());
-				return;
-			}
-
-			if (CPU.Tick % UpdateCycle == 0 || CPU.Tick == 0)
-			{
-				OnStateUpdate(CPU.GetState());
-				return;
-			}
-
+			OnStateUpdate(CPU.GetState(), forceUpdate);
 		}
 	}
 }

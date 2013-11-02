@@ -8,7 +8,7 @@
  */
 
 using Mosa.TinyCPUSimulator;
-using System;
+using System.Collections.Generic;
 
 namespace Mosa.Tool.Simulator
 {
@@ -23,17 +23,15 @@ namespace Mosa.Tool.Simulator
 		{
 			listBox1.Items.Clear();
 
-			int count = Convert.ToInt32(simState.Values["Stack.Index.Count"]);
+			bool force32 = (uint)simState.Values["Register.Size"] == 32;
+			List<ulong[]> stack = simState.Values["Stack"] as List<ulong[]>;
 
-			for (int index = count - 1; index >= 0; index--)
+			foreach (var entry in stack)
 			{
-				listBox1.Items.Add(index.ToString("D2") + ": " + simState.Values["Stack.Index." + index.ToString()]);
+				listBox1.Items.Add(listBox1.Items.Count.ToString("D2") + ": " + MainForm.Format(entry[0], force32) + " [" + MainForm.Format(entry[1], force32) + "]");
 			}
-
-			listBox1.SelectedIndex = listBox1.Items.Count - 1;
 
 			this.Refresh();
 		}
-
 	}
 }

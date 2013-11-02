@@ -37,19 +37,19 @@ namespace Mosa.Tool.Simulator
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.treeView1.Location = new System.Drawing.Point(0, 0);
 			this.treeView1.Name = "treeView1";
-			this.treeView1.Size = new System.Drawing.Size(216, 156);
+			this.treeView1.Size = new System.Drawing.Size(221, 160);
 			this.treeView1.TabIndex = 1;
 			// 
 			// CallStackView
 			// 
-			this.ClientSize = new System.Drawing.Size(219, 161);
+			this.ClientSize = new System.Drawing.Size(224, 161);
 			this.CloseButton = false;
 			this.CloseButtonVisible = false;
 			this.Controls.Add(this.treeView1);
 			this.HideOnClose = true;
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
-			this.MinimumSize = new System.Drawing.Size(235, 200);
+			this.MinimumSize = new System.Drawing.Size(10, 10);
 			this.Name = "CallStackView";
 			this.Padding = new System.Windows.Forms.Padding(0, 2, 0, 2);
 			this.ShowHint = WeifenLuo.WinFormsUI.Docking.DockState.DockLeft;

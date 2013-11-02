@@ -15,8 +15,8 @@ using Mosa.Compiler.TypeSystem;
 using Mosa.TinyCPUSimulator;
 using Mosa.TinyCPUSimulator.Adaptor;
 using System;
-using System.Threading;
 using System.Collections.Generic;
+using System.Threading;
 using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
 
@@ -45,14 +45,18 @@ namespace Mosa.Tool.Simulator
 		public SimCPU SimCPU;
 
 		public bool Record = false;
-		public List<SimState> SimStates = new List<SimState>();
+		public int MaxHistory { get; set; }
 
 		public string Status { set { this.toolStripStatusLabel1.Text = value; toolStrip1.Refresh(); } }
 
 		public string CompileOnLaunch { get; set; }
 
+		private Queue<SimState> history = new Queue<SimState>();
+		private object historyLock = new object();
+		private SimState lastHistory = null;
+
 		private Thread worker;
-		private object locker = new object();
+		private object workerLock = new object();
 
 		public MainForm()
 		{
@@ -64,6 +68,8 @@ namespace Mosa.Tool.Simulator
 			Filter.ExcludeInternalMethods = false;
 
 			InternalTrace.TraceFilter = Filter;
+
+			MaxHistory = 1000;
 
 			worker = new Thread(ExecuteThread);
 			worker.Name = "SimCPU";
@@ -146,13 +152,11 @@ namespace Mosa.Tool.Simulator
 
 			SimCPU = simAdapter.SimCPU;
 
-			SimCPU.Monitor.OnExecutionStepCompleted(true);
 			SimCPU.Monitor.BreakAtTick = 1;
-			SimCPU.Monitor.UpdateCycle = 20000;
 			SimCPU.Monitor.BreakOnException = true;
 			SimCPU.Monitor.OnStateUpdate = UpdateSimState;
-
 			SimCPU.Reset();
+			SimCPU.Monitor.OnExecutionStepCompleted(true);
 
 			Status = "Compiled.";
 
@@ -235,11 +239,22 @@ namespace Mosa.Tool.Simulator
 			}
 		}
 
-		private void UpdateSimState(SimState simState)
-		{
-			MethodInvoker method = delegate() { UpdateAllDocks(simState); };
+		private long lastTimeTick = 0;
 
-			Invoke(method);
+		private void UpdateSimState(SimState simState, bool forceUpdate)
+		{
+			SimCPU.ExtendState(simState);
+
+			AddHistory(simState);
+
+			if (forceUpdate || simState.Tick == 0 || DateTime.Now.Ticks > lastTimeTick + 2500000)
+			{
+				MethodInvoker method = delegate() { UpdateAllDocks(simState); };
+				Invoke(method);
+
+				lastTimeTick = DateTime.Now.Ticks;
+			}
+
 		}
 
 		private void ExecuteThread()
@@ -254,9 +269,35 @@ namespace Mosa.Tool.Simulator
 
 				SimCPU.Execute();
 
-				lock (locker)
+				lock (workerLock)
 				{
-					Monitor.Wait(locker);
+					Monitor.Wait(workerLock);
+				}
+			}
+		}
+
+		private void AddHistory(SimState simState)
+		{
+			if (!Record)
+				return;
+
+			lock (historyLock)
+			{
+				if (lastHistory == null || lastHistory.Tick != simState.Tick)
+				{
+					history.Enqueue(simState);
+					lastHistory = simState;
+				}
+
+				// Prune
+				int max = MaxHistory;
+
+				if (max <= 1)
+					max = 1000;
+
+				while (history.Count > max)
+				{
+					history.Dequeue();
 				}
 			}
 		}
@@ -274,9 +315,9 @@ namespace Mosa.Tool.Simulator
 			SimCPU.Monitor.BreakAtTick += steps;
 			SimCPU.Monitor.Stop = false;
 
-			lock (locker)
+			lock (workerLock)
 			{
-				Monitor.PulseAll(locker);
+				Monitor.PulseAll(workerLock);
 			}
 		}
 
@@ -289,10 +330,14 @@ namespace Mosa.Tool.Simulator
 
 			SimCPU.Monitor.Stop = false;
 
-			lock (locker)
+			lock (workerLock)
 			{
-				SimStates.Clear();
 				SimCPU.Reset();
+			}
+
+			lock (historyLock)
+			{
+				history.Clear();
 			}
 
 			SimCPU.Monitor.OnExecutionStepCompleted(true);
@@ -301,6 +346,10 @@ namespace Mosa.Tool.Simulator
 			symbolView.CreateEntries();
 		}
 
-
+		private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+		{
+			SimCPU.Monitor.Stop = true;
+			worker.Abort();
+		}
 	}
 }

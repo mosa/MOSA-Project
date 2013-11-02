@@ -7,8 +7,8 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
 using Mosa.TinyCPUSimulator;
+using System.Collections.Generic;
 
 namespace Mosa.Tool.Simulator
 {
@@ -32,42 +32,14 @@ namespace Mosa.Tool.Simulator
 		{
 			treeView1.Nodes.Clear();
 
-			ulong ip = simState.IP;
+			List<ulong> list = simState.Values["CallStack"] as List<ulong>;
 
-			AddSymbol(ip);
+			foreach (ulong ip in list)
+			{
+				AddSymbol(ip);
+			}
 
 			this.Refresh();
 		}
-
-		//public override void UpdateDock()
-		//{
-		//	UpdateDock(SimCPU.GetState());
-
-		//	ulong ip = SimCPU.CurrentInstructionPointer;
-		//	ulong ebp = SimCPU.FramePointer;
-
-		//	try
-		//	{
-		//		for (int i = 0; i < 10; i++)
-		//		{
-		//			if (ebp == 0)
-		//				break;
-
-		//			ip = SimCPU.DirectRead32((ulong)((long)ebp + SimCPU.PreviousFrameOffset));
-
-		//			if (ip == 0)
-		//				break;
-
-		//			AddSymbol(ip);
-
-		//			ebp = SimCPU.DirectRead32((ulong)((long)ebp));
-		//		}
-		//	}
-		//	catch (Exception e)
-		//	{
-		//	}
-
-		//	this.Refresh();
-		//}
 	}
 }

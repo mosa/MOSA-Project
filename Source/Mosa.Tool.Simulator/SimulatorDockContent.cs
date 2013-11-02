@@ -10,7 +10,18 @@ namespace Mosa.Tool.Simulator
 			InitializeComponent();
 		}
 
-		public MainForm MainForm { get { return ((this.ParentForm) as MainForm); } }
+		private MainForm mainForm;
+
+		public MainForm MainForm
+		{
+			get
+			{
+				if (mainForm == null)
+					mainForm = ParentForm as MainForm;
+
+				return mainForm;
+			}
+		}
 
 		public SimCPU SimCPU { get { return ((this.ParentForm) as MainForm).SimCPU; } }
 

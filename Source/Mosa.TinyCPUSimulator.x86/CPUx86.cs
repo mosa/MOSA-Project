@@ -7,6 +7,8 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using System.Collections.Generic;
+
 namespace Mosa.TinyCPUSimulator.x86
 {
 	/// <summary>
@@ -275,6 +277,8 @@ namespace Mosa.TinyCPUSimulator.x86
 		{
 			SimState simState = base.GetState();
 
+			simState.StoreValue("Register.Size", (uint)32);
+
 			simState.StoreValue("Register.List", registerList);
 			simState.StoreValue("Flag.List", flagList);
 
@@ -293,14 +297,14 @@ namespace Mosa.TinyCPUSimulator.x86
 			simState.StoreValue("Register.CR3", CR3.Value);
 			simState.StoreValue("Register.CR4", CR4.Value);
 
-			simState.StoreValue("Register.XXM0", XMM0.Value.ToString());
-			simState.StoreValue("Register.XXM1", XMM1.Value.ToString());
-			simState.StoreValue("Register.XXM2", XMM2.Value.ToString());
-			simState.StoreValue("Register.XXM3", XMM3.Value.ToString());
-			simState.StoreValue("Register.XXM4", XMM4.Value.ToString());
-			simState.StoreValue("Register.XXM5", XMM5.Value.ToString());
-			simState.StoreValue("Register.XXM6", XMM6.Value.ToString());
-			simState.StoreValue("Register.XXM7", XMM7.Value.ToString());
+			simState.StoreValue("Register.XXM0", XMM0.Value);
+			simState.StoreValue("Register.XXM1", XMM1.Value);
+			simState.StoreValue("Register.XXM2", XMM2.Value);
+			simState.StoreValue("Register.XXM3", XMM3.Value);
+			simState.StoreValue("Register.XXM4", XMM4.Value);
+			simState.StoreValue("Register.XXM5", XMM5.Value);
+			simState.StoreValue("Register.XXM6", XMM6.Value);
+			simState.StoreValue("Register.XXM7", XMM7.Value);
 
 			simState.StoreValue("Flag.Value", EFLAGS.Value);
 			simState.StoreValue("Flag.Zero", EFLAGS.Zero);
@@ -311,31 +315,66 @@ namespace Mosa.TinyCPUSimulator.x86
 			simState.StoreValue("Flag.Adjust", EFLAGS.Adjust);
 			simState.StoreValue("Flag.Overflow", EFLAGS.Overflow);
 
-			uint ebp = EBP.Value;
+			var stack = new List<ulong[]>();
+			var frame = new List<ulong[]>();
+
+			simState.StoreValue("Stack", stack);
+			simState.StoreValue("StackFrame", frame);
+
+			uint esp = ESP.Value;
 			uint index = 0;
-
-			while (ebp > ESP.Value && index < 32)
-			{
-				simState.StoreValue("StackFrame.Index." + index.ToString(), Read32(ebp).ToString("X8") + " [0x" + ebp.ToString("X8") + "]");
-				ebp = ebp - 4;
-				index++;
-			}
-
-			simState.StoreValue("StackFrame.Index.Count", index.ToString());
-
-			uint esp = ESP.Value;// +4;
-			index = 0;
 
 			while (index < 16)
 			{
-				simState.StoreValue("Stack.Index." + index.ToString(), Read32(esp).ToString("X8") + " [0x" + esp.ToString("X8") + "]");
+				stack.Add(new ulong[2] { (ulong)Read32(esp), esp });
 				esp = esp + 4;
 				index++;
 			}
 
-			simState.StoreValue("Stack.Index.Count", index.ToString());
+			uint ebp = EBP.Value;
+			index = 0;
+
+			while (ebp > ESP.Value && index < 32)
+			{
+				frame.Add(new ulong[2] { (ulong)Read32(ebp), ebp });
+				ebp = ebp - 4;
+				index++;
+			}
 
 			return simState;
+		}
+
+		public override void ExtendState(SimState simState)
+		{
+			var list = new List<ulong>();
+
+			uint ip = EIP.Value;
+			uint ebp = EBP.Value;
+
+			simState.StoreValue("CallStack", list);
+
+			list.Add((ulong)ip);
+
+			try
+			{
+				for (int i = 0; i < 20; i++)
+				{
+					if (ebp == 0)
+						return;
+
+					ip = DirectRead32(ebp + 4);
+
+					if (ip == 0)
+						return;
+
+					list.Add((ulong)ip);
+
+					ebp = DirectRead32(ebp);
+				}
+			}
+			catch (SimCPUException e)
+			{
+			}
 		}
 	}
 }

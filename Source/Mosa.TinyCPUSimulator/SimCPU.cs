@@ -38,8 +38,6 @@ namespace Mosa.TinyCPUSimulator
 
 		public virtual ulong FramePointer { get { return 0; } set { return; } }
 
-		public virtual long PreviousFrameOffset { get { return 4; } }
-
 		//public Dictionary<ulong, KeyValuePair<byte, byte>> MemoryDelta { get; private set; }
 
 		public SimCPUException LastException { get; set; }
@@ -349,7 +347,6 @@ namespace Mosa.TinyCPUSimulator
 					{
 						return;
 					}
-
 				}
 			}
 		}
@@ -361,6 +358,10 @@ namespace Mosa.TinyCPUSimulator
 			//simState.StoreMemoryDelta(MemoryDelta);
 
 			return simState;
+		}
+
+		public virtual void ExtendState(SimState simState)
+		{
 		}
 	}
 }

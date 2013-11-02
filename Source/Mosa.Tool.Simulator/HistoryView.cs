@@ -9,6 +9,7 @@
 
 using Mosa.TinyCPUSimulator;
 using System;
+using System.Collections.Generic;
 
 namespace Mosa.Tool.Simulator
 {
@@ -23,29 +24,47 @@ namespace Mosa.Tool.Simulator
 
 		public override void UpdateDock(SimState simState)
 		{
-			if (!enable)
+			if (simState == null)
 				return;
 
-			if (MainForm.SimStates.Count < lbHistory.Items.Count)
-				lbHistory.Items.Clear();
+			//lbHistory.Items.Clear();
 
-			while (MainForm.SimStates.Count != lbHistory.Items.Count)
-			{
-				lbHistory.Items.Add(MainForm.SimStates[lbHistory.Items.Count]);
-			}
+			//foreach (var entry in history)
+			//{
+			//	lbHistory.Items.Add(entry);
+			//}
 
-			lbHistory.SelectedIndex = lbHistory.Items.Count - 1;
+			//lbHistory.SelectedIndex = lbHistory.Items.Count - 1;
 
 			this.Refresh();
 		}
 
-		private void lbHistory_DoubleClick(object sender, EventArgs e)
+
+		private void Select(SimState simState)
 		{
+			if (simState == null)
+				return;
+
 			enable = false;
 
-			MainForm.UpdateAllDocks(lbHistory.SelectedItem as SimState);
+			MainForm.UpdateAllDocks(simState);
 
 			enable = true;
+		}
+
+		private void lbHistory_DoubleClick(object sender, EventArgs e)
+		{
+			Select(lbHistory.SelectedItem as SimState);
+		}
+
+		private void lbHistory_KeyDown(object sender, System.Windows.Forms.KeyEventArgs e)
+		{
+			Select(lbHistory.SelectedItem as SimState);
+		}
+
+		private void lbHistory_KeyPress(object sender, System.Windows.Forms.KeyPressEventArgs e)
+		{
+			Select(lbHistory.SelectedItem as SimState);
 		}
 	}
 }

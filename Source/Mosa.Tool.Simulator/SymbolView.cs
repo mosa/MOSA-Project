@@ -65,6 +65,5 @@ namespace Mosa.Tool.Simulator
 		public override void UpdateDock(SimState simState)
 		{
 		}
-
 	}
 }
