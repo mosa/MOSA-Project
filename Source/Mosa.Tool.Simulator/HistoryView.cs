@@ -24,17 +24,23 @@ namespace Mosa.Tool.Simulator
 
 		public override void UpdateDock(SimState simState)
 		{
+			if (!enable)
+				return;
+
 			if (simState == null)
 				return;
 
-			//lbHistory.Items.Clear();
+			if (!MainForm.Record)
+				return;
 
-			//foreach (var entry in history)
-			//{
-			//	lbHistory.Items.Add(entry);
-			//}
+			lbHistory.Items.Clear();
 
-			//lbHistory.SelectedIndex = lbHistory.Items.Count - 1;
+			foreach (var entry in MainForm.history)
+			{
+				lbHistory.Items.Add(entry);
+			}
+
+			lbHistory.SelectedIndex = lbHistory.Items.Count - 1;
 
 			this.Refresh();
 		}

@@ -17,6 +17,7 @@ using Mosa.TinyCPUSimulator.Adaptor;
 using System;
 using System.Collections.Generic;
 using System.Threading;
+using System.Diagnostics;
 using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
 
@@ -51,12 +52,14 @@ namespace Mosa.Tool.Simulator
 
 		public string CompileOnLaunch { get; set; }
 
-		private Queue<SimState> history = new Queue<SimState>();
+		public Queue<SimState> history = new Queue<SimState>();
 		private object historyLock = new object();
 		private SimState lastHistory = null;
 
 		private Thread worker;
 		private object workerLock = new object();
+
+		private Stopwatch stopwatch = new Stopwatch();
 
 		public MainForm()
 		{
@@ -245,6 +248,13 @@ namespace Mosa.Tool.Simulator
 		{
 			SimCPU.ExtendState(simState);
 
+			double ms = stopwatch.Elapsed.TotalMilliseconds;
+
+			if (ms == 0)
+				ms = 1;
+
+			simState.StoreValue("TotalElapsed", ms);
+
 			AddHistory(simState);
 
 			if (forceUpdate || simState.Tick == 0 || DateTime.Now.Ticks > lastTimeTick + 2500000)
@@ -267,7 +277,9 @@ namespace Mosa.Tool.Simulator
 					continue;
 				}
 
+				stopwatch.Start();
 				SimCPU.Execute();
+				stopwatch.Stop();
 
 				lock (workerLock)
 				{
@@ -333,6 +345,7 @@ namespace Mosa.Tool.Simulator
 			lock (workerLock)
 			{
 				SimCPU.Reset();
+				stopwatch.Reset();
 			}
 
 			lock (historyLock)

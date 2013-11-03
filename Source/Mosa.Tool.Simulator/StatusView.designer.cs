@@ -39,6 +39,8 @@ namespace Mosa.Tool.Simulator
 			this.label3 = new System.Windows.Forms.Label();
 			this.textBox6 = new System.Windows.Forms.TextBox();
 			this.label4 = new System.Windows.Forms.Label();
+			this.textBox7 = new System.Windows.Forms.TextBox();
+			this.label5 = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// textBox2
@@ -143,11 +145,30 @@ namespace Mosa.Tool.Simulator
 			this.label4.TabIndex = 35;
 			this.label4.Text = "Exception:";
 			// 
+			// textBox7
+			// 
+			this.textBox7.Location = new System.Drawing.Point(6, 59);
+			this.textBox7.Name = "textBox7";
+			this.textBox7.ReadOnly = true;
+			this.textBox7.Size = new System.Drawing.Size(80, 20);
+			this.textBox7.TabIndex = 36;
+			// 
+			// label5
+			// 
+			this.label5.AutoSize = true;
+			this.label5.Location = new System.Drawing.Point(3, 43);
+			this.label5.Name = "label5";
+			this.label5.Size = new System.Drawing.Size(88, 13);
+			this.label5.TabIndex = 37;
+			this.label5.Text = "Instruction/Secs.";
+			// 
 			// StatusView
 			// 
 			this.ClientSize = new System.Drawing.Size(531, 131);
 			this.CloseButton = false;
 			this.CloseButtonVisible = false;
+			this.Controls.Add(this.label5);
+			this.Controls.Add(this.textBox7);
 			this.Controls.Add(this.label4);
 			this.Controls.Add(this.textBox6);
 			this.Controls.Add(this.label3);
@@ -187,6 +208,8 @@ namespace Mosa.Tool.Simulator
 		private System.Windows.Forms.Label label3;
 		private System.Windows.Forms.TextBox textBox6;
 		private System.Windows.Forms.Label label4;
+		private System.Windows.Forms.TextBox textBox7;
+		private System.Windows.Forms.Label label5;
 
 
 

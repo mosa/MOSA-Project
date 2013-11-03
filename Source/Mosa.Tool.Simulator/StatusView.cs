@@ -9,6 +9,7 @@
 
 using Mosa.TinyCPUSimulator;
 using System;
+using System.Diagnostics;
 
 namespace Mosa.Tool.Simulator
 {
@@ -24,16 +25,20 @@ namespace Mosa.Tool.Simulator
 			var currentInstruction = SimCPU.DecodeOpcode(simState.IP);
 			var nextInstruction = SimCPU.DecodeOpcode(simState.NextIP);
 
-			this.textBox1.Text = simState.Tick.ToString();
-			this.textBox2.Text = currentInstruction != null ? currentInstruction.ToString() : "-BLANK-";
-			this.textBox3.Text = nextInstruction != null ? nextInstruction.ToString() : "-BLANK-";
+			textBox1.Text = simState.Tick.ToString();
+			textBox2.Text = currentInstruction != null ? currentInstruction.ToString() : "-BLANK-";
+			textBox3.Text = nextInstruction != null ? nextInstruction.ToString() : "-BLANK-";
 
-			this.textBox4.Text = "0x" + simState.IP.ToString("X8");
-			this.textBox5.Text = "0x" + simState.NextIP.ToString("X8");
+			textBox4.Text = "0x" + simState.IP.ToString("X8");
+			textBox5.Text = "0x" + simState.NextIP.ToString("X8");
 
-			this.textBox6.Text = simState.CPUException != null ? simState.CPUException.ToString() : "None";
-		
-			this.Refresh();
+			textBox6.Text = simState.CPUException != null ? simState.CPUException.ToString() : "None";
+
+			double speed = simState.Tick / (double)simState.Values["TotalElapsed"];
+
+			textBox7.Text = speed.ToString("0.00");
+
+			Refresh();
 		}
 
 	}
