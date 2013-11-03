@@ -197,6 +197,7 @@
 			this.Controls.Add(this.dockPanel);
 			this.Name = "MainForm";
 			this.Text = "Mosa Simulator";
+			this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
 			this.Load += new System.EventHandler(this.MainForm_Load);
 			this.toolStrip1.ResumeLayout(false);

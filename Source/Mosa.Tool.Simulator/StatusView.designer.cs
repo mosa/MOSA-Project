@@ -45,6 +45,8 @@ namespace Mosa.Tool.Simulator
 			// 
 			// textBox2
 			// 
+			this.textBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.textBox2.Location = new System.Drawing.Point(185, 18);
 			this.textBox2.Name = "textBox2";
 			this.textBox2.ReadOnly = true;
@@ -79,6 +81,8 @@ namespace Mosa.Tool.Simulator
 			// 
 			// textBox3
 			// 
+			this.textBox3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.textBox3.Location = new System.Drawing.Point(185, 59);
 			this.textBox3.Name = "textBox3";
 			this.textBox3.ReadOnly = true;
@@ -130,6 +134,8 @@ namespace Mosa.Tool.Simulator
 			// 
 			// textBox6
 			// 
+			this.textBox6.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.textBox6.Location = new System.Drawing.Point(6, 98);
 			this.textBox6.Name = "textBox6";
 			this.textBox6.ReadOnly = true;

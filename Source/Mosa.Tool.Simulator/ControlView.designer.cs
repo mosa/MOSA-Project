@@ -85,7 +85,7 @@ namespace Mosa.Tool.Simulator
 			// 
 			// ControlView
 			// 
-			this.ClientSize = new System.Drawing.Size(415, 40);
+			this.ClientSize = new System.Drawing.Size(415, 36);
 			this.CloseButton = false;
 			this.CloseButtonVisible = false;
 			this.Controls.Add(this.button3);

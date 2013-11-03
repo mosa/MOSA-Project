@@ -26,7 +26,7 @@ namespace Mosa.Tool.Simulator
 	public partial class MainForm : Form
 	{
 		private AssembliesView assembliesView = new AssembliesView();
-		private RegisterView generalPurposeRegistersView = new RegisterView();
+		private RegisterView registersView = new RegisterView();
 		private DisplayView displayView = new DisplayView();
 		private ControlView controlView = new ControlView();
 		private CallStackView callStackView = new CallStackView();
@@ -82,18 +82,25 @@ namespace Mosa.Tool.Simulator
 		private void MainForm_Load(object sender, EventArgs e)
 		{
 			dockPanel.SuspendLayout(true);
+			dockPanel.DockTopPortion = 60;
+
+			controlView.Show(dockPanel, DockState.DockTop);
+
+			statusView.Show(dockPanel, DockState.DockBottom);
+			callStackView.Show(statusView.PanelPane, DockAlignment.Right, 0.50);
+
+			displayView.Show(dockPanel, DockState.Document);
+			historyView.Show(dockPanel, DockState.Document);
+
+			symbolView.Show(dockPanel, DockState.DockLeftAutoHide);
 
 			assembliesView.Show(dockPanel, DockState.DockLeftAutoHide);
-			generalPurposeRegistersView.Show(dockPanel, DockState.DockRight);
-			callStackView.Show(dockPanel, DockState.DockRight);
-			displayView.Show(dockPanel, DockState.Document);
-			statusView.Show(dockPanel, DockState.DockBottom);
-			controlView.Show(dockPanel, DockState.DockBottom);
-			stackFrameView.Show(dockPanel, DockState.DockRight);
-			stackView.Show(dockPanel, DockState.DockRight);
-			flagView.Show(dockPanel, DockState.DockRight);
-			historyView.Show(dockPanel, DockState.Document);
-			symbolView.Show(dockPanel, DockState.Document);
+
+			registersView.Show(dockPanel, DockState.DockRight);
+			flagView.Show(registersView.PanelPane, DockAlignment.Bottom, 0.5);
+
+			stackView.Show(displayView.PanelPane, DockAlignment.Right, 0.2);
+			stackFrameView.Show(stackView.PanelPane, DockAlignment.Top, 0.25);
 
 			dockPanel.ResumeLayout(true, true);
 
@@ -361,6 +368,9 @@ namespace Mosa.Tool.Simulator
 
 		private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
 		{
+			if (SimCPU == null)
+				return;
+			
 			SimCPU.Monitor.Stop = true;
 			worker.Abort();
 		}

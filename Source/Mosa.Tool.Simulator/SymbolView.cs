@@ -10,6 +10,9 @@
 using Mosa.Compiler.Linker;
 using Mosa.TinyCPUSimulator;
 using System.Collections.Generic;
+using System;
+using System.Data;
+using System.Windows.Forms;
 
 namespace Mosa.Tool.Simulator
 {
@@ -26,14 +29,12 @@ namespace Mosa.Tool.Simulator
 
 			public long Length { get { return LinkerSymbol.Length; } }
 
-			//public long VirtualAddress { get { return LinkerSymbol.VirtualAddress; } }
 			public string VirtualAddress { get { return MainForm.Format(LinkerSymbol.VirtualAddress, force32); } }
 
 			public long Offset { get { return LinkerSymbol.Offset; } }
 
 			public SectionKind SectionKind { get { return LinkerSymbol.SectionKind; } }
 
-			//public long SectionAddress { get { return LinkerSymbol.SectionAddress; } }
 			public string SectionAddress { get { return MainForm.Format(LinkerSymbol.SectionAddress, force32); } }
 
 			public SymbolEntry(LinkerSymbol linkerSymbol, bool force32)
@@ -52,9 +53,14 @@ namespace Mosa.Tool.Simulator
 		{
 			symbols = new List<SymbolEntry>(MainForm.Linker.Symbols.Count);
 
+			string filter = textBox1.Text.Trim();
+
 			foreach (var symbol in MainForm.Linker.Symbols)
 			{
-				symbols.Add(new SymbolEntry(symbol, true)); // true == forces 32 bit
+				if (filter.Length == 0 || symbol.Name.Contains(filter))
+				{
+					symbols.Add(new SymbolEntry(symbol, true)); // true == forces 32 bit
+				}
 			}
 
 			dataGridView1.DataSource = symbols;
@@ -65,5 +71,11 @@ namespace Mosa.Tool.Simulator
 		public override void UpdateDock(SimState simState)
 		{
 		}
+
+		private void textBox1_TextChanged(object sender, EventArgs e)
+		{
+			CreateEntries();
+		}
+
 	}
 }

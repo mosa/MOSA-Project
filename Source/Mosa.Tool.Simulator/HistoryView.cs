@@ -72,5 +72,18 @@ namespace Mosa.Tool.Simulator
 		{
 			Select(lbHistory.SelectedItem as SimState);
 		}
+
+		private void toolStripTextBox1_Leave(object sender, EventArgs e)
+		{
+			int max = 1000;
+
+			if (Int32.TryParse(toolStripTextBox1.Text, out max))
+			{
+				if (max < 1)
+					max = 1;
+
+				MainForm.MaxHistory = max;
+			}
+		}
 	}
 }

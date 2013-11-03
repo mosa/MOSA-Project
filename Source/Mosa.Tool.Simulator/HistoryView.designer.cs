@@ -72,6 +72,7 @@ namespace Mosa.Tool.Simulator
 			this.toolStripTextBox1.Name = "toolStripTextBox1";
 			this.toolStripTextBox1.Size = new System.Drawing.Size(80, 25);
 			this.toolStripTextBox1.Text = "1000";
+			this.toolStripTextBox1.Leave += new System.EventHandler(this.toolStripTextBox1_Leave);
 			// 
 			// HistoryView
 			// 
