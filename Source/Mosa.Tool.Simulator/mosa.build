@@ -14,6 +14,9 @@
 	<target name="build">
 	    <csc target="exe" main="Mosa.Tool.Simulator.Program" output="${outputDirectory}/Mosa.Tool.Simulator.exe" debug="${debug}" unsafe="true" nostdlib="false">
 		<sources>
+                    <include name="Watch.cs"/>
+                    <include name="WatchView.cs"/>
+                    <include name="WatchView.designer.cs"/>
                     <include name="SymbolView.cs"/>
                     <include name="SymbolView.designer.cs"/>
                     <include name="HistoryView.cs"/>
@@ -49,8 +52,10 @@
 		<references>
                     <include name="System.dll"/>
                     <include name="System.Core.dll"/>
+                    <include name="System.Data.dll"/>
                     <include name="System.Drawing.dll"/>
                     <include name="System.Windows.Forms.dll"/>
+                    <include name="System.XML.dll"/>
                     <include name="../../3rdParty/WeifenLuo.WinFormsUI.Docking.dll"/>
                     <include name="${outputDirectory}/Mosa.Compiler.Common.dll"/>
                     <include name="${outputDirectory}/Mosa.Compiler.Framework.dll"/>

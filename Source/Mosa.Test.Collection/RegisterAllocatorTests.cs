@@ -21,7 +21,6 @@ namespace Mosa.Test.Collection
 			int f = 60;
 			int g = 70;
 			int h = 80;
-			int i = 80;
 			int j = 90;
 			int k = 100;
 
@@ -38,7 +37,6 @@ namespace Mosa.Test.Collection
 		public static int Pressure7(int a, int b, int c, int d, int e, int f, int g)
 		{
 			int h = 70;
-			int i = 80;
 			int j = 90;
 			int k = 100;
 
@@ -55,7 +53,6 @@ namespace Mosa.Test.Collection
 		public static int Pressure7B(int a, int b, int c, int d, int e, int f, int g)
 		{
 			int h = 70;
-			int i = 80;
 			int j = 90;
 			int k = 100;
 
@@ -88,7 +85,6 @@ namespace Mosa.Test.Collection
 		{
 			int z = a + b + c + d + e + f + g;
 			int q = 0;
-			int y = 10;
 
 			for (int i = 1; i < 20; i++)
 			{

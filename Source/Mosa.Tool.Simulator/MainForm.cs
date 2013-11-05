@@ -16,8 +16,8 @@ using Mosa.TinyCPUSimulator;
 using Mosa.TinyCPUSimulator.Adaptor;
 using System;
 using System.Collections.Generic;
-using System.Threading;
 using System.Diagnostics;
+using System.Threading;
 using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
 
@@ -36,6 +36,7 @@ namespace Mosa.Tool.Simulator
 		private StatusView statusView = new StatusView();
 		private HistoryView historyView = new HistoryView();
 		private SymbolView symbolView = new SymbolView();
+		private WatchView watchView = new WatchView();
 
 		public IInternalTrace InternalTrace = new BasicInternalTrace();
 		public ConfigurableTraceFilter Filter = new ConfigurableTraceFilter();
@@ -46,11 +47,14 @@ namespace Mosa.Tool.Simulator
 		public SimCPU SimCPU;
 
 		public bool Record = false;
+
 		public int MaxHistory { get; set; }
 
 		public string Status { set { this.toolStripStatusLabel1.Text = value; toolStrip1.Refresh(); } }
 
 		public string CompileOnLaunch { get; set; }
+
+		public List<Watch> watches = new List<Watch>();
 
 		public Queue<SimState> history = new Queue<SimState>();
 		private object historyLock = new object();
@@ -82,19 +86,18 @@ namespace Mosa.Tool.Simulator
 		private void MainForm_Load(object sender, EventArgs e)
 		{
 			dockPanel.SuspendLayout(true);
-			dockPanel.DockTopPortion = 60;
+			dockPanel.DockTopPortion = 150;
 
-			controlView.Show(dockPanel, DockState.DockTop);
+			statusView.Show(dockPanel, DockState.DockTop);
+			controlView.Show(statusView.PanelPane, DockAlignment.Right, 0.50);
 
-			statusView.Show(dockPanel, DockState.DockBottom);
-			callStackView.Show(statusView.PanelPane, DockAlignment.Right, 0.50);
+			callStackView.Show(dockPanel, DockState.DockBottom);
+			watchView.Show(callStackView.PanelPane, DockAlignment.Right, 0.50);
 
 			displayView.Show(dockPanel, DockState.Document);
 			historyView.Show(dockPanel, DockState.Document);
-
-			symbolView.Show(dockPanel, DockState.DockLeftAutoHide);
-
-			assembliesView.Show(dockPanel, DockState.DockLeftAutoHide);
+			assembliesView.Show(dockPanel, DockState.Document);
+			symbolView.Show(dockPanel, DockState.Document);
 
 			registersView.Show(dockPanel, DockState.DockRight);
 			flagView.Show(registersView.PanelPane, DockAlignment.Bottom, 0.5);
@@ -255,14 +258,15 @@ namespace Mosa.Tool.Simulator
 		{
 			SimCPU.ExtendState(simState);
 
-			double ms = stopwatch.Elapsed.TotalMilliseconds;
+			double secs = stopwatch.Elapsed.TotalSeconds;
 
-			if (ms == 0)
-				ms = 1;
+			if (secs == 0)
+				secs = 1;
 
-			simState.StoreValue("TotalElapsed", ms);
+			simState.StoreValue("TotalElapsed", secs);
 
 			AddHistory(simState);
+			AddWatch(simState);
 
 			if (forceUpdate || simState.Tick == 0 || DateTime.Now.Ticks > lastTimeTick + 2500000)
 			{
@@ -271,7 +275,6 @@ namespace Mosa.Tool.Simulator
 
 				lastTimeTick = DateTime.Now.Ticks;
 			}
-
 		}
 
 		private void ExecuteThread()
@@ -319,6 +322,36 @@ namespace Mosa.Tool.Simulator
 					history.Dequeue();
 				}
 			}
+		}
+
+		private void AddWatch(SimState simState)
+		{
+			var toplist = new Dictionary<int, Dictionary<ulong, object>>();
+
+			for (int size = 8; size <= 64; size = size * 2)
+			{
+				var list = new Dictionary<ulong, object>();
+
+				foreach (var entry in watches)
+				{
+					if (entry.Size == size)
+					{
+						switch (size)
+						{
+							case 8: list.Add(entry.Address, SimCPU.Read8(entry.Address)); break;
+							case 16: list.Add(entry.Address, SimCPU.Read16(entry.Address)); break;
+							case 32: list.Add(entry.Address, SimCPU.Read32(entry.Address)); break;
+							//case 64: list.Add(entry.Address, SimCPU.Read64(entry.Address)); break;
+							default: break;
+						}
+
+					}
+				}
+
+				toplist.Add(size, list);
+			}
+
+			simState.StoreValue("WatchValues", toplist);
 		}
 
 		public void Stop()
@@ -370,9 +403,22 @@ namespace Mosa.Tool.Simulator
 		{
 			if (SimCPU == null)
 				return;
-			
+
 			SimCPU.Monitor.Stop = true;
 			worker.Abort();
+		}
+
+		public void AddWatch(string name, ulong address, int size)
+		{
+			if (!(size == 8 || size == 16 || size == 32 || size == 64))
+				return;
+
+			var watch = new Watch(address, size);
+
+			watches.Add(watch);
+
+			watchView.AddWatch(name, address, size, false);
+			watchView.Refresh();
 		}
 	}
 }

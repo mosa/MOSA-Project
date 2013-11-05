@@ -53,8 +53,12 @@
 			this.statusStrip1 = new System.Windows.Forms.StatusStrip();
 			this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
 			this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
+			this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+			this.testToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.test2ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStrip1.SuspendLayout();
 			this.statusStrip1.SuspendLayout();
+			this.menuStrip1.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// dockPanel
@@ -128,7 +132,7 @@
             this.toolStripButton1,
             this.toolStripSeparator1,
             this.toolStripButton2});
-			this.toolStrip1.Location = new System.Drawing.Point(0, 0);
+			this.toolStrip1.Location = new System.Drawing.Point(0, 24);
 			this.toolStrip1.Name = "toolStrip1";
 			this.toolStrip1.Size = new System.Drawing.Size(856, 25);
 			this.toolStrip1.TabIndex = 28;
@@ -187,6 +191,30 @@
 			this.openFileDialog.DefaultExt = "exe";
 			this.openFileDialog.Filter = "Executable|*.exe|Library|*.dll|All Files|*.*";
 			// 
+			// menuStrip1
+			// 
+			this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.testToolStripMenuItem});
+			this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+			this.menuStrip1.Name = "menuStrip1";
+			this.menuStrip1.Size = new System.Drawing.Size(856, 24);
+			this.menuStrip1.TabIndex = 30;
+			this.menuStrip1.Text = "menuStrip1";
+			// 
+			// testToolStripMenuItem
+			// 
+			this.testToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.test2ToolStripMenuItem});
+			this.testToolStripMenuItem.Name = "testToolStripMenuItem";
+			this.testToolStripMenuItem.Size = new System.Drawing.Size(38, 20);
+			this.testToolStripMenuItem.Text = "test";
+			// 
+			// test2ToolStripMenuItem
+			// 
+			this.test2ToolStripMenuItem.Name = "test2ToolStripMenuItem";
+			this.test2ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.test2ToolStripMenuItem.Text = "test2";
+			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -194,7 +222,9 @@
 			this.ClientSize = new System.Drawing.Size(856, 445);
 			this.Controls.Add(this.statusStrip1);
 			this.Controls.Add(this.toolStrip1);
+			this.Controls.Add(this.menuStrip1);
 			this.Controls.Add(this.dockPanel);
+			this.MainMenuStrip = this.menuStrip1;
 			this.Name = "MainForm";
 			this.Text = "Mosa Simulator";
 			this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
@@ -204,6 +234,8 @@
 			this.toolStrip1.PerformLayout();
 			this.statusStrip1.ResumeLayout(false);
 			this.statusStrip1.PerformLayout();
+			this.menuStrip1.ResumeLayout(false);
+			this.menuStrip1.PerformLayout();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -220,5 +252,8 @@
 		private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
 		private System.Windows.Forms.ToolStripButton toolStripButton3;
 		private System.Windows.Forms.OpenFileDialog openFileDialog;
+		private System.Windows.Forms.MenuStrip menuStrip1;
+		private System.Windows.Forms.ToolStripMenuItem testToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem test2ToolStripMenuItem;
 	}
 }

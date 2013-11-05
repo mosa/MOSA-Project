@@ -51,6 +51,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Watch.cs" />
+    <Compile Include="WatchView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WatchView.designer.cs">
+      <DependentUpon>WatchView.cs</DependentUpon>
+    </Compile>
     <Compile Include="SymbolView.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -145,6 +152,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="CallStackView.resx">
       <DependentUpon>CallStackView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WatchView.resx">
+      <DependentUpon>WatchView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SymbolView.resx">
       <DependentUpon>SymbolView.cs</DependentUpon>
