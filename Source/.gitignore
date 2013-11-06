@@ -3,3 +3,5 @@
 *.resources
 *.psess
 *.vspx
+*.CodeAnalysisLog.xml
+*.lastcodeanalysissucceeded

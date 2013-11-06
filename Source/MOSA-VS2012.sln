@@ -162,7 +162,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Platform.ARMv6", "Mosa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.TestWorld.ARMv6", "Mosa.TestWorld.ARMv6\Mosa.TestWorld.ARMv6.csproj", "{577B8294-334B-4E02-BE3A-CBA8ABAF8939}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Tool.Simulator", "Mosa.Tool.Simulator\Mosa.Tool.Simulator.csproj", "{DEF831EA-79D8-49FC-8923-3AFFDA1283B6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Tool.TinySimulator", "Mosa.Tool.TinySimulator\Mosa.Tool.TinySimulator.csproj", "{DEF831EA-79D8-49FC-8923-3AFFDA1283B6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
