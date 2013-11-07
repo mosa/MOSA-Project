@@ -24,10 +24,6 @@ grub
 - GNU License
 - http://www.gnu.org/software/grub/
 
-JPC
-- GNU License
-- http://www-jpc.physics.ox.ac.uk
-
 peter-bochs
 - GNU License
 - http://code.google.com/p/peter-bochs/
