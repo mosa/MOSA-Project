@@ -8,8 +8,6 @@
  */
 
 using Mosa.TinyCPUSimulator;
-using System;
-using System.Diagnostics;
 
 namespace Mosa.Tool.TinySimulator
 {
@@ -22,7 +20,7 @@ namespace Mosa.Tool.TinySimulator
 
 		public override void UpdateDock(SimState simState)
 		{
-			var currentInstruction = SimCPU.DecodeOpcode(simState.IP);
+			var currentInstruction = simState.Instruction;
 			var nextInstruction = SimCPU.DecodeOpcode(simState.NextIP);
 
 			textBox1.Text = simState.Tick.ToString();
@@ -40,6 +38,5 @@ namespace Mosa.Tool.TinySimulator
 
 			Refresh();
 		}
-
 	}
 }

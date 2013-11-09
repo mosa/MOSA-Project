@@ -7,7 +7,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using Mosa.Compiler.Linker;
 using Mosa.TinyCPUSimulator;
 using System.Collections.Generic;
 using System.ComponentModel;

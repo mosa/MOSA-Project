@@ -480,9 +480,9 @@
             "x86II",
             "AVR32",
             "Null"});
-			this.cbPlatform.Location = new System.Drawing.Point(329, 25);
+			this.cbPlatform.Location = new System.Drawing.Point(221, 27);
 			this.cbPlatform.Name = "cbPlatform";
-			this.cbPlatform.Size = new System.Drawing.Size(58, 21);
+			this.cbPlatform.Size = new System.Drawing.Size(78, 21);
 			this.cbPlatform.TabIndex = 28;
 			// 
 			// Main

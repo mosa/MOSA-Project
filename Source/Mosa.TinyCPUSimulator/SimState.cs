@@ -27,7 +27,7 @@ namespace Mosa.TinyCPUSimulator
 
 		public SimCPUException CPUException { get; private set; }
 
-		public SimState(ulong tick, ulong ip, SimCPUException exception, SimInstruction instruction, ulong nextIP)
+		public SimState(ulong tick, ulong ip, SimInstruction instruction, SimCPUException exception, ulong nextIP)
 		{
 			Tick = tick;
 			IP = ip;

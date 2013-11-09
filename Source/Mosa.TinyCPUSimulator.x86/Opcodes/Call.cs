@@ -32,5 +32,7 @@ namespace Mosa.TinyCPUSimulator.x86.Opcodes
 			cpu.ESP.Value = (uint)(cpu.ESP.Value - (size / 8));
 			cpu.EIP.Value = target;
 		}
+
+		public override OpcodeFlowType FlowType { get { return OpcodeFlowType.Call; } }
 	}
 }

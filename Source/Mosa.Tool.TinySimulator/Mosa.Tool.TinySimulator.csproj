@@ -51,6 +51,17 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BreakPointView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="BreakPointView.designer.cs">
+      <DependentUpon>BreakPointView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Watch.cs" />
     <Compile Include="WatchView.cs">
       <SubType>Form</SubType>
@@ -153,6 +164,13 @@
     <EmbeddedResource Include="CallStackView.resx">
       <DependentUpon>CallStackView.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="BreakPointView.resx">
+      <DependentUpon>BreakPointView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="WatchView.resx">
       <DependentUpon>WatchView.cs</DependentUpon>
     </EmbeddedResource>
@@ -186,16 +204,6 @@
     <EmbeddedResource Include="MemoryView.resx">
       <DependentUpon>MemoryView.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <EmbeddedResource Include="StackView.resx">
       <DependentUpon>StackView.cs</DependentUpon>
     </EmbeddedResource>

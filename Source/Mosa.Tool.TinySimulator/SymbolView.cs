@@ -12,7 +12,6 @@ using Mosa.TinyCPUSimulator;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
-using System.Drawing;
 
 namespace Mosa.Tool.TinySimulator
 {
@@ -123,8 +122,12 @@ namespace Mosa.Tool.TinySimulator
 
 			var relativeMousePosition = dataGridView1.PointToClient(Cursor.Position);
 
+			MenuItem menu = new MenuItem(row.Name);
+			menu.Enabled = false;
 			ContextMenu m = new ContextMenu();
-			m.MenuItems.Add(new MenuItem(string.Format("&Add to Watch List: {0}", row.Name), new EventHandler(MenuItem1_Click)));
+			m.MenuItems.Add(menu);
+			m.MenuItems.Add(new MenuItem("Add to &Watch List", new EventHandler(MenuItem1_Click)));
+			m.MenuItems.Add(new MenuItem("Set &Breakpoint", new EventHandler(MenuItem2_Click)));
 			m.Show(dataGridView1, relativeMousePosition);
 		}
 
@@ -134,8 +137,14 @@ namespace Mosa.Tool.TinySimulator
 				return;
 
 			MainForm.AddWatch(clickedSymbolEntry.Name, (ulong)clickedSymbolEntry.LinkerSymbol.VirtualAddress, (int)clickedSymbolEntry.LinkerSymbol.Length * 8);
+		}
 
-			return;
+		private void MenuItem2_Click(Object sender, EventArgs e)
+		{
+			if (clickedSymbolEntry == null)
+				return;
+
+			MainForm.AddBreakPoint(clickedSymbolEntry.Name, (ulong)clickedSymbolEntry.LinkerSymbol.VirtualAddress);
 		}
 
 		private void toolStripComboBox1_SelectedIndexChanged(object sender, EventArgs e)
@@ -147,6 +156,5 @@ namespace Mosa.Tool.TinySimulator
 		{
 			CreateEntries();
 		}
-
 	}
 }

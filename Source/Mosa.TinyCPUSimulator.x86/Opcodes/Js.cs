@@ -18,5 +18,7 @@ namespace Mosa.TinyCPUSimulator.x86.Opcodes
 				cpu.EIP.Value = ResolveBranch(cpu, instruction.Operand1);
 			}
 		}
+
+		public override OpcodeFlowType FlowType { get { return OpcodeFlowType.Branch; } }
 	}
 }

@@ -37,6 +37,7 @@ namespace Mosa.Tool.TinySimulator
 		private HistoryView historyView = new HistoryView();
 		private SymbolView symbolView = new SymbolView();
 		private WatchView watchView = new WatchView();
+		private BreakPointView breakPointView = new BreakPointView();
 
 		public IInternalTrace InternalTrace = new BasicInternalTrace();
 		public ConfigurableTraceFilter Filter = new ConfigurableTraceFilter();
@@ -90,9 +91,10 @@ namespace Mosa.Tool.TinySimulator
 
 			statusView.Show(dockPanel, DockState.DockTop);
 			controlView.Show(statusView.PanelPane, DockAlignment.Right, 0.50);
+			callStackView.Show(controlView.PanelPane, DockAlignment.Bottom, 0.50);
 
-			callStackView.Show(dockPanel, DockState.DockBottom);
-			watchView.Show(callStackView.PanelPane, DockAlignment.Right, 0.50);
+			breakPointView.Show(dockPanel, DockState.DockBottom);
+			watchView.Show(breakPointView.PanelPane, DockAlignment.Right, 0.50);
 
 			displayView.Show(dockPanel, DockState.Document);
 			historyView.Show(dockPanel, DockState.Document);
@@ -344,7 +346,6 @@ namespace Mosa.Tool.TinySimulator
 							//case 64: list.Add(entry.Address, SimCPU.Read64(entry.Address)); break;
 							default: break;
 						}
-
 					}
 				}
 
@@ -354,17 +355,12 @@ namespace Mosa.Tool.TinySimulator
 			simState.StoreValue("WatchValues", toplist);
 		}
 
-		public void Stop()
-		{
-			SimCPU.Monitor.Stop = true;
-		}
-
 		public void ExecuteSteps(uint steps)
 		{
 			if (SimCPU == null)
 				return;
 
-			SimCPU.Monitor.BreakAtTick += steps;
+			SimCPU.Monitor.BreakFromCurrentTick(steps);
 			SimCPU.Monitor.Stop = false;
 
 			lock (workerLock)
@@ -381,6 +377,7 @@ namespace Mosa.Tool.TinySimulator
 			Record = false;
 
 			SimCPU.Monitor.Stop = false;
+			SimCPU.Monitor.StepOverBreakPoint = 0;
 
 			lock (workerLock)
 			{
@@ -397,6 +394,28 @@ namespace Mosa.Tool.TinySimulator
 			Status = "Simulation Reset.";
 
 			symbolView.CreateEntries();
+		}
+
+		public void Start()
+		{
+			if (SimCPU == null)
+				return;
+
+			SimCPU.Monitor.BreakAtTick = UInt32.MaxValue;
+			SimCPU.Monitor.Stop = false;
+
+			lock (workerLock)
+			{
+				Monitor.PulseAll(workerLock);
+			}
+		}
+
+		public void Stop()
+		{
+			if (SimCPU == null)
+				return;
+
+			SimCPU.Monitor.Stop = true;
 		}
 
 		private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -418,7 +437,11 @@ namespace Mosa.Tool.TinySimulator
 			watches.Add(watch);
 
 			watchView.AddWatch(name, address, size, false);
-			watchView.Refresh();
+		}
+
+		public void AddBreakPoint(string name, ulong address)
+		{
+			breakPointView.AddBreakPoint(name, address);
 		}
 	}
 }

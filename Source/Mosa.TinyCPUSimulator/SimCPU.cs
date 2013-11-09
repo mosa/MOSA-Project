@@ -32,7 +32,9 @@ namespace Mosa.TinyCPUSimulator
 
 		public virtual ulong CurrentInstructionPointer { get { return 0; } set { return; } }
 
-		public virtual ulong PreviousInstructionPointer { get; set; }
+		public virtual ulong LastInstructionPointer { get; set; }
+
+		public SimInstruction LastInstruction { get; private set; }
 
 		public virtual ulong StackPointer { get { return 0; } set { return; } }
 
@@ -277,6 +279,26 @@ namespace Mosa.TinyCPUSimulator
 			}
 		}
 
+		private SimInstruction lastDecodedInstruction;
+		private ulong lastAddressDecodedInstruction = 0;
+
+		public SimInstruction CurrentInstruction
+		{
+			get
+			{
+				if (CurrentInstructionPointer == lastAddressDecodedInstruction)
+					return lastDecodedInstruction;
+
+				lastDecodedInstruction = DecodeOpcode(CurrentInstructionPointer);
+
+				// if lastDecodedInstruction is null --- a binary decode would be necessary
+
+				lastAddressDecodedInstruction = CurrentInstructionPointer;
+
+				return lastDecodedInstruction;
+			}
+		}
+
 		public virtual SimInstruction DecodeOpcode(ulong address)
 		{
 			var instruction = GetInstruction(address);
@@ -307,19 +329,17 @@ namespace Mosa.TinyCPUSimulator
 
 				Tick++;
 				LastException = null;
-				PreviousInstructionPointer = CurrentInstructionPointer;
+				LastInstructionPointer = CurrentInstructionPointer;
 
-				var instruction = DecodeOpcode(CurrentInstructionPointer);
+				LastInstruction = CurrentInstruction;
 
-				var PreviousInstruction = instruction;
-
-				ExecuteOpcode(instruction);
+				ExecuteOpcode(LastInstruction);
 
 				if (Monitor.DebugOutput)
 				{
 					Debug.Write(CompactDump());
-					Debug.Write("  0x" + PreviousInstructionPointer.ToString("X") + ": ");
-					Debug.WriteLine(PreviousInstruction.ToString());
+					Debug.Write("  0x" + LastInstructionPointer.ToString("X") + ": ");
+					Debug.WriteLine(LastInstruction.ToString());
 				}
 			}
 			catch (SimCPUException e)
@@ -335,25 +355,22 @@ namespace Mosa.TinyCPUSimulator
 
 			for (; ; )
 			{
-				lock (Monitor)
+				ExecuteInstruction();
+
+				bool brk = Monitor.Break;
+
+				Monitor.OnExecutionStepCompleted(brk);
+
+				if (brk)
 				{
-					ExecuteInstruction();
-
-					bool brk = Monitor.Break;
-
-					Monitor.OnExecutionStepCompleted(brk);
-
-					if (brk)
-					{
-						return;
-					}
+					return;
 				}
 			}
 		}
 
 		public virtual SimState GetState()
 		{
-			SimState simState = new SimState(Tick, PreviousInstructionPointer, LastException, DecodeOpcode(PreviousInstructionPointer), CurrentInstructionPointer);
+			SimState simState = new SimState(Tick, LastInstructionPointer, LastInstruction, LastException, CurrentInstructionPointer);
 
 			//simState.StoreMemoryDelta(MemoryDelta);
 
@@ -363,5 +380,6 @@ namespace Mosa.TinyCPUSimulator
 		public virtual void ExtendState(SimState simState)
 		{
 		}
+
 	}
 }

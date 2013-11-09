@@ -7,8 +7,8 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using Mosa.TinyCPUSimulator;
 using System;
+using Mosa.TinyCPUSimulator;
 
 namespace Mosa.Tool.TinySimulator
 {
@@ -19,18 +19,20 @@ namespace Mosa.Tool.TinySimulator
 			InitializeComponent();
 		}
 
-		private void button1_Click(object sender, EventArgs e)
+		private void btnStep_Click(object sender, EventArgs e)
 		{
+			//SimCPU.Monitor.StepOverBreakPoint = 0;
 			MainForm.ExecuteSteps(1);
 		}
 
-		private void button2_Click(object sender, EventArgs e)
+		private void btnStepN_Click(object sender, EventArgs e)
 		{
 			uint steps = Convert.ToUInt32(tbSteps.Text);
+			//SimCPU.Monitor.StepOverBreakPoint = 0; 
 			MainForm.ExecuteSteps(steps);
 		}
 
-		private void button3_Click(object sender, EventArgs e)
+		private void btnRestart_Click(object sender, EventArgs e)
 		{
 			MainForm.Restart();
 		}
@@ -39,5 +41,53 @@ namespace Mosa.Tool.TinySimulator
 		{
 			MainForm.Record = cbRecord.Checked;
 		}
+
+		private void btnStart_Click(object sender, EventArgs e)
+		{
+			MainForm.Start();
+		}
+
+		private void btnStop_Click(object sender, EventArgs e)
+		{
+			MainForm.Stop();
+		}
+
+		private void cbBreakOnJump_CheckedChanged(object sender, EventArgs e)
+		{
+			SimCPU.Monitor.BreakAfterJump = cbBreakAfterJump.Checked;
+		}
+
+		private void cbBreakOnCall_CheckedChanged(object sender, EventArgs e)
+		{
+			SimCPU.Monitor.BreakAfterCall = cbBreakAfterCall.Checked;
+		}
+
+		private void cbBreakOnReturn_CheckedChanged(object sender, EventArgs e)
+		{
+			SimCPU.Monitor.BreakAfterReturn = cbBreakAfterReturn.Checked;
+		}
+
+		private void cbBreakAfterBranch_CheckedChanged(object sender, EventArgs e)
+		{
+			SimCPU.Monitor.BreakAfterBranch = cbBreakAfterBranch.Checked;
+		}
+
+		private void btnStepOver_Click(object sender, EventArgs e)
+		{
+			if (SimCPU.LastInstruction.Opcode.FlowType == OpcodeFlowType.Call || SimCPU.LastInstruction.Opcode.FlowType == OpcodeFlowType.Normal)
+			{
+				ulong ip = SimCPU.LastInstructionPointer + SimCPU.CurrentInstruction.OpcodeSize;
+
+				SimCPU.Monitor.StepOverBreakPoint = ip;
+				MainForm.Start();
+			}
+			else
+			{
+				SimCPU.Monitor.StepOverBreakPoint = 0;
+				MainForm.ExecuteSteps(1);
+			}
+
+		}
+
 	}
 }

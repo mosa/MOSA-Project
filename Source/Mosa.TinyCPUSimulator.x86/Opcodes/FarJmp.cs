@@ -20,5 +20,7 @@ namespace Mosa.TinyCPUSimulator.x86.Opcodes
 
 			cpu.EIP.Value = (uint)(cpu.EIP.Value + (int)v1);
 		}
+
+		public override OpcodeFlowType FlowType { get { return OpcodeFlowType.Jump; } }
 	}
 }
