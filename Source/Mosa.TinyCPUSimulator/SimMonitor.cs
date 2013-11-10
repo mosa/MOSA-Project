@@ -98,7 +98,7 @@ namespace Mosa.TinyCPUSimulator
 		{
 			lock (locker)
 			{
-				breakPoints.Add(address);
+				breakPoints.Remove(address);
 			}
 		}
 
