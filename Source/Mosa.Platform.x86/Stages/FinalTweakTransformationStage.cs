@@ -96,6 +96,30 @@ namespace Mosa.Platform.x86.Stages
 			}
 		}
 
+		/// <summary>
+		/// Visitation function for <see cref="IX86Visitor.Call"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IX86Visitor.Call(Context context)
+		{
+			if (context.Operand1 == null)
+				return;
+
+			if (!context.Operand1.IsCPURegister)
+				return;
+
+			var before = context.Previous;
+
+			if (!before.Result.IsCPURegister)
+				return;
+
+			if (context.Operand1.Register != before.Result.Register)
+				return;
+
+			before.SetInstruction(X86.Call, null, before.Operand1);
+			context.Delete();
+		}
+
 		#endregion IX86Visitor
 
 		#region IX86Visitor - Unused
@@ -153,14 +177,6 @@ namespace Mosa.Platform.x86.Stages
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IX86Visitor.Shr(Context context)
-		{
-		}
-
-		/// <summary>
-		/// Visitation function for <see cref="IX86Visitor.Call"/> instructions.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void IX86Visitor.Call(Context context)
 		{
 		}
 
