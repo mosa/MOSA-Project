@@ -85,9 +85,12 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Architecture.cs" />
+    <Compile Include="ArchitectureFeatureFlags.cs" />
     <Compile Include="ARMv6Instruction.cs" />
     <Compile Include="ARMv6.cs" />
     <Compile Include="BaseTransformationStage.cs" />
+    <Compile Include="GeneralPurposeRegister.cs" />
     <Compile Include="IARMv6Visitor.cs" />
     <Compile Include="Instructions\Adc.cs" />
     <Compile Include="Instructions\Add.cs" />
@@ -150,10 +153,10 @@
     <Compile Include="Instructions\Wfi.cs" />
     <Compile Include="Instructions\Yield.cs" />
     <Compile Include="MachineCodeEmitter.cs" />
+    <Compile Include="Stages\IRTransformationStage.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Intrinsic\" />
-    <Folder Include="Stages\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />
   <PropertyGroup>
