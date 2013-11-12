@@ -31,7 +31,7 @@ namespace Mosa.Tool.TinySimulator
 			this.cbBreakAfterReturn = new System.Windows.Forms.CheckBox();
 			this.cbBreakAfterCall = new System.Windows.Forms.CheckBox();
 			this.cbBreakAfterJump = new System.Windows.Forms.CheckBox();
-			this.btnStop = new System.Windows.Forms.Button();
+			this.btnPause = new System.Windows.Forms.Button();
 			this.btnStart = new System.Windows.Forms.Button();
 			this.btnRestart = new System.Windows.Forms.Button();
 			this.btnStepN = new System.Windows.Forms.Button();
@@ -76,18 +76,18 @@ namespace Mosa.Tool.TinySimulator
 			this.cbBreakAfterJump.UseVisualStyleBackColor = true;
 			this.cbBreakAfterJump.CheckedChanged += new System.EventHandler(this.cbBreakOnJump_CheckedChanged);
 			// 
-			// btnStop
+			// btnPause
 			// 
-			this.btnStop.Image = ((System.Drawing.Image)(resources.GetObject("btnStop.Image")));
-			this.btnStop.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.btnStop.Location = new System.Drawing.Point(167, 5);
-			this.btnStop.Name = "btnStop";
-			this.btnStop.Size = new System.Drawing.Size(80, 23);
-			this.btnStop.TabIndex = 25;
-			this.btnStop.Text = "Stop";
-			this.btnStop.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-			this.btnStop.UseVisualStyleBackColor = true;
-			this.btnStop.Click += new System.EventHandler(this.btnStop_Click);
+			this.btnPause.Image = ((System.Drawing.Image)(resources.GetObject("btnPause.Image")));
+			this.btnPause.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.btnPause.Location = new System.Drawing.Point(167, 5);
+			this.btnPause.Name = "btnPause";
+			this.btnPause.Size = new System.Drawing.Size(80, 23);
+			this.btnPause.TabIndex = 25;
+			this.btnPause.Text = "Pause";
+			this.btnPause.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+			this.btnPause.UseVisualStyleBackColor = true;
+			this.btnPause.Click += new System.EventHandler(this.btnStop_Click);
 			// 
 			// btnStart
 			// 
@@ -204,7 +204,7 @@ namespace Mosa.Tool.TinySimulator
 			this.Controls.Add(this.cbBreakAfterReturn);
 			this.Controls.Add(this.cbBreakAfterCall);
 			this.Controls.Add(this.cbBreakAfterJump);
-			this.Controls.Add(this.btnStop);
+			this.Controls.Add(this.btnPause);
 			this.Controls.Add(this.btnStart);
 			this.Controls.Add(this.btnRestart);
 			this.Controls.Add(this.btnStepN);
@@ -236,7 +236,7 @@ namespace Mosa.Tool.TinySimulator
 		private System.Windows.Forms.Button btnStepN;
 		private System.Windows.Forms.Button btnRestart;
 		private System.Windows.Forms.Button btnStart;
-		private System.Windows.Forms.Button btnStop;
+		private System.Windows.Forms.Button btnPause;
 		private System.Windows.Forms.CheckBox cbBreakAfterJump;
 		private System.Windows.Forms.CheckBox cbBreakAfterCall;
 		private System.Windows.Forms.CheckBox cbBreakAfterReturn;

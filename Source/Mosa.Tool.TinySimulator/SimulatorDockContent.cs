@@ -23,7 +23,7 @@ namespace Mosa.Tool.TinySimulator
 			}
 		}
 
-		public SimCPU SimCPU { get { return ((this.ParentForm) as MainForm).SimCPU; } }
+		public SimCPU SimCPU { get { return MainForm.SimCPU; } }
 
 		public string Status { set { MainForm.Status = value; } }
 

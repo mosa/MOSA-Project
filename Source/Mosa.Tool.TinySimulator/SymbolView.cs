@@ -89,7 +89,7 @@ namespace Mosa.Tool.TinySimulator
 				if (symbol.Length > end || symbol.Length < start)
 					continue;
 
-				symbols.Add(new SymbolEntry(symbol, true)); // true == forces 32 bit
+				symbols.Add(new SymbolEntry(symbol, MainForm.Display32));
 			}
 
 			dataGridView1.DataSource = symbols;
@@ -113,7 +113,7 @@ namespace Mosa.Tool.TinySimulator
 			if (e.Button != MouseButtons.Right)
 				return;
 
-			if (e.RowIndex < 0 && e.ColumnIndex < 0)
+			if (e.RowIndex < 0 || e.ColumnIndex < 0)
 				return;
 
 			var row = dataGridView1.Rows[e.RowIndex].DataBoundItem as SymbolEntry;

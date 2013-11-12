@@ -57,14 +57,16 @@ namespace Mosa.Tool.TinySimulator
 
 		public List<Watch> watches = new List<Watch>();
 
-		public Queue<SimState> history = new Queue<SimState>();
-		private object historyLock = new object();
-		private SimState lastHistory = null;
+		//public Queue<SimState> history = new Queue<SimState>();
+		//private object historyLock = new object();
+		//private SimState lastHistory = null;
 
 		private Thread worker;
 		private object workerLock = new object();
 
 		private Stopwatch stopwatch = new Stopwatch();
+
+		public bool Display32 { get; private set; }
 
 		public MainForm()
 		{
@@ -102,10 +104,11 @@ namespace Mosa.Tool.TinySimulator
 			symbolView.Show(dockPanel, DockState.Document);
 
 			registersView.Show(dockPanel, DockState.DockRight);
-			flagView.Show(registersView.PanelPane, DockAlignment.Bottom, 0.5);
+			flagView.Show(dockPanel, DockState.DockRight);
+			stackView.Show(dockPanel, DockState.DockRight);
+			stackFrameView.Show(dockPanel, DockState.DockRight);
 
-			stackView.Show(displayView.PanelPane, DockAlignment.Right, 0.2);
-			stackFrameView.Show(stackView.PanelPane, DockAlignment.Top, 0.25);
+			registersView.Show();
 
 			dockPanel.ResumeLayout(true, true);
 
@@ -164,13 +167,15 @@ namespace Mosa.Tool.TinySimulator
 			Linker = new SimLinker(simAdapter);
 
 			SimCompiler.Compile(TypeSystem, TypeLayout, InternalTrace, true, Architecture, simAdapter, Linker);
-
 			SimCPU = simAdapter.SimCPU;
 
 			SimCPU.Monitor.BreakAtTick = 1;
 			SimCPU.Monitor.BreakOnException = true;
 			SimCPU.Monitor.OnStateUpdate = UpdateSimState;
 			SimCPU.Reset();
+
+			Display32 = (uint)SimCPU.GetState().Values["Register.Size"] == 32;
+
 			SimCPU.Monitor.OnExecutionStepCompleted(true);
 
 			Status = "Compiled.";
@@ -302,28 +307,30 @@ namespace Mosa.Tool.TinySimulator
 
 		private void AddHistory(SimState simState)
 		{
-			if (!Record)
-				return;
+			historyView.AddHistory(simState);
 
-			lock (historyLock)
-			{
-				if (lastHistory == null || lastHistory.Tick != simState.Tick)
-				{
-					history.Enqueue(simState);
-					lastHistory = simState;
-				}
+			//if (!Record)
+			//	return;
 
-				// Prune
-				int max = MaxHistory;
+			//lock (historyLock)
+			//{
+			//	if (lastHistory == null || lastHistory.Tick != simState.Tick)
+			//	{
+			//		history.Enqueue(simState);
+			//		lastHistory = simState;
+			//	}
 
-				if (max <= 1)
-					max = 1000;
+			//	// Prune
+			//	int max = MaxHistory;
 
-				while (history.Count > max)
-				{
-					history.Dequeue();
-				}
-			}
+			//	if (max <= 1)
+			//		max = 1000;
+
+			//	while (history.Count > max)
+			//	{
+			//		history.Dequeue();
+			//	}
+			//}
 		}
 
 		private void AddWatch(SimState simState)
@@ -385,10 +392,10 @@ namespace Mosa.Tool.TinySimulator
 				stopwatch.Reset();
 			}
 
-			lock (historyLock)
-			{
-				history.Clear();
-			}
+			//lock (historyLock)
+			//{
+			//	history.Clear();
+			//}
 
 			SimCPU.Monitor.OnExecutionStepCompleted(true);
 			Status = "Simulation Reset.";
