@@ -33,9 +33,9 @@ namespace Mosa.Tool.TinySimulator
 
 			public bool signed;
 
-			public bool force32 = true;
+			public bool display32 = true;
 
-			public WatchEntry(string name, ulong address, int size, bool signed, bool force32)
+			public WatchEntry(string name, ulong address, int size, bool signed, bool display32)
 			{
 				Name = name;
 				this.Address = "0x" + address.ToString("X8");
@@ -44,7 +44,7 @@ namespace Mosa.Tool.TinySimulator
 				this.signed = signed;
 				this.Value = "[N/A]";
 				this.Hex = "[N/A]";
-				this.force32 = force32;
+				this.display32 = display32;
 			}
 
 			public void Update(object value)

@@ -12,7 +12,8 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.x86.Stages
 {
 	/// <summary>
-	/// The simple dead code removal stage remove unless instructions and NOP instructions prior to the register allocation stage.
+	/// The simple dead code removal stage remove unless instructions 
+	/// and NOP instructions prior to the register allocation stage.
 	/// </summary>
 	public sealed class SimpleDeadCodeRemovalStage : BaseTransformationStage, IMethodCompilerStage
 	{
@@ -40,11 +41,12 @@ namespace Mosa.Platform.x86.Stages
 						// Remove Nop instructions
 						if (ctx.Instruction is Instructions.Nop)
 						{
-							ctx.Remove();
+							ctx.Delete();
+							continue;
 						}
 
 						// Remove useless instructions
-						else if (ctx.ResultCount == 1 && ctx.Result.Uses.Count == 0 && ctx.Result.IsVirtualRegister)
+						if (ctx.ResultCount == 1 && ctx.Result.Uses.Count == 0 && ctx.Result.IsVirtualRegister)
 						{
 							// Check is split child, if so check is parent in use (IR.Return for example)
 							if (ctx.Result.IsSplitChild && ctx.Result.SplitParent.Uses.Count != 0)

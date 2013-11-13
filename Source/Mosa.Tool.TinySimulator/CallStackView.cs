@@ -24,20 +24,20 @@ namespace Mosa.Tool.TinySimulator
 
 			private SimSymbol SimSymbol;
 
-			public CallStackEntry(string name, ulong address, bool force32)
+			public CallStackEntry(string name, ulong address, bool display32)
 			{
 				Address = address;
 				MethodName = name;
-				Text = "[" + MainForm.Format(address, force32) + "] " + (string.IsNullOrEmpty(name) ? "Unknown" : name);
+				Text = "[" + MainForm.Format(address, display32) + "] " + (string.IsNullOrEmpty(name) ? "Unknown" : name);
 			}
 
-			public CallStackEntry(ulong address, bool force32)
-				: this(string.Empty, address, force32)
+			public CallStackEntry(ulong address, bool display32)
+				: this(string.Empty, address, display32)
 			{
 			}
 
-			public CallStackEntry(SimSymbol simSymbol, ulong address, bool force32)
-				: this(simSymbol.Name, address, force32)
+			public CallStackEntry(SimSymbol simSymbol, ulong address, bool display32)
+				: this(simSymbol.Name, address, display32)
 			{
 				SimSymbol = simSymbol;
 			}
@@ -115,7 +115,7 @@ namespace Mosa.Tool.TinySimulator
 			if (clickedNode == null)
 				return;
 
-			MainForm.AddBreakPoint(clickedNode.MethodName, (ulong)clickedNode.Address);
+			MainForm.AddBreakpoint(clickedNode.MethodName, (ulong)clickedNode.Address);
 		}
 	}
 }

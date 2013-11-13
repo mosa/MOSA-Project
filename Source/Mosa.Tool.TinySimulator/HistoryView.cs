@@ -39,14 +39,14 @@ namespace Mosa.Tool.TinySimulator
 
 			public SimState SimState;
 
-			public HistoryEntry(SimState simState, string method, bool force32)
+			public HistoryEntry(SimState simState, string method, bool display32)
 			{
 				this.Tick = simState.Tick;
 				this.ip = simState.IP;
 				this.Code = simState.Instruction.ToString();
 				this.Method = method;
 				this.SimState = simState;
-				IP = MainForm.Format(simState.IP, force32);
+				IP = MainForm.Format(simState.IP, display32);
 			}
 		}
 

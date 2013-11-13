@@ -38,6 +38,10 @@
   <PropertyGroup>
     <StartupObject>Mosa.Tool.TinySimulator.Program</StartupObject>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>
+    </ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -57,10 +61,22 @@
     <Compile Include="BreakPointView.designer.cs">
       <DependentUpon>BreakPointView.cs</DependentUpon>
     </Compile>
+    <Compile Include="ScriptView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ScriptView.designer.cs">
+      <DependentUpon>ScriptView.cs</DependentUpon>
+    </Compile>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="OutputView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="OutputView.designer.cs">
+      <DependentUpon>OutputView.cs</DependentUpon>
     </Compile>
     <Compile Include="Watch.cs" />
     <Compile Include="WatchView.cs">
@@ -167,9 +183,15 @@
     <EmbeddedResource Include="BreakPointView.resx">
       <DependentUpon>BreakPointView.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="ScriptView.resx">
+      <DependentUpon>ScriptView.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OutputView.resx">
+      <DependentUpon>OutputView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="WatchView.resx">
       <DependentUpon>WatchView.cs</DependentUpon>
@@ -261,6 +283,9 @@
       <Project>{6f7c06b2-09bf-45bd-8e6b-ae9bf7c7e250}</Project>
       <Name>Mosa.TinyCPUSimulator</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="processor.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

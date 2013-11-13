@@ -25,22 +25,22 @@ namespace Mosa.Tool.TinySimulator
 
 			public long Length { get { return LinkerSymbol.Length; } }
 
-			public string VirtualAddress { get { return MainForm.Format(LinkerSymbol.VirtualAddress, force32); } }
+			public string VirtualAddress { get { return MainForm.Format(LinkerSymbol.VirtualAddress, display32); } }
 
 			public long Offset { get { return LinkerSymbol.Offset; } }
 
 			public string SectionKind { get; set; }
 
-			public string SectionAddress { get { return MainForm.Format(LinkerSymbol.SectionAddress, force32); } }
+			public string SectionAddress { get { return MainForm.Format(LinkerSymbol.SectionAddress, display32); } }
 
 			public LinkerSymbol LinkerSymbol;
 
-			private bool force32;
+			private bool display32;
 
-			public SymbolEntry(LinkerSymbol linkerSymbol, bool force32)
+			public SymbolEntry(LinkerSymbol linkerSymbol, bool display32)
 			{
 				this.LinkerSymbol = linkerSymbol;
-				this.force32 = force32;
+				this.display32 = display32;
 				this.SectionKind = linkerSymbol.SectionKind.ToString();
 			}
 		}
@@ -144,7 +144,7 @@ namespace Mosa.Tool.TinySimulator
 			if (clickedSymbolEntry == null)
 				return;
 
-			MainForm.AddBreakPoint(clickedSymbolEntry.Name, (ulong)clickedSymbolEntry.LinkerSymbol.VirtualAddress);
+			MainForm.AddBreakpoint(clickedSymbolEntry.Name, (ulong)clickedSymbolEntry.LinkerSymbol.VirtualAddress);
 		}
 
 		private void toolStripComboBox1_SelectedIndexChanged(object sender, EventArgs e)

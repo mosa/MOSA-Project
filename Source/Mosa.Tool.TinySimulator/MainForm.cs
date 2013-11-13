@@ -38,6 +38,8 @@ namespace Mosa.Tool.TinySimulator
 		private SymbolView symbolView = new SymbolView();
 		private WatchView watchView = new WatchView();
 		private BreakPointView breakPointView = new BreakPointView();
+		private OutputView outputView = new OutputView();
+		private ScriptView scriptView = new ScriptView();
 
 		public IInternalTrace InternalTrace = new BasicInternalTrace();
 		public ConfigurableTraceFilter Filter = new ConfigurableTraceFilter();
@@ -47,8 +49,6 @@ namespace Mosa.Tool.TinySimulator
 		public ILinker Linker;
 		public SimCPU SimCPU;
 
-		public bool Record = false;
-
 		public int MaxHistory { get; set; }
 
 		public string Status { set { this.toolStripStatusLabel1.Text = value; toolStrip1.Refresh(); } }
@@ -57,16 +57,18 @@ namespace Mosa.Tool.TinySimulator
 
 		public List<Watch> watches = new List<Watch>();
 
-		//public Queue<SimState> history = new Queue<SimState>();
-		//private object historyLock = new object();
-		//private SimState lastHistory = null;
-
 		private Thread worker;
 		private object workerLock = new object();
 
 		private Stopwatch stopwatch = new Stopwatch();
 
 		public bool Display32 { get; private set; }
+
+		public bool Record
+		{
+			get { return controlView.Record; }
+			set { controlView.Record = value; }
+		}
 
 		public MainForm()
 		{
@@ -101,6 +103,8 @@ namespace Mosa.Tool.TinySimulator
 			displayView.Show(dockPanel, DockState.Document);
 			historyView.Show(dockPanel, DockState.Document);
 			assembliesView.Show(dockPanel, DockState.Document);
+			outputView.Show(dockPanel, DockState.Document);
+			scriptView.Show(dockPanel, DockState.Document);
 			symbolView.Show(dockPanel, DockState.Document);
 
 			registersView.Show(dockPanel, DockState.DockRight);
@@ -114,8 +118,8 @@ namespace Mosa.Tool.TinySimulator
 
 			if (CompileOnLaunch != null)
 			{
-				LoadAssembly(CompileOnLaunch, "x86");
-				StartSimulator();
+				LoadAssembly(CompileOnLaunch);
+				StartSimulator("x86");
 			}
 		}
 
@@ -134,11 +138,11 @@ namespace Mosa.Tool.TinySimulator
 		{
 			if (openFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
 			{
-				LoadAssembly(openFileDialog.FileName, "x86");
+				LoadAssembly(openFileDialog.FileName);
 			}
 		}
 
-		public void LoadAssembly(string filename, string platform)
+		public void LoadAssembly(string filename)
 		{
 			IAssemblyLoader assemblyLoader = new AssemblyLoader();
 
@@ -153,14 +157,12 @@ namespace Mosa.Tool.TinySimulator
 			assembliesView.UpdateTree();
 		}
 
-		public void StartSimulator()
+		public void StartSimulator(string platform)
 		{
 			if (TypeSystem == null)
 				return;
 
 			Status = "Compiling...";
-
-			string platform = "x86"; // cbPlatform.Text.Trim().ToLower();
 
 			Architecture = GetArchitecture(platform);
 			var simAdapter = GetSimAdaptor(platform);
@@ -201,9 +203,9 @@ namespace Mosa.Tool.TinySimulator
 			return value.ToString();
 		}
 
-		public static string Format(object value, bool force32)
+		public static string Format(object value, bool display32)
 		{
-			if (force32)
+			if (display32)
 			{
 				if (value is ulong)
 					return "0x" + ((ulong)value).ToString("X8");
@@ -239,7 +241,7 @@ namespace Mosa.Tool.TinySimulator
 				LoadAssembly();
 			}
 
-			StartSimulator();
+			StartSimulator("x86");
 		}
 
 		public void UpdateAllDocks(SimState simState)
@@ -309,30 +311,8 @@ namespace Mosa.Tool.TinySimulator
 		{
 			historyView.AddHistory(simState);
 
-			//if (!Record)
-			//	return;
 
-			//lock (historyLock)
-			//{
-			//	if (lastHistory == null || lastHistory.Tick != simState.Tick)
-			//	{
-			//		history.Enqueue(simState);
-			//		lastHistory = simState;
-			//	}
-
-			//	// Prune
-			//	int max = MaxHistory;
-
-			//	if (max <= 1)
-			//		max = 1000;
-
-			//	while (history.Count > max)
-			//	{
-			//		history.Dequeue();
-			//	}
-			//}
 		}
-
 		private void AddWatch(SimState simState)
 		{
 			var toplist = new Dictionary<int, Dictionary<ulong, object>>();
@@ -392,11 +372,6 @@ namespace Mosa.Tool.TinySimulator
 				stopwatch.Reset();
 			}
 
-			//lock (historyLock)
-			//{
-			//	history.Clear();
-			//}
-
 			SimCPU.Monitor.OnExecutionStepCompleted(true);
 			Status = "Simulation Reset.";
 
@@ -423,6 +398,9 @@ namespace Mosa.Tool.TinySimulator
 				return;
 
 			SimCPU.Monitor.Stop = true;
+
+			// wait until worker done
+			lock (workerLock) { }
 		}
 
 		private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -431,6 +409,10 @@ namespace Mosa.Tool.TinySimulator
 				return;
 
 			SimCPU.Monitor.Stop = true;
+
+			// wait until worker done
+			lock (workerLock) { }
+
 			worker.Abort();
 		}
 
@@ -446,9 +428,14 @@ namespace Mosa.Tool.TinySimulator
 			watchView.AddWatch(name, address, size, false);
 		}
 
-		public void AddBreakPoint(string name, ulong address)
+		public void AddBreakpoint(string name, ulong address)
 		{
 			breakPointView.AddBreakPoint(name, address);
+		}
+
+		public void AddOutput(string data)
+		{
+			outputView.AddOutput(data);
 		}
 	}
 }

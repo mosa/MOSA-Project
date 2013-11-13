@@ -19,16 +19,16 @@ namespace Mosa.Tool.TinySimulator
 			InitializeComponent();
 		}
 
+		public bool Record { get { return cbRecord.Checked; } set { cbRecord.Checked = value; } }
+
 		private void btnStep_Click(object sender, EventArgs e)
 		{
-			//SimCPU.Monitor.StepOverBreakPoint = 0;
 			MainForm.ExecuteSteps(1);
 		}
 
 		private void btnStepN_Click(object sender, EventArgs e)
 		{
 			uint steps = Convert.ToUInt32(tbSteps.Text);
-			//SimCPU.Monitor.StepOverBreakPoint = 0; 
 			MainForm.ExecuteSteps(steps);
 		}
 

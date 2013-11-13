@@ -23,12 +23,12 @@ namespace Mosa.Tool.TinySimulator
 		{
 			listBox1.Items.Clear();
 
-			bool force32 = (uint)simState.Values["Register.Size"] == 32;
+			bool display32 = (uint)simState.Values["Register.Size"] == 32;
 			List<ulong[]> stack = simState.Values["StackFrame"] as List<ulong[]>;
 
 			foreach (var entry in stack)
 			{
-				listBox1.Items.Add(listBox1.Items.Count.ToString("D2") + ": " + MainForm.Format(entry[0], force32) + " [" + MainForm.Format(entry[1], force32) + "]");
+				listBox1.Items.Add(listBox1.Items.Count.ToString("D2") + ": " + MainForm.Format(entry[0], display32) + " [" + MainForm.Format(entry[1], display32) + "]");
 			}
 
 			this.Refresh();
