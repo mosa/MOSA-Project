@@ -5,17 +5,19 @@
  *
  * Authors:
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
+ *  Marcelo Caetano (marcelocaetano) <marcelo.caetano@ymail.com>
  */
 
+using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.Framework;
 using System.Diagnostics;
 
-namespace Mosa.Platform.x86.Stages
+namespace Mosa.Compiler.Framework.Stages
 {
 	/// <summary>
 	/// This stages removes jumps to the next instruction
 	/// </summary>
-	public sealed class JumpPeepholeOptimizationStage : BaseTransformationStage, IMethodCompilerStage
+    public sealed class JumpPeepholeOptimizationStage : BaseCodeTransformationStage, IMethodCompilerStage
 	{
 		// TODO:
 		// 1. If first branch is to the next basic block,
@@ -45,7 +47,7 @@ namespace Mosa.Platform.x86.Stages
 					context.GotoPrevious();
 				}
 
-				if (!(context.Instruction is Instructions.Jmp))
+				if (!(context.Instruction is Jmp))
 					continue;
 
 				Debug.Assert(context.Instruction.FlowControl == FlowControl.Branch);
