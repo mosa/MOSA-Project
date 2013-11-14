@@ -99,6 +99,10 @@
       <Project>{5F30A68E-05BF-40EA-B576-5EBCDE520449}</Project>
       <Name>Mosa.Compiler.TypeSystem</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Mosa.Platform.ARMv6\Mosa.Platform.ARMv6.csproj">
+      <Project>{0fb92651-3ee8-441d-84f2-c4dfda68e8a5}</Project>
+      <Name>Mosa.Platform.ARMv6</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Mosa.Platform.AVR32\Mosa.Platform.AVR32.csproj">
       <Project>{F3BB1082-13E3-4B37-ABF4-A3E42C9E7ED9}</Project>
       <Name>Mosa.Platform.AVR32</Name>

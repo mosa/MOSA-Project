@@ -48,7 +48,24 @@ namespace Mosa.Platform.ARMv6
         /// The name of the platform.
         /// </value>
         public override string PlatformName { get { return "ARMv6"; } }
-        
+
+		/// <summary>
+		/// Factory method for the Architecture class.
+		/// </summary>
+		/// <returns>The created architecture instance.</returns>
+		/// <param name="architectureFeatures">The features available in the architecture and code generation.</param>
+		/// <remarks>
+		/// This method creates an instance of an appropriate architecture class, which supports the specific
+		/// architecture features.
+		/// </remarks>
+		public static IArchitecture CreateArchitecture(ArchitectureFeatureFlags architectureFeatures)
+		{
+			if (architectureFeatures == ArchitectureFeatureFlags.AutoDetect)
+				architectureFeatures = ArchitectureFeatureFlags.ARM; // TODO
+
+			return new Architecture(architectureFeatures);
+		}
+
         /// <summary>
         /// Gets the register set of the architecture.
         /// </summary>
@@ -99,7 +116,7 @@ namespace Mosa.Platform.ARMv6
         }
 
         /// <summary>
-        /// Retrieves the register set of the x86 platform.
+		/// Retrieves the register set of the ARMv6 platform.
         /// </summary>
         public override Register[] RegisterSet
         {
@@ -107,11 +124,11 @@ namespace Mosa.Platform.ARMv6
         }
 
         /// <summary>
-        /// Retrieves the stack frame register of the x86.
+		/// Retrieves the stack frame register of the ARMv6.
         /// </summary>
         public override Register StackFrameRegister
         {
-            get { return GeneralPurposeRegister.SP; }
+			get { return GeneralPurposeRegister.LR; }
         }
 
         /// <summary>
