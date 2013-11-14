@@ -104,7 +104,6 @@
     <Compile Include="Instructions\Addsd.cs" />
     <Compile Include="Stages\BuildStackStage.cs" />
     <Compile Include="Stages\FloatingPointStage.cs" />
-    <Compile Include="Stages\JumpPeepholeOptimizationStage.cs" />
     <Compile Include="Stages\FinalTweakTransformationStage.cs" />
     <Compile Include="Stages\SimpleDeadCodeRemovalStage.cs" />
     <Compile Include="Instructions\Mulsd.cs" />
