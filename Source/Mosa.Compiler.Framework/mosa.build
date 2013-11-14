@@ -250,7 +250,7 @@
                     <include name="Stages/DominanceCalculationStage.cs"/>
                     <include name="FlowControl.cs"/>
                     <include name="ICompilerStage.cs"/>
-                    <include name="ICallingConvention.cs"/>
+                    <include name="BaseCallingConvention.cs"/>
                     <include name="IDominanceProvider.cs"/>
                     <include name="CIL/IInstructionDecoder.cs"/>
                     <include name="IMethodCompilerStage.cs"/>

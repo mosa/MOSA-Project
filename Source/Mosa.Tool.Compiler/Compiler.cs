@@ -8,13 +8,13 @@
  *  Pascal Delprat (pdelprat) <pascal.delprat@online.fr>
  */
 
+using Mosa.Compiler.Framework;
+using Mosa.Compiler.Linker;
+using NDesk.Options;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using Mosa.Compiler.Framework;
-using Mosa.Compiler.Linker;
-using NDesk.Options;
 
 namespace Mosa.Tool.Compiler
 {
@@ -542,6 +542,7 @@ namespace Mosa.Tool.Compiler
 				case "multiboot-0.7":
 				case "mb0.7":
 					return new Mosa.Platform.x86.Stages.Multiboot0695Stage();
+
 				default:
 					throw new OptionException(String.Format("Unknown or unsupported boot format {0}.", format), "boot");
 			}

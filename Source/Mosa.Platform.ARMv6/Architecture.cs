@@ -8,13 +8,11 @@
  *  Marcelo Caetano (marcelocaetano) <marcelo.caetano@ymail.com>
  */
 
-using System;
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Stages;
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Signatures;
-using Mosa.Platform.ARMv6.Stages;
+using System;
 
 namespace Mosa.Platform.ARMv6
 {
@@ -37,7 +35,7 @@ namespace Mosa.Platform.ARMv6
 		/// Gets the type of the elf machine.
 		/// </summary>
 		/// <value>
-		/// The type of the elf machine. As defined in ARM ELF File Format doc. page 5, EM_ARM. 
+		/// The type of the elf machine. As defined in ARM ELF File Format doc. page 5, EM_ARM.
 		/// </value>
 		public override ushort ElfMachineType { get { return 40; } }
 
@@ -246,7 +244,7 @@ namespace Mosa.Platform.ARMv6
 		/// <param name="Source">The source.</param>
 		public override void InsertExchange(Context context, Operand destination, Operand source)
 		{
-			// TODO 
+			// TODO
 		}
 
 		/// <summary>

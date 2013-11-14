@@ -213,7 +213,7 @@ namespace Mosa.Compiler.Framework
 		/// <param name="instructionSet">The instruction set.</param>
 		/// <returns></returns>
 		public abstract BaseMethodCompiler CreateMethodCompiler(RuntimeMethod method, BasicBlocks basicBlocks, InstructionSet instructionSet);
-		
+
 		/// <summary>
 		/// Compiles the linker method.
 		/// </summary>

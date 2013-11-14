@@ -8,9 +8,9 @@
  */
 
 using Mosa.Compiler.Linker;
-using Mosa.Compiler.Linker.PE;
 using Mosa.Compiler.Linker.Elf32;
 using Mosa.Compiler.Linker.Elf64;
+using Mosa.Compiler.Linker.PE;
 
 namespace Mosa.Compiler.Framework.Linker
 {

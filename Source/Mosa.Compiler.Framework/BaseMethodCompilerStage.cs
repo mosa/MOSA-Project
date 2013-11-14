@@ -68,7 +68,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Holds the calling convention interface
 		/// </summary>
-		protected ICallingConvention callingConvention;
+		protected BaseCallingConvention callingConvention;
 
 		/// <summary>
 		/// Holds the Native Pointer Size

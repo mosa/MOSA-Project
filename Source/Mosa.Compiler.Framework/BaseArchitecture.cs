@@ -10,7 +10,6 @@
 
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Metadata.Signatures;
-using System;
 
 namespace Mosa.Compiler.Framework
 {
@@ -24,7 +23,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Retrieves an object, that is able to translate the CIL calling convention into appropriate native code.
 		/// </summary>
-		public ICallingConvention CallingConvention { get; protected set; }
+		public BaseCallingConvention CallingConvention { get; protected set; }
 
 		/// <summary>
 		/// Gets the endianness of the target architecture.

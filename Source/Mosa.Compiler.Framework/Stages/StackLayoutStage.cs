@@ -71,7 +71,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="offsetOfFirst">Specifies the offset of the first stack operand in the list.</param>
 		/// <param name="direction">The direction.</param>
 		/// <returns></returns>
-		private static int LayoutVariables(IList<Operand> locals, ICallingConvention callingConvention, int offsetOfFirst, int direction)
+		private static int LayoutVariables(IList<Operand> locals, BaseCallingConvention callingConvention, int offsetOfFirst, int direction)
 		{
 			int offset = offsetOfFirst;
 

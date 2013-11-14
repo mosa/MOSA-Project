@@ -333,7 +333,7 @@
     <Compile Include="ICompilerStage.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ICallingConvention.cs">
+    <Compile Include="BaseCallingConvention.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="IDominanceProvider.cs">

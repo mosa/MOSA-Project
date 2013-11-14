@@ -5,6 +5,7 @@
  *
  * Authors:
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 using Mosa.Compiler.Framework;
@@ -18,19 +19,10 @@ using System.Diagnostics;
 namespace Mosa.Platform.x86
 {
 	/// <summary>
-	/// Implements the CIL default calling convention for x86.
+	/// Implements the default calling convention for x86.
 	/// </summary>
-	internal sealed class DefaultCallingConvention : ICallingConvention
+	public sealed class DefaultCallingConvention : BaseCallingConvention
 	{
-		#region Data members
-
-		/// <summary>
-		/// Holds the architecture of the calling convention.
-		/// </summary>
-		private BaseArchitecture architecture;
-
-		#endregion Data members
-
 		#region Construction
 
 		/// <summary>
@@ -38,16 +30,13 @@ namespace Mosa.Platform.x86
 		/// </summary>
 		/// <param name="architecture">The architecture of the calling convention.</param>
 		public DefaultCallingConvention(BaseArchitecture architecture)
+			: base(architecture)
 		{
-			if (architecture == null)
-				throw new ArgumentNullException(@"architecture");
-
-			this.architecture = architecture;
 		}
 
 		#endregion Construction
 
-		#region ICallingConvention Members
+		#region Members
 
 		/// <summary>
 		/// Expands the given invoke instruction to perform the method call.
@@ -56,7 +45,7 @@ namespace Mosa.Platform.x86
 		/// <returns>
 		/// A single instruction or an array of instructions, which appropriately represent the method call.
 		/// </returns>
-		void ICallingConvention.MakeCall(Context context)
+		public override void MakeCall(Context context)
 		{
 			/*
 			 * Calling convention is right-to-left, pushed on the stack. Return value in EAX for integral
@@ -90,22 +79,6 @@ namespace Mosa.Platform.x86
 
 			FreeStackAfterCall(context, stackSize);
 			CleanupReturnValue(context, result);
-		}
-
-		private List<Operand> BuildOperands(Context context)
-		{
-			List<Operand> operands = new List<Operand>(context.OperandCount - 1);
-			int index = 0;
-
-			foreach (Operand operand in context.Operands)
-			{
-				if (index++ > 0)
-				{
-					operands.Add(operand);
-				}
-			}
-
-			return operands;
 		}
 
 		private void ReserveStackSizeForCall(Context context, int stackSize, Operand edx)
@@ -266,7 +239,7 @@ namespace Mosa.Platform.x86
 		/// </summary>
 		/// <param name="context">The context.</param>
 		/// <param name="operand">The operand, that's holding the return value.</param>
-		void ICallingConvention.MoveReturnValue(Context context, Operand operand)
+		public override void MoveReturnValue(Context context, Operand operand)
 		{
 			int size, alignment;
 			architecture.GetTypeRequirements(operand.Type, out size, out alignment);
@@ -303,14 +276,14 @@ namespace Mosa.Platform.x86
 			throw new NotSupportedException();
 		}
 
-		void ICallingConvention.GetStackRequirements(Operand stackOperand, out int size, out int alignment)
+		public override void GetStackRequirements(Operand stackOperand, out int size, out int alignment)
 		{
 			// Special treatment for some stack types
 			// FIXME: Handle the size and alignment requirements of value types
 			architecture.GetTypeRequirements(stackOperand.Type, out size, out alignment);
 		}
 
-		int ICallingConvention.OffsetOfFirstLocal
+		public override int OffsetOfFirstLocal
 		{
 			get
 			{
@@ -328,7 +301,7 @@ namespace Mosa.Platform.x86
 			}
 		}
 
-		int ICallingConvention.OffsetOfFirstParameter
+		public override int OffsetOfFirstParameter
 		{
 			get
 			{
@@ -344,6 +317,6 @@ namespace Mosa.Platform.x86
 			}
 		}
 
-		#endregion ICallingConvention Members
+		#endregion Members
 	}
 }

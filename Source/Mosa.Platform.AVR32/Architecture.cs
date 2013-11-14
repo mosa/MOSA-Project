@@ -8,13 +8,13 @@
  *  Pascal Delprat (pdelprat) <pascal.delprat@online.fr>
  */
 
-using System;
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Stages;
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Platform.AVR32.Stages;
+using System;
 
 namespace Mosa.Platform.AVR32
 {
@@ -39,7 +39,7 @@ namespace Mosa.Platform.AVR32
 		/// The type of the elf machine.
 		/// </value>
 		public override ushort ElfMachineType { get { return 0x18AD; } }
-		
+
 		/// <summary>
 		/// Gets the signature type of the native integer.
 		/// </summary>
@@ -245,7 +245,7 @@ namespace Mosa.Platform.AVR32
 		/// <param name="Source">The source.</param>
 		public override void InsertExchange(Context context, Operand destination, Operand source)
 		{
-			// TODO 
+			// TODO
 		}
 
 		/// <summary>

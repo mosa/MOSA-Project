@@ -7,9 +7,9 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System.Collections.Generic;
 using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Compiler.TypeSystem;
+using System.Collections.Generic;
 
 // NOTE: Eventually all temporary stack locals will be converted to virtual registers and
 //       removed from this StackLayout class except for spill slots

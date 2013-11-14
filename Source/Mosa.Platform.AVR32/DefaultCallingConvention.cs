@@ -8,29 +8,20 @@
  *  Pascal Delprat (pdelprat) <pascal.delprat@online.fr>
  */
 
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Signatures;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Mosa.Platform.AVR32
 {
 	/// <summary>
-	/// Implements the CIL default calling convention for AVR32.
+	/// Implements the default calling convention for AVR32.
 	/// </summary>
-	internal sealed class DefaultCallingConvention : ICallingConvention
+	internal sealed class DefaultCallingConvention : BaseCallingConvention
 	{
-		#region Data members
-
-		/// <summary>
-		/// Holds the architecture of the calling convention.
-		/// </summary>
-		private BaseArchitecture architecture;
-
-		#endregion Data members
-
 		#region Construction
 
 		/// <summary>
@@ -39,16 +30,13 @@ namespace Mosa.Platform.AVR32
 		/// <param name="architecture">The architecture of the calling convention.</param>
 		/// <param name="typeLayout">The type layout.</param>
 		public DefaultCallingConvention(BaseArchitecture architecture)
+			: base(architecture)
 		{
-			if (architecture == null)
-				throw new ArgumentNullException(@"architecture");
-
-			this.architecture = architecture;
 		}
 
 		#endregion Construction
 
-		#region ICallingConvention Members
+		#region BaseCallingConvention Members
 
 		/// <summary>
 		/// Expands the given invoke instruction to perform the method call.
@@ -57,7 +45,7 @@ namespace Mosa.Platform.AVR32
 		/// <returns>
 		/// A single instruction or an array of instructions, which appropriately represent the method call.
 		/// </returns>
-		void ICallingConvention.MakeCall(Context ctx)
+		public override void MakeCall(Context ctx)
 		{
 			/*
 			 * Calling convention is right-to-left, pushed on the stack. Return value in R9 for integral
@@ -289,7 +277,7 @@ namespace Mosa.Platform.AVR32
 		/// </summary>
 		/// <param name="context">The context.</param>
 		/// <param name="operand">The operand, that's holding the return value.</param>
-		void ICallingConvention.MoveReturnValue(Context context, Operand operand)
+		public override void MoveReturnValue(Context context, Operand operand)
 		{
 			int size, alignment;
 			architecture.GetTypeRequirements(operand.Type, out size, out alignment);
@@ -331,14 +319,14 @@ namespace Mosa.Platform.AVR32
 			}
 		}
 
-		void ICallingConvention.GetStackRequirements(Operand stackOperand, out int size, out int alignment)
+		public override void GetStackRequirements(Operand stackOperand, out int size, out int alignment)
 		{
 			// Special treatment for some stack types
 			// FIXME: Handle the size and alignment requirements of value types
 			architecture.GetTypeRequirements(stackOperand.Type, out size, out alignment);
 		}
 
-		int ICallingConvention.OffsetOfFirstLocal
+		public override int OffsetOfFirstLocal
 		{
 			get
 			{
@@ -356,7 +344,7 @@ namespace Mosa.Platform.AVR32
 			}
 		}
 
-		int ICallingConvention.OffsetOfFirstParameter
+		public override int OffsetOfFirstParameter
 		{
 			get
 			{
@@ -372,6 +360,6 @@ namespace Mosa.Platform.AVR32
 			}
 		}
 
-		#endregion ICallingConvention Members
+		#endregion BaseCallingConvention Members
 	}
 }
