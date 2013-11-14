@@ -71,7 +71,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			return -1;
 		}
 
-		protected void TrySimpleMoves(IArchitecture architecture, Context context)
+		protected void TrySimpleMoves(BaseArchitecture architecture, Context context)
 		{
 			bool loop = true;
 
@@ -101,7 +101,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			}
 		}
 
-		protected void TryExchange(IArchitecture architecture, Context context)
+		protected void TryExchange(BaseArchitecture architecture, Context context)
 		{
 			bool loop = true;
 
@@ -137,7 +137,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			}
 		}
 
-		protected void CreateMemoryMoves(IArchitecture architecture, Context context)
+		protected void CreateMemoryMoves(BaseArchitecture architecture, Context context)
 		{
 			for (int i = 0; i < moves.Count; i++)
 			{
@@ -150,7 +150,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			}
 		}
 
-		public void InsertResolvingMoves(IArchitecture architecture, InstructionSet instructionSet)
+		public void InsertResolvingMoves(BaseArchitecture architecture, InstructionSet instructionSet)
 		{
 			if (moves.Count == 0)
 				return;

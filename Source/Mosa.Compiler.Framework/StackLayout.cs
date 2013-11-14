@@ -23,7 +23,7 @@ namespace Mosa.Compiler.Framework
 	{
 		#region Data members
 
-		private IArchitecture architecture;
+		private BaseArchitecture architecture;
 
 		private List<Operand> stackLocal = new List<Operand>();
 
@@ -63,7 +63,7 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		/// <param name="architecture">The architecture.</param>
 		/// <param name="parameters">The parameters.</param>
-		public StackLayout(IArchitecture architecture, int parameters)
+		public StackLayout(BaseArchitecture architecture, int parameters)
 		{
 			this.architecture = architecture;
 			this.parameters = new Operand[parameters];

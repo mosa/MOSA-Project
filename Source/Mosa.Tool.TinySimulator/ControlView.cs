@@ -7,8 +7,8 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
 using Mosa.TinyCPUSimulator;
+using System;
 
 namespace Mosa.Tool.TinySimulator
 {
@@ -76,7 +76,7 @@ namespace Mosa.Tool.TinySimulator
 		{
 			if (SimCPU.LastInstruction.Opcode.FlowType == OpcodeFlowType.Call || SimCPU.LastInstruction.Opcode.FlowType == OpcodeFlowType.Normal)
 			{
-				ulong ip = SimCPU.LastInstructionPointer + SimCPU.CurrentInstruction.OpcodeSize;
+				ulong ip = SimCPU.LastProgramCounter + SimCPU.CurrentInstruction.OpcodeSize;
 
 				SimCPU.Monitor.StepOverBreakPoint = ip;
 				MainForm.Start();
@@ -86,8 +86,6 @@ namespace Mosa.Tool.TinySimulator
 				SimCPU.Monitor.StepOverBreakPoint = 0;
 				MainForm.ExecuteSteps(1);
 			}
-
 		}
-
 	}
 }

@@ -25,7 +25,6 @@
                     <include name="Instructions/Addsd.cs"/>
                     <include name="Stages/BuildStackStage.cs"/>
                     <include name="Stages/FloatingPointStage.cs"/>
-                    <include name="Stages/JumpPeepholeOptimizationStage.cs"/>
                     <include name="Stages/FinalTweakTransformationStage.cs"/>
                     <include name="Stages/SimpleDeadCodeRemovalStage.cs"/>
                     <include name="Instructions/Mulsd.cs"/>

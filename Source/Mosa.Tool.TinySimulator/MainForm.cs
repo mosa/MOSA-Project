@@ -45,7 +45,7 @@ namespace Mosa.Tool.TinySimulator
 		public ConfigurableTraceFilter Filter = new ConfigurableTraceFilter();
 		public ITypeSystem TypeSystem;
 		public ITypeLayout TypeLayout;
-		public IArchitecture Architecture;
+		public BaseArchitecture Architecture;
 		public ILinker Linker;
 		public SimCPU SimCPU;
 
@@ -216,7 +216,7 @@ namespace Mosa.Tool.TinySimulator
 			return Format(value);
 		}
 
-		private static IArchitecture GetArchitecture(string platform)
+		private static BaseArchitecture GetArchitecture(string platform)
 		{
 			switch (platform.ToLower())
 			{
@@ -310,9 +310,8 @@ namespace Mosa.Tool.TinySimulator
 		private void AddHistory(SimState simState)
 		{
 			historyView.AddHistory(simState);
-
-
 		}
+
 		private void AddWatch(SimState simState)
 		{
 			var toplist = new Dictionary<int, Dictionary<ulong, object>>();

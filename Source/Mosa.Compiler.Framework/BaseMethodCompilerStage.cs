@@ -33,7 +33,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// The architecture of the compilation process
 		/// </summary>
-		protected IArchitecture architecture;
+		protected BaseArchitecture architecture;
 
 		/// <summary>
 		/// Holds the instruction set

@@ -56,7 +56,7 @@ namespace Mosa.Compiler.Framework
 		/// Gets or sets the architecture.
 		/// </summary>
 		/// <value>The architecture.</value>
-		public IArchitecture Architecture { get; set; }
+		public BaseArchitecture Architecture { get; set; }
 
 		/// <summary>
 		/// Gets or sets the output file.

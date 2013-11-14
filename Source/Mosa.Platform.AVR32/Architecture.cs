@@ -39,6 +39,11 @@ namespace Mosa.Platform.AVR32
 		/// The type of the elf machine.
 		/// </value>
 		public override ushort ElfMachineType { get { return 0x18AD; } }
+		
+		/// <summary>
+		/// Gets the signature type of the native integer.
+		/// </summary>
+		public override SigType NativeType { get { return BuiltInSigType.Int32; } }
 
 		/// <summary>
 		/// Defines the register set of the target architecture.
@@ -60,7 +65,10 @@ namespace Mosa.Platform.AVR32
 			GeneralPurposeRegister.R9,
 			GeneralPurposeRegister.R10,
 			GeneralPurposeRegister.R11,
-			GeneralPurposeRegister.R12
+			GeneralPurposeRegister.R12,
+			GeneralPurposeRegister.SP,
+			GeneralPurposeRegister.LR,
+			GeneralPurposeRegister.PC
 		};
 
 		/// <summary>
@@ -111,6 +119,14 @@ namespace Mosa.Platform.AVR32
 		}
 
 		/// <summary>
+		/// Retrieves the program counter register of the ARMv6.
+		/// </summary>
+		public override Register ProgramCounter
+		{
+			get { return GeneralPurposeRegister.PC; }
+		}
+
+		/// <summary>
 		/// Gets the name of the platform.
 		/// </summary>
 		/// <value>
@@ -127,7 +143,7 @@ namespace Mosa.Platform.AVR32
 		/// This method creates an instance of an appropriate architecture class, which supports the specific
 		/// architecture features.
 		/// </remarks>
-		public static IArchitecture CreateArchitecture(ArchitectureFeatureFlags architectureFeatures)
+		public static BaseArchitecture CreateArchitecture(ArchitectureFeatureFlags architectureFeatures)
 		{
 			if (architectureFeatures == ArchitectureFeatureFlags.AutoDetect)
 				architectureFeatures = ArchitectureFeatureFlags.AutoDetect; // FIXME
@@ -231,7 +247,7 @@ namespace Mosa.Platform.AVR32
 		{
 			// TODO 
 		}
-		
+
 		/// <summary>
 		/// Gets the jump instruction for the platform.
 		/// </summary>

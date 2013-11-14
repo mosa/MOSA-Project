@@ -190,7 +190,7 @@ namespace Mosa.TinyCPUSimulator.x86
 			base.Reset();
 		}
 
-		public override ulong CurrentInstructionPointer { get { return EIP.Value; } set { EIP.Value = (uint)value; } }
+		public override ulong CurrentProgramCounter { get { return EIP.Value; } set { EIP.Value = (uint)value; } }
 
 		public override ulong StackPointer { get { return ESP.Value; } set { ESP.Value = (uint)value; } }
 

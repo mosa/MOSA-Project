@@ -99,7 +99,12 @@ namespace Mosa.Platform.AVR32
 			/// <summary>
 			/// The AVR32 LR/R14 register instruction encoding.
 			/// </summary>
-			LR = 14
+			LR = 14,
+
+			/// <summary>
+			/// The AVR32 PC/R15 register instruction encoding.
+			/// </summary>
+			PC = 15
 		}
 
 		#endregion Types
@@ -180,6 +185,11 @@ namespace Mosa.Platform.AVR32
 		/// Represents the LR/R14 register.
 		/// </summary>
 		public static readonly GeneralPurposeRegister LR = new GeneralPurposeRegister(14, GPR.LR);
+
+		/// <summary>
+		/// Represents the PC/R15 register.
+		/// </summary>
+		public static readonly GeneralPurposeRegister PC = new GeneralPurposeRegister(15, GPR.PC);
 
 		#endregion Static data members
 

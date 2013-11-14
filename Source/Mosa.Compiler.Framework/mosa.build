@@ -30,6 +30,7 @@
                     <include name="Linker/LinkerFactory.cs"/>
                     <include name="Stages/BaseEdgeSplitStage.cs"/>
                     <include name="Stages/EmptyBlockRemovalStage.cs"/>
+                    <include name="Stages/JumpPeepholeOptimizationStage.cs"/>
                     <include name="Stages/PlatformEdgeSplitStage.cs"/>
                     <include name="Stages/StackSetupStage.cs"/>
                     <include name="Stages/GreedyRegisterAllocatorStage.cs"/>
@@ -248,7 +249,6 @@
                     <include name="CompilerPipeline.cs"/>
                     <include name="Stages/DominanceCalculationStage.cs"/>
                     <include name="FlowControl.cs"/>
-                    <include name="IArchitecture.cs"/>
                     <include name="ICompilerStage.cs"/>
                     <include name="ICallingConvention.cs"/>
                     <include name="IDominanceProvider.cs"/>

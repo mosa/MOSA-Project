@@ -7,17 +7,14 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using Mosa.Compiler.Linker;
 using Mosa.TinyCPUSimulator;
 using System;
-using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace Mosa.Tool.TinySimulator
 {
 	public partial class ScriptView : SimulatorDockContent
 	{
-
 		public ScriptView()
 		{
 			InitializeComponent();
@@ -186,7 +183,5 @@ namespace Mosa.Tool.TinySimulator
 			AddOutput(lineNbr, "STATUS: Add watach " + symbol.Name + " at " + MainForm.Format(symbol.Address, MainForm.Display32));
 			MainForm.AddWatch(symbol.Name, symbol.Address, (int)symbol.Size);
 		}
-
-
 	}
 }

@@ -37,6 +37,7 @@
                     <include name="${outputDirectory}/Mosa.Compiler.Metadata.dll"/>
                     <include name="${outputDirectory}/Mosa.Compiler.Pdb.dll"/>
                     <include name="${outputDirectory}/Mosa.Compiler.TypeSystem.dll"/>
+                    <include name="${outputDirectory}/Mosa.Platform.ARMv6.dll"/>
                     <include name="${outputDirectory}/Mosa.Platform.AVR32.dll"/>
                     <include name="${outputDirectory}/Mosa.Compiler.InternalTrace.dll"/>
                     <include name="${outputDirectory}/Mosa.Platform.x86.dll"/>

@@ -27,7 +27,7 @@ namespace Mosa.Platform.AVR32
 		/// <summary>
 		/// Holds the architecture of the calling convention.
 		/// </summary>
-		private IArchitecture architecture;
+		private BaseArchitecture architecture;
 
 		#endregion Data members
 
@@ -38,7 +38,7 @@ namespace Mosa.Platform.AVR32
 		/// </summary>
 		/// <param name="architecture">The architecture of the calling convention.</param>
 		/// <param name="typeLayout">The type layout.</param>
-		public DefaultCallingConvention(IArchitecture architecture)
+		public DefaultCallingConvention(BaseArchitecture architecture)
 		{
 			if (architecture == null)
 				throw new ArgumentNullException(@"architecture");

@@ -26,7 +26,7 @@ namespace Mosa.Tool.Explorer
 		/// <param name="typeLayout">The type layout.</param>
 		/// <param name="internalTrace">The internal trace.</param>
 		/// <param name="compilerOptions">The compiler options.</param>
-		public ExplorerCompiler(IArchitecture architecture, ITypeSystem typeSystem, ITypeLayout typeLayout, IInternalTrace internalTrace, CompilerOptions compilerOptions, bool emitBinary) :
+		public ExplorerCompiler(BaseArchitecture architecture, ITypeSystem typeSystem, ITypeLayout typeLayout, IInternalTrace internalTrace, CompilerOptions compilerOptions, bool emitBinary) :
 			base(architecture, typeSystem, typeLayout, new CompilationScheduler(typeSystem, true), internalTrace, new ExplorerLinker(), compilerOptions)
 		{
 			this.emitBinary = emitBinary;
@@ -69,7 +69,7 @@ namespace Mosa.Tool.Explorer
 		/// <param name="emitBinary">if set to <c>true</c> [emit binary].</param>
 		public static void Compile(ITypeSystem typeSystem, ITypeLayout typeLayout, IInternalTrace internalTrace, string platform, bool enabledSSA, bool emitBinary)
 		{
-			IArchitecture architecture;
+			BaseArchitecture architecture;
 
 			switch (platform.ToLower())
 			{

@@ -38,6 +38,11 @@ namespace Mosa.Platform.x64
 		public override ushort ElfMachineType { get { return 3; } }
 
 		/// <summary>
+		/// Gets the signature type of the native integer.
+		/// </summary>
+		public override SigType NativeType { get { return BuiltInSigType.Int64; } }
+
+		/// <summary>
 		/// Defines the register set of the target architecture.
 		/// </summary>
 		private static readonly Register[] Registers = new Register[]
@@ -93,6 +98,14 @@ namespace Mosa.Platform.x64
 		}
 
 		/// <summary>
+		/// Retrieves the stack pointer register of the x64.
+		/// </summary>
+		public override Register ProgramCounter
+		{
+			get { return null; }
+		}
+
+		/// <summary>
 		/// Gets the name of the platform.
 		/// </summary>
 		/// <value>
@@ -109,7 +122,7 @@ namespace Mosa.Platform.x64
 		/// This method creates an instance of an appropriate architecture class, which supports the specific
 		/// architecture features.
 		/// </remarks>
-		public static IArchitecture CreateArchitecture(ArchitectureFeatureFlags architectureFeatures)
+		public static BaseArchitecture CreateArchitecture(ArchitectureFeatureFlags architectureFeatures)
 		{
 			if (architectureFeatures == ArchitectureFeatureFlags.AutoDetect)
 				architectureFeatures = ArchitectureFeatureFlags.MMX | ArchitectureFeatureFlags.SSE | ArchitectureFeatureFlags.SSE2;

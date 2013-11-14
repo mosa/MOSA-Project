@@ -30,9 +30,9 @@ namespace Mosa.TinyCPUSimulator
 
 		public bool IsLittleEndian { get; protected set; }
 
-		public virtual ulong CurrentInstructionPointer { get { return 0; } set { return; } }
+		public virtual ulong CurrentProgramCounter { get { return 0; } set { return; } }
 
-		public virtual ulong LastInstructionPointer { get; set; }
+		public virtual ulong LastProgramCounter { get; set; }
 
 		public SimInstruction LastInstruction { get; private set; }
 
@@ -280,20 +280,20 @@ namespace Mosa.TinyCPUSimulator
 		}
 
 		private SimInstruction lastDecodedInstruction;
-		private ulong lastAddressDecodedInstruction = 0;
+		private ulong lastDecodedProgramCounter = 0;
 
 		public SimInstruction CurrentInstruction
 		{
 			get
 			{
-				if (CurrentInstructionPointer == lastAddressDecodedInstruction)
+				if (CurrentProgramCounter == lastDecodedProgramCounter)
 					return lastDecodedInstruction;
 
-				lastDecodedInstruction = DecodeOpcode(CurrentInstructionPointer);
+				lastDecodedInstruction = DecodeOpcode(CurrentProgramCounter);
 
 				// if lastDecodedInstruction is null --- a binary decode would be necessary
 
-				lastAddressDecodedInstruction = CurrentInstructionPointer;
+				lastDecodedProgramCounter = CurrentProgramCounter;
 
 				return lastDecodedInstruction;
 			}
@@ -329,7 +329,7 @@ namespace Mosa.TinyCPUSimulator
 
 				Tick++;
 				LastException = null;
-				LastInstructionPointer = CurrentInstructionPointer;
+				LastProgramCounter = CurrentProgramCounter;
 
 				LastInstruction = CurrentInstruction;
 
@@ -338,7 +338,7 @@ namespace Mosa.TinyCPUSimulator
 				if (Monitor.DebugOutput)
 				{
 					Debug.Write(CompactDump());
-					Debug.Write("  0x" + LastInstructionPointer.ToString("X") + ": ");
+					Debug.Write("  0x" + LastProgramCounter.ToString("X") + ": ");
 					Debug.WriteLine(LastInstruction.ToString());
 				}
 			}
@@ -370,7 +370,7 @@ namespace Mosa.TinyCPUSimulator
 
 		public virtual SimState GetState()
 		{
-			SimState simState = new SimState(Tick, LastInstructionPointer, LastInstruction, LastException, CurrentInstructionPointer);
+			SimState simState = new SimState(Tick, LastProgramCounter, LastInstruction, LastException, CurrentProgramCounter);
 
 			//simState.StoreMemoryDelta(MemoryDelta);
 
@@ -380,6 +380,5 @@ namespace Mosa.TinyCPUSimulator
 		public virtual void ExtendState(SimState simState)
 		{
 		}
-
 	}
 }

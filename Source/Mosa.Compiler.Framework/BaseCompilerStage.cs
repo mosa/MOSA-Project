@@ -24,7 +24,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Holds the Architecture during compilation.
 		/// </summary>
-		protected IArchitecture architecture;
+		protected BaseArchitecture architecture;
 
 		/// <summary>
 		/// Holds the compiler.

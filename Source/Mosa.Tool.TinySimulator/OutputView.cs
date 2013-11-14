@@ -7,17 +7,14 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using Mosa.Compiler.Linker;
 using Mosa.TinyCPUSimulator;
 using System;
-using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace Mosa.Tool.TinySimulator
 {
 	public partial class OutputView : SimulatorDockContent
 	{
-
 		public OutputView()
 		{
 			InitializeComponent();
@@ -49,6 +46,5 @@ namespace Mosa.Tool.TinySimulator
 
 			richTextBox1.SaveFile(saveFileDialog1.FileName, RichTextBoxStreamType.PlainText);
 		}
-
 	}
 }

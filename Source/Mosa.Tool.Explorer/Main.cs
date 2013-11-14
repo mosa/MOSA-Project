@@ -344,7 +344,7 @@ namespace Mosa.Tool.Explorer
 			toolStripStatusLabel1.Text = "Compiled!";
 		}
 
-		private static IArchitecture GetArchitecture(string platform)
+		private static BaseArchitecture GetArchitecture(string platform)
 		{
 			switch (platform.ToLower())
 			{

@@ -27,7 +27,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 		private BasicBlocks basicBlocks;
 		private InstructionSet instructionSet;
 		private StackLayout stackLayout;
-		private IArchitecture architecture;
+		private BaseArchitecture architecture;
 
 		private int virtualRegisterCount;
 		private int physicalRegisterCount;
@@ -40,6 +40,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		private Register stackFrameRegister;
 		private Register stackPointerRegister;
+		private Register programCounter;
 
 		private List<LiveInterval> spilledIntervals;
 
@@ -97,7 +98,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			}
 		}
 
-		public GreedyRegisterAllocator(BasicBlocks basicBlocks, VirtualRegisters compilerVirtualRegisters, InstructionSet instructionSet, StackLayout stackLayout, IArchitecture architecture, CompilerTrace trace)
+		public GreedyRegisterAllocator(BasicBlocks basicBlocks, VirtualRegisters compilerVirtualRegisters, InstructionSet instructionSet, StackLayout stackLayout, BaseArchitecture architecture, CompilerTrace trace)
 		{
 			this.trace = trace;
 
@@ -116,6 +117,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 			stackFrameRegister = architecture.StackFrameRegister;
 			stackPointerRegister = architecture.StackPointerRegister;
+			programCounter = architecture.ProgramCounter;
 
 			// Setup extended physical registers
 			foreach (var physicalRegister in architecture.RegisterSet)
@@ -123,7 +125,9 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 				Debug.Assert(physicalRegister.Index == virtualRegisters.Count);
 				Debug.Assert(physicalRegister.Index == liveIntervalUnions.Count);
 
-				bool reserved = (physicalRegister == stackFrameRegister || physicalRegister == stackPointerRegister);
+				bool reserved = (physicalRegister == stackFrameRegister
+					|| physicalRegister == stackPointerRegister
+					|| (programCounter != null && physicalRegister == programCounter));
 
 				this.virtualRegisters.Add(new VirtualRegister(physicalRegister, reserved));
 				this.liveIntervalUnions.Add(new LiveIntervalUnion(physicalRegister, reserved));
@@ -375,6 +379,9 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 				liveGen.Set(stackFrameRegister.Index, true);
 				liveGen.Set(stackPointerRegister.Index, true);
+
+				if (programCounter != null)
+					liveGen.Set(programCounter.Index, true);
 
 				for (Context context = new Context(instructionSet, block.BasicBlock); !context.IsBlockEndInstruction; context.GotoNext())
 				{

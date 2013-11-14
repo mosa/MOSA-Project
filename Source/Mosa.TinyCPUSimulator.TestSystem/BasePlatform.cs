@@ -22,7 +22,7 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 			Name = platform;
 		}
 
-		public abstract IArchitecture CreateArchitecture();
+		public abstract BaseArchitecture CreateArchitecture();
 
 		public abstract ISimAdapter CreateSimAdaptor();
 

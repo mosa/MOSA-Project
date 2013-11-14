@@ -19,7 +19,7 @@ namespace Mosa.TinyCPUSimulator
 		public BaseSetup()
 		{
 			CPU = new T();
-			CPU.CurrentInstructionPointer = Address;
+			CPU.CurrentProgramCounter = Address;
 		}
 
 		public void Add(SimInstruction instruction)

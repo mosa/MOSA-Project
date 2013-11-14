@@ -50,7 +50,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// The Architecture of the compilation target.
 		/// </summary>
-		private readonly IArchitecture architecture;
+		private readonly BaseArchitecture architecture;
 
 		/// <summary>
 		/// Holds the linker used to resolve external symbols
@@ -175,7 +175,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets the Architecture to compile for.
 		/// </summary>
-		public IArchitecture Architecture { get { return architecture; } }
+		public BaseArchitecture Architecture { get { return architecture; } }
 
 		/// <summary>
 		/// Gets the assembly, which contains the method.

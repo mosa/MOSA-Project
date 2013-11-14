@@ -14,9 +14,12 @@
 	<target name="build">
 	    <csc target="library" output="${outputDirectory}/Mosa.Platform.ARMv6.dll" debug="${debug}" unsafe="true" nostdlib="false">
 		<sources>
+                    <include name="Architecture.cs"/>
+                    <include name="ArchitectureFeatureFlags.cs"/>
                     <include name="ARMv6Instruction.cs"/>
                     <include name="ARMv6.cs"/>
                     <include name="BaseTransformationStage.cs"/>
+                    <include name="GeneralPurposeRegister.cs"/>
                     <include name="IARMv6Visitor.cs"/>
                     <include name="Instructions/Adc.cs"/>
                     <include name="Instructions/Add.cs"/>
@@ -79,6 +82,7 @@
                     <include name="Instructions/Wfi.cs"/>
                     <include name="Instructions/Yield.cs"/>
                     <include name="MachineCodeEmitter.cs"/>
+                    <include name="Stages/IRTransformationStage.cs"/>
 		</sources>
 		<references>
                     <include name="System.dll"/>

@@ -28,7 +28,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// The compiler target architecture.
 		/// </summary>
-		private IArchitecture architecture;
+		private BaseArchitecture architecture;
 
 		/// <summary>
 		/// The pipeline of the compiler.
@@ -93,7 +93,7 @@ namespace Mosa.Compiler.Framework
 		/// <param name="compilationScheduler">The compilation scheduler.</param>
 		/// <param name="internalTrace">The internal trace.</param>
 		/// <param name="compilerOptions">The compiler options.</param>
-		protected BaseCompiler(IArchitecture architecture, ITypeSystem typeSystem, ITypeLayout typeLayout, ICompilationScheduler compilationScheduler, IInternalTrace internalTrace, ILinker linker, CompilerOptions compilerOptions)
+		protected BaseCompiler(BaseArchitecture architecture, ITypeSystem typeSystem, ITypeLayout typeLayout, ICompilationScheduler compilationScheduler, IInternalTrace internalTrace, ILinker linker, CompilerOptions compilerOptions)
 		{
 			if (architecture == null)
 				throw new ArgumentNullException(@"architecture");
@@ -118,7 +118,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Returns the architecture used by the compiler.
 		/// </summary>
-		public IArchitecture Architecture { get { return architecture; } }
+		public BaseArchitecture Architecture { get { return architecture; } }
 
 		/// <summary>
 		/// Gets the pipeline.

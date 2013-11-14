@@ -31,7 +31,7 @@ namespace Mosa.Test.System
 		/// <param name="typeLayout">The type layout.</param>
 		/// <param name="internalTrace">The internal trace.</param>
 		/// <param name="compilerOptions">The compiler options.</param>
-		private TestCaseCompiler(IArchitecture architecture, ITypeSystem typeSystem, ITypeLayout typeLayout, IInternalTrace internalTrace, ILinker linker, CompilerOptions compilerOptions) :
+		private TestCaseCompiler(BaseArchitecture architecture, ITypeSystem typeSystem, ITypeLayout typeLayout, IInternalTrace internalTrace, ILinker linker, CompilerOptions compilerOptions) :
 			base(architecture, typeSystem, typeLayout, new CompilationScheduler(typeSystem, true), internalTrace, linker, compilerOptions)
 		{
 			// Build the assembly compiler pipeline
@@ -53,7 +53,7 @@ namespace Mosa.Test.System
 		/// <returns></returns>
 		public static TestLinker Compile(ITypeSystem typeSystem)
 		{
-			IArchitecture architecture = x86.Architecture.CreateArchitecture(x86.ArchitectureFeatureFlags.AutoDetect);
+			BaseArchitecture architecture = x86.Architecture.CreateArchitecture(x86.ArchitectureFeatureFlags.AutoDetect);
 
 			// FIXME: get from architecture
 			TypeLayout typeLayout = new TypeLayout(typeSystem, 4, 4);

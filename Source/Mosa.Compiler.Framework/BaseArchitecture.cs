@@ -17,10 +17,12 @@ namespace Mosa.Compiler.Framework
 	/// <summary>
 	/// Implements a base framework for architectures.
 	/// </summary>
-	public abstract class BaseArchitecture : IArchitecture
+	public abstract class BaseArchitecture
 	{
+		#region Properties
+
 		/// <summary>
-		/// Holds the calling conversion
+		/// Retrieves an object, that is able to translate the CIL calling convention into appropriate native code.
 		/// </summary>
 		public ICallingConvention CallingConvention { get; protected set; }
 
@@ -41,14 +43,9 @@ namespace Mosa.Compiler.Framework
 		public abstract ushort ElfMachineType { get; }
 
 		/// <summary>
-		/// Holds the native type of the architecture.
+		/// Gets the signature type of the native integer.
 		/// </summary>
-		private SigType nativeType;
-
-		/// <summary>
-		/// Gets the width of a native integer in bits.
-		/// </summary>
-		public abstract int NativeIntegerSize { get; }
+		public abstract SigType NativeType { get; }
 
 		/// <summary>
 		/// Gets the register set of the architecture.
@@ -66,6 +63,11 @@ namespace Mosa.Compiler.Framework
 		public abstract Register StackPointerRegister { get; }
 
 		/// <summary>
+		/// Retrieves the program counter register of the architecture.
+		/// </summary>
+		public abstract Register ProgramCounter { get; }
+
+		/// <summary>
 		/// Gets the name of the platform.
 		/// </summary>
 		/// <value>
@@ -74,32 +76,21 @@ namespace Mosa.Compiler.Framework
 		public abstract string PlatformName { get; }
 
 		/// <summary>
-		/// Gets the signature type of the native integer.
+		/// Gets the jump instruction for the platform.
 		/// </summary>
-		public SigType NativeType
-		{
-			get
-			{
-				if (nativeType == null)
-				{
-					switch (NativeIntegerSize)
-					{
-						case 32:
-							nativeType = BuiltInSigType.Int32;
-							break;
+		/// <value>
+		/// The jump instruction.
+		/// </value>
+		public abstract BaseInstruction JumpInstruction { get; }
 
-						case 64:
-							nativeType = BuiltInSigType.Int64;
-							break;
+		/// <summary>
+		/// Gets the width of a native integer in bits.
+		/// </summary>
+		public abstract int NativeIntegerSize { get; }
 
-						default:
-							throw new NotSupportedException(@"The native bit width is not supported.");
-					}
-				}
+		#endregion Properties
 
-				return nativeType;
-			}
-		}
+		#region Methods
 
 		/// <summary>
 		/// Extends the compiler pipeline with architecture specific assembly compiler stages.
@@ -144,12 +135,6 @@ namespace Mosa.Compiler.Framework
 		/// <param name="Source">The source.</param>
 		public abstract void InsertExchange(Context context, Operand Destination, Operand Source);
 
-		/// <summary>
-		/// Gets the jump instruction for the platform.
-		/// </summary>
-		/// <value>
-		/// The jump instruction.
-		/// </value>
-		public abstract BaseInstruction JumpInstruction { get; }
+		#endregion Methods
 	}
 }

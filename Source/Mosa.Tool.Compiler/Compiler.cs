@@ -513,7 +513,7 @@ namespace Mosa.Tool.Compiler
 		/// </summary>
 		/// <param name="architecture">The architecture.</param>
 		/// <returns></returns>
-		private static IArchitecture SelectArchitecture(string architecture)
+		private static BaseArchitecture SelectArchitecture(string architecture)
 		{
 			switch (architecture.ToLower())
 			{

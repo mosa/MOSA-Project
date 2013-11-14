@@ -19,7 +19,7 @@ namespace Mosa.Compiler.Framework.Linker
 	/// </summary>
 	public static class LinkerFactory
 	{
-		public static ILinker Create(LinkerType linkerType, CompilerOptions compilerOptions, IArchitecture architecture)
+		public static ILinker Create(LinkerType linkerType, CompilerOptions compilerOptions, BaseArchitecture architecture)
 		{
 			ILinker linker = Create(linkerType);
 

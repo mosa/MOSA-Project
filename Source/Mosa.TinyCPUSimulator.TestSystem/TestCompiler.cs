@@ -25,7 +25,7 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 		protected IInternalTrace internalTrace = new BasicInternalTrace();
 		protected ISimAdapter adapter;
 		protected ISimAdapter simAdapter;
-		protected IArchitecture architecture;
+		protected BaseArchitecture architecture;
 		protected ILinker linker;
 		protected ITypeSystem typeSystem;
 		protected ITypeLayout typeLayout;

@@ -63,14 +63,14 @@ namespace Mosa.TinyCPUSimulator
 			{
 				lock (locker)
 				{
-					var lastFlowType = CPU.LastInstruction.Opcode.FlowType;
-					var currentFlowType = CPU.CurrentInstruction.Opcode.FlowType;
+					var lastFlowType = CPU.LastInstruction != null ? CPU.LastInstruction.Opcode.FlowType : OpcodeFlowType.Normal;
+					var currentFlowType = CPU.CurrentInstruction != null ? CPU.CurrentInstruction.Opcode.FlowType : OpcodeFlowType.Normal;
 
 					return Stop
 						|| CPU.Tick == BreakAtTick
 						|| (BreakOnException && CPU.LastException != null)
-						|| (StepOverBreakPoint == CPU.CurrentInstructionPointer)
-						
+						|| (StepOverBreakPoint == CPU.CurrentProgramCounter)
+
 						|| (BreakAfterJump && lastFlowType == OpcodeFlowType.Jump)
 						|| (BreakAfterCall && lastFlowType == OpcodeFlowType.Call)
 						|| (BreakAfterReturn && lastFlowType == OpcodeFlowType.Return)
@@ -81,7 +81,7 @@ namespace Mosa.TinyCPUSimulator
 						|| (BreakOnReturn && currentFlowType == OpcodeFlowType.Return)
 						|| (BreakOnBranch && currentFlowType == OpcodeFlowType.Branch)
 
-						|| breakPoints.Contains(CPU.CurrentInstructionPointer);
+						|| breakPoints.Contains(CPU.CurrentProgramCounter);
 				}
 			}
 		}

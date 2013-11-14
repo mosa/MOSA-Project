@@ -38,7 +38,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Initializes a new instance of the <see cref="VirtualRegisters"/> class.
 		/// </summary>
-		public VirtualRegisters(IArchitecture architecture)
+		public VirtualRegisters(BaseArchitecture architecture)
 		{
 		}
 

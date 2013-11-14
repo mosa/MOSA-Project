@@ -14,6 +14,13 @@
 	<target name="build">
 	    <csc target="exe" main="Mosa.Tool.TinySimulator.Program" output="${outputDirectory}/Mosa.Tool.TinySimulator.exe" debug="${debug}" unsafe="true" nostdlib="false">
 		<sources>
+                    <include name="BreakPointView.cs"/>
+                    <include name="BreakPointView.designer.cs"/>
+                    <include name="ScriptView.cs"/>
+                    <include name="ScriptView.designer.cs"/>
+                    <include name="Properties/Resources.Designer.cs"/>
+                    <include name="OutputView.cs"/>
+                    <include name="OutputView.designer.cs"/>
                     <include name="Watch.cs"/>
                     <include name="WatchView.cs"/>
                     <include name="WatchView.designer.cs"/>
@@ -47,7 +54,6 @@
                     <include name="MemoryView.Designer.cs"/>
                     <include name="Program.cs"/>
                     <include name="Properties/AssemblyInfo.cs"/>
-                    <include name="Properties/Resources.Designer.cs"/>
 		</sources>
 		<references>
                     <include name="System.dll"/>

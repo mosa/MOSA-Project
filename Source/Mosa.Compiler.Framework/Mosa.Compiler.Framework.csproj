@@ -330,9 +330,6 @@
     <Compile Include="FlowControl.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="IArchitecture.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="ICompilerStage.cs">
       <SubType>Code</SubType>
     </Compile>

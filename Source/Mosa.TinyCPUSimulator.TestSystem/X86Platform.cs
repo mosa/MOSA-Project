@@ -26,7 +26,7 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 		{
 		}
 
-		public override IArchitecture CreateArchitecture()
+		public override BaseArchitecture CreateArchitecture()
 		{
 			return Architecture.CreateArchitecture(ArchitectureFeatureFlags.AutoDetect);
 		}
