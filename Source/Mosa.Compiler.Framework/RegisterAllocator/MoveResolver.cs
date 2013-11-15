@@ -91,7 +91,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 					if (other != -1)
 						continue;
 
-					architecture.InsertMove(context, move.Destination, move.Source);
+					architecture.InsertMoveInstruction(context, move.Destination, move.Source);
 					context.Marked = true;
 
 					moves.RemoveAt(i);
@@ -121,7 +121,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 					if (other == -1)
 						continue;
 
-					architecture.InsertExchange(context, moves[other].Source, move.Source);
+					architecture.InsertExchangeInstruction(context, moves[other].Source, move.Source);
 					context.Marked = true;
 					moves[other].Source = move.Source;
 					moves.RemoveAt(i);
@@ -146,7 +146,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 				if (!(move.Source.IsCPURegister || move.Destination.IsCPURegister))
 					continue;
 
-				architecture.InsertMove(context, move.Destination, move.Source);
+				architecture.InsertMoveInstruction(context, move.Destination, move.Source);
 			}
 		}
 

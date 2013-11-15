@@ -15,6 +15,7 @@ using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Platform.x86.Stages;
 using System;
+using System.Diagnostics;
 
 namespace Mosa.Platform.x86
 {
@@ -264,7 +265,7 @@ namespace Mosa.Platform.x86
 		/// <param name="context">The context.</param>
 		/// <param name="destination">The destination.</param>
 		/// <param name="source">The source.</param>
-		public override void InsertMove(Context context, Operand destination, Operand source)
+		public override void InsertMoveInstruction(Context context, Operand destination, Operand source)
 		{
 			context.AppendInstruction(BaseTransformationStage.GetMove(destination, source), destination, source);
 		}
@@ -275,7 +276,7 @@ namespace Mosa.Platform.x86
 		/// <param name="context">The context.</param>
 		/// <param name="destination">The destination.</param>
 		/// <param name="source">The source.</param>
-		public override void InsertExchange(Context context, Operand destination, Operand source)
+		public override void InsertExchangeInstruction(Context context, Operand destination, Operand source)
 		{
 			if (source.Type.Type == CilElementType.R4)
 			{
@@ -292,11 +293,58 @@ namespace Mosa.Platform.x86
 		}
 
 		/// <summary>
-		/// Gets the jump instruction for the platform.
+		/// Inserts the jump instruction.
 		/// </summary>
-		/// <value>
-		/// The jump instruction.
-		/// </value>
-		public override BaseInstruction JumpInstruction { get { return X86.Jmp; } }
+		/// <param name="context">The context.</param>
+		/// <param name="destination">The destination.</param>
+		/// <param name="source">The source.</param>
+		public override void InsertJumpInstruction(Context context, Operand destination)
+		{
+			context.AppendInstruction(X86.Jmp, destination);
+		}
+
+		/// <summary>
+		/// Inserts the jump instruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <param name="Destination">The destination.</param>
+		public override void InsertJumpInstruction(Context context, BasicBlock destination)
+		{
+			context.AppendInstruction(X86.Jmp, destination);
+		}
+
+		/// <summary>
+		/// Inserts the call instruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <param name="source">The source.</param>
+		public override void InsertCallInstruction(Context context, Operand source)
+		{
+			context.AppendInstruction(X86.Call, null, source);
+		}
+
+		/// <summary>
+		/// Inserts the add instruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <param name="Destination">The destination.</param>
+		/// <param name="Source">The source.</param>
+		public override void InsertAddInstruction(Context context, Operand destination, Operand source1, Operand source2)
+		{
+			Debug.Assert(source1 == destination);
+			context.AppendInstruction(X86.Add, destination, source1, source2);
+		}
+
+		/// <summary>
+		/// Inserts the sub instruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <param name="Destination">The destination.</param>
+		/// <param name="Source">The source.</param>
+		public override void InsertSubInstruction(Context context, Operand destination, Operand source1, Operand source2)
+		{
+			Debug.Assert(source1 == destination); 
+			context.AppendInstruction(X86.Sub, destination, source1, source2);
+		}
 	}
 }

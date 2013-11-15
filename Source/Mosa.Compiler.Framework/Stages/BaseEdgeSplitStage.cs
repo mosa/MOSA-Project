@@ -19,7 +19,6 @@ namespace Mosa.Compiler.Framework.Stages
 	/// </summary>
 	public class BaseEdgeSplitStage : BaseMethodCompilerStage
 	{
-		protected BaseInstruction jumpInstruction;
 
 		public virtual void Run()
 		{
@@ -52,7 +51,9 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			// Create new block z
 			Context ctx = CreateNewBlockWithContext();
-			ctx.AppendInstruction(jumpInstruction, to);
+
+			architecture.InsertJumpInstruction(ctx, to);
+			//ctx.AppendInstruction(jumpInstruction, to);
 			ctx.Label = -1;
 
 			var js = ctx.BasicBlock;

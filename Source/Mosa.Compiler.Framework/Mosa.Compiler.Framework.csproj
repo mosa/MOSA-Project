@@ -77,11 +77,13 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BaseCallingConventionExtended.cs" />
     <Compile Include="BasicBlocks.cs" />
     <Compile Include="ContextHelper.cs" />
     <Compile Include="IR\BlockStart.cs" />
     <Compile Include="IR\BlockEnd.cs" />
     <Compile Include="IR\InternalReturn.cs" />
+    <Compile Include="Platform\BaseCallingConvention32Bit.cs" />
     <Compile Include="RegisterAllocator\MoveResolver.cs" />
     <Compile Include="RegisterAllocator\Interval.cs" />
     <Compile Include="RegisterAllocator\SlotIndex.cs" />

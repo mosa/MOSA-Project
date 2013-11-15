@@ -14,7 +14,7 @@ using Mosa.Compiler.Metadata.Signatures;
 namespace Mosa.Compiler.Framework
 {
 	/// <summary>
-	/// Implements a base framework for architectures.
+	///
 	/// </summary>
 	public abstract class BaseArchitecture
 	{
@@ -69,18 +69,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets the name of the platform.
 		/// </summary>
-		/// <value>
-		/// The name of the platform.
-		/// </value>
 		public abstract string PlatformName { get; }
-
-		/// <summary>
-		/// Gets the jump instruction for the platform.
-		/// </summary>
-		/// <value>
-		/// The jump instruction.
-		/// </value>
-		public abstract BaseInstruction JumpInstruction { get; }
 
 		/// <summary>
 		/// Gets the width of a native integer in bits.
@@ -124,7 +113,7 @@ namespace Mosa.Compiler.Framework
 		/// <param name="context">The context.</param>
 		/// <param name="Destination">The destination.</param>
 		/// <param name="Source">The source.</param>
-		public abstract void InsertMove(Context context, Operand Destination, Operand Source);
+		public abstract void InsertMoveInstruction(Context context, Operand destination, Operand source);
 
 		/// <summary>
 		/// Create platform exchange registers.
@@ -132,7 +121,44 @@ namespace Mosa.Compiler.Framework
 		/// <param name="context">The context.</param>
 		/// <param name="Destination">The destination.</param>
 		/// <param name="Source">The source.</param>
-		public abstract void InsertExchange(Context context, Operand Destination, Operand Source);
+		public abstract void InsertExchangeInstruction(Context context, Operand destination, Operand source);
+
+		/// <summary>
+		/// Create platform exchange registers.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <param name="Destination">The destination.</param>
+		public abstract void InsertJumpInstruction(Context context, Operand destination);
+
+		/// <summary>
+		/// Inserts the jump instruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <param name="Destination">The destination.</param>
+		public abstract void InsertJumpInstruction(Context context, BasicBlock destination);
+
+		/// <summary>
+		/// Inserts the call instruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <param name="destination">The destination.</param>
+		public abstract void InsertCallInstruction(Context context, Operand destination);
+
+		/// <summary>
+		/// Inserts the add instruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <param name="Destination">The destination.</param>
+		/// <param name="Source">The source.</param>
+		public abstract void InsertAddInstruction(Context context, Operand destination, Operand source1, Operand source2);
+
+		/// <summary>
+		/// Inserts the sub instruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <param name="Destination">The destination.</param>
+		/// <param name="Source">The source.</param>
+		public abstract void InsertSubInstruction(Context context, Operand destination, Operand source1, Operand source2);
 
 		#endregion Methods
 	}

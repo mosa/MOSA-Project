@@ -215,33 +215,78 @@ namespace Mosa.Platform.x64
 		}
 
 		/// <summary>
-		/// Create platform move.
+		/// Inserts the move instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		/// <param name="destination">The destination.</param>
-		/// <param name="Source">The source.</param>
-		public override void InsertMove(Context context, Operand destination, Operand source)
+		/// <param name="source">The source.</param>
+		public override void InsertMoveInstruction(Context context, Operand destination, Operand source)
 		{
 			// TODO
 		}
 
 		/// <summary>
-		/// Create platform exchange registers.
+		/// Inserts the exchange instruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <param name="destination">The destination.</param>
+		/// <param name="source">The source.</param>
+		public override void InsertExchangeInstruction(Context context, Operand destination, Operand source)
+		{
+			// TODO
+		}
+
+		/// <summary>
+		/// Inserts the jump instruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <param name="destination">The destination.</param>
+		/// <param name="source">The source.</param>
+		public override void InsertJumpInstruction(Context context, Operand destination)
+		{
+			// TODO
+		}
+
+		/// <summary>
+		/// Inserts the jump instruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <param name="Destination">The destination.</param>
+		public override void InsertJumpInstruction(Context context, BasicBlock Destination)
+		{
+			// TODO
+		}
+
+		/// <summary>
+		/// Inserts the call instruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <param name="source">The source.</param>
+		public override void InsertCallInstruction(Context context, Operand source)
+		{
+			// TODO
+		}
+
+		/// <summary>
+		/// Inserts the add instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		/// <param name="Destination">The destination.</param>
 		/// <param name="Source">The source.</param>
-		public override void InsertExchange(Context context, Operand destination, Operand source)
+		public override void InsertAddInstruction(Context context, Operand destination, Operand source1, Operand source2)
 		{
 			// TODO
 		}
 
 		/// <summary>
-		/// Gets the jump instruction for the platform.
+		/// Inserts the sub instruction.
 		/// </summary>
-		/// <value>
-		/// The jump instruction.
-		/// </value>
-		public override BaseInstruction JumpInstruction { get { /* TODO */ return null; } }
+		/// <param name="context">The context.</param>
+		/// <param name="Destination">The destination.</param>
+		/// <param name="Source">The source.</param>
+		public override void InsertSubInstruction(Context context, Operand destination, Operand source1, Operand source2)
+		{
+			// TODO
+		}
 	}
 }

@@ -1169,7 +1169,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 					{
 						Context context = new Context(instructionSet, def.Index);
 
-						architecture.InsertMove(context, register.SpillSlotOperand, liveInterval.AssignedPhysicalOperand);
+						architecture.InsertMoveInstruction(context, register.SpillSlotOperand, liveInterval.AssignedPhysicalOperand);
 
 						context.Marked = true;
 					}
@@ -1370,7 +1370,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 								context.GotoPrevious();
 							}
 
-							architecture.InsertMove(context,
+							architecture.InsertMoveInstruction(context,
 								nextInterval.AssignedOperand,
 								currentInterval.AssignedOperand
 							);

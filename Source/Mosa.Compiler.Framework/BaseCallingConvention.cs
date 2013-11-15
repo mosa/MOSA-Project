@@ -1,5 +1,5 @@
 /*
- * (c) 2008 MOSA - The Managed Operating System Alliance
+ * (c) 2013 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
  *
@@ -23,30 +23,6 @@ namespace Mosa.Compiler.Framework
 	/// </summary>
 	public abstract class BaseCallingConvention
 	{
-		#region Data members
-
-		/// <summary>
-		/// Holds the architecture of the calling convention.
-		/// </summary>
-		protected BaseArchitecture architecture;
-
-		#endregion Data members
-
-		#region Construction
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="BaseCallingConvention"/>.
-		/// </summary>
-		/// <param name="architecture">The architecture of the calling convention.</param>
-		public BaseCallingConvention(BaseArchitecture architecture)
-		{
-			if (architecture == null)
-				throw new ArgumentNullException(@"architecture");
-
-			this.architecture = architecture;
-		}
-
-		#endregion Construction
 
 		#region Methods
 
@@ -74,7 +50,7 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		/// <param name="context">The context.</param>
 		/// <param name="operand">The operand, that's holding the return value.</param>
-		public abstract void MoveReturnValue(Context context, Operand operand);
+		public abstract void SetReturnValue(Context context, Operand operand);
 
 		/// <summary>
 		/// Retrieves the offset of the first local variable from the stack frame start.
@@ -88,25 +64,6 @@ namespace Mosa.Compiler.Framework
 
 		#endregion
 
-		#region Helper Methods
-
-		protected List<Operand> BuildOperands(Context context)
-		{
-			List<Operand> operands = new List<Operand>(context.OperandCount - 1);
-			int index = 0;
-
-			foreach (Operand operand in context.Operands)
-			{
-				if (index++ > 0)
-				{
-					operands.Add(operand);
-				}
-			}
-
-			return operands;
-		}
-
-		#endregion
 	}
 
 }

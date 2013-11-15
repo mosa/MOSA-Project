@@ -20,7 +20,7 @@ namespace Mosa.Platform.AVR32
 	/// <summary>
 	/// Implements the default calling convention for AVR32.
 	/// </summary>
-	internal sealed class DefaultCallingConvention : BaseCallingConvention
+	internal sealed class DefaultCallingConvention : BaseCallingConventionExtended
 	{
 		#region Construction
 
@@ -277,7 +277,7 @@ namespace Mosa.Platform.AVR32
 		/// </summary>
 		/// <param name="context">The context.</param>
 		/// <param name="operand">The operand, that's holding the return value.</param>
-		public override void MoveReturnValue(Context context, Operand operand)
+		public override void SetReturnValue(Context context, Operand operand)
 		{
 			int size, alignment;
 			architecture.GetTypeRequirements(operand.Type, out size, out alignment);

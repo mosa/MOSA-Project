@@ -26,8 +26,6 @@ namespace Mosa.Compiler.Framework.Stages
 		void IMethodCompilerStage.Setup(BaseMethodCompiler methodCompiler)
 		{
 			base.Setup(methodCompiler);
-
-			jumpInstruction = methodCompiler.Architecture.JumpInstruction;
 		}
 
 	}

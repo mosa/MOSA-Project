@@ -494,7 +494,7 @@ namespace Mosa.Platform.AVR32.Stages
 
 			if (context.Operand1 != null)
 			{
-				callingConvention.MoveReturnValue(context, context.Operand1);
+				callingConvention.SetReturnValue(context, context.Operand1);
 				context.AppendInstruction(AVR32.Rjmp);
 				context.SetBranch(Int32.MaxValue);
 			}

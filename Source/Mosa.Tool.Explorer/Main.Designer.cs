@@ -137,8 +137,7 @@
 			// toolStripStatusLabel1
 			// 
 			this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-			this.toolStripStatusLabel1.Size = new System.Drawing.Size(59, 17);
-			this.toolStripStatusLabel1.Text = "Loading...";
+			this.toolStripStatusLabel1.Size = new System.Drawing.Size(0, 17);
 			// 
 			// menuStrip1
 			// 

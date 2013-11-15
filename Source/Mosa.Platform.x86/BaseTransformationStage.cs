@@ -27,15 +27,21 @@ namespace Mosa.Platform.x86
 
 		public static X86Instruction GetMove(Operand Destination, Operand Source)
 		{
-			//Debug.Assert(Destination.Type.Type == Source.Type.Type);
-
-			if (Source.Type.Type == CilElementType.R4)
+			if (Source.Type.Type == CilElementType.R4 && Destination.Type.Type == CilElementType.R4)
 			{
 				return X86.Movss;
 			}
-			else if (Source.Type.Type == CilElementType.R8)
+			else if (Source.Type.Type == CilElementType.R8 && Destination.Type.Type == CilElementType.R8)
 			{
 				return X86.Movsd;
+			}
+			else if (Source.Type.Type == CilElementType.R4 && Destination.Type.Type == CilElementType.R8)
+			{
+				return X86.Cvtss2sd;
+			}
+			else if (Source.Type.Type == CilElementType.R8 && Destination.Type.Type == CilElementType.R4)
+			{
+				return X86.Cvtsd2ss;
 			}
 			else
 			{
