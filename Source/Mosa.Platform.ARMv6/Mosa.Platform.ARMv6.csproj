@@ -90,6 +90,7 @@
     <Compile Include="ARMv6Instruction.cs" />
     <Compile Include="ARMv6.cs" />
     <Compile Include="BaseTransformationStage.cs" />
+    <Compile Include="DefaultCallingConvention.cs" />
     <Compile Include="GeneralPurposeRegister.cs" />
     <Compile Include="IARMv6Visitor.cs" />
     <Compile Include="Instructions\Adc.cs" />

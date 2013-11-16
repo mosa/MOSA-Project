@@ -81,7 +81,7 @@ namespace Mosa.Compiler.Framework.CIL
 		{
 			string s = base.ToString(context);
 
-			RuntimeType type = context.Other as RuntimeType;
+			RuntimeType type = context.RuntimeType;
 
 			if (type != null)
 				s = s + " {" + type.ToString() + "}";

@@ -14,11 +14,13 @@
 	<target name="build">
 	    <csc target="library" output="${outputDirectory}/Mosa.Compiler.Framework.dll" debug="${debug}" unsafe="true" nostdlib="false">
 		<sources>
+                    <include name="BaseCallingConventionExtended.cs"/>
                     <include name="BasicBlocks.cs"/>
                     <include name="ContextHelper.cs"/>
                     <include name="IR/BlockStart.cs"/>
                     <include name="IR/BlockEnd.cs"/>
                     <include name="IR/InternalReturn.cs"/>
+                    <include name="Platform/BaseCallingConvention32Bit.cs"/>
                     <include name="RegisterAllocator/MoveResolver.cs"/>
                     <include name="RegisterAllocator/Interval.cs"/>
                     <include name="RegisterAllocator/SlotIndex.cs"/>
@@ -28,6 +30,7 @@
                     <include name="RegisterAllocator/VirtualRegister.cs"/>
                     <include name="RegisterAllocator/GreedyRegisterAllocator.cs"/>
                     <include name="Linker/LinkerFactory.cs"/>
+                    <include name="Stages/StopStage.cs"/>
                     <include name="Stages/BaseEdgeSplitStage.cs"/>
                     <include name="Stages/EmptyBlockRemovalStage.cs"/>
                     <include name="Stages/JumpPeepholeOptimizationStage.cs"/>
@@ -236,7 +239,6 @@
                     <include name="InstructionData.cs"/>
                     <include name="CIL/BaseCILInstruction.cs"/>
                     <include name="Stages/ReverseBlockOrderStage.cs"/>
-                    <include name="RuntimeMethodData.cs"/>
                     <include name="Stages/SimpleTraceBlockOrderStage.cs"/>
                     <include name="Linker/LinkerGeneratedMethod.cs"/>
                     <include name="Linker/LinkerGeneratedType.cs"/>

@@ -10,6 +10,8 @@
 
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework;
+using Mosa.Compiler.Framework.Stages;
+using Mosa.Compiler.Framework.RegisterAllocator;
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Signatures;
 using System;
@@ -107,6 +109,7 @@ namespace Mosa.Platform.ARMv6
 		private Architecture(ArchitectureFeatureFlags architectureFeatures)
 		{
 			this.architectureFeatures = architectureFeatures;
+			this.CallingConvention = new DefaultCallingConvention(this);
 		}
 
 		/// <summary>
@@ -193,6 +196,11 @@ namespace Mosa.Platform.ARMv6
 			//methodCompilerPipeline.InsertAfterLast<CodeGenerationStage>(
 			//    new ExceptionLayoutStage()
 			//);
+
+			methodCompilerPipeline.InsertBefore<GreedyRegisterAllocatorStage>(
+				new StopStage()
+			);
+
 		}
 
 		/// <summary>
@@ -233,7 +241,7 @@ namespace Mosa.Platform.ARMv6
 		/// <param name="Source">The source.</param>
 		public override void InsertMoveInstruction(Context context, Operand destination, Operand source)
 		{
-			// TODO
+			context.AppendInstruction(BaseTransformationStage.GetMove(destination, source), destination, source);
 		}
 
 		/// <summary>
@@ -255,7 +263,7 @@ namespace Mosa.Platform.ARMv6
 		/// <param name="source">The source.</param>
 		public override void InsertJumpInstruction(Context context, Operand destination)
 		{
-			// TODO
+			//context.AppendInstruction(ARMv6., destination);
 		}
 
 		/// <summary>
@@ -275,7 +283,7 @@ namespace Mosa.Platform.ARMv6
 		/// <param name="destination">The destination.</param>
 		public override void InsertCallInstruction(Context context, Operand destination)
 		{
-			// TODO
+			//context.AppendInstruction(ARMv6., destination);
 		}
 
 		/// <summary>
@@ -286,7 +294,7 @@ namespace Mosa.Platform.ARMv6
 		/// <param name="Source">The source.</param>
 		public override void InsertAddInstruction(Context context, Operand destination, Operand source1, Operand source2)
 		{
-			// TODO
+			context.AppendInstruction(ARMv6.Add, destination);
 		}
 
 		/// <summary>
@@ -297,7 +305,7 @@ namespace Mosa.Platform.ARMv6
 		/// <param name="Source">The source.</param>
 		public override void InsertSubInstruction(Context context, Operand destination, Operand source1, Operand source2)
 		{
-			// TODO
+			context.AppendInstruction(ARMv6.Sub, destination);
 		}
 	}
 }

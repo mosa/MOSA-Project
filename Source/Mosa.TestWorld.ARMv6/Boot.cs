@@ -5,6 +5,8 @@
  *
  */
 
+using Mosa.Kernel.ARMv6;
+
 namespace Mosa.TestWorld.ARMv6
 {
 	/// <summary>
@@ -17,6 +19,8 @@ namespace Mosa.TestWorld.ARMv6
 		/// </summary>
 		public static void Main()
 		{
+			Mosa.Kernel.ARMv6.Kernel.Setup();
+			Mosa.Platform.ARMv6.Intrinsic.Native.Nop();	// force load of the assembly
 		}
 	}
 }

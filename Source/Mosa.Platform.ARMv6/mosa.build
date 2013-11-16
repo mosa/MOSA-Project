@@ -19,6 +19,7 @@
                     <include name="ARMv6Instruction.cs"/>
                     <include name="ARMv6.cs"/>
                     <include name="BaseTransformationStage.cs"/>
+                    <include name="DefaultCallingConvention.cs"/>
                     <include name="GeneralPurposeRegister.cs"/>
                     <include name="IARMv6Visitor.cs"/>
                     <include name="Instructions/Adc.cs"/>

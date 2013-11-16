@@ -63,6 +63,7 @@ namespace Mosa.Compiler.Framework
 		public Operand Result2;
 
 		/// <summary>
+		/// <summary>
 		/// The condition code
 		/// </summary>
 		public ConditionCode ConditionCode;
@@ -81,6 +82,10 @@ namespace Mosa.Compiler.Framework
 		/// Holds a packed value (to save space)
 		/// </summary>
 		private uint packed;
+
+		/// The additional operands
+		/// </summary>
+		private Operand[] additionalOperands; 
 
 		#endregion Data members
 
@@ -135,21 +140,13 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Gets or sets the invoke target method.
+		/// Gets or sets the runtime method.
 		/// </summary>
-		/// <value>The invoke target method.</value>
+		/// <value>The runtime method.</value>
 		public RuntimeMethod InvokeMethod
 		{
-			get
-			{
-				if (!(Other is RuntimeMethodData)) return null;
-				return (Other as RuntimeMethodData).RuntimeMethod;
-			}
-			set
-			{
-				if (!(Other is RuntimeMethodData)) Other = new RuntimeMethodData(value);
-				else (Other as RuntimeMethodData).RuntimeMethod = value;
-			}
+			get { return Other as RuntimeMethod; }
+			set { Other = value; }
 		}
 
 		/// <summary>
@@ -209,6 +206,7 @@ namespace Mosa.Compiler.Framework
 			this.Result = null;
 			this.Result2 = null;
 			this.packed = 0;
+			this.additionalOperands = null;
 			this.BranchTargets = null;
 			this.Other = null;
 			this.BranchHint = false;
@@ -222,12 +220,12 @@ namespace Mosa.Compiler.Framework
 		/// <param name="operand">The operand.</param>
 		public void SetAdditionalOperand(int index, Operand operand)
 		{
-			if (Other == null) Other = new RuntimeMethodData();
+			if (additionalOperands == null) additionalOperands = new Operand[253];
 
-			Debug.Assert(index < RuntimeMethodData.MaxOperands, @"No index");
+			Debug.Assert(index < 255, @"No index");
 			Debug.Assert(index >= 3, @"No index");
 
-			(Other as RuntimeMethodData).AdditionalOperands[index - 3] = operand;
+			additionalOperands[index - 3] = operand;
 		}
 
 		/// <summary>
@@ -237,12 +235,12 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		public Operand GetAdditionalOperand(int index)
 		{
-			if (Other == null) return null;
+			if (additionalOperands == null) return null;
 
-			Debug.Assert(index < RuntimeMethodData.MaxOperands, @"No index");
+			Debug.Assert(index < 255, @"No index");
 			Debug.Assert(index >= 3, @"No index");
 
-			return (Other as RuntimeMethodData).AdditionalOperands[index - 3];
+			return additionalOperands[index - 3];
 		}
 
 		/// <summary>

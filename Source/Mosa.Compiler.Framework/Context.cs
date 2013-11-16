@@ -1297,7 +1297,10 @@ namespace Mosa.Compiler.Framework
 
 						if (operand != null)
 						{
-							operand.Uses.Add(index);
+							if (!operand.IsCPURegister)
+							{
+								operand.Uses.Add(index);
+							}
 							if (operand.IsMemoryAddress && operand.OffsetBase != null)
 							{
 								operand.OffsetBase.Uses.Remove(index);
@@ -1309,7 +1312,7 @@ namespace Mosa.Compiler.Framework
 					}
 			}
 		}
-
+	
 		/// <summary>
 		/// Sets the result by index.
 		/// </summary>

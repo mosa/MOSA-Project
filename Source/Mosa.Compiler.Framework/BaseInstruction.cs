@@ -170,11 +170,6 @@ namespace Mosa.Compiler.Framework
 				s.Append(",");
 			}
 
-			//if (context.OperandCount > 4)
-			//{
-			//	s.Append(" [more]");
-			//}
-			//else
 			if (context.OperandCount > 0)
 			{
 				s.Length = s.Length - 1;
@@ -197,12 +192,12 @@ namespace Mosa.Compiler.Framework
 				}
 			}
 
-			//if (context.InvokeMethod != null)
-			//{
-			//	s.Append(" {");
-			//	s.Append(context.InvokeMethod.FullName);
-			//	s.Append("}");
-			//}
+			if (context.InvokeMethod != null)
+			{
+				s.Append(" {");
+				s.Append(context.InvokeMethod.FullName);
+				s.Append("}");
+			}
 
 			if (context.RuntimeField != null)
 			{

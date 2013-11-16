@@ -93,6 +93,7 @@
     <Compile Include="RegisterAllocator\VirtualRegister.cs" />
     <Compile Include="RegisterAllocator\GreedyRegisterAllocator.cs" />
     <Compile Include="Linker\LinkerFactory.cs" />
+    <Compile Include="Stages\StopStage.cs" />
     <Compile Include="Stages\BaseEdgeSplitStage.cs" />
     <Compile Include="Stages\EmptyBlockRemovalStage.cs" />
     <Compile Include="Stages\JumpPeepholeOptimizationStage.cs" />
@@ -301,7 +302,6 @@
     <Compile Include="InstructionData.cs" />
     <Compile Include="CIL\BaseCILInstruction.cs" />
     <Compile Include="Stages\ReverseBlockOrderStage.cs" />
-    <Compile Include="RuntimeMethodData.cs" />
     <Compile Include="Stages\SimpleTraceBlockOrderStage.cs" />
     <Compile Include="Linker\LinkerGeneratedMethod.cs" />
     <Compile Include="Linker\LinkerGeneratedType.cs" />

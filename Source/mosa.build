@@ -87,7 +87,7 @@
         <target name="Mosa.Kernel.ARMv6" depends="init,Korlib,Mosa.Internal.Plug,Mosa.Platform.ARMv6.Intrinsic,"><nant buildfile="Mosa.Kernel.ARMv6/mosa.build"/></target>
         <target name="Mosa.Platform.ARMv6.Intrinsic" depends="init,Korlib,"><nant buildfile="Mosa.Platform.ARMv6.Intrinsic/mosa.build"/></target>
         <target name="Mosa.Platform.ARMv6" depends="init,Mosa.Compiler.Common,Mosa.Compiler.Linker,Mosa.Compiler.Metadata,Mosa.Compiler.Framework,Mosa.Compiler.TypeSystem,"><nant buildfile="Mosa.Platform.ARMv6/mosa.build"/></target>
-        <target name="Mosa.TestWorld.ARMv6" depends="init,Mosa.ClassLib,Mosa.Internal.Plug,Mosa.Kernel.x86,Korlib,Mosa.Platform.x86.Intrinsic,"><nant buildfile="Mosa.TestWorld.ARMv6/mosa.build"/></target>
+        <target name="Mosa.TestWorld.ARMv6" depends="init,Mosa.ClassLib,Mosa.Internal.Plug,Korlib,Mosa.Kernel.ARMv6,Mosa.Platform.ARMv6.Intrinsic,"><nant buildfile="Mosa.TestWorld.ARMv6/mosa.build"/></target>
         <target name="Mosa.Tool.TinySimulator" depends="init,Mosa.Compiler.Common,Mosa.Compiler.Framework,Mosa.Compiler.InternalTrace,Mosa.Compiler.Linker,Mosa.Compiler.Metadata,Mosa.Compiler.TypeSystem,Mosa.Platform.ARMv6,Mosa.Platform.AVR32,Mosa.Platform.x86,Mosa.TinyCPUSimulator.Adaptor,Mosa.TinyCPUSimulator.x86.Adaptor,Mosa.TinyCPUSimulator.x86,Mosa.TinyCPUSimulator,"><nant buildfile="Mosa.Tool.TinySimulator/mosa.build"/></target>
 
         <target name="all" depends ="

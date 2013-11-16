@@ -31,13 +31,13 @@ namespace Mosa.Platform.x86.Intrinsic
 			Operand dest = context.Operand1;
 			Operand value = context.Operand2;
 
-			Operand edx = methodCompiler.CreateVirtualRegister(dest.Type);
-			Operand eax = methodCompiler.CreateVirtualRegister(value.Type);
-			Operand memory = Operand.CreateMemoryAddress(new SigType(context.InvokeMethod.SigParameters[1].Type), edx, 0);
+			Operand v1 = methodCompiler.CreateVirtualRegister(dest.Type);
+			Operand v2 = methodCompiler.CreateVirtualRegister(value.Type);
+			Operand memory = Operand.CreateMemoryAddress(new SigType(context.InvokeMethod.SigParameters[1].Type), v1, 0);
 
-			context.SetInstruction(X86.Mov, edx, dest);
-			context.AppendInstruction(X86.Mov, eax, value);
-			context.AppendInstruction(X86.Mov, memory, eax);
+			context.SetInstruction(X86.Mov, v1, dest);
+			context.AppendInstruction(X86.Mov, v2, value);
+			context.AppendInstruction(X86.Mov, memory, v2);
 		}
 
 		#endregion Methods
