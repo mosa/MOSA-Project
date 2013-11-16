@@ -5,9 +5,9 @@
  *
  * Authors:
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- *  Pascal Delprat (pdelprat) <pascal.delprat@online.fr>
  */
 
+using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework;
 using System;
 
@@ -16,12 +16,8 @@ namespace Mosa.Platform.ARMv6
 	/// <summary>
 	/// An AVR32 machine code emitter.
 	/// </summary>
-	public sealed class MachineCodeEmitter : BaseCodeEmitter, ICodeEmitter, IDisposable
+	public sealed class MachineCodeEmitter : BaseCodeEmitter, ICodeEmitter
 	{
-		public MachineCodeEmitter()
-		{
-		}
-
 		#region Code Generation Members
 
 		protected override void ResolvePatches()
@@ -51,15 +47,42 @@ namespace Mosa.Platform.ARMv6
 			codeStream.WriteByte((byte)(data & 0xFF));
 		}
 
-		/// <summary>
-		/// Calls the specified target.
-		/// </summary>
-		/// <param name="symbolOperand">The symbol operand.</param>
-		public void Call(Operand symbolOperand)
+		#endregion Code Generation Members
+
+		#region Instruction Format Emitters
+
+		public byte GetConditionCode(ConditionCode condition)
 		{
-			// TODO: Check x86 Implementation
+			switch (condition)
+			{
+				case ConditionCode.Equal: return Bits.b0000;
+				case ConditionCode.GreaterOrEqual: return Bits.b1010;
+				case ConditionCode.GreaterThan: return Bits.b1100;
+				case ConditionCode.LessOrEqual: return Bits.b1101;
+				case ConditionCode.LessThan: return Bits.b1011;
+				case ConditionCode.NotEqual: return Bits.b0001;
+
+				case ConditionCode.UnsignedGreaterOrEqual: return Bits.b0010;
+				case ConditionCode.UnsignedGreaterThan: return Bits.b1000;
+				case ConditionCode.UnsignedLessOrEqual: return Bits.b1001;
+				case ConditionCode.UnsignedLessThan: return Bits.b0011;
+
+				case ConditionCode.NotSigned: return Bits.b0000;
+				case ConditionCode.Signed: return Bits.b0000;
+
+				case ConditionCode.Zero: return Bits.b0101;
+
+				case ConditionCode.Overflow: return Bits.b0110;
+				case ConditionCode.NoOverflow: return Bits.b0111;
+
+				case ConditionCode.Always: return Bits.b1110;
+
+				default: throw new NotSupportedException();
+			}
 		}
 
-		#endregion Code Generation Members
+		// TODO: Add additional instruction formats
+
+		#endregion Instruction Format Emitters
 	}
 }

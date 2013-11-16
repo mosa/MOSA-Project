@@ -8,9 +8,9 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using Mosa.Compiler.Common;
 using System;
 using System.Collections.Generic;
-using Mosa.Compiler.Common;
 
 namespace Mosa.Compiler.Framework
 {

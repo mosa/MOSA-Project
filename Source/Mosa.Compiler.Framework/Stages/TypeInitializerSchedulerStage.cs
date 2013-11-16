@@ -53,7 +53,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			basicBlocks = new BasicBlocks();
 			instructionSet = new InstructionSet(25);
-			context = ContextHelper.CreateNewBlockWithContext(instructionSet, basicBlocks);
+			context = instructionSet.CreateNewBlock(basicBlocks);
 			basicBlocks.AddHeaderBlock(context.BasicBlock);
 
 			context.AppendInstruction(IRInstruction.Prologue);

@@ -1312,7 +1312,7 @@ namespace Mosa.Compiler.Framework
 					}
 			}
 		}
-	
+
 		/// <summary>
 		/// Sets the result by index.
 		/// </summary>

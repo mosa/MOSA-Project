@@ -17,7 +17,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// The undefined
 		/// </summary>
-		Undefined, 
+		Undefined,
 
 		/// <summary>
 		/// Equality comparison.
@@ -118,5 +118,20 @@ namespace Mosa.Compiler.Framework
 		/// No Overflow flag
 		/// </summary>
 		NoOverflow,
+
+		/// <summary>
+		/// Always
+		/// </summary>
+		Always,
+
+		/// <summary>
+		/// The positive
+		/// </summary>
+		Positive,
+
+		/// <summary>
+		/// The negative
+		/// </summary>
+		Negative,
 	}
 }

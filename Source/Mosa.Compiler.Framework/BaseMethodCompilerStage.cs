@@ -230,7 +230,7 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		protected Context CreateNewBlockWithContext(int label)
 		{
-			return ContextHelper.CreateNewBlockWithContext(instructionSet, basicBlocks, label);
+			return instructionSet.CreateNewBlock(basicBlocks, label);
 		}
 
 		/// <summary>
@@ -239,7 +239,7 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		protected Context CreateNewBlockWithContext()
 		{
-			return ContextHelper.CreateNewBlockWithContext(instructionSet, basicBlocks);
+			return instructionSet.CreateNewBlock(basicBlocks);
 		}
 
 		/// <summary>
@@ -404,113 +404,5 @@ namespace Mosa.Compiler.Framework
 		{
 			methodCompiler.Compiler.Counters.UpdateCounter(name, count);
 		}
-
-		#region Utility Methods
-
-		/// <summary>
-		/// Converts the specified opcode.
-		/// </summary>
-		/// <param name="opcode">The opcode.</param>
-		/// <returns></returns>
-		public static ConditionCode ConvertCondition(CIL.OpCode opcode)
-		{
-			switch (opcode)
-			{
-				// Signed
-				case CIL.OpCode.Beq_s: return ConditionCode.Equal;
-				case CIL.OpCode.Bge_s: return ConditionCode.GreaterOrEqual;
-				case CIL.OpCode.Bgt_s: return ConditionCode.GreaterThan;
-				case CIL.OpCode.Ble_s: return ConditionCode.LessOrEqual;
-				case CIL.OpCode.Blt_s: return ConditionCode.LessThan;
-
-				// Unsigned
-				case CIL.OpCode.Bne_un_s: return ConditionCode.NotEqual;
-				case CIL.OpCode.Bge_un_s: return ConditionCode.UnsignedGreaterOrEqual;
-				case CIL.OpCode.Bgt_un_s: return ConditionCode.UnsignedGreaterThan;
-				case CIL.OpCode.Ble_un_s: return ConditionCode.UnsignedLessOrEqual;
-				case CIL.OpCode.Blt_un_s: return ConditionCode.UnsignedLessThan;
-
-				// Long form signed
-				case CIL.OpCode.Beq: goto case CIL.OpCode.Beq_s;
-				case CIL.OpCode.Bge: goto case CIL.OpCode.Bge_s;
-				case CIL.OpCode.Bgt: goto case CIL.OpCode.Bgt_s;
-				case CIL.OpCode.Ble: goto case CIL.OpCode.Ble_s;
-				case CIL.OpCode.Blt: goto case CIL.OpCode.Blt_s;
-
-				// Long form unsigned
-				case CIL.OpCode.Bne_un: goto case CIL.OpCode.Bne_un_s;
-				case CIL.OpCode.Bge_un: goto case CIL.OpCode.Bge_un_s;
-				case CIL.OpCode.Bgt_un: goto case CIL.OpCode.Bgt_un_s;
-				case CIL.OpCode.Ble_un: goto case CIL.OpCode.Ble_un_s;
-				case CIL.OpCode.Blt_un: goto case CIL.OpCode.Blt_un_s;
-
-				// Compare
-				case CIL.OpCode.Ceq: return ConditionCode.Equal;
-				case CIL.OpCode.Cgt: return ConditionCode.GreaterThan;
-				case CIL.OpCode.Cgt_un: return ConditionCode.UnsignedGreaterThan;
-				case CIL.OpCode.Clt: return ConditionCode.LessThan;
-				case CIL.OpCode.Clt_un: return ConditionCode.UnsignedLessThan;
-
-				default: throw new NotImplementedException();
-			}
-		}
-
-		/// <summary>
-		/// Gets the unsigned condition code.
-		/// </summary>
-		/// <param name="conditionCode">The condition code to get an unsigned form from.</param>
-		/// <returns>The unsigned form of the given condition code.</returns>
-		protected static ConditionCode GetUnsignedConditionCode(ConditionCode conditionCode)
-		{
-			switch (conditionCode)
-			{
-				case ConditionCode.Equal: break;
-				case ConditionCode.NotEqual: break;
-				case ConditionCode.GreaterOrEqual: return ConditionCode.UnsignedGreaterOrEqual;
-				case ConditionCode.GreaterThan: return ConditionCode.UnsignedGreaterThan;
-				case ConditionCode.LessOrEqual: return ConditionCode.UnsignedLessOrEqual;
-				case ConditionCode.LessThan: return ConditionCode.UnsignedLessThan;
-				case ConditionCode.UnsignedGreaterOrEqual: break;
-				case ConditionCode.UnsignedGreaterThan: break;
-				case ConditionCode.UnsignedLessOrEqual: break;
-				case ConditionCode.UnsignedLessThan: break;
-				default: throw new NotSupportedException();
-			}
-
-			return conditionCode;
-		}
-
-		/// <summary>
-		/// Gets the opposite condition code.
-		/// </summary>
-		/// <param name="conditionCode">The condition code.</param>
-		/// <returns></returns>
-		protected static ConditionCode GetOppositeConditionCode(ConditionCode conditionCode)
-		{
-			switch (conditionCode)
-			{
-				case ConditionCode.Equal: return ConditionCode.NotEqual;
-				case ConditionCode.NotEqual: return ConditionCode.Equal;
-				case ConditionCode.GreaterOrEqual: return ConditionCode.LessThan;
-				case ConditionCode.GreaterThan: return ConditionCode.LessOrEqual;
-				case ConditionCode.LessOrEqual: return ConditionCode.GreaterThan;
-				case ConditionCode.LessThan: return ConditionCode.GreaterOrEqual;
-				case ConditionCode.UnsignedGreaterOrEqual: return ConditionCode.UnsignedLessThan;
-				case ConditionCode.UnsignedGreaterThan: return ConditionCode.UnsignedLessOrEqual;
-				case ConditionCode.UnsignedLessOrEqual: return ConditionCode.UnsignedGreaterThan;
-				case ConditionCode.UnsignedLessThan: return ConditionCode.UnsignedGreaterOrEqual;
-				case ConditionCode.Signed: return ConditionCode.NotSigned;
-				case ConditionCode.NotSigned: return ConditionCode.Signed;
-				case ConditionCode.Parity: return ConditionCode.NoParity;
-				case ConditionCode.NoParity: return ConditionCode.Parity;
-				case ConditionCode.Carry: return ConditionCode.NoCarry;
-				case ConditionCode.NoCarry: return ConditionCode.Carry;
-				case ConditionCode.Overflow: return ConditionCode.NoOverflow;
-				case ConditionCode.NoOverflow: return ConditionCode.Overflow;
-				default: throw new NotSupportedException();
-			}
-		}
-
-		#endregion Utility Methods
 	}
 }

@@ -171,7 +171,6 @@ namespace Mosa.Compiler.Framework.Stages
 		protected virtual void EndGenerate()
 		{
 			codeEmitter.ResolvePatches();
-			codeEmitter.Dispose();
 		}
 
 		#endregion Methods

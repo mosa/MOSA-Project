@@ -15,8 +15,9 @@
 	    <csc target="library" output="${outputDirectory}/Mosa.Compiler.Framework.dll" debug="${debug}" unsafe="true" nostdlib="false">
 		<sources>
                     <include name="BaseCallingConventionExtended.cs"/>
+                    <include name="ConditionCodeExtension.cs"/>
                     <include name="BasicBlocks.cs"/>
-                    <include name="ContextHelper.cs"/>
+                    <include name="ContextExtension.cs"/>
                     <include name="IR/BlockStart.cs"/>
                     <include name="IR/BlockEnd.cs"/>
                     <include name="IR/InternalReturn.cs"/>

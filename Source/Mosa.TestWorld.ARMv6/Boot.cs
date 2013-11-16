@@ -5,8 +5,6 @@
  *
  */
 
-using Mosa.Kernel.ARMv6;
-
 namespace Mosa.TestWorld.ARMv6
 {
 	/// <summary>

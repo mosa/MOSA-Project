@@ -16,7 +16,7 @@ namespace Mosa.Compiler.Framework
 	/// <summary>
 	/// Interface of a code emitter.
 	/// </summary>
-	public interface ICodeEmitter : IDisposable
+	public interface ICodeEmitter
 	{
 		/// <summary>
 		/// Initializes the specified emitter.

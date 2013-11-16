@@ -9,11 +9,6 @@
  */
 
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Metadata;
-using Mosa.Compiler.Metadata.Signatures;
-using Mosa.Compiler.TypeSystem;
-using System.Collections.Generic;
-using System.Diagnostics;
 using Mosa.Compiler.Framework.Platform;
 
 namespace Mosa.Platform.ARMv6
@@ -40,6 +35,5 @@ namespace Mosa.Platform.ARMv6
 		}
 
 		#endregion Construction
-
 	}
 }

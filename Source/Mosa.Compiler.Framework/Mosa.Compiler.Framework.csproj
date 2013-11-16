@@ -78,8 +78,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseCallingConventionExtended.cs" />
+    <Compile Include="ConditionCodeExtension.cs" />
     <Compile Include="BasicBlocks.cs" />
-    <Compile Include="ContextHelper.cs" />
+    <Compile Include="ContextExtension.cs" />
     <Compile Include="IR\BlockStart.cs" />
     <Compile Include="IR\BlockEnd.cs" />
     <Compile Include="IR\InternalReturn.cs" />

@@ -58,7 +58,7 @@ namespace Mosa.Platform.x86.Stages
 
 			BasicBlocks basicBlocks = new BasicBlocks();
 			InstructionSet instructionSet = new InstructionSet(25);
-			Context ctx = ContextHelper.CreateNewBlockWithContext(instructionSet, basicBlocks);
+			Context ctx = instructionSet.CreateNewBlock(basicBlocks);
 			basicBlocks.AddHeaderBlock(ctx.BasicBlock);
 
 			// TODO - setup stack for call to the managed exception handler

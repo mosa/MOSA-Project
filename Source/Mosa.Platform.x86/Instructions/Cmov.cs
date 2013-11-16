@@ -88,8 +88,7 @@ namespace Mosa.Platform.x86.Instructions
 				case ConditionCode.NoOverflow: opcode = CMOVNO; break;
 				case ConditionCode.Parity: opcode = CMOVP; break;
 				case ConditionCode.NoParity: opcode = CMOVNP; break;
-				default:
-					throw new NotSupportedException();
+				default: throw new NotSupportedException();
 			}
 
 			emitter.Emit(opcode, context.Result, context.Operand1);

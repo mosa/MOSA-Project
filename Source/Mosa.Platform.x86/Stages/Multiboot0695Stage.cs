@@ -155,7 +155,7 @@ namespace Mosa.Platform.x86.Stages
 
 				BasicBlocks basicBlocks = new BasicBlocks();
 				InstructionSet instructionSet = new InstructionSet(25);
-				Context ctx = ContextHelper.CreateNewBlockWithContext(instructionSet, basicBlocks);
+				Context ctx = instructionSet.CreateNewBlock(basicBlocks);
 				basicBlocks.AddHeaderBlock(ctx.BasicBlock);
 
 				ctx.AppendInstruction(X86.Mov, ecx, Operand.CreateConstant(BuiltInSigType.Int32, 0x200000));

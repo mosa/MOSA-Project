@@ -151,7 +151,7 @@ namespace Mosa.Compiler.Framework
 			var basicBlocks = methodCompiler.BasicBlocks;
 			CreatePrologueAndEpilogueBlocks(methodCompiler.InstructionSet, basicBlocks);
 
-			var context = ContextHelper.CreateNewBlockWithContext(methodCompiler.InstructionSet, basicBlocks, 0);
+			var context = methodCompiler.InstructionSet.CreateNewBlock(basicBlocks, 0);
 
 			basicBlocks.LinkBlocks(basicBlocks.PrologueBlock, context.BasicBlock);
 
@@ -164,7 +164,7 @@ namespace Mosa.Compiler.Framework
 		private static void CreatePrologueAndEpilogueBlocks(InstructionSet instructionSet, BasicBlocks basicBlocks)
 		{
 			// Create the prologue block
-			var context = ContextHelper.CreateNewBlockWithContext(instructionSet, basicBlocks, BasicBlock.PrologueLabel);
+			var context = instructionSet.CreateNewBlock(basicBlocks, BasicBlock.PrologueLabel);
 
 			// Add a jump instruction to the first block from the prologue
 			context.AppendInstruction(IRInstruction.Jmp);
@@ -173,13 +173,13 @@ namespace Mosa.Compiler.Framework
 			basicBlocks.AddHeaderBlock(prologue);
 
 			// Create the epilogue block
-			context = ContextHelper.CreateNewBlockWithContext(instructionSet, basicBlocks, BasicBlock.EpilogueLabel);
+			context = instructionSet.CreateNewBlock(basicBlocks, BasicBlock.EpilogueLabel);
 			var epilogue = context.BasicBlock;
 		}
 
 		private static Context CreateNewBlock(BaseMethodCompiler methodCompiler)
 		{
-			return ContextHelper.CreateNewBlockWithContext(methodCompiler.InstructionSet, methodCompiler.BasicBlocks);
+			return methodCompiler.InstructionSet.CreateNewBlock(methodCompiler.BasicBlocks);
 		}
 
 		private static RuntimeField GetField(RuntimeType type, string name)

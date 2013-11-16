@@ -11,7 +11,6 @@
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Stages;
-using Mosa.Compiler.Framework.RegisterAllocator;
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Signatures;
 using System;
@@ -200,7 +199,6 @@ namespace Mosa.Platform.ARMv6
 			methodCompilerPipeline.InsertBefore<GreedyRegisterAllocatorStage>(
 				new StopStage()
 			);
-
 		}
 
 		/// <summary>

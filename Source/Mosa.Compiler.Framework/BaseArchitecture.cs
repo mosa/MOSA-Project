@@ -111,30 +111,30 @@ namespace Mosa.Compiler.Framework
 		/// Create platform move.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		/// <param name="Destination">The destination.</param>
-		/// <param name="Source">The source.</param>
+		/// <param name="destination">The destination.</param>
+		/// <param name="source">The source.</param>
 		public abstract void InsertMoveInstruction(Context context, Operand destination, Operand source);
 
 		/// <summary>
 		/// Create platform exchange registers.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		/// <param name="Destination">The destination.</param>
-		/// <param name="Source">The source.</param>
+		/// <param name="destination">The destination.</param>
+		/// <param name="source">The source.</param>
 		public abstract void InsertExchangeInstruction(Context context, Operand destination, Operand source);
 
 		/// <summary>
 		/// Create platform exchange registers.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		/// <param name="Destination">The destination.</param>
+		/// <param name="destination">The destination.</param>
 		public abstract void InsertJumpInstruction(Context context, Operand destination);
 
 		/// <summary>
 		/// Inserts the jump instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		/// <param name="Destination">The destination.</param>
+		/// <param name="destination">The destination.</param>
 		public abstract void InsertJumpInstruction(Context context, BasicBlock destination);
 
 		/// <summary>
@@ -148,16 +148,18 @@ namespace Mosa.Compiler.Framework
 		/// Inserts the add instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		/// <param name="Destination">The destination.</param>
-		/// <param name="Source">The source.</param>
+		/// <param name="destination">The destination.</param>
+		/// <param name="source1">The source1.</param>
+		/// <param name="source2">The source2.</param>
 		public abstract void InsertAddInstruction(Context context, Operand destination, Operand source1, Operand source2);
 
 		/// <summary>
 		/// Inserts the sub instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		/// <param name="Destination">The destination.</param>
-		/// <param name="Source">The source.</param>
+		/// <param name="destination">The destination.</param>
+		/// <param name="source1">The source1.</param>
+		/// <param name="source2">The source2.</param>
 		public abstract void InsertSubInstruction(Context context, Operand destination, Operand source1, Operand source2);
 
 		#endregion Methods

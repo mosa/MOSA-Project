@@ -45,7 +45,7 @@ namespace Mosa.TinyCPUSimulator.Adaptor
 
 			BasicBlocks basicBlocks = new BasicBlocks();
 			InstructionSet instructionSet = new InstructionSet(25);
-			Context context = ContextHelper.CreateNewBlockWithContext(instructionSet, basicBlocks);
+			Context context = instructionSet.CreateNewBlock(basicBlocks);
 			basicBlocks.AddHeaderBlock(context.BasicBlock);
 
 			Operand entryPoint = Operand.CreateSymbolFromMethod(typeInitializerSchedulerStage.TypeInitializerMethod);

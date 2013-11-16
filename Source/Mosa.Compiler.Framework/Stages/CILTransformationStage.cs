@@ -1349,6 +1349,54 @@ namespace Mosa.Compiler.Framework.Stages
 
 		#region Internals
 
+		/// <summary>
+		/// Converts the specified opcode.
+		/// </summary>
+		/// <param name="opcode">The opcode.</param>
+		/// <returns></returns>
+		public static ConditionCode ConvertCondition(CIL.OpCode opcode)
+		{
+			switch (opcode)
+			{
+				// Signed
+				case CIL.OpCode.Beq_s: return ConditionCode.Equal;
+				case CIL.OpCode.Bge_s: return ConditionCode.GreaterOrEqual;
+				case CIL.OpCode.Bgt_s: return ConditionCode.GreaterThan;
+				case CIL.OpCode.Ble_s: return ConditionCode.LessOrEqual;
+				case CIL.OpCode.Blt_s: return ConditionCode.LessThan;
+
+				// Unsigned
+				case CIL.OpCode.Bne_un_s: return ConditionCode.NotEqual;
+				case CIL.OpCode.Bge_un_s: return ConditionCode.UnsignedGreaterOrEqual;
+				case CIL.OpCode.Bgt_un_s: return ConditionCode.UnsignedGreaterThan;
+				case CIL.OpCode.Ble_un_s: return ConditionCode.UnsignedLessOrEqual;
+				case CIL.OpCode.Blt_un_s: return ConditionCode.UnsignedLessThan;
+
+				// Long form signed
+				case CIL.OpCode.Beq: goto case CIL.OpCode.Beq_s;
+				case CIL.OpCode.Bge: goto case CIL.OpCode.Bge_s;
+				case CIL.OpCode.Bgt: goto case CIL.OpCode.Bgt_s;
+				case CIL.OpCode.Ble: goto case CIL.OpCode.Ble_s;
+				case CIL.OpCode.Blt: goto case CIL.OpCode.Blt_s;
+
+				// Long form unsigned
+				case CIL.OpCode.Bne_un: goto case CIL.OpCode.Bne_un_s;
+				case CIL.OpCode.Bge_un: goto case CIL.OpCode.Bge_un_s;
+				case CIL.OpCode.Bgt_un: goto case CIL.OpCode.Bgt_un_s;
+				case CIL.OpCode.Ble_un: goto case CIL.OpCode.Ble_un_s;
+				case CIL.OpCode.Blt_un: goto case CIL.OpCode.Blt_un_s;
+
+				// Compare
+				case CIL.OpCode.Ceq: return ConditionCode.Equal;
+				case CIL.OpCode.Cgt: return ConditionCode.GreaterThan;
+				case CIL.OpCode.Cgt_un: return ConditionCode.UnsignedGreaterThan;
+				case CIL.OpCode.Clt: return ConditionCode.LessThan;
+				case CIL.OpCode.Clt_un: return ConditionCode.UnsignedLessThan;
+
+				default: throw new NotImplementedException();
+			}
+		}
+
 		private static void Replace(Context context, BaseInstruction floatingPointInstruction, BaseInstruction signedInstruction, BaseInstruction unsignedInstruction)
 		{
 			if (IsFloatingPoint(context.Result))

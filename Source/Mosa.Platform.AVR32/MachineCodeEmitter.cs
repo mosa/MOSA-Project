@@ -17,12 +17,9 @@ namespace Mosa.Platform.AVR32
 	/// <summary>
 	/// An AVR32 machine code emitter.
 	/// </summary>
-	public sealed class MachineCodeEmitter : BaseCodeEmitter, ICodeEmitter, IDisposable
+	public sealed class MachineCodeEmitter : BaseCodeEmitter, ICodeEmitter
 	{
-		public MachineCodeEmitter()
-		{
-		}
-
+		
 		#region Code Generation Members
 
 		protected override void ResolvePatches()
@@ -108,9 +105,9 @@ namespace Mosa.Platform.AVR32
 		/// <summary>
 		/// Emit with format 9.2.1
 		/// </summary>
-		/// <param name="opcode"></param>
-		/// <param name="firstRegister"></param>
-		/// <param name="secondRegister"></param>
+		/// <param name="opcode">The opcode.</param>
+		/// <param name="firstRegister">The first register.</param>
+		/// <param name="secondRegister">The second register.</param>
 		public void EmitTwoRegisterInstructions(byte opcode, byte firstRegister, byte secondRegister)
 		{
 			ushort buffer = 0;
@@ -126,8 +123,8 @@ namespace Mosa.Platform.AVR32
 		/// <summary>
 		/// Emit with format 9.2.2
 		/// </summary>
-		/// <param name="opcode"></param>
-		/// <param name="register"></param>
+		/// <param name="opcode">The opcode.</param>
+		/// <param name="register">The register.</param>
 		public void EmitSingleRegisterInstructions(byte opcode, byte register)
 		{
 			ushort buffer = 0;
@@ -142,8 +139,7 @@ namespace Mosa.Platform.AVR32
 		/// <summary>
 		/// Emit with format 9.2.3
 		/// </summary>
-		/// <param name="opcode"></param>
-		/// <param name="first"></param>
+		/// <param name="opcode">The opcode.</param>
 		public void EmitReturnAndTest(byte opcode)
 		{
 			ushort buffer = 0;
@@ -159,9 +155,9 @@ namespace Mosa.Platform.AVR32
 		/// <summary>
 		/// Emit with format 9.2.4
 		/// </summary>
-		/// <param name="opcode"></param>
-		/// <param name="k8"></param>
-		/// <param name="register"></param>
+		/// <param name="opcode">The opcode.</param>
+		/// <param name="k8">The k8.</param>
+		/// <param name="register">The register.</param>
 		public void EmitK8immediateAndSingleRegister(byte opcode, sbyte k8, byte register)
 		{
 			ushort buffer = 0;
@@ -177,8 +173,8 @@ namespace Mosa.Platform.AVR32
 		/// <summary>
 		/// Emit with format 9.2.6 Bis // Seems to be a error on doc 32000.pdf
 		/// </summary>
-		/// <param name="k6"></param>
-		/// <param name="register"></param>
+		/// <param name="k6">The k6.</param>
+		/// <param name="register">The register.</param>
 		public void EmitK6immediateAndSingleRegister(sbyte k6, byte register)
 		{
 			ushort buffer = 0;
@@ -193,9 +189,9 @@ namespace Mosa.Platform.AVR32
 		/// <summary>
 		/// Emit with format 9.2.7
 		/// </summary>
-		/// <param name="pointerRegister"></param>
-		/// <param name="k5"></param>
-		/// <param name="destinationRegister"></param>
+		/// <param name="pointerRegister">The pointer register.</param>
+		/// <param name="k5">The k5.</param>
+		/// <param name="destinationRegister">The destination register.</param>
 		public void EmitDisplacementLoadWithK5Immediate(byte pointerRegister, sbyte k5, byte destinationRegister)
 		{
 			ushort buffer = 0;
@@ -211,8 +207,8 @@ namespace Mosa.Platform.AVR32
 		/// <summary>
 		/// Emit with format 9.2.13
 		/// </summary>
-		/// <param name="opcode"></param>
-		/// <param name="label"></param>
+		/// <param name="opcode">The opcode.</param>
+		/// <param name="label">The label.</param>
 		public void EmitRelativeJumpAndCall(byte opcode, int label)
 		{
 			ushort value = (ushort)(label >> 1);
@@ -250,10 +246,10 @@ namespace Mosa.Platform.AVR32
 		/// <summary>
 		/// Emit with format 9.2.23
 		/// </summary>
-		/// <param name="opcode"></param>
-		/// <param name="sourceRegister"></param>
-		/// <param name="destinationRegister"></param>
-		/// <param name="k8"></param>
+		/// <param name="opcode">The opcode.</param>
+		/// <param name="sourceRegister">The source register.</param>
+		/// <param name="destinationRegister">The destination register.</param>
+		/// <param name="k8">The k8.</param>
 		public void EmitTwoRegisterOperandsWithK8Immediate(byte opcode, byte sourceRegister, byte destinationRegister, sbyte k8)
 		{
 			ushort buffer = 0;
@@ -270,9 +266,9 @@ namespace Mosa.Platform.AVR32
 		/// <summary>
 		/// Emit with format 9.2.28
 		/// </summary>
-		/// <param name="opcode"></param>
-		/// <param name="register"></param>
-		/// <param name="k16"></param>
+		/// <param name="opcode">The opcode.</param>
+		/// <param name="register">The register.</param>
+		/// <param name="k16">The K16.</param>
 		public void EmitRegisterOperandWithK16(ushort opcode, byte register, ushort k16)
 		{
 			uint buffer = 0;
@@ -288,9 +284,9 @@ namespace Mosa.Platform.AVR32
 		/// <summary>
 		/// Emit with format 9.2.30
 		/// </summary>
-		/// <param name="opcode"></param>
-		/// <param name="registerOrCond"></param>
-		/// <param name="k20"></param>
+		/// <param name="opcode">The opcode.</param>
+		/// <param name="registerOrCond">The register or cond.</param>
+		/// <param name="k20">The K20.</param>
 		public void EmitRegisterOrConditionCodeAndK21(byte opcode, byte registerOrCond, int k20)
 		{
 			uint buffer = 0;
@@ -308,8 +304,8 @@ namespace Mosa.Platform.AVR32
 		/// <summary>
 		/// Emit with format 9.2.31
 		/// </summary>
-		/// <param name="opcode"></param>
-		/// <param name="label"></param>
+		/// <param name="opcode">The opcode.</param>
+		/// <param name="label">The label.</param>
 		public void EmitNoRegisterAndK21(byte opcode, int label)
 		{
 			uint buffer = 0;
@@ -327,10 +323,10 @@ namespace Mosa.Platform.AVR32
 		/// <summary>
 		/// Emit with format 9.2.32
 		/// </summary>
-		/// <param name="opcode"></param>
-		/// <param name="firstRegister"></param>
-		/// <param name="secondRegister"></param>
-		/// <param name="k16"></param>
+		/// <param name="opcode">The opcode.</param>
+		/// <param name="firstRegister">The first register.</param>
+		/// <param name="secondRegister">The second register.</param>
+		/// <param name="k16">The K16.</param>
 		public void EmitTwoRegistersAndK16(byte opcode, byte firstRegister, byte secondRegister, short k16)
 		{
 			uint buffer = 0;
@@ -347,10 +343,9 @@ namespace Mosa.Platform.AVR32
 		/// <summary>
 		/// Emit with format 9.2.50
 		/// </summary>
-		/// <param name="opcode"></param>
-		/// <param name="firstRegister"></param>
-		/// <param name="secondRegister"></param>
-		/// <param name="k16"></param>
+		/// <param name="firstRegister">The first register.</param>
+		/// <param name="secondRegister">The second register.</param>
+		/// <param name="k4">The k4.</param>
 		public void EmitTwoRegistersWithK4(byte firstRegister, byte secondRegister, sbyte k4)
 		{
 			uint buffer = 0;

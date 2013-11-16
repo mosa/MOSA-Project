@@ -63,7 +63,6 @@ namespace Mosa.Compiler.Framework
 		public Operand Result2;
 
 		/// <summary>
-		/// <summary>
 		/// The condition code
 		/// </summary>
 		public ConditionCode ConditionCode;
@@ -83,9 +82,10 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		private uint packed;
 
+		/// <summary>
 		/// The additional operands
 		/// </summary>
-		private Operand[] additionalOperands; 
+		private Operand[] additionalOperands;
 
 		#endregion Data members
 

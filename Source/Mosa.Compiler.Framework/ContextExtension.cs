@@ -11,9 +11,9 @@ using Mosa.Compiler.Framework.IR;
 
 namespace Mosa.Compiler.Framework
 {
-	public static class ContextHelper
+	public static class ContextExtension
 	{
-		public static Context CreateNewBlockWithContext(InstructionSet instructionSet, BasicBlocks basicBlocks, int label)
+		public static Context CreateNewBlock(this InstructionSet instructionSet, BasicBlocks basicBlocks, int label)
 		{
 			Context ctx = new Context(instructionSet);
 
@@ -30,7 +30,7 @@ namespace Mosa.Compiler.Framework
 			return ctx;
 		}
 
-		public static Context CreateNewBlockWithContext(InstructionSet instructionSet, BasicBlocks basicBlocks)
+		public static Context CreateNewBlock(this InstructionSet instructionSet, BasicBlocks basicBlocks)
 		{
 			Context ctx = new Context(instructionSet);
 

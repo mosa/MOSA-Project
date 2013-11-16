@@ -22,7 +22,7 @@ namespace Mosa.Compiler.Framework
 	/// <summary>
 	/// Base code emitter.
 	/// </summary>
-	public abstract class BaseCodeEmitter : IDisposable, ICodeEmitter
+	public abstract class BaseCodeEmitter : ICodeEmitter
 	{
 		#region Types
 
@@ -95,6 +95,8 @@ namespace Mosa.Compiler.Framework
 
 		#endregion Data members
 
+		#region Properties
+
 		/// <summary>
 		/// Gets the name of the method.
 		/// </summary>
@@ -111,19 +113,7 @@ namespace Mosa.Compiler.Framework
 		/// </value>
 		protected IList<Patch> Patches { get { return patches.AsReadOnly(); } }
 
-		#region IDisposable Members
-
-		/// <summary>
-		/// Completes emitting the code of a method.
-		/// </summary>
-		public void Dispose()
-		{
-			// Flush the stream - we're not responsible for disposing it, as it belongs
-			// to another component that gave it to the code generator.
-			codeStream.Flush();
-		}
-
-		#endregion IDisposable Members
+		#endregion Properties
 
 		#region ICodeEmitter Members
 

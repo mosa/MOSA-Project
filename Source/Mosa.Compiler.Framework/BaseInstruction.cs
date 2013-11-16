@@ -255,6 +255,7 @@ namespace Mosa.Compiler.Framework
 				case ConditionCode.NoParity: return @"no parity";
 				case ConditionCode.Carry: return @"carry";
 				case ConditionCode.NoCarry: return @"no carry";
+				case ConditionCode.Always: return @"always";
 
 				default: throw new NotSupportedException();
 			}

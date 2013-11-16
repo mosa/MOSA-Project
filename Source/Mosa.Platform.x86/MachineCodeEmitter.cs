@@ -22,7 +22,7 @@ namespace Mosa.Platform.x86
 	/// <summary>
 	/// An x86 machine code emitter.
 	/// </summary>
-	public sealed class MachineCodeEmitter : BaseCodeEmitter, IDisposable
+	public sealed class MachineCodeEmitter : BaseCodeEmitter
 	{
 		#region Code Generation
 
