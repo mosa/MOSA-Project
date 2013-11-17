@@ -20,5 +20,10 @@ namespace Mosa.TestWorld.ARMv6
 			Mosa.Kernel.ARMv6.Kernel.Setup();
 			Mosa.Platform.ARMv6.Intrinsic.Native.Nop();	// force load of the assembly
 		}
+
+		public static void Test()
+		{
+			Mosa.Test.Collection.UInt32Tests.AddU4U4(1, 2);
+		}
 	}
 }

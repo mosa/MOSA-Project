@@ -1512,7 +1512,7 @@ namespace Mosa.Platform.x86.Stages
 		}
 
 		/// <summary>
-		/// Visitation function for RemSInstruction.
+		/// Visitation function for RemSigned.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IIRVisitor.RemSigned(Context context)
@@ -1548,7 +1548,7 @@ namespace Mosa.Platform.x86.Stages
 		}
 
 		/// <summary>
-		/// Visitation function for AddSInstruction.
+		/// Visitation function for AddSigned.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IIRVisitor.AddSigned(Context context)
@@ -1560,7 +1560,7 @@ namespace Mosa.Platform.x86.Stages
 		}
 
 		/// <summary>
-		/// Visitation function for AddUInstruction.
+		/// Visitation function for AddUnsigned.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IIRVisitor.AddUnsigned(Context context)
@@ -1652,7 +1652,7 @@ namespace Mosa.Platform.x86.Stages
 		}
 
 		/// <summary>
-		/// Visitation function for AddFInstruction.
+		/// Visitation function for AddFloat.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IIRVisitor.AddFloat(Context context)
@@ -1660,7 +1660,7 @@ namespace Mosa.Platform.x86.Stages
 		}
 
 		/// <summary>
-		/// Visitation function for DivFInstruction.
+		/// Visitation function for DivFloat.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IIRVisitor.DivFloat(Context context)

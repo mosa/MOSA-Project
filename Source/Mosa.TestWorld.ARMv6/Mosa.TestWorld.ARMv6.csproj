@@ -88,6 +88,10 @@
       <Project>{599d1c00-7c78-4211-a958-1285c4cb76c9}</Project>
       <Name>Mosa.Platform.ARMv6.Intrinsic</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Mosa.Test.Collection\Mosa.Test.Collection.csproj">
+      <Project>{067aab6b-447a-45ba-9e0d-dfea886b4f69}</Project>
+      <Name>Mosa.Test.Collection</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -43,45 +43,45 @@ namespace Mosa.Platform.x86.Stages
 		#region IIRVisitor
 
 		/// <summary>
-		/// Visitation function for AddSInstruction.
+		/// Visitation function for AddSigned.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IIRVisitor.AddSigned(Context context)
 		{
-			HandleCommutativeOperation(context, X86.Add);
+			ReplaceInstructionAndAnyFloatingPointConstant(context, X86.Add);
 		}
 
 		/// <summary>
-		/// Visitation function for AddUInstruction.
+		/// Visitation function for AddUnsigned.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IIRVisitor.AddUnsigned(Context context)
 		{
-			HandleCommutativeOperation(context, X86.Add);
+			ReplaceInstructionAndAnyFloatingPointConstant(context, X86.Add);
 		}
 
 		/// <summary>
-		/// Visitation function for AddFInstruction.
+		/// Visitation function for AddFloat.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IIRVisitor.AddFloat(Context context)
 		{
 			if (context.Result.Type.Type == CilElementType.R4)
-				HandleCommutativeOperation(context, X86.Addss);
+				ReplaceInstructionAndAnyFloatingPointConstant(context, X86.Addss);
 			else
-				HandleCommutativeOperation(context, X86.Addsd);
+				ReplaceInstructionAndAnyFloatingPointConstant(context, X86.Addsd);
 		}
 
 		/// <summary>
-		/// Visitation function for DivFInstruction.
+		/// Visitation function for DivFloat.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IIRVisitor.DivFloat(Context context)
 		{
 			if (context.Result.Type.Type == CilElementType.R4)
-				HandleCommutativeOperation(context, X86.Divss);
+				ReplaceInstructionAndAnyFloatingPointConstant(context, X86.Divss);
 			else
-				HandleCommutativeOperation(context, X86.Divsd);
+				ReplaceInstructionAndAnyFloatingPointConstant(context, X86.Divsd);
 		}
 
 		/// <summary>
@@ -558,7 +558,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IIRVisitor.ArithmeticShiftRight(Context context)
 		{
-			HandleShiftOperation(context, X86.Sar);
+			ReplaceInstructionAndAnyFloatingPointConstant(context, X86.Sar);
 		}
 
 		/// <summary>
@@ -567,7 +567,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IIRVisitor.ShiftLeft(Context context)
 		{
-			HandleShiftOperation(context, X86.Shl);
+			ReplaceInstructionAndAnyFloatingPointConstant(context, X86.Shl);
 		}
 
 		/// <summary>
@@ -576,7 +576,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IIRVisitor.ShiftRight(Context context)
 		{
-			HandleShiftOperation(context, X86.Shr);
+			ReplaceInstructionAndAnyFloatingPointConstant(context, X86.Shr);
 		}
 
 		/// <summary>
@@ -588,8 +588,6 @@ namespace Mosa.Platform.x86.Stages
 			Operand baseOperand = context.Operand1;
 			Operand offsetOperand = context.Operand2;
 			Operand value = context.Operand3;
-
-			//Operand value = AllocateVirtualRegister(value.Type);
 
 			if (value.Type.Type == CilElementType.R8 && GetElementType(baseOperand.Type).Type == CilElementType.R4)
 			{
@@ -628,9 +626,9 @@ namespace Mosa.Platform.x86.Stages
 		void IIRVisitor.MulFloat(Context context)
 		{
 			if (context.Result.Type.Type == CilElementType.R4)
-				HandleCommutativeOperation(context, X86.Mulss);
+				ReplaceInstructionAndAnyFloatingPointConstant(context, X86.Mulss);
 			else
-				HandleCommutativeOperation(context, X86.Mulsd);
+				ReplaceInstructionAndAnyFloatingPointConstant(context, X86.Mulsd);
 		}
 
 		/// <summary>
@@ -640,9 +638,9 @@ namespace Mosa.Platform.x86.Stages
 		void IIRVisitor.SubFloat(Context context)
 		{
 			if (context.Result.Type.Type == CilElementType.R4)
-				HandleCommutativeOperation(context, X86.Subss);
+				ReplaceInstructionAndAnyFloatingPointConstant(context, X86.Subss);
 			else
-				HandleCommutativeOperation(context, X86.Subsd);
+				ReplaceInstructionAndAnyFloatingPointConstant(context, X86.Subsd);
 		}
 
 		/// <summary>
@@ -740,7 +738,7 @@ namespace Mosa.Platform.x86.Stages
 		}
 
 		/// <summary>
-		/// Visitation function for RemSInstruction.
+		/// Visitation function for RemSigned.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IIRVisitor.RemSigned(Context context)
@@ -991,56 +989,14 @@ namespace Mosa.Platform.x86.Stages
 		#region Internals
 
 		/// <summary>
-		/// Special handling for commutative operations.
-		/// </summary>
-		/// <param name="context">The transformation context.</param>
-		/// <param name="instruction">The instruction.</param>
-		/// <remarks>
-		/// Commutative operations are reordered by moving the constant to the second operand,
-		/// which allows the instruction selection in the code generator to use a instruction
-		/// format with an immediate operand.
-		/// </remarks>
-		private void HandleCommutativeOperation(Context context, BaseInstruction instruction)
-		{
-			EmitFloatingPointConstants(context);
-			context.ReplaceInstructionOnly(instruction);
-		}
-
-		/// <summary>
-		/// Special handling for shift operations, which require the shift amount in the ECX or as a constant register.
-		/// </summary>
-		/// <param name="context">The transformation context.</param>
-		/// <param name="instruction">The instruction to transform.</param>
-		private void HandleShiftOperation(Context context, BaseInstruction instruction)
-		{
-			EmitFloatingPointConstants(context);
-			context.ReplaceInstructionOnly(instruction);
-		}
-
-		/// <summary>
-		/// Swaps the comparison operands.
+		/// Removes the any floating point constant and replace instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		private static void SwapComparisonOperands(Context context)
+		/// <param name="instruction">The instruction.</param>
+		private void ReplaceInstructionAndAnyFloatingPointConstant(Context context, BaseInstruction instruction)
 		{
-			Operand op1 = context.Operand1;
-			context.Operand1 = context.Operand2;
-			context.Operand2 = op1;
-
-			// Negate the condition code if necessary.
-			switch (context.ConditionCode)
-			{
-				case ConditionCode.Equal: break;
-				case ConditionCode.GreaterOrEqual: context.ConditionCode = ConditionCode.LessThan; break;
-				case ConditionCode.GreaterThan: context.ConditionCode = ConditionCode.LessOrEqual; break;
-				case ConditionCode.LessOrEqual: context.ConditionCode = ConditionCode.GreaterThan; break;
-				case ConditionCode.LessThan: context.ConditionCode = ConditionCode.GreaterOrEqual; break;
-				case ConditionCode.NotEqual: break;
-				case ConditionCode.UnsignedGreaterOrEqual: context.ConditionCode = ConditionCode.UnsignedLessThan; break;
-				case ConditionCode.UnsignedGreaterThan: context.ConditionCode = ConditionCode.UnsignedLessOrEqual; break;
-				case ConditionCode.UnsignedLessOrEqual: context.ConditionCode = ConditionCode.UnsignedGreaterThan; break;
-				case ConditionCode.UnsignedLessThan: context.ConditionCode = ConditionCode.UnsignedGreaterOrEqual; break;
-			}
+			EmitFloatingPointConstants(context);
+			context.ReplaceInstructionOnly(instruction);
 		}
 
 		private static SigType GetElementType(SigType sigType)
