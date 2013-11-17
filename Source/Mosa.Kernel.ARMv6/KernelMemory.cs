@@ -20,7 +20,7 @@ namespace Mosa.Kernel.ARMv6
 		static private uint _size = 0;
 		static private uint _used = 0;
 
-		[PlugMethod("Mosa.Platform.Internal.ARMv6.AllocateMemory")]
+		[PlugMethod("Mosa.Platform.Internal.ARMv6.Runtime.AllocateMemory")]
 		static public uint AllocateMemory(uint size)
 		{
 			if ((_heap == 0) || (size > (_size - _used)))
