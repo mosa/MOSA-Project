@@ -84,9 +84,9 @@
       <Project>{4cff6607-4d83-46e6-a1d0-ef045311c98b}</Project>
       <Name>Mosa.Kernel.ARMv6</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Mosa.Platform.ARMv6.Intrinsic\Mosa.Platform.ARMv6.Intrinsic.csproj">
+    <ProjectReference Include="..\Mosa.Platform.ARMv6.Intrinsic\Mosa.Platform.Internal.ARMv6.csproj">
       <Project>{599d1c00-7c78-4211-a958-1285c4cb76c9}</Project>
-      <Name>Mosa.Platform.ARMv6.Intrinsic</Name>
+      <Name>Mosa.Platform.Internal.ARMv6</Name>
     </ProjectReference>
     <ProjectReference Include="..\Mosa.Test.Collection\Mosa.Test.Collection.csproj">
       <Project>{067aab6b-447a-45ba-9e0d-dfea886b4f69}</Project>

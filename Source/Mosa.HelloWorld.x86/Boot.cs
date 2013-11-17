@@ -8,7 +8,7 @@
 using System;
 using Mosa.Kernel.x86;
 using Mosa.Kernel.x86.Smbios;
-using Mosa.Platform.x86.Intrinsic;
+using Mosa.Platform.Internal.x86;
 
 namespace Mosa.HelloWorld.x86
 {

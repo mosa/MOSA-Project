@@ -11,6 +11,7 @@ using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Compiler.TypeSystem;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework.Intrinsics
 {
@@ -22,11 +23,15 @@ namespace Mosa.Compiler.Framework.Intrinsics
 		/// Replaces the intrinsic call site
 		/// </summary>
 		/// <param name="context">The context.</param>
-		/// <param name="typeSystem">The type system.</param>
-		void IIntrinsicInternalMethod.ReplaceIntrinsicCall(Context context, ITypeSystem typeSystem, IList<RuntimeParameter> parameters)
+		/// <param name="methodCompiler">The method compiler.</param>
+		void IIntrinsicInternalMethod.ReplaceIntrinsicCall(Context context, BaseMethodCompiler methodCompiler)
 		{
-			RuntimeType runtimeType = typeSystem.GetType(@"Mosa.Internal.Runtime");
-			RuntimeMethod callTarget = runtimeType.FindMethod(@"AllocateString");
+			string runtime = "Mosa.Platform.Internal." + methodCompiler.Architecture.PlatformName + ".Runtime";
+
+			RuntimeType runtimeType = methodCompiler.TypeSystem.GetType(runtime);
+			Debug.Assert(runtimeType != null, "Cannot find " + runtime);
+
+			RuntimeMethod callTarget = runtimeType.FindMethod("AllocateString");
 
 			Operand callTargetOperand = Operand.CreateSymbolFromMethod(callTarget);
 

@@ -9,7 +9,7 @@
 
 using System.Runtime.InteropServices;
 
-namespace Mosa.Platform.ARMv6.Intrinsic
+namespace Mosa.Platform.Internal.ARMv6
 {
 	/// <summary>
 	/// Provides stub methods for selected x86 native assembly instructions.

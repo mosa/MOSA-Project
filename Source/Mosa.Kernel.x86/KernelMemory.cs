@@ -20,7 +20,7 @@ namespace Mosa.Kernel.x86
 		static private uint allocated = 0;
 		static private uint used = 0;
 
-		[PlugMethod("Mosa.Internal.Runtime.AllocateMemory")]
+		[PlugMethod("Mosa.Platform.Internal.x86.AllocateMemory")]
 		static public uint AllocateMemory(uint size)
 		{
 			if ((heap == 0) || (size > (allocated - used)))

@@ -33,7 +33,7 @@ namespace Mosa.Platform.x86.Stages
 
 		#region Utility Methods
 
-		private void SplitLongOperand(Operand operand, out Operand operandLow, out Operand operandHigh)
+		public static void SplitLongOperand(BaseMethodCompiler methodCompiler, Operand operand, out Operand operandLow, out Operand operandHigh, Operand constantZero)
 		{
 			if (operand.StackType == StackTypeCode.Int64)
 			{
@@ -45,11 +45,16 @@ namespace Mosa.Platform.x86.Stages
 			else if (operand.StackType == StackTypeCode.Int32 || operand.StackType == StackTypeCode.Ptr)
 			{
 				operandLow = operand;
-				operandHigh = constantZero;
+				operandHigh = constantZero != null ? constantZero : Operand.CreateConstant((int)0);
 				return;
 			}
 
 			throw new InvalidProgramException("@can not split" + operand.ToString());
+		}
+
+		private void SplitLongOperand(Operand operand, out Operand operandLow, out Operand operandHigh)
+		{
+			SplitLongOperand(methodCompiler, operand, out operandLow, out operandHigh, constantZero);
 		}
 
 		/// <summary>

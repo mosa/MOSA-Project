@@ -9,7 +9,7 @@
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  */
 
-namespace Mosa.Internal
+namespace Mosa.Platform.Internal.AVR32
 {
 	public unsafe static class Runtime
 	{

@@ -12,7 +12,7 @@
 
 using System.Runtime.InteropServices;
 
-namespace Mosa.Platform.x86.Intrinsic
+namespace Mosa.Platform.Internal.x86
 {
 	/// <summary>
 	/// Provides stub methods for selected x86 native assembly instructions.
@@ -284,10 +284,6 @@ namespace Mosa.Platform.x86.Intrinsic
 		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.SwitchTask, Mosa.Platform.x86")]
 		public extern static void SwitchTask(uint esp);
 
-		//[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.RestoreContext, Mosa.Platform.x86")]
-		//public extern static void RestoreContext(uint ebp, uint esp, uint eip);
-		//public extern static void RestoreContext(uint edi, uint esi, uint ebp, uint esp, uint ebx, uint edx, uint ecx, uint eax);
-
 		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.GetEIP, Mosa.Platform.x86")]
 		public extern static uint GetEIP();
 
@@ -296,6 +292,9 @@ namespace Mosa.Platform.x86.Intrinsic
 
 		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.GetMethodLookupTable, Mosa.Platform.x86")]
 		public extern static uint GetMethodLookupTable(uint ptr);
+
+		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.Div, Mosa.Platform.x86")]
+		public extern static uint Div(ulong n, uint d);
 
 		#endregion Intrinsic
 	}

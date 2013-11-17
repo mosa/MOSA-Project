@@ -75,9 +75,9 @@
       <Project>{77961864-DB33-4189-804F-D774022C96E2}</Project>
       <Name>Mosa.Internal.Plug</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Mosa.Platform.ARMv6.Intrinsic\Mosa.Platform.ARMv6.Intrinsic.csproj">
+    <ProjectReference Include="..\Mosa.Platform.ARMv6.Intrinsic\Mosa.Platform.Internal.ARMv6.csproj">
       <Project>{599d1c00-7c78-4211-a958-1285c4cb76c9}</Project>
-      <Name>Mosa.Platform.ARMv6.Intrinsic</Name>
+      <Name>Mosa.Platform.Internal.ARMv6</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

@@ -96,9 +96,9 @@
       <Project>{631BC4F3-E2D8-4319-814C-13904CAA17CE}</Project>
       <Name>Korlib</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Mosa.Platform.x86.Intrinsic\Mosa.Platform.x86.Intrinsic.csproj">
+    <ProjectReference Include="..\Mosa.Platform.x86.Intrinsic\Mosa.Platform.Internal.x86.csproj">
       <Project>{A47B7998-4EE8-4AF8-9373-C664FDEDDC65}</Project>
-      <Name>Mosa.Platform.x86.Intrinsic</Name>
+      <Name>Mosa.Platform.Internal.x86</Name>
     </ProjectReference>
     <ProjectReference Include="..\Mosa.Test.AssemblyA\Mosa.Test.AssemblyA.csproj">
       <Project>{6e8efb11-7c55-4d9a-a38c-8a2b70d5e423}</Project>

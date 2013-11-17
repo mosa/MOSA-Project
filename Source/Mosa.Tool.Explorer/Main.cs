@@ -481,7 +481,7 @@ namespace Mosa.Tool.Explorer
 			{
 				assemblyLoader.AddPrivatePath(System.IO.Directory.GetCurrentDirectory());
 				assemblyLoader.LoadModule("mscorlib.dll");
-				assemblyLoader.LoadModule("Mosa.Platform." + platform + ".Intrinsic.dll");
+				assemblyLoader.LoadModule("Mosa.Platform.Internal." + platform + ".dll");
 				assemblyLoader.LoadModule("Mosa.Kernel.x86Test.dll");
 			}
 

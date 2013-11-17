@@ -102,6 +102,7 @@
     <Compile Include="Instructions\IMul.cs" />
     <Compile Include="Instructions\TwoOperandInstruction.cs" />
     <Compile Include="Instructions\Addsd.cs" />
+    <Compile Include="Intrinsic\Div.cs" />
     <Compile Include="Stages\BuildStackStage.cs" />
     <Compile Include="Stages\FloatingPointStage.cs" />
     <Compile Include="Stages\FinalTweakTransformationStage.cs" />

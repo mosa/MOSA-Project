@@ -9,7 +9,7 @@
 
 using System.Runtime.InteropServices;
 
-namespace Mosa.Platform.AVR32.Intrinsic
+namespace Mosa.Platform.Internal.AVR32
 {
 	/// <summary>
 	/// Provides stub methods for selected x86 native assembly instructions.

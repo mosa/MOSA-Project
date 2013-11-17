@@ -1903,7 +1903,7 @@ namespace Mosa.Compiler.Framework.Stages
 			var instanceMethod = instance as IIntrinsicInternalMethod;
 			if (instanceMethod != null)
 			{
-				instanceMethod.ReplaceIntrinsicCall(context, typeSystem, methodCompiler.Method.Parameters);
+				instanceMethod.ReplaceIntrinsicCall(context, methodCompiler);
 				return true;
 			}
 			else if (instance is IIntrinsicPlatformMethod)
@@ -2024,10 +2024,12 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="internalCallTarget">The internal call target.</param>
 		private void ReplaceWithVmCall(Context context, VmCall internalCallTarget)
 		{
-			RuntimeType type = typeSystem.GetType(@"Mosa.Internal.Runtime");
-			Debug.Assert(type != null, "Cannot find Mosa.Internal.Runtime");
+			string runtime = "Mosa.Platform.Internal." + methodCompiler.Architecture.PlatformName + ".Runtime";
 
-			RuntimeMethod method = type.FindMethod(internalCallTarget.ToString());
+			RuntimeType runtimeType = typeSystem.GetType(runtime);
+			Debug.Assert(runtimeType != null, "Cannot find " + runtime);
+
+			RuntimeMethod method = runtimeType.FindMethod(internalCallTarget.ToString());
 			Debug.Assert(method != null, "Cannot find method: " + internalCallTarget.ToString());
 
 			context.ReplaceInstructionOnly(IRInstruction.Call);

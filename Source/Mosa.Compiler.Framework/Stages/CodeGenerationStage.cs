@@ -116,10 +116,7 @@ namespace Mosa.Compiler.Framework.Stages
 					}
 					else
 					{
-						if (architecture.PlatformName != "Null")
-						{
-							trace.Log(InternalTrace.CompilerEvent.Error, "Missing Code Transformation: " + context.ToString());
-						}
+						trace.Log(InternalTrace.CompilerEvent.Error, "Missing Code Transformation: " + context.ToString());
 					}
 				}
 

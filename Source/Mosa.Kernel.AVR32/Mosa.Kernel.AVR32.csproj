@@ -75,9 +75,9 @@
       <Project>{77961864-DB33-4189-804F-D774022C96E2}</Project>
       <Name>Mosa.Internal.Plug</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Mosa.Platform.AVR32.Intrinsic\Mosa.Platform.AVR32.Intrinsic.csproj">
+    <ProjectReference Include="..\Mosa.Platform.AVR32.Intrinsic\Mosa.Platform.Internal.AVR32.csproj">
       <Project>{599D1C00-7C78-4801-A958-1285C4CB76C9}</Project>
-      <Name>Mosa.Platform.AVR32.Intrinsic</Name>
+      <Name>Mosa.Platform.Internal.AVR32</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />
