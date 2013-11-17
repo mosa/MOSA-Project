@@ -122,6 +122,18 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
+		/// Gets or sets a value indicating whether [set status flag].
+		/// </summary>
+		/// <value>
+		///   <c>true</c> if [set status flag]; otherwise, <c>false</c>.
+		/// </value>
+		public bool UpdateStatusFlags
+		{
+			get { return (packed & 0x08) == 0x16; }
+			set { if (value) packed = packed | 0x16; else packed = (uint)(packed & ~0x08); }
+		}
+
+		/// <summary>
 		/// Gets or sets the number of operand results
 		/// </summary>
 		public byte ResultCount

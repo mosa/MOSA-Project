@@ -12,7 +12,7 @@ using System;
 namespace Mosa.Compiler.Common
 {
 	[Serializable]
-	public class CompilerException : Exception
+	public class NotImplementCompilerException : CompilerException
 	{
 	}
 }

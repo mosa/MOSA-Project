@@ -8,6 +8,7 @@
  *  Marcelo Caetano (marcelocaetano) <marcelo.caetano@ymail.com>
  */
 
+using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework;
 
 namespace Mosa.Platform.ARMv6.Instructions
@@ -18,6 +19,7 @@ namespace Mosa.Platform.ARMv6.Instructions
 	/// </summary>
 	public class Add : ARMv6Instruction
 	{
+
 		#region Construction
 
 		/// <summary>
@@ -39,7 +41,19 @@ namespace Mosa.Platform.ARMv6.Instructions
 		/// <param name="emitter">The emitter.</param>
 		protected override void Emit(Context context, MachineCodeEmitter emitter)
 		{
-			// TODO
+			if (context.Operand2.IsRegister)
+			{
+				emitter.EmitDataProcessingInstructionWithRegister(context.ConditionCode, Bits.b0100, context.UpdateStatusFlags, context.Operand1.Register.Index, context.Result.Register.Index, context.Operand2.Register.Index, (int)context.Operand3.ValueAsLongInteger);
+			}
+			else if (context.Operand2.IsConstant)
+			{
+				emitter.EmitDataProcessingInstructionWithImmediate(context.ConditionCode, Bits.b0100, context.UpdateStatusFlags, context.Operand1.Register.Index, context.Result.Register.Index, (int)context.Operand2.ValueAsLongInteger, (int)context.Operand3.ValueAsLongInteger);
+			}
+			else
+			{
+				throw new InvalidCompilerException();
+			}
+
 		}
 
 		/// <summary>

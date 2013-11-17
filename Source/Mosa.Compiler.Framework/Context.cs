@@ -130,6 +130,18 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
+		/// Gets or sets a value indicating whether [update status flags].
+		/// </summary>
+		/// <value>
+		///   <c>true</c> if [update status flags]; otherwise, <c>false</c>.
+		/// </value>
+		public bool UpdateStatusFlags
+		{
+			get { return instructionSet.Data[index].UpdateStatusFlags; }
+			set { instructionSet.Data[index].UpdateStatusFlags = value; }
+		}
+
+		/// <summary>
 		/// Gets or sets the branch targets.
 		/// </summary>
 		/// <value>
