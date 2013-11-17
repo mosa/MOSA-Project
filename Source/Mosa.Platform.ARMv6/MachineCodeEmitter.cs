@@ -81,10 +81,25 @@ namespace Mosa.Platform.ARMv6
 			Write(value);
 		}
 
+		public void EmitBranch(ConditionCode conditionCode, int offset, bool link)
+		{
+			Debug.Assert(offset <= 0xFFF);
+
+			uint value = 0;
+
+			value |= (uint)(GetConditionCode(conditionCode) << 28);
+			value |= (uint)(Bits.b0101 << 25);
+			value |= (uint)(link ? 1 : 0 << 24);
+			value |= (uint)offset;
+
+			Write(value);
+		}
+
 		public void EmitDataProcessingInstructionWithRegister(ConditionCode conditionCode, byte opcode, bool setCondition, int firstRegister, int destinationRegister, int secondRegister, int secondShift)
 		{
 			Debug.Assert(opcode <= 0xF);
 			Debug.Assert(destinationRegister <= 0xF);
+			Debug.Assert(firstRegister <= 0xF); 
 			Debug.Assert(secondRegister <= 0xF);
 			Debug.Assert(secondShift <= 0xFF);
 
@@ -95,6 +110,7 @@ namespace Mosa.Platform.ARMv6
 			value |= (uint)(opcode << 21);
 			value |= (uint)(setCondition ? 1 : 0 << 20);
 			value |= (uint)(firstRegister << 16);
+			value |= (uint)(destinationRegister << 12);
 			value |= (uint)(secondShift << 4);
 			value |= (uint)secondRegister;
 
@@ -105,6 +121,7 @@ namespace Mosa.Platform.ARMv6
 		{
 			Debug.Assert(opcode <= 0xF);
 			Debug.Assert(destinationRegister <= 0xF);
+			Debug.Assert(firstRegister <= 0xF);
 			Debug.Assert(rotate <= 0xF);
 			Debug.Assert(immediate <= 0xFF);
 
@@ -112,10 +129,50 @@ namespace Mosa.Platform.ARMv6
 
 			value |= (uint)(GetConditionCode(conditionCode) << 28);
 			value |= (uint)(0x1 << 25);
-			value |= (uint)((opcode) << 21);
+			value |= (uint)(opcode << 21);
 			value |= (uint)(setCondition ? 1 : 0 << 20);
+			value |= (uint)(firstRegister << 16);
+			value |= (uint)(destinationRegister << 12);
 			value |= (uint)(rotate << 8);
 			value |= (uint)immediate;
+
+			Write(value);
+		}
+
+		public void EmitMultiply(ConditionCode conditionCode, bool setCondition, int firstRegister, int destinationRegister, int secondRegister)
+		{
+			Debug.Assert(destinationRegister <= 0xF);
+			Debug.Assert(secondRegister <= 0xF);
+			Debug.Assert(firstRegister <= 0xF);
+
+			uint value = 0;
+
+			value |= (uint)(GetConditionCode(conditionCode) << 28);
+			value |= (uint)(setCondition ? 1 : 0 << 20);
+			value |= (uint)(destinationRegister << 16);
+			value |= (uint)(firstRegister << 12);
+			value |= (uint)(Bits.b1001 << 4);
+			value |= (uint)(secondRegister << 8);
+
+			Write(value);
+		}
+
+		public void EmitMultiplyWithAccumulate(ConditionCode conditionCode, bool setCondition, int firstRegister, int destinationRegister, int secondRegister, int accumulateRegister)
+		{
+			Debug.Assert(destinationRegister <= 0xF);
+			Debug.Assert(secondRegister <= 0xF);
+			Debug.Assert(firstRegister <= 0xF);
+
+			uint value = 0;
+
+			value |= (uint)(GetConditionCode(conditionCode) << 28);
+			value |= (uint)(1 << 21);
+			value |= (uint)(setCondition ? 1 : 0 << 20);
+			value |= (uint)(destinationRegister << 16);
+			value |= (uint)(firstRegister << 12);
+			value |= (uint)(secondRegister << 8);
+			value |= (uint)(Bits.b1001 << 4);
+			value |= (uint)accumulateRegister;
 
 			Write(value);
 		}
