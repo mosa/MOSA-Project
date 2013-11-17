@@ -74,7 +74,7 @@ namespace Mosa.Platform.ARMv6
 		/// <returns>A string representation of the operand.</returns>
 		public override string ToString()
 		{
-			return "AVR32." + base.ToString();
+			return "ARMv6." + base.ToString();
 		}
 
 		/// <summary>

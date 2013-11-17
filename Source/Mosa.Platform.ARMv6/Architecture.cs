@@ -13,6 +13,7 @@ using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Stages;
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Signatures;
+using Mosa.Platform.ARMv6.Stages;
 using System;
 
 namespace Mosa.Platform.ARMv6
@@ -177,16 +178,12 @@ namespace Mosa.Platform.ARMv6
 		/// <param name="methodCompilerPipeline">The method compiler pipeline to extend.</param>
 		public override void ExtendMethodCompilerPipeline(CompilerPipeline methodCompilerPipeline)
 		{
-			//methodCompilerPipeline.InsertAfterLast<PlatformStubStage>(
-			//    new IMethodCompilerStage[]
-			//    {
-			//        //new LongOperandTransformationStage(),
-			//        //new AddressModeConversionStage(),
-			//        new IRTransformationStage(),
-
-			//        //new TweakTransformationStage(),
-			//        //new MemToMemConversionStage(),
-			//    });
+			methodCompilerPipeline.InsertAfterLast<PlatformStubStage>(
+				new IMethodCompilerStage[]
+			    {
+			        //new LongOperandTransformationStage(),
+			        new IRTransformationStage(),
+			    });
 
 			//methodCompilerPipeline.InsertAfterLast<IBlockOrderStage>(
 			//    new SimplePeepholeOptimizationStage()
