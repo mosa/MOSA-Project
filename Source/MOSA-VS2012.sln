@@ -50,7 +50,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Kernel.x86", "Mosa.Ker
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libraries", "Libraries", "{E808AF53-3054-497B-B7C5-DEA4FDED0806}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Platform.Internal.x86", "Mosa.Platform.x86.Intrinsic\Mosa.Platform.Internal.x86.csproj", "{A47B7998-4EE8-4AF8-9373-C664FDEDDC65}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Platform.Internal.x86", "Mosa.Platform.Internal.x86\Mosa.Platform.Internal.x86.csproj", "{A47B7998-4EE8-4AF8-9373-C664FDEDDC65}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Test.Prebuilt", "Mosa.Test.Prebuilt\Mosa.Test.Prebuilt.csproj", "{F9043097-AD68-4E7E-AD16-853A7DB2ECDD}"
 EndProject
@@ -108,7 +108,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Internal.Plug", "Mosa.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Kernel.AVR32", "Mosa.Kernel.AVR32\Mosa.Kernel.AVR32.csproj", "{4CFF6607-4D83-46E6-A1D0-EF945311C98B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Platform.Internal.AVR32", "Mosa.Platform.AVR32.Intrinsic\Mosa.Platform.Internal.AVR32.csproj", "{599D1C00-7C78-4801-A958-1285C4CB76C9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Platform.Internal.AVR32", "Mosa.Platform.Internal.AVR32\Mosa.Platform.Internal.AVR32.csproj", "{599D1C00-7C78-4801-A958-1285C4CB76C9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.HelloWorld.AVR32", "Mosa.HelloWorld.AVR32\Mosa.HelloWorld.AVR32.csproj", "{F5C47C68-67C3-47D2-8846-DD817C2E3999}"
 EndProject
@@ -156,7 +156,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Test.Numbers", "Mosa.T
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Kernel.ARMv6", "Mosa.Kernel.ARMv6\Mosa.Kernel.ARMv6.csproj", "{4CFF6607-4D83-46E6-A1D0-EF045311C98B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Platform.Internal.ARMv6", "Mosa.Platform.ARMv6.Intrinsic\Mosa.Platform.Internal.ARMv6.csproj", "{599D1C00-7C78-4211-A958-1285C4CB76C9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Platform.Internal.ARMv6", "Mosa.Platform.Internal.ARMv6\Mosa.Platform.Internal.ARMv6.csproj", "{599D1C00-7C78-4211-A958-1285C4CB76C9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Platform.ARMv6", "Mosa.Platform.ARMv6\Mosa.Platform.ARMv6.csproj", "{0FB92651-3EE8-441D-84F2-C4DFDA68E8A5}"
 EndProject

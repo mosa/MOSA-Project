@@ -15,7 +15,7 @@ namespace Mosa.Kernel.x86Test
 	{
 		private static uint memoryPtr;
 
-		[PlugMethod("Mosa.Platform.Internal.x86.AllocateMemory")]
+		[PlugMethod("Mosa.Platform.Internal.x86.Runtime.AllocateMemory")]
 		static public uint AllocateMemory(uint size)
 		{
 			uint alloc = memoryPtr;

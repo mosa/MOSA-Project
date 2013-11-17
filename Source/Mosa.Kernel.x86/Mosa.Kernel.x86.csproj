@@ -103,7 +103,7 @@
       <Project>{77961864-DB33-4189-804F-D774022C96E2}</Project>
       <Name>Mosa.Internal.Plug</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Mosa.Platform.x86.Intrinsic\Mosa.Platform.Internal.x86.csproj">
+    <ProjectReference Include="..\Mosa.Platform.Internal.x86\Mosa.Platform.Internal.x86.csproj">
       <Project>{A47B7998-4EE8-4AF8-9373-C664FDEDDC65}</Project>
       <Name>Mosa.Platform.Internal.x86</Name>
     </ProjectReference>
