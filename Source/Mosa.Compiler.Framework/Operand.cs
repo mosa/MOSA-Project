@@ -23,21 +23,17 @@ namespace Mosa.Compiler.Framework
 	/// </summary>
 	public sealed class Operand
 	{
-		#region Data members
+		#region Properties
 
 		/// <summary>
 		/// Holds a list of instructions, which define this operand.
 		/// </summary>
-		private List<int> definitions;
+		public List<int> Definitions { get; private set; }
 
 		/// <summary>
 		/// Holds a list of instructions, which use this operand.
 		/// </summary>
-		private List<int> uses;
-
-		#endregion Data members
-
-		#region Properties
+		public List<int> Uses { get; private set; }
 
 		/// <summary>
 		/// Returns the type of the operand.
@@ -45,19 +41,9 @@ namespace Mosa.Compiler.Framework
 		public SigType Type { get; private set; }
 
 		/// <summary>
-		/// Returns a list of instructions, which use this operand.
-		/// </summary>
-		public List<int> Definitions { get { return definitions; } }
-
-		/// <summary>
 		/// Returns the value of the constant.
 		/// </summary>
 		public object Value { get; private set; }
-
-		/// <summary>
-		/// Returns a list of instructions, which use this operand.
-		/// </summary>
-		public List<int> Uses { get { return uses; } }
 
 		/// <summary>
 		/// Retrieves the register, where the operand is located.
@@ -261,6 +247,8 @@ namespace Mosa.Compiler.Framework
 
 		private Operand()
 		{
+			Definitions = new List<int>();
+			Uses = new List<int>();
 			this.IsParameter = false;
 			this.IsStackLocal = false;
 			this.IsShift = false;
@@ -282,9 +270,7 @@ namespace Mosa.Compiler.Framework
 		private Operand(SigType type)
 			: this()
 		{
-			this.Type = type;
-			definitions = new List<int>();
-			uses = new List<int>();
+			Type = type;
 		}
 
 		/// <summary>
@@ -296,8 +282,6 @@ namespace Mosa.Compiler.Framework
 		{
 			this.ShiftType = shiftType;
 			this.IsShift = true;
-			definitions = new List<int>();
-			uses = new List<int>();
 		}
 
 		#endregion Construction
