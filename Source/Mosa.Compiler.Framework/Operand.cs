@@ -35,11 +35,6 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		private List<int> uses;
 
-		/// <summary>
-		/// The operand of the parent.
-		/// </summary>
-		private Operand parent;
-
 		#endregion Data members
 
 		#region Properties
@@ -85,7 +80,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets the base operand.
 		/// </summary>
-		public Operand SSAParent { get { return IsSSA ? parent : null; } private set { parent = value; } }
+		public Operand SSAParent { get; private set; }
 
 		/// <summary>
 		/// Holds the address offset if used together with a base register or the absolute address, if register is null.
@@ -127,7 +122,7 @@ namespace Mosa.Compiler.Framework
 		/// <value>
 		/// The split64 parent.
 		/// </value>
-		public Operand SplitParent { get { return !IsSSA ? parent : null; } private set { parent = value; } }
+		public Operand SplitParent { get; private set; }
 
 		/// <summary>
 		/// Determines if the operand is a constant variable.
@@ -190,7 +185,7 @@ namespace Mosa.Compiler.Framework
 		/// <value>
 		/// <c>true</c> if this instance is split64 child; otherwise, <c>false</c>.
 		/// </value>
-		public bool IsSplitChild { get { return parent != null && !IsSSA; } }
+		public bool IsSplitChild { get { return SplitParent != null && !IsSSA; } }
 
 		/// <summary>
 		/// Determines if the operand is a shift operand.
@@ -595,7 +590,7 @@ namespace Mosa.Compiler.Framework
 				operand.IsVirtualRegister = true;
 			}
 
-			operand.parent = longOperand;
+			operand.SplitParent = longOperand;
 
 			Debug.Assert(longOperand.Low == null);
 			longOperand.Low = operand;
@@ -652,7 +647,7 @@ namespace Mosa.Compiler.Framework
 				operand.IsVirtualRegister = true;
 			}
 
-			operand.parent = longOperand;
+			operand.SplitParent = longOperand;
 
 			//operand.SplitParent = longOperand;
 
@@ -720,9 +715,9 @@ namespace Mosa.Compiler.Framework
 			{
 				s.Append(' ');
 
-				s.Append("(" + parent.ToString() + ")");
+				s.Append("(" + SplitParent.ToString() + ")");
 
-				if (parent.High == this)
+				if (SplitParent.High == this)
 					s.Append("/high");
 				else
 					s.Append("/low");
