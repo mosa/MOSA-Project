@@ -47,6 +47,7 @@ namespace Mosa.Platform.ARMv6
 			switch (condition)
 			{
 				case ConditionCode.Always: return Bits.b1110;
+				case ConditionCode.Never: return Bits.b1111;
 				case ConditionCode.Equal: return Bits.b0000;
 				case ConditionCode.GreaterOrEqual: return Bits.b1010;
 				case ConditionCode.GreaterThan: return Bits.b1100;

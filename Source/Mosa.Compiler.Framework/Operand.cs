@@ -25,19 +25,6 @@ namespace Mosa.Compiler.Framework
 	{
 		#region Data members
 
-		[Flags]
-		private enum OperandType { Undefined = 0, Constant = 1, StackLocal = 2, Parameter = 4, Symbol = 16, CPURegister = 64, SSA = 128, RuntimeMember = 256, MemoryAddress = 512, VirtualRegister = 1024, Label = 2048 };
-
-		/// <summary>
-		///
-		/// </summary>
-		private readonly OperandType operandType;
-
-		/// <summary>
-		/// The namespace of the operand.
-		/// </summary>
-		private readonly SigType sigType;
-
 		/// <summary>
 		/// Holds a list of instructions, which define this operand.
 		/// </summary>
@@ -49,29 +36,9 @@ namespace Mosa.Compiler.Framework
 		private List<int> uses;
 
 		/// <summary>
-		/// Holds the index.
-		/// </summary>
-		private int index;
-
-		/// <summary>
-		/// The register where the operand is stored.
-		/// </summary>
-		private Register register;
-
-		/// <summary>
-		/// The operand for the offset base.
-		/// </summary>
-		private Operand offsetBase;
-
-		/// <summary>
 		/// The operand of the parent.
 		/// </summary>
 		private Operand parent;
-
-		/// <summary>
-		/// Holds the runtime member.
-		/// </summary>
-		private RuntimeMember runtimeMember;
 
 		#endregion Data members
 
@@ -80,7 +47,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Returns the type of the operand.
 		/// </summary>
-		public SigType Type { get { return sigType; } }
+		public SigType Type { get; private set; }
 
 		/// <summary>
 		/// Returns a list of instructions, which use this operand.
@@ -100,12 +67,12 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Retrieves the register, where the operand is located.
 		/// </summary>
-		public Register Register { get { return register; } private set { register = value; } }
+		public Register Register { get; private set; }
 
 		/// <summary>
 		/// Retrieves the offset base.
 		/// </summary>
-		public Operand OffsetBase { get { return offsetBase; } private set { offsetBase = value; } }
+		public Operand OffsetBase { get; private set; }
 
 		/// <summary>
 		/// Gets the effective base.
@@ -113,7 +80,7 @@ namespace Mosa.Compiler.Framework
 		/// <value>
 		/// The effective base.
 		/// </value>
-		public Register EffectiveOffsetBase { get { return offsetBase != null ? offsetBase.register : register; } }
+		public Register EffectiveOffsetBase { get { return OffsetBase != null ? OffsetBase.Register : Register; } }
 
 		/// <summary>
 		/// Gets the base operand.
@@ -131,7 +98,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Retrieves the runtime member.
 		/// </summary>
-		public RuntimeMember RuntimeMember { get { return runtimeMember; } private set { runtimeMember = value; } }
+		public RuntimeMember RuntimeMember { get; private set; }
 
 		/// <summary>
 		/// Gets the ssa version.
@@ -165,17 +132,17 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Determines if the operand is a constant variable.
 		/// </summary>
-		public bool IsConstant { get { return (operandType & OperandType.Constant) == OperandType.Constant; } }
+		public bool IsConstant { get; private set; }
 
 		/// <summary>
 		/// Determines if the operand is a symbol operand.
 		/// </summary>
-		public bool IsSymbol { get { return (operandType & OperandType.Symbol) == OperandType.Symbol; } }
+		public bool IsSymbol { get; private set; }
 
 		/// <summary>
 		/// Determines if the operand is a label operand.
 		/// </summary>
-		public bool IsLabel { get { return (operandType & OperandType.Label) == OperandType.Label; } }
+		public bool IsLabel { get; private set; }
 
 		/// <summary>
 		/// Determines if the operand is a register.
@@ -185,37 +152,37 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Determines if the operand is a virtual register operand.
 		/// </summary>
-		public bool IsVirtualRegister { get { return (operandType & OperandType.VirtualRegister) == OperandType.VirtualRegister; } }
+		public bool IsVirtualRegister { get; private set; }
 
 		/// <summary>
 		/// Determines if the operand is a cpu register operand.
 		/// </summary>
-		public bool IsCPURegister { get { return (operandType & OperandType.CPURegister) == OperandType.CPURegister; } }
+		public bool IsCPURegister { get; private set; }
 
 		/// <summary>
 		/// Determines if the operand is a memory operand.
 		/// </summary>
-		public bool IsMemoryAddress { get { return (operandType & OperandType.MemoryAddress) == OperandType.MemoryAddress; } }
+		public bool IsMemoryAddress { get; private set; }
 
 		/// <summary>
 		/// Determines if the operand is a stack local operand.
 		/// </summary>
-		public bool IsStackLocal { get { return (operandType & OperandType.StackLocal) == OperandType.StackLocal; } }
+		public bool IsStackLocal { get; private set; }
 
 		/// <summary>
 		/// Determines if the operand is a runtime member operand.
 		/// </summary>
-		public bool IsRuntimeMember { get { return (operandType & OperandType.RuntimeMember) == OperandType.RuntimeMember; } }
+		public bool IsRuntimeMember { get; private set; }
 
 		/// <summary>
 		/// Determines if the operand is a local variable operand.
 		/// </summary>
-		public bool IsParameter { get { return (operandType & OperandType.Parameter) == OperandType.Parameter; } }
+		public bool IsParameter { get; private set; }
 
 		/// <summary>
 		/// Determines if the operand is a ssa operand.
 		/// </summary>
-		public bool IsSSA { get { return (operandType & OperandType.SSA) == OperandType.SSA; } }
+		public bool IsSSA { get; private set; }
 
 		/// <summary>
 		/// Gets a value indicating whether this instance is split64 child.
@@ -226,26 +193,20 @@ namespace Mosa.Compiler.Framework
 		public bool IsSplitChild { get { return parent != null && !IsSSA; } }
 
 		/// <summary>
+		/// Determines if the operand is a shift operand.
+		/// </summary>
+		public bool IsShift { get; private set; }
+
+		/// <summary>
 		/// Gets the name.
 		/// </summary>
 		/// <value>The name.</value>
 		public string Name { get; private set; }
 
 		/// <summary>
-		/// Gets the sequence.
-		/// </summary>
-		/// <value>
-		/// The name.
-		/// </value>
-		public int Sequence { get { return this.index; } }
-
-		/// <summary>
 		/// Gets the index.
 		/// </summary>
-		/// <value>
-		/// The name.
-		/// </value>
-		public int Index { get { return this.index; } }
+		public int Index { get; private set; }
 
 		/// <summary>
 		/// Gets the value as long integer.
@@ -281,7 +242,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Returns the stack type of the operand.
 		/// </summary>
-		public StackTypeCode StackType { get { return StackTypeFromSigType(sigType); } }
+		public StackTypeCode StackType { get { return StackTypeFromSigType(Type); } }
 
 		/// <summary>
 		/// Gets a value indicating whether this instance is floating point.
@@ -291,29 +252,55 @@ namespace Mosa.Compiler.Framework
 		/// </value>
 		public bool IsFloatingPoint { get { return (Type.Type == CilElementType.R4 || Type.Type == CilElementType.R8); } }
 
+		/// <summary>
+		/// Gets the type of the shift.
+		/// </summary>
+		/// <value>
+		/// The type of the shift.
+		/// </value>
+		public ShiftType ShiftType { get; private set; }
+
 		#endregion Properties
 
 		#region Construction
 
-		/// <summary>
-		/// Initializes a new instance of <see cref="Operand"/>.
-		/// </summary>
-		/// <param name="type">The type of the operand.</param>
-		private Operand(SigType type)
+		private Operand()
 		{
-			this.sigType = type;
-			definitions = new List<int>();
-			uses = new List<int>();
+			this.IsParameter = false;
+			this.IsStackLocal = false;
+			this.IsShift = false;
+			this.IsConstant = false;
+			this.IsVirtualRegister = false;
+			this.IsLabel = false;
+			this.IsCPURegister = false;
+			this.IsMemoryAddress = false;
+			this.IsSSA = false;
+			this.IsSymbol = false;
+			this.IsRuntimeMember = false;
+			this.IsParameter = false;
 		}
 
 		/// <summary>
 		/// Initializes a new instance of <see cref="Operand"/>.
 		/// </summary>
 		/// <param name="type">The type of the operand.</param>
-		private Operand(SigType type, OperandType operandType)
+		private Operand(SigType type)
+			: this()
 		{
-			this.sigType = type;
-			this.operandType = operandType;
+			this.Type = type;
+			definitions = new List<int>();
+			uses = new List<int>();
+		}
+
+		/// <summary>
+		/// Prevents a default instance of the <see cref="Operand"/> class from being created.
+		/// </summary>
+		/// <param name="shiftType">Type of the shift.</param>
+		private Operand(ShiftType shiftType)
+			: this()
+		{
+			this.ShiftType = shiftType;
+			this.IsShift = true;
 			definitions = new List<int>();
 			uses = new List<int>();
 		}
@@ -330,7 +317,8 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		public static Operand CreateConstant(SigType sigType, object value)
 		{
-			Operand operand = new Operand(sigType, OperandType.Constant);
+			Operand operand = new Operand(sigType);
+			operand.IsConstant = true;
 			operand.Value = value;
 			return operand;
 		}
@@ -372,7 +360,8 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		public static Operand CreateSymbol(SigType sigType, string name)
 		{
-			Operand operand = new Operand(sigType, OperandType.Symbol);
+			Operand operand = new Operand(sigType);
+			operand.IsSymbol = true;
 			operand.Name = name;
 			return operand;
 		}
@@ -397,8 +386,9 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		public static Operand CreateVirtualRegister(SigType sigType, int index)
 		{
-			Operand operand = new Operand(sigType, OperandType.VirtualRegister);
-			operand.index = index;
+			Operand operand = new Operand(sigType);
+			operand.IsVirtualRegister = true;
+			operand.Index = index;
 			return operand;
 		}
 
@@ -411,9 +401,10 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		public static Operand CreateVirtualRegister(SigType sigType, int index, string name)
 		{
-			Operand operand = new Operand(sigType, OperandType.VirtualRegister);
+			Operand operand = new Operand(sigType);
+			operand.IsVirtualRegister = true;
 			operand.Name = name;
-			operand.index = index;
+			operand.Index = index;
 			return operand;
 		}
 
@@ -425,8 +416,9 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		public static Operand CreateCPURegister(SigType sigType, Register register)
 		{
-			Operand operand = new Operand(sigType, OperandType.CPURegister);
-			operand.register = register;
+			Operand operand = new Operand(sigType);
+			operand.IsCPURegister = true;
+			operand.Register = register;
 			return operand;
 		}
 
@@ -439,7 +431,8 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		public static Operand CreateMemoryAddress(SigType sigType, Operand offsetBase, long offset)
 		{
-			Operand operand = new Operand(sigType, OperandType.MemoryAddress);
+			Operand operand = new Operand(sigType);
+			operand.IsMemoryAddress = true;
 			operand.OffsetBase = offsetBase;
 			operand.Displacement = offset;
 			return operand;
@@ -453,7 +446,9 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		public static Operand CreateLabel(SigType sigType, string label)
 		{
-			Operand operand = new Operand(sigType, OperandType.MemoryAddress | OperandType.Label);
+			Operand operand = new Operand(sigType);
+			operand.IsMemoryAddress = true;
+			operand.IsLabel = true;
 			operand.Name = label;
 			operand.Displacement = 0;
 			return operand;
@@ -468,9 +463,11 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		public static Operand CreateRuntimeMember(SigType type, RuntimeMember member, int offset)
 		{
-			Operand operand = new Operand(type, OperandType.MemoryAddress | OperandType.RuntimeMember);
+			Operand operand = new Operand(type);
+			operand.IsMemoryAddress = true;
+			operand.IsRuntimeMember = true;
 			operand.Displacement = offset;
-			operand.runtimeMember = member;
+			operand.RuntimeMember = member;
 			return operand;
 		}
 
@@ -481,9 +478,11 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		public static Operand CreateRuntimeMember(RuntimeField field)
 		{
-			Operand operand = new Operand(field.SigType, OperandType.MemoryAddress | OperandType.RuntimeMember);
+			Operand operand = new Operand(field.SigType);
+			operand.IsMemoryAddress = true;
+			operand.IsRuntimeMember = true;
 			operand.Displacement = 0;
-			operand.runtimeMember = field;
+			operand.RuntimeMember = field;
 			return operand;
 		}
 
@@ -496,9 +495,11 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		public static Operand CreateParameter(SigType type, Register register, RuntimeParameter param, int index)
 		{
-			Operand operand = new Operand(type, OperandType.MemoryAddress | OperandType.Parameter);
-			operand.register = register;
-			operand.index = index; // param.Position;
+			Operand operand = new Operand(type);
+			operand.IsMemoryAddress = true;
+			operand.IsParameter = true;
+			operand.Register = register;
+			operand.Index = index; // param.Position;
 
 			//operand.sequence = index;
 			operand.Displacement = param.Position * 4; // FIXME: 4 is platform dependent!
@@ -514,9 +515,11 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		public static Operand CreateStackLocal(SigType sigType, Register register, int index)
 		{
-			Operand operand = new Operand(sigType, OperandType.StackLocal | OperandType.MemoryAddress);
-			operand.register = register;
-			operand.index = index;
+			Operand operand = new Operand(sigType);
+			operand.IsMemoryAddress = true;
+			operand.Register = register;
+			operand.Index = index;
+			operand.IsStackLocal = true;
 			return operand;
 		}
 
@@ -528,7 +531,19 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		public static Operand CreateSSA(Operand ssaOperand, int ssaVersion)
 		{
-			Operand operand = new Operand(ssaOperand.sigType, ssaOperand.operandType | OperandType.SSA);
+			Operand operand = new Operand(ssaOperand.Type);
+			operand.IsParameter = ssaOperand.IsParameter;
+			operand.IsStackLocal = ssaOperand.IsStackLocal;
+			operand.IsShift = ssaOperand.IsShift;
+			operand.IsConstant = ssaOperand.IsConstant;
+			operand.IsVirtualRegister = ssaOperand.IsVirtualRegister;
+			operand.IsLabel = ssaOperand.IsLabel;
+			operand.IsCPURegister = ssaOperand.IsCPURegister;
+			operand.IsMemoryAddress = ssaOperand.IsMemoryAddress;
+			operand.IsSymbol = ssaOperand.IsSymbol;
+			operand.IsRuntimeMember = ssaOperand.IsRuntimeMember;
+			operand.IsParameter = ssaOperand.IsParameter;
+			operand.IsSSA = true;
 			operand.SSAParent = ssaOperand;
 			operand.SSAVersion = ssaVersion;
 			return operand;
@@ -552,27 +567,32 @@ namespace Mosa.Compiler.Framework
 
 			if (longOperand.IsConstant)
 			{
-				operand = new Operand(BuiltInSigType.UInt32, OperandType.Constant);
+				operand = new Operand(BuiltInSigType.UInt32);
+				operand.IsConstant = true;
 				operand.Value = longOperand.ValueAsLongInteger & uint.MaxValue;
 			}
 			else if (longOperand.IsRuntimeMember)
 			{
-				operand = new Operand(BuiltInSigType.UInt32, OperandType.MemoryAddress | OperandType.RuntimeMember);
-				operand.runtimeMember = longOperand.RuntimeMember;
+				operand = new Operand(BuiltInSigType.UInt32);
+				operand.IsMemoryAddress = true;
+				operand.IsRuntimeMember = true;
+				operand.RuntimeMember = longOperand.RuntimeMember;
 				operand.OffsetBase = longOperand.OffsetBase;
 				operand.Displacement = longOperand.Displacement + offset;
 				operand.Register = longOperand.Register;
 			}
 			else if (longOperand.IsMemoryAddress)
 			{
-				operand = new Operand(BuiltInSigType.UInt32, OperandType.MemoryAddress);
+				operand = new Operand(BuiltInSigType.UInt32);
+				operand.IsMemoryAddress = true;
 				operand.OffsetBase = longOperand.OffsetBase;
 				operand.Displacement = longOperand.Displacement + offset;
 				operand.Register = longOperand.Register;
 			}
 			else
 			{
-				operand = new Operand(BuiltInSigType.UInt32, OperandType.VirtualRegister);
+				operand = new Operand(BuiltInSigType.UInt32);
+				operand.IsVirtualRegister = true;
 			}
 
 			operand.parent = longOperand;
@@ -580,7 +600,7 @@ namespace Mosa.Compiler.Framework
 			Debug.Assert(longOperand.Low == null);
 			longOperand.Low = operand;
 
-			operand.index = index;
+			operand.Index = index;
 
 			//operand.sequence = index;
 			return operand;
@@ -604,27 +624,32 @@ namespace Mosa.Compiler.Framework
 
 			if (longOperand.IsConstant)
 			{
-				operand = new Operand(BuiltInSigType.UInt32, OperandType.Constant);
+				operand = new Operand(BuiltInSigType.UInt32);
+				operand.IsConstant = true;
 				operand.Value = ((uint)((ulong)(longOperand.ValueAsLongInteger) >> 32)) & uint.MaxValue;
 			}
 			else if (longOperand.IsRuntimeMember)
 			{
-				operand = new Operand(BuiltInSigType.UInt32, OperandType.MemoryAddress | OperandType.RuntimeMember);
-				operand.runtimeMember = longOperand.RuntimeMember;
+				operand = new Operand(BuiltInSigType.UInt32);
+				operand.IsMemoryAddress = true;
+				operand.IsRuntimeMember = true;
+				operand.RuntimeMember = longOperand.RuntimeMember;
 				operand.OffsetBase = longOperand.OffsetBase;
 				operand.Displacement = longOperand.Displacement + offset;
 				operand.Register = longOperand.Register;
 			}
 			else if (longOperand.IsMemoryAddress)
 			{
-				operand = new Operand(BuiltInSigType.UInt32, OperandType.MemoryAddress);
+				operand = new Operand(BuiltInSigType.UInt32);
+				operand.IsMemoryAddress = true;
 				operand.OffsetBase = longOperand.OffsetBase;
 				operand.Displacement = longOperand.Displacement + offset;
 				operand.Register = longOperand.Register;
 			}
 			else
 			{
-				operand = new Operand(BuiltInSigType.UInt32, OperandType.VirtualRegister);
+				operand = new Operand(BuiltInSigType.UInt32);
+				operand.IsVirtualRegister = true;
 			}
 
 			operand.parent = longOperand;
@@ -634,7 +659,18 @@ namespace Mosa.Compiler.Framework
 			Debug.Assert(longOperand.High == null);
 			longOperand.High = operand;
 
-			operand.index = index;
+			operand.Index = index;
+			return operand;
+		}
+
+		/// <summary>
+		/// Creates the shifter.
+		/// </summary>
+		/// <param name="shifter">The shifter.</param>
+		/// <returns></returns>
+		public static Operand CreateShifter(ShiftType shiftType)
+		{
+			Operand operand = new Operand(shiftType);
 			return operand;
 		}
 
@@ -669,15 +705,15 @@ namespace Mosa.Compiler.Framework
 
 			if (IsVirtualRegister)
 			{
-				s.AppendFormat("V_{0}", index);
+				s.AppendFormat("V_{0}", Index);
 			}
 			else if (IsStackLocal && Name == null)
 			{
-				s.AppendFormat("T_{0}", index);
+				s.AppendFormat("T_{0}", Index);
 			}
 			else if (IsParameter && Name == null)
 			{
-				s.AppendFormat("P_{0}", index);
+				s.AppendFormat("P_{0}", Index);
 			}
 
 			if (IsSplitChild)
@@ -705,12 +741,12 @@ namespace Mosa.Compiler.Framework
 			if (IsRuntimeMember)
 			{
 				s.Append(' ');
-				s.Append(runtimeMember.ToString());
+				s.Append(RuntimeMember.ToString());
 			}
 
 			if (IsCPURegister)
 			{
-				s.AppendFormat(" {0}", register);
+				s.AppendFormat(" {0}", Register);
 			}
 			else if (IsMemoryAddress)
 			{
@@ -738,17 +774,17 @@ namespace Mosa.Compiler.Framework
 				}
 			}
 
-			if (sigType is PtrSigType)
+			if (Type is PtrSigType)
 			{
-				s.AppendFormat(" [{0}-{1}]", sigType, (sigType as PtrSigType).ElementType);
+				s.AppendFormat(" [{0}-{1}]", Type, (Type as PtrSigType).ElementType);
 			}
-			else if (sigType is RefSigType)
+			else if (Type is RefSigType)
 			{
-				s.AppendFormat(" [{0}-{1}]", sigType, (sigType as RefSigType).ElementType);
+				s.AppendFormat(" [{0}-{1}]", Type, (Type as RefSigType).ElementType);
 			}
 			else
 			{
-				s.AppendFormat(" [{0}]", sigType);
+				s.AppendFormat(" [{0}]", Type);
 			}
 
 			return s.ToString().Replace("  ", " ").Trim();

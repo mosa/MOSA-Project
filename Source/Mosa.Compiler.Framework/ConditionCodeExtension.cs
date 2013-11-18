@@ -73,6 +73,8 @@ namespace Mosa.Compiler.Framework
 				case ConditionCode.NoOverflow: return ConditionCode.Overflow;
 				case ConditionCode.Positive: return ConditionCode.Negative;
 				case ConditionCode.Negative: return ConditionCode.Positive;
+				case ConditionCode.Always: return ConditionCode.Never;
+				case ConditionCode.Never: return ConditionCode.Always;
 				default: throw new NotSupportedException();
 			}
 		}

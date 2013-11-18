@@ -306,7 +306,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		private int GetIndex(Operand operand)
 		{
-			return (operand.IsCPURegister) ? (operand.Register.Index) : (operand.Sequence + physicalRegisterCount - 1);
+			return (operand.IsCPURegister) ? (operand.Register.Index) : (operand.Index + physicalRegisterCount - 1);
 		}
 
 		private void CreateExtendedBlocks()

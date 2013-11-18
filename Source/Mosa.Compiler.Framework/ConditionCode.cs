@@ -125,6 +125,11 @@ namespace Mosa.Compiler.Framework
 		Always,
 
 		/// <summary>
+		/// Never
+		/// </summary>
+		Never,
+
+		/// <summary>
 		/// The positive
 		/// </summary>
 		Positive,
