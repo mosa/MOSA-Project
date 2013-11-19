@@ -47,7 +47,7 @@ namespace Mosa.Platform.x86.Instructions
 		protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
 		{
 			// FIXME: This method is not called.
-			if (IsByte(third))
+			if (third.IsByte)
 			{
 				if ((source.IsConstant) && (third.IsRegister)) return C_R_8;
 				if ((source.IsRegister) && (third.IsRegister)) return R_R_8;

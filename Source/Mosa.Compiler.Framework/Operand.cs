@@ -355,6 +355,12 @@ namespace Mosa.Compiler.Framework
 
 		public bool IsLong { get { return IsUnsignedLong || IsSignedLong; } }
 
+		public bool IsBoolean { get { return Type.Type == CilElementType.Boolean; } }
+
+		public bool IsPointer { get { return Type.Type == CilElementType.Ptr; } }
+
+		public bool IsObject { get { return StackType == StackTypeCode.O; } }
+
 		#endregion Properties
 
 		#region Construction

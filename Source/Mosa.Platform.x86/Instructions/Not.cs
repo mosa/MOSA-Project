@@ -51,8 +51,8 @@ namespace Mosa.Platform.x86.Instructions
 		{
 			if ((destination.IsRegister) || (destination.IsMemoryAddress))
 			{
-				if (IsByte(destination)) return MR_8;
-				if (IsChar(destination)) return MR_16;
+				if (destination.IsByte) return MR_8;
+				if (destination.IsChar) return MR_16;
 				return MR;
 			}
 

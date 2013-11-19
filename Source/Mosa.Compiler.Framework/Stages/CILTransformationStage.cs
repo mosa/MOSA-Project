@@ -346,24 +346,24 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="context">The context.</param>
 		void CIL.ICILVisitor.Neg(Context context)
 		{
-			if (IsUnsigned(context.Operand1))
+			if (context.Operand1.IsUnsigned)
 			{
 				Operand zero = Operand.CreateConstant(context.Operand1.Type, 0);
 				context.SetInstruction(IRInstruction.SubU, context.Result, zero, context.Operand1);
 			}
-			else if (context.Operand1.Type.Type == CilElementType.R4)
+			else if (context.Operand1.IsSingle)
 			{
 				Operand minusOne = Operand.CreateConstantFloat(-1.0f);
 				context.SetInstruction(IRInstruction.MulF, context.Result, minusOne, context.Operand1);
 			}
-			else if (context.Operand1.Type.Type == CilElementType.R8)
+			else if (context.Operand1.IsDouble)
 			{
 				Operand minusOne = Operand.CreateConstantDouble(-1.0d);
 				context.SetInstruction(IRInstruction.MulF, context.Result, minusOne, context.Operand1);
 			}
 			else
 			{
-				Operand minusOne = Operand.CreateConstant(context.Operand1.Type, -1L);
+				Operand minusOne = Operand.CreateConstant(context.Operand1.Type, -1);
 				context.SetInstruction(IRInstruction.MulS, context.Result, minusOne, context.Operand1);
 			}
 		}
@@ -1399,11 +1399,11 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private static void Replace(Context context, BaseInstruction floatingPointInstruction, BaseInstruction signedInstruction, BaseInstruction unsignedInstruction)
 		{
-			if (IsFloatingPoint(context.Result))
+			if (context.Result.IsFloatingPoint)
 			{
 				context.ReplaceInstructionOnly(floatingPointInstruction);
 			}
-			else if (IsUnsigned(context.Result))
+			else if (context.Result.IsUnsigned)
 			{
 				context.ReplaceInstructionOnly(unsignedInstruction);
 			}
@@ -1411,45 +1411,28 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				context.ReplaceInstructionOnly(signedInstruction);
 			}
-		}
 
-		private static bool IsUnsigned(Operand operand)
-		{
-			CilElementType type = operand.Type.Type;
-			return type == CilElementType.U
-				   || type == CilElementType.U1
-				   || type == CilElementType.U2
-				   || type == CilElementType.U4
-				   || type == CilElementType.U8;
-		}
-
-		private static bool IsFloatingPoint(Operand operand)
-		{
-			return operand.StackType == StackTypeCode.F;
 		}
 
 		/// <summary>
 		/// Determines if a store is silently truncating the value.
 		/// </summary>
-		/// <param name="dest">The destination operand.</param>
+		/// <param name="destination">The destination operand.</param>
 		/// <param name="source">The source operand.</param>
 		/// <returns>True if the store is truncating, otherwise false.</returns>
-		private static bool IsTruncating(Operand dest, Operand source)
+		private static bool IsTruncating(Operand destination, Operand source)
 		{
-			CilElementType cetDest = dest.Type.Type;
-			CilElementType cetSource = source.Type.Type;
-
-			if (cetDest == CilElementType.I4 || cetDest == CilElementType.U4)
+			if (destination.IsInt)
 			{
-				return (cetSource == CilElementType.I8 || cetSource == CilElementType.U8);
+				return (source.IsLong);
 			}
-			if (cetDest == CilElementType.I2 || cetDest == CilElementType.U2 || cetDest == CilElementType.Char)
+			else if (destination.IsShort || destination.IsChar)
 			{
-				return (cetSource == CilElementType.I8 || cetSource == CilElementType.U8 || cetSource == CilElementType.I4 || cetSource == CilElementType.U4);
+				return (source.IsLong || source.IsInteger);
 			}
-			if (cetDest == CilElementType.I1 || cetDest == CilElementType.U1)
+			else if (destination.IsByte) // UNKNOWN: Add destination.IsBoolean
 			{
-				return (cetSource == CilElementType.I8 || cetSource == CilElementType.U8 || cetSource == CilElementType.I4 || cetSource == CilElementType.U4 || cetSource == CilElementType.I2 || cetSource == CilElementType.U2 || cetSource == CilElementType.U2);
+				return (source.IsLong || source.IsInteger || source.IsShort);
 			}
 
 			return false;
@@ -1501,21 +1484,12 @@ namespace Mosa.Compiler.Framework.Stages
 			switch (sigType.Type)
 			{
 				case CilElementType.I1: goto case CilElementType.I2;
-				case CilElementType.I2:
-					result = BuiltInSigType.Int32;
-					break;
-
+				case CilElementType.I2: result = BuiltInSigType.Int32; break;
 				case CilElementType.U1: goto case CilElementType.U2;
-				case CilElementType.U2:
-					result = BuiltInSigType.UInt32;
-					break;
-
+				case CilElementType.U2: result = BuiltInSigType.UInt32; break;
 				case CilElementType.Char: goto case CilElementType.U2;
 				case CilElementType.Boolean: goto case CilElementType.U2;
-
-				default:
-					result = sigType;
-					break;
+				default: result = sigType; break;
 			}
 
 			return result;

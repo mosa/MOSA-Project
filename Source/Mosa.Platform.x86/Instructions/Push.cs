@@ -56,11 +56,11 @@ namespace Mosa.Platform.x86.Instructions
 		{
 			if (context.Operand1.IsConstant)
 			{
-				if (IsByte(context.Operand1))
+				if (context.Operand1.IsByte)
 					emitter.Emit(CONST8, context.Operand1, null);
-				else if (IsShort(context.Operand1) || IsChar(context.Operand1))
+				else if (context.Operand1.IsShort || context.Operand1.IsChar)
 					emitter.Emit(CONST16, context.Operand1, null);
-				else if (IsInt(context.Operand1))
+				else if (context.Operand1.IsInt)
 					emitter.Emit(CONST32, context.Operand1, null);
 				return;
 			}

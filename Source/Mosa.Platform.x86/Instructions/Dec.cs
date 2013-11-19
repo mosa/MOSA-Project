@@ -49,9 +49,9 @@ namespace Mosa.Platform.x86.Instructions
 		/// <returns></returns>
 		protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
 		{
-			if (IsByte(destination)) return DEC8;
-			if (IsShort(destination) || IsChar(destination)) return DEC16;
-			if (IsInt(destination)) return DEC32;
+			if (destination.IsByte) return DEC8;
+			if (destination.IsShort || destination.IsChar) return DEC16;
+			if (destination.IsInt) return DEC32;
 
 			throw new ArgumentException(@"No opcode for operand type.");
 		}

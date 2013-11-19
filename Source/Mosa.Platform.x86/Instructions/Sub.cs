@@ -53,7 +53,7 @@ namespace Mosa.Platform.x86.Instructions
 
 			if (destination.IsRegister)
 			{
-				if (IsChar(third))
+				if (third.IsChar)
 					return R_O_16;
 				else
 					return R_O;

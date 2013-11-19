@@ -32,16 +32,13 @@ namespace Mosa.Platform.x86.Stages
 			Debug.Assert(!context.Result.IsConstant);
 
 			// Convert moves to float moves, if necessary
-			if (context.Result.StackType == StackTypeCode.F || context.Operand1.StackType == StackTypeCode.F)
+			if (context.Result.IsSingle)
 			{
-				if (context.Result.Type.Type == CilElementType.R4)
-				{
-					context.SetInstruction(X86.Movss, context.Result, context.Operand1);
-				}
-				else if (context.Result.Type.Type == CilElementType.R8)
-				{
-					context.SetInstruction(X86.Movsd, context.Result, context.Operand1);
-				}
+				context.SetInstruction(X86.Movss, context.Result, context.Operand1);
+			}
+			else if (context.Result.IsDouble)
+			{
+				context.SetInstruction(X86.Movsd, context.Result, context.Operand1);
 			}
 		}
 
@@ -158,7 +155,7 @@ namespace Mosa.Platform.x86.Stages
 				Operand edx = AllocateVirtualRegister(BuiltInSigType.Int32);
 				Context before = context.InsertBefore();
 
-				if (IsSigned(left))
+				if (left.IsSigned || left.IsPointer)	// FIXME: left.IsPointer correct?
 				{
 					before.AppendInstruction(X86.Movsx, edx, left);
 				}

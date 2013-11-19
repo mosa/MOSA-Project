@@ -308,7 +308,7 @@ namespace Mosa.Platform.x86.Stages
 
 			context.AppendInstruction(X86.Cmp, null, operand1, operand2);
 
-			if (IsUnsigned(resultOperand))
+			if (resultOperand.IsUnsigned || resultOperand.IsChar)
 				context.AppendInstruction(X86.Setcc, condition.GetUnsigned(), v1);
 			else
 				context.AppendInstruction(X86.Setcc, condition, v1);

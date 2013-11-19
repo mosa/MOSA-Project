@@ -143,17 +143,13 @@ namespace Mosa.Platform.AVR32
 				case CilElementType.Char:
 				case CilElementType.U2:
 				case CilElementType.Ptr:
-				case CilElementType.U4:
-					goto case CilElementType.I;
+				case CilElementType.U4: goto case CilElementType.I;
 				case CilElementType.I8:
 				case CilElementType.U8:
 				case CilElementType.R4:
-				case CilElementType.R8:
-					goto default;
-				case CilElementType.Object:
-					goto case CilElementType.I;
-				default:
-					throw new NotSupportedException(String.Format(@"CilElementType.{0} is not supported.", op.Type.Type));
+				case CilElementType.R8: goto default;
+				case CilElementType.Object: goto case CilElementType.I;
+				default: throw new NotSupportedException(String.Format(@"CilElementType.{0} is not supported.", op.Type.Type));
 			}
 		}
 	}

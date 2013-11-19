@@ -65,7 +65,7 @@ namespace Mosa.Platform.x86.Instructions
 
 			if (destination.IsMemoryAddress && source.IsConstant)
 			{
-				if (IsByte(source)) return RM_C_U8;
+				if (source.IsByte) return RM_C_U8;
 				return RM_C;
 			}
 
@@ -75,22 +75,22 @@ namespace Mosa.Platform.x86.Instructions
 
 			if (destination.IsRegister && source.IsRegister)
 			{
-				if (IsByte(source) || IsByte(destination)) return R_M_U8;
-				if (IsChar(source) || IsChar(destination) || IsShort(source) || IsShort(destination)) return R_R_16;
+				if (source.IsByte || destination.IsByte) return R_M_U8;
+				if (source.IsChar || destination.IsChar || source.IsShort || destination.IsShort) return R_R_16;
 				return R_RM;
 			}
 
 			if (destination.IsRegister && source.IsMemoryAddress)
 			{
-				if (IsByte(destination)) return R_M_U8;
-				if (IsChar(destination) || IsShort(destination)) return R_M_16;
+				if (destination.IsByte) return R_M_U8;
+				if (destination.IsChar || destination.IsShort) return R_M_16;
 				return R_RM;
 			}
 
 			if (destination.IsMemoryAddress && source.IsRegister)
 			{
-				if (IsByte(destination)) return RM_R_U8;
-				if (IsChar(destination) || IsShort(destination)) return M_R_16;
+				if (destination.IsByte) return RM_R_U8;
+				if (destination.IsChar || destination.IsShort) return M_R_16;
 				return M_R;
 			}
 
