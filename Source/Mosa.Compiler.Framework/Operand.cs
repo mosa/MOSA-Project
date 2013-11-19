@@ -885,7 +885,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Creates the shifter.
 		/// </summary>
-		/// <param name="shifter">The shifter.</param>
+		/// <param name="shiftType">Type of the shift.</param>
 		/// <returns></returns>
 		public static Operand CreateShifter(ShiftType shiftType)
 		{
