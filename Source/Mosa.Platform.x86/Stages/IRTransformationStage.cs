@@ -14,6 +14,7 @@ using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Compiler.TypeSystem;
+using Mosa.Compiler.Common;
 using System;
 using System.Diagnostics;
 
@@ -66,7 +67,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IIRVisitor.AddFloat(Context context)
 		{
-			if (context.Result.Type.Type == CilElementType.R4)
+			if (context.Result.IsSingle)
 				ReplaceInstructionAndAnyFloatingPointConstant(context, X86.Addss);
 			else
 				ReplaceInstructionAndAnyFloatingPointConstant(context, X86.Addsd);
@@ -78,7 +79,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IIRVisitor.DivFloat(Context context)
 		{
-			if (context.Result.Type.Type == CilElementType.R4)
+			if (context.Result.IsSingle)
 				ReplaceInstructionAndAnyFloatingPointConstant(context, X86.Divss);
 			else
 				ReplaceInstructionAndAnyFloatingPointConstant(context, X86.Divsd);
@@ -138,13 +139,13 @@ namespace Mosa.Platform.x86.Stages
 			Context before = context.InsertBefore();
 
 			// Compare using the smallest precision
-			if (left.Type.Type == CilElementType.R4 && right.Type.Type == CilElementType.R8)
+			if (left.IsSingle && right.IsDouble)
 			{
 				Operand rop = AllocateVirtualRegister(BuiltInSigType.Single);
 				before.SetInstruction(X86.Cvtsd2ss, rop, right);
 				right = rop;
 			}
-			if (left.Type.Type == CilElementType.R8 && right.Type.Type == CilElementType.R4)
+			if (left.IsDouble && right.IsSingle)
 			{
 				Operand rop = AllocateVirtualRegister(BuiltInSigType.Single);
 				before.SetInstruction(X86.Cvtsd2ss, rop, left);
@@ -152,7 +153,7 @@ namespace Mosa.Platform.x86.Stages
 			}
 
 			X86Instruction instruction = null;
-			if (left.Type.Type == CilElementType.R4)
+			if (left.IsSingle)
 			{
 				instruction = X86.Ucomiss;
 			}
@@ -341,7 +342,7 @@ namespace Mosa.Platform.x86.Stages
 
 				var mov = GetMove(result, mem);
 
-				if (result.Type.Type == CilElementType.R8 && GetElementType(mem.Type).Type == CilElementType.R4)
+				if (result.IsDouble && GetElementType(mem.Type).Type == CilElementType.R4)
 					mov = X86.Cvtss2sd;
 
 				context.SetInstruction(mov, result, mem);
@@ -356,7 +357,7 @@ namespace Mosa.Platform.x86.Stages
 
 				var mov = GetMove(result, mem);
 
-				if (result.Type.Type == CilElementType.R8 && GetElementType(mem.Type).Type == CilElementType.R4)
+				if (result.IsDouble && GetElementType(mem.Type).Type == CilElementType.R4)
 					mov = X86.Cvtss2sd;
 
 				context.AppendInstruction(mov, result, mem);
@@ -458,10 +459,10 @@ namespace Mosa.Platform.x86.Stages
 			Operand dest = context.Result;
 
 			context.SetInstruction(X86.Mov, context.Result, context.Operand1);
-			if (dest.Type.Type == CilElementType.U1)
-				context.AppendInstruction(X86.Xor, dest, dest, Operand.CreateConstantUnsignedInt((uint)0xFF));
-			else if (dest.Type.Type == CilElementType.U2)
-				context.AppendInstruction(X86.Xor, dest, dest, Operand.CreateConstantUnsignedInt((uint)0xFFFF));
+			if (dest.IsByte)
+				context.AppendInstruction(X86.Xor, dest, dest, Operand.CreateConstantUnsignedInt(0xFF));
+			else if (dest.IsUnsignedShort)
+				context.AppendInstruction(X86.Xor, dest, dest, Operand.CreateConstantUnsignedInt(0xFFFF));
 			else
 				context.AppendInstruction(X86.Not, dest, dest);
 		}
@@ -483,20 +484,20 @@ namespace Mosa.Platform.x86.Stages
 
 				if (result.Type.Type == operand.Type.Type)
 				{
-					if (result.Type.Type == CilElementType.R4)
+					if (result.IsSingle)
 					{
 						instruction = X86.Movss;
 					}
-					else if (result.Type.Type == CilElementType.R8)
+					else if (result.IsDouble)
 					{
 						instruction = X86.Movsd;
 					}
 				}
-				else if (result.Type.Type == CilElementType.R8)
+				else if (result.IsDouble)
 				{
 					instruction = X86.Cvtss2sd;
 				}
-				else if (result.Type.Type == CilElementType.R4)
+				else if (result.IsSingle)
 				{
 					instruction = X86.Cvtsd2ss;
 				}
@@ -589,7 +590,7 @@ namespace Mosa.Platform.x86.Stages
 			Operand offsetOperand = context.Operand2;
 			Operand value = context.Operand3;
 
-			if (value.Type.Type == CilElementType.R8 && GetElementType(baseOperand.Type).Type == CilElementType.R4)
+			if (value.IsDouble && GetElementType(baseOperand.Type).Type == CilElementType.R4)
 			{
 				Operand xmm1 = AllocateVirtualRegister(BuiltInSigType.Single);
 				context.InsertBefore().AppendInstruction(X86.Cvtsd2ss, xmm1, value);
@@ -625,7 +626,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IIRVisitor.MulFloat(Context context)
 		{
-			if (context.Result.Type.Type == CilElementType.R4)
+			if (context.Result.IsSingle)
 				ReplaceInstructionAndAnyFloatingPointConstant(context, X86.Mulss);
 			else
 				ReplaceInstructionAndAnyFloatingPointConstant(context, X86.Mulsd);
@@ -637,7 +638,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IIRVisitor.SubFloat(Context context)
 		{
-			if (context.Result.Type.Type == CilElementType.R4)
+			if (context.Result.IsSingle)
 				ReplaceInstructionAndAnyFloatingPointConstant(context, X86.Subss);
 			else
 				ReplaceInstructionAndAnyFloatingPointConstant(context, X86.Subsd);
@@ -885,7 +886,7 @@ namespace Mosa.Platform.x86.Stages
 				case CilElementType.I1: goto case CilElementType.I4;
 				case CilElementType.I2: goto case CilElementType.I4;
 				case CilElementType.I4:
-					if (source.Type.Type == CilElementType.R8)
+					if (source.IsDouble)
 						context.ReplaceInstructionOnly(X86.Cvttsd2si);
 					else
 						context.ReplaceInstructionOnly(X86.Cvttss2si);
@@ -940,9 +941,9 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IIRVisitor.IntegerToFloatConversion(Context context)
 		{
-			if (context.Result.Type.Type == CilElementType.R4)
+			if (context.Result.IsSingle)
 				context.ReplaceInstructionOnly(X86.Cvtsi2ss);
-			else if (context.Result.Type.Type == CilElementType.R8)
+			else if (context.Result.IsDouble)
 				context.ReplaceInstructionOnly(X86.Cvtsi2sd);
 			else
 				throw new NotSupportedException();

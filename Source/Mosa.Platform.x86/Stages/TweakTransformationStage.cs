@@ -824,7 +824,7 @@ namespace Mosa.Platform.x86.Stages
 			if (!context.Operand2.IsConstant)
 				return;
 
-			if (context.Operand2.Type.Type == CilElementType.U1)
+			if (context.Operand2.IsByte)
 				return;
 
 			context.Operand2 = Operand.CreateConstant(BuiltInSigType.Byte, context.Operand2.ConstantUnsignedInteger);

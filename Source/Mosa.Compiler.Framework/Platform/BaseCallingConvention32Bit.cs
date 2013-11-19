@@ -156,7 +156,7 @@ namespace Mosa.Compiler.Framework.Platform
 				int size, alignment;
 				architecture.GetTypeRequirements(operand.Type, out size, out alignment);
 
-				if (param != null && operand.Type.Type == CilElementType.R8 && param.Type == CilElementType.R4)
+				if (param != null && operand.IsDouble && param.Type == CilElementType.R4)
 				{
 					size = 4; alignment = 4;
 				}
@@ -183,9 +183,9 @@ namespace Mosa.Compiler.Framework.Platform
 				architecture.InsertMoveInstruction(context, Operand.CreateMemoryAddress(BuiltInSigType.Int32, scratch, stackSize), op.Low);
 				architecture.InsertMoveInstruction(context, Operand.CreateMemoryAddress(BuiltInSigType.Int32, scratch, stackSize + 4), op.High);
 			}
-			else if (op.StackType == StackTypeCode.F)
+			else if (op.IsFloatingPoint)
 			{
-				if (op.Type.Type == CilElementType.R8 && parameterSize == 4)
+				if (op.IsDouble && parameterSize == 4)
 				{
 					Operand op2 = Operand.CreateCPURegister(BuiltInSigType.Single, returnFloatingPointRegister);
 					architecture.InsertMoveInstruction(context, op2, op);
@@ -217,17 +217,17 @@ namespace Mosa.Compiler.Framework.Platform
 			{
 				architecture.InsertMoveInstruction(context, Operand.CreateCPURegister(operand.Type, return32BitRegister), operand);
 			}
-			else if (operand.Type.Type == CilElementType.R4)
+			else if (operand.IsSingle)
 			{
 				architecture.InsertMoveInstruction(context, Operand.CreateCPURegister(operand.Type, returnFloatingPointRegister), operand);
 			}
-			else if (operand.Type.Type == CilElementType.R8)
+			else if (operand.IsDouble)
 			{
 				architecture.InsertMoveInstruction(context, Operand.CreateCPURegister(operand.Type, returnFloatingPointRegister), operand);
 			}
-			else if (operand.Type.Type == CilElementType.I8 || operand.Type.Type == CilElementType.U8)
+			else if (operand.IsLong)
 			{
-				SigType HighType = (operand.Type.Type == CilElementType.I8) ? BuiltInSigType.Int32 : BuiltInSigType.UInt32;
+				SigType HighType = (operand.IsSignedLong) ? BuiltInSigType.Int32 : BuiltInSigType.UInt32;
 
 				architecture.InsertMoveInstruction(context, Operand.CreateCPURegister(BuiltInSigType.UInt32, return32BitRegister), operand.Low);
 				architecture.InsertMoveInstruction(context, Operand.CreateCPURegister(HighType, return64BitRegister), operand.High);

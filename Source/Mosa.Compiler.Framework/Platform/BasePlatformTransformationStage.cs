@@ -58,7 +58,7 @@ namespace Mosa.Compiler.Framework.Platform
 		/// </returns>
 		protected Operand EmitFloatingPointConstant(Operand operand)
 		{
-			if (!operand.IsConstant || operand.StackType != StackTypeCode.F)
+			if (!operand.IsConstant || !operand.IsFloatingPoint)
 				return operand;
 
 			int size, alignment;
@@ -70,11 +70,11 @@ namespace Mosa.Compiler.Framework.Platform
 			{
 				using (BinaryWriter writer = new BinaryWriter(stream))
 				{
-					if (operand.Type.Type == CilElementType.R4)
+					if (operand.IsSingle)
 					{
 						writer.Write(operand.ConstantSingleFloatingPoint);
 					}
-					else if (operand.Type.Type == CilElementType.R8)
+					else if (operand.IsDouble)
 					{
 						writer.Write(operand.ConstantDoubleFloatingPoint);
 					}

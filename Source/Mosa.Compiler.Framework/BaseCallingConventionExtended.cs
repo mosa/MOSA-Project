@@ -106,7 +106,7 @@ namespace Mosa.Compiler.Framework
 
 				SigType param = (index + offset >= 0) ? method.SigParameters[index + offset] : null;
 
-				if (param != null && operand.Type.Type == CilElementType.R8 && param.Type == CilElementType.R4)
+				if (param != null && operand.IsDouble && param.Type == CilElementType.R4)
 				{
 					size = 4;
 					alignment = 4;
