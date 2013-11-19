@@ -103,7 +103,7 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 
 			if (operand.IsConstant)
 			{
-				return CreateImmediate((ulong)operand.ValueAsLongInteger, size);
+				return CreateImmediate(operand.ConstantUnsignedInteger, size);
 			}
 			else if (operand.IsRegister)
 			{
@@ -127,7 +127,7 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 			{
 				if (operand.OffsetBase != null && operand.OffsetBase.IsConstant)
 				{
-					return CreateMemoryAddressOperand(size, (ulong)operand.OffsetBase.ValueAsLongInteger);
+					return CreateMemoryAddressOperand(size, operand.OffsetBase.ConstantUnsignedInteger);
 				}
 				else
 				{

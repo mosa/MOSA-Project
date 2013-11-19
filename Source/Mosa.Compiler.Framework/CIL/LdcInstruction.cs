@@ -7,8 +7,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using Mosa.Compiler.Metadata.Signatures;
-
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
@@ -48,35 +46,35 @@ namespace Mosa.Compiler.Framework.CIL
 				case OpCode.Ldc_i4:
 					{
 						int i = decoder.DecodeInt();
-						constantValueOperand = Operand.CreateConstant(BuiltInSigType.Int32, i);
+						constantValueOperand = Operand.CreateConstantSignedInt(i);
 					}
 					break;
 
 				case OpCode.Ldc_i4_s:
 					{
 						sbyte sb = decoder.DecodeSByte();
-						constantValueOperand = Operand.CreateConstant(BuiltInSigType.Int32, sb);
+						constantValueOperand = Operand.CreateConstantSignedInt(sb);
 					}
 					break;
 
 				case OpCode.Ldc_i8:
 					{
 						long l = decoder.DecodeLong();
-						constantValueOperand = Operand.CreateConstant(BuiltInSigType.Int64, l);
+						constantValueOperand = Operand.CreateConstantSignedLong(l);
 					}
 					break;
 
 				case OpCode.Ldc_r4:
 					{
 						float f = decoder.DecodeFloat();
-						constantValueOperand = Operand.CreateConstant(BuiltInSigType.Single, f);
+						constantValueOperand = Operand.CreateConstantFloat(f);
 					}
 					break;
 
 				case OpCode.Ldc_r8:
 					{
 						double d = decoder.DecodeDouble();
-						constantValueOperand = Operand.CreateConstant(BuiltInSigType.Double, d);
+						constantValueOperand = Operand.CreateConstantDouble(d);
 					}
 					break;
 
@@ -85,43 +83,43 @@ namespace Mosa.Compiler.Framework.CIL
 					break;
 
 				case OpCode.Ldc_i4_0:
-					constantValueOperand = Operand.CreateConstant(0);
+					constantValueOperand = Operand.CreateConstantSignedInt(0);
 					break;
 
 				case OpCode.Ldc_i4_1:
-					constantValueOperand = Operand.CreateConstant(1);
+					constantValueOperand = Operand.CreateConstantSignedInt(1);
 					break;
 
 				case OpCode.Ldc_i4_2:
-					constantValueOperand = Operand.CreateConstant(2);
+					constantValueOperand = Operand.CreateConstantSignedInt(2);
 					break;
 
 				case OpCode.Ldc_i4_3:
-					constantValueOperand = Operand.CreateConstant(3);
+					constantValueOperand = Operand.CreateConstantSignedInt(3);
 					break;
 
 				case OpCode.Ldc_i4_4:
-					constantValueOperand = Operand.CreateConstant(4);
+					constantValueOperand = Operand.CreateConstantSignedInt(4);
 					break;
 
 				case OpCode.Ldc_i4_5:
-					constantValueOperand = Operand.CreateConstant(5);
+					constantValueOperand = Operand.CreateConstantSignedInt(5);
 					break;
 
 				case OpCode.Ldc_i4_6:
-					constantValueOperand = Operand.CreateConstant(6);
+					constantValueOperand = Operand.CreateConstantSignedInt(6);
 					break;
 
 				case OpCode.Ldc_i4_7:
-					constantValueOperand = Operand.CreateConstant(7);
+					constantValueOperand = Operand.CreateConstantSignedInt(7);
 					break;
 
 				case OpCode.Ldc_i4_8:
-					constantValueOperand = Operand.CreateConstant(8);
+					constantValueOperand = Operand.CreateConstantSignedInt(8);
 					break;
 
 				case OpCode.Ldc_i4_m1:
-					constantValueOperand = Operand.CreateConstant(-1);
+					constantValueOperand = Operand.CreateConstantSignedInt(-1);
 					break;
 
 				default:

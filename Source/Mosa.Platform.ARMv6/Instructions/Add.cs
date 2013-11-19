@@ -19,7 +19,6 @@ namespace Mosa.Platform.ARMv6.Instructions
 	/// </summary>
 	public class Add : ARMv6Instruction
 	{
-
 		#region Construction
 
 		/// <summary>
@@ -47,13 +46,12 @@ namespace Mosa.Platform.ARMv6.Instructions
 			}
 			else if (context.Operand2.IsConstant && context.Operand3.IsConstant)
 			{
-				emitter.EmitDataProcessingInstructionWithImmediate(context.ConditionCode, Bits.b0100, context.UpdateStatusFlags, context.Operand1.Register.Index, context.Result.Register.Index, (int)context.Operand2.ValueAsLongInteger, (int)context.Operand3.ValueAsLongInteger);
+				emitter.EmitDataProcessingInstructionWithImmediate(context.ConditionCode, Bits.b0100, context.UpdateStatusFlags, context.Operand1.Register.Index, context.Result.Register.Index, (int)context.Operand2.ConstantSignedInteger, (int)context.Operand3.ConstantSignedInteger);
 			}
 			else
 			{
 				throw new InvalidCompilerException();
 			}
-
 		}
 
 		/// <summary>

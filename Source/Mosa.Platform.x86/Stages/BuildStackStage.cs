@@ -20,7 +20,6 @@ namespace Mosa.Platform.x86.Stages
 	/// </summary>
 	public sealed class BuildStackStage : BaseMethodCompilerStage, IMethodCompilerStage, IPipelineStage
 	{
-
 		#region IMethodCompilerStage
 
 		/// <summary>
@@ -40,8 +39,9 @@ namespace Mosa.Platform.x86.Stages
 		#endregion IMethodCompilerStage
 
 		public bool SaveRegisters { get; set; }
+
 		public bool InsertBreaks { get; set; }
-		
+
 		public BuildStackStage()
 		{
 			SaveRegisters = false;
@@ -108,14 +108,14 @@ namespace Mosa.Platform.x86.Stages
 
 			if (methodCompiler.StackLayout.StackSize != 0)
 			{
-				context.AppendInstruction(X86.Sub, esp, esp, Operand.CreateConstant(-methodCompiler.StackLayout.StackSize));
+				context.AppendInstruction(X86.Sub, esp, esp, Operand.CreateConstantSignedInt(-methodCompiler.StackLayout.StackSize));
 			}
 
 			if (InsertBreaks)// && !methodCompiler.Method.FullName.Equals(".cctor"))
 			{
-				 //Note that if you debug using visual studio you must enable unmanaged code
-				 //debugging, otherwise the function will never return and the breakpoint will
-				 //never appear.
+				//Note that if you debug using visual studio you must enable unmanaged code
+				//debugging, otherwise the function will never return and the breakpoint will
+				//never appear.
 
 				// int 3
 				context.AppendInstruction(X86.Break);
@@ -170,7 +170,7 @@ namespace Mosa.Platform.x86.Stages
 
 			if (methodCompiler.StackLayout.StackSize != 0)
 			{
-				context.AppendInstruction(X86.Add, esp, esp, Operand.CreateConstant(BuiltInSigType.IntPtr, -methodCompiler.StackLayout.StackSize));
+				context.AppendInstruction(X86.Add, esp, esp, Operand.CreateConstantIntPtr(-methodCompiler.StackLayout.StackSize));
 			}
 
 			context.AppendInstruction(X86.Pop, ebp);

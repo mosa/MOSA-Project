@@ -48,10 +48,14 @@ namespace Mosa.Platform.x86.Instructions
 		{
 			if (context.Operand2.IsConstant)
 			{
-				if (context.Operand2.ValueAsLongInteger == 1)
+				if (context.Operand2.IsConstantOne)
+				{
 					emitter.Emit(C1, context.Result, null);
+				}
 				else
+				{
 					emitter.Emit(C, context.Result, context.Operand2);
+				}
 			}
 			else
 			{

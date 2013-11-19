@@ -112,7 +112,7 @@ namespace Mosa.Platform.AVR32
 			Operand r7 = Operand.CreateCPURegister(BuiltInSigType.IntPtr, GeneralPurposeRegister.R7);
 			if (stackSize != 0)
 			{
-				context.AppendInstruction(AVR32.Mov, r7, Operand.CreateConstant(BuiltInSigType.IntPtr, stackSize));
+				context.AppendInstruction(AVR32.Mov, r7, Operand.CreateConstantIntPtr(stackSize));
 				context.AppendInstruction(AVR32.Add, sp, r7);
 			}
 		}

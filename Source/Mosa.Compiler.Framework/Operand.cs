@@ -8,6 +8,7 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using Mosa.Compiler.Common;
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Compiler.TypeSystem;
@@ -39,11 +40,6 @@ namespace Mosa.Compiler.Framework
 		/// Returns the type of the operand.
 		/// </summary>
 		public SigType Type { get; private set; }
-
-		/// <summary>
-		/// Returns the value of the constant.
-		/// </summary>
-		public object Value { get; private set; }
 
 		/// <summary>
 		/// Retrieves the register, where the operand is located.
@@ -195,7 +191,7 @@ namespace Mosa.Compiler.Framework
 		/// <value>
 		/// The constant integer.
 		/// </value>
-		public ulong ConstantInteger { get; private set; }
+		public ulong ConstantUnsignedInteger { get; private set; }
 
 		/// <summary>
 		/// Gets the constant double float point.
@@ -219,7 +215,7 @@ namespace Mosa.Compiler.Framework
 		/// <value>
 		/// The constant signed integer.
 		/// </value>
-		public long ConstantSignedInteger { get { return (int)ConstantInteger; } set { ConstantInteger = (uint)value; } }
+		public long ConstantSignedInteger { get { return (int)ConstantUnsignedInteger; } set { ConstantUnsignedInteger = (uint)value; } }
 
 		/// <summary>
 		/// Gets a value indicating whether [is null].
@@ -228,37 +224,6 @@ namespace Mosa.Compiler.Framework
 		///   <c>true</c> if [is null]; otherwise, <c>false</c>.
 		/// </value>
 		public bool IsNull { get; private set; }
-
-		/// <summary>
-		/// Gets the value as long integer.
-		/// </summary>
-		public long ValueAsLongInteger
-		{
-			get
-			{
-				if (Value is int)
-					return (long)(int)Value;
-				else if (Value is short)
-					return (long)(short)Value;
-				else if (Value is sbyte)
-					return (long)(sbyte)Value;
-				else if (Value is long)
-					return (long)Value;
-				else if (Value is uint)
-					return (long)(uint)Value;
-				else if (Value is byte)
-					return (long)(byte)Value;
-				else if (Value is ushort)
-					return (long)(ushort)Value;
-				else if (Value is ulong)
-					return (long)(ulong)Value;
-
-				else if (Value == null)
-					return 0;	// REVIEW
-
-				throw new CompilationException("Not an integer");
-			}
-		}
 
 		/// <summary>
 		/// Returns the stack type of the operand.
@@ -279,7 +244,7 @@ namespace Mosa.Compiler.Framework
 		/// <value>
 		///   <c>true</c> if [is double]; otherwise, <c>false</c>.
 		/// </value>
-		public bool IsDouble { get { return  Type.Type == CilElementType.R8; } }
+		public bool IsDouble { get { return Type.Type == CilElementType.R8; } }
 
 		/// <summary>
 		/// Gets a value indicating whether [is single].
@@ -295,7 +260,7 @@ namespace Mosa.Compiler.Framework
 		/// <value>
 		/// <c>true</c> if this instance is floating point; otherwise, <c>false</c>.
 		/// </value>
-		public bool IsInteger { get { return IsSignedInteger || IsUnsignedInteger; } }
+		public bool IsInteger { get { return IsSigned || IsUnsigned; } }
 
 		/// <summary>
 		/// Gets a value indicating whether [is signed integer].
@@ -303,7 +268,7 @@ namespace Mosa.Compiler.Framework
 		/// <value>
 		///   <c>true</c> if [is signed integer]; otherwise, <c>false</c>.
 		/// </value>
-		public bool IsSignedInteger { get { return Type.Type == CilElementType.I || Type.Type == CilElementType.I1 || Type.Type == CilElementType.I2 || Type.Type == CilElementType.I4 || Type.Type == CilElementType.I8; } }
+		public bool IsSigned { get { return Type.Type == CilElementType.I || Type.Type == CilElementType.I1 || Type.Type == CilElementType.I2 || Type.Type == CilElementType.I4 || Type.Type == CilElementType.I8; } }
 
 		/// <summary>
 		/// Gets a value indicating whether [is unsigned integer].
@@ -311,7 +276,7 @@ namespace Mosa.Compiler.Framework
 		/// <value>
 		///   <c>true</c> if [is unsigned integer]; otherwise, <c>false</c>.
 		/// </value>
-		public bool IsUnsignedInteger { get { return Type.Type == CilElementType.U || Type.Type == CilElementType.U1 || Type.Type == CilElementType.U2 || Type.Type == CilElementType.U4 || Type.Type == CilElementType.U8; } }
+		public bool IsUnsigned { get { return Type.Type == CilElementType.U || Type.Type == CilElementType.U1 || Type.Type == CilElementType.U2 || Type.Type == CilElementType.U4 || Type.Type == CilElementType.U8; } }
 
 		/// <summary>
 		/// Gets the type of the shift.
@@ -320,6 +285,75 @@ namespace Mosa.Compiler.Framework
 		/// The type of the shift.
 		/// </value>
 		public ShiftType ShiftType { get; private set; }
+
+		/// <summary>
+		/// Gets a value indicating whether [is constant zero].
+		/// </summary>
+		/// <value>
+		///   <c>true</c> if [is constant zero]; otherwise, <c>false</c>.
+		/// </value>
+		public bool IsConstantZero
+		{
+			get
+			{
+				if (IsInteger)
+					return ConstantUnsignedInteger == 0;
+				else if (IsDouble)
+					return ConstantDoubleFloatingPoint == 0;
+				else if (IsSingle)
+					return ConstantSingleFloatingPoint == 0;
+
+				throw new InvalidCompilerException();
+			}
+		}
+
+		/// <summary>
+		/// Gets a value indicating whether [is constant one].
+		/// </summary>
+		/// <value>
+		///   <c>true</c> if [is constant one]; otherwise, <c>false</c>.
+		/// </value>
+		/// <exception cref="InvalidCompilerException"></exception>
+		public bool IsConstantOne
+		{
+			get
+			{
+				if (IsInteger)
+					return ConstantUnsignedInteger == 1;
+				else if (IsDouble)
+					return ConstantDoubleFloatingPoint == 1;
+				else if (IsSingle)
+					return ConstantSingleFloatingPoint == 1;
+
+				throw new InvalidCompilerException();
+			}
+		}
+
+		public bool IsUnsignedByte { get { return (Type.Type == CilElementType.U1); } }
+
+		public bool IsSignedByte { get { return (Type.Type == CilElementType.I1); } }
+
+		public bool IsUnsignedShort { get { return (Type.Type == CilElementType.U2); } }
+
+		public bool IsSignedShort { get { return (Type.Type == CilElementType.I2); } }
+
+		public bool IsUnsignedInt { get { return (Type.Type == CilElementType.U4); } }
+
+		public bool IsSignedInt { get { return (Type.Type == CilElementType.I4); } }
+
+		public bool IsUnsignedLong { get { return (Type.Type == CilElementType.U8); } }
+
+		public bool IsSignedLong { get { return (Type.Type == CilElementType.I8); } }
+
+		public bool IsByte { get { return IsUnsignedByte || IsSignedByte; } }
+
+		public bool IsShort { get { return IsUnsignedShort || IsSignedShort; } }
+
+		public bool IsChar { get { return Type.Type == CilElementType.Char; } }
+
+		public bool IsInt { get { return IsUnsignedInt || IsSignedInt; } }
+
+		public bool IsLong { get { return IsUnsignedLong || IsSignedLong; } }
 
 		#endregion Properties
 
@@ -371,14 +405,27 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Creates a new constant <see cref="Operand"/> for the given integral value.
 		/// </summary>
-		/// <param name="sigType">Type of the sig.</param>
-		/// <param name="value">The value.</param>
-		/// <returns></returns>
-		public static Operand CreateConstant(SigType sigType, object value)
+		/// <param name="value">The value to create the constant operand for.</param>
+		/// <returns>A new operand representing the value <paramref name="value"/>.</returns>
+		public static Operand CreateConstant(SigType sigType, ulong value)
 		{
 			Operand operand = new Operand(sigType);
 			operand.IsConstant = true;
-			operand.Value = value;
+
+			switch (sigType.Type)
+			{
+				case CilElementType.U1: operand.ConstantUnsignedInteger = value; break;
+				case CilElementType.U2: operand.ConstantUnsignedInteger = value; break;
+				case CilElementType.U4: operand.ConstantUnsignedInteger = value; break;
+				case CilElementType.U8: operand.ConstantUnsignedInteger = value; break;
+				case CilElementType.I1: operand.ConstantSignedInteger = (long)value; break;
+				case CilElementType.I2: operand.ConstantSignedInteger = (long)value; break;
+				case CilElementType.I4: operand.ConstantSignedInteger = (long)value; break;
+				case CilElementType.I8: operand.ConstantSignedInteger = (long)value; break;
+
+				default: throw new InvalidCompilerException();
+			}
+
 			return operand;
 		}
 
@@ -386,13 +433,32 @@ namespace Mosa.Compiler.Framework
 		/// Creates a new constant <see cref="Operand"/> for the given integral value.
 		/// </summary>
 		/// <param name="value">The value to create the constant operand for.</param>
-		/// <returns>A new Operand representing the value <paramref name="value"/>.</returns>
-		public static Operand CreateConstant(uint value)
+		/// <returns>A new operand representing the value <paramref name="value"/>.</returns>
+		public static Operand CreateConstant(SigType sigType, long value)
+		{
+			return CreateConstant(sigType, (ulong)value);
+		}
+
+		/// <summary>
+		/// Creates a new constant <see cref="Operand"/> for the given integral value.
+		/// </summary>
+		/// <param name="value">The value to create the constant operand for.</param>
+		/// <returns>A new operand representing the value <paramref name="value"/>.</returns>
+		public static Operand CreateConstant(SigType sigType, int value)
+		{
+			return CreateConstant(sigType, (long)value);
+		}
+
+		/// <summary>
+		/// Creates a new constant <see cref="Operand"/> for the given integral value.
+		/// </summary>
+		/// <param name="value">The value to create the constant operand for.</param>
+		/// <returns>A new operand representing the value <paramref name="value"/>.</returns>
+		public static Operand CreateConstantUnsignedInt(uint value)
 		{
 			Operand operand = new Operand(BuiltInSigType.UInt32);
 			operand.IsConstant = true;
-			operand.Value = value;
-			operand.ConstantInteger = value;
+			operand.ConstantUnsignedInteger = value;
 			return operand;
 		}
 
@@ -400,12 +466,11 @@ namespace Mosa.Compiler.Framework
 		/// Creates a new constant <see cref="Operand"/> for the given integral value.
 		/// </summary>
 		/// <param name="value">The value to create the constant operand for.</param>
-		/// <returns>A new Operand representing the value <paramref name="value"/>.</returns>
-		public static Operand CreateConstant(int value)
+		/// <returns>A new operand representing the value <paramref name="value"/>.</returns>
+		public static Operand CreateConstantSignedInt(int value)
 		{
 			Operand operand = new Operand(BuiltInSigType.Int32);
 			operand.IsConstant = true;
-			operand.Value = value;
 			operand.ConstantSignedInteger = value;
 			return operand;
 		}
@@ -414,13 +479,12 @@ namespace Mosa.Compiler.Framework
 		/// Creates a new constant <see cref="Operand"/> for the given integral value.
 		/// </summary>
 		/// <param name="value">The value to create the constant operand for.</param>
-		/// <returns>A new Operand representing the value <paramref name="value"/>.</returns>
-		public static Operand CreateConstant(ulong value)
+		/// <returns>A new operand representing the value <paramref name="value"/>.</returns>
+		public static Operand CreateConstantUnsignedLong(ulong value)
 		{
 			Operand operand = new Operand(BuiltInSigType.UInt64);
 			operand.IsConstant = true;
-			operand.Value = value;
-			operand.ConstantInteger = value;
+			operand.ConstantUnsignedInteger = value;
 			return operand;
 		}
 
@@ -428,40 +492,77 @@ namespace Mosa.Compiler.Framework
 		/// Creates a new constant <see cref="Operand"/> for the given integral value.
 		/// </summary>
 		/// <param name="value">The value to create the constant operand for.</param>
-		/// <returns>A new Operand representing the value <paramref name="value"/>.</returns>
-		public static Operand CreateConstant(long value)
+		/// <returns>A new operand representing the value <paramref name="value"/>.</returns>
+		public static Operand CreateConstantSignedLong(long value)
 		{
 			Operand operand = new Operand(BuiltInSigType.Int64);
 			operand.IsConstant = true;
-			operand.Value = value;
 			operand.ConstantSignedInteger = value;
 			return operand;
 		}
 
-		public static Operand CreateConstant(float value)
+		/// <summary>
+		/// Creates a new constant <see cref="Operand"/> for the given integral value.
+		/// </summary>
+		/// <param name="value">The value to create the constant operand for.</param>
+		/// <returns>A new operand representing the value <paramref name="value"/>.</returns>
+		public static Operand CreateConstantFloat(float value)
 		{
 			Operand operand = new Operand(BuiltInSigType.Single);
 			operand.IsConstant = true;
-			operand.Value = value;
 			operand.ConstantSingleFloatingPoint = value;
 			return operand;
 		}
 
-		public static Operand CreateConstant(double value)
+		/// <summary>
+		/// Creates a new constant <see cref="Operand"/> for the given integral value.
+		/// </summary>
+		/// <param name="value">The value to create the constant operand for.</param>
+		/// <returns>A new operand representing the value <paramref name="value"/>.</returns>
+		public static Operand CreateConstantDouble(double value)
 		{
 			Operand operand = new Operand(BuiltInSigType.Double);
 			operand.IsConstant = true;
-			operand.Value = value;
 			operand.ConstantDoubleFloatingPoint = value;
 			return operand;
 		}
+
+		/// <summary>
+		/// Creates a new constant <see cref="Operand"/> for the given integral value.
+		/// </summary>
+		/// <param name="value">The value to create the constant operand for.</param>
+		/// <returns>A new operand representing the value <paramref name="value"/>.</returns>
+		public static Operand CreateConstantIntPtr(int value)
+		{
+			Operand operand = new Operand(BuiltInSigType.IntPtr);
+			operand.IsConstant = true;
+			operand.ConstantSignedInteger = value;
+			return operand;
+		}
+
+		/// <summary>
+		/// Creates a new constant <see cref="Operand"/> for the given integral value.
+		/// </summary>
+		/// <param name="value">The value to create the constant operand for.</param>
+		/// <returns>A new operand representing the value <paramref name="value"/>.</returns>
+		public static Operand CreateConstantIntPtr(long value)
+		{
+			Operand operand = new Operand(BuiltInSigType.IntPtr);
+			operand.IsConstant = true;
+			operand.ConstantSignedInteger = value;
+			return operand;
+		}
+
 		/// <summary>
 		/// Gets the null constant <see cref="Operand"/>.
 		/// </summary>
 		/// <returns></returns>
 		public static Operand GetNull()
 		{
-			return CreateConstant(BuiltInSigType.Object, null);
+			Operand operand = new Operand(BuiltInSigType.Object);
+			operand.IsNull = true;
+			operand.IsConstant = true;
+			return operand;
 		}
 
 		/// <summary>
@@ -681,7 +782,7 @@ namespace Mosa.Compiler.Framework
 			{
 				operand = new Operand(BuiltInSigType.UInt32);
 				operand.IsConstant = true;
-				operand.Value = longOperand.ValueAsLongInteger & uint.MaxValue;
+				operand.ConstantUnsignedInteger = longOperand.ConstantUnsignedInteger & uint.MaxValue;
 			}
 			else if (longOperand.IsRuntimeMember)
 			{
@@ -738,7 +839,7 @@ namespace Mosa.Compiler.Framework
 			{
 				operand = new Operand(BuiltInSigType.UInt32);
 				operand.IsConstant = true;
-				operand.Value = ((uint)((ulong)(longOperand.ValueAsLongInteger) >> 32)) & uint.MaxValue;
+				operand.ConstantUnsignedInteger = ((uint)(longOperand.ConstantUnsignedInteger >> 32)) & uint.MaxValue;
 			}
 			else if (longOperand.IsRuntimeMember)
 			{
@@ -807,99 +908,107 @@ namespace Mosa.Compiler.Framework
 					return ssa.Substring(0, pos) + "<" + SSAVersion + ">" + ssa.Substring(pos);
 			}
 
-			StringBuilder s = new StringBuilder();
+			StringBuilder sb = new StringBuilder();
 
 			if (Name != null)
 			{
-				s.Append(Name);
-				s.Append(' ');
+				sb.Append(Name);
+				sb.Append(' ');
 			}
 
 			if (IsVirtualRegister)
 			{
-				s.AppendFormat("V_{0}", Index);
+				sb.AppendFormat("V_{0}", Index);
 			}
 			else if (IsStackLocal && Name == null)
 			{
-				s.AppendFormat("T_{0}", Index);
+				sb.AppendFormat("T_{0}", Index);
 			}
 			else if (IsParameter && Name == null)
 			{
-				s.AppendFormat("P_{0}", Index);
+				sb.AppendFormat("P_{0}", Index);
 			}
 
 			if (IsSplitChild)
 			{
-				s.Append(' ');
+				sb.Append(' ');
 
-				s.Append("(" + SplitParent.ToString() + ")");
+				sb.Append("(" + SplitParent.ToString() + ")");
 
 				if (SplitParent.High == this)
-					s.Append("/high");
+					sb.Append("/high");
 				else
-					s.Append("/low");
+					sb.Append("/low");
 			}
 
 			if (IsConstant)
 			{
-				s.Append(' ');
+				sb.Append(" const {");
 
-				if (Value == null)
-					s.Append("const null");
-				else
-					s.AppendFormat("const {0}", Value);
+				if (IsNull)
+					sb.Append("null");
+				else if (IsSigned)
+					sb.AppendFormat("{0}", ConstantUnsignedInteger);
+				else if (IsSigned)
+					sb.AppendFormat("{0}", ConstantSignedInteger);
+				if (IsDouble)
+					sb.AppendFormat("{0}", ConstantDoubleFloatingPoint);
+				else if (IsSingle)
+					sb.AppendFormat("{0}", ConstantSingleFloatingPoint);
+
+				sb.Append('}');
 			}
 
 			if (IsRuntimeMember)
 			{
-				s.Append(' ');
-				s.Append(RuntimeMember.ToString());
+				sb.Append(' ');
+				sb.Append(RuntimeMember.ToString());
 			}
 
 			if (IsCPURegister)
 			{
-				s.AppendFormat(" {0}", Register);
+				sb.AppendFormat(" {0}", Register);
 			}
 			else if (IsMemoryAddress)
 			{
-				s.Append(' ');
+				sb.Append(' ');
 				if (OffsetBase != null)
 				{
 					if (Displacement > 0)
-						s.AppendFormat("[{0}+{1:X}h]", OffsetBase.ToString(), Displacement);
+						sb.AppendFormat("[{0}+{1:X}h]", OffsetBase.ToString(), Displacement);
 					else
-						s.AppendFormat("[{0}-{1:X}h]", OffsetBase.ToString(), -Displacement);
+						sb.AppendFormat("[{0}-{1:X}h]", OffsetBase.ToString(), -Displacement);
 				}
 				else if (Register != null)
 				{
 					if (Displacement > 0)
-						s.AppendFormat("[{0}+{1:X}h]", Register.ToString(), Displacement);
+						sb.AppendFormat("[{0}+{1:X}h]", Register.ToString(), Displacement);
 					else
-						s.AppendFormat("[{0}-{1:X}h]", Register.ToString(), -Displacement);
+						sb.AppendFormat("[{0}-{1:X}h]", Register.ToString(), -Displacement);
 				}
 				else if (IsRuntimeMember && IsSplitChild)
 				{
 					if (Displacement > 0)
-						s.AppendFormat("+{0:X}h", Displacement);
+						sb.AppendFormat("+{0:X}h", Displacement);
 					else
-						s.AppendFormat("-{0:X}h", -Displacement);
+						sb.AppendFormat("-{0:X}h", -Displacement);
 				}
 			}
 
 			if (Type is PtrSigType)
 			{
-				s.AppendFormat(" [{0}-{1}]", Type, (Type as PtrSigType).ElementType);
+				sb.AppendFormat(" [{0}-{1}]", Type, (Type as PtrSigType).ElementType);
 			}
 			else if (Type is RefSigType)
 			{
-				s.AppendFormat(" [{0}-{1}]", Type, (Type as RefSigType).ElementType);
+				sb.AppendFormat(" [{0}-{1}]", Type, (Type as RefSigType).ElementType);
 			}
 			else
 			{
-				s.AppendFormat(" [{0}]", Type);
+				sb.AppendFormat(" [{0}]", Type);
 			}
 
-			return s.ToString().Replace("  ", " ").Trim();
+			return sb.ToString().Replace("  ", " ").Trim();
 		}
 
 		#endregion Object Overrides

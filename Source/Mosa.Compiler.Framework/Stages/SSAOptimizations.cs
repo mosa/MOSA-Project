@@ -358,122 +358,38 @@ namespace Mosa.Compiler.Framework.Stages
 				return;
 
 			// Divide by zero!
-			if ((context.Instruction is IR.DivSigned || context.Instruction is IR.DivUnsigned) && op2.IsConstant && IsValueZero(op2))
+			if ((context.Instruction is IR.DivSigned || context.Instruction is IR.DivUnsigned) && op2.IsConstant && op2.IsConstantZero)
 				return;
 
 			Operand constant = null;
 
 			if (context.Instruction is IR.AddSigned || context.Instruction is IR.AddUnsigned)
 			{
-				switch (result.Type.Type)
-				{
-					case CilElementType.U1: constant = Operand.CreateConstant(result.Type, (byte)(op1.ValueAsLongInteger + op2.ValueAsLongInteger)); break;
-					case CilElementType.U2: constant = Operand.CreateConstant(result.Type, (ushort)(op1.ValueAsLongInteger + op2.ValueAsLongInteger)); break;
-					case CilElementType.U4: constant = Operand.CreateConstant(result.Type, (uint)(op1.ValueAsLongInteger + op2.ValueAsLongInteger)); break;
-					case CilElementType.U8: constant = Operand.CreateConstant(result.Type, (ulong)(op1.ValueAsLongInteger + op2.ValueAsLongInteger)); break;
-					case CilElementType.I1: constant = Operand.CreateConstant(result.Type, (sbyte)(op1.ValueAsLongInteger + op2.ValueAsLongInteger)); break;
-					case CilElementType.I2: constant = Operand.CreateConstant(result.Type, (short)(op1.ValueAsLongInteger + op2.ValueAsLongInteger)); break;
-					case CilElementType.I4: constant = Operand.CreateConstant(result.Type, (int)(op1.ValueAsLongInteger + op2.ValueAsLongInteger)); break;
-					case CilElementType.I8: constant = Operand.CreateConstant(result.Type, (long)(op1.ValueAsLongInteger + op2.ValueAsLongInteger)); break;
-
-					default: throw new CompilationException("Not an integer");
-				}
+				constant = Operand.CreateConstant(result.Type, op1.ConstantUnsignedInteger + op2.ConstantUnsignedInteger);
 			}
 			else if (context.Instruction is IR.SubSigned || context.Instruction is IR.SubUnsigned)
 			{
-				switch (result.Type.Type)
-				{
-					case CilElementType.U1: constant = Operand.CreateConstant(result.Type, (byte)(op1.ValueAsLongInteger - op2.ValueAsLongInteger)); break;
-					case CilElementType.U2: constant = Operand.CreateConstant(result.Type, (ushort)(op1.ValueAsLongInteger - op2.ValueAsLongInteger)); break;
-					case CilElementType.U4: constant = Operand.CreateConstant(result.Type, (uint)(op1.ValueAsLongInteger - op2.ValueAsLongInteger)); break;
-					case CilElementType.U8: constant = Operand.CreateConstant(result.Type, (ulong)(op1.ValueAsLongInteger - op2.ValueAsLongInteger)); break;
-					case CilElementType.I1: constant = Operand.CreateConstant(result.Type, (sbyte)(op1.ValueAsLongInteger - op2.ValueAsLongInteger)); break;
-					case CilElementType.I2: constant = Operand.CreateConstant(result.Type, (short)(op1.ValueAsLongInteger - op2.ValueAsLongInteger)); break;
-					case CilElementType.I4: constant = Operand.CreateConstant(result.Type, (int)(op1.ValueAsLongInteger - op2.ValueAsLongInteger)); break;
-					case CilElementType.I8: constant = Operand.CreateConstant(result.Type, (long)(op1.ValueAsLongInteger - op2.ValueAsLongInteger)); break;
-
-					default: throw new CompilationException("Not an integer");
-				}
+				constant = Operand.CreateConstant(result.Type, op1.ConstantUnsignedInteger - op2.ConstantUnsignedInteger);
 			}
 			else if (context.Instruction is IR.LogicalAnd)
 			{
-				switch (result.Type.Type)
-				{
-					case CilElementType.U1: constant = Operand.CreateConstant(result.Type, (byte)(op1.ValueAsLongInteger & op2.ValueAsLongInteger)); break;
-					case CilElementType.U2: constant = Operand.CreateConstant(result.Type, (ushort)(op1.ValueAsLongInteger & op2.ValueAsLongInteger)); break;
-					case CilElementType.U4: constant = Operand.CreateConstant(result.Type, (uint)(op1.ValueAsLongInteger & op2.ValueAsLongInteger)); break;
-					case CilElementType.U8: constant = Operand.CreateConstant(result.Type, (ulong)(op1.ValueAsLongInteger & op2.ValueAsLongInteger)); break;
-					case CilElementType.I1: constant = Operand.CreateConstant(result.Type, (sbyte)(op1.ValueAsLongInteger & op2.ValueAsLongInteger)); break;
-					case CilElementType.I2: constant = Operand.CreateConstant(result.Type, (short)(op1.ValueAsLongInteger & op2.ValueAsLongInteger)); break;
-					case CilElementType.I4: constant = Operand.CreateConstant(result.Type, (int)(op1.ValueAsLongInteger & op2.ValueAsLongInteger)); break;
-					case CilElementType.I8: constant = Operand.CreateConstant(result.Type, (long)(op1.ValueAsLongInteger & op2.ValueAsLongInteger)); break;
-
-					default: throw new CompilationException("Not an integer");
-				}
+				constant = Operand.CreateConstant(result.Type, op1.ConstantUnsignedInteger & op2.ConstantUnsignedInteger);
 			}
 			else if (context.Instruction is IR.LogicalOr)
 			{
-				switch (result.Type.Type)
-				{
-					case CilElementType.U1: constant = Operand.CreateConstant(result.Type, (byte)(op1.ValueAsLongInteger | op2.ValueAsLongInteger)); break;
-					case CilElementType.U2: constant = Operand.CreateConstant(result.Type, (ushort)(op1.ValueAsLongInteger | op2.ValueAsLongInteger)); break;
-					case CilElementType.U4: constant = Operand.CreateConstant(result.Type, (uint)(op1.ValueAsLongInteger | op2.ValueAsLongInteger)); break;
-					case CilElementType.U8: constant = Operand.CreateConstant(result.Type, (ulong)(op1.ValueAsLongInteger | op2.ValueAsLongInteger)); break;
-					case CilElementType.I1: constant = Operand.CreateConstant(result.Type, (sbyte)(op1.ValueAsLongInteger | op2.ValueAsLongInteger)); break;
-					case CilElementType.I2: constant = Operand.CreateConstant(result.Type, (short)(op1.ValueAsLongInteger | op2.ValueAsLongInteger)); break;
-					case CilElementType.I4: constant = Operand.CreateConstant(result.Type, (int)(op1.ValueAsLongInteger | op2.ValueAsLongInteger)); break;
-					case CilElementType.I8: constant = Operand.CreateConstant(result.Type, (long)(op1.ValueAsLongInteger | op2.ValueAsLongInteger)); break;
-
-					default: throw new CompilationException("Not an integer");
-				}
+				constant = Operand.CreateConstant(result.Type, op1.ConstantUnsignedInteger | op2.ConstantUnsignedInteger);
 			}
 			else if (context.Instruction is IR.LogicalXor)
 			{
-				switch (result.Type.Type)
-				{
-					case CilElementType.U1: constant = Operand.CreateConstant(result.Type, (byte)(op1.ValueAsLongInteger ^ op2.ValueAsLongInteger)); break;
-					case CilElementType.U2: constant = Operand.CreateConstant(result.Type, (ushort)(op1.ValueAsLongInteger ^ op2.ValueAsLongInteger)); break;
-					case CilElementType.U4: constant = Operand.CreateConstant(result.Type, (uint)(op1.ValueAsLongInteger ^ op2.ValueAsLongInteger)); break;
-					case CilElementType.U8: constant = Operand.CreateConstant(result.Type, (ulong)(op1.ValueAsLongInteger ^ op2.ValueAsLongInteger)); break;
-					case CilElementType.I1: constant = Operand.CreateConstant(result.Type, (sbyte)(op1.ValueAsLongInteger ^ op2.ValueAsLongInteger)); break;
-					case CilElementType.I2: constant = Operand.CreateConstant(result.Type, (short)(op1.ValueAsLongInteger ^ op2.ValueAsLongInteger)); break;
-					case CilElementType.I4: constant = Operand.CreateConstant(result.Type, (int)(op1.ValueAsLongInteger ^ op2.ValueAsLongInteger)); break;
-					case CilElementType.I8: constant = Operand.CreateConstant(result.Type, (long)(op1.ValueAsLongInteger ^ op2.ValueAsLongInteger)); break;
-
-					default: throw new CompilationException("Not an integer");
-				}
+				constant = Operand.CreateConstant(result.Type, op1.ConstantUnsignedInteger ^ op2.ConstantUnsignedInteger);
 			}
 			else if (context.Instruction is IR.MulSigned || context.Instruction is IR.MulUnsigned)
 			{
-				switch (result.Type.Type)
-				{
-					case CilElementType.U1: constant = Operand.CreateConstant(result.Type, (byte)(op1.ValueAsLongInteger * op2.ValueAsLongInteger)); break;
-					case CilElementType.U2: constant = Operand.CreateConstant(result.Type, (ushort)(op1.ValueAsLongInteger * op2.ValueAsLongInteger)); break;
-					case CilElementType.U4: constant = Operand.CreateConstant(result.Type, (uint)(op1.ValueAsLongInteger * op2.ValueAsLongInteger)); break;
-					case CilElementType.U8: constant = Operand.CreateConstant(result.Type, (ulong)(op1.ValueAsLongInteger * op2.ValueAsLongInteger)); break;
-					case CilElementType.I1: constant = Operand.CreateConstant(result.Type, (sbyte)(op1.ValueAsLongInteger * op2.ValueAsLongInteger)); break;
-					case CilElementType.I2: constant = Operand.CreateConstant(result.Type, (short)(op1.ValueAsLongInteger * op2.ValueAsLongInteger)); break;
-					case CilElementType.I4: constant = Operand.CreateConstant(result.Type, (int)(op1.ValueAsLongInteger * op2.ValueAsLongInteger)); break;
-					case CilElementType.I8: constant = Operand.CreateConstant(result.Type, (long)(op1.ValueAsLongInteger * op2.ValueAsLongInteger)); break;
-
-					default: throw new CompilationException("Not an integer");
-				}
+				constant = Operand.CreateConstant(result.Type, op1.ConstantUnsignedInteger * op2.ConstantUnsignedInteger);
 			}
 			else if (context.Instruction is IR.DivSigned || context.Instruction is IR.DivUnsigned)
 			{
-				switch (result.Type.Type)
-				{
-					case CilElementType.U1: constant = Operand.CreateConstant(result.Type, (byte)(op1.ValueAsLongInteger / op2.ValueAsLongInteger)); break;
-					case CilElementType.U2: constant = Operand.CreateConstant(result.Type, (ushort)(op1.ValueAsLongInteger / op2.ValueAsLongInteger)); break;
-					case CilElementType.U4: constant = Operand.CreateConstant(result.Type, (uint)(op1.ValueAsLongInteger / op2.ValueAsLongInteger)); break;
-					case CilElementType.U8: constant = Operand.CreateConstant(result.Type, (ulong)(op1.ValueAsLongInteger / op2.ValueAsLongInteger)); break;
-					case CilElementType.I1: constant = Operand.CreateConstant(result.Type, (sbyte)(op1.ValueAsLongInteger / op2.ValueAsLongInteger)); break;
-					case CilElementType.I2: constant = Operand.CreateConstant(result.Type, (short)(op1.ValueAsLongInteger / op2.ValueAsLongInteger)); break;
-					case CilElementType.I4: constant = Operand.CreateConstant(result.Type, (int)(op1.ValueAsLongInteger / op2.ValueAsLongInteger)); break;
-					case CilElementType.I8: constant = Operand.CreateConstant(result.Type, (long)(op1.ValueAsLongInteger / op2.ValueAsLongInteger)); break;
-
-					default: throw new CompilationException("Not an integer");
-				}
+				constant = Operand.CreateConstant(result.Type, op1.ConstantUnsignedInteger / op2.ConstantUnsignedInteger);
 			}
 
 			if (constant != null)
@@ -515,12 +431,12 @@ namespace Mosa.Compiler.Framework.Stages
 
 			switch (context.ConditionCode)
 			{
-				case ConditionCode.Equal: compareResult = (op1.ValueAsLongInteger == op2.ValueAsLongInteger); break;
-				case ConditionCode.NotEqual: compareResult = (op1.ValueAsLongInteger != op2.ValueAsLongInteger); break;
-				case ConditionCode.GreaterOrEqual: compareResult = (op1.ValueAsLongInteger >= op2.ValueAsLongInteger); break;
-				case ConditionCode.GreaterThan: compareResult = (op1.ValueAsLongInteger > op2.ValueAsLongInteger); break;
-				case ConditionCode.LessOrEqual: compareResult = (op1.ValueAsLongInteger <= op2.ValueAsLongInteger); break;
-				case ConditionCode.LessThan: compareResult = (op1.ValueAsLongInteger < op2.ValueAsLongInteger); break;
+				case ConditionCode.Equal: compareResult = (op1.ConstantUnsignedInteger == op2.ConstantUnsignedInteger); break;
+				case ConditionCode.NotEqual: compareResult = (op1.ConstantUnsignedInteger != op2.ConstantUnsignedInteger); break;
+				case ConditionCode.GreaterOrEqual: compareResult = (op1.ConstantUnsignedInteger >= op2.ConstantUnsignedInteger); break;
+				case ConditionCode.GreaterThan: compareResult = (op1.ConstantUnsignedInteger > op2.ConstantUnsignedInteger); break;
+				case ConditionCode.LessOrEqual: compareResult = (op1.ConstantUnsignedInteger <= op2.ConstantUnsignedInteger); break;
+				case ConditionCode.LessThan: compareResult = (op1.ConstantUnsignedInteger < op2.ConstantUnsignedInteger); break;
 
 				// TODO: Add more
 				default: return;
@@ -552,7 +468,7 @@ namespace Mosa.Compiler.Framework.Stages
 			Operand op1 = context.Operand1;
 			Operand op2 = context.Operand2;
 
-			if (op1.IsConstant && !op2.IsConstant && IsValueZero(op1))
+			if (op1.IsConstant && !op2.IsConstant && op1.IsConstantZero)
 			{
 				AddOperandUsageToWorkList(context);
 				if (trace.Active) trace.Log("*** StrengthReductionIntegerAdditionAndSubstraction");
@@ -562,7 +478,7 @@ namespace Mosa.Compiler.Framework.Stages
 				return;
 			}
 
-			if (op2.IsConstant && !op1.IsConstant && IsValueZero(op2))
+			if (op2.IsConstant && !op1.IsConstant && op2.IsConstantZero)
 			{
 				AddOperandUsageToWorkList(context);
 				if (trace.Active) trace.Log("*** StrengthReductionIntegerAdditionAndSubstraction");
@@ -592,7 +508,7 @@ namespace Mosa.Compiler.Framework.Stages
 			Operand op1 = context.Operand1;
 			Operand op2 = context.Operand2;
 
-			if (op1.IsConstant && IsValueZero(op1))
+			if (op1.IsConstant && op1.IsConstantZero)
 			{
 				AddOperandUsageToWorkList(context);
 				if (trace.Active) trace.Log("*** StrengthReductionMultiplication");
@@ -602,7 +518,7 @@ namespace Mosa.Compiler.Framework.Stages
 				return;
 			}
 
-			if (op2.IsConstant && IsValueZero(op2))
+			if (op2.IsConstant && op2.IsConstantZero)
 			{
 				AddOperandUsageToWorkList(context);
 				if (trace.Active) trace.Log("*** StrengthReductionMultiplication");
@@ -612,7 +528,7 @@ namespace Mosa.Compiler.Framework.Stages
 				return;
 			}
 
-			if (op1.IsConstant && IsValueOne(op1))
+			if (op1.IsConstant && op1.IsConstantOne)
 			{
 				AddOperandUsageToWorkList(context);
 				if (trace.Active) trace.Log("*** StrengthReductionMultiplication");
@@ -622,7 +538,7 @@ namespace Mosa.Compiler.Framework.Stages
 				return;
 			}
 
-			if (op2.IsConstant && IsValueOne(op2))
+			if (op2.IsConstant && op2.IsConstantOne)
 			{
 				AddOperandUsageToWorkList(context);
 				if (trace.Active) trace.Log("*** StrengthReductionMultiplication");
@@ -652,7 +568,7 @@ namespace Mosa.Compiler.Framework.Stages
 			Operand op1 = context.Operand1;
 			Operand op2 = context.Operand2;
 
-			if (op1.IsConstant && IsValueZero(op1))
+			if (op1.IsConstant && op1.IsConstantZero)
 			{
 				AddOperandUsageToWorkList(context);
 				if (trace.Active) trace.Log("*** StrengthReductionDivision");
@@ -662,13 +578,13 @@ namespace Mosa.Compiler.Framework.Stages
 				return;
 			}
 
-			if (op2.IsConstant && IsValueZero(op2))
+			if (op2.IsConstant && op2.IsConstantZero)
 			{
 				// TODO: Divide by zero
 				return;
 			}
 
-			if (op2.IsConstant && IsValueOne(op2))
+			if (op2.IsConstant && op2.IsConstantOne)
 			{
 				AddOperandUsageToWorkList(context);
 				if (trace.Active) trace.Log("*** StrengthReductionDivision");
@@ -700,37 +616,34 @@ namespace Mosa.Compiler.Framework.Stages
 			if (!op1.IsConstant)
 				return;
 
-			var newConstant = op1.Value;
+			Operand newOperand;
 
-			if (context.Instruction is IR.ZeroExtendedMove)
+			if (context.Instruction is IR.ZeroExtendedMove && result.IsUnsigned && op1.IsSigned)
 			{
-				if (!IsSigned(result.Type.Type) && IsSigned(op1.Type.Type))
-				{
-					newConstant = Unsign(op1.Type.Type, op1.ValueAsLongInteger);
-				}
+				var newConstant = Unsign(op1.Type.Type, op1.ConstantSignedInteger);
+				newOperand = Operand.CreateConstant(context.Result.Type, newConstant);
+			}
+			else
+			{
+				newOperand = Operand.CreateConstant(context.Result.Type, op1.ConstantUnsignedInteger);
 			}
 
 			AddOperandUsageToWorkList(context);
 			if (trace.Active) trace.Log("*** SimplifyExtendedMove");
 			if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
-			context.SetInstruction(IRInstruction.Move, result, Operand.CreateConstant(context.Result.Type, newConstant));
+			context.SetInstruction(IRInstruction.Move, result, newOperand);
 			if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
 		}
 
-		static private bool IsSigned(CilElementType type)
-		{
-			return (type == CilElementType.I || type == CilElementType.I1 || type == CilElementType.I2 || type == CilElementType.I4 || type == CilElementType.I8);
-		}
-
-		static private object Unsign(CilElementType type, long value)
+		static private ulong Unsign(CilElementType type, long value)
 		{
 			switch (type)
 			{
-				case CilElementType.I1: return (byte)((sbyte)value);
-				case CilElementType.I2: return (ushort)((short)value);
-				case CilElementType.I4: return (uint)((int)value);
+				case CilElementType.I1: return (ulong)((sbyte)value);
+				case CilElementType.I2: return (ulong)((short)value);
+				case CilElementType.I4: return (ulong)((int)value);
 				case CilElementType.I8: return (ulong)((long)value);
-				default: return value;
+				default: return (ulong)value;
 			}
 		}
 
@@ -781,25 +694,25 @@ namespace Mosa.Compiler.Framework.Stages
 			Operand op1 = context.Operand1;
 			Operand op2 = context.Operand2;
 
-			if (context.Instruction is IR.LogicalOr && op1.IsConstant && !op2.IsConstant && IsValueZero(op1))
+			if (context.Instruction is IR.LogicalOr && op1.IsConstant && !op2.IsConstant && op1.IsConstantZero)
 			{
 				AddOperandUsageToWorkList(context);
 				if (trace.Active) trace.Log("*** StrengthReductionLogicalOperators");
 				if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
-				context.SetInstruction(IRInstruction.Move, result, Operand.CreateConstant(context.Result.Type, op2.Value));
+				context.SetInstruction(IRInstruction.Move, result, Operand.CreateConstant(context.Result.Type, op2.ConstantSignedInteger));
 				if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
 			}
 
-			if (context.Instruction is IR.LogicalOr && op2.IsConstant && !op1.IsConstant && IsValueZero(op2))
+			if (context.Instruction is IR.LogicalOr && op2.IsConstant && !op1.IsConstant && op2.IsConstantZero)
 			{
 				AddOperandUsageToWorkList(context);
 				if (trace.Active) trace.Log("*** StrengthReductionLogicalOperators");
 				if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
-				context.SetInstruction(IRInstruction.Move, result, Operand.CreateConstant(context.Result.Type, op1.Value));
+				context.SetInstruction(IRInstruction.Move, result, Operand.CreateConstant(context.Result.Type, op1.ConstantSignedInteger));
 				if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
 			}
 
-			if (context.Instruction is IR.LogicalAnd && op1.IsConstant && !op1.IsConstant && IsValueZero(op1))
+			if (context.Instruction is IR.LogicalAnd && op1.IsConstant && !op1.IsConstant && op1.IsConstantZero)
 			{
 				AddOperandUsageToWorkList(context);
 				if (trace.Active) trace.Log("*** StrengthReductionLogicalOperators");
@@ -808,7 +721,7 @@ namespace Mosa.Compiler.Framework.Stages
 				if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
 			}
 
-			if (context.Instruction is IR.LogicalAnd && op2.IsConstant && !op1.IsConstant && IsValueZero(op2))
+			if (context.Instruction is IR.LogicalAnd && op2.IsConstant && !op1.IsConstant && op2.IsConstantZero)
 			{
 				AddOperandUsageToWorkList(context);
 				if (trace.Active) trace.Log("*** StrengthReductionLogicalOperators");
@@ -862,12 +775,12 @@ namespace Mosa.Compiler.Framework.Stages
 
 			switch (context.ConditionCode)
 			{
-				case ConditionCode.Equal: compareResult = (op1.ValueAsLongInteger == op2.ValueAsLongInteger); break;
-				case ConditionCode.NotEqual: compareResult = (op1.ValueAsLongInteger != op2.ValueAsLongInteger); break;
-				case ConditionCode.GreaterOrEqual: compareResult = (op1.ValueAsLongInteger >= op2.ValueAsLongInteger); break;
-				case ConditionCode.GreaterThan: compareResult = (op1.ValueAsLongInteger > op2.ValueAsLongInteger); break;
-				case ConditionCode.LessOrEqual: compareResult = (op1.ValueAsLongInteger <= op2.ValueAsLongInteger); break;
-				case ConditionCode.LessThan: compareResult = (op1.ValueAsLongInteger < op2.ValueAsLongInteger); break;
+				case ConditionCode.Equal: compareResult = (op1.ConstantUnsignedInteger == op2.ConstantUnsignedInteger); break;
+				case ConditionCode.NotEqual: compareResult = (op1.ConstantUnsignedInteger != op2.ConstantUnsignedInteger); break;
+				case ConditionCode.GreaterOrEqual: compareResult = (op1.ConstantUnsignedInteger >= op2.ConstantUnsignedInteger); break;
+				case ConditionCode.GreaterThan: compareResult = (op1.ConstantUnsignedInteger > op2.ConstantUnsignedInteger); break;
+				case ConditionCode.LessOrEqual: compareResult = (op1.ConstantUnsignedInteger <= op2.ConstantUnsignedInteger); break;
+				case ConditionCode.LessThan: compareResult = (op1.ConstantUnsignedInteger < op2.ConstantUnsignedInteger); break;
 
 				// TODO: Add more
 				default: return;
@@ -922,100 +835,5 @@ namespace Mosa.Compiler.Framework.Stages
 
 			// TODO: if target block no longer has any predecessors (or the only predecessor is itself), remove all instructions from it.
 		}
-
-		#region Helpers
-
-		/// <summary>
-		/// Determines whether the value is zero.
-		/// </summary>
-		/// <param name="operand">The constant operand.</param>
-		/// <returns>
-		///   <c>true</c> if the value is zero; otherwise, <c>false</c>.
-		/// </returns>
-		private static bool IsValueZero(Operand operand)
-		{
-			Debug.Assert(operand.IsConstant);
-			object value = operand.Value;
-
-			if (value is int)
-				return (int)value == 0;
-			else if (value is short)
-				return (short)value == 0;
-			else if (value is byte)
-				return (byte)value == 0;
-			else if (value is long)
-				return (long)value == 0;
-			else if (value is uint)
-				return (uint)value == 0;
-			else if (value is ushort)
-				return (ushort)value == 0;
-			else if (value is sbyte)
-				return (sbyte)value == 0;
-			else if (value is ulong)
-				return (ulong)value == 0;
-			else if (value is double)
-				return (double)value == 0;
-			else if (value is float)
-				return (float)value == 0;
-
-			else if (value == null) // REVIEW
-				return true;
-
-			throw new CompilationException("unknown type");
-		}
-
-		/// <summary>
-		/// Determines whether the value is one.
-		/// </summary>
-		/// <param name="operand">The constant operand.</param>
-		/// <returns>
-		///   <c>true</c> if the value is one; otherwise, <c>false</c>.
-		/// </returns>
-		private static bool IsValueOne(Operand operand)
-		{
-			Debug.Assert(operand.IsConstant);
-			object value = operand.Value;
-
-			if (value is int)
-				return (int)value == 1;
-			else if (value is short)
-				return (short)value == 1;
-			else if (value is byte)
-				return (byte)value == 1;
-			else if (value is long)
-				return (long)value == 1;
-			else if (value is uint)
-				return (uint)value == 1;
-			else if (value is ushort)
-				return (ushort)value == 1;
-			else if (value is sbyte)
-				return (sbyte)value == 1;
-			else if (value is ulong)
-				return (ulong)value == 1;
-			else if (value is double)
-				return (double)value == 1;
-			else if (value is float)
-				return (float)value == 1;
-
-			else if (value == null) // REVIEW
-				return false;
-
-			throw new CompilationException("unknown type");
-		}
-
-		/// <summary>
-		/// Determines whether [is same integer constant] [the specified op1].
-		/// </summary>
-		/// <param name="op1">The op1.</param>
-		/// <param name="op2">The op2.</param>
-		/// <returns>
-		///   <c>true</c> if [is same integer constant] [the specified op1]; otherwise, <c>false</c>.
-		/// </returns>
-		private static bool IsSameIntegerConstant(Operand op1, Operand op2)
-		{
-			return (op1.ValueAsLongInteger == op2.ValueAsLongInteger);
-		}
-
-		#endregion Helpers
 	}
 }

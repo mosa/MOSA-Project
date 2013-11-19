@@ -95,7 +95,7 @@ namespace Mosa.Compiler.Framework.Platform
 
 			Operand stackPointer = Operand.CreateCPURegister(BuiltInSigType.IntPtr, architecture.StackPointerRegister);
 
-			architecture.InsertSubInstruction(context, stackPointer, stackPointer, Operand.CreateConstant(BuiltInSigType.IntPtr, stackSize));
+			architecture.InsertSubInstruction(context, stackPointer, stackPointer, Operand.CreateConstantIntPtr(stackSize));
 			architecture.InsertMoveInstruction(context, scratch, stackPointer);
 		}
 
@@ -105,7 +105,7 @@ namespace Mosa.Compiler.Framework.Platform
 				return;
 
 			Operand stackPointer = Operand.CreateCPURegister(BuiltInSigType.IntPtr, architecture.StackPointerRegister);
-			architecture.InsertAddInstruction(context, stackPointer, stackPointer, Operand.CreateConstant(BuiltInSigType.IntPtr, stackSize));
+			architecture.InsertAddInstruction(context, stackPointer, stackPointer, Operand.CreateConstantIntPtr(stackSize));
 		}
 
 		private void CleanupReturnValue(Context context, Operand result)

@@ -8,7 +8,6 @@
  */
 
 using Mosa.Compiler.Metadata;
-using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Compiler.TypeSystem;
 
 namespace Mosa.Compiler.Framework.CIL
@@ -48,7 +47,7 @@ namespace Mosa.Compiler.Framework.CIL
 
 			uint size = (uint)decoder.Compiler.TypeLayout.GetTypeSize(type);
 
-			ctx.Result = Operand.CreateConstant(BuiltInSigType.UInt32, size);
+			ctx.Result = Operand.CreateConstantUnsignedInt(size);
 		}
 
 		/// <summary>

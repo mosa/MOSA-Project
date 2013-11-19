@@ -7,8 +7,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System.Collections;
-
 namespace Mosa.Compiler.Common
 {
 	public static class Bits
@@ -34,6 +32,5 @@ namespace Mosa.Compiler.Common
 		public const byte b1101 = 0xD;
 		public const byte b1110 = 0xE;
 		public const byte b1111 = 0xF;
-
 	}
 }

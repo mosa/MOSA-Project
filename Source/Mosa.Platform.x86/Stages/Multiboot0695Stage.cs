@@ -158,7 +158,7 @@ namespace Mosa.Platform.x86.Stages
 				Context ctx = instructionSet.CreateNewBlock(basicBlocks);
 				basicBlocks.AddHeaderBlock(ctx.BasicBlock);
 
-				ctx.AppendInstruction(X86.Mov, ecx, Operand.CreateConstant(BuiltInSigType.Int32, 0x200000));
+				ctx.AppendInstruction(X86.Mov, ecx, Operand.CreateConstantSignedInt(0x200000));
 				ctx.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(BuiltInSigType.Int32, ecx, 0), eax);
 				ctx.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(BuiltInSigType.Int32, ecx, 4), ebx);
 

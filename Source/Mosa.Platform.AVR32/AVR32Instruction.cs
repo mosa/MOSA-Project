@@ -8,10 +8,10 @@
  *  Pascal Delprat (pdelprat) <pascal.delprat@online.fr>
  */
 
-using System;
-using System.Diagnostics;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Metadata;
+using System;
+using System.Diagnostics;
 
 namespace Mosa.Platform.AVR32
 {
@@ -129,16 +129,8 @@ namespace Mosa.Platform.AVR32
 				case CilElementType.I:
 					try
 					{
-						//if (op.Value is Token)
-						//{
-						//	value = ((Token)op.Value).ToInt32();
-						//	return value >= lo && value <= hi;
-						//}
-						//else
-						//{
-							value = Convert.ToInt32(op.Value);
-							return value >= lo && value <= hi;
-						//}
+						value = (int)op.ConstantSignedInteger;
+						return value >= lo && value <= hi;
 					}
 					catch (OverflowException)
 					{

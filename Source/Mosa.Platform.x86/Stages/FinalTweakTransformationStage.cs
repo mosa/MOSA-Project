@@ -34,8 +34,8 @@ namespace Mosa.Platform.x86.Stages
 				Operand dest = context.Result;
 
 				context.ReplaceInstructionOnly(X86.Mov);
-				context.AppendInstruction(X86.Add, dest, dest, Operand.CreateConstant((uint)0xFFFFFF00));
-				context.AppendInstruction(X86.Xor, dest, dest, Operand.CreateConstant((uint)0xFFFFFF00));
+				context.AppendInstruction(X86.Add, dest, dest, Operand.CreateConstantUnsignedInt((uint)0xFFFFFF00));
+				context.AppendInstruction(X86.Xor, dest, dest, Operand.CreateConstantUnsignedInt((uint)0xFFFFFF00));
 			}
 		}
 
@@ -52,7 +52,7 @@ namespace Mosa.Platform.x86.Stages
 				Operand dest = context.Result;
 
 				context.ReplaceInstructionOnly(X86.Mov);
-				context.AppendInstruction(X86.And, dest, dest, Operand.CreateConstant((uint)0xFF));
+				context.AppendInstruction(X86.And, dest, dest, Operand.CreateConstantUnsignedInt((uint)0xFF));
 			}
 		}
 

@@ -60,7 +60,7 @@ namespace Mosa.Platform.x86.Stages
 				context.AppendInstruction(X86.Mov, result, register);
 			}
 		}
-		
+
 		/// <summary>
 		/// Visitation function for <see cref="IX86Visitor.Cvttss2si"/> instructions.
 		/// </summary>
@@ -438,7 +438,6 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IX86Visitor.Cvtsi2ss(Context context)
 		{
-			
 		}
 
 		/// <summary>
@@ -831,7 +830,7 @@ namespace Mosa.Platform.x86.Stages
 			if (context.Operand2.Type.Type == CilElementType.U1)
 				return;
 
-			context.Operand2 = Operand.CreateConstant(BuiltInSigType.Byte, context.Operand2.Value);
+			context.Operand2 = Operand.CreateConstant(BuiltInSigType.Byte, context.Operand2.ConstantUnsignedInteger);
 		}
 	}
 }

@@ -8,12 +8,12 @@
  *  Pascal Delprat (pdelprat) <pascal.delprat@online.fr>
  */
 
-using System;
-using System.Diagnostics;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Signatures;
+using System;
+using System.Diagnostics;
 
 namespace Mosa.Platform.AVR32.Stages
 {
@@ -211,7 +211,7 @@ namespace Mosa.Platform.AVR32.Stages
 			context.SetInstruction(AVR32.Ld, r8, operand);
 			if (offset.IsConstant)
 			{
-				offsetPtr = (long)offset.ValueAsLongInteger;
+				offsetPtr = offset.ConstantSignedInteger;
 			}
 			else
 			{
@@ -540,7 +540,7 @@ namespace Mosa.Platform.AVR32.Stages
 			long offsetPtr = 0;
 			if (offset.IsConstant)
 			{
-				offsetPtr = (long)offset.ValueAsLongInteger;
+				offsetPtr = offset.ConstantSignedInteger;
 			}
 			else
 			{

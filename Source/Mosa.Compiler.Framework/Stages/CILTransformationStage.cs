@@ -103,7 +103,7 @@ namespace Mosa.Compiler.Framework.Stages
 				loadInstruction = IRInstruction.LoadZeroExtended;
 			}
 
-			context.SetInstruction(loadInstruction, destination, source, Operand.CreateConstant(0));
+			context.SetInstruction(loadInstruction, destination, source, Operand.CreateConstantSignedInt(0));
 			context.SigType = elementType;
 		}
 
@@ -207,7 +207,7 @@ namespace Mosa.Compiler.Framework.Stages
 		void CIL.ICILVisitor.Stobj(Context context)
 		{
 			// This is actually stind.* and stobj - the opcodes have the same meanings
-			context.SetInstruction(IRInstruction.Store, null, context.Operand1, Operand.CreateConstant(0), context.Operand2);
+			context.SetInstruction(IRInstruction.Store, null, context.Operand1, Operand.CreateConstantSignedInt(0), context.Operand2);
 		}
 
 		/// <summary>
@@ -348,17 +348,17 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			if (IsUnsigned(context.Operand1))
 			{
-				Operand zero = Operand.CreateConstant(context.Operand1.Type, 0UL);
+				Operand zero = Operand.CreateConstant(context.Operand1.Type, 0);
 				context.SetInstruction(IRInstruction.SubU, context.Result, zero, context.Operand1);
 			}
 			else if (context.Operand1.Type.Type == CilElementType.R4)
 			{
-				Operand minusOne = Operand.CreateConstant(context.Operand1.Type, -1.0f);
+				Operand minusOne = Operand.CreateConstantFloat(-1.0f);
 				context.SetInstruction(IRInstruction.MulF, context.Result, minusOne, context.Operand1);
 			}
 			else if (context.Operand1.Type.Type == CilElementType.R8)
 			{
-				Operand minusOne = Operand.CreateConstant(context.Operand1.Type, -1.0);
+				Operand minusOne = Operand.CreateConstantDouble(-1.0d);
 				context.SetInstruction(IRInstruction.MulF, context.Result, minusOne, context.Operand1);
 			}
 			else
@@ -429,8 +429,8 @@ namespace Mosa.Compiler.Framework.Stages
 				if (!method.DeclaringType.IsInterface)
 				{
 					int methodTableOffset = CalculateMethodTableOffset(method) + (nativePointerSize * 5);
-					context.SetInstruction(IRInstruction.Load, methodTable, thisPtr, Operand.CreateConstant(0));
-					context.AppendInstruction(IRInstruction.Load, methodPtr, methodTable, Operand.CreateConstant((int)methodTableOffset));
+					context.SetInstruction(IRInstruction.Load, methodTable, thisPtr, Operand.CreateConstantSignedInt(0));
+					context.AppendInstruction(IRInstruction.Load, methodPtr, methodTable, Operand.CreateConstantSignedInt((int)methodTableOffset));
 				}
 				else
 				{
@@ -440,10 +440,10 @@ namespace Mosa.Compiler.Framework.Stages
 					Operand interfaceSlotPtr = methodCompiler.CreateVirtualRegister(BuiltInSigType.IntPtr);
 					Operand interfaceMethodTablePtr = methodCompiler.CreateVirtualRegister(BuiltInSigType.IntPtr);
 
-					context.SetInstruction(IRInstruction.Load, methodTable, thisPtr, Operand.CreateConstant(0));
-					context.AppendInstruction(IRInstruction.Load, interfaceSlotPtr, methodTable, Operand.CreateConstant(0));
-					context.AppendInstruction(IRInstruction.Load, interfaceMethodTablePtr, interfaceSlotPtr, Operand.CreateConstant((int)slotOffset));
-					context.AppendInstruction(IRInstruction.Load, methodPtr, interfaceMethodTablePtr, Operand.CreateConstant((int)methodTableOffset));
+					context.SetInstruction(IRInstruction.Load, methodTable, thisPtr, Operand.CreateConstantSignedInt(0));
+					context.AppendInstruction(IRInstruction.Load, interfaceSlotPtr, methodTable, Operand.CreateConstantSignedInt(0));
+					context.AppendInstruction(IRInstruction.Load, interfaceMethodTablePtr, interfaceSlotPtr, Operand.CreateConstantSignedInt((int)slotOffset));
+					context.AppendInstruction(IRInstruction.Load, methodPtr, interfaceMethodTablePtr, Operand.CreateConstantSignedInt((int)methodTableOffset));
 				}
 
 				context.AppendInstruction(IRInstruction.Nop);
@@ -516,8 +516,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 			ReplaceWithVmCall(context, VmCall.AllocateArray);
 
-			context.SetOperand(1, Operand.CreateConstant((int)0));
-			context.SetOperand(2, Operand.CreateConstant((int)elementSize));
+			context.SetOperand(1, Operand.CreateConstantSignedInt((int)0));
+			context.SetOperand(2, Operand.CreateConstantSignedInt((int)elementSize));
 			context.SetOperand(3, lengthOperand);
 			context.OperandCount = 4;
 		}
@@ -565,7 +565,7 @@ namespace Mosa.Compiler.Framework.Stages
 				Operand methodTableSymbol = GetMethodTableSymbol(classType);
 
 				before.SetOperand(1, methodTableSymbol);
-				before.SetOperand(2, Operand.CreateConstant((int)typeLayout.GetTypeSize(classType)));
+				before.SetOperand(2, Operand.CreateConstantSignedInt((int)typeLayout.GetTypeSize(classType)));
 				before.OperandCount = 3;
 				before.Result = thisReference;
 
@@ -648,7 +648,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 				ReplaceWithVmCall(context, VmCall.IsInstanceOfInterfaceType);
 
-				context.SetOperand(1, Operand.CreateConstant((uint)slot));
+				context.SetOperand(1, Operand.CreateConstantUnsignedInt((uint)slot));
 				context.SetOperand(2, reference);
 				context.OperandCount = 3;
 				context.ResultCount = 1;
@@ -717,7 +717,7 @@ namespace Mosa.Compiler.Framework.Stages
 			var classSize = typeLayout.GetTypeSize(type);
 
 			context.SetOperand(1, methodTableSymbol);
-			context.SetOperand(2, Operand.CreateConstant((uint)classSize));
+			context.SetOperand(2, Operand.CreateConstantUnsignedInt((uint)classSize));
 			context.SetOperand(3, value);
 			context.OperandCount = 4;
 			context.Result = result;
@@ -857,7 +857,7 @@ namespace Mosa.Compiler.Framework.Stages
 			RuntimeField field = context.RuntimeField;
 
 			int offset = typeLayout.GetFieldOffset(field);
-			Operand offsetOperand = Operand.CreateConstant(BuiltInSigType.IntPtr, offset);
+			Operand offsetOperand = Operand.CreateConstantIntPtr(offset);
 
 			BaseInstruction loadInstruction = IRInstruction.Load;
 			if (MustSignExtendOnLoad(field.SigType.Type))
@@ -886,7 +886,7 @@ namespace Mosa.Compiler.Framework.Stages
 			Operand objectOperand = context.Operand1;
 
 			int offset = typeLayout.GetFieldOffset(context.RuntimeField);
-			Operand fixedOffset = Operand.CreateConstant((int)offset);
+			Operand fixedOffset = Operand.CreateConstantSignedInt((int)offset);
 
 			context.SetInstruction(IRInstruction.AddU, fieldAddress, objectOperand, fixedOffset);
 		}
@@ -902,7 +902,7 @@ namespace Mosa.Compiler.Framework.Stages
 			Operand temp = methodCompiler.CreateVirtualRegister(context.RuntimeField.SigType);
 
 			int offset = typeLayout.GetFieldOffset(context.RuntimeField);
-			Operand offsetOperand = Operand.CreateConstant(BuiltInSigType.IntPtr, offset);
+			Operand offsetOperand = Operand.CreateConstantIntPtr(offset);
 
 			context.SetInstruction(IRInstruction.Move, temp, valueOperand);
 			context.AppendInstruction(IRInstruction.Store, null, objectOperand, offsetOperand, temp);
@@ -935,7 +935,7 @@ namespace Mosa.Compiler.Framework.Stages
 			int target = context.BranchTargets[0];
 
 			Operand first = context.Operand1;
-			Operand second = Operand.CreateConstant((int)0);
+			Operand second = Operand.CreateConstantSignedInt((int)0);
 
 			CIL.OpCode opcode = ((CIL.BaseCILInstruction)context.Instruction).OpCode;
 
@@ -971,7 +971,7 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				Operand comparisonResult = methodCompiler.CreateVirtualRegister(BuiltInSigType.Int32);
 				context.SetInstruction(IRInstruction.FloatingPointCompare, cc, comparisonResult, first, second);
-				context.AppendInstruction(IRInstruction.IntegerCompareBranch, ConditionCode.Equal, null, comparisonResult, Operand.CreateConstant(BuiltInSigType.IntPtr, 1));
+				context.AppendInstruction(IRInstruction.IntegerCompareBranch, ConditionCode.Equal, null, comparisonResult, Operand.CreateConstantIntPtr(1));
 				context.SetBranch(target);
 			}
 			else
@@ -1007,7 +1007,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			Operand arrayOperand = context.Operand1;
 			Operand arrayLength = context.Result;
-			Operand constantOffset = Operand.CreateConstant(8);
+			Operand constantOffset = Operand.CreateConstantSignedInt(8);
 
 			Operand arrayAddress = methodCompiler.CreateVirtualRegister(new PtrSigType(BuiltInSigType.Int32));
 			context.SetInstruction(IRInstruction.Move, arrayAddress, arrayOperand);
@@ -1052,7 +1052,7 @@ namespace Mosa.Compiler.Framework.Stages
 			//
 
 			Operand elementOffset = methodCompiler.CreateVirtualRegister(BuiltInSigType.Int32);
-			Operand elementSizeOperand = Operand.CreateConstant((int)elementSizeInBytes);
+			Operand elementSizeOperand = Operand.CreateConstantSignedInt((int)elementSizeInBytes);
 			context.AppendInstruction(IRInstruction.MulS, elementOffset, arrayIndexOperand, elementSizeOperand);
 
 			return elementOffset;
@@ -1061,7 +1061,7 @@ namespace Mosa.Compiler.Framework.Stages
 		private Operand LoadArrayBaseAddress(Context context, SZArraySigType arraySignatureType, Operand arrayOperand)
 		{
 			Operand arrayAddress = methodCompiler.CreateVirtualRegister(new PtrSigType(arraySignatureType.ElementType));
-			Operand fixedOffset = Operand.CreateConstant((int)12);
+			Operand fixedOffset = Operand.CreateConstantSignedInt((int)12);
 			context.SetInstruction(IRInstruction.AddS, arrayAddress, arrayOperand, fixedOffset);
 			return arrayAddress;
 		}
@@ -1799,11 +1799,11 @@ namespace Mosa.Compiler.Framework.Stages
 						Operand temp = AllocateVirtualRegister(destinationOperand.Type);
 
 						context.SetInstruction(IRInstruction.Move, temp, sourceOperand);
-						context.AppendInstruction(type, destinationOperand, temp, Operand.CreateConstant((uint)mask));
+						context.AppendInstruction(type, destinationOperand, temp, Operand.CreateConstantUnsignedInt((uint)mask));
 					}
 					else
 					{
-						context.SetInstruction(type, destinationOperand, sourceOperand, Operand.CreateConstant((uint)mask));
+						context.SetInstruction(type, destinationOperand, sourceOperand, Operand.CreateConstantUnsignedInt((uint)mask));
 					}
 				}
 			}

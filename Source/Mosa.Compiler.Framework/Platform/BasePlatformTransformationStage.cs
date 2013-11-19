@@ -245,11 +245,11 @@ namespace Mosa.Compiler.Framework.Platform
 				{
 					if (operand.Type.Type == CilElementType.R4)
 					{
-						writer.Write((float)operand.Value);
+						writer.Write(operand.ConstantSingleFloatingPoint);
 					}
 					else if (operand.Type.Type == CilElementType.R8)
 					{
-						writer.Write((double)operand.Value);
+						writer.Write(operand.ConstantDoubleFloatingPoint);
 					}
 				}
 			}

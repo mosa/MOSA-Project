@@ -183,7 +183,7 @@ namespace Mosa.Platform.x86
 			}
 			else if (displacement.IsMemoryAddress && displacement.OffsetBase != null && displacement.OffsetBase.IsConstant)
 			{
-				codeStream.Write((int)(displacement.OffsetBase.ValueAsLongInteger + displacement.Displacement), Endianness.Little);
+				codeStream.Write((int)(displacement.OffsetBase.ConstantSignedInteger + displacement.Displacement), Endianness.Little);
 			}
 			else
 			{
@@ -216,12 +216,14 @@ namespace Mosa.Platform.x86
 				case CilElementType.I: goto case CilElementType.I4;
 				case CilElementType.Ptr: goto case CilElementType.U4;
 
-				case CilElementType.I1: codeStream.WriteByte(Convert.ToByte(op.Value)); return;
-				case CilElementType.I2: codeStream.Write(Convert.ToInt16(op.Value), Endianness.Little); return;
-				case CilElementType.I4: codeStream.Write(Convert.ToInt32(op.Value), Endianness.Little); return;
-				case CilElementType.U1: codeStream.WriteByte(Convert.ToByte(op.Value)); return;
-				case CilElementType.U2: codeStream.Write(Convert.ToUInt16(op.Value), Endianness.Little); return;
-				case CilElementType.U4: codeStream.Write(Convert.ToUInt32(op.Value), Endianness.Little); return;
+				case CilElementType.I1: codeStream.WriteByte(Convert.ToByte(op.ConstantSignedInteger)); return;
+				case CilElementType.I2: codeStream.Write(Convert.ToInt16(op.ConstantSignedInteger), Endianness.Little); return;
+				case CilElementType.I4: codeStream.Write(Convert.ToInt32(op.ConstantSignedInteger), Endianness.Little); return;
+
+				case CilElementType.U1: codeStream.WriteByte(Convert.ToByte(op.ConstantUnsignedInteger)); return;
+				case CilElementType.U2: codeStream.Write(Convert.ToUInt16(op.ConstantUnsignedInteger), Endianness.Little); return;
+				case CilElementType.U4: codeStream.Write(Convert.ToUInt32(op.ConstantUnsignedInteger), Endianness.Little); return;
+
 				default: throw new InvalidOperationException(String.Format(@"CilElementType.{0} is not supported.", op.Type.Type));
 			}
 		}

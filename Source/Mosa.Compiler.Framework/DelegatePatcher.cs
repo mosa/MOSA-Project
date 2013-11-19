@@ -48,11 +48,11 @@ namespace Mosa.Compiler.Framework
 
 			RuntimeField methodPointerField = GetField(methodCompiler.Method.DeclaringType, "methodPointer");
 			int methodPointerOffset = methodCompiler.TypeLayout.GetFieldOffset(methodPointerField);
-			Operand methodPointerOffsetOperand = Operand.CreateConstant(BuiltInSigType.IntPtr, methodPointerOffset);
+			Operand methodPointerOffsetOperand = Operand.CreateConstantIntPtr(methodPointerOffset);
 
 			RuntimeField instanceField = GetField(methodCompiler.Method.DeclaringType, "instance");
 			int instanceOffset = methodCompiler.TypeLayout.GetFieldOffset(instanceField);
-			Operand instanceOffsetOperand = Operand.CreateConstant(BuiltInSigType.IntPtr, instanceOffset);
+			Operand instanceOffsetOperand = Operand.CreateConstantIntPtr(instanceOffset);
 
 			Context context = CreateMethodStructure(methodCompiler, true);
 
@@ -68,11 +68,11 @@ namespace Mosa.Compiler.Framework
 
 			RuntimeField methodPointerField = GetField(methodCompiler.Method.DeclaringType, "methodPointer");
 			int methodPointerOffset = methodCompiler.TypeLayout.GetFieldOffset(methodPointerField);
-			Operand methodPointerOffsetOperand = Operand.CreateConstant(BuiltInSigType.IntPtr, methodPointerOffset);
+			Operand methodPointerOffsetOperand = Operand.CreateConstantIntPtr(methodPointerOffset);
 
 			RuntimeField instanceField = GetField(methodCompiler.Method.DeclaringType, "instance");
 			int instanceOffset = methodCompiler.TypeLayout.GetFieldOffset(instanceField);
-			Operand instanceOffsetOperand = Operand.CreateConstant(BuiltInSigType.IntPtr, instanceOffset);
+			Operand instanceOffsetOperand = Operand.CreateConstantIntPtr(instanceOffset);
 
 			Context b0 = CreateMethodStructure(methodCompiler, false);
 			Context b1 = CreateNewBlock(methodCompiler);
@@ -94,7 +94,7 @@ namespace Mosa.Compiler.Framework
 			Operand opCompare = methodCompiler.VirtualRegisters.Allocate(BuiltInSigType.Int32);
 
 			Operand opReturn = withReturn ? methodCompiler.VirtualRegisters.Allocate(BuiltInSigType.Object) : null;
-			Operand c0 = Operand.CreateConstant((int)0);
+			Operand c0 = Operand.CreateConstantSignedInt(0);
 
 			b0.AppendInstruction(IRInstruction.Load, opMethod, thisOperand, methodPointerOffsetOperand);
 			b0.AppendInstruction(IRInstruction.Load, opInstance, thisOperand, instanceOffsetOperand);

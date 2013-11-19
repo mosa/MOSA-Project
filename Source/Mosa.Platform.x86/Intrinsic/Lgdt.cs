@@ -35,7 +35,7 @@ namespace Mosa.Platform.x86.Intrinsic
 			Operand gs = Operand.CreateCPURegister(BuiltInSigType.Int16, SegmentRegister.GS);
 			Operand ss = Operand.CreateCPURegister(BuiltInSigType.Int16, SegmentRegister.SS);
 
-			context.AppendInstruction(X86.Mov, ax, Operand.CreateConstant((int)0x00000010));
+			context.AppendInstruction(X86.Mov, ax, Operand.CreateConstantSignedInt(0x10));
 			context.AppendInstruction(X86.Mov, ds, ax);
 			context.AppendInstruction(X86.Mov, es, ax);
 			context.AppendInstruction(X86.Mov, fs, ax);
