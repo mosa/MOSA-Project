@@ -129,16 +129,16 @@ namespace Mosa.Platform.AVR32
 				case CilElementType.I:
 					try
 					{
-						if (op.Value is Token)
-						{
-							value = ((Token)op.Value).ToInt32();
-							return value >= lo && value <= hi;
-						}
-						else
-						{
+						//if (op.Value is Token)
+						//{
+						//	value = ((Token)op.Value).ToInt32();
+						//	return value >= lo && value <= hi;
+						//}
+						//else
+						//{
 							value = Convert.ToInt32(op.Value);
 							return value >= lo && value <= hi;
-						}
+						//}
 					}
 					catch (OverflowException)
 					{

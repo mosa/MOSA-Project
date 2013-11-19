@@ -41,11 +41,11 @@ namespace Mosa.Platform.ARMv6.Instructions
 		/// <param name="emitter">The emitter.</param>
 		protected override void Emit(Context context, MachineCodeEmitter emitter)
 		{
-			if (context.Operand2.IsRegister)
+			if (context.Operand2.IsRegister && context.Operand3.IsShift)
 			{
-				emitter.EmitDataProcessingInstructionWithRegister(context.ConditionCode, Bits.b0100, context.UpdateStatusFlags, context.Operand1.Register.Index, context.Result.Register.Index, context.Operand2.Register.Index, (int)context.Operand3.ValueAsLongInteger);
+				emitter.EmitDataProcessingInstructionWithRegister(context.ConditionCode, Bits.b0100, context.UpdateStatusFlags, context.Operand1.Register.Index, context.Result.Register.Index, context.Operand2.Register.Index, context.Operand3.ShiftType);
 			}
-			else if (context.Operand2.IsConstant)
+			else if (context.Operand2.IsConstant && context.Operand3.IsConstant)
 			{
 				emitter.EmitDataProcessingInstructionWithImmediate(context.ConditionCode, Bits.b0100, context.UpdateStatusFlags, context.Operand1.Register.Index, context.Result.Register.Index, (int)context.Operand2.ValueAsLongInteger, (int)context.Operand3.ValueAsLongInteger);
 			}

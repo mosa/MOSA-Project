@@ -13,6 +13,11 @@ namespace Mosa.Compiler.Common
 {
 	public static class Bits
 	{
+		public const byte b00 = 0x0;
+		public const byte b01 = 0x1;
+		public const byte b10 = 0x2;
+		public const byte b11 = 0x3;
+
 		public const byte b0000 = 0x0;
 		public const byte b0001 = 0x1;
 		public const byte b0010 = 0x2;

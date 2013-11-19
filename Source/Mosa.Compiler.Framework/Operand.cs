@@ -190,6 +190,46 @@ namespace Mosa.Compiler.Framework
 		public int Index { get; private set; }
 
 		/// <summary>
+		/// Gets the constant integer.
+		/// </summary>
+		/// <value>
+		/// The constant integer.
+		/// </value>
+		public ulong ConstantInteger { get; private set; }
+
+		/// <summary>
+		/// Gets the constant double float point.
+		/// </summary>
+		/// <value>
+		/// The constant double float point.
+		/// </value>
+		public double ConstantDoubleFloatingPoint { get; private set; }
+
+		/// <summary>
+		/// Gets the single double float point.
+		/// </summary>
+		/// <value>
+		/// The single double float point.
+		/// </value>
+		public float ConstantSingleFloatingPoint { get; private set; }
+
+		/// <summary>
+		/// Gets or sets the constant signed integer.
+		/// </summary>
+		/// <value>
+		/// The constant signed integer.
+		/// </value>
+		public long ConstantSignedInteger { get { return (int)ConstantInteger; } set { ConstantInteger = (uint)value; } }
+
+		/// <summary>
+		/// Gets a value indicating whether [is null].
+		/// </summary>
+		/// <value>
+		///   <c>true</c> if [is null]; otherwise, <c>false</c>.
+		/// </value>
+		public bool IsNull { get; private set; }
+
+		/// <summary>
 		/// Gets the value as long integer.
 		/// </summary>
 		public long ValueAsLongInteger
@@ -231,7 +271,47 @@ namespace Mosa.Compiler.Framework
 		/// <value>
 		/// <c>true</c> if this instance is floating point; otherwise, <c>false</c>.
 		/// </value>
-		public bool IsFloatingPoint { get { return (Type.Type == CilElementType.R4 || Type.Type == CilElementType.R8); } }
+		public bool IsFloatingPoint { get { return Type.Type == CilElementType.R4 || Type.Type == CilElementType.R8; } }
+
+		/// <summary>
+		/// Gets a value indicating whether [is double].
+		/// </summary>
+		/// <value>
+		///   <c>true</c> if [is double]; otherwise, <c>false</c>.
+		/// </value>
+		public bool IsDouble { get { return  Type.Type == CilElementType.R8; } }
+
+		/// <summary>
+		/// Gets a value indicating whether [is single].
+		/// </summary>
+		/// <value>
+		///   <c>true</c> if [is single]; otherwise, <c>false</c>.
+		/// </value>
+		public bool IsSingle { get { return Type.Type == CilElementType.R4; } }
+
+		/// <summary>
+		/// Gets a value indicating whether this instance is floating point.
+		/// </summary>
+		/// <value>
+		/// <c>true</c> if this instance is floating point; otherwise, <c>false</c>.
+		/// </value>
+		public bool IsInteger { get { return IsSignedInteger || IsUnsignedInteger; } }
+
+		/// <summary>
+		/// Gets a value indicating whether [is signed integer].
+		/// </summary>
+		/// <value>
+		///   <c>true</c> if [is signed integer]; otherwise, <c>false</c>.
+		/// </value>
+		public bool IsSignedInteger { get { return Type.Type == CilElementType.I || Type.Type == CilElementType.I1 || Type.Type == CilElementType.I2 || Type.Type == CilElementType.I4 || Type.Type == CilElementType.I8; } }
+
+		/// <summary>
+		/// Gets a value indicating whether [is unsigned integer].
+		/// </summary>
+		/// <value>
+		///   <c>true</c> if [is unsigned integer]; otherwise, <c>false</c>.
+		/// </value>
+		public bool IsUnsignedInteger { get { return Type.Type == CilElementType.U || Type.Type == CilElementType.U1 || Type.Type == CilElementType.U2 || Type.Type == CilElementType.U4 || Type.Type == CilElementType.U8; } }
 
 		/// <summary>
 		/// Gets the type of the shift.
@@ -309,7 +389,11 @@ namespace Mosa.Compiler.Framework
 		/// <returns>A new Operand representing the value <paramref name="value"/>.</returns>
 		public static Operand CreateConstant(uint value)
 		{
-			return CreateConstant(BuiltInSigType.UInt32, value);
+			Operand operand = new Operand(BuiltInSigType.UInt32);
+			operand.IsConstant = true;
+			operand.Value = value;
+			operand.ConstantInteger = value;
+			return operand;
 		}
 
 		/// <summary>
@@ -319,9 +403,58 @@ namespace Mosa.Compiler.Framework
 		/// <returns>A new Operand representing the value <paramref name="value"/>.</returns>
 		public static Operand CreateConstant(int value)
 		{
-			return CreateConstant(BuiltInSigType.Int32, value);
+			Operand operand = new Operand(BuiltInSigType.Int32);
+			operand.IsConstant = true;
+			operand.Value = value;
+			operand.ConstantSignedInteger = value;
+			return operand;
 		}
 
+		/// <summary>
+		/// Creates a new constant <see cref="Operand"/> for the given integral value.
+		/// </summary>
+		/// <param name="value">The value to create the constant operand for.</param>
+		/// <returns>A new Operand representing the value <paramref name="value"/>.</returns>
+		public static Operand CreateConstant(ulong value)
+		{
+			Operand operand = new Operand(BuiltInSigType.UInt64);
+			operand.IsConstant = true;
+			operand.Value = value;
+			operand.ConstantInteger = value;
+			return operand;
+		}
+
+		/// <summary>
+		/// Creates a new constant <see cref="Operand"/> for the given integral value.
+		/// </summary>
+		/// <param name="value">The value to create the constant operand for.</param>
+		/// <returns>A new Operand representing the value <paramref name="value"/>.</returns>
+		public static Operand CreateConstant(long value)
+		{
+			Operand operand = new Operand(BuiltInSigType.Int64);
+			operand.IsConstant = true;
+			operand.Value = value;
+			operand.ConstantSignedInteger = value;
+			return operand;
+		}
+
+		public static Operand CreateConstant(float value)
+		{
+			Operand operand = new Operand(BuiltInSigType.Single);
+			operand.IsConstant = true;
+			operand.Value = value;
+			operand.ConstantSingleFloatingPoint = value;
+			return operand;
+		}
+
+		public static Operand CreateConstant(double value)
+		{
+			Operand operand = new Operand(BuiltInSigType.Double);
+			operand.IsConstant = true;
+			operand.Value = value;
+			operand.ConstantDoubleFloatingPoint = value;
+			return operand;
+		}
 		/// <summary>
 		/// Gets the null constant <see cref="Operand"/>.
 		/// </summary>

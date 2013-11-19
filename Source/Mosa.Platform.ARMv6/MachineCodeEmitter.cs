@@ -69,6 +69,18 @@ namespace Mosa.Platform.ARMv6
 			}
 		}
 
+		public static byte GetShiftTypeCode(ShiftType shiftType)
+		{
+			switch (shiftType)
+			{
+				case ShiftType.LogicalLeft: return Bits.b00;
+				case ShiftType.LogicalRight: return Bits.b01;
+				case ShiftType.ArithmeticRight: return Bits.b10;
+				case ShiftType.RotateRight: return Bits.b11;
+				default: throw new NotSupportedException();
+			}
+		}
+
 		public void EmitBranch(ConditionCode conditionCode, int register)
 		{
 			Debug.Assert(register <= 0xF);
@@ -96,13 +108,12 @@ namespace Mosa.Platform.ARMv6
 			Write(value);
 		}
 
-		public void EmitDataProcessingInstructionWithRegister(ConditionCode conditionCode, byte opcode, bool setCondition, int firstRegister, int destinationRegister, int secondRegister, int secondShift)
+		public void EmitDataProcessingInstructionWithRegister(ConditionCode conditionCode, byte opcode, bool setCondition, int firstRegister, int destinationRegister, int secondRegister, ShiftType secondShiftType)
 		{
 			Debug.Assert(opcode <= 0xF);
 			Debug.Assert(destinationRegister <= 0xF);
-			Debug.Assert(firstRegister <= 0xF); 
+			Debug.Assert(firstRegister <= 0xF);
 			Debug.Assert(secondRegister <= 0xF);
-			Debug.Assert(secondShift <= 0xFF);
 
 			uint value = 0;
 
@@ -112,7 +123,7 @@ namespace Mosa.Platform.ARMv6
 			value |= (uint)(setCondition ? 1 : 0 << 20);
 			value |= (uint)(firstRegister << 16);
 			value |= (uint)(destinationRegister << 12);
-			value |= (uint)(secondShift << 4);
+			value |= (uint)(GetShiftTypeCode(secondShiftType) << 4);
 			value |= (uint)secondRegister;
 
 			Write(value);
