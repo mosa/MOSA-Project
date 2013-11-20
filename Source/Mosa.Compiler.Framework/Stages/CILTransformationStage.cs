@@ -290,28 +290,12 @@ namespace Mosa.Compiler.Framework.Stages
 
 			switch ((context.Instruction as CIL.BaseCILInstruction).OpCode)
 			{
-				case CIL.OpCode.And:
-					context.SetInstruction(IRInstruction.LogicalAnd, context.Result, context.Operand1, context.Operand2);
-					break;
-
-				case CIL.OpCode.Or:
-					context.SetInstruction(IRInstruction.LogicalOr, context.Result, context.Operand1, context.Operand2);
-					break;
-
-				case CIL.OpCode.Xor:
-					context.SetInstruction(IRInstruction.LogicalXor, context.Result, context.Operand1, context.Operand2);
-					break;
-
-				case CIL.OpCode.Div_un:
-					context.SetInstruction(IRInstruction.DivU, context.Result, context.Operand1, context.Operand2);
-					break;
-
-				case CIL.OpCode.Rem_un:
-					context.SetInstruction(IRInstruction.RemU, context.Result, context.Operand1, context.Operand2);
-					break;
-
-				default:
-					throw new NotSupportedException();
+				case CIL.OpCode.And: context.SetInstruction(IRInstruction.LogicalAnd, context.Result, context.Operand1, context.Operand2); break;
+				case CIL.OpCode.Or: context.SetInstruction(IRInstruction.LogicalOr, context.Result, context.Operand1, context.Operand2); break;
+				case CIL.OpCode.Xor: context.SetInstruction(IRInstruction.LogicalXor, context.Result, context.Operand1, context.Operand2); break;
+				case CIL.OpCode.Div_un: context.SetInstruction(IRInstruction.DivU, context.Result, context.Operand1, context.Operand2); break;
+				case CIL.OpCode.Rem_un: context.SetInstruction(IRInstruction.RemU, context.Result, context.Operand1, context.Operand2); break;
+				default: throw new InvalidCompilerException();
 			}
 		}
 
@@ -323,20 +307,10 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			switch ((context.Instruction as CIL.BaseCILInstruction).OpCode)
 			{
-				case CIL.OpCode.Shl:
-					context.SetInstruction(IRInstruction.ShiftLeft, context.Result, context.Operand1, context.Operand2);
-					break;
-
-				case CIL.OpCode.Shr:
-					context.SetInstruction(IRInstruction.ArithmeticShiftRight, context.Result, context.Operand1, context.Operand2);
-					break;
-
-				case CIL.OpCode.Shr_un:
-					context.SetInstruction(IRInstruction.ShiftRight, context.Result, context.Operand1, context.Operand2);
-					break;
-
-				default:
-					throw new NotSupportedException();
+				case CIL.OpCode.Shl: context.SetInstruction(IRInstruction.ShiftLeft, context.Result, context.Operand1, context.Operand2); break;
+				case CIL.OpCode.Shr: context.SetInstruction(IRInstruction.ArithmeticShiftRight, context.Result, context.Operand1, context.Operand2); break;
+				case CIL.OpCode.Shr_un: context.SetInstruction(IRInstruction.ShiftRight, context.Result, context.Operand1, context.Operand2); break;
+				default: throw new InvalidCompilerException();
 			}
 		}
 
@@ -661,7 +635,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="context">The context.</param>
 		void CIL.ICILVisitor.Unbox(Context context)
 		{
-			throw new NotSupportedException();
+			throw new NotImplementCompilerException();
 
 			//ReplaceWithVmCall(context, VmCall.Unbox);
 		}
@@ -914,7 +888,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="context">The context.</param>
 		void CIL.ICILVisitor.Jmp(Context context)
 		{
-			throw new NotSupportedException();
+			throw new NotImplementCompilerException();
 		}
 
 		/// <summary>
@@ -1784,10 +1758,10 @@ namespace Mosa.Compiler.Framework.Stages
 				case CilElementType.I: break;
 				case CilElementType.U: break;
 				case CilElementType.Ptr: break;
-				default: break;
+				default: throw new InvalidCompilerException();
 			}
 
-			throw new InvalidCompilerException();
+			return null;
 		}
 
 		/// <summary>
