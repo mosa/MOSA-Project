@@ -1411,7 +1411,6 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				context.ReplaceInstructionOnly(signedInstruction);
 			}
-
 		}
 
 		/// <summary>
@@ -1496,54 +1495,34 @@ namespace Mosa.Compiler.Framework.Stages
 		}
 
 		/// <summary>
-		///
+		/// Gets the index of the cil type.
 		/// </summary>
-		private enum ConvertType
-		{
-			I1 = 0,
-			I2 = 1,
-			I4 = 2,
-			I8 = 3,
-			U1 = 4,
-			U2 = 5,
-			U4 = 6,
-			U8 = 7,
-			R4 = 8,
-			R8 = 9,
-			I = 10,
-			U = 11,
-			Ptr = 12
-		}
-
-		/// <summary>
-		/// Converts a <see cref="CilElementType" /> to <see cref="ConvertType" />
-		/// </summary>
-		/// <param name="cet">The cet.</param>
+		/// <param name="cilElementType">Type of the cil element.</param>
 		/// <returns></returns>
-		/// <exception cref="System.NotSupportedException"></exception>
-		private ConvertType ConvTypeFromCilType(CilElementType cet)
+		/// <exception cref="InvalidCompilerException"></exception>
+		private int GetCilTypeIndex(CilElementType cilElementType)
 		{
-			switch (cet)
+			switch (cilElementType)
 			{
-				case CilElementType.Char: return ConvertType.U2;
-				case CilElementType.I1: return ConvertType.I1;
-				case CilElementType.I2: return ConvertType.I2;
-				case CilElementType.I4: return ConvertType.I4;
-				case CilElementType.I8: return ConvertType.I8;
-				case CilElementType.U1: return ConvertType.U1;
-				case CilElementType.U2: return ConvertType.U2;
-				case CilElementType.U4: return ConvertType.U4;
-				case CilElementType.U8: return ConvertType.U8;
-				case CilElementType.R4: return ConvertType.R4;
-				case CilElementType.R8: return ConvertType.R8;
-				case CilElementType.I: return ConvertType.I;
-				case CilElementType.U: return ConvertType.U;
-				case CilElementType.Ptr: return ConvertType.Ptr;
-				case CilElementType.ByRef: return ConvertType.Ptr;
+				case CilElementType.Char: return 5;
+				case CilElementType.I1: return 0;
+				case CilElementType.I2: return 1;
+				case CilElementType.I4: return 2;
+				case CilElementType.I8: return 3;
+				case CilElementType.U1: return 4;
+				case CilElementType.U2: return 5;
+				case CilElementType.U4: return 6;
+				case CilElementType.U8: return 7;
+				case CilElementType.R4: return 8;
+				case CilElementType.R8: return 9;
+				case CilElementType.I: return 10;
+				case CilElementType.U: return 11;
+				case CilElementType.Ptr: return 12;
+				case CilElementType.ByRef: return 12;
+				default: break;
 			}
 
-			// Requested CilElementType is not supported
-			throw new NotSupportedException();
+			throw new InvalidCompilerException();
 		}
 
 		private static readonly BaseIRInstruction[][] s_convTable = new BaseIRInstruction[13][] {
@@ -1749,15 +1728,16 @@ namespace Mosa.Compiler.Framework.Stages
 			Operand destinationOperand = context.Result;
 			Operand sourceOperand = context.Operand1;
 
-			ConvertType ctDest = ConvTypeFromCilType(destinationOperand.Type.Type);
-			ConvertType ctSrc = ConvTypeFromCilType(sourceOperand.Type.Type);
+			int destIndex = GetCilTypeIndex(destinationOperand.Type.Type);
+			int srcIndex = GetCilTypeIndex(sourceOperand.Type.Type);
 
-			BaseIRInstruction type = s_convTable[(int)ctDest][(int)ctSrc];
+			BaseIRInstruction type = s_convTable[destIndex][srcIndex];
+
 			if (type == null)
-				throw new NotSupportedException();
+				throw new InvalidCompilerException();
 
 			uint mask = 0xFFFFFFFF;
-			BaseInstruction instruction = ComputeExtensionTypeAndMask(ctDest, ref mask);
+			BaseInstruction instruction = ComputeExtensionTypeAndMask(destinationOperand.Type.Type, ref mask);
 
 			if (type == IRInstruction.LogicalAnd)
 			{
@@ -1787,63 +1767,27 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 		}
 
-		private BaseInstruction ComputeExtensionTypeAndMask(ConvertType destinationType, ref uint mask)
+		private BaseInstruction ComputeExtensionTypeAndMask(CilElementType destinationType, ref uint mask)
 		{
 			switch (destinationType)
 			{
-				case ConvertType.I1:
-					mask = 0xFF;
-					return IRInstruction.SignExtendedMove;
-
-				case ConvertType.I2:
-					mask = 0xFFFF;
-					return IRInstruction.SignExtendedMove;
-
-				case ConvertType.I4:
-					mask = 0xFFFFFFFF;
-					break;
-
-				case ConvertType.I8:
-					mask = 0x0;
-					break;
-
-				case ConvertType.U1:
-					mask = 0xFF;
-					return IRInstruction.ZeroExtendedMove;
-
-				case ConvertType.U2:
-					mask = 0xFFFF;
-					return IRInstruction.ZeroExtendedMove;
-
-				case ConvertType.U4:
-					mask = 0xFFFFFFFF;
-					break;
-
-				case ConvertType.U8:
-					mask = 0x0;
-					break;
-
-				case ConvertType.R4:
-					break;
-
-				case ConvertType.R8:
-					break;
-
-				case ConvertType.I:
-					break;
-
-				case ConvertType.U:
-					break;
-
-				case ConvertType.Ptr:
-					break;
-
-				default:
-					Debug.Assert(false);
-					throw new NotSupportedException();
+				case CilElementType.I1: mask = 0xFF; return IRInstruction.SignExtendedMove;
+				case CilElementType.I2: mask = 0xFFFF; return IRInstruction.SignExtendedMove;
+				case CilElementType.I4: mask = 0xFFFFFFFF; break;
+				case CilElementType.I8: mask = 0x0; break;
+				case CilElementType.U1: mask = 0xFF; return IRInstruction.ZeroExtendedMove;
+				case CilElementType.U2: mask = 0xFFFF; return IRInstruction.ZeroExtendedMove;
+				case CilElementType.U4: mask = 0xFFFFFFFF; break;
+				case CilElementType.U8: mask = 0x0; break;
+				case CilElementType.R4: break;
+				case CilElementType.R8: break;
+				case CilElementType.I: break;
+				case CilElementType.U: break;
+				case CilElementType.Ptr: break;
+				default: break;
 			}
 
-			return null;
+			throw new InvalidCompilerException();
 		}
 
 		/// <summary>
@@ -1972,9 +1916,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (extension != null)
 			{
-				//Operand temp = methodCompiler.CreateVirtualRegister(extendedType);
-				//context.SetInstruction(extension, temp, source);
-				//context.AppendInstruction(IRInstruction.Move, destination, temp);
 				context.SetInstruction(extension, destination, source);
 				return;
 			}
