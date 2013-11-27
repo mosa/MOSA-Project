@@ -1,14 +1,10 @@
 ﻿namespace Mosa.Compiler.MosaTypeSystem
 {
-	public class MosaAssembly
+	public class MosaGenericParameter
 	{
 		public string Name { get; internal set; }
 
-		public MosaAssembly()
-		{
-		}
-
-		public MosaAssembly(string name)
+		public MosaGenericParameter(string name)
 		{
 			this.Name = name;
 		}

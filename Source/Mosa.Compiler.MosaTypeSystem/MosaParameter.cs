@@ -10,6 +10,11 @@
 
 		public bool IsOut { get; internal set; }
 
-		public MosaType MosaType { get; internal set; }
+		public MosaType Type { get; internal set; }
+
+		public override string ToString()
+		{
+			return Name;
+		}
 	}
 }
