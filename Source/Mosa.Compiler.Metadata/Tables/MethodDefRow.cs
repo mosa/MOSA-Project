@@ -21,32 +21,32 @@ namespace Mosa.Compiler.Metadata.Tables
 		/// <summary>
 		///
 		/// </summary>
-		private uint _rva;
+		private uint rva;
 
 		/// <summary>
 		///
 		/// </summary>
-		private MethodImplAttributes _implFlags;
+		private MethodImplAttributes implFlags;
 
 		/// <summary>
 		///
 		/// </summary>
-		private MethodAttributes _flags;
+		private MethodAttributes flags;
 
 		/// <summary>
 		///
 		/// </summary>
-		private HeapIndexToken _nameStringIdx;
+		private HeapIndexToken nameStringIdx;
 
 		/// <summary>
 		///
 		/// </summary>
-		private HeapIndexToken _signatureBlobIdx;
+		private HeapIndexToken signatureBlobIdx;
 
 		/// <summary>
 		///
 		/// </summary>
-		private Token _paramList;
+		private Token paramList;
 
 		#endregion Data members
 
@@ -64,12 +64,12 @@ namespace Mosa.Compiler.Metadata.Tables
 		public MethodDefRow(uint rva, MethodImplAttributes implFlags, MethodAttributes flags, HeapIndexToken nameStringIdx,
 								HeapIndexToken signatureBlobIdx, Token paramList)
 		{
-			this._rva = rva;
-			this._implFlags = implFlags;
-			this._flags = flags;
-			this._nameStringIdx = nameStringIdx;
-			this._signatureBlobIdx = signatureBlobIdx;
-			this._paramList = paramList;
+			this.rva = rva;
+			this.implFlags = implFlags;
+			this.flags = flags;
+			this.nameStringIdx = nameStringIdx;
+			this.signatureBlobIdx = signatureBlobIdx;
+			this.paramList = paramList;
 		}
 
 		#endregion Construction
@@ -82,7 +82,7 @@ namespace Mosa.Compiler.Metadata.Tables
 		/// <value>The rva.</value>
 		public uint Rva
 		{
-			get { return _rva; }
+			get { return rva; }
 		}
 
 		/// <summary>
@@ -91,7 +91,7 @@ namespace Mosa.Compiler.Metadata.Tables
 		/// <value>The impl flags.</value>
 		public MethodImplAttributes ImplFlags
 		{
-			get { return _implFlags; }
+			get { return implFlags; }
 		}
 
 		/// <summary>
@@ -100,7 +100,7 @@ namespace Mosa.Compiler.Metadata.Tables
 		/// <value>The flags.</value>
 		public MethodAttributes Flags
 		{
-			get { return _flags; }
+			get { return flags; }
 		}
 
 		/// <summary>
@@ -109,7 +109,7 @@ namespace Mosa.Compiler.Metadata.Tables
 		/// <value>The name string idx.</value>
 		public HeapIndexToken NameStringIdx
 		{
-			get { return _nameStringIdx; }
+			get { return nameStringIdx; }
 		}
 
 		/// <summary>
@@ -118,7 +118,7 @@ namespace Mosa.Compiler.Metadata.Tables
 		/// <value>The signature BLOB idx.</value>
 		public HeapIndexToken SignatureBlobIdx
 		{
-			get { return _signatureBlobIdx; }
+			get { return signatureBlobIdx; }
 		}
 
 		/// <summary>
@@ -127,7 +127,7 @@ namespace Mosa.Compiler.Metadata.Tables
 		/// <value>The param list.</value>
 		public Token ParamList
 		{
-			get { return _paramList; }
+			get { return paramList; }
 		}
 
 		#endregion Properties

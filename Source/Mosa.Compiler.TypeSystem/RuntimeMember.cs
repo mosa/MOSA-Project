@@ -8,7 +8,6 @@
  */
 
 using Mosa.Compiler.Metadata;
-using System;
 using System.Collections.Generic;
 
 namespace Mosa.Compiler.TypeSystem
@@ -50,7 +49,7 @@ namespace Mosa.Compiler.TypeSystem
 		{
 			this.declaringType = declaringType;
 			this.attributes = new List<RuntimeAttribute>();
-			this.name = name;		
+			this.name = name;
 		}
 
 		#endregion Construction

@@ -163,7 +163,6 @@ namespace Mosa.Compiler.TypeSystem
 			}
 		}
 
-
 		/// <summary>
 		/// Gets the attributes.
 		/// </summary>

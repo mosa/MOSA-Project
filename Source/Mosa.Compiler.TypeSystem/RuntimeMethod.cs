@@ -229,9 +229,11 @@ namespace Mosa.Compiler.TypeSystem
 		}
 
 		/// <summary>
-		/// Returns the interfaces implemented by this type.
+		/// Gets the generic parameters.
 		/// </summary>
-		/// <value>A list of interfaces.</value>
+		/// <value>
+		/// The generic parameters.
+		/// </value>
 		public IList<GenericParameter> GenericParameters
 		{
 			get { return genericParameters; }

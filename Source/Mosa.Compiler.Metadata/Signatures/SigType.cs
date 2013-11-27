@@ -17,15 +17,6 @@ namespace Mosa.Compiler.Metadata.Signatures
 	/// </summary>
 	public class SigType : IEquatable<SigType>
 	{
-		#region Data members
-
-		/// <summary>
-		/// Holds the CIL element type of the signature type.
-		/// </summary>
-		private CilElementType type;
-
-		#endregion Data members
-
 		#region Construction
 
 		/// <summary>
@@ -34,7 +25,7 @@ namespace Mosa.Compiler.Metadata.Signatures
 		/// <param name="type">The type.</param>
 		public SigType(CilElementType type)
 		{
-			this.type = type;
+			this.Type = type;
 		}
 
 		#endregion Construction
@@ -45,7 +36,7 @@ namespace Mosa.Compiler.Metadata.Signatures
 		/// Gets the type.
 		/// </summary>
 		/// <value>The type.</value>
-		public CilElementType Type { get { return type; } set { type = value; } }
+		public CilElementType Type { get; private set; }
 
 		/// <summary>
 		/// Gets a value indicating whether the type contains a generic type.
@@ -53,7 +44,7 @@ namespace Mosa.Compiler.Metadata.Signatures
 		/// <value>
 		/// 	<c>true</c> if [contains generic type]; otherwise, <c>false</c>.
 		/// </value>
-		public bool IsOpenGenericParameter { get { return (type == CilElementType.Var || type == CilElementType.MVar); } }
+		public bool IsOpenGenericParameter { get { return (Type == CilElementType.Var || Type == CilElementType.MVar); } }
 
 		#endregion Properties
 
@@ -67,7 +58,7 @@ namespace Mosa.Compiler.Metadata.Signatures
 		/// </returns>
 		public override string ToString()
 		{
-			return type.ToString();
+			return Type.ToString();
 		}
 
 		#endregion Object Overrides
@@ -163,92 +154,35 @@ namespace Mosa.Compiler.Metadata.Signatures
 			CilElementType type = (CilElementType)reader.ReadByte();
 			switch (type)
 			{
-				case CilElementType.Void:
-					return BuiltInSigType.Void;
-
-				case CilElementType.Boolean:
-					return BuiltInSigType.Boolean;
-
-				case CilElementType.Char:
-					return BuiltInSigType.Char;
-
-				case CilElementType.I1:
-					return BuiltInSigType.SByte;
-
-				case CilElementType.U1:
-					return BuiltInSigType.Byte;
-
-				case CilElementType.I2:
-					return BuiltInSigType.Int16;
-
-				case CilElementType.U2:
-					return BuiltInSigType.UInt16;
-
-				case CilElementType.I4:
-					return BuiltInSigType.Int32;
-
-				case CilElementType.U4:
-					return BuiltInSigType.UInt32;
-
-				case CilElementType.I8:
-					return BuiltInSigType.Int64;
-
-				case CilElementType.U8:
-					return BuiltInSigType.UInt64;
-
-				case CilElementType.R4:
-					return BuiltInSigType.Single;
-
-				case CilElementType.R8:
-					return BuiltInSigType.Double;
-
-				case CilElementType.String:
-					return BuiltInSigType.String;
-
-				case CilElementType.Object:
-					return BuiltInSigType.Object;
-
-				case CilElementType.I:
-					return BuiltInSigType.IntPtr;
-
-				case CilElementType.U:
-					return BuiltInSigType.UIntPtr;
-
-				case CilElementType.TypedByRef:
-					return BuiltInSigType.TypedByRef;
-
-				case CilElementType.Array:
-					return ParseArraySignature(reader);
-
-				case CilElementType.Class:
-					return ParseClassSignature(reader);
-
-				case CilElementType.FunctionPtr:
-					return ParseFunctionPointer(reader);
-
-				case CilElementType.GenericInst:
-					return ParseGenericInstance(reader);
-
-				case CilElementType.MVar:
-					return ParseMVar(reader);
-
-				case CilElementType.Ptr:
-					return ParsePointer(reader);
-
-				case CilElementType.SZArray:
-					return ParseSZArraySignature(reader);
-
-				case CilElementType.ValueType:
-					return ParseValueType(reader);
-
-				case CilElementType.Var:
-					return ParseVar(reader);
-
-				case CilElementType.ByRef:
-					return ParseReference(reader);
-
-				default:
-					throw new NotSupportedException(@"Unsupported CIL element type: " + type);
+				case CilElementType.Void: return BuiltInSigType.Void;
+				case CilElementType.Boolean: return BuiltInSigType.Boolean;
+				case CilElementType.Char: return BuiltInSigType.Char;
+				case CilElementType.I1: return BuiltInSigType.SByte;
+				case CilElementType.U1: return BuiltInSigType.Byte;
+				case CilElementType.I2: return BuiltInSigType.Int16;
+				case CilElementType.U2: return BuiltInSigType.UInt16;
+				case CilElementType.I4: return BuiltInSigType.Int32;
+				case CilElementType.U4: return BuiltInSigType.UInt32;
+				case CilElementType.I8: return BuiltInSigType.Int64;
+				case CilElementType.U8: return BuiltInSigType.UInt64;
+				case CilElementType.R4: return BuiltInSigType.Single;
+				case CilElementType.R8: return BuiltInSigType.Double;
+				case CilElementType.String: return BuiltInSigType.String;
+				case CilElementType.Object: return BuiltInSigType.Object;
+				case CilElementType.I: return BuiltInSigType.IntPtr;
+				case CilElementType.U: return BuiltInSigType.UIntPtr;
+				case CilElementType.TypedByRef: return BuiltInSigType.TypedByRef;
+				case CilElementType.Array: return ParseArraySignature(reader);
+				case CilElementType.Class: return ParseClassSignature(reader);
+				case CilElementType.FunctionPtr: return ParseFunctionPointer(reader);
+				case CilElementType.GenericInst: return ParseGenericInstance(reader);
+				case CilElementType.MVar: return ParseMVar(reader);
+				case CilElementType.Ptr: return ParsePointer(reader);
+				case CilElementType.SZArray: return ParseSZArraySignature(reader);
+				case CilElementType.ValueType: return ParseValueType(reader);
+				case CilElementType.Var: return ParseVar(reader);
+				case CilElementType.ByRef: return ParseReference(reader);
+				default: throw new NotSupportedException(@"Unsupported CIL element type: " + type);
 			}
 		}
 
@@ -283,7 +217,7 @@ namespace Mosa.Compiler.Metadata.Signatures
 		{
 			CustomMod[] mods = CustomMod.ParseCustomMods(reader);
 			SigType type = ParseTypeSignature(reader);
-			return new PtrSigType(mods, type);
+			return new PtrSigType(type, mods);
 		}
 
 		/// <summary>
@@ -413,7 +347,7 @@ namespace Mosa.Compiler.Metadata.Signatures
 		/// </returns>
 		public virtual bool Equals(SigType other)
 		{
-			return (type == other.type);
+			return (Type == other.Type);
 		}
 
 		#endregion IEquatable<SigType> Members
@@ -430,86 +364,44 @@ namespace Mosa.Compiler.Metadata.Signatures
 			// Otherwise, call the virtual method ToSymbolPart() and hope that it is overridden so that it doesn't throw a NotImplementedException
 			switch (this.Type)
 			{
-				case CilElementType.Boolean:
-					return "bool";
-				case CilElementType.Char:
-					return "char";
-				case CilElementType.I1:
-					return "sbyte";
-				case CilElementType.U1:
-					return "byte";
-				case CilElementType.I2:
-					return "short";
-				case CilElementType.U2:
-					return "ushort";
-				case CilElementType.I4:
-					return "int";
-				case CilElementType.U4:
-					return "uint";
-				case CilElementType.I8:
-					return "long";
-				case CilElementType.U8:
-					return "ulong";
-				case CilElementType.R4:
-					return "single";
-				case CilElementType.R8:
-					return "double";
-				case CilElementType.String:
-					return "string";
-				case CilElementType.ValueType:
-					return "valuetype";	// FIXME: HACK?
-
-				//throw new NotImplementedException();
-				case CilElementType.Class:
-					throw new NotImplementedException();
-				case CilElementType.Var:
-					throw new NotImplementedException();
-				case CilElementType.Array:
-					throw new NotImplementedException();
-				case CilElementType.GenericInst:
-					throw new NotImplementedException();
-				case CilElementType.TypedByRef:
-					throw new NotImplementedException();
-				case CilElementType.I:
-					return "IntPtr";
-				case CilElementType.U:
-					return "UIntPtr";
-				case CilElementType.FunctionPtr:
-					throw new NotImplementedException();
-				case CilElementType.Object:
-					return "object";	// FIXME: HACK?
-
-				//throw new NotImplementedException();
-				case CilElementType.SZArray:
-					throw new NotImplementedException();
-				case CilElementType.MVar:
-					throw new NotImplementedException();
-				case CilElementType.Required:
-					throw new NotImplementedException();
-				case CilElementType.Optional:
-					throw new NotImplementedException();
-				case CilElementType.Internal:
-					throw new NotImplementedException();
-				case CilElementType.Modifier:
-					throw new NotImplementedException();
-				case CilElementType.Sentinel:
-					throw new NotImplementedException();
-				case CilElementType.Pinned:
-					throw new NotImplementedException();
-				case CilElementType.Type:
-					throw new NotImplementedException();
-				case CilElementType.BoxedObject:
-					throw new NotImplementedException();
-				case CilElementType.Reserved:
-					throw new NotImplementedException();
-				case CilElementType.Field:
-					throw new NotImplementedException();
-				case CilElementType.Property:
-					throw new NotImplementedException();
-				case CilElementType.Enum:
-					throw new NotImplementedException();
-				default:
-					throw new NotImplementedException();
+				case CilElementType.Boolean: return "bool";
+				case CilElementType.Char: return "char";
+				case CilElementType.I1: return "sbyte";
+				case CilElementType.U1: return "byte";
+				case CilElementType.I2: return "short";
+				case CilElementType.U2: return "ushort";
+				case CilElementType.I4: return "int";
+				case CilElementType.U4: return "uint";
+				case CilElementType.I8: return "long";
+				case CilElementType.U8: return "ulong";
+				case CilElementType.R4: return "single";
+				case CilElementType.R8: return "double";
+				case CilElementType.String: return "string";
+				case CilElementType.ValueType: return "valuetype";	// FIXME: HACK?
+				case CilElementType.Class: throw new NotImplementedException();
+				case CilElementType.Var: throw new NotImplementedException();
+				case CilElementType.Array: throw new NotImplementedException();
+				case CilElementType.GenericInst: throw new NotImplementedException();
+				case CilElementType.TypedByRef: throw new NotImplementedException();
+				case CilElementType.I: return "IntPtr";
+				case CilElementType.U: return "UIntPtr";
+				case CilElementType.FunctionPtr: throw new NotImplementedException();
+				case CilElementType.Object: return "object";	// FIXME: HACK?
+				case CilElementType.SZArray: throw new NotImplementedException();
+				case CilElementType.MVar: throw new NotImplementedException();
+				case CilElementType.Required: throw new NotImplementedException();
+				case CilElementType.Optional: throw new NotImplementedException();
+				case CilElementType.Internal: throw new NotImplementedException();
+				case CilElementType.Modifier: throw new NotImplementedException();
+				case CilElementType.Sentinel: throw new NotImplementedException();
+				case CilElementType.Pinned: throw new NotImplementedException();
+				case CilElementType.Type: throw new NotImplementedException();
+				case CilElementType.BoxedObject: throw new NotImplementedException();
+				case CilElementType.Reserved: throw new NotImplementedException();
+				case CilElementType.Field: throw new NotImplementedException();
+				case CilElementType.Property: throw new NotImplementedException();
+				case CilElementType.Enum: throw new NotImplementedException();
+				default: throw new NotImplementedException();
 			}
 		}
 	}

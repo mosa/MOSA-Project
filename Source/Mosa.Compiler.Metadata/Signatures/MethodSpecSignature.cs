@@ -17,11 +17,6 @@ namespace Mosa.Compiler.Metadata.Signatures
 	public class MethodSpecSignature : Signature
 	{
 		/// <summary>
-		///
-		/// </summary>
-		private SigType[] types;
-
-		/// <summary>
 		/// Initializes a new instance of the <see cref="VariableSignature"/> class.
 		/// </summary>
 		/// <param name="provider">The provider.</param>
@@ -35,10 +30,7 @@ namespace Mosa.Compiler.Metadata.Signatures
 		/// Gets the types.
 		/// </summary>
 		/// <value>The types.</value>
-		public SigType[] Types
-		{
-			get { return types; }
-		}
+		public SigType[] Types { get; private set; }
 
 		/// <summary>
 		/// Parses the signature.
@@ -50,9 +42,9 @@ namespace Mosa.Compiler.Metadata.Signatures
 				throw new InvalidOperationException(@"Invalid signature.");
 
 			int genArgCount = reader.ReadCompressedInt32();
-			types = new SigType[genArgCount];
+			Types = new SigType[genArgCount];
 			for (int i = 0; i < genArgCount; i++)
-				types[i] = SigType.ParseTypeSignature(reader);
+				Types[i] = SigType.ParseTypeSignature(reader);
 		}
 	}
 }

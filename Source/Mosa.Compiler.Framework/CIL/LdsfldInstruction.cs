@@ -55,7 +55,7 @@ namespace Mosa.Compiler.Framework.CIL
 
 			SigType sigType = ctx.RuntimeField.SigType;
 
-			Debug.Assert((ctx.RuntimeField.Attributes & FieldAttributes.Static) == FieldAttributes.Static, @"Static field access on non-static field.");
+			Debug.Assert(ctx.RuntimeField.IsStaticField, "Static field access on non-static field.");
 			ctx.Result = LoadInstruction.CreateResultOperand(decoder, sigType);
 		}
 

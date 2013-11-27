@@ -459,7 +459,7 @@ namespace Mosa.Compiler.TypeSystem
 			{
 				var fieldRow = metadataProvider.ReadFieldRow(token);
 				uint rva = 0;
-				uint layout = 0;
+				uint offset = 0;
 
 				// Static fields have an optional RVA, non-static may have a layout assigned
 				if ((fieldRow.Flags & FieldAttributes.HasFieldRVA) == FieldAttributes.HasFieldRVA)
@@ -502,7 +502,7 @@ namespace Mosa.Compiler.TypeSystem
 					// Does this field have layout?
 					if (token == fieldLayout.Field && tokenLayout.RID <= maxLayout.RID)
 					{
-						layout = fieldLayout.Offset;
+						offset = fieldLayout.Offset;
 						tokenLayout = tokenLayout.NextRow;
 						if (tokenLayout.RID < maxLayout.RID)
 						{
@@ -517,7 +517,7 @@ namespace Mosa.Compiler.TypeSystem
 					GetString(fieldRow.Name),
 					GetFieldSignature(fieldRow.Signature).Type,
 					token,
-					layout,
+					offset,
 					rva,
 					declaringType,
 					fieldRow.Flags

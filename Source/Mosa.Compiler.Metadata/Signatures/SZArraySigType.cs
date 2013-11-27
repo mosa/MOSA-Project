@@ -16,20 +16,6 @@ namespace Mosa.Compiler.Metadata.Signatures
 	/// </summary>
 	public sealed class SZArraySigType : SigType
 	{
-		#region Data members
-
-		/// <summary>
-		/// The modifiers of the vector.
-		/// </summary>
-		private CustomMod[] customMods;
-
-		/// <summary>
-		/// The array element type.
-		/// </summary>
-		private SigType elementType;
-
-		#endregion Data members
-
 		#region Construction
 
 		/// <summary>
@@ -40,8 +26,8 @@ namespace Mosa.Compiler.Metadata.Signatures
 		public SZArraySigType(CustomMod[] customMods, SigType type) :
 			base(CilElementType.SZArray)
 		{
-			this.customMods = customMods;
-			this.elementType = type;
+			CustomMods = customMods;
+			ElementType = type;
 		}
 
 		#endregion Construction
@@ -52,13 +38,13 @@ namespace Mosa.Compiler.Metadata.Signatures
 		/// Gets the custom modifiers of the array type.
 		/// </summary>
 		/// <value>The custom modifiers of the array type.</value>
-		public CustomMod[] CustomMods { get { return customMods; } }
+		public CustomMod[] CustomMods { get; private set; }
 
 		/// <summary>
 		/// Gets the type of the array elements.
 		/// </summary>
 		/// <value>The type of the array elements.</value>
-		public SigType ElementType { get { return elementType; } }
+		public SigType ElementType { get; private set; }
 
 		#endregion Properties
 
@@ -77,7 +63,7 @@ namespace Mosa.Compiler.Metadata.Signatures
 			if (szast == null)
 				return false;
 
-			return (base.Equals(other) && elementType.Equals(szast.elementType) && CustomMod.Equals(customMods, szast.customMods));
+			return (base.Equals(other) && ElementType.Equals(szast.ElementType) && CustomMod.Equals(CustomMods, szast.CustomMods));
 		}
 
 		#endregion SigType Overrides
@@ -89,7 +75,7 @@ namespace Mosa.Compiler.Metadata.Signatures
 		public override string ToSymbolPart()
 		{
 			StringBuilder sb = new StringBuilder();
-			sb.Append(this.ElementType.ToSymbolPart());
+			sb.Append(ElementType.ToSymbolPart());
 			sb.Append("[]");
 			return sb.ToString();
 		}

@@ -14,15 +14,6 @@ namespace Mosa.Compiler.Metadata.Signatures
 	/// </summary>
 	public sealed class MVarSigType : SigType
 	{
-		#region Data members
-
-		/// <summary>
-		/// Holds the index of the generic parameter in the generic parameter list.
-		/// </summary>
-		private int index;
-
-		#endregion Data members
-
 		#region Construction
 
 		/// <summary>
@@ -32,7 +23,7 @@ namespace Mosa.Compiler.Metadata.Signatures
 		public MVarSigType(int index) :
 			base(CilElementType.MVar)
 		{
-			this.index = index;
+			Index = index;
 		}
 
 		#endregion Construction
@@ -43,7 +34,7 @@ namespace Mosa.Compiler.Metadata.Signatures
 		/// Gets the index of the generic parameter in the generic parameter list of the generic member.
 		/// </summary>
 		/// <value>The index.</value>
-		public int Index { get { return index; } }
+		public int Index { get; private set; }
 
 		#endregion Properties
 
@@ -62,7 +53,7 @@ namespace Mosa.Compiler.Metadata.Signatures
 			if (mvst == null)
 				return false;
 
-			return (base.Equals(other) == true && index == mvst.index);
+			return (base.Equals(other) == true && Index == mvst.Index);
 		}
 
 		/// <summary>
@@ -73,7 +64,7 @@ namespace Mosa.Compiler.Metadata.Signatures
 		/// </returns>
 		public override string ToString()
 		{
-			return base.ToString() + "#" + index.ToString();
+			return base.ToString() + "#" + Index.ToString();
 		}
 
 		#endregion SigType Overrides
