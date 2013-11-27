@@ -23,6 +23,11 @@ namespace Mosa.Compiler.Metadata
 			get { return (TableType)(token & 0xff000000); }
 		}
 
+		public uint Value
+		{
+			get { return token; }
+		}
+
 		public static readonly Token Zero = new Token((uint)0);
 
 		public Token(uint token)
@@ -136,5 +141,6 @@ namespace Mosa.Compiler.Metadata
 
 			yield return token;
 		}
+
 	}
 }

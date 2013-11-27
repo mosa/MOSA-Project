@@ -2,14 +2,23 @@ namespace Mosa.Compiler.Metadata.Signatures
 {
 	public class TypeSigType : SigType
 	{
-		private readonly Token token;
+		/// <summary>
+		/// Gets the token.
+		/// </summary>
+		/// <value>
+		/// The token.
+		/// </value>
+		public Token Token { get; private set; }
 
-		public Token Token { get { return this.token; } }
-
+		/// <summary>
+		/// Initializes a new instance of the <see cref="TypeSigType"/> class.
+		/// </summary>
+		/// <param name="token">The token.</param>
+		/// <param name="type">The type.</param>
 		public TypeSigType(Token token, CilElementType type) :
 			base(type)
 		{
-			this.token = token;
+			Token = token;
 		}
 
 		/// <summary>
@@ -20,7 +29,7 @@ namespace Mosa.Compiler.Metadata.Signatures
 		/// </returns>
 		public override string ToString()
 		{
-			return base.ToString() + " " + this.token.ToString();
+			return base.ToString() + " " + Token.ToString();
 		}
 	}
 }

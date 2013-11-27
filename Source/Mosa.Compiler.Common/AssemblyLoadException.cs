@@ -12,20 +12,20 @@ using System;
 namespace Mosa.Compiler.Common
 {
 	[Serializable]
-	public class CompilerException : Exception
+	public class AssemblyLoadException : CompilerException
 	{
 		/// <summary>
-		/// Initializes a new instance of the <see cref="CompilerException"/> class.
+		/// Initializes a new instance of the <see cref="AssemblyLoadException"/> class.
 		/// </summary>
-		public CompilerException()
+		public AssemblyLoadException()
 		{
 		}
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="CompilerException"/> class.
+		/// Initializes a new instance of the <see cref="AssemblyLoadException"/> class.
 		/// </summary>
 		/// <param name="message">The message that describes the error.</param>
-		public CompilerException(string message)
+		public AssemblyLoadException(string message)
 			: base(message)
 		{ }
 	}

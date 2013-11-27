@@ -126,44 +126,6 @@ namespace Mosa.Compiler.Metadata.Signatures
 		}
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="MethodSignature"/> class.
-		/// </summary>
-		/// <param name="returnType">Type of the return value.</param>
-		/// <param name="parameters">The parameter types.</param>
-		public MethodSignature(SigType returnType, SigType[] parameters)
-		{
-			if (returnType == null)
-				throw new ArgumentNullException(@"returnType");
-			if (parameters == null)
-				throw new ArgumentNullException(@"parameters");
-
-			this.methodCallingConvention = MethodCallingConvention.Default;
-			this.hasExplicitThis = false;
-			this.hasThis = false;
-			this.parameters = parameters;
-			this.returnType = returnType;
-			this.genericParameterCount = 0;
-		}
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="MethodSignature"/> class.
-		/// </summary>
-		/// <param name="signature">The signature.</param>
-		public MethodSignature(MethodSignature signature)
-			: base(signature)
-		{
-			this.methodCallingConvention = signature.methodCallingConvention;
-			this.hasExplicitThis = signature.hasExplicitThis;
-			this.hasThis = signature.hasThis;
-			this.returnType = signature.returnType;
-			this.genericParameterCount = signature.genericParameterCount;
-
-			this.parameters = new SigType[signature.parameters.Length];
-			for (int i = 0; i < signature.parameters.Length; i++)
-				this.parameters[i] = signature.parameters[i];
-		}
-
-		/// <summary>
 		/// Parses the signature.
 		/// </summary>
 		/// <param name="reader">The reader.</param>

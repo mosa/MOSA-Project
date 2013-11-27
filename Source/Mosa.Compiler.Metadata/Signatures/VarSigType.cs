@@ -14,15 +14,6 @@ namespace Mosa.Compiler.Metadata.Signatures
 	/// </summary>
 	public sealed class VarSigType : SigType
 	{
-		#region Data members
-
-		/// <summary>
-		/// The generic type parameter index.
-		/// </summary>
-		private int index;
-
-		#endregion Data members
-
 		#region Construction
 
 		/// <summary>
@@ -32,7 +23,7 @@ namespace Mosa.Compiler.Metadata.Signatures
 		public VarSigType(int index) :
 			base(CilElementType.Var)
 		{
-			this.index = index;
+			Index = index;
 		}
 
 		#endregion Construction
@@ -43,7 +34,7 @@ namespace Mosa.Compiler.Metadata.Signatures
 		/// Gets the generic type parameter index.
 		/// </summary>
 		/// <value>The index.</value>
-		public int Index { get { return index; } }
+		public int Index { get; private set; }
 
 		#endregion Properties
 
@@ -62,7 +53,7 @@ namespace Mosa.Compiler.Metadata.Signatures
 			if (null == vst)
 				return false;
 
-			return (base.Equals(other) && index == vst.index);
+			return (base.Equals(other) && Index == vst.Index);
 		}
 
 		/// <summary>
@@ -73,7 +64,7 @@ namespace Mosa.Compiler.Metadata.Signatures
 		/// </returns>
 		public override string ToString()
 		{
-			return base.ToString() + "#" + index.ToString();
+			return base.ToString() + "#" + Index.ToString();
 		}
 
 		#endregion SigType Overrides

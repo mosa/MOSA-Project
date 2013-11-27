@@ -14,15 +14,6 @@ namespace Mosa.Compiler.Metadata.Signatures
 	/// </summary>
 	public sealed class FnptrSigType : SigType
 	{
-		#region Data members
-
-		/// <summary>
-		/// The token type of a MethodDef, MethodRef or MethodSpec row, that holds the function signature.
-		/// </summary>
-		private HeapIndexToken heapIndexToken;
-
-		#endregion Data members
-
 		#region Construction
 
 		/// <summary>
@@ -32,7 +23,7 @@ namespace Mosa.Compiler.Metadata.Signatures
 		public FnptrSigType(HeapIndexToken token) :
 			base(CilElementType.FunctionPtr)
 		{
-			heapIndexToken = token;
+			Token = token;
 		}
 
 		#endregion Construction
@@ -43,7 +34,7 @@ namespace Mosa.Compiler.Metadata.Signatures
 		/// Gets the method definition, reference or specification token.
 		/// </summary>
 		/// <value>The token.</value>
-		public HeapIndexToken Token { get { return heapIndexToken; } }
+		public HeapIndexToken Token { get; private set; }
 
 		#endregion Properties
 
@@ -62,7 +53,7 @@ namespace Mosa.Compiler.Metadata.Signatures
 			if (null == fst)
 				return false;
 
-			return (base.Equals(other) == true && heapIndexToken == fst.heapIndexToken);
+			return (base.Equals(other) == true && Token == fst.Token);
 		}
 
 		#endregion SigType Overrides

@@ -40,7 +40,7 @@ namespace Mosa.Compiler.Metadata.Signatures
 		public PtrSigType(SigType type)
 			: base(CilElementType.Ptr)
 		{
-			if (null == type)
+			if (type == null)
 				throw new ArgumentNullException(@"type");
 
 			this.customMods = null;
@@ -50,12 +50,12 @@ namespace Mosa.Compiler.Metadata.Signatures
 		/// <summary>
 		/// Initializes a new instance of the <see cref="PtrSigType"/> class.
 		/// </summary>
-		/// <param name="customMods">The custom mods.</param>
 		/// <param name="type">The type.</param>
-		public PtrSigType(CustomMod[] customMods, SigType type)
+		/// <param name="customMods">The custom mods.</param>
+		public PtrSigType(SigType type, CustomMod[] customMods)
 			: base(CilElementType.Ptr)
 		{
-			if (null == type)
+			if (type == null)
 				throw new ArgumentNullException(@"type");
 
 			this.customMods = customMods;

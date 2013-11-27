@@ -1,4 +1,6 @@
 ﻿using Mosa.Test.Collection.MbUnit;
+using Mosa.Compiler.Metadata.Loader;
+using System.IO;
 
 namespace Mosa.Test.Debug
 {

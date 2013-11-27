@@ -279,7 +279,7 @@ namespace Mosa.Compiler.TypeSystem
 		/// <param name="enclosingType">Type of the enclosing.</param>
 		/// <param name="openType">Type of the open.</param>
 		/// <returns></returns>
-		public SigType[] CloseGenericArguments(SigType[] enclosingType, SigType[] openType)
+		private SigType[] CloseGenericArguments(SigType[] enclosingType, SigType[] openType)
 		{
 			var result = new SigType[openType.Length];
 

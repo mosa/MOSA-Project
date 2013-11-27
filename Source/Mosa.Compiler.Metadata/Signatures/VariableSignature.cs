@@ -11,10 +11,6 @@ namespace Mosa.Compiler.Metadata.Signatures
 {
 	public class VariableSignature : Signature
 	{
-		private CustomMod[] customMods;
-		private CilElementType modifier;
-		private SigType sigType;
-
 		/// <summary>
 		/// Initializes a new instance of the <see cref="VariableSignature"/> class.
 		/// </summary>
@@ -42,41 +38,37 @@ namespace Mosa.Compiler.Metadata.Signatures
 		public VariableSignature(VariableSignature signature)
 			: base(signature)
 		{
-			this.customMods = signature.customMods;
-			this.modifier = signature.modifier;
-			this.sigType = signature.sigType;
+			CustomMods = signature.CustomMods;
+			Modifier = signature.Modifier;
+			Type = signature.Type;
 		}
 
 		/// <summary>
 		/// Gets the custom mods.
 		/// </summary>
 		/// <value>The custom mods.</value>
-		public CustomMod[] CustomMods
-		{
-			get { return this.customMods; }
-		}
+		public CustomMod[] CustomMods { get; private set; }
 
-		public CilElementType Modifier
-		{
-			get { return this.modifier; }
-		}
+		/// <summary>
+		/// Gets the modifier.
+		/// </summary>
+		/// <value>
+		/// The modifier.
+		/// </value>
+		public CilElementType Modifier { get; private set; }
 
 		/// <summary>
 		/// Gets the type.
 		/// </summary>
 		/// <value>The type.</value>
-		public SigType Type
-		{
-			get { return this.sigType; }
-			set { this.sigType = value; }
-		}
+		public SigType Type { get; private set; }
 
 		protected override void ParseSignature(SignatureReader reader)
 		{
 			this.ParseModifier(reader);
 
-			this.customMods = CustomMod.ParseCustomMods(reader);
-			this.sigType = SigType.ParseTypeSignature(reader);
+			CustomMods = CustomMod.ParseCustomMods(reader);
+			Type = SigType.ParseTypeSignature(reader);
 		}
 
 		private void ParseModifier(SignatureReader reader)
@@ -84,7 +76,7 @@ namespace Mosa.Compiler.Metadata.Signatures
 			CilElementType value = (CilElementType)reader.PeekByte();
 			if (value == CilElementType.Pinned)
 			{
-				this.modifier = value;
+				Modifier = value;
 				reader.SkipByte();
 			}
 		}
