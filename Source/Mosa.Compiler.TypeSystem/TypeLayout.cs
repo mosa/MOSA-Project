@@ -7,12 +7,12 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Compiler.Metadata.Tables;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Mosa.Compiler.TypeSystem
 {
@@ -171,13 +171,13 @@ namespace Mosa.Compiler.TypeSystem
 			}
 
 			// If the field is another struct, we have to dig down and compute its size too.
-			if (field.SignatureType.Type == CilElementType.ValueType)
+			if (field.SigType.Type == CilElementType.ValueType)
 			{
 				size = ((ITypeLayout)this).GetTypeSize(field.DeclaringType);
 			}
 			else
 			{
-				size = GetMemorySize(field.SignatureType);
+				size = GetMemorySize(field.SigType);
 			}
 
 			fieldSizes.Add(field, size);
@@ -349,7 +349,7 @@ namespace Mosa.Compiler.TypeSystem
 			{
 				if (!field.IsStaticField)
 				{
-					int fieldSize = GetMemorySize(field.SignatureType);
+					int fieldSize = GetMemorySize(field.SigType);
 
 					//int fieldAlignment = GetAlignmentSize(field.SignatureType);
 
@@ -400,7 +400,7 @@ namespace Mosa.Compiler.TypeSystem
 			foreach (var token in new Token(TableType.MethodImpl, 1).Upto(maxToken))
 			{
 				MethodImplRow row = metadata.ReadMethodImplRow(token);
-				if (row.@Class == type.Token)
+				if (row.Class == type.Token)
 				{
 					int slot = 0;
 					foreach (var interfaceMethod in interfaceType.Methods)
@@ -438,7 +438,7 @@ namespace Mosa.Compiler.TypeSystem
 
 				if (cleanInterfaceMethodName.Equals(cleanMethodName))
 				{
-					if (interfaceMethod.Signature.Matches(method.Signature))
+					if (interfaceMethod.Matches(method))
 					{
 						return method;
 					}
@@ -533,7 +533,7 @@ namespace Mosa.Compiler.TypeSystem
 		{
 			foreach (var baseMethod in methodTable)
 			{
-				if (baseMethod.Name.Equals(method.Name) && baseMethod.Signature.Matches(method.Signature))
+				if (baseMethod.Name.Equals(method.Name) && baseMethod.Matches(method))
 				{
 					return methodTableOffsets[baseMethod];
 				}

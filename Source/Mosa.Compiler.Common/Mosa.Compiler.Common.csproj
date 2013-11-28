@@ -34,9 +34,13 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System" />
-  </ItemGroup>
-  <ItemGroup>
+    <Compile Include="Bits.cs" />
+    <Compile Include="BitArrayExtension.cs" />
+    <Compile Include="InvalidCompilerException.cs" />
+    <Compile Include="NotImplementCompilerException.cs" />
+    <Compile Include="CompilerException.cs" />
+    <Compile Include="SimplePriorityQueue.cs" />
+    <Compile Include="Endianness .cs" />
     <Compile Include="ListExtension.cs" />
     <Compile Include="EndianAwareBinaryWriter.cs" />
     <Compile Include="EndianAwareBinaryReader.cs" />
@@ -45,6 +49,9 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

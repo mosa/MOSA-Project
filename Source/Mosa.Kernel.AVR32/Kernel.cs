@@ -7,7 +7,7 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using Mosa.Platform.AVR32.Intrinsic;
+using Mosa.Platform.Internal.AVR32;
 
 namespace Mosa.Kernel.AVR32
 {

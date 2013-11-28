@@ -55,9 +55,9 @@ namespace Mosa.Compiler.Framework.CIL
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		/// <param name="compiler">The compiler.</param>
-		public override void Validate(Context ctx, BaseMethodCompiler compiler)
+		public override void Resolve(Context ctx, BaseMethodCompiler compiler)
 		{
-			base.Validate(ctx, compiler);
+			base.Resolve(ctx, compiler);
 
 			var stackTypeForOperand1 = ctx.Operand1.StackType;
 			var stackTypeForOperand2 = ctx.Operand2.StackType;
@@ -66,14 +66,14 @@ namespace Mosa.Compiler.Framework.CIL
 			{
 				var op1Type = compiler.Method.Module.GetType((ctx.Operand1.Type as ValueTypeSigType).Token);
 				if (op1Type.BaseType.FullName == "System.Enum")
-					stackTypeForOperand1 = this.FromSigType(op1Type.Fields[0].SignatureType.Type);
+					stackTypeForOperand1 = FromSigType(op1Type.Fields[0].SigType.Type);
 			}
 
 			if (ctx.Operand2.Type is ValueTypeSigType)
 			{
 				var op2Type = compiler.Method.Module.GetType((ctx.Operand2.Type as ValueTypeSigType).Token);
 				if (op2Type.BaseType.FullName == "System.Enum")
-					stackTypeForOperand2 = this.FromSigType(op2Type.Fields[0].SignatureType.Type);
+					stackTypeForOperand2 = FromSigType(op2Type.Fields[0].SigType.Type);
 			}
 
 			var result = _opTable[(int)stackTypeForOperand1][(int)stackTypeForOperand2];
@@ -84,7 +84,7 @@ namespace Mosa.Compiler.Framework.CIL
 			ctx.Result = compiler.CreateVirtualRegister(Operand.SigTypeFromStackType(result));
 		}
 
-		private StackTypeCode FromSigType(CilElementType type)
+		private static StackTypeCode FromSigType(CilElementType type)
 		{
 			switch (type)
 			{

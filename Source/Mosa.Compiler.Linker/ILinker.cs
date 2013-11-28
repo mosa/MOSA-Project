@@ -7,31 +7,29 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-using System;
+using Mosa.Compiler.Common;
 using System.Collections.Generic;
 using System.IO;
 
 namespace Mosa.Compiler.Linker
 {
 	/// <summary>
-	/// Collects linker requests for processing in the AssemblyLinkerStage.
+	/// Interface to the linker
 	/// </summary>
 	/// <remarks>
-	/// The assembly linker collector performs runtime specific requests in order to resolve a metadata object
-	/// to its physical virtualAddress in memory. All link requests require the metadata object, the request virtualAddress
+	/// The linker collects runtime specific requests in order to resolve a metadata object to its physical virtual
+	/// address in memory. All link requests require the metadata object, the request virtual address
 	/// and a relative flag. These are used to either resolve the request immediately or patch the code during
 	/// a later linker stage, when all methods and fields have been compiled.
-	/// <para/>
-	/// The methods return a long instead of IntPtr to allow cross-compilation for 64-bit on a 32-bit system.
 	/// </remarks>
 	public interface ILinker
 	{
 		#region Properties
 
 		/// <summary>
-		/// Gets the base virtualAddress.
+		/// Gets the base address.
 		/// </summary>
-		/// <value>The base virtualAddress.</value>
+		/// <value>The base address.</value>
 		long BaseAddress { get; }
 
 		/// <summary>
@@ -44,13 +42,13 @@ namespace Mosa.Compiler.Linker
 		/// Gets the load alignment of sections.
 		/// </summary>
 		/// <value>The load alignment.</value>
-		long LoadSectionAlignment { get; }
+		uint LoadSectionAlignment { get; }
 
 		/// <summary>
 		/// Retrieves the collection of sections created during compilation.
 		/// </summary>
 		/// <value>The sections collection.</value>
-		ICollection<LinkerSection> Sections { get; }
+		ExtendedLinkerSection[] Sections { get; }
 
 		/// <summary>
 		/// Retrieves the collection of symbols known by the linker.
@@ -65,10 +63,22 @@ namespace Mosa.Compiler.Linker
 		string OutputFile { get; set; }
 
 		/// <summary>
-		/// Gets the virtual alignment of sections.
+		/// Gets the alignment of sections.
 		/// </summary>
 		/// <value>The virtual section alignment.</value>
-		long VirtualSectionAlignment { get; }
+		uint SectionAlignment { get; }
+
+		/// <summary>
+		/// Flag is the target platform is little-endian
+		/// </summary>
+		Endianness Endianness { get; set; }
+
+		/// <summary>
+		/// Gets or sets the machine id (depends on platform)
+		/// </summary>
+		/// <value>
+		/// </value>
+		uint MachineID { get; set; }
 
 		#endregion Properties
 
@@ -83,6 +93,12 @@ namespace Mosa.Compiler.Linker
 		/// <param name="alignment">The alignment. A value of zero indicates the use of a default alignment for the section.</param>
 		/// <returns>A stream, which can be used to populate the section.</returns>
 		Stream Allocate(string name, SectionKind section, int size, int alignment);
+
+		/// <summary>
+		/// Adds the section.
+		/// </summary>
+		/// <param name="section">The section.</param>
+		void AddSection(ExtendedLinkerSection section);
 
 		/// <summary>
 		/// Gets the section.
@@ -101,22 +117,21 @@ namespace Mosa.Compiler.Linker
 		LinkerSymbol GetSymbol(string symbolName);
 
 		/// <summary>
-		/// Determines if a given symbol name is already in use by the linker.
-		/// </summary>
-		/// <param name="symbolName">The symbol name.</param>
-		/// <returns><c>true</c> if the symbol name is already used; <c>false</c> otherwise.</returns>
-		bool HasSymbol(string symbolName);
-
-		/// <summary>
 		/// Issues a linker request for the given runtime method.
 		/// </summary>
 		/// <param name="linkType">The type of link required.</param>
-		/// <param name="symbolName">The method the patched code belongs to.</param>
-		/// <param name="methodOffset">The offset inside the method where the patch is placed.</param>
+		/// <param name="patches">The patches.</param>
+		/// <param name="symbolName">The symbol name the patched code belongs to.</param>
+		/// <param name="symbolOffset">The offset inside the method where the patch is placed.</param>
 		/// <param name="methodRelativeBase">The base virtualAddress, if a relative link is required.</param>
 		/// <param name="targetSymbol">The linker symbol name to link against.</param>
-		/// <param name="offset">An offset to apply to the link target.</param>
-		void Link(LinkType linkType, string symbolName, int methodOffset, int methodRelativeBase, string targetSymbol, IntPtr offset);
+		/// <param name="targetOffset">An offset to apply to the link target.</param>
+		void Link(LinkType linkType, Patch[] patches, string symbolName, int symbolOffset, int methodRelativeBase, string targetSymbol, long targetOffset);
+
+		/// <summary>
+		/// Commits the linker and generates the final linked file
+		/// </summary>
+		void Commit();
 
 		#endregion Methods
 	}

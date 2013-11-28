@@ -39,19 +39,9 @@ namespace Mosa.Compiler.Framework.CIL
 		/// Initializes a new instance of the <see cref="BaseCILInstruction"/> class.
 		/// </summary>
 		/// <param name="opCode">The op code.</param>
-		public BaseCILInstruction(OpCode opCode)
-			: base()
-		{
-			this.opcode = opCode;
-		}
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="BaseCILInstruction"/> class.
-		/// </summary>
-		/// <param name="opCode">The op code.</param>
 		/// <param name="operandCount">The operand count.</param>
 		public BaseCILInstruction(OpCode opCode, byte operandCount)
-			: base(operandCount, 0)
+			: base(0, operandCount)
 		{
 			this.opcode = opCode;
 		}
@@ -63,7 +53,7 @@ namespace Mosa.Compiler.Framework.CIL
 		/// <param name="operandCount">The operand count.</param>
 		/// <param name="resultCount">The result count.</param>
 		public BaseCILInstruction(OpCode opCode, byte operandCount, byte resultCount)
-			: base(operandCount, resultCount)
+			: base(resultCount, operandCount)
 		{
 			this.opcode = opCode;
 		}

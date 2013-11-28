@@ -5,7 +5,7 @@
  *
  * Authors:
  *  Simon Wollwage (rootnode) <rootnode@mosa-project.org>
- *
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 using Mosa.Compiler.Framework;
@@ -15,13 +15,25 @@ namespace Mosa.Platform.x86.Instructions
 	/// <summary>
 	/// Intermediate representation for the x86 cvtsd2ss instruction.
 	/// </summary>
-	public class Cvttss2si : TwoOperandInstruction
+	public class Cvttss2si : X86Instruction
 	{
 		#region Data Members
 
 		private static readonly OpCode opcode = new OpCode(new byte[] { 0xF3, 0x0F, 0x2C });
 
 		#endregion Data Members
+
+		#region Construction
+
+		/// <summary>
+		/// Initializes a new instance of <see cref="Cvttss2si"/>.
+		/// </summary>
+		public Cvttss2si() :
+			base(1, 1)
+		{
+		}
+
+		#endregion Construction
 
 		#region Methods
 

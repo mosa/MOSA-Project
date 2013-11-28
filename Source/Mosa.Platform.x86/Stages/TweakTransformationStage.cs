@@ -10,99 +10,99 @@
  */
 
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Platform;
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Signatures;
+using System.Diagnostics;
 
 namespace Mosa.Platform.x86.Stages
 {
 	/// <summary>
-	///
+	/// TODO: Add pre-IR decomposition stage to account for platform operand requirements (and avoid it here)
 	/// </summary>
-	public sealed class TweakTransformationStage : BaseTransformationStage, IX86Visitor, IMethodCompilerStage, IPlatformStage
+	public sealed class TweakTransformationStage : BaseTransformationStage, IX86Visitor, IMethodCompilerStage
 	{
 		#region IX86Visitor
 
 		/// <summary>
 		/// Visitation function for <see cref="IX86Visitor.Mov"/> instructions.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void IX86Visitor.Mov(Context ctx)
+		/// <param name="context">The context.</param>
+		void IX86Visitor.Mov(Context context)
 		{
-			if (ctx.Result.IsConstant)
+			Debug.Assert(!context.Result.IsConstant);
+
+			// Convert moves to float moves, if necessary
+			if (context.Result.IsSingle)
 			{
-				ctx.SetInstruction(X86.Nop);
-				return;
+				context.SetInstruction(X86.Movss, context.Result, context.Operand1);
 			}
-
-			if (ctx.Operand1.IsConstant && ctx.Operand1.StackType == StackTypeCode.F)
-				ctx.Operand1 = EmitConstant(ctx.Operand1);
-
-			// Check that we're not dealing with floating point values
-			if (ctx.Result.StackType == StackTypeCode.F || ctx.Operand1.StackType == StackTypeCode.F)
-				if (ctx.Result.Type.Type == CilElementType.R4)
-					ctx.SetInstruction(X86.Movss, ctx.Result, ctx.Operand1);
-				else if (ctx.Result.Type.Type == CilElementType.R8)
-					ctx.SetInstruction(X86.Movsd, ctx.Result, ctx.Operand1);
-		}
-
-		/// <summary>
-		/// Visitation function for <see cref="IX86Visitor.Mul"/> instructions.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void IX86Visitor.Mul(Context ctx)
-		{
-			if (ctx.Operand1.IsConstant)
+			else if (context.Result.IsDouble)
 			{
-				Operand ecx = Operand.CreateCPURegister(ctx.Operand1.Type, GeneralPurposeRegister.ECX);
-				Context before = ctx.InsertBefore();
-				before.SetInstruction(X86.Push, null, ecx);
-				before.AppendInstruction(X86.Mov, ecx, ctx.Operand1);
-
-				ctx.Operand1 = ecx;
-				ctx.AppendInstruction(X86.Pop, ecx);
+				context.SetInstruction(X86.Movsd, context.Result, context.Operand1);
 			}
-		}
-
-		/// <summary>
-		/// Visitation function for <see cref="IX86Visitor.Cvtss2sd"/> instructions.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void IX86Visitor.Cvtss2sd(Context ctx)
-		{
-			if (ctx.Operand2 != null && ctx.Operand2.IsConstant)	// FIXME: shouldn't there always be a second operand?
-				ctx.SetInstruction(X86.Cvtss2sd, ctx.Operand1, EmitConstant(ctx.Operand2));
 		}
 
 		/// <summary>
 		/// Visitation function for <see cref="IX86Visitor.Cvttsd2si"/> instructions.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void IX86Visitor.Cvttsd2si(Context ctx)
+		/// <param name="context">The context.</param>
+		void IX86Visitor.Cvttsd2si(Context context)
 		{
-			Operand result = ctx.Result;
+			Operand result = context.Result;
 
-			if (!(result.IsRegister))
+			if (!result.IsRegister)
 			{
-				Operand register = Operand.CreateCPURegister(result.Type, GeneralPurposeRegister.EAX);
-				ctx.Result = register;
-				ctx.AppendInstruction(X86.Mov, result, register);
+				Operand register = AllocateVirtualRegister(result.Type);
+				context.Result = register;
+				context.AppendInstruction(X86.Mov, result, register);
 			}
 		}
 
 		/// <summary>
 		/// Visitation function for <see cref="IX86Visitor.Cvttss2si"/> instructions.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void IX86Visitor.Cvttss2si(Context ctx)
+		/// <param name="context">The context.</param>
+		void IX86Visitor.Cvttss2si(Context context)
 		{
-			Operand result = ctx.Result;
-			Operand register = Operand.CreateCPURegister(result.Type, GeneralPurposeRegister.EAX);
+			Operand result = context.Result;
+			Operand register = AllocateVirtualRegister(result.Type);
 
-			if (!(result.IsRegister))
+			if (!result.IsRegister)
 			{
-				ctx.Result = register;
-				ctx.AppendInstruction(X86.Mov, result, register);
+				context.Result = register;
+				context.AppendInstruction(X86.Mov, result, register);
+			}
+		}
+
+		/// <summary>
+		/// Visitation function for <see cref="IX86Visitor.Cvtss2sd" /> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IX86Visitor.Cvtss2sd(Context context)
+		{
+			Operand result = context.Result;
+
+			if (!result.IsRegister)
+			{
+				Operand register = AllocateVirtualRegister(result.Type);
+				context.Result = register;
+				context.AppendInstruction(X86.Movsd, result, register);
+			}
+		}
+
+		/// <summary>
+		/// Visitation function for <see cref="IX86Visitor.Cvtsd2ss"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IX86Visitor.Cvtsd2ss(Context context)
+		{
+			Operand result = context.Result;
+
+			if (!result.IsRegister)
+			{
+				Operand register = AllocateVirtualRegister(result.Type);
+				context.Result = register;
+				context.AppendInstruction(X86.Movss, result, register);
 			}
 		}
 
@@ -114,17 +114,9 @@ namespace Mosa.Platform.x86.Stages
 		{
 			if (Is32Bit(context.Operand1))
 			{
+				Debug.Assert(Is32Bit(context.Result));
+
 				context.ReplaceInstructionOnly(X86.Mov);
-			}
-			else
-			{
-				Operand result = context.Result;
-				if (!(result.IsRegister))
-				{
-					Operand ecx = Operand.CreateCPURegister(context.Result.Type, GeneralPurposeRegister.ECX);
-					context.Result = ecx;
-					context.AppendInstruction(X86.Mov, result, ecx);
-				}
 			}
 		}
 
@@ -138,86 +130,40 @@ namespace Mosa.Platform.x86.Stages
 			{
 				context.ReplaceInstructionOnly(X86.Mov);
 			}
-			else
-			{
-				Operand result = context.Result;
-				if (!(result.IsRegister))
-				{
-					Operand ecx = Operand.CreateCPURegister(context.Result.Type, GeneralPurposeRegister.ECX);
-					context.SetInstruction(X86.Movzx, ecx, context.Operand1);
-					context.AppendInstruction(X86.Mov, result, ecx);
-				}
-			}
-		}
-
-		/// <summary>
-		/// Visitation function for <see cref="IX86Visitor.DirectMultiplication"/> instructions.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void IX86Visitor.DirectMultiplication(Context ctx)
-		{
-			Operand op = ctx.Operand1;
-
-			if (op.IsConstant)
-			{
-				Operand ebx = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.EBX);
-				ctx.SetInstruction(X86.Push, null, ebx);
-				ctx.AppendInstruction(X86.Mov, ebx, op);
-				ctx.AppendInstruction(X86.IDiv, ebx);
-				ctx.AppendInstruction(X86.Pop, ebx);
-			}
-			else
-			{
-				ctx.SetInstruction(X86.IDiv, null, op);
-			}
 		}
 
 		/// <summary>
 		/// Visitation function for <see cref="IX86Visitor.Cmp"/> instructions.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void IX86Visitor.Cmp(Context ctx)
+		/// <param name="context">The context.</param>
+		void IX86Visitor.Cmp(Context context)
 		{
-			Operand left = ctx.Operand1;
-			Operand right = ctx.Operand2;
+			Operand left = context.Operand1;
+			Operand right = context.Operand2;
 
 			if (left.IsConstant)
 			{
-				Operand ecx = Operand.CreateCPURegister(left.Type, GeneralPurposeRegister.ECX);
-				Context before = ctx.InsertBefore();
-				before.SetInstruction(X86.Push, null, ecx);
+				Operand ecx = AllocateVirtualRegister(left.Type);
+				Context before = context.InsertBefore();
+
 				before.AppendInstruction(X86.Mov, ecx, left);
-				ctx.Operand1 = ecx;
-				ctx.AppendInstruction(X86.Pop, ecx);
+				context.Operand1 = ecx;
 			}
+
 			if (right.IsConstant && !Is32Bit(left))
 			{
-				Operand edx = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.EBX);
-				Context before = ctx.InsertBefore();
-				before.SetInstruction(X86.Push, null, edx);
-				if (IsSigned(left))
+				Operand edx = AllocateVirtualRegister(BuiltInSigType.Int32);
+				Context before = context.InsertBefore();
+
+				if (left.IsSigned || left.IsPointer)	// FIXME: left.IsPointer correct?
+				{
 					before.AppendInstruction(X86.Movsx, edx, left);
+				}
 				else
+				{
 					before.AppendInstruction(X86.Movzx, edx, left);
-				ctx.Operand1 = edx;
-				ctx.AppendInstruction(X86.Pop, edx);
-			}
-		}
-
-		/// <summary>
-		/// Visitation function for <see cref="IX86Visitor.IDiv"/> instructions.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void IX86Visitor.IDiv(Context context)
-		{
-			Context before = context.InsertBefore();
-			before.SetInstruction(X86.Cdq);
-
-			if (context.Operand1.IsConstant)
-			{
-				Operand ecx = Operand.CreateCPURegister(context.Operand1.Type, GeneralPurposeRegister.ECX);
-				before.AppendInstruction(X86.Mov, ecx, context.Operand1);
-				context.Operand1 = ecx;
+				}
+				context.Operand1 = edx;
 			}
 		}
 
@@ -227,13 +173,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IX86Visitor.Sar(Context context)
 		{
-			if (context.Operand1.IsConstant)
-				return;
-
-			Operand ecx = Operand.CreateCPURegister(BuiltInSigType.IntPtr, GeneralPurposeRegister.ECX);
-			Context before = context.InsertBefore();
-			before.SetInstruction(X86.Mov, ecx, context.Operand1);
-			context.Operand1 = context.Result;
+			ConvertShiftConstantToByte(context);
 		}
 
 		/// <summary>
@@ -242,13 +182,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IX86Visitor.Shl(Context context)
 		{
-			if (context.Operand1.IsConstant)
-				return;
-
-			Operand ecx = Operand.CreateCPURegister(BuiltInSigType.IntPtr, GeneralPurposeRegister.ECX);
-			Context before = context.InsertBefore();
-			before.SetInstruction(X86.Mov, ecx, context.Operand1);
-			context.Operand1 = context.Result;
+			ConvertShiftConstantToByte(context);
 		}
 
 		/// <summary>
@@ -257,13 +191,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IX86Visitor.Shr(Context context)
 		{
-			if (context.Operand1.IsConstant)
-				return;
-
-			Operand ecx = Operand.CreateCPURegister(BuiltInSigType.IntPtr, GeneralPurposeRegister.ECX);
-			Context before = context.InsertBefore();
-			before.SetInstruction(X86.Mov, ecx, context.Operand1);
-			context.Operand1 = context.Result;
+			ConvertShiftConstantToByte(context);
 		}
 
 		/// <summary>
@@ -272,24 +200,74 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IX86Visitor.Call(Context context)
 		{
+			// FIXME: Result operand should be used instead of Operand1 for the result
+			// FIXME: Move to FixedRegisterAssignmentStage
 			Operand destinationOperand = context.Operand1;
 
 			if (destinationOperand == null || destinationOperand.IsSymbol)
 				return;
 
-			if (!(destinationOperand.IsRegister))
+			if (!destinationOperand.IsRegister)
 			{
 				Context before = context.InsertBefore();
-				Operand eax = Operand.CreateCPURegister(BuiltInSigType.IntPtr, GeneralPurposeRegister.EAX);
+				Operand eax = AllocateVirtualRegister(BuiltInSigType.IntPtr);
 
 				before.SetInstruction(X86.Mov, eax, destinationOperand);
 				context.Operand1 = eax;
 			}
 		}
 
+		/// <summary>
+		/// Visitation function for <see cref="IX86Visitor.Movsd"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IX86Visitor.Movsd(Context context)
+		{
+		}
+
+		/// <summary>
+		/// Visitation function for <see cref="IX86Visitor.Movss" /> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IX86Visitor.Movss(Context context)
+		{
+		}
+
 		#endregion IX86Visitor
 
 		#region IX86Visitor - Unused
+
+		/// <summary>
+		/// Visitation function for <see cref="IX86Visitor.Mul"/> instructions.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void IX86Visitor.Mul(Context ctx)
+		{
+		}
+
+		/// <summary>
+		/// Visitation function for <see cref="IX86Visitor.IDiv" /> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IX86Visitor.IDiv(Context context)
+		{
+		}
+
+		/// <summary>
+		/// Visitation function for <see cref="IMul.IDiv" /> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IX86Visitor.IMul(Context context)
+		{
+		}
+
+		/// <summary>
+		/// Visitation function for <see cref="IX86Visitor.Cmov"/> instructions.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		void IX86Visitor.Cmov(Context ctx)
+		{
+		}
 
 		/// <summary>
 		/// Visitation function for <see cref="IX86Visitor.Div"/> instructions.
@@ -464,14 +442,6 @@ namespace Mosa.Platform.x86.Stages
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IX86Visitor.Cvtsi2sd(Context context)
-		{
-		}
-
-		/// <summary>
-		/// Visitation function for <see cref="IX86Visitor.Cvtsd2ss"/> instructions.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void IX86Visitor.Cvtsd2ss(Context context)
 		{
 		}
 
@@ -843,22 +813,21 @@ namespace Mosa.Platform.x86.Stages
 		{
 		}
 
-		/// <summary>
-		/// Movsses instruction
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void IX86Visitor.Movss(Context context)
-		{
-		}
-
-		/// <summary>
-		/// Movsds instruction
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void IX86Visitor.Movsd(Context context)
-		{
-		}
-
 		#endregion IX86Visitor - Unused
+
+		/// <summary>
+		/// Adjusts the shift constant.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		private void ConvertShiftConstantToByte(Context context)
+		{
+			if (!context.Operand2.IsConstant)
+				return;
+
+			if (context.Operand2.IsByte)
+				return;
+
+			context.Operand2 = Operand.CreateConstant(BuiltInSigType.Byte, context.Operand2.ConstantUnsignedInteger);
+		}
 	}
 }

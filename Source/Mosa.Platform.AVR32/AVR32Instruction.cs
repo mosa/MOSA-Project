@@ -8,10 +8,10 @@
  *  Pascal Delprat (pdelprat) <pascal.delprat@online.fr>
  */
 
-using System;
-using System.Diagnostics;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Metadata;
+using System;
+using System.Diagnostics;
 
 namespace Mosa.Platform.AVR32
 {
@@ -25,26 +25,10 @@ namespace Mosa.Platform.AVR32
 		/// <summary>
 		/// Initializes a new instance of the <see cref="AVR32Instruction"/> class.
 		/// </summary>
-		protected AVR32Instruction()
-		{
-		}
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="AVR32Instruction"/> class.
-		/// </summary>
-		/// <param name="operandCount">The operand count.</param>
-		private AVR32Instruction(byte operandCount)
-			: base(operandCount)
-		{
-		}
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="AVR32Instruction"/> class.
-		/// </summary>
-		/// <param name="operandCount">The operand count.</param>
 		/// <param name="resultCount">The result count.</param>
-		protected AVR32Instruction(byte operandCount, byte resultCount)
-			: base(operandCount, resultCount)
+		/// <param name="operandCount">The operand count.</param>
+		protected AVR32Instruction(byte resultCount, byte operandCount)
+			: base(resultCount, operandCount)
 		{
 		}
 
@@ -130,7 +114,7 @@ namespace Mosa.Platform.AVR32
 			return ((value & 0x001FFFFF) != value);
 		}
 
-		protected bool IsBetween(int value, int lo, int hi)
+		protected bool IsBetween(long value, long lo, long hi)
 		{
 			return value >= lo && value <= hi;
 		}
@@ -145,16 +129,8 @@ namespace Mosa.Platform.AVR32
 				case CilElementType.I:
 					try
 					{
-						if (op.Value is Token)
-						{
-							value = ((Token)op.Value).ToInt32();
-							return value >= lo && value <= hi;
-						}
-						else
-						{
-							value = Convert.ToInt32(op.Value);
-							return value >= lo && value <= hi;
-						}
+						value = (int)op.ConstantSignedInteger;
+						return value >= lo && value <= hi;
 					}
 					catch (OverflowException)
 					{
@@ -167,17 +143,13 @@ namespace Mosa.Platform.AVR32
 				case CilElementType.Char:
 				case CilElementType.U2:
 				case CilElementType.Ptr:
-				case CilElementType.U4:
-					goto case CilElementType.I;
+				case CilElementType.U4: goto case CilElementType.I;
 				case CilElementType.I8:
 				case CilElementType.U8:
 				case CilElementType.R4:
-				case CilElementType.R8:
-					goto default;
-				case CilElementType.Object:
-					goto case CilElementType.I;
-				default:
-					throw new NotSupportedException(String.Format(@"CilElementType.{0} is not supported.", op.Type.Type));
+				case CilElementType.R8: goto default;
+				case CilElementType.Object: goto case CilElementType.I;
+				default: throw new NotSupportedException(String.Format(@"CilElementType.{0} is not supported.", op.Type.Type));
 			}
 		}
 	}

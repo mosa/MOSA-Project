@@ -8,13 +8,13 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Linker;
 using Mosa.Compiler.TypeSystem;
+using Mosa.Compiler.TypeSystem.Cil;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 
 namespace Mosa.Compiler.Framework.Stages
 {
@@ -29,11 +29,17 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			foreach (RuntimeType type in typeSystem.GetAllTypes())
 			{
+				if (type.IsModule || type.IsGeneric)
+					continue;
+
 				if (type.ContainsOpenGenericParameters)
 					continue;
 
-				if (type.IsModule || type.IsGeneric)
-					continue;
+				// Only create method tables for generic types in the internal type module
+				if (type is CilGenericType && !(type.Module is InternalTypeModule))
+				{
+					//continue;
+				}
 
 				if (!type.IsInterface)
 				{
@@ -172,7 +178,7 @@ namespace Mosa.Compiler.Framework.Stages
 				{
 					if (!string.IsNullOrEmpty(link))
 					{
-						compiler.Linker.Link(LinkType.AbsoluteAddress | LinkType.NativeI4, methodTableName, offset, 0, link, IntPtr.Zero);
+						compiler.Linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuiltInPatch.I4, methodTableName, offset, 0, link, 0);
 					}
 
 					offset += typeLayout.NativePointerSize;
@@ -188,7 +194,7 @@ namespace Mosa.Compiler.Framework.Stages
 				{
 					//if (compiler.Scheduler.IsMethodScheduled(method))
 					{
-						compiler.Linker.Link(LinkType.AbsoluteAddress | LinkType.NativeI4, methodTableName, offset, 0, method.FullName, IntPtr.Zero);
+						compiler.Linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuiltInPatch.I4, methodTableName, offset, 0, method.FullName, 0);
 					}
 				}
 				offset += typeLayout.NativePointerSize;
@@ -231,7 +237,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			// Determine the size of the type & alignment requirements
 			int size, alignment;
-			architecture.GetTypeRequirements(field.SignatureType, out size, out alignment);
+			architecture.GetTypeRequirements(field.SigType, out size, out alignment);
 
 			size = (int)typeLayout.GetFieldSize(field);
 
@@ -241,8 +247,7 @@ namespace Mosa.Compiler.Framework.Stages
 			// Does this field have an RVA?
 			if (field.RVA != 0)
 			{
-				// FIXME: Move a static field into ROData, if it is read-only and can be initialized
-				// using static analysis
+				// FIXME: Move a static field into ROData, if it is read-only and can be initialized using static analysis
 				section = SectionKind.Data;
 			}
 			else

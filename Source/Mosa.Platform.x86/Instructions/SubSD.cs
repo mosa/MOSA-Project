@@ -5,6 +5,7 @@
  *
  * Authors:
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 using Mosa.Compiler.Framework;
@@ -14,7 +15,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// <summary>
 	/// Intermediate representation of an SSE based subtraction instruction.
 	/// </summary>
-	public sealed class SubSD : TwoOperandInstruction
+	public sealed class Subsd : TwoOperandInstruction
 	{
 		#region Data Members
 

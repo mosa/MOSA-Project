@@ -5,6 +5,7 @@
  *
  * Authors:
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 using Mosa.Compiler.Framework;
@@ -16,19 +17,19 @@ namespace Mosa.Platform.x86.Instructions
 	/// </summary>
 	public sealed class Pushad : X86Instruction
 	{
-		#region Methods
+		#region Construction
 
 		/// <summary>
-		/// Gets the additional input registers.
+		/// Initializes a new instance of <see cref="Pushad"/>.
 		/// </summary>
-		public override RegisterBitmap AdditionalInputRegisters
+		public Pushad() :
+			base(0, 0)
 		{
-			get
-			{
-				return new RegisterBitmap(GeneralPurposeRegister.EDI, GeneralPurposeRegister.ESI, GeneralPurposeRegister.EBP,
-					GeneralPurposeRegister.EBX, GeneralPurposeRegister.EDX, GeneralPurposeRegister.ECX, GeneralPurposeRegister.EAX);
-			}
 		}
+
+		#endregion Construction
+
+		#region Methods
 
 		/// <summary>
 		/// Emits the specified platform instruction.

@@ -14,13 +14,13 @@ namespace Mosa.Kernel.AVR32
 	/// <summary>
 	/// Kernel Memory Allocator - This is a pure HACK!
 	/// </summary>
-	public class KernelMemory
+	public static class KernelMemory
 	{
 		static private uint _heap = 0;
 		static private uint _size = 0;
 		static private uint _used = 0;
 
-		[PlugMethod("Mosa.Internal.Runtime.AllocateMemory")]
+		[PlugMethod("Mosa.Platform.Internal.AVR32.Runtime.AllocateMemory")]
 		static public uint AllocateMemory(uint size)
 		{
 			if ((_heap == 0) || (size > (_size - _used)))

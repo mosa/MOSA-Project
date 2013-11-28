@@ -17,8 +17,6 @@
                     <include name="Boot.cs"/>
 		</sources>
 		<references>
-                    <include name="${outputDirectory}/Mosa.ClassLib.dll"/>
-                    <include name="${outputDirectory}/Mosa.Internal.Plug.dll"/>
                     <include name="${outputDirectory}/mscorlib.dll"/>
                     <include name="${outputDirectory}/Mosa.Kernel.AVR32.dll"/>
 		</references>

@@ -5,10 +5,11 @@
  *
  * Authors:
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
 using Mosa.Compiler.Framework;
+using System;
 
 namespace Mosa.Platform.x86.Instructions
 {
@@ -30,7 +31,7 @@ namespace Mosa.Platform.x86.Instructions
 		/// Initializes a new instance of <see cref="Out"/>.
 		/// </summary>
 		public Out() :
-			base(2, 0)
+			base(0, 2)
 		{
 		}
 
@@ -46,7 +47,7 @@ namespace Mosa.Platform.x86.Instructions
 		protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
 		{
 			// FIXME: This method is not called.
-			if (IsByte(third))
+			if (third.IsByte)
 			{
 				if ((source.IsConstant) && (third.IsRegister)) return C_R_8;
 				if ((source.IsRegister) && (third.IsRegister)) return R_R_8;

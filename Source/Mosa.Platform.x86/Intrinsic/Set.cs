@@ -7,14 +7,10 @@
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  */
 
-using System;
-using System.Collections.Generic;
-
 //using System.Diagnostics;
 
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Metadata.Signatures;
-using Mosa.Compiler.TypeSystem;
 
 namespace Mosa.Platform.x86.Intrinsic
 {
@@ -30,18 +26,18 @@ namespace Mosa.Platform.x86.Intrinsic
 		/// </summary>
 		/// <param name="context">The context.</param>
 		/// <param name="typeSystem">The type system.</param>
-		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, ITypeSystem typeSystem, IList<RuntimeParameter> parameters)
+		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, BaseMethodCompiler methodCompiler)
 		{
 			Operand dest = context.Operand1;
 			Operand value = context.Operand2;
 
-			Operand edx = Operand.CreateCPURegister(dest.Type, GeneralPurposeRegister.EDX);
-			Operand eax = Operand.CreateCPURegister(value.Type, GeneralPurposeRegister.EAX);
-			Operand memory = Operand.CreateMemoryAddress(new SigType(context.InvokeTarget.Signature.Parameters[1].Type), GeneralPurposeRegister.EDX, new IntPtr(0));
+			Operand v1 = methodCompiler.CreateVirtualRegister(dest.Type);
+			Operand v2 = methodCompiler.CreateVirtualRegister(value.Type);
+			Operand memory = Operand.CreateMemoryAddress(new SigType(context.InvokeMethod.SigParameters[1].Type), v1, 0);
 
-			context.SetInstruction(X86.Mov, edx, dest);
-			context.AppendInstruction(X86.Mov, eax, value);
-			context.AppendInstruction(X86.Mov, memory, eax);
+			context.SetInstruction(X86.Mov, v1, dest);
+			context.AppendInstruction(X86.Mov, v2, value);
+			context.AppendInstruction(X86.Mov, memory, v2);
 		}
 
 		#endregion Methods

@@ -5,6 +5,7 @@
  *
  * Authors:
  *  Simon Wollwage (rootnode) <rootnode@mosa-project.org>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 using System.Diagnostics;
@@ -24,22 +25,25 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			foreach (var block in basicBlocks)
 			{
-				for (var context = new Context(instructionSet, block); !context.EndOfInstruction; context.GotoNext())
+				for (var context = new Context(instructionSet, block); !context.IsBlockEndInstruction; context.GotoNext())
 				{
 					if (context.Instruction is IR.Phi)
+					{
 						ProcessPhiInstruction(block, context);
+					}
 
 					for (var i = 0; i < context.OperandCount; ++i)
 					{
 						var op = context.GetOperand(i);
 						if (op != null && op.IsSSA)
-							context.SetOperand(i, op.SsaOperand);
+						{
+							context.SetOperand(i, op.SSAParent);
+						}
 					}
 
-					if (context.Result != null)
+					if (context.Result != null && context.Result.IsSSA)
 					{
-						if (context.Result.IsSSA)
-							context.Result = context.Result.SsaOperand;
+						context.Result = context.Result.SSAParent;
 					}
 				}
 			}
@@ -70,33 +74,23 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="operand">The operand.</param>
 		private void InsertCopyStatement(BasicBlock predecessor, Operand result, Operand operand)
 		{
-			var context = new Context(instructionSet, predecessor);
-			while (!context.EndOfInstruction && IsBranchInstruction(context))
-				context.GotoNext();
+			var context = new Context(instructionSet, predecessor, predecessor.EndIndex);
 
-			if (context.Index != -1)
-				context = context.InsertBefore();
+			context.GotoPrevious();
 
-			var source = operand.IsSSA ? operand.SsaOperand : operand;
-			var destination = result.IsSSA ? result.SsaOperand : result;
+			while (context.Instruction is IntegerCompareBranch || context.Instruction is Jmp)
+			{
+				context.GotoPrevious();
+			}
+
+			var source = operand.IsSSA ? operand.SSAParent : operand;
+			var destination = result.IsSSA ? result.SSAParent : result;
 
 			Debug.Assert(!source.IsSSA);
 			Debug.Assert(!destination.IsSSA);
 
 			if (destination != source)
-				context.SetInstruction(IR.IRInstruction.Move, destination, source);
-		}
-
-		/// <summary>
-		/// Determines whether [is branch instruction] [the specified context].
-		/// </summary>
-		/// <param name="context">The context.</param>
-		/// <returns>
-		///   <c>true</c> if [is branch instruction] [the specified context]; otherwise, <c>false</c>.
-		/// </returns>
-		private bool IsBranchInstruction(Context context)
-		{
-			return context.Instruction is Jmp || context.Instruction is IntegerCompareBranch;
+				context.AppendInstruction(IRInstruction.Move, destination, source);
 		}
 	}
 }

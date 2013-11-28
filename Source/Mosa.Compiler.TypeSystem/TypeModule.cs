@@ -16,7 +16,6 @@ using Mosa.Compiler.Metadata.Loader;
 using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Compiler.Metadata.Tables;
 using Mosa.Compiler.TypeSystem.Cil;
-using Mosa.Compiler.TypeSystem.Generic;
 
 namespace Mosa.Compiler.TypeSystem
 {
@@ -401,10 +400,15 @@ namespace Mosa.Compiler.TypeSystem
 					maxParam = GetMaxTokenValue(TableType.Param).NextRow;
 				}
 
+				var signature = GetMethodSignature(methodDef.SignatureBlobIdx);
+
 				var method = new CilRuntimeMethod(
 					this,
 					GetString(methodDef.NameStringIdx),
-					GetMethodSignature(methodDef.SignatureBlobIdx),
+					signature.ReturnType,
+					signature.HasThis,
+					signature.HasExplicitThis,
+					signature.Parameters,
 					token,
 					declaringType,
 					methodDef.Flags,
@@ -511,7 +515,7 @@ namespace Mosa.Compiler.TypeSystem
 				var field = new CilRuntimeField(
 					this,
 					GetString(fieldRow.Name),
-					GetFieldSignature(fieldRow.Signature),
+					GetFieldSignature(fieldRow.Signature).Type,
 					token,
 					layout,
 					rva,
@@ -602,10 +606,8 @@ namespace Mosa.Compiler.TypeSystem
 
 				var signature = GetMemberRefSignature(row.SignatureBlobIdx);
 
-				var genericOwnerType = ownerType as CilGenericType;
-
 				RuntimeMember runtimeMember = null;
-				MethodSignature methodSignature = null;
+
 				if (signature is FieldSignature)
 				{
 					foreach (RuntimeField field in ownerType.Fields)
@@ -619,23 +621,19 @@ namespace Mosa.Compiler.TypeSystem
 				}
 				else
 				{
-					methodSignature = signature as MethodSignature;
+					MethodSignature methodSignature = signature as MethodSignature;
 					Debug.Assert(signature is MethodSignature);
 
-					if ((genericOwnerType != null) && (genericOwnerType.GenericArguments.Length != 0))
-					{
-						methodSignature = new MethodSignature(methodSignature, genericOwnerType.GenericArguments);
-					}
+					var genericOwnerType = ownerType as CilGenericType;
+
+					SigType[] sigTypes = GenericSigTypeResolver.Resolve(methodSignature.Parameters, (genericOwnerType == null) ? null : genericOwnerType.GenericArguments);
 
 					foreach (var method in ownerType.Methods)
 					{
-						if (method.Name == name)
+						if (method.Name == name && method.Matches(sigTypes))
 						{
-							if (method.Signature.Matches(methodSignature))
-							{
-								runtimeMember = method;
-								break;
-							}
+							runtimeMember = method;
+							break;
 						}
 					}
 
@@ -646,13 +644,10 @@ namespace Mosa.Compiler.TypeSystem
 
 						foreach (RuntimeMethod method in ownerType.Methods)
 						{
-							if (method.Name == name)
+							if (method.Name == name && method.Matches(sigTypes))
 							{
-								if (method.Signature.Matches(methodSignature))
-								{
-									runtimeMember = method;
-									break;
-								}
+								runtimeMember = method;
+								break;
 							}
 						}
 					}

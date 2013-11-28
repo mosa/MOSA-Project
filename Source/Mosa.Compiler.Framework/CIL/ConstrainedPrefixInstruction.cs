@@ -10,7 +10,7 @@
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Compiler.TypeSystem;
-using Mosa.Compiler.TypeSystem.Generic;
+using Mosa.Compiler.TypeSystem.Cil;
 
 namespace Mosa.Compiler.Framework.CIL
 {
@@ -81,7 +81,7 @@ namespace Mosa.Compiler.Framework.CIL
 		{
 			string s = base.ToString(context);
 
-			RuntimeType type = context.Other as RuntimeType;
+			RuntimeType type = context.RuntimeType;
 
 			if (type != null)
 				s = s + " {" + type.ToString() + "}";

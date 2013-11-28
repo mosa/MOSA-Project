@@ -15,11 +15,6 @@ namespace Mosa.Compiler.Metadata
 	public enum CilElementType
 	{
 		/// <summary>
-		/// Marks the end of the list
-		/// </summary>
-		End = 0x00,
-
-		/// <summary>
 		///
 		/// </summary>
 		Void = 0x01,

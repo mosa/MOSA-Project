@@ -5,6 +5,7 @@
  *
  * Authors:
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 using Mosa.Compiler.Framework;
@@ -14,14 +15,14 @@ namespace Mosa.Platform.x86.Instructions
 	/// <summary>
 	/// Intermediate representation of the SSE multiplication operation.
 	/// </summary>
-	public sealed class MulSD : TwoOperandInstruction
+	public sealed class Mulsd : TwoOperandInstruction
 	{
 		#region Data Members
 
 		private static readonly OpCode opcode = new OpCode(new byte[] { 0xF2, 0x0F, 0x59 });
 
 		#endregion Data Members
-
+		
 		#region Methods
 
 		/// <summary>

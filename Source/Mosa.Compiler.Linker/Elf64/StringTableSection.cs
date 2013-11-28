@@ -7,7 +7,6 @@
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  */
 
-using System;
 using System.Collections.Generic;
 using System.IO;
 
@@ -16,7 +15,7 @@ namespace Mosa.Compiler.Linker.Elf64
 	/// <summary>
 	///
 	/// </summary>
-	public class StringTableSection : Section
+	public class StringTableSection : Elf64LinkerSection
 	{
 		/// <summary>
 		///
@@ -27,19 +26,13 @@ namespace Mosa.Compiler.Linker.Elf64
 		/// Gets the length of the section in bytes.
 		/// </summary>
 		/// <value>The length of the section in bytes.</value>
-		public override long Length
-		{
-			get
-			{
-				return stringTable.Count;
-			}
-		}
+		public override long Length { get { return stringTable.Count; } }
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="CodeSection"/> class.
 		/// </summary>
 		public StringTableSection()
-			: base(Mosa.Compiler.Linker.SectionKind.Text, @".shstrtab", IntPtr.Zero)
+			: base(Mosa.Compiler.Linker.SectionKind.Text, @".shstrtab", 0)
 		{
 			header.Type = SectionType.StringTable;
 			header.Flags = (SectionAttribute)0;

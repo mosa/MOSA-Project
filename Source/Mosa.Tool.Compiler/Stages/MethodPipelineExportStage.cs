@@ -61,9 +61,9 @@ namespace Mosa.Tool.Compiler.Stages
 		/// </summary>
 		void ICompilerStage.Run()
 		{
-			filter.IsLogging = !string.IsNullOrEmpty(MethodPipelineExportDirectory);
+			bool logging = !string.IsNullOrEmpty(MethodPipelineExportDirectory);
 
-			if (filter.IsLogging)
+			if (logging)
 			{
 				filter.MethodMatch = MatchType.Any;
 				filter.StageMatch = MatchType.Exclude;

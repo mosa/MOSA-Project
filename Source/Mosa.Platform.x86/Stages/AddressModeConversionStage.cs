@@ -10,8 +10,6 @@
  */
 
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.IR;
-using Mosa.Compiler.Metadata;
 
 namespace Mosa.Platform.x86.Stages
 {
@@ -28,7 +26,7 @@ namespace Mosa.Platform.x86.Stages
 		public override void Run()
 		{
 			foreach (BasicBlock block in basicBlocks)
-				for (Context ctx = CreateContext(block); !ctx.EndOfInstruction; ctx.GotoNext())
+				for (Context ctx = CreateContext(block); !ctx.IsBlockEndInstruction; ctx.GotoNext())
 					if (!ctx.IsEmpty)
 						if (ctx.OperandCount == 2 && ctx.ResultCount == 1)
 							ThreeTwoAddressConversion(ctx);
@@ -39,67 +37,23 @@ namespace Mosa.Platform.x86.Stages
 		/// <summary>
 		/// Converts the given instruction from three address format to a two address format.
 		/// </summary>
-		/// <param name="ctx">The conversion context.</param>
-		private static void ThreeTwoAddressConversion(Context ctx)
+		/// <param name="context">The conversion context.</param>
+		private void ThreeTwoAddressConversion(Context context)
 		{
-			if (!(ctx.Instruction is BaseIRInstruction))
+			if (!(context.Instruction is X86Instruction))
 				return;
 
-			if (ctx.Instruction is IntegerCompare
-				|| ctx.Instruction is FloatCompare
-				|| ctx.Instruction is Load
-				|| ctx.Instruction is LoadZeroExtended
-				|| ctx.Instruction is LoadSignExtended
-				|| ctx.Instruction is Store
-				|| ctx.Instruction is Call
-				|| ctx.Instruction is ZeroExtendedMove
-				|| ctx.Instruction is SignExtendedMove)
+			if (!(context.OperandCount >= 1 && context.ResultCount >= 1 && context.Result != context.Operand1))
 				return;
 
-			Operand result = ctx.Result;
-			Operand op1 = ctx.Operand1;
-			Operand op2 = ctx.Operand2;
+			Operand result = context.Result;
+			Operand operand1 = context.Operand1;
 
-			// Create registers for different data types
-			Operand eax = Operand.CreateCPURegister(op1.Type, op1.StackType == StackTypeCode.F ? (Register)SSE2Register.XMM0 : GeneralPurposeRegister.EAX);
-			Operand storeOperand = Operand.CreateCPURegister(result.Type, result.StackType == StackTypeCode.F ? (Register)SSE2Register.XMM0 : GeneralPurposeRegister.EAX);
+			context.Operand1 = result;
 
-			ctx.Result = storeOperand;
-			ctx.Operand1 = op2;
-			ctx.Operand2 = null;
-			ctx.OperandCount = 1;
+			context.InsertBefore().SetInstruction(GetMove(result, operand1), result, operand1);
 
-			if (op1.StackType != StackTypeCode.F)
-			{
-				if (IsSigned(op1) && !(op1.IsConstant))
-					ctx.InsertBefore().SetInstruction(IRInstruction.SignExtendedMove, eax, op1);
-				else if (IsUnsigned(op1) && !(op1.IsConstant))
-					ctx.InsertBefore().SetInstruction(IRInstruction.ZeroExtendedMove, eax, op1);
-				else
-					ctx.InsertBefore().SetInstruction(X86.Mov, eax, op1);
-			}
-			else
-			{
-				if (op1.Type.Type == CilElementType.R4)
-				{
-					if (op1.IsConstant)
-					{
-						Context before = ctx.InsertBefore();
-						before.SetInstruction(X86.Mov, eax, op1);
-						before.AppendInstruction(X86.Cvtss2sd, eax, eax);
-					}
-					else
-					{
-						ctx.InsertBefore().SetInstruction(X86.Cvtss2sd, eax, op1);
-					}
-				}
-				else
-				{
-					ctx.InsertBefore().SetInstruction(X86.Mov, eax, op1);
-				}
-			}
-
-			ctx.AppendInstruction(X86.Mov, result, eax);
+			return;
 		}
 	}
 }

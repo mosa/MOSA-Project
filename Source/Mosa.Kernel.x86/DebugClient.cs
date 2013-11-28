@@ -7,7 +7,7 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using Mosa.Platform.x86.Intrinsic;
+using Mosa.Platform.Internal.x86;
 
 namespace Mosa.Kernel.x86
 {
@@ -142,8 +142,6 @@ namespace Mosa.Kernel.x86
 
 				Native.Set8(_buffer + _index, b);
 				_index++;
-
-				//SendNumber((int)_index);
 
 				if (_index == 1 && Native.Get8(_buffer) != (byte)'M')
 					BadDataAbort();

@@ -18,50 +18,18 @@ namespace Mosa.Compiler.Linker
 	/// </summary>
 	public sealed class LinkerSymbol
 	{
-		#region Data members
-
-		/// <summary>
-		/// Holds the virtualAddress of the symbol.
-		/// </summary>
-		private IntPtr address;
-
-		/// <summary>
-		/// Holds the length of the linker symbol in bytes.
-		/// </summary>
-		private long length;
-
-		/// <summary>
-		/// Holds the name of the linker symbol.
-		/// </summary>
-		private string name;
-
-		/// <summary>
-		/// Holds the symbol offset in the file.
-		/// </summary>
-		private long offset;
-
-		/// <summary>
-		/// Holds the section containing the linker symbol.
-		/// </summary>
-		private SectionKind section;
-
-		/// <summary>
-		/// The section start relative virtualAddress.
-		/// </summary>
-		private long sectionAddress;
-
-		#endregion Data members
-
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="LinkerSymbol"/> class.
+		/// Initializes a new instance of the <see cref="LinkerSymbol" /> class.
 		/// </summary>
 		/// <param name="name">The name of the symbol.</param>
 		/// <param name="section">The section holding the symbol.</param>
 		/// <param name="sectionAddress">Holds the section relative address of the symbol.</param>
-		/// <exception cref="T:System.ArgumentException"><paramref name="name"/> is empty.</exception>
-		/// <exception cref="T:System.ArgumentNullException"><paramref name="name"/> is null.</exception>
+		/// <exception cref="System.ArgumentNullException">@name</exception>
+		/// <exception cref="System.ArgumentException">@Name can't be empty.;@name</exception>
+		/// <exception cref="T:System.ArgumentException"><paramref name="name" /> is empty.</exception>
+		/// <exception cref="T:System.ArgumentNullException"><paramref name="name" /> is null.</exception>
 		public LinkerSymbol(string name, SectionKind section, long sectionAddress)
 		{
 			Debug.Assert(!String.IsNullOrEmpty(name), @"LinkerSymbol requires a proper name.");
@@ -70,9 +38,9 @@ namespace Mosa.Compiler.Linker
 			if (name.Length == 0)
 				throw new ArgumentException(@"Name can't be empty.", @"name");
 
-			this.name = name;
-			this.section = section;
-			this.sectionAddress = sectionAddress;
+			this.Name = name;
+			this.SectionKind = section;
+			this.SectionAddress = sectionAddress;
 		}
 
 		#endregion Construction
@@ -83,58 +51,37 @@ namespace Mosa.Compiler.Linker
 		/// Gets the virtualAddress of the linker symbol.
 		/// </summary>
 		/// <value>The virtualAddress of the linker symbol.</value>
-		public IntPtr VirtualAddress
-		{
-			get { return this.address; }
-			set { this.address = value; }
-		}
+		public long VirtualAddress { get; set; }
 
 		/// <summary>
 		/// Gets or sets the length of the linker symbol in bytes.
 		/// </summary>
 		/// <value>The length in bytes.</value>
-		public long Length
-		{
-			get { return this.length; }
-			set { this.length = value; }
-		}
+		public long Length { get; set; }
 
 		/// <summary>
 		/// Retrieves the symbol name.
 		/// </summary>
 		/// <value>The name of the linker symbol.</value>
-		public string Name
-		{
-			get { return this.name; }
-		}
+		public string Name { get; private set; }
 
 		/// <summary>
 		/// Gets or sets the offset of the symbol in the file.
 		/// </summary>
 		/// <value>The symbol offset.</value>
-		public long Offset
-		{
-			get { return this.offset; }
-			set { this.offset = value; }
-		}
+		public long Offset { get; set; }
 
 		/// <summary>
 		/// Gets the section holding the symbol.
 		/// </summary>
 		/// <value>The section.</value>
-		public SectionKind Section
-		{
-			get { return this.section; }
-		}
+		public SectionKind SectionKind { get; set; }
 
 		/// <summary>
 		/// Gets the section start relative virtualAddress of the symbol.
 		/// </summary>
 		/// <value>The section start relative virtualAddress.</value>
-		public long SectionAddress
-		{
-			get { return this.sectionAddress; }
-		}
+		public long SectionAddress { get; set; }
 
 		/// <summary>
 		/// Returns a <see cref="System.String"/> that represents this instance.
@@ -144,7 +91,7 @@ namespace Mosa.Compiler.Linker
 		/// </returns>
 		public override string ToString()
 		{
-			return this.name;
+			return this.Name;
 		}
 
 		#endregion Properties

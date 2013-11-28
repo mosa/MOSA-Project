@@ -11,6 +11,7 @@
 		/// Initializes a new instance of the <see cref="Call"/> class.
 		/// </summary>
 		public IntrinsicMethodCall()
+			: base(0, 0)
 		{
 		}
 

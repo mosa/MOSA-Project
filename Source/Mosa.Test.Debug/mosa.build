@@ -1,28 +1,20 @@
-<?xml version="1.0"?>
-<project name="Mosa" default="build" basedir=".">
-	
-	<!-- Comma-separated list of warnings that should be surpressed in all modules. Warning: no spaces allowed! -->
-	<property name="suppresswarnings" value="0414,0219,0169,0162,0168"/>
-	
-	<!-- Toggle debug output by setting this to true (nant -D:debug=true) -->
-	<property name="debug" value="none" overwrite="false"/>
-	
-	<!-- Speaks for itself, I should hope -->
-	<property name="outputDirectory" value="../bin" overwrite="false"/>
-	
-	<!-- Main build target -->
-	<target name="build">
-	    <csc target="exe" main="Mosa.Test.Debug.Program" output="${outputDirectory}/Mosa.Test.Debug.exe" debug="${debug}" unsafe="true" nostdlib="false">
-		<sources>
+<?xml version="1.0"?>
+<project name="Mosa" default="build" basedir=".">
+	
+	<!-- Comma-separated list of warnings that should be surpressed in all modules. Warning: no spaces allowed! -->
+	<property name="suppresswarnings" value="0414,0219,0169,0162,0168"/>
+	
+	<!-- Toggle debug output by setting this to true (nant -D:debug=true) -->
+	<property name="debug" value="none" overwrite="false"/>
+	
+	<!-- Speaks for itself, I should hope -->
+	<property name="outputDirectory" value="../bin" overwrite="false"/>
+	
+	<!-- Main build target -->
+	<target name="build">
+	    <csc target="exe" main="Mosa.Test.Debug.Program" output="${outputDirectory}/Mosa.Test.Debug.exe" debug="${debug}" unsafe="true" nostdlib="false">
+		<sources>
                     <include name="Program.cs"/>
-		</sources>
-		<references>
-                    <include name="System.dll"/>
+		</sources>
+		<references>
                     <include name="${outputDirectory}/Mosa.Test.Cases.dll"/>
-                    <include name="${outputDirectory}/Mosa.Test.Runtime.CompilerFramework.dll"/>
-		</references>
-		<!-- supress warnings -->
-		<nowarn><warning number="${suppresswarnings}"/></nowarn>
-        </csc>
-	</target>
-</project>

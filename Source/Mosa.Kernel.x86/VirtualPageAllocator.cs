@@ -7,7 +7,7 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using Mosa.Platform.x86.Intrinsic;
+using Mosa.Platform.Internal.x86;
 
 namespace Mosa.Kernel.x86
 {
@@ -20,19 +20,19 @@ namespace Mosa.Kernel.x86
 	public static class VirtualPageAllocator
 	{
 		// Location of bitmap starts at 21MB
-		private static uint _bitmap = 1024 * 1024 * 21; // 0x1500000
+		private static uint bitmap = 1024 * 1024 * 21; // 0x1500000
 
-		private static uint _pages;
+		private static uint pages;
 
 		/// <summary>
 		/// Setups this instance.
 		/// </summary>
 		public static void Setup()
 		{
-			_pages = (PageFrameAllocator.TotalPages - PageFrameAllocator.ReserveMemory) / PageFrameAllocator.PageSize;
+			pages = (PageFrameAllocator.TotalPages - PageFrameAllocator.ReserveMemory) / PageFrameAllocator.PageSize;
 
 			// Bits: 0 = Available, 1 = Not Available
-			Memory.Clear(_bitmap, _pages / 8);
+			Memory.Clear(bitmap, pages / 8);
 		}
 
 		/// <summary>
@@ -52,7 +52,7 @@ namespace Mosa.Kernel.x86
 		/// <param name="free">if set to <c>true</c> [free].</param>
 		private static void SetPageStatus(uint page, bool free)
 		{
-			uint at = (uint)(_bitmap + (page / 32));
+			uint at = (uint)(bitmap + (page / 32));
 			byte bit = (byte)(page % 32);
 			uint mask = (byte)(1 << bit);
 
@@ -73,7 +73,7 @@ namespace Mosa.Kernel.x86
 		/// <returns></returns>
 		private static bool GetPageStatus(uint page)  // true = available
 		{
-			uint at = (uint)(_bitmap + (page / 8));
+			uint at = (uint)(bitmap + (page / 8));
 			byte bit = (byte)(page % 8);
 			byte mask = (byte)(1 << bit);
 
@@ -92,7 +92,7 @@ namespace Mosa.Kernel.x86
 			uint first = 0xFFFFFFFF; // Marker
 			uint pages = ((size - 1) / PageFrameAllocator.PageSize) + 1;
 
-			for (uint at = 0; at < _pages; at++)
+			for (uint at = 0; at < pages; at++)
 			{
 				if (GetPageStatus(at))
 				{

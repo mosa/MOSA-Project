@@ -7,11 +7,10 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
+using Mosa.Compiler.Metadata;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-
-using Mosa.Compiler.Metadata;
 
 namespace Mosa.Compiler.TypeSystem
 {
@@ -82,6 +81,11 @@ namespace Mosa.Compiler.TypeSystem
 		/// </summary>
 		private IList<GenericParameter> genericParameters;
 
+		/// <summary>
+		/// Holds the fullname (namespace + declaring type + name)
+		/// </summary>
+		private string fullname;
+
 		#endregion Data members
 
 		#region Construction
@@ -92,10 +96,11 @@ namespace Mosa.Compiler.TypeSystem
 		/// <param name="module">The module.</param>
 		/// <param name="token">The token of the type.</param>
 		/// <param name="baseType">Type of the base.</param>
-		public RuntimeType(ITypeModule module, Token token, RuntimeType baseType) :
-			base(module, token, null)
+		public RuntimeType(ITypeModule module, Token token, string name, RuntimeType baseType, string nameSpace) :
+			base(module, name, null, token)
 		{
 			this.baseType = baseType;
+			this.nameSpace = nameSpace;
 
 			if (baseType == null)
 			{
@@ -133,6 +138,31 @@ namespace Mosa.Compiler.TypeSystem
 		#endregion Construction
 
 		#region Properties
+
+		/// <summary>
+		/// Gets the full name.
+		/// </summary>
+		/// <value>
+		/// The full name.
+		/// </value>
+		public string FullName
+		{
+			get
+			{
+				if (fullname == null)
+				{
+					fullname = (DeclaringType == null) ? Name : String.Format("{0}.{1}", DeclaringType.FullName, Name);
+
+					if (nameSpace != null)
+					{
+						fullname = nameSpace + "." + fullname;
+					}
+				}
+
+				return fullname;
+			}
+		}
+
 
 		/// <summary>
 		/// Gets the attributes.
@@ -218,30 +248,7 @@ namespace Mosa.Compiler.TypeSystem
 		public string Namespace
 		{
 			get { return nameSpace; }
-			protected set
-			{
-				if (value == null)
-					throw new ArgumentNullException(@"value");
-
-				nameSpace = value;
-			}
-		}
-
-		/// <summary>
-		/// Gets the full name of the type.
-		/// </summary>
-		/// <value>The full name.</value>
-		public string FullName
-		{
-			get
-			{
-				string ns = Namespace;
-				string name = Name;
-				if (ns == null)
-					return name;
-
-				return ns + "." + name;
-			}
+			protected set { nameSpace = value; }
 		}
 
 		/// <summary>
@@ -279,7 +286,7 @@ namespace Mosa.Compiler.TypeSystem
 					if ((method.Attributes & attrs) == attrs && method.Name == ".cctor")
 					{
 						Debug.Assert(method.Parameters.Count == 0, @"Static initializer takes arguments??");
-						Debug.Assert(method.Signature.ReturnType == null, @"Static initializer having a result??");
+						Debug.Assert(method.ReturnType == null, @"Static initializer having a result??");
 						result = method;
 						break;
 					}

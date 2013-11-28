@@ -10,26 +10,20 @@
  *  Scott Balmos <sbalmos@fastmail.fm>
  */
 
-using System;
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Linker;
 using Mosa.Compiler.Metadata;
+using Mosa.Compiler.TypeSystem;
+using System;
 
 namespace Mosa.Platform.x86
 {
 	/// <summary>
 	/// An x86 machine code emitter.
 	/// </summary>
-	public sealed class MachineCodeEmitter : BaseCodeEmitter, IDisposable
+	public sealed class MachineCodeEmitter : BaseCodeEmitter
 	{
-		/// <summary>
-		/// Initializes a new instance of the <see cref="MachineCodeEmitter"/> class.
-		/// </summary>
-		public MachineCodeEmitter()
-		{
-		}
-
 		#region Code Generation
 
 		/// <summary>
@@ -37,7 +31,7 @@ namespace Mosa.Platform.x86
 		/// </summary>
 		/// <param name="code">The branch instruction code.</param>
 		/// <param name="dest">The destination label.</param>
-		public void EmitBranch(byte[] code, int dest)
+		public void EmitRelativeBranch(byte[] code, int dest)
 		{
 			codeStream.Write(code, 0, code.Length);
 			EmitRelativeBranchTarget(dest);
@@ -47,15 +41,16 @@ namespace Mosa.Platform.x86
 		/// Calls the specified target.
 		/// </summary>
 		/// <param name="symbolOperand">The symbol operand.</param>
-		public void Call(Operand symbolOperand)
+		public void EmitCallSite(Operand symbolOperand)
 		{
 			linker.Link(
-				LinkType.RelativeOffset | LinkType.NativeI4,
-				compiler.Method.ToString(),
+				LinkType.RelativeOffset | LinkType.I4,
+				BuiltInPatch.I4,
+				MethodName,
 				(int)(codeStream.Position - codeStreamBasePosition),
 				(int)(codeStream.Position - codeStreamBasePosition) + 4,
 				symbolOperand.Name,
-				IntPtr.Zero
+				0
 			);
 
 			codeStream.Position += 4;
@@ -167,28 +162,32 @@ namespace Mosa.Platform.x86
 		/// Emits the displacement operand.
 		/// </summary>
 		/// <param name="displacement">The displacement operand.</param>
-		public void WriteDisplacement(Operand displacement)
+		private void WriteDisplacement(Operand displacement)
 		{
 			int pos = (int)(codeStream.Position - codeStreamBasePosition);
 
 			if (displacement.IsLabel)
 			{
-				linker.Link(LinkType.AbsoluteAddress | LinkType.NativeI4, compiler.Method.ToString(), pos, 0, displacement.Name, IntPtr.Zero);
+				linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuiltInPatch.I4, MethodName, pos, 0, displacement.Name, 0);
 				codeStream.Position += 4;
 			}
 			else if (displacement.IsRuntimeMember)
 			{
-				linker.Link(LinkType.AbsoluteAddress | LinkType.NativeI4, compiler.Method.ToString(), pos, 0, displacement.RuntimeMember.ToString(), displacement.Offset);
+				linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuiltInPatch.I4, MethodName, pos, 0, ((displacement.RuntimeMember) as RuntimeField).FullName, displacement.Displacement);
 				codeStream.Position += 4;
 			}
 			else if (displacement.IsSymbol)
 			{
-				linker.Link(LinkType.AbsoluteAddress | LinkType.NativeI4, compiler.Method.ToString(), pos, 0, displacement.Name, IntPtr.Zero);
+				linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuiltInPatch.I4, MethodName, pos, 0, displacement.Name, 0);
 				codeStream.Position += 4;
+			}
+			else if (displacement.IsMemoryAddress && displacement.OffsetBase != null && displacement.OffsetBase.IsConstant)
+			{
+				codeStream.Write((int)(displacement.OffsetBase.ConstantSignedInteger + displacement.Displacement), Endianness.Little);
 			}
 			else
 			{
-				codeStream.Write(displacement.Offset.ToInt32(), true);
+				codeStream.Write((int)displacement.Displacement, Endianness.Little);
 			}
 		}
 
@@ -198,86 +197,34 @@ namespace Mosa.Platform.x86
 		/// <param name="op">The immediate operand to emit.</param>
 		private void WriteImmediate(Operand op)
 		{
-			if (op.IsLocalVariable || op.IsStackTemp || op.IsMemoryAddress)
+			if (op.IsRegister)
+				return; // nothing to do.
+
+			if (op.IsStackLocal || op.IsMemoryAddress)
 			{
-				// Add the displacement
-				codeStream.Write(op.Offset.ToInt32(), true);
+				codeStream.Write((int)op.Displacement, Endianness.Little);
+				return;
 			}
-			else if (op.IsConstant)
+
+			if (!op.IsConstant)
+				throw new InvalidOperationException();
+
+			switch (op.Type.Type)
 			{
-				// Add the immediate
-				switch (op.Type.Type)
-				{
-					case CilElementType.I:
-						try
-						{
-							if (op.Value is Token)
-							{
-								codeStream.Write(((Token)op.Value).ToInt32(), true);
-							}
-							else
-							{
-								codeStream.Write(Convert.ToInt32(op.Value), true);
-							}
-						}
-						catch (OverflowException) // Odd??
-						{
-							codeStream.Write(Convert.ToUInt64(op.Value), true);
-						}
-						break;
+				case CilElementType.Object: goto case CilElementType.I;
+				case CilElementType.Char: goto case CilElementType.U2;
+				case CilElementType.I: goto case CilElementType.I4;
+				case CilElementType.Ptr: goto case CilElementType.U4;
 
-					case CilElementType.I1:
-						codeStream.WriteByte(Convert.ToByte(op.Value));
-						break;
+				case CilElementType.I1: codeStream.WriteByte(Convert.ToByte(op.ConstantSignedInteger)); return;
+				case CilElementType.I2: codeStream.Write(Convert.ToInt16(op.ConstantSignedInteger), Endianness.Little); return;
+				case CilElementType.I4: codeStream.Write(Convert.ToInt32(op.ConstantSignedInteger), Endianness.Little); return;
 
-					case CilElementType.I2:
-						codeStream.Write(Convert.ToInt16(op.Value), true);
-						break;
+				case CilElementType.U1: codeStream.WriteByte(Convert.ToByte(op.ConstantUnsignedInteger)); return;
+				case CilElementType.U2: codeStream.Write(Convert.ToUInt16(op.ConstantUnsignedInteger), Endianness.Little); return;
+				case CilElementType.U4: codeStream.Write(Convert.ToUInt32(op.ConstantUnsignedInteger), Endianness.Little); return;
 
-					case CilElementType.I4:
-						goto case CilElementType.I;
-					case CilElementType.U1:
-						codeStream.WriteByte(Convert.ToByte(op.Value));
-						break;
-
-					case CilElementType.Char:
-						goto case CilElementType.U2;
-					case CilElementType.U2:
-						codeStream.Write((ushort)Convert.ToUInt64(op.Value), true);
-						break;
-
-					case CilElementType.Ptr:
-					case CilElementType.U4:
-						codeStream.Write((uint)Convert.ToUInt64(op.Value), true);
-						break;
-
-					case CilElementType.I8:
-						codeStream.Write(Convert.ToInt64(op.Value), true);
-						break;
-
-					case CilElementType.U8:
-						codeStream.Write(Convert.ToUInt64(op.Value), true);
-						break;
-
-					case CilElementType.R4:
-						codeStream.Write(Endian.ConvertToUInt32(Convert.ToSingle(op.Value)), true);
-						break;
-
-					case CilElementType.R8:
-						goto default;
-					case CilElementType.Object:
-						goto case CilElementType.I;
-					default:
-						throw new NotSupportedException(String.Format(@"CilElementType.{0} is not supported.", op.Type.Type));
-				}
-			}
-			else if (op.IsRegister)
-			{
-				// Nothing to do...
-			}
-			else
-			{
-				throw new NotImplementedException();
+				default: throw new InvalidOperationException(String.Format(@"CilElementType.{0} is not supported.", op.Type.Type));
 			}
 		}
 
@@ -294,7 +241,7 @@ namespace Mosa.Platform.x86
 			long position;
 
 			// Did we see the label?
-			if (labels.TryGetValue(label, out position))
+			if (TryGetLabel(label, out position))
 			{
 				// Yes, calculate the relative offset
 				relOffset = (int)position - ((int)codeStream.Position + 4);
@@ -302,11 +249,38 @@ namespace Mosa.Platform.x86
 			else
 			{
 				// Forward jump, we can't resolve yet - store a patch
-				patches.Add(new Patch(label, codeStream.Position));
+				AddPatch(label, codeStream.Position);
 			}
 
 			// Emit the relative jump offset (zero if we don't know it yet!)
-			codeStream.Write(relOffset, true);
+			codeStream.Write(relOffset, Endianness.Little);
+		}
+
+		protected override void ResolvePatches()
+		{
+			// Save the current position
+			long currentPosition = codeStream.Position;
+
+			foreach (Patch p in Patches)
+			{
+				long labelPosition;
+				if (!TryGetLabel(p.Label, out labelPosition))
+				{
+					throw new ArgumentException(@"Missing label while resolving patches.", @"label");
+				}
+
+				codeStream.Position = p.Position;
+
+				// Compute relative branch offset
+				int relOffset = (int)labelPosition - ((int)p.Position + 4);
+
+				// Write relative offset to stream
+				byte[] bytes = BitConverter.GetBytes(relOffset);
+				codeStream.Write(bytes, 0, bytes.Length);
+			}
+
+			// Reset the position
+			codeStream.Position = currentPosition;
 		}
 
 		/// <summary>
@@ -316,94 +290,15 @@ namespace Mosa.Platform.x86
 		{
 			codeStream.WriteByte(0xEA);
 
-			// HACK: Determines the IP address of current instruction, should use the linker instead
+			// HACK: Determines the EIP address of current instruction, should use the linker instead
 			LinkerSection linkerSection = linker.GetSection(SectionKind.Text);
-			if (linkerSection != null) // To assist TypeExplorer, which returns null from GetSection method
+			if (linkerSection != null) // The Explorer Tool returns null
 			{
-				codeStream.Write((int)(linkerSection.VirtualAddress.ToInt32() + linkerSection.Length + 6), true);
+				codeStream.Write((int)(linkerSection.VirtualAddress + linkerSection.Length + 6), Endianness.Little);
 			}
 
 			codeStream.WriteByte(0x08);
 			codeStream.WriteByte(0x00);
-		}
-
-		/// <summary>
-		/// Emits an immediate operand.
-		/// </summary>
-		/// <param name="op">The immediate operand to emit.</param>
-		public void EmitImmediate(Operand op)
-		{
-			if (op.IsLocalVariable || op.IsStackTemp || op.IsMemoryAddress)
-			{
-				// Add the displacement
-				codeStream.Write(op.Offset.ToInt32(), true);
-			}
-			else if (op.IsConstant)
-			{
-				// Add the immediate
-				switch (op.Type.Type)
-				{
-					case CilElementType.I:
-						try
-						{
-							codeStream.Write(Convert.ToInt32(op.Value), true);
-						}
-						catch (OverflowException)
-						{
-							codeStream.Write(Convert.ToUInt32(op.Value), true);
-						}
-						break;
-
-					case CilElementType.I1:
-						codeStream.WriteByte(Convert.ToByte(op.Value));
-						break;
-
-					case CilElementType.I2:
-						codeStream.Write(Convert.ToInt16(op.Value), true);
-						break;
-
-					case CilElementType.I4:
-						goto case CilElementType.I;
-					case CilElementType.U1:
-						codeStream.WriteByte(Convert.ToByte(op.Value));
-						break;
-
-					case CilElementType.Char:
-						goto case CilElementType.U2;
-					case CilElementType.U2:
-						codeStream.Write(Convert.ToUInt16(op.Value), true);
-						break;
-
-					case CilElementType.U4:
-						codeStream.Write(Convert.ToUInt32(op.Value), true);
-						break;
-
-					case CilElementType.I8:
-						codeStream.Write(Convert.ToInt64(op.Value), true);
-						break;
-
-					case CilElementType.U8:
-						codeStream.Write(Convert.ToUInt64(op.Value), true);
-						break;
-
-					case CilElementType.R4:
-						codeStream.Write(Endian.ConvertToUInt32(Convert.ToSingle(op.Value)), true);
-						break;
-
-					case CilElementType.R8:
-						goto default;
-					default:
-						throw new NotSupportedException();
-				}
-			}
-			else if (op.IsRegister)
-			{
-				// Nothing to do...
-			}
-			else
-			{
-				throw new NotImplementedException();
-			}
 		}
 
 		/// <summary>
@@ -449,16 +344,15 @@ namespace Mosa.Platform.x86
 				// mod = 11b, reg = rop1, r/m = rop2
 				modRM = (byte)((3 << 6) | (op1.Register.RegisterCode << 3) | op2.Register.RegisterCode);
 			}
-
 			// Check for register/memory combinations
-			else if (mop2 != null && mop2.Base != null)
+			else if (mop2 != null && mop2.EffectiveOffsetBase != null)
 			{
 				// mod = 10b, reg = rop1, r/m = mop2
-				modRM = (byte)(modRM.GetValueOrDefault() | (2 << 6) | (byte)mop2.Base.RegisterCode);
+				modRM = (byte)(modRM.GetValueOrDefault() | (2 << 6) | (byte)mop2.EffectiveOffsetBase.RegisterCode);
 				if (op1 != null)
 					modRM |= (byte)(op1.Register.RegisterCode << 3);
 				displacement = mop2;
-				if (mop2.Base.RegisterCode == 4)
+				if (mop2.EffectiveOffsetBase.RegisterCode == 4)
 					sib = 0xA4;
 			}
 			else if (mop2 != null)
@@ -469,14 +363,14 @@ namespace Mosa.Platform.x86
 					modRM |= (byte)(op1.Register.RegisterCode << 3);
 				displacement = mop2;
 			}
-			else if (mop1 != null && mop1.Base != null)
+			else if (mop1 != null && mop1.EffectiveOffsetBase != null)
 			{
 				// mod = 10b, r/m = mop1, reg = rop2
-				modRM = (byte)(modRM.GetValueOrDefault() | (2 << 6) | mop1.Base.RegisterCode);
+				modRM = (byte)(modRM.GetValueOrDefault() | (2 << 6) | mop1.EffectiveOffsetBase.RegisterCode);
 				if (op2IsRegister)
 					modRM |= (byte)(op2.Register.RegisterCode << 3);
 				displacement = mop1;
-				if (mop1.Base.RegisterCode == 4)
+				if (mop1.EffectiveOffsetBase.RegisterCode == 4)
 					sib = 0xA4;
 			}
 			else if (mop1 != null)
@@ -490,9 +384,6 @@ namespace Mosa.Platform.x86
 			else if (op1IsRegister)
 			{
 				modRM = (byte)(modRM.GetValueOrDefault() | (3 << 6) | op1.Register.RegisterCode);
-
-				//if (op2 is SymbolOperand)
-				//    displacement = op2;
 			}
 
 			return modRM;

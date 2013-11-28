@@ -22,11 +22,6 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <summary>
 		///
 		/// </summary>
-		protected IArchitecture arch;
-
-		/// <summary>
-		///
-		/// </summary>
 		private BasicBlock firstBlock;
 
 		/// <summary>
@@ -84,7 +79,9 @@ namespace Mosa.Compiler.Framework.Stages
 			IPipelineStage previousStage = methodCompiler.GetStage(typeof(IMethodCompilerStage));
 
 			dotFile.WriteLine("subgraph cluster" + methodName + "_FlowGraph {");
-			dotFile.WriteLine("label = \"Method: " + methodName + "(" + methodCompiler.Method.Signature + ") after " + previousStage.Name + "\"");
+
+			//dotFile.WriteLine("label = \"Method: " + methodName + "(" + methodCompiler.Method.Signature + ") after " + previousStage.Name + "\"");
+			dotFile.WriteLine("label = \"Method: " + methodName + " after " + previousStage.Name + "\"");
 
 			//dotFile.WriteLine("graph [rankdir = \"TB\"];");
 
@@ -106,7 +103,7 @@ namespace Mosa.Compiler.Framework.Stages
 				int field = 0;
 				int i = 0;
 
-				for (Context ctx = new Context(instructionSet, block); !ctx.EndOfInstruction; ctx.GotoNext())
+				for (Context ctx = new Context(instructionSet, block); !ctx.IsBlockEndInstruction; ctx.GotoNext())
 				{
 					if (ctx.IsEmpty)
 						continue;

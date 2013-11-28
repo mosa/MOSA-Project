@@ -5,24 +5,36 @@
  *
  * Authors:
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
- *
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
 using Mosa.Compiler.Framework;
+using System;
 
 namespace Mosa.Platform.x86.Instructions
 {
 	/// <summary>
 	/// Intermediate representation for the x86 cvtsd2ss instruction.
 	/// </summary>
-	public class Cvtss2sd : TwoOperandInstruction
+	public class Cvtss2sd : X86Instruction
 	{
 		#region Data Members
 
 		private static readonly OpCode opcode = new OpCode(new byte[] { 0xF3, 0x0F, 0x5A });
 
 		#endregion Data Members
+
+		#region Construction
+
+		/// <summary>
+		/// Initializes a new instance of <see cref="Cvtss2sd" />.
+		/// </summary>
+		public Cvtss2sd() :
+			base(1, 1)
+		{
+		}
+
+		#endregion Construction
 
 		#region Methods
 

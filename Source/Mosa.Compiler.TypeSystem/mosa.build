@@ -19,16 +19,13 @@
                     <include name="Cil/CilRuntimeMethod.cs"/>
                     <include name="Cil/CilRuntimeType.cs"/>
                     <include name="GenericTypePatcher.cs"/>
-                    <include name="IGenericTypePatcher.cs"/>
                     <include name="InternalTypeModule.cs"/>
                     <include name="GenericParameter.cs"/>
                     <include name="ITypeLayout.cs"/>
                     <include name="TypeLayout.cs"/>
                     <include name="TypeSystem.cs"/>
                     <include name="CustomAttributeParser.cs"/>
-                    <include name="Generic/CilGenericField.cs"/>
-                    <include name="Generic/CilGenericMethod.cs"/>
-                    <include name="Generic/CilGenericType.cs"/>
+                    <include name="Cil/CilGenericType.cs"/>
                     <include name="ITypeModule.cs"/>
                     <include name="TypeModule.cs"/>
                     <include name="RuntimeAttribute.cs"/>

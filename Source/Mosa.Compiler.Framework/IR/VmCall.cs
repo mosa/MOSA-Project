@@ -114,6 +114,7 @@ namespace Mosa.Compiler.Framework.IR
 		UnboxInt8,
 		UnboxUInt8,
 		UnboxInt16,
+		UnboxUInt16,
 		UnboxInt32,
 		UnboxUInt32,
 		UnboxInt64,

@@ -28,6 +28,7 @@
     <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <NoStdLib>false</NoStdLib>
+    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -89,6 +90,10 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>ForeachTests.cs</LastGenOutput>
     </None>
+    <None Include="LdargaTests.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>LdargaTests.cs</LastGenOutput>
+    </None>
     <None Include="StaticFieldTests.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>StaticFieldTests.cs</LastGenOutput>
@@ -101,6 +106,13 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>StructTests.cs</LastGenOutput>
     </None>
+    <Compile Include="LdargaTests.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>LdargaTests.tt</DependentUpon>
+    </Compile>
+    <Compile Include="NewObjectTests.cs" />
+    <Compile Include="RegisterAllocatorTests.cs" />
     <Compile Include="SpecificTests.cs" />
     <Compile Include="ForeachTests.cs">
       <AutoGen>True</AutoGen>
@@ -114,14 +126,14 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>GenericCallTests.tt</DependentUpon>
     </Compile>
-    <None Include="InitobjTests.tt">
+    <None Include="InitStructTests.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>InitobjTests.cs</LastGenOutput>
+      <LastGenOutput>InitStructTests.cs</LastGenOutput>
     </None>
-    <Compile Include="InitobjTests.cs">
+    <Compile Include="InitStructTests.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>InitobjTests.tt</DependentUpon>
+      <DependentUpon>InitStructTests.tt</DependentUpon>
     </Compile>
     <Compile Include="StructTests.cs">
       <DependentUpon>StructTests.tt</DependentUpon>
@@ -146,11 +158,6 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="LdargaTests.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>LdargaTests.tt</DependentUpon>
-    </Compile>
     <Compile Include="WhileTests.cs" />
     <Compile Include="StringTests.cs" />
     <Compile Include="SingleTests.cs" />
@@ -165,7 +172,7 @@
     <Compile Include="UInt8Tests.cs" />
     <Compile Include="InterfaceTests.cs" />
     <Compile Include="EnumTests.cs" />
-    <Compile Include="NewobjTests.cs" />
+    <Compile Include="DerivedNewObjectTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ConditionalOperatorTests.tt">
@@ -187,10 +194,6 @@
     <None Include="LdlocaTests.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>LdlocaTests.cs</LastGenOutput>
-    </None>
-    <None Include="LdargaTests.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>LdargaTests.cs</LastGenOutput>
     </None>
   </ItemGroup>
   <ItemGroup>

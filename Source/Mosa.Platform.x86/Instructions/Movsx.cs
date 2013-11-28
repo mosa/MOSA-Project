@@ -5,18 +5,18 @@
  *
  * Authors:
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Metadata;
+using System;
 
 namespace Mosa.Platform.x86.Instructions
 {
 	/// <summary>
 	/// Representations the x86 Movsx instruction.
 	/// </summary>
-	public sealed class Movsx : TwoOperandInstruction
+	public sealed class Movsx : X86Instruction
 	{
 		#region Data Members
 
@@ -25,15 +25,19 @@ namespace Mosa.Platform.x86.Instructions
 
 		#endregion Data Members
 
-		#region Methods
+		#region Construction
 
 		/// <summary>
-		/// Gets a value indicating whether [result is input].
+		/// Initializes a new instance of <see cref="Movsx"/>.
 		/// </summary>
-		/// <value>
-		///   <c>true</c> if [result is input]; otherwise, <c>false</c>.
-		/// </value>
-		public override bool ResultIsInput { get { return false; } }
+		public Movsx() :
+			base(1, 1)
+		{
+		}
+
+		#endregion Construction
+
+		#region Methods
 
 		/// <summary>
 		/// Computes the opcode.
@@ -49,26 +53,16 @@ namespace Mosa.Platform.x86.Instructions
 			if (source.IsConstant)
 				throw new ArgumentException(@"Source must not be ConstantOperand.", @"source");
 
-			switch (source.Type.Type)
+			if (source.IsByte || source.IsBoolean)
 			{
-				case CilElementType.Boolean: goto case CilElementType.I1;
-				case CilElementType.U1: goto case CilElementType.I1;
-				case CilElementType.I1:
-					{
-						if ((destination.IsRegister) && (source.IsRegister)) return R_X8;
-						if ((destination.IsRegister) && (source.IsMemoryAddress)) return R_X8;
-					}
-					break;
+				if (destination.IsRegister && source.IsRegister) return R_X8;
+				if (destination.IsRegister && source.IsMemoryAddress) return R_X8;
+			}
 
-				case CilElementType.Char: goto case CilElementType.U2;
-				case CilElementType.U2: goto case CilElementType.I2;
-				case CilElementType.I2:
-					if ((destination.IsRegister) && (source.IsRegister)) return R_X16;
-					if ((destination.IsRegister) && (source.IsMemoryAddress)) return R_X16;
-					break;
-
-				default:
-					break;
+			if (source.IsShort || source.IsChar)
+			{
+				if (destination.IsRegister && source.IsRegister) return R_X16;
+				if (destination.IsRegister && source.IsMemoryAddress) return R_X16;
 			}
 
 			throw new ArgumentException(@"No opcode for operand type. [" + destination.GetType() + ", " + source.GetType() + ")");

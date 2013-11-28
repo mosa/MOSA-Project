@@ -7,16 +7,18 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-using System;
-using System.Diagnostics;
-using System.IO;
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.CIL;
+using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Compiler.Metadata.Tables;
 using Mosa.Compiler.TypeSystem;
-using Mosa.Compiler.TypeSystem.Generic;
+using Mosa.Compiler.TypeSystem.Cil;
+using Mosa.Compiler.Framework.Linker;
+using System;
+using System.Diagnostics;
+using System.IO;
 
 namespace Mosa.Compiler.Framework.Stages
 {
@@ -47,25 +49,25 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </summary>
 		void IMethodCompilerStage.Run()
 		{
+			// No CIL decoding if this is a linker generated method
+			if (methodCompiler.Method is LinkerGeneratedMethod)
+				return;
+
 			RuntimeMethod plugMethod = methodCompiler.Compiler.PlugSystem.GetPlugMethod(methodCompiler.Method);
 
 			if (plugMethod != null)
 			{
 				Operand plugSymbol = Operand.CreateSymbolFromMethod(plugMethod);
-				Context context = new Context(instructionSet);
-				context.AppendInstruction(IR.IRInstruction.Jmp, null, plugSymbol);
-				context.Label = -1;
-				var prologue = basicBlocks.CreateBlock(BasicBlock.PrologueLabel, context.Index);
-				basicBlocks.AddHeaderBlock(prologue);
+				Context context = CreateNewBlockWithContext(-1);
+				context.AppendInstruction(IRInstruction.Jmp, null, plugSymbol);
+				basicBlocks.AddHeaderBlock(context.BasicBlock);
 				return;
 			}
 
 			if (!methodCompiler.Method.HasCode)
 			{
 				if (DelegatePatcher.PatchDelegate(methodCompiler))
-				{
 					return;
-				}
 
 				methodCompiler.StopMethodCompiler();
 				return;
@@ -73,7 +75,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			using (Stream code = methodCompiler.GetInstructionStream())
 			{
-				using (codeReader = new EndianAwareBinaryReader(code, true))
+				using (codeReader = new EndianAwareBinaryReader(code, Endianness.Little))
 				{
 					MethodHeader header = ReadMethodHeader(codeReader);
 
@@ -81,31 +83,22 @@ namespace Mosa.Compiler.Framework.Stages
 					{
 						StandAloneSigRow row = methodCompiler.Method.Module.MetadataModule.Metadata.ReadStandAloneSigRow(header.LocalsSignature);
 
-						LocalVariableSignature localsSignature;
+						LocalVariableSignature localsSignature = new LocalVariableSignature(methodCompiler.Method.Module.MetadataModule.Metadata, row.SignatureBlobIdx);
 
-						if (methodCompiler.Method.DeclaringType is CilGenericType)
+						SigType[] localSigTypes = new SigType[localsSignature.Locals.Length];
+
+						for (int i = 0; i < localsSignature.Locals.Length; i++)
 						{
-							localsSignature = new LocalVariableSignature(methodCompiler.Method.Module.MetadataModule.Metadata, row.SignatureBlobIdx, (methodCompiler.Method.DeclaringType as CilGenericType).GenericArguments);
-						}
-						else
-						{
-							localsSignature = new LocalVariableSignature(methodCompiler.Method.Module.MetadataModule.Metadata, row.SignatureBlobIdx);
+							localSigTypes[i] = localsSignature.Locals[i].Type;
 						}
 
-						var declaringType = methodCompiler.Method.DeclaringType;
-						var locals = localsSignature.Locals;
-						for (var i = 0; i < locals.Length; ++i)
+						var genericDeclaringType = methodCompiler.Method.DeclaringType as CilGenericType;
+						if (genericDeclaringType != null)
 						{
-							var local = locals[i];
-							if (local.Type is GenericInstSigType && declaringType is CilGenericType)
-							{
-								var genericInstSigType = local.Type as GenericInstSigType;
-								var genericArguments = methodCompiler.Compiler.GenericTypePatcher.CloseGenericArguments((declaringType as CilGenericType).GenericArguments, genericInstSigType.GenericArguments);
-								local = new VariableSignature(locals[i], genericArguments);
-							}
+							localSigTypes = GenericSigTypeResolver.Resolve(localSigTypes, genericDeclaringType.GenericArguments);
 						}
 
-						methodCompiler.SetLocalVariableSignature(localsSignature);
+						methodCompiler.SetLocalVariableSignature(localSigTypes);
 					}
 
 					/* Decode the instructions */
@@ -299,7 +292,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <summary>
 		/// Gets the generic type patcher.
 		/// </summary>
-		IGenericTypePatcher IInstructionDecoder.GenericTypePatcher
+		GenericTypePatcher IInstructionDecoder.GenericTypePatcher
 		{
 			get { return methodCompiler.Compiler.GenericTypePatcher; }
 		}

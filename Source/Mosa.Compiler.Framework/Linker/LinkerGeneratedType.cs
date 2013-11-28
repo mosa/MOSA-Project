@@ -7,49 +7,35 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-using System;
-using System.Collections.Generic;
-
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.TypeSystem;
 
-namespace Mosa.Compiler.Linker
+namespace Mosa.Compiler.Framework.Linker
 {
 	/// <summary>
 	/// Represents a compiler generated type.
 	/// </summary>
 	public sealed class LinkerGeneratedType : RuntimeType
 	{
-		private readonly List<RuntimeMethod> methods;
-
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="LinkerGeneratedType"/> class.
+		/// Initializes a new instance of the <see cref="LinkerGeneratedType" /> class.
 		/// </summary>
 		/// <param name="moduleTypeSystem">The module type system.</param>
 		/// <param name="nameSpace">The name space.</param>
 		/// <param name="name">The name.</param>
 		/// <param name="baseType">Type of the base.</param>
 		public LinkerGeneratedType(ITypeModule moduleTypeSystem, string nameSpace, string name, RuntimeType baseType) :
-			base(moduleTypeSystem, Token.Zero, baseType)
+			base(moduleTypeSystem, Token.Zero, name, baseType, nameSpace)
 		{
-			if (nameSpace == null)
-				throw new ArgumentNullException(@"namespace");
-			if (name == null)
-				throw new ArgumentNullException(@"name");
-
-			base.Namespace = nameSpace;
-			base.Name = name;
-
-			this.methods = new List<RuntimeMethod>();
 		}
 
 		#endregion Construction
 
 		public void AddMethod(RuntimeMethod method)
 		{
-			this.methods.Add(method);
+			Methods.Add(method);
 		}
 	}
 }

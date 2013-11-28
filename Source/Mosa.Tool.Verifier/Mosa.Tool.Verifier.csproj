@@ -62,9 +62,6 @@
     <StartupObject>Mosa.Tool.Verifier.Program</StartupObject>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System" />
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="ParseOptions.cs" />
     <Compile Include="Program.cs" />
   </ItemGroup>

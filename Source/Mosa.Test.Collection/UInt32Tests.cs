@@ -61,12 +61,12 @@ namespace Mosa.Test.Collection
 			return (~first);
 		}
 
-		public static uint ShiftLeftU4U4(uint first, byte second)
+		public static uint ShiftLeftU4U1(uint first, byte second)
 		{
 			return (first << second);
 		}
 
-		public static uint ShiftRightU4U4(uint first, byte second)
+		public static uint ShiftRightU4U1(uint first, byte second)
 		{
 			return (first >> second);
 		}

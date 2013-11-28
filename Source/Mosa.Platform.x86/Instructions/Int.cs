@@ -5,6 +5,7 @@
  *
  * Authors:
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 using Mosa.Compiler.Framework;
@@ -25,10 +26,10 @@ namespace Mosa.Platform.x86.Instructions
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of <see cref="Dec"/>.
+		/// Initializes a new instance of <see cref="Int"/>.
 		/// </summary>
 		public Int() :
-			base(1, 0)
+			base(0, 1)
 		{
 		}
 

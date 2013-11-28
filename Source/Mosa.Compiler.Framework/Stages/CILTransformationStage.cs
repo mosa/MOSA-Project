@@ -8,11 +8,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Text;
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.CIL;
 using Mosa.Compiler.Framework.IR;
@@ -21,7 +16,12 @@ using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Loader;
 using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Compiler.TypeSystem;
-using Mosa.Compiler.TypeSystem.Generic;
+using Mosa.Compiler.TypeSystem.Cil;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Text;
 
 namespace Mosa.Compiler.Framework.Stages
 {
@@ -33,14 +33,6 @@ namespace Mosa.Compiler.Framework.Stages
 	/// </remarks>
 	public sealed class CILTransformationStage : BaseCodeTransformationStage, CIL.ICILVisitor, IPipelineStage
 	{
-		#region Data members
-
-		#endregion Data members
-
-		#region IMethodCompilerStage Members
-
-		#endregion IMethodCompilerStage Members
-
 		#region ICILVisitor
 
 		/// <summary>
@@ -111,7 +103,7 @@ namespace Mosa.Compiler.Framework.Stages
 				loadInstruction = IRInstruction.LoadZeroExtended;
 			}
 
-			context.SetInstruction(loadInstruction, destination, source, Operand.CreateConstant(0));
+			context.SetInstruction(loadInstruction, destination, source, Operand.CreateConstantSignedInt(0));
 			context.SigType = elementType;
 		}
 
@@ -134,7 +126,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="context">The context.</param>
 		void CIL.ICILVisitor.Ldsfld(Context context)
 		{
-			SigType sigType = context.RuntimeField.SignatureType;
+			SigType sigType = context.RuntimeField.SigType;
 			Operand source = Operand.CreateRuntimeMember(context.RuntimeField);
 			Operand destination = context.Result;
 
@@ -169,7 +161,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="context">The context.</param>
 		void CIL.ICILVisitor.Ldftn(Context context)
 		{
-			context.SetInstruction(IRInstruction.Move, context.Result, Operand.CreateSymbolFromMethod(context.InvokeTarget));
+			context.SetInstruction(IRInstruction.Move, context.Result, Operand.CreateSymbolFromMethod(context.InvokeMethod));
 		}
 
 		/// <summary>
@@ -215,7 +207,7 @@ namespace Mosa.Compiler.Framework.Stages
 		void CIL.ICILVisitor.Stobj(Context context)
 		{
 			// This is actually stind.* and stobj - the opcodes have the same meanings
-			context.SetInstruction(IRInstruction.Store, null, context.Operand1, Operand.CreateConstant(0), context.Operand2);
+			context.SetInstruction(IRInstruction.Store, null, context.Operand1, Operand.CreateConstantSignedInt(0), context.Operand2);
 		}
 
 		/// <summary>
@@ -252,11 +244,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (ProcessExternalCall(context))
 				return;
 
-			// Create a symbol operand for the invocation target
-			RuntimeMethod invokeTarget = context.InvokeTarget;
-			Operand symbolOperand = Operand.CreateSymbolFromMethod(invokeTarget);
-
-			ProcessInvokeInstruction(context, symbolOperand, context.Result, new List<Operand>(context.Operands));
+			ProcessInvokeInstruction(context, context.InvokeMethod, context.Result, new List<Operand>(context.Operands));
 		}
 
 		/// <summary>
@@ -268,7 +256,7 @@ namespace Mosa.Compiler.Framework.Stages
 			Operand destinationOperand = context.GetOperand(context.OperandCount - 1);
 			context.OperandCount -= 1;
 
-			ProcessInvokeInstruction(context, destinationOperand, context.Result, new List<Operand>(context.Operands));
+			ProcessInvokeInstruction(context, context.InvokeMethod, context.Result, new List<Operand>(context.Operands));
 		}
 
 		/// <summary>
@@ -289,41 +277,25 @@ namespace Mosa.Compiler.Framework.Stages
 			if (context.Operand1.Type is ValueTypeSigType)
 			{
 				var type = methodCompiler.Method.Module.GetType((context.Operand1.Type as ValueTypeSigType).Token);
-				var operand = Operand.CreateRuntimeMember(type.Fields[0].SignatureType, type.Fields[0], new IntPtr(0));
+				var operand = Operand.CreateRuntimeMember(type.Fields[0].SigType, type.Fields[0], 0);
 				context.SetOperand(0, operand);
 			}
 
 			if (context.Operand2.Type is ValueTypeSigType)
 			{
 				var type = methodCompiler.Method.Module.GetType((context.Operand2.Type as ValueTypeSigType).Token);
-				var operand = Operand.CreateRuntimeMember(type.Fields[0].SignatureType, type.Fields[0], new IntPtr(0));
+				var operand = Operand.CreateRuntimeMember(type.Fields[0].SigType, type.Fields[0], 0);
 				context.SetOperand(1, operand);
 			}
 
 			switch ((context.Instruction as CIL.BaseCILInstruction).OpCode)
 			{
-				case CIL.OpCode.And:
-					context.SetInstruction(IRInstruction.LogicalAnd, context.Result, context.Operand1, context.Operand2);
-					break;
-
-				case CIL.OpCode.Or:
-					context.SetInstruction(IRInstruction.LogicalOr, context.Result, context.Operand1, context.Operand2);
-					break;
-
-				case CIL.OpCode.Xor:
-					context.SetInstruction(IRInstruction.LogicalXor, context.Result, context.Operand1, context.Operand2);
-					break;
-
-				case CIL.OpCode.Div_un:
-					context.SetInstruction(IRInstruction.DivU, context.Result, context.Operand1, context.Operand2);
-					break;
-
-				case CIL.OpCode.Rem_un:
-					context.SetInstruction(IRInstruction.RemU, context.Result, context.Operand1, context.Operand2);
-					break;
-
-				default:
-					throw new NotSupportedException();
+				case CIL.OpCode.And: context.SetInstruction(IRInstruction.LogicalAnd, context.Result, context.Operand1, context.Operand2); break;
+				case CIL.OpCode.Or: context.SetInstruction(IRInstruction.LogicalOr, context.Result, context.Operand1, context.Operand2); break;
+				case CIL.OpCode.Xor: context.SetInstruction(IRInstruction.LogicalXor, context.Result, context.Operand1, context.Operand2); break;
+				case CIL.OpCode.Div_un: context.SetInstruction(IRInstruction.DivU, context.Result, context.Operand1, context.Operand2); break;
+				case CIL.OpCode.Rem_un: context.SetInstruction(IRInstruction.RemU, context.Result, context.Operand1, context.Operand2); break;
+				default: throw new InvalidCompilerException();
 			}
 		}
 
@@ -335,20 +307,10 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			switch ((context.Instruction as CIL.BaseCILInstruction).OpCode)
 			{
-				case CIL.OpCode.Shl:
-					context.SetInstruction(IRInstruction.ShiftLeft, context.Result, context.Operand1, context.Operand2);
-					break;
-
-				case CIL.OpCode.Shr:
-					context.SetInstruction(IRInstruction.ArithmeticShiftRight, context.Result, context.Operand1, context.Operand2);
-					break;
-
-				case CIL.OpCode.Shr_un:
-					context.SetInstruction(IRInstruction.ShiftRight, context.Result, context.Operand1, context.Operand2);
-					break;
-
-				default:
-					throw new NotSupportedException();
+				case CIL.OpCode.Shl: context.SetInstruction(IRInstruction.ShiftLeft, context.Result, context.Operand1, context.Operand2); break;
+				case CIL.OpCode.Shr: context.SetInstruction(IRInstruction.ArithmeticShiftRight, context.Result, context.Operand1, context.Operand2); break;
+				case CIL.OpCode.Shr_un: context.SetInstruction(IRInstruction.ShiftRight, context.Result, context.Operand1, context.Operand2); break;
+				default: throw new InvalidCompilerException();
 			}
 		}
 
@@ -358,24 +320,24 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="context">The context.</param>
 		void CIL.ICILVisitor.Neg(Context context)
 		{
-			if (IsUnsigned(context.Operand1))
+			if (context.Operand1.IsUnsigned)
 			{
-				Operand zero = Operand.CreateConstant(context.Operand1.Type, 0UL);
+				Operand zero = Operand.CreateConstant(context.Operand1.Type, 0);
 				context.SetInstruction(IRInstruction.SubU, context.Result, zero, context.Operand1);
 			}
-			else if (context.Operand1.Type.Type == CilElementType.R4)
+			else if (context.Operand1.IsSingle)
 			{
-				Operand minusOne = Operand.CreateConstant(context.Operand1.Type, -1.0f);
+				Operand minusOne = Operand.CreateConstantFloat(-1.0f);
 				context.SetInstruction(IRInstruction.MulF, context.Result, minusOne, context.Operand1);
 			}
-			else if (context.Operand1.Type.Type == CilElementType.R8)
+			else if (context.Operand1.IsDouble)
 			{
-				Operand minusOne = Operand.CreateConstant(context.Operand1.Type, -1.0);
+				Operand minusOne = Operand.CreateConstantDouble(-1.0d);
 				context.SetInstruction(IRInstruction.MulF, context.Result, minusOne, context.Operand1);
 			}
 			else
 			{
-				Operand minusOne = Operand.CreateConstant(context.Operand1.Type, -1L);
+				Operand minusOne = Operand.CreateConstant(context.Operand1.Type, -1);
 				context.SetInstruction(IRInstruction.MulS, context.Result, minusOne, context.Operand1);
 			}
 		}
@@ -404,74 +366,68 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="context">The context.</param>
 		void CIL.ICILVisitor.Callvirt(Context context)
 		{
-			RuntimeMethod invokeTarget = context.InvokeTarget;
-
+			RuntimeMethod method = context.InvokeMethod;
 			Operand resultOperand = context.Result;
-			var operands = new List<Operand>(context.Operands);
+			List<Operand> operands = new List<Operand>(context.Operands);
 
 			if (context.Previous.Instruction is ConstrainedPrefixInstruction)
 			{
 				var type = context.Previous.RuntimeType;
 
-				foreach (var method in type.Methods)
+				foreach (var m in type.Methods)
 				{
-					if (method.Name == invokeTarget.Name)
+					if (method.Name == method.Name)
 					{
-						if (method.Signature.Matches(invokeTarget.Signature))
+						if (method.Matches(method))
 						{
-							invokeTarget = method;
+							method = m;
 							break;
 						}
 					}
 				}
 
-				//context.Previous.SetInstruction(IRInstruction.Nop);
 				context.Previous.Remove();
 
-				Operand symbolOperand = Operand.CreateSymbolFromMethod(invokeTarget);
-				ProcessInvokeInstruction(context, symbolOperand, resultOperand, operands);
+				ProcessInvokeInstruction(context, method, resultOperand, operands);
 
 				return;
 			}
 
-			if ((invokeTarget.Attributes & MethodAttributes.Virtual) == MethodAttributes.Virtual)
+			if ((method.Attributes & MethodAttributes.Virtual) == MethodAttributes.Virtual)
 			{
 				Operand thisPtr = context.Operand1;
 
 				Operand methodTable = methodCompiler.CreateVirtualRegister(BuiltInSigType.IntPtr);
 				Operand methodPtr = methodCompiler.CreateVirtualRegister(BuiltInSigType.IntPtr);
 
-				if (!invokeTarget.DeclaringType.IsInterface)
+				if (!method.DeclaringType.IsInterface)
 				{
-					int methodTableOffset = CalculateMethodTableOffset(invokeTarget) + (nativePointerSize * 5);
-					context.SetInstruction(IRInstruction.Load, methodTable, thisPtr, Operand.CreateConstant(0));
-					context.AppendInstruction(IRInstruction.Load, methodPtr, methodTable, Operand.CreateConstant(BuiltInSigType.Int32, methodTableOffset));
+					int methodTableOffset = CalculateMethodTableOffset(method) + (nativePointerSize * 5);
+					context.SetInstruction(IRInstruction.Load, methodTable, thisPtr, Operand.CreateConstantSignedInt(0));
+					context.AppendInstruction(IRInstruction.Load, methodPtr, methodTable, Operand.CreateConstantSignedInt((int)methodTableOffset));
 				}
 				else
 				{
-					int methodTableOffset = CalculateMethodTableOffset(invokeTarget);
-					int slotOffset = CalculateInterfaceSlotOffset(invokeTarget);
+					int methodTableOffset = CalculateMethodTableOffset(method);
+					int slotOffset = CalculateInterfaceSlotOffset(method);
 
 					Operand interfaceSlotPtr = methodCompiler.CreateVirtualRegister(BuiltInSigType.IntPtr);
 					Operand interfaceMethodTablePtr = methodCompiler.CreateVirtualRegister(BuiltInSigType.IntPtr);
 
-					context.SetInstruction(IRInstruction.Load, methodTable, thisPtr, Operand.CreateConstant(0));
-					context.AppendInstruction(IRInstruction.Load, interfaceSlotPtr, methodTable, Operand.CreateConstant(0));
-					context.AppendInstruction(IRInstruction.Load, interfaceMethodTablePtr, interfaceSlotPtr, Operand.CreateConstant(BuiltInSigType.Int32, slotOffset));
-					context.AppendInstruction(IRInstruction.Load, methodPtr, interfaceMethodTablePtr, Operand.CreateConstant(BuiltInSigType.Int32, methodTableOffset));
+					context.SetInstruction(IRInstruction.Load, methodTable, thisPtr, Operand.CreateConstantSignedInt(0));
+					context.AppendInstruction(IRInstruction.Load, interfaceSlotPtr, methodTable, Operand.CreateConstantSignedInt(0));
+					context.AppendInstruction(IRInstruction.Load, interfaceMethodTablePtr, interfaceSlotPtr, Operand.CreateConstantSignedInt((int)slotOffset));
+					context.AppendInstruction(IRInstruction.Load, methodPtr, interfaceMethodTablePtr, Operand.CreateConstantSignedInt((int)methodTableOffset));
 				}
 
 				context.AppendInstruction(IRInstruction.Nop);
-				ProcessInvokeInstruction(context, methodPtr, resultOperand, operands);
+				ProcessInvokeInstruction(context, method, methodPtr, resultOperand, operands);
 			}
 			else
 			{
 				// FIXME: Callvirt imposes a null-check. For virtual calls this is done implicitly, but for non-virtual calls
 				// we have to make this explicitly somehow.
-
-				// Create a symbol operand for the invocation target
-				Operand symbolOperand = Operand.CreateSymbolFromMethod(invokeTarget);
-				ProcessInvokeInstruction(context, symbolOperand, resultOperand, operands);
+				ProcessInvokeInstruction(context, method, resultOperand, operands);
 			}
 		}
 
@@ -534,8 +490,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 			ReplaceWithVmCall(context, VmCall.AllocateArray);
 
-			context.SetOperand(1, Operand.CreateConstant(BuiltInSigType.IntPtr, 0));
-			context.SetOperand(2, Operand.CreateConstant(BuiltInSigType.Int32, elementSize));
+			context.SetOperand(1, Operand.CreateConstantSignedInt((int)0));
+			context.SetOperand(2, Operand.CreateConstantSignedInt((int)elementSize));
 			context.SetOperand(3, lengthOperand);
 			context.OperandCount = 4;
 		}
@@ -546,51 +502,52 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="context">The context.</param>
 		void CIL.ICILVisitor.Newobj(Context context)
 		{
-			Operand thisReference = context.Result;
-			Debug.Assert(thisReference != null, @"Newobj didn't specify class signature?");
-			RuntimeType classType = null;
-
-			if (thisReference.Type is ClassSigType)
+			if (!ReplaceWithInternalCall(context))
 			{
-				var classSigType = thisReference.Type as ClassSigType;
-				classType = typeModule.GetType(classSigType.Token);
-			}
-			else if (thisReference.Type is GenericInstSigType)
-			{
-				var genericInstSigType = thisReference.Type as GenericInstSigType;
-				var baseSigType = genericInstSigType.BaseType as ValueTypeSigType;
-				classType = typeModule.GetType(baseSigType.Token);
-			}
+				Operand thisReference = context.Result;
+				Debug.Assert(thisReference != null, @"Newobj didn't specify class signature?");
+				RuntimeType classType = null;
 
-			if (classType.ContainsOpenGenericParameters)
-			{
-				if (!(classType is CilGenericType))
-					classType = new CilGenericType(classType.Module, classType.Token, classType, thisReference.Type as GenericInstSigType);
-				classType = methodCompiler.Compiler.GenericTypePatcher.PatchType(this.typeModule, methodCompiler.Method.DeclaringType as CilGenericType, classType as CilGenericType);
-			}
+				if (thisReference.Type is ClassSigType)
+				{
+					var classSigType = thisReference.Type as ClassSigType;
+					classType = typeModule.GetType(classSigType.Token);
+				}
+				else if (thisReference.Type is GenericInstSigType)
+				{
+					var genericInstSigType = thisReference.Type as GenericInstSigType;
+					var baseSigType = genericInstSigType.BaseType as ValueTypeSigType;
+					classType = typeModule.GetType(baseSigType.Token);
+				}
 
-			List<Operand> ctorOperands = new List<Operand>(context.Operands);
-			RuntimeMethod ctorMethod = context.InvokeTarget;
+				if (classType.ContainsOpenGenericParameters)
+				{
+					if (!(classType is CilGenericType))
+					{
+						string name = CilGenericType.GetGenericTypeName(classType.Module, classType, (thisReference.Type as GenericInstSigType).GenericArguments);
 
-			if (!ReplaceWithInternalCall(context, ctorMethod))
-			{
+						classType = new CilGenericType(classType.Module, classType.Token, name, classType, (thisReference.Type as GenericInstSigType).GenericArguments);
+					}
+
+					classType = methodCompiler.Compiler.GenericTypePatcher.PatchType(this.typeModule, methodCompiler.Method.DeclaringType as CilGenericType, classType as CilGenericType);
+				}
+
 				Context before = context.InsertBefore();
-				before.SetInstruction(IRInstruction.Nop);
 
 				ReplaceWithVmCall(before, VmCall.AllocateObject);
 
 				Operand methodTableSymbol = GetMethodTableSymbol(classType);
 
 				before.SetOperand(1, methodTableSymbol);
-				before.SetOperand(2, Operand.CreateConstant(BuiltInSigType.Int32, typeLayout.GetTypeSize(classType)));
-				before.OperandCount = 2;
+				before.SetOperand(2, Operand.CreateConstantSignedInt((int)typeLayout.GetTypeSize(classType)));
+				before.OperandCount = 3;
 				before.Result = thisReference;
 
 				// Result is the this pointer, now invoke the real constructor
-				Operand symbolOperand = Operand.CreateSymbolFromMethod(ctorMethod);
+				List<Operand> operands = new List<Operand>(context.Operands);
+				operands.Insert(0, thisReference);
 
-				ctorOperands.Insert(0, thisReference);
-				ProcessInvokeInstruction(context, symbolOperand, null, ctorOperands);
+				ProcessInvokeInstruction(context, context.InvokeMethod, null, operands);
 			}
 		}
 
@@ -614,19 +571,16 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private bool DoCtorParametersMatch(RuntimeMethod method, List<Operand> ctorOperands)
 		{
-			bool result = false;
+			if (method.Parameters.Count != ctorOperands.Count)
+				return false;
 
-			if (method.Parameters.Count == ctorOperands.Count)
+			for (int index = 0; index < ctorOperands.Count; index++)
 			{
-				result = true;
-
-				for (int index = 0; result && index < ctorOperands.Count; index++)
-				{
-					result = ctorOperands[index].Type.Matches(method.Signature.Parameters[index]);
-				}
+				if (!ctorOperands[index].Type.Matches(method.SigParameters[index]))
+					return false;
 			}
 
-			return result;
+			return true;
 		}
 
 		/// <summary>
@@ -636,10 +590,8 @@ namespace Mosa.Compiler.Framework.Stages
 		void CIL.ICILVisitor.Castclass(Context context)
 		{
 			// TODO!
-			// We don't need to check the result, if the icall fails, it'll happily throw
-			// the InvalidCastException.
-			//context.Remove();
-			ReplaceWithVmCall(context, VmCall.Castclass);
+			//ReplaceWithVmCall(context, VmCall.Castclass);
+			context.ReplaceInstructionOnly(IRInstruction.Move); // HACK!
 		}
 
 		/// <summary>
@@ -670,7 +622,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 				ReplaceWithVmCall(context, VmCall.IsInstanceOfInterfaceType);
 
-				context.SetOperand(1, Operand.CreateConstant(BuiltInSigType.UInt32, slot));
+				context.SetOperand(1, Operand.CreateConstantUnsignedInt((uint)slot));
 				context.SetOperand(2, reference);
 				context.OperandCount = 3;
 				context.ResultCount = 1;
@@ -683,7 +635,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="context">The context.</param>
 		void CIL.ICILVisitor.Unbox(Context context)
 		{
-			throw new NotSupportedException();
+			throw new NotImplementCompilerException();
 
 			//ReplaceWithVmCall(context, VmCall.Unbox);
 		}
@@ -705,84 +657,41 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			var value = context.Operand1;
 			var result = context.Result;
+			var type = context.RuntimeType;
 
-			RuntimeType type;
-			VmCall vmCall;
+			// this type resolution is a hack
+			if (type == null)
+			{
+				var sigType = result.Type as ValueTypeSigType;
 
-			if (context.Operand1.Type.Type == CilElementType.Char)
-			{
-				type = typeSystem.GetType("mscorlib", "System", "Char");
-				vmCall = VmCall.BoxChar;
+				if (sigType != null)
+				{
+					type = typeModule.GetType(sigType.Token);
+				}
 			}
-			else if (context.Operand1.Type.Type == CilElementType.Boolean)
+
+			if (type == null || !type.IsValueType)
 			{
-				type = typeSystem.GetType("mscorlib", "System", "Boolean");
-				vmCall = VmCall.BoxBool;
+				context.ReplaceInstructionOnly(IRInstruction.Move);
+				return;
 			}
-			else if (context.Operand1.Type.Type == CilElementType.I1)
-			{
-				type = typeSystem.GetType("mscorlib", "System", "SByte");
-				vmCall = VmCall.BoxInt8;
-			}
-			else if (context.Operand1.Type.Type == CilElementType.U1)
-			{
-				type = typeSystem.GetType("mscorlib", "System", "Byte");
-				vmCall = VmCall.BoxUInt8;
-			}
-			else if (context.Operand1.Type.Type == CilElementType.I2)
-			{
-				type = typeSystem.GetType("mscorlib", "System", "Int16");
-				vmCall = VmCall.BoxInt16;
-			}
-			else if (context.Operand1.Type.Type == CilElementType.U2)
-			{
-				type = typeSystem.GetType("mscorlib", "System", "UInt16");
-				vmCall = VmCall.BoxUInt16;
-			}
-			else if (context.Operand1.Type.Type == CilElementType.I4)
-			{
-				type = typeSystem.GetType("mscorlib", "System", "Int32");
-				vmCall = VmCall.BoxInt32;
-			}
-			else if (context.Operand1.Type.Type == CilElementType.U4)
-			{
-				type = typeSystem.GetType("mscorlib", "System", "UInt32");
-				vmCall = VmCall.BoxUInt32;
-			}
-			else if (context.Operand1.Type.Type == CilElementType.I8)
-			{
-				type = typeSystem.GetType("mscorlib", "System", "Int64");
-				vmCall = VmCall.BoxInt64;
-			}
-			else if (context.Operand1.Type.Type == CilElementType.U8)
-			{
-				type = typeSystem.GetType("mscorlib", "System", "UInt64");
-				vmCall = VmCall.BoxUInt64;
-			}
-			else if (context.Operand1.Type.Type == CilElementType.R4)
-			{
-				type = typeSystem.GetType("mscorlib", "System", "Single");
-				vmCall = VmCall.BoxSingle;
-			}
-			else if (context.Operand1.Type.Type == CilElementType.R8)
-			{
-				type = typeSystem.GetType("mscorlib", "System", "Double");
-				vmCall = VmCall.BoxDouble;
-			}
-			else
+
+			var vmCall = TypeToVmBoxCall(type);
+
+			if (!vmCall.HasValue)
 			{
 				context.ReplaceInstructionOnly(IRInstruction.Move);
 				return;
 			}
 
 			context.SetInstruction(IRInstruction.Nop);
-			ReplaceWithVmCall(context, vmCall);
+			ReplaceWithVmCall(context, vmCall.Value);
 
 			var methodTableSymbol = GetMethodTableSymbol(type);
 			var classSize = typeLayout.GetTypeSize(type);
 
 			context.SetOperand(1, methodTableSymbol);
-			context.SetOperand(2, Operand.CreateConstant(BuiltInSigType.UInt32, classSize));
+			context.SetOperand(2, Operand.CreateConstantUnsignedInt((uint)classSize));
 			context.SetOperand(3, value);
 			context.OperandCount = 4;
 			context.Result = result;
@@ -795,7 +704,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="context">The context.</param>
 		void CIL.ICILVisitor.BinaryComparison(Context context)
 		{
-			IR.ConditionCode code = ConvertCondition((context.Instruction as CIL.BaseCILInstruction).OpCode);
+			ConditionCode code = ConvertCondition((context.Instruction as CIL.BaseCILInstruction).OpCode);
 
 			if (context.Operand1.StackType == StackTypeCode.F)
 			{
@@ -884,15 +793,14 @@ namespace Mosa.Compiler.Framework.Stages
 
 			string referencedString = assembly.Metadata.ReadUserString(context.TokenType);
 
-			string symbolName = @"$ldstr$" + assembly.Name + "$String" + context.TokenType.ToString("x");
+			string symbolName = @"$ldstr$" + assembly.Name + "$" + context.TokenType.ToString("x");
 
-			if (!linker.HasSymbol(symbolName))
+			if (linker.GetSymbol(symbolName) == null)
 			{
-				// HACK: These strings should actually go into .rodata, but we can't link that right now.
-				using (Stream stream = linker.Allocate(symbolName, SectionKind.Text, 0, nativePointerAlignment))
+				using (Stream stream = linker.Allocate(symbolName, SectionKind.ROData, 0, nativePointerAlignment))
 				{
 					// Method table and sync block
-					linker.Link(LinkType.AbsoluteAddress | LinkType.NativeI4, symbolName, 0, 0, @"System.String$mtable", IntPtr.Zero);
+					linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuiltInPatch.I4, symbolName, 0, 0, @"System.String$mtable", 0);
 					stream.WriteZeroBytes(8);
 
 					// String length field
@@ -919,18 +827,18 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			Operand resultOperand = context.Result;
 			Operand objectOperand = context.Operand1;
-			Operand result = methodCompiler.CreateVirtualRegister(context.RuntimeField.SignatureType);
+			Operand result = methodCompiler.CreateVirtualRegister(context.RuntimeField.SigType);
 			RuntimeField field = context.RuntimeField;
 
 			int offset = typeLayout.GetFieldOffset(field);
-			Operand offsetOperand = Operand.CreateConstant(BuiltInSigType.IntPtr, offset);
+			Operand offsetOperand = Operand.CreateConstantIntPtr(offset);
 
 			BaseInstruction loadInstruction = IRInstruction.Load;
-			if (MustSignExtendOnLoad(field.SignatureType.Type))
+			if (MustSignExtendOnLoad(field.SigType.Type))
 			{
 				loadInstruction = IRInstruction.LoadSignExtended;
 			}
-			else if (MustZeroExtendOnLoad(field.SignatureType.Type))
+			else if (MustZeroExtendOnLoad(field.SigType.Type))
 			{
 				loadInstruction = IRInstruction.LoadZeroExtended;
 			}
@@ -938,7 +846,7 @@ namespace Mosa.Compiler.Framework.Stages
 			Debug.Assert(offsetOperand != null);
 
 			context.SetInstruction(loadInstruction, result, objectOperand, offsetOperand);
-			context.SigType = field.SignatureType;
+			context.SigType = field.SigType;
 			context.AppendInstruction(IRInstruction.Move, resultOperand, result);
 		}
 
@@ -952,7 +860,7 @@ namespace Mosa.Compiler.Framework.Stages
 			Operand objectOperand = context.Operand1;
 
 			int offset = typeLayout.GetFieldOffset(context.RuntimeField);
-			Operand fixedOffset = Operand.CreateConstant(BuiltInSigType.Int32, offset);
+			Operand fixedOffset = Operand.CreateConstantSignedInt((int)offset);
 
 			context.SetInstruction(IRInstruction.AddU, fieldAddress, objectOperand, fixedOffset);
 		}
@@ -965,10 +873,10 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			Operand objectOperand = context.Operand1;
 			Operand valueOperand = context.Operand2;
-			Operand temp = methodCompiler.CreateVirtualRegister(context.RuntimeField.SignatureType);
+			Operand temp = methodCompiler.CreateVirtualRegister(context.RuntimeField.SigType);
 
 			int offset = typeLayout.GetFieldOffset(context.RuntimeField);
-			Operand offsetOperand = Operand.CreateConstant(BuiltInSigType.IntPtr, offset);
+			Operand offsetOperand = Operand.CreateConstantIntPtr(offset);
 
 			context.SetInstruction(IRInstruction.Move, temp, valueOperand);
 			context.AppendInstruction(IRInstruction.Store, null, objectOperand, offsetOperand, temp);
@@ -980,7 +888,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="context">The context.</param>
 		void CIL.ICILVisitor.Jmp(Context context)
 		{
-			throw new NotSupportedException();
+			throw new NotImplementCompilerException();
 		}
 
 		/// <summary>
@@ -1001,7 +909,7 @@ namespace Mosa.Compiler.Framework.Stages
 			int target = context.BranchTargets[0];
 
 			Operand first = context.Operand1;
-			Operand second = Operand.CreateConstant(BuiltInSigType.Int32, (int)0);
+			Operand second = Operand.CreateConstantSignedInt((int)0);
 
 			CIL.OpCode opcode = ((CIL.BaseCILInstruction)context.Instruction).OpCode;
 
@@ -1037,7 +945,7 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				Operand comparisonResult = methodCompiler.CreateVirtualRegister(BuiltInSigType.Int32);
 				context.SetInstruction(IRInstruction.FloatingPointCompare, cc, comparisonResult, first, second);
-				context.AppendInstruction(IRInstruction.IntegerCompareBranch, ConditionCode.Equal, null, comparisonResult, Operand.CreateConstant(BuiltInSigType.IntPtr, 1));
+				context.AppendInstruction(IRInstruction.IntegerCompareBranch, ConditionCode.Equal, null, comparisonResult, Operand.CreateConstantIntPtr(1));
 				context.SetBranch(target);
 			}
 			else
@@ -1073,7 +981,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			Operand arrayOperand = context.Operand1;
 			Operand arrayLength = context.Result;
-			Operand constantOffset = Operand.CreateConstant(8);
+			Operand constantOffset = Operand.CreateConstantSignedInt(8);
 
 			Operand arrayAddress = methodCompiler.CreateVirtualRegister(new PtrSigType(BuiltInSigType.Int32));
 			context.SetInstruction(IRInstruction.Move, arrayAddress, arrayOperand);
@@ -1118,7 +1026,7 @@ namespace Mosa.Compiler.Framework.Stages
 			//
 
 			Operand elementOffset = methodCompiler.CreateVirtualRegister(BuiltInSigType.Int32);
-			Operand elementSizeOperand = Operand.CreateConstant(BuiltInSigType.Int32, elementSizeInBytes);
+			Operand elementSizeOperand = Operand.CreateConstantSignedInt((int)elementSizeInBytes);
 			context.AppendInstruction(IRInstruction.MulS, elementOffset, arrayIndexOperand, elementSizeOperand);
 
 			return elementOffset;
@@ -1127,7 +1035,7 @@ namespace Mosa.Compiler.Framework.Stages
 		private Operand LoadArrayBaseAddress(Context context, SZArraySigType arraySignatureType, Operand arrayOperand)
 		{
 			Operand arrayAddress = methodCompiler.CreateVirtualRegister(new PtrSigType(arraySignatureType.ElementType));
-			Operand fixedOffset = Operand.CreateConstant(BuiltInSigType.Int32, 12);
+			Operand fixedOffset = Operand.CreateConstantSignedInt((int)12);
 			context.SetInstruction(IRInstruction.AddS, arrayAddress, arrayOperand, fixedOffset);
 			return arrayAddress;
 		}
@@ -1198,60 +1106,13 @@ namespace Mosa.Compiler.Framework.Stages
 			var type = context.RuntimeType;
 			var result = context.Result;
 
-			if (type.FullName == "System.Boolean")
-			{
-				ReplaceWithVmCall(context, VmCall.UnboxBool);
-			}
-			else if (type.FullName == "System.Char")
-			{
-				ReplaceWithVmCall(context, VmCall.UnboxChar);
-			}
-			else if (type.FullName == "System.SByte")
-			{
-				ReplaceWithVmCall(context, VmCall.UnboxInt8);
-			}
-			else if (type.FullName == "System.Byte")
-			{
-				ReplaceWithVmCall(context, VmCall.UnboxUInt8);
-			}
-			else if (type.FullName == "System.Int16")
-			{
-				//ReplaceWithVmCall(context, VmCall.UnboxInt32);
-				ReplaceWithVmCall(context, VmCall.UnboxInt16);
-			}
-			else if (type.FullName == "System.UInt16")
-			{
-				ReplaceWithVmCall(context, VmCall.UnboxUInt32);
-			}
-			else if (type.FullName == "System.Int32")
-			{
-				ReplaceWithVmCall(context, VmCall.UnboxInt32);
-			}
-			else if (type.FullName == "System.UInt32")
-			{
-				ReplaceWithVmCall(context, VmCall.UnboxUInt32);
-			}
-			else if (type.FullName == "System.Int64")
-			{
-				ReplaceWithVmCall(context, VmCall.UnboxInt64);
-			}
-			else if (type.FullName == "System.UInt64")
-			{
-				ReplaceWithVmCall(context, VmCall.UnboxUInt64);
-			}
-			else if (type.FullName == "System.Single")
-			{
-				ReplaceWithVmCall(context, VmCall.UnboxSingle);
-			}
-			else if (type.FullName == "System.Double")
-			{
-				ReplaceWithVmCall(context, VmCall.UnboxDouble);
-			}
-			else
+			if (!type.IsValueType)
 			{
 				context.ReplaceInstructionOnly(IRInstruction.Move);
 				return;
 			}
+
+			ReplaceWithVmCall(context, TypeToVmUnboxCall(type));
 
 			context.SetOperand(1, value);
 			context.OperandCount = 2;
@@ -1299,7 +1160,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="context">The context.</param>
 		void CIL.ICILVisitor.Endfinally(Context context)
 		{
-			context.SetInstruction(IRInstruction.Return);
+			context.SetInstruction(IRInstruction.InternalReturn);
 		}
 
 		private ExceptionHandlingClause FindImmediateClause(Context context)
@@ -1462,13 +1323,61 @@ namespace Mosa.Compiler.Framework.Stages
 
 		#region Internals
 
+		/// <summary>
+		/// Converts the specified opcode.
+		/// </summary>
+		/// <param name="opcode">The opcode.</param>
+		/// <returns></returns>
+		public static ConditionCode ConvertCondition(CIL.OpCode opcode)
+		{
+			switch (opcode)
+			{
+				// Signed
+				case CIL.OpCode.Beq_s: return ConditionCode.Equal;
+				case CIL.OpCode.Bge_s: return ConditionCode.GreaterOrEqual;
+				case CIL.OpCode.Bgt_s: return ConditionCode.GreaterThan;
+				case CIL.OpCode.Ble_s: return ConditionCode.LessOrEqual;
+				case CIL.OpCode.Blt_s: return ConditionCode.LessThan;
+
+				// Unsigned
+				case CIL.OpCode.Bne_un_s: return ConditionCode.NotEqual;
+				case CIL.OpCode.Bge_un_s: return ConditionCode.UnsignedGreaterOrEqual;
+				case CIL.OpCode.Bgt_un_s: return ConditionCode.UnsignedGreaterThan;
+				case CIL.OpCode.Ble_un_s: return ConditionCode.UnsignedLessOrEqual;
+				case CIL.OpCode.Blt_un_s: return ConditionCode.UnsignedLessThan;
+
+				// Long form signed
+				case CIL.OpCode.Beq: goto case CIL.OpCode.Beq_s;
+				case CIL.OpCode.Bge: goto case CIL.OpCode.Bge_s;
+				case CIL.OpCode.Bgt: goto case CIL.OpCode.Bgt_s;
+				case CIL.OpCode.Ble: goto case CIL.OpCode.Ble_s;
+				case CIL.OpCode.Blt: goto case CIL.OpCode.Blt_s;
+
+				// Long form unsigned
+				case CIL.OpCode.Bne_un: goto case CIL.OpCode.Bne_un_s;
+				case CIL.OpCode.Bge_un: goto case CIL.OpCode.Bge_un_s;
+				case CIL.OpCode.Bgt_un: goto case CIL.OpCode.Bgt_un_s;
+				case CIL.OpCode.Ble_un: goto case CIL.OpCode.Ble_un_s;
+				case CIL.OpCode.Blt_un: goto case CIL.OpCode.Blt_un_s;
+
+				// Compare
+				case CIL.OpCode.Ceq: return ConditionCode.Equal;
+				case CIL.OpCode.Cgt: return ConditionCode.GreaterThan;
+				case CIL.OpCode.Cgt_un: return ConditionCode.UnsignedGreaterThan;
+				case CIL.OpCode.Clt: return ConditionCode.LessThan;
+				case CIL.OpCode.Clt_un: return ConditionCode.UnsignedLessThan;
+
+				default: throw new NotImplementedException();
+			}
+		}
+
 		private static void Replace(Context context, BaseInstruction floatingPointInstruction, BaseInstruction signedInstruction, BaseInstruction unsignedInstruction)
 		{
-			if (IsFloatingPoint(context))
+			if (context.Result.IsFloatingPoint)
 			{
 				context.ReplaceInstructionOnly(floatingPointInstruction);
 			}
-			else if (IsUnsigned(context))
+			else if (context.Result.IsUnsigned)
 			{
 				context.ReplaceInstructionOnly(unsignedInstruction);
 			}
@@ -1478,48 +1387,25 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 		}
 
-		private static bool IsUnsigned(Context context)
-		{
-			return IsUnsigned(context.Result);
-		}
-
-		private static bool IsUnsigned(Operand operand)
-		{
-			CilElementType type = operand.Type.Type;
-			return type == CilElementType.U
-				   || type == CilElementType.U1
-				   || type == CilElementType.U2
-				   || type == CilElementType.U4
-				   || type == CilElementType.U8;
-		}
-
-		private static bool IsFloatingPoint(Context context)
-		{
-			return context.Result.StackType == StackTypeCode.F;
-		}
-
 		/// <summary>
 		/// Determines if a store is silently truncating the value.
 		/// </summary>
-		/// <param name="dest">The destination operand.</param>
+		/// <param name="destination">The destination operand.</param>
 		/// <param name="source">The source operand.</param>
 		/// <returns>True if the store is truncating, otherwise false.</returns>
-		private static bool IsTruncating(Operand dest, Operand source)
+		private static bool IsTruncating(Operand destination, Operand source)
 		{
-			CilElementType cetDest = dest.Type.Type;
-			CilElementType cetSource = source.Type.Type;
-
-			if (cetDest == CilElementType.I4 || cetDest == CilElementType.U4)
+			if (destination.IsInt)
 			{
-				return (cetSource == CilElementType.I8 || cetSource == CilElementType.U8);
+				return (source.IsLong);
 			}
-			if (cetDest == CilElementType.I2 || cetDest == CilElementType.U2 || cetDest == CilElementType.Char)
+			else if (destination.IsShort || destination.IsChar)
 			{
-				return (cetSource == CilElementType.I8 || cetSource == CilElementType.U8 || cetSource == CilElementType.I4 || cetSource == CilElementType.U4);
+				return (source.IsLong || source.IsInteger);
 			}
-			if (cetDest == CilElementType.I1 || cetDest == CilElementType.U1)
+			else if (destination.IsByte) // UNKNOWN: Add destination.IsBoolean
 			{
-				return (cetSource == CilElementType.I8 || cetSource == CilElementType.U8 || cetSource == CilElementType.I4 || cetSource == CilElementType.U4 || cetSource == CilElementType.I2 || cetSource == CilElementType.U2 || cetSource == CilElementType.U2);
+				return (source.IsLong || source.IsInteger || source.IsShort);
 			}
 
 			return false;
@@ -1556,7 +1442,7 @@ namespace Mosa.Compiler.Framework.Stages
 		}
 
 		/// <summary>
-		/// Determines the implicit result type of the load  instruction.
+		/// Determines the implicit result type of the load instruction.
 		/// </summary>
 		/// <param name="sigType">The signature type of the source operand.</param>
 		/// <returns>The signature type of the result.</returns>
@@ -1571,75 +1457,46 @@ namespace Mosa.Compiler.Framework.Stages
 			switch (sigType.Type)
 			{
 				case CilElementType.I1: goto case CilElementType.I2;
-				case CilElementType.I2:
-					result = BuiltInSigType.Int32;
-					break;
-
+				case CilElementType.I2: result = BuiltInSigType.Int32; break;
 				case CilElementType.U1: goto case CilElementType.U2;
-				case CilElementType.U2:
-					result = BuiltInSigType.UInt32;
-					break;
-
+				case CilElementType.U2: result = BuiltInSigType.UInt32; break;
 				case CilElementType.Char: goto case CilElementType.U2;
 				case CilElementType.Boolean: goto case CilElementType.U2;
-
-				default:
-					result = sigType;
-					break;
+				default: result = sigType; break;
 			}
 
 			return result;
 		}
 
 		/// <summary>
-		///
+		/// Gets the index of the cil type.
 		/// </summary>
-		private enum ConvType
+		/// <param name="cilElementType">Type of the cil element.</param>
+		/// <returns></returns>
+		/// <exception cref="InvalidCompilerException"></exception>
+		private int GetCilTypeIndex(CilElementType cilElementType)
 		{
-			I1 = 0,
-			I2 = 1,
-			I4 = 2,
-			I8 = 3,
-			U1 = 4,
-			U2 = 5,
-			U4 = 6,
-			U8 = 7,
-			R4 = 8,
-			R8 = 9,
-			I = 10,
-			U = 11,
-			Ptr = 12
-		}
-
-		/// <summary>
-		/// Converts a <see cref="CilElementType"/> to <see cref="ConvType"/>
-		/// </summary>
-		/// <param name="cet">The CilElementType to convert.</param>
-		/// <returns>The equivalent ConvType.</returns>
-		/// <exception cref="T:System.NotSupportedException"><paramref name="cet"/> can't be converted.</exception>
-		private ConvType ConvTypeFromCilType(CilElementType cet)
-		{
-			switch (cet)
+			switch (cilElementType)
 			{
-				case CilElementType.Char: return ConvType.U2;
-				case CilElementType.I1: return ConvType.I1;
-				case CilElementType.I2: return ConvType.I2;
-				case CilElementType.I4: return ConvType.I4;
-				case CilElementType.I8: return ConvType.I8;
-				case CilElementType.U1: return ConvType.U1;
-				case CilElementType.U2: return ConvType.U2;
-				case CilElementType.U4: return ConvType.U4;
-				case CilElementType.U8: return ConvType.U8;
-				case CilElementType.R4: return ConvType.R4;
-				case CilElementType.R8: return ConvType.R8;
-				case CilElementType.I: return ConvType.I;
-				case CilElementType.U: return ConvType.U;
-				case CilElementType.Ptr: return ConvType.Ptr;
-				case CilElementType.ByRef: return ConvType.Ptr;
+				case CilElementType.Char: return 5;
+				case CilElementType.I1: return 0;
+				case CilElementType.I2: return 1;
+				case CilElementType.I4: return 2;
+				case CilElementType.I8: return 3;
+				case CilElementType.U1: return 4;
+				case CilElementType.U2: return 5;
+				case CilElementType.U4: return 6;
+				case CilElementType.U8: return 7;
+				case CilElementType.R4: return 8;
+				case CilElementType.R8: return 9;
+				case CilElementType.I: return 10;
+				case CilElementType.U: return 11;
+				case CilElementType.Ptr: return 12;
+				case CilElementType.ByRef: return 12;
+				default: break;
 			}
 
-			// Requested CilElementType is not supported
-			throw new NotSupportedException();
+			throw new InvalidCompilerException();
 		}
 
 		private static readonly BaseIRInstruction[][] s_convTable = new BaseIRInstruction[13][] {
@@ -1845,15 +1702,16 @@ namespace Mosa.Compiler.Framework.Stages
 			Operand destinationOperand = context.Result;
 			Operand sourceOperand = context.Operand1;
 
-			ConvType ctDest = ConvTypeFromCilType(destinationOperand.Type.Type);
-			ConvType ctSrc = ConvTypeFromCilType(sourceOperand.Type.Type);
+			int destIndex = GetCilTypeIndex(destinationOperand.Type.Type);
+			int srcIndex = GetCilTypeIndex(sourceOperand.Type.Type);
 
-			BaseIRInstruction type = s_convTable[(int)ctDest][(int)ctSrc];
+			BaseIRInstruction type = s_convTable[destIndex][srcIndex];
+
 			if (type == null)
-				throw new NotSupportedException();
+				throw new InvalidCompilerException();
 
 			uint mask = 0xFFFFFFFF;
-			BaseInstruction instruction = ComputeExtensionTypeAndMask(ctDest, ref mask);
+			BaseInstruction instruction = ComputeExtensionTypeAndMask(destinationOperand.Type.Type, ref mask);
 
 			if (type == IRInstruction.LogicalAnd)
 			{
@@ -1866,12 +1724,14 @@ namespace Mosa.Compiler.Framework.Stages
 				{
 					if (sourceOperand.Type.Type == CilElementType.I8 || sourceOperand.Type.Type == CilElementType.U8)
 					{
-						context.SetInstruction(IRInstruction.Move, destinationOperand, sourceOperand);
-						context.AppendInstruction(type, destinationOperand, sourceOperand, Operand.CreateConstant(BuiltInSigType.UInt32, mask));
+						Operand temp = AllocateVirtualRegister(destinationOperand.Type);
+
+						context.SetInstruction(IRInstruction.Move, temp, sourceOperand);
+						context.AppendInstruction(type, destinationOperand, temp, Operand.CreateConstantUnsignedInt((uint)mask));
 					}
 					else
 					{
-						context.SetInstruction(type, destinationOperand, sourceOperand, Operand.CreateConstant(BuiltInSigType.UInt32, mask));
+						context.SetInstruction(type, destinationOperand, sourceOperand, Operand.CreateConstantUnsignedInt((uint)mask));
 					}
 				}
 			}
@@ -1881,56 +1741,24 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 		}
 
-		private BaseInstruction ComputeExtensionTypeAndMask(ConvType destinationType, ref uint mask)
+		private BaseInstruction ComputeExtensionTypeAndMask(CilElementType destinationType, ref uint mask)
 		{
 			switch (destinationType)
 			{
-				case ConvType.I1:
-					mask = 0xFF;
-					return IRInstruction.SignExtendedMove;
-				case ConvType.I2:
-					mask = 0xFFFF;
-					return IRInstruction.SignExtendedMove;
-				case ConvType.I4:
-					mask = 0xFFFFFFFF;
-					break;
-
-				case ConvType.I8:
-					mask = 0x0;
-					break;
-
-				case ConvType.U1:
-					mask = 0xFF;
-					return IRInstruction.ZeroExtendedMove;
-				case ConvType.U2:
-					mask = 0xFFFF;
-					return IRInstruction.ZeroExtendedMove;
-				case ConvType.U4:
-					mask = 0xFFFFFFFF;
-					break;
-
-				case ConvType.U8:
-					mask = 0x0;
-					break;
-
-				case ConvType.R4:
-					break;
-
-				case ConvType.R8:
-					break;
-
-				case ConvType.I:
-					break;
-
-				case ConvType.U:
-					break;
-
-				case ConvType.Ptr:
-					break;
-
-				default:
-					Debug.Assert(false);
-					throw new NotSupportedException();
+				case CilElementType.I1: mask = 0xFF; return IRInstruction.SignExtendedMove;
+				case CilElementType.I2: mask = 0xFFFF; return IRInstruction.SignExtendedMove;
+				case CilElementType.I4: mask = 0xFFFFFFFF; break;
+				case CilElementType.I8: mask = 0x0; break;
+				case CilElementType.U1: mask = 0xFF; return IRInstruction.ZeroExtendedMove;
+				case CilElementType.U2: mask = 0xFFFF; return IRInstruction.ZeroExtendedMove;
+				case CilElementType.U4: mask = 0xFFFFFFFF; break;
+				case CilElementType.U8: mask = 0x0; break;
+				case CilElementType.R4: break;
+				case CilElementType.R8: break;
+				case CilElementType.I: break;
+				case CilElementType.U: break;
+				case CilElementType.Ptr: break;
+				default: throw new InvalidCompilerException();
 			}
 
 			return null;
@@ -1950,10 +1778,10 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </remarks>
 		private bool ProcessExternalCall(Context context)
 		{
-			if ((context.InvokeTarget.Attributes & MethodAttributes.PInvokeImpl) != MethodAttributes.PInvokeImpl)
+			if ((context.InvokeMethod.Attributes & MethodAttributes.PInvokeImpl) != MethodAttributes.PInvokeImpl)
 				return false;
 
-			string external = context.InvokeTarget.Module.GetExternalName(context.InvokeTarget.Token);
+			string external = context.InvokeMethod.Module.GetExternalName(context.InvokeMethod.Token);
 
 			//TODO: Verify!
 
@@ -1967,7 +1795,7 @@ namespace Mosa.Compiler.Framework.Stages
 			var instanceMethod = instance as IIntrinsicInternalMethod;
 			if (instanceMethod != null)
 			{
-				instanceMethod.ReplaceIntrinsicCall(context, typeSystem, methodCompiler.Method.Parameters);
+				instanceMethod.ReplaceIntrinsicCall(context, methodCompiler);
 				return true;
 			}
 			else if (instance is IIntrinsicPlatformMethod)
@@ -1980,31 +1808,49 @@ namespace Mosa.Compiler.Framework.Stages
 		}
 
 		/// <summary>
+		/// Processes the invoke instruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <param name="method">The method.</param>
+		/// <param name="resultOperand">The result operand.</param>
+		/// <param name="operands">The operands.</param>
+		private void ProcessInvokeInstruction(Context context, RuntimeMethod method, Operand resultOperand, List<Operand> operands)
+		{
+			Operand symbolOperand = Operand.CreateSymbolFromMethod(method);
+			ProcessInvokeInstruction(context, method, symbolOperand, resultOperand, operands);
+		}
+
+		/// <summary>
 		/// Processes a method call instruction.
 		/// </summary>
 		/// <param name="context">The transformation context.</param>
-		/// <param name="destinationOperand">The operand, which holds the call destination.</param>
-		/// <param name="resultOperand"></param>
-		/// <param name="operands"></param>
-		private void ProcessInvokeInstruction(Context context, Operand destinationOperand, Operand resultOperand, List<Operand> operands)
+		/// <param name="method">The method.</param>
+		/// <param name="resultOperand">The result operand.</param>
+		/// <param name="operands">The operands.</param>
+		private void ProcessInvokeInstruction(Context context, RuntimeMethod method, Operand symbolOperand, Operand resultOperand, List<Operand> operands)
 		{
+			Debug.Assert(method != null);
+
 			context.SetInstruction(IRInstruction.Call, (byte)(operands.Count + 1), (byte)(resultOperand == null ? 0 : 1));
+			context.InvokeMethod = method;
 
 			if (resultOperand != null)
+			{
 				context.SetResult(resultOperand);
+			}
 
-			int operandIndex = 0;
-			context.SetOperand(operandIndex++, destinationOperand);
+			int index = 0;
+			context.SetOperand(index++, symbolOperand);
 			foreach (Operand op in operands)
 			{
-				context.SetOperand(operandIndex++, op);
+				context.SetOperand(index++, op);
 			}
 		}
 
 		private bool CanSkipDueToRecursiveSystemObjectCtorCall(Context context)
 		{
 			RuntimeMethod currentMethod = methodCompiler.Method;
-			RuntimeMethod invokeTarget = context.InvokeTarget;
+			RuntimeMethod invokeTarget = context.InvokeMethod;
 
 			// Skip recursive System.Object ctor calls.
 			if (currentMethod.DeclaringType.FullName == @"System.Object" &&
@@ -2044,9 +1890,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (extension != null)
 			{
-				Operand temp = methodCompiler.CreateVirtualRegister(extendedType);
-				destination.Replace(temp, context.InstructionSet);
-				context.SetInstruction(extension, temp, source);
+				context.SetInstruction(extension, destination, source);
 				return;
 			}
 
@@ -2069,19 +1913,24 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="internalCallTarget">The internal call target.</param>
 		private void ReplaceWithVmCall(Context context, VmCall internalCallTarget)
 		{
-			RuntimeType type = typeSystem.GetType(@"Mosa.Internal.Runtime");
-			Debug.Assert(type != null, "Cannot find Mosa.Internal.Runtime");
+			string runtime = "Mosa.Platform.Internal." + methodCompiler.Architecture.PlatformName + ".Runtime";
 
-			RuntimeMethod method = type.FindMethod(internalCallTarget.ToString());
+			RuntimeType runtimeType = typeSystem.GetType(runtime);
+			Debug.Assert(runtimeType != null, "Cannot find " + runtime);
+
+			RuntimeMethod method = runtimeType.FindMethod(internalCallTarget.ToString());
 			Debug.Assert(method != null, "Cannot find method: " + internalCallTarget.ToString());
 
 			context.ReplaceInstructionOnly(IRInstruction.Call);
 			context.SetOperand(0, Operand.CreateSymbolFromMethod(method));
 			context.OperandCount = 1;
+			context.InvokeMethod = method;
 		}
 
-		private bool ReplaceWithInternalCall(Context context, RuntimeMethod method)
+		private bool ReplaceWithInternalCall(Context context)
 		{
+			var method = context.InvokeMethod;
+
 			bool internalCall = ((method.ImplAttributes & MethodImplAttributes.InternalCall) == MethodImplAttributes.InternalCall);
 
 			if (internalCall)
@@ -2089,12 +1938,11 @@ namespace Mosa.Compiler.Framework.Stages
 				string replacementMethod = this.BuildInternalCallName(method);
 
 				method = method.DeclaringType.FindMethod(replacementMethod);
-				context.InvokeTarget = method;
 
 				Operand result = context.Result;
 				List<Operand> operands = new List<Operand>(context.Operands);
 
-				ProcessInvokeInstruction(context, Operand.CreateSymbolFromMethod(method), result, operands);
+				ProcessInvokeInstruction(context, method, result, operands);
 			}
 
 			return internalCall;
@@ -2113,6 +1961,50 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 
 			return name;
+		}
+
+		private static VmCall? TypeToVmBoxCall(RuntimeType type)
+		{
+			Debug.Assert(type.IsValueType);
+
+			switch (type.FullName)
+			{
+				case "System.Char": return VmCall.BoxChar;
+				case "System.Boolean": return VmCall.BoxChar;
+				case "System.SByte": return VmCall.BoxInt8;
+				case "System.Byte": return VmCall.BoxUInt8;
+				case "System.Int16": return VmCall.BoxInt16;
+				case "System.UInt16": return VmCall.BoxUInt16;
+				case "System.Int32": return VmCall.BoxInt32;
+				case "System.UInt32": return VmCall.BoxUInt32;
+				case "System.Int64": return VmCall.BoxInt64;
+				case "System.UInt64": return VmCall.BoxUInt64;
+				case "System.Single": return VmCall.BoxSingle;
+				case "System.Double": return VmCall.BoxDouble;
+				default: return null;
+			}
+		}
+
+		private static VmCall TypeToVmUnboxCall(RuntimeType type)
+		{
+			Debug.Assert(type.IsValueType);
+
+			switch (type.FullName)
+			{
+				case "System.Char": return VmCall.UnboxChar;
+				case "System.Boolean": return VmCall.UnboxChar;
+				case "System.SByte": return VmCall.UnboxInt8;
+				case "System.Byte": return VmCall.UnboxUInt8;
+				case "System.Int16": return VmCall.UnboxInt16;
+				case "System.UInt16": return VmCall.UnboxUInt16;
+				case "System.Int32": return VmCall.UnboxInt32;
+				case "System.UInt32": return VmCall.UnboxUInt32;
+				case "System.Int64": return VmCall.UnboxInt64;
+				case "System.UInt64": return VmCall.UnboxUInt64;
+				case "System.Single": return VmCall.UnboxSingle;
+				case "System.Double": return VmCall.UnboxDouble;
+				default: throw new InvalidProgramException();
+			}
 		}
 
 		#endregion Internals

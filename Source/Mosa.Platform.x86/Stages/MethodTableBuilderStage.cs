@@ -8,12 +8,11 @@
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  */
 
-using System;
-using System.Collections.Generic;
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Linker;
 using Mosa.Compiler.TypeSystem;
+using System.Collections.Generic;
 
 namespace Mosa.Platform.x86.Stages
 {
@@ -30,18 +29,12 @@ namespace Mosa.Platform.x86.Stages
 	public class MethodTableBuilderStage : BaseCompilerStage, ICompilerStage
 	{
 		/// <summary>
-		///
-		/// </summary>
-		private ILinker linker;
-
-		/// <summary>
 		/// Setups the specified compiler.
 		/// </summary>
 		/// <param name="compiler">The compiler.</param>
 		void ICompilerStage.Setup(BaseCompiler compiler)
 		{
 			base.Setup(compiler);
-			linker = RetrieveLinkerFromCompiler();
 		}
 
 		/// <summary>
@@ -72,9 +65,10 @@ namespace Mosa.Platform.x86.Stages
 
 				foreach (var method in type.Methods)
 				{
-					if (linker.HasSymbol(method.ToString()))
+					var symbol = linker.GetSymbol(method.FullName);
+					if (symbol != null)
 					{
-						table.Add(linker.GetSymbol(method.ToString()));
+						table.Add(symbol);
 
 						if (!methods.Contains(method))
 							methods.Add(method);
@@ -102,14 +96,14 @@ namespace Mosa.Platform.x86.Stages
 				foreach (var entry in table)
 				{
 					// 1. Store address (the linker writes the actual entry)
-					linker.Link(LinkType.AbsoluteAddress | LinkType.NativeI4, section, (int)stream.Position, 0, entry.Name, IntPtr.Zero);
+					linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuiltInPatch.I4, section, (int)stream.Position, 0, entry.Name, 0);
 					stream.Position += typeLayout.NativePointerSize;
 
-					// 2. Store the length (it copied in by the next loop)
-					stream.Write((uint)entry.Length, true);
+					// 2. Store the length (its copied in by the next loop)
+					stream.Write((uint)entry.Length, Endianness.Little);
 
 					// 3. Store the pointer to the method description table (the linker writes the actual entry)
-					linker.Link(LinkType.AbsoluteAddress | LinkType.NativeI4, section, (int)stream.Position, 0, entry.Name + "$mdtable", IntPtr.Zero);
+					linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuiltInPatch.I4, section, (int)stream.Position, 0, entry.Name + "$mdtable", 0);
 					stream.Position += typeLayout.NativePointerSize;
 				}
 
@@ -134,14 +128,14 @@ namespace Mosa.Platform.x86.Stages
 				{
 					// Pointer to Exception Handler Table
 					// TODO: If there is no exception clause table, set to 0 and do not involve linker
-					linker.Link(LinkType.AbsoluteAddress | LinkType.NativeI4, section, 0, 0, method.FullName + "$etable", IntPtr.Zero);
+					linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuiltInPatch.I4, section, 0, 0, method.FullName + "$etable", 0);
 					stream.Position += typeLayout.NativePointerSize;
 
 					// GC tracking info (not implemented yet)
 					stream.WriteZeroBytes(typeLayout.NativePointerSize);
 
 					// Method's Parameter stack size
-					stream.Write(DetermineSizeOfMethodParameters(method), true); // FIXME
+					stream.Write(DetermineSizeOfMethodParameters(method), Endianness.Little); // FIXME
 				}
 			}
 		}

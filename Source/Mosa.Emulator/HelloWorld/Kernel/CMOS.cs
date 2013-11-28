@@ -5,7 +5,7 @@
  *
  */
 
-using Mosa.Platform.x86.Intrinsic;
+using Mosa.Platform.Internal.x86;
 
 namespace Mosa.Kernel.x86
 {

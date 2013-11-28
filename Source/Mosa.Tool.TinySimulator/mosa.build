@@ -1,0 +1,84 @@
+<?xml version="1.0"?>
+<project name="Mosa" default="build" basedir=".">
+	
+	<!-- Comma-separated list of warnings that should be surpressed in all modules. Warning: no spaces allowed! -->
+	<property name="suppresswarnings" value="0414,0219,0169,0162,0168"/>
+	
+	<!-- Toggle debug output by setting this to true (nant -D:debug=true) -->
+	<property name="debug" value="none" overwrite="false"/>
+	
+	<!-- Speaks for itself, I should hope -->
+	<property name="outputDirectory" value="../bin" overwrite="false"/>
+	
+	<!-- Main build target -->
+	<target name="build">
+	    <csc target="exe" main="Mosa.Tool.TinySimulator.Program" output="${outputDirectory}/Mosa.Tool.TinySimulator.exe" debug="${debug}" unsafe="true" nostdlib="false">
+		<sources>
+                    <include name="BreakPointView.cs"/>
+                    <include name="BreakPointView.designer.cs"/>
+                    <include name="ScriptView.cs"/>
+                    <include name="ScriptView.designer.cs"/>
+                    <include name="Properties/Resources.Designer.cs"/>
+                    <include name="OutputView.cs"/>
+                    <include name="OutputView.designer.cs"/>
+                    <include name="Watch.cs"/>
+                    <include name="WatchView.cs"/>
+                    <include name="WatchView.designer.cs"/>
+                    <include name="SymbolView.cs"/>
+                    <include name="SymbolView.designer.cs"/>
+                    <include name="HistoryView.cs"/>
+                    <include name="HistoryView.designer.cs"/>
+                    <include name="ControlView.cs"/>
+                    <include name="ControlView.designer.cs"/>
+                    <include name="CallStackView.cs"/>
+                    <include name="CallStackView.designer.cs"/>
+                    <include name="StatusView.cs"/>
+                    <include name="StatusView.designer.cs"/>
+                    <include name="FlagView.cs"/>
+                    <include name="FlagView.designer.cs"/>
+                    <include name="StackView.cs"/>
+                    <include name="StackView.designer.cs"/>
+                    <include name="StackFrameView.cs"/>
+                    <include name="StackFrameView.designer.cs"/>
+                    <include name="DisplayView.cs"/>
+                    <include name="DisplayView.Designer.cs"/>
+                    <include name="RegisterView.cs"/>
+                    <include name="RegisterView.designer.cs"/>
+                    <include name="SimulatorDockContent.cs"/>
+                    <include name="SimulatorDockContent.designer.cs"/>
+                    <include name="AssembliesView.cs"/>
+                    <include name="AssembliesView.designer.cs"/>
+                    <include name="MainForm.cs"/>
+                    <include name="MainForm.Designer.cs"/>
+                    <include name="MemoryView.cs"/>
+                    <include name="MemoryView.Designer.cs"/>
+                    <include name="Program.cs"/>
+                    <include name="Properties/AssemblyInfo.cs"/>
+		</sources>
+		<references>
+                    <include name="System.dll"/>
+                    <include name="System.Core.dll"/>
+                    <include name="System.Data.dll"/>
+                    <include name="System.Drawing.dll"/>
+                    <include name="System.Windows.Forms.dll"/>
+                    <include name="System.XML.dll"/>
+                    <include name="../../3rdParty/WeifenLuo.WinFormsUI.Docking.dll"/>
+                    <include name="${outputDirectory}/Mosa.Compiler.Common.dll"/>
+                    <include name="${outputDirectory}/Mosa.Compiler.Framework.dll"/>
+                    <include name="${outputDirectory}/Mosa.Compiler.InternalTrace.dll"/>
+                    <include name="${outputDirectory}/Mosa.Compiler.Linker.dll"/>
+                    <include name="${outputDirectory}/Mosa.Compiler.Metadata.dll"/>
+                    <include name="${outputDirectory}/Mosa.Compiler.TypeSystem.dll"/>
+                    <include name="${outputDirectory}/Mosa.Platform.ARMv6.dll"/>
+                    <include name="${outputDirectory}/Mosa.Platform.AVR32.dll"/>
+                    <include name="${outputDirectory}/Mosa.Platform.x86.dll"/>
+                    <include name="${outputDirectory}/Mosa.TinyCPUSimulator.Adaptor.dll"/>
+                    <include name="${outputDirectory}/Mosa.TinyCPUSimulator.x86.Adaptor.dll"/>
+                    <include name="${outputDirectory}/Mosa.TinyCPUSimulator.x86.dll"/>
+                    <include name="${outputDirectory}/Mosa.TinyCPUSimulator.dll"/>
+		</references>
+		<!-- supress warnings -->
+		<nowarn><warning number="${suppresswarnings}"/></nowarn>
+        </csc>
+	</target>
+</project>

@@ -15,9 +15,10 @@ namespace Mosa.Compiler.Common
 	{
 		private bool swap = false;
 
-		public EndianAwareBinaryReader(Stream input, bool isLittleEndian)
+		public EndianAwareBinaryReader(Stream input, Endianness endianness)
 			: base(input)
 		{
+			bool isLittleEndian = endianness == Endianness.Little;
 			swap = (isLittleEndian != Endian.NativeIsLittleEndian);
 		}
 

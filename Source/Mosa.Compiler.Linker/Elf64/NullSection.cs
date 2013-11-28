@@ -7,7 +7,6 @@
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  */
 
-using System;
 using System.IO;
 
 namespace Mosa.Compiler.Linker.Elf64
@@ -15,25 +14,19 @@ namespace Mosa.Compiler.Linker.Elf64
 	/// <summary>
 	///
 	/// </summary>
-	public class NullSection : Section
+	public class NullSection : Elf64LinkerSection
 	{
 		/// <summary>
 		/// Gets the length of the section in bytes.
 		/// </summary>
 		/// <value>The length of the section in bytes.</value>
-		public override long Length
-		{
-			get
-			{
-				return 0;
-			}
-		}
+		public override long Length { get { return 0; } }
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="CodeSection"/> class.
 		/// </summary>
 		public NullSection()
-			: base(Mosa.Compiler.Linker.SectionKind.Text, @"", IntPtr.Zero)
+			: base(Mosa.Compiler.Linker.SectionKind.Text, @"", 0)
 		{
 			header.Name = 0;
 			header.Type = SectionType.Null;

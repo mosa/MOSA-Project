@@ -8,10 +8,10 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-using System.Diagnostics;
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Compiler.TypeSystem;
+using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework
 {
@@ -33,6 +33,11 @@ namespace Mosa.Compiler.Framework
 		public int Label;
 
 		/// <summary>
+		/// The order slot number (initalized by some stage)
+		/// </summary>
+		public int SlotNumber;
+
+		/// <summary>
 		/// Holds the first operand of the instruction.
 		/// </summary>
 		public Operand Operand1;
@@ -48,9 +53,19 @@ namespace Mosa.Compiler.Framework
 		public Operand Operand3;
 
 		/// <summary>
-		/// Holds the result operands of the instruction.
+		/// Holds the result first operand of the instruction.
 		/// </summary>
 		public Operand Result;
+
+		/// <summary>
+		/// Holds the second result operand of the instruction.
+		/// </summary>
+		public Operand Result2;
+
+		/// <summary>
+		/// The condition code
+		/// </summary>
+		public ConditionCode ConditionCode;
 
 		/// <summary>
 		///  Holds the branch targets
@@ -63,9 +78,14 @@ namespace Mosa.Compiler.Framework
 		public object Other;
 
 		/// <summary>
-		///
+		/// Holds a packed value (to save space)
 		/// </summary>
 		private uint packed;
+
+		/// <summary>
+		/// The additional operands
+		/// </summary>
+		private Operand[] additionalOperands;
 
 		#endregion Data members
 
@@ -102,6 +122,18 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
+		/// Gets or sets a value indicating whether [set status flag].
+		/// </summary>
+		/// <value>
+		///   <c>true</c> if [set status flag]; otherwise, <c>false</c>.
+		/// </value>
+		public bool UpdateStatusFlags
+		{
+			get { return (packed & 0x08) == 0x16; }
+			set { if (value) packed = packed | 0x16; else packed = (uint)(packed & ~0x08); }
+		}
+
+		/// <summary>
 		/// Gets or sets the number of operand results
 		/// </summary>
 		public byte ResultCount
@@ -120,21 +152,13 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Gets or sets the invoke target.
+		/// Gets or sets the runtime method.
 		/// </summary>
-		/// <value>The invoke target.</value>
-		public RuntimeMethod InvokeTarget
+		/// <value>The runtime method.</value>
+		public RuntimeMethod InvokeMethod
 		{
-			get
-			{
-				if (!(Other is RuntimeMethodData)) return null;
-				return (Other as RuntimeMethodData).RuntimeMethod;
-			}
-			set
-			{
-				if (!(Other is RuntimeMethodData)) Other = new RuntimeMethodData(value);
-				else (Other as RuntimeMethodData).RuntimeMethod = value;
-			}
+			get { return Other as RuntimeMethod; }
+			set { Other = value; }
 		}
 
 		/// <summary>
@@ -177,16 +201,6 @@ namespace Mosa.Compiler.Framework
 			set { Other = value; }
 		}
 
-		/// <summary>
-		/// Gets or sets the condition code.
-		/// </summary>
-		/// <value>The condition code.</value>
-		public IR.ConditionCode ConditionCode
-		{
-			get { return (IR.ConditionCode)Other; }
-			set { Other = value; }
-		}
-
 		#endregion Properties
 
 		#region Methods
@@ -202,23 +216,13 @@ namespace Mosa.Compiler.Framework
 			this.Operand2 = null;
 			this.Operand3 = null;
 			this.Result = null;
+			this.Result2 = null;
 			this.packed = 0;
+			this.additionalOperands = null;
 			this.BranchTargets = null;
 			this.Other = null;
 			this.BranchHint = false;
-		}
-
-		/// <summary>
-		/// Clears the instance.
-		/// </summary>
-		public void ClearAbbreviated()
-		{
-			this.Label = -1;
-			this.Instruction = null;
-			this.OperandCount = 0;
-			this.ResultCount = 0;
-			this.BranchTargets = null;
-			this.Other = null;
+			this.ConditionCode = ConditionCode.Undefined;
 		}
 
 		/// <summary>
@@ -228,12 +232,12 @@ namespace Mosa.Compiler.Framework
 		/// <param name="operand">The operand.</param>
 		public void SetAdditionalOperand(int index, Operand operand)
 		{
-			if (Other == null) Other = new RuntimeMethodData();
+			if (additionalOperands == null) additionalOperands = new Operand[253];
 
-			Debug.Assert(index < RuntimeMethodData.MaxOperands, @"No index");
+			Debug.Assert(index < 255, @"No index");
 			Debug.Assert(index >= 3, @"No index");
 
-			(Other as RuntimeMethodData).AdditionalOperands[index - 3] = operand;
+			additionalOperands[index - 3] = operand;
 		}
 
 		/// <summary>
@@ -243,12 +247,12 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		public Operand GetAdditionalOperand(int index)
 		{
-			if (Other == null) return null;
+			if (additionalOperands == null) return null;
 
-			Debug.Assert(index < RuntimeMethodData.MaxOperands, @"No index");
+			Debug.Assert(index < 255, @"No index");
 			Debug.Assert(index >= 3, @"No index");
 
-			return (Other as RuntimeMethodData).AdditionalOperands[index - 3];
+			return additionalOperands[index - 3];
 		}
 
 		/// <summary>

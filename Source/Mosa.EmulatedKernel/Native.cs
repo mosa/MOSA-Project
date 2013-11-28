@@ -7,7 +7,7 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-namespace Mosa.Platform.x86.Intrinsic
+namespace Mosa.Platform.Internal.x86
 {
 	/// <summary>
 	///

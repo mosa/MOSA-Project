@@ -7,7 +7,7 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using Mosa.Platform.x86.Intrinsic;
+using Mosa.Platform.Internal.x86;
 
 namespace Mosa.Kernel.x86
 {
@@ -17,10 +17,10 @@ namespace Mosa.Kernel.x86
 	public static class PageTable
 	{
 		// Location for page directory starts at 20MB
-		private static uint _pageDirectory = 1024 * 1024 * 20; // 0x1400000
+		private static uint pageDirectory = 1024 * 1024 * 20; // 0x1400000
 
 		// Location for page tables start at 16MB
-		private static uint _pageTable = 1024 * 1024 * 16;	// 0x1000000
+		private static uint pageTable = 1024 * 1024 * 16;	// 0x1000000
 
 		/// <summary>
 		/// Sets up the PageTable
@@ -29,14 +29,14 @@ namespace Mosa.Kernel.x86
 		{
 			// Setup Page Directory
 			for (int index = 0; index < 1024; index++)
-				Native.Set32((uint)(_pageDirectory + (index * 4)), (uint)(_pageTable + (index * 4096) | 0x04 | 0x02 | 0x01));
+				Native.Set32((uint)(pageDirectory + (index * 4)), (uint)(pageTable + (index * 4096) | 0x04 | 0x02 | 0x01));
 
 			// Map the first 32MB of memory (8192 4K pages)
 			for (int index = 0; index < 8192 * 16; index++) // FIXME: It's not 32MB
-				Native.Set32((uint)(_pageTable + (index * 4)), (uint)(index * 4096) | 0x04 | 0x02 | 0x01);
+				Native.Set32((uint)(pageTable + (index * 4)), (uint)(index * 4096) | 0x04 | 0x02 | 0x01);
 
 			// Set CR3 register on processor - sets page directory
-			Native.SetCR3(_pageDirectory);
+			Native.SetCR3(pageDirectory);
 
 			// Set CR0 register on processor - turns on virtual memory
 			Native.SetCR0(Native.GetCR0() | 0x80000000);
@@ -49,7 +49,7 @@ namespace Mosa.Kernel.x86
 		/// <param name="physicalAddress">The physical address.</param>
 		public static void MapVirtualAddressToPhysical(uint virtualAddress, uint physicalAddress)
 		{
-			Native.Set32(_pageTable + ((virtualAddress >> 12) * 4), (uint)(physicalAddress | 0x04 | 0x02 | 0x01));
+			Native.Set32(pageTable + ((virtualAddress >> 12) * 4), (uint)(physicalAddress | 0x04 | 0x02 | 0x01));
 		}
 
 		/// <summary>
@@ -59,7 +59,7 @@ namespace Mosa.Kernel.x86
 		/// <returns></returns>
 		public static uint GetPhysicalAddressFromVirtual(uint address)
 		{
-			return Native.Get32(_pageTable + ((address >> 12) * 4)) & 0xFFF;
+			return Native.Get32(pageTable + ((address >> 12) * 4)) & 0xFFF;
 		}
 	}
 }

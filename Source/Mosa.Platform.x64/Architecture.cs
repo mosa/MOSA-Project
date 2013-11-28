@@ -7,11 +7,11 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
-
+using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Signatures;
+using System;
 
 namespace Mosa.Platform.x64
 {
@@ -19,15 +19,15 @@ namespace Mosa.Platform.x64
 	/// This class provides a common base class for architecture
 	/// specific operations.
 	/// </summary>
-	public class Architecture : BasicArchitecture
+	public class Architecture : BaseArchitecture
 	{
 		/// <summary>
-		/// Gets a value indicating whether this architecture is little-endian.
+		/// Gets the endianness of the target architecture.
 		/// </summary>
 		/// <value>
-		/// 	<c>true</c> if this instance is architecture is little-endian; otherwise, <c>false</c>.
+		/// The endianness.
 		/// </value>
-		public override bool IsLittleEndian { get { return true; } }
+		public override Endianness Endianness { get { return Endianness.Little; } }
 
 		/// <summary>
 		/// Gets the type of the elf machine.
@@ -36,6 +36,11 @@ namespace Mosa.Platform.x64
 		/// The type of the elf machine.
 		/// </value>
 		public override ushort ElfMachineType { get { return 3; } }
+
+		/// <summary>
+		/// Gets the signature type of the native integer.
+		/// </summary>
+		public override SigType NativeType { get { return BuiltInSigType.Int64; } }
 
 		/// <summary>
 		/// Defines the register set of the target architecture.
@@ -93,6 +98,14 @@ namespace Mosa.Platform.x64
 		}
 
 		/// <summary>
+		/// Retrieves the stack pointer register of the x64.
+		/// </summary>
+		public override Register ProgramCounter
+		{
+			get { return null; }
+		}
+
+		/// <summary>
 		/// Gets the name of the platform.
 		/// </summary>
 		/// <value>
@@ -109,7 +122,7 @@ namespace Mosa.Platform.x64
 		/// This method creates an instance of an appropriate architecture class, which supports the specific
 		/// architecture features.
 		/// </remarks>
-		public static IArchitecture CreateArchitecture(ArchitectureFeatureFlags architectureFeatures)
+		public static BaseArchitecture CreateArchitecture(ArchitectureFeatureFlags architectureFeatures)
 		{
 			if (architectureFeatures == ArchitectureFeatureFlags.AutoDetect)
 				architectureFeatures = ArchitectureFeatureFlags.MMX | ArchitectureFeatureFlags.SSE | ArchitectureFeatureFlags.SSE2;
@@ -165,37 +178,27 @@ namespace Mosa.Platform.x64
 		/// Gets the type memory requirements.
 		/// </summary>
 		/// <param name="signatureType">The signature type.</param>
-		/// <param name="memorySize">Receives the memory size of the type.</param>
+		/// <param name="size">Receives the memory size of the type.</param>
 		/// <param name="alignment">Receives alignment requirements of the type.</param>
-		public override void GetTypeRequirements(SigType signatureType, out int memorySize, out int alignment)
+		public override void GetTypeRequirements(SigType signatureType, out int size, out int alignment)
 		{
 			if (signatureType == null)
 				throw new ArgumentNullException("signatureType");
 
 			switch (signatureType.Type)
 			{
-				case CilElementType.U1: memorySize = alignment = 4; break;
-				case CilElementType.U2: memorySize = alignment = 4; break;
-				case CilElementType.U4: memorySize = alignment = 4; break;
-				case CilElementType.U8: memorySize = 8; alignment = 4; break;
-				case CilElementType.I1: memorySize = alignment = 4; break;
-				case CilElementType.I2: memorySize = alignment = 4; break;
-				case CilElementType.I4: memorySize = alignment = 4; break;
-				case CilElementType.I8: memorySize = 8; alignment = 4; break;
-				case CilElementType.R4: memorySize = alignment = 4; break;
-				case CilElementType.R8: memorySize = alignment = 8; break;
-				case CilElementType.Boolean: memorySize = alignment = 4; break;
-				case CilElementType.Char: memorySize = alignment = 4; break;
+				case CilElementType.U8: size = 8; alignment = 4; break;
+				case CilElementType.I8: size = 8; alignment = 4; break;
+				case CilElementType.R8: size = alignment = 8; break;
 
-				// Platform specific
-				case CilElementType.Ptr: memorySize = alignment = 4; break;
-				case CilElementType.I: memorySize = alignment = 4; break;
-				case CilElementType.U: memorySize = alignment = 4; break;
-				case CilElementType.Object: memorySize = alignment = 4; break;
-				case CilElementType.Class: memorySize = alignment = 4; break;
-				case CilElementType.String: memorySize = alignment = 4; break;
+				case CilElementType.Ptr: size = alignment = 8; break;
+				case CilElementType.I: size = alignment = 8; break;
+				case CilElementType.U: size = alignment = 8; break;
+				case CilElementType.Object: size = alignment = 8; break;
+				case CilElementType.Class: size = alignment = 8; break;
+				case CilElementType.String: size = alignment = 8; break;
 
-				default: memorySize = alignment = 4; break;
+				default: size = alignment = 4; break;
 			}
 		}
 
@@ -209,6 +212,81 @@ namespace Mosa.Platform.x64
 			return null;
 
 			//return new MachineCodeEmitter();
+		}
+
+		/// <summary>
+		/// Inserts the move instruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <param name="destination">The destination.</param>
+		/// <param name="source">The source.</param>
+		public override void InsertMoveInstruction(Context context, Operand destination, Operand source)
+		{
+			// TODO
+		}
+
+		/// <summary>
+		/// Inserts the exchange instruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <param name="destination">The destination.</param>
+		/// <param name="source">The source.</param>
+		public override void InsertExchangeInstruction(Context context, Operand destination, Operand source)
+		{
+			// TODO
+		}
+
+		/// <summary>
+		/// Inserts the jump instruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <param name="destination">The destination.</param>
+		/// <param name="source">The source.</param>
+		public override void InsertJumpInstruction(Context context, Operand destination)
+		{
+			// TODO
+		}
+
+		/// <summary>
+		/// Inserts the jump instruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <param name="Destination">The destination.</param>
+		public override void InsertJumpInstruction(Context context, BasicBlock Destination)
+		{
+			// TODO
+		}
+
+		/// <summary>
+		/// Inserts the call instruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <param name="source">The source.</param>
+		public override void InsertCallInstruction(Context context, Operand source)
+		{
+			// TODO
+		}
+
+		/// <summary>
+		/// Inserts the add instruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <param name="Destination">The destination.</param>
+		/// <param name="Source">The source.</param>
+		public override void InsertAddInstruction(Context context, Operand destination, Operand source1, Operand source2)
+		{
+			// TODO
+		}
+
+		/// <summary>
+		/// Inserts the sub instruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <param name="Destination">The destination.</param>
+		/// <param name="Source">The source.</param>
+		public override void InsertSubInstruction(Context context, Operand destination, Operand source1, Operand source2)
+		{
+			// TODO
 		}
 	}
 }

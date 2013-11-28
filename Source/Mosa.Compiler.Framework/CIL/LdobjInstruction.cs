@@ -107,7 +107,7 @@ namespace Mosa.Compiler.Framework.CIL
 			}
 
 			// Push the loaded value
-			ctx.Result = LoadInstruction.CreateResultOperand(decoder, Operand.StackTypeFromSigType(sigType), sigType);
+			ctx.Result = LoadInstruction.CreateResultOperand(decoder, sigType);
 			ctx.SigType = sigType;
 		}
 
@@ -116,9 +116,9 @@ namespace Mosa.Compiler.Framework.CIL
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		/// <param name="compiler">The compiler.</param>
-		public override void Validate(Context ctx, BaseMethodCompiler compiler)
+		public override void Resolve(Context ctx, BaseMethodCompiler compiler)
 		{
-			base.Validate(ctx, compiler);
+			base.Resolve(ctx, compiler);
 
 			// If we're ldind.i8, fix an IL deficiency that the result may be U8
 			if (opcode == OpCode.Ldind_i8 && typeRef.Type == CilElementType.I8)

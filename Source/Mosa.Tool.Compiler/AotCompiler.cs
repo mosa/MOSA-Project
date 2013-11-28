@@ -7,32 +7,30 @@
  *  Michael Fröhlich (grover) <sharpos@michaelruck.de>
  */
 
-using System.Collections.Generic;
-using System.IO;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Stages;
 using Mosa.Compiler.InternalTrace;
-using Mosa.Compiler.Linker;
 using Mosa.Compiler.Metadata.Loader;
 using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Compiler.TypeSystem;
 using Mosa.Tool.Compiler.Stages;
+using System.Collections.Generic;
+using System.IO;
 
 namespace Mosa.Tool.Compiler
 {
 	public class AotCompiler : BaseCompiler
 	{
 		/// <summary>
-		/// Initializes a new instance of the <see cref="AotCompiler"/> class.
+		/// Initializes a new instance of the <see cref="AotCompiler" /> class.
 		/// </summary>
 		/// <param name="architecture">The architecture.</param>
-		/// <param name="linker">The linker.</param>
 		/// <param name="typeSystem">The type system.</param>
 		/// <param name="typeLayout">The type layout.</param>
 		/// <param name="internalTrace">The internal trace.</param>
 		/// <param name="compilerOptions">The compiler options.</param>
-		public AotCompiler(IArchitecture architecture, ILinker linker, ITypeSystem typeSystem, ITypeLayout typeLayout, IInternalTrace internalTrace, CompilerOptions compilerOptions)
-			: base(architecture, typeSystem, typeLayout, new CompilationScheduler(typeSystem, true), internalTrace, compilerOptions)
+		public AotCompiler(BaseArchitecture architecture, ITypeSystem typeSystem, ITypeLayout typeLayout, IInternalTrace internalTrace, CompilerOptions compilerOptions)
+			: base(architecture, typeSystem, typeLayout, new CompilationScheduler(typeSystem, true), internalTrace, null, compilerOptions)
 		{
 		}
 
@@ -52,12 +50,14 @@ namespace Mosa.Tool.Compiler
 		/// Creates the method compiler.
 		/// </summary>
 		/// <param name="method">The method.</param>
+		/// <param name="basicBlocks">The basic blocks.</param>
+		/// <param name="instructionSet">The instruction set.</param>
 		/// <returns>
 		/// An instance of a MethodCompilerBase for the given type/method pair.
 		/// </returns>
-		public override BaseMethodCompiler CreateMethodCompiler(RuntimeMethod method)
+		public override BaseMethodCompiler CreateMethodCompiler(RuntimeMethod method, BasicBlocks basicBlocks, InstructionSet instructionSet)
 		{
-			return new AotMethodCompiler(this, method);
+			return new AotMethodCompiler(this, method, basicBlocks, instructionSet);
 		}
 
 		/// <summary>
@@ -89,9 +89,17 @@ namespace Mosa.Tool.Compiler
 
 			TypeLayout typeLayout = new TypeLayout(typeSystem, nativePointerSize, nativePointerAlignment);
 
-			IInternalTrace internalTrace = new BasicInternalTrace();
+			ConfigurableTraceFilter filter = new ConfigurableTraceFilter();
+			filter.MethodMatch = MatchType.None;
+			filter.Method = string.Empty;
+			filter.StageMatch = MatchType.Any;
+			filter.TypeMatch = MatchType.Any;
+			filter.ExcludeInternalMethods = false;
 
-			AotCompiler aot = new AotCompiler(compilerOptions.Architecture, compilerOptions.Linker, typeSystem, typeLayout, internalTrace, compilerOptions);
+			IInternalTrace internalTrace = new BasicInternalTrace();
+			internalTrace.TraceFilter = filter;
+
+			AotCompiler aot = new AotCompiler(compilerOptions.Architecture, typeSystem, typeLayout, internalTrace, compilerOptions);
 
 			aot.Pipeline.AddRange(new ICompilerStage[] {
 				compilerOptions.BootCompilerStage,
@@ -103,7 +111,7 @@ namespace Mosa.Tool.Compiler
 				new TypeLayoutStage(),
 				new MetadataStage(),
 				new ObjectFileLayoutStage(),
-				(ICompilerStage)compilerOptions.Linker,
+				new LinkerFinalizationStage(),
 				compilerOptions.MapFile != null ? new MapFileGenerationStage() : null
 			});
 

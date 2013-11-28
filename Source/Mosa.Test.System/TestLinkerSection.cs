@@ -7,9 +7,6 @@
  *  Michael Fröhlich (grover) <michael.ruck@michaelruck.de>
  */
 
-using System;
-using System.IO;
-
 using Mosa.Compiler.Linker;
 
 namespace Mosa.Test.System
@@ -17,71 +14,24 @@ namespace Mosa.Test.System
 	/// <summary>
 	///
 	/// </summary>
-	public sealed class TestLinkerSection : LinkerSection
+	public sealed class TestLinkerSection : ExtendedLinkerSection
 	{
-		#region Data members
-
-		/// <summary>
-		/// Holds the stream of this linker section.
-		/// </summary>
-		private Stream stream;
-
-		#endregion Data members
-
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="TestLinkerSection"/> class.
+		/// Initializes a new instance of the <see cref="TestLinkerSection" /> class.
 		/// </summary>
 		/// <param name="kind">The kind of the section.</param>
 		/// <param name="name">The name.</param>
-		/// <param name="address">The address.</param>
-		public TestLinkerSection(SectionKind kind, string name, IntPtr address) :
-			base(kind, name, address)
+		public TestLinkerSection(SectionKind kind, string name) :
+			base(kind, name, 0)
 		{
+			// Allocate 8Mb for this stream
+			VirtualMemoryStream vms = new VirtualMemoryStream(1024 * 1024 * 8);
+			base.VirtualAddress = vms.Base;
+			stream = vms;
 		}
 
 		#endregion Construction
-
-		#region Methods
-
-		/// <summary>
-		/// Allocates a stream of the specified size from the section.
-		/// </summary>
-		/// <param name="size">The size.</param>
-		/// <param name="alignment">The alignment.</param>
-		/// <returns></returns>
-		public Stream Allocate(int size, int alignment)
-		{
-			if (stream == null)
-			{
-				// Allocate 4Mb for this stream
-				VirtualMemoryStream vms = new VirtualMemoryStream(global::Mosa.Test.System.Memory.MemoryPageManager, 1024 * 1024 * 4);
-
-				// Save the stream for further references
-				this.stream = vms;
-				base.VirtualAddress = vms.Base;
-			}
-
-			if (size != 0 && size > (stream.Length - stream.Position))
-				throw new OutOfMemoryException(@"Not enough space in section to allocate symbol.");
-
-			return stream;
-		}
-
-		#endregion Methods
-
-		#region LinkerSection Overrides
-
-		/// <summary>
-		/// Gets the length of the section in bytes.
-		/// </summary>
-		/// <value>The length of the section in bytes.</value>
-		public override long Length
-		{
-			get { return (this.stream != null ? this.stream.Length : 0); }
-		}
-
-		#endregion LinkerSection Overrides
 	}
 }

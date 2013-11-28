@@ -7,11 +7,9 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System.Collections.Generic;
 using Mosa.Compiler.Framework;
+using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.Metadata.Signatures;
-using Mosa.Compiler.TypeSystem;
-using IR = Mosa.Compiler.Framework.IR;
 
 namespace Mosa.Platform.x86.Intrinsic
 {
@@ -27,9 +25,9 @@ namespace Mosa.Platform.x86.Intrinsic
 		/// </summary>
 		/// <param name="context">The context.</param>
 		/// <param name="typeSystem">The type system.</param>
-		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, ITypeSystem typeSystem, IList<RuntimeParameter> parameters)
+		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, BaseMethodCompiler methodCompiler)
 		{
-			context.SetInstruction(IR.IRInstruction.Move, context.Result, Operand.CreateCPURegister(BuiltInSigType.UInt32, GeneralPurposeRegister.EBP));
+			context.SetInstruction(X86.Mov, context.Result, Operand.CreateCPURegister(BuiltInSigType.UInt32, GeneralPurposeRegister.EBP));
 		}
 
 		#endregion Methods

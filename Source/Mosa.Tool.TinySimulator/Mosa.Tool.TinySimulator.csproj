@@ -1,0 +1,298 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Mosa.Tool.TinySimulator</RootNamespace>
+    <AssemblyName>Mosa.Tool.TinySimulator</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+    <FileAlignment>512</FileAlignment>
+    <ProjectGuid>{DEF831EA-79D8-49FC-8923-3AFFDA1283B6}</ProjectGuid>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>
+    </DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\..\bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>..\..\bin\Mosa.Tool.Debugger.xml</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>Mosa.Tool.TinySimulator.Program</StartupObject>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>
+    </ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.XML" />
+    <Reference Include="WeifenLuo.WinFormsUI.Docking">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\3rdParty\WeifenLuo.WinFormsUI.Docking.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BreakPointView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="BreakPointView.designer.cs">
+      <DependentUpon>BreakPointView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ScriptView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ScriptView.designer.cs">
+      <DependentUpon>ScriptView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="OutputView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="OutputView.designer.cs">
+      <DependentUpon>OutputView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Watch.cs" />
+    <Compile Include="WatchView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WatchView.designer.cs">
+      <DependentUpon>WatchView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SymbolView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SymbolView.designer.cs">
+      <DependentUpon>SymbolView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="HistoryView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="HistoryView.designer.cs">
+      <DependentUpon>HistoryView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ControlView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ControlView.designer.cs">
+      <DependentUpon>ControlView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CallStackView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CallStackView.designer.cs">
+      <DependentUpon>CallStackView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="StatusView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="StatusView.designer.cs">
+      <DependentUpon>StatusView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FlagView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FlagView.designer.cs">
+      <DependentUpon>FlagView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="StackView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="StackView.designer.cs">
+      <DependentUpon>StackView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="StackFrameView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="StackFrameView.designer.cs">
+      <DependentUpon>StackFrameView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DisplayView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DisplayView.Designer.cs">
+      <DependentUpon>DisplayView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="RegisterView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="RegisterView.designer.cs">
+      <DependentUpon>RegisterView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SimulatorDockContent.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SimulatorDockContent.designer.cs">
+      <DependentUpon>SimulatorDockContent.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AssembliesView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AssembliesView.designer.cs">
+      <DependentUpon>AssembliesView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MainForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MainForm.Designer.cs">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MemoryView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MemoryView.Designer.cs">
+      <DependentUpon>MemoryView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="AssembliesView.resx">
+      <DependentUpon>AssembliesView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ControlView.resx">
+      <DependentUpon>ControlView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CallStackView.resx">
+      <DependentUpon>CallStackView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="BreakPointView.resx">
+      <DependentUpon>BreakPointView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ScriptView.resx">
+      <DependentUpon>ScriptView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OutputView.resx">
+      <DependentUpon>OutputView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WatchView.resx">
+      <DependentUpon>WatchView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SymbolView.resx">
+      <DependentUpon>SymbolView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="HistoryView.resx">
+      <DependentUpon>HistoryView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StackFrameView.resx">
+      <DependentUpon>StackFrameView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StatusView.resx">
+      <DependentUpon>StatusView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FlagView.resx">
+      <DependentUpon>FlagView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DisplayView.resx">
+      <DependentUpon>DisplayView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="RegisterView.resx">
+      <DependentUpon>RegisterView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SimulatorDockContent.resx">
+      <DependentUpon>SimulatorDockContent.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MainForm.resx">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MemoryView.resx">
+      <DependentUpon>MemoryView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StackView.resx">
+      <DependentUpon>StackView.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Mosa.Compiler.Common\Mosa.Compiler.Common.csproj">
+      <Project>{0b1011a6-8fcd-4f9e-bbb8-8db86e23d2e8}</Project>
+      <Name>Mosa.Compiler.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mosa.Compiler.Framework\Mosa.Compiler.Framework.csproj">
+      <Project>{75a12a8a-8c8f-4d1e-801b-689d8f781bf4}</Project>
+      <Name>Mosa.Compiler.Framework</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mosa.Compiler.InternalTrace\Mosa.Compiler.InternalTrace.csproj">
+      <Project>{540beac7-a2c3-4c46-9f4a-e6e1df4ef6fc}</Project>
+      <Name>Mosa.Compiler.InternalTrace</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mosa.Compiler.Linker\Mosa.Compiler.Linker.csproj">
+      <Project>{65866a51-b229-44c5-ac81-87a90fa1741b}</Project>
+      <Name>Mosa.Compiler.Linker</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mosa.Compiler.Metadata\Mosa.Compiler.Metadata.csproj">
+      <Project>{7033b213-2055-4c6a-b008-d9856267f5d7}</Project>
+      <Name>Mosa.Compiler.Metadata</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mosa.Compiler.TypeSystem\Mosa.Compiler.TypeSystem.csproj">
+      <Project>{5f30a68e-05bf-40ea-b576-5ebcde520449}</Project>
+      <Name>Mosa.Compiler.TypeSystem</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mosa.Platform.ARMv6\Mosa.Platform.ARMv6.csproj">
+      <Project>{0fb92651-3ee8-441d-84f2-c4dfda68e8a5}</Project>
+      <Name>Mosa.Platform.ARMv6</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mosa.Platform.AVR32\Mosa.Platform.AVR32.csproj">
+      <Project>{f3bb1082-13e3-4b37-abf4-a3e42c9e7ed9}</Project>
+      <Name>Mosa.Platform.AVR32</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mosa.Platform.x86\Mosa.Platform.x86.csproj">
+      <Project>{de30cbe9-50f3-4a3e-bcc9-a8a36348530e}</Project>
+      <Name>Mosa.Platform.x86</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mosa.TinyCPUSimulator.Adaptor\Mosa.TinyCPUSimulator.Adaptor.csproj">
+      <Project>{50568e2d-5360-4f71-87e0-f6979d2d858a}</Project>
+      <Name>Mosa.TinyCPUSimulator.Adaptor</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mosa.TinyCPUSimulator.x86.Adaptor\Mosa.TinyCPUSimulator.x86.Adaptor.csproj">
+      <Project>{50568e2d-5360-4f71-87e0-f6979d1d858a}</Project>
+      <Name>Mosa.TinyCPUSimulator.x86.Adaptor</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mosa.TinyCPUSimulator.x86\Mosa.TinyCPUSimulator.x86.csproj">
+      <Project>{50568e2d-5360-4f71-87e0-e6979d1d858a}</Project>
+      <Name>Mosa.TinyCPUSimulator.x86</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mosa.TinyCPUSimulator\Mosa.TinyCPUSimulator.csproj">
+      <Project>{6f7c06b2-09bf-45bd-8e6b-ae9bf7c7e250}</Project>
+      <Name>Mosa.TinyCPUSimulator</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="processor.ico" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+			 Other similar extension points exist, see Microsoft.Common.targets.
+	<Target Name="BeforeBuild">
+	</Target>
+	<Target Name="AfterBuild">
+	</Target>
+	-->
+</Project>

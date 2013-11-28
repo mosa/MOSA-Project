@@ -8,13 +8,14 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
 */
 
-using System;
-
+using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Stages;
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Platform.x86.Stages;
+using System;
+using System.Diagnostics;
 
 namespace Mosa.Platform.x86
 {
@@ -22,15 +23,15 @@ namespace Mosa.Platform.x86
 	/// This class provides a common base class for architecture
 	/// specific operations.
 	/// </summary>
-	public class Architecture : BasicArchitecture
+	public class Architecture : BaseArchitecture
 	{
 		/// <summary>
-		/// Gets a value indicating whether this architecture is little-endian.
+		/// Gets the endianness of the target architecture.
 		/// </summary>
 		/// <value>
-		/// 	<c>true</c> if this instance is architecture is little-endian; otherwise, <c>false</c>.
+		/// The endianness.
 		/// </value>
-		public override bool IsLittleEndian { get { return true; } }
+		public override Endianness Endianness { get { return Endianness.Little; } }
 
 		/// <summary>
 		/// Gets the type of the elf machine.
@@ -39,6 +40,11 @@ namespace Mosa.Platform.x86
 		/// The type of the elf machine.
 		/// </value>
 		public override ushort ElfMachineType { get { return 3; } }
+
+		/// <summary>
+		/// Gets the signature type of the native integer.
+		/// </summary>
+		public override SigType NativeType { get { return BuiltInSigType.Int32; } }
 
 		/// <summary>
 		/// Defines the register set of the target architecture.
@@ -58,18 +64,6 @@ namespace Mosa.Platform.x86
 			GeneralPurposeRegister.EDI,
 
 			////////////////////////////////////////////////////////
-			// MMX floating point registers
-			////////////////////////////////////////////////////////
-			MMXRegister.MM0,
-			MMXRegister.MM1,
-			MMXRegister.MM2,
-			MMXRegister.MM3,
-			MMXRegister.MM4,
-			MMXRegister.MM5,
-			MMXRegister.MM6,
-			MMXRegister.MM7,
-
-			////////////////////////////////////////////////////////
 			// SSE 128-bit floating point registers
 			////////////////////////////////////////////////////////
 			SSE2Register.XMM0,
@@ -84,12 +78,12 @@ namespace Mosa.Platform.x86
 			////////////////////////////////////////////////////////
 			// Segmentation Registers
 			////////////////////////////////////////////////////////
-			SegmentRegister.CS,
-			SegmentRegister.DS,
-			SegmentRegister.ES,
-			SegmentRegister.FS,
-			SegmentRegister.GS,
-			SegmentRegister.SS
+			//SegmentRegister.CS,
+			//SegmentRegister.DS,
+			//SegmentRegister.ES,
+			//SegmentRegister.FS,
+			//SegmentRegister.GS,
+			//SegmentRegister.SS
 		};
 
 		/// <summary>
@@ -141,6 +135,14 @@ namespace Mosa.Platform.x86
 		}
 
 		/// <summary>
+		/// Retrieves the program counter register of the x86.
+		/// </summary>
+		public override Register ProgramCounter
+		{
+			get { return null; }
+		}
+
+		/// <summary>
 		/// Gets the name of the platform.
 		/// </summary>
 		/// <value>
@@ -157,7 +159,7 @@ namespace Mosa.Platform.x86
 		/// This method creates an instance of an appropriate architecture class, which supports the specific
 		/// architecture features.
 		/// </remarks>
-		public static IArchitecture CreateArchitecture(ArchitectureFeatureFlags architectureFeatures)
+		public static BaseArchitecture CreateArchitecture(ArchitectureFeatureFlags architectureFeatures)
 		{
 			if (architectureFeatures == ArchitectureFeatureFlags.AutoDetect)
 				architectureFeatures = ArchitectureFeatureFlags.MMX | ArchitectureFeatureFlags.SSE | ArchitectureFeatureFlags.SSE2;
@@ -179,9 +181,10 @@ namespace Mosa.Platform.x86
 				new ExceptionVectorStage()
 			);
 
-			compilerPipeline.InsertAfterLast<TypeLayoutStage>(
-				new MethodTableBuilderStage()
-			);
+			//FIXME: Uncomment
+			//compilerPipeline.InsertAfterLast<TypeLayoutStage>(
+			//    new MethodTableBuilderStage()
+			//);
 		}
 
 		/// <summary>
@@ -196,58 +199,54 @@ namespace Mosa.Platform.x86
 			methodCompilerPipeline.InsertAfterLast<PlatformStubStage>(
 				new IMethodCompilerStage[]
 				{
-					//new IntrinsicTransformationStage(),
+					//new CheckOperandCountStage(),
+					new PlatformIntrinsicTransformationStage(),
 					new LongOperandTransformationStage(),
-					new AddressModeConversionStage(),
+
 					new IRTransformationStage(),
-					new TweakTransformationStage(),
-					new MemToMemConversionStage(),
+				    new TweakTransformationStage(),
+
+					new FixedRegisterAssignmentStage(),
+					new SimpleDeadCodeRemovalStage(),
+				    new AddressModeConversionStage(),
+					new FloatingPointStage(),
 				});
 
-			methodCompilerPipeline.InsertAfterLast<IBlockOrderStage>(
-				new SimplePeepholeOptimizationStage()
+			methodCompilerPipeline.InsertAfterLast<StackLayoutStage>(
+				new BuildStackStage()
 			);
 
-			methodCompilerPipeline.InsertAfterLast<CodeGenerationStage>(
-				new ExceptionLayoutStage()
+			methodCompilerPipeline.InsertBefore<CodeGenerationStage>(
+				new FinalTweakTransformationStage()
 			);
+
+			methodCompilerPipeline.InsertBefore<CodeGenerationStage>(
+				new JumpPeepholeOptimizationStage()
+			);
+
+			// FIXME: Disabled for now
+			//methodCompilerPipeline.InsertAfterLast<CodeGenerationStage>(
+			//    new ExceptionLayoutStage()
+			//);
 		}
 
 		/// <summary>
 		/// Gets the type memory requirements.
 		/// </summary>
 		/// <param name="signatureType">The signature type.</param>
-		/// <param name="memorySize">Receives the memory size of the type.</param>
+		/// <param name="size">Receives the memory size of the type.</param>
 		/// <param name="alignment">Receives alignment requirements of the type.</param>
-		public override void GetTypeRequirements(SigType signatureType, out int memorySize, out int alignment)
+		public override void GetTypeRequirements(SigType signatureType, out int size, out int alignment)
 		{
 			if (signatureType == null)
 				throw new ArgumentNullException("signatureType");
 
 			switch (signatureType.Type)
 			{
-				case CilElementType.U1: memorySize = alignment = 4; break;
-				case CilElementType.U2: memorySize = alignment = 4; break;
-				case CilElementType.U4: memorySize = alignment = 4; break;
-				case CilElementType.U8: memorySize = 8; alignment = 4; break;
-				case CilElementType.I1: memorySize = alignment = 4; break;
-				case CilElementType.I2: memorySize = alignment = 4; break;
-				case CilElementType.I4: memorySize = alignment = 4; break;
-				case CilElementType.I8: memorySize = 8; alignment = 4; break;
-				case CilElementType.R4: memorySize = alignment = 4; break;
-				case CilElementType.R8: memorySize = alignment = 8; break;
-				case CilElementType.Boolean: memorySize = alignment = 4; break;
-				case CilElementType.Char: memorySize = alignment = 4; break;
-
-				// Platform specific
-				case CilElementType.Ptr: memorySize = alignment = 4; break;
-				case CilElementType.I: memorySize = alignment = 4; break;
-				case CilElementType.U: memorySize = alignment = 4; break;
-				case CilElementType.Object: memorySize = alignment = 4; break;
-				case CilElementType.Class: memorySize = alignment = 4; break;
-				case CilElementType.String: memorySize = alignment = 4; break;
-
-				default: memorySize = alignment = 4; break;
+				case CilElementType.U8: size = 8; alignment = 4; break;
+				case CilElementType.I8: size = 8; alignment = 4; break;
+				case CilElementType.R8: size = alignment = 8; break;
+				default: size = alignment = 4; break;
 			}
 		}
 
@@ -258,6 +257,94 @@ namespace Mosa.Platform.x86
 		public override ICodeEmitter GetCodeEmitter()
 		{
 			return new MachineCodeEmitter();
+		}
+
+		/// <summary>
+		/// Create platform move.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <param name="destination">The destination.</param>
+		/// <param name="source">The source.</param>
+		public override void InsertMoveInstruction(Context context, Operand destination, Operand source)
+		{
+			context.AppendInstruction(BaseTransformationStage.GetMove(destination, source), destination, source);
+		}
+
+		/// <summary>
+		/// Creates the swap.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <param name="destination">The destination.</param>
+		/// <param name="source">The source.</param>
+		public override void InsertExchangeInstruction(Context context, Operand destination, Operand source)
+		{
+			if (source.Type.Type == CilElementType.R4)
+			{
+				// TODO
+			}
+			else if (source.Type.Type == CilElementType.R8)
+			{
+				// TODO
+			}
+			else
+			{
+				context.AppendInstruction2(X86.Xchg, destination, source, source, destination);
+			}
+		}
+
+		/// <summary>
+		/// Inserts the jump instruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <param name="destination">The destination.</param>
+		/// <param name="source">The source.</param>
+		public override void InsertJumpInstruction(Context context, Operand destination)
+		{
+			context.AppendInstruction(X86.Jmp, destination);
+		}
+
+		/// <summary>
+		/// Inserts the jump instruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <param name="Destination">The destination.</param>
+		public override void InsertJumpInstruction(Context context, BasicBlock destination)
+		{
+			context.AppendInstruction(X86.Jmp, destination);
+		}
+
+		/// <summary>
+		/// Inserts the call instruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <param name="source">The source.</param>
+		public override void InsertCallInstruction(Context context, Operand source)
+		{
+			context.AppendInstruction(X86.Call, null, source);
+		}
+
+		/// <summary>
+		/// Inserts the add instruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <param name="Destination">The destination.</param>
+		/// <param name="Source">The source.</param>
+		public override void InsertAddInstruction(Context context, Operand destination, Operand source1, Operand source2)
+		{
+			Debug.Assert(source1 == destination);
+			context.AppendInstruction(X86.Add, destination, source1, source2);
+		}
+
+		/// <summary>
+		/// Inserts the sub instruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <param name="Destination">The destination.</param>
+		/// <param name="Source">The source.</param>
+		public override void InsertSubInstruction(Context context, Operand destination, Operand source1, Operand source2)
+		{
+			Debug.Assert(source1 == destination); 
+			context.AppendInstruction(X86.Sub, destination, source1, source2);
 		}
 	}
 }

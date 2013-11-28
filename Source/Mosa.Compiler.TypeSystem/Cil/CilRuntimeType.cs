@@ -7,9 +7,8 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-using System.Diagnostics;
-
 using Mosa.Compiler.Metadata;
+using System.Diagnostics;
 
 namespace Mosa.Compiler.TypeSystem.Cil
 {
@@ -48,7 +47,7 @@ namespace Mosa.Compiler.TypeSystem.Cil
 		/// <param name="attributes">The attributes.</param>
 		/// <param name="baseToken">The base token.</param>
 		public CilRuntimeType(ITypeModule module, string name, string typeNamespace, int packing, int size, Token token, RuntimeType baseType, RuntimeType enclosingType, TypeAttributes attributes, Token baseToken) :
-			base(module, token, baseType)
+			base(module, token, name, baseType, typeNamespace)
 		{
 			this.baseTypeToken = baseToken;
 			this.enclosingType = enclosingType;
@@ -56,8 +55,6 @@ namespace Mosa.Compiler.TypeSystem.Cil
 			base.Attributes = attributes;
 			base.Pack = packing;
 			base.LayoutSize = size;
-			base.Name = name;
-			base.Namespace = typeNamespace;
 
 			if (IsNested)
 			{

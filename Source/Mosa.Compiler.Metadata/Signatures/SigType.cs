@@ -84,7 +84,6 @@ namespace Mosa.Compiler.Metadata.Signatures
 			if (object.ReferenceEquals(this, other))
 				return true;
 
-			// TODO: Check to make sure a SigType matches
 			if (other.Type != this.Type)
 				return false;
 
@@ -262,8 +261,6 @@ namespace Mosa.Compiler.Metadata.Signatures
 		{
 			int typeVariableIndex = reader.ReadCompressedInt32();
 			return new VarSigType(typeVariableIndex);
-
-			//return context.GetGenericTypeArgument(typeVariableIndex);
 		}
 
 		/// <summary>
@@ -309,8 +306,6 @@ namespace Mosa.Compiler.Metadata.Signatures
 		{
 			int methodVariableIndex = reader.ReadCompressedInt32();
 			return new MVarSigType(methodVariableIndex);
-
-			//return context.GetGenericMethodArgument(methodVariableIndex);
 		}
 
 		/// <summary>

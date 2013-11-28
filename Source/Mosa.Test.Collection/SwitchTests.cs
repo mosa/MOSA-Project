@@ -1,6 +1,8 @@
 ﻿// Remove conditional statement after Mono 2.11 is released
 #if !__MonoCS__
 
+ 
+using System;
 
 namespace Mosa.Test.Collection
 {

@@ -5,10 +5,11 @@
  *
  * Authors:
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
 using Mosa.Compiler.Framework;
+using System;
 
 namespace Mosa.Platform.x86.Instructions
 {
@@ -31,7 +32,7 @@ namespace Mosa.Platform.x86.Instructions
 		/// Initializes a new instance of <see cref="Dec"/>.
 		/// </summary>
 		public Dec() :
-			base(0, 1)
+			base(1, 1)
 		{
 		}
 
@@ -48,11 +49,22 @@ namespace Mosa.Platform.x86.Instructions
 		/// <returns></returns>
 		protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
 		{
-			if (IsByte(destination)) return DEC8;
-			if (IsShort(destination) || IsChar(destination)) return DEC16;
-			if (IsInt(destination)) return DEC32;
+			if (destination.IsByte) return DEC8;
+			if (destination.IsShort || destination.IsChar) return DEC16;
+			if (destination.IsInt) return DEC32;
 
 			throw new ArgumentException(@"No opcode for operand type.");
+		}
+
+		/// <summary>
+		/// Emits the specified platform instruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <param name="emitter">The emitter.</param>
+		protected override void Emit(Context context, MachineCodeEmitter emitter)
+		{
+			OpCode opCode = ComputeOpCode(context.Result, null, null);
+			emitter.Emit(opCode, context.Result);
 		}
 
 		/// <summary>

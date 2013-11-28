@@ -54,6 +54,11 @@ namespace Mosa.Compiler.Framework
 		public abstract bool IsFloatingPoint { get; }
 
 		/// <summary>
+		/// Determines if this is a integer register.
+		/// </summary>
+		public abstract bool IsInteger { get; }
+
+		/// <summary>
 		/// Holds the machine specific index or code of the register.
 		/// </summary>
 		public abstract int RegisterCode { get; }

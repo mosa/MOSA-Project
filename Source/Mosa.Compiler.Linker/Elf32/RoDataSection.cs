@@ -7,20 +7,18 @@
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  */
 
-using System;
-
 namespace Mosa.Compiler.Linker.Elf32
 {
 	/// <summary>
 	///
 	/// </summary>
-	public class RoDataSection : Section
+	public class RoDataSection : Elf32LinkerSection
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="RoDataSection"/> class.
 		/// </summary>
 		public RoDataSection()
-			: base(SectionKind.ROData, @".rodata", IntPtr.Zero)
+			: base(SectionKind.ROData, @".rodata", 0)
 		{
 			header.Type = SectionType.ProgBits;
 			header.Flags = SectionAttribute.Alloc;

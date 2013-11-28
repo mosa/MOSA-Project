@@ -7,10 +7,10 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-using System;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Signatures;
+using System;
 
 namespace Mosa.Platform.x86
 {
@@ -29,42 +29,42 @@ namespace Mosa.Platform.x86
 		/// <summary>
 		/// Represents SSE2 register XMM0.
 		/// </summary>
-		public static readonly SSE2Register XMM0 = new SSE2Register(16, 0);
+		public static readonly SSE2Register XMM0 = new SSE2Register(8, 0);
 
 		/// <summary>
 		/// Represents SSE2 register XMM1.
 		/// </summary>
-		public static readonly SSE2Register XMM1 = new SSE2Register(17, 1);
+		public static readonly SSE2Register XMM1 = new SSE2Register(9, 1);
 
 		/// <summary>
 		/// Represents SSE2 register XMM2.
 		/// </summary>
-		public static readonly SSE2Register XMM2 = new SSE2Register(18, 2);
+		public static readonly SSE2Register XMM2 = new SSE2Register(10, 2);
 
 		/// <summary>
 		/// Represents SSE2 register XMM3.
 		/// </summary>
-		public static readonly SSE2Register XMM3 = new SSE2Register(19, 3);
+		public static readonly SSE2Register XMM3 = new SSE2Register(11, 3);
 
 		/// <summary>
 		/// Represents SSE2 register XMM4.
 		/// </summary>
-		public static readonly SSE2Register XMM4 = new SSE2Register(20, 4);
+		public static readonly SSE2Register XMM4 = new SSE2Register(12, 4);
 
 		/// <summary>
 		/// Represents SSE2 register XMM5.
 		/// </summary>
-		public static readonly SSE2Register XMM5 = new SSE2Register(21, 5);
+		public static readonly SSE2Register XMM5 = new SSE2Register(13, 5);
 
 		/// <summary>
 		/// Represents SSE2 register XMM6.
 		/// </summary>
-		public static readonly SSE2Register XMM6 = new SSE2Register(22, 6);
+		public static readonly SSE2Register XMM6 = new SSE2Register(14, 6);
 
 		/// <summary>
 		/// Represents SSE2 register XMM7.
 		/// </summary>
-		public static readonly SSE2Register XMM7 = new SSE2Register(23, 7);
+		public static readonly SSE2Register XMM7 = new SSE2Register(15, 7);
 
 		#endregion Static data members
 
@@ -73,7 +73,7 @@ namespace Mosa.Platform.x86
 		/// <summary>
 		/// Stores the register index of this instance.
 		/// </summary>
-		private readonly int _registerCode;
+		private readonly int registerCode;
 
 		#endregion Data members
 
@@ -87,7 +87,7 @@ namespace Mosa.Platform.x86
 		private SSE2Register(int index, int registerCode) :
 			base(index)
 		{
-			_registerCode = registerCode;
+			this.registerCode = registerCode;
 		}
 
 		#endregion Construction
@@ -95,7 +95,15 @@ namespace Mosa.Platform.x86
 		#region Properties
 
 		/// <summary>
-		/// Indicates that SSE2 registers are floating point register.
+		/// SSE2 registers do not support integer operations.
+		/// </summary>
+		public override bool IsInteger
+		{
+			get { return false; }
+		}
+
+		/// <summary>
+		/// SSE2 registers are floating point register.
 		/// </summary>
 		public override bool IsFloatingPoint
 		{
@@ -107,7 +115,7 @@ namespace Mosa.Platform.x86
 		/// </summary>
 		public override int RegisterCode
 		{
-			get { return _registerCode; }
+			get { return registerCode; }
 		}
 
 		/// <summary>
@@ -115,7 +123,7 @@ namespace Mosa.Platform.x86
 		/// </summary>
 		public override int Width
 		{
-			get { return 64; }
+			get { return 128; }
 		}
 
 		#endregion Properties
@@ -138,7 +146,7 @@ namespace Mosa.Platform.x86
 		/// <returns>The SSE2 register name.</returns>
 		public override string ToString()
 		{
-			return String.Format("XMM#{0}", _registerCode);
+			return String.Format("XMM#{0}", registerCode);
 		}
 
 		#endregion Methods

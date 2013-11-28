@@ -5,10 +5,11 @@
  *
  * Authors:
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
 using Mosa.Compiler.Framework;
+using System;
 
 namespace Mosa.Platform.x86.Instructions
 {
@@ -38,7 +39,7 @@ namespace Mosa.Platform.x86.Instructions
 		/// Initializes a new instance of <see cref="Push"/>.
 		/// </summary>
 		public Push() :
-			base(1, 0)
+			base(0, 1)
 		{
 		}
 
@@ -55,11 +56,11 @@ namespace Mosa.Platform.x86.Instructions
 		{
 			if (context.Operand1.IsConstant)
 			{
-				if (IsByte(context.Operand1))
+				if (context.Operand1.IsByte)
 					emitter.Emit(CONST8, context.Operand1, null);
-				else if (IsShort(context.Operand1) || IsChar(context.Operand1))
+				else if (context.Operand1.IsShort || context.Operand1.IsChar)
 					emitter.Emit(CONST16, context.Operand1, null);
-				else if (IsInt(context.Operand1))
+				else if (context.Operand1.IsInt)
 					emitter.Emit(CONST32, context.Operand1, null);
 				return;
 			}
@@ -77,7 +78,7 @@ namespace Mosa.Platform.x86.Instructions
 						default: throw new InvalidOperationException(@"unable to emit opcode for segment register");
 					}
 			}
-			emitter.Emit(PUSH, context.Operand1, null, null);
+			emitter.Emit(PUSH, context.Operand1);
 		}
 
 		/// <summary>

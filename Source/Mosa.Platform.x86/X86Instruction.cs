@@ -15,35 +15,17 @@ namespace Mosa.Platform.x86
 	/// <summary>
 	///
 	/// </summary>
-	public abstract class X86Instruction : BasePlatformInstruction, IRegisterUsage
+	public abstract class X86Instruction : BasePlatformInstruction
 	{
-		static protected RegisterBitmap NoRegisters = new RegisterBitmap();
-
 		#region Construction
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="X86Instruction"/> class.
 		/// </summary>
-		protected X86Instruction()
-		{
-		}
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="X86Instruction"/> class.
-		/// </summary>
-		/// <param name="operandCount">The operand count.</param>
-		private X86Instruction(byte operandCount)
-			: base(operandCount)
-		{
-		}
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="X86Instruction"/> class.
-		/// </summary>
-		/// <param name="operandCount">The operand count.</param>
 		/// <param name="resultCount">The result count.</param>
-		protected X86Instruction(byte operandCount, byte resultCount)
-			: base(operandCount, resultCount)
+		/// <param name="operandCount">The operand count.</param>
+		protected X86Instruction(byte resultCount, byte operandCount)
+			: base(resultCount, operandCount)
 		{
 		}
 
@@ -117,227 +99,12 @@ namespace Mosa.Platform.x86
 			return "X86." + base.ToString();
 		}
 
+		//TODO
 		public virtual Register[] UsableRegisters
 		{
 			get { return null; }
 		}
 
 		#endregion Operand Overrides
-
-		#region Typesizes
-
-		/// <summary>
-		/// Check if the given operand is an unsigned byte
-		/// </summary>
-		/// <param name="operand">The operand to check</param>
-		/// <returns>True if it is an unsigned byte</returns>
-		private static bool IsUnsignedByte(Operand operand)
-		{
-			return (operand.Type.Type == Compiler.Metadata.CilElementType.U1);
-		}
-
-		/// <summary>
-		/// Check if the given operand is a signed byte
-		/// </summary>
-		/// <param name="operand">The operand to check</param>
-		/// <returns>True if it is a signed byte</returns>
-		private static bool IsSignedByte(Operand operand)
-		{
-			return (operand.Type.Type == Compiler.Metadata.CilElementType.I1);
-		}
-
-		/// <summary>
-		/// Check if the given operand is an unsigned short
-		/// </summary>
-		/// <param name="operand">The operand to check</param>
-		/// <returns>True if it is an unsigned short</returns>
-		private static bool IsUnsignedShort(Operand operand)
-		{
-			return (operand.Type.Type == Compiler.Metadata.CilElementType.U2);
-		}
-
-		/// <summary>
-		/// Check if the given operand is a signed short
-		/// </summary>
-		/// <param name="operand">The operand to check</param>
-		/// <returns>True if it is a signed short</returns>
-		private static bool IsSignedShort(Operand operand)
-		{
-			return (operand.Type.Type == Compiler.Metadata.CilElementType.I2);
-		}
-
-		/// <summary>
-		/// Check if the given operand is an unsigned integer
-		/// </summary>
-		/// <param name="operand">The operand to check</param>
-		/// <returns>True if it is an unsigned integer</returns>
-		private static bool IsUnsignedInt(Operand operand)
-		{
-			return (operand.Type.Type == Compiler.Metadata.CilElementType.U4);
-		}
-
-		/// <summary>
-		/// Check if the given operand is a signed integer
-		/// </summary>
-		/// <param name="operand">The operand to check</param>
-		/// <returns>True if it is a signed integer</returns>
-		private static bool IsSignedInt(Operand operand)
-		{
-			return (operand.Type.Type == Compiler.Metadata.CilElementType.I4);
-		}
-
-		/// <summary>
-		/// Check if the given operand is an unsigned long
-		/// </summary>
-		/// <param name="operand">The operand to check</param>
-		/// <returns>True if it is an unsigned long</returns>
-		private static bool IsUnsignedLong(Operand operand)
-		{
-			return (operand.Type.Type == Compiler.Metadata.CilElementType.U8);
-		}
-
-		/// <summary>
-		/// Check if the given operand is a signed long
-		/// </summary>
-		/// <param name="operand">The operand to check</param>
-		/// <returns>True if it is a signed long</returns>
-		private static bool IsSignedLong(Operand operand)
-		{
-			return (operand.Type.Type == Compiler.Metadata.CilElementType.I8);
-		}
-
-		/// <summary>
-		/// Check if the given operand is a byte
-		/// </summary>
-		/// <param name="operand">The operand to check</param>
-		/// <returns>True if it is a byte</returns>
-		protected static bool IsByte(Operand operand)
-		{
-			return IsUnsignedByte(operand) || IsSignedByte(operand);
-		}
-
-		/// <summary>
-		/// Check if the given operand is a short
-		/// </summary>
-		/// <param name="operand">The operand to check</param>
-		/// <returns>True if it is a short</returns>
-		protected static bool IsShort(Operand operand)
-		{
-			return IsUnsignedShort(operand) || IsSignedShort(operand);
-		}
-
-		/// <summary>
-		/// Check if the given operand is a char
-		/// </summary>
-		/// <param name="operand">The operand to check</param>
-		/// <returns>True if it is a char</returns>
-		protected static bool IsChar(Operand operand)
-		{
-			return operand.Type.Type == Compiler.Metadata.CilElementType.Char;
-		}
-
-		/// <summary>
-		/// Check if the given operand is an integer
-		/// </summary>
-		/// <param name="operand">The operand to check</param>
-		/// <returns>True if it is an integer</returns>
-		protected static bool IsInt(Operand operand)
-		{
-			return IsUnsignedInt(operand) || IsSignedInt(operand);
-		}
-
-		/// <summary>
-		/// Check if the given operand is a long
-		/// </summary>
-		/// <param name="operand">The operand to check</param>
-		/// <returns>True if it is a long</returns>
-		public static bool IsLong(Operand operand)
-		{
-			return IsUnsignedLong(operand) || IsSignedLong(operand);
-		}
-
-		#endregion Typesizes
-
-		#region IRegisterUsage
-
-		/// <summary>
-		/// Gets the output registers.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		/// <returns></returns>
-		public virtual RegisterBitmap GetOutputRegisters(Context context)
-		{
-			RegisterBitmap registers = new RegisterBitmap();
-
-			if (context.Result.IsRegister)
-				registers.Set(context.Result.Register);
-
-			registers.Or(AdditionalOutputRegisters);
-
-			return registers;
-		}
-
-		/// <summary>
-		/// Gets the input registers.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		/// <returns></returns>
-		public virtual RegisterBitmap GetInputRegisters(Context context)
-		{
-			RegisterBitmap registers = new RegisterBitmap();
-
-			registers.Set(GetRegister(context.Operand1, true));
-			registers.Set(GetRegister(context.Operand2, true));
-			registers.Set(GetRegister(context.Operand3, true));
-			registers.Set(GetRegister(context.Result, ResultIsInput));
-
-			registers.Or(AdditionalInputRegisters);
-
-			return registers;
-		}
-
-		/// <summary>
-		/// Gets a value indicating whether [result is input].
-		/// </summary>
-		/// <value>
-		///   <c>true</c> if [result is input]; otherwise, <c>false</c>.
-		/// </value>
-		public virtual bool ResultIsInput { get { return true; } }
-
-		/// <summary>
-		/// Gets the additional output registers.
-		/// </summary>
-		public virtual RegisterBitmap AdditionalOutputRegisters { get { return NoRegisters; } }
-
-		/// <summary>
-		/// Gets the additional input registers.
-		/// </summary>
-		public virtual RegisterBitmap AdditionalInputRegisters { get { return NoRegisters; } }
-
-		#endregion IRegisterUsage
-
-		/// <summary>
-		/// Gets the register.
-		/// </summary>
-		/// <param name="operand">The operand.</param>
-		/// <returns></returns>
-		protected Register GetRegister(Operand operand, bool includeRegister)
-		{
-			if (operand == null)
-				return null;
-
-			if (includeRegister)
-			{
-				if (operand.IsRegister)
-					return operand.Register;
-			}
-
-			if (operand.IsMemoryAddress || operand.IsParameter)
-			{
-				return operand.Register;
-			}
-
-			return null;
-		}
 	}
 }

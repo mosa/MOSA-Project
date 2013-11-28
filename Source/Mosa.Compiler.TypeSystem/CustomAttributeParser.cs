@@ -70,7 +70,7 @@ namespace Mosa.Compiler.TypeSystem
 
 				object[] args = new object[parameters];
 				for (int idx = 0; idx < parameters; idx++)
-					args[idx] = ParseFixedArg(reader, attributeCtor.Signature.Parameters[idx]);
+					args[idx] = ParseFixedArg(reader, attributeCtor.SigParameters[idx]);
 
 				// Create the attribute instance
 				return args;

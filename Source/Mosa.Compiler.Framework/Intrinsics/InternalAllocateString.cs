@@ -7,10 +7,11 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-using System.Collections.Generic;
+using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Compiler.TypeSystem;
-using Mosa.Compiler.Framework.IR;
+using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework.Intrinsics
 {
@@ -22,23 +23,24 @@ namespace Mosa.Compiler.Framework.Intrinsics
 		/// Replaces the intrinsic call site
 		/// </summary>
 		/// <param name="context">The context.</param>
-		/// <param name="typeSystem">The type system.</param>
-		void IIntrinsicInternalMethod.ReplaceIntrinsicCall(Context context, ITypeSystem typeSystem, IList<RuntimeParameter> parameters)
+		/// <param name="methodCompiler">The method compiler.</param>
+		void IIntrinsicInternalMethod.ReplaceIntrinsicCall(Context context, BaseMethodCompiler methodCompiler)
 		{
-			Operand callTargetOperand = this.GetInternalAllocateStringCallTarget(typeSystem);
+			string runtime = "Mosa.Platform.Internal." + methodCompiler.Architecture.PlatformName + ".Runtime";
+
+			RuntimeType runtimeType = methodCompiler.TypeSystem.GetType(runtime);
+			Debug.Assert(runtimeType != null, "Cannot find " + runtime);
+
+			RuntimeMethod callTarget = runtimeType.FindMethod("AllocateString");
+
+			Operand callTargetOperand = Operand.CreateSymbolFromMethod(callTarget);
+
 			Operand methodTableOperand = Operand.CreateSymbol(BuiltInSigType.IntPtr, StringClassMethodTableSymbolName);
 			Operand lengthOperand = context.Operand1;
 			Operand result = context.Result;
 
 			context.SetInstruction(IRInstruction.Call, result, callTargetOperand, methodTableOperand, lengthOperand);
-		}
-
-		private Operand GetInternalAllocateStringCallTarget(ITypeSystem typeSystem)
-		{
-			RuntimeType runtimeType = typeSystem.GetType(@"Mosa.Internal.Runtime");
-			RuntimeMethod callTarget = runtimeType.FindMethod(@"AllocateString");
-
-			return Operand.CreateSymbolFromMethod(callTarget);
+			context.InvokeMethod = callTarget;
 		}
 	}
 }

@@ -7,7 +7,7 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using Mosa.Platform.x86.Intrinsic;
+using Mosa.Platform.Internal.x86;
 
 namespace Mosa.Kernel.x86
 {
@@ -26,23 +26,23 @@ namespace Mosa.Kernel.x86
 		public const uint MaximumMemory = 0xFFFFFFFF;
 
 		// Start of memory map
-		private static uint _map;
+		private static uint map;
 
 		// Current position in map data structure
-		private static uint _at;
+		private static uint at;
 
-		private static uint _totalPages;
-		private static uint _totalUsedPages;
+		private static uint totalPages;
+		private static uint totalUsedPages;
 
 		/// <summary>
 		/// Setup the physical page manager
 		/// </summary>
 		public static void Setup()
 		{
-			_map = StartLocation;
-			_at = StartLocation;
-			_totalPages = 0;
-			_totalUsedPages = 0;
+			map = StartLocation;
+			at = StartLocation;
+			totalPages = 0;
+			totalUsedPages = 0;
 			SetupFreeMemory();
 		}
 
@@ -94,11 +94,11 @@ namespace Mosa.Kernel.x86
 			}
 
 			// Populate free table
-			for (uint mem = normstart; mem < normstart + normsize; mem = mem + PageSize, _at = _at + 4)
-				Native.Set32(_at, mem);
+			for (uint mem = normstart; mem < normstart + normsize; mem = mem + PageSize, at = at + 4)
+				Native.Set32(at, mem);
 
-			_at = _at - 4;
-			_totalPages = _totalPages + (normsize / PageSize);
+			at = at - 4;
+			totalPages = totalPages + (normsize / PageSize);
 		}
 
 		/// <summary>
@@ -107,11 +107,11 @@ namespace Mosa.Kernel.x86
 		/// <returns>The page</returns>
 		public static uint Allocate()
 		{
-			if (_at == _map) return 0; // out of memory
+			if (at == map) return 0; // out of memory
 
-			_totalUsedPages++;
-			uint avail = Native.Get32(_at);
-			_at = _at - sizeof(uint);
+			totalUsedPages++;
+			uint avail = Native.Get32(at);
+			at = at - sizeof(uint);
 
 			// Clear out memory
 			Memory.Clear(avail, PageSize);
@@ -125,9 +125,9 @@ namespace Mosa.Kernel.x86
 		/// <param name="address">The address.</param>
 		public static void Free(uint address)
 		{
-			_totalUsedPages--;
-			_at = _at + sizeof(uint);
-			Native.Set32(_at, address);
+			totalUsedPages--;
+			at = at + sizeof(uint);
+			Native.Set32(at, address);
 		}
 
 		/// <summary>
@@ -138,11 +138,11 @@ namespace Mosa.Kernel.x86
 		/// <summary>
 		/// Retrieves the amount of total physical memory pages available in the system.
 		/// </summary>
-		public static uint TotalPages { get { return _totalPages; } }
+		public static uint TotalPages { get { return totalPages; } }
 
 		/// <summary>
 		/// Retrieves the amount of number of physical pages in use.
 		/// </summary>
-		public static uint TotalPagesInUse { get { return _totalUsedPages; } }
+		public static uint TotalPagesInUse { get { return totalUsedPages; } }
 	}
 }

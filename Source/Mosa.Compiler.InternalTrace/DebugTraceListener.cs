@@ -14,10 +14,9 @@ namespace Mosa.Compiler.InternalTrace
 {
 	public class DebugTraceListener : ITraceListener
 	{
-		void ITraceListener.SubmitInstructionTraceInformation(RuntimeMethod method, string stage, string log)
+		void ITraceListener.SubmitInstructionTraceInformation(RuntimeMethod method, string stage, string line)
 		{
-			//Debug.WriteLine(String.Format("IR representation of method {0} after stage {1}", method.FullName, stage));
-			Debug.WriteLine(log);
+			Debug.WriteLine(line);
 		}
 
 		void ITraceListener.SubmitDebugStageInformation(RuntimeMethod method, string stage, string line)

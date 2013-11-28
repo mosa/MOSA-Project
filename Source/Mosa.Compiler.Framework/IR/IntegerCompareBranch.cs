@@ -11,7 +11,7 @@ namespace Mosa.Compiler.Framework.IR
 		#region Construction
 
 		public IntegerCompareBranch()
-			: base(2)
+			: base(0, 2)
 		{
 		}
 

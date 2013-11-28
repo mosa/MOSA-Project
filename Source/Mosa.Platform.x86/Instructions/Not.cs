@@ -5,11 +5,11 @@
  *
  * Authors:
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
-
 using Mosa.Compiler.Framework;
+using System;
 
 namespace Mosa.Platform.x86.Instructions
 {
@@ -51,8 +51,8 @@ namespace Mosa.Platform.x86.Instructions
 		{
 			if ((destination.IsRegister) || (destination.IsMemoryAddress))
 			{
-				if (IsByte(destination)) return MR_8;
-				if (IsChar(destination)) return MR_16;
+				if (destination.IsByte) return MR_8;
+				if (destination.IsChar) return MR_16;
 				return MR;
 			}
 
@@ -67,7 +67,7 @@ namespace Mosa.Platform.x86.Instructions
 		protected override void Emit(Context context, MachineCodeEmitter emitter)
 		{
 			OpCode opCode = ComputeOpCode(context.Result, null, null);
-			emitter.Emit(opCode, context.Result, null, null);
+			emitter.Emit(opCode, context.Result);
 		}
 
 		/// <summary>

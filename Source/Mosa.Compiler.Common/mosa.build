@@ -14,6 +14,13 @@
 	<target name="build">
 	    <csc target="library" output="${outputDirectory}/Mosa.Compiler.Common.dll" debug="${debug}" unsafe="true" nostdlib="false">
 		<sources>
+                    <include name="Bits.cs"/>
+                    <include name="BitArrayExtension.cs"/>
+                    <include name="InvalidCompilerException.cs"/>
+                    <include name="NotImplementCompilerException.cs"/>
+                    <include name="CompilerException.cs"/>
+                    <include name="SimplePriorityQueue.cs"/>
+                    <include name="Endianness .cs"/>
                     <include name="ListExtension.cs"/>
                     <include name="EndianAwareBinaryWriter.cs"/>
                     <include name="EndianAwareBinaryReader.cs"/>

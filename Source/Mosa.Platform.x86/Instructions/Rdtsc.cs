@@ -5,6 +5,7 @@
  *
  * Authors:
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 using Mosa.Compiler.Framework;
@@ -22,18 +23,13 @@ namespace Mosa.Platform.x86.Instructions
 		/// Initializes a new instance of <see cref="Rdtsc"/>.
 		/// </summary>
 		public Rdtsc() :
-			base(0, 1)
+			base(1, 0)
 		{
 		}
 
 		#endregion Construction
 
 		#region Methods
-
-		/// <summary>
-		/// Gets the additional output registers.
-		/// </summary>
-		public override RegisterBitmap AdditionalOutputRegisters { get { return new RegisterBitmap(GeneralPurposeRegister.EDX, GeneralPurposeRegister.EAX); } }
 
 		/// <summary>
 		/// Allows visitor based dispatch for this instruction object.
