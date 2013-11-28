@@ -42,6 +42,7 @@
     <WarningLevel>4</WarningLevel>
     <DebugType>full</DebugType>
     <NoWarn>0414,0219</NoWarn>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <BaseAddress>285212672</BaseAddress>

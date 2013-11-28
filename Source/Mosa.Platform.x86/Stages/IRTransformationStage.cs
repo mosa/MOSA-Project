@@ -908,7 +908,8 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IIRVisitor.Throw(Context context)
 		{
-			RuntimeType runtimeType = typeSystem.GetType(@"Mosa.Internal.ExceptionEngine");
+			/* FIXME: Create Mosa.Internal.ExceptionEngine
+            RuntimeType runtimeType = typeSystem.GetType(@"Mosa.Internal.ExceptionEngine");
 			RuntimeMethod runtimeMethod = runtimeType.FindMethod(@"ThrowException");
 			Operand throwMethod = Operand.CreateSymbolFromMethod(runtimeMethod);
 
@@ -919,7 +920,7 @@ namespace Mosa.Platform.x86.Stages
 			context.AppendInstruction(X86.Pushad);
 
 			// Call exception handling
-			context.AppendInstruction(X86.Call, null, throwMethod);
+			context.AppendInstruction(X86.Call, null, throwMethod);*/
 		}
 
 		/// <summary>

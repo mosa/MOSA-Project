@@ -10,7 +10,7 @@ namespace Mosa.DeviceDrivers.PCI.VideoCard
     {
         #region Subclasses
 
-        struct GfxObject
+        /*struct GfxObject
         {
             byte* cpuAddress;
             ulong gfxAddress;
@@ -21,17 +21,17 @@ namespace Mosa.DeviceDrivers.PCI.VideoCard
             GfxObject storage;
             uint next;
             uint size;
-        }
+        }*/
 
         #endregion
 
         #region IO and Memory
 
-        private IMemory VramMemory;
+        //private IMemory VramMemory;
 
-        private IMemory SharedMemory;
+        //private IMemory SharedMemory;
 
-        private IMemory PrivateMemory;
+        //private IMemory PrivateMemory;
 
         #endregion
 

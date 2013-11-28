@@ -1,4 +1,4 @@
-﻿namespace Mosa.DeviceDrivers.PCI.VideoCard
+﻿/*namespace Mosa.DeviceDrivers.PCI.VideoCard
 {
     public unsafe partial class IntelHD
     {
@@ -2422,7 +2422,7 @@ typedef union RegFence
     u64 qword;
 } RegFence;
 */
-
+/*
 // ------------------------------------------------------------------------------------------------
 // Tile Ctrl - control register for cpu gtt access
 
@@ -2434,3 +2434,4 @@ static uint TILE_CTL_BACKSNOOP_DISABLE      = (1 << 3)
 
     }
 }
+*/
