@@ -5,6 +5,7 @@
  *
  * Authors:
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 namespace Mosa.Compiler.Metadata.Tables
@@ -12,27 +13,8 @@ namespace Mosa.Compiler.Metadata.Tables
 	/// <summary>
 	///
 	/// </summary>
-	public struct EventRow
+	public class EventRow
 	{
-		#region Data members
-
-		/// <summary>
-		///
-		/// </summary>
-		private EventAttributes flags;
-
-		/// <summary>
-		///
-		/// </summary>
-		private HeapIndexToken name;
-
-		/// <summary>
-		///
-		/// </summary>
-		private Token eventType;
-
-		#endregion Data members
-
 		#region Construction
 
 		/// <summary>
@@ -43,9 +25,9 @@ namespace Mosa.Compiler.Metadata.Tables
 		/// <param name="eventType">Type of the event.</param>
 		public EventRow(EventAttributes flags, HeapIndexToken name, Token eventType)
 		{
-			this.flags = flags;
-			this.name = name;
-			this.eventType = eventType;
+			Flags = flags;
+			Name = name;
+			EventType = eventType;
 		}
 
 		#endregion Construction
@@ -56,28 +38,19 @@ namespace Mosa.Compiler.Metadata.Tables
 		/// Gets the flags.
 		/// </summary>
 		/// <value>The flags.</value>
-		public EventAttributes Flags
-		{
-			get { return flags; }
-		}
+		public EventAttributes Flags { get; private set; }
 
 		/// <summary>
 		/// Gets the name.
 		/// </summary>
 		/// <value>The name.</value>
-		public HeapIndexToken Name
-		{
-			get { return name; }
-		}
+		public HeapIndexToken Name { get; private set; }
 
 		/// <summary>
 		/// Gets the type of the event.
 		/// </summary>
 		/// <value>The type of the event.</value>
-		public Token EventType
-		{
-			get { return eventType; }
-		}
+		public Token EventType { get; private set; }
 
 		#endregion Properties
 	}

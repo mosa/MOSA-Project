@@ -5,6 +5,7 @@
  *
  * Authors:
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 namespace Mosa.Compiler.Metadata.Tables
@@ -12,27 +13,8 @@ namespace Mosa.Compiler.Metadata.Tables
 	/// <summary>
 	///
 	/// </summary>
-	public struct CustomAttributeRow
+	public class CustomAttributeRow
 	{
-		#region Data members
-
-		/// <summary>
-		///
-		/// </summary>
-		private Token parent;
-
-		/// <summary>
-		///
-		/// </summary>
-		private Token type;
-
-		/// <summary>
-		///
-		/// </summary>
-		private HeapIndexToken value;
-
-		#endregion Data members
-
 		#region Construction
 
 		/// <summary>
@@ -43,9 +25,9 @@ namespace Mosa.Compiler.Metadata.Tables
 		/// <param name="value">The value.</param>
 		public CustomAttributeRow(Token parent, Token type, HeapIndexToken value)
 		{
-			this.parent = parent;
-			this.type = type;
-			this.value = value;
+			Parent = parent;
+			Type = type;
+			Value = value;
 		}
 
 		#endregion Construction
@@ -56,28 +38,19 @@ namespace Mosa.Compiler.Metadata.Tables
 		/// Gets the parent.
 		/// </summary>
 		/// <value>The parent.</value>
-		public Token Parent
-		{
-			get { return parent; }
-		}
+		public Token Parent { get; private set; }
 
 		/// <summary>
 		/// Gets the type.
 		/// </summary>
 		/// <value>The type.</value>
-		public Token Type
-		{
-			get { return type; }
-		}
+		public Token Type { get; private set; }
 
 		/// <summary>
 		/// Gets the value.
 		/// </summary>
 		/// <value>The value.</value>
-		public HeapIndexToken Value
-		{
-			get { return value; }
-		}
+		public HeapIndexToken Value { get; private set; }
 
 		#endregion Properties
 	}

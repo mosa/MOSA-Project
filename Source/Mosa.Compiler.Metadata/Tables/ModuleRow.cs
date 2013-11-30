@@ -5,6 +5,7 @@
  *
  * Authors:
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 namespace Mosa.Compiler.Metadata.Tables
@@ -12,58 +13,29 @@ namespace Mosa.Compiler.Metadata.Tables
 	/// <summary>
 	///
 	/// </summary>
-	public struct ModuleRow
+	public class ModuleRow
 	{
-		#region Data members
-
-		/// <summary>
-		///
-		/// </summary>
-		private ushort _generation;
-
-		/// <summary>
-		///
-		/// </summary>
-		private HeapIndexToken _nameStringIdx;
-
-		/// <summary>
-		///
-		/// </summary>
-		private HeapIndexToken _mvidGuidIdx;
-
-		/// <summary>
-		///
-		/// </summary>
-		private HeapIndexToken _encIdGuidIdx;
-
-		/// <summary>
-		///
-		/// </summary>
-		private HeapIndexToken _encBaseIdGuidIdx;
-
-		#endregion Data members
-
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="ModuleRow"/> struct.
+		/// Initializes a new instance of the <see cref="ModuleRow" /> struct.
 		/// </summary>
 		/// <param name="generation">The generation.</param>
-		/// <param name="nameStringIdx">The name string idx.</param>
-		/// <param name="mvidGuidIdx">The mvid GUID idx.</param>
-		/// <param name="encIdGuidIdx">The enc id GUID idx.</param>
-		/// <param name="encBaseIdGuidIdx">The enc base id GUID idx.</param>
+		/// <param name="nameString">The name string.</param>
+		/// <param name="mvidGuid">The mvid unique identifier.</param>
+		/// <param name="encIdGuid">The enc identifier unique identifier.</param>
+		/// <param name="encBaseIdGuid">The enc base identifier unique identifier.</param>
 		public ModuleRow(ushort generation,
-							HeapIndexToken nameStringIdx,
-							HeapIndexToken mvidGuidIdx,
-							HeapIndexToken encIdGuidIdx,
-							HeapIndexToken encBaseIdGuidIdx)
+							HeapIndexToken nameString,
+							HeapIndexToken mvidGuid,
+							HeapIndexToken encIdGuid,
+							HeapIndexToken encBaseIdGuid)
 		{
-			_generation = generation;
-			_nameStringIdx = nameStringIdx;
-			_mvidGuidIdx = mvidGuidIdx;
-			_encIdGuidIdx = encIdGuidIdx;
-			_encBaseIdGuidIdx = encBaseIdGuidIdx;
+			Generation = generation;
+			NameString = nameString;
+			MvidGuid = mvidGuid;
+			EncIdGuid = encIdGuid;
+			EncBaseIdGuid = encBaseIdGuid;
 		}
 
 		#endregion Construction
@@ -71,49 +43,42 @@ namespace Mosa.Compiler.Metadata.Tables
 		#region Properties
 
 		/// <summary>
-		/// Gets the enc base id GUID idx.
+		/// Gets the enc base identifier unique identifier.
 		/// </summary>
-		/// <value>The enc base id GUID idx.</value>
-		public HeapIndexToken EncBaseIdGuidIdx
-		{
-			get { return _encBaseIdGuidIdx; }
-		}
+		/// <value>
+		/// The enc base identifier unique identifier.
+		/// </value>
+		public HeapIndexToken EncBaseIdGuid { get; private set; }
 
 		/// <summary>
-		/// Gets the enc id GUID idx.
+		/// Gets the enc identifier unique identifier.
 		/// </summary>
-		/// <value>The enc id GUID idx.</value>
-		public HeapIndexToken EncIdGuidIdx
-		{
-			get { return _encIdGuidIdx; }
-		}
+		/// <value>
+		/// The enc identifier unique identifier.
+		/// </value>
+		public HeapIndexToken EncIdGuid { get; private set; }
 
 		/// <summary>
 		/// Gets the generation.
 		/// </summary>
 		/// <value>The generation.</value>
-		public ushort Generation
-		{
-			get { return _generation; }
-		}
+		public ushort Generation { get; private set; }
 
 		/// <summary>
-		/// Gets the mvid GUID idx.
+		/// Gets the mvid unique identifier.
 		/// </summary>
-		/// <value>The mvid GUID idx.</value>
-		public HeapIndexToken MvidGuidIdx
-		{
-			get { return _mvidGuidIdx; }
-		}
+		/// <value>
+		/// The mvid unique identifier.
+		/// </value>
+		public HeapIndexToken MvidGuid { get; private set; }
 
 		/// <summary>
-		/// Gets the name string idx.
+		/// Gets the name string.
 		/// </summary>
-		/// <value>The name string idx.</value>
-		public HeapIndexToken NameStringIdx
-		{
-			get { return _nameStringIdx; }
-		}
+		/// <value>
+		/// The name string.
+		/// </value>
+		public HeapIndexToken NameString { get; private set; }
 
 		#endregion Properties
 	}

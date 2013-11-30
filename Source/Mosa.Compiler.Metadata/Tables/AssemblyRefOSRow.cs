@@ -5,39 +5,16 @@
  *
  * Authors:
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
- */
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
+*/
 
 namespace Mosa.Compiler.Metadata.Tables
 {
 	/// <summary>
 	///
 	/// </summary>
-	public struct AssemblyRefOSRow
+	public class AssemblyRefOSRow
 	{
-		#region Data members
-
-		/// <summary>
-		///
-		/// </summary>
-		private uint platformId;
-
-		/// <summary>
-		///
-		/// </summary>
-		private uint majorVersion;
-
-		/// <summary>
-		///
-		/// </summary>
-		private uint minorVersion;
-
-		/// <summary>
-		///
-		/// </summary>
-		private Token assemblyRef;
-
-		#endregion Data members
-
 		#region Construction
 
 		/// <summary>
@@ -49,10 +26,10 @@ namespace Mosa.Compiler.Metadata.Tables
 		/// <param name="assemblyRef">The assembly ref.</param>
 		public AssemblyRefOSRow(uint platformId, uint majorVersion, uint minorVersion, Token assemblyRef)
 		{
-			this.platformId = platformId;
-			this.majorVersion = majorVersion;
-			this.minorVersion = minorVersion;
-			this.assemblyRef = assemblyRef;
+			OSPlatformId = platformId;
+			OSMajorVersion = majorVersion;
+			OSMinorVersion = minorVersion;
+			AssemblyRef = assemblyRef;
 		}
 
 		#endregion Construction
@@ -63,37 +40,27 @@ namespace Mosa.Compiler.Metadata.Tables
 		/// Gets the platform id.
 		/// </summary>
 		/// <value>The platform id.</value>
-		public uint OSPlatformId
-		{
-			get { return platformId; }
-		}
+		public uint OSPlatformId { get; private set; }
 
 		/// <summary>
 		/// Gets the major version.
 		/// </summary>
 		/// <value>The major version.</value>
-		public uint OSMajorVersion
-		{
-			get { return majorVersion; }
-		}
+		public uint OSMajorVersion { get; private set; }
 
 		/// <summary>
 		/// Gets the minor version.
 		/// </summary>
 		/// <value>The minor version.</value>
-		public uint OSMinorVersion
-		{
-			get { return minorVersion; }
-		}
+		public uint OSMinorVersion { get; private set; }
 
 		/// <summary>
-		/// Gets the assembly ref idx.
+		/// Gets the assembly reference.
 		/// </summary>
-		/// <value>The assembly ref idx.</value>
-		public Token AssemblyRef
-		{
-			get { return assemblyRef; }
-		}
+		/// <value>
+		/// The assembly reference.
+		/// </value>
+		public Token AssemblyRef { get; private set; }
 
 		#endregion Properties
 	}

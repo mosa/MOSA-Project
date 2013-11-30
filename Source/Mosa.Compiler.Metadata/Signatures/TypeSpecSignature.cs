@@ -5,6 +5,7 @@
  *
  * Authors:
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 namespace Mosa.Compiler.Metadata.Signatures
@@ -46,6 +47,17 @@ namespace Mosa.Compiler.Metadata.Signatures
 		protected override void ParseSignature(SignatureReader reader)
 		{
 			Type = SigType.ParseTypeSignature(reader);
+		}
+
+		/// <summary>
+		/// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
+		/// </summary>
+		/// <returns>
+		/// A <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
+		/// </returns>
+		public override string ToString()
+		{
+			return base.ToString() + " " + Type.ToString();
 		}
 	}
 }

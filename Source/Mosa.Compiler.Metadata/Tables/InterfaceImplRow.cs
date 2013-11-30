@@ -5,6 +5,7 @@
  *
  * Authors:
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 namespace Mosa.Compiler.Metadata.Tables
@@ -12,22 +13,8 @@ namespace Mosa.Compiler.Metadata.Tables
 	/// <summary>
 	///
 	/// </summary>
-	public struct InterfaceImplRow
+	public class InterfaceImplRow
 	{
-		#region Data members
-
-		/// <summary>
-		///
-		/// </summary>
-		private Token @class;
-
-		/// <summary>
-		///
-		/// </summary>
-		private Token @interface;
-
-		#endregion Data members
-
 		#region Construction
 
 		/// <summary>
@@ -37,8 +24,8 @@ namespace Mosa.Compiler.Metadata.Tables
 		/// <param name="interface">The @interface.</param>
 		public InterfaceImplRow(Token @class, Token @interface)
 		{
-			this.@class = @class;
-			this.@interface = @interface;
+			Class = @class;
+			Interface = @interface;
 		}
 
 		#endregion Construction
@@ -49,19 +36,13 @@ namespace Mosa.Compiler.Metadata.Tables
 		/// Gets the class.
 		/// </summary>
 		/// <value>The class.</value>
-		public Token Class
-		{
-			get { return this.@class; }
-		}
+		public Token Class { get; private set; }
 
 		/// <summary>
 		/// Gets the interface.
 		/// </summary>
 		/// <value>The interface.</value>
-		public Token Interface
-		{
-			get { return this.@interface; }
-		}
+		public Token Interface { get; private set; }
 
 		#endregion Properties
 	}

@@ -7,10 +7,9 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System.Collections;
-
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Tables;
+using System.Collections;
 
 namespace Mosa.Tool.MetadataExplorer.Tables
 {
@@ -31,9 +30,9 @@ namespace Mosa.Tool.MetadataExplorer.Tables
 
 		public override IEnumerable GetValues()
 		{
-			yield return Value("ParentTableIdx", row.Parent);
-			yield return Value("TypeIdx", row.Type);
-			yield return Value("ValueBlobIdx", row.Value);
+			yield return Value("ParentTable #", row.Parent);
+			yield return Value("Type #", row.Type);
+			yield return Value("ValueBlob #", row.Value);
 		}
 	}
 }

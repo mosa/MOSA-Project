@@ -5,6 +5,7 @@
  *
  * Authors:
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 namespace Mosa.Compiler.Metadata.Tables
@@ -12,40 +13,21 @@ namespace Mosa.Compiler.Metadata.Tables
 	/// <summary>
 	///
 	/// </summary>
-	public struct ConstantRow
+	public class ConstantRow
 	{
-		#region Data members
-
-		/// <summary>
-		///
-		/// </summary>
-		private CilElementType type;
-
-		/// <summary>
-		///
-		/// </summary>
-		private Token parent;
-
-		/// <summary>
-		///
-		/// </summary>
-		private HeapIndexToken value;
-
-		#endregion Data members
-
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="ConstantRow"/> struct.
+		/// Initializes a new instance of the <see cref="ConstantRow" /> struct.
 		/// </summary>
 		/// <param name="type">The type.</param>
 		/// <param name="parent">The parent.</param>
-		/// <param name="value">The value BLOB idx.</param>
+		/// <param name="value">The value.</param>
 		public ConstantRow(CilElementType type, Token parent, HeapIndexToken value)
 		{
-			this.type = type;
-			this.parent = parent;
-			this.value = value;
+			Type = type;
+			Parent = parent;
+			Value = value;
 		}
 
 		#endregion Construction
@@ -56,28 +38,21 @@ namespace Mosa.Compiler.Metadata.Tables
 		/// Gets the type.
 		/// </summary>
 		/// <value>The type.</value>
-		public CilElementType Type
-		{
-			get { return type; }
-		}
+		public CilElementType Type { get; private set; }
 
 		/// <summary>
 		/// Gets the parent.
 		/// </summary>
 		/// <value>The parent.</value>
-		public Token Parent
-		{
-			get { return parent; }
-		}
+		public Token Parent { get; private set; }
 
 		/// <summary>
-		/// Gets the value BLOB idx.
+		/// Gets the value.
 		/// </summary>
-		/// <value>The value BLOB idx.</value>
-		public HeapIndexToken Value
-		{
-			get { return value; }
-		}
+		/// <value>
+		/// The value.
+		/// </value>
+		public HeapIndexToken Value { get; private set; }
 
 		#endregion Properties
 	}

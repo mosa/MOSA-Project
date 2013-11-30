@@ -5,6 +5,7 @@
  *
  * Authors:
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 namespace Mosa.Compiler.Metadata.Tables
@@ -12,27 +13,8 @@ namespace Mosa.Compiler.Metadata.Tables
 	/// <summary>
 	///
 	/// </summary>
-	public struct MethodSemanticsRow
+	public class MethodSemanticsRow
 	{
-		#region Data members
-
-		/// <summary>
-		///
-		/// </summary>
-		private MethodSemanticsAttributes _semantics;
-
-		/// <summary>
-		///
-		/// </summary>
-		private Token _method;
-
-		/// <summary>
-		///
-		/// </summary>
-		private Token _association;
-
-		#endregion Data members
-
 		#region Construction
 
 		/// <summary>
@@ -44,9 +26,9 @@ namespace Mosa.Compiler.Metadata.Tables
 		public MethodSemanticsRow(MethodSemanticsAttributes semantics, Token method,
 									Token association)
 		{
-			_semantics = semantics;
-			_method = method;
-			_association = association;
+			Semantics = semantics;
+			Method = method;
+			Association = association;
 		}
 
 		#endregion Construction
@@ -57,28 +39,19 @@ namespace Mosa.Compiler.Metadata.Tables
 		/// Gets the semantics.
 		/// </summary>
 		/// <value>The semantics.</value>
-		public MethodSemanticsAttributes Semantics
-		{
-			get { return _semantics; }
-		}
+		public MethodSemanticsAttributes Semantics { get; private set; }
 
 		/// <summary>
 		/// Gets the method.
 		/// </summary>
 		/// <value>The method.</value>
-		public Token Method
-		{
-			get { return _method; }
-		}
+		public Token Method { get; private set; }
 
 		/// <summary>
 		/// Gets the association.
 		/// </summary>
 		/// <value>The association.</value>
-		public Token Association
-		{
-			get { return _association; }
-		}
+		public Token Association { get; private set; }
 
 		#endregion Properties
 	}

@@ -5,6 +5,7 @@
  *
  * Authors:
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 using System.Security.Permissions;
@@ -14,40 +15,21 @@ namespace Mosa.Compiler.Metadata.Tables
 	/// <summary>
 	///
 	/// </summary>
-	public struct DeclSecurityRow
+	public class DeclSecurityRow
 	{
-		#region Data members
-
-		/// <summary>
-		///
-		/// </summary>
-		private SecurityAction action;
-
-		/// <summary>
-		///
-		/// </summary>
-		private Token parent;
-
-		/// <summary>
-		///
-		/// </summary>
-		private HeapIndexToken permissionSet;
-
-		#endregion Data members
-
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="DeclSecurityRow"/> struct.
+		/// Initializes a new instance of the <see cref="DeclSecurityRow" /> struct.
 		/// </summary>
 		/// <param name="action">The action.</param>
-		/// <param name="parent">The parent table idx.</param>
-		/// <param name="permissionSet">The permission set BLOB idx.</param>
+		/// <param name="parent">The parent.</param>
+		/// <param name="permissionSet">The permission set.</param>
 		public DeclSecurityRow(SecurityAction action, Token parent, HeapIndexToken permissionSet)
 		{
-			this.action = action;
-			this.parent = parent;
-			this.permissionSet = permissionSet;
+			Action = action;
+			Parent = parent;
+			PermissionSet = permissionSet;
 		}
 
 		#endregion Construction
@@ -58,28 +40,19 @@ namespace Mosa.Compiler.Metadata.Tables
 		/// Gets the action.
 		/// </summary>
 		/// <value>The action.</value>
-		public SecurityAction Action
-		{
-			get { return action; }
-		}
+		public SecurityAction Action { get; private set; }
 
 		/// <summary>
 		/// Gets the parent.
 		/// </summary>
 		/// <value>The parent.</value>
-		public Token Parent
-		{
-			get { return parent; }
-		}
+		public Token Parent { get; private set; }
 
 		/// <summary>
 		/// Gets the permission set.
 		/// </summary>
 		/// <value>The permission set.</value>
-		public HeapIndexToken PermissionSet
-		{
-			get { return permissionSet; }
-		}
+		public HeapIndexToken PermissionSet { get; private set; }
 
 		#endregion Properties
 	}

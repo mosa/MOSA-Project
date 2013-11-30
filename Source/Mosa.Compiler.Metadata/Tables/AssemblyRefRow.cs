@@ -5,6 +5,7 @@
  *
  * Authors:
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 namespace Mosa.Compiler.Metadata.Tables
@@ -12,57 +13,8 @@ namespace Mosa.Compiler.Metadata.Tables
 	/// <summary>
 	///
 	/// </summary>
-	public struct AssemblyRefRow
+	public class AssemblyRefRow
 	{
-		#region Data members
-
-		/// <summary>
-		///
-		/// </summary>
-		private ushort majorVersion;
-
-		/// <summary>
-		///
-		/// </summary>
-		private ushort minorVersion;
-
-		/// <summary>
-		///
-		/// </summary>
-		private ushort buildNumber;
-
-		/// <summary>
-		///
-		/// </summary>
-		private ushort revisionNumber;
-
-		/// <summary>
-		///
-		/// </summary>
-		private AssemblyAttributes flags;
-
-		/// <summary>
-		///
-		/// </summary>
-		private HeapIndexToken publicKeyOrToken;
-
-		/// <summary>
-		///
-		/// </summary>
-		private HeapIndexToken name;
-
-		/// <summary>
-		///
-		/// </summary>
-		private HeapIndexToken culture;
-
-		/// <summary>
-		///
-		/// </summary>
-		private HeapIndexToken hashValue;
-
-		#endregion Data members
-
 		#region Construction
 
 		/// <summary>
@@ -81,15 +33,15 @@ namespace Mosa.Compiler.Metadata.Tables
 								AssemblyAttributes flags, HeapIndexToken publicKeyOrToken, HeapIndexToken name,
 								HeapIndexToken culture, HeapIndexToken hashValue)
 		{
-			this.majorVersion = majorVersion;
-			this.minorVersion = minorVersion;
-			this.buildNumber = buildNumber;
-			this.revisionNumber = revisionNumber;
-			this.flags = flags;
-			this.publicKeyOrToken = publicKeyOrToken;
-			this.name = name;
-			this.culture = culture;
-			this.hashValue = hashValue;
+			MajorVersion = majorVersion;
+			MinorVersion = minorVersion;
+			BuildNumber = buildNumber;
+			RevisionNumber = revisionNumber;
+			Flags = flags;
+			PublicKeyOrToken = publicKeyOrToken;
+			Name = name;
+			Culture = culture;
+			HashValue = hashValue;
 		}
 
 		#endregion Construction
@@ -100,82 +52,55 @@ namespace Mosa.Compiler.Metadata.Tables
 		/// Gets the major version.
 		/// </summary>
 		/// <value>The major version.</value>
-		public ushort MajorVersion
-		{
-			get { return majorVersion; }
-		}
+		public ushort MajorVersion { get; private set; }
 
 		/// <summary>
 		/// Gets the minor version.
 		/// </summary>
 		/// <value>The minor version.</value>
-		public ushort MinorVersion
-		{
-			get { return minorVersion; }
-		}
+		public ushort MinorVersion { get; private set; }
 
 		/// <summary>
 		/// Gets the build number.
 		/// </summary>
 		/// <value>The build number.</value>
-		public ushort BuildNumber
-		{
-			get { return buildNumber; }
-		}
+		public ushort BuildNumber { get; private set; }
 
 		/// <summary>
 		/// Gets the revision.
 		/// </summary>
 		/// <value>The revision.</value>
-		public ushort RevisionNumber
-		{
-			get { return revisionNumber; }
-		}
+		public ushort RevisionNumber { get; private set; }
 
 		/// <summary>
 		/// Gets the flags.
 		/// </summary>
 		/// <value>The flags.</value>
-		public AssemblyAttributes Flags
-		{
-			get { return flags; }
-		}
+		public AssemblyAttributes Flags { get; private set; }
 
 		/// <summary>
 		/// Gets the public key or token.
 		/// </summary>
 		/// <value>The public key or token.</value>
-		public HeapIndexToken PublicKeyOrToken
-		{
-			get { return publicKeyOrToken; }
-		}
+		public HeapIndexToken PublicKeyOrToken { get; private set; }
 
 		/// <summary>
 		/// Gets the name.
 		/// </summary>
 		/// <value>The name.</value>
-		public HeapIndexToken Name
-		{
-			get { return name; }
-		}
+		public HeapIndexToken Name { get; private set; }
 
 		/// <summary>
 		/// Gets the culture.
 		/// </summary>
 		/// <value>The culture.</value>
-		public HeapIndexToken Culture
-		{
-			get { return culture; }
-		}
+		public HeapIndexToken Culture { get; private set; }
 
 		/// <summary>
 		/// Gets the hash value.
 		/// </summary>
 		/// <value>The hash value.</value>
-		public HeapIndexToken HashValue
-		{
-			get { return hashValue; }
-		}
+		public HeapIndexToken HashValue { get; private set; }
 
 		#endregion Properties
 	}

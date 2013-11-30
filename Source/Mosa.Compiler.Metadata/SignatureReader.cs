@@ -16,9 +16,8 @@ namespace Mosa.Compiler.Metadata
 	public sealed class SignatureReader
 	{
 		private byte[] buffer = null;
-		private int index = 0;
 
-		public int Index { get { return index; } }
+		public int Index { get; private set; }
 
 		public int Length { get { return buffer.Length; } }
 
@@ -31,10 +30,10 @@ namespace Mosa.Compiler.Metadata
 		public SignatureReader(byte[] buffer)
 		{
 			if (buffer == null)
-				throw new ArgumentNullException(@"buffer");
+				throw new ArgumentNullException("buffer");
 
 			this.buffer = buffer;
-			this.index = 0;
+			Index = 0;
 		}
 
 		/// <summary>
@@ -43,10 +42,10 @@ namespace Mosa.Compiler.Metadata
 		/// <returns></returns>
 		public byte ReadByte()
 		{
-			if (0 > index || index > buffer.Length)
-				throw new ArgumentOutOfRangeException(@"index");
+			if (Index < 0 || Index >= buffer.Length)
+				throw new ArgumentOutOfRangeException("index");
 
-			return buffer[index++];
+			return buffer[Index++];
 		}
 
 		/// <summary>
@@ -55,10 +54,10 @@ namespace Mosa.Compiler.Metadata
 		/// <returns></returns>
 		public byte PeekByte()
 		{
-			if (0 > index || index > buffer.Length)
+			if (Index < 0 || Index >= buffer.Length)
 				throw new ArgumentOutOfRangeException(@"index");
 
-			return buffer[index];
+			return buffer[Index];
 		}
 
 		/// <summary>
@@ -66,10 +65,10 @@ namespace Mosa.Compiler.Metadata
 		/// </summary>
 		public void SkipByte()
 		{
-			if (0 > index || index > buffer.Length)
+			if (Index < 0 || Index >= buffer.Length)
 				throw new ArgumentOutOfRangeException(@"index");
 
-			index++;
+			Index++;
 		}
 
 		/// <summary>
@@ -78,30 +77,30 @@ namespace Mosa.Compiler.Metadata
 		/// <returns></returns>
 		public int ReadCompressedInt32()
 		{
-			if (0 > index || index > buffer.Length)
+			if (Index < 0 || Index >= buffer.Length)
 				throw new ArgumentOutOfRangeException(@"index");
 
 			int result = 0;
-			if (0xC0 == (0xE0 & buffer[index]))
+			if (0xC0 == (0xE0 & buffer[Index]))
 			{
-				if (index + 3 >= buffer.Length)
+				if (Index + 3 >= buffer.Length)
 					throw new ArgumentOutOfRangeException(@"index");
 
-				result = ((buffer[index] & 0x1F) << 24) | (buffer[index + 1] << 16) | (buffer[index + 2] << 8) | (buffer[index + 3]);
-				index += 4;
+				result = ((buffer[Index] & 0x1F) << 24) | (buffer[Index + 1] << 16) | (buffer[Index + 2] << 8) | (buffer[Index + 3]);
+				Index += 4;
 			}
-			else if (0x80 == (0xC0 & buffer[index]))
+			else if (0x80 == (0xC0 & buffer[Index]))
 			{
-				if (index + 1 >= buffer.Length)
+				if (Index + 1 >= buffer.Length)
 					throw new ArgumentOutOfRangeException(@"index");
 
-				result = ((buffer[index] & 0x3F) << 8) | (buffer[index + 1]);
-				index += 2;
+				result = ((buffer[Index] & 0x3F) << 8) | (buffer[Index + 1]);
+				Index += 2;
 			}
 			else
 			{
-				Debug.Assert(0x00 == (0x80 & buffer[index]));
-				result = buffer[index++];
+				Debug.Assert(0x00 == (0x80 & buffer[Index]));
+				result = buffer[Index++];
 			}
 			return result;
 		}
@@ -112,12 +111,11 @@ namespace Mosa.Compiler.Metadata
 		/// <returns></returns>
 		public bool ReadCustomMod()
 		{
-			bool result = (buffer[index] == (byte)CilElementType.Required || buffer[index] == (byte)CilElementType.Optional);
+			bool result = (buffer[Index] == (byte)CilElementType.Required || buffer[Index] == (byte)CilElementType.Optional);
 			if (result)
 			{
-				index++;
+				Index++;
 				ReadEncodedTypeDefOrRef();
-				//Debug.WriteLine("Skipping CilElementType.Required or CilElementType.Optional.");
 			}
 			return result;
 		}
@@ -125,7 +123,7 @@ namespace Mosa.Compiler.Metadata
 		/// <summary>
 		///
 		/// </summary>
-		private static readonly TableType[] _typeDefOrRefEncodedTables2 = new TableType[] { TableType.TypeDef, TableType.TypeRef, TableType.TypeSpec };
+		private static readonly TableType[] typeDefOrRefEncodedTables2 = new TableType[] { TableType.TypeDef, TableType.TypeRef, TableType.TypeSpec };
 
 		/// <summary>
 		/// Reads the type def or ref encoded.
@@ -135,7 +133,7 @@ namespace Mosa.Compiler.Metadata
 		{
 			int value = ReadCompressedInt32();
 			Debug.Assert(0 != (value & 0xFFFFFFFC), @"Invalid TypeDefOrRefEncoded index value.");
-			Token token = new Token(_typeDefOrRefEncodedTables2[value & 0x03], value >> 2);
+			Token token = new Token(typeDefOrRefEncodedTables2[value & 0x03], value >> 2);
 			return token;
 		}
 
@@ -157,9 +155,9 @@ namespace Mosa.Compiler.Metadata
 		public bool ReadConstraint()
 		{
 			// FIXME: Influence the variable type somehow.
-			bool result = (buffer[index] == (byte)CilElementType.Pinned);
+			bool result = (buffer[Index] == (byte)CilElementType.Pinned);
 			if (result)
-				index++;
+				Index++;
 			return result;
 		}
 	}

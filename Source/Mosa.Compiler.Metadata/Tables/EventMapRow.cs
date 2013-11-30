@@ -5,6 +5,7 @@
  *
  * Authors:
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 namespace Mosa.Compiler.Metadata.Tables
@@ -12,22 +13,8 @@ namespace Mosa.Compiler.Metadata.Tables
 	/// <summary>
 	///
 	/// </summary>
-	public struct EventMapRow
+	public class EventMapRow
 	{
-		#region Data members
-
-		/// <summary>
-		///
-		/// </summary>
-		private Token typeDef;
-
-		/// <summary>
-		///
-		/// </summary>
-		private Token eventList;
-
-		#endregion Data members
-
 		#region Construction
 
 		/// <summary>
@@ -37,8 +24,8 @@ namespace Mosa.Compiler.Metadata.Tables
 		/// <param name="eventList">The event list.</param>
 		public EventMapRow(Token typeDef, Token eventList)
 		{
-			this.typeDef = typeDef;
-			this.eventList = eventList;
+			TypeDef = typeDef;
+			EventList = eventList;
 		}
 
 		#endregion Construction
@@ -49,19 +36,13 @@ namespace Mosa.Compiler.Metadata.Tables
 		/// Gets the type def.
 		/// </summary>
 		/// <value>The type def.</value>
-		public Token TypeDef
-		{
-			get { return typeDef; }
-		}
+		public Token TypeDef { get; private set; }
 
 		/// <summary>
 		/// Gets the event list.
 		/// </summary>
 		/// <value>The event list.</value>
-		public Token EventList
-		{
-			get { return eventList; }
-		}
+		public Token EventList { get; private set; }
 
 		#endregion Properties
 	}

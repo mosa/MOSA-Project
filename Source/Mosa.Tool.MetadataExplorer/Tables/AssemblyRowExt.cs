@@ -7,10 +7,9 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System.Collections;
-
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Tables;
+using System.Collections;
 
 namespace Mosa.Tool.MetadataExplorer.Tables
 {
@@ -38,8 +37,8 @@ namespace Mosa.Tool.MetadataExplorer.Tables
 			yield return Value("MinorVersion", row.MinorVersion);
 			yield return Value("HashAlgId", row.HashAlgId.ToString());
 			yield return Value("Revision", row.Revision);
-			yield return Value("CultureIdx", row.Culture);
-			yield return Value("PublicKeyIdx", row.PublicKey);
+			yield return Value("Culture #", row.Culture);
+			yield return Value("PublicKey #", row.PublicKey);
 		}
 	}
 }

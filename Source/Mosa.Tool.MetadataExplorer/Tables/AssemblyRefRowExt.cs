@@ -7,10 +7,9 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System.Collections;
-
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Tables;
+using System.Collections;
 
 namespace Mosa.Tool.MetadataExplorer.Tables
 {
@@ -32,15 +31,15 @@ namespace Mosa.Tool.MetadataExplorer.Tables
 		public override IEnumerable GetValues()
 		{
 			yield return TokenString("Name", row.Name);
-			yield return Value("NameIdx", row.Name);
+			yield return Value("Name #", row.Name);
 			yield return Value("Flags", row.Flags.ToString());
 			yield return Value("BuildNumber", row.BuildNumber);
 			yield return Value("MajorVersion", row.MajorVersion);
 			yield return Value("MinorVersion", row.MinorVersion);
-			yield return Value("HashValueIdx", row.HashValue);
+			yield return Value("HashValue #", row.HashValue);
 			yield return Value("Revision", row.RevisionNumber);
-			yield return Value("CultureIdx", row.Culture);
-			yield return Value("PublicKeyOrTokenIdx", row.PublicKeyOrToken);
+			yield return Value("Culture #", row.Culture);
+			yield return Value("PublicKeyOrToken #", row.PublicKeyOrToken);
 		}
 	}
 }

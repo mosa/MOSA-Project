@@ -5,7 +5,10 @@
  *
  * Authors:
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
+
+using System.Text;
 
 namespace Mosa.Compiler.Metadata.Signatures
 {
@@ -31,19 +34,6 @@ namespace Mosa.Compiler.Metadata.Signatures
 		}
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="VariableSignature"/> class.
-		/// </summary>
-		/// <param name="provider">The provider.</param>
-		/// <param name="token">The token.</param>
-		public VariableSignature(VariableSignature signature)
-			: base(signature)
-		{
-			CustomMods = signature.CustomMods;
-			Modifier = signature.Modifier;
-			Type = signature.Type;
-		}
-
-		/// <summary>
 		/// Gets the custom mods.
 		/// </summary>
 		/// <value>The custom mods.</value>
@@ -65,12 +55,15 @@ namespace Mosa.Compiler.Metadata.Signatures
 
 		protected override void ParseSignature(SignatureReader reader)
 		{
-			this.ParseModifier(reader);
-
+			ParseModifier(reader);
 			CustomMods = CustomMod.ParseCustomMods(reader);
 			Type = SigType.ParseTypeSignature(reader);
 		}
 
+		/// <summary>
+		/// Parses the modifier.
+		/// </summary>
+		/// <param name="reader">The reader.</param>
 		private void ParseModifier(SignatureReader reader)
 		{
 			CilElementType value = (CilElementType)reader.PeekByte();
@@ -79,6 +72,22 @@ namespace Mosa.Compiler.Metadata.Signatures
 				Modifier = value;
 				reader.SkipByte();
 			}
+		}
+
+		/// <summary>
+		/// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
+		/// </summary>
+		/// <returns>
+		/// A <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
+		/// </returns>
+		public override string ToString()
+		{
+			StringBuilder sb = new StringBuilder();
+			sb.Append(base.ToString() + " ");
+			sb.Append(Type.ToString());
+			sb.Append(" Modifier: ");
+			sb.Append(Modifier.ToString());
+			return sb.ToString();
 		}
 	}
 }

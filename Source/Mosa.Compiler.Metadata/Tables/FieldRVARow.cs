@@ -5,6 +5,7 @@
  *
  * Authors:
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 namespace Mosa.Compiler.Metadata.Tables
@@ -12,33 +13,19 @@ namespace Mosa.Compiler.Metadata.Tables
 	/// <summary>
 	///
 	/// </summary>
-	public struct FieldRVARow
+	public class FieldRVARow
 	{
-		#region Data members
-
-		/// <summary>
-		///
-		/// </summary>
-		private uint rva;
-
-		/// <summary>
-		///
-		/// </summary>
-		private Token field;
-
-		#endregion Data members
-
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="FieldRVARow"/> struct.
+		/// Initializes a new instance of the <see cref="FieldRVARow" /> struct.
 		/// </summary>
 		/// <param name="rva">The rva.</param>
-		/// <param name="field">The field table idx.</param>
+		/// <param name="field">The field.</param>
 		public FieldRVARow(uint rva, Token field)
 		{
-			this.rva = rva;
-			this.field = field;
+			Rva = rva;
+			Field = field;
 		}
 
 		#endregion Construction
@@ -49,19 +36,13 @@ namespace Mosa.Compiler.Metadata.Tables
 		/// Gets the rva.
 		/// </summary>
 		/// <value>The rva.</value>
-		public uint Rva
-		{
-			get { return rva; }
-		}
+		public uint Rva { get; private set; }
 
 		/// <summary>
 		/// Gets the field.
 		/// </summary>
 		/// <value>The field.</value>
-		public Token Field
-		{
-			get { return field; }
-		}
+		public Token Field { get; private set; }
 
 		#endregion Properties
 	}

@@ -29,6 +29,7 @@
 		private void InitializeComponent()
 		{
 			this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+			this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
 			this.treeView = new System.Windows.Forms.TreeView();
 			this.menuStrip1 = new System.Windows.Forms.MenuStrip();
 			this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -39,22 +40,30 @@
 			this.showTokenValues = new System.Windows.Forms.ToolStripMenuItem();
 			this.showSizes = new System.Windows.Forms.ToolStripMenuItem();
 			this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
+			this.statusStrip1.SuspendLayout();
 			this.menuStrip1.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// statusStrip1
 			// 
+			this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripStatusLabel1});
 			this.statusStrip1.Location = new System.Drawing.Point(0, 489);
 			this.statusStrip1.Name = "statusStrip1";
 			this.statusStrip1.Size = new System.Drawing.Size(617, 22);
 			this.statusStrip1.TabIndex = 0;
 			this.statusStrip1.Text = "statusStrip1";
 			// 
+			// toolStripStatusLabel1
+			// 
+			this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
+			this.toolStripStatusLabel1.Size = new System.Drawing.Size(0, 17);
+			// 
 			// treeView
 			// 
-			this.treeView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-						| System.Windows.Forms.AnchorStyles.Left)
-						| System.Windows.Forms.AnchorStyles.Right)));
+			this.treeView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.treeView.Location = new System.Drawing.Point(0, 29);
 			this.treeView.Name = "treeView";
 			this.treeView.Size = new System.Drawing.Size(616, 461);
@@ -84,19 +93,19 @@
 			// openToolStripMenuItem
 			// 
 			this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-			this.openToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.openToolStripMenuItem.Size = new System.Drawing.Size(103, 22);
 			this.openToolStripMenuItem.Text = "&Open";
 			this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
 			// 
 			// toolStripMenuItem1
 			// 
 			this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-			this.toolStripMenuItem1.Size = new System.Drawing.Size(149, 6);
+			this.toolStripMenuItem1.Size = new System.Drawing.Size(100, 6);
 			// 
 			// quitToolStripMenuItem
 			// 
 			this.quitToolStripMenuItem.Name = "quitToolStripMenuItem";
-			this.quitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.quitToolStripMenuItem.Size = new System.Drawing.Size(103, 22);
 			this.quitToolStripMenuItem.Text = "&Quit";
 			this.quitToolStripMenuItem.Click += new System.EventHandler(this.quitToolStripMenuItem_Click);
 			// 
@@ -132,7 +141,7 @@
 			// openFileDialog
 			// 
 			this.openFileDialog.DefaultExt = "exe";
-			this.openFileDialog.Filter = "Executable|*.exe|Library|*.dll|All Files|*.*";
+			this.openFileDialog.Filter = "Executable & Library|*.exe;*.dll|Executable|*.exe|Library|*.dll|All Files|*.*";
 			// 
 			// Main
 			// 
@@ -146,6 +155,8 @@
 			this.Name = "Main";
 			this.Text = "MOSA Metadata Explorer";
 			this.Load += new System.EventHandler(this.Main_Load);
+			this.statusStrip1.ResumeLayout(false);
+			this.statusStrip1.PerformLayout();
 			this.menuStrip1.ResumeLayout(false);
 			this.menuStrip1.PerformLayout();
 			this.ResumeLayout(false);
@@ -166,5 +177,6 @@
 		private System.Windows.Forms.ToolStripMenuItem optionsToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem showTokenValues;
 		private System.Windows.Forms.ToolStripMenuItem showSizes;
+		private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
 	}
 }

@@ -17,6 +17,8 @@ namespace Mosa.Compiler.Metadata
 	/// </summary>
 	public sealed class BlobHeap : Heap
 	{
+		private static byte[] emptyArray = new byte[0];
+
 		#region Construction
 
 		/// <summary>
@@ -43,14 +45,14 @@ namespace Mosa.Compiler.Metadata
 		{
 			Debug.Assert((HeapIndexToken.TableMask & token) == HeapIndexToken.Blob);
 			if ((HeapIndexToken.TableMask & token) != HeapIndexToken.Blob)
-				throw new ArgumentException(@"Invalid token value.", @"token");
+				throw new ArgumentException("Invalid token value.", @"token");
 
 			// Argument checks
 			int offset = (int)(token & HeapIndexToken.RowIndexMask);
-			if (0 == offset)
+			if (offset == 0)
 			{
 				token += 1;
-				return new byte[0];
+				return emptyArray;
 			}
 
 			// Validate the offset & calculate the real offset

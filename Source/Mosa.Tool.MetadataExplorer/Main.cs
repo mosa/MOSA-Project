@@ -37,6 +37,8 @@ namespace Mosa.Tool.MetadataExplorer
 			metadataModule = assemblyLoader.LoadModule(filename);
 
 			UpdateTree();
+
+			this.toolStripStatusLabel1.Text = filename;
 		}
 
 		protected void UpdateTree()
@@ -96,5 +98,6 @@ namespace Mosa.Tool.MetadataExplorer
 		{
 			UpdateTree();
 		}
+
 	}
 }

@@ -7,10 +7,10 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System.Collections;
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Compiler.Metadata.Tables;
+using System.Collections;
 
 namespace Mosa.Tool.MetadataExplorer.Tables
 {
@@ -32,15 +32,10 @@ namespace Mosa.Tool.MetadataExplorer.Tables
 		public override IEnumerable GetValues()
 		{
 			yield return TokenString("Name", row.Name);
-			yield return Value("NameStringIdx", row.Name);
 			yield return Value("Flags", row.Flags.ToString());
-			yield return Value("SignatureBlobIdx", row.Signature);
 
 			FieldSignature signature = new FieldSignature(Metadata, row.Signature);
-
-			//yield return Value("Signature Token", signature.Token);
-			yield return Value("Signature Modifier", signature.Modifier.ToString());
-			yield return Value("Signature Type", signature.Type.ToString());
+			yield return Value("Signature", signature.ToString());
 		}
 	}
 }

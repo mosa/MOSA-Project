@@ -5,6 +5,7 @@
  *
  * Authors:
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 namespace Mosa.Compiler.Metadata.Tables
@@ -12,40 +13,21 @@ namespace Mosa.Compiler.Metadata.Tables
 	/// <summary>
 	///
 	/// </summary>
-	public struct ParamRow
+	public class ParamRow
 	{
-		#region Data members
-
-		/// <summary>
-		/// Holds the flags of the parameter.
-		/// </summary>
-		private ParameterAttributes flags;
-
-		/// <summary>
-		/// The token holding the name of the parameter.
-		/// </summary>
-		private HeapIndexToken nameIdx;
-
-		/// <summary>
-		/// Holds the sequence index of the parameter.
-		/// </summary>
-		private short sequence;
-
-		#endregion Data members
-
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="ParamRow"/> struct.
+		/// Initializes a new instance of the <see cref="ParamRow" /> struct.
 		/// </summary>
 		/// <param name="flags">The flags.</param>
 		/// <param name="sequence">The sequence.</param>
-		/// <param name="nameIdx">The name idx.</param>
-		public ParamRow(ParameterAttributes flags, short sequence, HeapIndexToken nameIdx)
+		/// <param name="name">The name.</param>
+		public ParamRow(ParameterAttributes flags, short sequence, HeapIndexToken name)
 		{
-			this.nameIdx = nameIdx;
-			this.sequence = sequence;
-			this.flags = flags;
+			Name = name;
+			Sequence = sequence;
+			Flags = flags;
 		}
 
 		#endregion Construction
@@ -56,31 +38,21 @@ namespace Mosa.Compiler.Metadata.Tables
 		/// Returns the attributes of this parameter.
 		/// </summary>
 		/// <value>The flags.</value>
-		public ParameterAttributes Flags
-		{
-			get { return flags; }
-		}
+		public ParameterAttributes Flags { get; private set; }
 
 		/// <summary>
 		/// Retrieves the token of the parameter name.
 		/// </summary>
-		/// <value>The name idx.</value>
-		public HeapIndexToken NameIdx
-		{
-			get
-			{
-				return nameIdx;
-			}
-		}
+		/// <value>
+		/// The name.
+		/// </value>
+		public HeapIndexToken Name { get; private set; }
 
 		/// <summary>
 		/// Retrieves the parameter sequence number.
 		/// </summary>
 		/// <value>The sequence.</value>
-		public short Sequence
-		{
-			get { return sequence; }
-		}
+		public short Sequence { get; private set; }
 
 		#endregion Properties
 	}

@@ -5,6 +5,7 @@
  *
  * Authors:
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 namespace Mosa.Compiler.Metadata.Tables
@@ -12,22 +13,8 @@ namespace Mosa.Compiler.Metadata.Tables
 	/// <summary>
 	///
 	/// </summary>
-	public struct FieldLayoutRow
+	public class FieldLayoutRow
 	{
-		#region Data members
-
-		/// <summary>
-		///
-		/// </summary>
-		private uint offset;
-
-		/// <summary>
-		///
-		/// </summary>
-		private Token field;
-
-		#endregion Data members
-
 		#region Construction
 
 		/// <summary>
@@ -37,8 +24,8 @@ namespace Mosa.Compiler.Metadata.Tables
 		/// <param name="field">The field.</param>
 		public FieldLayoutRow(uint offset, Token field)
 		{
-			this.offset = offset;
-			this.field = field;
+			Offset = offset;
+			Field = field;
 		}
 
 		#endregion Construction
@@ -49,19 +36,13 @@ namespace Mosa.Compiler.Metadata.Tables
 		/// Gets the offset.
 		/// </summary>
 		/// <value>The offset.</value>
-		public uint Offset
-		{
-			get { return offset; }
-		}
+		public uint Offset { get; private set; }
 
 		/// <summary>
 		/// Gets the field.
 		/// </summary>
 		/// <value>The field.</value>
-		public Token Field
-		{
-			get { return field; }
-		}
+		public Token Field { get; private set; }
 
 		#endregion Properties
 	}

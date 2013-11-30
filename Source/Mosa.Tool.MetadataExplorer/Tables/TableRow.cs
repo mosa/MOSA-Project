@@ -7,9 +7,9 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using Mosa.Compiler.Metadata;
 using System.Collections;
 using System.Collections.Generic;
-using Mosa.Compiler.Metadata;
 
 namespace Mosa.Tool.MetadataExplorer.Tables
 {

@@ -5,6 +5,7 @@
  *
  * Authors:
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 namespace Mosa.Compiler.Metadata.Tables
@@ -12,26 +13,17 @@ namespace Mosa.Compiler.Metadata.Tables
 	/// <summary>
 	///
 	/// </summary>
-	public struct TypeSpecRow
+	public class TypeSpecRow
 	{
-		#region Data members
-
-		/// <summary>
-		///
-		/// </summary>
-		private HeapIndexToken _signatureBlobIdx;
-
-		#endregion Data members
-
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="TypeSpecRow"/> struct.
+		/// Initializes a new instance of the <see cref="TypeSpecRow" /> struct.
 		/// </summary>
-		/// <param name="signatureBlobIdx">The signature BLOB idx.</param>
-		public TypeSpecRow(HeapIndexToken signatureBlobIdx)
+		/// <param name="signatureBlob">The signature BLOB.</param>
+		public TypeSpecRow(HeapIndexToken signatureBlob)
 		{
-			_signatureBlobIdx = signatureBlobIdx;
+			SignatureBlob = signatureBlob;
 		}
 
 		#endregion Construction
@@ -39,13 +31,12 @@ namespace Mosa.Compiler.Metadata.Tables
 		#region Properties
 
 		/// <summary>
-		/// Gets the signature BLOB idx.
+		/// Gets the signature BLOB.
 		/// </summary>
-		/// <value>The signature BLOB idx.</value>
-		public HeapIndexToken SignatureBlobIdx
-		{
-			get { return _signatureBlobIdx; }
-		}
+		/// <value>
+		/// The signature BLOB.
+		/// </value>
+		public HeapIndexToken SignatureBlob { get; private set; }
 
 		#endregion Properties
 	}
