@@ -16,5 +16,15 @@
 		{
 			return Name;
 		}
+
+		public bool Matches(MosaParameter parameter)
+		{
+			return Type.Matches(parameter.Type);
+		}
+
+		public bool Matches(MosaType type)
+		{
+			return Type.Matches(type);
+		}
 	}
 }

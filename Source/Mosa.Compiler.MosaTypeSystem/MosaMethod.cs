@@ -94,5 +94,35 @@ namespace Mosa.Compiler.MosaTypeSystem
 			MethodName = sb.ToString();
 		}
 
+		public bool Matches(MosaMethod method)
+		{
+			if (Parameters.Count != method.Parameters.Count)
+				return false;
+
+			for (int index = 0; index < Parameters.Count; index++)
+			{
+				if (!Parameters[index].Matches(method.Parameters[index]))
+					return false;
+			}
+
+			if (ReturnType != method.ReturnType)
+				return false;
+
+			return true;
+		}
+
+		public bool Matches(List<MosaType> parameterTypes)
+		{
+			if (Parameters.Count != parameterTypes.Count)
+				return false;
+
+			for (int index = 0; index < Parameters.Count; index++)
+			{
+				if (!Parameters[index].Matches(parameterTypes[index]))
+					return false;
+			}
+
+			return true;
+		}
 	}
 }

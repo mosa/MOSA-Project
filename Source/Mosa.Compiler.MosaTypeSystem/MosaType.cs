@@ -219,5 +219,10 @@ namespace Mosa.Compiler.MosaTypeSystem
 		{
 			return FullName;
 		}
+
+		public bool Matches(MosaType type)
+		{
+			return type == this;
+		}
 	}
 }

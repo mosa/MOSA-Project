@@ -175,7 +175,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 			{
 				type = new MosaType();
 				type.Name = "MVAR#" + index.ToString();
-				type.FullName = type.Name; 
+				type.FullName = type.Name;
 				type.IsMVarFlag = true;
 				type.VarOrMVarIndex = index;
 				var[index] = type;

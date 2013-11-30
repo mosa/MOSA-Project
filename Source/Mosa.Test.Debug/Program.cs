@@ -1,6 +1,6 @@
-﻿using Mosa.Test.Collection.MbUnit;
+﻿using Mosa.Compiler.Metadata.Loader;
 using Mosa.Compiler.MosaTypeSystem;
-using Mosa.Compiler.Metadata.Loader;
+using Mosa.Test.Collection.MbUnit;
 using System.IO;
 
 namespace Mosa.Test.Debug
@@ -27,7 +27,7 @@ namespace Mosa.Test.Debug
 			var assemblyB = new PortableExecutableImage(new FileStream(@"Mosa.Test.AssemblyB.dll", FileMode.Open, FileAccess.Read));
 			var assemblyC = new PortableExecutableImage(new FileStream(@"Mosa.Test.AssemblyC.dll", FileMode.Open, FileAccess.Read));
 			var classLib = new PortableExecutableImage(new FileStream(@"Mosa.ClassLib.dll", FileMode.Open, FileAccess.Read));
-			
+
 			loader.Load(mscorlib);
 			loader.Load(assemblyA);
 			loader.Load(assemblyB);

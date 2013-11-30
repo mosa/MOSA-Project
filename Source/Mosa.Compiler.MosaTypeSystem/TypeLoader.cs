@@ -5,6 +5,7 @@ using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Compiler.Metadata.Tables;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Mosa.Compiler.MosaTypeSystem
 {
@@ -87,7 +88,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 			LoadTypeReferences();
 			LoadTypes();
 			LoadTypeSpecs();
-			//LoadMemberReferences();
+			LoadMemberReferences();
 			//LoadCustomAttributes();
 			LoadGenericParams();
 
@@ -193,7 +194,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		private Signature GetMemberRefSignature(HeapIndexToken blobIdx)
 		{
-			return (RetrieveSignature<Signature>(blobIdx) ?? StoreSignature<Signature>(blobIdx, Signature.FromMemberRefSignatureToken(metadataProvider, blobIdx)));
+			return (RetrieveSignature<Signature>(blobIdx) ?? StoreSignature<Signature>(blobIdx, Signature.GetSignatureFromMemberRef(metadataProvider, blobIdx)));
 		}
 
 		private struct TypeInfo
@@ -220,7 +221,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 				MosaType type = null;
 
 				var row = metadataProvider.ReadTypeRefRow(token);
-				var typeName = GetString(row.TypeNameIdx);
+				var typeName = GetString(row.TypeName);
 
 				switch (row.ResolutionScope.Table)
 				{
@@ -229,8 +230,8 @@ namespace Mosa.Compiler.MosaTypeSystem
 					case TableType.TypeRef:
 						{
 							var row2 = metadataProvider.ReadTypeRefRow(row.ResolutionScope);
-							var typeName2 = GetString(row2.TypeNameIdx);
-							var @namespace = GetString(row2.TypeNamespaceIdx) + "." + typeName2;
+							var typeName2 = GetString(row2.TypeName);
+							var @namespace = GetString(row2.TypeNamespace) + "." + typeName2;
 							var asmRefRow = metadataProvider.ReadAssemblyRefRow(row2.ResolutionScope);
 							var sourceAssemblyName = GetString(asmRefRow.Name);
 							var sourceAssembly = resolver.GetAssemblyByName(sourceAssemblyName);
@@ -241,7 +242,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 					case TableType.ModuleRef: throw new AssemblyLoadException();
 					case TableType.AssemblyRef:
 						{
-							var @namespace = GetString(row.TypeNamespaceIdx);
+							var @namespace = GetString(row.TypeNamespace);
 							var asmRefRow = metadataProvider.ReadAssemblyRefRow(row.ResolutionScope);
 							var sourceAssemblyName = GetString(asmRefRow.Name);
 							var sourceAssembly = resolver.GetAssemblyByName(sourceAssemblyName);
@@ -274,12 +275,12 @@ namespace Mosa.Compiler.MosaTypeSystem
 			var maxNestedClass = GetMaxTokenValue(TableType.NestedClass);
 
 			var tokenLayout = new Token(TableType.ClassLayout, 1);
-			var layoutRow = (maxLayout.RID != 0) ? metadataProvider.ReadClassLayoutRow(tokenLayout) : new ClassLayoutRow();
+			ClassLayoutRow layoutRow = (maxLayout.RID != 0) ? metadataProvider.ReadClassLayoutRow(tokenLayout) : null;
 
 			var tokenNested = new Token(TableType.NestedClass, 1);
-			var nestedRow = (maxNestedClass.RID != 0) ? metadataProvider.ReadNestedClassRow(tokenNested) : new NestedClassRow();
+			NestedClassRow nestedRow = (maxNestedClass.RID != 0) ? metadataProvider.ReadNestedClassRow(tokenNested) : null;
 
-			var nextTypeDefRow = new TypeDefRow();
+			TypeDefRow nextTypeDefRow = null;
 			var typeDefRow = metadataProvider.ReadTypeDefRow(new Token(TableType.TypeDef, 1));
 
 			foreach (var token in new Token(TableType.TypeDef, 1).Upto(maxTypeDef))
@@ -289,8 +290,8 @@ namespace Mosa.Compiler.MosaTypeSystem
 				info.TypeDefRow = typeDefRow;
 				info.NestedClass = (nestedRow.NestedClass == token) ? nestedRow.NestedClass : Token.Zero;
 				info.EnclosingClass = (nestedRow.NestedClass == token) ? nestedRow.EnclosingClass : Token.Zero;
-				info.Size = (layoutRow.Parent == token) ? layoutRow.ClassSize : 0;
-				info.PackingSize = (layoutRow.Parent == token) ? layoutRow.PackingSize : (short)0;
+				info.Size = (layoutRow != null && layoutRow.Parent == token) ? layoutRow.ClassSize : 0;
+				info.PackingSize = (layoutRow != null && layoutRow.Parent == token) ? layoutRow.PackingSize : (short)0;
 
 				if (token.RID < maxTypeDef.RID)
 				{
@@ -395,7 +396,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 			var maxMethod = GetMaxTokenValue(TableType.MethodDef);
 			var methodDef = metadataProvider.ReadMethodDefRow(first);
-			var nextMethodDef = new MethodDefRow();
+			MethodDefRow nextMethodDef = null;
 
 			foreach (var token in first.Upto(last.PreviousRow))
 			{
@@ -411,10 +412,10 @@ namespace Mosa.Compiler.MosaTypeSystem
 					maxParam = GetMaxTokenValue(TableType.Param).NextRow;
 				}
 
-				var signature = GetMethodSignature(methodDef.SignatureBlobIdx);
+				var signature = GetMethodSignature(methodDef.SignatureBlob);
 
 				MosaMethod method = new MosaMethod();
-				method.Name = GetString(methodDef.NameStringIdx);
+				method.Name = GetString(methodDef.NameString);
 				method.FullName = declaringType + "." + method.Name;
 				method.DeclaringType = declaringType;
 				method.ReturnType = GetMosaType(signature.ReturnType);
@@ -433,7 +434,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 				method.Rva = methodDef.Rva;
 
 				LoadParameters(method, methodDef.ParamList, maxParam, signature);
-				
+
 				method.SetMethodName();
 
 				methodDef = nextMethodDef;
@@ -450,8 +451,8 @@ namespace Mosa.Compiler.MosaTypeSystem
 			var tokenRva = new Token(TableType.FieldRVA, 1);
 			var tokenLayout = new Token(TableType.FieldLayout, 1);
 
-			var fieldRVA = (maxRVA.RID != 0) ? metadataProvider.ReadFieldRVARow(tokenRva) : new FieldRVARow();
-			var fieldLayout = (maxLayout.RID != 0) ? metadataProvider.ReadFieldLayoutRow(tokenLayout) : new FieldLayoutRow();
+			FieldRVARow fieldRVA = (maxRVA.RID != 0) ? metadataProvider.ReadFieldRVARow(tokenRva) : null;
+			FieldLayoutRow fieldLayout = (maxLayout.RID != 0) ? metadataProvider.ReadFieldLayoutRow(tokenLayout) : null;
 
 			foreach (var token in first.Upto(last.PreviousRow))
 			{
@@ -521,7 +522,6 @@ namespace Mosa.Compiler.MosaTypeSystem
 				declaringType.Fields.Add(field);
 				resolver.AddField(assembly, token, field);
 			}
-
 		}
 
 		private MosaAssembly internalAssembly = null;
@@ -565,7 +565,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 			foreach (var token in new Token(TableType.GenericParam, 1).Upto(maxToken))
 			{
 				var row = metadataProvider.ReadGenericParamRow(token);
-				var name = GetString(row.NameStringIdx);
+				var name = GetString(row.NameString);
 
 				var genericParameter = new MosaGenericParameter(name);
 
@@ -577,10 +577,12 @@ namespace Mosa.Compiler.MosaTypeSystem
 						var type = resolver.GetTypeByToken(assembly, row.Owner);
 						type.GenericParameters.Add(genericParameter);
 						break;
+
 					case TableType.MethodDef:
 						var method = resolver.GetMethodByToken(assembly, row.Owner);
 						method.GenericParameters.Add(genericParameter);
 						break;
+
 					default: throw new NotImplementedException();
 				}
 			}
@@ -595,7 +597,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 				var paramDef = metadataProvider.ReadParamRow(token);
 				var parameter = new MosaParameter();
 
-				parameter.Name = GetString(paramDef.NameIdx);
+				parameter.Name = GetString(paramDef.Name);
 				parameter.IsIn = (paramDef.Flags & ParameterAttributes.In) == ParameterAttributes.In;
 				parameter.IsOut = (paramDef.Flags & ParameterAttributes.Out) == ParameterAttributes.Out;
 				parameter.Position = paramDef.Sequence;
@@ -620,7 +622,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 				return;
 
 			var row = metadataProvider.ReadTypeSpecRow(token);
-			var signature = GetTypeSpecSignature(row.SignatureBlobIdx);
+			var signature = GetTypeSpecSignature(row.SignatureBlob);
 
 			MosaType genericType = new MosaType();
 
@@ -630,7 +632,105 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 			//resolver.AddType(assembly, token, genericType);
 
+			// FIXME:
+			resolver.AddType(assembly, token, type);
+
 			return;
+		}
+
+		/// <summary>
+		/// Loads the interfaces.
+		/// </summary>
+		private void LoadMemberReferences()
+		{
+			var maxToken = GetMaxTokenValue(TableType.MemberRef);
+			foreach (var token in new Token(TableType.MemberRef, 1).Upto(maxToken))
+			{
+				var row = metadataProvider.ReadMemberRefRow(token);
+				var name = GetString(row.NameString);
+
+				MosaType ownerType = null;
+
+				if (row.Class.Table == TableType.TypeDef || row.Class.Table == TableType.TypeRef || row.Class.Table == TableType.TypeSpec)
+				{
+					ownerType = resolver.GetTypeByToken(assembly, row.Class);
+				}
+				else
+				{
+					throw new TypeLoadException(String.Format("Failed to retrieve owner type for Token {0:x} (Table {1})", row.Class, row.Class.Table));
+				}
+
+				var signature = GetMemberRefSignature(row.SignatureBlob);
+
+				if (signature is FieldSignature)
+				{
+					foreach (var field in ownerType.Fields)
+					{
+						if (field.Name == name)
+						{
+							resolver.AddField(assembly, token, field);
+							break;
+						}
+					}
+				}
+				else
+				{
+					MethodSignature methodSignature = signature as MethodSignature;
+					Debug.Assert(signature is MethodSignature);
+
+					List<MosaType> typeSignature = new List<MosaType>(methodSignature.Parameters.Length);
+
+					for (int index = 0; index < methodSignature.Parameters.Length; index++)
+					{
+						var parameter = methodSignature.Parameters[index];
+
+						var parameterType = GetMosaType(parameter);
+
+						if (parameterType.IsMVarFlag && ownerType.IsGeneric)
+						{
+							//parameter = ownerType.GenericParameters[parameterType.VarOrMVarIndex];
+						}
+
+						typeSignature.Add(parameterType);
+					}
+
+					MosaMethod targetMethod = null;
+
+					foreach (var method in ownerType.Methods)
+					{
+						if (method.Name == name)
+						{
+							if (method.Matches(typeSignature))
+							{
+								targetMethod = method;
+								break;
+							}
+						}
+					}
+
+					// Special case: string.get_Chars is same as string.get_Item
+					if (name == "get_Chars" && ownerType.FullName == "System.String")
+					{
+						name = "get_Item";
+
+						foreach (var method in ownerType.Methods)
+						{
+							if (method.Matches(typeSignature))
+							{
+								targetMethod = method;
+								break;
+							}
+						}
+					}
+
+					if (targetMethod == null)
+					{
+						throw new TypeLoadException(String.Format("Failed to retrieve method for Token {0:x} (Table {1})", row.Class, row.Class.Table));
+					}
+
+					resolver.AddMethod(assembly, token, targetMethod);
+				}
+			}
 		}
 	}
 }
