@@ -5,9 +5,11 @@
  *
  * Authors:
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 using System;
+using System.Text;
 
 namespace Mosa.Compiler.Metadata.Signatures
 {
@@ -16,55 +18,46 @@ namespace Mosa.Compiler.Metadata.Signatures
 	/// </summary>
 	public class MethodSignature : Signature
 	{
-		/// <summary>
-		///
-		/// </summary>
-		//private CallingConvention callingConvention;
-		private MethodCallingConvention methodCallingConvention;
+		#region Constants
 
 		/// <summary>
 		///
 		/// </summary>
-		private int genericParameterCount;
+		private const byte DEFAULT = 0x00;
 
 		/// <summary>
 		///
 		/// </summary>
-		private bool hasExplicitThis;
+		private const byte VARARG = 0x05;
 
 		/// <summary>
 		///
 		/// </summary>
-		private bool hasThis;
+		private const byte GENERIC = 0x10;
 
 		/// <summary>
 		///
 		/// </summary>
-		private SigType[] parameters;
+		private const byte HAS_THIS = 0x20;
 
 		/// <summary>
 		///
 		/// </summary>
-		private SigType returnType;
+		private const byte HAS_EXPLICIT_THIS = 0x40;
+
+		#endregion Constants
 
 		/// <summary>
 		/// Gets the calling convention.
 		/// </summary>
 		/// <value>The calling convention.</value>
-		public MethodCallingConvention MethodCallingConvention
-		{
-			get { return methodCallingConvention; }
-			protected set { methodCallingConvention = value; }
-		}
+		public MethodCallingConvention MethodCallingConvention { get; private set; }
 
 		/// <summary>
 		/// Gets the generic parameter count.
 		/// </summary>
 		/// <value>The generic parameter count.</value>
-		public int GenericParameterCount
-		{
-			get { return genericParameterCount; }
-		}
+		public int GenericParameterCount { get; private set; }
 
 		/// <summary>
 		/// Gets a value indicating whether this instance has explicit this.
@@ -72,39 +65,25 @@ namespace Mosa.Compiler.Metadata.Signatures
 		/// <value>
 		/// 	<c>true</c> if this instance has explicit this; otherwise, <c>false</c>.
 		/// </value>
-		public bool HasExplicitThis
-		{
-			get { return hasExplicitThis; }
-			protected set { hasExplicitThis = value; }
-		}
+		public bool HasExplicitThis { get; private set; }
 
 		/// <summary>
 		/// Gets a value indicating whether this instance has this.
 		/// </summary>
 		/// <value><c>true</c> if this instance has this; otherwise, <c>false</c>.</value>
-		public bool HasThis
-		{
-			get { return hasThis; }
-			protected set { hasThis = value; }
-		}
+		public bool HasThis { get; private set; }
 
 		/// <summary>
 		/// Gets the parameters.
 		/// </summary>
 		/// <value>The parameters.</value>
-		public SigType[] Parameters
-		{
-			get { return parameters; }
-		}
+		public SigType[] Parameters { get; private set; }
 
 		/// <summary>
 		/// Gets the type of the return.
 		/// </summary>
 		/// <value>The type of the return.</value>
-		public SigType ReturnType
-		{
-			get { return returnType; }
-		}
+		public SigType ReturnType { get; private set; }
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="MethodSignature"/> class.
@@ -136,22 +115,22 @@ namespace Mosa.Compiler.Metadata.Signatures
 			// Check for instance signature
 			if (HAS_THIS == (value & HAS_THIS))
 			{
-				hasThis = true;
+				HasThis = true;
 			}
 
 			if (HAS_EXPLICIT_THIS == (value & HAS_EXPLICIT_THIS))
 			{
-				hasExplicitThis = true;
+				HasExplicitThis = true;
 			}
 
 			if (GENERIC == (value & GENERIC))
 			{
-				methodCallingConvention = MethodCallingConvention.Generic;
-				genericParameterCount = reader.ReadCompressedInt32();
+				MethodCallingConvention = MethodCallingConvention.Generic;
+				GenericParameterCount = reader.ReadCompressedInt32();
 			}
 			else if (VARARG == (value & VARARG))
 			{
-				methodCallingConvention = MethodCallingConvention.VarArg;
+				MethodCallingConvention = MethodCallingConvention.VarArg;
 			}
 			else if ((value & 0x1F) != 0x00)
 			{
@@ -160,39 +139,53 @@ namespace Mosa.Compiler.Metadata.Signatures
 
 			// Number of parameters
 			int paramCount = reader.ReadCompressedInt32();
-			parameters = new SigType[paramCount];
+			Parameters = new SigType[paramCount];
 
 			// Read the return type
-			returnType = SigType.ParseTypeSignature(reader);
+			ReturnType = SigType.ParseTypeSignature(reader);
 
 			// Read all parameters
 			for (int i = 0; i < paramCount; i++)
-				parameters[i] = SigType.ParseTypeSignature(reader);
+			{
+				Parameters[i] = SigType.ParseTypeSignature(reader);
+			}
 		}
 
 		/// <summary>
-		///
+		/// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
 		/// </summary>
-		private const byte DEFAULT = 0x00;
+		/// <returns>
+		/// A <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
+		/// </returns>
+		public override string ToString()
+		{
+			StringBuilder sb = new StringBuilder();
+			
+			sb.Append(base.ToString() + " ");
+			sb.Append("Has This/ThisExplicit: ");
+			sb.Append(HasThis.ToString());
+			sb.Append("/");
+			sb.Append(HasExplicitThis.ToString());
 
-		/// <summary>
-		///
-		/// </summary>
-		private const byte VARARG = 0x05;
+			sb.Append(" RetType: ");
+			sb.Append(ReturnType.ToString());
 
-		/// <summary>
-		///
-		/// </summary>
-		private const byte GENERIC = 0x10;
+			if (Parameters.Length != 0)
+			{
+				sb.Append(" [ ");
 
-		/// <summary>
-		///
-		/// </summary>
-		private const byte HAS_THIS = 0x20;
+				foreach (var param in Parameters)
+				{
+					sb.Append(param.ToString());
+					sb.Append(", ");
+				}
 
-		/// <summary>
-		///
-		/// </summary>
-		private const byte HAS_EXPLICIT_THIS = 0x40;
+				sb.Length = sb.Length - 2;
+
+				sb.Append(" ]");
+			}
+
+			return sb.ToString();
+		}
 	}
 }

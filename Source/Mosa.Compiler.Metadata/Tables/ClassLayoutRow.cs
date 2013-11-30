@@ -5,6 +5,7 @@
  *
  * Authors:
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 namespace Mosa.Compiler.Metadata.Tables
@@ -12,40 +13,21 @@ namespace Mosa.Compiler.Metadata.Tables
 	/// <summary>
 	///
 	/// </summary>
-	public struct ClassLayoutRow
+	public class ClassLayoutRow
 	{
-		#region Data members
-
-		/// <summary>
-		///
-		/// </summary>
-		private short packingSize;
-
-		/// <summary>
-		///
-		/// </summary>
-		private int classSize;
-
-		/// <summary>
-		///
-		/// </summary>
-		private Token parent;
-
-		#endregion Data members
-
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="ClassLayoutRow"/> struct.
+		/// Initializes a new instance of the <see cref="ClassLayoutRow" /> struct.
 		/// </summary>
 		/// <param name="packingSize">Size of the packing.</param>
 		/// <param name="classSize">Size of the class.</param>
-		/// <param name="parent">The parent type def idx.</param>
+		/// <param name="parent">The parent.</param>
 		public ClassLayoutRow(short packingSize, int classSize, Token parent)
 		{
-			this.packingSize = packingSize;
-			this.classSize = classSize;
-			this.parent = parent;
+			PackingSize = packingSize;
+			ClassSize = classSize;
+			Parent = parent;
 		}
 
 		#endregion Construction
@@ -56,28 +38,21 @@ namespace Mosa.Compiler.Metadata.Tables
 		/// Gets the size of the packing.
 		/// </summary>
 		/// <value>The size of the packing.</value>
-		public short PackingSize
-		{
-			get { return packingSize; }
-		}
+		public short PackingSize { get; private set; }
 
 		/// <summary>
 		/// Gets the size of the class.
 		/// </summary>
 		/// <value>The size of the class.</value>
-		public int ClassSize
-		{
-			get { return classSize; }
-		}
+		public int ClassSize { get; private set; }
 
 		/// <summary>
-		/// Gets the parent type def idx.
+		/// Gets the parent.
 		/// </summary>
-		/// <value>The parent type def idx.</value>
-		public Token Parent
-		{
-			get { return parent; }
-		}
+		/// <value>
+		/// The parent.
+		/// </value>
+		public Token Parent { get; private set; }
 
 		#endregion Properties
 	}

@@ -5,6 +5,7 @@
  *
  * Authors:
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 using System.IO;
@@ -14,40 +15,21 @@ namespace Mosa.Compiler.Metadata.Tables
 	/// <summary>
 	///
 	/// </summary>
-	public struct FileRow
+	public class FileRow
 	{
-		#region Data members
-
-		/// <summary>
-		///
-		/// </summary>
-		private FileAttributes flags;
-
-		/// <summary>
-		///
-		/// </summary>
-		private HeapIndexToken name;
-
-		/// <summary>
-		///
-		/// </summary>
-		private HeapIndexToken hashValue;
-
-		#endregion Data members
-
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="FileRow"/> struct.
+		/// Initializes a new instance of the <see cref="FileRow" /> struct.
 		/// </summary>
 		/// <param name="flags">The flags.</param>
-		/// <param name="name">The name string idx.</param>
+		/// <param name="name">The name.</param>
 		/// <param name="hashValue">The hash value.</param>
 		public FileRow(FileAttributes flags, HeapIndexToken name, HeapIndexToken hashValue)
 		{
-			this.flags = flags;
-			this.name = name;
-			this.hashValue = hashValue;
+			Flags = flags;
+			Name = name;
+			HashValue = hashValue;
 		}
 
 		#endregion Construction
@@ -58,28 +40,19 @@ namespace Mosa.Compiler.Metadata.Tables
 		/// Gets the flags.
 		/// </summary>
 		/// <value>The flags.</value>
-		public FileAttributes Flags
-		{
-			get { return flags; }
-		}
+		public FileAttributes Flags { get; private set; }
 
 		/// <summary>
 		/// Gets the name.
 		/// </summary>
 		/// <value>The name.</value>
-		public HeapIndexToken Name
-		{
-			get { return name; }
-		}
+		public HeapIndexToken Name { get; private set; }
 
 		/// <summary>
 		/// Gets the hash value.
 		/// </summary>
 		/// <value>The hash value.</value>
-		public HeapIndexToken HashValue
-		{
-			get { return hashValue; }
-		}
+		public HeapIndexToken HashValue { get; private set; }
 
 		#endregion Properties
 	}

@@ -61,7 +61,7 @@ namespace Mosa.Compiler.Metadata.Loader
 		/// <summary>
 		/// Array of provider streams found in the source file.
 		/// </summary>
-		private Heap[] _streams = new Heap[(int)HeapType.MaxType];
+		private Heap[] streams = new Heap[(int)HeapType.MaxType];
 
 		/// <summary>
 		/// Metadata binary byte array.
@@ -107,10 +107,10 @@ namespace Mosa.Compiler.Metadata.Loader
 			byte[] version = reader.ReadBytes(length);
 			Version = Encoding.UTF8.GetString(version, 0, Array.IndexOf<byte>(version, 0));
 			reader.ReadUInt16();
-			ushort streams = reader.ReadUInt16();
+			ushort streamCnt = reader.ReadUInt16();
 
 			// Read stream headers
-			for (ushort i = 0; i < streams; i++)
+			for (ushort i = 0; i < streamCnt; i++)
 			{
 				int offset = reader.ReadInt32();
 				int size = reader.ReadInt32();
@@ -143,7 +143,7 @@ namespace Mosa.Compiler.Metadata.Loader
 					throw new NotSupportedException();
 				}
 
-				_streams[(int)kind] = Heap.CreateHeap(this, kind, metadata, offset, size);
+				streams[(int)kind] = Heap.CreateHeap(this, kind, metadata, offset, size);
 
 				// Move to the next stream
 				reader.BaseStream.Position = length + (4 - length % 4);
@@ -161,7 +161,7 @@ namespace Mosa.Compiler.Metadata.Loader
 			if (type < 0 || type >= HeapType.MaxType)
 				throw new ArgumentException(@"Invalid heap type.", @"type");
 
-			return _streams[(int)type];
+			return streams[(int)type];
 		}
 
 		#endregion Methods
@@ -175,12 +175,12 @@ namespace Mosa.Compiler.Metadata.Loader
 		/// <returns></returns>
 		int IMetadataProvider.GetRowCount(TableType table)
 		{
-			return ((TableHeap)_streams[(int)HeapType.Tables]).GetRowCount(table);
+			return ((TableHeap)streams[(int)HeapType.Tables]).GetRowCount(table);
 		}
 
 		Token IMetadataProvider.GetMaxTokenValue(TableType table)
 		{
-			return ((TableHeap)_streams[(int)HeapType.Tables]).GetMaxTokenValue(table);
+			return ((TableHeap)streams[(int)HeapType.Tables]).GetMaxTokenValue(table);
 		}
 
 		/// <summary>
@@ -190,7 +190,7 @@ namespace Mosa.Compiler.Metadata.Loader
 		/// <returns></returns>
 		string IMetadataProvider.ReadString(HeapIndexToken token)
 		{
-			var sheap = _streams[(int)HeapType.String] as StringHeap;
+			var sheap = streams[(int)HeapType.String] as StringHeap;
 			return sheap.ReadString(token);
 		}
 
@@ -201,7 +201,7 @@ namespace Mosa.Compiler.Metadata.Loader
 		/// <returns></returns>
 		string IMetadataProvider.ReadUserString(HeapIndexToken token)
 		{
-			var usheap = _streams[(int)HeapType.UserString] as UserStringHeap;
+			var usheap = streams[(int)HeapType.UserString] as UserStringHeap;
 			return usheap.ReadString(token);
 		}
 
@@ -212,7 +212,7 @@ namespace Mosa.Compiler.Metadata.Loader
 		/// <returns></returns>
 		Guid IMetadataProvider.ReadGuid(HeapIndexToken token)
 		{
-			var gheap = _streams[(int)HeapType.Guid] as GuidHeap;
+			var gheap = streams[(int)HeapType.Guid] as GuidHeap;
 			return gheap.ReadGuid(token);
 		}
 
@@ -223,7 +223,7 @@ namespace Mosa.Compiler.Metadata.Loader
 		/// <returns></returns>
 		byte[] IMetadataProvider.ReadBlob(HeapIndexToken token)
 		{
-			var bheap = _streams[(int)HeapType.Blob] as BlobHeap;
+			var bheap = streams[(int)HeapType.Blob] as BlobHeap;
 			return bheap.ReadBlob(token);
 		}
 
@@ -234,7 +234,7 @@ namespace Mosa.Compiler.Metadata.Loader
 		/// <returns></returns>
 		ModuleRow IMetadataProvider.ReadModuleRow(Token token)
 		{
-			var theap = _streams[(int)HeapType.Tables] as TableHeap;
+			var theap = streams[(int)HeapType.Tables] as TableHeap;
 			return theap.ReadModuleRow(token);
 		}
 
@@ -245,7 +245,7 @@ namespace Mosa.Compiler.Metadata.Loader
 		/// <returns></returns>
 		TypeRefRow IMetadataProvider.ReadTypeRefRow(Token token)
 		{
-			var theap = _streams[(int)HeapType.Tables] as TableHeap;
+			var theap = streams[(int)HeapType.Tables] as TableHeap;
 			return theap.ReadTypeRefRow(token);
 		}
 
@@ -256,7 +256,7 @@ namespace Mosa.Compiler.Metadata.Loader
 		/// <returns></returns>
 		TypeDefRow IMetadataProvider.ReadTypeDefRow(Token token)
 		{
-			var theap = _streams[(int)HeapType.Tables] as TableHeap;
+			var theap = streams[(int)HeapType.Tables] as TableHeap;
 			return theap.ReadTypeDefRow(token);
 		}
 
@@ -267,7 +267,7 @@ namespace Mosa.Compiler.Metadata.Loader
 		/// <returns></returns>
 		FieldRow IMetadataProvider.ReadFieldRow(Token token)
 		{
-			var theap = _streams[(int)HeapType.Tables] as TableHeap;
+			var theap = streams[(int)HeapType.Tables] as TableHeap;
 			return theap.ReadFieldRow(token);
 		}
 
@@ -278,7 +278,7 @@ namespace Mosa.Compiler.Metadata.Loader
 		/// <returns></returns>
 		MethodDefRow IMetadataProvider.ReadMethodDefRow(Token token)
 		{
-			var theap = _streams[(int)HeapType.Tables] as TableHeap;
+			var theap = streams[(int)HeapType.Tables] as TableHeap;
 			return theap.ReadMethodDefRow(token);
 		}
 
@@ -289,7 +289,7 @@ namespace Mosa.Compiler.Metadata.Loader
 		/// <returns></returns>
 		ParamRow IMetadataProvider.ReadParamRow(Token token)
 		{
-			var theap = _streams[(int)HeapType.Tables] as TableHeap;
+			var theap = streams[(int)HeapType.Tables] as TableHeap;
 			return theap.ReadParamRow(token);
 		}
 
@@ -300,7 +300,7 @@ namespace Mosa.Compiler.Metadata.Loader
 		/// <returns></returns>
 		InterfaceImplRow IMetadataProvider.ReadInterfaceImplRow(Token token)
 		{
-			var theap = _streams[(int)HeapType.Tables] as TableHeap;
+			var theap = streams[(int)HeapType.Tables] as TableHeap;
 			return theap.ReadInterfaceImplRow(token);
 		}
 
@@ -311,7 +311,7 @@ namespace Mosa.Compiler.Metadata.Loader
 		/// <returns></returns>
 		MemberRefRow IMetadataProvider.ReadMemberRefRow(Token token)
 		{
-			var theap = _streams[(int)HeapType.Tables] as TableHeap;
+			var theap = streams[(int)HeapType.Tables] as TableHeap;
 			return theap.ReadMemberRefRow(token);
 		}
 
@@ -322,7 +322,7 @@ namespace Mosa.Compiler.Metadata.Loader
 		/// <returns></returns>
 		ConstantRow IMetadataProvider.ReadConstantRow(Token token)
 		{
-			var theap = _streams[(int)HeapType.Tables] as TableHeap;
+			var theap = streams[(int)HeapType.Tables] as TableHeap;
 			return theap.ReadConstantRow(token);
 		}
 
@@ -333,7 +333,7 @@ namespace Mosa.Compiler.Metadata.Loader
 		/// <returns></returns>
 		CustomAttributeRow IMetadataProvider.ReadCustomAttributeRow(Token token)
 		{
-			var theap = _streams[(int)HeapType.Tables] as TableHeap;
+			var theap = streams[(int)HeapType.Tables] as TableHeap;
 			return theap.ReadCustomAttributeRow(token);
 		}
 
@@ -344,7 +344,7 @@ namespace Mosa.Compiler.Metadata.Loader
 		/// <returns></returns>
 		FieldMarshalRow IMetadataProvider.ReadFieldMarshalRow(Token token)
 		{
-			var theap = _streams[(int)HeapType.Tables] as TableHeap;
+			var theap = streams[(int)HeapType.Tables] as TableHeap;
 			return theap.ReadFieldMarshalRow(token);
 		}
 
@@ -355,7 +355,7 @@ namespace Mosa.Compiler.Metadata.Loader
 		/// <returns></returns>
 		DeclSecurityRow IMetadataProvider.ReadDeclSecurityRow(Token token)
 		{
-			var theap = _streams[(int)HeapType.Tables] as TableHeap;
+			var theap = streams[(int)HeapType.Tables] as TableHeap;
 			return theap.ReadDeclSecurityRow(token);
 		}
 
@@ -366,7 +366,7 @@ namespace Mosa.Compiler.Metadata.Loader
 		/// <returns></returns>
 		ClassLayoutRow IMetadataProvider.ReadClassLayoutRow(Token token)
 		{
-			var theap = _streams[(int)HeapType.Tables] as TableHeap;
+			var theap = streams[(int)HeapType.Tables] as TableHeap;
 			return theap.ReadClassLayoutRow(token);
 		}
 
@@ -377,7 +377,7 @@ namespace Mosa.Compiler.Metadata.Loader
 		/// <returns></returns>
 		FieldLayoutRow IMetadataProvider.ReadFieldLayoutRow(Token token)
 		{
-			var theap = _streams[(int)HeapType.Tables] as TableHeap;
+			var theap = streams[(int)HeapType.Tables] as TableHeap;
 			return theap.ReadFieldLayoutRow(token);
 		}
 
@@ -388,7 +388,7 @@ namespace Mosa.Compiler.Metadata.Loader
 		/// <returns></returns>
 		StandAloneSigRow IMetadataProvider.ReadStandAloneSigRow(Token token)
 		{
-			var theap = _streams[(int)HeapType.Tables] as TableHeap;
+			var theap = streams[(int)HeapType.Tables] as TableHeap;
 			return theap.ReadStandAloneSigRow(token);
 		}
 
@@ -399,7 +399,7 @@ namespace Mosa.Compiler.Metadata.Loader
 		/// <returns></returns>
 		EventMapRow IMetadataProvider.ReadEventMapRow(Token token)
 		{
-			var theap = _streams[(int)HeapType.Tables] as TableHeap;
+			var theap = streams[(int)HeapType.Tables] as TableHeap;
 			return theap.ReadEventMapRow(token);
 		}
 
@@ -410,7 +410,7 @@ namespace Mosa.Compiler.Metadata.Loader
 		/// <returns></returns>
 		EventRow IMetadataProvider.ReadEventRow(Token token)
 		{
-			var theap = _streams[(int)HeapType.Tables] as TableHeap;
+			var theap = streams[(int)HeapType.Tables] as TableHeap;
 			return theap.ReadEventRow(token);
 		}
 
@@ -421,7 +421,7 @@ namespace Mosa.Compiler.Metadata.Loader
 		/// <returns></returns>
 		PropertyMapRow IMetadataProvider.ReadPropertyMapRow(Token token)
 		{
-			var theap = _streams[(int)HeapType.Tables] as TableHeap;
+			var theap = streams[(int)HeapType.Tables] as TableHeap;
 			return theap.ReadPropertyMapRow(token);
 		}
 
@@ -432,7 +432,7 @@ namespace Mosa.Compiler.Metadata.Loader
 		/// <returns></returns>
 		PropertyRow IMetadataProvider.ReadPropertyRow(Token token)
 		{
-			var theap = _streams[(int)HeapType.Tables] as TableHeap;
+			var theap = streams[(int)HeapType.Tables] as TableHeap;
 			return theap.ReadPropertyRow(token);
 		}
 
@@ -443,7 +443,7 @@ namespace Mosa.Compiler.Metadata.Loader
 		/// <returns></returns>
 		MethodSemanticsRow IMetadataProvider.ReadMethodSemanticsRow(Token token)
 		{
-			var theap = _streams[(int)HeapType.Tables] as TableHeap;
+			var theap = streams[(int)HeapType.Tables] as TableHeap;
 			return theap.ReadMethodSemanticsRow(token);
 		}
 
@@ -454,7 +454,7 @@ namespace Mosa.Compiler.Metadata.Loader
 		/// <returns></returns>
 		MethodImplRow IMetadataProvider.ReadMethodImplRow(Token token)
 		{
-			var theap = _streams[(int)HeapType.Tables] as TableHeap;
+			var theap = streams[(int)HeapType.Tables] as TableHeap;
 			return theap.ReadMethodImplRow(token);
 		}
 
@@ -465,7 +465,7 @@ namespace Mosa.Compiler.Metadata.Loader
 		/// <returns></returns>
 		ModuleRefRow IMetadataProvider.ReadModuleRefRow(Token token)
 		{
-			var theap = _streams[(int)HeapType.Tables] as TableHeap;
+			var theap = streams[(int)HeapType.Tables] as TableHeap;
 			return theap.ReadModuleRefRow(token);
 		}
 
@@ -476,7 +476,7 @@ namespace Mosa.Compiler.Metadata.Loader
 		/// <returns></returns>
 		TypeSpecRow IMetadataProvider.ReadTypeSpecRow(Token token)
 		{
-			var theap = _streams[(int)HeapType.Tables] as TableHeap;
+			var theap = streams[(int)HeapType.Tables] as TableHeap;
 			return theap.ReadTypeSpecRow(token);
 		}
 
@@ -487,7 +487,7 @@ namespace Mosa.Compiler.Metadata.Loader
 		/// <returns></returns>
 		ImplMapRow IMetadataProvider.ReadImplMapRow(Token token)
 		{
-			var theap = _streams[(int)HeapType.Tables] as TableHeap;
+			var theap = streams[(int)HeapType.Tables] as TableHeap;
 			return theap.ReadImplMapRow(token);
 		}
 
@@ -498,7 +498,7 @@ namespace Mosa.Compiler.Metadata.Loader
 		/// <returns></returns>
 		FieldRVARow IMetadataProvider.ReadFieldRVARow(Token token)
 		{
-			var theap = _streams[(int)HeapType.Tables] as TableHeap;
+			var theap = streams[(int)HeapType.Tables] as TableHeap;
 			return theap.ReadFieldRVARow(token);
 		}
 
@@ -509,7 +509,7 @@ namespace Mosa.Compiler.Metadata.Loader
 		/// <returns></returns>
 		AssemblyRow IMetadataProvider.ReadAssemblyRow(Token token)
 		{
-			var theap = _streams[(int)HeapType.Tables] as TableHeap;
+			var theap = streams[(int)HeapType.Tables] as TableHeap;
 			return theap.ReadAssemblyRow(token);
 		}
 
@@ -520,7 +520,7 @@ namespace Mosa.Compiler.Metadata.Loader
 		/// <returns></returns>
 		AssemblyProcessorRow IMetadataProvider.ReadAssemblyProcessorRow(Token token)
 		{
-			var theap = _streams[(int)HeapType.Tables] as TableHeap;
+			var theap = streams[(int)HeapType.Tables] as TableHeap;
 			return theap.ReadAssemblyProcessorRow(token);
 		}
 
@@ -531,7 +531,7 @@ namespace Mosa.Compiler.Metadata.Loader
 		/// <returns></returns>
 		AssemblyOSRow IMetadataProvider.ReadAssemblyOSRow(Token token)
 		{
-			var theap = _streams[(int)HeapType.Tables] as TableHeap;
+			var theap = streams[(int)HeapType.Tables] as TableHeap;
 			return theap.ReadAssemblyOSRow(token);
 		}
 
@@ -542,7 +542,7 @@ namespace Mosa.Compiler.Metadata.Loader
 		/// <returns></returns>
 		AssemblyRefRow IMetadataProvider.ReadAssemblyRefRow(Token token)
 		{
-			var theap = _streams[(int)HeapType.Tables] as TableHeap;
+			var theap = streams[(int)HeapType.Tables] as TableHeap;
 			return theap.ReadAssemblyRefRow(token);
 		}
 
@@ -553,7 +553,7 @@ namespace Mosa.Compiler.Metadata.Loader
 		/// <returns></returns>
 		AssemblyRefProcessorRow IMetadataProvider.ReadAssemblyRefProcessorRow(Token token)
 		{
-			var theap = _streams[(int)HeapType.Tables] as TableHeap;
+			var theap = streams[(int)HeapType.Tables] as TableHeap;
 			return theap.ReadAssemblyRefProcessorRow(token);
 		}
 
@@ -564,7 +564,7 @@ namespace Mosa.Compiler.Metadata.Loader
 		/// <returns></returns>
 		AssemblyRefOSRow IMetadataProvider.ReadAssemblyRefOSRow(Token token)
 		{
-			var theap = _streams[(int)HeapType.Tables] as TableHeap;
+			var theap = streams[(int)HeapType.Tables] as TableHeap;
 			return theap.ReadAssemblyRefOSRow(token);
 		}
 
@@ -575,7 +575,7 @@ namespace Mosa.Compiler.Metadata.Loader
 		/// <returns></returns>
 		FileRow IMetadataProvider.ReadFileRow(Token token)
 		{
-			var theap = _streams[(int)HeapType.Tables] as TableHeap;
+			var theap = streams[(int)HeapType.Tables] as TableHeap;
 			return theap.ReadFileRow(token);
 		}
 
@@ -586,7 +586,7 @@ namespace Mosa.Compiler.Metadata.Loader
 		/// <returns></returns>
 		ExportedTypeRow IMetadataProvider.ReadExportedTypeRow(Token token)
 		{
-			var theap = _streams[(int)HeapType.Tables] as TableHeap;
+			var theap = streams[(int)HeapType.Tables] as TableHeap;
 			return theap.ReadExportedTypeRow(token);
 		}
 
@@ -597,7 +597,7 @@ namespace Mosa.Compiler.Metadata.Loader
 		/// <returns></returns>
 		ManifestResourceRow IMetadataProvider.ReadManifestResourceRow(Token token)
 		{
-			var theap = _streams[(int)HeapType.Tables] as TableHeap;
+			var theap = streams[(int)HeapType.Tables] as TableHeap;
 			return theap.ReadManifestResourceRow(token);
 		}
 
@@ -608,7 +608,7 @@ namespace Mosa.Compiler.Metadata.Loader
 		/// <returns></returns>
 		NestedClassRow IMetadataProvider.ReadNestedClassRow(Token token)
 		{
-			var theap = _streams[(int)HeapType.Tables] as TableHeap;
+			var theap = streams[(int)HeapType.Tables] as TableHeap;
 			return theap.ReadNestedClassRow(token);
 		}
 
@@ -619,7 +619,7 @@ namespace Mosa.Compiler.Metadata.Loader
 		/// <returns></returns>
 		GenericParamRow IMetadataProvider.ReadGenericParamRow(Token token)
 		{
-			var theap = _streams[(int)HeapType.Tables] as TableHeap;
+			var theap = streams[(int)HeapType.Tables] as TableHeap;
 			return theap.ReadGenericParamRow(token);
 		}
 
@@ -630,7 +630,7 @@ namespace Mosa.Compiler.Metadata.Loader
 		/// <returns></returns>
 		MethodSpecRow IMetadataProvider.ReadMethodSpecRow(Token token)
 		{
-			var theap = _streams[(int)HeapType.Tables] as TableHeap;
+			var theap = streams[(int)HeapType.Tables] as TableHeap;
 			return theap.ReadMethodSpecRow(token);
 		}
 
@@ -641,7 +641,7 @@ namespace Mosa.Compiler.Metadata.Loader
 		/// <returns></returns>
 		GenericParamConstraintRow IMetadataProvider.ReadGenericParamConstraintRow(Token token)
 		{
-			var theap = _streams[(int)HeapType.Tables] as TableHeap;
+			var theap = streams[(int)HeapType.Tables] as TableHeap;
 			return theap.ReadGenericParamConstraintRow(token);
 		}
 
@@ -653,7 +653,7 @@ namespace Mosa.Compiler.Metadata.Loader
 		IList<Heap> IMetadataProvider.GetHeaps(HeapType heapType)
 		{
 			List<Heap> list = new List<Heap>();
-			list.Add(_streams[(int)heapType]);
+			list.Add(streams[(int)heapType]);
 			return list;
 		}
 

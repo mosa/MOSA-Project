@@ -7,10 +7,9 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System.Collections;
-
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Tables;
+using System.Collections;
 
 namespace Mosa.Tool.MetadataExplorer.Tables
 {
@@ -33,8 +32,8 @@ namespace Mosa.Tool.MetadataExplorer.Tables
 		{
 			yield return TokenString("Name", row.TypeName);
 			yield return TokenString("Namespace", row.TypeNamespace);
-			yield return Value("TypeNameIdx", row.TypeName);
-			yield return Value("TypeNamespaceIdx", row.TypeNamespace);
+			//yield return Value("TypeName #", row.TypeName);
+			//yield return Value("TypeNamespace #", row.TypeNamespace);
 			yield return Value("Extends", row.Extends);
 			yield return Value("FieldList", row.FieldList);
 			yield return Value("Flags", row.Flags.ToString());

@@ -5,6 +5,7 @@
  *
  * Authors:
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 namespace Mosa.Compiler.Metadata.Tables
@@ -12,57 +13,8 @@ namespace Mosa.Compiler.Metadata.Tables
 	/// <summary>
 	///
 	/// </summary>
-	public struct AssemblyRow
+	public class AssemblyRow
 	{
-		#region Data members
-
-		/// <summary>
-		///
-		/// </summary>
-		private AssemblyHashAlgorithm hashAlgId;
-
-		/// <summary>
-		///
-		/// </summary>
-		private ushort majorVersion;
-
-		/// <summary>
-		///
-		/// </summary>
-		private ushort minorVersion;
-
-		/// <summary>
-		///
-		/// </summary>
-		private ushort buildNumber;
-
-		/// <summary>
-		///
-		/// </summary>
-		private ushort revisionNumber;
-
-		/// <summary>
-		///
-		/// </summary>
-		private AssemblyAttributes flags;
-
-		/// <summary>
-		///
-		/// </summary>
-		private HeapIndexToken publicKey;
-
-		/// <summary>
-		///
-		/// </summary>
-		private HeapIndexToken name;
-
-		/// <summary>
-		///
-		/// </summary>
-		private HeapIndexToken culture;
-
-		#endregion Data members
-
 		#region Construction
 
 		/// <summary>
@@ -81,15 +33,15 @@ namespace Mosa.Compiler.Metadata.Tables
 							ushort majorVersion, ushort minorVersion, ushort buildNumber, ushort revision,
 							AssemblyAttributes flags, HeapIndexToken publicKey, HeapIndexToken name, HeapIndexToken culture)
 		{
-			this.hashAlgId = hashAlgId;
-			this.majorVersion = majorVersion;
-			this.minorVersion = minorVersion;
-			this.buildNumber = buildNumber;
-			this.revisionNumber = revision;
-			this.flags = flags;
-			this.publicKey = publicKey;
-			this.name = name;
-			this.culture = culture;
+			HashAlgId = hashAlgId;
+			MajorVersion = majorVersion;
+			MinorVersion = minorVersion;
+			BuildNumber = buildNumber;
+			Revision = revision;
+			Flags = flags;
+			PublicKey = publicKey;
+			Name = name;
+			Culture = culture;
 		}
 
 		#endregion Construction
@@ -100,82 +52,57 @@ namespace Mosa.Compiler.Metadata.Tables
 		/// Gets or sets the hash alg id.
 		/// </summary>
 		/// <value>The hash alg id.</value>
-		public AssemblyHashAlgorithm HashAlgId
-		{
-			get { return hashAlgId; }
-
-			//set { hashAlgId = value; }
-		}
+		public AssemblyHashAlgorithm HashAlgId { get; private set; }
 
 		/// <summary>
 		/// Gets or sets the major version.
 		/// </summary>
 		/// <value>The major version.</value>
-		public ushort MajorVersion
-		{
-			get { return majorVersion; }
-
-			//set { majorVersion = value; }
-		}
+		public ushort MajorVersion { get; private set; }
 
 		/// <summary>
 		/// Gets the minor version.
 		/// </summary>
 		/// <value>The minor version.</value>
-		public ushort MinorVersion
-		{
-			get { return minorVersion; }
-		}
+		public ushort MinorVersion { get; private set; }
 
 		/// <summary>
 		/// Gets the build number.
 		/// </summary>
 		/// <value>The build number.</value>
-		public ushort BuildNumber
-		{
-			get { return buildNumber; }
-		}
+		public ushort BuildNumber { get; private set; }
 
 		/// <summary>
 		/// Gets the revision.
 		/// </summary>
 		/// <value>The revision.</value>
-		public ushort Revision
-		{
-			get { return revisionNumber; }
-		}
+		public ushort Revision { get; private set; }
 
 		/// <summary>
 		/// Gets the flags.
 		/// </summary>
 		/// <value>The flags.</value>
-		public AssemblyAttributes Flags
-		{
-			get { return flags; }
-		}
+		public AssemblyAttributes Flags { get; private set; }
 
 		/// <summary>
 		/// Gets the public key.
 		/// </summary>
 		/// <value>The public key.</value>
-		public HeapIndexToken PublicKey
-		{
-			get { return publicKey; }
-		}
+		public HeapIndexToken PublicKey { get; private set; }
 
 		/// <summary>
 		/// Gets the name.
 		/// </summary>
 		/// <value>The name.</value>
-		public HeapIndexToken Name
-		{
-			get { return name; }
-		}
+		public HeapIndexToken Name { get; private set; }
 
-		public HeapIndexToken Culture
-		{
-			get { return culture; }
-		}
+		/// <summary>
+		/// Gets the culture.
+		/// </summary>
+		/// <value>
+		/// The culture.
+		/// </value>
+		public HeapIndexToken Culture { get; private set; }
 
 		#endregion Properties
 	}

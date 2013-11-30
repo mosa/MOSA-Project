@@ -5,6 +5,7 @@
  *
  * Authors:
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 namespace Mosa.Compiler.Metadata.Tables
@@ -12,40 +13,21 @@ namespace Mosa.Compiler.Metadata.Tables
 	/// <summary>
 	///
 	/// </summary>
-	public struct FieldRow
+	public class FieldRow
 	{
-		#region Data members
-
-		/// <summary>
-		///
-		/// </summary>
-		private readonly FieldAttributes flags;
-
-		/// <summary>
-		///
-		/// </summary>
-		private readonly HeapIndexToken name;
-
-		/// <summary>
-		///
-		/// </summary>
-		private readonly HeapIndexToken signature;
-
-		#endregion Data members
-
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="FieldRow"/> struct.
+		/// Initializes a new instance of the <see cref="FieldRow" /> struct.
 		/// </summary>
 		/// <param name="flags">The flags.</param>
-		/// <param name="name">The name string idx.</param>
-		/// <param name="signature">The signature BLOB idx.</param>
+		/// <param name="name">The name.</param>
+		/// <param name="signature">The signature.</param>
 		public FieldRow(FieldAttributes flags, HeapIndexToken name, HeapIndexToken signature)
 		{
-			this.flags = flags;
-			this.name = name;
-			this.signature = signature;
+			Flags = flags;
+			Name = name;
+			Signature = signature;
 		}
 
 		#endregion Construction
@@ -56,28 +38,19 @@ namespace Mosa.Compiler.Metadata.Tables
 		/// Gets the flags.
 		/// </summary>
 		/// <value>The flags.</value>
-		public FieldAttributes Flags
-		{
-			get { return flags; }
-		}
+		public FieldAttributes Flags { get; private set; }
 
 		/// <summary>
 		/// Gets the name.
 		/// </summary>
 		/// <value>The name.</value>
-		public HeapIndexToken Name
-		{
-			get { return name; }
-		}
+		public HeapIndexToken Name { get; private set; }
 
 		/// <summary>
 		/// Gets the signature.
 		/// </summary>
 		/// <value>The signature.</value>
-		public HeapIndexToken Signature
-		{
-			get { return signature; }
-		}
+		public HeapIndexToken Signature { get; private set; }
 
 		#endregion Properties
 	}

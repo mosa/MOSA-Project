@@ -10,12 +10,12 @@
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.CIL;
 using Mosa.Compiler.Framework.IR;
+using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Compiler.Metadata.Tables;
 using Mosa.Compiler.TypeSystem;
 using Mosa.Compiler.TypeSystem.Cil;
-using Mosa.Compiler.Framework.Linker;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -83,7 +83,7 @@ namespace Mosa.Compiler.Framework.Stages
 					{
 						StandAloneSigRow row = methodCompiler.Method.Module.MetadataModule.Metadata.ReadStandAloneSigRow(header.LocalsSignature);
 
-						LocalVariableSignature localsSignature = new LocalVariableSignature(methodCompiler.Method.Module.MetadataModule.Metadata, row.SignatureBlobIdx);
+						LocalVariableSignature localsSignature = new LocalVariableSignature(methodCompiler.Method.Module.MetadataModule.Metadata, row.SignatureBlob);
 
 						SigType[] localSigTypes = new SigType[localsSignature.Locals.Length];
 

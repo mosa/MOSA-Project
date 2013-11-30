@@ -5,6 +5,7 @@
  *
  * Authors:
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 namespace Mosa.Compiler.Metadata.Tables
@@ -12,27 +13,8 @@ namespace Mosa.Compiler.Metadata.Tables
 	/// <summary>
 	///
 	/// </summary>
-	public struct MethodImplRow
+	public class MethodImplRow
 	{
-		#region Data members
-
-		/// <summary>
-		///
-		/// </summary>
-		private Token @class;
-
-		/// <summary>
-		///
-		/// </summary>
-		private Token methodBody;
-
-		/// <summary>
-		///
-		/// </summary>
-		private Token methodDeclaration;
-
-		#endregion Data members
-
 		#region Construction
 
 		/// <summary>
@@ -43,9 +25,9 @@ namespace Mosa.Compiler.Metadata.Tables
 		/// <param name="methodDeclaration">The method declaration.</param>
 		public MethodImplRow(Token @class, Token methodBody, Token methodDeclaration)
 		{
-			this.@class = @class;
-			this.methodBody = methodBody;
-			this.methodDeclaration = methodDeclaration;
+			Class = @class;
+			MethodBody = methodBody;
+			MethodDeclaration = methodDeclaration;
 		}
 
 		#endregion Construction
@@ -55,29 +37,22 @@ namespace Mosa.Compiler.Metadata.Tables
 		/// <summary>
 		/// Gets the class.
 		/// </summary>
-		/// <value>The class table idx.</value>
-		public Token @Class
-		{
-			get { return @class; }
-		}
+		/// <value>
+		/// The class.
+		/// </value>
+		public Token Class { get; private set; }
 
 		/// <summary>
 		/// Gets the method body .
 		/// </summary>
 		/// <value>The method body.</value>
-		public Token MethodBody
-		{
-			get { return methodBody; }
-		}
+		public Token MethodBody { get; private set; }
 
 		/// <summary>
 		/// Gets the method declaration.
 		/// </summary>
 		/// <value>The method declaration.</value>
-		public Token MethodDeclaration
-		{
-			get { return methodDeclaration; }
-		}
+		public Token MethodDeclaration { get; private set; }
 
 		#endregion Properties
 	}

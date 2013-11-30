@@ -6,6 +6,7 @@
  * Authors:
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  *  Bruce Markham (illuminus) <illuminus86@gmail.com>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 using System;

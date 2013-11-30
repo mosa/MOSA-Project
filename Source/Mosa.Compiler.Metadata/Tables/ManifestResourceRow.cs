@@ -5,6 +5,7 @@
  *
  * Authors:
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 namespace Mosa.Compiler.Metadata.Tables
@@ -12,48 +13,24 @@ namespace Mosa.Compiler.Metadata.Tables
 	/// <summary>
 	///
 	/// </summary>
-	public struct ManifestResourceRow
+	public class ManifestResourceRow
 	{
-		#region Data members
-
-		/// <summary>
-		///
-		/// </summary>
-		private uint _offset;
-
-		/// <summary>
-		///
-		/// </summary>
-		private ManifestResourceAttributes _flags;
-
-		/// <summary>
-		///
-		/// </summary>
-		private HeapIndexToken _nameStringIdx;
-
-		/// <summary>
-		///
-		/// </summary>
-		private Token _implementation;
-
-		#endregion Data members
-
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="ManifestResourceRow"/> struct.
+		/// Initializes a new instance of the <see cref="ManifestResourceRow" /> struct.
 		/// </summary>
 		/// <param name="offset">The offset.</param>
 		/// <param name="flags">The flags.</param>
-		/// <param name="nameStringIndex">Index of the name string.</param>
-		/// <param name="implementation">The implementation table idx.</param>
-		public ManifestResourceRow(uint offset, ManifestResourceAttributes flags, HeapIndexToken nameStringIndex,
+		/// <param name="nameString">Index of the name string.</param>
+		/// <param name="implementation">The implementation.</param>
+		public ManifestResourceRow(uint offset, ManifestResourceAttributes flags, HeapIndexToken nameString,
 			Token implementation)
 		{
-			_offset = offset;
-			_flags = flags;
-			_nameStringIdx = nameStringIndex;
-			_implementation = implementation;
+			Offset = offset;
+			Flags = flags;
+			NameString = nameString;
+			Implementation = implementation;
 		}
 
 		#endregion Construction
@@ -64,37 +41,29 @@ namespace Mosa.Compiler.Metadata.Tables
 		/// Gets the offset.
 		/// </summary>
 		/// <value>The offset.</value>
-		public uint Offset
-		{
-			get { return _offset; }
-		}
+		public uint Offset { get; private set; }
 
 		/// <summary>
 		/// Gets the flags.
 		/// </summary>
 		/// <value>The flags.</value>
-		public ManifestResourceAttributes Flags
-		{
-			get { return _flags; }
-		}
+		public ManifestResourceAttributes Flags { get; private set; }
 
 		/// <summary>
-		/// Gets the name string idx.
+		/// Gets the name string.
 		/// </summary>
-		/// <value>The name string idx.</value>
-		public HeapIndexToken NameStringIdx
-		{
-			get { return _nameStringIdx; }
-		}
+		/// <value>
+		/// The name string.
+		/// </value>
+		public HeapIndexToken NameString { get; private set; }
 
 		/// <summary>
-		/// Gets the implementation table idx.
+		/// Gets the implementation.
 		/// </summary>
-		/// <value>The implementation table idx.</value>
-		public Token Implementation
-		{
-			get { return _implementation; }
-		}
+		/// <value>
+		/// The implementation.
+		/// </value>
+		public Token Implementation { get; private set; }
 
 		#endregion Properties
 	}

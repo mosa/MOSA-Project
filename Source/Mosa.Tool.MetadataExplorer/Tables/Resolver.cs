@@ -31,6 +31,7 @@ namespace Mosa.Tool.MetadataExplorer.Tables
 				case TableType.AssemblyRef: return new AssemblyRefRowExt(metadata, metadata.ReadAssemblyRefRow(token));
 				case TableType.GenericParam: return new GenericParamRowExt(metadata, metadata.ReadGenericParamRow(token));
 				case TableType.Param: return new ParamRowExt(metadata, metadata.ReadParamRow(token));
+				case TableType.StandAloneSig: return new StandAloneSigExt(metadata, metadata.ReadStandAloneSigRow(token));
 
 				default: return null;
 			}

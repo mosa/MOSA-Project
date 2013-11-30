@@ -5,6 +5,7 @@
  *
  * Authors:
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 namespace Mosa.Compiler.Metadata.Tables
@@ -12,41 +13,31 @@ namespace Mosa.Compiler.Metadata.Tables
 	/// <summary>
 	///
 	/// </summary>
-	public struct StandAloneSigRow
+	public class StandAloneSigRow
 	{
-		#region Data members
+		#region Properties
 
 		/// <summary>
-		///
+		/// Gets the signature BLOB.
 		/// </summary>
-		private HeapIndexToken _signatureBlobIdx;
+		/// <value>
+		/// The signature BLOB.
+		/// </value>
+		public HeapIndexToken SignatureBlob { get; private set; }
 
-		#endregion Data members
+		#endregion Properties
 
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="StandAloneSigRow"/> struct.
+		/// Initializes a new instance of the <see cref="StandAloneSigRow" /> struct.
 		/// </summary>
-		/// <param name="signatureBlobIdx">The signature BLOB idx.</param>
-		public StandAloneSigRow(HeapIndexToken signatureBlobIdx)
+		/// <param name="signatureBlob">The signature BLOB.</param>
+		public StandAloneSigRow(HeapIndexToken signatureBlob)
 		{
-			_signatureBlobIdx = signatureBlobIdx;
+			SignatureBlob = signatureBlob;
 		}
 
 		#endregion Construction
-
-		#region Properties
-
-		/// <summary>
-		/// Gets the signature BLOB idx.
-		/// </summary>
-		/// <value>The signature BLOB idx.</value>
-		public HeapIndexToken SignatureBlobIdx
-		{
-			get { return _signatureBlobIdx; }
-		}
-
-		#endregion Properties
 	}
 }

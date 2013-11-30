@@ -59,6 +59,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Extension.cs" />
+    <Compile Include="Tables\StandAloneSigExt.cs" />
     <Compile Include="Tables\InterfaceImplRowExt.cs" />
     <Compile Include="Tables\CustomAttributeRowExt.cs" />
     <Compile Include="Tables\AssemblyRowExt.cs" />

@@ -7,12 +7,11 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
+using Mosa.Compiler.Metadata.Tables;
 using System;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
-
-using Mosa.Compiler.Metadata.Tables;
 
 namespace Mosa.Compiler.Metadata
 {

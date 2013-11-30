@@ -5,6 +5,7 @@
  *
  * Authors:
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 using System;
@@ -34,15 +35,6 @@ namespace Mosa.Compiler.Metadata.Signatures
 		/// <param name="token">The token.</param>
 		public FieldSignature(IMetadataProvider provider, HeapIndexToken token)
 			: base(provider, token)
-		{
-		}
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="FieldSignature"/> class.
-		/// </summary>
-		/// <param name="signature">The signature.</param>
-		public FieldSignature(FieldSignature signature)
-			: base(signature)
 		{
 		}
 

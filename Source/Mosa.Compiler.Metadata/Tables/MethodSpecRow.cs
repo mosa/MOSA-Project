@@ -5,6 +5,7 @@
  *
  * Authors:
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 namespace Mosa.Compiler.Metadata.Tables
@@ -12,33 +13,19 @@ namespace Mosa.Compiler.Metadata.Tables
 	/// <summary>
 	///
 	/// </summary>
-	public struct MethodSpecRow
+	public class MethodSpecRow
 	{
-		#region Data members
-
-		/// <summary>
-		/// Holds the index into the method table.
-		/// </summary>
-		private Token _method;
-
-		/// <summary>
-		/// Holds the index into the blob instantiation.
-		/// </summary>
-		private HeapIndexToken _instantiationBlobIdx;
-
-		#endregion Data members
-
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of <see cref="MethodSpecRow"/>.
+		/// Initializes a new instance of <see cref="MethodSpecRow" />.
 		/// </summary>
 		/// <param name="method">The method table index of the MethodSpecRow.</param>
-		/// <param name="instantiationBlobIdx">The instantiation blob index of the MethodSpecRow.</param>
-		public MethodSpecRow(Token method, HeapIndexToken instantiationBlobIdx)
+		/// <param name="instantiationBlob">The instantiation BLOB.</param>
+		public MethodSpecRow(Token method, HeapIndexToken instantiationBlob)
 		{
-			_method = method;
-			_instantiationBlobIdx = instantiationBlobIdx;
+			Method = method;
+			InstantiationBlob = instantiationBlob;
 		}
 
 		#endregion Construction
@@ -46,22 +33,20 @@ namespace Mosa.Compiler.Metadata.Tables
 		#region Properties
 
 		/// <summary>
-		/// Gets the method table idx.
+		/// Gets the method.
 		/// </summary>
-		/// <value>The method table idx.</value>
-		public Token Method
-		{
-			get { return _method; }
-		}
+		/// <value>
+		/// The method.
+		/// </value>
+		public Token Method { get; private set; }
 
 		/// <summary>
-		/// Gets the instantiation BLOB idx.
+		/// Gets the instantiation BLOB.
 		/// </summary>
-		/// <value>The instantiation BLOB idx.</value>
-		public HeapIndexToken InstantiationBlobIdx
-		{
-			get { return _instantiationBlobIdx; }
-		}
+		/// <value>
+		/// The instantiation BLOB.
+		/// </value>
+		public HeapIndexToken InstantiationBlob { get; private set; }
 
 		#endregion Properties
 	}

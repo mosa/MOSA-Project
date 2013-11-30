@@ -7,10 +7,9 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System.Collections;
-
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Tables;
+using System.Collections;
 
 namespace Mosa.Tool.MetadataExplorer.Tables
 {
@@ -31,8 +30,8 @@ namespace Mosa.Tool.MetadataExplorer.Tables
 
 		public override IEnumerable GetValues()
 		{
-			yield return Value("ClassTableIdx", row.Class);
-			yield return Value("InterfaceTableIdx", row.Interface);
+			yield return Value("ClassTable #", row.Class);
+			yield return Value("InterfaceTable #", row.Interface);
 		}
 	}
 }

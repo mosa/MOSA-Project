@@ -5,9 +5,11 @@
  *
  * Authors:
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 using System;
+using System.Text;
 
 namespace Mosa.Compiler.Metadata.Signatures
 {
@@ -16,10 +18,6 @@ namespace Mosa.Compiler.Metadata.Signatures
 	/// </summary>
 	public class LocalVariableSignature : Signature
 	{
-		/// <summary>
-		/// A shared empty array for those signatures, who do not have local variables.
-		/// </summary>
-		private static VariableSignature[] Empty = new VariableSignature[0];
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="LocalVariableSignature" /> class.
@@ -38,14 +36,6 @@ namespace Mosa.Compiler.Metadata.Signatures
 		public LocalVariableSignature(IMetadataProvider provider, HeapIndexToken token)
 			: base(provider, token)
 		{
-		}
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="LocalVariableSignature" /> class.
-		/// </summary>
-		public LocalVariableSignature()
-		{
-			Locals = LocalVariableSignature.Empty;
 		}
 
 		/// <summary>
@@ -74,6 +64,31 @@ namespace Mosa.Compiler.Metadata.Signatures
 					Locals[i] = new VariableSignature(reader);
 				}
 			}
+		}
+
+		public override string ToString()
+		{
+			StringBuilder sb = new StringBuilder();
+
+			sb.Append(base.ToString());
+			sb.Append(' ');
+
+			if (Locals.Length != 0)
+			{
+				sb.Append(" [ ");
+
+				foreach (var local in Locals)
+				{
+					sb.Append(local.ToString());
+					sb.Append(", ");
+				}
+
+				sb.Length = sb.Length - 2;
+
+				sb.Append(" ]");
+			}
+
+			return sb.ToString();
 		}
 	}
 }

@@ -5,6 +5,7 @@
  *
  * Authors:
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 namespace Mosa.Compiler.Metadata.Tables
@@ -12,26 +13,17 @@ namespace Mosa.Compiler.Metadata.Tables
 	/// <summary>
 	///
 	/// </summary>
-	public struct ModuleRefRow
+	public class ModuleRefRow
 	{
-		#region Data members
-
-		/// <summary>
-		///
-		/// </summary>
-		private HeapIndexToken _nameStringIdx;
-
-		#endregion Data members
-
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="ModuleRefRow"/> struct.
+		/// Initializes a new instance of the <see cref="ModuleRefRow" /> struct.
 		/// </summary>
-		/// <param name="nameStringIdx">The name string idx.</param>
-		public ModuleRefRow(HeapIndexToken nameStringIdx)
+		/// <param name="nameString">The name string.</param>
+		public ModuleRefRow(HeapIndexToken nameString)
 		{
-			_nameStringIdx = nameStringIdx;
+			NameString = nameString;
 		}
 
 		#endregion Construction
@@ -39,13 +31,12 @@ namespace Mosa.Compiler.Metadata.Tables
 		#region Properties
 
 		/// <summary>
-		/// Gets the name string idx.
+		/// Gets the name string.
 		/// </summary>
-		/// <value>The name string idx.</value>
-		public HeapIndexToken NameStringIdx
-		{
-			get { return _nameStringIdx; }
-		}
+		/// <value>
+		/// The name string.
+		/// </value>
+		public HeapIndexToken NameString { get; private set; }
 
 		#endregion Properties
 	}

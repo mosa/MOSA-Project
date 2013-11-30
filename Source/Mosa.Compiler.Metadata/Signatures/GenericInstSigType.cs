@@ -5,6 +5,7 @@
  *
  * Authors:
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 using System.Text;
@@ -93,7 +94,28 @@ namespace Mosa.Compiler.Metadata.Signatures
 		/// </returns>
 		public override string ToString()
 		{
-			return base.ToString() + " " + BaseType.ToString();
+			StringBuilder sb = new StringBuilder();
+
+			sb.Append(base.ToString());
+			sb.Append(' ');
+			sb.Append(BaseType.ToString());
+
+			if (GenericArguments.Length != 0)
+			{
+				sb.Append(" [ ");
+
+				foreach (var type in GenericArguments)
+				{
+					sb.Append(type.ToString());
+					sb.Append(", ");
+				}
+
+				sb.Length = sb.Length - 2;
+
+				sb.Append(" ]");
+			}
+
+			return sb.ToString();
 		}
 
 		#endregion SigType Overrides

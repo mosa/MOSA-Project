@@ -5,6 +5,7 @@
  *
  * Authors:
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 namespace Mosa.Compiler.Metadata.Tables
@@ -12,47 +13,23 @@ namespace Mosa.Compiler.Metadata.Tables
 	/// <summary>
 	///
 	/// </summary>
-	public struct GenericParamRow
+	public class GenericParamRow
 	{
-		#region Data members
-
-		/// <summary>
-		///
-		/// </summary>
-		private ushort number;
-
-		/// <summary>
-		///
-		/// </summary>
-		private GenericParameterAttributes flags;
-
-		/// <summary>
-		///
-		/// </summary>
-		private Token owner;
-
-		/// <summary>
-		///
-		/// </summary>
-		private HeapIndexToken nameStringIdx;
-
-		#endregion Data members
-
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="GenericParamRow"/> struct.
+		/// Initializes a new instance of the <see cref="GenericParamRow" /> struct.
 		/// </summary>
 		/// <param name="number">The number.</param>
 		/// <param name="flags">The flags.</param>
-		/// <param name="owner">The owner table idx.</param>
-		/// <param name="nameStringIdx">The name string idx.</param>
-		public GenericParamRow(ushort number, GenericParameterAttributes flags, Token owner, HeapIndexToken nameStringIdx)
+		/// <param name="owner">The owner.</param>
+		/// <param name="nameString">The name string.</param>
+		public GenericParamRow(ushort number, GenericParameterAttributes flags, Token owner, HeapIndexToken nameString)
 		{
-			this.number = number;
-			this.flags = flags;
-			this.owner = owner;
-			this.nameStringIdx = nameStringIdx;
+			Number = number;
+			Flags = flags;
+			Owner = owner;
+			NameString = nameString;
 		}
 
 		#endregion Construction
@@ -63,37 +40,29 @@ namespace Mosa.Compiler.Metadata.Tables
 		/// Gets the number.
 		/// </summary>
 		/// <value>The number.</value>
-		public ushort Number
-		{
-			get { return number; }
-		}
+		public ushort Number { get; private set; }
 
 		/// <summary>
 		/// Gets the flags.
 		/// </summary>
 		/// <value>The flags.</value>
-		public GenericParameterAttributes Flags
-		{
-			get { return flags; }
-		}
+		public GenericParameterAttributes Flags { get; private set; }
 
 		/// <summary>
-		/// Gets the owner table idx.
+		/// Gets the owner.
 		/// </summary>
-		/// <value>The owner table idx.</value>
-		public Token Owner
-		{
-			get { return owner; }
-		}
+		/// <value>
+		/// The owner.
+		/// </value>
+		public Token Owner { get; private set; }
 
 		/// <summary>
-		/// Gets the name string idx.
+		/// Gets the name string.
 		/// </summary>
-		/// <value>The name string idx.</value>
-		public HeapIndexToken NameStringIdx
-		{
-			get { return nameStringIdx; }
-		}
+		/// <value>
+		/// The name string.
+		/// </value>
+		public HeapIndexToken NameString { get; private set; }
 
 		#endregion Properties
 	}

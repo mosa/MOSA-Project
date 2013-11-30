@@ -5,9 +5,11 @@
  *
  * Authors:
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 using System;
+using System.Text;
 
 namespace Mosa.Compiler.Metadata.Signatures
 {
@@ -45,6 +47,30 @@ namespace Mosa.Compiler.Metadata.Signatures
 			Types = new SigType[genArgCount];
 			for (int i = 0; i < genArgCount; i++)
 				Types[i] = SigType.ParseTypeSignature(reader);
+		}
+
+		public override string ToString()
+		{
+			StringBuilder sb = new StringBuilder();
+
+			sb.Append(base.ToString() + " ");
+
+			if (Types.Length != 0)
+			{
+				sb.Append(" [ ");
+
+				foreach (var type in Types)
+				{
+					sb.Append(type.ToString());
+					sb.Append(", ");
+				}
+
+				sb.Length = sb.Length - 2;
+
+				sb.Append(" ]");
+			}
+
+			return sb.ToString();
 		}
 	}
 }

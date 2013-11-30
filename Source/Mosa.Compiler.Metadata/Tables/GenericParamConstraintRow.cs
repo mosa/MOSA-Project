@@ -5,6 +5,7 @@
  *
  * Authors:
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 namespace Mosa.Compiler.Metadata.Tables
@@ -12,33 +13,19 @@ namespace Mosa.Compiler.Metadata.Tables
 	/// <summary>
 	///
 	/// </summary>
-	public struct GenericParamConstraintRow
+	public class GenericParamConstraintRow
 	{
-		#region Data members
-
-		/// <summary>
-		///
-		/// </summary>
-		private Token _owner;
-
-		/// <summary>
-		///
-		/// </summary>
-		private Token _constraint;
-
-		#endregion Data members
-
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="GenericParamConstraintRow"/> struct.
+		/// Initializes a new instance of the <see cref="GenericParamConstraintRow" /> struct.
 		/// </summary>
-		/// <param name="owner">The owner table idx.</param>
-		/// <param name="constraint">The constraint table idx.</param>
+		/// <param name="owner">The owner.</param>
+		/// <param name="constraint">The constraint.</param>
 		public GenericParamConstraintRow(Token owner, Token constraint)
 		{
-			_owner = owner;
-			_constraint = constraint;
+			Owner = owner;
+			Constraint = constraint;
 		}
 
 		#endregion Construction
@@ -46,22 +33,20 @@ namespace Mosa.Compiler.Metadata.Tables
 		#region Properties
 
 		/// <summary>
-		/// Gets the owner table idx.
+		/// Gets the owner.
 		/// </summary>
-		/// <value>The owner table idx.</value>
-		public Token Owner
-		{
-			get { return _owner; }
-		}
+		/// <value>
+		/// The owner.
+		/// </value>
+		public Token Owner { get; private set; }
 
 		/// <summary>
-		/// Gets the constraint table idx.
+		/// Gets the constraint.
 		/// </summary>
-		/// <value>The constraint table idx.</value>
-		public Token Constraint
-		{
-			get { return _constraint; }
-		}
+		/// <value>
+		/// The constraint.
+		/// </value>
+		public Token Constraint { get; private set; }
 
 		#endregion Properties
 	}
