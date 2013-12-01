@@ -23,10 +23,7 @@ namespace Mosa.Tool.MetadataExplorer
 
 		private void openToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			if (openFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-			{
-				LoadAssembly(openFileDialog.FileName);
-			}
+			
 		}
 
 		protected void LoadAssembly(string filename)
@@ -97,6 +94,14 @@ namespace Mosa.Tool.MetadataExplorer
 		private void showSizes_Click(object sender, EventArgs e)
 		{
 			UpdateTree();
+		}
+
+		private void toolStripButton1_Click(object sender, EventArgs e)
+		{
+			if (openFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+			{
+				LoadAssembly(openFileDialog.FileName);
+			}
 		}
 
 	}

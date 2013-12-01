@@ -52,7 +52,7 @@ namespace Mosa.Tool.MetadataExplorer.Tables
 			{
 				StandAloneSigRow standAlongSigRow = Metadata.ReadStandAloneSigRow(header.LocalVarSigTok);
 				var local = new LocalVariableSignature(Metadata, standAlongSigRow.SignatureBlob);
-				yield return Value("Local Variable Signature", local.ToString());
+				yield return Value("Method Table", local.ToString());
 			}
 		}
 	}
