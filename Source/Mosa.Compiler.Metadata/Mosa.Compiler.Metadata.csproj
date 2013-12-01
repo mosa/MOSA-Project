@@ -39,6 +39,8 @@
     <Compile Include="AssemblyHashAlgorithm.cs" />
     <Compile Include="BlobHeap.cs" />
     <Compile Include="CilElementType.cs" />
+    <Compile Include="ExceptionHandlerType.cs" />
+    <Compile Include="ExceptionHandlingClause.cs" />
     <Compile Include="GenericSigTypeResolver.cs" />
     <Compile Include="MethodFlags.cs" />
     <Compile Include="MethodHeader.cs" />

@@ -125,13 +125,7 @@ namespace Mosa.Compiler.Framework
 		/// <value>
 		/// 	<c>true</c> if this instance has exception or finally; otherwise, <c>false</c>.
 		/// </value>
-		protected bool HasExceptionOrFinally
-		{
-			get
-			{
-				return methodCompiler.ExceptionClauseHeader.Clauses.Count != 0;
-			}
-		}
+		protected bool HasExceptionOrFinally { get { return methodCompiler.ExceptionHandlingClauses.Count != 0; } }
 
 		/// <summary>
 		/// Creates the context.

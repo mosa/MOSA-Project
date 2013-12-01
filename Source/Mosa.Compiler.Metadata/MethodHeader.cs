@@ -9,7 +9,8 @@
  */
 
 using Mosa.Compiler.Common;
-using Mosa.Compiler.Metadata;
+using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Mosa.Compiler.Metadata
 {
@@ -39,12 +40,20 @@ namespace Mosa.Compiler.Metadata
 		public Token LocalVarSigTok { get; private set; }
 
 		/// <summary>
+		/// Gets the clauses.
+		/// </summary>
+		/// <value>The clauses.</value>
+		public List<ExceptionHandlingClause> Clauses { get; private set; }
+
+		/// <summary>
 		/// Reads the method header from the instruction stream.
 		/// </summary>
 		/// <param name="reader">The reader used to decode the instruction stream.</param>
 		/// <returns></returns>
 		public MethodHeader(EndianAwareBinaryReader reader)
 		{
+			Clauses = new List<ExceptionHandlingClause>();
+
 			// Read first byte
 			Flags = (MethodFlags)reader.ReadByte();
 
@@ -72,7 +81,59 @@ namespace Mosa.Compiler.Metadata
 					throw new CompilerException("Invalid method header");
 			}
 
-		}
+			// Are there sections following the code?
+			if (MethodFlags.MoreSections != (Flags & MethodFlags.MoreSections))
+				return;
 
+			// Yes, seek to them and process those sections
+			long codepos = reader.BaseStream.Position;
+
+			// Seek to the end of the code...
+			long dataSectPos = codepos + CodeSize;
+			if (0 != (dataSectPos & 3))
+				dataSectPos += (4 - (dataSectPos % 4));
+			reader.BaseStream.Position = dataSectPos;
+
+			// Read all headers, so the IL decoder knows how to handle these...
+			byte flags;
+
+			do
+			{
+				flags = reader.ReadByte();
+				bool isFat = (0x40 == (flags & 0x40));
+				int length;
+				int blocks;
+				if (isFat)
+				{
+					byte a = reader.ReadByte();
+					byte b = reader.ReadByte();
+					byte c = reader.ReadByte();
+
+					length = (c << 24) | (b << 16) | a;
+					blocks = (length - 4) / 24;
+				}
+				else
+				{
+					length = reader.ReadByte();
+					blocks = (length - 4) / 12;
+
+					/* Read & skip the padding. */
+					reader.ReadInt16();
+				}
+
+				Debug.Assert(0x01 == (flags & 0x3F), "Unsupported method data section.");
+
+				// Read the clause
+				for (int i = 0; i < blocks; i++)
+				{
+					ExceptionHandlingClause clause = new ExceptionHandlingClause();
+					clause.Read(reader, isFat);
+					Clauses.Add(clause);
+				}
+			}
+			while (0x80 == (flags & 0x80));
+
+			reader.BaseStream.Position = codepos;
+		}
 	}
 }
