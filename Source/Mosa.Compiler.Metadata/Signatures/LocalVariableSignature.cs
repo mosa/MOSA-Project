@@ -52,7 +52,7 @@ namespace Mosa.Compiler.Metadata.Signatures
 		{
 			// Check signature identifier
 			if (reader.ReadByte() != 0x07)
-				throw new ArgumentException(@"Token doesn't represent a local variable signature.", @"token");
+				throw new ArgumentException("Token doesn't represent a local variable signature.", "token");
 
 			// Retrieve the number of locals
 			int count = reader.ReadCompressedInt32();

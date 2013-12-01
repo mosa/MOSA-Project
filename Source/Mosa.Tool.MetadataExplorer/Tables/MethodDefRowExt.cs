@@ -11,6 +11,9 @@ using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Compiler.Metadata.Tables;
 using System.Collections;
+using System.IO;
+using Mosa.Compiler.Metadata.Loader;
+using Mosa.Compiler.Common;
 
 namespace Mosa.Tool.MetadataExplorer.Tables
 {
@@ -21,8 +24,8 @@ namespace Mosa.Tool.MetadataExplorer.Tables
 	{
 		protected MethodDefRow row;
 
-		public MethodDefRowExt(IMetadataProvider metadata, MethodDefRow row)
-			: base(metadata)
+		public MethodDefRowExt(IMetadataModule metadataModule, MethodDefRow row)
+			: base(metadataModule)
 		{
 			this.row = row;
 		}
@@ -39,7 +42,18 @@ namespace Mosa.Tool.MetadataExplorer.Tables
 
 			MethodSignature signature = new MethodSignature(Metadata, row.SignatureBlob);
 			yield return Value("Signature", signature.ToString());
-			yield return Value("Signature Generic Parameters", signature.GenericParameterCount.ToString());
+			//yield return Value("Signature Generic Parameters", signature.GenericParameterCount.ToString());
+
+			var code = MetadataModule.GetInstructionStream((long)row.Rva);
+			var codeReader = new EndianAwareBinaryReader(code, Endianness.Little);
+			var header = new MethodHeader(codeReader);
+
+			if (header.LocalVarSigTok.RID != 0)
+			{
+				StandAloneSigRow standAlongSigRow = Metadata.ReadStandAloneSigRow(header.LocalVarSigTok);
+				var local = new LocalVariableSignature(Metadata, standAlongSigRow.SignatureBlob);
+				yield return Value("Local Variable Signature", local.ToString());
+			}
 		}
 	}
 }

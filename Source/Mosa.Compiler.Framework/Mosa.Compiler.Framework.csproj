@@ -191,8 +191,6 @@
     <Compile Include="CIL\ConstrainedPrefixInstruction.cs" />
     <Compile Include="CIL\ConversionInstruction.cs" />
     <Compile Include="CIL\CILInstruction.cs" />
-    <Compile Include="CIL\MethodFlags.cs" />
-    <Compile Include="CIL\MethodHeader.cs" />
     <Compile Include="CIL\StoreInstruction.cs" />
     <Compile Include="CIL\ICILVisitor.cs" />
     <Compile Include="CIL\Prefix.cs" />

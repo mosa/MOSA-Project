@@ -65,7 +65,7 @@ namespace Mosa.Tool.MetadataExplorer
 				{
 					Token token = new Token(table, rowid);
 
-					TableRow row = Resolver.GetTableRow(metadataModule.Metadata, token);
+					TableRow row = Resolver.GetTableRow(metadataModule, token);
 
 					if (row == null)
 						continue;

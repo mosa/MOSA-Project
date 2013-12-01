@@ -5,6 +5,7 @@
  *
  * Authors:
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 using Mosa.Compiler.Common;
@@ -77,11 +78,12 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				using (codeReader = new EndianAwareBinaryReader(code, Endianness.Little))
 				{
-					MethodHeader header = ReadMethodHeader(codeReader);
+					MethodHeader header = new MethodHeader(codeReader);
+					ReadMethodHeader(header, codeReader);
 
-					if (header.LocalsSignature.RID != 0)
+					if (header.LocalVarSigTok.RID != 0)
 					{
-						StandAloneSigRow row = methodCompiler.Method.Module.MetadataModule.Metadata.ReadStandAloneSigRow(header.LocalsSignature);
+						StandAloneSigRow row = methodCompiler.Method.Module.MetadataModule.Metadata.ReadStandAloneSigRow(header.LocalVarSigTok);
 
 						LocalVariableSignature localsSignature = new LocalVariableSignature(methodCompiler.Method.Module.MetadataModule.Metadata, row.SignatureBlob);
 
@@ -111,44 +113,11 @@ namespace Mosa.Compiler.Framework.Stages
 
 		#region Internals
 
-		/// <summary>
-		/// Reads the method header from the instruction stream.
-		/// </summary>
-		/// <param name="reader">The reader used to decode the instruction stream.</param>
-		/// <returns></returns>
-		private MethodHeader ReadMethodHeader(EndianAwareBinaryReader reader)
+		private void ReadMethodHeader(MethodHeader header, EndianAwareBinaryReader reader)
 		{
-			MethodHeader header = new MethodHeader();
-
-			// Read first byte
-			header.Flags = (MethodFlags)reader.ReadByte();
-
-			// Check least significant 2 bits
-			switch (header.Flags & MethodFlags.HeaderMask)
-			{
-				case MethodFlags.TinyFormat:
-					header.CodeSize = ((uint)(header.Flags & MethodFlags.TinyCodeSizeMask) >> 2);
-					header.Flags &= MethodFlags.HeaderMask;
-					break;
-
-				case MethodFlags.FatFormat:
-
-					// Read second byte of flags
-					header.Flags = (MethodFlags)(reader.ReadByte() << 8 | (byte)header.Flags);
-					if (MethodFlags.ValidHeader != (header.Flags & MethodFlags.HeaderSizeMask))
-						throw new InvalidDataException(@"Invalid method header.");
-					header.MaxStack = reader.ReadUInt16();
-					header.CodeSize = reader.ReadUInt32();
-					header.LocalsSignature = new Token(reader.ReadUInt32()); // ReadStandAloneSigRow
-					break;
-
-				default:
-					throw new InvalidDataException(@"Invalid method header while trying to decode " + this.methodCompiler.Method.FullName + ". (Flags = " + header.Flags.ToString("X") + ", Rva = " + this.methodCompiler.Method.Rva + ")");
-			}
-
 			// Are there sections following the code?
 			if (MethodFlags.MoreSections != (header.Flags & MethodFlags.MoreSections))
-				return header;
+				return;
 
 			// Yes, seek to them and process those sections
 			long codepos = reader.BaseStream.Position;
@@ -186,7 +155,7 @@ namespace Mosa.Compiler.Framework.Stages
 					reader.ReadInt16();
 				}
 
-				Debug.Assert(0x01 == (flags & 0x3F), @"Unsupported method data section.");
+				Debug.Assert(0x01 == (flags & 0x3F), "Unsupported method data section.");
 
 				// Read the clause
 				for (int i = 0; i < blocks; i++)
@@ -199,8 +168,6 @@ namespace Mosa.Compiler.Framework.Stages
 			while (0x80 == (flags & 0x80));
 
 			reader.BaseStream.Position = codepos;
-
-			return header;
 		}
 
 		/// <summary>

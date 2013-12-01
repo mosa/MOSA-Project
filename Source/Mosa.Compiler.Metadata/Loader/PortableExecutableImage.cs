@@ -191,7 +191,7 @@ namespace Mosa.Compiler.Metadata.Loader
 		/// Retrieves an instruction for the specified relative virtual address.
 		/// </summary>
 		/// <param name="rva">The method to retrieve the instruction stream for.</param>
-		/// <returns>A new instance of CILInstructionStream, which represents the stream.</returns>
+		/// <returns>A new instance of InstructionStream, which represents the stream.</returns>
 		Stream IMetadataModule.GetInstructionStream(long rva)
 		{
 			return new InstructionStream(assemblyStream, ResolveVirtualAddress(rva));

@@ -45,6 +45,26 @@ namespace Mosa.Compiler.Metadata.Signatures
 		/// </summary>
 		private const byte HAS_EXPLICIT_THIS = 0x40;
 
+		/// <summary>
+		/// 
+		/// </summary>
+		private const byte C = 0x1;
+
+		/// <summary>
+		/// 
+		/// </summary>			
+		private const byte STDCALL = 0x2;
+
+		/// <summary>
+		/// 
+		/// </summary>
+		private const byte THISCALL = 0x3;
+
+		/// <summary>
+		/// 
+		/// </summary>
+		private const byte FASTCALL = 0x4;
+
 		#endregion Constants
 
 		/// <summary>
@@ -132,6 +152,18 @@ namespace Mosa.Compiler.Metadata.Signatures
 			{
 				MethodCallingConvention = MethodCallingConvention.VarArg;
 			}
+			else if (C == (value & C))
+			{
+			}
+			else if (STDCALL == (value & STDCALL))
+			{
+			}
+			else if (THISCALL == (value & THISCALL))
+			{
+			}
+			else if (FASTCALL == (value & FASTCALL))
+			{
+			}
 			else if ((value & 0x1F) != 0x00)
 			{
 				throw new InvalidOperationException(@"Invalid method definition signature.");
@@ -160,7 +192,7 @@ namespace Mosa.Compiler.Metadata.Signatures
 		public override string ToString()
 		{
 			StringBuilder sb = new StringBuilder();
-			
+
 			sb.Append(base.ToString() + " ");
 			sb.Append("Has This/ThisExplicit: ");
 			sb.Append(HasThis.ToString());
