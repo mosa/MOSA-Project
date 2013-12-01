@@ -7,10 +7,10 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
 */
 
+using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Compiler.TypeSystem;
-using Mosa.Compiler.Framework.IR;
 
 namespace Mosa.Compiler.Framework.Stages
 {
@@ -25,7 +25,7 @@ namespace Mosa.Compiler.Framework.Stages
 		void IMethodCompilerStage.Run()
 		{
 			// Handler Code
-			foreach (ExceptionHandlingClause clause in methodCompiler.ExceptionClauseHeader.Clauses)
+			foreach (ExceptionHandlingClause clause in methodCompiler.ExceptionHandlingClauses)
 			{
 				if (clause.ExceptionHandler == ExceptionHandlerType.Exception)
 				{

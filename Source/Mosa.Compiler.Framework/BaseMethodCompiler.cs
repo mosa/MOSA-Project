@@ -17,6 +17,7 @@ using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Compiler.TypeSystem;
 using Mosa.Compiler.TypeSystem.Cil;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 
@@ -105,7 +106,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Holds the exception clauses
 		/// </summary>
-		private readonly ExceptionClauseHeader exceptionClauseHeader = new ExceptionClauseHeader();
+		private readonly List<ExceptionHandlingClause> exceptionHandlingClauses;
 
 		/// <summary>
 		/// Holds the compiler
@@ -152,16 +153,12 @@ namespace Mosa.Compiler.Framework
 			this.typeLayout = Compiler.TypeLayout;
 			this.internalTrace = Compiler.InternalTrace;
 			this.linker = compiler.Linker;
-
 			this.basicBlocks = basicBlocks ?? new BasicBlocks();
-
 			this.instructionSet = instructionSet ?? new InstructionSet(256);
-
 			this.pipeline = new CompilerPipeline();
-
 			this.stackLayout = new StackLayout(architecture, method.Parameters.Count + (method.HasThis || method.HasExplicitThis ? 1 : 0));
-
 			this.virtualRegisters = new VirtualRegisters(architecture);
+			this.exceptionHandlingClauses = new List<ExceptionHandlingClause>();
 
 			EvaluateParameterOperands();
 
@@ -242,7 +239,7 @@ namespace Mosa.Compiler.Framework
 		/// Gets the exception clause header.
 		/// </summary>
 		/// <value>The exception clause header.</value>
-		public ExceptionClauseHeader ExceptionClauseHeader { get { return exceptionClauseHeader; } }
+		public List<ExceptionHandlingClause> ExceptionHandlingClauses { get { return exceptionHandlingClauses; } }
 
 		/// <summary>
 		/// Gets the local variables.

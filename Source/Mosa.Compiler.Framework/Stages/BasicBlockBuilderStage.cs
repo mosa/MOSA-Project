@@ -8,10 +8,10 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-using System.Collections.Generic;
-using System.Diagnostics;
 using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.Framework.Linker;
+using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework.Stages
 {
@@ -70,17 +70,17 @@ namespace Mosa.Compiler.Framework.Stages
 			// Link all the blocks together
 			BuildBlockLinks(prologue);
 
-			foreach (ExceptionHandlingClause exceptionClause in methodCompiler.ExceptionClauseHeader.Clauses)
+			foreach (var clause in methodCompiler.ExceptionHandlingClauses)
 			{
-				if (exceptionClause.HandlerOffset != 0)
+				if (clause.HandlerOffset != 0)
 				{
-					BasicBlock basicBlock = basicBlocks.GetByLabel(exceptionClause.HandlerOffset);
+					BasicBlock basicBlock = basicBlocks.GetByLabel(clause.HandlerOffset);
 					BuildBlockLinks(basicBlock);
 					basicBlocks.AddHeaderBlock(basicBlock);
 				}
-				if (exceptionClause.FilterOffset != 0)
+				if (clause.FilterOffset != 0)
 				{
-					BasicBlock basicBlock = basicBlocks.GetByLabel(exceptionClause.FilterOffset);
+					BasicBlock basicBlock = basicBlocks.GetByLabel(clause.FilterOffset);
 					BuildBlockLinks(basicBlock);
 					basicBlocks.AddHeaderBlock(basicBlock);
 				}
@@ -140,16 +140,16 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 
 			// Add Exception Class targets
-			foreach (ExceptionHandlingClause exceptionClause in methodCompiler.ExceptionClauseHeader.Clauses)
+			foreach (var clause in methodCompiler.ExceptionHandlingClauses)
 			{
-				if (!targets.ContainsKey(exceptionClause.HandlerOffset))
-					targets.Add(exceptionClause.HandlerOffset, -1);
+				if (!targets.ContainsKey(clause.HandlerOffset))
+					targets.Add(clause.HandlerOffset, -1);
 
-				if (!targets.ContainsKey(exceptionClause.TryOffset))
-					targets.Add(exceptionClause.TryOffset, -1);
+				if (!targets.ContainsKey(clause.TryOffset))
+					targets.Add(clause.TryOffset, -1);
 
-				if (!targets.ContainsKey(exceptionClause.FilterOffset))
-					targets.Add(exceptionClause.FilterOffset, -1);
+				if (!targets.ContainsKey(clause.FilterOffset))
+					targets.Add(clause.FilterOffset, -1);
 			}
 
 			BasicBlock currentBlock = null;

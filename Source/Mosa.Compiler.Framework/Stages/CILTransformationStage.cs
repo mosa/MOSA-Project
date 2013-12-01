@@ -1168,7 +1168,7 @@ namespace Mosa.Compiler.Framework.Stages
 			ExceptionHandlingClause innerClause = null;
 			int label = context.Label;
 
-			foreach (ExceptionHandlingClause clause in methodCompiler.ExceptionClauseHeader.Clauses)
+			foreach (var clause in methodCompiler.ExceptionHandlingClauses)
 			{
 				if (clause.IsLabelWithinTry(label) || clause.IsLabelWithinHandler(label))
 				{

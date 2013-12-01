@@ -56,7 +56,7 @@ namespace Mosa.Platform.x86.Stages
 
 		private void AssignBlocksToClauses()
 		{
-			if (methodCompiler.ExceptionClauseHeader.Clauses.Count == 0)
+			if (methodCompiler.ExceptionHandlingClauses.Count == 0)
 				return;
 
 			blockExceptions = new Dictionary<BasicBlock, ExceptionHandlingClause>();
@@ -86,7 +86,7 @@ namespace Mosa.Platform.x86.Stages
 			Context ctx = new Context(instructionSet, block);
 			int label = ctx.Label;
 
-			foreach (ExceptionHandlingClause clause in methodCompiler.ExceptionClauseHeader.Clauses)
+			foreach (var clause in methodCompiler.ExceptionHandlingClauses)
 			{
 				if (clause.IsLabelWithinTry(label))
 					return clause;
@@ -126,7 +126,7 @@ namespace Mosa.Platform.x86.Stages
 		{
 			List<ProtectedBlock> entries = new List<ProtectedBlock>();
 
-			foreach (ExceptionHandlingClause clause in methodCompiler.ExceptionClauseHeader.Clauses)
+			foreach (var clause in methodCompiler.ExceptionHandlingClauses)
 			{
 				ProtectedBlock prev = new ProtectedBlock();
 
