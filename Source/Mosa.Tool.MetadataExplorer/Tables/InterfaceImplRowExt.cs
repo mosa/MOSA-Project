@@ -10,6 +10,7 @@
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Tables;
 using System.Collections;
+using Mosa.Compiler.Metadata.Loader;
 
 namespace Mosa.Tool.MetadataExplorer.Tables
 {
@@ -20,8 +21,8 @@ namespace Mosa.Tool.MetadataExplorer.Tables
 	{
 		protected InterfaceImplRow row;
 
-		public InterfaceImplRowExt(IMetadataProvider metadata, InterfaceImplRow row)
-			: base(metadata)
+		public InterfaceImplRowExt(IMetadataModule metadataModule, InterfaceImplRow row)
+			: base(metadataModule)
 		{
 			this.row = row;
 		}

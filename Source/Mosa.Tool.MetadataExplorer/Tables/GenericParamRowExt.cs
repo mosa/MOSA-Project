@@ -10,6 +10,7 @@
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Tables;
 using System.Collections;
+using Mosa.Compiler.Metadata.Loader;
 
 namespace Mosa.Tool.MetadataExplorer.Tables
 {
@@ -20,8 +21,8 @@ namespace Mosa.Tool.MetadataExplorer.Tables
 	{
 		protected GenericParamRow row;
 
-		public GenericParamRowExt(IMetadataProvider metadata, GenericParamRow row)
-			: base(metadata)
+		public GenericParamRowExt(IMetadataModule metadataModule, GenericParamRow row)
+			: base(metadataModule)
 		{
 			this.row = row;
 		}

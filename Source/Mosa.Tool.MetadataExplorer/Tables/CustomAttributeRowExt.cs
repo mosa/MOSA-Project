@@ -10,6 +10,7 @@
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Tables;
 using System.Collections;
+using Mosa.Compiler.Metadata.Loader;
 
 namespace Mosa.Tool.MetadataExplorer.Tables
 {
@@ -20,8 +21,8 @@ namespace Mosa.Tool.MetadataExplorer.Tables
 	{
 		protected CustomAttributeRow row;
 
-		public CustomAttributeRowExt(IMetadataProvider metadata, CustomAttributeRow row)
-			: base(metadata)
+		public CustomAttributeRowExt(IMetadataModule metadataModule, CustomAttributeRow row)
+			: base(metadataModule)
 		{
 			this.row = row;
 		}

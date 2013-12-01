@@ -5,11 +5,12 @@
  *
  * Authors:
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 using System;
 
-namespace Mosa.Compiler.Framework.CIL
+namespace Mosa.Compiler.Metadata
 {
 	/// <summary>
 	///

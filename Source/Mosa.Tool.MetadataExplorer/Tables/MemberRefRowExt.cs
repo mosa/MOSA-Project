@@ -11,6 +11,7 @@ using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Compiler.Metadata.Tables;
 using System.Collections;
+using Mosa.Compiler.Metadata.Loader;
 
 namespace Mosa.Tool.MetadataExplorer.Tables
 {
@@ -21,8 +22,8 @@ namespace Mosa.Tool.MetadataExplorer.Tables
 	{
 		protected MemberRefRow row;
 
-		public MemberRefRowExt(IMetadataProvider metadata, MemberRefRow row)
-			: base(metadata)
+		public MemberRefRowExt(IMetadataModule metadataModule, MemberRefRow row)
+			: base(metadataModule)
 		{
 			this.row = row;
 		}

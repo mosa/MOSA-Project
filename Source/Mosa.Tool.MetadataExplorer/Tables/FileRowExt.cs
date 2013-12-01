@@ -10,6 +10,7 @@
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Tables;
 using System.Collections;
+using Mosa.Compiler.Metadata.Loader;
 
 namespace Mosa.Tool.MetadataExplorer.Tables
 {
@@ -20,8 +21,8 @@ namespace Mosa.Tool.MetadataExplorer.Tables
 	{
 		protected FileRow row;
 
-		public FileRowExt(IMetadataProvider metadata, FileRow row)
-			: base(metadata)
+		public FileRowExt(IMetadataModule metadataModule, FileRow row)
+			: base(metadataModule)
 		{
 			this.row = row;
 		}
