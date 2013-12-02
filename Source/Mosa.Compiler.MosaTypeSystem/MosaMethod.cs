@@ -27,6 +27,8 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public IList<MosaParameter> Parameters { get; internal set; }
 
+		public IList<MosaAttribute> CustomAttributes { get; internal set; }
+
 		public bool IsInternal { get; internal set; }
 
 		public bool IsNoInlining { get; internal set; }
@@ -65,6 +67,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 			Parameters = new List<MosaParameter>();
 			GenericParameters = new List<MosaGenericParameter>();
+			CustomAttributes = new List<MosaAttribute>();
 		}
 
 		public override string ToString()

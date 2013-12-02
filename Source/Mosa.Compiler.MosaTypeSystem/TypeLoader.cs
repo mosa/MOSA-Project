@@ -17,6 +17,11 @@ namespace Mosa.Compiler.MosaTypeSystem
 		#region Data members
 
 		/// <summary>
+		/// The table count
+		/// </summary>
+		private const int TableCount = ((int)TableType.GenericParamConstraint >> 24) + 1;
+
+		/// <summary>
 		/// The resolver
 		/// </summary>
 		private readonly MosaTypeResolver resolver;
@@ -32,11 +37,6 @@ namespace Mosa.Compiler.MosaTypeSystem
 		private IMetadataModule metadataModule;
 
 		/// <summary>
-		/// The externals
-		/// </summary>
-		private Dictionary<Token, string> externals;
-
-		/// <summary>
 		/// The strings
 		/// </summary>
 		private Dictionary<HeapIndexToken, string> strings;
@@ -50,11 +50,6 @@ namespace Mosa.Compiler.MosaTypeSystem
 		/// The table rows
 		/// </summary>
 		private int[] tableRows = new int[TableCount];
-
-		/// <summary>
-		/// The table count
-		/// </summary>
-		private const int TableCount = ((int)TableType.GenericParamConstraint >> 24) + 1;
 
 		/// <summary>
 		/// The assembly
@@ -75,7 +70,6 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 			RetrieveAllTableSizes();
 
-			this.externals = new Dictionary<Token, string>();
 			this.signatures = new Dictionary<HeapIndexToken, Signature>();
 			this.strings = new Dictionary<HeapIndexToken, string>();
 
@@ -89,18 +83,15 @@ namespace Mosa.Compiler.MosaTypeSystem
 			LoadTypes();
 			LoadTypeSpecs();
 			LoadMemberReferences();
-			//LoadCustomAttributes();
+			LoadCustomAttributes();
 			LoadGenericParams();
 
-			//LoadInterfaces();
-			//LoadGenericInterfaces();
-
-			//LoadExternals();
+			LoadInterfaces();
+			LoadGenericInterfaces();
 
 			// release
 			this.metadataModule = null;
 			this.metadataProvider = null;
-			this.externals = null;
 			this.signatures = null;
 			this.strings = null;
 		}
@@ -729,6 +720,103 @@ namespace Mosa.Compiler.MosaTypeSystem
 					}
 
 					resolver.AddMethod(assembly, token, targetMethod);
+				}
+			}
+		}
+
+		/// <summary>
+		/// Loads the interfaces.
+		/// </summary>
+		private void LoadInterfaces()
+		{
+			var maxToken = GetMaxTokenValue(TableType.InterfaceImpl);
+
+			foreach (var token in new Token(TableType.InterfaceImpl, 1).Upto(maxToken))
+			{
+				var row = metadataProvider.ReadInterfaceImplRow(token);
+
+				var declaringType = resolver.GetTypeByToken(assembly, row.Class);
+				var interfaceType = resolver.GetTypeByToken(assembly, row.Interface);
+
+				declaringType.Interfaces.Add(interfaceType);
+			}
+		}
+
+		/// <summary>
+		/// Loads the generic interfaces.
+		/// </summary>
+		private void LoadGenericInterfaces()
+		{
+			//foreach (var genericType in typeSpecs.OfType<CilGenericType>())
+			//{
+			//	genericType.ResolveInterfaces(this);
+			//}
+		}
+
+		/// <summary>
+		/// Loads all custom attributes from the assembly.
+		/// </summary>
+		private void LoadCustomAttributes()
+		{
+			var maxToken = GetMaxTokenValue(TableType.CustomAttribute);
+			foreach (var token in new Token(TableType.CustomAttribute, 1).Upto(maxToken))
+			{
+				var row = metadataProvider.ReadCustomAttributeRow(token);
+
+				MosaAttribute attribute = new MosaAttribute();
+				attribute.CtorMethod = resolver.GetMethodByToken(assembly, row.Type);
+				attribute.Blob = metadataProvider.ReadBlob(row.Value);
+
+				// The following switch matches the AttributeTargets enumeration against
+				// metadata tables, which make valid targets for an attribute.
+				switch (row.Parent.Table)
+				{
+					case TableType.Assembly:
+						// AttributeTargets.Assembly
+						break;
+
+					case TableType.TypeDef:
+						// AttributeTargets.Class
+						// AttributeTargets.Delegate
+						// AttributeTargets.Enum
+						// AttributeTargets.Interface
+						// AttributeTargets.Struct
+						resolver.GetTypeByToken(assembly, row.Parent).CustomAttributes.Add(attribute);
+						break;
+
+					case TableType.MethodDef:
+						// AttributeTargets.Constructor
+						// AttributeTargets.Method
+						resolver.GetMethodByToken(assembly, row.Parent).CustomAttributes.Add(attribute);
+						break;
+
+					case TableType.Event:
+						// AttributeTargets.Event
+						break;
+
+					case TableType.Field:
+						// AttributeTargets.Field
+						resolver.GetFieldByToken(assembly, row.Parent).CustomAttributes.Add(attribute);
+						break;
+
+					case TableType.GenericParam:
+						// AttributeTargets.GenericParameter
+						break;
+
+					case TableType.Module:
+						// AttributeTargets.Module
+						break;
+
+					case TableType.Param:
+						// AttributeTargets.Parameter
+						// AttributeTargets.ReturnValue
+						break;
+
+					case TableType.Property:
+						// AttributeTargets.StackFrameIndex
+						break;
+
+					default: throw new AssemblyLoadException();
 				}
 			}
 		}

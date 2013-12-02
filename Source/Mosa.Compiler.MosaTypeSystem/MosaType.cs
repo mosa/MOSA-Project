@@ -36,6 +36,8 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public IList<MosaType> Interfaces { get; internal set; }
 
+		public IList<MosaAttribute> CustomAttributes { get; internal set; }
+
 		public bool IsUnsignedByte { get; internal set; }
 
 		public bool IsSignedByte { get; internal set; }
@@ -133,6 +135,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 			Interfaces = new List<MosaType>();
 
 			GenericParameters = new List<MosaGenericParameter>();
+			CustomAttributes = new List<MosaAttribute>();
 		}
 
 		public MosaType Clone()

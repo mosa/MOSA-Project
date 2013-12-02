@@ -75,6 +75,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MosaAttribute.cs" />
     <Compile Include="MosaGenericParameter.cs" />
     <Compile Include="TypeLoader.cs" />
     <Compile Include="MosaAssembly.cs" />
