@@ -164,7 +164,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			foreach (RuntimeAttribute attribute in attributes)
 			{
-				if (attribute.Type == plugAttribute)
+				if (attribute.CtorMethod.DeclaringType == plugAttribute)
 					return attribute;
 			}
 

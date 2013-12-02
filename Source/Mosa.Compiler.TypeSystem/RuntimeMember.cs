@@ -101,8 +101,8 @@ namespace Mosa.Compiler.TypeSystem
 			{
 				foreach (var attribute in this.attributes)
 				{
-					if (attribute.Type.Equals(attributeType) == true ||
-						attribute.Type.IsSubclassOf(attributeType) == true)
+					if (attribute.CtorMethod.DeclaringType.Equals(attributeType) == true ||
+						attribute.CtorMethod.DeclaringType.IsSubclassOf(attributeType) == true)
 					{
 						result = true;
 						break;

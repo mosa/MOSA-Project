@@ -64,26 +64,13 @@ namespace Mosa.Compiler.TypeSystem
 
 		#endregion Construction
 
-		#region Methods
-
-		#endregion Methods
-
 		#region Properties
 
 		/// <summary>
 		/// Retrieves the module from which this object originated
 		/// </summary>
 		/// <value>The type module.</value>
-		public ITypeModule TypeModule
-		{
-			get { return typeModule; }
-		}
-
-		/// <summary>
-		/// Gets the runtime type.
-		/// </summary>
-		/// <value>The runtime type.</value>
-		public RuntimeType Type { get { return ctorMethod.DeclaringType; } }
+		public ITypeModule TypeModule { get { return typeModule; } }
 
 		/// <summary>
 		/// Gets the ctor method.
