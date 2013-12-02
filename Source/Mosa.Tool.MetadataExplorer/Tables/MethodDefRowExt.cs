@@ -42,17 +42,19 @@ namespace Mosa.Tool.MetadataExplorer.Tables
 
 			MethodSignature signature = new MethodSignature(Metadata, row.SignatureBlob);
 			yield return Value("Signature", signature.ToString());
-			//yield return Value("Signature Generic Parameters", signature.GenericParameterCount.ToString());
 
-			var code = MetadataModule.GetInstructionStream((long)row.Rva);
-			var codeReader = new EndianAwareBinaryReader(code, Endianness.Little);
-			var header = new MethodHeader(codeReader);
-
-			if (header.LocalVarSigTok.RID != 0)
+			if (row.Rva != 0)
 			{
-				StandAloneSigRow standAlongSigRow = Metadata.ReadStandAloneSigRow(header.LocalVarSigTok);
-				var local = new LocalVariableSignature(Metadata, standAlongSigRow.SignatureBlob);
-				yield return Value("Method Header", local.ToString());
+				var code = MetadataModule.GetInstructionStream((long)row.Rva);
+				var codeReader = new EndianAwareBinaryReader(code, Endianness.Little);
+				var header = new MethodHeader(codeReader);
+
+				if (header.LocalVarSigTok.RID != 0)
+				{
+					StandAloneSigRow standAlongSigRow = Metadata.ReadStandAloneSigRow(header.LocalVarSigTok);
+					var local = new LocalVariableSignature(Metadata, standAlongSigRow.SignatureBlob);
+					yield return Value("Method Header", local.ToString());
+				}
 			}
 		}
 	}
