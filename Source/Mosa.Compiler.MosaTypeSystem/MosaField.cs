@@ -27,7 +27,35 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public override string ToString()
 		{
-			return FullName;
+			return FieldType.Name + " " + FullName;
+		}
+
+		public MosaField Clone(MosaType declaringType)
+		{
+			var cloneField = Clone();
+			cloneField.DeclaringType = declaringType;
+
+			if (this.FieldType.IsVarFlag || this.FieldType.IsMVarFlag)
+			{
+				cloneField.FieldType = declaringType.GenericTypes[this.FieldType.VarOrMVarIndex];
+			}
+
+			return cloneField;
+		}
+
+		private MosaField Clone()
+		{
+			var field = new MosaField();
+			field.FieldType = this.FieldType;
+			field.DeclaringType = this.DeclaringType;
+			field.Name = this.Name;
+			field.FullName = this.FullName;
+			field.CustomAttributes = this.CustomAttributes;
+			field.IsLiteralField = this.IsLiteralField;
+			field.IsStaticField = this.IsStaticField;
+			field.RVA = field.RVA;
+
+			return field;
 		}
 	}
 }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Text;
 
 namespace Mosa.Compiler.MosaTypeSystem
 {
@@ -13,6 +14,8 @@ namespace Mosa.Compiler.MosaTypeSystem
 		public MosaType BaseType { get; internal set; }
 
 		public MosaType EnclosingType { get; internal set; }
+
+		public MosaType GenericBaseType { get; internal set; }
 
 		public bool IsValueType { get; internal set; }
 
@@ -102,6 +105,8 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public bool IsGeneric { get { return GenericParameters.Count != 0; } }
 
+		public IList<MosaType> GenericTypes { get; internal set; }
+
 		public MosaType()
 		{
 			IsUnsignedByte = false;
@@ -128,7 +133,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 			IsUnmanagedPointerType = false;
 			IsArrayType = false;
 
-			IsBuiltInType = true;
+			IsBuiltInType = false;
 
 			Methods = new List<MosaMethod>();
 			Fields = new List<MosaField>();
@@ -136,59 +141,104 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 			GenericParameters = new List<MosaGenericParameter>();
 			CustomAttributes = new List<MosaAttribute>();
+
+			GenericTypes = new List<MosaType>();
+		}
+
+		public MosaType Clone(List<MosaType> genericTypes)
+		{
+			var typeClone = Clone();
+
+			typeClone.GenericTypes = genericTypes;
+
+			StringBuilder genericTypeNames = new StringBuilder();
+
+			foreach (var genericType in genericTypes)
+			{
+				genericTypeNames.Append(genericType.FullName);
+				genericTypeNames.Append(", ");
+			}
+
+			genericTypeNames.Length = genericTypeNames.Length - 2;
+			typeClone.FullName = typeClone.FullName + '<' + genericTypeNames.ToString() + '>';
+
+			foreach (var m in Methods)
+			{
+				var cloneMethod = m.Clone(typeClone);
+				typeClone.Methods.Add(cloneMethod);
+			}
+
+			foreach (var f in Fields)
+			{
+				var cloneField = f.Clone(typeClone);
+				typeClone.Fields.Add(cloneField);
+			}
+
+			typeClone.SetFlags();
+
+			return typeClone;
 		}
 
 		public MosaType Clone()
 		{
-			MosaType type = new MosaType();
+			MosaType cloneType = new MosaType();
 
-			type.Name = Name;
+			cloneType.Name = Name;
 
-			type.FullName = FullName;
-			type.Namespace = Namespace;
-			type.BaseType = BaseType;
-			type.EnclosingType = EnclosingType;
+			cloneType.FullName = FullName;
+			cloneType.Namespace = Namespace;
+			cloneType.BaseType = BaseType;
+			cloneType.EnclosingType = EnclosingType;
+			cloneType.GenericBaseType = GenericBaseType;
 
-			type.IsUnsignedByte = IsUnsignedByte;
-			type.IsSignedByte = IsSignedByte;
-			type.IsUnsignedShort = IsUnsignedShort;
-			type.IsSignedShort = IsSignedShort;
-			type.IsUnsignedInt = IsUnsignedInt;
-			type.IsSignedInt = IsSignedInt;
-			type.IsUnsignedLong = IsUnsignedLong;
-			type.IsSignedLong = IsSignedLong;
-			type.IsChar = IsChar;
-			type.IsBoolean = IsBoolean;
-			type.IsPointer = IsPointer;
-			type.IsObject = IsObject;
-			type.IsDouble = IsDouble;
-			type.IsSingle = IsSingle;
-			type.IsInteger = IsInteger;
-			type.IsSigned = IsSigned;
-			type.IsUnsigned = IsUnsigned;
-			type.IsVarFlag = IsVarFlag;
-			type.IsMVarFlag = IsMVarFlag;
+			cloneType.IsUnsignedByte = IsUnsignedByte;
+			cloneType.IsSignedByte = IsSignedByte;
+			cloneType.IsUnsignedShort = IsUnsignedShort;
+			cloneType.IsSignedShort = IsSignedShort;
+			cloneType.IsUnsignedInt = IsUnsignedInt;
+			cloneType.IsSignedInt = IsSignedInt;
+			cloneType.IsUnsignedLong = IsUnsignedLong;
+			cloneType.IsSignedLong = IsSignedLong;
+			cloneType.IsChar = IsChar;
+			cloneType.IsBoolean = IsBoolean;
+			cloneType.IsPointer = IsPointer;
+			cloneType.IsObject = IsObject;
+			cloneType.IsDouble = IsDouble;
+			cloneType.IsSingle = IsSingle;
+			cloneType.IsInteger = IsInteger;
+			cloneType.IsSigned = IsSigned;
+			cloneType.IsUnsigned = IsUnsigned;
+			cloneType.IsVarFlag = IsVarFlag;
+			cloneType.IsMVarFlag = IsMVarFlag;
 
-			type.IsManagedPointerType = IsManagedPointerType;
-			type.IsUnmanagedPointerType = IsUnmanagedPointerType;
-			type.IsArrayType = IsArrayType;
-			type.IsBuiltInType = IsBuiltInType;
+			cloneType.IsManagedPointerType = IsManagedPointerType;
+			cloneType.IsUnmanagedPointerType = IsUnmanagedPointerType;
+			cloneType.IsArrayType = IsArrayType;
+			cloneType.IsBuiltInType = IsBuiltInType;
 
-			foreach (var m in Methods)
-				type.Methods.Add(m);
+			cloneType.Size = Size;
+			cloneType.PackingSize = PackingSize;
+			cloneType.VarOrMVarIndex = VarOrMVarIndex;
+			cloneType.ElementType = ElementType;
 
-			foreach (var m in Fields)
-				type.Fields.Add(m);
+			//foreach (var m in Methods)
+			//{
+			//	var cloneMethod = m.Clone(cloneType);
+			//	cloneType.Methods.Add(cloneMethod);
+			//}
+
+			//foreach (var f in Fields)
+			//{
+			//	var cloneField = f.Clone(cloneType);
+			//	cloneType.Fields.Add(cloneField);
+			//}
 
 			foreach (var m in Interfaces)
-				type.Interfaces.Add(m);
+			{
+				cloneType.Interfaces.Add(m);
+			}
 
-			type.Size = Size;
-			type.PackingSize = PackingSize;
-			type.VarOrMVarIndex = VarOrMVarIndex;
-			type.ElementType = ElementType;
-
-			return type;
+			return cloneType;
 		}
 
 		public void SetFlags()

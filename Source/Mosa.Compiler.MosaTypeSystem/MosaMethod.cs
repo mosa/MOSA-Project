@@ -75,8 +75,10 @@ namespace Mosa.Compiler.MosaTypeSystem
 			return MethodName ?? FullName;
 		}
 
-		public void SetMethodName()
+		public void SetName()
 		{
+			FullName = DeclaringType.FullName + "." + Name;
+
 			var sb = new StringBuilder();
 
 			sb.Append(ReturnType.Name);
@@ -126,6 +128,70 @@ namespace Mosa.Compiler.MosaTypeSystem
 			}
 
 			return true;
+		}
+
+		public MosaMethod Clone(MosaType declaringType)
+		{
+			var cloneMethod = Clone();
+			cloneMethod.DeclaringType = declaringType;
+
+			if (this.ReturnType.IsVarFlag || this.ReturnType.IsMVarFlag)
+			{
+				cloneMethod.ReturnType = declaringType.GenericTypes[this.ReturnType.VarOrMVarIndex];
+			}
+
+			for (int i = 0; i < Parameters.Count; i++)
+			{
+				var paramater = Parameters[i];
+
+				if (paramater.Type.IsVarFlag || paramater.Type.IsMVarFlag)
+				{
+					var cloneParam = paramater.Clone();
+
+					cloneParam.Type = declaringType.GenericTypes[paramater.Type.VarOrMVarIndex];
+
+					cloneMethod.Parameters[i] = cloneParam;
+				}
+			}
+
+			cloneMethod.SetName();
+
+			return cloneMethod;
+		}
+
+		private MosaMethod Clone()
+		{
+			MosaMethod cloneMethod = new MosaMethod();
+			cloneMethod.Name = this.Name;
+			cloneMethod.MethodName = this.MethodName;
+			cloneMethod.DeclaringType = this.DeclaringType;
+			cloneMethod.IsAbstract = this.IsAbstract;
+			cloneMethod.IsGeneric = this.IsGeneric;
+			cloneMethod.IsStatic = this.IsStatic;
+			cloneMethod.HasThis = this.HasThis;
+			cloneMethod.HasExplicitThis = this.HasExplicitThis;
+			cloneMethod.ReturnType = this.ReturnType;
+			cloneMethod.IsInternal = this.IsInternal;
+			cloneMethod.IsNoInlining = this.IsNoInlining;
+			cloneMethod.IsSpecialName = this.IsSpecialName;
+			cloneMethod.IsRTSpecialName = this.IsRTSpecialName;
+			cloneMethod.IsVirtual = this.IsVirtual;
+			cloneMethod.IsPInvokeImpl = this.IsPInvokeImpl;
+			cloneMethod.IsNewSlot = this.IsNewSlot;
+			cloneMethod.IsFinal = this.IsFinal;
+			cloneMethod.Rva = this.Rva;
+
+			foreach (var p in Parameters)
+			{
+				cloneMethod.Parameters.Add(p);
+			}
+
+			foreach (var a in CustomAttributes)
+			{
+				cloneMethod.CustomAttributes.Add(a);
+			}
+
+			return cloneMethod;
 		}
 	}
 }

@@ -6,6 +6,7 @@ using Mosa.Compiler.Metadata.Tables;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Text;
 
 namespace Mosa.Compiler.MosaTypeSystem
 {
@@ -47,6 +48,16 @@ namespace Mosa.Compiler.MosaTypeSystem
 		private Dictionary<HeapIndexToken, Signature> signatures;
 
 		/// <summary>
+		/// The map generic parameter
+		/// </summary>
+		private Dictionary<Token, MosaGenericParameter> mapGenericParam;
+
+		/// <summary>
+		/// The internal assembly
+		/// </summary>
+		private MosaAssembly internalAssembly = null;
+
+		/// <summary>
 		/// The table rows
 		/// </summary>
 		private int[] tableRows = new int[TableCount];
@@ -72,9 +83,10 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 			this.signatures = new Dictionary<HeapIndexToken, Signature>();
 			this.strings = new Dictionary<HeapIndexToken, string>();
+			this.mapGenericParam = new Dictionary<Token, MosaGenericParameter>();
 
-			assembly = new MosaAssembly(metadataModule.Name);
-			//assembly.Name = metadataModule.Name;
+			assembly = new MosaAssembly();
+			assembly.Name = metadataModule.Name;
 
 			resolver.AddAssembly(assembly);
 
@@ -83,17 +95,21 @@ namespace Mosa.Compiler.MosaTypeSystem
 			LoadTypes();
 			LoadTypeSpecs();
 			LoadMemberReferences();
-			LoadCustomAttributes();
 			LoadGenericParams();
+			LoadCustomAttributes();
 
 			LoadInterfaces();
 			LoadGenericInterfaces();
+
+			LoadGenericParamContraints();
 
 			// release
 			this.metadataModule = null;
 			this.metadataProvider = null;
 			this.signatures = null;
 			this.strings = null;
+			this.mapGenericParam = null;
+			this.internalAssembly = null;
 		}
 
 		#region Internals
@@ -279,8 +295,8 @@ namespace Mosa.Compiler.MosaTypeSystem
 				var info = new TypeInfo();
 
 				info.TypeDefRow = typeDefRow;
-				info.NestedClass = (nestedRow.NestedClass == token) ? nestedRow.NestedClass : Token.Zero;
-				info.EnclosingClass = (nestedRow.NestedClass == token) ? nestedRow.EnclosingClass : Token.Zero;
+				info.NestedClass = (nestedRow != null && nestedRow.NestedClass == token) ? nestedRow.NestedClass : Token.Zero;
+				info.EnclosingClass = (nestedRow != null && nestedRow.NestedClass == token) ? nestedRow.EnclosingClass : Token.Zero;
 				info.Size = (layoutRow != null && layoutRow.Parent == token) ? layoutRow.ClassSize : 0;
 				info.PackingSize = (layoutRow != null && layoutRow.Parent == token) ? layoutRow.PackingSize : (short)0;
 
@@ -305,14 +321,14 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 				typeInfos.Add(info);
 
-				if (layoutRow.Parent == token)
+				if (layoutRow != null && layoutRow.Parent == token)
 				{
 					tokenLayout = tokenLayout.NextRow;
 					if (tokenLayout.RID <= maxLayout.RID)
 						layoutRow = metadataProvider.ReadClassLayoutRow(tokenLayout);
 				}
 
-				if (nestedRow.NestedClass == token)
+				if (nestedRow != null && nestedRow.NestedClass == token)
 				{
 					tokenNested = tokenNested.NextRow;
 					if (tokenNested.RID <= maxNestedClass.RID)
@@ -407,8 +423,8 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 				MosaMethod method = new MosaMethod();
 				method.Name = GetString(methodDef.NameString);
-				method.FullName = declaringType + "." + method.Name;
 				method.DeclaringType = declaringType;
+				//method.FullName = declaringType + "." + method.Name;
 				method.ReturnType = GetMosaType(signature.ReturnType);
 				method.HasThis = signature.HasThis;
 				method.HasExplicitThis = signature.HasExplicitThis;
@@ -426,7 +442,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 				LoadParameters(method, methodDef.ParamList, maxParam, signature);
 
-				method.SetMethodName();
+				method.SetName();
 
 				methodDef = nextMethodDef;
 
@@ -483,14 +499,14 @@ namespace Mosa.Compiler.MosaTypeSystem
 				if ((fieldRow.Flags & FieldAttributes.Static) != FieldAttributes.Static)
 				{
 					// Move to the layout of this field
-					while (fieldLayout.Field.RID < token.RID && tokenLayout.RID <= maxLayout.RID)
+					while ((fieldLayout == null || fieldLayout.Field.RID < token.RID) && tokenLayout.RID <= maxLayout.RID)
 					{
 						fieldLayout = metadataProvider.ReadFieldLayoutRow(tokenLayout);
 						tokenLayout = tokenLayout.NextRow;
 					}
 
 					// Does this field have layout?
-					if (token == fieldLayout.Field && tokenLayout.RID <= maxLayout.RID)
+					if (fieldLayout != null && token == fieldLayout.Field && tokenLayout.RID <= maxLayout.RID)
 					{
 						layout = fieldLayout.Offset;
 						tokenLayout = tokenLayout.NextRow;
@@ -514,8 +530,6 @@ namespace Mosa.Compiler.MosaTypeSystem
 				resolver.AddField(assembly, token, field);
 			}
 		}
-
-		private MosaAssembly internalAssembly = null;
 
 		private MosaType GetMosaType(SigType sigType)
 		{
@@ -558,7 +572,14 @@ namespace Mosa.Compiler.MosaTypeSystem
 				var row = metadataProvider.ReadGenericParamRow(token);
 				var name = GetString(row.NameString);
 
-				var genericParameter = new MosaGenericParameter(name);
+				var genericParameter = new MosaGenericParameter();
+				genericParameter.Name = name;
+				genericParameter.Index = row.Number;
+				genericParameter.IsCovariant = (row.Flags & GenericParameterAttributes.Covariant) == GenericParameterAttributes.Covariant;
+				genericParameter.IsContravariant = (row.Flags & GenericParameterAttributes.Contravariant) == GenericParameterAttributes.Contravariant;
+				genericParameter.IsNonVariant = (row.Flags & GenericParameterAttributes.NonVariant) == GenericParameterAttributes.NonVariant;
+
+				mapGenericParam.Add(token, genericParameter);
 
 				// The following switch matches the AttributeTargets enumeration against
 				// metadata tables, which make valid targets for an attribute.
@@ -576,6 +597,21 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 					default: throw new NotImplementedException();
 				}
+			}
+		}
+
+		private void LoadGenericParamContraints()
+		{
+			var maxToken = GetMaxTokenValue(TableType.GenericParamConstraint);
+			foreach (var token in new Token(TableType.GenericParamConstraint, 1).Upto(maxToken))
+			{
+				var row = metadataProvider.ReadGenericParamConstraintRow(token);
+
+				var genericParam = mapGenericParam[row.Owner];
+
+				var type = resolver.GetTypeByToken(assembly, row.Constraint);
+
+				genericParam.Constraints.Add(type);
 			}
 		}
 
@@ -614,17 +650,33 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 			var row = metadataProvider.ReadTypeSpecRow(token);
 			var signature = GetTypeSpecSignature(row.SignatureBlob);
+			var genericSig = (signature.Type as GenericInstSigType);
 
-			MosaType genericType = new MosaType();
+			if (genericSig == null)
+				return;
 
-			// TODO: typeSystem.ResolveGenericType(this, signature, token);
+			var genericBaseType = GetMosaType(signature.Type);
 
-			var type = GetMosaType(signature.Type);
+			List<MosaType> genericParamTypes = new List<MosaType>();
+			//StringBuilder genericTypeNames = new StringBuilder();
 
-			//resolver.AddType(assembly, token, genericType);
+			foreach (var genericParam in genericSig.GenericArguments)
+			{
+				var genericParamType = GetMosaType(genericParam);
+				genericParamTypes.Add(genericParamType);
 
-			// FIXME:
-			resolver.AddType(assembly, token, type);
+				//genericTypeNames.Append(genericParamType.FullName);
+				//genericTypeNames.Append(", ");
+			}
+
+			//genericTypeNames.Length = genericTypeNames.Length - 2;
+
+			MosaType genericType = genericBaseType.Clone(genericParamTypes);
+			genericType.GenericBaseType = genericBaseType;
+			//genericType.FullName = genericType.FullName + '<' + genericTypeNames.ToString() + '>';
+			//genericType.SetFlags();
+
+			resolver.AddType(assembly, token, genericType);
 
 			return;
 		}
@@ -677,9 +729,9 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 						var parameterType = GetMosaType(parameter);
 
-						if (parameterType.IsMVarFlag && ownerType.IsGeneric)
+						if (parameterType.IsMVarFlag || parameterType.IsVarFlag)
 						{
-							//parameter = ownerType.GenericParameters[parameterType.VarOrMVarIndex];
+							parameterType = ownerType.GenericTypes[parameterType.VarOrMVarIndex];
 						}
 
 						typeSignature.Add(parameterType);
@@ -773,6 +825,9 @@ namespace Mosa.Compiler.MosaTypeSystem
 				{
 					case TableType.Assembly:
 						// AttributeTargets.Assembly
+						break;
+
+					case TableType.AssemblyRef:
 						break;
 
 					case TableType.TypeDef:
