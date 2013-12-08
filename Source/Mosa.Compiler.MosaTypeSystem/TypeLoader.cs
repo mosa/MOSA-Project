@@ -6,7 +6,6 @@ using Mosa.Compiler.Metadata.Tables;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Text;
 
 namespace Mosa.Compiler.MosaTypeSystem
 {
@@ -53,6 +52,11 @@ namespace Mosa.Compiler.MosaTypeSystem
 		private Dictionary<Token, MosaGenericParameter> mapGenericParam;
 
 		/// <summary>
+		/// The generic types
+		/// </summary>
+		private List<MosaType> genericTypes;
+
+		/// <summary>
 		/// The internal assembly
 		/// </summary>
 		private MosaAssembly internalAssembly = null;
@@ -84,6 +88,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 			this.signatures = new Dictionary<HeapIndexToken, Signature>();
 			this.strings = new Dictionary<HeapIndexToken, string>();
 			this.mapGenericParam = new Dictionary<Token, MosaGenericParameter>();
+			this.genericTypes = new List<MosaType>();
 
 			assembly = new MosaAssembly();
 			assembly.Name = metadataModule.Name;
@@ -99,7 +104,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 			LoadCustomAttributes();
 
 			LoadInterfaces();
-			LoadGenericInterfaces();
+			AssignGenericInterfaces();
 
 			LoadGenericParamContraints();
 
@@ -110,6 +115,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 			this.strings = null;
 			this.mapGenericParam = null;
 			this.internalAssembly = null;
+			this.genericTypes = null;
 		}
 
 		#region Internals
@@ -369,7 +375,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 			var enclosingType = (info.NestedClass == token) ? resolver.GetTypeByToken(assembly, info.EnclosingClass) : null;
 
-			MosaType type = new MosaType();
+			MosaType type = new MosaType(assembly);
 			type.Name = GetString(info.TypeDefRow.TypeName);
 			type.BaseType = (info.TypeDefRow.Extends.RID == 0) ? null : resolver.GetTypeByToken(assembly, info.TypeDefRow.Extends);
 			type.EnclosingType = enclosingType;
@@ -379,8 +385,11 @@ namespace Mosa.Compiler.MosaTypeSystem
 				(info.TypeDefRow.Flags & TypeAttributes.NestedFamily) == TypeAttributes.NestedFamily;
 			type.Namespace = type.IsNested ? enclosingType.FullName : GetString(info.TypeDefRow.TypeNamespace);
 			type.FullName = type.Namespace + "." + type.Name;
+			type.IsInterface = (info.TypeDefRow.Flags & TypeAttributes.Interface) == TypeAttributes.Interface;
+			type.IsExplicitLayout = (info.TypeDefRow.Flags & TypeAttributes.LayoutMask) == TypeAttributes.ExplicitLayout; 
 			type.PackingSize = info.PackingSize;
 			type.Size = info.Size;
+
 			type.SetFlags();
 
 			resolver.AddType(assembly, token, type);
@@ -658,27 +667,54 @@ namespace Mosa.Compiler.MosaTypeSystem
 			var genericBaseType = GetMosaType(signature.Type);
 
 			List<MosaType> genericParamTypes = new List<MosaType>();
-			//StringBuilder genericTypeNames = new StringBuilder();
 
 			foreach (var genericParam in genericSig.GenericArguments)
 			{
 				var genericParamType = GetMosaType(genericParam);
 				genericParamTypes.Add(genericParamType);
-
-				//genericTypeNames.Append(genericParamType.FullName);
-				//genericTypeNames.Append(", ");
 			}
 
-			//genericTypeNames.Length = genericTypeNames.Length - 2;
-
-			MosaType genericType = genericBaseType.Clone(genericParamTypes);
-			genericType.GenericBaseType = genericBaseType;
-			//genericType.FullName = genericType.FullName + '<' + genericTypeNames.ToString() + '>';
-			//genericType.SetFlags();
+			var genericType = MosaGeneric.ResolveGenericType(genericBaseType, genericBaseType, genericParamTypes);
 
 			resolver.AddType(assembly, token, genericType);
+			genericTypes.Add(genericType);
 
 			return;
+		}
+
+		/// <summary>
+		/// Loads the generic interfaces.
+		/// </summary>
+		private void AssignGenericInterfaces()
+		{
+			foreach (var genericType in genericTypes)
+			{
+				foreach (var type in genericType.GenericBaseType.Interfaces)
+				{
+					if (type.GenericParameterTypes.Count == 0)
+					{
+						genericType.Interfaces.Add(type);
+						continue;
+					}
+
+					// -- only needs to search generic type interfaces
+					foreach (var interfaceType in resolver.Types)
+					{
+						if (!interfaceType.IsInterface)
+							continue;
+
+						if (genericType.GenericBaseType == interfaceType.GenericBaseType)
+						{
+							//if (SigType.Equals(GenericArguments, interfaceType.GenericArguments))
+							//{
+							//	genericType.Interfaces.Add(interfaceType);
+							//	break;
+							//}
+							continue;
+						}
+					}
+				}
+			}
 		}
 
 		/// <summary>
@@ -731,7 +767,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 						if (parameterType.IsMVarFlag || parameterType.IsVarFlag)
 						{
-							parameterType = ownerType.GenericTypes[parameterType.VarOrMVarIndex];
+							parameterType = ownerType.GenericParameterTypes[parameterType.VarOrMVarIndex];
 						}
 
 						typeSignature.Add(parameterType);
@@ -792,17 +828,6 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 				declaringType.Interfaces.Add(interfaceType);
 			}
-		}
-
-		/// <summary>
-		/// Loads the generic interfaces.
-		/// </summary>
-		private void LoadGenericInterfaces()
-		{
-			//foreach (var genericType in typeSpecs.OfType<CilGenericType>())
-			//{
-			//	genericType.ResolveInterfaces(this);
-			//}
 		}
 
 		/// <summary>

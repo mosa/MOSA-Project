@@ -26,16 +26,5 @@
 		{
 			return Type.Matches(type);
 		}
-
-		public MosaParameter Clone()
-		{
-			MosaParameter parameter = new MosaParameter();
-			parameter.Position = this.Position;
-			parameter.Type = this.Type;
-			parameter.Name = this.Name;
-			parameter.IsIn = this.IsIn;
-			parameter.IsOut = this.IsOut;
-			return parameter;
-		}
 	}
 }

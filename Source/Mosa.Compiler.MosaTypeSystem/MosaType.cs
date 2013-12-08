@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
-using System.Text;
 
 namespace Mosa.Compiler.MosaTypeSystem
 {
 	public class MosaType
 	{
+		public MosaAssembly Assembly { get; internal set; }
+
 		public string Name { get; internal set; }
 
 		public string FullName { get; internal set; }
@@ -27,7 +28,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public bool IsNested { get; internal set; }
 
-		public bool IsExplicitLayoutRequestedByType { get; internal set; }
+		public bool IsExplicitLayout { get; internal set; }
 
 		public int Size { get; internal set; }
 
@@ -105,10 +106,12 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public bool IsGeneric { get { return GenericParameters.Count != 0; } }
 
-		public IList<MosaType> GenericTypes { get; internal set; }
+		public IList<MosaType> GenericParameterTypes { get; internal set; }
 
-		public MosaType()
+		public MosaType(MosaAssembly assembly)
 		{
+			Assembly = assembly;
+
 			IsUnsignedByte = false;
 			IsSignedByte = false;
 			IsUnsignedShort = false;
@@ -120,7 +123,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 			IsChar = false;
 			IsBoolean = false;
 			IsPointer = false;
-			IsObject = false;
+			IsObject = true;
 			IsDouble = false;
 			IsSingle = false;
 			IsInteger = false;
@@ -128,117 +131,17 @@ namespace Mosa.Compiler.MosaTypeSystem
 			IsUnsigned = false;
 			IsVarFlag = false;
 			IsMVarFlag = false;
-
 			IsManagedPointerType = false;
 			IsUnmanagedPointerType = false;
 			IsArrayType = false;
-
 			IsBuiltInType = false;
 
 			Methods = new List<MosaMethod>();
 			Fields = new List<MosaField>();
 			Interfaces = new List<MosaType>();
-
 			GenericParameters = new List<MosaGenericParameter>();
 			CustomAttributes = new List<MosaAttribute>();
-
-			GenericTypes = new List<MosaType>();
-		}
-
-		public MosaType Clone(List<MosaType> genericTypes)
-		{
-			var typeClone = Clone();
-
-			typeClone.GenericTypes = genericTypes;
-
-			StringBuilder genericTypeNames = new StringBuilder();
-
-			foreach (var genericType in genericTypes)
-			{
-				genericTypeNames.Append(genericType.FullName);
-				genericTypeNames.Append(", ");
-			}
-
-			genericTypeNames.Length = genericTypeNames.Length - 2;
-			typeClone.FullName = typeClone.FullName + '<' + genericTypeNames.ToString() + '>';
-
-			foreach (var m in Methods)
-			{
-				var cloneMethod = m.Clone(typeClone);
-				typeClone.Methods.Add(cloneMethod);
-			}
-
-			foreach (var f in Fields)
-			{
-				var cloneField = f.Clone(typeClone);
-				typeClone.Fields.Add(cloneField);
-			}
-
-			typeClone.SetFlags();
-
-			return typeClone;
-		}
-
-		public MosaType Clone()
-		{
-			MosaType cloneType = new MosaType();
-
-			cloneType.Name = Name;
-
-			cloneType.FullName = FullName;
-			cloneType.Namespace = Namespace;
-			cloneType.BaseType = BaseType;
-			cloneType.EnclosingType = EnclosingType;
-			cloneType.GenericBaseType = GenericBaseType;
-
-			cloneType.IsUnsignedByte = IsUnsignedByte;
-			cloneType.IsSignedByte = IsSignedByte;
-			cloneType.IsUnsignedShort = IsUnsignedShort;
-			cloneType.IsSignedShort = IsSignedShort;
-			cloneType.IsUnsignedInt = IsUnsignedInt;
-			cloneType.IsSignedInt = IsSignedInt;
-			cloneType.IsUnsignedLong = IsUnsignedLong;
-			cloneType.IsSignedLong = IsSignedLong;
-			cloneType.IsChar = IsChar;
-			cloneType.IsBoolean = IsBoolean;
-			cloneType.IsPointer = IsPointer;
-			cloneType.IsObject = IsObject;
-			cloneType.IsDouble = IsDouble;
-			cloneType.IsSingle = IsSingle;
-			cloneType.IsInteger = IsInteger;
-			cloneType.IsSigned = IsSigned;
-			cloneType.IsUnsigned = IsUnsigned;
-			cloneType.IsVarFlag = IsVarFlag;
-			cloneType.IsMVarFlag = IsMVarFlag;
-
-			cloneType.IsManagedPointerType = IsManagedPointerType;
-			cloneType.IsUnmanagedPointerType = IsUnmanagedPointerType;
-			cloneType.IsArrayType = IsArrayType;
-			cloneType.IsBuiltInType = IsBuiltInType;
-
-			cloneType.Size = Size;
-			cloneType.PackingSize = PackingSize;
-			cloneType.VarOrMVarIndex = VarOrMVarIndex;
-			cloneType.ElementType = ElementType;
-
-			//foreach (var m in Methods)
-			//{
-			//	var cloneMethod = m.Clone(cloneType);
-			//	cloneType.Methods.Add(cloneMethod);
-			//}
-
-			//foreach (var f in Fields)
-			//{
-			//	var cloneField = f.Clone(cloneType);
-			//	cloneType.Fields.Add(cloneField);
-			//}
-
-			foreach (var m in Interfaces)
-			{
-				cloneType.Interfaces.Add(m);
-			}
-
-			return cloneType;
+			GenericParameterTypes = new List<MosaType>();
 		}
 
 		public void SetFlags()
