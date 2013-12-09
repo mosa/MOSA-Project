@@ -27,12 +27,14 @@ namespace Mosa.Test.Debug
 			var assemblyB = new PortableExecutableImage(new FileStream(@"Mosa.Test.AssemblyB.dll", FileMode.Open, FileAccess.Read));
 			var assemblyC = new PortableExecutableImage(new FileStream(@"Mosa.Test.AssemblyC.dll", FileMode.Open, FileAccess.Read));
 			var classLib = new PortableExecutableImage(new FileStream(@"Mosa.ClassLib.dll", FileMode.Open, FileAccess.Read));
+			var testCollection = new PortableExecutableImage(new FileStream(@"Mosa.Test.Collection.dll", FileMode.Open, FileAccess.Read));
 
 			loader.Load(mscorlib);
 			loader.Load(assemblyA);
 			loader.Load(assemblyB);
 			loader.Load(assemblyC);
 			loader.Load(classLib);
+			loader.Load(testCollection);
 
 			return;
 		}

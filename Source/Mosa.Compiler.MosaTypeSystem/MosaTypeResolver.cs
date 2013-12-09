@@ -1,6 +1,8 @@
 ﻿using Mosa.Compiler.Common;
 using Mosa.Compiler.Metadata;
+using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 
 namespace Mosa.Compiler.MosaTypeSystem
 {
@@ -20,7 +22,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public MosaAssembly InternalAssembly { get; private set; }
 
-		//public MosaAssembly GenericAssembly { get; private set; }
+		public MosaAssembly InternalGenericsAssembly { get; private set; }
 
 		public MosaTypeResolver()
 		{
@@ -28,9 +30,10 @@ namespace Mosa.Compiler.MosaTypeSystem
 			Methods = new List<MosaMethod>();
 
 			SetupInternalAssembly();
+			SetupInternalGenericsAssembly();
 		}
 
-		public void SetupInternalAssembly()
+		private void SetupInternalAssembly()
 		{
 			InternalAssembly = new MosaAssembly("@Internal");
 			AddAssembly(InternalAssembly);
@@ -54,6 +57,12 @@ namespace Mosa.Compiler.MosaTypeSystem
 			CreateAddBuiltInType(InternalAssembly, CilElementType.U);
 			CreateAddBuiltInType(InternalAssembly, CilElementType.TypedByRef);
 			CreateAddBuiltInType(InternalAssembly, CilElementType.Ptr);
+		}
+
+		private void SetupInternalGenericsAssembly()
+		{
+			InternalGenericsAssembly = new MosaAssembly("@InternalGenerics");
+			AddAssembly(InternalGenericsAssembly);
 		}
 
 		private MosaType CreateBuiltInType(CilElementType cilElementType)
@@ -253,6 +262,221 @@ namespace Mosa.Compiler.MosaTypeSystem
 			arrayTypes.Add(element, type);
 
 			return type;
+		}
+
+		private Dictionary<MosaType, List<KeyValuePair<List<MosaType>, MosaType>>> generics = new Dictionary<MosaType, List<KeyValuePair<List<MosaType>, MosaType>>>();
+
+		public MosaType FindGeneric(MosaType genericBaseType, List<MosaType> genericTypes)
+		{
+			List<KeyValuePair<List<MosaType>, MosaType>> genericVariations = null;
+
+			if (!generics.TryGetValue(genericBaseType, out genericVariations))
+				return null;
+
+			foreach (var genericPair in genericVariations)
+			{
+				var types = genericPair.Key;
+
+				if (types.Count != genericTypes.Count)
+					continue;
+
+				bool match = true;
+				for (int i = 0; i < types.Count; i++)
+				{
+					if (!types[i].Matches(genericTypes[i]))
+					{
+						match = false;
+						break;
+					}
+				}
+
+				if (!match)
+					continue;
+
+				return genericPair.Value;
+			}
+
+			return null;
+		}
+
+		public void StoreGeneric(MosaType genericBaseType, List<MosaType> genericTypes, MosaType genericType)
+		{
+			List<KeyValuePair<List<MosaType>, MosaType>> genericVariations;
+
+			if (!generics.TryGetValue(genericBaseType, out genericVariations))
+			{
+				genericVariations = new List<KeyValuePair<List<MosaType>, MosaType>>();
+				generics.Add(genericBaseType, genericVariations);
+			}
+
+			genericVariations.Add(new KeyValuePair<List<MosaType>, MosaType>(genericTypes, genericType));
+		}
+
+		public MosaType ResolveGenericType(MosaType genericBaseType, List<MosaType> genericTypes)
+		{
+			var genericType = FindGeneric(genericBaseType, genericTypes);
+
+			if (genericType != null)
+				return genericType;
+
+			genericType = CreateGenericType(genericBaseType, genericTypes);
+
+			StoreGeneric(genericBaseType, genericTypes, genericType);
+
+			return genericType;
+		}
+
+		public MosaType CreateGenericType(MosaType genericBaseType, List<MosaType> genericTypes)
+		{
+			var clone = new MosaType(InternalGenericsAssembly);
+
+			clone.GenericBaseType = genericBaseType;
+			clone.GenericParameterTypes = genericTypes;
+			clone.Name = genericBaseType.Name;
+			clone.FullName = genericBaseType.FullName;
+			clone.Namespace = genericBaseType.Namespace;
+			clone.BaseType = genericBaseType.BaseType;
+			clone.EnclosingType = genericBaseType.EnclosingType;
+			clone.IsUnsignedByte = genericBaseType.IsUnsignedByte;
+			clone.IsSignedByte = genericBaseType.IsSignedByte;
+			clone.IsUnsignedShort = genericBaseType.IsUnsignedShort;
+			clone.IsSignedShort = genericBaseType.IsSignedShort;
+			clone.IsUnsignedInt = genericBaseType.IsUnsignedInt;
+			clone.IsSignedInt = genericBaseType.IsSignedInt;
+			clone.IsUnsignedLong = genericBaseType.IsUnsignedLong;
+			clone.IsSignedLong = genericBaseType.IsSignedLong;
+			clone.IsChar = genericBaseType.IsChar;
+			clone.IsBoolean = genericBaseType.IsBoolean;
+			clone.IsPointer = genericBaseType.IsPointer;
+			clone.IsObject = genericBaseType.IsObject;
+			clone.IsDouble = genericBaseType.IsDouble;
+			clone.IsSingle = genericBaseType.IsSingle;
+			clone.IsInteger = genericBaseType.IsInteger;
+			clone.IsSigned = genericBaseType.IsSigned;
+			clone.IsUnsigned = genericBaseType.IsUnsigned;
+			clone.IsVarFlag = genericBaseType.IsVarFlag;
+			clone.IsMVarFlag = genericBaseType.IsMVarFlag;
+			clone.IsManagedPointerType = genericBaseType.IsManagedPointerType;
+			clone.IsUnmanagedPointerType = genericBaseType.IsUnmanagedPointerType;
+			clone.IsArrayType = genericBaseType.IsArrayType;
+			clone.IsBuiltInType = genericBaseType.IsBuiltInType;
+			clone.Size = genericBaseType.Size;
+			clone.PackingSize = genericBaseType.PackingSize;
+			clone.VarOrMVarIndex = genericBaseType.VarOrMVarIndex;
+			clone.ElementType = genericBaseType.ElementType;
+
+			var genericTypeNames = new StringBuilder();
+
+			foreach (var genericType in genericTypes)
+			{
+				genericTypeNames.Append(genericType.FullName);
+				genericTypeNames.Append(", ");
+			}
+
+			genericTypeNames.Length = genericTypeNames.Length - 2;
+			clone.FullName = clone.FullName + '<' + genericTypeNames.ToString() + '>';
+
+			foreach (var m in genericBaseType.Methods)
+			{
+				var cloneMethod = ResolveGenericMethod(m, clone);
+				clone.Methods.Add(cloneMethod);
+			}
+
+			foreach (var f in genericBaseType.Fields)
+			{
+				var cloneField = ResolveGenericField(f, clone);
+				clone.Fields.Add(cloneField);
+			}
+
+			foreach (var m in genericBaseType.Interfaces)
+			{
+				clone.Interfaces.Add(m);
+			}
+
+			clone.SetFlags();
+
+			return clone;
+		}
+
+		private static MosaMethod ResolveGenericMethod(MosaMethod method, MosaType declaringType)
+		{
+			var clone = new MosaMethod();
+
+			clone.DeclaringType = declaringType;
+			clone.Name = method.Name;
+			clone.MethodName = method.MethodName;
+			clone.IsAbstract = method.IsAbstract;
+			clone.IsGeneric = method.IsGeneric;
+			clone.IsStatic = method.IsStatic;
+			clone.HasThis = method.HasThis;
+			clone.HasExplicitThis = method.HasExplicitThis;
+			clone.ReturnType = method.ReturnType;
+			clone.IsInternal = method.IsInternal;
+			clone.IsNoInlining = method.IsNoInlining;
+			clone.IsSpecialName = method.IsSpecialName;
+			clone.IsRTSpecialName = method.IsRTSpecialName;
+			clone.IsVirtual = method.IsVirtual;
+			clone.IsPInvokeImpl = method.IsPInvokeImpl;
+			clone.IsNewSlot = method.IsNewSlot;
+			clone.IsFinal = method.IsFinal;
+			clone.Rva = method.Rva;
+
+			foreach (var p in method.Parameters)
+			{
+				var cloneParameter = ResolveGenericParameter(p, declaringType);
+				clone.Parameters.Add(cloneParameter);
+			}
+
+			foreach (var a in method.CustomAttributes)
+			{
+				clone.CustomAttributes.Add(a);
+			}
+
+			if (method.ReturnType.IsVarFlag || method.ReturnType.IsMVarFlag)
+			{
+				clone.ReturnType = declaringType.GenericParameterTypes[method.ReturnType.VarOrMVarIndex];
+			}
+
+			clone.SetName();
+
+			return clone;
+		}
+
+		private static MosaField ResolveGenericField(MosaField field, MosaType declaringType)
+		{
+			var clone = new MosaField();
+
+			clone.DeclaringType = declaringType;
+			clone.FieldType = field.FieldType;
+			clone.Name = field.Name;
+			clone.FullName = field.FullName;
+			clone.CustomAttributes = field.CustomAttributes;
+			clone.IsLiteralField = field.IsLiteralField;
+			clone.IsStaticField = field.IsStaticField;
+			clone.RVA = clone.RVA;
+
+			if (field.FieldType.IsVarFlag || field.FieldType.IsMVarFlag)
+			{
+				clone.FieldType = declaringType.GenericParameterTypes[field.FieldType.VarOrMVarIndex];
+			}
+
+			return clone;
+		}
+
+		private static MosaParameter ResolveGenericParameter(MosaParameter parameter, MosaType declaringType)
+		{
+			if (!(parameter.Type.IsVarFlag || parameter.Type.IsMVarFlag))
+				return parameter;
+
+			var clone = new MosaParameter();
+
+			clone.Type = declaringType.GenericParameterTypes[parameter.Type.VarOrMVarIndex];
+			clone.Position = parameter.Position;
+			clone.Name = parameter.Name;
+			clone.IsIn = parameter.IsIn;
+			clone.IsOut = parameter.IsOut;
+
+			return clone;
 		}
 	}
 }

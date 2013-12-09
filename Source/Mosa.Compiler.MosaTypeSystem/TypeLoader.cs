@@ -267,7 +267,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 				if (type == null)
 				{
-					throw new AssemblyLoadException("Could not find type: " + typeName);
+					throw new AssemblyLoadException("Could not find genericBaseType: " + typeName);
 				}
 
 				resolver.AddType(assembly, token, type);
@@ -369,7 +369,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 					case TableType.TypeDef: LoadType(info.TypeDefRow.Extends, typeInfos); break;
 					case TableType.TypeSpec: LoadTypeSpec(info.TypeDefRow.Extends); break;
 					case TableType.TypeRef: break;
-					default: throw new AssemblyLoadException("unexpected token type.");
+					default: throw new AssemblyLoadException("unexpected token genericBaseType.");
 				}
 			}
 
@@ -551,7 +551,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 				case CilElementType.MVar: return resolver.GetMVarType((sigType as MVarSigType).Index);
 
 				case CilElementType.Ptr: return resolver.GetUnmanagedPointerType(GetMosaType((sigType as PtrSigType).ElementType));
-				case CilElementType.ByRef: return resolver.GetManagedPointerType(GetMosaType((sigType as PtrSigType).ElementType));
+				case CilElementType.ByRef: return resolver.GetManagedPointerType(GetMosaType((sigType as RefSigType).ElementType));
 				case CilElementType.Array: return resolver.GetArrayType(GetMosaType((sigType as ArraySigType).ElementType));
 
 				case CilElementType.SZArray: return resolver.GetArrayType(GetMosaType((sigType as SZArraySigType).ElementType));
@@ -674,7 +674,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 				genericParamTypes.Add(genericParamType);
 			}
 
-			var genericType = MosaGeneric.ResolveGenericType(genericBaseType, genericBaseType, genericParamTypes);
+			var genericType = resolver.ResolveGenericType(genericBaseType, genericParamTypes);
 
 			resolver.AddType(assembly, token, genericType);
 			genericTypes.Add(genericType);
@@ -701,6 +701,9 @@ namespace Mosa.Compiler.MosaTypeSystem
 					foreach (var interfaceType in resolver.Types)
 					{
 						if (!interfaceType.IsInterface)
+							continue;
+
+						if (interfaceType.GenericBaseType == null)
 							continue;
 
 						if (genericType.GenericBaseType == interfaceType.GenericBaseType)
@@ -736,7 +739,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 				}
 				else
 				{
-					throw new TypeLoadException(String.Format("Failed to retrieve owner type for Token {0:x} (Table {1})", row.Class, row.Class.Table));
+					throw new TypeLoadException(String.Format("Failed to retrieve owner genericBaseType for Token {0:x} (Table {1})", row.Class, row.Class.Table));
 				}
 
 				var signature = GetMemberRefSignature(row.SignatureBlob);
