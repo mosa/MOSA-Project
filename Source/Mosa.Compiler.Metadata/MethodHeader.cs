@@ -32,7 +32,7 @@ namespace Mosa.Compiler.Metadata
 		/// <summary>
 		/// Size of the code in bytes
 		/// </summary>
-		public uint CodeSize { get; private set; }
+		public int CodeSize { get; private set; }
 
 		/// <summary>
 		/// Local variable signature token
@@ -61,7 +61,7 @@ namespace Mosa.Compiler.Metadata
 			switch (Flags & MethodFlags.HeaderMask)
 			{
 				case MethodFlags.TinyFormat:
-					CodeSize = ((uint)(Flags & MethodFlags.TinyCodeSizeMask) >> 2);
+					CodeSize = ((int)(Flags & MethodFlags.TinyCodeSizeMask) >> 2);
 					Flags &= MethodFlags.HeaderMask;
 					break;
 
@@ -73,7 +73,7 @@ namespace Mosa.Compiler.Metadata
 						throw new CompilerException("Invalid method ");
 
 					MaxStack = reader.ReadUInt16();
-					CodeSize = reader.ReadUInt32();
+					CodeSize = reader.ReadInt32();
 					LocalVarSigTok = new Token(reader.ReadUInt32()); // ReadStandAloneSigRow
 					break;
 

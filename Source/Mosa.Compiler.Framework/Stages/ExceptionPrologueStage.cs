@@ -27,9 +27,9 @@ namespace Mosa.Compiler.Framework.Stages
 			// Handler Code
 			foreach (ExceptionHandlingClause clause in methodCompiler.ExceptionHandlingClauses)
 			{
-				if (clause.ExceptionHandler == ExceptionHandlerType.Exception)
+				if (clause.ExceptionHandlerType == ExceptionHandlerType.Exception)
 				{
-					var typeToken = new Token(clause.ClassToken);
+					var typeToken = clause.ClassToken;
 
 					RuntimeType type = methodCompiler.Method.Module.GetType(typeToken);
 

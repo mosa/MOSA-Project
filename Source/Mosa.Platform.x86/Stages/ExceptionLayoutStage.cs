@@ -135,7 +135,7 @@ namespace Mosa.Platform.x86.Stages
 					uint start = (uint)codeEmitter.GetPosition(block.Label);
 					uint end = (uint)codeEmitter.GetPosition(block.Label + 0x0F000000);
 
-					ExceptionHandlerType kind = clause.ExceptionHandler;
+					ExceptionHandlerType kind = clause.ExceptionHandlerType;
 
 					uint handler = 0;
 					uint filter = 0;
@@ -146,7 +146,7 @@ namespace Mosa.Platform.x86.Stages
 					if (kind == ExceptionHandlerType.Exception)
 					{
 						// Get runtime type
-						type = typeModule.GetType(new Token(clause.ClassToken));
+						type = typeModule.GetType(clause.ClassToken);
 					}
 					else if (kind == ExceptionHandlerType.Filter)
 					{
