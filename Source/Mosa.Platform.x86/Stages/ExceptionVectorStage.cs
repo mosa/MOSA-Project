@@ -47,7 +47,7 @@ namespace Mosa.Platform.x86.Stages
 			if (runtimeType == null)
 				return;
 
-			RuntimeMethod runtimeMethod = runtimeType.FindMethod(@"ExceptionHandler");
+			RuntimeMethod runtimeMethod = runtimeType.FindMethod(@"ExceptionHandlerType");
 
 			if (runtimeMethod == null)
 				return;
