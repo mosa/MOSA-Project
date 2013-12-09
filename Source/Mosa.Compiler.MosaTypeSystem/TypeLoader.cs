@@ -489,7 +489,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 						block.HandlerLength = handler.HandlerLength;
 						block.FilterOffset = handler.FilterOffset;
 
-						block.Type = resolver.GetTypeByToken(assembly, handler.ClassToken);
+						block.Type = (handler.ClassToken.Value != 0) ? resolver.GetTypeByToken(assembly, handler.ClassToken) : null;
 
 						switch (handler.ExceptionHandlerType)
 						{
@@ -498,7 +498,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 							case ExceptionHandlerType.Filter: block.ExceptionHandler = ExceptionBlockType.Filter; break;
 							case ExceptionHandlerType.Finally: block.ExceptionHandler = ExceptionBlockType.Finally; break;
 						}
-						
+
 						method.ExceptionBlocks.Add(block);
 					}
 				}
