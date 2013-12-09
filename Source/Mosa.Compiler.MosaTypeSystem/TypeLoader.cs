@@ -1,4 +1,13 @@
-﻿using Mosa.Compiler.Common;
+﻿/*
+ * (c) 2013 MOSA - The Managed Operating System Alliance
+ *
+ * Licensed under the terms of the New BSD License.
+ *
+ * Authors:
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
+ */
+
+using Mosa.Compiler.Common;
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Loader;
 using Mosa.Compiler.Metadata.Signatures;
@@ -104,7 +113,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 			LoadCustomAttributes();
 
 			LoadInterfaces();
-			AssignGenericInterfaces();
+			//AssignGenericInterfaces();
 
 			LoadGenericParamContraints();
 
@@ -386,7 +395,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 			type.Namespace = type.IsNested ? enclosingType.FullName : GetString(info.TypeDefRow.TypeNamespace);
 			type.FullName = type.Namespace + "." + type.Name;
 			type.IsInterface = (info.TypeDefRow.Flags & TypeAttributes.Interface) == TypeAttributes.Interface;
-			type.IsExplicitLayout = (info.TypeDefRow.Flags & TypeAttributes.LayoutMask) == TypeAttributes.ExplicitLayout; 
+			type.IsExplicitLayout = (info.TypeDefRow.Flags & TypeAttributes.LayoutMask) == TypeAttributes.ExplicitLayout;
 			type.PackingSize = info.PackingSize;
 			type.Size = info.Size;
 
@@ -430,7 +439,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 				var signature = GetMethodSignature(methodDef.SignatureBlob);
 
-				MosaMethod method = new MosaMethod();
+				var method = new MosaMethod();
 				method.Name = GetString(methodDef.NameString);
 				method.DeclaringType = declaringType;
 				//method.FullName = declaringType + "." + method.Name;
@@ -449,14 +458,59 @@ namespace Mosa.Compiler.MosaTypeSystem
 				method.IsFinal = ((methodDef.Flags & MethodAttributes.Final) != MethodAttributes.Final);
 				method.Rva = methodDef.Rva;
 
+				if (methodDef.Rva != 0)
+				{
+					var code = metadataModule.GetInstructionStream((long)methodDef.Rva);
+					var codeReader = new EndianAwareBinaryReader(code, Endianness.Little);
+					var header = new MethodHeader(codeReader);
+
+					if (header.LocalVarSigTok.RID != 0)
+					{
+						var standAlongSigRow = metadataProvider.ReadStandAloneSigRow(header.LocalVarSigTok);
+						var localVariables = new LocalVariableSignature(metadataProvider, standAlongSigRow.SignatureBlob);
+
+						foreach (var local in localVariables.Locals)
+						{
+							var type = GetMosaType(local.Type);
+
+							method.LocalVariables.Add(type);
+						}
+					}
+
+					method.Code = codeReader.ReadBytes(header.CodeSize);
+
+					foreach (var handler in header.Clauses)
+					{
+						ExceptionBlock block = new ExceptionBlock();
+
+						block.TryOffset = handler.TryOffset;
+						block.TryLength = handler.TryLength;
+						block.HandlerOffset = handler.HandlerOffset;
+						block.HandlerLength = handler.HandlerLength;
+						block.FilterOffset = handler.FilterOffset;
+
+						block.Type = resolver.GetTypeByToken(assembly, handler.ClassToken);
+
+						switch (handler.ExceptionHandlerType)
+						{
+							case ExceptionHandlerType.Exception: block.ExceptionHandler = ExceptionBlockType.Exception; break;
+							case ExceptionHandlerType.Fault: block.ExceptionHandler = ExceptionBlockType.Fault; break;
+							case ExceptionHandlerType.Filter: block.ExceptionHandler = ExceptionBlockType.Filter; break;
+							case ExceptionHandlerType.Finally: block.ExceptionHandler = ExceptionBlockType.Finally; break;
+						}
+						
+						method.ExceptionBlocks.Add(block);
+					}
+				}
+
 				LoadParameters(method, methodDef.ParamList, maxParam, signature);
 
 				method.SetName();
 
-				methodDef = nextMethodDef;
-
 				declaringType.Methods.Add(method);
 				resolver.AddMethod(assembly, token, method);
+
+				methodDef = nextMethodDef;
 			}
 		}
 

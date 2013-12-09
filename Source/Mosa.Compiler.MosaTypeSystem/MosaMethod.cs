@@ -1,4 +1,13 @@
-﻿using System.Collections.Generic;
+﻿/*
+ * (c) 2013 MOSA - The Managed Operating System Alliance
+ *
+ * Licensed under the terms of the New BSD License.
+ *
+ * Authors:
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
+ */
+
+using System.Collections.Generic;
 using System.Text;
 
 namespace Mosa.Compiler.MosaTypeSystem
@@ -51,6 +60,12 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		//public IList<MosaType> GenericParameterTypes { get; internal set; }
 
+		public IList<MosaType> LocalVariables { get; internal set; }
+
+		public byte[] Code { get; internal set; }
+
+		public List<ExceptionBlock> ExceptionBlocks { get; internal set; }
+
 		public MosaMethod()
 		{
 			IsAbstract = false;
@@ -70,7 +85,9 @@ namespace Mosa.Compiler.MosaTypeSystem
 			Parameters = new List<MosaParameter>();
 			GenericParameters = new List<MosaGenericParameter>();
 			CustomAttributes = new List<MosaAttribute>();
+			LocalVariables = new List<MosaType>();
 			//GenericParameterTypes = new List<MosaType>();
+			ExceptionBlocks = new List<ExceptionBlock>();
 		}
 
 		public override string ToString()
