@@ -442,6 +442,10 @@ namespace Mosa.Compiler.Metadata.Signatures
 
 		public bool IsByRef { get { return Type == CilElementType.ByRef; } }
 
+		public bool IsIntPtr { get { return Type == CilElementType.I; } }
+
+		public bool IsUIntPtr { get { return Type == CilElementType.U; } }
+		
 		#endregion Properties
 	}
 }

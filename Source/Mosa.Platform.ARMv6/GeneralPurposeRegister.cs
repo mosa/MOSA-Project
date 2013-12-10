@@ -262,7 +262,7 @@ namespace Mosa.Platform.ARMv6
 		/// <returns>True if the signature type fits.</returns>
 		public override bool IsValidSigType(SigType type)
 		{
-			return (type.Type == CilElementType.I ||
+			return (type.IsIntPtr ||
 					type.IsSignedByte ||
 					type.IsSignedShort ||
 					type.IsSignedInt ||

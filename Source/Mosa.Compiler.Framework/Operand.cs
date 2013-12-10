@@ -268,7 +268,7 @@ namespace Mosa.Compiler.Framework
 		/// <value>
 		///   <c>true</c> if [is signed integer]; otherwise, <c>false</c>.
 		/// </value>
-		public bool IsSigned { get { return Type.Type == CilElementType.I || Type.IsSignedByte || Type.IsSignedShort || Type.IsSignedInt || Type.IsSignedLong; } }
+		public bool IsSigned { get { return IsIntPtr || IsSignedByte || IsSignedShort || IsSignedInt || IsSignedLong; } }
 
 		/// <summary>
 		/// Gets a value indicating whether [is unsigned integer].
@@ -276,7 +276,7 @@ namespace Mosa.Compiler.Framework
 		/// <value>
 		///   <c>true</c> if [is unsigned integer]; otherwise, <c>false</c>.
 		/// </value>
-		public bool IsUnsigned { get { return Type.Type == CilElementType.U || Type.IsUnsignedByte || Type.IsUnsignedShort || Type.IsUnsignedInt || Type.IsUnsignedLong; } }
+		public bool IsUnsigned { get { return IsUIntPtr || IsUnsignedByte || IsUnsignedShort || IsUnsignedInt || IsUnsignedLong; } }
 
 		/// <summary>
 		/// Gets the type of the shift.
@@ -368,6 +368,10 @@ namespace Mosa.Compiler.Framework
 		public bool IsFunctionPtr { get { return Type.IsFunctionPtr; } }
 
 		public bool IsByRef { get { return Type.IsByRef; } }
+
+		public bool IsIntPtr { get { return Type.IsIntPtr; } }
+
+		public bool IsUIntPtr { get { return Type.IsUIntPtr; } }
 
 		#endregion Properties
 

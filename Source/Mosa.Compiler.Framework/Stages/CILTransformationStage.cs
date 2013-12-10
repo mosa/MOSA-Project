@@ -94,7 +94,7 @@ namespace Mosa.Compiler.Framework.Stages
 			// This is actually ldind.* and ldobj - the opcodes have the same meanings
 
 			BaseInstruction loadInstruction = IRInstruction.Load;
-			if (MustSignExtendOnLoad(elementType.Type))
+			if (MustSignExtendOnLoad(elementType))
 			{
 				loadInstruction = IRInstruction.LoadSignExtended;
 			}
@@ -130,7 +130,7 @@ namespace Mosa.Compiler.Framework.Stages
 			Operand source = Operand.CreateRuntimeMember(context.RuntimeField);
 			Operand destination = context.Result;
 
-			if (MustSignExtendOnLoad(sigType.Type))
+			if (MustSignExtendOnLoad(sigType))
 			{
 				context.SetInstruction(IRInstruction.SignExtendedMove, destination, source);
 			}
@@ -834,7 +834,7 @@ namespace Mosa.Compiler.Framework.Stages
 			Operand offsetOperand = Operand.CreateConstantIntPtr(offset);
 
 			BaseInstruction loadInstruction = IRInstruction.Load;
-			if (MustSignExtendOnLoad(field.SigType.Type))
+			if (MustSignExtendOnLoad(field.SigType))
 			{
 				loadInstruction = IRInstruction.LoadSignExtended;
 			}
@@ -1058,7 +1058,7 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 
 			BaseInstruction loadInstruction = IRInstruction.Load;
-			if (MustSignExtendOnLoad(arraySigType.ElementType.Type))
+			if (MustSignExtendOnLoad(arraySigType.ElementType))
 			{
 				loadInstruction = IRInstruction.LoadSignExtended;
 			}
@@ -1418,12 +1418,12 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <returns>True if the given operand should be loaded with its sign extended.</returns>
 		private static bool IsSignExtending(Operand source)
 		{
-			return MustSignExtendOnLoad(source.Type.Type);
+			return source.IsSignedByte || source.IsSignedShort;
 		}
 
-		private static bool MustSignExtendOnLoad(CilElementType elementType)
+		private static bool MustSignExtendOnLoad(SigType source)
 		{
-			return (elementType == CilElementType.I1 || elementType == CilElementType.I2);
+			return source.IsSignedByte || source.IsSignedShort;
 		}
 
 		/// <summary>
