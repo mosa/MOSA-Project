@@ -61,7 +61,7 @@ namespace Mosa.Compiler.Framework.CIL
 			if (OpCode.Ret != opcode)
 				throw new ArgumentException(@"Invalid opcode.", @"code");
 
-			if (decoder.Method.ReturnType.Type == CilElementType.Void)
+			if (decoder.Method.ReturnType.IsVoid)
 				ctx.OperandCount = 0;
 			else
 				ctx.OperandCount = 1;
