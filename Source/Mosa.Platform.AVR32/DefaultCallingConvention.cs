@@ -187,7 +187,7 @@ namespace Mosa.Platform.AVR32
 		{
 			if (op.IsMemoryAddress)
 			{
-				if (op.Type.Type == CilElementType.ValueType)
+				if (op.IsValueType)
 				{
 					//for (int i = 0; i < parameterSize; i += 4)
 					//	context.AppendInstruction(AVR32.Mov, Operand.CreateMemoryAddress(op.Type, GeneralPurposeRegister.R9, stackSize + i), Operand.CreateMemoryAddress(op.Type, op.OffsetBaseRegister, op.Offset + i));
@@ -288,7 +288,7 @@ namespace Mosa.Platform.AVR32
 				context.SetInstruction(AVR32.Mov, Operand.CreateCPURegister(operand.Type, GeneralPurposeRegister.R8), operand);
 				return;
 			}
-			else if (size == 8 && (operand.Type.Type == CilElementType.R4 || operand.Type.Type == CilElementType.R8))
+			else if (size == 8 && (operand.IsFloat || operand.IsDouble))
 			{
 				if (!(operand.IsMemoryAddress))
 				{
@@ -300,9 +300,9 @@ namespace Mosa.Platform.AVR32
 				//ctx.SetInstruction(Instruction.Mov, new RegisterOperand(operand.Type, SSE2Register.XMM0), operand);
 				return;
 			}
-			else if (size == 8 && (operand.Type.Type == CilElementType.I8 || operand.Type.Type == CilElementType.U8))
+			else if (size == 8 && (operand.IsSignedLong || operand.IsUnsignedLong))
 			{
-				SigType HighType = (operand.Type.Type == CilElementType.I8) ? BuiltInSigType.Int32 : BuiltInSigType.UInt32;
+				SigType HighType = (operand.IsSignedLong) ? BuiltInSigType.Int32 : BuiltInSigType.UInt32;
 
 				//Operand opL, opH;
 				//LongOperandTransformationStage.SplitLongOperand(operand, out opL, out opH);

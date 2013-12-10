@@ -17,97 +17,97 @@ namespace Mosa.Platform.ARMv6
 	/// <summary>
 	/// Represents integral general purpose ARMv6 registers.
 	/// </summary>
-    public sealed class GeneralPurposeRegister : Register
-    {
-        #region Types
+	public sealed class GeneralPurposeRegister : Register
+	{
+		#region Types
 
-        /// <summary>
-        /// Identifies ARMv6 general purpose registers using their instruction encoding.
-        /// </summary>
-        private enum GPR
-        {
-            /// <summary>
-            /// The ARMv6 R0 register instruction encoding.
-            /// </summary>
-            R0 = 0,
+		/// <summary>
+		/// Identifies ARMv6 general purpose registers using their instruction encoding.
+		/// </summary>
+		private enum GPR
+		{
+			/// <summary>
+			/// The ARMv6 R0 register instruction encoding.
+			/// </summary>
+			R0 = 0,
 
-            /// <summary>
-            /// The ARMv6 R1 register instruction encoding.
-            /// </summary>
-            R1 = 1,
+			/// <summary>
+			/// The ARMv6 R1 register instruction encoding.
+			/// </summary>
+			R1 = 1,
 
-            /// <summary>
-            /// The ARMv6 R2 register instruction encoding.
-            /// </summary>
-            R2 = 2,
+			/// <summary>
+			/// The ARMv6 R2 register instruction encoding.
+			/// </summary>
+			R2 = 2,
 
-            /// <summary>
-            /// The ARMv6 R3 register instruction encoding.
-            /// </summary>
-            R3 = 3,
+			/// <summary>
+			/// The ARMv6 R3 register instruction encoding.
+			/// </summary>
+			R3 = 3,
 
-            /// <summary>
-            /// The ARMv6 R4 register instruction encoding.
-            /// </summary>
-            R4 = 4,
+			/// <summary>
+			/// The ARMv6 R4 register instruction encoding.
+			/// </summary>
+			R4 = 4,
 
-            /// <summary>
-            /// The ARMv6 R5 register instruction encoding.
-            /// </summary>
-            R5 = 5,
+			/// <summary>
+			/// The ARMv6 R5 register instruction encoding.
+			/// </summary>
+			R5 = 5,
 
-            /// <summary>
-            /// The ARMv6 R6 register instruction encoding.
-            /// </summary>
-            R6 = 6,
+			/// <summary>
+			/// The ARMv6 R6 register instruction encoding.
+			/// </summary>
+			R6 = 6,
 
-            /// <summary>
-            /// The ARMv6 R7 register instruction encoding.
-            /// </summary>
-            R7 = 7,
+			/// <summary>
+			/// The ARMv6 R7 register instruction encoding.
+			/// </summary>
+			R7 = 7,
 
-            /// <summary>
-            /// The ARMv6 R8 register instruction encoding.
-            /// </summary>
-            R8 = 8,
+			/// <summary>
+			/// The ARMv6 R8 register instruction encoding.
+			/// </summary>
+			R8 = 8,
 
-            /// <summary>
-            /// The ARMv6 R9 register instruction encoding.
-            /// </summary>
-            R9 = 9,
+			/// <summary>
+			/// The ARMv6 R9 register instruction encoding.
+			/// </summary>
+			R9 = 9,
 
-            /// <summary>
-            /// The ARMv6 R10 register instruction encoding.
-            /// </summary>
-            R10 = 10,
+			/// <summary>
+			/// The ARMv6 R10 register instruction encoding.
+			/// </summary>
+			R10 = 10,
 
-            /// <summary>
-            /// The ARMv6 R11 register instruction encoding.
-            /// </summary>
-            R11 = 11,
+			/// <summary>
+			/// The ARMv6 R11 register instruction encoding.
+			/// </summary>
+			R11 = 11,
 
-            /// <summary>
-            /// The ARMv6 R12 register instruction encoding.
-            /// </summary>
-            R12 = 12,
+			/// <summary>
+			/// The ARMv6 R12 register instruction encoding.
+			/// </summary>
+			R12 = 12,
 
-            /// <summary>
-            /// The ARMv6 Stack Pointer (R13).
-            /// </summary>
-            SP = 13,
+			/// <summary>
+			/// The ARMv6 Stack Pointer (R13).
+			/// </summary>
+			SP = 13,
 
-            /// <summary>
-            /// The ARMv6 Link Register (R14).
-            /// </summary>
-            LR = 14,
+			/// <summary>
+			/// The ARMv6 Link Register (R14).
+			/// </summary>
+			LR = 14,
 
-            /// <summary>
-            /// The ARMv6 Program Counter (R15).
-            /// </summary>
-            PC = 15
-        }
+			/// <summary>
+			/// The ARMv6 Program Counter (R15).
+			/// </summary>
+			PC = 15
+		}
 
-        #endregion Types
+		#endregion Types
 
 		#region Static data members
 
@@ -179,30 +179,30 @@ namespace Mosa.Platform.ARMv6
 		/// <summary>
 		/// Represents the SP/R13 register.
 		/// </summary>
-        public static readonly GeneralPurposeRegister SP = new GeneralPurposeRegister(13, GPR.SP);
+		public static readonly GeneralPurposeRegister SP = new GeneralPurposeRegister(13, GPR.SP);
 
 		/// <summary>
 		/// Represents the LR/R14 register.
 		/// </summary>
 		public static readonly GeneralPurposeRegister LR = new GeneralPurposeRegister(14, GPR.LR);
 
-        /// <summary>
-        /// Represents the PC/R15 register.
-        /// </summary>
-        public static readonly GeneralPurposeRegister PC = new GeneralPurposeRegister(15, GPR.PC);
+		/// <summary>
+		/// Represents the PC/R15 register.
+		/// </summary>
+		public static readonly GeneralPurposeRegister PC = new GeneralPurposeRegister(15, GPR.PC);
 
-        #endregion Static data members
+		#endregion Static data members
 
-        #region Data members
+		#region Data members
 
-        /// <summary>
-        /// Stores the general purpose register identified by this object instance.
-        /// </summary>
-        private readonly GPR gpr;
+		/// <summary>
+		/// Stores the general purpose register identified by this object instance.
+		/// </summary>
+		private readonly GPR gpr;
 
-        #endregion Data members
-        
-        #region Construction
+		#endregion Data members
+
+		#region Construction
 
 		/// <summary>
 		/// Initializes a new instance of <see cref="GeneralPurposeRegister"/>.
@@ -217,33 +217,33 @@ namespace Mosa.Platform.ARMv6
 
 		#endregion Construction
 
-        #region Properties
+		#region Properties
 
-        /// <summary>
-        /// General purpose registers support integer operations.
-        /// </summary>
-        public override bool IsInteger
-        {
-            get { return true; }
-        }
+		/// <summary>
+		/// General purpose registers support integer operations.
+		/// </summary>
+		public override bool IsInteger
+		{
+			get { return true; }
+		}
 
-        /// <summary>
-        /// General purpose register do not support floating point operations.
-        /// </summary>
-        public override bool IsFloatingPoint
-        {
-            get { return false; }
-        }
+		/// <summary>
+		/// General purpose register do not support floating point operations.
+		/// </summary>
+		public override bool IsFloatingPoint
+		{
+			get { return false; }
+		}
 
-        /// <summary>
-        /// Returns the index of this register.
-        /// </summary>
-        public override int RegisterCode
-        {
-            get { return (int)gpr; }
-        }
+		/// <summary>
+		/// Returns the index of this register.
+		/// </summary>
+		public override int RegisterCode
+		{
+			get { return (int)gpr; }
+		}
 
-        /// <summary>
+		/// <summary>
 		/// Returns the width of general purpose registers in bits.
 		/// </summary>
 		public override int Width
@@ -253,28 +253,28 @@ namespace Mosa.Platform.ARMv6
 
 		#endregion Properties
 
-        #region Methods
+		#region Methods
 
-        /// <summary>
-        /// Determines if the signature type fits into the register.
-        /// </summary>
-        /// <param name="type">The signature type to check.</param>
-        /// <returns>True if the signature type fits.</returns>
-        public override bool IsValidSigType(SigType type)
-        {
-            return (type.Type == CilElementType.I ||
-                    type.Type == CilElementType.I1 ||
-                    type.Type == CilElementType.I2 ||
-                    type.Type == CilElementType.I4 ||
-                    type.Type == CilElementType.U1 ||
-                    type.Type == CilElementType.U2 ||
-                    type.Type == CilElementType.U4 ||
-                    type.Type == CilElementType.Ptr ||
-                    type.Type == CilElementType.ByRef ||
-                    type.Type == CilElementType.FunctionPtr ||
-                    type.Type == CilElementType.Object);
-        }
+		/// <summary>
+		/// Determines if the signature type fits into the register.
+		/// </summary>
+		/// <param name="type">The signature type to check.</param>
+		/// <returns>True if the signature type fits.</returns>
+		public override bool IsValidSigType(SigType type)
+		{
+			return (type.Type == CilElementType.I ||
+					type.IsSignedByte ||
+					type.IsSignedShort ||
+					type.IsSignedInt ||
+					type.IsSignedByte ||
+					type.IsUnsignedShort ||
+					type.IsUnsignedInt ||
+					type.IsPointer ||
+					type.IsByRef ||
+					type.IsFunctionPtr ||
+					type.IsObject);
+		}
 
-        #endregion
-    }
+		#endregion Methods
+	}
 }

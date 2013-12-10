@@ -278,11 +278,11 @@ namespace Mosa.Platform.x86
 		/// <param name="source">The source.</param>
 		public override void InsertExchangeInstruction(Context context, Operand destination, Operand source)
 		{
-			if (source.Type.Type == CilElementType.R4)
+			if (source.IsFloat)
 			{
 				// TODO
 			}
-			else if (source.Type.Type == CilElementType.R8)
+			else if (source.IsDouble)
 			{
 				// TODO
 			}

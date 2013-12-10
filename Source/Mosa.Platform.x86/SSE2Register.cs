@@ -137,7 +137,7 @@ namespace Mosa.Platform.x86
 		/// <returns>True, if the register can store this signature type.</returns>
 		public override bool IsValidSigType(SigType type)
 		{
-			return (type.Type == CilElementType.R4 || type.Type == CilElementType.R8 || type.Type == CilElementType.I8 || type.Type == CilElementType.U8);
+			return (type.IsFloat || type.IsDouble|| type.IsSignedLong || type.IsUnsignedLong);
 		}
 
 		/// <summary>

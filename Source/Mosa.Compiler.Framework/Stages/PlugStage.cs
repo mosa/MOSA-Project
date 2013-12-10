@@ -179,7 +179,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (targetMethod.SigParameters.Length != plugMethod.SigParameters.Length - 1)
 				return false;
 
-			if (plugMethod.SigParameters[0].Type != Metadata.CilElementType.ByRef)
+			if (!plugMethod.SigParameters[0].IsByRef)
 				return false;
 
 			// TODO: Compare plug.Parameters[0].Type to the target's type

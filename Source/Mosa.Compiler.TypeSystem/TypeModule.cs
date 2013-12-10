@@ -1103,7 +1103,7 @@ namespace Mosa.Compiler.TypeSystem
 
 				foreach (var sigType in genericType.GenericArguments)
 				{
-					if (!sigType.IsOpenGenericParameter)
+					if (!sigType.IsGeneric)
 					{
 						return genericType;
 					}

@@ -124,7 +124,7 @@ namespace Mosa.Compiler.TypeSystem
 
 		public bool ContainsGenericParameter
 		{
-			get { return SigType.IsOpenGenericParameter; }
+			get { return SigType.IsGeneric; }
 		}
 
 		#endregion Properties

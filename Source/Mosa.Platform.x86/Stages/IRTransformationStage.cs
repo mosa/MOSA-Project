@@ -342,7 +342,7 @@ namespace Mosa.Platform.x86.Stages
 
 				var mov = GetMove(result, mem);
 
-				if (result.IsDouble && GetElementType(mem.Type).Type == CilElementType.R4)
+				if (result.IsDouble && GetElementType(mem.Type).IsFloat)
 					mov = X86.Cvtss2sd;
 
 				context.SetInstruction(mov, result, mem);
@@ -357,7 +357,7 @@ namespace Mosa.Platform.x86.Stages
 
 				var mov = GetMove(result, mem);
 
-				if (result.IsDouble && GetElementType(mem.Type).Type == CilElementType.R4)
+				if (result.IsDouble && GetElementType(mem.Type).IsFloat)
 					mov = X86.Cvtss2sd;
 
 				context.AppendInstruction(mov, result, mem);
@@ -590,7 +590,7 @@ namespace Mosa.Platform.x86.Stages
 			Operand offsetOperand = context.Operand2;
 			Operand value = context.Operand3;
 
-			if (value.IsDouble && GetElementType(baseOperand.Type).Type == CilElementType.R4)
+			if (value.IsDouble && GetElementType(baseOperand.Type).IsFloat)
 			{
 				Operand xmm1 = AllocateVirtualRegister(BuiltInSigType.Single);
 				context.InsertBefore().AppendInstruction(X86.Cvtsd2ss, xmm1, value);

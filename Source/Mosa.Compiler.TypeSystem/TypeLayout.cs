@@ -171,7 +171,7 @@ namespace Mosa.Compiler.TypeSystem
 			}
 
 			// If the field is another struct, we have to dig down and compute its size too.
-			if (field.SigType.Type == CilElementType.ValueType)
+			if (field.SigType.IsValueType)
 			{
 				size = ((ITypeLayout)this).GetTypeSize(field.DeclaringType);
 			}

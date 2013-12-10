@@ -98,7 +98,7 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				loadInstruction = IRInstruction.LoadSignExtended;
 			}
-			else if (MustZeroExtendOnLoad(elementType.Type))
+			else if (MustZeroExtendOnLoad(elementType))
 			{
 				loadInstruction = IRInstruction.LoadZeroExtended;
 			}
@@ -134,7 +134,7 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				context.SetInstruction(IRInstruction.SignExtendedMove, destination, source);
 			}
-			else if (MustZeroExtendOnLoad(sigType.Type))
+			else if (MustZeroExtendOnLoad(sigType))
 			{
 				context.SetInstruction(IRInstruction.ZeroExtendedMove, destination, source);
 			}
@@ -838,7 +838,7 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				loadInstruction = IRInstruction.LoadSignExtended;
 			}
-			else if (MustZeroExtendOnLoad(field.SigType.Type))
+			else if (MustZeroExtendOnLoad(field.SigType))
 			{
 				loadInstruction = IRInstruction.LoadZeroExtended;
 			}
@@ -1062,7 +1062,7 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				loadInstruction = IRInstruction.LoadSignExtended;
 			}
-			else if (MustZeroExtendOnLoad(arraySigType.ElementType.Type))
+			else if (MustZeroExtendOnLoad(arraySigType.ElementType))
 			{
 				loadInstruction = IRInstruction.LoadZeroExtended;
 			}
@@ -1433,12 +1433,12 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <returns>True if the given operand should be loaded with its sign extended.</returns>
 		private static bool IsZeroExtending(Operand source)
 		{
-			return MustZeroExtendOnLoad(source.Type.Type);
+			return MustZeroExtendOnLoad(source.Type);
 		}
 
-		private static bool MustZeroExtendOnLoad(CilElementType elementType)
+		private static bool MustZeroExtendOnLoad(SigType source)
 		{
-			return (elementType == CilElementType.U1 || elementType == CilElementType.U2 || elementType == CilElementType.Char);
+			return source.IsUnsignedByte || source.IsUnsignedShort || source.IsUnsignedInt || source.IsChar;
 		}
 
 		/// <summary>
@@ -1722,7 +1722,7 @@ namespace Mosa.Compiler.Framework.Stages
 				}
 				else
 				{
-					if (sourceOperand.Type.Type == CilElementType.I8 || sourceOperand.Type.Type == CilElementType.U8)
+					if (sourceOperand.IsSignedLong || sourceOperand.IsUnsignedLong)
 					{
 						Operand temp = AllocateVirtualRegister(destinationOperand.Type);
 

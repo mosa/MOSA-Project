@@ -144,7 +144,7 @@ namespace Mosa.Compiler.Metadata.Signatures
 		private bool CheckContainsOpenGenericParameters()
 		{
 			foreach (SigType type in GenericArguments)
-				if (type.IsOpenGenericParameter)
+				if (type.IsGeneric)
 					return true;
 
 			return false;

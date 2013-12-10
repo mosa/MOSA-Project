@@ -236,7 +236,7 @@ namespace Mosa.Compiler.Framework
 		/// <value>
 		/// <c>true</c> if this instance is floating point; otherwise, <c>false</c>.
 		/// </value>
-		public bool IsFloatingPoint { get { return Type.Type == CilElementType.R4 || Type.Type == CilElementType.R8; } }
+		public bool IsFloatingPoint { get { return Type.IsFloat || Type.IsDouble; } }
 
 		/// <summary>
 		/// Gets a value indicating whether [is double].
@@ -244,7 +244,7 @@ namespace Mosa.Compiler.Framework
 		/// <value>
 		///   <c>true</c> if [is double]; otherwise, <c>false</c>.
 		/// </value>
-		public bool IsDouble { get { return Type.Type == CilElementType.R8; } }
+		public bool IsDouble { get { return Type.IsDouble; } }
 
 		/// <summary>
 		/// Gets a value indicating whether [is single].
@@ -252,7 +252,7 @@ namespace Mosa.Compiler.Framework
 		/// <value>
 		///   <c>true</c> if [is single]; otherwise, <c>false</c>.
 		/// </value>
-		public bool IsSingle { get { return Type.Type == CilElementType.R4; } }
+		public bool IsSingle { get { return Type.IsSingle; } }
 
 		/// <summary>
 		/// Gets a value indicating whether this instance is floating point.
@@ -268,7 +268,7 @@ namespace Mosa.Compiler.Framework
 		/// <value>
 		///   <c>true</c> if [is signed integer]; otherwise, <c>false</c>.
 		/// </value>
-		public bool IsSigned { get { return Type.Type == CilElementType.I || Type.Type == CilElementType.I1 || Type.Type == CilElementType.I2 || Type.Type == CilElementType.I4 || Type.Type == CilElementType.I8; } }
+		public bool IsSigned { get { return Type.Type == CilElementType.I || Type.IsSignedByte || Type.IsSignedShort || Type.IsSignedInt || Type.IsSignedLong; } }
 
 		/// <summary>
 		/// Gets a value indicating whether [is unsigned integer].
@@ -276,7 +276,7 @@ namespace Mosa.Compiler.Framework
 		/// <value>
 		///   <c>true</c> if [is unsigned integer]; otherwise, <c>false</c>.
 		/// </value>
-		public bool IsUnsigned { get { return Type.Type == CilElementType.U || Type.Type == CilElementType.U1 || Type.Type == CilElementType.U2 || Type.Type == CilElementType.U4 || Type.Type == CilElementType.U8; } }
+		public bool IsUnsigned { get { return Type.Type == CilElementType.U || Type.IsUnsignedByte || Type.IsUnsignedShort || Type.IsUnsignedInt || Type.IsUnsignedLong; } }
 
 		/// <summary>
 		/// Gets the type of the shift.
@@ -329,37 +329,45 @@ namespace Mosa.Compiler.Framework
 			}
 		}
 
-		public bool IsUnsignedByte { get { return (Type.Type == CilElementType.U1); } }
+		public bool IsFloat { get { return Type.IsFloat; } }
 
-		public bool IsSignedByte { get { return (Type.Type == CilElementType.I1); } }
+		public bool IsUnsignedByte { get { return Type.IsUnsignedByte; } }
 
-		public bool IsUnsignedShort { get { return (Type.Type == CilElementType.U2); } }
+		public bool IsSignedByte { get { return Type.IsSignedByte; } }
 
-		public bool IsSignedShort { get { return (Type.Type == CilElementType.I2); } }
+		public bool IsUnsignedShort { get { return Type.IsUnsignedShort; } }
 
-		public bool IsUnsignedInt { get { return (Type.Type == CilElementType.U4); } }
+		public bool IsSignedShort { get { return Type.IsSignedShort; } }
 
-		public bool IsSignedInt { get { return (Type.Type == CilElementType.I4); } }
+		public bool IsUnsignedInt { get { return Type.IsUnsignedInt; } }
 
-		public bool IsUnsignedLong { get { return (Type.Type == CilElementType.U8); } }
+		public bool IsSignedInt { get { return Type.IsSignedInt; } }
 
-		public bool IsSignedLong { get { return (Type.Type == CilElementType.I8); } }
+		public bool IsUnsignedLong { get { return Type.IsUnsignedLong; } }
+
+		public bool IsSignedLong { get { return Type.IsSignedLong; } }
 
 		public bool IsByte { get { return IsUnsignedByte || IsSignedByte; } }
 
 		public bool IsShort { get { return IsUnsignedShort || IsSignedShort; } }
 
-		public bool IsChar { get { return Type.Type == CilElementType.Char; } }
+		public bool IsChar { get { return Type.IsChar; } }
 
 		public bool IsInt { get { return IsUnsignedInt || IsSignedInt; } }
 
 		public bool IsLong { get { return IsUnsignedLong || IsSignedLong; } }
 
-		public bool IsBoolean { get { return Type.Type == CilElementType.Boolean; } }
+		public bool IsBoolean { get { return Type.IsBoolean; } }
 
-		public bool IsPointer { get { return Type.Type == CilElementType.Ptr; } }
+		public bool IsPointer { get { return Type.IsPointer; } }
+
+		public bool IsValueType { get { return Type.IsValueType; } }
 
 		public bool IsObject { get { return StackType == StackTypeCode.O; } }
+
+		public bool IsFunctionPtr { get { return Type.IsFunctionPtr; } }
+
+		public bool IsByRef { get { return Type.IsByRef; } }
 
 		#endregion Properties
 
@@ -777,7 +785,7 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		public static Operand CreateLowSplitForLong(Operand longOperand, int offset, int index)
 		{
-			Debug.Assert(longOperand.Type.Type == CilElementType.U8 || longOperand.Type.Type == CilElementType.I8);
+			Debug.Assert(longOperand.IsUnsignedLong || longOperand.IsSignedLong);
 
 			Debug.Assert(longOperand.SplitParent == null);
 			Debug.Assert(longOperand.Low == null);
@@ -834,7 +842,7 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		public static Operand CreateHighSplitForLong(Operand longOperand, int offset, int index)
 		{
-			Debug.Assert(longOperand.Type.Type == CilElementType.U8 || longOperand.Type.Type == CilElementType.I8);
+			Debug.Assert(longOperand.IsUnsignedLong || longOperand.IsSignedLong);
 
 			Debug.Assert(longOperand.SplitParent == null);
 			Debug.Assert(longOperand.High == null);
