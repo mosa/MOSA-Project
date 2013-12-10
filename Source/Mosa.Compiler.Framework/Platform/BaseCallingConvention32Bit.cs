@@ -156,7 +156,7 @@ namespace Mosa.Compiler.Framework.Platform
 				int size, alignment;
 				architecture.GetTypeRequirements(operand.Type, out size, out alignment);
 
-				if (param != null && operand.IsDouble && param.Type == CilElementType.R4)
+				if (param != null && operand.IsDouble && param.IsFloat)
 				{
 					size = 4; alignment = 4;
 				}

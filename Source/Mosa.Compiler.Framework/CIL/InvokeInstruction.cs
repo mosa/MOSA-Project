@@ -192,7 +192,7 @@ namespace Mosa.Compiler.Framework.CIL
 				paramCount++;
 
 			// Setup operands for parameters and the return value
-			if (method.ReturnType.Type != CilElementType.Void)
+			if (!method.ReturnType.IsVoid)
 			{
 				context.ResultCount = 1;
 				context.Result = compiler.CreateVirtualRegister(Operand.NormalizeSigType(method.ReturnType));

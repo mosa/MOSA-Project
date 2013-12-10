@@ -424,7 +424,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (!op1.IsConstant || !op2.IsConstant)
 				return;
 
-			if (op1.Type.Type == CilElementType.Object || op2.Type.Type == CilElementType.Object)
+			if (op1.IsObject || op2.IsObject)
 				return;
 
 			bool compareResult = true;

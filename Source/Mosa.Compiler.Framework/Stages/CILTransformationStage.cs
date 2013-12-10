@@ -94,11 +94,11 @@ namespace Mosa.Compiler.Framework.Stages
 			// This is actually ldind.* and ldobj - the opcodes have the same meanings
 
 			BaseInstruction loadInstruction = IRInstruction.Load;
-			if (MustSignExtendOnLoad(elementType.Type))
+			if (MustSignExtendOnLoad(elementType))
 			{
 				loadInstruction = IRInstruction.LoadSignExtended;
 			}
-			else if (MustZeroExtendOnLoad(elementType.Type))
+			else if (MustZeroExtendOnLoad(elementType))
 			{
 				loadInstruction = IRInstruction.LoadZeroExtended;
 			}
@@ -130,11 +130,11 @@ namespace Mosa.Compiler.Framework.Stages
 			Operand source = Operand.CreateRuntimeMember(context.RuntimeField);
 			Operand destination = context.Result;
 
-			if (MustSignExtendOnLoad(sigType.Type))
+			if (MustSignExtendOnLoad(sigType))
 			{
 				context.SetInstruction(IRInstruction.SignExtendedMove, destination, source);
 			}
-			else if (MustZeroExtendOnLoad(sigType.Type))
+			else if (MustZeroExtendOnLoad(sigType))
 			{
 				context.SetInstruction(IRInstruction.ZeroExtendedMove, destination, source);
 			}
@@ -834,11 +834,11 @@ namespace Mosa.Compiler.Framework.Stages
 			Operand offsetOperand = Operand.CreateConstantIntPtr(offset);
 
 			BaseInstruction loadInstruction = IRInstruction.Load;
-			if (MustSignExtendOnLoad(field.SigType.Type))
+			if (MustSignExtendOnLoad(field.SigType))
 			{
 				loadInstruction = IRInstruction.LoadSignExtended;
 			}
-			else if (MustZeroExtendOnLoad(field.SigType.Type))
+			else if (MustZeroExtendOnLoad(field.SigType))
 			{
 				loadInstruction = IRInstruction.LoadZeroExtended;
 			}
@@ -1058,11 +1058,11 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 
 			BaseInstruction loadInstruction = IRInstruction.Load;
-			if (MustSignExtendOnLoad(arraySigType.ElementType.Type))
+			if (MustSignExtendOnLoad(arraySigType.ElementType))
 			{
 				loadInstruction = IRInstruction.LoadSignExtended;
 			}
-			else if (MustZeroExtendOnLoad(arraySigType.ElementType.Type))
+			else if (MustZeroExtendOnLoad(arraySigType.ElementType))
 			{
 				loadInstruction = IRInstruction.LoadZeroExtended;
 			}
@@ -1418,12 +1418,12 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <returns>True if the given operand should be loaded with its sign extended.</returns>
 		private static bool IsSignExtending(Operand source)
 		{
-			return MustSignExtendOnLoad(source.Type.Type);
+			return source.IsSignedByte || source.IsSignedShort;
 		}
 
-		private static bool MustSignExtendOnLoad(CilElementType elementType)
+		private static bool MustSignExtendOnLoad(SigType source)
 		{
-			return (elementType == CilElementType.I1 || elementType == CilElementType.I2);
+			return source.IsSignedByte || source.IsSignedShort;
 		}
 
 		/// <summary>
@@ -1433,12 +1433,12 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <returns>True if the given operand should be loaded with its sign extended.</returns>
 		private static bool IsZeroExtending(Operand source)
 		{
-			return MustZeroExtendOnLoad(source.Type.Type);
+			return MustZeroExtendOnLoad(source.Type);
 		}
 
-		private static bool MustZeroExtendOnLoad(CilElementType elementType)
+		private static bool MustZeroExtendOnLoad(SigType source)
 		{
-			return (elementType == CilElementType.U1 || elementType == CilElementType.U2 || elementType == CilElementType.Char);
+			return source.IsUnsignedByte || source.IsUnsignedShort || source.IsUnsignedInt || source.IsChar;
 		}
 
 		/// <summary>
@@ -1722,7 +1722,7 @@ namespace Mosa.Compiler.Framework.Stages
 				}
 				else
 				{
-					if (sourceOperand.Type.Type == CilElementType.I8 || sourceOperand.Type.Type == CilElementType.U8)
+					if (sourceOperand.IsSignedLong || sourceOperand.IsUnsignedLong)
 					{
 						Operand temp = AllocateVirtualRegister(destinationOperand.Type);
 

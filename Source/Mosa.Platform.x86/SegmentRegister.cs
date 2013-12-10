@@ -162,17 +162,17 @@ namespace Mosa.Platform.x86
 		/// <returns>True if the signature type fits.</returns>
 		public override bool IsValidSigType(SigType type)
 		{
-			return (type.Type == CilElementType.I ||
-					type.Type == CilElementType.I1 ||
-					type.Type == CilElementType.I2 ||
-					type.Type == CilElementType.I4 ||
-					type.Type == CilElementType.U1 ||
-					type.Type == CilElementType.U2 ||
-					type.Type == CilElementType.U4 ||
-					type.Type == CilElementType.Ptr ||
-					type.Type == CilElementType.ByRef ||
-					type.Type == CilElementType.FunctionPtr ||
-					type.Type == CilElementType.Object);
+			return (type.IsIntPtr ||
+					type.IsSignedByte ||
+					type.IsSignedShort ||
+					type.IsSignedInt ||
+					type.IsUnsignedByte ||
+					type.IsUnsignedShort ||
+					type.IsUnsignedInt ||
+					type.IsPointer ||
+					type.IsByRef ||
+					type.IsFunctionPtr ||
+					type.IsObject);
 		}
 
 		/// <summary>

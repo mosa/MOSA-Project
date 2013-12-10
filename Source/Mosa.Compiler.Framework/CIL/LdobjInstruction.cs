@@ -121,14 +121,14 @@ namespace Mosa.Compiler.Framework.CIL
 			base.Resolve(ctx, compiler);
 
 			// If we're ldind.i8, fix an IL deficiency that the result may be U8
-			if (opcode == OpCode.Ldind_i8 && typeRef.Type == CilElementType.I8)
+			if (opcode == OpCode.Ldind_i8 && typeRef.IsSignedLong)
 			{
 				SigType opType = ctx.Operand1.Type;
 				RefSigType rst = opType as RefSigType;
 				PtrSigType ptr = opType as PtrSigType;
 
-				if (rst != null && rst.ElementType.Type == CilElementType.U8
-					|| ptr != null && ptr.ElementType.Type == CilElementType.U8)
+				if (rst != null && rst.ElementType.IsUnsignedLong
+					|| ptr != null && ptr.ElementType.IsUnsignedLong)
 				{
 					ctx.Result = compiler.CreateVirtualRegister(BuiltInSigType.UInt64);
 				}

@@ -198,7 +198,7 @@ namespace Mosa.Platform.AVR32
 		/// <summary>
 		/// Stores the general purpose register identified by this object instance.
 		/// </summary>
-		private readonly GPR _gpr;
+		private readonly GPR gpr;
 
 		#endregion Data members
 
@@ -212,7 +212,7 @@ namespace Mosa.Platform.AVR32
 		private GeneralPurposeRegister(int index, GPR gpr) :
 			base(index)
 		{
-			_gpr = gpr;
+			this.gpr = gpr;
 		}
 
 		#endregion Construction
@@ -240,7 +240,7 @@ namespace Mosa.Platform.AVR32
 		/// </summary>
 		public override int RegisterCode
 		{
-			get { return (int)_gpr; }
+			get { return (int)gpr; }
 		}
 
 		/// <summary>
@@ -262,17 +262,17 @@ namespace Mosa.Platform.AVR32
 		/// <returns>True if the signature type fits.</returns>
 		public override bool IsValidSigType(SigType type)
 		{
-			return (type.Type == CilElementType.I ||
-					type.Type == CilElementType.I1 ||
-					type.Type == CilElementType.I2 ||
-					type.Type == CilElementType.I4 ||
-					type.Type == CilElementType.U1 ||
-					type.Type == CilElementType.U2 ||
-					type.Type == CilElementType.U4 ||
-					type.Type == CilElementType.Ptr ||
-					type.Type == CilElementType.ByRef ||
-					type.Type == CilElementType.FunctionPtr ||
-					type.Type == CilElementType.Object);
+			return (type.IsIntPtr ||
+					type.IsSignedByte ||
+					type.IsSignedShort ||
+					type.IsSignedInt ||
+					type.IsUnsignedByte ||
+					type.IsUnsignedShort ||
+					type.IsUnsignedInt ||
+					type.IsPointer ||
+					type.IsByRef ||
+					type.IsFunctionPtr ||
+					type.IsObject);
 		}
 
 		/// <summary>
@@ -281,7 +281,7 @@ namespace Mosa.Platform.AVR32
 		/// <returns>The name of the general purpose register.</returns>
 		public override string ToString()
 		{
-			return _gpr.ToString();
+			return gpr.ToString();
 		}
 
 		#endregion Methods

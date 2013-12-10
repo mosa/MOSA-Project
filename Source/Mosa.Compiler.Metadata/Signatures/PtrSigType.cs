@@ -126,7 +126,7 @@ namespace Mosa.Compiler.Metadata.Signatures
 		public override string ToSymbolPart()
 		{
 			StringBuilder sb = new StringBuilder();
-			if (this.ElementType.Type == CilElementType.Void)
+			if (this.ElementType.IsVoid)
 			{
 				// NOTE: Void should only ever be written for a symbol when used as a pointer in a signature
 				sb.Append("void*");

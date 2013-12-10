@@ -51,7 +51,7 @@ namespace Mosa.Platform.x86.Instructions
 		{
 			Debug.Assert(source.IsMemoryAddress);
 
-			if (source.Type.Type == CilElementType.R4)
+			if (source.IsFloat)
 				return m32fp;
 			else
 				return m64fp;

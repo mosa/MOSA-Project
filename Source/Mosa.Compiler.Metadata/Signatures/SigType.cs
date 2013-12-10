@@ -39,14 +39,6 @@ namespace Mosa.Compiler.Metadata.Signatures
 		/// <value>The type.</value>
 		public CilElementType Type { get; private set; }
 
-		/// <summary>
-		/// Gets a value indicating whether the type contains a generic type.
-		/// </summary>
-		/// <value>
-		/// 	<c>true</c> if [contains generic type]; otherwise, <c>false</c>.
-		/// </value>
-		public bool IsOpenGenericParameter { get { return (Type == CilElementType.Var || Type == CilElementType.MVar); } }
-
 		#endregion Properties
 
 		#region Object Overrides
@@ -405,5 +397,59 @@ namespace Mosa.Compiler.Metadata.Signatures
 				default: throw new NotImplementedException();
 			}
 		}
+
+		#region Properties
+
+		public bool IsBoolean { get { return Type == CilElementType.Boolean; } }
+
+		public bool IsChar { get { return Type == CilElementType.Char; } }
+
+		public bool IsObject { get { return Type == CilElementType.Object; } }
+
+		public bool IsSignedByte { get { return Type == CilElementType.I1; } }
+
+		public bool IsSignedShort { get { return Type == CilElementType.I2; } }
+
+		public bool IsSignedInt { get { return Type == CilElementType.I4; } }
+
+		public bool IsSignedLong { get { return Type == CilElementType.I8; } }
+
+		public bool IsUnsignedByte { get { return Type == CilElementType.U1; } }
+
+		public bool IsUnsignedShort { get { return Type == CilElementType.U2; } }
+
+		public bool IsUnsignedInt { get { return Type == CilElementType.U4; } }
+
+		public bool IsUnsignedLong { get { return Type == CilElementType.U8; } }
+
+		public bool IsPointer { get { return Type == CilElementType.Ptr; } }
+
+		public bool IsFloat { get { return Type == CilElementType.R4; } }
+
+		public bool IsSingle { get { return Type == CilElementType.R4; } }
+
+		public bool IsDouble { get { return Type == CilElementType.R8; } }
+
+		public bool IsVar { get { return Type == CilElementType.Var; } }
+
+		public bool IsMVar { get { return Type == CilElementType.MVar; } }
+
+		public bool IsValueType { get { return Type == CilElementType.ValueType; } }
+
+		public bool IsGeneric { get { return IsVar || IsMVar; } }
+
+		public bool IsFunctionPtr { get { return Type == CilElementType.FunctionPtr; } }
+
+		public bool IsByRef { get { return Type == CilElementType.ByRef; } }
+
+		public bool IsIntPtr { get { return Type == CilElementType.I; } }
+
+		public bool IsUIntPtr { get { return Type == CilElementType.U; } }
+
+		public bool IsVoid { get { return Type == CilElementType.Void; } }
+
+		public bool IsPinned { get { return Type == CilElementType.Pinned; } }
+		
+		#endregion Properties
 	}
 }

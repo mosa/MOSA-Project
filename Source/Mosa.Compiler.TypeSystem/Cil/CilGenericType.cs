@@ -91,7 +91,7 @@ namespace Mosa.Compiler.TypeSystem.Cil
 
 			foreach (var sigType in genericArguments)
 			{
-				if (sigType.IsOpenGenericParameter)
+				if (sigType.IsGeneric)
 				{
 					sb.AppendFormat("{0}, ", sigType.ToString());
 				}
@@ -191,7 +191,7 @@ namespace Mosa.Compiler.TypeSystem.Cil
 		private bool CheckContainsOpenGenericParameters()
 		{
 			foreach (var sig in genericArguments)
-				if (sig.IsOpenGenericParameter)
+				if (sig.IsGeneric)
 					return true;
 
 			return false;
