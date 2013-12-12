@@ -21,7 +21,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 	/// <summary>
 	///
 	/// </summary>
-	public class TypeLoader
+	public class MosaTypeLoader
 	{
 		#region Data members
 
@@ -82,7 +82,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		#endregion Data members
 
-		public TypeLoader(MosaTypeResolver resolver)
+		public MosaTypeLoader(MosaTypeResolver resolver)
 		{
 			this.resolver = resolver;
 		}
@@ -569,7 +569,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 					}
 
 					// Does this field have layout?
-					if (fieldLayout != null && token == fieldLayout.Field && tokenLayout.RID <= maxLayout.RID)
+					if (fieldLayout != null && fieldLayout.Field == token && tokenLayout.RID <= maxLayout.RID)
 					{
 						layout = fieldLayout.Offset;
 						tokenLayout = tokenLayout.NextRow;

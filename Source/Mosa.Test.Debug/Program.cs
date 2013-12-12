@@ -19,22 +19,39 @@ namespace Mosa.Test.Debug
 
 		private static void Test0()
 		{
-			var resolver = new MosaTypeResolver();
-			var loader = new TypeLoader(resolver);
 
-			var mscorlib = new PortableExecutableImage(new FileStream(@"mscorlib.dll", FileMode.Open, FileAccess.Read));
-			var assemblyA = new PortableExecutableImage(new FileStream(@"Mosa.Test.AssemblyA.dll", FileMode.Open, FileAccess.Read));
-			var assemblyB = new PortableExecutableImage(new FileStream(@"Mosa.Test.AssemblyB.dll", FileMode.Open, FileAccess.Read));
-			var assemblyC = new PortableExecutableImage(new FileStream(@"Mosa.Test.AssemblyC.dll", FileMode.Open, FileAccess.Read));
-			var classLib = new PortableExecutableImage(new FileStream(@"Mosa.ClassLib.dll", FileMode.Open, FileAccess.Read));
-			var testCollection = new PortableExecutableImage(new FileStream(@"Mosa.Test.Collection.dll", FileMode.Open, FileAccess.Read));
+			var assemblyLoader = new MosaAssemblyLoader();
 
-			loader.Load(mscorlib);
-			loader.Load(assemblyA);
-			loader.Load(assemblyB);
-			loader.Load(assemblyC);
-			loader.Load(classLib);
-			loader.Load(testCollection);
+			assemblyLoader.AddPrivatePath(Directory.GetCurrentDirectory());
+
+			assemblyLoader.LoadModule("Mosa.Test.AssemblyB.dll");
+			assemblyLoader.LoadModule("Mosa.Test.AssemblyC.dll");
+			assemblyLoader.LoadModule("Mosa.ClassLib.dll");
+
+			var typeSystem = new MosaTypeSystem();
+
+			typeSystem.Load(assemblyLoader);
+
+			//var resolver = new MosaTypeResolver();
+			//var loader = new TypeLoader(resolver);
+
+			//var mscorlib = new PortableExecutableImage(new FileStream(@"mscorlib.dll", FileMode.Open, FileAccess.Read));
+			//var assemblyA = new PortableExecutableImage(new FileStream(@"Mosa.Test.AssemblyA.dll", FileMode.Open, FileAccess.Read));
+			//var assemblyB = new PortableExecutableImage(new FileStream(@"Mosa.Test.AssemblyB.dll", FileMode.Open, FileAccess.Read));
+			//var assemblyC = new PortableExecutableImage(new FileStream(@"Mosa.Test.AssemblyC.dll", FileMode.Open, FileAccess.Read));
+			//var classLib = new PortableExecutableImage(new FileStream(@"Mosa.ClassLib.dll", FileMode.Open, FileAccess.Read));
+
+			//loader.Load(mscorlib);
+			//loader.Load(assemblyA);
+			//loader.Load(assemblyB);
+			//loader.Load(assemblyC);
+			//loader.Load(classLib);
+
+			//tpeSystem.LoadAssembly(mscorlib);
+			//tpeSystem.LoadAssembly(assemblyA);
+			//tpeSystem.LoadAssembly(assemblyB);
+			//tpeSystem.LoadAssembly(assemblyC);
+			//tpeSystem.LoadAssembly(classLib);
 
 			return;
 		}

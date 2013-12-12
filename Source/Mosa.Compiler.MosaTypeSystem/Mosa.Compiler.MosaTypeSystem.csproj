@@ -75,11 +75,12 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ExceptionBlockType.cs" />
     <Compile Include="ExceptionBlock.cs" />
+    <Compile Include="ExceptionBlockType.cs" />
     <Compile Include="MosaAttribute.cs" />
     <Compile Include="MosaGenericParameter.cs" />
-    <Compile Include="TypeLoader.cs" />
+    <Compile Include="MosaAssemblyLoader.cs" />
+    <Compile Include="MosaTypeLoader.cs" />
     <Compile Include="MosaAssembly.cs" />
     <Compile Include="MosaTypeResolver.cs" />
     <Compile Include="MosaTypeSystem.cs" />

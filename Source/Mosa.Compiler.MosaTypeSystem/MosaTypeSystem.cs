@@ -1,23 +1,33 @@
-﻿/*
- * (c) 2013 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- */
-
+﻿using Mosa.Compiler.Metadata.Loader;
+using System.IO;
 using System.Collections.Generic;
 
 namespace Mosa.Compiler.MosaTypeSystem
 {
 	public class MosaTypeSystem
 	{
-		private List<MosaType> Types = new List<MosaType>();
+		public MosaTypeResolver Resolver { get; internal set; }
 
-		public void AddType(MosaType type)
+		private MosaTypeLoader loader;
+
+		public MosaTypeSystem()
 		{
-			Types.Add(type);
+			Resolver = new MosaTypeResolver();
+			this.loader = new MosaTypeLoader(Resolver);
 		}
+
+		public void LoadAssembly(IMetadataModule metadataModule)
+		{
+			loader.Load(metadataModule);
+		}
+
+		public void Load(MosaAssemblyLoader assemblyLoader)
+		{
+			foreach(var module in assemblyLoader.Modules)
+			{
+				LoadAssembly(module);
+			}
+		}
+
 	}
 }
