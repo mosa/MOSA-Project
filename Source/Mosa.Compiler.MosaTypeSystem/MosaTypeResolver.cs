@@ -20,6 +20,12 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public List<MosaMethod> Methods { get; private set; }
 
+		public MosaAssembly InternalAssembly { get; private set; }
+
+		public MosaAssembly InternalGenericsAssembly { get; private set; }
+
+		public BuiltInTypes BuiltIn { get; internal set; }
+
 		private Dictionary<string, MosaAssembly> assemblyLookup = new Dictionary<string, MosaAssembly>();
 		private Dictionary<MosaAssembly, Dictionary<Token, MosaType>> typeLookup = new Dictionary<MosaAssembly, Dictionary<Token, MosaType>>();
 		private Dictionary<MosaAssembly, Dictionary<Token, MosaMethod>> methodLookup = new Dictionary<MosaAssembly, Dictionary<Token, MosaMethod>>();
@@ -28,17 +34,20 @@ namespace Mosa.Compiler.MosaTypeSystem
 		private MosaType[] var = new MosaType[255];
 		private MosaType[] mvar = new MosaType[255];
 
-		public MosaAssembly InternalAssembly { get; private set; }
-
-		public MosaAssembly InternalGenericsAssembly { get; private set; }
-
 		public MosaTypeResolver()
 		{
 			Types = new List<MosaType>();
 			Methods = new List<MosaMethod>();
+			BuiltIn = new BuiltInTypes();
 
 			SetupInternalAssembly();
 			SetupInternalGenericsAssembly();
+		}
+
+		private void SetupInternalGenericsAssembly()
+		{
+			InternalGenericsAssembly = new MosaAssembly("@InternalGenerics");
+			AddAssembly(InternalGenericsAssembly);
 		}
 
 		private void SetupInternalAssembly()
@@ -46,31 +55,25 @@ namespace Mosa.Compiler.MosaTypeSystem
 			InternalAssembly = new MosaAssembly("@Internal");
 			AddAssembly(InternalAssembly);
 
-			CreateAddBuiltInType(InternalAssembly, CilElementType.Void);
-			CreateAddBuiltInType(InternalAssembly, CilElementType.Boolean);
-			CreateAddBuiltInType(InternalAssembly, CilElementType.Char);
-			CreateAddBuiltInType(InternalAssembly, CilElementType.I1);
-			CreateAddBuiltInType(InternalAssembly, CilElementType.U1);
-			CreateAddBuiltInType(InternalAssembly, CilElementType.I2);
-			CreateAddBuiltInType(InternalAssembly, CilElementType.U2);
-			CreateAddBuiltInType(InternalAssembly, CilElementType.I4);
-			CreateAddBuiltInType(InternalAssembly, CilElementType.U4);
-			CreateAddBuiltInType(InternalAssembly, CilElementType.I8);
-			CreateAddBuiltInType(InternalAssembly, CilElementType.U8);
-			CreateAddBuiltInType(InternalAssembly, CilElementType.R4);
-			CreateAddBuiltInType(InternalAssembly, CilElementType.R8);
-			CreateAddBuiltInType(InternalAssembly, CilElementType.String);
-			CreateAddBuiltInType(InternalAssembly, CilElementType.Object);
-			CreateAddBuiltInType(InternalAssembly, CilElementType.I);
-			CreateAddBuiltInType(InternalAssembly, CilElementType.U);
-			CreateAddBuiltInType(InternalAssembly, CilElementType.TypedByRef);
-			CreateAddBuiltInType(InternalAssembly, CilElementType.Ptr);
-		}
-
-		private void SetupInternalGenericsAssembly()
-		{
-			InternalGenericsAssembly = new MosaAssembly("@InternalGenerics");
-			AddAssembly(InternalGenericsAssembly);
+			BuiltIn.Void = CreateAddBuiltInType(InternalAssembly, CilElementType.Void);
+			BuiltIn.Boolean = CreateAddBuiltInType(InternalAssembly, CilElementType.Boolean);
+			BuiltIn.Char = CreateAddBuiltInType(InternalAssembly, CilElementType.Char);
+			BuiltIn.I1 = CreateAddBuiltInType(InternalAssembly, CilElementType.I1);
+			BuiltIn.U1 = CreateAddBuiltInType(InternalAssembly, CilElementType.U1);
+			BuiltIn.I2 = CreateAddBuiltInType(InternalAssembly, CilElementType.I2);
+			BuiltIn.U2 = CreateAddBuiltInType(InternalAssembly, CilElementType.U2);
+			BuiltIn.I4 = CreateAddBuiltInType(InternalAssembly, CilElementType.I4);
+			BuiltIn.U4 = CreateAddBuiltInType(InternalAssembly, CilElementType.U4);
+			BuiltIn.I8 = CreateAddBuiltInType(InternalAssembly, CilElementType.I8);
+			BuiltIn.U8 = CreateAddBuiltInType(InternalAssembly, CilElementType.U8);
+			BuiltIn.R4 = CreateAddBuiltInType(InternalAssembly, CilElementType.R4);
+			BuiltIn.R8 = CreateAddBuiltInType(InternalAssembly, CilElementType.R8);
+			BuiltIn.String = CreateAddBuiltInType(InternalAssembly, CilElementType.String);
+			BuiltIn.Object = CreateAddBuiltInType(InternalAssembly, CilElementType.Object);
+			BuiltIn.I = CreateAddBuiltInType(InternalAssembly, CilElementType.I);
+			BuiltIn.U = CreateAddBuiltInType(InternalAssembly, CilElementType.U);
+			BuiltIn.TypedByRef = CreateAddBuiltInType(InternalAssembly, CilElementType.TypedByRef);
+			BuiltIn.Ptr = CreateAddBuiltInType(InternalAssembly, CilElementType.Ptr);
 		}
 
 		private MosaType CreateBuiltInType(CilElementType cilElementType)
@@ -83,11 +86,13 @@ namespace Mosa.Compiler.MosaTypeSystem
 			return type;
 		}
 
-		private void CreateAddBuiltInType(MosaAssembly assembly, CilElementType cilElementType)
+		private MosaType CreateAddBuiltInType(MosaAssembly assembly, CilElementType cilElementType)
 		{
 			var type = CreateBuiltInType(cilElementType);
 
 			AddType(assembly, new Token((uint)cilElementType), type);
+
+			return type;
 		}
 
 		public void AddAssembly(MosaAssembly assembly)
