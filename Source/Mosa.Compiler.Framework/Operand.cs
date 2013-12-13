@@ -372,7 +372,7 @@ namespace Mosa.Compiler.Framework
 
 		public bool IsValueType { get { return Type.IsValueType; } }
 
-		public bool IsObject { get { return StackType == StackTypeCode.O; } }
+		public bool IsObject { get { return IsArray || IsByRef || IsValueType || StackType == StackTypeCode.O; } }
 
 		public bool IsFunctionPtr { get { return Type.IsFunctionPtr; } }
 
@@ -382,6 +382,8 @@ namespace Mosa.Compiler.Framework
 
 		public bool IsUIntPtr { get { return Type.IsUIntPtr; } }
 
+		public bool IsArray { get { return Type.IsArray; } }
+		
 		#endregion Properties
 
 		#region Construction

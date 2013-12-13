@@ -449,6 +449,8 @@ namespace Mosa.Compiler.Metadata.Signatures
 		public bool IsVoid { get { return Type == CilElementType.Void; } }
 
 		public bool IsPinned { get { return Type == CilElementType.Pinned; } }
+
+		public bool IsArray { get { return Type == CilElementType.Array; } }
 		
 		#endregion Properties
 	}
