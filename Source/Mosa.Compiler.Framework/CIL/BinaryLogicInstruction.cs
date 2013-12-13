@@ -7,9 +7,9 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Signatures;
+using System;
 
 namespace Mosa.Compiler.Framework.CIL
 {
@@ -23,7 +23,7 @@ namespace Mosa.Compiler.Framework.CIL
 		/// <summary>
 		/// Operand table according to ISO/IEC 23271:2006 (E), Partition III, 1.5, Table 5.
 		/// </summary>
-		private static readonly StackTypeCode[][] _opTable = new StackTypeCode[][] {
+		private static readonly StackTypeCode[][] opTable = new StackTypeCode[][] {
 			new StackTypeCode[] { StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown },
 			new StackTypeCode[] { StackTypeCode.Unknown, StackTypeCode.Int32,   StackTypeCode.Unknown, StackTypeCode.N,       StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown },
 			new StackTypeCode[] { StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Int64,   StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown },
@@ -76,12 +76,12 @@ namespace Mosa.Compiler.Framework.CIL
 					stackTypeForOperand2 = FromSigType(op2Type.Fields[0].SigType.Type);
 			}
 
-			var result = _opTable[(int)stackTypeForOperand1][(int)stackTypeForOperand2];
+			var result = opTable[(int)stackTypeForOperand1][(int)stackTypeForOperand2];
 
 			if (result == StackTypeCode.Unknown)
 				throw new InvalidOperationException(@"Invalid stack result of instruction: " + result.ToString() + " (" + ctx.Operand1.ToString() + ")");
 
-			ctx.Result = compiler.CreateVirtualRegister(Operand.SigTypeFromStackType(result));
+			ctx.Result = compiler.CreateVirtualRegister(SigTypeFromStackType(result));
 		}
 
 		private static StackTypeCode FromSigType(CilElementType type)

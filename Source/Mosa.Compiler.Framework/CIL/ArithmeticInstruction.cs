@@ -7,9 +7,9 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Signatures;
+using System;
 
 namespace Mosa.Compiler.Framework.CIL
 {
@@ -106,7 +106,7 @@ namespace Mosa.Compiler.Framework.CIL
 			SigType resultType;
 			if (result != StackTypeCode.Ptr)
 			{
-				resultType = Operand.SigTypeFromStackType(result);
+				resultType = SigTypeFromStackType(result);
 			}
 			else
 			{

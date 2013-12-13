@@ -35,14 +35,14 @@ namespace Mosa.Platform.x86.Stages
 
 		public static void SplitLongOperand(BaseMethodCompiler methodCompiler, Operand operand, out Operand operandLow, out Operand operandHigh, Operand constantZero)
 		{
-			if (operand.StackType == StackTypeCode.Int64)
+			if (operand.Is64BitInteger)
 			{
 				methodCompiler.VirtualRegisters.SplitLongOperand(operand, 4, 0);
 				operandLow = operand.Low;
 				operandHigh = operand.High;
 				return;
 			}
-			else if (operand.StackType == StackTypeCode.Int32 || operand.StackType == StackTypeCode.Ptr)
+			else //if (operand.StackType == StackTypeCode.Int32 || operand.StackType == StackTypeCode.Ptr)
 			{
 				operandLow = operand;
 				operandHigh = constantZero != null ? constantZero : Operand.CreateConstantSignedInt((int)0);
@@ -857,7 +857,7 @@ namespace Mosa.Platform.x86.Stages
 			SplitLongOperand(context.Operand1, out op1L, out op1H);
 			SplitLongOperand(context.Operand2, out op2L, out op2H);
 
-			if (context.Result.StackType != StackTypeCode.Int64)
+			if (!context.Result.Is64BitInteger)
 			{
 				context.SetInstruction(X86.Mov, op0L, op1L);
 				context.AppendInstruction(X86.And, op0L, op0L, op2L);
@@ -913,7 +913,7 @@ namespace Mosa.Platform.x86.Stages
 		{
 			Operand op0L, op0H, op1L, op1H;
 
-			if (context.Result.StackType == StackTypeCode.Int64)
+			if (context.Result.Is64BitInteger)
 			{
 				SplitLongOperand(context.Result, out op0L, out op0H);
 				SplitLongOperand(context.Operand1, out op1L, out op1H);
@@ -1238,29 +1238,17 @@ namespace Mosa.Platform.x86.Stages
 		}
 
 		/// <summary>
-		/// Determines whether the specified op is int64.
-		/// </summary>
-		/// <param name="op">The op.</param>
-		/// <returns>
-		/// 	<c>true</c> if the specified op is int64; otherwise, <c>false</c>.
-		/// </returns>
-		public static bool IsInt64(Operand op)
-		{
-			return op.StackType == StackTypeCode.Int64;
-		}
-
-		/// <summary>
 		/// Ares the any64 bit.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		/// <returns></returns>
 		public static bool AreAny64Bit(Context context)
 		{
-			if (IsInt64(context.Result))
+			if (context.Result.Is64BitInteger)
 				return true;
 
 			foreach (var operand in context.Operands)
-				if (IsInt64(operand))
+				if (operand.Is64BitInteger)
 					return true;
 
 			return false;
@@ -1276,7 +1264,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IIRVisitor.ArithmeticShiftRight(Context context)
 		{
-			if (IsInt64(context.Operand1))
+			if (context.Operand1.Is64BitInteger)
 			{
 				ExpandArithmeticShiftRight(context);
 			}
@@ -1288,7 +1276,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IIRVisitor.IntegerCompareBranch(Context context)
 		{
-			if (IsInt64(context.Operand1) || IsInt64(context.Operand2))
+			if (context.Operand1.Is64BitInteger || context.Operand2.Is64BitInteger)
 			{
 				ExpandBinaryBranch(context);
 			}
@@ -1300,7 +1288,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IIRVisitor.IntegerCompare(Context context)
 		{
-			if (IsInt64(context.Operand1))
+			if (context.Operand1.Is64BitInteger)
 			{
 				ExpandComparison(context);
 			}
@@ -1312,7 +1300,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IIRVisitor.Load(Context context)
 		{
-			if (IsInt64(context.Operand1) || IsInt64(context.Result))
+			if (context.Operand1.Is64BitInteger || context.Result.Is64BitInteger)
 			{
 				ExpandLoad(context);
 			}
@@ -1438,7 +1426,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IIRVisitor.Store(Context context)
 		{
-			if (IsInt64(context.Operand3))
+			if (context.Operand3.Is64BitInteger)
 			{
 				ExpandStore(context);
 			}
@@ -1584,14 +1572,14 @@ namespace Mosa.Platform.x86.Stages
 		{
 			Operand op0L, op0H;
 
-			if (context.Result != null && IsInt64(context.Result))
+			if (context.Result != null && context.Result.Is64BitInteger)
 			{
 				SplitLongOperand(context.Result, out op0L, out op0H);
 			}
 
 			foreach (var operand in context.Operands)
 			{
-				if (IsInt64(operand))
+				if (operand.Is64BitInteger)
 				{
 					SplitLongOperand(operand, out op0L, out op0H);
 				}
@@ -1606,14 +1594,14 @@ namespace Mosa.Platform.x86.Stages
 		{
 			Operand op0L, op0H;
 
-			if (context.Result != null && IsInt64(context.Result))
+			if (context.Result != null && context.Result.Is64BitInteger)
 			{
 				SplitLongOperand(context.Result, out op0L, out op0H);
 			}
 
 			foreach (var operand in context.Operands)
 			{
-				if (IsInt64(operand))
+				if (operand.Is64BitInteger)
 				{
 					SplitLongOperand(operand, out op0L, out op0H);
 				}

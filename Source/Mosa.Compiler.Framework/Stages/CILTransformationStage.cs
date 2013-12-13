@@ -706,7 +706,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			ConditionCode code = ConvertCondition((context.Instruction as CIL.BaseCILInstruction).OpCode);
 
-			if (context.Operand1.StackType == StackTypeCode.F)
+			if (context.Operand1.IsFloatingPoint)
 			{
 				context.SetInstruction(IRInstruction.FloatingPointCompare, code, context.Result, context.Operand1, context.Operand2);
 			}
@@ -941,7 +941,7 @@ namespace Mosa.Compiler.Framework.Stages
 			Operand first = context.Operand1;
 			Operand second = context.Operand2;
 
-			if (first.StackType == StackTypeCode.F)
+			if (first.IsFloatingPoint)
 			{
 				Operand comparisonResult = methodCompiler.CreateVirtualRegister(BuiltInSigType.Int32);
 				context.SetInstruction(IRInstruction.FloatingPointCompare, cc, comparisonResult, first, second);

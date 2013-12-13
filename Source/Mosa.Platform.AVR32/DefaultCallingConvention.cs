@@ -9,11 +9,9 @@
  */
 
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Signatures;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 
 namespace Mosa.Platform.AVR32
 {
@@ -121,7 +119,7 @@ namespace Mosa.Platform.AVR32
 		{
 			if (result != null)
 			{
-				if (result.StackType == StackTypeCode.Int64)
+				if (result.Is64BitInteger)
 					MoveReturnValueTo64Bit(result, context);
 				else
 					MoveReturnValueTo32Bit(result, context);
@@ -185,71 +183,7 @@ namespace Mosa.Platform.AVR32
 		/// <param name="parameterSize">Size of the parameter.</param>
 		private void Push(Context context, Operand op, int stackSize, int parameterSize)
 		{
-			if (op.IsMemoryAddress)
-			{
-				if (op.IsValueType)
-				{
-					//for (int i = 0; i < parameterSize; i += 4)
-					//	context.AppendInstruction(AVR32.Mov, Operand.CreateMemoryAddress(op.Type, GeneralPurposeRegister.R9, stackSize + i), Operand.CreateMemoryAddress(op.Type, op.OffsetBaseRegister, op.Offset + i));
-
-					return;
-				}
-
-				Operand rop;
-				switch (op.StackType)
-				{
-					case StackTypeCode.O: goto case StackTypeCode.N;
-					case StackTypeCode.Ptr: goto case StackTypeCode.N;
-					case StackTypeCode.Int32: goto case StackTypeCode.N;
-					case StackTypeCode.N:
-						rop = Operand.CreateCPURegister(op.Type, GeneralPurposeRegister.R8);
-						break;
-
-					case StackTypeCode.F:
-
-						// TODO:
-						//rop = new RegisterOperand(op.Type, SSE2Register.XMM0);
-						rop = null;
-						break;
-
-					case StackTypeCode.Int64:
-						{
-							Debug.Assert(op.IsMemoryAddress, @"I8/U8 arg is not in a memory operand.");
-
-							//Operand r8 = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.R8);
-
-							//Operand opL, opH;
-							//LongOperandTransformationStage.SplitLongOperand(op, out opL, out opH);
-
-							//ctx.AppendInstruction(Instruction.Mov, r8, opL);
-							//ctx.AppendInstruction(Instruction.Mov, Operand.CreateMemoryAddress(op.Type, GeneralPurposeRegister.R9, new IntPtr(stackSize)), r8);
-							//ctx.AppendInstruction(Instruction.Mov, r8, opH);
-							//ctx.AppendInstruction(Instruction.Mov, Operand.CreateMemoryAddress(op.Type, GeneralPurposeRegister.R9, new IntPtr(stackSize + 4)), r8);
-						}
-						return;
-
-					default:
-						throw new NotSupportedException();
-				}
-
-				context.AppendInstruction(AVR32.Mov, rop, op);
-				op = rop;
-			}
-			else if (op.IsConstant && op.StackType == StackTypeCode.Int64)
-			{
-				//Operand opL, opH;
-				//RegisterOperand r8 = new RegisterOperand(BuiltInSigType.Int32, GeneralPurposeRegister.R8);
-				//LongOperandTransformationStage.SplitLongOperand(op, out opL, out opH);
-
-				//ctx.AppendInstruction(Instruction.Mov, r8, opL);
-				//ctx.AppendInstruction(Instruction.Mov, Operand.CreateMemoryAddress(BuiltInSigType.Int32, GeneralPurposeRegister.R9, new IntPtr(stackSize)), r8);
-				//ctx.AppendInstruction(Instruction.Mov, r8, opH);
-				//ctx.AppendInstruction(Instruction.Mov, Operand.CreateMemoryAddress(BuiltInSigType.Int32, GeneralPurposeRegister.R9, new IntPtr(stackSize + 4)), r8);
-
-				return;
-			}
-
-			//context.AppendInstruction(AVR32.Mov, Operand.CreateMemoryAddress(op.Type, GeneralPurposeRegister.R9, stackSize), op);
+			// TODO
 		}
 
 		/// <summary>

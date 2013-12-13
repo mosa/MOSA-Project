@@ -8,7 +8,6 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Compiler.TypeSystem;
 using System.Collections.Generic;
@@ -113,12 +112,12 @@ namespace Mosa.Compiler.Framework.Platform
 			if (result == null)
 				return;
 
-			if (result.StackType == StackTypeCode.F)
+			if (result.IsFloatingPoint)
 			{
 				Operand returnFP = Operand.CreateCPURegister(result.Type, returnFloatingPointRegister);
 				architecture.InsertMoveInstruction(context, result, returnFP);
 			}
-			else if (result.StackType == StackTypeCode.Int64)
+			else if (result.Is64BitInteger)
 			{
 				Operand returnLow = Operand.CreateCPURegister(result.Type, return32BitRegister);
 				Operand returnHigh = Operand.CreateCPURegister(BuiltInSigType.Int32, return64BitRegister);
@@ -178,7 +177,7 @@ namespace Mosa.Compiler.Framework.Platform
 		{
 			Debug.Assert(!op.IsMemoryAddress);
 
-			if (op.StackType == StackTypeCode.Int64)
+			if (op.Is64BitInteger)
 			{
 				architecture.InsertMoveInstruction(context, Operand.CreateMemoryAddress(BuiltInSigType.Int32, scratch, stackSize), op.Low);
 				architecture.InsertMoveInstruction(context, Operand.CreateMemoryAddress(BuiltInSigType.Int32, scratch, stackSize + 4), op.High);

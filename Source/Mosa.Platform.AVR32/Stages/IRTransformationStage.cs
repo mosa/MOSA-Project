@@ -10,7 +10,6 @@
 
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.IR;
-using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Signatures;
 using System;
 using System.Diagnostics;
@@ -325,7 +324,7 @@ namespace Mosa.Platform.AVR32.Stages
 
 			//context.Operand1 = EmitConstant(context.Operand1);
 
-			if (context.Result.StackType == StackTypeCode.F)
+			if (context.Result.IsFloatingPoint)
 			{
 				// TODO:
 			}

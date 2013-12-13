@@ -9,6 +9,7 @@
  *
  */
 
+using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Signatures;
 
 namespace Mosa.Compiler.Framework.CIL
@@ -43,7 +44,7 @@ namespace Mosa.Compiler.Framework.CIL
 
 		public static Operand CreateResultOperand(IInstructionDecoder decoder, SigType operandSigType)
 		{
-			return CreateResultOperand(decoder, Operand.StackTypeFromSigType(operandSigType), operandSigType);
+			return CreateResultOperand(decoder, StackTypeFromSigType(operandSigType), operandSigType);
 		}
 
 		public static Operand CreateResultOperand(IInstructionDecoder decoder, StackTypeCode operandType, SigType operandSigType)
@@ -54,7 +55,7 @@ namespace Mosa.Compiler.Framework.CIL
 			}
 			else
 			{
-				return decoder.Compiler.CreateVirtualRegister(Operand.SigTypeFromStackType(operandType));
+				return decoder.Compiler.CreateVirtualRegister(SigTypeFromStackType(operandType));
 			}
 		}
 	}

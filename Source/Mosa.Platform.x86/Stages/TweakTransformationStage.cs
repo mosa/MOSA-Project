@@ -10,7 +10,6 @@
  */
 
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Signatures;
 using System.Diagnostics;
 
@@ -112,10 +111,8 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IX86Visitor.Movsx(Context context)
 		{
-			if (Is32Bit(context.Operand1))
+			if (context.Operand1.IsInt || context.Operand1.IsPointer || context.Operand1.IsObject)
 			{
-				Debug.Assert(Is32Bit(context.Result));
-
 				context.ReplaceInstructionOnly(X86.Mov);
 			}
 		}
@@ -126,7 +123,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IX86Visitor.Movzx(Context context)
 		{
-			if (Is32Bit(context.Operand1))
+			if (context.Operand1.IsInt || context.Operand1.IsPointer || context.Operand1.IsObject)
 			{
 				context.ReplaceInstructionOnly(X86.Mov);
 			}
@@ -150,7 +147,7 @@ namespace Mosa.Platform.x86.Stages
 				context.Operand1 = ecx;
 			}
 
-			if (right.IsConstant && !Is32Bit(left))
+			if (right.IsConstant && !(left.IsInt || left.IsPointer || left.IsObject))
 			{
 				Operand edx = AllocateVirtualRegister(BuiltInSigType.Int32);
 				Context before = context.InsertBefore();

@@ -7,7 +7,7 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-namespace Mosa.Compiler.Framework
+namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
 	/// Specifies the CLI stack type of a type reference.

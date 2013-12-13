@@ -7,6 +7,7 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using Mosa.Compiler.Metadata;
 using System;
 using System.Diagnostics;
 
@@ -22,7 +23,7 @@ namespace Mosa.Compiler.Framework.CIL
 		/// <summary>
 		/// This operand table conforms to ISO/IEC 23271:2006 (E), Partition III, §1.5, Table 6.
 		/// </summary>
-		private static readonly StackTypeCode[][] _operandTable = new StackTypeCode[][] {
+		private static readonly StackTypeCode[][] operandTable = new StackTypeCode[][] {
 			new StackTypeCode[] { StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown },
 			new StackTypeCode[] { StackTypeCode.Unknown, StackTypeCode.Int32,   StackTypeCode.Unknown, StackTypeCode.Int32,   StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown },
 			new StackTypeCode[] { StackTypeCode.Unknown, StackTypeCode.Int64,   StackTypeCode.Unknown, StackTypeCode.Int64,   StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown },
@@ -58,12 +59,12 @@ namespace Mosa.Compiler.Framework.CIL
 		{
 			base.Resolve(ctx, compiler);
 
-			StackTypeCode result = _operandTable[(int)ctx.Operand1.StackType][(int)ctx.Operand2.StackType];
+			var result = operandTable[(int)ctx.Operand1.StackType][(int)ctx.Operand2.StackType];
 			Debug.Assert(StackTypeCode.Unknown != result, @"Can't shift with the given stack operands.");
 			if (StackTypeCode.Unknown == result)
 				throw new InvalidOperationException(@"Invalid stack state for pairing (" + ctx.Operand1.StackType + ", " + ctx.Operand2.StackType + ")");
 
-			ctx.Result = compiler.CreateVirtualRegister(Operand.SigTypeFromStackType(result));
+			ctx.Result = compiler.CreateVirtualRegister(SigTypeFromStackType(result));
 		}
 
 		/// <summary>

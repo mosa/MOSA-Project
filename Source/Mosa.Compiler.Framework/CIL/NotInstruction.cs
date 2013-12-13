@@ -7,6 +7,7 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using Mosa.Compiler.Metadata;
 using System;
 
 namespace Mosa.Compiler.Framework.CIL
@@ -21,7 +22,7 @@ namespace Mosa.Compiler.Framework.CIL
 		/// <summary>
 		/// Operand table according to ISO/IEC 23271:2006 (E), Partition III, 1.5, Table 5.
 		/// </summary>
-		private static readonly StackTypeCode[] _opTable = new StackTypeCode[] {
+		private static readonly StackTypeCode[] opTable = new StackTypeCode[] {
 			StackTypeCode.Unknown,
 			StackTypeCode.Int32,
 			StackTypeCode.Int64,
@@ -58,7 +59,7 @@ namespace Mosa.Compiler.Framework.CIL
 			base.Resolve(ctx, compiler);
 
 			// Validate the operand
-			StackTypeCode result = _opTable[(int)ctx.Operand1.StackType];
+			var result = opTable[(int)ctx.Operand1.StackType];
 			if (StackTypeCode.Unknown == result)
 				throw new InvalidOperationException(@"Invalid operand to Not instruction.");
 

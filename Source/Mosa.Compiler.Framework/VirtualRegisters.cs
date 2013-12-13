@@ -71,7 +71,7 @@ namespace Mosa.Compiler.Framework
 
 		public void SplitLongOperand(Operand longOperand, int highOffset, int lowOffset)
 		{
-			Debug.Assert(longOperand.StackType == StackTypeCode.Int64);
+			Debug.Assert(longOperand.Is64BitInteger);
 
 			if (longOperand.Low == null && longOperand.High == null)
 			{

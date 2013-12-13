@@ -1,5 +1,4 @@
-﻿using Mosa.Compiler.Metadata.Loader;
-using Mosa.Compiler.MosaTypeSystem;
+﻿using Mosa.Compiler.MosaTypeSystem;
 using Mosa.Test.Collection.MbUnit;
 using System.IO;
 
@@ -19,7 +18,6 @@ namespace Mosa.Test.Debug
 
 		private static void Test0()
 		{
-
 			var assemblyLoader = new MosaAssemblyLoader();
 
 			assemblyLoader.AddPrivatePath(Directory.GetCurrentDirectory());

@@ -14,7 +14,6 @@ using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Compiler.TypeSystem;
-using Mosa.Compiler.Common;
 using System;
 using System.Diagnostics;
 
@@ -478,9 +477,9 @@ namespace Mosa.Platform.x86.Stages
 
 			X86Instruction instruction = X86.Mov;
 
-			if (result.StackType == StackTypeCode.F)
+			if (result.IsFloatingPoint)
 			{
-				Debug.Assert(operand.StackType == StackTypeCode.F, @"Move can't convert to floating point type.");
+				Debug.Assert(operand.IsFloatingPoint, @"Move can't convert to floating point type.");
 
 				if (result.Type.Type == operand.Type.Type)
 				{
@@ -516,7 +515,7 @@ namespace Mosa.Platform.x86.Stages
 
 			if (context.Operand1 != null)
 			{
-				if (context.Operand1.StackType == StackTypeCode.F)
+				if (context.Operand1.IsFloatingPoint)
 				{
 					// HACK - to support test suit on windows
 					Operand stack = methodCompiler.StackLayout.AddStackLocal(context.Operand1.Type);

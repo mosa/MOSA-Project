@@ -7,6 +7,7 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using Mosa.Compiler.Metadata;
 using System;
 
 namespace Mosa.Compiler.Framework.CIL
@@ -22,7 +23,7 @@ namespace Mosa.Compiler.Framework.CIL
 		/// Holds the typecode validation table from ISO/IEC 23271:2006 (E),
 		/// Partition III, §1.5, Table 3.
 		/// </summary>
-		private static StackTypeCode[] _typeCodes = new StackTypeCode[] {
+		private static StackTypeCode[] typeCodes = new StackTypeCode[] {
 			StackTypeCode.Unknown,
 			StackTypeCode.Int32,
 			StackTypeCode.Int64,
@@ -59,7 +60,7 @@ namespace Mosa.Compiler.Framework.CIL
 			base.Resolve(ctx, compiler);
 
 			// Validate the operand
-			StackTypeCode result = _typeCodes[(int)ctx.Operand1.StackType];
+			var result = typeCodes[(int)ctx.Operand1.StackType];
 			if (StackTypeCode.Unknown == result)
 				throw new InvalidOperationException(@"Invalid operand to Neg instruction [" + result + "]");
 

@@ -11,9 +11,6 @@
 
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Platform;
-using Mosa.Compiler.Metadata;
-using System;
-using System.IO;
 
 namespace Mosa.Platform.x86
 {
@@ -47,16 +44,5 @@ namespace Mosa.Platform.x86
 				return X86.Mov;
 			}
 		}
-
-		/// <summary>
-		/// Determines whether the specified operand is 32 bits.
-		/// </summary>
-		/// <param name="operand">The operand.</param>
-		/// <returns></returns>
-		protected static bool Is32Bit(Operand operand)
-		{
-			return operand.IsInt || operand.IsPointer || operand.IsObject;
-		}
-
 	}
 }
