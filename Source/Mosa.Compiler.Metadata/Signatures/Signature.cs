@@ -5,9 +5,9 @@
  *
  * Authors:
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
 using System.Diagnostics;
 
 namespace Mosa.Compiler.Metadata.Signatures
@@ -41,19 +41,8 @@ namespace Mosa.Compiler.Metadata.Signatures
 		public Signature(IMetadataProvider provider, HeapIndexToken token)
 		{
 			SignatureReader reader = new SignatureReader(provider.ReadBlob(token));
-
-			this.ParseSignature(reader);
-			Debug.Assert(reader.Index == reader.Length, @"Signature parser didn't complete.");
-		}
-
-		/// <summary>
-		/// Loads the signature.
-		/// </summary>
-		/// <param name="signature">The signature.</param>
-		public Signature(Signature signature)
-		{
-			if (signature == null)
-				throw new ArgumentNullException(@"signature");
+			ParseSignature(reader);
+			Debug.Assert(reader.Index == reader.Length, "Signature parser didn't complete.");
 		}
 
 		/// <summary>
@@ -64,9 +53,8 @@ namespace Mosa.Compiler.Metadata.Signatures
 		public void LoadSignature(IMetadataProvider provider, HeapIndexToken token)
 		{
 			SignatureReader reader = new SignatureReader(provider.ReadBlob(token));
-
-			this.ParseSignature(reader);
-			Debug.Assert(reader.Index == reader.Length, @"Signature parser didn't complete.");
+			ParseSignature(reader);
+			Debug.Assert(reader.Index == reader.Length, "Signature parser didn't complete.");
 		}
 
 		/// <summary>
@@ -76,12 +64,23 @@ namespace Mosa.Compiler.Metadata.Signatures
 		protected abstract void ParseSignature(SignatureReader reader);
 
 		/// <summary>
-		/// Froms the member ref signature token.
+		/// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
+		/// </summary>
+		/// <returns>
+		/// A <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
+		/// </returns>
+		public override string ToString()
+		{
+			return "[" + GetType().Name + "]";
+		}
+
+		/// <summary>
+		/// Gets the signature from member reference.
 		/// </summary>
 		/// <param name="provider">The provider.</param>
 		/// <param name="token">The token.</param>
 		/// <returns></returns>
-		public static Signature FromMemberRefSignatureToken(IMetadataProvider provider, HeapIndexToken token)
+		public static Signature GetSignatureFromMemberRef(IMetadataProvider provider, HeapIndexToken token)
 		{
 			SignatureReader reader = new SignatureReader(provider.ReadBlob(token));
 
@@ -92,6 +91,26 @@ namespace Mosa.Compiler.Metadata.Signatures
 			else
 			{
 				return new MethodSignature(reader);
+			}
+		}
+
+		/// <summary>
+		/// Gets the signature from stand along sig.
+		/// </summary>
+		/// <param name="provider">The provider.</param>
+		/// <param name="token">The token.</param>
+		/// <returns></returns>
+		public static Signature GetSignatureFromStandAlongSig(IMetadataProvider provider, HeapIndexToken token)
+		{
+			SignatureReader reader = new SignatureReader(provider.ReadBlob(token));
+
+			if (reader[0] == 0x07)
+			{
+				return new LocalVariableSignature(reader);
+			}
+			else
+			{
+				return new StandAloneMethodSignature(reader);
 			}
 		}
 	}

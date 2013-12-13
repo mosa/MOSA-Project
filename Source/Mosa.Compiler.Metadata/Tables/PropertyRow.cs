@@ -5,6 +5,7 @@
  *
  * Authors:
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 namespace Mosa.Compiler.Metadata.Tables
@@ -12,40 +13,21 @@ namespace Mosa.Compiler.Metadata.Tables
 	/// <summary>
 	///
 	/// </summary>
-	public struct PropertyRow
+	public class PropertyRow
 	{
-		#region Data members
-
-		/// <summary>
-		///
-		/// </summary>
-		private PropertyAttributes _flags;
-
-		/// <summary>
-		///
-		/// </summary>
-		private HeapIndexToken _nameStringIdx;
-
-		/// <summary>
-		///
-		/// </summary>
-		private HeapIndexToken _typeBlobIdx;
-
-		#endregion Data members
-
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="PropertyRow"/> struct.
+		/// Initializes a new instance of the <see cref="PropertyRow" /> struct.
 		/// </summary>
 		/// <param name="flags">The flags.</param>
-		/// <param name="nameStringIdx">The name string idx.</param>
-		/// <param name="typeBlobIdx">The type BLOB idx.</param>
-		public PropertyRow(PropertyAttributes flags, HeapIndexToken nameStringIdx, HeapIndexToken typeBlobIdx)
+		/// <param name="nameString">The name string.</param>
+		/// <param name="typeBlob">The type BLOB.</param>
+		public PropertyRow(PropertyAttributes flags, HeapIndexToken nameString, HeapIndexToken typeBlob)
 		{
-			_flags = flags;
-			_nameStringIdx = nameStringIdx;
-			_typeBlobIdx = typeBlobIdx;
+			Flags = flags;
+			NameString = nameString;
+			TypeBlob = typeBlob;
 		}
 
 		#endregion Construction
@@ -56,28 +38,23 @@ namespace Mosa.Compiler.Metadata.Tables
 		/// Gets the flags.
 		/// </summary>
 		/// <value>The flags.</value>
-		public PropertyAttributes Flags
-		{
-			get { return _flags; }
-		}
+		public PropertyAttributes Flags { get; private set; }
 
 		/// <summary>
-		/// Gets the name string idx.
+		/// Gets the name string.
 		/// </summary>
-		/// <value>The name string idx.</value>
-		public HeapIndexToken NameStringIdx
-		{
-			get { return _nameStringIdx; }
-		}
+		/// <value>
+		/// The name string.
+		/// </value>
+		public HeapIndexToken NameString { get; private set; }
 
 		/// <summary>
-		/// Gets the type BLOB idx.
+		/// Gets the type BLOB.
 		/// </summary>
-		/// <value>The type BLOB idx.</value>
-		public HeapIndexToken TypeBlobIdx
-		{
-			get { return _typeBlobIdx; }
-		}
+		/// <value>
+		/// The type BLOB.
+		/// </value>
+		public HeapIndexToken TypeBlob { get; private set; }
 
 		#endregion Properties
 	}

@@ -17,15 +17,6 @@ namespace Mosa.Compiler.Metadata.Signatures
 	/// </summary>
 	public sealed class RefSigType : SigType
 	{
-		#region Data members
-
-		/// <summary>
-		/// The type referenced by this signature type.
-		/// </summary>
-		private SigType elementType;
-
-		#endregion Data members
-
 		#region Construction
 
 		/// <summary>
@@ -38,7 +29,7 @@ namespace Mosa.Compiler.Metadata.Signatures
 			if (null == type)
 				throw new ArgumentNullException(@"type");
 
-			this.elementType = type;
+			ElementType = type;
 		}
 
 		#endregion Construction
@@ -49,10 +40,7 @@ namespace Mosa.Compiler.Metadata.Signatures
 		/// Gets the type referenced by this signature type.
 		/// </summary>
 		/// <value>The referenced type.</value>
-		public SigType ElementType
-		{
-			get { return this.elementType; }
-		}
+		public SigType ElementType { get; private set; }
 
 		#endregion Properties
 
@@ -71,7 +59,7 @@ namespace Mosa.Compiler.Metadata.Signatures
 			if (null == rst)
 				return false;
 
-			return (base.Equals(other) && this.elementType.Matches(rst.elementType) == true);
+			return (base.Equals(other) && ElementType.Matches(rst.ElementType) == true);
 		}
 
 		/// <summary>
@@ -84,7 +72,7 @@ namespace Mosa.Compiler.Metadata.Signatures
 			RefSigType refOther = other as RefSigType;
 
 			// FIXME: Do we need to consider custom mods here?
-			return (refOther != null && refOther.elementType.Matches(this.ElementType) == true);
+			return (refOther != null && refOther.ElementType.Matches(ElementType));
 		}
 
 		#endregion SigType Overrides
@@ -97,7 +85,7 @@ namespace Mosa.Compiler.Metadata.Signatures
 		{
 			StringBuilder sb = new StringBuilder();
 			sb.Append("ref ");
-			sb.Append(this.ElementType.ToSymbolPart());
+			sb.Append(ElementType.ToSymbolPart());
 			return sb.ToString();
 		}
 	}

@@ -5,6 +5,7 @@
  *
  * Authors:
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 namespace Mosa.Compiler.Metadata.Tables
@@ -12,27 +13,8 @@ namespace Mosa.Compiler.Metadata.Tables
 	/// <summary>
 	///
 	/// </summary>
-	public struct AssemblyOSRow
+	public class AssemblyOSRow
 	{
-		#region Data members
-
-		/// <summary>
-		///
-		/// </summary>
-		private int platformID;
-
-		/// <summary>
-		///
-		/// </summary>
-		private int majorVersion;
-
-		/// <summary>
-		///
-		/// </summary>
-		private int minorVersion;
-
-		#endregion Data members
-
 		#region Construction
 
 		/// <summary>
@@ -43,9 +25,9 @@ namespace Mosa.Compiler.Metadata.Tables
 		/// <param name="minorVersion">The minor version.</param>
 		public AssemblyOSRow(int platformId, int majorVersion, int minorVersion)
 		{
-			this.platformID = platformId;
-			this.majorVersion = majorVersion;
-			this.minorVersion = minorVersion;
+			OSPlatformID = platformId;
+			OSMajorVersion = majorVersion;
+			OSMinorVersion = minorVersion;
 		}
 
 		#endregion Construction
@@ -56,28 +38,19 @@ namespace Mosa.Compiler.Metadata.Tables
 		/// Gets the platform id.
 		/// </summary>
 		/// <value>The platform id.</value>
-		public int OSPlatformID
-		{
-			get { return platformID; }
-		}
+		public int OSPlatformID { get; private set; }
 
 		/// <summary>
 		/// Gets the major version.
 		/// </summary>
 		/// <value>The major version.</value>
-		public int OSMajorVersion
-		{
-			get { return majorVersion; }
-		}
+		public int OSMajorVersion { get; private set; }
 
 		/// <summary>
 		/// Gets the minor version.
 		/// </summary>
 		/// <value>The minor version.</value>
-		public int OSMinorVersion
-		{
-			get { return minorVersion; }
-		}
+		public int OSMinorVersion { get; private set; }
 
 		#endregion Properties
 	}

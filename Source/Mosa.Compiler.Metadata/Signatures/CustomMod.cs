@@ -38,19 +38,6 @@ namespace Mosa.Compiler.Metadata.Signatures
 	/// </summary>
 	public struct CustomMod : IEquatable<CustomMod>
 	{
-		#region Data members
-
-		/// <summary>
-		/// The modifier type of the signature type.
-		/// </summary>
-		private CustomModType _type;
-
-		/// <summary>
-		/// The token of the modifier.
-		/// </summary>
-		private Token _token;
-
-		#endregion Data members
 
 		#region Construction
 
@@ -60,9 +47,10 @@ namespace Mosa.Compiler.Metadata.Signatures
 		/// <param name="type">The modifier type.</param>
 		/// <param name="token">The modifier token type.</param>
 		public CustomMod(CustomModType type, Token token)
+			: this()
 		{
-			_type = type;
-			_token = token;
+			Type = type;
+			Token = token;
 		}
 
 		#endregion Construction
@@ -73,13 +61,13 @@ namespace Mosa.Compiler.Metadata.Signatures
 		/// Gets the custom modifier type.
 		/// </summary>
 		/// <value>The modifier type.</value>
-		public CustomModType Type { get { return _type; } }
+		public CustomModType Type { get; private set; }
 
 		/// <summary>
 		/// Gets the custom modifiers token type.
 		/// </summary>
 		/// <value>The token type.</value>
-		public Token Token { get { return _token; } }
+		public Token Token { get; private set; }
 
 		#endregion Properties
 
@@ -136,7 +124,7 @@ namespace Mosa.Compiler.Metadata.Signatures
 
 		bool IEquatable<CustomMod>.Equals(CustomMod other)
 		{
-			return (_token == other._token && _type == other._type);
+			return (Token == other.Token && Type == other.Type);
 		}
 
 		#endregion IEquatable<CustomMod> Members

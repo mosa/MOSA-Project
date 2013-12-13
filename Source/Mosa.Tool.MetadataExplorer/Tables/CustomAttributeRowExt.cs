@@ -7,10 +7,10 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System.Collections;
-
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Tables;
+using System.Collections;
+using Mosa.Compiler.Metadata.Loader;
 
 namespace Mosa.Tool.MetadataExplorer.Tables
 {
@@ -21,8 +21,8 @@ namespace Mosa.Tool.MetadataExplorer.Tables
 	{
 		protected CustomAttributeRow row;
 
-		public CustomAttributeRowExt(IMetadataProvider metadata, CustomAttributeRow row)
-			: base(metadata)
+		public CustomAttributeRowExt(IMetadataModule metadataModule, CustomAttributeRow row)
+			: base(metadataModule)
 		{
 			this.row = row;
 		}
@@ -31,9 +31,9 @@ namespace Mosa.Tool.MetadataExplorer.Tables
 
 		public override IEnumerable GetValues()
 		{
-			yield return Value("ParentTableIdx", row.Parent);
-			yield return Value("TypeIdx", row.Type);
-			yield return Value("ValueBlobIdx", row.Value);
+			yield return Value("ParentTable #", row.Parent);
+			yield return Value("Type #", row.Type);
+			yield return Value("ValueBlob #", row.Value);
 		}
 	}
 }

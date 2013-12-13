@@ -114,9 +114,9 @@ namespace Mosa.Compiler.Framework.CIL
 				PtrSigType op0 = ctx.Operand1.Type as PtrSigType;
 				PtrSigType op1 = ctx.Operand2.Type as PtrSigType;
 				if (op0 != null)
-					resultType = new PtrSigType(op0.CustomMods, op0.ElementType);
+					resultType = new PtrSigType(op0.ElementType, op0.CustomMods);
 				else if (op1 != null)
-					resultType = new PtrSigType(op1.CustomMods, op1.ElementType);
+					resultType = new PtrSigType(op1.ElementType, op1.CustomMods);
 				else
 					throw new InvalidOperationException();
 			}

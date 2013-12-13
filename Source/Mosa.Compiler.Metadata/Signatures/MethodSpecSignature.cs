@@ -5,9 +5,11 @@
  *
  * Authors:
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 using System;
+using System.Text;
 
 namespace Mosa.Compiler.Metadata.Signatures
 {
@@ -16,11 +18,6 @@ namespace Mosa.Compiler.Metadata.Signatures
 	/// </summary>
 	public class MethodSpecSignature : Signature
 	{
-		/// <summary>
-		///
-		/// </summary>
-		private SigType[] types;
-
 		/// <summary>
 		/// Initializes a new instance of the <see cref="VariableSignature"/> class.
 		/// </summary>
@@ -35,10 +32,7 @@ namespace Mosa.Compiler.Metadata.Signatures
 		/// Gets the types.
 		/// </summary>
 		/// <value>The types.</value>
-		public SigType[] Types
-		{
-			get { return types; }
-		}
+		public SigType[] Types { get; private set; }
 
 		/// <summary>
 		/// Parses the signature.
@@ -50,9 +44,33 @@ namespace Mosa.Compiler.Metadata.Signatures
 				throw new InvalidOperationException(@"Invalid signature.");
 
 			int genArgCount = reader.ReadCompressedInt32();
-			types = new SigType[genArgCount];
+			Types = new SigType[genArgCount];
 			for (int i = 0; i < genArgCount; i++)
-				types[i] = SigType.ParseTypeSignature(reader);
+				Types[i] = SigType.ParseTypeSignature(reader);
+		}
+
+		public override string ToString()
+		{
+			StringBuilder sb = new StringBuilder();
+
+			sb.Append(base.ToString() + " ");
+
+			if (Types.Length != 0)
+			{
+				sb.Append(" [ ");
+
+				foreach (var type in Types)
+				{
+					sb.Append(type.ToString());
+					sb.Append(", ");
+				}
+
+				sb.Length = sb.Length - 2;
+
+				sb.Append(" ]");
+			}
+
+			return sb.ToString();
 		}
 	}
 }

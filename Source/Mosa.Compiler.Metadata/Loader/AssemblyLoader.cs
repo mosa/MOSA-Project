@@ -11,7 +11,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using Mosa.Compiler.Metadata.Loader.PE;
+using Mosa.Compiler.Metadata.Loader;
 
 namespace Mosa.Compiler.Metadata.Loader
 {

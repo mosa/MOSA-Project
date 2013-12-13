@@ -17,30 +17,6 @@ namespace Mosa.Compiler.Metadata.Signatures
 	/// </summary>
 	public sealed class ArraySigType : SigType
 	{
-		#region Data members
-
-		/// <summary>
-		/// The array element type signature.
-		/// </summary>
-		private SigType elementType;
-
-		/// <summary>
-		/// Holds the rank of the array (number of dimensions)
-		/// </summary>
-		private int rank;
-
-		/// <summary>
-		/// Holds the sizes of each rank of the array.
-		/// </summary>
-		private int[] sizes;
-
-		/// <summary>
-		/// Holds the lower bound of each rank of the array.
-		/// </summary>
-		private int[] lowbounds;
-
-		#endregion Data members
-
 		#region Construction
 
 		/// <summary>
@@ -53,13 +29,13 @@ namespace Mosa.Compiler.Metadata.Signatures
 		public ArraySigType(SigType type, int rank, int[] sizes, int[] lowBounds)
 			: base(CilElementType.Array)
 		{
-			if (null == type)
+			if (type == null)
 				throw new ArgumentNullException(@"type");
 
-			this.elementType = type;
-			this.rank = rank;
-			this.sizes = sizes;
-			this.lowbounds = lowBounds;
+			ElementType = type;
+			Rank = rank;
+			Sizes = sizes;
+			LowBounds = lowBounds;
 		}
 
 		#endregion Construction
@@ -70,25 +46,25 @@ namespace Mosa.Compiler.Metadata.Signatures
 		/// Gets the type of the element.
 		/// </summary>
 		/// <value>The type of the element.</value>
-		public SigType ElementType { get { return elementType; } }
+		public SigType ElementType { get; private set; }
 
 		/// <summary>
 		/// Gets the array rank.
 		/// </summary>
 		/// <value>The rank.</value>
-		public int Rank { get { return rank; } }
+		public int Rank { get; private set; }
 
 		/// <summary>
 		/// Gets the sizes of the array ranks.
 		/// </summary>
 		/// <value>The sizes.</value>
-		public int[] Sizes { get { return sizes; } }
+		public int[] Sizes { get; private set; }
 
 		/// <summary>
 		/// Gets the lower bounds of the array ranks.
 		/// </summary>
 		/// <value>The low bounds.</value>
-		public int[] LowBounds { get { return lowbounds; } }
+		public int[] LowBounds { get; private set; }
 
 		#endregion Properties
 
@@ -107,7 +83,7 @@ namespace Mosa.Compiler.Metadata.Signatures
 			if (null == ast)
 				return false;
 
-			return (base.Equals(other) && rank == ast.rank && Equal(sizes, ast.sizes) && Equal(lowbounds, ast.lowbounds));
+			return (base.Equals(other) && Rank == ast.Rank && Equal(Sizes, ast.Sizes) && Equal(LowBounds, ast.LowBounds));
 		}
 
 		/// <summary>
@@ -138,11 +114,11 @@ namespace Mosa.Compiler.Metadata.Signatures
 		public override string ToSymbolPart()
 		{
 			StringBuilder sb = new StringBuilder();
-			sb.Append(this.ElementType.ToSymbolPart());
+			sb.Append(ElementType.ToSymbolPart());
 			sb.Append('[');
 
 			// Don't write a comma for rank 1 on purpose...
-			for (int x = 1; x < this.Rank; x++)
+			for (int x = 1; x < Rank; x++)
 			{
 				sb.Append(',');
 			}

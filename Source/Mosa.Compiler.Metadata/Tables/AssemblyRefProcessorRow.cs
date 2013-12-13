@@ -5,6 +5,7 @@
  *
  * Authors:
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 namespace Mosa.Compiler.Metadata.Tables
@@ -12,22 +13,8 @@ namespace Mosa.Compiler.Metadata.Tables
 	/// <summary>
 	///
 	/// </summary>
-	public struct AssemblyRefProcessorRow
+	public class AssemblyRefProcessorRow
 	{
-		#region Data members
-
-		/// <summary>
-		///
-		/// </summary>
-		private uint processor;
-
-		/// <summary>
-		///
-		/// </summary>
-		private Token assemblyRef;
-
-		#endregion Data members
-
 		#region Construction
 
 		/// <summary>
@@ -37,8 +24,8 @@ namespace Mosa.Compiler.Metadata.Tables
 		/// <param name="assemblyRef">The assembly ref.</param>
 		public AssemblyRefProcessorRow(uint processor, Token assemblyRef)
 		{
-			this.processor = processor;
-			this.assemblyRef = assemblyRef;
+			Processor = processor;
+			AssemblyRef = assemblyRef;
 		}
 
 		#endregion Construction
@@ -49,19 +36,13 @@ namespace Mosa.Compiler.Metadata.Tables
 		/// Gets the processor.
 		/// </summary>
 		/// <value>The processor.</value>
-		public uint Processor
-		{
-			get { return processor; }
-		}
+		public uint Processor { get; private set; }
 
 		/// <summary>
 		/// Gets the assembly ref.
 		/// </summary>
 		/// <value>The assembly ref.</value>
-		public Token AssemblyRef
-		{
-			get { return assemblyRef; }
-		}
+		public Token AssemblyRef { get; private set; }
 
 		#endregion Properties
 	}

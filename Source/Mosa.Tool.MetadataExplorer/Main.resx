@@ -120,10 +120,28 @@
   <metadata name="statusStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>150, 17</value>
   </metadata>
-  <metadata name="menuStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>266, 17</value>
-  </metadata>
   <metadata name="openFileDialog.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
+  </metadata>
+  <metadata name="toolStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>486, 17</value>
+  </metadata>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="toolStripButton1.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
+        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAHTSURBVDhPlZLPT9pgHMb7r7ijFqwQ9id43txpiWZuyQ5b
+        pgJODzuZnYyRuLjDNHO/ook/ooclEmwpiYmIIIIisU1NzKbYTKQHDoQFBjy+fXmZgCbiJ3mS9k2fT99+
+        33I1Ho4G4BgRf7Pb+2N/K6N3LoEul7TAlu6H4Pbj55GBd0tJkOt5ttw6nS4Ja4cZTPgUjM7H0D4okYgs
+        EiwuGVYSwS3DNizDMRxYYtUqpmA1cYm+zzsYW9lFRv+FekJbm4gkNcz4jzAnJ6iEVasIRLAYT+PZlzAe
+        TfiwH40gm82iXC5TQXB7G5n0BRbECD6sx+hOWLWK4PLje/QP+r+G8XhyAwexKFKpFCqVCo2iqCgWizAu
+        0wjuq+hsFnSRIc6GdDxngkQ8ClVV6dtru9A0DV6vF5+mPbC6AzcFH7fOGwSKoiCXy1FBqVSiO6nRMSTd
+        FHg2U0QQaRAYhvFfUIuJeTqsWsVGBOOBU7z4di0wP0HX9dYEdqdXfzobx8sfu+hpEhQKhbsFBIswsH7W
+        MxXEE0+jIJ/PtyQw4W1vfOfd70UcJ/dweqIha1wA//7SUj188xDr4PlXKxtWcs6800+n3fhbi7Rseb0s
+        sudvpY3EfkcecBzHXQG9ZfTTO7satQAAAABJRU5ErkJggg==
+</value>
+  </data>
+  <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>34</value>
   </metadata>
 </root>

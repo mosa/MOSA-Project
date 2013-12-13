@@ -7,10 +7,11 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System.Collections;
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Compiler.Metadata.Tables;
+using System.Collections;
+using Mosa.Compiler.Metadata.Loader;
 
 namespace Mosa.Tool.MetadataExplorer.Tables
 {
@@ -21,22 +22,18 @@ namespace Mosa.Tool.MetadataExplorer.Tables
 	{
 		protected TypeSpecRow row;
 
-		public TypeSpecRowExt(IMetadataProvider metadata, TypeSpecRow row)
-			: base(metadata)
+		public TypeSpecRowExt(IMetadataModule metadataModule, TypeSpecRow row)
+			: base(metadataModule)
 		{
 			this.row = row;
 		}
 
-		public override string Name { get { return row.SignatureBlobIdx.FormatToString(); } }
+		public override string Name { get { return row.SignatureBlob.FormatToString(); } }
 
 		public override IEnumerable GetValues()
 		{
-			yield return Value("SignatureBlobIdx", row.SignatureBlobIdx);
-
-			TypeSpecSignature signature = new TypeSpecSignature(Metadata, row.SignatureBlobIdx);
-
-			//yield return Value("Signature Token", signature.Token);
-			yield return Value("Signature Type", signature.Type.ToString());
+			TypeSpecSignature signature = new TypeSpecSignature(Metadata, row.SignatureBlob);
+			yield return Value("Signature", signature.ToString());
 		}
 	}
 }

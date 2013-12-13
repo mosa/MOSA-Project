@@ -5,17 +5,18 @@
  *
  * Authors:
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.CIL;
 using Mosa.Compiler.Framework.IR;
+using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Compiler.Metadata.Tables;
 using Mosa.Compiler.TypeSystem;
 using Mosa.Compiler.TypeSystem.Cil;
-using Mosa.Compiler.Framework.Linker;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -77,13 +78,18 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				using (codeReader = new EndianAwareBinaryReader(code, Endianness.Little))
 				{
-					MethodHeader header = ReadMethodHeader(codeReader);
+					MethodHeader header = new MethodHeader(codeReader);
 
-					if (header.LocalsSignature.RID != 0)
+					foreach (var clause in header.Clauses)
 					{
-						StandAloneSigRow row = methodCompiler.Method.Module.MetadataModule.Metadata.ReadStandAloneSigRow(header.LocalsSignature);
+						methodCompiler.ExceptionHandlingClauses.Add(clause);
+					}
 
-						LocalVariableSignature localsSignature = new LocalVariableSignature(methodCompiler.Method.Module.MetadataModule.Metadata, row.SignatureBlobIdx);
+					if (header.LocalVarSigTok.RID != 0)
+					{
+						StandAloneSigRow row = methodCompiler.Method.Module.MetadataModule.Metadata.ReadStandAloneSigRow(header.LocalVarSigTok);
+
+						LocalVariableSignature localsSignature = new LocalVariableSignature(methodCompiler.Method.Module.MetadataModule.Metadata, row.SignatureBlob);
 
 						SigType[] localSigTypes = new SigType[localsSignature.Locals.Length];
 
@@ -110,98 +116,6 @@ namespace Mosa.Compiler.Framework.Stages
 		#endregion IMethodCompilerStage Members
 
 		#region Internals
-
-		/// <summary>
-		/// Reads the method header from the instruction stream.
-		/// </summary>
-		/// <param name="reader">The reader used to decode the instruction stream.</param>
-		/// <returns></returns>
-		private MethodHeader ReadMethodHeader(EndianAwareBinaryReader reader)
-		{
-			MethodHeader header = new MethodHeader();
-
-			// Read first byte
-			header.Flags = (MethodFlags)reader.ReadByte();
-
-			// Check least significant 2 bits
-			switch (header.Flags & MethodFlags.HeaderMask)
-			{
-				case MethodFlags.TinyFormat:
-					header.CodeSize = ((uint)(header.Flags & MethodFlags.TinyCodeSizeMask) >> 2);
-					header.Flags &= MethodFlags.HeaderMask;
-					break;
-
-				case MethodFlags.FatFormat:
-
-					// Read second byte of flags
-					header.Flags = (MethodFlags)(reader.ReadByte() << 8 | (byte)header.Flags);
-					if (MethodFlags.ValidHeader != (header.Flags & MethodFlags.HeaderSizeMask))
-						throw new InvalidDataException(@"Invalid method header.");
-					header.MaxStack = reader.ReadUInt16();
-					header.CodeSize = reader.ReadUInt32();
-					header.LocalsSignature = new Token(reader.ReadUInt32()); // ReadStandAloneSigRow
-					break;
-
-				default:
-					throw new InvalidDataException(@"Invalid method header while trying to decode " + this.methodCompiler.Method.FullName + ". (Flags = " + header.Flags.ToString("X") + ", Rva = " + this.methodCompiler.Method.Rva + ")");
-			}
-
-			// Are there sections following the code?
-			if (MethodFlags.MoreSections != (header.Flags & MethodFlags.MoreSections))
-				return header;
-
-			// Yes, seek to them and process those sections
-			long codepos = reader.BaseStream.Position;
-
-			// Seek to the end of the code...
-			long dataSectPos = codepos + header.CodeSize;
-			if (0 != (dataSectPos & 3))
-				dataSectPos += (4 - (dataSectPos % 4));
-			reader.BaseStream.Position = dataSectPos;
-
-			// Read all headers, so the IL decoder knows how to handle these...
-			byte flags;
-
-			do
-			{
-				flags = reader.ReadByte();
-				bool isFat = (0x40 == (flags & 0x40));
-				int length;
-				int blocks;
-				if (isFat)
-				{
-					byte a = reader.ReadByte();
-					byte b = reader.ReadByte();
-					byte c = reader.ReadByte();
-
-					length = (c << 24) | (b << 16) | a;
-					blocks = (length - 4) / 24;
-				}
-				else
-				{
-					length = reader.ReadByte();
-					blocks = (length - 4) / 12;
-
-					/* Read & skip the padding. */
-					reader.ReadInt16();
-				}
-
-				Debug.Assert(0x01 == (flags & 0x3F), @"Unsupported method data section.");
-
-				// Read the clause
-				for (int i = 0; i < blocks; i++)
-				{
-					ExceptionHandlingClause clause = new ExceptionHandlingClause();
-					clause.Read(reader, isFat);
-					methodCompiler.ExceptionClauseHeader.AddClause(clause);
-				}
-			}
-			while (0x80 == (flags & 0x80));
-
-			reader.BaseStream.Position = codepos;
-
-			return header;
-		}
 
 		/// <summary>
 		/// Decodes the instruction stream of the reader and populates the compiler.

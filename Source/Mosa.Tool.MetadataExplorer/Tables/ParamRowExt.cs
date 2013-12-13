@@ -7,10 +7,10 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System.Collections;
-
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Tables;
+using System.Collections;
+using Mosa.Compiler.Metadata.Loader;
 
 namespace Mosa.Tool.MetadataExplorer.Tables
 {
@@ -21,19 +21,18 @@ namespace Mosa.Tool.MetadataExplorer.Tables
 	{
 		protected ParamRow row;
 
-		public ParamRowExt(IMetadataProvider metadata, ParamRow row)
-			: base(metadata)
+		public ParamRowExt(IMetadataModule metadataModule, ParamRow row)
+			: base(metadataModule)
 		{
 			this.row = row;
 		}
 
-		public override string Name { get { return Metadata.ReadString(row.NameIdx); } }
+		public override string Name { get { return Metadata.ReadString(row.Name); } }
 
 		public override IEnumerable GetValues()
 		{
-			yield return TokenString("Name", row.NameIdx);
-			yield return Value("NameIdx", row.NameIdx);
-			yield return Value("NameIdx", row.Flags.ToString());
+			yield return TokenString("Name", row.Name);
+			yield return Value("Flags", row.Flags.ToString());
 			yield return Value("Sequence", row.Sequence.ToString());
 		}
 	}

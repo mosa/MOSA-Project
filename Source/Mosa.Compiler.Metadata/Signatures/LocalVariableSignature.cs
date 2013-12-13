@@ -5,9 +5,11 @@
  *
  * Authors:
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 using System;
+using System.Text;
 
 namespace Mosa.Compiler.Metadata.Signatures
 {
@@ -16,15 +18,6 @@ namespace Mosa.Compiler.Metadata.Signatures
 	/// </summary>
 	public class LocalVariableSignature : Signature
 	{
-		/// <summary>
-		/// Holds the signature types of all local variables in order of definition.
-		/// </summary>
-		private VariableSignature[] locals;
-
-		/// <summary>
-		/// A shared empty array for those signatures, who do not have local variables.
-		/// </summary>
-		private static VariableSignature[] Empty = new VariableSignature[0];
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="LocalVariableSignature" /> class.
@@ -46,21 +39,10 @@ namespace Mosa.Compiler.Metadata.Signatures
 		}
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="LocalVariableSignature" /> class.
-		/// </summary>
-		public LocalVariableSignature()
-		{
-			this.locals = LocalVariableSignature.Empty;
-		}
-
-		/// <summary>
-		/// Gets the types.
+		/// Holds the signature types of all local variables in order of definition.
 		/// </summary>
 		/// <value>The types.</value>
-		public VariableSignature[] Locals
-		{
-			get { return this.locals; }
-		}
+		public VariableSignature[] Locals { get; private set; }
 
 		/// <summary>
 		/// Parses the signature.
@@ -70,18 +52,43 @@ namespace Mosa.Compiler.Metadata.Signatures
 		{
 			// Check signature identifier
 			if (reader.ReadByte() != 0x07)
-				throw new ArgumentException(@"Token doesn't represent a local variable signature.", @"token");
+				throw new ArgumentException("Token doesn't represent a local variable signature.", "token");
 
 			// Retrieve the number of locals
 			int count = reader.ReadCompressedInt32();
 			if (count != 0)
 			{
-				this.locals = new VariableSignature[count];
+				Locals = new VariableSignature[count];
 				for (int i = 0; i < count; i++)
 				{
-					locals[i] = new VariableSignature(reader);
+					Locals[i] = new VariableSignature(reader);
 				}
 			}
+		}
+
+		public override string ToString()
+		{
+			StringBuilder sb = new StringBuilder();
+
+			sb.Append(base.ToString());
+			sb.Append(' ');
+
+			if (Locals.Length != 0)
+			{
+				sb.Append(" [ ");
+
+				foreach (var local in Locals)
+				{
+					sb.Append(local.ToString());
+					sb.Append(", ");
+				}
+
+				sb.Length = sb.Length - 2;
+
+				sb.Append(" ]");
+			}
+
+			return sb.ToString();
 		}
 	}
 }

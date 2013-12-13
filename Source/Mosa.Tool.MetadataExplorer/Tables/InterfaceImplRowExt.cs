@@ -7,10 +7,10 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System.Collections;
-
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Tables;
+using System.Collections;
+using Mosa.Compiler.Metadata.Loader;
 
 namespace Mosa.Tool.MetadataExplorer.Tables
 {
@@ -21,8 +21,8 @@ namespace Mosa.Tool.MetadataExplorer.Tables
 	{
 		protected InterfaceImplRow row;
 
-		public InterfaceImplRowExt(IMetadataProvider metadata, InterfaceImplRow row)
-			: base(metadata)
+		public InterfaceImplRowExt(IMetadataModule metadataModule, InterfaceImplRow row)
+			: base(metadataModule)
 		{
 			this.row = row;
 		}
@@ -31,8 +31,8 @@ namespace Mosa.Tool.MetadataExplorer.Tables
 
 		public override IEnumerable GetValues()
 		{
-			yield return Value("ClassTableIdx", row.Class);
-			yield return Value("InterfaceTableIdx", row.Interface);
+			yield return Value("ClassTable #", row.Class);
+			yield return Value("InterfaceTable #", row.Interface);
 		}
 	}
 }

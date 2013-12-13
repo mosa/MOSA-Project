@@ -7,23 +7,24 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using Mosa.Compiler.Metadata;
 using System.Collections;
 using System.Collections.Generic;
-using Mosa.Compiler.Metadata;
+using Mosa.Compiler.Metadata.Loader;
 
 namespace Mosa.Tool.MetadataExplorer.Tables
 {
 	public abstract class TableRow
 	{
-		private IMetadataProvider metadata;
+		public IMetadataModule MetadataModule { get; private set; }
 
 		public abstract string Name { get; }
 
-		public IMetadataProvider Metadata { get { return metadata; } }
+		public IMetadataProvider Metadata { get { return MetadataModule.Metadata; } }
 
-		public TableRow(IMetadataProvider metadata)
+		public TableRow(IMetadataModule metadataModule)
 		{
-			this.metadata = metadata;
+			MetadataModule = metadataModule;
 		}
 
 		public abstract IEnumerable GetValues();
@@ -55,7 +56,7 @@ namespace Mosa.Tool.MetadataExplorer.Tables
 
 		private string ReadString(HeapIndexToken token)
 		{
-			return metadata.ReadString(token);
+			return Metadata.ReadString(token);
 		}
 	}
 }

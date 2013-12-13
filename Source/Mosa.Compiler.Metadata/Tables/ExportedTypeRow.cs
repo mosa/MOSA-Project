@@ -5,6 +5,7 @@
  *
  * Authors:
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 namespace Mosa.Compiler.Metadata.Tables
@@ -12,37 +13,8 @@ namespace Mosa.Compiler.Metadata.Tables
 	/// <summary>
 	///
 	/// </summary>
-	public struct ExportedTypeRow
+	public class ExportedTypeRow
 	{
-		#region Data members
-
-		/// <summary>
-		///
-		/// </summary>
-		private TypeAttributes flags;
-
-		/// <summary>
-		///
-		/// </summary>
-		private HeapIndexToken typeDef;
-
-		/// <summary>
-		///
-		/// </summary>
-		private HeapIndexToken typeName;
-
-		/// <summary>
-		///
-		/// </summary>
-		private HeapIndexToken typeNamespace;
-
-		/// <summary>
-		///
-		/// </summary>
-		private Token implementation;
-
-		#endregion Data members
-
 		#region Construction
 
 		/// <summary>
@@ -56,11 +28,11 @@ namespace Mosa.Compiler.Metadata.Tables
 		public ExportedTypeRow(TypeAttributes flags, HeapIndexToken typeDef, HeapIndexToken typeName,
 								HeapIndexToken typeNamespace, Token implementation)
 		{
-			this.flags = flags;
-			this.typeDef = typeDef;
-			this.typeName = typeName;
-			this.typeNamespace = typeNamespace;
-			this.implementation = implementation;
+			Flags = flags;
+			TypeDef = typeDef;
+			TypeName = typeName;
+			TypeNamespace = typeNamespace;
+			Implementation = implementation;
 		}
 
 		#endregion Construction
@@ -71,46 +43,31 @@ namespace Mosa.Compiler.Metadata.Tables
 		/// Gets the flags.
 		/// </summary>
 		/// <value>The flags.</value>
-		public TypeAttributes Flags
-		{
-			get { return flags; }
-		}
+		public TypeAttributes Flags { get; private set; }
 
 		/// <summary>
 		/// Gets the type def.
 		/// </summary>
 		/// <value>The type def.</value>
-		public HeapIndexToken TypeDef
-		{
-			get { return typeDef; }
-		}
+		public HeapIndexToken TypeDef { get; private set; }
 
 		/// <summary>
 		/// Gets the name of the type.
 		/// </summary>
 		/// <value>The name of the type.</value>
-		public HeapIndexToken TypeName
-		{
-			get { return typeName; }
-		}
+		public HeapIndexToken TypeName { get; private set; }
 
 		/// <summary>
 		/// Gets the type namespace.
 		/// </summary>
 		/// <value>The type namespace.</value>
-		public HeapIndexToken TypeNamespace
-		{
-			get { return typeNamespace; }
-		}
+		public HeapIndexToken TypeNamespace { get; private set; }
 
 		/// <summary>
 		/// Gets the implementation.
 		/// </summary>
 		/// <value>The implementation.</value>
-		public Token Implementation
-		{
-			get { return implementation; }
-		}
+		public Token Implementation { get; private set; }
 
 		#endregion Properties
 	}

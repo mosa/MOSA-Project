@@ -8,12 +8,11 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
-using System.Collections.Generic;
-
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Compiler.TypeSystem.Cil;
+using System;
+using System.Collections.Generic;
 
 namespace Mosa.Compiler.TypeSystem
 {
@@ -227,7 +226,7 @@ namespace Mosa.Compiler.TypeSystem
 			if (token.Table == TableType.TypeSpec)
 			{
 				var typespecRow = typemodule.MetadataModule.Metadata.ReadTypeSpecRow(token);
-				var signature = new TypeSpecSignature(typemodule.MetadataModule.Metadata, typespecRow.SignatureBlobIdx);
+				var signature = new TypeSpecSignature(typemodule.MetadataModule.Metadata, typespecRow.SignatureBlob);
 
 				if (enclosingType is CilGenericType)
 				{
@@ -279,7 +278,7 @@ namespace Mosa.Compiler.TypeSystem
 		/// <param name="enclosingType">Type of the enclosing.</param>
 		/// <param name="openType">Type of the open.</param>
 		/// <returns></returns>
-		public SigType[] CloseGenericArguments(SigType[] enclosingType, SigType[] openType)
+		private SigType[] CloseGenericArguments(SigType[] enclosingType, SigType[] openType)
 		{
 			var result = new SigType[openType.Length];
 

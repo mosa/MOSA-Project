@@ -156,7 +156,6 @@
     <Compile Include="IR\ExceptionPrologue.cs" />
     <Compile Include="Stages\MetadataStage.cs" />
     <Compile Include="Stages\EnterSSAStage.cs" />
-    <Compile Include="ExceptionClauseHeader.cs" />
     <Compile Include="InstructionLogger.cs" />
     <Compile Include="Stages\LeaveSSAStage.cs" />
     <Compile Include="Stages\OperandAssignmentStage.cs" />
@@ -191,8 +190,6 @@
     <Compile Include="CIL\ConstrainedPrefixInstruction.cs" />
     <Compile Include="CIL\ConversionInstruction.cs" />
     <Compile Include="CIL\CILInstruction.cs" />
-    <Compile Include="CIL\MethodFlags.cs" />
-    <Compile Include="CIL\MethodHeader.cs" />
     <Compile Include="CIL\StoreInstruction.cs" />
     <Compile Include="CIL\ICILVisitor.cs" />
     <Compile Include="CIL\Prefix.cs" />
@@ -200,7 +197,6 @@
     <Compile Include="CIL\CpobjInstruction.cs" />
     <Compile Include="CIL\DivInstruction.cs" />
     <Compile Include="CIL\DupInstruction.cs" />
-    <Compile Include="ExceptionHandlingClause.cs" />
     <Compile Include="CIL\EndFilterInstruction.cs" />
     <Compile Include="CIL\EndFinallyInstruction.cs" />
     <Compile Include="CIL\IBranchInstruction.cs" />

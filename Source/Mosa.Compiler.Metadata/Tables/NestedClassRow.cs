@@ -5,6 +5,7 @@
  *
  * Authors:
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 namespace Mosa.Compiler.Metadata.Tables
@@ -12,33 +13,19 @@ namespace Mosa.Compiler.Metadata.Tables
 	/// <summary>
 	///
 	/// </summary>
-	public struct NestedClassRow
+	public class NestedClassRow
 	{
-		#region Data members
-
-		/// <summary>
-		///
-		/// </summary>
-		private Token nestedClass;
-
-		/// <summary>
-		///
-		/// </summary>
-		private Token enclosingClass;
-
-		#endregion Data members
-
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="NestedClassRow"/> struct.
+		/// Initializes a new instance of the <see cref="NestedClassRow" /> struct.
 		/// </summary>
-		/// <param name="nestedClassTableIdx">The nested class table idx.</param>
-		/// <param name="enclosingClassTableIdx">The enclosing class table idx.</param>
+		/// <param name="nestedClass">The nested class.</param>
+		/// <param name="enclosingClass">The enclosing class.</param>
 		public NestedClassRow(Token nestedClass, Token enclosingClass)
 		{
-			this.nestedClass = nestedClass;
-			this.enclosingClass = enclosingClass;
+			NestedClass = nestedClass;
+			EnclosingClass = enclosingClass;
 		}
 
 		#endregion Construction
@@ -49,19 +36,13 @@ namespace Mosa.Compiler.Metadata.Tables
 		/// Gets the nested class.
 		/// </summary>
 		/// <value>The nested class.</value>
-		public Token NestedClass
-		{
-			get { return nestedClass; }
-		}
+		public Token NestedClass { get; private set; }
 
 		/// <summary>
 		/// Gets the enclosing class.
 		/// </summary>
 		/// <value>The enclosing class .</value>
-		public Token EnclosingClass
-		{
-			get { return enclosingClass; }
-		}
+		public Token EnclosingClass { get; private set; }
 
 		#endregion Properties
 	}

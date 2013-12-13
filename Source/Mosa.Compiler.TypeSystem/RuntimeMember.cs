@@ -8,7 +8,6 @@
  */
 
 using Mosa.Compiler.Metadata;
-using System;
 using System.Collections.Generic;
 
 namespace Mosa.Compiler.TypeSystem
@@ -50,7 +49,7 @@ namespace Mosa.Compiler.TypeSystem
 		{
 			this.declaringType = declaringType;
 			this.attributes = new List<RuntimeAttribute>();
-			this.name = name;		
+			this.name = name;
 		}
 
 		#endregion Construction
@@ -102,8 +101,8 @@ namespace Mosa.Compiler.TypeSystem
 			{
 				foreach (var attribute in this.attributes)
 				{
-					if (attribute.Type.Equals(attributeType) == true ||
-						attribute.Type.IsSubclassOf(attributeType) == true)
+					if (attribute.CtorMethod.DeclaringType.Equals(attributeType) == true ||
+						attribute.CtorMethod.DeclaringType.IsSubclassOf(attributeType) == true)
 					{
 						result = true;
 						break;

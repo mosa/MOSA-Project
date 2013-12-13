@@ -5,51 +5,16 @@
  *
  * Authors:
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
-
-//using System.Reflection;
 
 namespace Mosa.Compiler.Metadata.Tables
 {
 	/// <summary>
 	///
 	/// </summary>
-	public struct MethodDefRow
+	public class MethodDefRow
 	{
-		#region Data members
-
-		/// <summary>
-		///
-		/// </summary>
-		private uint _rva;
-
-		/// <summary>
-		///
-		/// </summary>
-		private MethodImplAttributes _implFlags;
-
-		/// <summary>
-		///
-		/// </summary>
-		private MethodAttributes _flags;
-
-		/// <summary>
-		///
-		/// </summary>
-		private HeapIndexToken _nameStringIdx;
-
-		/// <summary>
-		///
-		/// </summary>
-		private HeapIndexToken _signatureBlobIdx;
-
-		/// <summary>
-		///
-		/// </summary>
-		private Token _paramList;
-
-		#endregion Data members
-
 		#region Construction
 
 		/// <summary>
@@ -58,18 +23,16 @@ namespace Mosa.Compiler.Metadata.Tables
 		/// <param name="rva">The rva.</param>
 		/// <param name="implFlags">The impl flags.</param>
 		/// <param name="flags">The flags.</param>
-		/// <param name="nameStringIdx">The name string idx.</param>
-		/// <param name="signatureBlobIdx">The signature BLOB idx.</param>
 		/// <param name="paramList">The param list.</param>
-		public MethodDefRow(uint rva, MethodImplAttributes implFlags, MethodAttributes flags, HeapIndexToken nameStringIdx,
-								HeapIndexToken signatureBlobIdx, Token paramList)
+		public MethodDefRow(uint rva, MethodImplAttributes implFlags, MethodAttributes flags, HeapIndexToken nameString,
+								HeapIndexToken signatureBlob, Token paramList)
 		{
-			this._rva = rva;
-			this._implFlags = implFlags;
-			this._flags = flags;
-			this._nameStringIdx = nameStringIdx;
-			this._signatureBlobIdx = signatureBlobIdx;
-			this._paramList = paramList;
+			Rva = rva;
+			ImplFlags = implFlags;
+			Flags = flags;
+			NameString = nameString;
+			SignatureBlob = signatureBlob;
+			ParamList = paramList;
 		}
 
 		#endregion Construction
@@ -80,55 +43,41 @@ namespace Mosa.Compiler.Metadata.Tables
 		/// Gets the rva.
 		/// </summary>
 		/// <value>The rva.</value>
-		public uint Rva
-		{
-			get { return _rva; }
-		}
+		public uint Rva { get; private set; }
 
 		/// <summary>
 		/// Gets the impl flags.
 		/// </summary>
 		/// <value>The impl flags.</value>
-		public MethodImplAttributes ImplFlags
-		{
-			get { return _implFlags; }
-		}
+		public MethodImplAttributes ImplFlags { get; private set; }
 
 		/// <summary>
 		/// Gets the flags.
 		/// </summary>
 		/// <value>The flags.</value>
-		public MethodAttributes Flags
-		{
-			get { return _flags; }
-		}
+		public MethodAttributes Flags { get; private set; }
 
 		/// <summary>
-		/// Gets the name string idx.
+		/// Gets the name string.
 		/// </summary>
-		/// <value>The name string idx.</value>
-		public HeapIndexToken NameStringIdx
-		{
-			get { return _nameStringIdx; }
-		}
+		/// <value>
+		/// The name string.
+		/// </value>
+		public HeapIndexToken NameString { get; private set; }
 
 		/// <summary>
-		/// Gets the signature BLOB idx.
+		/// Gets the signature BLOB.
 		/// </summary>
-		/// <value>The signature BLOB idx.</value>
-		public HeapIndexToken SignatureBlobIdx
-		{
-			get { return _signatureBlobIdx; }
-		}
+		/// <value>
+		/// The signature BLOB.
+		/// </value>
+		public HeapIndexToken SignatureBlob { get; private set; }
 
 		/// <summary>
 		/// Gets the param list.
 		/// </summary>
 		/// <value>The param list.</value>
-		public Token ParamList
-		{
-			get { return _paramList; }
-		}
+		public Token ParamList { get; private set; }
 
 		#endregion Properties
 	}

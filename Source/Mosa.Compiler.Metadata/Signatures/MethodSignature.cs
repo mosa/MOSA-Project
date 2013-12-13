@@ -5,9 +5,11 @@
  *
  * Authors:
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 using System;
+using System.Text;
 
 namespace Mosa.Compiler.Metadata.Signatures
 {
@@ -16,197 +18,7 @@ namespace Mosa.Compiler.Metadata.Signatures
 	/// </summary>
 	public class MethodSignature : Signature
 	{
-		/// <summary>
-		///
-		/// </summary>
-		//private CallingConvention callingConvention;
-		private MethodCallingConvention methodCallingConvention;
-
-		/// <summary>
-		///
-		/// </summary>
-		private int genericParameterCount;
-
-		/// <summary>
-		///
-		/// </summary>
-		private bool hasExplicitThis;
-
-		/// <summary>
-		///
-		/// </summary>
-		private bool hasThis;
-
-		/// <summary>
-		///
-		/// </summary>
-		private SigType[] parameters;
-
-		/// <summary>
-		///
-		/// </summary>
-		private SigType returnType;
-
-		/// <summary>
-		/// Gets the calling convention.
-		/// </summary>
-		/// <value>The calling convention.</value>
-		public MethodCallingConvention MethodCallingConvention
-		{
-			get { return methodCallingConvention; }
-			protected set { methodCallingConvention = value; }
-		}
-
-		/// <summary>
-		/// Gets the generic parameter count.
-		/// </summary>
-		/// <value>The generic parameter count.</value>
-		public int GenericParameterCount
-		{
-			get { return genericParameterCount; }
-		}
-
-		/// <summary>
-		/// Gets a value indicating whether this instance has explicit this.
-		/// </summary>
-		/// <value>
-		/// 	<c>true</c> if this instance has explicit this; otherwise, <c>false</c>.
-		/// </value>
-		public bool HasExplicitThis
-		{
-			get { return hasExplicitThis; }
-			protected set { hasExplicitThis = value; }
-		}
-
-		/// <summary>
-		/// Gets a value indicating whether this instance has this.
-		/// </summary>
-		/// <value><c>true</c> if this instance has this; otherwise, <c>false</c>.</value>
-		public bool HasThis
-		{
-			get { return hasThis; }
-			protected set { hasThis = value; }
-		}
-
-		/// <summary>
-		/// Gets the parameters.
-		/// </summary>
-		/// <value>The parameters.</value>
-		public SigType[] Parameters
-		{
-			get { return parameters; }
-		}
-
-		/// <summary>
-		/// Gets the type of the return.
-		/// </summary>
-		/// <value>The type of the return.</value>
-		public SigType ReturnType
-		{
-			get { return returnType; }
-		}
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="MethodSignature"/> class.
-		/// </summary>
-		/// <param name="reader">The reader.</param>
-		public MethodSignature(SignatureReader reader)
-			: base(reader)
-		{
-		}
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="MethodSignature"/> class.
-		/// </summary>
-		/// <param name="provider">The provider.</param>
-		/// <param name="token">The token.</param>
-		public MethodSignature(IMetadataProvider provider, HeapIndexToken token)
-			: base(provider, token)
-		{
-		}
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="MethodSignature"/> class.
-		/// </summary>
-		/// <param name="returnType">Type of the return value.</param>
-		/// <param name="parameters">The parameter types.</param>
-		public MethodSignature(SigType returnType, SigType[] parameters)
-		{
-			if (returnType == null)
-				throw new ArgumentNullException(@"returnType");
-			if (parameters == null)
-				throw new ArgumentNullException(@"parameters");
-
-			this.methodCallingConvention = MethodCallingConvention.Default;
-			this.hasExplicitThis = false;
-			this.hasThis = false;
-			this.parameters = parameters;
-			this.returnType = returnType;
-			this.genericParameterCount = 0;
-		}
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="MethodSignature"/> class.
-		/// </summary>
-		/// <param name="signature">The signature.</param>
-		public MethodSignature(MethodSignature signature)
-			: base(signature)
-		{
-			this.methodCallingConvention = signature.methodCallingConvention;
-			this.hasExplicitThis = signature.hasExplicitThis;
-			this.hasThis = signature.hasThis;
-			this.returnType = signature.returnType;
-			this.genericParameterCount = signature.genericParameterCount;
-
-			this.parameters = new SigType[signature.parameters.Length];
-			for (int i = 0; i < signature.parameters.Length; i++)
-				this.parameters[i] = signature.parameters[i];
-		}
-
-		/// <summary>
-		/// Parses the signature.
-		/// </summary>
-		/// <param name="reader">The reader.</param>
-		protected sealed override void ParseSignature(SignatureReader reader)
-		{
-			byte value = reader.ReadByte();
-
-			// Check for instance signature
-			if (HAS_THIS == (value & HAS_THIS))
-			{
-				hasThis = true;
-			}
-
-			if (HAS_EXPLICIT_THIS == (value & HAS_EXPLICIT_THIS))
-			{
-				hasExplicitThis = true;
-			}
-
-			if (GENERIC == (value & GENERIC))
-			{
-				methodCallingConvention = MethodCallingConvention.Generic;
-				genericParameterCount = reader.ReadCompressedInt32();
-			}
-			else if (VARARG == (value & VARARG))
-			{
-				methodCallingConvention = MethodCallingConvention.VarArg;
-			}
-			else if ((value & 0x1F) != 0x00)
-			{
-				throw new InvalidOperationException(@"Invalid method definition signature.");
-			}
-
-			// Number of parameters
-			int paramCount = reader.ReadCompressedInt32();
-			parameters = new SigType[paramCount];
-
-			// Read the return type
-			returnType = SigType.ParseTypeSignature(reader);
-
-			// Read all parameters
-			for (int i = 0; i < paramCount; i++)
-				parameters[i] = SigType.ParseTypeSignature(reader);
-		}
+		#region Constants
 
 		/// <summary>
 		///
@@ -232,5 +44,180 @@ namespace Mosa.Compiler.Metadata.Signatures
 		///
 		/// </summary>
 		private const byte HAS_EXPLICIT_THIS = 0x40;
+
+		/// <summary>
+		/// 
+		/// </summary>
+		private const byte C = 0x1;
+
+		/// <summary>
+		/// 
+		/// </summary>			
+		private const byte STDCALL = 0x2;
+
+		/// <summary>
+		/// 
+		/// </summary>
+		private const byte THISCALL = 0x3;
+
+		/// <summary>
+		/// 
+		/// </summary>
+		private const byte FASTCALL = 0x4;
+
+		#endregion Constants
+
+		/// <summary>
+		/// Gets the calling convention.
+		/// </summary>
+		/// <value>The calling convention.</value>
+		public MethodCallingConvention MethodCallingConvention { get; private set; }
+
+		/// <summary>
+		/// Gets the generic parameter count.
+		/// </summary>
+		/// <value>The generic parameter count.</value>
+		public int GenericParameterCount { get; private set; }
+
+		/// <summary>
+		/// Gets a value indicating whether this instance has explicit this.
+		/// </summary>
+		/// <value>
+		/// 	<c>true</c> if this instance has explicit this; otherwise, <c>false</c>.
+		/// </value>
+		public bool HasExplicitThis { get; private set; }
+
+		/// <summary>
+		/// Gets a value indicating whether this instance has this.
+		/// </summary>
+		/// <value><c>true</c> if this instance has this; otherwise, <c>false</c>.</value>
+		public bool HasThis { get; private set; }
+
+		/// <summary>
+		/// Gets the parameters.
+		/// </summary>
+		/// <value>The parameters.</value>
+		public SigType[] Parameters { get; private set; }
+
+		/// <summary>
+		/// Gets the type of the return.
+		/// </summary>
+		/// <value>The type of the return.</value>
+		public SigType ReturnType { get; private set; }
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="MethodSignature"/> class.
+		/// </summary>
+		/// <param name="reader">The reader.</param>
+		public MethodSignature(SignatureReader reader)
+			: base(reader)
+		{
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="MethodSignature"/> class.
+		/// </summary>
+		/// <param name="provider">The provider.</param>
+		/// <param name="token">The token.</param>
+		public MethodSignature(IMetadataProvider provider, HeapIndexToken token)
+			: base(provider, token)
+		{
+		}
+
+		/// <summary>
+		/// Parses the signature.
+		/// </summary>
+		/// <param name="reader">The reader.</param>
+		protected sealed override void ParseSignature(SignatureReader reader)
+		{
+			byte value = reader.ReadByte();
+
+			// Check for instance signature
+			if (HAS_THIS == (value & HAS_THIS))
+			{
+				HasThis = true;
+			}
+
+			if (HAS_EXPLICIT_THIS == (value & HAS_EXPLICIT_THIS))
+			{
+				HasExplicitThis = true;
+			}
+
+			if (GENERIC == (value & GENERIC))
+			{
+				MethodCallingConvention = MethodCallingConvention.Generic;
+				GenericParameterCount = reader.ReadCompressedInt32();
+			}
+			else if (VARARG == (value & VARARG))
+			{
+				MethodCallingConvention = MethodCallingConvention.VarArg;
+			}
+			else if (C == (value & C))
+			{
+			}
+			else if (STDCALL == (value & STDCALL))
+			{
+			}
+			else if (THISCALL == (value & THISCALL))
+			{
+			}
+			else if (FASTCALL == (value & FASTCALL))
+			{
+			}
+			else if ((value & 0x1F) != 0x00)
+			{
+				throw new InvalidOperationException(@"Invalid method definition signature.");
+			}
+
+			// Number of parameters
+			int paramCount = reader.ReadCompressedInt32();
+			Parameters = new SigType[paramCount];
+
+			// Read the return type
+			ReturnType = SigType.ParseTypeSignature(reader);
+
+			// Read all parameters
+			for (int i = 0; i < paramCount; i++)
+			{
+				Parameters[i] = SigType.ParseTypeSignature(reader);
+			}
+		}
+
+		/// <summary>
+		/// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
+		/// </summary>
+		/// <returns>
+		/// A <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
+		/// </returns>
+		public override string ToString()
+		{
+			StringBuilder sb = new StringBuilder();
+
+			sb.Append(base.ToString() + " ");
+			sb.Append("Has This/ThisExplicit: ");
+			sb.Append(HasThis.ToString());
+			sb.Append("/");
+			sb.Append(HasExplicitThis.ToString());
+
+			sb.Append(" RetType: ");
+			sb.Append(ReturnType.ToString());
+
+			if (Parameters.Length != 0)
+			{
+				sb.Append(" [ ");
+
+				foreach (var param in Parameters)
+				{
+					sb.Append(param.ToString());
+					sb.Append(", ");
+				}
+
+				sb.Length = sb.Length - 2;
+
+				sb.Append(" ]");
+			}
+
+			return sb.ToString();
+		}
 	}
 }

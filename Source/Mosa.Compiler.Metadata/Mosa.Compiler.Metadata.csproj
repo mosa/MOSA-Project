@@ -39,7 +39,11 @@
     <Compile Include="AssemblyHashAlgorithm.cs" />
     <Compile Include="BlobHeap.cs" />
     <Compile Include="CilElementType.cs" />
+    <Compile Include="ExceptionHandlerType.cs" />
+    <Compile Include="ExceptionHandlingClause.cs" />
     <Compile Include="GenericSigTypeResolver.cs" />
+    <Compile Include="MethodFlags.cs" />
+    <Compile Include="MethodHeader.cs" />
     <Compile Include="TableType.cs" />
     <Compile Include="EventAttributes.cs" />
     <Compile Include="FieldAttributes.cs" />
@@ -54,8 +58,8 @@
     <Compile Include="Loader\IMetadataModule.cs" />
     <Compile Include="Loader\InstructionStream.cs" />
     <Compile Include="Loader\ModuleType.cs" />
-    <Compile Include="Loader\PE\MetadataRoot.cs" />
-    <Compile Include="Loader\PE\PortableExecutableImage.cs" />
+    <Compile Include="Loader\MetadataRoot.cs" />
+    <Compile Include="Loader\PortableExecutableImage.cs" />
     <Compile Include="ManifestResourceAttributes.cs" />
     <Compile Include="MethodAttributes.cs" />
     <Compile Include="MethodCallingConvention.cs" />
@@ -83,7 +87,7 @@
     <Compile Include="Signatures\RefSigType.cs" />
     <Compile Include="Signatures\Signature.cs" />
     <Compile Include="Signatures\SigType.cs" />
-    <Compile Include="Signatures\StandaloneMethodSignature.cs" />
+    <Compile Include="Signatures\StandAloneMethodSignature.cs" />
     <Compile Include="Signatures\SZArraySigType.cs" />
     <Compile Include="Signatures\TypeSigType.cs" />
     <Compile Include="Signatures\TypeSpecSignature.cs" />

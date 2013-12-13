@@ -1,4 +1,7 @@
-﻿using Mosa.Test.Collection.MbUnit;
+﻿using Mosa.Compiler.Metadata.Loader;
+using Mosa.Compiler.MosaTypeSystem;
+using Mosa.Test.Collection.MbUnit;
+using System.IO;
 
 namespace Mosa.Test.Debug
 {
@@ -6,10 +9,31 @@ namespace Mosa.Test.Debug
 	{
 		public static void Main()
 		{
-			Test4();
-			Test3();
-			Test2();
-			Test1();
+			Test0();
+			//Test4();
+			//Test3();
+			//Test2();
+			//Test1();
+			return;
+		}
+
+		private static void Test0()
+		{
+			var resolver = new MosaTypeResolver();
+			var loader = new TypeLoader(resolver);
+
+			var mscorlib = new PortableExecutableImage(new FileStream(@"mscorlib.dll", FileMode.Open, FileAccess.Read));
+			var assemblyA = new PortableExecutableImage(new FileStream(@"Mosa.Test.AssemblyA.dll", FileMode.Open, FileAccess.Read));
+			var assemblyB = new PortableExecutableImage(new FileStream(@"Mosa.Test.AssemblyB.dll", FileMode.Open, FileAccess.Read));
+			var assemblyC = new PortableExecutableImage(new FileStream(@"Mosa.Test.AssemblyC.dll", FileMode.Open, FileAccess.Read));
+			var classLib = new PortableExecutableImage(new FileStream(@"Mosa.ClassLib.dll", FileMode.Open, FileAccess.Read));
+
+			loader.Load(mscorlib);
+			loader.Load(assemblyA);
+			loader.Load(assemblyB);
+			loader.Load(assemblyC);
+			loader.Load(classLib);
+
 			return;
 		}
 

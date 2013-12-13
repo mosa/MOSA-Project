@@ -5,6 +5,7 @@
  *
  * Authors:
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 namespace Mosa.Compiler.Metadata.Signatures
@@ -15,18 +16,10 @@ namespace Mosa.Compiler.Metadata.Signatures
 	public class TypeSpecSignature : Signature
 	{
 		/// <summary>
-		///
-		/// </summary>
-		private SigType type;
-
-		/// <summary>
 		/// Gets the type.
 		/// </summary>
 		/// <value>The type.</value>
-		public SigType Type
-		{
-			get { return type; }
-		}
+		public SigType Type { get; private set; }
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="TypeSpecSignature"/> class.
@@ -53,7 +46,18 @@ namespace Mosa.Compiler.Metadata.Signatures
 		/// <param name="reader">The reader.</param>
 		protected override void ParseSignature(SignatureReader reader)
 		{
-			type = SigType.ParseTypeSignature(reader);
+			Type = SigType.ParseTypeSignature(reader);
+		}
+
+		/// <summary>
+		/// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
+		/// </summary>
+		/// <returns>
+		/// A <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
+		/// </returns>
+		public override string ToString()
+		{
+			return base.ToString() + " " + Type.ToString();
 		}
 	}
 }

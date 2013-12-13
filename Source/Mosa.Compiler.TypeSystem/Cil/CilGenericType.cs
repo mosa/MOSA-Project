@@ -46,7 +46,7 @@ namespace Mosa.Compiler.TypeSystem.Cil
 		/// <param name="baseGenericType">Type of the base generic.</param>
 		/// <param name="genericArguments">The generic arguments.</param>
 		public CilGenericType(ITypeModule typeModule, Token token, string name, RuntimeType baseGenericType, SigType[] genericArguments) :
-			base(baseGenericType.Module, token, name, baseGenericType.BaseType, baseGenericType.Namespace) 
+			base(baseGenericType.Module, token, name, baseGenericType.BaseType, baseGenericType.Namespace)
 		{
 			Debug.Assert(baseGenericType is CilRuntimeType);
 
@@ -62,7 +62,7 @@ namespace Mosa.Compiler.TypeSystem.Cil
 			}
 
 			// TODO: if this is a nested types, add enclosing type(s) into genericArguments first
-			this.genericArguments = genericArguments;			
+			this.genericArguments = genericArguments;
 
 			ResolveMethods();
 			ResolveFields();

@@ -23,10 +23,7 @@ namespace Mosa.Tool.MetadataExplorer
 
 		private void openToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			if (openFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-			{
-				LoadAssembly(openFileDialog.FileName);
-			}
+			
 		}
 
 		protected void LoadAssembly(string filename)
@@ -37,6 +34,8 @@ namespace Mosa.Tool.MetadataExplorer
 			metadataModule = assemblyLoader.LoadModule(filename);
 
 			UpdateTree();
+
+			this.toolStripStatusLabel1.Text = filename;
 		}
 
 		protected void UpdateTree()
@@ -63,7 +62,7 @@ namespace Mosa.Tool.MetadataExplorer
 				{
 					Token token = new Token(table, rowid);
 
-					TableRow row = Resolver.GetTableRow(metadataModule.Metadata, token);
+					TableRow row = Resolver.GetTableRow(metadataModule, token);
 
 					if (row == null)
 						continue;
@@ -96,5 +95,14 @@ namespace Mosa.Tool.MetadataExplorer
 		{
 			UpdateTree();
 		}
+
+		private void toolStripButton1_Click(object sender, EventArgs e)
+		{
+			if (openFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+			{
+				LoadAssembly(openFileDialog.FileName);
+			}
+		}
+
 	}
 }

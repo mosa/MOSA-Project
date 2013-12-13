@@ -5,6 +5,7 @@
  *
  * Authors:
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 namespace Mosa.Compiler.Metadata
@@ -21,6 +22,11 @@ namespace Mosa.Compiler.Metadata
 		public TableType Table
 		{
 			get { return (TableType)(token & 0xff000000); }
+		}
+
+		public uint Value
+		{
+			get { return token; }
 		}
 
 		public static readonly Token Zero = new Token((uint)0);
@@ -136,5 +142,6 @@ namespace Mosa.Compiler.Metadata
 
 			yield return token;
 		}
+
 	}
 }

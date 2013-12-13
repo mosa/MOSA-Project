@@ -5,6 +5,7 @@
  *
  * Authors:
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 namespace Mosa.Compiler.Metadata.Tables
@@ -12,33 +13,19 @@ namespace Mosa.Compiler.Metadata.Tables
 	/// <summary>
 	///
 	/// </summary>
-	public struct FieldMarshalRow
+	public class FieldMarshalRow
 	{
-		#region Data members
-
-		/// <summary>
-		///
-		/// </summary>
-		private Token parent;
-
-		/// <summary>
-		///
-		/// </summary>
-		private HeapIndexToken nativeType;
-
-		#endregion Data members
-
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="FieldMarshalRow"/> struct.
+		/// Initializes a new instance of the <see cref="FieldMarshalRow" /> struct.
 		/// </summary>
 		/// <param name="parent">The parent.</param>
-		/// <param name="nativeType">The native type BLOB idx.</param>
+		/// <param name="nativeType">Type of the native.</param>
 		public FieldMarshalRow(Token parent, HeapIndexToken nativeType)
 		{
-			this.parent = parent;
-			this.nativeType = nativeType;
+			Parent = parent;
+			NativeType = nativeType;
 		}
 
 		#endregion Construction
@@ -49,19 +36,13 @@ namespace Mosa.Compiler.Metadata.Tables
 		/// Gets the parent.
 		/// </summary>
 		/// <value>The parent.</value>
-		public Token Parent
-		{
-			get { return parent; }
-		}
+		public Token Parent { get; private set; }
 
 		/// <summary>
 		/// Gets the type of the native.
 		/// </summary>
 		/// <value>The type of the native.</value>
-		public HeapIndexToken NativeType
-		{
-			get { return nativeType; }
-		}
+		public HeapIndexToken NativeType { get; private set; }
 
 		#endregion Properties
 	}

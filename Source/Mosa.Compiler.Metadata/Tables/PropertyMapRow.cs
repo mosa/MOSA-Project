@@ -5,6 +5,7 @@
  *
  * Authors:
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 namespace Mosa.Compiler.Metadata.Tables
@@ -12,33 +13,19 @@ namespace Mosa.Compiler.Metadata.Tables
 	/// <summary>
 	///
 	/// </summary>
-	public struct PropertyMapRow
+	public class PropertyMapRow
 	{
-		#region Data members
-
-		/// <summary>
-		///
-		/// </summary>
-		private Token _parent;
-
-		/// <summary>
-		///
-		/// </summary>
-		private Token _property;
-
-		#endregion Data members
-
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="PropertyMapRow"/> struct.
+		/// Initializes a new instance of the <see cref="PropertyMapRow" /> struct.
 		/// </summary>
-		/// <param name="parentTableIdx">The parent table idx.</param>
-		/// <param name="propertyTableIdx">The property table idx.</param>
+		/// <param name="parent">The parent.</param>
+		/// <param name="property">The property.</param>
 		public PropertyMapRow(Token parent, Token property)
 		{
-			_parent = parent;
-			_property = property;
+			Parent = parent;
+			Property = property;
 		}
 
 		#endregion Construction
@@ -46,22 +33,20 @@ namespace Mosa.Compiler.Metadata.Tables
 		#region Properties
 
 		/// <summary>
-		/// Gets the parent table idx.
+		/// Gets the parent.
 		/// </summary>
-		/// <value>The parent table idx.</value>
-		public Token ParentTableIdx
-		{
-			get { return _parent; }
-		}
+		/// <value>
+		/// The parent.
+		/// </value>
+		public Token Parent { get; private set; }
 
 		/// <summary>
-		/// Gets the property table idx.
+		/// Gets the property.
 		/// </summary>
-		/// <value>The property table idx.</value>
-		public Token PropertyTableIdx
-		{
-			get { return _property; }
-		}
+		/// <value>
+		/// The property.
+		/// </value>
+		public Token Property { get; private set; }
 
 		#endregion Properties
 	}

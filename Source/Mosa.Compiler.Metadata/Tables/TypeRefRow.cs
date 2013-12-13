@@ -5,6 +5,7 @@
  *
  * Authors:
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 namespace Mosa.Compiler.Metadata.Tables
@@ -12,40 +13,21 @@ namespace Mosa.Compiler.Metadata.Tables
 	/// <summary>
 	///
 	/// </summary>
-	public struct TypeRefRow
+	public class TypeRefRow
 	{
-		#region Data members
-
-		/// <summary>
-		///
-		/// </summary>
-		private Token resolutionScope;
-
-		/// <summary>
-		///
-		/// </summary>
-		private HeapIndexToken typeNameIdx;
-
-		/// <summary>
-		///
-		/// </summary>
-		private HeapIndexToken typeNamespaceIdx;
-
-		#endregion Data members
-
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="TypeRefRow"/> struct.
+		/// Initializes a new instance of the <see cref="TypeRefRow"/> class.
 		/// </summary>
-		/// <param name="resolutionScope">The resolution scope idx.</param>
-		/// <param name="typeNameIdx">The type name idx.</param>
-		/// <param name="typeNamespaceIdx">The type namespace idx.</param>
-		public TypeRefRow(Token resolutionScope, HeapIndexToken typeNameIdx, HeapIndexToken typeNamespaceIdx)
+		/// <param name="resolutionScope">The resolution scope.</param>
+		/// <param name="typeName">Name of the type.</param>
+		/// <param name="typeNamespace">The type namespace.</param>
+		public TypeRefRow(Token resolutionScope, HeapIndexToken typeName, HeapIndexToken typeNamespace)
 		{
-			this.resolutionScope = resolutionScope;
-			this.typeNameIdx = typeNameIdx;
-			this.typeNamespaceIdx = typeNamespaceIdx;
+			ResolutionScope = resolutionScope;
+			TypeName = typeName;
+			TypeNamespace = typeNamespace;
 		}
 
 		#endregion Construction
@@ -53,31 +35,28 @@ namespace Mosa.Compiler.Metadata.Tables
 		#region Properties
 
 		/// <summary>
-		/// Gets or sets the resolution scope idx.
+		/// Gets the resolution scope.
 		/// </summary>
-		/// <value>The resolution scope idx.</value>
-		public Token ResolutionScope
-		{
-			get { return resolutionScope; }
-		}
+		/// <value>
+		/// The resolution scope.
+		/// </value>
+		public Token ResolutionScope { get; private set; }
 
 		/// <summary>
-		/// Gets or sets the type name idx.
+		/// Gets the name of the type.
 		/// </summary>
-		/// <value>The type name idx.</value>
-		public HeapIndexToken TypeNameIdx
-		{
-			get { return typeNameIdx; }
-		}
+		/// <value>
+		/// The name of the type.
+		/// </value>
+		public HeapIndexToken TypeName { get; private set; }
 
 		/// <summary>
-		/// Gets or sets the type namespace idx.
+		/// Gets the type namespace.
 		/// </summary>
-		/// <value>The type namespace idx.</value>
-		public HeapIndexToken TypeNamespaceIdx
-		{
-			get { return typeNamespaceIdx; }
-		}
+		/// <value>
+		/// The type namespace.
+		/// </value>
+		public HeapIndexToken TypeNamespace { get; private set; }
 
 		#endregion Properties
 	}
