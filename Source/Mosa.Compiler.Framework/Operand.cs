@@ -9,6 +9,7 @@
  */
 
 using Mosa.Compiler.Common;
+using Mosa.Compiler.Framework.CIL;
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Compiler.TypeSystem;
@@ -16,7 +17,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
-using Mosa.Compiler.Framework.CIL;
 
 namespace Mosa.Compiler.Framework
 {
@@ -383,7 +383,7 @@ namespace Mosa.Compiler.Framework
 		public bool IsUIntPtr { get { return Type.IsUIntPtr; } }
 
 		public bool IsArray { get { return Type.IsArray; } }
-		
+
 		#endregion Properties
 
 		#region Construction
@@ -441,19 +441,12 @@ namespace Mosa.Compiler.Framework
 			Operand operand = new Operand(sigType);
 			operand.IsConstant = true;
 
-			switch (sigType.Type)
-			{
-				case CilElementType.U1: operand.ConstantUnsignedInteger = value; break;
-				case CilElementType.U2: operand.ConstantUnsignedInteger = value; break;
-				case CilElementType.U4: operand.ConstantUnsignedInteger = value; break;
-				case CilElementType.U8: operand.ConstantUnsignedInteger = value; break;
-				case CilElementType.I1: operand.ConstantSignedInteger = (long)value; break;
-				case CilElementType.I2: operand.ConstantSignedInteger = (long)value; break;
-				case CilElementType.I4: operand.ConstantSignedInteger = (long)value; break;
-				case CilElementType.I8: operand.ConstantSignedInteger = (long)value; break;
-
-				default: throw new InvalidCompilerException();
-			}
+			if (operand.IsUnsigned)
+				operand.ConstantUnsignedInteger = value;
+			else if (operand.IsSigned)
+				operand.ConstantSignedInteger = (int)value;
+			else
+				throw new InvalidCompilerException();
 
 			return operand;
 		}
