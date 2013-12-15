@@ -1,6 +1,4 @@
 ﻿using Mosa.Compiler.Metadata.Loader;
-using System.IO;
-using System.Collections.Generic;
 
 namespace Mosa.Compiler.MosaTypeSystem
 {
@@ -8,26 +6,25 @@ namespace Mosa.Compiler.MosaTypeSystem
 	{
 		public MosaTypeResolver Resolver { get; internal set; }
 
-		private MosaTypeLoader loader;
+		public BuiltInTypes BuiltIn { get; internal set; }
 
 		public MosaTypeSystem()
 		{
 			Resolver = new MosaTypeResolver();
-			this.loader = new MosaTypeLoader(Resolver);
+			this.BuiltIn = Resolver.BuiltIn;
 		}
 
 		public void LoadAssembly(IMetadataModule metadataModule)
 		{
-			loader.Load(metadataModule);
+			MosaTypeLoader.Load(metadataModule, Resolver);
 		}
 
 		public void Load(MosaAssemblyLoader assemblyLoader)
 		{
-			foreach(var module in assemblyLoader.Modules)
+			foreach (var module in assemblyLoader.Modules)
 			{
 				LoadAssembly(module);
 			}
 		}
-
 	}
 }

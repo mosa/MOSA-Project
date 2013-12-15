@@ -82,12 +82,18 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		#endregion Data members
 
-		public MosaTypeLoader(MosaTypeResolver resolver)
+		private MosaTypeLoader(MosaTypeResolver resolver)
 		{
 			this.resolver = resolver;
 		}
 
-		public void Load(IMetadataModule metadataModule)
+		public static void Load(IMetadataModule metadataModule, MosaTypeResolver resolver)
+		{
+			var loader = new MosaTypeLoader(resolver);
+			loader.Load(metadataModule);
+		}
+
+		private void Load(IMetadataModule metadataModule)
 		{
 			this.metadataModule = metadataModule;
 			this.metadataProvider = metadataModule.Metadata;
@@ -111,10 +117,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 			LoadMemberReferences();
 			LoadGenericParams();
 			LoadCustomAttributes();
-
-			LoadInterfaces();
-			//AssignGenericInterfaces();
-
+			LoadInterfaces();			
 			LoadGenericParamContraints();
 
 			// release
