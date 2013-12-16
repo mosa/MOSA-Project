@@ -16,9 +16,9 @@ namespace Mosa.Compiler.MosaTypeSystem
 {
 	public class MosaTypeResolver
 	{
-		public List<MosaType> Types { get; private set; }
+		public IList<MosaType> Types { get; private set; }
 
-		public List<MosaMethod> Methods { get; private set; }
+		public IList<MosaMethod> Methods { get; private set; }
 
 		public MosaAssembly InternalAssembly { get; private set; }
 

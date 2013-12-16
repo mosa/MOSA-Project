@@ -1,4 +1,14 @@
-﻿using Mosa.Compiler.Metadata.Loader;
+﻿/*
+ * (c) 2013 MOSA - The Managed Operating System Alliance
+ *
+ * Licensed under the terms of the New BSD License.
+ *
+ * Authors:
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
+ */
+
+using Mosa.Compiler.Metadata.Loader;
+using System.Collections.Generic;
 
 namespace Mosa.Compiler.MosaTypeSystem
 {
@@ -7,6 +17,8 @@ namespace Mosa.Compiler.MosaTypeSystem
 		public MosaTypeResolver Resolver { get; internal set; }
 
 		public BuiltInTypes BuiltIn { get; internal set; }
+
+		public IList<MosaType> AllTypes { get { return Resolver.Types; } }
 
 		public MosaTypeSystem()
 		{

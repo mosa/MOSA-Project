@@ -117,8 +117,9 @@ namespace Mosa.Compiler.MosaTypeSystem
 			LoadMemberReferences();
 			LoadGenericParams();
 			LoadCustomAttributes();
-			LoadInterfaces();			
+			LoadInterfaces();
 			LoadGenericParamContraints();
+			MethodImplementation();
 
 			// release
 			this.metadataModule = null;
@@ -958,6 +959,21 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 					default: throw new AssemblyLoadException();
 				}
+			}
+		}
+
+		private void MethodImplementation()
+		{
+			var maxToken = GetMaxTokenValue(TableType.MethodImpl);
+			foreach (var token in new Token(TableType.MethodImpl, 1).Upto(maxToken))
+			{
+				var row = metadataProvider.ReadMethodImplRow(token);
+
+				var type = resolver.GetTypeByToken(assembly, row.Class);
+				var body = resolver.GetMethodByToken(assembly, row.MethodBody);
+				var declaration = resolver.GetMethodByToken(assembly, row.MethodDeclaration);
+
+				type.InheritanceOveride.Add(declaration, body);
 			}
 		}
 	}

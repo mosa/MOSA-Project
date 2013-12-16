@@ -39,6 +39,8 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public bool IsExplicitLayout { get; internal set; }
 
+		public bool IsModule { get; internal set; }
+
 		public int Size { get; internal set; }
 
 		public int PackingSize { get; internal set; }
@@ -109,6 +111,8 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public bool IsArrayType { get; internal set; }
 
+		public bool IsVoid { get; internal set; }
+
 		public bool IsBuiltInType { get; internal set; }
 
 		public IList<MosaGenericParameter> GenericParameters { get; internal set; }
@@ -116,6 +120,8 @@ namespace Mosa.Compiler.MosaTypeSystem
 		public bool IsGeneric { get { return GenericParameters.Count != 0; } }
 
 		public IList<MosaType> GenericParameterTypes { get; internal set; }
+		
+		public IDictionary<MosaMethod, MosaMethod> InheritanceOveride { get; internal set;}
 
 		public MosaType(MosaAssembly assembly)
 		{
@@ -144,6 +150,8 @@ namespace Mosa.Compiler.MosaTypeSystem
 			IsUnmanagedPointerType = false;
 			IsArrayType = false;
 			IsBuiltInType = false;
+			IsModule = false;
+			IsVoid = false;
 
 			Methods = new List<MosaMethod>();
 			Fields = new List<MosaField>();
@@ -151,6 +159,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 			GenericParameters = new List<MosaGenericParameter>();
 			CustomAttributes = new List<MosaAttribute>();
 			GenericParameterTypes = new List<MosaType>();
+			InheritanceOveride = new Dictionary<MosaMethod, MosaMethod>();
 		}
 
 		public void SetFlags()
@@ -174,9 +183,10 @@ namespace Mosa.Compiler.MosaTypeSystem
 			IsEnum = BaseType != null && (BaseType.IsEnum || FullName == "System.Enum");
 			IsObject = BaseType != null && (BaseType.IsEnum || FullName == "System.Object");
 
+			IsModule = FullName == "<Module>";
+			IsVoid = FullName == "System.Void";
 			//"System.IntPtr"
 			//"System.UIntPtr"
-			//"System.Void"
 			//"System.TypedByRef"
 		}
 
