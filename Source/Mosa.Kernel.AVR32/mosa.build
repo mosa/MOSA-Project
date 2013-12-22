@@ -20,7 +20,7 @@
 		<references>
                     <include name="${outputDirectory}/mscorlib.dll"/>
                     <include name="${outputDirectory}/Mosa.Internal.Plug.dll"/>
-                    <include name="${outputDirectory}/Mosa.Platform.AVR32.Intrinsic.dll"/>
+                    <include name="${outputDirectory}/Mosa.Platform.Internal.AVR32.dll"/>
 		</references>
 		<!-- supress warnings -->
 		<nowarn><warning number="${suppresswarnings}"/></nowarn>

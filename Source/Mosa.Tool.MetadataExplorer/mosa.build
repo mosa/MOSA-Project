@@ -19,6 +19,7 @@
                     <include name="Program.cs"/>
                     <include name="Properties/Resources.Designer.cs"/>
                     <include name="Extension.cs"/>
+                    <include name="Tables/StandAloneSigExt.cs"/>
                     <include name="Tables/InterfaceImplRowExt.cs"/>
                     <include name="Tables/CustomAttributeRowExt.cs"/>
                     <include name="Tables/AssemblyRowExt.cs"/>
@@ -40,6 +41,7 @@
                     <include name="System.dll"/>
                     <include name="System.Drawing.dll"/>
                     <include name="System.Windows.Forms.dll"/>
+                    <include name="${outputDirectory}/Mosa.Compiler.Common.dll"/>
                     <include name="${outputDirectory}/Mosa.Compiler.Metadata.dll"/>
 		</references>
 		<!-- supress warnings -->

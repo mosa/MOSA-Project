@@ -23,6 +23,7 @@
                     <include name="Instructions/IMul.cs"/>
                     <include name="Instructions/TwoOperandInstruction.cs"/>
                     <include name="Instructions/Addsd.cs"/>
+                    <include name="Intrinsic/Div.cs"/>
                     <include name="Stages/BuildStackStage.cs"/>
                     <include name="Stages/FloatingPointStage.cs"/>
                     <include name="Stages/FinalTweakTransformationStage.cs"/>

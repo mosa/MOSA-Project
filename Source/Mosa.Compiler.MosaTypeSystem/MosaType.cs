@@ -87,6 +87,8 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public bool IsFloatingPoint { get { return IsDouble || IsSingle; } }
 
+		public bool IsString { get; internal set; }
+
 		public bool IsDouble { get; internal set; }
 
 		public bool IsSingle { get; internal set; }
@@ -123,6 +125,8 @@ namespace Mosa.Compiler.MosaTypeSystem
 		
 		public IDictionary<MosaMethod, MosaMethod> InheritanceOveride { get; internal set;}
 
+		public bool IsLinkerGenerated { get; internal set; }
+
 		public MosaType(MosaAssembly assembly)
 		{
 			Assembly = assembly;
@@ -152,6 +156,8 @@ namespace Mosa.Compiler.MosaTypeSystem
 			IsBuiltInType = false;
 			IsModule = false;
 			IsVoid = false;
+			IsLinkerGenerated = false;
+			IsString = false;
 
 			Methods = new List<MosaMethod>();
 			Fields = new List<MosaField>();
@@ -177,6 +183,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 			IsSingle = FullName == "System.Single";
 			IsDouble = FullName == "System.Double";
 			IsPointer = FullName == "System.Ptr";
+			IsString = FullName == "System.String";
 
 			IsValueType = BaseType != null && (BaseType.IsValueType || FullName == "System.ValueType");
 			IsDelegate = BaseType != null && (BaseType.IsDelegate || FullName == "System.Delegate");

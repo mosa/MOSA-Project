@@ -7,13 +7,22 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using System.Collections.Generic;
+
 namespace Mosa.Compiler.MosaTypeSystem
 {
 	public class MosaAttribute
 	{
 		public MosaMethod CtorMethod { get; internal set; }
 
-		public byte[] Blob { get; internal set; }
+		//public byte[] Blob { get; internal set; }
+
+		public IList<object> Values { get; internal set; }
+
+		public MosaAttribute()
+		{
+			Values = new List<object>();
+		}
 
 		public override string ToString()
 		{

@@ -16,6 +16,8 @@ namespace Mosa.Compiler.MosaTypeSystem
 {
 	public class MosaTypeResolver
 	{
+		public IList<MosaAssembly> Assemblies { get; private set; }
+
 		public IList<MosaType> Types { get; private set; }
 
 		public IList<MosaMethod> Methods { get; private set; }
@@ -39,6 +41,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 			Types = new List<MosaType>();
 			Methods = new List<MosaMethod>();
 			BuiltIn = new BuiltInTypes();
+			Assemblies = new List<MosaAssembly>();
 
 			SetupInternalAssembly();
 			SetupInternalGenericsAssembly();
@@ -55,25 +58,25 @@ namespace Mosa.Compiler.MosaTypeSystem
 			InternalAssembly = new MosaAssembly("@Internal");
 			AddAssembly(InternalAssembly);
 
-			BuiltIn.Void = CreateAddBuiltInType(InternalAssembly, CilElementType.Void);
-			BuiltIn.Boolean = CreateAddBuiltInType(InternalAssembly, CilElementType.Boolean);
-			BuiltIn.Char = CreateAddBuiltInType(InternalAssembly, CilElementType.Char);
-			BuiltIn.I1 = CreateAddBuiltInType(InternalAssembly, CilElementType.I1);
-			BuiltIn.U1 = CreateAddBuiltInType(InternalAssembly, CilElementType.U1);
-			BuiltIn.I2 = CreateAddBuiltInType(InternalAssembly, CilElementType.I2);
-			BuiltIn.U2 = CreateAddBuiltInType(InternalAssembly, CilElementType.U2);
-			BuiltIn.I4 = CreateAddBuiltInType(InternalAssembly, CilElementType.I4);
-			BuiltIn.U4 = CreateAddBuiltInType(InternalAssembly, CilElementType.U4);
-			BuiltIn.I8 = CreateAddBuiltInType(InternalAssembly, CilElementType.I8);
-			BuiltIn.U8 = CreateAddBuiltInType(InternalAssembly, CilElementType.U8);
-			BuiltIn.R4 = CreateAddBuiltInType(InternalAssembly, CilElementType.R4);
-			BuiltIn.R8 = CreateAddBuiltInType(InternalAssembly, CilElementType.R8);
-			BuiltIn.String = CreateAddBuiltInType(InternalAssembly, CilElementType.String);
-			BuiltIn.Object = CreateAddBuiltInType(InternalAssembly, CilElementType.Object);
-			BuiltIn.I = CreateAddBuiltInType(InternalAssembly, CilElementType.I);
-			BuiltIn.U = CreateAddBuiltInType(InternalAssembly, CilElementType.U);
-			BuiltIn.TypedByRef = CreateAddBuiltInType(InternalAssembly, CilElementType.TypedByRef);
-			BuiltIn.Ptr = CreateAddBuiltInType(InternalAssembly, CilElementType.Ptr);
+			BuiltIn.Void = CreateAddBuiltInType(CilElementType.Void); BuiltIn.Void.IsVoid = true;
+			BuiltIn.Boolean = CreateAddBuiltInType(CilElementType.Boolean); BuiltIn.Void.IsBoolean = true;
+			BuiltIn.Char = CreateAddBuiltInType(CilElementType.Char); BuiltIn.Void.IsChar = true;
+			BuiltIn.I1 = CreateAddBuiltInType(CilElementType.I1); BuiltIn.Void.IsSignedByte = true;
+			BuiltIn.U1 = CreateAddBuiltInType(CilElementType.U1); BuiltIn.Void.IsUnsignedByte = true;
+			BuiltIn.I2 = CreateAddBuiltInType(CilElementType.I2); BuiltIn.Void.IsSignedShort = true;
+			BuiltIn.U2 = CreateAddBuiltInType(CilElementType.U2); BuiltIn.Void.IsUnsignedShort = true;
+			BuiltIn.I4 = CreateAddBuiltInType(CilElementType.I4); BuiltIn.Void.IsSignedInt = true;
+			BuiltIn.U4 = CreateAddBuiltInType(CilElementType.U4); BuiltIn.Void.IsUnsignedInt = true;
+			BuiltIn.I8 = CreateAddBuiltInType(CilElementType.I8); BuiltIn.Void.IsSignedLong = true;
+			BuiltIn.U8 = CreateAddBuiltInType(CilElementType.U8); BuiltIn.Void.IsUnsignedLong= true;
+			BuiltIn.R4 = CreateAddBuiltInType(CilElementType.R4); BuiltIn.Void.IsSingle = true;
+			BuiltIn.R8 = CreateAddBuiltInType(CilElementType.R8); BuiltIn.Void.IsDouble = true;
+			BuiltIn.String = CreateAddBuiltInType(CilElementType.String); BuiltIn.Void.IsString = true;
+			BuiltIn.Object = CreateAddBuiltInType(CilElementType.Object); BuiltIn.Void.IsObject = true;
+			BuiltIn.I = CreateAddBuiltInType(CilElementType.I);
+			BuiltIn.U = CreateAddBuiltInType(CilElementType.U);
+			BuiltIn.TypedByRef = CreateAddBuiltInType(CilElementType.TypedByRef); 
+			BuiltIn.Ptr = CreateAddBuiltInType(CilElementType.Ptr); BuiltIn.Void.IsPointer = true;
 		}
 
 		private MosaType CreateBuiltInType(CilElementType cilElementType)
@@ -86,11 +89,11 @@ namespace Mosa.Compiler.MosaTypeSystem
 			return type;
 		}
 
-		private MosaType CreateAddBuiltInType(MosaAssembly assembly, CilElementType cilElementType)
+		private MosaType CreateAddBuiltInType(CilElementType cilElementType)
 		{
 			var type = CreateBuiltInType(cilElementType);
 
-			AddType(assembly, new Token((uint)cilElementType), type);
+			AddType(cilElementType, type);
 
 			return type;
 		}
@@ -119,6 +122,21 @@ namespace Mosa.Compiler.MosaTypeSystem
 		{
 			Types.Add(type);
 			typeLookup[assembly].Add(token, type);
+		}
+
+		public void AddType(CilElementType elementType, MosaType type)
+		{
+			AddType(InternalAssembly, new Token((uint)elementType), type);
+		}
+
+		public MosaType GetTypeByElementType(CilElementType elementType)
+		{
+			return GetTypeByToken(InternalAssembly, new Token((uint)elementType));
+		}
+
+		public MosaType GetTypeByElementType(CilElementType? elementType)
+		{
+			return GetTypeByToken(InternalAssembly, new Token((uint)elementType.Value));
 		}
 
 		public MosaType GetTypeByToken(MosaAssembly assembly, Token token)
@@ -442,6 +460,8 @@ namespace Mosa.Compiler.MosaTypeSystem
 			generic.IsFinal = method.IsFinal;
 			generic.Rva = method.Rva;
 			generic.Code = method.Code;
+			generic.CodeAssembly = method.CodeAssembly;
+			generic.IsCILGenerated = method.IsCILGenerated;
 
 			foreach (var p in method.Parameters)
 			{

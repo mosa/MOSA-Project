@@ -15,6 +15,8 @@ using Mosa.Compiler.Metadata.Tables;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
+using System.Text;
 
 namespace Mosa.Compiler.MosaTypeSystem
 {
@@ -82,6 +84,25 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		#endregion Data members
 
+		#region Constants
+
+		/// <summary>
+		/// The prologue id for a custom attribute blob.
+		/// </summary>
+		private const ushort ATTRIBUTE_BLOB_PROLOGUE = 0x0001;
+
+		/// <summary>
+		/// Length of a null string in a custom attribute blob.
+		/// </summary>
+		private const byte ATTRIBUTE_NULL_STRING_LEN = 0xFF;
+
+		/// <summary>
+		/// Length of an empty string in a custom attribute blob.
+		/// </summary>
+		private const byte ATTRIBUTE_EMPTY_STRING_LEN = 0x00;
+
+		#endregion Constants
+
 		private MosaTypeLoader(MosaTypeResolver resolver)
 		{
 			this.resolver = resolver;
@@ -120,6 +141,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 			LoadInterfaces();
 			LoadGenericParamContraints();
 			MethodImplementation();
+			LoadExternals();
 
 			// release
 			this.metadataModule = null;
@@ -460,6 +482,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 				method.IsPInvokeImpl = ((methodDef.Flags & MethodAttributes.PInvokeImpl) != MethodAttributes.PInvokeImpl);
 				method.IsNewSlot = ((methodDef.Flags & MethodAttributes.NewSlot) != MethodAttributes.NewSlot);
 				method.IsFinal = ((methodDef.Flags & MethodAttributes.Final) != MethodAttributes.Final);
+				method.IsCILGenerated = true;
 				method.Rva = methodDef.Rva;
 
 				if (methodDef.Rva != 0)
@@ -482,6 +505,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 					}
 
 					method.Code = codeReader.ReadBytes(header.CodeSize);
+					method.CodeAssembly = assembly;
 
 					foreach (var handler in header.Clauses)
 					{
@@ -619,10 +643,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 			var builtInSigType = sigType as BuiltInSigType;
 			if (builtInSigType != null)
 			{
-				if (internalAssembly == null)
-					internalAssembly = resolver.GetAssemblyByName("@Internal");
-
-				return resolver.GetTypeByToken(internalAssembly, new Token((uint)builtInSigType.Type));
+				return resolver.GetTypeByElementType(builtInSigType.Type);
 			}
 
 			throw new NotImplementedException(String.Format("SigType of CilElementType.{0} is not supported.", sigType.Type));
@@ -901,9 +922,53 @@ namespace Mosa.Compiler.MosaTypeSystem
 			{
 				var row = metadataProvider.ReadCustomAttributeRow(token);
 
-				MosaAttribute attribute = new MosaAttribute();
-				attribute.CtorMethod = resolver.GetMethodByToken(assembly, row.Type);
-				attribute.Blob = metadataProvider.ReadBlob(row.Value);
+				var attribute = new MosaAttribute();
+				var ctor = resolver.GetMethodByToken(assembly, row.Type);
+				var blob = metadataProvider.ReadBlob(row.Value);
+
+				attribute.CtorMethod = ctor;
+
+				// Create a binary reader for the blob
+				using (var reader = new BinaryReader(new MemoryStream(blob), Encoding.UTF8))
+				{
+					var prologue = reader.ReadUInt16();
+
+					if (prologue != ATTRIBUTE_BLOB_PROLOGUE)
+					{
+						throw new InvalidMetadataException(@"Invalid custom attribute blob.");
+					}
+
+					var parameters = ctor.Parameters.Count;
+
+					for (int index = 0; index < parameters; index++)
+					{
+						var type = ctor.Parameters[index].Type;
+
+						object value = null;
+
+						if (type.IsBoolean) value = reader.ReadByte() == 1;
+						else if (type.IsChar) value = (char)reader.ReadUInt16();
+						else if (type.IsSignedByte) value = reader.ReadSByte();
+						else if (type.IsSignedShort) value = reader.ReadInt16();
+						else if (type.IsSignedInt) value = reader.ReadInt32();
+						else if (type.IsSignedLong) value = reader.ReadInt64();
+						else if (type.IsUnsignedByte) value = reader.ReadByte();
+						else if (type.IsUnsignedShort) value = reader.ReadUInt16();
+						else if (type.IsUnsignedInt) value = reader.ReadUInt32();
+						else if (type.IsUnsignedLong) value = reader.ReadUInt64();
+						else if (type.IsSingle) value = reader.ReadSingle();
+						else if (type.IsDouble) value = reader.ReadDouble();
+						else if (type.IsString) value = ParseString(reader);
+
+						//FIXME!
+
+						attribute.Values.Add(value);
+					}
+
+
+
+				}
+
 
 				// The following switch matches the AttributeTargets enumeration against
 				// metadata tables, which make valid targets for an attribute.
@@ -962,6 +1027,60 @@ namespace Mosa.Compiler.MosaTypeSystem
 			}
 		}
 
+		/// <summary>
+		/// Parses a string definition for an attribute field, parameter or property definition.
+		/// </summary>
+		/// <param name="reader">The binary reader to read From.</param>
+		/// <returns>A string, which represents the value read.</returns>
+		private static string ParseString(BinaryReader reader)
+		{
+			// Read the length
+			int packedLen = DecodePackedLen(reader);
+			
+			if (ATTRIBUTE_NULL_STRING_LEN == packedLen)
+				return null;
+
+			if (ATTRIBUTE_EMPTY_STRING_LEN == packedLen)
+				return String.Empty;
+
+			// Read the string
+			var buffer = reader.ReadChars(packedLen);
+
+			return new String(buffer);
+		}
+
+		private static int DecodePackedLen(BinaryReader reader)
+		{
+			int result, offset;
+			byte value = reader.ReadByte();
+
+			if (0xC0 == (value & 0xC0))
+			{
+				// A 4 byte length...
+				result = ((value & 0x1F) << 24);
+				offset = 16;
+			}
+			else if (0x80 == (value & 0x80))
+			{
+				// A 2 byte length...
+				result = ((value & 0x3F) << 8);
+				offset = 0;
+			}
+			else
+			{
+				result = value & 0x7F;
+				offset = -8;
+			}
+
+			while (offset != -8)
+			{
+				result |= (reader.ReadByte() << offset);
+				offset -= 8;
+			}
+
+			return result;
+		}
+
 		private void MethodImplementation()
 		{
 			var maxToken = GetMaxTokenValue(TableType.MethodImpl);
@@ -974,6 +1093,25 @@ namespace Mosa.Compiler.MosaTypeSystem
 				var declaration = resolver.GetMethodByToken(assembly, row.MethodDeclaration);
 
 				type.InheritanceOveride.Add(declaration, body);
+			}
+		}
+
+		/// <summary>
+		/// Loads the externals.
+		/// </summary>
+		private void LoadExternals()
+		{
+			var maxToken = GetMaxTokenValue(TableType.ImplMap);
+			foreach (var token in new Token(TableType.ImplMap, 1).Upto(maxToken))
+			{
+				var row = metadataProvider.ReadImplMapRow(token);
+
+				var moduleRow = metadataProvider.ReadModuleRefRow(row.ImportScopeTable);
+				var external = GetString(moduleRow.NameString);
+
+				var method = resolver.GetMethodByToken(assembly, row.MemberForwarded);
+
+				method.ExternalReference = external;
 			}
 		}
 	}

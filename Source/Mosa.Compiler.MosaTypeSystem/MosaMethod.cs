@@ -64,7 +64,15 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public byte[] Code { get; internal set; }
 
+		public MosaAssembly CodeAssembly { get; internal set; }
+
 		public List<ExceptionBlock> ExceptionBlocks { get; internal set; }
+
+		public string ExternalReference { get; internal set; }
+
+		public bool HasCode { get { return Rva != 0; } }
+
+		public bool IsCILGenerated { get; internal set; }
 
 		public MosaMethod()
 		{
@@ -81,6 +89,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 			IsPInvokeImpl = false;
 			IsNewSlot = false;
 			IsFinal = false;
+			IsCILGenerated = false;
 
 			Parameters = new List<MosaParameter>();
 			GenericParameters = new List<MosaGenericParameter>();

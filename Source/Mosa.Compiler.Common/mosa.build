@@ -16,6 +16,7 @@
 		<sources>
                     <include name="Bits.cs"/>
                     <include name="BitArrayExtension.cs"/>
+                    <include name="AssemblyLoadException.cs"/>
                     <include name="InvalidCompilerException.cs"/>
                     <include name="NotImplementCompilerException.cs"/>
                     <include name="CompilerException.cs"/>

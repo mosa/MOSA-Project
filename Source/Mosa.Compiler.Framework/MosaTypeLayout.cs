@@ -24,7 +24,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Holds the type system
 		/// </summary>
-		private Mosa.Compiler.MosaTypeSystem.MosaTypeSystem typeSystem;
+		private Mosa.Compiler.MosaTypeSystem.TypeSystem typeSystem;
 
 		/// <summary>
 		/// Holds the Native Pointer Size
@@ -84,7 +84,7 @@ namespace Mosa.Compiler.Framework
 		/// <param name="typeSystem">The type system.</param>
 		/// <param name="nativePointerSize">Size of the native pointer.</param>
 		/// <param name="nativePointerAlignment">The native pointer alignment.</param>
-		public MosaTypeLayout(Mosa.Compiler.MosaTypeSystem.MosaTypeSystem typeSystem, int nativePointerSize, int nativePointerAlignment)
+		public MosaTypeLayout(Mosa.Compiler.MosaTypeSystem.TypeSystem typeSystem, int nativePointerSize, int nativePointerAlignment)
 		{
 			this.nativePointerAlignment = nativePointerAlignment;
 			this.nativePointerSize = nativePointerSize;

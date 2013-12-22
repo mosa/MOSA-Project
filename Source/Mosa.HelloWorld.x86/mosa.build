@@ -21,7 +21,7 @@
                     <include name="${outputDirectory}/Mosa.Internal.Plug.dll"/>
                     <include name="${outputDirectory}/Mosa.Kernel.x86.dll"/>
                     <include name="${outputDirectory}/mscorlib.dll"/>
-                    <include name="${outputDirectory}/Mosa.Platform.x86.Intrinsic.dll"/>
+                    <include name="${outputDirectory}/Mosa.Platform.Internal.x86.dll"/>
 		</references>
 		<!-- supress warnings -->
 		<nowarn><warning number="${suppresswarnings}"/></nowarn>
