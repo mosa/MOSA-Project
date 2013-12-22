@@ -14,6 +14,7 @@
 	<target name="build">
 	    <csc target="library" output="${outputDirectory}/Mosa.Compiler.Common.dll" debug="${debug}" unsafe="true" nostdlib="false">
 		<sources>
+                    <include name="InvalidMetadataException.cs"/>
                     <include name="Bits.cs"/>
                     <include name="BitArrayExtension.cs"/>
                     <include name="AssemblyLoadException.cs"/>
