@@ -8,9 +8,7 @@
  */
 
 using Mosa.Compiler.Framework.IR;
-using Mosa.Compiler.Metadata.Signatures;
-using Mosa.Compiler.TypeSystem;
-using System.Collections.Generic;
+using Mosa.Compiler.MosaTypeSystem;
 using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework.Intrinsics
@@ -28,19 +26,19 @@ namespace Mosa.Compiler.Framework.Intrinsics
 		{
 			string runtime = "Mosa.Platform.Internal." + methodCompiler.Architecture.PlatformName + ".Runtime";
 
-			RuntimeType runtimeType = methodCompiler.TypeSystem.GetType(runtime);
-			Debug.Assert(runtimeType != null, "Cannot find " + runtime);
+			var type = methodCompiler.TypeSystem.GetTypeByName(runtime);
+			Debug.Assert(type != null, "Cannot find " + runtime);
 
-			RuntimeMethod callTarget = runtimeType.FindMethod("AllocateString");
+			var method = TypeSystem.GetMethodByName(type, "AllocateString");
 
-			Operand callTargetOperand = Operand.CreateSymbolFromMethod(callTarget);
+			Operand callTargetOperand = Operand.CreateSymbolFromMethod(methodCompiler.TypeSystem, method);
 
-			Operand methodTableOperand = Operand.CreateSymbol(BuiltInSigType.IntPtr, StringClassMethodTableSymbolName);
+			Operand methodTableOperand = Operand.CreateManagedSymbolPointer(methodCompiler.TypeSystem, StringClassMethodTableSymbolName);
 			Operand lengthOperand = context.Operand1;
 			Operand result = context.Result;
 
 			context.SetInstruction(IRInstruction.Call, result, callTargetOperand, methodTableOperand, lengthOperand);
-			context.InvokeMethod = callTarget;
+			context.InvokeMethod = method;
 		}
 	}
 }

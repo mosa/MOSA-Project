@@ -125,17 +125,17 @@ namespace Mosa.Compiler.Framework
 				s.Append("]");
 			}
 
-			if (context.RuntimeType != null)
+			if (context.MosaType != null)
 			{
 				s.Append(" [");
-				s.Append(context.RuntimeType.FullName);
+				s.Append(context.MosaType.FullName);
 				s.Append("]");
 			}
 
-			if (context.RuntimeField != null)
+			if (context.MosaField != null)
 			{
 				s.Append(" [");
-				s.Append(context.RuntimeField.FullName);
+				s.Append(context.MosaField.FullName);
 				s.Append("]");
 			}
 
@@ -199,10 +199,10 @@ namespace Mosa.Compiler.Framework
 				s.Append("}");
 			}
 
-			if (context.RuntimeField != null)
+			if (context.MosaField != null)
 			{
 				s.Append(" {");
-				s.Append(context.RuntimeField.FullName);
+				s.Append(context.MosaField.FullName);
 				s.Append("}");
 			}
 

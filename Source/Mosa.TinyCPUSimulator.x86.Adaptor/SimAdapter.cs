@@ -8,9 +8,7 @@
  */
 
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Metadata;
-using Mosa.Compiler.Metadata.Signatures;
-using Mosa.Compiler.TypeSystem;
+using Mosa.Compiler.MosaTypeSystem;
 using Mosa.Platform.x86;
 using Mosa.TinyCPUSimulator.Adaptor;
 using System.Collections.Generic;
@@ -25,7 +23,7 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 
 		SimCPU ISimAdapter.SimCPU { get { return this.CPU; } }
 
-		SimInstruction ISimAdapter.Convert(Context context, RuntimeMethod method, BasicBlocks basicBlocks, byte opcodeSize)
+		SimInstruction ISimAdapter.Convert(Context context, MosaMethod method, BasicBlocks basicBlocks, byte opcodeSize)
 		{
 			X86Instruction x86Instruction = context.Instruction as X86Instruction;
 
@@ -56,7 +54,7 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 			return instruction;
 		}
 
-		private List<SimOperand> GetOperands(Context context, RuntimeMethod method, BasicBlocks basicBlocks)
+		private List<SimOperand> GetOperands(Context context, MosaMethod method, BasicBlocks basicBlocks)
 		{
 			List<SimOperand> operands = new List<SimOperand>();
 
@@ -116,12 +114,12 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 				else
 					return CreateLabel(size, operand.Name);
 			}
-			else if (operand.IsRuntimeMember)
+			else if (operand.IsField)
 			{
 				if (operand.IsMemoryAddress)
-					return CreateMemoryAddressLabel(size, ((operand.RuntimeMember) as RuntimeField).FullName);
+					return CreateMemoryAddressLabel(size, operand.Field.FullName);
 				else
-					return CreateLabel(size, ((operand.RuntimeMember) as RuntimeField).FullName);
+					return CreateLabel(size, operand.Field.FullName);
 			}
 			else if (operand.IsMemoryAddress)
 			{
@@ -200,27 +198,16 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 			return register;
 		}
 
-		private static int GetSize(SigType sigType)
+		private static int GetSize(MosaType type)
 		{
-			switch (sigType.Type)
-			{
-				case CilElementType.U1: return 8;
-				case CilElementType.U2: return 16;
-				case CilElementType.U4: return 32;
-				case CilElementType.U8: return 64;
-				case CilElementType.I1: return 8;
-				case CilElementType.I2: return 16;
-				case CilElementType.I4: return 32;
-				case CilElementType.I8: return 64;
-				case CilElementType.R4: return 32;
-				case CilElementType.R8: return 64;
-				case CilElementType.Boolean: return 8;
-				case CilElementType.Char: return 16;
-				case CilElementType.Ptr: return 32;
-				case CilElementType.I: return 32;
-				case CilElementType.U: return 32;
-				default: return 32;
-			}
+			if (type.IsByte || type.IsBoolean)
+				return 8;
+			else if (type.IsShort)
+				return 16;
+			else if (type.IsLong || type.IsDouble)
+				return 64;
+			else
+				return 32;
 		}
 
 		private static bool IsSecondOperandDuplicate(BaseOpcode opcode)

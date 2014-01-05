@@ -7,11 +7,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System.Diagnostics;
-using Mosa.Compiler.Metadata;
-using Mosa.Compiler.Metadata.Signatures;
-using Mosa.Compiler.TypeSystem.Cil;
-
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
@@ -43,31 +38,10 @@ namespace Mosa.Compiler.Framework.CIL
 		{
 			base.Decode(ctx, decoder);
 
-			Token token = decoder.DecodeTokenType();
-			ctx.RuntimeField = decoder.Method.Module.GetField(token);
+			var field = decoder.TypeSystem.Resolver.GetFieldByToken(decoder.Method.CodeAssembly, decoder.DecodeTokenType(), decoder.Method); ;
 
-			// FIXME: Can this be put into a re-used method?
-			if (ctx.RuntimeField.ContainsGenericParameter || ctx.RuntimeField.DeclaringType.ContainsOpenGenericParameters)
-			{
-				foreach (var field in decoder.Method.DeclaringType.Fields)
-				{
-					if (field.Name == ctx.RuntimeField.Name)
-					{
-						ctx.RuntimeField = field;
-						break;
-					}
-				}
-
-				if (ctx.RuntimeField.ContainsGenericParameter)
-				{
-					ctx.RuntimeField = decoder.GenericTypePatcher.PatchField(decoder.TypeModule, decoder.Method.DeclaringType as CilGenericType, ctx.RuntimeField);
-				}
-				decoder.Compiler.Scheduler.TrackFieldReferenced(ctx.RuntimeField);
-				Debug.Assert(!ctx.RuntimeField.ContainsGenericParameter);
-			}
-
-			SigType sigType = new RefSigType(ctx.RuntimeField.SigType);
-			ctx.Result = LoadInstruction.CreateResultOperand(decoder, sigType);
+			ctx.MosaField = field;
+			ctx.Result = LoadInstruction.CreateResultOperand(decoder, field.Type);
 		}
 
 		/// <summary>

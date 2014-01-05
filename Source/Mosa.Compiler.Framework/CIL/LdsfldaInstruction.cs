@@ -7,9 +7,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using Mosa.Compiler.Metadata;
-using Mosa.Compiler.Metadata.Signatures;
-
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
@@ -36,16 +33,10 @@ namespace Mosa.Compiler.Framework.CIL
 			// Decode base classes first
 			base.Decode(ctx, decoder);
 
-			// Read the _stackFrameIndex From the code
-			Token token = decoder.DecodeTokenType();
-			ctx.RuntimeField = decoder.TypeModule.GetField(token);
+			var field = decoder.TypeSystem.Resolver.GetFieldByToken(decoder.Method.CodeAssembly, decoder.DecodeTokenType(), decoder.Method);
 
-			if (ctx.RuntimeField.ContainsGenericParameter)
-			{
-				//TODO
-			}
-
-			ctx.Result = decoder.Compiler.CreateVirtualRegister(BuiltInSigType.Ptr);
+			ctx.MosaField = field;
+			ctx.Result = decoder.Compiler.CreateVirtualRegister(decoder.TypeSystem.BuiltIn.TypedByRef);
 		}
 
 		/// <summary>

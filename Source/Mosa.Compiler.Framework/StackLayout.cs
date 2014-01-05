@@ -8,7 +8,7 @@
  */
 
 using Mosa.Compiler.Metadata.Signatures;
-using Mosa.Compiler.TypeSystem;
+using Mosa.Compiler.MosaTypeSystem;
 using System.Collections.Generic;
 
 // NOTE: Eventually all temporary stack locals will be converted to virtual registers and
@@ -84,7 +84,7 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		/// <param name="type">The type.</param>
 		/// <returns></returns>
-		public Operand AddStackLocal(SigType type)
+		public Operand AddStackLocal(MosaType type)
 		{
 			var local = Operand.CreateStackLocal(type, architecture.StackFrameRegister, stackLocal.Count);
 			stackLocal.Add(local);
@@ -95,12 +95,12 @@ namespace Mosa.Compiler.Framework
 		/// Sets the stack parameter.
 		/// </summary>
 		/// <param name="index">The index.</param>
-		/// <param name="param">The param.</param>
 		/// <param name="type">The type.</param>
+		/// <param name="displacement">The displacement.</param>
 		/// <returns></returns>
-		public Operand SetStackParameter(int index, RuntimeParameter param, SigType type)
+		public Operand SetStackParameter(int index, MosaType type, int displacement, string name)
 		{
-			parameters[index] = Operand.CreateParameter(type, architecture.StackFrameRegister, param, index);
+			parameters[index] = Operand.CreateParameter(type, architecture.StackFrameRegister, displacement, index, name);
 			return parameters[index];
 		}
 

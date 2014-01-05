@@ -10,8 +10,7 @@
 
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Linker;
-using Mosa.Compiler.TypeSystem;
-using Mosa.Compiler.TypeSystem.Cil;
+using Mosa.Compiler.MosaTypeSystem;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -27,19 +26,13 @@ namespace Mosa.Compiler.Framework.Stages
 
 		void ICompilerStage.Run()
 		{
-			foreach (RuntimeType type in typeSystem.GetAllTypes())
+			foreach (MosaType type in typeSystem.AllTypes)
 			{
 				if (type.IsModule || type.IsGeneric)
 					continue;
 
-				if (type.ContainsOpenGenericParameters)
-					continue;
-
-				// Only create method tables for generic types in the internal type module
-				if (type is CilGenericType && !(type.Module is InternalTypeModule))
-				{
-					//continue;
-				}
+				//if (type.ContainsOpenGenericParameters)
+				//	continue;
 
 				if (!type.IsInterface)
 				{
@@ -55,14 +48,14 @@ namespace Mosa.Compiler.Framework.Stages
 
 		#endregion ICompilerStage members
 
-		private void BuildTypeInterfaceSlots(RuntimeType type)
+		private void BuildTypeInterfaceSlots(MosaType type)
 		{
 			if (type.Interfaces.Count == 0)
 				return;
 
 			List<string> slots = new List<string>(typeLayout.Interfaces.Count);
 
-			foreach (RuntimeType interfaceType in typeLayout.Interfaces)
+			foreach (MosaType interfaceType in typeLayout.Interfaces)
 			{
 				if (type.Interfaces.Contains(interfaceType))
 					slots.Add(type.FullName + @"$mtable$" + interfaceType.FullName);
@@ -73,7 +66,7 @@ namespace Mosa.Compiler.Framework.Stages
 			AskLinkerToCreateMethodTable(type.FullName + @"$itable", null, slots);
 		}
 
-		private void BuildTypeInterfaceBitmap(RuntimeType type)
+		private void BuildTypeInterfaceBitmap(MosaType type)
 		{
 			if (type.Interfaces.Count == 0)
 				return;
@@ -82,10 +75,12 @@ namespace Mosa.Compiler.Framework.Stages
 
 			int at = 0;
 			byte bit = 0;
-			foreach (RuntimeType interfaceType in typeLayout.Interfaces)
+			foreach (var interfaceType in typeLayout.Interfaces)
 			{
-				if (type.ImplementsInterface(interfaceType))
+				if (type.Interfaces.Contains(interfaceType))
+				{
 					bitmap[at] = (byte)(bitmap[at] | (byte)(1 << bit));
+				}
 
 				bit++;
 				if (bit == 8)
@@ -98,17 +93,17 @@ namespace Mosa.Compiler.Framework.Stages
 			AskLinkerToCreateArray(type.FullName + @"$ibitmap", bitmap);
 		}
 
-		private void BuildTypeInterfaceTables(RuntimeType type)
+		private void BuildTypeInterfaceTables(MosaType type)
 		{
-			foreach (RuntimeType interfaceType in type.Interfaces)
+			foreach (MosaType interfaceType in type.Interfaces)
 			{
 				BuildInterfaceTable(type, interfaceType);
 			}
 		}
 
-		private void BuildInterfaceTable(RuntimeType type, RuntimeType interfaceType)
+		private void BuildInterfaceTable(MosaType type, MosaType interfaceType)
 		{
-			RuntimeMethod[] methodTable = typeLayout.GetInterfaceTable(type, interfaceType);
+			MosaMethod[] methodTable = typeLayout.GetInterfaceTable(type, interfaceType);
 
 			if (methodTable == null)
 				return;
@@ -120,7 +115,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Builds the method table.
 		/// </summary>
 		/// <param name="type">The type.</param>
-		private void BuildMethodTable(RuntimeType type)
+		private void BuildMethodTable(MosaType type)
 		{
 			// The method table is offset by a four pointers:
 			// 1. interface dispatch table pointer
@@ -152,16 +147,16 @@ namespace Mosa.Compiler.Framework.Stages
 				headerlinks.Add(type.BaseType + @"$mtable");
 
 			// 5. Type Metadata
-			if (!type.IsModule && !(type.Module is InternalTypeModule))
+			if (!type.IsModule)
 				headerlinks.Add(type.FullName + @"$dtable");
 			else
 				headerlinks.Add(null);
 
-			IList<RuntimeMethod> methodTable = typeLayout.GetMethodTable(type);
+			IList<MosaMethod> methodTable = typeLayout.GetMethodTable(type);
 			AskLinkerToCreateMethodTable(type.FullName + @"$mtable", methodTable, headerlinks);
 		}
 
-		private void AskLinkerToCreateMethodTable(string methodTableName, IList<RuntimeMethod> methodTable, IList<string> headerlinks)
+		private void AskLinkerToCreateMethodTable(string methodTableName, IList<MosaMethod> methodTable, IList<string> headerlinks)
 		{
 			int methodTableSize = ((headerlinks == null ? 0 : headerlinks.Count) + (methodTable == null ? 0 : methodTable.Count)) * typeLayout.NativePointerSize;
 
@@ -188,7 +183,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (methodTable == null)
 				return;
 
-			foreach (RuntimeMethod method in methodTable)
+			foreach (MosaMethod method in methodTable)
 			{
 				if (!method.IsAbstract)
 				{
@@ -215,9 +210,9 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 		}
 
-		private void AllocateStaticFields(RuntimeType type)
+		private void AllocateStaticFields(MosaType type)
 		{
-			foreach (RuntimeField field in type.Fields)
+			foreach (MosaField field in type.Fields)
 			{
 				if (field.IsStaticField && !field.IsLiteralField)
 				{
@@ -231,40 +226,27 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Allocates memory for the static field and initializes it.
 		/// </summary>
 		/// <param name="field">The field.</param>
-		private void CreateStaticField(RuntimeField field)
+		private void CreateStaticField(MosaField field)
 		{
-			Debug.Assert(field != null, @"No field given.");
-
 			// Determine the size of the type & alignment requirements
 			int size, alignment;
-			architecture.GetTypeRequirements(field.SigType, out size, out alignment);
+			architecture.GetTypeRequirements(field.Type, out size, out alignment);
 
 			size = (int)typeLayout.GetFieldSize(field);
 
 			// The linker section to move this field into
-			SectionKind section;
-
-			// Does this field have an RVA?
-			if (field.RVA != 0)
-			{
-				// FIXME: Move a static field into ROData, if it is read-only and can be initialized using static analysis
-				section = SectionKind.Data;
-			}
-			else
-			{
-				section = SectionKind.BSS;
-			}
+			SectionKind section = field.HasRVA ? section = SectionKind.Data : section = SectionKind.BSS;
 
 			AllocateSpace(field, section, size, alignment);
 		}
 
-		private void AllocateSpace(RuntimeField field, SectionKind section, int size, int alignment)
+		private void AllocateSpace(MosaField field, SectionKind section, int size, int alignment)
 		{
 			using (Stream stream = compiler.Linker.Allocate(field.ToString(), section, size, alignment))
 			{
-				if (field.RVA != 0)
+				if (field.HasRVA)
 				{
-					InitializeStaticValueFromRVA(stream, size, field);
+					stream.Write(field.Data, 0, size);
 				}
 				else
 				{
@@ -273,18 +255,5 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 		}
 
-		private void InitializeStaticValueFromRVA(Stream stream, int size, RuntimeField field)
-		{
-			using (Stream source = field.Module.MetadataModule.GetDataSection((long)field.RVA))
-			{
-				byte[] data = new byte[size];
-				int wrote = source.Read(data, 0, size);
-
-				if (wrote != size)
-					throw new InvalidDataException(); // FIXME
-
-				stream.Write(data, 0, size);
-			}
-		}
 	}
 }

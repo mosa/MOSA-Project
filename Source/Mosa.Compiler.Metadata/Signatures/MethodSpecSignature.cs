@@ -59,10 +59,14 @@ namespace Mosa.Compiler.Metadata.Signatures
 			{
 				sb.Append(" [ ");
 
+				int index = 0;
 				foreach (var type in Types)
 				{
+					sb.Append(index.ToString());
+					sb.Append(":");
 					sb.Append(type.ToString());
 					sb.Append(", ");
+					index++;
 				}
 
 				sb.Length = sb.Length - 2;

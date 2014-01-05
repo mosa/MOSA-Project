@@ -7,10 +7,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System.Diagnostics;
-
-using Mosa.Compiler.Metadata;
-
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
@@ -43,17 +39,9 @@ namespace Mosa.Compiler.Framework.CIL
 			// Decode base classes first
 			base.Decode(ctx, decoder);
 
-			// Read the field from the code
-			Token token = decoder.DecodeTokenType();
-			ctx.RuntimeField = decoder.TypeModule.GetField(token);
+			var field = decoder.TypeSystem.Resolver.GetFieldByToken(decoder.Method.CodeAssembly, decoder.DecodeTokenType(), decoder.Method);
 
-			if (ctx.RuntimeField.ContainsGenericParameter)
-			{
-				//TODO
-				;
-			}
-
-			Debug.Assert((ctx.RuntimeField.Attributes & FieldAttributes.Static) == FieldAttributes.Static, @"Static field access on non-static field.");
+			ctx.MosaField = field;
 		}
 
 		/// <summary>

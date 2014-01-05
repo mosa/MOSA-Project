@@ -129,7 +129,7 @@ namespace Mosa.Tool.Compiler.Stages
 			{
 				writer.WriteLine();
 				writer.WriteLine("Entry point is {0}", entryPoint.Name);
-				writer.WriteLine("\tat offset {0:x16}", entryPoint.Offset);
+				writer.WriteLine("\tat Offset {0:x16}", entryPoint.Offset);
 				writer.WriteLine("\tat virtual address {0:x16}", entryPoint.VirtualAddress);
 			}
 		}

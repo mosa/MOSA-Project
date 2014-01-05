@@ -9,7 +9,6 @@
 
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Platform;
-using Mosa.Compiler.Metadata;
 
 namespace Mosa.Platform.ARMv6
 {
@@ -22,7 +21,7 @@ namespace Mosa.Platform.ARMv6
 
 		public static ARMv6Instruction GetMove(Operand Destination, Operand Source)
 		{
-			if (Source.IsFloat && Destination.IsFloat)
+			if (Source.IsSingle && Destination.IsSingle)
 			{
 				return ARMv6.Mov; // FIXME
 			}
@@ -30,11 +29,11 @@ namespace Mosa.Platform.ARMv6
 			{
 				return ARMv6.Mov; // FIXME
 			}
-			else if (Source.IsFloat && Destination.IsDouble)
+			else if (Source.IsSingle && Destination.IsDouble)
 			{
 				return ARMv6.Mov; // FIXME
 			}
-			else if (Source.IsDouble && Destination.IsFloat)
+			else if (Source.IsDouble && Destination.IsSingle)
 			{
 				return ARMv6.Mov; // FIXME
 			}

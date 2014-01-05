@@ -13,7 +13,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 {
 	public class MosaField
 	{
-		public MosaType FieldType { get; internal set; }
+		public MosaType Type { get; internal set; }
 
 		public MosaType DeclaringType { get; internal set; }
 
@@ -27,16 +27,28 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public bool IsStaticField { get; internal set; }
 
-		public int RVA { get; internal set; }
+		public bool HasDefault { get; internal set; }
+
+		public bool HasRVA { get; internal set; }
+
+		public uint Offset { get; internal set; }
+
+		internal uint RVA { get; set; }
+
+		public byte[] Data { get; internal set; }
 
 		public MosaField()
 		{
 			CustomAttributes = new List<MosaAttribute>();
+			HasRVA = false;
+			IsLiteralField = false;
+			IsStaticField = false;
+			HasDefault = false;
 		}
 
 		public override string ToString()
 		{
-			return FieldType.Name + " " + FullName;
+			return Type.Name + " " + FullName;
 		}
 	}
 }

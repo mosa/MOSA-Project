@@ -7,7 +7,7 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using Mosa.Compiler.TypeSystem;
+using Mosa.Compiler.MosaTypeSystem;
 
 namespace Mosa.Compiler.InternalTrace
 {
@@ -17,7 +17,7 @@ namespace Mosa.Compiler.InternalTrace
 
 		public string Stage { get; set; }
 
-		public RuntimeMethod Method { get; set; }
+		public MosaMethod Method { get; set; }
 
 		public string Section { get; set; }
 
@@ -47,7 +47,7 @@ namespace Mosa.Compiler.InternalTrace
 			this.Active = internalTrace.TraceFilter.IsMatch(this.Method, this.Stage);
 		}
 
-		public CompilerTrace(IInternalTrace internalTrace, RuntimeMethod method, string stage)
+		public CompilerTrace(IInternalTrace internalTrace, MosaMethod method, string stage)
 			: this(internalTrace)
 		{
 			this.Stage = stage;
@@ -55,7 +55,7 @@ namespace Mosa.Compiler.InternalTrace
 			this.Active = internalTrace.TraceFilter.IsMatch(this.Method, this.Stage);
 		}
 
-		public CompilerTrace(IInternalTrace internalTrace, RuntimeMethod method, string stage, string section)
+		public CompilerTrace(IInternalTrace internalTrace, MosaMethod method, string stage, string section)
 			: this(internalTrace)
 		{
 			this.Stage = stage;

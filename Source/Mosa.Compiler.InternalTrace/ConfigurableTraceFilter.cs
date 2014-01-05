@@ -9,7 +9,7 @@
 
 using System;
 
-using Mosa.Compiler.TypeSystem;
+using Mosa.Compiler.MosaTypeSystem;
 
 namespace Mosa.Compiler.InternalTrace
 {
@@ -27,7 +27,7 @@ namespace Mosa.Compiler.InternalTrace
 		public MatchType MethodMatch = MatchType.Contains;
 		public MatchType StageMatch = MatchType.Any;
 
-		bool ITraceFilter.IsMatch(RuntimeMethod method, string stage)
+		bool ITraceFilter.IsMatch(MosaMethod method, string stage)
 		{
 			return IsMatch(method.DeclaringType.Name, method.Name, stage);
 		}

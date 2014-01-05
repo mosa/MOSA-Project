@@ -8,8 +8,6 @@
  */
 
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Metadata;
-using Mosa.Compiler.Metadata.Signatures;
 using System;
 
 namespace Mosa.Platform.x86
@@ -129,16 +127,6 @@ namespace Mosa.Platform.x86
 		#endregion Properties
 
 		#region Methods
-
-		/// <summary>
-		/// Checks if the signature type is valid for this register type.
-		/// </summary>
-		/// <param name="type">The signature type to check.</param>
-		/// <returns>True, if the register can store this signature type.</returns>
-		public override bool IsValidSigType(SigType type)
-		{
-			return (type.IsFloat || type.IsDouble|| type.IsSignedLong || type.IsUnsignedLong);
-		}
 
 		/// <summary>
 		/// Retrieves the SSE2 register name.

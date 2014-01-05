@@ -17,85 +17,18 @@ namespace Mosa.Compiler.Metadata.Loader
 	/// </summary>
 	public sealed class InstructionStream : Stream
 	{
-		#region Types
-
-		/// <summary>
-		///
-		/// </summary>
-		[Flags]
-		private enum MethodFlags : ushort
-		{
-			/// <summary>
-			///
-			/// </summary>
-			TinyFormat = 0x02,
-
-			/// <summary>
-			///
-			/// </summary>
-			FatFormat = 0x03,
-
-			/// <summary>
-			///
-			/// </summary>
-			MoreSections = 0x08,
-
-			/// <summary>
-			///
-			/// </summary>
-			InitLocals = 0x10,
-
-			/// <summary>
-			///
-			/// </summary>
-			CodeSizeMask = 0xF000,
-
-			/// <summary>
-			///
-			/// </summary>
-			HeaderMask = 0x0003
-		}
-
-		/// <summary>
-		///
-		/// </summary>
-		[Flags]
-		private enum MethodDataSectionType
-		{
-			/// <summary>
-			///
-			/// </summary>
-			EHTable = 0x01,
-
-			/// <summary>
-			///
-			/// </summary>
-			OptIL = 0x02,
-
-			/// <summary>
-			///
-			/// </summary>
-			FatFormat = 0x40,
-
-			/// <summary>
-			///
-			/// </summary>
-			MoreSections = 0x80
-		}
-
-		#endregion Types
 
 		#region Data members
 
 		/// <summary>
 		/// The CIL stream offset.
 		/// </summary>
-		private long _startOffset;
+		private long startOffset;
 
 		/// <summary>
 		/// Stream, which holds the il code to decode.
 		/// </summary>
-		private Stream _stream;
+		private Stream stream;
 
 		#endregion Data members
 
@@ -109,13 +42,13 @@ namespace Mosa.Compiler.Metadata.Loader
 		public InstructionStream(Stream assemblyStream, long offset)
 		{
 			// Check preconditions
-			if (null == assemblyStream)
+			if (assemblyStream == null)
 				throw new ArgumentNullException(@"assembly");
 
 			// Store the arguments
-			_stream = assemblyStream;
-			_startOffset = offset;
-			_stream.Position = offset;
+			stream = assemblyStream;
+			startOffset = offset;
+			stream.Position = offset;
 		}
 
 		#endregion Construction
@@ -183,7 +116,7 @@ namespace Mosa.Compiler.Metadata.Loader
 		/// </exception>
 		public override long Length
 		{
-			get { return _stream.Length; }
+			get { return stream.Length; }
 		}
 
 		/// <summary>
@@ -206,14 +139,14 @@ namespace Mosa.Compiler.Metadata.Loader
 		{
 			get
 			{
-				return _stream.Position;
+				return stream.Position;
 			}
 			set
 			{
 				if (0 > value)
 					throw new ArgumentOutOfRangeException(@"value");
 
-				_stream.Position = value;
+				stream.Position = value;
 			}
 		}
 
@@ -250,7 +183,7 @@ namespace Mosa.Compiler.Metadata.Loader
 			if (null == buffer)
 				throw new ArgumentNullException(@"buffer");
 
-			return _stream.Read(buffer, offset, count);
+			return stream.Read(buffer, offset, count);
 		}
 
 		/// <summary>
@@ -273,7 +206,7 @@ namespace Mosa.Compiler.Metadata.Loader
 		public override long Seek(long offset, SeekOrigin origin)
 		{
 			// FIXME: Fix the seeking...
-			return _stream.Seek(offset, origin);
+			return stream.Seek(offset, origin);
 		}
 
 		/// <summary>

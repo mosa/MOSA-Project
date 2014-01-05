@@ -8,8 +8,6 @@
  */
 
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Metadata;
-using Mosa.Compiler.Metadata.Signatures;
 
 namespace Mosa.Platform.x86
 {
@@ -173,26 +171,6 @@ namespace Mosa.Platform.x86
 		#endregion Properties
 
 		#region Methods
-
-		/// <summary>
-		/// Determines if the signature type fits into the register.
-		/// </summary>
-		/// <param name="type">The signature type to check.</param>
-		/// <returns>True if the signature type fits.</returns>
-		public override bool IsValidSigType(SigType type)
-		{
-			return (type.IsIntPtr ||
-					type.IsSignedByte ||
-					type.IsSignedShort ||
-					type.IsSignedInt ||
-					type.IsUnsignedByte ||
-					type.IsUnsignedShort ||
-					type.IsUnsignedInt ||
-					type.IsPointer ||
-					type.IsByRef ||
-					type.IsFunctionPtr ||
-					type.IsObject);
-		}
 
 		/// <summary>
 		/// Returns the name of the general purpose register.

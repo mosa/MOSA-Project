@@ -7,9 +7,9 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using Mosa.Compiler.MosaTypeSystem;
 using System;
 using System.Collections.Generic;
-using Mosa.Compiler.TypeSystem;
 
 namespace Mosa.Compiler.Framework.Stages
 {
@@ -20,8 +20,8 @@ namespace Mosa.Compiler.Framework.Stages
 	{
 		#region Data members
 
-		protected RuntimeType plugTypeAttribute;
-		protected RuntimeType plugMethodAttribute;
+		protected MosaType plugTypeAttribute;
+		protected MosaType plugMethodAttribute;
 
 		#endregion Data members
 
@@ -31,8 +31,8 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			base.Setup(compiler);
 
-			plugTypeAttribute = typeSystem.GetType("Mosa.Internal.Plug", "Mosa.Internal.Plug", "PlugTypeAttribute");
-			plugMethodAttribute = typeSystem.GetType("Mosa.Internal.Plug", "Mosa.Internal.Plug", "PlugMethodAttribute");
+			plugTypeAttribute = typeSystem.GetTypeByName("Mosa.Internal.Plug", "Mosa.Internal.Plug", "PlugTypeAttribute");
+			plugMethodAttribute = typeSystem.GetTypeByName("Mosa.Internal.Plug", "Mosa.Internal.Plug", "PlugMethodAttribute");
 		}
 
 		void ICompilerStage.Run()
@@ -40,38 +40,34 @@ namespace Mosa.Compiler.Framework.Stages
 			if (plugTypeAttribute == null | plugMethodAttribute == null)
 				return;
 
-			foreach (RuntimeType type in this.typeSystem.GetAllTypes())
+			foreach (var type in typeSystem.AllTypes)
 			{
 				string plugTypeTarget = null;
 
-				RuntimeAttribute typeAttribute = GetAttribute(type.CustomAttributes, plugTypeAttribute);
+				MosaAttribute typeAttribute = GetAttribute(type.CustomAttributes, plugTypeAttribute);
 
 				if (typeAttribute != null)
 				{
-					object[] parameters = CustomAttributeParser.Parse(typeAttribute.Blob, typeAttribute.CtorMethod);
-
-					if (parameters.Length >= 1)
+					if (typeAttribute.Values.Count >= 1 && typeAttribute.CtorMethod.Parameters[0].Type.IsString)
 					{
-						plugTypeTarget = (string)parameters[0];
+						plugTypeTarget = (string)typeAttribute.Values[0];
 					}
 				}
 
-				foreach (RuntimeMethod method in type.Methods)
+				foreach (var method in type.Methods)
 				{
 					if (!method.IsStatic)
 						continue;
 
 					string plugMethodTarget = null;
 
-					RuntimeAttribute methodAttribute = GetAttribute(method.CustomAttributes, plugMethodAttribute);
+					MosaAttribute methodAttribute = GetAttribute(method.CustomAttributes, plugMethodAttribute);
 
 					if (methodAttribute != null)
 					{
-						object[] parameters = CustomAttributeParser.Parse(methodAttribute.Blob, methodAttribute.CtorMethod);
-
-						if (parameters.Length >= 1)
+						if (methodAttribute.Values.Count >= 1 && methodAttribute.CtorMethod.Parameters[0].Type.IsString)
 						{
-							plugMethodTarget = (string)parameters[0];
+							plugMethodTarget = (string)methodAttribute.Values[0];
 						}
 					}
 
@@ -97,12 +93,12 @@ namespace Mosa.Compiler.Framework.Stages
 						string targetNameSpace = ParseNameSpace(targetFullTypeName);
 						string targetTypeName = ParseType(targetFullTypeName);
 
-						RuntimeType targetType;
+						MosaType targetType;
 
 						if (targetAssemblyName != null)
-							targetType = typeSystem.GetType(targetAssemblyName, targetNameSpace, targetTypeName);
+							targetType = typeSystem.GetTypeByName(targetAssemblyName, targetNameSpace, targetTypeName);
 						else
-							targetType = typeSystem.GetType(targetNameSpace, targetTypeName);
+							targetType = typeSystem.GetTypeByName(targetNameSpace, targetTypeName);
 
 						if (targetType == null)
 						{
@@ -112,7 +108,7 @@ namespace Mosa.Compiler.Framework.Stages
 							continue;
 						}
 
-						RuntimeMethod targetMethod = null;
+						MosaMethod targetMethod = null;
 
 						foreach (var targetMethodCandidate in targetType.Methods)
 						{
@@ -154,39 +150,41 @@ namespace Mosa.Compiler.Framework.Stages
 
 		#endregion ICompilerStage members
 
-		private void Patch(RuntimeMethod targetMethod, RuntimeMethod method)
+		private void Patch(MosaMethod targetMethod, MosaMethod method)
 		{
 			Trace(InternalTrace.CompilerEvent.Plug, targetMethod.FullName + " with " + method.FullName);
 			compiler.PlugSystem.CreatePlug(method, targetMethod);
 		}
 
-		private RuntimeAttribute GetAttribute(List<RuntimeAttribute> attributes, RuntimeType plugAttribute)
+		private MosaAttribute GetAttribute(IList<MosaAttribute> attributes, MosaType plugAttribute)
 		{
-			foreach (RuntimeAttribute attribute in attributes)
+			foreach (var attribute in attributes)
 			{
 				if (attribute.CtorMethod.DeclaringType == plugAttribute)
+				{
 					return attribute;
+				}
 			}
 
 			return null;
 		}
 
-		private bool MatchesWithStaticThis(RuntimeMethod targetMethod, RuntimeMethod plugMethod)
+		private bool MatchesWithStaticThis(MosaMethod targetMethod, MosaMethod plugMethod)
 		{
 			if (!targetMethod.ReturnType.Matches(plugMethod.ReturnType))
 				return false;
 
-			if (targetMethod.SigParameters.Length != plugMethod.SigParameters.Length - 1)
+			if (targetMethod.Parameters.Count != plugMethod.Parameters.Count - 1)
 				return false;
 
-			if (!plugMethod.SigParameters[0].IsByRef)
+			if (!plugMethod.Parameters[0].Type.IsManagedPointerType)
 				return false;
 
 			// TODO: Compare plug.Parameters[0].Type to the target's type
 
-			for (int i = 0; i < targetMethod.SigParameters.Length; i++)
+			for (int i = 0; i < targetMethod.Parameters.Count; i++)
 			{
-				if (!targetMethod.SigParameters[i].Matches(plugMethod.SigParameters[i + 1]))
+				if (!targetMethod.Parameters[i].Matches(plugMethod.Parameters[i + 1]))
 					return false;
 			}
 

@@ -11,7 +11,7 @@
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Linker;
-using Mosa.Compiler.TypeSystem;
+using Mosa.Compiler.MosaTypeSystem;
 using System.Collections.Generic;
 
 namespace Mosa.Platform.x86.Stages
@@ -51,16 +51,12 @@ namespace Mosa.Platform.x86.Stages
 		private void CreateTables()
 		{
 			var table = new List<LinkerSymbol>();
-			var methods = new List<RuntimeMethod>();
+			var methods = new List<MosaMethod>();
 
 			// Collect all methods that we can link to
-			foreach (var type in this.typeSystem.GetAllTypes())
+			foreach (var type in typeSystem.AllTypes)
 			{
-				if (type.ContainsOpenGenericParameters)
-					continue;
-				if (type.IsModule || type.IsGeneric)
-					continue;
-				if (type.IsInterface)
+				if (type.IsModule || type.IsGeneric || type.IsInterface)
 					continue;
 
 				foreach (var method in type.Methods)
@@ -116,7 +112,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Creates the method description entries.
 		/// </summary>
 		/// <param name="methods">The methods.</param>
-		private void CreateMethodDescriptionEntries(IList<RuntimeMethod> methods)
+		private void CreateMethodDescriptionEntries(IList<MosaMethod> methods)
 		{
 			foreach (var method in methods)
 			{
@@ -140,7 +136,7 @@ namespace Mosa.Platform.x86.Stages
 			}
 		}
 
-		protected uint DetermineSizeOfMethodParameters(RuntimeMethod method)
+		protected uint DetermineSizeOfMethodParameters(MosaMethod method)
 		{
 			// TODO
 			return 0;

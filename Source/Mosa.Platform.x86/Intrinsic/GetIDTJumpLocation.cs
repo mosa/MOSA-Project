@@ -9,7 +9,6 @@
 
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.IR;
-using Mosa.Compiler.Metadata.Signatures;
 using System;
 using System.Diagnostics;
 
@@ -47,7 +46,7 @@ namespace Mosa.Platform.x86.Intrinsic
 			if ((irq > 256) || (irq < 0))
 				throw new InvalidOperationException();
 
-			context.SetInstruction(IRInstruction.Move, context.Result, Operand.CreateSymbol(BuiltInSigType.Ptr, @"Mosa.Tools.Compiler.LinkerGenerated.<$>InterruptISR" + irq.ToString() + "()"));
+			context.SetInstruction(IRInstruction.Move, context.Result, Operand.CreateUnmanagedSymbolPointer(methodCompiler.TypeSystem, "Mosa.Tools.Compiler.LinkerGenerated.<$>InterruptISR" + irq.ToString() + "()"));
 		}
 
 		#endregion Methods

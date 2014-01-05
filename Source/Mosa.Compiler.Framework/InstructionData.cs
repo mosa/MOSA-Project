@@ -8,9 +8,8 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-using Mosa.Compiler.Metadata;
-using Mosa.Compiler.Metadata.Signatures;
-using Mosa.Compiler.TypeSystem;
+
+using Mosa.Compiler.MosaTypeSystem;
 using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework
@@ -155,9 +154,9 @@ namespace Mosa.Compiler.Framework
 		/// Gets or sets the runtime method.
 		/// </summary>
 		/// <value>The runtime method.</value>
-		public RuntimeMethod InvokeMethod
+		public MosaMethod InvokeMethod
 		{
-			get { return Other as RuntimeMethod; }
+			get { return Other as MosaMethod; }
 			set { Other = value; }
 		}
 
@@ -165,9 +164,9 @@ namespace Mosa.Compiler.Framework
 		/// Gets or sets the runtime field.
 		/// </summary>
 		/// <value>The runtime field.</value>
-		public RuntimeField RuntimeField
+		public MosaField MosaField
 		{
-			get { return Other as RuntimeField; }
+			get { return Other as MosaField; }
 			set { Other = value; }
 		}
 
@@ -175,29 +174,9 @@ namespace Mosa.Compiler.Framework
 		/// Gets or sets the runtime field.
 		/// </summary>
 		/// <value>The runtime field.</value>
-		public RuntimeType RuntimeType
+		public MosaType MosaType
 		{
-			get { return Other as RuntimeType; }
-			set { Other = value; }
-		}
-
-		/// <summary>
-		/// Gets or sets the sig type.
-		/// </summary>
-		/// <value>The runtime field.</value>
-		public SigType SigType
-		{
-			get { return Other as SigType; }
-			set { Other = value; }
-		}
-
-		/// <summary>
-		/// Gets or sets the token type.
-		/// </summary>
-		/// <value>The token type.</value>
-		public HeapIndexToken TokenType
-		{
-			get { return (HeapIndexToken)Other; }
+			get { return Other as MosaType; }
 			set { Other = value; }
 		}
 

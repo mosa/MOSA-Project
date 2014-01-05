@@ -21,7 +21,7 @@
                     <include name="${outputDirectory}/Mosa.Internal.Plug.dll"/>
                     <include name="${outputDirectory}/mscorlib.dll"/>
                     <include name="${outputDirectory}/Mosa.Kernel.ARMv6.dll"/>
-                    <include name="${outputDirectory}/Mosa.Platform.ARMv6.Intrinsic.dll"/>
+                    <include name="${outputDirectory}/Mosa.Platform.Internal.ARMv6.dll"/>
                     <include name="${outputDirectory}/Mosa.Test.Collection.dll"/>
 		</references>
 		<!-- supress warnings -->

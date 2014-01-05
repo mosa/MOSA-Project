@@ -11,8 +11,7 @@
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Stages;
 using Mosa.Compiler.Linker;
-using Mosa.Compiler.Metadata.Signatures;
-using Mosa.Compiler.TypeSystem;
+using Mosa.Compiler.MosaTypeSystem;
 using System.IO;
 using System.Text;
 
@@ -147,27 +146,27 @@ namespace Mosa.Platform.x86.Stages
 			}
 			else
 			{
-				TypeInitializerSchedulerStage typeInitializerSchedulerStage = this.compiler.Pipeline.FindFirst<TypeInitializerSchedulerStage>();
+				TypeInitializerSchedulerStage typeInitializerSchedulerStage = compiler.Pipeline.FindFirst<TypeInitializerSchedulerStage>();
 
-				Operand ecx = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.ECX);
-				Operand eax = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.EAX);
-				Operand ebx = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.EBX);
+				Operand ecx = Operand.CreateCPURegister(typeSystem.BuiltIn.Int32, GeneralPurposeRegister.ECX);
+				Operand eax = Operand.CreateCPURegister(typeSystem.BuiltIn.Int32, GeneralPurposeRegister.EAX);
+				Operand ebx = Operand.CreateCPURegister(typeSystem.BuiltIn.Int32, GeneralPurposeRegister.EBX);
 
 				BasicBlocks basicBlocks = new BasicBlocks();
 				InstructionSet instructionSet = new InstructionSet(25);
 				Context ctx = instructionSet.CreateNewBlock(basicBlocks);
 				basicBlocks.AddHeaderBlock(ctx.BasicBlock);
 
-				ctx.AppendInstruction(X86.Mov, ecx, Operand.CreateConstantSignedInt(0x200000));
-				ctx.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(BuiltInSigType.Int32, ecx, 0), eax);
-				ctx.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(BuiltInSigType.Int32, ecx, 4), ebx);
+				ctx.AppendInstruction(X86.Mov, ecx, Operand.CreateConstantSignedInt(typeSystem, 0x200000));
+				ctx.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(typeSystem.BuiltIn.Int32, ecx, 0), eax);
+				ctx.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(typeSystem.BuiltIn.Int32, ecx, 4), ebx);
 
-				Operand entryPoint = Operand.CreateSymbolFromMethod(typeInitializerSchedulerStage.TypeInitializerMethod);
+				Operand entryPoint = Operand.CreateSymbolFromMethod(typeSystem, typeInitializerSchedulerStage.TypeInitializerMethod);
 
 				ctx.AppendInstruction(X86.Call, null, entryPoint);
 				ctx.AppendInstruction(X86.Ret);
 
-				RuntimeMethod method = compiler.CreateLinkerMethod("MultibootInit");
+				MosaMethod method = compiler.CreateLinkerMethod("MultibootInit");
 				compiler.CompileMethod(method, basicBlocks, instructionSet);
 				linker.EntryPoint = linker.GetSymbol(method.FullName);
 			}

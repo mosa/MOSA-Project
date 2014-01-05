@@ -24,12 +24,11 @@ namespace Mosa.Compiler.Metadata.Signatures
 		/// </summary>
 		/// <param name="baseType">Type of the base.</param>
 		/// <param name="genericArguments">The generic args.</param>
-		public GenericInstSigType(TypeSigType baseType, SigType[] genericArguments) :
+		internal GenericInstSigType(TypeSigType baseType, SigType[] genericArguments) :
 			base(CilElementType.GenericInst)
 		{
 			BaseType = baseType;
 			GenericArguments = genericArguments;
-			ContainsGenericParameters = CheckContainsOpenGenericParameters();
 		}
 
 		#endregion Construction
@@ -48,43 +47,9 @@ namespace Mosa.Compiler.Metadata.Signatures
 		/// <value>The generic type signatures.</value>
 		public SigType[] GenericArguments { get; private set; }
 
-		/// <summary>
-		/// Gets a value indicating whether the the signature's types are closed.
-		/// </summary>
-		/// <value><c>true</c> if this signature's types are closed; otherwise, <c>false</c>.</value>
-		public bool ContainsGenericParameters { get; private set; }
-
 		#endregion Properties
 
 		#region SigType Overrides
-
-		/// <summary>
-		/// Indicates whether the current object is equal to another object of the same type.
-		/// </summary>
-		/// <param name="other">An object to compare with this object.</param>
-		/// <returns>
-		/// true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.
-		/// </returns>
-		public override bool Equals(SigType other)
-		{
-			GenericInstSigType gist = other as GenericInstSigType;
-			if (gist == null)
-				return false;
-
-			// TEMP
-			if (!base.Equals(other))
-				return false;
-
-			if (BaseType != gist.BaseType)
-				return false;
-
-			if (!SigType.Equals(GenericArguments, gist.GenericArguments))
-				return false;
-
-			// END TEMP
-
-			return (base.Equals(other) && BaseType == gist.BaseType && SigType.Equals(GenericArguments, gist.GenericArguments));
-		}
 
 		/// <summary>
 		/// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
@@ -104,10 +69,14 @@ namespace Mosa.Compiler.Metadata.Signatures
 			{
 				sb.Append(" [ ");
 
+				int index = 0;
 				foreach (var type in GenericArguments)
 				{
+					sb.Append(index.ToString());
+					sb.Append(":");
 					sb.Append(type.ToString());
 					sb.Append(", ");
+					index++;
 				}
 
 				sb.Length = sb.Length - 2;
@@ -139,15 +108,6 @@ namespace Mosa.Compiler.Metadata.Signatures
 			sb.Append('>');
 
 			return sb.ToString();
-		}
-
-		private bool CheckContainsOpenGenericParameters()
-		{
-			foreach (SigType type in GenericArguments)
-				if (type.IsGeneric)
-					return true;
-
-			return false;
 		}
 	}
 }

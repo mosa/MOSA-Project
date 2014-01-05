@@ -10,26 +10,40 @@
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Metadata;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 
 namespace Mosa.Compiler.MosaTypeSystem
 {
 	public class MosaTypeResolver
 	{
+		public IList<MosaAssembly> Assemblies { get; private set; }
+
 		public IList<MosaType> Types { get; private set; }
 
 		public IList<MosaMethod> Methods { get; private set; }
 
 		public MosaAssembly InternalAssembly { get; private set; }
 
-		public MosaAssembly InternalGenericsAssembly { get; private set; }
+		public MosaAssembly LinkerAssembly { get; private set; }
+
+		public MosaAssembly GenericAssembly { get; private set; }
 
 		public BuiltInTypes BuiltIn { get; internal set; }
+
+		public MosaType DefaultLinkerType { get; internal set; }
 
 		private Dictionary<string, MosaAssembly> assemblyLookup = new Dictionary<string, MosaAssembly>();
 		private Dictionary<MosaAssembly, Dictionary<Token, MosaType>> typeLookup = new Dictionary<MosaAssembly, Dictionary<Token, MosaType>>();
 		private Dictionary<MosaAssembly, Dictionary<Token, MosaMethod>> methodLookup = new Dictionary<MosaAssembly, Dictionary<Token, MosaMethod>>();
 		private Dictionary<MosaAssembly, Dictionary<Token, MosaField>> fieldLookup = new Dictionary<MosaAssembly, Dictionary<Token, MosaField>>();
+		private Dictionary<MosaType, MosaType> unmanagedPointerTypes = new Dictionary<MosaType, MosaType>();
+		private Dictionary<MosaType, MosaType> managedPointerTypes = new Dictionary<MosaType, MosaType>();
+		private Dictionary<MosaAssembly, Dictionary<HeapIndexToken, string>> userString = new Dictionary<MosaAssembly, Dictionary<HeapIndexToken, string>>();
+		private Dictionary<MosaAssembly, UserStringHeap> userStringHeaps = new Dictionary<MosaAssembly, UserStringHeap>();
+		private Dictionary<MosaType, MosaType> arrayTypes = new Dictionary<MosaType, MosaType>();
+		private Dictionary<MosaType, List<KeyValuePair<List<MosaType>, MosaType>>> genericTypeLookup = new Dictionary<MosaType, List<KeyValuePair<List<MosaType>, MosaType>>>();
+		private Dictionary<MosaMethod, List<KeyValuePair<List<MosaType>, MosaMethod>>> genericMethodLookup = new Dictionary<MosaMethod, List<KeyValuePair<List<MosaType>, MosaMethod>>>();
 
 		private MosaType[] var = new MosaType[255];
 		private MosaType[] mvar = new MosaType[255];
@@ -39,15 +53,24 @@ namespace Mosa.Compiler.MosaTypeSystem
 			Types = new List<MosaType>();
 			Methods = new List<MosaMethod>();
 			BuiltIn = new BuiltInTypes();
+			Assemblies = new List<MosaAssembly>();
 
 			SetupInternalAssembly();
-			SetupInternalGenericsAssembly();
+			SetupLinkerAssembly();
+			SetupGenericAssembly();
 		}
 
-		private void SetupInternalGenericsAssembly()
+		private void SetupLinkerAssembly()
 		{
-			InternalGenericsAssembly = new MosaAssembly("@InternalGenerics");
-			AddAssembly(InternalGenericsAssembly);
+			LinkerAssembly = new MosaAssembly("@Linker");
+			AddAssembly(LinkerAssembly);
+			DefaultLinkerType = CreateLinkerType("@Linker", "Default");
+		}
+
+		private void SetupGenericAssembly()
+		{
+			GenericAssembly = new MosaAssembly("@Generic");
+			AddAssembly(GenericAssembly);
 		}
 
 		private void SetupInternalAssembly()
@@ -55,48 +78,50 @@ namespace Mosa.Compiler.MosaTypeSystem
 			InternalAssembly = new MosaAssembly("@Internal");
 			AddAssembly(InternalAssembly);
 
-			BuiltIn.Void = CreateAddBuiltInType(InternalAssembly, CilElementType.Void);
-			BuiltIn.Boolean = CreateAddBuiltInType(InternalAssembly, CilElementType.Boolean);
-			BuiltIn.Char = CreateAddBuiltInType(InternalAssembly, CilElementType.Char);
-			BuiltIn.I1 = CreateAddBuiltInType(InternalAssembly, CilElementType.I1);
-			BuiltIn.U1 = CreateAddBuiltInType(InternalAssembly, CilElementType.U1);
-			BuiltIn.I2 = CreateAddBuiltInType(InternalAssembly, CilElementType.I2);
-			BuiltIn.U2 = CreateAddBuiltInType(InternalAssembly, CilElementType.U2);
-			BuiltIn.I4 = CreateAddBuiltInType(InternalAssembly, CilElementType.I4);
-			BuiltIn.U4 = CreateAddBuiltInType(InternalAssembly, CilElementType.U4);
-			BuiltIn.I8 = CreateAddBuiltInType(InternalAssembly, CilElementType.I8);
-			BuiltIn.U8 = CreateAddBuiltInType(InternalAssembly, CilElementType.U8);
-			BuiltIn.R4 = CreateAddBuiltInType(InternalAssembly, CilElementType.R4);
-			BuiltIn.R8 = CreateAddBuiltInType(InternalAssembly, CilElementType.R8);
-			BuiltIn.String = CreateAddBuiltInType(InternalAssembly, CilElementType.String);
-			BuiltIn.Object = CreateAddBuiltInType(InternalAssembly, CilElementType.Object);
-			BuiltIn.I = CreateAddBuiltInType(InternalAssembly, CilElementType.I);
-			BuiltIn.U = CreateAddBuiltInType(InternalAssembly, CilElementType.U);
-			BuiltIn.TypedByRef = CreateAddBuiltInType(InternalAssembly, CilElementType.TypedByRef);
-			BuiltIn.Ptr = CreateAddBuiltInType(InternalAssembly, CilElementType.Ptr);
+			BuiltIn.Void = CreateAddBuiltInType(CilElementType.Void, 0); BuiltIn.Void.IsVoid = true;
+			BuiltIn.Boolean = CreateAddBuiltInType(CilElementType.Boolean, 1); BuiltIn.Boolean.IsBoolean = true;
+			BuiltIn.Char = CreateAddBuiltInType(CilElementType.Char, 2); BuiltIn.Char.IsChar = true;
+			BuiltIn.I1 = CreateAddBuiltInType(CilElementType.I1, 1); BuiltIn.I1.IsSignedByte = true;
+			BuiltIn.U1 = CreateAddBuiltInType(CilElementType.U1, 1); BuiltIn.U1.IsUnsignedByte = true;
+			BuiltIn.I2 = CreateAddBuiltInType(CilElementType.I2, 2); BuiltIn.I2.IsSignedShort = true;
+			BuiltIn.U2 = CreateAddBuiltInType(CilElementType.U2, 2); BuiltIn.U2.IsUnsignedShort = true;
+			BuiltIn.I4 = CreateAddBuiltInType(CilElementType.I4, 4); BuiltIn.I4.IsSignedInt = true;
+			BuiltIn.U4 = CreateAddBuiltInType(CilElementType.U4, 4); BuiltIn.U4.IsUnsignedInt = true;
+			BuiltIn.I8 = CreateAddBuiltInType(CilElementType.I8, 8); BuiltIn.I8.IsSignedLong = true;
+			BuiltIn.U8 = CreateAddBuiltInType(CilElementType.U8, 8); BuiltIn.U8.IsUnsignedLong = true;
+			BuiltIn.R4 = CreateAddBuiltInType(CilElementType.R4, 4); BuiltIn.R4.IsSingle = true;
+			BuiltIn.R8 = CreateAddBuiltInType(CilElementType.R8, 8); BuiltIn.R8.IsDouble = true;
+			BuiltIn.String = CreateAddBuiltInType(CilElementType.String, null); BuiltIn.String.IsString = true;
+			BuiltIn.Object = CreateAddBuiltInType(CilElementType.Object, null); BuiltIn.Object.IsObject = true;
+			BuiltIn.TypedByRef = CreateAddBuiltInType(CilElementType.TypedByRef, null); BuiltIn.TypedByRef.IsManagedPointerType = true;
+			BuiltIn.Ptr = CreateAddBuiltInType(CilElementType.Ptr, null); BuiltIn.Ptr.IsUnmanagedPointerType = true;
+			BuiltIn.I = CreateAddBuiltInType(CilElementType.I, null); BuiltIn.I.IsNativeSignedInteger = true;
+			BuiltIn.U = CreateAddBuiltInType(CilElementType.U, null); BuiltIn.I.IsNativeUnsignedInteger = true;
 		}
 
 		private MosaType CreateBuiltInType(CilElementType cilElementType)
 		{
 			MosaType type = new MosaType(InternalAssembly);
-			type.Name = "@" + cilElementType.ToString();
-			type.FullName = "@" + cilElementType.ToString();
+			type.Name = cilElementType.ToString();
+			type.FullName = cilElementType.ToString();
 			type.IsBuiltInType = true;
 
 			return type;
 		}
 
-		private MosaType CreateAddBuiltInType(MosaAssembly assembly, CilElementType cilElementType)
+		private MosaType CreateAddBuiltInType(CilElementType cilElementType, int? fixedSize)
 		{
 			var type = CreateBuiltInType(cilElementType);
+			type.FixedSize = fixedSize;
 
-			AddType(assembly, new Token((uint)cilElementType), type);
+			AddType(cilElementType, type);
 
 			return type;
 		}
 
 		public void AddAssembly(MosaAssembly assembly)
 		{
+			Assemblies.Add(assembly);
 			assemblyLookup.Add(assembly.Name, assembly);
 			typeLookup.Add(assembly, new Dictionary<Token, MosaType>());
 			methodLookup.Add(assembly, new Dictionary<Token, MosaMethod>());
@@ -115,15 +140,62 @@ namespace Mosa.Compiler.MosaTypeSystem
 			throw new InvalidCompilerException();
 		}
 
-		public void AddType(MosaAssembly assembly, Token token, MosaType type)
+		internal void AddType(MosaAssembly assembly, Token token, MosaType type)
 		{
 			Types.Add(type);
 			typeLookup[assembly].Add(token, type);
 		}
 
+		internal void AddLinkerType(MosaType type)
+		{
+			Types.Add(type);
+		}
+
+		internal void AddType(CilElementType elementType, MosaType type)
+		{
+			AddType(InternalAssembly, new Token((uint)elementType), type);
+		}
+
+		internal MosaType CreateLinkerType(string @namespace, string name)
+		{
+			var type = new MosaType(LinkerAssembly);
+			type.Name = name;
+			type.Namespace = @namespace;
+			type.IsLinkerGenerated = true;
+			type.FullName = @namespace + "." + name;
+
+			AddLinkerType(type);
+
+			return type;
+		}
+
+		public MosaType GetTypeByElementType(CilElementType elementType)
+		{
+			return GetTypeByToken(InternalAssembly, new Token((uint)elementType));
+		}
+
+		public MosaType GetTypeByElementType(CilElementType? elementType)
+		{
+			return GetTypeByToken(InternalAssembly, new Token((uint)elementType.Value));
+		}
+
 		public MosaType GetTypeByToken(MosaAssembly assembly, Token token)
 		{
 			return typeLookup[assembly][token];
+		}
+
+		public MosaType GetTypeByToken(MosaAssembly assembly, Token token, MosaMethod baseMethod)
+		{
+			var type = typeLookup[assembly][token];
+
+			Debug.Assert(!type.IsMVarFlag);
+
+			if (type.IsVarFlag)
+			{
+				type = ResolveGenericType(baseMethod.DeclaringType, baseMethod.DeclaringType.GenericParameterTypes);
+			}
+
+			return type;
 		}
 
 		public MosaType GetTypeByName(MosaAssembly assembly, string @namespace, string name)
@@ -154,10 +226,55 @@ namespace Mosa.Compiler.MosaTypeSystem
 			return typeLookup[assembly].ContainsKey(token);
 		}
 
-		public void AddMethod(MosaAssembly assembly, Token token, MosaMethod method)
+		public bool CheckMethodExists(MosaAssembly assembly, Token token)
+		{
+			return methodLookup[assembly].ContainsKey(token);
+		}
+
+		internal void AddMethod(MosaAssembly assembly, Token token, MosaMethod method)
 		{
 			Methods.Add(method);
 			methodLookup[assembly].Add(token, method);
+		}
+
+		internal void AddLinkerMethod(MosaMethod method)
+		{
+			Methods.Add(method);
+		}
+
+		internal MosaMethod CreateLinkerMethod(MosaType declaringType, string name, MosaType returnType, IList<MosaType> parameters)
+		{
+			var method = new MosaMethod();
+			method.Name = name;
+			method.DeclaringType = declaringType;
+			method.ReturnType = returnType;
+			method.IsStatic = true;
+			method.IsCILGenerated = false;
+			method.HasExplicitThis = false;
+			method.HasThis = false;
+
+			if (parameters != null)
+			{
+				for (int index = 0; index < parameters.Count; index++)
+				{
+					var param = new MosaParameter();
+
+					param.Type = parameters[index];
+					param.IsIn = false;
+					param.IsOut = false;
+					param.Position = index;
+					param.Name = "P" + index.ToString();
+
+					method.Parameters.Add(param);
+				}
+			}
+
+			method.SetName();
+			method.SetOpenGeneric();
+
+			AddLinkerMethod(method);
+
+			return method;
 		}
 
 		public MosaMethod GetMethodByToken(MosaAssembly assembly, Token token)
@@ -170,7 +287,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 			return fieldLookup[assembly].ContainsKey(token);
 		}
 
-		public void AddField(MosaAssembly assembly, Token token, MosaField field)
+		internal void AddField(MosaAssembly assembly, Token token, MosaField field)
 		{
 			fieldLookup[assembly].Add(token, field);
 		}
@@ -180,7 +297,30 @@ namespace Mosa.Compiler.MosaTypeSystem
 			return fieldLookup[assembly][token];
 		}
 
-		public MosaType GetVarType(int index)
+		public MosaField GetFieldByToken(MosaAssembly assembly, Token token, MosaMethod baseMethod)
+		{
+			var field = fieldLookup[assembly][token];
+
+			Debug.Assert(!field.Type.IsMVarFlag);
+
+			if (field.DeclaringType.IsGeneric)
+			{
+				// find the closed generic type and field
+
+				// find type first
+
+				var type = ResolveGenericType(field.DeclaringType.GenericBaseType, baseMethod.GenericParameterTypes);
+			}
+
+			if (field.Type.IsVarFlag)
+			{
+				//field = ResolveGenericType(baseMethod.DeclaringType, baseMethod.DeclaringType.GenericParameterTypes);
+			}
+
+			return field;
+		}
+
+		internal MosaType GetVarType(int index)
 		{
 			MosaType type = var[index];
 
@@ -197,9 +337,9 @@ namespace Mosa.Compiler.MosaTypeSystem
 			return type;
 		}
 
-		public MosaType GetMVarType(int index)
+		internal MosaType GetMVarType(int index)
 		{
-			MosaType type = var[index];
+			MosaType type = mvar[index];
 
 			if (type == null)
 			{
@@ -208,13 +348,11 @@ namespace Mosa.Compiler.MosaTypeSystem
 				type.FullName = type.Name;
 				type.IsMVarFlag = true;
 				type.VarOrMVarIndex = index;
-				var[index] = type;
+				mvar[index] = type;
 			}
 
 			return type;
 		}
-
-		private Dictionary<MosaType, MosaType> unmanagedPointerTypes = new Dictionary<MosaType, MosaType>();
 
 		public MosaType GetUnmanagedPointerType(MosaType element)
 		{
@@ -224,18 +362,17 @@ namespace Mosa.Compiler.MosaTypeSystem
 				return type;
 
 			type = new MosaType(InternalAssembly);
-			type.FullName = element.FullName + "*";
-			type.Name = element.Name + "*";
-			type.IsUnmanagedPointerType = true;
+			type.FullName = "Ptr-" + element.FullName;
+			type.Name = "Ptr-" + element.Name;
 			type.ElementType = element;
+			type.IsUnmanagedPointerType = true;
+			type.IsBuiltInType = true;
 			type.SetFlags();
 
 			unmanagedPointerTypes.Add(element, type);
 
 			return type;
 		}
-
-		private Dictionary<MosaType, MosaType> managedPointerTypes = new Dictionary<MosaType, MosaType>();
 
 		public MosaType GetManagedPointerType(MosaType element)
 		{
@@ -245,18 +382,17 @@ namespace Mosa.Compiler.MosaTypeSystem
 				return type;
 
 			type = new MosaType(InternalAssembly);
-			type.FullName = element.FullName + "&";
-			type.Name = element.Name + "&";
-			type.IsManagedPointerType = true;
+			type.FullName = "Ptr+" + element.FullName;
+			type.Name = "Ptr+" + element.Name;
 			type.ElementType = element;
+			type.IsManagedPointerType = true;
+			type.IsBuiltInType = true;
 			type.SetFlags();
 
 			managedPointerTypes.Add(element, type);
 
 			return type;
 		}
-
-		private Dictionary<MosaType, MosaType> arrayTypes = new Dictionary<MosaType, MosaType>();
 
 		public MosaType GetArrayType(MosaType element)
 		{
@@ -266,10 +402,11 @@ namespace Mosa.Compiler.MosaTypeSystem
 				return type;
 
 			type = new MosaType(InternalAssembly);
-			type.FullName = element.FullName + "[]";
-			type.Name = element.Name + "[]";
-			type.IsArrayType = true;
+			type.FullName = "Array-" + element.FullName;
+			type.Name = "Array-" + element.Name;
+			type.IsArray = true;
 			type.ElementType = element;
+			type.IsBuiltInType = true;
 			type.SetFlags();
 
 			arrayTypes.Add(element, type);
@@ -277,26 +414,42 @@ namespace Mosa.Compiler.MosaTypeSystem
 			return type;
 		}
 
-		private Dictionary<MosaType, List<KeyValuePair<List<MosaType>, MosaType>>> generics = new Dictionary<MosaType, List<KeyValuePair<List<MosaType>, MosaType>>>();
+		private MosaType CreateNewElementType(MosaType baseType, MosaType elementType)
+		{
+			if (baseType.IsArray)
+			{
+				return GetArrayType(elementType);
+			}
+			else if (baseType.IsUnmanagedPointerType)
+			{
+				return GetUnmanagedPointerType(elementType);
+			}
+			else if (baseType.IsManagedPointerType)
+			{
+				return GetManagedPointerType(elementType);
+			}
 
-		public MosaType FindGeneric(MosaType genericBaseType, List<MosaType> genericTypes)
+			throw new InvalidCompilerException();
+		}
+
+		private MosaType FindGenericType(MosaType genericBaseType, IList<MosaType> typeGenericTypes)
 		{
 			List<KeyValuePair<List<MosaType>, MosaType>> genericVariations = null;
 
-			if (!generics.TryGetValue(genericBaseType, out genericVariations))
+			if (!genericTypeLookup.TryGetValue(genericBaseType, out genericVariations))
 				return null;
 
 			foreach (var genericPair in genericVariations)
 			{
 				var types = genericPair.Key;
 
-				if (types.Count != genericTypes.Count)
+				if (types.Count != typeGenericTypes.Count)
 					continue;
 
 				bool match = true;
 				for (int i = 0; i < types.Count; i++)
 				{
-					if (!types[i].Matches(genericTypes[i]))
+					if (!types[i].Matches(typeGenericTypes[i]))
 					{
 						match = false;
 						break;
@@ -312,14 +465,14 @@ namespace Mosa.Compiler.MosaTypeSystem
 			return null;
 		}
 
-		public void StoreGeneric(MosaType genericBaseType, List<MosaType> genericTypes, MosaType genericType)
+		private void StoreGenericType(MosaType genericBaseType, List<MosaType> genericTypes, MosaType genericType)
 		{
 			List<KeyValuePair<List<MosaType>, MosaType>> genericVariations;
 
-			if (!generics.TryGetValue(genericBaseType, out genericVariations))
+			if (!genericTypeLookup.TryGetValue(genericBaseType, out genericVariations))
 			{
 				genericVariations = new List<KeyValuePair<List<MosaType>, MosaType>>();
-				generics.Add(genericBaseType, genericVariations);
+				genericTypeLookup.Add(genericBaseType, genericVariations);
 			}
 
 			genericVariations.Add(new KeyValuePair<List<MosaType>, MosaType>(genericTypes, genericType));
@@ -327,21 +480,21 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public MosaType ResolveGenericType(MosaType genericBaseType, List<MosaType> genericTypes)
 		{
-			var genericType = FindGeneric(genericBaseType, genericTypes);
+			var genericType = FindGenericType(genericBaseType, genericTypes);
 
 			if (genericType != null)
 				return genericType;
 
 			genericType = CreateGenericType(genericBaseType, genericTypes);
 
-			StoreGeneric(genericBaseType, genericTypes, genericType);
+			StoreGenericType(genericBaseType, genericTypes, genericType);
 
 			return genericType;
 		}
 
 		public MosaType CreateGenericType(MosaType genericBaseType, List<MosaType> genericTypes)
 		{
-			var generic = new MosaType(InternalGenericsAssembly);
+			var generic = new MosaType(GenericAssembly);
 
 			generic.GenericBaseType = genericBaseType;
 			generic.GenericParameterTypes = genericTypes;
@@ -360,23 +513,22 @@ namespace Mosa.Compiler.MosaTypeSystem
 			generic.IsSignedLong = genericBaseType.IsSignedLong;
 			generic.IsChar = genericBaseType.IsChar;
 			generic.IsBoolean = genericBaseType.IsBoolean;
-			generic.IsPointer = genericBaseType.IsPointer;
 			generic.IsObject = genericBaseType.IsObject;
 			generic.IsDouble = genericBaseType.IsDouble;
 			generic.IsSingle = genericBaseType.IsSingle;
-			generic.IsInteger = genericBaseType.IsInteger;
-			generic.IsSigned = genericBaseType.IsSigned;
-			generic.IsUnsigned = genericBaseType.IsUnsigned;
 			generic.IsVarFlag = genericBaseType.IsVarFlag;
 			generic.IsMVarFlag = genericBaseType.IsMVarFlag;
 			generic.IsManagedPointerType = genericBaseType.IsManagedPointerType;
 			generic.IsUnmanagedPointerType = genericBaseType.IsUnmanagedPointerType;
-			generic.IsArrayType = genericBaseType.IsArrayType;
+			generic.IsArray = genericBaseType.IsArray;
 			generic.IsBuiltInType = genericBaseType.IsBuiltInType;
+			generic.IsInterface = genericBaseType.IsInterface;
 			generic.Size = genericBaseType.Size;
 			generic.PackingSize = genericBaseType.PackingSize;
 			generic.VarOrMVarIndex = genericBaseType.VarOrMVarIndex;
 			generic.ElementType = genericBaseType.ElementType;
+			generic.IsNativeSignedInteger = genericBaseType.IsNativeSignedInteger;
+			generic.IsNativeUnsignedInteger = genericBaseType.IsNativeUnsignedInteger;
 
 			var genericTypeNames = new StringBuilder();
 
@@ -391,7 +543,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 			foreach (var m in genericBaseType.Methods)
 			{
-				var cloneMethod = ResolveGenericMethod(m, generic);
+				var cloneMethod = CreateGenericMethod(m, generic, null);
 				generic.Methods.Add(cloneMethod);
 			}
 
@@ -419,7 +571,67 @@ namespace Mosa.Compiler.MosaTypeSystem
 			return generic;
 		}
 
-		private static MosaMethod ResolveGenericMethod(MosaMethod method, MosaType declaringType)
+		private MosaMethod FindGenericMethod(MosaMethod genericBaseMethod, List<MosaType> methodGenericsTypes)
+		{
+			List<KeyValuePair<List<MosaType>, MosaMethod>> genericVariations = null;
+
+			if (!genericMethodLookup.TryGetValue(genericBaseMethod, out genericVariations))
+				return null;
+
+			foreach (var genericPair in genericVariations)
+			{
+				var types = genericPair.Key;
+
+				if (types.Count != methodGenericsTypes.Count)
+					continue;
+
+				bool match = true;
+				for (int i = 0; i < types.Count; i++)
+				{
+					if (!types[i].Matches(methodGenericsTypes[i]))
+					{
+						match = false;
+						break;
+					}
+				}
+
+				if (!match)
+					continue;
+
+				return genericPair.Value;
+			}
+
+			return null;
+		}
+
+		private void StoreGenericMethod(MosaMethod genericBaseMethod, List<MosaType> methodGenericsTypes, MosaMethod genericMethod)
+		{
+			List<KeyValuePair<List<MosaType>, MosaMethod>> genericVariations;
+
+			if (!genericMethodLookup.TryGetValue(genericBaseMethod, out genericVariations))
+			{
+				genericVariations = new List<KeyValuePair<List<MosaType>, MosaMethod>>();
+				genericMethodLookup.Add(genericBaseMethod, genericVariations);
+			}
+
+			genericVariations.Add(new KeyValuePair<List<MosaType>, MosaMethod>(methodGenericsTypes, genericMethod));
+		}
+
+		public MosaMethod ResolveGenericMethod(MosaMethod genericBaseMethod, List<MosaType> methodGenericsTypes)
+		{
+			var genericMethod = FindGenericMethod(genericBaseMethod, methodGenericsTypes);
+
+			if (genericMethod != null)
+				return genericMethod;
+
+			genericMethod = CreateGenericMethod(genericBaseMethod, genericBaseMethod.DeclaringType, methodGenericsTypes);
+
+			StoreGenericMethod(genericBaseMethod, methodGenericsTypes, genericMethod);
+
+			return genericMethod;
+		}
+
+		private MosaMethod CreateGenericMethod(MosaMethod method, MosaType declaringType, IList<MosaType> methodGenericsTypes)
 		{
 			var generic = new MosaMethod();
 
@@ -442,10 +654,13 @@ namespace Mosa.Compiler.MosaTypeSystem
 			generic.IsFinal = method.IsFinal;
 			generic.Rva = method.Rva;
 			generic.Code = method.Code;
+			generic.CodeAssembly = method.CodeAssembly;
+			generic.IsCILGenerated = method.IsCILGenerated;
+			generic.ReturnType = method.ReturnType;
 
 			foreach (var p in method.Parameters)
 			{
-				var cloneParameter = ResolveGenericParameter(p, declaringType);
+				var cloneParameter = ResolveGenericParameter(p, declaringType.GenericParameterTypes, methodGenericsTypes);
 				generic.Parameters.Add(cloneParameter);
 			}
 
@@ -454,51 +669,109 @@ namespace Mosa.Compiler.MosaTypeSystem
 				generic.CustomAttributes.Add(a);
 			}
 
-			if (method.ReturnType.IsVarFlag || method.ReturnType.IsMVarFlag)
+			if (method.ReturnType.IsVarFlag)
 			{
 				generic.ReturnType = declaringType.GenericParameterTypes[method.ReturnType.VarOrMVarIndex];
 			}
+			else if (method.ReturnType.IsVarFlag && methodGenericsTypes != null)
+			{
+				generic.ReturnType = methodGenericsTypes[method.ReturnType.VarOrMVarIndex];
+			}
 
 			generic.SetName();
+			generic.SetOpenGeneric();
 
 			return generic;
 		}
 
-		private static MosaField ResolveGenericField(MosaField field, MosaType declaringType)
+		private MosaField ResolveGenericField(MosaField field, MosaType declaringType)
 		{
 			var generic = new MosaField();
 
 			generic.DeclaringType = declaringType;
-			generic.FieldType = field.FieldType;
+			generic.Type = field.Type;
 			generic.Name = field.Name;
 			generic.FullName = field.FullName;
 			generic.CustomAttributes = field.CustomAttributes;
 			generic.IsLiteralField = field.IsLiteralField;
 			generic.IsStaticField = field.IsStaticField;
-			generic.RVA = generic.RVA;
+			generic.Offset = field.Offset;
+			generic.RVA = field.RVA;
+			generic.HasRVA = field.HasRVA;
+			generic.Data = generic.Data;
+			generic.Type = field.Type;
 
-			if (field.FieldType.IsVarFlag || field.FieldType.IsMVarFlag)
+			if (field.Type.IsVarFlag)
 			{
-				generic.FieldType = declaringType.GenericParameterTypes[field.FieldType.VarOrMVarIndex];
+				generic.Type = declaringType.GenericParameterTypes[field.Type.VarOrMVarIndex];
+			}
+
+			if (generic.Type.HasElement && generic.Type.ElementType.IsVarFlag)
+			{
+				generic.Type = CreateNewElementType(generic.Type, declaringType.GenericParameterTypes[field.Type.VarOrMVarIndex]);
 			}
 
 			return generic;
 		}
 
-		private static MosaParameter ResolveGenericParameter(MosaParameter parameter, MosaType declaringType)
+		private MosaParameter ResolveGenericParameter(MosaParameter parameter, IList<MosaType> typeGenericTypes, IList<MosaType> methodGenericTypes)
 		{
 			if (!(parameter.Type.IsVarFlag || parameter.Type.IsMVarFlag))
 				return parameter;
 
-			var generic = new MosaParameter();
+			if (parameter.Type.IsVarFlag && typeGenericTypes == null)
+				return parameter;
 
-			generic.Type = declaringType.GenericParameterTypes[parameter.Type.VarOrMVarIndex];
+			if (parameter.Type.IsMVarFlag && methodGenericTypes == null)
+				return parameter;
+
+			var type = (parameter.Type.IsVarFlag)
+				? typeGenericTypes[parameter.Type.VarOrMVarIndex]
+				: methodGenericTypes[parameter.Type.VarOrMVarIndex];
+
+			if (type == parameter.Type)
+				return parameter;
+
+			var generic = new MosaParameter();
+			generic.Type = type;
 			generic.Position = parameter.Position;
 			generic.Name = parameter.Name;
 			generic.IsIn = parameter.IsIn;
 			generic.IsOut = parameter.IsOut;
 
 			return generic;
+		}
+
+		internal void AddUserStringHeap(MosaAssembly assembly, UserStringHeap userStringHeap)
+		{
+			userStringHeaps.Add(assembly, userStringHeap);
+		}
+
+		/// <summary>
+		/// Gets the string.
+		/// </summary>
+		/// <param name="assembly">The assembly.</param>
+		/// <param name="token">The token.</param>
+		/// <returns></returns>
+		public string GetUserString(MosaAssembly assembly, HeapIndexToken token)
+		{
+			string value;
+
+			if (userString.ContainsKey(assembly))
+			{
+				if (userString[assembly].TryGetValue(token, out value))
+					return value;
+			}
+			else
+			{
+				userString.Add(assembly, new Dictionary<HeapIndexToken, string>());
+			}
+
+			value = userStringHeaps[assembly].ReadString(token);
+
+			userString[assembly].Add(token, value);
+
+			return value;
 		}
 	}
 }

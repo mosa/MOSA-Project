@@ -10,7 +10,7 @@
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.Framework.Stages;
-using Mosa.Compiler.TypeSystem;
+using Mosa.Compiler.MosaTypeSystem;
 
 namespace Mosa.TinyCPUSimulator.Adaptor
 {
@@ -48,13 +48,13 @@ namespace Mosa.TinyCPUSimulator.Adaptor
 			Context context = instructionSet.CreateNewBlock(basicBlocks);
 			basicBlocks.AddHeaderBlock(context.BasicBlock);
 
-			Operand entryPoint = Operand.CreateSymbolFromMethod(typeInitializerSchedulerStage.TypeInitializerMethod);
+			Operand entryPoint = Operand.CreateSymbolFromMethod(typeSystem, typeInitializerSchedulerStage.TypeInitializerMethod);
 
 			context.AppendInstruction(IRInstruction.Call, null, entryPoint);
 			context.InvokeMethod = typeInitializerSchedulerStage.TypeInitializerMethod;
 			//context.AppendInstruction(IRInstruction.Break);
 
-			RuntimeMethod method = compiler.CreateLinkerMethod(StartUpName);
+			MosaMethod method = compiler.CreateLinkerMethod(StartUpName);
 			compiler.CompileMethod(method, basicBlocks, instructionSet);
 
 			linker.EntryPoint = linker.GetSymbol(method.FullName);

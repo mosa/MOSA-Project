@@ -7,9 +7,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System.Diagnostics;
-using Mosa.Compiler.TypeSystem.Cil;
-
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
@@ -42,18 +39,10 @@ namespace Mosa.Compiler.Framework.CIL
 			// Decode base classes first
 			base.Decode(ctx, decoder);
 
-			var token = decoder.DecodeTokenType();
-			ctx.RuntimeField = decoder.Method.Module.GetField(token);
+			var field = decoder.TypeSystem.Resolver.GetFieldByToken(decoder.Method.CodeAssembly, decoder.DecodeTokenType(), decoder.Method);
 
-			if (ctx.RuntimeField.ContainsGenericParameter || ctx.RuntimeField.DeclaringType.ContainsOpenGenericParameters)
-			{
-				ctx.RuntimeField = decoder.GenericTypePatcher.PatchField(decoder.TypeModule, decoder.Method.DeclaringType as CilGenericType, ctx.RuntimeField);
-				decoder.Compiler.Scheduler.TrackFieldReferenced(ctx.RuntimeField);
-				Debug.Assert(!ctx.RuntimeField.ContainsGenericParameter);
-			}
-
-			var sigType = ctx.RuntimeField.SigType;
-			ctx.Result = LoadInstruction.CreateResultOperand(decoder,  sigType);
+			ctx.MosaField = field;
+			ctx.Result = LoadInstruction.CreateResultOperand(decoder, field.Type);
 		}
 
 		/// <summary>

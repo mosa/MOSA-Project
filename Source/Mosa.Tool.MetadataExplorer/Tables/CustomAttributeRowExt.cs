@@ -31,9 +31,9 @@ namespace Mosa.Tool.MetadataExplorer.Tables
 
 		public override IEnumerable GetValues()
 		{
-			yield return Value("ParentTable #", row.Parent);
-			yield return Value("Type #", row.Type);
-			yield return Value("ValueBlob #", row.Value);
+			yield return Value("Parent", row.Parent);
+			yield return Value("Type", row.Type);
+			yield return Value("ValueBlob", row.Value);
 		}
 	}
 }

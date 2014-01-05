@@ -31,8 +31,8 @@ namespace Mosa.Tool.MetadataExplorer.Tables
 
 		public override IEnumerable GetValues()
 		{
-			yield return Value("ClassTable #", row.Class);
-			yield return Value("InterfaceTable #", row.Interface);
+			yield return Value("Class", row.Class);
+			yield return Value("Interface", row.Interface);
 		}
 	}
 }

@@ -11,7 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.TypeSystem;
+using Mosa.Compiler.MosaTypeSystem;
 
 namespace Mosa.Compiler.InternalTrace
 {
@@ -31,7 +31,7 @@ namespace Mosa.Compiler.InternalTrace
 			);
 		}
 
-		public static void Run(IInternalTrace internalLog, string stage, RuntimeMethod method, InstructionSet instructionSet, BasicBlocks basicBlocks)
+		public static void Run(IInternalTrace internalLog, string stage, MosaMethod method, InstructionSet instructionSet, BasicBlocks basicBlocks)
 		{
 			if (internalLog == null)
 				return;

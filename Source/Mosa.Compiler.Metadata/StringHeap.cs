@@ -38,6 +38,19 @@ namespace Mosa.Compiler.Metadata
 		/// <summary>
 		/// Reads the string.
 		/// </summary>
+		/// <param name="offset">The offset.</param>
+		/// <returns></returns>
+		public string ReadString(int offset, out int size)
+		{
+			// Validate the offset & calculate the real offset
+			int realOffset = ValidateOffset(offset);
+			size = Array.IndexOf<byte>(Metadata, 0, realOffset) - realOffset;
+			return Encoding.UTF8.GetString(Metadata, realOffset, size);
+		}
+
+		/// <summary>
+		/// Reads the string.
+		/// </summary>
 		/// <param name="token">The token.</param>
 		/// <returns></returns>
 		public string ReadString(HeapIndexToken token)
@@ -46,16 +59,10 @@ namespace Mosa.Compiler.Metadata
 			if ((HeapIndexToken.TableMask & token) != HeapIndexToken.String)
 				throw new ArgumentException(@"Invalid token value.", @"token");
 
-			// Offset of the requested string
-			int offset = (int)(token & HeapIndexToken.RowIndexMask);
-			if (offset == 0)
-				return String.Empty;
+			int size = 0;
 
-			// Validate the offset & calculate the real offset
-			int realOffset = ValidateOffset(offset);
-			byte[] buffer = this.Buffer;
-			int endOffset = Array.IndexOf<byte>(buffer, 0, realOffset);
-			return Encoding.UTF8.GetString(buffer, realOffset, endOffset - realOffset);
+			// Offset of the requested string
+			return ReadString((int)(token & HeapIndexToken.RowIndexMask), out size);
 		}
 
 		#endregion Methods

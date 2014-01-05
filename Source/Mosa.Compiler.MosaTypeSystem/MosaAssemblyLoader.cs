@@ -137,7 +137,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 		/// Appends the given paths to the assembly search path.
 		/// </summary>
 		/// <param name="assemblyPaths">The assembly paths.</param>
-		public void InitializePrivatePaths(IEnumerable<string> assemblyPaths)
+		public void AddPrivatePath(IEnumerable<string> assemblyPaths)
 		{
 			foreach (var path in FindPrivatePaths(assemblyPaths))
 			{

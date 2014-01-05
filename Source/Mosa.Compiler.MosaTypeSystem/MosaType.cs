@@ -69,33 +69,35 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public bool IsSignedLong { get; internal set; }
 
-		public bool IsByte { get { return IsUnsignedByte || IsSignedByte; } }
-
-		public bool IsShort { get { return IsUnsignedShort || IsSignedShort; } }
-
 		public bool IsChar { get; internal set; }
-
-		public bool IsInt { get { return IsUnsignedInt || IsSignedInt; } }
-
-		public bool IsLong { get { return IsUnsignedLong || IsSignedLong; } }
 
 		public bool IsBoolean { get; internal set; }
 
-		public bool IsPointer { get; internal set; }
-
 		public bool IsObject { get; internal set; }
 
-		public bool IsFloatingPoint { get { return IsDouble || IsSingle; } }
+		public bool IsString { get; internal set; }
 
 		public bool IsDouble { get; internal set; }
 
 		public bool IsSingle { get; internal set; }
 
-		public bool IsInteger { get; internal set; }
+		public bool IsPointer { get { return IsUnmanagedPointerType || IsManagedPointerType; } }
 
-		public bool IsSigned { get; internal set; }
+		public bool IsByte { get { return IsUnsignedByte || IsSignedByte; } }
 
-		public bool IsUnsigned { get; internal set; }
+		public bool IsShort { get { return IsUnsignedShort || IsSignedShort; } }
+
+		public bool IsInt { get { return IsUnsignedInt || IsSignedInt; } }
+
+		public bool IsLong { get { return IsUnsignedLong || IsSignedLong; } }
+
+		public bool IsFloatingPoint { get { return IsDouble || IsSingle; } }
+
+		public bool IsInteger { get { return IsSigned || IsUnsigned; } }
+
+		public bool IsSigned { get { return IsSignedByte || IsSignedShort || IsSignedInt || IsSignedLong || IsNativeSignedInteger; } }
+
+		public bool IsUnsigned { get { return IsUnsignedByte || IsUnsignedShort || IsUnsignedInt || IsUnsignedLong || IsNativeUnsignedInteger; } }
 
 		public bool IsVarFlag { get; internal set; }
 
@@ -105,11 +107,13 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public MosaType ElementType { get; internal set; }
 
+		public bool HasElement { get { return ElementType != null; } }
+
 		public bool IsManagedPointerType { get; internal set; }
 
 		public bool IsUnmanagedPointerType { get; internal set; }
 
-		public bool IsArrayType { get; internal set; }
+		public bool IsArray { get; internal set; }
 
 		public bool IsVoid { get; internal set; }
 
@@ -119,9 +123,19 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public bool IsGeneric { get { return GenericParameters.Count != 0; } }
 
-		public IList<MosaType> GenericParameterTypes { get; internal set; }
-		
-		public IDictionary<MosaMethod, MosaMethod> InheritanceOveride { get; internal set;}
+		public List<MosaType> GenericParameterTypes { get; internal set; }
+
+		public IDictionary<MosaMethod, MosaMethod> InheritanceOveride { get; internal set; }
+
+		public bool IsLinkerGenerated { get; internal set; }
+
+		public bool IsNativeSignedInteger { get; internal set; }
+
+		public bool IsNativeUnsignedInteger { get; internal set; }
+
+		public bool IsNativeInteger { get { return IsNativeSignedInteger || IsNativeUnsignedInteger; } }
+
+		internal int? FixedSize { get; set; }
 
 		public MosaType(MosaAssembly assembly)
 		{
@@ -137,21 +151,21 @@ namespace Mosa.Compiler.MosaTypeSystem
 			IsSignedLong = false;
 			IsChar = false;
 			IsBoolean = false;
-			IsPointer = false;
-			IsObject = true;
+			IsObject = false;
 			IsDouble = false;
 			IsSingle = false;
-			IsInteger = false;
-			IsSigned = false;
-			IsUnsigned = false;
 			IsVarFlag = false;
 			IsMVarFlag = false;
 			IsManagedPointerType = false;
 			IsUnmanagedPointerType = false;
-			IsArrayType = false;
+			IsArray = false;
 			IsBuiltInType = false;
 			IsModule = false;
 			IsVoid = false;
+			IsLinkerGenerated = false;
+			IsString = false;
+			IsNativeSignedInteger = false;
+			IsNativeUnsignedInteger = false;
 
 			Methods = new List<MosaMethod>();
 			Fields = new List<MosaField>();
@@ -164,27 +178,12 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public void SetFlags()
 		{
-			IsSignedByte = FullName == "System.SByte";
-			IsSignedShort = FullName == "System.Int16";
-			IsSignedInt = FullName == "System.Int32";
-			IsSignedLong = FullName == "System.Int64";
-			IsUnsignedByte = FullName == "System.Byte";
-			IsUnsignedShort = FullName == "System.UInt16";
-			IsUnsignedInt = FullName == "System.UInt32";
-			IsUnsignedLong = FullName == "System.UInt64";
-			IsChar = FullName == "System.Char";
-			IsBoolean = FullName == "System.Boolean";
-			IsSingle = FullName == "System.Single";
-			IsDouble = FullName == "System.Double";
-			IsPointer = FullName == "System.Ptr";
-
-			IsValueType = BaseType != null && (BaseType.IsValueType || FullName == "System.ValueType");
-			IsDelegate = BaseType != null && (BaseType.IsDelegate || FullName == "System.Delegate");
-			IsEnum = BaseType != null && (BaseType.IsEnum || FullName == "System.Enum");
-			IsObject = BaseType != null && (BaseType.IsEnum || FullName == "System.Object");
-
+			IsValueType = (BaseType != null && BaseType.IsValueType) || FullName == "System.ValueType";
+			IsDelegate = (BaseType != null && BaseType.IsDelegate) || FullName == "System.Delegate";
+			IsEnum = (BaseType != null && BaseType.IsEnum) || FullName == "System.Enum";
+			IsObject = (BaseType != null && BaseType.IsObject) || FullName == "System.Object";
 			IsModule = FullName == "<Module>";
-			IsVoid = FullName == "System.Void";
+
 			//"System.IntPtr"
 			//"System.UIntPtr"
 			//"System.TypedByRef"

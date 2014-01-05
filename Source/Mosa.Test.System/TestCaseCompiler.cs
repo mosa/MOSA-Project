@@ -11,7 +11,7 @@ using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Stages;
 using Mosa.Compiler.InternalTrace;
 using Mosa.Compiler.Linker;
-using Mosa.Compiler.TypeSystem;
+using Mosa.Compiler.MosaTypeSystem;
 using System.Collections.Generic;
 using x86 = Mosa.Platform.x86;
 
@@ -31,7 +31,7 @@ namespace Mosa.Test.System
 		/// <param name="typeLayout">The type layout.</param>
 		/// <param name="internalTrace">The internal trace.</param>
 		/// <param name="compilerOptions">The compiler options.</param>
-		private TestCaseCompiler(BaseArchitecture architecture, ITypeSystem typeSystem, ITypeLayout typeLayout, IInternalTrace internalTrace, ILinker linker, CompilerOptions compilerOptions) :
+		private TestCaseCompiler(BaseArchitecture architecture, TypeSystem typeSystem, MosaTypeLayout typeLayout, IInternalTrace internalTrace, ILinker linker, CompilerOptions compilerOptions) :
 			base(architecture, typeSystem, typeLayout, new CompilationScheduler(typeSystem, true), internalTrace, linker, compilerOptions)
 		{
 			// Build the assembly compiler pipeline
@@ -51,12 +51,12 @@ namespace Mosa.Test.System
 		/// </summary>
 		/// <param name="typeSystem">The type system.</param>
 		/// <returns></returns>
-		public static TestLinker Compile(ITypeSystem typeSystem)
+		public static TestLinker Compile(TypeSystem typeSystem)
 		{
 			BaseArchitecture architecture = x86.Architecture.CreateArchitecture(x86.ArchitectureFeatureFlags.AutoDetect);
 
 			// FIXME: get from architecture
-			TypeLayout typeLayout = new TypeLayout(typeSystem, 4, 4);
+			MosaTypeLayout typeLayout = new MosaTypeLayout(typeSystem, 4, 4);
 
 			IInternalTrace internalTrace = new BasicInternalTrace();
 			//(internalTrace.CompilerEventListener as BasicCompilerEventListener).DebugOutput = true;
@@ -90,7 +90,7 @@ namespace Mosa.Test.System
 		/// <returns>
 		/// An instance of a BaseMethodCompiler for the given type/method pair.
 		/// </returns>
-		public override BaseMethodCompiler CreateMethodCompiler(RuntimeMethod method, BasicBlocks basicBlocks, InstructionSet instructionSet)
+		public override BaseMethodCompiler CreateMethodCompiler(MosaMethod method, BasicBlocks basicBlocks, InstructionSet instructionSet)
 		{
 			return new TestCaseMethodCompiler(this, method, basicBlocks, instructionSet);
 		}

@@ -7,7 +7,7 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using Mosa.Compiler.Metadata.Signatures;
+using Mosa.Compiler.MosaTypeSystem;
 
 namespace Mosa.Compiler.Framework.CIL
 {
@@ -40,22 +40,21 @@ namespace Mosa.Compiler.Framework.CIL
 			// Decode base classes first
 			base.Decode(ctx, decoder);
 
-			ushort locIdx;
+			ushort index;
 
 			// Opcode specific handling
 			if (opcode == OpCode.Ldloca_s)
 			{
-				byte loc = decoder.DecodeByte();
-				locIdx = loc;
+				index = decoder.DecodeByte();
 			}
 			else
 			{
-				locIdx = decoder.DecodeUShort();
+				index = decoder.DecodeUShort();
 			}
 
-			Operand localVariableOperand = decoder.Compiler.GetLocalOperand(locIdx);
+			Operand localVariableOperand = decoder.Compiler.GetLocalOperand(index);
 			ctx.Operand1 = localVariableOperand;
-			ctx.Result = decoder.Compiler.CreateVirtualRegister(new RefSigType(localVariableOperand.Type));
+			ctx.Result = decoder.Compiler.CreateVirtualRegister(decoder.Compiler.TypeSystem.Resolver.GetManagedPointerType(localVariableOperand.Type));
 		}
 
 		/// <summary>

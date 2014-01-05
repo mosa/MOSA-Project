@@ -10,9 +10,7 @@
 
 using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.InternalTrace;
-using Mosa.Compiler.Metadata.Loader;
-using Mosa.Compiler.Metadata.Signatures;
-using Mosa.Compiler.TypeSystem;
+using Mosa.Compiler.MosaTypeSystem;
 using System;
 using System.Diagnostics;
 
@@ -48,22 +46,12 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Holds the type system
 		/// </summary>
-		protected ITypeSystem typeSystem;
-
-		/// <summary>
-		/// Holds the modules type system
-		/// </summary>
-		protected ITypeModule typeModule;
-
-		/// <summary>
-		/// Holds the assembly loader
-		/// </summary>
-		protected IAssemblyLoader assemblyLoader;
+		protected TypeSystem typeSystem;
 
 		/// <summary>
 		/// Holds the type layout interface
 		/// </summary>
-		protected ITypeLayout typeLayout;
+		protected MosaTypeLayout typeLayout;
 
 		/// <summary>
 		/// Holds the calling convention interface
@@ -107,12 +95,11 @@ namespace Mosa.Compiler.Framework
 			instructionSet = compiler.InstructionSet;
 			basicBlocks = compiler.BasicBlocks;
 			architecture = compiler.Architecture;
-			typeModule = compiler.Method.Module;
 			typeSystem = compiler.TypeSystem;
 			typeLayout = compiler.TypeLayout;
 			callingConvention = architecture.CallingConvention;
 
-			architecture.GetTypeRequirements(BuiltInSigType.IntPtr, out nativePointerSize, out nativePointerAlignment);
+			architecture.GetTypeRequirements(typeSystem.BuiltIn.Ptr, out nativePointerSize, out nativePointerAlignment);
 		}
 
 		#endregion IMethodCompilerStage members
@@ -125,7 +112,7 @@ namespace Mosa.Compiler.Framework
 		/// <value>
 		/// 	<c>true</c> if this instance has exception or finally; otherwise, <c>false</c>.
 		/// </value>
-		protected bool HasExceptionOrFinally { get { return methodCompiler.ExceptionHandlingClauses.Count != 0; } }
+		protected bool HasExceptionOrFinally { get { return methodCompiler.Method.ExceptionBlocks.Count != 0; } }
 
 		/// <summary>
 		/// Creates the context.
@@ -152,7 +139,7 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		/// <param name="type">The type.</param>
 		/// <returns></returns>
-		protected Operand AllocateVirtualRegister(SigType type)
+		protected Operand AllocateVirtualRegister(MosaType type)
 		{
 			return methodCompiler.VirtualRegisters.Allocate(type);
 		}
@@ -397,6 +384,23 @@ namespace Mosa.Compiler.Framework
 		public void UpdateCounter(string name, int count)
 		{
 			methodCompiler.Compiler.Counters.UpdateCounter(name, count);
+		}
+
+		/// <summary>
+		/// Dumps this instance.
+		/// </summary>
+		protected void Dump(bool before)
+		{
+			Debug.WriteLine(string.Empty);
+
+			Debug.WriteLine("METHOD: " + methodCompiler.Method.MethodName);
+			Debug.WriteLine("STAGE : " + (before ? "[BEFORE] " : "[AFTER] ") + this.GetType().Name);
+			Debug.WriteLine(string.Empty);
+
+			for (int index = 0; index < basicBlocks.Count; index++)
+				for (Context ctx = new Context(instructionSet, basicBlocks[index]); !ctx.IsBlockEndInstruction; ctx.GotoNext())
+					if (!ctx.IsEmpty)
+						Debug.WriteLine(ctx.ToString());
 		}
 	}
 }

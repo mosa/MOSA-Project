@@ -42,37 +42,18 @@ namespace Mosa.Compiler.Framework.CIL
 			ushort locIdx;
 			switch (opcode)
 			{
-				case OpCode.Ldloc:
-					locIdx = decoder.DecodeUShort();
-					break;
-
-				case OpCode.Ldloc_s:
-					locIdx = decoder.DecodeByte();
-					break;
-
-				case OpCode.Ldloc_0:
-					locIdx = 0;
-					break;
-
-				case OpCode.Ldloc_1:
-					locIdx = 1;
-					break;
-
-				case OpCode.Ldloc_2:
-					locIdx = 2;
-					break;
-
-				case OpCode.Ldloc_3:
-					locIdx = 3;
-					break;
-
-				default:
-					throw new System.NotImplementedException();
+				case OpCode.Ldloc: locIdx = decoder.DecodeUShort(); break;
+				case OpCode.Ldloc_s: locIdx = decoder.DecodeByte(); break;
+				case OpCode.Ldloc_0: locIdx = 0; break;
+				case OpCode.Ldloc_1: locIdx = 1; break;
+				case OpCode.Ldloc_2: locIdx = 2; break;
+				case OpCode.Ldloc_3: locIdx = 3; break;
+				default: throw new System.NotImplementedException();
 			}
 
 			// Push the loaded value onto the evaluation stack
-			Operand localVariableOperand = decoder.Compiler.GetLocalOperand(locIdx);
-			Operand result = LoadInstruction.CreateResultOperand(decoder, localVariableOperand.StackType, localVariableOperand.Type);
+			var localVariableOperand = decoder.Compiler.GetLocalOperand(locIdx);
+			var result = LoadInstruction.CreateResultOperand(decoder, localVariableOperand.Type);
 
 			ctx.Operand1 = localVariableOperand;
 			ctx.Result = result;

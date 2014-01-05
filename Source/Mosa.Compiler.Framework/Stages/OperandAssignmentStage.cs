@@ -77,7 +77,6 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </summary>
 		void IMethodCompilerStage.Run()
 		{
-			//System.Diagnostics.Debug.WriteLine("METHOD: "+this.methodCompiler.Method.ToString());
 			foreach (BasicBlock headBlock in basicBlocks.HeadBlocks)
 				Trace(headBlock);
 		}

@@ -12,7 +12,7 @@
 	
 	<!-- Main build target -->
 	<target name="build">
-	    <csc target="library" output="${outputDirectory}/Mosa.Platform.ARMv6.Intrinsic.dll" debug="${debug}" unsafe="true" nostdlib="false">
+	    <csc target="library" output="${outputDirectory}/Mosa.Platform.Internal.ARMv6.dll" debug="${debug}" unsafe="true" nostdlib="false">
 		<sources>
                     <include name="Native.cs"/>
                     <include name="Runtime.cs"/>

@@ -11,7 +11,7 @@ using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Stages;
 using Mosa.Compiler.InternalTrace;
 using Mosa.Compiler.Linker;
-using Mosa.Compiler.TypeSystem;
+using Mosa.Compiler.MosaTypeSystem;
 
 namespace Mosa.TinyCPUSimulator.Adaptor
 {
@@ -32,7 +32,7 @@ namespace Mosa.TinyCPUSimulator.Adaptor
 		/// <param name="compilerOptions">The compiler options.</param>
 		/// <param name="internalTrace">The internal trace.</param>
 		/// <param name="simAdapter">The sim adapter.</param>
-		public SimCompiler(BaseArchitecture architecture, ITypeSystem typeSystem, ITypeLayout typeLayout, ILinker linker, CompilerOptions compilerOptions, IInternalTrace internalTrace, ISimAdapter simAdapter) :
+		public SimCompiler(BaseArchitecture architecture, TypeSystem typeSystem, MosaTypeLayout typeLayout, ILinker linker, CompilerOptions compilerOptions, IInternalTrace internalTrace, ISimAdapter simAdapter) :
 			base(architecture, typeSystem, typeLayout, new CompilationScheduler(typeSystem, true), internalTrace, linker, compilerOptions)
 		{
 			this.simAdapter = simAdapter;
@@ -60,7 +60,7 @@ namespace Mosa.TinyCPUSimulator.Adaptor
 		/// <returns>
 		/// An instance of a MethodCompilerBase for the given type/method pair.
 		/// </returns>
-		public override BaseMethodCompiler CreateMethodCompiler(RuntimeMethod method, BasicBlocks basicBlocks, InstructionSet instructionSet)
+		public override BaseMethodCompiler CreateMethodCompiler(MosaMethod method, BasicBlocks basicBlocks, InstructionSet instructionSet)
 		{
 			return new SimMethodCompiler(this, method, simAdapter, basicBlocks, instructionSet);
 		}
@@ -76,7 +76,7 @@ namespace Mosa.TinyCPUSimulator.Adaptor
 		/// <param name="simAdapter">The sim adapter.</param>
 		/// <param name="linker">The linker.</param>
 		/// <returns></returns>
-		public static SimCompiler Compile(ITypeSystem typeSystem, ITypeLayout typeLayout, IInternalTrace internalTrace, bool enabledSSA, BaseArchitecture architecture, ISimAdapter simAdapter, ILinker linker)
+		public static SimCompiler Compile(TypeSystem typeSystem, MosaTypeLayout typeLayout, IInternalTrace internalTrace, bool enabledSSA, BaseArchitecture architecture, ISimAdapter simAdapter, ILinker linker)
 		{
 			CompilerOptions compilerOptions = new CompilerOptions();
 			compilerOptions.EnableSSA = enabledSSA;

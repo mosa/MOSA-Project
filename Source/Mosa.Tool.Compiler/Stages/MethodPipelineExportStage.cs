@@ -12,7 +12,7 @@ using System.IO;
 
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.InternalTrace;
-using Mosa.Compiler.TypeSystem;
+using Mosa.Compiler.MosaTypeSystem;
 
 namespace Mosa.Tool.Compiler.Stages
 {
@@ -80,7 +80,7 @@ namespace Mosa.Tool.Compiler.Stages
 
 		#region ITraceListener Members
 
-		void ITraceListener.SubmitInstructionTraceInformation(RuntimeMethod method, string stage, string log)
+		void ITraceListener.SubmitInstructionTraceInformation(MosaMethod method, string stage, string log)
 		{
 			if (string.IsNullOrEmpty(MethodPipelineExportDirectory))
 				return;
@@ -95,7 +95,7 @@ namespace Mosa.Tool.Compiler.Stages
 			File.AppendAllText(fullname, "[" + stage + "]" + Environment.NewLine + Environment.NewLine + log + Environment.NewLine);
 		}
 
-		void ITraceListener.SubmitDebugStageInformation(RuntimeMethod method, string stage, string line)
+		void ITraceListener.SubmitDebugStageInformation(MosaMethod method, string stage, string line)
 		{
 			// nothing
 		}

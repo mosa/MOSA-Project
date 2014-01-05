@@ -30,13 +30,13 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <summary>
 		///
 		/// </summary>
-		protected ICodeEmitter codeEmitter;
+		protected BaseCodeEmitter codeEmitter;
 
 		#endregion Data members
 
 		#region Properties
 
-		public ICodeEmitter CodeEmitter { get { return codeEmitter; } }
+		public BaseCodeEmitter CodeEmitter { get { return codeEmitter; } }
 
 		public bool EmitBinary { get; set; }
 
@@ -77,8 +77,8 @@ namespace Mosa.Compiler.Framework.Stages
 			using (codeStream = methodCompiler.RequestCodeStream())
 			{
 				// HINT: We need seeking to resolve labels.
-				Debug.Assert(codeStream.CanSeek, @"Can't seek code output stream.");
-				Debug.Assert(codeStream.CanWrite, @"Can't write to code output stream.");
+				Debug.Assert(codeStream.CanSeek, @"Can't seek codeReader output stream.");
+				Debug.Assert(codeStream.CanWrite, @"Can't write to codeReader output stream.");
 
 				if (!codeStream.CanSeek || !codeStream.CanWrite)
 					throw new NotSupportedException(@"Code stream doesn't support seeking or writing.");
@@ -129,7 +129,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </summary>
 		/// <param name="context">The context.</param>
 		/// <param name="codeEmitter">The code emitter.</param>
-		protected virtual void EmitInstruction(Context context, ICodeEmitter codeEmitter)
+		protected virtual void EmitInstruction(Context context, BaseCodeEmitter codeEmitter)
 		{
 			(context.Instruction as BasePlatformInstruction).Emit(context, codeEmitter);
 		}
@@ -140,7 +140,7 @@ namespace Mosa.Compiler.Framework.Stages
 		protected virtual void BeginGenerate()
 		{
 			codeEmitter = architecture.GetCodeEmitter();
-			codeEmitter.Initialize(methodCompiler.Method.FullName, methodCompiler.Linker, codeStream);
+			codeEmitter.Initialize(methodCompiler.Method.FullName, methodCompiler.Linker, codeStream, typeSystem);
 		}
 
 		/// <summary>
@@ -158,7 +158,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="block">The completed block.</param>
 		protected virtual void BlockEnd(BasicBlock block)
 		{
-			// TODO: Adjust ICodeEmitter interface to mark the end of label sections, rather than create this special label:
+			// TODO: Adjust BaseCodeEmitter interface to mark the end of label sections, rather than create this special label:
 			codeEmitter.Label(block.Label + 0x0F000000);
 		}
 

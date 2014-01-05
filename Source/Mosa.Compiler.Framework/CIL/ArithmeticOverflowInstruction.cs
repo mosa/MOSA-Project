@@ -7,7 +7,7 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using Mosa.Compiler.Metadata;
+using Mosa.Compiler.MosaTypeSystem;
 using System;
 
 namespace Mosa.Compiler.Framework.CIL
@@ -92,25 +92,20 @@ namespace Mosa.Compiler.Framework.CIL
 			base.Resolve(ctx, compiler);
 
 			StackTypeCode result = StackTypeCode.Unknown;
+			
 			switch (opcode)
 			{
-				case OpCode.Add_ovf_un:
-					result = addovfunTable[(int)ctx.Operand1.StackType][(int)ctx.Operand2.StackType];
-					break;
-
-				case OpCode.Sub_ovf_un:
-					result = subovfunTable[(int)ctx.Operand1.StackType][(int)ctx.Operand2.StackType];
-					break;
-
-				default:
-					result = operandTable[(int)ctx.Operand1.StackType][(int)ctx.Operand2.StackType];
-					break;
+				case OpCode.Add_ovf_un: result = addovfunTable[(int)TypeSystem.GetStackType(ctx.Operand1.Type)][(int)TypeSystem.GetStackType(ctx.Operand2.Type)]; break;
+				case OpCode.Sub_ovf_un: result = subovfunTable[(int)TypeSystem.GetStackType(ctx.Operand1.Type)][(int)TypeSystem.GetStackType(ctx.Operand2.Type)]; break;
+				default: result = operandTable[(int)TypeSystem.GetStackType(ctx.Operand1.Type)][(int)TypeSystem.GetStackType(ctx.Operand2.Type)]; break;
 			}
 
 			if (StackTypeCode.Unknown == result)
+			{
 				throw new InvalidOperationException(@"Invalid operand types passed to " + opcode);
+			}
 
-			ctx.Result = compiler.CreateVirtualRegister(SigTypeFromStackType(result));
+			ctx.Result = compiler.CreateVirtualRegister(compiler.TypeSystem.GetType(result));
 		}
 
 		#endregion Methods

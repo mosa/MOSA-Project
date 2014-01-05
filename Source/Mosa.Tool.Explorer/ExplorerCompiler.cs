@@ -10,7 +10,7 @@
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Stages;
 using Mosa.Compiler.InternalTrace;
-using Mosa.Compiler.TypeSystem;
+using Mosa.Compiler.MosaTypeSystem;
 
 namespace Mosa.Tool.Explorer
 {
@@ -26,7 +26,7 @@ namespace Mosa.Tool.Explorer
 		/// <param name="typeLayout">The type layout.</param>
 		/// <param name="internalTrace">The internal trace.</param>
 		/// <param name="compilerOptions">The compiler options.</param>
-		public ExplorerCompiler(BaseArchitecture architecture, ITypeSystem typeSystem, ITypeLayout typeLayout, IInternalTrace internalTrace, CompilerOptions compilerOptions, bool emitBinary) :
+		public ExplorerCompiler(BaseArchitecture architecture, TypeSystem typeSystem, MosaTypeLayout typeLayout, IInternalTrace internalTrace, CompilerOptions compilerOptions, bool emitBinary) :
 			base(architecture, typeSystem, typeLayout, new CompilationScheduler(typeSystem, true), internalTrace, new ExplorerLinker(), compilerOptions)
 		{
 			this.emitBinary = emitBinary;
@@ -53,7 +53,7 @@ namespace Mosa.Tool.Explorer
 		/// <returns>
 		/// An instance of a MethodCompilerBase for the given type/method pair.
 		/// </returns>
-		public override BaseMethodCompiler CreateMethodCompiler(RuntimeMethod method, BasicBlocks basicBlocks, InstructionSet instructionSet)
+		public override BaseMethodCompiler CreateMethodCompiler(MosaMethod method, BasicBlocks basicBlocks, InstructionSet instructionSet)
 		{
 			return new ExplorerMethodCompiler(this, method, basicBlocks, instructionSet, emitBinary);
 		}
@@ -67,7 +67,7 @@ namespace Mosa.Tool.Explorer
 		/// <param name="platform">The platform.</param>
 		/// <param name="enabledSSA">if set to <c>true</c> [enabled ssa].</param>
 		/// <param name="emitBinary">if set to <c>true</c> [emit binary].</param>
-		public static void Compile(ITypeSystem typeSystem, ITypeLayout typeLayout, IInternalTrace internalTrace, string platform, bool enabledSSA, bool emitBinary)
+		public static void Compile(TypeSystem typeSystem, MosaTypeLayout typeLayout, IInternalTrace internalTrace, string platform, bool enabledSSA, bool emitBinary)
 		{
 			BaseArchitecture architecture;
 
@@ -75,7 +75,7 @@ namespace Mosa.Tool.Explorer
 			{
 				case "x86": architecture = Mosa.Platform.x86.Architecture.CreateArchitecture(Mosa.Platform.x86.ArchitectureFeatureFlags.AutoDetect); break;
 				case "armv6": architecture = Mosa.Platform.ARMv6.Architecture.CreateArchitecture(Mosa.Platform.ARMv6.ArchitectureFeatureFlags.AutoDetect); break;
-				case "avr32": architecture = Mosa.Platform.AVR32.Architecture.CreateArchitecture(Mosa.Platform.AVR32.ArchitectureFeatureFlags.AutoDetect); break;
+				//case "avr32": architecture = Mosa.Platform.AVR32.Architecture.CreateArchitecture(Mosa.Platform.AVR32.ArchitectureFeatureFlags.AutoDetect); break;
 				default:
 					architecture = Mosa.Platform.x86.Architecture.CreateArchitecture(Mosa.Platform.x86.ArchitectureFeatureFlags.AutoDetect); break;
 			}

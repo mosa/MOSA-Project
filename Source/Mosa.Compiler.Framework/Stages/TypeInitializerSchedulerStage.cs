@@ -8,7 +8,7 @@
  */
 
 using Mosa.Compiler.Framework.IR;
-using Mosa.Compiler.TypeSystem;
+using Mosa.Compiler.MosaTypeSystem;
 
 namespace Mosa.Compiler.Framework.Stages
 {
@@ -67,7 +67,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Gets the intializer method.
 		/// </summary>
 		/// <value>The method.</value>
-		public RuntimeMethod TypeInitializerMethod { get; private set; }
+		public MosaMethod TypeInitializerMethod { get; private set; }
 
 		#endregion Properties
 
@@ -83,13 +83,9 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </summary>
 		void ICompilerStage.Run()
 		{
-			ITypeModule mainTypeModule = typeSystem.MainTypeModule;
-
-			if (mainTypeModule != null && mainTypeModule.MetadataModule.EntryPoint.RID != 0)
+			if (typeSystem.EntryMethod != null)
 			{
-				RuntimeMethod entrypoint = mainTypeModule.GetMethod(mainTypeModule.MetadataModule.EntryPoint);
-
-				Schedule(entrypoint);
+				Schedule(typeSystem.EntryMethod);
 			}
 
 			context.AppendInstruction(IRInstruction.Epilogue);
@@ -109,9 +105,9 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Schedules the specified method for invocation in the main.
 		/// </summary>
 		/// <param name="method">The method.</param>
-		public void Schedule(RuntimeMethod method)
+		public void Schedule(MosaMethod method)
 		{
-			Operand symbolOperand = Operand.CreateSymbolFromMethod(method);
+			Operand symbolOperand = Operand.CreateSymbolFromMethod(typeSystem,method);
 			context.AppendInstruction(IRInstruction.Call, null, symbolOperand);
 			context.InvokeMethod = method;
 		}

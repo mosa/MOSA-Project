@@ -11,14 +11,10 @@
 using Mosa.Compiler.Framework.Stages;
 using Mosa.Compiler.InternalTrace;
 using Mosa.Compiler.Linker;
-using Mosa.Compiler.Metadata;
-using Mosa.Compiler.Metadata.Loader;
-using Mosa.Compiler.Metadata.Signatures;
-using Mosa.Compiler.TypeSystem;
-using Mosa.Compiler.TypeSystem.Cil;
+
+using Mosa.Compiler.MosaTypeSystem;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 
 namespace Mosa.Compiler.Framework
@@ -66,12 +62,12 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// The method definition being compiled
 		/// </summary>
-		private readonly RuntimeMethod method;
+		private readonly MosaMethod method;
 
 		/// <summary>
 		/// Holds the type, which owns the method
 		/// </summary>
-		private readonly RuntimeType type;
+		private readonly MosaType type;
 
 		/// <summary>
 		/// Holds the instruction set
@@ -86,27 +82,17 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Holds the type system during compilation
 		/// </summary>
-		private readonly ITypeSystem typeSystem;
+		private readonly TypeSystem typeSystem;
 
 		/// <summary>
 		/// Holds the type layout interface
 		/// </summary>
-		private readonly ITypeLayout typeLayout;
-
-		/// <summary>
-		/// Holds the modules type system
-		/// </summary>
-		private readonly ITypeModule moduleTypeSystem;
+		private readonly MosaTypeLayout typeLayout;
 
 		/// <summary>
 		/// Holds the internal logging interface
 		/// </summary>
 		private readonly IInternalTrace internalTrace;
-
-		/// <summary>
-		/// Holds the exception clauses
-		/// </summary>
-		private readonly List<ExceptionHandlingClause> exceptionHandlingClauses;
 
 		/// <summary>
 		/// Holds the compiler
@@ -123,6 +109,9 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		private readonly VirtualRegisters virtualRegisters;
 
+		/// <summary>
+		/// Holds flag that will stop method compiler
+		/// </summary>
 		private bool stopMethodCompiler;
 
 		/// <summary>
@@ -141,13 +130,12 @@ namespace Mosa.Compiler.Framework
 		/// <param name="method">The method to compile by this instance.</param>
 		/// <param name="basicBlocks">The basic blocks.</param>
 		/// <param name="instructionSet">The instruction set.</param>
-		protected BaseMethodCompiler(BaseCompiler compiler, RuntimeMethod method, BasicBlocks basicBlocks, InstructionSet instructionSet)
+		protected BaseMethodCompiler(BaseCompiler compiler, MosaMethod method, BasicBlocks basicBlocks, InstructionSet instructionSet)
 		{
 			this.compiler = compiler;
 			this.method = method;
 			this.type = method.DeclaringType;
 			this.compilationScheduler = compiler.Scheduler;
-			this.moduleTypeSystem = method.Module;
 			this.architecture = compiler.Architecture;
 			this.typeSystem = compiler.TypeSystem;
 			this.typeLayout = Compiler.TypeLayout;
@@ -158,7 +146,6 @@ namespace Mosa.Compiler.Framework
 			this.pipeline = new CompilerPipeline();
 			this.stackLayout = new StackLayout(architecture, method.Parameters.Count + (method.HasThis || method.HasExplicitThis ? 1 : 0));
 			this.virtualRegisters = new VirtualRegisters(architecture);
-			this.exceptionHandlingClauses = new List<ExceptionHandlingClause>();
 
 			EvaluateParameterOperands();
 
@@ -175,11 +162,6 @@ namespace Mosa.Compiler.Framework
 		public BaseArchitecture Architecture { get { return architecture; } }
 
 		/// <summary>
-		/// Gets the assembly, which contains the method.
-		/// </summary>
-		public IMetadataModule Assembly { get { return moduleTypeSystem.MetadataModule; } }
-
-		/// <summary>
 		/// Gets the linker used to resolve external symbols.
 		/// </summary>
 		public ILinker Linker { get { return linker; } }
@@ -187,12 +169,12 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets the method implementation being compiled.
 		/// </summary>
-		public RuntimeMethod Method { get { return method; } }
+		public MosaMethod Method { get { return method; } }
 
 		/// <summary>
 		/// Gets the owner type of the method.
 		/// </summary>
-		public RuntimeType Type { get { return type; } }
+		public MosaType Type { get { return type; } }
 
 		/// <summary>
 		/// Gets the instruction set.
@@ -221,25 +203,19 @@ namespace Mosa.Compiler.Framework
 		/// Gets the type system.
 		/// </summary>
 		/// <value>The type system.</value>
-		public ITypeSystem TypeSystem { get { return typeSystem; } }
+		public TypeSystem TypeSystem { get { return typeSystem; } }
 
 		/// <summary>
 		/// Gets the type layout.
 		/// </summary>
 		/// <value>The type layout.</value>
-		public ITypeLayout TypeLayout { get { return typeLayout; } }
+		public MosaTypeLayout TypeLayout { get { return typeLayout; } }
 
 		/// <summary>
 		/// Gets the internal logging interface
 		/// </summary>
 		/// <value>The log.</value>
 		public IInternalTrace InternalTrace { get { return internalTrace; } }
-
-		/// <summary>
-		/// Gets the exception clause header.
-		/// </summary>
-		/// <value>The exception clause header.</value>
-		public List<ExceptionHandlingClause> ExceptionHandlingClauses { get { return exceptionHandlingClauses; } }
 
 		/// <summary>
 		/// Gets the local variables.
@@ -272,25 +248,17 @@ namespace Mosa.Compiler.Framework
 		{
 			int index = 0;
 
+			//FIXME! Note: displacement is recalculated later
+			int displacement = 4;
+
 			if (method.HasThis || method.HasExplicitThis)
 			{
-				var signatureType = Method.DeclaringType.ContainsOpenGenericParameters
-					? compiler.GenericTypePatcher.PatchSignatureType(Method.Module, Method.DeclaringType as CilGenericType, type.Token)
-					: new ClassSigType(type.Token);
-
-				stackLayout.SetStackParameter(index++, new RuntimeParameter("this", 2, ParameterAttributes.In), signatureType); // position 2?
+				stackLayout.SetStackParameter(index++, type, displacement, "this");
 			}
 
-			for (int paramIndex = 0; paramIndex < method.SigParameters.Length; paramIndex++)
+			foreach (var parameter in method.Parameters)
 			{
-				var parameterType = method.SigParameters[paramIndex];
-
-				if (parameterType is GenericInstSigType && (parameterType as GenericInstSigType).ContainsGenericParameters)
-				{
-					parameterType = compiler.GenericTypePatcher.PatchSignatureType(typeSystem.InternalTypeModule, Method.DeclaringType, (parameterType as GenericInstSigType).BaseType.Token);
-				}
-
-				stackLayout.SetStackParameter(index++, method.Parameters[paramIndex], parameterType);
+				stackLayout.SetStackParameter(index++, parameter.Type, displacement, parameter.Name);
 			}
 		}
 
@@ -342,18 +310,9 @@ namespace Mosa.Compiler.Framework
 		/// <returns>
 		/// An operand, which represents the virtual register.
 		/// </returns>
-		public Operand CreateVirtualRegister(SigType type)
+		public Operand CreateVirtualRegister(MosaType type)
 		{
 			return virtualRegisters.Allocate(type);
-		}
-
-		/// <summary>
-		/// Provides access to the instructions of the method.
-		/// </summary>
-		/// <returns>A stream, which represents the IL of the method.</returns>
-		public Stream GetInstructionStream()
-		{
-			return method.Module.MetadataModule.GetInstructionStream((long)method.Rva);
 		}
 
 		/// <summary>
@@ -386,19 +345,15 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Sets the signature of local variables in the method.
 		/// </summary>
-		/// <param name="localSigTypes">The local sig types.</param>
-		public void SetLocalVariableSignature(SigType[] localSigTypes)
+		/// <param name="localTypes">The local sig types.</param>
+		public void SetLocalVariableSignature(IList<MosaType> localTypes)
 		{
-			Debug.Assert(localSigTypes != null, "localVariableSignature");
-
 			int index = 0;
-			locals = new Operand[localSigTypes.Length];
+			locals = new Operand[localTypes.Count];
 
-			foreach (var localVariable in localSigTypes)
+			foreach (var localVariable in localTypes)
 			{
-				locals[index++] = VirtualRegisters.Allocate(Operand.NormalizeSigType(localVariable));
-
-				//Scheduler.ScheduleTypeForCompilation(sigtype); // TODO
+				locals[index++] = VirtualRegisters.Allocate(TypeSystem.ConvertToStackType(localVariable));
 			}
 		}
 
@@ -413,8 +368,7 @@ namespace Mosa.Compiler.Framework
 				return;
 
 			// If we're compiling a type initializer, run it immediately.
-			const MethodAttributes attrs = MethodAttributes.SpecialName | MethodAttributes.RTSpecialName | MethodAttributes.Static;
-			if ((Method.Attributes & attrs) == attrs && Method.Name == ".cctor")
+			if (Method.IsSpecialName && method.IsRTSpecialName && method.IsStatic && Method.Name == ".cctor")
 			{
 				typeInitializerSchedulerStage.Schedule(Method);
 			}

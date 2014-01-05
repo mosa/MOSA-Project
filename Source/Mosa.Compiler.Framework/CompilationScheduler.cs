@@ -7,10 +7,9 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System.Collections.Generic;
 using Mosa.Compiler.Common;
-using Mosa.Compiler.TypeSystem;
-using Mosa.Compiler.TypeSystem.Cil;
+using Mosa.Compiler.MosaTypeSystem;
+using System.Collections.Generic;
 
 namespace Mosa.Compiler.Framework.Stages
 {
@@ -21,20 +20,20 @@ namespace Mosa.Compiler.Framework.Stages
 	{
 		#region Data Members
 
-		private readonly List<RuntimeType> typesAllocated = new List<RuntimeType>();
-		private readonly List<RuntimeMethod> methodsInvoked = new List<RuntimeMethod>();
+		private readonly List<MosaType> typesAllocated = new List<MosaType>();
+		private readonly List<MosaMethod> methodsInvoked = new List<MosaMethod>();
 
-		private readonly HashSet<RuntimeType> typeScheduled = new HashSet<RuntimeType>();
-		private readonly HashSet<RuntimeMethod> methodScheduled = new HashSet<RuntimeMethod>();
-		private readonly Queue<RuntimeMethod> methodQueue = new Queue<RuntimeMethod>();
+		private readonly HashSet<MosaType> typeScheduled = new HashSet<MosaType>();
+		private readonly HashSet<MosaMethod> methodScheduled = new HashSet<MosaMethod>();
+		private readonly Queue<MosaMethod> methodQueue = new Queue<MosaMethod>();
 
-		private readonly ITypeSystem typeSystem;
+		private readonly Mosa.Compiler.MosaTypeSystem.TypeSystem typeSystem;
 
 		private readonly bool compileAllMethods;
 
 		#endregion Data Members
 
-		public CompilationScheduler(ITypeSystem typeSystem, bool compileAllMethods)
+		public CompilationScheduler(TypeSystem typeSystem, bool compileAllMethods)
 		{
 			this.typeSystem = typeSystem;
 			this.compileAllMethods = compileAllMethods;
@@ -42,7 +41,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (compileAllMethods)
 			{
 				// forces all types to get compiled
-				foreach (RuntimeType type in typeSystem.GetAllTypes())
+				foreach (MosaType type in typeSystem.AllTypes)
 				{
 					CompileType(type);
 				}
@@ -51,7 +50,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		#region ICompilationScheduler members
 
-		void ICompilationScheduler.TrackTypeAllocated(RuntimeType type)
+		void ICompilationScheduler.TrackTypeAllocated(MosaType type)
 		{
 			if (type.IsModule)
 				return;
@@ -62,7 +61,7 @@ namespace Mosa.Compiler.Framework.Stages
 				CompileType(type);
 		}
 
-		void ICompilationScheduler.TrackMethodInvoked(RuntimeMethod method)
+		void ICompilationScheduler.TrackMethodInvoked(MosaMethod method)
 		{
 			methodsInvoked.AddIfNew(method);
 
@@ -70,7 +69,7 @@ namespace Mosa.Compiler.Framework.Stages
 				CompileMethod(method);
 		}
 
-		void ICompilationScheduler.TrackFieldReferenced(RuntimeField field)
+		void ICompilationScheduler.TrackFieldReferenced(MosaField field)
 		{
 			if (compileAllMethods)
 				CompileType(field.DeclaringType);
@@ -83,14 +82,14 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <returns>
 		///   <c>true</c> if method is scheduled to be compiled; otherwise, <c>false</c>.
 		/// </returns>
-		bool ICompilationScheduler.IsMethodScheduled(RuntimeMethod method)
+		bool ICompilationScheduler.IsMethodScheduled(MosaMethod method)
 		{
 			return methodScheduled.Contains(method);
 		}
 
 		#endregion ICompilationScheduler members
 
-		private void CompileType(RuntimeType type)
+		private void CompileType(MosaType type)
 		{
 			if (type.IsModule)
 				return;
@@ -98,39 +97,22 @@ namespace Mosa.Compiler.Framework.Stages
 			if (type.IsInterface)
 				return;
 
-			// Can not compile an open generic type
-			if (type.ContainsOpenGenericParameters)
-				return;
-
-			//FIXME
-			// Do not compile generic types outside of the internal type module
-			//if (type is CilGenericType && !(type.Module is InternalTypeModule))
-			//	return;
-
 			if (typeScheduled.Contains(type))
 				return;
 
 			typeScheduled.Add(type);
+
 			foreach (var method in type.Methods)
 				CompileMethod(method);
 		}
 
-		private void CompileMethod(RuntimeMethod method)
+		private void CompileMethod(MosaMethod method)
 		{
-			// Can not compile an (open) generic method
-			if (method.IsGeneric)
+			if (method.IsGeneric || method.DeclaringType.IsInterface || method.IsAbstract || method.IsOpenGeneric)
 				return;
 
-			if (method.DeclaringType.IsInterface)
+			if (method.IsOpenGeneric)
 				return;
-
-			if (method.IsAbstract)
-				return;
-
-			//FIXME
-			// Do not compile generic methods outside of the internal type module
-			//if (method.DeclaringType is CilGenericType && !(method.DeclaringType.Module is InternalTypeModule))
-			//    return;
 
 			if (methodScheduled.Contains(method))
 				return;
@@ -139,7 +121,7 @@ namespace Mosa.Compiler.Framework.Stages
 			methodQueue.Enqueue(method);
 		}
 
-		RuntimeMethod ICompilationScheduler.GetMethodToCompile()
+		MosaMethod ICompilationScheduler.GetMethodToCompile()
 		{
 			if (methodQueue.Count == 0)
 				return null;

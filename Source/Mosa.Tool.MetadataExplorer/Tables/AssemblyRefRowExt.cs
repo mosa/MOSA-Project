@@ -32,15 +32,14 @@ namespace Mosa.Tool.MetadataExplorer.Tables
 		public override IEnumerable GetValues()
 		{
 			yield return TokenString("Name", row.Name);
-			yield return Value("Name #", row.Name);
 			yield return Value("Flags", row.Flags.ToString());
 			yield return Value("BuildNumber", row.BuildNumber);
 			yield return Value("MajorVersion", row.MajorVersion);
 			yield return Value("MinorVersion", row.MinorVersion);
-			yield return Value("HashValue #", row.HashValue);
+			yield return Value("HashValue", row.HashValue);
 			yield return Value("Revision", row.RevisionNumber);
-			yield return Value("Culture #", row.Culture);
-			yield return Value("PublicKeyOrToken #", row.PublicKeyOrToken);
+			yield return Value("Culture", row.Culture);
+			yield return Value("PublicKeyOrToken", row.PublicKeyOrToken);
 		}
 	}
 }

@@ -33,7 +33,7 @@ namespace Mosa.Tool.MetadataExplorer.Tables
 		public override IEnumerable GetValues()
 		{
 			yield return TokenString("Name", row.NameString);
-			yield return Value("ClassTable #", row.Class);
+			yield return Value("Class", row.Class);
 
 			var signature = Signature.GetSignatureFromMemberRef(Metadata, row.SignatureBlob);
 			yield return Value("Signature", signature.ToString());

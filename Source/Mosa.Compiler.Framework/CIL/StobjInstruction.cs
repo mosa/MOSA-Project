@@ -7,11 +7,9 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
-
 using Mosa.Compiler.Metadata;
-using Mosa.Compiler.Metadata.Signatures;
-using Mosa.Compiler.TypeSystem;
+using Mosa.Compiler.MosaTypeSystem;
+using System;
 
 namespace Mosa.Compiler.Framework.CIL
 {
@@ -25,7 +23,7 @@ namespace Mosa.Compiler.Framework.CIL
 		/// <summary>
 		/// Specifies the type of the value.
 		/// </summary>
-		private readonly SigType valueType;
+		private readonly CilElementType? elementType;
 
 		#endregion Data members
 
@@ -40,44 +38,16 @@ namespace Mosa.Compiler.Framework.CIL
 		{
 			switch (opcode)
 			{
-				case OpCode.Stind_i1:
-					valueType = BuiltInSigType.SByte;
-					break;
-
-				case OpCode.Stind_i2:
-					valueType = BuiltInSigType.Int16;
-					break;
-
-				case OpCode.Stind_i4:
-					valueType = BuiltInSigType.Int32;
-					break;
-
-				case OpCode.Stind_i8:
-					valueType = BuiltInSigType.Int64;
-					break;
-
-				case OpCode.Stind_r4:
-					valueType = BuiltInSigType.Single;
-					break;
-
-				case OpCode.Stind_r8:
-					valueType = BuiltInSigType.Double;
-					break;
-
-				case OpCode.Stind_i:
-					valueType = BuiltInSigType.IntPtr;
-					break;
-
-				case OpCode.Stind_ref: // FIXME: Really object?
-					valueType = BuiltInSigType.Object;
-					break;
-
-				case OpCode.Stobj:  // FIXME
-					valueType = null;
-					break;
-
-				default:
-					throw new NotImplementedException();
+				case OpCode.Stind_i1: elementType = CilElementType.I1; break;
+				case OpCode.Stind_i2: elementType = CilElementType.I2; break;
+				case OpCode.Stind_i4: elementType = CilElementType.I4; break;
+				case OpCode.Stind_i8: elementType = CilElementType.I8; break;
+				case OpCode.Stind_r4: elementType = CilElementType.R4; break;
+				case OpCode.Stind_r8: elementType = CilElementType.R8; break;
+				case OpCode.Stind_i: elementType = CilElementType.I; break;
+				case OpCode.Stind_ref: elementType = CilElementType.Object; break;
+				case OpCode.Stobj: elementType = null; break;
+				default: throw new NotImplementedException();
 			}
 		}
 
@@ -95,15 +65,11 @@ namespace Mosa.Compiler.Framework.CIL
 			// Decode base classes first
 			base.Decode(ctx, decoder);
 
-			// Do we have a type?
-			if (valueType == null)
-			{
-				// No, retrieve a type reference from the immediate argument
-				Token token = decoder.DecodeTokenType();
-				RuntimeType type = decoder.TypeModule.GetType(token);
+			MosaType type = (elementType == null)
+				? type = decoder.TypeSystem.Resolver.GetTypeByToken(decoder.Method.CodeAssembly, decoder.DecodeTokenType(), decoder.Method)
+				: type = decoder.TypeSystem.Resolver.GetTypeByElementType(elementType);
 
-				ctx.RuntimeType = type;
-			}
+				ctx.MosaType = type;
 
 			// FIXME: Check the value/destinations
 		}

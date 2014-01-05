@@ -7,7 +7,7 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using Mosa.Compiler.Metadata.Signatures;
+using Mosa.Compiler.MosaTypeSystem;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -47,7 +47,7 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		/// <param name="type">The type.</param>
 		/// <returns></returns>
-		public Operand Allocate(SigType type)
+		public Operand Allocate(MosaType type)
 		{
 			return Allocate(type, null);
 		}
@@ -58,7 +58,7 @@ namespace Mosa.Compiler.Framework
 		/// <param name="type">The type.</param>
 		/// <param name="name">The name.</param>
 		/// <returns></returns>
-		public Operand Allocate(SigType type, string name)
+		public Operand Allocate(MosaType type, string name)
 		{
 			int index = virtualRegisters.Count + 1;
 
@@ -69,14 +69,14 @@ namespace Mosa.Compiler.Framework
 			return virtualRegister;
 		}
 
-		public void SplitLongOperand(Operand longOperand, int highOffset, int lowOffset)
+		public void SplitLongOperand(TypeSystem typeSystem, Operand longOperand, int highOffset, int lowOffset)
 		{
 			Debug.Assert(longOperand.Is64BitInteger);
 
 			if (longOperand.Low == null && longOperand.High == null)
 			{
-				virtualRegisters.Add(Operand.CreateHighSplitForLong(longOperand, highOffset, virtualRegisters.Count + 1));
-				virtualRegisters.Add(Operand.CreateLowSplitForLong(longOperand, lowOffset, virtualRegisters.Count + 1));
+				virtualRegisters.Add(Operand.CreateHighSplitForLong(typeSystem, longOperand, highOffset, virtualRegisters.Count + 1));
+				virtualRegisters.Add(Operand.CreateLowSplitForLong(typeSystem, longOperand, lowOffset, virtualRegisters.Count + 1));
 			}
 		}
 

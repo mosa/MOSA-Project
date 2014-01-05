@@ -7,8 +7,7 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using Mosa.Compiler.Metadata;
-using Mosa.Compiler.TypeSystem;
+using Mosa.Compiler.MosaTypeSystem;
 
 namespace Mosa.Compiler.Framework.CIL
 {
@@ -42,12 +41,11 @@ namespace Mosa.Compiler.Framework.CIL
 			// Decode base classes first
 			base.Decode(ctx, decoder);
 
-			Token token = decoder.DecodeTokenType();
-			RuntimeType type = decoder.TypeModule.GetType(token);
+			MosaType type = decoder.TypeSystem.Resolver.GetTypeByToken(decoder.Method.CodeAssembly, decoder.DecodeTokenType(), decoder.Method);
 
 			uint size = (uint)decoder.Compiler.TypeLayout.GetTypeSize(type);
 
-			ctx.Result = Operand.CreateConstantUnsignedInt(size);
+			ctx.Result = Operand.CreateConstantUnsignedInt(decoder.TypeSystem, size);
 		}
 
 		/// <summary>

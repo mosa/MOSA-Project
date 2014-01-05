@@ -7,12 +7,12 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using Mosa.Compiler.TypeSystem;
+using Mosa.Compiler.MosaTypeSystem;
 
 namespace Mosa.Compiler.InternalTrace
 {
 	public interface ITraceFilter
 	{
-		bool IsMatch(RuntimeMethod method, string stage);
+		bool IsMatch(MosaMethod method, string stage);
 	}
 }

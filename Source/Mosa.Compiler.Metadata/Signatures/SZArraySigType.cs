@@ -49,26 +49,6 @@ namespace Mosa.Compiler.Metadata.Signatures
 
 		#endregion Properties
 
-		#region SigType Overrides
-
-		/// <summary>
-		/// Indicates whether the current object is equal to another object of the same type.
-		/// </summary>
-		/// <param name="other">An object to compare with this object.</param>
-		/// <returns>
-		/// true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.
-		/// </returns>
-		public override bool Equals(SigType other)
-		{
-			SZArraySigType szast = other as SZArraySigType;
-			if (szast == null)
-				return false;
-
-			return (base.Equals(other) && ElementType.Equals(szast.ElementType) && CustomMod.Equals(CustomMods, szast.CustomMods));
-		}
-
-		#endregion SigType Overrides
-
 		/// <summary>
 		/// Expresses the array type reference in a meaningful, symbol-friendly string form
 		/// </summary>

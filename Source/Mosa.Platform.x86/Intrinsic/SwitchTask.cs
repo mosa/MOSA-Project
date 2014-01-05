@@ -8,7 +8,6 @@
  */
 
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Metadata.Signatures;
 
 namespace Mosa.Platform.x86.Intrinsic
 {
@@ -26,11 +25,11 @@ namespace Mosa.Platform.x86.Intrinsic
 		/// <param name="typeSystem">The type system.</param>
 		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, BaseMethodCompiler methodCompiler)
 		{
-			Operand esp = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.ESP);
+			Operand esp = Operand.CreateCPURegister(methodCompiler.TypeSystem.Resolver.BuiltIn.Int32, GeneralPurposeRegister.ESP);
 
 			context.SetInstruction(X86.Mov, esp, context.Operand1);
 			context.AppendInstruction(X86.Popad);
-			context.AppendInstruction(X86.Add, esp, esp, Operand.CreateConstantSignedInt(0x08));
+			context.AppendInstruction(X86.Add, esp, esp, Operand.CreateConstantSignedInt(methodCompiler.TypeSystem, 0x08));
 			context.AppendInstruction(X86.Sti);
 			context.AppendInstruction(X86.IRetd);
 		}

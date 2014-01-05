@@ -89,9 +89,8 @@
                     <include name="System.dll"/>
                     <include name="${outputDirectory}/Mosa.Compiler.Common.dll"/>
                     <include name="${outputDirectory}/Mosa.Compiler.Linker.dll"/>
-                    <include name="${outputDirectory}/Mosa.Compiler.Metadata.dll"/>
                     <include name="${outputDirectory}/Mosa.Compiler.Framework.dll"/>
-                    <include name="${outputDirectory}/Mosa.Compiler.TypeSystem.dll"/>
+                    <include name="${outputDirectory}/Mosa.Compiler.MosaTypeSystem.dll"/>
 		</references>
 		<!-- supress warnings -->
 		<nowarn><warning number="${suppresswarnings}"/></nowarn>

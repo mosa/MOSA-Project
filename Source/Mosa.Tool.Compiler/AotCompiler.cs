@@ -10,9 +10,7 @@
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Stages;
 using Mosa.Compiler.InternalTrace;
-using Mosa.Compiler.Metadata.Loader;
-using Mosa.Compiler.Metadata.Signatures;
-using Mosa.Compiler.TypeSystem;
+using Mosa.Compiler.MosaTypeSystem;
 using Mosa.Tool.Compiler.Stages;
 using System.Collections.Generic;
 using System.IO;
@@ -29,7 +27,7 @@ namespace Mosa.Tool.Compiler
 		/// <param name="typeLayout">The type layout.</param>
 		/// <param name="internalTrace">The internal trace.</param>
 		/// <param name="compilerOptions">The compiler options.</param>
-		public AotCompiler(BaseArchitecture architecture, ITypeSystem typeSystem, ITypeLayout typeLayout, IInternalTrace internalTrace, CompilerOptions compilerOptions)
+		public AotCompiler(BaseArchitecture architecture, TypeSystem typeSystem, MosaTypeLayout typeLayout, IInternalTrace internalTrace, CompilerOptions compilerOptions)
 			: base(architecture, typeSystem, typeLayout, new CompilationScheduler(typeSystem, true), internalTrace, null, compilerOptions)
 		{
 		}
@@ -55,7 +53,7 @@ namespace Mosa.Tool.Compiler
 		/// <returns>
 		/// An instance of a MethodCompilerBase for the given type/method pair.
 		/// </returns>
-		public override BaseMethodCompiler CreateMethodCompiler(RuntimeMethod method, BasicBlocks basicBlocks, InstructionSet instructionSet)
+		public override BaseMethodCompiler CreateMethodCompiler(MosaMethod method, BasicBlocks basicBlocks, InstructionSet instructionSet)
 		{
 			return new AotMethodCompiler(this, method, basicBlocks, instructionSet);
 		}
@@ -71,23 +69,25 @@ namespace Mosa.Tool.Compiler
 
 		public static void Compile(CompilerOptions compilerOptions, List<FileInfo> inputFiles)
 		{
-			IAssemblyLoader assemblyLoader = new AssemblyLoader();
-			assemblyLoader.InitializePrivatePaths(GetInputFileNames(inputFiles));
+			var assemblyLoader = new MosaAssemblyLoader();
+
+			assemblyLoader.AddPrivatePath(GetInputFileNames(inputFiles));
 
 			foreach (string file in GetInputFileNames(inputFiles))
 			{
 				assemblyLoader.LoadModule(file);
 			}
 
-			ITypeSystem typeSystem = new TypeSystem();
-			typeSystem.LoadModules(assemblyLoader.Modules);
+			var typeSystem = new TypeSystem();
+
+			typeSystem.Load(assemblyLoader);
 
 			int nativePointerSize;
 			int nativePointerAlignment;
 
-			compilerOptions.Architecture.GetTypeRequirements(BuiltInSigType.IntPtr, out nativePointerSize, out nativePointerAlignment);
+			compilerOptions.Architecture.GetTypeRequirements(typeSystem.BuiltIn.Ptr, out nativePointerSize, out nativePointerAlignment);
 
-			TypeLayout typeLayout = new TypeLayout(typeSystem, nativePointerSize, nativePointerAlignment);
+			MosaTypeLayout typeLayout = new MosaTypeLayout(typeSystem, nativePointerSize, nativePointerAlignment);
 
 			ConfigurableTraceFilter filter = new ConfigurableTraceFilter();
 			filter.MethodMatch = MatchType.None;

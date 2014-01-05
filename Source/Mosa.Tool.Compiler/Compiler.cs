@@ -336,12 +336,12 @@ namespace Mosa.Tool.Compiler
 			);
 
 			optionSet.Add(
-				"multiboot-module=",
-				"Adds a {0:module} to multiboot, to be loaded at a given {1:virtualAddress} (can be used multiple times).",
+				"multiboot-assemblyly=",
+				"Adds a {0:assemblyly} to multiboot, to be loaded at a given {1:virtualAddress} (can be used multiple times).",
 				delegate(string file, string address)
 				{
 					// TODO: validate and add this to a list or something
-					Console.WriteLine("Adding multiboot module " + file + " at virtualAddress " + address);
+					Console.WriteLine("Adding multiboot assemblyly " + file + " at virtualAddress " + address);
 				}
 			);
 
@@ -520,8 +520,8 @@ namespace Mosa.Tool.Compiler
 				case "x86":
 					return Mosa.Platform.x86.Architecture.CreateArchitecture(Mosa.Platform.x86.ArchitectureFeatureFlags.AutoDetect);
 
-				case "avr32":
-					return Mosa.Platform.AVR32.Architecture.CreateArchitecture(Mosa.Platform.AVR32.ArchitectureFeatureFlags.AutoDetect);
+				//case "avr32":
+				//	return Mosa.Platform.AVR32.Architecture.CreateArchitecture(Mosa.Platform.AVR32.ArchitectureFeatureFlags.AutoDetect);
 
 				case "x64":
 

@@ -41,7 +41,7 @@ namespace Mosa.TinyCPUSimulator.Adaptor
 			return;
 		}
 
-		protected override void EmitInstruction(Context context, ICodeEmitter codeEmitter)
+		protected override void EmitInstruction(Context context, BaseCodeEmitter codeEmitter)
 		{
 			long start = codeEmitter.CurrentPosition;
 

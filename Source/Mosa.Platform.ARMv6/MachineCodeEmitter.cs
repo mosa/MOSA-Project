@@ -17,11 +17,11 @@ namespace Mosa.Platform.ARMv6
 	/// <summary>
 	/// An AVR32 machine code emitter.
 	/// </summary>
-	public sealed class MachineCodeEmitter : BaseCodeEmitter, ICodeEmitter
+	public sealed class MachineCodeEmitter : BaseCodeEmitter
 	{
 		#region Code Generation Members
 
-		protected override void ResolvePatches()
+		public override void ResolvePatches()
 		{
 			// TODO: Check x86 Implementation
 		}

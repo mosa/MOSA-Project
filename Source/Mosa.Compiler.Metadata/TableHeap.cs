@@ -371,7 +371,7 @@ namespace Mosa.Compiler.Metadata
 			int tableIdx = (int)(token.Table) >> 24;
 			int tableOffset = _tableOffsets[tableIdx] + ((int)(token.RID - 1) * _recordSize[tableIdx]);
 
-			var reader = new BinaryReader(new MemoryStream(_metadata), Encoding.UTF8);
+			var reader = new BinaryReader(new MemoryStream(Metadata), Encoding.UTF8);
 			reader.BaseStream.Position = tableOffset;
 			return reader;
 		}

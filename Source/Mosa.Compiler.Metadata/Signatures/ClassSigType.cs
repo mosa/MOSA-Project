@@ -29,26 +29,6 @@ namespace Mosa.Compiler.Metadata.Signatures
 
 		#endregion Construction
 
-		#region SigType Overrides
-
-		/// <summary>
-		/// Indicates whether the current object is equal to another object of the same type.
-		/// </summary>
-		/// <param name="other">An object to compare with this object.</param>
-		/// <returns>
-		/// true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.
-		/// </returns>
-		public override bool Equals(SigType other)
-		{
-			ClassSigType cst = other as ClassSigType;
-			if (null == cst)
-				return false;
-
-			return (base.Equals(other) == true && this.Token == cst.Token);
-		}
-
-		#endregion SigType Overrides
-
 		/// <summary>
 		/// Expresses the class reference in a meaningful, symbol-friendly string form
 		/// </summary>

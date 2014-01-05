@@ -7,9 +7,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using Mosa.Compiler.Metadata;
-using Mosa.Compiler.Metadata.Signatures;
-
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
@@ -42,10 +39,10 @@ namespace Mosa.Compiler.Framework.CIL
 			// Decode base classes first
 			base.Decode(ctx, decoder);
 
-			// Read the fn token
-			Token token = decoder.DecodeTokenType();
-			ctx.Result = decoder.Compiler.CreateVirtualRegister(BuiltInSigType.IntPtr);
-			ctx.InvokeMethod = decoder.TypeModule.GetMethod(token);
+			var method = decoder.TypeSystem.Resolver.GetMethodByToken(decoder.Method.CodeAssembly, decoder.DecodeTokenType());
+
+			ctx.Result = decoder.Compiler.CreateVirtualRegister(decoder.TypeSystem.BuiltIn.TypedByRef);
+			ctx.InvokeMethod = method;
 
 			decoder.Compiler.Scheduler.TrackMethodInvoked(ctx.InvokeMethod);
 		}

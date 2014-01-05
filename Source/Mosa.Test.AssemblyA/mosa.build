@@ -14,10 +14,10 @@
 	<target name="build">
 	    <csc target="library" output="${outputDirectory}/Mosa.Test.AssemblyA.dll" debug="${debug}" unsafe="true" nostdlib="false">
 		<sources>
+                    <include name="IHolder.cs"/>
                     <include name="Holder.cs"/>
 		</sources>
 		<references>
-                    <include name="System.dll"/>
 		</references>
 		<!-- supress warnings -->
 		<nowarn><warning number="${suppresswarnings}"/></nowarn>

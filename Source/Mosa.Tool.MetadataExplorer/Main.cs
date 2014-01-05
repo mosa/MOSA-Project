@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
-
+using Mosa.Compiler.MosaTypeSystem;
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Loader;
 using Mosa.Tool.MetadataExplorer.Tables;
+using System.IO;
 
 namespace Mosa.Tool.MetadataExplorer
 {
@@ -28,10 +29,7 @@ namespace Mosa.Tool.MetadataExplorer
 
 		protected void LoadAssembly(string filename)
 		{
-			IAssemblyLoader assemblyLoader = new AssemblyLoader();
-			assemblyLoader.AddPrivatePath(System.IO.Path.GetDirectoryName(filename));
-
-			metadataModule = assemblyLoader.LoadModule(filename);
+			metadataModule = new PortableExecutableImage(new FileStream(filename, FileMode.Open, FileAccess.Read));
 
 			UpdateTree();
 

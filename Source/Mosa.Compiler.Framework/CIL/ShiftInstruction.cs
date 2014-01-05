@@ -7,7 +7,8 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using Mosa.Compiler.Metadata;
+
+using Mosa.Compiler.MosaTypeSystem;
 using System;
 using System.Diagnostics;
 
@@ -59,12 +60,12 @@ namespace Mosa.Compiler.Framework.CIL
 		{
 			base.Resolve(ctx, compiler);
 
-			var result = operandTable[(int)ctx.Operand1.StackType][(int)ctx.Operand2.StackType];
+			var result = operandTable[(int)TypeSystem.GetStackType(ctx.Operand1.Type)][(int)TypeSystem.GetStackType(ctx.Operand2.Type)];
 			Debug.Assert(StackTypeCode.Unknown != result, @"Can't shift with the given stack operands.");
 			if (StackTypeCode.Unknown == result)
-				throw new InvalidOperationException(@"Invalid stack state for pairing (" + ctx.Operand1.StackType + ", " + ctx.Operand2.StackType + ")");
+				throw new InvalidOperationException(@"Invalid stack state for pairing (" + TypeSystem.GetStackType(ctx.Operand1.Type) + ", " + TypeSystem.GetStackType(ctx.Operand2.Type) + ")");
 
-			ctx.Result = compiler.CreateVirtualRegister(SigTypeFromStackType(result));
+			ctx.Result = compiler.CreateVirtualRegister(compiler.TypeSystem.GetType(result));
 		}
 
 		/// <summary>

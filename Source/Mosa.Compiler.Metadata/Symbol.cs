@@ -17,6 +17,6 @@ namespace Mosa.Compiler.Metadata
 		/// <summary>
 		/// Name for symbol
 		/// </summary>
-		public const string Name = @".cil.metadata";
+		public const string Name = @".cil.Metadata";
 	}
 }

@@ -15,6 +15,8 @@ using Mosa.Compiler.Metadata.Tables;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
+using System.Text;
 
 namespace Mosa.Compiler.MosaTypeSystem
 {
@@ -46,11 +48,6 @@ namespace Mosa.Compiler.MosaTypeSystem
 		private IMetadataModule metadataModule;
 
 		/// <summary>
-		/// The strings
-		/// </summary>
-		private Dictionary<HeapIndexToken, string> strings;
-
-		/// <summary>
 		/// The signatures
 		/// </summary>
 		private Dictionary<HeapIndexToken, Signature> signatures;
@@ -80,17 +77,55 @@ namespace Mosa.Compiler.MosaTypeSystem
 		/// </summary>
 		private MosaAssembly assembly;
 
+		/// <summary>
+		/// Gets the entry method.
+		/// </summary>
+		/// <value>
+		/// The entry method.
+		/// </value>
+		public MosaMethod EntryMethod { get; internal set; }
+
+		/// <summary>
+		/// The strings
+		/// </summary>
+		private Dictionary<HeapIndexToken, string> strings;
+
+		/// <summary>
+		/// The user strings
+		/// </summary>
+		private Dictionary<int, string> userStrings;
+
 		#endregion Data members
+
+		#region Constants
+
+		/// <summary>
+		/// The prologue id for a custom attribute blob.
+		/// </summary>
+		private const ushort ATTRIBUTE_BLOB_PROLOGUE = 0x0001;
+
+		/// <summary>
+		/// Length of a null string in a custom attribute blob.
+		/// </summary>
+		private const byte ATTRIBUTE_NULL_STRING_LEN = 0xFF;
+
+		/// <summary>
+		/// Length of an empty string in a custom attribute blob.
+		/// </summary>
+		private const byte ATTRIBUTE_EMPTY_STRING_LEN = 0x00;
+
+		#endregion Constants
 
 		private MosaTypeLoader(MosaTypeResolver resolver)
 		{
 			this.resolver = resolver;
 		}
 
-		public static void Load(IMetadataModule metadataModule, MosaTypeResolver resolver)
+		public static MosaMethod Load(IMetadataModule metadataModule, MosaTypeResolver resolver)
 		{
 			var loader = new MosaTypeLoader(resolver);
 			loader.Load(metadataModule);
+			return loader.EntryMethod;
 		}
 
 		private void Load(IMetadataModule metadataModule)
@@ -101,34 +136,50 @@ namespace Mosa.Compiler.MosaTypeSystem
 			RetrieveAllTableSizes();
 
 			this.signatures = new Dictionary<HeapIndexToken, Signature>();
-			this.strings = new Dictionary<HeapIndexToken, string>();
+			this.userStrings = new Dictionary<int, string>();
 			this.mapGenericParam = new Dictionary<Token, MosaGenericParameter>();
 			this.genericTypes = new List<MosaType>();
+			this.strings = new Dictionary<HeapIndexToken, string>();
 
 			assembly = new MosaAssembly();
 			assembly.Name = metadataModule.Name;
 
 			resolver.AddAssembly(assembly);
 
+			resolver.AddUserStringHeap(assembly, metadataProvider.GetHeap(HeapType.UserString) as UserStringHeap);
+
 			// Load all types from the assembly into the type array
 			LoadTypeReferences();
 			LoadTypes();
+			LoadFieldLayout();
+			LoadFieldData();
 			LoadTypeSpecs();
 			LoadMemberReferences();
 			LoadGenericParams();
+			LoadMethodSpecs();
 			LoadCustomAttributes();
 			LoadInterfaces();
 			LoadGenericParamContraints();
 			MethodImplementation();
+			LoadExternals();
+
+			if (metadataModule.ModuleType == ModuleType.Executable)
+			{
+				if (metadataModule.EntryPoint.RID != 0)
+				{
+					EntryMethod = resolver.GetMethodByToken(assembly, metadataModule.EntryPoint);
+				}
+			}
 
 			// release
 			this.metadataModule = null;
 			this.metadataProvider = null;
 			this.signatures = null;
-			this.strings = null;
+			this.userStrings = null;
 			this.mapGenericParam = null;
 			this.internalAssembly = null;
 			this.genericTypes = null;
+			this.strings = null;
 		}
 
 		#region Internals
@@ -172,55 +223,62 @@ namespace Mosa.Compiler.MosaTypeSystem
 		/// <summary>
 		/// Loads the string from the heap table for stringIdx
 		/// </summary>
-		/// <param name="stringIdx">The string's index</param>
+		/// <param name="token">The string's index</param>
 		/// <returns>The string at heap[stringIdx]</returns>
-		private string GetString(HeapIndexToken stringIdx)
+		private string GetString(HeapIndexToken token)
 		{
 			string value;
 
-			if (strings.TryGetValue(stringIdx, out value))
+			if (strings.TryGetValue(token, out value))
+			{
 				return value;
+			}
 
-			value = metadataProvider.ReadString(stringIdx);
-			strings.Add(stringIdx, value);
+			value = metadataProvider.ReadString(token);
+			strings.Add(token, value);
 
 			return value;
 		}
 
-		private T RetrieveSignature<T>(HeapIndexToken blobIdx) where T : Signature
+		private T RetrieveSignature<T>(HeapIndexToken token) where T : Signature
 		{
 			Signature signature;
 
-			if (signatures.TryGetValue(blobIdx, out signature))
+			if (signatures.TryGetValue(token, out signature))
 				return signature as T;
 			else
 				return (T)null;
 		}
 
-		private T StoreSignature<T>(HeapIndexToken blobIdx, T signature) where T : Signature
+		private T StoreSignature<T>(HeapIndexToken token, T signature) where T : Signature
 		{
-			signatures.Add(blobIdx, signature);
+			signatures.Add(token, signature);
 			return signature;
 		}
 
-		private MethodSignature GetMethodSignature(HeapIndexToken blobIdx)
+		private MethodSignature GetMethodSignature(HeapIndexToken token)
 		{
-			return (RetrieveSignature<MethodSignature>(blobIdx) ?? StoreSignature<MethodSignature>(blobIdx, new MethodSignature(metadataProvider, blobIdx)));
+			return (RetrieveSignature<MethodSignature>(token) ?? StoreSignature<MethodSignature>(token, new MethodSignature(metadataProvider, token)));
 		}
 
-		private FieldSignature GetFieldSignature(HeapIndexToken blobIdx)
+		private FieldSignature GetFieldSignature(HeapIndexToken token)
 		{
-			return (RetrieveSignature<FieldSignature>(blobIdx) ?? StoreSignature<FieldSignature>(blobIdx, new FieldSignature(metadataProvider, blobIdx)));
+			return (RetrieveSignature<FieldSignature>(token) ?? StoreSignature<FieldSignature>(token, new FieldSignature(metadataProvider, token)));
 		}
 
-		private TypeSpecSignature GetTypeSpecSignature(HeapIndexToken blobIdx)
+		private TypeSpecSignature GetTypeSpecSignature(HeapIndexToken token)
 		{
-			return (RetrieveSignature<TypeSpecSignature>(blobIdx) ?? StoreSignature<TypeSpecSignature>(blobIdx, new TypeSpecSignature(metadataProvider, blobIdx)));
+			return (RetrieveSignature<TypeSpecSignature>(token) ?? StoreSignature<TypeSpecSignature>(token, new TypeSpecSignature(metadataProvider, token)));
 		}
 
-		private Signature GetMemberRefSignature(HeapIndexToken blobIdx)
+		private MethodSpecSignature GetMethodSpecSignature(HeapIndexToken token)
 		{
-			return (RetrieveSignature<Signature>(blobIdx) ?? StoreSignature<Signature>(blobIdx, Signature.GetSignatureFromMemberRef(metadataProvider, blobIdx)));
+			return (RetrieveSignature<MethodSpecSignature>(token) ?? StoreSignature<MethodSpecSignature>(token, new MethodSpecSignature(metadataProvider, token)));
+		}
+
+		private Signature GetMemberRefSignature(HeapIndexToken token)
+		{
+			return (RetrieveSignature<Signature>(token) ?? StoreSignature<Signature>(token, Signature.GetSignatureFromMemberRef(metadataProvider, token)));
 		}
 
 		private struct TypeInfo
@@ -446,7 +504,6 @@ namespace Mosa.Compiler.MosaTypeSystem
 				var method = new MosaMethod();
 				method.Name = GetString(methodDef.NameString);
 				method.DeclaringType = declaringType;
-				//method.FullName = declaringType + "." + method.Name;
 				method.ReturnType = GetMosaType(signature.ReturnType);
 				method.HasThis = signature.HasThis;
 				method.HasExplicitThis = signature.HasExplicitThis;
@@ -457,9 +514,10 @@ namespace Mosa.Compiler.MosaTypeSystem
 				method.IsSpecialName = (methodDef.Flags & MethodAttributes.SpecialName) == MethodAttributes.SpecialName;
 				method.IsRTSpecialName = (methodDef.Flags & MethodAttributes.RTSpecialName) == MethodAttributes.RTSpecialName;
 				method.IsVirtual = ((methodDef.Flags & MethodAttributes.Virtual) == MethodAttributes.Virtual);
-				method.IsPInvokeImpl = ((methodDef.Flags & MethodAttributes.PInvokeImpl) != MethodAttributes.PInvokeImpl);
-				method.IsNewSlot = ((methodDef.Flags & MethodAttributes.NewSlot) != MethodAttributes.NewSlot);
-				method.IsFinal = ((methodDef.Flags & MethodAttributes.Final) != MethodAttributes.Final);
+				method.IsPInvokeImpl = ((methodDef.Flags & MethodAttributes.PInvokeImpl) == MethodAttributes.PInvokeImpl);
+				method.IsNewSlot = ((methodDef.Flags & MethodAttributes.NewSlot) == MethodAttributes.NewSlot);
+				method.IsFinal = ((methodDef.Flags & MethodAttributes.Final) == MethodAttributes.Final);
+				method.IsCILGenerated = true;
 				method.Rva = methodDef.Rva;
 
 				if (methodDef.Rva != 0)
@@ -482,6 +540,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 					}
 
 					method.Code = codeReader.ReadBytes(header.CodeSize);
+					method.CodeAssembly = assembly;
 
 					foreach (var handler in header.Clauses)
 					{
@@ -510,6 +569,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 				LoadParameters(method, methodDef.ParamList, maxParam, signature);
 
 				method.SetName();
+				method.SetOpenGeneric();
 
 				declaringType.Methods.Add(method);
 				resolver.AddMethod(assembly, token, method);
@@ -520,68 +580,17 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		private void LoadFields(MosaType declaringType, Token first, Token last)
 		{
-			var maxRVA = GetMaxTokenValue(TableType.FieldRVA);
 			var maxLayout = GetMaxTokenValue(TableType.FieldLayout);
-			var tokenRva = new Token(TableType.FieldRVA, 1);
 			var tokenLayout = new Token(TableType.FieldLayout, 1);
-
-			FieldRVARow fieldRVA = (maxRVA.RID != 0) ? metadataProvider.ReadFieldRVARow(tokenRva) : null;
-			FieldLayoutRow fieldLayout = (maxLayout.RID != 0) ? metadataProvider.ReadFieldLayoutRow(tokenLayout) : null;
 
 			foreach (var token in first.Upto(last.PreviousRow))
 			{
 				var fieldRow = metadataProvider.ReadFieldRow(token);
-				uint rva = 0;
-				uint layout = 0;
-
-				// Static fields have an optional RVA, non-static may have a layout assigned
-				if ((fieldRow.Flags & FieldAttributes.HasFieldRVA) == FieldAttributes.HasFieldRVA)
-				{
-					// Move to the RVA of this field
-					while (fieldRVA.Field.RID < token.RID && tokenRva.RID <= maxRVA.RID)
-					{
-						fieldRVA = metadataProvider.ReadFieldRVARow(tokenRva);
-						tokenRva = tokenRva.NextRow;
-					}
-
-					// Does this field have an RVA?
-					if (token == fieldRVA.Field && tokenRva.RID <= maxRVA.RID)
-					{
-						rva = fieldRVA.Rva;
-						tokenRva = tokenRva.NextRow;
-						if (tokenRva.RID < maxRVA.RID)
-						{
-							fieldRVA = metadataProvider.ReadFieldRVARow(tokenRva);
-						}
-					}
-				}
 
 				if ((fieldRow.Flags & FieldAttributes.HasDefault) == FieldAttributes.HasDefault)
 				{
-					// FIXME: Has a default value.
+					// FIXME!: Has a default value.
 					//Debug.Assert(false);
-				}
-
-				// Layout only exists for non-static fields
-				if ((fieldRow.Flags & FieldAttributes.Static) != FieldAttributes.Static)
-				{
-					// Move to the layout of this field
-					while ((fieldLayout == null || fieldLayout.Field.RID < token.RID) && tokenLayout.RID <= maxLayout.RID)
-					{
-						fieldLayout = metadataProvider.ReadFieldLayoutRow(tokenLayout);
-						tokenLayout = tokenLayout.NextRow;
-					}
-
-					// Does this field have layout?
-					if (fieldLayout != null && fieldLayout.Field == token && tokenLayout.RID <= maxLayout.RID)
-					{
-						layout = fieldLayout.Offset;
-						tokenLayout = tokenLayout.NextRow;
-						if (tokenLayout.RID < maxLayout.RID)
-						{
-							fieldLayout = metadataProvider.ReadFieldLayoutRow(tokenLayout);
-						}
-					}
 				}
 
 				var field = new MosaField();
@@ -590,8 +599,9 @@ namespace Mosa.Compiler.MosaTypeSystem
 				field.DeclaringType = declaringType;
 				field.IsLiteralField = (fieldRow.Flags & FieldAttributes.Literal) == FieldAttributes.Literal;
 				field.IsStaticField = (fieldRow.Flags & FieldAttributes.Static) == FieldAttributes.Static;
-				field.RVA = (int)rva;
-				field.FieldType = GetMosaType(GetFieldSignature(fieldRow.Signature).Type);
+				field.HasRVA = (fieldRow.Flags & FieldAttributes.HasFieldRVA) == FieldAttributes.HasFieldRVA;
+				field.HasRVA = (fieldRow.Flags & FieldAttributes.HasDefault) == FieldAttributes.HasDefault;
+				field.Type = GetMosaType(GetFieldSignature(fieldRow.Signature).Type);
 
 				declaringType.Fields.Add(field);
 				resolver.AddField(assembly, token, field);
@@ -607,11 +617,9 @@ namespace Mosa.Compiler.MosaTypeSystem
 				case CilElementType.GenericInst: return resolver.GetTypeByToken(assembly, (sigType as GenericInstSigType).BaseType.Token);
 				case CilElementType.Var: return resolver.GetVarType((sigType as VarSigType).Index);
 				case CilElementType.MVar: return resolver.GetMVarType((sigType as MVarSigType).Index);
-
 				case CilElementType.Ptr: return resolver.GetUnmanagedPointerType(GetMosaType((sigType as PtrSigType).ElementType));
 				case CilElementType.ByRef: return resolver.GetManagedPointerType(GetMosaType((sigType as RefSigType).ElementType));
 				case CilElementType.Array: return resolver.GetArrayType(GetMosaType((sigType as ArraySigType).ElementType));
-
 				case CilElementType.SZArray: return resolver.GetArrayType(GetMosaType((sigType as SZArraySigType).ElementType));
 				default: break;
 			}
@@ -619,10 +627,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 			var builtInSigType = sigType as BuiltInSigType;
 			if (builtInSigType != null)
 			{
-				if (internalAssembly == null)
-					internalAssembly = resolver.GetAssemblyByName("@Internal");
-
-				return resolver.GetTypeByToken(internalAssembly, new Token((uint)builtInSigType.Type));
+				return resolver.GetTypeByElementType(builtInSigType.Type);
 			}
 
 			throw new NotImplementedException(String.Format("SigType of CilElementType.{0} is not supported.", sigType.Type));
@@ -720,7 +725,11 @@ namespace Mosa.Compiler.MosaTypeSystem
 			var genericSig = (signature.Type as GenericInstSigType);
 
 			if (genericSig == null)
+			{
+				var type = GetMosaType(signature.Type);
+				resolver.AddType(assembly, token, type);
 				return;
+			}
 
 			var genericBaseType = GetMosaType(signature.Type);
 
@@ -738,6 +747,37 @@ namespace Mosa.Compiler.MosaTypeSystem
 			genericTypes.Add(genericType);
 
 			return;
+		}
+
+		private void LoadMethodSpecs()
+		{
+			var maxToken = GetMaxTokenValue(TableType.MethodSpec);
+			foreach (var token in new Token(TableType.MethodSpec, 1).Upto(maxToken))
+			{
+				LoadMethodSpec(token);
+			}
+		}
+
+		private void LoadMethodSpec(Token token)
+		{
+			if (resolver.CheckMethodExists(assembly, token))
+				return;
+
+			var row = metadataProvider.ReadMethodSpecRow(token);
+			var signature = GetMethodSpecSignature(row.InstantiationBlob);
+			var method = resolver.GetMethodByToken(assembly, row.Method);
+
+			List<MosaType> genericParamTypes = new List<MosaType>();
+
+			foreach (var genericParam in signature.Types)
+			{
+				var genericParamType = GetMosaType(genericParam);
+				genericParamTypes.Add(genericParamType);
+			}
+
+			var genericMethod = resolver.ResolveGenericMethod(method, genericParamTypes);
+
+			resolver.AddMethod(assembly, token, genericMethod);
 		}
 
 		/// <summary>
@@ -826,9 +866,12 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 						var parameterType = GetMosaType(parameter);
 
-						if (parameterType.IsMVarFlag || parameterType.IsVarFlag)
+						if (parameterType.IsVarFlag)
 						{
 							parameterType = ownerType.GenericParameterTypes[parameterType.VarOrMVarIndex];
+						}
+						else if (parameterType.IsMVarFlag)
+						{
 						}
 
 						typeSignature.Add(parameterType);
@@ -901,9 +944,49 @@ namespace Mosa.Compiler.MosaTypeSystem
 			{
 				var row = metadataProvider.ReadCustomAttributeRow(token);
 
-				MosaAttribute attribute = new MosaAttribute();
-				attribute.CtorMethod = resolver.GetMethodByToken(assembly, row.Type);
-				attribute.Blob = metadataProvider.ReadBlob(row.Value);
+				var attribute = new MosaAttribute();
+				var ctor = resolver.GetMethodByToken(assembly, row.Type);
+				var blob = metadataProvider.ReadBlob(row.Value);
+
+				attribute.CtorMethod = ctor;
+
+				// Create a binary reader for the blob
+				using (var reader = new BinaryReader(new MemoryStream(blob), Encoding.UTF8))
+				{
+					var prologue = reader.ReadUInt16();
+
+					if (prologue != ATTRIBUTE_BLOB_PROLOGUE)
+					{
+						throw new InvalidMetadataException(@"Invalid custom attribute blob.");
+					}
+
+					var parameters = ctor.Parameters.Count;
+
+					for (int index = 0; index < parameters; index++)
+					{
+						var type = ctor.Parameters[index].Type;
+
+						object value = null;
+
+						if (type.IsBoolean) value = reader.ReadByte() == 1;
+						else if (type.IsChar) value = (char)reader.ReadUInt16();
+						else if (type.IsSignedByte) value = reader.ReadSByte();
+						else if (type.IsSignedShort) value = reader.ReadInt16();
+						else if (type.IsSignedInt) value = reader.ReadInt32();
+						else if (type.IsSignedLong) value = reader.ReadInt64();
+						else if (type.IsUnsignedByte) value = reader.ReadByte();
+						else if (type.IsUnsignedShort) value = reader.ReadUInt16();
+						else if (type.IsUnsignedInt) value = reader.ReadUInt32();
+						else if (type.IsUnsignedLong) value = reader.ReadUInt64();
+						else if (type.IsSingle) value = reader.ReadSingle();
+						else if (type.IsDouble) value = reader.ReadDouble();
+						else if (type.IsString) value = ParseString(reader);
+
+						//FIXME!
+
+						attribute.Values.Add(value);
+					}
+				}
 
 				// The following switch matches the AttributeTargets enumeration against
 				// metadata tables, which make valid targets for an attribute.
@@ -962,6 +1045,60 @@ namespace Mosa.Compiler.MosaTypeSystem
 			}
 		}
 
+		/// <summary>
+		/// Parses a string definition for an attribute field, parameter or property definition.
+		/// </summary>
+		/// <param name="reader">The binary reader to read From.</param>
+		/// <returns>A string, which represents the value read.</returns>
+		private static string ParseString(BinaryReader reader)
+		{
+			// Read the length
+			int packedLen = DecodePackedLen(reader);
+
+			if (ATTRIBUTE_NULL_STRING_LEN == packedLen)
+				return null;
+
+			if (ATTRIBUTE_EMPTY_STRING_LEN == packedLen)
+				return String.Empty;
+
+			// Read the string
+			var buffer = reader.ReadChars(packedLen);
+
+			return new String(buffer);
+		}
+
+		private static int DecodePackedLen(BinaryReader reader)
+		{
+			int result, offset;
+			byte value = reader.ReadByte();
+
+			if (0xC0 == (value & 0xC0))
+			{
+				// A 4 byte length...
+				result = ((value & 0x1F) << 24);
+				offset = 16;
+			}
+			else if (0x80 == (value & 0x80))
+			{
+				// A 2 byte length...
+				result = ((value & 0x3F) << 8);
+				offset = 0;
+			}
+			else
+			{
+				result = value & 0x7F;
+				offset = -8;
+			}
+
+			while (offset != -8)
+			{
+				result |= (reader.ReadByte() << offset);
+				offset -= 8;
+			}
+
+			return result;
+		}
+
 		private void MethodImplementation()
 		{
 			var maxToken = GetMaxTokenValue(TableType.MethodImpl);
@@ -974,6 +1111,89 @@ namespace Mosa.Compiler.MosaTypeSystem
 				var declaration = resolver.GetMethodByToken(assembly, row.MethodDeclaration);
 
 				type.InheritanceOveride.Add(declaration, body);
+			}
+		}
+
+		/// <summary>
+		/// Loads the externals.
+		/// </summary>
+		private void LoadExternals()
+		{
+			var maxToken = GetMaxTokenValue(TableType.ImplMap);
+			foreach (var token in new Token(TableType.ImplMap, 1).Upto(maxToken))
+			{
+				var row = metadataProvider.ReadImplMapRow(token);
+
+				var moduleRow = metadataProvider.ReadModuleRefRow(row.ImportScopeTable);
+				var external = GetString(moduleRow.NameString);
+
+				var method = resolver.GetMethodByToken(assembly, row.MemberForwarded);
+
+				method.ExternalReference = external;
+			}
+		}
+
+		private void LoadFieldData()
+		{
+			var maxToken = GetMaxTokenValue(TableType.FieldRVA);
+			foreach (var token in new Token(TableType.FieldRVA, 1).Upto(maxToken))
+			{
+				var fieldRVARow = metadataProvider.ReadFieldRVARow(token);
+				var field = resolver.GetFieldByToken(assembly, fieldRVARow.Field);
+
+				field.HasRVA = true;
+				field.RVA = fieldRVARow.Rva;
+
+				int? size = DetermineFieldSize(field);
+
+				if (!size.HasValue)
+				{
+					throw new InvalidMetadataException("Unable to determine field Size");
+				}
+
+				var data = metadataModule.GetDataSection((long)field.RVA);
+				var dataReader = new EndianAwareBinaryReader(data, Endianness.Little);
+				field.Data = dataReader.ReadBytes(size.Value);
+			}
+		}
+
+		private int? DetermineFieldSize(MosaField field)
+		{
+			if (field.Type.IsBuiltInType)
+			{
+				return field.Type.FixedSize;
+			}
+			else if (field.Type.IsValueType)
+			{
+				int size = 0;
+
+				foreach (var valueField in field.Type.Fields)
+				{
+					int? valueSize = DetermineFieldSize(valueField);
+
+					if (!valueSize.HasValue)
+					{
+						return null;
+					}
+
+					size = size + valueSize.Value;
+				}
+
+				return size;
+			}
+
+			return null;
+		}
+
+		private void LoadFieldLayout()
+		{
+			var maxToken = GetMaxTokenValue(TableType.FieldLayout);
+			foreach (var token in new Token(TableType.FieldLayout, 1).Upto(maxToken))
+			{
+				var fieldLayoutRow = metadataProvider.ReadFieldLayoutRow(token);
+				var field = resolver.GetFieldByToken(assembly, fieldLayoutRow.Field);
+
+				field.Offset = fieldLayoutRow.Offset;
 			}
 		}
 	}

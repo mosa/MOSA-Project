@@ -10,7 +10,7 @@
 
 using Mosa.Compiler.InternalTrace;
 using Mosa.Compiler.Linker;
-using Mosa.Compiler.TypeSystem;
+using Mosa.Compiler.MosaTypeSystem;
 
 namespace Mosa.Compiler.Framework
 {
@@ -34,12 +34,12 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Holds the current type system during compilation.
 		/// </summary>
-		protected ITypeSystem typeSystem;
+		protected TypeSystem typeSystem;
 
 		/// <summary>
 		/// Holds the current type layout during compilation.
 		/// </summary>
-		protected ITypeLayout typeLayout;
+		protected MosaTypeLayout typeLayout;
 
 		/// <summary>
 		/// Holds the linker
@@ -78,7 +78,7 @@ namespace Mosa.Compiler.Framework
 			compiler.InternalTrace.CompilerEventListener.SubmitTraceEvent(compilerEvent, message);
 		}
 
-		protected void Trace(RuntimeMethod method, string stage, string line)
+		protected void Trace(MosaMethod method, string stage, string line)
 		{
 			compiler.InternalTrace.TraceListener.SubmitDebugStageInformation(method, stage, line);
 		}

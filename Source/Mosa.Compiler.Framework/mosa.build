@@ -15,6 +15,7 @@
 	    <csc target="library" output="${outputDirectory}/Mosa.Compiler.Framework.dll" debug="${debug}" unsafe="true" nostdlib="false">
 		<sources>
                     <include name="BaseCallingConventionExtended.cs"/>
+                    <include name="ShiftType.cs"/>
                     <include name="ConditionCodeExtension.cs"/>
                     <include name="BasicBlocks.cs"/>
                     <include name="ContextExtension.cs"/>
@@ -40,7 +41,6 @@
                     <include name="Stages/GreedyRegisterAllocatorStage.cs"/>
                     <include name="Stages/LinkerFinalizationStage.cs"/>
                     <include name="IIntrinsicInternalMethod.cs"/>
-                    <include name="DelegatePatcher.cs"/>
                     <include name="ICompilationScheduler.cs"/>
                     <include name="Counters.cs"/>
                     <include name="IR/IntrinsicMethodCall.cs"/>
@@ -58,6 +58,7 @@
                     <include name="Stages/SSAOptimizations.cs"/>
                     <include name="Stages/EdgeSplitStage.cs"/>
                     <include name="Stages/TypeInitializerSchedulerStage.cs"/>
+                    <include name="MosaTypeLayout.cs"/>
                     <include name="VirtualRegisters.cs"/>
                     <include name="BaseCodeEmitter.cs"/>
                     <include name="BaseInstruction.cs"/>
@@ -92,7 +93,6 @@
                     <include name="IR/ExceptionPrologue.cs"/>
                     <include name="Stages/MetadataStage.cs"/>
                     <include name="Stages/EnterSSAStage.cs"/>
-                    <include name="ExceptionClauseHeader.cs"/>
                     <include name="InstructionLogger.cs"/>
                     <include name="Stages/LeaveSSAStage.cs"/>
                     <include name="Stages/OperandAssignmentStage.cs"/>
@@ -127,8 +127,6 @@
                     <include name="CIL/ConstrainedPrefixInstruction.cs"/>
                     <include name="CIL/ConversionInstruction.cs"/>
                     <include name="CIL/CILInstruction.cs"/>
-                    <include name="CIL/MethodFlags.cs"/>
-                    <include name="CIL/MethodHeader.cs"/>
                     <include name="CIL/StoreInstruction.cs"/>
                     <include name="CIL/ICILVisitor.cs"/>
                     <include name="CIL/Prefix.cs"/>
@@ -136,7 +134,6 @@
                     <include name="CIL/CpobjInstruction.cs"/>
                     <include name="CIL/DivInstruction.cs"/>
                     <include name="CIL/DupInstruction.cs"/>
-                    <include name="ExceptionHandlingClause.cs"/>
                     <include name="CIL/EndFilterInstruction.cs"/>
                     <include name="CIL/EndFinallyInstruction.cs"/>
                     <include name="CIL/IBranchInstruction.cs"/>
@@ -200,7 +197,6 @@
                     <include name="CIL/UnboxInstruction.cs"/>
                     <include name="Context.cs"/>
                     <include name="BaseMethodCompilerStage.cs"/>
-                    <include name="ICodeEmitter.cs"/>
                     <include name="IR/AddressOf.cs"/>
                     <include name="IR/ArithmeticShiftRight.cs"/>
                     <include name="IR/Call.cs"/>
@@ -241,8 +237,6 @@
                     <include name="CIL/BaseCILInstruction.cs"/>
                     <include name="Stages/ReverseBlockOrderStage.cs"/>
                     <include name="Stages/SimpleTraceBlockOrderStage.cs"/>
-                    <include name="Linker/LinkerGeneratedMethod.cs"/>
-                    <include name="Linker/LinkerGeneratedType.cs"/>
                     <include name="BaseCompiler.cs"/>
                     <include name="BaseArchitecture.cs"/>
                     <include name="BasicBlock.cs"/>
@@ -261,7 +255,6 @@
                     <include name="Operand.cs"/>
                     <include name="Register.cs"/>
                     <include name="Stages/StackLayoutStage.cs"/>
-                    <include name="StackTypeCode.cs"/>
                     <include name="IR/VmCall.cs"/>
 		</sources>
 		<references>
@@ -270,7 +263,7 @@
                     <include name="${outputDirectory}/Mosa.Compiler.Linker.dll"/>
                     <include name="${outputDirectory}/Mosa.Compiler.InternalTrace.dll"/>
                     <include name="${outputDirectory}/Mosa.Compiler.Metadata.dll"/>
-                    <include name="${outputDirectory}/Mosa.Compiler.TypeSystem.dll"/>
+                    <include name="${outputDirectory}/Mosa.Compiler.MosaTypeSystem.dll"/>
 		</references>
 		<!-- supress warnings -->
 		<nowarn><warning number="${suppresswarnings}"/></nowarn>

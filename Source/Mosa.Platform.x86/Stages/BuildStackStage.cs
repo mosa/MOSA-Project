@@ -9,8 +9,6 @@
 
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.IR;
-using Mosa.Compiler.Metadata;
-using Mosa.Compiler.Metadata.Signatures;
 using System.Diagnostics;
 
 namespace Mosa.Platform.x86.Stages
@@ -94,21 +92,21 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		private void AddPrologueInstructions(Context context)
 		{
-			Operand ebp = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.EBP);
-			Operand esp = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.ESP);
+			Operand ebp = Operand.CreateCPURegister(typeSystem.BuiltIn.Int32, GeneralPurposeRegister.EBP);
+			Operand esp = Operand.CreateCPURegister(typeSystem.BuiltIn.Int32, GeneralPurposeRegister.ESP);
 
-			//Operand eax = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.EAX);
-			Operand edx = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.EDX);
-			Operand edi = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.EDI);
-			Operand ecx = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.ECX);
-			Operand ebx = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.EBX);
+			//Operand eax = Operand.CreateCPURegister(typeSystem.BuiltIn.Int32, GeneralPurposeRegister.EAX);
+			Operand edx = Operand.CreateCPURegister(typeSystem.BuiltIn.Int32, GeneralPurposeRegister.EDX);
+			Operand edi = Operand.CreateCPURegister(typeSystem.BuiltIn.Int32, GeneralPurposeRegister.EDI);
+			Operand ecx = Operand.CreateCPURegister(typeSystem.BuiltIn.Int32, GeneralPurposeRegister.ECX);
+			Operand ebx = Operand.CreateCPURegister(typeSystem.BuiltIn.Int32, GeneralPurposeRegister.EBX);
 
 			context.SetInstruction(X86.Push, null, ebp);
 			context.AppendInstruction(X86.Mov, ebp, esp);
 
 			if (methodCompiler.StackLayout.StackSize != 0)
 			{
-				context.AppendInstruction(X86.Sub, esp, esp, Operand.CreateConstantSignedInt(-methodCompiler.StackLayout.StackSize));
+				context.AppendInstruction(X86.Sub, esp, esp, Operand.CreateConstantSignedInt(typeSystem, -methodCompiler.StackLayout.StackSize));
 			}
 
 			if (InsertBreaks)// && !methodCompiler.Method.FullName.Equals(".cctor"))
@@ -143,13 +141,13 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		private void AddEpilogueInstructions(Context context)
 		{
-			Operand ebp = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.EBP);
-			Operand esp = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.ESP);
+			Operand ebp = Operand.CreateCPURegister(typeSystem.BuiltIn.Int32, GeneralPurposeRegister.EBP);
+			Operand esp = Operand.CreateCPURegister(typeSystem.BuiltIn.Int32, GeneralPurposeRegister.ESP);
 
-			Operand edx = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.EDX);
-			Operand edi = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.EDI);
-			Operand ecx = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.ECX);
-			Operand ebx = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.EBX);
+			Operand edx = Operand.CreateCPURegister(typeSystem.BuiltIn.Int32, GeneralPurposeRegister.EDX);
+			Operand edi = Operand.CreateCPURegister(typeSystem.BuiltIn.Int32, GeneralPurposeRegister.EDI);
+			Operand ecx = Operand.CreateCPURegister(typeSystem.BuiltIn.Int32, GeneralPurposeRegister.ECX);
+			Operand ebx = Operand.CreateCPURegister(typeSystem.BuiltIn.Int32, GeneralPurposeRegister.EBX);
 
 			context.SetInstruction(X86.Nop);
 
@@ -168,7 +166,7 @@ namespace Mosa.Platform.x86.Stages
 
 			if (methodCompiler.StackLayout.StackSize != 0)
 			{
-				context.AppendInstruction(X86.Add, esp, esp, Operand.CreateConstantIntPtr(-methodCompiler.StackLayout.StackSize));
+				context.AppendInstruction(X86.Add, esp, esp, Operand.CreateConstantSignedInt(typeSystem, -methodCompiler.StackLayout.StackSize));
 			}
 
 			context.AppendInstruction(X86.Pop, ebp);

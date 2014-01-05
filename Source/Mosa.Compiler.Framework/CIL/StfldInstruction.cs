@@ -7,10 +7,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System.Diagnostics;
-using Mosa.Compiler.Metadata;
-using Mosa.Compiler.TypeSystem.Cil;
-
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
@@ -43,19 +39,11 @@ namespace Mosa.Compiler.Framework.CIL
 			// Decode base classes first
 			base.Decode(ctx, decoder);
 
-			// Load the _stackFrameIndex token from the immediate
-			Token token = decoder.DecodeTokenType();
-			Debug.Assert(token.Table == TableType.Field || token.Table == TableType.MemberRef, @"Invalid token type.");
+			var field = decoder.TypeSystem.Resolver.GetFieldByToken(decoder.Method.CodeAssembly, decoder.DecodeTokenType(), decoder.Method);
 
-			ctx.RuntimeField = decoder.Method.Module.GetField(token);
+			ctx.MosaField = field;
 
-			if (ctx.RuntimeField.ContainsGenericParameter || ctx.RuntimeField.DeclaringType.ContainsOpenGenericParameters)
-			{
-				ctx.RuntimeField = decoder.GenericTypePatcher.PatchField(decoder.TypeModule, decoder.Method.DeclaringType as CilGenericType, ctx.RuntimeField);
-			}
-			decoder.Compiler.Scheduler.TrackFieldReferenced(ctx.RuntimeField);
-
-			Debug.Assert(!ctx.RuntimeField.ContainsGenericParameter);
+			decoder.Compiler.Scheduler.TrackFieldReferenced(field);
 		}
 
 		/// <summary>

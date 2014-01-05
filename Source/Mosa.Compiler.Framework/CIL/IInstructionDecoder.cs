@@ -8,7 +8,7 @@
  */
 
 using Mosa.Compiler.Metadata;
-using Mosa.Compiler.TypeSystem;
+using Mosa.Compiler.MosaTypeSystem;
 
 namespace Mosa.Compiler.Framework.CIL
 {
@@ -23,20 +23,9 @@ namespace Mosa.Compiler.Framework.CIL
 		BaseMethodCompiler Compiler { get; }
 
 		/// <summary>
-		/// Gets the RuntimeMethod being compiled.
+		/// Gets the MosaMethod being compiled.
 		/// </summary>
-		RuntimeMethod Method { get; }
-
-		/// <summary>
-		/// Gets the type system.
-		/// </summary>
-		/// <value>The type system.</value>
-		ITypeModule TypeModule { get; }
-
-		/// <summary>
-		/// Gets the generic type patcher.
-		/// </summary>
-		GenericTypePatcher GenericTypePatcher { get; }
+		MosaMethod Method { get; }
 
 		/// <summary>
 		/// Decodes the byte value from the instruction stream
@@ -97,5 +86,13 @@ namespace Mosa.Compiler.Framework.CIL
 		/// </summary>
 		/// <returns></returns>
 		Token DecodeTokenType();
+
+		/// <summary>
+		/// Gets the type system.
+		/// </summary>
+		/// <value>
+		/// The type system.
+		/// </value>
+		TypeSystem TypeSystem { get; }
 	}
 }

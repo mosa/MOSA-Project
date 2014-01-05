@@ -7,10 +7,10 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using Mosa.Compiler.MosaTypeSystem;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using Mosa.Compiler.MosaTypeSystem;
 
 namespace Mosa.Compiler.Framework
 {
@@ -24,7 +24,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Holds the type system
 		/// </summary>
-		private Mosa.Compiler.MosaTypeSystem.MosaTypeSystem typeSystem;
+		private Mosa.Compiler.MosaTypeSystem.TypeSystem typeSystem;
 
 		/// <summary>
 		/// Holds the Native Pointer Size
@@ -84,7 +84,7 @@ namespace Mosa.Compiler.Framework
 		/// <param name="typeSystem">The type system.</param>
 		/// <param name="nativePointerSize">Size of the native pointer.</param>
 		/// <param name="nativePointerAlignment">The native pointer alignment.</param>
-		public MosaTypeLayout(Mosa.Compiler.MosaTypeSystem.MosaTypeSystem typeSystem, int nativePointerSize, int nativePointerAlignment)
+		public MosaTypeLayout(TypeSystem typeSystem, int nativePointerSize, int nativePointerAlignment)
 		{
 			this.nativePointerAlignment = nativePointerAlignment;
 			this.nativePointerSize = nativePointerSize;
@@ -167,7 +167,7 @@ namespace Mosa.Compiler.Framework
 			}
 			else
 			{
-				size = GetMemorySize(field.FieldType);
+				size = GetMemorySize(field.Type);
 			}
 
 			fieldSizes.Add(field, size);
@@ -215,7 +215,7 @@ namespace Mosa.Compiler.Framework
 		/// <param name="type">The type.</param>
 		/// <param name="interfaceType">Type of the interface.</param>
 		/// <returns></returns>
-		private MosaMethod[] GetInterfaceTable(MosaType type, MosaType interfaceType)
+		public MosaMethod[] GetInterfaceTable(MosaType type, MosaType interfaceType)
 		{
 			if (type.Interfaces.Count == 0)
 				return null;
@@ -239,7 +239,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Get a list of interfaces
 		/// </summary>
-		private IList<MosaType> Interfaces { get { return interfaces.AsReadOnly(); } }
+		public IList<MosaType> Interfaces { get { return interfaces; } }
 
 		#region Internal - Layout
 
@@ -340,7 +340,7 @@ namespace Mosa.Compiler.Framework
 			{
 				if (!field.IsStaticField)
 				{
-					int fieldSize = GetMemorySize(field.FieldType);
+					int fieldSize = GetMemorySize(field.Type);
 
 					// Pad the field in the type
 					if (packingSize != 0)
@@ -449,14 +449,14 @@ namespace Mosa.Compiler.Framework
 				{
 					if (method.IsNewSlot)
 					{
-						int slot = FindOverrideSlot(methodTable, method);
-						methodTable[slot] = method;
+						int slot = methodTable.Count;
+						methodTable.Add(method);
 						methodTableOffsets.Add(method, slot);
 					}
 					else
 					{
-						int slot = methodTable.Count;
-						methodTable.Add(method);
+						int slot = FindOverrideSlot(methodTable, method);
+						methodTable[slot] = method;
 						methodTableOffsets.Add(method, slot);
 					}
 				}
@@ -498,13 +498,21 @@ namespace Mosa.Compiler.Framework
 
 		private int FindOverrideSlot(IList<MosaMethod> methodTable, MosaMethod method)
 		{
+			int slot = -1;
+
 			foreach (var baseMethod in methodTable)
 			{
 				if (baseMethod.Name.Equals(method.Name) && baseMethod.Matches(method))
 				{
-					return methodTableOffsets[baseMethod];
+					if (baseMethod.GenericParameterTypes.Count == 0)
+						return methodTableOffsets[baseMethod];
+					else
+						slot = methodTableOffsets[baseMethod];
 				}
 			}
+
+			if (slot >= 0) // non generic methods are more exact
+				return slot;
 
 			throw new InvalidOperationException(@"Failed to find override method slot.");
 		}
@@ -522,7 +530,8 @@ namespace Mosa.Compiler.Framework
 				return 8;
 			else if (type.IsPointer || type.IsUnmanagedPointerType || type.IsManagedPointerType)
 				return nativePointerSize;
-
+			else if (type.IsNativeInteger)
+				return nativePointerSize;
 			return 4;
 		}
 
@@ -540,6 +549,8 @@ namespace Mosa.Compiler.Framework
 			else if (type.IsPointer)
 				return nativePointerAlignment;
 			else if (type.IsPointer || type.IsUnmanagedPointerType || type.IsManagedPointerType)
+				return nativePointerAlignment;
+			else if (type.IsNativeInteger)
 				return nativePointerAlignment;
 
 			return 4;

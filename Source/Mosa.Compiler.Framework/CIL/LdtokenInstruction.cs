@@ -9,8 +9,6 @@
 
 using System;
 
-using Mosa.Compiler.Metadata;
-
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
@@ -43,75 +41,10 @@ namespace Mosa.Compiler.Framework.CIL
 			// Decode base classes first
 			base.Decode(ctx, decoder);
 
-			Token token = decoder.DecodeTokenType();
+			var token = decoder.DecodeTokenType();
 
-			//ctx.Token = token;
-
+			//TODO
 			throw new NotImplementedException();
-			/*
-			TypeReference typeRef;
-
-			// Determine the result type...
-			switch (TokenTypes.TableMask & token)
-			{
-				case TokenTypes.TypeDef:
-					n = @"RuntimeTypeHandle";
-					break;
-
-				case TokenTypes.TypeRef:
-					n = @"RuntimeTypeHandle";
-					break;
-
-				case TokenTypes.TypeSpec:
-					n = @"RuntimeTypeHandle";
-					break;
-
-				case TokenTypes.MethodDef:
-					n = @"RuntimeMethodHandle";
-					break;
-
-				case TokenTypes.MemberRef:
-
-					// Field or Method
-					{
-						MemberReference memberRef = MetadataMemberReference.FromToken(decoder.Metadata, _token);
-						MemberDefinition memberDef = memberRef.Resolve();
-						if (memberDef is MethodDefinition)
-						{
-							n = @"RuntimeMethodHandle";
-						}
-						else if (memberDef is FieldDefinition)
-						{
-							n = @"RuntimeFieldHandle";
-						}
-						else
-						{
-							Debug.Assert(false, @"Failed to determine member reference type in ldtoken.");
-							throw new InvalidOperationException();
-						}
-					}
-					break;
-
-				case TokenTypes.MethodSpec:
-					n = @"RuntimeMethodHandle";
-					break;
-
-				case TokenTypes.Field:
-					n = @"RuntimeFieldHandle";
-					break;
-
-				default:
-					throw new NotImplementedException();
-			}
-
-			typeRef = MetadataTypeReference.FromName(decoder.Metadata, @"System", n);
-			if (null == typeRef)
-				typeRef = MetadataTypeDefinition.FromName(decoder.Metadata, @"System", n);
-
-			// Set the result
-			Debug.Assert(null != typeRef, @"ldtoken: Failed to retrieve type reference.");
-			_results[0] = CreateResultOperand(typeRef);
-			 */
 		}
 
 		/// <summary>

@@ -8,7 +8,6 @@
  */
 
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Metadata.Signatures;
 
 namespace Mosa.Platform.x86.Intrinsic
 {
@@ -28,11 +27,11 @@ namespace Mosa.Platform.x86.Intrinsic
 		{
 			Operand result = context.Result;
 			Operand operand = context.Operand1;
-			Operand eax = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.EAX);
-			Operand ecx = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.ECX);
-			Operand reg = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.ECX);
+			Operand eax = Operand.CreateCPURegister(methodCompiler.TypeSystem.Resolver.BuiltIn.Int32, GeneralPurposeRegister.EAX);
+			Operand ecx = Operand.CreateCPURegister(methodCompiler.TypeSystem.Resolver.BuiltIn.Int32, GeneralPurposeRegister.ECX);
+			Operand reg = Operand.CreateCPURegister(methodCompiler.TypeSystem.Resolver.BuiltIn.Int32, GeneralPurposeRegister.ECX);
 			context.SetInstruction(X86.Mov, eax, operand);
-			context.AppendInstruction(X86.Mov, ecx, Operand.CreateConstantUnsignedInt((uint)0));
+			context.AppendInstruction(X86.Mov, ecx, Operand.CreateConstantUnsignedInt(methodCompiler.TypeSystem, (uint)0));
 			context.AppendInstruction(X86.CpuId, eax, eax);
 			context.AppendInstruction(X86.Mov, result, reg);
 		}

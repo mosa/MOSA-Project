@@ -11,7 +11,7 @@ using Mosa.Compiler.Framework;
 using Mosa.Compiler.InternalTrace;
 using Mosa.Compiler.Linker;
 using Mosa.Compiler.Metadata.Loader;
-using Mosa.Compiler.TypeSystem;
+using Mosa.Compiler.MosaTypeSystem;
 using Mosa.TinyCPUSimulator;
 using Mosa.TinyCPUSimulator.Adaptor;
 using System;
@@ -43,8 +43,8 @@ namespace Mosa.Tool.TinySimulator
 
 		public IInternalTrace InternalTrace = new BasicInternalTrace();
 		public ConfigurableTraceFilter Filter = new ConfigurableTraceFilter();
-		public ITypeSystem TypeSystem;
-		public ITypeLayout TypeLayout;
+		public TypeSystem TypeSystem;
+		public MosaTypeLayout TypeLayout;
 		public BaseArchitecture Architecture;
 		public ILinker Linker;
 		public SimCPU SimCPU;
@@ -144,15 +144,16 @@ namespace Mosa.Tool.TinySimulator
 
 		public void LoadAssembly(string filename)
 		{
-			IAssemblyLoader assemblyLoader = new AssemblyLoader();
+			MosaAssemblyLoader assemblyLoader = new MosaAssemblyLoader();
 
 			assemblyLoader.AddPrivatePath(System.IO.Path.GetDirectoryName(filename));
 			assemblyLoader.LoadModule(filename);
 
 			TypeSystem = new TypeSystem();
-			TypeSystem.LoadModules(assemblyLoader.Modules);
 
-			TypeLayout = new TypeLayout(TypeSystem, 4, 4);
+			TypeSystem.Load(assemblyLoader);
+
+			TypeLayout = new MosaTypeLayout(TypeSystem, 4, 4);
 
 			assembliesView.UpdateTree();
 		}

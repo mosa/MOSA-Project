@@ -8,9 +8,8 @@
  */
 
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Metadata;
-using Mosa.Compiler.Metadata.Signatures;
-using Mosa.Compiler.TypeSystem;
+
+using Mosa.Compiler.MosaTypeSystem;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -29,8 +28,9 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Expands method call instruction represented by the context to perform the method call.
 		/// </summary>
+		/// <param name="typeSystem">The type system.</param>
 		/// <param name="context">The context.</param>
-		public abstract void MakeCall(Context context);
+		public abstract void MakeCall(TypeSystem typeSystem, Context context);
 
 		/// <summary>
 		/// Retrieves the stack requirements of a stack operand.
@@ -50,7 +50,7 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		/// <param name="context">The context.</param>
 		/// <param name="operand">The operand, that's holding the return value.</param>
-		public abstract void SetReturnValue(Context context, Operand operand);
+		public abstract void SetReturnValue(TypeSystem typeSystem, Context context, Operand operand);
 
 		/// <summary>
 		/// Retrieves the offset of the first local variable from the stack frame start.

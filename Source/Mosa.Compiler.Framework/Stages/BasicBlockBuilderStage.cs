@@ -43,7 +43,7 @@ namespace Mosa.Compiler.Framework.Stages
 		void IMethodCompilerStage.Run()
 		{
 			// No basic block building if this is a linker generated method
-			if (methodCompiler.Method is LinkerGeneratedMethod)
+			if (!methodCompiler.Method.IsCILGenerated)
 				return;
 
 			if (methodCompiler.Compiler.PlugSystem.GetPlugMethod(methodCompiler.Method) != null)
@@ -70,7 +70,7 @@ namespace Mosa.Compiler.Framework.Stages
 			// Link all the blocks together
 			BuildBlockLinks(prologue);
 
-			foreach (var clause in methodCompiler.ExceptionHandlingClauses)
+			foreach (var clause in methodCompiler.Method.ExceptionBlocks)
 			{
 				if (clause.HandlerOffset != 0)
 				{
@@ -140,7 +140,7 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 
 			// Add Exception Class targets
-			foreach (var clause in methodCompiler.ExceptionHandlingClauses)
+			foreach (var clause in methodCompiler.Method.ExceptionBlocks)
 			{
 				if (!targets.ContainsKey(clause.HandlerOffset))
 					targets.Add(clause.HandlerOffset, -1);

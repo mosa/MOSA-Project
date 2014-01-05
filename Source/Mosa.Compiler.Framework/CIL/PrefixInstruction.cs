@@ -35,7 +35,7 @@ namespace Mosa.Compiler.Framework.CIL
 					case OpCode.PreUnaligned: return Prefix.Unaligned;
 					case OpCode.PreVolatile: return Prefix.Volatile;
 					default:
-						throw new InvalidOperationException(@"Unknown prefix instruction code.");
+						throw new InvalidOperationException(@"Unknown prefix instruction codeReader.");
 				}
 			}
 		}
