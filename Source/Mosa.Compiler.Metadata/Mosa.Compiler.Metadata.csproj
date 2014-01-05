@@ -45,6 +45,7 @@
     <Compile Include="MethodFlags.cs" />
     <Compile Include="MethodHeader.cs" />
     <Compile Include="Signatures\BuiltInSigType.cs" />
+    <Compile Include="Signatures\StandAloneMethodSignature.cs" />
     <Compile Include="TableType.cs" />
     <Compile Include="EventAttributes.cs" />
     <Compile Include="FieldAttributes.cs" />
@@ -85,7 +86,6 @@
     <Compile Include="Signatures\RefSigType.cs" />
     <Compile Include="Signatures\Signature.cs" />
     <Compile Include="Signatures\SigType.cs" />
-    <Compile Include="Signatures\StandAloneMethodSignature.cs" />
     <Compile Include="Signatures\SZArraySigType.cs" />
     <Compile Include="Signatures\TypeSigType.cs" />
     <Compile Include="Signatures\TypeSpecSignature.cs" />
