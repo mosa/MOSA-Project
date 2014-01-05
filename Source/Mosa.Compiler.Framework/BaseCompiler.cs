@@ -210,9 +210,7 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		public MosaMethod CreateLinkerMethod(string methodName)
 		{
-			// HACK: <$> prevents the method from being called from CIL
-			var method = typeSystem.CreateLinkerMethod("<$>" + methodName, typeSystem.BuiltIn.Void, null);
-
+			var method = typeSystem.CreateLinkerMethod(methodName, typeSystem.BuiltIn.Void, null);
 			return method;
 		}
 

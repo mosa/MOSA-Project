@@ -242,7 +242,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private void AllocateSpace(MosaField field, SectionKind section, int size, int alignment)
 		{
-			using (Stream stream = compiler.Linker.Allocate(field.ToString(), section, size, alignment))
+			using (Stream stream = compiler.Linker.Allocate(field.FullName, section, size, alignment))
 			{
 				if (field.HasRVA)
 				{

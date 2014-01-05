@@ -23,7 +23,7 @@ namespace Mosa.Compiler.Framework.Stages
 	/// </remarks>
 	public sealed class TypeInitializerSchedulerStage : BaseCompilerStage, ICompilerStage, IPipelineStage
 	{
-		public readonly string TypeInitializerName = "AssemblyInit"; // FullName = Mosa.Tools.Compiler.LinkerGenerated.<$>AssemblyInit
+		public readonly string TypeInitializerName = "AssemblyInit"; 
 
 		#region Data Members
 
@@ -93,8 +93,6 @@ namespace Mosa.Compiler.Framework.Stages
 			TypeInitializerMethod = compiler.CreateLinkerMethod(TypeInitializerName);
 
 			compiler.CompileMethod(TypeInitializerMethod, basicBlocks, instructionSet);
-
-			//TypeInitializerMethod = compiler.CompileLinkerMethod(TypeInitializerName, basicBlocks, instructionSet);
 		}
 
 		#endregion ICompilerStage Members

@@ -64,9 +64,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (!methodCompiler.Method.HasCode)
 			{
-				//FIXME!
-				//if (DelegatePatcher.PatchDelegate(methodCompiler))
-				//	return;
+				if (DelegatePatcher.PatchDelegate(methodCompiler))
+					return;
 
 				methodCompiler.StopMethodCompiler();
 				return;
