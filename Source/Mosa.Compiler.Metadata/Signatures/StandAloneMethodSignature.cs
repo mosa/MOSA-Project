@@ -23,15 +23,5 @@ namespace Mosa.Compiler.Metadata.Signatures
 			: base(reader)
 		{
 		}
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="StandAloneMethodSignature"/> class.
-		/// </summary>
-		/// <param name="provider">The provider.</param>
-		/// <param name="token">The token.</param>
-		public StandAloneMethodSignature(IMetadataProvider provider, HeapIndexToken token)
-			: base(provider, token)
-		{
-		}
 	}
 }

@@ -289,7 +289,7 @@ namespace Mosa.Compiler.Framework
 			{
 				if (!ctx.IsEmpty)
 				{
-					if (ctx.Instruction.FlowControl != FlowControl.Branch)
+					if (ctx.Instruction.FlowControl != FlowControl.UnconditionalBranch)
 						return false;
 				}
 

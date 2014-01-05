@@ -106,10 +106,10 @@ namespace Mosa.Compiler.Framework.Stages
 				{
 					case FlowControl.Next: continue;
 					case FlowControl.Call: continue;
-					case FlowControl.Break: goto case FlowControl.Branch;
+					case FlowControl.Break: goto case FlowControl.UnconditionalBranch;
 					case FlowControl.Return: continue;
 					case FlowControl.Throw: continue;
-					case FlowControl.Branch:
+					case FlowControl.UnconditionalBranch:
 
 						// Unconditional branch
 						Debug.Assert(ctx.BranchTargets.Length == 1);
@@ -211,10 +211,10 @@ namespace Mosa.Compiler.Framework.Stages
 							LinkBlocks(block, epilogue);
 						return;
 
-					case FlowControl.Break: goto case FlowControl.Branch;
+					case FlowControl.Break: goto case FlowControl.UnconditionalBranch;
 					case FlowControl.Throw: continue;
 					case FlowControl.Switch: goto case FlowControl.ConditionalBranch;
-					case FlowControl.Branch:
+					case FlowControl.UnconditionalBranch:
 						FindAndLinkBlock(block, ctx.BranchTargets[0]);
 						return;
 

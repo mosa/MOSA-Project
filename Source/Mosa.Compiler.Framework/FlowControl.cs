@@ -27,7 +27,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// The instruction is an unconditional branch.
 		/// </summary>
-		Branch = 0x02,
+		UnconditionalBranch = 0x02,
 
 		/// <summary>
 		/// The instruction is a conditional branch, which never falls through.

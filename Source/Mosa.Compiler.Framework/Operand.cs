@@ -1025,26 +1025,5 @@ namespace Mosa.Compiler.Framework
 
 		#endregion Object Overrides
 
-		#region Static Methods
-
-		public static MosaType NormalizeMosaType(MosaTypeResolver resolver, MosaType type)
-		{
-			if (type.IsBoolean) return resolver.BuiltIn.Boolean;
-			else if (type.IsChar) return resolver.BuiltIn.Char;
-			else if (type.IsSignedByte) return resolver.BuiltIn.I1;
-			else if (type.IsSignedShort) return resolver.BuiltIn.I2;
-			else if (type.IsSignedInt) return resolver.BuiltIn.I4;
-			else if (type.IsSignedLong) return resolver.BuiltIn.I8;
-			else if (type.IsUnsignedByte) return resolver.BuiltIn.U1;
-			else if (type.IsUnsignedShort) return resolver.BuiltIn.U2;
-			else if (type.IsUnsignedInt) return resolver.BuiltIn.U4;
-			else if (type.IsUnsignedLong) return resolver.BuiltIn.U8;
-			else if (type.IsSingle) return resolver.BuiltIn.R4;
-			else if (type.IsDouble) return resolver.BuiltIn.R8;
-
-			return type;
-		}
-
-		#endregion Static Methods
 	}
 }
