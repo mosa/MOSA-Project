@@ -28,7 +28,7 @@ namespace Mosa.Platform.x86.Stages
 			if (methodCompiler.Compiler.PlugSystem.GetPlugMethod(methodCompiler.Method) != null)
 				return;
 
-			Debug.Assert((methodCompiler.StackLayout.StackSize % 4) == 0, @"Stack size of method can't be divided by 4!!");
+			Debug.Assert((methodCompiler.StackLayout.StackSize % 4) == 0, @"Stack size of interrupt can't be divided by 4!!");
 
 			UpdatePrologue();
 			UpdateEpilogue();

@@ -85,7 +85,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Decodes the instruction stream of the reader and populates the compiler.
 		/// </summary>
 		/// <param name="compiler">The compiler to populate.</param>
-		/// <param name="header">The method header.</param>
+		/// <exception cref="InvalidMetadataException"></exception>
 		private void Decode(BaseMethodCompiler compiler)
 		{
 			codeReader = new EndianAwareBinaryReader(new MemoryStream(methodCompiler.Method.Code), Endianness.Little);
@@ -109,7 +109,9 @@ namespace Mosa.Compiler.Framework.Stages
 				BaseCILInstruction instruction = CILInstruction.Get(op);
 
 				if (instruction == null)
-					throw new Exception("CIL " + op + " is not yet supported");
+				{
+					throw new InvalidMetadataException();
+				}
 
 				// Create and initialize the corresponding instruction
 				context.AppendInstruction(instruction);

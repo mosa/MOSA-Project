@@ -142,8 +142,12 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		internal void AddType(MosaAssembly assembly, Token token, MosaType type)
 		{
-			Types.Add(type);
 			typeLookup[assembly].Add(token, type);
+
+			if (Types.Contains(type))
+				return;
+
+			Types.Add(type);
 		}
 
 		internal void AddLinkerType(MosaType type)
@@ -179,7 +183,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 			return GetTypeByToken(InternalAssembly, new Token((uint)elementType.Value));
 		}
 
-		public MosaType GetTypeByToken(MosaAssembly assembly, Token token)
+		internal MosaType GetTypeByToken(MosaAssembly assembly, Token token)
 		{
 			return typeLookup[assembly][token];
 		}
@@ -233,18 +237,24 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		internal void AddMethod(MosaAssembly assembly, Token token, MosaMethod method)
 		{
-			Methods.Add(method);
 			methodLookup[assembly].Add(token, method);
+
+			if (Methods.Contains(method))
+				return;
+
+			Methods.Add(method);
 		}
 
 		internal void AddLinkerMethod(MosaMethod method)
 		{
 			Methods.Add(method);
+			method.DeclaringType.Methods.Add(method);
 		}
 
 		internal MosaMethod CreateLinkerMethod(MosaType declaringType, string name, MosaType returnType, IList<MosaType> parameters)
 		{
 			var method = new MosaMethod();
+
 			method.Name = name;
 			method.DeclaringType = declaringType;
 			method.ReturnType = returnType;
@@ -280,6 +290,20 @@ namespace Mosa.Compiler.MosaTypeSystem
 		public MosaMethod GetMethodByToken(MosaAssembly assembly, Token token)
 		{
 			return methodLookup[assembly][token];
+		}
+
+		public MosaMethod GetMethodByToken(MosaAssembly assembly, Token token, MosaMethod baseMethod)
+		{
+			var method = methodLookup[assembly][token];
+
+			if (method.DeclaringType.IsGeneric)
+			{
+				Debug.Assert(method.IsOpenGenericType);
+
+				//method = ResolveGenericMethod(baseMethod.DeclaringType, baseMethod.DeclaringType.GenericParameterTypes);
+			}
+
+			return method;
 		}
 
 		public bool CheckFieldExists(MosaAssembly assembly, Token token)
@@ -368,6 +392,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 			type.IsUnmanagedPointerType = true;
 			type.IsBuiltInType = true;
 			type.SetFlags();
+			type.SetOpenGeneric();
 
 			unmanagedPointerTypes.Add(element, type);
 
@@ -388,6 +413,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 			type.IsManagedPointerType = true;
 			type.IsBuiltInType = true;
 			type.SetFlags();
+			type.SetOpenGeneric();
 
 			managedPointerTypes.Add(element, type);
 
@@ -408,6 +434,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 			type.ElementType = element;
 			type.IsBuiltInType = true;
 			type.SetFlags();
+			type.SetOpenGeneric();
 
 			arrayTypes.Add(element, type);
 
@@ -529,6 +556,8 @@ namespace Mosa.Compiler.MosaTypeSystem
 			generic.ElementType = genericBaseType.ElementType;
 			generic.IsNativeSignedInteger = genericBaseType.IsNativeSignedInteger;
 			generic.IsNativeUnsignedInteger = genericBaseType.IsNativeUnsignedInteger;
+
+			generic.SetOpenGeneric();
 
 			var genericTypeNames = new StringBuilder();
 

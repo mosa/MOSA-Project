@@ -743,7 +743,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Creates the stack local.
 		/// </summary>
-		/// <param name="sigType">Type of the sig.</param>
+		/// <param name="type">The type.</param>
 		/// <param name="register">The register.</param>
 		/// <param name="index">The index.</param>
 		/// <returns></returns>

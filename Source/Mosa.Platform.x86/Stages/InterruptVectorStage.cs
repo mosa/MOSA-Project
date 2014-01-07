@@ -46,12 +46,12 @@ namespace Mosa.Platform.x86.Stages
 			if (type == null)
 				return;
 
-			var runtimeMethod = TypeSystem.GetMethodByName(type, "ProcessInterrupt");
+			var method = TypeSystem.GetMethodByName(type, "ProcessInterrupt");
 
-			if (runtimeMethod == null)
+			if (method == null)
 				return;
 
-			Operand interruptMethod = Operand.CreateSymbolFromMethod(typeSystem, runtimeMethod);
+			Operand interrupt = Operand.CreateSymbolFromMethod(typeSystem, method);
 
 			Operand esp = Operand.CreateCPURegister(typeSystem.BuiltIn.Int32, GeneralPurposeRegister.ESP);
 
@@ -64,17 +64,17 @@ namespace Mosa.Platform.x86.Stages
 
 				ctx.AppendInstruction(X86.Cli);
 				if (i <= 7 || i >= 16 | i == 9) // For IRQ 8, 10, 11, 12, 13, 14 the cpu will automatically pushed the error code
-					ctx.AppendInstruction(X86.Push, null, Operand.CreateConstantUnsignedInt(typeSystem, (uint)0x0));
+					ctx.AppendInstruction(X86.Push, null, Operand.CreateConstantUnsignedInt(typeSystem, 0));
 				ctx.AppendInstruction(X86.Push, null, Operand.CreateConstantUnsignedInt(typeSystem, (uint)i));
 				ctx.AppendInstruction(X86.Pushad);
-				ctx.AppendInstruction(X86.Call, null, interruptMethod);
+				ctx.AppendInstruction(X86.Call, null, interrupt);
 				ctx.AppendInstruction(X86.Popad);
-				ctx.AppendInstruction(X86.Add, esp, esp, Operand.CreateConstantUnsignedInt(typeSystem, (uint)0x08));
+				ctx.AppendInstruction(X86.Add, esp, esp, Operand.CreateConstantUnsignedInt(typeSystem, 8));
 				ctx.AppendInstruction(X86.Sti);
 				ctx.AppendInstruction(X86.IRetd);
 
-				MosaMethod method = compiler.CreateLinkerMethod("InterruptISR" + i.ToString());
-				compiler.CompileMethod(method, basicBlocks, instructionSet);
+				var interruptMethod = compiler.CreateLinkerMethod("InterruptISR" + i.ToString());
+				compiler.CompileMethod(interruptMethod, basicBlocks, instructionSet);
 			}
 		}
 

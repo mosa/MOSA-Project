@@ -155,8 +155,8 @@ namespace Mosa.Compiler.MosaTypeSystem
 			LoadFieldData();
 			LoadTypeSpecs();
 			LoadMemberReferences();
-			LoadGenericParams();
 			LoadMethodSpecs();
+			LoadGenericParams();
 			LoadCustomAttributes();
 			LoadInterfaces();
 			LoadGenericParamContraints();
@@ -462,8 +462,10 @@ namespace Mosa.Compiler.MosaTypeSystem
 			type.Size = info.Size;
 
 			type.SetFlags();
+			type.SetOpenGeneric();
 
 			resolver.AddType(assembly, token, type);
+
 		}
 
 		private void LoadTypeMethodsAndParameters(Token token, IList<TypeInfo> typeInfos)

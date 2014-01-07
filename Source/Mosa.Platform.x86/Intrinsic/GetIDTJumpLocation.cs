@@ -7,8 +7,10 @@
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  */
 
+using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.IR;
+using Mosa.Compiler.MosaTypeSystem;
 using System;
 using System.Diagnostics;
 
@@ -33,20 +35,27 @@ namespace Mosa.Platform.x86.Intrinsic
 			if (!operand.IsConstant)
 			{
 				// try to find the constant - a bit of a hack
-				Context def = new Context(context.InstructionSet, operand.Definitions[0]);
+				Context ctx = new Context(context.InstructionSet, operand.Definitions[0]);
 
-				if (def.Instruction is Move && def.Operand1.IsConstant)
-					operand = def.Operand1;
+				if (ctx.Instruction == IRInstruction.Move && ctx.Operand1.IsConstant)
+				{
+					operand = ctx.Operand1;
+				}
 			}
 
 			Debug.Assert(operand.IsConstant);
 
 			int irq = (int)operand.ConstantSignedInteger;
 
-			if ((irq > 256) || (irq < 0))
-				throw new InvalidOperationException();
+			// Find the method
+			var method = TypeSystem.GetMethodByName(methodCompiler.TypeSystem.Resolver.DefaultLinkerType, "InterruptISR" + irq.ToString());
 
-			context.SetInstruction(IRInstruction.Move, context.Result, Operand.CreateUnmanagedSymbolPointer(methodCompiler.TypeSystem, "Mosa.Tools.Compiler.LinkerGenerated.<$>InterruptISR" + irq.ToString() + "()"));
+			if (method == null)
+			{
+				throw new InvalidCompilerException();
+			}
+
+			context.SetInstruction(IRInstruction.Move, context.Result, Operand.CreateUnmanagedSymbolPointer(methodCompiler.TypeSystem, method.FullName));
 		}
 
 		#endregion Methods

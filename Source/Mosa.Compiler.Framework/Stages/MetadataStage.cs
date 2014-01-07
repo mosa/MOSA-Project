@@ -44,10 +44,16 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			foreach (var type in typeSystem.AllTypes)
 			{
-				if (!type.IsModule)
-				{
-					CreateTypeDefinitionTable(type);
-				}
+				if (type.IsModule || type.IsGeneric)
+					continue;
+
+				if (type.IsOpenGenericType)
+					continue;
+
+				if (!(type.IsObject || type.IsValueType || type.IsEnum || type.IsString || type.IsInterface || type.IsLinkerGenerated))
+					continue;
+
+				CreateTypeDefinitionTable(type);
 			}
 		}
 

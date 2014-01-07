@@ -31,8 +31,11 @@ namespace Mosa.Compiler.Framework.Stages
 				if (type.IsModule || type.IsGeneric)
 					continue;
 
-				//if (type.ContainsOpenGenericParameters)
-				//	continue;
+				if (type.IsOpenGenericType)
+					continue;
+
+				if (!(type.IsObject || type.IsValueType || type.IsEnum || type.IsString || type.IsInterface || type.IsLinkerGenerated))
+					continue;
 
 				if (!type.IsInterface)
 				{
@@ -187,10 +190,7 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				if (!method.IsAbstract)
 				{
-					//if (compiler.Scheduler.IsMethodScheduled(method))
-					{
-						compiler.Linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuiltInPatch.I4, methodTableName, offset, 0, method.FullName, 0);
-					}
+					compiler.Linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuiltInPatch.I4, methodTableName, offset, 0, method.FullName, 0);
 				}
 				offset += typeLayout.NativePointerSize;
 			}

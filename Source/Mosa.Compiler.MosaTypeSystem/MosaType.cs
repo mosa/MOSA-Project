@@ -137,6 +137,8 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		internal int? FixedSize { get; set; }
 
+		public bool IsOpenGenericType { get; internal set; }
+
 		public MosaType(MosaAssembly assembly)
 		{
 			Assembly = assembly;
@@ -182,7 +184,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 			IsDelegate = (BaseType != null && BaseType.IsDelegate) || FullName == "System.Delegate";
 			IsEnum = (BaseType != null && BaseType.IsEnum) || FullName == "System.Enum";
 			IsObject = (BaseType != null && BaseType.IsObject) || FullName == "System.Object";
-			IsModule = FullName == "<Module>";
+			IsModule = Name == "<Module>" && Namespace == string.Empty;
 
 			//"System.IntPtr"
 			//"System.UIntPtr"
@@ -197,6 +199,32 @@ namespace Mosa.Compiler.MosaTypeSystem
 		public bool Matches(MosaType type)
 		{
 			return type == this;
+		}
+
+		internal static bool IsOpenGeneric(MosaType type)
+		{
+			if (type.IsVarFlag || type.IsMVarFlag)
+				return true;
+
+			if (!type.HasElement)
+				return false;
+
+			return IsOpenGeneric(type.ElementType);
+		}
+
+		internal void SetOpenGeneric()
+		{
+			IsOpenGenericType = IsOpenGeneric(this);
+
+			foreach (var param in GenericParameterTypes)
+			{
+				IsOpenGenericType = MosaType.IsOpenGeneric(param);
+
+				if (IsOpenGenericType)
+					return;
+			}
+
+			IsOpenGenericType = false;
 		}
 	}
 }

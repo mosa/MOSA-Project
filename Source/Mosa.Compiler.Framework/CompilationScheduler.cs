@@ -108,10 +108,10 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private void CompileMethod(MosaMethod method)
 		{
-			if (method.IsGeneric || method.DeclaringType.IsInterface || method.IsAbstract || method.IsOpenGeneric)
+			if (method.IsGeneric || method.DeclaringType.IsInterface || method.IsAbstract)
 				return;
 
-			if (method.IsOpenGeneric)
+			if (method.IsOpenGenericType || method.DeclaringType.IsOpenGenericType)
 				return;
 
 			if (methodScheduled.Contains(method))

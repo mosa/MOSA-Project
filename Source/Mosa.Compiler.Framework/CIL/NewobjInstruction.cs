@@ -82,11 +82,11 @@ namespace Mosa.Compiler.Framework.CIL
 		/// <summary>
 		/// Decodes the specified instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
+		/// <param name="context">The context.</param>
 		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
-		public override void Decode(Context ctx, IInstructionDecoder decoder)
+		public override void Decode(Context context, IInstructionDecoder decoder)
 		{
-			var ctor = DecodeInvocationTarget(ctx, decoder, InvokeSupport);
+			var ctor = DecodeInvocationTarget(context, decoder, InvokeSupport);
 
 			/*
 			 * HACK: We need to remove the this parameter from the operand list, as it
@@ -97,14 +97,14 @@ namespace Mosa.Compiler.Framework.CIL
 			 */
 
 			// Remove the this argument from the invocation, it's not on the stack yet.
-			ctx.OperandCount--;
+			context.OperandCount--;
 
-			decoder.Compiler.Scheduler.TrackMethodInvoked(ctx.InvokeMethod);
-			decoder.Compiler.Scheduler.TrackTypeAllocated(ctx.InvokeMethod.DeclaringType);
+			//decoder.Compiler.Scheduler.TrackMethodInvoked(ctx.InvokeMethod);
+			decoder.Compiler.Scheduler.TrackTypeAllocated(context.InvokeMethod.DeclaringType);
 
 			// Set a return value according to the type of the object allocated
-			ctx.Result = decoder.Compiler.CreateVirtualRegister(ctor.ReturnType);
-			ctx.ResultCount = 1;
+			context.Result = decoder.Compiler.CreateVirtualRegister(ctor.DeclaringType);
+			context.ResultCount = 1;
 		}
 
 		/// <summary>

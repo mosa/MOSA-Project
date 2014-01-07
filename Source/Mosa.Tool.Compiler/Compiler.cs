@@ -185,8 +185,8 @@ namespace Mosa.Tool.Compiler
 			);
 
 			optionSet.Add(
-				"method-pipeline-export-dir|mped=",
-				"The method pipeline export directory {file}.",
+				"interrupt-pipeline-export-dir|mped=",
+				"The interrupt pipeline export directory {file}.",
 				delegate(string dir)
 				{
 					compilerOptions.MethodPipelineExportDirectory = dir;

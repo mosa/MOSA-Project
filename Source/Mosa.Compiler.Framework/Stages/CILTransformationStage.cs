@@ -490,29 +490,28 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="context">The context.</param>
 		void CIL.ICILVisitor.Newobj(Context context)
 		{
-			if (!ReplaceWithInternalCall(context))
-			{
-				Operand thisReference = context.Result;
-				Debug.Assert(thisReference != null, @"Newobj didn't specify class signature?");
-				MosaType classType = thisReference.Type;
+			if (ReplaceWithInternalCall(context))
+				return;
 
-				Context before = context.InsertBefore();
+			var classType = context.InvokeMethod.DeclaringType;
+			var thisReference = context.Result;
 
-				ReplaceWithVmCall(before, VmCall.AllocateObject);
+			Context before = context.InsertBefore();
 
-				Operand methodTableSymbol = GetMethodTableSymbol(classType);
+			ReplaceWithVmCall(before, VmCall.AllocateObject);
 
-				before.SetOperand(1, methodTableSymbol);
-				before.SetOperand(2, Operand.CreateConstantSignedInt(typeSystem, (int)typeLayout.GetTypeSize(classType)));
-				before.OperandCount = 3;
-				before.Result = thisReference;
+			Operand methodTableSymbol = GetMethodTableSymbol(classType);
 
-				// Result is the this pointer, now invoke the real constructor
-				List<Operand> operands = new List<Operand>(context.Operands);
-				operands.Insert(0, thisReference);
+			before.SetOperand(1, methodTableSymbol);
+			before.SetOperand(2, Operand.CreateConstantSignedInt(typeSystem, (int)typeLayout.GetTypeSize(classType)));
+			before.OperandCount = 3;
+			before.Result = thisReference;
 
-				ProcessInvokeInstruction(context, context.InvokeMethod, null, operands);
-			}
+			// Result is the this pointer, now invoke the real constructor
+			List<Operand> operands = new List<Operand>(context.Operands);
+			operands.Insert(0, thisReference);
+
+			ProcessInvokeInstruction(context, context.InvokeMethod, null, operands);
 		}
 
 		private Operand GetMethodTableSymbol(MosaType runtimeType)

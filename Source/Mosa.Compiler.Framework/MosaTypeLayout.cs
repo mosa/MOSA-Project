@@ -198,10 +198,10 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		public IList<MosaMethod> GetMethodTable(MosaType type)
 		{
-			//if (type.ContainsOpenGenericParameters)
-			//	return null;
+			if (type.IsModule)
+				return null;
 
-			if (type.IsModule || type.IsGeneric)
+			if (!(type.IsObject || type.IsValueType || type.IsEnum || type.IsString || type.IsInterface || type.IsLinkerGenerated))
 				return null;
 
 			ResolveType(type);
@@ -254,11 +254,10 @@ namespace Mosa.Compiler.Framework
 
 		private void ResolveType(MosaType type)
 		{
-			//FIXME
-			//if (type.ContainsOpenGenericParameters)
-			//	return;
+			if (type.IsModule)
+				return;
 
-			if (type.IsModule || type.IsGeneric)
+			if (!(type.IsObject || type.IsValueType || type.IsEnum || type.IsString || type.IsInterface || type.IsLinkerGenerated))
 				return;
 
 			if (typeSet.Contains(type))
@@ -267,7 +266,9 @@ namespace Mosa.Compiler.Framework
 			typeSet.Add(type);
 
 			if (type.BaseType != null)
+			{
 				ResolveType(type.BaseType);
+			}
 
 			if (type.IsInterface)
 			{
@@ -301,11 +302,10 @@ namespace Mosa.Compiler.Framework
 		{
 			Debug.Assert(type.IsInterface);
 
-			//FIXME
-			//if (type.ContainsOpenGenericParameters)
-			//	return;
+			if (type.IsModule)
+				return;
 
-			if (type.IsModule || type.IsGeneric)
+			if (!(type.IsObject || type.IsValueType || type.IsEnum || type.IsString || type.IsInterface || type.IsLinkerGenerated))
 				return;
 
 			if (interfaces.Contains(type))
@@ -538,7 +538,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets the size of the type alignment.
 		/// </summary>
-		/// <param name="signatureType">The signature type.</param>
+		/// <param name="type">The type.</param>
 		/// <returns></returns>
 		private int GetAlignmentSize(MosaType type)
 		{

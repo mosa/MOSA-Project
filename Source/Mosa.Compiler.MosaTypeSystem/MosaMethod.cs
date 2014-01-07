@@ -76,7 +76,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public bool IsCILGenerated { get; internal set; }
 
-		public bool IsOpenGeneric { get; internal set; }
+		public bool IsOpenGenericType { get; internal set; }
 
 		public MosaMethod()
 		{
@@ -94,7 +94,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 			IsNewSlot = false;
 			IsFinal = false;
 			IsCILGenerated = false;
-			IsOpenGeneric = false;
+			IsOpenGenericType = false;
 
 			Parameters = new List<MosaParameter>();
 			GenericParameters = new List<MosaGenericParameter>();
@@ -139,33 +139,27 @@ namespace Mosa.Compiler.MosaTypeSystem
 			ShortMethodName = ReturnType.Name + " " + Name + parameterNames;
 		}
 
-		private static bool IsOpenGenericType(MosaType type)
-		{
-			if (type.IsVarFlag || type.IsMVarFlag)
-				return true;
-
-			if (!type.HasElement)
-				return false;
-
-			return IsOpenGenericType(type.ElementType);
-		}
-
 		internal void SetOpenGeneric()
 		{
-			IsOpenGeneric = IsOpenGenericType(ReturnType);
+			IsOpenGenericType = DeclaringType.IsOpenGenericType;
 
-			if (IsOpenGeneric)
+			if (IsOpenGenericType)
+				return;
+
+			IsOpenGenericType = MosaType.IsOpenGeneric(ReturnType);
+
+			if (IsOpenGenericType)
 				return;
 
 			foreach (var param in Parameters)
 			{
-				IsOpenGeneric = IsOpenGenericType(param.Type);
+				IsOpenGenericType = MosaType.IsOpenGeneric(param.Type);
 
-				if (IsOpenGeneric)
+				if (IsOpenGenericType)
 					return;
 			}
 
-			IsOpenGeneric = false;
+			IsOpenGenericType = false;
 		}
 
 		public bool Matches(MosaMethod method)
