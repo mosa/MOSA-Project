@@ -97,6 +97,12 @@ namespace Mosa.Compiler.Framework.Stages
 			if (type.IsInterface)
 				return;
 
+			if (type.IsGeneric || type.IsOpenGenericType)
+				return;
+
+			if (!(type.IsObject || type.IsValueType || type.IsEnum || type.IsString || type.IsInterface || type.IsLinkerGenerated))
+				return;
+
 			if (typeScheduled.Contains(type))
 				return;
 

@@ -125,7 +125,7 @@ namespace Mosa.Compiler.Framework.CIL
 		/// <returns></returns>
 		protected static MosaMethod DecodeInvocationTarget(Context ctx, IInstructionDecoder decoder, InvokeSupportFlags flags)
 		{
-			var method = decoder.TypeSystem.Resolver.GetMethodByToken(decoder.Method.CodeAssembly, decoder.DecodeTokenType());
+			var method = decoder.TypeSystem.Resolver.GetMethodByToken(decoder.Method.CodeAssembly, decoder.DecodeTokenType(), decoder.Compiler.Method);
 
 			decoder.Compiler.Scheduler.TrackMethodInvoked(method);
 

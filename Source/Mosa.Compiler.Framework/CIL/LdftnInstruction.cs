@@ -39,7 +39,7 @@ namespace Mosa.Compiler.Framework.CIL
 			// Decode base classes first
 			base.Decode(ctx, decoder);
 
-			var method = decoder.TypeSystem.Resolver.GetMethodByToken(decoder.Method.CodeAssembly, decoder.DecodeTokenType());
+			var method = decoder.TypeSystem.Resolver.GetMethodByToken(decoder.Method.CodeAssembly, decoder.DecodeTokenType(), decoder.Compiler.Method);
 
 			ctx.Result = decoder.Compiler.CreateVirtualRegister(decoder.TypeSystem.BuiltIn.TypedByRef);
 			ctx.InvokeMethod = method;

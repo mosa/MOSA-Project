@@ -117,6 +117,12 @@ namespace Mosa.Tool.Explorer
 						typeNode.Nodes.Add(baseTypeNode);
 					}
 
+					if (type.EnclosingType != null)
+					{
+						TreeNode baseTypeNode = new TreeNode("Enclosing Type: " + type.EnclosingType.FullName);
+						typeNode.Nodes.Add(baseTypeNode);
+					}
+
 					if (type.GenericBaseType != null)
 					{
 						TreeNode genericBaseTypeNode = new TreeNode("Generic Base Type: " + type.GenericBaseType.FullName);

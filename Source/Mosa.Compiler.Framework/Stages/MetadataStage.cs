@@ -44,10 +44,10 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			foreach (var type in typeSystem.AllTypes)
 			{
-				if (type.IsModule || type.IsGeneric)
+				if (type.IsModule)
 					continue;
 
-				if (type.IsOpenGenericType)
+				if (type.IsGeneric || type.IsOpenGenericType)
 					continue;
 
 				if (!(type.IsObject || type.IsValueType || type.IsEnum || type.IsString || type.IsInterface || type.IsLinkerGenerated))

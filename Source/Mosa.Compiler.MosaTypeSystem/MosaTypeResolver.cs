@@ -287,7 +287,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 			return method;
 		}
 
-		public MosaMethod GetMethodByToken(MosaAssembly assembly, Token token)
+		internal MosaMethod GetMethodByToken(MosaAssembly assembly, Token token)
 		{
 			return methodLookup[assembly][token];
 		}
@@ -296,10 +296,9 @@ namespace Mosa.Compiler.MosaTypeSystem
 		{
 			var method = methodLookup[assembly][token];
 
-			if (method.DeclaringType.IsGeneric)
+			if (method.IsOpenGenericType || method.DeclaringType.IsGeneric)
 			{
-				Debug.Assert(method.IsOpenGenericType);
-
+				//method = ResolveGenericMethod(method, baseMethod.GenericParameterTypes);
 				//method = ResolveGenericMethod(baseMethod.DeclaringType, baseMethod.DeclaringType.GenericParameterTypes);
 			}
 
