@@ -52,10 +52,10 @@ namespace Mosa.Compiler.Framework.CIL
 			}
 
 			// Push the loaded value onto the evaluation stack
-			var localVariableOperand = decoder.Compiler.GetLocalOperand(index);
-			var result = LoadInstruction.CreateResultOperand(decoder, localVariableOperand.Type);
+			var local = decoder.Compiler.GetLocalOperand(index);
+			var result = LoadInstruction.CreateResultOperand(decoder, local.Type);
 
-			ctx.Operand1 = localVariableOperand;
+			ctx.Operand1 = local;
 			ctx.Result = result;
 		}
 

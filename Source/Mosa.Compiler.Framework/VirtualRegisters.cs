@@ -23,8 +23,6 @@ namespace Mosa.Compiler.Framework
 
 		private List<Operand> virtualRegisters = new List<Operand>();
 
-		//private int sequenceStart;
-
 		#endregion Data members
 
 		#region Properties

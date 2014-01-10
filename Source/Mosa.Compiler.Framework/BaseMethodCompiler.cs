@@ -223,7 +223,7 @@ namespace Mosa.Compiler.Framework
 		/// Stops the method compiler.
 		/// </summary>
 		/// <returns></returns>
-		public void StopMethodCompiler()
+		public void Stop()
 		{
 			stop = true;
 		}
@@ -268,14 +268,14 @@ namespace Mosa.Compiler.Framework
 		public Operand[] Parameters { get { return StackLayout.Parameters; } }
 
 		/// <summary>
-		/// Sets the signature of local variables in the method.
+		/// Allocates the local variable virtual registers.
 		/// </summary>
-		/// <param name="localTypes">The local sig types.</param>
-		public void SetLocalVariableSignature(IList<MosaType> localTypes)
+		/// <param name="locals">The locals.</param>
+		public void AllocateLocalVariableVirtualRegisters(IList<MosaType> locals)
 		{
-			foreach (var localVariable in localTypes)
+			foreach (var local in locals)
 			{
-				VirtualRegisters.Allocate(TypeSystem.ConvertToStackType(localVariable));
+				VirtualRegisters.Allocate(TypeSystem.ConvertToStackType(local));
 			}
 		}
 

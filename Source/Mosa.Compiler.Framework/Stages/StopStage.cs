@@ -16,7 +16,7 @@ namespace Mosa.Compiler.Framework.Stages
 	{
 		public virtual void Run()
 		{
-			methodCompiler.StopMethodCompiler();
+			methodCompiler.Stop();
 		}
 	}
 }

@@ -67,11 +67,11 @@ namespace Mosa.Compiler.Framework.Stages
 				if (DelegatePatcher.PatchDelegate(methodCompiler))
 					return;
 
-				methodCompiler.StopMethodCompiler();
+				methodCompiler.Stop();
 				return;
 			}
 
-			methodCompiler.SetLocalVariableSignature(methodCompiler.Method.LocalVariables);
+			methodCompiler.AllocateLocalVariableVirtualRegisters(methodCompiler.Method.LocalVariables);
 
 			/* Decode the instructions */
 			Decode(methodCompiler);

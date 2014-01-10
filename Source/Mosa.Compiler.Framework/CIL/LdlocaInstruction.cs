@@ -52,9 +52,9 @@ namespace Mosa.Compiler.Framework.CIL
 				index = decoder.DecodeUShort();
 			}
 
-			Operand localVariableOperand = decoder.Compiler.GetLocalOperand(index);
-			ctx.Operand1 = localVariableOperand;
-			ctx.Result = decoder.Compiler.CreateVirtualRegister(decoder.Compiler.TypeSystem.Resolver.GetManagedPointerType(localVariableOperand.Type));
+			Operand local = decoder.Compiler.GetLocalOperand(index);
+			ctx.Operand1 = local;
+			ctx.Result = decoder.Compiler.CreateVirtualRegister(decoder.Compiler.TypeSystem.Resolver.GetManagedPointerType(local.Type));
 		}
 
 		/// <summary>
