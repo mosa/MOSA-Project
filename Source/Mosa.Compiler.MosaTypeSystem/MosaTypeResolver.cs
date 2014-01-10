@@ -298,8 +298,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 			if (method.IsOpenGenericType || method.DeclaringType.IsGeneric)
 			{
-				//method = ResolveGenericMethod(method, baseMethod.GenericParameterTypes);
-				//method = ResolveGenericMethod(baseMethod.DeclaringType, baseMethod.DeclaringType.GenericParameterTypes);
+				method = ResolveGenericMethod(method, baseMethod.DeclaringType.GenericParameterTypes);
 			}
 
 			return method;
@@ -525,7 +524,6 @@ namespace Mosa.Compiler.MosaTypeSystem
 			generic.GenericBaseType = genericBaseType;
 			generic.GenericParameterTypes = genericTypes;
 			generic.Name = genericBaseType.Name;
-			generic.FullName = genericBaseType.FullName;
 			generic.Namespace = genericBaseType.Namespace;
 			generic.BaseType = genericBaseType.BaseType;
 			generic.EnclosingType = genericBaseType.EnclosingType;
@@ -567,7 +565,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 			}
 
 			genericTypeNames.Length = genericTypeNames.Length - 2;
-			generic.FullName = generic.FullName + '<' + genericTypeNames.ToString() + '>';
+			generic.FullName = generic.Namespace + "." + generic.Name + '<' + genericTypeNames.ToString() + '>';
 
 			foreach (var m in genericBaseType.Methods)
 			{
@@ -647,6 +645,8 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public MosaMethod ResolveGenericMethod(MosaMethod genericBaseMethod, List<MosaType> methodGenericsTypes)
 		{
+			var genericType = ResolveGenericType(genericBaseMethod.DeclaringType, methodGenericsTypes);
+
 			var genericMethod = FindGenericMethod(genericBaseMethod, methodGenericsTypes);
 
 			if (genericMethod != null)
