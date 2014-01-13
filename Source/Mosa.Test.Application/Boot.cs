@@ -14,19 +14,16 @@ namespace Mosa.Test.Application
 	/// </summary>
 	public static class Boot
 	{
-
-		public static int Test1()
+		public static void Test1()
 		{
 			Holder<int> holderInt = new Holder<int>(10);
-
-			return holderInt.value;
 		}
 
-		public static int Test2()
+		public static void Test2()
 		{
 			Parent<int> parent = new Parent<int>();
 
-			return parent.value;
+			int p = parent.child.value;
 		}
 
 		/// <summary>

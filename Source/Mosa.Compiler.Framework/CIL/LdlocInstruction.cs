@@ -7,6 +7,8 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using Mosa.Compiler.Common;
+
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
@@ -48,7 +50,7 @@ namespace Mosa.Compiler.Framework.CIL
 				case OpCode.Ldloc_1: index = 1; break;
 				case OpCode.Ldloc_2: index = 2; break;
 				case OpCode.Ldloc_3: index = 3; break;
-				default: throw new System.NotImplementedException();
+				default: throw new InvalidMetadataException();
 			}
 
 			// Push the loaded value onto the evaluation stack

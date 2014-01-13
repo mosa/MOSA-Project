@@ -14,7 +14,6 @@ using Mosa.Compiler.Framework.IR;
 
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.MosaTypeSystem;
-using System;
 using System.Diagnostics;
 using System.IO;
 

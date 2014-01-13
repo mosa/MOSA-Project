@@ -241,11 +241,13 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Retrieves the local stack operand at the specified <paramref name="index"/>.
+		/// Retrieves the local stack operand at the specified <paramref name="index" />.
 		/// </summary>
 		/// <param name="index">The index of the stack operand to retrieve.</param>
-		/// <returns>The operand at the specified index.</returns>
-		/// <exception cref="System.ArgumentOutOfRangeException">The <paramref name="index"/> is not valid.</exception>
+		/// <returns>
+		/// The operand at the specified index.
+		/// </returns>
+		/// <exception cref="System.ArgumentOutOfRangeException">The <paramref name="index" /> is not valid.</exception>
 		public Operand GetLocalOperand(int index)
 		{
 			return VirtualRegisters[index];
@@ -275,7 +277,8 @@ namespace Mosa.Compiler.Framework
 		{
 			foreach (var local in locals)
 			{
-				VirtualRegisters.Allocate(TypeSystem.ConvertToStackType(local));
+				var stackLocal = TypeSystem.ConvertToStackType(local);
+				VirtualRegisters.Allocate(stackLocal);
 			}
 		}
 

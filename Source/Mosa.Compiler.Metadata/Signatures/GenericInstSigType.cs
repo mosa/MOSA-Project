@@ -17,22 +17,6 @@ namespace Mosa.Compiler.Metadata.Signatures
 	/// </summary>
 	public sealed class GenericInstSigType : SigType
 	{
-		#region Construction
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="GenericInstSigType"/> class.
-		/// </summary>
-		/// <param name="baseType">Type of the base.</param>
-		/// <param name="genericArguments">The generic args.</param>
-		internal GenericInstSigType(TypeSigType baseType, SigType[] genericArguments) :
-			base(CilElementType.GenericInst)
-		{
-			BaseType = baseType;
-			GenericArguments = genericArguments;
-		}
-
-		#endregion Construction
-
 		#region Properties
 
 		/// <summary>
@@ -48,6 +32,22 @@ namespace Mosa.Compiler.Metadata.Signatures
 		public SigType[] GenericArguments { get; private set; }
 
 		#endregion Properties
+
+		#region Construction
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="GenericInstSigType"/> class.
+		/// </summary>
+		/// <param name="baseType">Type of the base.</param>
+		/// <param name="genericArguments">The generic args.</param>
+		internal GenericInstSigType(TypeSigType baseType, SigType[] genericArguments) :
+			base(CilElementType.GenericInst)
+		{
+			BaseType = baseType;
+			GenericArguments = genericArguments;
+		}
+
+		#endregion Construction
 
 		#region SigType Overrides
 

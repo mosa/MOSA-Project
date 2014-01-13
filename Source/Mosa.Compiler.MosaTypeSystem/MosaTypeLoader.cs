@@ -465,7 +465,6 @@ namespace Mosa.Compiler.MosaTypeSystem
 			type.SetOpenGeneric();
 
 			resolver.AddType(assembly, token, type);
-
 		}
 
 		private void LoadTypeMethodsAndParameters(Token token, IList<TypeInfo> typeInfos)
@@ -616,13 +615,13 @@ namespace Mosa.Compiler.MosaTypeSystem
 			{
 				case CilElementType.Class: return resolver.GetTypeByToken(assembly, (sigType as TypeSigType).Token);
 				case CilElementType.ValueType: goto case CilElementType.Class;
-				case CilElementType.GenericInst: return resolver.GetTypeByToken(assembly, (sigType as GenericInstSigType).BaseType.Token);
 				case CilElementType.Var: return resolver.GetVarType((sigType as VarSigType).Index);
 				case CilElementType.MVar: return resolver.GetMVarType((sigType as MVarSigType).Index);
 				case CilElementType.Ptr: return resolver.GetUnmanagedPointerType(GetMosaType((sigType as PtrSigType).ElementType));
 				case CilElementType.ByRef: return resolver.GetManagedPointerType(GetMosaType((sigType as RefSigType).ElementType));
 				case CilElementType.Array: return resolver.GetArrayType(GetMosaType((sigType as ArraySigType).ElementType));
 				case CilElementType.SZArray: return resolver.GetArrayType(GetMosaType((sigType as SZArraySigType).ElementType));
+				case CilElementType.GenericInst: return CreateGenericInstance(sigType as GenericInstSigType, Token.Zero);
 				default: break;
 			}
 
@@ -724,8 +723,8 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 			var row = metadataProvider.ReadTypeSpecRow(token);
 			var signature = GetTypeSpecSignature(row.SignatureBlob);
-			var genericSig = (signature.Type as GenericInstSigType);
 
+			var genericSig = signature.Type as GenericInstSigType;
 			if (genericSig == null)
 			{
 				var type = GetMosaType(signature.Type);
@@ -733,9 +732,19 @@ namespace Mosa.Compiler.MosaTypeSystem
 				return;
 			}
 
-			var genericBaseType = GetMosaType(signature.Type);
+			CreateGenericInstance(genericSig, token);
+		}
 
-			List<MosaType> genericParamTypes = new List<MosaType>();
+		//private MosaType CreateGenericInstance(TypeSpecSignature signature)
+		//{
+		//	return CreateGenericInstance(signature, Token.Zero);
+		//}
+
+		private MosaType CreateGenericInstance(GenericInstSigType genericSig, Token token)
+		{
+			var genericBaseType = GetMosaType(genericSig.BaseType);
+
+			List<MosaType> genericParamTypes = new List<MosaType>(genericSig.GenericArguments.Length);
 
 			foreach (var genericParam in genericSig.GenericArguments)
 			{
@@ -745,10 +754,14 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 			var genericType = resolver.ResolveGenericType(genericBaseType, genericParamTypes);
 
-			resolver.AddType(assembly, token, genericType);
+			if (!token.IsZero)
+			{
+				resolver.AddType(assembly, token, genericType);
+			}
+
 			genericTypes.Add(genericType);
 
-			return;
+			return genericType;
 		}
 
 		private void LoadMethodSpecs()

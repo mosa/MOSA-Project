@@ -18,6 +18,11 @@ namespace Mosa.Compiler.Metadata.Signatures
 	/// </summary>
 	public class LocalVariableSignature : Signature
 	{
+		/// <summary>
+		/// Holds the signature types of all local variables in order of definition.
+		/// </summary>
+		/// <value>The types.</value>
+		public VariableSignature[] Locals { get; private set; }
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="LocalVariableSignature" /> class.
@@ -37,12 +42,6 @@ namespace Mosa.Compiler.Metadata.Signatures
 			: base(provider, token)
 		{
 		}
-
-		/// <summary>
-		/// Holds the signature types of all local variables in order of definition.
-		/// </summary>
-		/// <value>The types.</value>
-		public VariableSignature[] Locals { get; private set; }
 
 		/// <summary>
 		/// Parses the signature.

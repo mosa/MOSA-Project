@@ -246,7 +246,7 @@ namespace Mosa.Compiler.Linker
 		/// </summary>
 		protected virtual void LayoutSymbols()
 		{
-			foreach (LinkerSymbol symbol in Symbols)
+			foreach (var symbol in Symbols)
 			{
 				LinkerSection ls = GetSection(symbol.SectionKind);
 				symbol.Offset = ls.Offset + symbol.SectionAddress;
@@ -322,7 +322,7 @@ namespace Mosa.Compiler.Linker
 		/// <param name="targetAddress">The virtualAddress of the member.</param>
 		private void PatchRequests(IEnumerable<LinkRequest> requests, long targetAddress)
 		{
-			foreach (LinkRequest request in requests)
+			foreach (var request in requests)
 			{
 				var symbol = GetSymbol(request.SymbolName);
 

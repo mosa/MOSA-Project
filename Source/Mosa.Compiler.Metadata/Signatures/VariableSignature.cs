@@ -15,6 +15,26 @@ namespace Mosa.Compiler.Metadata.Signatures
 	public class VariableSignature : Signature
 	{
 		/// <summary>
+		/// Gets the type.
+		/// </summary>
+		/// <value>The type.</value>
+		public SigType Type { get; private set; }
+
+		/// <summary>
+		/// Gets the custom mods.
+		/// </summary>
+		/// <value>The custom mods.</value>
+		public CustomMod[] CustomMods { get; private set; }
+
+		/// <summary>
+		/// Gets the modifier.
+		/// </summary>
+		/// <value>
+		/// The modifier.
+		/// </value>
+		public CilElementType Modifier { get; private set; }
+
+		/// <summary>
 		/// Initializes a new instance of the <see cref="VariableSignature"/> class.
 		/// </summary>
 		/// <param name="reader">The reader.</param>
@@ -32,26 +52,6 @@ namespace Mosa.Compiler.Metadata.Signatures
 			: base(provider, token)
 		{
 		}
-
-		/// <summary>
-		/// Gets the custom mods.
-		/// </summary>
-		/// <value>The custom mods.</value>
-		public CustomMod[] CustomMods { get; private set; }
-
-		/// <summary>
-		/// Gets the modifier.
-		/// </summary>
-		/// <value>
-		/// The modifier.
-		/// </value>
-		public CilElementType Modifier { get; private set; }
-
-		/// <summary>
-		/// Gets the type.
-		/// </summary>
-		/// <value>The type.</value>
-		public SigType Type { get; private set; }
 
 		protected override void ParseSignature(SignatureReader reader)
 		{
@@ -85,8 +85,8 @@ namespace Mosa.Compiler.Metadata.Signatures
 			StringBuilder sb = new StringBuilder();
 			sb.Append(base.ToString() + " ");
 			sb.Append(Type.ToString());
-			sb.Append(" Modifier: ");
-			sb.Append(Modifier.ToString());
+			//sb.Append(" Modifier: ");
+			//sb.Append(Modifier.ToString());
 			return sb.ToString();
 		}
 	}

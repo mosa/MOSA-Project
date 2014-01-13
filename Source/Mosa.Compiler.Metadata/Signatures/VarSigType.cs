@@ -14,6 +14,16 @@ namespace Mosa.Compiler.Metadata.Signatures
 	/// </summary>
 	public sealed class VarSigType : SigType
 	{
+		#region Properties
+
+		/// <summary>
+		/// Gets the generic type parameter index.
+		/// </summary>
+		/// <value>The index.</value>
+		public int Index { get; private set; }
+
+		#endregion Properties
+
 		#region Construction
 
 		/// <summary>
@@ -27,16 +37,6 @@ namespace Mosa.Compiler.Metadata.Signatures
 		}
 
 		#endregion Construction
-
-		#region Properties
-
-		/// <summary>
-		/// Gets the generic type parameter index.
-		/// </summary>
-		/// <value>The index.</value>
-		public int Index { get; private set; }
-
-		#endregion Properties
 
 		#region SigType Overrides
 
