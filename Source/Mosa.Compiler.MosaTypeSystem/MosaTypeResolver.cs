@@ -519,6 +519,9 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public MosaType CreateGenericType(MosaType genericBaseType, List<MosaType> genericTypes)
 		{
+			Debug.Assert(genericBaseType.AreMethodsAssigned);
+			Debug.Assert(genericBaseType.AreFieldsAssigned);
+
 			var generic = new MosaType(GenericAssembly);
 
 			generic.GenericBaseType = genericBaseType;
@@ -553,7 +556,8 @@ namespace Mosa.Compiler.MosaTypeSystem
 			generic.ElementType = genericBaseType.ElementType;
 			generic.IsNativeSignedInteger = genericBaseType.IsNativeSignedInteger;
 			generic.IsNativeUnsignedInteger = genericBaseType.IsNativeUnsignedInteger;
-
+			generic.AreMethodsAssigned = true;
+			generic.AreFieldsAssigned = true;
 			generic.SetOpenGeneric();
 
 			var genericTypeNames = new StringBuilder();

@@ -86,7 +86,7 @@ namespace Mosa.Compiler.Metadata.Signatures
 			}
 			else
 			{
-				sb.Append(this.ElementType.ToSymbolPart());
+				sb.Append(ElementType.ToSymbolPart());
 				sb.Append('*');
 			}
 

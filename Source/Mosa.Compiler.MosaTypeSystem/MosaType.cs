@@ -139,6 +139,10 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public bool IsOpenGenericType { get; internal set; }
 
+		internal bool AreMethodsAssigned { get; set; }
+
+		internal bool AreFieldsAssigned { get; set; }
+
 		public MosaType(MosaAssembly assembly)
 		{
 			Assembly = assembly;
@@ -176,6 +180,9 @@ namespace Mosa.Compiler.MosaTypeSystem
 			CustomAttributes = new List<MosaAttribute>();
 			GenericParameterTypes = new List<MosaType>();
 			InheritanceOveride = new Dictionary<MosaMethod, MosaMethod>();
+
+			AreMethodsAssigned = false;
+			AreFieldsAssigned = false;
 		}
 
 		public void SetFlags()

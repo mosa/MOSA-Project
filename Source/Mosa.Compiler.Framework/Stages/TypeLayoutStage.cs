@@ -12,7 +12,6 @@ using Mosa.Compiler.Common;
 using Mosa.Compiler.Linker;
 using Mosa.Compiler.MosaTypeSystem;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 
 namespace Mosa.Compiler.Framework.Stages
@@ -254,6 +253,5 @@ namespace Mosa.Compiler.Framework.Stages
 				}
 			}
 		}
-
 	}
 }

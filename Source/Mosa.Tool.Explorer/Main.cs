@@ -94,6 +94,8 @@ namespace Mosa.Tool.Explorer
 
 		protected void UpdateTree()
 		{
+			//TODO: Refactor - Code was copied in TinySimulator
+
 			treeView.BeginUpdate();
 			treeView.Nodes.Clear();
 
@@ -152,6 +154,7 @@ namespace Mosa.Tool.Explorer
 							genericParameterNodes.Nodes.Add(GenericParameterNode);
 						}
 					}
+
 					if (type.Interfaces.Count != 0)
 					{
 						TreeNode interfacesNodes = new TreeNode("Interfaces");

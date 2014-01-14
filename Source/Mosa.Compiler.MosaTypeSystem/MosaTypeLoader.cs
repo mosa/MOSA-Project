@@ -95,6 +95,16 @@ namespace Mosa.Compiler.MosaTypeSystem
 		/// </summary>
 		private Dictionary<int, string> userStrings;
 
+		/// <summary>
+		/// The type infos
+		/// </summary>
+		private List<TypeInfo> typeInfos;
+
+		/// <summary>
+		/// The type infos lookup
+		/// </summary>
+		private Dictionary<MosaType, TypeInfo> typeInfosLookup;
+
 		#endregion Data members
 
 		#region Constants
@@ -140,27 +150,50 @@ namespace Mosa.Compiler.MosaTypeSystem
 			this.mapGenericParam = new Dictionary<Token, MosaGenericParameter>();
 			this.genericTypes = new List<MosaType>();
 			this.strings = new Dictionary<HeapIndexToken, string>();
+			this.typeInfos = new List<TypeInfo>(GetTableRows(TableType.TypeDef));
+			this.typeInfosLookup = new Dictionary<MosaType, TypeInfo>(typeInfos.Count);
 
 			assembly = new MosaAssembly();
 			assembly.Name = metadataModule.Name;
 
 			resolver.AddAssembly(assembly);
-
 			resolver.AddUserStringHeap(assembly, metadataProvider.GetHeap(HeapType.UserString) as UserStringHeap);
 
-			// Load all types from the assembly into the type array
+			// Resolve all type refernces
 			LoadTypeReferences();
+
+			// Get type info - speeds up processing
+			GetTypeInfo();
+
+			// Loads all types (excluding generic instances)
 			LoadTypes();
+
+			// Loads all methods
+			LoadMethods();
+
+			// Loads all fields
+			LoadFields();
 			LoadFieldLayout();
 			LoadFieldData();
+
+			// Load generic types
 			LoadTypeSpecs();
-			LoadMemberReferences();
+
+			// Load method types
 			LoadMethodSpecs();
+
+			// Resolves all member references - must be after types include generic types
+			LoadMemberReferences();
+
+			// Resolves generic parameters - must be after all methods and fields are loaded
 			LoadGenericParams();
-			LoadCustomAttributes();
+
+			// Loads interfaces -- TODO
 			LoadInterfaces();
+
+			LoadCustomAttributes();
 			LoadGenericParamContraints();
-			MethodImplementation();
+			LoadMethodImplementation();
 			LoadExternals();
 
 			if (metadataModule.ModuleType == ModuleType.Executable)
@@ -180,6 +213,8 @@ namespace Mosa.Compiler.MosaTypeSystem
 			this.internalAssembly = null;
 			this.genericTypes = null;
 			this.strings = null;
+			this.typeInfos = null;
+			this.typeInfosLookup = null;
 		}
 
 		#region Internals
@@ -345,13 +380,8 @@ namespace Mosa.Compiler.MosaTypeSystem
 			}
 		}
 
-		/// <summary>
-		/// Loads all types from the given metadata module.
-		/// </summary>
-		private void LoadTypes()
+		private void GetTypeInfo()
 		{
-			var typeInfos = new List<TypeInfo>(GetTableRows(TableType.TypeDef));
-
 			var maxTypeDef = GetMaxTokenValue(TableType.TypeDef);
 			var maxMethod = GetMaxTokenValue(TableType.MethodDef);
 			var maxField = GetMaxTokenValue(TableType.Field);
@@ -414,19 +444,55 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 				typeDefRow = nextTypeDefRow;
 			}
+		}
+
+		private void LoadTypes()
+		{
+			var maxTypeDef = GetMaxTokenValue(TableType.TypeDef);
 
 			foreach (var token in new Token(TableType.TypeDef, 1).Upto(maxTypeDef))
 			{
-				LoadType(token, typeInfos);
-			}
-
-			foreach (var token in new Token(TableType.TypeDef, 1).Upto(maxTypeDef))
-			{
-				LoadTypeMethodsAndParameters(token, typeInfos);
+				LoadType(token);
 			}
 		}
 
-		private void LoadType(Token token, IList<TypeInfo> typeInfos)
+		private void LoadMethods()
+		{
+			var maxTypeDef = GetMaxTokenValue(TableType.TypeDef);
+
+			foreach (var token in new Token(TableType.TypeDef, 1).Upto(maxTypeDef))
+			{
+				var type = resolver.GetTypeByToken(assembly, token);
+
+				var info = typeInfos[(int)token.RID - 1];
+
+				LoadMethods(type, info.TypeDefRow.MethodList, info.MaxMethod);
+			}
+		}
+
+		private void ForwardLoadMethodsAndFields(MosaType type)
+		{
+			var info = typeInfosLookup[type];
+
+			LoadMethods(type, info.TypeDefRow.MethodList, info.MaxMethod);
+			LoadFields(type, info.TypeDefRow.FieldList, info.MaxField);
+		}
+
+		private void LoadFields()
+		{
+			var maxTypeDef = GetMaxTokenValue(TableType.TypeDef);
+
+			foreach (var token in new Token(TableType.TypeDef, 1).Upto(maxTypeDef))
+			{
+				var type = resolver.GetTypeByToken(assembly, token);
+
+				var info = typeInfos[(int)token.RID - 1];
+
+				LoadFields(type, info.TypeDefRow.FieldList, info.MaxField);
+			}
+		}
+
+		private void LoadType(Token token)
 		{
 			if (resolver.CheckTypeExists(assembly, token))
 				return;
@@ -437,7 +503,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 			{
 				switch (info.TypeDefRow.Extends.Table)
 				{
-					case TableType.TypeDef: LoadType(info.TypeDefRow.Extends, typeInfos); break;
+					case TableType.TypeDef: LoadType(info.TypeDefRow.Extends); break;
 					case TableType.TypeSpec: LoadTypeSpec(info.TypeDefRow.Extends); break;
 					case TableType.TypeRef: break;
 					default: throw new AssemblyLoadException("unexpected token genericBaseType.");
@@ -465,21 +531,16 @@ namespace Mosa.Compiler.MosaTypeSystem
 			type.SetOpenGeneric();
 
 			resolver.AddType(assembly, token, type);
-		}
 
-		private void LoadTypeMethodsAndParameters(Token token, IList<TypeInfo> typeInfos)
-		{
-			var type = resolver.GetTypeByToken(assembly, token);
-
-			var info = typeInfos[(int)token.RID - 1];
-
-			LoadMethods(type, info.TypeDefRow.MethodList, info.MaxMethod);
-			LoadFields(type, info.TypeDefRow.FieldList, info.MaxField);
+			typeInfosLookup.Add(type, info);
 		}
 
 		private void LoadMethods(MosaType declaringType, Token first, Token last)
 		{
 			if (first.RID >= last.RID)
+				return;
+
+			if (declaringType.AreMethodsAssigned)
 				return;
 
 			var maxMethod = GetMaxTokenValue(TableType.MethodDef);
@@ -577,10 +638,15 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 				methodDef = nextMethodDef;
 			}
+
+			declaringType.AreMethodsAssigned = true;
 		}
 
 		private void LoadFields(MosaType declaringType, Token first, Token last)
 		{
+			if (declaringType.AreFieldsAssigned)
+				return;
+
 			var maxLayout = GetMaxTokenValue(TableType.FieldLayout);
 			var tokenLayout = new Token(TableType.FieldLayout, 1);
 
@@ -607,6 +673,8 @@ namespace Mosa.Compiler.MosaTypeSystem
 				declaringType.Fields.Add(field);
 				resolver.AddField(assembly, token, field);
 			}
+
+			declaringType.AreFieldsAssigned = true;
 		}
 
 		private MosaType GetMosaType(SigType sigType)
@@ -735,11 +803,6 @@ namespace Mosa.Compiler.MosaTypeSystem
 			CreateGenericInstance(genericSig, token);
 		}
 
-		//private MosaType CreateGenericInstance(TypeSpecSignature signature)
-		//{
-		//	return CreateGenericInstance(signature, Token.Zero);
-		//}
-
 		private MosaType CreateGenericInstance(GenericInstSigType genericSig, Token token)
 		{
 			var genericBaseType = GetMosaType(genericSig.BaseType);
@@ -751,6 +814,9 @@ namespace Mosa.Compiler.MosaTypeSystem
 				var genericParamType = GetMosaType(genericParam);
 				genericParamTypes.Add(genericParamType);
 			}
+
+			// resolve all methods and fields of genericBaseType
+			ForwardLoadMethodsAndFields(genericBaseType);
 
 			var genericType = resolver.ResolveGenericType(genericBaseType, genericParamTypes);
 
@@ -1114,7 +1180,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 			return result;
 		}
 
-		private void MethodImplementation()
+		private void LoadMethodImplementation()
 		{
 			var maxToken = GetMaxTokenValue(TableType.MethodImpl);
 			foreach (var token in new Token(TableType.MethodImpl, 1).Upto(maxToken))
