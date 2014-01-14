@@ -152,7 +152,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private void Patch(MosaMethod targetMethod, MosaMethod method)
 		{
-			Trace(InternalTrace.CompilerEvent.Plug, targetMethod.FullName + " with " + method.FullName);
+			Trace(InternalTrace.CompilerEvent.Plug, targetMethod.MethodName + " with " + method.MethodName);
 			compiler.PlugSystem.CreatePlug(method, targetMethod);
 		}
 

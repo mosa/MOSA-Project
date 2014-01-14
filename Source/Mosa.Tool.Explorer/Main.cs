@@ -581,7 +581,7 @@ namespace Mosa.Tool.Explorer
 			if (node == null)
 				return;
 
-			toolStripStatusLabel1.Text = node.Type.FullName;
+			toolStripStatusLabel1.Text = node.Type.MethodName;
 
 			if (cbLabels.SelectedIndex == 0)
 			{

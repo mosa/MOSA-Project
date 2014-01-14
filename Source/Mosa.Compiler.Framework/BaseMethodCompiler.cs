@@ -193,7 +193,7 @@ namespace Mosa.Compiler.Framework
 		/// <returns>A stream object, which can be used to store emitted instructions.</returns>
 		public virtual Stream RequestCodeStream()
 		{
-			return Linker.Allocate(Method.FullName, SectionKind.Text, 0, 0);
+			return Linker.Allocate(Method.MethodName, SectionKind.Text, 0, 0);
 		}
 
 		/// <summary>

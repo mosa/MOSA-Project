@@ -61,7 +61,7 @@ namespace Mosa.Platform.x86.Stages
 
 				foreach (var method in type.Methods)
 				{
-					var symbol = linker.GetSymbol(method.FullName);
+					var symbol = linker.GetSymbol(method.MethodName);
 					if (symbol != null)
 					{
 						table.Add(symbol);
@@ -118,13 +118,13 @@ namespace Mosa.Platform.x86.Stages
 			{
 				int size = 3 * typeLayout.NativePointerSize;
 
-				string section = method.FullName + "$mdtable";
+				string section = method.MethodName + "$mdtable";
 
 				using (var stream = linker.Allocate(section, SectionKind.ROData, size, typeLayout.NativePointerAlignment))
 				{
 					// Pointer to Exception Handler Table
 					// TODO: If there is no exception clause table, set to 0 and do not involve linker
-					linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuiltInPatch.I4, section, 0, 0, method.FullName + "$etable", 0);
+					linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuiltInPatch.I4, section, 0, 0, method.MethodName + "$etable", 0);
 					stream.Position += typeLayout.NativePointerSize;
 
 					// GC tracking info (not implemented yet)

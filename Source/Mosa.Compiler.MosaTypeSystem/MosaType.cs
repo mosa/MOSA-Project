@@ -53,6 +53,8 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public IList<MosaAttribute> CustomAttributes { get; internal set; }
 
+		public bool IsStruct { get; internal set; }
+
 		public bool IsUnsignedByte { get; internal set; }
 
 		public bool IsSignedByte { get; internal set; }
@@ -143,6 +145,8 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		internal bool AreFieldsAssigned { get; set; }
 
+		internal bool AreInterfacesAssigned { get; set; }
+
 		public MosaType(MosaAssembly assembly)
 		{
 			Assembly = assembly;
@@ -183,19 +187,17 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 			AreMethodsAssigned = false;
 			AreFieldsAssigned = false;
+			AreInterfacesAssigned = false;
 		}
 
 		public void SetFlags()
 		{
-			IsValueType = (BaseType != null && BaseType.IsValueType) || FullName == "System.ValueType";
+			IsObject = (BaseType != null && BaseType.IsObject) || FullName == "System.Object";
+			IsValueType = FullName == "System.ValueType";
+			IsStruct = (BaseType != null && BaseType.IsValueType);
 			IsDelegate = (BaseType != null && BaseType.IsDelegate) || FullName == "System.Delegate";
 			IsEnum = (BaseType != null && BaseType.IsEnum) || FullName == "System.Enum";
-			IsObject = (BaseType != null && BaseType.IsObject) || FullName == "System.Object";
 			IsModule = Name == "<Module>" && Namespace == string.Empty;
-
-			//"System.IntPtr"
-			//"System.UIntPtr"
-			//"System.TypedByRef"
 		}
 
 		public override string ToString()

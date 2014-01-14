@@ -519,8 +519,8 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public MosaType CreateGenericType(MosaType genericBaseType, List<MosaType> genericTypes)
 		{
-			Debug.Assert(genericBaseType.AreMethodsAssigned);
-			Debug.Assert(genericBaseType.AreFieldsAssigned);
+			//Debug.Assert(genericBaseType.AreMethodsAssigned);
+			//Debug.Assert(genericBaseType.AreFieldsAssigned);
 
 			var generic = new MosaType(GenericAssembly);
 
@@ -556,8 +556,9 @@ namespace Mosa.Compiler.MosaTypeSystem
 			generic.ElementType = genericBaseType.ElementType;
 			generic.IsNativeSignedInteger = genericBaseType.IsNativeSignedInteger;
 			generic.IsNativeUnsignedInteger = genericBaseType.IsNativeUnsignedInteger;
-			generic.AreMethodsAssigned = true;
-			generic.AreFieldsAssigned = true;
+			//generic.AreMethodsAssigned = false;
+			//generic.AreFieldsAssigned = false;
+			//generic.AreInterfacesAssigned = false;
 			generic.SetOpenGeneric();
 
 			var genericTypeNames = new StringBuilder();
@@ -571,34 +572,71 @@ namespace Mosa.Compiler.MosaTypeSystem
 			genericTypeNames.Length = genericTypeNames.Length - 2;
 			generic.FullName = generic.Namespace + "." + generic.Name + '<' + genericTypeNames.ToString() + '>';
 
-			foreach (var m in genericBaseType.Methods)
-			{
-				var cloneMethod = CreateGenericMethod(m, generic, null);
-				generic.Methods.Add(cloneMethod);
-			}
-
-			foreach (var f in genericBaseType.Fields)
-			{
-				var cloneField = ResolveGenericField(f, generic);
-				generic.Fields.Add(cloneField);
-			}
-
-			foreach (var m in genericBaseType.Interfaces)
-			{
-				if (m.GenericParameterTypes.Count == 0)
-				{
-					generic.Interfaces.Add(m);
-				}
-				else
-				{
-					var genericInterface = ResolveGenericType(m.GenericBaseType, genericTypes);
-					generic.Interfaces.Add(genericInterface);
-				}
-			}
+			AddGenericMethods(generic);
+			AddGenericFields(generic);
+			AddGenericInterfaces(generic);
 
 			generic.SetFlags();
 
 			return generic;
+		}
+
+		internal void AddGenericMethods(MosaType generic)
+		{
+			if (generic.AreMethodsAssigned)
+				return;
+
+			if (!generic.GenericBaseType.AreMethodsAssigned)
+				return;
+
+			generic.AreMethodsAssigned = true;
+
+			foreach (var m in generic.GenericBaseType.Methods)
+			{
+				var cloneMethod = CreateGenericMethod(m, generic, null);
+				generic.Methods.Add(cloneMethod);
+			}
+		}
+
+		internal void AddGenericFields(MosaType generic)
+		{
+			if (generic.AreFieldsAssigned)
+				return;
+
+			if (!generic.GenericBaseType.AreFieldsAssigned)
+				return;
+
+			generic.AreFieldsAssigned = true;
+
+			foreach (var f in generic.GenericBaseType.Fields)
+			{
+				var cloneField = ResolveGenericField(f, generic);
+				generic.Fields.Add(cloneField);
+			}
+		}
+
+		internal void AddGenericInterfaces(MosaType generic)
+		{
+			if (generic.AreInterfacesAssigned)
+				return;
+
+			if (!generic.GenericBaseType.AreInterfacesAssigned)
+				return;
+
+			generic.AreInterfacesAssigned = true;
+
+			foreach (var @interface in generic.GenericBaseType.Interfaces)
+			{
+				if (@interface.GenericParameterTypes.Count == 0)
+				{
+					generic.Interfaces.Add(@interface);
+				}
+				else
+				{
+					var genericInterface = ResolveGenericType(@interface.GenericBaseType, generic.GenericParameterTypes);
+					generic.Interfaces.Add(genericInterface);
+				}
+			}
 		}
 
 		private MosaMethod FindGenericMethod(MosaMethod genericBaseMethod, List<MosaType> methodGenericsTypes)

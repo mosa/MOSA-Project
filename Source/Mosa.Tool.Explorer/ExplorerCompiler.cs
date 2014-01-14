@@ -38,7 +38,7 @@ namespace Mosa.Tool.Explorer
 				new TypeInitializerSchedulerStage(),
 				new TypeLayoutStage(),
 
-				//new LinkerFinalizationStage(),
+				new LinkerFinalizationStage(),
 			});
 
 			architecture.ExtendCompilerPipeline(Pipeline);

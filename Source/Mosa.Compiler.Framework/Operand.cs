@@ -624,7 +624,7 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		public static Operand CreateSymbolFromMethod(TypeSystem typeSystem, MosaMethod method)
 		{
-			Operand operand = CreateUnmanagedSymbolPointer(typeSystem, method.FullName);
+			Operand operand = CreateUnmanagedSymbolPointer(typeSystem, method.MethodName);
 			operand.Method = method;
 			return operand;
 		}
@@ -1024,6 +1024,5 @@ namespace Mosa.Compiler.Framework
 		}
 
 		#endregion Object Overrides
-
 	}
 }

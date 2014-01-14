@@ -6,6 +6,7 @@
  * Authors:
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  *  Kai P. Reisert <kpreisert@googlemail.com>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 using Mosa.Compiler.Framework;
@@ -98,7 +99,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <summary>
 		/// The multiboot method
 		/// </summary>
-		MosaMethod multibootMethod;
+		private MosaMethod multibootMethod;
 
 		#endregion Data members
 
@@ -141,7 +142,7 @@ namespace Mosa.Platform.x86.Stages
 			if (multibootMethod == null)
 			{
 				multibootMethod = compiler.CreateLinkerMethod("MultibootInit");
-				linker.EntryPoint = linker.GetSymbol(multibootMethod.FullName);
+				linker.EntryPoint = linker.GetSymbol(multibootMethod.MethodName);
 				WriteMultibootHeader();
 				return;
 			}
@@ -233,7 +234,7 @@ namespace Mosa.Platform.x86.Stages
 					bw.Write(load_end_addr);
 					bw.Write(bss_end_addr);
 
-					linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuiltInPatch.I4, MultibootHeaderSymbolName, (int)stream.Position, 0, multibootMethod.FullName, 0);
+					linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuiltInPatch.I4, MultibootHeaderSymbolName, (int)stream.Position, 0, multibootMethod.MethodName, 0);
 					bw.Write((int)0);
 
 					bw.Write(VideoMode);

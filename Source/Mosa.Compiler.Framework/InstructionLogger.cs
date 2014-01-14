@@ -7,11 +7,11 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using Mosa.Compiler.Framework;
+using Mosa.Compiler.MosaTypeSystem;
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Mosa.Compiler.Framework;
-using Mosa.Compiler.MosaTypeSystem;
 
 namespace Mosa.Compiler.InternalTrace
 {
@@ -44,7 +44,7 @@ namespace Mosa.Compiler.InternalTrace
 
 			StringBuilder text = new StringBuilder();
 
-			text.AppendLine(String.Format("IR representation of method {0} after stage {1}:", method.FullName, stage));
+			text.AppendLine(String.Format("IR representation of method {0} after stage {1}:", method.MethodName, stage));
 			text.AppendLine();
 
 			if (basicBlocks.Count > 0)

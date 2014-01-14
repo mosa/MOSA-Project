@@ -101,9 +101,9 @@ namespace Mosa.Compiler.MosaTypeSystem
 		private List<TypeInfo> typeInfos;
 
 		/// <summary>
-		/// The type infos lookup
+		/// The delayed generic
 		/// </summary>
-		private Dictionary<MosaType, TypeInfo> typeInfosLookup;
+		private Queue<MosaType> delayedGeneric;
 
 		#endregion Data members
 
@@ -151,7 +151,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 			this.genericTypes = new List<MosaType>();
 			this.strings = new Dictionary<HeapIndexToken, string>();
 			this.typeInfos = new List<TypeInfo>(GetTableRows(TableType.TypeDef));
-			this.typeInfosLookup = new Dictionary<MosaType, TypeInfo>(typeInfos.Count);
+			this.delayedGeneric = new Queue<MosaType>();
 
 			assembly = new MosaAssembly();
 			assembly.Name = metadataModule.Name;
@@ -179,20 +179,24 @@ namespace Mosa.Compiler.MosaTypeSystem
 			// Load generic types
 			LoadTypeSpecs();
 
+			// Loads interfaces
+			LoadInterfaces();
+
 			// Load method types
 			LoadMethodSpecs();
 
-			// Resolves all member references - must be after types include generic types
+			// Resolve Delayed Generics
+			ResolveDelayedGenerics();
+
+			// Resolves all member references
 			LoadMemberReferences();
 
-			// Resolves generic parameters - must be after all methods and fields are loaded
+			// Loads generic parameters
 			LoadGenericParams();
 
-			// Loads interfaces -- TODO
-			LoadInterfaces();
 
-			LoadCustomAttributes();
 			LoadGenericParamContraints();
+			LoadCustomAttributes();
 			LoadMethodImplementation();
 			LoadExternals();
 
@@ -214,7 +218,6 @@ namespace Mosa.Compiler.MosaTypeSystem
 			this.genericTypes = null;
 			this.strings = null;
 			this.typeInfos = null;
-			this.typeInfosLookup = null;
 		}
 
 		#region Internals
@@ -321,8 +324,10 @@ namespace Mosa.Compiler.MosaTypeSystem
 			public TypeDefRow TypeDefRow;
 			public Token NestedClass;
 			public Token EnclosingClass;
-			public Token MaxMethod;
-			public Token MaxField;
+			public Token EndMethod;
+			public Token EndField;
+			public Token StartInterface;
+			public Token EndInterface;
 			public int Size;
 			public short PackingSize;
 		}
@@ -387,12 +392,16 @@ namespace Mosa.Compiler.MosaTypeSystem
 			var maxField = GetMaxTokenValue(TableType.Field);
 			var maxLayout = GetMaxTokenValue(TableType.ClassLayout);
 			var maxNestedClass = GetMaxTokenValue(TableType.NestedClass);
+			var maxInterface = GetMaxTokenValue(TableType.InterfaceImpl);
 
-			var tokenLayout = new Token(TableType.ClassLayout, 1);
-			ClassLayoutRow layoutRow = (maxLayout.RID != 0) ? metadataProvider.ReadClassLayoutRow(tokenLayout) : null;
+			var classLayoutToken = new Token(TableType.ClassLayout, 1);
+			ClassLayoutRow layoutClassRow = (maxLayout.RID != 0) ? metadataProvider.ReadClassLayoutRow(classLayoutToken) : null;
 
-			var tokenNested = new Token(TableType.NestedClass, 1);
-			NestedClassRow nestedRow = (maxNestedClass.RID != 0) ? metadataProvider.ReadNestedClassRow(tokenNested) : null;
+			var nestedtoken = new Token(TableType.NestedClass, 1);
+			NestedClassRow nestedRow = (maxNestedClass.RID != 0) ? metadataProvider.ReadNestedClassRow(nestedtoken) : null;
+
+			var interfaceToken = new Token(TableType.InterfaceImpl, 1);
+			InterfaceImplRow interfaceRow = (maxInterface.RID != 0) ? metadataProvider.ReadInterfaceImplRow(interfaceToken) : null;
 
 			TypeDefRow nextTypeDefRow = null;
 			var typeDefRow = metadataProvider.ReadTypeDefRow(new Token(TableType.TypeDef, 1));
@@ -404,42 +413,59 @@ namespace Mosa.Compiler.MosaTypeSystem
 				info.TypeDefRow = typeDefRow;
 				info.NestedClass = (nestedRow != null && nestedRow.NestedClass == token) ? nestedRow.NestedClass : Token.Zero;
 				info.EnclosingClass = (nestedRow != null && nestedRow.NestedClass == token) ? nestedRow.EnclosingClass : Token.Zero;
-				info.Size = (layoutRow != null && layoutRow.Parent == token) ? layoutRow.ClassSize : 0;
-				info.PackingSize = (layoutRow != null && layoutRow.Parent == token) ? layoutRow.PackingSize : (short)0;
+				info.Size = (layoutClassRow != null && layoutClassRow.Parent == token) ? layoutClassRow.ClassSize : 0;
+				info.PackingSize = (layoutClassRow != null && layoutClassRow.Parent == token) ? layoutClassRow.PackingSize : (short)0;
+				info.StartInterface = (interfaceRow != null && interfaceRow.Class == token) ? interfaceToken : Token.Zero;
+				info.EndInterface = info.StartInterface;
 
 				if (token.RID < maxTypeDef.RID)
 				{
 					nextTypeDefRow = metadataProvider.ReadTypeDefRow(token.NextRow);
 
-					info.MaxField = nextTypeDefRow.FieldList;
-					info.MaxMethod = nextTypeDefRow.MethodList;
+					info.EndField = nextTypeDefRow.FieldList;
+					info.EndMethod = nextTypeDefRow.MethodList;
 
-					if (info.MaxMethod.RID > maxMethod.RID)
-						info.MaxMethod = maxMethod.NextRow;
+					if (info.EndMethod.RID > maxMethod.RID)
+						info.EndMethod = maxMethod.NextRow;
 
-					if (info.MaxField.RID > maxField.RID)
-						info.MaxField = maxField.NextRow;
+					if (info.EndField.RID > maxField.RID)
+						info.EndField = maxField.NextRow;
 				}
 				else
 				{
-					info.MaxMethod = maxMethod.NextRow;
-					info.MaxField = maxField.NextRow;
+					info.EndMethod = maxMethod.NextRow;
+					info.EndField = maxField.NextRow;
 				}
 
 				typeInfos.Add(info);
 
-				if (layoutRow != null && layoutRow.Parent == token)
-				{
-					tokenLayout = tokenLayout.NextRow;
-					if (tokenLayout.RID <= maxLayout.RID)
-						layoutRow = metadataProvider.ReadClassLayoutRow(tokenLayout);
-				}
-
 				if (nestedRow != null && nestedRow.NestedClass == token)
 				{
-					tokenNested = tokenNested.NextRow;
-					if (tokenNested.RID <= maxNestedClass.RID)
-						nestedRow = metadataProvider.ReadNestedClassRow(tokenNested);
+					nestedtoken = nestedtoken.NextRow;
+					if (nestedtoken.RID <= maxNestedClass.RID)
+						nestedRow = metadataProvider.ReadNestedClassRow(nestedtoken);
+				}
+
+				if (layoutClassRow != null && layoutClassRow.Parent == token)
+				{
+					classLayoutToken = classLayoutToken.NextRow;
+					if (classLayoutToken.RID <= maxLayout.RID)
+						layoutClassRow = metadataProvider.ReadClassLayoutRow(classLayoutToken);
+				}
+
+				while (interfaceRow != null && interfaceRow.Class == token)
+				{
+					info.EndInterface = interfaceToken;
+
+					interfaceToken = interfaceToken.NextRow;
+					if (interfaceToken.RID <= maxInterface.RID)
+					{
+						interfaceRow = metadataProvider.ReadInterfaceImplRow(interfaceToken);
+					}
+					else
+					{
+						interfaceRow = null;
+					}
 				}
 
 				typeDefRow = nextTypeDefRow;
@@ -466,16 +492,8 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 				var info = typeInfos[(int)token.RID - 1];
 
-				LoadMethods(type, info.TypeDefRow.MethodList, info.MaxMethod);
+				LoadMethods(type, info.TypeDefRow.MethodList, info.EndMethod);
 			}
-		}
-
-		private void ForwardLoadMethodsAndFields(MosaType type)
-		{
-			var info = typeInfosLookup[type];
-
-			LoadMethods(type, info.TypeDefRow.MethodList, info.MaxMethod);
-			LoadFields(type, info.TypeDefRow.FieldList, info.MaxField);
 		}
 
 		private void LoadFields()
@@ -488,7 +506,21 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 				var info = typeInfos[(int)token.RID - 1];
 
-				LoadFields(type, info.TypeDefRow.FieldList, info.MaxField);
+				LoadFields(type, info.TypeDefRow.FieldList, info.EndField);
+			}
+		}
+
+		private void LoadInterfaces()
+		{
+			var maxTypeDef = GetMaxTokenValue(TableType.TypeDef);
+
+			foreach (var token in new Token(TableType.TypeDef, 1).Upto(maxTypeDef))
+			{
+				var type = resolver.GetTypeByToken(assembly, token);
+
+				var info = typeInfos[(int)token.RID - 1];
+
+				LoadInterfaces(type, info.StartInterface, info.EndInterface);
 			}
 		}
 
@@ -531,16 +563,16 @@ namespace Mosa.Compiler.MosaTypeSystem
 			type.SetOpenGeneric();
 
 			resolver.AddType(assembly, token, type);
-
-			typeInfosLookup.Add(type, info);
 		}
 
 		private void LoadMethods(MosaType declaringType, Token first, Token last)
 		{
-			if (first.RID >= last.RID)
+			if (declaringType.AreMethodsAssigned)
 				return;
 
-			if (declaringType.AreMethodsAssigned)
+			declaringType.AreMethodsAssigned = true;
+
+			if (first.RID >= last.RID)
 				return;
 
 			var maxMethod = GetMaxTokenValue(TableType.MethodDef);
@@ -588,6 +620,9 @@ namespace Mosa.Compiler.MosaTypeSystem
 					var codeReader = new EndianAwareBinaryReader(code, Endianness.Little);
 					var header = new MethodHeader(codeReader);
 
+					method.Code = codeReader.ReadBytes(header.CodeSize);
+					method.CodeAssembly = assembly;
+
 					if (header.LocalVarSigTok.RID != 0)
 					{
 						var standAlongSigRow = metadataProvider.ReadStandAloneSigRow(header.LocalVarSigTok);
@@ -600,9 +635,6 @@ namespace Mosa.Compiler.MosaTypeSystem
 							method.LocalVariables.Add(type);
 						}
 					}
-
-					method.Code = codeReader.ReadBytes(header.CodeSize);
-					method.CodeAssembly = assembly;
 
 					foreach (var handler in header.Clauses)
 					{
@@ -639,7 +671,6 @@ namespace Mosa.Compiler.MosaTypeSystem
 				methodDef = nextMethodDef;
 			}
 
-			declaringType.AreMethodsAssigned = true;
 		}
 
 		private void LoadFields(MosaType declaringType, Token first, Token last)
@@ -647,8 +678,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 			if (declaringType.AreFieldsAssigned)
 				return;
 
-			var maxLayout = GetMaxTokenValue(TableType.FieldLayout);
-			var tokenLayout = new Token(TableType.FieldLayout, 1);
+			declaringType.AreFieldsAssigned = true;
 
 			foreach (var token in first.Upto(last.PreviousRow))
 			{
@@ -674,7 +704,6 @@ namespace Mosa.Compiler.MosaTypeSystem
 				resolver.AddField(assembly, token, field);
 			}
 
-			declaringType.AreFieldsAssigned = true;
 		}
 
 		private MosaType GetMosaType(SigType sigType)
@@ -815,9 +844,6 @@ namespace Mosa.Compiler.MosaTypeSystem
 				genericParamTypes.Add(genericParamType);
 			}
 
-			// resolve all methods and fields of genericBaseType
-			ForwardLoadMethodsAndFields(genericBaseType);
-
 			var genericType = resolver.ResolveGenericType(genericBaseType, genericParamTypes);
 
 			if (!token.IsZero)
@@ -827,7 +853,29 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 			genericTypes.Add(genericType);
 
+			if (!genericType.AreMethodsAssigned || !genericType.AreFieldsAssigned || !genericType.AreInterfacesAssigned)
+			{
+				delayedGeneric.Enqueue(genericType);
+			}
+
 			return genericType;
+		}
+
+		private void ResolveDelayedGenerics()
+		{
+			while (delayedGeneric.Count != 0)
+			{
+				var genericType = delayedGeneric.Dequeue();
+
+				resolver.AddGenericMethods(genericType);
+				resolver.AddGenericFields(genericType);
+				resolver.AddGenericInterfaces(genericType);
+
+				if (!genericType.AreMethodsAssigned || !genericType.AreFieldsAssigned || !genericType.AreInterfacesAssigned)
+				{
+					delayedGeneric.Enqueue(genericType);
+				}
+			}
 		}
 
 		private void LoadMethodSpecs()
@@ -861,47 +909,6 @@ namespace Mosa.Compiler.MosaTypeSystem
 			resolver.AddMethod(assembly, token, genericMethod);
 		}
 
-		/// <summary>
-		/// Loads the generic interfaces.
-		/// </summary>
-		private void AssignGenericInterfaces()
-		{
-			foreach (var genericType in genericTypes)
-			{
-				foreach (var type in genericType.GenericBaseType.Interfaces)
-				{
-					if (type.GenericParameterTypes.Count == 0)
-					{
-						genericType.Interfaces.Add(type);
-						continue;
-					}
-
-					// -- only needs to search generic type interfaces
-					foreach (var interfaceType in resolver.Types)
-					{
-						if (!interfaceType.IsInterface)
-							continue;
-
-						if (interfaceType.GenericBaseType == null)
-							continue;
-
-						if (genericType.GenericBaseType == interfaceType.GenericBaseType)
-						{
-							//if (SigType.Equals(GenericArguments, interfaceType.GenericArguments))
-							//{
-							//	genericType.Interfaces.Add(interfaceType);
-							//	break;
-							//}
-							continue;
-						}
-					}
-				}
-			}
-		}
-
-		/// <summary>
-		/// Loads the interfaces.
-		/// </summary>
 		private void LoadMemberReferences()
 		{
 			var maxToken = GetMaxTokenValue(TableType.MemberRef);
@@ -997,18 +1004,22 @@ namespace Mosa.Compiler.MosaTypeSystem
 			}
 		}
 
-		/// <summary>
-		/// Loads the interfaces.
-		/// </summary>
-		private void LoadInterfaces()
+		private void LoadInterfaces(MosaType declaringType, Token first, Token last)
 		{
-			var maxToken = GetMaxTokenValue(TableType.InterfaceImpl);
+			if (declaringType.AreInterfacesAssigned)
+				return;
 
-			foreach (var token in new Token(TableType.InterfaceImpl, 1).Upto(maxToken))
+			declaringType.AreInterfacesAssigned = true;
+
+			if (first.RID == 0)
+				return;
+
+			foreach (var token in first.Upto(last))
 			{
 				var row = metadataProvider.ReadInterfaceImplRow(token);
 
-				var declaringType = resolver.GetTypeByToken(assembly, row.Class);
+				Debug.Assert(resolver.GetTypeByToken(assembly, row.Class) == declaringType);
+
 				var interfaceType = resolver.GetTypeByToken(assembly, row.Interface);
 
 				declaringType.Interfaces.Add(interfaceType);
@@ -1063,7 +1074,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 						else if (type.IsDouble) value = reader.ReadDouble();
 						else if (type.IsString) value = ParseString(reader);
 
-						//FIXME!
+						//FIXME! Add more
 
 						attribute.Values.Add(value);
 					}

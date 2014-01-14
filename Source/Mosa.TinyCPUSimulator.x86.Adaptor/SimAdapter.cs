@@ -70,7 +70,7 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 				{
 					var block = basicBlocks.GetByLabel(target);
 
-					operands.Add(CreateLabel(32, block.ToString() + ":" + method.FullName));
+					operands.Add(CreateLabel(32, block.ToString() + ":" + method.MethodName));
 				}
 			}
 

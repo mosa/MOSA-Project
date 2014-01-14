@@ -149,10 +149,10 @@ namespace Mosa.Compiler.Framework.Stages
 				headerlinks.Add(type.BaseType + @"$mtable");
 
 			// 5. Type Metadata
-			if (!type.IsModule)
-				headerlinks.Add(type.FullName + @"$dtable");
-			else
-				headerlinks.Add(null);
+			//if (!type.IsModule)
+			//	headerlinks.Add(type.FullName + @"$dtable");
+			//else
+			headerlinks.Add(null);
 
 			IList<MosaMethod> methodTable = typeLayout.GetMethodTable(type);
 			AskLinkerToCreateMethodTable(type.FullName + @"$mtable", methodTable, headerlinks);
@@ -189,7 +189,7 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				if (!method.IsAbstract)
 				{
-					compiler.Linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuiltInPatch.I4, methodTableName, offset, 0, method.FullName, 0);
+					compiler.Linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuiltInPatch.I4, methodTableName, offset, 0, method.MethodName, 0);
 				}
 				offset += typeLayout.NativePointerSize;
 			}

@@ -11,7 +11,6 @@
 using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.InternalTrace;
 using Mosa.Compiler.Linker;
-using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Compiler.MosaTypeSystem;
 using System;
 
@@ -176,7 +175,7 @@ namespace Mosa.Compiler.Framework
 		/// <param name="instructionSet">The instruction set.</param>
 		public void CompileMethod(MosaMethod method, BasicBlocks basicBlocks, InstructionSet instructionSet)
 		{
-			Trace(CompilerEvent.CompilingMethod, method.FullName);
+			Trace(CompilerEvent.CompilingMethod, method.MethodName);
 
 			BaseMethodCompiler methodCompiler = CreateMethodCompiler(method, basicBlocks, instructionSet);
 			Architecture.ExtendMethodCompilerPipeline(methodCompiler.Pipeline);

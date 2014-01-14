@@ -6,8 +6,10 @@
  * Authors:
  *  Kai P. Reisert <kpreisert@googlemail.com>
  *  Pascal Delprat (pdelprat) <pascal.delprat@online.fr>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Linker;
 using NDesk.Options;
@@ -422,7 +424,7 @@ namespace Mosa.Tool.Compiler
 			{
 				Compile();
 			}
-			catch (CompilationException ce)
+			catch (CompilerException ce)
 			{
 				this.ShowError(ce.Message);
 			}

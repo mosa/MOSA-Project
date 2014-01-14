@@ -172,7 +172,7 @@ namespace Mosa.Platform.x86.Stages
 
 			int tableSize = (entries.Count * nativePointerSize * 5) + nativePointerSize;
 
-			string section = methodCompiler.Method.FullName + @"$etable";
+			string section = methodCompiler.Method.MethodName + @"$etable";
 
 			using (Stream stream = methodCompiler.Linker.Allocate(section, SectionKind.ROData, tableSize, nativePointerAlignment))
 			{

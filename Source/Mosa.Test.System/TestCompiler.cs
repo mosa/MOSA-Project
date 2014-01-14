@@ -9,7 +9,6 @@
 
 using MbUnit.Framework;
 using Mosa.Compiler.Linker;
-using Mosa.Compiler.Metadata.Loader;
 using Mosa.Compiler.MosaTypeSystem;
 using Mosa.Test.CodeDomCompiler;
 using System;
@@ -116,7 +115,7 @@ namespace Mosa.Test.System
 
 			Debug.Assert(delegateType != null, delegateName);
 
-			LinkerSymbol symbol = linker.GetSymbol(runtimeMethod.FullName);
+			LinkerSymbol symbol = linker.GetSymbol(runtimeMethod.MethodName);
 			LinkerSection section = linker.GetSection(symbol.SectionKind);
 
 			long address = symbol.VirtualAddress;

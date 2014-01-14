@@ -4,15 +4,15 @@
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
-
-using System;
-using System.IO;
 
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.InternalTrace;
 using Mosa.Compiler.MosaTypeSystem;
+using System;
+using System.IO;
 
 namespace Mosa.Tool.Compiler.Stages
 {
@@ -85,7 +85,7 @@ namespace Mosa.Tool.Compiler.Stages
 			if (string.IsNullOrEmpty(MethodPipelineExportDirectory))
 				return;
 
-			string filename = (method.FullName + ".txt").Replace("<", "[").Replace(">", "]");
+			string filename = (method.MethodName + ".txt").Replace("<", "[").Replace(">", "]");
 
 			if (filename.Length > 200)
 				filename = filename.Substring(0, 200);

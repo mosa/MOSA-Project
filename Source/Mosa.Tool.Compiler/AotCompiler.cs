@@ -5,6 +5,7 @@
  *
  * Authors:
  *  Michael Fröhlich (grover) <sharpos@michaelruck.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 using Mosa.Compiler.Framework;

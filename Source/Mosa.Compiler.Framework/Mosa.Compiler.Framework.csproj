@@ -316,9 +316,6 @@
     <Compile Include="BaseCodeTransformationStage.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompilationException.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="CompilerPipeline.cs">
       <SubType>Code</SubType>
     </Compile>

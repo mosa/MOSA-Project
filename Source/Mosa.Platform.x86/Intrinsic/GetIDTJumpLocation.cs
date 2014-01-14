@@ -5,13 +5,13 @@
  *
  * Authors:
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.MosaTypeSystem;
-using System;
 using System.Diagnostics;
 
 namespace Mosa.Platform.x86.Intrinsic
@@ -55,7 +55,7 @@ namespace Mosa.Platform.x86.Intrinsic
 				throw new InvalidCompilerException();
 			}
 
-			context.SetInstruction(IRInstruction.Move, context.Result, Operand.CreateUnmanagedSymbolPointer(methodCompiler.TypeSystem, method.FullName));
+			context.SetInstruction(IRInstruction.Move, context.Result, Operand.CreateUnmanagedSymbolPointer(methodCompiler.TypeSystem, method.MethodName));
 		}
 
 		#endregion Methods
