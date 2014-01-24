@@ -6,6 +6,7 @@
  */
 
 using Mosa.Platform.Internal.x86;
+using Mosa.ClassLib;
 
 namespace Mosa.Test.Application
 {
@@ -24,6 +25,15 @@ namespace Mosa.Test.Application
 			Parent<int> parent = new Parent<int>();
 
 			int p = parent.child.value;
+		}
+
+		public static void Test3()
+		{
+			LinkedList<object> list = new LinkedList<object>();
+
+			object o = new object();
+
+			list.Add(o);
 		}
 
 		/// <summary>

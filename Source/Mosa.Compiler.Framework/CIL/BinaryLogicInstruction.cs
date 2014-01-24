@@ -76,7 +76,7 @@ namespace Mosa.Compiler.Framework.CIL
 
 			if (result == StackTypeCode.Unknown)
 			{
-				throw new InvalidOperationException(@"Invalid stackLocal result of instruction: " + result.ToString() + " (" + ctx.Operand1.ToString() + ")");
+				throw new InvalidOperationException(@"Invalid virtualLocal result of instruction: " + result.ToString() + " (" + ctx.Operand1.ToString() + ")");
 			}
 
 			ctx.Result = compiler.CreateVirtualRegister(compiler.TypeSystem.GetType(result));

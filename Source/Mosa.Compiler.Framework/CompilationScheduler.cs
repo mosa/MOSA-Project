@@ -97,7 +97,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (type.IsInterface)
 				return;
 
-			if (type.IsGeneric || type.IsOpenGenericType)
+			if (type.IsBaseGeneric || type.IsOpenGenericType)
 				return;
 
 			if (!(type.IsObject || type.IsValueType || type.IsEnum || type.IsString || type.IsInterface || type.IsLinkerGenerated))
@@ -114,7 +114,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private void CompileMethod(MosaMethod method)
 		{
-			if (method.IsGeneric || method.DeclaringType.IsInterface || method.IsAbstract)
+			if (method.IsBaseGeneric || method.DeclaringType.IsInterface || method.IsAbstract)
 				return;
 
 			if (method.IsOpenGenericType || method.DeclaringType.IsOpenGenericType)

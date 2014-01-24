@@ -26,7 +26,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public bool IsAbstract { get; internal set; }
 
-		public bool IsGeneric { get; internal set; }
+		public bool IsBaseGeneric { get; internal set; }
 
 		public bool IsStatic { get; internal set; }
 
@@ -81,7 +81,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 		public MosaMethod()
 		{
 			IsAbstract = false;
-			IsGeneric = false;
+			IsBaseGeneric = false;
 			IsStatic = false;
 			HasThis = false;
 			HasExplicitThis = false;

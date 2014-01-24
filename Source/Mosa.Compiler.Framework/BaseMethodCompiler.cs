@@ -44,6 +44,8 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		private bool stop;
 
+		private static readonly Operand[] emptyOperandList = new Operand[0];
+
 		#endregion Data Members
 
 		#region Construction
@@ -71,6 +73,7 @@ namespace Mosa.Compiler.Framework
 			this.Pipeline = new CompilerPipeline();
 			this.StackLayout = new StackLayout(Architecture, method.Parameters.Count + (method.HasThis || method.HasExplicitThis ? 1 : 0));
 			this.VirtualRegisters = new VirtualRegisters(Architecture);
+			this.LocalVariables = emptyOperandList;
 
 			EvaluateParameterOperands();
 
@@ -250,7 +253,7 @@ namespace Mosa.Compiler.Framework
 		/// <exception cref="System.ArgumentOutOfRangeException">The <paramref name="index" /> is not valid.</exception>
 		public Operand GetLocalOperand(int index)
 		{
-			return VirtualRegisters[index];
+			return LocalVariables[index];
 		}
 
 		/// <summary>
@@ -273,12 +276,26 @@ namespace Mosa.Compiler.Framework
 		/// Allocates the local variable virtual registers.
 		/// </summary>
 		/// <param name="locals">The locals.</param>
-		public void AllocateLocalVariableVirtualRegisters(IList<MosaType> locals)
+		public void SetLocalVariables(List<MosaType> locals)
 		{
-			foreach (var local in locals)
+			LocalVariables = new Operand[locals.Count];
+
+			for (int index = 0; index < locals.Count; index++)
 			{
-				var stackLocal = TypeSystem.ConvertToStackType(local);
-				VirtualRegisters.Allocate(stackLocal);
+				var local = locals[index];
+				Operand operand;
+
+				if (local.IsValueType)
+				{
+					operand = StackLayout.AddStackLocal(local);
+				}
+				else
+				{
+					var stacktype = TypeSystem.ConvertToStackType(local);
+					operand = VirtualRegisters.Allocate(stacktype);
+				}
+
+				LocalVariables[index] = operand;
 			}
 		}
 

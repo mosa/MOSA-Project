@@ -935,7 +935,7 @@ namespace Mosa.Compiler.Framework
 
 			if (IsVirtualRegister)
 			{
-				sb.AppendFormat("v{0}", Index);
+				sb.AppendFormat("local{0}", Index);
 			}
 			else if (IsStackLocal && Name == null)
 			{

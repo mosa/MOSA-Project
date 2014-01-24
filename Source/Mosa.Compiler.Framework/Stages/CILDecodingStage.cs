@@ -70,7 +70,7 @@ namespace Mosa.Compiler.Framework.Stages
 				return;
 			}
 
-			methodCompiler.AllocateLocalVariableVirtualRegisters(methodCompiler.Method.LocalVariables);
+			methodCompiler.SetLocalVariables(methodCompiler.Method.LocalVariables);
 
 			/* Decode the instructions */
 			Decode(methodCompiler);

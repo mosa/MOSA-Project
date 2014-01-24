@@ -201,7 +201,7 @@ namespace Mosa.Compiler.Framework
 			if (type.IsModule)
 				return null;
 
-			if (type.IsGeneric || type.IsOpenGenericType)
+			if (type.IsBaseGeneric || type.IsOpenGenericType)
 				return null;
 
 			if (!(type.IsObject || type.IsValueType || type.IsEnum || type.IsString || type.IsInterface || type.IsLinkerGenerated))
@@ -260,7 +260,7 @@ namespace Mosa.Compiler.Framework
 			if (type.IsModule)
 				return;
 
-			if (type.IsGeneric || type.IsOpenGenericType)
+			if (type.IsBaseGeneric || type.IsOpenGenericType)
 				return;
 
 			if (!(type.IsObject || type.IsValueType || type.IsEnum || type.IsString || type.IsInterface || type.IsLinkerGenerated))
@@ -311,7 +311,7 @@ namespace Mosa.Compiler.Framework
 			if (type.IsModule)
 				return;
 
-			if (type.IsGeneric || type.IsOpenGenericType)
+			if (type.IsBaseGeneric || type.IsOpenGenericType)
 				return;
 
 			if (!(type.IsObject || type.IsValueType || type.IsEnum || type.IsString || type.IsInterface || type.IsLinkerGenerated))

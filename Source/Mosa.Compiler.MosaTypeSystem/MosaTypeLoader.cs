@@ -168,8 +168,14 @@ namespace Mosa.Compiler.MosaTypeSystem
 			// Loads all types (excluding generic instances)
 			LoadTypes();
 
+			// Loads generic parameters for types
+			LoadGenericParams(TableType.TypeDef);
+
 			// Loads all methods
 			LoadMethods();
+
+			// Loads generic parameters for methods
+			LoadGenericParams(TableType.MethodDef);
 
 			// Loads all fields
 			LoadFields();
@@ -190,10 +196,6 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 			// Resolves all member references
 			LoadMemberReferences();
-
-			// Loads generic parameters
-			LoadGenericParams();
-
 
 			LoadGenericParamContraints();
 			LoadCustomAttributes();
@@ -557,7 +559,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 			type.IsInterface = (info.TypeDefRow.Flags & TypeAttributes.Interface) == TypeAttributes.Interface;
 			type.IsExplicitLayout = (info.TypeDefRow.Flags & TypeAttributes.LayoutMask) == TypeAttributes.ExplicitLayout;
 			type.PackingSize = info.PackingSize;
-			type.Size = info.Size;
+			type.Size = info.Size;			
 
 			type.SetFlags();
 			type.SetOpenGeneric();
@@ -734,16 +736,18 @@ namespace Mosa.Compiler.MosaTypeSystem
 		/// <summary>
 		/// Loads the generic param constraints.
 		/// </summary>
-		private void LoadGenericParams()
+		private void LoadGenericParams(TableType table)
 		{
 			var maxToken = GetMaxTokenValue(TableType.GenericParam);
 			foreach (var token in new Token(TableType.GenericParam, 1).Upto(maxToken))
 			{
 				var row = metadataProvider.ReadGenericParamRow(token);
-				var name = GetString(row.NameString);
+
+				if (row.Owner.Table != table)
+					continue;
 
 				var genericParameter = new MosaGenericParameter();
-				genericParameter.Name = name;
+				genericParameter.Name = GetString(row.NameString);
 				genericParameter.Index = row.Number;
 				genericParameter.IsCovariant = (row.Flags & GenericParameterAttributes.Covariant) == GenericParameterAttributes.Covariant;
 				genericParameter.IsContravariant = (row.Flags & GenericParameterAttributes.Contravariant) == GenericParameterAttributes.Contravariant;
@@ -751,18 +755,18 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 				mapGenericParam.Add(token, genericParameter);
 
-				// The following switch matches the AttributeTargets enumeration against
-				// metadata tables, which make valid targets for an attribute.
 				switch (row.Owner.Table)
 				{
 					case TableType.TypeDef:
 						var type = resolver.GetTypeByToken(assembly, row.Owner);
 						type.GenericParameters.Add(genericParameter);
+						type.IsBaseGeneric = true;
 						break;
 
 					case TableType.MethodDef:
 						var method = resolver.GetMethodByToken(assembly, row.Owner);
 						method.GenericParameters.Add(genericParameter);
+						method.IsBaseGeneric = true;
 						break;
 
 					default: throw new NotImplementedException();

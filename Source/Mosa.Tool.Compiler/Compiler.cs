@@ -72,7 +72,7 @@ namespace Mosa.Tool.Compiler
 			#region Setup general options
 
 			optionSet.Add(
-				"v|version",
+				"local|version",
 				"Display version information.",
 				delegate(string v)
 				{

@@ -56,7 +56,7 @@ namespace Mosa.Platform.x86.Stages
 			// Collect all methods that we can link to
 			foreach (var type in typeSystem.AllTypes)
 			{
-				if (type.IsModule || type.IsGeneric || type.IsInterface)
+				if (type.IsModule || type.IsBaseGeneric || type.IsInterface)
 					continue;
 
 				foreach (var method in type.Methods)

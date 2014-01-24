@@ -30,7 +30,7 @@ namespace Mosa.Compiler.Framework.Stages
 				if (type.IsModule)
 					continue;
 
-				if (type.IsGeneric || type.IsOpenGenericType)
+				if (type.IsBaseGeneric || type.IsOpenGenericType)
 					continue;
 
 				if (!(type.IsObject || type.IsValueType || type.IsEnum || type.IsString || type.IsInterface || type.IsLinkerGenerated))

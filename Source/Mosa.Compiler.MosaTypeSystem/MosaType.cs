@@ -123,7 +123,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public IList<MosaGenericParameter> GenericParameters { get; internal set; }
 
-		public bool IsGeneric { get { return GenericParameters.Count != 0; } }
+		public bool IsBaseGeneric { get; internal set; }
 
 		public List<MosaType> GenericParameterTypes { get; internal set; }
 
@@ -176,6 +176,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 			IsString = false;
 			IsNativeSignedInteger = false;
 			IsNativeUnsignedInteger = false;
+			IsBaseGeneric = false;
 
 			Methods = new List<MosaMethod>();
 			Fields = new List<MosaField>();
