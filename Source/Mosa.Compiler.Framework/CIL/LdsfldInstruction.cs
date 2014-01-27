@@ -41,7 +41,7 @@ namespace Mosa.Compiler.Framework.CIL
 			// Decode base classes first
 			base.Decode(ctx, decoder);
 
-			var field = decoder.TypeSystem.Resolver.GetFieldByToken(decoder.Method.CodeAssembly, decoder.DecodeTokenType(), decoder.Method);
+			var field = decoder.TypeSystem.Resolver.GetFieldByToken(decoder.Method.CodeAssembly, decoder.DecodeTokenType(), decoder.Method.DeclaringType.GenericArguments);
 
 			Debug.Assert(field.IsStaticField, "Static field access on non-static field.");
 

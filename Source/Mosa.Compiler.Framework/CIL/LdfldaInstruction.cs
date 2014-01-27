@@ -38,7 +38,7 @@ namespace Mosa.Compiler.Framework.CIL
 		{
 			base.Decode(ctx, decoder);
 
-			var field = decoder.TypeSystem.Resolver.GetFieldByToken(decoder.Method.CodeAssembly, decoder.DecodeTokenType(), decoder.Method); ;
+			var field = decoder.TypeSystem.Resolver.GetFieldByToken(decoder.Method.CodeAssembly, decoder.DecodeTokenType(), decoder.Method.DeclaringType.GenericArguments); ;
 
 			ctx.MosaField = field;
 			ctx.Result = LoadInstruction.CreateResultOperand(decoder, field.Type);

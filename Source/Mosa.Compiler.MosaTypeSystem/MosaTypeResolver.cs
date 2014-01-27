@@ -196,7 +196,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 			if (type.IsOpenGenericType)
 			{
-				type = ResolveGenericType(baseMethod.DeclaringType, baseMethod.DeclaringType.GenericParameterTypes);
+				type = ResolveGenericType(baseMethod.DeclaringType, baseMethod.DeclaringType.GenericArguments);
 			}
 
 			return type;
@@ -296,9 +296,9 @@ namespace Mosa.Compiler.MosaTypeSystem
 		{
 			var method = methodLookup[assembly][token];
 
-			if (method.IsOpenGenericType) //  || method.DeclaringType.IsGeneric)
+			if (method.IsOpenGenericType)
 			{
-				method = ResolveGenericMethod(method, baseMethod.DeclaringType.GenericParameterTypes);
+				method = ResolveGenericMethod(method, baseMethod.DeclaringType.GenericArguments);
 			}
 
 			return method;
@@ -319,7 +319,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 			return fieldLookup[assembly][token];
 		}
 
-		public MosaField GetFieldByToken(MosaAssembly assembly, Token token, MosaMethod baseMethod)
+		public MosaField GetFieldByToken(MosaAssembly assembly, Token token, List<MosaType> genericArguments)
 		{
 			var field = fieldLookup[assembly][token];
 
@@ -327,7 +327,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 			
 			if (field.DeclaringType.IsOpenGenericType)
 			{
-				var type = ResolveGenericType(field.DeclaringType, baseMethod.DeclaringType.GenericParameterTypes);
+				var type = ResolveGenericType(field.DeclaringType, genericArguments);
 
 				foreach(var f in type.Fields)
 				{
@@ -494,7 +494,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 			return null;
 		}
 
-		private void StoreGenericType(MosaType genericBaseType, List<MosaType> genericTypes, MosaType genericType)
+		private void StoreGenericType(MosaType genericBaseType, List<MosaType> genericArguments, MosaType genericType)
 		{
 			List<KeyValuePair<List<MosaType>, MosaType>> genericVariations;
 
@@ -504,29 +504,29 @@ namespace Mosa.Compiler.MosaTypeSystem
 				genericTypeLookup.Add(genericBaseType, genericVariations);
 			}
 
-			genericVariations.Add(new KeyValuePair<List<MosaType>, MosaType>(genericTypes, genericType));
+			genericVariations.Add(new KeyValuePair<List<MosaType>, MosaType>(genericArguments, genericType));
 		}
 
-		public MosaType ResolveGenericType(MosaType genericBaseType, List<MosaType> genericTypes)
+		public MosaType ResolveGenericType(MosaType genericBaseType, List<MosaType> genericArguments)
 		{
-			var genericType = FindGenericType(genericBaseType, genericTypes);
+			var genericType = FindGenericType(genericBaseType, genericArguments);
 
 			if (genericType != null)
 				return genericType;
 
-			genericType = CreateGenericType(genericBaseType, genericTypes);
+			genericType = CreateGenericType(genericBaseType, genericArguments);
 
-			StoreGenericType(genericBaseType, genericTypes, genericType);
+			StoreGenericType(genericBaseType, genericArguments, genericType);
 
 			return genericType;
 		}
 
-		public MosaType CreateGenericType(MosaType genericBaseType, List<MosaType> genericTypes)
+		public MosaType CreateGenericType(MosaType genericBaseType, List<MosaType> genericArguments)
 		{
 			var generic = new MosaType(GenericAssembly);
 
 			generic.GenericBaseType = genericBaseType;
-			generic.GenericParameterTypes = genericTypes;
+			generic.GenericArguments = genericArguments;
 			generic.Name = genericBaseType.Name;
 			generic.Namespace = genericBaseType.Namespace;
 			generic.BaseType = genericBaseType.BaseType;
@@ -562,7 +562,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 			var genericTypeNames = new StringBuilder();
 
-			foreach (var genericType in genericTypes)
+			foreach (var genericType in genericArguments)
 			{
 				genericTypeNames.Append(genericType.FullName);
 				genericTypeNames.Append(", ");
@@ -626,13 +626,13 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 			foreach (var @interface in generic.GenericBaseType.Interfaces)
 			{
-				if (@interface.GenericParameterTypes.Count == 0)
+				if (@interface.GenericArguments.Count == 0)
 				{
 					generic.Interfaces.Add(@interface);
 				}
 				else
 				{
-					var genericInterface = ResolveGenericType(@interface.GenericBaseType, generic.GenericParameterTypes);
+					var genericInterface = ResolveGenericType(@interface.GenericBaseType, generic.GenericArguments);
 					generic.Interfaces.Add(genericInterface);
 				}
 			}
@@ -725,11 +725,11 @@ namespace Mosa.Compiler.MosaTypeSystem
 			generic.Code = method.Code;
 			generic.CodeAssembly = method.CodeAssembly;
 			generic.IsCILGenerated = method.IsCILGenerated;
-			generic.ReturnType = ResolveGenericType(method.ReturnType, declaringType.GenericParameterTypes, methodGenericsTypes);
+			generic.ReturnType = ResolveGenericType(method.ReturnType, declaringType.GenericArguments, methodGenericsTypes);
 
 			foreach (var p in method.Parameters)
 			{
-				var cloneParameter = ResolveGenericParameter(p, declaringType.GenericParameterTypes, methodGenericsTypes);
+				var cloneParameter = ResolveGenericParameter(p, declaringType.GenericArguments, methodGenericsTypes);
 				generic.Parameters.Add(cloneParameter);
 			}
 
@@ -738,32 +738,12 @@ namespace Mosa.Compiler.MosaTypeSystem
 				generic.CustomAttributes.Add(a);
 			}
 
-			//if (method.ReturnType.IsVarFlag)
-			//{
-			//	generic.ReturnType = declaringType.GenericParameterTypes[method.ReturnType.VarOrMVarIndex];
-			//}
-			//else if (method.ReturnType.IsMVarFlag && methodGenericsTypes != null)
-			//{
-			//	generic.ReturnType = methodGenericsTypes[method.ReturnType.VarOrMVarIndex];
-			//}
-
 			generic.SetName();
 			generic.SetOpenGeneric();
 
 			foreach (var localVariable in method.LocalVariables)
 			{
-				var local = ResolveGenericType(localVariable, declaringType.GenericParameterTypes, methodGenericsTypes);
-
-				//var local = localVariable;
-
-				//if (local.IsVarFlag)
-				//{
-				//	local = declaringType.GenericParameterTypes[local.VarOrMVarIndex];
-				//}
-				//else if (local.IsMVarFlag && methodGenericsTypes != null)
-				//{
-				//	local = methodGenericsTypes[local.VarOrMVarIndex];
-				//}
+				var local = ResolveGenericType(localVariable, declaringType.GenericArguments, methodGenericsTypes);
 
 				generic.LocalVariables.Add(local);
 			}
@@ -776,7 +756,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 			var generic = new MosaField();
 
 			generic.DeclaringType = declaringType;
-			generic.Type = ResolveGenericType(field.Type, declaringType.GenericParameterTypes, null);
+			generic.Type = ResolveGenericType(field.Type, declaringType.GenericArguments, null);
 			generic.Name = field.Name;
 			generic.FullName = field.FullName;
 			generic.CustomAttributes = field.CustomAttributes;
@@ -787,16 +767,6 @@ namespace Mosa.Compiler.MosaTypeSystem
 			generic.HasRVA = field.HasRVA;
 			generic.Data = generic.Data;
 			generic.Type = field.Type;
-
-			//if (generic.Type.IsVarFlag)
-			//{
-			//	generic.Type = declaringType.GenericParameterTypes[generic.Type.VarOrMVarIndex];
-			//}
-
-			//if (generic.Type.HasElement && generic.Type.ElementType.IsVarFlag)
-			//{
-			//	generic.Type = CreateNewElementType(generic.Type, declaringType.GenericParameterTypes[generic.Type.VarOrMVarIndex]);
-			//}
 
 			return generic;
 		}

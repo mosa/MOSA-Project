@@ -92,10 +92,8 @@ namespace Mosa.Tool.Explorer
 			toolStripStatusLabel1.Text = "Assemblies Loaded!";
 		}
 
-		protected void UpdateTree()
+		protected static void UpdateTree(TreeView treeView, TypeSystem typeSystem, MosaTypeLayout typeLayout, bool showSizes)
 		{
-			//TODO: Refactor - Code was copied in TinySimulator
-
 			treeView.BeginUpdate();
 			treeView.Nodes.Clear();
 
@@ -143,12 +141,12 @@ namespace Mosa.Tool.Explorer
 						}
 					}
 
-					if (type.GenericParameterTypes.Count != 0)
+					if (type.GenericArguments.Count != 0)
 					{
-						TreeNode genericParameterNodes = new TreeNode("Generic Parameters Types");
+						TreeNode genericParameterNodes = new TreeNode("Generic Arguments");
 						typeNode.Nodes.Add(genericParameterNodes);
 
-						foreach (var genericParameter in type.GenericParameterTypes)
+						foreach (var genericParameter in type.GenericArguments)
 						{
 							TreeNode GenericParameterNode = new TreeNode(genericParameter.Name);
 							genericParameterNodes.Nodes.Add(GenericParameterNode);
@@ -170,7 +168,7 @@ namespace Mosa.Tool.Explorer
 					if (type.Fields.Count != 0)
 					{
 						TreeNode fieldsNode = new TreeNode("Fields");
-						if (showSizes.Checked)
+						if (showSizes)
 							fieldsNode.Text = fieldsNode.Text + " (Count: " + type.Fields.Count.ToString() + " - Size: " + typeLayout.GetTypeSize(type).ToString() + ")";
 
 						typeNode.Nodes.Add(fieldsNode);
@@ -183,7 +181,7 @@ namespace Mosa.Tool.Explorer
 							if (field.IsStaticField)
 								fieldNode.Text = fieldNode.Text + " [Static]";
 
-							if (showSizes.Checked)
+							if (showSizes)
 							{
 								fieldNode.Text = fieldNode.Text + " (Size: " + typeLayout.GetFieldSize(field).ToString();
 
@@ -267,6 +265,11 @@ namespace Mosa.Tool.Explorer
 			}
 
 			treeView.EndUpdate();
+		}
+
+		protected void UpdateTree()
+		{
+			UpdateTree(treeView, typeSystem, typeLayout, showSizes.Checked);
 		}
 
 		private void quitToolStripMenuItem_Click(object sender, EventArgs e)

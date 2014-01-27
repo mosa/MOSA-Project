@@ -8,7 +8,6 @@
  */
 
 using Mosa.Compiler.Metadata;
-using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Compiler.Metadata.Tables;
 using System.Collections;
 using Mosa.Compiler.Metadata.Loader;
@@ -18,21 +17,22 @@ namespace Mosa.Tool.MetadataExplorer.Tables
 	/// <summary>
 	///
 	/// </summary>
-	public class StandAloneSigExt : TableRow
+	public class NestedClassExt : TableRow
 	{
-		protected StandAloneSigRow row;
+		protected NestedClassRow row;
 
-		public StandAloneSigExt(IMetadataModule metadataModule, StandAloneSigRow row)
+		public NestedClassExt(IMetadataModule metadataModule, NestedClassRow row)
 			: base(metadataModule)
 		{
 			this.row = row;
 		}
 
-		public override string Name { get { return Signature.GetSignatureFromStandAlongSig(Metadata, row.SignatureBlob).ToString(); } }
+		public override string Name { get { return row.NestedClass.FormatToString(); } }
 
 		public override IEnumerable GetValues()
 		{
-			yield break;
+			yield return Value("EnclosingClass", row.EnclosingClass);
+			yield return Value("NestedClass", row.NestedClass);
 		}
 	}
 }

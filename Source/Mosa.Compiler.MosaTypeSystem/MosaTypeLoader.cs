@@ -559,7 +559,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 			type.IsInterface = (info.TypeDefRow.Flags & TypeAttributes.Interface) == TypeAttributes.Interface;
 			type.IsExplicitLayout = (info.TypeDefRow.Flags & TypeAttributes.LayoutMask) == TypeAttributes.ExplicitLayout;
 			type.PackingSize = info.PackingSize;
-			type.Size = info.Size;			
+			type.Size = info.Size;
 
 			type.SetFlags();
 			type.SetOpenGeneric();
@@ -572,10 +572,11 @@ namespace Mosa.Compiler.MosaTypeSystem
 			if (declaringType.AreMethodsAssigned)
 				return;
 
-			declaringType.AreMethodsAssigned = true;
-
 			if (first.RID >= last.RID)
+			{
+				declaringType.AreMethodsAssigned = true;
 				return;
+			}
 
 			var maxMethod = GetMaxTokenValue(TableType.MethodDef);
 			var methodDef = metadataProvider.ReadMethodDefRow(first);
@@ -672,6 +673,8 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 				methodDef = nextMethodDef;
 			}
+
+			declaringType.AreMethodsAssigned = true;
 
 		}
 
@@ -840,26 +843,29 @@ namespace Mosa.Compiler.MosaTypeSystem
 		{
 			var genericBaseType = GetMosaType(genericSig.BaseType);
 
-			List<MosaType> genericParamTypes = new List<MosaType>(genericSig.GenericArguments.Length);
+			List<MosaType> genericArguments = new List<MosaType>(genericSig.GenericArguments.Length);
 
 			foreach (var genericParam in genericSig.GenericArguments)
 			{
 				var genericParamType = GetMosaType(genericParam);
-				genericParamTypes.Add(genericParamType);
+				genericArguments.Add(genericParamType);
 			}
 
-			var genericType = resolver.ResolveGenericType(genericBaseType, genericParamTypes);
+			var genericType = resolver.ResolveGenericType(genericBaseType, genericArguments);
 
 			if (!token.IsZero)
 			{
 				resolver.AddType(assembly, token, genericType);
 			}
 
-			genericTypes.Add(genericType);
-
-			if (!genericType.AreMethodsAssigned || !genericType.AreFieldsAssigned || !genericType.AreInterfacesAssigned)
+			if (!genericTypes.Contains(genericType))
 			{
-				delayedGeneric.Enqueue(genericType);
+				genericTypes.Add(genericType);
+
+				if (!genericType.AreMethodsAssigned || !genericType.AreFieldsAssigned || !genericType.AreInterfacesAssigned)
+				{
+					delayedGeneric.Enqueue(genericType);
+				}
 			}
 
 			return genericType;
@@ -960,7 +966,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 						if (parameterType.IsVarFlag)
 						{
-							parameterType = ownerType.GenericParameterTypes[parameterType.VarOrMVarIndex];
+							parameterType = ownerType.GenericArguments[parameterType.VarOrMVarIndex];
 						}
 						else if (parameterType.IsMVarFlag)
 						{

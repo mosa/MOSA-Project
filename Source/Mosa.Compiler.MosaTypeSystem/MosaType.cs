@@ -125,7 +125,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public bool IsBaseGeneric { get; internal set; }
 
-		public List<MosaType> GenericParameterTypes { get; internal set; }
+		public List<MosaType> GenericArguments { get; internal set; }
 
 		public IDictionary<MosaMethod, MosaMethod> InheritanceOveride { get; internal set; }
 
@@ -183,7 +183,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 			Interfaces = new List<MosaType>();
 			GenericParameters = new List<MosaGenericParameter>();
 			CustomAttributes = new List<MosaAttribute>();
-			GenericParameterTypes = new List<MosaType>();
+			GenericArguments = new List<MosaType>();
 			InheritanceOveride = new Dictionary<MosaMethod, MosaMethod>();
 
 			AreMethodsAssigned = false;
@@ -226,7 +226,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 		{
 			IsOpenGenericType = IsOpenGeneric(this);
 
-			foreach (var param in GenericParameterTypes)
+			foreach (var param in GenericArguments)
 			{
 				IsOpenGenericType = MosaType.IsOpenGeneric(param);
 

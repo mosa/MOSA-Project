@@ -70,6 +70,7 @@
     <Compile Include="Tables\MemberRefRowExt.cs" />
     <Compile Include="Tables\MethodDefRowExt.cs" />
     <Compile Include="Tables\FieldRowExt.cs" />
+    <Compile Include="Tables\NestedClassExt.cs" />
     <Compile Include="Tables\TypeRefRowExt.cs" />
     <Compile Include="Tables\MethodSpecExt.cs" />
     <Compile Include="Tables\TypeSpecRowExt.cs" />
