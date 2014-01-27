@@ -15,6 +15,7 @@
 	    <csc target="library" output="${outputDirectory}/Mosa.Compiler.Framework.dll" debug="${debug}" unsafe="true" nostdlib="false">
 		<sources>
                     <include name="BaseCallingConventionExtended.cs"/>
+                    <include name="DelegatePatcher.cs"/>
                     <include name="ShiftType.cs"/>
                     <include name="ConditionCodeExtension.cs"/>
                     <include name="BasicBlocks.cs"/>
@@ -242,7 +243,6 @@
                     <include name="BasicBlock.cs"/>
                     <include name="Stages/CodeGenerationStage.cs"/>
                     <include name="BaseCodeTransformationStage.cs"/>
-                    <include name="CompilationException.cs"/>
                     <include name="CompilerPipeline.cs"/>
                     <include name="Stages/DominanceCalculationStage.cs"/>
                     <include name="FlowControl.cs"/>

@@ -675,7 +675,6 @@ namespace Mosa.Compiler.MosaTypeSystem
 			}
 
 			declaringType.AreMethodsAssigned = true;
-
 		}
 
 		private void LoadFields(MosaType declaringType, Token first, Token last)
@@ -708,7 +707,6 @@ namespace Mosa.Compiler.MosaTypeSystem
 				declaringType.Fields.Add(field);
 				resolver.AddField(assembly, token, field);
 			}
-
 		}
 
 		private MosaType GetMosaType(SigType sigType)

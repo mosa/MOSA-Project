@@ -5,8 +5,8 @@
  *
  */
 
-using Mosa.Platform.Internal.x86;
 using Mosa.ClassLib;
+using Mosa.Platform.Internal.x86;
 
 namespace Mosa.Test.Application
 {

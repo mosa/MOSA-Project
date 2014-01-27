@@ -75,6 +75,7 @@
                     <include name="${outputDirectory}/Mosa.TinyCPUSimulator.x86.Adaptor.dll"/>
                     <include name="${outputDirectory}/Mosa.TinyCPUSimulator.x86.dll"/>
                     <include name="${outputDirectory}/Mosa.TinyCPUSimulator.dll"/>
+                    <include name="${outputDirectory}/Mosa.Utility.GUI.Common.dll"/>
 		</references>
 		<!-- supress warnings -->
 		<nowarn><warning number="${suppresswarnings}"/></nowarn>

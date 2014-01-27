@@ -279,6 +279,10 @@
       <Project>{6f7c06b2-09bf-45bd-8e6b-ae9bf7c7e250}</Project>
       <Name>Mosa.TinyCPUSimulator</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Mosa.Utility.GUI.Common\Mosa.Utility.GUI.Common.csproj">
+      <Project>{5a813793-78e2-413c-aa05-fcdd12b7db04}</Project>
+      <Name>Mosa.Utility.GUI.Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="processor.ico" />

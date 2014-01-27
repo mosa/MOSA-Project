@@ -324,12 +324,12 @@ namespace Mosa.Compiler.MosaTypeSystem
 			var field = fieldLookup[assembly][token];
 
 			Debug.Assert(!field.Type.IsMVarFlag);
-			
+
 			if (field.DeclaringType.IsOpenGenericType)
 			{
 				var type = ResolveGenericType(field.DeclaringType, genericArguments);
 
-				foreach(var f in type.Fields)
+				foreach (var f in type.Fields)
 				{
 					if (f.Name == field.Name)
 						return f;

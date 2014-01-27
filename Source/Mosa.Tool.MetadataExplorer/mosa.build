@@ -30,6 +30,7 @@
                     <include name="Tables/MemberRefRowExt.cs"/>
                     <include name="Tables/MethodDefRowExt.cs"/>
                     <include name="Tables/FieldRowExt.cs"/>
+                    <include name="Tables/NestedClassExt.cs"/>
                     <include name="Tables/TypeRefRowExt.cs"/>
                     <include name="Tables/MethodSpecExt.cs"/>
                     <include name="Tables/TypeSpecRowExt.cs"/>
