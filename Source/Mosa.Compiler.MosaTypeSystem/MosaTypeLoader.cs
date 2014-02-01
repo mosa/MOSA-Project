@@ -380,7 +380,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 				if (type == null)
 				{
-					throw new AssemblyLoadException("Could not find genericBaseType: " + typeName);
+					throw new AssemblyLoadException("Could not find generic type: " + typeName);
 				}
 
 				resolver.AddType(assembly, token, type);
@@ -540,7 +540,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 					case TableType.TypeDef: LoadType(info.TypeDefRow.Extends); break;
 					case TableType.TypeSpec: LoadTypeSpec(info.TypeDefRow.Extends); break;
 					case TableType.TypeRef: break;
-					default: throw new AssemblyLoadException("unexpected token genericBaseType.");
+					default: throw new AssemblyLoadException("unexpected token resolvedGenericType.");
 				}
 			}
 
@@ -762,6 +762,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 						var type = resolver.GetTypeByToken(assembly, row.Owner);
 						type.GenericParameters.Add(genericParameter);
 						type.IsBaseGeneric = true;
+						type.GenericBaseType = type;
 						break;
 
 					case TableType.MethodDef:
@@ -933,7 +934,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 				}
 				else
 				{
-					throw new TypeLoadException(String.Format("Failed to retrieve owner genericBaseType for Token {0:x} (Table {1})", row.Class, row.Class.Table));
+					throw new TypeLoadException(String.Format("Failed to retrieve owner resolvedGenericType for Token {0:x} (Table {1})", row.Class, row.Class.Table));
 				}
 
 				var signature = GetMemberRefSignature(row.SignatureBlob);
@@ -956,19 +957,11 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 					List<MosaType> typeSignature = new List<MosaType>(methodSignature.Parameters.Length);
 
-					for (int index = 0; index < methodSignature.Parameters.Length; index++)
+					foreach(var parameter in methodSignature.Parameters )
 					{
-						var parameter = methodSignature.Parameters[index];
-
 						var parameterType = GetMosaType(parameter);
 
-						if (parameterType.IsVarFlag)
-						{
-							parameterType = ownerType.GenericArguments[parameterType.VarOrMVarIndex];
-						}
-						else if (parameterType.IsMVarFlag)
-						{
-						}
+						parameterType = resolver.ResolveGenericType(parameterType, ownerType.GenericArguments, null);
 
 						typeSignature.Add(parameterType);
 					}

@@ -46,9 +46,9 @@ namespace Mosa.Utility.GUI.Common
 						typeNode.Nodes.Add(baseTypeNode);
 					}
 
-					if (type.GenericBaseType != null)
+					if (type.GenericParentType != null)
 					{
-						TreeNode genericBaseTypeNode = new TreeNode("Generic Base Type: " + type.GenericBaseType.FullName);
+						TreeNode genericBaseTypeNode = new TreeNode("Generic Base Type: " + type.GenericParentType.FullName);
 						typeNode.Nodes.Add(genericBaseTypeNode);
 					}
 

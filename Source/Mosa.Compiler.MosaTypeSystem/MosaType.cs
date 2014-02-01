@@ -25,6 +25,8 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public MosaType EnclosingType { get; internal set; }
 
+		public MosaType GenericParentType { get; internal set; }
+
 		public MosaType GenericBaseType { get; internal set; }
 
 		public bool IsValueType { get; internal set; }

@@ -943,7 +943,7 @@ namespace Mosa.Compiler.Framework
 			}
 			else if (IsParameter && Name == null)
 			{
-				sb.AppendFormat("p{0}", Index);
+				sb.AppendFormat("parameter{0}", Index);
 			}
 
 			if (Name != null)
