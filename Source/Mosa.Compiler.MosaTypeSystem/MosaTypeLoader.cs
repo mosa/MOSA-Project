@@ -100,11 +100,6 @@ namespace Mosa.Compiler.MosaTypeSystem
 		/// </summary>
 		private List<TypeInfo> typeInfos;
 
-		/// <summary>
-		/// The delayed generic
-		/// </summary>
-		private Queue<MosaType> delayedGeneric;
-
 		#endregion Data members
 
 		#region Constants
@@ -151,7 +146,6 @@ namespace Mosa.Compiler.MosaTypeSystem
 			this.genericTypes = new List<MosaType>();
 			this.strings = new Dictionary<HeapIndexToken, string>();
 			this.typeInfos = new List<TypeInfo>(GetTableRows(TableType.TypeDef));
-			this.delayedGeneric = new Queue<MosaType>();
 
 			assembly = new MosaAssembly();
 			assembly.Name = metadataModule.Name;
@@ -171,6 +165,9 @@ namespace Mosa.Compiler.MosaTypeSystem
 			// Loads generic parameters for types
 			LoadGenericParams(TableType.TypeDef);
 
+			// Load generic types
+			LoadTypeSpecs();
+
 			// Loads all methods
 			LoadMethods();
 
@@ -182,9 +179,6 @@ namespace Mosa.Compiler.MosaTypeSystem
 			LoadFieldLayout();
 			LoadFieldData();
 
-			// Load generic types
-			LoadTypeSpecs();
-
 			// Loads interfaces
 			LoadInterfaces();
 
@@ -192,7 +186,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 			LoadMethodSpecs();
 
 			// Resolve Delayed Generics
-			ResolveDelayedGenerics();
+			resolver.ResolveDelayedGenerics();
 
 			// Resolves all member references
 			LoadMemberReferences();
@@ -860,31 +854,9 @@ namespace Mosa.Compiler.MosaTypeSystem
 			if (!genericTypes.Contains(genericType))
 			{
 				genericTypes.Add(genericType);
-
-				if (!genericType.AreMethodsAssigned || !genericType.AreFieldsAssigned || !genericType.AreInterfacesAssigned)
-				{
-					delayedGeneric.Enqueue(genericType);
-				}
 			}
 
 			return genericType;
-		}
-
-		private void ResolveDelayedGenerics()
-		{
-			while (delayedGeneric.Count != 0)
-			{
-				var genericType = delayedGeneric.Dequeue();
-
-				resolver.AddGenericMethods(genericType);
-				resolver.AddGenericFields(genericType);
-				resolver.AddGenericInterfaces(genericType);
-
-				if (!genericType.AreMethodsAssigned || !genericType.AreFieldsAssigned || !genericType.AreInterfacesAssigned)
-				{
-					delayedGeneric.Enqueue(genericType);
-				}
-			}
 		}
 
 		private void LoadMethodSpecs()
@@ -957,7 +929,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 					List<MosaType> typeSignature = new List<MosaType>(methodSignature.Parameters.Length);
 
-					foreach(var parameter in methodSignature.Parameters )
+					foreach (var parameter in methodSignature.Parameters)
 					{
 						var parameterType = GetMosaType(parameter);
 

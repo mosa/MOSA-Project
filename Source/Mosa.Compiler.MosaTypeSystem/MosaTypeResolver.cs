@@ -44,6 +44,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 		private Dictionary<MosaType, MosaType> arrayTypes = new Dictionary<MosaType, MosaType>();
 		private Dictionary<MosaType, List<KeyValuePair<List<MosaType>, MosaType>>> genericTypeLookup = new Dictionary<MosaType, List<KeyValuePair<List<MosaType>, MosaType>>>();
 		private Dictionary<MosaMethod, List<KeyValuePair<List<MosaType>, MosaMethod>>> genericMethodLookup = new Dictionary<MosaMethod, List<KeyValuePair<List<MosaType>, MosaMethod>>>();
+		private Queue<MosaType> delayedGenericResolution = new Queue<MosaType>();
 
 		private MosaType[] var = new MosaType[255];
 		private MosaType[] mvar = new MosaType[255];
@@ -140,6 +141,16 @@ namespace Mosa.Compiler.MosaTypeSystem
 			throw new InvalidCompilerException();
 		}
 
+		internal void AddType(MosaType type)
+		{
+			Types.Add(type);
+
+			if (type.GenericBaseType != null)
+			{
+				delayedGenericResolution.Enqueue(type);
+			}
+		}
+
 		internal void AddType(MosaAssembly assembly, Token token, MosaType type)
 		{
 			typeLookup[assembly].Add(token, type);
@@ -147,12 +158,12 @@ namespace Mosa.Compiler.MosaTypeSystem
 			if (Types.Contains(type))
 				return;
 
-			Types.Add(type);
+			AddType(type);
 		}
 
 		internal void AddLinkerType(MosaType type)
 		{
-			Types.Add(type);
+			AddType(type);
 		}
 
 		internal void AddType(CilElementType elementType, MosaType type)
@@ -458,18 +469,18 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		private MosaType FindGenericType(MosaType genericType, List<MosaType> genericArguments)
 		{
-			Debug.Write("FIND : " + genericType.FullName + " <");
-			foreach (var a in genericArguments)
-			{
-				Debug.Write(a.FullName + ", ");
-			}
-			Debug.Write("> ");
+			//Debug.Write("FIND : " + genericType.FullName + " <");
+			//foreach (var a in genericArguments)
+			//{
+			//	Debug.Write(a.FullName + ", ");
+			//}
+			//Debug.Write("> ");
 
 			List<KeyValuePair<List<MosaType>, MosaType>> genericParameters = null;
 
 			if (!genericTypeLookup.TryGetValue(genericType.GenericBaseType, out genericParameters))
 			{
-				Debug.WriteLine("==> NONE");
+				//Debug.WriteLine("==> NONE");
 				return null;
 			}
 
@@ -493,22 +504,22 @@ namespace Mosa.Compiler.MosaTypeSystem
 				if (!match)
 					continue;
 
-				Debug.WriteLine("==> RETURNED: " + genericPair.Value);
+				//Debug.WriteLine("==> RETURNED: " + genericPair.Value);
 				return genericPair.Value;
 			}
 
-			Debug.WriteLine("==> NONE");
+			//Debug.WriteLine("==> NONE");
 			return null;
 		}
 
 		private void StoreGenericType(MosaType genericType, List<MosaType> genericArguments)
 		{
-			Debug.Write("STORE: " + genericType.FullName + " <");
-			foreach (var a in genericArguments)
-			{
-				Debug.Write(a.FullName + ", ");
-			}
-			Debug.WriteLine("> BASE: " + genericType.GenericBaseType.FullName);
+			//Debug.Write("STORE: " + genericType.FullName + " <");
+			//foreach (var a in genericArguments)
+			//{
+			//	Debug.Write(a.FullName + ", ");
+			//}
+			//Debug.WriteLine("> BASE: " + genericType.GenericBaseType.FullName);
 
 			List<KeyValuePair<List<MosaType>, MosaType>> genericVariations;
 
@@ -532,7 +543,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 			resolvedGenericType = CreateGenericType(genericType, genericArguments);
 
-			Types.Add(resolvedGenericType);
+			AddType(resolvedGenericType);
 
 			StoreGenericType(resolvedGenericType, genericArguments);
 
@@ -590,7 +601,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 			genericTypeNames.Length = genericTypeNames.Length - 2;
 			generic.FullName = generic.Namespace + "." + generic.Name + '<' + genericTypeNames.ToString() + '>';
 
-			Debug.WriteLine("CREATED: " + generic.FullName);
+			//Debug.WriteLine("CREATED: " + generic.FullName);
 
 			//AddGenericMethods(generic);
 			//AddGenericFields(generic);
@@ -876,6 +887,28 @@ namespace Mosa.Compiler.MosaTypeSystem
 			userString[assembly].Add(token, value);
 
 			return value;
+		}
+
+		public void ResolveDelayedGenerics()
+		{
+			while (delayedGenericResolution.Count != 0)
+			{
+				var genericType = delayedGenericResolution.Dequeue();
+
+				if (!ResolveDelayedGeneric(genericType))
+				{
+					delayedGenericResolution.Enqueue(genericType);
+				}
+			}
+		}
+
+		private bool ResolveDelayedGeneric(MosaType genericType)
+		{
+			AddGenericMethods(genericType);
+			AddGenericFields(genericType);
+			AddGenericInterfaces(genericType);
+
+			return genericType.AreMethodsAssigned && genericType.AreFieldsAssigned && genericType.AreInterfacesAssigned;
 		}
 	}
 }

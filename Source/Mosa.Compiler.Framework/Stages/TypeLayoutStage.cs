@@ -25,7 +25,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		void ICompilerStage.Run()
 		{
-			foreach (MosaType type in typeSystem.AllTypes)
+			foreach (var type in typeSystem.AllTypes)
 			{
 				if (type.IsModule)
 					continue;
@@ -55,7 +55,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (type.Interfaces.Count == 0)
 				return;
 
-			List<string> slots = new List<string>(typeLayout.Interfaces.Count);
+			var slots = new List<string>(typeLayout.Interfaces.Count);
 
 			foreach (MosaType interfaceType in typeLayout.Interfaces)
 			{
@@ -73,7 +73,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (type.Interfaces.Count == 0)
 				return;
 
-			byte[] bitmap = new byte[(((typeLayout.Interfaces.Count - 1) / 8) + 1)];
+			var bitmap = new byte[(((typeLayout.Interfaces.Count - 1) / 8) + 1)];
 
 			int at = 0;
 			byte bit = 0;
@@ -97,7 +97,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private void BuildTypeInterfaceTables(MosaType type)
 		{
-			foreach (MosaType interfaceType in type.Interfaces)
+			foreach (var interfaceType in type.Interfaces)
 			{
 				BuildInterfaceTable(type, interfaceType);
 			}
@@ -105,7 +105,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private void BuildInterfaceTable(MosaType type, MosaType interfaceType)
 		{
-			MosaMethod[] methodTable = typeLayout.GetInterfaceTable(type, interfaceType);
+			var methodTable = typeLayout.GetInterfaceTable(type, interfaceType);
 
 			if (methodTable == null)
 				return;
@@ -125,7 +125,7 @@ namespace Mosa.Compiler.Framework.Stages
 			// 3. interface implementation bitmap
 			// 4. parent type (if any)
 			// 5. type metadata
-			List<string> headerlinks = new List<string>();
+			var headerlinks = new List<string>();
 
 			// 1. interface dispatch table pointer
 			if (type.Interfaces.Count == 0)
@@ -154,7 +154,7 @@ namespace Mosa.Compiler.Framework.Stages
 			//else
 			headerlinks.Add(null);
 
-			IList<MosaMethod> methodTable = typeLayout.GetMethodTable(type);
+			var methodTable = typeLayout.GetMethodTable(type);
 			AskLinkerToCreateMethodTable(type.FullName + @"$mtable", methodTable, headerlinks);
 		}
 
@@ -185,7 +185,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (methodTable == null)
 				return;
 
-			foreach (MosaMethod method in methodTable)
+			foreach (var method in methodTable)
 			{
 				if (!method.IsAbstract)
 				{
@@ -200,7 +200,7 @@ namespace Mosa.Compiler.Framework.Stages
 			int size = array.Length;
 
 			//FIXME: change  SectionKind.Text to SectionKind.ROData
-			using (Stream stream = compiler.Linker.Allocate(tableName, SectionKind.Text, size, typeLayout.NativePointerAlignment))
+			using (var stream = compiler.Linker.Allocate(tableName, SectionKind.Text, size, typeLayout.NativePointerAlignment))
 			{
 				foreach (byte b in array)
 					stream.WriteByte(b);
@@ -211,7 +211,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private void AllocateStaticFields(MosaType type)
 		{
-			foreach (MosaField field in type.Fields)
+			foreach (var field in type.Fields)
 			{
 				if (field.IsStaticField && !field.IsLiteralField)
 				{
@@ -241,7 +241,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private void AllocateSpace(MosaField field, SectionKind section, int size, int alignment)
 		{
-			using (Stream stream = compiler.Linker.Allocate(field.FullName, section, size, alignment))
+			using (var stream = compiler.Linker.Allocate(field.FullName, section, size, alignment))
 			{
 				if (field.HasRVA)
 				{
