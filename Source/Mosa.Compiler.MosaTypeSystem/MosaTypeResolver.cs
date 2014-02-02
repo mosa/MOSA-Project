@@ -664,7 +664,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 				}
 				else
 				{
-					var genericInterface = ResolveGenericType(@interface.GenericBaseType, generic.GenericArguments, null);
+					var genericInterface = ResolveGenericType(@interface, generic.GenericArguments, null);
 					generic.Interfaces.Add(genericInterface);
 				}
 			}
