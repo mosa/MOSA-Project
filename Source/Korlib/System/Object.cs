@@ -84,7 +84,7 @@ namespace System
 		/// </returns>
 		public Type GetType()
 		{
-			return new Type();
+            throw new NotImplementedException();
 		}
 
 		/// <summary>

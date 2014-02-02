@@ -127,5 +127,14 @@ namespace Mosa.DeviceSystem
                 }
             }
         }
+
+        /// <summary>
+        /// Registers a device driver using a prebuilt DeviceDriver object.
+        /// </summary>
+        /// <param name="driver">The prebuilt DeviceDriver object</param>
+        public void RegisterDeviceDriver(DeviceDriver driver)
+        {
+            deviceDrivers.Add(driver);
+        }
 	}
 }

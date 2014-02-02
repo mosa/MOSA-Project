@@ -11,5 +11,13 @@ namespace System.Reflection
 {
 	public class Assembly
 	{
+        /// <summary>
+        /// Gets the types defined in this assembly.
+        /// </summary>
+        /// <returns>An array that contains all the types that are defined in this assembly.</returns>
+        public virtual Type[] GetTypes()
+        {
+            throw new NotImplementedException();
+        }
 	}
 }

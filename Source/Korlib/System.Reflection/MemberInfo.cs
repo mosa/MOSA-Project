@@ -13,10 +13,25 @@ namespace System.Reflection
 	/// Implementation of the "System.Reflection.DefaultMemberAttribute" class
 	/// </summary>
 	[SerializableAttribute]
-	public abstract class MemberInfo
+	public abstract class MemberInfo : ICustomAttributeProvider
 	{
 		protected MemberInfo()
 		{
 		}
-	}
+
+        public object[] GetCustomAttributes(bool inherit)
+        {
+            throw new NotImplementedException();
+        }
+
+        public object[] GetCustomAttributes(Type attributeType, bool inherit)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsDefined(Type attributeType, bool inherit)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }

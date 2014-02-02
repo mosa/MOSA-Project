@@ -6,13 +6,14 @@
  * Authors:
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
+using System.Reflection;
 
 namespace System
 {
 	/// <summary>
 	/// Implementation of the "System.Type" class.
 	/// </summary>
-	public class Type
+	public abstract class Type
 	{
 		// TODO
 
@@ -25,5 +26,10 @@ namespace System
 		{
 			return null;
 		}
+
+        public abstract /*override*/ Module Module
+        {
+            get;
+        }
 	}
 }
