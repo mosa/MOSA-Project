@@ -798,7 +798,6 @@ namespace Mosa.Compiler.MosaTypeSystem
 			generic.RVA = field.RVA;
 			generic.HasRVA = field.HasRVA;
 			generic.Data = generic.Data;
-			generic.Type = field.Type;
 
 			return generic;
 		}

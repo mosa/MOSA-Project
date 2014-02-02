@@ -38,7 +38,11 @@ namespace Mosa.Tool.Explorer
 				new TypeInitializerSchedulerStage(),
 				new TypeLayoutStage(),
 
-				new LinkerFinalizationStage(),
+			});
+
+			if (emitBinary)
+				Pipeline.AddRange(new ICompilerStage[] {
+					new LinkerFinalizationStage(),
 			});
 
 			architecture.ExtendCompilerPipeline(Pipeline);
