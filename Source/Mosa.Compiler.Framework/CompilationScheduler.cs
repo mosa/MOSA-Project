@@ -10,6 +10,7 @@
 using Mosa.Compiler.Common;
 using Mosa.Compiler.MosaTypeSystem;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework.Stages
 {
@@ -52,6 +53,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 		void ICompilationScheduler.TrackTypeAllocated(MosaType type)
 		{
+			Debug.Assert(!type.IsOpenGenericType);
+
 			if (type.IsModule)
 				return;
 
@@ -63,6 +66,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 		void ICompilationScheduler.TrackMethodInvoked(MosaMethod method)
 		{
+			Debug.Assert(!method.IsOpenGenericType);
+
 			methodsInvoked.AddIfNew(method);
 
 			if (compileAllMethods)
@@ -71,6 +76,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 		void ICompilationScheduler.TrackFieldReferenced(MosaField field)
 		{
+			Debug.Assert(!field.Type.IsOpenGenericType);
+
 			if (compileAllMethods)
 				CompileType(field.DeclaringType);
 		}

@@ -322,6 +322,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		internal void AddField(MosaAssembly assembly, Token token, MosaField field)
 		{
+			Debug.Assert(field.DeclaringType.IsBaseGeneric || field.DeclaringType.GenericParameters.Count == field.DeclaringType.GenericArguments.Count);
 			fieldLookup[assembly].Add(token, field);
 		}
 
@@ -337,7 +338,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 			Debug.Assert(!field.Type.IsMVarFlag);
 
 			if (field.DeclaringType.IsOpenGenericType)
-			{
+			{				
 				var type = ResolveGenericType(field.DeclaringType, genericArguments, null);
 
 				foreach (var f in type.Fields)
@@ -718,14 +719,14 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public MosaMethod ResolveGenericMethod(MosaMethod genericBaseMethod, List<MosaType> genericMethodArguments)
 		{
-			var genericType = ResolveGenericType(genericBaseMethod.DeclaringType, genericMethodArguments);
-
 			var genericMethod = FindGenericMethod(genericBaseMethod, genericMethodArguments);
 
 			if (genericMethod != null)
 				return genericMethod;
 
-			genericMethod = CreateGenericMethod(genericBaseMethod, genericBaseMethod.DeclaringType, genericMethodArguments);
+			var genericType = ResolveGenericType(genericBaseMethod.DeclaringType, genericMethodArguments);
+
+			genericMethod = CreateGenericMethod(genericBaseMethod, genericType, genericMethodArguments);
 
 			StoreGenericMethod(genericBaseMethod, genericMethodArguments, genericMethod);
 
