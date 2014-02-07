@@ -147,6 +147,13 @@ namespace Mosa.Utility.GUI.Common
 							if (method.IsRTSpecialName)
 								methodNode.Text = methodNode.Text + " [RTSpecialName]";
 
+
+							if (method.GenericBaseMethod != null)
+							{
+								TreeNode genericBaseMethodNodes = new TreeNode("Generic Base Method: " + method.GenericBaseMethod.MethodName);
+								methodNode.Nodes.Add(genericBaseMethodNodes);
+							}
+
 							if (method.GenericParameters.Count != 0)
 							{
 								TreeNode genericParameterNodes = new TreeNode("Generic Parameters");
@@ -159,12 +166,12 @@ namespace Mosa.Utility.GUI.Common
 								}
 							}
 
-							if (method.GenericParameterTypes.Count != 0)
+							if (method.GenericArguments.Count != 0)
 							{
 								TreeNode genericParameterNodes = new TreeNode("Generic Parameters Types");
 								methodNode.Nodes.Add(genericParameterNodes);
 
-								foreach (var genericParameter in method.GenericParameterTypes)
+								foreach (var genericParameter in method.GenericArguments)
 								{
 									TreeNode GenericParameterNode = new TreeNode(genericParameter.Name);
 									genericParameterNodes.Nodes.Add(GenericParameterNode);

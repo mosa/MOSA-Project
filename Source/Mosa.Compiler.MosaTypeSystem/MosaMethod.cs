@@ -24,6 +24,10 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public MosaType DeclaringType { get; internal set; }
 
+		public MosaMethod GenericParentMethod { get; internal set; }
+
+		public MosaMethod GenericBaseMethod { get; internal set; }
+
 		public bool IsAbstract { get; internal set; }
 
 		public bool IsBaseGeneric { get; internal set; }
@@ -60,7 +64,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public IList<MosaGenericParameter> GenericParameters { get; internal set; }
 
-		public List<MosaType> GenericParameterTypes { get; internal set; }
+		public List<MosaType> GenericArguments { get; internal set; }
 
 		public List<MosaType> LocalVariables { get; internal set; }
 
@@ -100,7 +104,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 			GenericParameters = new List<MosaGenericParameter>();
 			CustomAttributes = new List<MosaAttribute>();
 			LocalVariables = new List<MosaType>();
-			GenericParameterTypes = new List<MosaType>();
+			GenericArguments = new List<MosaType>();
 			ExceptionBlocks = new List<ExceptionBlock>();
 		}
 

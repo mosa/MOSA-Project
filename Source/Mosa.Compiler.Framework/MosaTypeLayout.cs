@@ -513,7 +513,7 @@ namespace Mosa.Compiler.Framework
 			{
 				if (baseMethod.Name.Equals(method.Name) && baseMethod.Matches(method))
 				{
-					if (baseMethod.GenericParameterTypes.Count == 0)
+					if (baseMethod.GenericArguments.Count == 0)
 						return methodTableOffsets[baseMethod];
 					else
 						slot = methodTableOffsets[baseMethod];
