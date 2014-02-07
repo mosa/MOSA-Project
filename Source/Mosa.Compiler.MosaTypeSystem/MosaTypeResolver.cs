@@ -341,6 +341,8 @@ namespace Mosa.Compiler.MosaTypeSystem
 			{
 				var type = ResolveGenericType(field.DeclaringType, genericArguments, null);
 
+				ResolveDelayedGenerics();
+
 				foreach (var f in type.Fields)
 				{
 					if (f.Name == field.Name)
@@ -543,7 +545,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 			}
 
 			resolvedGenericType = CreateGenericType(genericType, genericArguments);
-
+			
 			AddType(resolvedGenericType);
 
 			StoreGenericType(resolvedGenericType, genericArguments);
