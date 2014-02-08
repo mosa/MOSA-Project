@@ -142,7 +142,7 @@ namespace Mosa.Platform.x86.Stages
 			if (multibootMethod == null)
 			{
 				multibootMethod = compiler.CreateLinkerMethod("MultibootInit");
-				linker.EntryPoint = linker.GetSymbol(multibootMethod.MethodName);
+				
 				WriteMultibootHeader();
 				return;
 			}
@@ -168,6 +168,8 @@ namespace Mosa.Platform.x86.Stages
 			ctx.AppendInstruction(X86.Ret);
 
 			compiler.CompileMethod(multibootMethod, basicBlocks, instructionSet);
+
+			linker.EntryPoint = linker.GetSymbol(multibootMethod.MethodName);
 		}
 
 		#endregion ICompilerStage Members
