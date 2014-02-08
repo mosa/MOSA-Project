@@ -208,6 +208,8 @@ namespace Mosa.Compiler.MosaTypeSystem
 			if (type.IsOpenGenericType)
 			{
 				type = ResolveGenericType(baseMethod.DeclaringType, baseMethod.DeclaringType.GenericArguments);
+
+				ResolveDelayedGenerics();
 			}
 
 			return type;
@@ -310,6 +312,8 @@ namespace Mosa.Compiler.MosaTypeSystem
 			if (method.IsOpenGenericType)
 			{
 				method = ResolveGenericMethod(method, genericArguments);
+
+				ResolveDelayedGenerics();
 			}
 
 			return method;
@@ -326,7 +330,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 			fieldLookup[assembly].Add(token, field);
 		}
 
-		public MosaField GetFieldByToken(MosaAssembly assembly, Token token)
+		internal MosaField GetFieldByToken(MosaAssembly assembly, Token token)
 		{
 			return fieldLookup[assembly][token];
 		}
@@ -535,7 +539,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 			argumentPairs.Add(new KeyValuePair<List<MosaType>, MosaType>(genericArguments, genericType));
 		}
 
-		public MosaType ResolveGenericType(MosaType genericType, List<MosaType> genericArguments)
+		internal MosaType ResolveGenericType(MosaType genericType, List<MosaType> genericArguments)
 		{
 			var resolvedGenericType = FindGenericType(genericType, genericArguments);
 
@@ -553,7 +557,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 			return resolvedGenericType;
 		}
 
-		public MosaType CreateGenericType(MosaType genericBaseType, List<MosaType> genericArguments)
+		internal MosaType CreateGenericType(MosaType genericBaseType, List<MosaType> genericArguments)
 		{
 			var generic = new MosaType(GenericAssembly);
 
@@ -715,7 +719,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 			argumentPairs.Add(new KeyValuePair<List<MosaType>, MosaMethod>(genericArguments, genericMethod));
 		}
 
-		public MosaMethod ResolveGenericMethod(MosaMethod genericMethod, List<MosaType> genericArguments)
+		internal MosaMethod ResolveGenericMethod(MosaMethod genericMethod, List<MosaType> genericArguments)
 		{
 			var resolvedGenericMethod = FindGenericMethod(genericMethod, genericArguments);
 
@@ -807,7 +811,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 			return generic;
 		}
 
-		public MosaType ResolveGenericType(MosaType type, List<MosaType> genericArguments, List<MosaType> genericMethodArguments)
+		internal MosaType ResolveGenericType(MosaType type, List<MosaType> genericArguments, List<MosaType> genericMethodArguments)
 		{
 			if (type.IsVarFlag)
 			{

@@ -41,9 +41,9 @@ namespace Mosa.Compiler.Framework.CIL
 
 			var field = decoder.TypeSystem.Resolver.GetFieldByToken(decoder.Method.CodeAssembly, decoder.DecodeTokenType(), decoder.Method.DeclaringType.GenericArguments);
 
-			ctx.MosaField = field;
-
 			decoder.Compiler.Scheduler.TrackFieldReferenced(field);
+
+			ctx.MosaField = field;
 		}
 
 		/// <summary>

@@ -61,7 +61,9 @@ namespace Mosa.Compiler.Framework.Stages
 			typesAllocated.AddIfNew(type);
 
 			if (compileAllMethods)
+			{
 				CompileType(type);
+			}
 		}
 
 		void ICompilationScheduler.TrackMethodInvoked(MosaMethod method)
@@ -69,17 +71,15 @@ namespace Mosa.Compiler.Framework.Stages
 			Debug.Assert(!method.IsOpenGenericType);
 
 			methodsInvoked.AddIfNew(method);
-
-			if (compileAllMethods)
-				CompileMethod(method);
+			
+			(this as ICompilationScheduler).TrackTypeAllocated(method.DeclaringType);
 		}
 
 		void ICompilationScheduler.TrackFieldReferenced(MosaField field)
 		{
 			Debug.Assert(!field.Type.IsOpenGenericType);
 
-			if (compileAllMethods)
-				CompileType(field.DeclaringType);
+			(this as ICompilationScheduler).TrackTypeAllocated(field.DeclaringType);
 		}
 
 		/// <summary>
@@ -116,7 +116,9 @@ namespace Mosa.Compiler.Framework.Stages
 			typeScheduled.Add(type);
 
 			foreach (var method in type.Methods)
+			{
 				CompileMethod(method);
+			}
 		}
 
 		private void CompileMethod(MosaMethod method)

@@ -99,7 +99,7 @@ namespace Mosa.Compiler.Framework.CIL
 			// Remove the this argument from the invocation, it's not on the stack yet.
 			context.OperandCount--;
 
-			//decoder.Compiler.Scheduler.TrackMethodInvoked(ctx.InvokeMethod);
+			decoder.Compiler.Scheduler.TrackTypeAllocated(ctor.DeclaringType);
 			decoder.Compiler.Scheduler.TrackTypeAllocated(context.InvokeMethod.DeclaringType);
 
 			// Set a return value according to the type of the object allocated
