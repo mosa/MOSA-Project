@@ -409,7 +409,7 @@ namespace Mosa.Compiler.Framework
 		/// <exception cref="InvalidCompilerException"></exception>
 		public static Operand CreateConstant(MosaType type, ulong value)
 		{
-			Operand operand = new Operand(type);
+			var operand = new Operand(type);
 			operand.IsConstant = true;
 
 			if (operand.IsUnsigned)
@@ -456,7 +456,7 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		public static Operand CreateConstantUnsignedByte(TypeSystem typeSystem, byte value)
 		{
-			Operand operand = new Operand(typeSystem.BuiltIn.U1);
+			var operand = new Operand(typeSystem.BuiltIn.U1);
 			operand.IsConstant = true;
 			operand.ConstantUnsignedInteger = value;
 			return operand;
@@ -472,7 +472,7 @@ namespace Mosa.Compiler.Framework
 		/// </returns>
 		public static Operand CreateConstantUnsignedInt(TypeSystem typeSystem, uint value)
 		{
-			Operand operand = new Operand(typeSystem.BuiltIn.U4);
+			var operand = new Operand(typeSystem.BuiltIn.U4);
 			operand.IsConstant = true;
 			operand.ConstantUnsignedInteger = value;
 			return operand;
@@ -488,7 +488,7 @@ namespace Mosa.Compiler.Framework
 		/// </returns>
 		public static Operand CreateConstantSignedInt(TypeSystem typeSystem, int value)
 		{
-			Operand operand = new Operand(typeSystem.BuiltIn.I4);
+			var operand = new Operand(typeSystem.BuiltIn.I4);
 			operand.IsConstant = true;
 			operand.ConstantSignedInteger = value;
 			return operand;
@@ -504,7 +504,7 @@ namespace Mosa.Compiler.Framework
 		/// </returns>
 		public static Operand CreateConstantUnsignedLong(TypeSystem typeSystem, ulong value)
 		{
-			Operand operand = new Operand(typeSystem.BuiltIn.U8);
+			var operand = new Operand(typeSystem.BuiltIn.U8);
 			operand.IsConstant = true;
 			operand.ConstantUnsignedInteger = value;
 			return operand;
@@ -520,7 +520,7 @@ namespace Mosa.Compiler.Framework
 		/// </returns>
 		public static Operand CreateConstantSignedLong(TypeSystem typeSystem, long value)
 		{
-			Operand operand = new Operand(typeSystem.BuiltIn.I8);
+			var operand = new Operand(typeSystem.BuiltIn.I8);
 			operand.IsConstant = true;
 			operand.ConstantSignedInteger = value;
 			return operand;
@@ -536,7 +536,7 @@ namespace Mosa.Compiler.Framework
 		/// </returns>
 		public static Operand CreateConstantSingle(TypeSystem typeSystem, float value)
 		{
-			Operand operand = new Operand(typeSystem.BuiltIn.R4);
+			var operand = new Operand(typeSystem.BuiltIn.R4);
 			operand.IsConstant = true;
 			operand.ConstantSingleFloatingPoint = value;
 			return operand;
@@ -552,7 +552,7 @@ namespace Mosa.Compiler.Framework
 		/// </returns>
 		public static Operand CreateConstantDouble(TypeSystem typeSystem, double value)
 		{
-			Operand operand = new Operand(typeSystem.BuiltIn.R8);
+			var operand = new Operand(typeSystem.BuiltIn.R8);
 			operand.IsConstant = true;
 			operand.ConstantDoubleFloatingPoint = value;
 			return operand;
@@ -564,7 +564,7 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		public static Operand GetNull(TypeSystem typeSystem)
 		{
-			Operand operand = new Operand(typeSystem.BuiltIn.Object);
+			var operand = new Operand(typeSystem.BuiltIn.Object);
 			operand.IsNull = true;
 			operand.IsConstant = true;
 			return operand;
@@ -578,7 +578,7 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		public static Operand CreateUnmanagedSymbolPointer(TypeSystem typeSystem, string name)
 		{
-			Operand operand = new Operand(typeSystem.BuiltIn.Ptr);
+			var operand = new Operand(typeSystem.BuiltIn.Ptr);
 			operand.IsSymbol = true;
 			operand.Name = name;
 			return operand;
@@ -592,7 +592,7 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		public static Operand CreateManagedSymbolPointer(TypeSystem typeSystem, string name)
 		{
-			Operand operand = new Operand(typeSystem.BuiltIn.TypedByRef);
+			var operand = new Operand(typeSystem.BuiltIn.TypedByRef);
 			operand.IsSymbol = true;
 			operand.Name = name;
 			return operand;
@@ -609,7 +609,7 @@ namespace Mosa.Compiler.Framework
 		{
 			Debug.Assert(data != null);
 
-			Operand operand = new Operand(typeSystem.BuiltIn.String);
+			var operand = new Operand(typeSystem.BuiltIn.String);
 			operand.IsSymbol = true;
 			operand.Name = name;
 			operand.StringData = data;
@@ -637,7 +637,7 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		public static Operand CreateVirtualRegister(MosaType type, int index)
 		{
-			Operand operand = new Operand(type);
+			var operand = new Operand(type);
 			operand.IsVirtualRegister = true;
 			operand.Index = index;
 			return operand;
@@ -652,7 +652,7 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		public static Operand CreateVirtualRegister(MosaType type, int index, string name)
 		{
-			Operand operand = new Operand(type);
+			var operand = new Operand(type);
 			operand.IsVirtualRegister = true;
 			operand.Name = name;
 			operand.Index = index;
@@ -667,7 +667,7 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		public static Operand CreateCPURegister(MosaType type, Register register)
 		{
-			Operand operand = new Operand(type);
+			var operand = new Operand(type);
 			operand.IsCPURegister = true;
 			operand.Register = register;
 			return operand;
@@ -682,7 +682,7 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		public static Operand CreateMemoryAddress(MosaType type, Operand offsetBase, long offset)
 		{
-			Operand operand = new Operand(type);
+			var operand = new Operand(type);
 			operand.IsMemoryAddress = true;
 			operand.OffsetBase = offsetBase;
 			operand.Displacement = offset;
@@ -697,7 +697,7 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		public static Operand CreateLabel(MosaType type, string label)
 		{
-			Operand operand = new Operand(type);
+			var operand = new Operand(type);
 			operand.IsMemoryAddress = true;
 			operand.IsLabel = true;
 			operand.Name = label;
@@ -712,7 +712,7 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		public static Operand CreateField(MosaField field)
 		{
-			Operand operand = new Operand(field.Type);
+			var operand = new Operand(field.Type);
 			operand.IsMemoryAddress = true;
 			operand.IsField = true;
 			operand.Displacement = 0;
@@ -730,7 +730,7 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		public static Operand CreateParameter(MosaType type, Register register, int displacement, int index, string name)
 		{
-			Operand operand = new Operand(type);
+			var operand = new Operand(type);
 			operand.IsMemoryAddress = true;
 			operand.IsParameter = true;
 			operand.Register = register;
@@ -749,7 +749,7 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		public static Operand CreateStackLocal(MosaType type, Register register, int index)
 		{
-			Operand operand = new Operand(type);
+			var operand = new Operand(type);
 			operand.IsMemoryAddress = true;
 			operand.Register = register;
 			operand.Index = index;
@@ -765,7 +765,7 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		public static Operand CreateSSA(Operand ssaOperand, int ssaVersion)
 		{
-			Operand operand = new Operand(ssaOperand.Type);
+			var operand = new Operand(ssaOperand.Type);
 			operand.IsParameter = ssaOperand.IsParameter;
 			operand.IsStackLocal = ssaOperand.IsStackLocal;
 			operand.IsShift = ssaOperand.IsShift;
@@ -906,7 +906,7 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		public static Operand CreateShifter(ShiftType shiftType)
 		{
-			Operand operand = new Operand(shiftType);
+			var operand = new Operand(shiftType);
 			return operand;
 		}
 
@@ -935,15 +935,15 @@ namespace Mosa.Compiler.Framework
 
 			if (IsVirtualRegister)
 			{
-				sb.AppendFormat("local{0}", Index);
+				sb.AppendFormat("V_{0}", Index);
 			}
 			else if (IsStackLocal && Name == null)
 			{
-				sb.AppendFormat("t{0}", Index);
+				sb.AppendFormat("T_{0}", Index);
 			}
 			else if (IsParameter && Name == null)
 			{
-				sb.AppendFormat("parameter{0}", Index);
+				sb.AppendFormat("P_{0}", Index);
 			}
 
 			if (Name != null)
