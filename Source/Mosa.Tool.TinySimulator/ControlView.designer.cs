@@ -46,7 +46,7 @@ namespace Mosa.Tool.TinySimulator
 			// cbBreakAfterReturn
 			// 
 			this.cbBreakAfterReturn.AutoSize = true;
-			this.cbBreakAfterReturn.Location = new System.Drawing.Point(179, 35);
+			this.cbBreakAfterReturn.Location = new System.Drawing.Point(167, 34);
 			this.cbBreakAfterReturn.Name = "cbBreakAfterReturn";
 			this.cbBreakAfterReturn.Size = new System.Drawing.Size(58, 17);
 			this.cbBreakAfterReturn.TabIndex = 28;
@@ -57,7 +57,7 @@ namespace Mosa.Tool.TinySimulator
 			// cbBreakAfterCall
 			// 
 			this.cbBreakAfterCall.AutoSize = true;
-			this.cbBreakAfterCall.Location = new System.Drawing.Point(130, 34);
+			this.cbBreakAfterCall.Location = new System.Drawing.Point(123, 34);
 			this.cbBreakAfterCall.Name = "cbBreakAfterCall";
 			this.cbBreakAfterCall.Size = new System.Drawing.Size(43, 17);
 			this.cbBreakAfterCall.TabIndex = 27;
@@ -131,7 +131,7 @@ namespace Mosa.Tool.TinySimulator
 			// cbRecord
 			// 
 			this.cbRecord.AutoSize = true;
-			this.cbRecord.Location = new System.Drawing.Point(343, 34);
+			this.cbRecord.Location = new System.Drawing.Point(368, 34);
 			this.cbRecord.Name = "cbRecord";
 			this.cbRecord.Size = new System.Drawing.Size(61, 17);
 			this.cbRecord.TabIndex = 21;
@@ -141,9 +141,9 @@ namespace Mosa.Tool.TinySimulator
 			// 
 			// tbSteps
 			// 
-			this.tbSteps.Location = new System.Drawing.Point(410, 32);
+			this.tbSteps.Location = new System.Drawing.Point(435, 32);
 			this.tbSteps.Name = "tbSteps";
-			this.tbSteps.Size = new System.Drawing.Size(80, 20);
+			this.tbSteps.Size = new System.Drawing.Size(55, 20);
 			this.tbSteps.TabIndex = 20;
 			this.tbSteps.Text = "1000";
 			// 
@@ -172,11 +172,11 @@ namespace Mosa.Tool.TinySimulator
 			// cbBreakAfterBranch
 			// 
 			this.cbBreakAfterBranch.AutoSize = true;
-			this.cbBreakAfterBranch.Location = new System.Drawing.Point(243, 35);
+			this.cbBreakAfterBranch.Location = new System.Drawing.Point(231, 34);
 			this.cbBreakAfterBranch.Name = "cbBreakAfterBranch";
-			this.cbBreakAfterBranch.Size = new System.Drawing.Size(60, 17);
+			this.cbBreakAfterBranch.Size = new System.Drawing.Size(128, 17);
 			this.cbBreakAfterBranch.TabIndex = 30;
-			this.cbBreakAfterBranch.Text = "UnconditionalBranch";
+			this.cbBreakAfterBranch.Text = "Unconditional Branch";
 			this.cbBreakAfterBranch.UseVisualStyleBackColor = true;
 			this.cbBreakAfterBranch.CheckedChanged += new System.EventHandler(this.cbBreakAfterBranch_CheckedChanged);
 			// 

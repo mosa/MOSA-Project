@@ -139,6 +139,8 @@ namespace Mosa.Tool.TinySimulator
 			if (openFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
 			{
 				LoadAssembly(openFileDialog.FileName);
+
+				Status = "Assembly Loaded. Ready to Compile.";
 			}
 		}
 
