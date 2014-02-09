@@ -7,8 +7,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using Mosa.Compiler.Metadata.Signatures;
-
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
@@ -42,7 +40,7 @@ namespace Mosa.Compiler.Framework.CIL
 			base.Decode(ctx, decoder);
 
 			// Push the address on the stack
-			ctx.Result = decoder.Compiler.CreateVirtualRegister(BuiltInSigType.IntPtr);
+			ctx.Result = decoder.Compiler.CreateVirtualRegister(decoder.TypeSystem.BuiltIn.TypedByRef);
 		}
 
 		/// <summary>

@@ -7,11 +7,8 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using Mosa.Compiler.Metadata;
-using Mosa.Compiler.TypeSystem;
-using Mosa.Compiler.TypeSystem.Cil;
+using Mosa.Compiler.MosaTypeSystem;
 using System;
-using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework.CIL
 {
@@ -126,50 +123,15 @@ namespace Mosa.Compiler.Framework.CIL
 		/// <param name="decoder">The IL decoder, which provides decoding functionality.</param>
 		/// <param name="flags">Flags, which control the</param>
 		/// <returns></returns>
-		protected static Token DecodeInvocationTarget(Context ctx, IInstructionDecoder decoder, InvokeSupportFlags flags)
+		protected static MosaMethod DecodeInvocationTarget(Context ctx, IInstructionDecoder decoder, InvokeSupportFlags flags)
 		{
-			// Retrieve the immediate argument - it contains the token
-			// of the methoddef, methodref, methodspec or callsite to call.
-			Token callTarget = decoder.DecodeTokenType();
+			var method = decoder.TypeSystem.Resolver.GetMethodByToken(decoder.Method.CodeAssembly, decoder.DecodeTokenType(), decoder.Compiler.Method.DeclaringType.GenericArguments);
 
-			if (!IsCallTargetSupported(callTarget.Table, flags))
-				throw new InvalidOperationException(@"Invalid IL call target specification.");
-
-			ITypeModule module = decoder.Method.Module;
-			RuntimeMethod method = null;
-
-			switch (callTarget.Table)
-			{
-				case TableType.MethodDef:
-					method = module.GetMethod(callTarget);
-					decoder.Compiler.Scheduler.TrackMethodInvoked(method);
-					break;
-
-				case TableType.MemberRef:
-					method = module.GetMethod(callTarget, decoder.Method.DeclaringType);
-					if (method.DeclaringType.IsGeneric)
-						decoder.Compiler.Scheduler.TrackMethodInvoked(method);
-					break;
-
-				case TableType.MethodSpec:
-					method = module.GetMethod(callTarget);
-					decoder.Compiler.Scheduler.TrackMethodInvoked(method);
-					break;
-
-				default:
-					Debug.Assert(false, @"Should never reach this!");
-					break;
-			}
-
-			if (method.DeclaringType.ContainsOpenGenericParameters)
-			{
-				method = decoder.GenericTypePatcher.PatchMethod(method.DeclaringType.Module, decoder.Method.DeclaringType as CilGenericType, method);
-				decoder.Compiler.Scheduler.TrackMethodInvoked(method);
-			}
+			decoder.Compiler.Scheduler.TrackMethodInvoked(method);
 
 			SetInvokeTarget(ctx, decoder.Compiler, method);
 
-			return callTarget;
+			return method;
 		}
 
 		/// <summary>
@@ -178,15 +140,12 @@ namespace Mosa.Compiler.Framework.CIL
 		/// <param name="context">The context.</param>
 		/// <param name="compiler">The compiler.</param>
 		/// <param name="method">The method.</param>
-		private static void SetInvokeTarget(Context context, BaseMethodCompiler compiler, RuntimeMethod method)
+		private static void SetInvokeTarget(Context context, BaseMethodCompiler compiler, MosaMethod method)
 		{
-			if (method == null)
-				throw new ArgumentNullException(@"method");
-
 			context.InvokeMethod = method;
 
 			// Fix the parameter list
-			int paramCount = method.SigParameters.Length;
+			int paramCount = method.Parameters.Count;
 
 			if (method.HasThis && !method.HasExplicitThis)
 				paramCount++;
@@ -195,34 +154,12 @@ namespace Mosa.Compiler.Framework.CIL
 			if (!method.ReturnType.IsVoid)
 			{
 				context.ResultCount = 1;
-				context.Result = compiler.CreateVirtualRegister(Operand.NormalizeSigType(method.ReturnType));
+				context.Result = compiler.CreateVirtualRegister(compiler.TypeSystem.ConvertToStackType(method.ReturnType));
 			}
 			else
 				context.ResultCount = 0;
 
 			context.OperandCount = (byte)paramCount;
-		}
-
-		/// <summary>
-		/// Determines whether [is call target supported] [the specified target type].
-		/// </summary>
-		/// <param name="targetType">Type of the target.</param>
-		/// <param name="flags">The flags.</param>
-		/// <returns>
-		/// 	<c>true</c> if [is call target supported] [the specified target type]; otherwise, <c>false</c>.
-		/// </returns>
-		private static bool IsCallTargetSupported(TableType targetType, InvokeSupportFlags flags)
-		{
-			bool result = false;
-
-			if (targetType == TableType.MethodDef && InvokeSupportFlags.MethodDef == (flags & InvokeSupportFlags.MethodDef))
-				result = true;
-			else if (targetType == TableType.MemberRef && InvokeSupportFlags.MemberRef == (flags & InvokeSupportFlags.MemberRef))
-				result = true;
-			else if (targetType == TableType.MethodSpec && InvokeSupportFlags.MethodSpec == (flags & InvokeSupportFlags.MethodSpec))
-				result = true;
-
-			return result;
 		}
 
 		#endregion Methods

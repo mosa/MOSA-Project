@@ -1365,7 +1365,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 							Context context = new Context(instructionSet, currentInterval.End.Index);
 							context.GotoPrevious();
 
-							while (context.IsEmpty || context.Instruction.FlowControl == FlowControl.Branch || context.Instruction.FlowControl == FlowControl.ConditionalBranch || context.Instruction.FlowControl == FlowControl.Return)
+							while (context.IsEmpty || context.Instruction.FlowControl == FlowControl.UnconditionalBranch || context.Instruction.FlowControl == FlowControl.ConditionalBranch || context.Instruction.FlowControl == FlowControl.Return)
 							{
 								context.GotoPrevious();
 							}

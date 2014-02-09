@@ -41,7 +41,7 @@ namespace Mosa.TinyCPUSimulator.Adaptor
 			return;
 		}
 
-		protected override void EmitInstruction(Context context, ICodeEmitter codeEmitter)
+		protected override void EmitInstruction(Context context, BaseCodeEmitter codeEmitter)
 		{
 			long start = codeEmitter.CurrentPosition;
 
@@ -64,7 +64,7 @@ namespace Mosa.TinyCPUSimulator.Adaptor
 
 			base.BlockStart(block);
 
-			simAdapter.SimCPU.SetSymbol(block.ToString() + ":" + methodCompiler.Method.FullName, (ulong)(sectionAddress + startPosition + current), 0);
+			simAdapter.SimCPU.SetSymbol(block.ToString() + ":" + methodCompiler.Method.MethodName, (ulong)(sectionAddress + startPosition + current), 0);
 		}
 	}
 }

@@ -34,7 +34,7 @@ namespace Mosa.Compiler.Framework.Stages
 					if (!(context.Instruction is IntrinsicMethodCall))
 						continue;
 
-					string external = context.InvokeMethod.Module.GetExternalName(context.InvokeMethod.Token);
+					string external = context.InvokeMethod.ExternalReference;
 
 					//TODO: Verify!
 

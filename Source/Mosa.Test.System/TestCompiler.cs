@@ -9,8 +9,7 @@
 
 using MbUnit.Framework;
 using Mosa.Compiler.Linker;
-using Mosa.Compiler.Metadata.Loader;
-using Mosa.Compiler.TypeSystem;
+using Mosa.Compiler.MosaTypeSystem;
 using Mosa.Test.CodeDomCompiler;
 using System;
 using System.CodeDom.Compiler;
@@ -26,7 +25,7 @@ namespace Mosa.Test.System
 		/// <summary>
 		/// Holds the type system
 		/// </summary>
-		private ITypeSystem typeSystem;
+		private TypeSystem typeSystem;
 
 		/// <summary>
 		///
@@ -94,7 +93,7 @@ namespace Mosa.Test.System
 			}
 
 			// Find the test method to execute
-			RuntimeMethod runtimeMethod = FindMethod(
+			MosaMethod runtimeMethod = FindMethod(
 				ns,
 				type,
 				method,
@@ -116,7 +115,7 @@ namespace Mosa.Test.System
 
 			Debug.Assert(delegateType != null, delegateName);
 
-			LinkerSymbol symbol = linker.GetSymbol(runtimeMethod.FullName);
+			LinkerSymbol symbol = linker.GetSymbol(runtimeMethod.MethodName);
 			LinkerSection section = linker.GetSection(symbol.SectionKind);
 
 			long address = symbol.VirtualAddress;
@@ -150,7 +149,7 @@ namespace Mosa.Test.System
 
 				CompilerResults results = Mosa.Test.CodeDomCompiler.Compiler.ExecuteCompiler(cacheSettings);
 
-				Assert.IsFalse(results.Errors.HasErrors, "Failed to compile source code with native compiler");
+				Assert.IsFalse(results.Errors.HasErrors, "Failed to compile source codeReader with native compiler");
 
 				linker = RunMosaCompiler(settings, results.PathToAssembly);
 
@@ -166,13 +165,13 @@ namespace Mosa.Test.System
 		/// <param name="method">The method to find.</param>
 		/// <param name="parameters">The parameters.</param>
 		/// <returns>
-		/// An instance of <see cref="RuntimeMethod" />.
+		/// An instance of <see cref="MosaMethod" />.
 		/// </returns>
 		/// <exception cref="System.MissingMethodException"></exception>
 		/// <exception cref="MissingMethodException">The sought method is not found.</exception>
-		private RuntimeMethod FindMethod(string ns, string type, string method, params object[] parameters)
+		private MosaMethod FindMethod(string ns, string type, string method, params object[] parameters)
 		{
-			foreach (RuntimeType t in typeSystem.GetAllTypes())
+			foreach (MosaType t in typeSystem.AllTypes)
 			{
 				if (t.Name != type)
 					continue;
@@ -181,7 +180,7 @@ namespace Mosa.Test.System
 					if (t.Namespace != ns)
 						continue;
 
-				foreach (RuntimeMethod m in t.Methods)
+				foreach (MosaMethod m in t.Methods)
 				{
 					if (m.Name == method)
 					{
@@ -200,8 +199,9 @@ namespace Mosa.Test.System
 
 		private TestLinker RunMosaCompiler(CompilerSettings settings, string assemblyFile)
 		{
-			IAssemblyLoader assemblyLoader = new AssemblyLoader();
-			assemblyLoader.InitializePrivatePaths(settings.References);
+			MosaAssemblyLoader assemblyLoader = new MosaAssemblyLoader();
+
+			assemblyLoader.AddPrivatePath(settings.References);
 
 			assemblyLoader.LoadModule(assemblyFile);
 
@@ -211,7 +211,8 @@ namespace Mosa.Test.System
 			}
 
 			typeSystem = new TypeSystem();
-			typeSystem.LoadModules(assemblyLoader.Modules);
+
+			typeSystem.Load(assemblyLoader);
 
 			return TestCaseCompiler.Compile(typeSystem);
 		}

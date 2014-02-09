@@ -48,5 +48,29 @@ namespace Mosa.Compiler.MosaTypeSystem
 		public MosaType TypedByRef { get; internal set; }
 
 		public MosaType Ptr { get; internal set; }
+
+		// OLD Style
+
+		public MosaType Byte { get { return U1; } }
+
+		public MosaType UInt8 { get { return U1; } }
+
+		public MosaType UInt16 { get { return U2; } }
+
+		public MosaType UInt32 { get { return U4; } }
+
+		public MosaType UInt64 { get { return U8; } }
+
+		public MosaType Int8 { get { return I1; } }
+
+		public MosaType Int16 { get { return I2; } }
+
+		public MosaType Int32 { get { return I8; } }
+
+		public MosaType Int64 { get { return I8; } }
+
+		public MosaType Single { get { return R4; } }
+
+		public MosaType Double { get { return R8; } }
 	}
 }

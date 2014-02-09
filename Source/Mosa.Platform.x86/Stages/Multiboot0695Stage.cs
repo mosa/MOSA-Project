@@ -6,13 +6,13 @@
  * Authors:
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  *  Kai P. Reisert <kpreisert@googlemail.com>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Stages;
 using Mosa.Compiler.Linker;
-using Mosa.Compiler.Metadata.Signatures;
-using Mosa.Compiler.TypeSystem;
+using Mosa.Compiler.MosaTypeSystem;
 using System.IO;
 using System.Text;
 
@@ -97,9 +97,9 @@ namespace Mosa.Platform.x86.Stages
 		public uint VideoDepth { get; set; }
 
 		/// <summary>
-		/// Holds true if the second stage is reached
+		/// The multiboot method
 		/// </summary>
-		private bool secondStage;
+		private MosaMethod multibootMethod;
 
 		#endregion Data members
 
@@ -114,7 +114,6 @@ namespace Mosa.Platform.x86.Stages
 			VideoWidth = 80;
 			VideoHeight = 25;
 			VideoDepth = 0;
-			secondStage = false;
 		}
 
 		#endregion Construction
@@ -140,37 +139,37 @@ namespace Mosa.Platform.x86.Stages
 		/// </summary>
 		void ICompilerStage.Run()
 		{
-			if (!secondStage)
+			if (multibootMethod == null)
 			{
+				multibootMethod = compiler.CreateLinkerMethod("MultibootInit");
+				
 				WriteMultibootHeader();
-				secondStage = true;
+				return;
 			}
-			else
-			{
-				TypeInitializerSchedulerStage typeInitializerSchedulerStage = this.compiler.Pipeline.FindFirst<TypeInitializerSchedulerStage>();
 
-				Operand ecx = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.ECX);
-				Operand eax = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.EAX);
-				Operand ebx = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.EBX);
+			TypeInitializerSchedulerStage typeInitializerSchedulerStage = compiler.Pipeline.FindFirst<TypeInitializerSchedulerStage>();
 
-				BasicBlocks basicBlocks = new BasicBlocks();
-				InstructionSet instructionSet = new InstructionSet(25);
-				Context ctx = instructionSet.CreateNewBlock(basicBlocks);
-				basicBlocks.AddHeaderBlock(ctx.BasicBlock);
+			Operand ecx = Operand.CreateCPURegister(typeSystem.BuiltIn.Int32, GeneralPurposeRegister.ECX);
+			Operand eax = Operand.CreateCPURegister(typeSystem.BuiltIn.Int32, GeneralPurposeRegister.EAX);
+			Operand ebx = Operand.CreateCPURegister(typeSystem.BuiltIn.Int32, GeneralPurposeRegister.EBX);
 
-				ctx.AppendInstruction(X86.Mov, ecx, Operand.CreateConstantSignedInt(0x200000));
-				ctx.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(BuiltInSigType.Int32, ecx, 0), eax);
-				ctx.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(BuiltInSigType.Int32, ecx, 4), ebx);
+			BasicBlocks basicBlocks = new BasicBlocks();
+			InstructionSet instructionSet = new InstructionSet(25);
+			Context ctx = instructionSet.CreateNewBlock(basicBlocks);
+			basicBlocks.AddHeaderBlock(ctx.BasicBlock);
 
-				Operand entryPoint = Operand.CreateSymbolFromMethod(typeInitializerSchedulerStage.TypeInitializerMethod);
+			ctx.AppendInstruction(X86.Mov, ecx, Operand.CreateConstantSignedInt(typeSystem, 0x200000));
+			ctx.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(typeSystem.BuiltIn.Int32, ecx, 0), eax);
+			ctx.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(typeSystem.BuiltIn.Int32, ecx, 4), ebx);
 
-				ctx.AppendInstruction(X86.Call, null, entryPoint);
-				ctx.AppendInstruction(X86.Ret);
+			Operand entryPoint = Operand.CreateSymbolFromMethod(typeSystem, typeInitializerSchedulerStage.TypeInitializerMethod);
 
-				RuntimeMethod method = compiler.CreateLinkerMethod("MultibootInit");
-				compiler.CompileMethod(method, basicBlocks, instructionSet);
-				linker.EntryPoint = linker.GetSymbol(method.FullName);
-			}
+			ctx.AppendInstruction(X86.Call, null, entryPoint);
+			ctx.AppendInstruction(X86.Ret);
+
+			compiler.CompileMethod(multibootMethod, basicBlocks, instructionSet);
+
+			linker.EntryPoint = linker.GetSymbol(multibootMethod.MethodName);
 		}
 
 		#endregion ICompilerStage Members
@@ -237,7 +236,7 @@ namespace Mosa.Platform.x86.Stages
 					bw.Write(load_end_addr);
 					bw.Write(bss_end_addr);
 
-					linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuiltInPatch.I4, MultibootHeaderSymbolName, (int)stream.Position, 0, @"Mosa.Tools.Compiler.LinkerGenerated.<$>MultibootInit()", 0);
+					linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuiltInPatch.I4, MultibootHeaderSymbolName, (int)stream.Position, 0, multibootMethod.MethodName, 0);
 					bw.Write((int)0);
 
 					bw.Write(VideoMode);

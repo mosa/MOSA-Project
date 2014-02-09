@@ -59,7 +59,7 @@ namespace Mosa.Platform.ARMv6
 		/// </summary>
 		/// <param name="context">The context.</param>
 		/// <param name="emitter">The emitter.</param>
-		public void Emit(Context context, ICodeEmitter emitter)
+		public void Emit(Context context, BaseCodeEmitter emitter)
 		{
 			Emit(context, emitter as MachineCodeEmitter);
 		}

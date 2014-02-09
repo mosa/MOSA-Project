@@ -20,11 +20,17 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public string MethodName { get; internal set; }
 
+		public string ShortMethodName { get; internal set; }
+
 		public MosaType DeclaringType { get; internal set; }
+
+		public MosaMethod GenericParentMethod { get; internal set; }
+
+		public MosaMethod GenericBaseMethod { get; internal set; }
 
 		public bool IsAbstract { get; internal set; }
 
-		public bool IsGeneric { get; internal set; }
+		public bool IsBaseGeneric { get; internal set; }
 
 		public bool IsStatic { get; internal set; }
 
@@ -58,9 +64,9 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public IList<MosaGenericParameter> GenericParameters { get; internal set; }
 
-		//public IList<MosaType> GenericParameterTypes { get; internal set; }
+		public List<MosaType> GenericArguments { get; internal set; }
 
-		public IList<MosaType> LocalVariables { get; internal set; }
+		public List<MosaType> LocalVariables { get; internal set; }
 
 		public byte[] Code { get; internal set; }
 
@@ -74,10 +80,12 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public bool IsCILGenerated { get; internal set; }
 
+		public bool IsOpenGenericType { get; internal set; }
+
 		public MosaMethod()
 		{
 			IsAbstract = false;
-			IsGeneric = false;
+			IsBaseGeneric = false;
 			IsStatic = false;
 			HasThis = false;
 			HasExplicitThis = false;
@@ -90,12 +98,13 @@ namespace Mosa.Compiler.MosaTypeSystem
 			IsNewSlot = false;
 			IsFinal = false;
 			IsCILGenerated = false;
+			IsOpenGenericType = false;
 
 			Parameters = new List<MosaParameter>();
 			GenericParameters = new List<MosaGenericParameter>();
 			CustomAttributes = new List<MosaAttribute>();
 			LocalVariables = new List<MosaType>();
-			//GenericParameterTypes = new List<MosaType>();
+			GenericArguments = new List<MosaType>();
 			ExceptionBlocks = new List<ExceptionBlock>();
 		}
 
@@ -104,15 +113,10 @@ namespace Mosa.Compiler.MosaTypeSystem
 			return MethodName ?? FullName;
 		}
 
-		public void SetName()
+		internal string GetParameterNames()
 		{
-			FullName = DeclaringType.FullName + "." + Name;
-
 			var sb = new StringBuilder();
 
-			sb.Append(ReturnType.Name);
-			sb.Append(' ');
-			sb.Append(FullName);
 			sb.Append('(');
 
 			for (int i = 0; i < Parameters.Count; i++)
@@ -125,7 +129,41 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 			sb.Append(')');
 
-			MethodName = sb.ToString();
+			return sb.ToString();
+		}
+
+		internal void SetName()
+		{
+			FullName = DeclaringType.FullName + "." + Name;
+
+			string parameterNames = GetParameterNames();
+
+			MethodName = FullName + parameterNames;
+
+			ShortMethodName = ReturnType.Name + " " + Name + parameterNames;
+		}
+
+		internal void SetOpenGeneric()
+		{
+			IsOpenGenericType = DeclaringType.IsOpenGenericType;
+
+			if (IsOpenGenericType)
+				return;
+
+			IsOpenGenericType = MosaType.IsOpenGeneric(ReturnType);
+
+			if (IsOpenGenericType)
+				return;
+
+			foreach (var param in Parameters)
+			{
+				IsOpenGenericType = MosaType.IsOpenGeneric(param.Type);
+
+				if (IsOpenGenericType)
+					return;
+			}
+
+			IsOpenGenericType = false;
 		}
 
 		public bool Matches(MosaMethod method)

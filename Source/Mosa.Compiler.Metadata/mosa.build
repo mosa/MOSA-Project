@@ -23,6 +23,8 @@
                     <include name="GenericSigTypeResolver.cs"/>
                     <include name="MethodFlags.cs"/>
                     <include name="MethodHeader.cs"/>
+                    <include name="Signatures/BuiltInSigType.cs"/>
+                    <include name="Signatures/StandAloneMethodSignature.cs"/>
                     <include name="TableType.cs"/>
                     <include name="EventAttributes.cs"/>
                     <include name="FieldAttributes.cs"/>
@@ -32,8 +34,6 @@
                     <include name="HeapType.cs"/>
                     <include name="IMetadataProvider.cs"/>
                     <include name="IndexType.cs"/>
-                    <include name="Loader/AssemblyLoader.cs"/>
-                    <include name="Loader/IAssemblyLoader.cs"/>
                     <include name="Loader/IMetadataModule.cs"/>
                     <include name="Loader/InstructionStream.cs"/>
                     <include name="Loader/ModuleType.cs"/>
@@ -50,7 +50,6 @@
                     <include name="PropertyAttributes.cs"/>
                     <include name="SignatureReader.cs"/>
                     <include name="Signatures/ArraySigType.cs"/>
-                    <include name="Signatures/BuiltInSigType.cs"/>
                     <include name="Signatures/ClassSigType.cs"/>
                     <include name="Signatures/CustomMod.cs"/>
                     <include name="Signatures/FieldSignature.cs"/>
@@ -66,7 +65,6 @@
                     <include name="Signatures/RefSigType.cs"/>
                     <include name="Signatures/Signature.cs"/>
                     <include name="Signatures/SigType.cs"/>
-                    <include name="Signatures/StandAloneMethodSignature.cs"/>
                     <include name="Signatures/SZArraySigType.cs"/>
                     <include name="Signatures/TypeSigType.cs"/>
                     <include name="Signatures/TypeSpecSignature.cs"/>

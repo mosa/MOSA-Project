@@ -8,7 +8,6 @@
  */
 
 using Mosa.Compiler.Metadata;
-using Mosa.Compiler.Metadata.Signatures;
 
 namespace Mosa.Compiler.Framework.CIL
 {
@@ -24,7 +23,7 @@ namespace Mosa.Compiler.Framework.CIL
 		/// </summary>
 		/// <param name="opCode">The op code.</param>
 		public LdstrInstruction(OpCode opCode)
-			: base(opCode, 0, 1)
+			: base(opCode, 1, 1)
 		{
 			return;
 		}
@@ -43,10 +42,15 @@ namespace Mosa.Compiler.Framework.CIL
 			// Decode base classes first
 			base.Decode(ctx, decoder);
 
-			// Set the result
-			ctx.TokenType = ((HeapIndexToken)decoder.DecodeInt()) | HeapIndexToken.UserString;
+			var token = (HeapIndexToken)decoder.DecodeInt();
 
-			ctx.Result = decoder.Compiler.CreateVirtualRegister(BuiltInSigType.String);
+			string symbolName = @"$ldstr$" + decoder.Method.CodeAssembly.Name + "$" + ((int)(token)).ToString("x");
+
+			string name = decoder.TypeSystem.Resolver.GetUserString(decoder.Method.CodeAssembly, token);
+
+			ctx.Operand1 = Operand.CreateStringSymbol(decoder.TypeSystem, symbolName, name);
+
+			ctx.Result = decoder.Compiler.CreateVirtualRegister(decoder.TypeSystem.BuiltIn.String);
 		}
 
 		/// <summary>
@@ -58,7 +62,8 @@ namespace Mosa.Compiler.Framework.CIL
 		/// </returns>
 		public override string ToString(Context context)
 		{
-			return base.ToString(context) + " <- 0x" + context.TokenType.ToString();
+			//FIXME!
+			return base.ToString(context); // +" <- 0x" + context.TokenType.ToString();
 		}
 
 		/// <summary>

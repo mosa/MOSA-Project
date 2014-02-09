@@ -9,8 +9,8 @@
  *
  */
 
-using Mosa.Compiler.Metadata;
-using Mosa.Compiler.Metadata.Signatures;
+
+using Mosa.Compiler.MosaTypeSystem;
 
 namespace Mosa.Compiler.Framework.CIL
 {
@@ -42,21 +42,17 @@ namespace Mosa.Compiler.Framework.CIL
 
 		#endregion Construction
 
-		public static Operand CreateResultOperand(IInstructionDecoder decoder, SigType operandSigType)
+		public static Operand CreateResultOperand(IInstructionDecoder decoder, MosaType type)
 		{
-			return CreateResultOperand(decoder, StackTypeFromSigType(operandSigType), operandSigType);
-		}
-
-		public static Operand CreateResultOperand(IInstructionDecoder decoder, StackTypeCode operandType, SigType operandSigType)
-		{
-			if (operandType == StackTypeCode.O || operandType == StackTypeCode.Ptr)
+			if (type.IsObject || type.IsPointer || type.IsArray)
 			{
-				return decoder.Compiler.CreateVirtualRegister(operandSigType);
+				return decoder.Compiler.CreateVirtualRegister(type);
 			}
 			else
 			{
-				return decoder.Compiler.CreateVirtualRegister(SigTypeFromStackType(operandType));
+				return decoder.Compiler.CreateVirtualRegister(decoder.TypeSystem.ConvertToStackType(type));
 			}
 		}
+
 	}
 }

@@ -16,7 +16,7 @@ namespace Mosa.Compiler.Metadata.Signatures
 	/// <summary>
 	/// Base class of a type signature.
 	/// </summary>
-	public class SigType : IEquatable<SigType>
+	public class SigType
 	{
 		#region Construction
 
@@ -56,86 +56,7 @@ namespace Mosa.Compiler.Metadata.Signatures
 
 		#endregion Object Overrides
 
-		#region Methods
-
-		/// <summary>
-		/// Matches the specified other.
-		/// </summary>
-		/// <param name="other">The other signature type.</param>
-		/// <returns>True, if the signature type matches.</returns>
-		public virtual bool Matches(SigType other)
-		{
-			if (object.ReferenceEquals(this, other))
-				return true;
-
-			if (other.Type != this.Type)
-				return false;
-
-			switch (this.Type)
-			{
-				case CilElementType.Void:
-				case CilElementType.Boolean:
-				case CilElementType.Char:
-				case CilElementType.I1:
-				case CilElementType.U1:
-				case CilElementType.I2:
-				case CilElementType.U2:
-				case CilElementType.I4:
-				case CilElementType.U4:
-				case CilElementType.I8:
-				case CilElementType.U8:
-				case CilElementType.R4:
-				case CilElementType.R8:
-				case CilElementType.String:
-				case CilElementType.Type:
-				case CilElementType.I:
-				case CilElementType.U:
-				case CilElementType.Object:
-				case CilElementType.Class:
-				case CilElementType.ValueType:
-					return true;
-
-				case CilElementType.SZArray:
-					return this.Equals(other);
-
-				case CilElementType.GenericInst:
-					return true; // this.Equals(other);
-
-				default:
-					throw new NotImplementedException();
-			}
-		}
-
-		#endregion Methods
-
 		#region Static methods
-
-		/// <summary>
-		/// Compares both arrays of signature types for equality.
-		/// </summary>
-		/// <param name="first">The first array to compare.</param>
-		/// <param name="second">The second array to compare.</param>
-		/// <returns>True, if the signature types in both arrays are equal.</returns>
-		public static bool Equals(SigType[] first, SigType[] second)
-		{
-			if (null == first)
-				throw new ArgumentNullException(@"first");
-			if (null == second)
-				throw new ArgumentNullException(@"second");
-
-			if (first == second)
-				return true;
-			if (first.Length != second.Length)
-				return false;
-
-			bool result = true;
-			for (int idx = 0; result == true && idx < first.Length; idx++)
-			{
-				result = (first[idx].Equals(second[idx]));
-			}
-
-			return result;
-		}
 
 		/// <summary>
 		/// Parses the type signature.
@@ -329,22 +250,6 @@ namespace Mosa.Compiler.Metadata.Signatures
 
 		#endregion Static methods
 
-		#region IEquatable<SigType> Members
-
-		/// <summary>
-		/// Indicates whether the current object is equal to another object of the same type.
-		/// </summary>
-		/// <param name="other">An object to compare with this object.</param>
-		/// <returns>
-		/// true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.
-		/// </returns>
-		public virtual bool Equals(SigType other)
-		{
-			return (Type == other.Type);
-		}
-
-		#endregion IEquatable<SigType> Members
-
 		/// <summary>
 		/// Expresses the signature element information in a string form differentiating it from other signature
 		/// elements expressed the same way
@@ -451,7 +356,7 @@ namespace Mosa.Compiler.Metadata.Signatures
 		public bool IsPinned { get { return Type == CilElementType.Pinned; } }
 
 		public bool IsArray { get { return Type == CilElementType.Array; } }
-		
+
 		#endregion Properties
 	}
 }

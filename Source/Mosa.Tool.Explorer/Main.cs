@@ -10,11 +10,9 @@
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.InternalTrace;
-using Mosa.Compiler.Metadata;
-using Mosa.Compiler.Metadata.Loader;
+using Mosa.Compiler.MosaTypeSystem;
 using Mosa.Compiler.Pdb;
-using Mosa.Compiler.TypeSystem;
-using Mosa.Compiler.TypeSystem.Cil;
+using Mosa.Utility.GUI.Common;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -27,14 +25,14 @@ namespace Mosa.Tool.Explorer
 	{
 		private CodeForm form = new CodeForm();
 		private IInternalTrace internalTrace = new BasicInternalTrace();
-		private ITypeSystem typeSystem = new TypeSystem();
+		private TypeSystem typeSystem = new TypeSystem();
 		private ConfigurableTraceFilter filter = new ConfigurableTraceFilter();
-		private ITypeLayout typeLayout;
+		private MosaTypeLayout typeLayout;
 		private DateTime compileStartTime;
 		private StringBuilder currentInstructionLog;
 		private string[] currentInstructionLogLines;
 
-		private Dictionary<RuntimeMethod, MethodStages> methodStages = new Dictionary<RuntimeMethod, MethodStages>();
+		private Dictionary<MosaMethod, MethodStages> methodStages = new Dictionary<MosaMethod, MethodStages>();
 
 		private class MethodStages
 		{
@@ -83,43 +81,6 @@ namespace Mosa.Tool.Explorer
 			}
 		}
 
-		protected string TokenToString(Token token)
-		{
-			return token.ToInt32().ToString("X8");
-		}
-
-		protected string FormatToString(Token token)
-		{
-			if (!showTokenValues.Checked)
-				return string.Empty;
-
-			return "[" + TokenToString(token) + "] ";
-		}
-
-		protected string FormatRuntimeMember(RuntimeMember member)
-		{
-			if (!showTokenValues.Checked)
-				return member.Name;
-
-			return "[" + TokenToString(member.Token) + "] " + member.Name;
-		}
-
-		protected string FormatRuntimeMember(RuntimeMethod method)
-		{
-			if (!showTokenValues.Checked)
-				return method.Name;
-
-			return "[" + TokenToString(method.Token) + "] " + method.MethodName;
-		}
-
-		protected string FormatRuntimeType(RuntimeType type)
-		{
-			if (!showTokenValues.Checked)
-				return type.Namespace + Type.Delimiter + type.Name;
-
-			return "[" + TokenToString(type.Token) + "] " + type.Namespace + Type.Delimiter + type.Name;
-		}
-
 		public void LoadAssembly(string filename)
 		{
 			if (Path.GetFileName(filename) == "Mosa.Test.Collection.dll" || Path.GetFileName(filename) == "Mosa.Kernel.x86Test.dll")
@@ -134,127 +95,7 @@ namespace Mosa.Tool.Explorer
 
 		protected void UpdateTree()
 		{
-			treeView.BeginUpdate();
-			treeView.Nodes.Clear();
-
-			foreach (ITypeModule module in typeSystem.TypeModules)
-			{
-				TreeNode moduleNode = new TreeNode(module.Name);
-				treeView.Nodes.Add(moduleNode);
-
-				foreach (RuntimeType type in module.GetAllTypes())
-				{
-					TreeNode typeNode = new TreeNode(FormatRuntimeType(type));
-					moduleNode.Nodes.Add(typeNode);
-
-					if (type.BaseType != null)
-					{
-						TreeNode baseTypeNode = new TreeNode("Base Type: " + FormatRuntimeType(type.BaseType));
-						typeNode.Nodes.Add(baseTypeNode);
-					}
-
-					CilGenericType genericType = type as CilGenericType;
-					if (genericType != null)
-					{
-						if (genericType.BaseGenericType != null)
-						{
-							TreeNode genericBaseTypeNode = new TreeNode("Generic Base Type: " + FormatRuntimeType(genericType.BaseGenericType));
-							typeNode.Nodes.Add(genericBaseTypeNode);
-						}
-					}
-
-					CilGenericType genericOpenType = typeSystem.GetOpenGeneric(type);
-					if (genericOpenType != null)
-					{
-						TreeNode genericOpenTypeNode = new TreeNode("Open Generic Type: " + FormatRuntimeType(genericOpenType));
-						typeNode.Nodes.Add(genericOpenTypeNode);
-					}
-
-					if (type.GenericParameters.Count != 0)
-					{
-						TreeNode genericParameterNodes = new TreeNode("Generic Parameters");
-						typeNode.Nodes.Add(genericParameterNodes);
-
-						foreach (GenericParameter genericParameter in type.GenericParameters)
-						{
-							TreeNode GenericParameterNode = new TreeNode(genericParameter.Name);
-							genericParameterNodes.Nodes.Add(GenericParameterNode);
-						}
-					}
-
-					if (type.Interfaces.Count != 0)
-					{
-						TreeNode interfacesNodes = new TreeNode("Interfaces");
-						typeNode.Nodes.Add(interfacesNodes);
-
-						foreach (RuntimeType interfaceType in type.Interfaces)
-						{
-							TreeNode interfaceNode = new TreeNode(FormatRuntimeType(interfaceType));
-							interfacesNodes.Nodes.Add(interfaceNode);
-						}
-					}
-
-					if (type.Fields.Count != 0)
-					{
-						TreeNode fieldsNode = new TreeNode("Fields");
-						if (showSizes.Checked)
-							fieldsNode.Text = fieldsNode.Text + " (Count: " + type.Fields.Count.ToString() + " - Size: " + typeLayout.GetTypeSize(type).ToString() + ")";
-
-						typeNode.Nodes.Add(fieldsNode);
-
-						foreach (RuntimeField field in type.Fields)
-						{
-							TreeNode fieldNode = new TreeNode(FormatRuntimeMember(field));
-							fieldsNode.Nodes.Add(fieldNode);
-
-							if (field.IsStaticField)
-								fieldNode.Text = fieldNode.Text + " [Static]";
-
-							if (showSizes.Checked)
-							{
-								fieldNode.Text = fieldNode.Text + " (Size: " + typeLayout.GetFieldSize(field).ToString();
-
-								if (!field.IsStaticField)
-									fieldNode.Text = fieldNode.Text + " - Offset: " + typeLayout.GetFieldOffset(field).ToString();
-
-								fieldNode.Text = fieldNode.Text + ")";
-							}
-						}
-					}
-
-					if (type.Methods.Count != 0)
-					{
-						TreeNode methodsNode = new TreeNode("Methods");
-						typeNode.Nodes.Add(methodsNode);
-
-						foreach (RuntimeMethod method in type.Methods)
-						{
-							TreeNode methodNode = new ViewNode<RuntimeMethod>(method, FormatRuntimeMember(method));
-							methodsNode.Nodes.Add(methodNode);
-
-							if ((method.Attributes & MethodAttributes.Static) == MethodAttributes.Static)
-								methodNode.Text = methodNode.Text + " [Static]";
-
-							if (method.IsAbstract)
-								methodNode.Text = methodNode.Text + " [Abstract]";
-						}
-					}
-
-					if (typeLayout.GetMethodTable(type) != null)
-					{
-						TreeNode methodTableNode = new TreeNode("Method Table");
-						typeNode.Nodes.Add(methodTableNode);
-
-						foreach (RuntimeMethod method in typeLayout.GetMethodTable(type))
-						{
-							TreeNode methodNode = new ViewNode<RuntimeMethod>(method, FormatRuntimeMember(method));
-							methodTableNode.Nodes.Add(methodNode);
-						}
-					}
-				}
-			}
-
-			treeView.EndUpdate();
+			TypeSystemTree.UpdateTree(treeView, typeSystem, typeLayout, showSizes.Checked);
 		}
 
 		private void quitToolStripMenuItem_Click(object sender, EventArgs e)
@@ -283,7 +124,7 @@ namespace Mosa.Tool.Explorer
 			compileLog.Append(String.Format("{0:0.00}", (DateTime.Now - compileStartTime).TotalSeconds) + " secs: " + compilerStage.ToText() + ": " + info + "\n");
 		}
 
-		void ITraceListener.SubmitInstructionTraceInformation(RuntimeMethod method, string stage, string log)
+		void ITraceListener.SubmitInstructionTraceInformation(MosaMethod method, string stage, string log)
 		{
 			MethodStages methodStage;
 
@@ -308,7 +149,7 @@ namespace Mosa.Tool.Explorer
 			}
 		}
 
-		void ITraceListener.SubmitDebugStageInformation(RuntimeMethod method, string stage, string line)
+		void ITraceListener.SubmitDebugStageInformation(MosaMethod method, string stage, string line)
 		{
 			MethodStages methodStage;
 
@@ -373,7 +214,7 @@ namespace Mosa.Tool.Explorer
 		{
 			tbResult.Text = string.Empty;
 
-			var node = GetCurrentNode<ViewNode<RuntimeMethod>>();
+			var node = GetCurrentNode<ViewNode<MosaMethod>>();
 
 			if (node == null)
 				return;
@@ -403,7 +244,7 @@ namespace Mosa.Tool.Explorer
 		{
 			currentInstructionLog = null;
 
-			var node = GetCurrentNode<ViewNode<RuntimeMethod>>();
+			var node = GetCurrentNode<ViewNode<MosaMethod>>();
 
 			if (node == null)
 				return;
@@ -445,7 +286,7 @@ namespace Mosa.Tool.Explorer
 
 		private void cbDebugStages_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			var node = GetCurrentNode<ViewNode<RuntimeMethod>>();
+			var node = GetCurrentNode<ViewNode<MosaMethod>>();
 
 			if (node == null)
 				return;
@@ -475,7 +316,7 @@ namespace Mosa.Tool.Explorer
 
 		protected void LoadAssembly(string filename, bool includeTestComponents, string platform)
 		{
-			IAssemblyLoader assemblyLoader = new AssemblyLoader();
+			MosaAssemblyLoader assemblyLoader = new MosaAssemblyLoader();
 
 			if (includeTestComponents)
 			{
@@ -485,13 +326,13 @@ namespace Mosa.Tool.Explorer
 				assemblyLoader.LoadModule("Mosa.Kernel.x86Test.dll");
 			}
 
-			assemblyLoader.AddPrivatePath(System.IO.Path.GetDirectoryName(filename));
+			assemblyLoader.AddPrivatePath(Path.GetDirectoryName(filename));
 			assemblyLoader.LoadModule(filename);
 
 			typeSystem = new TypeSystem();
-			typeSystem.LoadModules(assemblyLoader.Modules);
+			typeSystem.Load(assemblyLoader);
 
-			typeLayout = new TypeLayout(typeSystem, 4, 4);
+			typeLayout = new MosaTypeLayout(typeSystem, 4, 4); // FIXME
 
 			UpdateTree();
 		}
@@ -564,12 +405,12 @@ namespace Mosa.Tool.Explorer
 			if (currentInstructionLog == null)
 				return;
 
-			var node = GetCurrentNode<ViewNode<RuntimeMethod>>();
+			var node = GetCurrentNode<ViewNode<MosaMethod>>();
 
 			if (node == null)
 				return;
 
-			toolStripStatusLabel1.Text = node.Type.FullName;
+			toolStripStatusLabel1.Text = node.Type.MethodName;
 
 			if (cbLabels.SelectedIndex == 0)
 			{
@@ -602,22 +443,6 @@ namespace Mosa.Tool.Explorer
 		{
 			Compile();
 			UpdateTree();
-		}
-	}
-
-	public class ViewNode<T> : TreeNode
-	{
-		public T Type;
-
-		public ViewNode(T type, string name)
-			: base(name)
-		{
-			this.Type = type;
-		}
-
-		public override string ToString()
-		{
-			return Name;
 		}
 	}
 }

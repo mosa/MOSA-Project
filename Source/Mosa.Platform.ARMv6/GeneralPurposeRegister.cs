@@ -9,8 +9,6 @@
  */
 
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Metadata;
-using Mosa.Compiler.Metadata.Signatures;
 
 namespace Mosa.Platform.ARMv6
 {
@@ -253,28 +251,5 @@ namespace Mosa.Platform.ARMv6
 
 		#endregion Properties
 
-		#region Methods
-
-		/// <summary>
-		/// Determines if the signature type fits into the register.
-		/// </summary>
-		/// <param name="type">The signature type to check.</param>
-		/// <returns>True if the signature type fits.</returns>
-		public override bool IsValidSigType(SigType type)
-		{
-			return (type.IsIntPtr ||
-					type.IsSignedByte ||
-					type.IsSignedShort ||
-					type.IsSignedInt ||
-					type.IsSignedByte ||
-					type.IsUnsignedShort ||
-					type.IsUnsignedInt ||
-					type.IsPointer ||
-					type.IsByRef ||
-					type.IsFunctionPtr ||
-					type.IsObject);
-		}
-
-		#endregion Methods
 	}
 }

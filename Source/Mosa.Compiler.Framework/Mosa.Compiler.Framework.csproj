@@ -78,7 +78,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseCallingConventionExtended.cs" />
-    <Compile Include="CIL\StackTypeCode.cs" />
+    <Compile Include="DelegatePatcher.cs" />
     <Compile Include="ShiftType.cs" />
     <Compile Include="ConditionCodeExtension.cs" />
     <Compile Include="BasicBlocks.cs" />
@@ -105,7 +105,6 @@
     <Compile Include="Stages\GreedyRegisterAllocatorStage.cs" />
     <Compile Include="Stages\LinkerFinalizationStage.cs" />
     <Compile Include="IIntrinsicInternalMethod.cs" />
-    <Compile Include="DelegatePatcher.cs" />
     <Compile Include="ICompilationScheduler.cs" />
     <Compile Include="Counters.cs" />
     <Compile Include="IR\IntrinsicMethodCall.cs" />
@@ -262,7 +261,6 @@
     <Compile Include="CIL\UnboxInstruction.cs" />
     <Compile Include="Context.cs" />
     <Compile Include="BaseMethodCompilerStage.cs" />
-    <Compile Include="ICodeEmitter.cs" />
     <Compile Include="IR\AddressOf.cs" />
     <Compile Include="IR\ArithmeticShiftRight.cs" />
     <Compile Include="IR\Call.cs" />
@@ -303,8 +301,6 @@
     <Compile Include="CIL\BaseCILInstruction.cs" />
     <Compile Include="Stages\ReverseBlockOrderStage.cs" />
     <Compile Include="Stages\SimpleTraceBlockOrderStage.cs" />
-    <Compile Include="Linker\LinkerGeneratedMethod.cs" />
-    <Compile Include="Linker\LinkerGeneratedType.cs" />
     <Compile Include="BaseCompiler.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -318,9 +314,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="BaseCodeTransformationStage.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompilationException.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="CompilerPipeline.cs">
@@ -375,16 +368,12 @@
       <Name>Mosa.Compiler.InternalTrace</Name>
     </ProjectReference>
     <ProjectReference Include="..\Mosa.Compiler.Metadata\Mosa.Compiler.Metadata.csproj">
-      <Project>{7033B213-2055-4C6A-B008-D9856267F5D7}</Project>
+      <Project>{7033b213-2055-4c6a-b008-d9856267f5d7}</Project>
       <Name>Mosa.Compiler.Metadata</Name>
     </ProjectReference>
     <ProjectReference Include="..\Mosa.Compiler.MosaTypeSystem\Mosa.Compiler.MosaTypeSystem.csproj">
       <Project>{5f30a68e-05bf-40ea-b576-5ebcde520559}</Project>
       <Name>Mosa.Compiler.MosaTypeSystem</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Mosa.Compiler.TypeSystem\Mosa.Compiler.TypeSystem.csproj">
-      <Project>{5F30A68E-05BF-40EA-B576-5EBCDE520449}</Project>
-      <Name>Mosa.Compiler.TypeSystem</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

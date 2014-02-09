@@ -23,6 +23,14 @@ namespace Mosa.Compiler.Metadata
 	/// </remarks>
 	public interface IMetadataProvider
 	{
+
+		/// <summary>
+		/// Gets the heap.
+		/// </summary>
+		/// <param name="type">The type.</param>
+		/// <returns></returns>
+		Heap GetHeap(HeapType type);
+
 		/// <summary>
 		/// Returns the number of rows for the specified provider table.
 		/// </summary>
@@ -329,11 +337,5 @@ namespace Mosa.Compiler.Metadata
 		/// <returns></returns>
 		GenericParamConstraintRow ReadGenericParamConstraintRow(Token token);
 
-		/// <summary>
-		/// Gets the heaps of a specified type
-		/// </summary>
-		/// <param name="heapType">Type of the heap.</param>
-		/// <returns></returns>
-		IList<Heap> GetHeaps(HeapType heapType);
 	}
 }

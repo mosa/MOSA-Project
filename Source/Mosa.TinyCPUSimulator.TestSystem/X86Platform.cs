@@ -8,7 +8,7 @@
  */
 
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Metadata;
+using Mosa.Compiler.MosaTypeSystem;
 using Mosa.Platform.x86;
 using Mosa.TinyCPUSimulator.Adaptor;
 using Mosa.TinyCPUSimulator.x86;
@@ -149,25 +149,33 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 			WriteStackValue(simAdapter, StopEIP);
 		}
 
-		public override object GetResult(ISimAdapter simAdapter, CilElementType cilElementType)
+		public override object GetResult(ISimAdapter simAdapter, MosaType type)
 		{
 			var x86 = simAdapter.SimCPU as CPUx86;
 
-			switch (cilElementType)
-			{
-				case CilElementType.I1: return (object)(sbyte)x86.EAX.Value;
-				case CilElementType.I2: return (object)(short)x86.EAX.Value;
-				case CilElementType.I4: return (object)(int)x86.EAX.Value;
-				case CilElementType.I8: return (object)(long)(((ulong)x86.EAX.Value) | ((ulong)x86.EDX.Value << 32));
-				case CilElementType.U1: return (object)(byte)x86.EAX.Value;
-				case CilElementType.U2: return (object)(ushort)x86.EAX.Value;
-				case CilElementType.U4: return (object)(uint)x86.EAX.Value;
-				case CilElementType.U8: return (object)(ulong)(((ulong)x86.EAX.Value) | ((ulong)x86.EDX.Value << 32));
-				case CilElementType.Char: return (object)(char)x86.EAX.Value;
-				case CilElementType.Boolean: return (object)(bool)(x86.EAX.Value != 0);
+			if (type.IsSignedByte)
+				return (object)(sbyte)x86.EAX.Value;
+			else if (type.IsSignedShort)
+				return (object)(short)x86.EAX.Value;
+			else if (type.IsSignedInt)
+				return (object)(int)x86.EAX.Value;
+			else if (type.IsSignedLong)
+				return (object)(long)(((ulong)x86.EAX.Value) | ((ulong)x86.EDX.Value << 32));
+			else if (type.IsUnsignedByte)
+				return (object)(byte)x86.EAX.Value;
+			else if (type.IsUnsignedShort)
+				return (object)(ushort)x86.EAX.Value;
+			else if (type.IsUnsignedInt)
+				return (object)(uint)x86.EAX.Value;
+			else if (type.IsUnsignedLong)
+				return (object)(ulong)(((ulong)x86.EAX.Value) | ((ulong)x86.EDX.Value << 32));
 
-				default: return null;
-			}
+			else if (type.IsChar)
+				return (object)(char)x86.EAX.Value;
+			else if (type.IsBoolean)
+				return (object)(bool)(x86.EAX.Value != 0);
+
+			return null;
 		}
 	}
 }

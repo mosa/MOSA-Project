@@ -50,6 +50,8 @@ namespace Mosa.Tool.MetadataExplorer.Tables
 
 				if (header.LocalVarSigTok.RID != 0)
 				{
+					yield return Value("LocalVarSigTok", header.LocalVarSigTok.ToString());
+
 					StandAloneSigRow standAlongSigRow = Metadata.ReadStandAloneSigRow(header.LocalVarSigTok);
 					var local = new LocalVariableSignature(Metadata, standAlongSigRow.SignatureBlob);
 					yield return Value("Method Header", local.ToString());

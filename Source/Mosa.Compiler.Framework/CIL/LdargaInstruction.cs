@@ -52,9 +52,9 @@ namespace Mosa.Compiler.Framework.CIL
 				argIdx = decoder.DecodeUShort();
 			}
 
-			Operand parameterOperand = decoder.Compiler.GetParameterOperand(argIdx);
+			var parameterOperand = decoder.Compiler.GetParameterOperand(argIdx);
 			ctx.Operand1 = parameterOperand;
-			ctx.Result = decoder.Compiler.CreateVirtualRegister(new RefSigType(parameterOperand.Type));
+			ctx.Result = decoder.Compiler.CreateVirtualRegister(parameterOperand.Type);
 		}
 
 		/// <summary>

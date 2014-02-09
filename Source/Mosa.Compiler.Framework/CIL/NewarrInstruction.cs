@@ -7,9 +7,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using Mosa.Compiler.Metadata;
-using Mosa.Compiler.Metadata.Signatures;
-
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
@@ -42,19 +39,16 @@ namespace Mosa.Compiler.Framework.CIL
 			// Decode base classes first
 			base.Decode(ctx, decoder);
 
-			// Read the type specification
-			Token token = decoder.DecodeTokenType();
-
-			// Patch usage of generic arguments
-			var enclosingType = decoder.Method.DeclaringType;
-			var signatureType = decoder.GenericTypePatcher.PatchSignatureType(decoder.TypeModule, enclosingType, token);
+			var type = decoder.TypeSystem.Resolver.GetTypeByToken(decoder.Method.CodeAssembly, decoder.DecodeTokenType(), decoder.Method);
 
 			// FIXME: If ctx.Operands1 is an integral constant, we can infer the maximum size of the array
 			// and instantiate an ArrayTypeSpecification with max. sizes. This way we could eliminate bounds
 			// checks in an optimization stage later on, if we find that a value never exceeds the array
 			// bounds.
-			var resultType = new SZArraySigType(null, signatureType);
-			ctx.Result = decoder.Compiler.CreateVirtualRegister(resultType);
+
+			var arrayType = decoder.TypeSystem.Resolver.GetArrayType(type);
+
+			ctx.Result = decoder.Compiler.CreateVirtualRegister(arrayType);
 		}
 
 		/// <summary>

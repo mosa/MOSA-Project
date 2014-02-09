@@ -34,8 +34,8 @@ namespace Mosa.Tool.MetadataExplorer.Tables
 			yield return TokenString("ImportName", row.ImportNameString);
 			yield return Value("MappingFlags", row.MappingFlags.ToString());
 
-			yield return Value("ImportScopeTable #", row.ImportScopeTable);
-			yield return Value("MemberForwardedTable #", row.MemberForwarded);
+			yield return Value("ImportScopeTable", row.ImportScopeTable);
+			yield return Value("MemberForwardedTable", row.MemberForwarded);
 		}
 	}
 }

@@ -7,6 +7,7 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Signatures;
 
 namespace Mosa.Compiler.Framework.CIL
@@ -36,34 +37,32 @@ namespace Mosa.Compiler.Framework.CIL
 			// Decode base classes first
 			base.Decode(ctx, decoder);
 
-			// Retrieve the provider token to check against
-			var token = decoder.DecodeTokenType();
-			var type = decoder.TypeModule.GetType(token);
+			var type = decoder.TypeSystem.Resolver.GetTypeByToken(decoder.Method.CodeAssembly, decoder.DecodeTokenType(), decoder.Method);
 
 			Operand result;
 
 			switch (type.FullName)
 			{
-				case "System.Boolean": result = decoder.Compiler.CreateVirtualRegister(BuiltInSigType.Boolean); break;
-				case "System.SByte": result = decoder.Compiler.CreateVirtualRegister(BuiltInSigType.SByte); break;
-				case "System.Int16": result = decoder.Compiler.CreateVirtualRegister(BuiltInSigType.Int16); break;
-				case "System.Int32": result = decoder.Compiler.CreateVirtualRegister(BuiltInSigType.Int32); break;
-				case "System.Int64": result = decoder.Compiler.CreateVirtualRegister(BuiltInSigType.Int64); break;
-				case "System.Byte": result = decoder.Compiler.CreateVirtualRegister(BuiltInSigType.Byte); break;
-				case "System.UInt16": result = decoder.Compiler.CreateVirtualRegister(BuiltInSigType.UInt16); break;
-				case "System.UInt32": result = decoder.Compiler.CreateVirtualRegister(BuiltInSigType.UInt32); break;
-				case "System.UInt64": result = decoder.Compiler.CreateVirtualRegister(BuiltInSigType.UInt64); break;
-				case "System.Single": result = decoder.Compiler.CreateVirtualRegister(BuiltInSigType.Single); break;
-				case "System.Double": result = decoder.Compiler.CreateVirtualRegister(BuiltInSigType.Double); break;
-				case "System.Char": result = decoder.Compiler.CreateVirtualRegister(BuiltInSigType.Char); break;
+				case "System.Boolean": result = decoder.Compiler.CreateVirtualRegister(decoder.TypeSystem.BuiltIn.Boolean); break;
+				case "System.SByte": result = decoder.Compiler.CreateVirtualRegister(decoder.TypeSystem.BuiltIn.I1); break;
+				case "System.Int16": result = decoder.Compiler.CreateVirtualRegister(decoder.TypeSystem.BuiltIn.I2); break;
+				case "System.Int32": result = decoder.Compiler.CreateVirtualRegister(decoder.TypeSystem.BuiltIn.I4); break;
+				case "System.Int64": result = decoder.Compiler.CreateVirtualRegister(decoder.TypeSystem.BuiltIn.I8); break;
+				case "System.Byte": result = decoder.Compiler.CreateVirtualRegister(decoder.TypeSystem.BuiltIn.U1); break;
+				case "System.UInt16": result = decoder.Compiler.CreateVirtualRegister(decoder.TypeSystem.BuiltIn.U2); break;
+				case "System.UInt32": result = decoder.Compiler.CreateVirtualRegister(decoder.TypeSystem.BuiltIn.U4); break;
+				case "System.UInt64": result = decoder.Compiler.CreateVirtualRegister(decoder.TypeSystem.BuiltIn.U8); break;
+				case "System.Single": result = decoder.Compiler.CreateVirtualRegister(decoder.TypeSystem.BuiltIn.R4); break;
+				case "System.Double": result = decoder.Compiler.CreateVirtualRegister(decoder.TypeSystem.BuiltIn.R8); break;
+				case "System.Char": result = decoder.Compiler.CreateVirtualRegister(decoder.TypeSystem.BuiltIn.Char); break;
 				default: throw new System.InvalidOperationException();
 			}
 
 			// threat this like a load
-			result = LoadInstruction.CreateResultOperand(decoder, result.StackType, result.Type);
+			result = LoadInstruction.CreateResultOperand(decoder, result.Type);
 
 			ctx.Result = result;
-			ctx.RuntimeType = type;
+			ctx.MosaType = type;
 		}
 
 		/// <summary>

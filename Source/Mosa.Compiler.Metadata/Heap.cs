@@ -17,24 +17,25 @@ namespace Mosa.Compiler.Metadata
 	/// </summary>
 	public abstract class Heap
 	{
-		#region Data members
+	
+		#region Properties
 
 		/// <summary>
 		/// Metadata heap buffer.
 		/// </summary>
-		protected byte[] _metadata;
+		public byte[] Metadata { get; protected set; }
 
 		/// <summary>
-		/// Offset into _metadata, where this heap starts.
+		/// Offset into metadata, where this heap starts.
 		/// </summary>
-		protected int _offset;
+		public int Offset { get; protected set; }
 
 		/// <summary>
 		/// The number of bytes allocated to this heap.
 		/// </summary>
-		protected int _size;
-
-		#endregion Data members
+		public int Size { get; protected set; }
+		
+		#endregion Properties
 
 		#region Construction
 
@@ -46,41 +47,12 @@ namespace Mosa.Compiler.Metadata
 		/// <param name="size">The size of the heap in bytes.</param>
 		public Heap(byte[] metadata, int offset, int size)
 		{
-			if (null == metadata)
-				throw new ArgumentNullException(@"provider");
-
-			_metadata = metadata;
-			_offset = offset;
-			_size = size;
+			this.Metadata = metadata;
+			this.Offset = offset;
+			this.Size = size;
 		}
 
 		#endregion Construction
-
-		#region Properties
-
-		/// <summary>
-		/// Enables derived classes to access the provider buffer.
-		/// </summary>
-		protected byte[] Buffer
-		{
-			get
-			{
-				return _metadata;
-			}
-		}
-
-		/// <summary>
-		/// Retrieves the size of the heap.
-		/// </summary>
-		public int Size
-		{
-			get
-			{
-				return _size;
-			}
-		}
-
-		#endregion Properties
 
 		#region Methods
 
@@ -91,10 +63,10 @@ namespace Mosa.Compiler.Metadata
 		/// <exception cref="System.ArgumentException">Thrown if the offset value is larger than the size of the heap or negative.</exception>
 		protected int ValidateOffset(int offset)
 		{
-			if (0 > offset || offset >= _size)
-				throw new ArgumentException(@"Invalid offset value.", @"offset");
+			if (offset < 0 || offset >= Size)
+				throw new ArgumentException(@"Invalid Offset value.", @"Offset");
 
-			return _offset + offset;
+			return this.Offset + offset;
 		}
 
 		/// <summary>
@@ -107,44 +79,35 @@ namespace Mosa.Compiler.Metadata
 		protected int CalculatePrefixLength(ref int offset)
 		{
 			// FIXME: Check preconditions
-			if (0 > offset || offset > _offset + _size)
-				throw new ArgumentException(@"Invalid prefix offset specified.");
+			if (0 > offset || offset > offset + Size)
+				throw new ArgumentException(@"Invalid prefix Offset specified.");
 
 			// Return value
 			int result;
 
-			if (0xC0 == (_metadata[offset] & 0xC0))
+			if (0xC0 == (Metadata[offset] & 0xC0))
 			{
 				// A 4 byte length...
-				result = ((_metadata[offset] & 0x1F) << 24) + (_metadata[offset + 1] << 16) + (_metadata[offset + 2] << 8) + _metadata[offset + 3];
+				result = ((Metadata[offset] & 0x1F) << 24) + (Metadata[offset + 1] << 16) + (Metadata[offset + 2] << 8) + Metadata[offset + 3];
 				offset += 4;
 			}
-			else if (0x80 == (_metadata[offset] & 0x80))
+			else if (0x80 == (Metadata[offset] & 0x80))
 			{
 				// A 2 byte length...
-				result = ((_metadata[offset] & 0x3F) << 8) + _metadata[offset + 1];
+				result = ((Metadata[offset] & 0x3F) << 8) + Metadata[offset + 1];
 				offset += 2;
 			}
 			else
 			{
-				result = _metadata[offset] & 0x7F;
+				result = Metadata[offset] & 0x7F;
 				offset += 1;
 			}
 
 			// Make sure there's enough room left in the heap
-			if (offset + result > _offset + _size)
+			if (offset + result > offset + Size)
 				throw new BadImageFormatException();
 
 			return result;
-		}
-
-		/// <summary>
-		/// Writes the heap to the specified writer.
-		/// </summary>
-		/// <param name="writer">The writer.</param>
-		public void WriteTo(BinaryWriter writer)
-		{
-			writer.Write(_metadata, _offset, _size);
 		}
 
 		#endregion Methods
@@ -165,20 +128,11 @@ namespace Mosa.Compiler.Metadata
 		{
 			switch (type)
 			{
-				case HeapType.String:
-					return new StringHeap(metadata, offset, size);
-
-				case HeapType.Guid:
-					return new GuidHeap(metadata, offset, size);
-
-				case HeapType.Blob:
-					return new BlobHeap(metadata, offset, size);
-
-				case HeapType.UserString:
-					return new UserStringHeap(metadata, offset, size);
-
-				case HeapType.Tables:
-					return new TableHeap(provider, metadata, offset, size);
+				case HeapType.String: return new StringHeap(metadata, offset, size);
+				case HeapType.Guid: return new GuidHeap(metadata, offset, size);
+				case HeapType.Blob: return new BlobHeap(metadata, offset, size);
+				case HeapType.UserString: return new UserStringHeap(metadata, offset, size);
+				case HeapType.Tables: return new TableHeap(provider, metadata, offset, size);
 			}
 
 			throw new ArgumentException(@"Invalid heap type.", @"type");

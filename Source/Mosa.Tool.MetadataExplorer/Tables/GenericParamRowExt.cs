@@ -32,7 +32,7 @@ namespace Mosa.Tool.MetadataExplorer.Tables
 		public override IEnumerable GetValues()
 		{
 			yield return TokenString("Name", row.NameString);
-			yield return Value("OwnerTable #", row.Owner);
+			yield return Value("Owner", row.Owner);
 			yield return Value("Flags", row.Flags.ToString());
 			yield return Value("Number", row.Number);
 		}

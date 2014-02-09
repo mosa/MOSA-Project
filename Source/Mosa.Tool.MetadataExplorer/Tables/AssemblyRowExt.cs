@@ -38,8 +38,8 @@ namespace Mosa.Tool.MetadataExplorer.Tables
 			yield return Value("MinorVersion", row.MinorVersion);
 			yield return Value("HashAlgId", row.HashAlgId.ToString());
 			yield return Value("Revision", row.Revision);
-			yield return Value("Culture #", row.Culture);
-			yield return Value("PublicKey #", row.PublicKey);
+			yield return Value("Culture", row.Culture);
+			yield return Value("PublicKey", row.PublicKey);
 		}
 	}
 }

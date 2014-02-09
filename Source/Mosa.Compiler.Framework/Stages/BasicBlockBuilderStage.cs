@@ -43,7 +43,7 @@ namespace Mosa.Compiler.Framework.Stages
 		void IMethodCompilerStage.Run()
 		{
 			// No basic block building if this is a linker generated method
-			if (methodCompiler.Method is LinkerGeneratedMethod)
+			if (!methodCompiler.Method.IsCILGenerated)
 				return;
 
 			if (methodCompiler.Compiler.PlugSystem.GetPlugMethod(methodCompiler.Method) != null)
@@ -70,7 +70,7 @@ namespace Mosa.Compiler.Framework.Stages
 			// Link all the blocks together
 			BuildBlockLinks(prologue);
 
-			foreach (var clause in methodCompiler.ExceptionHandlingClauses)
+			foreach (var clause in methodCompiler.Method.ExceptionBlocks)
 			{
 				if (clause.HandlerOffset != 0)
 				{
@@ -106,10 +106,10 @@ namespace Mosa.Compiler.Framework.Stages
 				{
 					case FlowControl.Next: continue;
 					case FlowControl.Call: continue;
-					case FlowControl.Break: goto case FlowControl.Branch;
+					case FlowControl.Break: goto case FlowControl.UnconditionalBranch;
 					case FlowControl.Return: continue;
 					case FlowControl.Throw: continue;
-					case FlowControl.Branch:
+					case FlowControl.UnconditionalBranch:
 
 						// Unconditional branch
 						Debug.Assert(ctx.BranchTargets.Length == 1);
@@ -140,7 +140,7 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 
 			// Add Exception Class targets
-			foreach (var clause in methodCompiler.ExceptionHandlingClauses)
+			foreach (var clause in methodCompiler.Method.ExceptionBlocks)
 			{
 				if (!targets.ContainsKey(clause.HandlerOffset))
 					targets.Add(clause.HandlerOffset, -1);
@@ -211,10 +211,10 @@ namespace Mosa.Compiler.Framework.Stages
 							LinkBlocks(block, epilogue);
 						return;
 
-					case FlowControl.Break: goto case FlowControl.Branch;
+					case FlowControl.Break: goto case FlowControl.UnconditionalBranch;
 					case FlowControl.Throw: continue;
 					case FlowControl.Switch: goto case FlowControl.ConditionalBranch;
-					case FlowControl.Branch:
+					case FlowControl.UnconditionalBranch:
 						FindAndLinkBlock(block, ctx.BranchTargets[0]);
 						return;
 

@@ -44,7 +44,6 @@
 			this.nowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.snippetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.showTokenValues = new System.Windows.Forms.ToolStripMenuItem();
 			this.showSizes = new System.Windows.Forms.ToolStripMenuItem();
 			this.includeTestKorlibToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.enableSSAToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -206,7 +205,6 @@
 			// optionsToolStripMenuItem
 			// 
 			this.optionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.showTokenValues,
             this.showSizes,
             this.includeTestKorlibToolStripMenuItem,
             this.enableSSAToolStripMenuItem,
@@ -214,16 +212,6 @@
 			this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
 			this.optionsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
 			this.optionsToolStripMenuItem.Text = "Options";
-			// 
-			// showTokenValues
-			// 
-			this.showTokenValues.Checked = true;
-			this.showTokenValues.CheckOnClick = true;
-			this.showTokenValues.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.showTokenValues.Name = "showTokenValues";
-			this.showTokenValues.Size = new System.Drawing.Size(237, 22);
-			this.showTokenValues.Text = "Show Token Values";
-			this.showTokenValues.Click += new System.EventHandler(this.showTokenValues_Click);
 			// 
 			// showSizes
 			// 
@@ -495,7 +483,7 @@
 			this.Controls.Add(this.splitContainer1);
 			this.MainMenuStrip = this.menuStrip1;
 			this.Name = "Main";
-			this.Text = "MOSA Explorer II";
+			this.Text = "MOSA Explorer IV";
 			this.Load += new System.EventHandler(this.Main_Load);
 			this.statusStrip1.ResumeLayout(false);
 			this.statusStrip1.PerformLayout();
@@ -525,7 +513,6 @@
 		private System.Windows.Forms.ToolStripMenuItem quitToolStripMenuItem;
 		private System.Windows.Forms.OpenFileDialog openFileDialog;
 		private System.Windows.Forms.ToolStripMenuItem optionsToolStripMenuItem;
-		private System.Windows.Forms.ToolStripMenuItem showTokenValues;
 		private System.Windows.Forms.ToolStripMenuItem showSizes;
 		private System.Windows.Forms.TreeView treeView;
 		private System.Windows.Forms.SplitContainer splitContainer1;

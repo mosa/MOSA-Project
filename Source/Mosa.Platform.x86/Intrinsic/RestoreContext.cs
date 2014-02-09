@@ -8,7 +8,6 @@
  */
 
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Metadata.Signatures;
 
 namespace Mosa.Platform.x86.Intrinsic
 {
@@ -27,24 +26,12 @@ namespace Mosa.Platform.x86.Intrinsic
 		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, BaseMethodCompiler methodCompiler)
 		{
 			// Retrieve register context
-			//context.SetInstruction(CPUx86.Instruction.MovInstruction, new RegisterOperand(BuiltInSigType.UInt32, GeneralPurposeRegister.EAX), Operand.CreateMemoryAddress(BuiltInSigType.UInt32, GeneralPurposeRegister.ESP, new IntPtr(28)));
-
-			// Restore registers (Note: EAX and EDX are NOT restored!)
-			//context.AppendInstruction(CPUx86.Instruction.MovInstruction, new RegisterOperand(BuiltInSigType.UInt32, GeneralPurposeRegister.EDX), Operand.CreateMemoryAddress(BuiltInSigType.UInt32, GeneralPurposeRegister.EAX, new IntPtr(28)));
-			//context.AppendInstruction(CPUx86.Instruction.MovInstruction, new RegisterOperand(BuiltInSigType.UInt32, GeneralPurposeRegister.EBX), Operand.CreateMemoryAddress(BuiltInSigType.UInt32, GeneralPurposeRegister.EAX, new IntPtr(4)));
-			//context.AppendInstruction(CPUx86.Instruction.MovInstruction, new RegisterOperand(BuiltInSigType.UInt32, GeneralPurposeRegister.EDI), Operand.CreateMemoryAddress(BuiltInSigType.UInt32, GeneralPurposeRegister.EAX, new IntPtr(20)));
-			//context.AppendInstruction(CPUx86.Instruction.MovInstruction, new RegisterOperand(BuiltInSigType.UInt32, GeneralPurposeRegister.ESI), Operand.CreateMemoryAddress(BuiltInSigType.UInt32, GeneralPurposeRegister.EAX, new IntPtr(16)));
-			//context.AppendInstruction(CPUx86.Instruction.MovInstruction, new RegisterOperand(BuiltInSigType.UInt32, GeneralPurposeRegister.ESP), Operand.CreateMemoryAddress(BuiltInSigType.UInt32, GeneralPurposeRegister.EAX, new IntPtr(32)));
-			//context.AppendInstruction(CPUx86.Instruction.MovInstruction, new RegisterOperand(BuiltInSigType.UInt32, GeneralPurposeRegister.EBP), Operand.CreateMemoryAddress(BuiltInSigType.UInt32, GeneralPurposeRegister.EAX, new IntPtr(24)));
-
-			//uint ebp, uint esp, int eip
-
-			Operand edx = Operand.CreateCPURegister(BuiltInSigType.UInt32, GeneralPurposeRegister.EDX);
-			Operand ebp = Operand.CreateCPURegister(BuiltInSigType.UInt32, GeneralPurposeRegister.EBP);
-			Operand esp = Operand.CreateCPURegister(BuiltInSigType.UInt32, GeneralPurposeRegister.ESP);
+			Operand edx = Operand.CreateCPURegister(methodCompiler.TypeSystem.Resolver.BuiltIn.UInt32, GeneralPurposeRegister.EDX);
+			Operand ebp = Operand.CreateCPURegister(methodCompiler.TypeSystem.Resolver.BuiltIn.UInt32, GeneralPurposeRegister.EBP);
+			Operand esp = Operand.CreateCPURegister(methodCompiler.TypeSystem.Resolver.BuiltIn.UInt32, GeneralPurposeRegister.ESP);
 
 			// Restore registers
-			context.SetInstruction(X86.Mov, Operand.CreateCPURegister(BuiltInSigType.UInt32, GeneralPurposeRegister.ESP), context.Operand1);
+			context.SetInstruction(X86.Mov, Operand.CreateCPURegister(methodCompiler.TypeSystem.Resolver.BuiltIn.UInt32, GeneralPurposeRegister.ESP), context.Operand1);
 
 			// Jmp to EIP (stored in EDX)
 			context.AppendInstruction(X86.Jmp, null, edx);

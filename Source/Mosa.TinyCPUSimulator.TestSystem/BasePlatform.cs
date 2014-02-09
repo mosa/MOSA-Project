@@ -8,7 +8,7 @@
  */
 
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Metadata;
+using Mosa.Compiler.MosaTypeSystem;
 using Mosa.TinyCPUSimulator.Adaptor;
 
 namespace Mosa.TinyCPUSimulator.TestSystem
@@ -36,6 +36,6 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 
 		public abstract void PrepareToExecuteMethod(ISimAdapter simAdapter, ulong address);
 
-		public abstract object GetResult(ISimAdapter simAdapter, CilElementType cilElementType);
+		public abstract object GetResult(ISimAdapter simAdapter, MosaType type);
 	}
 }

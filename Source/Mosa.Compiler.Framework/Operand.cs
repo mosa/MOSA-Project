@@ -9,10 +9,8 @@
  */
 
 using Mosa.Compiler.Common;
-using Mosa.Compiler.Framework.CIL;
-using Mosa.Compiler.Metadata;
-using Mosa.Compiler.Metadata.Signatures;
-using Mosa.Compiler.TypeSystem;
+
+using Mosa.Compiler.MosaTypeSystem;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -40,7 +38,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Returns the type of the operand.
 		/// </summary>
-		public SigType Type { get; private set; }
+		public MosaType Type { get; private set; }
 
 		/// <summary>
 		/// Retrieves the register, where the operand is located.
@@ -74,9 +72,14 @@ namespace Mosa.Compiler.Framework
 		public long Displacement { get; set; }
 
 		/// <summary>
-		/// Retrieves the runtime member.
+		/// Retrieves the method.
 		/// </summary>
-		public RuntimeMember RuntimeMember { get; private set; }
+		public MosaMethod Method { get; private set; }
+
+		/// <summary>
+		/// Retrieves the field.
+		/// </summary>
+		public MosaField Field { get; private set; }
 
 		/// <summary>
 		/// Gets the ssa version.
@@ -150,7 +153,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Determines if the operand is a runtime member operand.
 		/// </summary>
-		public bool IsRuntimeMember { get; private set; }
+		public bool IsField { get; private set; }
 
 		/// <summary>
 		/// Determines if the operand is a local variable operand.
@@ -219,65 +222,20 @@ namespace Mosa.Compiler.Framework
 		public long ConstantSignedInteger { get { return (int)ConstantUnsignedInteger; } set { ConstantUnsignedInteger = (uint)value; } }
 
 		/// <summary>
+		/// Gets the string data.
+		/// </summary>
+		/// <value>
+		/// The string data.
+		/// </value>
+		public string StringData { get; private set; }
+
+		/// <summary>
 		/// Gets a value indicating whether [is null].
 		/// </summary>
 		/// <value>
 		///   <c>true</c> if [is null]; otherwise, <c>false</c>.
 		/// </value>
 		public bool IsNull { get; private set; }
-
-		/// <summary>
-		/// Returns the stack type of the operand.
-		/// </summary>
-		public StackTypeCode StackType { get { return Mosa.Compiler.Framework.CIL.BaseCILInstruction.StackTypeFromSigType(Type); } }
-
-		/// <summary>
-		/// Gets a value indicating whether this instance is floating point.
-		/// </summary>
-		/// <value>
-		/// <c>true</c> if this instance is floating point; otherwise, <c>false</c>.
-		/// </value>
-		public bool IsFloatingPoint { get { return Type.IsFloat || Type.IsDouble; } }
-
-		/// <summary>
-		/// Gets a value indicating whether [is double].
-		/// </summary>
-		/// <value>
-		///   <c>true</c> if [is double]; otherwise, <c>false</c>.
-		/// </value>
-		public bool IsDouble { get { return Type.IsDouble; } }
-
-		/// <summary>
-		/// Gets a value indicating whether [is single].
-		/// </summary>
-		/// <value>
-		///   <c>true</c> if [is single]; otherwise, <c>false</c>.
-		/// </value>
-		public bool IsSingle { get { return Type.IsSingle; } }
-
-		/// <summary>
-		/// Gets a value indicating whether this instance is floating point.
-		/// </summary>
-		/// <value>
-		/// <c>true</c> if this instance is floating point; otherwise, <c>false</c>.
-		/// </value>
-		public bool IsInteger { get { return IsSigned || IsUnsigned; } }
-
-		/// <summary>
-		/// Gets a value indicating whether [is signed integer].
-		/// </summary>
-		/// <value>
-		///   <c>true</c> if [is signed integer]; otherwise, <c>false</c>.
-		/// </value>
-		public bool IsSigned { get { return IsIntPtr || IsSignedByte || IsSignedShort || IsSignedInt || IsSignedLong; } }
-
-		/// <summary>
-		/// Gets a value indicating whether [is unsigned integer].
-		/// </summary>
-		/// <value>
-		///   <c>true</c> if [is unsigned integer]; otherwise, <c>false</c>.
-		/// </value>
-		public bool IsUnsigned { get { return IsUIntPtr || IsUnsignedByte || IsUnsignedShort || IsUnsignedInt || IsUnsignedLong; } }
 
 		/// <summary>
 		/// Gets a value indicating whether [is 64 bit integer].
@@ -338,7 +296,17 @@ namespace Mosa.Compiler.Framework
 			}
 		}
 
-		public bool IsFloat { get { return Type.IsFloat; } }
+		public bool IsFloatingPoint { get { return Type.IsFloatingPoint; } }
+
+		public bool IsDouble { get { return Type.IsDouble; } }
+
+		public bool IsSingle { get { return Type.IsSingle; } }
+
+		public bool IsInteger { get { return Type.IsInteger; } }
+
+		public bool IsSigned { get { return Type.IsSigned; } }
+
+		public bool IsUnsigned { get { return Type.IsUnsigned; } }
 
 		public bool IsUnsignedByte { get { return Type.IsUnsignedByte; } }
 
@@ -356,15 +324,15 @@ namespace Mosa.Compiler.Framework
 
 		public bool IsSignedLong { get { return Type.IsSignedLong; } }
 
-		public bool IsByte { get { return IsUnsignedByte || IsSignedByte; } }
+		public bool IsByte { get { return Type.IsByte; } }
 
-		public bool IsShort { get { return IsUnsignedShort || IsSignedShort; } }
+		public bool IsShort { get { return Type.IsShort; } }
 
 		public bool IsChar { get { return Type.IsChar; } }
 
-		public bool IsInt { get { return IsUnsignedInt || IsSignedInt; } }
+		public bool IsInt { get { return Type.IsInt; } }
 
-		public bool IsLong { get { return IsUnsignedLong || IsSignedLong; } }
+		public bool IsLong { get { return Type.IsLong; } }
 
 		public bool IsBoolean { get { return Type.IsBoolean; } }
 
@@ -372,17 +340,15 @@ namespace Mosa.Compiler.Framework
 
 		public bool IsValueType { get { return Type.IsValueType; } }
 
-		public bool IsObject { get { return IsArray || IsByRef || IsValueType || StackType == StackTypeCode.O; } }
-
-		public bool IsFunctionPtr { get { return Type.IsFunctionPtr; } }
-
-		public bool IsByRef { get { return Type.IsByRef; } }
-
-		public bool IsIntPtr { get { return Type.IsIntPtr; } }
-
-		public bool IsUIntPtr { get { return Type.IsUIntPtr; } }
-
 		public bool IsArray { get { return Type.IsArray; } }
+
+		public bool IsObject { get { return Type.IsObject; } }
+
+		public bool IsString { get { return Type.IsString; } }
+
+		public bool IsNativeSignedInteger { get { return Type.IsNativeSignedInteger; } }
+
+		public bool IsNativeUnsignedInteger { get { return Type.IsNativeUnsignedInteger; } }
 
 		#endregion Properties
 
@@ -402,7 +368,7 @@ namespace Mosa.Compiler.Framework
 			this.IsMemoryAddress = false;
 			this.IsSSA = false;
 			this.IsSymbol = false;
-			this.IsRuntimeMember = false;
+			this.IsField = false;
 			this.IsParameter = false;
 		}
 
@@ -410,9 +376,10 @@ namespace Mosa.Compiler.Framework
 		/// Initializes a new instance of <see cref="Operand"/>.
 		/// </summary>
 		/// <param name="type">The type of the operand.</param>
-		private Operand(SigType type)
+		private Operand(MosaType type)
 			: this()
 		{
+			Debug.Assert(type != null);
 			Type = type;
 		}
 
@@ -432,13 +399,17 @@ namespace Mosa.Compiler.Framework
 		#region Static Factory Constructors
 
 		/// <summary>
-		/// Creates a new constant <see cref="Operand"/> for the given integral value.
+		/// Creates a new constant <see cref="Operand" /> for the given integral value.
 		/// </summary>
+		/// <param name="type">The type.</param>
 		/// <param name="value">The value to create the constant operand for.</param>
-		/// <returns>A new operand representing the value <paramref name="value"/>.</returns>
-		public static Operand CreateConstant(SigType sigType, ulong value)
+		/// <returns>
+		/// A new operand representing the value <paramref name="value" />.
+		/// </returns>
+		/// <exception cref="InvalidCompilerException"></exception>
+		public static Operand CreateConstant(MosaType type, ulong value)
 		{
-			Operand operand = new Operand(sigType);
+			var operand = new Operand(type);
 			operand.IsConstant = true;
 
 			if (operand.IsUnsigned)
@@ -452,126 +423,138 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Creates a new constant <see cref="Operand"/> for the given integral value.
+		/// Creates a new constant <see cref="Operand" /> for the given integral value.
 		/// </summary>
+		/// <param name="type">The type.</param>
 		/// <param name="value">The value to create the constant operand for.</param>
-		/// <returns>A new operand representing the value <paramref name="value"/>.</returns>
-		public static Operand CreateConstant(SigType sigType, long value)
+		/// <returns>
+		/// A new operand representing the value <paramref name="value" />.
+		/// </returns>
+		public static Operand CreateConstant(MosaType type, long value)
 		{
-			return CreateConstant(sigType, (ulong)value);
+			return CreateConstant(type, (ulong)value);
 		}
 
 		/// <summary>
-		/// Creates a new constant <see cref="Operand"/> for the given integral value.
+		/// Creates a new constant <see cref="Operand" /> for the given integral value.
 		/// </summary>
+		/// <param name="type">The type.</param>
 		/// <param name="value">The value to create the constant operand for.</param>
-		/// <returns>A new operand representing the value <paramref name="value"/>.</returns>
-		public static Operand CreateConstant(SigType sigType, int value)
+		/// <returns>
+		/// A new operand representing the value <paramref name="value" />.
+		/// </returns>
+		public static Operand CreateConstant(MosaType type, int value)
 		{
-			return CreateConstant(sigType, (long)value);
+			return CreateConstant(type, (long)value);
 		}
 
 		/// <summary>
-		/// Creates a new constant <see cref="Operand"/> for the given integral value.
+		/// Creates the constant unsigned byte.
 		/// </summary>
-		/// <param name="value">The value to create the constant operand for.</param>
-		/// <returns>A new operand representing the value <paramref name="value"/>.</returns>
-		public static Operand CreateConstantUnsignedInt(uint value)
+		/// <param name="typeSystem">The type system.</param>
+		/// <param name="value">The value.</param>
+		/// <returns></returns>
+		public static Operand CreateConstantUnsignedByte(TypeSystem typeSystem, byte value)
 		{
-			Operand operand = new Operand(BuiltInSigType.UInt32);
+			var operand = new Operand(typeSystem.BuiltIn.U1);
 			operand.IsConstant = true;
 			operand.ConstantUnsignedInteger = value;
 			return operand;
 		}
 
 		/// <summary>
-		/// Creates a new constant <see cref="Operand"/> for the given integral value.
+		/// Creates a new constant <see cref="Operand" /> for the given integral value.
 		/// </summary>
+		/// <param name="typeSystem">The type system.</param>
 		/// <param name="value">The value to create the constant operand for.</param>
-		/// <returns>A new operand representing the value <paramref name="value"/>.</returns>
-		public static Operand CreateConstantSignedInt(int value)
+		/// <returns>
+		/// A new operand representing the value <paramref name="value" />.
+		/// </returns>
+		public static Operand CreateConstantUnsignedInt(TypeSystem typeSystem, uint value)
 		{
-			Operand operand = new Operand(BuiltInSigType.Int32);
-			operand.IsConstant = true;
-			operand.ConstantSignedInteger = value;
-			return operand;
-		}
-
-		/// <summary>
-		/// Creates a new constant <see cref="Operand"/> for the given integral value.
-		/// </summary>
-		/// <param name="value">The value to create the constant operand for.</param>
-		/// <returns>A new operand representing the value <paramref name="value"/>.</returns>
-		public static Operand CreateConstantUnsignedLong(ulong value)
-		{
-			Operand operand = new Operand(BuiltInSigType.UInt64);
+			var operand = new Operand(typeSystem.BuiltIn.U4);
 			operand.IsConstant = true;
 			operand.ConstantUnsignedInteger = value;
 			return operand;
 		}
 
 		/// <summary>
-		/// Creates a new constant <see cref="Operand"/> for the given integral value.
+		/// Creates a new constant <see cref="Operand" /> for the given integral value.
 		/// </summary>
+		/// <param name="typeSystem">The type system.</param>
 		/// <param name="value">The value to create the constant operand for.</param>
-		/// <returns>A new operand representing the value <paramref name="value"/>.</returns>
-		public static Operand CreateConstantSignedLong(long value)
+		/// <returns>
+		/// A new operand representing the value <paramref name="value" />.
+		/// </returns>
+		public static Operand CreateConstantSignedInt(TypeSystem typeSystem, int value)
 		{
-			Operand operand = new Operand(BuiltInSigType.Int64);
+			var operand = new Operand(typeSystem.BuiltIn.I4);
 			operand.IsConstant = true;
 			operand.ConstantSignedInteger = value;
 			return operand;
 		}
 
 		/// <summary>
-		/// Creates a new constant <see cref="Operand"/> for the given integral value.
+		/// Creates a new constant <see cref="Operand" /> for the given integral value.
 		/// </summary>
+		/// <param name="typeSystem">The type system.</param>
 		/// <param name="value">The value to create the constant operand for.</param>
-		/// <returns>A new operand representing the value <paramref name="value"/>.</returns>
-		public static Operand CreateConstantFloat(float value)
+		/// <returns>
+		/// A new operand representing the value <paramref name="value" />.
+		/// </returns>
+		public static Operand CreateConstantUnsignedLong(TypeSystem typeSystem, ulong value)
 		{
-			Operand operand = new Operand(BuiltInSigType.Single);
+			var operand = new Operand(typeSystem.BuiltIn.U8);
+			operand.IsConstant = true;
+			operand.ConstantUnsignedInteger = value;
+			return operand;
+		}
+
+		/// <summary>
+		/// Creates a new constant <see cref="Operand" /> for the given integral value.
+		/// </summary>
+		/// <param name="typeSystem">The type system.</param>
+		/// <param name="value">The value to create the constant operand for.</param>
+		/// <returns>
+		/// A new operand representing the value <paramref name="value" />.
+		/// </returns>
+		public static Operand CreateConstantSignedLong(TypeSystem typeSystem, long value)
+		{
+			var operand = new Operand(typeSystem.BuiltIn.I8);
+			operand.IsConstant = true;
+			operand.ConstantSignedInteger = value;
+			return operand;
+		}
+
+		/// <summary>
+		/// Creates a new constant <see cref="Operand" /> for the given integral value.
+		/// </summary>
+		/// <param name="typeSystem">The type system.</param>
+		/// <param name="value">The value to create the constant operand for.</param>
+		/// <returns>
+		/// A new operand representing the value <paramref name="value" />.
+		/// </returns>
+		public static Operand CreateConstantSingle(TypeSystem typeSystem, float value)
+		{
+			var operand = new Operand(typeSystem.BuiltIn.R4);
 			operand.IsConstant = true;
 			operand.ConstantSingleFloatingPoint = value;
 			return operand;
 		}
 
 		/// <summary>
-		/// Creates a new constant <see cref="Operand"/> for the given integral value.
+		/// Creates a new constant <see cref="Operand" /> for the given integral value.
 		/// </summary>
+		/// <param name="typeSystem">The type system.</param>
 		/// <param name="value">The value to create the constant operand for.</param>
-		/// <returns>A new operand representing the value <paramref name="value"/>.</returns>
-		public static Operand CreateConstantDouble(double value)
+		/// <returns>
+		/// A new operand representing the value <paramref name="value" />.
+		/// </returns>
+		public static Operand CreateConstantDouble(TypeSystem typeSystem, double value)
 		{
-			Operand operand = new Operand(BuiltInSigType.Double);
+			var operand = new Operand(typeSystem.BuiltIn.R8);
 			operand.IsConstant = true;
 			operand.ConstantDoubleFloatingPoint = value;
-			return operand;
-		}
-
-		/// <summary>
-		/// Creates a new constant <see cref="Operand"/> for the given integral value.
-		/// </summary>
-		/// <param name="value">The value to create the constant operand for.</param>
-		/// <returns>A new operand representing the value <paramref name="value"/>.</returns>
-		public static Operand CreateConstantIntPtr(int value)
-		{
-			Operand operand = new Operand(BuiltInSigType.IntPtr);
-			operand.IsConstant = true;
-			operand.ConstantSignedInteger = value;
-			return operand;
-		}
-
-		/// <summary>
-		/// Creates a new constant <see cref="Operand"/> for the given integral value.
-		/// </summary>
-		/// <param name="value">The value to create the constant operand for.</param>
-		/// <returns>A new operand representing the value <paramref name="value"/>.</returns>
-		public static Operand CreateConstantIntPtr(long value)
-		{
-			Operand operand = new Operand(BuiltInSigType.IntPtr);
-			operand.IsConstant = true;
-			operand.ConstantSignedInteger = value;
 			return operand;
 		}
 
@@ -579,49 +562,82 @@ namespace Mosa.Compiler.Framework
 		/// Gets the null constant <see cref="Operand"/>.
 		/// </summary>
 		/// <returns></returns>
-		public static Operand GetNull()
+		public static Operand GetNull(TypeSystem typeSystem)
 		{
-			Operand operand = new Operand(BuiltInSigType.Object);
+			var operand = new Operand(typeSystem.BuiltIn.Object);
 			operand.IsNull = true;
 			operand.IsConstant = true;
 			return operand;
 		}
 
 		/// <summary>
-		/// Creates a new symbol <see cref="Operand"/> for the given symbol name.
+		/// Creates the symbol.
 		/// </summary>
-		/// <param name="sigType">Type of the sig.</param>
+		/// <param name="typeSystem">The type system.</param>
 		/// <param name="name">The name.</param>
 		/// <returns></returns>
-		public static Operand CreateSymbol(SigType sigType, string name)
+		public static Operand CreateUnmanagedSymbolPointer(TypeSystem typeSystem, string name)
 		{
-			Operand operand = new Operand(sigType);
+			var operand = new Operand(typeSystem.BuiltIn.Ptr);
 			operand.IsSymbol = true;
 			operand.Name = name;
 			return operand;
 		}
 
 		/// <summary>
-		/// Creates a new symbol <see cref="Operand"/> for the given symbol name.
+		/// Creates the symbol.
 		/// </summary>
-		/// <param name="method">The method.</param>
+		/// <param name="typeSystem">The type system.</param>
+		/// <param name="name">The name.</param>
 		/// <returns></returns>
-		public static Operand CreateSymbolFromMethod(RuntimeMethod method)
+		public static Operand CreateManagedSymbolPointer(TypeSystem typeSystem, string name)
 		{
-			Operand operand = CreateSymbol(BuiltInSigType.IntPtr, method.FullName);
-			operand.RuntimeMember = method;
+			var operand = new Operand(typeSystem.BuiltIn.TypedByRef);
+			operand.IsSymbol = true;
+			operand.Name = name;
 			return operand;
 		}
 
 		/// <summary>
-		/// Creates a new virtual register <see cref="Operand"/>.
+		/// Creates the string symbol with data.
 		/// </summary>
-		/// <param name="sigType">Type of the sig.</param>
+		/// <param name="typeSystem">The type system.</param>
+		/// <param name="name">The name.</param>
+		/// <param name="data">The string data.</param>
+		/// <returns></returns>
+		public static Operand CreateStringSymbol(TypeSystem typeSystem, string name, string data)
+		{
+			Debug.Assert(data != null);
+
+			var operand = new Operand(typeSystem.BuiltIn.String);
+			operand.IsSymbol = true;
+			operand.Name = name;
+			operand.StringData = data;
+			return operand;
+		}
+
+		/// <summary>
+		/// Creates a new symbol <see cref="Operand" /> for the given symbol name.
+		/// </summary>
+		/// <param name="typeSystem">The type system.</param>
+		/// <param name="method">The method.</param>
+		/// <returns></returns>
+		public static Operand CreateSymbolFromMethod(TypeSystem typeSystem, MosaMethod method)
+		{
+			Operand operand = CreateUnmanagedSymbolPointer(typeSystem, method.MethodName);
+			operand.Method = method;
+			return operand;
+		}
+
+		/// <summary>
+		/// Creates a new virtual register <see cref="Operand" />.
+		/// </summary>
+		/// <param name="type">The type.</param>
 		/// <param name="index">The index.</param>
 		/// <returns></returns>
-		public static Operand CreateVirtualRegister(SigType sigType, int index)
+		public static Operand CreateVirtualRegister(MosaType type, int index)
 		{
-			Operand operand = new Operand(sigType);
+			var operand = new Operand(type);
 			operand.IsVirtualRegister = true;
 			operand.Index = index;
 			return operand;
@@ -630,13 +646,13 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Creates a new virtual register <see cref="Operand" />.
 		/// </summary>
-		/// <param name="sigType">Type of the sig.</param>
+		/// <param name="type">The type.</param>
 		/// <param name="index">The index.</param>
 		/// <param name="name">The name.</param>
 		/// <returns></returns>
-		public static Operand CreateVirtualRegister(SigType sigType, int index, string name)
+		public static Operand CreateVirtualRegister(MosaType type, int index, string name)
 		{
-			Operand operand = new Operand(sigType);
+			var operand = new Operand(type);
 			operand.IsVirtualRegister = true;
 			operand.Name = name;
 			operand.Index = index;
@@ -644,29 +660,29 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Creates a new physical register <see cref="Operand"/>.
+		/// Creates a new physical register <see cref="Operand" />.
 		/// </summary>
-		/// <param name="sigType">Type of the sig.</param>
+		/// <param name="type">The type.</param>
 		/// <param name="register">The register.</param>
 		/// <returns></returns>
-		public static Operand CreateCPURegister(SigType sigType, Register register)
+		public static Operand CreateCPURegister(MosaType type, Register register)
 		{
-			Operand operand = new Operand(sigType);
+			var operand = new Operand(type);
 			operand.IsCPURegister = true;
 			operand.Register = register;
 			return operand;
 		}
 
 		/// <summary>
-		/// Creates a new memory address <see cref="Operand"/>.
+		/// Creates a new memory address <see cref="Operand" />.
 		/// </summary>
-		/// <param name="sigType">Type of the sig.</param>
+		/// <param name="type">The type.</param>
 		/// <param name="offsetBase">The base register.</param>
 		/// <param name="offset">The offset.</param>
 		/// <returns></returns>
-		public static Operand CreateMemoryAddress(SigType sigType, Operand offsetBase, long offset)
+		public static Operand CreateMemoryAddress(MosaType type, Operand offsetBase, long offset)
 		{
-			Operand operand = new Operand(sigType);
+			var operand = new Operand(type);
 			operand.IsMemoryAddress = true;
 			operand.OffsetBase = offsetBase;
 			operand.Displacement = offset;
@@ -674,14 +690,14 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Creates a new symbol <see cref="Operand"/> for the given symbol name.
+		/// Creates a new symbol <see cref="Operand" /> for the given symbol name.
 		/// </summary>
-		/// <param name="sigType">Type of the sig.</param>
+		/// <param name="type">The type.</param>
 		/// <param name="label">The label.</param>
 		/// <returns></returns>
-		public static Operand CreateLabel(SigType sigType, string label)
+		public static Operand CreateLabel(MosaType type, string label)
 		{
-			Operand operand = new Operand(sigType);
+			var operand = new Operand(type);
 			operand.IsMemoryAddress = true;
 			operand.IsLabel = true;
 			operand.Name = label;
@@ -692,65 +708,48 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Creates a new runtime member <see cref="Operand"/>.
 		/// </summary>
-		/// <param name="type">The type.</param>
-		/// <param name="member">The member.</param>
-		/// <param name="offset">The offset.</param>
-		/// <returns></returns>
-		public static Operand CreateRuntimeMember(SigType type, RuntimeMember member, int offset)
-		{
-			Operand operand = new Operand(type);
-			operand.IsMemoryAddress = true;
-			operand.IsRuntimeMember = true;
-			operand.Displacement = offset;
-			operand.RuntimeMember = member;
-			return operand;
-		}
-
-		/// <summary>
-		/// Creates a new runtime member <see cref="Operand"/>.
-		/// </summary>
 		/// <param name="field">The field.</param>
 		/// <returns></returns>
-		public static Operand CreateRuntimeMember(RuntimeField field)
+		public static Operand CreateField(MosaField field)
 		{
-			Operand operand = new Operand(field.SigType);
+			var operand = new Operand(field.Type);
 			operand.IsMemoryAddress = true;
-			operand.IsRuntimeMember = true;
+			operand.IsField = true;
 			operand.Displacement = 0;
-			operand.RuntimeMember = field;
+			operand.Field = field;
 			return operand;
 		}
 
 		/// <summary>
-		/// Creates a new local variable <see cref="Operand"/>.
+		/// Creates a new local variable <see cref="Operand" />.
 		/// </summary>
 		/// <param name="type">The type.</param>
 		/// <param name="register">The register.</param>
-		/// <param name="param">The param.</param>
+		/// <param name="displacement">The displacement.</param>
+		/// <param name="index">The index.</param>
 		/// <returns></returns>
-		public static Operand CreateParameter(SigType type, Register register, RuntimeParameter param, int index)
+		public static Operand CreateParameter(MosaType type, Register register, int displacement, int index, string name)
 		{
-			Operand operand = new Operand(type);
+			var operand = new Operand(type);
 			operand.IsMemoryAddress = true;
 			operand.IsParameter = true;
 			operand.Register = register;
-			operand.Index = index; // param.Position;
-
-			//operand.sequence = index;
-			operand.Displacement = param.Position * 4; // FIXME: 4 is platform dependent!
+			operand.Index = index;
+			operand.Displacement = displacement;
+			operand.Name = name;
 			return operand;
 		}
 
 		/// <summary>
 		/// Creates the stack local.
 		/// </summary>
-		/// <param name="sigType">Type of the sig.</param>
+		/// <param name="type">The type.</param>
 		/// <param name="register">The register.</param>
 		/// <param name="index">The index.</param>
 		/// <returns></returns>
-		public static Operand CreateStackLocal(SigType sigType, Register register, int index)
+		public static Operand CreateStackLocal(MosaType type, Register register, int index)
 		{
-			Operand operand = new Operand(sigType);
+			var operand = new Operand(type);
 			operand.IsMemoryAddress = true;
 			operand.Register = register;
 			operand.Index = index;
@@ -766,7 +765,7 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		public static Operand CreateSSA(Operand ssaOperand, int ssaVersion)
 		{
-			Operand operand = new Operand(ssaOperand.Type);
+			var operand = new Operand(ssaOperand.Type);
 			operand.IsParameter = ssaOperand.IsParameter;
 			operand.IsStackLocal = ssaOperand.IsStackLocal;
 			operand.IsShift = ssaOperand.IsShift;
@@ -776,7 +775,7 @@ namespace Mosa.Compiler.Framework
 			operand.IsCPURegister = ssaOperand.IsCPURegister;
 			operand.IsMemoryAddress = ssaOperand.IsMemoryAddress;
 			operand.IsSymbol = ssaOperand.IsSymbol;
-			operand.IsRuntimeMember = ssaOperand.IsRuntimeMember;
+			operand.IsField = ssaOperand.IsField;
 			operand.IsParameter = ssaOperand.IsParameter;
 			operand.IsSSA = true;
 			operand.SSAParent = ssaOperand;
@@ -791,7 +790,7 @@ namespace Mosa.Compiler.Framework
 		/// <param name="offset">The offset.</param>
 		/// <param name="index">The index.</param>
 		/// <returns></returns>
-		public static Operand CreateLowSplitForLong(Operand longOperand, int offset, int index)
+		public static Operand CreateLowSplitForLong(TypeSystem typeSystem, Operand longOperand, int offset, int index)
 		{
 			Debug.Assert(longOperand.IsUnsignedLong || longOperand.IsSignedLong);
 
@@ -802,23 +801,24 @@ namespace Mosa.Compiler.Framework
 
 			if (longOperand.IsConstant)
 			{
-				operand = new Operand(BuiltInSigType.UInt32);
+				operand = new Operand(typeSystem.BuiltIn.U4);
 				operand.IsConstant = true;
 				operand.ConstantUnsignedInteger = longOperand.ConstantUnsignedInteger & uint.MaxValue;
 			}
-			else if (longOperand.IsRuntimeMember)
+			else if (longOperand.IsField)
 			{
-				operand = new Operand(BuiltInSigType.UInt32);
+				operand = new Operand(typeSystem.BuiltIn.U4);
 				operand.IsMemoryAddress = true;
-				operand.IsRuntimeMember = true;
-				operand.RuntimeMember = longOperand.RuntimeMember;
+				operand.IsField = true;
+				operand.Field = longOperand.Field;
+				operand.Type = longOperand.Type;
 				operand.OffsetBase = longOperand.OffsetBase;
 				operand.Displacement = longOperand.Displacement + offset;
 				operand.Register = longOperand.Register;
 			}
 			else if (longOperand.IsMemoryAddress)
 			{
-				operand = new Operand(BuiltInSigType.UInt32);
+				operand = new Operand(typeSystem.BuiltIn.U4);
 				operand.IsMemoryAddress = true;
 				operand.OffsetBase = longOperand.OffsetBase;
 				operand.Displacement = longOperand.Displacement + offset;
@@ -826,7 +826,7 @@ namespace Mosa.Compiler.Framework
 			}
 			else
 			{
-				operand = new Operand(BuiltInSigType.UInt32);
+				operand = new Operand(typeSystem.BuiltIn.U4);
 				operand.IsVirtualRegister = true;
 			}
 
@@ -848,7 +848,7 @@ namespace Mosa.Compiler.Framework
 		/// <param name="offset">The offset.</param>
 		/// <param name="index">The index.</param>
 		/// <returns></returns>
-		public static Operand CreateHighSplitForLong(Operand longOperand, int offset, int index)
+		public static Operand CreateHighSplitForLong(TypeSystem typeSystem, Operand longOperand, int offset, int index)
 		{
 			Debug.Assert(longOperand.IsUnsignedLong || longOperand.IsSignedLong);
 
@@ -859,23 +859,24 @@ namespace Mosa.Compiler.Framework
 
 			if (longOperand.IsConstant)
 			{
-				operand = new Operand(BuiltInSigType.UInt32);
+				operand = new Operand(typeSystem.BuiltIn.U4);
 				operand.IsConstant = true;
 				operand.ConstantUnsignedInteger = ((uint)(longOperand.ConstantUnsignedInteger >> 32)) & uint.MaxValue;
 			}
-			else if (longOperand.IsRuntimeMember)
+			else if (longOperand.IsField)
 			{
-				operand = new Operand(BuiltInSigType.UInt32);
+				operand = new Operand(typeSystem.BuiltIn.U4);
 				operand.IsMemoryAddress = true;
-				operand.IsRuntimeMember = true;
-				operand.RuntimeMember = longOperand.RuntimeMember;
+				operand.IsField = true;
+				operand.Field = longOperand.Field;
+				operand.Type = longOperand.Type;
 				operand.OffsetBase = longOperand.OffsetBase;
 				operand.Displacement = longOperand.Displacement + offset;
 				operand.Register = longOperand.Register;
 			}
 			else if (longOperand.IsMemoryAddress)
 			{
-				operand = new Operand(BuiltInSigType.UInt32);
+				operand = new Operand(typeSystem.BuiltIn.U4);
 				operand.IsMemoryAddress = true;
 				operand.OffsetBase = longOperand.OffsetBase;
 				operand.Displacement = longOperand.Displacement + offset;
@@ -883,7 +884,7 @@ namespace Mosa.Compiler.Framework
 			}
 			else
 			{
-				operand = new Operand(BuiltInSigType.UInt32);
+				operand = new Operand(typeSystem.BuiltIn.U4);
 				operand.IsVirtualRegister = true;
 			}
 
@@ -905,7 +906,7 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		public static Operand CreateShifter(ShiftType shiftType)
 		{
-			Operand operand = new Operand(shiftType);
+			var operand = new Operand(shiftType);
 			return operand;
 		}
 
@@ -932,12 +933,6 @@ namespace Mosa.Compiler.Framework
 
 			StringBuilder sb = new StringBuilder();
 
-			if (Name != null)
-			{
-				sb.Append(Name);
-				sb.Append(' ');
-			}
-
 			if (IsVirtualRegister)
 			{
 				sb.AppendFormat("V_{0}", Index);
@@ -949,6 +944,18 @@ namespace Mosa.Compiler.Framework
 			else if (IsParameter && Name == null)
 			{
 				sb.AppendFormat("P_{0}", Index);
+			}
+
+			if (Name != null)
+			{
+				sb.Append(Name);
+				sb.Append(' ');
+			}
+
+			if (IsField)
+			{
+				sb.Append(' ');
+				sb.Append(Field.FullName.ToString());
 			}
 
 			if (IsSplitChild)
@@ -981,12 +988,6 @@ namespace Mosa.Compiler.Framework
 				sb.Append('}');
 			}
 
-			if (IsRuntimeMember)
-			{
-				sb.Append(' ');
-				sb.Append(RuntimeMember.ToString());
-			}
-
 			if (IsCPURegister)
 			{
 				sb.AppendFormat(" {0}", Register);
@@ -1008,7 +1009,7 @@ namespace Mosa.Compiler.Framework
 					else
 						sb.AppendFormat("[{0}-{1:X}h]", Register.ToString(), -Displacement);
 				}
-				else if (IsRuntimeMember && IsSplitChild)
+				else if (IsField && IsSplitChild)
 				{
 					if (Displacement > 0)
 						sb.AppendFormat("+{0:X}h", Displacement);
@@ -1017,43 +1018,11 @@ namespace Mosa.Compiler.Framework
 				}
 			}
 
-			if (Type is PtrSigType)
-			{
-				sb.AppendFormat(" [{0}-{1}]", Type, (Type as PtrSigType).ElementType);
-			}
-			else if (Type is RefSigType)
-			{
-				sb.AppendFormat(" [{0}-{1}]", Type, (Type as RefSigType).ElementType);
-			}
-			else
-			{
-				sb.AppendFormat(" [{0}]", Type);
-			}
+			sb.AppendFormat(" [{0}]", Type.FullName);
 
 			return sb.ToString().Replace("  ", " ").Trim();
 		}
 
 		#endregion Object Overrides
-
-		#region Static Methods
-
-		public static SigType NormalizeSigType(SigType type)
-		{
-			switch (type.Type)
-			{
-				case CilElementType.Boolean: return BuiltInSigType.UInt32;
-				case CilElementType.Char: return BuiltInSigType.UInt32;
-				case CilElementType.I1: return BuiltInSigType.Int32;
-				case CilElementType.I2: return BuiltInSigType.Int32;
-				case CilElementType.U1: return BuiltInSigType.UInt32;
-				case CilElementType.U2: return BuiltInSigType.UInt32;
-				case CilElementType.U4: return BuiltInSigType.UInt32;
-				case CilElementType.U8: return BuiltInSigType.UInt64;
-				case CilElementType.R4: return BuiltInSigType.Double;
-				default: return type;
-			}
-		}
-
-		#endregion Static Methods
 	}
 }

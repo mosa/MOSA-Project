@@ -176,7 +176,7 @@ namespace Mosa.Tool.TinySimulator
 			this.cbBreakAfterBranch.Name = "cbBreakAfterBranch";
 			this.cbBreakAfterBranch.Size = new System.Drawing.Size(60, 17);
 			this.cbBreakAfterBranch.TabIndex = 30;
-			this.cbBreakAfterBranch.Text = "Branch";
+			this.cbBreakAfterBranch.Text = "UnconditionalBranch";
 			this.cbBreakAfterBranch.UseVisualStyleBackColor = true;
 			this.cbBreakAfterBranch.CheckedChanged += new System.EventHandler(this.cbBreakAfterBranch_CheckedChanged);
 			// 

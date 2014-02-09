@@ -84,6 +84,7 @@
     <Compile Include="MosaAssembly.cs" />
     <Compile Include="BuiltInTypes.cs" />
     <Compile Include="MosaTypeResolver.cs" />
+    <Compile Include="StackTypeCode.cs" />
     <Compile Include="TypeSystem.cs" />
     <Compile Include="MosaMethod.cs" />
     <Compile Include="MosaField.cs" />

@@ -9,7 +9,6 @@
  */
 
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Metadata;
 using System.Diagnostics;
 
 namespace Mosa.Platform.x86.Instructions
@@ -51,7 +50,7 @@ namespace Mosa.Platform.x86.Instructions
 		{
 			Debug.Assert(source.IsMemoryAddress);
 
-			if (source.IsFloat)
+			if (source.IsSingle)
 				return m32fp;
 			else
 				return m64fp;

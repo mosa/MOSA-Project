@@ -23,6 +23,7 @@
                     <include name="MosaAssembly.cs"/>
                     <include name="BuiltInTypes.cs"/>
                     <include name="MosaTypeResolver.cs"/>
+                    <include name="StackTypeCode.cs"/>
                     <include name="TypeSystem.cs"/>
                     <include name="MosaMethod.cs"/>
                     <include name="MosaField.cs"/>

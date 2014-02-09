@@ -30,27 +30,6 @@ namespace Mosa.Test.Debug
 
 			typeSystem.Load(assemblyLoader);
 
-			//var resolver = new MosaTypeResolver();
-			//var loader = new TypeLoader(resolver);
-
-			//var mscorlib = new PortableExecutableImage(new FileStream(@"mscorlib.dll", FileMode.Open, FileAccess.Read));
-			//var assemblyA = new PortableExecutableImage(new FileStream(@"Mosa.Test.AssemblyA.dll", FileMode.Open, FileAccess.Read));
-			//var assemblyB = new PortableExecutableImage(new FileStream(@"Mosa.Test.AssemblyB.dll", FileMode.Open, FileAccess.Read));
-			//var assemblyC = new PortableExecutableImage(new FileStream(@"Mosa.Test.AssemblyC.dll", FileMode.Open, FileAccess.Read));
-			//var classLib = new PortableExecutableImage(new FileStream(@"Mosa.ClassLib.dll", FileMode.Open, FileAccess.Read));
-
-			//loader.Load(mscorlib);
-			//loader.Load(assemblyA);
-			//loader.Load(assemblyB);
-			//loader.Load(assemblyC);
-			//loader.Load(classLib);
-
-			//tpeSystem.LoadAssembly(mscorlib);
-			//tpeSystem.LoadAssembly(assemblyA);
-			//tpeSystem.LoadAssembly(assemblyB);
-			//tpeSystem.LoadAssembly(assemblyC);
-			//tpeSystem.LoadAssembly(classLib);
-
 			return;
 		}
 

@@ -14,7 +14,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-
+using Mosa.Compiler.MosaTypeSystem;
 using Mosa.Compiler.Linker;
 
 namespace Mosa.Compiler.Framework
@@ -22,7 +22,7 @@ namespace Mosa.Compiler.Framework
 	/// <summary>
 	/// Base code emitter.
 	/// </summary>
-	public abstract class BaseCodeEmitter : ICodeEmitter
+	public abstract class BaseCodeEmitter
 	{
 		#region Types
 
@@ -98,6 +98,14 @@ namespace Mosa.Compiler.Framework
 		#region Properties
 
 		/// <summary>
+		/// Gets the type system.
+		/// </summary>
+		/// <value>
+		/// The type system.
+		/// </value>
+		public TypeSystem TypeSystem { get; private set; }
+
+		/// <summary>
 		/// Gets the name of the method.
 		/// </summary>
 		/// <value>
@@ -115,7 +123,7 @@ namespace Mosa.Compiler.Framework
 
 		#endregion Properties
 
-		#region ICodeEmitter Members
+		#region BaseCodeEmitter Members
 
 		/// <summary>
 		/// Initializes a new instance of <see cref="BaseCodeEmitter" />.
@@ -123,7 +131,8 @@ namespace Mosa.Compiler.Framework
 		/// <param name="methodName">Name of the method.</param>
 		/// <param name="linker">The linker.</param>
 		/// <param name="codeStream">The stream the machine code is written to.</param>
-		void ICodeEmitter.Initialize(string methodName, ILinker linker, Stream codeStream)
+		/// <param name="typeSystem">The type system.</param>
+		public void Initialize(string methodName, ILinker linker, Stream codeStream, TypeSystem typeSystem)
 		{
 			Debug.Assert(codeStream != null);
 			Debug.Assert(linker != null);
@@ -132,18 +141,14 @@ namespace Mosa.Compiler.Framework
 			this.linker = linker;
 			this.codeStream = codeStream;
 			this.codeStreamBasePosition = codeStream.Position;
-		}
-
-		void ICodeEmitter.ResolvePatches()
-		{
-			ResolvePatches();
+			this.TypeSystem = typeSystem;
 		}
 
 		/// <summary>
 		/// Emits a label into the code stream.
 		/// </summary>
 		/// <param name="label">The label name to emit.</param>
-		void ICodeEmitter.Label(int label)
+		public void Label(int label)
 		{
 			/*
 			 * Labels are used to resolve branches inside a procedure. Branches outside
@@ -167,7 +172,7 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		/// <param name="label">The label.</param>
 		/// <returns></returns>
-		long ICodeEmitter.GetPosition(int label)
+		public long GetPosition(int label)
 		{
 			return labels[label];
 		}
@@ -176,9 +181,9 @@ namespace Mosa.Compiler.Framework
 		/// Gets the current position.
 		/// </summary>
 		/// <value>The current position.</value>
-		long ICodeEmitter.CurrentPosition { get { return codeStream.Position; } }
+		public long CurrentPosition { get { return codeStream.Position; } }
 
-		#endregion ICodeEmitter Members
+		#endregion BaseCodeEmitter Members
 
 		#region Code Generation Members
 
@@ -214,7 +219,7 @@ namespace Mosa.Compiler.Framework
 			patches.Add(new Patch(label, position));
 		}
 
-		protected abstract void ResolvePatches();
+		public abstract void ResolvePatches();
 
 	}
 }

@@ -8,18 +8,18 @@
  */
 
 using System.Diagnostics;
-using Mosa.Compiler.TypeSystem;
+using Mosa.Compiler.MosaTypeSystem;
 
 namespace Mosa.Compiler.InternalTrace
 {
 	public class DebugTraceListener : ITraceListener
 	{
-		void ITraceListener.SubmitInstructionTraceInformation(RuntimeMethod method, string stage, string line)
+		void ITraceListener.SubmitInstructionTraceInformation(MosaMethod method, string stage, string line)
 		{
 			Debug.WriteLine(line);
 		}
 
-		void ITraceListener.SubmitDebugStageInformation(RuntimeMethod method, string stage, string line)
+		void ITraceListener.SubmitDebugStageInformation(MosaMethod method, string stage, string line)
 		{
 			Debug.WriteLine(stage + ": " + line);
 		}

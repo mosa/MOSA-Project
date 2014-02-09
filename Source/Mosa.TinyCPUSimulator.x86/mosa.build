@@ -150,6 +150,7 @@
                     <include name="System.dll"/>
                     <include name="System.Drawing.dll"/>
                     <include name="System.Windows.Forms.dll"/>
+                    <include name="${outputDirectory}/Mosa.Compiler.MosaTypeSystem.dll"/>
                     <include name="${outputDirectory}/Mosa.TinyCPUSimulator.Adaptor.dll"/>
                     <include name="${outputDirectory}/Mosa.TinyCPUSimulator.dll"/>
 		</references>

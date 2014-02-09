@@ -7,11 +7,9 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
-
 using Mosa.Compiler.Metadata;
-using Mosa.Compiler.Metadata.Signatures;
-using Mosa.Compiler.TypeSystem;
+using Mosa.Compiler.MosaTypeSystem;
+using System;
 
 namespace Mosa.Compiler.Framework.CIL
 {
@@ -20,14 +18,7 @@ namespace Mosa.Compiler.Framework.CIL
 	/// </summary>
 	public sealed class StelemInstruction : NaryInstruction
 	{
-		#region Data members
-
-		/// <summary>
-		///
-		/// </summary>
-		private readonly SigType typeRef;
-
-		#endregion Data members
+		private readonly CilElementType? elementType;
 
 		#region Construction
 
@@ -40,44 +31,16 @@ namespace Mosa.Compiler.Framework.CIL
 		{
 			switch (opcode)
 			{
-				case OpCode.Stelem_i1:
-					typeRef = BuiltInSigType.SByte;
-					break;
-
-				case OpCode.Stelem_i2:
-					typeRef = BuiltInSigType.Int16;
-					break;
-
-				case OpCode.Stelem_i4:
-					typeRef = BuiltInSigType.Int32;
-					break;
-
-				case OpCode.Stelem_i8:
-					typeRef = BuiltInSigType.Int64;
-					break;
-
-				case OpCode.Stelem_i:
-					typeRef = BuiltInSigType.IntPtr;
-					break;
-
-				case OpCode.Stelem_r4:
-					typeRef = BuiltInSigType.Single;
-					break;
-
-				case OpCode.Stelem_r8:
-					typeRef = BuiltInSigType.Double;
-					break;
-
-				case OpCode.Stelem_ref: // FIXME: Really object?
-					typeRef = BuiltInSigType.Object;
-					break;
-
-				case OpCode.Stelem:
-					typeRef = null;
-					break;
-
-				default:
-					throw new NotImplementedException("Not implemented: " + opcode);
+				case OpCode.Stelem_i1: elementType = CilElementType.I1; break;
+				case OpCode.Stelem_i2: elementType = CilElementType.I2; break;
+				case OpCode.Stelem_i4: elementType = CilElementType.I4; break;
+				case OpCode.Stelem_i8: elementType = CilElementType.I8; break;
+				case OpCode.Stelem_i: elementType = CilElementType.I; break;
+				case OpCode.Stelem_r4: elementType = CilElementType.R4; break;
+				case OpCode.Stelem_r8: elementType = CilElementType.R8; break;
+				case OpCode.Stelem_ref: elementType = CilElementType.Object; break;
+				case OpCode.Stelem: elementType = null; break;
+				default: throw new NotImplementedException("Not implemented: " + opcode);
 			}
 		}
 
@@ -95,13 +58,11 @@ namespace Mosa.Compiler.Framework.CIL
 			// Decode base classes first
 			base.Decode(ctx, decoder);
 
-			if (typeRef == null)
-			{
-				Token token = decoder.DecodeTokenType();
-				RuntimeType type = decoder.TypeModule.GetType(token);
+			MosaType type = (elementType == null)
+				? type = decoder.TypeSystem.Resolver.GetTypeByToken(decoder.Method.CodeAssembly, decoder.DecodeTokenType(), decoder.Method)
+				: type = decoder.TypeSystem.Resolver.GetTypeByElementType(elementType);
 
-				ctx.RuntimeType = type;
-			}
+			ctx.MosaType = type;
 		}
 
 		/// <summary>

@@ -22,8 +22,6 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 		}
 
-		//		newScheduler = new CompilationScheduler(typeSystem);
-
 		#region ICompilerStage members
 
 		void ICompilerStage.Run()

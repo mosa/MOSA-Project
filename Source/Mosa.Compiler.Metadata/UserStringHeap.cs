@@ -58,12 +58,12 @@ namespace Mosa.Compiler.Metadata
 			// Validate the offset & calculate the real offset
 			int realOffset = ValidateOffset(offset);
 			int length = CalculatePrefixLength(ref realOffset);
-			Debug.Assert(1 == (length & 1), @"Invalid string length read from metadata - corrupt string?");
+			Debug.Assert(1 == (length & 1), @"Invalid string length read from Metadata - corrupt string?");
 
-			//token = (TokenTypes)((int)TokenTypes.UserString | realOffset + length - this._offset);
 			if (0 == length)
 				return String.Empty;
-			byte[] buffer = this.Buffer;
+
+			byte[] buffer = this.Metadata;
 			return Encoding.Unicode.GetString(buffer, realOffset, length - 1);
 		}
 

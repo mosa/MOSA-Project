@@ -7,11 +7,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
-using Mosa.Compiler.Common;
-using Mosa.Compiler.Metadata;
-using Mosa.Compiler.Metadata.Signatures;
-
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
@@ -126,63 +121,6 @@ namespace Mosa.Compiler.Framework.CIL
 		#endregion Methods
 
 		#region Static Methods
-
-		/// <summary>
-		/// Retrieves the stack type from a sig type.
-		/// </summary>
-		/// <param name="type">The signature type to convert to a stack type code.</param>
-		/// <returns>The equivalent stack type code.</returns>
-		public static StackTypeCode StackTypeFromSigType(SigType type)
-		{
-			switch (type.Type)
-			{
-				case CilElementType.Void: return StackTypeCode.Unknown;
-				case CilElementType.Boolean: return StackTypeCode.Int32;
-				case CilElementType.Char: return StackTypeCode.Int32;
-				case CilElementType.I1: return StackTypeCode.Int32;
-				case CilElementType.U1: return StackTypeCode.Int32;
-				case CilElementType.I2: return StackTypeCode.Int32;
-				case CilElementType.U2: return StackTypeCode.Int32;
-				case CilElementType.I4: return StackTypeCode.Int32;
-				case CilElementType.U4: return StackTypeCode.Int32;
-				case CilElementType.I8: return StackTypeCode.Int64;
-				case CilElementType.U8: return StackTypeCode.Int64;
-				case CilElementType.R4: return StackTypeCode.F;
-				case CilElementType.R8: return StackTypeCode.F;
-				case CilElementType.I: return StackTypeCode.N;
-				case CilElementType.U: return StackTypeCode.N;
-				case CilElementType.Ptr: return StackTypeCode.Ptr;
-				case CilElementType.ByRef: return StackTypeCode.Ptr;
-				case CilElementType.Object: return StackTypeCode.O;
-				case CilElementType.String: return StackTypeCode.O;
-				case CilElementType.ValueType: return StackTypeCode.O;
-				case CilElementType.Type: return StackTypeCode.O;
-				case CilElementType.Class: return StackTypeCode.O;
-				case CilElementType.GenericInst: return StackTypeCode.O;
-				case CilElementType.Array: return StackTypeCode.O;
-				case CilElementType.SZArray: return StackTypeCode.O;
-				//case CilElementType.Var: return StackTypeCode.O;
-				default: throw new InvalidCompilerException(String.Format("Can't transform SigType of CilElementType.{0} to StackTypeCode.", type.Type));
-			}
-		}
-
-		/// <summary>
-		/// Sigs the type of the type from stack.
-		/// </summary>
-		/// <param name="typeCode">The type code.</param>
-		/// <returns></returns>
-		public static SigType SigTypeFromStackType(StackTypeCode typeCode)
-		{
-			switch (typeCode)
-			{
-				case StackTypeCode.Int32: return BuiltInSigType.Int32;
-				case StackTypeCode.Int64: return BuiltInSigType.Int64;
-				case StackTypeCode.F: return BuiltInSigType.Double;
-				case StackTypeCode.O: return BuiltInSigType.Object;
-				case StackTypeCode.N: return BuiltInSigType.IntPtr;
-				default: throw new InvalidCompilerException("Can't convert stack type code to SigType.");
-			}
-		}
 
 		#endregion Static Methods
 	}

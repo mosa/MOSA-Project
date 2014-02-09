@@ -7,10 +7,9 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
-
 using Mosa.Compiler.Metadata;
-using Mosa.Compiler.Metadata.Signatures;
+using Mosa.Compiler.MosaTypeSystem;
+using System;
 
 namespace Mosa.Compiler.Framework.CIL
 {
@@ -22,7 +21,7 @@ namespace Mosa.Compiler.Framework.CIL
 		/// <summary>
 		/// A fixed typeref for ldind.* instructions.
 		/// </summary>
-		private readonly SigType elementType;
+		private readonly CilElementType? elementType;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="LdelemInstruction"/> class.
@@ -33,52 +32,18 @@ namespace Mosa.Compiler.Framework.CIL
 		{
 			switch (opcode)
 			{
-				case OpCode.Ldelem_i1:
-					elementType = BuiltInSigType.SByte;
-					break;
-
-				case OpCode.Ldelem_i2:
-					elementType = BuiltInSigType.Int16;
-					break;
-
-				case OpCode.Ldelem_i4:
-					elementType = BuiltInSigType.Int32;
-					break;
-
-				case OpCode.Ldelem_i8:
-					elementType = BuiltInSigType.Int64;
-					break;
-
-				case OpCode.Ldelem_u1:
-					elementType = BuiltInSigType.Byte;
-					break;
-
-				case OpCode.Ldelem_u2:
-					elementType = BuiltInSigType.UInt16;
-					break;
-
-				case OpCode.Ldelem_u4:
-					elementType = BuiltInSigType.UInt32;
-					break;
-
-				case OpCode.Ldelem_i:
-					elementType = BuiltInSigType.IntPtr;
-					break;
-
-				case OpCode.Ldelem_r4:
-					elementType = BuiltInSigType.Single;
-					break;
-
-				case OpCode.Ldelem_r8:
-					elementType = BuiltInSigType.Double;
-					break;
-
-				case OpCode.Ldelem_ref: // FIXME: Really object?
-					elementType = BuiltInSigType.Object;
-					break;
-
-				default:
-					throw new NotImplementedException();
+				case OpCode.Ldelem_i1: elementType = CilElementType.I1; break;
+				case OpCode.Ldelem_i2: elementType = CilElementType.I2; break;
+				case OpCode.Ldelem_i4: elementType = CilElementType.I4; break;
+				case OpCode.Ldelem_i8: elementType = CilElementType.I8; break;
+				case OpCode.Ldelem_u1: elementType = CilElementType.U1; break;
+				case OpCode.Ldelem_u2: elementType = CilElementType.U2; break;
+				case OpCode.Ldelem_u4: elementType = CilElementType.U4; break;
+				case OpCode.Ldelem_i: elementType = CilElementType.I; break;
+				case OpCode.Ldelem_r4: elementType = CilElementType.R4; break;
+				case OpCode.Ldelem_r8: elementType = CilElementType.R8; break;
+				case OpCode.Ldelem_ref: elementType = CilElementType.Object; break;
+				default: throw new NotImplementedException();
 			}
 		}
 
@@ -92,17 +57,11 @@ namespace Mosa.Compiler.Framework.CIL
 			// Decode base classes first
 			base.Decode(ctx, decoder);
 
-			SigType sigType = elementType;
+			MosaType type = (elementType == null)
+				? type = decoder.TypeSystem.Resolver.GetTypeByToken(decoder.Method.CodeAssembly, decoder.DecodeTokenType(), decoder.Method)
+				: type = decoder.TypeSystem.Resolver.GetTypeByElementType(elementType);
 
-			// Do we have a type?
-			if (sigType == null)
-			{
-				// No, retrieve a type reference from the immediate argument
-				Token token = decoder.DecodeTokenType();
-				sigType = new ClassSigType(token);
-			}
-
-			ctx.Result = LoadInstruction.CreateResultOperand(decoder, sigType);
+			ctx.Result = LoadInstruction.CreateResultOperand(decoder, type);
 		}
 
 		/// <summary>

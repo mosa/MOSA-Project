@@ -7,7 +7,7 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using Mosa.Compiler.Metadata;
+using Mosa.Compiler.MosaTypeSystem;
 using System;
 
 namespace Mosa.Compiler.Framework.CIL
@@ -59,7 +59,7 @@ namespace Mosa.Compiler.Framework.CIL
 			base.Resolve(ctx, compiler);
 
 			// Validate the operand
-			var result = opTable[(int)ctx.Operand1.StackType];
+			var result = opTable[(int)TypeSystem.GetStackType(ctx.Operand1.Type)];
 			if (StackTypeCode.Unknown == result)
 				throw new InvalidOperationException(@"Invalid operand to Not instruction.");
 

@@ -9,8 +9,7 @@
  */
 
 using Mosa.Compiler.Framework.IR;
-using Mosa.Compiler.Metadata.Signatures;
-using Mosa.Compiler.TypeSystem;
+using Mosa.Compiler.MosaTypeSystem;
 
 namespace Mosa.Compiler.Framework
 {
@@ -46,13 +45,13 @@ namespace Mosa.Compiler.Framework
 			Operand instanceOperand = methodCompiler.Parameters[1];
 			Operand methodPointerOperand = methodCompiler.Parameters[2];
 
-			RuntimeField methodPointerField = GetField(methodCompiler.Method.DeclaringType, "methodPointer");
+			MosaField methodPointerField = GetField(methodCompiler.Method.DeclaringType, "methodPointer");
 			int methodPointerOffset = methodCompiler.TypeLayout.GetFieldOffset(methodPointerField);
-			Operand methodPointerOffsetOperand = Operand.CreateConstantIntPtr(methodPointerOffset);
+			Operand methodPointerOffsetOperand = Operand.CreateConstantSignedInt(methodCompiler.TypeSystem, methodPointerOffset);
 
-			RuntimeField instanceField = GetField(methodCompiler.Method.DeclaringType, "instance");
+			MosaField instanceField = GetField(methodCompiler.Method.DeclaringType, "instance");
 			int instanceOffset = methodCompiler.TypeLayout.GetFieldOffset(instanceField);
-			Operand instanceOffsetOperand = Operand.CreateConstantIntPtr(instanceOffset);
+			Operand instanceOffsetOperand = Operand.CreateConstantSignedInt(methodCompiler.TypeSystem, instanceOffset);
 
 			Context context = CreateMethodStructure(methodCompiler, true);
 
@@ -66,13 +65,13 @@ namespace Mosa.Compiler.Framework
 		{
 			// check if instance is null (if so, it's a static call to the methodPointer)
 
-			RuntimeField methodPointerField = GetField(methodCompiler.Method.DeclaringType, "methodPointer");
+			MosaField methodPointerField = GetField(methodCompiler.Method.DeclaringType, "methodPointer");
 			int methodPointerOffset = methodCompiler.TypeLayout.GetFieldOffset(methodPointerField);
-			Operand methodPointerOffsetOperand = Operand.CreateConstantIntPtr(methodPointerOffset);
+			Operand methodPointerOffsetOperand = Operand.CreateConstantSignedInt(methodCompiler.TypeSystem, methodPointerOffset);
 
-			RuntimeField instanceField = GetField(methodCompiler.Method.DeclaringType, "instance");
+			MosaField instanceField = GetField(methodCompiler.Method.DeclaringType, "instance");
 			int instanceOffset = methodCompiler.TypeLayout.GetFieldOffset(instanceField);
-			Operand instanceOffsetOperand = Operand.CreateConstantIntPtr(instanceOffset);
+			Operand instanceOffsetOperand = Operand.CreateConstantSignedInt(methodCompiler.TypeSystem, instanceOffset);
 
 			Context b0 = CreateMethodStructure(methodCompiler, false);
 			Context b1 = CreateNewBlock(methodCompiler);
@@ -89,12 +88,12 @@ namespace Mosa.Compiler.Framework
 
 			Operand thisOperand = vrs[0];
 
-			Operand opMethod = methodCompiler.VirtualRegisters.Allocate(BuiltInSigType.UInt32);
+			Operand opMethod = methodCompiler.VirtualRegisters.Allocate(methodCompiler.TypeSystem.BuiltIn.UInt32);
 			Operand opInstance = methodCompiler.VirtualRegisters.Allocate(thisOperand.Type);
-			Operand opCompare = methodCompiler.VirtualRegisters.Allocate(BuiltInSigType.Int32);
+			Operand opCompare = methodCompiler.VirtualRegisters.Allocate(methodCompiler.TypeSystem.BuiltIn.Int32);
 
-			Operand opReturn = withReturn ? methodCompiler.VirtualRegisters.Allocate(BuiltInSigType.Object) : null;
-			Operand c0 = Operand.CreateConstantSignedInt(0);
+			Operand opReturn = withReturn ? methodCompiler.VirtualRegisters.Allocate(methodCompiler.TypeSystem.BuiltIn.Object) : null;
+			Operand c0 = Operand.CreateConstantSignedInt(methodCompiler.TypeSystem, 0);
 
 			b0.AppendInstruction(IRInstruction.Load, opMethod, thisOperand, methodPointerOffsetOperand);
 			b0.AppendInstruction(IRInstruction.Load, opInstance, thisOperand, instanceOffsetOperand);
@@ -135,8 +134,10 @@ namespace Mosa.Compiler.Framework
 
 		private static void PatchBeginInvoke(BaseMethodCompiler methodCompiler)
 		{
+			var nullOperand = Operand.GetNull(methodCompiler.TypeSystem);
+
 			Context context = CreateMethodStructure(methodCompiler, true);
-			context.AppendInstruction(IRInstruction.Return, null, Operand.GetNull());
+			context.AppendInstruction(IRInstruction.Return, null, nullOperand);
 			context.SetBranch(methodCompiler.BasicBlocks.EpilogueBlock);
 		}
 
@@ -182,7 +183,7 @@ namespace Mosa.Compiler.Framework
 			return methodCompiler.InstructionSet.CreateNewBlock(methodCompiler.BasicBlocks);
 		}
 
-		private static RuntimeField GetField(RuntimeType type, string name)
+		private static MosaField GetField(MosaType type, string name)
 		{
 			foreach (var field in type.Fields)
 			{

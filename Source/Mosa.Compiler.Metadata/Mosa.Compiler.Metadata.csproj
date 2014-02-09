@@ -44,6 +44,8 @@
     <Compile Include="GenericSigTypeResolver.cs" />
     <Compile Include="MethodFlags.cs" />
     <Compile Include="MethodHeader.cs" />
+    <Compile Include="Signatures\BuiltInSigType.cs" />
+    <Compile Include="Signatures\StandAloneMethodSignature.cs" />
     <Compile Include="TableType.cs" />
     <Compile Include="EventAttributes.cs" />
     <Compile Include="FieldAttributes.cs" />
@@ -53,8 +55,6 @@
     <Compile Include="HeapType.cs" />
     <Compile Include="IMetadataProvider.cs" />
     <Compile Include="IndexType.cs" />
-    <Compile Include="Loader\AssemblyLoader.cs" />
-    <Compile Include="Loader\IAssemblyLoader.cs" />
     <Compile Include="Loader\IMetadataModule.cs" />
     <Compile Include="Loader\InstructionStream.cs" />
     <Compile Include="Loader\ModuleType.cs" />
@@ -71,7 +71,6 @@
     <Compile Include="PropertyAttributes.cs" />
     <Compile Include="SignatureReader.cs" />
     <Compile Include="Signatures\ArraySigType.cs" />
-    <Compile Include="Signatures\BuiltInSigType.cs" />
     <Compile Include="Signatures\ClassSigType.cs" />
     <Compile Include="Signatures\CustomMod.cs" />
     <Compile Include="Signatures\FieldSignature.cs" />
@@ -87,7 +86,6 @@
     <Compile Include="Signatures\RefSigType.cs" />
     <Compile Include="Signatures\Signature.cs" />
     <Compile Include="Signatures\SigType.cs" />
-    <Compile Include="Signatures\StandAloneMethodSignature.cs" />
     <Compile Include="Signatures\SZArraySigType.cs" />
     <Compile Include="Signatures\TypeSigType.cs" />
     <Compile Include="Signatures\TypeSpecSignature.cs" />

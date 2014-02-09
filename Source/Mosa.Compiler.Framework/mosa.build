@@ -15,7 +15,7 @@
 	    <csc target="library" output="${outputDirectory}/Mosa.Compiler.Framework.dll" debug="${debug}" unsafe="true" nostdlib="false">
 		<sources>
                     <include name="BaseCallingConventionExtended.cs"/>
-                    <include name="CIL/StackTypeCode.cs"/>
+                    <include name="DelegatePatcher.cs"/>
                     <include name="ShiftType.cs"/>
                     <include name="ConditionCodeExtension.cs"/>
                     <include name="BasicBlocks.cs"/>
@@ -42,7 +42,6 @@
                     <include name="Stages/GreedyRegisterAllocatorStage.cs"/>
                     <include name="Stages/LinkerFinalizationStage.cs"/>
                     <include name="IIntrinsicInternalMethod.cs"/>
-                    <include name="DelegatePatcher.cs"/>
                     <include name="ICompilationScheduler.cs"/>
                     <include name="Counters.cs"/>
                     <include name="IR/IntrinsicMethodCall.cs"/>
@@ -199,7 +198,6 @@
                     <include name="CIL/UnboxInstruction.cs"/>
                     <include name="Context.cs"/>
                     <include name="BaseMethodCompilerStage.cs"/>
-                    <include name="ICodeEmitter.cs"/>
                     <include name="IR/AddressOf.cs"/>
                     <include name="IR/ArithmeticShiftRight.cs"/>
                     <include name="IR/Call.cs"/>
@@ -240,14 +238,11 @@
                     <include name="CIL/BaseCILInstruction.cs"/>
                     <include name="Stages/ReverseBlockOrderStage.cs"/>
                     <include name="Stages/SimpleTraceBlockOrderStage.cs"/>
-                    <include name="Linker/LinkerGeneratedMethod.cs"/>
-                    <include name="Linker/LinkerGeneratedType.cs"/>
                     <include name="BaseCompiler.cs"/>
                     <include name="BaseArchitecture.cs"/>
                     <include name="BasicBlock.cs"/>
                     <include name="Stages/CodeGenerationStage.cs"/>
                     <include name="BaseCodeTransformationStage.cs"/>
-                    <include name="CompilationException.cs"/>
                     <include name="CompilerPipeline.cs"/>
                     <include name="Stages/DominanceCalculationStage.cs"/>
                     <include name="FlowControl.cs"/>
@@ -269,7 +264,6 @@
                     <include name="${outputDirectory}/Mosa.Compiler.InternalTrace.dll"/>
                     <include name="${outputDirectory}/Mosa.Compiler.Metadata.dll"/>
                     <include name="${outputDirectory}/Mosa.Compiler.MosaTypeSystem.dll"/>
-                    <include name="${outputDirectory}/Mosa.Compiler.TypeSystem.dll"/>
 		</references>
 		<!-- supress warnings -->
 		<nowarn><warning number="${suppresswarnings}"/></nowarn>

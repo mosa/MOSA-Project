@@ -162,7 +162,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 				context.GotoPrevious();
 
 				// Note: This won't work for expanded switch statements... but we can't insert into the end of those blocks anyway
-				while (context.IsEmpty || context.Instruction.FlowControl == FlowControl.Branch || context.Instruction.FlowControl == FlowControl.ConditionalBranch || context.Instruction.FlowControl == FlowControl.Return)
+				while (context.IsEmpty || context.Instruction.FlowControl == FlowControl.UnconditionalBranch || context.Instruction.FlowControl == FlowControl.ConditionalBranch || context.Instruction.FlowControl == FlowControl.Return)
 				{
 					context.GotoPrevious();
 				}

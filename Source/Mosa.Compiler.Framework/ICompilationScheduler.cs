@@ -6,7 +6,7 @@
  * Authors:
  */
 
-using Mosa.Compiler.TypeSystem;
+using Mosa.Compiler.MosaTypeSystem;
 
 namespace Mosa.Compiler.Framework
 {
@@ -16,25 +16,25 @@ namespace Mosa.Compiler.Framework
 		/// Tracks the type allocated.
 		/// </summary>
 		/// <param name="type">The type.</param>
-		void TrackTypeAllocated(RuntimeType type);
+		void TrackTypeAllocated(MosaType type);
 
 		/// <summary>
 		/// Tracks the method invoked.
 		/// </summary>
 		/// <param name="method">The method.</param>
-		void TrackMethodInvoked(RuntimeMethod method);
+		void TrackMethodInvoked(MosaMethod method);
 
 		/// <summary>
 		/// Tracks the field referenced.
 		/// </summary>
 		/// <param name="field">The field.</param>
-		void TrackFieldReferenced(RuntimeField field);
+		void TrackFieldReferenced(MosaField field);
 
 		/// <summary>
 		/// Gets the method to compile.
 		/// </summary>
 		/// <returns></returns>
-		RuntimeMethod GetMethodToCompile();
+		MosaMethod GetMethodToCompile();
 
 		/// <summary>
 		/// Determines whether the method scheduled to be compiled.
@@ -43,6 +43,6 @@ namespace Mosa.Compiler.Framework
 		/// <returns>
 		///   <c>true</c> if method is scheduled to be compiled; otherwise, <c>false</c>.
 		/// </returns>
-		bool IsMethodScheduled(RuntimeMethod method);
+		bool IsMethodScheduled(MosaMethod method);
 	}
 }

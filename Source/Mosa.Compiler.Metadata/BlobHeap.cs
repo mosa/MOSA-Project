@@ -59,7 +59,7 @@ namespace Mosa.Compiler.Metadata
 			int realOffset = ValidateOffset(offset);
 			int length = CalculatePrefixLength(ref realOffset);
 			byte[] result = new byte[length];
-			Array.Copy(this.Buffer, realOffset, result, 0, length);
+			Array.Copy(this.Metadata, realOffset, result, 0, length);
 			return result;
 		}
 

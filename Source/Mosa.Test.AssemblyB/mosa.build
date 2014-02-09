@@ -14,6 +14,7 @@
 	<target name="build">
 	    <csc target="library" output="${outputDirectory}/Mosa.Test.AssemblyB.dll" debug="${debug}" unsafe="true" nostdlib="false">
 		<sources>
+                    <include name="TestZ.cs"/>
                     <include name="Test.cs"/>
 		</sources>
 		<references>

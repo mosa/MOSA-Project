@@ -8,8 +8,7 @@
  */
 
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Metadata.Signatures;
-using Mosa.Compiler.TypeSystem;
+using Mosa.Compiler.MosaTypeSystem;
 
 namespace Mosa.Platform.x86.Stages
 {
@@ -42,19 +41,19 @@ namespace Mosa.Platform.x86.Stages
 		/// </summary>
 		private void CreateExceptionVector()
 		{
-			RuntimeType runtimeType = typeSystem.GetType(@"Mosa.Kernel.x86.IDT");
+			var type = typeSystem.GetTypeByName("Mosa.Kernel.x86", "IDT");
 
-			if (runtimeType == null)
+			if (type == null)
 				return;
 
-			RuntimeMethod runtimeMethod = runtimeType.FindMethod(@"ExceptionHandlerType");
+			var method = TypeSystem.GetMethodByName(type, "ExceptionHandlerType");
 
-			if (runtimeMethod == null)
+			if (method == null)
 				return;
 
-			Operand exceptionMethod = Operand.CreateSymbolFromMethod(runtimeMethod);
+			Operand exceptionMethod = Operand.CreateSymbolFromMethod(typeSystem, method);
 
-			Operand esp = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.ESP);
+			Operand esp = Operand.CreateCPURegister(typeSystem.BuiltIn.Int32, GeneralPurposeRegister.ESP);
 
 			BasicBlocks basicBlocks = new BasicBlocks();
 			InstructionSet instructionSet = new InstructionSet(25);
@@ -69,8 +68,9 @@ namespace Mosa.Platform.x86.Stages
 			//3. Call the managed exception handler
 			ctx.AppendInstruction(X86.Call, null, exceptionMethod);
 
-			var method = compiler.CreateLinkerMethod("ExceptionVector");
-			compiler.CompileMethod(method, basicBlocks, instructionSet);
+			var vectorMethod = compiler.CreateLinkerMethod("ExceptionVector");
+
+			compiler.CompileMethod(vectorMethod, basicBlocks, instructionSet);
 		}
 
 		#endregion Internal

@@ -30,7 +30,9 @@
                     <include name="Tables/MemberRefRowExt.cs"/>
                     <include name="Tables/MethodDefRowExt.cs"/>
                     <include name="Tables/FieldRowExt.cs"/>
+                    <include name="Tables/NestedClassExt.cs"/>
                     <include name="Tables/TypeRefRowExt.cs"/>
+                    <include name="Tables/MethodSpecExt.cs"/>
                     <include name="Tables/TypeSpecRowExt.cs"/>
                     <include name="Tables/Resolver.cs"/>
                     <include name="Tables/TypeDefRowExt.cs"/>
@@ -43,6 +45,7 @@
                     <include name="System.Windows.Forms.dll"/>
                     <include name="${outputDirectory}/Mosa.Compiler.Common.dll"/>
                     <include name="${outputDirectory}/Mosa.Compiler.Metadata.dll"/>
+                    <include name="${outputDirectory}/Mosa.Compiler.MosaTypeSystem.dll"/>
 		</references>
 		<!-- supress warnings -->
 		<nowarn><warning number="${suppresswarnings}"/></nowarn>

@@ -33,8 +33,6 @@ namespace Mosa.Tool.MetadataExplorer.Tables
 		{
 			yield return TokenString("Name", row.TypeName);
 			yield return TokenString("Namespace", row.TypeNamespace);
-			//yield return Value("TypeName #", row.TypeName);
-			//yield return Value("TypeNamespace #", row.TypeNamespace);
 			yield return Value("Extends", row.Extends);
 			yield return Value("FieldList", row.FieldList);
 			yield return Value("Flags", row.Flags.ToString());

@@ -8,7 +8,7 @@
  */
 
 using System.Collections.Generic;
-using Mosa.Compiler.TypeSystem;
+using Mosa.Compiler.MosaTypeSystem;
 
 namespace Mosa.Compiler.Framework
 {

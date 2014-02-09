@@ -7,7 +7,6 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-using System;
 using System.Collections.Generic;
 
 namespace Mosa.Compiler.Metadata.Signatures
@@ -36,9 +35,8 @@ namespace Mosa.Compiler.Metadata.Signatures
 	/// <summary>
 	/// Specifies a modifier of a signature type.
 	/// </summary>
-	public struct CustomMod : IEquatable<CustomMod>
+	public struct CustomMod
 	{
-
 		#region Construction
 
 		/// <summary>
@@ -96,37 +94,6 @@ namespace Mosa.Compiler.Metadata.Signatures
 			return mods.ToArray();
 		}
 
-		/// <summary>
-		/// Compares two modifier sets for equality.
-		/// </summary>
-		/// <param name="first">The first set of modifiers.</param>
-		/// <param name="second">The second set of modifiers.</param>
-		/// <returns>The return value is true, if the sets are equal; otherwise false.</returns>
-		public static bool Equals(CustomMod[] first, CustomMod[] second)
-		{
-			if (first == second)
-				return true;
-			if (first.Length != second.Length)
-				return false;
-
-			bool result = true;
-			for (int idx = 0; result && idx < first.Length; idx++)
-			{
-				result = first[idx].Equals(second[idx]);
-			}
-
-			return result;
-		}
-
 		#endregion Static methods
-
-		#region IEquatable<CustomMod> Members
-
-		bool IEquatable<CustomMod>.Equals(CustomMod other)
-		{
-			return (Token == other.Token && Type == other.Type);
-		}
-
-		#endregion IEquatable<CustomMod> Members
 	}
 }

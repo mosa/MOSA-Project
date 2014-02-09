@@ -28,12 +28,11 @@ namespace Mosa.Tool.MetadataExplorer.Tables
 			this.row = row;
 		}
 
-		public override string Name { get { return row.SignatureBlob.FormatToString(); } }
+		public override string Name { get { return Signature.GetSignatureFromStandAlongSig(Metadata, row.SignatureBlob).ToString(); } }
 
 		public override IEnumerable GetValues()
 		{
-			var signature = Signature.GetSignatureFromStandAlongSig(Metadata, row.SignatureBlob);
-			yield return Value("Signature", signature.ToString());
+			yield break;
 		}
 	}
 }

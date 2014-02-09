@@ -28,12 +28,11 @@ namespace Mosa.Tool.MetadataExplorer.Tables
 			this.row = row;
 		}
 
-		public override string Name { get { return row.SignatureBlob.FormatToString(); } }
+		public override string Name { get { return new TypeSpecSignature(Metadata, row.SignatureBlob).ToString(); } }
 
 		public override IEnumerable GetValues()
 		{
-			TypeSpecSignature signature = new TypeSpecSignature(Metadata, row.SignatureBlob);
-			yield return Value("Signature", signature.ToString());
+			yield break;
 		}
 	}
 }

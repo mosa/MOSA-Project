@@ -24,7 +24,7 @@ namespace Mosa.Compiler.Framework.Stages
 		void IMethodCompilerStage.Run()
 		{
 			// No stack setup if this is a linker generated method
-			if (methodCompiler.Method is LinkerGeneratedMethod)
+			if (methodCompiler.Method.DeclaringType.IsLinkerGenerated)
 				return;
 
 			if (methodCompiler.Compiler.PlugSystem.GetPlugMethod(methodCompiler.Method) != null)

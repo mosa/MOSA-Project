@@ -7,9 +7,7 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using Mosa.Compiler.Metadata;
-using Mosa.Compiler.Metadata.Signatures;
-using Mosa.Compiler.TypeSystem;
+using Mosa.Compiler.MosaTypeSystem;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -67,26 +65,6 @@ namespace Mosa.Compiler.Framework
 		{
 			get { return index; }
 			set { index = value; }
-		}
-
-		/// <summary>
-		/// Gets or sets the type of the token.
-		/// </summary>
-		/// <value>The type of the token.</value>
-		public HeapIndexToken TokenType
-		{
-			get { return instructionSet.Data[index].TokenType; }
-			set { instructionSet.Data[index].TokenType = value; }
-		}
-
-		/// <summary>
-		/// Gets or sets the sig type.
-		/// </summary>
-		/// <value>The runtime field.</value>
-		public SigType SigType
-		{
-			get { return instructionSet.Data[index].SigType; }
-			set { instructionSet.Data[index].SigType = value; }
 		}
 
 		/// <summary>
@@ -459,7 +437,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Holds the function being called.
 		/// </summary>
-		public RuntimeMethod InvokeMethod
+		public MosaMethod InvokeMethod
 		{
 			get { return instructionSet.Data[index].InvokeMethod; }
 			set { instructionSet.Data[index].InvokeMethod = value; }
@@ -469,20 +447,20 @@ namespace Mosa.Compiler.Framework
 		/// Gets or sets the runtime field.
 		/// </summary>
 		/// <value>The runtime field.</value>
-		public RuntimeField RuntimeField
+		public MosaField MosaField
 		{
-			get { return instructionSet.Data[index].RuntimeField; }
-			set { instructionSet.Data[index].RuntimeField = value; }
+			get { return instructionSet.Data[index].MosaField; }
+			set { instructionSet.Data[index].MosaField = value; }
 		}
 
 		/// <summary>
 		/// Gets or sets the runtime field.
 		/// </summary>
 		/// <value>The runtime field.</value>
-		public RuntimeType RuntimeType
+		public MosaType MosaType
 		{
-			get { return instructionSet.Data[index].RuntimeType; }
-			set { instructionSet.Data[index].RuntimeType = value; }
+			get { return instructionSet.Data[index].MosaType; }
+			set { instructionSet.Data[index].MosaType = value; }
 		}
 
 		/// <summary>
@@ -750,7 +728,7 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		/// <param name="instruction">The instruction.</param>
 		/// <param name="target">The target.</param>
-		public void SetInstruction(BaseInstruction instruction, RuntimeMethod target)
+		public void SetInstruction(BaseInstruction instruction, MosaMethod target)
 		{
 			SetInstruction(instruction);
 			InvokeMethod = target;
@@ -1003,7 +981,7 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		/// <param name="instruction">The instruction to append.</param>
 		/// <param name="target">The invoke target.</param>
-		public void AppendInstruction(BaseInstruction instruction, RuntimeMethod target)
+		public void AppendInstruction(BaseInstruction instruction, MosaMethod target)
 		{
 			AppendInstruction(instruction);
 			InvokeMethod = target;

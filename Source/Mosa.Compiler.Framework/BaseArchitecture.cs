@@ -9,7 +9,7 @@
  */
 
 using Mosa.Compiler.Common;
-using Mosa.Compiler.Metadata.Signatures;
+using Mosa.Compiler.MosaTypeSystem;
 
 namespace Mosa.Compiler.Framework
 {
@@ -40,11 +40,6 @@ namespace Mosa.Compiler.Framework
 		/// The type of the elf machine.
 		/// </value>
 		public abstract ushort ElfMachineType { get; }
-
-		/// <summary>
-		/// Gets the signature type of the native integer.
-		/// </summary>
-		public abstract SigType NativeType { get; }
 
 		/// <summary>
 		/// Gets the register set of the architecture.
@@ -96,16 +91,16 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets the type memory requirements.
 		/// </summary>
-		/// <param name="type">The signature type.</param>
+		/// <param name="type">The type.</param>
 		/// <param name="size">Receives the memory size of the type.</param>
 		/// <param name="alignment">Receives alignment requirements of the type.</param>
-		public abstract void GetTypeRequirements(SigType type, out int size, out int alignment);
+		public abstract void GetTypeRequirements(MosaType type, out int size, out int alignment);
 
 		/// <summary>
 		/// Gets the code emitter.
 		/// </summary>
 		/// <returns></returns>
-		public abstract ICodeEmitter GetCodeEmitter();
+		public abstract BaseCodeEmitter GetCodeEmitter();
 
 		/// <summary>
 		/// Create platform move.

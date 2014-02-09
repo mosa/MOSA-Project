@@ -28,7 +28,7 @@ namespace Mosa.Compiler.Framework.Stages
 					if (!(context.Instruction is BasePlatformInstruction))
 						continue;
 
-					if (context.Instruction.FlowControl == FlowControl.Branch && context.OperandCount <= 1)
+					if (context.Instruction.FlowControl == FlowControl.UnconditionalBranch && context.OperandCount <= 1)
 						continue;
 
 					if (context.Instruction.FlowControl == FlowControl.Call)

@@ -9,7 +9,7 @@
 
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Stages;
-using Mosa.Compiler.TypeSystem;
+using Mosa.Compiler.MosaTypeSystem;
 
 namespace Mosa.Tool.Explorer
 {
@@ -23,7 +23,7 @@ namespace Mosa.Tool.Explorer
 		/// <param name="basicBlocks">The basic blocks.</param>
 		/// <param name="instructionSet">The instruction set.</param>
 		/// <param name="emitBinary">if set to <c>true</c> [emit binary].</param>
-		public ExplorerMethodCompiler(ExplorerCompiler compiler, RuntimeMethod method, BasicBlocks basicBlocks, InstructionSet instructionSet, bool emitBinary)
+		public ExplorerMethodCompiler(ExplorerCompiler compiler, MosaMethod method, BasicBlocks basicBlocks, InstructionSet instructionSet, bool emitBinary)
 			: base(compiler, method, basicBlocks, instructionSet)
 		{
 			var compilerOptions = Compiler.CompilerOptions;

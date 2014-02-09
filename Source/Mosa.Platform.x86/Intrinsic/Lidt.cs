@@ -8,7 +8,6 @@
  */
 
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Metadata.Signatures;
 
 namespace Mosa.Platform.x86.Intrinsic
 {
@@ -26,8 +25,7 @@ namespace Mosa.Platform.x86.Intrinsic
 		/// <param name="typeSystem">The type system.</param>
 		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, BaseMethodCompiler methodCompiler)
 		{
-			context.SetInstruction(X86.Lidt, null, Operand.CreateMemoryAddress(BuiltInSigType.Ptr, context.Operand1, 0));
-
+			context.SetInstruction(X86.Lidt, null, Operand.CreateMemoryAddress(methodCompiler.TypeSystem.Resolver.BuiltIn.Ptr, context.Operand1, 0));
 		}
 
 		#endregion Methods
