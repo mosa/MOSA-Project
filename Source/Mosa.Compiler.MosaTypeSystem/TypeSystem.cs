@@ -127,7 +127,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 		public MosaType ConvertToStackType(MosaType type)
 		{
 			// FIXME! This is 32-bit platform specific ---
-			if (type.IsNativeInteger || type.IsShort || type.IsChar || type.IsBoolean)
+			if (type.IsNativeInteger || type.IsByte || type.IsShort || type.IsChar || type.IsBoolean)
 				return BuiltIn.I4;
 			else
 				return type;

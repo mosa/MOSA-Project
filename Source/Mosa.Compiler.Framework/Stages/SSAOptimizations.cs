@@ -231,8 +231,11 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private bool CanCopyPropagation(Operand result, Operand destination)
 		{
-			//if (result.Type.Type != CilElementType.Ptr && destination.Type.Type != CilElementType.Ptr)
-			//	return true;
+			if (result.IsObject && destination.IsObject)
+				return true;
+
+			if (!result.IsPointer && !destination.IsPointer)
+				return true;
 
 			if (result.Type != destination.Type)
 				return false;
