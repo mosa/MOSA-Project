@@ -11,67 +11,23 @@ namespace Mosa.Kernel.x86
 {
 	public class CpuInfo
 	{
-		public ulong NumberOfCores
-		{
-			get
-			{
-				return (ulong)((Native.CpuIdEax(4) >> 26) + 1);
-			}
-		}
+		public uint NumberOfCores { get { return (Native.CpuIdEax(4) >> 26) + 1; } }
 
-		public ulong Type
-		{
-			get
-			{
-				return (ulong)((Native.CpuIdEax(1) & 0x3000) >> 12);
-			}
-		}
+		public uint Type { get { return (Native.CpuIdEax(1) & 0x3000) >> 12; } }
 
-		public ulong Stepping
-		{
-			get
-			{
-				return (ulong)(Native.CpuIdEax(1) & 0xF);
-			}
-		}
+		public uint Stepping { get { return Native.CpuIdEax(1) & 0xF; } }
 
-		public ulong Model
-		{
-			get
-			{
-				return (ulong)((Native.CpuIdEax(1) & 0xF0) >> 4);
-			}
-		}
+		public uint Model { get { return (Native.CpuIdEax(1) & 0xF0) >> 4; } }
 
-		public ulong Family
-		{
-			get
-			{
-				return (ulong)((Native.CpuIdEax(1) & 0xF00) >> 8);
-			}
-		}
+		public uint Family { get { return (Native.CpuIdEax(1) & 0xF00) >> 8; } }
 
-		public bool SupportsExtendedCpuid
-		{
-			get
-			{
-				uint identifier = (uint)Native.CpuIdEax(0x80000000);
-				return (identifier & 0x80000000) != 0;
-			}
-		}
+		public bool SupportsExtendedCpuid { get { uint identifier = Native.CpuIdEax(0x80000000); return (identifier & 0x80000000) != 0; } }
 
-		public bool SupportsBrandString
-		{
-			get
-			{
-				uint identifier = (uint)Native.CpuIdEax(0x80000000);
-				return identifier >= 0x80000004U;
-			}
-		}
+		public bool SupportsBrandString { get { uint identifier = Native.CpuIdEax(0x80000000); return identifier >= 0x80000004U; } }
 
 		public void PrintVendorString(ConsoleSession console)
 		{
-			int identifier = Native.CpuIdEbx(0);
+			uint identifier = Native.CpuIdEbx(0);
 			for (int i = 0; i < 4; ++i)
 				console.Write((char)((identifier >> (i * 8)) & 0xFF));
 
@@ -99,7 +55,7 @@ namespace Mosa.Kernel.x86
 
 		private void PrintBrand(ConsoleSession console, uint param)
 		{
-			int identifier = Native.CpuIdEax(param);
+			uint identifier = Native.CpuIdEax(param);
 			bool whitespace = true;
 			if (identifier != 0x20202020)
 				for (int i = 0; i < 4; ++i)
@@ -121,7 +77,7 @@ namespace Mosa.Kernel.x86
 					PrintBrandPart(console, identifier, i, ref whitespace);
 		}
 
-		private void PrintBrandPart(ConsoleSession console, int identifier, int i, ref bool whitespace)
+		private void PrintBrandPart(ConsoleSession console, uint identifier, int i, ref bool whitespace)
 		{
 			char character = (char)((identifier >> (i * 8)) & 0xFF);
 

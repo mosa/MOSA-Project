@@ -234,7 +234,7 @@ namespace Mosa.Kernel.x86
 		/// </summary>
 		/// <param name="index">The index.</param>
 		/// <returns></returns>
-		public static ulong GetMemoryMapLength(uint index)
+		public static uint GetMemoryMapLength(uint index)
 		{
 			return Native.Get32(GetMemoryMapIndexLocation(index) + 12);
 		}
