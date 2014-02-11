@@ -150,6 +150,7 @@ namespace Mosa.Tool.TinySimulator
 
 			assemblyLoader.AddPrivatePath(System.IO.Path.GetDirectoryName(filename));
 			assemblyLoader.LoadModule(filename);
+            assemblyLoader.LoadModule("Mosa.Internal.dll");
 
 			TypeSystem = new TypeSystem();
 

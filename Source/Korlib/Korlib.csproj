@@ -63,6 +63,8 @@
     <Compile Include="System.IO\BinaryReader.cs" />
     <Compile Include="System.IO\MemoryStream.cs" />
     <Compile Include="System.Reflection\Assembly.cs" />
+    <Compile Include="System.Reflection\AssemblyDescriptionAttribute.cs" />
+    <Compile Include="System.Reflection\AssemblyTitleAttribute.cs" />
     <Compile Include="System.Reflection\ICustomAttributeProvider.cs" />
     <Compile Include="System.Reflection\MemberInfo.cs" />
     <Compile Include="System.Reflection\Module.cs" />
@@ -154,9 +156,6 @@
     <Compile Include="System.Runtime.CompilerServices\CompilerGeneratedAttribute.cs" />
     <Compile Include="System.Runtime.InteropServices\ComVisible.cs" />
     <Compile Include="System.Runtime.InteropServices\OutAttribute.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="System" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.Targets" />
 </Project>
