@@ -17,7 +17,7 @@ namespace Mosa.Compiler.Framework.Stages
 	/// <summary>
 	/// This stages removes jumps to the next instruction
 	/// </summary>
-    public sealed class JumpPeepholeOptimizationStage : BaseCodeTransformationStage, IMethodCompilerStage
+	public sealed class JumpPeepholeOptimizationStage : BaseCodeTransformationStage, IMethodCompilerStage
 	{
 		// TODO:
 		// 1. If first branch is to the next basic block,
@@ -47,10 +47,10 @@ namespace Mosa.Compiler.Framework.Stages
 					context.GotoPrevious();
 				}
 
-				if (!(context.Instruction is Jmp))
+				if (context.Instruction.FlowControl != FlowControl.UnconditionalBranch)
 					continue;
 
-				Debug.Assert(context.Instruction.FlowControl == FlowControl.Branch);
+				Debug.Assert(context.Instruction.FlowControl == FlowControl.UnconditionalBranch);
 				Debug.Assert(context.BranchTargets.Length == 1);
 
 				var target = context.BranchTargets[0];

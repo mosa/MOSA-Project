@@ -8,8 +8,7 @@
  */
 
 using System;
-
-using Mosa.Compiler.Metadata;
+using Mosa.Compiler.Common;
 
 namespace Mosa.Compiler.Framework.CIL
 {
@@ -43,18 +42,10 @@ namespace Mosa.Compiler.Framework.CIL
 			// Decode base classes first
 			base.Decode(ctx, decoder);
 
-			// Retrieve a type reference from the immediate argument
-			// FIXME: Limit the token types
-			Token token = decoder.DecodeTokenType();
+			var type = decoder.TypeSystem.Resolver.GetTypeByToken(decoder.Method.CodeAssembly, decoder.DecodeTokenType(), decoder.Method);
 
-			throw new NotImplementedException();
-			/*
-				_typeRef = MetadataTypeReference.FromToken(decoder.Metadata, token);
-				_results[0] = CreateResultOperand(MetadataTypeReference.FromName(decoder.Metadata, @"System", @"TypedReference"));
-			 */
-
-			// FIXME: Validate the operands
-			// FIXME: Do verification
+			throw new NotImplementCompilerException();
+		
 		}
 
 		/// <summary>

@@ -11,13 +11,9 @@
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.CIL;
 using Mosa.Compiler.Framework.IR;
-using Mosa.Compiler.Framework.Linker;
+
 using Mosa.Compiler.Metadata;
-using Mosa.Compiler.Metadata.Signatures;
-using Mosa.Compiler.Metadata.Tables;
-using Mosa.Compiler.TypeSystem;
-using Mosa.Compiler.TypeSystem.Cil;
-using System;
+using Mosa.Compiler.MosaTypeSystem;
 using System.Diagnostics;
 using System.IO;
 
@@ -51,14 +47,14 @@ namespace Mosa.Compiler.Framework.Stages
 		void IMethodCompilerStage.Run()
 		{
 			// No CIL decoding if this is a linker generated method
-			if (methodCompiler.Method is LinkerGeneratedMethod)
+			if (!methodCompiler.Method.IsCILGenerated)
 				return;
 
-			RuntimeMethod plugMethod = methodCompiler.Compiler.PlugSystem.GetPlugMethod(methodCompiler.Method);
+			MosaMethod plugMethod = methodCompiler.Compiler.PlugSystem.GetPlugMethod(methodCompiler.Method);
 
 			if (plugMethod != null)
 			{
-				Operand plugSymbol = Operand.CreateSymbolFromMethod(plugMethod);
+				Operand plugSymbol = Operand.CreateSymbolFromMethod(typeSystem, plugMethod);
 				Context context = CreateNewBlockWithContext(-1);
 				context.AppendInstruction(IRInstruction.Jmp, null, plugSymbol);
 				basicBlocks.AddHeaderBlock(context.BasicBlock);
@@ -70,47 +66,14 @@ namespace Mosa.Compiler.Framework.Stages
 				if (DelegatePatcher.PatchDelegate(methodCompiler))
 					return;
 
-				methodCompiler.StopMethodCompiler();
+				methodCompiler.Stop();
 				return;
 			}
 
-			using (Stream code = methodCompiler.GetInstructionStream())
-			{
-				using (codeReader = new EndianAwareBinaryReader(code, Endianness.Little))
-				{
-					MethodHeader header = new MethodHeader(codeReader);
+			methodCompiler.SetLocalVariables(methodCompiler.Method.LocalVariables);
 
-					foreach (var clause in header.Clauses)
-					{
-						methodCompiler.ExceptionHandlingClauses.Add(clause);
-					}
-
-					if (header.LocalVarSigTok.RID != 0)
-					{
-						StandAloneSigRow row = methodCompiler.Method.Module.MetadataModule.Metadata.ReadStandAloneSigRow(header.LocalVarSigTok);
-
-						LocalVariableSignature localsSignature = new LocalVariableSignature(methodCompiler.Method.Module.MetadataModule.Metadata, row.SignatureBlob);
-
-						SigType[] localSigTypes = new SigType[localsSignature.Locals.Length];
-
-						for (int i = 0; i < localsSignature.Locals.Length; i++)
-						{
-							localSigTypes[i] = localsSignature.Locals[i].Type;
-						}
-
-						var genericDeclaringType = methodCompiler.Method.DeclaringType as CilGenericType;
-						if (genericDeclaringType != null)
-						{
-							localSigTypes = GenericSigTypeResolver.Resolve(localSigTypes, genericDeclaringType.GenericArguments);
-						}
-
-						methodCompiler.SetLocalVariableSignature(localSigTypes);
-					}
-
-					/* Decode the instructions */
-					Decode(methodCompiler, header);
-				}
-			}
+			/* Decode the instructions */
+			Decode(methodCompiler);
 		}
 
 		#endregion IMethodCompilerStage Members
@@ -121,14 +84,10 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Decodes the instruction stream of the reader and populates the compiler.
 		/// </summary>
 		/// <param name="compiler">The compiler to populate.</param>
-		/// <param name="header">The method header.</param>
-		private void Decode(BaseMethodCompiler compiler, MethodHeader header)
+		/// <exception cref="InvalidMetadataException"></exception>
+		private void Decode(BaseMethodCompiler compiler)
 		{
-			// Start of the code stream
-			long codeStart = codeReader.BaseStream.Position;
-
-			// End of the code stream
-			long codeEnd = codeReader.BaseStream.Position + header.CodeSize;
+			codeReader = new EndianAwareBinaryReader(new MemoryStream(methodCompiler.Method.Code), Endianness.Little);
 
 			// Create context
 			Context context = new Context(instructionSet);
@@ -136,10 +95,10 @@ namespace Mosa.Compiler.Framework.Stages
 			// Prefix instruction
 			bool prefix = false;
 
-			while (codeEnd != codeReader.BaseStream.Position)
+			while (codeReader.BaseStream.Length != codeReader.BaseStream.Position)
 			{
 				// Determine the instruction offset
-				int instOffset = (int)(codeReader.BaseStream.Position - codeStart);
+				int instOffset = (int)(codeReader.BaseStream.Position);
 
 				// Read the next opcode from the stream
 				OpCode op = (OpCode)codeReader.ReadByte();
@@ -149,7 +108,9 @@ namespace Mosa.Compiler.Framework.Stages
 				BaseCILInstruction instruction = CILInstruction.Get(op);
 
 				if (instruction == null)
-					throw new Exception("CIL " + op + " is not yet supported");
+				{
+					throw new InvalidMetadataException();
+				}
 
 				// Create and initialize the corresponding instruction
 				context.AppendInstruction(instruction);
@@ -162,10 +123,12 @@ namespace Mosa.Compiler.Framework.Stages
 				// Do we need to patch branch targets?
 				if (instruction is IBranchInstruction && instruction.FlowControl != FlowControl.Return)
 				{
-					int pc = (int)(codeReader.BaseStream.Position - codeStart);
+					int pc = (int)(codeReader.BaseStream.Position);
 
 					for (int i = 0; i < context.BranchTargets.Length; i++)
+					{
 						context.BranchTargets[i] += pc;
+					}
 				}
 
 				prefix = (instruction is PrefixInstruction);
@@ -186,29 +149,12 @@ namespace Mosa.Compiler.Framework.Stages
 		}
 
 		/// <summary>
-		/// Gets the RuntimeMethod being compiled.
+		/// Gets the MosaMethod being compiled.
 		/// </summary>
 		/// <value></value>
-		RuntimeMethod IInstructionDecoder.Method
+		MosaMethod IInstructionDecoder.Method
 		{
 			get { return methodCompiler.Method; }
-		}
-
-		/// <summary>
-		/// Gets the type system.
-		/// </summary>
-		/// <value>The type system.</value>
-		ITypeModule IInstructionDecoder.TypeModule
-		{
-			get { return typeModule; }
-		}
-
-		/// <summary>
-		/// Gets the generic type patcher.
-		/// </summary>
-		GenericTypePatcher IInstructionDecoder.GenericTypePatcher
-		{
-			get { return methodCompiler.Compiler.GenericTypePatcher; }
 		}
 
 		/// <summary>
@@ -300,6 +246,14 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			return new Token((uint)codeReader.ReadInt32());
 		}
+
+		/// <summary>
+		/// Gets the type system.
+		/// </summary>
+		/// <value>
+		/// The type system.
+		/// </value>
+		TypeSystem IInstructionDecoder.TypeSystem { get { return typeSystem; } }
 
 		#endregion BaseInstructionDecoder Members
 	}

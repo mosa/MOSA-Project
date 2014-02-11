@@ -33,7 +33,8 @@ namespace Mosa.Tool.MetadataExplorer.Tables
 				case TableType.GenericParam: return new GenericParamRowExt(metadataModule, metadataModule.Metadata.ReadGenericParamRow(token));
 				case TableType.Param: return new ParamRowExt(metadataModule, metadataModule.Metadata.ReadParamRow(token));
 				case TableType.StandAloneSig: return new StandAloneSigExt(metadataModule, metadataModule.Metadata.ReadStandAloneSigRow(token));
-
+				case TableType.MethodSpec: return new MethodSpecExt(metadataModule, metadataModule.Metadata.ReadMethodSpecRow(token));
+				case TableType.NestedClass: return new NestedClassExt(metadataModule, metadataModule.Metadata.ReadNestedClassRow(token));
 				default: return null;
 			}
 		}

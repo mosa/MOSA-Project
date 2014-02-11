@@ -150,23 +150,23 @@ namespace Mosa.Compiler.Metadata.Loader
 			}
 		}
 
+		#endregion Methods
+
+		#region IMetadataProvider members
+
 		/// <summary>
 		/// Retrieves the requested provider heap.
 		/// </summary>
 		/// <param name="type">The requested provider heap.</param>
 		/// <returns>The provider heap requested.</returns>
 		/// <exception cref="System.ArgumentException"><paramref name="type"/> is invalid.</exception>
-		public Heap GetHeap(HeapType type)
+		Heap IMetadataProvider.GetHeap(HeapType type)
 		{
 			if (type < 0 || type >= HeapType.MaxType)
 				throw new ArgumentException(@"Invalid heap type.", @"type");
 
 			return streams[(int)type];
 		}
-
-		#endregion Methods
-
-		#region IMetadataProvider members
 
 		/// <summary>
 		/// Gets the row count.
@@ -178,6 +178,11 @@ namespace Mosa.Compiler.Metadata.Loader
 			return ((TableHeap)streams[(int)HeapType.Tables]).GetRowCount(table);
 		}
 
+		/// <summary>
+		/// Returns the number of rows for the specified provider table.
+		/// </summary>
+		/// <param name="table">The token type, whose maximum value is returned.</param>
+		/// <returns></returns>
 		Token IMetadataProvider.GetMaxTokenValue(TableType table)
 		{
 			return ((TableHeap)streams[(int)HeapType.Tables]).GetMaxTokenValue(table);
@@ -643,18 +648,6 @@ namespace Mosa.Compiler.Metadata.Loader
 		{
 			var theap = streams[(int)HeapType.Tables] as TableHeap;
 			return theap.ReadGenericParamConstraintRow(token);
-		}
-
-		/// <summary>
-		/// Gets the heaps of a specified type
-		/// </summary>
-		/// <param name="heapType">Type of the heap.</param>
-		/// <returns></returns>
-		IList<Heap> IMetadataProvider.GetHeaps(HeapType heapType)
-		{
-			List<Heap> list = new List<Heap>();
-			list.Add(streams[(int)heapType]);
-			return list;
 		}
 
 		#endregion IMetadataProvider members

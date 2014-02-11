@@ -11,7 +11,7 @@
 
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Stages;
-using Mosa.Compiler.TypeSystem;
+using Mosa.Compiler.MosaTypeSystem;
 
 namespace Mosa.Tool.Compiler
 {
@@ -29,7 +29,7 @@ namespace Mosa.Tool.Compiler
 		/// <param name="method">The method.</param>
 		/// <param name="basicBlocks">The basic blocks.</param>
 		/// <param name="instructionSet">The instruction set.</param>
-		public AotMethodCompiler(BaseCompiler compiler, RuntimeMethod method, BasicBlocks basicBlocks, InstructionSet instructionSet)
+		public AotMethodCompiler(BaseCompiler compiler, MosaMethod method, BasicBlocks basicBlocks, InstructionSet instructionSet)
 			: base(compiler, method, basicBlocks, instructionSet)
 		{
 			var compilerOptions = compiler.CompilerOptions;

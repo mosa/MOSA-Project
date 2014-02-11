@@ -7,6 +7,8 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using Mosa.Compiler.Common;
+
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
@@ -39,42 +41,23 @@ namespace Mosa.Compiler.Framework.CIL
 			base.Decode(ctx, decoder);
 
 			// Opcode specific handling
-			ushort locIdx;
+			ushort index;
 			switch (opcode)
 			{
-				case OpCode.Ldloc:
-					locIdx = decoder.DecodeUShort();
-					break;
-
-				case OpCode.Ldloc_s:
-					locIdx = decoder.DecodeByte();
-					break;
-
-				case OpCode.Ldloc_0:
-					locIdx = 0;
-					break;
-
-				case OpCode.Ldloc_1:
-					locIdx = 1;
-					break;
-
-				case OpCode.Ldloc_2:
-					locIdx = 2;
-					break;
-
-				case OpCode.Ldloc_3:
-					locIdx = 3;
-					break;
-
-				default:
-					throw new System.NotImplementedException();
+				case OpCode.Ldloc: index = decoder.DecodeUShort(); break;
+				case OpCode.Ldloc_s: index = decoder.DecodeByte(); break;
+				case OpCode.Ldloc_0: index = 0; break;
+				case OpCode.Ldloc_1: index = 1; break;
+				case OpCode.Ldloc_2: index = 2; break;
+				case OpCode.Ldloc_3: index = 3; break;
+				default: throw new InvalidMetadataException();
 			}
 
 			// Push the loaded value onto the evaluation stack
-			Operand localVariableOperand = decoder.Compiler.GetLocalOperand(locIdx);
-			Operand result = LoadInstruction.CreateResultOperand(decoder, localVariableOperand.StackType, localVariableOperand.Type);
+			var local = decoder.Compiler.GetLocalOperand(index);
+			var result = LoadInstruction.CreateResultOperand(decoder, local.Type);
 
-			ctx.Operand1 = localVariableOperand;
+			ctx.Operand1 = local;
 			ctx.Result = result;
 		}
 

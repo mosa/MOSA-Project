@@ -8,9 +8,9 @@
 */
 
 using Mosa.Compiler.Framework.IR;
-using Mosa.Compiler.Metadata;
+
 using Mosa.Compiler.Metadata.Signatures;
-using Mosa.Compiler.TypeSystem;
+using Mosa.Compiler.MosaTypeSystem;
 
 namespace Mosa.Compiler.Framework.Stages
 {
@@ -25,20 +25,15 @@ namespace Mosa.Compiler.Framework.Stages
 		void IMethodCompilerStage.Run()
 		{
 			// Handler Code
-			foreach (ExceptionHandlingClause clause in methodCompiler.ExceptionHandlingClauses)
+			foreach (var clause in methodCompiler.Method.ExceptionBlocks)
 			{
-				if (clause.ExceptionHandler == ExceptionHandlerType.Exception)
+				if (clause.ExceptionHandler == ExceptionBlockType.Exception)
 				{
-					var typeToken = new Token(clause.ClassToken);
-
-					RuntimeType type = methodCompiler.Method.Module.GetType(typeToken);
-
 					var block = basicBlocks.GetByLabel(clause.HandlerOffset);
 
 					var context = new Context(instructionSet, block).InsertBefore();
 
-					SigType sigType = new ClassSigType(typeToken);
-					Operand exceptionObject = methodCompiler.CreateVirtualRegister(sigType);
+					Operand exceptionObject = methodCompiler.CreateVirtualRegister(clause.Type);
 
 					context.SetInstruction(IRInstruction.ExceptionPrologue, exceptionObject);
 				}

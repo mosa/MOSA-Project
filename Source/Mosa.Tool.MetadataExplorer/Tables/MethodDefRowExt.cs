@@ -7,13 +7,12 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using Mosa.Compiler.Common;
 using Mosa.Compiler.Metadata;
+using Mosa.Compiler.Metadata.Loader;
 using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Compiler.Metadata.Tables;
 using System.Collections;
-using System.IO;
-using Mosa.Compiler.Metadata.Loader;
-using Mosa.Compiler.Common;
 
 namespace Mosa.Tool.MetadataExplorer.Tables
 {
@@ -51,6 +50,8 @@ namespace Mosa.Tool.MetadataExplorer.Tables
 
 				if (header.LocalVarSigTok.RID != 0)
 				{
+					yield return Value("LocalVarSigTok", header.LocalVarSigTok.ToString());
+
 					StandAloneSigRow standAlongSigRow = Metadata.ReadStandAloneSigRow(header.LocalVarSigTok);
 					var local = new LocalVariableSignature(Metadata, standAlongSigRow.SignatureBlob);
 					yield return Value("Method Header", local.ToString());

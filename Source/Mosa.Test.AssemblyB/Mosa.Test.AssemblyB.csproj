@@ -33,6 +33,7 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="TestZ.cs" />
     <Compile Include="Test.cs" />
   </ItemGroup>
   <ItemGroup>

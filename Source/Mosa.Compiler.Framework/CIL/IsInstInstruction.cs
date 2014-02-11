@@ -7,8 +7,8 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using Mosa.Compiler.Metadata;
-using Mosa.Compiler.Metadata.Signatures;
+
+using Mosa.Compiler.MosaTypeSystem;
 
 namespace Mosa.Compiler.Framework.CIL
 {
@@ -42,11 +42,9 @@ namespace Mosa.Compiler.Framework.CIL
 			// Decode base classes first
 			base.Decode(ctx, decoder);
 
-			Token token = decoder.DecodeTokenType();
+			var type = decoder.TypeSystem.Resolver.GetTypeByToken(decoder.Method.CodeAssembly, decoder.DecodeTokenType(), decoder.Method);
 
-			//RuntimeType type = decoder.TypeModule.GetType(token);
-
-			ctx.Result = decoder.Compiler.CreateVirtualRegister(new ClassSigType(token));
+			ctx.Result = decoder.Compiler.CreateVirtualRegister(type);
 			ctx.ResultCount = 1;
 		}
 

@@ -16,7 +16,7 @@ namespace Mosa.Compiler.Metadata.Signatures
 	/// <summary>
 	/// Base class of a type signature.
 	/// </summary>
-	public class SigType : IEquatable<SigType>
+	public class SigType
 	{
 		#region Construction
 
@@ -39,14 +39,6 @@ namespace Mosa.Compiler.Metadata.Signatures
 		/// <value>The type.</value>
 		public CilElementType Type { get; private set; }
 
-		/// <summary>
-		/// Gets a value indicating whether the type contains a generic type.
-		/// </summary>
-		/// <value>
-		/// 	<c>true</c> if [contains generic type]; otherwise, <c>false</c>.
-		/// </value>
-		public bool IsOpenGenericParameter { get { return (Type == CilElementType.Var || Type == CilElementType.MVar); } }
-
 		#endregion Properties
 
 		#region Object Overrides
@@ -64,86 +56,7 @@ namespace Mosa.Compiler.Metadata.Signatures
 
 		#endregion Object Overrides
 
-		#region Methods
-
-		/// <summary>
-		/// Matches the specified other.
-		/// </summary>
-		/// <param name="other">The other signature type.</param>
-		/// <returns>True, if the signature type matches.</returns>
-		public virtual bool Matches(SigType other)
-		{
-			if (object.ReferenceEquals(this, other))
-				return true;
-
-			if (other.Type != this.Type)
-				return false;
-
-			switch (this.Type)
-			{
-				case CilElementType.Void:
-				case CilElementType.Boolean:
-				case CilElementType.Char:
-				case CilElementType.I1:
-				case CilElementType.U1:
-				case CilElementType.I2:
-				case CilElementType.U2:
-				case CilElementType.I4:
-				case CilElementType.U4:
-				case CilElementType.I8:
-				case CilElementType.U8:
-				case CilElementType.R4:
-				case CilElementType.R8:
-				case CilElementType.String:
-				case CilElementType.Type:
-				case CilElementType.I:
-				case CilElementType.U:
-				case CilElementType.Object:
-				case CilElementType.Class:
-				case CilElementType.ValueType:
-					return true;
-
-				case CilElementType.SZArray:
-					return this.Equals(other);
-
-				case CilElementType.GenericInst:
-					return true; // this.Equals(other);
-
-				default:
-					throw new NotImplementedException();
-			}
-		}
-
-		#endregion Methods
-
 		#region Static methods
-
-		/// <summary>
-		/// Compares both arrays of signature types for equality.
-		/// </summary>
-		/// <param name="first">The first array to compare.</param>
-		/// <param name="second">The second array to compare.</param>
-		/// <returns>True, if the signature types in both arrays are equal.</returns>
-		public static bool Equals(SigType[] first, SigType[] second)
-		{
-			if (null == first)
-				throw new ArgumentNullException(@"first");
-			if (null == second)
-				throw new ArgumentNullException(@"second");
-
-			if (first == second)
-				return true;
-			if (first.Length != second.Length)
-				return false;
-
-			bool result = true;
-			for (int idx = 0; result == true && idx < first.Length; idx++)
-			{
-				result = (first[idx].Equals(second[idx]));
-			}
-
-			return result;
-		}
 
 		/// <summary>
 		/// Parses the type signature.
@@ -337,22 +250,6 @@ namespace Mosa.Compiler.Metadata.Signatures
 
 		#endregion Static methods
 
-		#region IEquatable<SigType> Members
-
-		/// <summary>
-		/// Indicates whether the current object is equal to another object of the same type.
-		/// </summary>
-		/// <param name="other">An object to compare with this object.</param>
-		/// <returns>
-		/// true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.
-		/// </returns>
-		public virtual bool Equals(SigType other)
-		{
-			return (Type == other.Type);
-		}
-
-		#endregion IEquatable<SigType> Members
-
 		/// <summary>
 		/// Expresses the signature element information in a string form differentiating it from other signature
 		/// elements expressed the same way
@@ -405,5 +302,61 @@ namespace Mosa.Compiler.Metadata.Signatures
 				default: throw new NotImplementedException();
 			}
 		}
+
+		#region Properties
+
+		public bool IsBoolean { get { return Type == CilElementType.Boolean; } }
+
+		public bool IsChar { get { return Type == CilElementType.Char; } }
+
+		public bool IsObject { get { return Type == CilElementType.Object; } }
+
+		public bool IsSignedByte { get { return Type == CilElementType.I1; } }
+
+		public bool IsSignedShort { get { return Type == CilElementType.I2; } }
+
+		public bool IsSignedInt { get { return Type == CilElementType.I4; } }
+
+		public bool IsSignedLong { get { return Type == CilElementType.I8; } }
+
+		public bool IsUnsignedByte { get { return Type == CilElementType.U1; } }
+
+		public bool IsUnsignedShort { get { return Type == CilElementType.U2; } }
+
+		public bool IsUnsignedInt { get { return Type == CilElementType.U4; } }
+
+		public bool IsUnsignedLong { get { return Type == CilElementType.U8; } }
+
+		public bool IsPointer { get { return Type == CilElementType.Ptr; } }
+
+		public bool IsFloat { get { return Type == CilElementType.R4; } }
+
+		public bool IsSingle { get { return Type == CilElementType.R4; } }
+
+		public bool IsDouble { get { return Type == CilElementType.R8; } }
+
+		public bool IsVar { get { return Type == CilElementType.Var; } }
+
+		public bool IsMVar { get { return Type == CilElementType.MVar; } }
+
+		public bool IsValueType { get { return Type == CilElementType.ValueType; } }
+
+		public bool IsGeneric { get { return IsVar || IsMVar; } }
+
+		public bool IsFunctionPtr { get { return Type == CilElementType.FunctionPtr; } }
+
+		public bool IsByRef { get { return Type == CilElementType.ByRef; } }
+
+		public bool IsIntPtr { get { return Type == CilElementType.I; } }
+
+		public bool IsUIntPtr { get { return Type == CilElementType.U; } }
+
+		public bool IsVoid { get { return Type == CilElementType.Void; } }
+
+		public bool IsPinned { get { return Type == CilElementType.Pinned; } }
+
+		public bool IsArray { get { return Type == CilElementType.Array; } }
+
+		#endregion Properties
 	}
 }

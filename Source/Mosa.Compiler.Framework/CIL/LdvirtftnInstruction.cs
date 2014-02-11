@@ -9,7 +9,7 @@
 
 using System;
 
-using Mosa.Compiler.Metadata;
+
 
 namespace Mosa.Compiler.Framework.CIL
 {
@@ -43,14 +43,10 @@ namespace Mosa.Compiler.Framework.CIL
 			// Decode base classes first
 			base.Decode(ctx, decoder);
 
-			Token token = decoder.DecodeTokenType();
+			var type = decoder.TypeSystem.Resolver.GetTypeByToken(decoder.Method.CodeAssembly, decoder.DecodeTokenType(), decoder.Method);
+			
+			//TODO
 			throw new NotImplementedException();
-
-			//  _function = MetadataMemberReference.FromToken(decoder.Metadata, token);
-
-			// Setup the result
-			// FIXME: Function ptr
-			// ctx.Result = CreateResultOperand(NativeTypeReference.NativeInt);
 		}
 
 		/// <summary>

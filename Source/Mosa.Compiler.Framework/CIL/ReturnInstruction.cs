@@ -9,7 +9,7 @@
 
 using System;
 
-using Mosa.Compiler.Metadata;
+
 
 namespace Mosa.Compiler.Framework.CIL
 {
@@ -59,9 +59,9 @@ namespace Mosa.Compiler.Framework.CIL
 			base.Decode(ctx, decoder);
 
 			if (OpCode.Ret != opcode)
-				throw new ArgumentException(@"Invalid opcode.", @"code");
+				throw new ArgumentException(@"Invalid opcode.", @"codeReader");
 
-			if (decoder.Method.ReturnType.Type == CilElementType.Void)
+			if (decoder.Method.ReturnType.IsVoid)
 				ctx.OperandCount = 0;
 			else
 				ctx.OperandCount = 1;

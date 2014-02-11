@@ -38,7 +38,7 @@ namespace Mosa.Platform.x86
 		/// </summary>
 		/// <param name="context">The context.</param>
 		/// <param name="emitter">The emitter.</param>
-		public override void Emit(Context context, ICodeEmitter emitter)
+		public override void Emit(Context context, BaseCodeEmitter emitter)
 		{
 			Emit(context, emitter as MachineCodeEmitter);
 		}

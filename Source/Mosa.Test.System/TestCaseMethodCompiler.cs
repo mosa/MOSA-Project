@@ -10,8 +10,7 @@
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Stages;
 using Mosa.Compiler.Linker;
-using Mosa.Compiler.Metadata;
-using Mosa.Compiler.TypeSystem;
+using Mosa.Compiler.MosaTypeSystem;
 using Mosa.Platform.x86.Stages;
 using System;
 using System.IO;
@@ -41,7 +40,7 @@ namespace Mosa.Test.System
 		/// <param name="method">The method.</param>
 		/// <param name="basicBlocks">The basic blocks.</param>
 		/// <param name="instructionSet">The instruction set.</param>
-		public TestCaseMethodCompiler(TestCaseCompiler compiler, RuntimeMethod method, BasicBlocks basicBlocks, InstructionSet instructionSet)
+		public TestCaseMethodCompiler(TestCaseCompiler compiler, MosaMethod method, BasicBlocks basicBlocks, InstructionSet instructionSet)
 			: base(compiler, method, basicBlocks, instructionSet)
 		{
 			// Populate the pipeline
@@ -103,8 +102,7 @@ namespace Mosa.Test.System
 		protected override void EndCompile()
 		{
 			// If we're compiling a type initializer, run it immediately.
-			const MethodAttributes attrs = MethodAttributes.SpecialName | MethodAttributes.RTSpecialName | MethodAttributes.Static;
-			if ((Method.Attributes & attrs) == attrs && Method.Name == ".cctor")
+			if ((Method.IsSpecialName || Method.IsRTSpecialName || Method.IsSpecialName) && Method.Name == ".cctor")
 			{
 				CCtor cctor = (CCtor)Marshal.GetDelegateForFunctionPointer(new IntPtr(address), typeof(CCtor));
 				(Compiler as TestCaseCompiler).QueueCCtorForInvocationAfterCompilation(cctor);

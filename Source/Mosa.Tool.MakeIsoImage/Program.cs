@@ -7,8 +7,8 @@
  *  Royce Mitchell III (royce3) <royce3 [at] gmail [dot] com>
  */
 
-using System;
 using Mosa.Utility.IsoImage;
+using System;
 
 namespace Mosa.Tool.MakeIsoImage
 {

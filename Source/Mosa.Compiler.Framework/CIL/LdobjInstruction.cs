@@ -7,10 +7,9 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
-
 using Mosa.Compiler.Metadata;
-using Mosa.Compiler.Metadata.Signatures;
+using Mosa.Compiler.MosaTypeSystem;
+using System;
 
 namespace Mosa.Compiler.Framework.CIL
 {
@@ -22,7 +21,7 @@ namespace Mosa.Compiler.Framework.CIL
 		/// <summary>
 		/// A fixed typeref for ldind.* instructions.
 		/// </summary>
-		private readonly SigType typeRef;
+		private readonly CilElementType? elementType;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="LdobjInstruction"/> class.
@@ -33,56 +32,19 @@ namespace Mosa.Compiler.Framework.CIL
 		{
 			switch (opcode)
 			{
-				case OpCode.Ldind_i1:
-					typeRef = BuiltInSigType.SByte;
-					break;
-
-				case OpCode.Ldind_i2:
-					typeRef = BuiltInSigType.Int16;
-					break;
-
-				case OpCode.Ldind_i4:
-					typeRef = BuiltInSigType.Int32;
-					break;
-
-				case OpCode.Ldind_i8:
-					typeRef = BuiltInSigType.Int64;
-					break;
-
-				case OpCode.Ldind_u1:
-					typeRef = BuiltInSigType.Byte;
-					break;
-
-				case OpCode.Ldind_u2:
-					typeRef = BuiltInSigType.UInt16;
-					break;
-
-				case OpCode.Ldind_u4:
-					typeRef = BuiltInSigType.UInt32;
-					break;
-
-				case OpCode.Ldind_i:
-					typeRef = BuiltInSigType.IntPtr;
-					break;
-
-				case OpCode.Ldind_r4:
-					typeRef = BuiltInSigType.Single;
-					break;
-
-				case OpCode.Ldind_r8:
-					typeRef = BuiltInSigType.Double;
-					break;
-
-				case OpCode.Ldind_ref: // FIXME: Really object?
-					typeRef = BuiltInSigType.Object;
-					break;
-
-				case OpCode.Ldobj: // FIXME
-					typeRef = null; // BuiltInSigType.Object;
-					break;
-
-				default:
-					throw new NotImplementedException();
+				case OpCode.Ldind_i1: elementType = CilElementType.I1; break;
+				case OpCode.Ldind_i2: elementType = CilElementType.I2; break;
+				case OpCode.Ldind_i4: elementType = CilElementType.I4; break;
+				case OpCode.Ldind_i8: elementType = CilElementType.I8; break;
+				case OpCode.Ldind_u1: elementType = CilElementType.U1; break;
+				case OpCode.Ldind_u2: elementType = CilElementType.U2; break;
+				case OpCode.Ldind_u4: elementType = CilElementType.U4; break;
+				case OpCode.Ldind_i: elementType = CilElementType.I; break;
+				case OpCode.Ldind_r4: elementType = CilElementType.R4; break;
+				case OpCode.Ldind_r8: elementType = CilElementType.R8; break;
+				case OpCode.Ldind_ref: elementType = CilElementType.Object; break;
+				case OpCode.Ldobj: elementType = null; break;
+				default: throw new NotImplementedException();
 			}
 		}
 
@@ -96,19 +58,13 @@ namespace Mosa.Compiler.Framework.CIL
 			// Decode base classes first
 			base.Decode(ctx, decoder);
 
-			SigType sigType = typeRef;
-
-			// Do we have a type?
-			if (sigType == null)
-			{
-				// No, retrieve a type reference from the immediate argument
-				Token token = decoder.DecodeTokenType();
-				sigType = new ClassSigType(token);
-			}
+			MosaType type = (elementType == null)
+				? type = decoder.TypeSystem.Resolver.GetTypeByToken(decoder.Method.CodeAssembly, decoder.DecodeTokenType(), decoder.Method)
+				: type = decoder.TypeSystem.Resolver.GetTypeByElementType(elementType);
 
 			// Push the loaded value
-			ctx.Result = LoadInstruction.CreateResultOperand(decoder, sigType);
-			ctx.SigType = sigType;
+			ctx.Result = LoadInstruction.CreateResultOperand(decoder, type);
+			ctx.MosaType = type;
 		}
 
 		/// <summary>
@@ -121,16 +77,11 @@ namespace Mosa.Compiler.Framework.CIL
 			base.Resolve(ctx, compiler);
 
 			// If we're ldind.i8, fix an IL deficiency that the result may be U8
-			if (opcode == OpCode.Ldind_i8 && typeRef.Type == CilElementType.I8)
+			if (opcode == OpCode.Ldind_i8 && elementType.Value == CilElementType.I8)
 			{
-				SigType opType = ctx.Operand1.Type;
-				RefSigType rst = opType as RefSigType;
-				PtrSigType ptr = opType as PtrSigType;
-
-				if (rst != null && rst.ElementType.Type == CilElementType.U8
-					|| ptr != null && ptr.ElementType.Type == CilElementType.U8)
+				if (ctx.Operand1.Type.HasElement && (ctx.Operand1.Type.ElementType.IsUnsignedLong || ctx.Operand1.Type.ElementType.IsUnsignedLong))
 				{
-					ctx.Result = compiler.CreateVirtualRegister(BuiltInSigType.UInt64);
+					ctx.Result = compiler.CreateVirtualRegister(compiler.TypeSystem.BuiltIn.U8);
 				}
 			}
 		}

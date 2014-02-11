@@ -9,7 +9,7 @@
 
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Stages;
-using Mosa.Compiler.TypeSystem;
+using Mosa.Compiler.MosaTypeSystem;
 
 namespace Mosa.TinyCPUSimulator.Adaptor
 {
@@ -23,7 +23,7 @@ namespace Mosa.TinyCPUSimulator.Adaptor
 		/// <param name="simAdapter">The sim adapter.</param>
 		/// <param name="basicBlocks">The basic blocks.</param>
 		/// <param name="instructionSet">The instruction set.</param>
-		public SimMethodCompiler(SimCompiler compiler, RuntimeMethod method, ISimAdapter simAdapter, BasicBlocks basicBlocks, InstructionSet instructionSet)
+		public SimMethodCompiler(SimCompiler compiler, MosaMethod method, ISimAdapter simAdapter, BasicBlocks basicBlocks, InstructionSet instructionSet)
 			: base(compiler, method, basicBlocks, instructionSet)
 		{
 			var compilerOptions = Compiler.CompilerOptions;

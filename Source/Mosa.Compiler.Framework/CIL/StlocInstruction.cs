@@ -49,43 +49,21 @@ namespace Mosa.Compiler.Framework.CIL
 			// Decode base classes first
 			base.Decode(ctx, decoder);
 
-			ushort locIdx;
+			int index;
 
 			// Destination depends on the opcode
 			switch (opcode)
 			{
-				case OpCode.Stloc:
-					locIdx = decoder.DecodeUShort();
-					break;
-
-				case OpCode.Stloc_s:
-					{
-						byte loc = decoder.DecodeByte();
-						locIdx = loc;
-						break;
-					}
-
-				case OpCode.Stloc_0:
-					locIdx = 0;
-					break;
-
-				case OpCode.Stloc_1:
-					locIdx = 1;
-					break;
-
-				case OpCode.Stloc_2:
-					locIdx = 2;
-					break;
-
-				case OpCode.Stloc_3:
-					locIdx = 3;
-					break;
-
-				default:
-					throw new NotImplementedException();
+				case OpCode.Stloc: index = decoder.DecodeUShort(); break;
+				case OpCode.Stloc_s: index = decoder.DecodeByte(); break;
+				case OpCode.Stloc_0: index = 0; break;
+				case OpCode.Stloc_1: index = 1; break;
+				case OpCode.Stloc_2: index = 2; break;
+				case OpCode.Stloc_3: index = 3; break;
+				default: throw new NotImplementedException();
 			}
 
-			ctx.Result = decoder.Compiler.GetLocalOperand(locIdx);
+			ctx.Result = decoder.Compiler.GetLocalOperand(index);
 		}
 
 		/// <summary>

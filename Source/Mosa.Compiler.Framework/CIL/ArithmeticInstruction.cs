@@ -7,9 +7,8 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using Mosa.Compiler.MosaTypeSystem;
 using System;
-using Mosa.Compiler.Metadata;
-using Mosa.Compiler.Metadata.Signatures;
 
 namespace Mosa.Compiler.Framework.CIL
 {
@@ -87,38 +86,25 @@ namespace Mosa.Compiler.Framework.CIL
 			StackTypeCode result = StackTypeCode.Unknown;
 			switch (opcode)
 			{
-				case OpCode.Add:
-					result = addTable[(int)ctx.Operand1.StackType][(int)ctx.Operand2.StackType];
-					break;
-
-				case OpCode.Sub:
-					result = subTable[(int)ctx.Operand1.StackType][(int)ctx.Operand2.StackType];
-					break;
-
-				default:
-					result = operandTable[(int)ctx.Operand1.StackType][(int)ctx.Operand2.StackType];
-					break;
+				case OpCode.Add: result = addTable[(int)TypeSystem.GetStackType(ctx.Operand1.Type)][(int)TypeSystem.GetStackType(ctx.Operand2.Type)]; break;
+				case OpCode.Sub: result = subTable[(int)TypeSystem.GetStackType(ctx.Operand1.Type)][(int)TypeSystem.GetStackType(ctx.Operand2.Type)]; break;
+				default: result = operandTable[(int)TypeSystem.GetStackType(ctx.Operand1.Type)][(int)TypeSystem.GetStackType(ctx.Operand2.Type)]; break;
 			}
 
-			if (StackTypeCode.Unknown == result)
-				throw new InvalidOperationException(@"Invalid operand types passed to " + opcode);
-
-			SigType resultType;
-			if (result != StackTypeCode.Ptr)
+			if (result == StackTypeCode.Unknown)
 			{
-				resultType = Operand.SigTypeFromStackType(result);
+				throw new InvalidOperationException(@"Invalid operand types passed to " + opcode);
+			}
+
+			MosaType resultType = null;
+
+			if (StackTypeCode.Ptr != result)
+			{
+				resultType = compiler.TypeSystem.GetType(result);
 			}
 			else
 			{
-				// Copy the pointer element type
-				PtrSigType op0 = ctx.Operand1.Type as PtrSigType;
-				PtrSigType op1 = ctx.Operand2.Type as PtrSigType;
-				if (op0 != null)
-					resultType = new PtrSigType(op0.ElementType, op0.CustomMods);
-				else if (op1 != null)
-					resultType = new PtrSigType(op1.ElementType, op1.CustomMods);
-				else
-					throw new InvalidOperationException();
+				resultType = ctx.Operand1.Type.ElementType ?? ctx.Operand2.Type.ElementType;
 			}
 
 			ctx.Result = compiler.CreateVirtualRegister(resultType);

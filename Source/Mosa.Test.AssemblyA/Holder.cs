@@ -1,6 +1,6 @@
 ﻿namespace Mosa.Test.AssemblyA
 {
-	public class Holder<T>
+	public class Holder<T>// : IHolder<T>
 	{
 		public T value;
 

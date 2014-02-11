@@ -9,7 +9,7 @@
 
 using System;
 
-using Mosa.Compiler.Metadata.Signatures;
+using Mosa.Compiler.MosaTypeSystem;
 
 namespace Mosa.Compiler.Framework.CIL
 {
@@ -44,7 +44,7 @@ namespace Mosa.Compiler.Framework.CIL
 			base.Decode(ctx, decoder);
 
 			// Set the result
-			ctx.Result = decoder.Compiler.CreateVirtualRegister(BuiltInSigType.Int32);
+			ctx.Result = decoder.Compiler.CreateVirtualRegister(decoder.TypeSystem.BuiltIn.I4);
 		}
 
 		/// <summary>

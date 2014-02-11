@@ -11,10 +11,8 @@
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Stages;
-using Mosa.Compiler.Metadata;
-using Mosa.Compiler.Metadata.Signatures;
+using Mosa.Compiler.MosaTypeSystem;
 using Mosa.Platform.x86.Stages;
-using System;
 using System.Diagnostics;
 
 namespace Mosa.Platform.x86
@@ -40,11 +38,6 @@ namespace Mosa.Platform.x86
 		/// The type of the elf machine.
 		/// </value>
 		public override ushort ElfMachineType { get { return 3; } }
-
-		/// <summary>
-		/// Gets the signature type of the native integer.
-		/// </summary>
-		public override SigType NativeType { get { return BuiltInSigType.Int32; } }
 
 		/// <summary>
 		/// Defines the register set of the target architecture.
@@ -233,20 +226,25 @@ namespace Mosa.Platform.x86
 		/// <summary>
 		/// Gets the type memory requirements.
 		/// </summary>
-		/// <param name="signatureType">The signature type.</param>
+		/// <param name="type">The type.</param>
 		/// <param name="size">Receives the memory size of the type.</param>
 		/// <param name="alignment">Receives alignment requirements of the type.</param>
-		public override void GetTypeRequirements(SigType signatureType, out int size, out int alignment)
+		public override void GetTypeRequirements(MosaType type, out int size, out int alignment)
 		{
-			if (signatureType == null)
-				throw new ArgumentNullException("signatureType");
-
-			switch (signatureType.Type)
+			if (type.IsLong)
 			{
-				case CilElementType.U8: size = 8; alignment = 4; break;
-				case CilElementType.I8: size = 8; alignment = 4; break;
-				case CilElementType.R8: size = alignment = 8; break;
-				default: size = alignment = 4; break;
+				size = 8;
+				alignment = 4;
+			}
+			else if (type.IsDouble)
+			{
+				size = 8;
+				alignment = 8;
+			}
+			else
+			{
+				size = 4;
+				alignment = 4;
 			}
 		}
 
@@ -254,7 +252,7 @@ namespace Mosa.Platform.x86
 		/// Gets the code emitter.
 		/// </summary>
 		/// <returns></returns>
-		public override ICodeEmitter GetCodeEmitter()
+		public override BaseCodeEmitter GetCodeEmitter()
 		{
 			return new MachineCodeEmitter();
 		}
@@ -278,11 +276,11 @@ namespace Mosa.Platform.x86
 		/// <param name="source">The source.</param>
 		public override void InsertExchangeInstruction(Context context, Operand destination, Operand source)
 		{
-			if (source.Type.Type == CilElementType.R4)
+			if (source.IsSingle)
 			{
 				// TODO
 			}
-			else if (source.Type.Type == CilElementType.R8)
+			else if (source.IsDouble)
 			{
 				// TODO
 			}
@@ -343,7 +341,7 @@ namespace Mosa.Platform.x86
 		/// <param name="Source">The source.</param>
 		public override void InsertSubInstruction(Context context, Operand destination, Operand source1, Operand source2)
 		{
-			Debug.Assert(source1 == destination); 
+			Debug.Assert(source1 == destination);
 			context.AppendInstruction(X86.Sub, destination, source1, source2);
 		}
 	}

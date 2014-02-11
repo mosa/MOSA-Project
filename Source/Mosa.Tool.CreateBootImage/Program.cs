@@ -7,9 +7,9 @@
 *  Phil Garcia (tgiphil) <phil@thinkedge.com>
 */
 
+using Mosa.Utility.BootImage;
 using System;
 using System.IO;
-using Mosa.Utility.BootImage;
 
 namespace Mosa.Tool.CreateBootImage
 {

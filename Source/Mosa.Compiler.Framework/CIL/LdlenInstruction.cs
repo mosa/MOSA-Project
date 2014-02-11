@@ -7,10 +7,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
-
-using Mosa.Compiler.Metadata.Signatures;
-
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
@@ -42,11 +38,7 @@ namespace Mosa.Compiler.Framework.CIL
 		{
 			base.Resolve(ctx, compiler);
 
-			SZArraySigType arrayType = ctx.Operand1.Type as SZArraySigType;
-			if (arrayType == null)
-				throw new InvalidProgramException(@"Operand to ldlen is not a vector.");
-
-			ctx.Result = compiler.CreateVirtualRegister(BuiltInSigType.IntPtr);
+			ctx.Result = compiler.CreateVirtualRegister(compiler.TypeSystem.BuiltIn.TypedByRef);
 		}
 
 		/// <summary>

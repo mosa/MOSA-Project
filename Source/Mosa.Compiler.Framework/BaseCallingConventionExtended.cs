@@ -8,9 +8,7 @@
  */
 
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Metadata;
-using Mosa.Compiler.Metadata.Signatures;
-using Mosa.Compiler.TypeSystem;
+using Mosa.Compiler.MosaTypeSystem;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -89,7 +87,7 @@ namespace Mosa.Compiler.Framework
 		/// <param name="operands">The operands.</param>
 		/// <param name="method">The method.</param>
 		/// <returns></returns>
-		protected static int CalculateStackSizeForParameters(BaseArchitecture architecture, List<Operand> operands, RuntimeMethod method)
+		protected static int CalculateStackSizeForParameters(BaseArchitecture architecture, List<Operand> operands, MosaMethod method)
 		{
 			Debug.Assert((method.Parameters.Count + (method.HasThis ? 1 : 0) == operands.Count) ||
 			(method.DeclaringType.IsDelegate && method.Parameters.Count == operands.Count));
@@ -104,9 +102,9 @@ namespace Mosa.Compiler.Framework
 				int size, alignment;
 				architecture.GetTypeRequirements(operand.Type, out size, out alignment);
 
-				SigType param = (index + offset >= 0) ? method.SigParameters[index + offset] : null;
+				var param = (index + offset >= 0) ? method.Parameters[index + offset] : null;
 
-				if (param != null && operand.IsDouble && param.Type == CilElementType.R4)
+				if (param != null && operand.IsDouble && param.Type.IsSingle)
 				{
 					size = 4;
 					alignment = 4;

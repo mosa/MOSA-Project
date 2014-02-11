@@ -9,8 +9,7 @@
 
 using Mosa.Compiler.Framework.CIL;
 using Mosa.Compiler.Linker;
-using Mosa.Compiler.Metadata.Signatures;
-using Mosa.Compiler.TypeSystem;
+using Mosa.Compiler.MosaTypeSystem;
 using System.Collections.Generic;
 
 namespace Mosa.Compiler.Framework.Stages
@@ -40,10 +39,11 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private void PerformStaticAllocationOf(Context allocation, Context assignment)
 		{
-			RuntimeType allocatedType = allocation.InvokeMethod.DeclaringType;
+			MosaType allocatedType = allocation.InvokeMethod.DeclaringType;
 
-			// Allocate a linker symbol to refer to for this allocation. Use the destination field name as the linker symbol name.
-			string symbolName = assignment.RuntimeField.ToString() + @"<<$cctor";
+			// Allocate a linker symbol to refer to this allocation. Use the destination field name as the linker symbol name.
+			string symbolName = assignment.MosaField.ToString() + @"<<$cctor";
+
 			using (var stream = methodCompiler.Linker.Allocate(symbolName, SectionKind.BSS, typeLayout.GetTypeSize(allocatedType), 4))
 			{
 				// FIXME: Do we have to initialize this?
@@ -54,10 +54,10 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 
 			// Issue a load request before the newobj and before the assignment.
-			Operand symbol1 = InsertLoadBeforeInstruction(allocation, symbolName, assignment.RuntimeField.SigType);
+			Operand symbol1 = InsertLoadBeforeInstruction(allocation, symbolName, assignment.MosaField.Type);
 			allocation.Operand1 = symbol1;
 
-			Operand symbol2 = InsertLoadBeforeInstruction(assignment, symbolName, assignment.RuntimeField.SigType);
+			Operand symbol2 = InsertLoadBeforeInstruction(assignment, symbolName, assignment.MosaField.Type);
 			assignment.Operand1 = symbol2;
 
 			// Change the newobj to a call and increase the operand count to include the this ptr.
@@ -66,7 +66,7 @@ namespace Mosa.Compiler.Framework.Stages
 			allocation.ReplaceInstructionOnly(CILInstruction.Get(OpCode.Call));
 		}
 
-		private string GetMethodTableForType(RuntimeType allocatedType)
+		private string GetMethodTableForType(MosaType allocatedType)
 		{
 			if (!allocatedType.IsValueType)
 			{
@@ -76,11 +76,11 @@ namespace Mosa.Compiler.Framework.Stages
 			return null;
 		}
 
-		private Operand InsertLoadBeforeInstruction(Context context, string symbolName, SigType type)
+		private Operand InsertLoadBeforeInstruction(Context context, string symbolName, MosaType type)
 		{
 			Context before = context.InsertBefore();
 			Operand result = methodCompiler.CreateVirtualRegister(type);
-			Operand op = Operand.CreateSymbol(type, symbolName);
+			Operand op = Operand.CreateManagedSymbolPointer(typeSystem, symbolName);
 
 			before.SetInstruction(CILInstruction.Get(OpCode.Ldc_i4), result, op);
 
@@ -126,8 +126,8 @@ namespace Mosa.Compiler.Framework.Stages
 			// Only direct assignment without any casts is compliant. We can't perform casts or anything alike here,
 			// as that is hard to complete at this point of time.
 
-			RuntimeType allocationType = allocation.InvokeMethod.DeclaringType;
-			RuntimeType storageType = assignment.RuntimeField.DeclaringType;
+			MosaType allocationType = allocation.InvokeMethod.DeclaringType;
+			MosaType storageType = assignment.MosaField.DeclaringType;
 
 			return ReferenceEquals(allocationType, storageType);
 		}

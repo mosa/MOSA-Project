@@ -28,7 +28,7 @@ namespace Mosa.Compiler.Framework.IR
 
 		#region IRInstruction Overrides
 
-		public override FlowControl FlowControl { get { return FlowControl.Branch; } }
+		public override FlowControl FlowControl { get { return FlowControl.UnconditionalBranch; } }
 
 		/// <summary>
 		/// Visits the specified visitor.

@@ -8,7 +8,7 @@
  */
 
 using System.Collections.Generic;
-using Mosa.Compiler.TypeSystem;
+using Mosa.Compiler.MosaTypeSystem;
 
 namespace Mosa.Compiler.Framework
 {
@@ -16,7 +16,7 @@ namespace Mosa.Compiler.Framework
 	{
 		#region Data members
 
-		protected Dictionary<RuntimeMethod, RuntimeMethod> plugMethods = new Dictionary<RuntimeMethod, RuntimeMethod>();
+		protected Dictionary<MosaMethod, MosaMethod> plugMethods = new Dictionary<MosaMethod, MosaMethod>();
 
 		#endregion Data members
 
@@ -25,16 +25,16 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		/// <param name="method">The method.</param>
 		/// <returns></returns>
-		public RuntimeMethod GetPlugMethod(RuntimeMethod method)
+		public MosaMethod GetPlugMethod(MosaMethod method)
 		{
-			RuntimeMethod plug = null;
+			MosaMethod plug = null;
 
 			plugMethods.TryGetValue(method, out plug);
 
 			return plug;
 		}
 
-		public void CreatePlug(RuntimeMethod plug, RuntimeMethod methodToPlug)
+		public void CreatePlug(MosaMethod plug, MosaMethod methodToPlug)
 		{
 			plugMethods.Add(methodToPlug, plug);
 		}

@@ -9,7 +9,7 @@
 
 using System;
 
-using Mosa.Compiler.Metadata;
+
 
 namespace Mosa.Compiler.Framework.CIL
 {
@@ -45,7 +45,7 @@ namespace Mosa.Compiler.Framework.CIL
 
 			// Retrieve a type reference from the immediate argument
 			// FIXME: Limit the token types
-			Token token = decoder.DecodeTokenType();
+			var token = decoder.DecodeTokenType();
 
 			throw new NotImplementedException();
 		}

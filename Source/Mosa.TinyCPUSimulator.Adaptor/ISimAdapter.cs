@@ -8,7 +8,7 @@
  */
 
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.TypeSystem;
+using Mosa.Compiler.MosaTypeSystem;
 
 namespace Mosa.TinyCPUSimulator.Adaptor
 {
@@ -33,6 +33,6 @@ namespace Mosa.TinyCPUSimulator.Adaptor
 		/// <param name="basicBlocks">The basic blocks.</param>
 		/// <param name="opcodeSize">Size of the opcode.</param>
 		/// <returns></returns>
-		SimInstruction Convert(Context context, RuntimeMethod method, BasicBlocks basicBlocks, byte opcodeSize);
+		SimInstruction Convert(Context context, MosaMethod method, BasicBlocks basicBlocks, byte opcodeSize);
 	}
 }

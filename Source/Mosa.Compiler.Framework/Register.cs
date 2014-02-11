@@ -7,8 +7,6 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-using Mosa.Compiler.Metadata.Signatures;
-
 namespace Mosa.Compiler.Framework
 {
 	/// <summary>
@@ -70,15 +68,5 @@ namespace Mosa.Compiler.Framework
 
 		#endregion Properties
 
-		#region Methods
-
-		/// <summary>
-		/// Determines if the given signature type can be stored in this register.
-		/// </summary>
-		/// <param name="type">The signature type to check.</param>
-		/// <returns>The return value is true if <paramref name="type"/> can be stored in this register.</returns>
-		public abstract bool IsValidSigType(SigType type);
-
-		#endregion Methods
 	}
 }

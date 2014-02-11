@@ -9,7 +9,7 @@
 
 using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.InternalTrace;
-using Mosa.Compiler.Metadata;
+using Mosa.Compiler.MosaTypeSystem;
 using Mosa.Compiler.Metadata.Signatures;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -231,31 +231,16 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private bool CanCopyPropagation(Operand result, Operand destination)
 		{
-			if (result.Type.Type != CilElementType.Ptr && destination.Type.Type != CilElementType.Ptr)
+			if (result.IsObject && destination.IsObject)
 				return true;
 
-			if (result.Type.Type != destination.Type.Type)
+			if (!result.IsPointer && !destination.IsPointer)
+				return true;
+
+			if (result.Type != destination.Type)
 				return false;
 
-			return GetElementType(result.Type) == GetElementType(destination.Type);
-		}
-
-		private static SigType GetElementType(SigType sigType)
-		{
-			// code copied from IRTransofmrationStage.cs
-			PtrSigType pointerType = sigType as PtrSigType;
-			if (pointerType != null)
-			{
-				return pointerType.ElementType;
-			}
-
-			RefSigType referenceType = sigType as RefSigType;
-			if (referenceType != null)
-			{
-				return referenceType.ElementType;
-			}
-
-			return sigType;
+			return result.Type.ElementType == destination.Type.ElementType;
 		}
 
 		/// <summary>
@@ -424,7 +409,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (!op1.IsConstant || !op2.IsConstant)
 				return;
 
-			if (op1.Type.Type == CilElementType.Object || op2.Type.Type == CilElementType.Object)
+			if (op1.IsObject || op2.IsObject)
 				return;
 
 			bool compareResult = true;
@@ -620,7 +605,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (context.Instruction is IR.ZeroExtendedMove && result.IsUnsigned && op1.IsSigned)
 			{
-				var newConstant = Unsign(op1.Type.Type, op1.ConstantSignedInteger);
+				var newConstant = Unsign(op1.Type, op1.ConstantSignedInteger);
 				newOperand = Operand.CreateConstant(context.Result.Type, newConstant);
 			}
 			else
@@ -635,16 +620,13 @@ namespace Mosa.Compiler.Framework.Stages
 			if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
 		}
 
-		static private ulong Unsign(CilElementType type, long value)
+		static private ulong Unsign(MosaType type, long value)
 		{
-			switch (type)
-			{
-				case CilElementType.I1: return (ulong)((sbyte)value);
-				case CilElementType.I2: return (ulong)((short)value);
-				case CilElementType.I4: return (ulong)((int)value);
-				case CilElementType.I8: return (ulong)((long)value);
-				default: return (ulong)value;
-			}
+			if (type.IsSignedByte) return (ulong)((sbyte)value);
+			else if (type.IsSignedShort) return (ulong)((short)value);
+			else if (type.IsSignedInt) return (ulong)((int)value);
+			else if (type.IsSignedLong) return (ulong)((long)value);
+			else return (ulong)value;
 		}
 
 		/// <summary>

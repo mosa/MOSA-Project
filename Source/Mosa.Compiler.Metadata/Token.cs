@@ -14,20 +14,13 @@ namespace Mosa.Compiler.Metadata
 	{
 		private readonly uint token;
 
-		public int RID
-		{
-			get { return (int)(token & 0x00ffffff); }
-		}
+		public int RID { get { return (int)(token & 0x00ffffff); } }
 
-		public TableType Table
-		{
-			get { return (TableType)(token & 0xff000000); }
-		}
+		public bool IsZero { get { return token == 0; } }
 
-		public uint Value
-		{
-			get { return token; }
-		}
+		public TableType Table { get { return (TableType)(token & 0xff000000); } }
+
+		public uint Value { get { return token; } }
 
 		public static readonly Token Zero = new Token((uint)0);
 

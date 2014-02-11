@@ -8,7 +8,6 @@
  */
 
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Metadata.Signatures;
 
 namespace Mosa.Platform.x86.Intrinsic
 {
@@ -26,16 +25,16 @@ namespace Mosa.Platform.x86.Intrinsic
 		/// <param name="typeSystem">The type system.</param>
 		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, BaseMethodCompiler methodCompiler)
 		{
-			context.SetInstruction(X86.Lgdt, null, Operand.CreateMemoryAddress(BuiltInSigType.Ptr, context.Operand1, 0));
+			context.SetInstruction(X86.Lgdt, null, Operand.CreateMemoryAddress(methodCompiler.TypeSystem.Resolver.BuiltIn.Ptr, context.Operand1, 0));
 
-			Operand ax = Operand.CreateCPURegister(BuiltInSigType.Int16, GeneralPurposeRegister.EAX);
-			Operand ds = Operand.CreateCPURegister(BuiltInSigType.Int16, SegmentRegister.DS);
-			Operand es = Operand.CreateCPURegister(BuiltInSigType.Int16, SegmentRegister.ES);
-			Operand fs = Operand.CreateCPURegister(BuiltInSigType.Int16, SegmentRegister.FS);
-			Operand gs = Operand.CreateCPURegister(BuiltInSigType.Int16, SegmentRegister.GS);
-			Operand ss = Operand.CreateCPURegister(BuiltInSigType.Int16, SegmentRegister.SS);
+			Operand ax = Operand.CreateCPURegister(methodCompiler.TypeSystem.Resolver.BuiltIn.Int16, GeneralPurposeRegister.EAX);
+			Operand ds = Operand.CreateCPURegister(methodCompiler.TypeSystem.Resolver.BuiltIn.Int16, SegmentRegister.DS);
+			Operand es = Operand.CreateCPURegister(methodCompiler.TypeSystem.Resolver.BuiltIn.Int16, SegmentRegister.ES);
+			Operand fs = Operand.CreateCPURegister(methodCompiler.TypeSystem.Resolver.BuiltIn.Int16, SegmentRegister.FS);
+			Operand gs = Operand.CreateCPURegister(methodCompiler.TypeSystem.Resolver.BuiltIn.Int16, SegmentRegister.GS);
+			Operand ss = Operand.CreateCPURegister(methodCompiler.TypeSystem.Resolver.BuiltIn.Int16, SegmentRegister.SS);
 
-			context.AppendInstruction(X86.Mov, ax, Operand.CreateConstantSignedInt(0x10));
+			context.AppendInstruction(X86.Mov, ax, Operand.CreateConstantSignedInt(methodCompiler.TypeSystem, 0x10));
 			context.AppendInstruction(X86.Mov, ds, ax);
 			context.AppendInstruction(X86.Mov, es, ax);
 			context.AppendInstruction(X86.Mov, fs, ax);

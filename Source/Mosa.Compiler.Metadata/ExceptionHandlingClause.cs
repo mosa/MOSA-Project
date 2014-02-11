@@ -20,7 +20,7 @@ namespace Mosa.Compiler.Metadata
 		/// <summary>
 		///
 		/// </summary>
-		public ExceptionHandlerType ExceptionHandler;
+		public ExceptionHandlerType ExceptionHandlerType;
 
 		/// <summary>
 		///
@@ -45,7 +45,7 @@ namespace Mosa.Compiler.Metadata
 		/// <summary>
 		///
 		/// </summary>
-		public uint ClassToken;
+		public Token ClassToken;
 
 		/// <summary>
 		///
@@ -101,7 +101,7 @@ namespace Mosa.Compiler.Metadata
 		{
 			if (!isFat)
 			{
-				this.ExceptionHandler = (ExceptionHandlerType)reader.ReadInt16();
+				this.ExceptionHandlerType = (ExceptionHandlerType)reader.ReadInt16();
 				this.TryOffset = reader.ReadInt16();
 				this.TryLength = reader.ReadByte();
 				this.HandlerOffset = reader.ReadInt16();
@@ -109,18 +109,18 @@ namespace Mosa.Compiler.Metadata
 			}
 			else
 			{
-				this.ExceptionHandler = (ExceptionHandlerType)reader.ReadInt32();
+				this.ExceptionHandlerType = (ExceptionHandlerType)reader.ReadInt32();
 				this.TryOffset = reader.ReadInt32();
 				this.TryLength = reader.ReadInt32();
 				this.HandlerOffset = reader.ReadInt32();
 				this.HandlerLength = reader.ReadInt32();
 			}
 
-			if (ExceptionHandlerType.Exception == this.ExceptionHandler)
+			if (ExceptionHandlerType.Exception == this.ExceptionHandlerType)
 			{
-				this.ClassToken = reader.ReadUInt32();
+				this.ClassToken = new Token(reader.ReadUInt32());
 			}
-			else if (ExceptionHandlerType.Filter == this.ExceptionHandler)
+			else if (ExceptionHandlerType.Filter == this.ExceptionHandlerType)
 			{
 				this.FilterOffset = reader.ReadInt32();
 			}

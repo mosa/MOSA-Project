@@ -39,7 +39,7 @@ namespace Mosa.Compiler.Framework.Platform
 		/// </summary>
 		/// <param name="context">The context.</param>
 		/// <param name="emitter">The emitter.</param>
-		public abstract void Emit(Context context, ICodeEmitter emitter);
+		public abstract void Emit(Context context, BaseCodeEmitter emitter);
 
 		#endregion Methods
 	}

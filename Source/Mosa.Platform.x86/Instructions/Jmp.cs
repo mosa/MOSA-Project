@@ -25,7 +25,7 @@ namespace Mosa.Platform.x86.Instructions
 
 		#region Properties
 
-		public override FlowControl FlowControl { get { return FlowControl.Branch; } }
+		public override FlowControl FlowControl { get { return FlowControl.UnconditionalBranch; } }
 
 		#endregion Properties
 

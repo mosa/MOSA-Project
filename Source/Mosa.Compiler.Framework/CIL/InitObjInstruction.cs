@@ -7,7 +7,7 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using Mosa.Compiler.Metadata;
+
 
 namespace Mosa.Compiler.Framework.CIL
 {
@@ -42,9 +42,7 @@ namespace Mosa.Compiler.Framework.CIL
 			base.Decode(ctx, decoder);
 
 			// Retrieve the type reference
-			Token token = decoder.DecodeTokenType();
-
-			decoder.TypeModule.GetType(token);
+			var type = decoder.TypeSystem.Resolver.GetTypeByToken(decoder.Method.CodeAssembly, decoder.DecodeTokenType(), decoder.Method);
 		}
 
 		/// <summary>

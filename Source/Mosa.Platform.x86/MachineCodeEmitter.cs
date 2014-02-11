@@ -13,8 +13,6 @@
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Linker;
-using Mosa.Compiler.Metadata;
-using Mosa.Compiler.TypeSystem;
 using System;
 
 namespace Mosa.Platform.x86
@@ -168,16 +166,22 @@ namespace Mosa.Platform.x86
 
 			if (displacement.IsLabel)
 			{
+				// FIXME! remove assertion
+				System.Diagnostics.Debug.Assert(displacement.Displacement == 0);
+
 				linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuiltInPatch.I4, MethodName, pos, 0, displacement.Name, 0);
 				codeStream.Position += 4;
 			}
-			else if (displacement.IsRuntimeMember)
+			else if (displacement.IsField)
 			{
-				linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuiltInPatch.I4, MethodName, pos, 0, ((displacement.RuntimeMember) as RuntimeField).FullName, displacement.Displacement);
+				linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuiltInPatch.I4, MethodName, pos, 0, displacement.Field.FullName, displacement.Displacement);
 				codeStream.Position += 4;
 			}
 			else if (displacement.IsSymbol)
 			{
+				// FIXME! remove assertion
+				System.Diagnostics.Debug.Assert(displacement.Displacement == 0);
+
 				linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuiltInPatch.I4, MethodName, pos, 0, displacement.Name, 0);
 				codeStream.Position += 4;
 			}
@@ -207,25 +211,24 @@ namespace Mosa.Platform.x86
 			}
 
 			if (!op.IsConstant)
-				throw new InvalidOperationException();
-
-			switch (op.Type.Type)
 			{
-				case CilElementType.Object: goto case CilElementType.I;
-				case CilElementType.Char: goto case CilElementType.U2;
-				case CilElementType.I: goto case CilElementType.I4;
-				case CilElementType.Ptr: goto case CilElementType.U4;
-
-				case CilElementType.I1: codeStream.WriteByte(Convert.ToByte(op.ConstantSignedInteger)); return;
-				case CilElementType.I2: codeStream.Write(Convert.ToInt16(op.ConstantSignedInteger), Endianness.Little); return;
-				case CilElementType.I4: codeStream.Write(Convert.ToInt32(op.ConstantSignedInteger), Endianness.Little); return;
-
-				case CilElementType.U1: codeStream.WriteByte(Convert.ToByte(op.ConstantUnsignedInteger)); return;
-				case CilElementType.U2: codeStream.Write(Convert.ToUInt16(op.ConstantUnsignedInteger), Endianness.Little); return;
-				case CilElementType.U4: codeStream.Write(Convert.ToUInt32(op.ConstantUnsignedInteger), Endianness.Little); return;
-
-				default: throw new InvalidOperationException(String.Format(@"CilElementType.{0} is not supported.", op.Type.Type));
+				throw new InvalidCompilerException();
 			}
+
+			if (op.IsSignedByte)
+				codeStream.WriteByte(Convert.ToByte(op.ConstantSignedInteger));
+			else if (op.IsUnsignedByte)
+				codeStream.WriteByte(Convert.ToByte(op.ConstantUnsignedInteger));
+			else if (op.IsUnsignedShort || op.IsChar)
+				codeStream.Write(Convert.ToUInt16(op.ConstantUnsignedInteger), Endianness.Little);
+			else if (op.IsSignedShort)
+				codeStream.Write(Convert.ToInt16(op.ConstantSignedInteger), Endianness.Little);
+			else if (op.IsSignedInt || op.IsNativeSignedInteger)
+				codeStream.Write(Convert.ToInt32(op.ConstantSignedInteger), Endianness.Little);
+			else if (op.IsUnsignedInt || op.IsPointer || op.IsNativeUnsignedInteger || op.IsObject)
+				codeStream.Write(Convert.ToUInt32(op.ConstantUnsignedInteger), Endianness.Little);
+			else
+				throw new InvalidCompilerException();
 		}
 
 		/// <summary>
@@ -256,7 +259,7 @@ namespace Mosa.Platform.x86
 			codeStream.Write(relOffset, Endianness.Little);
 		}
 
-		protected override void ResolvePatches()
+		public override void ResolvePatches()
 		{
 			// Save the current position
 			long currentPosition = codeStream.Position;

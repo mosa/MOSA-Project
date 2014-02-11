@@ -8,10 +8,9 @@
  */
 
 using System.Diagnostics;
-using Mosa.Compiler.Metadata;
+
 using Mosa.Compiler.Metadata.Loader;
-using Mosa.Compiler.Metadata.Signatures;
-using Mosa.Compiler.TypeSystem;
+using Mosa.Compiler.MosaTypeSystem;
 
 namespace Mosa.Compiler.Framework.CIL
 {
@@ -83,11 +82,11 @@ namespace Mosa.Compiler.Framework.CIL
 		/// <summary>
 		/// Decodes the specified instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
+		/// <param name="context">The context.</param>
 		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
-		public override void Decode(Context ctx, IInstructionDecoder decoder)
+		public override void Decode(Context context, IInstructionDecoder decoder)
 		{
-			Token ctor = DecodeInvocationTarget(ctx, decoder, InvokeSupport);
+			var ctor = DecodeInvocationTarget(context, decoder, InvokeSupport);
 
 			/*
 			 * HACK: We need to remove the this parameter from the operand list, as it
@@ -98,38 +97,14 @@ namespace Mosa.Compiler.Framework.CIL
 			 */
 
 			// Remove the this argument from the invocation, it's not on the stack yet.
-			ctx.OperandCount--;
+			context.OperandCount--;
 
-			// Get the type to allocate
-			SigType sigType = CreateSignatureTypeFor(decoder.Compiler.Assembly, ctor, ctx.InvokeMethod.DeclaringType);
-
-			decoder.Compiler.Scheduler.TrackMethodInvoked(ctx.InvokeMethod);
-			decoder.Compiler.Scheduler.TrackTypeAllocated(ctx.InvokeMethod.DeclaringType);
+			decoder.Compiler.Scheduler.TrackTypeAllocated(ctor.DeclaringType);
+			decoder.Compiler.Scheduler.TrackTypeAllocated(context.InvokeMethod.DeclaringType);
 
 			// Set a return value according to the type of the object allocated
-			ctx.Result = decoder.Compiler.CreateVirtualRegister(sigType);
-			ctx.ResultCount = 1;
-		}
-
-		private SigType CreateSignatureTypeFor(IMetadataModule module, Token ctorToken, RuntimeType declaringType)
-		{
-			Token typeToken = declaringType.Token;
-
-			if (ctorToken.Table == TableType.MemberRef)
-			{
-				typeToken = module.Metadata.ReadMemberRefRow(ctorToken).Class;
-			}
-
-			//if (declaringType.IsValueType)
-			//{
-			//    // TODO
-			//    var typeSpecRow = module.Metadata.ReadTypeSpecRow(typeToken);
-			//    var typeSpecSignature = new TypeSpecSignature(module.Metadata, typeSpecRow.SignatureBlobIdx);
-			//    return typeSpecSignature.Type;
-			//    //return new ValueTypeSigType(typeToken);
-			//}
-
-			return new ClassSigType(typeToken);
+			context.Result = decoder.Compiler.CreateVirtualRegister(ctor.DeclaringType);
+			context.ResultCount = 1;
 		}
 
 		/// <summary>
@@ -141,7 +116,8 @@ namespace Mosa.Compiler.Framework.CIL
 		{
 			// Validate the operands...
 			int offset = (ctx.InvokeMethod.HasExplicitThis ? 1 : 0);
-			Debug.Assert(ctx.OperandCount == ctx.InvokeMethod.SigParameters.Length - offset, @"Operand count doesn't match parameter count.");
+
+			Debug.Assert(ctx.OperandCount == ctx.InvokeMethod.Parameters.Count - offset, @"Operand count doesn't match parameter count.");
 		}
 
 		/// <summary>

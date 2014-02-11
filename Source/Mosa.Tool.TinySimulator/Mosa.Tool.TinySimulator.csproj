@@ -251,17 +251,13 @@
       <Project>{7033b213-2055-4c6a-b008-d9856267f5d7}</Project>
       <Name>Mosa.Compiler.Metadata</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Mosa.Compiler.TypeSystem\Mosa.Compiler.TypeSystem.csproj">
-      <Project>{5f30a68e-05bf-40ea-b576-5ebcde520449}</Project>
-      <Name>Mosa.Compiler.TypeSystem</Name>
+    <ProjectReference Include="..\Mosa.Compiler.MosaTypeSystem\Mosa.Compiler.MosaTypeSystem.csproj">
+      <Project>{5f30a68e-05bf-40ea-b576-5ebcde520559}</Project>
+      <Name>Mosa.Compiler.MosaTypeSystem</Name>
     </ProjectReference>
     <ProjectReference Include="..\Mosa.Platform.ARMv6\Mosa.Platform.ARMv6.csproj">
       <Project>{0fb92651-3ee8-441d-84f2-c4dfda68e8a5}</Project>
       <Name>Mosa.Platform.ARMv6</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Mosa.Platform.AVR32\Mosa.Platform.AVR32.csproj">
-      <Project>{f3bb1082-13e3-4b37-abf4-a3e42c9e7ed9}</Project>
-      <Name>Mosa.Platform.AVR32</Name>
     </ProjectReference>
     <ProjectReference Include="..\Mosa.Platform.x86\Mosa.Platform.x86.csproj">
       <Project>{de30cbe9-50f3-4a3e-bcc9-a8a36348530e}</Project>
@@ -282,6 +278,10 @@
     <ProjectReference Include="..\Mosa.TinyCPUSimulator\Mosa.TinyCPUSimulator.csproj">
       <Project>{6f7c06b2-09bf-45bd-8e6b-ae9bf7c7e250}</Project>
       <Name>Mosa.TinyCPUSimulator</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mosa.Utility.GUI.Common\Mosa.Utility.GUI.Common.csproj">
+      <Project>{5a813793-78e2-413c-aa05-fcdd12b7db04}</Project>
+      <Name>Mosa.Utility.GUI.Common</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

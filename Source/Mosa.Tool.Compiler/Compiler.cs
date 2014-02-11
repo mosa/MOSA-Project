@@ -6,8 +6,10 @@
  * Authors:
  *  Kai P. Reisert <kpreisert@googlemail.com>
  *  Pascal Delprat (pdelprat) <pascal.delprat@online.fr>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Linker;
 using NDesk.Options;
@@ -70,7 +72,7 @@ namespace Mosa.Tool.Compiler
 			#region Setup general options
 
 			optionSet.Add(
-				"v|version",
+				"local|version",
 				"Display version information.",
 				delegate(string v)
 				{
@@ -185,8 +187,8 @@ namespace Mosa.Tool.Compiler
 			);
 
 			optionSet.Add(
-				"method-pipeline-export-dir|mped=",
-				"The method pipeline export directory {file}.",
+				"interrupt-pipeline-export-dir|mped=",
+				"The interrupt pipeline export directory {file}.",
 				delegate(string dir)
 				{
 					compilerOptions.MethodPipelineExportDirectory = dir;
@@ -335,16 +337,6 @@ namespace Mosa.Tool.Compiler
 				}
 			);
 
-			optionSet.Add(
-				"multiboot-module=",
-				"Adds a {0:module} to multiboot, to be loaded at a given {1:virtualAddress} (can be used multiple times).",
-				delegate(string file, string address)
-				{
-					// TODO: validate and add this to a list or something
-					Console.WriteLine("Adding multiboot module " + file + " at virtualAddress " + address);
-				}
-			);
-
 			#endregion Setup options
 		}
 
@@ -422,7 +414,7 @@ namespace Mosa.Tool.Compiler
 			{
 				Compile();
 			}
-			catch (CompilationException ce)
+			catch (CompilerException ce)
 			{
 				this.ShowError(ce.Message);
 			}
@@ -520,8 +512,8 @@ namespace Mosa.Tool.Compiler
 				case "x86":
 					return Mosa.Platform.x86.Architecture.CreateArchitecture(Mosa.Platform.x86.ArchitectureFeatureFlags.AutoDetect);
 
-				case "avr32":
-					return Mosa.Platform.AVR32.Architecture.CreateArchitecture(Mosa.Platform.AVR32.ArchitectureFeatureFlags.AutoDetect);
+				//case "avr32":
+				//	return Mosa.Platform.AVR32.Architecture.CreateArchitecture(Mosa.Platform.AVR32.ArchitectureFeatureFlags.AutoDetect);
 
 				case "x64":
 

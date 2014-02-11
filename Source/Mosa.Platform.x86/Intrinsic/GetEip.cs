@@ -8,7 +8,6 @@
  */
 
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Metadata.Signatures;
 
 namespace Mosa.Platform.x86.Intrinsic
 {
@@ -27,10 +26,10 @@ namespace Mosa.Platform.x86.Intrinsic
 		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, BaseMethodCompiler methodCompiler)
 		{
 			Operand result = context.Result;
-			Operand eax = methodCompiler.CreateVirtualRegister(BuiltInSigType.UInt32);
+			Operand eax = methodCompiler.CreateVirtualRegister(methodCompiler.TypeSystem.Resolver.BuiltIn.UInt32);
 
-			context.AppendInstruction(X86.Add, eax, eax, Operand.CreateCPURegister(BuiltInSigType.UInt32, GeneralPurposeRegister.ESP));
-			context.AppendInstruction(X86.Mov, eax, Operand.CreateMemoryAddress(BuiltInSigType.UInt32, eax, 0));
+			context.AppendInstruction(X86.Add, eax, eax, Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.UInt32, GeneralPurposeRegister.ESP));
+			context.AppendInstruction(X86.Mov, eax, Operand.CreateMemoryAddress(methodCompiler.TypeSystem.BuiltIn.UInt32, eax, 0));
 			context.AppendInstruction(X86.Mov, result, eax);
 		}
 

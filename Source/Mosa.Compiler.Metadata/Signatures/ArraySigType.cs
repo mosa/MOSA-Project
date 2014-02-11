@@ -68,45 +68,6 @@ namespace Mosa.Compiler.Metadata.Signatures
 
 		#endregion Properties
 
-		#region SigType Overrides
-
-		/// <summary>
-		/// Indicates whether the current object is equal to another object of the same type.
-		/// </summary>
-		/// <param name="other">An object to compare with this object.</param>
-		/// <returns>
-		/// true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.
-		/// </returns>
-		public override bool Equals(SigType other)
-		{
-			ArraySigType ast = other as ArraySigType;
-			if (null == ast)
-				return false;
-
-			return (base.Equals(other) && Rank == ast.Rank && Equal(Sizes, ast.Sizes) && Equal(LowBounds, ast.LowBounds));
-		}
-
-		/// <summary>
-		/// Compares the two arrays for equality.
-		/// </summary>
-		/// <param name="first">The first array to compare.</param>
-		/// <param name="second">The second array to compare.</param>
-		/// <returns>True if the arrays are equal.</returns>
-		private static bool Equal(int[] first, int[] second)
-		{
-			if (first.Length != second.Length)
-				return false;
-
-			bool result = true;
-			for (int idx = 0; idx < first.Length; idx++)
-			{
-				result = (first[idx] == second[idx]);
-			}
-			return result;
-		}
-
-		#endregion SigType Overrides
-
 		/// <summary>
 		/// Expresses the array type reference in a meaningful, symbol-friendly string form
 		/// </summary>

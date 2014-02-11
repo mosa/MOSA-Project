@@ -9,9 +9,6 @@
 
 using System.Diagnostics;
 
-using Mosa.Compiler.Metadata;
-using Mosa.Compiler.Metadata.Signatures;
-
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
@@ -44,19 +41,14 @@ namespace Mosa.Compiler.Framework.CIL
 			// Decode base classes first
 			base.Decode(ctx, decoder);
 
-			Token token = decoder.DecodeTokenType();
-			ctx.RuntimeField = decoder.TypeModule.GetField(token);
+			var field = decoder.TypeSystem.Resolver.GetFieldByToken(decoder.Method.CodeAssembly, decoder.DecodeTokenType(), decoder.Method.DeclaringType.GenericArguments);
 
-			if (ctx.RuntimeField.ContainsGenericParameter)
-			{
-				//TODO
-				;
-			}
+			decoder.Compiler.Scheduler.TrackFieldReferenced(field);
 
-			SigType sigType = ctx.RuntimeField.SigType;
+			Debug.Assert(field.IsStaticField, "Static field access on non-static field.");
 
-			Debug.Assert(ctx.RuntimeField.IsStaticField, "Static field access on non-static field.");
-			ctx.Result = LoadInstruction.CreateResultOperand(decoder, sigType);
+			ctx.MosaField = field;
+			ctx.Result = LoadInstruction.CreateResultOperand(decoder, field.Type);
 		}
 
 		/// <summary>

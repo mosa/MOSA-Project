@@ -33,6 +33,7 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="IHolder.cs" />
     <Compile Include="Holder.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -11,7 +11,7 @@ using System.IO;
 
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Linker;
-using Mosa.Compiler.TypeSystem;
+using Mosa.Compiler.MosaTypeSystem;
 
 namespace Mosa.Compiler.Framework.Stages
 {
@@ -29,7 +29,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		void ICompilerStage.Run()
 		{
-			CreateAssemblyListTable();
+			CreateTypeDefinitionTables();
 		}
 
 		#endregion ICompilerStage members
@@ -40,90 +40,24 @@ namespace Mosa.Compiler.Framework.Stages
 			stream.Write(System.Text.ASCIIEncoding.ASCII.GetBytes(value));
 		}
 
-		private void CreateAssemblyListTable()
+		private void CreateTypeDefinitionTables()
 		{
-			string assemblyListSymbol = @"<$>AssemblyList";
-
-			using (Stream stream = linker.Allocate(assemblyListSymbol, SectionKind.ROData, 0, typeLayout.NativePointerAlignment))
+			foreach (var type in typeSystem.AllTypes)
 			{
-				using (EndianAwareBinaryWriter writer = new EndianAwareBinaryWriter(stream, architecture.Endianness))
-				{
-					// 1. Number of assemblies (modules)
-					writer.Write((uint)typeSystem.TypeModules.Count);
+				if (type.IsModule)
+					continue;
 
-					// 2. Pointers to assemblies
-					foreach (var module in typeSystem.TypeModules)
-					{
-						linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuiltInPatch.I4, assemblyListSymbol, (int)writer.Position, 0, module.Name + "$atable", 0);
-						writer.Position += typeLayout.NativePointerSize;
-					}
-				}
-			}
+				if (type.IsBaseGeneric || type.IsOpenGenericType)
+					continue;
 
-			// Create a table per assembly
-			foreach (var module in typeSystem.TypeModules)
-			{
-				CreateAssemblyDefinitionTable(module);
+				if (!(type.IsObject || type.IsValueType || type.IsEnum || type.IsString || type.IsInterface || type.IsLinkerGenerated))
+					continue;
+
+				CreateTypeDefinitionTable(type);
 			}
 		}
 
-		private void CreateAssemblyDefinitionTable(ITypeModule typeModule)
-		{
-			string assemblyNameSymbol = typeModule.Name + @"$aname";
-
-			// Emit assembly name
-			using (Stream stream = linker.Allocate(assemblyNameSymbol, SectionKind.ROData, 0, typeLayout.NativePointerAlignment))
-			{
-				using (EndianAwareBinaryWriter writer = new EndianAwareBinaryWriter(stream, architecture.Endianness))
-				{
-					EmitStringWithLength(writer, typeModule.Name);
-				}
-			}
-
-			uint moduleTypes = 0;
-
-			foreach (RuntimeType type in typeModule.GetAllTypes())
-			{
-				if (!type.IsModule)
-					moduleTypes++;
-			}
-
-			string assemblyTableSymbol = typeModule.Name + @"$atable";
-
-			using (Stream stream = linker.Allocate(assemblyTableSymbol, SectionKind.ROData, 0, typeLayout.NativePointerAlignment))
-			{
-				using (EndianAwareBinaryWriter writer = new EndianAwareBinaryWriter(stream, architecture.Endianness))
-				{
-					// 1. Pointer to Assembly Name
-					linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuiltInPatch.I4, assemblyTableSymbol, 0, 0, assemblyNameSymbol, 0);
-					writer.Position += typeLayout.NativePointerSize;
-
-					// 2. Number of types
-					writer.Write(moduleTypes);
-
-					// 3. Pointer to list of types
-					foreach (var type in typeModule.GetAllTypes())
-					{
-						if (!type.IsModule && !(type.Module is InternalTypeModule))
-						{
-							linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuiltInPatch.I4, assemblyTableSymbol, (int)writer.Position, 0, type.FullName + @"$dtable", 0);
-						}
-
-						writer.Position += typeLayout.NativePointerSize;
-					}
-				}
-			}
-
-			foreach (var type in typeModule.GetAllTypes())
-			{
-				if (!type.IsModule)
-				{
-					CreateTypeDefinitionTable(type, assemblyTableSymbol);
-				}
-			}
-		}
-
-		private void CreateTypeDefinitionTable(RuntimeType type, string assemblySymbol)
+		private void CreateTypeDefinitionTable(MosaType type)
 		{
 			string typeNameSymbol = type + @"$tname";
 
@@ -147,17 +81,17 @@ namespace Mosa.Compiler.Framework.Stages
 
 					// 2. Metadata Token
 					//writer.Write((uint)type.Token.ToUInt32());
-					writer.Write((uint)0); //FIXME: ^^^
+					writer.Write((uint)0); //FIXME! ^^^
 
 					// 3. Pointer to Name
 					linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuiltInPatch.I4, typeTableSymbol, (int)writer.Position, 0, typeNameSymbol, 0);
 					writer.Position += typeLayout.NativePointerSize;
 
 					// 4. Pointer to Assembly Definition
-					linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuiltInPatch.I4, typeTableSymbol, (int)writer.Position, 0, assemblySymbol, 0);
+					//linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuiltInPatch.I4, typeTableSymbol, (int)writer.Position, 0, assemblySymbol, 0);
 					writer.Position += typeLayout.NativePointerSize;
 
-					// 5. TODO: Constructor that accept no parameters, if any, for this type
+					// 5. TODO: Constructor that accepts no parameters, if any, for this type
 					writer.WriteZeroBytes(typeLayout.NativePointerSize);
 
 					// 6. Flag: IsInterface

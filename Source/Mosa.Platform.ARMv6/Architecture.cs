@@ -11,8 +11,7 @@
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Stages;
-using Mosa.Compiler.Metadata;
-using Mosa.Compiler.Metadata.Signatures;
+using Mosa.Compiler.MosaTypeSystem;
 using Mosa.Platform.ARMv6.Stages;
 using System;
 
@@ -40,11 +39,6 @@ namespace Mosa.Platform.ARMv6
 		/// The type of the elf machine. As defined in ARM ELF File Format doc. page 5, EM_ARM.
 		/// </value>
 		public override ushort ElfMachineType { get { return 40; } }
-
-		/// <summary>
-		/// Gets the signature type of the native integer.
-		/// </summary>
-		public override SigType NativeType { get { return BuiltInSigType.Int32; } }
 
 		/// <summary>
 		/// Gets the name of the platform.
@@ -201,21 +195,26 @@ namespace Mosa.Platform.ARMv6
 		/// <summary>
 		/// Gets the type memory requirements.
 		/// </summary>
-		/// <param name="signatureType">The signature type.</param>
+		/// <param name="type">The signature type.</param>
 		/// <param name="size">Receives the memory size of the type.</param>
 		/// <param name="alignment">Receives alignment requirements of the type.</param>
 		/// <exception cref="System.ArgumentNullException">signatureType</exception>
-		public override void GetTypeRequirements(SigType signatureType, out int size, out int alignment)
+		public override void GetTypeRequirements(MosaType type, out int size, out int alignment)
 		{
-			if (signatureType == null)
-				throw new ArgumentNullException("signatureType");
-
-			switch (signatureType.Type)
+			if (type.IsLong)
 			{
-				case CilElementType.U8: size = 8; alignment = 4; break;
-				case CilElementType.I8: size = 8; alignment = 4; break;
-				case CilElementType.R8: size = alignment = 8; break;
-				default: size = alignment = 4; break;
+				size = 8;
+				alignment = 4;
+			}
+			else if (type.IsDouble)
+			{
+				size = 8;
+				alignment = 8;
+			}
+			else
+			{
+				size = 4;
+				alignment = 4;
 			}
 		}
 
@@ -223,7 +222,7 @@ namespace Mosa.Platform.ARMv6
 		/// Gets the code emitter.
 		/// </summary>
 		/// <returns></returns>
-		public override ICodeEmitter GetCodeEmitter()
+		public override BaseCodeEmitter GetCodeEmitter()
 		{
 			return new MachineCodeEmitter();
 		}

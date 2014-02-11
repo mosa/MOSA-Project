@@ -10,8 +10,7 @@
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.InternalTrace;
 using Mosa.Compiler.Linker;
-using Mosa.Compiler.Metadata.Loader;
-using Mosa.Compiler.TypeSystem;
+using Mosa.Compiler.MosaTypeSystem;
 using Mosa.TinyCPUSimulator.Adaptor;
 using System;
 using System.Diagnostics;
@@ -27,8 +26,8 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 		protected ISimAdapter simAdapter;
 		protected BaseArchitecture architecture;
 		protected ILinker linker;
-		protected ITypeSystem typeSystem;
-		protected ITypeLayout typeLayout;
+		protected TypeSystem typeSystem;
+		protected MosaTypeLayout typeLayout;
 		protected SimCompiler simCompiler;
 
 		protected CompilerOptions compilerOptions = new CompilerOptions();
@@ -58,7 +57,7 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 			if (simCompiler != null)
 				return;
 
-			IAssemblyLoader assemblyLoader = new AssemblyLoader();
+			MosaAssemblyLoader assemblyLoader = new MosaAssemblyLoader();
 
 			assemblyLoader.AddPrivatePath(System.IO.Directory.GetCurrentDirectory());
 			assemblyLoader.LoadModule("mscorlib.dll");
@@ -66,9 +65,9 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 			assemblyLoader.LoadModule("Mosa.Test.Collection.dll");
 			assemblyLoader.LoadModule("Mosa.Kernel.x86Test.dll");
 
-			typeSystem.LoadModules(assemblyLoader.Modules);
+			typeSystem.Load(assemblyLoader);
 
-			typeLayout = new TypeLayout(typeSystem, 4, 4);
+			typeLayout = new MosaTypeLayout(typeSystem, 4, 4);
 
 			compilerOptions.EnableSSA = EnableSSA;
 			compilerOptions.EnableSSAOptimizations = EnableSSAOptimizations;
@@ -88,7 +87,7 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 			platform.ResetSimulation(simAdapter);
 
 			// Find the test method to execute
-			RuntimeMethod runtimeMethod = FindMethod(
+			MosaMethod runtimeMethod = FindMethod(
 				ns,
 				type,
 				method,
@@ -97,7 +96,7 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 
 			Debug.Assert(runtimeMethod != null, runtimeMethod.ToString());
 
-			LinkerSymbol symbol = linker.GetSymbol(runtimeMethod.FullName);
+			LinkerSymbol symbol = linker.GetSymbol(runtimeMethod.MethodName);
 			//LinkerSection section = linker.GetSection(symbol.SectionKind);
 
 			ulong address = (ulong)symbol.VirtualAddress;
@@ -112,7 +111,7 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 			if (simAdapter.SimCPU.Monitor.BreakAtTick == simAdapter.SimCPU.Tick)
 				throw new Exception("Aborted. Method did not complete under 100000 ticks. " + simAdapter.SimCPU.Tick.ToString());
 
-			object result = platform.GetResult(simAdapter, runtimeMethod.ReturnType.Type);
+			object result = platform.GetResult(simAdapter, runtimeMethod.ReturnType);
 
 			try
 			{
@@ -128,9 +127,9 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 			}
 		}
 
-		private RuntimeMethod FindMethod(string ns, string type, string method, params object[] parameters)
+		private MosaMethod FindMethod(string ns, string type, string method, params object[] parameters)
 		{
-			foreach (RuntimeType t in typeSystem.GetAllTypes())
+			foreach (var t in typeSystem.AllTypes)
 			{
 				if (t.Name != type)
 					continue;
@@ -139,7 +138,7 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 					if (t.Namespace != ns)
 						continue;
 
-				foreach (RuntimeMethod m in t.Methods)
+				foreach (var m in t.Methods)
 				{
 					if (m.Name == method)
 					{

@@ -10,8 +10,6 @@
  */
 
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Metadata;
-using Mosa.Compiler.Metadata.Signatures;
 using System.Diagnostics;
 
 namespace Mosa.Platform.x86.Stages
@@ -112,10 +110,8 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IX86Visitor.Movsx(Context context)
 		{
-			if (Is32Bit(context.Operand1))
+			if (context.Operand1.IsInt || context.Operand1.IsPointer || context.Operand1.IsObject)
 			{
-				Debug.Assert(Is32Bit(context.Result));
-
 				context.ReplaceInstructionOnly(X86.Mov);
 			}
 		}
@@ -126,7 +122,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IX86Visitor.Movzx(Context context)
 		{
-			if (Is32Bit(context.Operand1))
+			if (context.Operand1.IsInt || context.Operand1.IsPointer || context.Operand1.IsObject)
 			{
 				context.ReplaceInstructionOnly(X86.Mov);
 			}
@@ -150,12 +146,12 @@ namespace Mosa.Platform.x86.Stages
 				context.Operand1 = ecx;
 			}
 
-			if (right.IsConstant && !Is32Bit(left))
+			if (right.IsConstant && (left.IsChar || left.IsShort || left.IsByte))
 			{
-				Operand edx = AllocateVirtualRegister(BuiltInSigType.Int32);
+				Operand edx = AllocateVirtualRegister(typeSystem.BuiltIn.Int32);
 				Context before = context.InsertBefore();
 
-				if (left.IsSigned || left.IsPointer)	// FIXME: left.IsPointer correct?
+				if (left.IsSigned)
 				{
 					before.AppendInstruction(X86.Movsx, edx, left);
 				}
@@ -210,7 +206,7 @@ namespace Mosa.Platform.x86.Stages
 			if (!destinationOperand.IsRegister)
 			{
 				Context before = context.InsertBefore();
-				Operand eax = AllocateVirtualRegister(BuiltInSigType.IntPtr);
+				Operand eax = AllocateVirtualRegister(destinationOperand.Type);
 
 				before.SetInstruction(X86.Mov, eax, destinationOperand);
 				context.Operand1 = eax;
@@ -827,7 +823,7 @@ namespace Mosa.Platform.x86.Stages
 			if (context.Operand2.IsByte)
 				return;
 
-			context.Operand2 = Operand.CreateConstant(BuiltInSigType.Byte, context.Operand2.ConstantUnsignedInteger);
+			context.Operand2 = Operand.CreateConstant(typeSystem.BuiltIn.Byte, context.Operand2.ConstantUnsignedInteger);
 		}
 	}
 }

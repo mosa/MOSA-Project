@@ -9,7 +9,6 @@
 
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.IR;
-using Mosa.Compiler.Metadata.Signatures;
 
 namespace Mosa.Platform.x86.Intrinsic
 {
@@ -27,7 +26,7 @@ namespace Mosa.Platform.x86.Intrinsic
 		/// <param name="typeSystem">The type system.</param>
 		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, BaseMethodCompiler methodCompiler)
 		{
-			context.SetInstruction(X86.Mov, context.Result, Operand.CreateCPURegister(BuiltInSigType.UInt32, GeneralPurposeRegister.EBP));
+			context.SetInstruction(X86.Mov, context.Result, Operand.CreateCPURegister(methodCompiler.TypeSystem.Resolver.BuiltIn.UInt32, GeneralPurposeRegister.EBP));
 		}
 
 		#endregion Methods

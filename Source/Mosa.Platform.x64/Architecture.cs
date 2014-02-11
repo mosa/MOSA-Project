@@ -9,9 +9,8 @@
 
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Metadata;
-using Mosa.Compiler.Metadata.Signatures;
 using System;
+using Mosa.Compiler.MosaTypeSystem;
 
 namespace Mosa.Platform.x64
 {
@@ -36,11 +35,6 @@ namespace Mosa.Platform.x64
 		/// The type of the elf machine.
 		/// </value>
 		public override ushort ElfMachineType { get { return 3; } }
-
-		/// <summary>
-		/// Gets the signature type of the native integer.
-		/// </summary>
-		public override SigType NativeType { get { return BuiltInSigType.Int64; } }
 
 		/// <summary>
 		/// Defines the register set of the target architecture.
@@ -177,36 +171,29 @@ namespace Mosa.Platform.x64
 		/// <summary>
 		/// Gets the type memory requirements.
 		/// </summary>
-		/// <param name="signatureType">The signature type.</param>
+		/// <param name="type">The signature type.</param>
 		/// <param name="size">Receives the memory size of the type.</param>
 		/// <param name="alignment">Receives alignment requirements of the type.</param>
-		public override void GetTypeRequirements(SigType signatureType, out int size, out int alignment)
+		public override void GetTypeRequirements(MosaType type, out int size, out int alignment)
 		{
-			if (signatureType == null)
-				throw new ArgumentNullException("signatureType");
-
-			switch (signatureType.Type)
+			if (type.IsLong || type.IsDouble || type.IsObject || type.IsPointer)
 			{
-				case CilElementType.U8: size = 8; alignment = 4; break;
-				case CilElementType.I8: size = 8; alignment = 4; break;
-				case CilElementType.R8: size = alignment = 8; break;
-
-				case CilElementType.Ptr: size = alignment = 8; break;
-				case CilElementType.I: size = alignment = 8; break;
-				case CilElementType.U: size = alignment = 8; break;
-				case CilElementType.Object: size = alignment = 8; break;
-				case CilElementType.Class: size = alignment = 8; break;
-				case CilElementType.String: size = alignment = 8; break;
-
-				default: size = alignment = 4; break;
+				size = 8;
+				alignment = 8;
 			}
+			else
+			{
+				size = 4;
+				alignment = 4;
+			}
+
 		}
 
 		/// <summary>
 		/// Gets the code emitter.
 		/// </summary>
 		/// <returns></returns>
-		public override ICodeEmitter GetCodeEmitter()
+		public override BaseCodeEmitter GetCodeEmitter()
 		{
 			// TODO
 			return null;
