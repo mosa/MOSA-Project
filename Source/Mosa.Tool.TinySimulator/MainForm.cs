@@ -23,7 +23,7 @@ using WeifenLuo.WinFormsUI.Docking;
 
 namespace Mosa.Tool.TinySimulator
 {
-	public partial class MainForm : Form
+	public partial class MainForm : Form, ICompilerEventListener
 	{
 		private AssembliesView assembliesView = new AssembliesView();
 		private RegisterView registersView = new RegisterView();
@@ -62,6 +62,8 @@ namespace Mosa.Tool.TinySimulator
 
 		private Stopwatch stopwatch = new Stopwatch();
 
+		private DateTime compileStartTime = DateTime.Now;
+
 		public bool Display32 { get; private set; }
 
 		public bool Record
@@ -80,12 +82,26 @@ namespace Mosa.Tool.TinySimulator
 			Filter.ExcludeInternalMethods = false;
 
 			InternalTrace.TraceFilter = Filter;
+			InternalTrace.CompilerEventListener = this;
 
 			MaxHistory = 1000;
 
 			worker = new Thread(ExecuteThread);
 			worker.Name = "SimCPU";
 			worker.Start();
+		}
+
+		void ICompilerEventListener.SubmitTraceEvent(CompilerEvent compilerStage, string info)
+		{
+			if (compilerStage == CompilerEvent.CompilerStageStart || compilerStage == CompilerEvent.CompilerStageEnd)
+			{
+				string status = "Compiling: " + String.Format("{0:0.00}", (DateTime.Now - compileStartTime).TotalSeconds) + " secs: " + compilerStage.ToText() + ": " + info;
+
+				toolStripStatusLabel1.Text = status;
+				toolStripStatusLabel1.GetCurrentParent().Refresh();
+
+				AddOutput(status);
+			}
 		}
 
 		private void MainForm_Load(object sender, EventArgs e)
@@ -170,6 +186,8 @@ namespace Mosa.Tool.TinySimulator
 			Architecture = GetArchitecture(platform);
 			var simAdapter = GetSimAdaptor(platform);
 			Linker = new SimLinker(simAdapter);
+
+			compileStartTime = DateTime.Now;
 
 			SimCompiler.Compile(TypeSystem, TypeLayout, InternalTrace, true, Architecture, simAdapter, Linker);
 			SimCPU = simAdapter.SimCPU;
