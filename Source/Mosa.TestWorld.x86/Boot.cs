@@ -125,7 +125,7 @@ namespace Mosa.TestWorld.x86
 
 		public static void Test()
 		{
-			Mosa.Test.Collection.UInt64Tests.DivU8U8(18446744073709551615, 4294967294);
+			//Mosa.Test.Collection.UInt64Tests.DivU8U8(18446744073709551615, 4294967294);
 		}
 	}
 }
