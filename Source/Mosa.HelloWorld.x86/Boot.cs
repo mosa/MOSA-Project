@@ -19,6 +19,8 @@ namespace Mosa.HelloWorld.x86
 	{
 		public static ConsoleSession Console;
 
+        static int[] test = new int[] { 1, 2, 3 };
+
 		/// <summary>
 		/// Mains this instance.
 		/// </summary>

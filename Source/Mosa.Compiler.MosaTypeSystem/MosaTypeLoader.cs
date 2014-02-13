@@ -1246,6 +1246,10 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 				return size;
 			}
+            else if (field.Type.IsStruct)
+            {
+                return field.Type.Size;
+            }
 
 			return null;
 		}
