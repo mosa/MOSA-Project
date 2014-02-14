@@ -62,6 +62,13 @@ namespace Mosa.Platform.Internal.x86
 			return AllocateArray(methodTable, 2, length);
 		}
 
+		public static void* GetTypeHandle(uint** obj)
+		{
+			// Method table is located at the beginning of object (i.e. *obj )
+			// Type metadata ($dtable) located at the second of the method table (i.e. *(*obj + 1) )
+			return (void*)*(*obj + 1);
+		}
+
 		public static uint IsInstanceOfType(uint methodTable, uint obj)
 		{
 			if (obj == 0)

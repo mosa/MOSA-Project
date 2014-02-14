@@ -44,7 +44,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			foreach (var type in typeSystem.AllTypes)
 			{
-				if (type.IsModule)
+				if (type.IsModule || type.IsBuiltInType)
 					continue;
 
 				if (type.IsBaseGeneric || type.IsOpenGenericType)
