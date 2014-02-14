@@ -119,6 +119,33 @@ namespace Mosa.Compiler.MosaTypeSystem
 			return null;
 		}
 
+		public static MosaMethod GetMethodByNameAndParameters(MosaType type, string name, IList<MosaParameter> parameters)
+		{
+			foreach (var method in type.Methods)
+			{
+				if (method.Name != name)
+					continue;
+
+				if (method.Parameters.Count != parameters.Count)
+					continue;
+
+				bool match = true;
+				for (int i = 0; i < method.Parameters.Count; i++)
+				{
+					if (!method.Parameters[i].Type.Matches(parameters[i].Type))
+					{
+						match = false;
+						break;
+					}
+				}
+
+				if (match)
+					return method;
+			}
+
+			return null;
+		}
+
 		/// <summary>
 		/// Converts the type of to stack.
 		/// </summary>
