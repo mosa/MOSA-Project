@@ -173,8 +173,18 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void CIL.ICILVisitor.Ldtoken(Context context)
-		{
-			ReplaceWithVmCall(context, VmCall.GetHandleForToken);
+		{ 
+			// TODO: remove VmCall.GetHandleForToken?
+
+			if (context.MosaType != null)
+			{
+				Operand source = Operand.CreateManagedSymbolPointer(typeSystem, context.MosaType.FullName + "$dtable");
+				Operand destination = context.Result;
+
+				context.SetInstruction(IRInstruction.Move, destination, source);
+			}
+			else
+				throw new NotImplementCompilerException();
 		}
 
 		/// <summary>
