@@ -164,7 +164,11 @@ namespace System
 			value += startIndex;
 
 			for (int index = 0; index < length; index++)
-				*chars++ = (char)*value++;
+			{
+				*chars = (char)*value;
+				chars++;
+				value++;
+			}
 
 			return result;
 		}
@@ -186,7 +190,11 @@ namespace System
 			char* chars = result.first_char;
 
 			for (int index = 0; index < length; index++)
-				*chars++ = (char)*value++;
+			{
+				*chars = (char)*value;
+				chars++;
+				value++;
+			}
 
 			return result;
 		}

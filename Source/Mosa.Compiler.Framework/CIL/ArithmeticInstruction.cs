@@ -104,7 +104,16 @@ namespace Mosa.Compiler.Framework.CIL
 			}
 			else
 			{
-				resultType = ctx.Operand1.Type.ElementType ?? ctx.Operand2.Type.ElementType;
+				if (ctx.Operand1.Type.IsUnmanagedPointerType)
+				{
+					resultType = ctx.Operand1.Type;
+				}
+				else if (ctx.Operand2.Type.IsUnmanagedPointerType)
+				{
+					resultType = ctx.Operand2.Type;
+				}
+				else
+					throw new InvalidOperationException(@"Invalid operand types passed to " + opcode);
 			}
 
 			ctx.Result = compiler.CreateVirtualRegister(resultType);
