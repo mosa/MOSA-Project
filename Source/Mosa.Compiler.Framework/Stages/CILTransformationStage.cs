@@ -1815,7 +1815,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			string replacementMethod = BuildInternalCallName(method);
 
-			method = TypeSystem.GetMethodByName(method.DeclaringType, replacementMethod);
+			method = TypeSystem.GetMethodByNameAndParameters(method.DeclaringType, replacementMethod, method.Parameters);
 
 			Operand result = context.Result;
 
