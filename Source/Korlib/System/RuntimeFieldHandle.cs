@@ -18,6 +18,6 @@ namespace System
         /// <summary>
         /// An IntPtr that contains the handle to the field represented by the current instance.
         /// </summary>
-        public IntPtr Value;
+        public IntPtr Value { get; private set; }
 	}
 }

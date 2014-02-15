@@ -174,12 +174,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="context">The context.</param>
 		void CIL.ICILVisitor.Ldtoken(Context context)
 		{
-            var thisReference = context.Operand1;
-
-            ReplaceWithVmCall(context, VmCall.AllocateObject);
-
-            context.SetOperand(1, thisReference);
-            context.OperandCount = 2;
+			ReplaceWithVmCall(context, VmCall.GetHandleForToken);
 		}
 
 		/// <summary>
