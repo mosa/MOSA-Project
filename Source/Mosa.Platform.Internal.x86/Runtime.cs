@@ -45,8 +45,10 @@ namespace Mosa.Platform.Internal.x86
 			//   - IntPtr SyncBlock
 			//   - int length
 			//   - ElementType[length] elements
+			//   - Padding
 
 			uint allocationSize = (nativeIntSize * 3) + (uint)(elements * elementSize);
+			allocationSize = (allocationSize + 3) & ~3u;	// Align to 4-bytes boundary
 			void* memory = (void*)AllocateMemory(allocationSize);
 
 			uint* destination = (uint*)memory;

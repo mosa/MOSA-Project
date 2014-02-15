@@ -89,6 +89,11 @@ namespace Mosa.Platform.x86.Instructions
 
 			if (destination.IsMemoryAddress && source.IsRegister)
 			{
+				if (destination.IsPointer && destination.Type.ElementType != null)
+				{
+					if (destination.Type.ElementType.IsByte) return RM_R_U8;
+					if (destination.Type.ElementType.IsChar || destination.Type.ElementType.IsShort) return M_R_16;
+				}
 				if (destination.IsByte) return RM_R_U8;
 				if (destination.IsChar || destination.IsShort) return M_R_16;
 				return M_R;

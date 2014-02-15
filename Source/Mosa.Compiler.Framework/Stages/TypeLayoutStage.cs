@@ -27,7 +27,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			foreach (var type in typeSystem.AllTypes)
 			{
-				if (type.IsModule || type.IsBuiltInType)
+				if (type.IsModule || type.Assembly.Name == "@Internal")
 					continue;
 
 				if (type.IsBaseGeneric || type.IsOpenGenericType)
