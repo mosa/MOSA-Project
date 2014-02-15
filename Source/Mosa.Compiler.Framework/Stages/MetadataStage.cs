@@ -44,7 +44,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			foreach (var type in typeSystem.AllTypes)
 			{
-				if (type.IsModule)
+				if (type.IsModule || type.Assembly.Name == "@Internal")
 					continue;
 
 				if (type.IsBaseGeneric || type.IsOpenGenericType)
@@ -96,6 +96,57 @@ namespace Mosa.Compiler.Framework.Stages
 
 					// 6. Flag: IsInterface
 					writer.WriteByte((byte)(type.IsInterface ? 1 : 0));
+				}
+			}
+
+			CreateFieldDefinitions(type);
+		}
+
+		private void CreateFieldDefinitions(MosaType type)
+		{
+			foreach (MosaField field in type.Fields)
+			{
+				string fieldNameSymbol = field.FullName + @"$name";
+
+				// Emit field name
+				using (Stream stream = linker.Allocate(fieldNameSymbol, SectionKind.ROData, 0, typeLayout.NativePointerAlignment))
+				{
+					using (EndianAwareBinaryWriter writer = new EndianAwareBinaryWriter(stream, architecture.Endianness))
+					{
+						EmitStringWithLength(writer, field.Name);
+					}
+				}
+
+
+				string fieldDescSymbol = field.FullName + @"$desc";
+
+				// Emit field descriptor
+				using (Stream stream = linker.Allocate(fieldDescSymbol, SectionKind.ROData, 0, typeLayout.NativePointerAlignment))
+				{
+					using (EndianAwareBinaryWriter writer = new EndianAwareBinaryWriter(stream, architecture.Endianness))
+					{
+						// 1. Offset / Address
+						if (field.IsStaticField && !field.IsLiteralField)
+						{
+							linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuiltInPatch.I4, fieldDescSymbol, (int)writer.Position, 0, field.FullName, 0);
+						}
+						else
+						{
+							writer.Write(field.Offset);
+							writer.Position -= 4;
+						}
+						writer.Position += typeLayout.NativePointerSize;
+
+						// 2. Name
+						linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuiltInPatch.I4, fieldDescSymbol, (int)writer.Position, 0, fieldNameSymbol, 0);
+						writer.Position += typeLayout.NativePointerSize;
+
+						// 3. Size
+						writer.Write((uint)typeLayout.GetTypeSize(field.Type));
+
+						// 4. Metadata Token
+						writer.Write((uint)0); //FIXME!
+					}
 				}
 			}
 		}

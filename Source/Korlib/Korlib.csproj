@@ -62,6 +62,7 @@
     <Compile Include="System.Reflection\Module.cs" />
     <Compile Include="System.Runtime.CompilerServices\CompilationRelaxationsAttribute.cs" />
     <Compile Include="System.Runtime.CompilerServices\RuntimeCompatibilityAttribute.cs" />
+    <Compile Include="System.Runtime.CompilerServices\RuntimeHelpers.cs" />
     <Compile Include="System.Runtime.InteropServices\CallingConvention.cs" />
     <Compile Include="System.Runtime.InteropServices\LayoutKind.cs" />
     <Compile Include="System.Runtime.InteropServices\StructLayoutAttribute.cs" />

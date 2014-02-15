@@ -84,7 +84,7 @@ namespace System
 		/// </returns>
 		public Type GetType()
 		{
-			return new Type();
+			return Type.GetTypeFromHandle(Type.GetTypeHandle(this));
 		}
 
 		/// <summary>

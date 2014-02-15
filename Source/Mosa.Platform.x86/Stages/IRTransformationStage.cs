@@ -590,8 +590,9 @@ namespace Mosa.Platform.x86.Stages
 			Operand baseOperand = context.Operand1;
 			Operand offsetOperand = context.Operand2;
 			Operand value = context.Operand3;
+			MosaType storeType = context.MosaType;
 
-			if (value.IsDouble && baseOperand.Type.ElementType.IsSingle)
+			if (value.IsDouble && (storeType ?? value.Type).IsSingle)
 			{
 				Operand xmm1 = AllocateVirtualRegister(typeSystem.BuiltIn.Single);
 				context.InsertBefore().AppendInstruction(X86.Cvtsd2ss, xmm1, value);
@@ -599,21 +600,31 @@ namespace Mosa.Platform.x86.Stages
 			}
 			else
 			{
-				Operand v2 = AllocateVirtualRegister(value.Type);
+				Operand v2 = AllocateVirtualRegister(storeType ?? value.Type);
 				context.InsertBefore().AppendInstruction(X86.Mov, v2, value); // FIXME
 				value = v2;
 			}
 
+			MosaType type = baseOperand.Type;
+			if (storeType != null)
+			{
+				if (baseOperand.Type.IsUnmanagedPointerType)
+					type = typeSystem.Resolver.GetUnmanagedPointerType(storeType);
+
+				else if (baseOperand.Type.IsManagedPointerType)
+					type = typeSystem.Resolver.GetManagedPointerType(storeType);
+			}
+
 			if (offsetOperand.IsConstant)
 			{
-				Operand mem = Operand.CreateMemoryAddress(baseOperand.Type, baseOperand, offsetOperand.ConstantSignedInteger);
+				Operand mem = Operand.CreateMemoryAddress(type, baseOperand, offsetOperand.ConstantSignedInteger);
 
 				context.SetInstruction(GetMove(mem, value), mem, value);
 			}
 			else
 			{
-				Operand v1 = AllocateVirtualRegister(baseOperand.Type);
-				Operand mem = Operand.CreateMemoryAddress(baseOperand.Type, v1, 0);
+				Operand v1 = AllocateVirtualRegister(type);
+				Operand mem = Operand.CreateMemoryAddress(type, v1, 0);
 
 				context.SetInstruction(X86.Mov, v1, baseOperand);
 				context.AppendInstruction(X86.Add, v1, v1, offsetOperand);

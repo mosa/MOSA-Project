@@ -243,7 +243,7 @@ namespace Mosa.Platform.x86
 			}
 			else
 			{
-				size = 4;
+				size = type.FixedSize ?? 4;
 				alignment = 4;
 			}
 		}

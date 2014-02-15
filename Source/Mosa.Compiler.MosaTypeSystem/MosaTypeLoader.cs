@@ -520,6 +520,37 @@ namespace Mosa.Compiler.MosaTypeSystem
 			}
 		}
 
+		private void CheckBuiltInType(MosaType type)
+		{
+			if (assembly.Name != "mscorlib" || type.Namespace != "System")
+				return;
+
+			switch (type.Name)
+			{
+				case "Void": type.FixedSize = 0; type.IsVoid = true; break;
+				case "Boolean": type.FixedSize = 1; type.IsBoolean = true; break;
+				case "Char": type.FixedSize = 2; type.IsChar = true; break;
+				case "SByte": type.FixedSize = 1; type.IsSignedByte = true; break;
+				case "Byte": type.FixedSize = 1; type.IsUnsignedByte = true; break;
+				case "Int16": type.FixedSize = 2; type.IsSignedShort = true; break;
+				case "UInt16": type.FixedSize = 2; type.IsUnsignedShort = true; break;
+				case "Int32": type.FixedSize = 4; type.IsSignedInt = true; break;
+				case "UInt32": type.FixedSize = 4; type.IsUnsignedInt = true; break;
+				case "Int64": type.FixedSize = 8; type.IsSignedLong = true; break;
+				case "UInt64": type.FixedSize = 8; type.IsUnsignedLong = true; break;
+				case "Single": type.FixedSize = 4; type.IsSingle = true; break;
+				case "Double": type.FixedSize = 8; type.IsDouble = true; break;
+				case "String": type.IsString = true; break;
+				case "Object": type.IsObject = true; break;
+				case "IntPtr": type.IsNativeSignedInteger = true; break;
+				case "UIntPtr": type.IsNativeUnsignedInteger = true; break;
+				case "TypedReference": type.IsManagedPointerType = true; break;
+				default:
+					return;
+			}
+			type.IsBuiltInType = true;
+		}
+
 		private void LoadType(Token token)
 		{
 			if (resolver.CheckTypeExists(assembly, token))
@@ -557,6 +588,8 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 			type.SetFlags();
 			type.SetOpenGeneric();
+
+			CheckBuiltInType(type);
 
 			resolver.AddType(assembly, token, type);
 		}
@@ -1224,11 +1257,16 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		private int? DetermineFieldSize(MosaField field)
 		{
+			if (field.Type.Size != 0)
+			{
+				return field.Type.Size;
+			}
+
 			if (field.Type.IsBuiltInType)
 			{
 				return field.Type.FixedSize;
 			}
-			else if (field.Type.IsValueType)
+			else if (field.Type.IsStruct)
 			{
 				int size = 0;
 

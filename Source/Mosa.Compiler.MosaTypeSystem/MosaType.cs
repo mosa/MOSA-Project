@@ -139,7 +139,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public bool IsNativeInteger { get { return IsNativeSignedInteger || IsNativeUnsignedInteger; } }
 
-		internal int? FixedSize { get; set; }
+		public int? FixedSize { get; set; }
 
 		public bool IsOpenGenericType { get; internal set; }
 
