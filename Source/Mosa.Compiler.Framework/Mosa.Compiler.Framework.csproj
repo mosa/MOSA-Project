@@ -79,7 +79,6 @@
   <ItemGroup>
     <Compile Include="BaseCallingConventionExtended.cs" />
     <Compile Include="DelegatePatcher.cs" />
-    <Compile Include="Intrinsics\InternalInitializeArray.cs" />
     <Compile Include="ShiftType.cs" />
     <Compile Include="ConditionCodeExtension.cs" />
     <Compile Include="BasicBlocks.cs" />

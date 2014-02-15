@@ -43,18 +43,8 @@ namespace Mosa.Compiler.Framework.CIL
 
 			var token = decoder.DecodeTokenType();
 
-            if (token.Table == Metadata.TableType.Field)
-            {
-                var field = decoder.TypeSystem.Resolver.GetFieldByToken(decoder.Method.CodeAssembly, token, decoder.Method.DeclaringType.GenericArguments);
-                decoder.Compiler.Scheduler.TrackFieldReferenced(field);
-                ctx.MosaField = field;
-                ctx.Result = decoder.Compiler.CreateVirtualRegister(decoder.TypeSystem.BuiltIn.TypedByRef);
-            }
-            else
-            {
-			    //TODO
-			    throw new NotImplementedException();
-            }
+			//TODO
+			throw new NotImplementedException();
 		}
 
 		/// <summary>

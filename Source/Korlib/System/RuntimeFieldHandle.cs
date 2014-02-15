@@ -10,14 +10,9 @@
 namespace System
 {
 	/// <summary>
-    /// Represents a field using an internal metadata token.
+	///
 	/// </summary>
-    [SerializableAttribute]
 	public struct RuntimeFieldHandle
 	{
-        /// <summary>
-        /// An IntPtr that contains the handle to the field represented by the current instance.
-        /// </summary>
-        public IntPtr Value { get; private set; }
 	}
 }

@@ -57,20 +57,6 @@ namespace Mosa.Platform.Internal.x86
 			return memory;
 		}
 
-        public static void* InitializeArray(uint array, uint fldHandle)
-        {
-            uint arrayLength = ((uint*)array)[2];
-            byte* arrayBytes = (byte*)array;
-            byte* fldHandleBytes = (byte*)fldHandle;
-
-            for (uint i = 0; i < arrayLength; i++)
-            {
-                arrayBytes[i + (nativeIntSize * 3)] = fldHandleBytes[i];
-            }
-
-            return (void*)array;
-        }
-
 		public static void* AllocateString(void* methodTable, uint length)
 		{
 			return AllocateArray(methodTable, 2, length);
