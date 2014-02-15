@@ -8,6 +8,7 @@
  */
 
 using System;
+using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework.CIL
 {
@@ -46,9 +47,9 @@ namespace Mosa.Compiler.Framework.CIL
             if (token.Table == Metadata.TableType.Field)
             {
                 var field = decoder.TypeSystem.Resolver.GetFieldByToken(decoder.Method.CodeAssembly, token, decoder.Method.DeclaringType.GenericArguments);
-                decoder.Compiler.Scheduler.TrackFieldReferenced(field);
-                ctx.MosaField = field;
-                ctx.Result = decoder.Compiler.CreateVirtualRegister(decoder.TypeSystem.BuiltIn.TypedByRef);
+
+                ctx.Operand1 = decoder.Compiler.CreateVirtualRegister(decoder.TypeSystem.BuiltIn.TypedByRef);
+                ctx.Result = LoadInstruction.CreateResultOperand(decoder, field.Type);
             }
             else
             {

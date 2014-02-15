@@ -313,5 +313,10 @@ namespace Mosa.Platform.Internal.x86
 
 			return sizeOf;
 		}
+
+        public static uint GetHandleForToken(uint token)
+        {
+            return token;
+        }
 	}
 }
