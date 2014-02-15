@@ -177,6 +177,9 @@ namespace Mosa.Compiler.Framework.Platform
 					size = 4; alignment = 4;
 				}
 
+				if (size < alignment)
+					size = alignment;
+
 				space -= size;
 				Push(typeSystem, context, operand, space, size, scratch);
 			}

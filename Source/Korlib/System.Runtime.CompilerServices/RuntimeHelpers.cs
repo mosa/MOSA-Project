@@ -3,15 +3,15 @@
  *
  * Licensed under the terms of the New BSD License.
  *
- * Authors:
- *  Stefan Andres Charsley (charsleysa) <charsleysa@gmail.com>
  */
+
+using System.Runtime.InteropServices;
 
 namespace System.Runtime.CompilerServices
 {
-    public static class RuntimeHelpers
-    {
-        [MethodImplAttribute(MethodImplOptions.InternalCall)]
-        public extern static void InitializeArray(Array array, RuntimeFieldHandle fldHandle);
-    }
+	public static class RuntimeHelpers
+	{
+		[DllImport("Mosa.Compiler.Framework.Intrinsics.InternalInitializeArray, Mosa.Compiler.Framework")]
+		public static extern void InitializeArray(Array array, RuntimeFieldHandle fldHandle);
+	}
 }

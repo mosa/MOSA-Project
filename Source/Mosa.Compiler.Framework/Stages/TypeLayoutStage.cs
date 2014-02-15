@@ -27,7 +27,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			foreach (var type in typeSystem.AllTypes)
 			{
-				if (type.IsModule)
+				if (type.IsModule || type.Assembly.Name == "@Internal")
 					continue;
 
 				if (type.IsBaseGeneric || type.IsOpenGenericType)
@@ -121,10 +121,9 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			// The method table is offset by a four pointers:
 			// 1. interface dispatch table pointer
-			// 2. type pointer - contains the type information pointer, used to realize object.GetType().
+			// 2. type metadata pointer - contains the type metadata pointer, used to realize object.GetType().
 			// 3. interface implementation bitmap
 			// 4. parent type (if any)
-			// 5. type metadata
 			var headerlinks = new List<string>();
 
 			// 1. interface dispatch table pointer
@@ -133,8 +132,11 @@ namespace Mosa.Compiler.Framework.Stages
 			else
 				headerlinks.Add(type.FullName + @"$itable");
 
-			// 2. type pointer - contains the type information pointer, used to realize object.GetType().
-			headerlinks.Add(null); // TODO: GetType()
+			// 2. type metadata pointer - contains the type metadata pointer, used to realize object.GetType().
+			if (!type.IsModule)
+				headerlinks.Add(type.FullName + @"$dtable");
+			else
+				headerlinks.Add(null);
 
 			// 3. interface bitmap
 			if (type.Interfaces.Count == 0)
@@ -147,12 +149,6 @@ namespace Mosa.Compiler.Framework.Stages
 				headerlinks.Add(null);
 			else
 				headerlinks.Add(type.BaseType + @"$mtable");
-
-			// 5. Type Metadata
-			//if (!type.IsModule)
-			//	headerlinks.Add(type.FullName + @"$dtable");
-			//else
-			headerlinks.Add(null);
 
 			var methodTable = typeLayout.GetMethodTable(type);
 			AskLinkerToCreateMethodTable(type.FullName + @"$mtable", methodTable, headerlinks);

@@ -1,4 +1,4 @@
-﻿/*
+/*
  * (c) 2008 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
@@ -84,7 +84,7 @@ namespace System
 		/// </returns>
 		public Type GetType()
 		{
-            throw new NotImplementedException();
+			return Type.GetTypeFromHandle(Type.GetTypeHandle(this));
 		}
 
 		/// <summary>

@@ -8,6 +8,7 @@
  */
 
 using System;
+using Mosa.Compiler.Metadata;
 
 namespace Mosa.Compiler.Framework.CIL
 {
@@ -41,10 +42,68 @@ namespace Mosa.Compiler.Framework.CIL
 			// Decode base classes first
 			base.Decode(ctx, decoder);
 
+			// See Partition III, 4.17 (ldtoken)
+			// ldtoken can produce three kinds of token depending on the operand.
 			var token = decoder.DecodeTokenType();
 
-			//TODO
-			throw new NotImplementedException();
+			const int MethodToken = 1;
+			const int FieldToken = 2;
+			const int TypeToken = 3;
+			int tokenType = 0;
+
+			var assembly = decoder.Method.CodeAssembly;
+			switch (token.Table)
+			{
+				case TableType.MethodDef:
+				case TableType.MethodSpec:
+					tokenType = MethodToken;
+					break;
+
+				case TableType.TypeDef:
+				case TableType.TypeRef:
+				case TableType.TypeSpec:
+					tokenType = TypeToken;
+					break;
+
+				case TableType.Field:
+					tokenType = FieldToken;
+					break;
+
+				case TableType.MemberRef:
+					// MemberRef can only be field or method.
+					if (decoder.TypeSystem.Resolver.CheckFieldExists(assembly, token))
+					{
+						tokenType = FieldToken;
+					}
+					else
+					{
+						tokenType = MethodToken;
+					}
+					break;
+			}
+
+			// Set the result according to token type
+			switch (tokenType)
+			{
+				case TypeToken:
+					var type = decoder.TypeSystem.Resolver.GetTypeByToken(assembly, token, decoder.Method);
+					ctx.MosaType = type;
+					ctx.Result = decoder.Compiler.CreateVirtualRegister(decoder.TypeSystem.GetTypeByName("System", "RuntimeTypeHandle"));
+					break;
+
+				case MethodToken:
+					var method = decoder.TypeSystem.Resolver.GetMethodByToken(assembly, token, decoder.Method.DeclaringType.GenericArguments);
+					ctx.InvokeMethod = method;      // Since there isn't way to store as 'referenced method' rather than 'invoked method', this will do.
+					ctx.Result = decoder.Compiler.CreateVirtualRegister(decoder.TypeSystem.GetTypeByName("System", "RuntimeMethodHandle"));
+					break;
+
+				case FieldToken:
+					var field = decoder.TypeSystem.Resolver.GetFieldByToken(assembly, token, decoder.Method.DeclaringType.GenericArguments);
+					ctx.MosaField = field;
+					ctx.Result = decoder.Compiler.CreateVirtualRegister(decoder.TypeSystem.GetTypeByName("System", "RuntimeFieldHandle"));
+					break;
+			}
+			ctx.OperandCount = 0;
 		}
 
 		/// <summary>

@@ -1372,7 +1372,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IIRVisitor.Store(Context context)
 		{
-			if (context.Operand3.Is64BitInteger)
+			if ((context.MosaType ?? context.Operand3.Type).IsLong)
 			{
 				ExpandStore(context);
 			}

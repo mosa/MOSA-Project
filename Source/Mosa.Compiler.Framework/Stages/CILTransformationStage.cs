@@ -173,8 +173,24 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void CIL.ICILVisitor.Ldtoken(Context context)
-		{
-			ReplaceWithVmCall(context, VmCall.GetHandleForToken);
+		{ 
+			// TODO: remove VmCall.GetHandleForToken?
+
+			Operand source;
+			if (context.MosaType != null)
+			{
+				source = Operand.CreateManagedSymbolPointer(typeSystem, context.MosaType.FullName + "$dtable");
+			}
+			else if (context.MosaField != null)
+			{
+				source = Operand.CreateManagedSymbolPointer(typeSystem, context.MosaField.FullName + "$desc");
+			}
+			else
+				throw new NotImplementCompilerException();
+
+
+			Operand destination = context.Result;
+			context.SetInstruction(IRInstruction.Move, destination, source);
 		}
 
 		/// <summary>
@@ -202,7 +218,9 @@ namespace Mosa.Compiler.Framework.Stages
 		void CIL.ICILVisitor.Stobj(Context context)
 		{
 			// This is actually stind.* and stobj - the opcodes have the same meanings
+			MosaType type = context.MosaType;
 			context.SetInstruction(IRInstruction.Store, null, context.Operand1, Operand.CreateConstantSignedInt(methodCompiler.TypeSystem, 0), context.Operand2);
+			context.MosaType = type;
 		}
 
 		/// <summary>
@@ -805,8 +823,10 @@ namespace Mosa.Compiler.Framework.Stages
 			int offset = typeLayout.GetFieldOffset(context.MosaField);
 			Operand offsetOperand = Operand.CreateConstantSignedInt(typeSystem, offset);
 
+			MosaType fieldType = context.MosaField.Type;
 			context.SetInstruction(IRInstruction.Move, temp, valueOperand);
 			context.AppendInstruction(IRInstruction.Store, null, objectOperand, offsetOperand, temp);
+			context.MosaType = fieldType;
 		}
 
 		/// <summary>
@@ -1012,6 +1032,7 @@ namespace Mosa.Compiler.Framework.Stages
 			Operand arrayAddress = LoadArrayBaseAddress(context, arrayType, arrayOperand);
 			Operand elementOffset = CalculateArrayElementOffset(context, arrayType, arrayIndexOperand);
 			context.AppendInstruction(IRInstruction.Store, null, arrayAddress, elementOffset, value);
+			context.MosaType = arrayType.ElementType;
 		}
 
 		/// <summary>
