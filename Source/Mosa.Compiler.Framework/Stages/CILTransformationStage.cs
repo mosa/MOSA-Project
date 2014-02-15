@@ -176,15 +176,21 @@ namespace Mosa.Compiler.Framework.Stages
 		{ 
 			// TODO: remove VmCall.GetHandleForToken?
 
+			Operand source;
 			if (context.MosaType != null)
 			{
-				Operand source = Operand.CreateManagedSymbolPointer(typeSystem, context.MosaType.FullName + "$dtable");
-				Operand destination = context.Result;
-
-				context.SetInstruction(IRInstruction.Move, destination, source);
+				source = Operand.CreateManagedSymbolPointer(typeSystem, context.MosaType.FullName + "$dtable");
+			}
+			else if (context.MosaField != null)
+			{
+				source = Operand.CreateManagedSymbolPointer(typeSystem, context.MosaField.FullName + "$desc");
 			}
 			else
 				throw new NotImplementCompilerException();
+
+
+			Operand destination = context.Result;
+			context.SetInstruction(IRInstruction.Move, destination, source);
 		}
 
 		/// <summary>

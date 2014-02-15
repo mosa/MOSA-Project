@@ -75,7 +75,9 @@ namespace Mosa.Platform.x86.Instructions
 
 			if (destination.IsRegister && source.IsRegister)
 			{
-				if (source.IsByte || destination.IsByte) return R_M_U8;
+				// HACK: there is no opcode for "mov reg, esi(I1)/edi(U1)" (i.e. no way to access lower byte of esi/edi without extra instruction)
+				if ((source.IsByte || destination.IsByte) &&
+					!(source.Register == GeneralPurposeRegister.ESI || source.Register == GeneralPurposeRegister.EDI)) return R_M_U8;
 				if (source.IsChar || destination.IsChar || source.IsShort || destination.IsShort) return R_R_16;
 				return R_RM;
 			}

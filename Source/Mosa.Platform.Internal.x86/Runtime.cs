@@ -71,6 +71,21 @@ namespace Mosa.Platform.Internal.x86
 			return (void*)*(*obj + 1);
 		}
 
+		public static void InitializeArray(uint* array, uint* fieldHandle)
+		{
+			byte* arrayElements = (byte*)(array + 3);
+			// See symbol $desc for format of field handle
+			byte* fieldData = (byte*)*fieldHandle;
+			uint dataLength = *(fieldHandle + 2);
+			while (dataLength > 0)
+			{
+				*arrayElements = *fieldData;
+				arrayElements++;
+				fieldData++;
+				dataLength--;
+			}
+		}
+
 		public static uint IsInstanceOfType(uint methodTable, uint obj)
 		{
 			if (obj == 0)
