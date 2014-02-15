@@ -45,8 +45,10 @@ namespace Mosa.Platform.Internal.x86
 			//   - IntPtr SyncBlock
 			//   - int length
 			//   - ElementType[length] elements
+			//   - Padding
 
 			uint allocationSize = (nativeIntSize * 3) + (uint)(elements * elementSize);
+			allocationSize = (allocationSize + 3) & ~3u;	// Align to 4-bytes boundary
 			void* memory = (void*)AllocateMemory(allocationSize);
 
 			uint* destination = (uint*)memory;
@@ -60,6 +62,28 @@ namespace Mosa.Platform.Internal.x86
 		public static void* AllocateString(void* methodTable, uint length)
 		{
 			return AllocateArray(methodTable, 2, length);
+		}
+
+		public static void* GetTypeHandle(uint** obj)
+		{
+			// Method table is located at the beginning of object (i.e. *obj )
+			// Type metadata ($dtable) located at the second of the method table (i.e. *(*obj + 1) )
+			return (void*)*(*obj + 1);
+		}
+
+		public static void InitializeArray(uint* array, uint* fieldHandle)
+		{
+			byte* arrayElements = (byte*)(array + 3);
+			// See symbol $desc for format of field handle
+			byte* fieldData = (byte*)*fieldHandle;
+			uint dataLength = *(fieldHandle + 2);
+			while (dataLength > 0)
+			{
+				*arrayElements = *fieldData;
+				arrayElements++;
+				fieldData++;
+				dataLength--;
+			}
 		}
 
 		public static uint IsInstanceOfType(uint methodTable, uint obj)

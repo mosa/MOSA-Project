@@ -69,7 +69,7 @@ namespace Mosa.Compiler.Framework.CIL
 				? type = decoder.TypeSystem.Resolver.GetTypeByToken(decoder.Method.CodeAssembly, decoder.DecodeTokenType(), decoder.Method)
 				: type = decoder.TypeSystem.Resolver.GetTypeByElementType(elementType);
 
-				ctx.MosaType = type;
+			ctx.MosaType = type;
 
 			// FIXME: Check the value/destinations
 		}

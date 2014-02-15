@@ -383,6 +383,8 @@ namespace Mosa.Compiler.Framework
 				// to the field. We just assign this offset.
 				Debug.Assert(fieldSizes[field] != 0, @"Non-static field doesn't have layout!");
 			}
+
+			typeSizes.Add(type, type.Size);
 		}
 
 		#endregion Internal - Layout
@@ -541,7 +543,8 @@ namespace Mosa.Compiler.Framework
 				return nativePointerSize;
 			else if (type.IsNativeInteger)
 				return nativePointerSize;
-			return 4;
+			else
+				return type.Size != 0 ? type.Size : 4;
 		}
 
 		/// <summary>

@@ -54,6 +54,9 @@ namespace Mosa.Compiler.Framework
 			// Special treatment for some stack types
 			// FIXME: Handle the size and alignment requirements of value types
 			architecture.GetTypeRequirements(stackOperand.Type, out size, out alignment);
+
+			if (size < alignment)
+				size = alignment;
 		}
 
 		#endregion
@@ -109,6 +112,9 @@ namespace Mosa.Compiler.Framework
 					size = 4;
 					alignment = 4;
 				}
+
+				if (size < alignment)
+					size = alignment;
 
 				result += size;
 			}
