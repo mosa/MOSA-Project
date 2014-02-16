@@ -80,6 +80,11 @@ namespace Mosa.Platform.x86.Stages
 
 				epilogueContext.GotoNext();
 
+				while (epilogueContext.IsEmpty)
+				{
+					epilogueContext.GotoNext();
+				}
+
 				Debug.Assert(epilogueContext.Instruction is Epilogue);
 
 				AddEpilogueInstructions(epilogueContext);
