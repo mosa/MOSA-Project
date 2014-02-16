@@ -17,6 +17,8 @@ namespace Mosa.TinyCPUSimulator.Adaptor
 	/// </summary>
 	public sealed class SimLinkerSection : ExtendedLinkerSection
 	{
+		public readonly byte[] Memory;
+
 		#region Construction
 
 		/// <summary>
@@ -26,18 +28,14 @@ namespace Mosa.TinyCPUSimulator.Adaptor
 		/// <param name="name">The name.</param>
 		/// <param name="address">The address.</param>
 		/// <param name="size">The size.</param>
-		/// <param name="simAdapter">The sim adapter.</param>
-		public SimLinkerSection(SectionKind kind, string name, uint address, uint size, ISimAdapter simAdapter) :
+		public SimLinkerSection(SectionKind kind, string name, uint address, uint size) :
 			base(kind, name, 0)
 		{
-			byte[] ram = new byte[size];
-
-			RAMBank rambank = new RAMBank(ram, address, size, 1);
-
-			simAdapter.SimCPU.AddMemory(rambank);
+			Memory = new byte[size];
 
 			VirtualAddress = address;
-			stream = new MemoryStream(ram, true);
+
+			stream = new MemoryStream(Memory, true);
 		}
 
 		#endregion Construction

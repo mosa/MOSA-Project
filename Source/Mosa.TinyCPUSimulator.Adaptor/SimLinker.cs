@@ -31,10 +31,10 @@ namespace Mosa.TinyCPUSimulator.Adaptor
 		{
 			this.SimAdapter = simAdapter;
 
-			AddSection(new SimLinkerSection(SectionKind.BSS, "BSS", 0x400000, 0x200000, simAdapter));
-			AddSection(new SimLinkerSection(SectionKind.Data, "Data", 0x600000, 0x200000, simAdapter));
-			AddSection(new SimLinkerSection(SectionKind.ROData, "ReadOnlyData", 0x800000, 0x200000, simAdapter));
-			AddSection(new SimLinkerSection(SectionKind.Text, "Text", 0xA00000, 0x200000, simAdapter));
+			AddSection(new SimLinkerSection(SectionKind.BSS, "BSS", 0x400000, 0x200000));
+			AddSection(new SimLinkerSection(SectionKind.Data, "Data", 0x600000, 0x200000));
+			AddSection(new SimLinkerSection(SectionKind.ROData, "ReadOnlyData", 0x800000, 0x200000));
+			AddSection(new SimLinkerSection(SectionKind.Text, "Text", 0xA00000, 0x200000));
 
 			LoadSectionAlignment = 1;
 			SectionAlignment = 1;
@@ -48,6 +48,18 @@ namespace Mosa.TinyCPUSimulator.Adaptor
 			foreach (var symbol in Symbols)
 			{
 				SimAdapter.SimCPU.SetSymbol(symbol.Name, (ulong)symbol.VirtualAddress, (ulong)symbol.Length);
+			}
+
+			foreach (var section in Sections)
+			{
+				ulong address = (ulong)section.VirtualAddress;
+
+				var ram = (section as SimLinkerSection).Memory;
+
+				foreach (byte b in ram)
+				{					
+					SimAdapter.SimCPU.Write8(address++, b);					
+				}
 			}
 		}
 

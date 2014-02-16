@@ -169,7 +169,6 @@ namespace Mosa.TinyCPUSimulator.x86.Emulate
 
 		public override void Initialize()
 		{
-			simCPU.AddMemory(baseAddress, StandardMemorySize, 2);
 		}
 
 		public override void Reset()

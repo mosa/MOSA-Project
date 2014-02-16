@@ -14,7 +14,6 @@ namespace Mosa.TinyCPUSimulator
 {
 	public class SimCPU
 	{
-		public List<RAMBank> RAMBanks { get; private set; }
 
 		public Dictionary<ulong, SimInstruction> InstructionCache { get; private set; }
 
@@ -44,9 +43,16 @@ namespace Mosa.TinyCPUSimulator
 
 		public SimCPUException LastException { get; set; }
 
+		public ulong TotalMemory { get; set; }
+
+		public byte[][] MemoryBlocks { get; private set; }
+
+		private static ulong BlockSize = 1024 * 1024; // 1 MB
+		private static ulong MaxMemory = 1024L * 1024L * 1024L * 4L; // 4 GB
+
 		public SimCPU()
 		{
-			RAMBanks = new List<RAMBank>();
+			MemoryBlocks = new byte[MaxMemory / BlockSize][];
 			InstructionCache = new Dictionary<ulong, SimInstruction>();
 			SimDevices = new List<BaseSimDevice>();
 			PortDevices = new BaseSimDevice[65536];
@@ -56,6 +62,8 @@ namespace Mosa.TinyCPUSimulator
 
 			Tick = 0;
 			IsLittleEndian = true;
+
+			TotalMemory = 1024L * 1024L * 64; // 64 MB
 		}
 
 		public virtual void Reset()
@@ -68,35 +76,40 @@ namespace Mosa.TinyCPUSimulator
 			}
 		}
 
-		private RAMBank Find(ulong address)
-		{
-			foreach (var r in RAMBanks)
-				if (r.Contains(address))
-					return r;
-
-			throw new InvalidMemoryAccess(address);
-		}
-
 		private byte InternalRead8(ulong address)
 		{
-			RAMBank ram = Find(address);
+			if (address > TotalMemory)
+				throw new InvalidMemoryAccess(address);
 
-			if (ram != null)
-				return ram.Read8(address);
+			ulong index = address / BlockSize;
 
-			return 0;
+			byte[] block = MemoryBlocks[index];
+
+			if (block == null)
+				return 0;
+
+			return block[address % BlockSize];
 		}
 
 		private void InternalWrite8(ulong address, byte value)
 		{
-			RAMBank ram = Find(address);
+			if (address > TotalMemory)
+				throw new InvalidMemoryAccess(address);
 
-			//MemoryDelta.Add(address, new KeyValuePair<byte, byte>(ram.Read8(address), value));
+			ulong index = address / BlockSize;
+			byte[] block = MemoryBlocks[index];
 
-			if (ram != null)
-				ram.Write8(address, value);
+			if (block == null)
+			{
+				if (value == 0)
+					return;
 
-			return;
+				block = new byte[BlockSize];
+
+				MemoryBlocks[index] = block;
+			}
+
+			block[address % BlockSize] = value;
 		}
 
 		protected virtual ulong TranslateToPhysical(ulong address)
@@ -110,16 +123,6 @@ namespace Mosa.TinyCPUSimulator
 			{
 				device.MemoryWrite(address, size);
 			}
-		}
-
-		public void AddMemory(ulong address, ulong size, uint type)
-		{
-			RAMBanks.Add(new RAMBank(address, size, type));
-		}
-
-		public void AddMemory(RAMBank bank)
-		{
-			RAMBanks.Add(bank);
 		}
 
 		public void DirectWrite8(ulong address, byte value)
