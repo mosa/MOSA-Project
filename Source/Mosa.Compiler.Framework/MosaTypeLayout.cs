@@ -137,7 +137,8 @@ namespace Mosa.Compiler.Framework
 			ResolveType(type);
 
 			var size = 0;
-			typeSizes.TryGetValue(type, out size);
+			if (!typeSizes.TryGetValue(type, out size))
+				size = type.FixedSize ?? type.Size;
 
 			return size;
 		}

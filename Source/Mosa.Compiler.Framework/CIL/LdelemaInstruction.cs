@@ -44,7 +44,7 @@ namespace Mosa.Compiler.Framework.CIL
 
 			var type = decoder.TypeSystem.Resolver.GetTypeByToken(decoder.Method.CodeAssembly, decoder.DecodeTokenType(), decoder.Method);
 
-			ctx.Result = decoder.Compiler.CreateVirtualRegister(type);
+			ctx.Result = decoder.Compiler.CreateVirtualRegister(decoder.TypeSystem.Resolver.GetManagedPointerType(type));
 		}
 
 		/// <summary>

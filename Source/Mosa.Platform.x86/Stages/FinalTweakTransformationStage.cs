@@ -10,6 +10,7 @@
  */
 
 using Mosa.Compiler.Framework;
+using Mosa.Compiler.MosaTypeSystem;
 
 namespace Mosa.Platform.x86.Stages
 {
@@ -61,17 +62,42 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IX86Visitor.Mov(Context context)
 		{
+			int size, alignment;
+			architecture.GetTypeRequirements(context.Result.Type, out size, out alignment);
 			// Mov can not use ESI or EDI registers with 8 or 16 bit memory
-			if (context.Operand1.IsCPURegister && context.Result.IsMemoryAddress && !(context.Result.IsInt || context.Result.IsPointer || context.Result.IsObject) && (context.Operand1.Register == GeneralPurposeRegister.ESI || context.Operand1.Register == GeneralPurposeRegister.EDI))
+			// Mov also can not use ESI or EDI registers with 8 or 16 bit register
+			if (context.Operand1.IsCPURegister && (context.Result.IsMemoryAddress || context.Result.IsCPURegister) && size < 4 && (context.Operand1.Register == GeneralPurposeRegister.ESI || context.Operand1.Register == GeneralPurposeRegister.EDI))
 			{
 				Operand source = context.Operand1;
 				Operand dest = context.Result;
 
-				Operand EAX = Operand.CreateCPURegister(typeSystem.BuiltIn.Int32, GeneralPurposeRegister.EAX);
+				Operand spareReg ;
+				if (dest.Register == GeneralPurposeRegister.EAX)
+					spareReg = Operand.CreateCPURegister(typeSystem.BuiltIn.Int32, GeneralPurposeRegister.EDX);
+				else
+					spareReg = Operand.CreateCPURegister(typeSystem.BuiltIn.Int32, GeneralPurposeRegister.EAX);
 
-				context.SetInstruction2(X86.Xchg, EAX, source, source, EAX);
-				context.AppendInstruction(X86.Mov, dest, EAX);
-				context.AppendInstruction2(X86.Xchg, source, EAX, EAX, source);
+				context.SetInstruction2(X86.Xchg, spareReg, source, source, spareReg);
+				context.AppendInstruction(X86.Mov, dest, spareReg);
+				context.AppendInstruction2(X86.Xchg, source, spareReg, spareReg, source);
+			}
+			// Clear the register first if a 8 or 16 bit value moved into it
+			else if (context.Operand1.Register != context.Result.Register)
+			{
+				if (context.Operand1.IsMemoryAddress && context.Operand1.Type.ElementType != null)
+					architecture.GetTypeRequirements(context.Operand1.Type.ElementType, out size, out alignment);
+
+				if (context.Result.IsCPURegister && (context.Operand1.IsMemoryAddress || context.Operand1.IsRegister) && size < 4)
+				{
+					int srcSize;
+					architecture.GetTypeRequirements(context.Operand1.Type, out srcSize, out alignment);
+					if (srcSize != size)
+					{
+						Operand register = Operand.CreateCPURegister(typeSystem.BuiltIn.Int32, context.Result.Register);
+
+						context.InsertBefore().SetInstruction2(X86.Xor, register, null, register, register);
+					}
+				}
 			}
 		}
 
