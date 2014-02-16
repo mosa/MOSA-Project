@@ -39,6 +39,7 @@ namespace Mosa.TinyCPUSimulator.Adaptor
 			LoadSectionAlignment = 1;
 			SectionAlignment = 1;
 			Endianness = Endianness.Little;	// FIXME: assumes x86
+			simAdapter.SimCPU.TotalMemory = 1024L * 1024L * 1024L; // 1GB
 		}
 
 		protected override void CreateFile()
@@ -57,8 +58,8 @@ namespace Mosa.TinyCPUSimulator.Adaptor
 				var ram = (section as SimLinkerSection).Memory;
 
 				foreach (byte b in ram)
-				{					
-					SimAdapter.SimCPU.Write8(address++, b);					
+				{
+					SimAdapter.SimCPU.Write8(address++, b);
 				}
 			}
 		}

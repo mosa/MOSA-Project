@@ -63,7 +63,7 @@ namespace Mosa.TinyCPUSimulator
 			Tick = 0;
 			IsLittleEndian = true;
 
-			TotalMemory = 1024L * 1024L * 64; // 64 MB
+			TotalMemory = 1024L * 1024L * 1024L * 4; // 4 GB
 		}
 
 		public virtual void Reset()
