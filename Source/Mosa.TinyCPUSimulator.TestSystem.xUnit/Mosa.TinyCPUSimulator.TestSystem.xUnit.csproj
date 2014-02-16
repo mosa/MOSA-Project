@@ -82,6 +82,7 @@
   <ItemGroup>
     <Compile Include="BooleanFixture.cs" />
     <Compile Include="BoxingFixture.cs" />
+    <Compile Include="ArrayLayoutFixture.cs" />
     <Compile Include="EnumFixture.cs" />
     <Compile Include="FibonacciFixture.cs" />
     <Compile Include="Int16Fixture.cs">
