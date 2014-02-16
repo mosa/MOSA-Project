@@ -21,7 +21,7 @@ namespace Mosa.Test.System
 		protected TestCompilerAdapter()
 		{
 			settings.AddReference("mscorlib.dll");
-			settings.AddReference("Mosa.Platform.x86.Intrinsic.dll");
+			settings.AddReference("Mosa.Platform.Internal.x86.dll");
 			settings.AddReference("Mosa.Kernel.x86Test.dll");
 		}
 
