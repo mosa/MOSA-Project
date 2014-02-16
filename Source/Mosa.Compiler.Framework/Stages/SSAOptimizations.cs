@@ -681,7 +681,7 @@ namespace Mosa.Compiler.Framework.Stages
 				AddOperandUsageToWorkList(context);
 				if (trace.Active) trace.Log("*** StrengthReductionLogicalOperators");
 				if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
-				context.SetInstruction(IRInstruction.Move, result, Operand.CreateConstant(context.Result.Type, op2.ConstantSignedInteger));
+				context.SetInstruction(IRInstruction.Move, result, op2);
 				if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
 			}
 
@@ -690,7 +690,7 @@ namespace Mosa.Compiler.Framework.Stages
 				AddOperandUsageToWorkList(context);
 				if (trace.Active) trace.Log("*** StrengthReductionLogicalOperators");
 				if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
-				context.SetInstruction(IRInstruction.Move, result, Operand.CreateConstant(context.Result.Type, op1.ConstantSignedInteger));
+				context.SetInstruction(IRInstruction.Move, result, op1);
 				if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
 			}
 
