@@ -28,12 +28,15 @@ namespace Mosa.TinyCPUSimulator.Adaptor
 		/// <param name="name">The name.</param>
 		/// <param name="address">The address.</param>
 		/// <param name="size">The size.</param>
-		public SimLinkerSection(SectionKind kind, string name, uint address, uint size) :
+		/// <param name="simAdapter">The sim adapter.</param>
+		public SimLinkerSection(SectionKind kind, string name, uint address, uint size, ISimAdapter simAdapter) :
 			base(kind, name, 0)
 		{
 			Memory = new byte[size];
 
 			VirtualAddress = address;
+
+			simAdapter.SimCPU.AddMemory(address, size, 1);
 
 			stream = new MemoryStream(Memory, true);
 		}

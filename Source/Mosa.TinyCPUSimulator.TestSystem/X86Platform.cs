@@ -38,6 +38,8 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 
 		public override void InitializeSimulation(ISimAdapter simAdapter)
 		{
+			simAdapter.SimCPU.AddMemory(0x00000000, 0x000A0000, 1); // First 640kb
+
 			simAdapter.SimCPU.Monitor.AddBreakPoint(StopEIP);
 		}
 

@@ -31,15 +31,14 @@ namespace Mosa.TinyCPUSimulator.Adaptor
 		{
 			this.SimAdapter = simAdapter;
 
-			AddSection(new SimLinkerSection(SectionKind.BSS, "BSS", 0x400000, 0x200000));
-			AddSection(new SimLinkerSection(SectionKind.Data, "Data", 0x600000, 0x200000));
-			AddSection(new SimLinkerSection(SectionKind.ROData, "ReadOnlyData", 0x800000, 0x200000));
-			AddSection(new SimLinkerSection(SectionKind.Text, "Text", 0xA00000, 0x200000));
+			AddSection(new SimLinkerSection(SectionKind.BSS, "BSS", 0x400000, 0x200000, simAdapter));
+			AddSection(new SimLinkerSection(SectionKind.Data, "Data", 0x600000, 0x200000, simAdapter));
+			AddSection(new SimLinkerSection(SectionKind.ROData, "ReadOnlyData", 0x800000, 0x200000, simAdapter));
+			AddSection(new SimLinkerSection(SectionKind.Text, "Text", 0xA00000, 0x200000, simAdapter));
 
 			LoadSectionAlignment = 1;
 			SectionAlignment = 1;
 			Endianness = Endianness.Little;	// FIXME: assumes x86
-			simAdapter.SimCPU.TotalMemory = 1024L * 1024L * 1024L; // 1GB
 		}
 
 		protected override void CreateFile()
@@ -59,7 +58,10 @@ namespace Mosa.TinyCPUSimulator.Adaptor
 
 				foreach (byte b in ram)
 				{
-					SimAdapter.SimCPU.Write8(address++, b);
+					if (b != 0)
+					{
+						SimAdapter.SimCPU.Write8(address++, b);
+					}
 				}
 			}
 		}

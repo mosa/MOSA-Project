@@ -47,8 +47,10 @@ namespace Mosa.TinyCPUSimulator
 
 		public byte[][] MemoryBlocks { get; private set; }
 
-		private static ulong BlockSize = 1024 * 1024; // 1 MB
-		private static ulong MaxMemory = 1024L * 1024L * 1024L * 4L; // 4 GB
+		public List<MemoryRegion> MemoryRegions { get; private set; }
+
+		internal static ulong BlockSize = 1024 * 1024; // 1 MB
+		internal static ulong MaxMemory = 1024L * 1024L * 1024L * 4L; // 4 GB
 
 		public SimCPU()
 		{
@@ -58,12 +60,27 @@ namespace Mosa.TinyCPUSimulator
 			PortDevices = new BaseSimDevice[65536];
 			Symbols = new Dictionary<string, SimSymbol>();
 			Monitor = new SimMonitor(this);
+			MemoryRegions = new List<MemoryRegion>();
 			//MemoryDelta = new Dictionary<ulong, KeyValuePair<byte, byte>>();
 
 			Tick = 0;
 			IsLittleEndian = true;
 
 			TotalMemory = 1024L * 1024L * 1024L * 4; // 4 GB
+		}
+
+		public void AddMemory(ulong address, ulong size, uint type)
+		{
+			MemoryRegions.Add(new MemoryRegion(address, size, type));
+		}
+
+		public bool IsValidMemoryReference(ulong address)
+		{
+			foreach (var region in MemoryRegions)
+				if (region.Contains(address))
+					return true;
+
+			return false;
 		}
 
 		public virtual void Reset()
@@ -78,24 +95,24 @@ namespace Mosa.TinyCPUSimulator
 
 		private byte InternalRead8(ulong address)
 		{
-			if (address > TotalMemory)
-				throw new InvalidMemoryAccess(address);
-
 			ulong index = address / BlockSize;
 
 			byte[] block = MemoryBlocks[index];
 
 			if (block == null)
+			{
+				// for performance we only check if the memory access is valid when memory is allocated by the simulator
+				if (!IsValidMemoryReference(address))
+					throw new InvalidMemoryAccess(address);
+
 				return 0;
+			}
 
 			return block[address % BlockSize];
 		}
 
 		private void InternalWrite8(ulong address, byte value)
 		{
-			if (address > TotalMemory)
-				throw new InvalidMemoryAccess(address);
-
 			ulong index = address / BlockSize;
 			byte[] block = MemoryBlocks[index];
 
@@ -103,6 +120,10 @@ namespace Mosa.TinyCPUSimulator
 			{
 				if (value == 0)
 					return;
+
+				// for performance we only check if the memory access is valid when memory is allocated by the simulator
+				if (!IsValidMemoryReference(address))
+					throw new InvalidMemoryAccess(address);
 
 				block = new byte[BlockSize];
 
