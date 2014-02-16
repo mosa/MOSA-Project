@@ -54,14 +54,16 @@ namespace Mosa.TinyCPUSimulator.Adaptor
 			{
 				ulong address = (ulong)section.VirtualAddress;
 
-				var ram = (section as SimLinkerSection).Memory;
+				var mem = (section as SimLinkerSection).Memory;
 
-				foreach (byte b in ram)
+				foreach (byte b in mem)
 				{
 					if (b != 0)
 					{
-						SimAdapter.SimCPU.Write8(address++, b);
+						SimAdapter.SimCPU.DirectWrite8(address, b);
 					}
+
+					address++;
 				}
 			}
 		}
