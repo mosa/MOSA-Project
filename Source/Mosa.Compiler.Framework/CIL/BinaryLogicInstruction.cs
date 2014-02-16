@@ -62,12 +62,12 @@ namespace Mosa.Compiler.Framework.CIL
 			var stackTypeForOperand1 = TypeSystem.GetStackType(ctx.Operand1.Type);
 			var stackTypeForOperand2 = TypeSystem.GetStackType(ctx.Operand2.Type);
 
-			if (ctx.Operand1.IsValueType && ctx.Operand1.Type.BaseType.IsEnum)
+			if (ctx.Operand1.Type.IsEnum)
 			{
 				stackTypeForOperand1 = TypeSystem.GetStackType(ctx.Operand1.Type.Fields[0].Type);
 			}
 
-			if (ctx.Operand2.IsValueType && ctx.Operand2.Type.BaseType.IsEnum)
+			if (ctx.Operand2.Type.IsEnum)
 			{
 				stackTypeForOperand2 = TypeSystem.GetStackType(ctx.Operand2.Type.Fields[0].Type);
 			}

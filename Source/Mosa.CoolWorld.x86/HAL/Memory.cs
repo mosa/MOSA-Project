@@ -104,5 +104,25 @@ namespace Mosa.CoolWorld.x86.HAL
 		{
 			Native.Set32(address + index, value);
 		}
-	}
+
+        void IMemory.Write24(uint index, uint value)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        uint IMemory.Read24(uint index)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        uint IMemory.Read32(uint index, byte count)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        void IMemory.Write32(uint index, uint value, byte count)
+        {
+            throw new System.NotImplementedException();
+        }
+    }
 }

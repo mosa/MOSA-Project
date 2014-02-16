@@ -12,6 +12,7 @@ namespace System
 	/// <summary>
 	/// Implementation of the "System.Exception" class
 	/// </summary>
+    [Serializable]
 	public class Exception
 	{
 		private readonly string message;

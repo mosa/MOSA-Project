@@ -60,7 +60,21 @@ namespace Mosa.Compiler.Framework.CIL
 		{
 			base.Resolve(ctx, compiler);
 
-			var result = operandTable[(int)TypeSystem.GetStackType(ctx.Operand1.Type)][(int)TypeSystem.GetStackType(ctx.Operand2.Type)];
+            var stackTypeForOperand1 = TypeSystem.GetStackType(ctx.Operand1.Type);
+            var stackTypeForOperand2 = TypeSystem.GetStackType(ctx.Operand2.Type);
+
+            if (ctx.Operand1.Type.IsEnum)
+            {
+                stackTypeForOperand1 = TypeSystem.GetStackType(ctx.Operand1.Type.Fields[0].Type);
+            }
+
+            if (ctx.Operand2.Type.IsEnum)
+            {
+                stackTypeForOperand2 = TypeSystem.GetStackType(ctx.Operand2.Type.Fields[0].Type);
+            }
+
+            var result = operandTable[(int)stackTypeForOperand1][(int)stackTypeForOperand2];
+
 			Debug.Assert(StackTypeCode.Unknown != result, @"Can't shift with the given virtualLocal operands.");
 			if (StackTypeCode.Unknown == result)
 				throw new InvalidOperationException(@"Invalid virtualLocal state for pairing (" + TypeSystem.GetStackType(ctx.Operand1.Type) + ", " + TypeSystem.GetStackType(ctx.Operand2.Type) + ")");

@@ -44,18 +44,12 @@ namespace Mosa.Compiler.Framework.Stages
 			// Allocate a linker symbol to refer to this allocation. Use the destination field name as the linker symbol name.
 			string symbolName = assignment.MosaField.ToString() + @"<<$cctor";
 
-			using (var stream = methodCompiler.Linker.Allocate(symbolName, SectionKind.BSS, typeLayout.GetTypeSize(allocatedType), 4))
-			{
-				// FIXME: Do we have to initialize this?
-				string methodTableSymbol = GetMethodTableForType(allocatedType);
-
-				if (methodTableSymbol != null)
-					methodCompiler.Linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuiltInPatch.I4, symbolName, 0, 0, methodTableSymbol, 0);
-			}
+			int size = typeLayout.GetTypeSize(allocatedType);
+ 			using (var stream = methodCompiler.Linker.Allocate(symbolName, SectionKind.BSS, size, 4))
+ 				stream.Position += typeLayout.GetTypeSize(allocatedType);
 
 			// Issue a load request before the newobj and before the assignment.
 			Operand symbol1 = InsertLoadBeforeInstruction(allocation, symbolName, assignment.MosaField.Type);
-			allocation.Operand1 = symbol1;
 
 			Operand symbol2 = InsertLoadBeforeInstruction(assignment, symbolName, assignment.MosaField.Type);
 			assignment.Operand1 = symbol2;
@@ -63,7 +57,16 @@ namespace Mosa.Compiler.Framework.Stages
 			// Change the newobj to a call and increase the operand count to include the this ptr.
 			allocation.OperandCount++;
 			allocation.ResultCount = 0;
-			allocation.ReplaceInstructionOnly(CILInstruction.Get(OpCode.Call));
+            allocation.ReplaceInstructionOnly(CILInstruction.Get(OpCode.Call));
+
+            // Here we are creating a new list of operands with the first operand as symbol1
+            List<Operand> operands = new List<Operand>(allocation.Operands);
+            int index = 0;
+            allocation.SetOperand(index++, symbol1);
+            foreach (Operand op in operands)
+            {
+                allocation.SetOperand(index++, op);
+            }
 		}
 
 		private string GetMethodTableForType(MosaType allocatedType)

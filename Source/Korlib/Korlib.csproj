@@ -56,8 +56,16 @@
     </NoWarn>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="System.Collections\IComparer.cs" />
+    <Compile Include="System.Collections\IStructuralComparable.cs" />
+    <Compile Include="System.Collections\IStructuralEquatable.cs" />
     <Compile Include="System.Diagnostics\DebuggerHiddenAttribute.cs" />
+    <Compile Include="System.IO\BinaryReader.cs" />
+    <Compile Include="System.IO\MemoryStream.cs" />
     <Compile Include="System.Reflection\Assembly.cs" />
+    <Compile Include="System.Reflection\AssemblyDescriptionAttribute.cs" />
+    <Compile Include="System.Reflection\AssemblyTitleAttribute.cs" />
+    <Compile Include="System.Reflection\ICustomAttributeProvider.cs" />
     <Compile Include="System.Reflection\MemberInfo.cs" />
     <Compile Include="System.Reflection\Module.cs" />
     <Compile Include="System.Runtime.CompilerServices\CompilationRelaxationsAttribute.cs" />
@@ -81,6 +89,9 @@
     <Compile Include="System.Diagnostics\DebuggableAttribute.cs" />
     <Compile Include="System\AsyncCallback.cs" />
     <Compile Include="System\IAsyncResult.cs" />
+    <Compile Include="System\ICloneable.cs" />
+    <Compile Include="System\NotImplementedException.cs" />
+    <Compile Include="System\SystemException.cs" />
     <Compile Include="System\WaitHandle.cs" />
     <Compile Include="System\IComparable.cs" />
     <Compile Include="System\Delegate.cs" />
@@ -145,9 +156,6 @@
     <Compile Include="System.Runtime.CompilerServices\CompilerGeneratedAttribute.cs" />
     <Compile Include="System.Runtime.InteropServices\ComVisible.cs" />
     <Compile Include="System.Runtime.InteropServices\OutAttribute.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="System" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.Targets" />
 </Project>

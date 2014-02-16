@@ -8,6 +8,8 @@
  */
 
 using System.Runtime.InteropServices;
+using System.Reflection;
+
 namespace System
 {
 	/// <summary>
@@ -63,5 +65,11 @@ namespace System
 		{
 			return null;
 		}
+
+        public Module Module
+        {
+            get;
+            internal set;
+        }
 	}
 }

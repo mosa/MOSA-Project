@@ -66,72 +66,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Boot.cs" />
-    <Compile Include="DeviceDrivers\ISA\CMOS.cs" />
-    <Compile Include="DeviceDrivers\ISA\PCIController.cs" />
-    <Compile Include="DeviceDrivers\ISA\PIC.cs" />
-    <Compile Include="DeviceDrivers\ISA\PIT.cs" />
-    <Compile Include="DeviceDrivers\ISA\StandardKeyboard.cs" />
-    <Compile Include="DeviceDrivers\ISA\VGAText.cs" />
-    <Compile Include="DeviceDrivers\ScanCodeMap\US.cs" />
-    <Compile Include="DeviceSystem\Device.cs" />
-    <Compile Include="DeviceSystem\DeviceDriver.cs" />
-    <Compile Include="DeviceSystem\DeviceDriverPhysicalMemoryAttribute.cs" />
-    <Compile Include="DeviceSystem\DeviceDriverRegistry.cs" />
-    <Compile Include="DeviceSystem\DeviceDriverStartStatus.cs" />
-    <Compile Include="DeviceSystem\DeviceManager.cs" />
-    <Compile Include="DeviceSystem\DeviceStatus.cs" />
-    <Compile Include="DeviceSystem\FindDevice.cs" />
-    <Compile Include="DeviceSystem\HAL.cs" />
-    <Compile Include="DeviceSystem\HardwareDevice.cs" />
-    <Compile Include="DeviceSystem\HardwareResources.cs" />
-    <Compile Include="DeviceSystem\IDevice.cs" />
-    <Compile Include="DeviceSystem\IDeviceDriver.cs" />
-    <Compile Include="DeviceSystem\IDeviceManager.cs" />
-    <Compile Include="DeviceSystem\IDiskControllerDevice.cs" />
-    <Compile Include="DeviceSystem\IDiskDevice.cs" />
-    <Compile Include="DeviceSystem\IFindDevice.cs" />
-    <Compile Include="DeviceSystem\IHardwareAbstraction.cs" />
-    <Compile Include="DeviceSystem\IHardwareDevice.cs" />
-    <Compile Include="DeviceSystem\IHardwareResources.cs" />
-    <Compile Include="DeviceSystem\IInterruptHandler.cs" />
-    <Compile Include="DeviceSystem\IIOPortRegion.cs" />
-    <Compile Include="DeviceSystem\IIOPorts.cs" />
-    <Compile Include="DeviceSystem\IKeyboard.cs" />
-    <Compile Include="DeviceSystem\IKeyboardDevice.cs" />
-    <Compile Include="DeviceSystem\IMemory.cs" />
-    <Compile Include="DeviceSystem\IMemoryRegion.cs" />
-    <Compile Include="DeviceSystem\InterruptHandler.cs" />
-    <Compile Include="DeviceSystem\InterruptManager.cs" />
-    <Compile Include="DeviceSystem\IOPortRegion.cs" />
-    <Compile Include="DeviceSystem\IOPortRegister.cs" />
-    <Compile Include="DeviceSystem\IOPortResources.cs" />
-    <Compile Include="DeviceSystem\IPartitionDevice.cs" />
-    <Compile Include="DeviceSystem\IPCIController.cs" />
-    <Compile Include="DeviceSystem\IResourceManager.cs" />
-    <Compile Include="DeviceSystem\ISADeviceDriverAttribute.cs" />
-    <Compile Include="DeviceSystem\IScanCodeMap.cs" />
-    <Compile Include="DeviceSystem\ISerialDevice.cs" />
-    <Compile Include="DeviceSystem\ITextDevice.cs" />
-    <Compile Include="DeviceSystem\ITextScreen.cs" />
-    <Compile Include="DeviceSystem\Key.cs" />
-    <Compile Include="DeviceSystem\Keyboard.cs" />
-    <Compile Include="DeviceSystem\KeyEvent.cs" />
-    <Compile Include="DeviceSystem\KeyType.cs" />
-    <Compile Include="DeviceSystem\MemoryRegion.cs" />
-    <Compile Include="DeviceSystem\MemoryResources.cs" />
-    <Compile Include="DeviceSystem\PCIControllerManager.cs" />
-    <Compile Include="DeviceSystem\PCIDeviceDriverAttribute.cs" />
-    <Compile Include="DeviceSystem\PCI\AddressType.cs" />
-    <Compile Include="DeviceSystem\PCI\BaseAddress.cs" />
-    <Compile Include="DeviceSystem\PCI\ClassCodeTable.cs" />
-    <Compile Include="DeviceSystem\PCI\IDeviceResource.cs" />
-    <Compile Include="DeviceSystem\PCI\IPCIDevice.cs" />
-    <Compile Include="DeviceSystem\PCI\PCIDevice.cs" />
-    <Compile Include="DeviceSystem\PCI\SubClassCodeTable.cs" />
-    <Compile Include="DeviceSystem\PlatformArchitecture.cs" />
-    <Compile Include="DeviceSystem\ResourceManager.cs" />
     <Compile Include="Setup.cs" />
-    <Compile Include="DeviceSystem\SpinLock.cs" />
     <Compile Include="HAL\Memory.cs" />
     <Compile Include="HAL\IOPort.cs" />
     <Compile Include="HAL\HardwareAbstraction.cs" />
@@ -140,6 +75,14 @@
     <ProjectReference Include="..\Mosa.ClassLib\Mosa.ClassLib.csproj">
       <Project>{27A3C89C-1967-45FF-A77E-94F44995C42C}</Project>
       <Name>Mosa.ClassLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mosa.DeviceDrivers\Mosa.DeviceDrivers.csproj">
+      <Project>{4dbd4c50-bec5-48d9-b471-9fb0a7f69999}</Project>
+      <Name>Mosa.DeviceDrivers</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mosa.DeviceSystem\Mosa.DeviceSystem.csproj">
+      <Project>{6509477a-7360-4937-a1b9-26fed0a75cda}</Project>
+      <Name>Mosa.DeviceSystem</Name>
     </ProjectReference>
     <ProjectReference Include="..\Mosa.Kernel.x86\Mosa.Kernel.x86.csproj">
       <Project>{FF099D48-3FA5-4ED6-BBA0-1497D734962A}</Project>

@@ -327,6 +327,7 @@ namespace Mosa.Tool.Explorer
 			}
 
 			assemblyLoader.AddPrivatePath(Path.GetDirectoryName(filename));
+            assemblyLoader.LoadModule("Mosa.Internal.dll");
 			assemblyLoader.LoadModule(filename);
 
 			typeSystem = new TypeSystem();

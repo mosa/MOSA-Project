@@ -11,5 +11,9 @@ namespace System.Reflection
 {
 	public class Module
 	{
+        public virtual Assembly Assembly
+        {
+            get { throw new NotImplementedException(); }
+        }
 	}
 }

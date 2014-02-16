@@ -83,12 +83,25 @@ namespace Mosa.Compiler.Framework.CIL
 		{
 			base.Resolve(ctx, compiler);
 
+            var stackTypeForOperand1 = TypeSystem.GetStackType(ctx.Operand1.Type);
+            var stackTypeForOperand2 = TypeSystem.GetStackType(ctx.Operand2.Type);
+
+            if (ctx.Operand1.Type.IsEnum)
+            {
+                stackTypeForOperand1 = TypeSystem.GetStackType(ctx.Operand1.Type.Fields[0].Type);
+            }
+
+            if (ctx.Operand2.Type.IsEnum)
+            {
+                stackTypeForOperand2 = TypeSystem.GetStackType(ctx.Operand2.Type.Fields[0].Type);
+            }
+
 			StackTypeCode result = StackTypeCode.Unknown;
 			switch (opcode)
 			{
-				case OpCode.Add: result = addTable[(int)TypeSystem.GetStackType(ctx.Operand1.Type)][(int)TypeSystem.GetStackType(ctx.Operand2.Type)]; break;
-				case OpCode.Sub: result = subTable[(int)TypeSystem.GetStackType(ctx.Operand1.Type)][(int)TypeSystem.GetStackType(ctx.Operand2.Type)]; break;
-				default: result = operandTable[(int)TypeSystem.GetStackType(ctx.Operand1.Type)][(int)TypeSystem.GetStackType(ctx.Operand2.Type)]; break;
+                case OpCode.Add: result = addTable[(int)stackTypeForOperand1][(int)stackTypeForOperand2]; break;
+                case OpCode.Sub: result = subTable[(int)stackTypeForOperand1][(int)stackTypeForOperand2]; break;
+                default: result = operandTable[(int)stackTypeForOperand1][(int)stackTypeForOperand2]; break;
 			}
 
 			if (result == StackTypeCode.Unknown)
