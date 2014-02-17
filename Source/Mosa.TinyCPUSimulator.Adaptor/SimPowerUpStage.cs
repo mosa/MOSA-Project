@@ -16,7 +16,7 @@ namespace Mosa.TinyCPUSimulator.Adaptor
 {
 	public sealed class SimPowerUpStage : BaseCompilerStage, ICompilerStage, IPipelineStage
 	{
-		public readonly string StartUpName = "StartUp"; // FullName = Mosa.Tools.Compiler.LinkerGenerated.<$>PowerUp
+		public readonly string StartUpName = "StartUp";
 
 		#region Construction
 

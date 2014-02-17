@@ -23,7 +23,7 @@ namespace Mosa.Tool.TinySimulator
 
 		private object historyLock = new object();
 
-		private List<HistoryEntry> pendingHistory = new List<HistoryEntry>();
+		private Queue<HistoryEntry> pendingHistory = new Queue<HistoryEntry>();
 
 		private class HistoryEntry
 		{
@@ -65,7 +65,12 @@ namespace Mosa.Tool.TinySimulator
 
 			lock (pendingHistory)
 			{
-				pendingHistory.Add(new HistoryEntry(simState, methodName, MainForm.Display32));
+				pendingHistory.Enqueue(new HistoryEntry(simState, methodName, MainForm.Display32));
+
+				while (pendingHistory.Count > MainForm.MaxHistory)
+				{
+					pendingHistory.Dequeue();
+				}
 			}
 		}
 
@@ -82,6 +87,16 @@ namespace Mosa.Tool.TinySimulator
 
 			lock (pendingHistory)
 			{
+				if (pendingHistory.Count == 0)
+					return;
+
+				dataGridView1.DataSource = null;
+
+				if (pendingHistory.Count >= MainForm.MaxHistory)
+				{
+					history.Clear();
+				}
+
 				foreach (var entry in pendingHistory)
 				{
 					history.Add(entry);
@@ -90,20 +105,19 @@ namespace Mosa.Tool.TinySimulator
 				pendingHistory.Clear();
 			}
 
+			while (history.Count > MainForm.MaxHistory)
+			{
+				history.RemoveAt(0);
+			}
+
+			dataGridView1.DataSource = history;
+
 			if (history.Count == 1)
 			{
 				dataGridView1.AutoResizeColumns();
 				dataGridView1.Columns[0].Width = 60;
 				dataGridView1.Columns[1].Width = 90;
 				dataGridView1.Columns[2].Width = 450;
-			}
-
-			if (history.Count > MainForm.MaxHistory + 100)
-			{
-				while (history.Count > MainForm.MaxHistory)
-				{
-					history.RemoveAt(0);
-				}
 			}
 
 			dataGridView1.CurrentCell = dataGridView1[0, history.Count - 1];

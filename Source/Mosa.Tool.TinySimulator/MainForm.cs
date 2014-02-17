@@ -57,6 +57,9 @@ namespace Mosa.Tool.TinySimulator
 
 		public List<Watch> watches = new List<Watch>();
 
+		private MosaAssemblyLoader assemblyLoader;
+		private bool typeSystemModified = true;
+
 		private Thread worker;
 		private object workerLock = new object();
 
@@ -162,18 +165,28 @@ namespace Mosa.Tool.TinySimulator
 
 		public void LoadAssembly(string filename)
 		{
-			MosaAssemblyLoader assemblyLoader = new MosaAssemblyLoader();
+			assemblyLoader = new MosaAssemblyLoader();
 
 			assemblyLoader.AddPrivatePath(System.IO.Path.GetDirectoryName(filename));
 			assemblyLoader.LoadModule(filename);
 
+			typeSystemModified = true;
+
+			UpdateTypeSystem();
+		}
+
+		private void UpdateTypeSystem()
+		{
+			if (!typeSystemModified)
+				return;
+
 			TypeSystem = new TypeSystem();
-
 			TypeSystem.Load(assemblyLoader);
-
 			TypeLayout = new MosaTypeLayout(TypeSystem, 4, 4);
 
 			assembliesView.UpdateTree();
+
+			typeSystemModified = false;
 		}
 
 		public void StartSimulator(string platform)
@@ -182,6 +195,10 @@ namespace Mosa.Tool.TinySimulator
 				return;
 
 			Status = "Compiling...";
+
+			UpdateTypeSystem();
+
+			typeSystemModified = true;  // compiling modifies the type sytem
 
 			Architecture = GetArchitecture(platform);
 			var simAdapter = GetSimAdaptor(platform);

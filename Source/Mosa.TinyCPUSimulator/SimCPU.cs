@@ -238,9 +238,6 @@ namespace Mosa.TinyCPUSimulator
 
 		public void SetSymbol(string name, ulong address, ulong size)
 		{
-			if (Symbols.ContainsKey(name))
-				return; // HACK for generics which duplicate methods!
-
 			Symbols.Add(name, new SimSymbol(name, address, size));
 
 			//Debug.WriteLine("0x" + address.ToString("X") + ": " + label);
