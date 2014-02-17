@@ -9,7 +9,6 @@
 
 using Mosa.Compiler.Framework.IR;
 
-using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Compiler.MosaTypeSystem;
 
 namespace Mosa.Compiler.Framework.Stages
@@ -27,7 +26,7 @@ namespace Mosa.Compiler.Framework.Stages
 			// Handler Code
 			foreach (var clause in methodCompiler.Method.ExceptionBlocks)
 			{
-				if (clause.ExceptionHandler == ExceptionBlockType.Exception)
+				if (clause.HandlerType == ExceptionHandlerType.Exception)
 				{
 					var block = basicBlocks.GetByLabel(clause.HandlerOffset);
 

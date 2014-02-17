@@ -7,7 +7,7 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using Mosa.Compiler.Metadata;
+using dnlib.DotNet;
 using Mosa.Compiler.MosaTypeSystem;
 using System;
 
@@ -18,7 +18,7 @@ namespace Mosa.Compiler.Framework.CIL
 	/// </summary>
 	public sealed class StelemInstruction : NaryInstruction
 	{
-		private readonly CilElementType? elementType;
+		private readonly ElementType? elementType;
 
 		#region Construction
 
@@ -31,14 +31,14 @@ namespace Mosa.Compiler.Framework.CIL
 		{
 			switch (opcode)
 			{
-				case OpCode.Stelem_i1: elementType = CilElementType.I1; break;
-				case OpCode.Stelem_i2: elementType = CilElementType.I2; break;
-				case OpCode.Stelem_i4: elementType = CilElementType.I4; break;
-				case OpCode.Stelem_i8: elementType = CilElementType.I8; break;
-				case OpCode.Stelem_i: elementType = CilElementType.I; break;
-				case OpCode.Stelem_r4: elementType = CilElementType.R4; break;
-				case OpCode.Stelem_r8: elementType = CilElementType.R8; break;
-				case OpCode.Stelem_ref: elementType = CilElementType.Object; break;
+				case OpCode.Stelem_i1: elementType = ElementType.I1; break;
+				case OpCode.Stelem_i2: elementType = ElementType.I2; break;
+				case OpCode.Stelem_i4: elementType = ElementType.I4; break;
+				case OpCode.Stelem_i8: elementType = ElementType.I8; break;
+				case OpCode.Stelem_i: elementType = ElementType.I; break;
+				case OpCode.Stelem_r4: elementType = ElementType.R4; break;
+				case OpCode.Stelem_r8: elementType = ElementType.R8; break;
+				case OpCode.Stelem_ref: elementType = ElementType.Object; break;
 				case OpCode.Stelem: elementType = null; break;
 				default: throw new NotImplementedException("Not implemented: " + opcode);
 			}
@@ -59,8 +59,8 @@ namespace Mosa.Compiler.Framework.CIL
 			base.Decode(ctx, decoder);
 
 			MosaType type = (elementType == null)
-				? type = decoder.TypeSystem.Resolver.GetTypeByToken(decoder.Method.CodeAssembly, decoder.DecodeTokenType(), decoder.Method)
-				: type = decoder.TypeSystem.Resolver.GetTypeByElementType(elementType);
+				? type = (MosaType)decoder.Instruction.Operand
+				: type = decoder.TypeSystem.GetTypeFromElementCode(elementType.Value);
 
 			ctx.MosaType = type;
 		}

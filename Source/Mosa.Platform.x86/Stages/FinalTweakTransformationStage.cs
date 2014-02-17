@@ -62,12 +62,12 @@ namespace Mosa.Platform.x86.Stages
 		void IX86Visitor.Mov(Context context)
 		{
 			// Mov can not use ESI or EDI registers with 8 or 16 bit memory
-			if (context.Operand1.IsCPURegister && context.Result.IsMemoryAddress && !(context.Result.IsInt || context.Result.IsPointer || context.Result.IsObject) && (context.Operand1.Register == GeneralPurposeRegister.ESI || context.Operand1.Register == GeneralPurposeRegister.EDI))
+			if (context.Operand1.IsCPURegister && context.Result.IsMemoryAddress && !(context.Result.IsInt || context.Result.IsPointer || !context.Result.IsValueType) && (context.Operand1.Register == GeneralPurposeRegister.ESI || context.Operand1.Register == GeneralPurposeRegister.EDI))
 			{
 				Operand source = context.Operand1;
 				Operand dest = context.Result;
 
-				Operand EAX = Operand.CreateCPURegister(typeSystem.BuiltIn.Int32, GeneralPurposeRegister.EAX);
+				Operand EAX = Operand.CreateCPURegister(typeSystem.BuiltIn.I4, GeneralPurposeRegister.EAX);
 
 				context.SetInstruction2(X86.Xchg, EAX, source, source, EAX);
 				context.AppendInstruction(X86.Mov, dest, EAX);
@@ -87,7 +87,7 @@ namespace Mosa.Platform.x86.Stages
 				Operand result = context.Result;
 				var condition = context.ConditionCode;
 
-				Operand EAX = Operand.CreateCPURegister(typeSystem.BuiltIn.Int32, GeneralPurposeRegister.EAX);
+				Operand EAX = Operand.CreateCPURegister(typeSystem.BuiltIn.I4, GeneralPurposeRegister.EAX);
 
 				context.SetInstruction2(X86.Xchg, EAX, result, result, EAX);
 				context.AppendInstruction(X86.Setcc, condition, EAX);

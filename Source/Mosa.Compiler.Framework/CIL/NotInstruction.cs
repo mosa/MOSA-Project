@@ -29,6 +29,7 @@ namespace Mosa.Compiler.Framework.CIL
 			StackTypeCode.N,
 			StackTypeCode.Unknown,
 			StackTypeCode.Unknown,
+			StackTypeCode.Unknown,
 			StackTypeCode.Unknown
 		};
 
@@ -59,7 +60,7 @@ namespace Mosa.Compiler.Framework.CIL
 			base.Resolve(ctx, compiler);
 
 			// Validate the operand
-			var result = opTable[(int)TypeSystem.GetStackType(ctx.Operand1.Type)];
+			var result = opTable[(int)ctx.Operand1.Type.GetStackType()];
 			if (StackTypeCode.Unknown == result)
 				throw new InvalidOperationException(@"Invalid operand to Not instruction.");
 

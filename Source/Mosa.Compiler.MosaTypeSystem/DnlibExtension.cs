@@ -39,5 +39,54 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 			return ((MemberRef)method).ResolveMethodThrow();
 		}
+
+		public static bool HasOpenGenericParameter(this TypeSig signature)
+		{
+			if (signature.IsGenericParameter)
+				return true;
+
+			if (signature is ModifierSig)
+			{
+				TypeSpec modifier = ((ModifierSig)signature).Modifier as TypeSpec;
+				if (modifier != null && HasOpenGenericParameter(modifier.TypeSig))
+					return true;
+			}
+
+			if(signature is NonLeafSig){
+				return HasOpenGenericParameter(signature.Next);
+			}
+			else if (signature is TypeDefOrRefSig)
+			{
+				TypeSpec type = ((TypeDefOrRefSig)signature).TypeDefOrRef as TypeSpec;
+				if (type != null && HasOpenGenericParameter(type.TypeSig))
+					return true;
+				else 
+					return ((TypeDefOrRefSig)signature).TypeDefOrRef.ResolveTypeDef().HasGenericParameters;
+			}
+			else if (signature is GenericInstSig)
+			{
+				GenericInstSig genericInst = (GenericInstSig)signature;
+				foreach (var genericArg in genericInst.GenericArguments)
+				{
+					if (HasOpenGenericParameter(genericArg))
+						return true;
+				}
+				TypeSpec genericType = genericInst.GenericType.TypeDefOrRef as TypeSpec;
+				if (genericType != null && HasOpenGenericParameter(genericType.TypeSig))
+					return true;
+			}
+
+			return false;
+		}
+
+		public static bool HasOpenGenericParameter(this MethodSig signature)
+		{
+			foreach (var param in signature.Params)
+			{
+				if (HasOpenGenericParameter(param))
+					return true;
+			}
+			return HasOpenGenericParameter(signature.RetType);
+		}
 	}
 }

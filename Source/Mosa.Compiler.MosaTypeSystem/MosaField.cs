@@ -31,6 +31,8 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public MosaType FieldType { get; private set; }
 
+		public bool HasOpenGenericParams { get; private set; }
+
 		public bool IsLiteralField { get { return InternalField.IsLiteral; } }
 
 		public bool IsStaticField { get { return InternalField.IsStatic; } }
@@ -87,6 +89,8 @@ namespace Mosa.Compiler.MosaTypeSystem
 				typeGenericArgs = ((GenericInstSig)DeclaringType.TypeSignature).GenericArguments;
 
 			FullName = FullNameCreator.FieldFullName(DeclaringType.FullName, Name, sig, typeGenericArgs);
+
+			HasOpenGenericParams = DeclaringType.HasOpenGenericParams || sig.Type.HasOpenGenericParameter();
 		}
 
 		void IResolvable.Resolve(MosaTypeLoader loader)

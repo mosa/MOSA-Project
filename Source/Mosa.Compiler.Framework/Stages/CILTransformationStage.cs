@@ -8,17 +8,16 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using Mosa.Compiler.Common;
-using Mosa.Compiler.Framework.CIL;
-using Mosa.Compiler.Framework.IR;
-using Mosa.Compiler.Linker;
-using Mosa.Compiler.Metadata.Signatures;
-using Mosa.Compiler.MosaTypeSystem;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
+using Mosa.Compiler.Common;
+using Mosa.Compiler.Framework.CIL;
+using Mosa.Compiler.Framework.IR;
+using Mosa.Compiler.Linker;
+using Mosa.Compiler.MosaTypeSystem;
 
 namespace Mosa.Compiler.Framework.Stages
 {
@@ -104,26 +103,13 @@ namespace Mosa.Compiler.Framework.Stages
 			context.MosaType = type;
 		}
 
-		private SigType GetElementTypeFromSigType(SigType sigType)
-		{
-			RefSigType refSigType = sigType as RefSigType;
-			if (refSigType != null)
-				return refSigType.ElementType;
-
-			PtrSigType ptrSigType = sigType as PtrSigType;
-			if (ptrSigType != null)
-				return ptrSigType.ElementType;
-
-			throw new NotSupportedException(@"Invalid signature type: " + sigType.GetType());
-		}
-
 		/// <summary>
 		/// Visitation function for Ldsfld instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void CIL.ICILVisitor.Ldsfld(Context context)
 		{
-			MosaType type = context.MosaField.Type;
+			MosaType type = context.MosaField.FieldType;
 			Operand source = Operand.CreateField(context.MosaField);
 			Operand destination = context.Result;
 
@@ -156,7 +142,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="context">The context.</param>
 		void CIL.ICILVisitor.Ldftn(Context context)
 		{
-			context.SetInstruction(IRInstruction.Move, context.Result, Operand.CreateSymbolFromMethod(typeSystem, context.InvokeMethod));
+			context.SetInstruction(IRInstruction.Move, context.Result, Operand.CreateSymbolFromMethod(typeSystem, context.MosaMethod));
 		}
 
 		/// <summary>
@@ -179,11 +165,11 @@ namespace Mosa.Compiler.Framework.Stages
 			Operand source;
 			if (context.MosaType != null)
 			{
-				source = Operand.CreateManagedSymbolPointer(typeSystem, context.MosaType.FullName + "$dtable");
+				source = Operand.CreateManagedSymbol(typeSystem, typeSystem.GetTypeByName("System", "RuntimeTypeHandle"), context.MosaType.FullName + "$dtable");
 			}
 			else if (context.MosaField != null)
 			{
-				source = Operand.CreateManagedSymbolPointer(typeSystem, context.MosaField.FullName + "$desc");
+				source = Operand.CreateManagedSymbol(typeSystem, typeSystem.GetTypeByName("System", "RuntimeTypeHandle"), context.MosaField.FullName + "$desc");
 			}
 			else
 				throw new NotImplementCompilerException();
@@ -257,7 +243,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (ProcessExternalCall(context))
 				return;
 
-			ProcessInvokeInstruction(context, context.InvokeMethod, context.Result, new List<Operand>(context.Operands));
+			ProcessInvokeInstruction(context, context.MosaMethod, context.Result, new List<Operand>(context.Operands));
 		}
 
 		/// <summary>
@@ -269,7 +255,7 @@ namespace Mosa.Compiler.Framework.Stages
 			Operand destinationOperand = context.GetOperand(context.OperandCount - 1);
 			context.OperandCount -= 1;
 
-			ProcessInvokeInstruction(context, context.InvokeMethod, context.Result, new List<Operand>(context.Operands));
+			ProcessInvokeInstruction(context, context.MosaMethod, context.Result, new List<Operand>(context.Operands));
 		}
 
 		/// <summary>
@@ -338,12 +324,12 @@ namespace Mosa.Compiler.Framework.Stages
 				Operand zero = Operand.CreateConstant(context.Operand1.Type, 0);
 				context.SetInstruction(IRInstruction.SubU, context.Result, zero, context.Operand1);
 			}
-			else if (context.Operand1.IsSingle)
+			else if (context.Operand1.IsR4)
 			{
 				Operand minusOne = Operand.CreateConstantSingle(typeSystem, -1.0f);
 				context.SetInstruction(IRInstruction.MulF, context.Result, minusOne, context.Operand1);
 			}
-			else if (context.Operand1.IsDouble)
+			else if (context.Operand1.IsR8)
 			{
 				Operand minusOne = Operand.CreateConstantDouble(typeSystem, -1.0d);
 				context.SetInstruction(IRInstruction.MulF, context.Result, minusOne, context.Operand1);
@@ -379,7 +365,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="context">The context.</param>
 		void CIL.ICILVisitor.Callvirt(Context context)
 		{
-			MosaMethod method = context.InvokeMethod;
+			MosaMethod method = context.MosaMethod;
 			Operand resultOperand = context.Result;
 			List<Operand> operands = new List<Operand>(context.Operands);
 
@@ -410,8 +396,8 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				Operand thisPtr = context.Operand1;
 
-				Operand methodTable = methodCompiler.CreateVirtualRegister(typeSystem.BuiltIn.Ptr);
-				Operand methodPtr = methodCompiler.CreateVirtualRegister(typeSystem.BuiltIn.Ptr);
+				Operand methodTable = methodCompiler.CreateVirtualRegister(typeSystem.BuiltIn.Pointer);
+				Operand methodPtr = methodCompiler.CreateVirtualRegister(typeSystem.BuiltIn.Pointer);
 
 				if (!method.DeclaringType.IsInterface)
 				{
@@ -424,8 +410,8 @@ namespace Mosa.Compiler.Framework.Stages
 					int methodTableOffset = CalculateMethodTableOffset(method);
 					int slotOffset = CalculateInterfaceSlotOffset(method);
 
-					Operand interfaceSlotPtr = methodCompiler.CreateVirtualRegister(typeSystem.BuiltIn.Ptr);
-					Operand interfaceMethodTablePtr = methodCompiler.CreateVirtualRegister(typeSystem.BuiltIn.Ptr);
+					Operand interfaceSlotPtr = methodCompiler.CreateVirtualRegister(typeSystem.BuiltIn.Pointer);
+					Operand interfaceMethodTablePtr = methodCompiler.CreateVirtualRegister(typeSystem.BuiltIn.Pointer);
 
 					context.SetInstruction(IRInstruction.Load, methodTable, thisPtr, Operand.CreateConstantSignedInt(typeSystem, 0));
 					context.AppendInstruction(IRInstruction.Load, interfaceSlotPtr, methodTable, Operand.CreateConstantSignedInt(typeSystem, 0));
@@ -474,17 +460,7 @@ namespace Mosa.Compiler.Framework.Stages
 			int elementSize = 0;
 			var elementType = arrayType.ElementType;
 
-			if (elementType.IsBuiltInType)
-			{
-				// Handle builtin types
-				var alignment = 0;
-				architecture.GetTypeRequirements(elementType, out elementSize, out alignment);
-			}
-			else
-			{
-				// Handle classes and structs
-				elementSize = typeLayout.GetTypeSize(elementType);
-			}
+			elementSize = typeLayout.GetTypeSize(elementType);
 
 			Operand lengthOperand = context.Operand1;
 
@@ -511,7 +487,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (ReplaceWithInternalCall(context))
 				return;
 
-			var classType = context.InvokeMethod.DeclaringType;
+			var classType = context.MosaMethod.DeclaringType;
 			var thisReference = context.Result;
 
 			Context before = context.InsertBefore();
@@ -529,7 +505,7 @@ namespace Mosa.Compiler.Framework.Stages
 			List<Operand> operands = new List<Operand>(context.Operands);
 			operands.Insert(0, thisReference);
 
-			ProcessInvokeInstruction(context, context.InvokeMethod, null, operands);
+			ProcessInvokeInstruction(context, context.MosaMethod, null, operands);
 		}
 
 		private Operand GetMethodTableSymbol(MosaType runtimeType)
@@ -656,7 +632,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			ConditionCode code = ConvertCondition((context.Instruction as CIL.BaseCILInstruction).OpCode);
 
-			if (context.Operand1.IsFloatingPoint)
+			if (context.Operand1.IsR)
 			{
 				context.SetInstruction(IRInstruction.FloatingPointCompare, code, context.Result, context.Operand1, context.Operand2);
 			}
@@ -776,14 +752,14 @@ namespace Mosa.Compiler.Framework.Stages
 			int offset = typeLayout.GetFieldOffset(field);
 			Operand offsetOperand = Operand.CreateConstantSignedInt(typeSystem, offset);
 
-			Operand result = methodCompiler.CreateVirtualRegister(field.Type);
+			Operand result = methodCompiler.CreateVirtualRegister(field.FieldType);
 
 			BaseInstruction loadInstruction = IRInstruction.Load;
-			if (MustSignExtendOnLoad(field.Type))
+			if (MustSignExtendOnLoad(field.FieldType))
 			{
 				loadInstruction = IRInstruction.LoadSignExtended;
 			}
-			else if (MustZeroExtendOnLoad(field.Type))
+			else if (MustZeroExtendOnLoad(field.FieldType))
 			{
 				loadInstruction = IRInstruction.LoadZeroExtended;
 			}
@@ -791,7 +767,7 @@ namespace Mosa.Compiler.Framework.Stages
 			Debug.Assert(offsetOperand != null);
 
 			context.SetInstruction(loadInstruction, result, objectOperand, offsetOperand);
-			context.MosaType = field.Type;
+			context.MosaType = field.FieldType;
 			context.AppendInstruction(IRInstruction.Move, resultOperand, result);
 		}
 
@@ -818,12 +794,12 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			Operand objectOperand = context.Operand1;
 			Operand valueOperand = context.Operand2;
-			Operand temp = methodCompiler.CreateVirtualRegister(context.MosaField.Type);
+			Operand temp = methodCompiler.CreateVirtualRegister(context.MosaField.FieldType);
 
 			int offset = typeLayout.GetFieldOffset(context.MosaField);
 			Operand offsetOperand = Operand.CreateConstantSignedInt(typeSystem, offset);
 
-			MosaType fieldType = context.MosaField.Type;
+			MosaType fieldType = context.MosaField.FieldType;
 			context.SetInstruction(IRInstruction.Move, temp, valueOperand);
 			context.AppendInstruction(IRInstruction.Store, null, objectOperand, offsetOperand, temp);
 			context.MosaType = fieldType;
@@ -888,7 +864,7 @@ namespace Mosa.Compiler.Framework.Stages
 			Operand first = context.Operand1;
 			Operand second = context.Operand2;
 
-			if (first.IsFloatingPoint)
+			if (first.IsR)
 			{
 				Operand comparisonResult = methodCompiler.CreateVirtualRegister(typeSystem.BuiltIn.I4);
 				context.SetInstruction(IRInstruction.FloatingPointCompare, cc, comparisonResult, first, second);
@@ -930,7 +906,7 @@ namespace Mosa.Compiler.Framework.Stages
 			Operand arrayLength = context.Result;
 			Operand constantOffset = Operand.CreateConstantSignedInt(typeSystem, 8);
 
-			Operand arrayAddress = methodCompiler.CreateVirtualRegister(typeSystem.BuiltIn.I4);
+			Operand arrayAddress = methodCompiler.CreateVirtualRegister(typeSystem.GetManagedPointerType(arrayOperand.Type.ElementType));
 			context.SetInstruction(IRInstruction.Move, arrayAddress, arrayOperand);
 			context.AppendInstruction(IRInstruction.Load, arrayLength, arrayAddress, constantOffset);
 		}
@@ -977,7 +953,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private Operand LoadArrayBaseAddress(Context context, MosaType arrayType, Operand arrayOperand)
 		{
-			var arrayPointer = typeSystem.Resolver.GetManagedPointerType(arrayType.ElementType);
+			var arrayPointer = typeSystem.GetManagedPointerType(arrayType.ElementType);
 
 			Operand arrayAddress = methodCompiler.CreateVirtualRegister(arrayPointer);
 			Operand fixedOffset = Operand.CreateConstantSignedInt(typeSystem, (int)12);
@@ -1102,9 +1078,9 @@ namespace Mosa.Compiler.Framework.Stages
 			context.SetInstruction(IRInstruction.InternalReturn);
 		}
 
-		private ExceptionBlock FindImmediateClause(Context context)
+		private MosaExceptionHandler FindImmediateClause(Context context)
 		{
-			ExceptionBlock innerClause = null;
+			MosaExceptionHandler innerClause = null;
 
 			int label = context.Label;
 
@@ -1126,7 +1102,7 @@ namespace Mosa.Compiler.Framework.Stages
 		void CIL.ICILVisitor.Leave(Context context)
 		{
 			// Find enclosing finally clause
-			ExceptionBlock clause = FindImmediateClause(context);
+			MosaExceptionHandler clause = FindImmediateClause(context);
 
 			if (clause.IsLabelWithinTry(context.Label))
 			{
@@ -1313,7 +1289,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private static void Replace(Context context, BaseInstruction floatingPointInstruction, BaseInstruction signedInstruction, BaseInstruction unsignedInstruction)
 		{
-			if (context.Result.IsFloatingPoint)
+			if (context.Result.IsR)
 			{
 				context.ReplaceInstructionOnly(floatingPointInstruction);
 			}
@@ -1360,7 +1336,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </returns>
 		private static bool MustSignExtendOnLoad(MosaType source)
 		{
-			return source.IsSignedByte || source.IsSignedShort;
+			return source.IsI1 || source.IsI2;
 		}
 
 		/// <summary>
@@ -1372,7 +1348,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </returns>
 		private static bool MustZeroExtendOnLoad(MosaType source)
 		{
-			return source.IsUnsignedByte || source.IsUnsignedShort || source.IsChar;
+			return source.IsU1 || source.IsU2 || source.IsChar || source.IsBoolean;
 		}
 
 		/// <summary>
@@ -1383,20 +1359,20 @@ namespace Mosa.Compiler.Framework.Stages
 		private int GetIndex(MosaType type)
 		{
 			if (type.IsChar) return 5;
-			else if (type.IsSignedByte) return 0;
-			else if (type.IsSignedShort) return 1;
-			else if (type.IsSignedInt) return 2;
-			else if (type.IsSignedLong) return 3;
-			else if (type.IsUnsignedByte) return 4;
-			else if (type.IsUnsignedShort) return 5;
-			else if (type.IsUnsignedInt) return 6;
-			else if (type.IsUnsignedLong) return 7;
-			else if (type.IsSingle) return 8;
-			else if (type.IsDouble) return 9;
-			else if (type.IsNativeSignedInteger) return 10;
-			else if (type.IsNativeUnsignedInteger) return 11;
+			else if (type.IsI1) return 0;
+			else if (type.IsI2) return 1;
+			else if (type.IsI4) return 2;
+			else if (type.IsI8) return 3;
+			else if (type.IsU1) return 4;
+			else if (type.IsU2) return 5;
+			else if (type.IsU4) return 6;
+			else if (type.IsU8) return 7;
+			else if (type.IsR4) return 8;
+			else if (type.IsR8) return 9;
+			else if (type.IsI) return 10;
+			else if (type.IsU) return 11;
 			else if (type.IsPointer) return 12;
-			else if (type.IsObject) return 12;
+			else if (!type.IsValueType) return 12;
 
 			throw new InvalidCompilerException();
 		}
@@ -1624,7 +1600,7 @@ namespace Mosa.Compiler.Framework.Stages
 				}
 				else
 				{
-					if (sourceOperand.IsSignedLong || sourceOperand.IsUnsignedLong)
+					if (sourceOperand.IsLong)
 					{
 						Operand temp = AllocateVirtualRegister(destinationOperand.Type);
 
@@ -1645,21 +1621,21 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private BaseInstruction ComputeExtensionTypeAndMask(MosaType destinationType, ref uint mask)
 		{
-			if (destinationType.IsByte)
+			if (destinationType.IsUI1)
 			{
 				mask = 0xFF;
 				return (destinationType.IsSigned ? (BaseInstruction)IRInstruction.SignExtendedMove : (BaseInstruction)IRInstruction.ZeroExtendedMove);
 			}
-			else if (destinationType.IsShort)
+			else if (destinationType.IsUI2)
 			{
 				mask = 0xFFFF;
 				return destinationType.IsSigned ? (BaseInstruction)IRInstruction.SignExtendedMove : (BaseInstruction)IRInstruction.ZeroExtendedMove;
 			}
-			else if (destinationType.IsInt)
+			else if (destinationType.IsUI4)
 			{
 				mask = 0xFFFFFFFF;
 			}
-			else if (destinationType.IsLong)
+			else if (destinationType.IsUI8)
 			{
 				mask = 0x0;
 			}
@@ -1681,10 +1657,10 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </remarks>
 		private bool ProcessExternalCall(Context context)
 		{
-			if (!context.InvokeMethod.IsPInvokeImpl)
+			if (!context.MosaMethod.IsPInvokeImpl)
 				return false;
 
-			string external = context.InvokeMethod.ExternalReference;
+			string external = context.MosaMethod.ExternMethod;
 
 			//TODO: Verify!
 
@@ -1735,7 +1711,7 @@ namespace Mosa.Compiler.Framework.Stages
 			Debug.Assert(method != null);
 
 			context.SetInstruction(IRInstruction.Call, (byte)(operands.Count + 1), (byte)(resultOperand == null ? 0 : 1));
-			context.InvokeMethod = method;
+			context.MosaMethod = method;
 
 			if (resultOperand != null)
 			{
@@ -1753,7 +1729,7 @@ namespace Mosa.Compiler.Framework.Stages
 		private bool CanSkipDueToRecursiveSystemObjectCtorCall(Context context)
 		{
 			MosaMethod currentMethod = methodCompiler.Method;
-			MosaMethod invokeTarget = context.InvokeMethod;
+			MosaMethod invokeTarget = context.MosaMethod;
 
 			// Skip recursive System.Object ctor calls.
 			if (currentMethod.DeclaringType.FullName == @"System.Object" &&
@@ -1824,12 +1800,12 @@ namespace Mosa.Compiler.Framework.Stages
 			context.ReplaceInstructionOnly(IRInstruction.Call);
 			context.SetOperand(0, Operand.CreateSymbolFromMethod(typeSystem, method));
 			context.OperandCount = 1;
-			context.InvokeMethod = method;
+			context.MosaMethod = method;
 		}
 
 		private bool ReplaceWithInternalCall(Context context)
 		{
-			var method = context.InvokeMethod;
+			var method = context.MosaMethod;
 
 			if (!method.IsInternal)
 				return false;

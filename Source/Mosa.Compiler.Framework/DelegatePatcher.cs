@@ -88,9 +88,9 @@ namespace Mosa.Compiler.Framework
 
 			Operand thisOperand = vrs[0];
 
-			Operand opMethod = methodCompiler.VirtualRegisters.Allocate(methodCompiler.TypeSystem.BuiltIn.UInt32);
+			Operand opMethod = methodCompiler.VirtualRegisters.Allocate(methodCompiler.TypeSystem.BuiltIn.U4);
 			Operand opInstance = methodCompiler.VirtualRegisters.Allocate(thisOperand.Type);
-			Operand opCompare = methodCompiler.VirtualRegisters.Allocate(methodCompiler.TypeSystem.BuiltIn.Int32);
+			Operand opCompare = methodCompiler.VirtualRegisters.Allocate(methodCompiler.TypeSystem.BuiltIn.I4);
 
 			Operand opReturn = withReturn ? methodCompiler.VirtualRegisters.Allocate(methodCompiler.TypeSystem.BuiltIn.Object) : null;
 			Operand c0 = Operand.CreateConstantSignedInt(methodCompiler.TypeSystem, 0);
@@ -105,7 +105,7 @@ namespace Mosa.Compiler.Framework
 			methodCompiler.BasicBlocks.LinkBlocks(b0.BasicBlock, b2.BasicBlock);
 
 			b1.AppendInstruction(IRInstruction.Call, opReturn, opMethod);
-			b1.InvokeMethod = methodCompiler.Method;
+			b1.MosaMethod = methodCompiler.Method;
 			for (int i = 1; i < methodCompiler.Parameters.Length; i++)
 			{
 				b1.AddOperand(vrs[i]);
@@ -114,7 +114,7 @@ namespace Mosa.Compiler.Framework
 			methodCompiler.BasicBlocks.LinkBlocks(b1.BasicBlock, b3.BasicBlock);
 
 			b2.AppendInstruction(IRInstruction.Call, opReturn, opMethod);
-			b2.InvokeMethod = methodCompiler.Method;
+			b2.MosaMethod = methodCompiler.Method;
 			for (int i = 1; i < methodCompiler.Parameters.Length; i++)
 			{
 				b2.AddOperand(vrs[i]);

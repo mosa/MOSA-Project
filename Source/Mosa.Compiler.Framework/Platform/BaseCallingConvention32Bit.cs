@@ -58,11 +58,11 @@ namespace Mosa.Compiler.Framework.Platform
 
 			Operand target = context.Operand1;
 			Operand result = context.Result;
-			MosaMethod method = context.InvokeMethod;
+			MosaMethod method = context.MosaMethod;
 
 			Debug.Assert(method != null);
 
-			Operand scratch = Operand.CreateCPURegister(typeSystem.BuiltIn.Ptr, scratchRegister);
+			Operand scratch = Operand.CreateCPURegister(typeSystem.BuiltIn.Pointer, scratchRegister);
 
 			List<Operand> operands = BuildOperands(context);
 
@@ -96,7 +96,7 @@ namespace Mosa.Compiler.Framework.Platform
 			if (stackSize == 0)
 				return;
 
-			Operand stackPointer = Operand.CreateCPURegister(typeSystem.BuiltIn.Ptr, architecture.StackPointerRegister);
+			Operand stackPointer = Operand.CreateCPURegister(typeSystem.BuiltIn.Pointer, architecture.StackPointerRegister);
 
 			architecture.InsertSubInstruction(context, stackPointer, stackPointer, Operand.CreateConstant(typeSystem.BuiltIn.I4, stackSize));
 			architecture.InsertMoveInstruction(context, scratch, stackPointer);
@@ -113,7 +113,7 @@ namespace Mosa.Compiler.Framework.Platform
 			if (stackSize == 0)
 				return;
 
-			Operand stackPointer = Operand.CreateCPURegister(typeSystem.BuiltIn.Ptr, architecture.StackPointerRegister);
+			Operand stackPointer = Operand.CreateCPURegister(typeSystem.BuiltIn.Pointer, architecture.StackPointerRegister);
 			architecture.InsertAddInstruction(context, stackPointer, stackPointer, Operand.CreateConstant(typeSystem.BuiltIn.I4, stackSize));
 		}
 
@@ -128,7 +128,7 @@ namespace Mosa.Compiler.Framework.Platform
 			if (result == null)
 				return;
 
-			if (result.IsFloatingPoint)
+			if (result.IsR)
 			{
 				Operand returnFP = Operand.CreateCPURegister(result.Type, returnFloatingPointRegister);
 				architecture.InsertMoveInstruction(context, result, returnFP);
@@ -172,10 +172,8 @@ namespace Mosa.Compiler.Framework.Platform
 				int size, alignment;
 				architecture.GetTypeRequirements(operand.Type, out size, out alignment);
 
-				if (param != null && operand.IsDouble && param.IsSingle)
-				{
-					size = 4; alignment = 4;
-				}
+				if (param != null && operand.IsR8 && param.IsR4)
+					architecture.GetTypeRequirements(param, out size, out alignment);
 
 				if (size < alignment)
 					size = alignment;
@@ -203,9 +201,9 @@ namespace Mosa.Compiler.Framework.Platform
 				architecture.InsertMoveInstruction(context, Operand.CreateMemoryAddress(typeSystem.BuiltIn.I4, scratch, stackSize), op.Low);
 				architecture.InsertMoveInstruction(context, Operand.CreateMemoryAddress(typeSystem.BuiltIn.I4, scratch, stackSize + 4), op.High);
 			}
-			else if (op.IsFloatingPoint)
+			else if (op.IsR)
 			{
-				if (op.IsDouble && parameterSize == 4)
+				if (op.IsR8 && parameterSize == 4)
 				{
 					Operand op2 = Operand.CreateCPURegister(typeSystem.BuiltIn.R4, returnFloatingPointRegister);
 					architecture.InsertMoveInstruction(context, op2, op);
@@ -237,17 +235,17 @@ namespace Mosa.Compiler.Framework.Platform
 			{
 				architecture.InsertMoveInstruction(context, Operand.CreateCPURegister(operand.Type, return32BitRegister), operand);
 			}
-			else if (operand.IsSingle)
+			else if (operand.IsR4)
 			{
 				architecture.InsertMoveInstruction(context, Operand.CreateCPURegister(operand.Type, returnFloatingPointRegister), operand);
 			}
-			else if (operand.IsDouble)
+			else if (operand.IsR8)
 			{
 				architecture.InsertMoveInstruction(context, Operand.CreateCPURegister(operand.Type, returnFloatingPointRegister), operand);
 			}
 			else if (operand.IsLong)
 			{
-				MosaType highType = (operand.IsSignedLong) ? typeSystem.BuiltIn.I4 : typeSystem.BuiltIn.U4;
+				MosaType highType = (operand.IsI8) ? typeSystem.BuiltIn.I4 : typeSystem.BuiltIn.U4;
 
 				architecture.InsertMoveInstruction(context, Operand.CreateCPURegister(typeSystem.BuiltIn.U4, return32BitRegister), operand.Low);
 				architecture.InsertMoveInstruction(context, Operand.CreateCPURegister(highType, return64BitRegister), operand.High);

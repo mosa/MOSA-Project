@@ -107,11 +107,8 @@ namespace Mosa.Compiler.Framework
 
 				var param = (index + offset >= 0) ? method.Parameters[index + offset] : null;
 
-				if (param != null && operand.IsDouble && param.Type.IsSingle)
-				{
-					size = 4;
-					alignment = 4;
-				}
+				if (param != null && operand.IsR8 && param.Type.IsR4)
+					architecture.GetTypeRequirements(param.Type, out size, out alignment);
 
 				if (size < alignment)
 					size = alignment;

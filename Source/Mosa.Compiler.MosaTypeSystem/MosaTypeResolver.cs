@@ -26,12 +26,10 @@ namespace Mosa.Compiler.MosaTypeSystem
 		private Dictionary<ScopedToken, MosaMethod> methodLookup = new Dictionary<ScopedToken, MosaMethod>();
 		private Dictionary<ScopedToken, MosaField> fieldLookup = new Dictionary<ScopedToken, MosaField>();
 
-		private Dictionary<MosaType, MosaType> unmanagedPointerTypes = new Dictionary<MosaType, MosaType>();
-		private Dictionary<MosaType, MosaType> managedPointerTypes = new Dictionary<MosaType, MosaType>();
-		private Dictionary<MosaType, MosaType> arrayTypes = new Dictionary<MosaType, MosaType>();
-
 		private Dictionary<GenericInstSig, MosaType> genericTypeInsts;
 		private Dictionary<Tuple<MethodSig, GenericInstMethodSig>, MosaMethod> genericMethodInsts;
+
+		internal Dictionary<Tuple<ModuleDefMD, string>, uint> stringHeapLookup = new Dictionary<Tuple<ModuleDefMD, string>, uint>();
 
 		class GenericTypeInstComparer : IEqualityComparer<GenericInstSig>
 		{
@@ -77,9 +75,30 @@ namespace Mosa.Compiler.MosaTypeSystem
 			DefaultLinkerType = CreateLinkerType("@Linker", "Default");
 		}
 
+		class USLookupHook : IStringDecrypter
+		{
+			MosaTypeResolver resolver;
+			ModuleDefMD module;
+
+			public USLookupHook(MosaTypeResolver resolver, ModuleDefMD module)
+			{
+				this.resolver = resolver;
+				this.module = module;
+			}
+
+			public string ReadUserString(uint token)
+			{
+				string result = module.USStream.ReadNoNull(token);
+				resolver.stringHeapLookup[Tuple.Create(module, result)] = token;
+				return result;
+			}
+		}
+
 		internal void AddModule(MosaModule module)
 		{
 			Modules.Add(module.Name, module);
+			if (module.InternalModule != null)
+				module.InternalModule.StringDecrypter = new USLookupHook(this, module.InternalModule);
 		}
 
 		public MosaModule GetModuleByName(string name)
@@ -205,63 +224,6 @@ namespace Mosa.Compiler.MosaTypeSystem
 		internal MosaField GetFieldByToken(ScopedToken token)
 		{
 			return fieldLookup[token];
-		}
-
-		public MosaType GetUnmanagedPointerType(MosaType element)
-		{
-			MosaType type;
-
-			if (unmanagedPointerTypes.TryGetValue(element, out type))
-				return type;
-
-			type = new MosaType(element.Module, element.InternalType, element.TypeSignature.ToPtrSig());
-			unmanagedPointerTypes.Add(element, type);
-
-			return type;
-		}
-
-		public MosaType GetManagedPointerType(MosaType element)
-		{
-			MosaType type;
-
-			if (managedPointerTypes.TryGetValue(element, out type))
-				return type;
-
-			type = new MosaType(element.Module, element.InternalType, element.TypeSignature.ToByRefSig());
-			managedPointerTypes.Add(element, type);
-
-			return type;
-		}
-
-		public MosaType GetArrayType(MosaType element)
-		{
-			MosaType type;
-
-			if (arrayTypes.TryGetValue(element, out type))
-				return type;
-
-			type = new MosaType(element.Module, element.InternalType, element.TypeSignature.ToSZArraySig());
-			arrayTypes.Add(element, type);
-
-			return type;
-		}
-
-		private MosaType CreateNewElementType(MosaType baseType, MosaType elementType)
-		{
-			if (baseType.IsArray)
-			{
-				return GetArrayType(elementType);
-			}
-			else if (baseType.IsUnmanagedPointer)
-			{
-				return GetUnmanagedPointerType(elementType);
-			}
-			else if (baseType.IsManagedPointer)
-			{
-				return GetManagedPointerType(elementType);
-			}
-
-			throw new InvalidCompilerException();
 		}
 	}
 }

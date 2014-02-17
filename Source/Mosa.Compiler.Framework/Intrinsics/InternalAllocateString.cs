@@ -33,12 +33,12 @@ namespace Mosa.Compiler.Framework.Intrinsics
 
 			Operand callTargetOperand = Operand.CreateSymbolFromMethod(methodCompiler.TypeSystem, method);
 
-			Operand methodTableOperand = Operand.CreateManagedSymbolPointer(methodCompiler.TypeSystem, StringClassMethodTableSymbolName);
+			Operand methodTableOperand = Operand.CreateUnmanagedSymbolPointer(methodCompiler.TypeSystem, StringClassMethodTableSymbolName);
 			Operand lengthOperand = context.Operand1;
 			Operand result = context.Result;
 
 			context.SetInstruction(IRInstruction.Call, result, callTargetOperand, methodTableOperand, lengthOperand);
-			context.InvokeMethod = method;
+			context.MosaMethod = method;
 		}
 	}
 }

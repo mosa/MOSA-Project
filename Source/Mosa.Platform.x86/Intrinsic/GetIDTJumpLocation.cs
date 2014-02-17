@@ -48,14 +48,14 @@ namespace Mosa.Platform.x86.Intrinsic
 			int irq = (int)operand.ConstantSignedInteger;
 
 			// Find the method
-			var method = TypeSystem.GetMethodByName(methodCompiler.TypeSystem.Resolver.DefaultLinkerType, "InterruptISR" + irq.ToString());
+			var method = TypeSystem.GetMethodByName(methodCompiler.TypeSystem.DefaultLinkerType, "InterruptISR" + irq.ToString());
 
 			if (method == null)
 			{
 				throw new InvalidCompilerException();
 			}
 
-			context.SetInstruction(IRInstruction.Move, context.Result, Operand.CreateUnmanagedSymbolPointer(methodCompiler.TypeSystem, method.MethodName));
+			context.SetInstruction(IRInstruction.Move, context.Result, Operand.CreateUnmanagedSymbolPointer(methodCompiler.TypeSystem, method.FullName));
 		}
 
 		#endregion Methods

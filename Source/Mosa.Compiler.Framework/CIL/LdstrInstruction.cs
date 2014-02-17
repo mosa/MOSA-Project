@@ -7,8 +7,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using Mosa.Compiler.Metadata;
-
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
@@ -42,11 +40,11 @@ namespace Mosa.Compiler.Framework.CIL
 			// Decode base classes first
 			base.Decode(ctx, decoder);
 
-			var token = (HeapIndexToken)decoder.DecodeInt();
+			var value = (string)decoder.Instruction.Operand;
 
-			string symbolName = @"$ldstr$" + decoder.Method.CodeAssembly.Name + "$" + ((int)(token)).ToString("x");
+			string symbolName = @"$ldstr$" + decoder.Method.Module.Name + "$" + decoder.TypeSystem.LookupUserString(decoder.Method.Module, value);
 
-			string name = decoder.TypeSystem.Resolver.GetUserString(decoder.Method.CodeAssembly, token);
+			string name = value;
 
 			ctx.Operand1 = Operand.CreateStringSymbol(decoder.TypeSystem, symbolName, name);
 

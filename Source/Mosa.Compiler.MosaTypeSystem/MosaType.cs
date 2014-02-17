@@ -35,6 +35,8 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public MosaType EnclosingType { get; private set; }
 
+		public bool HasOpenGenericParams { get; private set; }
+
 		public bool IsValueType { get; private set; }
 
 		public bool IsDelegate { get; private set; }
@@ -101,7 +103,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public bool IsUI8 { get { return IsU8 || IsI8; } }
 
-		public bool IsR48 { get { return IsR4 || IsR8; } }
+		public bool IsR { get { return IsR4 || IsR8; } }
 
 		public bool IsN { get { return IsU || IsI; } }
 
@@ -169,6 +171,21 @@ namespace Mosa.Compiler.MosaTypeSystem
 			return type == this;
 		}
 
+		public object[] GetAttribute(string attrType)
+		{
+			var attr = InternalType.CustomAttributes.Find(attrType);
+			if (attr == null)
+				return null;
+
+			var arguments = attr.ConstructorArguments;
+
+			object[] result = new object[arguments.Count];
+			for (int i = 0; i < result.Length; i++)
+				result[i] = arguments[i].Value;
+
+			return result;
+		}
+
 		public MosaType Clone()
 		{
 			MosaType result = (MosaType)base.MemberwiseClone();
@@ -217,9 +234,11 @@ namespace Mosa.Compiler.MosaTypeSystem
 					return StackTypeCode.N;
 
 				case ElemType.ByRef:
+					return StackTypeCode.ManagedPointer;
+
 				case ElemType.Ptr:
 				case ElemType.FnPtr:
-					return StackTypeCode.Pointer;
+					return StackTypeCode.UnmanagedPointer;
 
 				case ElemType.String:
 				case ElemType.ValueType:
@@ -280,11 +299,13 @@ namespace Mosa.Compiler.MosaTypeSystem
 				IsModule = false;
 				ClassSize = PackingSize = null;
 			}
+
+			HasOpenGenericParams = sig.HasOpenGenericParameter();
 		}
 
 		void IResolvable.Resolve(MosaTypeLoader loader)
 		{
-			// InternalType is null is this instance is generic parameters
+			// InternalType is null means this instance is generic parameters
 			if (InternalType != null)
 			{
 				if (TypeSignature.IsArray || TypeSignature.IsSZArray)

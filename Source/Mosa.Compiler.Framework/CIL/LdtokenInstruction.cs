@@ -8,7 +8,7 @@
  */
 
 using System;
-using Mosa.Compiler.Metadata;
+using Mosa.Compiler.MosaTypeSystem;
 
 namespace Mosa.Compiler.Framework.CIL
 {
@@ -43,65 +43,21 @@ namespace Mosa.Compiler.Framework.CIL
 			base.Decode(ctx, decoder);
 
 			// See Partition III, 4.17 (ldtoken)
-			// ldtoken can produce three kinds of token depending on the operand.
-			var token = decoder.DecodeTokenType();
 
-			const int MethodToken = 1;
-			const int FieldToken = 2;
-			const int TypeToken = 3;
-			int tokenType = 0;
-
-			var assembly = decoder.Method.CodeAssembly;
-			switch (token.Table)
+			if (decoder.Instruction.Operand is MosaType)
 			{
-				case TableType.MethodDef:
-				case TableType.MethodSpec:
-					tokenType = MethodToken;
-					break;
-
-				case TableType.TypeDef:
-				case TableType.TypeRef:
-				case TableType.TypeSpec:
-					tokenType = TypeToken;
-					break;
-
-				case TableType.Field:
-					tokenType = FieldToken;
-					break;
-
-				case TableType.MemberRef:
-					// MemberRef can only be field or method.
-					if (decoder.TypeSystem.Resolver.CheckFieldExists(assembly, token))
-					{
-						tokenType = FieldToken;
-					}
-					else
-					{
-						tokenType = MethodToken;
-					}
-					break;
+				ctx.MosaType = (MosaType)decoder.Instruction.Operand;
+				ctx.Result = decoder.Compiler.CreateVirtualRegister(decoder.TypeSystem.GetTypeByName("System", "RuntimeTypeHandle"));
 			}
-
-			// Set the result according to token type
-			switch (tokenType)
+			else if (decoder.Instruction.Operand is MosaMethod)
 			{
-				case TypeToken:
-					var type = decoder.TypeSystem.Resolver.GetTypeByToken(assembly, token, decoder.Method);
-					ctx.MosaType = type;
-					ctx.Result = decoder.Compiler.CreateVirtualRegister(decoder.TypeSystem.GetTypeByName("System", "RuntimeTypeHandle"));
-					break;
-
-				case MethodToken:
-					var method = decoder.TypeSystem.Resolver.GetMethodByToken(assembly, token, decoder.Method.DeclaringType.GenericArguments);
-					ctx.InvokeMethod = method;      // Since there isn't way to store as 'referenced method' rather than 'invoked method', this will do.
-					ctx.Result = decoder.Compiler.CreateVirtualRegister(decoder.TypeSystem.GetTypeByName("System", "RuntimeMethodHandle"));
-					break;
-
-				case FieldToken:
-					var field = decoder.TypeSystem.Resolver.GetFieldByToken(assembly, token, decoder.Method.DeclaringType.GenericArguments);
-					ctx.MosaField = field;
-					ctx.Result = decoder.Compiler.CreateVirtualRegister(decoder.TypeSystem.GetTypeByName("System", "RuntimeFieldHandle"));
-					break;
+				ctx.MosaMethod = (MosaMethod)decoder.Instruction.Operand;
+				ctx.Result = decoder.Compiler.CreateVirtualRegister(decoder.TypeSystem.GetTypeByName("System", "RuntimeMethodHandle"));
+			}
+			else if (decoder.Instruction.Operand is MosaField)
+			{
+				ctx.MosaField = (MosaField)decoder.Instruction.Operand;
+				ctx.Result = decoder.Compiler.CreateVirtualRegister(decoder.TypeSystem.GetTypeByName("System", "RuntimeFieldHandle"));
 			}
 			ctx.OperandCount = 0;
 		}

@@ -20,17 +20,13 @@ namespace Mosa.Utility.GUI.Common
 			treeView.BeginUpdate();
 			treeView.Nodes.Clear();
 
-			foreach (var assembly in typeSystem.AllAssemblies)
+			foreach (var module in typeSystem.AllModules)
 			{
-				TreeNode moduleNode = new TreeNode(assembly.Name);
+				TreeNode moduleNode = new TreeNode(module.Name);
 				treeView.Nodes.Add(moduleNode);
 
-				foreach (MosaType type in typeSystem.AllTypes)
+				foreach (MosaType type in module.Types.Values)
 				{
-					// slow!
-					if (type.Assembly != assembly)
-						continue;
-
 					TreeNode typeNode = new TreeNode(type.FullName);
 					moduleNode.Nodes.Add(typeNode);
 
@@ -46,34 +42,10 @@ namespace Mosa.Utility.GUI.Common
 						typeNode.Nodes.Add(baseTypeNode);
 					}
 
-					if (type.GenericParentType != null)
+					if (type.InternalType != null)
 					{
-						TreeNode genericBaseTypeNode = new TreeNode("Generic Base Type: " + type.GenericParentType.FullName);
-						typeNode.Nodes.Add(genericBaseTypeNode);
-					}
-
-					if (type.GenericParameters.Count != 0)
-					{
-						TreeNode genericParameterNodes = new TreeNode("Generic Parameters");
-						typeNode.Nodes.Add(genericParameterNodes);
-
-						foreach (var genericParameter in type.GenericParameters)
-						{
-							TreeNode GenericParameterNode = new TreeNode(genericParameter.Name);
-							genericParameterNodes.Nodes.Add(GenericParameterNode);
-						}
-					}
-
-					if (type.GenericArguments.Count != 0)
-					{
-						TreeNode genericParameterNodes = new TreeNode("Generic Arguments");
-						typeNode.Nodes.Add(genericParameterNodes);
-
-						foreach (var genericParameter in type.GenericArguments)
-						{
-							TreeNode GenericParameterNode = new TreeNode(genericParameter.Name);
-							genericParameterNodes.Nodes.Add(GenericParameterNode);
-						}
+						TreeNode baseTypeNode = new TreeNode("Type Definition: " + type.InternalType.FullName);
+						typeNode.Nodes.Add(baseTypeNode);
 					}
 
 					if (type.Interfaces.Count != 0)
@@ -123,7 +95,7 @@ namespace Mosa.Utility.GUI.Common
 
 						foreach (MosaMethod method in type.Methods)
 						{
-							TreeNode methodNode = new ViewNode<MosaMethod>(method, method.ShortMethodName);
+							TreeNode methodNode = new ViewNode<MosaMethod>(method, method.FullName);
 							methodsNode.Nodes.Add(methodNode);
 
 							if (method.IsStatic)
@@ -148,27 +120,16 @@ namespace Mosa.Utility.GUI.Common
 								methodNode.Text = methodNode.Text + " [RTSpecialName]";
 
 
-							if (method.GenericBaseMethod != null)
-							{
-								TreeNode genericBaseMethodNodes = new TreeNode("Generic Base Method: " + method.GenericBaseMethod.MethodName);
-								methodNode.Nodes.Add(genericBaseMethodNodes);
-							}
 
-							if (method.GenericParameters.Count != 0)
+							if (method.InternalMethod != null)
 							{
-								TreeNode genericParameterNodes = new TreeNode("Generic Parameters");
-								methodNode.Nodes.Add(genericParameterNodes);
-
-								foreach (var genericParameter in method.GenericParameters)
-								{
-									TreeNode GenericParameterNode = new TreeNode(genericParameter.Name);
-									genericParameterNodes.Nodes.Add(GenericParameterNode);
-								}
+								TreeNode baseMethodNode = new TreeNode("Method Definition: " + method.InternalMethod.FullName);
+								typeNode.Nodes.Add(baseMethodNode);
 							}
 
 							if (method.GenericArguments.Count != 0)
 							{
-								TreeNode genericParameterNodes = new TreeNode("Generic Parameters Types");
+								TreeNode genericParameterNodes = new TreeNode("Generic Arguments Types");
 								methodNode.Nodes.Add(genericParameterNodes);
 
 								foreach (var genericParameter in method.GenericArguments)
@@ -187,7 +148,7 @@ namespace Mosa.Utility.GUI.Common
 
 						foreach (MosaMethod method in typeLayout.GetMethodTable(type))
 						{
-							TreeNode methodNode = new ViewNode<MosaMethod>(method, method.ShortMethodName);
+							TreeNode methodNode = new ViewNode<MosaMethod>(method, method.FullName);
 							methodTableNode.Nodes.Add(methodNode);
 						}
 					}

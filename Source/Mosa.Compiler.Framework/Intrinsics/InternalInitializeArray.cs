@@ -33,7 +33,7 @@ namespace Mosa.Compiler.Framework.Intrinsics
 			Operand fieldOperand = context.Operand2;
 
 			context.SetInstruction(IRInstruction.Call, null, callTargetOperand, arrayOperand, fieldOperand);
-			context.InvokeMethod = method;
+			context.MosaMethod = method;
 		}
 	}
 }

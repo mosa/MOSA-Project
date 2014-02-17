@@ -115,7 +115,7 @@ namespace Mosa.Test.System
 
 			Debug.Assert(delegateType != null, delegateName);
 
-			LinkerSymbol symbol = linker.GetSymbol(runtimeMethod.MethodName);
+			LinkerSymbol symbol = linker.GetSymbol(runtimeMethod.FullName);
 			LinkerSection section = linker.GetSection(symbol.SectionKind);
 
 			long address = symbol.VirtualAddress;
@@ -199,20 +199,18 @@ namespace Mosa.Test.System
 
 		private TestLinker RunMosaCompiler(CompilerSettings settings, string assemblyFile)
 		{
-			MosaAssemblyLoader assemblyLoader = new MosaAssemblyLoader();
+			MosaModuleLoader moduleLoader = new MosaModuleLoader();
 
-			assemblyLoader.AddPrivatePath(settings.References);
+			moduleLoader.AddPrivatePath(settings.References);
 
-			assemblyLoader.LoadModule(assemblyFile);
+			moduleLoader.LoadModuleFromFile(assemblyFile);
 
 			foreach (string file in settings.References)
 			{
-				assemblyLoader.LoadModule(file);
+				moduleLoader.LoadModuleFromFile(file);
 			}
 
-			typeSystem = new TypeSystem();
-
-			typeSystem.Load(assemblyLoader);
+			typeSystem = TypeSystem.Load(moduleLoader);
 
 			return TestCaseCompiler.Compile(typeSystem);
 		}

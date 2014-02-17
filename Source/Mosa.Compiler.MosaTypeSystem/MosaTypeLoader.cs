@@ -209,7 +209,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 						return LoadArraySig(elementType, typeSig);
 
 					case ElementType.FnPtr:
-						throw new NotSupportedException("FnPtr is not supported.");
+						return LoadFnPointerSig((FnPtrSig)typeSig);
 
 					default:
 						throw new AssemblyLoadException();
@@ -259,6 +259,14 @@ namespace Mosa.Compiler.MosaTypeSystem
 			// Add three array accessors as defined in standard (Get, Set, Address)
 
 			// TODO: Add them
+
+			return type;
+		}
+
+		MosaType LoadFnPointerSig(FnPtrSig sig)
+		{
+			MosaType type = new MosaType(TypeSystem.Resolver.LinkerModule, string.Format("FnPtr[0x{0:x8}]", sig.MethodSig), "");
+			type.UpdateSignature(sig);
 
 			return type;
 		}

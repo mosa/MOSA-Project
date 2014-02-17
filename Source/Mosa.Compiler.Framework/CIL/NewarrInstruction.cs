@@ -7,6 +7,8 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using Mosa.Compiler.MosaTypeSystem;
+
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
@@ -39,14 +41,14 @@ namespace Mosa.Compiler.Framework.CIL
 			// Decode base classes first
 			base.Decode(ctx, decoder);
 
-			var type = decoder.TypeSystem.Resolver.GetTypeByToken(decoder.Method.CodeAssembly, decoder.DecodeTokenType(), decoder.Method);
+			var type = (MosaType)decoder.Instruction.Operand;
 
 			// FIXME: If ctx.Operands1 is an integral constant, we can infer the maximum size of the array
 			// and instantiate an ArrayTypeSpecification with max. sizes. This way we could eliminate bounds
 			// checks in an optimization stage later on, if we find that a value never exceeds the array
 			// bounds.
 
-			var arrayType = decoder.TypeSystem.Resolver.GetArrayType(type);
+			var arrayType = decoder.TypeSystem.GetArrayType(type);
 
 			ctx.Result = decoder.Compiler.CreateVirtualRegister(arrayType);
 		}

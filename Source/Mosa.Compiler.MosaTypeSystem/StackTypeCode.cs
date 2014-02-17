@@ -40,13 +40,18 @@ namespace Mosa.Compiler.MosaTypeSystem
 		F = 4,
 
 		/// <summary>
-		/// CLI Stack type is pointer.
+		/// CLI Stack type is managed pointer.
 		/// </summary>
-		Pointer = 5,
+		ManagedPointer = 5,
+
+		/// <summary>
+		/// CLI Stack type is unmanaged pointer.
+		/// </summary>
+		UnmanagedPointer = 6,
 
 		/// <summary>
 		/// CLI stack type is object reference.
 		/// </summary>
-		O = 6,
+		O = 7,
 	}
 }

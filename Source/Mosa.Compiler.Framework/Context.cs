@@ -435,9 +435,9 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Holds the function being called.
+		/// Gets or sets the runtime method.
 		/// </summary>
-		public MosaMethod InvokeMethod
+		public MosaMethod MosaMethod
 		{
 			get { return instructionSet.Data[index].InvokeMethod; }
 			set { instructionSet.Data[index].InvokeMethod = value; }
@@ -731,7 +731,7 @@ namespace Mosa.Compiler.Framework
 		public void SetInstruction(BaseInstruction instruction, MosaMethod target)
 		{
 			SetInstruction(instruction);
-			InvokeMethod = target;
+			MosaMethod = target;
 		}
 
 		/// <summary>
@@ -984,7 +984,7 @@ namespace Mosa.Compiler.Framework
 		public void AppendInstruction(BaseInstruction instruction, MosaMethod target)
 		{
 			AppendInstruction(instruction);
-			InvokeMethod = target;
+			MosaMethod = target;
 		}
 
 		/// <summary>

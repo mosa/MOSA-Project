@@ -231,6 +231,10 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\dnlib\src\dnlib.csproj">
+      <Project>{FDFC1237-143F-4919-8318-4926901F4639}</Project>
+      <Name>dnlib</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Mosa.Compiler.Common\Mosa.Compiler.Common.csproj">
       <Project>{0b1011a6-8fcd-4f9e-bbb8-8db86e23d2e8}</Project>
       <Name>Mosa.Compiler.Common</Name>
@@ -246,10 +250,6 @@
     <ProjectReference Include="..\Mosa.Compiler.Linker\Mosa.Compiler.Linker.csproj">
       <Project>{65866a51-b229-44c5-ac81-87a90fa1741b}</Project>
       <Name>Mosa.Compiler.Linker</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Mosa.Compiler.Metadata\Mosa.Compiler.Metadata.csproj">
-      <Project>{7033b213-2055-4c6a-b008-d9856267f5d7}</Project>
-      <Name>Mosa.Compiler.Metadata</Name>
     </ProjectReference>
     <ProjectReference Include="..\Mosa.Compiler.MosaTypeSystem\Mosa.Compiler.MosaTypeSystem.csproj">
       <Project>{5f30a68e-05bf-40ea-b576-5ebcde520559}</Project>

@@ -51,13 +51,13 @@ namespace Mosa.TinyCPUSimulator.Adaptor
 			Operand entryPoint = Operand.CreateSymbolFromMethod(typeSystem, typeInitializerSchedulerStage.TypeInitializerMethod);
 
 			context.AppendInstruction(IRInstruction.Call, null, entryPoint);
-			context.InvokeMethod = typeInitializerSchedulerStage.TypeInitializerMethod;
+			context.MosaMethod = typeInitializerSchedulerStage.TypeInitializerMethod;
 			//context.AppendInstruction(IRInstruction.Break);
 
 			MosaMethod method = compiler.CreateLinkerMethod(StartUpName);
 			compiler.CompileMethod(method, basicBlocks, instructionSet);
 
-			linker.EntryPoint = linker.GetSymbol(method.MethodName);
+			linker.EntryPoint = linker.GetSymbol(method.FullName);
 		}
 
 		#endregion ICompilerStage Members

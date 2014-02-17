@@ -54,14 +54,14 @@ namespace Mosa.Compiler.Framework.CIL
 			// Decode base classes first
 			base.Decode(ctx, decoder);
 
-			// Retrieve the number of branch targets
-			uint count = decoder.DecodeUInt();
+			var targets = (dnlib.DotNet.Emit.Instruction[])decoder.Instruction.Operand;
 
-			ctx.AllocateBranchTargets(count + 1);
+			ctx.AllocateBranchTargets((uint)targets.Length + 1);
 
 			// Populate the array
-			for (uint i = 0; i < count; i++)
-				ctx.BranchTargets[i] = decoder.DecodeInt();
+			for (int i = 0; i < targets.Length; i++)
+				ctx.BranchTargets[i] = (int)targets[i].Offset;
+			ctx.BranchTargets[targets.Length] = (int)decoder.Method.Code[decoder.Method.Code.IndexOf(decoder.Instruction) + 1].Offset;
 		}
 
 		/// <summary>

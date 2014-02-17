@@ -53,7 +53,7 @@ namespace Mosa.Platform.x86.Stages
 
 			Operand interrupt = Operand.CreateSymbolFromMethod(typeSystem, method);
 
-			Operand esp = Operand.CreateCPURegister(typeSystem.BuiltIn.Int32, GeneralPurposeRegister.ESP);
+			Operand esp = Operand.CreateCPURegister(typeSystem.BuiltIn.I4, GeneralPurposeRegister.ESP);
 
 			for (int i = 0; i <= 255; i++)
 			{

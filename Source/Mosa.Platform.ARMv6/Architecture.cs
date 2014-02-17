@@ -201,12 +201,12 @@ namespace Mosa.Platform.ARMv6
 		/// <exception cref="System.ArgumentNullException">signatureType</exception>
 		public override void GetTypeRequirements(MosaType type, out int size, out int alignment)
 		{
-			if (type.IsLong)
+			if (type.IsUI8)
 			{
 				size = 8;
 				alignment = 4;
 			}
-			else if (type.IsDouble)
+			else if (type.IsR8)
 			{
 				size = 8;
 				alignment = 8;

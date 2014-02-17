@@ -49,7 +49,6 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 			simAdapter = platform.CreateSimAdaptor();
 
 			linker = new SimLinker(simAdapter);
-			typeSystem = new TypeSystem();
 		}
 
 		protected void CompileTestCode()
@@ -57,15 +56,15 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 			if (simCompiler != null)
 				return;
 
-			MosaAssemblyLoader assemblyLoader = new MosaAssemblyLoader();
+			MosaModuleLoader moduleLoader = new MosaModuleLoader();
 
-			assemblyLoader.AddPrivatePath(System.IO.Directory.GetCurrentDirectory());
-			assemblyLoader.LoadModule("mscorlib.dll");
-			assemblyLoader.LoadModule("Mosa.Platform.Internal." + platform.Name + ".dll");
-			assemblyLoader.LoadModule("Mosa.Test.Collection.dll");
-			assemblyLoader.LoadModule("Mosa.Kernel.x86Test.dll");
+			moduleLoader.AddPrivatePath(System.IO.Directory.GetCurrentDirectory());
+			moduleLoader.LoadModuleFromFile("mscorlib.dll");
+			moduleLoader.LoadModuleFromFile("Mosa.Platform.Internal." + platform.Name + ".dll");
+			moduleLoader.LoadModuleFromFile("Mosa.Test.Collection.dll");
+			moduleLoader.LoadModuleFromFile("Mosa.Kernel.x86Test.dll");
 
-			typeSystem.Load(assemblyLoader);
+			typeSystem = TypeSystem.Load(moduleLoader);
 
 			typeLayout = new MosaTypeLayout(typeSystem, 4, 4);
 
@@ -96,7 +95,7 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 
 			Debug.Assert(runtimeMethod != null, runtimeMethod.ToString());
 
-			LinkerSymbol symbol = linker.GetSymbol(runtimeMethod.MethodName);
+			LinkerSymbol symbol = linker.GetSymbol(runtimeMethod.FullName);
 			//LinkerSection section = linker.GetSection(symbol.SectionKind);
 
 			ulong address = (ulong)symbol.VirtualAddress;

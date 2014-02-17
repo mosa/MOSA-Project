@@ -25,7 +25,7 @@ namespace Mosa.Tool.Explorer
 	{
 		private CodeForm form = new CodeForm();
 		private IInternalTrace internalTrace = new BasicInternalTrace();
-		private TypeSystem typeSystem = new TypeSystem();
+		private TypeSystem typeSystem;
 		private ConfigurableTraceFilter filter = new ConfigurableTraceFilter();
 		private MosaTypeLayout typeLayout;
 		private DateTime compileStartTime;
@@ -316,21 +316,20 @@ namespace Mosa.Tool.Explorer
 
 		protected void LoadAssembly(string filename, bool includeTestComponents, string platform)
 		{
-			MosaAssemblyLoader assemblyLoader = new MosaAssemblyLoader();
+			MosaModuleLoader assemblyLoader = new MosaModuleLoader();
 
 			if (includeTestComponents)
 			{
 				assemblyLoader.AddPrivatePath(System.IO.Directory.GetCurrentDirectory());
-				assemblyLoader.LoadModule("mscorlib.dll");
-				assemblyLoader.LoadModule("Mosa.Platform.Internal." + platform + ".dll");
-				assemblyLoader.LoadModule("Mosa.Kernel.x86Test.dll");
+				assemblyLoader.LoadModuleFromFile("mscorlib.dll");
+				assemblyLoader.LoadModuleFromFile("Mosa.Platform.Internal." + platform + ".dll");
+				assemblyLoader.LoadModuleFromFile("Mosa.Kernel.x86Test.dll");
 			}
 
 			assemblyLoader.AddPrivatePath(Path.GetDirectoryName(filename));
-			assemblyLoader.LoadModule(filename);
+			assemblyLoader.LoadModuleFromFile(filename);
 
-			typeSystem = new TypeSystem();
-			typeSystem.Load(assemblyLoader);
+			typeSystem = TypeSystem.Load(assemblyLoader);
 
 			typeLayout = new MosaTypeLayout(typeSystem, 4, 4); // FIXME
 
@@ -410,7 +409,7 @@ namespace Mosa.Tool.Explorer
 			if (node == null)
 				return;
 
-			toolStripStatusLabel1.Text = node.Type.MethodName;
+			toolStripStatusLabel1.Text = node.Type.FullName;
 
 			if (cbLabels.SelectedIndex == 0)
 			{

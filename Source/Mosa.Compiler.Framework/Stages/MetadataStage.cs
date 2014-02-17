@@ -44,14 +44,14 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			foreach (var type in typeSystem.AllTypes)
 			{
-				if (type.IsModule || type.Assembly.Name == "@Internal")
+				if (type.IsModule)
 					continue;
 
-				if (type.IsBaseGeneric || type.IsOpenGenericType)
+				if (type.HasOpenGenericParams)
 					continue;
 
-				if (!(type.IsObject || type.IsValueType || type.IsEnum || type.IsString || type.IsInterface || type.IsLinkerGenerated))
-					continue;
+				if (type.BaseType == null && !type.IsInterface)	// ghost types like generic params, function ptr, etc.
+					return;
 
 				CreateTypeDefinitionTable(type);
 			}
@@ -132,7 +132,7 @@ namespace Mosa.Compiler.Framework.Stages
 						}
 						else
 						{
-							writer.Write(field.Offset);
+							writer.Write(typeLayout.GetFieldOffset(field));
 							writer.Position -= 4;
 						}
 						writer.Position += typeLayout.NativePointerSize;
@@ -142,7 +142,7 @@ namespace Mosa.Compiler.Framework.Stages
 						writer.Position += typeLayout.NativePointerSize;
 
 						// 3. Size
-						writer.Write((uint)typeLayout.GetTypeSize(field.Type));
+						writer.Write((uint)typeLayout.GetFieldSize(field));
 
 						// 4. Metadata Token
 						writer.Write((uint)0); //FIXME!

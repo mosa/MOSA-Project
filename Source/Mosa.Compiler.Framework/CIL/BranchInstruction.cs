@@ -54,22 +54,7 @@ namespace Mosa.Compiler.Framework.CIL
 			// Decode bases first
 			base.Decode(ctx, decoder);
 
-			switch (opcode)
-			{
-				case OpCode.Br_s:
-					{
-						sbyte target = decoder.DecodeSByte();
-						ctx.SetBranch(target);
-					}
-					break;
-
-				case OpCode.Br:
-					{
-						int target = decoder.DecodeInt();
-						ctx.SetBranch(target);
-						break;
-					}
-			}
+			ctx.SetBranch((int)((dnlib.DotNet.Emit.Instruction)decoder.Instruction.Operand).Offset);
 		}
 
 		/// <summary>

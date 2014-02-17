@@ -99,7 +99,7 @@ namespace Mosa.Compiler.Framework
 			typeLayout = compiler.TypeLayout;
 			callingConvention = architecture.CallingConvention;
 
-			architecture.GetTypeRequirements(typeSystem.BuiltIn.Ptr, out nativePointerSize, out nativePointerAlignment);
+			architecture.GetTypeRequirements(typeSystem.BuiltIn.Pointer, out nativePointerSize, out nativePointerAlignment);
 		}
 
 		#endregion IMethodCompilerStage members
@@ -393,7 +393,7 @@ namespace Mosa.Compiler.Framework
 		{
 			Debug.WriteLine(string.Empty);
 
-			Debug.WriteLine("METHOD: " + methodCompiler.Method.MethodName);
+			Debug.WriteLine("METHOD: " + methodCompiler.Method.FullName);
 			Debug.WriteLine("STAGE : " + (before ? "[BEFORE] " : "[AFTER] ") + this.GetType().Name);
 			Debug.WriteLine(string.Empty);
 

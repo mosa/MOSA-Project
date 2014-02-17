@@ -196,7 +196,7 @@ namespace Mosa.Compiler.Framework
 		/// <returns>A stream object, which can be used to store emitted instructions.</returns>
 		public virtual Stream RequestCodeStream()
 		{
-			return Linker.Allocate(Method.MethodName, SectionKind.Text, 0, 0);
+			return Linker.Allocate(Method.FullName, SectionKind.Text, 0, 0);
 		}
 
 		/// <summary>
@@ -276,7 +276,7 @@ namespace Mosa.Compiler.Framework
 		/// Allocates the local variable virtual registers.
 		/// </summary>
 		/// <param name="locals">The locals.</param>
-		public void SetLocalVariables(List<MosaType> locals)
+		public void SetLocalVariables(IList<MosaType> locals)
 		{
 			LocalVariables = new Operand[locals.Count];
 
@@ -291,7 +291,7 @@ namespace Mosa.Compiler.Framework
 				}
 				else
 				{
-					var stacktype = TypeSystem.ConvertToStackType(local);
+					var stacktype = TypeSystem.GetStackType(local);
 					operand = VirtualRegisters.Allocate(stacktype);
 				}
 

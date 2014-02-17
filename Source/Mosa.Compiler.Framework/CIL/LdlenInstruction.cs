@@ -38,7 +38,7 @@ namespace Mosa.Compiler.Framework.CIL
 		{
 			base.Resolve(ctx, compiler);
 
-			ctx.Result = compiler.CreateVirtualRegister(compiler.TypeSystem.BuiltIn.TypedByRef);
+			ctx.Result = compiler.CreateVirtualRegister(compiler.TypeSystem.BuiltIn.U);
 		}
 
 		/// <summary>

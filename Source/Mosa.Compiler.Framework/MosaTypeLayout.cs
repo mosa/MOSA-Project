@@ -69,7 +69,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Holds the offset for each field
 		/// </summary>
-		private Dictionary<MosaField, int> fieldOffets = new Dictionary<MosaField, int>();
+		private Dictionary<MosaField, int> fieldOffsets = new Dictionary<MosaField, int>();
 
 		/// <summary>
 		/// Holds a list of methods for each type
@@ -167,7 +167,7 @@ namespace Mosa.Compiler.Framework
 			}
 			else
 			{
-				size = GetMemorySize(field.Type);
+				size = GetMemorySize(field.FieldType);
 			}
 
 			fieldSizes.Add(field, size);
@@ -186,7 +186,7 @@ namespace Mosa.Compiler.Framework
 
 			var offset = 0;
 
-			fieldOffets.TryGetValue(field, out offset);
+			fieldOffsets.TryGetValue(field, out offset);
 
 			return offset;
 		}
@@ -201,10 +201,7 @@ namespace Mosa.Compiler.Framework
 			if (type.IsModule)
 				return null;
 
-			if (type.IsBaseGeneric || type.IsOpenGenericType)
-				return null;
-
-			if (!(type.IsObject || type.IsValueType || type.IsEnum || type.IsString || type.IsInterface || type.IsLinkerGenerated))
+			if (type.HasOpenGenericParams)
 				return null;
 
 			ResolveType(type);
@@ -260,10 +257,10 @@ namespace Mosa.Compiler.Framework
 			if (type.IsModule)
 				return;
 
-			if (type.IsBaseGeneric || type.IsOpenGenericType)
+			if (type.HasOpenGenericParams)
 				return;
 
-			if (!(type.IsObject || type.IsValueType || type.IsEnum || type.IsString || type.IsInterface || type.IsLinkerGenerated))
+			if (type.BaseType == null && !type.IsInterface)	// ghost types like generic params, function ptr, etc.
 				return;
 
 			if (typeSet.Contains(type))
@@ -290,11 +287,11 @@ namespace Mosa.Compiler.Framework
 
 			if (type.IsExplicitLayout)
 			{
-				ResolveExplicitLayout(type);
+				ComputeExplicitLayout(type);
 			}
 			else
 			{
-				CreateSequentialLayout(type);
+				ComputeSequentialLayout(type);
 			}
 
 			CreateMethodTable(type);
@@ -311,10 +308,7 @@ namespace Mosa.Compiler.Framework
 			if (type.IsModule)
 				return;
 
-			if (type.IsBaseGeneric || type.IsOpenGenericType)
-				return;
-
-			if (!(type.IsObject || type.IsValueType || type.IsEnum || type.IsString || type.IsInterface || type.IsLinkerGenerated))
+			if (type.HasOpenGenericParams)
 				return;
 
 			if (interfaces.Contains(type))
@@ -324,7 +318,7 @@ namespace Mosa.Compiler.Framework
 			interfaceSlots.Add(type, interfaceSlots.Count);
 		}
 
-		private void CreateSequentialLayout(MosaType type)
+		private void ComputeSequentialLayout(MosaType type)
 		{
 			Debug.Assert(type != null, @"No type given.");
 
@@ -335,7 +329,7 @@ namespace Mosa.Compiler.Framework
 			int typeSize = 0;
 
 			// Receives the size/alignment
-			int packingSize = type.PackingSize;
+			int packingSize = type.PackingSize ?? nativePointerAlignment;
 
 			if (type.BaseType != null)
 			{
@@ -349,7 +343,7 @@ namespace Mosa.Compiler.Framework
 			{
 				if (!field.IsStaticField)
 				{
-					int fieldSize = GetMemorySize(field.Type);
+					int fieldSize = GetFieldSize(field);
 
 					// Pad the field in the type
 					if (packingSize != 0)
@@ -359,7 +353,7 @@ namespace Mosa.Compiler.Framework
 					}
 
 					// Set the field address
-					fieldOffets.Add(field, typeSize);
+					fieldOffsets.Add(field, typeSize);
 
 					typeSize += fieldSize;
 				}
@@ -372,19 +366,24 @@ namespace Mosa.Compiler.Framework
 		/// Applies the explicit layout to the given type.
 		/// </summary>
 		/// <param name="type">The type.</param>
-		private void ResolveExplicitLayout(MosaType type)
+		private void ComputeExplicitLayout(MosaType type)
 		{
 			Debug.Assert(type != null, @"No type given.");
 			//Debug.Assert(type.BaseType.LayoutSize != 0, @"Type size not set for explicit layout.");
 
+			int size = 0;
 			foreach (MosaField field in type.Fields)
 			{
+				int offset = (int)field.Offset.Value;
+				fieldOffsets.Add(field, offset);
+				size = Math.Max(size, offset + GetFieldSize(field));
+
 				// Explicit layout assigns a physical offset from the start of the structure
 				// to the field. We just assign this offset.
 				Debug.Assert(fieldSizes[field] != 0, @"Non-static field doesn't have layout!");
 			}
 
-			typeSizes.Add(type, type.Size);
+			typeSizes.Add(type, type.ClassSize ?? size);
 		}
 
 		#endregion Internal - Layout
@@ -535,37 +534,8 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		private int GetMemorySize(MosaType type)
 		{
-			if (type.IsDouble)
-				return 8;
-			else if (type.IsLong)
-				return 8;
-			else if (type.IsPointer || type.IsUnmanagedPointerType || type.IsManagedPointerType)
-				return nativePointerSize;
-			else if (type.IsNativeInteger)
-				return nativePointerSize;
-			else
-				return type.Size != 0 ? type.Size : 4;
-		}
-
-		/// <summary>
-		/// Gets the size of the type alignment.
-		/// </summary>
-		/// <param name="type">The type.</param>
-		/// <returns></returns>
-		private int GetAlignmentSize(MosaType type)
-		{
-			if (type.IsDouble)
-				return 8;
-			else if (type.IsLong)
-				return 8;
-			else if (type.IsPointer)
-				return nativePointerAlignment;
-			else if (type.IsPointer || type.IsUnmanagedPointerType || type.IsManagedPointerType)
-				return nativePointerAlignment;
-			else if (type.IsNativeInteger)
-				return nativePointerAlignment;
-
-			return 4;
+			Debug.Assert(!type.IsValueType);
+			return nativePointerSize;
 		}
 
 		#endregion Internal

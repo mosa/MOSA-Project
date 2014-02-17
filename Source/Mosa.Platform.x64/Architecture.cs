@@ -176,7 +176,7 @@ namespace Mosa.Platform.x64
 		/// <param name="alignment">Receives alignment requirements of the type.</param>
 		public override void GetTypeRequirements(MosaType type, out int size, out int alignment)
 		{
-			if (type.IsLong || type.IsDouble || type.IsObject || type.IsPointer)
+			if (type.IsUI8 || type.IsR8 || !type.IsValueType || type.IsPointer)
 			{
 				size = 8;
 				alignment = 8;

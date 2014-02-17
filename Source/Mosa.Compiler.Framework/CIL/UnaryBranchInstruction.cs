@@ -61,15 +61,10 @@ namespace Mosa.Compiler.Framework.CIL
 
 			// Read the branch target
 			// Is this a short branch target?
-			if (opcode == OpCode.Brfalse_s || opcode == OpCode.Brtrue_s)
+			if (opcode == OpCode.Brfalse_s || opcode == OpCode.Brtrue_s ||
+				opcode == OpCode.Brfalse || opcode == OpCode.Brtrue)
 			{
-				sbyte target = decoder.DecodeSByte();
-				ctx.SetBranch(target);
-			}
-			else if (opcode == OpCode.Brfalse || opcode == OpCode.Brtrue)
-			{
-				int target = decoder.DecodeInt();
-				ctx.SetBranch(target);
+				ctx.SetBranch((int)((dnlib.DotNet.Emit.Instruction)decoder.Instruction.Operand).Offset);
 			}
 			else if (opcode == OpCode.Switch)
 			{

@@ -231,19 +231,19 @@ namespace Mosa.Platform.x86
 		/// <param name="alignment">Receives alignment requirements of the type.</param>
 		public override void GetTypeRequirements(MosaType type, out int size, out int alignment)
 		{
-			if (type.IsLong)
+			if (type.IsUI8)
 			{
 				size = 8;
 				alignment = 4;
 			}
-			else if (type.IsDouble)
+			else if (type.IsR8)
 			{
 				size = 8;
 				alignment = 8;
 			}
 			else
 			{
-				size = type.FixedSize ?? 4;
+				size = 4;
 				alignment = 4;
 			}
 		}
@@ -276,11 +276,11 @@ namespace Mosa.Platform.x86
 		/// <param name="source">The source.</param>
 		public override void InsertExchangeInstruction(Context context, Operand destination, Operand source)
 		{
-			if (source.IsSingle)
+			if (source.IsR4)
 			{
 				// TODO
 			}
-			else if (source.IsDouble)
+			else if (source.IsR8)
 			{
 				// TODO
 			}

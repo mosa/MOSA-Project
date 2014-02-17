@@ -19,7 +19,8 @@ namespace Mosa.Compiler.MosaTypeSystem
 	/// </summary>
 	public class TypeSystem
 	{
-		public MosaTypeResolver Resolver { get; private set; }
+		internal MosaTypeResolver Resolver { get; private set; }
+		MosaTypeLoader loader;
 
 		public BuiltInTypes BuiltIn { get; private set; }
 
@@ -41,11 +42,15 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public IEnumerable<MosaModule> AllModules { get { return Resolver.Modules.Values; } }
 
+		public MosaType DefaultLinkerType { get { return Resolver.DefaultLinkerType; } }
+
 		public MosaMethod EntryPoint { get; private set; }
+
 
 		private TypeSystem()
 		{
 			Resolver = new MosaTypeResolver();
+			loader = new MosaTypeLoader(this);
 		}
 
 		static MosaModule LoadModule(MosaTypeLoader loader, ModuleDefMD module)
@@ -57,22 +62,21 @@ namespace Mosa.Compiler.MosaTypeSystem
 		{
 			TypeSystem result = new TypeSystem();
 
-			MosaTypeLoader loader = new MosaTypeLoader(result);
 			foreach (var module in moduleLoader.Modules)
 			{
-				var mosaModule = LoadModule(loader, module);
+				var mosaModule = LoadModule(result.loader, module);
 
 				if (module.Assembly.IsCorLib())
 				{
-					result.BuiltIn = new BuiltInTypes(mosaModule);
 					result.CorLib = mosaModule;
+					result.BuiltIn = new BuiltInTypes(result, mosaModule);
 				}
 			}
 
 			if (result.BuiltIn == null)
 				throw new AssemblyLoadException();
 
-			loader.Resolve();
+			result.loader.Resolve();
 
 			return result;
 		}
@@ -123,7 +127,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 		public MosaModule GetModuleByName(string name)
 		{
 			MosaModule result;
-			if (this.Resolver.Modules.TryGetValue(name, out result))
+			if (Resolver.Modules.TryGetValue(name, out result))
 				return result;
 
 			return null;
@@ -199,6 +203,129 @@ namespace Mosa.Compiler.MosaTypeSystem
 		public MosaMethod CreateLinkerMethod(string name, MosaType returnType, IList<MosaType> parameters)
 		{
 			return Resolver.CreateLinkerMethod(Resolver.DefaultLinkerType, name, returnType, parameters);
+		}
+
+		public uint LookupUserString(MosaModule module, string str)
+		{
+			return Resolver.stringHeapLookup[Tuple.Create(module.InternalModule, str)];
+		}
+
+		public MosaType GetUnmanagedPointerType(MosaType element)
+		{
+			return loader.GetType(new PtrSig(element.TypeSignature));
+		}
+
+		public MosaType GetManagedPointerType(MosaType element)
+		{
+			return loader.GetType(new ByRefSig(element.TypeSignature));
+		}
+
+		public MosaType GetArrayType(MosaType element)
+		{
+			return loader.GetType(new SZArraySig(element.TypeSignature));
+		}
+
+		public MosaType CreateNewElementType(MosaType baseType, MosaType elementType)
+		{
+			if (baseType.IsArray)
+			{
+				return GetArrayType(elementType);
+			}
+			else if (baseType.IsUnmanagedPointer)
+			{
+				return GetUnmanagedPointerType(elementType);
+			}
+			else if (baseType.IsManagedPointer)
+			{
+				return GetManagedPointerType(elementType);
+			}
+
+			throw new InvalidCompilerException();
+		}
+
+		public MosaType GetFunctionPointerType(MosaMethod method)
+		{
+			return loader.GetType(new FnPtrSig(method.MethodSignature));
+		}
+
+		public MosaType GetStackType(MosaType type)
+		{
+			switch (type.GetStackType())
+			{
+				case StackTypeCode.Int32:
+					return BuiltIn.I4;
+
+				case StackTypeCode.Int64:
+					return BuiltIn.I8;
+
+				case StackTypeCode.N:
+					return BuiltIn.I;
+
+				case StackTypeCode.F:
+					return BuiltIn.R8;
+
+				case StackTypeCode.O:
+					return type;
+
+				case StackTypeCode.UnmanagedPointer:
+				case StackTypeCode.ManagedPointer:
+					return type;
+			}
+			throw new CompilerException("Can't convert '" + type.FullName + "' to stack type.");
+		}
+
+		public MosaType GetStackTypeFromCode(StackTypeCode code)
+		{
+			switch (code)
+			{
+				case StackTypeCode.Int32:
+					return BuiltIn.I4;
+
+				case StackTypeCode.Int64:
+					return BuiltIn.I8;
+
+				case StackTypeCode.N:
+					return BuiltIn.I;
+
+				case StackTypeCode.F:
+					return BuiltIn.R8;
+
+				case StackTypeCode.O:
+					return BuiltIn.Object;
+
+				case StackTypeCode.UnmanagedPointer:
+					return BuiltIn.Pointer;
+
+				case StackTypeCode.ManagedPointer:
+					return GetManagedPointerType(BuiltIn.Object);
+			}
+			throw new CompilerException("Can't convert stack type code'" + code + "' to type.");
+		}
+
+		public MosaType GetTypeFromElementCode(ElementType type)
+		{
+			switch (type)
+			{
+				case ElementType.Void: return BuiltIn.Void;
+				case ElementType.Boolean: return BuiltIn.Boolean;
+				case ElementType.Char: return BuiltIn.Char;
+				case ElementType.I1: return BuiltIn.I1;
+				case ElementType.U1: return BuiltIn.U1;
+				case ElementType.I2: return BuiltIn.I2;
+				case ElementType.U2: return BuiltIn.U2;
+				case ElementType.I4: return BuiltIn.I4;
+				case ElementType.U4: return BuiltIn.U4;
+				case ElementType.I8: return BuiltIn.I8;
+				case ElementType.U8: return BuiltIn.U8;
+				case ElementType.R4: return BuiltIn.R4;
+				case ElementType.R8: return BuiltIn.R8;
+				case ElementType.I: return BuiltIn.I;
+				case ElementType.U: return BuiltIn.U;
+				case ElementType.String: return BuiltIn.String;
+				case ElementType.TypedByRef: return BuiltIn.TypedRef;
+				case ElementType.Object: return BuiltIn.Object;
+			}
+			throw new CompilerException("Can't convert element '" + type + "' to type.");
 		}
 	}
 }

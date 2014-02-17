@@ -43,7 +43,7 @@ namespace Mosa.Compiler.Framework.Stages
 		void IMethodCompilerStage.Run()
 		{
 			// No basic block building if this is a linker generated method
-			if (!methodCompiler.Method.IsCILGenerated)
+			if (methodCompiler.Method.IsLinkerGenerated)
 				return;
 
 			if (methodCompiler.Compiler.PlugSystem.GetPlugMethod(methodCompiler.Method) != null)

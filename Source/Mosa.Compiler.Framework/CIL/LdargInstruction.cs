@@ -41,23 +41,9 @@ namespace Mosa.Compiler.Framework.CIL
 		{
 			// Decode base classes first
 			base.Decode(ctx, decoder);
-
-			ushort index;
-
-			// Opcode specific handling
-			switch (opcode)
-			{
-				case OpCode.Ldarg: index = decoder.DecodeUShort(); break;
-				case OpCode.Ldarg_s: index = decoder.DecodeByte(); break;
-				case OpCode.Ldarg_0: index = 0; break;
-				case OpCode.Ldarg_1: index = 1; break;
-				case OpCode.Ldarg_2: index = 2; break;
-				case OpCode.Ldarg_3: index = 3; break;
-				default: throw new System.NotImplementedException();
-			}
-
+			
 			// Push the loaded value onto the evaluation stack
-			var parameterOperand = decoder.Compiler.GetParameterOperand(index);
+			var parameterOperand = decoder.Compiler.GetParameterOperand(decoder.Instruction.GetParameterIndex());
 			var result = LoadInstruction.CreateResultOperand(decoder, parameterOperand.Type);
 
 			ctx.Operand1 = parameterOperand;

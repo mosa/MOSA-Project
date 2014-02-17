@@ -7,6 +7,7 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using dnlib.DotNet.Emit;
 using Mosa.Compiler.Common;
 
 namespace Mosa.Compiler.Framework.CIL
@@ -41,11 +42,11 @@ namespace Mosa.Compiler.Framework.CIL
 			base.Decode(ctx, decoder);
 
 			// Opcode specific handling
-			ushort index;
+			int index;
 			switch (opcode)
 			{
-				case OpCode.Ldloc: index = decoder.DecodeUShort(); break;
-				case OpCode.Ldloc_s: index = decoder.DecodeByte(); break;
+				case OpCode.Ldloc:
+				case OpCode.Ldloc_s: index = ((Local)decoder.Instruction.Operand).Index; break;
 				case OpCode.Ldloc_0: index = 0; break;
 				case OpCode.Ldloc_1: index = 1; break;
 				case OpCode.Ldloc_2: index = 2; break;

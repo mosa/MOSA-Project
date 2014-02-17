@@ -49,7 +49,9 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public MosaType TypedRef { get; private set; }
 
-		public BuiltInTypes(MosaModule corlib)
+		public MosaType Pointer { get; private set; }
+
+		public BuiltInTypes(TypeSystem typeSystem, MosaModule corlib)
 		{
 			Void = corlib.Types[Tuple.Create("System", "System.Void")];
 			Boolean = corlib.Types[Tuple.Create("System", "System.Boolean")];
@@ -69,6 +71,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 			I = corlib.Types[Tuple.Create("System", "System.IntPtr")];
 			U = corlib.Types[Tuple.Create("System", "System.UIntPtr")];
 			TypedRef = corlib.Types[Tuple.Create("System", "System.TypedReference")];
+			Pointer = typeSystem.GetUnmanagedPointerType(Void);
 		}
 	}
 }

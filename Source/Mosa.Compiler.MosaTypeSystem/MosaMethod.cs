@@ -32,6 +32,8 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public MosaType DeclaringType { get; private set; }
 
+		public bool HasOpenGenericParams { get; private set; }
+
 		public bool IsAbstract { get { return InternalMethod.IsAbstract; } }
 
 		public bool IsStatic { get { return InternalMethod.IsStatic; } }
@@ -60,7 +62,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public bool IsFinal { get { return InternalMethod.IsFinal; } }
 
-		public uint Rva { get { return (uint)InternalMethod.RVA; } }
+		public uint RVA { get { return (uint)InternalMethod.RVA; } }
 
 		public IList<MosaType> GenericArguments { get; private set; }
 
@@ -72,7 +74,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public string ExternMethod { get { return InternalMethod.ImplMap == null ? null : InternalMethod.ImplMap.Name; } }
 
-		public bool HasCode { get { return Rva != 0; } }
+		public bool HasCode { get { return InternalMethod.HasBody; } }
 
 		public bool IsLinkerGenerated { get; internal set; }
 
@@ -125,6 +127,21 @@ namespace Mosa.Compiler.MosaTypeSystem
 			return new SigComparer().Equals(method.MethodSignature, this.MethodSignature);
 		}
 
+		public object[] GetAttribute(string attrType)
+		{
+			var attr = InternalMethod.CustomAttributes.Find(attrType);
+			if (attr == null)
+				return null;
+
+			var arguments = attr.ConstructorArguments;
+
+			object[] result = new object[arguments.Count];
+			for (int i = 0; i < result.Length; i++)
+				result[i] = arguments[i].Value;
+
+			return result;
+		}
+
 		internal MosaMethod Clone()
 		{
 			MosaMethod result = (MosaMethod)base.MemberwiseClone();
@@ -160,6 +177,8 @@ namespace Mosa.Compiler.MosaTypeSystem
 			}
 
 			FullName = FullNameCreator.MethodFullName(DeclaringType.FullName, Name, MethodSignature, typeGenericArgs, methodGenericArgs);
+
+			HasOpenGenericParams = DeclaringType.HasOpenGenericParams || sig.HasOpenGenericParameter();
 
 			// TODO: update parameters
 		}

@@ -243,7 +243,7 @@ namespace Mosa.Compiler.Framework
 		/// <value>
 		///   <c>true</c> if [is signed integer]; otherwise, <c>false</c>.
 		/// </value>
-		public bool Is64BitInteger { get { return IsUnsignedLong || IsSignedLong; } }
+		public bool Is64BitInteger { get { return IsLong; } }
 
 		/// <summary>
 		/// Gets the type of the shift.
@@ -265,9 +265,9 @@ namespace Mosa.Compiler.Framework
 			{
 				if (IsInteger)
 					return ConstantUnsignedInteger == 0;
-				else if (IsDouble)
+				else if (IsR8)
 					return ConstantDoubleFloatingPoint == 0;
-				else if (IsSingle)
+				else if (IsR4)
 					return ConstantSingleFloatingPoint == 0;
 
 				throw new InvalidCompilerException();
@@ -287,20 +287,20 @@ namespace Mosa.Compiler.Framework
 			{
 				if (IsInteger)
 					return ConstantUnsignedInteger == 1;
-				else if (IsDouble)
+				else if (IsR8)
 					return ConstantDoubleFloatingPoint == 1;
-				else if (IsSingle)
+				else if (IsR4)
 					return ConstantSingleFloatingPoint == 1;
 
 				throw new InvalidCompilerException();
 			}
 		}
 
-		public bool IsFloatingPoint { get { return Type.IsFloatingPoint; } }
+		public bool IsR { get { return Type.IsR; } }
 
-		public bool IsDouble { get { return Type.IsDouble; } }
+		public bool IsR8 { get { return Type.IsR8; } }
 
-		public bool IsSingle { get { return Type.IsSingle; } }
+		public bool IsR4 { get { return Type.IsR4; } }
 
 		public bool IsInteger { get { return Type.IsInteger; } }
 
@@ -308,31 +308,31 @@ namespace Mosa.Compiler.Framework
 
 		public bool IsUnsigned { get { return Type.IsUnsigned; } }
 
-		public bool IsUnsignedByte { get { return Type.IsUnsignedByte; } }
+		public bool IsU1 { get { return Type.IsU1; } }
 
-		public bool IsSignedByte { get { return Type.IsSignedByte; } }
+		public bool IsI1 { get { return Type.IsI1; } }
 
-		public bool IsUnsignedShort { get { return Type.IsUnsignedShort; } }
+		public bool IsU2 { get { return Type.IsU2; } }
 
-		public bool IsSignedShort { get { return Type.IsSignedShort; } }
+		public bool IsI2 { get { return Type.IsI2; } }
 
-		public bool IsUnsignedInt { get { return Type.IsUnsignedInt; } }
+		public bool IsU4 { get { return Type.IsU4; } }
 
-		public bool IsSignedInt { get { return Type.IsSignedInt; } }
+		public bool IsI4 { get { return Type.IsI4; } }
 
-		public bool IsUnsignedLong { get { return Type.IsUnsignedLong; } }
+		public bool IsU8 { get { return Type.IsU8; } }
 
-		public bool IsSignedLong { get { return Type.IsSignedLong; } }
+		public bool IsI8 { get { return Type.IsI8; } }
 
-		public bool IsByte { get { return Type.IsByte; } }
+		public bool IsByte { get { return Type.IsUI1; } }
 
-		public bool IsShort { get { return Type.IsShort; } }
+		public bool IsShort { get { return Type.IsUI2; } }
 
 		public bool IsChar { get { return Type.IsChar; } }
 
-		public bool IsInt { get { return Type.IsInt; } }
+		public bool IsInt { get { return Type.IsUI4; } }
 
-		public bool IsLong { get { return Type.IsLong; } }
+		public bool IsLong { get { return Type.IsUI8; } }
 
 		public bool IsBoolean { get { return Type.IsBoolean; } }
 
@@ -342,13 +342,9 @@ namespace Mosa.Compiler.Framework
 
 		public bool IsArray { get { return Type.IsArray; } }
 
-		public bool IsObject { get { return Type.IsObject; } }
+		public bool IsI { get { return Type.IsI; } }
 
-		public bool IsString { get { return Type.IsString; } }
-
-		public bool IsNativeSignedInteger { get { return Type.IsNativeSignedInteger; } }
-
-		public bool IsNativeUnsignedInteger { get { return Type.IsNativeUnsignedInteger; } }
+		public bool IsU { get { return Type.IsU; } }
 
 		#endregion Properties
 
@@ -578,7 +574,7 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		public static Operand CreateUnmanagedSymbolPointer(TypeSystem typeSystem, string name)
 		{
-			var operand = new Operand(typeSystem.BuiltIn.Ptr);
+			var operand = new Operand(typeSystem.BuiltIn.Pointer);
 			operand.IsSymbol = true;
 			operand.Name = name;
 			return operand;
@@ -588,11 +584,27 @@ namespace Mosa.Compiler.Framework
 		/// Creates the symbol.
 		/// </summary>
 		/// <param name="typeSystem">The type system.</param>
+		/// <param name="type">The type.</param>
 		/// <param name="name">The name.</param>
 		/// <returns></returns>
-		public static Operand CreateManagedSymbolPointer(TypeSystem typeSystem, string name)
+		public static Operand CreateManagedSymbolPointer(TypeSystem typeSystem, MosaType type, string name)
 		{
-			var operand = new Operand(typeSystem.BuiltIn.TypedByRef);
+			var operand = new Operand(typeSystem.GetManagedPointerType(type));
+			operand.IsSymbol = true;
+			operand.Name = name;
+			return operand;
+		}
+
+		/// <summary>
+		/// Creates the symbol.
+		/// </summary>
+		/// <param name="typeSystem">The type system.</param>
+		/// <param name="type">The type.</param>
+		/// <param name="name">The name.</param>
+		/// <returns></returns>
+		public static Operand CreateManagedSymbol(TypeSystem typeSystem, MosaType type, string name)
+		{
+			var operand = new Operand(type);
 			operand.IsSymbol = true;
 			operand.Name = name;
 			return operand;
@@ -624,7 +636,7 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		public static Operand CreateSymbolFromMethod(TypeSystem typeSystem, MosaMethod method)
 		{
-			Operand operand = CreateUnmanagedSymbolPointer(typeSystem, method.MethodName);
+			Operand operand = CreateUnmanagedSymbolPointer(typeSystem, method.FullName);
 			operand.Method = method;
 			return operand;
 		}
@@ -712,7 +724,7 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		public static Operand CreateField(MosaField field)
 		{
-			var operand = new Operand(field.Type);
+			var operand = new Operand(field.FieldType);
 			operand.IsMemoryAddress = true;
 			operand.IsField = true;
 			operand.Displacement = 0;
@@ -792,7 +804,7 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		public static Operand CreateLowSplitForLong(TypeSystem typeSystem, Operand longOperand, int offset, int index)
 		{
-			Debug.Assert(longOperand.IsUnsignedLong || longOperand.IsSignedLong);
+			Debug.Assert(longOperand.IsLong);
 
 			Debug.Assert(longOperand.SplitParent == null);
 			Debug.Assert(longOperand.Low == null);
@@ -850,7 +862,7 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		public static Operand CreateHighSplitForLong(TypeSystem typeSystem, Operand longOperand, int offset, int index)
 		{
-			Debug.Assert(longOperand.IsUnsignedLong || longOperand.IsSignedLong);
+			Debug.Assert(longOperand.IsLong);
 
 			Debug.Assert(longOperand.SplitParent == null);
 			Debug.Assert(longOperand.High == null);
@@ -980,9 +992,9 @@ namespace Mosa.Compiler.Framework
 					sb.AppendFormat("{0}", ConstantUnsignedInteger);
 				else if (IsSigned)
 					sb.AppendFormat("{0}", ConstantSignedInteger);
-				if (IsDouble)
+				if (IsR8)
 					sb.AppendFormat("{0}", ConstantDoubleFloatingPoint);
-				else if (IsSingle)
+				else if (IsR4)
 					sb.AppendFormat("{0}", ConstantSingleFloatingPoint);
 
 				sb.Append('}');

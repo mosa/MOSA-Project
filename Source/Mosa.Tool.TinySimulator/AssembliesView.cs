@@ -7,7 +7,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using Mosa.Compiler.Metadata;
 using Mosa.Compiler.MosaTypeSystem;
 using System;
 using Mosa.Utility.GUI.Common;
@@ -26,19 +25,6 @@ namespace Mosa.Tool.TinySimulator
 		public void UpdateTree()
 		{			
 			TypeSystemTree.UpdateTree(treeView, MainForm.TypeSystem, MainForm.TypeLayout, true);
-		}
-
-		protected string TokenToString(Token token)
-		{
-			return token.ToInt32().ToString("X8");
-		}
-
-		protected string FormatToString(Token token)
-		{
-			if (!showTokenValues)
-				return string.Empty;
-
-			return "[" + TokenToString(token) + "] ";
 		}
 
 		protected string FormatRuntimeMember(MosaField field)

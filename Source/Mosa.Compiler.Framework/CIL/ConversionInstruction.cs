@@ -65,7 +65,7 @@ namespace Mosa.Compiler.Framework.CIL
 				default: throw new NotSupportedException(@"Overflow checking conversions not supported.");
 			}
 
-			ctx.Result = compiler.CreateVirtualRegister(compiler.TypeSystem.ConvertToStackType(resultType));
+			ctx.Result = compiler.CreateVirtualRegister(compiler.TypeSystem.GetStackType(resultType));
 		}
 
 		/// <summary>

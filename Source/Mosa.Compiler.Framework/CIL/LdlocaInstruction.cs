@@ -7,6 +7,7 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using dnlib.DotNet.Emit;
 using Mosa.Compiler.MosaTypeSystem;
 
 namespace Mosa.Compiler.Framework.CIL
@@ -39,22 +40,12 @@ namespace Mosa.Compiler.Framework.CIL
 		{
 			// Decode base classes first
 			base.Decode(ctx, decoder);
-
-			ushort index;
-
+			
 			// Opcode specific handling
-			if (opcode == OpCode.Ldloca_s)
-			{
-				index = decoder.DecodeByte();
-			}
-			else
-			{
-				index = decoder.DecodeUShort();
-			}
 
-			Operand local = decoder.Compiler.GetLocalOperand(index);
+			Operand local = decoder.Compiler.GetLocalOperand(((Local)decoder.Instruction.Operand).Index);
 			ctx.Operand1 = local;
-			ctx.Result = decoder.Compiler.CreateVirtualRegister(decoder.Compiler.TypeSystem.Resolver.GetManagedPointerType(local.Type));
+			ctx.Result = decoder.Compiler.CreateVirtualRegister(decoder.Compiler.TypeSystem.GetManagedPointerType(local.Type));
 		}
 
 		/// <summary>

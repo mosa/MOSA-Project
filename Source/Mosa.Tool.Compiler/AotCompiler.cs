@@ -70,23 +70,21 @@ namespace Mosa.Tool.Compiler
 
 		public static void Compile(CompilerOptions compilerOptions, List<FileInfo> inputFiles)
 		{
-			var assemblyLoader = new MosaAssemblyLoader();
+			var moduleLoader = new MosaModuleLoader();
 
-			assemblyLoader.AddPrivatePath(GetInputFileNames(inputFiles));
+			moduleLoader.AddPrivatePath(GetInputFileNames(inputFiles));
 
 			foreach (string file in GetInputFileNames(inputFiles))
 			{
-				assemblyLoader.LoadModule(file);
+				moduleLoader.LoadModuleFromFile(file);
 			}
 
-			var typeSystem = new TypeSystem();
-
-			typeSystem.Load(assemblyLoader);
+			var typeSystem = TypeSystem.Load(moduleLoader);
 
 			int nativePointerSize;
 			int nativePointerAlignment;
 
-			compilerOptions.Architecture.GetTypeRequirements(typeSystem.BuiltIn.Ptr, out nativePointerSize, out nativePointerAlignment);
+			compilerOptions.Architecture.GetTypeRequirements(typeSystem.BuiltIn.Pointer, out nativePointerSize, out nativePointerAlignment);
 
 			MosaTypeLayout typeLayout = new MosaTypeLayout(typeSystem, nativePointerSize, nativePointerAlignment);
 

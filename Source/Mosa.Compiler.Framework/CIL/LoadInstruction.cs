@@ -44,14 +44,7 @@ namespace Mosa.Compiler.Framework.CIL
 
 		public static Operand CreateResultOperand(IInstructionDecoder decoder, MosaType type)
 		{
-			if (type.IsObject || type.IsPointer || type.IsArray)
-			{
-				return decoder.Compiler.CreateVirtualRegister(type);
-			}
-			else
-			{
-				return decoder.Compiler.CreateVirtualRegister(decoder.TypeSystem.ConvertToStackType(type));
-			}
+			return decoder.Compiler.CreateVirtualRegister(decoder.TypeSystem.GetStackType(type));
 		}
 
 	}

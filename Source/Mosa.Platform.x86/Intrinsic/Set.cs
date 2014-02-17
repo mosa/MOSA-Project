@@ -30,7 +30,7 @@ namespace Mosa.Platform.x86.Intrinsic
 
 			Operand v1 = methodCompiler.CreateVirtualRegister(dest.Type);
 			Operand v2 = methodCompiler.CreateVirtualRegister(value.Type);
-			Operand memory = Operand.CreateMemoryAddress(context.InvokeMethod.Parameters[1].Type, v1, 0);
+			Operand memory = Operand.CreateMemoryAddress(context.MosaMethod.Parameters[1].Type, v1, 0);
 
 			context.SetInstruction(X86.Mov, v1, dest);
 			context.AppendInstruction(X86.Mov, v2, value);

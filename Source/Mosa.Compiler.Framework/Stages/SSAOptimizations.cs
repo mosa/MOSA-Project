@@ -10,7 +10,6 @@
 using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.InternalTrace;
 using Mosa.Compiler.MosaTypeSystem;
-using Mosa.Compiler.Metadata.Signatures;
 using System.Collections.Generic;
 using System.Diagnostics;
 
@@ -231,7 +230,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private bool CanCopyPropagation(Operand result, Operand destination)
 		{
-			if (result.IsObject && destination.IsObject)
+			if (!result.IsValueType && !destination.IsValueType)
 				return true;
 
 			if (!result.IsPointer && !destination.IsPointer)
@@ -409,7 +408,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (!op1.IsConstant || !op2.IsConstant)
 				return;
 
-			if (op1.IsObject || op2.IsObject)
+			if (!op1.IsValueType || !op2.IsValueType)
 				return;
 
 			bool compareResult = true;
@@ -622,10 +621,10 @@ namespace Mosa.Compiler.Framework.Stages
 
 		static private ulong Unsign(MosaType type, long value)
 		{
-			if (type.IsSignedByte) return (ulong)((sbyte)value);
-			else if (type.IsSignedShort) return (ulong)((short)value);
-			else if (type.IsSignedInt) return (ulong)((int)value);
-			else if (type.IsSignedLong) return (ulong)((long)value);
+			if (type.IsI1) return (ulong)((sbyte)value);
+			else if (type.IsI2) return (ulong)((short)value);
+			else if (type.IsI4) return (ulong)((int)value);
+			else if (type.IsI8) return (ulong)((long)value);
 			else return (ulong)value;
 		}
 
