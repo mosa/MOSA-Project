@@ -11,15 +11,15 @@ namespace Mosa.Compiler.MosaTypeSystem
 {
 	public class MosaParameter
 	{
-		public string Name { get; internal set; }
+		internal MosaParameter(string name, MosaType type)
+		{
+			this.Name = name;
+			this.Type = type;
+		}
 
-		public MosaType Type { get; internal set; }
+		public string Name { get; private set; }
 
-		public int Position { get; internal set; }
-
-		public bool IsIn { get; internal set; }
-
-		public bool IsOut { get; internal set; }
+		public MosaType Type { get; private set; }
 
 		public override string ToString()
 		{

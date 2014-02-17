@@ -1,4 +1,4 @@
-/*
+﻿/*
  * (c) 2013 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
@@ -7,37 +7,29 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using dnlib.DotNet.Emit;
+
 namespace Mosa.Compiler.MosaTypeSystem
 {
 	/// <summary>
 	///
 	/// </summary>
-	public class ExceptionBlock
+	public class MosaExceptionHandler
 	{
 		/// <summary>
 		///
 		/// </summary>
-		public ExceptionBlockType ExceptionHandler;
+		public ExceptionHandlerType HandlerType { get; private set; }
 
 		/// <summary>
 		///
 		/// </summary>
-		public int TryOffset { get; internal set; }
+		public int TryOffset { get; private set; }
 
 		/// <summary>
 		///
 		/// </summary>
-		public int TryLength { get; internal set; }
-
-		/// <summary>
-		///
-		/// </summary>
-		public int HandlerOffset { get; internal set; }
-
-		/// <summary>
-		///
-		/// </summary>
-		public int HandlerLength { get; internal set; }
+		public int HandlerOffset { get; private set; }
 
 		/// <summary>
 		///
@@ -47,23 +39,17 @@ namespace Mosa.Compiler.MosaTypeSystem
 		/// <summary>
 		///
 		/// </summary>
-		public int FilterOffset { get; internal set; }
+		public int FilterOffset { get; private set; }
 
 		/// <summary>
 		///
 		/// </summary>
-		public int TryEnd
-		{
-			get { return this.TryOffset + this.TryLength; }
-		}
+		public int TryEnd { get; private set; }
 
 		/// <summary>
 		///
 		/// </summary>
-		public int HandlerEnd
-		{
-			get { return this.HandlerOffset + this.HandlerLength; }
-		}
+		public int HandlerEnd { get; private set; }
 
 		/// <summary>
 		/// Determines whether [is label within try] [the specified label].
@@ -87,6 +73,20 @@ namespace Mosa.Compiler.MosaTypeSystem
 		public bool IsLabelWithinHandler(int label)
 		{
 			return (label >= HandlerOffset && label < HandlerEnd);
+		}
+
+		internal MosaExceptionHandler(ExceptionHandler handler)
+		{
+			HandlerType = (ExceptionHandlerType)handler.HandlerType;
+
+			TryOffset = (int)handler.TryStart.Offset;
+			TryEnd = (int)handler.TryEnd.Offset;
+
+			HandlerOffset = (int)handler.HandlerStart.Offset;
+			HandlerEnd = (int)handler.HandlerEnd.Offset;
+
+			if (handler.FilterStart != null)
+				FilterOffset = (int)handler.FilterStart.Offset;
 		}
 	}
 }

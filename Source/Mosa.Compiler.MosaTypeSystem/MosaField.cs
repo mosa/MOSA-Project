@@ -5,50 +5,93 @@
  *
  * Authors:
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
+ *  Ki (kiootic) <kiootic@gmail.com>
  */
 
 using System.Collections.Generic;
+using dnlib.DotNet;
 
 namespace Mosa.Compiler.MosaTypeSystem
 {
-	public class MosaField
+	public class MosaField : IResolvable
 	{
-		public MosaType Type { get; internal set; }
+		public MosaModule Module { get; private set; }
 
-		public MosaType DeclaringType { get; internal set; }
+		public FieldDef InternalField { get; private set; }
 
-		public string Name { get; internal set; }
+		public FieldSig FieldSignature { get; private set; }
 
-		public string FullName { get; internal set; }
+		public ScopedToken Token { get; private set; }
 
-		public IList<MosaAttribute> CustomAttributes { get; internal set; }
+		public string Name { get { return InternalField.Name; } }
 
-		public bool IsLiteralField { get; internal set; }
+		public string FullName { get; private set; }
 
-		public bool IsStaticField { get; internal set; }
+		public MosaType DeclaringType { get; private set; }
 
-		public bool HasDefault { get; internal set; }
+		public MosaType FieldType { get; private set; }
 
-		public bool HasRVA { get; internal set; }
+		public bool IsLiteralField { get { return InternalField.IsLiteral; } }
 
-		public uint Offset { get; internal set; }
+		public bool IsStaticField { get { return InternalField.IsStatic; } }
 
-		internal uint RVA { get; set; }
+		public bool HasDefault { get { return InternalField.HasDefault; } }
 
-		public byte[] Data { get; internal set; }
+		public bool HasRVA { get { return InternalField.HasFieldRVA; } }
 
-		public MosaField()
+		public uint? Offset { get { return InternalField.FieldOffset; } }
+
+		public byte[] Data { get { return InternalField.InitialValue; } }
+
+		public bool IsLinkerGenerated { get; internal set; }
+
+
+		internal MosaField(MosaModule module, MosaType declType, string name, FieldSig signature)
+			: this(module, declType, new FieldDefUser(name, signature))
 		{
-			CustomAttributes = new List<MosaAttribute>();
-			HasRVA = false;
-			IsLiteralField = false;
-			IsStaticField = false;
-			HasDefault = false;
+		}
+
+		internal MosaField(MosaModule module, MosaType declType, FieldDef field)
+			: this(module, declType, field, field.FieldSig)
+		{
+		}
+
+		internal MosaField(MosaModule module, MosaType declType, FieldDef field, FieldSig fieldSig)
+		{
+			Module = module;
+			InternalField = field;
+			Token = new ScopedToken(module.InternalModule, field.MDToken);
+
+			IsLinkerGenerated = false;
+
+			UpdateSignature(fieldSig, declType);
 		}
 
 		public override string ToString()
 		{
-			return Type.Name + " " + FullName;
+			return FullName;
+		}
+
+		internal MosaField Clone()
+		{
+			return (MosaField)base.MemberwiseClone();
+		}
+
+		internal void UpdateSignature(FieldSig sig, MosaType declaringType)
+		{
+			DeclaringType = declaringType;
+			FieldSignature = sig;
+
+			IList<TypeSig> typeGenericArgs = null;
+			if (DeclaringType.TypeSignature.IsGenericInstanceType)
+				typeGenericArgs = ((GenericInstSig)DeclaringType.TypeSignature).GenericArguments;
+
+			FullName = FullNameCreator.FieldFullName(DeclaringType.FullName, Name, sig, typeGenericArgs);
+		}
+
+		void IResolvable.Resolve(MosaTypeLoader loader)
+		{
+			FieldType = loader.GetType(FieldSignature.Type);
 		}
 	}
 }

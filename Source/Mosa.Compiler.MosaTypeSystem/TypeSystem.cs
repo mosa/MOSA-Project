@@ -5,12 +5,12 @@
  *
  * Authors:
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
+ *  Ki (kiootic) <kiootic@gmail.com>
  */
 
-using Mosa.Compiler.Common;
-using Mosa.Compiler.Metadata.Loader;
-using System;
 using System.Collections.Generic;
+using dnlib.DotNet;
+using Mosa.Compiler.Common;
 
 namespace Mosa.Compiler.MosaTypeSystem
 {
@@ -19,40 +19,62 @@ namespace Mosa.Compiler.MosaTypeSystem
 	/// </summary>
 	public class TypeSystem
 	{
-		public MosaTypeResolver Resolver { get; internal set; }
+		public MosaTypeResolver Resolver { get; private set; }
 
-		public BuiltInTypes BuiltIn { get; internal set; }
+		public BuiltInTypes BuiltIn { get; private set; }
 
-		public MosaMethod StartupMethod { get; internal set; }
+		public MosaModule CorLib { get; private set; }
 
-		public IList<MosaType> AllTypes { get { return Resolver.Types; } }
+		public IEnumerable<MosaType> AllTypes
+		{
+			get
+			{
+				foreach (var module in AllModules)
+				{
+					foreach (var type in module.Types.Values)
+					{
+						yield return type;
+					}
+				}
+			}
+		}
 
-		public IList<MosaAssembly> AllAssemblies { get { return Resolver.Assemblies; } }
+		public IEnumerable<MosaModule> AllModules { get { return Resolver.Modules.Values; } }
 
-		public MosaMethod EntryMethod { get; private set; }
+		public MosaMethod EntryPoint { get; private set; }
 
-		public TypeSystem()
+		private TypeSystem()
 		{
 			Resolver = new MosaTypeResolver();
-			this.BuiltIn = Resolver.BuiltIn;
 		}
 
-		public void LoadAssembly(IMetadataModule metadataModule)
+		static MosaModule LoadModule(MosaTypeLoader loader, ModuleDefMD module)
 		{
-			var entryMethod = MosaTypeLoader.Load(metadataModule, Resolver);
-
-			if (entryMethod != null)
-			{
-				EntryMethod = entryMethod;
-			}
+			return loader.Load(module);
 		}
 
-		public void Load(MosaAssemblyLoader assemblyLoader)
+		public static TypeSystem Load(MosaModuleLoader moduleLoader)
 		{
-			foreach (var module in assemblyLoader.Modules)
+			TypeSystem result = new TypeSystem();
+
+			MosaTypeLoader loader = new MosaTypeLoader(result);
+			foreach (var module in moduleLoader.Modules)
 			{
-				LoadAssembly(module);
+				var mosaModule = LoadModule(loader, module);
+
+				if (module.Assembly.IsCorLib())
+				{
+					result.BuiltIn = new BuiltInTypes(mosaModule);
+					result.CorLib = mosaModule;
+				}
 			}
+
+			if (result.BuiltIn == null)
+				throw new AssemblyLoadException();
+
+			loader.Resolve();
+
+			return result;
 		}
 
 		public MosaType GetTypeByName(string fullname)
@@ -67,43 +89,42 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public MosaType GetTypeByName(string @namespace, string name)
 		{
-			foreach (var type in AllTypes)
+			var typeKey = Tuple.Create(@namespace, @namespace + "." + name);
+
+			foreach (var module in AllModules)
 			{
-				if (type.Name == name && type.Namespace == @namespace)
-					return type;
+				MosaType result;
+				if (module.Types.TryGetValue(typeKey, out result))
+					return result;
 			}
 
 			return null;
 		}
 
-		public MosaType GetTypeByName(string assemblyName, string @namespace, string name)
+		public MosaType GetTypeByName(string moduleName, string @namespace, string name)
 		{
-			var assembly = GetAssemblyByName(assemblyName);
+			var module = GetModuleByName(moduleName);
 
-			if (assemblyName == null)
+			if (module == null)
 				return null;
 
-			return GetTypeByName(assembly, @namespace, name);
+			return GetTypeByName(module, @namespace, name);
 		}
 
-		public MosaType GetTypeByName(MosaAssembly assembly, string @namespace, string name)
+		public MosaType GetTypeByName(MosaModule module, string @namespace, string name)
 		{
-			foreach (var type in AllTypes)
-			{
-				if (type.Name == name && type.Namespace == @namespace && type.Assembly == assembly)
-					return type;
-			}
+			MosaType result;
+			if (module.Types.TryGetValue(Tuple.Create(@namespace, @namespace + "." + name), out result))
+				return result;
 
 			return null;
 		}
 
-		public MosaAssembly GetAssemblyByName(string name)
+		public MosaModule GetModuleByName(string name)
 		{
-			foreach (var assembly in this.Resolver.Assemblies)
-			{
-				if (assembly.Name == name)
-					return assembly;
-			}
+			MosaModule result;
+			if (this.Resolver.Modules.TryGetValue(name, out result))
+				return result;
 
 			return null;
 		}
@@ -147,20 +168,6 @@ namespace Mosa.Compiler.MosaTypeSystem
 		}
 
 		/// <summary>
-		/// Converts the type of to stack.
-		/// </summary>
-		/// <param name="type">The type.</param>
-		/// <returns></returns>
-		public MosaType ConvertToStackType(MosaType type)
-		{
-			// FIXME! This is 32-bit platform specific ---
-			if (type.IsNativeInteger || type.IsByte || type.IsShort || type.IsChar || type.IsBoolean)
-				return BuiltIn.I4;
-			else
-				return type;
-		}
-
-		/// <summary>
 		/// Creates the type of the linker.
 		/// </summary>
 		/// <param name="namespace">The namespace.</param>
@@ -192,41 +199,6 @@ namespace Mosa.Compiler.MosaTypeSystem
 		public MosaMethod CreateLinkerMethod(string name, MosaType returnType, IList<MosaType> parameters)
 		{
 			return Resolver.CreateLinkerMethod(Resolver.DefaultLinkerType, name, returnType, parameters);
-		}
-
-		/// <summary>
-		/// Gets the type on the stack.
-		/// </summary>
-		/// <param name="type">The type.</param>
-		/// <returns>
-		/// The equivalent stack type code.
-		/// </returns>
-		/// <exception cref="InvalidCompilerException"></exception>
-		public static StackTypeCode GetStackType(MosaType type)
-		{
-			if (type.IsLong) return StackTypeCode.Int64;
-			else if (type.IsInteger || type.IsChar || type.IsBoolean) return StackTypeCode.Int32;
-			else if (type.IsFloatingPoint) return StackTypeCode.F;
-			else if (type.IsUnmanagedPointerType) return StackTypeCode.Ptr;
-			else if (type.IsManagedPointerType) return StackTypeCode.O;
-			else if (type.IsNativeInteger) return StackTypeCode.N;
-			else if (type.IsObject || type.IsValueType || type.IsArray || type.IsString) return StackTypeCode.O;
-			else if (type.IsVoid) return StackTypeCode.Unknown;
-
-			throw new InvalidCompilerException(String.Format("Can't transform Type {0} to StackTypeCode.", type));
-		}
-
-		public MosaType GetType(StackTypeCode typeCode)
-		{
-			switch (typeCode)
-			{
-				case StackTypeCode.Int32: return BuiltIn.I4;
-				case StackTypeCode.Int64: return BuiltIn.I8;
-				case StackTypeCode.F: return BuiltIn.R8;
-				case StackTypeCode.O: return BuiltIn.Object;
-				case StackTypeCode.N: return BuiltIn.I;
-				default: throw new InvalidCompilerException("Can't convert stack type codeReader to type.");
-			}
 		}
 	}
 }

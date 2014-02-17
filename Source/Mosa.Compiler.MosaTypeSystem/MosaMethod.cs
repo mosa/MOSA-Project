@@ -5,196 +5,294 @@
  *
  * Authors:
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
+ *  Ki (kiootic) <kiootic@gmail.com>
  */
 
 using System.Collections.Generic;
-using System.Text;
+using System.Diagnostics;
+using dnlib.DotNet;
+using dnlib.DotNet.Emit;
+using Mosa.Compiler.Common;
 
 namespace Mosa.Compiler.MosaTypeSystem
 {
-	public class MosaMethod
+	public class MosaMethod : IResolvable
 	{
-		public string Name { get; internal set; }
+		public MosaModule Module { get; private set; }
 
-		public string FullName { get; internal set; }
+		public MethodDef InternalMethod { get; private set; }
 
-		public string MethodName { get; internal set; }
+		public MethodSig MethodSignature { get; private set; }
 
-		public string ShortMethodName { get; internal set; }
+		public ScopedToken Token { get; private set; }
 
-		public MosaType DeclaringType { get; internal set; }
+		public string Name { get { return InternalMethod.Name; } }
 
-		public MosaMethod GenericParentMethod { get; internal set; }
+		public string FullName { get; private set; }
 
-		public MosaMethod GenericBaseMethod { get; internal set; }
+		public MosaType DeclaringType { get; private set; }
 
-		public bool IsAbstract { get; internal set; }
+		public bool IsAbstract { get { return InternalMethod.IsAbstract; } }
 
-		public bool IsBaseGeneric { get; internal set; }
+		public bool IsStatic { get { return InternalMethod.IsStatic; } }
 
-		public bool IsStatic { get; internal set; }
+		public bool HasThis { get { return InternalMethod.HasThis; } }
 
-		public bool HasThis { get; internal set; }
+		public bool HasExplicitThis { get { return InternalMethod.ExplicitThis; } }
 
-		public bool HasExplicitThis { get; internal set; }
+		public MosaType ReturnType { get; private set; }
 
-		public MosaType ReturnType { get; internal set; }
+		public IList<MosaParameter> Parameters { get; private set; }
 
-		public IList<MosaParameter> Parameters { get; internal set; }
+		public bool IsInternal { get { return InternalMethod.IsInternalCall; } }
 
-		public IList<MosaAttribute> CustomAttributes { get; internal set; }
+		public bool IsNoInlining { get { return InternalMethod.IsNoInlining; } }
 
-		public bool IsInternal { get; internal set; }
+		public bool IsSpecialName { get { return InternalMethod.IsSpecialName; } }
 
-		public bool IsNoInlining { get; internal set; }
+		public bool IsRTSpecialName { get { return InternalMethod.IsRuntimeSpecialName; } }
 
-		public bool IsSpecialName { get; internal set; }
+		public bool IsVirtual { get { return InternalMethod.IsVirtual; } }
 
-		public bool IsRTSpecialName { get; internal set; }
+		public bool IsPInvokeImpl { get { return InternalMethod.IsPinvokeImpl; } }
 
-		public bool IsVirtual { get; internal set; }
+		public bool IsNewSlot { get { return InternalMethod.IsNewSlot; } }
 
-		public bool IsPInvokeImpl { get; internal set; }
+		public bool IsFinal { get { return InternalMethod.IsFinal; } }
 
-		public bool IsNewSlot { get; internal set; }
+		public uint Rva { get { return (uint)InternalMethod.RVA; } }
 
-		public bool IsFinal { get; internal set; }
+		public IList<MosaType> GenericArguments { get; private set; }
 
-		public uint Rva { get; internal set; }
+		public IList<MosaType> LocalVariables { get; private set; }
 
-		public IList<MosaGenericParameter> GenericParameters { get; internal set; }
+		public IList<Instruction> Code { get; private set; }
 
-		public List<MosaType> GenericArguments { get; internal set; }
+		public IList<MosaExceptionHandler> ExceptionBlocks { get; private set; }
 
-		public List<MosaType> LocalVariables { get; internal set; }
-
-		public byte[] Code { get; internal set; }
-
-		public MosaAssembly CodeAssembly { get; internal set; }
-
-		public List<ExceptionBlock> ExceptionBlocks { get; internal set; }
-
-		public string ExternalReference { get; internal set; }
+		public string ExternMethod { get { return InternalMethod.ImplMap == null ? null : InternalMethod.ImplMap.Name; } }
 
 		public bool HasCode { get { return Rva != 0; } }
 
-		public bool IsCILGenerated { get; internal set; }
+		public bool IsLinkerGenerated { get; internal set; }
 
-		public bool IsOpenGenericType { get; internal set; }
-
-		public MosaMethod()
+		internal MosaMethod(MosaModule module, MosaType declType, string name, MethodSig signature)
+			: this(module, declType, new MethodDefUser(name, signature)
+			{
+				Body = new CilBody(false, new List<Instruction>(), new List<ExceptionHandler>(), new List<Local>())
+			})
 		{
-			IsAbstract = false;
-			IsBaseGeneric = false;
-			IsStatic = false;
-			HasThis = false;
-			HasExplicitThis = false;
-			IsInternal = false;
-			IsNoInlining = false;
-			IsSpecialName = false;
-			IsRTSpecialName = false;
-			IsVirtual = false;
-			IsPInvokeImpl = false;
-			IsNewSlot = false;
-			IsFinal = false;
-			IsCILGenerated = false;
-			IsOpenGenericType = false;
+		}
+
+		internal MosaMethod(MosaModule module, MosaType declType, MethodDef method)
+			: this(module, declType, method, method.MethodSig)
+		{
+		}
+
+		internal MosaMethod(MosaModule module, MosaType declType, MethodDef method, MethodSig methodSig)
+		{
+			Module = module;
+			InternalMethod = method;
+			Token = new ScopedToken(module.InternalModule, method.MDToken);
+
+			IsLinkerGenerated = false;
 
 			Parameters = new List<MosaParameter>();
-			GenericParameters = new List<MosaGenericParameter>();
-			CustomAttributes = new List<MosaAttribute>();
 			LocalVariables = new List<MosaType>();
+			if (method.HasBody)
+			{
+				Code = new List<Instruction>();
+				ExceptionBlocks = new List<MosaExceptionHandler>();
+			}
+			else
+			{
+				Code = null;
+				ExceptionBlocks = null;
+			}
+
 			GenericArguments = new List<MosaType>();
-			ExceptionBlocks = new List<ExceptionBlock>();
+
+			UpdateSignature(methodSig, declType);
 		}
 
 		public override string ToString()
 		{
-			return MethodName ?? FullName;
-		}
-
-		internal string GetParameterNames()
-		{
-			var sb = new StringBuilder();
-
-			sb.Append('(');
-
-			for (int i = 0; i < Parameters.Count; i++)
-			{
-				sb.AppendFormat("{0} {1}, ", Parameters[i].Type.FullName, Parameters[i].Name);
-			}
-
-			if (Parameters.Count != 0)
-				sb.Length = sb.Length - 2;
-
-			sb.Append(')');
-
-			return sb.ToString();
-		}
-
-		internal void SetName()
-		{
-			FullName = DeclaringType.FullName + "." + Name;
-
-			string parameterNames = GetParameterNames();
-
-			MethodName = FullName + parameterNames;
-
-			ShortMethodName = ReturnType.Name + " " + Name + parameterNames;
-		}
-
-		internal void SetOpenGeneric()
-		{
-			IsOpenGenericType = DeclaringType.IsOpenGenericType;
-
-			if (IsOpenGenericType)
-				return;
-
-			IsOpenGenericType = MosaType.IsOpenGeneric(ReturnType);
-
-			if (IsOpenGenericType)
-				return;
-
-			foreach (var param in Parameters)
-			{
-				IsOpenGenericType = MosaType.IsOpenGeneric(param.Type);
-
-				if (IsOpenGenericType)
-					return;
-			}
-
-			IsOpenGenericType = false;
+			return FullName;
 		}
 
 		public bool Matches(MosaMethod method)
 		{
-			if (Parameters.Count != method.Parameters.Count)
-				return false;
-
-			for (int index = 0; index < Parameters.Count; index++)
-			{
-				if (!Parameters[index].Matches(method.Parameters[index]))
-					return false;
-			}
-
-			if (ReturnType != method.ReturnType)
-				return false;
-
-			return true;
+			return new SigComparer().Equals(method.MethodSignature, this.MethodSignature);
 		}
 
-		public bool Matches(List<MosaType> parameterTypes)
+		internal MosaMethod Clone()
 		{
-			if (Parameters.Count != parameterTypes.Count)
-				return false;
+			MosaMethod result = (MosaMethod)base.MemberwiseClone();
 
-			for (int index = 0; index < Parameters.Count; index++)
+			result.Parameters = new List<MosaParameter>(this.Parameters);
+			result.LocalVariables = new List<MosaType>(this.LocalVariables);
+			if (result.InternalMethod.HasBody)
 			{
-				if (!Parameters[index].Matches(parameterTypes[index]))
-					return false;
+				result.Code = new List<Instruction>(this.Code);
+				result.ExceptionBlocks = new List<MosaExceptionHandler>(this.ExceptionBlocks);
 			}
 
-			return true;
+			result.GenericArguments = new List<MosaType>(this.GenericArguments);
+
+			return result;
+		}
+
+		internal void UpdateSignature(MethodSig sig, MosaType declaringType)
+		{
+			DeclaringType = declaringType;
+			MethodSignature = sig;
+
+			IList<TypeSig> typeGenericArgs = null;
+			if (DeclaringType.TypeSignature.IsGenericInstanceType)
+				typeGenericArgs = ((GenericInstSig)DeclaringType.TypeSignature).GenericArguments;
+
+			List<TypeSig> methodGenericArgs = null;
+			if (this.GenericArguments.Count > 0)
+			{
+				methodGenericArgs = new List<TypeSig>();
+				foreach (var genericArg in this.GenericArguments)
+					methodGenericArgs.Add(genericArg.TypeSignature);
+			}
+
+			FullName = FullNameCreator.MethodFullName(DeclaringType.FullName, Name, MethodSignature, typeGenericArgs, methodGenericArgs);
+
+			// TODO: update parameters
+		}
+
+		void IResolvable.Resolve(MosaTypeLoader loader)
+		{
+			GenericArgumentResolver resolver = new GenericArgumentResolver();
+			if (GenericArguments.Count > 0)
+			{
+				List<TypeSig> genericArgs = new List<TypeSig>();
+				foreach (var genericArg in this.GenericArguments)
+					genericArgs.Add(genericArg.TypeSignature);
+
+				resolver.PushMethodGenericArguments(genericArgs);
+			}
+
+
+			ReturnType = loader.GetType(resolver.Resolve(MethodSignature.RetType));
+
+			Debug.Assert(MethodSignature.GetParamCount() == InternalMethod.ParamDefs.Count);
+			Parameters.Clear();
+			for (int i = 0; i < InternalMethod.ParamDefs.Count; i++)
+			{
+				Parameters.Add(new MosaParameter(InternalMethod.ParamDefs[i].FullName, loader.GetType(resolver.Resolve(MethodSignature.Params[i]))));
+			}
+
+			if (InternalMethod.HasBody)
+			{
+				ResolveBody(loader, resolver);
+			}
+		}
+
+		internal void ResolveBody(MosaTypeLoader loader, GenericArgumentResolver resolver)
+		{
+			LocalVariables.Clear();
+			foreach (var variable in InternalMethod.Body.Variables)
+				LocalVariables.Add(loader.GetType(resolver.Resolve(variable.Type)));
+
+			ExceptionBlocks.Clear();
+			foreach (var eh in InternalMethod.Body.ExceptionHandlers)
+			{
+				ExceptionBlocks.Add(new MosaExceptionHandler(eh)
+				{
+					Type = eh.CatchType == null ? null : loader.GetType(resolver.Resolve(eh.CatchType.ToTypeSig()))
+				});
+			}
+
+			Code.Clear();
+			foreach (var instr in InternalMethod.Body.Instructions)
+			{
+				Code.Add(ResolveInstruction(instr, loader, resolver));
+			}
+		}
+
+		Instruction ResolveInstruction(Instruction instruction, MosaTypeLoader loader, GenericArgumentResolver resolver)
+		{
+			Instruction result = instruction.Clone();
+
+			if (result.Operand is ITypeDefOrRef)
+				result.Operand = ResolveType((ITypeDefOrRef)result.Operand, loader, resolver);
+
+			else if (result.Operand is MemberRef)
+			{
+				MemberRef memberRef = (MemberRef)result.Operand;
+				if (memberRef.IsFieldRef)
+					result.Operand = ResolveField(memberRef, loader, resolver);
+				else
+					result.Operand = ResolveMethod(memberRef, loader, resolver);
+			}
+			else if (result.Operand is IField)
+				result.Operand = ResolveField((IField)result.Operand, loader, resolver);
+
+			else if (result.Operand is IMethod)
+				result.Operand = ResolveMethod((IMethod)result.Operand, loader, resolver);
+
+			return result;
+		}
+
+		MosaField ResolveField(IField operand, MosaTypeLoader loader, GenericArgumentResolver resolver)
+		{
+			TypeSig declType;
+			FieldDef fieldDef = operand as FieldDef;
+			if (fieldDef == null)
+			{
+				MemberRef memberRef = (MemberRef)operand;
+				fieldDef = memberRef.ResolveFieldThrow();
+				declType = memberRef.DeclaringType.ToTypeSig();
+			}
+			else
+				declType = fieldDef.DeclaringType.ToTypeSig();
+
+			MDToken fieldToken = fieldDef.MDToken;
+
+			MosaType type = loader.GetType(resolver.Resolve(declType));
+			foreach (var field in type.Fields)
+			{
+				if (field.Token.Token == fieldToken)
+					return field;
+			}
+			throw new AssemblyLoadException();
+		}
+
+		MosaMethod ResolveMethod(IMethod operand, MosaTypeLoader loader, GenericArgumentResolver resolver)
+		{
+			if (operand is MethodSpec)
+				return loader.LoadGenericMethodInstance((MethodSpec)operand, resolver);
+
+			TypeSig declType;
+			MethodDef methodDef = operand as MethodDef;
+			if (methodDef == null)
+			{
+				MemberRef memberRef = (MemberRef)operand;
+				methodDef = memberRef.ResolveMethodThrow();
+				declType = memberRef.DeclaringType.ToTypeSig();
+			}
+			else
+				declType = methodDef.DeclaringType.ToTypeSig();
+
+			MDToken fieldToken = methodDef.MDToken;
+
+			MosaType type = loader.GetType(resolver.Resolve(declType));
+			foreach (var field in type.Methods)
+			{
+				if (field.Token.Token == fieldToken)
+					return field;
+			}
+
+			throw new AssemblyLoadException();
+		}
+
+		MosaType ResolveType(ITypeDefOrRef operand, MosaTypeLoader loader, GenericArgumentResolver resolver)
+		{
+			return loader.GetType(resolver.Resolve(operand.ToTypeSig()));
 		}
 	}
 }

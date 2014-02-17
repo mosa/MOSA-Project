@@ -5,202 +5,158 @@
  *
  * Authors:
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
+ *  Ki (kiootic) <kiootic@gmail.com>
  */
 
 using System.Collections.Generic;
+using dnlib.DotNet;
+using Mosa.Compiler.Common;
+using ElemType = dnlib.DotNet.ElementType;
 
 namespace Mosa.Compiler.MosaTypeSystem
 {
-	public class MosaType
+	public class MosaType : IResolvable
 	{
-		public MosaAssembly Assembly { get; internal set; }
+		public MosaModule Module { get; private set; }
 
-		public string Name { get; internal set; }
+		public TypeDef InternalType { get; private set; }
 
-		public string FullName { get; internal set; }
+		public TypeSig TypeSignature { get; private set; }
 
-		public string Namespace { get; internal set; }
+		public ScopedToken Token { get; private set; }
 
-		public MosaType BaseType { get; internal set; }
+		public string Namespace { get; private set; }
 
-		public MosaType EnclosingType { get; internal set; }
+		public string Name { get; private set; }
 
-		public MosaType GenericParentType { get; internal set; }
+		public string FullName { get; private set; }
 
-		public MosaType GenericBaseType { get; internal set; }
+		public MosaType BaseType { get; private set; }
 
-		public bool IsValueType { get; internal set; }
+		public MosaType EnclosingType { get; private set; }
 
-		public bool IsDelegate { get; internal set; }
+		public bool IsValueType { get; private set; }
 
-		public bool IsEnum { get; internal set; }
+		public bool IsDelegate { get; private set; }
 
-		public bool IsInterface { get; internal set; }
+		public bool IsEnum { get; private set; }
 
-		public bool IsNested { get; internal set; }
+		public bool IsInterface { get; private set; }
 
-		public bool IsExplicitLayout { get; internal set; }
+		public bool IsNested { get; private set; }
 
-		public bool IsModule { get; internal set; }
+		public bool IsExplicitLayout { get; private set; }
 
-		public int Size { get; internal set; }
+		public bool IsModule { get; private set; }
 
-		public int PackingSize { get; internal set; }
+		public int? ClassSize { get; private set; }
 
-		public IList<MosaMethod> Methods { get; internal set; }
+		public int? PackingSize { get; private set; }
 
-		public IList<MosaField> Fields { get; internal set; }
+		public IList<MosaMethod> Methods { get; private set; }
 
-		public IList<MosaType> Interfaces { get; internal set; }
+		public IList<MosaField> Fields { get; private set; }
 
-		public IList<MosaAttribute> CustomAttributes { get; internal set; }
+		public IList<MosaType> Interfaces { get; private set; }
 
-		public bool IsStruct { get; internal set; }
+		public bool IsU1 { get { return TypeSignature.ElementType == ElemType.U1; } }
 
-		public bool IsUnsignedByte { get; internal set; }
+		public bool IsI1 { get { return TypeSignature.ElementType == ElemType.I1; } }
 
-		public bool IsSignedByte { get; internal set; }
+		public bool IsU2 { get { return TypeSignature.ElementType == ElemType.U2; } }
 
-		public bool IsUnsignedShort { get; internal set; }
+		public bool IsI2 { get { return TypeSignature.ElementType == ElemType.I2; } }
 
-		public bool IsSignedShort { get; internal set; }
+		public bool IsU4 { get { return TypeSignature.ElementType == ElemType.U4; } }
 
-		public bool IsUnsignedInt { get; internal set; }
+		public bool IsI4 { get { return TypeSignature.ElementType == ElemType.I4; } }
 
-		public bool IsSignedInt { get; internal set; }
+		public bool IsU8 { get { return TypeSignature.ElementType == ElemType.U8; } }
 
-		public bool IsUnsignedLong { get; internal set; }
+		public bool IsI8 { get { return TypeSignature.ElementType == ElemType.I8; } }
 
-		public bool IsSignedLong { get; internal set; }
+		public bool IsR4 { get { return TypeSignature.ElementType == ElemType.R4; } }
 
-		public bool IsChar { get; internal set; }
+		public bool IsR8 { get { return TypeSignature.ElementType == ElemType.R8; } }
 
-		public bool IsBoolean { get; internal set; }
+		public bool IsI { get { return TypeSignature.ElementType == ElemType.I; } }
 
-		public bool IsObject { get; internal set; }
+		public bool IsU { get { return TypeSignature.ElementType == ElemType.U; } }
 
-		public bool IsString { get; internal set; }
+		public bool IsBoolean { get { return TypeSignature.ElementType == ElemType.Boolean; } }
 
-		public bool IsDouble { get; internal set; }
+		public bool IsChar { get { return TypeSignature.ElementType == ElemType.Char; } }
 
-		public bool IsSingle { get; internal set; }
+		public bool IsVoid { get { return TypeSignature.ElementType == ElemType.Void; } }
 
-		public bool IsPointer { get { return IsUnmanagedPointerType || IsManagedPointerType; } }
+		public bool IsManagedPointer { get { return TypeSignature is PinnedSig || TypeSignature is ByRefSig; } }
 
-		public bool IsByte { get { return IsUnsignedByte || IsSignedByte; } }
+		public bool IsUnmanagedPointer { get { return TypeSignature is PtrSig; } }
 
-		public bool IsShort { get { return IsUnsignedShort || IsSignedShort; } }
+		public bool IsUI1 { get { return IsU1 || IsI1; } }
 
-		public bool IsInt { get { return IsUnsignedInt || IsSignedInt; } }
+		public bool IsUI2 { get { return IsU2 || IsI2; } }
 
-		public bool IsLong { get { return IsUnsignedLong || IsSignedLong; } }
+		public bool IsUI4 { get { return IsU4 || IsI4; } }
 
-		public bool IsFloatingPoint { get { return IsDouble || IsSingle; } }
+		public bool IsUI8 { get { return IsU8 || IsI8; } }
+
+		public bool IsR48 { get { return IsR4 || IsR8; } }
+
+		public bool IsN { get { return IsU || IsI; } }
 
 		public bool IsInteger { get { return IsSigned || IsUnsigned; } }
 
-		public bool IsSigned { get { return IsSignedByte || IsSignedShort || IsSignedInt || IsSignedLong || IsNativeSignedInteger; } }
+		public bool IsSigned { get { return IsI1 || IsI2 || IsI4 || IsI8 || IsI; } }
 
-		public bool IsUnsigned { get { return IsUnsignedByte || IsUnsignedShort || IsUnsignedInt || IsUnsignedLong || IsNativeUnsignedInteger; } }
+		public bool IsUnsigned { get { return IsU1 || IsU2 || IsU4 || IsU8 || IsU; } }
 
-		public bool IsVarFlag { get; internal set; }
+		public bool IsPointer { get { return IsManagedPointer || IsUnmanagedPointer; } }
 
-		public bool IsMVarFlag { get; internal set; }
+		public bool IsVar { get { return TypeSignature is GenericMVar; } }
 
-		public int VarOrMVarIndex { get; internal set; }
+		public bool IsMVar { get { return TypeSignature is GenericVar; } }
 
-		public MosaType ElementType { get; internal set; }
+		public bool IsArray { get { return TypeSignature is SZArraySig || TypeSignature is ArraySig; } }
 
-		public bool HasElement { get { return ElementType != null; } }
+		public int? VarOrMVarIndex { get { return TypeSignature is GenericSig ? (int?)((GenericSig)TypeSignature).Number : null; } }
 
-		public bool IsManagedPointerType { get; internal set; }
+		public MosaType ElementType { get; private set; }
 
-		public bool IsUnmanagedPointerType { get; internal set; }
+		public bool HasElementType { get { return ElementType != null; } }
 
-		public bool IsArray { get; internal set; }
-
-		public bool IsVoid { get; internal set; }
-
-		public bool IsBuiltInType { get; internal set; }
-
-		public IList<MosaGenericParameter> GenericParameters { get; internal set; }
-
-		public bool IsBaseGeneric { get; internal set; }
-
-		public List<MosaType> GenericArguments { get; internal set; }
-
-		public IDictionary<MosaMethod, MosaMethod> InheritanceOveride { get; internal set; }
+		public IDictionary<MosaMethod, MosaMethod> InheritanceOveride { get; private set; }
 
 		public bool IsLinkerGenerated { get; internal set; }
 
-		public bool IsNativeSignedInteger { get; internal set; }
-
-		public bool IsNativeUnsignedInteger { get; internal set; }
-
-		public bool IsNativeInteger { get { return IsNativeSignedInteger || IsNativeUnsignedInteger; } }
-
-		public int? FixedSize { get; set; }
-
-		public bool IsOpenGenericType { get; internal set; }
-
-		internal bool AreMethodsAssigned { get; set; }
-
-		internal bool AreFieldsAssigned { get; set; }
-
-		internal bool AreInterfacesAssigned { get; set; }
-
-		public MosaType(MosaAssembly assembly)
+		internal MosaType(MosaModule module, string name, string @namespace)
+			: this(module, new TypeDefUser(@namespace, name, null))
 		{
-			Assembly = assembly;
+		}
 
-			IsUnsignedByte = false;
-			IsSignedByte = false;
-			IsUnsignedShort = false;
-			IsSignedShort = false;
-			IsUnsignedInt = false;
-			IsSignedInt = false;
-			IsUnsignedLong = false;
-			IsSignedLong = false;
-			IsChar = false;
-			IsBoolean = false;
-			IsObject = false;
-			IsDouble = false;
-			IsSingle = false;
-			IsVarFlag = false;
-			IsMVarFlag = false;
-			IsManagedPointerType = false;
-			IsUnmanagedPointerType = false;
-			IsArray = false;
-			IsBuiltInType = false;
-			IsModule = false;
-			IsVoid = false;
+		internal MosaType(MosaModule module, TypeDef type)
+			: this(module, type, type.ToTypeSig())
+		{
+		}
+
+		internal MosaType(MosaModule module, TypeDef type, TypeSig typeSig)
+		{
+			Module = module;
+			InternalType = type;
+			if (type != null)
+			{
+				Token = new ScopedToken(module.InternalModule, type.MDToken);
+			}
+
 			IsLinkerGenerated = false;
-			IsString = false;
-			IsNativeSignedInteger = false;
-			IsNativeUnsignedInteger = false;
-			IsBaseGeneric = false;
 
 			Methods = new List<MosaMethod>();
 			Fields = new List<MosaField>();
 			Interfaces = new List<MosaType>();
-			GenericParameters = new List<MosaGenericParameter>();
-			CustomAttributes = new List<MosaAttribute>();
-			GenericArguments = new List<MosaType>();
+
 			InheritanceOveride = new Dictionary<MosaMethod, MosaMethod>();
 
-			AreMethodsAssigned = false;
-			AreFieldsAssigned = false;
-			AreInterfacesAssigned = false;
-		}
-
-		public void SetFlags()
-		{
-			IsObject = (BaseType != null && BaseType.IsObject) || FullName == "System.Object";
-			IsValueType = FullName == "System.ValueType";
-			IsStruct = (BaseType != null && BaseType.IsValueType);
-			IsDelegate = (BaseType != null && BaseType.IsDelegate) || FullName == "System.Delegate";
-			IsEnum = (BaseType != null && BaseType.IsEnum) || FullName == "System.Enum";
-			IsModule = Name == "<Module>" && Namespace == string.Empty;
+			UpdateSignature(typeSig);
 		}
 
 		public override string ToString()
@@ -213,30 +169,136 @@ namespace Mosa.Compiler.MosaTypeSystem
 			return type == this;
 		}
 
-		internal static bool IsOpenGeneric(MosaType type)
+		public MosaType Clone()
 		{
-			if (type.IsVarFlag || type.IsMVarFlag)
-				return true;
+			MosaType result = (MosaType)base.MemberwiseClone();
 
-			if (!type.HasElement)
-				return false;
+			result.Methods = new List<MosaMethod>(this.Methods);
+			result.Fields = new List<MosaField>(this.Fields);
+			result.Interfaces = new List<MosaType>(this.Interfaces);
 
-			return IsOpenGeneric(type.ElementType);
+			result.InheritanceOveride = new Dictionary<MosaMethod, MosaMethod>(this.InheritanceOveride);
+
+			return result;
 		}
 
-		internal void SetOpenGeneric()
+		/// <summary>
+		/// Gets the type on the stack.
+		/// </summary>
+		/// <param name="type">The type.</param>
+		/// <returns>
+		/// The equivalent stack type code.
+		/// </returns>
+		/// <exception cref="InvalidCompilerException"></exception>
+		public StackTypeCode GetStackType()
 		{
-			IsOpenGenericType = IsOpenGeneric(this);
-
-			foreach (var param in GenericArguments)
+			switch (TypeSignature.RemovePinnedAndModifiers().ElementType)
 			{
-				IsOpenGenericType = MosaType.IsOpenGeneric(param);
+				case ElemType.Boolean:
+				case ElemType.Char:
+				case ElemType.I1:
+				case ElemType.U1:
+				case ElemType.I2:
+				case ElemType.U2:
+				case ElemType.I4:
+				case ElemType.U4:
+					return StackTypeCode.Int32;
 
-				if (IsOpenGenericType)
-					return;
+				case ElemType.I8:
+				case ElemType.U8:
+					return StackTypeCode.Int64;
+
+				case ElemType.R4:
+				case ElemType.R8:
+					return StackTypeCode.F;
+
+				case ElemType.I:
+				case ElemType.U:
+					return StackTypeCode.N;
+
+				case ElemType.ByRef:
+				case ElemType.Ptr:
+				case ElemType.FnPtr:
+					return StackTypeCode.Pointer;
+
+				case ElemType.String:
+				case ElemType.ValueType:
+				case ElemType.Class:
+				case ElemType.Var:
+				case ElemType.Array:
+				case ElemType.GenericInst:
+				case ElemType.TypedByRef:
+				case ElemType.Object:
+				case ElemType.SZArray:
+				case ElemType.MVar:
+					return StackTypeCode.O;
+
+				case ElemType.Void:
+					return StackTypeCode.Unknown;
 			}
+			throw new InvalidCompilerException(string.Format("Can't transform Type {0} to StackTypeCode.", this));
+		}
 
-			IsOpenGenericType = false;
+		internal void UpdateSignature(TypeSig sig)
+		{
+			TypeSignature = sig;
+			Namespace = sig.ReflectionNamespace;
+			Name = sig.ReflectionName;
+			FullName = TypeSignature.ReflectionFullName;
+
+			TypeRef typeRef = sig.RemovePinnedAndModifiers().TryGetTypeRef();
+			if (typeRef != null)
+			{
+				TypeDef typeDef = typeRef.ResolveThrow();
+
+				IsValueType = typeDef.IsValueType;
+				IsDelegate = typeDef.BaseType != null && typeDef.BaseType.DefinitionAssembly.IsCorLib() &&
+					(typeDef.BaseType.FullName == "System.Delegate" || typeDef.BaseType.FullName == "System.MulticastDelegate");
+				IsEnum = typeDef.IsEnum;
+				IsInterface = typeDef.IsInterface;
+				IsNested = typeDef.IsNested;
+				IsExplicitLayout = typeDef.IsExplicitLayout;
+				IsModule = typeDef.IsGlobalModuleType;
+				if (typeDef.HasClassLayout)
+				{
+					ClassSize = (int)typeDef.ClassLayout.ClassSize;
+					PackingSize = typeDef.ClassLayout.PackingSize;
+				}
+				else
+				{
+					ClassSize = PackingSize = null;
+				}
+			}
+			else
+			{
+				IsValueType = false;
+				IsDelegate = false;
+				IsEnum = false;
+				IsInterface = false;
+				IsNested = false;
+				IsExplicitLayout = false;
+				IsModule = false;
+				ClassSize = PackingSize = null;
+			}
+		}
+
+		void IResolvable.Resolve(MosaTypeLoader loader)
+		{
+			// InternalType is null is this instance is generic parameters
+			if (InternalType != null)
+			{
+				if (TypeSignature.IsArray || TypeSignature.IsSZArray)
+					BaseType = loader.GetType(InternalType.ToTypeSig());
+				if (InternalType.BaseType != null)
+					BaseType = loader.GetType(InternalType.BaseType.ToTypeSig());
+
+				if (InternalType.DeclaringType != null)
+					EnclosingType = loader.GetType(InternalType.DeclaringType.ToTypeSig());
+
+				Interfaces.Clear();
+				foreach (var iface in InternalType.Interfaces)
+					Interfaces.Add(loader.GetType(iface.Interface.ToTypeSig()));
+			}
 		}
 	}
 }

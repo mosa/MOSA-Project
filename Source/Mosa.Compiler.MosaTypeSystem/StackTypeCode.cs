@@ -40,9 +40,9 @@ namespace Mosa.Compiler.MosaTypeSystem
 		F = 4,
 
 		/// <summary>
-		/// CLI Stack type managed ptr.
+		/// CLI Stack type is pointer.
 		/// </summary>
-		Ptr = 5,
+		Pointer = 5,
 
 		/// <summary>
 		/// CLI stack type is object reference.
