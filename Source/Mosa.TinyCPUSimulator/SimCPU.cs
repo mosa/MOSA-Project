@@ -43,11 +43,9 @@ namespace Mosa.TinyCPUSimulator
 
 		public SimCPUException LastException { get; set; }
 
-		public ulong TotalMemory { get; set; }
-
-		public byte[][] MemoryBlocks { get; private set; }
-
 		public List<MemoryRegion> MemoryRegions { get; private set; }
+
+		private byte[][] MemoryBlocks;
 
 		internal static ulong BlockSize = 1024 * 1024; // 1 MB
 		internal static ulong MaxMemory = 1024L * 1024L * 1024L * 4L; // 4 GB
@@ -65,8 +63,6 @@ namespace Mosa.TinyCPUSimulator
 
 			Tick = 0;
 			IsLittleEndian = true;
-
-			TotalMemory = 1024L * 1024L * 1024L * 4; // 4 GB
 		}
 
 		public void AddMemory(ulong address, ulong size, uint type)

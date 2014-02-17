@@ -13,6 +13,8 @@ namespace Mosa.TinyCPUSimulator
 	{
 		public ulong Address { get; private set; }
 
+		public ulong End { get { return Address + Size; } }
+
 		public ulong Size { get; private set; }
 
 		public uint Type { get; private set; }

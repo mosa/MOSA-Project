@@ -39,12 +39,20 @@ namespace Mosa.TinyCPUSimulator.x86.Emulate
 
 			uint multiboot = MultibootStructure;
 
-			uint mem_upper = (uint)simCPU.TotalMemory;
+			uint mem_upper = 0;
+
+			foreach (var region in simCPU.MemoryRegions)
+			{
+				if (region.Type == 1 && region.End > mem_upper)
+				{
+					mem_upper = (uint)region.End;
+				}
+			}
 
 			mem_upper = mem_upper - (1024 * 1024);
 
 			simCPU.Write32(multiboot + 0, 0x01 | 0x40);	// flags
-			simCPU.Write32(multiboot + 4, 640);	// mem_lower - assuming at least 640k
+			simCPU.Write32(multiboot + 4, 640);		// mem_lower - assuming at least 640k
 			simCPU.Write32(multiboot + 8, mem_upper / 1024);	// mem_upper
 			simCPU.Write32(multiboot + 12, 0x0);	// boot_device
 			simCPU.Write32(multiboot + 16, 0x0);	// cmdline
@@ -67,13 +75,16 @@ namespace Mosa.TinyCPUSimulator.x86.Emulate
 
 			multiboot = multiboot + 96;
 
-			simCPU.Write32(multiboot + 0, 20);		// Size
-			simCPU.Write32(multiboot + 4, 0);		// base_addr_low
-			simCPU.Write32(multiboot + 8, 0x00);	// base_addr_high
-			simCPU.Write32(multiboot + 12, mem_upper);	// length_low
-			simCPU.Write32(multiboot + 16, 0x00);	// length_high
-			simCPU.Write32(multiboot + 20, 1);		// type
-			multiboot = multiboot + 24;
+			foreach (var region in simCPU.MemoryRegions)
+			{
+				simCPU.Write32(multiboot + 0, 20);		// Size
+				simCPU.Write32(multiboot + 4, (uint)region.Address);	// base_addr_low
+				simCPU.Write32(multiboot + 8, 0x00);	// base_addr_high
+				simCPU.Write32(multiboot + 12, (uint)region.Size);	// length_low
+				simCPU.Write32(multiboot + 16, 0x00);	// length_high
+				simCPU.Write32(multiboot + 20, (uint)region.Type);	// type
+				multiboot = multiboot + 24;
+			}
 		}
 
 		public override void MemoryWrite(ulong address, byte size)
