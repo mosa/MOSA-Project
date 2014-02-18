@@ -142,7 +142,7 @@ namespace Mosa.Compiler.Framework.Stages
 						if (op == null || !op.IsVirtualRegister)
 							continue;
 
-						Debug.Assert(variables.ContainsKey(op), op.ToString() + " is not in dictionary [block = " + block + "]");
+						//Debug.Assert(variables.ContainsKey(op), op.ToString() + " is not in dictionary [block = " + block + "]");
 
 						var index = variables[op].Peek();
 						context.SetOperand(i, GetSSAOperand(op, index, 0));

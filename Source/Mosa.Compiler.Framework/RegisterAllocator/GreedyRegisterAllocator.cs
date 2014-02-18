@@ -372,7 +372,8 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 			foreach (var block in extendedBlocks)
 			{
-				liveSetTrace.Log("Block # " + block.BasicBlock.Sequence.ToString());
+				if (liveSetTrace.Active)
+					liveSetTrace.Log("Block # " + block.BasicBlock.Sequence.ToString());
 
 				BitArray liveGen = new BitArray(registerCount, false);
 				BitArray liveKill = new BitArray(registerCount, false);
@@ -388,18 +389,23 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 					if (context.IsEmpty)
 						continue;
 
-					liveSetTrace.Log(context.ToString());
+					if (liveSetTrace.Active) 
+						liveSetTrace.Log(context.ToString());
 
 					OperandVisitor visitor = new OperandVisitor(context);
 
 					foreach (var ops in visitor.Input)
 					{
-						liveSetTrace.Log("INPUT:  " + ops.ToString());
+						if (liveSetTrace.Active) 
+							liveSetTrace.Log("INPUT:  " + ops.ToString());
+						
 						int index = GetIndex(ops);
 						if (!liveKill.Get(index))
 						{
 							liveGen.Set(index, true);
-							liveSetTrace.Log("GEN:  " + index.ToString() + " " + ops.ToString());
+
+							if (liveSetTrace.Active) 
+								liveSetTrace.Log("GEN:  " + index.ToString() + " " + ops.ToString());
 						}
 					}
 
@@ -409,15 +415,21 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 						{
 							liveKill.Set(s, true);
 						}
-						liveSetTrace.Log("KILL ALL PHYSICAL");
+
+						if (liveSetTrace.Active) 
+							liveSetTrace.Log("KILL ALL PHYSICAL");
 					}
 
 					foreach (var ops in visitor.Output)
 					{
-						liveSetTrace.Log("OUTPUT: " + ops.ToString());
+						if (liveSetTrace.Active) 
+							liveSetTrace.Log("OUTPUT: " + ops.ToString());
+						
 						int index = GetIndex(ops);
 						liveKill.Set(index, true);
-						liveSetTrace.Log("KILL: " + index.ToString() + " " + ops.ToString());
+
+						if (liveSetTrace.Active) 
+							liveSetTrace.Log("KILL: " + index.ToString() + " " + ops.ToString());
 					}
 				}
 
@@ -425,11 +437,13 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 				block.LiveKill = liveKill;
 				block.LiveKillNot = ((BitArray)liveKill.Clone()).Not();
 
-				liveSetTrace.Log("GEN:     " + ToString(block.LiveGen));
-				liveSetTrace.Log("KILL:    " + ToString(block.LiveKill));
-				liveSetTrace.Log("KILLNOT: " + ToString(block.LiveKillNot));
-
-				liveSetTrace.Log(string.Empty);
+				if (liveSetTrace.Active)
+				{
+					liveSetTrace.Log("GEN:     " + ToString(block.LiveGen));
+					liveSetTrace.Log("KILL:    " + ToString(block.LiveKill));
+					liveSetTrace.Log("KILLNOT: " + ToString(block.LiveKillNot));
+					liveSetTrace.Log(string.Empty);
+				}
 			}
 		}
 

@@ -101,6 +101,10 @@ namespace Mosa.TinyCPUSimulator
 				if (!IsValidMemoryReference(address))
 					throw new InvalidMemoryAccess(address);
 
+				block = new byte[BlockSize];
+
+				MemoryBlocks[index] = block;
+
 				return 0;
 			}
 

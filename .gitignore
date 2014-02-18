@@ -18,6 +18,7 @@
 *.exe.manifest
 *.mdb
 *.docstates
+*.vsp
 Thumbs.db
 build.force
 obj
