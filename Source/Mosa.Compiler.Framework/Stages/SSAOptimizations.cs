@@ -233,6 +233,10 @@ namespace Mosa.Compiler.Framework.Stages
 			if (!result.IsValueType && !destination.IsValueType)
 				return true;
 
+			if (result.IsInteger && destination.IsInteger &&
+				result.IsSigned != result.IsUnsigned)
+				return false;
+
 			if (!result.IsPointer && !destination.IsPointer)
 				return true;
 
@@ -266,6 +270,7 @@ namespace Mosa.Compiler.Framework.Stages
 			Debug.Assert(context.Result.Definitions.Count == 1);
 
 			// If the pointer or reference types are different, we can not copy propagation because type information would be lost.
+			// Also if the operand sign is different, we cannot do it as it required a signed/unsigned extended move, not a normal move
 			if (!CanCopyPropagation(context.Result, context.Operand1))
 				return;
 

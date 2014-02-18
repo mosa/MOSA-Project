@@ -351,19 +351,18 @@ namespace Mosa.Compiler.Framework
 			{
 				if (!field.IsStaticField)
 				{
+					// Set the field address
+					fieldOffsets.Add(field, typeSize);
+
 					int fieldSize = GetFieldSize(field);
+					typeSize += fieldSize;
 
 					// Pad the field in the type
 					if (packingSize != 0)
 					{
-						int padding = (typeSize % packingSize);
+						int padding = (packingSize - (typeSize % packingSize)) % packingSize;
 						typeSize += padding;
 					}
-
-					// Set the field address
-					fieldOffsets.Add(field, typeSize);
-
-					typeSize += fieldSize;
 				}
 			}
 
