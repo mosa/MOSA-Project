@@ -37,7 +37,7 @@ namespace Mosa.Tool.Explorer
 				new MethodCompilerSchedulerStage(),
 				new TypeInitializerSchedulerStage(),
 				new TypeLayoutStage(),
-
+				new MetadataStage()
 			});
 
 			if (emitBinary)

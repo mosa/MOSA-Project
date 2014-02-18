@@ -204,6 +204,9 @@ namespace Mosa.Compiler.Framework
 			if (type.HasOpenGenericParams)
 				return null;
 
+			if (type.BaseType == null && !type.IsInterface && type.FullName != "System.Object")   // ghost types like generic params, function ptr, etc.
+				return null;
+
 			ResolveType(type);
 
 			return typeMethodTables[type];
@@ -260,7 +263,7 @@ namespace Mosa.Compiler.Framework
 			if (type.HasOpenGenericParams)
 				return;
 
-			if (type.BaseType == null && !type.IsInterface)	// ghost types like generic params, function ptr, etc.
+			if (type.BaseType == null && !type.IsInterface && type.FullName != "System.Object")   // ghost types like generic params, function ptr, etc.
 				return;
 
 			if (typeSet.Contains(type))
@@ -285,7 +288,12 @@ namespace Mosa.Compiler.Framework
 				ResolveInterfaceType(interfaceType);
 			}
 
-			if (type.IsExplicitLayout)
+			int size = dnlib.DotNet.Extensions.GetPrimitiveSize(type.TypeSignature.ElementType, (int)nativePointerSize);
+			if (size != -1)
+			{
+				typeSizes[type] = size;
+			}
+			else if (type.IsExplicitLayout)
 			{
 				ComputeExplicitLayout(type);
 			}
@@ -534,8 +542,13 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		private int GetMemorySize(MosaType type)
 		{
-			Debug.Assert(!type.IsValueType);
-			return nativePointerSize;
+			if (type.IsValueType)
+			{
+				ResolveType(type);
+				return typeSizes[type];
+			}
+			else
+				return nativePointerSize;
 		}
 
 		#endregion Internal

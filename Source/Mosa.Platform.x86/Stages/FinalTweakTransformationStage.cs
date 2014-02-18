@@ -116,7 +116,7 @@ namespace Mosa.Platform.x86.Stages
 				return;
 
 			before.SetInstruction(X86.Call, null, before.Operand1);
-			context.Delete();
+			context.Delete(false);
 		}
 
 		#endregion IX86Visitor

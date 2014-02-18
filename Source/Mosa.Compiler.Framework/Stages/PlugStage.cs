@@ -37,9 +37,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 		void ICompilerStage.Run()
 		{
-			if (plugTypeAttribute == null | plugMethodAttribute == null)
-				return;
-
 			foreach (var type in typeSystem.AllTypes)
 			{
 				string plugTypeTarget = null;
@@ -67,19 +64,19 @@ namespace Mosa.Compiler.Framework.Stages
 
 					if (plugTypeTarget != null || plugMethodTarget != null)
 					{
-						string targetModuleName;
+						string targetAssemblyName;
 						string targetFullTypeName;
 						string targetMethodName;
 
 						if (plugMethodTarget != null)
 						{
-							targetModuleName = ParseModule(plugMethodTarget);
+							targetAssemblyName = ParseAssembly(plugMethodTarget);
 							targetFullTypeName = ParseFullTypeName(plugMethodTarget);
 							targetMethodName = ParseMethod(plugMethodTarget);
 						}
 						else
 						{
-							targetModuleName = ParseModule(plugTypeTarget);
+							targetAssemblyName = ParseAssembly(plugTypeTarget);
 							targetFullTypeName = RemoveModule(plugTypeTarget);
 							targetMethodName = method.Name;
 						}
@@ -89,8 +86,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 						MosaType targetType;
 
-						if (targetModuleName != null)
-							targetType = typeSystem.GetTypeByName(targetModuleName, targetNameSpace, targetTypeName);
+						if (targetAssemblyName != null)
+							targetType = typeSystem.GetTypeByName(typeSystem.GetModuleByAssembly(targetAssemblyName), targetNameSpace, targetTypeName);
 						else
 							targetType = typeSystem.GetTypeByName(targetNameSpace, targetTypeName);
 
@@ -98,7 +95,7 @@ namespace Mosa.Compiler.Framework.Stages
 						{
 							Trace(InternalTrace.CompilerEvent.Warning,
 								String.Format("Plug target type {0} not found. Ignoring plug.",
-								targetModuleName != null ? (targetFullTypeName + "(in " + targetModuleName + ")") : targetFullTypeName));
+								targetAssemblyName != null ? (targetFullTypeName + "(in " + targetAssemblyName + ")") : targetFullTypeName));
 							continue;
 						}
 
@@ -182,7 +179,7 @@ namespace Mosa.Compiler.Framework.Stages
 			return target.Substring(target.Length - pos - 1).Trim(' ');
 		}
 
-		private string ParseModule(string target)
+		private string ParseAssembly(string target)
 		{
 			int pos = target.IndexOf(',');
 

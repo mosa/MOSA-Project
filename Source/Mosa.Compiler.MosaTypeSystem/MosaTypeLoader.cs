@@ -102,13 +102,20 @@ namespace Mosa.Compiler.MosaTypeSystem
 			{
 				resolveQueue.Dequeue().Resolve(this);
 			}
+			foreach (MosaModule module in TypeSystem.AllModules)
+			{
+				if (module.InternalModule != null && module.InternalModule.IsManagedEntryPointValid)
+					module.EntryPoint = TypeSystem.Resolver.GetMethodByToken(new ScopedToken(module.InternalModule, module.InternalModule.ManagedEntryPoint.MDToken));
+			}
 		}
 
 		Dictionary<IAssembly, string> assemblyNameCache = new Dictionary<IAssembly, string>();
 		Tuple<string, string, string> CreateKey(TypeSig sig)
 		{
 			string assemblyFullName;
-			if (!assemblyNameCache.TryGetValue(sig.DefinitionAssembly, out assemblyFullName))
+			if (sig is FnPtrSig)
+				assemblyFullName = TypeSystem.Resolver.LinkerModule.Name;
+			else if (!assemblyNameCache.TryGetValue(sig.DefinitionAssembly, out assemblyFullName))
 			{
 				assemblyFullName = TypeSystem.CorLib.InternalModule.Context.AssemblyResolver.Resolve(sig.DefinitionAssembly, sig.Module).FullName;
 				assemblyNameCache[sig.DefinitionAssembly] = assemblyFullName;
@@ -187,6 +194,10 @@ namespace Mosa.Compiler.MosaTypeSystem
 					GenericSig genericParam = (GenericSig)typeSig;
 					return genericParam.IsTypeVar ? GetVarType(genericParam.Number) : GetMVarType(genericParam.Number);
 				}
+				else if (typeSig is FnPtrSig)
+				{
+					return LoadFnPointerSig((FnPtrSig)typeSig);
+				}
 				else
 					throw new NotSupportedException();
 			}
@@ -208,9 +219,6 @@ namespace Mosa.Compiler.MosaTypeSystem
 					case ElementType.SZArray:
 						return LoadArraySig(elementType, typeSig);
 
-					case ElementType.FnPtr:
-						return LoadFnPointerSig((FnPtrSig)typeSig);
-
 					default:
 						throw new AssemblyLoadException();
 				}
@@ -222,6 +230,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 			// Pointers have nothing defined
 			MosaType type = elemType.Clone();
 			type.UpdateSignature(typeSig);
+			type.ElementType = elemType;
 
 			type.Methods.Clear();
 			type.Fields.Clear();
@@ -237,6 +246,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 			// Basically same as element type
 			MosaType type = elemType.Clone();
 			type.UpdateSignature(typeSig);
+			type.ElementType = elemType;
 
 			return type;
 		}
@@ -248,6 +258,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 			MosaType array = types[Tuple.Create("System", "System.Array", TypeSystem.CorLib.InternalModule.Assembly.FullName)];
 			MosaType type = array.Clone();   // Copy from System.Array
 			type.UpdateSignature(typeSig);
+			type.ElementType = elemType;
 
 			// Remove Static Methods
 			for (int i = type.Methods.Count - 1; i >= 0; i--)
@@ -273,18 +284,32 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		MosaType LoadGenericTypeInstanceSig(GenericInstSig typeSig)
 		{
-			MosaType result = GetType(typeSig.GenericType).Clone();
+			MosaType origin = GetType(typeSig.GenericType);
+			if (!origin.Resolved)
+				((IResolvable)origin).Resolve(this);
+			MosaType result = origin.Clone();
 			result.UpdateSignature(typeSig);
 
 			GenericArgumentResolver resolver = new GenericArgumentResolver();
 			resolver.PushTypeGenericArguments(typeSig.GenericArguments);
 
+			// Resolve infos
+			if (result.BaseType != null)
+				result.BaseType = GetType(resolver.Resolve(result.BaseType.TypeSignature));
+
+			for (int i = 0; i < result.Interfaces.Count; i++)
+			{
+				result.Interfaces[i] = GetType(resolver.Resolve(result.Interfaces[i].TypeSignature));
+			}
+
 			// Resolve members
+			Dictionary<MosaMethod, MosaMethod> resolvedMethodLookup = new Dictionary<MosaMethod, MosaMethod>();
 			for (int i = 0; i < result.Methods.Count; i++)
 			{
 				MosaMethod method = result.Methods[i].Clone();
 				MethodSig newSig = resolver.Resolve(method.MethodSignature);
 				method.UpdateSignature(newSig, result);
+				resolvedMethodLookup[result.Methods[i]] = method;
 				result.Methods[i] = method;
 				resolveQueue.Enqueue(method);
 			}
@@ -297,6 +322,9 @@ namespace Mosa.Compiler.MosaTypeSystem
 				result.Fields[i] = field;
 				resolveQueue.Enqueue(field);
 			}
+
+			foreach (var decl in new List<MosaMethod>(result.InheritanceOveride.Keys))
+				result.InheritanceOveride[decl] = resolvedMethodLookup[result.InheritanceOveride[decl]];
 
 			TypeSystem.Resolver.AddNewType(result);
 

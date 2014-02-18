@@ -273,14 +273,14 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="context">The context.</param>
 		void CIL.ICILVisitor.BinaryLogic(Context context)
 		{
-			if (context.Operand1.IsValueType)
+			if (context.Operand1.Type.IsEnum)
 			{
 				var type = context.Operand1.Type;
 				var operand = Operand.CreateField(type.Fields[0]);
 				context.SetOperand(0, operand);
 			}
 
-			if (context.Operand2.IsValueType)
+			if (context.Operand2.Type.IsEnum)
 			{
 				var type = context.Operand2.Type;
 				var operand = Operand.CreateField(type.Fields[0]);

@@ -666,9 +666,17 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// delete this instruction (not to be replaced)
 		/// </summary>
-		public void Delete()
+		/// <param name="remove">also remove in instruction set</param>
+		public void Delete(bool remove)
 		{
 			Clear();
+			if (remove)
+			{
+				int next = instructionSet.Next(index);
+				instructionSet.Remove(index);
+				this.index = instructionSet.Previous(next);
+				Debug.Assert(this.index != -1);
+			}
 		}
 
 		/// <summary>

@@ -72,7 +72,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public IList<MosaExceptionHandler> ExceptionBlocks { get; private set; }
 
-		public string ExternMethod { get { return InternalMethod.ImplMap == null ? null : InternalMethod.ImplMap.Name; } }
+		public string ExternMethod { get { return InternalMethod.ImplMap == null ? null : InternalMethod.ImplMap.Module.Name; } }
 
 		public bool HasCode { get { return InternalMethod.HasBody; } }
 
@@ -101,16 +101,8 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 			Parameters = new List<MosaParameter>();
 			LocalVariables = new List<MosaType>();
-			if (method.HasBody)
-			{
-				Code = new List<Instruction>();
-				ExceptionBlocks = new List<MosaExceptionHandler>();
-			}
-			else
-			{
-				Code = null;
-				ExceptionBlocks = null;
-			}
+			Code = new List<Instruction>();
+			ExceptionBlocks = new List<MosaExceptionHandler>();
 
 			GenericArguments = new List<MosaType>();
 
@@ -137,7 +129,12 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 			object[] result = new object[arguments.Count];
 			for (int i = 0; i < result.Length; i++)
-				result[i] = arguments[i].Value;
+			{
+				if (arguments[i].Value is UTF8String)
+					result[i] = ((UTF8String)arguments[i].Value).String;
+				else
+					result[i] = arguments[i].Value;
+			}
 
 			return result;
 		}
@@ -148,11 +145,8 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 			result.Parameters = new List<MosaParameter>(this.Parameters);
 			result.LocalVariables = new List<MosaType>(this.LocalVariables);
-			if (result.InternalMethod.HasBody)
-			{
-				result.Code = new List<Instruction>(this.Code);
-				result.ExceptionBlocks = new List<MosaExceptionHandler>(this.ExceptionBlocks);
-			}
+			result.Code = new List<Instruction>(this.Code);
+			result.ExceptionBlocks = new List<MosaExceptionHandler>(this.ExceptionBlocks);
 
 			result.GenericArguments = new List<MosaType>(this.GenericArguments);
 
@@ -186,6 +180,10 @@ namespace Mosa.Compiler.MosaTypeSystem
 		void IResolvable.Resolve(MosaTypeLoader loader)
 		{
 			GenericArgumentResolver resolver = new GenericArgumentResolver();
+
+			if (DeclaringType.TypeSignature is GenericInstSig)
+				resolver.PushTypeGenericArguments(((GenericInstSig)DeclaringType.TypeSignature).GenericArguments);
+
 			if (GenericArguments.Count > 0)
 			{
 				List<TypeSig> genericArgs = new List<TypeSig>();

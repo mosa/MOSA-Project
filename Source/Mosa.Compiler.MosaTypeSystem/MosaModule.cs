@@ -18,6 +18,8 @@ namespace Mosa.Compiler.MosaTypeSystem
 	{
 		public ModuleDefMD InternalModule { get; private set; }
 
+		public MosaMethod EntryPoint { get; internal set; }
+
 		public string Name { get; private set; }
 
 		// Key is ( Type namespace, Type full name )

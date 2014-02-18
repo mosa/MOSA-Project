@@ -10,6 +10,7 @@
 
 using System.Collections.Generic;
 using dnlib.DotNet;
+using System.IO;
 
 namespace Mosa.Compiler.MosaTypeSystem
 {
@@ -67,7 +68,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 		public void AddPrivatePath(IEnumerable<string> assemblyPaths)
 		{
 			foreach (string path in assemblyPaths)
-				AddPrivatePath(path);
+				AddPrivatePath(Path.GetDirectoryName(path));
 		}
 
 		/// <summary>

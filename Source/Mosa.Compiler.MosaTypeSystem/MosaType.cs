@@ -31,7 +31,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public string FullName { get; private set; }
 
-		public MosaType BaseType { get; private set; }
+		public MosaType BaseType { get; internal set; }
 
 		public MosaType EnclosingType { get; private set; }
 
@@ -93,7 +93,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public bool IsManagedPointer { get { return TypeSignature is PinnedSig || TypeSignature is ByRefSig; } }
 
-		public bool IsUnmanagedPointer { get { return TypeSignature is PtrSig; } }
+		public bool IsUnmanagedPointer { get { return TypeSignature is PtrSig || TypeSignature is FnPtrSig; } }
 
 		public bool IsUI1 { get { return IsU1 || IsI1; } }
 
@@ -123,7 +123,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public int? VarOrMVarIndex { get { return TypeSignature is GenericSig ? (int?)((GenericSig)TypeSignature).Number : null; } }
 
-		public MosaType ElementType { get; private set; }
+		public MosaType ElementType { get; internal set; }
 
 		public bool HasElementType { get { return ElementType != null; } }
 
@@ -181,7 +181,12 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 			object[] result = new object[arguments.Count];
 			for (int i = 0; i < result.Length; i++)
-				result[i] = arguments[i].Value;
+			{
+				if (arguments[i].Value is UTF8String)
+					result[i] = ((UTF8String)arguments[i].Value).String;
+				else
+					result[i] = arguments[i].Value;
+			}
 
 			return result;
 		}
@@ -262,14 +267,19 @@ namespace Mosa.Compiler.MosaTypeSystem
 		{
 			TypeSignature = sig;
 			Namespace = sig.ReflectionNamespace;
-			Name = sig.ReflectionName;
-			FullName = TypeSignature.ReflectionFullName;
+			Name = sig is FnPtrSig ? FullNameCreator.MethodFullName("", "", ((FnPtrSig)sig).MethodSig) : sig.ReflectionName;
+			FullName = sig is FnPtrSig ? FullNameCreator.MethodFullName("", "", ((FnPtrSig)sig).MethodSig) : sig.ReflectionFullName;
 
-			TypeRef typeRef = sig.RemovePinnedAndModifiers().TryGetTypeRef();
-			if (typeRef != null)
+			var sSig = sig.RemovePinnedAndModifiers();
+			TypeDef typeDef = null;
+
+			if (sSig is TypeDefOrRefSig)
+				typeDef = ((TypeDefOrRefSig)sSig).TypeDefOrRef.ResolveTypeDef();
+			else if (sSig is GenericInstSig)
+				typeDef = ((GenericInstSig)sSig).GenericType.TypeDefOrRef.ResolveTypeDef();
+
+			if (typeDef != null)
 			{
-				TypeDef typeDef = typeRef.ResolveThrow();
-
 				IsValueType = typeDef.IsValueType;
 				IsDelegate = typeDef.BaseType != null && typeDef.BaseType.DefinitionAssembly.IsCorLib() &&
 					(typeDef.BaseType.FullName == "System.Delegate" || typeDef.BaseType.FullName == "System.MulticastDelegate");
@@ -303,14 +313,18 @@ namespace Mosa.Compiler.MosaTypeSystem
 			HasOpenGenericParams = sig.HasOpenGenericParameter();
 		}
 
+		internal bool Resolved { get; private set; }
 		void IResolvable.Resolve(MosaTypeLoader loader)
 		{
 			// InternalType is null means this instance is generic parameters
-			if (InternalType != null)
+			if (!Resolved && InternalType != null)
 			{
+				GenericArgumentResolver resolver = new GenericArgumentResolver();
+
 				if (TypeSignature.IsArray || TypeSignature.IsSZArray)
 					BaseType = loader.GetType(InternalType.ToTypeSig());
-				if (InternalType.BaseType != null)
+
+				else if (InternalType.BaseType != null)
 					BaseType = loader.GetType(InternalType.BaseType.ToTypeSig());
 
 				if (InternalType.DeclaringType != null)
@@ -320,6 +334,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 				foreach (var iface in InternalType.Interfaces)
 					Interfaces.Add(loader.GetType(iface.Interface.ToTypeSig()));
 			}
+			Resolved = true;
 		}
 	}
 }

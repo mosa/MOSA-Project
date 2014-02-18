@@ -94,7 +94,11 @@ namespace Mosa.Compiler.Framework.Stages
 			foreach (Instruction instr in methodCompiler.Method.Code)
 			{
 				// Read the next opcode from the stream
-				var op = (CIL.OpCode)instr.OpCode.Code;
+
+				int code = (int)instr.OpCode.Code;
+				if (code > 0x100)
+					code = 0x100 + (code & 0xff);
+				var op = (CIL.OpCode)code;
 
 				BaseCILInstruction instruction = CILInstruction.Get(op);
 

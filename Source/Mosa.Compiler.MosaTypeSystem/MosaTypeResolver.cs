@@ -88,7 +88,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 			public string ReadUserString(uint token)
 			{
-				string result = module.USStream.ReadNoNull(token);
+				string result = module.USStream.ReadNoNull(token & 0xffffff);
 				resolver.stringHeapLookup[Tuple.Create(module, result)] = token;
 				return result;
 			}
@@ -181,14 +181,18 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		void AddLinkerMethod(MosaMethod method)
 		{
+			method.IsLinkerGenerated = true;
 			method.DeclaringType.Methods.Add(method);
 		}
 
 		internal MosaMethod CreateLinkerMethod(MosaType declaringType, string name, MosaType returnType, IList<MosaType> parameters)
 		{
 			List<TypeSig> parameterSigs = new List<TypeSig>();
-			foreach (var parameter in parameters)
-				parameterSigs.Add(parameter.TypeSignature);
+			if (parameters != null)
+			{
+				foreach (var parameter in parameters)
+					parameterSigs.Add(parameter.TypeSignature);
+			}
 
 			var method = new MosaMethod(
 				declaringType.Module,

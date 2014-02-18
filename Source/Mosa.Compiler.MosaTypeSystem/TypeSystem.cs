@@ -78,6 +78,12 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 			result.loader.Resolve();
 
+			foreach (var module in result.AllModules)
+			{
+				if (module.EntryPoint != null)
+					result.EntryPoint = module.EntryPoint;
+			}
+
 			return result;
 		}
 
@@ -129,6 +135,17 @@ namespace Mosa.Compiler.MosaTypeSystem
 			MosaModule result;
 			if (Resolver.Modules.TryGetValue(name, out result))
 				return result;
+
+			return null;
+		}
+
+		public MosaModule GetModuleByAssembly(string name)
+		{
+			foreach (var module in AllModules)
+			{
+				if (module.InternalModule.Assembly.Name == name)
+					return module;
+			}
 
 			return null;
 		}

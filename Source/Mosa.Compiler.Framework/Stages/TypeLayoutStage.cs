@@ -33,8 +33,8 @@ namespace Mosa.Compiler.Framework.Stages
 				if (type.HasOpenGenericParams)
 					continue;
 
-				if (type.BaseType == null && !type.IsInterface)	// ghost types like generic params, function ptr, etc.
-					return;
+				if (type.BaseType == null && !type.IsInterface && type.FullName != "System.Object")   // ghost types like generic params, function ptr, etc.
+					continue;
 
 				if (!type.IsInterface)
 				{
@@ -209,7 +209,8 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			foreach (var field in type.Fields)
 			{
-				if (field.IsStaticField && !field.IsLiteralField)
+				// TODO: Inline literal field constants
+				if (field.IsStaticField)
 				{
 					// Assign a memory slot to the static & initialize it, if there's initial data set
 					CreateStaticField(field);

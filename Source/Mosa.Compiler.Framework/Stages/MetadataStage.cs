@@ -50,8 +50,8 @@ namespace Mosa.Compiler.Framework.Stages
 				if (type.HasOpenGenericParams)
 					continue;
 
-				if (type.BaseType == null && !type.IsInterface)	// ghost types like generic params, function ptr, etc.
-					return;
+				if (type.BaseType == null && !type.IsInterface && type.FullName != "System.Object")   // ghost types like generic params, function ptr, etc.
+					continue;
 
 				CreateTypeDefinitionTable(type);
 			}
