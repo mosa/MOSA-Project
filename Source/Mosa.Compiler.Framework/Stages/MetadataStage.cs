@@ -47,8 +47,9 @@ namespace Mosa.Compiler.Framework.Stages
 				if (type.IsModule)
 					continue;
 
-				if (type.HasOpenGenericParams)
-					continue;
+				// For reflection, even types having opening generic params should be written
+				//if (type.HasOpenGenericParams)
+				//    continue;
 
 				if (type.BaseType == null && !type.IsInterface && type.FullName != "System.Object")   // ghost types like generic params, function ptr, etc.
 					continue;

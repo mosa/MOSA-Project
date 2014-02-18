@@ -32,7 +32,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public MosaType DeclaringType { get; private set; }
 
-		public bool HasOpenGenericParams { get; private set; }
+		public bool HasOpenGenericParams { get; internal set; }
 
 		public bool IsAbstract { get { return InternalMethod.IsAbstract; } }
 
@@ -173,8 +173,6 @@ namespace Mosa.Compiler.MosaTypeSystem
 			FullName = FullNameCreator.MethodFullName(DeclaringType.FullName, Name, MethodSignature, typeGenericArgs, methodGenericArgs);
 
 			HasOpenGenericParams = DeclaringType.HasOpenGenericParams || sig.HasOpenGenericParameter();
-
-			// TODO: update parameters
 		}
 
 		void IResolvable.Resolve(MosaTypeLoader loader)
@@ -193,7 +191,11 @@ namespace Mosa.Compiler.MosaTypeSystem
 				resolver.PushMethodGenericArguments(genericArgs);
 			}
 
+				Resolve(loader, resolver);
+		}
 
+		internal void Resolve(MosaTypeLoader loader, GenericArgumentResolver resolver)
+		{
 			ReturnType = loader.GetType(resolver.Resolve(MethodSignature.RetType));
 
 			Debug.Assert(MethodSignature.GetParamCount() == InternalMethod.ParamDefs.Count);
@@ -205,29 +207,24 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 			if (InternalMethod.HasBody)
 			{
-				ResolveBody(loader, resolver);
-			}
-		}
+				LocalVariables.Clear();
+				foreach (var variable in InternalMethod.Body.Variables)
+					LocalVariables.Add(loader.GetType(resolver.Resolve(variable.Type)));
 
-		internal void ResolveBody(MosaTypeLoader loader, GenericArgumentResolver resolver)
-		{
-			LocalVariables.Clear();
-			foreach (var variable in InternalMethod.Body.Variables)
-				LocalVariables.Add(loader.GetType(resolver.Resolve(variable.Type)));
-
-			ExceptionBlocks.Clear();
-			foreach (var eh in InternalMethod.Body.ExceptionHandlers)
-			{
-				ExceptionBlocks.Add(new MosaExceptionHandler(eh)
+				ExceptionBlocks.Clear();
+				foreach (var eh in InternalMethod.Body.ExceptionHandlers)
 				{
-					Type = eh.CatchType == null ? null : loader.GetType(resolver.Resolve(eh.CatchType.ToTypeSig()))
-				});
-			}
+					ExceptionBlocks.Add(new MosaExceptionHandler(eh)
+					{
+						Type = eh.CatchType == null ? null : loader.GetType(resolver.Resolve(eh.CatchType.ToTypeSig()))
+					});
+				}
 
-			Code.Clear();
-			foreach (var instr in InternalMethod.Body.Instructions)
-			{
-				Code.Add(ResolveInstruction(instr, loader, resolver));
+				Code.Clear();
+				foreach (var instr in InternalMethod.Body.Instructions)
+				{
+					Code.Add(ResolveInstruction(instr, loader, resolver));
+				}
 			}
 		}
 

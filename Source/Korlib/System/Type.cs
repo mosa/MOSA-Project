@@ -44,7 +44,7 @@ namespace System
 
 		unsafe string InternalGetFullName(IntPtr handle)
 		{
-			int* namePtr = *(int**)(handle.ToInt64() + 8);
+			int* namePtr = *(int**)(handle.ToInt32() + 8);
 			int length = *namePtr;
 			namePtr++;
 

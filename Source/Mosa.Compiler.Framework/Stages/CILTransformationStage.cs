@@ -472,7 +472,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			ReplaceWithVmCall(context, VmCall.AllocateArray);
 
-			context.SetOperand(1, Operand.CreateConstantSignedInt(typeSystem, (int)0));
+			context.SetOperand(1, GetMethodTableSymbol(arrayType));
 			context.SetOperand(2, Operand.CreateConstantSignedInt(typeSystem, (int)elementSize));
 			context.SetOperand(3, lengthOperand);
 			context.OperandCount = 4;

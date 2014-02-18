@@ -81,6 +81,9 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public static bool HasOpenGenericParameter(this MethodSig signature)
 		{
+			if (signature.GenParamCount > 0)
+				return true;
+
 			foreach (var param in signature.Params)
 			{
 				if (HasOpenGenericParameter(param))

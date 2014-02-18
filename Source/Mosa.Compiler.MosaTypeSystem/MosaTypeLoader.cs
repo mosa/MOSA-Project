@@ -204,24 +204,30 @@ namespace Mosa.Compiler.MosaTypeSystem
 			else	// Non-leaf signature
 			{
 				MosaType elementType = GetType(typeSig.Next);
+				MosaType result;
 				switch (typeSig.ElementType)
 				{
 					case ElementType.Ptr:
 					case ElementType.ByRef:
-						return LoadPointerSig(elementType, typeSig);
+						result = LoadPointerSig(elementType, typeSig);
+						break;
 
 					case ElementType.CModReqd:
 					case ElementType.CModOpt:
 					case ElementType.Pinned:
-						return LoadModifierSig(elementType, typeSig);
+						return LoadModifierSig(elementType, typeSig);    // signature is identical to elem. type so don't add it
 
 					case ElementType.Array:
 					case ElementType.SZArray:
-						return LoadArraySig(elementType, typeSig);
+						result = LoadArraySig(elementType, typeSig);
+						break;
 
 					default:
 						throw new AssemblyLoadException();
 				}
+				if (!result.HasOpenGenericParams)
+					TypeSystem.Resolver.AddNewType(result);
+				return result;
 			}
 		}
 
@@ -256,16 +262,16 @@ namespace Mosa.Compiler.MosaTypeSystem
 			// See Partition II 14.2 Arrays
 
 			MosaType array = types[Tuple.Create("System", "System.Array", TypeSystem.CorLib.InternalModule.Assembly.FullName)];
+			if (!array.Resolved)
+				((IResolvable)array).Resolve(this);
+
 			MosaType type = array.Clone();   // Copy from System.Array
 			type.UpdateSignature(typeSig);
 			type.ElementType = elemType;
 
-			// Remove Static Methods
-			for (int i = type.Methods.Count - 1; i >= 0; i--)
-			{
-				if (type.Methods[i].IsStatic)
-					type.Methods.RemoveAt(i);
-			}
+			// Remove Methods & Fields
+			type.Methods.Clear();
+			type.Fields.Clear();
 
 			// Add three array accessors as defined in standard (Get, Set, Address)
 
@@ -349,28 +355,49 @@ namespace Mosa.Compiler.MosaTypeSystem
 			foreach (var m in declType.Methods)
 			{
 				if (m.Token.Token == token)
+				{
 					mosaMethod = m;
+					break;
+				}
 			}
 
 			if (mosaMethod == null)
 				throw new AssemblyLoadException();
 
-			resolver = new GenericArgumentResolver();
+			List<TypeSig> genericArgs;
+
 			if (declType.TypeSignature.IsGenericInstanceType)
 			{
-				IList<TypeSig> genericArgs = ((GenericInstSig)declType.TypeSignature).GenericArguments;
+				genericArgs = new List<TypeSig>(((GenericInstSig)declType.TypeSignature).GenericArguments);
+				for (int i = 0; i < genericArgs.Count; i++)
+					genericArgs[i] = resolver.Resolve(genericArgs[i]);
 				resolver.PushTypeGenericArguments(genericArgs);
 			}
-			resolver.PushMethodGenericArguments(genericArguments);
+
+			genericArgs = new List<TypeSig>();
+			foreach (var genericArg in genericArguments)
+				genericArgs.Add(resolver.Resolve(genericArg));
+			resolver.PushMethodGenericArguments(genericArgs);
 
 			mosaMethod = mosaMethod.Clone();
 
-			mosaMethod.ResolveBody(this, resolver);
+			mosaMethod.Resolve(this, resolver);
 
+			bool hasOpenGenericParams = false;
 			foreach (var genericArg in genericArguments)
-				mosaMethod.GenericArguments.Add(GetType(genericArg));
+			{
+				var arg = resolver.Resolve(genericArg);
+				mosaMethod.GenericArguments.Add(GetType(arg));
+				hasOpenGenericParams |= arg.HasOpenGenericParameter();
+			}
 
 			mosaMethod.UpdateSignature(resolver.Resolve(method.MethodSig), declType);
+			mosaMethod.HasOpenGenericParams = hasOpenGenericParams;
+
+			if (declType.TypeSignature.IsGenericInstanceType)
+				resolver.PopTypeGenericArguments();
+
+			resolver.PopMethodGenericArguments();
 
 			declType.Methods.Add(mosaMethod);
 
