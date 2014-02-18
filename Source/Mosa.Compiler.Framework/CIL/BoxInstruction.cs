@@ -43,7 +43,7 @@ namespace Mosa.Compiler.Framework.CIL
 			base.Decode(ctx, decoder);
 
 			var type = (MosaType)decoder.Instruction.Operand;
-			ctx.Result = decoder.Compiler.CreateVirtualRegister(type);
+			ctx.Result = decoder.Compiler.CreateVirtualRegister(decoder.TypeSystem.BuiltIn.Object);
 			ctx.MosaType = type;
 		}
 

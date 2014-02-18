@@ -57,7 +57,7 @@ namespace Mosa.Compiler.Framework.CIL
 				default: throw new System.InvalidOperationException();
 			}
 
-			// threat this like a load
+			// treat this like a load
 			result = LoadInstruction.CreateResultOperand(decoder, result.Type);
 
 			ctx.Result = result;

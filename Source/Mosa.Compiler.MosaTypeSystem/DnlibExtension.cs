@@ -91,5 +91,10 @@ namespace Mosa.Compiler.MosaTypeSystem
 			}
 			return HasOpenGenericParameter(signature.RetType);
 		}
+
+		public static bool HasModifierOrPinned(this TypeSig signature)
+		{
+			return signature is ModifierSig || signature is PinnedSig;
+		}
 	}
 }

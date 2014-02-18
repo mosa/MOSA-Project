@@ -401,7 +401,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 				if (!method.DeclaringType.IsInterface)
 				{
-					int methodTableOffset = CalculateMethodTableOffset(method) + (nativePointerSize * 5);
+					int methodTableOffset = CalculateMethodTableOffset(method) + (nativePointerSize * 4);
 					context.SetInstruction(IRInstruction.Load, methodTable, thisPtr, Operand.CreateConstantSignedInt(typeSystem, 0));
 					context.AppendInstruction(IRInstruction.Load, methodPtr, methodTable, Operand.CreateConstantSignedInt(typeSystem, (int)methodTableOffset));
 				}
@@ -559,14 +559,51 @@ namespace Mosa.Compiler.Framework.Stages
 		}
 
 		/// <summary>
-		/// Visitation function for Unbox instruction.
+		/// Visitation function for Unbox.Any instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void CIL.ICILVisitor.Unbox(Context context)
+		void CIL.ICILVisitor.UnboxAny(Context context)
 		{
-			throw new NotImplementCompilerException();
+			var value = context.Operand1;
+			var result = context.Result;
+			var type = context.MosaType;
 
-			//ReplaceWithVmCall(context, VmCall.Unbox);
+			if (!type.IsValueType)
+			{
+				context.ReplaceInstructionOnly(IRInstruction.Move);
+				return;
+			}
+
+			int typeSize = typeLayout.GetTypeSize(type);
+			int alignment = typeLayout.NativePointerAlignment;
+			typeSize += (alignment - (typeSize % alignment)) % alignment;
+
+			var vmCall = ToVmUnboxCall(typeSize);
+
+			context.SetInstruction(IRInstruction.Nop);
+			ReplaceWithVmCall(context, vmCall);
+
+			var methodTableSymbol = GetMethodTableSymbol(type);
+
+			context.SetOperand(1, value);
+			if (vmCall == VmCall.Unbox)
+			{
+				Operand adr = methodCompiler.CreateVirtualRegister(type);
+				context.InsertBefore().SetInstruction(IRInstruction.AddressOf, adr, value);
+
+				context.SetOperand(2, adr);
+				context.SetOperand(3, Operand.CreateConstantUnsignedInt(typeSystem, (uint)typeSize));
+				context.OperandCount = 4;
+			}
+			else
+			{
+				context.OperandCount = 2;
+			}
+			Operand tmp = methodCompiler.CreateVirtualRegister(typeSystem.GetManagedPointerType(type));
+			context.Result = tmp;
+			context.AppendInstruction(IRInstruction.Load, result, tmp, Operand.CreateConstantUnsignedInt(typeSystem, 0));
+			context.MosaType = type;
+			return;
 		}
 
 		/// <summary>
@@ -588,38 +625,38 @@ namespace Mosa.Compiler.Framework.Stages
 			var result = context.Result;
 			var type = context.MosaType;
 
-			//FIXME!
-
-			// this type resolution is a hack
-			if (type == null)
-			{
-				type = result.Type;
-			}
-
-			if (type == null || !type.IsValueType)
+			if (!type.IsValueType)
 			{
 				context.ReplaceInstructionOnly(IRInstruction.Move);
 				return;
 			}
+			
+			int typeSize = typeLayout.GetTypeSize(type);
+			int alignment = typeLayout.NativePointerAlignment;
+			typeSize += (alignment - (typeSize % alignment)) % alignment;
 
-			var vmCall = TypeToVmBoxCall(type);
-
-			if (!vmCall.HasValue)
-			{
-				context.ReplaceInstructionOnly(IRInstruction.Move);
-				return;
-			}
+			var vmCall = ToVmBoxCall(typeSize);
 
 			context.SetInstruction(IRInstruction.Nop);
-			ReplaceWithVmCall(context, vmCall.Value);
+			ReplaceWithVmCall(context, vmCall);
 
 			var methodTableSymbol = GetMethodTableSymbol(type);
-			var classSize = typeLayout.GetTypeSize(type);
 
 			context.SetOperand(1, methodTableSymbol);
-			context.SetOperand(2, Operand.CreateConstantUnsignedInt(typeSystem, (uint)classSize));
-			context.SetOperand(3, value);
-			context.OperandCount = 4;
+			if (vmCall == VmCall.Box)
+			{
+				Operand adr = methodCompiler.CreateVirtualRegister(typeSystem.GetManagedPointerType(type));
+				context.InsertBefore().SetInstruction(IRInstruction.AddressOf, adr, value);
+
+				context.SetOperand(2, adr);
+				context.SetOperand(3, Operand.CreateConstantUnsignedInt(typeSystem, (uint)typeSize));
+				context.OperandCount = 4;
+			}
+			else
+			{
+				context.SetOperand(2, value);
+				context.OperandCount = 3;
+			}
 			context.Result = result;
 			return;
 		}
@@ -922,6 +959,7 @@ namespace Mosa.Compiler.Framework.Stages
 			Operand arrayIndexOperand = context.Operand2;
 
 			MosaType arrayType = arrayOperand.Type;
+			Debug.Assert(arrayType.ElementType == result.Type.ElementType);
 
 			Operand arrayAddress = LoadArrayBaseAddress(context, arrayType, arrayOperand);
 			Operand elementOffset = CalculateArrayElementOffset(context, arrayType, arrayIndexOperand);
@@ -1012,26 +1050,16 @@ namespace Mosa.Compiler.Framework.Stages
 		}
 
 		/// <summary>
-		/// Visitation function for UnboxAny instruction.
+		/// Visitation function for Unbox instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void CIL.ICILVisitor.UnboxAny(Context context)
+		void CIL.ICILVisitor.Unbox(Context context)
 		{
 			var value = context.Operand1;
 			var type = context.MosaType;
 			var result = context.Result;
 
-			if (!type.IsValueType)
-			{
-				context.ReplaceInstructionOnly(IRInstruction.Move);
-				return;
-			}
-
-			ReplaceWithVmCall(context, TypeToVmUnboxCall(type));
-
-			context.SetOperand(1, value);
-			context.OperandCount = 2;
-			context.Result = result;
+			throw new NotImplementCompilerException();
 		}
 
 		/// <summary>
@@ -1838,48 +1866,24 @@ namespace Mosa.Compiler.Framework.Stages
 			return name;
 		}
 
-		private static VmCall? TypeToVmBoxCall(MosaType type)
+		private VmCall ToVmBoxCall(int typeSize)
 		{
-			Debug.Assert(type.IsValueType);
-
-			switch (type.FullName)
-			{
-				case "System.Char": return VmCall.BoxChar;
-				case "System.Boolean": return VmCall.BoxChar;
-				case "System.SByte": return VmCall.BoxInt8;
-				case "System.Byte": return VmCall.BoxUInt8;
-				case "System.Int16": return VmCall.BoxInt16;
-				case "System.UInt16": return VmCall.BoxUInt16;
-				case "System.Int32": return VmCall.BoxInt32;
-				case "System.UInt32": return VmCall.BoxUInt32;
-				case "System.Int64": return VmCall.BoxInt64;
-				case "System.UInt64": return VmCall.BoxUInt64;
-				case "System.Single": return VmCall.BoxSingle;
-				case "System.Double": return VmCall.BoxDouble;
-				default: return null;
-			}
+			if (typeSize <= 4)
+				return VmCall.Box32;
+			else if (typeSize == 8)
+				return VmCall.Box64;
+			else
+				return VmCall.Box;
 		}
 
-		private static VmCall TypeToVmUnboxCall(MosaType type)
+		private VmCall ToVmUnboxCall(int typeSize)
 		{
-			Debug.Assert(type.IsValueType);
-
-			switch (type.FullName)
-			{
-				case "System.Char": return VmCall.UnboxChar;
-				case "System.Boolean": return VmCall.UnboxChar;
-				case "System.SByte": return VmCall.UnboxInt8;
-				case "System.Byte": return VmCall.UnboxUInt8;
-				case "System.Int16": return VmCall.UnboxInt16;
-				case "System.UInt16": return VmCall.UnboxUInt16;
-				case "System.Int32": return VmCall.UnboxInt32;
-				case "System.UInt32": return VmCall.UnboxUInt32;
-				case "System.Int64": return VmCall.UnboxInt64;
-				case "System.UInt64": return VmCall.UnboxUInt64;
-				case "System.Single": return VmCall.UnboxSingle;
-				case "System.Double": return VmCall.UnboxDouble;
-				default: throw new InvalidProgramException();
-			}
+			if (typeSize <= 4)
+				return VmCall.Unbox32;
+			else if (typeSize == 8)
+				return VmCall.Unbox64;
+			else
+				return VmCall.Unbox;
 		}
 
 		#endregion Internals

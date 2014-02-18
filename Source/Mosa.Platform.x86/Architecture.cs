@@ -241,6 +241,16 @@ namespace Mosa.Platform.x86
 				size = 8;
 				alignment = 8;
 			}
+			else if (type.IsUI2 || type.IsChar)
+			{
+				size = 2;
+				alignment = 4;
+			}
+			else if (type.IsUI1 || type.IsBoolean)
+			{
+				size = 1;
+				alignment = 4;
+			}
 			else
 			{
 				size = 4;

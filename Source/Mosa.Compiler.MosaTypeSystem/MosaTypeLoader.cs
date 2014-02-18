@@ -134,7 +134,8 @@ namespace Mosa.Compiler.MosaTypeSystem
 				return result;
 
 			result = Load(typeSig);
-			types[key] = result;
+			if (!typeSig.HasModifierOrPinned())
+				types[key] = result;
 			return result;
 		}
 

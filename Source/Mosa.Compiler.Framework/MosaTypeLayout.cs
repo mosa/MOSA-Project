@@ -161,9 +161,9 @@ namespace Mosa.Compiler.Framework
 			}
 
 			// If the field is another struct, we have to dig down and compute its size too.
-			if (field.DeclaringType.IsValueType)
+			if (field.FieldType.IsValueType)
 			{
-				size = GetTypeSize(field.DeclaringType);
+				size = GetTypeSize(field.FieldType);
 			}
 			else
 			{
@@ -541,13 +541,8 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		private int GetMemorySize(MosaType type)
 		{
-			if (type.IsValueType)
-			{
-				ResolveType(type);
-				return typeSizes[type];
-			}
-			else
-				return nativePointerSize;
+			Debug.Assert(!type.IsValueType);
+			return nativePointerSize;
 		}
 
 		#endregion Internal

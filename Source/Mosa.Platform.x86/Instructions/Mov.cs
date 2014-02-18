@@ -91,7 +91,7 @@ namespace Mosa.Platform.x86.Instructions
 
 			if (destination.IsMemoryAddress && source.IsRegister)
 			{
-				if (destination.IsPointer && destination.Type.ElementType != null)
+				if (destination.IsPointer && !source.IsPointer && destination.Type.ElementType != null)
 				{
 					if (destination.Type.ElementType.IsUI1 || destination.Type.ElementType.IsBoolean) return RM_R_U8;
 					if (destination.Type.ElementType.IsChar || destination.Type.ElementType.IsUI2) return M_R_16;

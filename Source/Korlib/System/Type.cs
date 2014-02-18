@@ -58,10 +58,10 @@ namespace System
 
 		[DllImport("Mosa.Compiler.Framework.Intrinsics.InternalGetType, Mosa.Compiler.Framework")]
 		public static extern RuntimeTypeHandle GetTypeHandle(object obj);
-
-		public static Type GetType(string typeName, bool throwOnError)
+		
+		public override string ToString()
 		{
-			return null;
+			return FullName;
 		}
 	}
 }
