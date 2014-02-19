@@ -26,7 +26,7 @@ namespace Mosa.Test.Debug
 			moduleLoader.LoadModuleFromFile("Mosa.Test.AssemblyC.dll");
 			moduleLoader.LoadModuleFromFile("Mosa.ClassLib.dll");
 
-			var typeSystem = TypeSystem.Load(moduleLoader);
+			var typeSystem = TypeSystem.Load(moduleLoader.CreateMetadata());
 
 			return;
 		}

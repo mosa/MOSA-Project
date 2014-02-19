@@ -44,7 +44,7 @@ namespace Mosa.Compiler.Framework.CIL
 
 			var type = (MosaType)decoder.Instruction.Operand;
 
-			ctx.Result = decoder.Compiler.CreateVirtualRegister(decoder.TypeSystem.GetManagedPointerType(type));
+			ctx.Result = decoder.Compiler.CreateVirtualRegister(type.ToManagedPointer());
 		}
 
 		/// <summary>

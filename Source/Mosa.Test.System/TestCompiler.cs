@@ -184,7 +184,7 @@ namespace Mosa.Test.System
 				{
 					if (m.Name == method)
 					{
-						if (m.Parameters.Count == parameters.Length)
+						if (m.Signature.Parameters.Count == parameters.Length)
 						{
 							return m;
 						}
@@ -210,7 +210,7 @@ namespace Mosa.Test.System
 				moduleLoader.LoadModuleFromFile(file);
 			}
 
-			typeSystem = TypeSystem.Load(moduleLoader);
+			typeSystem = TypeSystem.Load(moduleLoader.CreateMetadata());
 
 			return TestCaseCompiler.Compile(typeSystem);
 		}

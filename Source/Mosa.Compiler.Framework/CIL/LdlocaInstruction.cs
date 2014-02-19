@@ -7,7 +7,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using dnlib.DotNet.Emit;
 using Mosa.Compiler.MosaTypeSystem;
 
 namespace Mosa.Compiler.Framework.CIL
@@ -43,9 +42,9 @@ namespace Mosa.Compiler.Framework.CIL
 			
 			// Opcode specific handling
 
-			Operand local = decoder.Compiler.GetLocalOperand(((Local)decoder.Instruction.Operand).Index);
+			Operand local = decoder.Compiler.GetLocalOperand((int)decoder.Instruction.Operand);
 			ctx.Operand1 = local;
-			ctx.Result = decoder.Compiler.CreateVirtualRegister(decoder.Compiler.TypeSystem.GetManagedPointerType(local.Type));
+			ctx.Result = decoder.Compiler.CreateVirtualRegister(local.Type.ToManagedPointer());
 		}
 
 		/// <summary>

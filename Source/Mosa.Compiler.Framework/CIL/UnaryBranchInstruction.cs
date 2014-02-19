@@ -64,7 +64,7 @@ namespace Mosa.Compiler.Framework.CIL
 			if (opcode == OpCode.Brfalse_s || opcode == OpCode.Brtrue_s ||
 				opcode == OpCode.Brfalse || opcode == OpCode.Brtrue)
 			{
-				ctx.SetBranch((int)((dnlib.DotNet.Emit.Instruction)decoder.Instruction.Operand).Offset);
+				ctx.SetBranch((int)decoder.Instruction.Operand);
 			}
 			else if (opcode == OpCode.Switch)
 			{

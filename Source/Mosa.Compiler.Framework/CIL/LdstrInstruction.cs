@@ -40,11 +40,11 @@ namespace Mosa.Compiler.Framework.CIL
 			// Decode base classes first
 			base.Decode(ctx, decoder);
 
-			var value = (string)decoder.Instruction.Operand;
+			var token = (uint)decoder.Instruction.Operand;
 
-			string symbolName = @"$ldstr$" + decoder.Method.Module.Name + "$" + decoder.TypeSystem.LookupUserString(decoder.Method.Module, value);
+			string symbolName = @"$ldstr$" + decoder.Method.Module.Name + "$" + token;
 
-			string name = value;
+			string name = decoder.TypeSystem.LookupUserString(decoder.Method.Module, token);
 
 			ctx.Operand1 = Operand.CreateStringSymbol(decoder.TypeSystem, symbolName, name);
 

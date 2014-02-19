@@ -92,10 +92,10 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		protected static int CalculateStackSizeForParameters(BaseArchitecture architecture, List<Operand> operands, MosaMethod method)
 		{
-			Debug.Assert((method.Parameters.Count + (method.HasThis ? 1 : 0) == operands.Count) ||
-			(method.DeclaringType.IsDelegate && method.Parameters.Count == operands.Count));
+			Debug.Assert((method.Signature.Parameters.Count + (method.HasThis ? 1 : 0) == operands.Count) ||
+			(method.DeclaringType.IsDelegate && method.Signature.Parameters.Count == operands.Count));
 
-			int offset = method.Parameters.Count - operands.Count;
+			int offset = method.Signature.Parameters.Count - operands.Count;
 			int result = 0;
 
 			for (int index = operands.Count - 1; index >= 0; index--)
@@ -105,7 +105,7 @@ namespace Mosa.Compiler.Framework
 				int size, alignment;
 				architecture.GetTypeRequirements(operand.Type, out size, out alignment);
 
-				var param = (index + offset >= 0) ? method.Parameters[index + offset] : null;
+				var param = (index + offset >= 0) ? method.Signature.Parameters[index + offset] : null;
 
 				if (param != null && operand.IsR8 && param.Type.IsR4)
 					architecture.GetTypeRequirements(param.Type, out size, out alignment);

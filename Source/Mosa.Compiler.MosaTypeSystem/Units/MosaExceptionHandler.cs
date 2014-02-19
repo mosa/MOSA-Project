@@ -7,8 +7,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using dnlib.DotNet.Emit;
-
 namespace Mosa.Compiler.MosaTypeSystem
 {
 	/// <summary>
@@ -29,27 +27,27 @@ namespace Mosa.Compiler.MosaTypeSystem
 		/// <summary>
 		///
 		/// </summary>
-		public int HandlerOffset { get; private set; }
-
-		/// <summary>
-		///
-		/// </summary>
-		public MosaType Type { get; internal set; }
-
-		/// <summary>
-		///
-		/// </summary>
-		public int FilterOffset { get; private set; }
-
-		/// <summary>
-		///
-		/// </summary>
 		public int TryEnd { get; private set; }
 
 		/// <summary>
 		///
 		/// </summary>
+		public int HandlerOffset { get; private set; }
+
+		/// <summary>
+		///
+		/// </summary>
 		public int HandlerEnd { get; private set; }
+
+		/// <summary>
+		///
+		/// </summary>
+		public MosaType Type { get; private set; }
+
+		/// <summary>
+		///
+		/// </summary>
+		public int? FilterOffset { get; private set; }
 
 		/// <summary>
 		/// Determines whether [is label within try] [the specified label].
@@ -75,18 +73,22 @@ namespace Mosa.Compiler.MosaTypeSystem
 			return (label >= HandlerOffset && label < HandlerEnd);
 		}
 
-		internal MosaExceptionHandler(ExceptionHandler handler)
+		public MosaExceptionHandler(
+			ExceptionHandlerType ehType,
+			int tryOffset, int tryEnd,
+			int handlerOffset, int handlerEnd,
+			MosaType type, int? filterOffset)
 		{
-			HandlerType = (ExceptionHandlerType)handler.HandlerType;
+			HandlerType = ehType;
 
-			TryOffset = (int)handler.TryStart.Offset;
-			TryEnd = (int)handler.TryEnd.Offset;
+			TryOffset = tryOffset;
+			TryEnd = tryEnd;
 
-			HandlerOffset = (int)handler.HandlerStart.Offset;
-			HandlerEnd = (int)handler.HandlerEnd.Offset;
+			HandlerOffset = handlerOffset;
+			HandlerEnd = handlerEnd;
 
-			if (handler.FilterStart != null)
-				FilterOffset = (int)handler.FilterStart.Offset;
+			Type = type;
+			FilterOffset = filterOffset;
 		}
 	}
 }

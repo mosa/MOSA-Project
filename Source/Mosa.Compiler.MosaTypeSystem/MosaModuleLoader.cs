@@ -9,12 +9,13 @@
  */
 
 using System.Collections.Generic;
-using dnlib.DotNet;
 using System.IO;
+using dnlib.DotNet;
+using Mosa.Compiler.MosaTypeSystem.Metadata;
 
 namespace Mosa.Compiler.MosaTypeSystem
 {
-	public class MosaModuleLoader
+	public class MosaModuleLoader : IModuleLoader
 	{
 		public AssemblyResolver Resolver { get; private set; }
 
@@ -33,11 +34,14 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		#region Internal methods
 
+		List<string> seenModules = new List<string>();
 		void LoadDependencies(ModuleDefMD module)
 		{
-			if (Modules.Contains(module))
+			if (seenModules.Contains(module.Location))
 				return;
+			seenModules.Add(module.Location);
 			Modules.Add(module);
+			Resolver.AddToCache(module);
 
 			foreach (var assemblyRef in module.GetAssemblyRefs())
 			{
@@ -82,11 +86,19 @@ namespace Mosa.Compiler.MosaTypeSystem
 		{
 			ModuleDefMD module = ModuleDefMD.Load(file, Resolver.DefaultModuleContext);
 			module.EnableTypeDefFindCache = true;
-			Resolver.AddToCache(module);
 
 			LoadDependencies(module);
 			return module;
 		}
 
+		void IModuleLoader.LoadModuleFromFile(string file)
+		{
+			LoadModuleFromFile(file);
+		}
+
+		public IMetadata CreateMetadata()
+		{
+			return new CLRMetadata(this);
+		}
 	}
 }

@@ -16,14 +16,14 @@ namespace Mosa.Compiler.MosaTypeSystem
 	[DebuggerDisplay("[{Module.Name}] {Token.Table} {Token.Rid}")]
 	public struct ScopedToken : IEquatable<ScopedToken>
 	{
-		public ScopedToken(ModuleDefMD module, MDToken token)
+		public ScopedToken(ModuleDef module, MDToken token)
 		{
 			this.module = module;
 			this.token = token;
 		}
 
-		private readonly ModuleDefMD module;
-		public ModuleDefMD Module { get { return module; } }
+		private readonly ModuleDef module;
+		public ModuleDef Module { get { return module; } }
 
 		private readonly MDToken token;
 		public MDToken Token { get { return token; } }

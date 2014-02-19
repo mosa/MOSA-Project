@@ -45,7 +45,7 @@ namespace Mosa.Compiler.Framework.CIL
 
 			decoder.Compiler.Scheduler.TrackMethodInvoked(method);
 
-			ctx.Result = decoder.Compiler.CreateVirtualRegister(decoder.TypeSystem.GetFunctionPointerType(method));
+			ctx.Result = decoder.Compiler.CreateVirtualRegister(decoder.TypeSystem.ToFnPtr(method.Signature));
 			ctx.MosaMethod = method;
 
 		}

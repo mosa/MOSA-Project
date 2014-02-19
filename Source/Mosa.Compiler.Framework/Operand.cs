@@ -589,7 +589,7 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		public static Operand CreateManagedSymbolPointer(TypeSystem typeSystem, MosaType type, string name)
 		{
-			var operand = new Operand(typeSystem.GetManagedPointerType(type));
+			var operand = new Operand(type.ToManagedPointer());
 			operand.IsSymbol = true;
 			operand.Name = name;
 			return operand;

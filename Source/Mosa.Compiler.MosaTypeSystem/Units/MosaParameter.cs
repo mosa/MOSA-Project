@@ -7,11 +7,13 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using System;
+
 namespace Mosa.Compiler.MosaTypeSystem
 {
-	public class MosaParameter
+	public class MosaParameter : IEquatable<MosaParameter>, IEquatable<MosaType>
 	{
-		internal MosaParameter(string name, MosaType type)
+		public MosaParameter(string name, MosaType type)
 		{
 			this.Name = name;
 			this.Type = type;
@@ -26,14 +28,14 @@ namespace Mosa.Compiler.MosaTypeSystem
 			return Type + " " + Name;
 		}
 
-		public bool Matches(MosaParameter parameter)
+		public bool Equals(MosaParameter parameter)
 		{
-			return Type.Matches(parameter.Type);
+			return Type.Equals( parameter.Type);
 		}
 
-		public bool Matches(MosaType type)
+		public bool Equals(MosaType type)
 		{
-			return Type.Matches(type);
+			return Type.Equals(type);
 		}
 	}
 }

@@ -609,10 +609,10 @@ namespace Mosa.Platform.x86.Stages
 			if (storeType != null)
 			{
 				if (baseOperand.Type.IsUnmanagedPointer)
-					type = typeSystem.GetUnmanagedPointerType(storeType);
+					type = storeType.ToUnmanagedPointer();
 
 				else if (baseOperand.Type.IsManagedPointer)
-					type = typeSystem.GetManagedPointerType(storeType);
+					type = storeType.ToManagedPointer();
 			}
 
 			if (offsetOperand.IsConstant)
@@ -914,7 +914,7 @@ namespace Mosa.Platform.x86.Stages
 		void IIRVisitor.Throw(Context context)
 		{
 			var type = typeSystem.GetTypeByName("Mosa.Internal", "ExceptionEngine");
-			var runtimeMethod = TypeSystem.GetMethodByName(type, "ThrowException");
+			var runtimeMethod = type.FindMethodByName("ThrowException");
 			Operand throwMethod = Operand.CreateSymbolFromMethod(typeSystem, runtimeMethod);
 
 			// Push exception object onto stack

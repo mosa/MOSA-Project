@@ -7,8 +7,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using Mosa.Compiler.Common;
-
 namespace Mosa.Compiler.MosaTypeSystem
 {
 	public class BuiltInTypes
@@ -53,25 +51,25 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public BuiltInTypes(TypeSystem typeSystem, MosaModule corlib)
 		{
-			Void = corlib.Types[Tuple.Create("System", "System.Void")];
-			Boolean = corlib.Types[Tuple.Create("System", "System.Boolean")];
-			Char = corlib.Types[Tuple.Create("System", "System.Char")];
-			I1 = corlib.Types[Tuple.Create("System", "System.SByte")];
-			U1 = corlib.Types[Tuple.Create("System", "System.Byte")];
-			I2 = corlib.Types[Tuple.Create("System", "System.Int16")];
-			U2 = corlib.Types[Tuple.Create("System", "System.UInt16")];
-			I4 = corlib.Types[Tuple.Create("System", "System.Int32")];
-			U4 = corlib.Types[Tuple.Create("System", "System.UInt32")];
-			I8 = corlib.Types[Tuple.Create("System", "System.Int64")];
-			U8 = corlib.Types[Tuple.Create("System", "System.UInt64")];
-			R4 = corlib.Types[Tuple.Create("System", "System.Single")];
-			R8 = corlib.Types[Tuple.Create("System", "System.Double")];
-			String = corlib.Types[Tuple.Create("System", "System.String")];
-			Object = corlib.Types[Tuple.Create("System", "System.Object")];
-			I = corlib.Types[Tuple.Create("System", "System.IntPtr")];
-			U = corlib.Types[Tuple.Create("System", "System.UIntPtr")];
-			TypedRef = corlib.Types[Tuple.Create("System", "System.TypedReference")];
-			Pointer = typeSystem.GetUnmanagedPointerType(Void);
+			Void = typeSystem.GetTypeByName(corlib, "System", "Void");
+			Boolean = typeSystem.GetTypeByName(corlib, "System", "Boolean");
+			Char = typeSystem.GetTypeByName(corlib, "System", "Char");
+			I1 = typeSystem.GetTypeByName(corlib, "System", "SByte");
+			U1 = typeSystem.GetTypeByName(corlib, "System", "Byte");
+			I2 = typeSystem.GetTypeByName(corlib, "System", "Int16");
+			U2 = typeSystem.GetTypeByName(corlib, "System", "UInt16");
+			I4 = typeSystem.GetTypeByName(corlib, "System", "Int32");
+			U4 = typeSystem.GetTypeByName(corlib, "System", "UInt32");
+			I8 = typeSystem.GetTypeByName(corlib, "System", "Int64");
+			U8 = typeSystem.GetTypeByName(corlib, "System", "UInt64");
+			R4 = typeSystem.GetTypeByName(corlib, "System", "Single");
+			R8 = typeSystem.GetTypeByName(corlib, "System", "Double");
+			String = typeSystem.GetTypeByName(corlib, "System", "String");
+			Object = typeSystem.GetTypeByName(corlib, "System", "Object");
+			I = typeSystem.GetTypeByName(corlib, "System", "IntPtr");
+			U = typeSystem.GetTypeByName(corlib, "System", "UIntPtr");
+			TypedRef = typeSystem.GetTypeByName(corlib, "System", "TypedReference");
+			Pointer = Void.ToUnmanagedPointer();
 		}
 	}
 }

@@ -7,7 +7,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using dnlib.DotNet;
 using Mosa.Compiler.MosaTypeSystem;
 using System;
 
@@ -18,7 +17,7 @@ namespace Mosa.Compiler.Framework.CIL
 	/// </summary>
 	public sealed class StelemInstruction : NaryInstruction
 	{
-		private readonly ElementType? elementType;
+		private readonly MosaTypeCode? elementType;
 
 		#region Construction
 
@@ -31,14 +30,14 @@ namespace Mosa.Compiler.Framework.CIL
 		{
 			switch (opcode)
 			{
-				case OpCode.Stelem_i1: elementType = ElementType.I1; break;
-				case OpCode.Stelem_i2: elementType = ElementType.I2; break;
-				case OpCode.Stelem_i4: elementType = ElementType.I4; break;
-				case OpCode.Stelem_i8: elementType = ElementType.I8; break;
-				case OpCode.Stelem_i: elementType = ElementType.I; break;
-				case OpCode.Stelem_r4: elementType = ElementType.R4; break;
-				case OpCode.Stelem_r8: elementType = ElementType.R8; break;
-				case OpCode.Stelem_ref: elementType = ElementType.Object; break;
+				case OpCode.Stelem_i1: elementType = MosaTypeCode.I1; break;
+				case OpCode.Stelem_i2: elementType = MosaTypeCode.I2; break;
+				case OpCode.Stelem_i4: elementType = MosaTypeCode.I4; break;
+				case OpCode.Stelem_i8: elementType = MosaTypeCode.I8; break;
+				case OpCode.Stelem_i: elementType = MosaTypeCode.I; break;
+				case OpCode.Stelem_r4: elementType = MosaTypeCode.R4; break;
+				case OpCode.Stelem_r8: elementType = MosaTypeCode.R8; break;
+				case OpCode.Stelem_ref: elementType = MosaTypeCode.Object; break;
 				case OpCode.Stelem: elementType = null; break;
 				default: throw new NotImplementedException("Not implemented: " + opcode);
 			}
@@ -60,7 +59,7 @@ namespace Mosa.Compiler.Framework.CIL
 
 			MosaType type = (elementType == null)
 				? type = (MosaType)decoder.Instruction.Operand
-				: type = decoder.TypeSystem.GetTypeFromElementCode(elementType.Value);
+				: type = decoder.TypeSystem.GetTypeFromTypeCode(elementType.Value);
 
 			ctx.MosaType = type;
 		}

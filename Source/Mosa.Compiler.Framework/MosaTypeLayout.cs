@@ -288,10 +288,10 @@ namespace Mosa.Compiler.Framework
 				ResolveInterfaceType(interfaceType);
 			}
 
-			int size = dnlib.DotNet.Extensions.GetPrimitiveSize(type.TypeSignature.ElementType, (int)nativePointerSize);
-			if (size != -1)
+			int? size = type.GetPrimitiveSize((int)nativePointerSize);
+			if (size != null)
 			{
-				typeSizes[type] = size;
+				typeSizes[type] = size.Value;
 			}
 			else if (type.IsExplicitLayout)
 			{
@@ -349,7 +349,7 @@ namespace Mosa.Compiler.Framework
 
 			foreach (MosaField field in type.Fields)
 			{
-				if (!field.IsStaticField)
+				if (!field.IsStatic)
 				{
 					// Set the field address
 					fieldOffsets.Add(field, typeSize);
@@ -399,16 +399,19 @@ namespace Mosa.Compiler.Framework
 
 		private void ScanExplicitInterfaceImplementations(MosaType type, MosaType interfaceType, MosaMethod[] methodTable)
 		{
-			foreach (var pair in type.InheritanceOveride)
+			foreach (var method in type.Methods)
 			{
-				int slot = 0;
-				foreach (var interfaceMethod in interfaceType.Methods)
+				foreach (var overrideTarget in method.Overrides)
 				{
-					if (pair.Key == interfaceMethod)
+					int slot = 0;
+					foreach (var interfaceMethod in interfaceType.Methods)
 					{
-						methodTable[slot] = pair.Value;
+						if (overrideTarget.Equals(interfaceMethod))
+						{
+							methodTable[slot] = method;
+						}
+						slot++;
 					}
-					slot++;
 				}
 			}
 		}
@@ -423,7 +426,7 @@ namespace Mosa.Compiler.Framework
 
 				if (cleanInterfaceMethodName.Equals(cleanMethodName))
 				{
-					if (interfaceMethod.Matches(method))
+					if (interfaceMethod.Equals(method))
 					{
 						return method;
 					}
@@ -519,7 +522,7 @@ namespace Mosa.Compiler.Framework
 
 			foreach (var baseMethod in methodTable)
 			{
-				if (baseMethod.Name.Equals(method.Name) && baseMethod.Matches(method))
+				if (baseMethod.Name.Equals(method.Name) && baseMethod.Equals(method))
 				{
 					if (baseMethod.GenericArguments.Count == 0)
 						return methodTableOffsets[baseMethod];

@@ -40,7 +40,7 @@ namespace Mosa.Compiler.Framework.CIL
 			decoder.Compiler.Scheduler.TrackFieldReferenced(field);
 
 			ctx.MosaField = field;
-			ctx.Result = decoder.Compiler.CreateVirtualRegister(decoder.TypeSystem.GetManagedPointerType(field.FieldType));
+			ctx.Result = decoder.Compiler.CreateVirtualRegister(field.FieldType.ToManagedPointer());
 		}
 
 		/// <summary>

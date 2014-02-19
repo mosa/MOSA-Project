@@ -44,7 +44,7 @@ namespace Mosa.Compiler.Framework.CIL
 
 		public static Operand CreateResultOperand(IInstructionDecoder decoder, MosaType type)
 		{
-			return decoder.Compiler.CreateVirtualRegister(decoder.TypeSystem.GetStackType(type));
+			return decoder.Compiler.CreateVirtualRegister(type.GetStackType());
 		}
 
 	}

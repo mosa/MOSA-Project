@@ -127,7 +127,7 @@ namespace Mosa.Compiler.Framework.Stages
 					using (EndianAwareBinaryWriter writer = new EndianAwareBinaryWriter(stream, architecture.Endianness))
 					{
 						// 1. Offset / Address
-						if (field.IsStaticField && !field.IsLiteralField)
+						if (field.IsStatic && !field.IsLiteral)
 						{
 							linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuiltInPatch.I4, fieldDescSymbol, (int)writer.Position, 0, field.FullName, 0);
 						}

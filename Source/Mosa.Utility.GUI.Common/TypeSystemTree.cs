@@ -20,7 +20,7 @@ namespace Mosa.Utility.GUI.Common
 			treeView.BeginUpdate();
 			treeView.Nodes.Clear();
 
-			foreach (var module in typeSystem.AllModules)
+			foreach (var module in typeSystem.Modules)
 			{
 				TreeNode moduleNode = new TreeNode(module.Name);
 				treeView.Nodes.Add(moduleNode);
@@ -36,15 +36,9 @@ namespace Mosa.Utility.GUI.Common
 						typeNode.Nodes.Add(baseTypeNode);
 					}
 
-					if (type.EnclosingType != null)
+					if (type.DeclaringType != null)
 					{
-						TreeNode baseTypeNode = new TreeNode("Enclosing Type: " + type.EnclosingType.FullName);
-						typeNode.Nodes.Add(baseTypeNode);
-					}
-
-					if (type.InternalType != null)
-					{
-						TreeNode baseTypeNode = new TreeNode("Type Definition: " + type.InternalType.FullName);
+						TreeNode baseTypeNode = new TreeNode("Enclosing Type: " + type.DeclaringType.FullName);
 						typeNode.Nodes.Add(baseTypeNode);
 					}
 
@@ -73,14 +67,14 @@ namespace Mosa.Utility.GUI.Common
 							TreeNode fieldNode = new TreeNode(field.DeclaringType.FullName + " " + field.Name);
 							fieldsNode.Nodes.Add(fieldNode);
 
-							if (field.IsStaticField)
+							if (field.IsStatic)
 								fieldNode.Text = fieldNode.Text + " [Static]";
 
 							if (showSizes)
 							{
 								fieldNode.Text = fieldNode.Text + " (Size: " + typeLayout.GetFieldSize(field).ToString();
 
-								if (!field.IsStaticField)
+								if (!field.IsStatic)
 									fieldNode.Text = fieldNode.Text + " - Offset: " + typeLayout.GetFieldOffset(field).ToString();
 
 								fieldNode.Text = fieldNode.Text + ")";
@@ -118,14 +112,6 @@ namespace Mosa.Utility.GUI.Common
 
 							if (method.IsRTSpecialName)
 								methodNode.Text = methodNode.Text + " [RTSpecialName]";
-
-
-
-							if (method.InternalMethod != null)
-							{
-								TreeNode baseMethodNode = new TreeNode("Method Definition: " + method.InternalMethod.FullName);
-								typeNode.Nodes.Add(baseMethodNode);
-							}
 
 							if (method.GenericArguments.Count != 0)
 							{

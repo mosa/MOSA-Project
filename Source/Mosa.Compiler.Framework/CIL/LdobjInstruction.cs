@@ -7,7 +7,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using dnlib.DotNet;
 using Mosa.Compiler.MosaTypeSystem;
 using System;
 
@@ -21,7 +20,7 @@ namespace Mosa.Compiler.Framework.CIL
 		/// <summary>
 		/// A fixed typeref for ldind.* instructions.
 		/// </summary>
-		private readonly ElementType? elementType;
+		private readonly MosaTypeCode? elementType;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="LdobjInstruction"/> class.
@@ -32,17 +31,17 @@ namespace Mosa.Compiler.Framework.CIL
 		{
 			switch (opcode)
 			{
-				case OpCode.Ldind_i1: elementType = ElementType.I1; break;
-				case OpCode.Ldind_i2: elementType = ElementType.I2; break;
-				case OpCode.Ldind_i4: elementType = ElementType.I4; break;
-				case OpCode.Ldind_i8: elementType = ElementType.I8; break;
-				case OpCode.Ldind_u1: elementType = ElementType.U1; break;
-				case OpCode.Ldind_u2: elementType = ElementType.U2; break;
-				case OpCode.Ldind_u4: elementType = ElementType.U4; break;
-				case OpCode.Ldind_i: elementType = ElementType.I; break;
-				case OpCode.Ldind_r4: elementType = ElementType.R4; break;
-				case OpCode.Ldind_r8: elementType = ElementType.R8; break;
-				case OpCode.Ldind_ref: elementType = ElementType.Object; break;
+				case OpCode.Ldind_i1: elementType = MosaTypeCode.I1; break;
+				case OpCode.Ldind_i2: elementType = MosaTypeCode.I2; break;
+				case OpCode.Ldind_i4: elementType = MosaTypeCode.I4; break;
+				case OpCode.Ldind_i8: elementType = MosaTypeCode.I8; break;
+				case OpCode.Ldind_u1: elementType = MosaTypeCode.U1; break;
+				case OpCode.Ldind_u2: elementType = MosaTypeCode.U2; break;
+				case OpCode.Ldind_u4: elementType = MosaTypeCode.U4; break;
+				case OpCode.Ldind_i: elementType = MosaTypeCode.I; break;
+				case OpCode.Ldind_r4: elementType = MosaTypeCode.R4; break;
+				case OpCode.Ldind_r8: elementType = MosaTypeCode.R8; break;
+				case OpCode.Ldind_ref: elementType = MosaTypeCode.Object; break;
 				case OpCode.Ldobj: elementType = null; break;
 				default: throw new NotImplementedException();
 			}
@@ -60,7 +59,7 @@ namespace Mosa.Compiler.Framework.CIL
 
 			MosaType type = (elementType == null)
 				? type = (MosaType)decoder.Instruction.Operand
-				: type = decoder.TypeSystem.GetTypeFromElementCode(elementType.Value);
+				: type = decoder.TypeSystem.GetTypeFromTypeCode(elementType.Value);
 
 			// Push the loaded value
 			ctx.Result = LoadInstruction.CreateResultOperand(decoder, type);
@@ -77,9 +76,9 @@ namespace Mosa.Compiler.Framework.CIL
 			base.Resolve(ctx, compiler);
 
 			// If we're ldind.i8, fix an IL deficiency that the result may be U8
-			if (opcode == OpCode.Ldind_i8 && elementType.Value == ElementType.I8)
+			if (opcode == OpCode.Ldind_i8 && elementType.Value == MosaTypeCode.I8)
 			{
-				if (ctx.Operand1.Type.HasElementType && ctx.Operand1.Type.ElementType.IsU8)
+				if (ctx.Operand1.Type.ElementType != null && ctx.Operand1.Type.ElementType.IsU8)
 				{
 					ctx.Result = compiler.CreateVirtualRegister(compiler.TypeSystem.BuiltIn.U8);
 				}

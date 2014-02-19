@@ -599,7 +599,7 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				context.OperandCount = 2;
 			}
-			Operand tmp = methodCompiler.CreateVirtualRegister(typeSystem.GetManagedPointerType(type));
+			Operand tmp = methodCompiler.CreateVirtualRegister(type.ToManagedPointer());
 			context.Result = tmp;
 			context.AppendInstruction(IRInstruction.Load, result, tmp, Operand.CreateConstantUnsignedInt(typeSystem, 0));
 			context.MosaType = type;
@@ -645,7 +645,7 @@ namespace Mosa.Compiler.Framework.Stages
 			context.SetOperand(1, methodTableSymbol);
 			if (vmCall == VmCall.Box)
 			{
-				Operand adr = methodCompiler.CreateVirtualRegister(typeSystem.GetManagedPointerType(type));
+				Operand adr = methodCompiler.CreateVirtualRegister(type.ToManagedPointer());
 				context.InsertBefore().SetInstruction(IRInstruction.AddressOf, adr, value);
 
 				context.SetOperand(2, adr);
@@ -943,7 +943,7 @@ namespace Mosa.Compiler.Framework.Stages
 			Operand arrayLength = context.Result;
 			Operand constantOffset = Operand.CreateConstantSignedInt(typeSystem, 8);
 
-			Operand arrayAddress = methodCompiler.CreateVirtualRegister(typeSystem.GetManagedPointerType(arrayOperand.Type.ElementType));
+			Operand arrayAddress = methodCompiler.CreateVirtualRegister(arrayOperand.Type.ElementType.ToManagedPointer());
 			context.SetInstruction(IRInstruction.Move, arrayAddress, arrayOperand);
 			context.AppendInstruction(IRInstruction.Load, arrayLength, arrayAddress, constantOffset);
 		}
@@ -991,7 +991,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private Operand LoadArrayBaseAddress(Context context, MosaType arrayType, Operand arrayOperand)
 		{
-			var arrayPointer = typeSystem.GetManagedPointerType(arrayType.ElementType);
+			var arrayPointer = arrayType.ElementType.ToManagedPointer();
 
 			Operand arrayAddress = methodCompiler.CreateVirtualRegister(arrayPointer);
 			Operand fixedOffset = Operand.CreateConstantSignedInt(typeSystem, (int)12);
@@ -1685,10 +1685,10 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </remarks>
 		private bool ProcessExternalCall(Context context)
 		{
-			if (!context.MosaMethod.IsPInvokeImpl)
-				return false;
-
 			string external = context.MosaMethod.ExternMethod;
+
+			if (external == null)
+				return false;
 
 			//TODO: Verify!
 
@@ -1821,7 +1821,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			Debug.Assert(type != null, "Cannot find platform Runtime type");
 
-			var method = TypeSystem.GetMethodByName(type, internalCallTarget.ToString());
+			var method = type.FindMethodByName(internalCallTarget.ToString());
 
 			Debug.Assert(method != null, "Cannot find method: " + internalCallTarget.ToString());
 
@@ -1840,7 +1840,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			string replacementMethod = BuildInternalCallName(method);
 
-			method = TypeSystem.GetMethodByNameAndParameters(method.DeclaringType, replacementMethod, method.Parameters);
+			method = method.DeclaringType.FindMethodByNameAndParameters(replacementMethod, method.Signature.Parameters);
 
 			Operand result = context.Result;
 

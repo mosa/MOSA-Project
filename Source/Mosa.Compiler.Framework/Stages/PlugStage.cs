@@ -41,11 +41,11 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				string plugTypeTarget = null;
 
-				object[] typeAttribute = type.GetAttribute(PlugTypeAttribute);
+				var typeAttribute = type.FindCustomAttribute(PlugTypeAttribute);
 
 				if (typeAttribute != null)
 				{
-					plugTypeTarget = (string)typeAttribute[0];
+					plugTypeTarget = (string)typeAttribute.Arguments[0];
 				}
 
 				foreach (var method in type.Methods)
@@ -55,11 +55,11 @@ namespace Mosa.Compiler.Framework.Stages
 
 					string plugMethodTarget = null;
 
-					object[] methodAttribute = method.GetAttribute(PlugMethodAttribute);
+					var methodAttribute = method.FindCustomAttribute(PlugMethodAttribute);
 
 					if (methodAttribute != null)
 					{
-						plugMethodTarget = (string)methodAttribute[0];
+						plugMethodTarget = (string)methodAttribute.Arguments[0];
 					}
 
 					if (plugTypeTarget != null || plugMethodTarget != null)
@@ -107,7 +107,7 @@ namespace Mosa.Compiler.Framework.Stages
 							{
 								if (targetMethodCandidate.IsStatic)
 								{
-									if (targetMethodCandidate.Matches(method))
+									if (targetMethodCandidate.Equals(method))
 									{
 										targetMethod = targetMethodCandidate;
 										break;
@@ -149,20 +149,20 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private bool MatchesWithStaticThis(MosaMethod targetMethod, MosaMethod plugMethod)
 		{
-			if (!targetMethod.ReturnType.Matches(plugMethod.ReturnType))
+			if (!targetMethod.Signature.ReturnType.Equals(plugMethod.Signature.ReturnType))
 				return false;
 
-			if (targetMethod.Parameters.Count != plugMethod.Parameters.Count - 1)
+			if (targetMethod.Signature.Parameters.Count != plugMethod.Signature.Parameters.Count - 1)
 				return false;
 
-			if (plugMethod.Parameters[0].Type.IsValueType && !plugMethod.Parameters[0].Type.IsManagedPointer)
+			if (plugMethod.Signature.Parameters[0].Type.IsValueType && !plugMethod.Signature.Parameters[0].Type.IsManagedPointer)
 				return false;
 
 			// TODO: Compare plug.Parameters[0].Type to the target's type
 
-			for (int i = 0; i < targetMethod.Parameters.Count; i++)
+			for (int i = 0; i < targetMethod.Signature.Parameters.Count; i++)
 			{
-				if (!targetMethod.Parameters[i].Matches(plugMethod.Parameters[i + 1]))
+				if (!targetMethod.Signature.Parameters[i].Equals(plugMethod.Signature.Parameters[i + 1]))
 					return false;
 			}
 

@@ -9,7 +9,6 @@
  */
 
 using System.Diagnostics;
-using dnlib.DotNet.Emit;
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.CIL;
 using Mosa.Compiler.Framework.IR;
@@ -33,7 +32,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <summary>
 		/// The instruction being decoded.
 		/// </summary>
-		private Instruction instruction;
+		private MosaInstruction instruction;
 
 		#endregion Data members
 
@@ -59,7 +58,7 @@ namespace Mosa.Compiler.Framework.Stages
 				return;
 			}
 
-			if (!methodCompiler.Method.HasCode)
+			if (methodCompiler.Method.Code.Count == 0)
 			{
 				if (DelegatePatcher.PatchDelegate(methodCompiler))
 					return;
@@ -91,14 +90,11 @@ namespace Mosa.Compiler.Framework.Stages
 			// Prefix instruction
 			bool prefix = false;
 			
-			foreach (Instruction instr in methodCompiler.Method.Code)
+			foreach (MosaInstruction instr in methodCompiler.Method.Code)
 			{
 				// Read the next opcode from the stream
 
-				int code = (int)instr.OpCode.Code;
-				if (code > 0x100)
-					code = 0x100 + (code & 0xff);
-				var op = (CIL.OpCode)code;
+				var op = (OpCode)instr.OpCode;
 
 				BaseCILInstruction instruction = CILInstruction.Get(op);
 
@@ -109,7 +105,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 				// Create and initialize the corresponding instruction
 				context.AppendInstruction(instruction);
-				context.Label = (int)instr.Offset;
+				context.Label = instr.Offset;
 				this.instruction = instr;
 				instruction.Decode(context, this);
 				context.HasPrefix = prefix;
@@ -145,7 +141,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <summary>
 		/// Gets the Instruction being decoded.
 		/// </summary>
-		Instruction IInstructionDecoder.Instruction
+		MosaInstruction IInstructionDecoder.Instruction
 		{
 			get { return instruction; }
 		}

@@ -71,7 +71,7 @@ namespace Mosa.Compiler.Framework
 			this.BasicBlocks = basicBlocks ?? new BasicBlocks();
 			this.InstructionSet = instructionSet ?? new InstructionSet(256);
 			this.Pipeline = new CompilerPipeline();
-			this.StackLayout = new StackLayout(Architecture, method.Parameters.Count + (method.HasThis || method.HasExplicitThis ? 1 : 0));
+			this.StackLayout = new StackLayout(Architecture, method.Signature.Parameters.Count + (method.HasThis || method.HasExplicitThis ? 1 : 0));
 			this.VirtualRegisters = new VirtualRegisters(Architecture);
 			this.LocalVariables = emptyOperandList;
 
@@ -184,7 +184,7 @@ namespace Mosa.Compiler.Framework
 				StackLayout.SetStackParameter(index++, Type, displacement, "this");
 			}
 
-			foreach (var parameter in Method.Parameters)
+			foreach (var parameter in Method.Signature.Parameters)
 			{
 				StackLayout.SetStackParameter(index++, parameter.Type, displacement, parameter.Name);
 			}
@@ -276,7 +276,7 @@ namespace Mosa.Compiler.Framework
 		/// Allocates the local variable virtual registers.
 		/// </summary>
 		/// <param name="locals">The locals.</param>
-		public void SetLocalVariables(IList<MosaType> locals)
+		public void SetLocalVariables(IList<MosaLocal> locals)
 		{
 			LocalVariables = new Operand[locals.Count];
 
@@ -285,13 +285,13 @@ namespace Mosa.Compiler.Framework
 				var local = locals[index];
 				Operand operand;
 
-				if (local.IsValueType)
+				if (local.Type.IsValueType)
 				{
-					operand = StackLayout.AddStackLocal(local);
+					operand = StackLayout.AddStackLocal(local.Type);
 				}
 				else
 				{
-					var stacktype = TypeSystem.GetStackType(local);
+					var stacktype = local.Type.GetStackType();
 					operand = VirtualRegisters.Allocate(stacktype);
 				}
 

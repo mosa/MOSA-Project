@@ -7,7 +7,6 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-using dnlib.DotNet.Emit;
 using Mosa.Compiler.MosaTypeSystem;
 
 namespace Mosa.Compiler.Framework.CIL
@@ -30,7 +29,7 @@ namespace Mosa.Compiler.Framework.CIL
 		/// <summary>
 		/// Gets the Instruction being decoded.
 		/// </summary>
-		Instruction Instruction { get; }
+		MosaInstruction Instruction { get; }
 
 		/// <summary>
 		/// Gets the type system.

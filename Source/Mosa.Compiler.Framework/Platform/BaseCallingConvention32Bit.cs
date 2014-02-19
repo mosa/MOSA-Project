@@ -158,16 +158,16 @@ namespace Mosa.Compiler.Framework.Platform
 		/// <param name="scratch">The scratch.</param>
 		private void PushOperands(TypeSystem typeSystem, Context context, MosaMethod method, List<Operand> operands, int space, Operand scratch)
 		{
-			Debug.Assert((method.Parameters.Count + (method.HasThis ? 1 : 0) == operands.Count) ||
-						(method.DeclaringType.IsDelegate && method.Parameters.Count == operands.Count));
+			Debug.Assert((method.Signature.Parameters.Count + (method.HasThis ? 1 : 0) == operands.Count) ||
+						(method.DeclaringType.IsDelegate && method.Signature.Parameters.Count == operands.Count));
 
-			int offset = method.Parameters.Count - operands.Count;
+			int offset = method.Signature.Parameters.Count - operands.Count;
 
 			for (int index = operands.Count - 1; index >= 0; index--)
 			{
 				Operand operand = operands[index];
 
-				MosaType param = (index + offset >= 0) ? method.Parameters[index + offset].Type : null;
+				MosaType param = (index + offset >= 0) ? method.Signature.Parameters[index + offset].Type : null;
 
 				int size, alignment;
 				architecture.GetTypeRequirements(operand.Type, out size, out alignment);

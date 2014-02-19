@@ -144,7 +144,7 @@ namespace Mosa.Platform.x86.Stages
 
 					if (kind == ExceptionHandlerType.Filter)
 					{
-						filter = (uint)codeEmitter.GetPosition(clause.FilterOffset);
+						filter = (uint)codeEmitter.GetPosition(clause.FilterOffset.Value);
 					}
 
 					// TODO: Optimization - Search for existing exception protected region (before or after) to merge the current block

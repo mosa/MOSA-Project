@@ -125,7 +125,7 @@ namespace Mosa.Platform.x86.Stages
 			if (SaveRegisters)
 			{
 				// Save EDX for int32 return values (or do not save EDX for non-int64 return values)
-				if (!methodCompiler.Method.ReturnType.IsUI8)
+				if (!methodCompiler.Method.Signature.ReturnType.IsUI8)
 				{
 					context.AppendInstruction(X86.Push, null, edx);
 				}
@@ -158,7 +158,7 @@ namespace Mosa.Platform.x86.Stages
 				context.AppendInstruction(X86.Pop, edi);
 
 				// Save EDX for int32 return values (or do not save EDX for non-int64 return values)
-				if (!methodCompiler.Method.ReturnType.IsUI8)
+				if (!methodCompiler.Method.Signature.ReturnType.IsUI8)
 				{
 					context.AppendInstruction(X86.Pop, edx);
 				}

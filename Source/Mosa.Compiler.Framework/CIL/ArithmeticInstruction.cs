@@ -91,9 +91,9 @@ namespace Mosa.Compiler.Framework.CIL
 			StackTypeCode result = StackTypeCode.Unknown;
 			switch (opcode)
 			{
-				case OpCode.Add: result = addTable[(int)ctx.Operand1.Type.GetStackType()][(int)ctx.Operand2.Type.GetStackType()]; break;
-				case OpCode.Sub: result = subTable[(int)ctx.Operand1.Type.GetStackType()][(int)ctx.Operand2.Type.GetStackType()]; break;
-				default: result = operandTable[(int)ctx.Operand1.Type.GetStackType()][(int)ctx.Operand2.Type.GetStackType()]; break;
+				case OpCode.Add: result = addTable[(int)ctx.Operand1.Type.GetStackTypeCode()][(int)ctx.Operand2.Type.GetStackTypeCode()]; break;
+				case OpCode.Sub: result = subTable[(int)ctx.Operand1.Type.GetStackTypeCode()][(int)ctx.Operand2.Type.GetStackTypeCode()]; break;
+				default: result = operandTable[(int)ctx.Operand1.Type.GetStackTypeCode()][(int)ctx.Operand2.Type.GetStackTypeCode()]; break;
 			}
 
 			if (result == StackTypeCode.Unknown)

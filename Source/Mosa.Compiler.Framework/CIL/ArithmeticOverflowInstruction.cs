@@ -103,9 +103,9 @@ namespace Mosa.Compiler.Framework.CIL
 			
 			switch (opcode)
 			{
-				case OpCode.Add_ovf_un: result = addovfunTable[(int)ctx.Operand1.Type.GetStackType()][(int)ctx.Operand2.Type.GetStackType()]; break;
-				case OpCode.Sub_ovf_un: result = subovfunTable[(int)ctx.Operand1.Type.GetStackType()][(int)ctx.Operand2.Type.GetStackType()]; break;
-				default: result = operandTable[(int)ctx.Operand1.Type.GetStackType()][(int)ctx.Operand2.Type.GetStackType()]; break;
+				case OpCode.Add_ovf_un: result = addovfunTable[(int)ctx.Operand1.Type.GetStackTypeCode()][(int)ctx.Operand2.Type.GetStackTypeCode()]; break;
+				case OpCode.Sub_ovf_un: result = subovfunTable[(int)ctx.Operand1.Type.GetStackTypeCode()][(int)ctx.Operand2.Type.GetStackTypeCode()]; break;
+				default: result = operandTable[(int)ctx.Operand1.Type.GetStackTypeCode()][(int)ctx.Operand2.Type.GetStackTypeCode()]; break;
 			}
 
 			if (StackTypeCode.Unknown == result)

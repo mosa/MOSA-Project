@@ -210,7 +210,7 @@ namespace Mosa.Compiler.Framework.Stages
 			foreach (var field in type.Fields)
 			{
 				// TODO: Inline literal field constants
-				if (field.IsStaticField)
+				if (field.IsStatic)
 				{
 					// Assign a memory slot to the static & initialize it, if there's initial data set
 					CreateStaticField(field);
@@ -231,7 +231,7 @@ namespace Mosa.Compiler.Framework.Stages
 			size = (int)typeLayout.GetFieldSize(field);
 
 			// The linker section to move this field into
-			SectionKind section = field.HasRVA ? section = SectionKind.Data : section = SectionKind.BSS;
+			SectionKind section = field.Data != null ? section = SectionKind.Data : section = SectionKind.BSS;
 
 			AllocateSpace(field, section, size, alignment);
 		}
@@ -240,7 +240,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			using (var stream = compiler.Linker.Allocate(field.FullName, section, size, alignment))
 			{
-				if (field.HasRVA)
+				if (field.Data != null)
 				{
 					stream.Write(field.Data, 0, size);
 				}

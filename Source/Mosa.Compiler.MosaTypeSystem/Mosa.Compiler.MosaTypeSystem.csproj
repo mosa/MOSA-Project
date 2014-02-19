@@ -75,22 +75,39 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IResolvable.cs" />
-    <Compile Include="DnlibExtension.cs" />
+    <Compile Include="IMetadata.cs" />
+    <Compile Include="IModuleLoader.cs" />
+    <Compile Include="Metadata\MetadataResolver.cs" />
+    <Compile Include="ITypeSystemController.cs" />
+    <Compile Include="Metadata\DnlibExtension.cs" />
     <Compile Include="ExceptionHandlerType.cs" />
-    <Compile Include="MosaExceptionHandler.cs" />
+    <Compile Include="Metadata\CLRMetadata.cs" />
+    <Compile Include="Metadata\UnitDescs.cs" />
+    <Compile Include="MosaTypeExtension.cs" />
+    <Compile Include="SignatureName.cs" />
+    <Compile Include="TypeSystemExtensions.cs" />
+    <Compile Include="Units\MosaArrayInfo.cs" />
+    <Compile Include="Units\MosaCustomAttribute.cs" />
+    <Compile Include="Units\MosaInstruction.cs" />
+    <Compile Include="Units\MosaLocal.cs" />
+    <Compile Include="Units\MosaMethodSignature.cs" />
+    <Compile Include="MosaTypeCode.cs" />
+    <Compile Include="Units\MosaExceptionHandler.cs" />
     <Compile Include="MosaModuleLoader.cs" />
-    <Compile Include="MosaModule.cs" />
+    <Compile Include="Units\MosaModule.cs" />
     <Compile Include="BuiltInTypes.cs" />
-    <Compile Include="MosaTypeLoader.cs" />
-    <Compile Include="MosaTypeResolver.cs" />
-    <Compile Include="ScopedToken.cs" />
+    <Compile Include="Metadata\MetadataLoader.cs" />
+    <Compile Include="Metadata\MetadataCache.cs" />
+    <Compile Include="Units\MosaUnit.cs" />
+    <Compile Include="Metadata\ScopedToken.cs" />
+    <Compile Include="SignatureComparer.cs" />
     <Compile Include="StackTypeCode.cs" />
     <Compile Include="TypeSystem.cs" />
-    <Compile Include="MosaMethod.cs" />
-    <Compile Include="MosaField.cs" />
-    <Compile Include="MosaParameter.cs" />
-    <Compile Include="MosaType.cs" />
+    <Compile Include="Units\MosaMethod.cs" />
+    <Compile Include="Units\MosaField.cs" />
+    <Compile Include="Units\MosaParameter.cs" />
+    <Compile Include="Units\MosaType.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

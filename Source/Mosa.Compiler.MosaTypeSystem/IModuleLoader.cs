@@ -9,8 +9,9 @@
 
 namespace Mosa.Compiler.MosaTypeSystem
 {
-	interface IResolvable
+	public interface IModuleLoader
 	{
-		void Resolve(MosaTypeLoader loader);
+		void LoadModuleFromFile(string file);
+		IMetadata CreateMetadata();
 	}
 }

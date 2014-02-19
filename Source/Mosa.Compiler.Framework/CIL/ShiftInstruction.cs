@@ -61,7 +61,7 @@ namespace Mosa.Compiler.Framework.CIL
 		{
 			base.Resolve(ctx, compiler);
 
-			var result = operandTable[(int)ctx.Operand1.Type.GetStackType()][(int)ctx.Operand2.Type.GetStackType()];
+			var result = operandTable[(int)ctx.Operand1.Type.GetStackTypeCode()][(int)ctx.Operand2.Type.GetStackTypeCode()];
 			Debug.Assert(StackTypeCode.Unknown != result, @"Can't shift with the given virtualLocal operands.");
 			if (StackTypeCode.Unknown == result)
 				throw new InvalidOperationException(@"Invalid virtualLocal state for pairing (" + ctx.Operand1.Type.GetStackType() + ", " + ctx.Operand2.Type.GetStackType() + ")");

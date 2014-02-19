@@ -59,17 +59,17 @@ namespace Mosa.Compiler.Framework.CIL
 		{
 			base.Resolve(ctx, compiler);
 
-			var stackTypeForOperand1 = ctx.Operand1.Type.GetStackType();
-			var stackTypeForOperand2 = ctx.Operand2.Type.GetStackType();
+			var stackTypeForOperand1 = ctx.Operand1.Type.GetStackTypeCode();
+			var stackTypeForOperand2 = ctx.Operand2.Type.GetStackTypeCode();
 
 			if (ctx.Operand1.IsValueType && ctx.Operand1.Type.BaseType.IsEnum)
 			{
-				stackTypeForOperand1 = ctx.Operand1.Type.Fields[0].FieldType.GetStackType();
+				stackTypeForOperand1 = ctx.Operand1.Type.Fields[0].FieldType.GetStackTypeCode();
 			}
 
 			if (ctx.Operand2.IsValueType && ctx.Operand2.Type.BaseType.IsEnum)
 			{
-				stackTypeForOperand2 = ctx.Operand2.Type.Fields[0].FieldType.GetStackType();
+				stackTypeForOperand2 = ctx.Operand2.Type.Fields[0].FieldType.GetStackTypeCode();
 			}
 
 			var result = opTable[(int)stackTypeForOperand1][(int)stackTypeForOperand2];

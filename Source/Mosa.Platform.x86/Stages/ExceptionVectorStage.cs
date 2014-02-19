@@ -46,7 +46,7 @@ namespace Mosa.Platform.x86.Stages
 			if (type == null)
 				return;
 
-			var method = TypeSystem.GetMethodByName(type, "ExceptionHandlerType");
+			var method = type.FindMethodByName("ExceptionHandlerType");
 
 			if (method == null)
 				return;

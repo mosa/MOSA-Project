@@ -115,7 +115,7 @@ namespace Mosa.Compiler.Framework.CIL
 			// Validate the operands...
 			int offset = (ctx.MosaMethod.HasExplicitThis ? 1 : 0);
 
-			Debug.Assert(ctx.OperandCount == ctx.MosaMethod.Parameters.Count - offset, @"Operand count doesn't match parameter count.");
+			Debug.Assert(ctx.OperandCount == ctx.MosaMethod.Signature.Parameters.Count - offset, @"Operand count doesn't match parameter count.");
 		}
 
 		/// <summary>

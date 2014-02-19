@@ -46,7 +46,7 @@ namespace Mosa.Platform.x86.Stages
 			if (type == null)
 				return;
 
-			var method = TypeSystem.GetMethodByName(type, "ProcessInterrupt");
+			var method = type.FindMethodByName("ProcessInterrupt");
 
 			if (method == null)
 				return;

@@ -7,9 +7,10 @@
  *  Ki (kiootic) <kiootic@gmail.com>
  */
 
+using System.Collections.Generic;
 using dnlib.DotNet;
 
-namespace Mosa.Compiler.MosaTypeSystem
+namespace Mosa.Compiler.MosaTypeSystem.Metadata
 {
 	static class DnlibExtension
 	{
@@ -95,6 +96,29 @@ namespace Mosa.Compiler.MosaTypeSystem
 		public static bool HasModifierOrPinned(this TypeSig signature)
 		{
 			return signature is ModifierSig || signature is PinnedSig;
+		}
+
+		public static TypeSig GetTypeSig(this MosaType type)
+		{
+			return type.GetUnderlyingObject<UnitDesc<TypeDef, TypeSig>>().Signature;
+		}
+
+		public static MethodSig GetMethodSig(this MosaMethod method)
+		{
+			return method.GetUnderlyingObject<UnitDesc<MethodDef, MethodSig>>().Signature;
+		}
+
+		public static FieldSig GetFieldSig(this MosaField field)
+		{
+			return field.GetUnderlyingObject<UnitDesc<FieldDef, FieldSig>>().Signature;
+		}
+
+		public static IList<TypeSig> GetGenericArguments(this IList<MosaType> types)
+		{
+			List<TypeSig> result = new List<TypeSig>();
+			foreach (var type in types)
+				result.Add(type.GetTypeSig());
+			return result;
 		}
 	}
 }

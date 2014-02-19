@@ -9,7 +9,6 @@
 
 using System;
 using Mosa.Compiler.MosaTypeSystem;
-using dnlib.DotNet;
 
 namespace Mosa.Compiler.Framework.CIL
 {
@@ -23,7 +22,7 @@ namespace Mosa.Compiler.Framework.CIL
 		/// <summary>
 		/// Specifies the type of the value.
 		/// </summary>
-		private readonly ElementType? elementType;
+		private readonly MosaTypeCode? elementType;
 
 		#endregion Data members
 
@@ -38,14 +37,14 @@ namespace Mosa.Compiler.Framework.CIL
 		{
 			switch (opcode)
 			{
-				case OpCode.Stind_i1: elementType = ElementType.I1; break;
-				case OpCode.Stind_i2: elementType = ElementType.I2; break;
-				case OpCode.Stind_i4: elementType = ElementType.I4; break;
-				case OpCode.Stind_i8: elementType = ElementType.I8; break;
-				case OpCode.Stind_r4: elementType = ElementType.R4; break;
-				case OpCode.Stind_r8: elementType = ElementType.R8; break;
-				case OpCode.Stind_i: elementType = ElementType.I; break;
-				case OpCode.Stind_ref: elementType = ElementType.Object; break;
+				case OpCode.Stind_i1: elementType = MosaTypeCode.I1; break;
+				case OpCode.Stind_i2: elementType = MosaTypeCode.I2; break;
+				case OpCode.Stind_i4: elementType = MosaTypeCode.I4; break;
+				case OpCode.Stind_i8: elementType = MosaTypeCode.I8; break;
+				case OpCode.Stind_r4: elementType = MosaTypeCode.R4; break;
+				case OpCode.Stind_r8: elementType = MosaTypeCode.R8; break;
+				case OpCode.Stind_i: elementType = MosaTypeCode.I; break;
+				case OpCode.Stind_ref: elementType = MosaTypeCode.Object; break;
 				case OpCode.Stobj: elementType = null; break;
 				default: throw new NotImplementedException();
 			}
@@ -67,7 +66,7 @@ namespace Mosa.Compiler.Framework.CIL
 
 			MosaType type = (elementType == null)
 				? type = (MosaType)decoder.Instruction.Operand
-				: type = decoder.TypeSystem.GetTypeFromElementCode(elementType.Value);
+				: type = decoder.TypeSystem.GetTypeFromTypeCode(elementType.Value);
 
 			ctx.MosaType = type;
 

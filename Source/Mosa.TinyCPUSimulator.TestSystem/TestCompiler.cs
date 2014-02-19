@@ -64,7 +64,7 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 			moduleLoader.LoadModuleFromFile("Mosa.Test.Collection.dll");
 			moduleLoader.LoadModuleFromFile("Mosa.Kernel.x86Test.dll");
 
-			typeSystem = TypeSystem.Load(moduleLoader);
+			typeSystem = TypeSystem.Load(moduleLoader.CreateMetadata());
 
 			typeLayout = new MosaTypeLayout(typeSystem, 4, 4);
 
@@ -110,7 +110,7 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 			if (simAdapter.SimCPU.Monitor.BreakAtTick == simAdapter.SimCPU.Tick)
 				throw new Exception("Aborted. Method did not complete under 100000 ticks. " + simAdapter.SimCPU.Tick.ToString());
 
-			object result = platform.GetResult(simAdapter, runtimeMethod.ReturnType);
+			object result = platform.GetResult(simAdapter, runtimeMethod.Signature.ReturnType);
 
 			try
 			{
@@ -141,7 +141,7 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 				{
 					if (m.Name == method)
 					{
-						if (m.Parameters.Count == parameters.Length)
+						if (m.Signature.Parameters.Count == parameters.Length)
 						{
 							return m;
 						}

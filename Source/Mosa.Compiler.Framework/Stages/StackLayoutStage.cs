@@ -55,7 +55,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (methodCompiler.Method.HasThis || methodCompiler.Method.HasExplicitThis)
 				++offset;
 
-			for (int i = 0; i < methodCompiler.Method.Parameters.Count + offset; ++i)
+			for (int i = 0; i < methodCompiler.Method.Signature.Parameters.Count + offset; ++i)
 			{
 				parameters.Add(methodCompiler.GetParameterOperand(i));
 			}

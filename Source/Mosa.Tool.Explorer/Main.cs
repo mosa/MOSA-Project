@@ -329,7 +329,7 @@ namespace Mosa.Tool.Explorer
 			assemblyLoader.AddPrivatePath(Path.GetDirectoryName(filename));
 			assemblyLoader.LoadModuleFromFile(filename);
 
-			typeSystem = TypeSystem.Load(assemblyLoader);
+			typeSystem = TypeSystem.Load(assemblyLoader.CreateMetadata());
 
 			typeLayout = new MosaTypeLayout(typeSystem, 4, 4); // FIXME
 

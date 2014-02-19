@@ -79,7 +79,7 @@ namespace Mosa.Tool.Compiler
 				moduleLoader.LoadModuleFromFile(file);
 			}
 
-			var typeSystem = TypeSystem.Load(moduleLoader);
+			var typeSystem = TypeSystem.Load(moduleLoader.CreateMetadata());
 
 			int nativePointerSize;
 			int nativePointerAlignment;

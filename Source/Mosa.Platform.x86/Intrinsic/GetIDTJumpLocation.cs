@@ -48,7 +48,7 @@ namespace Mosa.Platform.x86.Intrinsic
 			int irq = (int)operand.ConstantSignedInteger;
 
 			// Find the method
-			var method = TypeSystem.GetMethodByName(methodCompiler.TypeSystem.DefaultLinkerType, "InterruptISR" + irq.ToString());
+			var method = methodCompiler.TypeSystem.DefaultLinkerType.FindMethodByName("InterruptISR" + irq.ToString());
 
 			if (method == null)
 			{
