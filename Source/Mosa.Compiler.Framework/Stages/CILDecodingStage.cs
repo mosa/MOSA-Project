@@ -89,11 +89,10 @@ namespace Mosa.Compiler.Framework.Stages
 
 			// Prefix instruction
 			bool prefix = false;
-			
-			foreach (MosaInstruction instr in methodCompiler.Method.Code)
-			{
-				// Read the next opcode from the stream
 
+			for (int i = 0; i < methodCompiler.Method.Code.Count; i++)
+			{
+				MosaInstruction instr = methodCompiler.Method.Code[i];
 				var op = (OpCode)instr.OpCode;
 
 				BaseCILInstruction instruction = CILInstruction.Get(op);
@@ -106,9 +105,9 @@ namespace Mosa.Compiler.Framework.Stages
 				// Create and initialize the corresponding instruction
 				context.AppendInstruction(instruction);
 				context.Label = instr.Offset;
+				context.HasPrefix = prefix;
 				this.instruction = instr;
 				instruction.Decode(context, this);
-				context.HasPrefix = prefix;
 
 				Debug.Assert(context.Instruction != null);
 

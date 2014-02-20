@@ -7,6 +7,8 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using Mosa.Compiler.MosaTypeSystem;
+
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
@@ -45,7 +47,7 @@ namespace Mosa.Compiler.Framework.CIL
 
 			var parameterOperand = decoder.Compiler.GetParameterOperand((int)decoder.Instruction.Operand);
 			ctx.Operand1 = parameterOperand;
-			ctx.Result = decoder.Compiler.CreateVirtualRegister(parameterOperand.Type);
+			ctx.Result = decoder.Compiler.CreateVirtualRegister(parameterOperand.Type.ToManagedPointer());
 		}
 
 		/// <summary>

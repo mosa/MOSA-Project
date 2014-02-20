@@ -45,7 +45,7 @@ namespace Mosa.Compiler.Framework.CIL
 			decoder.Compiler.Scheduler.TrackFieldReferenced(field);
 
 			ctx.MosaField = field;
-			ctx.Result = LoadInstruction.CreateResultOperand(decoder, field.FieldType);
+			ctx.Result = LoadInstruction.CreateResultOperand(decoder, field.FieldType.ToManagedPointer());
 		}
 
 		/// <summary>

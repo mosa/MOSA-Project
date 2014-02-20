@@ -148,12 +148,21 @@ namespace Mosa.Compiler.MosaTypeSystem
 			return null;
 		}
 
-
 		public MosaMethod FindMethodByNameAndParameters(string name, IList<MosaParameter> parameters)
 		{
 			foreach (var method in Methods)
 			{
 				if (method.Name == name && method.Signature.Parameters.SequenceEquals(parameters))
+					return method;
+			}
+			return null;
+		}
+
+		public MosaMethod FindMethodBySignature(string name, MosaMethodSignature sig)
+		{
+			foreach (var method in Methods)
+			{
+				if (method.Name == name && method.Signature.Equals(sig))
 					return method;
 			}
 			return null;

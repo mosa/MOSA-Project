@@ -246,15 +246,29 @@ namespace System
 			return base.GetHashCode();
 		}
 
+		public override string ToString()
+		{
+			return this;
+		}
+
+		// TODO: Seems some compiler bugs prevent the original algorithms from working...
 		public unsafe static string Concat(String a, String b)
 		{
 			String result = InternalAllocateString(a.length + b.length);
 			char* chars = result.first_char;
 
-			foreach (char character in a)
-				*chars++ = character;
-			foreach (char character in b)
-				*chars++ = character;
+			char* aPtr = a.first_char;
+			char* bPtr = b.first_char;
+			for (int i = 0; i < a.length; i++)
+			{
+				*chars = aPtr[i];
+				chars++;
+			}
+			for (int i = 0; i < b.length; i++)
+			{
+				*chars = bPtr[i];
+				chars++;
+			}
 
 			return result;
 		}
@@ -264,12 +278,24 @@ namespace System
 			String result = InternalAllocateString(a.length + b.length + c.length);
 			char* chars = result.first_char;
 
-			foreach (char character in a)
-				*chars++ = character;
-			foreach (char character in b)
-				*chars++ = character;
-			foreach (char character in c)
-				*chars++ = character;
+			char* aPtr = a.first_char;
+			char* bPtr = b.first_char;
+			char* cPtr = c.first_char;
+			for (int i = 0; i < a.length; i++)
+			{
+				*chars = aPtr[i];
+				chars++;
+			}
+			for (int i = 0; i < b.length; i++)
+			{
+				*chars = bPtr[i];
+				chars++;
+			}
+			for (int i = 0; i < c.length; i++)
+			{
+				*chars = cPtr[i];
+				chars++;
+			}
 
 			return result;
 		}
@@ -279,14 +305,30 @@ namespace System
 			String result = InternalAllocateString(a.length + b.length + c.length + d.length);
 			char* chars = result.first_char;
 
-			foreach (char character in a)
-				*chars++ = character;
-			foreach (char character in b)
-				*chars++ = character;
-			foreach (char character in c)
-				*chars++ = character;
-			foreach (char character in d)
-				*chars++ = character;
+			char* aPtr = a.first_char;
+			char* bPtr = b.first_char;
+			char* cPtr = c.first_char;
+			char* dPtr = d.first_char;
+			for (int i = 0; i < a.length; i++)
+			{
+				*chars = aPtr[i];
+				chars++;
+			}
+			for (int i = 0; i < b.length; i++)
+			{
+				*chars = bPtr[i];
+				chars++;
+			}
+			for (int i = 0; i < c.length; i++)
+			{
+				*chars = cPtr[i];
+				chars++;
+			}
+			for (int i = 0; i < d.length; i++)
+			{
+				*chars = dPtr[i];
+				chars++;
+			}
 
 			return result;
 		}
@@ -313,20 +355,26 @@ namespace System
 
 		public static string Concat(params object[] args)
 		{
-			string result = string.Empty;
+			if (args.Length == 0)
+				return string.Empty;
 
-			for (int i = 0; i < args.Length - 1; ++i)
-				result = Concat(result, args[i]);
+			string result = args[0].ToString();
+
+			for (int i = 1; i < args.Length; ++i)
+				result = Concat(result, args[i].ToString());
 
 			return result;
 		}
 
 		public static string Concat(string[] objects)
 		{
-			string result = string.Empty;
+			if (objects.Length == 0)
+				return string.Empty;
 
-			for (int i = 0; i < objects.Length - 1; ++i)
-				result = Concat(result, objects[i]);
+			string result = objects[0].ToString();
+
+			for (int i = 1; i < objects.Length; ++i)
+				result = Concat(result, objects[i].ToString());
 
 			return result;
 		}

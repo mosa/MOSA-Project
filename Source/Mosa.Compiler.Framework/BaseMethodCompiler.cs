@@ -181,7 +181,10 @@ namespace Mosa.Compiler.Framework
 
 			if (Method.HasThis || Method.HasExplicitThis)
 			{
-				StackLayout.SetStackParameter(index++, Type, displacement, "this");
+				if (Type.IsValueType)
+					StackLayout.SetStackParameter(index++, Type.ToManagedPointer(), displacement, "this");
+				else
+					StackLayout.SetStackParameter(index++, Type, displacement, "this");
 			}
 
 			foreach (var parameter in Method.Signature.Parameters)
