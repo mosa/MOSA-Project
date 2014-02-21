@@ -159,6 +159,7 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
+    <Compile Include="ValueTypeTests.cs" />
     <Compile Include="WhileTests.cs" />
     <Compile Include="StringTests.cs" />
     <Compile Include="SingleTests.cs" />

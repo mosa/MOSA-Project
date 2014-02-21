@@ -41,14 +41,26 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			if (ctx.Instruction is Load)
 			{
-				if (ctx.Operand1.Type.IsPointer && ctx.Result.Type.Equals(ctx.Operand1.Type.ElementType) &&
-					typeLayout.IsCompoundType(ctx.Result.Type) && !ctx.Result.Type.IsUI8 && !ctx.Result.Type.IsR8)
+				if (ctx.MosaType != null &&
+					typeLayout.IsCompoundType(ctx.MosaType) && !ctx.MosaType.IsUI8 && !ctx.MosaType.IsR8)
 				{
 					if (ctx.Result.IsVirtualRegister && !repl.ContainsKey(ctx.Result))
 					{
-						repl[ctx.Result] = methodCompiler.StackLayout.AddStackLocal(ctx.Result.Type);
+						repl[ctx.Result] = methodCompiler.StackLayout.AddStackLocal(ctx.MosaType);
 					}
 					ctx.ReplaceInstructionOnly(IRInstruction.CompoundLoad);
+				}
+			}
+			else if (ctx.Instruction is Store)
+			{
+				if (ctx.MosaType != null &&
+					typeLayout.IsCompoundType(ctx.MosaType) && !ctx.MosaType.IsUI8 && !ctx.MosaType.IsR8)
+				{
+					if (ctx.Operand3.IsVirtualRegister && !repl.ContainsKey(ctx.Operand3))
+					{
+						repl[ctx.Operand3] = methodCompiler.StackLayout.AddStackLocal(ctx.Result.Type);
+					}
+					ctx.ReplaceInstructionOnly(IRInstruction.CompoundStore);
 				}
 			}
 			else if (ctx.Instruction is Move)

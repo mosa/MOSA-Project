@@ -392,7 +392,7 @@ namespace Mosa.Platform.x86.Stages
 			for (int i = 0; i < typeSize; i += 4)
 			{
 				context.AppendInstruction(X86.Mov, edx, Operand.CreateMemoryAddress(typeSystem.BuiltIn.I4, edi, i + offset));
-				context.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(typeSystem.BuiltIn.I4, esi, i + offset), edx);
+				context.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(typeSystem.BuiltIn.I4, esi, i), edx);
 			}
 			context.AppendInstruction(X86.Pop, edx);
 			context.AppendInstruction(X86.Pop, esi);
@@ -721,7 +721,7 @@ namespace Mosa.Platform.x86.Stages
 			context.AppendInstruction(X86.Mov, esi, dest);
 			for (int i = 0; i < typeSize; i += 4)
 			{
-				context.AppendInstruction(X86.Mov, edx, Operand.CreateMemoryAddress(typeSystem.BuiltIn.I4, edi, i + offset));
+				context.AppendInstruction(X86.Mov, edx, Operand.CreateMemoryAddress(typeSystem.BuiltIn.I4, edi, i));
 				context.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(typeSystem.BuiltIn.I4, esi, i + offset), edx);
 			}
 			context.AppendInstruction(X86.Pop, edx);

@@ -54,6 +54,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 				// See Partition II 14.2 Arrays
 
 				arrayType.Module = type.Module;
+				arrayType.DeclaringType = type.DeclaringType;
 				arrayType.Namespace = type.Namespace;
 				arrayType.Name = type.Name;
 
