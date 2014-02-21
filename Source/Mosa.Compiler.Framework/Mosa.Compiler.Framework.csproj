@@ -85,6 +85,9 @@
     <Compile Include="DelegatePatcher.cs" />
     <Compile Include="Intrinsics\InternalInitializeArray.cs" />
     <Compile Include="Intrinsics\InternalGetType.cs" />
+    <Compile Include="IR\CompoundLoad.cs" />
+    <Compile Include="IR\CompoundMove.cs" />
+    <Compile Include="IR\CompoundStore.cs" />
     <Compile Include="ShiftType.cs" />
     <Compile Include="ConditionCodeExtension.cs" />
     <Compile Include="BasicBlocks.cs" />
@@ -102,6 +105,7 @@
     <Compile Include="RegisterAllocator\VirtualRegister.cs" />
     <Compile Include="RegisterAllocator\GreedyRegisterAllocator.cs" />
     <Compile Include="Linker\LinkerFactory.cs" />
+    <Compile Include="Stages\ConvertCompoundMoveStage.cs" />
     <Compile Include="Stages\StopStage.cs" />
     <Compile Include="Stages\BaseEdgeSplitStage.cs" />
     <Compile Include="Stages\EmptyBlockRemovalStage.cs" />

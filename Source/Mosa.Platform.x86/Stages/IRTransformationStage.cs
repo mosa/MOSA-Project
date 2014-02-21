@@ -367,6 +367,38 @@ namespace Mosa.Platform.x86.Stages
 			}
 		}
 
+		void IIRVisitor.CompoundLoad(Context context)
+		{
+			var type = context.Result.Type;
+			int typeSize = typeLayout.GetTypeSize(type);
+			Debug.Assert(typeSize > 0 && typeSize % 4 == 0 && context.Operand2.IsConstant);
+
+			int offset = (int)context.Operand2.ConstantSignedInteger;
+			var src = context.Operand1;
+			var dest = context.Result;
+			Debug.Assert(dest.IsMemoryAddress);
+
+			if (dest.EffectiveOffsetBase == GeneralPurposeRegister.ESP)
+				dest = Operand.CreateMemoryAddress(typeSystem.BuiltIn.I4, Operand.CreateCPURegister(typeSystem.BuiltIn.I4, GeneralPurposeRegister.ESP), dest.Displacement + 12);
+
+			var edi = Operand.CreateCPURegister(typeSystem.BuiltIn.I4, GeneralPurposeRegister.EDI);
+			var esi = Operand.CreateCPURegister(typeSystem.BuiltIn.I4, GeneralPurposeRegister.ESI);
+			var edx = Operand.CreateCPURegister(typeSystem.BuiltIn.I4, GeneralPurposeRegister.EDX);
+			context.SetInstruction(X86.Push, null, edi);
+			context.AppendInstruction(X86.Push, null, esi);
+			context.AppendInstruction(X86.Push, null, edx);
+			context.AppendInstruction(X86.Mov, edi, src);
+			context.AppendInstruction(X86.Lea, esi, dest);
+			for (int i = 0; i < typeSize; i += 4)
+			{
+				context.AppendInstruction(X86.Mov, edx, Operand.CreateMemoryAddress(typeSystem.BuiltIn.I4, edi, i + offset));
+				context.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(typeSystem.BuiltIn.I4, esi, i + offset), edx);
+			}
+			context.AppendInstruction(X86.Pop, edx);
+			context.AppendInstruction(X86.Pop, esi);
+			context.AppendInstruction(X86.Pop, edi);
+		}
+
 		/// <summary>
 		/// Visitation function for Load Sign Extended.
 		/// </summary>
@@ -507,6 +539,39 @@ namespace Mosa.Platform.x86.Stages
 			context.ReplaceInstructionOnly(instruction);
 		}
 
+		void IIRVisitor.CompoundMove(Context context)
+		{
+			var type = context.Result.Type;
+			int typeSize = typeLayout.GetTypeSize(type);
+			Debug.Assert(typeSize > 0 && typeSize % 4 == 0);
+
+			var src = context.Operand1;
+			var dest = context.Result;
+			Debug.Assert(src.IsMemoryAddress && dest.IsMemoryAddress);
+
+			if (src.EffectiveOffsetBase == GeneralPurposeRegister.ESP)
+				src = Operand.CreateMemoryAddress(src.Type.TypeSystem.BuiltIn.I4, Operand.CreateCPURegister(src.Type.TypeSystem.BuiltIn.I4, GeneralPurposeRegister.ESP), src.Displacement + 12);
+			if (dest.EffectiveOffsetBase == GeneralPurposeRegister.ESP)
+				dest = Operand.CreateMemoryAddress(dest.Type.TypeSystem.BuiltIn.I4, Operand.CreateCPURegister(dest.Type.TypeSystem.BuiltIn.I4, GeneralPurposeRegister.ESP), dest.Displacement + 12);
+
+			var edi = Operand.CreateCPURegister(typeSystem.BuiltIn.I4, GeneralPurposeRegister.EDI);
+			var esi = Operand.CreateCPURegister(typeSystem.BuiltIn.I4, GeneralPurposeRegister.ESI);
+			var edx = Operand.CreateCPURegister(typeSystem.BuiltIn.I4, GeneralPurposeRegister.EDX);
+			context.SetInstruction(X86.Push, null, edi);
+			context.AppendInstruction(X86.Push, null, esi);
+			context.AppendInstruction(X86.Push, null, edx);
+			context.AppendInstruction(X86.Lea, edi, src);
+			context.AppendInstruction(X86.Lea, esi, dest);
+			for (int i = 0; i < typeSize; i += 4)
+			{
+				context.AppendInstruction(X86.Mov, edx, Operand.CreateMemoryAddress(typeSystem.BuiltIn.I4, edi, i));
+				context.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(typeSystem.BuiltIn.I4, esi, i), edx);
+			}
+			context.AppendInstruction(X86.Pop, edx);
+			context.AppendInstruction(X86.Pop, esi);
+			context.AppendInstruction(X86.Pop, edi);
+		}
+
 		/// <summary>
 		/// Visitation function for Return.
 		/// </summary>
@@ -530,7 +595,7 @@ namespace Mosa.Platform.x86.Stages
 
 				context.Remove();
 
-				callingConvention.SetReturnValue(typeSystem, context, returnOperand);
+				callingConvention.SetReturnValue(typeLayout, context, returnOperand);
 
 				context.AppendInstruction(X86.Jmp);
 				context.SetBranch(Int32.MaxValue);
@@ -630,6 +695,38 @@ namespace Mosa.Platform.x86.Stages
 				context.AppendInstruction(X86.Add, v1, v1, offsetOperand);
 				context.AppendInstruction(GetMove(mem, value), mem, value);
 			}
+		}
+
+		void IIRVisitor.CompoundStore(Context context)
+		{
+			var type = context.Operand3.Type;
+			int typeSize = typeLayout.GetTypeSize(type);
+			Debug.Assert(typeSize > 0 && typeSize % 4 == 0 && context.Operand2.IsConstant);
+
+			int offset = (int)context.Operand2.ConstantSignedInteger;
+			var src = context.Operand3;
+			var dest = context.Operand1;
+			Debug.Assert(src.IsMemoryAddress);
+
+			if (src.EffectiveOffsetBase == GeneralPurposeRegister.ESP)
+				src = Operand.CreateMemoryAddress(typeSystem.BuiltIn.I4, Operand.CreateCPURegister(typeSystem.BuiltIn.I4, GeneralPurposeRegister.ESP), src.Displacement + 12);
+
+			var edi = Operand.CreateCPURegister(typeSystem.BuiltIn.I4, GeneralPurposeRegister.EDI);
+			var esi = Operand.CreateCPURegister(typeSystem.BuiltIn.I4, GeneralPurposeRegister.ESI);
+			var edx = Operand.CreateCPURegister(typeSystem.BuiltIn.I4, GeneralPurposeRegister.EDX);
+			context.SetInstruction(X86.Push, null, edi);
+			context.AppendInstruction(X86.Push, null, esi);
+			context.AppendInstruction(X86.Push, null, edx);
+			context.AppendInstruction(X86.Lea, edi, src);
+			context.AppendInstruction(X86.Mov, esi, dest);
+			for (int i = 0; i < typeSize; i += 4)
+			{
+				context.AppendInstruction(X86.Mov, edx, Operand.CreateMemoryAddress(typeSystem.BuiltIn.I4, edi, i + offset));
+				context.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(typeSystem.BuiltIn.I4, esi, i + offset), edx);
+			}
+			context.AppendInstruction(X86.Pop, edx);
+			context.AppendInstruction(X86.Pop, esi);
+			context.AppendInstruction(X86.Pop, edi);
 		}
 
 		/// <summary>
@@ -872,7 +969,7 @@ namespace Mosa.Platform.x86.Stages
 			}
 			else
 			{
-				callingConvention.MakeCall(typeSystem, context);
+				callingConvention.MakeCall(typeLayout, context);
 			}
 		}
 

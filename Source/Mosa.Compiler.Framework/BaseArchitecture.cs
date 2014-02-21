@@ -71,6 +71,16 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		public abstract int NativeIntegerSize { get; }
 
+		/// <summary>
+		/// Gets the native alignment of the architecture in bytes.
+		/// </summary>
+		public abstract int NativeAlignment { get; }
+
+		/// <summary>
+		/// Gets the native size of architecture in bytes.
+		/// </summary>
+		public abstract int NativePointerSize { get; }
+
 		#endregion Properties
 
 		#region Methods
@@ -91,10 +101,11 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets the type memory requirements.
 		/// </summary>
+		/// <param name="typeLayout">The type layouts.</param>
 		/// <param name="type">The type.</param>
 		/// <param name="size">Receives the memory size of the type.</param>
 		/// <param name="alignment">Receives alignment requirements of the type.</param>
-		public abstract void GetTypeRequirements(MosaType type, out int size, out int alignment);
+		public abstract void GetTypeRequirements(MosaTypeLayout typeLayout, MosaType type, out int size, out int alignment);
 
 		/// <summary>
 		/// Gets the code emitter.
@@ -109,6 +120,15 @@ namespace Mosa.Compiler.Framework
 		/// <param name="destination">The destination.</param>
 		/// <param name="source">The source.</param>
 		public abstract void InsertMoveInstruction(Context context, Operand destination, Operand source);
+
+		/// <summary>
+		/// Create platform compound move.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <param name="destination">The destination.</param>
+		/// <param name="source">The source.</param>
+		/// <param name="type">The size of compound type.</param>
+		public abstract void InsertCompoundMoveInstruction(Context context, Operand destination, Operand source, int size);
 
 		/// <summary>
 		/// Create platform exchange registers.

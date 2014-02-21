@@ -90,8 +90,16 @@ namespace Mosa.Compiler.Framework
 			this.nativePointerSize = nativePointerSize;
 			this.typeSystem = typeSystem;
 
+			Debug.Assert(nativePointerSize >= 4);
+
 			ResolveLayouts();
 		}
+
+		/// <summary>
+		/// Gets the type system associated with this instance.
+		/// </summary>
+		/// <value>The type system.</value>
+		public TypeSystem TypeSystem { get { return typeSystem; } }
 
 		/// <summary>
 		/// Gets the size of the native pointer.
@@ -243,6 +251,23 @@ namespace Mosa.Compiler.Framework
 		/// Get a list of interfaces
 		/// </summary>
 		public IList<MosaType> Interfaces { get { return interfaces; } }
+
+		public bool IsCompoundType(MosaType type)
+		{
+			// i.e. whether copying of the type requires multiple move
+			int? primitiveSize = type.GetPrimitiveSize(nativePointerSize);
+			if (primitiveSize != null && primitiveSize > 8)
+				return true;
+
+			if (!type.IsUserValueType)
+				return false;
+
+			int typeSize = GetTypeSize(type);
+			if (typeSize > nativePointerSize)
+				return true;
+
+			return false;
+		}
 
 		#region Internal - Layout
 

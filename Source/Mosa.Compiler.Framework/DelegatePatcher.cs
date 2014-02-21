@@ -83,7 +83,15 @@ namespace Mosa.Compiler.Framework
 			for (int i = 0; i < methodCompiler.Parameters.Length; i++)
 			{
 				vrs[i] = methodCompiler.VirtualRegisters.Allocate(methodCompiler.Parameters[i].Type);
-				b0.AppendInstruction(IRInstruction.Move, vrs[i], methodCompiler.Parameters[i]);
+
+				if (methodCompiler.TypeLayout.IsCompoundType(methodCompiler.Parameters[i].Type))
+				{
+					b0.AppendInstruction(IRInstruction.CompoundMove, vrs[i], methodCompiler.Parameters[i]);
+				}
+				else
+				{
+					b0.AppendInstruction(IRInstruction.Move, vrs[i], methodCompiler.Parameters[i]);
+				}
 			}
 
 			Operand thisOperand = vrs[0];

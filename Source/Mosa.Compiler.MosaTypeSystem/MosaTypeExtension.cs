@@ -100,10 +100,10 @@ namespace Mosa.Compiler.MosaTypeSystem
 			}
 		}
 
-		public static int? GetPrimitiveSize(this MosaType type, int ptrSize)
+		public static int? GetPrimitiveSize(this MosaType type, int nativeSize)
 		{
 			if (type.IsPointer || type.IsN)
-				return ptrSize;
+				return nativeSize;
 			else if (type.IsUI1 || type.IsBoolean)
 				return 1;
 			else if (type.IsUI2 || type.IsChar)

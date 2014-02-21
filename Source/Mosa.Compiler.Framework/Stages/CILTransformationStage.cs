@@ -98,6 +98,10 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				loadInstruction = IRInstruction.LoadZeroExtended;
 			}
+			else if (typeLayout.IsCompoundType(type))
+			{
+				loadInstruction = IRInstruction.CompoundLoad;
+			}
 
 			context.SetInstruction(loadInstruction, destination, source, Operand.CreateConstantSignedInt(typeSystem, 0));
 			context.MosaType = type;
@@ -205,7 +209,14 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			// This is actually stind.* and stobj - the opcodes have the same meanings
 			MosaType type = context.MosaType;
-			context.SetInstruction(IRInstruction.Store, null, context.Operand1, Operand.CreateConstantSignedInt(methodCompiler.TypeSystem, 0), context.Operand2);
+			if (typeLayout.IsCompoundType(type))
+			{
+				context.SetInstruction(IRInstruction.CompoundStore, null, context.Operand1, Operand.CreateConstantSignedInt(methodCompiler.TypeSystem, 0), context.Operand2);
+			}
+			else
+			{
+				context.SetInstruction(IRInstruction.Store, null, context.Operand1, Operand.CreateConstantSignedInt(methodCompiler.TypeSystem, 0), context.Operand2);
+			}
 			context.MosaType = type;
 		}
 
@@ -588,8 +599,8 @@ namespace Mosa.Compiler.Framework.Stages
 			context.SetOperand(1, value);
 			if (vmCall == VmCall.Unbox)
 			{
-				Operand adr = methodCompiler.CreateVirtualRegister(type);
-				context.InsertBefore().SetInstruction(IRInstruction.AddressOf, adr, value);
+				Operand adr = methodCompiler.CreateVirtualRegister(type.ToManagedPointer());
+				context.InsertBefore().SetInstruction(IRInstruction.AddressOf, adr, methodCompiler.StackLayout.AddStackLocal(type));
 
 				context.SetOperand(2, adr);
 				context.SetOperand(3, Operand.CreateConstantUnsignedInt(typeSystem, (uint)typeSize));
@@ -969,7 +980,7 @@ namespace Mosa.Compiler.Framework.Stages
 		private Operand CalculateArrayElementOffset(Context context, MosaType arrayType, Operand arrayIndexOperand)
 		{
 			int elementSizeInBytes = 0, alignment = 0;
-			architecture.GetTypeRequirements(arrayType.ElementType, out elementSizeInBytes, out alignment);
+			architecture.GetTypeRequirements(typeLayout, arrayType.ElementType, out elementSizeInBytes, out alignment);
 
 			//
 			// The sequence we're emitting is:

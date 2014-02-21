@@ -62,7 +62,7 @@ namespace Mosa.Compiler.Framework.Platform
 				return operand;
 
 			int size, alignment;
-			architecture.GetTypeRequirements(operand.Type, out size, out alignment);
+			architecture.GetTypeRequirements(typeLayout, operand.Type, out size, out alignment);
 
 			string name = String.Format("C_{0}", Guid.NewGuid());
 

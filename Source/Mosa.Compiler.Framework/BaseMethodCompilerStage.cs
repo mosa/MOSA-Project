@@ -99,7 +99,8 @@ namespace Mosa.Compiler.Framework
 			typeLayout = compiler.TypeLayout;
 			callingConvention = architecture.CallingConvention;
 
-			architecture.GetTypeRequirements(typeSystem.BuiltIn.Pointer, out nativePointerSize, out nativePointerAlignment);
+			nativePointerSize = architecture.NativePointerSize;
+			nativePointerAlignment = architecture.NativeAlignment;
 		}
 
 		#endregion IMethodCompilerStage members
