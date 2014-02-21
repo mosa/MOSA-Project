@@ -17,6 +17,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 			using (var ptrType = type.TypeSystem.Controller.MutateType(result))
 			{
 				ptrType.Module = type.Module;
+				ptrType.DeclaringType = type;
 				ptrType.Namespace = type.Namespace;
 				ptrType.Name = type.Name;
 
@@ -33,6 +34,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 			using (var ptrType = type.TypeSystem.Controller.MutateType(result))
 			{
 				ptrType.Module = type.Module;
+				ptrType.DeclaringType = type;
 				ptrType.Namespace = type.Namespace;
 				ptrType.Name = type.Name;
 

@@ -42,7 +42,7 @@ namespace Mosa.Compiler.Framework.CIL
 				case OpCode.Ldelem_r4: elementType = MosaTypeCode.R4; break;
 				case OpCode.Ldelem_r8: elementType = MosaTypeCode.R8; break;
 				case OpCode.Ldelem_ref: elementType = MosaTypeCode.Object; break;
-				default: throw new NotImplementedException();
+				default: elementType = null; break;
 			}
 		}
 
