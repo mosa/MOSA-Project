@@ -7,10 +7,10 @@
  *  Ki (kiootic) <kiootic@gmail.com>
  */
 
-using System;
-using System.Collections.Generic;
 using dnlib.DotNet;
 using Mosa.Compiler.Common;
+using System;
+using System.Collections.Generic;
 
 namespace Mosa.Compiler.MosaTypeSystem.Metadata
 {
@@ -37,7 +37,8 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 
 		public MosaModule CorLib { get; private set; }
 
-		CLRMetadata metadata;
+		private CLRMetadata metadata;
+
 		public MetadataLoader(CLRMetadata metadata)
 		{
 			this.metadata = metadata;
@@ -68,7 +69,7 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 			return mosaModule;
 		}
 
-		void Load(MosaModule module, TypeDef typeDef)
+		private void Load(MosaModule module, TypeDef typeDef)
 		{
 			TypeSig typeSig = typeDef.ToTypeSig();
 			MosaType mosaType = metadata.Controller.CreateType();
@@ -127,7 +128,7 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 			LoadedUnits.Add(mosaType);
 		}
 
-		void LoadField(MosaType declType, MosaField.Mutator field, FieldDef fieldDef)
+		private void LoadField(MosaType declType, MosaField.Mutator field, FieldDef fieldDef)
 		{
 			FieldSig fieldSig = fieldDef.FieldSig;
 			field.Module = declType.Module;
@@ -143,7 +144,7 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 			field.Data = fieldDef.InitialValue;
 		}
 
-		void LoadMethod(MosaType declType, MosaMethod.Mutator method, MethodDef methodDef)
+		private void LoadMethod(MosaType declType, MosaMethod.Mutator method, MethodDef methodDef)
 		{
 			MethodSig methodSig = methodDef.MethodSig;
 			method.Module = declType.Module;
@@ -188,7 +189,7 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 			throw new AssemblyLoadException();
 		}
 
-		MosaType Load(TypeSig typeSig)
+		private MosaType Load(TypeSig typeSig)
 		{
 			if (typeSig is LeafSig)
 			{
@@ -264,14 +265,13 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 
 					default:
 						throw new AssemblyLoadException();
-
 				}
 				metadata.Controller.AddType(result);
 				return result;
 			}
 		}
 
-		MosaType LoadGenericParam(GenericSig sig)
+		private MosaType LoadGenericParam(GenericSig sig)
 		{
 			MosaType[] pars = sig.IsTypeVar ? var : mvar;
 			MosaType type = pars[sig.Number];
@@ -294,7 +294,7 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 			return type;
 		}
 
-		MosaType LoadGenericTypeInstanceSig(GenericInstSig typeSig)
+		private MosaType LoadGenericTypeInstanceSig(GenericInstSig typeSig)
 		{
 			MosaType origin = GetType(typeSig.GenericType);
 			MosaType result = metadata.Controller.CreateType(origin);
@@ -404,7 +404,6 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 				var desc = mosaMethod.GetUnderlyingObject<UnitDesc<MethodDef, MethodSig>>();
 				_mosaMethod.UnderlyingObject = desc = desc.Clone(resolver.Resolve(method.MethodSig));
 				_mosaMethod.DeclaringType = declType;
-
 
 				_mosaMethod.HasOpenGenericParams = hasOpening;
 			}

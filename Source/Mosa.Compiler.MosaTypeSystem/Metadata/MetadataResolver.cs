@@ -7,23 +7,24 @@
  *  Ki (kiootic) <kiootic@gmail.com>
  */
 
-using System.Collections.Generic;
-using System.Diagnostics;
 using dnlib.DotNet;
 using dnlib.DotNet.Emit;
 using Mosa.Compiler.Common;
+using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Mosa.Compiler.MosaTypeSystem.Metadata
 {
 	internal class MetadataResolver
 	{
-		CLRMetadata metadata;
+		private CLRMetadata metadata;
+
 		public MetadataResolver(CLRMetadata metadata)
 		{
 			this.metadata = metadata;
 		}
 
-		Queue<MosaUnit> resolveQueue = new Queue<MosaUnit>();
+		private Queue<MosaUnit> resolveQueue = new Queue<MosaUnit>();
 
 		public void EnqueueForResolve(MosaUnit unit)
 		{
@@ -78,7 +79,7 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 			}
 		}
 
-		void ResolveCustomAttributes(MosaUnit.MutatorBase unit, IHasCustomAttribute obj)
+		private void ResolveCustomAttributes(MosaUnit.MutatorBase unit, IHasCustomAttribute obj)
 		{
 			// TODO: More detail parsing
 			foreach (var attr in obj.CustomAttributes)
@@ -110,7 +111,7 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 			}
 		}
 
-		void ResolveType(MosaType type)
+		private void ResolveType(MosaType type)
 		{
 			GenericArgumentResolver resolver = new GenericArgumentResolver();
 
@@ -134,7 +135,7 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 			}
 		}
 
-		void ResolveField(MosaField field)
+		private void ResolveField(MosaField field)
 		{
 			GenericArgumentResolver resolver = new GenericArgumentResolver();
 
@@ -149,11 +150,11 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 					field.DeclaringType.HasOpenGenericParams ||
 					field.FieldType.GetTypeSig().HasOpenGenericParameter();
 
-				ResolveCustomAttributes(mosaField, field.GetUnderlyingObject<UnitDesc<FieldDef,FieldSig>>().Definition);
+				ResolveCustomAttributes(mosaField, field.GetUnderlyingObject<UnitDesc<FieldDef, FieldSig>>().Definition);
 			}
 		}
 
-		void ResolveMethod(MosaMethod method)
+		private void ResolveMethod(MosaMethod method)
 		{
 			GenericArgumentResolver resolver = new GenericArgumentResolver();
 			bool hasOpening = method.DeclaringType.HasOpenGenericParams;
@@ -198,7 +199,7 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 			}
 		}
 
-		void ResolveBody(MethodDef methodDef, MosaMethod.Mutator method, CilBody body, GenericArgumentResolver resolver)
+		private void ResolveBody(MethodDef methodDef, MosaMethod.Mutator method, CilBody body, GenericArgumentResolver resolver)
 		{
 			method.LocalVariables.Clear();
 			foreach (var variable in body.Variables)
@@ -230,7 +231,7 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 			}
 		}
 
-		MosaInstruction ResolveInstruction(MethodDef methodDef, CilBody body, int index, GenericArgumentResolver resolver)
+		private MosaInstruction ResolveInstruction(MethodDef methodDef, CilBody body, int index, GenericArgumentResolver resolver)
 		{
 			Instruction instruction = body.Instructions[index];
 			int? prev = index == 0 ? null : (int?)body.Instructions[index - 1].Offset;
@@ -290,7 +291,7 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 			return new MosaInstruction((int)instruction.Offset, code, operand, prev, next);
 		}
 
-		MosaField ResolveFieldOperand(IField operand, GenericArgumentResolver resolver)
+		private MosaField ResolveFieldOperand(IField operand, GenericArgumentResolver resolver)
 		{
 			TypeSig declType;
 			FieldDef fieldDef = operand as FieldDef;
@@ -317,7 +318,7 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 			throw new AssemblyLoadException();
 		}
 
-		MosaMethod ResolveMethodOperand(IMethod operand, GenericArgumentResolver resolver)
+		private MosaMethod ResolveMethodOperand(IMethod operand, GenericArgumentResolver resolver)
 		{
 			if (operand is MethodSpec)
 				return metadata.Loader.LoadGenericMethodInstance((MethodSpec)operand, resolver);
@@ -348,7 +349,7 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 			throw new AssemblyLoadException();
 		}
 
-		MosaType ResolveTypeOperand(ITypeDefOrRef operand, GenericArgumentResolver resolver)
+		private MosaType ResolveTypeOperand(ITypeDefOrRef operand, GenericArgumentResolver resolver)
 		{
 			return metadata.Loader.GetType(resolver.Resolve(operand.ToTypeSig()));
 		}

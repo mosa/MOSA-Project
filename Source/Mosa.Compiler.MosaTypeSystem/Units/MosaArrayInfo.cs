@@ -7,11 +7,11 @@
  *  Ki (kiootic) <kiootic@gmail.com>
  */
 
+using Mosa.Compiler.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Mosa.Compiler.Common;
 
 namespace Mosa.Compiler.MosaTypeSystem
 {
@@ -20,7 +20,9 @@ namespace Mosa.Compiler.MosaTypeSystem
 		public static readonly MosaArrayInfo Vector = new MosaArrayInfo(null, 0, null);
 
 		public IList<int> LowerBounds { get; private set; }
+
 		public uint Rank { get; private set; }
+
 		public IList<uint> Sizes { get; private set; }
 
 		public MosaArrayInfo(IList<int> lowerBounds, uint rank, IList<uint> sizes)
@@ -42,7 +44,8 @@ namespace Mosa.Compiler.MosaTypeSystem
 				   this.Sizes.SequenceEqual(info.Sizes);
 		}
 
-		string sig;
+		private string sig;
+
 		public override string ToString()
 		{
 			if (this == Vector)
