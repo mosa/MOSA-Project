@@ -32,7 +32,6 @@ namespace Mosa.Test.Collection
 			p.b = 7;
 			p.c = 21;
 			p.d = 171;
-
 			return p.a == 1 && p.b == 7 & p.c == 21 && p.d == 171;
 		}
 
@@ -157,10 +156,10 @@ namespace Mosa.Test.Collection
 		public static bool TestValueTypePassByRef()
 		{
 			valuetype p = new valuetype();
-			p.a = 3;
-			p.b = 11;
-			p.c = 41;
-			p.d = 83;
+			p.a = 1;
+			p.b = 7;
+			p.c = 21;
+			p.d = 171;
 
 			return ByRefOk(ref p);
 		}
@@ -168,12 +167,12 @@ namespace Mosa.Test.Collection
 		public static bool TestValueTypePassByRefModify()
 		{
 			valuetype p = new valuetype();
-			p.a = 1;
-			p.b = 7;
-			p.c = 21;
-			p.d = 171;
+			p.a = 3;
+			p.b = 11;
+			p.c = 41;
+			p.d = 83;
 
-			return ByRefModify(ref p) && p.Check(3, 11, 41, 83);
+			return ByRefModify(ref p) && p.Check(1, 7, 21, 171);
 		}
 
 		public static bool TestValueTypeArray()
@@ -193,13 +192,13 @@ namespace Mosa.Test.Collection
 		{
 			valuetype[] l = new valuetype[2];
 			valuetype p = new valuetype();
-			p.a = 1;
-			p.b = 7;
-			p.c = 21;
-			p.d = 171;
+			p.a = 3;
+			p.b = 11;
+			p.c = 41;
+			p.d = 83;
 			l[1] = p;
 
-			return ByRefModify(ref p) && p.Check(3, 11, 41, 83);
+			return ByRefModify(ref l[1]) && l[1].Check(1, 7, 21, 171);
 		}
 	}
 }

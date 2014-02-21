@@ -803,20 +803,23 @@ namespace Mosa.Compiler.Framework.Stages
 			Operand result = methodCompiler.CreateVirtualRegister(field.FieldType);
 
 			BaseInstruction loadInstruction = IRInstruction.Load;
+			BaseInstruction moveInstruction = IRInstruction.Move;
 			if (MustSignExtendOnLoad(field.FieldType))
 			{
 				loadInstruction = IRInstruction.LoadSignExtended;
+				moveInstruction = IRInstruction.SignExtendedMove;
 			}
 			else if (MustZeroExtendOnLoad(field.FieldType))
 			{
 				loadInstruction = IRInstruction.LoadZeroExtended;
+				moveInstruction = IRInstruction.ZeroExtendedMove;
 			}
 
 			Debug.Assert(offsetOperand != null);
 
 			context.SetInstruction(loadInstruction, result, objectOperand, offsetOperand);
 			context.MosaType = field.FieldType;
-			context.AppendInstruction(IRInstruction.Move, resultOperand, result);
+			context.AppendInstruction(moveInstruction, resultOperand, result);
 		}
 
 		/// <summary>
