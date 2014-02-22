@@ -200,7 +200,7 @@ namespace Mosa.Compiler.Framework.Platform
 		/// <summary>
 		/// Pushes the specified instructions.
 		/// </summary>
-		/// <param name="typeSystem">The type system.</param>
+		/// <param name="typeLayout">The type layout.</param>
 		/// <param name="context">The context.</param>
 		/// <param name="op">The op.</param>
 		/// <param name="stackSize">Size of the stack.</param>

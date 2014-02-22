@@ -127,7 +127,7 @@ namespace Mosa.Compiler.Framework
 		/// <param name="context">The context.</param>
 		/// <param name="destination">The destination.</param>
 		/// <param name="source">The source.</param>
-		/// <param name="type">The size of compound type.</param>
+		/// <param name="size">The size.</param>
 		public abstract void InsertCompoundMoveInstruction(Context context, Operand destination, Operand source, int size);
 
 		/// <summary>
