@@ -389,6 +389,18 @@ namespace Mosa.Platform.ARMv6.Stages
 		{
 		}
 
+		void IIRVisitor.CompoundLoad(Context context)
+		{
+		}
+
+		void IIRVisitor.CompoundMove(Context context)
+		{
+		}
+
+		void IIRVisitor.CompoundStore(Context context)
+		{
+		}
+
 		#endregion IIRVisitor
 
 		#region IIRVisitor - Unused

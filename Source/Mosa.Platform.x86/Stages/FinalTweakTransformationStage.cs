@@ -33,8 +33,18 @@ namespace Mosa.Platform.x86.Stages
 				Operand dest = context.Result;
 
 				context.ReplaceInstructionOnly(X86.Mov);
-				context.AppendInstruction(X86.Add, dest, dest, Operand.CreateConstantUnsignedInt(methodCompiler.TypeSystem, (uint)0xFFFFFF00));
-				context.AppendInstruction(X86.Xor, dest, dest, Operand.CreateConstantUnsignedInt(methodCompiler.TypeSystem, (uint)0xFFFFFF00));
+				if (context.Operand1.IsShort || context.Operand1.IsChar)
+				{
+					context.AppendInstruction(X86.And, dest, dest, Operand.CreateConstantUnsignedInt(methodCompiler.TypeSystem, (uint)0x0000ffff));
+					context.AppendInstruction(X86.Xor, dest, dest, Operand.CreateConstantUnsignedInt(methodCompiler.TypeSystem, (uint)0x00010000));
+					context.AppendInstruction(X86.Sub, dest, dest, Operand.CreateConstantUnsignedInt(methodCompiler.TypeSystem, (uint)0x00010000));
+				}
+				else if (context.Operand1.IsByte || context.Operand1.IsBoolean)
+				{
+					context.AppendInstruction(X86.And, dest, dest, Operand.CreateConstantUnsignedInt(methodCompiler.TypeSystem, (uint)0x000000ff));
+					context.AppendInstruction(X86.Xor, dest, dest, Operand.CreateConstantUnsignedInt(methodCompiler.TypeSystem, (uint)0x00000100));
+					context.AppendInstruction(X86.Sub, dest, dest, Operand.CreateConstantUnsignedInt(methodCompiler.TypeSystem, (uint)0x00000100));
+				}
 			}
 		}
 
@@ -51,7 +61,14 @@ namespace Mosa.Platform.x86.Stages
 				Operand dest = context.Result;
 
 				context.ReplaceInstructionOnly(X86.Mov);
-				context.AppendInstruction(X86.And, dest, dest, Operand.CreateConstantUnsignedInt(typeSystem, (uint)0xFF));
+				if (context.Operand1.IsShort || context.Operand1.IsChar)
+				{
+					context.AppendInstruction(X86.And, dest, dest, Operand.CreateConstantUnsignedInt(typeSystem, (uint)0xffff));
+				}
+				else if (context.Operand1.IsByte || context.Operand1.IsBoolean)
+				{
+					context.AppendInstruction(X86.And, dest, dest, Operand.CreateConstantUnsignedInt(typeSystem, (uint)0xff));
+				}
 			}
 		}
 
@@ -62,7 +79,8 @@ namespace Mosa.Platform.x86.Stages
 		void IX86Visitor.Mov(Context context)
 		{
 			// Mov can not use ESI or EDI registers with 8 or 16 bit memory
-			if (context.Operand1.IsCPURegister && context.Result.IsMemoryAddress && !(context.Result.IsInt || context.Result.IsPointer || !context.Result.IsValueType) && (context.Operand1.Register == GeneralPurposeRegister.ESI || context.Operand1.Register == GeneralPurposeRegister.EDI))
+			// Mov also can not use ESI or EDI registers with 8 or 16 bit register
+			if (context.Operand1.IsCPURegister && (context.Result.IsMemoryAddress || context.Result.IsCPURegister) && !(context.Result.IsInt || context.Result.IsPointer || context.Result.IsValueType) && (context.Operand1.Register == GeneralPurposeRegister.ESI || context.Operand1.Register == GeneralPurposeRegister.EDI))
 			{
 				Operand source = context.Operand1;
 				Operand dest = context.Result;
@@ -72,6 +90,27 @@ namespace Mosa.Platform.x86.Stages
 				context.SetInstruction2(X86.Xchg, EAX, source, source, EAX);
 				context.AppendInstruction(X86.Mov, dest, EAX);
 				context.AppendInstruction2(X86.Xchg, source, EAX, EAX, source);
+			}
+			// Clear the register first if a 8 or 16 bit value moved into it
+			else if (context.Operand1.Register != context.Result.Register &&
+					 context.Result.Type.IsValueType && context.Operand1.Type.IsValueType)
+			{
+				int operandSize;
+				if (context.Operand1.IsMemoryAddress && context.Operand1.Type.ElementType != null)
+					operandSize = typeLayout.GetTypeSize(context.Operand1.Type.ElementType);
+				else
+					operandSize = typeLayout.GetTypeSize(context.Operand1.Type);
+
+				if (context.Result.IsCPURegister && context.Operand1.IsRegister && operandSize < 4)
+				{
+					int resultSize = typeLayout.GetTypeSize(context.Result.Type);
+					if (operandSize != 0 && resultSize != 0 && resultSize != operandSize)
+					{
+						Operand register = Operand.CreateCPURegister(typeSystem.BuiltIn.I4, context.Result.Register);
+
+						context.InsertBefore().SetInstruction(X86.Xor, register, null, register, register);
+					}
+				}
 			}
 		}
 

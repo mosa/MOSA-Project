@@ -54,6 +54,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 				// See Partition II 14.2 Arrays
 
 				arrayType.Module = type.Module;
+				arrayType.DeclaringType = type.DeclaringType;
 				arrayType.Namespace = type.Namespace;
 				arrayType.Name = type.Name;
 
@@ -100,10 +101,10 @@ namespace Mosa.Compiler.MosaTypeSystem
 			}
 		}
 
-		public static int? GetPrimitiveSize(this MosaType type, int ptrSize)
+		public static int? GetPrimitiveSize(this MosaType type, int nativeSize)
 		{
 			if (type.IsPointer || type.IsN)
-				return ptrSize;
+				return nativeSize;
 			else if (type.IsUI1 || type.IsBoolean)
 				return 1;
 			else if (type.IsUI2 || type.IsChar)

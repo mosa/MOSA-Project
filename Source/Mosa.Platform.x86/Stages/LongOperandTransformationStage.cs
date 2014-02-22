@@ -1249,6 +1249,10 @@ namespace Mosa.Platform.x86.Stages
 			}
 		}
 
+		void IIRVisitor.CompoundLoad(Context context)
+		{
+		}
+
 		/// <summary>
 		/// Visitation function for Load Zero Extended.
 		/// </summary>
@@ -1330,6 +1334,10 @@ namespace Mosa.Platform.x86.Stages
 			}
 		}
 
+		void IIRVisitor.CompoundMove(Context context)
+		{
+		}
+
 		/// <summary>
 		/// Visitation function for ShiftLeftInstruction.
 		/// </summary>
@@ -1376,6 +1384,10 @@ namespace Mosa.Platform.x86.Stages
 			{
 				ExpandStore(context);
 			}
+		}
+
+		void IIRVisitor.CompoundStore(Context context)
+		{
 		}
 
 		/// <summary>

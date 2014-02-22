@@ -104,6 +104,24 @@ namespace Mosa.Platform.x86
 		}
 
 		/// <summary>
+		/// Gets the native alignment of the architecture in bytes.
+		/// </summary>
+		/// <value>This property always returns 4.</value>
+		public override int NativeAlignment
+		{
+			get { return 4; }
+		}
+
+		/// <summary>
+		/// Gets the native size of architecture in bytes.
+		/// </summary>
+		/// <value>This property always returns 4.</value>
+		public override int NativePointerSize
+		{
+			get { return 4; }
+		}
+
+		/// <summary>
 		/// Retrieves the register set of the x86 platform.
 		/// </summary>
 		public override Register[] RegisterSet
@@ -226,36 +244,16 @@ namespace Mosa.Platform.x86
 		/// <summary>
 		/// Gets the type memory requirements.
 		/// </summary>
+		/// <param name="typeLayout">The type layouts.</param>
 		/// <param name="type">The type.</param>
 		/// <param name="size">Receives the memory size of the type.</param>
 		/// <param name="alignment">Receives alignment requirements of the type.</param>
-		public override void GetTypeRequirements(MosaType type, out int size, out int alignment)
+		public override void GetTypeRequirements(MosaTypeLayout typeLayout, MosaType type, out int size, out int alignment)
 		{
-			if (type.IsUI8)
-			{
-				size = 8;
-				alignment = 4;
-			}
-			else if (type.IsR8)
-			{
-				size = 8;
-				alignment = 8;
-			}
-			else if (type.IsUI2 || type.IsChar)
-			{
-				size = 2;
-				alignment = 4;
-			}
-			else if (type.IsUI1 || type.IsBoolean)
-			{
-				size = 1;
-				alignment = 4;
-			}
-			else
-			{
-				size = 4;
-				alignment = 4;
-			}
+			alignment = type.IsR8 ? 8 : 4;
+
+			size = type.IsValueType ? typeLayout.GetTypeSize(type) : 4;
+			size += (alignment - (size % alignment)) % alignment;
 		}
 
 		/// <summary>
@@ -276,6 +274,45 @@ namespace Mosa.Platform.x86
 		public override void InsertMoveInstruction(Context context, Operand destination, Operand source)
 		{
 			context.AppendInstruction(BaseTransformationStage.GetMove(destination, source), destination, source);
+		}
+
+		/// <summary>
+		/// Create platform compound move.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <param name="destination">The destination.</param>
+		/// <param name="source">The source.</param>
+		/// <param name="size">The size.</param>
+		public override void InsertCompoundMoveInstruction(Context context, Operand destination, Operand source, int size)
+		{
+			var type = destination.Type;
+			Debug.Assert(size > 0 && size % 4 == 0);
+
+			var src = source;
+			var dest = destination;
+			Debug.Assert(src.IsMemoryAddress && dest.IsMemoryAddress);
+
+			if (src.EffectiveOffsetBase == GeneralPurposeRegister.ESP)
+				src = Operand.CreateMemoryAddress(src.Type.TypeSystem.BuiltIn.I4, Operand.CreateCPURegister(src.Type.TypeSystem.BuiltIn.I4, GeneralPurposeRegister.ESP), src.Displacement + 12);
+			if (dest.EffectiveOffsetBase == GeneralPurposeRegister.ESP)
+				dest = Operand.CreateMemoryAddress(dest.Type.TypeSystem.BuiltIn.I4, Operand.CreateCPURegister(dest.Type.TypeSystem.BuiltIn.I4, GeneralPurposeRegister.ESP), dest.Displacement + 12);
+
+			var edi = Operand.CreateCPURegister(destination.Type.TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EDI);
+			var esi = Operand.CreateCPURegister(destination.Type.TypeSystem.BuiltIn.I4, GeneralPurposeRegister.ESI);
+			var edx = Operand.CreateCPURegister(destination.Type.TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EDX);
+			context.AppendInstruction(X86.Push, null, edi);
+			context.AppendInstruction(X86.Push, null, esi);
+			context.AppendInstruction(X86.Push, null, edx);
+			context.AppendInstruction(X86.Lea, edi, src);
+			context.AppendInstruction(X86.Lea, esi, dest);
+			for (int i = 0; i < size; i += 4)
+			{
+				context.AppendInstruction(X86.Mov, edx, Operand.CreateMemoryAddress(src.Type.TypeSystem.BuiltIn.I4, edi, i));
+				context.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(dest.Type.TypeSystem.BuiltIn.I4, esi, i), edx);
+			}
+			context.AppendInstruction(X86.Pop, edx);
+			context.AppendInstruction(X86.Pop, esi);
+			context.AppendInstruction(X86.Pop, edi);
 		}
 
 		/// <summary>

@@ -38,27 +38,7 @@ namespace Mosa.Compiler.Framework.CIL
 
 			var type = (MosaType)decoder.Instruction.Operand;
 
-			Operand result;
-
-			switch (type.FullName)
-			{
-				case "System.Boolean": result = decoder.Compiler.CreateVirtualRegister(decoder.TypeSystem.BuiltIn.Boolean); break;
-				case "System.SByte": result = decoder.Compiler.CreateVirtualRegister(decoder.TypeSystem.BuiltIn.I1); break;
-				case "System.Int16": result = decoder.Compiler.CreateVirtualRegister(decoder.TypeSystem.BuiltIn.I2); break;
-				case "System.Int32": result = decoder.Compiler.CreateVirtualRegister(decoder.TypeSystem.BuiltIn.I4); break;
-				case "System.Int64": result = decoder.Compiler.CreateVirtualRegister(decoder.TypeSystem.BuiltIn.I8); break;
-				case "System.Byte": result = decoder.Compiler.CreateVirtualRegister(decoder.TypeSystem.BuiltIn.U1); break;
-				case "System.UInt16": result = decoder.Compiler.CreateVirtualRegister(decoder.TypeSystem.BuiltIn.U2); break;
-				case "System.UInt32": result = decoder.Compiler.CreateVirtualRegister(decoder.TypeSystem.BuiltIn.U4); break;
-				case "System.UInt64": result = decoder.Compiler.CreateVirtualRegister(decoder.TypeSystem.BuiltIn.U8); break;
-				case "System.Single": result = decoder.Compiler.CreateVirtualRegister(decoder.TypeSystem.BuiltIn.R4); break;
-				case "System.Double": result = decoder.Compiler.CreateVirtualRegister(decoder.TypeSystem.BuiltIn.R8); break;
-				case "System.Char": result = decoder.Compiler.CreateVirtualRegister(decoder.TypeSystem.BuiltIn.Char); break;
-				default: throw new System.InvalidOperationException();
-			}
-
-			// treat this like a load
-			result = LoadInstruction.CreateResultOperand(decoder, result.Type);
+			Operand result = decoder.Compiler.CreateVirtualRegister(type);
 
 			ctx.Result = result;
 			ctx.MosaType = type;

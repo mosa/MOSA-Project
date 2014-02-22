@@ -143,7 +143,9 @@ namespace Mosa.Platform.Internal.x86
 
 			while (count > 0)
 			{
-				*(_dest++) = *(_src++);
+				*_dest = *_src;
+				_dest++;
+				_src++;
 				count--;
 			}
 
@@ -151,7 +153,9 @@ namespace Mosa.Platform.Internal.x86
 			byte* __src = (byte*)_src;
 			while (c > 0)
 			{
-				*(__dest++) = *(__src++);
+				*__dest = *__src;
+				__dest++;
+				__src++;
 				c--;
 			}
 		}
