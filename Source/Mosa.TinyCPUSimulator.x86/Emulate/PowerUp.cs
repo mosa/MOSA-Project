@@ -12,7 +12,7 @@ namespace Mosa.TinyCPUSimulator.x86.Emulate
 	public class PowerUp : BaseSimDevice
 	{
 		public readonly uint VectorReset = 0xFFFFFFF0;
-		public readonly string VectorCall = "@Linker.Default.StartUp()";
+		public readonly string VectorCall = "System.Void Default::StartUp()";
 
 		public PowerUp(SimCPU simCPU)
 			: base(simCPU)
