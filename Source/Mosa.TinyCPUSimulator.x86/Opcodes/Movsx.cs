@@ -7,6 +7,8 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using System;
+
 namespace Mosa.TinyCPUSimulator.x86.Opcodes
 {
 	public class Movsx : BaseX86Opcode
@@ -39,7 +41,7 @@ namespace Mosa.TinyCPUSimulator.x86.Opcodes
 				}
 			}
 
-			throw new System.NotImplementedException();
+			throw new NotImplementedException();
 		}
 	}
 }

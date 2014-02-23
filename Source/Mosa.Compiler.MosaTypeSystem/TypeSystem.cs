@@ -8,8 +8,8 @@
  *  Ki (kiootic) <kiootic@gmail.com>
  */
 
-using Mosa.Compiler.Common;
 using System.Collections.Generic;
+using Mosa.Compiler.Common;
 
 namespace Mosa.Compiler.MosaTypeSystem
 {
@@ -20,8 +20,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 	{
 		public BuiltInTypes BuiltIn { get; private set; }
 
-		private MosaModule corLib;
-
+		MosaModule corLib;
 		public MosaModule CorLib
 		{
 			get { return corLib; }
@@ -56,8 +55,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		internal ITypeSystemController Controller { get; private set; }
 
-		private IMetadata metadata;
-
+		IMetadata metadata;
 		private TypeSystem(IMetadata metadata)
 		{
 			this.metadata = metadata;
@@ -100,8 +98,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 				throw new AssemblyLoadException();
 		}
 
-		private Dictionary<Tuple<MosaModule, string, string>, MosaType> typeLookup = new Dictionary<Tuple<MosaModule, string, string>, MosaType>();
-
+		Dictionary<Tuple<MosaModule, string, string>, MosaType> typeLookup = new Dictionary<Tuple<MosaModule, string, string>, MosaType>();
 		public MosaType GetTypeByName(string @namespace, string name)
 		{
 			foreach (var module in Modules)
@@ -163,11 +160,10 @@ namespace Mosa.Compiler.MosaTypeSystem
 			}
 		}
 
-		private class TypeSystemController : ITypeSystemController
+		class TypeSystemController : ITypeSystemController
 		{
-			private TypeSystem typeSystem;
-			private uint id = 1;
-
+			TypeSystem typeSystem;
+			uint id = 1;
 			public TypeSystemController(TypeSystem typeSystem)
 			{
 				this.typeSystem = typeSystem;

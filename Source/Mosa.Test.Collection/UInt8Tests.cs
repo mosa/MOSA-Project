@@ -108,11 +108,11 @@ namespace Mosa.Test.Collection
 			return arr.Length == length;
 		}
 
-		public static bool Ldelem(int index, byte value)
+		public static byte Ldelem(int index, byte value)
 		{
 			byte[] arr = new byte[index + 1];
 			arr[index] = value;
-			return value == arr[index];
+			return arr[index];
 		}
 
 		public static bool Stelem(int index, byte value)
@@ -122,11 +122,11 @@ namespace Mosa.Test.Collection
 			return true;
 		}
 
-		public static bool Ldelema(int index, byte value)
+		public static byte Ldelema(int index, byte value)
 		{
 			byte[] arr = new byte[index + 1];
 			SetValueInRefValue(ref arr[index], value);
-			return arr[index] == value;
+			return arr[index];
 		}
 
 		private static void SetValueInRefValue(ref byte destination, byte value)

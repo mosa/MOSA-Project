@@ -45,6 +45,7 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="ArrayLayoutTests.cs" />
     <Compile Include="CharTests.cs" />
     <Compile Include="ComparisonTests.cs">
       <AutoGen>True</AutoGen>

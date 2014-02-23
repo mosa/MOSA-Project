@@ -49,6 +49,23 @@ namespace Mosa.TinyCPUSimulator.Adaptor
 			{
 				SimAdapter.SimCPU.SetSymbol(symbol.Name, (ulong)symbol.VirtualAddress, (ulong)symbol.Length);
 			}
+
+			foreach (var section in Sections)
+			{
+				ulong address = (ulong)section.VirtualAddress;
+
+				var mem = (section as SimLinkerSection).Memory;
+
+				foreach (byte b in mem)
+				{
+					if (b != 0)
+					{
+						SimAdapter.SimCPU.DirectWrite8(address, b);
+					}
+
+					address++;
+				}
+			}
 		}
 
 		#endregion Construction

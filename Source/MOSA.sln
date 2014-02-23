@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.21005.1
+VisualStudioVersion = 12.0.30110.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Platforms", "Platforms", "{AB88960E-B233-475B-96E4-8C10EEF8622C}"
 EndProject
@@ -153,6 +153,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Test.Application", "Mosa.Test.Application\Mosa.Test.Application.csproj", "{E3578FBB-CE46-4DD0-9A9E-AA84797DAEC8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Utility.GUI.Common", "Mosa.Utility.GUI.Common\Mosa.Utility.GUI.Common.csproj", "{5A813793-78E2-413C-AA05-FCDD12B7DB04}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Platform.Internal.x86.xUnit", "Mosa.Platform.Internal.x86.xUnit\Mosa.Platform.Internal.x86.xUnit.csproj", "{C28F587E-81AF-475A-AC2C-A7E46BB4C270}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -804,6 +806,16 @@ Global
 		{5A813793-78E2-413C-AA05-FCDD12B7DB04}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{5A813793-78E2-413C-AA05-FCDD12B7DB04}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{5A813793-78E2-413C-AA05-FCDD12B7DB04}.Release|x86.ActiveCfg = Release|Any CPU
+		{C28F587E-81AF-475A-AC2C-A7E46BB4C270}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C28F587E-81AF-475A-AC2C-A7E46BB4C270}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C28F587E-81AF-475A-AC2C-A7E46BB4C270}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{C28F587E-81AF-475A-AC2C-A7E46BB4C270}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{C28F587E-81AF-475A-AC2C-A7E46BB4C270}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{C28F587E-81AF-475A-AC2C-A7E46BB4C270}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C28F587E-81AF-475A-AC2C-A7E46BB4C270}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C28F587E-81AF-475A-AC2C-A7E46BB4C270}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{C28F587E-81AF-475A-AC2C-A7E46BB4C270}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{C28F587E-81AF-475A-AC2C-A7E46BB4C270}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -814,6 +826,7 @@ Global
 		{DE30CBE9-50F3-4A3E-BCC9-A8A36348530E} = {AB88960E-B233-475B-96E4-8C10EEF8622C}
 		{599D1C00-7C78-4211-A958-1285C4CB76C9} = {AB88960E-B233-475B-96E4-8C10EEF8622C}
 		{0FB92651-3EE8-441D-84F2-C4DFDA68E8A5} = {AB88960E-B233-475B-96E4-8C10EEF8622C}
+		{C28F587E-81AF-475A-AC2C-A7E46BB4C270} = {AB88960E-B233-475B-96E4-8C10EEF8622C}
 		{F9043097-AD68-4E7E-AD16-853A7DB2ECDD} = {88D3D1D0-85D2-4301-A9EA-3F964CB05415}
 		{AD653B6B-EBB7-4E69-93F7-FADA40462648} = {88D3D1D0-85D2-4301-A9EA-3F964CB05415}
 		{38D90F00-5CFB-4AF8-85CE-84FCCE20123F} = {88D3D1D0-85D2-4301-A9EA-3F964CB05415}

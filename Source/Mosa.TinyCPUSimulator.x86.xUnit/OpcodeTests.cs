@@ -7,7 +7,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using Mosa.TinyCPUSimulator.x86.Emulate;
 using Xunit;
 using Xunit.Extensions;
 
@@ -17,10 +16,8 @@ namespace Mosa.TinyCPUSimulator.x86.xUnit
 	{
 		public OpcodeTests()
 		{
-			CPU.AddMemory(0x400000, 0x100000, 2);  // 4-5Mb reserved
-
-			CPU.AddDevice(new PowerUp(CPU));
-			CPU.AddDevice(new Multiboot(CPU));
+			//CPU.AddDevice(new PowerUp(CPU));
+			//CPU.AddDevice(new Multiboot(CPU));
 		}
 
 		[Theory]

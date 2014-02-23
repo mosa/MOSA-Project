@@ -7,9 +7,9 @@
  *  Ki (kiootic) <kiootic@gmail.com>
  */
 
-using dnlib.DotNet;
 using System;
 using System.Diagnostics;
+using dnlib.DotNet;
 
 namespace Mosa.Compiler.MosaTypeSystem
 {
@@ -23,11 +23,9 @@ namespace Mosa.Compiler.MosaTypeSystem
 		}
 
 		private readonly ModuleDef module;
-
 		public ModuleDef Module { get { return module; } }
 
 		private readonly MDToken token;
-
 		public MDToken Token { get { return token; } }
 
 		public bool Equals(ScopedToken other)

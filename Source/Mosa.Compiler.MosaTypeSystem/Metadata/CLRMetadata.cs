@@ -12,10 +12,9 @@ using Mosa.Compiler.Common;
 
 namespace Mosa.Compiler.MosaTypeSystem.Metadata
 {
-	internal class CLRMetadata : IMetadata
+	class CLRMetadata : IMetadata
 	{
-		private MosaModuleLoader moduleLoader;
-
+		MosaModuleLoader moduleLoader;
 		public CLRMetadata(MosaModuleLoader loader)
 		{
 			this.moduleLoader = loader;
@@ -59,7 +58,7 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 
 		public string LookupUserString(MosaModule module, uint id)
 		{
-			var desc = module.GetUnderlyingObject<UnitDesc<ModuleDef, object>>();
+			var desc = module.GetUnderlyingObject<UnitDesc<ModuleDef,object>>();
 			return Cache.stringHeapLookup[Tuple.Create(desc == null ? null : desc.Definition as ModuleDefMD, id)];
 		}
 	}

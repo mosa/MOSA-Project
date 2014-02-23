@@ -74,7 +74,7 @@
     <Compile Include="DivideByZero.cs" />
     <Compile Include="SimInstruction.cs" />
     <Compile Include="InvalidMemoryAccess.cs" />
-    <Compile Include="RAMBank.cs" />
+    <Compile Include="MemoryRegion.cs" />
     <Compile Include="SimOperand.cs" />
     <Compile Include="RegisterType.cs" />
     <Compile Include="SimRegister.cs" />

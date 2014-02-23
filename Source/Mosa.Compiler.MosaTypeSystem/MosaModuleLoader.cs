@@ -8,10 +8,10 @@
  *  Ki (kiootic) <kiootic@gmail.com>
  */
 
-using dnlib.DotNet;
-using Mosa.Compiler.MosaTypeSystem.Metadata;
 using System.Collections.Generic;
 using System.IO;
+using dnlib.DotNet;
+using Mosa.Compiler.MosaTypeSystem.Metadata;
 
 namespace Mosa.Compiler.MosaTypeSystem
 {
@@ -34,9 +34,8 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		#region Internal methods
 
-		private List<string> seenModules = new List<string>();
-
-		private void LoadDependencies(ModuleDefMD module)
+		List<string> seenModules = new List<string>();
+		void LoadDependencies(ModuleDefMD module)
 		{
 			if (seenModules.Contains(module.Location))
 				return;
@@ -52,7 +51,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 			}
 		}
 
-		#endregion Internal methods
+		#endregion
 
 		/// <summary>
 		/// Appends the given path to the assembly search path.

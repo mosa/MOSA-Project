@@ -7,12 +7,12 @@
  *  Ki (kiootic) <kiootic@gmail.com>
  */
 
-using dnlib.DotNet;
 using System.Collections.Generic;
+using dnlib.DotNet;
 
 namespace Mosa.Compiler.MosaTypeSystem.Metadata
 {
-	internal static class DnlibExtension
+	static class DnlibExtension
 	{
 		public static ITypeDefOrRef GetElementType(this TypeSig signature)
 		{
@@ -53,8 +53,7 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 					return true;
 			}
 
-			if (signature is NonLeafSig)
-			{
+			if(signature is NonLeafSig){
 				return HasOpenGenericParameter(signature.Next);
 			}
 			else if (signature is TypeDefOrRefSig)
@@ -62,7 +61,7 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 				TypeSpec type = ((TypeDefOrRefSig)signature).TypeDefOrRef as TypeSpec;
 				if (type != null && HasOpenGenericParameter(type.TypeSig))
 					return true;
-				else
+				else 
 					return ((TypeDefOrRefSig)signature).TypeDefOrRef.ResolveTypeDef().HasGenericParameters;
 			}
 			else if (signature is GenericInstSig)

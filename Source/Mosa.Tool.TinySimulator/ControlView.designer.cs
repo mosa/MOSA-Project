@@ -46,7 +46,7 @@ namespace Mosa.Tool.TinySimulator
 			// cbBreakAfterReturn
 			// 
 			this.cbBreakAfterReturn.AutoSize = true;
-			this.cbBreakAfterReturn.Location = new System.Drawing.Point(167, 34);
+			this.cbBreakAfterReturn.Location = new System.Drawing.Point(234, 34);
 			this.cbBreakAfterReturn.Name = "cbBreakAfterReturn";
 			this.cbBreakAfterReturn.Size = new System.Drawing.Size(58, 17);
 			this.cbBreakAfterReturn.TabIndex = 28;
@@ -57,7 +57,7 @@ namespace Mosa.Tool.TinySimulator
 			// cbBreakAfterCall
 			// 
 			this.cbBreakAfterCall.AutoSize = true;
-			this.cbBreakAfterCall.Location = new System.Drawing.Point(123, 34);
+			this.cbBreakAfterCall.Location = new System.Drawing.Point(190, 34);
 			this.cbBreakAfterCall.Name = "cbBreakAfterCall";
 			this.cbBreakAfterCall.Size = new System.Drawing.Size(43, 17);
 			this.cbBreakAfterCall.TabIndex = 27;
@@ -68,7 +68,7 @@ namespace Mosa.Tool.TinySimulator
 			// cbBreakAfterJump
 			// 
 			this.cbBreakAfterJump.AutoSize = true;
-			this.cbBreakAfterJump.Location = new System.Drawing.Point(73, 34);
+			this.cbBreakAfterJump.Location = new System.Drawing.Point(140, 34);
 			this.cbBreakAfterJump.Name = "cbBreakAfterJump";
 			this.cbBreakAfterJump.Size = new System.Drawing.Size(51, 17);
 			this.cbBreakAfterJump.TabIndex = 26;
@@ -131,7 +131,7 @@ namespace Mosa.Tool.TinySimulator
 			// cbRecord
 			// 
 			this.cbRecord.AutoSize = true;
-			this.cbRecord.Location = new System.Drawing.Point(368, 34);
+			this.cbRecord.Location = new System.Drawing.Point(7, 34);
 			this.cbRecord.Name = "cbRecord";
 			this.cbRecord.Size = new System.Drawing.Size(61, 17);
 			this.cbRecord.TabIndex = 21;
@@ -163,7 +163,7 @@ namespace Mosa.Tool.TinySimulator
 			// label1
 			// 
 			this.label1.AutoSize = true;
-			this.label1.Location = new System.Drawing.Point(4, 35);
+			this.label1.Location = new System.Drawing.Point(74, 35);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(63, 13);
 			this.label1.TabIndex = 29;
@@ -172,7 +172,7 @@ namespace Mosa.Tool.TinySimulator
 			// cbBreakAfterBranch
 			// 
 			this.cbBreakAfterBranch.AutoSize = true;
-			this.cbBreakAfterBranch.Location = new System.Drawing.Point(231, 34);
+			this.cbBreakAfterBranch.Location = new System.Drawing.Point(291, 34);
 			this.cbBreakAfterBranch.Name = "cbBreakAfterBranch";
 			this.cbBreakAfterBranch.Size = new System.Drawing.Size(128, 17);
 			this.cbBreakAfterBranch.TabIndex = 30;

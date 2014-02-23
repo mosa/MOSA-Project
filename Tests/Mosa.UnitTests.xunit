@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xunit>
+  <assemblies>
+    <assembly filename="X:\MOSA-Project-tgiphil\bin\Mosa.TinyCPUSimulator.TestSystem.xUnit.dll" shadow-copy="true" />
+    <assembly filename="X:\MOSA-Project-tgiphil\bin\Mosa.Platform.Internal.x86.xUnit.dll" shadow-copy="true" />
+    <assembly filename="X:\MOSA-Project-tgiphil\bin\Mosa.Compiler.Framework.xUnit.dll" shadow-copy="true" />
+  </assemblies>
+</xunit>

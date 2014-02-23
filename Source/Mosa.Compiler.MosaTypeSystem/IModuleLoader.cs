@@ -12,7 +12,6 @@ namespace Mosa.Compiler.MosaTypeSystem
 	public interface IModuleLoader
 	{
 		void LoadModuleFromFile(string file);
-
 		IMetadata CreateMetadata();
 	}
 }

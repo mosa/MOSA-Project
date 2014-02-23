@@ -15,19 +15,15 @@ namespace Mosa.Compiler.MosaTypeSystem
 	public abstract class MosaUnit
 	{
 		public object UnderlyingObject { get; private set; }
-
 		public uint ID { get; internal set; }
-
 		public TypeSystem TypeSystem { get; internal set; }
 
 		public string Name { get; private set; }
-
 		public string FullName { get; internal set; }
 
 		public bool IsLinkerGenerated { get; private set; }
 
-		private List<MosaCustomAttribute> customAttributes;
-
+		List<MosaCustomAttribute> customAttributes;
 		public IList<MosaCustomAttribute> CustomAttributes { get; private set; }
 
 		internal MosaUnit()
@@ -58,8 +54,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public abstract class MutatorBase : IDisposable
 		{
-			private MosaUnit unit;
-
+			MosaUnit unit;
 			internal MutatorBase(MosaUnit unit)
 			{
 				this.unit = unit;

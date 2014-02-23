@@ -35,6 +35,7 @@ namespace Mosa.Compiler.Framework.Stages
 					for (var i = 0; i < context.OperandCount; ++i)
 					{
 						var op = context.GetOperand(i);
+						
 						if (op != null && op.IsSSA)
 						{
 							context.SetOperand(i, op.SSAParent);
@@ -63,6 +64,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 				InsertCopyStatement(predecessor, context.Result, operand);
 			}
+
 			context.Remove();
 		}
 
@@ -90,7 +92,9 @@ namespace Mosa.Compiler.Framework.Stages
 			Debug.Assert(!destination.IsSSA);
 
 			if (destination != source)
+			{
 				context.AppendInstruction(IRInstruction.Move, destination, source);
+			}
 		}
 	}
 }

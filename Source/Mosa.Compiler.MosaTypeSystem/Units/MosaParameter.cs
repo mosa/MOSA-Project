@@ -30,7 +30,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public bool Equals(MosaParameter parameter)
 		{
-			return Type.Equals(parameter.Type);
+			return Type.Equals( parameter.Type);
 		}
 
 		public bool Equals(MosaType type)

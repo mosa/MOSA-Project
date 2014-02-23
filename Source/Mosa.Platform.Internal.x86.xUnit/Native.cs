@@ -27,89 +27,11 @@
 
 namespace Mosa.Platform.Internal.x86
 {
-	public static class Division
+	public static class Native
 	{
-		/* Returns the number of leading zero bits in X,  which must be nonzero. */
-
-		public static int nlz(uint x)
+		public static uint Div(ulong a, uint b)
 		{
-			int n = 0;
-
-			if (x <= 0x0000FFFF)
-			{
-				n += 16;
-				x <<= 16;
-			}
-			if (x <= 0x00FFFFFF)
-			{
-				n += 8;
-				x <<= 8;
-			}
-			if (x <= 0x0FFFFFFF)
-			{
-				n += 4;
-				x <<= 4;
-			}
-			if (x <= 0x3FFFFFFF)
-			{
-				n += 2;
-				x <<= 2;
-			}
-			if (x <= 0x7FFFFFFF)
-				n++;
-
-			return n;
-		}
-
-		/* Divides unsigned 64-bit N by unsigned 64-bit D and returns the quotient. */
-
-		public static ulong udiv64(ulong n, ulong d)
-		{
-			if ((d >> 32) == 0)
-			{
-				ulong b = 1L << 32;
-				uint n1 = (uint)(n >> 32);
-				uint n0 = (uint)n;
-				uint d0 = (uint)d;
-
-				return Native.Div(b * (n1 % d0) + n0, d0) + b * (n1 / d0);
-			}
-			else
-			{
-				if (n < d)
-					return 0;
-				else
-				{
-					uint d1 = (uint)(d >> 32);
-					int s = nlz(d1);
-					ulong q = Native.Div(n >> 1, (uint)((d << s) >> 32)) >> (31 - s);
-					return n - (q - 1) * d < d ? q - 1 : q;
-				}
-			}
-		}
-
-		/* Divides unsigned 64-bit N by unsigned 64-bit D and returns the remainder. */
-
-		public static uint umod64(ulong n, ulong d)
-		{
-			return (uint)(n - d * udiv64(n, d));
-		}
-
-		/* Divides signed 64-bit N by signed 64-bit D and returns the quotient. */
-
-		public static long sdiv64(long n, long d)
-		{
-			ulong n_abs = (ulong)(n >= 0 ? n : -n);
-			ulong d_abs = (ulong)(d >= 0 ? d : -d);
-			ulong q_abs = udiv64(n_abs, d_abs);
-			return (n < 0) == (d < 0) ? (long)q_abs : -(long)q_abs;
-		}
-
-		/* Divides signed 64-bit N by signed 64-bit D and returns the remainder. */
-
-		public static int smod64(long n, long d)
-		{
-			return (int)(n - d * sdiv64(n, d));
+			return (uint)(a / b);
 		}
 	}
 }

@@ -14,7 +14,6 @@ namespace Mosa.TinyCPUSimulator
 {
 	public class SimCPU
 	{
-		public List<RAMBank> RAMBanks { get; private set; }
 
 		public Dictionary<ulong, SimInstruction> InstructionCache { get; private set; }
 
@@ -44,18 +43,40 @@ namespace Mosa.TinyCPUSimulator
 
 		public SimCPUException LastException { get; set; }
 
+		public List<MemoryRegion> MemoryRegions { get; private set; }
+
+		private byte[][] MemoryBlocks;
+
+		internal static ulong BlockSize = 1024 * 1024; // 1 MB
+		internal static ulong MaxMemory = 1024L * 1024L * 1024L * 4L; // 4 GB
+
 		public SimCPU()
 		{
-			RAMBanks = new List<RAMBank>();
+			MemoryBlocks = new byte[MaxMemory / BlockSize][];
 			InstructionCache = new Dictionary<ulong, SimInstruction>();
 			SimDevices = new List<BaseSimDevice>();
 			PortDevices = new BaseSimDevice[65536];
 			Symbols = new Dictionary<string, SimSymbol>();
 			Monitor = new SimMonitor(this);
+			MemoryRegions = new List<MemoryRegion>();
 			//MemoryDelta = new Dictionary<ulong, KeyValuePair<byte, byte>>();
 
 			Tick = 0;
 			IsLittleEndian = true;
+		}
+
+		public void AddMemory(ulong address, ulong size, uint type)
+		{
+			MemoryRegions.Add(new MemoryRegion(address, size, type));
+		}
+
+		public bool IsValidMemoryReference(ulong address)
+		{
+			foreach (var region in MemoryRegions)
+				if (region.Contains(address))
+					return true;
+
+			return false;
 		}
 
 		public virtual void Reset()
@@ -68,35 +89,48 @@ namespace Mosa.TinyCPUSimulator
 			}
 		}
 
-		private RAMBank Find(ulong address)
-		{
-			foreach (var r in RAMBanks)
-				if (r.Contains(address))
-					return r;
-
-			throw new InvalidMemoryAccess(address);
-		}
-
 		private byte InternalRead8(ulong address)
 		{
-			RAMBank ram = Find(address);
+			ulong index = address / BlockSize;
 
-			if (ram != null)
-				return ram.Read8(address);
+			byte[] block = MemoryBlocks[index];
 
-			return 0;
+			if (block == null)
+			{
+				// for performance we only check if the memory access is valid when memory is allocated by the simulator
+				if (!IsValidMemoryReference(address))
+					throw new InvalidMemoryAccess(address);
+
+				block = new byte[BlockSize];
+
+				MemoryBlocks[index] = block;
+
+				return 0;
+			}
+
+			return block[address % BlockSize];
 		}
 
 		private void InternalWrite8(ulong address, byte value)
 		{
-			RAMBank ram = Find(address);
+			ulong index = address / BlockSize;
+			byte[] block = MemoryBlocks[index];
 
-			//MemoryDelta.Add(address, new KeyValuePair<byte, byte>(ram.Read8(address), value));
+			if (block == null)
+			{
+				if (value == 0)
+					return;
 
-			if (ram != null)
-				ram.Write8(address, value);
+				// for performance we only check if the memory access is valid when memory is allocated by the simulator
+				if (!IsValidMemoryReference(address))
+					throw new InvalidMemoryAccess(address);
 
-			return;
+				block = new byte[BlockSize];
+
+				MemoryBlocks[index] = block;
+			}
+
+			block[address % BlockSize] = value;
 		}
 
 		protected virtual ulong TranslateToPhysical(ulong address)
@@ -110,16 +144,6 @@ namespace Mosa.TinyCPUSimulator
 			{
 				device.MemoryWrite(address, size);
 			}
-		}
-
-		public void AddMemory(ulong address, ulong size, uint type)
-		{
-			RAMBanks.Add(new RAMBank(address, size, type));
-		}
-
-		public void AddMemory(RAMBank bank)
-		{
-			RAMBanks.Add(bank);
 		}
 
 		public void DirectWrite8(ulong address, byte value)
@@ -218,9 +242,6 @@ namespace Mosa.TinyCPUSimulator
 
 		public void SetSymbol(string name, ulong address, ulong size)
 		{
-			if (Symbols.ContainsKey(name))
-				return; // HACK for generics which duplicate methods!
-
 			Symbols.Add(name, new SimSymbol(name, address, size));
 
 			//Debug.WriteLine("0x" + address.ToString("X") + ": " + label);
@@ -286,7 +307,7 @@ namespace Mosa.TinyCPUSimulator
 		{
 			get
 			{
-				if (CurrentProgramCounter == lastDecodedProgramCounter)
+				if (CurrentProgramCounter == lastDecodedProgramCounter && lastDecodedProgramCounter != 0)
 					return lastDecodedInstruction;
 
 				lastDecodedInstruction = DecodeOpcode(CurrentProgramCounter);

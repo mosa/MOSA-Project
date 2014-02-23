@@ -8,9 +8,9 @@
  *  Ki (kiootic) <kiootic@gmail.com>
  */
 
+using System.Collections.Generic;
 using dnlib.DotNet;
 using Mosa.Compiler.Common;
-using System.Collections.Generic;
 
 namespace Mosa.Compiler.MosaTypeSystem.Metadata
 {
@@ -34,10 +34,10 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 			Modules = new Dictionary<string, MosaModule>();
 		}
 
-		private class USLookupHook : IStringDecrypter
+		class USLookupHook : IStringDecrypter
 		{
-			private MetadataCache cache;
-			private ModuleDefMD module;
+			MetadataCache cache;
+			ModuleDefMD module;
 
 			public USLookupHook(MetadataCache cache, ModuleDefMD module)
 			{
