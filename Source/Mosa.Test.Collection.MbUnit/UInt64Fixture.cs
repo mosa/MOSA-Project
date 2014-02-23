@@ -167,13 +167,13 @@ namespace Mosa.Test.Collection.MbUnit
 		[Test]
 		public void LdelemU8([I4Small]int index, [U8]ulong value)
 		{
-			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "UInt64Tests", "Ldelem", index, value));
+			Assert.AreEqual(UInt64Tests.Ldelem(index, value), Run<ulong>("Mosa.Test.Collection", "UInt64Tests", "Ldelem", index, value));
 		}
 
 		[Test]
 		public void LdelemaU8([I4Small]int index, [U8]ulong value)
 		{
-			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "UInt64Tests", "Ldelema", index, value));
+			Assert.AreEqual(UInt64Tests.Ldelema(index, value), Run<ulong>("Mosa.Test.Collection", "UInt64Tests", "Ldelema", index, value));
 		}
 	}
 }

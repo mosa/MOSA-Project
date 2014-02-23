@@ -56,7 +56,7 @@ namespace Mosa.Compiler.Framework
 		public SimpleFastDominance(BasicBlocks basicBlocks, BasicBlock entryBlock)
 		{
 			// Blocks in reverse post order topology
-			List<BasicBlock> blocks = BasicBlocks.ReversePostorder(entryBlock); //basicBlocks.GetConnectedBlocksStartingAtHead(entryBlock);
+			List<BasicBlock> blocks = BasicBlocks.ReversePostorder(entryBlock);
 
 			CalculateDominance(blocks);
 			CalculateChildren(blocks);

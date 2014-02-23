@@ -108,11 +108,11 @@ namespace Mosa.Test.Collection
 			return arr.Length == length;
 		}
 
-		public static bool Ldelem(int index, short value)
+		public static short Ldelem(int index, short value)
 		{
 			short[] arr = new short[index + 1];
 			arr[index] = value;
-			return value == arr[index];
+			return arr[index];
 		}
 
 		public static bool Stelem(int index, short value)
@@ -122,11 +122,11 @@ namespace Mosa.Test.Collection
 			return true;
 		}
 
-		public static bool Ldelema(int index, short value)
+		public static short Ldelema(int index, short value)
 		{
 			short[] arr = new short[index + 1];
 			SetValueInRefValue(ref arr[index], value);
-			return arr[index] == value;
+			return arr[index];
 		}
 
 		private static void SetValueInRefValue(ref short destination, short value)

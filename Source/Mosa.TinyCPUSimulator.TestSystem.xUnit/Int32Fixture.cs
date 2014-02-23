@@ -173,18 +173,16 @@ namespace Mosa.TinyCPUSimulator.TestSystem.xUnit
 
 		[Theory]
 		[PropertyData("I4SmallI4")]
-		//[InlineData((int)1, (int)2)]
 		public void LdelemI4(int index, int value)
 		{
-			Assert.True(Run<bool>("Mosa.Test.Collection.Int32Tests.Ldelem", index, value));
+			Assert.Equal(Int32Tests.Ldelem(index, value), Run<int>("Mosa.Test.Collection.Int32Tests.Ldelem", index, value));
 		}
 
 		[Theory]
 		[PropertyData("I4SmallI4")]
-		//[InlineData((int)1, (int)2)]
 		public void LdelemaI4(int index, int value)
 		{
-			Assert.True(Run<bool>("Mosa.Test.Collection.Int32Tests.Ldelema", index, value));
+			Assert.Equal(Int32Tests.Ldelema(index, value), Run<int>("Mosa.Test.Collection.Int32Tests.Ldelema", index, value)); 
 		}
 	}
 }
