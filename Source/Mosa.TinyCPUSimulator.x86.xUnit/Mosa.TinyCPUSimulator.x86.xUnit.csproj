@@ -33,9 +33,11 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="xunit">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\3rdParty\xunit.dll</HintPath>
     </Reference>
     <Reference Include="xunit.extensions">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\3rdParty\xunit.extensions.dll</HintPath>
     </Reference>
   </ItemGroup>

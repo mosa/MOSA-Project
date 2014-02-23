@@ -307,7 +307,7 @@ namespace Mosa.TinyCPUSimulator
 		{
 			get
 			{
-				if (CurrentProgramCounter == lastDecodedProgramCounter)
+				if (CurrentProgramCounter == lastDecodedProgramCounter && lastDecodedProgramCounter != 0)
 					return lastDecodedInstruction;
 
 				lastDecodedInstruction = DecodeOpcode(CurrentProgramCounter);
