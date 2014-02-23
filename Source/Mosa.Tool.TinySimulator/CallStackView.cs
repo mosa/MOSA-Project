@@ -79,7 +79,7 @@ namespace Mosa.Tool.TinySimulator
 
 		private CallStackEntry clickedNode = null;
 
-		private void treeView1_MouseClick(object sender, System.Windows.Forms.MouseEventArgs e)
+		private void treeView1_MouseClick(object sender, MouseEventArgs e)
 		{
 			if (e.Button != MouseButtons.Right)
 				return;
@@ -97,6 +97,7 @@ namespace Mosa.Tool.TinySimulator
 			menu.Enabled = false;
 			ContextMenu m = new ContextMenu();
 			m.MenuItems.Add(menu);
+			m.MenuItems.Add(new MenuItem("Copy to &Clipboard", new EventHandler(MenuItem3_Click)));
 			m.MenuItems.Add(new MenuItem("&Jump to", new EventHandler(MenuItem1_Click)));
 			m.MenuItems.Add(new MenuItem("Set &Breakpoint", new EventHandler(MenuItem2_Click)));
 			m.Show(treeView1, relativeMousePosition);
@@ -117,5 +118,14 @@ namespace Mosa.Tool.TinySimulator
 
 			MainForm.AddBreakpoint(clickedNode.MethodName, (ulong)clickedNode.Address);
 		}
+
+		private void MenuItem3_Click(Object sender, EventArgs e)
+		{
+			if (clickedNode == null)
+				return;
+
+			Clipboard.SetText(clickedNode.MethodName);
+		}
+
 	}
 }

@@ -10,6 +10,8 @@
 using Mosa.TinyCPUSimulator;
 using System.ComponentModel;
 using System.Windows.Forms;
+using System.Collections.Generic;
+using System;
 
 namespace Mosa.Tool.TinySimulator
 {
@@ -72,5 +74,49 @@ namespace Mosa.Tool.TinySimulator
 
 			SimCPU.Monitor.RemoveBreakPoint((row as BreakPointEntry).Address);
 		}
+
+		private BreakPointEntry breakPointEntry = null;
+
+		private void dataGridView1_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+		{
+			if (e.Button != MouseButtons.Right)
+				return;
+
+			if (e.RowIndex < 0 || e.ColumnIndex < 0)
+				return;
+
+			var row = dataGridView1.Rows[e.RowIndex].DataBoundItem as BreakPointEntry;
+
+			breakPointEntry = row;
+
+			var relativeMousePosition = dataGridView1.PointToClient(Cursor.Position);
+
+			MenuItem menu = new MenuItem(row.Name);
+			menu.Enabled = false;
+			ContextMenu m = new ContextMenu();
+			m.MenuItems.Add(menu);
+			m.MenuItems.Add(new MenuItem("Copy to &Clipboard", new EventHandler(MenuItem3_Click)));
+			m.MenuItems.Add(new MenuItem("&Delete breakpoint", new EventHandler(MenuItem1_Click)));
+			m.Show(dataGridView1, relativeMousePosition);
+		}
+
+		private void MenuItem1_Click(Object sender, EventArgs e)
+		{
+			if (breakPointEntry == null)
+				return;
+
+			breakpoints.Remove(breakPointEntry);
+
+			SimCPU.Monitor.RemoveBreakPoint(breakPointEntry.Address);
+		}
+
+		private void MenuItem3_Click(Object sender, EventArgs e)
+		{
+			if (breakPointEntry == null)
+				return;
+
+			Clipboard.SetText(breakPointEntry.Name);
+		}
+
 	}
 }
