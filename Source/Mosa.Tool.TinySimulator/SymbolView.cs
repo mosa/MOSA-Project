@@ -126,11 +126,12 @@ namespace Mosa.Tool.TinySimulator
 			menu.Enabled = false;
 			ContextMenu m = new ContextMenu();
 			m.MenuItems.Add(menu);
+			m.MenuItems.Add(new MenuItem("Copy to &Clipboard", new EventHandler(MenuItem3_Click)));
 			m.MenuItems.Add(new MenuItem("Add to &Watch List", new EventHandler(MenuItem1_Click)));
 			m.MenuItems.Add(new MenuItem("Set &Breakpoint", new EventHandler(MenuItem2_Click)));
 			m.Show(dataGridView1, relativeMousePosition);
 		}
-
+		
 		private void MenuItem1_Click(Object sender, EventArgs e)
 		{
 			if (clickedSymbolEntry == null)
@@ -145,6 +146,14 @@ namespace Mosa.Tool.TinySimulator
 				return;
 
 			MainForm.AddBreakpoint(clickedSymbolEntry.Name, (ulong)clickedSymbolEntry.LinkerSymbol.VirtualAddress);
+		}
+
+		private void MenuItem3_Click(Object sender, EventArgs e)
+		{
+			if (clickedSymbolEntry == null)
+				return;
+
+			Clipboard.SetText(clickedSymbolEntry.Name);
 		}
 
 		private void toolStripComboBox1_SelectedIndexChanged(object sender, EventArgs e)
