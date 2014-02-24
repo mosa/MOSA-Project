@@ -244,7 +244,6 @@ namespace Mosa.TinyCPUSimulator
 		{
 			Symbols.Add(name, new SimSymbol(name, address, size));
 
-			//Debug.WriteLine("0x" + address.ToString("X") + ": " + label);
 		}
 
 		public SimSymbol GetSymbol(string name)
