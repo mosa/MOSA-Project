@@ -10,6 +10,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Text;
 
 namespace Mosa.Compiler.MosaTypeSystem
 {
@@ -54,6 +55,8 @@ namespace Mosa.Compiler.MosaTypeSystem
 		private List<MosaExceptionHandler> exceptionHandlers;
 
 		public IList<MosaLocal> LocalVariables { get; private set; }
+
+		public uint MaxStack { get; private set; }
 
 		public IList<MosaInstruction> Code { get; private set; }
 
@@ -140,6 +143,8 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 			public IList<MosaLocal> LocalVariables { get { return method.localVars; } }
 
+			public uint MaxStack { set { method.MaxStack = value; } }
+
 			public IList<MosaInstruction> Code { get { return method.instructions; } }
 
 			public IList<MosaExceptionHandler> ExceptionBlocks { get { return method.exceptionHandlers; } }
@@ -151,7 +156,24 @@ namespace Mosa.Compiler.MosaTypeSystem
 			public override void Dispose()
 			{
 				if (method.Signature != null && method.DeclaringType != null)
-					method.FullName = SignatureName.GetSignature(string.Concat(method.DeclaringType.FullName, "::", method.Name), method.Signature);
+				{
+					StringBuilder methodName = new StringBuilder();
+					methodName.Append(method.DeclaringType.FullName);
+					methodName.Append("::");
+					methodName.Append(method.Name);
+					if (GenericArguments.Count > 0)
+					{
+						methodName.Append("<");
+						for (int i = 0; i < GenericArguments.Count; i++)
+						{
+							if (i != 0)
+								methodName.Append(", ");
+							methodName.Append(GenericArguments[i].Name);
+						}
+						methodName.Append(">");
+					}
+					method.FullName = SignatureName.GetSignature(methodName.ToString(), method.Signature);
+				}
 			}
 		}
 	}

@@ -179,7 +179,7 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 			{
 				var desc = method.GetUnderlyingObject<UnitDesc<MethodDef, MethodSig>>();
 
-				MosaType returnType = metadata.Loader.GetType(desc.Signature.RetType);
+				MosaType returnType = metadata.Loader.GetType(resolver.Resolve(desc.Signature.RetType));
 				List<MosaParameter> pars = new List<MosaParameter>();
 
 				Debug.Assert(desc.Signature.GetParamCount() == desc.Definition.ParamDefs.Count);
@@ -202,12 +202,14 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 		private void ResolveBody(MethodDef methodDef, MosaMethod.Mutator method, CilBody body, GenericArgumentResolver resolver)
 		{
 			method.LocalVariables.Clear();
+			int index = 0;
 			foreach (var variable in body.Variables)
 			{
 				method.LocalVariables.Add(new MosaLocal(
-					variable.Name,
+					variable.Name ?? "V_" + index,
 					metadata.Loader.GetType(resolver.Resolve(variable.Type)),
 					variable.Type.IsPinned));
+				index++;
 			}
 
 			method.ExceptionBlocks.Clear();
@@ -223,6 +225,8 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 					eh.FilterStart == null ? null : (int?)eh.FilterStart.Offset
 				));
 			}
+
+			method.MaxStack = methodDef.Body.MaxStack;
 
 			method.Code.Clear();
 			for (int i = 0; i < body.Instructions.Count; i++)

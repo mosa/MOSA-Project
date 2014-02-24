@@ -103,6 +103,9 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public static int? GetPrimitiveSize(this MosaType type, int nativeSize)
 		{
+			if (type.IsEnum)
+				return type.GetEnumUnderlyingType().GetPrimitiveSize(nativeSize);
+
 			if (type.IsPointer || type.IsN)
 				return nativeSize;
 			else if (type.IsUI1 || type.IsBoolean)
@@ -115,6 +118,19 @@ namespace Mosa.Compiler.MosaTypeSystem
 				return 8;
 			else
 				return null;
+		}
+
+		public static MosaType GetEnumUnderlyingType(this MosaType type)
+		{
+			if (!type.IsEnum)
+				return type;
+
+			foreach (var field in type.Fields)
+			{
+				if (!field.IsStatic)
+					return field.FieldType;
+			}
+			return null;
 		}
 	}
 }
