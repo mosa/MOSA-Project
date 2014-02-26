@@ -45,9 +45,9 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 
 		public override void ResetSimulation(ISimAdapter simAdapter)
 		{
-			simAdapter.SimCPU.Reset();
-
 			var x86 = simAdapter.SimCPU as CPUx86;
+
+			x86.Reset();
 
 			// Start of stack
 			x86.ESP.Value = 0x00080000;
@@ -169,7 +169,6 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 				return (object)(uint)x86.EAX.Value;
 			else if (type.IsU8)
 				return (object)(ulong)(((ulong)x86.EAX.Value) | ((ulong)x86.EDX.Value << 32));
-
 			else if (type.IsChar)
 				return (object)(char)x86.EAX.Value;
 			else if (type.IsBoolean)
