@@ -1,0 +1,95 @@
+﻿/*
+ * (c) 2014 MOSA - The Managed Operating System Alliance
+ *
+ * Licensed under the terms of the New BSD License.
+ *
+ * Authors:
+ *  Ki (kiootic) <kiootic@gmail.com>
+ */
+
+using System.Collections.Generic;
+
+namespace Mosa.Compiler.Common
+{
+	public class Tuple<T1, T2>
+	{
+		public Tuple(T1 item1, T2 item2)
+		{
+			Item1 = item1;
+			Item2 = item2;
+		}
+
+		public T1 Item1 { get; private set; }
+
+		public T2 Item2 { get; private set; }
+
+		public override bool Equals(object obj)
+		{
+			Tuple<T1, T2> other = obj as Tuple<T1, T2>;
+			if (other == null) return false;
+			return object.Equals(Item1, other.Item1) && object.Equals(Item2, other.Item2);
+		}
+
+		public override int GetHashCode()
+		{
+			int hash1 = EqualityComparer<T1>.Default.GetHashCode(Item1);
+			int hash2 = EqualityComparer<T2>.Default.GetHashCode(Item2);
+			return hash1 * 7 + hash2;
+		}
+
+		public override string ToString()
+		{
+			return string.Format("{{{0}, {1}}}", Item1, Item2);
+		}
+	}
+
+
+	public class Tuple<T1, T2, T3>
+	{
+		public Tuple(T1 item1, T2 item2, T3 item3)
+		{
+			Item1 = item1;
+			Item2 = item2;
+			Item3 = item3;
+		}
+
+		public T1 Item1 { get; private set; }
+
+		public T2 Item2 { get; private set; }
+
+		public T3 Item3 { get; private set; }
+
+		public override bool Equals(object obj)
+		{
+			Tuple<T1, T2, T3> other = obj as Tuple<T1, T2, T3>;
+			if (other == null) return false;
+			return object.Equals(Item1, other.Item1) && object.Equals(Item2, other.Item2) && object.Equals(Item3, other.Item3);
+		}
+
+		public override int GetHashCode()
+		{
+			int hash1 = EqualityComparer<T1>.Default.GetHashCode(Item1);
+			int hash2 = EqualityComparer<T2>.Default.GetHashCode(Item2);
+			int hash3 = EqualityComparer<T3>.Default.GetHashCode(Item3);
+			return (((hash1 * 7) ^ hash2) * 7) ^ hash3;
+		}
+
+		public override string ToString()
+		{
+			return string.Format("({0}, {1}, {2})", Item1, Item2, Item3);
+		}
+	}
+
+	public static class Tuple
+	{
+		public static Tuple<T1, T2> Create<T1, T2>(T1 item1, T2 item2)
+		{
+			return new Tuple<T1, T2>(item1, item2);
+		}
+
+		public static Tuple<T1, T2, T3> Create<T1, T2, T3>(T1 item1, T2 item2, T3 item3)
+		{
+			return new Tuple<T1, T2, T3>(item1, item2, item3);
+		}
+	}
+}

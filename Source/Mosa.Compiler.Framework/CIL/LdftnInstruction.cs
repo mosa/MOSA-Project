@@ -7,6 +7,8 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using Mosa.Compiler.MosaTypeSystem;
+
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
@@ -39,12 +41,12 @@ namespace Mosa.Compiler.Framework.CIL
 			// Decode base classes first
 			base.Decode(ctx, decoder);
 
-			var method = decoder.TypeSystem.Resolver.GetMethodByToken(decoder.Method.CodeAssembly, decoder.DecodeTokenType(), decoder.Compiler.Method.DeclaringType.GenericArguments);
+			var method = (MosaMethod)decoder.Instruction.Operand;
 
 			decoder.Compiler.Scheduler.TrackMethodInvoked(method);
 
-			ctx.Result = decoder.Compiler.CreateVirtualRegister(decoder.TypeSystem.BuiltIn.TypedByRef);
-			ctx.InvokeMethod = method;
+			ctx.Result = decoder.Compiler.CreateVirtualRegister(decoder.TypeSystem.ToFnPtr(method.Signature));
+			ctx.MosaMethod = method;
 
 		}
 

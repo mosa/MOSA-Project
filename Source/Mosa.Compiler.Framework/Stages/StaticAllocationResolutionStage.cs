@@ -39,7 +39,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private void PerformStaticAllocationOf(Context allocation, Context assignment)
 		{
-			MosaType allocatedType = allocation.InvokeMethod.DeclaringType;
+			MosaType allocatedType = allocation.MosaMethod.DeclaringType;
 
 			// Allocate a linker symbol to refer to this allocation. Use the destination field name as the linker symbol name.
 			string symbolName = assignment.MosaField.ToString() + @"<<$cctor";
@@ -54,10 +54,10 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 
 			// Issue a load request before the newobj and before the assignment.
-			Operand symbol1 = InsertLoadBeforeInstruction(allocation, symbolName, assignment.MosaField.Type);
+			Operand symbol1 = InsertLoadBeforeInstruction(allocation, symbolName, assignment.MosaField.FieldType);
 			allocation.Operand1 = symbol1;
 
-			Operand symbol2 = InsertLoadBeforeInstruction(assignment, symbolName, assignment.MosaField.Type);
+			Operand symbol2 = InsertLoadBeforeInstruction(assignment, symbolName, assignment.MosaField.FieldType);
 			assignment.Operand1 = symbol2;
 
 			// Change the newobj to a call and increase the operand count to include the this ptr.
@@ -80,7 +80,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			Context before = context.InsertBefore();
 			Operand result = methodCompiler.CreateVirtualRegister(type);
-			Operand op = Operand.CreateManagedSymbolPointer(typeSystem, symbolName);
+			Operand op = Operand.CreateManagedSymbol(typeSystem, type, symbolName);
 
 			before.SetInstruction(CILInstruction.Get(OpCode.Ldc_i4), result, op);
 
@@ -126,7 +126,7 @@ namespace Mosa.Compiler.Framework.Stages
 			// Only direct assignment without any casts is compliant. We can't perform casts or anything alike here,
 			// as that is hard to complete at this point of time.
 
-			MosaType allocationType = allocation.InvokeMethod.DeclaringType;
+			MosaType allocationType = allocation.MosaMethod.DeclaringType;
 			MosaType storageType = assignment.MosaField.DeclaringType;
 
 			return ReferenceEquals(allocationType, storageType);

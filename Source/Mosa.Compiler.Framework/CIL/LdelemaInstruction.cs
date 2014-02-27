@@ -42,9 +42,9 @@ namespace Mosa.Compiler.Framework.CIL
 			// Decode base classes first
 			base.Decode(ctx, decoder);
 
-			var type = decoder.TypeSystem.Resolver.GetTypeByToken(decoder.Method.CodeAssembly, decoder.DecodeTokenType(), decoder.Method);
+			var type = (MosaType)decoder.Instruction.Operand;
 
-			ctx.Result = decoder.Compiler.CreateVirtualRegister(decoder.TypeSystem.Resolver.GetManagedPointerType(type));
+			ctx.Result = decoder.Compiler.CreateVirtualRegister(type.ToManagedPointer());
 		}
 
 		/// <summary>

@@ -7,7 +7,7 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using Mosa.Compiler.Metadata.Signatures;
+using Mosa.Compiler.MosaTypeSystem;
 
 namespace Mosa.Compiler.Framework.CIL
 {
@@ -40,21 +40,14 @@ namespace Mosa.Compiler.Framework.CIL
 			// Decode base classes first
 			base.Decode(ctx, decoder);
 
-			ushort argIdx;
+			int argIdx;
 
 			// Opcode specific handling
-			if (opcode == OpCode.Ldarga_s)
-			{
-				argIdx = decoder.DecodeByte();
-			}
-			else
-			{
-				argIdx = decoder.DecodeUShort();
-			}
+			argIdx = (int)decoder.Instruction.Operand;
 
-			var parameterOperand = decoder.Compiler.GetParameterOperand(argIdx);
+			var parameterOperand = decoder.Compiler.GetParameterOperand((int)decoder.Instruction.Operand);
 			ctx.Operand1 = parameterOperand;
-			ctx.Result = decoder.Compiler.CreateVirtualRegister(parameterOperand.Type);
+			ctx.Result = decoder.Compiler.CreateVirtualRegister(parameterOperand.Type.ToManagedPointer());
 		}
 
 		/// <summary>

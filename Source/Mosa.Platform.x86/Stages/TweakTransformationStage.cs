@@ -30,11 +30,11 @@ namespace Mosa.Platform.x86.Stages
 			Debug.Assert(!context.Result.IsConstant);
 
 			// Convert moves to float moves, if necessary
-			if (context.Result.IsSingle)
+			if (context.Result.IsR4)
 			{
 				context.SetInstruction(X86.Movss, context.Result, context.Operand1);
 			}
-			else if (context.Result.IsDouble)
+			else if (context.Result.IsR8)
 			{
 				context.SetInstruction(X86.Movsd, context.Result, context.Operand1);
 			}
@@ -110,7 +110,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IX86Visitor.Movsx(Context context)
 		{
-			if (context.Operand1.IsInt || context.Operand1.IsPointer || context.Operand1.IsObject)
+			if (context.Operand1.IsInt || context.Operand1.IsPointer || !context.Operand1.IsValueType)
 			{
 				context.ReplaceInstructionOnly(X86.Mov);
 			}
@@ -122,7 +122,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IX86Visitor.Movzx(Context context)
 		{
-			if (context.Operand1.IsInt || context.Operand1.IsPointer || context.Operand1.IsObject)
+			if (context.Operand1.IsInt || context.Operand1.IsPointer || !context.Operand1.IsValueType)
 			{
 				context.ReplaceInstructionOnly(X86.Mov);
 			}
@@ -148,7 +148,7 @@ namespace Mosa.Platform.x86.Stages
 
 			if (right.IsConstant && (left.IsChar || left.IsShort || left.IsByte))
 			{
-				Operand edx = AllocateVirtualRegister(typeSystem.BuiltIn.Int32);
+				Operand edx = AllocateVirtualRegister(typeSystem.BuiltIn.I4);
 				Context before = context.InsertBefore();
 
 				if (left.IsSigned)
@@ -823,7 +823,7 @@ namespace Mosa.Platform.x86.Stages
 			if (context.Operand2.IsByte)
 				return;
 
-			context.Operand2 = Operand.CreateConstant(typeSystem.BuiltIn.Byte, context.Operand2.ConstantUnsignedInteger);
+			context.Operand2 = Operand.CreateConstant(typeSystem.BuiltIn.U1, context.Operand2.ConstantUnsignedInteger);
 		}
 	}
 }

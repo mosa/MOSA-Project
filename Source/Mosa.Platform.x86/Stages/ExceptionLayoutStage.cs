@@ -23,9 +23,9 @@ namespace Mosa.Platform.x86.Stages
 	{
 		#region Data members
 
-		private Dictionary<BasicBlock, ExceptionBlock> blockExceptions;
+		private Dictionary<BasicBlock, MosaExceptionHandler> blockExceptions;
 
-		private Dictionary<ExceptionBlock, List<BasicBlock>> exceptionBlocks = new Dictionary<ExceptionBlock, List<BasicBlock>>();
+		private Dictionary<MosaExceptionHandler, List<BasicBlock>> exceptionBlocks = new Dictionary<MosaExceptionHandler, List<BasicBlock>>();
 
 		private BaseCodeEmitter codeEmitter;
 
@@ -58,11 +58,11 @@ namespace Mosa.Platform.x86.Stages
 			if (methodCompiler.Method.ExceptionBlocks.Count == 0)
 				return;
 
-			blockExceptions = new Dictionary<BasicBlock, ExceptionBlock>();
+			blockExceptions = new Dictionary<BasicBlock, MosaExceptionHandler>();
 
 			foreach (BasicBlock block in basicBlocks)
 			{
-				ExceptionBlock clause = FindExceptionClause(block);
+				MosaExceptionHandler clause = FindExceptionClause(block);
 
 				if (clause != null)
 				{
@@ -80,7 +80,7 @@ namespace Mosa.Platform.x86.Stages
 			}
 		}
 
-		private ExceptionBlock FindExceptionClause(BasicBlock block)
+		private MosaExceptionHandler FindExceptionClause(BasicBlock block)
 		{
 			Context ctx = new Context(instructionSet, block);
 			int label = ctx.Label;
@@ -99,7 +99,7 @@ namespace Mosa.Platform.x86.Stages
 
 		private struct ProtectedBlock
 		{
-			public ExceptionBlockType Kind;
+			public ExceptionHandlerType Kind;
 			public uint Start;
 			public uint End;
 
@@ -110,7 +110,7 @@ namespace Mosa.Platform.x86.Stages
 			public uint Filter;
 			public MosaType Type;
 
-			public ProtectedBlock(uint start, uint end, uint handler, ExceptionBlockType kind, MosaType type, uint filter)
+			public ProtectedBlock(uint start, uint end, uint handler, ExceptionHandlerType kind, MosaType type, uint filter)
 			{
 				Start = start;
 				End = end;
@@ -134,7 +134,7 @@ namespace Mosa.Platform.x86.Stages
 					uint start = (uint)codeEmitter.GetPosition(block.Label);
 					uint end = (uint)codeEmitter.GetPosition(block.Label + 0x0F000000);
 
-					ExceptionBlockType kind = clause.ExceptionHandler;
+					ExceptionHandlerType kind = clause.HandlerType;
 
 					uint handler = 0;
 					uint filter = 0;
@@ -142,9 +142,9 @@ namespace Mosa.Platform.x86.Stages
 
 					handler = (uint)codeEmitter.GetPosition(clause.HandlerOffset);
 
-					if (kind == ExceptionBlockType.Filter)
+					if (kind == ExceptionHandlerType.Filter)
 					{
-						filter = (uint)codeEmitter.GetPosition(clause.FilterOffset);
+						filter = (uint)codeEmitter.GetPosition(clause.FilterOffset.Value);
 					}
 
 					// TODO: Optimization - Search for existing exception protected region (before or after) to merge the current block
@@ -172,7 +172,7 @@ namespace Mosa.Platform.x86.Stages
 
 			int tableSize = (entries.Count * nativePointerSize * 5) + nativePointerSize;
 
-			string section = methodCompiler.Method.MethodName + @"$etable";
+			string section = methodCompiler.Method.FullName + @"$etable";
 
 			using (Stream stream = methodCompiler.Linker.Allocate(section, SectionKind.ROData, tableSize, nativePointerAlignment))
 			{
@@ -186,7 +186,7 @@ namespace Mosa.Platform.x86.Stages
 						writer.Write(entry.Length);
 						writer.Write(entry.Handler);
 
-						if (entry.Kind == ExceptionBlockType.Exception)
+						if (entry.Kind == ExceptionHandlerType.Exception)
 						{
 							// Store method table pointer of the exception object type
 							// The VES exception runtime will uses this to compare exception object types
@@ -194,7 +194,7 @@ namespace Mosa.Platform.x86.Stages
 
 							writer.Position += nativePointerSize;
 						}
-						else if (entry.Kind == ExceptionBlockType.Filter)
+						else if (entry.Kind == ExceptionHandlerType.Filter)
 						{
 							// TODO: There are no plans in the short term to support filtered exception clause as C# does not use them
 							writer.Position += nativePointerSize;

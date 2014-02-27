@@ -26,7 +26,7 @@ namespace Mosa.Platform.x86.Intrinsic
 		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, BaseMethodCompiler methodCompiler)
 		{
 			Operand result = context.Result;
-			Operand edx = methodCompiler.CreateVirtualRegister(methodCompiler.TypeSystem.Resolver.BuiltIn.Ptr);
+			Operand edx = methodCompiler.CreateVirtualRegister(methodCompiler.TypeSystem.BuiltIn.Pointer);
 			Operand operand = Operand.CreateMemoryAddress(context.Operand1.Type, edx, 0);
 
 			context.SetInstruction(X86.Mov, edx, context.Operand1);

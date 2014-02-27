@@ -39,7 +39,7 @@ namespace Mosa.Compiler.Framework.CIL
 			// Decode base classes first
 			base.Decode(ctx, decoder);
 
-			byte nocheck = decoder.DecodeByte();
+			byte nocheck = (byte)decoder.Instruction.Operand;
 
 			ctx.Other = nocheck;
 		}

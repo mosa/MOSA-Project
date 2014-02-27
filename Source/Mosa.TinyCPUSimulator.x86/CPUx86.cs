@@ -257,10 +257,15 @@ namespace Mosa.TinyCPUSimulator.x86
 			}
 		}
 
+		private string Hex(uint value)
+		{
+			return "0x" + value.ToString("X8");
+		}
+
 		public override string CompactDump()
 		{
 			//s.AppendLine("EIP        EAX        EBX        ECX        EDX        ESI        EDI        ESP        EBP        FLAGS");
-			return EIP.Value + " " + EAX.Value + " " + EBX.Value + " " + ECX.Value + " " + EDX.Value + " " + ESI.Value + " " + EDI.Value + " " + ESP.Value + " " + EBP.Value + " "
+			return Hex(EIP.Value) + " " + Hex(EAX.Value) + " " + Hex(EBX.Value) + " " + Hex(ECX.Value) + " " + Hex(EDX.Value) + " " + Hex(ESI.Value) + " " + Hex(EDI.Value) + " " + Hex(ESP.Value) + " " + Hex(EBP.Value) + " "
 				+ (EFLAGS.Zero ? "Z" : "-")
 				+ (EFLAGS.Carry ? "C" : "-")
 				+ (EFLAGS.Direction ? "D" : "-")

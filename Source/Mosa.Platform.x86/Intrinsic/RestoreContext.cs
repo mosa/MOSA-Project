@@ -26,12 +26,12 @@ namespace Mosa.Platform.x86.Intrinsic
 		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, BaseMethodCompiler methodCompiler)
 		{
 			// Retrieve register context
-			Operand edx = Operand.CreateCPURegister(methodCompiler.TypeSystem.Resolver.BuiltIn.UInt32, GeneralPurposeRegister.EDX);
-			Operand ebp = Operand.CreateCPURegister(methodCompiler.TypeSystem.Resolver.BuiltIn.UInt32, GeneralPurposeRegister.EBP);
-			Operand esp = Operand.CreateCPURegister(methodCompiler.TypeSystem.Resolver.BuiltIn.UInt32, GeneralPurposeRegister.ESP);
+			Operand edx = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.U4, GeneralPurposeRegister.EDX);
+			Operand ebp = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.U4, GeneralPurposeRegister.EBP);
+			Operand esp = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.U4, GeneralPurposeRegister.ESP);
 
 			// Restore registers
-			context.SetInstruction(X86.Mov, Operand.CreateCPURegister(methodCompiler.TypeSystem.Resolver.BuiltIn.UInt32, GeneralPurposeRegister.ESP), context.Operand1);
+			context.SetInstruction(X86.Mov, Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.U4, GeneralPurposeRegister.ESP), context.Operand1);
 
 			// Jmp to EIP (stored in EDX)
 			context.AppendInstruction(X86.Jmp, null, edx);

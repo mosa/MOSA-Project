@@ -43,13 +43,13 @@ namespace Mosa.Compiler.Framework.Stages
 		void IMethodCompilerStage.Run()
 		{
 			// No basic block building if this is a linker generated method
-			if (!methodCompiler.Method.IsCILGenerated)
+			if (methodCompiler.Method.IsLinkerGenerated)
 				return;
 
 			if (methodCompiler.Compiler.PlugSystem.GetPlugMethod(methodCompiler.Method) != null)
 				return;
 
-			if (!methodCompiler.Method.HasCode)
+			if (methodCompiler.Method.Code.Count == 0)
 				return;
 
 			// Create the prologue block
@@ -78,9 +78,9 @@ namespace Mosa.Compiler.Framework.Stages
 					BuildBlockLinks(basicBlock);
 					basicBlocks.AddHeaderBlock(basicBlock);
 				}
-				if (clause.FilterOffset != 0)
+				if (clause.FilterOffset != null)
 				{
-					BasicBlock basicBlock = basicBlocks.GetByLabel(clause.FilterOffset);
+					BasicBlock basicBlock = basicBlocks.GetByLabel(clause.FilterOffset.Value);
 					BuildBlockLinks(basicBlock);
 					basicBlocks.AddHeaderBlock(basicBlock);
 				}
@@ -148,8 +148,8 @@ namespace Mosa.Compiler.Framework.Stages
 				if (!targets.ContainsKey(clause.TryOffset))
 					targets.Add(clause.TryOffset, -1);
 
-				if (!targets.ContainsKey(clause.FilterOffset))
-					targets.Add(clause.FilterOffset, -1);
+				if (clause.FilterOffset != null && !targets.ContainsKey(clause.FilterOffset.Value))
+					targets.Add(clause.FilterOffset.Value, -1);
 			}
 
 			BasicBlock currentBlock = null;

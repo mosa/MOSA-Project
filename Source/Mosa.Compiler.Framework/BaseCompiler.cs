@@ -175,7 +175,7 @@ namespace Mosa.Compiler.Framework
 		/// <param name="instructionSet">The instruction set.</param>
 		public void CompileMethod(MosaMethod method, BasicBlocks basicBlocks, InstructionSet instructionSet)
 		{
-			Trace(CompilerEvent.CompilingMethod, method.MethodName);
+			Trace(CompilerEvent.CompilingMethod, method.FullName);
 
 			BaseMethodCompiler methodCompiler = CreateMethodCompiler(method, basicBlocks, instructionSet);
 			Architecture.ExtendMethodCompilerPipeline(methodCompiler.Pipeline);

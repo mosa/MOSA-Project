@@ -27,13 +27,13 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			foreach (var type in typeSystem.AllTypes)
 			{
-				if (type.IsModule || type.Assembly.Name == "@Internal")
+				if (type.IsModule)
 					continue;
 
-				if (type.IsBaseGeneric || type.IsOpenGenericType)
+				if (type.HasOpenGenericParams)
 					continue;
 
-				if (!(type.IsObject || type.IsValueType || type.IsEnum || type.IsString || type.IsInterface || type.IsLinkerGenerated))
+				if (type.BaseType == null && !type.IsInterface && type.FullName != "System.Object")   // ghost types like generic params, function ptr, etc.
 					continue;
 
 				if (!type.IsInterface)
@@ -185,7 +185,7 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				if (!method.IsAbstract)
 				{
-					compiler.Linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuiltInPatch.I4, methodTableName, offset, 0, method.MethodName, 0);
+					compiler.Linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuiltInPatch.I4, methodTableName, offset, 0, method.FullName, 0);
 				}
 				offset += typeLayout.NativePointerSize;
 			}
@@ -209,7 +209,8 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			foreach (var field in type.Fields)
 			{
-				if (field.IsStaticField && !field.IsLiteralField)
+				// TODO: Inline literal field constants
+				if (field.IsStatic)
 				{
 					// Assign a memory slot to the static & initialize it, if there's initial data set
 					CreateStaticField(field);
@@ -225,12 +226,12 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			// Determine the size of the type & alignment requirements
 			int size, alignment;
-			architecture.GetTypeRequirements(field.Type, out size, out alignment);
+			architecture.GetTypeRequirements(typeLayout, field.FieldType, out size, out alignment);
 
 			size = (int)typeLayout.GetFieldSize(field);
 
 			// The linker section to move this field into
-			SectionKind section = field.HasRVA ? section = SectionKind.Data : section = SectionKind.BSS;
+			SectionKind section = field.Data != null ? section = SectionKind.Data : section = SectionKind.BSS;
 
 			AllocateSpace(field, section, size, alignment);
 		}
@@ -239,7 +240,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			using (var stream = compiler.Linker.Allocate(field.FullName, section, size, alignment))
 			{
-				if (field.HasRVA)
+				if (field.Data != null)
 				{
 					stream.Write(field.Data, 0, size);
 				}

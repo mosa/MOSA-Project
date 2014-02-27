@@ -133,172 +133,92 @@ namespace Mosa.Platform.Internal.x86
 			return obj;
 		}
 
-		public static void* BoxChar(void* methodTable, uint classSize, char value)
+		// TODO: efficiency?
+		public static void Memcpy(void* dest, void* src, uint count)
 		{
-			byte* memory = (byte*)AllocateObject(methodTable, classSize);
-			char* destination = (char*)(memory + (nativeIntSize * 2));
-			destination[0] = value;
+			uint* _dest = (uint*)dest;
+			uint* _src = (uint*)src;
+			uint c = count & 3;
+			count >>= 2;
+
+			while (count > 0)
+			{
+				*_dest = *_src;
+				_dest++;
+				_src++;
+				count--;
+			}
+
+			byte* __dest = (byte*)_dest;
+			byte* __src = (byte*)_src;
+			while (c > 0)
+			{
+				*__dest = *__src;
+				__dest++;
+				__src++;
+				c--;
+			}
+		}
+
+		public static void* Box8(void* methodTable, byte value)
+		{
+			byte* memory = (byte*)AllocateObject(methodTable, 4);	// 4 for alignment
+			*(byte*)(memory + (nativeIntSize * 2)) = value;
 			return memory;
 		}
 
-		public static void* BoxBoolean(void* methodTable, uint classSize, bool value)
+		public static void* Box16(void* methodTable, ushort value)
 		{
-			byte* memory = (byte*)AllocateObject(methodTable, classSize);
-			bool* destination = (bool*)(memory + (nativeIntSize * 2));
-			destination[0] = value;
+			byte* memory = (byte*)AllocateObject(methodTable, 4);	// 4 for alignment
+			*(ushort*)(memory + (nativeIntSize * 2)) = value;
 			return memory;
 		}
 
-		public static void* BoxInt8(void* methodTable, uint classSize, sbyte value)
-		{
-			byte* memory = (byte*)AllocateObject(methodTable, classSize);
-			sbyte* destination = (sbyte*)(memory + (nativeIntSize * 2));
-			destination[0] = value;
-			return memory;
-		}
-
-		public static void* BoxUInt8(void* methodTable, uint classSize, uint value)
+		public static void* Box32(void* methodTable, uint value)
 		{
 			byte* memory = (byte*)AllocateObject(methodTable, 4);
-			uint* destination = (uint*)(memory + (nativeIntSize * 2));
-			destination[0] = value;
+			*(uint*)(memory + (nativeIntSize * 2)) = value;
 			return memory;
 		}
 
-		public static void* BoxInt16(void* methodTable, uint classSize, short value)
+		public static void* Box64(void* methodTable, ulong value)
 		{
-			byte* memory = (byte*)AllocateObject(methodTable, classSize);
-			short* destination = (short*)(memory + (nativeIntSize * 2));
-			destination[0] = value;
+			byte* memory = (byte*)AllocateObject(methodTable, 8);
+			*(ulong*)(memory + (nativeIntSize * 2)) = value;
 			return memory;
 		}
 
-		public static void* BoxUInt16(void* methodTable, uint classSize, ushort value)
+		public static void* Box(void* methodTable, void* value, uint size)
 		{
-			byte* memory = (byte*)AllocateObject(methodTable, classSize);
-			ushort* destination = (ushort*)(memory + (nativeIntSize * 2));
-			destination[0] = value;
+			byte* memory = (byte*)AllocateObject(methodTable, size);
+			Memcpy(memory + nativeIntSize * 2, value, size);
 			return memory;
 		}
 
-		public static void* BoxInt32(void* methodTable, uint classSize, int value)
+		public static byte Unbox8(void* box)
 		{
-			byte* memory = (byte*)AllocateObject(methodTable, classSize);
-			int* destination = (int*)(memory + (nativeIntSize * 2));
-			destination[0] = value;
-			return memory;
+			return *(byte*)((byte*)box + nativeIntSize * 2);
 		}
 
-		public static void* BoxUInt32(void* methodTable, uint classSize, uint value)
+		public static ushort Unbox16(void* box)
 		{
-			byte* memory = (byte*)AllocateObject(methodTable, classSize);
-			uint* destination = (uint*)(memory + (nativeIntSize * 2));
-			destination[0] = value;
-			return memory;
+			return *(ushort*)((byte*)box + nativeIntSize * 2);
 		}
 
-		public static void* BoxInt64(void* methodTable, uint classSize, long value)
+		public static uint* Unbox32(void* box)
 		{
-			byte* memory = (byte*)AllocateObject(methodTable, classSize);
-			long* destination = (long*)(memory + (nativeIntSize * 2));
-			destination[0] = value;
-			return memory;
+			return (uint*)((byte*)box + nativeIntSize * 2);
 		}
 
-		public static void* BoxUInt64(void* methodTable, uint classSize, ulong value)
+		public static ulong* Unbox64(void* box)
 		{
-			byte* memory = (byte*)AllocateObject(methodTable, classSize);
-			ulong* destination = (ulong*)(memory + (nativeIntSize * 2));
-			destination[0] = value;
-			return memory;
+			return (ulong*)((byte*)box + nativeIntSize * 2);
 		}
 
-		public static void* BoxSingle(void* methodTable, uint classSize, float value)
+		public static void* Unbox(void* box, void* vt, uint size)
 		{
-			byte* memory = (byte*)AllocateObject(methodTable, classSize);
-			float* destination = (float*)(memory + (nativeIntSize * 2));
-			destination[0] = value;
-			return memory;
-		}
-
-		public static void* BoxDouble(void* methodTable, uint classSize, double value)
-		{
-			byte* memory = (byte*)AllocateObject(methodTable, classSize);
-			double* destination = (double*)(memory + (nativeIntSize * 2));
-			destination[0] = value;
-			return memory;
-		}
-
-		public static char UnboxChar(void* obj)
-		{
-			byte* memory = (byte*)obj + (nativeIntSize * 2);
-			return ((char*)memory)[0];
-		}
-
-		public static bool UnboxBoolean(void* obj)
-		{
-			byte* memory = (byte*)obj + (nativeIntSize * 2);
-			return ((bool*)memory)[0];
-		}
-
-		public static sbyte UnboxInt8(void* obj)
-		{
-			byte* memory = (byte*)obj + (nativeIntSize * 2);
-			return ((sbyte*)memory)[0];
-		}
-
-		public static byte UnboxUInt8(void* obj)
-		{
-			byte* memory = (byte*)obj + (nativeIntSize * 2);
-			return ((byte*)memory)[0];
-		}
-
-		public static short UnboxInt16(void* obj)
-		{
-			byte* memory = (byte*)obj + (nativeIntSize * 2);
-			return ((short*)memory)[0];
-		}
-
-		public static ushort UnboxUInt16(void* obj)
-		{
-			byte* memory = (byte*)obj + (nativeIntSize * 2);
-			return ((ushort*)memory)[0];
-		}
-
-		public static int UnboxInt32(void* obj)
-		{
-			byte* memory = (byte*)obj + (nativeIntSize * 2);
-			return ((int*)memory)[0];
-		}
-
-		public static uint UnboxUInt32(void* obj)
-		{
-			byte* memory = (byte*)obj + (nativeIntSize * 2);
-			return ((uint*)memory)[0];
-		}
-
-		public static long UnboxInt64(void* obj)
-		{
-			byte* memory = (byte*)obj + (nativeIntSize * 2);
-			return ((long*)memory)[0];
-		}
-
-		public static ulong UnboxUInt64(void* obj)
-		{
-			byte* memory = (byte*)obj + (nativeIntSize * 2);
-			return ((ulong*)memory)[0];
-		}
-
-		public static float UnboxSingle(void* obj)
-		{
-			byte* memory = (byte*)obj + (nativeIntSize * 2);
-			return ((float*)memory)[0];
-		}
-
-		public static double UnboxDouble(void* obj)
-		{
-			byte* memory = (byte*)obj + (nativeIntSize * 2);
-			return ((double*)memory)[0];
+			Memcpy(vt, (byte*)box + nativeIntSize * 2, size);
+			return vt;
 		}
 
 		public static void Throw(uint something)

@@ -7,7 +7,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using Mosa.Compiler.Metadata;
 using Mosa.Compiler.MosaTypeSystem;
 using System;
 
@@ -21,7 +20,7 @@ namespace Mosa.Compiler.Framework.CIL
 		/// <summary>
 		/// A fixed typeref for ldind.* instructions.
 		/// </summary>
-		private readonly CilElementType? elementType;
+		private readonly MosaTypeCode? elementType;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="LdelemInstruction"/> class.
@@ -32,18 +31,18 @@ namespace Mosa.Compiler.Framework.CIL
 		{
 			switch (opcode)
 			{
-				case OpCode.Ldelem_i1: elementType = CilElementType.I1; break;
-				case OpCode.Ldelem_i2: elementType = CilElementType.I2; break;
-				case OpCode.Ldelem_i4: elementType = CilElementType.I4; break;
-				case OpCode.Ldelem_i8: elementType = CilElementType.I8; break;
-				case OpCode.Ldelem_u1: elementType = CilElementType.U1; break;
-				case OpCode.Ldelem_u2: elementType = CilElementType.U2; break;
-				case OpCode.Ldelem_u4: elementType = CilElementType.U4; break;
-				case OpCode.Ldelem_i: elementType = CilElementType.I; break;
-				case OpCode.Ldelem_r4: elementType = CilElementType.R4; break;
-				case OpCode.Ldelem_r8: elementType = CilElementType.R8; break;
-				case OpCode.Ldelem_ref: elementType = CilElementType.Object; break;
-				default: throw new NotImplementedException();
+				case OpCode.Ldelem_i1: elementType = MosaTypeCode.I1; break;
+				case OpCode.Ldelem_i2: elementType = MosaTypeCode.I2; break;
+				case OpCode.Ldelem_i4: elementType = MosaTypeCode.I4; break;
+				case OpCode.Ldelem_i8: elementType = MosaTypeCode.I8; break;
+				case OpCode.Ldelem_u1: elementType = MosaTypeCode.U1; break;
+				case OpCode.Ldelem_u2: elementType = MosaTypeCode.U2; break;
+				case OpCode.Ldelem_u4: elementType = MosaTypeCode.U4; break;
+				case OpCode.Ldelem_i: elementType = MosaTypeCode.I; break;
+				case OpCode.Ldelem_r4: elementType = MosaTypeCode.R4; break;
+				case OpCode.Ldelem_r8: elementType = MosaTypeCode.R8; break;
+				case OpCode.Ldelem_ref: elementType = MosaTypeCode.Object; break;
+				default: elementType = null; break;
 			}
 		}
 
@@ -58,8 +57,8 @@ namespace Mosa.Compiler.Framework.CIL
 			base.Decode(ctx, decoder);
 
 			MosaType type = (elementType == null)
-				? type = decoder.TypeSystem.Resolver.GetTypeByToken(decoder.Method.CodeAssembly, decoder.DecodeTokenType(), decoder.Method)
-				: type = decoder.TypeSystem.Resolver.GetTypeByElementType(elementType);
+				? type = (MosaType)decoder.Instruction.Operand
+				: type = decoder.TypeSystem.GetTypeFromTypeCode(elementType.Value);
 
 			ctx.Result = LoadInstruction.CreateResultOperand(decoder, type);
 		}

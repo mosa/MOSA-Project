@@ -10,7 +10,6 @@
  */
 
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.MosaTypeSystem;
 
 namespace Mosa.Platform.x86.Stages
 {
@@ -34,8 +33,18 @@ namespace Mosa.Platform.x86.Stages
 				Operand dest = context.Result;
 
 				context.ReplaceInstructionOnly(X86.Mov);
-				context.AppendInstruction(X86.Add, dest, dest, Operand.CreateConstantUnsignedInt(methodCompiler.TypeSystem, (uint)0xFFFFFF00));
-				context.AppendInstruction(X86.Xor, dest, dest, Operand.CreateConstantUnsignedInt(methodCompiler.TypeSystem, (uint)0xFFFFFF00));
+				if (context.Operand1.IsShort || context.Operand1.IsChar)
+				{
+					context.AppendInstruction(X86.And, dest, dest, Operand.CreateConstantUnsignedInt(methodCompiler.TypeSystem, (uint)0x0000ffff));
+					context.AppendInstruction(X86.Xor, dest, dest, Operand.CreateConstantUnsignedInt(methodCompiler.TypeSystem, (uint)0x00010000));
+					context.AppendInstruction(X86.Sub, dest, dest, Operand.CreateConstantUnsignedInt(methodCompiler.TypeSystem, (uint)0x00010000));
+				}
+				else if (context.Operand1.IsByte || context.Operand1.IsBoolean)
+				{
+					context.AppendInstruction(X86.And, dest, dest, Operand.CreateConstantUnsignedInt(methodCompiler.TypeSystem, (uint)0x000000ff));
+					context.AppendInstruction(X86.Xor, dest, dest, Operand.CreateConstantUnsignedInt(methodCompiler.TypeSystem, (uint)0x00000100));
+					context.AppendInstruction(X86.Sub, dest, dest, Operand.CreateConstantUnsignedInt(methodCompiler.TypeSystem, (uint)0x00000100));
+				}
 			}
 		}
 
@@ -52,7 +61,14 @@ namespace Mosa.Platform.x86.Stages
 				Operand dest = context.Result;
 
 				context.ReplaceInstructionOnly(X86.Mov);
-				context.AppendInstruction(X86.And, dest, dest, Operand.CreateConstantUnsignedInt(typeSystem, (uint)0xFF));
+				if (context.Operand1.IsShort || context.Operand1.IsChar)
+				{
+					context.AppendInstruction(X86.And, dest, dest, Operand.CreateConstantUnsignedInt(typeSystem, (uint)0xffff));
+				}
+				else if (context.Operand1.IsByte || context.Operand1.IsBoolean)
+				{
+					context.AppendInstruction(X86.And, dest, dest, Operand.CreateConstantUnsignedInt(typeSystem, (uint)0xff));
+				}
 			}
 		}
 
@@ -62,40 +78,37 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IX86Visitor.Mov(Context context)
 		{
-			int size, alignment;
-			architecture.GetTypeRequirements(context.Result.Type, out size, out alignment);
 			// Mov can not use ESI or EDI registers with 8 or 16 bit memory
 			// Mov also can not use ESI or EDI registers with 8 or 16 bit register
-			if (context.Operand1.IsCPURegister && (context.Result.IsMemoryAddress || context.Result.IsCPURegister) && size < 4 && (context.Operand1.Register == GeneralPurposeRegister.ESI || context.Operand1.Register == GeneralPurposeRegister.EDI))
+			if (context.Operand1.IsCPURegister && (context.Result.IsMemoryAddress || context.Result.IsCPURegister) && !(context.Result.IsInt || context.Result.IsPointer || context.Result.IsValueType) && (context.Operand1.Register == GeneralPurposeRegister.ESI || context.Operand1.Register == GeneralPurposeRegister.EDI))
 			{
 				Operand source = context.Operand1;
 				Operand dest = context.Result;
 
-				Operand spareReg ;
-				if (dest.Register == GeneralPurposeRegister.EAX)
-					spareReg = Operand.CreateCPURegister(typeSystem.BuiltIn.Int32, GeneralPurposeRegister.EDX);
-				else
-					spareReg = Operand.CreateCPURegister(typeSystem.BuiltIn.Int32, GeneralPurposeRegister.EAX);
+				Operand EAX = Operand.CreateCPURegister(typeSystem.BuiltIn.I4, GeneralPurposeRegister.EAX);
 
-				context.SetInstruction2(X86.Xchg, spareReg, source, source, spareReg);
-				context.AppendInstruction(X86.Mov, dest, spareReg);
-				context.AppendInstruction2(X86.Xchg, source, spareReg, spareReg, source);
+				context.SetInstruction2(X86.Xchg, EAX, source, source, EAX);
+				context.AppendInstruction(X86.Mov, dest, EAX);
+				context.AppendInstruction2(X86.Xchg, source, EAX, EAX, source);
 			}
 			// Clear the register first if a 8 or 16 bit value moved into it
-			else if (context.Operand1.Register != context.Result.Register)
+			else if (context.Operand1.Register != context.Result.Register &&
+					 context.Result.Type.IsValueType && context.Operand1.Type.IsValueType)
 			{
+				int operandSize;
 				if (context.Operand1.IsMemoryAddress && context.Operand1.Type.ElementType != null)
-					architecture.GetTypeRequirements(context.Operand1.Type.ElementType, out size, out alignment);
+					operandSize = typeLayout.GetTypeSize(context.Operand1.Type.ElementType);
+				else
+					operandSize = typeLayout.GetTypeSize(context.Operand1.Type);
 
-				if (context.Result.IsCPURegister && (context.Operand1.IsMemoryAddress || context.Operand1.IsRegister) && size < 4)
+				if (context.Result.IsCPURegister && context.Operand1.IsRegister && operandSize < 4)
 				{
-					int srcSize;
-					architecture.GetTypeRequirements(context.Operand1.Type, out srcSize, out alignment);
-					if (srcSize != size)
+					int resultSize = typeLayout.GetTypeSize(context.Result.Type);
+					if (operandSize != 0 && resultSize != 0 && resultSize != operandSize)
 					{
-						Operand register = Operand.CreateCPURegister(typeSystem.BuiltIn.Int32, context.Result.Register);
+						Operand register = Operand.CreateCPURegister(typeSystem.BuiltIn.I4, context.Result.Register);
 
-						context.InsertBefore().SetInstruction2(X86.Xor, register, null, register, register);
+						context.InsertBefore().SetInstruction(X86.Xor, register, null, register, register);
 					}
 				}
 			}
@@ -113,7 +126,7 @@ namespace Mosa.Platform.x86.Stages
 				Operand result = context.Result;
 				var condition = context.ConditionCode;
 
-				Operand EAX = Operand.CreateCPURegister(typeSystem.BuiltIn.Int32, GeneralPurposeRegister.EAX);
+				Operand EAX = Operand.CreateCPURegister(typeSystem.BuiltIn.I4, GeneralPurposeRegister.EAX);
 
 				context.SetInstruction2(X86.Xchg, EAX, result, result, EAX);
 				context.AppendInstruction(X86.Setcc, condition, EAX);
@@ -142,7 +155,7 @@ namespace Mosa.Platform.x86.Stages
 				return;
 
 			before.SetInstruction(X86.Call, null, before.Operand1);
-			context.Delete();
+			context.Delete(false);
 		}
 
 		#endregion IX86Visitor

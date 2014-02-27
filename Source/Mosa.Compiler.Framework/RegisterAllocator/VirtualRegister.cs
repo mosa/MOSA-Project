@@ -41,7 +41,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		public Operand SpillSlotOperand { get; set; }
 
-		public bool IsFloatingPoint { get { return VirtualRegisterOperand.IsFloatingPoint; } }
+		public bool IsFloatingPoint { get { return VirtualRegisterOperand.IsR; } }
 
 		public bool IsReserved { get; private set; }
 

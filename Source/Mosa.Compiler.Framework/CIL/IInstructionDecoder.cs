@@ -7,7 +7,6 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-using Mosa.Compiler.Metadata;
 using Mosa.Compiler.MosaTypeSystem;
 
 namespace Mosa.Compiler.Framework.CIL
@@ -28,64 +27,9 @@ namespace Mosa.Compiler.Framework.CIL
 		MosaMethod Method { get; }
 
 		/// <summary>
-		/// Decodes the byte value from the instruction stream
+		/// Gets the Instruction being decoded.
 		/// </summary>
-		/// <returns></returns>
-		byte DecodeByte();
-
-		/// <summary>
-		/// Decodes the sbyte value from the instruction stream
-		/// </summary>
-		/// <returns></returns>
-		sbyte DecodeSByte();
-
-		/// <summary>
-		/// Decodes the short value from the instruction stream
-		/// </summary>
-		/// <returns></returns>
-		short DecodeShort();
-
-		/// <summary>
-		/// Decodes the ushort value from the instruction stream
-		/// </summary>
-		/// <returns></returns>
-		ushort DecodeUShort();
-
-		/// <summary>
-		/// Decodes the int value from the instruction stream
-		/// </summary>
-		/// <returns></returns>
-		int DecodeInt();
-
-		/// <summary>
-		/// Decodes the uint value from the instruction stream
-		/// </summary>
-		/// <returns></returns>
-		uint DecodeUInt();
-
-		/// <summary>
-		/// Decodes the long value from the instruction stream
-		/// </summary>
-		/// <returns></returns>
-		long DecodeLong();
-
-		/// <summary>
-		/// Decodes the float value from the instruction stream
-		/// </summary>
-		/// <returns></returns>
-		float DecodeFloat();
-
-		/// <summary>
-		/// Decodes the double value from the instruction stream
-		/// </summary>
-		/// <returns></returns>
-		double DecodeDouble();
-
-		/// <summary>
-		/// Decodes the tokentype from the instruction stream
-		/// </summary>
-		/// <returns></returns>
-		Token DecodeTokenType();
+		MosaInstruction Instruction { get; }
 
 		/// <summary>
 		/// Gets the type system.

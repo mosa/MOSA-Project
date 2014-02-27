@@ -27,5 +27,24 @@ namespace Mosa.Compiler.Common
 
 			list.Add(item);
 		}
+		/// <summary>
+		/// Determines whether the two lists' elements are equal.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="list">The list.</param>
+		/// <param name="other">The other list.</param>
+		public static bool SequenceEquals<T>(this IList<T> list, IList<T> other)
+		{
+			if (list.Count != other.Count)
+				return false;
+
+			var comparer = EqualityComparer<T>.Default;
+			for (int i = 0; i < list.Count; i++)
+			{
+				if (!comparer.Equals(list[i], other[i]))
+					return false;
+			}
+			return true;
+		}
 	}
 }

@@ -64,7 +64,7 @@ namespace Mosa.TinyCPUSimulator.Adaptor
 
 			base.BlockStart(block);
 
-			simAdapter.SimCPU.SetSymbol(block.ToString() + ":" + methodCompiler.Method.MethodName, (ulong)(sectionAddress + startPosition + current), 0);
+			simAdapter.SimCPU.SetSymbol(block.ToString() + ":" + methodCompiler.Method.FullName, (ulong)(sectionAddress + startPosition + current), 0);
 		}
 	}
 }

@@ -116,6 +116,24 @@ namespace Mosa.Platform.ARMv6
 		}
 
 		/// <summary>
+		/// Gets the native alignment of the architecture in bytes.
+		/// </summary>
+		/// <value>This property always returns 4.</value>
+		public override int NativeAlignment
+		{
+			get { return 4; }
+		}
+
+		/// <summary>
+		/// Gets the native size of architecture in bytes.
+		/// </summary>
+		/// <value>This property always returns 4.</value>
+		public override int NativePointerSize
+		{
+			get { return 4; }
+		}
+
+		/// <summary>
 		/// Retrieves the register set of the ARMv6 platform.
 		/// </summary>
 		public override Register[] RegisterSet
@@ -195,27 +213,17 @@ namespace Mosa.Platform.ARMv6
 		/// <summary>
 		/// Gets the type memory requirements.
 		/// </summary>
+		/// <param name="typeLayout">The type layouts.</param>
 		/// <param name="type">The signature type.</param>
 		/// <param name="size">Receives the memory size of the type.</param>
 		/// <param name="alignment">Receives alignment requirements of the type.</param>
 		/// <exception cref="System.ArgumentNullException">signatureType</exception>
-		public override void GetTypeRequirements(MosaType type, out int size, out int alignment)
+		public override void GetTypeRequirements(MosaTypeLayout typeLayout, MosaType type, out int size, out int alignment)
 		{
-			if (type.IsLong)
-			{
-				size = 8;
-				alignment = 4;
-			}
-			else if (type.IsDouble)
-			{
-				size = 8;
-				alignment = 8;
-			}
-			else
-			{
-				size = 4;
-				alignment = 4;
-			}
+			alignment = type.IsR8 ? 8 : 4;
+
+			size = type.IsValueType ? typeLayout.GetTypeSize(type) : 4;
+			size += (alignment - (size % alignment)) % alignment;
 		}
 
 		/// <summary>
@@ -236,6 +244,18 @@ namespace Mosa.Platform.ARMv6
 		public override void InsertMoveInstruction(Context context, Operand destination, Operand source)
 		{
 			context.AppendInstruction(BaseTransformationStage.GetMove(destination, source), destination, source);
+		}
+
+		/// <summary>
+		/// Create platform compound move.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <param name="destination">The destination.</param>
+		/// <param name="source">The source.</param>
+		/// <param name="size">The size.</param>
+		public override void InsertCompoundMoveInstruction(Context context, Operand destination, Operand source, int size)
+		{
+			throw new NotImplementCompilerException();
 		}
 
 		/// <summary>

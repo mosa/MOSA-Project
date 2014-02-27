@@ -125,7 +125,7 @@ namespace Mosa.Compiler.Framework.CIL
 		/// <returns></returns>
 		protected static MosaMethod DecodeInvocationTarget(Context ctx, IInstructionDecoder decoder, InvokeSupportFlags flags)
 		{
-			var method = decoder.TypeSystem.Resolver.GetMethodByToken(decoder.Method.CodeAssembly, decoder.DecodeTokenType(), decoder.Compiler.Method.DeclaringType.GenericArguments);
+			var method = (MosaMethod)decoder.Instruction.Operand;
 
 			decoder.Compiler.Scheduler.TrackMethodInvoked(method);
 
@@ -142,19 +142,19 @@ namespace Mosa.Compiler.Framework.CIL
 		/// <param name="method">The method.</param>
 		private static void SetInvokeTarget(Context context, BaseMethodCompiler compiler, MosaMethod method)
 		{
-			context.InvokeMethod = method;
+			context.MosaMethod = method;
 
 			// Fix the parameter list
-			int paramCount = method.Parameters.Count;
+			int paramCount = method.Signature.Parameters.Count;
 
 			if (method.HasThis && !method.HasExplicitThis)
 				paramCount++;
 
 			// Setup operands for parameters and the return value
-			if (!method.ReturnType.IsVoid)
+			if (!method.Signature.ReturnType.IsVoid)
 			{
 				context.ResultCount = 1;
-				context.Result = compiler.CreateVirtualRegister(compiler.TypeSystem.ConvertToStackType(method.ReturnType));
+				context.Result = compiler.CreateVirtualRegister(method.Signature.ReturnType.GetStackType());
 			}
 			else
 				context.ResultCount = 0;

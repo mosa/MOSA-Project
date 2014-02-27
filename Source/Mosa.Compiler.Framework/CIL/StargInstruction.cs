@@ -48,21 +48,8 @@ namespace Mosa.Compiler.Framework.CIL
 			// Decode the base first
 			base.Decode(ctx, decoder);
 
-			ushort argIdx;
-
-			// Opcode specific handling
-			if (opcode == OpCode.Starg_s)
-			{
-				byte arg = decoder.DecodeByte();
-				argIdx = arg;
-			}
-			else
-			{
-				argIdx = decoder.DecodeUShort();
-			}
-
 			// The argument is the result
-			ctx.Result = decoder.Compiler.GetParameterOperand(argIdx);
+			ctx.Result = decoder.Compiler.GetParameterOperand((int)decoder.Instruction.Operand);
 
 			// FIXME: Do some type compatibility checks
 			// See verification for this instruction and

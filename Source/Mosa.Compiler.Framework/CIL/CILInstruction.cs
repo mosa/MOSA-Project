@@ -368,7 +368,7 @@ namespace Mosa.Compiler.Framework.CIL
 			/* 0x0A2 */
 			opcodeMap[(int)OpCode.Stelem_ref] = new StelemInstruction(OpCode.Stelem_ref);
 			/* 0x0A3 */
-			opcodeMap[(int)OpCode.Ldelem] = null; // new LdelemInstruction(OpCode.Ldelem);
+			opcodeMap[(int)OpCode.Ldelem] = new LdelemInstruction(OpCode.Ldelem);
 			/* 0x0A4 */
 			opcodeMap[(int)OpCode.Stelem] = new StelemInstruction(OpCode.Stelem);
 			/* 0x0A5 */

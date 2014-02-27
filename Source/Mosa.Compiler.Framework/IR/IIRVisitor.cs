@@ -81,6 +81,12 @@ namespace Mosa.Compiler.Framework.IR
 		void Load(Context context);
 
 		/// <summary>
+		/// Visitation function for CompoundLoad.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CompoundLoad(Context context);
+
+		/// <summary>
 		/// Visitation function for Load Zero Extended.
 		/// </summary>
 		/// <param name="context">The context.</param>
@@ -121,6 +127,12 @@ namespace Mosa.Compiler.Framework.IR
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void Move(Context context);
+
+		/// <summary>
+		/// Visitation function for CompoundMove.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CompoundMove(Context context);
 
 		/// <summary>
 		/// Visitation function for Phi.
@@ -169,6 +181,12 @@ namespace Mosa.Compiler.Framework.IR
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void Store(Context context);
+
+		/// <summary>
+		/// Visitation function for CompoundStore.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CompoundStore(Context context);
 
 		/// <summary>
 		/// Visitation function for ZeroExtendedMove.

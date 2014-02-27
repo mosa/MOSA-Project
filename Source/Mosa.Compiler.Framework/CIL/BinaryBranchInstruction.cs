@@ -59,24 +59,7 @@ namespace Mosa.Compiler.Framework.CIL
 			// Read the branch target
 			// Is this a short branch target?
 			// FIXME: Remove unary branch instructions from this list.
-			if (opcode == OpCode.Beq_s || opcode == OpCode.Bge_s || opcode == OpCode.Bge_un_s || opcode == OpCode.Bgt_s ||
-				opcode == OpCode.Bgt_un_s || opcode == OpCode.Ble_s || opcode == OpCode.Ble_un_s || opcode == OpCode.Blt_s ||
-				opcode == OpCode.Blt_un_s || opcode == OpCode.Bne_un_s)
-			{
-				sbyte target = decoder.DecodeSByte();
-				ctx.SetBranch(target);
-			}
-			else if (opcode == OpCode.Beq || opcode == OpCode.Bge || opcode == OpCode.Bge_un || opcode == OpCode.Bgt ||
-				opcode == OpCode.Bgt_un || opcode == OpCode.Ble || opcode == OpCode.Ble_un || opcode == OpCode.Blt ||
-				opcode == OpCode.Blt_un || opcode == OpCode.Bne_un)
-			{
-				int target = decoder.DecodeInt();
-				ctx.SetBranch(target);
-			}
-			else
-			{
-				throw new NotSupportedException(@"Invalid branch opcode specified for BinaryBranchInstruction");
-			}
+			ctx.SetBranch((int)decoder.Instruction.Operand);
 		}
 
 		/// <summary>

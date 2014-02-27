@@ -32,20 +32,9 @@ namespace Mosa.Compiler.Framework.IR
 		/// <summary>
 		/// Boxes a value type.
 		/// </summary>
-		/// BoxInt8,
-		BoxChar,
-
-		BoxBool,
-		BoxInt8,
-		BoxUInt8,
-		BoxInt16,
-		BoxUInt16,
-		BoxInt32,
-		BoxUInt32,
-		BoxInt64,
-		BoxUInt64,
-		BoxSingle,
-		BoxDouble,
+		Box32,
+		Box64,
+		Box,
 
 		/// <summary>
 		/// Casts an object references to a specific type.
@@ -108,18 +97,8 @@ namespace Mosa.Compiler.Framework.IR
 		/// <summary>
 		/// Unboxes a value type.
 		/// </summary>
-		UnboxChar,
-
-		UnboxBool,
-		UnboxInt8,
-		UnboxUInt8,
-		UnboxInt16,
-		UnboxUInt16,
-		UnboxInt32,
-		UnboxUInt32,
-		UnboxInt64,
-		UnboxUInt64,
-		UnboxSingle,
-		UnboxDouble,
+		Unbox32,
+		Unbox64,
+		Unbox,
 	}
 }

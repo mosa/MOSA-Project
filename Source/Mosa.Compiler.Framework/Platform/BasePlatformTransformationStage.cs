@@ -58,11 +58,11 @@ namespace Mosa.Compiler.Framework.Platform
 		/// </returns>
 		protected Operand EmitFloatingPointConstant(Operand operand)
 		{
-			if (!operand.IsConstant || !operand.IsFloatingPoint)
+			if (!operand.IsConstant || !operand.IsR)
 				return operand;
 
 			int size, alignment;
-			architecture.GetTypeRequirements(operand.Type, out size, out alignment);
+			architecture.GetTypeRequirements(typeLayout, operand.Type, out size, out alignment);
 
 			string name = String.Format("C_{0}", Guid.NewGuid());
 
@@ -70,11 +70,11 @@ namespace Mosa.Compiler.Framework.Platform
 			{
 				using (BinaryWriter writer = new BinaryWriter(stream))
 				{
-					if (operand.IsSingle)
+					if (operand.IsR4)
 					{
 						writer.Write(operand.ConstantSingleFloatingPoint);
 					}
-					else if (operand.IsDouble)
+					else if (operand.IsR8)
 					{
 						writer.Write(operand.ConstantDoubleFloatingPoint);
 					}

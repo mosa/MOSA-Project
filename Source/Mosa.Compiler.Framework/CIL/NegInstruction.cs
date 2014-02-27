@@ -30,6 +30,7 @@ namespace Mosa.Compiler.Framework.CIL
 			StackTypeCode.N,
 			StackTypeCode.F,
 			StackTypeCode.Unknown,
+			StackTypeCode.Unknown,
 			StackTypeCode.Unknown
 		};
 
@@ -60,7 +61,7 @@ namespace Mosa.Compiler.Framework.CIL
 			base.Resolve(ctx, compiler);
 
 			// Validate the operand
-			var result = typeCodes[(int)TypeSystem.GetStackType(ctx.Operand1.Type)];
+			var result = typeCodes[(int)ctx.Operand1.Type.GetStackTypeCode()];
 			if (StackTypeCode.Unknown == result)
 				throw new InvalidOperationException(@"Invalid operand to Neg instruction [" + result + "]");
 

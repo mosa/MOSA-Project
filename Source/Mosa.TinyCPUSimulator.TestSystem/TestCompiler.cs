@@ -49,7 +49,6 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 			simAdapter = platform.CreateSimAdaptor();
 
 			linker = new SimLinker(simAdapter);
-			typeSystem = new TypeSystem();
 		}
 
 		protected void CompileTestCode()
@@ -57,15 +56,15 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 			if (simCompiler != null)
 				return;
 
-			MosaAssemblyLoader assemblyLoader = new MosaAssemblyLoader();
+			MosaModuleLoader moduleLoader = new MosaModuleLoader();
 
-			assemblyLoader.AddPrivatePath(System.IO.Directory.GetCurrentDirectory());
-			assemblyLoader.LoadModule("mscorlib.dll");
-			assemblyLoader.LoadModule("Mosa.Platform.Internal." + platform.Name + ".dll");
-			assemblyLoader.LoadModule("Mosa.Test.Collection.dll");
-			assemblyLoader.LoadModule("Mosa.Kernel.x86Test.dll");
+			moduleLoader.AddPrivatePath(System.IO.Directory.GetCurrentDirectory());
+			moduleLoader.LoadModuleFromFile("mscorlib.dll");
+			moduleLoader.LoadModuleFromFile("Mosa.Platform.Internal." + platform.Name + ".dll");
+			moduleLoader.LoadModuleFromFile("Mosa.Test.Collection.dll");
+			moduleLoader.LoadModuleFromFile("Mosa.Kernel.x86Test.dll");
 
-			typeSystem.Load(assemblyLoader);
+			typeSystem = TypeSystem.Load(moduleLoader.CreateMetadata());
 
 			typeLayout = new MosaTypeLayout(typeSystem, 4, 4);
 
@@ -96,8 +95,7 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 
 			Debug.Assert(runtimeMethod != null, runtimeMethod.ToString());
 
-			LinkerSymbol symbol = linker.GetSymbol(runtimeMethod.MethodName);
-			//LinkerSection section = linker.GetSection(symbol.SectionKind);
+			LinkerSymbol symbol = linker.GetSymbol(runtimeMethod.FullName);
 
 			ulong address = (ulong)symbol.VirtualAddress;
 
@@ -111,7 +109,7 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 			if (simAdapter.SimCPU.Monitor.BreakAtTick == simAdapter.SimCPU.Tick)
 				throw new Exception("Aborted. Method did not complete under 100000 ticks. " + simAdapter.SimCPU.Tick.ToString());
 
-			object result = platform.GetResult(simAdapter, runtimeMethod.ReturnType);
+			object result = platform.GetResult(simAdapter, runtimeMethod.Signature.ReturnType);
 
 			try
 			{
@@ -142,7 +140,7 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 				{
 					if (m.Name == method)
 					{
-						if (m.Parameters.Count == parameters.Length)
+						if (m.Signature.Parameters.Count == parameters.Length)
 						{
 							return m;
 						}

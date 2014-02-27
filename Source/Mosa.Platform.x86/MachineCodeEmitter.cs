@@ -215,17 +215,17 @@ namespace Mosa.Platform.x86
 				throw new InvalidCompilerException();
 			}
 
-			if (op.IsSignedByte)
+			if (op.IsI1)
 				codeStream.WriteByte(Convert.ToByte(op.ConstantSignedInteger));
-			else if (op.IsUnsignedByte)
+			else if (op.IsU1 || op.IsBoolean)
 				codeStream.WriteByte(Convert.ToByte(op.ConstantUnsignedInteger));
-			else if (op.IsUnsignedShort || op.IsChar)
+			else if (op.IsU2 || op.IsChar)
 				codeStream.Write(Convert.ToUInt16(op.ConstantUnsignedInteger), Endianness.Little);
-			else if (op.IsSignedShort)
+			else if (op.IsI2)
 				codeStream.Write(Convert.ToInt16(op.ConstantSignedInteger), Endianness.Little);
-			else if (op.IsSignedInt || op.IsNativeSignedInteger)
+			else if (op.IsI4 || op.IsI)
 				codeStream.Write(Convert.ToInt32(op.ConstantSignedInteger), Endianness.Little);
-			else if (op.IsUnsignedInt || op.IsPointer || op.IsNativeUnsignedInteger || op.IsObject)
+			else if (op.IsU4 || op.IsPointer || op.IsU || !op.IsValueType)
 				codeStream.Write(Convert.ToUInt32(op.ConstantUnsignedInteger), Endianness.Little);
 			else
 				throw new InvalidCompilerException();

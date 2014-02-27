@@ -18,17 +18,15 @@ namespace Mosa.Test.Debug
 
 		private static void Test0()
 		{
-			var assemblyLoader = new MosaAssemblyLoader();
+			var moduleLoader = new MosaModuleLoader();
 
-			assemblyLoader.AddPrivatePath(Directory.GetCurrentDirectory());
+			moduleLoader.AddPrivatePath(Directory.GetCurrentDirectory());
 
-			assemblyLoader.LoadModule("Mosa.Test.AssemblyB.dll");
-			assemblyLoader.LoadModule("Mosa.Test.AssemblyC.dll");
-			assemblyLoader.LoadModule("Mosa.ClassLib.dll");
+			moduleLoader.LoadModuleFromFile("Mosa.Test.AssemblyB.dll");
+			moduleLoader.LoadModuleFromFile("Mosa.Test.AssemblyC.dll");
+			moduleLoader.LoadModuleFromFile("Mosa.ClassLib.dll");
 
-			var typeSystem = new TypeSystem();
-
-			typeSystem.Load(assemblyLoader);
+			var typeSystem = TypeSystem.Load(moduleLoader.CreateMetadata());
 
 			return;
 		}

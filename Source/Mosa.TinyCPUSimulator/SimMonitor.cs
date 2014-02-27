@@ -53,6 +53,7 @@ namespace Mosa.TinyCPUSimulator
 		{
 			CPU = cpu;
 			DebugOutput = false;
+			//DebugOutput = true;
 			Stop = false;
 			StepOverBreakPoint = 0;
 		}
