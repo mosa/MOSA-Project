@@ -54,8 +54,8 @@ namespace Mosa.Compiler.Framework.CIL
 			// Destination depends on the opcode
 			switch (opcode)
 			{
-				case OpCode.Stloc: index = decoder.DecodeUShort(); break;
-				case OpCode.Stloc_s: index = decoder.DecodeByte(); break;
+				case OpCode.Stloc:
+				case OpCode.Stloc_s: index = (int)decoder.Instruction.Operand; break;
 				case OpCode.Stloc_0: index = 0; break;
 				case OpCode.Stloc_1: index = 1; break;
 				case OpCode.Stloc_2: index = 2; break;

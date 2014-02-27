@@ -102,6 +102,11 @@ namespace Mosa.Compiler.Framework.IR
 		/// <summary>
 		///
 		/// </summary>
+		public static readonly CompoundLoad CompoundLoad = new CompoundLoad();
+
+		/// <summary>
+		///
+		/// </summary>
 		public static readonly LoadZeroExtended LoadZeroExtended = new LoadZeroExtended();
 
 		/// <summary>
@@ -133,6 +138,11 @@ namespace Mosa.Compiler.Framework.IR
 		///
 		/// </summary>
 		public static readonly Move Move = new Move();
+
+		/// <summary>
+		///
+		/// </summary>
+		public static readonly CompoundMove CompoundMove = new CompoundMove();
 
 		/// <summary>
 		///
@@ -203,6 +213,11 @@ namespace Mosa.Compiler.Framework.IR
 		///
 		/// </summary>
 		public static readonly Store Store = new Store();
+
+		/// <summary>
+		///
+		/// </summary>
+		public static readonly CompoundStore CompoundStore = new CompoundStore();
 
 		/// <summary>
 		///

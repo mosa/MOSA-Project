@@ -46,14 +46,14 @@ namespace Mosa.Platform.x86.Stages
 			if (type == null)
 				return;
 
-			var method = TypeSystem.GetMethodByName(type, "ExceptionHandlerType");
+			var method = type.FindMethodByName("ExceptionHandlerType");
 
 			if (method == null)
 				return;
 
 			Operand exceptionMethod = Operand.CreateSymbolFromMethod(typeSystem, method);
 
-			Operand esp = Operand.CreateCPURegister(typeSystem.BuiltIn.Int32, GeneralPurposeRegister.ESP);
+			Operand esp = Operand.CreateCPURegister(typeSystem.BuiltIn.I4, GeneralPurposeRegister.ESP);
 
 			BasicBlocks basicBlocks = new BasicBlocks();
 			InstructionSet instructionSet = new InstructionSet(25);

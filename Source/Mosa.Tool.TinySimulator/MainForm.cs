@@ -10,7 +10,6 @@
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.InternalTrace;
 using Mosa.Compiler.Linker;
-using Mosa.Compiler.Metadata.Loader;
 using Mosa.Compiler.MosaTypeSystem;
 using Mosa.TinyCPUSimulator;
 using Mosa.TinyCPUSimulator.Adaptor;
@@ -56,9 +55,6 @@ namespace Mosa.Tool.TinySimulator
 		public string CompileOnLaunch { get; set; }
 
 		public List<Watch> watches = new List<Watch>();
-
-		private MosaAssemblyLoader assemblyLoader;
-		private bool typeSystemModified = true;
 
 		private Thread worker;
 		private object workerLock = new object();
@@ -165,28 +161,16 @@ namespace Mosa.Tool.TinySimulator
 
 		public void LoadAssembly(string filename)
 		{
-			assemblyLoader = new MosaAssemblyLoader();
+			MosaModuleLoader moduleLoader = new MosaModuleLoader();
 
-			assemblyLoader.AddPrivatePath(System.IO.Path.GetDirectoryName(filename));
-			assemblyLoader.LoadModule(filename);
+			moduleLoader.AddPrivatePath(System.IO.Path.GetDirectoryName(filename));
+			moduleLoader.LoadModuleFromFile(filename);
 
-			typeSystemModified = true;
+			TypeSystem = TypeSystem.Load(moduleLoader.CreateMetadata());
 
-			UpdateTypeSystem();
-		}
-
-		private void UpdateTypeSystem()
-		{
-			if (!typeSystemModified)
-				return;
-
-			TypeSystem = new TypeSystem();
-			TypeSystem.Load(assemblyLoader);
 			TypeLayout = new MosaTypeLayout(TypeSystem, 4, 4);
 
 			assembliesView.UpdateTree();
-
-			typeSystemModified = false;
 		}
 
 		public void StartSimulator(string platform)
@@ -195,10 +179,6 @@ namespace Mosa.Tool.TinySimulator
 				return;
 
 			Status = "Compiling...";
-
-			UpdateTypeSystem();
-
-			typeSystemModified = true;  // compiling modifies the type sytem
 
 			Architecture = GetArchitecture(platform);
 			var simAdapter = GetSimAdaptor(platform);

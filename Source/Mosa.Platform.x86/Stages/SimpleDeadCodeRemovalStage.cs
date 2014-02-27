@@ -12,7 +12,7 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.x86.Stages
 {
 	/// <summary>
-	/// The simple dead code removal stage remove unless instructions 
+	/// The simple dead code removal stage remove useless instructions 
 	/// and NOP instructions prior to the register allocation stage.
 	/// </summary>
 	public sealed class SimpleDeadCodeRemovalStage : BaseTransformationStage, IMethodCompilerStage
@@ -41,7 +41,7 @@ namespace Mosa.Platform.x86.Stages
 						// Remove Nop instructions
 						if (ctx.Instruction is Instructions.Nop)
 						{
-							ctx.Delete();
+							ctx.Delete(true);
 							continue;
 						}
 

@@ -83,9 +83,9 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </summary>
 		void ICompilerStage.Run()
 		{
-			if (typeSystem.EntryMethod != null)
+			if (typeSystem.EntryPoint != null)
 			{
-				Schedule(typeSystem.EntryMethod);
+				Schedule(typeSystem.EntryPoint);
 			}
 
 			context.AppendInstruction(IRInstruction.Epilogue);
@@ -107,7 +107,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			Operand symbolOperand = Operand.CreateSymbolFromMethod(typeSystem,method);
 			context.AppendInstruction(IRInstruction.Call, null, symbolOperand);
-			context.InvokeMethod = method;
+			context.MosaMethod = method;
 		}
 
 		#endregion Methods

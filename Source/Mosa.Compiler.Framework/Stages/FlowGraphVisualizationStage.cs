@@ -154,7 +154,7 @@ namespace Mosa.Compiler.Framework.Stages
 				//dotFile = new System.IO.StreamWriter("dotGraph_" + compiler.Method.Name + "_" + methodCount[compiler.Method.Name] + ".dot");
 				dotFile = new System.IO.StreamWriter("dotGraph.dot");
 				dotFile.WriteLine("digraph \"\" {");
-				dotFile.WriteLine("label = \"" + methodCompiler.Method.DeclaringType.Assembly.Name + "\"");
+				dotFile.WriteLine("label = \"" + methodCompiler.Method.DeclaringType.Module.Name + "\"");
 			}
 			catch (System.Exception)
 			{

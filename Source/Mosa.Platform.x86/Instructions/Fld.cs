@@ -50,7 +50,7 @@ namespace Mosa.Platform.x86.Instructions
 		{
 			Debug.Assert(source.IsMemoryAddress);
 
-			if (source.IsSingle)
+			if (source.IsR4)
 				return m32fp;
 			else
 				return m64fp;

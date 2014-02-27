@@ -68,6 +68,24 @@ namespace Mosa.Platform.x64
 		}
 
 		/// <summary>
+		/// Gets the native alignment of the architecture in bytes.
+		/// </summary>
+		/// <value>This property always returns 8.</value>
+		public override int NativeAlignment
+		{
+			get { return 8; }
+		}
+
+		/// <summary>
+		/// Gets the native size of architecture in bytes.
+		/// </summary>
+		/// <value>This property always returns 8.</value>
+		public override int NativePointerSize
+		{
+			get { return 8; }
+		}
+
+		/// <summary>
 		/// Retrieves the register set of the x64 platform.
 		/// </summary>
 		public override Register[] RegisterSet
@@ -171,14 +189,20 @@ namespace Mosa.Platform.x64
 		/// <summary>
 		/// Gets the type memory requirements.
 		/// </summary>
+		/// <param name="typeLayout">The type layouts.</param>
 		/// <param name="type">The signature type.</param>
 		/// <param name="size">Receives the memory size of the type.</param>
 		/// <param name="alignment">Receives alignment requirements of the type.</param>
-		public override void GetTypeRequirements(MosaType type, out int size, out int alignment)
+		public override void GetTypeRequirements(MosaTypeLayout typeLayout, MosaType type, out int size, out int alignment)
 		{
-			if (type.IsLong || type.IsDouble || type.IsObject || type.IsPointer)
+			if (type.IsUI8 || type.IsR8 || !type.IsValueType || type.IsPointer)
 			{
 				size = 8;
+				alignment = 8;
+			}
+			else if (typeLayout.IsCompoundType(type))
+			{
+				size = typeLayout.GetTypeSize(type);
 				alignment = 8;
 			}
 			else
@@ -186,7 +210,6 @@ namespace Mosa.Platform.x64
 				size = 4;
 				alignment = 4;
 			}
-
 		}
 
 		/// <summary>
@@ -208,6 +231,18 @@ namespace Mosa.Platform.x64
 		/// <param name="destination">The destination.</param>
 		/// <param name="source">The source.</param>
 		public override void InsertMoveInstruction(Context context, Operand destination, Operand source)
+		{
+			// TODO
+		}
+
+		/// <summary>
+		/// Create platform compound move.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <param name="destination">The destination.</param>
+		/// <param name="source">The source.</param>
+		/// <param name="size">The size.</param>
+		public override void InsertCompoundMoveInstruction(Context context, Operand destination, Operand source, int size)
 		{
 			// TODO
 		}

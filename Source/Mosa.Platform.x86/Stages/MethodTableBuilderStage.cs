@@ -56,12 +56,12 @@ namespace Mosa.Platform.x86.Stages
 			// Collect all methods that we can link to
 			foreach (var type in typeSystem.AllTypes)
 			{
-				if (type.IsModule || type.IsBaseGeneric || type.IsInterface)
+				if (type.IsModule || type.HasOpenGenericParams || type.IsInterface)
 					continue;
 
 				foreach (var method in type.Methods)
 				{
-					var symbol = linker.GetSymbol(method.MethodName);
+					var symbol = linker.GetSymbol(method.FullName);
 					if (symbol != null)
 					{
 						table.Add(symbol);
@@ -118,13 +118,13 @@ namespace Mosa.Platform.x86.Stages
 			{
 				int size = 3 * typeLayout.NativePointerSize;
 
-				string section = method.MethodName + "$mdtable";
+				string section = method.FullName + "$mdtable";
 
 				using (var stream = linker.Allocate(section, SectionKind.ROData, size, typeLayout.NativePointerAlignment))
 				{
 					// Pointer to Exception Handler Table
 					// TODO: If there is no exception clause table, set to 0 and do not involve linker
-					linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuiltInPatch.I4, section, 0, 0, method.MethodName + "$etable", 0);
+					linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuiltInPatch.I4, section, 0, 0, method.FullName + "$etable", 0);
 					stream.Position += typeLayout.NativePointerSize;
 
 					// GC tracking info (not implemented yet)

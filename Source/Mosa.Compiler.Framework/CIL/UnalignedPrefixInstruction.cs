@@ -39,7 +39,7 @@ namespace Mosa.Compiler.Framework.CIL
 			// Decode base classes first
 			base.Decode(ctx, decoder);
 
-			byte alignment = decoder.DecodeByte();
+			byte alignment = (byte)decoder.Instruction.Operand;
 			ctx.Other = alignment;
 		}
 

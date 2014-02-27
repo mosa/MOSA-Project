@@ -46,14 +46,14 @@ namespace Mosa.Platform.x86.Stages
 			if (type == null)
 				return;
 
-			var method = TypeSystem.GetMethodByName(type, "ProcessInterrupt");
+			var method = type.FindMethodByName("ProcessInterrupt");
 
 			if (method == null)
 				return;
 
 			Operand interrupt = Operand.CreateSymbolFromMethod(typeSystem, method);
 
-			Operand esp = Operand.CreateCPURegister(typeSystem.BuiltIn.Int32, GeneralPurposeRegister.ESP);
+			Operand esp = Operand.CreateCPURegister(typeSystem.BuiltIn.I4, GeneralPurposeRegister.ESP);
 
 			for (int i = 0; i <= 255; i++)
 			{

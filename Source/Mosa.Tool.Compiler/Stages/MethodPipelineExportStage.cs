@@ -85,7 +85,7 @@ namespace Mosa.Tool.Compiler.Stages
 			if (string.IsNullOrEmpty(MethodPipelineExportDirectory))
 				return;
 
-			string filename = (method.MethodName + ".txt").Replace("<", "[").Replace(">", "]");
+			string filename = (method.FullName + ".txt").Replace("<", "[").Replace(">", "]");
 
 			if (filename.Length > 200)
 				filename = filename.Substring(0, 200);

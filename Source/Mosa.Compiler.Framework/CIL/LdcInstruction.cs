@@ -47,35 +47,35 @@ namespace Mosa.Compiler.Framework.CIL
 			{
 				case OpCode.Ldc_i4:
 					{
-						int i = decoder.DecodeInt();
+						int i = (int)decoder.Instruction.Operand;
 						constantValueOperand = Operand.CreateConstantSignedInt(decoder.TypeSystem, i);
 					}
 					break;
 
 				case OpCode.Ldc_i4_s:
 					{
-						sbyte sb = decoder.DecodeSByte();
+						sbyte sb = (sbyte)decoder.Instruction.Operand;
 						constantValueOperand = Operand.CreateConstantSignedInt(decoder.TypeSystem, sb);
 					}
 					break;
 
 				case OpCode.Ldc_i8:
 					{
-						long l = decoder.DecodeLong();
+						long l = (long)decoder.Instruction.Operand;
 						constantValueOperand = Operand.CreateConstantSignedLong(decoder.TypeSystem, l);
 					}
 					break;
 
 				case OpCode.Ldc_r4:
 					{
-						float f = decoder.DecodeFloat();
+						float f = (float)decoder.Instruction.Operand;
 						constantValueOperand = Operand.CreateConstantSingle(decoder.TypeSystem, f);
 					}
 					break;
 
 				case OpCode.Ldc_r8:
 					{
-						double d = decoder.DecodeDouble();
+						double d = (double)decoder.Instruction.Operand;
 						constantValueOperand = Operand.CreateConstantDouble(decoder.TypeSystem, d);
 					}
 					break;

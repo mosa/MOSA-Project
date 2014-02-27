@@ -40,13 +40,13 @@ namespace Mosa.Platform.x86.Stages
 						&& context.ResultCount == 1
 						&& context.Operand1.IsMemoryAddress
 						&& context.Result.IsMemoryAddress
-						&& (context.Result.IsFloatingPoint || context.Operand1.IsFloatingPoint))
+						&& (context.Result.IsR || context.Operand1.IsR))
 					{
 						LoadFirstOperandIntoRegister(context);
 					}
 					else
 						// No two-operand floating point opcode allows the first operand to a memory operand
-						if (context.OperandCount == 2 && context.Operand1.IsMemoryAddress && context.Operand1.IsFloatingPoint)
+						if (context.OperandCount == 2 && context.Operand1.IsMemoryAddress && context.Operand1.IsR)
 						{
 							if (IsCommutative(context.Instruction))
 							{

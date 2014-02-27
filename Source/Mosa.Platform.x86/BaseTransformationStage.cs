@@ -23,19 +23,19 @@ namespace Mosa.Platform.x86
 
 		public static X86Instruction GetMove(Operand Destination, Operand Source)
 		{
-			if (Source.IsSingle && Destination.IsSingle)
+			if (Source.IsR4 && Destination.IsR4)
 			{
 				return X86.Movss;
 			}
-			else if (Source.IsDouble && Destination.IsDouble)
+			else if (Source.IsR8 && Destination.IsR8)
 			{
 				return X86.Movsd;
 			}
-			else if (Source.IsSingle && Destination.IsDouble)
+			else if (Source.IsR4 && Destination.IsR8)
 			{
 				return X86.Cvtss2sd;
 			}
-			else if (Source.IsDouble && Destination.IsSingle)
+			else if (Source.IsR8 && Destination.IsR4)
 			{
 				return X86.Cvtsd2ss;
 			}

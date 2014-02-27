@@ -39,22 +39,12 @@ namespace Mosa.Compiler.Framework.CIL
 		{
 			// Decode base classes first
 			base.Decode(ctx, decoder);
-
-			ushort index;
-
+			
 			// Opcode specific handling
-			if (opcode == OpCode.Ldloca_s)
-			{
-				index = decoder.DecodeByte();
-			}
-			else
-			{
-				index = decoder.DecodeUShort();
-			}
 
-			Operand local = decoder.Compiler.GetLocalOperand(index);
+			Operand local = decoder.Compiler.GetLocalOperand((int)decoder.Instruction.Operand);
 			ctx.Operand1 = local;
-			ctx.Result = decoder.Compiler.CreateVirtualRegister(decoder.Compiler.TypeSystem.Resolver.GetManagedPointerType(local.Type));
+			ctx.Result = decoder.Compiler.CreateVirtualRegister(local.Type.ToManagedPointer());
 		}
 
 		/// <summary>

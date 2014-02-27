@@ -44,13 +44,14 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			foreach (var type in typeSystem.AllTypes)
 			{
-				if (type.IsModule || type.Assembly.Name == "@Internal")
+				if (type.IsModule)
 					continue;
 
-				if (type.IsBaseGeneric || type.IsOpenGenericType)
-					continue;
+				// For reflection, even types having opening generic params should be written
+				//if (type.HasOpenGenericParams)
+				//    continue;
 
-				if (!(type.IsObject || type.IsValueType || type.IsEnum || type.IsString || type.IsInterface || type.IsLinkerGenerated))
+				if (type.BaseType == null && !type.IsInterface && type.FullName != "System.Object")   // ghost types like generic params, function ptr, etc.
 					continue;
 
 				CreateTypeDefinitionTable(type);
@@ -126,13 +127,13 @@ namespace Mosa.Compiler.Framework.Stages
 					using (EndianAwareBinaryWriter writer = new EndianAwareBinaryWriter(stream, architecture.Endianness))
 					{
 						// 1. Offset / Address
-						if (field.IsStaticField && !field.IsLiteralField)
+						if (field.IsStatic && !field.IsLiteral)
 						{
 							linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuiltInPatch.I4, fieldDescSymbol, (int)writer.Position, 0, field.FullName, 0);
 						}
 						else
 						{
-							writer.Write(field.Offset);
+							writer.Write(typeLayout.GetFieldOffset(field));
 							writer.Position -= 4;
 						}
 						writer.Position += typeLayout.NativePointerSize;
@@ -142,7 +143,7 @@ namespace Mosa.Compiler.Framework.Stages
 						writer.Position += typeLayout.NativePointerSize;
 
 						// 3. Size
-						writer.Write((uint)typeLayout.GetTypeSize(field.Type));
+						writer.Write((uint)typeLayout.GetFieldSize(field));
 
 						// 4. Metadata Token
 						writer.Write((uint)0); //FIXME!

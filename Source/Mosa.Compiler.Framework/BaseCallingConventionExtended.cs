@@ -49,11 +49,11 @@ namespace Mosa.Compiler.Framework
 
 		#region Members
 
-		public override void GetStackRequirements(Operand stackOperand, out int size, out int alignment)
+		public override void GetStackRequirements(MosaTypeLayout typeLayout, Operand stackOperand, out int size, out int alignment)
 		{
 			// Special treatment for some stack types
 			// FIXME: Handle the size and alignment requirements of value types
-			architecture.GetTypeRequirements(stackOperand.Type, out size, out alignment);
+			architecture.GetTypeRequirements(typeLayout, stackOperand.Type, out size, out alignment);
 
 			if (size < alignment)
 				size = alignment;
@@ -87,15 +87,16 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Calculates the stack size for parameters.
 		/// </summary>
+		/// <param name="typeLayout">The type layouts.</param>
 		/// <param name="operands">The operands.</param>
 		/// <param name="method">The method.</param>
 		/// <returns></returns>
-		protected static int CalculateStackSizeForParameters(BaseArchitecture architecture, List<Operand> operands, MosaMethod method)
+		protected static int CalculateStackSizeForParameters(MosaTypeLayout typeLayout, BaseArchitecture architecture, List<Operand> operands, MosaMethod method)
 		{
-			Debug.Assert((method.Parameters.Count + (method.HasThis ? 1 : 0) == operands.Count) ||
-			(method.DeclaringType.IsDelegate && method.Parameters.Count == operands.Count));
+			Debug.Assert((method.Signature.Parameters.Count + (method.HasThis ? 1 : 0) == operands.Count) ||
+			(method.DeclaringType.IsDelegate && method.Signature.Parameters.Count == operands.Count));
 
-			int offset = method.Parameters.Count - operands.Count;
+			int offset = method.Signature.Parameters.Count - operands.Count;
 			int result = 0;
 
 			for (int index = operands.Count - 1; index >= 0; index--)
@@ -103,15 +104,12 @@ namespace Mosa.Compiler.Framework
 				Operand operand = operands[index];
 
 				int size, alignment;
-				architecture.GetTypeRequirements(operand.Type, out size, out alignment);
+				architecture.GetTypeRequirements(typeLayout, operand.Type, out size, out alignment);
 
-				var param = (index + offset >= 0) ? method.Parameters[index + offset] : null;
+				var param = (index + offset >= 0) ? method.Signature.Parameters[index + offset] : null;
 
-				if (param != null && operand.IsDouble && param.Type.IsSingle)
-				{
-					size = 4;
-					alignment = 4;
-				}
+				if (param != null && operand.IsR8 && param.Type.IsR4)
+					architecture.GetTypeRequirements(typeLayout, param.Type, out size, out alignment);
 
 				if (size < alignment)
 					size = alignment;

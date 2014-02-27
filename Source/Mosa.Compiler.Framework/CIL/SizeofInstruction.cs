@@ -41,7 +41,7 @@ namespace Mosa.Compiler.Framework.CIL
 			// Decode base classes first
 			base.Decode(ctx, decoder);
 
-			MosaType type = decoder.TypeSystem.Resolver.GetTypeByToken(decoder.Method.CodeAssembly, decoder.DecodeTokenType(), decoder.Method);
+			MosaType type = (MosaType)decoder.Instruction.Operand;
 
 			uint size = (uint)decoder.Compiler.TypeLayout.GetTypeSize(type);
 

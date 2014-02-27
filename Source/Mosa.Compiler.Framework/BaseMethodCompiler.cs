@@ -71,7 +71,7 @@ namespace Mosa.Compiler.Framework
 			this.BasicBlocks = basicBlocks ?? new BasicBlocks();
 			this.InstructionSet = instructionSet ?? new InstructionSet(256);
 			this.Pipeline = new CompilerPipeline();
-			this.StackLayout = new StackLayout(Architecture, method.Parameters.Count + (method.HasThis || method.HasExplicitThis ? 1 : 0));
+			this.StackLayout = new StackLayout(Architecture, method.Signature.Parameters.Count + (method.HasThis || method.HasExplicitThis ? 1 : 0));
 			this.VirtualRegisters = new VirtualRegisters(Architecture);
 			this.LocalVariables = emptyOperandList;
 
@@ -181,10 +181,13 @@ namespace Mosa.Compiler.Framework
 
 			if (Method.HasThis || Method.HasExplicitThis)
 			{
-				StackLayout.SetStackParameter(index++, Type, displacement, "this");
+				if (Type.IsValueType)
+					StackLayout.SetStackParameter(index++, Type.ToManagedPointer(), displacement, "this");
+				else
+					StackLayout.SetStackParameter(index++, Type, displacement, "this");
 			}
 
-			foreach (var parameter in Method.Parameters)
+			foreach (var parameter in Method.Signature.Parameters)
 			{
 				StackLayout.SetStackParameter(index++, parameter.Type, displacement, parameter.Name);
 			}
@@ -196,7 +199,7 @@ namespace Mosa.Compiler.Framework
 		/// <returns>A stream object, which can be used to store emitted instructions.</returns>
 		public virtual Stream RequestCodeStream()
 		{
-			return Linker.Allocate(Method.MethodName, SectionKind.Text, 0, 0);
+			return Linker.Allocate(Method.FullName, SectionKind.Text, 0, 0);
 		}
 
 		/// <summary>
@@ -276,7 +279,7 @@ namespace Mosa.Compiler.Framework
 		/// Allocates the local variable virtual registers.
 		/// </summary>
 		/// <param name="locals">The locals.</param>
-		public void SetLocalVariables(List<MosaType> locals)
+		public void SetLocalVariables(IList<MosaLocal> locals)
 		{
 			LocalVariables = new Operand[locals.Count];
 
@@ -285,13 +288,13 @@ namespace Mosa.Compiler.Framework
 				var local = locals[index];
 				Operand operand;
 
-				if (local.IsValueType)
+				if (local.Type.IsValueType)
 				{
-					operand = StackLayout.AddStackLocal(local);
+					operand = StackLayout.AddStackLocal(local.Type);
 				}
 				else
 				{
-					var stacktype = TypeSystem.ConvertToStackType(local);
+					var stacktype = local.Type.GetStackType();
 					operand = VirtualRegisters.Allocate(stacktype);
 				}
 

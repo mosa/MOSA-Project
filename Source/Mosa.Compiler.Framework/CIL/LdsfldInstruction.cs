@@ -8,6 +8,7 @@
  */
 
 using System.Diagnostics;
+using Mosa.Compiler.MosaTypeSystem;
 
 namespace Mosa.Compiler.Framework.CIL
 {
@@ -41,14 +42,14 @@ namespace Mosa.Compiler.Framework.CIL
 			// Decode base classes first
 			base.Decode(ctx, decoder);
 
-			var field = decoder.TypeSystem.Resolver.GetFieldByToken(decoder.Method.CodeAssembly, decoder.DecodeTokenType(), decoder.Method.DeclaringType.GenericArguments);
+			var field = (MosaField)decoder.Instruction.Operand;
 
 			decoder.Compiler.Scheduler.TrackFieldReferenced(field);
 
-			Debug.Assert(field.IsStaticField, "Static field access on non-static field.");
+			Debug.Assert(field.IsStatic, "Static field access on non-static field.");
 
 			ctx.MosaField = field;
-			ctx.Result = LoadInstruction.CreateResultOperand(decoder, field.Type);
+			ctx.Result = LoadInstruction.CreateResultOperand(decoder, field.FieldType);
 		}
 
 		/// <summary>

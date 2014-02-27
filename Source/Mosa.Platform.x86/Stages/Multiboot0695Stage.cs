@@ -149,9 +149,9 @@ namespace Mosa.Platform.x86.Stages
 
 			TypeInitializerSchedulerStage typeInitializerSchedulerStage = compiler.Pipeline.FindFirst<TypeInitializerSchedulerStage>();
 
-			Operand ecx = Operand.CreateCPURegister(typeSystem.BuiltIn.Int32, GeneralPurposeRegister.ECX);
-			Operand eax = Operand.CreateCPURegister(typeSystem.BuiltIn.Int32, GeneralPurposeRegister.EAX);
-			Operand ebx = Operand.CreateCPURegister(typeSystem.BuiltIn.Int32, GeneralPurposeRegister.EBX);
+			Operand ecx = Operand.CreateCPURegister(typeSystem.BuiltIn.I4, GeneralPurposeRegister.ECX);
+			Operand eax = Operand.CreateCPURegister(typeSystem.BuiltIn.I4, GeneralPurposeRegister.EAX);
+			Operand ebx = Operand.CreateCPURegister(typeSystem.BuiltIn.I4, GeneralPurposeRegister.EBX);
 
 			BasicBlocks basicBlocks = new BasicBlocks();
 			InstructionSet instructionSet = new InstructionSet(25);
@@ -159,8 +159,8 @@ namespace Mosa.Platform.x86.Stages
 			basicBlocks.AddHeaderBlock(ctx.BasicBlock);
 
 			ctx.AppendInstruction(X86.Mov, ecx, Operand.CreateConstantSignedInt(typeSystem, 0x200000));
-			ctx.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(typeSystem.BuiltIn.Int32, ecx, 0), eax);
-			ctx.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(typeSystem.BuiltIn.Int32, ecx, 4), ebx);
+			ctx.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(typeSystem.BuiltIn.I4, ecx, 0), eax);
+			ctx.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(typeSystem.BuiltIn.I4, ecx, 4), ebx);
 
 			Operand entryPoint = Operand.CreateSymbolFromMethod(typeSystem, typeInitializerSchedulerStage.TypeInitializerMethod);
 
@@ -169,7 +169,7 @@ namespace Mosa.Platform.x86.Stages
 
 			compiler.CompileMethod(multibootMethod, basicBlocks, instructionSet);
 
-			linker.EntryPoint = linker.GetSymbol(multibootMethod.MethodName);
+			linker.EntryPoint = linker.GetSymbol(multibootMethod.FullName);
 		}
 
 		#endregion ICompilerStage Members
@@ -236,7 +236,7 @@ namespace Mosa.Platform.x86.Stages
 					bw.Write(load_end_addr);
 					bw.Write(bss_end_addr);
 
-					linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuiltInPatch.I4, MultibootHeaderSymbolName, (int)stream.Position, 0, multibootMethod.MethodName, 0);
+					linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuiltInPatch.I4, MultibootHeaderSymbolName, (int)stream.Position, 0, multibootMethod.FullName, 0);
 					bw.Write((int)0);
 
 					bw.Write(VideoMode);

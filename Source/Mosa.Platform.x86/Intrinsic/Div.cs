@@ -30,7 +30,7 @@ namespace Mosa.Platform.x86.Intrinsic
 			Operand n = context.Operand1;
 			Operand d = context.Operand2;
 			Operand result = context.Result;
-			Operand result2 = methodCompiler.CreateVirtualRegister(methodCompiler.TypeSystem.BuiltIn.UInt32);
+			Operand result2 = methodCompiler.CreateVirtualRegister(methodCompiler.TypeSystem.BuiltIn.U4);
 			
 			Operand op0L, op0H;
 

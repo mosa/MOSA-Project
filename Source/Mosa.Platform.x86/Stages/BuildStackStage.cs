@@ -97,14 +97,14 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		private void AddPrologueInstructions(Context context)
 		{
-			Operand ebp = Operand.CreateCPURegister(typeSystem.BuiltIn.Int32, GeneralPurposeRegister.EBP);
-			Operand esp = Operand.CreateCPURegister(typeSystem.BuiltIn.Int32, GeneralPurposeRegister.ESP);
+			Operand ebp = Operand.CreateCPURegister(typeSystem.BuiltIn.I4, GeneralPurposeRegister.EBP);
+			Operand esp = Operand.CreateCPURegister(typeSystem.BuiltIn.I4, GeneralPurposeRegister.ESP);
 
-			//Operand eax = Operand.CreateCPURegister(typeSystem.BuiltIn.Int32, GeneralPurposeRegister.EAX);
-			Operand edx = Operand.CreateCPURegister(typeSystem.BuiltIn.Int32, GeneralPurposeRegister.EDX);
-			Operand edi = Operand.CreateCPURegister(typeSystem.BuiltIn.Int32, GeneralPurposeRegister.EDI);
-			Operand ecx = Operand.CreateCPURegister(typeSystem.BuiltIn.Int32, GeneralPurposeRegister.ECX);
-			Operand ebx = Operand.CreateCPURegister(typeSystem.BuiltIn.Int32, GeneralPurposeRegister.EBX);
+			//Operand eax = Operand.CreateCPURegister(typeSystem.BuiltIn.I4, GeneralPurposeRegister.EAX);
+			Operand edx = Operand.CreateCPURegister(typeSystem.BuiltIn.I4, GeneralPurposeRegister.EDX);
+			Operand edi = Operand.CreateCPURegister(typeSystem.BuiltIn.I4, GeneralPurposeRegister.EDI);
+			Operand ecx = Operand.CreateCPURegister(typeSystem.BuiltIn.I4, GeneralPurposeRegister.ECX);
+			Operand ebx = Operand.CreateCPURegister(typeSystem.BuiltIn.I4, GeneralPurposeRegister.EBX);
 
 			context.SetInstruction(X86.Push, null, ebp);
 			context.AppendInstruction(X86.Mov, ebp, esp);
@@ -130,7 +130,7 @@ namespace Mosa.Platform.x86.Stages
 			if (SaveRegisters)
 			{
 				// Save EDX for int32 return values (or do not save EDX for non-int64 return values)
-				if (!methodCompiler.Method.ReturnType.IsSignedLong && !methodCompiler.Method.ReturnType.IsUnsignedLong)
+				if (!methodCompiler.Method.Signature.ReturnType.IsUI8)
 				{
 					context.AppendInstruction(X86.Push, null, edx);
 				}
@@ -146,13 +146,13 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		private void AddEpilogueInstructions(Context context)
 		{
-			Operand ebp = Operand.CreateCPURegister(typeSystem.BuiltIn.Int32, GeneralPurposeRegister.EBP);
-			Operand esp = Operand.CreateCPURegister(typeSystem.BuiltIn.Int32, GeneralPurposeRegister.ESP);
+			Operand ebp = Operand.CreateCPURegister(typeSystem.BuiltIn.I4, GeneralPurposeRegister.EBP);
+			Operand esp = Operand.CreateCPURegister(typeSystem.BuiltIn.I4, GeneralPurposeRegister.ESP);
 
-			Operand edx = Operand.CreateCPURegister(typeSystem.BuiltIn.Int32, GeneralPurposeRegister.EDX);
-			Operand edi = Operand.CreateCPURegister(typeSystem.BuiltIn.Int32, GeneralPurposeRegister.EDI);
-			Operand ecx = Operand.CreateCPURegister(typeSystem.BuiltIn.Int32, GeneralPurposeRegister.ECX);
-			Operand ebx = Operand.CreateCPURegister(typeSystem.BuiltIn.Int32, GeneralPurposeRegister.EBX);
+			Operand edx = Operand.CreateCPURegister(typeSystem.BuiltIn.I4, GeneralPurposeRegister.EDX);
+			Operand edi = Operand.CreateCPURegister(typeSystem.BuiltIn.I4, GeneralPurposeRegister.EDI);
+			Operand ecx = Operand.CreateCPURegister(typeSystem.BuiltIn.I4, GeneralPurposeRegister.ECX);
+			Operand ebx = Operand.CreateCPURegister(typeSystem.BuiltIn.I4, GeneralPurposeRegister.EBX);
 
 			context.SetInstruction(X86.Nop);
 
@@ -163,7 +163,7 @@ namespace Mosa.Platform.x86.Stages
 				context.AppendInstruction(X86.Pop, edi);
 
 				// Save EDX for int32 return values (or do not save EDX for non-int64 return values)
-				if (!methodCompiler.Method.ReturnType.IsSignedLong && !methodCompiler.Method.ReturnType.IsUnsignedLong)
+				if (!methodCompiler.Method.Signature.ReturnType.IsUI8)
 				{
 					context.AppendInstruction(X86.Pop, edx);
 				}

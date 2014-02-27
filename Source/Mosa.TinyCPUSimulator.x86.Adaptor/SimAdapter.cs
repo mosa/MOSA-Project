@@ -70,7 +70,7 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 				{
 					var block = basicBlocks.GetByLabel(target);
 
-					operands.Add(CreateLabel(32, block.ToString() + ":" + method.MethodName));
+					operands.Add(CreateLabel(32, block.ToString() + ":" + method.FullName));
 				}
 			}
 
@@ -200,11 +200,11 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 
 		private static int GetSize(MosaType type)
 		{
-			if (type.IsByte || type.IsBoolean)
+			if (type.IsUI1 || type.IsBoolean)
 				return 8;
-			else if (type.IsShort)
+			else if (type.IsUI2)
 				return 16;
-			else if (type.IsLong || type.IsDouble)
+			else if (type.IsUI8 || type.IsR8)
 				return 64;
 			else
 				return 32;

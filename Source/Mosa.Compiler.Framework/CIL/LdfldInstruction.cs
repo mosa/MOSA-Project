@@ -7,6 +7,8 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using Mosa.Compiler.MosaTypeSystem;
+
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
@@ -39,12 +41,12 @@ namespace Mosa.Compiler.Framework.CIL
 			// Decode base classes first
 			base.Decode(ctx, decoder);
 
-			var field = decoder.TypeSystem.Resolver.GetFieldByToken(decoder.Method.CodeAssembly, decoder.DecodeTokenType(), decoder.Method.DeclaringType.GenericArguments);
+			var field = (MosaField)decoder.Instruction.Operand;
 
 			decoder.Compiler.Scheduler.TrackFieldReferenced(field);
 
 			ctx.MosaField = field;
-			ctx.Result = LoadInstruction.CreateResultOperand(decoder, field.Type);
+			ctx.Result = LoadInstruction.CreateResultOperand(decoder, field.FieldType);
 		}
 
 		/// <summary>

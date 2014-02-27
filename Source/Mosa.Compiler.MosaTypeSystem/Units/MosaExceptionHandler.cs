@@ -1,4 +1,4 @@
-/*
+﻿/*
  * (c) 2013 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
@@ -12,58 +12,42 @@ namespace Mosa.Compiler.MosaTypeSystem
 	/// <summary>
 	///
 	/// </summary>
-	public class ExceptionBlock
+	public class MosaExceptionHandler
 	{
 		/// <summary>
 		///
 		/// </summary>
-		public ExceptionBlockType ExceptionHandler;
+		public ExceptionHandlerType HandlerType { get; private set; }
 
 		/// <summary>
 		///
 		/// </summary>
-		public int TryOffset { get; internal set; }
+		public int TryOffset { get; private set; }
 
 		/// <summary>
 		///
 		/// </summary>
-		public int TryLength { get; internal set; }
+		public int TryEnd { get; private set; }
 
 		/// <summary>
 		///
 		/// </summary>
-		public int HandlerOffset { get; internal set; }
+		public int HandlerOffset { get; private set; }
 
 		/// <summary>
 		///
 		/// </summary>
-		public int HandlerLength { get; internal set; }
+		public int HandlerEnd { get; private set; }
 
 		/// <summary>
 		///
 		/// </summary>
-		public MosaType Type { get; internal set; }
+		public MosaType Type { get; private set; }
 
 		/// <summary>
 		///
 		/// </summary>
-		public int FilterOffset { get; internal set; }
-
-		/// <summary>
-		///
-		/// </summary>
-		public int TryEnd
-		{
-			get { return this.TryOffset + this.TryLength; }
-		}
-
-		/// <summary>
-		///
-		/// </summary>
-		public int HandlerEnd
-		{
-			get { return this.HandlerOffset + this.HandlerLength; }
-		}
+		public int? FilterOffset { get; private set; }
 
 		/// <summary>
 		/// Determines whether [is label within try] [the specified label].
@@ -87,6 +71,24 @@ namespace Mosa.Compiler.MosaTypeSystem
 		public bool IsLabelWithinHandler(int label)
 		{
 			return (label >= HandlerOffset && label < HandlerEnd);
+		}
+
+		public MosaExceptionHandler(
+			ExceptionHandlerType ehType,
+			int tryOffset, int tryEnd,
+			int handlerOffset, int handlerEnd,
+			MosaType type, int? filterOffset)
+		{
+			HandlerType = ehType;
+
+			TryOffset = tryOffset;
+			TryEnd = tryEnd;
+
+			HandlerOffset = handlerOffset;
+			HandlerEnd = handlerEnd;
+
+			Type = type;
+			FilterOffset = filterOffset;
 		}
 	}
 }

@@ -42,13 +42,13 @@ namespace Mosa.Compiler.Framework.CIL
 			// Decode base classes first
 			base.Decode(ctx, decoder);
 
-			ushort index;
+			int index;
 
 			// Opcode specific handling
 			switch (opcode)
 			{
-				case OpCode.Ldarg: index = decoder.DecodeUShort(); break;
-				case OpCode.Ldarg_s: index = decoder.DecodeByte(); break;
+				case OpCode.Ldarg:
+				case OpCode.Ldarg_s: index = (int)decoder.Instruction.Operand; break;
 				case OpCode.Ldarg_0: index = 0; break;
 				case OpCode.Ldarg_1: index = 1; break;
 				case OpCode.Ldarg_2: index = 2; break;

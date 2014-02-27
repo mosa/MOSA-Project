@@ -55,7 +55,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (methodCompiler.Method.HasThis || methodCompiler.Method.HasExplicitThis)
 				++offset;
 
-			for (int i = 0; i < methodCompiler.Method.Parameters.Count + offset; ++i)
+			for (int i = 0; i < methodCompiler.Method.Signature.Parameters.Count + offset; ++i)
 			{
 				parameters.Add(methodCompiler.GetParameterOperand(i));
 			}
@@ -71,7 +71,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="offsetOfFirst">Specifies the offset of the first stack operand in the list.</param>
 		/// <param name="direction">The direction.</param>
 		/// <returns></returns>
-		private static int LayoutVariables(IList<Operand> locals, BaseCallingConvention callingConvention, int offsetOfFirst, int direction)
+		private int LayoutVariables(IList<Operand> locals, BaseCallingConvention callingConvention, int offsetOfFirst, int direction)
 		{
 			int offset = offsetOfFirst;
 
@@ -83,7 +83,7 @@ namespace Mosa.Compiler.Framework.Stages
 				int padding;
 				int thisOffset;
 
-				callingConvention.GetStackRequirements(operand, out size, out alignment);
+				callingConvention.GetStackRequirements(typeLayout, operand, out size, out alignment);
 				if (direction == 1)
 				{
 					padding = (offset % alignment);

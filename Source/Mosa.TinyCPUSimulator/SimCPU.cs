@@ -244,7 +244,6 @@ namespace Mosa.TinyCPUSimulator
 		{
 			Symbols.Add(name, new SimSymbol(name, address, size));
 
-			//Debug.WriteLine("0x" + address.ToString("X") + ": " + label);
 		}
 
 		public SimSymbol GetSymbol(string name)
@@ -346,7 +345,9 @@ namespace Mosa.TinyCPUSimulator
 			try
 			{
 				//if (Monitor.DebugOutput)
-				//	Debug.Write("0x" + CurrentInstructionPointer.ToString("X") + ": ");
+				//{
+				//	Debug.Write("0x" + CurrentProgramCounter.ToString("X") + ": ");
+				//}
 
 				Tick++;
 				LastException = null;
@@ -372,7 +373,9 @@ namespace Mosa.TinyCPUSimulator
 		public void Execute()
 		{
 			if (Monitor.DebugOutput)
+			{
 				Debug.WriteLine("EIP        EAX        EBX        ECX        EDX        ESI        EDI        ESP        EBP        FLAGS");
+			}
 
 			for (; ; )
 			{
