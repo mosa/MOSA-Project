@@ -219,7 +219,7 @@ namespace Mosa.Compiler.Framework
 		/// <value>
 		/// The constant signed integer.
 		/// </value>
-		public long ConstantSignedInteger { get { return (int)ConstantUnsignedInteger; } set { ConstantUnsignedInteger = (uint)value; } }
+		public long ConstantSignedInteger { get { return (long)ConstantUnsignedInteger; } set { ConstantUnsignedInteger = (ulong)value; } }
 
 		/// <summary>
 		/// Gets the string data.
