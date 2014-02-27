@@ -52,8 +52,8 @@ namespace Mosa.TinyCPUSimulator
 		public SimMonitor(SimCPU cpu)
 		{
 			CPU = cpu;
-			//DebugOutput = false;
-			DebugOutput = true;
+			DebugOutput = false;
+			//DebugOutput = true;
 			Stop = false;
 			StepOverBreakPoint = 0;
 		}
