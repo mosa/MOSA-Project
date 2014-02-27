@@ -92,7 +92,7 @@ namespace Mosa.Compiler.Framework.CIL
 				else if (implMethod != null)
 				{
 					// Second case: unmodified, change callvirt target method
-					constrained.Delete(true);
+					constrained.SetInstruction(CILInstruction.Instructions[(int)OpCode.Nop]);
 					return implMethod;
 				}
 				else
