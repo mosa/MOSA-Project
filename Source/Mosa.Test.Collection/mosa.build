@@ -14,6 +14,7 @@
 	<target name="build">
 	    <csc target="library" output="${outputDirectory}/Mosa.Test.Collection.dll" debug="${debug}" unsafe="true" nostdlib="false">
 		<sources>
+                    <include name="ArrayLayoutTests.cs"/>
                     <include name="CharTests.cs"/>
                     <include name="ComparisonTests.cs"/>
                     <include name="ConvI2Tests.cs"/>
@@ -27,6 +28,7 @@
                     <include name="CallTests.cs"/>
                     <include name="ConvTests.cs"/>
                     <include name="CallVirtualTests.cs"/>
+                    <include name="GenericMixedTest.cs"/>
                     <include name="LdargaTests.cs"/>
                     <include name="NewObjectTests.cs"/>
                     <include name="RegisterAllocatorTests.cs"/>
@@ -43,6 +45,7 @@
                     <include name="StaticFieldTests.cs"/>
                     <include name="SwitchTests.cs"/>
                     <include name="LdlocaTests.cs"/>
+                    <include name="ValueTypeTests.cs"/>
                     <include name="WhileTests.cs"/>
                     <include name="StringTests.cs"/>
                     <include name="SingleTests.cs"/>

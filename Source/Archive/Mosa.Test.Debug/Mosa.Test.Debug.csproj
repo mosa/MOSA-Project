@@ -95,14 +95,6 @@
       <Project>{5f30a68e-05bf-40ea-b576-5ebcde520559}</Project>
       <Name>Mosa.Compiler.MosaTypeSystem</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Mosa.Test.Collection.MbUnit\Mosa.Test.Collection.MbUnit.csproj">
-      <Project>{68F4256D-C291-4365-BC09-AE49B902AE59}</Project>
-      <Name>Mosa.Test.Collection.MbUnit</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Mosa.Test.System\Mosa.Test.System.csproj">
-      <Project>{AD653B6B-EBB7-4E69-93F7-FADA40462648}</Project>
-      <Name>Mosa.Test.System</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="dnlib, Version=1.0.1.0, Culture=neutral, PublicKeyToken=50e96378b6e77999, processorArchitecture=MSIL">

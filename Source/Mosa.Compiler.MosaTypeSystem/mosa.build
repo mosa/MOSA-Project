@@ -14,26 +14,43 @@
 	<target name="build">
 	    <csc target="library" output="${outputDirectory}/Mosa.Compiler.MosaTypeSystem.dll" debug="${debug}" unsafe="true" nostdlib="false">
 		<sources>
-                    <include name="ExceptionBlock.cs"/>
-                    <include name="ExceptionBlockType.cs"/>
-                    <include name="MosaAttribute.cs"/>
-                    <include name="MosaGenericParameter.cs"/>
-                    <include name="MosaAssemblyLoader.cs"/>
-                    <include name="MosaTypeLoader.cs"/>
-                    <include name="MosaAssembly.cs"/>
+                    <include name="IMetadata.cs"/>
+                    <include name="IModuleLoader.cs"/>
+                    <include name="Metadata/MetadataResolver.cs"/>
+                    <include name="ITypeSystemController.cs"/>
+                    <include name="Metadata/DnlibExtension.cs"/>
+                    <include name="ExceptionHandlerType.cs"/>
+                    <include name="Metadata/CLRMetadata.cs"/>
+                    <include name="Metadata/UnitDescs.cs"/>
+                    <include name="MosaTypeExtension.cs"/>
+                    <include name="SignatureName.cs"/>
+                    <include name="TypeSystemExtensions.cs"/>
+                    <include name="Units/MosaArrayInfo.cs"/>
+                    <include name="Units/MosaCustomAttribute.cs"/>
+                    <include name="Units/MosaInstruction.cs"/>
+                    <include name="Units/MosaLocal.cs"/>
+                    <include name="Units/MosaMethodSignature.cs"/>
+                    <include name="MosaTypeCode.cs"/>
+                    <include name="Units/MosaExceptionHandler.cs"/>
+                    <include name="MosaModuleLoader.cs"/>
+                    <include name="Units/MosaModule.cs"/>
                     <include name="BuiltInTypes.cs"/>
-                    <include name="MosaTypeResolver.cs"/>
+                    <include name="Metadata/MetadataLoader.cs"/>
+                    <include name="Metadata/MetadataCache.cs"/>
+                    <include name="Units/MosaUnit.cs"/>
+                    <include name="Metadata/ScopedToken.cs"/>
+                    <include name="SignatureComparer.cs"/>
                     <include name="StackTypeCode.cs"/>
                     <include name="TypeSystem.cs"/>
-                    <include name="MosaMethod.cs"/>
-                    <include name="MosaField.cs"/>
-                    <include name="MosaParameter.cs"/>
-                    <include name="MosaType.cs"/>
+                    <include name="Units/MosaMethod.cs"/>
+                    <include name="Units/MosaField.cs"/>
+                    <include name="Units/MosaParameter.cs"/>
+                    <include name="Units/MosaType.cs"/>
 		</sources>
 		<references>
                     <include name="System.dll"/>
+                    <include name="../../3rdParty/dnlib.dll"/>
                     <include name="${outputDirectory}/Mosa.Compiler.Common.dll"/>
-                    <include name="${outputDirectory}/Mosa.Compiler.Metadata.dll"/>
 		</references>
 		<!-- supress warnings -->
 		<nowarn><warning number="${suppresswarnings}"/></nowarn>

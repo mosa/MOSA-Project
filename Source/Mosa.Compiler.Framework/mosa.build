@@ -16,6 +16,11 @@
 		<sources>
                     <include name="BaseCallingConventionExtended.cs"/>
                     <include name="DelegatePatcher.cs"/>
+                    <include name="Intrinsics/InternalInitializeArray.cs"/>
+                    <include name="Intrinsics/InternalGetType.cs"/>
+                    <include name="IR/CompoundLoad.cs"/>
+                    <include name="IR/CompoundMove.cs"/>
+                    <include name="IR/CompoundStore.cs"/>
                     <include name="ShiftType.cs"/>
                     <include name="ConditionCodeExtension.cs"/>
                     <include name="BasicBlocks.cs"/>
@@ -33,6 +38,7 @@
                     <include name="RegisterAllocator/VirtualRegister.cs"/>
                     <include name="RegisterAllocator/GreedyRegisterAllocator.cs"/>
                     <include name="Linker/LinkerFactory.cs"/>
+                    <include name="Stages/ConvertCompoundMoveStage.cs"/>
                     <include name="Stages/StopStage.cs"/>
                     <include name="Stages/BaseEdgeSplitStage.cs"/>
                     <include name="Stages/EmptyBlockRemovalStage.cs"/>
@@ -262,7 +268,6 @@
                     <include name="${outputDirectory}/Mosa.Compiler.Common.dll"/>
                     <include name="${outputDirectory}/Mosa.Compiler.Linker.dll"/>
                     <include name="${outputDirectory}/Mosa.Compiler.InternalTrace.dll"/>
-                    <include name="${outputDirectory}/Mosa.Compiler.Metadata.dll"/>
                     <include name="${outputDirectory}/Mosa.Compiler.MosaTypeSystem.dll"/>
 		</references>
 		<!-- supress warnings -->

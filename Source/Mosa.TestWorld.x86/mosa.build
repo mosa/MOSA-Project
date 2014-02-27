@@ -34,9 +34,6 @@
                     <include name="${outputDirectory}/Mosa.Kernel.x86.dll"/>
                     <include name="${outputDirectory}/mscorlib.dll"/>
                     <include name="${outputDirectory}/Mosa.Platform.Internal.x86.dll"/>
-                    <include name="${outputDirectory}/Mosa.Test.AssemblyA.dll"/>
-                    <include name="${outputDirectory}/Mosa.Test.AssemblyB.dll"/>
-                    <include name="${outputDirectory}/Mosa.Test.AssemblyC.dll"/>
                     <include name="${outputDirectory}/Mosa.Test.Collection.dll"/>
 		</references>
 		<!-- supress warnings -->

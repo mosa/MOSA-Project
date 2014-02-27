@@ -20,6 +20,7 @@
                     <include name="System.Reflection/Module.cs"/>
                     <include name="System.Runtime.CompilerServices/CompilationRelaxationsAttribute.cs"/>
                     <include name="System.Runtime.CompilerServices/RuntimeCompatibilityAttribute.cs"/>
+                    <include name="System.Runtime.CompilerServices/RuntimeHelpers.cs"/>
                     <include name="System.Runtime.InteropServices/CallingConvention.cs"/>
                     <include name="System.Runtime.InteropServices/LayoutKind.cs"/>
                     <include name="System.Runtime.InteropServices/StructLayoutAttribute.cs"/>
@@ -37,6 +38,7 @@
                     <include name="System/CLSCompliantAttribute.cs"/>
                     <include name="System.Diagnostics/DebuggableAttribute.cs"/>
                     <include name="System/AsyncCallback.cs"/>
+                    <include name="System/TypedReference.cs"/>
                     <include name="System/IAsyncResult.cs"/>
                     <include name="System/WaitHandle.cs"/>
                     <include name="System/IComparable.cs"/>

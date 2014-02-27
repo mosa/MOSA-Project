@@ -37,12 +37,6 @@
     <Compile Include="Test.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Mosa.Test.AssemblyA\Mosa.Test.AssemblyA.csproj">
-      <Project>{6e8efb11-7c55-4d9a-a38c-8a2b70d5e423}</Project>
-      <Name>Mosa.Test.AssemblyA</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Folder Include="Properties\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

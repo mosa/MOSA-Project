@@ -24,7 +24,6 @@
                     <include name="${outputDirectory}/Mosa.Compiler.Common.dll"/>
                     <include name="${outputDirectory}/Mosa.Compiler.Framework.dll"/>
                     <include name="${outputDirectory}/Mosa.Compiler.Linker.dll"/>
-                    <include name="${outputDirectory}/Mosa.Compiler.Metadata.dll"/>
                     <include name="${outputDirectory}/Mosa.Compiler.MosaTypeSystem.dll"/>
                     <include name="${outputDirectory}/Mosa.Platform.x86.dll"/>
                     <include name="${outputDirectory}/Mosa.TinyCPUSimulator.Adaptor.dll"/>

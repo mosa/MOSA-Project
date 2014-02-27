@@ -16,6 +16,7 @@
 		<sources>
                     <include name="BooleanFixture.cs"/>
                     <include name="BoxingFixture.cs"/>
+                    <include name="ArrayLayoutFixture.cs"/>
                     <include name="EnumFixture.cs"/>
                     <include name="FibonacciFixture.cs"/>
                     <include name="Int16Fixture.cs"/>
@@ -36,9 +37,7 @@
                     <include name="../../3rdParty/xunit.extensions.dll"/>
                     <include name="${outputDirectory}/Mosa.Compiler.Common.dll"/>
                     <include name="${outputDirectory}/Mosa.Compiler.Framework.dll"/>
-                    <include name="${outputDirectory}/Mosa.Test.Collection.MbUnit.dll"/>
                     <include name="${outputDirectory}/Mosa.Test.Collection.dll"/>
-                    <include name="${outputDirectory}/Mosa.Test.Numbers.dll"/>
                     <include name="${outputDirectory}/Mosa.TinyCPUSimulator.Adaptor.dll"/>
                     <include name="${outputDirectory}/Mosa.TinyCPUSimulator.TestSystem.dll"/>
                     <include name="${outputDirectory}/Mosa.TinyCPUSimulator.dll"/>

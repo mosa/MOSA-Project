@@ -47,10 +47,6 @@
                     <include name="HelloWorld/Kernel/Screen.cs"/>
                     <include name="MemoryForm.cs"/>
                     <include name="MemoryForm.Designer.cs"/>
-                    <include name="PlatformSpecificWindow.cs"/>
-                    <include name="PixelMap.cs"/>
-                    <include name="EmulatorDemo.cs"/>
-                    <include name="PlatformSupport.cs"/>
                     <include name="Program.cs"/>
 		</sources>
 		<references>
@@ -63,8 +59,6 @@
                     <include name="${outputDirectory}/Mosa.DeviceDrivers.dll"/>
                     <include name="${outputDirectory}/Mosa.EmulatedKernel.dll"/>
                     <include name="${outputDirectory}/Mosa.FileSystem.dll"/>
-                    <include name="${outputDirectory}/Pictor.UI.dll"/>
-                    <include name="${outputDirectory}/Pictor.dll"/>
 		</references>
 		<!-- supress warnings -->
 		<nowarn><warning number="${suppresswarnings}"/></nowarn>

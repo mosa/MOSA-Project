@@ -100,18 +100,6 @@
       <Project>{A47B7998-4EE8-4AF8-9373-C664FDEDDC65}</Project>
       <Name>Mosa.Platform.Internal.x86</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Mosa.Test.AssemblyA\Mosa.Test.AssemblyA.csproj">
-      <Project>{6e8efb11-7c55-4d9a-a38c-8a2b70d5e423}</Project>
-      <Name>Mosa.Test.AssemblyA</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Mosa.Test.AssemblyB\Mosa.Test.AssemblyB.csproj">
-      <Project>{eed1de89-46da-4ff1-a2e1-1d70d1a645d6}</Project>
-      <Name>Mosa.Test.AssemblyB</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Mosa.Test.AssemblyC\Mosa.Test.AssemblyC.csproj">
-      <Project>{3f7f8dcf-49be-485d-83fd-90a5f525f147}</Project>
-      <Name>Mosa.Test.AssemblyC</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Mosa.Test.Collection\Mosa.Test.Collection.csproj">
       <Project>{067AAB6B-447A-45BA-9E0D-DFEA886B4F69}</Project>
       <Name>Mosa.Test.Collection</Name>

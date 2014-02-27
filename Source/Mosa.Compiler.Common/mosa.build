@@ -28,6 +28,7 @@
                     <include name="EndianAwareBinaryReader.cs"/>
                     <include name="Endian.cs"/>
                     <include name="StreamExtension.cs"/>
+                    <include name="Tuple.cs"/>
 		</sources>
 		<references>
                     <include name="System.dll"/>

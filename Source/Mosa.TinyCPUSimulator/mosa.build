@@ -27,7 +27,7 @@
                     <include name="DivideByZero.cs"/>
                     <include name="SimInstruction.cs"/>
                     <include name="InvalidMemoryAccess.cs"/>
-                    <include name="RAMBank.cs"/>
+                    <include name="MemoryRegion.cs"/>
                     <include name="SimOperand.cs"/>
                     <include name="RegisterType.cs"/>
                     <include name="SimRegister.cs"/>

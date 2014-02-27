@@ -21,6 +21,7 @@
 		<references>
                     <include name="System.dll"/>
                     <include name="System.Windows.Forms.dll"/>
+                    <include name="../../3rdParty/dnlib.dll"/>
                     <include name="${outputDirectory}/Mosa.Compiler.Common.dll"/>
                     <include name="${outputDirectory}/Mosa.Compiler.Framework.dll"/>
                     <include name="${outputDirectory}/Mosa.Compiler.MosaTypeSystem.dll"/>

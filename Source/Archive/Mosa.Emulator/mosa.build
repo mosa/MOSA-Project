@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+<project name="Mosa" default="build" basedir=".">
+	
+	<!-- Comma-separated list of warnings that should be surpressed in all modules. Warning: no spaces allowed! -->
+	<property name="suppresswarnings" value="0414,0219,0169,0162,0168"/>
+	
+	<!-- Toggle debug output by setting this to true (nant -D:debug=true) -->
+	<property name="debug" value="none" overwrite="false"/>
+	
+	<!-- Speaks for itself, I should hope -->
+	<property name="outputDirectory" value="../bin" overwrite="false"/>
+	
+	<!-- Main build target -->
+	<target name="build">
+	    <csc target="exe" main="Mosa.Emulator.Program" output="${outputDirectory}/Mosa.Emulator.exe" debug="${debug}" unsafe="true" nostdlib="false">
+		<sources>
+                    <include name="HelloWorld/Boot.cs"/>
+                    <include name="HelloWorld/Kernel/CMOS.cs"/>
+                    <include name="HelloWorld/Kernel/Colors.cs"/>
+                    <include name="HelloWorld/Kernel/CpuInfo.cs"/>
+                    <include name="HelloWorld/Kernel/GDT.cs"/>
+                    <include name="HelloWorld/Kernel/IdleTask.cs"/>
+                    <include name="HelloWorld/Kernel/IDT.cs"/>
+                    <include name="HelloWorld/Kernel/Kernel.cs"/>
+                    <include name="HelloWorld/Kernel/Keyboard.cs"/>
+                    <include name="HelloWorld/Kernel/Memory.cs"/>
+                    <include name="HelloWorld/Kernel/PageFaultHandler.cs"/>
+                    <include name="HelloWorld/Kernel/PageFrameAllocator.cs"/>
+                    <include name="HelloWorld/Kernel/Panic.cs"/>
+                    <include name="HelloWorld/Kernel/PIC.cs"/>
+                    <include name="HelloWorld/Kernel/ProcessManager.cs"/>
+                    <include name="HelloWorld/Smbios/BiosInformationStructure.cs"/>
+                    <include name="HelloWorld/Smbios/CpuStructure.cs"/>
+                    <include name="HelloWorld/Smbios/SmbiosManager.cs"/>
+                    <include name="HelloWorld/Smbios/SmbiosStructure.cs"/>
+                    <include name="HelloWorld/Kernel/TaskManager.cs"/>
+                    <include name="HelloWorld/Tests/ExceptionTest.cs"/>
+                    <include name="HelloWorld/Tests/Generic2Test.cs"/>
+                    <include name="HelloWorld/Tests/GenericTest.cs"/>
+                    <include name="HelloWorld/Tests/InterfaceTest.cs"/>
+                    <include name="HelloWorld/Tests/IsInstTest.cs"/>
+                    <include name="HelloWorld/Tests/KernelTest.cs"/>
+                    <include name="HelloWorld/Tests/StringTest.cs"/>
+                    <include name="HelloWorld/Kernel/VirtualPageAllocator.cs"/>
+                    <include name="HelloWorld/Kernel/Multiboot.cs"/>
+                    <include name="HelloWorld/Kernel/PageTable.cs"/>
+                    <include name="HelloWorld/Kernel/Screen.cs"/>
+                    <include name="MemoryForm.cs"/>
+                    <include name="MemoryForm.Designer.cs"/>
+                    <include name="PlatformSpecificWindow.cs"/>
+                    <include name="PixelMap.cs"/>
+                    <include name="EmulatorDemo.cs"/>
+                    <include name="PlatformSupport.cs"/>
+                    <include name="Program.cs"/>
+		</sources>
+		<references>
+                    <include name="System.dll"/>
+                    <include name="System.Drawing.dll"/>
+                    <include name="System.Windows.Forms.dll"/>
+                    <include name="${outputDirectory}/Mosa.EmulatedDevices.dll"/>
+                    <include name="${outputDirectory}/Mosa.ClassLib.dll"/>
+                    <include name="${outputDirectory}/Mosa.DeviceSystem.dll"/>
+                    <include name="${outputDirectory}/Mosa.DeviceDrivers.dll"/>
+                    <include name="${outputDirectory}/Mosa.EmulatedKernel.dll"/>
+                    <include name="${outputDirectory}/Mosa.FileSystem.dll"/>
+                    <include name="${outputDirectory}/Pictor.UI.dll"/>
+                    <include name="${outputDirectory}/Pictor.dll"/>
+		</references>
+		<!-- supress warnings -->
+		<nowarn><warning number="${suppresswarnings}"/></nowarn>
+        </csc>
+	</target>
+</project>
