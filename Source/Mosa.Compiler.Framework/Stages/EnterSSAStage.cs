@@ -107,9 +107,8 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </summary>
 		/// <param name="operand">The operand.</param>
 		/// <param name="version">The version.</param>
-		/// <param name="maxversion">The maxversion.</param>
 		/// <returns></returns>
-		private Operand GetSSAOperand(Operand operand, int version, int maxversion)
+		private Operand GetSSAOperand(Operand operand, int version)
 		{
 			var ssaArray = ssaOperands[operand];
 			var ssaOperand = ssaArray[version];
@@ -145,7 +144,7 @@ namespace Mosa.Compiler.Framework.Stages
 						//Debug.Assert(variables.ContainsKey(op), op.ToString() + " is not in dictionary [block = " + block + "]");
 
 						var index = variables[op].Peek();
-						context.SetOperand(i, GetSSAOperand(op, index, 0));
+						context.SetOperand(i, GetSSAOperand(op, index));
 					}
 				}
 
@@ -153,7 +152,7 @@ namespace Mosa.Compiler.Framework.Stages
 				{
 					var op = context.Result;
 					var index = counts[op];
-					context.SetResult(GetSSAOperand(op, index, op.Definitions.Count));
+					context.SetResult(GetSSAOperand(op, index));
 					variables[op].Push(index);
 					counts[op] = index + 1;
 				}
@@ -173,7 +172,7 @@ namespace Mosa.Compiler.Framework.Stages
 					if (variables[op].Count > 0)
 					{
 						var index = variables[op].Peek();
-						context.SetOperand(j, GetSSAOperand(context.GetOperand(j), index, 0));
+						context.SetOperand(j, GetSSAOperand(context.GetOperand(j), index));
 					}
 				}
 			}

@@ -41,6 +41,7 @@ namespace Mosa.TinyCPUSimulator.Adaptor
 				new CILTransformationStage(),
 				new ConvertCompoundMoveStage(),
 				//new CheckIROperandCountStage(),
+				(compilerOptions.EnableSSA) ? new PromoteLocalVariablesStage() : null,
 				(compilerOptions.EnableSSA) ? new EdgeSplitStage() : null,
 				(compilerOptions.EnableSSA) ? new DominanceCalculationStage() : null,
 				(compilerOptions.EnableSSA) ? new PhiPlacementStage() : null,

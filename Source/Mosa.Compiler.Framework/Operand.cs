@@ -346,6 +346,8 @@ namespace Mosa.Compiler.Framework
 
 		public bool IsU { get { return Type.IsU; } }
 
+		public bool IsReferenceType { get { return Type.IsReferenceType; } }
+
 		#endregion Properties
 
 		#region Construction
