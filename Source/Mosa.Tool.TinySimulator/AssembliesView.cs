@@ -15,8 +15,6 @@ namespace Mosa.Tool.TinySimulator
 {
 	public partial class AssembliesView : SimulatorDockContent
 	{
-		private bool showTokenValues = true;
-
 		public AssembliesView()
 		{
 			InitializeComponent();

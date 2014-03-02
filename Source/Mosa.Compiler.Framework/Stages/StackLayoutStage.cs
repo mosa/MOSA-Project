@@ -57,7 +57,9 @@ namespace Mosa.Compiler.Framework.Stages
 
 			for (int i = 0; i < methodCompiler.Method.Signature.Parameters.Count + offset; ++i)
 			{
-				parameters.Add(methodCompiler.GetParameterOperand(i));
+				var parameter = methodCompiler.GetParameterOperand(i);
+
+				parameters.Add(parameter);
 			}
 
 			LayoutVariables(parameters, callingConvention, callingConvention.OffsetOfFirstParameter, -1);
@@ -75,43 +77,50 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			int offset = offsetOfFirst;
 
-			foreach (Operand operand in locals)
+			foreach (var operand in locals)
 			{
-				// Does the offset fit the alignment requirement?
-				int alignment;
-				int size;
-				int padding;
-				int thisOffset;
-
-				callingConvention.GetStackRequirements(typeLayout, operand, out size, out alignment);
-				if (direction == 1)
+				if (!operand.IsParameter && operand.IsStackLocal && operand.Uses.Count == 0 && operand.Definitions.Count == 0)
 				{
-					padding = (offset % alignment);
-					offset -= (padding + size);
-					thisOffset = offset;
+					operand.Displacement = 0;
 				}
 				else
 				{
-					padding = (offset % alignment);
-					if (padding != 0)
-						padding = alignment - padding;
+					// Does the offset fit the alignment requirement?
+					int alignment = 0;
+					int size = 0;
+					int padding = 0;
+					int thisOffset = 0;
 
-					thisOffset = offset;
-					offset += (padding + size);
-				}
+					callingConvention.GetStackRequirements(typeLayout, operand, out size, out alignment);
+					if (direction == 1)
+					{
+						padding = (offset % alignment);
+						offset -= (padding + size);
+						thisOffset = offset;
+					}
+					else
+					{
+						padding = (offset % alignment);
+						if (padding != 0)
+							padding = alignment - padding;
 
-				long existing = operand.Displacement;
-				operand.Displacement = thisOffset;
+						thisOffset = offset;
+						offset += (padding + size);
+					}
 
-				// adjust split children
-				if (operand.Low != null)
-				{
-					operand.Low.Displacement = thisOffset + (operand.Low.Displacement - existing);
-				}
+					long existing = operand.Displacement;
+					operand.Displacement = thisOffset;
 
-				if (operand.High != null)
-				{
-					operand.High.Displacement = thisOffset + (operand.High.Displacement - existing);
+					// adjust split children
+					if (operand.Low != null)
+					{
+						operand.Low.Displacement = thisOffset + (operand.Low.Displacement - existing);
+					}
+
+					if (operand.High != null)
+					{
+						operand.High.Displacement = thisOffset + (operand.High.Displacement - existing);
+					}
 				}
 			}
 
