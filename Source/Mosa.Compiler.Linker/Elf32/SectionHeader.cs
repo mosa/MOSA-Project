@@ -89,7 +89,6 @@ namespace Mosa.Compiler.Linker.Elf32
 		/// <param name="writer">The writer.</param>
 		public void Write(BinaryWriter writer)
 		{
-			Address = (uint)writer.BaseStream.Position;
 			writer.Write(Name);
 			writer.Write((uint)Type);
 			writer.Write((uint)Flags);

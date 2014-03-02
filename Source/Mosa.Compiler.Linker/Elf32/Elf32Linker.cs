@@ -54,7 +54,7 @@ namespace Mosa.Compiler.Linker.Elf32
 		public Elf32Linker()
 		{
 			// Create the default section set
-			AddSection(new CodeSection());
+			AddSection(new CodeSection(BaseAddress + SectionAlignment)); // HACK to make FarJump work
 			AddSection(new DataSection());
 			AddSection(new RoDataSection());
 			AddSection(new BssSection());
@@ -93,21 +93,25 @@ namespace Mosa.Compiler.Linker.Elf32
 				header.Machine = (MachineType)MachineID;
 				header.SectionHeaderNumber = (ushort)(Sections.Length + 2);
 				header.SectionHeaderOffset = header.ElfHeaderSize;
+				header.EntryAddress = (uint)EntryPoint.VirtualAddress;
 
 				header.CreateIdent(IdentClass.Class32, Endianness == Endianness.Little ? IdentData.Data2LSB : IdentData.Data2MSB, null);
 
 				// Calculate the concatenated size of all section's data
 				uint offset = 0;
+				ushort programHeaderNumber = 0;
 				foreach (Elf32LinkerSection section in Sections)
 				{
 					offset += (uint)section.Length;
+					if (section.SectionKind != SectionKind.BSS && section.Length > 0)
+						programHeaderNumber++;
 				}
 				offset += (uint)nullSection.Length;
 				offset += (uint)stringTableSection.Length;
 
 				// Calculate offsets
 				header.ProgramHeaderOffset = header.ElfHeaderSize + header.SectionHeaderEntrySize * (uint)header.SectionHeaderNumber + offset;
-				header.ProgramHeaderNumber = 1;
+				header.ProgramHeaderNumber = programHeaderNumber;
 				header.SectionHeaderStringIndex = 1;
 
 				EndianAwareBinaryWriter writer = new EndianAwareBinaryWriter(fs, Endianness);
@@ -136,20 +140,29 @@ namespace Mosa.Compiler.Linker.Elf32
 				foreach (Elf32LinkerSection section in Sections)
 					section.WriteHeader(writer);
 
-				ProgramHeader pheader = new ProgramHeader
-				{
-					Alignment = 0,
-					FileSize = (uint)GetSection(SectionKind.Text).Length
-				};
-
-				pheader.MemorySize = pheader.FileSize;
-				pheader.VirtualAddress = 0xFF0000;
-				pheader.Flags = ProgramHeaderFlags.Execute | ProgramHeaderFlags.Read | ProgramHeaderFlags.Write;
-				pheader.Offset = ((Elf32LinkerSection)GetSection(SectionKind.Text)).Header.Offset;
-				pheader.Type = ProgramHeaderType.Load;
-
 				writer.Seek((int)header.ProgramHeaderOffset, SeekOrigin.Begin);
-				pheader.Write(writer);
+				foreach (Elf32LinkerSection section in Sections)
+				{
+					if (section.SectionKind == SectionKind.BSS || section.Length == 0)
+						continue;
+
+					ProgramHeader pheader = new ProgramHeader
+					{
+						Alignment = 0,
+						FileSize = (uint)section.Length,
+						MemorySize = (uint)section.Length,
+						Offset = section.Header.Offset,
+						VirtualAddress = (uint)section.VirtualAddress,
+						PhysicalAddress = (uint)section.VirtualAddress,
+						Type = ProgramHeaderType.Load,
+						Flags =
+						    (section.SectionKind == SectionKind.Text) ? ProgramHeaderFlags.Read | ProgramHeaderFlags.Execute :
+						    (section.SectionKind == SectionKind.ROData) ? ProgramHeaderFlags.Read :
+						    ProgramHeaderFlags.Read | ProgramHeaderFlags.Write
+					};
+
+					pheader.Write(writer);
+				}
 			}
 		}
 	}

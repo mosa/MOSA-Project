@@ -17,8 +17,8 @@ namespace Mosa.Compiler.Linker.Elf32
 		/// <summary>
 		/// Initializes a new instance of the <see cref="CodeSection"/> class.
 		/// </summary>
-		public CodeSection()
-			: base(SectionKind.Text, @".text", 0)
+		public CodeSection(long virtualAddress)
+			: base(SectionKind.Text, @".text", virtualAddress)
 		{
 			header.Type = SectionType.ProgBits;
 			header.Flags = SectionAttribute.AllocExecute;
