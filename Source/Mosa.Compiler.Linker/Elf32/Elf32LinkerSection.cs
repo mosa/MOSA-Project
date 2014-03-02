@@ -55,6 +55,7 @@ namespace Mosa.Compiler.Linker.Elf32
 		public virtual void Write(BinaryWriter writer)
 		{
 			Header.Offset = (uint)writer.BaseStream.Position;
+			stream.Seek(0, SeekOrigin.Begin);
 			stream.WriteTo(writer.BaseStream);
 		}
 
@@ -65,6 +66,7 @@ namespace Mosa.Compiler.Linker.Elf32
 		public virtual void WriteHeader(BinaryWriter writer)
 		{
 			Header.Size = (uint)Length;
+			Header.Address = (uint)VirtualAddress;
 			Header.Write(writer);
 		}
 	}
