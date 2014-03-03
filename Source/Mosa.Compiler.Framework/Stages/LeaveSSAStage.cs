@@ -10,6 +10,7 @@
 
 using System.Diagnostics;
 using Mosa.Compiler.Framework.IR;
+using System.Collections.Generic;
 
 namespace Mosa.Compiler.Framework.Stages
 {
@@ -18,11 +19,16 @@ namespace Mosa.Compiler.Framework.Stages
 	/// </summary>
 	public class LeaveSSA : BaseMethodCompilerStage, IMethodCompilerStage, IPipelineStage
 	{
+
+		private Dictionary<Operand, Operand> finalVirtualRegisters;
+
 		/// <summary>
 		/// Performs stage specific processing on the compiler context.
 		/// </summary>
 		void IMethodCompilerStage.Run()
 		{
+			finalVirtualRegisters = new Dictionary<Operand, Operand>();
+
 			foreach (var block in basicBlocks)
 			{
 				for (var context = new Context(instructionSet, block); !context.IsBlockEndInstruction; context.GotoNext())
@@ -35,19 +41,38 @@ namespace Mosa.Compiler.Framework.Stages
 					for (var i = 0; i < context.OperandCount; ++i)
 					{
 						var op = context.GetOperand(i);
-						
+
 						if (op != null && op.IsSSA)
 						{
-							context.SetOperand(i, op.SSAParent);
+							context.SetOperand(i, GetFinalVirtualRegister(op));
 						}
 					}
 
 					if (context.Result != null && context.Result.IsSSA)
 					{
-						context.Result = context.Result.SSAParent;
+						context.Result = GetFinalVirtualRegister(context.Result);
 					}
 				}
 			}
+
+			finalVirtualRegisters = null;
+		}
+
+		private Operand GetFinalVirtualRegister(Operand operand)
+		{
+			Operand final;
+
+			if (!finalVirtualRegisters.TryGetValue(operand, out final))
+			{
+				if (operand.SSAVersion == 0)
+					final = operand.SSAParent;
+				else
+					final = methodCompiler.CreateVirtualRegister(operand.Type);
+
+				finalVirtualRegisters.Add(operand, final);
+			}
+
+			return final;
 		}
 
 		/// <summary>
@@ -85,8 +110,8 @@ namespace Mosa.Compiler.Framework.Stages
 				context.GotoPrevious();
 			}
 
-			var source = operand.IsSSA ? operand.SSAParent : operand;
-			var destination = result.IsSSA ? result.SSAParent : result;
+			var source = operand.IsSSA ? GetFinalVirtualRegister(operand) : operand;
+			var destination = result.IsSSA ? GetFinalVirtualRegister(result) : result;
 
 			Debug.Assert(!source.IsSSA);
 			Debug.Assert(!destination.IsSSA);

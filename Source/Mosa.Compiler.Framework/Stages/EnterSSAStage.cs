@@ -148,7 +148,7 @@ namespace Mosa.Compiler.Framework.Stages
 					}
 				}
 
-				if (!context.IsEmpty && context.Result != null && (context.Result.IsVirtualRegister || context.Result.IsParameter))
+				if (!context.IsEmpty && context.Result != null && context.Result.IsVirtualRegister)
 				{
 					var op = context.Result;
 					var index = counts[op];
