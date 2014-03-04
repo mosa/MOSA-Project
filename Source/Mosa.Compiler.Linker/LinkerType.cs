@@ -17,6 +17,6 @@ namespace Mosa.Compiler.Linker
 		PE,
 		Elf32,
 		Elf64,
-		None,
+		None
 	}
 }

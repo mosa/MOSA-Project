@@ -79,22 +79,22 @@ namespace Mosa.Platform.x86.Stages
 		/// <summary>
 		/// Holds the multiboot video mode.
 		/// </summary>
-		private uint VideoMode;
+		public uint VideoMode { get; set; }
 
 		/// <summary>
 		/// Holds the videoWidth of the screen for the video mode.
 		/// </summary>
-		private uint VideoWidth;
+		public uint VideoWidth { get; set; }
 
 		/// <summary>
 		/// Holds the height of the screen for the video mode.
 		/// </summary>
-		private uint VideoHeight;
+		public uint VideoHeight { get; set; }
 
 		/// <summary>
 		/// Holds the depth of the video mode in bits per pixel.
 		/// </summary>
-		private uint VideoDepth;
+		public uint VideoDepth { get; set; }
 
 		/// <summary>
 		/// The multiboot method
@@ -170,6 +170,8 @@ namespace Mosa.Platform.x86.Stages
 			compiler.CompileMethod(multibootMethod, basicBlocks, instructionSet);
 
 			linker.EntryPoint = linker.GetSymbol(multibootMethod.FullName);
+
+			multibootMethod = null; // HACK for now
 		}
 
 		#endregion ICompilerStage Members

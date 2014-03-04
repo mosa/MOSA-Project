@@ -59,6 +59,12 @@ namespace Mosa.Compiler.Framework
 		public BaseArchitecture Architecture { get; set; }
 
 		/// <summary>
+		/// Gets or sets the output file.
+		/// </summary>
+		/// <value>The output file.</value>
+		public string OutputFile { get; set; }
+
+		/// <summary>
 		/// Gets or sets the linker type.
 		/// </summary>
 		/// <value>
@@ -67,18 +73,9 @@ namespace Mosa.Compiler.Framework
 		public LinkerType LinkerType { get; set; }
 
 		/// <summary>
-		/// Gets or sets the type of the boot.
+		/// Gets or sets the compiler stage responsible for booting.
 		/// </summary>
-		/// <value>
-		/// The type of the boot.
-		/// </value>
-		public BootType BootType { get; set; }
-
-		/// <summary>
-		/// Gets or sets the output file.
-		/// </summary>
-		/// <value>The output file.</value>
-		public string OutputFile { get; set; }
+		public ICompilerStage BootCompilerStage { get; set; }
 
 		/// <summary>
 		/// Gets or sets the statistics file.
