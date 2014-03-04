@@ -79,22 +79,22 @@ namespace Mosa.Platform.x86.Stages
 		/// <summary>
 		/// Holds the multiboot video mode.
 		/// </summary>
-		public uint VideoMode { get; set; }
+		private uint VideoMode;
 
 		/// <summary>
 		/// Holds the videoWidth of the screen for the video mode.
 		/// </summary>
-		public uint VideoWidth { get; set; }
+		private uint VideoWidth;
 
 		/// <summary>
 		/// Holds the height of the screen for the video mode.
 		/// </summary>
-		public uint VideoHeight { get; set; }
+		private uint VideoHeight;
 
 		/// <summary>
 		/// Holds the depth of the video mode in bits per pixel.
 		/// </summary>
-		public uint VideoDepth { get; set; }
+		private uint VideoDepth;
 
 		/// <summary>
 		/// The multiboot method

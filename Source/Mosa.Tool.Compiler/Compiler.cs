@@ -130,7 +130,7 @@ namespace Mosa.Tool.Compiler
 				"Specify the bootable format of the produced binary [{mb0.7}].",
 				delegate(string format)
 				{
-					compilerOptions.BootCompilerStage = SelectBootStage(format);
+					compilerOptions.BootType = SelectBootStage(format);
 				}
 			);
 
@@ -148,7 +148,7 @@ namespace Mosa.Tool.Compiler
 				"Select the format of the binary file to create [{ELF32|ELF64|PE}].",
 				delegate(string format)
 				{
-					compilerOptions.LinkerType = SelectLinkerStage(format);
+					compilerOptions.LinkerType = Mosa.Compiler.Framework.Linker.LinkerFactory.Parse(format); 
 				}
 			);
 
@@ -352,7 +352,7 @@ namespace Mosa.Tool.Compiler
 		{
 			// always print header with version information
 			Console.WriteLine("MOSA AOT Compiler, Version {0}.{1} '{2}'", majorVersion, minorVersion, codeName);
-			Console.WriteLine("Copyright 2013 by the MOSA Project. Licensed under the New BSD License.");
+			Console.WriteLine("Copyright 2014 by the MOSA Project. Licensed under the New BSD License.");
 			Console.WriteLine("Copyright 2008 by Novell. NDesk.Options is released under the MIT/X11 license.");
 			Console.WriteLine();
 			Console.WriteLine("Parsing options...");
@@ -376,7 +376,7 @@ namespace Mosa.Tool.Compiler
 				// Process boot format:
 				// Boot format only matters if it's an executable
 				// Process this only now, because input files must be known
-				if (!isExecutable && compilerOptions.BootCompilerStage != null)
+				if (!isExecutable && compilerOptions.BootType != BootType.None)
 				{
 					Console.WriteLine("Warning: Ignoring boot format, because target is not an executable.");
 					Console.WriteLine();
@@ -437,7 +437,7 @@ namespace Mosa.Tool.Compiler
 			sb.Append(" > Input file(s): ").AppendLine(String.Join(", ", new List<string>(GetInputFileNames()).ToArray()));
 			sb.Append(" > Architecture: ").AppendLine(compilerOptions.Architecture.GetType().FullName);
 			sb.Append(" > Binary format: ").AppendLine(compilerOptions.LinkerType.ToString());
-			sb.Append(" > Boot format: ").AppendLine((compilerOptions.BootCompilerStage == null) ? "None" : ((IPipelineStage)compilerOptions.BootCompilerStage).Name);
+			sb.Append(" > Boot format: ").AppendLine(compilerOptions.BootType.ToString());
 			sb.Append(" > Is executable: ").AppendLine(isExecutable.ToString());
 			return sb.ToString();
 		}
@@ -527,39 +527,17 @@ namespace Mosa.Tool.Compiler
 		/// </summary>
 		/// <param name="format">The format.</param>
 		/// <returns></returns>
-		private static ICompilerStage SelectBootStage(string format)
+		private static BootType SelectBootStage(string format)
 		{
 			switch (format.ToLower())
 			{
 				case "multiboot-0.7":
+
 				case "mb0.7":
-					return new Mosa.Platform.x86.Stages.Multiboot0695Stage();
+					return BootType.Multiboot0695;//new Mosa.Platform.x86.Stages.Multiboot0695Stage();
 
 				default:
 					throw new OptionException(String.Format("Unknown or unsupported boot format {0}.", format), "boot");
-			}
-		}
-
-		/// <summary>
-		/// Selects the linker implementation to use.
-		/// </summary>
-		/// <param name="format">The linker format.</param>
-		/// <returns>The implementation of the linker.</returns>
-		private static LinkerType SelectLinkerStage(string format)
-		{
-			switch (format.ToLower())
-			{
-				case "elf32":
-					return LinkerType.Elf32;
-
-				case "elf64":
-					return LinkerType.Elf64;
-
-				case "pe":
-					return LinkerType.PE;
-
-				default:
-					throw new OptionException(String.Format("Unknown or unsupported binary format {0}.", format), "format");
 			}
 		}
 

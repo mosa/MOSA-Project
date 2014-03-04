@@ -78,6 +78,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseCallingConventionExtended.cs" />
+    <Compile Include="BootType.cs" />
     <Compile Include="DelegatePatcher.cs" />
     <Compile Include="Intrinsics\InternalInitializeArray.cs" />
     <Compile Include="Intrinsics\InternalGetType.cs" />

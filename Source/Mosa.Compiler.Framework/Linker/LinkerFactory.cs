@@ -19,6 +19,24 @@ namespace Mosa.Compiler.Framework.Linker
 	/// </summary>
 	public static class LinkerFactory
 	{
+		public static LinkerType Parse(string format)
+		{
+			switch (format.ToLower().Trim())
+			{
+				case "elf32":
+					return LinkerType.Elf32;
+
+				case "elf64":
+					return LinkerType.Elf64;
+
+				case "pe":
+					return LinkerType.PE;
+
+				default:
+					return LinkerType.None;
+			}
+		}
+
 		public static ILinker Create(LinkerType linkerType, CompilerOptions compilerOptions, BaseArchitecture architecture)
 		{
 			ILinker linker = Create(linkerType);

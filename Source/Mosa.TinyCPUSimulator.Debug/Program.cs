@@ -28,9 +28,9 @@ namespace Mosa.TinyCPUSimulator.Debug
 
 		private static void Test4()
 		{
-			var fixture = new Int16Fixture();
+			var fixture = new UInt16Fixture();
 
-			fixture.LdelemI2(0, -32768);
+			fixture.RetU2(0xFFFE);
 		}
 
 		private static void Test3()
