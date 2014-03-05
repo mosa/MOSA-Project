@@ -236,7 +236,7 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 			if (opcode == Opcode.Idiv) return true;
 			if (opcode == Opcode.Imul) return false;
 			if (opcode == Opcode.Inc) return true;
-			if (opcode == Opcode.Lea) return true;
+			//if (opcode == Opcode.Lea) return true;
 			if (opcode == Opcode.Mul) return true;
 			if (opcode == Opcode.Mulsd) return true;
 			if (opcode == Opcode.Mulss) return true;

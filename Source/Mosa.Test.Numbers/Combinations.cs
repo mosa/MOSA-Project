@@ -225,7 +225,7 @@ namespace Mosa.Test.Numbers
 						yield return new object[] { i1, i2 };
 			}
 		}
-		 
+
 		public static IEnumerable<object[]> I4SmallU8
 		{
 			get
@@ -411,5 +411,42 @@ namespace Mosa.Test.Numbers
 			}
 		}
 
+		public static IEnumerable<object[]> R4
+		{
+			get
+			{
+				foreach (var i1 in Mosa.Test.Numbers.R4.Series)
+					yield return new object[] { i1 };
+			}
+		}
+
+		public static IEnumerable<object[]> R4R4
+		{
+			get
+			{
+				foreach (var i1 in Mosa.Test.Numbers.R4.Series)
+					foreach (var i2 in Mosa.Test.Numbers.R4.Series)
+						yield return new object[] { i1, i2 };
+			}
+		}
+
+		public static IEnumerable<object[]> R8
+		{
+			get
+			{
+				foreach (var i1 in Mosa.Test.Numbers.R8.Series)
+					yield return new object[] { i1 };
+			}
+		}
+
+		public static IEnumerable<object[]> R8R8
+		{
+			get
+			{
+				foreach (var i1 in Mosa.Test.Numbers.R8.Series)
+					foreach (var i2 in Mosa.Test.Numbers.R8.Series)
+						yield return new object[] { i1, i2 };
+			}
+		}
 	}
 }

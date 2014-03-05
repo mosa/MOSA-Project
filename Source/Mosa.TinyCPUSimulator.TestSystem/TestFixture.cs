@@ -8,25 +8,30 @@
  */
 
 using Mosa.Test.Numbers;
+using System;
 using System.Collections.Generic;
 
 namespace Mosa.TinyCPUSimulator.TestSystem
 {
 	public class TestFixture
 	{
-		private static TestCompiler testCompiler;
+		private static Dictionary<Type, TestCompiler> testCompilers = new Dictionary<Type, TestCompiler>();
 
 		protected virtual BasePlatform BasePlatform { get { return null; } }
 
-		protected TestCompiler TestCompiler
+		private TestCompiler TestCompiler
 		{
 			get
 			{
-				if (testCompiler == null)
+				TestCompiler testCompiler;
+
+				if (!testCompilers.TryGetValue(this.GetType(), out testCompiler))
 				{
 					testCompiler = new TestCompiler(BasePlatform);
 					testCompiler.EnableSSA = true;
 					testCompiler.EnableSSAOptimizations = true;
+
+					testCompilers.Add(this.GetType(), testCompiler);
 				}
 
 				return testCompiler;
@@ -129,5 +134,13 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 		public static IEnumerable<object[]> U8U8 { get { return Combinations.U8U8; } }
 
 		public static IEnumerable<object[]> U8U1UpTo32 { get { return Combinations.U8U1UpTo32; } }
+
+		public static IEnumerable<object[]> R4 { get { return Combinations.R4; } }
+
+		public static IEnumerable<object[]> R4R4 { get { return Combinations.R4R4; } }
+
+		public static IEnumerable<object[]> R8 { get { return Combinations.R8; } }
+
+		public static IEnumerable<object[]> R8R8 { get { return Combinations.R8R8; } }
 	}
 }
