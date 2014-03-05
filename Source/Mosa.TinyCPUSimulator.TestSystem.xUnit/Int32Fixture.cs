@@ -7,13 +7,12 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using Mosa.Test.Collection;
 using Xunit;
 using Xunit.Extensions;
 
-namespace Mosa.TinyCPUSimulator.TestSystem.xUnit
+namespace Mosa.Test.Collection.x86.xUnit
 {
-	public class Int32Fixture : TestFixture
+	public class Int32Fixture : X86TestFixture
 	{
 		[Theory]
 		[PropertyData("I4I4")]
@@ -182,7 +181,7 @@ namespace Mosa.TinyCPUSimulator.TestSystem.xUnit
 		[PropertyData("I4SmallI4")]
 		public void LdelemaI4(int index, int value)
 		{
-			Assert.Equal(Int32Tests.Ldelema(index, value), Run<int>("Mosa.Test.Collection.Int32Tests.Ldelema", index, value)); 
+			Assert.Equal(Int32Tests.Ldelema(index, value), Run<int>("Mosa.Test.Collection.Int32Tests.Ldelema", index, value));
 		}
 	}
 }

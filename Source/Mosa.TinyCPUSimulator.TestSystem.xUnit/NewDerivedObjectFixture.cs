@@ -10,9 +10,9 @@
 
 using Xunit;
 
-namespace Mosa.TinyCPUSimulator.TestSystem.xUnit
+namespace Mosa.Test.Collection.x86.xUnit
 {
-	public class NewDerivedObjectFixture : TestFixture
+	public class NewDerivedObjectFixture : X86TestFixture
 	{
 		[Fact]
 		public void NewDerivedObjectWithoutArgs()

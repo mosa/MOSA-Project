@@ -10,9 +10,9 @@
 
 using Xunit;
 
-namespace Mosa.TinyCPUSimulator.TestSystem.xUnit
+namespace Mosa.Test.Collection.x86.xUnit
 {
-	public class EnumFixture : TestFixture
+	public class EnumFixture : X86TestFixture
 	{
 		[Fact]
 		public void ItemAMustEqual5()

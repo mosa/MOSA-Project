@@ -7,13 +7,12 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using Mosa.Test.Collection;
 using Xunit;
 using Xunit.Extensions;
 
-namespace Mosa.TinyCPUSimulator.TestSystem.xUnit
+namespace Mosa.Test.Collection.x86.xUnit
 {
-	public class UInt32Fixture : TestFixture
+	public class UInt32Fixture : X86TestFixture
 	{
 		[Theory]
 		[PropertyData("U4U4")]

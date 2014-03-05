@@ -9,7 +9,7 @@
 
 using System.Collections.Generic;
 
-namespace Mosa.Test.CodeDomCompiler
+namespace Mosa.Utility.CodeDomCompiler
 {
 	public class CompilerSettings
 	{

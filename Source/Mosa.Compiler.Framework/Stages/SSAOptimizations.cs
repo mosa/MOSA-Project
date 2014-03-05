@@ -230,20 +230,21 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private bool CanCopyPropagation(Operand result, Operand destination)
 		{
-			if (!result.IsValueType && !destination.IsValueType)
-				return true;
+			return false;
 
-			if (result.IsInteger && destination.IsInteger &&
-				result.IsSigned != result.IsUnsigned)
-				return false;
+			//if (result.IsReferenceType && destination.IsReferenceType)
+			//	return true;
 
-			if (!result.IsPointer && !destination.IsPointer)
-				return true;
+			//if (result.IsInteger && destination.IsInteger && result.Type == destination.Type)
+			//	return true;
 
-			if (result.Type != destination.Type)
-				return false;
+			//if (result.IsPointer && destination.IsPointer)
+			//	return true;
 
-			return result.Type.ElementType == destination.Type.ElementType;
+			//if (result.Type != destination.Type)
+			//	return false;
+
+			//return result.Type.ElementType == destination.Type.ElementType;
 		}
 
 		/// <summary>

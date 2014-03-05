@@ -39,6 +39,7 @@
                     <include name="RegisterAllocator/GreedyRegisterAllocator.cs"/>
                     <include name="Linker/LinkerFactory.cs"/>
                     <include name="Stages/ConvertCompoundMoveStage.cs"/>
+                    <include name="Stages/PromoteLocalVariablesStage.cs"/>
                     <include name="Stages/StopStage.cs"/>
                     <include name="Stages/BaseEdgeSplitStage.cs"/>
                     <include name="Stages/EmptyBlockRemovalStage.cs"/>

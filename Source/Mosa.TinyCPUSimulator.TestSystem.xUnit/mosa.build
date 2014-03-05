@@ -12,7 +12,7 @@
 	
 	<!-- Main build target -->
 	<target name="build">
-	    <csc target="library" output="${outputDirectory}/Mosa.TinyCPUSimulator.TestSystem.xUnit.dll" debug="${debug}" unsafe="true" nostdlib="false">
+	    <csc target="library" output="${outputDirectory}/Mosa.Test.Collection.x86.xUnit.dll" debug="${debug}" unsafe="true" nostdlib="false">
 		<sources>
                     <include name="BooleanFixture.cs"/>
                     <include name="BoxingFixture.cs"/>
@@ -25,6 +25,7 @@
                     <include name="Int8Fixture.cs"/>
                     <include name="NewDerivedObjectFixture.cs"/>
                     <include name="NewObjectFixture.cs"/>
+                    <include name="X86TestFixture.cs"/>
                     <include name="UInt16Fixture.cs"/>
                     <include name="UInt32Fixture.cs"/>
                     <include name="UInt64Fixture.cs"/>

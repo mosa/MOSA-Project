@@ -12,7 +12,7 @@ using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.IO;
 
-namespace Mosa.Test.CodeDomCompiler
+namespace Mosa.Utility.CodeDomCompiler
 {
 	public static class Compiler
 	{

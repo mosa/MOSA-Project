@@ -8,13 +8,12 @@
  *
  */
 
-using Mosa.Test.Collection;
 using Xunit;
 using Xunit.Extensions;
 
-namespace Mosa.TinyCPUSimulator.TestSystem.xUnit
+namespace Mosa.Test.Collection.x86.xUnit
 {
-	public class BooleanFixture : TestFixture
+	public class BooleanFixture : X86TestFixture
 	{
 		[Theory]
 		[PropertyData("B")]

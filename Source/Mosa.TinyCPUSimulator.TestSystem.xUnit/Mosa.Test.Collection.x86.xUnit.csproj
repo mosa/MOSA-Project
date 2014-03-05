@@ -7,8 +7,8 @@
     <ProjectGuid>{50568E2D-5360-4F71-87E3-A6979D1D858C}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Mosa.TinyCPUSimulator.TestSystem.xUnit</RootNamespace>
-    <AssemblyName>Mosa.TinyCPUSimulator.TestSystem.xUnit</AssemblyName>
+    <RootNamespace>Mosa.Test.Collection.x86.xUnit</RootNamespace>
+    <AssemblyName>Mosa.Test.Collection.x86.xUnit</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -83,6 +83,7 @@
     <Compile Include="Int8Fixture.cs" />
     <Compile Include="NewDerivedObjectFixture.cs" />
     <Compile Include="NewObjectFixture.cs" />
+    <Compile Include="X86TestFixture.cs" />
     <Compile Include="UInt16Fixture.cs" />
     <Compile Include="UInt32Fixture.cs" />
     <Compile Include="UInt64Fixture.cs" />

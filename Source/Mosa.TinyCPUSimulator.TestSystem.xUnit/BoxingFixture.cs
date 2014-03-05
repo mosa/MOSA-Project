@@ -8,13 +8,12 @@
  *
  */
 
-using Mosa.Test.Collection;
 using Xunit;
 using Xunit.Extensions;
 
-namespace Mosa.TinyCPUSimulator.TestSystem.xUnit
+namespace Mosa.Test.Collection.x86.xUnit
 {
-	public class BoxingFixture : TestFixture
+	public class BoxingFixture : X86TestFixture
 	{
 		private double DoubleTolerance = 0.000001d;
 		private float FloatTolerance = 0.00001f;

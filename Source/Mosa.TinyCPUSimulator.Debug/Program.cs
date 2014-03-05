@@ -8,7 +8,7 @@
  *
  */
 
-using Mosa.TinyCPUSimulator.TestSystem.xUnit;
+using Mosa.Test.Collection.x86.xUnit;
 
 namespace Mosa.TinyCPUSimulator.Debug
 {
@@ -21,7 +21,7 @@ namespace Mosa.TinyCPUSimulator.Debug
 
 		private static void Test5()
 		{
-			var fixture = new Mosa.TinyCPUSimulator.x86.xUnit.OpcodeTests();
+			var fixture = new UInt32Fixture();
 
 			fixture.AddU4U4(200, 100);
 		}

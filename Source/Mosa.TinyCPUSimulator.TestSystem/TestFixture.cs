@@ -16,13 +16,15 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 	{
 		private static TestCompiler testCompiler;
 
+		protected virtual BasePlatform BasePlatform { get { return null; } }
+
 		protected TestCompiler TestCompiler
 		{
 			get
 			{
 				if (testCompiler == null)
 				{
-					testCompiler = new TestCompiler(new X86Platform());
+					testCompiler = new TestCompiler(BasePlatform);
 					testCompiler.EnableSSA = true;
 					testCompiler.EnableSSAOptimizations = true;
 				}

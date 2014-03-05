@@ -5,13 +5,11 @@
  *
  */
 
-using Mosa.Test.Collection;
 using Xunit;
-using Xunit.Extensions;
 
-namespace Mosa.TinyCPUSimulator.TestSystem.xUnit
+namespace Mosa.Test.Collection.x86.xUnit
 {
-	public class ArrayLayoutFixture : TestFixture
+	public class ArrayLayoutFixture : X86TestFixture
 	{
 		[Fact]
 		public void ArrayB()
@@ -23,6 +21,18 @@ namespace Mosa.TinyCPUSimulator.TestSystem.xUnit
 		public void ArrayC()
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.ArrayLayoutTests.C"));
+		}
+
+		[Fact]
+		public void ArrayC1()
+		{
+			Assert.True(Run<bool>("Mosa.Test.Collection.ArrayLayoutTests.C1"));
+		}
+
+		[Fact]
+		public void ArrayC2()
+		{
+			Assert.True(Run<bool>("Mosa.Test.Collection.ArrayLayoutTests.C2"));
 		}
 
 		[Fact]
