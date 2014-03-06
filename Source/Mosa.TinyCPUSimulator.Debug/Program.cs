@@ -23,7 +23,7 @@ namespace Mosa.TinyCPUSimulator.Debug
 		{
 			var fixture = new DoubleFixture();
 
-			fixture.MulR8R8(200, 100);
+			fixture.RemR8R8(154, 100);
 		}
 
 		private static void Test7()

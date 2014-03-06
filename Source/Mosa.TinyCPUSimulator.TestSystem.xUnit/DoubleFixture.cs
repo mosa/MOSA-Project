@@ -40,38 +40,58 @@ namespace Mosa.Test.Collection.x86.xUnit
 			Assert.Equal(DoubleTests.MulR8R8(a, b), Run<double>("Mosa.Test.Collection", "DoubleTests", "MulR8R8", a, b));
 		}
 
-		//[Theory]
-		//[PropertyData("R8R8")]
-		//public void DivR8R8(double a, [R8NumberNotZero]double b)
-		//{
-		//	Assert.Equal(DoubleTests.DivR8R8(a, b), Run<double>("Mosa.Test.Collection", "DoubleTests", "DivR8R8", a, b));
-		//}
+		[Theory]
+		[PropertyData("R8R8")]
+		public void DivR8R8(double a, double b)
+		{
+			if (a == int.MinValue && b == -1)
+			{
+				//	Assert.Inconclusive("TODO: Overflow exception not implemented");
+				return;
+			}
+
+			if (b == 0)
+			{
+				return;
+			}
+
+			Assert.Equal(DoubleTests.DivR8R8(a, b), Run<double>("Mosa.Test.Collection", "DoubleTests", "DivR8R8", a, b));
+		}
 
 		//[Theory]
-		//[Pending]
 		//[ExpectedException(typeof(DivideByZeroException))]
-		//public void DivR8R8DivideByZeroException(double a)
-		//{
-		//	Run<double>("Mosa.Test.Collection", "DoubleTests", "DivR8R8", (double)0, a, (double)0);
-		//}
+		public void DivR8R8DivideByZeroException(double a)
+		{
+			Run<double>("Mosa.Test.Collection", "DoubleTests", "DivR8R8", (double)0, a, (double)0);
+		}
+
+		[Theory]
+		[PropertyData("R8R8")]
+		public void RemR8R8(double a, double b)
+		{
+			if (a == int.MinValue && b == -1)
+			{
+				//Assert.Inconclusive("TODO: Overflow exception not implemented");
+				return;
+			}
+
+			if (b == 0)
+			{
+				return;
+			}
+			
+			Assert.Equal(DoubleTests.RemR8R8(a, b), Run<double>("Mosa.Test.Collection", "DoubleTests", "RemR8R8", a, b));
+		}
 
 		//[Theory]
-		//[PropertyData("R8R8")]
-		//public void RemR8R8([R8NumberNoExtremes]double a, [R8NumberNoExtremesOrZero] double b)
-		//{
-		//	Assert.AreApproximatelyEqual(DoubleTests.RemR8R8(a, b), Run<double>("Mosa.Test.Collection", "DoubleTests", "RemR8R8", a, b), Tolerance);
-		//}
-
-		//[Theory]
-		//[Pending]
 		//[ExpectedException(typeof(DivideByZeroException))]
-		//public void RemR8R8DivideByZeroException(double a)
-		//{
-		//	Run<double>("Mosa.Test.Collection", "DoubleTests", "RemR8R8", (double)0, a, (double)0);
-		//}
+		public void RemI4I4DivideByZeroException(int a)
+		{
+			Run<double>("Mosa.Test.Collection", "DoubleTests", "RemR8R8", (double)0, a, (double)0);
+		}
 
-		//[Theory]
-		//[PropertyData("R8R8")]
+		[Theory]
+		[PropertyData("R8R8")]
 		public void CeqR8R8(double a, double b)
 		{
 			Assert.Equal(DoubleTests.CeqR8R8(a, b), Run<bool>("Mosa.Test.Collection", "DoubleTests", "CeqR8R8", a, b));

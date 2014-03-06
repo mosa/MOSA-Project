@@ -14,7 +14,6 @@ namespace Mosa.TinyCPUSimulator
 {
 	public class SimCPU
 	{
-
 		public Dictionary<ulong, SimInstruction> InstructionCache { get; private set; }
 
 		public BaseSimDevice[] PortDevices { get; private set; }
@@ -243,7 +242,6 @@ namespace Mosa.TinyCPUSimulator
 		public void SetSymbol(string name, ulong address, ulong size)
 		{
 			Symbols.Add(name, new SimSymbol(name, address, size));
-
 		}
 
 		public SimSymbol GetSymbol(string name)
@@ -374,7 +372,7 @@ namespace Mosa.TinyCPUSimulator
 		{
 			if (Monitor.DebugOutput)
 			{
-				Debug.WriteLine("EIP        EAX        EBX        ECX        EDX        ESI        EDI        ESP        EBP        XMM#0      XMM#1      XMM#2      FLAGS");
+				Debug.WriteLine("EIP        EAX        EBX        ECX        EDX        ESI        EDI        ESP        EBP        XMM#0      XMM#1      XMM#2      XMM#3      FLAGS");
 			}
 
 			for (; ; )

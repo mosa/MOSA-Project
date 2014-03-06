@@ -247,8 +247,8 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 			//if (opcode == Opcode.Rdpmc) return true;
 			//if (opcode == Opcode.Rdtsc) return true;
 			//if (opcode == Opcode.Rep) return true;
-			//if (opcode == Opcode.Roundsd) return true;
-			//if (opcode == Opcode.Roundss) return true;
+			if (opcode == Opcode.Roundsd) return true;
+			if (opcode == Opcode.Roundss) return true;
 			if (opcode == Opcode.Sar) return true;
 			if (opcode == Opcode.Sbb) return true;
 			if (opcode == Opcode.Shl) return true;
