@@ -37,9 +37,9 @@ namespace Mosa.Tool.TinySimulator
 
 			public string Method { get; private set; }
 
-			public SimState SimState;
+			public BaseSimState SimState;
 
-			public HistoryEntry(SimState simState, string method, bool display32)
+			public HistoryEntry(BaseSimState simState, string method, bool display32)
 			{
 				this.Tick = simState.Tick;
 				this.ip = simState.IP;
@@ -56,7 +56,7 @@ namespace Mosa.Tool.TinySimulator
 			dataGridView1.DataSource = history;
 		}
 
-		public void AddHistory(SimState simState)
+		public void AddHistory(BaseSimState simState)
 		{
 			if (!MainForm.Record)
 				return;
@@ -74,7 +74,7 @@ namespace Mosa.Tool.TinySimulator
 			}
 		}
 
-		public override void UpdateDock(SimState simState)
+		public override void UpdateDock(BaseSimState simState)
 		{
 			if (!enable)
 				return;
@@ -127,7 +127,7 @@ namespace Mosa.Tool.TinySimulator
 			this.Refresh();
 		}
 
-		private void Select(SimState simState)
+		private void Select(BaseSimState simState)
 		{
 			if (simState == null)
 				return;

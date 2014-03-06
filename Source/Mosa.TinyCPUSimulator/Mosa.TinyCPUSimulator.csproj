@@ -66,7 +66,7 @@
     <Compile Include="BaseSimDevice.cs" />
     <Compile Include="PageFaultException.cs" />
     <Compile Include="SimSymbol.cs" />
-    <Compile Include="SimState.cs" />
+    <Compile Include="BaseSimState.cs" />
     <Compile Include="RegisterFloatingPoint.cs" />
     <Compile Include="Register32Bit.cs" />
     <Compile Include="SimMonitor.cs" />

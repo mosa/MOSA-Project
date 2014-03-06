@@ -175,6 +175,7 @@
     <Compile Include="Opcodes\Subss.cs" />
     <Compile Include="Opcodes\Xchg.cs" />
     <Compile Include="Opcodes\Xor.cs" />
+    <Compile Include="SimState.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Mosa.Compiler.MosaTypeSystem\Mosa.Compiler.MosaTypeSystem.csproj">

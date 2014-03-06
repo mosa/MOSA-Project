@@ -194,7 +194,7 @@ namespace Mosa.Tool.TinySimulator
 			SimCPU.Monitor.OnStateUpdate = UpdateSimState;
 			SimCPU.Reset();
 
-			Display32 = (uint)SimCPU.GetState().Values["Register.Size"] == 32;
+			Display32 = SimCPU.GetState().NativeRegisterSize == 32;
 
 			SimCPU.Monitor.OnExecutionStepCompleted(true);
 
@@ -262,7 +262,7 @@ namespace Mosa.Tool.TinySimulator
 			StartSimulator("x86");
 		}
 
-		public void UpdateAllDocks(SimState simState)
+		public void UpdateAllDocks(BaseSimState simState)
 		{
 			if (simState == null)
 				return;
@@ -281,7 +281,7 @@ namespace Mosa.Tool.TinySimulator
 
 		private long lastTimeTick = 0;
 
-		private void UpdateSimState(SimState simState, bool forceUpdate)
+		private void UpdateSimState(BaseSimState simState, bool forceUpdate)
 		{
 			SimCPU.ExtendState(simState);
 
@@ -290,7 +290,7 @@ namespace Mosa.Tool.TinySimulator
 			if (secs == 0)
 				secs = 1;
 
-			simState.StoreValue("TotalElapsed", secs);
+			simState.TotalElapsedSeconds = secs;
 
 			AddHistory(simState);
 			AddWatch(simState);
@@ -325,12 +325,12 @@ namespace Mosa.Tool.TinySimulator
 			}
 		}
 
-		private void AddHistory(SimState simState)
+		private void AddHistory(BaseSimState simState)
 		{
 			historyView.AddHistory(simState);
 		}
 
-		private void AddWatch(SimState simState)
+		private void AddWatch(BaseSimState simState)
 		{
 			var toplist = new Dictionary<int, Dictionary<ulong, object>>();
 

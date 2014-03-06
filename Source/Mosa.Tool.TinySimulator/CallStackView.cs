@@ -63,7 +63,7 @@ namespace Mosa.Tool.TinySimulator
 			}
 		}
 
-		public override void UpdateDock(SimState simState)
+		public override void UpdateDock(BaseSimState simState)
 		{
 			treeView1.Nodes.Clear();
 

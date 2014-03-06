@@ -27,7 +27,7 @@ namespace Mosa.Tool.TinySimulator
 
 		public string Status { set { MainForm.Status = value; } }
 
-		public virtual void UpdateDock(SimState simState)
+		public virtual void UpdateDock(BaseSimState simState)
 		{
 		}
 	}

@@ -24,15 +24,13 @@ namespace Mosa.Tool.TinySimulator
 			dataGridView1.Rows.Clear();
 		}
 
-		public override void UpdateDock(SimState simState)
+		public override void UpdateDock(BaseSimState simState)
 		{
 			dataGridView1.Rows.Clear();
 
-			string[] entries = simState.Values["Register.List"] as string[];
-
-			foreach (var name in entries)
+			foreach (var name in simState.RegisterList)
 			{
-				dataGridView1.Rows.Add(name, MainForm.Format(simState.Values["Register." + name]));
+				dataGridView1.Rows.Add(name, MainForm.Format(simState.GetRegister(name)));
 			}
 
 			this.Refresh();

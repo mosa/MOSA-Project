@@ -11,7 +11,7 @@ using System.Collections.Generic;
 
 namespace Mosa.TinyCPUSimulator
 {
-	public class SimState
+	public abstract class BaseSimState
 	{
 		public ulong Tick { get; private set; }
 
@@ -23,34 +23,36 @@ namespace Mosa.TinyCPUSimulator
 
 		public Dictionary<string, object> Values { get; private set; }
 
-		//public Dictionary<ulong, KeyValuePair<byte, byte>> MemoryDelta { get; private set; }
-
 		public SimCPUException CPUException { get; private set; }
 
-		public SimState(ulong tick, ulong ip, SimInstruction instruction, SimCPUException exception, ulong nextIP)
+		public abstract int NativeRegisterSize { get; }
+
+		public abstract string[] RegisterList { get; }
+
+		public abstract string[] FlagList { get; }
+
+		public double TotalElapsedSeconds { get; set; }
+
+		protected BaseSimState(SimCPU simCPU)
 		{
-			Tick = tick;
-			IP = ip;
-			NextIP = nextIP;
-			Instruction = instruction;
-			CPUException = exception;
+			Tick = simCPU.Tick;
+			IP = simCPU.LastProgramCounter;
+			NextIP = simCPU.CurrentProgramCounter;
+			Instruction = simCPU.LastInstruction;
+			CPUException = simCPU.LastException;
 
 			Values = new Dictionary<string, object>();
-			//MemoryDelta = new Dictionary<ulong, KeyValuePair<byte, byte>>();
 		}
+
+		public abstract object GetRegister(string name);
 
 		public void StoreValue(string name, object value)
 		{
 			Values.Add(name, value);
 		}
 
-		//public void StoreMemoryDelta(Dictionary<ulong, KeyValuePair<byte, byte>> memoryDelta)
-		//{
-		//	foreach (var value in memoryDelta)
-		//	{
-		//		MemoryDelta.Add(value.Key, value.Value);
-		//	}
-		//}
+		public virtual void ExtendState(SimCPU simCPU)
+		{ }
 
 		public override string ToString()
 		{

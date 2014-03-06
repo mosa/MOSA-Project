@@ -102,7 +102,7 @@ namespace Mosa.Tool.TinySimulator
 			dataGridView1.Columns[1].Width = 250;
 		}
 
-		public override void UpdateDock(SimState simState)
+		public override void UpdateDock(BaseSimState simState)
 		{
 			if (simState == null)
 				return;

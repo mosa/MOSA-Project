@@ -20,7 +20,7 @@ namespace Mosa.Tool.TinySimulator
 			InitializeComponent();
 		}
 
-		public override void UpdateDock(SimState simState)
+		public override void UpdateDock(BaseSimState simState)
 		{
 		}
 

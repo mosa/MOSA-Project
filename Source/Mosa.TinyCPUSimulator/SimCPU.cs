@@ -390,16 +390,12 @@ namespace Mosa.TinyCPUSimulator
 			}
 		}
 
-		public virtual SimState GetState()
+		public virtual BaseSimState GetState()
 		{
-			SimState simState = new SimState(Tick, LastProgramCounter, LastInstruction, LastException, CurrentProgramCounter);
-
-			//simState.StoreMemoryDelta(MemoryDelta);
-
-			return simState;
+			return null;
 		}
 
-		public virtual void ExtendState(SimState simState)
+		public virtual void ExtendState(BaseSimState simState)
 		{
 		}
 	}

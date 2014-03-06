@@ -13,7 +13,7 @@ namespace Mosa.TinyCPUSimulator
 {
 	public sealed class SimMonitor
 	{
-		public delegate void OnSimStateUpdate(SimState state, bool forceUpdate);
+		public delegate void OnSimStateUpdate(BaseSimState state, bool forceUpdate);
 
 		private HashSet<ulong> breakPoints = new HashSet<ulong>();
 
