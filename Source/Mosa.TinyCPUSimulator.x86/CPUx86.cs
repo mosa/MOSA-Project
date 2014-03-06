@@ -7,6 +7,7 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using System;
 using System.Collections.Generic;
 
 namespace Mosa.TinyCPUSimulator.x86
@@ -266,6 +267,9 @@ namespace Mosa.TinyCPUSimulator.x86
 		{
 			//s.AppendLine("EIP        EAX        EBX        ECX        EDX        ESI        EDI        ESP        EBP        FLAGS");
 			return Hex(EIP.Value) + " " + Hex(EAX.Value) + " " + Hex(EBX.Value) + " " + Hex(ECX.Value) + " " + Hex(EDX.Value) + " " + Hex(ESI.Value) + " " + Hex(EDI.Value) + " " + Hex(ESP.Value) + " " + Hex(EBP.Value) + " "
+				+ (String.Format("{0:F8}", XMM0.Value)) + " "
+				+ (String.Format("{0:F8}", XMM1.Value)) + " "
+				+ (String.Format("{0:F8}", XMM2.Value)) + " "
 				+ (EFLAGS.Zero ? "Z" : "-")
 				+ (EFLAGS.Carry ? "C" : "-")
 				+ (EFLAGS.Direction ? "D" : "-")

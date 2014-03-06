@@ -234,7 +234,7 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 			//if (opcode == Opcode.FarJmp) return true;
 			//if (opcode == Opcode.Fld) return true;
 			if (opcode == Opcode.Idiv) return true;
-			if (opcode == Opcode.Imul) return false;
+			//if (opcode == Opcode.Imul) return false;
 			if (opcode == Opcode.Inc) return true;
 			//if (opcode == Opcode.Lea) return true;
 			if (opcode == Opcode.Mul) return true;
@@ -263,7 +263,7 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 			//if (opcode == Opcode.Ucomiss) return true;
 			//if (opcode == Opcode.Xchg) return true;
 			if (opcode == Opcode.Xor) return true;
-			if (opcode == Opcode.Ucomisd) return true;
+			//if (opcode == Opcode.Ucomisd) return true;
 			if (opcode == Opcode.Ucomiss) return true;
 			if (opcode == Opcode.Neg) return true;
 

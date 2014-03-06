@@ -374,7 +374,7 @@ namespace Mosa.TinyCPUSimulator
 		{
 			if (Monitor.DebugOutput)
 			{
-				Debug.WriteLine("EIP        EAX        EBX        ECX        EDX        ESI        EDI        ESP        EBP        FLAGS");
+				Debug.WriteLine("EIP        EAX        EBX        ECX        EDX        ESI        EDI        ESP        EBP        XMM#0      XMM#1      XMM#2      FLAGS");
 			}
 
 			for (; ; )
