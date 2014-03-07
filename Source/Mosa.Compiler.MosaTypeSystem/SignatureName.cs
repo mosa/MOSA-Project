@@ -13,21 +13,38 @@ namespace Mosa.Compiler.MosaTypeSystem
 {
 	internal class SignatureName
 	{
-		public static string GetSignature(string name, MosaMethodSignature sig)
+		public static string GetSignature(string name, MosaMethodSignature sig, bool shortSig)
 		{
 			StringBuilder result = new StringBuilder();
-			result.Append(sig.ReturnType.FullName);
-			result.Append(" ");
-			result.Append(name);
-			result.Append("(");
-			for (int i = 0; i < sig.Parameters.Count; i++)
+			if (shortSig)
 			{
-				if (i != 0)
-					result.Append(", ");
-				result.Append(sig.Parameters[i].Type.FullName);
+				result.Append(name);
+				result.Append("(");
+				for (int i = 0; i < sig.Parameters.Count; i++)
+				{
+					if (i != 0)
+						result.Append(", ");
+					result.Append(sig.Parameters[i].Type.Name);
+				}
+				result.Append(") : ");
+				result.Append(sig.ReturnType.Name);
+				return result.ToString();
 			}
-			result.Append(")");
-			return result.ToString();
+			else
+			{
+				result.Append(sig.ReturnType.FullName);
+				result.Append(" ");
+				result.Append(name);
+				result.Append("(");
+				for (int i = 0; i < sig.Parameters.Count; i++)
+				{
+					if (i != 0)
+						result.Append(", ");
+					result.Append(sig.Parameters[i].Type.FullName);
+				}
+				result.Append(")");
+				return result.ToString();
+			}
 		}
 
 		public static void UpdateType(MosaType type)

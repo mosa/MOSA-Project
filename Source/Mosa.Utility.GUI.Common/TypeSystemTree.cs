@@ -64,7 +64,7 @@ namespace Mosa.Utility.GUI.Common
 
 						foreach (MosaField field in type.Fields)
 						{
-							TreeNode fieldNode = new TreeNode(field.DeclaringType.FullName + " " + field.Name);
+							TreeNode fieldNode = new TreeNode(field.ShortName);
 							fieldsNode.Nodes.Add(fieldNode);
 
 							if (field.IsStatic)
@@ -89,7 +89,7 @@ namespace Mosa.Utility.GUI.Common
 
 						foreach (MosaMethod method in type.Methods)
 						{
-							TreeNode methodNode = new ViewNode<MosaMethod>(method, method.FullName);
+							TreeNode methodNode = new ViewNode<MosaMethod>(method, method.ShortName);
 							methodsNode.Nodes.Add(methodNode);
 
 							if (method.IsStatic)
@@ -134,7 +134,7 @@ namespace Mosa.Utility.GUI.Common
 
 						foreach (MosaMethod method in typeLayout.GetMethodTable(type))
 						{
-							TreeNode methodNode = new ViewNode<MosaMethod>(method, method.FullName);
+							TreeNode methodNode = new ViewNode<MosaMethod>(method, method.ShortName);
 							methodTableNode.Nodes.Add(methodNode);
 						}
 					}
