@@ -39,6 +39,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 			public override void Dispose()
 			{
 				module.FullName = module.Name;
+				module.ShortName = module.Name;
 			}
 		}
 	}

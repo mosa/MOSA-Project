@@ -33,7 +33,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 		string sig;
 		public override string ToString()
 		{
-			return sig ?? (sig = SignatureName.GetSignature("", this));
+			return sig ?? (sig = SignatureName.GetSignature("", this, true));
 		}
 	}
 }
