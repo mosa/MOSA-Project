@@ -50,7 +50,8 @@ namespace Mosa.Tool.TinySimulator
 			}
 		}
 
-		public HistoryView()
+		public HistoryView(MainForm mainForm)
+			: base(mainForm)
 		{
 			InitializeComponent();
 			dataGridView1.DataSource = history;

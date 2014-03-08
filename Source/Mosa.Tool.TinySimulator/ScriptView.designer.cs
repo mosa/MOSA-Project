@@ -34,10 +34,10 @@ namespace Mosa.Tool.TinySimulator
 			this.richTextBox1 = new System.Windows.Forms.RichTextBox();
 			this.dataGridView1 = new System.Windows.Forms.DataGridView();
 			this.toolStrip1 = new System.Windows.Forms.ToolStrip();
-			this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
 			this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
 			this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
 			this.toolStripButton3 = new System.Windows.Forms.ToolStripButton();
+			this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
 			((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
 			this.toolStrip1.SuspendLayout();
 			this.SuspendLayout();
@@ -111,10 +111,6 @@ namespace Mosa.Tool.TinySimulator
 			this.toolStrip1.TabIndex = 5;
 			this.toolStrip1.Text = "toolStrip1";
 			// 
-			// openFileDialog1
-			// 
-			this.openFileDialog1.FileName = "openFileDialog1";
-			// 
 			// toolStripButton1
 			// 
 			this.toolStripButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton1.Image")));
@@ -141,6 +137,10 @@ namespace Mosa.Tool.TinySimulator
 			this.toolStripButton3.Size = new System.Drawing.Size(67, 22);
 			this.toolStripButton3.Text = "Execute";
 			this.toolStripButton3.Click += new System.EventHandler(this.toolStripButton3_Click);
+			// 
+			// openFileDialog1
+			// 
+			this.openFileDialog1.DefaultExt = "txt";
 			// 
 			// ScriptView
 			// 

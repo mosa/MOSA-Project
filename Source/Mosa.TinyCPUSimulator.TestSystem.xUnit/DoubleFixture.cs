@@ -162,11 +162,11 @@ namespace Mosa.Test.Collection.x86.xUnit
 		//	Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "DoubleTests", "Ldelema", index, value));
 		//}
 
-		//[Theory]
-		//[PropertyData("R8")]
-		//public void IsNaN([R8]double value)
-		//{
-		//	Assert.Equal(DoubleTests.IsNaN(value), Run<bool>("Mosa.Test.Collection", "DoubleTests", "IsNaN", value));
-		//}
+		[Theory]
+		[PropertyData("R8")]
+		public void IsNaN(double value)
+		{
+			Assert.Equal(DoubleTests.IsNaN(value), Run<bool>("Mosa.Test.Collection", "DoubleTests", "IsNaN", value));
+		}
 	}
 }

@@ -15,7 +15,8 @@ namespace Mosa.Tool.TinySimulator
 {
 	public partial class OutputView : SimulatorDockContent
 	{
-		public OutputView()
+		public OutputView(MainForm mainForm)
+			: base(mainForm)
 		{
 			InitializeComponent();
 		}

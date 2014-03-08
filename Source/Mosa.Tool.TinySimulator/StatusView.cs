@@ -13,7 +13,7 @@ namespace Mosa.Tool.TinySimulator
 {
 	public partial class StatusView : SimulatorDockContent
 	{
-		public StatusView()
+		public StatusView(MainForm mainForm) : base(mainForm)
 		{
 			InitializeComponent();
 		}

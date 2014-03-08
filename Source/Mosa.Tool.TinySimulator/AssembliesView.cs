@@ -15,7 +15,8 @@ namespace Mosa.Tool.TinySimulator
 {
 	public partial class AssembliesView : SimulatorDockContent
 	{
-		public AssembliesView()
+		public AssembliesView(MainForm mainForm)
+			: base(mainForm)
 		{
 			InitializeComponent();
 		}

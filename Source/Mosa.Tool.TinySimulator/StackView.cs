@@ -14,7 +14,8 @@ namespace Mosa.Tool.TinySimulator
 {
 	public partial class StackView : SimulatorDockContent
 	{
-		public StackView()
+		public StackView(MainForm mainForm)
+			: base(mainForm)
 		{
 			InitializeComponent();
 		}

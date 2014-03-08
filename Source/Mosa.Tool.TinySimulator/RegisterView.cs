@@ -14,7 +14,8 @@ namespace Mosa.Tool.TinySimulator
 {
 	public partial class RegisterView : SimulatorDockContent
 	{
-		public RegisterView()
+		public RegisterView(MainForm mainForm)
+			: base(mainForm)
 		{
 			InitializeComponent();
 		}

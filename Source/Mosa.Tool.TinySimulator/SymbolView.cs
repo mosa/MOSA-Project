@@ -45,7 +45,8 @@ namespace Mosa.Tool.TinySimulator
 			}
 		}
 
-		public SymbolView()
+		public SymbolView(MainForm mainForm)
+			: base(mainForm)
 		{
 			InitializeComponent();
 		}

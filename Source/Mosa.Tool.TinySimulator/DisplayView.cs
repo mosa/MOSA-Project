@@ -43,7 +43,8 @@ namespace Mosa.Tool.TinySimulator
 		/// <summary>
 		/// Initializes a new instance of the <see cref="DisplayView" /> class.
 		/// </summary>
-		public DisplayView()
+		public DisplayView(MainForm mainForm)
+			: base(mainForm)
 		{
 			InitializeComponent();
 			DoubleBuffered = true;

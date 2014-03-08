@@ -15,7 +15,8 @@ namespace Mosa.Tool.TinySimulator
 {
 	public partial class ScriptView : SimulatorDockContent
 	{
-		public ScriptView()
+		public ScriptView(MainForm mainForm)
+			: base(mainForm)
 		{
 			InitializeComponent();
 		}
@@ -66,7 +67,7 @@ namespace Mosa.Tool.TinySimulator
 			int spacepos = line.IndexOf(' ');
 			int tabpos = line.IndexOf('\t');
 
-			int pos = (tabpos < spacepos && tabpos >= 0) ? spacepos : tabpos;
+			int pos = (tabpos >= 0) ? tabpos : spacepos;
 
 			first = string.Empty;
 			rest = string.Empty;
@@ -148,6 +149,7 @@ namespace Mosa.Tool.TinySimulator
 		{
 			AddOutput(lineNbr, "STATUS: Start");
 			MainForm.Start();
+			
 		}
 
 		protected void Restart(int lineNbr, string data)
@@ -161,7 +163,16 @@ namespace Mosa.Tool.TinySimulator
 			if (data.Length == 0)
 				Record(lineNbr, true);
 			else
-				Record(lineNbr, Char.ToUpper(data[0]) == 'Y' || Char.ToUpper(data[0]) == 'O');
+			{
+				bool record = false;
+
+				data = data.ToUpper();
+
+				if (data[0] == 'Y' || data[0] == 'T' || data == "ON")
+					record = true;
+
+				Record(lineNbr, record);
+			}
 		}
 
 		protected void Record(int lineNbr, bool record)
@@ -175,6 +186,7 @@ namespace Mosa.Tool.TinySimulator
 			uint step = Convert.ToUInt32(data);
 			AddOutput(lineNbr, "STATUS: Step for " + step.ToString());
 			MainForm.ExecuteSteps(step);
+			SimCPU.WaitUntilCompleted();
 		}
 
 		protected void AddWatchByLabel(int lineNbr, string data)

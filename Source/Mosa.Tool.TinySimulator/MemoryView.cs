@@ -24,7 +24,8 @@ namespace Mosa.Tool.TinySimulator
 		/// <summary>
 		/// Initializes a new instance of the <see cref="MemoryView"/> class.
 		/// </summary>
-		public MemoryView()
+		public MemoryView(MainForm mainForm)
+			: base(mainForm)
 		{
 			InitializeComponent();
 		}

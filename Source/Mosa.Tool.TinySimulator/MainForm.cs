@@ -24,21 +24,21 @@ namespace Mosa.Tool.TinySimulator
 {
 	public partial class MainForm : Form, ICompilerEventListener
 	{
-		private AssembliesView assembliesView = new AssembliesView();
-		private RegisterView registersView = new RegisterView();
-		private DisplayView displayView = new DisplayView();
-		private ControlView controlView = new ControlView();
-		private CallStackView callStackView = new CallStackView();
-		private StackFrameView stackFrameView = new StackFrameView();
-		private StackView stackView = new StackView();
-		private FlagView flagView = new FlagView();
-		private StatusView statusView = new StatusView();
-		private HistoryView historyView = new HistoryView();
-		private SymbolView symbolView = new SymbolView();
-		private WatchView watchView = new WatchView();
-		private BreakPointView breakPointView = new BreakPointView();
-		private OutputView outputView = new OutputView();
-		private ScriptView scriptView = new ScriptView();
+		private AssembliesView assembliesView;
+		private RegisterView registersView;
+		private DisplayView displayView;
+		private ControlView controlView;
+		private CallStackView callStackView;
+		private StackFrameView stackFrameView;
+		private StackView stackView;
+		private FlagView flagView;
+		private StatusView statusView;
+		private HistoryView historyView;
+		private SymbolView symbolView;
+		private WatchView watchView;
+		private BreakPointView breakPointView;
+		private OutputView outputView;
+		private ScriptView scriptView;
 
 		public IInternalTrace InternalTrace = new BasicInternalTrace();
 		public ConfigurableTraceFilter Filter = new ConfigurableTraceFilter();
@@ -84,6 +84,22 @@ namespace Mosa.Tool.TinySimulator
 			InternalTrace.CompilerEventListener = this;
 
 			MaxHistory = 1000;
+
+			assembliesView = new AssembliesView(this);
+			registersView = new RegisterView(this);
+			displayView = new DisplayView(this);
+			controlView = new ControlView(this);
+			callStackView = new CallStackView(this);
+			stackFrameView = new StackFrameView(this);
+			stackView = new StackView(this);
+			flagView = new FlagView(this);
+			statusView = new StatusView(this);
+			historyView = new HistoryView(this);
+			symbolView = new SymbolView(this);
+			watchView = new WatchView(this);
+			breakPointView = new BreakPointView(this);
+			outputView = new OutputView(this);
+			scriptView = new ScriptView(this);
 
 			worker = new Thread(ExecuteThread);
 			worker.Name = "SimCPU";
@@ -140,7 +156,7 @@ namespace Mosa.Tool.TinySimulator
 
 		private void toolStripButton2_Click(object sender, EventArgs e)
 		{
-			var memoryView = new MemoryView();
+			var memoryView = new MemoryView(this);
 			memoryView.Show(dockPanel, DockState.Document);
 		}
 
@@ -310,7 +326,7 @@ namespace Mosa.Tool.TinySimulator
 			{
 				if (SimCPU == null)
 				{
-					Thread.Sleep(500);
+					Thread.Sleep(250);
 					continue;
 				}
 

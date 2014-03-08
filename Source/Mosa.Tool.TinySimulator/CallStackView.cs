@@ -44,7 +44,8 @@ namespace Mosa.Tool.TinySimulator
 
 		}
 
-		public CallStackView()
+		public CallStackView(MainForm mainForm)
+			: base(mainForm)
 		{
 			InitializeComponent();
 		}

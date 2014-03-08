@@ -94,7 +94,8 @@ namespace Mosa.Tool.TinySimulator
 			}
 		}
 
-		public WatchView()
+		public WatchView(MainForm mainForm)
+			: base(mainForm)
 		{
 			InitializeComponent();
 			dataGridView1.DataSource = watches;

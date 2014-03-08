@@ -14,7 +14,8 @@ namespace Mosa.Tool.TinySimulator
 {
 	public partial class ControlView : SimulatorDockContent
 	{
-		public ControlView()
+		public ControlView(MainForm mainForm)
+			: base(mainForm)
 		{
 			InitializeComponent();
 		}

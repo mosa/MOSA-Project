@@ -8,6 +8,7 @@
  *
  */
 
+using System;
 using Mosa.Test.Collection.x86.xUnit;
 
 namespace Mosa.TinyCPUSimulator.Debug
@@ -23,7 +24,7 @@ namespace Mosa.TinyCPUSimulator.Debug
 		{
 			var fixture = new DoubleFixture();
 
-			fixture.RemR8R8(154, 100);
+			fixture.IsNaN(Double.NaN);
 		}
 
 		private static void Test7()

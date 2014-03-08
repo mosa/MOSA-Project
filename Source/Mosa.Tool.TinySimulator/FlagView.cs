@@ -14,7 +14,8 @@ namespace Mosa.Tool.TinySimulator
 {
 	public partial class FlagView : SimulatorDockContent
 	{
-		public FlagView()
+		public FlagView(MainForm mainForm)
+			: base(mainForm)
 		{
 			InitializeComponent();
 		}

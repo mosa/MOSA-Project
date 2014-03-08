@@ -91,12 +91,21 @@ namespace Mosa.TinyCPUSimulator.x86
 			Sign = x86.EFLAGS.Sign;
 			Adjust = x86.EFLAGS.Adjust;
 			Overflow = x86.EFLAGS.Overflow;
+		}
 
+		public override void ExtendState(SimCPU simCPU)
+		{
+			var x86 = simCPU as CPUx86;
+			AddStack(x86);
+			AddStackFrame(x86);
+			AddCallStack(x86);
+		}
+
+		private void AddStack(CPUx86 x86)
+		{
 			var stack = new List<ulong[]>();
-			var frame = new List<ulong[]>();
 
 			StoreValue("Stack", stack);
-			StoreValue("StackFrame", frame);
 
 			uint esp = x86.ESP.Value;
 			uint index = 0;
@@ -108,8 +117,16 @@ namespace Mosa.TinyCPUSimulator.x86
 				index++;
 			}
 
+		}
+
+		private void AddStackFrame(CPUx86 x86)
+		{
+			var frame = new List<ulong[]>();
+
+			StoreValue("StackFrame", frame);
+
 			uint ebp = x86.EBP.Value;
-			index = 0;
+			uint index = 0;
 
 			while (ebp > x86.ESP.Value && index < 32)
 			{
@@ -117,21 +134,18 @@ namespace Mosa.TinyCPUSimulator.x86
 				ebp = ebp - 4;
 				index++;
 			}
-
 		}
 
-		public override void ExtendState(SimCPU simCPU)
+		private void AddCallStack(CPUx86 x86)
 		{
-			var x86 = simCPU as CPUx86;
-
-			var list = new List<ulong>();
+			var callStack = new List<ulong>();
 
 			uint ip = x86.EIP.Value;
 			uint ebp = x86.EBP.Value;
 
-			StoreValue("CallStack", list);
+			StoreValue("CallStack", callStack);
 
-			list.Add((ulong)ip);
+			callStack.Add((ulong)ip);
 
 			try
 			{
@@ -145,7 +159,7 @@ namespace Mosa.TinyCPUSimulator.x86
 					if (ip == 0)
 						return;
 
-					list.Add((ulong)ip);
+					callStack.Add((ulong)ip);
 
 					ebp = x86.DirectRead32(ebp);
 				}
