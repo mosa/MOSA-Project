@@ -14,7 +14,7 @@ namespace Mosa.TinyCPUSimulator.x86
 {
 	public class SimState : BaseSimState
 	{
-		private static string[] registerList = new string[] { "EIP", "EAX", "EBX", "ECX", "EDX", "ESP", "EBP", "ESI", "EDI", "EFLAGS", "CR0", "CR2", "CR3", "CR4" };
+		private static string[] registerList = new string[] { "EIP", "EAX", "EBX", "ECX", "EDX", "ESP", "EBP", "ESI", "EDI", "EFLAGS", "CR0", "CR2", "CR3", "CR4", "XMM0", "XMM1", "XMM2", "XMM3", "XMM4", "XMM5", "XMM6", "XMM7", };
 		private static string[] flagList = new string[] { "Zero", "Parity", "Carry", "Direction", "Sign", "Adjust", "Overflow" };
 
 		public override int NativeRegisterSize { get { return 32; } }

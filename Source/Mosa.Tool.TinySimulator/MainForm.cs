@@ -57,7 +57,7 @@ namespace Mosa.Tool.TinySimulator
 		public List<Watch> watches = new List<Watch>();
 
 		private Thread worker;
-		private object workerLock = new object();
+		private object signalLock = new object();
 
 		private Stopwatch stopwatch = new Stopwatch();
 
@@ -231,6 +231,10 @@ namespace Mosa.Tool.TinySimulator
 				return "0x" + ((ulong)value).ToString("X16");
 			else if (value is long)
 				return "0x" + ((long)value).ToString("X16");
+			else if (value is double)
+				return ((double)value).ToString();
+			else if (value is float)
+				return ((float)value).ToString();
 			else if (value is bool)
 				return (bool)value ? "TRUE" : "FALSE";
 
@@ -313,20 +317,39 @@ namespace Mosa.Tool.TinySimulator
 
 			if (forceUpdate || simState.Tick == 0 || DateTime.Now.Ticks > lastTimeTick + 2500000)
 			{
-				MethodInvoker method = delegate() { UpdateAllDocks(simState); };
+				MethodInvoker method = delegate()
+				{
+					UpdateAllDocks(simState);
+				};
+
 				Invoke(method);
 
 				lastTimeTick = DateTime.Now.Ticks;
 			}
 		}
 
+		private void UpdateExecutionCompleted()
+		{
+			MethodInvoker method = delegate()
+			{
+				Status = "Simulation stopped.";
+				scriptView.ExecutingCompleted();
+			};
+
+			Invoke(method);
+		}
+
 		private void ExecuteThread()
 		{
 			for (; ; )
 			{
+				lock (signalLock)
+				{
+					Monitor.Wait(signalLock);
+				}
+
 				if (SimCPU == null)
 				{
-					Thread.Sleep(250);
 					continue;
 				}
 
@@ -334,10 +357,7 @@ namespace Mosa.Tool.TinySimulator
 				SimCPU.Execute();
 				stopwatch.Stop();
 
-				lock (workerLock)
-				{
-					Monitor.Wait(workerLock);
-				}
+				UpdateExecutionCompleted();
 			}
 		}
 
@@ -375,20 +395,6 @@ namespace Mosa.Tool.TinySimulator
 			simState.StoreValue("WatchValues", toplist);
 		}
 
-		public void ExecuteSteps(uint steps)
-		{
-			if (SimCPU == null)
-				return;
-
-			SimCPU.Monitor.BreakFromCurrentTick(steps);
-			SimCPU.Monitor.Stop = false;
-
-			lock (workerLock)
-			{
-				Monitor.PulseAll(workerLock);
-			}
-		}
-
 		public void Restart()
 		{
 			if (SimCPU == null)
@@ -396,17 +402,14 @@ namespace Mosa.Tool.TinySimulator
 
 			Record = false;
 
-			SimCPU.Monitor.Stop = false;
+			SimCPU.Monitor.Stop = true;
 			SimCPU.Monitor.StepOverBreakPoint = 0;
 
-			lock (workerLock)
-			{
-				SimCPU.Reset();
-				stopwatch.Reset();
-			}
+			SimCPU.Reset();
+			stopwatch.Reset();
 
-			SimCPU.Monitor.OnExecutionStepCompleted(true);
 			Status = "Simulation Reset.";
+			SimCPU.Monitor.OnExecutionStepCompleted(true);
 
 			symbolView.CreateEntries();
 		}
@@ -416,12 +419,28 @@ namespace Mosa.Tool.TinySimulator
 			if (SimCPU == null)
 				return;
 
+			Status = "Simulation running...";
 			SimCPU.Monitor.BreakAtTick = UInt32.MaxValue;
 			SimCPU.Monitor.Stop = false;
 
-			lock (workerLock)
+			lock (signalLock)
 			{
-				Monitor.PulseAll(workerLock);
+				Monitor.PulseAll(signalLock);
+			}
+		}
+
+		public void ExecuteSteps(uint steps)
+		{
+			if (SimCPU == null)
+				return;
+
+			Status = "Simulation running...";
+			SimCPU.Monitor.BreakFromCurrentTick(steps);
+			SimCPU.Monitor.Stop = false;
+
+			lock (signalLock)
+			{
+				Monitor.PulseAll(signalLock);
 			}
 		}
 
@@ -430,10 +449,13 @@ namespace Mosa.Tool.TinySimulator
 			if (SimCPU == null)
 				return;
 
+			Status = "Simulation stopping...";
 			SimCPU.Monitor.Stop = true;
 
-			// wait until worker done
-			lock (workerLock) { }
+			while (SimCPU.Monitor.IsExecuting)
+			{
+				Application.DoEvents();
+			}
 		}
 
 		private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -441,10 +463,7 @@ namespace Mosa.Tool.TinySimulator
 			if (SimCPU == null)
 				return;
 
-			SimCPU.Monitor.Stop = true;
-
-			// wait until worker done
-			lock (workerLock) { }
+			Stop();
 
 			worker.Abort();
 		}

@@ -47,6 +47,7 @@ namespace Mosa.Tool.TinySimulator
 			this.richTextBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+			this.richTextBox1.Font = new System.Drawing.Font("Consolas", 8F);
 			this.richTextBox1.Location = new System.Drawing.Point(0, 25);
 			this.richTextBox1.Name = "richTextBox1";
 			this.richTextBox1.Size = new System.Drawing.Size(890, 235);
@@ -150,6 +151,7 @@ namespace Mosa.Tool.TinySimulator
 			this.Controls.Add(this.richTextBox1);
 			this.Controls.Add(this.dataGridView1);
 			this.Controls.Add(this.toolStrip1);
+			this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.Name = "ScriptView";
 			this.TabText = "Script";
 			this.Text = "Script";

@@ -338,15 +338,8 @@ namespace Mosa.TinyCPUSimulator
 
 		protected void ExecuteInstruction()
 		{
-			//MemoryDelta.Clear();
-
 			try
 			{
-				//if (Monitor.DebugOutput)
-				//{
-				//	Debug.Write("0x" + CurrentProgramCounter.ToString("X") + ": ");
-				//}
-
 				Tick++;
 				LastException = null;
 				LastProgramCounter = CurrentProgramCounter;
@@ -370,23 +363,32 @@ namespace Mosa.TinyCPUSimulator
 
 		public void Execute()
 		{
-			if (Monitor.DebugOutput)
+			try
 			{
-				Debug.WriteLine("EIP        EAX        EBX        ECX        EDX        ESI        EDI        ESP        EBP        XMM#0      XMM#1      XMM#2      XMM#3      FLAGS");
-			}
+				Monitor.IsExecuting = true;
 
-			for (; ; )
-			{
-				ExecuteInstruction();
-
-				bool brk = Monitor.Break;
-
-				Monitor.OnExecutionStepCompleted(brk);
-
-				if (brk)
+				if (Monitor.DebugOutput)
 				{
-					return;
+					Debug.WriteLine("EIP        EAX        EBX        ECX        EDX        ESI        EDI        ESP        EBP        XMM#0      XMM#1      XMM#2      XMM#3      FLAGS");
 				}
+
+				for (; ; )
+				{
+					ExecuteInstruction();
+
+					bool brk = Monitor.Break;
+
+					Monitor.OnExecutionStepCompleted(brk);
+
+					if (brk)
+					{
+						return;
+					}
+				}
+			}
+			finally
+			{
+				Monitor.IsExecuting = false;
 			}
 		}
 

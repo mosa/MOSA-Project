@@ -15,6 +15,10 @@ namespace Mosa.Tool.TinySimulator
 {
 	public partial class ScriptView : SimulatorDockContent
 	{
+
+		private int lineNbr = 0;
+		private bool wait = false;
+
 		public ScriptView(MainForm mainForm)
 			: base(mainForm)
 		{
@@ -27,15 +31,30 @@ namespace Mosa.Tool.TinySimulator
 
 		private void toolStripButton3_Click(object sender, EventArgs e)
 		{
-			int lineNbr = 0;
+			lineNbr = 0;
+			wait = false;
 
-			foreach (var l in richTextBox1.Lines)
+			Execute();
+		}
+
+		public void ExecutingCompleted()
+		{
+			AddOutput(lineNbr, "STATUS: Execution completed");
+			wait = false;
+			Execute();
+		}
+
+		private void Execute()
+		{
+			while (!wait && richTextBox1.Lines.Length > lineNbr)
 			{
+				var l = richTextBox1.Lines[lineNbr];
 				lineNbr++;
+
 				string line = l.Trim();
 
 				if (string.IsNullOrEmpty(line))
-					continue;
+					return;
 
 				string cmd = string.Empty;
 				string data = string.Empty;
@@ -147,14 +166,15 @@ namespace Mosa.Tool.TinySimulator
 
 		protected void Execute(int lineNbr, string data)
 		{
-			AddOutput(lineNbr, "STATUS: Start");
+			AddOutput(lineNbr, "STATUS: Executing!");
+			wait = true;
 			MainForm.Start();
-			
 		}
 
 		protected void Restart(int lineNbr, string data)
 		{
 			AddOutput(lineNbr, "STATUS: Restart");
+			wait = true;
 			MainForm.Restart();
 		}
 
@@ -184,9 +204,9 @@ namespace Mosa.Tool.TinySimulator
 		protected void Step(int lineNbr, string data)
 		{
 			uint step = Convert.ToUInt32(data);
-			AddOutput(lineNbr, "STATUS: Step for " + step.ToString());
+			AddOutput(lineNbr, "STATUS: Executing " + step.ToString() + " steps!");
+			wait = true;
 			MainForm.ExecuteSteps(step);
-			SimCPU.WaitUntilCompleted();
 		}
 
 		protected void AddWatchByLabel(int lineNbr, string data)

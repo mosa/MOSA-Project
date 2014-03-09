@@ -75,6 +75,9 @@ namespace Mosa.Tool.TinySimulator
 
 		private void btnStepOver_Click(object sender, EventArgs e)
 		{
+			if (SimCPU == null)
+				return;
+
 			if (SimCPU.LastInstruction.Opcode.FlowType == OpcodeFlowType.Call || SimCPU.LastInstruction.Opcode.FlowType == OpcodeFlowType.Normal)
 			{
 				ulong ip = SimCPU.LastProgramCounter + SimCPU.CurrentInstruction.OpcodeSize;

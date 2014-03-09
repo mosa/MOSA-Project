@@ -19,6 +19,7 @@ namespace Mosa.TinyCPUSimulator
 
 		public SimCPU CPU { get; private set; }
 
+
 		public bool Stop { get; set; }
 
 		public ulong BreakAtTick { get; set; }
@@ -45,9 +46,13 @@ namespace Mosa.TinyCPUSimulator
 
 		public ulong StepOverBreakPoint { get; set; }
 
+		public bool IsExecuting { get { return isExecuting; } internal set { isExecuting = value; } }
+
 		public OnSimStateUpdate OnStateUpdate { get; set; }
 
-		public object locker = new object();
+		private object locker = new object();
+
+		private volatile bool isExecuting;
 
 		public SimMonitor(SimCPU cpu)
 		{
