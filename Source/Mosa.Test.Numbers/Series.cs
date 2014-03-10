@@ -259,6 +259,11 @@ namespace Mosa.Test.Numbers
 			get { foreach (int a in GetUpTo(32)) yield return a; }
 		}
 
+		public static IEnumerable<int> MiniI4
+		{
+			get { yield return 0; yield return 1; yield return int.MinValue; yield return int.MaxValue; }
+		}
+
 		public static IEnumerable<int> FewScatteredAI4
 		{
 			get { yield return 1; yield return 51; }
@@ -310,6 +315,11 @@ namespace Mosa.Test.Numbers
 			get { foreach (uint a in GetUpTo(8)) yield return a; }
 		}
 
+		public static IEnumerable<uint> MiniU4
+		{
+			get { yield return 0; yield return 1; yield return uint.MinValue; yield return uint.MaxValue; }
+		}
+
 		#endregion U4 Types
 
 		#region I8 Types
@@ -346,6 +356,11 @@ namespace Mosa.Test.Numbers
 			get { foreach (long a in GetUpTo(32)) yield return a; }
 		}
 
+		public static IEnumerable<long> MiniI8
+		{
+			get { yield return 0; yield return 1; yield return long.MinValue; yield return long.MaxValue; }
+		}
+
 		#endregion I8 Types
 
 		#region U8 Types
@@ -380,6 +395,11 @@ namespace Mosa.Test.Numbers
 		public static IEnumerable<ulong> U8UpTo32
 		{
 			get { foreach (ulong a in GetUpTo(32)) yield return a; }
+		}
+
+		public static IEnumerable<ulong> MiniU8
+		{
+			get { yield return 0; yield return 1; yield return ulong.MinValue; yield return ulong.MaxValue; }
 		}
 
 		#endregion U8 Types
