@@ -83,6 +83,8 @@
     <Compile Include="Int64Fixture.cs" />
     <Compile Include="Int8Fixture.cs" />
     <Compile Include="NewDerivedObjectFixture.cs" />
+    <Compile Include="RegisterAllocatorFixture.cs" />
+    <Compile Include="SSAOptimizationFixture.cs" />
     <Compile Include="NewObjectFixture.cs" />
     <Compile Include="X86TestFixture.cs" />
     <Compile Include="UInt16Fixture.cs" />

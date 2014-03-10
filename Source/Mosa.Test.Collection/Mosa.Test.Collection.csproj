@@ -114,6 +114,7 @@
       <DependentUpon>LdargaTests.tt</DependentUpon>
     </Compile>
     <Compile Include="NewObjectTests.cs" />
+    <Compile Include="SSAOptimizationTest.cs" />
     <Compile Include="RegisterAllocatorTests.cs" />
     <Compile Include="SpecificTests.cs" />
     <Compile Include="ForeachTests.cs">

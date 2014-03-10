@@ -33,15 +33,15 @@ namespace Mosa.Test.Collection.x86.xUnit
 			Assert.Equal(DoubleTests.SubR8R8(a, b), Run<double>("Mosa.Test.Collection", "DoubleTests", "SubR8R8", a, b));
 		}
 
-		[Theory]
-		[PropertyData("R8R8")]
+		//[Theory]
+		//[PropertyData("R8R8")]
 		public void MulR8R8(double a, double b)
 		{
 			Assert.Equal(DoubleTests.MulR8R8(a, b), Run<double>("Mosa.Test.Collection", "DoubleTests", "MulR8R8", a, b));
 		}
 
-		[Theory]
-		[PropertyData("R8R8")]
+		//[Theory]
+		//[PropertyData("R8R8")]
 		public void DivR8R8(double a, double b)
 		{
 			if (a == int.MinValue && b == -1)
@@ -90,8 +90,8 @@ namespace Mosa.Test.Collection.x86.xUnit
 			Run<double>("Mosa.Test.Collection", "DoubleTests", "RemR8R8", (double)0, a, (double)0);
 		}
 
-		[Theory]
-		[PropertyData("R8R8")]
+		//[Theory]
+		//[PropertyData("R8R8")]
 		public void CeqR8R8(double a, double b)
 		{
 			Assert.Equal(DoubleTests.CeqR8R8(a, b), Run<bool>("Mosa.Test.Collection", "DoubleTests", "CeqR8R8", a, b));
@@ -162,8 +162,8 @@ namespace Mosa.Test.Collection.x86.xUnit
 		//	Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "DoubleTests", "Ldelema", index, value));
 		//}
 
-		[Theory]
-		[PropertyData("R8")]
+		//[Theory]
+		//[PropertyData("R8")]
 		public void IsNaN(double value)
 		{
 			Assert.Equal(DoubleTests.IsNaN(value), Run<bool>("Mosa.Test.Collection", "DoubleTests", "IsNaN", value));

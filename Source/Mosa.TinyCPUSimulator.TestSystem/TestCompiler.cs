@@ -75,7 +75,7 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 
 			platform.InitializeSimulation(simAdapter);
 
-			simAdapter.SimCPU.Monitor.DebugOutput = true; // DEBUG OPTION
+			simAdapter.SimCPU.Monitor.DebugOutput = false; // DEBUG OPTION
 		}
 
 		public T Run<T>(string ns, string type, string method, params object[] parameters)
