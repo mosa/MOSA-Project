@@ -40,13 +40,6 @@ namespace Mosa.TinyCPUSimulator.Debug
 			fixture.DivU8U8(18446744073709551615, 4294967294);
 		}
 
-		private static void Test2()
-		{
-			var fixture = new EnumFixture();
-
-			fixture.ItemAMustEqual5();
-		}
-
 		private static void Test1()
 		{
 			var test = new TestCPUx86();

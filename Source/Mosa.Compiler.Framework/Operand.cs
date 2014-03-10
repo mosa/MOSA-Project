@@ -296,57 +296,59 @@ namespace Mosa.Compiler.Framework
 			}
 		}
 
-		public bool IsR { get { return Type.IsR; } }
+		public bool IsR { get { return underlyingType.IsR; } }
 
-		public bool IsR8 { get { return Type.IsR8; } }
+		public bool IsR8 { get { return underlyingType.IsR8; } }
 
-		public bool IsR4 { get { return Type.IsR4; } }
+		public bool IsR4 { get { return underlyingType.IsR4; } }
 
-		public bool IsInteger { get { return Type.IsInteger; } }
+		public bool IsInteger { get { return underlyingType.IsInteger; } }
 
-		public bool IsSigned { get { return Type.IsSigned; } }
+		public bool IsSigned { get { return underlyingType.IsSigned; } }
 
-		public bool IsUnsigned { get { return Type.IsUnsigned; } }
+		public bool IsUnsigned { get { return underlyingType.IsUnsigned; } }
 
-		public bool IsU1 { get { return Type.IsU1; } }
+		public bool IsU1 { get { return underlyingType.IsU1; } }
 
-		public bool IsI1 { get { return Type.IsI1; } }
+		public bool IsI1 { get { return underlyingType.IsI1; } }
 
-		public bool IsU2 { get { return Type.IsU2; } }
+		public bool IsU2 { get { return underlyingType.IsU2; } }
 
-		public bool IsI2 { get { return Type.IsI2; } }
+		public bool IsI2 { get { return underlyingType.IsI2; } }
 
-		public bool IsU4 { get { return Type.IsU4; } }
+		public bool IsU4 { get { return underlyingType.IsU4; } }
 
-		public bool IsI4 { get { return Type.IsI4; } }
+		public bool IsI4 { get { return underlyingType.IsI4; } }
 
-		public bool IsU8 { get { return Type.IsU8; } }
+		public bool IsU8 { get { return underlyingType.IsU8; } }
 
-		public bool IsI8 { get { return Type.IsI8; } }
+		public bool IsI8 { get { return underlyingType.IsI8; } }
 
-		public bool IsByte { get { return Type.IsUI1; } }
+		public bool IsByte { get { return underlyingType.IsUI1; } }
 
-		public bool IsShort { get { return Type.IsUI2; } }
+		public bool IsShort { get { return underlyingType.IsUI2; } }
 
-		public bool IsChar { get { return Type.IsChar; } }
+		public bool IsChar { get { return underlyingType.IsChar; } }
 
-		public bool IsInt { get { return Type.IsUI4; } }
+		public bool IsInt { get { return underlyingType.IsUI4; } }
 
-		public bool IsLong { get { return Type.IsUI8; } }
+		public bool IsLong { get { return underlyingType.IsUI8; } }
 
 		public bool IsBoolean { get { return Type.IsBoolean; } }
 
 		public bool IsPointer { get { return Type.IsPointer; } }
 
-		public bool IsValueType { get { return Type.IsValueType; } }
+		public bool IsValueType { get { return underlyingType.IsValueType; } }
 
 		public bool IsArray { get { return Type.IsArray; } }
 
-		public bool IsI { get { return Type.IsI; } }
+		public bool IsI { get { return underlyingType.IsI; } }
 
-		public bool IsU { get { return Type.IsU; } }
+		public bool IsU { get { return underlyingType.IsU; } }
 
 		public bool IsReferenceType { get { return Type.IsReferenceType; } }
+
+		private MosaType underlyingType { get { return Type.GetEnumUnderlyingType(); } }
 
 		#endregion Properties
 
@@ -990,7 +992,7 @@ namespace Mosa.Compiler.Framework
 
 				if (IsNull)
 					sb.Append("null");
-				else if (IsSigned)
+				else if (IsUnsigned)
 					sb.AppendFormat("{0}", ConstantUnsignedInteger);
 				else if (IsSigned)
 					sb.AppendFormat("{0}", ConstantSignedInteger);
