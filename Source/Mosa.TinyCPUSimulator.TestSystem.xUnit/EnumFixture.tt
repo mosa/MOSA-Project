@@ -16,7 +16,7 @@ namespace Mosa.TinyCPUSimulator.TestSystem.xUnit
 	{
 <#
 	List<string> members = new List<string>() {"Conversion", "PlusOne_1", "PlusOne_2", "MinusOne_1", "MinusOne_2",
-	                                           "Shl", "Shr", "Mul2", "Div2", "AssignPlusOne", "AssignMinusOne",
+											   "Shl", "Shr", "Mul2", "Div2", "Rem2", "AssignPlusOne", "AssignMinusOne",
 											   "Preincrement", "Predecrement", "Postincrement", "Postdecrement",
 											   "And", "Or", "XOr" };
 	foreach (KeyValuePair<string, string> comparison in Comparisons) {
@@ -26,8 +26,6 @@ namespace Mosa.TinyCPUSimulator.TestSystem.xUnit
 	}
 	foreach (bool isSigned in new bool[2] {false, true}) {
 		foreach (KeyValuePair<string, string> numberT in isSigned ? NegativeIntegers : PositiveIntegers) {
-			if (numberT.Value == "I8" || numberT.Value == "U8")
-				continue; // FIXME compiler bugs out on 64-bit shifts with constant shift count
 			foreach(string member in members) {
 #>
 		[Fact]

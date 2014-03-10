@@ -13,8 +13,6 @@ namespace Mosa.Test.Collection
 {
 <# foreach (bool isSigned in new bool[2] {false, true}) {
 	foreach (KeyValuePair<string, string> numberT in isSigned ? NegativeIntegers : PositiveIntegers) {
-		if (numberT.Value == "I8" || numberT.Value == "U8")
-			continue; // FIXME compiler bugs out on 64-bit shifts with constant shift count
 		string enumType = "Enum" + numberT.Value;
 		string valueType = numberT.Key;
 #>	enum <#= enumType #> : <#= valueType #> {
@@ -72,6 +70,10 @@ namespace Mosa.Test.Collection
 		public static bool <#= number.Value #>Div2() {
 			<#= enumType #> e = <#= enumElement #>;
 			return <#= value / 2 #> == (<#= valueType #>)e / 2;
+		}
+		public static bool <#= number.Value #>Rem2() {
+			<#= enumType #> e = <#= enumElement #>;
+			return <#= value % 2 #> == (<#= valueType #>)e % 2;
 		}
 		public static bool <#= number.Value #>AssignPlusOne() {
 			<#= enumType #> e = <#= enumElement #>;
