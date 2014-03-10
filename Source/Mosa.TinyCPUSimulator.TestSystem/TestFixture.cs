@@ -107,9 +107,9 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 
 		public static IEnumerable<object[]> I4I4I4I4 { get { return Combinations.I4I4I4I4; } }
 
-		public static IEnumerable<object[]> MiniI4MiniI4MiniI4 { get { return Combinations.MiniI4MiniI4MiniI4; } }
+		public static IEnumerable<object[]> I4MiniI4MiniI4Mini { get { return Combinations.I4MiniI4MiniI4Mini; } }
 
-		public static IEnumerable<object[]> MiniI4MiniI4MiniI4MiniI4 { get { return Combinations.MiniI4MiniI4MiniI4MiniI4; } }
+		public static IEnumerable<object[]> I4MiniI4MiniI4MiniI4Mini { get { return Combinations.I4MiniI4MiniI4MiniI4Mini; } }
 
 		public static IEnumerable<object[]> I4SmallI4SmallI4SmallI4SmallI4SmallI4SmallI4Small { get { return Combinations.I4SmallI4SmallI4SmallI4SmallI4SmallI4SmallI4Small; } }
 
@@ -158,7 +158,7 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 		public static IEnumerable<object[]> U8U8U8U8 { get { return Combinations.U8U8U8U8; } }
 
 		public static IEnumerable<object[]> MiniI8MiniI8MiniI8MiniI8 { get { return Combinations.MiniI8MiniI8MiniI8MiniI8; } }
-		public static IEnumerable<object[]> MiniU4MiniU8MiniU8MiniU8 { get { return Combinations.MiniU4MiniU8MiniU8MiniU8; } }
-		public static IEnumerable<object[]> MiniU8MiniU8MiniU8MiniU8 { get { return Combinations.MiniU8MiniU8MiniU8MiniU8; } }
+		public static IEnumerable<object[]> U4MiniU8MiniU8MiniU8Mini { get { return Combinations.U4MiniU8MiniU8MiniU8Mini; } }
+		public static IEnumerable<object[]> U8MiniU8MiniU8MiniU8Mini { get { return Combinations.U8MiniU8MiniU8MiniU8Mini; } }
 	}
 }

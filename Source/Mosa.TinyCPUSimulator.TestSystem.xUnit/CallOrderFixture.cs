@@ -55,14 +55,14 @@ namespace Mosa.Test.Collection.x86.xUnit
 		}
 
 		[Theory]
-		[PropertyData("MiniI4MiniI4MiniI4")]
+		[PropertyData("I4MiniI4MiniI4Mini")]
 		public void CallOrderI4I4I4(int a, int b, int c)
 		{
 			Assert.Equal(Mosa.Test.Collection.CallOrderTests.CallOrderI4I4I4(a, b, c), Run<bool>("Mosa.Test.Collection.CallOrderTests.CallOrderI4I4I4", a, b, c));
 		}
 
 		[Theory]
-		[PropertyData("MiniI4MiniI4MiniI4MiniI4")]
+		[PropertyData("I4MiniI4MiniI4MiniI4Mini")]
 		public void CallOrderI4I4I4I4(int a, int b, int c, int d)
 		{
 			Assert.Equal(Mosa.Test.Collection.CallOrderTests.CallOrderI4I4I4I4(a, b, c, d), Run<bool>("Mosa.Test.Collection.CallOrderTests.CallOrderI4I4I4I4", a, b, c, d));
@@ -90,7 +90,7 @@ namespace Mosa.Test.Collection.x86.xUnit
 		}
 
 		[Theory]
-		[PropertyData("MiniU8MiniU8MiniU8MiniU8")]
+		[PropertyData("U8MiniU8MiniU8MiniU8Mini")]
 		public void CallOrderU8U8U8U8(ulong a, ulong b, ulong c, ulong d)
 		{
 			Assert.Equal(Mosa.Test.Collection.CallOrderTests.CallOrderU8U8U8U8(a, b, c, d), Run<bool>("Mosa.Test.Collection.CallOrderTests.CallOrderU8U8U8U8", a, b, c, d));
@@ -98,14 +98,14 @@ namespace Mosa.Test.Collection.x86.xUnit
 		}
 
 		[Theory]
-		[PropertyData("MiniU4MiniU8MiniU8MiniU8")]
+		[PropertyData("U4MiniU8MiniU8MiniU8Mini")]
 		public void CallOrderU4U8U8U8(uint a, ulong b, ulong c, ulong d)
 		{
 			Assert.Equal(Mosa.Test.Collection.CallOrderTests.CallOrderU4U8U8U8(a, b, c, d), Run<bool>("Mosa.Test.Collection.CallOrderTests.CallOrderU4U8U8U8", a, b, c, d));
 		}
 
 		[Theory]
-		[PropertyData("MiniI4MiniI4MiniI4MiniI4")]
+		[PropertyData("I4MiniI4MiniI4MiniI4Mini")]
 		public void CallOrderI4I4I4I4_2(int a, int b, int c, int d)
 		{
 			Assert.Equal(Mosa.Test.Collection.CallOrderTests.CallOrderI4I4I4I4_2(a, b, c, d), Run<int>("Mosa.Test.Collection.CallOrderTests.CallOrderI4I4I4I4_2", a, b, c, d));

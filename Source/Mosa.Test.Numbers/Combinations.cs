@@ -279,25 +279,25 @@ namespace Mosa.Test.Numbers
 			}
 		}
 
-		public static IEnumerable<object[]> MiniI4MiniI4MiniI4
+		public static IEnumerable<object[]> I4MiniI4MiniI4Mini
 		{
 			get
 			{
-				foreach (var i1 in Series.MiniI4)
-					foreach (var i2 in Series.MiniI4)
-						foreach (var i3 in Series.MiniI4)
+				foreach (var i1 in Series.I4Mini)
+					foreach (var i2 in Series.I4Mini)
+						foreach (var i3 in Series.I4Mini)
 							yield return new object[] { i1, i2, i3 };
 			}
 		}
 
-		public static IEnumerable<object[]> MiniI4MiniI4MiniI4MiniI4
+		public static IEnumerable<object[]> I4MiniI4MiniI4MiniI4Mini
 		{
 			get
 			{
-				foreach (var i1 in Series.MiniI4)
-					foreach (var i2 in Series.MiniI4)
-						foreach (var i3 in Series.MiniI4)
-							foreach (var i4 in Series.MiniI4)
+				foreach (var i1 in Series.I4Mini)
+					foreach (var i2 in Series.I4Mini)
+						foreach (var i3 in Series.I4Mini)
+							foreach (var i4 in Series.I4Mini)
 								yield return new object[] { i1, i2, i3, i4 };
 			}
 		}
@@ -352,10 +352,10 @@ namespace Mosa.Test.Numbers
 		{
 			get
 			{
-				foreach (var i1 in Series.MiniI8)
-					foreach (var i2 in Series.MiniI8)
-						foreach (var i3 in Series.MiniI8)
-							foreach (var i4 in Series.MiniI8)
+				foreach (var i1 in Series.I8Mini)
+					foreach (var i2 in Series.I8Mini)
+						foreach (var i3 in Series.I8Mini)
+							foreach (var i4 in Series.I8Mini)
 								yield return new object[] { i1, i2, i3, i4 };
 			}
 		}
@@ -459,14 +459,14 @@ namespace Mosa.Test.Numbers
 			}
 		}
 
-		public static IEnumerable<object[]> MiniU4MiniU8MiniU8MiniU8
+		public static IEnumerable<object[]> U4MiniU8MiniU8MiniU8Mini
 		{
 			get
 			{
-				foreach (var i1 in Series.MiniU4)
-					foreach (var i2 in Series.MiniU8)
-						foreach (var i3 in Series.MiniU8)
-							foreach (var i4 in Series.MiniU8)
+				foreach (var i1 in Series.U4Mini)
+					foreach (var i2 in Series.U8Mini)
+						foreach (var i3 in Series.U8Mini)
+							foreach (var i4 in Series.U8Mini)
 								yield return new object[] { i1, i2, i3, i4 };
 			}
 		}
@@ -522,25 +522,25 @@ namespace Mosa.Test.Numbers
 			}
 		}
 
-		public static IEnumerable<object[]> MiniU8MiniU8MiniU8
+		public static IEnumerable<object[]> U8MiniU8MiniU8Mini
 		{
 			get
 			{
-				foreach (var i1 in Series.MiniU8)
-					foreach (var i2 in Series.MiniU8)
-						foreach (var i3 in Series.MiniU8)
+				foreach (var i1 in Series.U8Mini)
+					foreach (var i2 in Series.U8Mini)
+						foreach (var i3 in Series.U8Mini)
 							yield return new object[] { i1, i2, i3 };
 			}
 		}
 
-		public static IEnumerable<object[]> MiniU8MiniU8MiniU8MiniU8
+		public static IEnumerable<object[]> U8MiniU8MiniU8MiniU8Mini
 		{
 			get
 			{
-				foreach (var i1 in Series.MiniU8)
-					foreach (var i2 in Series.MiniU8)
-						foreach (var i3 in Series.MiniU8)
-							foreach (var U8 in Series.MiniU8)
+				foreach (var i1 in Series.U8Mini)
+					foreach (var i2 in Series.U8Mini)
+						foreach (var i3 in Series.U8Mini)
+							foreach (var U8 in Series.U8Mini)
 								yield return new object[] { i1, i2, i3, U8 };
 			}
 		}
