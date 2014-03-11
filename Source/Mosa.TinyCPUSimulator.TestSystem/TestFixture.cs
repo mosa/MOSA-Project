@@ -111,6 +111,8 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 
 		public static IEnumerable<object[]> I4MiniI4MiniI4MiniI4Mini { get { return Combinations.I4MiniI4MiniI4MiniI4Mini; } }
 
+		public static IEnumerable<object[]> I4MiniI4MiniI4MiniI4MiniI4MiniI4MiniI4Mini { get { return Combinations.I4MiniI4MiniI4MiniI4MiniI4MiniI4MiniI4Mini; } }
+		
 		public static IEnumerable<object[]> I4SmallI4SmallI4SmallI4SmallI4SmallI4SmallI4Small { get { return Combinations.I4SmallI4SmallI4SmallI4SmallI4SmallI4SmallI4Small; } }
 
 		public static IEnumerable<object[]> I8 { get { return Combinations.I8; } }

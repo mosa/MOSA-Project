@@ -22,7 +22,7 @@ namespace Mosa.Test.Collection.x86.xUnit
 		}
 
 		[Theory]
-		[PropertyData("I4SmallI4SmallI4SmallI4SmallI4SmallI4SmallI4Small")]
+		[PropertyData("I4MiniI4MiniI4MiniI4MiniI4MiniI4MiniI4Mini")]
 		public void Pressure7(int a, int b, int c, int d, int e, int f, int g)
 		{
 			Assert.Equal(Mosa.Test.Collection.RegisterAllocatorTests.Pressure7(a, b, c, d, e, f, g), Run<int>("Mosa.Test.Collection.RegisterAllocatorTests.Pressure7", a, b, c, d, e, f, g));
