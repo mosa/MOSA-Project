@@ -43,7 +43,7 @@
     <Compile Include="TestCPUx86.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Mosa.TinyCPUSimulator.TestSystem.xUnit\Mosa.Test.Collection.x86.xUnit.csproj">
+    <ProjectReference Include="..\Mosa.Test.Collection.x86.xUnit\Mosa.Test.Collection.x86.xUnit.csproj">
       <Project>{50568e2d-5360-4f71-87e3-a6979d1d858c}</Project>
       <Name>Mosa.Test.Collection.x86.xUnit</Name>
     </ProjectReference>
