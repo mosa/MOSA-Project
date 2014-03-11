@@ -55,13 +55,12 @@ namespace Mosa.Kernel.x86
 				return;
 
 			uint cnt = 0;
+
 			for (uint index = 0; index < Multiboot.MemoryMapCount; index++)
 			{
 				byte value = Multiboot.GetMemoryMapType(index);
-
 				uint start = Multiboot.GetMemoryMapBase(index);
 				uint size = Multiboot.GetMemoryMapLength(index);
-
 				if (value == 1)
 					AddFreeMemory(cnt++, (uint)start, (uint)size);
 			}

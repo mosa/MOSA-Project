@@ -6,11 +6,7 @@
  * Authors:
  *  Andrey Turkin <andrey.turkin@gmail.com>
  */
-
  
-
-
-
 using System;
 
 namespace Mosa.Test.Collection
@@ -57,6 +53,10 @@ namespace Mosa.Test.Collection
 		public static bool PositiveDiv2() {
 			EnumU1 e = EnumU1.Positive50;
 			return 25 == (byte)e / 2;
+		}
+		public static bool PositiveRem2() {
+			EnumU1 e = EnumU1.Positive50;
+			return 0 == (byte)e % 2;
 		}
 		public static bool PositiveAssignPlusOne() {
 			EnumU1 e = EnumU1.Positive50;
@@ -223,6 +223,10 @@ namespace Mosa.Test.Collection
 			EnumU2 e = EnumU2.Positive50;
 			return 25 == (ushort)e / 2;
 		}
+		public static bool PositiveRem2() {
+			EnumU2 e = EnumU2.Positive50;
+			return 0 == (ushort)e % 2;
+		}
 		public static bool PositiveAssignPlusOne() {
 			EnumU2 e = EnumU2.Positive50;
 			e += 1;
@@ -388,6 +392,10 @@ namespace Mosa.Test.Collection
 			EnumU4 e = EnumU4.Positive50;
 			return 25 == (uint)e / 2;
 		}
+		public static bool PositiveRem2() {
+			EnumU4 e = EnumU4.Positive50;
+			return 0 == (uint)e % 2;
+		}
 		public static bool PositiveAssignPlusOne() {
 			EnumU4 e = EnumU4.Positive50;
 			e += 1;
@@ -510,6 +518,175 @@ namespace Mosa.Test.Collection
 
 	}
 
+	enum EnumU8 : ulong {
+		Positive49 = 49,
+		Positive50,
+		Positive51
+	}
+
+	public static class TestEnumU8Class {
+		public static bool PositiveConversion() {
+			EnumU8 e = EnumU8.Positive50;
+			return 50 == (ulong)e;
+		}
+		public static bool PositivePlusOne_1() {
+			EnumU8 e = EnumU8.Positive50;
+			return 51 == (ulong)(e + 1);
+		}
+		public static bool PositivePlusOne_2() {
+			EnumU8 e = EnumU8.Positive50;
+			return EnumU8.Positive51 == e + 1;
+		}
+		public static bool PositiveMinusOne_1() {
+			EnumU8 e = EnumU8.Positive50;
+			return 49 == (ulong)(e - 1);
+		}
+		public static bool PositiveMinusOne_2() {
+			EnumU8 e = EnumU8.Positive50;
+			return EnumU8.Positive49 == e - 1;
+		}
+		public static bool PositiveShl() {
+			EnumU8 e = EnumU8.Positive50;
+			return 100 == (ulong)e << 1;
+		}
+		public static bool PositiveShr() {
+			EnumU8 e = EnumU8.Positive50;
+			return 25 == (ulong)e >> 1;
+		}
+		public static bool PositiveMul2() {
+			EnumU8 e = EnumU8.Positive50;
+			return 100 == (ulong)e * 2;
+		}
+		public static bool PositiveDiv2() {
+			EnumU8 e = EnumU8.Positive50;
+			return 25 == (ulong)e / 2;
+		}
+		public static bool PositiveRem2() {
+			EnumU8 e = EnumU8.Positive50;
+			return 0 == (ulong)e % 2;
+		}
+		public static bool PositiveAssignPlusOne() {
+			EnumU8 e = EnumU8.Positive50;
+			e += 1;
+			return 51 == (ulong)e;
+		}
+		public static bool PositiveAssignMinusOne() {
+			EnumU8 e = EnumU8.Positive50;
+			e -= 1;
+			return 49 == (ulong)e;
+		}
+		public static bool PositivePreincrement() {
+			EnumU8 e = EnumU8.Positive50;
+			bool retval = 51 == (ulong)(++e);
+			return retval && 51 == (ulong)e;
+		}
+		public static bool PositivePredecrement() {
+			EnumU8 e = EnumU8.Positive50;
+			bool retval = 49 == (ulong)(--e);
+			return retval && 49 == (ulong)e;
+		}
+		public static bool PositivePostincrement() {
+			EnumU8 e = EnumU8.Positive50;
+			bool retval = 50 == (ulong)(e++);
+			return retval && 51 == (ulong)e;
+		}
+		public static bool PositivePostdecrement() {
+			EnumU8 e = EnumU8.Positive50;
+			bool retval = 50 == (ulong)(e--);
+			return retval && 49 == (ulong)e;
+		}
+		public static bool PositiveAnd() {
+			EnumU8 e = EnumU8.Positive50;
+			return 50 == ((ulong)e & 0xFF);
+		}
+		public static bool PositiveOr() {
+			EnumU8 e = EnumU8.Positive50;
+			return 51 == ((ulong)e | 1);
+		}
+		public static bool PositiveXOr() {
+			EnumU8 e = EnumU8.Positive50;
+			return 51 == ((ulong)e ^ 1);
+		}
+		private static bool _PositiveEqual(EnumU8 e, ulong v) {
+			return (ulong)e == v;
+		}
+		public static bool PositiveEqual1() {
+			return (50 == 50) == _PositiveEqual(EnumU8.Positive50, 50);
+		}
+		public static bool PositiveEqual2() {
+			return (50 == 51) == _PositiveEqual(EnumU8.Positive50, 51);
+		}
+		public static bool PositiveEqual3() {
+			return (50 == 49) == _PositiveEqual(EnumU8.Positive50, 49);
+		}
+
+		private static bool _PositiveNotEqual(EnumU8 e, ulong v) {
+			return (ulong)e != v;
+		}
+		public static bool PositiveNotEqual1() {
+			return (50 != 50) == _PositiveNotEqual(EnumU8.Positive50, 50);
+		}
+		public static bool PositiveNotEqual2() {
+			return (50 != 51) == _PositiveNotEqual(EnumU8.Positive50, 51);
+		}
+		public static bool PositiveNotEqual3() {
+			return (50 != 49) == _PositiveNotEqual(EnumU8.Positive50, 49);
+		}
+
+		private static bool _PositiveGreaterThan(EnumU8 e, ulong v) {
+			return (ulong)e > v;
+		}
+		public static bool PositiveGreaterThan1() {
+			return (50 > 50) == _PositiveGreaterThan(EnumU8.Positive50, 50);
+		}
+		public static bool PositiveGreaterThan2() {
+			return (50 > 51) == _PositiveGreaterThan(EnumU8.Positive50, 51);
+		}
+		public static bool PositiveGreaterThan3() {
+			return (50 > 49) == _PositiveGreaterThan(EnumU8.Positive50, 49);
+		}
+
+		private static bool _PositiveLessThan(EnumU8 e, ulong v) {
+			return (ulong)e < v;
+		}
+		public static bool PositiveLessThan1() {
+			return (50 < 50) == _PositiveLessThan(EnumU8.Positive50, 50);
+		}
+		public static bool PositiveLessThan2() {
+			return (50 < 51) == _PositiveLessThan(EnumU8.Positive50, 51);
+		}
+		public static bool PositiveLessThan3() {
+			return (50 < 49) == _PositiveLessThan(EnumU8.Positive50, 49);
+		}
+
+		private static bool _PositiveGreaterThanOrEqual(EnumU8 e, ulong v) {
+			return (ulong)e >= v;
+		}
+		public static bool PositiveGreaterThanOrEqual1() {
+			return (50 >= 50) == _PositiveGreaterThanOrEqual(EnumU8.Positive50, 50);
+		}
+		public static bool PositiveGreaterThanOrEqual2() {
+			return (50 >= 51) == _PositiveGreaterThanOrEqual(EnumU8.Positive50, 51);
+		}
+		public static bool PositiveGreaterThanOrEqual3() {
+			return (50 >= 49) == _PositiveGreaterThanOrEqual(EnumU8.Positive50, 49);
+		}
+
+		private static bool _PositiveLessThanOrEqual(EnumU8 e, ulong v) {
+			return (ulong)e <= v;
+		}
+		public static bool PositiveLessThanOrEqual1() {
+			return (50 <= 50) == _PositiveLessThanOrEqual(EnumU8.Positive50, 50);
+		}
+		public static bool PositiveLessThanOrEqual2() {
+			return (50 <= 51) == _PositiveLessThanOrEqual(EnumU8.Positive50, 51);
+		}
+		public static bool PositiveLessThanOrEqual3() {
+			return (50 <= 49) == _PositiveLessThanOrEqual(EnumU8.Positive50, 49);
+		}
+
+	}
+
 	enum EnumI1 : sbyte {
 		Negative51 = -51,
 		Negative50,
@@ -555,6 +732,10 @@ namespace Mosa.Test.Collection
 		public static bool PositiveDiv2() {
 			EnumI1 e = EnumI1.Positive50;
 			return 25 == (sbyte)e / 2;
+		}
+		public static bool PositiveRem2() {
+			EnumI1 e = EnumI1.Positive50;
+			return 0 == (sbyte)e % 2;
 		}
 		public static bool PositiveAssignPlusOne() {
 			EnumI1 e = EnumI1.Positive50;
@@ -711,6 +892,10 @@ namespace Mosa.Test.Collection
 		public static bool NegativeDiv2() {
 			EnumI1 e = EnumI1.Negative50;
 			return -25 == (sbyte)e / 2;
+		}
+		public static bool NegativeRem2() {
+			EnumI1 e = EnumI1.Negative50;
+			return 0 == (sbyte)e % 2;
 		}
 		public static bool NegativeAssignPlusOne() {
 			EnumI1 e = EnumI1.Negative50;
@@ -880,6 +1065,10 @@ namespace Mosa.Test.Collection
 			EnumI2 e = EnumI2.Positive50;
 			return 25 == (short)e / 2;
 		}
+		public static bool PositiveRem2() {
+			EnumI2 e = EnumI2.Positive50;
+			return 0 == (short)e % 2;
+		}
 		public static bool PositiveAssignPlusOne() {
 			EnumI2 e = EnumI2.Positive50;
 			e += 1;
@@ -1035,6 +1224,10 @@ namespace Mosa.Test.Collection
 		public static bool NegativeDiv2() {
 			EnumI2 e = EnumI2.Negative50;
 			return -25 == (short)e / 2;
+		}
+		public static bool NegativeRem2() {
+			EnumI2 e = EnumI2.Negative50;
+			return 0 == (short)e % 2;
 		}
 		public static bool NegativeAssignPlusOne() {
 			EnumI2 e = EnumI2.Negative50;
@@ -1204,6 +1397,10 @@ namespace Mosa.Test.Collection
 			EnumI4 e = EnumI4.Positive50;
 			return 25 == (int)e / 2;
 		}
+		public static bool PositiveRem2() {
+			EnumI4 e = EnumI4.Positive50;
+			return 0 == (int)e % 2;
+		}
 		public static bool PositiveAssignPlusOne() {
 			EnumI4 e = EnumI4.Positive50;
 			e += 1;
@@ -1360,6 +1557,10 @@ namespace Mosa.Test.Collection
 			EnumI4 e = EnumI4.Negative50;
 			return -25 == (int)e / 2;
 		}
+		public static bool NegativeRem2() {
+			EnumI4 e = EnumI4.Negative50;
+			return 0 == (int)e % 2;
+		}
 		public static bool NegativeAssignPlusOne() {
 			EnumI4 e = EnumI4.Negative50;
 			e += 1;
@@ -1478,6 +1679,338 @@ namespace Mosa.Test.Collection
 		}
 		public static bool NegativeLessThanOrEqual3() {
 			return (-50 <= -51) == _NegativeLessThanOrEqual(EnumI4.Negative50, -51);
+		}
+
+	}
+
+	enum EnumI8 : long {
+		Negative51 = -51,
+		Negative50,
+		Negative49,
+		Positive49 = 49,
+		Positive50,
+		Positive51
+	}
+
+	public static class TestEnumI8Class {
+		public static bool PositiveConversion() {
+			EnumI8 e = EnumI8.Positive50;
+			return 50 == (long)e;
+		}
+		public static bool PositivePlusOne_1() {
+			EnumI8 e = EnumI8.Positive50;
+			return 51 == (long)(e + 1);
+		}
+		public static bool PositivePlusOne_2() {
+			EnumI8 e = EnumI8.Positive50;
+			return EnumI8.Positive51 == e + 1;
+		}
+		public static bool PositiveMinusOne_1() {
+			EnumI8 e = EnumI8.Positive50;
+			return 49 == (long)(e - 1);
+		}
+		public static bool PositiveMinusOne_2() {
+			EnumI8 e = EnumI8.Positive50;
+			return EnumI8.Positive49 == e - 1;
+		}
+		public static bool PositiveShl() {
+			EnumI8 e = EnumI8.Positive50;
+			return 100 == (long)e << 1;
+		}
+		public static bool PositiveShr() {
+			EnumI8 e = EnumI8.Positive50;
+			return 25 == (long)e >> 1;
+		}
+		public static bool PositiveMul2() {
+			EnumI8 e = EnumI8.Positive50;
+			return 100 == (long)e * 2;
+		}
+		public static bool PositiveDiv2() {
+			EnumI8 e = EnumI8.Positive50;
+			return 25 == (long)e / 2;
+		}
+		public static bool PositiveRem2() {
+			EnumI8 e = EnumI8.Positive50;
+			return 0 == (long)e % 2;
+		}
+		public static bool PositiveAssignPlusOne() {
+			EnumI8 e = EnumI8.Positive50;
+			e += 1;
+			return 51 == (long)e;
+		}
+		public static bool PositiveAssignMinusOne() {
+			EnumI8 e = EnumI8.Positive50;
+			e -= 1;
+			return 49 == (long)e;
+		}
+		public static bool PositivePreincrement() {
+			EnumI8 e = EnumI8.Positive50;
+			bool retval = 51 == (long)(++e);
+			return retval && 51 == (long)e;
+		}
+		public static bool PositivePredecrement() {
+			EnumI8 e = EnumI8.Positive50;
+			bool retval = 49 == (long)(--e);
+			return retval && 49 == (long)e;
+		}
+		public static bool PositivePostincrement() {
+			EnumI8 e = EnumI8.Positive50;
+			bool retval = 50 == (long)(e++);
+			return retval && 51 == (long)e;
+		}
+		public static bool PositivePostdecrement() {
+			EnumI8 e = EnumI8.Positive50;
+			bool retval = 50 == (long)(e--);
+			return retval && 49 == (long)e;
+		}
+		public static bool PositiveAnd() {
+			EnumI8 e = EnumI8.Positive50;
+			return 50 == ((long)e & 0xFF);
+		}
+		public static bool PositiveOr() {
+			EnumI8 e = EnumI8.Positive50;
+			return 51 == ((long)e | 1);
+		}
+		public static bool PositiveXOr() {
+			EnumI8 e = EnumI8.Positive50;
+			return 51 == ((long)e ^ 1);
+		}
+		private static bool _PositiveEqual(EnumI8 e, long v) {
+			return (long)e == v;
+		}
+		public static bool PositiveEqual1() {
+			return (50 == 50) == _PositiveEqual(EnumI8.Positive50, 50);
+		}
+		public static bool PositiveEqual2() {
+			return (50 == 51) == _PositiveEqual(EnumI8.Positive50, 51);
+		}
+		public static bool PositiveEqual3() {
+			return (50 == 49) == _PositiveEqual(EnumI8.Positive50, 49);
+		}
+
+		private static bool _PositiveNotEqual(EnumI8 e, long v) {
+			return (long)e != v;
+		}
+		public static bool PositiveNotEqual1() {
+			return (50 != 50) == _PositiveNotEqual(EnumI8.Positive50, 50);
+		}
+		public static bool PositiveNotEqual2() {
+			return (50 != 51) == _PositiveNotEqual(EnumI8.Positive50, 51);
+		}
+		public static bool PositiveNotEqual3() {
+			return (50 != 49) == _PositiveNotEqual(EnumI8.Positive50, 49);
+		}
+
+		private static bool _PositiveGreaterThan(EnumI8 e, long v) {
+			return (long)e > v;
+		}
+		public static bool PositiveGreaterThan1() {
+			return (50 > 50) == _PositiveGreaterThan(EnumI8.Positive50, 50);
+		}
+		public static bool PositiveGreaterThan2() {
+			return (50 > 51) == _PositiveGreaterThan(EnumI8.Positive50, 51);
+		}
+		public static bool PositiveGreaterThan3() {
+			return (50 > 49) == _PositiveGreaterThan(EnumI8.Positive50, 49);
+		}
+
+		private static bool _PositiveLessThan(EnumI8 e, long v) {
+			return (long)e < v;
+		}
+		public static bool PositiveLessThan1() {
+			return (50 < 50) == _PositiveLessThan(EnumI8.Positive50, 50);
+		}
+		public static bool PositiveLessThan2() {
+			return (50 < 51) == _PositiveLessThan(EnumI8.Positive50, 51);
+		}
+		public static bool PositiveLessThan3() {
+			return (50 < 49) == _PositiveLessThan(EnumI8.Positive50, 49);
+		}
+
+		private static bool _PositiveGreaterThanOrEqual(EnumI8 e, long v) {
+			return (long)e >= v;
+		}
+		public static bool PositiveGreaterThanOrEqual1() {
+			return (50 >= 50) == _PositiveGreaterThanOrEqual(EnumI8.Positive50, 50);
+		}
+		public static bool PositiveGreaterThanOrEqual2() {
+			return (50 >= 51) == _PositiveGreaterThanOrEqual(EnumI8.Positive50, 51);
+		}
+		public static bool PositiveGreaterThanOrEqual3() {
+			return (50 >= 49) == _PositiveGreaterThanOrEqual(EnumI8.Positive50, 49);
+		}
+
+		private static bool _PositiveLessThanOrEqual(EnumI8 e, long v) {
+			return (long)e <= v;
+		}
+		public static bool PositiveLessThanOrEqual1() {
+			return (50 <= 50) == _PositiveLessThanOrEqual(EnumI8.Positive50, 50);
+		}
+		public static bool PositiveLessThanOrEqual2() {
+			return (50 <= 51) == _PositiveLessThanOrEqual(EnumI8.Positive50, 51);
+		}
+		public static bool PositiveLessThanOrEqual3() {
+			return (50 <= 49) == _PositiveLessThanOrEqual(EnumI8.Positive50, 49);
+		}
+
+		public static bool NegativeConversion() {
+			EnumI8 e = EnumI8.Negative50;
+			return -50 == (long)e;
+		}
+		public static bool NegativePlusOne_1() {
+			EnumI8 e = EnumI8.Negative50;
+			return -49 == (long)(e + 1);
+		}
+		public static bool NegativePlusOne_2() {
+			EnumI8 e = EnumI8.Negative50;
+			return EnumI8.Negative49 == e + 1;
+		}
+		public static bool NegativeMinusOne_1() {
+			EnumI8 e = EnumI8.Negative50;
+			return -51 == (long)(e - 1);
+		}
+		public static bool NegativeMinusOne_2() {
+			EnumI8 e = EnumI8.Negative50;
+			return EnumI8.Negative51 == e - 1;
+		}
+		public static bool NegativeShl() {
+			EnumI8 e = EnumI8.Negative50;
+			return -100 == (long)e << 1;
+		}
+		public static bool NegativeShr() {
+			EnumI8 e = EnumI8.Negative50;
+			return -25 == (long)e >> 1;
+		}
+		public static bool NegativeMul2() {
+			EnumI8 e = EnumI8.Negative50;
+			return -100 == (long)e * 2;
+		}
+		public static bool NegativeDiv2() {
+			EnumI8 e = EnumI8.Negative50;
+			return -25 == (long)e / 2;
+		}
+		public static bool NegativeRem2() {
+			EnumI8 e = EnumI8.Negative50;
+			return 0 == (long)e % 2;
+		}
+		public static bool NegativeAssignPlusOne() {
+			EnumI8 e = EnumI8.Negative50;
+			e += 1;
+			return -49 == (long)e;
+		}
+		public static bool NegativeAssignMinusOne() {
+			EnumI8 e = EnumI8.Negative50;
+			e -= 1;
+			return -51 == (long)e;
+		}
+		public static bool NegativePreincrement() {
+			EnumI8 e = EnumI8.Negative50;
+			bool retval = -49 == (long)(++e);
+			return retval && -49 == (long)e;
+		}
+		public static bool NegativePredecrement() {
+			EnumI8 e = EnumI8.Negative50;
+			bool retval = -51 == (long)(--e);
+			return retval && -51 == (long)e;
+		}
+		public static bool NegativePostincrement() {
+			EnumI8 e = EnumI8.Negative50;
+			bool retval = -50 == (long)(e++);
+			return retval && -49 == (long)e;
+		}
+		public static bool NegativePostdecrement() {
+			EnumI8 e = EnumI8.Negative50;
+			bool retval = -50 == (long)(e--);
+			return retval && -51 == (long)e;
+		}
+		public static bool NegativeAnd() {
+			EnumI8 e = EnumI8.Negative50;
+			return 206 == ((long)e & 0xFF);
+		}
+		public static bool NegativeOr() {
+			EnumI8 e = EnumI8.Negative50;
+			return -49 == ((long)e | 1);
+		}
+		public static bool NegativeXOr() {
+			EnumI8 e = EnumI8.Negative50;
+			return -49 == ((long)e ^ 1);
+		}
+		private static bool _NegativeEqual(EnumI8 e, long v) {
+			return (long)e == v;
+		}
+		public static bool NegativeEqual1() {
+			return (-50 == -50) == _NegativeEqual(EnumI8.Negative50, -50);
+		}
+		public static bool NegativeEqual2() {
+			return (-50 == -49) == _NegativeEqual(EnumI8.Negative50, -49);
+		}
+		public static bool NegativeEqual3() {
+			return (-50 == -51) == _NegativeEqual(EnumI8.Negative50, -51);
+		}
+
+		private static bool _NegativeNotEqual(EnumI8 e, long v) {
+			return (long)e != v;
+		}
+		public static bool NegativeNotEqual1() {
+			return (-50 != -50) == _NegativeNotEqual(EnumI8.Negative50, -50);
+		}
+		public static bool NegativeNotEqual2() {
+			return (-50 != -49) == _NegativeNotEqual(EnumI8.Negative50, -49);
+		}
+		public static bool NegativeNotEqual3() {
+			return (-50 != -51) == _NegativeNotEqual(EnumI8.Negative50, -51);
+		}
+
+		private static bool _NegativeGreaterThan(EnumI8 e, long v) {
+			return (long)e > v;
+		}
+		public static bool NegativeGreaterThan1() {
+			return (-50 > -50) == _NegativeGreaterThan(EnumI8.Negative50, -50);
+		}
+		public static bool NegativeGreaterThan2() {
+			return (-50 > -49) == _NegativeGreaterThan(EnumI8.Negative50, -49);
+		}
+		public static bool NegativeGreaterThan3() {
+			return (-50 > -51) == _NegativeGreaterThan(EnumI8.Negative50, -51);
+		}
+
+		private static bool _NegativeLessThan(EnumI8 e, long v) {
+			return (long)e < v;
+		}
+		public static bool NegativeLessThan1() {
+			return (-50 < -50) == _NegativeLessThan(EnumI8.Negative50, -50);
+		}
+		public static bool NegativeLessThan2() {
+			return (-50 < -49) == _NegativeLessThan(EnumI8.Negative50, -49);
+		}
+		public static bool NegativeLessThan3() {
+			return (-50 < -51) == _NegativeLessThan(EnumI8.Negative50, -51);
+		}
+
+		private static bool _NegativeGreaterThanOrEqual(EnumI8 e, long v) {
+			return (long)e >= v;
+		}
+		public static bool NegativeGreaterThanOrEqual1() {
+			return (-50 >= -50) == _NegativeGreaterThanOrEqual(EnumI8.Negative50, -50);
+		}
+		public static bool NegativeGreaterThanOrEqual2() {
+			return (-50 >= -49) == _NegativeGreaterThanOrEqual(EnumI8.Negative50, -49);
+		}
+		public static bool NegativeGreaterThanOrEqual3() {
+			return (-50 >= -51) == _NegativeGreaterThanOrEqual(EnumI8.Negative50, -51);
+		}
+
+		private static bool _NegativeLessThanOrEqual(EnumI8 e, long v) {
+			return (long)e <= v;
+		}
+		public static bool NegativeLessThanOrEqual1() {
+			return (-50 <= -50) == _NegativeLessThanOrEqual(EnumI8.Negative50, -50);
+		}
+		public static bool NegativeLessThanOrEqual2() {
+			return (-50 <= -49) == _NegativeLessThanOrEqual(EnumI8.Negative50, -49);
+		}
+		public static bool NegativeLessThanOrEqual3() {
+			return (-50 <= -51) == _NegativeLessThanOrEqual(EnumI8.Negative50, -51);
 		}
 
 	}
