@@ -28,5 +28,16 @@ namespace Mosa.Compiler.Framework.Stages
 			base.Setup(methodCompiler);
 		}
 
+		/// <summary>
+		/// Inserts the jump instruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <param name="block">The block.</param>
+		protected override void InsertJumpInstruction(Context context, BasicBlock block)
+		{
+			architecture.InsertJumpInstruction(context, block);
+		}
+
+
 	}
 }

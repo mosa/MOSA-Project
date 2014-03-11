@@ -105,7 +105,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			context.GotoPrevious();
 
-			while (context.Instruction is IntegerCompareBranch || context.Instruction is Jmp)
+			while (context.IsEmpty || context.Instruction is IntegerCompareBranch || context.Instruction is Jmp)
 			{
 				context.GotoPrevious();
 			}
@@ -118,7 +118,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (destination != source)
 			{
-				context.AppendInstruction(IRInstruction.Move, destination, source);
+				architecture.InsertMoveInstruction(context, destination, source);
 			}
 		}
 	}
