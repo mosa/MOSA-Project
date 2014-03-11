@@ -23,7 +23,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 		/// <exception cref="InvalidCompilerException"></exception>
 		public static StackTypeCode GetStackTypeCode(this MosaType type)
 		{
-			switch (type.TypeCode)
+			switch (type.IsEnum ? type.GetEnumUnderlyingType().TypeCode : type.TypeCode)
 			{
 				case MosaTypeCode.Boolean:
 				case MosaTypeCode.Char:

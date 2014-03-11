@@ -1,0 +1,140 @@
+﻿/*
+ * (c) 2014 MOSA - The Managed Operating System Alliance
+ *
+ * Licensed under the terms of the New BSD License.
+ *
+ * Authors:
+ *  Andrey Turkin <andrey.turkin@gmail.com>
+ */
+<#@ include file="TemplateLibrary.txt" #>
+using System;
+
+namespace Mosa.Test.Collection
+{
+<# foreach (bool isSigned in new bool[2] {false, true}) {
+	foreach (KeyValuePair<string, string> numberT in isSigned ? NegativeIntegers : PositiveIntegers) {
+		string enumType = "Enum" + numberT.Value;
+		string valueType = numberT.Key;
+#>	enum <#= enumType #> : <#= valueType #> {
+<# if (isSigned) {
+#>		Negative51 = -51,
+		Negative50,
+		Negative49,
+<# } #>		Positive49 = 49,
+		Positive50,
+		Positive51
+	}
+
+	public static class Test<#= enumType #>Class {
+<#		List<KeyValuePair<int, string>> numbers = new List<KeyValuePair<int, string>>();
+		numbers.Add(new KeyValuePair<int, string>(50, "Positive"));
+		if (isSigned) numbers.Add(new KeyValuePair<int, string>(-50, "Negative"));
+		foreach (KeyValuePair<int, string> number in numbers) {
+			int value = number.Key;
+			string enumElement = enumType + "." + number.Value + Math.Abs(value).ToString();
+			string enumElementMinusOne = enumType + "." + number.Value + Math.Abs(value-1).ToString();
+			string enumElementPlusOne = enumType + "." + number.Value + Math.Abs(value+1).ToString();
+
+#>		public static bool <#= number.Value #>Conversion() {
+			<#= enumType #> e = <#= enumElement #>;
+			return <#= value #> == (<#= valueType #>)e;
+		}
+		public static bool <#= number.Value #>PlusOne_1() {
+			<#= enumType #> e = <#= enumElement #>;
+			return <#= value + 1 #> == (<#= valueType #>)(e + 1);
+		}
+		public static bool <#= number.Value #>PlusOne_2() {
+			<#= enumType #> e = <#= enumElement #>;
+			return <#= enumElementPlusOne #> == e + 1;
+		}
+		public static bool <#= number.Value #>MinusOne_1() {
+			<#= enumType #> e = <#= enumElement #>;
+			return <#= value - 1 #> == (<#= valueType #>)(e - 1);
+		}
+		public static bool <#= number.Value #>MinusOne_2() {
+			<#= enumType #> e = <#= enumElement #>;
+			return <#= enumElementMinusOne #> == e - 1;
+		}
+		public static bool <#= number.Value #>Shl() {
+			<#= enumType #> e = <#= enumElement #>;
+			return <#= value << 1 #> == (<#= valueType #>)e << 1;
+		}
+		public static bool <#= number.Value #>Shr() {
+			<#= enumType #> e = <#= enumElement #>;
+			return <#= value >> 1 #> == (<#= valueType #>)e >> 1;
+		}
+		public static bool <#= number.Value #>Mul2() {
+			<#= enumType #> e = <#= enumElement #>;
+			return <#= value * 2 #> == (<#= valueType #>)e * 2;
+		}
+		public static bool <#= number.Value #>Div2() {
+			<#= enumType #> e = <#= enumElement #>;
+			return <#= value / 2 #> == (<#= valueType #>)e / 2;
+		}
+		public static bool <#= number.Value #>Rem2() {
+			<#= enumType #> e = <#= enumElement #>;
+			return <#= value % 2 #> == (<#= valueType #>)e % 2;
+		}
+		public static bool <#= number.Value #>AssignPlusOne() {
+			<#= enumType #> e = <#= enumElement #>;
+			e += 1;
+			return <#= value + 1 #> == (<#= valueType #>)e;
+		}
+		public static bool <#= number.Value #>AssignMinusOne() {
+			<#= enumType #> e = <#= enumElement #>;
+			e -= 1;
+			return <#= value - 1 #> == (<#= valueType #>)e;
+		}
+		public static bool <#= number.Value #>Preincrement() {
+			<#= enumType #> e = <#= enumElement #>;
+			bool retval = <#= value + 1 #> == (<#= valueType #>)(++e);
+			return retval && <#= value + 1 #> == (<#= valueType #>)e;
+		}
+		public static bool <#= number.Value #>Predecrement() {
+			<#= enumType #> e = <#= enumElement #>;
+			bool retval = <#= value - 1 #> == (<#= valueType #>)(--e);
+			return retval && <#= value - 1 #> == (<#= valueType #>)e;
+		}
+		public static bool <#= number.Value #>Postincrement() {
+			<#= enumType #> e = <#= enumElement #>;
+			bool retval = <#= value #> == (<#= valueType #>)(e++);
+			return retval && <#= value + 1 #> == (<#= valueType #>)e;
+		}
+		public static bool <#= number.Value #>Postdecrement() {
+			<#= enumType #> e = <#= enumElement #>;
+			bool retval = <#= value #> == (<#= valueType #>)(e--);
+			return retval && <#= value - 1 #> == (<#= valueType #>)e;
+		}
+		public static bool <#= number.Value #>And() {
+			<#= enumType #> e = <#= enumElement #>;
+			return <#= value & 0xFF #> == ((<#= valueType #>)e & 0xFF);
+		}
+		public static bool <#= number.Value #>Or() {
+			<#= enumType #> e = <#= enumElement #>;
+			return <#= value | 1#> == ((<#= valueType #>)e | 1);
+		}
+		public static bool <#= number.Value #>XOr() {
+			<#= enumType #> e = <#= enumElement #>;
+			return <#= value ^ 1#> == ((<#= valueType #>)e ^ 1);
+		}
+<#			foreach (KeyValuePair<string, string> comparison in Comparisons) {
+#>		private static bool _<#= number.Value #><#= comparison.Value #>(<#= enumType #> e, <#= valueType #> v) {
+			return (<#= valueType #>)e <#= comparison.Key #> v;
+		}
+		public static bool <#= number.Value #><#= comparison.Value #>1() {
+			return (<#= value #> <#= comparison.Key #> <#= value #>) == _<#= number.Value #><#= comparison.Value #>(<#= enumElement #>, <#= value #>);
+		}
+		public static bool <#= number.Value #><#= comparison.Value #>2() {
+			return (<#= value #> <#= comparison.Key #> <#= value+1 #>) == _<#= number.Value #><#= comparison.Value #>(<#= enumElement #>, <#= value+1 #>);
+		}
+		public static bool <#= number.Value #><#= comparison.Value #>3() {
+			return (<#= value #> <#= comparison.Key #> <#= value-1 #>) == _<#= number.Value #><#= comparison.Value #>(<#= enumElement #>, <#= value-1 #>);
+		}
+
+<#			}
+		}
+#>	}
+
+<#	}
+}
+#>}
