@@ -1,7 +1,7 @@
 ﻿// Remove conditional statement after Mono 2.11 is released
 #if !__MonoCS__
 
-<#@ include file="TemplateLibrary.txt" #>
+<#@ include file="../TemplateLibrary.txt" #>
 using Xunit;
 using Xunit.Extensions;
 

@@ -1,5 +1,5 @@
 ﻿
-<#@ include file="TemplateLibrary.txt" #>
+<#@ include file="../TemplateLibrary.txt" #>
 using System;
 
 namespace Mosa.Test.Collection
