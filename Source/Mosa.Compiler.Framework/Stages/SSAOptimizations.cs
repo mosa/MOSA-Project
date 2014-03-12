@@ -266,6 +266,9 @@ namespace Mosa.Compiler.Framework.Stages
 			if (result.Type.IsArray & destination.Type.IsArray & result.Type.ElementType == destination.Type.ElementType)
 				return true;
 
+			if (result.Type.IsInteger & destination.Type.IsInteger && result.Type == destination.Type)
+				return true;
+
 			//if (result.Type == destination.Type)
 			//	return true;
 

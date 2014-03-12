@@ -145,6 +145,7 @@
                     <include name="Opcodes/Subss.cs"/>
                     <include name="Opcodes/Xchg.cs"/>
                     <include name="Opcodes/Xor.cs"/>
+                    <include name="SimState.cs"/>
 		</sources>
 		<references>
                     <include name="System.dll"/>

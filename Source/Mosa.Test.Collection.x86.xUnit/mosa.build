@@ -17,6 +17,8 @@
                     <include name="BooleanFixture.cs"/>
                     <include name="BoxingFixture.cs"/>
                     <include name="ArrayLayoutFixture.cs"/>
+                    <include name="CallOrderFixture.cs"/>
+                    <include name="DoubleFixture.cs"/>
                     <include name="EnumFixture.cs"/>
                     <include name="FibonacciFixture.cs"/>
                     <include name="Int16Fixture.cs"/>
@@ -24,7 +26,10 @@
                     <include name="Int64Fixture.cs"/>
                     <include name="Int8Fixture.cs"/>
                     <include name="NewDerivedObjectFixture.cs"/>
+                    <include name="RegisterAllocatorFixture.cs"/>
+                    <include name="SSAOptimizationFixture.cs"/>
                     <include name="NewObjectFixture.cs"/>
+                    <include name="SwitchFixture.cs"/>
                     <include name="X86TestFixture.cs"/>
                     <include name="UInt16Fixture.cs"/>
                     <include name="UInt32Fixture.cs"/>
