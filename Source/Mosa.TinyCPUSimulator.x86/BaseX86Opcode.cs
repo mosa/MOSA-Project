@@ -222,6 +222,13 @@ namespace Mosa.TinyCPUSimulator.x86
 				return ((operand.Register) as RegisterFloatingPoint).Value;
 			}
 
+			if (operand.IsLabel)
+			{
+				uint address = (uint)cpu.GetSymbol(operand.Label).Address;
+
+				return ReadFloat(cpu, address, operand.Size);
+			}
+
 			if (operand.IsMemory)
 			{
 				uint address = GetAddress(cpu, operand);
@@ -239,6 +246,13 @@ namespace Mosa.TinyCPUSimulator.x86
 			if (operand.IsRegister)
 			{
 				((operand.Register) as RegisterFloatingPoint).Value = value;
+			}
+
+			if (operand.IsLabel)
+			{
+				uint address = (uint)cpu.GetSymbol(operand.Label).Address;
+
+				WriteFloat(cpu, address, value, size);
 			}
 
 			if (operand.IsMemory)

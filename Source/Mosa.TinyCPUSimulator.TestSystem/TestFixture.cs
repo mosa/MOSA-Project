@@ -61,9 +61,13 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 
 		public static IEnumerable<object[]> C { get { return Combinations.C; } }
 
+		public static IEnumerable<object[]> CCC { get { return Combinations.CCC; } }
+
 		public static IEnumerable<object[]> I1 { get { return Combinations.I1; } }
 
 		public static IEnumerable<object[]> I1I1 { get { return Combinations.I1I1; } }
+
+		public static IEnumerable<object[]> I1I1I1 { get { return Combinations.I1I1I1; } }
 
 		public static IEnumerable<object[]> I1UpTo32 { get { return Combinations.I1UpTo32; } }
 
@@ -72,6 +76,8 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 		public static IEnumerable<object[]> I2 { get { return Combinations.I2; } }
 
 		public static IEnumerable<object[]> I2I2 { get { return Combinations.I2I2; } }
+
+		public static IEnumerable<object[]> I2I2I2 { get { return Combinations.I2I2I2; } }
 
 		public static IEnumerable<object[]> I2U1UpTo16 { get { return Combinations.I2U1UpTo16; } }
 
@@ -119,11 +125,15 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 
 		public static IEnumerable<object[]> I8I8 { get { return Combinations.I8I8; } }
 
+		public static IEnumerable<object[]> I8MiniI8MiniI8Mini { get { return Combinations.I8MiniI8MiniI8Mini; } }
+
 		public static IEnumerable<object[]> I8U1UpTo32 { get { return Combinations.I8U1UpTo32; } }
 
 		public static IEnumerable<object[]> U1 { get { return Combinations.U1; } }
 
 		public static IEnumerable<object[]> U1U1 { get { return Combinations.U1U1; } }
+
+		public static IEnumerable<object[]> U1U1U1 { get { return Combinations.U1U1U1; } }
 
 		public static IEnumerable<object[]> U1U1UpTo16 { get { return Combinations.U1U1UpTo16; } }
 
@@ -131,11 +141,15 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 
 		public static IEnumerable<object[]> U2U2 { get { return Combinations.U2U2; } }
 
+		public static IEnumerable<object[]> U2U2U2 { get { return Combinations.U2U2U2; } }
+
 		public static IEnumerable<object[]> U2U1UpTo16 { get { return Combinations.U2U1UpTo16; } }
 
 		public static IEnumerable<object[]> U4 { get { return Combinations.U4; } }
 
 		public static IEnumerable<object[]> U4U4 { get { return Combinations.U4U4; } }
+
+		public static IEnumerable<object[]> U4MiniU4MiniU4Mini { get { return Combinations.U4MiniU4MiniU4Mini; } }
 
 		public static IEnumerable<object[]> U4I1UpTo32 { get { return Combinations.U4I1UpTo32; } }
 
@@ -145,15 +159,21 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 
 		public static IEnumerable<object[]> U8U8 { get { return Combinations.U8U8; } }
 
+		public static IEnumerable<object[]> U8MiniU8MiniU8Mini { get { return Combinations.U8MiniU8MiniU8Mini; } }
+
 		public static IEnumerable<object[]> U8U1UpTo32 { get { return Combinations.U8U1UpTo32; } }
 
 		public static IEnumerable<object[]> R4 { get { return Combinations.R4; } }
 
 		public static IEnumerable<object[]> R4R4 { get { return Combinations.R4R4; } }
 
+		public static IEnumerable<object[]> R4MiniR4MiniR4Mini { get { return Combinations.R4MiniR4MiniR4Mini; } }
+
 		public static IEnumerable<object[]> R8 { get { return Combinations.R8; } }
 
 		public static IEnumerable<object[]> R8R8 { get { return Combinations.R8R8; } }
+
+		public static IEnumerable<object[]> R8MiniR8MiniR8Mini { get { return Combinations.R8MiniR8MiniR8Mini; } }
 
 		public static IEnumerable<object[]> I8I8I8I8 { get { return Combinations.I8I8I8I8; } }
 		public static IEnumerable<object[]> U4U8U8U8 { get { return Combinations.U4U8U8U8; } }

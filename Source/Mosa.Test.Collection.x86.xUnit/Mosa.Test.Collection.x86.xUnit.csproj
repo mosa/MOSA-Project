@@ -87,6 +87,11 @@
     <Compile Include="RegisterAllocatorFixture.cs" />
     <Compile Include="SSAOptimizationFixture.cs" />
     <Compile Include="NewObjectFixture.cs" />
+    <Compile Include="StructureFixture.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>StructureFixture.tt</DependentUpon>
+    </Compile>
     <Compile Include="SwitchFixture.cs">
       <DependentUpon>SwitchFixture.tt</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -104,9 +109,10 @@
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="TemplateLibrary.txt" />
-  </ItemGroup>
-  <ItemGroup>
+    <None Include="StructureFixture.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>StructureFixture.cs</LastGenOutput>
+    </None>
     <None Include="SwitchFixture.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>SwitchFixture.cs</LastGenOutput>

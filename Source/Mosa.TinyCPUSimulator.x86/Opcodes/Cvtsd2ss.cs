@@ -9,7 +9,7 @@
 
 namespace Mosa.TinyCPUSimulator.x86.Opcodes
 {
-	public class Cvtsd2ss : Cvtsi2sd
+	public class Cvtsd2ss : Cvtss2sd
 	{
 	}
 }

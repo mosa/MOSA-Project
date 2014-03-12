@@ -408,6 +408,18 @@ namespace Mosa.Test.Numbers
 
 		public static IEnumerable<float> R4 { get { return Numbers.R4.Series; } }
 
+		public static IEnumerable<float> R4Mini
+		{
+			get
+			{
+				yield return 0;
+				yield return float.MinValue;
+				yield return float.MaxValue;
+				yield return float.NaN;
+				yield return float.NegativeInfinity;
+			}
+		}
+
 		public static IEnumerable<float> R4NotNaN
 		{
 			get { foreach (float a in R4) if (!float.IsNaN(a)) yield return a; }
@@ -473,6 +485,18 @@ namespace Mosa.Test.Numbers
 		#region R8 Types
 
 		public static IEnumerable<double> R8 { get { return Numbers.R8.Series; } }
+
+		public static IEnumerable<double> R8Mini
+		{
+			get
+			{
+				yield return 0;
+				yield return double.MinValue;
+				yield return double.MaxValue;
+				yield return double.NaN;
+				yield return double.NegativeInfinity;
+			}
+		}
 
 		public static IEnumerable<double> R8NotNaN
 		{
