@@ -21,7 +21,8 @@ namespace Mosa.Compiler.InternalTrace
 		SchedulingMethod,
 		Plug,
 		Error,
-		Warning
+		Warning,
+		Counter,
 	};
 
 	public static class CompilerEventExtension

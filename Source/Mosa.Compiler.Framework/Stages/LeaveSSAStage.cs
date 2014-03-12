@@ -8,9 +8,9 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System.Diagnostics;
 using Mosa.Compiler.Framework.IR;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework.Stages
 {
@@ -19,7 +19,6 @@ namespace Mosa.Compiler.Framework.Stages
 	/// </summary>
 	public class LeaveSSA : BaseMethodCompilerStage, IMethodCompilerStage, IPipelineStage
 	{
-
 		private Dictionary<Operand, Operand> finalVirtualRegisters;
 
 		/// <summary>
@@ -33,7 +32,7 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				for (var context = new Context(instructionSet, block); !context.IsBlockEndInstruction; context.GotoNext())
 				{
-					if (context.Instruction is IR.Phi)
+					if (context.Instruction == IRInstruction.Phi)
 					{
 						ProcessPhiInstruction(block, context);
 					}

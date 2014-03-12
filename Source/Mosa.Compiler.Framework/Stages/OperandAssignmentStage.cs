@@ -162,16 +162,16 @@ namespace Mosa.Compiler.Framework.Stages
 				if (ctx.IsEmpty)
 					continue;
 
-				if (ctx.Instruction is IR.BlockEnd || ctx.Instruction is IR.BlockStart)
+				if (ctx.Instruction == IRInstruction.BlockEnd || ctx.Instruction == IRInstruction.BlockStart)
 					continue;
 
-				if (ctx.Instruction is IR.Jmp)
+				if (ctx.Instruction == IRInstruction.Jmp)
 					continue;
 
-				if (!(ctx.Instruction is IBranchInstruction) && !(ctx.Instruction is BaseCILInstruction) && !(ctx.Instruction is IR.ExceptionPrologue))
+				if (!(ctx.Instruction is IBranchInstruction) && !(ctx.Instruction is BaseCILInstruction) && ctx.Instruction != IRInstruction.ExceptionPrologue)
 					continue;
 
-				if (ctx.Instruction is IR.ExceptionPrologue)
+				if (ctx.Instruction == IRInstruction.ExceptionPrologue)
 				{
 					AssignOperandsFromCILStack(ctx, operandStack);
 					PushResultOperands(ctx, operandStack);
@@ -226,7 +226,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			context.GotoPrevious();
 
-			while (context.Instruction is IBranchInstruction || context.Instruction is IR.Jmp)
+			while (context.Instruction is IBranchInstruction || context.Instruction == IRInstruction.Jmp)
 			{
 				context.GotoPrevious();
 			}
@@ -262,7 +262,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="currentStack">The current stack.</param>
 		private static void PushResultOperands(Context ctx, Stack<Operand> currentStack)
 		{
-			if (!(ctx.Instruction is IR.ExceptionPrologue))
+			if (ctx.Instruction != IRInstruction.ExceptionPrologue)
 				if (!(ctx.Instruction as BaseCILInstruction).PushResult)
 					return;
 

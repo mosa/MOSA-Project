@@ -7,8 +7,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using Mosa.Compiler.Framework.IR;
-
 namespace Mosa.Compiler.Framework.Stages
 {
 	/// <summary>

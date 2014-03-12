@@ -7,10 +7,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System.Diagnostics;
-using System.Collections.Generic;
-using Mosa.Compiler.Framework.IR;
-
 namespace Mosa.Compiler.Framework.Stages
 {
 	/// <summary>
@@ -19,7 +15,6 @@ namespace Mosa.Compiler.Framework.Stages
 	/// </summary>
 	public class PlatformEdgeSplitStage : BaseEdgeSplitStage, IMethodCompilerStage, IPipelineStage
 	{
-
 		/// <summary>
 		/// Performs stage specific processing on the compiler context.
 		/// </summary>
@@ -37,7 +32,5 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			architecture.InsertJumpInstruction(context, block);
 		}
-
-
 	}
 }

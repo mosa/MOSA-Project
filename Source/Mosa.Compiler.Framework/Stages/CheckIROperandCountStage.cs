@@ -7,6 +7,8 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using Mosa.Compiler.Framework.IR;
+
 namespace Mosa.Compiler.Framework.Stages
 {
 	/// <summary>
@@ -26,10 +28,10 @@ namespace Mosa.Compiler.Framework.Stages
 					if (!(context.Instruction is IR.BaseIRInstruction))
 						continue;
 
-					if (context.Instruction is IR.Call || context.Instruction is IR.Switch)
+					if (context.Instruction == IRInstruction.Call || context.Instruction == IRInstruction.Switch)
 						continue;
 
-					if (context.Instruction is IR.Jmp && context.OperandCount <= 1)
+					if (context.Instruction == IRInstruction.Jmp && context.OperandCount <= 1)
 						continue;
 
 					if (context.OperandCount != context.Instruction.DefaultOperandCount ||

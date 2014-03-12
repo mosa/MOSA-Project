@@ -241,6 +241,8 @@ namespace Mosa.Compiler.Framework
 			}
 
 			EndCompile();
+
+			ExportCounters();
 		}
 
 		/// <summary>
@@ -258,6 +260,14 @@ namespace Mosa.Compiler.Framework
 		}
 
 		#endregion Methods
+
+		protected void ExportCounters()
+		{
+			foreach (var counter in Counters.Export())
+			{
+				Trace(CompilerEvent.Counter, counter);
+			}
+		}
 
 		#region Helper Methods
 

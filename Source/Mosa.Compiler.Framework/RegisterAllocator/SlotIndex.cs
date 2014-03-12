@@ -9,6 +9,7 @@
 
 using System;
 using System.Diagnostics;
+using Mosa.Compiler.Framework.IR;
 
 namespace Mosa.Compiler.Framework.RegisterAllocator
 {
@@ -148,7 +149,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 		{
 			get
 			{
-				return instructionSet.Data[index].Instruction is IR.BlockStart;
+				return instructionSet.Data[index].Instruction == IRInstruction.BlockStart;
 			}
 		}
 
@@ -156,7 +157,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 		{
 			get
 			{
-				return instructionSet.Data[index].Instruction is IR.BlockEnd;
+				return instructionSet.Data[index].Instruction == IRInstruction.BlockEnd;
 			}
 		}
 	}

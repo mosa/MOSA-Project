@@ -7,9 +7,8 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System.Diagnostics;
-using System.Collections.Generic;
 using Mosa.Compiler.Framework.IR;
+using System.Collections.Generic;
 
 namespace Mosa.Compiler.Framework.Stages
 {
@@ -19,7 +18,6 @@ namespace Mosa.Compiler.Framework.Stages
 	/// </summary>
 	public class BaseEdgeSplitStage : BaseMethodCompilerStage
 	{
-
 		public virtual void Run()
 		{
 			List<KeyValuePair<BasicBlock, BasicBlock>> worklist = new List<KeyValuePair<BasicBlock, BasicBlock>>();
