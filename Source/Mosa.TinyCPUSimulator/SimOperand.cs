@@ -25,7 +25,7 @@ namespace Mosa.TinyCPUSimulator
 
 		public int Scale { get; private set; }
 
-		public int Size { get; private set; }
+		public int Size { get; set; }
 
 		public ulong Immediate { get; private set; }
 

@@ -1,4 +1,4 @@
-﻿<#@ include file="TemplateLibrary.txt" #>
+﻿<#@ include file="../TemplateLibrary.txt" #>
 using System;
 
 namespace Mosa.Test.Collection
@@ -7,7 +7,7 @@ namespace Mosa.Test.Collection
 	public class StructTests
 	{
 	<# foreach (KeyValuePair<string, string> number in NumbersWithChar) { #>
-		static bool StructTestSet1<#= number.Value #>(<#= number.Key #> one)
+		public static bool StructTestSet1<#= number.Value #>(<#= number.Key #> one)
 		{
 			Struct1<#= number.Value #> structure;
 			
@@ -16,7 +16,7 @@ namespace Mosa.Test.Collection
 			return (structure.One.Equals(one));
 		}
 	
-		static bool StructTestSet3<#= number.Value #>(<#= number.Key #> one, <#= number.Key #> two, <#= number.Key #> three)
+		public static bool StructTestSet3<#= number.Value #>(<#= number.Key #> one, <#= number.Key #> two, <#= number.Key #> three)
 		{
 			Struct3<#= number.Value #> structure;
 			

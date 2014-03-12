@@ -209,9 +209,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="TemplateLibrary.txt" />
-  </ItemGroup>
-  <ItemGroup>
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>

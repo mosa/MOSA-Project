@@ -1,6 +1,6 @@
 ﻿<#
 /*
- * (c) 2011 MOSA - The Managed Operating System Alliance
+ * (c) 2014 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
  *
@@ -8,11 +8,10 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com> 
  *
  */
- #>
-<#@ template language="C#" #> 
-<#@ import namespace="System.Collections" #>
-<#@ import namespace="System.Collections.Generic" #>
-<# 	
+ #><#@ template language="C#"
+#><#@ import namespace="System.Collections"
+#><#@ import namespace="System.Collections.Generic"
+#><# 	
 	List<KeyValuePair<string, string>> PositiveIntegers = new List<KeyValuePair<string, string>>();
 	PositiveIntegers.Add(new KeyValuePair<string, string>("byte", "U1"));
 	PositiveIntegers.Add(new KeyValuePair<string, string>("ushort", "U2"));
