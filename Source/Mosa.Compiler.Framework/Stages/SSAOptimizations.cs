@@ -266,8 +266,30 @@ namespace Mosa.Compiler.Framework.Stages
 			if (result.Type.IsArray & destination.Type.IsArray & result.Type.ElementType == destination.Type.ElementType)
 				return true;
 
-			if (result.Type.IsInteger & destination.Type.IsInteger && result.Type == destination.Type)
+			if (result.Type.IsI1 & destination.Type.IsI1)
 				return true;
+
+			if (result.Type.IsU1 & destination.Type.IsU1)
+				return true;
+
+			if (result.Type.IsI2 & destination.Type.IsI2)
+				return true;
+
+			if (result.Type.IsU2 & destination.Type.IsU2)
+				return true;
+
+			if (result.Type.IsI8 & destination.Type.IsI8)
+				return true;
+
+			if (result.Type.IsU8 & destination.Type.IsU8)
+				return true;
+
+			if (result.Type.IsU4 & destination.Type.IsU4)
+				return true;
+
+			// Why this breaking things
+			//if (result.Type.IsI4 & destination.Type.IsI4)
+			//	return true;
 
 			//if (result.Type == destination.Type)
 			//	return true;
