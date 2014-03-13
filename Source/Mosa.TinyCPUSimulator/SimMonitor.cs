@@ -13,11 +13,12 @@ namespace Mosa.TinyCPUSimulator
 {
 	public sealed class SimMonitor
 	{
-		public delegate void OnSimStateUpdate(SimState state, bool forceUpdate);
+		public delegate void OnSimStateUpdate(BaseSimState state, bool forceUpdate);
 
 		private HashSet<ulong> breakPoints = new HashSet<ulong>();
 
 		public SimCPU CPU { get; private set; }
+
 
 		public bool Stop { get; set; }
 
@@ -45,9 +46,13 @@ namespace Mosa.TinyCPUSimulator
 
 		public ulong StepOverBreakPoint { get; set; }
 
+		public bool IsExecuting { get { return isExecuting; } internal set { isExecuting = value; } }
+
 		public OnSimStateUpdate OnStateUpdate { get; set; }
 
-		public object locker = new object();
+		private object locker = new object();
+
+		private volatile bool isExecuting;
 
 		public SimMonitor(SimCPU cpu)
 		{

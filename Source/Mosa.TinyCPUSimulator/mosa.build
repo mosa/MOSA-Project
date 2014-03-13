@@ -19,7 +19,7 @@
                     <include name="BaseSimDevice.cs"/>
                     <include name="PageFaultException.cs"/>
                     <include name="SimSymbol.cs"/>
-                    <include name="SimState.cs"/>
+                    <include name="BaseSimState.cs"/>
                     <include name="RegisterFloatingPoint.cs"/>
                     <include name="Register32Bit.cs"/>
                     <include name="SimMonitor.cs"/>

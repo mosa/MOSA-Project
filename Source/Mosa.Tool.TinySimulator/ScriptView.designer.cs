@@ -34,10 +34,10 @@ namespace Mosa.Tool.TinySimulator
 			this.richTextBox1 = new System.Windows.Forms.RichTextBox();
 			this.dataGridView1 = new System.Windows.Forms.DataGridView();
 			this.toolStrip1 = new System.Windows.Forms.ToolStrip();
-			this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
 			this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
 			this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
 			this.toolStripButton3 = new System.Windows.Forms.ToolStripButton();
+			this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
 			((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
 			this.toolStrip1.SuspendLayout();
 			this.SuspendLayout();
@@ -47,6 +47,7 @@ namespace Mosa.Tool.TinySimulator
 			this.richTextBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+			this.richTextBox1.Font = new System.Drawing.Font("Consolas", 8F);
 			this.richTextBox1.Location = new System.Drawing.Point(0, 25);
 			this.richTextBox1.Name = "richTextBox1";
 			this.richTextBox1.Size = new System.Drawing.Size(890, 235);
@@ -111,10 +112,6 @@ namespace Mosa.Tool.TinySimulator
 			this.toolStrip1.TabIndex = 5;
 			this.toolStrip1.Text = "toolStrip1";
 			// 
-			// openFileDialog1
-			// 
-			this.openFileDialog1.FileName = "openFileDialog1";
-			// 
 			// toolStripButton1
 			// 
 			this.toolStripButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton1.Image")));
@@ -142,6 +139,10 @@ namespace Mosa.Tool.TinySimulator
 			this.toolStripButton3.Text = "Execute";
 			this.toolStripButton3.Click += new System.EventHandler(this.toolStripButton3_Click);
 			// 
+			// openFileDialog1
+			// 
+			this.openFileDialog1.DefaultExt = "txt";
+			// 
 			// ScriptView
 			// 
 			this.ClientSize = new System.Drawing.Size(890, 260);
@@ -150,6 +151,7 @@ namespace Mosa.Tool.TinySimulator
 			this.Controls.Add(this.richTextBox1);
 			this.Controls.Add(this.dataGridView1);
 			this.Controls.Add(this.toolStrip1);
+			this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.Name = "ScriptView";
 			this.TabText = "Script";
 			this.Text = "Script";

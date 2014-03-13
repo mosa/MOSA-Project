@@ -7,6 +7,7 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using System;
 using System.Collections.Generic;
 
 namespace Mosa.TinyCPUSimulator.x86
@@ -266,6 +267,10 @@ namespace Mosa.TinyCPUSimulator.x86
 		{
 			//s.AppendLine("EIP        EAX        EBX        ECX        EDX        ESI        EDI        ESP        EBP        FLAGS");
 			return Hex(EIP.Value) + " " + Hex(EAX.Value) + " " + Hex(EBX.Value) + " " + Hex(ECX.Value) + " " + Hex(EDX.Value) + " " + Hex(ESI.Value) + " " + Hex(EDI.Value) + " " + Hex(ESP.Value) + " " + Hex(EBP.Value) + " "
+				+ (String.Format("{0:F}", XMM0.Value)) + " "
+				+ (String.Format("{0:F}", XMM1.Value)) + " "
+				+ (String.Format("{0:F}", XMM2.Value)) + " "
+				+ (String.Format("{0:F}", XMM3.Value)) + " "
 				+ (EFLAGS.Zero ? "Z" : "-")
 				+ (EFLAGS.Carry ? "C" : "-")
 				+ (EFLAGS.Direction ? "D" : "-")
@@ -275,111 +280,14 @@ namespace Mosa.TinyCPUSimulator.x86
 			//"[" + Tick.ToString("D5") + "] "
 		}
 
-		private string[] registerList = new string[] { "EIP", "EAX", "EBX", "ECX", "EDX", "ESP", "EBP", "ESI", "EDI", "CR0", "CR2", "CR3", "CR4" };
-		private string[] flagList = new string[] { "Zero", "Parity", "Carry", "Direction", "Sign", "Adjust", "Overflow", "Value" };
-
-		public override SimState GetState()
+		public override BaseSimState GetState()
 		{
-			SimState simState = base.GetState();
-
-			simState.StoreValue("Register.Size", (uint)32);
-
-			simState.StoreValue("Register.List", registerList);
-			simState.StoreValue("Flag.List", flagList);
-
-			simState.StoreValue("Register.EIP", EIP.Value);
-			simState.StoreValue("Register.EAX", EAX.Value);
-			simState.StoreValue("Register.EBX", EBX.Value);
-			simState.StoreValue("Register.ECX", ECX.Value);
-			simState.StoreValue("Register.EDX", EDX.Value);
-			simState.StoreValue("Register.ESP", ESP.Value);
-			simState.StoreValue("Register.EBP", EBP.Value);
-			simState.StoreValue("Register.ESI", ESI.Value);
-			simState.StoreValue("Register.EDI", EDI.Value);
-
-			simState.StoreValue("Register.CR0", CR0.Value);
-			simState.StoreValue("Register.CR2", CR2.Value);
-			simState.StoreValue("Register.CR3", CR3.Value);
-			simState.StoreValue("Register.CR4", CR4.Value);
-
-			simState.StoreValue("Register.XXM0", XMM0.Value);
-			simState.StoreValue("Register.XXM1", XMM1.Value);
-			simState.StoreValue("Register.XXM2", XMM2.Value);
-			simState.StoreValue("Register.XXM3", XMM3.Value);
-			simState.StoreValue("Register.XXM4", XMM4.Value);
-			simState.StoreValue("Register.XXM5", XMM5.Value);
-			simState.StoreValue("Register.XXM6", XMM6.Value);
-			simState.StoreValue("Register.XXM7", XMM7.Value);
-
-			simState.StoreValue("Flag.Value", EFLAGS.Value);
-			simState.StoreValue("Flag.Zero", EFLAGS.Zero);
-			simState.StoreValue("Flag.Parity", EFLAGS.Parity);
-			simState.StoreValue("Flag.Carry", EFLAGS.Carry);
-			simState.StoreValue("Flag.Direction", EFLAGS.Direction);
-			simState.StoreValue("Flag.Sign", EFLAGS.Sign);
-			simState.StoreValue("Flag.Adjust", EFLAGS.Adjust);
-			simState.StoreValue("Flag.Overflow", EFLAGS.Overflow);
-
-			var stack = new List<ulong[]>();
-			var frame = new List<ulong[]>();
-
-			simState.StoreValue("Stack", stack);
-			simState.StoreValue("StackFrame", frame);
-
-			uint esp = ESP.Value;
-			uint index = 0;
-
-			while (index < 16)
-			{
-				stack.Add(new ulong[2] { (ulong)Read32(esp), esp });
-				esp = esp + 4;
-				index++;
-			}
-
-			uint ebp = EBP.Value;
-			index = 0;
-
-			while (ebp > ESP.Value && index < 32)
-			{
-				frame.Add(new ulong[2] { (ulong)Read32(ebp), ebp });
-				ebp = ebp - 4;
-				index++;
-			}
-
-			return simState;
+			return new SimState(this);
 		}
 
-		public override void ExtendState(SimState simState)
+		public override void ExtendState(BaseSimState simState)
 		{
-			var list = new List<ulong>();
-
-			uint ip = EIP.Value;
-			uint ebp = EBP.Value;
-
-			simState.StoreValue("CallStack", list);
-
-			list.Add((ulong)ip);
-
-			try
-			{
-				for (int i = 0; i < 20; i++)
-				{
-					if (ebp == 0)
-						return;
-
-					ip = DirectRead32(ebp + 4);
-
-					if (ip == 0)
-						return;
-
-					list.Add((ulong)ip);
-
-					ebp = DirectRead32(ebp);
-				}
-			}
-			catch (SimCPUException e)
-			{
-			}
+			simState.ExtendState(this);
 		}
 	}
 }

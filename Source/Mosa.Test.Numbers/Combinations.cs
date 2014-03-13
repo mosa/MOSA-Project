@@ -51,6 +51,17 @@ namespace Mosa.Test.Numbers
 			}
 		}
 
+		public static IEnumerable<object[]> CCC
+		{
+			get
+			{
+				foreach (var i1 in Mosa.Test.Numbers.C.Series)
+					foreach (var i2 in Mosa.Test.Numbers.C.Series)
+						foreach (var i3 in Mosa.Test.Numbers.C.Series)
+							yield return new object[] { i1, i2, i3 };
+			}
+		}
+
 		public static IEnumerable<object[]> I1
 		{
 			get
@@ -67,6 +78,17 @@ namespace Mosa.Test.Numbers
 				foreach (var i1 in Mosa.Test.Numbers.I1.Series)
 					foreach (var i2 in Mosa.Test.Numbers.I1.Series)
 						yield return new object[] { i1, i2 };
+			}
+		}
+
+		public static IEnumerable<object[]> I1I1I1
+		{
+			get
+			{
+				foreach (var i1 in Mosa.Test.Numbers.I1.Series)
+					foreach (var i2 in Mosa.Test.Numbers.I1.Series)
+						foreach (var i3 in Mosa.Test.Numbers.I1.Series)
+							yield return new object[] { i1, i2, i3 };
 			}
 		}
 
@@ -105,6 +127,17 @@ namespace Mosa.Test.Numbers
 				foreach (var i1 in Mosa.Test.Numbers.I2.Series)
 					foreach (var i2 in Mosa.Test.Numbers.I2.Series)
 						yield return new object[] { i1, i2 };
+			}
+		}
+
+		public static IEnumerable<object[]> I2I2I2
+		{
+			get
+			{
+				foreach (var i1 in Mosa.Test.Numbers.I2.Series)
+					foreach (var i2 in Mosa.Test.Numbers.I2.Series)
+						foreach (var i3 in Mosa.Test.Numbers.I2.Series)
+							yield return new object[] { i1, i2, i3 };
 			}
 		}
 
@@ -225,7 +258,7 @@ namespace Mosa.Test.Numbers
 						yield return new object[] { i1, i2 };
 			}
 		}
-		 
+
 		public static IEnumerable<object[]> I4SmallU8
 		{
 			get
@@ -256,6 +289,82 @@ namespace Mosa.Test.Numbers
 			}
 		}
 
+		public static IEnumerable<object[]> I4I4I4
+		{
+			get
+			{
+				foreach (var i1 in Mosa.Test.Numbers.I4.Series)
+					foreach (var i2 in Mosa.Test.Numbers.I4.Series)
+						foreach (var i3 in Mosa.Test.Numbers.I4.Series)
+							yield return new object[] { i1, i2, i3 };
+			}
+		}
+
+		public static IEnumerable<object[]> I4I4I4I4
+		{
+			get
+			{
+				foreach (var i1 in Mosa.Test.Numbers.I4.Series)
+					foreach (var i2 in Mosa.Test.Numbers.I4.Series)
+						foreach (var i3 in Mosa.Test.Numbers.I4.Series)
+							foreach (var i4 in Mosa.Test.Numbers.I4.Series)
+								yield return new object[] { i1, i2, i3, i4 };
+			}
+		}
+
+		public static IEnumerable<object[]> I4MiniI4MiniI4Mini
+		{
+			get
+			{
+				foreach (var i1 in Series.I4Mini)
+					foreach (var i2 in Series.I4Mini)
+						foreach (var i3 in Series.I4Mini)
+							yield return new object[] { i1, i2, i3 };
+			}
+		}
+
+		public static IEnumerable<object[]> I4MiniI4MiniI4MiniI4Mini
+		{
+			get
+			{
+				foreach (var i1 in Series.I4Mini)
+					foreach (var i2 in Series.I4Mini)
+						foreach (var i3 in Series.I4Mini)
+							foreach (var i4 in Series.I4Mini)
+								yield return new object[] { i1, i2, i3, i4 };
+			}
+		}
+
+		public static IEnumerable<object[]> I4SmallI4SmallI4SmallI4SmallI4SmallI4SmallI4Small
+		{
+			get
+			{
+				foreach (var i1 in Mosa.Test.Numbers.Series.I4Small)
+					foreach (var i2 in Mosa.Test.Numbers.Series.I4Small)
+						foreach (var i3 in Mosa.Test.Numbers.Series.I4Small)
+							foreach (var i4 in Mosa.Test.Numbers.Series.I4Small)
+								foreach (var i5 in Mosa.Test.Numbers.Series.I4Small)
+									foreach (var i6 in Mosa.Test.Numbers.Series.I4Small)
+										foreach (var i7 in Mosa.Test.Numbers.Series.I4Small)
+											yield return new object[] { i1, i2, i3, i4, i5, i6, i7 };
+			}
+		}
+
+		public static IEnumerable<object[]> I4MiniI4MiniI4MiniI4MiniI4MiniI4MiniI4Mini
+		{
+			get
+			{
+				foreach (var i1 in Mosa.Test.Numbers.Series.I4Mini)
+					foreach (var i2 in Mosa.Test.Numbers.Series.I4Mini)
+						foreach (var i3 in Mosa.Test.Numbers.Series.I4Mini)
+							foreach (var i4 in Mosa.Test.Numbers.Series.I4Mini)
+								foreach (var i5 in Mosa.Test.Numbers.Series.I4Mini)
+									foreach (var i6 in Mosa.Test.Numbers.Series.I4Mini)
+										foreach (var i7 in Mosa.Test.Numbers.Series.I4Mini)
+											yield return new object[] { i1, i2, i3, i4, i5, i6, i7 };
+			}
+		}
+
 		public static IEnumerable<object[]> I8
 		{
 			get
@@ -272,6 +381,41 @@ namespace Mosa.Test.Numbers
 				foreach (var i1 in Mosa.Test.Numbers.I8.Series)
 					foreach (var i2 in Mosa.Test.Numbers.I8.Series)
 						yield return new object[] { i1, i2 };
+			}
+		}
+
+		public static IEnumerable<object[]> I8MiniI8MiniI8Mini
+		{
+			get
+			{
+				foreach (var i1 in Series.I8Mini)
+					foreach (var i2 in Series.I8Mini)
+						foreach (var i3 in Series.I8Mini)
+							yield return new object[] { i1, i2, i3 };
+			}
+		}
+
+		public static IEnumerable<object[]> I8I8I8I8
+		{
+			get
+			{
+				foreach (var i1 in Mosa.Test.Numbers.I8.Series)
+					foreach (var i2 in Mosa.Test.Numbers.I8.Series)
+						foreach (var i3 in Mosa.Test.Numbers.I8.Series)
+							foreach (var i4 in Mosa.Test.Numbers.I8.Series)
+								yield return new object[] { i1, i2, i3, i4 };
+			}
+		}
+
+		public static IEnumerable<object[]> MiniI8MiniI8MiniI8MiniI8
+		{
+			get
+			{
+				foreach (var i1 in Series.I8Mini)
+					foreach (var i2 in Series.I8Mini)
+						foreach (var i3 in Series.I8Mini)
+							foreach (var i4 in Series.I8Mini)
+								yield return new object[] { i1, i2, i3, i4 };
 			}
 		}
 
@@ -304,6 +448,17 @@ namespace Mosa.Test.Numbers
 			}
 		}
 
+		public static IEnumerable<object[]> U1U1U1
+		{
+			get
+			{
+				foreach (var i1 in Mosa.Test.Numbers.U1.Series)
+					foreach (var i2 in Mosa.Test.Numbers.U1.Series)
+						foreach (var i3 in Mosa.Test.Numbers.U1.Series)
+							yield return new object[] { i1, i2, i3 };
+			}
+		}
+
 		public static IEnumerable<object[]> U2
 		{
 			get
@@ -320,6 +475,17 @@ namespace Mosa.Test.Numbers
 				foreach (var i1 in Mosa.Test.Numbers.U2.Series)
 					foreach (var i2 in Mosa.Test.Numbers.U2.Series)
 						yield return new object[] { i1, i2 };
+			}
+		}
+
+		public static IEnumerable<object[]> U2U2U2
+		{
+			get
+			{
+				foreach (var i1 in Mosa.Test.Numbers.U2.Series)
+					foreach (var i2 in Mosa.Test.Numbers.U2.Series)
+						foreach (var i3 in Mosa.Test.Numbers.U2.Series)
+							yield return new object[] { i1, i2, i3 };
 			}
 		}
 
@@ -362,6 +528,41 @@ namespace Mosa.Test.Numbers
 			}
 		}
 
+		public static IEnumerable<object[]> U4MiniU4MiniU4Mini
+		{
+			get
+			{
+				foreach (var i1 in Series.U4Mini)
+					foreach (var i2 in Series.U4Mini)
+						foreach (var i3 in Series.U4Mini)
+							yield return new object[] { i1, i2, i3 };
+			}
+		}
+
+		public static IEnumerable<object[]> U4U8U8U8
+		{
+			get
+			{
+				foreach (var i1 in Mosa.Test.Numbers.U4.Series)
+					foreach (var i2 in Mosa.Test.Numbers.U8.Series)
+						foreach (var i3 in Mosa.Test.Numbers.U8.Series)
+							foreach (var i4 in Mosa.Test.Numbers.U8.Series)
+								yield return new object[] { i1, i2, i3, i4 };
+			}
+		}
+
+		public static IEnumerable<object[]> U4MiniU8MiniU8MiniU8Mini
+		{
+			get
+			{
+				foreach (var i1 in Series.U4Mini)
+					foreach (var i2 in Series.U8Mini)
+						foreach (var i3 in Series.U8Mini)
+							foreach (var i4 in Series.U8Mini)
+								yield return new object[] { i1, i2, i3, i4 };
+			}
+		}
+
 		public static IEnumerable<object[]> U4I1UpTo32
 		{
 			get
@@ -401,6 +602,41 @@ namespace Mosa.Test.Numbers
 			}
 		}
 
+		public static IEnumerable<object[]> U8U8U8U8
+		{
+			get
+			{
+				foreach (var i1 in Mosa.Test.Numbers.U8.Series)
+					foreach (var i2 in Mosa.Test.Numbers.U8.Series)
+						foreach (var i3 in Mosa.Test.Numbers.U8.Series)
+							foreach (var i4 in Mosa.Test.Numbers.U8.Series)
+								yield return new object[] { i1, i2, i3, i4 };
+			}
+		}
+
+		public static IEnumerable<object[]> U8MiniU8MiniU8Mini
+		{
+			get
+			{
+				foreach (var i1 in Series.U8Mini)
+					foreach (var i2 in Series.U8Mini)
+						foreach (var i3 in Series.U8Mini)
+							yield return new object[] { i1, i2, i3 };
+			}
+		}
+
+		public static IEnumerable<object[]> U8MiniU8MiniU8MiniU8Mini
+		{
+			get
+			{
+				foreach (var i1 in Series.U8Mini)
+					foreach (var i2 in Series.U8Mini)
+						foreach (var i3 in Series.U8Mini)
+							foreach (var U8 in Series.U8Mini)
+								yield return new object[] { i1, i2, i3, U8 };
+			}
+		}
+
 		public static IEnumerable<object[]> U8U1UpTo32
 		{
 			get
@@ -411,5 +647,64 @@ namespace Mosa.Test.Numbers
 			}
 		}
 
+		public static IEnumerable<object[]> R4
+		{
+			get
+			{
+				foreach (var i1 in Mosa.Test.Numbers.R4.Series)
+					yield return new object[] { i1 };
+			}
+		}
+
+		public static IEnumerable<object[]> R4R4
+		{
+			get
+			{
+				foreach (var i1 in Mosa.Test.Numbers.R4.Series)
+					foreach (var i2 in Mosa.Test.Numbers.R4.Series)
+						yield return new object[] { i1, i2 };
+			}
+		}
+
+		public static IEnumerable<object[]> R4MiniR4MiniR4Mini
+		{
+			get
+			{
+				foreach (var i1 in Series.R4Mini)
+					foreach (var i2 in Series.R4Mini)
+						foreach (var i3 in Series.R4Mini)
+							yield return new object[] { i1, i2, i3 };
+			}
+		}
+
+		public static IEnumerable<object[]> R8
+		{
+			get
+			{
+				foreach (var i1 in Mosa.Test.Numbers.R8.Series)
+					yield return new object[] { i1 };
+			}
+		}
+
+		public static IEnumerable<object[]> R8R8
+		{
+			get
+			{
+				foreach (var i1 in Mosa.Test.Numbers.R8.Series)
+					foreach (var i2 in Mosa.Test.Numbers.R8.Series)
+						yield return new object[] { i1, i2 };
+			}
+		}
+
+		public static IEnumerable<object[]> R8MiniR8MiniR8Mini
+		{
+			get
+			{
+				foreach (var i1 in Series.R8Mini)
+					foreach (var i2 in Series.R8Mini)
+						foreach (var i3 in Series.R8Mini)
+							yield return new object[] { i1, i2, i3 };
+			}
+		}
 	}
 }

@@ -13,12 +13,12 @@ namespace Mosa.Tool.TinySimulator
 {
 	public partial class StatusView : SimulatorDockContent
 	{
-		public StatusView()
+		public StatusView(MainForm mainForm) : base(mainForm)
 		{
 			InitializeComponent();
 		}
 
-		public override void UpdateDock(SimState simState)
+		public override void UpdateDock(BaseSimState simState)
 		{
 			var currentInstruction = simState.Instruction;
 			var nextInstruction = SimCPU.DecodeOpcode(simState.NextIP);
@@ -32,7 +32,7 @@ namespace Mosa.Tool.TinySimulator
 
 			textBox6.Text = simState.CPUException != null ? simState.CPUException.ToString() : "None";
 
-			double speed = simState.Tick / (double)simState.Values["TotalElapsed"];
+			double speed = simState.Tick / simState.TotalElapsedSeconds;
 
 			textBox7.Text = speed.ToString("0.00");
 

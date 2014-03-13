@@ -24,21 +24,21 @@ namespace Mosa.Tool.TinySimulator
 {
 	public partial class MainForm : Form, ICompilerEventListener
 	{
-		private AssembliesView assembliesView = new AssembliesView();
-		private RegisterView registersView = new RegisterView();
-		private DisplayView displayView = new DisplayView();
-		private ControlView controlView = new ControlView();
-		private CallStackView callStackView = new CallStackView();
-		private StackFrameView stackFrameView = new StackFrameView();
-		private StackView stackView = new StackView();
-		private FlagView flagView = new FlagView();
-		private StatusView statusView = new StatusView();
-		private HistoryView historyView = new HistoryView();
-		private SymbolView symbolView = new SymbolView();
-		private WatchView watchView = new WatchView();
-		private BreakPointView breakPointView = new BreakPointView();
-		private OutputView outputView = new OutputView();
-		private ScriptView scriptView = new ScriptView();
+		private AssembliesView assembliesView;
+		private RegisterView registersView;
+		private DisplayView displayView;
+		private ControlView controlView;
+		private CallStackView callStackView;
+		private StackFrameView stackFrameView;
+		private StackView stackView;
+		private FlagView flagView;
+		private StatusView statusView;
+		private HistoryView historyView;
+		private SymbolView symbolView;
+		private WatchView watchView;
+		private BreakPointView breakPointView;
+		private OutputView outputView;
+		private ScriptView scriptView;
 
 		public IInternalTrace InternalTrace = new BasicInternalTrace();
 		public ConfigurableTraceFilter Filter = new ConfigurableTraceFilter();
@@ -57,7 +57,7 @@ namespace Mosa.Tool.TinySimulator
 		public List<Watch> watches = new List<Watch>();
 
 		private Thread worker;
-		private object workerLock = new object();
+		private object signalLock = new object();
 
 		private Stopwatch stopwatch = new Stopwatch();
 
@@ -84,6 +84,22 @@ namespace Mosa.Tool.TinySimulator
 			InternalTrace.CompilerEventListener = this;
 
 			MaxHistory = 1000;
+
+			assembliesView = new AssembliesView(this);
+			registersView = new RegisterView(this);
+			displayView = new DisplayView(this);
+			controlView = new ControlView(this);
+			callStackView = new CallStackView(this);
+			stackFrameView = new StackFrameView(this);
+			stackView = new StackView(this);
+			flagView = new FlagView(this);
+			statusView = new StatusView(this);
+			historyView = new HistoryView(this);
+			symbolView = new SymbolView(this);
+			watchView = new WatchView(this);
+			breakPointView = new BreakPointView(this);
+			outputView = new OutputView(this);
+			scriptView = new ScriptView(this);
 
 			worker = new Thread(ExecuteThread);
 			worker.Name = "SimCPU";
@@ -140,7 +156,7 @@ namespace Mosa.Tool.TinySimulator
 
 		private void toolStripButton2_Click(object sender, EventArgs e)
 		{
-			var memoryView = new MemoryView();
+			var memoryView = new MemoryView(this);
 			memoryView.Show(dockPanel, DockState.Document);
 		}
 
@@ -194,7 +210,7 @@ namespace Mosa.Tool.TinySimulator
 			SimCPU.Monitor.OnStateUpdate = UpdateSimState;
 			SimCPU.Reset();
 
-			Display32 = (uint)SimCPU.GetState().Values["Register.Size"] == 32;
+			Display32 = SimCPU.GetState().NativeRegisterSize == 32;
 
 			SimCPU.Monitor.OnExecutionStepCompleted(true);
 
@@ -215,6 +231,10 @@ namespace Mosa.Tool.TinySimulator
 				return "0x" + ((ulong)value).ToString("X16");
 			else if (value is long)
 				return "0x" + ((long)value).ToString("X16");
+			else if (value is double)
+				return ((double)value).ToString();
+			else if (value is float)
+				return ((float)value).ToString();
 			else if (value is bool)
 				return (bool)value ? "TRUE" : "FALSE";
 
@@ -262,7 +282,7 @@ namespace Mosa.Tool.TinySimulator
 			StartSimulator("x86");
 		}
 
-		public void UpdateAllDocks(SimState simState)
+		public void UpdateAllDocks(BaseSimState simState)
 		{
 			if (simState == null)
 				return;
@@ -281,7 +301,7 @@ namespace Mosa.Tool.TinySimulator
 
 		private long lastTimeTick = 0;
 
-		private void UpdateSimState(SimState simState, bool forceUpdate)
+		private void UpdateSimState(BaseSimState simState, bool forceUpdate)
 		{
 			SimCPU.ExtendState(simState);
 
@@ -290,27 +310,46 @@ namespace Mosa.Tool.TinySimulator
 			if (secs == 0)
 				secs = 1;
 
-			simState.StoreValue("TotalElapsed", secs);
+			simState.TotalElapsedSeconds = secs;
 
 			AddHistory(simState);
 			AddWatch(simState);
 
 			if (forceUpdate || simState.Tick == 0 || DateTime.Now.Ticks > lastTimeTick + 2500000)
 			{
-				MethodInvoker method = delegate() { UpdateAllDocks(simState); };
+				MethodInvoker method = delegate()
+				{
+					UpdateAllDocks(simState);
+				};
+
 				Invoke(method);
 
 				lastTimeTick = DateTime.Now.Ticks;
 			}
 		}
 
+		private void UpdateExecutionCompleted()
+		{
+			MethodInvoker method = delegate()
+			{
+				Status = "Simulation stopped.";
+				scriptView.ExecutingCompleted();
+			};
+
+			Invoke(method);
+		}
+
 		private void ExecuteThread()
 		{
 			for (; ; )
 			{
+				lock (signalLock)
+				{
+					Monitor.Wait(signalLock);
+				}
+
 				if (SimCPU == null)
 				{
-					Thread.Sleep(500);
 					continue;
 				}
 
@@ -318,19 +357,16 @@ namespace Mosa.Tool.TinySimulator
 				SimCPU.Execute();
 				stopwatch.Stop();
 
-				lock (workerLock)
-				{
-					Monitor.Wait(workerLock);
-				}
+				UpdateExecutionCompleted();
 			}
 		}
 
-		private void AddHistory(SimState simState)
+		private void AddHistory(BaseSimState simState)
 		{
 			historyView.AddHistory(simState);
 		}
 
-		private void AddWatch(SimState simState)
+		private void AddWatch(BaseSimState simState)
 		{
 			var toplist = new Dictionary<int, Dictionary<ulong, object>>();
 
@@ -359,20 +395,6 @@ namespace Mosa.Tool.TinySimulator
 			simState.StoreValue("WatchValues", toplist);
 		}
 
-		public void ExecuteSteps(uint steps)
-		{
-			if (SimCPU == null)
-				return;
-
-			SimCPU.Monitor.BreakFromCurrentTick(steps);
-			SimCPU.Monitor.Stop = false;
-
-			lock (workerLock)
-			{
-				Monitor.PulseAll(workerLock);
-			}
-		}
-
 		public void Restart()
 		{
 			if (SimCPU == null)
@@ -380,17 +402,14 @@ namespace Mosa.Tool.TinySimulator
 
 			Record = false;
 
-			SimCPU.Monitor.Stop = false;
+			SimCPU.Monitor.Stop = true;
 			SimCPU.Monitor.StepOverBreakPoint = 0;
 
-			lock (workerLock)
-			{
-				SimCPU.Reset();
-				stopwatch.Reset();
-			}
+			SimCPU.Reset();
+			stopwatch.Reset();
 
-			SimCPU.Monitor.OnExecutionStepCompleted(true);
 			Status = "Simulation Reset.";
+			SimCPU.Monitor.OnExecutionStepCompleted(true);
 
 			symbolView.CreateEntries();
 		}
@@ -400,12 +419,28 @@ namespace Mosa.Tool.TinySimulator
 			if (SimCPU == null)
 				return;
 
+			Status = "Simulation running...";
 			SimCPU.Monitor.BreakAtTick = UInt32.MaxValue;
 			SimCPU.Monitor.Stop = false;
 
-			lock (workerLock)
+			lock (signalLock)
 			{
-				Monitor.PulseAll(workerLock);
+				Monitor.PulseAll(signalLock);
+			}
+		}
+
+		public void ExecuteSteps(uint steps)
+		{
+			if (SimCPU == null)
+				return;
+
+			Status = "Simulation running...";
+			SimCPU.Monitor.BreakFromCurrentTick(steps);
+			SimCPU.Monitor.Stop = false;
+
+			lock (signalLock)
+			{
+				Monitor.PulseAll(signalLock);
 			}
 		}
 
@@ -414,10 +449,13 @@ namespace Mosa.Tool.TinySimulator
 			if (SimCPU == null)
 				return;
 
+			Status = "Simulation stopping...";
 			SimCPU.Monitor.Stop = true;
 
-			// wait until worker done
-			lock (workerLock) { }
+			while (SimCPU.Monitor.IsExecuting)
+			{
+				Application.DoEvents();
+			}
 		}
 
 		private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -425,10 +463,7 @@ namespace Mosa.Tool.TinySimulator
 			if (SimCPU == null)
 				return;
 
-			SimCPU.Monitor.Stop = true;
-
-			// wait until worker done
-			lock (workerLock) { }
+			Stop();
 
 			worker.Abort();
 		}

@@ -43,7 +43,8 @@ namespace Mosa.Tool.TinySimulator
 			}
 		}
 
-		public BreakPointView()
+		public BreakPointView(MainForm mainForm)
+			: base(mainForm)
 		{
 			InitializeComponent();
 			dataGridView1.DataSource = breakpoints;

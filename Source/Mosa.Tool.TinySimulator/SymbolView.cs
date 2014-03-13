@@ -45,7 +45,8 @@ namespace Mosa.Tool.TinySimulator
 			}
 		}
 
-		public SymbolView()
+		public SymbolView(MainForm mainForm)
+			: base(mainForm)
 		{
 			InitializeComponent();
 		}
@@ -97,7 +98,7 @@ namespace Mosa.Tool.TinySimulator
 			dataGridView1.Columns[0].Width = 500;
 		}
 
-		public override void UpdateDock(SimState simState)
+		public override void UpdateDock(BaseSimState simState)
 		{
 		}
 

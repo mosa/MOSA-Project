@@ -1,16 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace Mosa.Test.Collection
+﻿namespace Mosa.Test.Collection
 {
-	class ArrayLayoutTests
+	internal class ArrayLayoutTests
 	{
 		public unsafe static bool B()
 		{
 			bool[] arr = new bool[] { true, false, true, false };
 			return arr[0] && !arr[1] && arr[2] && !arr[3];
+		}
+
+		public unsafe static bool C1()
+		{
+			char[] arr = new char[] { 'W' };
+			return arr[0] == 'W';
 		}
 
 		public unsafe static bool C()

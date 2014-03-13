@@ -14,7 +14,6 @@ namespace Mosa.TinyCPUSimulator
 {
 	public class SimCPU
 	{
-
 		public Dictionary<ulong, SimInstruction> InstructionCache { get; private set; }
 
 		public BaseSimDevice[] PortDevices { get; private set; }
@@ -243,7 +242,6 @@ namespace Mosa.TinyCPUSimulator
 		public void SetSymbol(string name, ulong address, ulong size)
 		{
 			Symbols.Add(name, new SimSymbol(name, address, size));
-
 		}
 
 		public SimSymbol GetSymbol(string name)
@@ -340,15 +338,8 @@ namespace Mosa.TinyCPUSimulator
 
 		protected void ExecuteInstruction()
 		{
-			//MemoryDelta.Clear();
-
 			try
 			{
-				//if (Monitor.DebugOutput)
-				//{
-				//	Debug.Write("0x" + CurrentProgramCounter.ToString("X") + ": ");
-				//}
-
 				Tick++;
 				LastException = null;
 				LastProgramCounter = CurrentProgramCounter;
@@ -372,36 +363,41 @@ namespace Mosa.TinyCPUSimulator
 
 		public void Execute()
 		{
-			if (Monitor.DebugOutput)
+			try
 			{
-				Debug.WriteLine("EIP        EAX        EBX        ECX        EDX        ESI        EDI        ESP        EBP        FLAGS");
-			}
+				Monitor.IsExecuting = true;
 
-			for (; ; )
-			{
-				ExecuteInstruction();
-
-				bool brk = Monitor.Break;
-
-				Monitor.OnExecutionStepCompleted(brk);
-
-				if (brk)
+				if (Monitor.DebugOutput)
 				{
-					return;
+					Debug.WriteLine("EIP        EAX        EBX        ECX        EDX        ESI        EDI        ESP        EBP        XMM#0      XMM#1      XMM#2      XMM#3      FLAGS");
+				}
+
+				for (; ; )
+				{
+					ExecuteInstruction();
+
+					bool brk = Monitor.Break;
+
+					Monitor.OnExecutionStepCompleted(brk);
+
+					if (brk)
+					{
+						return;
+					}
 				}
 			}
+			finally
+			{
+				Monitor.IsExecuting = false;
+			}
 		}
 
-		public virtual SimState GetState()
+		public virtual BaseSimState GetState()
 		{
-			SimState simState = new SimState(Tick, LastProgramCounter, LastInstruction, LastException, CurrentProgramCounter);
-
-			//simState.StoreMemoryDelta(MemoryDelta);
-
-			return simState;
+			return null;
 		}
 
-		public virtual void ExtendState(SimState simState)
+		public virtual void ExtendState(BaseSimState simState)
 		{
 		}
 	}

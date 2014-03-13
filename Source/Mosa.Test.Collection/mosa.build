@@ -28,9 +28,11 @@
                     <include name="CallTests.cs"/>
                     <include name="ConvTests.cs"/>
                     <include name="CallVirtualTests.cs"/>
+                    <include name="EnumTests.cs"/>
                     <include name="GenericMixedTest.cs"/>
                     <include name="LdargaTests.cs"/>
                     <include name="NewObjectTests.cs"/>
+                    <include name="SSAOptimizationTest.cs"/>
                     <include name="RegisterAllocatorTests.cs"/>
                     <include name="SpecificTests.cs"/>
                     <include name="ForeachTests.cs"/>
@@ -59,7 +61,6 @@
                     <include name="UInt64Tests.cs"/>
                     <include name="UInt8Tests.cs"/>
                     <include name="InterfaceTests.cs"/>
-                    <include name="EnumTests.cs"/>
                     <include name="DerivedNewObjectTests.cs"/>
 		</sources>
 		<references>

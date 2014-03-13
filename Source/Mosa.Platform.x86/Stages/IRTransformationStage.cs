@@ -582,14 +582,14 @@ namespace Mosa.Platform.x86.Stages
 
 			if (context.Operand1 != null)
 			{
-				if (context.Operand1.IsR)
-				{
-					// HACK - to support test suit on windows
-					Operand stack = methodCompiler.StackLayout.AddStackLocal(context.Operand1.Type);
-					Context before = context.InsertBefore();
-					architecture.InsertMoveInstruction(before, stack, context.Operand1);
-					before.AppendInstruction(X86.Fld, null, stack);
-				}
+				// HACK - to support test suit on windows
+				//if (context.Operand1.IsR)
+				//{
+				//	Operand stack = methodCompiler.StackLayout.AddStackLocal(context.Operand1.Type);
+				//	Context before = context.InsertBefore();
+				//	architecture.InsertMoveInstruction(before, stack, context.Operand1);
+				//	before.AppendInstruction(X86.Fld, null, stack);
+				//}
 
 				var returnOperand = context.Operand1;
 

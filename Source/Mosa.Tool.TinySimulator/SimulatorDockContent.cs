@@ -1,33 +1,27 @@
 ﻿using Mosa.TinyCPUSimulator;
 using WeifenLuo.WinFormsUI.Docking;
+using System.Windows.Forms;
 
 namespace Mosa.Tool.TinySimulator
 {
 	public partial class SimulatorDockContent : DockContent
 	{
+		protected MainForm MainForm;
+
 		public SimulatorDockContent()
+		{ }
+
+		public SimulatorDockContent(MainForm mainForm)
 		{
 			InitializeComponent();
-		}
-
-		private MainForm mainForm;
-
-		public MainForm MainForm
-		{
-			get
-			{
-				if (mainForm == null)
-					mainForm = ParentForm as MainForm;
-
-				return mainForm;
-			}
+			MainForm = mainForm;
 		}
 
 		public SimCPU SimCPU { get { return MainForm.SimCPU; } }
 
 		public string Status { set { MainForm.Status = value; } }
 
-		public virtual void UpdateDock(SimState simState)
+		public virtual void UpdateDock(BaseSimState simState)
 		{
 		}
 	}

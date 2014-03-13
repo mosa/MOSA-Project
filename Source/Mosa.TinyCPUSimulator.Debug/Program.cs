@@ -8,7 +8,8 @@
  *
  */
 
-using Mosa.TinyCPUSimulator.TestSystem.xUnit;
+using System;
+using Mosa.Test.Collection.x86.xUnit;
 
 namespace Mosa.TinyCPUSimulator.Debug
 {
@@ -16,12 +17,33 @@ namespace Mosa.TinyCPUSimulator.Debug
 	{
 		private static void Main(string[] args)
 		{
-			Test4();
+			Test8();
+		}
+
+		private static void Test8()
+		{
+			var fixture = new DoubleFixture();
+
+			fixture.IsNaN(Double.NaN);
+		}
+
+		private static void Test7()
+		{
+			var fixture = new DoubleFixture();
+
+			fixture.CeqR8R8(200, 100);
+		}
+
+		private static void Test6()
+		{
+			var fixture = new DoubleFixture();
+
+			fixture.AddR8R8(200, 100);
 		}
 
 		private static void Test5()
 		{
-			var fixture = new Mosa.TinyCPUSimulator.x86.xUnit.OpcodeTests();
+			var fixture = new UInt32Fixture();
 
 			fixture.AddU4U4(200, 100);
 		}
@@ -38,13 +60,6 @@ namespace Mosa.TinyCPUSimulator.Debug
 			var fixture = new UInt64Fixture();
 
 			fixture.DivU8U8(18446744073709551615, 4294967294);
-		}
-
-		private static void Test2()
-		{
-			var fixture = new EnumFixture();
-
-			fixture.ItemAMustEqual5();
 		}
 
 		private static void Test1()

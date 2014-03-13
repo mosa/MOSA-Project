@@ -1,0 +1,43 @@
+﻿/*
+ * (c) 2014 MOSA - The Managed Operating System Alliance
+ *
+ * Licensed under the terms of the New BSD License.
+ *
+ * Authors:
+ *  Andrey Turkin <andrey.turkin@gmail.com>
+ *
+ */
+<#@ include file="../TemplateLibrary.txt" #>
+using Xunit;
+
+namespace Mosa.TinyCPUSimulator.TestSystem.xUnit
+{
+	public class EnumFixture : TestFixture
+	{
+<#
+	List<string> members = new List<string>() {"Conversion", "PlusOne_1", "PlusOne_2", "MinusOne_1", "MinusOne_2",
+											   "Shl", "Shr", "Mul2", "Div2", "Rem2", "AssignPlusOne", "AssignMinusOne",
+											   "Preincrement", "Predecrement", "Postincrement", "Postdecrement",
+											   "And", "Or", "XOr" };
+	foreach (KeyValuePair<string, string> comparison in Comparisons) {
+		members.Add(comparison.Value + "1");
+		members.Add(comparison.Value + "2");
+		members.Add(comparison.Value + "3");
+	}
+	foreach (bool isSigned in new bool[2] {false, true}) {
+		foreach (KeyValuePair<string, string> numberT in isSigned ? NegativeIntegers : PositiveIntegers) {
+			foreach(string member in members) {
+#>
+		[Fact]
+		public void Enum<#= numberT.Value #>_<#= member #>()
+		{
+			Assert.True(Run<bool>("Mosa.Test.Collection.TestEnum<#= numberT.Value #>Class.Positive<#= member #>"));
+<#				if (isSigned) {
+#>			Assert.True(Run<bool>("Mosa.Test.Collection.TestEnum<#= numberT.Value #>Class.Negative<#= member #>"));
+<#				}
+#>		}
+<#			}
+		}
+	}
+#>	}
+}

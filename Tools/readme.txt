@@ -31,3 +31,8 @@ peter-bochs
 ndisasm
 - Simplified BSD License
 - http://www.nasm.us/
+
+xunit
+- Apache License, Version 2.0
+- http://xunit.codeplex.com/
+- Version: Build 1705

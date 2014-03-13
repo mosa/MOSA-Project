@@ -15,26 +15,46 @@ namespace Mosa.Tool.TinySimulator
 {
 	public partial class ScriptView : SimulatorDockContent
 	{
-		public ScriptView()
+
+		private int lineNbr = 0;
+		private bool wait = false;
+
+		public ScriptView(MainForm mainForm)
+			: base(mainForm)
 		{
 			InitializeComponent();
 		}
 
-		public override void UpdateDock(SimState simState)
+		public override void UpdateDock(BaseSimState simState)
 		{
 		}
 
 		private void toolStripButton3_Click(object sender, EventArgs e)
 		{
-			int lineNbr = 0;
+			lineNbr = 0;
+			wait = false;
 
-			foreach (var l in richTextBox1.Lines)
+			Execute();
+		}
+
+		public void ExecutingCompleted()
+		{
+			AddOutput(lineNbr, "STATUS: Execution completed");
+			wait = false;
+			Execute();
+		}
+
+		private void Execute()
+		{
+			while (!wait && richTextBox1.Lines.Length > lineNbr)
 			{
+				var l = richTextBox1.Lines[lineNbr];
 				lineNbr++;
+
 				string line = l.Trim();
 
 				if (string.IsNullOrEmpty(line))
-					continue;
+					return;
 
 				string cmd = string.Empty;
 				string data = string.Empty;
@@ -66,7 +86,7 @@ namespace Mosa.Tool.TinySimulator
 			int spacepos = line.IndexOf(' ');
 			int tabpos = line.IndexOf('\t');
 
-			int pos = (tabpos < spacepos && tabpos >= 0) ? spacepos : tabpos;
+			int pos = (tabpos >= 0) ? tabpos : spacepos;
 
 			first = string.Empty;
 			rest = string.Empty;
@@ -146,13 +166,15 @@ namespace Mosa.Tool.TinySimulator
 
 		protected void Execute(int lineNbr, string data)
 		{
-			AddOutput(lineNbr, "STATUS: Start");
+			AddOutput(lineNbr, "STATUS: Executing!");
+			wait = true;
 			MainForm.Start();
 		}
 
 		protected void Restart(int lineNbr, string data)
 		{
 			AddOutput(lineNbr, "STATUS: Restart");
+			wait = true;
 			MainForm.Restart();
 		}
 
@@ -161,7 +183,16 @@ namespace Mosa.Tool.TinySimulator
 			if (data.Length == 0)
 				Record(lineNbr, true);
 			else
-				Record(lineNbr, Char.ToUpper(data[0]) == 'Y' || Char.ToUpper(data[0]) == 'O');
+			{
+				bool record = false;
+
+				data = data.ToUpper();
+
+				if (data[0] == 'Y' || data[0] == 'T' || data == "ON")
+					record = true;
+
+				Record(lineNbr, record);
+			}
 		}
 
 		protected void Record(int lineNbr, bool record)
@@ -173,7 +204,8 @@ namespace Mosa.Tool.TinySimulator
 		protected void Step(int lineNbr, string data)
 		{
 			uint step = Convert.ToUInt32(data);
-			AddOutput(lineNbr, "STATUS: Step for " + step.ToString());
+			AddOutput(lineNbr, "STATUS: Executing " + step.ToString() + " steps!");
+			wait = true;
 			MainForm.ExecuteSteps(step);
 		}
 

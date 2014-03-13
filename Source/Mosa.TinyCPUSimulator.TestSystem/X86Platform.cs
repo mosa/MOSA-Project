@@ -113,15 +113,16 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 			}
 			else if (parameter is Single)
 			{
-				// TODO
-				WriteStackValue(simAdapter, 0);
-				WriteStackValue(simAdapter, 0);
+				var b = BitConverter.GetBytes((float)parameter);
+				var u = BitConverter.ToUInt32(b, 0);
+				WriteStackValue(simAdapter, u);
 			}
 			else if (parameter is Double)
 			{
-				// TODO
-				WriteStackValue(simAdapter, 0);
-				WriteStackValue(simAdapter, 0);
+				var b = BitConverter.GetBytes((double)parameter);
+				var u = BitConverter.ToUInt64(b, 0);
+				WriteStackValue(simAdapter, (uint)(u >> 32));
+				WriteStackValue(simAdapter, (uint)u);
 			}
 			//else  if (parameter is UIntPtr) { WriteStackValue(simAdapter, (uint)parameter);  }
 			//else  if (parameter is IntPtr) { WriteStackValue(simAdapter, (uint)parameter); }
@@ -173,6 +174,10 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 				return (object)(char)x86.EAX.Value;
 			else if (type.IsBoolean)
 				return (object)(bool)(x86.EAX.Value != 0);
+			else if (type.IsR4)
+				return (object)(float)x86.XMM0.Value;
+			else if (type.IsR8)
+				return (object)(double)x86.XMM0.Value;
 
 			return null;
 		}

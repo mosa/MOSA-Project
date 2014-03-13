@@ -7,9 +7,8 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System.Diagnostics;
-using System.Collections.Generic;
 using Mosa.Compiler.Framework.IR;
+using System.Collections.Generic;
 
 namespace Mosa.Compiler.Framework.Stages
 {
@@ -19,7 +18,6 @@ namespace Mosa.Compiler.Framework.Stages
 	/// </summary>
 	public class BaseEdgeSplitStage : BaseMethodCompilerStage
 	{
-
 		public virtual void Run()
 		{
 			List<KeyValuePair<BasicBlock, BasicBlock>> worklist = new List<KeyValuePair<BasicBlock, BasicBlock>>();
@@ -41,19 +39,22 @@ namespace Mosa.Compiler.Framework.Stages
 			foreach (var edge in worklist)
 			{
 				if (edge.Key.NextBlocks.Count > 1 || edge.Value.PreviousBlocks.Count > 1)
-				{ 
-					SplitEdge(edge.Key, edge.Value); 
+				{
+					SplitEdge(edge.Key, edge.Value);
 				}
 			}
+		}
+
+		protected virtual void InsertJumpInstruction(Context context, BasicBlock block)
+		{
+			context.AppendInstruction(IRInstruction.Jmp, block);
 		}
 
 		private void SplitEdge(BasicBlock from, BasicBlock to)
 		{
 			// Create new block z
 			Context ctx = CreateNewBlockWithContext();
-
-			architecture.InsertJumpInstruction(ctx, to);
-			//ctx.AppendInstruction(jumpInstruction, to);
+			InsertJumpInstruction(ctx, to);
 			ctx.Label = -1;
 
 			var js = ctx.BasicBlock;

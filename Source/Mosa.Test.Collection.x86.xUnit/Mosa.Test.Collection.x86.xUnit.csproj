@@ -1,0 +1,129 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{50568E2D-5360-4F71-87E3-A6979D1D858C}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Mosa.Test.Collection.x86.xUnit</RootNamespace>
+    <AssemblyName>Mosa.Test.Collection.x86.xUnit</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <NoWarn>0168</NoWarn>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\..\bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <NoWarn>0168</NoWarn>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="xunit, Version=1.9.2.1705, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\3rdParty\xunit.dll</HintPath>
+    </Reference>
+    <Reference Include="xunit.extensions, Version=1.9.2.1705, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\3rdParty\xunit.extensions.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Mosa.Compiler.Common\Mosa.Compiler.Common.csproj">
+      <Project>{0b1011a6-8fcd-4f9e-bbb8-8db86e23d2e8}</Project>
+      <Name>Mosa.Compiler.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mosa.Compiler.Framework\Mosa.Compiler.Framework.csproj">
+      <Project>{75a12a8a-8c8f-4d1e-801b-689d8f781bf4}</Project>
+      <Name>Mosa.Compiler.Framework</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mosa.Test.Collection\Mosa.Test.Collection.csproj">
+      <Project>{067aab6b-447a-45ba-9e0d-dfea886b4f69}</Project>
+      <Name>Mosa.Test.Collection</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mosa.TinyCPUSimulator.Adaptor\Mosa.TinyCPUSimulator.Adaptor.csproj">
+      <Project>{50568e2d-5360-4f71-87e0-f6979d2d858a}</Project>
+      <Name>Mosa.TinyCPUSimulator.Adaptor</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mosa.TinyCPUSimulator.TestSystem\Mosa.TinyCPUSimulator.TestSystem.csproj">
+      <Project>{50568e2d-5360-4f71-87e0-a6979d1d858a}</Project>
+      <Name>Mosa.TinyCPUSimulator.TestSystem</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mosa.TinyCPUSimulator\Mosa.TinyCPUSimulator.csproj">
+      <Project>{6f7c06b2-09bf-45bd-8e6b-ae9bf7c7e250}</Project>
+      <Name>Mosa.TinyCPUSimulator</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BooleanFixture.cs" />
+    <Compile Include="BoxingFixture.cs" />
+    <Compile Include="ArrayLayoutFixture.cs" />
+    <Compile Include="CallOrderFixture.cs" />
+    <Compile Include="DoubleFixture.cs" />
+    <Compile Include="EnumFixture.cs" />
+    <Compile Include="FibonacciFixture.cs" />
+    <Compile Include="Int16Fixture.cs" />
+    <Compile Include="Int32Fixture.cs" />
+    <Compile Include="Int64Fixture.cs" />
+    <Compile Include="Int8Fixture.cs" />
+    <Compile Include="NewDerivedObjectFixture.cs" />
+    <Compile Include="RegisterAllocatorFixture.cs" />
+    <Compile Include="SSAOptimizationFixture.cs" />
+    <Compile Include="NewObjectFixture.cs" />
+    <Compile Include="StructureFixture.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>StructureFixture.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SwitchFixture.cs">
+      <DependentUpon>SwitchFixture.tt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="X86TestFixture.cs" />
+    <Compile Include="UInt16Fixture.cs" />
+    <Compile Include="UInt32Fixture.cs" />
+    <Compile Include="UInt64Fixture.cs" />
+    <Compile Include="UInt8Fixture.cs" />
+    <Compile Include="WhileFixture.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="StructureFixture.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>StructureFixture.cs</LastGenOutput>
+    </None>
+    <None Include="SwitchFixture.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>SwitchFixture.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

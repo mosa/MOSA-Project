@@ -93,6 +93,16 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 			{
 				if (operands[0] == operands[1]) operands.RemoveAt(0);
 			}
+			else if (opcode == Opcode.Movsd)
+			{
+				operands[0].Size = 64;
+				operands[1].Size = 64;
+			}
+			else if (opcode == Opcode.Movss)
+			{
+				operands[0].Size = 32;
+				operands[1].Size = 32;
+			}
 		}
 
 		private SimOperand ConvertToOpcodeOperand(Operand operand)
@@ -221,10 +231,10 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 			//if (opcode == Opcode.CmpXchg) return true;
 			if (opcode == Opcode.Comisd) return true;
 			if (opcode == Opcode.Comiss) return true;
-			if (opcode == Opcode.Cvtsd2ss) return true;
-			if (opcode == Opcode.Cvtsi2sd) return true;
-			if (opcode == Opcode.Cvtsi2ss) return true;
-			if (opcode == Opcode.Cvtss2sd) return true;
+			//if (opcode == Opcode.Cvtsd2ss) return true;
+			//if (opcode == Opcode.Cvtsi2sd) return true;
+			//if (opcode == Opcode.Cvtsi2ss) return true;
+			//if (opcode == Opcode.Cvtss2sd) return true;
 			if (opcode == Opcode.Cvttsd2si) return true;
 			if (opcode == Opcode.Cvttss2si) return true;
 			if (opcode == Opcode.Dec) return true;
@@ -234,9 +244,9 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 			//if (opcode == Opcode.FarJmp) return true;
 			//if (opcode == Opcode.Fld) return true;
 			if (opcode == Opcode.Idiv) return true;
-			if (opcode == Opcode.Imul) return false;
+			//if (opcode == Opcode.Imul) return false;
 			if (opcode == Opcode.Inc) return true;
-			if (opcode == Opcode.Lea) return true;
+			//if (opcode == Opcode.Lea) return true;
 			if (opcode == Opcode.Mul) return true;
 			if (opcode == Opcode.Mulsd) return true;
 			if (opcode == Opcode.Mulss) return true;
@@ -247,8 +257,8 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 			//if (opcode == Opcode.Rdpmc) return true;
 			//if (opcode == Opcode.Rdtsc) return true;
 			//if (opcode == Opcode.Rep) return true;
-			//if (opcode == Opcode.Roundsd) return true;
-			//if (opcode == Opcode.Roundss) return true;
+			if (opcode == Opcode.Roundsd) return true;
+			if (opcode == Opcode.Roundss) return true;
 			if (opcode == Opcode.Sar) return true;
 			if (opcode == Opcode.Sbb) return true;
 			if (opcode == Opcode.Shl) return true;
@@ -263,7 +273,7 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 			//if (opcode == Opcode.Ucomiss) return true;
 			//if (opcode == Opcode.Xchg) return true;
 			if (opcode == Opcode.Xor) return true;
-			if (opcode == Opcode.Ucomisd) return true;
+			//if (opcode == Opcode.Ucomisd) return true;
 			if (opcode == Opcode.Ucomiss) return true;
 			if (opcode == Opcode.Neg) return true;
 

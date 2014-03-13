@@ -259,6 +259,11 @@ namespace Mosa.Test.Numbers
 			get { foreach (int a in GetUpTo(32)) yield return a; }
 		}
 
+		public static IEnumerable<int> I4Mini
+		{
+			get { yield return 0; yield return 1; yield return int.MinValue; yield return int.MaxValue; }
+		}
+
 		public static IEnumerable<int> FewScatteredAI4
 		{
 			get { yield return 1; yield return 51; }
@@ -310,6 +315,11 @@ namespace Mosa.Test.Numbers
 			get { foreach (uint a in GetUpTo(8)) yield return a; }
 		}
 
+		public static IEnumerable<uint> U4Mini
+		{
+			get { yield return 0; yield return 1; yield return uint.MinValue; yield return uint.MaxValue; }
+		}
+
 		#endregion U4 Types
 
 		#region I8 Types
@@ -344,6 +354,11 @@ namespace Mosa.Test.Numbers
 		public static IEnumerable<long> I8UpTo32
 		{
 			get { foreach (long a in GetUpTo(32)) yield return a; }
+		}
+
+		public static IEnumerable<long> I8Mini
+		{
+			get { yield return 0; yield return 1; yield return long.MinValue; yield return long.MaxValue; }
 		}
 
 		#endregion I8 Types
@@ -382,11 +397,28 @@ namespace Mosa.Test.Numbers
 			get { foreach (ulong a in GetUpTo(32)) yield return a; }
 		}
 
+		public static IEnumerable<ulong> U8Mini
+		{
+			get { yield return 0; yield return 1; yield return ulong.MinValue; yield return ulong.MaxValue; }
+		}
+
 		#endregion U8 Types
 
 		#region R4 Types
 
 		public static IEnumerable<float> R4 { get { return Numbers.R4.Series; } }
+
+		public static IEnumerable<float> R4Mini
+		{
+			get
+			{
+				yield return 0;
+				yield return float.MinValue;
+				yield return float.MaxValue;
+				yield return float.NaN;
+				yield return float.NegativeInfinity;
+			}
+		}
 
 		public static IEnumerable<float> R4NotNaN
 		{
@@ -453,6 +485,18 @@ namespace Mosa.Test.Numbers
 		#region R8 Types
 
 		public static IEnumerable<double> R8 { get { return Numbers.R8.Series; } }
+
+		public static IEnumerable<double> R8Mini
+		{
+			get
+			{
+				yield return 0;
+				yield return double.MinValue;
+				yield return double.MaxValue;
+				yield return double.NaN;
+				yield return double.NegativeInfinity;
+			}
+		}
 
 		public static IEnumerable<double> R8NotNaN
 		{

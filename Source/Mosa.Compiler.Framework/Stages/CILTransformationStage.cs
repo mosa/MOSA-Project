@@ -303,8 +303,8 @@ namespace Mosa.Compiler.Framework.Stages
 				case CIL.OpCode.And: context.SetInstruction(IRInstruction.LogicalAnd, context.Result, context.Operand1, context.Operand2); break;
 				case CIL.OpCode.Or: context.SetInstruction(IRInstruction.LogicalOr, context.Result, context.Operand1, context.Operand2); break;
 				case CIL.OpCode.Xor: context.SetInstruction(IRInstruction.LogicalXor, context.Result, context.Operand1, context.Operand2); break;
-				case CIL.OpCode.Div_un: context.SetInstruction(IRInstruction.DivU, context.Result, context.Operand1, context.Operand2); break;
-				case CIL.OpCode.Rem_un: context.SetInstruction(IRInstruction.RemU, context.Result, context.Operand1, context.Operand2); break;
+				case CIL.OpCode.Div_un: context.SetInstruction(IRInstruction.DivUnsigned, context.Result, context.Operand1, context.Operand2); break;
+				case CIL.OpCode.Rem_un: context.SetInstruction(IRInstruction.RemUnsigned, context.Result, context.Operand1, context.Operand2); break;
 				default: throw new InvalidCompilerException();
 			}
 		}
@@ -333,22 +333,22 @@ namespace Mosa.Compiler.Framework.Stages
 			if (context.Operand1.IsUnsigned)
 			{
 				Operand zero = Operand.CreateConstant(context.Operand1.Type, 0);
-				context.SetInstruction(IRInstruction.SubU, context.Result, zero, context.Operand1);
+				context.SetInstruction(IRInstruction.SubUnsigned, context.Result, zero, context.Operand1);
 			}
 			else if (context.Operand1.IsR4)
 			{
 				Operand minusOne = Operand.CreateConstantSingle(typeSystem, -1.0f);
-				context.SetInstruction(IRInstruction.MulF, context.Result, minusOne, context.Operand1);
+				context.SetInstruction(IRInstruction.MulFloat, context.Result, minusOne, context.Operand1);
 			}
 			else if (context.Operand1.IsR8)
 			{
 				Operand minusOne = Operand.CreateConstantDouble(typeSystem, -1.0d);
-				context.SetInstruction(IRInstruction.MulF, context.Result, minusOne, context.Operand1);
+				context.SetInstruction(IRInstruction.MulFloat, context.Result, minusOne, context.Operand1);
 			}
 			else
 			{
 				Operand minusOne = Operand.CreateConstant(context.Operand1.Type, -1);
-				context.SetInstruction(IRInstruction.MulS, context.Result, minusOne, context.Operand1);
+				context.SetInstruction(IRInstruction.MulSigned, context.Result, minusOne, context.Operand1);
 			}
 		}
 
@@ -682,7 +682,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (context.Operand1.IsR)
 			{
-				context.SetInstruction(IRInstruction.FloatingPointCompare, code, context.Result, context.Operand1, context.Operand2);
+				context.SetInstruction(IRInstruction.FloatCompare, code, context.Result, context.Operand1, context.Operand2);
 			}
 			else
 			{
@@ -834,7 +834,7 @@ namespace Mosa.Compiler.Framework.Stages
 			int offset = typeLayout.GetFieldOffset(context.MosaField);
 			Operand fixedOffset = Operand.CreateConstantSignedInt(typeSystem, (int)offset);
 
-			context.SetInstruction(IRInstruction.AddU, fieldAddress, objectOperand, fixedOffset);
+			context.SetInstruction(IRInstruction.AddUnsigned, fieldAddress, objectOperand, fixedOffset);
 		}
 
 		/// <summary>
@@ -918,7 +918,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (first.IsR)
 			{
 				Operand comparisonResult = methodCompiler.CreateVirtualRegister(typeSystem.BuiltIn.I4);
-				context.SetInstruction(IRInstruction.FloatingPointCompare, cc, comparisonResult, first, second);
+				context.SetInstruction(IRInstruction.FloatCompare, cc, comparisonResult, first, second);
 				context.AppendInstruction(IRInstruction.IntegerCompareBranch, ConditionCode.Equal, null, comparisonResult, Operand.CreateConstantSignedInt(typeSystem, 1));
 				context.SetBranch(target);
 			}
@@ -977,7 +977,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			Operand arrayAddress = LoadArrayBaseAddress(context, arrayType, arrayOperand);
 			Operand elementOffset = CalculateArrayElementOffset(context, arrayType, arrayIndexOperand);
-			context.AppendInstruction(IRInstruction.AddS, result, arrayAddress, elementOffset);
+			context.AppendInstruction(IRInstruction.AddSigned, result, arrayAddress, elementOffset);
 		}
 
 		private Operand CalculateArrayElementOffset(Context context, MosaType arrayType, Operand arrayIndexOperand)
@@ -998,7 +998,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			Operand elementOffset = methodCompiler.CreateVirtualRegister(typeSystem.BuiltIn.I4);	// FIXME: I4
 			Operand elementSizeOperand = Operand.CreateConstantSignedInt(typeSystem, (int)elementSizeInBytes);
-			context.AppendInstruction(IRInstruction.MulS, elementOffset, arrayIndexOperand, elementSizeOperand);
+			context.AppendInstruction(IRInstruction.MulSigned, elementOffset, arrayIndexOperand, elementSizeOperand);
 
 			return elementOffset;
 		}
@@ -1010,7 +1010,7 @@ namespace Mosa.Compiler.Framework.Stages
 			Operand arrayAddress = methodCompiler.CreateVirtualRegister(arrayPointer);
 			Operand fixedOffset = Operand.CreateConstantSignedInt(typeSystem, (int)12);
 
-			context.SetInstruction(IRInstruction.AddS, arrayAddress, arrayOperand, fixedOffset);
+			context.SetInstruction(IRInstruction.AddSigned, arrayAddress, arrayOperand, fixedOffset);
 
 			return arrayAddress;
 		}
@@ -1238,7 +1238,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="context">The context.</param>
 		void CIL.ICILVisitor.Add(Context context)
 		{
-			Replace(context, IRInstruction.AddF, IRInstruction.AddS, IRInstruction.AddU);
+			Replace(context, IRInstruction.AddFloat, IRInstruction.AddSigned, IRInstruction.AddUnsigned);
 		}
 
 		/// <summary>
@@ -1247,7 +1247,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="context">The context.</param>
 		void CIL.ICILVisitor.Sub(Context context)
 		{
-			Replace(context, IRInstruction.SubF, IRInstruction.SubS, IRInstruction.SubU);
+			Replace(context, IRInstruction.SubFloat, IRInstruction.SubSigned, IRInstruction.SubUnsigned);
 		}
 
 		/// <summary>
@@ -1256,7 +1256,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="context">The context.</param>
 		void CIL.ICILVisitor.Mul(Context context)
 		{
-			Replace(context, IRInstruction.MulF, IRInstruction.MulS, IRInstruction.MulU);
+			Replace(context, IRInstruction.MulFloat, IRInstruction.MulSigned, IRInstruction.MulUnsigned);
 		}
 
 		/// <summary>
@@ -1265,7 +1265,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="context">The context.</param>
 		void CIL.ICILVisitor.Div(Context context)
 		{
-			Replace(context, IRInstruction.DivF, IRInstruction.DivS, IRInstruction.DivU);
+			Replace(context, IRInstruction.DivFloat, IRInstruction.DivSigned, IRInstruction.DivUnsigned);
 		}
 
 		/// <summary>
@@ -1274,7 +1274,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="context">The context.</param>
 		void CIL.ICILVisitor.Rem(Context context)
 		{
-			Replace(context, IRInstruction.RemF, IRInstruction.RemS, IRInstruction.RemU);
+			Replace(context, IRInstruction.RemFloat, IRInstruction.RemSigned, IRInstruction.RemUnsigned);
 		}
 
 		#endregion ICILVisitor - Unused
@@ -1429,8 +1429,8 @@ namespace Mosa.Compiler.Framework.Stages
 				/* U2 */ IRInstruction.LogicalAnd,
 				/* U4 */ IRInstruction.LogicalAnd,
 				/* U8 */ IRInstruction.LogicalAnd,
-				/* R4 */ IRInstruction.FloatingPointToIntegerConversion,
-				/* R8 */ IRInstruction.FloatingPointToIntegerConversion,
+				/* R4 */ IRInstruction.FloatToIntegerConversion,
+				/* R8 */ IRInstruction.FloatToIntegerConversion,
 				/* I  */ IRInstruction.LogicalAnd,
 				/* U  */ IRInstruction.LogicalAnd,
 				/* Ptr*/ IRInstruction.LogicalAnd,
@@ -1444,8 +1444,8 @@ namespace Mosa.Compiler.Framework.Stages
 				/* U2 */ IRInstruction.Move,
 				/* U4 */ IRInstruction.LogicalAnd,
 				/* U8 */ IRInstruction.LogicalAnd,
-				/* R4 */ IRInstruction.FloatingPointToIntegerConversion,
-				/* R8 */ IRInstruction.FloatingPointToIntegerConversion,
+				/* R4 */ IRInstruction.FloatToIntegerConversion,
+				/* R8 */ IRInstruction.FloatToIntegerConversion,
 				/* I  */ IRInstruction.LogicalAnd,
 				/* U  */ IRInstruction.LogicalAnd,
 				/* Ptr*/ IRInstruction.LogicalAnd,
@@ -1459,8 +1459,8 @@ namespace Mosa.Compiler.Framework.Stages
 				/* U2 */ IRInstruction.ZeroExtendedMove,
 				/* U4 */ IRInstruction.Move,
 				/* U8 */ IRInstruction.LogicalAnd,
-				/* R4 */ IRInstruction.FloatingPointToIntegerConversion,
-				/* R8 */ IRInstruction.FloatingPointToIntegerConversion,
+				/* R4 */ IRInstruction.FloatToIntegerConversion,
+				/* R8 */ IRInstruction.FloatToIntegerConversion,
 				/* I  */ IRInstruction.LogicalAnd,
 				/* U  */ IRInstruction.LogicalAnd,
 				/* Ptr*/ IRInstruction.LogicalAnd,
@@ -1474,8 +1474,8 @@ namespace Mosa.Compiler.Framework.Stages
 				/* U2 */ IRInstruction.ZeroExtendedMove,
 				/* U4 */ IRInstruction.ZeroExtendedMove,
 				/* U8 */ IRInstruction.Move,
-				/* R4 */ IRInstruction.FloatingPointToIntegerConversion,
-				/* R8 */ IRInstruction.FloatingPointToIntegerConversion,
+				/* R4 */ IRInstruction.FloatToIntegerConversion,
+				/* R8 */ IRInstruction.FloatToIntegerConversion,
 				/* I  */ IRInstruction.LogicalAnd,
 				/* U  */ IRInstruction.LogicalAnd,
 				/* Ptr*/ IRInstruction.LogicalAnd,
@@ -1489,8 +1489,8 @@ namespace Mosa.Compiler.Framework.Stages
 				/* U2 */ IRInstruction.LogicalAnd,
 				/* U4 */ IRInstruction.LogicalAnd,
 				/* U8 */ IRInstruction.LogicalAnd,
-				/* R4 */ IRInstruction.FloatingPointToIntegerConversion,
-				/* R8 */ IRInstruction.FloatingPointToIntegerConversion,
+				/* R4 */ IRInstruction.FloatToIntegerConversion,
+				/* R8 */ IRInstruction.FloatToIntegerConversion,
 				/* I  */ IRInstruction.LogicalAnd,
 				/* U  */ IRInstruction.LogicalAnd,
 				/* Ptr*/ IRInstruction.LogicalAnd,
@@ -1504,8 +1504,8 @@ namespace Mosa.Compiler.Framework.Stages
 				/* U2 */ IRInstruction.Move,
 				/* U4 */ IRInstruction.LogicalAnd,
 				/* U8 */ IRInstruction.LogicalAnd,
-				/* R4 */ IRInstruction.FloatingPointToIntegerConversion,
-				/* R8 */ IRInstruction.FloatingPointToIntegerConversion,
+				/* R4 */ IRInstruction.FloatToIntegerConversion,
+				/* R8 */ IRInstruction.FloatToIntegerConversion,
 				/* I  */ IRInstruction.LogicalAnd,
 				/* U  */ IRInstruction.LogicalAnd,
 				/* Ptr*/ IRInstruction.LogicalAnd,
@@ -1519,8 +1519,8 @@ namespace Mosa.Compiler.Framework.Stages
 				/* U2 */ IRInstruction.ZeroExtendedMove,
 				/* U4 */ IRInstruction.Move,
 				/* U8 */ IRInstruction.LogicalAnd,
-				/* R4 */ IRInstruction.FloatingPointToIntegerConversion,
-				/* R8 */ IRInstruction.FloatingPointToIntegerConversion,
+				/* R4 */ IRInstruction.FloatToIntegerConversion,
+				/* R8 */ IRInstruction.FloatToIntegerConversion,
 				/* I  */ IRInstruction.LogicalAnd,
 				/* U  */ IRInstruction.LogicalAnd,
 				/* Ptr*/ IRInstruction.LogicalAnd,
@@ -1534,8 +1534,8 @@ namespace Mosa.Compiler.Framework.Stages
 				/* U2 */ IRInstruction.ZeroExtendedMove,
 				/* U4 */ IRInstruction.ZeroExtendedMove,
 				/* U8 */ IRInstruction.Move,
-				/* R4 */ IRInstruction.FloatingPointToIntegerConversion,
-				/* R8 */ IRInstruction.FloatingPointToIntegerConversion,
+				/* R4 */ IRInstruction.FloatToIntegerConversion,
+				/* R8 */ IRInstruction.FloatToIntegerConversion,
 				/* I  */ IRInstruction.LogicalAnd,
 				/* U  */ IRInstruction.LogicalAnd,
 				/* Ptr*/ IRInstruction.LogicalAnd,
@@ -1579,8 +1579,8 @@ namespace Mosa.Compiler.Framework.Stages
 				/* U2 */ IRInstruction.ZeroExtendedMove,
 				/* U4 */ IRInstruction.ZeroExtendedMove,
 				/* U8 */ IRInstruction.ZeroExtendedMove,
-				/* R4 */ IRInstruction.FloatingPointToIntegerConversion,
-				/* R8 */ IRInstruction.FloatingPointToIntegerConversion,
+				/* R4 */ IRInstruction.FloatToIntegerConversion,
+				/* R8 */ IRInstruction.FloatToIntegerConversion,
 				/* I  */ IRInstruction.Move,
 				/* U  */ IRInstruction.Move,
 				/* Ptr*/ IRInstruction.Move,
@@ -1594,8 +1594,8 @@ namespace Mosa.Compiler.Framework.Stages
 				/* U2 */ IRInstruction.ZeroExtendedMove,
 				/* U4 */ IRInstruction.ZeroExtendedMove,
 				/* U8 */ IRInstruction.ZeroExtendedMove,
-				/* R4 */ IRInstruction.FloatingPointToIntegerConversion,
-				/* R8 */ IRInstruction.FloatingPointToIntegerConversion,
+				/* R4 */ IRInstruction.FloatToIntegerConversion,
+				/* R8 */ IRInstruction.FloatToIntegerConversion,
 				/* I  */ IRInstruction.Move,
 				/* U  */ IRInstruction.Move,
 				/* Ptr*/ IRInstruction.Move,

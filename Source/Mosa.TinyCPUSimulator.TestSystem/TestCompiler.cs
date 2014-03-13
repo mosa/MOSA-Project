@@ -62,7 +62,7 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 			moduleLoader.LoadModuleFromFile("mscorlib.dll");
 			moduleLoader.LoadModuleFromFile("Mosa.Platform.Internal." + platform.Name + ".dll");
 			moduleLoader.LoadModuleFromFile("Mosa.Test.Collection.dll");
-			moduleLoader.LoadModuleFromFile("Mosa.Kernel.x86Test.dll");
+			moduleLoader.LoadModuleFromFile("Mosa.Kernel." + platform.Name + "Test.dll");
 
 			typeSystem = TypeSystem.Load(moduleLoader.CreateMetadata());
 
@@ -75,7 +75,7 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 
 			platform.InitializeSimulation(simAdapter);
 
-			//simAdapter.Monitor.DebugOutput = true;
+			simAdapter.SimCPU.Monitor.DebugOutput = false; // DEBUG OPTION
 		}
 
 		public T Run<T>(string ns, string type, string method, params object[] parameters)

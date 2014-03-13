@@ -27,19 +27,19 @@ namespace Mosa.Tool.TinySimulator
 		/// </summary>
 		private void InitializeComponent()
 		{
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle16 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle17 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle18 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
 			this.dataGridView1 = new System.Windows.Forms.DataGridView();
 			this.toolStrip1 = new System.Windows.Forms.ToolStrip();
 			this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
 			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripLabel2 = new System.Windows.Forms.ToolStripLabel();
 			this.toolStripTextBox1 = new System.Windows.Forms.ToolStripTextBox();
-			this.toolStripComboBox1 = new System.Windows.Forms.ToolStripComboBox();
-			this.toolStripLabel3 = new System.Windows.Forms.ToolStripLabel();
-			this.toolStripComboBox2 = new System.Windows.Forms.ToolStripComboBox();
 			this.toolStripLabel4 = new System.Windows.Forms.ToolStripLabel();
+			this.toolStripComboBox2 = new System.Windows.Forms.ToolStripComboBox();
+			this.toolStripLabel3 = new System.Windows.Forms.ToolStripLabel();
+			this.toolStripComboBox1 = new System.Windows.Forms.ToolStripComboBox();
 			((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
 			this.toolStrip1.SuspendLayout();
 			this.SuspendLayout();
@@ -52,40 +52,40 @@ namespace Mosa.Tool.TinySimulator
 			this.dataGridView1.AllowUserToResizeRows = false;
 			this.dataGridView1.BackgroundColor = System.Drawing.SystemColors.Control;
 			this.dataGridView1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-			dataGridViewCellStyle16.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle16.BackColor = System.Drawing.SystemColors.Control;
-			dataGridViewCellStyle16.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-			dataGridViewCellStyle16.ForeColor = System.Drawing.SystemColors.WindowText;
-			dataGridViewCellStyle16.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-			dataGridViewCellStyle16.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-			dataGridViewCellStyle16.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-			this.dataGridView1.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle16;
+			dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
+			dataGridViewCellStyle1.Font = new System.Drawing.Font("Consolas", 8F);
+			dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
+			dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+			dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+			this.dataGridView1.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
 			this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-			dataGridViewCellStyle17.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle17.BackColor = System.Drawing.SystemColors.Window;
-			dataGridViewCellStyle17.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-			dataGridViewCellStyle17.ForeColor = System.Drawing.SystemColors.ControlText;
-			dataGridViewCellStyle17.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-			dataGridViewCellStyle17.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-			dataGridViewCellStyle17.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-			this.dataGridView1.DefaultCellStyle = dataGridViewCellStyle17;
+			dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
+			dataGridViewCellStyle2.Font = new System.Drawing.Font("Consolas", 8F);
+			dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
+			dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+			dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+			this.dataGridView1.DefaultCellStyle = dataGridViewCellStyle2;
 			this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.dataGridView1.Location = new System.Drawing.Point(0, 28);
 			this.dataGridView1.Margin = new System.Windows.Forms.Padding(0);
 			this.dataGridView1.MultiSelect = false;
 			this.dataGridView1.Name = "dataGridView1";
 			this.dataGridView1.ReadOnly = true;
-			dataGridViewCellStyle18.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle18.BackColor = System.Drawing.SystemColors.Control;
-			dataGridViewCellStyle18.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			dataGridViewCellStyle18.ForeColor = System.Drawing.SystemColors.WindowText;
-			dataGridViewCellStyle18.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-			dataGridViewCellStyle18.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-			dataGridViewCellStyle18.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-			this.dataGridView1.RowHeadersDefaultCellStyle = dataGridViewCellStyle18;
+			dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control;
+			dataGridViewCellStyle3.Font = new System.Drawing.Font("Consolas", 8F);
+			dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
+			dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+			dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+			this.dataGridView1.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
 			this.dataGridView1.RowHeadersVisible = false;
 			this.dataGridView1.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
-			this.dataGridView1.RowTemplate.DefaultCellStyle.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.dataGridView1.RowTemplate.DefaultCellStyle.Font = new System.Drawing.Font("Consolas", 8F);
 			this.dataGridView1.RowTemplate.Height = 18;
 			this.dataGridView1.Size = new System.Drawing.Size(890, 232);
 			this.dataGridView1.TabIndex = 2;
@@ -133,23 +133,11 @@ namespace Mosa.Tool.TinySimulator
 			this.toolStripTextBox1.Size = new System.Drawing.Size(100, 23);
 			this.toolStripTextBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
 			// 
-			// toolStripComboBox1
+			// toolStripLabel4
 			// 
-			this.toolStripComboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.toolStripComboBox1.Items.AddRange(new object[] {
-            "<Any>",
-            "Text",
-            "BSS",
-            "ROData"});
-			this.toolStripComboBox1.Name = "toolStripComboBox1";
-			this.toolStripComboBox1.Size = new System.Drawing.Size(75, 28);
-			this.toolStripComboBox1.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBox1_SelectedIndexChanged);
-			// 
-			// toolStripLabel3
-			// 
-			this.toolStripLabel3.Name = "toolStripLabel3";
-			this.toolStripLabel3.Size = new System.Drawing.Size(76, 25);
-			this.toolStripLabel3.Text = "Section Kind:";
+			this.toolStripLabel4.Name = "toolStripLabel4";
+			this.toolStripLabel4.Size = new System.Drawing.Size(47, 25);
+			this.toolStripLabel4.Text = "Length:";
 			// 
 			// toolStripComboBox2
 			// 
@@ -164,11 +152,23 @@ namespace Mosa.Tool.TinySimulator
 			this.toolStripComboBox2.Size = new System.Drawing.Size(75, 28);
 			this.toolStripComboBox2.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBox2_SelectedIndexChanged);
 			// 
-			// toolStripLabel4
+			// toolStripLabel3
 			// 
-			this.toolStripLabel4.Name = "toolStripLabel4";
-			this.toolStripLabel4.Size = new System.Drawing.Size(47, 25);
-			this.toolStripLabel4.Text = "Length:";
+			this.toolStripLabel3.Name = "toolStripLabel3";
+			this.toolStripLabel3.Size = new System.Drawing.Size(76, 25);
+			this.toolStripLabel3.Text = "Section Kind:";
+			// 
+			// toolStripComboBox1
+			// 
+			this.toolStripComboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.toolStripComboBox1.Items.AddRange(new object[] {
+            "<Any>",
+            "Text",
+            "BSS",
+            "ROData"});
+			this.toolStripComboBox1.Name = "toolStripComboBox1";
+			this.toolStripComboBox1.Size = new System.Drawing.Size(75, 28);
+			this.toolStripComboBox1.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBox1_SelectedIndexChanged);
 			// 
 			// SymbolView
 			// 
@@ -177,6 +177,7 @@ namespace Mosa.Tool.TinySimulator
 			this.CloseButtonVisible = false;
 			this.Controls.Add(this.dataGridView1);
 			this.Controls.Add(this.toolStrip1);
+			this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.Name = "SymbolView";
 			this.TabText = "Symbols";
 			this.Text = "Symbols";

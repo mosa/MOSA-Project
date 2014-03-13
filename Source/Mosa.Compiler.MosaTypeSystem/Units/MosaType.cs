@@ -288,6 +288,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 				fName.Append(type.Name);
 				fName.Append(type.Signature);
 				type.FullName = fName.ToString();
+				type.ShortName = type.Name;
 			}
 		}
 	}

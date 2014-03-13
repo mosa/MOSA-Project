@@ -8,6 +8,7 @@
  */
 
 using Mosa.Compiler.MosaTypeSystem;
+using Mosa.Compiler.Framework.IR;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -491,7 +492,7 @@ namespace Mosa.Compiler.Framework
 		/// </value>
 		public bool IsBlockStartInstruction
 		{
-			get { return Instruction is IR.BlockStart; }
+			get { return Instruction == IRInstruction.BlockStart; }
 		}
 
 		/// <summary>
@@ -500,7 +501,7 @@ namespace Mosa.Compiler.Framework
 		/// <value><c>true</c> if this is the last instruction; otherwise, <c>false</c>.</value>
 		public bool IsBlockEndInstruction
 		{
-			get { return Instruction is IR.BlockEnd; }
+			get { return Instruction == IRInstruction.BlockEnd; }
 		}
 
 		/// <summary>

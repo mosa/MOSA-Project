@@ -66,7 +66,10 @@ namespace Mosa.Compiler.MosaTypeSystem
 			public override void Dispose()
 			{
 				if (field.FieldType != null)
+				{
 					field.FullName = string.Concat(field.FieldType.FullName, " ", field.DeclaringType.FullName, "::", field.Name);
+					field.ShortName = string.Concat(field.Name, " : ", field.FieldType.ShortName);
+				}
 			}
 		}
 	}

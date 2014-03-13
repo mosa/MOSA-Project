@@ -94,7 +94,8 @@ namespace Mosa.Tool.TinySimulator
 			}
 		}
 
-		public WatchView()
+		public WatchView(MainForm mainForm)
+			: base(mainForm)
 		{
 			InitializeComponent();
 			dataGridView1.DataSource = watches;
@@ -102,7 +103,7 @@ namespace Mosa.Tool.TinySimulator
 			dataGridView1.Columns[1].Width = 250;
 		}
 
-		public override void UpdateDock(SimState simState)
+		public override void UpdateDock(BaseSimState simState)
 		{
 			if (simState == null)
 				return;

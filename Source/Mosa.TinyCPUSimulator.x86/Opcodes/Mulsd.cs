@@ -17,7 +17,7 @@ namespace Mosa.TinyCPUSimulator.x86.Opcodes
 			double b = LoadFloatValue(cpu, instruction.Operand2);
 			int size = instruction.Operand1.Size;
 
-			double r = a / b;
+			double r = a * b;
 
 			StoreFloatValue(cpu, instruction.Operand1, r, size);
 		}

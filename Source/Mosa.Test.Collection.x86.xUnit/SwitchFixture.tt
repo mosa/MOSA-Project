@@ -1,0 +1,34 @@
+﻿// Remove conditional statement after Mono 2.11 is released
+#if !__MonoCS__
+
+<#@ include file="../TemplateLibrary.txt" #>
+using Xunit;
+using Xunit.Extensions;
+
+namespace Mosa.Test.Collection.x86.xUnit
+{
+
+	public class SwitchFixture : X86TestFixture
+	{
+	<# foreach (KeyValuePair<string, string> number in NegativeIntegers) { #>
+	
+		[Theory]
+		[PropertyData("<#= number.Value #>")]
+		public void Switch<#= number.Value #>(<#= number.Key #> a)
+		{
+			Assert.Equal(Mosa.Test.Collection.SwitchTests.Switch<#= number.Value #>(a), Run<<#= number.Key #>>("Mosa.Test.Collection.SwitchTests.Switch<#= number.Value #>", a));
+		}
+	<# } #>
+	<# foreach (KeyValuePair<string, string> number in PositiveIntegers) { #>
+	
+		[Theory]
+		[PropertyData("<#= number.Value #>")]
+		public void Switch<#= number.Value #>(<#= number.Key #> a)
+		{
+			Assert.Equal(Mosa.Test.Collection.SwitchTests.Switch<#= number.Value #>(a), Run<<#= number.Key #>>("Mosa.Test.Collection.SwitchTests.Switch<#= number.Value #>", a));
+		}
+	<# } #>
+	}
+}
+
+#endif

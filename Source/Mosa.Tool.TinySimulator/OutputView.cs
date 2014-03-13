@@ -15,12 +15,13 @@ namespace Mosa.Tool.TinySimulator
 {
 	public partial class OutputView : SimulatorDockContent
 	{
-		public OutputView()
+		public OutputView(MainForm mainForm)
+			: base(mainForm)
 		{
 			InitializeComponent();
 		}
 
-		public override void UpdateDock(SimState simState)
+		public override void UpdateDock(BaseSimState simState)
 		{
 		}
 

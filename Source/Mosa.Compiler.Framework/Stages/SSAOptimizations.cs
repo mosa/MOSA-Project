@@ -21,6 +21,18 @@ namespace Mosa.Compiler.Framework.Stages
 	public sealed class SSAOptimizations : BaseMethodCompilerStage, IMethodCompilerStage, IPipelineStage
 	{
 		private int instructionsRemoved = 0;
+		private int simplifyExtendedMove = 0;
+		private int simplifySubtraction = 0;
+		private int strengthReductionMultiplication = 0;
+		private int strengthReductionDivision = 0;
+		private int strengthReductionIntegerAdditionAndSubstraction = 0;
+		private int strengthReductionLogicalOperators = 0;
+		private int constantFoldingIntegerOperations = 0;
+		private int simpleConstantPropagation = 0;
+		private int simpleCopyPropagation = 0;
+		private int constantFoldingIntegerCompare = 0;
+		private int foldIntegerCompareBranch = 0;
+		private int deadCodeElimination = 0;
 
 		private Stack<int> worklist = new Stack<int>();
 
@@ -60,6 +72,20 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 
 			UpdateCounter("SSAOptimizations.IRInstructionRemoved", instructionsRemoved);
+
+			UpdateCounter("SSAOptimizations.SimplifyExtendedMove", simplifyExtendedMove);
+			UpdateCounter("SSAOptimizations.SimplifySubtraction", simplifySubtraction);
+			UpdateCounter("SSAOptimizations.StrengthReductionMultiplication", strengthReductionMultiplication);
+			UpdateCounter("SSAOptimizations.StrengthReductionDivision", strengthReductionDivision);
+			UpdateCounter("SSAOptimizations.StrengthReductionIntegerAdditionAndSubstraction", strengthReductionIntegerAdditionAndSubstraction);
+			UpdateCounter("SSAOptimizations.StrengthReductionLogicalOperators", strengthReductionLogicalOperators);
+			UpdateCounter("SSAOptimizations.ConstantFoldingIntegerOperations", constantFoldingIntegerOperations);
+			UpdateCounter("SSAOptimizations.SimpleConstantPropagation", simpleConstantPropagation);
+			UpdateCounter("SSAOptimizations.SimpleCopyPropagation", simpleCopyPropagation);
+			UpdateCounter("SSAOptimizations.ConstantFoldingIntegerCompare", constantFoldingIntegerCompare);
+			UpdateCounter("SSAOptimizations.FoldIntegerCompareBranch", foldIntegerCompareBranch);
+			UpdateCounter("SSAOptimizations.DeadCodeElimination", deadCodeElimination);
+
 			worklist = null;
 		}
 
@@ -149,19 +175,19 @@ namespace Mosa.Compiler.Framework.Stages
 			if (!context.Result.IsVirtualRegister)
 				return;
 
-			if (context.Instruction is IR.Move && context.Operand1.IsVirtualRegister && context.Operand1 == context.Result)
+			if (context.Instruction == IRInstruction.Move && context.Operand1.IsVirtualRegister && context.Operand1 == context.Result)
 			{
 				if (trace.Active) trace.Log("*** DeadCodeElimination");
 				if (trace.Active) trace.Log("REMOVED:\t" + context.ToString());
 				AddOperandUsageToWorkList(context);
 				context.SetInstruction(IRInstruction.Nop);
 				instructionsRemoved++;
-
+				deadCodeElimination++;
 				//context.Remove();
 				return;
 			}
 
-			if (context.Result.Uses.Count != 0 || context.Instruction is IR.Call || context.Instruction is IR.IntrinsicMethodCall)
+			if (context.Result.Uses.Count != 0 || context.Instruction == IRInstruction.Call || context.Instruction == IRInstruction.IntrinsicMethodCall)
 				return;
 
 			if (trace.Active) trace.Log("*** DeadCodeElimination");
@@ -169,7 +195,7 @@ namespace Mosa.Compiler.Framework.Stages
 			AddOperandUsageToWorkList(context);
 			context.SetInstruction(IRInstruction.Nop);
 			instructionsRemoved++;
-
+			deadCodeElimination++;
 			//context.Remove();
 			return;
 		}
@@ -183,7 +209,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (context.IsEmpty)
 				return;
 
-			if (!(context.Instruction is IR.Move))
+			if (!(context.Instruction == IRInstruction.Move))
 				return;
 
 			if (!context.Result.IsVirtualRegister)
@@ -202,7 +228,7 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				Context ctx = new Context(instructionSet, index);
 
-				if (ctx.Instruction is IR.AddressOf)
+				if (ctx.Instruction == IRInstruction.AddressOf)
 					continue;
 
 				bool propogated = false;
@@ -219,6 +245,7 @@ namespace Mosa.Compiler.Framework.Stages
 						if (trace.Active) trace.Log("BEFORE:\t" + ctx.ToString());
 						AddOperandUsageToWorkList(operand);
 						ctx.SetOperand(i, sourceOperand);
+						simpleConstantPropagation++;
 						if (trace.Active) trace.Log("AFTER: \t" + ctx.ToString());
 					}
 				}
@@ -230,20 +257,44 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private bool CanCopyPropagation(Operand result, Operand destination)
 		{
-			if (!result.IsValueType && !destination.IsValueType)
+			if (result.IsPointer && destination.IsPointer)
 				return true;
 
-			if (result.IsInteger && destination.IsInteger &&
-				result.IsSigned != result.IsUnsigned)
-				return false;
-
-			if (!result.IsPointer && !destination.IsPointer)
+			if (result.IsReferenceType && destination.IsReferenceType)
 				return true;
 
-			if (result.Type != destination.Type)
-				return false;
+			if (result.Type.IsArray & destination.Type.IsArray & result.Type.ElementType == destination.Type.ElementType)
+				return true;
 
-			return result.Type.ElementType == destination.Type.ElementType;
+			if (result.Type.IsI1 & destination.Type.IsI1)
+				return true;
+
+			if (result.Type.IsU1 & destination.Type.IsU1)
+				return true;
+
+			if (result.Type.IsI2 & destination.Type.IsI2)
+				return true;
+
+			if (result.Type.IsU2 & destination.Type.IsU2)
+				return true;
+
+			if (result.Type.IsI8 & destination.Type.IsI8)
+				return true;
+
+			if (result.Type.IsU8 & destination.Type.IsU8)
+				return true;
+
+			if (result.Type.IsU4 & destination.Type.IsU4)
+				return true;
+
+			// Why this breaking things
+			//if (result.Type.IsI4 & destination.Type.IsI4)
+			//	return true;
+
+			//if (result.Type == destination.Type)
+			//	return true;
+
+			return false;
 		}
 
 		/// <summary>
@@ -255,7 +306,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (context.IsEmpty)
 				return;
 
-			if (!(context.Instruction is IR.Move))
+			if (!(context.Instruction == IRInstruction.Move))
 				return;
 
 			if (context.Operand1.IsConstant)
@@ -284,7 +335,7 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				Context ctx = new Context(instructionSet, index);
 
-				if (ctx.Instruction is IR.AddressOf)
+				if (ctx.Instruction == IRInstruction.AddressOf)
 					return;
 			}
 
@@ -303,6 +354,7 @@ namespace Mosa.Compiler.Framework.Stages
 						if (trace.Active) trace.Log("*** SimpleCopyPropagation");
 						if (trace.Active) trace.Log("BEFORE:\t" + ctx.ToString());
 						ctx.SetOperand(i, sourceOperand);
+						simpleCopyPropagation++;
 						if (trace.Active) trace.Log("AFTER: \t" + ctx.ToString());
 					}
 				}
@@ -327,12 +379,12 @@ namespace Mosa.Compiler.Framework.Stages
 			if (context.IsEmpty)
 				return;
 
-			if (!(context.Instruction is IR.AddSigned || context.Instruction is IR.AddUnsigned ||
-				  context.Instruction is IR.SubSigned || context.Instruction is IR.SubUnsigned ||
-				  context.Instruction is IR.LogicalAnd || context.Instruction is IR.LogicalOr ||
-				  context.Instruction is IR.LogicalXor ||
-				  context.Instruction is IR.MulSigned || context.Instruction is IR.MulUnsigned ||
-				  context.Instruction is IR.DivSigned || context.Instruction is IR.DivUnsigned
+			if (!(context.Instruction == IRInstruction.AddSigned || context.Instruction == IRInstruction.AddUnsigned ||
+				  context.Instruction == IRInstruction.SubSigned || context.Instruction == IRInstruction.SubUnsigned ||
+				  context.Instruction == IRInstruction.LogicalAnd || context.Instruction == IRInstruction.LogicalOr ||
+				  context.Instruction == IRInstruction.LogicalXor ||
+				  context.Instruction == IRInstruction.MulSigned || context.Instruction == IRInstruction.MulUnsigned ||
+				  context.Instruction == IRInstruction.DivSigned || context.Instruction == IRInstruction.DivUnsigned
 				 ))
 				return;
 
@@ -347,48 +399,49 @@ namespace Mosa.Compiler.Framework.Stages
 				return;
 
 			// Divide by zero!
-			if ((context.Instruction is IR.DivSigned || context.Instruction is IR.DivUnsigned) && op2.IsConstant && op2.IsConstantZero)
+			if ((context.Instruction == IRInstruction.DivSigned || context.Instruction == IRInstruction.DivUnsigned) && op2.IsConstant && op2.IsConstantZero)
 				return;
 
 			Operand constant = null;
 
-			if (context.Instruction is IR.AddSigned || context.Instruction is IR.AddUnsigned)
+			if (context.Instruction == IRInstruction.AddSigned || context.Instruction == IRInstruction.AddUnsigned)
 			{
 				constant = Operand.CreateConstant(result.Type, op1.ConstantUnsignedInteger + op2.ConstantUnsignedInteger);
 			}
-			else if (context.Instruction is IR.SubSigned || context.Instruction is IR.SubUnsigned)
+			else if (context.Instruction == IRInstruction.SubSigned || context.Instruction == IRInstruction.SubUnsigned)
 			{
 				constant = Operand.CreateConstant(result.Type, op1.ConstantUnsignedInteger - op2.ConstantUnsignedInteger);
 			}
-			else if (context.Instruction is IR.LogicalAnd)
+			else if (context.Instruction == IRInstruction.LogicalAnd)
 			{
 				constant = Operand.CreateConstant(result.Type, op1.ConstantUnsignedInteger & op2.ConstantUnsignedInteger);
 			}
-			else if (context.Instruction is IR.LogicalOr)
+			else if (context.Instruction == IRInstruction.LogicalOr)
 			{
 				constant = Operand.CreateConstant(result.Type, op1.ConstantUnsignedInteger | op2.ConstantUnsignedInteger);
 			}
-			else if (context.Instruction is IR.LogicalXor)
+			else if (context.Instruction == IRInstruction.LogicalXor)
 			{
 				constant = Operand.CreateConstant(result.Type, op1.ConstantUnsignedInteger ^ op2.ConstantUnsignedInteger);
 			}
-			else if (context.Instruction is IR.MulSigned || context.Instruction is IR.MulUnsigned)
+			else if (context.Instruction == IRInstruction.MulSigned || context.Instruction == IRInstruction.MulUnsigned)
 			{
 				constant = Operand.CreateConstant(result.Type, op1.ConstantUnsignedInteger * op2.ConstantUnsignedInteger);
 			}
-			else if (context.Instruction is IR.DivSigned || context.Instruction is IR.DivUnsigned)
+			else if (context.Instruction == IRInstruction.DivSigned || context.Instruction == IRInstruction.DivUnsigned)
 			{
 				constant = Operand.CreateConstant(result.Type, op1.ConstantUnsignedInteger / op2.ConstantUnsignedInteger);
 			}
 
-			if (constant != null)
-			{
-				AddOperandUsageToWorkList(context);
-				if (trace.Active) trace.Log("*** ConstantFoldingIntegerOperations");
-				if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
-				context.SetInstruction(IRInstruction.Move, context.Result, constant);
-				if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
-			}
+			if (constant == null)
+				return;
+
+			AddOperandUsageToWorkList(context);
+			if (trace.Active) trace.Log("*** ConstantFoldingIntegerOperations");
+			if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
+			context.SetInstruction(IRInstruction.Move, context.Result, constant);
+			constantFoldingIntegerOperations++;
+			if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
 		}
 
 		/// <summary>
@@ -400,7 +453,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (context.IsEmpty)
 				return;
 
-			if (!(context.Instruction is IR.IntegerCompare))
+			if (!(context.Instruction == IRInstruction.IntegerCompare))
 				return;
 
 			if (!context.Result.IsVirtualRegister)
@@ -435,6 +488,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (trace.Active) trace.Log("*** ConstantFoldingIntegerCompare");
 			if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
 			context.SetInstruction(IRInstruction.Move, result, Operand.CreateConstant(result.Type, (int)(compareResult ? 1 : 0)));
+			constantFoldingIntegerCompare++;
 			if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
 		}
 
@@ -447,7 +501,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (context.IsEmpty)
 				return;
 
-			if (!(context.Instruction is IR.AddSigned || context.Instruction is IR.AddUnsigned || context.Instruction is IR.SubSigned || context.Instruction is IR.SubUnsigned))
+			if (!(context.Instruction == IRInstruction.AddSigned || context.Instruction == IRInstruction.AddUnsigned || context.Instruction == IRInstruction.SubSigned || context.Instruction == IRInstruction.SubUnsigned))
 				return;
 
 			if (!context.Result.IsVirtualRegister)
@@ -464,6 +518,7 @@ namespace Mosa.Compiler.Framework.Stages
 				if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
 				context.SetInstruction(IRInstruction.Move, result, op2);
 				if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
+				strengthReductionIntegerAdditionAndSubstraction++;
 				return;
 			}
 
@@ -474,6 +529,7 @@ namespace Mosa.Compiler.Framework.Stages
 				if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
 				context.SetInstruction(IRInstruction.Move, result, op1);
 				if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
+				strengthReductionIntegerAdditionAndSubstraction++;
 				return;
 			}
 		}
@@ -487,7 +543,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (context.IsEmpty)
 				return;
 
-			if (!(context.Instruction is IR.MulSigned || context.Instruction is IR.MulUnsigned || context.Instruction is IR.MulFloat))
+			if (!(context.Instruction == IRInstruction.MulSigned || context.Instruction == IRInstruction.MulUnsigned || context.Instruction == IRInstruction.MulFloat))
 				return;
 
 			if (!context.Result.IsVirtualRegister)
@@ -503,6 +559,7 @@ namespace Mosa.Compiler.Framework.Stages
 				if (trace.Active) trace.Log("*** StrengthReductionMultiplication");
 				if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
 				context.SetInstruction(IRInstruction.Move, result, Operand.CreateConstant(context.Result.Type, 0));
+				strengthReductionMultiplication++;
 				if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
 				return;
 			}
@@ -513,6 +570,7 @@ namespace Mosa.Compiler.Framework.Stages
 				if (trace.Active) trace.Log("*** StrengthReductionMultiplication");
 				if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
 				context.SetInstruction(IRInstruction.Move, result, Operand.CreateConstant(context.Result.Type, 0));
+				strengthReductionMultiplication++;
 				if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
 				return;
 			}
@@ -523,6 +581,7 @@ namespace Mosa.Compiler.Framework.Stages
 				if (trace.Active) trace.Log("*** StrengthReductionMultiplication");
 				if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
 				context.SetInstruction(IRInstruction.Move, result, op2);
+				strengthReductionMultiplication++;
 				if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
 				return;
 			}
@@ -533,6 +592,7 @@ namespace Mosa.Compiler.Framework.Stages
 				if (trace.Active) trace.Log("*** StrengthReductionMultiplication");
 				if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
 				context.SetInstruction(IRInstruction.Move, result, op1);
+				strengthReductionMultiplication++;
 				if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
 				return;
 			}
@@ -547,7 +607,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (context.IsEmpty)
 				return;
 
-			if (!(context.Instruction is IR.DivSigned || context.Instruction is IR.DivUnsigned))
+			if (!(context.Instruction == IRInstruction.DivSigned || context.Instruction == IRInstruction.DivUnsigned))
 				return;
 
 			if (!context.Result.IsVirtualRegister)
@@ -563,6 +623,7 @@ namespace Mosa.Compiler.Framework.Stages
 				if (trace.Active) trace.Log("*** StrengthReductionDivision");
 				if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
 				context.SetInstruction(IRInstruction.Move, result, Operand.CreateConstant(context.Result.Type, 0));
+				strengthReductionDivision++;
 				if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
 				return;
 			}
@@ -579,6 +640,7 @@ namespace Mosa.Compiler.Framework.Stages
 				if (trace.Active) trace.Log("*** StrengthReductionDivision");
 				if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
 				context.SetInstruction(IRInstruction.Move, result, op1);
+				strengthReductionDivision++;
 				if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
 				return;
 			}
@@ -593,7 +655,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (context.IsEmpty)
 				return;
 
-			if (!(context.Instruction is IR.ZeroExtendedMove || context.Instruction is IR.SignExtendedMove))
+			if (!(context.Instruction == IRInstruction.ZeroExtendedMove || context.Instruction == IRInstruction.SignExtendedMove))
 				return;
 
 			if (!context.Result.IsVirtualRegister)
@@ -607,7 +669,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			Operand newOperand;
 
-			if (context.Instruction is IR.ZeroExtendedMove && result.IsUnsigned && op1.IsSigned)
+			if (context.Instruction == IRInstruction.ZeroExtendedMove && result.IsUnsigned && op1.IsSigned)
 			{
 				var newConstant = Unsign(op1.Type, op1.ConstantSignedInteger);
 				newOperand = Operand.CreateConstant(context.Result.Type, newConstant);
@@ -621,6 +683,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (trace.Active) trace.Log("*** SimplifyExtendedMove");
 			if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
 			context.SetInstruction(IRInstruction.Move, result, newOperand);
+			simplifyExtendedMove++;
 			if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
 		}
 
@@ -642,7 +705,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (context.IsEmpty)
 				return;
 
-			if (!(context.Instruction is IR.SubSigned || context.Instruction is IR.SubUnsigned))
+			if (!(context.Instruction == IRInstruction.SubSigned || context.Instruction == IRInstruction.SubUnsigned))
 				return;
 
 			if (!context.Result.IsVirtualRegister)
@@ -659,6 +722,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (trace.Active) trace.Log("*** SimplifySubtraction");
 			if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
 			context.SetInstruction(IRInstruction.Move, result, Operand.CreateConstant(context.Result.Type, 0));
+			simplifySubtraction++;
 		}
 
 		/// <summary>
@@ -670,7 +734,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (context.IsEmpty)
 				return;
 
-			if (!(context.Instruction is IR.LogicalAnd || context.Instruction is IR.LogicalOr))
+			if (!(context.Instruction == IRInstruction.LogicalAnd || context.Instruction == IRInstruction.LogicalOr))
 				return;
 
 			if (!context.Result.IsVirtualRegister)
@@ -680,39 +744,43 @@ namespace Mosa.Compiler.Framework.Stages
 			Operand op1 = context.Operand1;
 			Operand op2 = context.Operand2;
 
-			if (context.Instruction is IR.LogicalOr && op1.IsConstant && !op2.IsConstant && op1.IsConstantZero)
+			if (context.Instruction == IRInstruction.LogicalOr && op1.IsConstant && !op2.IsConstant && op1.IsConstantZero)
 			{
 				AddOperandUsageToWorkList(context);
 				if (trace.Active) trace.Log("*** StrengthReductionLogicalOperators");
 				if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
 				context.SetInstruction(IRInstruction.Move, result, Operand.CreateConstant(context.Result.Type, op2.ConstantSignedInteger));
+				strengthReductionLogicalOperators++;
 				if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
 			}
 
-			if (context.Instruction is IR.LogicalOr && op2.IsConstant && !op1.IsConstant && op2.IsConstantZero)
+			if (context.Instruction == IRInstruction.LogicalOr && op2.IsConstant && !op1.IsConstant && op2.IsConstantZero)
 			{
 				AddOperandUsageToWorkList(context);
 				if (trace.Active) trace.Log("*** StrengthReductionLogicalOperators");
 				if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
 				context.SetInstruction(IRInstruction.Move, result, Operand.CreateConstant(context.Result.Type, op1.ConstantSignedInteger));
+				strengthReductionLogicalOperators++;
 				if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
 			}
 
-			if (context.Instruction is IR.LogicalAnd && op1.IsConstant && !op1.IsConstant && op1.IsConstantZero)
+			if (context.Instruction == IRInstruction.LogicalAnd && op1.IsConstant && !op1.IsConstant && op1.IsConstantZero)
 			{
 				AddOperandUsageToWorkList(context);
 				if (trace.Active) trace.Log("*** StrengthReductionLogicalOperators");
 				if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
 				context.SetInstruction(IRInstruction.Move, result, Operand.CreateConstant(context.Result.Type, 0));
+				strengthReductionLogicalOperators++;
 				if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
 			}
 
-			if (context.Instruction is IR.LogicalAnd && op2.IsConstant && !op1.IsConstant && op2.IsConstantZero)
+			if (context.Instruction == IRInstruction.LogicalAnd && op2.IsConstant && !op1.IsConstant && op2.IsConstantZero)
 			{
 				AddOperandUsageToWorkList(context);
 				if (trace.Active) trace.Log("*** StrengthReductionLogicalOperators");
 				if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
 				context.SetInstruction(IRInstruction.Move, result, Operand.CreateConstant(context.Result.Type, 0));
+				strengthReductionLogicalOperators++;
 				if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
 			}
 
@@ -731,7 +799,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (context.OperandCount != 2)
 				return;
 
-			if (!(context.Instruction is IR.IntegerCompareBranch))
+			if (!(context.Instruction == IRInstruction.IntegerCompareBranch))
 				return;
 
 			//if (!context.Result.IsVirtualRegister)
@@ -744,7 +812,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (!op1.IsConstant || !op2.IsConstant)
 				return;
 
-			if (!(context.Next.Instruction is IR.Jmp))
+			if (!(context.Next.Instruction == IRInstruction.Jmp))
 				return;
 
 			if (context.BranchTargets[0] == context.Next.BranchTargets[0])
@@ -754,6 +822,7 @@ namespace Mosa.Compiler.Framework.Stages
 				AddOperandUsageToWorkList(context);
 				context.SetInstruction(IRInstruction.Nop);
 				instructionsRemoved++;
+				foldIntegerCompareBranch++;
 				return;
 			}
 
@@ -772,7 +841,7 @@ namespace Mosa.Compiler.Framework.Stages
 				default: return;
 			}
 
-			Debug.Assert(context.Next.Instruction is IR.Jmp);
+			Debug.Assert(context.Next.Instruction == IRInstruction.Jmp);
 
 			BasicBlock target;
 
@@ -800,6 +869,7 @@ namespace Mosa.Compiler.Framework.Stages
 			AddOperandUsageToWorkList(context);
 			context.SetInstruction(IRInstruction.Nop);
 			instructionsRemoved++;
+			foldIntegerCompareBranch++;
 
 			// Goto the beginning of the block, to get to the first index of the block
 			Context first = context.Clone();

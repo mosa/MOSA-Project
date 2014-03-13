@@ -1,4 +1,4 @@
-﻿using Mosa.Test.CodeDomCompiler;
+﻿using Mosa.Utility.CodeDomCompiler;
 using System;
 using System.CodeDom.Compiler;
 using System.Windows.Forms;
@@ -24,7 +24,7 @@ namespace Mosa.Tool.Explorer
 			settings.CodeSource = SourceCode;
 			settings.AddReference("mscorlib.dll");
 
-			CompilerResults results = Mosa.Test.CodeDomCompiler.Compiler.ExecuteCompiler(settings);
+			CompilerResults results = Mosa.Utility.CodeDomCompiler.Compiler.ExecuteCompiler(settings);
 
 			if (results.Errors.HasErrors)
 			{

@@ -92,8 +92,8 @@ namespace Mosa.TinyCPUSimulator.x86
 		public static BaseX86Opcode Cpuid = new Cpuid();
 		public static BaseX86Opcode Addsd = new Addsd();
 		public static BaseX86Opcode Addss = new Addss();
-		public static BaseX86Opcode Subsd = new Addsd();
-		public static BaseX86Opcode Subss = new Addss();
+		public static BaseX86Opcode Subsd = new Subsd();
+		public static BaseX86Opcode Subss = new Subss();
 		public static BaseX86Opcode Movsd = new Movsd();
 		public static BaseX86Opcode Movss = new Movss();
 		public static BaseX86Opcode Cvtsd2ss = new Cvtsd2ss();

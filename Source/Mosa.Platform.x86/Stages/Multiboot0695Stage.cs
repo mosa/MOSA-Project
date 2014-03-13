@@ -170,6 +170,8 @@ namespace Mosa.Platform.x86.Stages
 			compiler.CompileMethod(multibootMethod, basicBlocks, instructionSet);
 
 			linker.EntryPoint = linker.GetSymbol(multibootMethod.FullName);
+
+			multibootMethod = null; // HACK for now
 		}
 
 		#endregion ICompilerStage Members

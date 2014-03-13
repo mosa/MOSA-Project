@@ -158,6 +158,7 @@ namespace Mosa.TinyCPUSimulator.x86.Emulate
 			lastCommand = 0;
 
 			font = new Font("Lucida Console", 9, FontStyle.Regular);
+			//font = new Font("Consolas", 8, FontStyle.Regular);
 			fontWidth = (int)font.SizeInPoints;
 			fontHeight = (int)font.SizeInPoints + 5;
 

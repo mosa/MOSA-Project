@@ -20,6 +20,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public string Name { get; private set; }
 		public string FullName { get; internal set; }
+		public string ShortName { get; internal set; }
 
 		public bool IsLinkerGenerated { get; private set; }
 

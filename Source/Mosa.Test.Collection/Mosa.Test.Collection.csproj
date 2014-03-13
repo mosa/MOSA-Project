@@ -87,6 +87,10 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>ComparisonTests.cs</LastGenOutput>
     </None>
+    <None Include="EnumTests.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>EnumTests.cs</LastGenOutput>
+    </None>
     <None Include="ForeachTests.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>ForeachTests.cs</LastGenOutput>
@@ -107,6 +111,11 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>StructTests.cs</LastGenOutput>
     </None>
+    <Compile Include="EnumTests.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EnumTests.tt</DependentUpon>
+    </Compile>
     <Compile Include="GenericMixedTest.cs" />
     <Compile Include="LdargaTests.cs">
       <AutoGen>True</AutoGen>
@@ -114,6 +123,7 @@
       <DependentUpon>LdargaTests.tt</DependentUpon>
     </Compile>
     <Compile Include="NewObjectTests.cs" />
+    <Compile Include="SSAOptimizationTest.cs" />
     <Compile Include="RegisterAllocatorTests.cs" />
     <Compile Include="SpecificTests.cs" />
     <Compile Include="ForeachTests.cs">
@@ -174,7 +184,6 @@
     <Compile Include="UInt64Tests.cs" />
     <Compile Include="UInt8Tests.cs" />
     <Compile Include="InterfaceTests.cs" />
-    <Compile Include="EnumTests.cs" />
     <Compile Include="DerivedNewObjectTests.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -198,9 +207,6 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>LdlocaTests.cs</LastGenOutput>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="TemplateLibrary.txt" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

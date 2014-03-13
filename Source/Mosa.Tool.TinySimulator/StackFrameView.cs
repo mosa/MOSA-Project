@@ -14,16 +14,17 @@ namespace Mosa.Tool.TinySimulator
 {
 	public partial class StackFrameView : SimulatorDockContent
 	{
-		public StackFrameView()
+		public StackFrameView(MainForm mainForm)
+			: base(mainForm)
 		{
 			InitializeComponent();
 		}
 
-		public override void UpdateDock(SimState simState)
+		public override void UpdateDock(BaseSimState simState)
 		{
 			listBox1.Items.Clear();
 
-			bool display32 = (uint)simState.Values["Register.Size"] == 32;
+			bool display32 = simState.NativeRegisterSize == 32;
 			List<ulong[]> stack = simState.Values["StackFrame"] as List<ulong[]>;
 
 			foreach (var entry in stack)
