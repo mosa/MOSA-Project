@@ -38,9 +38,9 @@ namespace Mosa.Compiler.Framework.CIL
 
 			var type = (MosaType)decoder.Instruction.Operand;
 
-			Operand result = decoder.Compiler.CreateVirtualRegister(type);
-
-			ctx.Result = result;
+			//Operand result = decoder.Compiler.CreateVirtualRegister(type);
+			//ctx.Result = result;
+			ctx.Result = LoadInstruction.CreateResultOperand(decoder, type);
 			ctx.MosaType = type;
 		}
 
