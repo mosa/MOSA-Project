@@ -7,7 +7,7 @@
  *  Andrey Turkin <andrey.turkin@gmail.com>
  *
  */
-<#@ include file="TemplateLibrary.txt" #>
+<#@ include file="../TemplateLibrary.txt" #>
 using Xunit;
 
 namespace Mosa.TinyCPUSimulator.TestSystem.xUnit

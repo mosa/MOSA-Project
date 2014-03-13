@@ -7,7 +7,7 @@
  *  Kai Patrick Reisert (Boddlnagg) <kpreisert@googlemail.com> 
  *
  */
-<#@ include file="TemplateLibrary.txt" #>
+<#@ include file="../TemplateLibrary.txt" #>
 
 namespace Mosa.Test.Collection
 {

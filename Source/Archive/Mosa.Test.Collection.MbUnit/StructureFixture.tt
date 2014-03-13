@@ -1,4 +1,4 @@
-﻿<#@ include file="TemplateLibrary.txt" #>
+﻿<#@ include file="../TemplateLibrary.txt" #>
 
 using MbUnit.Framework;
 
