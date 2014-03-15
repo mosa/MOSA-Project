@@ -656,6 +656,15 @@ namespace Mosa.Test.Numbers
 			}
 		}
 
+		public static IEnumerable<object[]> R4NotNaN
+		{
+			get
+			{
+				foreach (var i1 in Series.R4NotNaN)
+					yield return new object[] { i1 };
+			}
+		}
+
 		public static IEnumerable<object[]> R4R4
 		{
 			get
@@ -682,6 +691,15 @@ namespace Mosa.Test.Numbers
 			get
 			{
 				foreach (var i1 in Mosa.Test.Numbers.R8.Series)
+					yield return new object[] { i1 };
+			}
+		}
+
+		public static IEnumerable<object[]> R8NotNaN
+		{
+			get
+			{
+				foreach (var i1 in Series.R8NotNaN)
 					yield return new object[] { i1 };
 			}
 		}
