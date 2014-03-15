@@ -1,12 +1,10 @@
-﻿
-using Xunit;
+﻿using Xunit;
 using Xunit.Extensions;
 
 namespace Mosa.Test.Collection.x86.xUnit
 {
 	public class StructureFixture : X86TestFixture
 	{
-
 		[Theory]
 		[PropertyData("U1")]
 		public void StructTestSet1U1(byte one)
@@ -20,8 +18,7 @@ namespace Mosa.Test.Collection.x86.xUnit
 		{
 			Assert.Equal(Mosa.Test.Collection.StructTests.StructTestSet3U1(one, two, three), Run<bool>("Mosa.Test.Collection.StructTests.StructTestSet3U1", one, two, three));
 		}
-
-		[Theory]
+			[Theory]
 		[PropertyData("U2")]
 		public void StructTestSet1U2(ushort one)
 		{
@@ -34,8 +31,7 @@ namespace Mosa.Test.Collection.x86.xUnit
 		{
 			Assert.Equal(Mosa.Test.Collection.StructTests.StructTestSet3U2(one, two, three), Run<bool>("Mosa.Test.Collection.StructTests.StructTestSet3U2", one, two, three));
 		}
-
-		[Theory]
+			[Theory]
 		[PropertyData("U4")]
 		public void StructTestSet1U4(uint one)
 		{
@@ -48,8 +44,7 @@ namespace Mosa.Test.Collection.x86.xUnit
 		{
 			Assert.Equal(Mosa.Test.Collection.StructTests.StructTestSet3U4(one, two, three), Run<bool>("Mosa.Test.Collection.StructTests.StructTestSet3U4", one, two, three));
 		}
-
-		[Theory]
+			[Theory]
 		[PropertyData("U8")]
 		public void StructTestSet1U8(ulong one)
 		{
@@ -62,24 +57,33 @@ namespace Mosa.Test.Collection.x86.xUnit
 		{
 			Assert.Equal(Mosa.Test.Collection.StructTests.StructTestSet3U8(one, two, three), Run<bool>("Mosa.Test.Collection.StructTests.StructTestSet3U8", one, two, three));
 		}
-
-		[Theory]
+			[Theory]
 		[PropertyData("I1")]
 		public void StructTestSet1I1(sbyte one)
 		{
 			Assert.Equal(Mosa.Test.Collection.StructTests.StructTestSet1I1(one), Run<bool>("Mosa.Test.Collection.StructTests.StructTestSet1I1", one));
 		}
 		
-
 		[Theory]
+		[PropertyData("I1I1I1")]
+		public void StructTestSet3I1(sbyte one, sbyte two, sbyte three)
+		{
+			Assert.Equal(Mosa.Test.Collection.StructTests.StructTestSet3I1(one, two, three), Run<bool>("Mosa.Test.Collection.StructTests.StructTestSet3I1", one, two, three));
+		}
+			[Theory]
 		[PropertyData("I2")]
 		public void StructTestSet1I2(short one)
 		{
 			Assert.Equal(Mosa.Test.Collection.StructTests.StructTestSet1I2(one), Run<bool>("Mosa.Test.Collection.StructTests.StructTestSet1I2", one));
 		}
 		
-
 		[Theory]
+		[PropertyData("I2I2I2")]
+		public void StructTestSet3I2(short one, short two, short three)
+		{
+			Assert.Equal(Mosa.Test.Collection.StructTests.StructTestSet3I2(one, two, three), Run<bool>("Mosa.Test.Collection.StructTests.StructTestSet3I2", one, two, three));
+		}
+			[Theory]
 		[PropertyData("I4")]
 		public void StructTestSet1I4(int one)
 		{
@@ -92,8 +96,7 @@ namespace Mosa.Test.Collection.x86.xUnit
 		{
 			Assert.Equal(Mosa.Test.Collection.StructTests.StructTestSet3I4(one, two, three), Run<bool>("Mosa.Test.Collection.StructTests.StructTestSet3I4", one, two, three));
 		}
-
-		[Theory]
+			[Theory]
 		[PropertyData("I8")]
 		public void StructTestSet1I8(long one)
 		{
@@ -106,8 +109,7 @@ namespace Mosa.Test.Collection.x86.xUnit
 		{
 			Assert.Equal(Mosa.Test.Collection.StructTests.StructTestSet3I8(one, two, three), Run<bool>("Mosa.Test.Collection.StructTests.StructTestSet3I8", one, two, three));
 		}
-
-		[Theory]
+			[Theory]
 		[PropertyData("R4")]
 		public void StructTestSet1R4(float one)
 		{
@@ -120,8 +122,7 @@ namespace Mosa.Test.Collection.x86.xUnit
 		{
 			Assert.Equal(Mosa.Test.Collection.StructTests.StructTestSet3R4(one, two, three), Run<bool>("Mosa.Test.Collection.StructTests.StructTestSet3R4", one, two, three));
 		}
-
-		[Theory]
+			[Theory]
 		[PropertyData("R8")]
 		public void StructTestSet1R8(double one)
 		{
@@ -134,8 +135,7 @@ namespace Mosa.Test.Collection.x86.xUnit
 		{
 			Assert.Equal(Mosa.Test.Collection.StructTests.StructTestSet3R8(one, two, three), Run<bool>("Mosa.Test.Collection.StructTests.StructTestSet3R8", one, two, three));
 		}
-
-		[Theory]
+			[Theory]
 		[PropertyData("C")]
 		public void StructTestSet1C(char one)
 		{
@@ -148,5 +148,5 @@ namespace Mosa.Test.Collection.x86.xUnit
 		{
 			Assert.Equal(Mosa.Test.Collection.StructTests.StructTestSet3C(one, two, three), Run<bool>("Mosa.Test.Collection.StructTests.StructTestSet3C", one, two, three));
 		}
-	}
+		}
 }

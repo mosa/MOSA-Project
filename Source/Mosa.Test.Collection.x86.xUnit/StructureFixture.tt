@@ -9,7 +9,6 @@ namespace Mosa.Test.Collection.x86.xUnit
 <# foreach (KeyValuePair<string, string> number in NumbersWithChar) {
 	var shortName = number.Value;
 	var miniName = (shortName.EndsWith("4") || shortName.EndsWith("8")) ? shortName+"Mini" : shortName;
-	bool pending = shortName == "I1" || shortName == "I2"; // FIXME: 3-way tests sbyte/short are disabled due to excess number of failures
 #>
 		[Theory]
 		[PropertyData("<#= shortName #>")]
@@ -18,15 +17,12 @@ namespace Mosa.Test.Collection.x86.xUnit
 			Assert.Equal(Mosa.Test.Collection.StructTests.StructTestSet1<#= shortName #>(one), Run<bool>("Mosa.Test.Collection.StructTests.StructTestSet1<#= shortName #>", one));
 		}
 		
-<#	if (!pending)
-	{
-#>		[Theory]
+		[Theory]
 		[PropertyData("<#= miniName + miniName + miniName #>")]
 		public void StructTestSet3<#= shortName #>(<#= number.Key #> one, <#= number.Key #> two, <#= number.Key #> three)
 		{
 			Assert.Equal(Mosa.Test.Collection.StructTests.StructTestSet3<#= shortName #>(one, two, three), Run<bool>("Mosa.Test.Collection.StructTests.StructTestSet3<#= shortName #>", one, two, three));
 		}
-<#	}
-}
-#>	}
+	<# } #>
+	}
 }
