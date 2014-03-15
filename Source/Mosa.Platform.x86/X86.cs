@@ -455,5 +455,10 @@ namespace Mosa.Platform.x86
 		///
 		/// </summary>
 		public static readonly Fld Fld = new Fld();
+
+        /// <summary>
+        ///
+        /// </summary>
+        public static readonly Test Test = new Test();
 	}
 }
