@@ -165,11 +165,15 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 
 		public static IEnumerable<object[]> R4 { get { return Combinations.R4; } }
 
+		public static IEnumerable<object[]> R4NotNaN { get { return Combinations.R4NotNaN; } }
+
 		public static IEnumerable<object[]> R4R4 { get { return Combinations.R4R4; } }
 
 		public static IEnumerable<object[]> R4MiniR4MiniR4Mini { get { return Combinations.R4MiniR4MiniR4Mini; } }
 
 		public static IEnumerable<object[]> R8 { get { return Combinations.R8; } }
+
+		public static IEnumerable<object[]> R8NotNaN { get { return Combinations.R8NotNaN; } }
 
 		public static IEnumerable<object[]> R8R8 { get { return Combinations.R8R8; } }
 
