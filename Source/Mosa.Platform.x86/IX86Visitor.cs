@@ -531,5 +531,11 @@ namespace Mosa.Platform.x86
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void RoundSD(Context context);
+
+        /// <summary>
+        /// Test instruction
+        /// </summary>
+        /// <param name="context">The context.</param>
+        void Test(Context context);
 	}
 }

@@ -809,6 +809,14 @@ namespace Mosa.Platform.x86.Stages
 		{
 		}
 
+        /// <summary>
+        /// Visitation function for <see cref="IX86Visitor.Test"/> instructions.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        void IX86Visitor.Test(Context context)
+        {
+        }
+
 		#endregion IX86Visitor - Unused
 
 		/// <summary>

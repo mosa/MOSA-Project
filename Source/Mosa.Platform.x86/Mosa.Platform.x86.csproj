@@ -96,6 +96,7 @@
     <Compile Include="Instructions\Fld.cs" />
     <Compile Include="Instructions\MovCR.cs" />
     <Compile Include="Instructions\IMul.cs" />
+    <Compile Include="Instructions\Test.cs" />
     <Compile Include="Instructions\TwoOperandInstruction.cs" />
     <Compile Include="Instructions\Addsd.cs" />
     <Compile Include="Intrinsic\Div.cs" />
