@@ -890,6 +890,14 @@ namespace Mosa.Platform.x86.Stages
 		{
 		}
 
+        /// <summary>
+        /// Test instruction
+        /// </summary>
+        /// <param name="context">The context.</param>
+        void IX86Visitor.Test(Context context)
+        {
+        }
+
 		#endregion IX86Visitor - Unused
 
 		private void HandleShiftOperation(Context context, BaseInstruction instruction)
