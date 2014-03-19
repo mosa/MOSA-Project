@@ -12,7 +12,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 
-namespace Mosa.Compiler.Framework
+namespace Mosa.Compiler.Framework.Analysis
 {
 	/// <summary>
 	/// The Loop Aware Block Ordering reorders blocks to optimize loops and reduce the distance of jumps and branches.
