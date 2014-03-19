@@ -12,7 +12,7 @@ using Mosa.Compiler.Common;
 using System;
 using System.Collections.Generic;
 
-namespace Mosa.Compiler.Framework
+namespace Mosa.Compiler.Framework.Analysis
 {
 	/// <summary>
 	/// Performs dominance calculations on basic blocks.

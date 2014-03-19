@@ -7,6 +7,7 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using Mosa.Compiler.Framework.Analysis;
 using Mosa.Compiler.InternalTrace;
 
 namespace Mosa.Compiler.Framework.Stages
@@ -38,8 +39,8 @@ namespace Mosa.Compiler.Framework.Stages
 			basicBlocks.ReorderBlocks(loopAwareBlockOrder.NewBlockOrder);
 
 			if (trace.Active)
-			{ 
-				DumpTrace(); 
+			{
+				DumpTrace();
 			}
 		}
 

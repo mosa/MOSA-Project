@@ -10,6 +10,7 @@
 using Mosa.Compiler.Framework.IR;
 using System.Collections.Generic;
 using System.Diagnostics;
+using Mosa.Compiler.Framework.Analysis;
 
 namespace Mosa.Compiler.Framework.Stages
 {
