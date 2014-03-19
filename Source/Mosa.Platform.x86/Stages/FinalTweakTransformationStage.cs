@@ -108,7 +108,7 @@ namespace Mosa.Platform.x86.Stages
 					{
 						Operand register = Operand.CreateCPURegister(typeSystem.BuiltIn.I4, context.Result.Register);
 
-						context.InsertBefore().SetInstruction(X86.Xor, register, null, register, register);
+						context.InsertBefore().SetInstruction(X86.Xor, register, register, register);
 					}
 				}
 			}
