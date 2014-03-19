@@ -64,6 +64,22 @@ namespace Mosa.Platform.x86.Stages
 			SplitLongOperand(methodCompiler, operand, out operandLow, out operandHigh, constantZero);
 		}
 
+		private void ReplaceWithDivisionCall(Context context, string methodName)
+		{
+			var type = typeSystem.GetTypeByName("Mosa.Platform.Internal.x86", "Division");
+
+			Debug.Assert(type != null, "Cannot find type: Mosa.Platform.Internal.x86.Division type");
+
+			var method = type.FindMethodByName(methodName);
+
+			Debug.Assert(method != null, "Cannot find method: " + methodName);
+
+			context.ReplaceInstructionOnly(IRInstruction.Call);
+			context.SetOperand(0, Operand.CreateSymbolFromMethod(typeSystem, method));
+			context.OperandCount = 1;
+			context.MosaMethod = method;
+		}
+
 		/// <summary>
 		/// Expands the add instruction for 64-bit operands.
 		/// </summary>
@@ -175,6 +191,7 @@ namespace Mosa.Platform.x86.Stages
 					op1 = Operand.CreateConstantSignedLong(typeSystem, -op1.ConstantSignedInteger);
 				}
 			}
+			
 			if (op2.IsConstant)
 			{
 				staticNegation = true;
@@ -184,6 +201,7 @@ namespace Mosa.Platform.x86.Stages
 					op2 = Operand.CreateConstantSignedLong(typeSystem, -op2.ConstantSignedInteger);
 				}
 			}
+
 			SplitLongOperand(context.Result, out op0L, out op0H);
 			SplitLongOperand(op1, out op1L, out op1H);
 			SplitLongOperand(op2, out op2L, out op2H);
@@ -545,102 +563,22 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		private void ExpandUDiv(Context context)
 		{
-			Operand op0H, op1H, op2H, op0L, op1L, op2L;
-			SplitLongOperand(context.Result, out op0L, out op0H);
-			SplitLongOperand(context.Operand1, out op1L, out op1H);
-			SplitLongOperand(context.Operand2, out op2L, out op2H);
+			Operand op0H, op1H, op2H, op0L, op1L, op2L; 
+			
+			var result = context.Result;
+			var op1 = context.Operand1;
+			var op2 = context.Operand2;
 
-			//Operand eax = AllocateVirtualRegister(typeSystem.BuiltIn.U4);
-			//Operand edx = AllocateVirtualRegister(typeSystem.BuiltIn.U4);
-			//Operand ebx = AllocateVirtualRegister(typeSystem.BuiltIn.U4);
-			//Operand ecx = AllocateVirtualRegister(typeSystem.BuiltIn.U4);
-			//Operand edi = AllocateVirtualRegister(typeSystem.BuiltIn.U4);
-			//Operand esi = AllocateVirtualRegister(typeSystem.BuiltIn.U4);
+			SplitLongOperand(result, out op0L, out op0H);
+			SplitLongOperand(op1, out op1L, out op1H);
+			SplitLongOperand(op2, out op2L, out op2H);
 
-			Operand eax = Operand.CreateCPURegister(typeSystem.BuiltIn.U4, GeneralPurposeRegister.EAX);
-			Operand ebx = Operand.CreateCPURegister(typeSystem.BuiltIn.U4, GeneralPurposeRegister.EBX);
-			Operand edx = Operand.CreateCPURegister(typeSystem.BuiltIn.U4, GeneralPurposeRegister.EDX);
-			Operand ecx = Operand.CreateCPURegister(typeSystem.BuiltIn.U4, GeneralPurposeRegister.ECX);
-			Operand edi = Operand.CreateCPURegister(typeSystem.BuiltIn.U4, GeneralPurposeRegister.EDI);
-			Operand esi = Operand.CreateCPURegister(typeSystem.BuiltIn.U4, GeneralPurposeRegister.ESI);
-
-			Context[] newBlocks = CreateNewBlocksWithContexts(12);
-			Context nextBlock = Split(context);
-
-			context.SetInstruction(X86.Jmp, newBlocks[0].BasicBlock);
-			LinkBlocks(context, newBlocks[0]);
-
-			newBlocks[0].AppendInstruction(X86.Mov, eax, op2H);
-			newBlocks[0].AppendInstruction(X86.Or, eax, eax, eax);
-			newBlocks[0].AppendInstruction(X86.Branch, ConditionCode.NotEqual, newBlocks[2].BasicBlock);
-			newBlocks[0].AppendInstruction(X86.Jmp, newBlocks[1].BasicBlock);
-			LinkBlocks(newBlocks[0], newBlocks[2], newBlocks[1]);
-
-			newBlocks[1].AppendInstruction(X86.Mov, ecx, op2L);
-			newBlocks[1].AppendInstruction(X86.Mov, eax, op1H);
-			newBlocks[1].AppendInstruction(X86.Mov, edx, constantZero);
-			newBlocks[1].AppendInstruction2(X86.Div, edx, eax, edx, eax, ecx);
-			newBlocks[1].AppendInstruction(X86.Mov, ebx, eax);
-			newBlocks[1].AppendInstruction(X86.Mov, eax, op1L);
-			newBlocks[1].AppendInstruction2(X86.Div, edx, eax, edx, eax, ecx);
-			newBlocks[1].AppendInstruction(X86.Mov, edx, ebx);
-			newBlocks[1].AppendInstruction(X86.Jmp, newBlocks[10].BasicBlock);
-			LinkBlocks(newBlocks[1], newBlocks[10]);
-
-			newBlocks[2].AppendInstruction(X86.Mov, ecx, eax);
-			newBlocks[2].AppendInstruction(X86.Mov, ebx, op2L);
-			newBlocks[2].AppendInstruction(X86.Mov, edx, op1H);
-			newBlocks[2].AppendInstruction(X86.Mov, eax, op1L);
-			newBlocks[2].AppendInstruction(X86.Jmp, newBlocks[3].BasicBlock);
-			LinkBlocks(newBlocks[2], newBlocks[3]);
-
-			newBlocks[3].AppendInstruction(X86.Shr, ecx, ecx, constantByte1);
-			newBlocks[3].AppendInstruction(X86.Rcr, ebx, ebx, constantByte1);
-			newBlocks[3].AppendInstruction(X86.Shr, edx, edx, constantByte1);
-			newBlocks[3].AppendInstruction(X86.Rcr, eax, eax, constantByte1);
-			newBlocks[3].AppendInstruction(X86.Or, ecx, ecx, ecx);
-			newBlocks[3].AppendInstruction(X86.Branch, ConditionCode.NotEqual, newBlocks[3].BasicBlock);
-			newBlocks[3].AppendInstruction(X86.Jmp, newBlocks[4].BasicBlock);
-			LinkBlocks(newBlocks[3], newBlocks[3], newBlocks[4]);
-
-			newBlocks[4].AppendInstruction2(X86.Div, edx, eax, edx, eax, ebx);
-			newBlocks[4].AppendInstruction(X86.Mov, esi, eax);
-			newBlocks[4].AppendInstruction2(X86.Mul, edx, eax, eax, op2H);
-			newBlocks[4].AppendInstruction(X86.Mov, ecx, eax);
-			newBlocks[4].AppendInstruction(X86.Mov, eax, op2L);
-			newBlocks[4].AppendInstruction2(X86.Mul, edx, eax, eax, esi);
-			newBlocks[4].AppendInstruction(X86.Add, edx, edx, ecx);
-			newBlocks[4].AppendInstruction(X86.Branch, ConditionCode.UnsignedLessThan, newBlocks[8].BasicBlock);
-			newBlocks[4].AppendInstruction(X86.Jmp, newBlocks[5].BasicBlock);
-			LinkBlocks(newBlocks[4], newBlocks[8], newBlocks[5]);
-
-			newBlocks[5].AppendInstruction(X86.Cmp, null, edx, op1H);
-			newBlocks[5].AppendInstruction(X86.Branch, ConditionCode.UnsignedGreaterThan, newBlocks[8].BasicBlock);
-			newBlocks[5].AppendInstruction(X86.Jmp, newBlocks[6].BasicBlock);
-			LinkBlocks(newBlocks[5], newBlocks[8], newBlocks[6]);
-
-			newBlocks[6].AppendInstruction(X86.Branch, ConditionCode.UnsignedLessThan, newBlocks[9].BasicBlock);
-			newBlocks[6].AppendInstruction(X86.Jmp, newBlocks[7].BasicBlock);
-			LinkBlocks(newBlocks[6], newBlocks[9], newBlocks[7]);
-
-			newBlocks[7].AppendInstruction(X86.Cmp, null, eax, op1L);
-			newBlocks[7].AppendInstruction(X86.Branch, ConditionCode.UnsignedLessOrEqual, newBlocks[9].BasicBlock);
-			newBlocks[7].AppendInstruction(X86.Jmp, newBlocks[8].BasicBlock);
-			LinkBlocks(newBlocks[7], newBlocks[9], newBlocks[8]);
-
-			newBlocks[8].AppendInstruction(X86.Dec, esi, esi);
-			newBlocks[8].AppendInstruction(X86.Jmp, newBlocks[9].BasicBlock);
-			LinkBlocks(newBlocks[8], newBlocks[9]);
-
-			newBlocks[9].AppendInstruction(X86.Mov, edx, constantZero);
-			newBlocks[9].AppendInstruction(X86.Mov, eax, esi);
-			newBlocks[9].AppendInstruction(X86.Jmp, newBlocks[10].BasicBlock);
-			LinkBlocks(newBlocks[9], newBlocks[10]);
-
-			newBlocks[10].AppendInstruction(X86.Mov, op0L, eax);
-			newBlocks[10].AppendInstruction(X86.Mov, op0H, edx);
-			newBlocks[10].AppendInstruction(X86.Jmp, nextBlock.BasicBlock);
-			LinkBlocks(newBlocks[10], nextBlock);
+			ReplaceWithDivisionCall(context, "udiv64");
+			context.Result = result;
+			context.Operand2 = op1;
+			context.Operand3 = op2;
+			context.OperandCount = 3;
+			context.ResultCount = 1;
 		}
 
 		/// <summary>
@@ -650,100 +588,21 @@ namespace Mosa.Platform.x86.Stages
 		private void ExpandURem(Context context)
 		{
 			Operand op0H, op1H, op2H, op0L, op1L, op2L;
-			SplitLongOperand(context.Result, out op0L, out op0H);
-			SplitLongOperand(context.Operand1, out op1L, out op1H);
-			SplitLongOperand(context.Operand2, out op2L, out op2H);
 
-			//Operand eax = AllocateVirtualRegister(typeSystem.BuiltIn.U4);
-			//Operand edx = AllocateVirtualRegister(typeSystem.BuiltIn.U4);
-			//Operand ebx = AllocateVirtualRegister(typeSystem.BuiltIn.U4);
-			//Operand ecx = AllocateVirtualRegister(typeSystem.BuiltIn.U4);
+			var result = context.Result;
+			var op1 = context.Operand1;
+			var op2 = context.Operand2;
 
-			Operand eax = Operand.CreateCPURegister(typeSystem.BuiltIn.U4, GeneralPurposeRegister.EAX);
-			Operand ebx = Operand.CreateCPURegister(typeSystem.BuiltIn.U4, GeneralPurposeRegister.EBX);
-			Operand edx = Operand.CreateCPURegister(typeSystem.BuiltIn.U4, GeneralPurposeRegister.EDX);
-			Operand ecx = Operand.CreateCPURegister(typeSystem.BuiltIn.U4, GeneralPurposeRegister.ECX);
+			SplitLongOperand(result, out op0L, out op0H);
+			SplitLongOperand(op1, out op1L, out op1H);
+			SplitLongOperand(op2, out op2L, out op2H);
 
-			Context[] newBlocks = CreateNewBlocksWithContexts(11);
-			Context nextBlock = Split(context);
-
-			context.SetInstruction(X86.Jmp, newBlocks[0].BasicBlock);
-			LinkBlocks(context, newBlocks[0]);
-
-			newBlocks[0].AppendInstruction(X86.Mov, eax, op2H);
-			newBlocks[0].AppendInstruction(X86.Or, eax, eax, eax);
-			newBlocks[0].AppendInstruction(X86.Branch, ConditionCode.NotEqual, newBlocks[2].BasicBlock);
-			newBlocks[0].AppendInstruction(X86.Jmp, newBlocks[1].BasicBlock);
-			LinkBlocks(newBlocks[0], newBlocks[2], newBlocks[1]);
-
-			newBlocks[1].AppendInstruction(X86.Mov, ecx, op2L);
-			newBlocks[1].AppendInstruction(X86.Mov, eax, op1H);
-			newBlocks[1].AppendInstruction(X86.Mov, edx, constantZero);
-			newBlocks[1].AppendInstruction2(X86.Div, edx, eax, edx, eax, ecx);
-			newBlocks[1].AppendInstruction(X86.Mov, eax, op1L);
-			newBlocks[1].AppendInstruction2(X86.Div, edx, eax, edx, eax, ecx);
-			newBlocks[1].AppendInstruction(X86.Mov, eax, edx);
-			newBlocks[1].AppendInstruction(X86.Mov, edx, constantZero);
-			newBlocks[1].AppendInstruction(X86.Jmp, newBlocks[10].BasicBlock);
-			LinkBlocks(newBlocks[1], newBlocks[10]);
-
-			newBlocks[2].AppendInstruction(X86.Mov, ecx, eax);
-			newBlocks[2].AppendInstruction(X86.Mov, ebx, op2L);
-			newBlocks[2].AppendInstruction(X86.Mov, edx, op1H);
-			newBlocks[2].AppendInstruction(X86.Mov, eax, op1L);
-			newBlocks[2].AppendInstruction(X86.Jmp, newBlocks[3].BasicBlock);
-			LinkBlocks(newBlocks[2], newBlocks[3]);
-
-			newBlocks[3].AppendInstruction(X86.Shr, ecx, ecx, constantByte1);
-			newBlocks[3].AppendInstruction(X86.Rcr, ebx, ebx, constantByte1); // RCR
-			newBlocks[3].AppendInstruction(X86.Shr, edx, edx, constantByte1);
-			newBlocks[3].AppendInstruction(X86.Rcr, eax, eax, constantByte1);
-			newBlocks[3].AppendInstruction(X86.Or, ecx, ecx, ecx);
-			newBlocks[3].AppendInstruction(X86.Branch, ConditionCode.NotEqual, newBlocks[3].BasicBlock);
-			newBlocks[3].AppendInstruction(X86.Jmp, newBlocks[4].BasicBlock);
-			LinkBlocks(newBlocks[3], newBlocks[3], newBlocks[4]);
-
-			newBlocks[4].AppendInstruction2(X86.Div, edx, eax, edx, eax, ebx);
-			newBlocks[4].AppendInstruction(X86.Mov, ecx, eax);
-			newBlocks[4].AppendInstruction2(X86.Mul, edx, eax, eax, op2H);
-			newBlocks[4].AppendInstruction2(X86.Xchg, ecx, eax, eax, ecx);
-			newBlocks[4].AppendInstruction2(X86.Mul, edx, eax, eax, op2L);
-			newBlocks[4].AppendInstruction(X86.Add, edx, edx, ecx);
-			newBlocks[4].AppendInstruction(X86.Branch, ConditionCode.UnsignedLessThan, newBlocks[8].BasicBlock);
-			newBlocks[4].AppendInstruction(X86.Jmp, newBlocks[5].BasicBlock);
-			LinkBlocks(newBlocks[4], newBlocks[8], newBlocks[5]);
-
-			newBlocks[5].AppendInstruction(X86.Cmp, null, edx, op1H);
-			newBlocks[5].AppendInstruction(X86.Branch, ConditionCode.UnsignedGreaterThan, newBlocks[8].BasicBlock);
-			newBlocks[5].AppendInstruction(X86.Jmp, newBlocks[6].BasicBlock);
-			LinkBlocks(newBlocks[5], newBlocks[8], newBlocks[6]);
-
-			newBlocks[6].AppendInstruction(X86.Branch, ConditionCode.UnsignedLessThan, newBlocks[9].BasicBlock);
-			newBlocks[6].AppendInstruction(X86.Jmp, newBlocks[7].BasicBlock);
-			LinkBlocks(newBlocks[6], newBlocks[6], newBlocks[7]);
-
-			newBlocks[7].AppendInstruction(X86.Cmp, null, eax, op1L);
-			newBlocks[7].AppendInstruction(X86.Branch, ConditionCode.UnsignedLessOrEqual, newBlocks[9].BasicBlock);
-			newBlocks[7].AppendInstruction(X86.Jmp, newBlocks[3].BasicBlock);
-			LinkBlocks(newBlocks[7], newBlocks[9], newBlocks[3]);
-
-			newBlocks[8].AppendInstruction(X86.Sub, eax, eax, op2L);
-			newBlocks[8].AppendInstruction(X86.Sbb, edx, edx, op2H);
-			newBlocks[8].AppendInstruction(X86.Jmp, newBlocks[9].BasicBlock);
-			LinkBlocks(newBlocks[8], newBlocks[9]);
-
-			newBlocks[9].AppendInstruction(X86.Sub, eax, eax, op1L);
-			newBlocks[9].AppendInstruction(X86.Sbb, edx, edx, op1H);
-			newBlocks[9].AppendInstruction(X86.Neg, edx, edx);
-			newBlocks[9].AppendInstruction(X86.Neg, eax, eax);
-			newBlocks[9].AppendInstruction(X86.Sbb, edx, edx, constantZero);
-			newBlocks[9].AppendInstruction(X86.Jmp, newBlocks[10].BasicBlock);
-			LinkBlocks(newBlocks[9], newBlocks[10]);
-
-			newBlocks[10].AppendInstruction(X86.Mov, op0L, eax);
-			newBlocks[10].AppendInstruction(X86.Mov, op0H, edx);
-			newBlocks[10].AppendInstruction(X86.Jmp, nextBlock.BasicBlock);
-			LinkBlocks(newBlocks[10], nextBlock);
+			ReplaceWithDivisionCall(context, "umod64");
+			context.Result = result;
+			context.Operand2 = op1;
+			context.Operand3 = op2;
+			context.OperandCount = 3;
+			context.ResultCount = 1;
 		}
 
 		/// <summary>
