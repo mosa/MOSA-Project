@@ -245,7 +245,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="context">The context.</param>
 		void CIL.ICILVisitor.Call(Context context)
 		{
-			if (this.CanSkipDueToRecursiveSystemObjectCtorCall(context))
+			if (CanSkipDueToRecursiveSystemObjectCtorCall(context))
 			{
 				context.Remove();
 				return;
@@ -1833,7 +1833,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			var type = typeSystem.GetTypeByName("Mosa.Platform.Internal." + methodCompiler.Architecture.PlatformName, "Runtime");
 
-			Debug.Assert(type != null, "Cannot find platform Runtime type");
+			Debug.Assert(type != null, "Cannot find platform runtime type");
 
 			var method = type.FindMethodByName(internalCallTarget.ToString());
 
