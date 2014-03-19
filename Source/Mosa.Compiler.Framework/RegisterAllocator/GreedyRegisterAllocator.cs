@@ -8,6 +8,7 @@
  */
 
 using Mosa.Compiler.Common;
+using Mosa.Compiler.Framework.Analysis;
 using Mosa.Compiler.InternalTrace;
 using System;
 using System.Collections;
@@ -389,22 +390,22 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 					if (context.IsEmpty)
 						continue;
 
-					if (liveSetTrace.Active) 
+					if (liveSetTrace.Active)
 						liveSetTrace.Log(context.ToString());
 
 					OperandVisitor visitor = new OperandVisitor(context);
 
 					foreach (var ops in visitor.Input)
 					{
-						if (liveSetTrace.Active) 
+						if (liveSetTrace.Active)
 							liveSetTrace.Log("INPUT:  " + ops.ToString());
-						
+
 						int index = GetIndex(ops);
 						if (!liveKill.Get(index))
 						{
 							liveGen.Set(index, true);
 
-							if (liveSetTrace.Active) 
+							if (liveSetTrace.Active)
 								liveSetTrace.Log("GEN:  " + index.ToString() + " " + ops.ToString());
 						}
 					}
@@ -416,19 +417,19 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 							liveKill.Set(s, true);
 						}
 
-						if (liveSetTrace.Active) 
+						if (liveSetTrace.Active)
 							liveSetTrace.Log("KILL ALL PHYSICAL");
 					}
 
 					foreach (var ops in visitor.Output)
 					{
-						if (liveSetTrace.Active) 
+						if (liveSetTrace.Active)
 							liveSetTrace.Log("OUTPUT: " + ops.ToString());
-						
+
 						int index = GetIndex(ops);
 						liveKill.Set(index, true);
 
-						if (liveSetTrace.Active) 
+						if (liveSetTrace.Active)
 							liveSetTrace.Log("KILL: " + index.ToString() + " " + ops.ToString());
 					}
 				}
