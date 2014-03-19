@@ -228,7 +228,7 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				Context ctx = new Context(instructionSet, index);
 
-				if (ctx.Instruction == IRInstruction.AddressOf)
+				if (ctx.Instruction == IRInstruction.AddressOf || ctx.Instruction == IRInstruction.Phi)
 					continue;
 
 				bool propogated = false;
@@ -335,7 +335,7 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				Context ctx = new Context(instructionSet, index);
 
-				if (ctx.Instruction == IRInstruction.AddressOf)
+				if (ctx.Instruction == IRInstruction.AddressOf || ctx.Instruction == IRInstruction.Phi)
 					return;
 			}
 

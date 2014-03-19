@@ -16,7 +16,7 @@ namespace Mosa.Kernel.x86
 	/// </summary>
 	public static class KernelMemory
 	{
-		static private uint heap = 0x300000;
+		static private uint heap = 0x2000000;
 		static private uint allocated = 0;
 		static private uint used = 0;
 
