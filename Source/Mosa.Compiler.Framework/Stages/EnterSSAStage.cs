@@ -7,10 +7,9 @@
  *  Simon Wollwage (rootnode) <rootnode@mosa-project.org>
  */
 
+using Mosa.Compiler.Framework.Analysis;
 using Mosa.Compiler.Framework.IR;
 using System.Collections.Generic;
-using System.Diagnostics;
-using Mosa.Compiler.Framework.Analysis;
 
 namespace Mosa.Compiler.Framework.Stages
 {
@@ -22,7 +21,6 @@ namespace Mosa.Compiler.Framework.Stages
 		private PhiPlacementStage phiPlacementStage;
 		private Dictionary<Operand, Stack<int>> variables;
 		private Dictionary<Operand, int> counts;
-		private IDominanceProvider dominanceCalculation;
 
 		private Dictionary<Operand, Operand[]> ssaOperands = new Dictionary<Operand, Operand[]>();
 
@@ -51,7 +49,8 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="headBlock">The head block.</param>
 		private void EnterSSA(BasicBlock headBlock)
 		{
-			dominanceCalculation = methodCompiler.Pipeline.FindFirst<DominanceCalculationStage>().GetDominanceProvider(headBlock);
+			var dominanceProvider = methodCompiler.Pipeline.FindFirst<DominanceCalculationStage>().GetDominanceProvider(headBlock);
+
 			variables = new Dictionary<Operand, Stack<int>>();
 			counts = new Dictionary<Operand, int>();
 
@@ -75,11 +74,11 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (headBlock.NextBlocks.Count > 0)
 			{
-				RenameVariables(headBlock.NextBlocks[0]);
+				RenameVariables(headBlock.NextBlocks[0], dominanceProvider);
 			}
 
 			// Clean up
-			dominanceCalculation = null;
+			dominanceProvider = null;
 			variables = null;
 			counts = null;
 		}
@@ -123,13 +122,12 @@ namespace Mosa.Compiler.Framework.Stages
 			return ssaOperand;
 		}
 
-		//
-
 		/// <summary>
 		/// Renames the variables.
 		/// </summary>
 		/// <param name="block">The block.</param>
-		private void RenameVariables(BasicBlock block)
+		/// <param name="dominanceProvider">The dominance provider.</param>
+		private void RenameVariables(BasicBlock block, IDominanceProvider dominanceProvider)
 		{
 			for (var context = new Context(instructionSet, block); !context.IsBlockEndInstruction; context.GotoNext())
 			{
@@ -178,9 +176,9 @@ namespace Mosa.Compiler.Framework.Stages
 				}
 			}
 
-			foreach (var s in dominanceCalculation.GetChildren(block))
+			foreach (var s in dominanceProvider.GetChildren(block))
 			{
-				RenameVariables(s);
+				RenameVariables(s, dominanceProvider);
 			}
 
 			for (var context = new Context(instructionSet, block); !context.IsBlockEndInstruction; context.GotoNext())
