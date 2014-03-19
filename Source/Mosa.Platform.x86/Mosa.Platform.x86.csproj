@@ -155,7 +155,6 @@
     <Compile Include="Stages\MethodTableBuilderStage.cs" />
     <Compile Include="SegmentRegister.cs" />
     <Compile Include="Instructions\Branch.cs" />
-    <Compile Include="Intrinsic\Test.cs" />
     <Compile Include="Instructions\Cvttsd2si.cs" />
     <Compile Include="Instructions\Cvttss2si.cs" />
     <Compile Include="Instructions\Div.cs" />
