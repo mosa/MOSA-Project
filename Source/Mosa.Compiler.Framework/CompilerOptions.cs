@@ -8,6 +8,7 @@
  */
 
 using Mosa.Compiler.Framework.Analysis;
+using Mosa.Compiler.Framework.Analysis.BlockOrder;
 using Mosa.Compiler.Linker;
 using System;
 
@@ -162,7 +163,7 @@ namespace Mosa.Compiler.Framework
 			EnableSSA = false;
 			EnableSSAOptimizations = true;
 			DominanceAnalysisFactory = delegate { return new SimpleFastDominanceAnalysis(); };
-			BlockOrderAnalysis = delegate { return new LoopAwareBlockOrderAnalysis(); };
+			BlockOrderAnalysis = delegate { return new LoopAwareAnalysis(); };
 		}
 	}
 }

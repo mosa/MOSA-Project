@@ -7,15 +7,14 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using Mosa.Compiler.Framework.Analysis;
 using Mosa.Compiler.InternalTrace;
 
 namespace Mosa.Compiler.Framework.Stages
 {
 	/// <summary>
-	/// The Loop Aware Block Ordering Stage reorders blocks to optimize loops and reduce the distance of jumps and branches.
+	/// The Block Ordering Stage reorders blocks to optimize loops and reduce the distance of jumps and branches.
 	/// </summary>
-	public class LoopAwareBlockOrderStage : BaseMethodCompilerStage, IMethodCompilerStage, IPipelineStage
+	public class BlockOrderingStage : BaseMethodCompilerStage, IMethodCompilerStage, IPipelineStage
 	{
 		#region Data members
 
@@ -33,7 +32,7 @@ namespace Mosa.Compiler.Framework.Stages
 			trace = CreateTrace();
 
 			var blockOrderAnalysis = methodCompiler.Compiler.CompilerOptions.BlockOrderAnalysis();
-			blockOrderAnalysis.PerformAnalysis(this.basicBlocks);
+			blockOrderAnalysis.PerformAnalysis(basicBlocks);
 
 			basicBlocks.ReorderBlocks(blockOrderAnalysis.NewBlockOrder);
 

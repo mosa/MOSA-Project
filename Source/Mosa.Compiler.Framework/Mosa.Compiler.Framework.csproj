@@ -77,6 +77,9 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Analysis\BlockOrder\KeepSameBlockOrder.cs" />
+    <Compile Include="Analysis\BlockOrder\ReverseBlockOrder.cs" />
+    <Compile Include="Analysis\BlockOrder\SimpleTraceAnalysis.cs" />
     <Compile Include="DominanceAnalysis.cs" />
     <Compile Include="IDominanceAnalysis.cs" />
     <Compile Include="BaseCallingConventionExtended.cs" />
@@ -121,14 +124,14 @@
     <Compile Include="IR\LoadZeroExtended.cs" />
     <Compile Include="IR\LoadSignExtended.cs" />
     <Compile Include="Analysis\SimpleFastDominanceAnalysis.cs" />
-    <Compile Include="Analysis\LoopAwareBlockOrderAnalysis.cs" />
+    <Compile Include="Analysis\BlockOrder\LoopAwareAnalysis.cs" />
     <Compile Include="CompilationScheduler.cs" />
     <Compile Include="Stages\CheckPlatformOperandCountStage.cs" />
     <Compile Include="Stages\ObjectFileLayoutStage.cs" />
     <Compile Include="Stages\PlatformIntrinsicTransformationStage.cs" />
     <Compile Include="PlugSystem.cs" />
     <Compile Include="Stages\CheckIROperandCountStage.cs" />
-    <Compile Include="Stages\LoopAwareBlockOrderStage.cs" />
+    <Compile Include="Stages\BlockOrderingStage.cs" />
     <Compile Include="Stages\SSAOptimizations.cs" />
     <Compile Include="Stages\EdgeSplitStage.cs" />
     <Compile Include="Stages\TypeInitializerSchedulerStage.cs" />
@@ -309,8 +312,6 @@
     <Compile Include="InstructionSet.cs" />
     <Compile Include="InstructionData.cs" />
     <Compile Include="CIL\BaseCILInstruction.cs" />
-    <Compile Include="Stages\ReverseBlockOrderStage.cs" />
-    <Compile Include="Stages\SimpleTraceBlockOrderStage.cs" />
     <Compile Include="BaseCompiler.cs">
       <SubType>Code</SubType>
     </Compile>

@@ -8,7 +8,7 @@
  */
 
 using Mosa.Compiler.Common;
-using Mosa.Compiler.Framework.Analysis;
+using Mosa.Compiler.Framework.Analysis.BlockOrder;
 using Mosa.Compiler.InternalTrace;
 using System;
 using System.Collections;
@@ -312,7 +312,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		private void CreateExtendedBlocks()
 		{
-			var loopAwareBlockOrder = new LoopAwareBlockOrderAnalysis(this.basicBlocks);
+			var loopAwareBlockOrder = new LoopAwareAnalysis(this.basicBlocks);
 
 			// The re-ordering is not strictly necessary; however, it reduces "holes" in live ranges.
 			// Less "holes" increase readability of the debug logs.

@@ -11,6 +11,7 @@
 
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework;
+using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.Linker;
 using NDesk.Options;
 using System;
@@ -136,7 +137,7 @@ namespace Mosa.Tool.Compiler
 
 			optionSet.Add(
 				"a|Architecture=",
-				"Select one of the MOSA architectures to compile for [{x86|avr32}].",
+				"Select one of the MOSA architectures to compile for [{x86|ARMv6}].",
 				delegate(string arch)
 				{
 					compilerOptions.Architecture = SelectArchitecture(arch);
@@ -148,7 +149,7 @@ namespace Mosa.Tool.Compiler
 				"Select the format of the binary file to create [{ELF32|ELF64|PE}].",
 				delegate(string format)
 				{
-					compilerOptions.LinkerType = SelectLinkerStage(format);
+					compilerOptions.LinkerType = LinkerFactory.GetLinkerType(format);
 				}
 			);
 
@@ -160,22 +161,6 @@ namespace Mosa.Tool.Compiler
 					compilerOptions.OutputFile = file;
 				}
 			);
-
-			//optionSet.Add<uint>(
-			//	"elf-file-alignment=",
-			//	"Determines the alignment of sections within the ELF file. Must be a multiple of 512 bytes.",
-			//	delegate(uint alignment)
-			//	{
-			//		try
-			//		{
-			//			compilerOptions.Elf32.FileAlignment = alignment;
-			//		}
-			//		catch (System.Exception x)
-			//		{
-			//			throw new OptionException(@"The specified file alignment is invalid.", @"elf-file-alignment", x);
-			//		}
-			//	}
-			//);
 
 			optionSet.Add(
 				"map=",
@@ -194,47 +179,6 @@ namespace Mosa.Tool.Compiler
 					compilerOptions.MethodPipelineExportDirectory = dir;
 				}
 			);
-
-			//optionSet.Add(
-			//	"pe-no-checksum",
-			//	"Causes no checksum to be written in the generated PE file. MOSA requires the checksum to be set. It is on by default, use this switch to turn it off.",
-			//	delegate(string value)
-			//	{
-			//		compilerOptions.PortableExecutable.SetChecksum = false;
-			//	}
-			//);
-
-			//optionSet.Add<uint>(
-			//	"pe-file-alignment=",
-			//	"Determines the alignment of sections within the PE file. Must be a multiple of 512 bytes.",
-			//	delegate(uint alignment)
-			//	{
-			//		try
-			//		{
-			//			compilerOptions.PortableExecutable.FileAlignment = alignment;
-			//		}
-			//		catch (Exception x)
-			//		{
-			//			throw new OptionException(@"The specified file alignment is invalid.", @"pe-file-alignment", x);
-			//		}
-			//	}
-			//);
-
-			//optionSet.Add<uint>(
-			//	"pe-section-alignment=",
-			//	"Determines the alignment of sections in memory. Must be a multiple of 4096 bytes.",
-			//	delegate(uint alignment)
-			//	{
-			//		try
-			//		{
-			//			compilerOptions.PortableExecutable.SectionAlignment = alignment;
-			//		}
-			//		catch (Exception x)
-			//		{
-			//			throw new OptionException(@"The specified section alignment is invalid.", @"pe-section-alignment", x);
-			//		}
-			//	}
-			//);
 
 			optionSet.Add(
 				@"sa|enable-static-alloc",
@@ -352,7 +296,7 @@ namespace Mosa.Tool.Compiler
 		{
 			// always print header with version information
 			Console.WriteLine("MOSA AOT Compiler, Version {0}.{1} '{2}'", majorVersion, minorVersion, codeName);
-			Console.WriteLine("Copyright 2013 by the MOSA Project. Licensed under the New BSD License.");
+			Console.WriteLine("Copyright 2014 by the MOSA Project. Licensed under the New BSD License.");
 			Console.WriteLine("Copyright 2008 by Novell. NDesk.Options is released under the MIT/X11 license.");
 			Console.WriteLine();
 			Console.WriteLine("Parsing options...");
@@ -532,34 +476,8 @@ namespace Mosa.Tool.Compiler
 			switch (format.ToLower())
 			{
 				case "multiboot-0.7":
-				case "mb0.7":
-					return new Mosa.Platform.x86.Stages.Multiboot0695Stage();
-
-				default:
-					throw new OptionException(String.Format("Unknown or unsupported boot format {0}.", format), "boot");
-			}
-		}
-
-		/// <summary>
-		/// Selects the linker implementation to use.
-		/// </summary>
-		/// <param name="format">The linker format.</param>
-		/// <returns>The implementation of the linker.</returns>
-		private static LinkerType SelectLinkerStage(string format)
-		{
-			switch (format.ToLower())
-			{
-				case "elf32":
-					return LinkerType.Elf32;
-
-				case "elf64":
-					return LinkerType.Elf64;
-
-				case "pe":
-					return LinkerType.PE;
-
-				default:
-					throw new OptionException(String.Format("Unknown or unsupported binary format {0}.", format), "format");
+				case "mb0.7": return new Mosa.Platform.x86.Stages.Multiboot0695Stage();
+				default: throw new OptionException(String.Format("Unknown or unsupported boot format {0}.", format), "boot");
 			}
 		}
 

@@ -7,11 +7,10 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System.Diagnostics;
-using System.Collections.Generic;
 using Mosa.Compiler.Common;
 using Mosa.Compiler.InternalTrace;
-using Mosa.Compiler.Framework.IR;
+using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework.Stages
 {
@@ -88,6 +87,5 @@ namespace Mosa.Compiler.Framework.Stages
 
 			EmptyBlockOfAllInstructions(block);
 		}
-
 	}
 }

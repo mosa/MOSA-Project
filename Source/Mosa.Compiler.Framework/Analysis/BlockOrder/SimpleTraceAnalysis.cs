@@ -10,17 +10,34 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace Mosa.Compiler.Framework.Stages
+namespace Mosa.Compiler.Framework.Analysis.BlockOrder
 {
 	/// <summary>
-	/// The Simple Trace Block Order Stage reorders Blocks to optimize loops and reduce the distance of jumps and branches.
+	/// The Simple Trace Block Order quickly reorders blocks to optimize loops and reduce the distance of jumps and branches.
 	/// </summary>
-	public class SimpleTraceBlockOrderStage : BaseMethodCompilerStage, IMethodCompilerStage, IPipelineStage
+	public class SimpleTraceBlockOrderStage : IBlockOrderAnalysis
 	{
-		/// <summary>
-		/// Runs the specified compiler.
-		/// </summary>
-		void IMethodCompilerStage.Run()
+		#region Data members
+
+		private BasicBlock[] blockOrder;
+
+		#endregion Data members
+
+		#region IBlockOrderAnalysis
+
+		public BasicBlock[] NewBlockOrder { get { return blockOrder; } }
+
+		public int GetLoopDepth(BasicBlock block)
+		{
+			return 0;
+		}
+
+		public int GetLoopIndex(BasicBlock block)
+		{
+			return 0;
+		}
+
+		public void PerformAnalysis(BasicBlocks basicBlocks)
 		{
 			// Retrieve the first block
 			BasicBlock first = basicBlocks.PrologueBlock;
@@ -29,7 +46,7 @@ namespace Mosa.Compiler.Framework.Stages
 			Dictionary<BasicBlock, int> referenced = new Dictionary<BasicBlock, int>(basicBlocks.Count);
 
 			// Allocate list of ordered Blocks
-			BasicBlock[] ordered = new BasicBlock[basicBlocks.Count];
+			blockOrder = new BasicBlock[basicBlocks.Count];
 			int orderBlockCnt = 0;
 
 			// Create sorted worklist
@@ -46,7 +63,7 @@ namespace Mosa.Compiler.Framework.Stages
 					if (!referenced.ContainsKey(block))
 					{
 						referenced.Add(block, 0);
-						ordered[orderBlockCnt++] = block;
+						blockOrder[orderBlockCnt++] = block;
 
 						foreach (BasicBlock successor in block.NextBlocks)
 							if (!referenced.ContainsKey(successor))
@@ -54,8 +71,8 @@ namespace Mosa.Compiler.Framework.Stages
 					}
 				}
 			}
-
-			basicBlocks.ReorderBlocks(ordered);
 		}
+
+		#endregion IBlockOrderAnalysis
 	}
 }

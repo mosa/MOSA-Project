@@ -43,5 +43,22 @@ namespace Mosa.Compiler.Framework.Linker
 				default: throw new LinkerException("unknown linker type");
 			}
 		}
+
+		/// <summary>
+		/// Gets the type of the linker.
+		/// </summary>
+		/// <param name="format">The format.</param>
+		/// <returns></returns>
+		/// <exception cref="LinkerException">unknown linker type</exception>
+		public static LinkerType GetLinkerType(string format)
+		{
+			switch (format.ToLower())
+			{
+				case "elf32": return LinkerType.Elf32;
+				case "elf64": return LinkerType.Elf64;
+				case "pe": return LinkerType.PE;
+				default: throw new LinkerException("unknown linker type");
+			}
+		}
 	}
 }
