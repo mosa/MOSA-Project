@@ -312,7 +312,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		private void CreateExtendedBlocks()
 		{
-			var loopAwareBlockOrder = new LoopAwareBlockOrder(this.basicBlocks);
+			var loopAwareBlockOrder = new LoopAwareBlockOrderAnalysis(this.basicBlocks);
 
 			// The re-ordering is not strictly necessary; however, it reduces "holes" in live ranges.
 			// Less "holes" increase readability of the debug logs.

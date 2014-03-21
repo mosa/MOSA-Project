@@ -9,13 +9,20 @@
 
 using System.Collections.Generic;
 
-namespace Mosa.Compiler.Framework.Analysis
+namespace Mosa.Compiler.Framework
 {
 	/// <summary>
 	/// A dominance provider allows other compilation stages to retrieve dominance relationships.
 	/// </summary>
-	public interface IDominanceProvider
+	public interface IDominanceAnalysis
 	{
+		/// <summary>
+		/// Calculates dominance for the specified basic blocks.
+		/// </summary>
+		/// <param name="basicBlocks">The basic blocks.</param>
+		/// <param name="entryBlock">The entry block.</param>
+		void PerformAnalysis(BasicBlocks basicBlocks, BasicBlock entryBlock);
+
 		/// <summary>
 		/// Retrieves the immediate dominator of a block.
 		/// </summary>

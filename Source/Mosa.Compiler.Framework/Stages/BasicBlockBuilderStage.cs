@@ -9,7 +9,6 @@
  */
 
 using Mosa.Compiler.Framework.IR;
-using Mosa.Compiler.Framework.Linker;
 using System.Collections.Generic;
 using System.Diagnostics;
 

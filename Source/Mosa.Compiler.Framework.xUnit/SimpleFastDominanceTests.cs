@@ -15,11 +15,11 @@ namespace Mosa.Compiler.Framework.xUnit
 {
 	public class SimpleFastDominanceTests
 	{
-		internal static void Dump(BasicBlocks basicBlocks, IDominanceProvider provider)
+		internal static void Dump(BasicBlocks basicBlocks, IDominanceAnalysis analysis)
 		{
 			foreach (var b in basicBlocks)
 			{
-				Console.WriteLine(b.ToString() + " -> " + provider.GetImmediateDominator(b));
+				Console.WriteLine(b.ToString() + " -> " + analysis.GetImmediateDominator(b));
 			}
 
 			Console.WriteLine();
@@ -28,7 +28,7 @@ namespace Mosa.Compiler.Framework.xUnit
 			{
 				Console.Write(b.ToString() + " -> ");
 
-				foreach (var d in provider.GetDominators(b))
+				foreach (var d in analysis.GetDominators(b))
 					Console.Write(d.ToString() + " ");
 
 				Console.WriteLine();
@@ -42,9 +42,9 @@ namespace Mosa.Compiler.Framework.xUnit
 		{
 			var basicBlocks = BlockTests.Scenario3;
 
-			SimpleFastDominance dominance = new SimpleFastDominance(basicBlocks, basicBlocks[0]);
+			SimpleFastDominanceAnalysis dominance = new SimpleFastDominanceAnalysis(basicBlocks, basicBlocks[0]);
 
-			IDominanceProvider provider = dominance as IDominanceProvider;
+			IDominanceAnalysis provider = dominance as IDominanceAnalysis;
 
 			Assert.Same(provider.GetImmediateDominator(basicBlocks[0]), null);
 			Assert.Same(provider.GetImmediateDominator(basicBlocks[1]), basicBlocks[0]);
@@ -70,9 +70,9 @@ namespace Mosa.Compiler.Framework.xUnit
 		{
 			var basicBlocks = BlockTests.Scenario4;
 
-			SimpleFastDominance dominance = new SimpleFastDominance(basicBlocks, basicBlocks[0]);
+			SimpleFastDominanceAnalysis dominance = new SimpleFastDominanceAnalysis(basicBlocks, basicBlocks[0]);
 
-			IDominanceProvider provider = dominance as IDominanceProvider;
+			IDominanceAnalysis provider = dominance as IDominanceAnalysis;
 
 			Assert.Same(provider.GetImmediateDominator(basicBlocks[0]), null);
 			Assert.Same(provider.GetImmediateDominator(basicBlocks[1]), basicBlocks[0]);

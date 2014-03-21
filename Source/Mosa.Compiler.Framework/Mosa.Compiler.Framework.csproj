@@ -77,7 +77,8 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Analysis\IDominanceProvider.cs" />
+    <Compile Include="DominanceAnalysis.cs" />
+    <Compile Include="IDominanceAnalysis.cs" />
     <Compile Include="BaseCallingConventionExtended.cs" />
     <Compile Include="DelegatePatcher.cs" />
     <Compile Include="Intrinsics\InternalInitializeArray.cs" />
@@ -85,6 +86,7 @@
     <Compile Include="IR\CompoundLoad.cs" />
     <Compile Include="IR\CompoundMove.cs" />
     <Compile Include="IR\CompoundStore.cs" />
+    <Compile Include="IBlockOrderAnalysis.cs" />
     <Compile Include="ShiftType.cs" />
     <Compile Include="ConditionCodeExtension.cs" />
     <Compile Include="BasicBlocks.cs" />
@@ -118,8 +120,8 @@
     <Compile Include="IR\IntrinsicMethodCall.cs" />
     <Compile Include="IR\LoadZeroExtended.cs" />
     <Compile Include="IR\LoadSignExtended.cs" />
-    <Compile Include="Analysis\SimpleFastDominance.cs" />
-    <Compile Include="Analysis\LoopAwareBlockOrder.cs" />
+    <Compile Include="Analysis\SimpleFastDominanceAnalysis.cs" />
+    <Compile Include="Analysis\LoopAwareBlockOrderAnalysis.cs" />
     <Compile Include="CompilationScheduler.cs" />
     <Compile Include="Stages\CheckPlatformOperandCountStage.cs" />
     <Compile Include="Stages\ObjectFileLayoutStage.cs" />
@@ -325,9 +327,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="CompilerPipeline.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Stages\DominanceCalculationStage.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="FlowControl.cs">

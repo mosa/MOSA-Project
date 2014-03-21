@@ -7,7 +7,9 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using Mosa.Compiler.Framework.Analysis;
 using Mosa.Compiler.Linker;
+using System;
 
 namespace Mosa.Compiler.Framework
 {
@@ -134,6 +136,22 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		public string MethodPipelineExportDirectory { get; set; }
 
+		/// <summary>
+		/// Gets or sets the dominance analysis factory.
+		/// </summary>
+		/// <value>
+		/// The dominance analysis factory.
+		/// </value>
+		public Func<IDominanceAnalysis> DominanceAnalysisFactory { get; set; }
+
+		/// <summary>
+		/// Gets or sets the block order analysis.
+		/// </summary>
+		/// <value>
+		/// The block order analysis.
+		/// </value>
+		public Func<IBlockOrderAnalysis> BlockOrderAnalysis { get; set; }
+
 		#endregion Properties
 
 		/// <summary>
@@ -143,6 +161,8 @@ namespace Mosa.Compiler.Framework
 		{
 			EnableSSA = false;
 			EnableSSAOptimizations = true;
+			DominanceAnalysisFactory = delegate { return new SimpleFastDominanceAnalysis(); };
+			BlockOrderAnalysis = delegate { return new LoopAwareBlockOrderAnalysis(); };
 		}
 	}
 }

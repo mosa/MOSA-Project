@@ -152,7 +152,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </summary>
 		private void PlacePhiFunctionsMinimal(BasicBlock headBlock)
 		{
-			var dominanceCalculation = methodCompiler.Pipeline.FindFirst<DominanceCalculationStage>().GetDominanceProvider(headBlock);
+			var analysis = methodCompiler.DominanceAnalysis.GetDominanceAnalysis(headBlock);
 
 			foreach (var t in assignments)
 			{
@@ -163,7 +163,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 				blocks.AddIfNew(headBlock);
 
-				var idf = dominanceCalculation.IteratedDominanceFrontier(blocks);
+				var idf = analysis.IteratedDominanceFrontier(blocks);
 
 				foreach (var n in idf)
 				{

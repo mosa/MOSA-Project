@@ -19,8 +19,6 @@ namespace Mosa.Compiler.Framework.Stages
 	{
 		#region Data members
 
-		private LoopAwareBlockOrder loopAwareBlockOrder;
-
 		private CompilerTrace trace;
 
 		#endregion Data members
@@ -34,20 +32,21 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			trace = CreateTrace();
 
-			loopAwareBlockOrder = new LoopAwareBlockOrder(this.basicBlocks);
+			var blockOrderAnalysis = methodCompiler.Compiler.CompilerOptions.BlockOrderAnalysis();
+			blockOrderAnalysis.PerformAnalysis(this.basicBlocks);
 
-			basicBlocks.ReorderBlocks(loopAwareBlockOrder.NewBlockOrder);
+			basicBlocks.ReorderBlocks(blockOrderAnalysis.NewBlockOrder);
 
 			if (trace.Active)
 			{
-				DumpTrace();
+				DumpTrace(blockOrderAnalysis);
 			}
 		}
 
-		private void DumpTrace()
+		private void DumpTrace(IBlockOrderAnalysis blockOrderAnalysis)
 		{
 			int index = 0;
-			foreach (var block in loopAwareBlockOrder.NewBlockOrder)
+			foreach (var block in blockOrderAnalysis.NewBlockOrder)
 			{
 				if (block != null)
 					trace.Log("# " + index.ToString() + " Block " + block.ToString() + " #" + block.Sequence.ToString());
@@ -61,8 +60,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 			foreach (var block in basicBlocks)
 			{
-				int depth = loopAwareBlockOrder.GetLoopDepth(block);
-				int depthindex = loopAwareBlockOrder.GetLoopIndex(block);
+				int depth = blockOrderAnalysis.GetLoopDepth(block);
+				int depthindex = blockOrderAnalysis.GetLoopIndex(block);
 
 				trace.Log("Block " + block.ToString() + " #" + block.Sequence.ToString() + " -> Depth: " + depth.ToString() + " index: " + depthindex.ToString());
 			}
