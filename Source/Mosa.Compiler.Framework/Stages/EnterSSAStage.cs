@@ -7,7 +7,6 @@
  *  Simon Wollwage (rootnode) <rootnode@mosa-project.org>
  */
 
-using Mosa.Compiler.Framework.Analysis;
 using Mosa.Compiler.Framework.IR;
 using System.Collections.Generic;
 
@@ -49,7 +48,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="headBlock">The head block.</param>
 		private void EnterSSA(BasicBlock headBlock)
 		{
-			var dominanceProvider = methodCompiler.Pipeline.FindFirst<DominanceCalculationStage>().GetDominanceProvider(headBlock);
+			var analysis = methodCompiler.DominanceAnalysis.GetDominanceAnalysis(headBlock);
 
 			variables = new Dictionary<Operand, Stack<int>>();
 			counts = new Dictionary<Operand, int>();
@@ -74,11 +73,11 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (headBlock.NextBlocks.Count > 0)
 			{
-				RenameVariables(headBlock.NextBlocks[0], dominanceProvider);
+				RenameVariables(headBlock.NextBlocks[0], analysis);
 			}
 
 			// Clean up
-			dominanceProvider = null;
+			analysis = null;
 			variables = null;
 			counts = null;
 		}
@@ -127,7 +126,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </summary>
 		/// <param name="block">The block.</param>
 		/// <param name="dominanceProvider">The dominance provider.</param>
-		private void RenameVariables(BasicBlock block, IDominanceProvider dominanceProvider)
+		private void RenameVariables(BasicBlock block, IDominanceAnalysis dominanceProvider)
 		{
 			for (var context = new Context(instructionSet, block); !context.IsBlockEndInstruction; context.GotoNext())
 			{

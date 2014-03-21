@@ -6,7 +6,6 @@
  * Authors:
  *  Andrey Turkin <andrey.turkin@gmail.com>
  */
- 
 using System;
 
 namespace Mosa.Test.Collection
