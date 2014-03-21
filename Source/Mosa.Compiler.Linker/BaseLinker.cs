@@ -125,6 +125,21 @@ namespace Mosa.Compiler.Linker
 		#region ILinker Members
 
 		/// <summary>
+		/// Initializes the specified output file.
+		/// </summary>
+		/// <param name="outputFile">The output file.</param>
+		/// <param name="elfMachineType">Type of the elf machine.</param>
+		/// <param name="endianness">The endianness.</param>
+		void ILinker.Initialize(string outputFile, Endianness endianness, ushort elfMachineType)
+		{
+			this.OutputFile = outputFile;
+			this.Endianness = endianness;
+			this.MachineID = elfMachineType;
+		}
+
+		string ILinker.Name { get { return this.GetType().Name; } }
+
+		/// <summary>
 		/// Executes the linker and generates the final linked file
 		/// </summary>
 		void ILinker.Commit()

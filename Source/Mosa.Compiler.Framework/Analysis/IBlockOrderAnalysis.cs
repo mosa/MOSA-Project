@@ -7,12 +7,12 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-namespace Mosa.Compiler.Framework
+namespace Mosa.Compiler.Framework.Analysis
 {
 	public interface IBlockOrderAnalysis
 	{
 		void PerformAnalysis(BasicBlocks basicBlocks);
-		
+
 		#region Properties
 
 		BasicBlock[] NewBlockOrder { get; }

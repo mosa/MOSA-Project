@@ -7,6 +7,7 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using Mosa.Compiler.Framework.Analysis;
 using Mosa.Compiler.InternalTrace;
 
 namespace Mosa.Compiler.Framework.Stages
@@ -31,7 +32,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			trace = CreateTrace();
 
-			var blockOrderAnalysis = methodCompiler.Compiler.CompilerOptions.BlockOrderAnalysis();
+			var blockOrderAnalysis = methodCompiler.Compiler.CompilerOptions.BlockOrderAnalysisFactory();
 			blockOrderAnalysis.PerformAnalysis(basicBlocks);
 
 			basicBlocks.ReorderBlocks(blockOrderAnalysis.NewBlockOrder);

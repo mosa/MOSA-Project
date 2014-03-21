@@ -28,7 +28,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			while (true)
 			{
-				var method = compiler.Scheduler.GetMethodToCompile();
+				var method = compiler.CompilationScheduler.GetMethodToCompile();
 
 				if (method == null)
 					break;

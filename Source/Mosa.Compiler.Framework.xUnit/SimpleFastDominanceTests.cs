@@ -42,9 +42,9 @@ namespace Mosa.Compiler.Framework.xUnit
 		{
 			var basicBlocks = BlockTests.Scenario3;
 
-			SimpleFastDominanceAnalysis dominance = new SimpleFastDominanceAnalysis(basicBlocks, basicBlocks[0]);
+			var dominance = new SimpleFastDominance(basicBlocks, basicBlocks[0]);
 
-			IDominanceAnalysis provider = dominance as IDominanceAnalysis;
+			var provider = dominance as IDominanceAnalysis;
 
 			Assert.Same(provider.GetImmediateDominator(basicBlocks[0]), null);
 			Assert.Same(provider.GetImmediateDominator(basicBlocks[1]), basicBlocks[0]);
@@ -70,7 +70,7 @@ namespace Mosa.Compiler.Framework.xUnit
 		{
 			var basicBlocks = BlockTests.Scenario4;
 
-			SimpleFastDominanceAnalysis dominance = new SimpleFastDominanceAnalysis(basicBlocks, basicBlocks[0]);
+			SimpleFastDominance dominance = new SimpleFastDominance(basicBlocks, basicBlocks[0]);
 
 			IDominanceAnalysis provider = dominance as IDominanceAnalysis;
 

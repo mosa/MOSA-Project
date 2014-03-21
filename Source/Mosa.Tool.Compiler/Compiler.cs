@@ -11,8 +11,10 @@
 
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.Linker;
+using Mosa.Compiler.Linker.Elf32;
+using Mosa.Compiler.Linker.Elf64;
+using Mosa.Compiler.Linker.PE;
 using NDesk.Options;
 using System;
 using System.Collections.Generic;
@@ -149,7 +151,10 @@ namespace Mosa.Tool.Compiler
 				"Select the format of the binary file to create [{ELF32|ELF64|PE}].",
 				delegate(string format)
 				{
-					compilerOptions.LinkerType = LinkerFactory.GetLinkerType(format);
+					compilerOptions.LinkerFactory = GetLinkerFactory(format);
+
+					if (compilerOptions.LinkerFactory == null)
+						throw new OptionException("Invalid value linker format: " + format, "format");
 				}
 			);
 
@@ -327,9 +332,9 @@ namespace Mosa.Tool.Compiler
 				}
 
 				// Check for missing options
-				if (compilerOptions.LinkerType == LinkerType.None)
+				if (compilerOptions.LinkerFactory == null)
 				{
-					throw new OptionException("No binary format specified.", "Architecture");
+					throw new OptionException("No binary format specified.", "format");
 				}
 
 				if (String.IsNullOrEmpty(compilerOptions.OutputFile))
@@ -380,7 +385,7 @@ namespace Mosa.Tool.Compiler
 			sb.Append(" > Output file: ").AppendLine(compilerOptions.OutputFile);
 			sb.Append(" > Input file(s): ").AppendLine(String.Join(", ", new List<string>(GetInputFileNames()).ToArray()));
 			sb.Append(" > Architecture: ").AppendLine(compilerOptions.Architecture.GetType().FullName);
-			sb.Append(" > Binary format: ").AppendLine(compilerOptions.LinkerType.ToString());
+			sb.Append(" > Binary format: ").AppendLine(compilerOptions.LinkerFactory().Name.ToString());
 			sb.Append(" > Boot format: ").AppendLine((compilerOptions.BootCompilerStage == null) ? "None" : ((IPipelineStage)compilerOptions.BootCompilerStage).Name);
 			sb.Append(" > Is executable: ").AppendLine(isExecutable.ToString());
 			return sb.ToString();
@@ -478,6 +483,18 @@ namespace Mosa.Tool.Compiler
 				case "multiboot-0.7":
 				case "mb0.7": return new Mosa.Platform.x86.Stages.Multiboot0695Stage();
 				default: throw new OptionException(String.Format("Unknown or unsupported boot format {0}.", format), "boot");
+			}
+		}
+
+		private static Func<ILinker> GetLinkerFactory(string format)
+		{
+			switch (format.ToLower())
+			{
+				case "elf32": return delegate { return new Elf32Linker(); };
+				case "elf64": return delegate { return new Elf64Linker(); };
+				case "pe": return delegate { return new PELinker(); };
+
+				default: return null;
 			}
 		}
 

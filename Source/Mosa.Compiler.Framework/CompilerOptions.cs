@@ -8,7 +8,6 @@
  */
 
 using Mosa.Compiler.Framework.Analysis;
-using Mosa.Compiler.Framework.Analysis.BlockOrder;
 using Mosa.Compiler.Linker;
 using System;
 
@@ -66,14 +65,6 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		/// <value>The output file.</value>
 		public string OutputFile { get; set; }
-
-		/// <summary>
-		/// Gets or sets the linker type.
-		/// </summary>
-		/// <value>
-		/// The type of the linker type.
-		/// </value>
-		public LinkerType LinkerType { get; set; }
 
 		/// <summary>
 		/// Gets or sets the compiler stage responsible for booting.
@@ -151,7 +142,15 @@ namespace Mosa.Compiler.Framework
 		/// <value>
 		/// The block order analysis.
 		/// </value>
-		public Func<IBlockOrderAnalysis> BlockOrderAnalysis { get; set; }
+		public Func<IBlockOrderAnalysis> BlockOrderAnalysisFactory { get; set; }
+
+		/// <summary>
+		/// Gets or sets the linker factory.
+		/// </summary>
+		/// <value>
+		/// The linker factory.
+		/// </value>
+		public Func<ILinker> LinkerFactory { get; set; }
 
 		#endregion Properties
 
@@ -162,8 +161,8 @@ namespace Mosa.Compiler.Framework
 		{
 			EnableSSA = false;
 			EnableSSAOptimizations = true;
-			DominanceAnalysisFactory = delegate { return new SimpleFastDominanceAnalysis(); };
-			BlockOrderAnalysis = delegate { return new LoopAwareAnalysis(); };
+			DominanceAnalysisFactory = delegate { return new SimpleFastDominance(); };
+			BlockOrderAnalysisFactory = delegate { return new LoopAwareBlockOrder(); };
 		}
 	}
 }

@@ -27,6 +27,11 @@ namespace Mosa.Compiler.Linker
 		#region Properties
 
 		/// <summary>
+		/// Gets the name of the liner.
+		/// </summary>
+		string Name { get; }
+
+		/// <summary>
 		/// Gets the base address.
 		/// </summary>
 		/// <value>The base address.</value>
@@ -83,6 +88,14 @@ namespace Mosa.Compiler.Linker
 		#endregion Properties
 
 		#region Methods
+
+		/// <summary>
+		/// Initializes the linker
+		/// </summary>
+		/// <param name="outputFile">The output file.</param>
+		/// <param name="endianness">The endianness.</param>
+		/// <param name="elfMachineType">Type of the elf machine.</param>
+		void Initialize(string outputFile, Endianness endianness, ushort elfMachineType);
 
 		/// <summary>
 		/// Allocates a symbol of the given name in the specified section.
