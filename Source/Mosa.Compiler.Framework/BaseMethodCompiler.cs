@@ -16,6 +16,7 @@ using Mosa.Compiler.MosaTypeSystem;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework
 {
@@ -62,7 +63,7 @@ namespace Mosa.Compiler.Framework
 			this.Compiler = compiler;
 			this.Method = method;
 			this.Type = method.DeclaringType;
-			this.Scheduler = compiler.Scheduler;
+			this.Scheduler = compiler.CompilationScheduler;
 			this.Architecture = compiler.Architecture;
 			this.TypeSystem = compiler.TypeSystem;
 			this.TypeLayout = Compiler.TypeLayout;
@@ -79,6 +80,8 @@ namespace Mosa.Compiler.Framework
 			EvaluateParameterOperands();
 
 			this.stop = false;
+
+			Debug.Assert(this.Linker != null);
 		}
 
 		#endregion Construction

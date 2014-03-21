@@ -24,7 +24,7 @@ namespace Mosa.Compiler.Framework.Analysis
 	/// The implementation is based on "A Simple, Fast Dominance Algorithm" by Keith D. Cooper,
 	/// Timothy J. Harvey, and Ken Kennedy, Rice University in Houston, Texas, USA.
 	/// </remarks>
-	public sealed class SimpleFastDominanceAnalysis : IDominanceAnalysis
+	public sealed class SimpleFastDominance : IDominanceAnalysis
 	{
 		#region Data members
 
@@ -51,18 +51,18 @@ namespace Mosa.Compiler.Framework.Analysis
 		#endregion Data members
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="SimpleFastDominanceAnalysis"/> class.
+		/// Initializes a new instance of the <see cref="SimpleFastDominance"/> class.
 		/// </summary>
-		public SimpleFastDominanceAnalysis()
+		public SimpleFastDominance()
 		{
 		}
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="SimpleFastDominanceAnalysis"/> class.
+		/// Initializes a new instance of the <see cref="SimpleFastDominance"/> class.
 		/// </summary>
 		/// <param name="basicBlocks">The basic blocks.</param>
 		/// <param name="entryBlock">The entry block.</param>
-		public SimpleFastDominanceAnalysis(BasicBlocks basicBlocks, BasicBlock entryBlock)
+		public SimpleFastDominance(BasicBlocks basicBlocks, BasicBlock entryBlock)
 		{
 			PerformAnalysis(basicBlocks, entryBlock);
 		}
@@ -289,7 +289,7 @@ namespace Mosa.Compiler.Framework.Analysis
 				return new List<BasicBlock>(); // Empty List
 		}
 
-		#endregion IDominanceProvider Members
+		#endregion IDominanceAnalysis Members
 
 		#region Internals
 

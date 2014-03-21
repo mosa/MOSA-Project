@@ -10,7 +10,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace Mosa.Compiler.Framework.Analysis.BlockOrder
+namespace Mosa.Compiler.Framework.Analysis
 {
 	/// <summary>
 	/// The Simple Trace Block Order quickly reorders blocks to optimize loops and reduce the distance of jumps and branches.

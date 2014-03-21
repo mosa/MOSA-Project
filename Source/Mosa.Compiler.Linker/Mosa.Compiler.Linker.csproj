@@ -38,7 +38,6 @@
     <Compile Include="BuiltInPatch.cs" />
     <Compile Include="Patch.cs" />
     <Compile Include="ExtendedLinkerSection.cs" />
-    <Compile Include="LinkerType.cs" />
     <Compile Include="Elf32\Elf32Linker.cs" />
     <Compile Include="Elf32\BssSection.cs" />
     <Compile Include="Elf32\CodeSection.cs" />

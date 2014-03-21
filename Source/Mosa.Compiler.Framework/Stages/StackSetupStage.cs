@@ -8,7 +8,6 @@
  */
 
 using Mosa.Compiler.Framework.IR;
-using Mosa.Compiler.Framework.Linker;
 using System;
 
 namespace Mosa.Compiler.Framework.Stages

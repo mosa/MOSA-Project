@@ -7,12 +7,12 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-namespace Mosa.Compiler.Framework.Analysis.BlockOrder
+namespace Mosa.Compiler.Framework.Analysis
 {
 	/// <summary>
-	/// Reverses the block order; this is used for testing.
+	/// Keeps the same block ordering.
 	/// </summary>
-	public class ReverseBlockOrder : IBlockOrderAnalysis
+	public class NaturalBlockOrder : IBlockOrderAnalysis
 	{
 		#region Data members
 
@@ -41,7 +41,7 @@ namespace Mosa.Compiler.Framework.Analysis.BlockOrder
 
 			blockOrder[orderBlockCnt++] = basicBlocks.PrologueBlock;
 
-			for (int i = basicBlocks.Count; i >= 0; i--)
+			for (int i = 0; i < basicBlocks.Count; i++)
 			{
 				if (basicBlocks[i] != basicBlocks.PrologueBlock)
 				{
