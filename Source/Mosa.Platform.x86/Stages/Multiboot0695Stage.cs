@@ -142,27 +142,28 @@ namespace Mosa.Platform.x86.Stages
 			if (multibootMethod == null)
 			{
 				multibootMethod = compiler.CreateLinkerMethod("MultibootInit");
-				
+
 				WriteMultibootHeader();
 				return;
 			}
 
-			TypeInitializerSchedulerStage typeInitializerSchedulerStage = compiler.Pipeline.FindFirst<TypeInitializerSchedulerStage>();
+			var typeInitializerSchedulerStage = compiler.Pipeline.FindFirst<TypeInitializerSchedulerStage>();
 
-			Operand ecx = Operand.CreateCPURegister(typeSystem.BuiltIn.I4, GeneralPurposeRegister.ECX);
-			Operand eax = Operand.CreateCPURegister(typeSystem.BuiltIn.I4, GeneralPurposeRegister.EAX);
-			Operand ebx = Operand.CreateCPURegister(typeSystem.BuiltIn.I4, GeneralPurposeRegister.EBX);
+			var ecx = Operand.CreateCPURegister(typeSystem.BuiltIn.I4, GeneralPurposeRegister.ECX);
+			var eax = Operand.CreateCPURegister(typeSystem.BuiltIn.I4, GeneralPurposeRegister.EAX);
+			var ebx = Operand.CreateCPURegister(typeSystem.BuiltIn.I4, GeneralPurposeRegister.EBX);
 
-			BasicBlocks basicBlocks = new BasicBlocks();
-			InstructionSet instructionSet = new InstructionSet(25);
-			Context ctx = instructionSet.CreateNewBlock(basicBlocks);
+			var basicBlocks = new BasicBlocks();
+			var instructionSet = new InstructionSet(25);
+
+			var ctx = instructionSet.CreateNewBlock(basicBlocks);
 			basicBlocks.AddHeaderBlock(ctx.BasicBlock);
 
 			ctx.AppendInstruction(X86.Mov, ecx, Operand.CreateConstantSignedInt(typeSystem, 0x200000));
 			ctx.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(typeSystem.BuiltIn.I4, ecx, 0), eax);
 			ctx.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(typeSystem.BuiltIn.I4, ecx, 4), ebx);
 
-			Operand entryPoint = Operand.CreateSymbolFromMethod(typeSystem, typeInitializerSchedulerStage.TypeInitializerMethod);
+			var entryPoint = Operand.CreateSymbolFromMethod(typeSystem, typeInitializerSchedulerStage.TypeInitializerMethod);
 
 			ctx.AppendInstruction(X86.Call, null, entryPoint);
 			ctx.AppendInstruction(X86.Ret);

@@ -55,7 +55,7 @@ namespace Mosa.Tool.Compiler
 				new GreedyRegisterAllocatorStage(),
 				new StackLayoutStage(),
 				new EmptyBlockRemovalStage(),
-				new LoopAwareBlockOrderStage(),
+				new BlockOrderingStage(),
 				new CodeGenerationStage(),
 			});
 		}

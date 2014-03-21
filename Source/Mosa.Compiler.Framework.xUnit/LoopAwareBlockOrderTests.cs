@@ -7,7 +7,7 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using Mosa.Compiler.Framework.Analysis;
+using Mosa.Compiler.Framework.Analysis.BlockOrder;
 using System;
 using Xunit;
 
@@ -43,7 +43,7 @@ namespace Mosa.Compiler.Framework.xUnit
 		{
 			var basicBlocks = BlockTests.Scenario1;
 
-			var loopAwareBlockOrder = new LoopAwareBlockOrderAnalysis(basicBlocks);
+			var loopAwareBlockOrder = new LoopAwareAnalysis(basicBlocks);
 
 			Assert.Equal(loopAwareBlockOrder.GetLoopDepth(basicBlocks[0]), 0);
 			Assert.Equal(loopAwareBlockOrder.GetLoopDepth(basicBlocks[1]), 1);

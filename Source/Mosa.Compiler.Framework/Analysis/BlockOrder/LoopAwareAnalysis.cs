@@ -11,14 +11,13 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
-using Mosa.Compiler.Framework;
 
-namespace Mosa.Compiler.Framework.Analysis
+namespace Mosa.Compiler.Framework.Analysis.BlockOrder
 {
 	/// <summary>
 	/// The Loop Aware Block Ordering reorders blocks to optimize loops and reduce the distance of jumps and branches.
 	/// </summary>
-	public sealed class LoopAwareBlockOrderAnalysis : IBlockOrderAnalysis
+	public sealed class LoopAwareAnalysis : IBlockOrderAnalysis
 	{
 		#region Data members
 
@@ -99,17 +98,17 @@ namespace Mosa.Compiler.Framework.Analysis
 		#endregion Priority class
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="LoopAwareBlockOrderAnalysis"/> class.
+		/// Initializes a new instance of the <see cref="LoopAwareAnalysis"/> class.
 		/// </summary>
-		public LoopAwareBlockOrderAnalysis()
+		public LoopAwareAnalysis()
 		{
 		}
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="LoopAwareBlockOrderAnalysis"/> class.
+		/// Initializes a new instance of the <see cref="LoopAwareAnalysis"/> class.
 		/// </summary>
 		/// <param name="basicBlocks">The basic blocks.</param>
-		public LoopAwareBlockOrderAnalysis(BasicBlocks basicBlocks)
+		public LoopAwareAnalysis(BasicBlocks basicBlocks)
 		{
 			PerformAnalysis(basicBlocks);
 		}
@@ -131,7 +130,7 @@ namespace Mosa.Compiler.Framework.Analysis
 		public void PerformAnalysis(BasicBlocks basicBlocks)
 		{
 			this.basicBlocks = basicBlocks;
-			
+
 			blockCount = basicBlocks.Count;
 			loopEnds = new List<BasicBlock>();
 			loopCount = 0;

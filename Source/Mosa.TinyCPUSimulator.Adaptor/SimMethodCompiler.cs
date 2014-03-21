@@ -54,7 +54,7 @@ namespace Mosa.TinyCPUSimulator.Adaptor
 				new GreedyRegisterAllocatorStage(),
 				new StackLayoutStage(),
 				new EmptyBlockRemovalStage(),
-				new LoopAwareBlockOrderStage(),
+				new BlockOrderingStage(),
 				new SimCodeGeneratorStage(simAdapter),
 			});
 		}
