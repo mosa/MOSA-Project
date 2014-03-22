@@ -15,12 +15,9 @@ namespace Mosa.Compiler.Framework.Stages
 	/// <summary>
 	/// Calculates the layout of the stack of the method.
 	/// </summary>
-	public sealed class StackLayoutStage : BaseMethodCompilerStage, IMethodCompilerStage, IPipelineStage
+	public sealed class StackLayoutStage : BaseMethodCompilerStage
 	{
-		/// <summary>
-		/// Runs the specified method compiler.
-		/// </summary>
-		void IMethodCompilerStage.Execute()
+		protected override void Run()
 		{
 			if (MethodCompiler.Compiler.PlugSystem.GetPlugMethod(MethodCompiler.Method) != null)
 				return;

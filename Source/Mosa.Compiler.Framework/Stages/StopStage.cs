@@ -12,9 +12,9 @@ namespace Mosa.Compiler.Framework.Stages
 	/// <summary>
 	///	Stop the method compiler - use in development
 	/// </summary>
-	public class StopStage : BaseMethodCompilerStage, IMethodCompilerStage, IPipelineStage
+	public class StopStage : BaseMethodCompilerStage
 	{
-		public virtual void Execute()
+		protected override void Run()
 		{
 			MethodCompiler.Stop();
 		}

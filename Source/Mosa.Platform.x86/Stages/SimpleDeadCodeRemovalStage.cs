@@ -12,17 +12,12 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.x86.Stages
 {
 	/// <summary>
-	/// The simple dead code removal stage remove useless instructions 
+	/// The simple dead code removal stage remove useless instructions
 	/// and NOP instructions prior to the register allocation stage.
 	/// </summary>
-	public sealed class SimpleDeadCodeRemovalStage : BaseTransformationStage, IMethodCompilerStage
+	public sealed class SimpleDeadCodeRemovalStage : BaseTransformationStage
 	{
-		#region IMethodCompilerStage Members
-
-		/// <summary>
-		/// Performs stage specific processing on the compiler context.
-		/// </summary>
-		void IMethodCompilerStage.Execute()
+		protected override void Run()
 		{
 			var trace = CreateTrace();
 
@@ -61,7 +56,5 @@ namespace Mosa.Platform.x86.Stages
 				}
 			}
 		}
-
-		#endregion IMethodCompilerStage Members
 	}
 }

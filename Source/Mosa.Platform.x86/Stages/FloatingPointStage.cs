@@ -14,12 +14,9 @@ namespace Mosa.Platform.x86.Stages
 	/// <summary>
 	///
 	/// </summary>
-	public class FloatingPointStage : BaseTransformationStage, IMethodCompilerStage
+	public class FloatingPointStage : BaseTransformationStage
 	{
-		/// <summary>
-		/// Remove immediate floating point constants - constant must be in registers or memory locations
-		/// </summary>
-		void IMethodCompilerStage.Execute()
+		protected override void Run()
 		{
 			foreach (var block in BasicBlocks)
 			{
