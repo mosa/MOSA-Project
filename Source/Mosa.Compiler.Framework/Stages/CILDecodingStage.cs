@@ -8,11 +8,11 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System.Diagnostics;
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.CIL;
 using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.MosaTypeSystem;
+using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework.Stages
 {
@@ -25,7 +25,7 @@ namespace Mosa.Compiler.Framework.Stages
 	/// representation. The instructions are grouped into basic Blocks
 	/// for easier local optimizations in later compiler stages.
 	/// </remarks>
-	public sealed class CILDecodingStage : BaseMethodCompilerStage, IMethodCompilerStage, IInstructionDecoder, IPipelineStage
+	public sealed class CILDecodingStage : BaseMethodCompilerStage, IInstructionDecoder
 	{
 		#region Data members
 
@@ -36,12 +36,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		#endregion Data members
 
-		#region IMethodCompilerStage Members
-
-		/// <summary>
-		/// Performs stage specific processing on the compiler context.
-		/// </summary>
-		void IMethodCompilerStage.Execute()
+		protected override void Run()
 		{
 			// No CIL decoding if this is a linker generated method
 			if (MethodCompiler.Method.IsLinkerGenerated)
@@ -72,8 +67,6 @@ namespace Mosa.Compiler.Framework.Stages
 			/* Decode the instructions */
 			Decode(MethodCompiler);
 		}
-
-		#endregion IMethodCompilerStage Members
 
 		#region Internals
 

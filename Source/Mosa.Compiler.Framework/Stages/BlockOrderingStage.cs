@@ -15,7 +15,7 @@ namespace Mosa.Compiler.Framework.Stages
 	/// <summary>
 	/// The Block Ordering Stage reorders blocks to optimize loops and reduce the distance of jumps and branches.
 	/// </summary>
-	public class BlockOrderingStage : BaseMethodCompilerStage, IMethodCompilerStage, IPipelineStage
+	public class BlockOrderingStage : BaseMethodCompilerStage
 	{
 		#region Data members
 
@@ -23,12 +23,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		#endregion Data members
 
-		#region IMethodCompilerStage Members
-
-		/// <summary>
-		/// Runs the specified compiler.
-		/// </summary>
-		void IMethodCompilerStage.Execute()
+		protected override void Run()
 		{
 			trace = CreateTrace();
 
@@ -66,7 +61,5 @@ namespace Mosa.Compiler.Framework.Stages
 				trace.Log("Block " + block.ToString() + " #" + block.Sequence.ToString() + " -> Depth: " + depth.ToString() + " index: " + depthindex.ToString());
 			}
 		}
-
-		#endregion IMethodCompilerStage Members
 	}
 }

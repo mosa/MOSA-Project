@@ -17,7 +17,7 @@ namespace Mosa.Compiler.Framework.Stages
 	/// <summary>
 	/// This stages removes jumps to the next instruction
 	/// </summary>
-	public sealed class JumpPeepholeOptimizationStage : BaseCodeTransformationStage, IMethodCompilerStage
+	public sealed class JumpPeepholeOptimizationStage : BaseCodeTransformationStage
 	{
 		// TODO:
 		// 1. If first branch is to the next basic block,
@@ -25,12 +25,7 @@ namespace Mosa.Compiler.Framework.Stages
 		//           part of code: ConditionCode = GetOppositeConditionCode(ConditionCode);
 		// 2. If the basic block contains only a single jump instruction, rewrite all jumps to avoid it.
 
-		#region IMethodCompilerStage Members
-
-		/// <summary>
-		/// Performs stage specific processing on the compiler context.
-		/// </summary>
-		void IMethodCompilerStage.Execute()
+		protected override void Run()
 		{
 			var trace = CreateTrace();
 
@@ -62,6 +57,5 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 		}
 
-		#endregion IMethodCompilerStage Members
 	}
 }

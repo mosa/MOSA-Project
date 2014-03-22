@@ -30,12 +30,12 @@ namespace Mosa.Platform.x86.Stages
 		private Operand constantZero;
 		private Operand constantByte1;
 
-		public override void Execute()
+		protected override void Run()
 		{
 			constantZero = Operand.CreateConstantSignedInt(TypeSystem, 0);
 			constantByte1 = Operand.CreateConstantUnsignedByte(TypeSystem, 1);
 
-			base.Execute();
+			base.Run();
 		}
 
 		#region Utility Methods

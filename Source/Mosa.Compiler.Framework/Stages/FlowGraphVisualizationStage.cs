@@ -15,7 +15,7 @@ namespace Mosa.Compiler.Framework.Stages
 	/// <summary>
 	/// The FlowGraph Visualization Stage emits flowgraphs for graphviz.
 	/// </summary>
-	public class FlowGraphVisualizationStage : BaseMethodCompilerStage, IMethodCompilerStage, IPipelineStage
+	public class FlowGraphVisualizationStage : BaseMethodCompilerStage
 	{
 		#region Data members
 
@@ -53,10 +53,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </summary>
 		public static readonly FlowGraphVisualizationStage Instance = new FlowGraphVisualizationStage();
 
-		/// <summary>
-		/// Runs the specified compiler.
-		/// </summary>
-		void IMethodCompilerStage.Execute()
+		protected override void Run()
 		{
 			if (!methodCount.ContainsKey(MethodCompiler.Method.Name))
 				methodCount[MethodCompiler.Method.Name] = 0;

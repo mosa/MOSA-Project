@@ -18,11 +18,11 @@ namespace Mosa.Compiler.Framework.Stages
 	/// convert them into respective compound instructions, which will be expanded into
 	/// multiple native instructions by platform layer.
 	/// </summary>
-	public class ConvertCompoundMoveStage : BaseMethodCompilerStage, IMethodCompilerStage
+	public class ConvertCompoundMoveStage : BaseMethodCompilerStage
 	{
 		Dictionary<Operand, Operand> repl = new Dictionary<Operand, Operand>();
 
-		void IMethodCompilerStage.Execute()
+		protected override void Run()
 		{
 			for (int index = 0; index < BasicBlocks.Count; index++)
 				for (Context ctx = new Context(InstructionSet, BasicBlocks[index]); !ctx.IsBlockEndInstruction; ctx.GotoNext())

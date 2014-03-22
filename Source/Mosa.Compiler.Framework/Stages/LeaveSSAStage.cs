@@ -17,14 +17,11 @@ namespace Mosa.Compiler.Framework.Stages
 	/// <summary>
 	///
 	/// </summary>
-	public class LeaveSSA : BaseMethodCompilerStage, IMethodCompilerStage, IPipelineStage
+	public class LeaveSSA : BaseMethodCompilerStage
 	{
 		private Dictionary<Operand, Operand> finalVirtualRegisters;
 
-		/// <summary>
-		/// Performs stage specific processing on the compiler context.
-		/// </summary>
-		void IMethodCompilerStage.Execute()
+		protected override void Run()
 		{
 			finalVirtualRegisters = new Dictionary<Operand, Operand>();
 

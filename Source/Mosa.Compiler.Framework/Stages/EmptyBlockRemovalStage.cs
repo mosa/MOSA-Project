@@ -17,11 +17,11 @@ namespace Mosa.Compiler.Framework.Stages
 	/// <summary>
 	///	This stage removes empty blocks.
 	/// </summary>
-	public class EmptyBlockRemovalStage : BaseMethodCompilerStage, IMethodCompilerStage, IPipelineStage
+	public class EmptyBlockRemovalStage : BaseMethodCompilerStage
 	{
 		protected BaseInstruction jumpInstruction;
 
-		public virtual void Execute()
+		protected override void Run()
 		{
 			var trace = CreateTrace();
 

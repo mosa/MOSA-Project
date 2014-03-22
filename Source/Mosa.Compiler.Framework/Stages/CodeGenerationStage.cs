@@ -19,7 +19,7 @@ namespace Mosa.Compiler.Framework.Stages
 	/// <summary>
 	/// Base class for code generation stages.
 	/// </summary>
-	public class CodeGenerationStage : BaseMethodCompilerStage, IMethodCompilerStage, IPipelineStage
+	public class CodeGenerationStage : BaseMethodCompilerStage
 	{
 		#region Data members
 
@@ -64,12 +64,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		#endregion Construction
 
-		#region Methods
-
-		/// <summary>
-		/// Performs stage specific processing on the compiler context.
-		/// </summary>
-		void IMethodCompilerStage.Execute()
+		protected override void Run()
 		{
 			if (!EmitBinary)
 				return;
@@ -94,6 +89,8 @@ namespace Mosa.Compiler.Framework.Stages
 				EndGenerate();
 			}
 		}
+
+		#region Methods
 
 		/// <summary>
 		/// Called to emit a list of instructions offered by the instruction provider.
