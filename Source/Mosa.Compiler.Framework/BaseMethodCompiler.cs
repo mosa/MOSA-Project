@@ -11,12 +11,11 @@
 using Mosa.Compiler.Framework.Stages;
 using Mosa.Compiler.InternalTrace;
 using Mosa.Compiler.Linker;
-
 using Mosa.Compiler.MosaTypeSystem;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Diagnostics;
+using System.IO;
 
 namespace Mosa.Compiler.Framework
 {

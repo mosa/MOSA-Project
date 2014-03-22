@@ -9,8 +9,6 @@
 
 using System;
 
-
-
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>

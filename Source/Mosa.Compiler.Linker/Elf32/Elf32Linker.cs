@@ -156,9 +156,9 @@ namespace Mosa.Compiler.Linker.Elf32
 						PhysicalAddress = (uint)section.VirtualAddress,
 						Type = ProgramHeaderType.Load,
 						Flags =
-						    (section.SectionKind == SectionKind.Text) ? ProgramHeaderFlags.Read | ProgramHeaderFlags.Execute :
-						    (section.SectionKind == SectionKind.ROData) ? ProgramHeaderFlags.Read :
-						    ProgramHeaderFlags.Read | ProgramHeaderFlags.Write
+							(section.SectionKind == SectionKind.Text) ? ProgramHeaderFlags.Read | ProgramHeaderFlags.Execute :
+							(section.SectionKind == SectionKind.ROData) ? ProgramHeaderFlags.Read :
+							ProgramHeaderFlags.Read | ProgramHeaderFlags.Write
 					};
 
 					pheader.Write(writer);

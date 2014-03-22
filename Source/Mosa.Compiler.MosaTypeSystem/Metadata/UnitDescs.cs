@@ -14,7 +14,9 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 	internal class UnitDesc<Def, Sig> where Def : IMDTokenProvider
 	{
 		public ScopedToken Token { get; private set; }
+
 		public Def Definition { get; private set; }
+
 		public Sig Signature { get; private set; }
 
 		public UnitDesc(ModuleDef module, Def definition, Sig signature)

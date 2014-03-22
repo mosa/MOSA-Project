@@ -9,8 +9,6 @@
 
 using System;
 
-using Mosa.Compiler.MosaTypeSystem;
-
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>

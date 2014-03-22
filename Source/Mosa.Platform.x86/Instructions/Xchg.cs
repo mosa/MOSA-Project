@@ -26,7 +26,7 @@ namespace Mosa.Platform.x86.Instructions
 		private static readonly OpCode R_R_16 = new OpCode(new byte[] { 0x66, 0x87 });
 
 		#endregion Data Members
-		
+
 		#region Construction
 
 		/// <summary>

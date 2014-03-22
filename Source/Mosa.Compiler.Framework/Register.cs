@@ -67,6 +67,5 @@ namespace Mosa.Compiler.Framework
 		public abstract int Width { get; }
 
 		#endregion Properties
-
 	}
 }

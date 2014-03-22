@@ -16,7 +16,6 @@ namespace Mosa.Compiler.Framework
 	/// </summary>
 	public abstract class BaseCodeTransformationStage : BaseMethodCompilerStage, IVisitor
 	{
-
 		protected override void Run()
 		{
 			for (int index = 0; index < BasicBlocks.Count; index++)
@@ -24,6 +23,5 @@ namespace Mosa.Compiler.Framework
 					if (!ctx.IsEmpty)
 						ctx.Clone().Visit(this);
 		}
-
 	}
 }

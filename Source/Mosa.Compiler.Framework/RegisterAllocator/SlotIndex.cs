@@ -7,9 +7,9 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using Mosa.Compiler.Framework.IR;
 using System;
 using System.Diagnostics;
-using Mosa.Compiler.Framework.IR;
 
 namespace Mosa.Compiler.Framework.RegisterAllocator
 {

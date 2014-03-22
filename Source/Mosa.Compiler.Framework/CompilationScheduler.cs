@@ -71,7 +71,7 @@ namespace Mosa.Compiler.Framework.Stages
 			Debug.Assert(!method.HasOpenGenericParams);
 
 			methodsInvoked.AddIfNew(method);
-			
+
 			(this as ICompilationScheduler).TrackTypeAllocated(method.DeclaringType);
 		}
 
