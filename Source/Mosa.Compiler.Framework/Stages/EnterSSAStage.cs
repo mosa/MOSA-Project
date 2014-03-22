@@ -27,15 +27,15 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <summary>
 		/// Performs stage specific processing on the compiler context.
 		/// </summary>
-		void IMethodCompilerStage.Run()
+		void IMethodCompilerStage.Execute()
 		{
 			// Method is empty - must be a plugged method
-			if (basicBlocks.HeadBlocks.Count == 0)
+			if (BasicBlocks.HeadBlocks.Count == 0)
 				return;
 
-			phiPlacementStage = methodCompiler.Pipeline.FindFirst<PhiPlacementStage>();
+			phiPlacementStage = MethodCompiler.Pipeline.FindFirst<PhiPlacementStage>();
 
-			foreach (var headBlock in basicBlocks.HeadBlocks)
+			foreach (var headBlock in BasicBlocks.HeadBlocks)
 			{
 				EnterSSA(headBlock);
 			}
@@ -49,7 +49,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="headBlock">The head block.</param>
 		private void EnterSSA(BasicBlock headBlock)
 		{
-			var analysis = methodCompiler.DominanceAnalysis.GetDominanceAnalysis(headBlock);
+			var analysis = MethodCompiler.DominanceAnalysis.GetDominanceAnalysis(headBlock);
 
 			variables = new Dictionary<Operand, Stack<int>>();
 			counts = new Dictionary<Operand, int>();
@@ -59,12 +59,12 @@ namespace Mosa.Compiler.Framework.Stages
 				AddToAssignments(op);
 			}
 
-			foreach (var op in methodCompiler.Parameters)
+			foreach (var op in MethodCompiler.Parameters)
 			{
 				AddToAssignments(op);
 			}
 
-			foreach (var op in methodCompiler.LocalVariables)
+			foreach (var op in MethodCompiler.LocalVariables)
 			{
 				if (op.Uses.Count != 0)
 				{
@@ -129,7 +129,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="dominanceProvider">The dominance provider.</param>
 		private void RenameVariables(BasicBlock block, IDominanceAnalysis dominanceProvider)
 		{
-			for (var context = new Context(instructionSet, block); !context.IsBlockEndInstruction; context.GotoNext())
+			for (var context = new Context(InstructionSet, block); !context.IsBlockEndInstruction; context.GotoNext())
 			{
 				if (!(context.Instruction is Phi))
 				{
@@ -161,7 +161,7 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				var j = WhichPredecessor(s, block); // ???
 
-				for (var context = new Context(instructionSet, s); !context.IsBlockEndInstruction; context.GotoNext())
+				for (var context = new Context(InstructionSet, s); !context.IsBlockEndInstruction; context.GotoNext())
 				{
 					if (!(context.Instruction is Phi))
 						continue;
@@ -181,7 +181,7 @@ namespace Mosa.Compiler.Framework.Stages
 				RenameVariables(s, dominanceProvider);
 			}
 
-			for (var context = new Context(instructionSet, block); !context.IsBlockEndInstruction; context.GotoNext())
+			for (var context = new Context(InstructionSet, block); !context.IsBlockEndInstruction; context.GotoNext())
 			{
 				if (!context.IsEmpty && context.Result != null && context.Result.IsVirtualRegister)
 				{

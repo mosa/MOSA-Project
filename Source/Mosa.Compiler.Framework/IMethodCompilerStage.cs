@@ -31,11 +31,11 @@ namespace Mosa.Compiler.Framework
 		/// Setup stage specific processing on the compiler context.
 		/// </summary>
 		/// <param name="methodCompiler">The compiler context to perform processing in.</param>
-		void Setup(BaseMethodCompiler methodCompiler);
+		void Initialize(BaseMethodCompiler methodCompiler);
 
 		/// <summary>
 		/// Performs stage specific processing on the compiler context.
 		/// </summary>
-		void Run();
+		void Execute();
 	}
 }

@@ -30,16 +30,16 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <summary>
 		/// Performs stage specific processing on the compiler context.
 		/// </summary>
-		void IMethodCompilerStage.Run()
+		void IMethodCompilerStage.Execute()
 		{
 			var trace = CreateTrace();
 
-			for (int f = 0; f < basicBlocks.Count - 1; f++)
+			for (int f = 0; f < BasicBlocks.Count - 1; f++)
 			{
-				var from = basicBlocks[f];
-				var next = basicBlocks[f + 1];
+				var from = BasicBlocks[f];
+				var next = BasicBlocks[f + 1];
 
-				Context context = new Context(instructionSet, from, from.EndIndex);
+				Context context = new Context(InstructionSet, from, from.EndIndex);
 				context.GotoPrevious();
 
 				while (context.IsEmpty)

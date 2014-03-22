@@ -69,13 +69,13 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <summary>
 		/// Performs stage specific processing on the compiler context.
 		/// </summary>
-		void IMethodCompilerStage.Run()
+		void IMethodCompilerStage.Execute()
 		{
 			if (!EmitBinary)
 				return;
 
 			// Retrieve a stream to place the code into
-			using (codeStream = methodCompiler.RequestCodeStream())
+			using (codeStream = MethodCompiler.RequestCodeStream())
 			{
 				// HINT: We need seeking to resolve labels.
 				Debug.Assert(codeStream.CanSeek, @"Can't seek codeReader output stream.");
@@ -102,11 +102,11 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			var trace = CreateTrace();
 
-			foreach (BasicBlock block in basicBlocks)
+			foreach (BasicBlock block in BasicBlocks)
 			{
 				BlockStart(block);
 
-				for (Context context = new Context(instructionSet, block); !context.IsBlockEndInstruction; context.GotoNext())
+				for (Context context = new Context(InstructionSet, block); !context.IsBlockEndInstruction; context.GotoNext())
 				{
 					if (context.IsEmpty || context.Instruction == IRInstruction.BlockStart)
 						continue;
@@ -140,8 +140,8 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </summary>
 		protected virtual void BeginGenerate()
 		{
-			codeEmitter = architecture.GetCodeEmitter();
-			codeEmitter.Initialize(methodCompiler.Method.FullName, methodCompiler.Linker, codeStream, typeSystem);
+			codeEmitter = Architecture.GetCodeEmitter();
+			codeEmitter.Initialize(MethodCompiler.Method.FullName, MethodCompiler.Linker, codeStream, TypeSystem);
 		}
 
 		/// <summary>

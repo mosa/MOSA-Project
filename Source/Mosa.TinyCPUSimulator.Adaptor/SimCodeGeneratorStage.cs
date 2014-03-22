@@ -32,7 +32,7 @@ namespace Mosa.TinyCPUSimulator.Adaptor
 		{
 			base.BeginGenerate();
 
-			var section = methodCompiler.Linker.GetSection(SectionKind.Text) as SimLinkerSection;
+			var section = MethodCompiler.Linker.GetSection(SectionKind.Text) as SimLinkerSection;
 
 			sectionAddress = section.VirtualAddress;
 
@@ -50,7 +50,7 @@ namespace Mosa.TinyCPUSimulator.Adaptor
 			long end = codeEmitter.CurrentPosition;
 			byte opcodeSize = (byte)(end - start);
 
-			var instruction = simAdapter.Convert(context, methodCompiler.Method, basicBlocks, opcodeSize);
+			var instruction = simAdapter.Convert(context, MethodCompiler.Method, BasicBlocks, opcodeSize);
 			instruction.Source = context.ToString(); // context.Instruction.ToString(context);
 
 			simAdapter.SimCPU.AddInstruction((ulong)(sectionAddress + startPosition + start), instruction);
@@ -64,7 +64,7 @@ namespace Mosa.TinyCPUSimulator.Adaptor
 
 			base.BlockStart(block);
 
-			simAdapter.SimCPU.SetSymbol(block.ToString() + ":" + methodCompiler.Method.FullName, (ulong)(sectionAddress + startPosition + current), 0);
+			simAdapter.SimCPU.SetSymbol(block.ToString() + ":" + MethodCompiler.Method.FullName, (ulong)(sectionAddress + startPosition + current), 0);
 		}
 	}
 }

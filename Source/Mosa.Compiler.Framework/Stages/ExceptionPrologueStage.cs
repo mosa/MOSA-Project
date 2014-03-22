@@ -21,18 +21,18 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <summary>
 		/// Runs the specified compiler.
 		/// </summary>
-		void IMethodCompilerStage.Run()
+		void IMethodCompilerStage.Execute()
 		{
 			// Handler Code
-			foreach (var clause in methodCompiler.Method.ExceptionBlocks)
+			foreach (var clause in MethodCompiler.Method.ExceptionBlocks)
 			{
 				if (clause.HandlerType == ExceptionHandlerType.Exception)
 				{
-					var block = basicBlocks.GetByLabel(clause.HandlerOffset);
+					var block = BasicBlocks.GetByLabel(clause.HandlerOffset);
 
-					var context = new Context(instructionSet, block).InsertBefore();
+					var context = new Context(InstructionSet, block).InsertBefore();
 
-					Operand exceptionObject = methodCompiler.CreateVirtualRegister(clause.Type);
+					Operand exceptionObject = MethodCompiler.CreateVirtualRegister(clause.Type);
 
 					context.SetInstruction(IRInstruction.ExceptionPrologue, exceptionObject);
 				}

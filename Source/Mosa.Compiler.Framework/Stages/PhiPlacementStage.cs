@@ -67,10 +67,10 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <summary>
 		/// Performs stage specific processing on the compiler context.
 		/// </summary>
-		void IMethodCompilerStage.Run()
+		void IMethodCompilerStage.Execute()
 		{
 			// Method is empty - must be a plugged method
-			if (basicBlocks.HeadBlocks.Count == 0)
+			if (BasicBlocks.HeadBlocks.Count == 0)
 				return;
 
 			CollectAssignments();
@@ -88,15 +88,15 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </summary>
 		private void CollectAssignments()
 		{
-			foreach (var block in basicBlocks)
-				for (var context = new Context(instructionSet, block); !context.IsBlockEndInstruction; context.GotoNext())
+			foreach (var block in BasicBlocks)
+				for (var context = new Context(InstructionSet, block); !context.IsBlockEndInstruction; context.GotoNext())
 					if (!context.IsEmpty && context.Result != null)
 						if (context.Result.IsVirtualRegister)
 							AddToAssignments(context.Result, block);
 
 			// FUTURE: Only include parameter operands if reachable from the given header block
-			foreach (var headBlock in basicBlocks.HeadBlocks)
-				foreach (var op in methodCompiler.Parameters)
+			foreach (var headBlock in BasicBlocks.HeadBlocks)
+				foreach (var op in MethodCompiler.Parameters)
 					AddToAssignments(op, headBlock);
 		}
 
@@ -125,7 +125,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="variable">The variable.</param>
 		private void InsertPhiInstruction(BasicBlock block, Operand variable)
 		{
-			var context = new Context(instructionSet, block);
+			var context = new Context(InstructionSet, block);
 			context.AppendInstruction(IRInstruction.Phi, variable);
 
 			for (var i = 0; i < block.PreviousBlocks.Count; ++i)
@@ -141,7 +141,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </summary>
 		private void PlacePhiFunctionsMinimal()
 		{
-			foreach (var headBlock in basicBlocks.HeadBlocks)
+			foreach (var headBlock in BasicBlocks.HeadBlocks)
 			{
 				PlacePhiFunctionsMinimal(headBlock);
 			}
@@ -152,7 +152,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </summary>
 		private void PlacePhiFunctionsMinimal(BasicBlock headBlock)
 		{
-			var analysis = methodCompiler.DominanceAnalysis.GetDominanceAnalysis(headBlock);
+			var analysis = MethodCompiler.DominanceAnalysis.GetDominanceAnalysis(headBlock);
 
 			foreach (var t in assignments)
 			{

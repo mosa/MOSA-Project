@@ -23,9 +23,9 @@ namespace Mosa.Platform.x86.Stages
 		/// <summary>
 		/// Performs stage specific processing on the compiler context.
 		/// </summary>
-		public override void Run()
+		public override void Execute()
 		{
-			foreach (BasicBlock block in basicBlocks)
+			foreach (BasicBlock block in BasicBlocks)
 				for (Context ctx = CreateContext(block); !ctx.IsBlockEndInstruction; ctx.GotoNext())
 					if (!ctx.IsEmpty)
 						if (ctx.OperandCount == 2 && ctx.ResultCount == 1)

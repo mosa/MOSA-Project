@@ -16,9 +16,9 @@ namespace Mosa.Compiler.Framework.Stages
 {
 	public class StaticAllocationResolutionStage : BaseMethodCompilerStage, IMethodCompilerStage
 	{
-		void IMethodCompilerStage.Run()
+		void IMethodCompilerStage.Execute()
 		{
-			if (methodCompiler.Method.Name == @".cctor")
+			if (MethodCompiler.Method.Name == @".cctor")
 			{
 				AttemptToStaticallyAllocateObjects();
 			}
@@ -44,13 +44,13 @@ namespace Mosa.Compiler.Framework.Stages
 			// Allocate a linker symbol to refer to this allocation. Use the destination field name as the linker symbol name.
 			string symbolName = assignment.MosaField.ToString() + @"<<$cctor";
 
-			using (var stream = methodCompiler.Linker.Allocate(symbolName, SectionKind.BSS, typeLayout.GetTypeSize(allocatedType), 4))
+			using (var stream = MethodCompiler.Linker.Allocate(symbolName, SectionKind.BSS, TypeLayout.GetTypeSize(allocatedType), 4))
 			{
 				// FIXME: Do we have to initialize this?
 				string methodTableSymbol = GetMethodTableForType(allocatedType);
 
 				if (methodTableSymbol != null)
-					methodCompiler.Linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuiltInPatch.I4, symbolName, 0, 0, methodTableSymbol, 0);
+					MethodCompiler.Linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuiltInPatch.I4, symbolName, 0, 0, methodTableSymbol, 0);
 			}
 
 			// Issue a load request before the newobj and before the assignment.
@@ -79,8 +79,8 @@ namespace Mosa.Compiler.Framework.Stages
 		private Operand InsertLoadBeforeInstruction(Context context, string symbolName, MosaType type)
 		{
 			Context before = context.InsertBefore();
-			Operand result = methodCompiler.CreateVirtualRegister(type);
-			Operand op = Operand.CreateManagedSymbol(typeSystem, type, symbolName);
+			Operand result = MethodCompiler.CreateVirtualRegister(type);
+			Operand op = Operand.CreateManagedSymbol(TypeSystem, type, symbolName);
 
 			before.SetInstruction(CILInstruction.Get(OpCode.Ldc_i4), result, op);
 
@@ -89,9 +89,9 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private IEnumerable<Context> ScanForOperatorNew()
 		{
-			foreach (BasicBlock block in basicBlocks)
+			foreach (BasicBlock block in BasicBlocks)
 			{
-				for (Context context = new Context(instructionSet, block); !context.IsBlockEndInstruction; context.GotoNext())
+				for (Context context = new Context(InstructionSet, block); !context.IsBlockEndInstruction; context.GotoNext())
 				{
 					if (!context.IsEmpty && (context.Instruction is NewobjInstruction || context.Instruction is NewarrInstruction))
 					{

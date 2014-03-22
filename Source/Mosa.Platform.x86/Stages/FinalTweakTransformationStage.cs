@@ -35,15 +35,15 @@ namespace Mosa.Platform.x86.Stages
 				context.ReplaceInstructionOnly(X86.Mov);
 				if (context.Operand1.IsShort || context.Operand1.IsChar)
 				{
-					context.AppendInstruction(X86.And, dest, dest, Operand.CreateConstantUnsignedInt(methodCompiler.TypeSystem, (uint)0x0000ffff));
-					context.AppendInstruction(X86.Xor, dest, dest, Operand.CreateConstantUnsignedInt(methodCompiler.TypeSystem, (uint)0x00010000));
-					context.AppendInstruction(X86.Sub, dest, dest, Operand.CreateConstantUnsignedInt(methodCompiler.TypeSystem, (uint)0x00010000));
+					context.AppendInstruction(X86.And, dest, dest, Operand.CreateConstantUnsignedInt(MethodCompiler.TypeSystem, (uint)0x0000ffff));
+					context.AppendInstruction(X86.Xor, dest, dest, Operand.CreateConstantUnsignedInt(MethodCompiler.TypeSystem, (uint)0x00010000));
+					context.AppendInstruction(X86.Sub, dest, dest, Operand.CreateConstantUnsignedInt(MethodCompiler.TypeSystem, (uint)0x00010000));
 				}
 				else if (context.Operand1.IsByte || context.Operand1.IsBoolean)
 				{
-					context.AppendInstruction(X86.And, dest, dest, Operand.CreateConstantUnsignedInt(methodCompiler.TypeSystem, (uint)0x000000ff));
-					context.AppendInstruction(X86.Xor, dest, dest, Operand.CreateConstantUnsignedInt(methodCompiler.TypeSystem, (uint)0x00000100));
-					context.AppendInstruction(X86.Sub, dest, dest, Operand.CreateConstantUnsignedInt(methodCompiler.TypeSystem, (uint)0x00000100));
+					context.AppendInstruction(X86.And, dest, dest, Operand.CreateConstantUnsignedInt(MethodCompiler.TypeSystem, (uint)0x000000ff));
+					context.AppendInstruction(X86.Xor, dest, dest, Operand.CreateConstantUnsignedInt(MethodCompiler.TypeSystem, (uint)0x00000100));
+					context.AppendInstruction(X86.Sub, dest, dest, Operand.CreateConstantUnsignedInt(MethodCompiler.TypeSystem, (uint)0x00000100));
 				}
 			}
 		}
@@ -63,11 +63,11 @@ namespace Mosa.Platform.x86.Stages
 				context.ReplaceInstructionOnly(X86.Mov);
 				if (context.Operand1.IsShort || context.Operand1.IsChar)
 				{
-					context.AppendInstruction(X86.And, dest, dest, Operand.CreateConstantUnsignedInt(typeSystem, (uint)0xffff));
+					context.AppendInstruction(X86.And, dest, dest, Operand.CreateConstantUnsignedInt(TypeSystem, (uint)0xffff));
 				}
 				else if (context.Operand1.IsByte || context.Operand1.IsBoolean)
 				{
-					context.AppendInstruction(X86.And, dest, dest, Operand.CreateConstantUnsignedInt(typeSystem, (uint)0xff));
+					context.AppendInstruction(X86.And, dest, dest, Operand.CreateConstantUnsignedInt(TypeSystem, (uint)0xff));
 				}
 			}
 		}
@@ -85,7 +85,7 @@ namespace Mosa.Platform.x86.Stages
 				Operand source = context.Operand1;
 				Operand dest = context.Result;
 
-				Operand EAX = Operand.CreateCPURegister(typeSystem.BuiltIn.I4, GeneralPurposeRegister.EAX);
+				Operand EAX = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EAX);
 
 				context.SetInstruction2(X86.Xchg, EAX, source, source, EAX);
 				context.AppendInstruction(X86.Mov, dest, EAX);
@@ -97,16 +97,16 @@ namespace Mosa.Platform.x86.Stages
 			{
 				int operandSize;
 				if (context.Operand1.IsMemoryAddress && context.Operand1.Type.ElementType != null)
-					operandSize = typeLayout.GetTypeSize(context.Operand1.Type.ElementType);
+					operandSize = TypeLayout.GetTypeSize(context.Operand1.Type.ElementType);
 				else
-					operandSize = typeLayout.GetTypeSize(context.Operand1.Type);
+					operandSize = TypeLayout.GetTypeSize(context.Operand1.Type);
 
 				if (context.Result.IsCPURegister && context.Operand1.IsRegister && operandSize < 4)
 				{
-					int resultSize = typeLayout.GetTypeSize(context.Result.Type);
+					int resultSize = TypeLayout.GetTypeSize(context.Result.Type);
 					if (operandSize != 0 && resultSize != 0 && resultSize != operandSize)
 					{
-						Operand register = Operand.CreateCPURegister(typeSystem.BuiltIn.I4, context.Result.Register);
+						Operand register = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, context.Result.Register);
 
 						context.InsertBefore().SetInstruction(X86.Xor, register, register, register);
 					}
@@ -126,7 +126,7 @@ namespace Mosa.Platform.x86.Stages
 				Operand result = context.Result;
 				var condition = context.ConditionCode;
 
-				Operand EAX = Operand.CreateCPURegister(typeSystem.BuiltIn.I4, GeneralPurposeRegister.EAX);
+				Operand EAX = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EAX);
 
 				context.SetInstruction2(X86.Xchg, EAX, result, result, EAX);
 				context.AppendInstruction(X86.Setcc, condition, EAX);

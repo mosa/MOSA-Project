@@ -22,7 +22,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <summary>
 		/// Performs stage specific processing on the compiler context.
 		/// </summary>
-		void IMethodCompilerStage.Run()
+		void IMethodCompilerStage.Execute()
 		{
 			var trace = CreateTrace();
 
@@ -31,7 +31,7 @@ namespace Mosa.Platform.x86.Stages
 			{
 				changed = false;
 
-				foreach (BasicBlock block in basicBlocks)
+				foreach (BasicBlock block in BasicBlocks)
 				{
 					for (Context ctx = CreateContext(block); !ctx.IsBlockEndInstruction; ctx.GotoNext())
 					{

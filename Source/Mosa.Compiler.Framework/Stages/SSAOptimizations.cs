@@ -43,16 +43,16 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <summary>
 		/// Performs stage specific processing on the compiler context.
 		/// </summary>
-		void IMethodCompilerStage.Run()
+		void IMethodCompilerStage.Execute()
 		{
 			// Unable to optimize SSA w/ exceptions or finally handlers present
-			if (basicBlocks.HeadBlocks.Count != 1)
+			if (BasicBlocks.HeadBlocks.Count != 1)
 				return;
 
 			// initialize worklist
-			foreach (BasicBlock block in basicBlocks)
+			foreach (BasicBlock block in BasicBlocks)
 			{
-				for (Context ctx = new Context(instructionSet, block); !ctx.IsBlockEndInstruction; ctx.GotoNext())
+				for (Context ctx = new Context(InstructionSet, block); !ctx.IsBlockEndInstruction; ctx.GotoNext())
 				{
 					if (ctx.IsEmpty)
 						continue;
@@ -65,7 +65,7 @@ namespace Mosa.Compiler.Framework.Stages
 					while (worklist.Count != 0)
 					{
 						int index = worklist.Pop();
-						Context ctx2 = new Context(instructionSet, index);
+						Context ctx2 = new Context(InstructionSet, index);
 						Do(ctx2);
 					}
 				}
@@ -226,7 +226,7 @@ namespace Mosa.Compiler.Framework.Stages
 			// for each statement T that uses operand, substituted c in statement T
 			foreach (int index in destinationOperand.Uses.ToArray())
 			{
-				Context ctx = new Context(instructionSet, index);
+				Context ctx = new Context(InstructionSet, index);
 
 				if (ctx.Instruction == IRInstruction.AddressOf || ctx.Instruction == IRInstruction.Phi)
 					continue;
@@ -333,7 +333,7 @@ namespace Mosa.Compiler.Framework.Stages
 			// for each statement T that uses operand, substituted c in statement T
 			foreach (int index in destinationOperand.Uses.ToArray())
 			{
-				Context ctx = new Context(instructionSet, index);
+				Context ctx = new Context(InstructionSet, index);
 
 				if (ctx.Instruction == IRInstruction.AddressOf || ctx.Instruction == IRInstruction.Phi)
 					return;
@@ -343,7 +343,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			foreach (int index in destinationOperand.Uses.ToArray())
 			{
-				Context ctx = new Context(instructionSet, index);
+				Context ctx = new Context(InstructionSet, index);
 
 				for (int i = 0; i < ctx.OperandCount; i++)
 				{
@@ -849,12 +849,12 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (compareResult)
 			{
-				target = basicBlocks.GetByLabel(context.Next.BranchTargets[0]);
+				target = BasicBlocks.GetByLabel(context.Next.BranchTargets[0]);
 
 				if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
 
 				// change to JMP
-				context.SetInstruction(IRInstruction.Jmp, basicBlocks.GetByLabel(context.BranchTargets[0]));
+				context.SetInstruction(IRInstruction.Jmp, BasicBlocks.GetByLabel(context.BranchTargets[0]));
 				if (trace.Active) trace.Log("AFTER:\t" + context.ToString());
 
 				// goto next instruction and prepare to remove it
@@ -862,7 +862,7 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 			else
 			{
-				target = basicBlocks.GetByLabel(context.BranchTargets[0]);
+				target = BasicBlocks.GetByLabel(context.BranchTargets[0]);
 			}
 
 			if (trace.Active) trace.Log("REMOVED:\t" + context.ToString());
@@ -877,7 +877,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			// Find block based on first index
 			BasicBlock currentBlock = null;
-			foreach (var block in basicBlocks)
+			foreach (var block in BasicBlocks)
 			{
 				if (block.StartIndex == first.Index)
 				{

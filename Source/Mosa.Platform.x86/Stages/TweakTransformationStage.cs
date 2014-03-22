@@ -148,7 +148,7 @@ namespace Mosa.Platform.x86.Stages
 
 			if (right.IsConstant && (left.IsChar || left.IsShort || left.IsByte))
 			{
-				Operand edx = AllocateVirtualRegister(typeSystem.BuiltIn.I4);
+				Operand edx = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 				Context before = context.InsertBefore();
 
 				if (left.IsSigned)
@@ -831,7 +831,7 @@ namespace Mosa.Platform.x86.Stages
 			if (context.Operand2.IsByte)
 				return;
 
-			context.Operand2 = Operand.CreateConstant(typeSystem.BuiltIn.U1, context.Operand2.ConstantUnsignedInteger);
+			context.Operand2 = Operand.CreateConstant(TypeSystem.BuiltIn.U1, context.Operand2.ConstantUnsignedInteger);
 		}
 	}
 }

@@ -19,13 +19,13 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <summary>
 		/// Performs stage specific processing on the compiler context.
 		/// </summary>
-		void IMethodCompilerStage.Run()
+		void IMethodCompilerStage.Execute()
 		{
 			Dictionary<Operand, int> list = new Dictionary<Operand, int>();
 
-			foreach (var block in this.basicBlocks)
+			foreach (var block in this.BasicBlocks)
 			{
-				for (var context = new Context(this.instructionSet, block); !context.IsBlockEndInstruction; context.GotoNext())
+				for (var context = new Context(this.InstructionSet, block); !context.IsBlockEndInstruction; context.GotoNext())
 				{
 					context.Marked = false;
 
@@ -36,7 +36,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 					if (list.TryGetValue(context.Result, out index))
 					{
-						instructionSet.Data[index].Marked = true;
+						InstructionSet.Data[index].Marked = true;
 						context.Marked = true;
 					}
 					else

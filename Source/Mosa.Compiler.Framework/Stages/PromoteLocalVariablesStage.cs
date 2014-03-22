@@ -24,15 +24,15 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <summary>
 		/// Performs stage specific processing on the compiler context.
 		/// </summary>
-		void IMethodCompilerStage.Run()
+		void IMethodCompilerStage.Execute()
 		{
 			// Unable to optimize SSA w/ exceptions or finally handlers present
-			if (basicBlocks.HeadBlocks.Count != 1)
+			if (BasicBlocks.HeadBlocks.Count != 1)
 				return;
 
 			trace = CreateTrace();
 
-			foreach (var local in methodCompiler.LocalVariables)
+			foreach (var local in MethodCompiler.LocalVariables)
 			{
 				if (local.Uses.Count == 0)
 					continue;
@@ -53,7 +53,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			foreach (int index in local.Uses)
 			{
-				Context ctx = new Context(instructionSet, index);
+				Context ctx = new Context(InstructionSet, index);
 
 				if (ctx.Instruction == IRInstruction.AddressOf)
 					return true;
@@ -64,13 +64,13 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private void Promote(Operand local)
 		{
-			var v = methodCompiler.CreateVirtualRegister(local.Type);
+			var v = MethodCompiler.CreateVirtualRegister(local.Type);
 
 			if (trace.Active) trace.Log("*** Replacing: " + local.ToString() + " with " + v.ToString());
 
 			foreach (int index in local.Uses.ToArray())
 			{
-				Context ctx = new Context(instructionSet, index);
+				Context ctx = new Context(InstructionSet, index);
 
 				for (int i = 0; i < ctx.OperandCount; i++)
 				{
@@ -87,7 +87,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			foreach (int index in local.Definitions.ToArray())
 			{
-				Context ctx = new Context(instructionSet, index);
+				Context ctx = new Context(InstructionSet, index);
 
 				for (int i = 0; i < ctx.OperandCount; i++)
 				{
