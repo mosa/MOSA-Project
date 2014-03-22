@@ -14,7 +14,7 @@ using Mosa.Compiler.MosaTypeSystem;
 
 namespace Mosa.TinyCPUSimulator.Adaptor
 {
-	public sealed class SimPowerUpStage : BaseCompilerStage, ICompilerStage, IPipelineStage
+	public sealed class SimPowerUpStage : BaseCompilerStage
 	{
 		public readonly string StartUpName = "StartUp";
 
@@ -31,33 +31,25 @@ namespace Mosa.TinyCPUSimulator.Adaptor
 
 		#region ICompilerStage Members
 
-		void ICompilerStage.Setup(BaseCompiler compiler)
+		protected override void Run()
 		{
-			base.Setup(compiler);
-		}
-
-		/// <summary>
-		/// Performs stage specific processing on the compiler context.
-		/// </summary>
-		void ICompilerStage.Run()
-		{
-			TypeInitializerSchedulerStage typeInitializerSchedulerStage = compiler.Pipeline.FindFirst<TypeInitializerSchedulerStage>();
+			TypeInitializerSchedulerStage typeInitializerSchedulerStage = Compiler.Pipeline.FindFirst<TypeInitializerSchedulerStage>();
 
 			BasicBlocks basicBlocks = new BasicBlocks();
 			InstructionSet instructionSet = new InstructionSet(25);
 			Context context = instructionSet.CreateNewBlock(basicBlocks);
 			basicBlocks.AddHeaderBlock(context.BasicBlock);
 
-			Operand entryPoint = Operand.CreateSymbolFromMethod(typeSystem, typeInitializerSchedulerStage.TypeInitializerMethod);
+			Operand entryPoint = Operand.CreateSymbolFromMethod(TypeSystem, typeInitializerSchedulerStage.TypeInitializerMethod);
 
 			context.AppendInstruction(IRInstruction.Call, null, entryPoint);
 			context.MosaMethod = typeInitializerSchedulerStage.TypeInitializerMethod;
 			//context.AppendInstruction(IRInstruction.Break);
 
-			MosaMethod method = compiler.CreateLinkerMethod(StartUpName);
-			compiler.CompileMethod(method, basicBlocks, instructionSet);
+			MosaMethod method = Compiler.CreateLinkerMethod(StartUpName);
+			Compiler.CompileMethod(method, basicBlocks, instructionSet);
 
-			linker.EntryPoint = linker.GetSymbol(method.FullName);
+			Linker.EntryPoint = Linker.GetSymbol(method.FullName);
 		}
 
 		#endregion ICompilerStage Members

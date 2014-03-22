@@ -94,7 +94,7 @@ namespace Mosa.Compiler.Framework
 		protected BaseCompiler(BaseArchitecture architecture, TypeSystem typeSystem, MosaTypeLayout typeLayout, ICompilationScheduler compilationScheduler, IInternalTrace internalTrace, ILinker linker, CompilerOptions compilerOptions)
 		{
 			if (architecture == null)
-				throw new ArgumentNullException(@"architecture");
+				throw new ArgumentNullException(@"Architecture");
 
 			Pipeline = new CompilerPipeline();
 			Architecture = architecture;
@@ -178,7 +178,7 @@ namespace Mosa.Compiler.Framework
 			foreach (ICompilerStage stage in Pipeline)
 			{
 				// Setup Compiler
-				stage.Setup(this);
+				stage.Initialize(this);
 			}
 
 			foreach (ICompilerStage stage in Pipeline)
@@ -186,7 +186,7 @@ namespace Mosa.Compiler.Framework
 				Trace(CompilerEvent.CompilerStageStart, stage.Name);
 
 				// Execute stage
-				stage.Run();
+				stage.Execute();
 
 				Trace(CompilerEvent.CompilerStageEnd, stage.Name);
 			}

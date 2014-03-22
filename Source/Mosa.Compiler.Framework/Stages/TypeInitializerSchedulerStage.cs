@@ -21,9 +21,9 @@ namespace Mosa.Compiler.Framework.Stages
 	/// by the high-level language compiler by placing cctors in some order in
 	/// metadata.
 	/// </remarks>
-	public sealed class TypeInitializerSchedulerStage : BaseCompilerStage, ICompilerStage, IPipelineStage
+	public sealed class TypeInitializerSchedulerStage : BaseCompilerStage
 	{
-		public readonly string TypeInitializerName = "AssemblyInit"; 
+		public readonly string TypeInitializerName = "AssemblyInit";
 
 		#region Data Members
 
@@ -71,31 +71,19 @@ namespace Mosa.Compiler.Framework.Stages
 
 		#endregion Properties
 
-		#region ICompilerStage Members
-
-		void ICompilerStage.Setup(BaseCompiler compiler)
+		protected override void Run()
 		{
-			base.Setup(compiler);
-		}
-
-		/// <summary>
-		/// Performs stage specific processing on the compiler context.
-		/// </summary>
-		void ICompilerStage.Run()
-		{
-			if (typeSystem.EntryPoint != null)
+			if (TypeSystem.EntryPoint != null)
 			{
-				Schedule(typeSystem.EntryPoint);
+				Schedule(TypeSystem.EntryPoint);
 			}
 
 			context.AppendInstruction(IRInstruction.Epilogue);
 
-			TypeInitializerMethod = compiler.CreateLinkerMethod(TypeInitializerName);
+			TypeInitializerMethod = Compiler.CreateLinkerMethod(TypeInitializerName);
 
-			compiler.CompileMethod(TypeInitializerMethod, basicBlocks, instructionSet);
+			Compiler.CompileMethod(TypeInitializerMethod, basicBlocks, instructionSet);
 		}
-
-		#endregion ICompilerStage Members
 
 		#region Methods
 
@@ -105,7 +93,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="method">The method.</param>
 		public void Schedule(MosaMethod method)
 		{
-			Operand symbolOperand = Operand.CreateSymbolFromMethod(typeSystem,method);
+			Operand symbolOperand = Operand.CreateSymbolFromMethod(TypeSystem, method);
 			context.AppendInstruction(IRInstruction.Call, null, symbolOperand);
 			context.MosaMethod = method;
 		}

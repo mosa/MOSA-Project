@@ -32,7 +32,7 @@ namespace Mosa.Tool.Explorer
 			this.emitBinary = emitBinary;
 
 			// Build the assembly compiler pipeline
-			Pipeline.AddRange(new ICompilerStage[] {
+			Pipeline.Add(new ICompilerStage[] {
 				new PlugStage(),
 				new MethodCompilerSchedulerStage(),
 				new TypeInitializerSchedulerStage(),
@@ -41,7 +41,7 @@ namespace Mosa.Tool.Explorer
 			});
 
 			if (emitBinary)
-				Pipeline.AddRange(new ICompilerStage[] {
+				Pipeline.Add(new ICompilerStage[] {
 					new LinkerFinalizationStage(),
 			});
 

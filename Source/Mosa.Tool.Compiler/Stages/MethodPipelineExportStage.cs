@@ -19,7 +19,7 @@ namespace Mosa.Tool.Compiler.Stages
 	/// <summary>
 	/// An compilation stage, which exports each method pipeline stage
 	/// </summary>
-	public sealed class MethodPipelineExportStage : BaseCompilerStage, ICompilerStage, IPipelineStage, ITraceListener
+	public sealed class MethodPipelineExportStage : BaseCompilerStage, ITraceListener
 	{
 		#region Data members
 
@@ -47,19 +47,12 @@ namespace Mosa.Tool.Compiler.Stages
 
 		#endregion Construction
 
-		#region ICompilerStage Members
-
-		void ICompilerStage.Setup(BaseCompiler compiler)
+		protected override void Setup()
 		{
-			base.Setup(compiler);
-
-			this.MethodPipelineExportDirectory = compiler.CompilerOptions.MethodPipelineExportDirectory;
+			this.MethodPipelineExportDirectory = CompilerOptions.MethodPipelineExportDirectory;
 		}
 
-		/// <summary>
-		/// Performs stage specific processing on the compiler context.
-		/// </summary>
-		void ICompilerStage.Run()
+		protected override void Run()
 		{
 			bool logging = !string.IsNullOrEmpty(MethodPipelineExportDirectory);
 
@@ -69,14 +62,12 @@ namespace Mosa.Tool.Compiler.Stages
 				filter.StageMatch = MatchType.Exclude;
 				filter.Stage = "PlatformStubStage|ExceptionLayoutStage";
 
-				compiler.InternalTrace.TraceFilter = filter;
-				compiler.InternalTrace.TraceListener = this;
+				Compiler.InternalTrace.TraceFilter = filter;
+				Compiler.InternalTrace.TraceListener = this;
 
 				Directory.CreateDirectory(MethodPipelineExportDirectory);
 			}
 		}
-
-		#endregion ICompilerStage Members
 
 		#region ITraceListener Members
 

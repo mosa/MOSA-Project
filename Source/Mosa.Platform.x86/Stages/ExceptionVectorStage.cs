@@ -15,24 +15,12 @@ namespace Mosa.Platform.x86.Stages
 	/// <summary>
 	///
 	/// </summary>
-	public sealed class ExceptionVectorStage : BaseCompilerStage, ICompilerStage, IPipelineStage
+	public sealed class ExceptionVectorStage : BaseCompilerStage
 	{
-		#region ICompilerStage Members
-
-		void ICompilerStage.Setup(BaseCompiler compiler)
-		{
-			base.Setup(compiler);
-		}
-
-		/// <summary>
-		/// Performs stage specific processing on the compiler context.
-		/// </summary>
-		void ICompilerStage.Run()
+		protected override void Run()
 		{
 			CreateExceptionVector();
 		}
-
-		#endregion ICompilerStage Members
 
 		#region Internal
 
@@ -41,7 +29,7 @@ namespace Mosa.Platform.x86.Stages
 		/// </summary>
 		private void CreateExceptionVector()
 		{
-			var type = typeSystem.GetTypeByName("Mosa.Kernel.x86", "IDT");
+			var type = TypeSystem.GetTypeByName("Mosa.Kernel.x86", "IDT");
 
 			if (type == null)
 				return;
@@ -51,9 +39,9 @@ namespace Mosa.Platform.x86.Stages
 			if (method == null)
 				return;
 
-			Operand exceptionMethod = Operand.CreateSymbolFromMethod(typeSystem, method);
+			Operand exceptionMethod = Operand.CreateSymbolFromMethod(TypeSystem, method);
 
-			Operand esp = Operand.CreateCPURegister(typeSystem.BuiltIn.I4, GeneralPurposeRegister.ESP);
+			Operand esp = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.ESP);
 
 			BasicBlocks basicBlocks = new BasicBlocks();
 			InstructionSet instructionSet = new InstructionSet(25);
@@ -68,9 +56,9 @@ namespace Mosa.Platform.x86.Stages
 			//3. Call the managed exception handler
 			ctx.AppendInstruction(X86.Call, null, exceptionMethod);
 
-			var vectorMethod = compiler.CreateLinkerMethod("ExceptionVector");
+			var vectorMethod = Compiler.CreateLinkerMethod("ExceptionVector");
 
-			compiler.CompileMethod(vectorMethod, basicBlocks, instructionSet);
+			Compiler.CompileMethod(vectorMethod, basicBlocks, instructionSet);
 		}
 
 		#endregion Internal

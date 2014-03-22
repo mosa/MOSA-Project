@@ -133,7 +133,7 @@ namespace Mosa.Tool.Compiler
 				"Specify the bootable format of the produced binary [{mb0.7}].",
 				delegate(string format)
 				{
-					compilerOptions.BootCompilerStage = SelectBootStage(format);
+					compilerOptions.BootStageFactory = GetBootStageFactory(format);
 				}
 			);
 
@@ -154,7 +154,7 @@ namespace Mosa.Tool.Compiler
 					compilerOptions.LinkerFactory = GetLinkerFactory(format);
 
 					if (compilerOptions.LinkerFactory == null)
-						throw new OptionException("Invalid value linker format: " + format, "format");
+						throw new OptionException("Invalid value Linker format: " + format, "format");
 				}
 			);
 
@@ -325,7 +325,7 @@ namespace Mosa.Tool.Compiler
 				// Process boot format:
 				// Boot format only matters if it's an executable
 				// Process this only now, because input files must be known
-				if (!isExecutable && compilerOptions.BootCompilerStage != null)
+				if (!isExecutable && compilerOptions.BootStageFactory != null)
 				{
 					Console.WriteLine("Warning: Ignoring boot format, because target is not an executable.");
 					Console.WriteLine();
@@ -344,7 +344,7 @@ namespace Mosa.Tool.Compiler
 
 				if (compilerOptions.Architecture == null)
 				{
-					throw new OptionException("No architecture specified.", "Architecture");
+					throw new OptionException("No Architecture specified.", "Architecture");
 				}
 			}
 			catch (OptionException e)
@@ -386,7 +386,7 @@ namespace Mosa.Tool.Compiler
 			sb.Append(" > Input file(s): ").AppendLine(String.Join(", ", new List<string>(GetInputFileNames()).ToArray()));
 			sb.Append(" > Architecture: ").AppendLine(compilerOptions.Architecture.GetType().FullName);
 			sb.Append(" > Binary format: ").AppendLine(compilerOptions.LinkerFactory().Name.ToString());
-			sb.Append(" > Boot format: ").AppendLine((compilerOptions.BootCompilerStage == null) ? "None" : ((IPipelineStage)compilerOptions.BootCompilerStage).Name);
+			sb.Append(" > Boot format: ").AppendLine((compilerOptions.BootStageFactory == null) ? "None" : ((IPipelineStage)compilerOptions.BootStageFactory()).Name);
 			sb.Append(" > Is executable: ").AppendLine(isExecutable.ToString());
 			return sb.ToString();
 		}
@@ -420,7 +420,7 @@ namespace Mosa.Tool.Compiler
 			Console.Write("Error: ");
 			Console.WriteLine(message);
 			Console.WriteLine();
-			Console.WriteLine("Run 'mosacl --help' for more information.");
+			Console.WriteLine("Execute 'mosacl --help' for more information.");
 			Console.WriteLine();
 		}
 
@@ -431,7 +431,7 @@ namespace Mosa.Tool.Compiler
 		{
 			Console.WriteLine(usageString);
 			Console.WriteLine();
-			Console.WriteLine("Run 'mosacl --help' for more information.");
+			Console.WriteLine("Execute 'mosacl --help' for more information.");
 		}
 
 		/// <summary>
@@ -467,21 +467,16 @@ namespace Mosa.Tool.Compiler
 				case "x64":
 
 				default:
-					throw new OptionException(String.Format("Unknown or unsupported architecture {0}.", architecture), "Architecture");
+					throw new OptionException(String.Format("Unknown or unsupported Architecture {0}.", architecture), "Architecture");
 			}
 		}
 
-		/// <summary>
-		/// Selects the boot stage.
-		/// </summary>
-		/// <param name="format">The format.</param>
-		/// <returns></returns>
-		private static ICompilerStage SelectBootStage(string format)
+		private static Func<ICompilerStage> GetBootStageFactory(string format)
 		{
 			switch (format.ToLower())
 			{
 				case "multiboot-0.7":
-				case "mb0.7": return new Mosa.Platform.x86.Stages.Multiboot0695Stage();
+				case "mb0.7": return delegate { return new Mosa.Platform.x86.Stages.Multiboot0695Stage(); };
 				default: throw new OptionException(String.Format("Unknown or unsupported boot format {0}.", format), "boot");
 			}
 		}

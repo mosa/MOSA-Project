@@ -12,31 +12,19 @@ namespace Mosa.Compiler.Framework.Stages
 	/// <summary>
 	/// Schedules compilation of types/methods.
 	/// </summary>
-	public class MethodCompilerSchedulerStage : BaseCompilerStage, ICompilerStage, IPipelineStage
+	public class MethodCompilerSchedulerStage : BaseCompilerStage
 	{
-		#region Data Members
-
-		#endregion Data Members
-
-		public MethodCompilerSchedulerStage()
-		{
-		}
-
-		#region ICompilerStage members
-
-		void ICompilerStage.Run()
+		protected override void Run()
 		{
 			while (true)
 			{
-				var method = compiler.CompilationScheduler.GetMethodToCompile();
+				var method = Compiler.CompilationScheduler.GetMethodToCompile();
 
 				if (method == null)
 					break;
 
-				compiler.CompileMethod(method, null, null);
+				Compiler.CompileMethod(method, null, null);
 			}
 		}
-
-		#endregion ICompilerStage members
 	}
 }

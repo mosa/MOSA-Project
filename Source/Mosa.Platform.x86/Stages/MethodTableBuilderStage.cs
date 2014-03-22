@@ -26,21 +26,12 @@ namespace Mosa.Platform.x86.Stages
 	///		4 bytes: Pointer to exception clause table
 	///		4 bytes: GC tracking info
 	/// </summary>
-	public class MethodTableBuilderStage : BaseCompilerStage, ICompilerStage
+	public class MethodTableBuilderStage : BaseCompilerStage
 	{
 		/// <summary>
-		/// Setups the specified compiler.
+		/// Executes this stage.
 		/// </summary>
-		/// <param name="compiler">The compiler.</param>
-		void ICompilerStage.Setup(BaseCompiler compiler)
-		{
-			base.Setup(compiler);
-		}
-
-		/// <summary>
-		/// Performs stage specific processing on the compiler context.
-		/// </summary>
-		void ICompilerStage.Run()
+		protected override void Run()
 		{
 			CreateTables();
 		}
@@ -54,14 +45,14 @@ namespace Mosa.Platform.x86.Stages
 			var methods = new List<MosaMethod>();
 
 			// Collect all methods that we can link to
-			foreach (var type in typeSystem.AllTypes)
+			foreach (var type in TypeSystem.AllTypes)
 			{
 				if (type.IsModule || type.HasOpenGenericParams || type.IsInterface)
 					continue;
 
 				foreach (var method in type.Methods)
 				{
-					var symbol = linker.GetSymbol(method.FullName);
+					var symbol = Linker.GetSymbol(method.FullName);
 					if (symbol != null)
 					{
 						table.Add(symbol);
@@ -83,28 +74,28 @@ namespace Mosa.Platform.x86.Stages
 		private void CreateMethodLookupTable(IList<LinkerSymbol> table)
 		{
 			// Allocate the table and fill it
-			var size = 3 * table.Count * typeLayout.NativePointerSize + typeLayout.NativePointerSize;
+			var size = 3 * table.Count * TypeLayout.NativePointerSize + TypeLayout.NativePointerSize;
 
 			string section = "<$>methodLookupTable";
 
-			using (var stream = linker.Allocate(section, SectionKind.ROData, size, typeLayout.NativePointerAlignment))
+			using (var stream = Linker.Allocate(section, SectionKind.ROData, size, TypeLayout.NativePointerAlignment))
 			{
 				foreach (var entry in table)
 				{
 					// 1. Store address (the linker writes the actual entry)
-					linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuiltInPatch.I4, section, (int)stream.Position, 0, entry.Name, 0);
-					stream.Position += typeLayout.NativePointerSize;
+					Linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuiltInPatch.I4, section, (int)stream.Position, 0, entry.Name, 0);
+					stream.Position += TypeLayout.NativePointerSize;
 
 					// 2. Store the length (its copied in by the next loop)
 					stream.Write((uint)entry.Length, Endianness.Little);
 
 					// 3. Store the pointer to the method description table (the linker writes the actual entry)
-					linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuiltInPatch.I4, section, (int)stream.Position, 0, entry.Name + "$mdtable", 0);
-					stream.Position += typeLayout.NativePointerSize;
+					Linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuiltInPatch.I4, section, (int)stream.Position, 0, entry.Name + "$mdtable", 0);
+					stream.Position += TypeLayout.NativePointerSize;
 				}
 
 				// Mark end of table
-				stream.Position += typeLayout.NativePointerSize;
+				stream.Position += TypeLayout.NativePointerSize;
 			}
 		}
 
@@ -116,19 +107,19 @@ namespace Mosa.Platform.x86.Stages
 		{
 			foreach (var method in methods)
 			{
-				int size = 3 * typeLayout.NativePointerSize;
+				int size = 3 * TypeLayout.NativePointerSize;
 
 				string section = method.FullName + "$mdtable";
 
-				using (var stream = linker.Allocate(section, SectionKind.ROData, size, typeLayout.NativePointerAlignment))
+				using (var stream = Linker.Allocate(section, SectionKind.ROData, size, TypeLayout.NativePointerAlignment))
 				{
 					// Pointer to Exception Handler Table
 					// TODO: If there is no exception clause table, set to 0 and do not involve linker
-					linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuiltInPatch.I4, section, 0, 0, method.FullName + "$etable", 0);
-					stream.Position += typeLayout.NativePointerSize;
+					Linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuiltInPatch.I4, section, 0, 0, method.FullName + "$etable", 0);
+					stream.Position += TypeLayout.NativePointerSize;
 
 					// GC tracking info (not implemented yet)
-					stream.WriteZeroBytes(typeLayout.NativePointerSize);
+					stream.WriteZeroBytes(TypeLayout.NativePointerSize);
 
 					// Method's Parameter stack size
 					stream.Write(DetermineSizeOfMethodParameters(method), Endianness.Little); // FIXME

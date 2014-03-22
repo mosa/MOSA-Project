@@ -38,7 +38,7 @@ namespace Mosa.TinyCPUSimulator.Adaptor
 			this.simAdapter = simAdapter;
 
 			// Build the assembly compiler pipeline
-			Pipeline.AddRange(new ICompilerStage[] {
+			Pipeline.Add(new ICompilerStage[] {
 				new PlugStage(),
 				new MethodCompilerSchedulerStage(),
 				new TypeInitializerSchedulerStage(),

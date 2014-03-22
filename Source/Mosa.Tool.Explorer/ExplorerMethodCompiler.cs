@@ -29,7 +29,7 @@ namespace Mosa.Tool.Explorer
 			var compilerOptions = Compiler.CompilerOptions;
 
 			// Populate the pipeline
-			Pipeline.AddRange(new IMethodCompilerStage[] {
+			Pipeline.Add(new IMethodCompilerStage[] {
 				new CILDecodingStage(),
 				new BasicBlockBuilderStage(),
 				new StackSetupStage(),
