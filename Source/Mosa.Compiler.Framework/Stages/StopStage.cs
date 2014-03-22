@@ -14,9 +14,9 @@ namespace Mosa.Compiler.Framework.Stages
 	/// </summary>
 	public class StopStage : BaseMethodCompilerStage, IMethodCompilerStage, IPipelineStage
 	{
-		public virtual void Run()
+		public virtual void Execute()
 		{
-			methodCompiler.Stop();
+			MethodCompiler.Stop();
 		}
 	}
 }

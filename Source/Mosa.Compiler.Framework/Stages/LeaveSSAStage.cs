@@ -24,13 +24,13 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <summary>
 		/// Performs stage specific processing on the compiler context.
 		/// </summary>
-		void IMethodCompilerStage.Run()
+		void IMethodCompilerStage.Execute()
 		{
 			finalVirtualRegisters = new Dictionary<Operand, Operand>();
 
-			foreach (var block in basicBlocks)
+			foreach (var block in BasicBlocks)
 			{
-				for (var context = new Context(instructionSet, block); !context.IsBlockEndInstruction; context.GotoNext())
+				for (var context = new Context(InstructionSet, block); !context.IsBlockEndInstruction; context.GotoNext())
 				{
 					if (context.Instruction == IRInstruction.Phi)
 					{
@@ -66,7 +66,7 @@ namespace Mosa.Compiler.Framework.Stages
 				if (operand.SSAVersion == 0)
 					final = operand.SSAParent;
 				else
-					final = methodCompiler.CreateVirtualRegister(operand.Type);
+					final = MethodCompiler.CreateVirtualRegister(operand.Type);
 
 				finalVirtualRegisters.Add(operand, final);
 			}
@@ -100,7 +100,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="operand">The operand.</param>
 		private void InsertCopyStatement(BasicBlock predecessor, Operand result, Operand operand)
 		{
-			var context = new Context(instructionSet, predecessor, predecessor.EndIndex);
+			var context = new Context(InstructionSet, predecessor, predecessor.EndIndex);
 
 			context.GotoPrevious();
 
@@ -117,7 +117,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (destination != source)
 			{
-				architecture.InsertMoveInstruction(context, destination, source);
+				Architecture.InsertMoveInstruction(context, destination, source);
 			}
 		}
 	}

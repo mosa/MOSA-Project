@@ -20,9 +20,9 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <summary>
 		/// Runs the specified method compiler.
 		/// </summary>
-		void IMethodCompilerStage.Run()
+		void IMethodCompilerStage.Execute()
 		{
-			if (methodCompiler.Compiler.PlugSystem.GetPlugMethod(methodCompiler.Method) != null)
+			if (MethodCompiler.Compiler.PlugSystem.GetPlugMethod(MethodCompiler.Method) != null)
 				return;
 
 			// Layout stack variables
@@ -40,7 +40,7 @@ namespace Mosa.Compiler.Framework.Stages
 		private void LayoutStackVariables()
 		{
 			// assign increasing stack offsets to each variable
-			methodCompiler.StackLayout.StackSize = LayoutVariables(methodCompiler.StackLayout.Stack, callingConvention, callingConvention.OffsetOfFirstLocal, 1);
+			MethodCompiler.StackLayout.StackSize = LayoutVariables(MethodCompiler.StackLayout.Stack, CallingConvention, CallingConvention.OffsetOfFirstLocal, 1);
 		}
 
 		/// <summary>
@@ -52,17 +52,17 @@ namespace Mosa.Compiler.Framework.Stages
 
 			int offset = 0;
 
-			if (methodCompiler.Method.HasThis || methodCompiler.Method.HasExplicitThis)
+			if (MethodCompiler.Method.HasThis || MethodCompiler.Method.HasExplicitThis)
 				++offset;
 
-			for (int i = 0; i < methodCompiler.Method.Signature.Parameters.Count + offset; ++i)
+			for (int i = 0; i < MethodCompiler.Method.Signature.Parameters.Count + offset; ++i)
 			{
-				var parameter = methodCompiler.GetParameterOperand(i);
+				var parameter = MethodCompiler.GetParameterOperand(i);
 
 				parameters.Add(parameter);
 			}
 
-			LayoutVariables(parameters, callingConvention, callingConvention.OffsetOfFirstParameter, -1);
+			LayoutVariables(parameters, CallingConvention, CallingConvention.OffsetOfFirstParameter, -1);
 		}
 
 		/// <summary>
@@ -91,7 +91,7 @@ namespace Mosa.Compiler.Framework.Stages
 					int padding = 0;
 					int thisOffset = 0;
 
-					callingConvention.GetStackRequirements(typeLayout, operand, out size, out alignment);
+					callingConvention.GetStackRequirements(TypeLayout, operand, out size, out alignment);
 					if (direction == 1)
 					{
 						padding = (offset % alignment);

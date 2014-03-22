@@ -78,11 +78,11 @@ namespace Mosa.Tool.Compiler.Stages
 		/// <summary>
 		/// Performs stage specific processing on the compiler context.
 		/// </summary>
-		void IMethodCompilerStage.Run()
+		void IMethodCompilerStage.Execute()
 		{
 			numberOfMethods++;
 
-			foreach (BasicBlock block in basicBlocks)
+			foreach (BasicBlock block in BasicBlocks)
 				for (Context ctx = CreateContext(block); !ctx.IsBlockEndInstruction; ctx.GotoNext())
 					Visit(ctx);
 		}

@@ -18,11 +18,11 @@ namespace Mosa.Compiler.Framework.Stages
 	/// </summary>
 	public class BaseEdgeSplitStage : BaseMethodCompilerStage
 	{
-		public virtual void Run()
+		protected override void Run()
 		{
 			List<KeyValuePair<BasicBlock, BasicBlock>> worklist = new List<KeyValuePair<BasicBlock, BasicBlock>>();
 
-			foreach (var from in basicBlocks)
+			foreach (var from in BasicBlocks)
 			{
 				if (from.NextBlocks.Count > 1)
 				{

@@ -220,8 +220,8 @@ namespace Mosa.Compiler.Framework
 
 			foreach (IMethodCompilerStage stage in Pipeline)
 			{
-				stage.Setup(this);
-				stage.Run();
+				stage.Initialize(this);
+				stage.Execute();
 
 				Mosa.Compiler.InternalTrace.InstructionLogger.Run(this, stage);
 

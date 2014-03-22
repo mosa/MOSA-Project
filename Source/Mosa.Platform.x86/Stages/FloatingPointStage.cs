@@ -19,11 +19,11 @@ namespace Mosa.Platform.x86.Stages
 		/// <summary>
 		/// Remove immediate floating point constants - constant must be in registers or memory locations
 		/// </summary>
-		void IMethodCompilerStage.Run()
+		void IMethodCompilerStage.Execute()
 		{
-			foreach (var block in basicBlocks)
+			foreach (var block in BasicBlocks)
 			{
-				for (var context = new Context(this.instructionSet, block); !context.IsBlockEndInstruction; context.GotoNext())
+				for (var context = new Context(this.InstructionSet, block); !context.IsBlockEndInstruction; context.GotoNext())
 				{
 					if (context.IsEmpty || !(context.Instruction is X86Instruction))
 						continue;

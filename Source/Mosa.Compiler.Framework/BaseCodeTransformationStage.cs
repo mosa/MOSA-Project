@@ -21,10 +21,10 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Performs stage specific processing on the compiler context.
 		/// </summary>
-		public virtual void Run()
+		public virtual void Execute()
 		{
-			for (int index = 0; index < basicBlocks.Count; index++)
-				for (Context ctx = new Context(instructionSet, basicBlocks[index]); !ctx.IsBlockEndInstruction; ctx.GotoNext())
+			for (int index = 0; index < BasicBlocks.Count; index++)
+				for (Context ctx = new Context(InstructionSet, BasicBlocks[index]); !ctx.IsBlockEndInstruction; ctx.GotoNext())
 					if (!ctx.IsEmpty)
 						ctx.Clone().Visit(this);
 		}

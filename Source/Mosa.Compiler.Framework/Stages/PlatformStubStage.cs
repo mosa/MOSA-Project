@@ -12,7 +12,7 @@ namespace Mosa.Compiler.Framework.Stages
 	/// <summary>
 	///
 	/// </summary>
-	public sealed class PlatformStubStage : IMethodCompilerStage, IPipelineStage
+	public sealed class PlatformStubStage : BaseMethodCompilerStage, IPipelineStage
 	{
 		#region IPipelineStage Members
 
@@ -24,23 +24,5 @@ namespace Mosa.Compiler.Framework.Stages
 
 		#endregion IPipelineStage Members
 
-		#region IMethodCompilerStage Members
-
-		/// <summary>
-		/// Setup stage specific processing on the compiler context.
-		/// </summary>
-		/// <param name="methodCompiler">The compiler context to perform processing in.</param>
-		void IMethodCompilerStage.Setup(BaseMethodCompiler methodCompiler)
-		{
-		}
-
-		/// <summary>
-		/// Performs stage specific processing on the compiler context.
-		/// </summary>
-		void IMethodCompilerStage.Run()
-		{
-		}
-
-		#endregion IMethodCompilerStage Members
 	}
 }

@@ -21,13 +21,13 @@ namespace Mosa.Compiler.Framework.Stages
 	{
 		protected BaseInstruction jumpInstruction;
 
-		public virtual void Run()
+		public virtual void Execute()
 		{
 			var trace = CreateTrace();
 
 			List<KeyValuePair<BasicBlock, BasicBlock>> worklist = new List<KeyValuePair<BasicBlock, BasicBlock>>();
 
-			foreach (var block in basicBlocks)
+			foreach (var block in BasicBlocks)
 			{
 				// don't process other unusual blocks (header blocks, return block, etc.)
 				if (block.NextBlocks.Count == 0 || block.PreviousBlocks.Count == 0)

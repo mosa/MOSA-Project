@@ -62,11 +62,11 @@ namespace Mosa.Compiler.Framework.Platform
 				return operand;
 
 			int size, alignment;
-			architecture.GetTypeRequirements(typeLayout, operand.Type, out size, out alignment);
+			Architecture.GetTypeRequirements(TypeLayout, operand.Type, out size, out alignment);
 
 			string name = String.Format("C_{0}", Guid.NewGuid());
 
-			using (Stream stream = methodCompiler.Linker.Allocate(name, SectionKind.ROData, size, alignment))
+			using (Stream stream = MethodCompiler.Linker.Allocate(name, SectionKind.ROData, size, alignment))
 			{
 				using (BinaryWriter writer = new BinaryWriter(stream))
 				{

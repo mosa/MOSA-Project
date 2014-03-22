@@ -23,12 +23,12 @@ namespace Mosa.Platform.x86.Stages
 		/// <summary>
 		/// Setup stage specific processing on the compiler context.
 		/// </summary>
-		void IMethodCompilerStage.Run()
+		void IMethodCompilerStage.Execute()
 		{
-			if (methodCompiler.Compiler.PlugSystem.GetPlugMethod(methodCompiler.Method) != null)
+			if (MethodCompiler.Compiler.PlugSystem.GetPlugMethod(MethodCompiler.Method) != null)
 				return;
 
-			Debug.Assert((methodCompiler.StackLayout.StackSize % 4) == 0, @"Stack size of interrupt can't be divided by 4!!");
+			Debug.Assert((MethodCompiler.StackLayout.StackSize % 4) == 0, @"Stack size of interrupt can't be divided by 4!!");
 
 			UpdatePrologue();
 			UpdateEpilogue();
@@ -52,11 +52,11 @@ namespace Mosa.Platform.x86.Stages
 		private void UpdatePrologue()
 		{
 			// Update prologue Block
-			var prologueBlock = this.basicBlocks.PrologueBlock;
+			var prologueBlock = this.BasicBlocks.PrologueBlock;
 
 			if (prologueBlock != null)
 			{
-				Context prologueContext = new Context(instructionSet, prologueBlock);
+				Context prologueContext = new Context(InstructionSet, prologueBlock);
 
 				prologueContext.GotoNext();
 
@@ -72,11 +72,11 @@ namespace Mosa.Platform.x86.Stages
 		private void UpdateEpilogue()
 		{
 			// Update epilogue Block
-			var epilogueBlock = this.basicBlocks.EpilogueBlock;
+			var epilogueBlock = this.BasicBlocks.EpilogueBlock;
 
 			if (epilogueBlock != null)
 			{
-				Context epilogueContext = new Context(instructionSet, epilogueBlock);
+				Context epilogueContext = new Context(InstructionSet, epilogueBlock);
 
 				epilogueContext.GotoNext();
 
@@ -97,21 +97,21 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		private void AddPrologueInstructions(Context context)
 		{
-			Operand ebp = Operand.CreateCPURegister(typeSystem.BuiltIn.I4, GeneralPurposeRegister.EBP);
-			Operand esp = Operand.CreateCPURegister(typeSystem.BuiltIn.I4, GeneralPurposeRegister.ESP);
+			Operand ebp = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EBP);
+			Operand esp = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.ESP);
 
 			//Operand eax = Operand.CreateCPURegister(typeSystem.BuiltIn.I4, GeneralPurposeRegister.EAX);
-			Operand edx = Operand.CreateCPURegister(typeSystem.BuiltIn.I4, GeneralPurposeRegister.EDX);
-			Operand edi = Operand.CreateCPURegister(typeSystem.BuiltIn.I4, GeneralPurposeRegister.EDI);
-			Operand ecx = Operand.CreateCPURegister(typeSystem.BuiltIn.I4, GeneralPurposeRegister.ECX);
-			Operand ebx = Operand.CreateCPURegister(typeSystem.BuiltIn.I4, GeneralPurposeRegister.EBX);
+			Operand edx = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EDX);
+			Operand edi = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EDI);
+			Operand ecx = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.ECX);
+			Operand ebx = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EBX);
 
 			context.SetInstruction(X86.Push, null, ebp);
 			context.AppendInstruction(X86.Mov, ebp, esp);
 
-			if (methodCompiler.StackLayout.StackSize != 0)
+			if (MethodCompiler.StackLayout.StackSize != 0)
 			{
-				context.AppendInstruction(X86.Sub, esp, esp, Operand.CreateConstantSignedInt(typeSystem, -methodCompiler.StackLayout.StackSize));
+				context.AppendInstruction(X86.Sub, esp, esp, Operand.CreateConstantSignedInt(TypeSystem, -MethodCompiler.StackLayout.StackSize));
 			}
 
 			if (InsertBreaks)// && !methodCompiler.Method.FullName.Equals(".cctor"))
@@ -130,7 +130,7 @@ namespace Mosa.Platform.x86.Stages
 			if (SaveRegisters)
 			{
 				// Save EDX for int32 return values (or do not save EDX for non-int64 return values)
-				if (!methodCompiler.Method.Signature.ReturnType.IsUI8)
+				if (!MethodCompiler.Method.Signature.ReturnType.IsUI8)
 				{
 					context.AppendInstruction(X86.Push, null, edx);
 				}
@@ -146,13 +146,13 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		private void AddEpilogueInstructions(Context context)
 		{
-			Operand ebp = Operand.CreateCPURegister(typeSystem.BuiltIn.I4, GeneralPurposeRegister.EBP);
-			Operand esp = Operand.CreateCPURegister(typeSystem.BuiltIn.I4, GeneralPurposeRegister.ESP);
+			Operand ebp = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EBP);
+			Operand esp = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.ESP);
 
-			Operand edx = Operand.CreateCPURegister(typeSystem.BuiltIn.I4, GeneralPurposeRegister.EDX);
-			Operand edi = Operand.CreateCPURegister(typeSystem.BuiltIn.I4, GeneralPurposeRegister.EDI);
-			Operand ecx = Operand.CreateCPURegister(typeSystem.BuiltIn.I4, GeneralPurposeRegister.ECX);
-			Operand ebx = Operand.CreateCPURegister(typeSystem.BuiltIn.I4, GeneralPurposeRegister.EBX);
+			Operand edx = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EDX);
+			Operand edi = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EDI);
+			Operand ecx = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.ECX);
+			Operand ebx = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EBX);
 
 			context.SetInstruction(X86.Nop);
 
@@ -163,15 +163,15 @@ namespace Mosa.Platform.x86.Stages
 				context.AppendInstruction(X86.Pop, edi);
 
 				// Save EDX for int32 return values (or do not save EDX for non-int64 return values)
-				if (!methodCompiler.Method.Signature.ReturnType.IsUI8)
+				if (!MethodCompiler.Method.Signature.ReturnType.IsUI8)
 				{
 					context.AppendInstruction(X86.Pop, edx);
 				}
 			}
 
-			if (methodCompiler.StackLayout.StackSize != 0)
+			if (MethodCompiler.StackLayout.StackSize != 0)
 			{
-				context.AppendInstruction(X86.Add, esp, esp, Operand.CreateConstantSignedInt(typeSystem, -methodCompiler.StackLayout.StackSize));
+				context.AppendInstruction(X86.Add, esp, esp, Operand.CreateConstantSignedInt(TypeSystem, -MethodCompiler.StackLayout.StackSize));
 			}
 
 			context.AppendInstruction(X86.Pop, ebp);

@@ -28,14 +28,14 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <summary>
 		/// Runs the specified compiler.
 		/// </summary>
-		void IMethodCompilerStage.Run()
+		void IMethodCompilerStage.Execute()
 		{
 			trace = CreateTrace();
 
-			var blockOrderAnalysis = methodCompiler.Compiler.CompilerOptions.BlockOrderAnalysisFactory();
-			blockOrderAnalysis.PerformAnalysis(basicBlocks);
+			var blockOrderAnalysis = MethodCompiler.Compiler.CompilerOptions.BlockOrderAnalysisFactory();
+			blockOrderAnalysis.PerformAnalysis(BasicBlocks);
 
-			basicBlocks.ReorderBlocks(blockOrderAnalysis.NewBlockOrder);
+			BasicBlocks.ReorderBlocks(blockOrderAnalysis.NewBlockOrder);
 
 			if (trace.Active)
 			{
@@ -58,7 +58,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			trace.Log(string.Empty);
 
-			foreach (var block in basicBlocks)
+			foreach (var block in BasicBlocks)
 			{
 				int depth = blockOrderAnalysis.GetLoopDepth(block);
 				int depthindex = blockOrderAnalysis.GetLoopIndex(block);

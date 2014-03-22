@@ -22,9 +22,9 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <summary>
 		/// Performs stage specific processing on the compiler context.
 		/// </summary>
-		void IMethodCompilerStage.Run()
+		void IMethodCompilerStage.Execute()
 		{
-			foreach (BasicBlock block in basicBlocks)
+			foreach (BasicBlock block in BasicBlocks)
 			{
 				for (Context context = CreateContext(block); !context.IsBlockEndInstruction; context.GotoNext())
 				{
@@ -48,7 +48,7 @@ namespace Mosa.Compiler.Framework.Stages
 					if (instance == null)
 						return;
 
-					instance.ReplaceIntrinsicCall(context, methodCompiler);
+					instance.ReplaceIntrinsicCall(context, MethodCompiler);
 				}
 			}
 		}
