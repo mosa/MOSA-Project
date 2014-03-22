@@ -29,7 +29,13 @@ namespace Mosa.Compiler.Framework.Stages
 
 			foreach (var local in MethodCompiler.LocalVariables)
 			{
+				if (local.IsVirtualRegister)
+					continue;
+
 				if (local.Uses.Count == 0)
+					continue;
+
+				if (local.Definitions.Count != 1)
 					continue;
 
 				if (!local.IsReferenceType && !local.IsInteger && !local.IsR && !local.IsChar && !local.IsBoolean && !local.IsPointer)
