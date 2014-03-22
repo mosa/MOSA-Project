@@ -15,12 +15,9 @@ namespace Mosa.Compiler.Framework.Stages
 	/// <summary>
 	///
 	/// </summary>
-	public sealed class StackSetupStage : BaseMethodCompilerStage, IMethodCompilerStage, IPipelineStage
+	public sealed class StackSetupStage : BaseMethodCompilerStage
 	{
-		/// <summary>
-		/// Runs the specified method compiler.
-		/// </summary>
-		void IMethodCompilerStage.Execute()
+		protected override void Run()
 		{
 			// No stack setup if this is a linker generated method
 			if (MethodCompiler.Method.DeclaringType.IsLinkerGenerated)

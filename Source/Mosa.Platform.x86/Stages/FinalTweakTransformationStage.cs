@@ -16,7 +16,7 @@ namespace Mosa.Platform.x86.Stages
 	/// <summary>
 	///
 	/// </summary>
-	public sealed class FinalTweakTransformationStage : BaseTransformationStage, IX86Visitor, IMethodCompilerStage
+	public sealed class FinalTweakTransformationStage : BaseTransformationStage, IX86Visitor
 	{
 		#region IX86Visitor
 

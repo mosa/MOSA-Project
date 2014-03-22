@@ -19,7 +19,7 @@ using System.IO;
 
 namespace Mosa.Platform.x86.Stages
 {
-	public sealed class ExceptionLayoutStage : BaseMethodCompilerStage, IMethodCompilerStage, IPipelineStage
+	public sealed class ExceptionLayoutStage : BaseMethodCompilerStage
 	{
 		#region Data members
 
@@ -31,12 +31,7 @@ namespace Mosa.Platform.x86.Stages
 
 		#endregion Data members
 
-		#region IMethodCompilerStage members
-
-		/// <summary>
-		/// Performs stage specific processing on the compiler context.
-		/// </summary>
-		void IMethodCompilerStage.Execute()
+		protected override void Run()
 		{
 			codeEmitter = MethodCompiler.Pipeline.FindFirst<CodeGenerationStage>().CodeEmitter;
 
@@ -50,8 +45,6 @@ namespace Mosa.Platform.x86.Stages
 			// Step 3 - Emit table of PC ranges and the clause handler
 			EmitProtectedBlockTable();
 		}
-
-		#endregion IMethodCompilerStage members
 
 		private void AssignBlocksToClauses()
 		{

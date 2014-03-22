@@ -16,14 +16,9 @@ namespace Mosa.Platform.x86.Stages
 	/// <summary>
 	/// Completes the stack handling after register allocation
 	/// </summary>
-	public sealed class BuildStackStage : BaseMethodCompilerStage, IMethodCompilerStage, IPipelineStage
+	public sealed class BuildStackStage : BaseMethodCompilerStage
 	{
-		#region IMethodCompilerStage
-
-		/// <summary>
-		/// Setup stage specific processing on the compiler context.
-		/// </summary>
-		void IMethodCompilerStage.Execute()
+		protected override void Run()
 		{
 			if (MethodCompiler.Compiler.PlugSystem.GetPlugMethod(MethodCompiler.Method) != null)
 				return;
@@ -33,8 +28,6 @@ namespace Mosa.Platform.x86.Stages
 			UpdatePrologue();
 			UpdateEpilogue();
 		}
-
-		#endregion IMethodCompilerStage
 
 		public bool SaveRegisters { get; set; }
 

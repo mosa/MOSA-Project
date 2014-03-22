@@ -15,7 +15,7 @@ namespace Mosa.Platform.x86.Stages
 	/// <summary>
 	///
 	/// </summary>
-	public sealed class FixedRegisterAssignmentStage : BaseTransformationStage, IX86Visitor, IMethodCompilerStage
+	public sealed class FixedRegisterAssignmentStage : BaseTransformationStage, IX86Visitor
 	{
 		#region IX86Visitor
 

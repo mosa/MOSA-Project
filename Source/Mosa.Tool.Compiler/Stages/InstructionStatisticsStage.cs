@@ -7,10 +7,9 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
+using Mosa.Compiler.Framework;
 using System;
 using System.Collections.Generic;
-
-using Mosa.Compiler.Framework;
 
 namespace Mosa.Tool.Compiler.Stages
 {
@@ -18,7 +17,7 @@ namespace Mosa.Tool.Compiler.Stages
 	/// This stage just saves statistics about the code we're compiling, for example
 	/// ratio of IL to IR code, number of compiled instructions, etc.
 	/// </summary>
-	public class InstructionStatisticsStage : BaseMethodCompilerStage, IMethodCompilerStage, IPipelineStage
+	public class InstructionStatisticsStage : BaseMethodCompilerStage
 	{
 		/// <summary>
 		///
@@ -75,10 +74,7 @@ namespace Mosa.Tool.Compiler.Stages
 			++numberOfInstructions;
 		}
 
-		/// <summary>
-		/// Performs stage specific processing on the compiler context.
-		/// </summary>
-		void IMethodCompilerStage.Execute()
+		protected override void Run()
 		{
 			numberOfMethods++;
 

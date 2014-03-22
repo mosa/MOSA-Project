@@ -15,14 +15,9 @@ namespace Mosa.Compiler.Framework.Stages
 	/// <summary>
 	///
 	/// </summary>
-	public sealed class PlatformIntrinsicTransformationStage : BaseMethodCompilerStage, IMethodCompilerStage
+	public sealed class PlatformIntrinsicTransformationStage : BaseMethodCompilerStage
 	{
-		#region IMethodCompilerStage Members
-
-		/// <summary>
-		/// Performs stage specific processing on the compiler context.
-		/// </summary>
-		void IMethodCompilerStage.Execute()
+		protected override void Run()
 		{
 			foreach (BasicBlock block in BasicBlocks)
 			{
@@ -53,6 +48,5 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 		}
 
-		#endregion IMethodCompilerStage Members
 	}
 }

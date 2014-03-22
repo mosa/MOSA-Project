@@ -14,9 +14,9 @@ using System.Collections.Generic;
 
 namespace Mosa.Compiler.Framework.Stages
 {
-	public class StaticAllocationResolutionStage : BaseMethodCompilerStage, IMethodCompilerStage
+	public class StaticAllocationResolutionStage : BaseMethodCompilerStage
 	{
-		void IMethodCompilerStage.Execute()
+		protected override void Run()
 		{
 			if (MethodCompiler.Method.Name == @".cctor")
 			{

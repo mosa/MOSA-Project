@@ -15,16 +15,11 @@ namespace Mosa.Compiler.Framework.Stages
 	/// <summary>
 	///
 	/// </summary>
-	public sealed class PromoteLocalVariablesStage : BaseMethodCompilerStage, IMethodCompilerStage, IPipelineStage
+	public sealed class PromoteLocalVariablesStage : BaseMethodCompilerStage
 	{
 		private CompilerTrace trace;
 
-		#region IMethodCompilerStage Members
-
-		/// <summary>
-		/// Performs stage specific processing on the compiler context.
-		/// </summary>
-		void IMethodCompilerStage.Execute()
+		protected override void Run()
 		{
 			// Unable to optimize SSA w/ exceptions or finally handlers present
 			if (BasicBlocks.HeadBlocks.Count != 1)
@@ -46,8 +41,6 @@ namespace Mosa.Compiler.Framework.Stages
 				Promote(local);
 			}
 		}
-
-		#endregion IMethodCompilerStage Members
 
 		private bool ContainsAddressOf(Operand local)
 		{
