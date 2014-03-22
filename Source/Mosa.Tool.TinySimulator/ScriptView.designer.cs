@@ -136,7 +136,7 @@ namespace Mosa.Tool.TinySimulator
 			this.toolStripButton3.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButton3.Name = "toolStripButton3";
 			this.toolStripButton3.Size = new System.Drawing.Size(67, 22);
-			this.toolStripButton3.Text = "Execute";
+			this.toolStripButton3.Text = "Run";
 			this.toolStripButton3.Click += new System.EventHandler(this.toolStripButton3_Click);
 			// 
 			// openFileDialog1

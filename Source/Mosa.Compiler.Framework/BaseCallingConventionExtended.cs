@@ -40,7 +40,7 @@ namespace Mosa.Compiler.Framework
 		public BaseCallingConventionExtended(BaseArchitecture architecture)
 		{
 			if (architecture == null)
-				throw new ArgumentNullException(@"architecture");
+				throw new ArgumentNullException(@"Architecture");
 
 			this.architecture = architecture;
 		}

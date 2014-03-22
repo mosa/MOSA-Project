@@ -34,7 +34,7 @@ namespace Mosa.Tool.Compiler
 		{
 			var compilerOptions = compiler.CompilerOptions;
 
-			Pipeline.AddRange(new IMethodCompilerStage[] {
+			Pipeline.Add(new IMethodCompilerStage[] {
 				new CILDecodingStage(),
 				new BasicBlockBuilderStage(),
 				new StackSetupStage(),

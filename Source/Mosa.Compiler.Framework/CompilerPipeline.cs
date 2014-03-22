@@ -168,15 +168,16 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Adds the range.
+		/// Adds the specified stages.
 		/// </summary>
 		/// <param name="stages">The stages.</param>
-		public void AddRange(IEnumerable<IPipelineStage> stages)
+		/// <exception cref="System.ArgumentNullException">@stages</exception>
+		public void Add(IEnumerable<IPipelineStage> stages)
 		{
 			if (stages == null)
 				throw new ArgumentNullException(@"stages");
 
-			foreach (IPipelineStage stage in stages)
+			foreach (var stage in stages)
 				if (stage != null)
 					Add(stage);
 		}

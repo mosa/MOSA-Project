@@ -19,13 +19,11 @@ namespace Mosa.Compiler.Framework.Stages
 	/// <summary>
 	/// Performs memory layout of a type for compilation.
 	/// </summary>
-	public sealed class TypeLayoutStage : BaseCompilerStage, ICompilerStage
+	public sealed class TypeLayoutStage : BaseCompilerStage
 	{
-		#region ICompilerStage members
-
-		void ICompilerStage.Run()
+		protected override void Run()
 		{
-			foreach (var type in typeSystem.AllTypes)
+			foreach (var type in TypeSystem.AllTypes)
 			{
 				if (type.IsModule)
 					continue;
@@ -48,16 +46,14 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 		}
 
-		#endregion ICompilerStage members
-
 		private void BuildTypeInterfaceSlots(MosaType type)
 		{
 			if (type.Interfaces.Count == 0)
 				return;
 
-			var slots = new List<string>(typeLayout.Interfaces.Count);
+			var slots = new List<string>(TypeLayout.Interfaces.Count);
 
-			foreach (MosaType interfaceType in typeLayout.Interfaces)
+			foreach (MosaType interfaceType in TypeLayout.Interfaces)
 			{
 				if (type.Interfaces.Contains(interfaceType))
 					slots.Add(type.FullName + @"$mtable$" + interfaceType.FullName);
@@ -73,11 +69,11 @@ namespace Mosa.Compiler.Framework.Stages
 			if (type.Interfaces.Count == 0)
 				return;
 
-			var bitmap = new byte[(((typeLayout.Interfaces.Count - 1) / 8) + 1)];
+			var bitmap = new byte[(((TypeLayout.Interfaces.Count - 1) / 8) + 1)];
 
 			int at = 0;
 			byte bit = 0;
-			foreach (var interfaceType in typeLayout.Interfaces)
+			foreach (var interfaceType in TypeLayout.Interfaces)
 			{
 				if (type.Interfaces.Contains(interfaceType))
 				{
@@ -105,7 +101,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private void BuildInterfaceTable(MosaType type, MosaType interfaceType)
 		{
-			var methodTable = typeLayout.GetInterfaceTable(type, interfaceType);
+			var methodTable = TypeLayout.GetInterfaceTable(type, interfaceType);
 
 			if (methodTable == null)
 				return;
@@ -150,15 +146,15 @@ namespace Mosa.Compiler.Framework.Stages
 			else
 				headerlinks.Add(type.BaseType + @"$mtable");
 
-			var methodTable = typeLayout.GetMethodTable(type);
+			var methodTable = TypeLayout.GetMethodTable(type);
 			AskLinkerToCreateMethodTable(type.FullName + @"$mtable", methodTable, headerlinks);
 		}
 
 		private void AskLinkerToCreateMethodTable(string methodTableName, IList<MosaMethod> methodTable, IList<string> headerlinks)
 		{
-			int methodTableSize = ((headerlinks == null ? 0 : headerlinks.Count) + (methodTable == null ? 0 : methodTable.Count)) * typeLayout.NativePointerSize;
+			int methodTableSize = ((headerlinks == null ? 0 : headerlinks.Count) + (methodTable == null ? 0 : methodTable.Count)) * TypeLayout.NativePointerSize;
 
-			using (Stream stream = compiler.Linker.Allocate(methodTableName, SectionKind.ROData, methodTableSize, typeLayout.NativePointerAlignment))
+			using (Stream stream = Compiler.Linker.Allocate(methodTableName, SectionKind.ROData, methodTableSize, TypeLayout.NativePointerAlignment))
 			{
 				stream.Position = methodTableSize;
 			}
@@ -171,10 +167,10 @@ namespace Mosa.Compiler.Framework.Stages
 				{
 					if (!string.IsNullOrEmpty(link))
 					{
-						compiler.Linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuiltInPatch.I4, methodTableName, offset, 0, link, 0);
+						Compiler.Linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuiltInPatch.I4, methodTableName, offset, 0, link, 0);
 					}
 
-					offset += typeLayout.NativePointerSize;
+					offset += TypeLayout.NativePointerSize;
 				}
 			}
 
@@ -185,9 +181,9 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				if (!method.IsAbstract)
 				{
-					compiler.Linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuiltInPatch.I4, methodTableName, offset, 0, method.FullName, 0);
+					Compiler.Linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuiltInPatch.I4, methodTableName, offset, 0, method.FullName, 0);
 				}
-				offset += typeLayout.NativePointerSize;
+				offset += TypeLayout.NativePointerSize;
 			}
 		}
 
@@ -196,7 +192,7 @@ namespace Mosa.Compiler.Framework.Stages
 			int size = array.Length;
 
 			//FIXME: change  SectionKind.Text to SectionKind.ROData
-			using (var stream = compiler.Linker.Allocate(tableName, SectionKind.Text, size, typeLayout.NativePointerAlignment))
+			using (var stream = Compiler.Linker.Allocate(tableName, SectionKind.Text, size, TypeLayout.NativePointerAlignment))
 			{
 				foreach (byte b in array)
 					stream.WriteByte(b);
@@ -226,9 +222,9 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			// Determine the size of the type & alignment requirements
 			int size, alignment;
-			architecture.GetTypeRequirements(typeLayout, field.FieldType, out size, out alignment);
+			Architecture.GetTypeRequirements(TypeLayout, field.FieldType, out size, out alignment);
 
-			size = (int)typeLayout.GetFieldSize(field);
+			size = (int)TypeLayout.GetFieldSize(field);
 
 			// The linker section to move this field into
 			SectionKind section = field.Data != null ? section = SectionKind.Data : section = SectionKind.BSS;
@@ -238,7 +234,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private void AllocateSpace(MosaField field, SectionKind section, int size, int alignment)
 		{
-			using (var stream = compiler.Linker.Allocate(field.FullName, section, size, alignment))
+			using (var stream = Compiler.Linker.Allocate(field.FullName, section, size, alignment))
 			{
 				if (field.Data != null)
 				{

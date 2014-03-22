@@ -18,7 +18,7 @@ namespace Mosa.Tool.Compiler.Stages
 	/// <summary>
 	/// An compilation stage, which generates a map file of the built binary file.
 	/// </summary>
-	public sealed class MapFileGenerationStage : BaseCompilerStage, ICompilerStage, IPipelineStage
+	public sealed class MapFileGenerationStage : BaseCompilerStage
 	{
 		#region Data members
 
@@ -42,18 +42,12 @@ namespace Mosa.Tool.Compiler.Stages
 
 		#endregion Construction
 
-		#region ICompilerStage Members
-
-		void ICompilerStage.Setup(BaseCompiler compiler)
+		protected override void Setup()
 		{
-			base.Setup(compiler);
-			this.MapFile = compiler.CompilerOptions.MapFile;
+			this.MapFile = CompilerOptions.MapFile;
 		}
 
-		/// <summary>
-		/// Performs stage specific processing on the compiler context.
-		/// </summary>
-		void ICompilerStage.Run()
+		protected override void Run()
 		{
 			if (string.IsNullOrEmpty(MapFile))
 				return;
@@ -61,25 +55,23 @@ namespace Mosa.Tool.Compiler.Stages
 			using (writer = new StreamWriter(MapFile))
 			{
 				// Emit map file header
-				writer.WriteLine(linker.OutputFile);
+				writer.WriteLine(Linker.OutputFile);
 				writer.WriteLine();
 				writer.WriteLine("Timestamp is {0}", DateTime.Now);
 				writer.WriteLine();
-				writer.WriteLine("Preferred load address is {0:x16}", linker.BaseAddress);
+				writer.WriteLine("Preferred load address is {0:x16}", Linker.BaseAddress);
 				writer.WriteLine();
 
 				// Emit the sections
-				EmitSections(linker);
+				EmitSections(Linker);
 				writer.WriteLine();
 
 				// Emit all symbols
-				EmitSymbols(linker);
+				EmitSymbols(Linker);
 
 				writer.Close();
 			}
 		}
-
-		#endregion ICompilerStage Members
 
 		#region Internals
 

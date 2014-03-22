@@ -67,11 +67,6 @@ namespace Mosa.Compiler.Framework
 		public string OutputFile { get; set; }
 
 		/// <summary>
-		/// Gets or sets the compiler stage responsible for booting.
-		/// </summary>
-		public ICompilerStage BootCompilerStage { get; set; }
-
-		/// <summary>
 		/// Gets or sets the statistics file.
 		/// </summary>
 		/// <value>The statistics file.</value>
@@ -151,6 +146,11 @@ namespace Mosa.Compiler.Framework
 		/// The linker factory.
 		/// </value>
 		public Func<ILinker> LinkerFactory { get; set; }
+
+		/// <summary>
+		/// Gets or sets the compiler stage responsible for booting.
+		/// </summary>
+		public Func<ICompilerStage> BootStageFactory { get; set; }
 
 		#endregion Properties
 

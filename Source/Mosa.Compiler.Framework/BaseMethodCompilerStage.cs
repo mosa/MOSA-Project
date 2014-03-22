@@ -89,7 +89,7 @@ namespace Mosa.Compiler.Framework
 		public void Setup(BaseMethodCompiler compiler)
 		{
 			if (compiler == null)
-				throw new ArgumentNullException(@"compiler");
+				throw new ArgumentNullException(@"Compiler");
 
 			methodCompiler = compiler;
 			instructionSet = compiler.InstructionSet;

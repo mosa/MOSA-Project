@@ -9,14 +9,13 @@
 
 using Mosa.Compiler.MosaTypeSystem;
 using System;
-using System.Collections.Generic;
 
 namespace Mosa.Compiler.Framework.Stages
 {
 	/// <summary>
 	/// Searches for plug declarations
 	/// </summary>
-	public class PlugStage : BaseCompilerStage, ICompilerStage
+	public class PlugStage : BaseCompilerStage
 	{
 		#region Data members
 
@@ -25,19 +24,12 @@ namespace Mosa.Compiler.Framework.Stages
 
 		#endregion Data members
 
-		#region ICompilerStage members
+		private const string PlugTypeAttribute = "Mosa.Internal.Plug.PlugTypeAttribute";
+		private const string PlugMethodAttribute = "Mosa.Internal.Plug.PlugMethodAttribute";
 
-		const string PlugTypeAttribute = "Mosa.Internal.Plug.PlugTypeAttribute";
-		const string PlugMethodAttribute = "Mosa.Internal.Plug.PlugMethodAttribute";
-
-		void ICompilerStage.Setup(BaseCompiler compiler)
+		protected override void Run()
 		{
-			base.Setup(compiler);
-		}
-
-		void ICompilerStage.Run()
-		{
-			foreach (var type in typeSystem.AllTypes)
+			foreach (var type in TypeSystem.AllTypes)
 			{
 				string plugTypeTarget = null;
 
@@ -87,9 +79,9 @@ namespace Mosa.Compiler.Framework.Stages
 						MosaType targetType;
 
 						if (targetAssemblyName != null)
-							targetType = typeSystem.GetTypeByName(typeSystem.GetModuleByAssembly(targetAssemblyName), targetNameSpace, targetTypeName);
+							targetType = TypeSystem.GetTypeByName(TypeSystem.GetModuleByAssembly(targetAssemblyName), targetNameSpace, targetTypeName);
 						else
-							targetType = typeSystem.GetTypeByName(targetNameSpace, targetTypeName);
+							targetType = TypeSystem.GetTypeByName(targetNameSpace, targetTypeName);
 
 						if (targetType == null)
 						{
@@ -139,12 +131,10 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 		}
 
-		#endregion ICompilerStage members
-
 		private void Patch(MosaMethod targetMethod, MosaMethod method)
 		{
 			Trace(InternalTrace.CompilerEvent.Plug, targetMethod.FullName + " with " + method.FullName);
-			compiler.PlugSystem.CreatePlug(method, targetMethod);
+			Compiler.PlugSystem.CreatePlug(method, targetMethod);
 		}
 
 		private bool MatchesWithStaticThis(MosaMethod targetMethod, MosaMethod plugMethod)

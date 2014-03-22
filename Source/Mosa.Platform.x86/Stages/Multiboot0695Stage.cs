@@ -38,7 +38,7 @@ namespace Mosa.Platform.x86.Stages
 	/// the specification at
 	/// http://www.gnu.org/software/grub/manual/multiboot/multiboot.html.
 	/// </remarks>
-	public sealed class Multiboot0695Stage : BaseCompilerStage, ICompilerStage, IPipelineStage
+	public sealed class Multiboot0695Stage : BaseCompilerStage
 	{
 		#region Constants
 
@@ -118,40 +118,34 @@ namespace Mosa.Platform.x86.Stages
 
 		#endregion Construction
 
-		#region ICompilerStage Members
-
-		void ICompilerStage.Setup(BaseCompiler compiler)
+		protected override void Setup()
 		{
-			base.Setup(compiler);
-
-			if (compiler.CompilerOptions.Multiboot.VideoDepth.HasValue)
-				this.VideoDepth = compiler.CompilerOptions.Multiboot.VideoDepth.Value;
-			if (compiler.CompilerOptions.Multiboot.VideoHeight.HasValue)
-				this.VideoHeight = compiler.CompilerOptions.Multiboot.VideoHeight.Value;
-			if (compiler.CompilerOptions.Multiboot.VideoMode.HasValue)
-				this.VideoMode = compiler.CompilerOptions.Multiboot.VideoMode.Value;
-			if (compiler.CompilerOptions.Multiboot.VideoWidth.HasValue)
-				this.VideoWidth = compiler.CompilerOptions.Multiboot.VideoWidth.Value;
+			if (Compiler.CompilerOptions.Multiboot.VideoDepth.HasValue)
+				this.VideoDepth = Compiler.CompilerOptions.Multiboot.VideoDepth.Value;
+			if (Compiler.CompilerOptions.Multiboot.VideoHeight.HasValue)
+				this.VideoHeight = Compiler.CompilerOptions.Multiboot.VideoHeight.Value;
+			if (Compiler.CompilerOptions.Multiboot.VideoMode.HasValue)
+				this.VideoMode = Compiler.CompilerOptions.Multiboot.VideoMode.Value;
+			if (Compiler.CompilerOptions.Multiboot.VideoWidth.HasValue)
+				this.VideoWidth = Compiler.CompilerOptions.Multiboot.VideoWidth.Value;
 		}
 
-		/// <summary>
-		/// Performs stage specific processing on the compiler context.
-		/// </summary>
-		void ICompilerStage.Run()
+		protected override void Run()
 		{
 			if (multibootMethod == null)
 			{
-				multibootMethod = compiler.CreateLinkerMethod("MultibootInit");
+				multibootMethod = Compiler.CreateLinkerMethod("MultibootInit");
 
 				WriteMultibootHeader();
+
 				return;
 			}
 
-			var typeInitializerSchedulerStage = compiler.Pipeline.FindFirst<TypeInitializerSchedulerStage>();
+			var typeInitializerSchedulerStage = Compiler.Pipeline.FindFirst<TypeInitializerSchedulerStage>();
 
-			var ecx = Operand.CreateCPURegister(typeSystem.BuiltIn.I4, GeneralPurposeRegister.ECX);
-			var eax = Operand.CreateCPURegister(typeSystem.BuiltIn.I4, GeneralPurposeRegister.EAX);
-			var ebx = Operand.CreateCPURegister(typeSystem.BuiltIn.I4, GeneralPurposeRegister.EBX);
+			var ecx = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.ECX);
+			var eax = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EAX);
+			var ebx = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EBX);
 
 			var basicBlocks = new BasicBlocks();
 			var instructionSet = new InstructionSet(25);
@@ -159,23 +153,19 @@ namespace Mosa.Platform.x86.Stages
 			var ctx = instructionSet.CreateNewBlock(basicBlocks);
 			basicBlocks.AddHeaderBlock(ctx.BasicBlock);
 
-			ctx.AppendInstruction(X86.Mov, ecx, Operand.CreateConstantSignedInt(typeSystem, 0x200000));
-			ctx.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(typeSystem.BuiltIn.I4, ecx, 0), eax);
-			ctx.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(typeSystem.BuiltIn.I4, ecx, 4), ebx);
+			ctx.AppendInstruction(X86.Mov, ecx, Operand.CreateConstantSignedInt(TypeSystem, 0x200000));
+			ctx.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(TypeSystem.BuiltIn.I4, ecx, 0), eax);
+			ctx.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(TypeSystem.BuiltIn.I4, ecx, 4), ebx);
 
-			var entryPoint = Operand.CreateSymbolFromMethod(typeSystem, typeInitializerSchedulerStage.TypeInitializerMethod);
+			var entryPoint = Operand.CreateSymbolFromMethod(TypeSystem, typeInitializerSchedulerStage.TypeInitializerMethod);
 
 			ctx.AppendInstruction(X86.Call, null, entryPoint);
 			ctx.AppendInstruction(X86.Ret);
 
-			compiler.CompileMethod(multibootMethod, basicBlocks, instructionSet);
+			Compiler.CompileMethod(multibootMethod, basicBlocks, instructionSet);
 
-			linker.EntryPoint = linker.GetSymbol(multibootMethod.FullName);
-
-			multibootMethod = null; // HACK for now
+			Linker.EntryPoint = Linker.GetSymbol(multibootMethod.FullName);
 		}
-
-		#endregion ICompilerStage Members
 
 		#region Internals
 
@@ -189,7 +179,7 @@ namespace Mosa.Platform.x86.Stages
 		{
 			// HACK: According to the multiboot specification this header must be within the first 8K of the
 			// kernel binary. Since the text section is always first, this should take care of the problem.
-			using (Stream stream = linker.Allocate(MultibootHeaderSymbolName, SectionKind.Text, 64, 4))
+			using (Stream stream = Linker.Allocate(MultibootHeaderSymbolName, SectionKind.Text, 64, 4))
 			{
 				using (BinaryWriter bw = new BinaryWriter(stream, Encoding.ASCII))
 				{
@@ -213,17 +203,17 @@ namespace Mosa.Platform.x86.Stages
 
 					// entry_point the load virtualAddress of the entry point to invoke
 					// Are we linking an ELF binary?
-					if (!(linker is Mosa.Compiler.Linker.Elf32.Elf32Linker || linker is Mosa.Compiler.Linker.Elf64.Elf64Linker))
+					if (!(Linker is Mosa.Compiler.Linker.Elf32.Elf32Linker || Linker is Mosa.Compiler.Linker.Elf64.Elf64Linker))
 					{
 						// Check the linker layout settings
-						if (linker.LoadSectionAlignment != linker.SectionAlignment)
+						if (Linker.LoadSectionAlignment != Linker.SectionAlignment)
 							throw new LinkerException(@"Load and virtual section alignment must be identical if you are booting non-ELF binaries with a multiboot bootloader.");
 
 						// No, special multiboot treatment required
 						flags |= HEADER_MB_FLAG_NON_ELF_BINARY;
 
-						header_addr = (uint)(linker.GetSection(SectionKind.Text).VirtualAddress + linker.GetSymbol(MultibootHeaderSymbolName).SectionAddress);
-						load_addr = (uint)linker.BaseAddress;
+						header_addr = (uint)(Linker.GetSection(SectionKind.Text).VirtualAddress + Linker.GetSymbol(MultibootHeaderSymbolName).SectionAddress);
+						load_addr = (uint)Linker.BaseAddress;
 						load_end_addr = 0;
 						bss_end_addr = 0;
 					}
@@ -239,7 +229,7 @@ namespace Mosa.Platform.x86.Stages
 					bw.Write(load_end_addr);
 					bw.Write(bss_end_addr);
 
-					linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuiltInPatch.I4, MultibootHeaderSymbolName, (int)stream.Position, 0, multibootMethod.FullName, 0);
+					Linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuiltInPatch.I4, MultibootHeaderSymbolName, (int)stream.Position, 0, multibootMethod.FullName, 0);
 					bw.Write((int)0);
 
 					bw.Write(VideoMode);
