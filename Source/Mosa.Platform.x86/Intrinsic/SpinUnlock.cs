@@ -25,12 +25,12 @@ namespace Mosa.Platform.x86.Intrinsic
 		/// <param name="typeSystem">The type system.</param>
 		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, BaseMethodCompiler methodCompiler)
 		{
-            // Create constant operand and pointer to variable containing the lock
-            Operand const0 = Operand.CreateConstantSignedInt(methodCompiler.TypeSystem, 0x0);
-            Operand locked = Operand.CreateMemoryAddress(methodCompiler.TypeSystem.BuiltIn.Pointer, context.Operand1, 0);
+			// Create constant operand and pointer to variable containing the lock
+			Operand const0 = Operand.CreateConstantSignedInt(methodCompiler.TypeSystem, 0x0);
+			Operand locked = Operand.CreateMemoryAddress(methodCompiler.TypeSystem.BuiltIn.Pointer, context.Operand1, 0);
 
-            // Set the variable locked to 0 signifying that the lock is free
-            context.SetInstruction(X86.Mov, locked, const0);
+			// Set the variable locked to 0 signifying that the lock is free
+			context.SetInstruction(X86.Mov, locked, const0);
 		}
 
 		#endregion Methods

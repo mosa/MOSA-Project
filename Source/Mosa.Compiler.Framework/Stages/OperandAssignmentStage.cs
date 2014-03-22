@@ -8,10 +8,10 @@
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
 */
 
-using System.Collections;
-using System.Collections.Generic;
 using Mosa.Compiler.Framework.CIL;
 using Mosa.Compiler.Framework.IR;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace Mosa.Compiler.Framework.Stages
 {

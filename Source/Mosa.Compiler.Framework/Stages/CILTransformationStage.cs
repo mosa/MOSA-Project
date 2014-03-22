@@ -8,16 +8,16 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Text;
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.CIL;
 using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.Linker;
 using Mosa.Compiler.MosaTypeSystem;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Text;
 
 namespace Mosa.Compiler.Framework.Stages
 {
@@ -163,7 +163,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void CIL.ICILVisitor.Ldtoken(Context context)
-		{ 
+		{
 			// TODO: remove VmCall.GetHandleForToken?
 
 			Operand source;
@@ -177,7 +177,6 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 			else
 				throw new NotImplementCompilerException();
-
 
 			Operand destination = context.Result;
 			context.SetInstruction(IRInstruction.Move, destination, source);
@@ -641,7 +640,7 @@ namespace Mosa.Compiler.Framework.Stages
 				context.ReplaceInstructionOnly(IRInstruction.Move);
 				return;
 			}
-			
+
 			int typeSize = TypeLayout.GetTypeSize(type);
 			int alignment = TypeLayout.NativePointerAlignment;
 			typeSize += (alignment - (typeSize % alignment)) % alignment;

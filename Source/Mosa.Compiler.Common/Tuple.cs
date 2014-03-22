@@ -43,7 +43,6 @@ namespace Mosa.Compiler.Common
 		}
 	}
 
-
 	public class Tuple<T1, T2, T3>
 	{
 		public Tuple(T1 item1, T2 item2, T3 item3)

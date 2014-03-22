@@ -7,7 +7,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System.Diagnostics;
 using Mosa.Compiler.Common;
 using Mosa.Compiler.MosaTypeSystem;
 
@@ -62,7 +61,7 @@ namespace Mosa.Compiler.Framework.CIL
 				base.Decode(ctx, decoder);
 		}
 
-		MosaMethod HandleConstrained(Context ctx, IInstructionDecoder decoder, Context constrained)
+		private MosaMethod HandleConstrained(Context ctx, IInstructionDecoder decoder, Context constrained)
 		{
 			var type = constrained.MosaType;
 			var method = (MosaMethod)decoder.Instruction.Operand;

@@ -10,12 +10,11 @@
  *  Scott Balmos <sbalmos@fastmail.fm>
  */
 
-using System;
+using Mosa.Compiler.Linker;
+using Mosa.Compiler.MosaTypeSystem;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using Mosa.Compiler.MosaTypeSystem;
-using Mosa.Compiler.Linker;
 
 namespace Mosa.Compiler.Framework
 {
@@ -220,6 +219,5 @@ namespace Mosa.Compiler.Framework
 		}
 
 		public abstract void ResolvePatches();
-
 	}
 }

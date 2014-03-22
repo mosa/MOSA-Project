@@ -14,7 +14,9 @@ namespace Mosa.Compiler.MosaTypeSystem
 	public class MosaLocal : IEquatable<MosaLocal>, IEquatable<MosaType>
 	{
 		public string Name { get; private set; }
+
 		public MosaType Type { get; private set; }
+
 		public bool IsPinned { get; private set; }
 
 		public MosaLocal(string name, MosaType type, bool isPinned)

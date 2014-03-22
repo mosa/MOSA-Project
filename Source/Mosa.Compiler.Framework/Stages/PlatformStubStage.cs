@@ -23,6 +23,5 @@ namespace Mosa.Compiler.Framework.Stages
 		string IPipelineStage.Name { get { return @"PlatformStubStage"; } }
 
 		#endregion IPipelineStage Members
-
 	}
 }

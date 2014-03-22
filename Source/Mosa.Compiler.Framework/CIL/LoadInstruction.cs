@@ -9,7 +9,6 @@
  *
  */
 
-
 using Mosa.Compiler.MosaTypeSystem;
 
 namespace Mosa.Compiler.Framework.CIL
@@ -46,6 +45,5 @@ namespace Mosa.Compiler.Framework.CIL
 		{
 			return decoder.Compiler.CreateVirtualRegister(type.GetStackType());
 		}
-
 	}
 }

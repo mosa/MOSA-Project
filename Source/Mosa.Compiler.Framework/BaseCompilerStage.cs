@@ -68,7 +68,7 @@ namespace Mosa.Compiler.Framework
 		void ICompilerStage.Initialize(BaseCompiler compiler)
 		{
 			this.Compiler = compiler;
-			
+
 			Setup();
 		}
 

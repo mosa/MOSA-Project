@@ -7,8 +7,8 @@
  *  Ki (kiootic) <kiootic@gmail.com>
  */
 
-using System.Collections.Generic;
 using Mosa.Compiler.Framework.IR;
+using System.Collections.Generic;
 
 namespace Mosa.Compiler.Framework.Stages
 {
@@ -20,7 +20,7 @@ namespace Mosa.Compiler.Framework.Stages
 	/// </summary>
 	public class ConvertCompoundMoveStage : BaseMethodCompilerStage
 	{
-		Dictionary<Operand, Operand> repl = new Dictionary<Operand, Operand>();
+		private Dictionary<Operand, Operand> repl = new Dictionary<Operand, Operand>();
 
 		protected override void Run()
 		{
@@ -37,7 +37,7 @@ namespace Mosa.Compiler.Framework.Stages
 			repl.Clear();
 		}
 
-		void ProcessInstruction(Context ctx)
+		private void ProcessInstruction(Context ctx)
 		{
 			if (ctx.Instruction is Load)
 			{
@@ -92,7 +92,7 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 		}
 
-		void ReplaceOperands(Context ctx)
+		private void ReplaceOperands(Context ctx)
 		{
 			if (ctx.Result != null && repl.ContainsKey(ctx.Result))
 				ctx.Result = repl[ctx.Result];

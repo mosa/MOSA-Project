@@ -47,7 +47,6 @@ namespace Mosa.Compiler.Framework.CIL
 
 			ctx.Result = decoder.Compiler.CreateVirtualRegister(decoder.TypeSystem.ToFnPtr(method.Signature));
 			ctx.MosaMethod = method;
-
 		}
 
 		/// <summary>

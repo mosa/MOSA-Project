@@ -19,7 +19,7 @@ namespace Mosa.Compiler.Framework.CIL
 	{
 		#region Static data members
 
-		const StackTypeCode StackTypeCode_Pointer = StackTypeCode.UnmanagedPointer;    // For table format
+		private const StackTypeCode StackTypeCode_Pointer = StackTypeCode.UnmanagedPointer;    // For table format
 
 		/// <summary>
 		/// Generic operand validation table. Not used for add and sub.
@@ -100,7 +100,7 @@ namespace Mosa.Compiler.Framework.CIL
 			base.Resolve(ctx, compiler);
 
 			StackTypeCode result = StackTypeCode.Unknown;
-			
+
 			switch (opcode)
 			{
 				case OpCode.Add_ovf_un: result = addovfunTable[(int)ctx.Operand1.Type.GetStackTypeCode()][(int)ctx.Operand2.Type.GetStackTypeCode()]; break;

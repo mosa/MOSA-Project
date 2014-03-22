@@ -15,7 +15,6 @@ namespace Mosa.Compiler.Framework.Stages
 	/// </summary>
 	public class PlatformEdgeSplitStage : BaseEdgeSplitStage
 	{
-
 		/// <summary>
 		/// Inserts the jump instruction.
 		/// </summary>

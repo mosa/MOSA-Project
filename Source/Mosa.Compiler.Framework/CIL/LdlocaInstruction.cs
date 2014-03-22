@@ -39,7 +39,7 @@ namespace Mosa.Compiler.Framework.CIL
 		{
 			// Decode base classes first
 			base.Decode(ctx, decoder);
-			
+
 			// Opcode specific handling
 
 			Operand local = decoder.Compiler.GetLocalOperand((int)decoder.Instruction.Operand);

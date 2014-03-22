@@ -16,7 +16,6 @@ namespace Mosa.Compiler.Framework.Stages
 	/// </summary>
 	public sealed class GreedyRegisterAllocatorStage : BaseMethodCompilerStage
 	{
-
 		protected override void Run()
 		{
 			var trace = CreateTrace();
@@ -25,6 +24,5 @@ namespace Mosa.Compiler.Framework.Stages
 
 			return;
 		}
-
 	}
 }

@@ -15,6 +15,5 @@ namespace Mosa.Compiler.Framework.Stages
 	/// </summary>
 	public class EdgeSplitStage : BaseEdgeSplitStage
 	{
-		
 	}
 }

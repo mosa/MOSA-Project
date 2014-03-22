@@ -27,6 +27,7 @@ namespace Mosa.Compiler.Common
 
 			list.Add(item);
 		}
+
 		/// <summary>
 		/// Determines whether the two lists' elements are equal.
 		/// </summary>

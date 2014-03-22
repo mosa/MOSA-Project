@@ -114,7 +114,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 					liveRange = liveRange.CreateExpandedLiveRange(start, end);
 					liveIntervals[i] = liveRange;
 
-					for (int z = i + 1; z < liveIntervals.Count; z++) 
+					for (int z = i + 1; z < liveIntervals.Count; z++)
 					{
 						var nextLiveRange = liveIntervals[z];
 						if (liveRange.IsAdjacent(nextLiveRange) || liveRange.Intersects(nextLiveRange))

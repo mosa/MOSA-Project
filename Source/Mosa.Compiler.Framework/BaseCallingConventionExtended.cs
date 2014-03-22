@@ -7,7 +7,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using Mosa.Compiler.Framework;
 using Mosa.Compiler.MosaTypeSystem;
 using System;
 using System.Collections.Generic;
@@ -21,7 +20,6 @@ namespace Mosa.Compiler.Framework
 	/// </summary>
 	public abstract class BaseCallingConventionExtended : BaseCallingConvention
 	{
-
 		#region Data members
 
 		/// <summary>
@@ -59,7 +57,7 @@ namespace Mosa.Compiler.Framework
 				size = alignment;
 		}
 
-		#endregion
+		#endregion Members
 
 		#region Helper Methods
 
@@ -120,7 +118,6 @@ namespace Mosa.Compiler.Framework
 			return result;
 		}
 
-		#endregion
+		#endregion Helper Methods
 	}
-
 }

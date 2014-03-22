@@ -47,6 +47,5 @@ namespace Mosa.Compiler.Framework.Stages
 				}
 			}
 		}
-
 	}
 }

@@ -256,7 +256,7 @@ namespace Mosa.Compiler.Linker.PE
 
 			// Write the section headers
 			uint address = this.LoadSectionAlignment;
-			
+
 			foreach (LinkerSection section in Sections)
 			{
 				if (section.Length == 0)

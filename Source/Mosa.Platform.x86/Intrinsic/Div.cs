@@ -31,7 +31,7 @@ namespace Mosa.Platform.x86.Intrinsic
 			Operand d = context.Operand2;
 			Operand result = context.Result;
 			Operand result2 = methodCompiler.CreateVirtualRegister(methodCompiler.TypeSystem.BuiltIn.U4);
-			
+
 			Operand op0L, op0H;
 
 			LongOperandTransformationStage.SplitLongOperand(methodCompiler, n, out op0L, out op0H, null);

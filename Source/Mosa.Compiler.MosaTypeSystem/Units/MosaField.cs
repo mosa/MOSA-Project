@@ -15,14 +15,19 @@ namespace Mosa.Compiler.MosaTypeSystem
 	public class MosaField : MosaUnit, IEquatable<MosaField>
 	{
 		public MosaModule Module { get; private set; }
+
 		public MosaType DeclaringType { get; private set; }
 
 		public MosaType FieldType { get; private set; }
 
 		public bool IsLiteral { get; private set; }
+
 		public bool IsStatic { get; private set; }
+
 		public bool HasDefault { get; private set; }
+
 		public uint? Offset { get; private set; }
+
 		public byte[] Data { get; private set; }
 
 		public bool HasOpenGenericParams { get; private set; }
@@ -43,7 +48,8 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public class Mutator : MosaUnit.MutatorBase
 		{
-			MosaField field;
+			private MosaField field;
+
 			internal Mutator(MosaField field)
 				: base(field)
 			{
@@ -51,14 +57,19 @@ namespace Mosa.Compiler.MosaTypeSystem
 			}
 
 			public MosaModule Module { set { field.Module = value; } }
+
 			public MosaType DeclaringType { set { field.DeclaringType = value; } }
 
 			public MosaType FieldType { set { field.FieldType = value; } }
 
 			public bool IsLiteral { set { field.IsLiteral = value; } }
+
 			public bool IsStatic { set { field.IsStatic = value; } }
+
 			public bool HasDefault { set { field.HasDefault = value; } }
+
 			public uint? Offset { set { field.Offset = value; } }
+
 			public byte[] Data { set { field.Data = value; } }
 
 			public bool HasOpenGenericParams { set { field.HasOpenGenericParams = value; } }
