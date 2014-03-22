@@ -10,6 +10,7 @@
 using Mosa.Compiler.Framework.Analysis;
 using Mosa.Compiler.Framework.IR;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework.Stages
 {
@@ -55,20 +56,7 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				AddToAssignments(op);
 			}
-
-			foreach (var op in MethodCompiler.Parameters)
-			{
-				AddToAssignments(op);
-			}
-
-			foreach (var op in MethodCompiler.LocalVariables)
-			{
-				if (op.Uses.Count != 0)
-				{
-					AddToAssignments(op);
-				}
-			}
-
+			
 			if (headBlock.NextBlocks.Count > 0)
 			{
 				RenameVariables(headBlock.NextBlocks[0], analysis);
@@ -123,12 +111,12 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Renames the variables.
 		/// </summary>
 		/// <param name="block">The block.</param>
-		/// <param name="dominanceProvider">The dominance provider.</param>
-		private void RenameVariables(BasicBlock block, IDominanceAnalysis dominanceProvider)
+		/// <param name="dominance">The dominance provider.</param>
+		private void RenameVariables(BasicBlock block, IDominanceAnalysis dominance)
 		{
 			for (var context = new Context(InstructionSet, block); !context.IsBlockEndInstruction; context.GotoNext())
 			{
-				if (!(context.Instruction is Phi))
+				if (context.Instruction != IRInstruction.Phi)
 				{
 					for (var i = 0; i < context.OperandCount; ++i)
 					{
@@ -137,10 +125,10 @@ namespace Mosa.Compiler.Framework.Stages
 						if (op == null || !op.IsVirtualRegister)
 							continue;
 
-						//Debug.Assert(variables.ContainsKey(op), op.ToString() + " is not in dictionary [block = " + block + "]");
+						Debug.Assert(variables.ContainsKey(op), op.ToString() + " is not in dictionary [block = " + block + "]");
 
-						var index = variables[op].Peek();
-						context.SetOperand(i, GetSSAOperand(op, index));
+						var version = variables[op].Peek();
+						context.SetOperand(i, GetSSAOperand(op, version));
 					}
 				}
 
@@ -160,22 +148,22 @@ namespace Mosa.Compiler.Framework.Stages
 
 				for (var context = new Context(InstructionSet, s); !context.IsBlockEndInstruction; context.GotoNext())
 				{
-					if (!(context.Instruction is Phi))
+					if (context.Instruction != IRInstruction.Phi)
 						continue;
 
 					var op = context.GetOperand(j);
 
 					if (variables[op].Count > 0)
 					{
-						var index = variables[op].Peek();
-						context.SetOperand(j, GetSSAOperand(context.GetOperand(j), index));
+						var version = variables[op].Peek();
+						context.SetOperand(j, GetSSAOperand(context.GetOperand(j), version));
 					}
 				}
 			}
 
-			foreach (var s in dominanceProvider.GetChildren(block))
+			foreach (var s in dominance.GetChildren(block))
 			{
-				RenameVariables(s, dominanceProvider);
+				RenameVariables(s, dominance);
 			}
 
 			for (var context = new Context(InstructionSet, block); !context.IsBlockEndInstruction; context.GotoNext())
