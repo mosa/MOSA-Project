@@ -14,14 +14,10 @@ namespace Mosa.Compiler.Framework.Stages
 	/// <summary>
 	///
 	/// </summary>
-	public sealed class GreedyRegisterAllocatorStage : BaseMethodCompilerStage, IMethodCompilerStage
+	public sealed class GreedyRegisterAllocatorStage : BaseMethodCompilerStage
 	{
-		#region IMethodCompilerStage Members
 
-		/// <summary>
-		/// Performs stage specific processing on the compiler context.
-		/// </summary>
-		void IMethodCompilerStage.Execute()
+		protected override void Run()
 		{
 			var trace = CreateTrace();
 
@@ -30,6 +26,5 @@ namespace Mosa.Compiler.Framework.Stages
 			return;
 		}
 
-		#endregion IMethodCompilerStage Members
 	}
 }

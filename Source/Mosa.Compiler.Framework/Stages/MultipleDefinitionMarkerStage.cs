@@ -14,12 +14,9 @@ namespace Mosa.Compiler.Framework.Stages
 	/// <summary>
 	///
 	/// </summary>
-	public class MultipleDefinitionMarkerStage : BaseMethodCompilerStage, IMethodCompilerStage, IPipelineStage
+	public class MultipleDefinitionMarkerStage : BaseMethodCompilerStage
 	{
-		/// <summary>
-		/// Performs stage specific processing on the compiler context.
-		/// </summary>
-		void IMethodCompilerStage.Execute()
+		protected override void Run()
 		{
 			Dictionary<Operand, int> list = new Dictionary<Operand, int>();
 

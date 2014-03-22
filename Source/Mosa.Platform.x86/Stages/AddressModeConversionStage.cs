@@ -16,14 +16,9 @@ namespace Mosa.Platform.x86.Stages
 	/// <summary>
 	///
 	/// </summary>
-	public sealed class AddressModeConversionStage : BaseTransformationStage, IPipelineStage
+	public sealed class AddressModeConversionStage : BaseTransformationStage
 	{
-		#region IMethodCompilerStage Members
-
-		/// <summary>
-		/// Performs stage specific processing on the compiler context.
-		/// </summary>
-		public override void Execute()
+		protected override void Run()
 		{
 			foreach (BasicBlock block in BasicBlocks)
 				for (Context ctx = CreateContext(block); !ctx.IsBlockEndInstruction; ctx.GotoNext())
@@ -31,8 +26,6 @@ namespace Mosa.Platform.x86.Stages
 						if (ctx.OperandCount == 2 && ctx.ResultCount == 1)
 							ThreeTwoAddressConversion(ctx);
 		}
-
-		#endregion IMethodCompilerStage Members
 
 		/// <summary>
 		/// Converts the given instruction from three address format to a two address format.

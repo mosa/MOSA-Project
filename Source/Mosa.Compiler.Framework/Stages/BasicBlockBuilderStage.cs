@@ -18,7 +18,7 @@ namespace Mosa.Compiler.Framework.Stages
 	/// This compilation stage is used by method compilers after the
 	/// IL decoding stage to build basic Blocks out of the instruction list.
 	/// </summary>
-	public sealed class BasicBlockBuilderStage : BaseMethodCompilerStage, IMethodCompilerStage, IPipelineStage
+	public sealed class BasicBlockBuilderStage : BaseMethodCompilerStage
 	{
 		#region Data members
 
@@ -34,12 +34,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		#endregion Data members
 
-		#region IMethodCompilerStage members
-
-		/// <summary>
-		/// Performs stage specific processing on the compiler context.
-		/// </summary>
-		void IMethodCompilerStage.Execute()
+		protected override void Run()
 		{
 			// No basic block building if this is a linker generated method
 			if (MethodCompiler.Method.IsLinkerGenerated)
@@ -85,8 +80,6 @@ namespace Mosa.Compiler.Framework.Stages
 				}
 			}
 		}
-
-		#endregion IMethodCompilerStage members
 
 		/// <summary>
 		/// Finds all targets.

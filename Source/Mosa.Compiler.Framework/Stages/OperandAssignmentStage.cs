@@ -18,7 +18,7 @@ namespace Mosa.Compiler.Framework.Stages
 	/// <summary>
 	///
 	/// </summary>
-	public sealed class OperandAssignmentStage : BaseMethodCompilerStage, IMethodCompilerStage
+	public sealed class OperandAssignmentStage : BaseMethodCompilerStage
 	{
 		/// <summary>
 		///
@@ -72,10 +72,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </summary>
 		private Stack<Operand>[] scheduledMoves;
 
-		/// <summary>
-		/// Runs the specified compiler.
-		/// </summary>
-		void IMethodCompilerStage.Execute()
+		protected override void Run()
 		{
 			foreach (BasicBlock headBlock in BasicBlocks.HeadBlocks)
 				Trace(headBlock);

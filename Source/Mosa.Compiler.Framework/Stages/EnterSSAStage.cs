@@ -16,7 +16,7 @@ namespace Mosa.Compiler.Framework.Stages
 	/// <summary>
 	///
 	/// </summary>
-	public sealed class EnterSSAStage : BaseMethodCompilerStage, IMethodCompilerStage, IPipelineStage
+	public sealed class EnterSSAStage : BaseMethodCompilerStage
 	{
 		private PhiPlacementStage phiPlacementStage;
 		private Dictionary<Operand, Stack<int>> variables;
@@ -24,10 +24,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private Dictionary<Operand, Operand[]> ssaOperands = new Dictionary<Operand, Operand[]>();
 
-		/// <summary>
-		/// Performs stage specific processing on the compiler context.
-		/// </summary>
-		void IMethodCompilerStage.Execute()
+		protected override void Run()
 		{
 			// Method is empty - must be a plugged method
 			if (BasicBlocks.HeadBlocks.Count == 0)

@@ -17,7 +17,7 @@ namespace Mosa.Compiler.Framework.Stages
 	/// <summary>
 	///	Places phi instructions for the SSA transformation
 	/// </summary>
-	public class PhiPlacementStage : BaseMethodCompilerStage, IMethodCompilerStage, IPipelineStage
+	public class PhiPlacementStage : BaseMethodCompilerStage
 	{
 		/// <summary>
 		///
@@ -64,10 +64,7 @@ namespace Mosa.Compiler.Framework.Stages
 			get { return assignments; }
 		}
 
-		/// <summary>
-		/// Performs stage specific processing on the compiler context.
-		/// </summary>
-		void IMethodCompilerStage.Execute()
+		protected override void Run()
 		{
 			// Method is empty - must be a plugged method
 			if (BasicBlocks.HeadBlocks.Count == 0)
