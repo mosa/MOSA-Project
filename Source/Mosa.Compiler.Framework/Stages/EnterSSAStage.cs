@@ -56,7 +56,7 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				AddToAssignments(op);
 			}
-			
+
 			if (headBlock.NextBlocks.Count > 0)
 			{
 				RenameVariables(headBlock.NextBlocks[0], analysis);
@@ -144,19 +144,21 @@ namespace Mosa.Compiler.Framework.Stages
 
 			foreach (var s in block.NextBlocks)
 			{
-				var j = WhichPredecessor(s, block); // ???
+				var index = WhichPredecessor(s, block); // okay since the block list order does not change between this stage and PhiPlacementStage
 
 				for (var context = new Context(InstructionSet, s); !context.IsBlockEndInstruction; context.GotoNext())
 				{
 					if (context.Instruction != IRInstruction.Phi)
 						continue;
 
-					var op = context.GetOperand(j);
+					Debug.Assert(context.OperandCount == context.BasicBlock.PreviousBlocks.Count);
+
+					var op = context.GetOperand(index);
 
 					if (variables[op].Count > 0)
 					{
 						var version = variables[op].Peek();
-						context.SetOperand(j, GetSSAOperand(context.GetOperand(j), version));
+						context.SetOperand(index, GetSSAOperand(context.GetOperand(index), version));
 					}
 				}
 			}

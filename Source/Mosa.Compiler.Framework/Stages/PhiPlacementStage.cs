@@ -11,6 +11,7 @@ using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.IR;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework.Stages
 {
@@ -90,11 +91,6 @@ namespace Mosa.Compiler.Framework.Stages
 					if (!context.IsEmpty && context.Result != null)
 						if (context.Result.IsVirtualRegister)
 							AddToAssignments(context.Result, block);
-
-			// FUTURE: Only include parameter operands if reachable from the given header block
-			foreach (var headBlock in BasicBlocks.HeadBlocks)
-				foreach (var op in MethodCompiler.Parameters)
-					AddToAssignments(op, headBlock);
 		}
 
 		/// <summary>
@@ -125,12 +121,18 @@ namespace Mosa.Compiler.Framework.Stages
 			var context = new Context(InstructionSet, block);
 			context.AppendInstruction(IRInstruction.Phi, variable);
 
-			for (var i = 0; i < block.PreviousBlocks.Count; ++i)
+			//var sourceBlocks = new BasicBlock[block.PreviousBlocks.Count];
+			//context.Other = sourceBlocks;
+
+			for (var i = 0; i < block.PreviousBlocks.Count; i++)
 			{
 				context.SetOperand(i, variable);
+				//sourceBlocks[i] = block.PreviousBlocks[i];
 			}
 
 			context.OperandCount = (byte)block.PreviousBlocks.Count;
+
+			Debug.Assert(context.OperandCount == context.BasicBlock.PreviousBlocks.Count);
 		}
 
 		/// <summary>
