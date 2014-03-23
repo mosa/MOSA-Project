@@ -33,7 +33,7 @@ namespace Mosa.Compiler.Framework.Stages
 					{
 						Debug.Assert(context.OperandCount == context.BasicBlock.PreviousBlocks.Count);
 
-						ProcessPhiInstruction(block, context);
+						ProcessPhiInstruction(context);
 					}
 
 					for (var i = 0; i < context.OperandCount; ++i)
@@ -78,12 +78,14 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </summary>
 		/// <param name="block">The block.</param>
 		/// <param name="context">The context.</param>
-		private void ProcessPhiInstruction(BasicBlock block, Context context)
+		private void ProcessPhiInstruction(Context context)
 		{
-			for (var index = 0; index < block.PreviousBlocks.Count; index++)
+			var sourceBlocks = context.Other as BasicBlock[];
+
+			for (var index = 0; index < context.BasicBlock.PreviousBlocks.Count; index++)
 			{
-				var predecessor = block.PreviousBlocks[index];
 				var operand = context.GetOperand(index);
+				var predecessor = sourceBlocks[index];
 
 				InsertCopyStatement(predecessor, context.Result, operand);
 			}
