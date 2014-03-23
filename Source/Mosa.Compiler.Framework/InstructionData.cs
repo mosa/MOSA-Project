@@ -127,8 +127,8 @@ namespace Mosa.Compiler.Framework
 		/// </value>
 		public bool UpdateStatusFlags
 		{
-			get { return (packed & 0x08) == 0x16; }
-			set { if (value) packed = packed | 0x16; else packed = (uint)(packed & ~0x08); }
+			get { return (packed & 0x16) == 0x16; }
+			set { if (value) packed = packed | 0x16; else packed = (uint)(packed & ~0x16); }
 		}
 
 		/// <summary>
@@ -136,8 +136,8 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		public byte ResultCount
 		{
-			get { return (byte)((packed >> 16) & 0xF); }
-			set { packed = (uint)((packed & 0xFF00FFFF) | ((uint)value << 16)); }
+			get { return (byte)((packed >> 8) & 0xF); }
+			set { packed = (uint)((packed & 0xFFFFF0FF) | ((uint)value << 8)); }
 		}
 
 		/// <summary>
@@ -145,13 +145,13 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		public byte OperandCount
 		{
-			get { return (byte)((packed >> 24) & 0xF); }
-			set { packed = (uint)((packed & 0x00FFFFFF) | ((uint)value << 24)); }
+			get { return (byte)((packed >> 20) & 0xFFF); }
+			set { packed = (uint)((packed & 0x000FFFFF) | ((uint)value << 20)); }
 		}
 
 		/// <summary>
 		/// Gets or sets the runtime method.
-		/// </summary>
+		/// </summary>16
 		/// <value>The runtime method.</value>
 		public MosaMethod InvokeMethod
 		{

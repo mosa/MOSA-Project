@@ -31,6 +31,8 @@ namespace Mosa.Compiler.Framework.Stages
 				{
 					if (context.Instruction == IRInstruction.Phi)
 					{
+						Debug.Assert(context.OperandCount == context.BasicBlock.PreviousBlocks.Count);
+
 						ProcessPhiInstruction(block, context);
 					}
 
@@ -114,7 +116,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (destination != source)
 			{
-				Architecture.InsertMoveInstruction(context, destination, source);
+				context.AppendInstruction(IRInstruction.Move, destination, source);
 			}
 		}
 	}
