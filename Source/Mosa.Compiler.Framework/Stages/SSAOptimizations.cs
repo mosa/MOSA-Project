@@ -278,9 +278,8 @@ namespace Mosa.Compiler.Framework.Stages
 			if (result.Type.IsU4 & destination.Type.IsU4)
 				return true;
 
-			// Why does this breaking things
-			//if (result.Type.IsI4 & destination.Type.IsI4)
-			//	return true;
+			if (result.Type.IsI4 & destination.Type.IsI4)
+				return true;
 
 			//if (result.Type == destination.Type)
 			//	return true;
@@ -789,7 +788,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (context.Instruction != IRInstruction.IntegerCompareBranch)
 				return;
-			
+
 			if (context.OperandCount != 2)
 				return;
 

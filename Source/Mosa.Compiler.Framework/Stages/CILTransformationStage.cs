@@ -799,26 +799,20 @@ namespace Mosa.Compiler.Framework.Stages
 			int offset = TypeLayout.GetFieldOffset(field);
 			Operand offsetOperand = Operand.CreateConstantSignedInt(TypeSystem, offset);
 
-			Operand result = MethodCompiler.CreateVirtualRegister(field.FieldType);
-
 			BaseInstruction loadInstruction = IRInstruction.Load;
-			BaseInstruction moveInstruction = IRInstruction.Move;
 			if (MustSignExtendOnLoad(field.FieldType))
 			{
 				loadInstruction = IRInstruction.LoadSignExtended;
-				moveInstruction = IRInstruction.SignExtendedMove;
 			}
 			else if (MustZeroExtendOnLoad(field.FieldType))
 			{
 				loadInstruction = IRInstruction.LoadZeroExtended;
-				moveInstruction = IRInstruction.ZeroExtendedMove;
 			}
 
 			Debug.Assert(offsetOperand != null);
 
-			context.SetInstruction(loadInstruction, result, objectOperand, offsetOperand);
+			context.SetInstruction(loadInstruction, resultOperand, objectOperand, offsetOperand);
 			context.MosaType = field.FieldType;
-			context.AppendInstruction(moveInstruction, resultOperand, result);
 		}
 
 		/// <summary>
