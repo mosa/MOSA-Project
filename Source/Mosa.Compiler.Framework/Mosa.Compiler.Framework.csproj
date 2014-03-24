@@ -212,7 +212,6 @@
     <Compile Include="CIL\DupInstruction.cs" />
     <Compile Include="CIL\EndFilterInstruction.cs" />
     <Compile Include="CIL\EndFinallyInstruction.cs" />
-    <Compile Include="CIL\IBranchInstruction.cs" />
     <Compile Include="CIL\InitblkInstruction.cs" />
     <Compile Include="CIL\InitObjInstruction.cs" />
     <Compile Include="CIL\InvokeInstruction.cs" />

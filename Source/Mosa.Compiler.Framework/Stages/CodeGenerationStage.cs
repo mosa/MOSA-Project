@@ -8,7 +8,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.Framework.Platform;
 using System;
 using System.Diagnostics;
@@ -111,7 +110,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 				for (Context context = new Context(InstructionSet, block); !context.IsBlockEndInstruction; context.GotoNext())
 				{
-					if (context.IsEmpty || context.Instruction == IRInstruction.BlockStart)
+					if (context.IsEmpty || context.IsBlockStartInstruction)
 						continue;
 
 					if (context.Instruction is BasePlatformInstruction)
