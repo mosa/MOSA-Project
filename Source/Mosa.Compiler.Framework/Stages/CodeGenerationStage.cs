@@ -33,6 +33,9 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </summary>
 		protected BaseCodeEmitter codeEmitter;
 
+		private int generatedInstructionCount = 0;
+		private int generatedBlockCount = 0;
+
 		#endregion Data members
 
 		#region Properties
@@ -88,6 +91,9 @@ namespace Mosa.Compiler.Framework.Stages
 				// Emit the method epilogue
 				EndGenerate();
 			}
+
+			UpdateCounter("CodeGeneration.GeneratedInstructions", generatedInstructionCount);
+			UpdateCounter("CodeGeneration.GeneratedBlocks", generatedBlockCount);
 		}
 
 		#region Methods
@@ -111,6 +117,7 @@ namespace Mosa.Compiler.Framework.Stages
 					if (context.Instruction is BasePlatformInstruction)
 					{
 						EmitInstruction(context, codeEmitter);
+						generatedInstructionCount++;
 					}
 					else
 					{
@@ -119,6 +126,7 @@ namespace Mosa.Compiler.Framework.Stages
 				}
 
 				BlockEnd(block);
+				generatedBlockCount++;
 			}
 		}
 
