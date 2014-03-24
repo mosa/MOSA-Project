@@ -20,19 +20,20 @@ namespace Mosa.Compiler.Framework.Stages
 	/// </summary>
 	public sealed class SSAOptimizations : BaseMethodCompilerStage
 	{
-		private int instructionsRemoved = 0;
-		private int simplifyExtendedMove = 0;
-		private int simplifySubtraction = 0;
-		private int strengthReductionMultiplication = 0;
-		private int strengthReductionDivision = 0;
-		private int strengthReductionIntegerAdditionAndSubstraction = 0;
-		private int strengthReductionLogicalOperators = 0;
-		private int constantFoldingIntegerOperations = 0;
-		private int simpleConstantPropagation = 0;
-		private int simpleCopyPropagation = 0;
-		private int constantFoldingIntegerCompare = 0;
-		private int foldIntegerCompareBranch = 0;
-		private int deadCodeElimination = 0;
+		private int instructionsRemovedCount = 0;
+		private int simplifyExtendedMoveCount = 0;
+		private int simplifySubtractionCount = 0;
+		private int strengthReductionMultiplicationCount = 0;
+		private int strengthReductionDivisionCount = 0;
+		private int strengthReductionIntegerAdditionAndSubstractionCount = 0;
+		private int strengthReductionLogicalOperatorsCount = 0;
+		private int constantFoldingIntegerOperationsCount = 0;
+		private int simpleConstantPropagationCount = 0;
+		private int simpleCopyPropagationCount = 0;
+		private int constantFoldingIntegerCompareCount = 0;
+		private int foldIntegerCompareBranchCount = 0;
+		private int deadCodeEliminationCount = 0;
+		private int blockRemovedCount = 0;
 
 		private Stack<int> worklist = new Stack<int>();
 
@@ -66,20 +67,21 @@ namespace Mosa.Compiler.Framework.Stages
 				}
 			}
 
-			UpdateCounter("SSAOptimizations.IRInstructionRemoved", instructionsRemoved);
+			UpdateCounter("SSAOptimizations.IRInstructionRemoved", instructionsRemovedCount);
 
-			UpdateCounter("SSAOptimizations.SimplifyExtendedMove", simplifyExtendedMove);
-			UpdateCounter("SSAOptimizations.SimplifySubtraction", simplifySubtraction);
-			UpdateCounter("SSAOptimizations.StrengthReductionMultiplication", strengthReductionMultiplication);
-			UpdateCounter("SSAOptimizations.StrengthReductionDivision", strengthReductionDivision);
-			UpdateCounter("SSAOptimizations.StrengthReductionIntegerAdditionAndSubstraction", strengthReductionIntegerAdditionAndSubstraction);
-			UpdateCounter("SSAOptimizations.StrengthReductionLogicalOperators", strengthReductionLogicalOperators);
-			UpdateCounter("SSAOptimizations.ConstantFoldingIntegerOperations", constantFoldingIntegerOperations);
-			UpdateCounter("SSAOptimizations.SimpleConstantPropagation", simpleConstantPropagation);
-			UpdateCounter("SSAOptimizations.SimpleCopyPropagation", simpleCopyPropagation);
-			UpdateCounter("SSAOptimizations.ConstantFoldingIntegerCompare", constantFoldingIntegerCompare);
-			UpdateCounter("SSAOptimizations.FoldIntegerCompareBranch", foldIntegerCompareBranch);
-			UpdateCounter("SSAOptimizations.DeadCodeElimination", deadCodeElimination);
+			UpdateCounter("SSAOptimizations.SimplifyExtendedMove", simplifyExtendedMoveCount);
+			UpdateCounter("SSAOptimizations.SimplifySubtraction", simplifySubtractionCount);
+			UpdateCounter("SSAOptimizations.StrengthReductionMultiplication", strengthReductionMultiplicationCount);
+			UpdateCounter("SSAOptimizations.StrengthReductionDivision", strengthReductionDivisionCount);
+			UpdateCounter("SSAOptimizations.StrengthReductionIntegerAdditionAndSubstraction", strengthReductionIntegerAdditionAndSubstractionCount);
+			UpdateCounter("SSAOptimizations.StrengthReductionLogicalOperators", strengthReductionLogicalOperatorsCount);
+			UpdateCounter("SSAOptimizations.ConstantFoldingIntegerOperations", constantFoldingIntegerOperationsCount);
+			UpdateCounter("SSAOptimizations.SimpleConstantPropagation", simpleConstantPropagationCount);
+			UpdateCounter("SSAOptimizations.SimpleCopyPropagation", simpleCopyPropagationCount);
+			UpdateCounter("SSAOptimizations.ConstantFoldingIntegerCompare", constantFoldingIntegerCompareCount);
+			UpdateCounter("SSAOptimizations.FoldIntegerCompareBranch", foldIntegerCompareBranchCount);
+			UpdateCounter("SSAOptimizations.DeadCodeElimination", deadCodeEliminationCount);
+			UpdateCounter("SSAOptimizations.BlockRemoved", blockRemovedCount);
 
 			worklist = null;
 		}
@@ -172,8 +174,8 @@ namespace Mosa.Compiler.Framework.Stages
 				if (trace.Active) trace.Log("REMOVED:\t" + context.ToString());
 				AddOperandUsageToWorkList(context);
 				context.SetInstruction(IRInstruction.Nop);
-				instructionsRemoved++;
-				deadCodeElimination++;
+				instructionsRemovedCount++;
+				deadCodeEliminationCount++;
 				//context.Remove();
 				return;
 			}
@@ -185,8 +187,8 @@ namespace Mosa.Compiler.Framework.Stages
 			if (trace.Active) trace.Log("REMOVED:\t" + context.ToString());
 			AddOperandUsageToWorkList(context);
 			context.SetInstruction(IRInstruction.Nop);
-			instructionsRemoved++;
-			deadCodeElimination++;
+			instructionsRemovedCount++;
+			deadCodeEliminationCount++;
 			//context.Remove();
 			return;
 		}
@@ -219,7 +221,7 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				Context ctx = new Context(InstructionSet, index);
 
-				if (ctx.Instruction == IRInstruction.AddressOf || ctx.Instruction == IRInstruction.Phi)
+				if (ctx.Instruction == IRInstruction.AddressOf)
 					continue;
 
 				bool propogated = false;
@@ -236,7 +238,7 @@ namespace Mosa.Compiler.Framework.Stages
 						if (trace.Active) trace.Log("BEFORE:\t" + ctx.ToString());
 						AddOperandUsageToWorkList(operand);
 						ctx.SetOperand(i, sourceOperand);
-						simpleConstantPropagation++;
+						simpleConstantPropagationCount++;
 						if (trace.Active) trace.Log("AFTER: \t" + ctx.ToString());
 					}
 				}
@@ -257,32 +259,23 @@ namespace Mosa.Compiler.Framework.Stages
 			if (result.Type.IsArray & destination.Type.IsArray & result.Type.ElementType == destination.Type.ElementType)
 				return true;
 
-			if (result.Type.IsI1 & destination.Type.IsI1)
+			if (result.Type.IsUI1 & destination.Type.IsUI1)
 				return true;
 
-			if (result.Type.IsU1 & destination.Type.IsU1)
+			if (result.Type.IsUI2 & destination.Type.IsUI2)
 				return true;
 
-			if (result.Type.IsI2 & destination.Type.IsI2)
+			if (result.Type.IsUI4 & destination.Type.IsUI4)
 				return true;
 
-			if (result.Type.IsU2 & destination.Type.IsU2)
+			if (result.Type.IsUI8 & destination.Type.IsUI8)
 				return true;
 
-			if (result.Type.IsI8 & destination.Type.IsI8)
-				return true;
+			if (result.IsValueType || destination.IsValueType)
+				return false;
 
-			if (result.Type.IsU8 & destination.Type.IsU8)
+			if (result.Type == destination.Type)
 				return true;
-
-			if (result.Type.IsU4 & destination.Type.IsU4)
-				return true;
-
-			if (result.Type.IsI4 & destination.Type.IsI4)
-				return true;
-
-			//if (result.Type == destination.Type)
-			//	return true;
 
 			return false;
 		}
@@ -325,7 +318,7 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				Context ctx = new Context(InstructionSet, index);
 
-				if (ctx.Instruction == IRInstruction.AddressOf || ctx.Instruction == IRInstruction.Phi)
+				if (ctx.Instruction == IRInstruction.AddressOf)
 					return;
 			}
 
@@ -344,7 +337,7 @@ namespace Mosa.Compiler.Framework.Stages
 						if (trace.Active) trace.Log("*** SimpleCopyPropagation");
 						if (trace.Active) trace.Log("BEFORE:\t" + ctx.ToString());
 						ctx.SetOperand(i, sourceOperand);
-						simpleCopyPropagation++;
+						simpleCopyPropagationCount++;
 						if (trace.Active) trace.Log("AFTER: \t" + ctx.ToString());
 					}
 				}
@@ -355,7 +348,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (trace.Active) trace.Log("REMOVED:\t" + context.ToString());
 			AddOperandUsageToWorkList(context);
 			context.SetInstruction(IRInstruction.Nop);
-			instructionsRemoved++;
+			instructionsRemovedCount++;
 
 			//context.Remove();
 		}
@@ -374,7 +367,9 @@ namespace Mosa.Compiler.Framework.Stages
 				  context.Instruction == IRInstruction.LogicalAnd || context.Instruction == IRInstruction.LogicalOr ||
 				  context.Instruction == IRInstruction.LogicalXor ||
 				  context.Instruction == IRInstruction.MulSigned || context.Instruction == IRInstruction.MulUnsigned ||
-				  context.Instruction == IRInstruction.DivSigned || context.Instruction == IRInstruction.DivUnsigned
+				  context.Instruction == IRInstruction.DivSigned || context.Instruction == IRInstruction.DivUnsigned ||
+				  context.Instruction == IRInstruction.ArithmeticShiftRight ||
+				  context.Instruction == IRInstruction.ShiftLeft || context.Instruction == IRInstruction.ShiftRight
 				 ))
 				return;
 
@@ -422,6 +417,18 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				constant = Operand.CreateConstant(result.Type, op1.ConstantUnsignedInteger / op2.ConstantUnsignedInteger);
 			}
+			else if (context.Instruction == IRInstruction.ArithmeticShiftRight)
+			{
+				constant = Operand.CreateConstant(result.Type, ((long)op1.ConstantUnsignedInteger) >> (int)op2.ConstantUnsignedInteger);
+			}
+			else if (context.Instruction == IRInstruction.ShiftRight)
+			{
+				constant = Operand.CreateConstant(result.Type, ((ulong)op1.ConstantUnsignedInteger) >> (int)op2.ConstantUnsignedInteger);
+			}
+			else if (context.Instruction == IRInstruction.ShiftLeft)
+			{
+				constant = Operand.CreateConstant(result.Type, op1.ConstantUnsignedInteger << (int)op2.ConstantUnsignedInteger);
+			}
 
 			if (constant == null)
 				return;
@@ -430,7 +437,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (trace.Active) trace.Log("*** ConstantFoldingIntegerOperations");
 			if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
 			context.SetInstruction(IRInstruction.Move, context.Result, constant);
-			constantFoldingIntegerOperations++;
+			constantFoldingIntegerOperationsCount++;
 			if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
 		}
 
@@ -478,7 +485,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (trace.Active) trace.Log("*** ConstantFoldingIntegerCompare");
 			if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
 			context.SetInstruction(IRInstruction.Move, result, Operand.CreateConstant(result.Type, (int)(compareResult ? 1 : 0)));
-			constantFoldingIntegerCompare++;
+			constantFoldingIntegerCompareCount++;
 			if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
 		}
 
@@ -508,7 +515,7 @@ namespace Mosa.Compiler.Framework.Stages
 				if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
 				context.SetInstruction(IRInstruction.Move, result, op2);
 				if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
-				strengthReductionIntegerAdditionAndSubstraction++;
+				strengthReductionIntegerAdditionAndSubstractionCount++;
 				return;
 			}
 
@@ -519,7 +526,7 @@ namespace Mosa.Compiler.Framework.Stages
 				if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
 				context.SetInstruction(IRInstruction.Move, result, op1);
 				if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
-				strengthReductionIntegerAdditionAndSubstraction++;
+				strengthReductionIntegerAdditionAndSubstractionCount++;
 				return;
 			}
 		}
@@ -549,7 +556,7 @@ namespace Mosa.Compiler.Framework.Stages
 				if (trace.Active) trace.Log("*** StrengthReductionMultiplication");
 				if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
 				context.SetInstruction(IRInstruction.Move, result, Operand.CreateConstant(context.Result.Type, 0));
-				strengthReductionMultiplication++;
+				strengthReductionMultiplicationCount++;
 				if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
 				return;
 			}
@@ -560,7 +567,7 @@ namespace Mosa.Compiler.Framework.Stages
 				if (trace.Active) trace.Log("*** StrengthReductionMultiplication");
 				if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
 				context.SetInstruction(IRInstruction.Move, result, Operand.CreateConstant(context.Result.Type, 0));
-				strengthReductionMultiplication++;
+				strengthReductionMultiplicationCount++;
 				if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
 				return;
 			}
@@ -571,7 +578,7 @@ namespace Mosa.Compiler.Framework.Stages
 				if (trace.Active) trace.Log("*** StrengthReductionMultiplication");
 				if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
 				context.SetInstruction(IRInstruction.Move, result, op2);
-				strengthReductionMultiplication++;
+				strengthReductionMultiplicationCount++;
 				if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
 				return;
 			}
@@ -582,7 +589,7 @@ namespace Mosa.Compiler.Framework.Stages
 				if (trace.Active) trace.Log("*** StrengthReductionMultiplication");
 				if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
 				context.SetInstruction(IRInstruction.Move, result, op1);
-				strengthReductionMultiplication++;
+				strengthReductionMultiplicationCount++;
 				if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
 				return;
 			}
@@ -613,7 +620,7 @@ namespace Mosa.Compiler.Framework.Stages
 				if (trace.Active) trace.Log("*** StrengthReductionDivision");
 				if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
 				context.SetInstruction(IRInstruction.Move, result, Operand.CreateConstant(context.Result.Type, 0));
-				strengthReductionDivision++;
+				strengthReductionDivisionCount++;
 				if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
 				return;
 			}
@@ -630,7 +637,7 @@ namespace Mosa.Compiler.Framework.Stages
 				if (trace.Active) trace.Log("*** StrengthReductionDivision");
 				if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
 				context.SetInstruction(IRInstruction.Move, result, op1);
-				strengthReductionDivision++;
+				strengthReductionDivisionCount++;
 				if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
 				return;
 			}
@@ -673,7 +680,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (trace.Active) trace.Log("*** SimplifyExtendedMove");
 			if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
 			context.SetInstruction(IRInstruction.Move, result, newOperand);
-			simplifyExtendedMove++;
+			simplifyExtendedMoveCount++;
 			if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
 		}
 
@@ -712,7 +719,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (trace.Active) trace.Log("*** SimplifySubtraction");
 			if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
 			context.SetInstruction(IRInstruction.Move, result, Operand.CreateConstant(context.Result.Type, 0));
-			simplifySubtraction++;
+			simplifySubtractionCount++;
 		}
 
 		/// <summary>
@@ -740,7 +747,7 @@ namespace Mosa.Compiler.Framework.Stages
 				if (trace.Active) trace.Log("*** StrengthReductionLogicalOperators");
 				if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
 				context.SetInstruction(IRInstruction.Move, result, Operand.CreateConstant(context.Result.Type, op2.ConstantSignedInteger));
-				strengthReductionLogicalOperators++;
+				strengthReductionLogicalOperatorsCount++;
 				if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
 			}
 
@@ -750,7 +757,7 @@ namespace Mosa.Compiler.Framework.Stages
 				if (trace.Active) trace.Log("*** StrengthReductionLogicalOperators");
 				if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
 				context.SetInstruction(IRInstruction.Move, result, Operand.CreateConstant(context.Result.Type, op1.ConstantSignedInteger));
-				strengthReductionLogicalOperators++;
+				strengthReductionLogicalOperatorsCount++;
 				if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
 			}
 
@@ -760,7 +767,7 @@ namespace Mosa.Compiler.Framework.Stages
 				if (trace.Active) trace.Log("*** StrengthReductionLogicalOperators");
 				if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
 				context.SetInstruction(IRInstruction.Move, result, Operand.CreateConstant(context.Result.Type, 0));
-				strengthReductionLogicalOperators++;
+				strengthReductionLogicalOperatorsCount++;
 				if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
 			}
 
@@ -770,7 +777,7 @@ namespace Mosa.Compiler.Framework.Stages
 				if (trace.Active) trace.Log("*** StrengthReductionLogicalOperators");
 				if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
 				context.SetInstruction(IRInstruction.Move, result, Operand.CreateConstant(context.Result.Type, 0));
-				strengthReductionLogicalOperators++;
+				strengthReductionLogicalOperatorsCount++;
 				if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
 			}
 
@@ -808,8 +815,8 @@ namespace Mosa.Compiler.Framework.Stages
 				if (trace.Active) trace.Log("REMOVED:\t" + context.ToString());
 				AddOperandUsageToWorkList(context);
 				context.SetInstruction(IRInstruction.Nop);
-				instructionsRemoved++;
-				foldIntegerCompareBranch++;
+				instructionsRemovedCount++;
+				foldIntegerCompareBranchCount++;
 				return;
 			}
 
@@ -855,8 +862,8 @@ namespace Mosa.Compiler.Framework.Stages
 			if (trace.Active) trace.Log("REMOVED:\t" + context.ToString());
 			AddOperandUsageToWorkList(context);
 			context.SetInstruction(IRInstruction.Nop);
-			instructionsRemoved++;
-			foldIntegerCompareBranch++;
+			instructionsRemovedCount++;
+			foldIntegerCompareBranchCount++;
 
 			// Goto the beginning of the block, to get to the first index of the block
 			Context first = context.Clone();
@@ -876,7 +883,51 @@ namespace Mosa.Compiler.Framework.Stages
 			currentBlock.NextBlocks.Remove(target);
 			target.PreviousBlocks.Remove(currentBlock);
 
-			// TODO: if target block no longer has any predecessors (or the only predecessor is itself), remove all instructions from it.
+			// if target block no longer has any predecessors (or the only predecessor is itself), remove all instructions from it.
+			CheckAndClearEmptyBlock(target);
+		}
+
+		private void CheckAndClearEmptyBlock(BasicBlock block)
+		{
+			if (block.PreviousBlocks.Count != 0 || BasicBlocks.HeadBlocks.Contains(block))
+				return;
+
+			if (trace.Active) trace.Log("*** RemoveBlock");
+			if (trace.Active) trace.Log("    Block: " + block.ToString());
+
+			blockRemovedCount++;
+
+			var nextBlocks = new List<BasicBlock>(block.NextBlocks.Count);
+
+			foreach (var next in block.NextBlocks)
+			{
+				next.PreviousBlocks.Remove(block);
+				nextBlocks.Add(next);
+			}
+
+			block.NextBlocks.Clear();
+
+			for (Context context = new Context(InstructionSet, block); !context.IsBlockEndInstruction; context.GotoNext())
+			{
+				if (context.IsEmpty)
+					continue;
+
+				if (context.IsBlockStartInstruction)
+					continue;
+
+				if (context.Instruction == IRInstruction.Nop)
+					continue;
+
+				AddOperandUsageToWorkList(context);
+				if (trace.Active) trace.Log("REMOVED:\t" + context.ToString());
+				context.SetInstruction(IRInstruction.Nop);
+				instructionsRemovedCount++;
+			}
+
+			foreach (var next in nextBlocks)
+			{
+				CheckAndClearEmptyBlock(next);
+			}
 		}
 	}
 }

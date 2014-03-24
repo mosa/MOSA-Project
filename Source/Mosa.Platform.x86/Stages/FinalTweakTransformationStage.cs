@@ -65,7 +65,7 @@ namespace Mosa.Platform.x86.Stages
 				Operand dest = context.Result;
 
 				context.ReplaceInstructionOnly(X86.Mov);
-				
+
 				if (context.Operand1.IsShort || context.Operand1.IsChar)
 				{
 					context.AppendInstruction(X86.And, dest, dest, Operand.CreateConstantUnsignedInt(TypeSystem, (uint)0xffff));
@@ -110,7 +110,6 @@ namespace Mosa.Platform.x86.Stages
 			// SETcc can not use ESI or EDI registers
 			if (context.Result.IsCPURegister && (context.Result.Register == GeneralPurposeRegister.ESI || context.Result.Register == GeneralPurposeRegister.EDI))
 			{
-
 				Operand result = context.Result;
 				var condition = context.ConditionCode;
 
