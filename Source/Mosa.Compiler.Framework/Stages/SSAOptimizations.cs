@@ -105,8 +105,6 @@ namespace Mosa.Compiler.Framework.Stages
 			DeadCodeElimination(context);
 			ConstantFoldingIntegerCompare(context);
 			FoldIntegerCompareBranch(context);
-
-			//CheckForMore(context);
 		}
 
 		/// <summary>
@@ -202,7 +200,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (context.IsEmpty)
 				return;
 
-			if (!(context.Instruction == IRInstruction.Move))
+			if (context.Instruction != IRInstruction.Move)
 				return;
 
 			if (!context.Result.IsVirtualRegister)
@@ -280,7 +278,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (result.Type.IsU4 & destination.Type.IsU4)
 				return true;
 
-			// Why this breaking things
+			// Why does this breaking things
 			//if (result.Type.IsI4 & destination.Type.IsI4)
 			//	return true;
 
@@ -299,7 +297,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (context.IsEmpty)
 				return;
 
-			if (!(context.Instruction == IRInstruction.Move))
+			if (context.Instruction != IRInstruction.Move)
 				return;
 
 			if (context.Operand1.IsConstant)
@@ -446,7 +444,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (context.IsEmpty)
 				return;
 
-			if (!(context.Instruction == IRInstruction.IntegerCompare))
+			if (context.Instruction != IRInstruction.IntegerCompare)
 				return;
 
 			if (!context.Result.IsVirtualRegister)
@@ -789,14 +787,11 @@ namespace Mosa.Compiler.Framework.Stages
 			if (context.IsEmpty)
 				return;
 
+			if (context.Instruction != IRInstruction.IntegerCompareBranch)
+				return;
+			
 			if (context.OperandCount != 2)
 				return;
-
-			if (!(context.Instruction == IRInstruction.IntegerCompareBranch))
-				return;
-
-			//if (!context.Result.IsVirtualRegister)
-			//	return;
 
 			Operand result = context.Result;
 			Operand op1 = context.Operand1;
@@ -805,7 +800,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (!op1.IsConstant || !op2.IsConstant)
 				return;
 
-			if (!(context.Next.Instruction == IRInstruction.Jmp))
+			if (context.Next.Instruction != IRInstruction.Jmp)
 				return;
 
 			if (context.BranchTargets[0] == context.Next.BranchTargets[0])
