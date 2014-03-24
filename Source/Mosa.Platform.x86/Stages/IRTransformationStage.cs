@@ -288,7 +288,7 @@ namespace Mosa.Platform.x86.Stages
 			var operand1 = context.Operand1;
 			var operand2 = context.Operand2;
 
-			Operand v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.U1);
+			Operand v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 
 			context.SetInstruction(X86.Mov, v1, Operand.CreateConstantSignedInt(TypeSystem, 0));
 
@@ -299,7 +299,7 @@ namespace Mosa.Platform.x86.Stages
 			else
 				context.AppendInstruction(X86.Setcc, condition, v1);
 
-			context.AppendInstruction(X86.Movzx, resultOperand, v1);
+			context.AppendInstruction(X86.Mov, resultOperand, v1);
 		}
 
 		/// <summary>
@@ -644,6 +644,7 @@ namespace Mosa.Platform.x86.Stages
 			Operand value = context.Operand3;
 			MosaType storeType = context.MosaType;
 
+			//if (value.IsR4 || storeType.IsR4) // <--- this one is right
 			if (value.IsR8 && (storeType ?? value.Type).IsR4)
 			{
 				Operand xmm1 = AllocateVirtualRegister(TypeSystem.BuiltIn.R4);
@@ -652,8 +653,8 @@ namespace Mosa.Platform.x86.Stages
 			}
 			else
 			{
-				Operand v2 = AllocateVirtualRegister(storeType ?? value.Type);
-				context.InsertBefore().AppendInstruction(X86.Mov, v2, value); // FIXME
+				Operand v2 = AllocateVirtualRegister(value.Type);
+				context.InsertBefore().AppendInstruction(X86.Mov, v2, value);
 				value = v2;
 			}
 
