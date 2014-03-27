@@ -25,12 +25,14 @@ namespace Mosa.Tool.Explorer
 	{
 		private CodeForm form = new CodeForm();
 		private IInternalTrace internalTrace = new BasicInternalTrace();
+		private MosaModuleLoader assemblyLoader;
 		private TypeSystem typeSystem;
 		private ConfigurableTraceFilter filter = new ConfigurableTraceFilter();
 		private MosaTypeLayout typeLayout;
 		private DateTime compileStartTime;
 		private StringBuilder currentInstructionLog;
 		private string[] currentInstructionLogLines;
+		private bool compiled = false;
 
 		private Dictionary<MosaMethod, MethodStages> methodStages = new Dictionary<MosaMethod, MethodStages>();
 
@@ -178,9 +180,14 @@ namespace Mosa.Tool.Explorer
 
 			filter.MethodMatch = MatchType.Any;
 
+			CreateTypeSystemAndLayout();
+
 			ExplorerCompiler.Compile(typeSystem, typeLayout, internalTrace, cbPlatform.Text, enableSSAToolStripMenuItem.Checked, enableBinaryCodeGenerationToolStripMenuItem.Checked);
+			compiled = true;
+
 			tabControl1.SelectedTab = tabPage1;
 			rbOtherResult.Text = compileLog.ToString();
+			UpdateTree();
 
 			toolStripStatusLabel1.Text = "Compiled!";
 		}
@@ -316,7 +323,7 @@ namespace Mosa.Tool.Explorer
 
 		protected void LoadAssembly(string filename, bool includeTestComponents, string platform)
 		{
-			MosaModuleLoader assemblyLoader = new MosaModuleLoader();
+			assemblyLoader = new MosaModuleLoader();
 
 			if (includeTestComponents)
 			{
@@ -329,11 +336,21 @@ namespace Mosa.Tool.Explorer
 			assemblyLoader.AddPrivatePath(Path.GetDirectoryName(filename));
 			assemblyLoader.LoadModuleFromFile(filename);
 
-			typeSystem = TypeSystem.Load(assemblyLoader.CreateMetadata());
-
-			typeLayout = new MosaTypeLayout(typeSystem, 4, 4); // FIXME
-
+			CreateTypeSystemAndLayout();
 			UpdateTree();
+		}
+
+		protected void CreateTypeSystemAndLayout()
+		{
+			if (assemblyLoader == null)
+				return;
+
+			if (typeSystem != null && !compiled)
+				return;
+
+			typeSystem = TypeSystem.Load(assemblyLoader.CreateMetadata());
+			typeLayout = new MosaTypeLayout(typeSystem, 4, 4); // FIXME
+			compiled = false;
 		}
 
 		protected void LoadAssemblyDebugInfo(string assemblyFileName)
@@ -393,7 +410,6 @@ namespace Mosa.Tool.Explorer
 		private void toolStripButton3_Click(object sender, EventArgs e)
 		{
 			Compile();
-			UpdateTree();
 		}
 
 		private void cbLabels_SelectedIndexChanged(object sender, EventArgs e)
@@ -441,7 +457,6 @@ namespace Mosa.Tool.Explorer
 		private void toolStripButton4_Click(object sender, EventArgs e)
 		{
 			Compile();
-			UpdateTree();
 		}
 	}
 }
