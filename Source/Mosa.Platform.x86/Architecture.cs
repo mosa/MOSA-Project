@@ -391,5 +391,15 @@ namespace Mosa.Platform.x86
 			Debug.Assert(source1 == destination);
 			context.AppendInstruction(X86.Sub, destination, source1, source2);
 		}
+
+		/// <summary>
+		/// Determines whether [is instruction move] [the specified instruction].
+		/// </summary>
+		/// <param name="instruction">The instruction.</param>
+		/// <returns></returns>
+		public override bool IsInstructionMove(BaseInstruction instruction)
+		{
+			return (instruction == X86.Mov || instruction == X86.Movsd || instruction == X86.Movss);
+		}
 	}
 }

@@ -321,5 +321,16 @@ namespace Mosa.Platform.ARMv6
 		{
 			context.AppendInstruction(ARMv6.Sub, destination);
 		}
+
+
+		/// <summary>
+		/// Determines whether [is instruction move] [the specified instruction].
+		/// </summary>
+		/// <param name="instruction">The instruction.</param>
+		/// <returns></returns>
+		public override bool IsInstructionMove(BaseInstruction instruction)
+		{
+			return (instruction == ARMv6.Mov);
+		}
 	}
 }

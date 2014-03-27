@@ -13,7 +13,7 @@ using System.Diagnostics;
 namespace Mosa.Compiler.Framework.RegisterAllocator
 {
 	// TODO: Use data structures which are faster at finding intersetions, and add & evicting intervals.
-	public class LiveIntervalUnion
+	public class LiveIntervalTrack
 	{
 		protected List<LiveInterval> liveIntervals = new List<LiveInterval>();
 		protected Register register;
@@ -27,7 +27,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		public bool IsReserved { get { return reserved; } }
 
-		public LiveIntervalUnion(Register register, bool reserved)
+		public LiveIntervalTrack(Register register, bool reserved)
 		{
 			this.register = register;
 			this.reserved = reserved;
@@ -37,14 +37,14 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 		{
 			liveIntervals.Add(liveInterval);
 
-			liveInterval.LiveIntervalUnion = this;
+			liveInterval.LiveIntervalTrack = this;
 		}
 
 		public void Evict(LiveInterval liveInterval)
 		{
 			liveIntervals.Remove(liveInterval);
 
-			liveInterval.LiveIntervalUnion = null;
+			liveInterval.LiveIntervalTrack = null;
 		}
 
 		public void Evict(List<LiveInterval> liveIntervals)

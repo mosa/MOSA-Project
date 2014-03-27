@@ -34,7 +34,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		public int SpillCost { get { return NeverSpill ? Int32.MaxValue : (SpillValue / (Length + 1)); } }
 
-		public LiveIntervalUnion LiveIntervalUnion { get; set; }
+		public LiveIntervalTrack LiveIntervalTrack { get; set; }
 
 		public AllocationStage Stage { get; set; }
 
@@ -46,7 +46,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		public bool IsPhysicalRegister { get { return VirtualRegister.IsPhysicalRegister; } }
 
-		public Register AssignedPhysicalRegister { get { return LiveIntervalUnion == null ? null : LiveIntervalUnion.Register; } }
+		public Register AssignedPhysicalRegister { get { return LiveIntervalTrack == null ? null : LiveIntervalTrack.Register; } }
 
 		public Operand AssignedPhysicalOperand { get; set; }
 
@@ -132,7 +132,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		public void Evict()
 		{
-			this.LiveIntervalUnion.Evict(this);
+			this.LiveIntervalTrack.Evict(this);
 		}
 
 		public LiveInterval Split(SlotIndex start, SlotIndex end)
