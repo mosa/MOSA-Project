@@ -285,7 +285,7 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 			}
 			else if (instruction.Operand is string)
 			{
-				operand = metadata.Cache.stringHeapLookup2[Tuple.Create((ModuleDefMD)methodDef.Module, (string)instruction.Operand)];
+				operand = metadata.Cache.GetStringId((string)instruction.Operand);
 			}
 
 			ushort code = (ushort)instruction.OpCode.Code;

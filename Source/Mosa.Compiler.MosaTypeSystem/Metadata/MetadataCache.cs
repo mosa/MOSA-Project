@@ -8,9 +8,10 @@
  *  Ki (kiootic) <kiootic@gmail.com>
  */
 
+using System;
+using System.Collections.Generic;
 using dnlib.DotNet;
 using Mosa.Compiler.Common;
-using System.Collections.Generic;
 
 namespace Mosa.Compiler.MosaTypeSystem.Metadata
 {
@@ -26,40 +27,19 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 		private Dictionary<ScopedToken, MosaMethod> methodLookup = new Dictionary<ScopedToken, MosaMethod>();
 		private Dictionary<ScopedToken, MosaField> fieldLookup = new Dictionary<ScopedToken, MosaField>();
 
-		internal Dictionary<Tuple<ModuleDefMD, uint>, string> stringHeapLookup = new Dictionary<Tuple<ModuleDefMD, uint>, string>();
-		internal Dictionary<Tuple<ModuleDefMD, string>, uint> stringHeapLookup2 = new Dictionary<Tuple<ModuleDefMD, string>, uint>();
+		uint stringIdCounter;
+		internal Dictionary<string, uint> stringHeapLookup = new Dictionary<string, uint>(StringComparer.Ordinal);
+		internal Dictionary<uint, string> stringHeapLookup2 = new Dictionary<uint, string>();
 
 		public MetadataCache()
 		{
 			Modules = new Dictionary<string, MosaModule>();
 		}
 
-		private class USLookupHook : IStringDecrypter
-		{
-			private MetadataCache cache;
-			private ModuleDefMD module;
-
-			public USLookupHook(MetadataCache cache, ModuleDefMD module)
-			{
-				this.cache = cache;
-				this.module = module;
-			}
-
-			public string ReadUserString(uint token)
-			{
-				string result = module.USStream.ReadNoNull(token & 0xffffff);
-				cache.stringHeapLookup[Tuple.Create(module, token)] = result;
-				cache.stringHeapLookup2[Tuple.Create(module, result)] = token;
-				return result;
-			}
-		}
-
 		public void AddModule(MosaModule module)
 		{
 			Modules.Add(module.Name, module);
 			var desc = module.GetUnderlyingObject<UnitDesc<ModuleDef, object>>();
-			if (desc.Definition is ModuleDefMD)
-				((ModuleDefMD)desc.Definition).StringDecrypter = new USLookupHook(this, (ModuleDefMD)desc.Definition);
 		}
 
 		public MosaModule GetModuleByName(string name)
@@ -99,6 +79,23 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 		public MosaField GetFieldByToken(ScopedToken token)
 		{
 			return fieldLookup[token];
+		}
+
+		public uint GetStringId(string value)
+		{
+			uint id;
+			if (!stringHeapLookup.TryGetValue(value, out id))
+			{
+				id = stringIdCounter++;
+				stringHeapLookup[value] = id;
+				stringHeapLookup2[id] = value;
+			}
+			return id;
+		}
+
+		public string GetStringById(uint id)
+		{
+			return stringHeapLookup2[id];
 		}
 	}
 }

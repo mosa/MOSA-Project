@@ -32,7 +32,6 @@ namespace Mosa.Tool.Explorer
 		private DateTime compileStartTime;
 		private StringBuilder currentInstructionLog;
 		private string[] currentInstructionLogLines;
-		private bool compiled = false;
 
 		private Dictionary<MosaMethod, MethodStages> methodStages = new Dictionary<MosaMethod, MethodStages>();
 
@@ -183,7 +182,6 @@ namespace Mosa.Tool.Explorer
 			CreateTypeSystemAndLayout();
 
 			ExplorerCompiler.Compile(typeSystem, typeLayout, internalTrace, cbPlatform.Text, enableSSAToolStripMenuItem.Checked, enableBinaryCodeGenerationToolStripMenuItem.Checked);
-			compiled = true;
 
 			tabControl1.SelectedTab = tabPage1;
 			rbOtherResult.Text = compileLog.ToString();
@@ -345,12 +343,8 @@ namespace Mosa.Tool.Explorer
 			if (assemblyLoader == null)
 				return;
 
-			if (typeSystem != null && !compiled)
-				return;
-
 			typeSystem = TypeSystem.Load(assemblyLoader.CreateMetadata());
 			typeLayout = new MosaTypeLayout(typeSystem, 4, 4); // FIXME
-			compiled = false;
 		}
 
 		protected void LoadAssemblyDebugInfo(string assemblyFileName)
