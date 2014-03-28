@@ -58,8 +58,7 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 
 		public string LookupUserString(MosaModule module, uint id)
 		{
-			var desc = module.GetUnderlyingObject<UnitDesc<ModuleDef,object>>();
-			return Cache.stringHeapLookup[Tuple.Create(desc == null ? null : desc.Definition as ModuleDefMD, id)];
+			return Cache.GetStringById(id);
 		}
 	}
 }
