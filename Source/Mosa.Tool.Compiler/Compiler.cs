@@ -129,7 +129,7 @@ namespace Mosa.Tool.Compiler
 			#region Setup options
 
 			optionSet.Add(
-				"connectedInternal|boot=",
+				"b|boot=",
 				"Specify the bootable format of the produced binary [{mb0.7}].",
 				delegate(string format)
 				{
@@ -187,13 +187,13 @@ namespace Mosa.Tool.Compiler
 
 			optionSet.Add(
 				@"sa|enable-static-alloc",
-				@"Performs static allocations move compile time.",
+				@"Performs static allocations at compile time.",
 				enable => compilerOptions.EnableStaticAllocations = enable != null
 			);
 
 			optionSet.Add(
 				@"ssa|enable-single-static-assignment-form",
-				@"Performs single static assignments move compile time.",
+				@"Performs single static assignments at compile time.",
 				enable => compilerOptions.EnableSSA = enable != null
 			);
 
