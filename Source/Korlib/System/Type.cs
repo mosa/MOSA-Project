@@ -8,6 +8,8 @@
  */
 
 using System.Runtime.InteropServices;
+using System.Reflection;
+
 namespace System
 {
 	/// <summary>
@@ -58,10 +60,16 @@ namespace System
 
 		[DllImport("Mosa.Compiler.Framework.Intrinsics.InternalGetType, Mosa.Compiler.Framework")]
 		public static extern RuntimeTypeHandle GetTypeHandle(object obj);
-		
+
 		public override string ToString()
 		{
 			return FullName;
+		}
+
+		public Module Module
+		{
+			get;
+			internal set;
 		}
 	}
 }

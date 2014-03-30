@@ -118,12 +118,11 @@ namespace System.IO
 		{
 			get
 			{
-				//throw new InvalidOperationException("Timeouts are not supported on this stream.");
-				return -1;
+				throw new InvalidOperationException("Timeouts are not supported on this stream.");
 			}
 			set
 			{
-				//throw new InvalidOperationException("Timeouts are not supported on this stream.");
+				throw new InvalidOperationException("Timeouts are not supported on this stream.");
 			}
 		}
 
@@ -134,12 +133,11 @@ namespace System.IO
 		{
 			get
 			{
-				//throw new InvalidOperationException("Timeouts are not supported on this stream.");
-				return -1;
+				throw new InvalidOperationException("Timeouts are not supported on this stream.");
 			}
 			set
 			{
-				//throw new InvalidOperationException("Timeouts are not supported on this stream.");
+				throw new InvalidOperationException("Timeouts are not supported on this stream.");
 			}
 		}
 
@@ -148,8 +146,7 @@ namespace System.IO
 		/// </summary>
 		public static Stream Synchronized(Stream stream)
 		{
-			//throw new NotSupportedException();
-			return null;
+			throw new NotSupportedException();
 		}
 
 		/// <summary>
@@ -157,8 +154,7 @@ namespace System.IO
 		/// </summary>
 		public virtual IAsyncResult BeginRead(byte[] buffer, int offset, int count, AsyncCallback cback, object state)
 		{
-			//throw new NotSupportedException("This stream does not support async");
-			return null;
+			throw new NotSupportedException("This stream does not support async");
 		}
 
 		/// <summary>
@@ -166,8 +162,7 @@ namespace System.IO
 		/// </summary>
 		public virtual IAsyncResult BeginWrite(byte[] buffer, int offset, int count, AsyncCallback cback, object state)
 		{
-			//throw new NotSupportedException("This stream does not support async");
-			return null;
+			throw new NotSupportedException("This stream does not support async");
 		}
 
 		/// <summary>
@@ -175,8 +170,7 @@ namespace System.IO
 		/// </summary>
 		public virtual int EndRead(IAsyncResult async_result)
 		{
-			//throw new NotSupportedException("This stream does not support async");
-			return -1;
+			throw new NotSupportedException("This stream does not support async");
 		}
 
 		/// <summary>
@@ -184,7 +178,7 @@ namespace System.IO
 		/// </summary>
 		public virtual void EndWrite(IAsyncResult async_result)
 		{
-			//throw new NotSupportedException("This stream does not support async");
+			throw new NotSupportedException("This stream does not support async");
 		}
 
 		/// <summary>
