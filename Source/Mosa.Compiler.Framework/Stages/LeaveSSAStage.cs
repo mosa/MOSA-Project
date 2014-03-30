@@ -76,7 +76,6 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <summary>
 		/// Processes the phi instruction.
 		/// </summary>
-		/// <param name="block">The block.</param>
 		/// <param name="context">The context.</param>
 		private void ProcessPhiInstruction(Context context)
 		{

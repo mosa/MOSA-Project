@@ -90,6 +90,7 @@
     <Compile Include="IR\CompoundMove.cs" />
     <Compile Include="IR\CompoundStore.cs" />
     <Compile Include="Analysis\IBlockOrderAnalysis.cs" />
+    <Compile Include="RegisterAllocator\MoveHint.cs" />
     <Compile Include="ShiftType.cs" />
     <Compile Include="ConditionCodeExtension.cs" />
     <Compile Include="BasicBlocks.cs" />
@@ -101,7 +102,7 @@
     <Compile Include="RegisterAllocator\MoveResolver.cs" />
     <Compile Include="RegisterAllocator\Interval.cs" />
     <Compile Include="RegisterAllocator\SlotIndex.cs" />
-    <Compile Include="RegisterAllocator\LiveIntervalUnion.cs" />
+    <Compile Include="RegisterAllocator\LiveIntervalTrack.cs" />
     <Compile Include="RegisterAllocator\ExtendedBlock.cs" />
     <Compile Include="RegisterAllocator\LiveInterval.cs" />
     <Compile Include="RegisterAllocator\VirtualRegister.cs" />
@@ -212,7 +213,6 @@
     <Compile Include="CIL\DupInstruction.cs" />
     <Compile Include="CIL\EndFilterInstruction.cs" />
     <Compile Include="CIL\EndFinallyInstruction.cs" />
-    <Compile Include="CIL\IBranchInstruction.cs" />
     <Compile Include="CIL\InitblkInstruction.cs" />
     <Compile Include="CIL\InitObjInstruction.cs" />
     <Compile Include="CIL\InvokeInstruction.cs" />

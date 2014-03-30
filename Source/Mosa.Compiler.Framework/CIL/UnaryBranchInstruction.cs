@@ -17,7 +17,7 @@ namespace Mosa.Compiler.Framework.CIL
 	/// <remarks>
 	/// This instruction is used to represent brfalse[.s] and brtrue[.s].
 	/// </remarks>
-	public class UnaryBranchInstruction : UnaryInstruction, IBranchInstruction
+	public class UnaryBranchInstruction : UnaryInstruction
 	{
 		#region Construction
 
@@ -106,11 +106,5 @@ namespace Mosa.Compiler.Framework.CIL
 		}
 
 		#endregion Methods
-
-		/// <summary>
-		/// Determines if the branch is conditional.
-		/// </summary>
-		/// <value></value>
-		public bool IsConditional { get { return true; } }
 	}
 }

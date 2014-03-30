@@ -80,7 +80,6 @@ namespace Mosa.Tool.Compiler
 			}
 
 			var typeSystem = TypeSystem.Load(moduleLoader.CreateMetadata());
-
 			MosaTypeLayout typeLayout = new MosaTypeLayout(typeSystem, compilerOptions.Architecture.NativePointerSize, compilerOptions.Architecture.NativeAlignment);
 
 			ConfigurableTraceFilter filter = new ConfigurableTraceFilter();

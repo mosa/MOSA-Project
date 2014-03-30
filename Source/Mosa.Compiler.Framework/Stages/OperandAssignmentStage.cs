@@ -74,6 +74,9 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected override void Run()
 		{
+			if (MethodCompiler.Method.Code.Count == 0)
+				return;
+
 			foreach (BasicBlock headBlock in BasicBlocks.HeadBlocks)
 				Trace(headBlock);
 		}
@@ -159,13 +162,15 @@ namespace Mosa.Compiler.Framework.Stages
 				if (ctx.IsEmpty)
 					continue;
 
-				if (ctx.Instruction == IRInstruction.BlockEnd || ctx.Instruction == IRInstruction.BlockStart)
+				if (ctx.IsBlockEndInstruction || ctx.IsBlockStartInstruction)
 					continue;
 
 				if (ctx.Instruction == IRInstruction.Jmp)
 					continue;
 
-				if (!(ctx.Instruction is IBranchInstruction) && !(ctx.Instruction is BaseCILInstruction) && ctx.Instruction != IRInstruction.ExceptionPrologue)
+				if (!(ctx.Instruction.FlowControl == FlowControl.ConditionalBranch || ctx.Instruction.FlowControl == FlowControl.UnconditionalBranch || ctx.Instruction.FlowControl == FlowControl.Return)
+					&& !(ctx.Instruction is BaseCILInstruction)
+					&& ctx.Instruction != IRInstruction.ExceptionPrologue)
 					continue;
 
 				if (ctx.Instruction == IRInstruction.ExceptionPrologue)
@@ -223,7 +228,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			context.GotoPrevious();
 
-			while (context.Instruction is IBranchInstruction || context.Instruction == IRInstruction.Jmp)
+			while ((context.Instruction.FlowControl == FlowControl.ConditionalBranch || context.Instruction.FlowControl == FlowControl.UnconditionalBranch || context.Instruction.FlowControl == FlowControl.Return) || context.Instruction == IRInstruction.Jmp)
 			{
 				context.GotoPrevious();
 			}

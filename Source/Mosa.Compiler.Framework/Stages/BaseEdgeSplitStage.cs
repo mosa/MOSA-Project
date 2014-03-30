@@ -7,6 +7,7 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.IR;
 using System.Collections.Generic;
 
@@ -20,7 +21,7 @@ namespace Mosa.Compiler.Framework.Stages
 	{
 		protected override void Run()
 		{
-			List<KeyValuePair<BasicBlock, BasicBlock>> worklist = new List<KeyValuePair<BasicBlock, BasicBlock>>();
+			List<Tuple<BasicBlock, BasicBlock>> worklist = new List<Tuple<BasicBlock, BasicBlock>>();
 
 			foreach (var from in BasicBlocks)
 			{
@@ -30,7 +31,7 @@ namespace Mosa.Compiler.Framework.Stages
 					{
 						if (to.PreviousBlocks.Count > 1)
 						{
-							worklist.Add(new KeyValuePair<BasicBlock, BasicBlock>(from, to));
+							worklist.Add(new Tuple<BasicBlock, BasicBlock>(from, to));
 						}
 					}
 				}
@@ -38,9 +39,9 @@ namespace Mosa.Compiler.Framework.Stages
 
 			foreach (var edge in worklist)
 			{
-				if (edge.Key.NextBlocks.Count > 1 || edge.Value.PreviousBlocks.Count > 1)
+				if (edge.Item1.NextBlocks.Count > 1 || edge.Item2.PreviousBlocks.Count > 1)
 				{
-					SplitEdge(edge.Key, edge.Value);
+					SplitEdge(edge.Item1, edge.Item2);
 				}
 			}
 		}

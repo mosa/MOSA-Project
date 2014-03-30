@@ -310,5 +310,17 @@ namespace Mosa.Platform.x64
 		{
 			// TODO
 		}
+
+		/// <summary>
+		/// Determines whether [is instruction move] [the specified instruction].
+		/// </summary>
+		/// <param name="instruction">The instruction.</param>
+		/// <returns></returns>
+		public override bool IsInstructionMove(BaseInstruction instruction)
+		{
+			// TODO
+			return false;
+		}
+
 	}
 }

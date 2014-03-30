@@ -25,7 +25,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			var trace = CreateTrace();
 
-			List<KeyValuePair<BasicBlock, BasicBlock>> worklist = new List<KeyValuePair<BasicBlock, BasicBlock>>();
+			List<Tuple<BasicBlock, BasicBlock>> worklist = new List<Tuple<BasicBlock, BasicBlock>>();
 
 			foreach (var block in BasicBlocks)
 			{

@@ -13,7 +13,7 @@ namespace Mosa.Compiler.Common
 {
 	public class SimpleKeyPriorityQueue<T>
 	{
-		private readonly LinkedList<KeyValuePair<int, T>> items;
+		private readonly LinkedList<Tuple<int, T>> items;
 
 		public int Count { get { return items.Count; } }
 
@@ -21,12 +21,12 @@ namespace Mosa.Compiler.Common
 
 		public SimpleKeyPriorityQueue()
 		{
-			items = new LinkedList<KeyValuePair<int, T>>();
+			items = new LinkedList<Tuple<int, T>>();
 		}
 
 		public void Enqueue(int priority, T item)
 		{
-			var keyitem = new KeyValuePair<int, T>(priority, item);
+			var keyitem = new Tuple<int, T>(priority, item);
 
 			if (IsEmpty)
 			{
@@ -36,7 +36,7 @@ namespace Mosa.Compiler.Common
 
 			var at = items.First;
 
-			while (at != null && priority < at.Value.Key)
+			while (at != null && priority < at.Value.Item1)
 			{
 				at = at.Next;
 			}
@@ -55,7 +55,7 @@ namespace Mosa.Compiler.Common
 		{
 			var item = items.First.Value;
 			items.RemoveFirst();
-			return item.Value;
+			return item.Item2;
 		}
 	}
 }
