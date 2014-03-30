@@ -39,16 +39,23 @@ namespace Mosa.CoolWorld.x86
 			Console.Color = Colors.White;
 			Console.BackgroundColor = Colors.Black;
 
-			BiosInformationStructure biosInfo = new BiosInformationStructure();
-			CpuStructure cpuInfo = new CpuStructure();
+			if (SmbiosManager.IsAvailable)
+			{
+				BiosInformationStructure biosInfo = new BiosInformationStructure();
+				CpuStructure cpuInfo = new CpuStructure();
 
-			Console.WriteLine("> Checking BIOS...");
-			BulletPoint(); Console.Write("Vendor  "); InBrackets(biosInfo.BiosVendor, Colors.White, Colors.LightBlue); Console.WriteLine();
-			BulletPoint(); Console.Write("Version "); InBrackets(biosInfo.BiosVersion, Colors.White, Colors.LightBlue); Console.WriteLine();
+				Console.WriteLine("> Checking BIOS...");
+				BulletPoint(); Console.Write("Vendor  "); InBrackets(biosInfo.BiosVendor, Colors.White, Colors.LightBlue); Console.WriteLine();
+				BulletPoint(); Console.Write("Version "); InBrackets(biosInfo.BiosVersion, Colors.White, Colors.LightBlue); Console.WriteLine();
 
-			Console.WriteLine("> Checking CPU...");
-			BulletPoint(); Console.Write("Vendor  "); InBrackets(cpuInfo.Vendor, Colors.White, Colors.LightBlue); Console.WriteLine();
-			BulletPoint(); Console.Write("Version "); InBrackets(cpuInfo.Version, Colors.White, Colors.LightBlue); Console.WriteLine();
+				Console.WriteLine("> Checking CPU...");
+				BulletPoint(); Console.Write("Vendor  "); InBrackets(cpuInfo.Vendor, Colors.White, Colors.LightBlue); Console.WriteLine();
+				BulletPoint(); Console.Write("Version "); InBrackets(cpuInfo.Version, Colors.White, Colors.LightBlue); Console.WriteLine();
+			}
+			else
+			{
+				Console.WriteLine("> No SMBIOS available!");
+			}
 
 			Console.WriteLine("> Initializing hardware abstraction layer...");
 			Setup.Initialize();
