@@ -5,11 +5,13 @@
  *
  */
 
+using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.IR;
 using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework.Intrinsics
 {
+	[ReplacementTarget("System.Type::GetTypeHandle")]
 	public sealed class InternalGetType : IIntrinsicInternalMethod
 	{
 		/// <summary>

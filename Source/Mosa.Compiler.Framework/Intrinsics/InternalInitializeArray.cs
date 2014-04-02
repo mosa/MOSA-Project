@@ -5,12 +5,14 @@
  *
  */
 
+using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.MosaTypeSystem;
 using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework.Intrinsics
 {
+	[ReplacementTarget("System.Runtime.CompilerServices.RuntimeHelpers::InitializeArray")]
 	public sealed class InternalInitializeArray : IIntrinsicInternalMethod
 	{
 		/// <summary>
