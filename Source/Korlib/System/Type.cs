@@ -9,6 +9,7 @@
 
 using System.Runtime.InteropServices;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 
 namespace System
 {
@@ -58,7 +59,7 @@ namespace System
 			return new Type(handle);
 		}
 
-		[DllImport("Mosa.Compiler.Framework.Intrinsics.InternalGetType, Mosa.Compiler.Framework")]
+		[MethodImplAttribute(MethodImplOptions.InternalCall)]
 		public static extern RuntimeTypeHandle GetTypeHandle(object obj);
 
 		public override string ToString()

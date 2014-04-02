@@ -11,7 +11,7 @@ namespace System.Runtime.CompilerServices
 {
 	public static class RuntimeHelpers
 	{
-		[DllImport("Mosa.Compiler.Framework.Intrinsics.InternalInitializeArray, Mosa.Compiler.Framework")]
+		[MethodImplAttribute(MethodImplOptions.InternalCall)]
 		public static extern void InitializeArray(Array array, RuntimeFieldHandle fldHandle);
 	}
 }

@@ -7,12 +7,14 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
+using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.MosaTypeSystem;
 using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework.Intrinsics
 {
+	[ReplacementTarget("System.String::InternalAllocateString")]
 	public sealed class InternalAllocateString : IIntrinsicInternalMethod
 	{
 		private const string StringClassMethodTableSymbolName = @"System.String$mtable";
