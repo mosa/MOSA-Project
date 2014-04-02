@@ -14,7 +14,11 @@ namespace Mosa.Test.Collection
 			return (<#= number.Key #>)o;
 		}
 
+		public static bool Equals<#= number.Value #>(<#= number.Key #> value)
+		{
+			object o = value;
+			return o.Equals(value);
+		}
 	<# } #>
 	}
 }
-			
