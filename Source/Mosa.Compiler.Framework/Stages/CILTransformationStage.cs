@@ -18,8 +18,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
-using System.Reflection;
-using System.Linq;
 
 namespace Mosa.Compiler.Framework.Stages
 {
@@ -31,29 +29,6 @@ namespace Mosa.Compiler.Framework.Stages
 	/// </remarks>
 	public sealed class CILTransformationStage : BaseCodeTransformationStage, CIL.ICILVisitor, IPipelineStage
 	{
-		private Dictionary<string, Type> intrinsicTypes = new Dictionary<string, Type>();
-
-		protected override void Run()
-		{
-			// Get all the classes that implement the IIntrinsicInternalMethod interface
-			IEnumerable<Type> types = AppDomain.CurrentDomain.GetAssemblies()
-				.SelectMany(s => s.GetTypes())
-				.Where(p => typeof(IIntrinsicInternalMethod).IsAssignableFrom(p) && p.IsClass);
-
-			// Iterate through all the found types
-			foreach (Type t in types)
-			{
-				// Now get all the ReplacementTarget attributes
-				ReplacementTargetAttribute[] attributes = (ReplacementTargetAttribute[])t.GetCustomAttributes(typeof(ReplacementTargetAttribute), true);
-				for (int i = 0; i < attributes.Length; i++)
-				{
-					// Finally add the dictionary entry mapping the target string and the type
-					intrinsicTypes.Add(attributes[i].Target, t);
-				}
-			}
-			
-			base.Run();
-		}
 
 		#region ICILVisitor
 
@@ -1726,9 +1701,9 @@ namespace Mosa.Compiler.Framework.Stages
 			if (external != null)
 				intrinsicType = Type.GetType(external);
 			else if (isInternal)
-				intrinsicTypes.TryGetValue(context.MosaMethod.FullName, out intrinsicType);
+				MethodCompiler.Compiler.IntrinsicTypes.TryGetValue(context.MosaMethod.FullName, out intrinsicType);
 				if (intrinsicType == null)
-					intrinsicTypes.TryGetValue(context.MosaMethod.DeclaringType.FullName + "::" + context.MosaMethod.Name, out intrinsicType);
+					MethodCompiler.Compiler.IntrinsicTypes.TryGetValue(context.MosaMethod.DeclaringType.FullName + "::" + context.MosaMethod.Name, out intrinsicType);
 
 			if (intrinsicType == null)
 				return false;
