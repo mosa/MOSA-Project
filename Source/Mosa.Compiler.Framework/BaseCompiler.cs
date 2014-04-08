@@ -8,10 +8,13 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using Mosa.Compiler.Common;
 using Mosa.Compiler.InternalTrace;
 using Mosa.Compiler.Linker;
 using Mosa.Compiler.MosaTypeSystem;
 using System;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace Mosa.Compiler.Framework
 {
@@ -78,6 +81,11 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		public PlugSystem PlugSystem { get; private set; }
 
+		/// <summary>
+		/// Gets the list of Intrinsic Types for internal call replacements.
+		/// </summary>
+		public Dictionary<string, Type> IntrinsicTypes { get; private set; }
+
 		#endregion Properties
 
 		#region Construction
@@ -111,6 +119,26 @@ namespace Mosa.Compiler.Framework
 			{
 				Linker = compilerOptions.LinkerFactory();
 				Linker.Initialize(compilerOptions.OutputFile, architecture.Endianness, architecture.ElfMachineType);
+			}
+
+			// Create new dictionary
+			IntrinsicTypes = new Dictionary<string, Type>();
+
+			// Get all the classes that implement the IIntrinsicInternalMethod interface
+			IEnumerable<Type> types = AppDomain.CurrentDomain.GetAssemblies()
+				.SelectMany(s => s.GetTypes())
+				.Where(p => typeof(IIntrinsicInternalMethod).IsAssignableFrom(p) && p.IsClass);
+
+			// Iterate through all the found types
+			foreach (Type t in types)
+			{
+				// Now get all the ReplacementTarget attributes
+				ReplacementTargetAttribute[] attributes = (ReplacementTargetAttribute[])t.GetCustomAttributes(typeof(ReplacementTargetAttribute), true);
+				for (int i = 0; i < attributes.Length; i++)
+				{
+					// Finally add the dictionary entry mapping the target string and the type
+					IntrinsicTypes.Add(attributes[i].Target, t);
+				}
 			}
 		}
 
