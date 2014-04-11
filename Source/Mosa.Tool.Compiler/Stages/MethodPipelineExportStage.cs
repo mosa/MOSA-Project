@@ -59,8 +59,10 @@ namespace Mosa.Tool.Compiler.Stages
 			if (logging)
 			{
 				filter.MethodMatch = MatchType.Any;
-				filter.StageMatch = MatchType.Exclude;
-				filter.Stage = "PlatformStubStage|ExceptionLayoutStage";
+				//filter.StageMatch = MatchType.Exclude;
+				//filter.Stage = "PlatformStubStage|ExceptionLayoutStage";
+				filter.StageMatch = MatchType.Contains;
+				filter.Stage = "CodeGen";
 
 				Compiler.InternalTrace.TraceFilter = filter;
 				Compiler.InternalTrace.TraceListener = this;
@@ -76,12 +78,12 @@ namespace Mosa.Tool.Compiler.Stages
 			if (string.IsNullOrEmpty(MethodPipelineExportDirectory))
 				return;
 
-			string filename = (method.FullName + ".txt").Replace("<", "[").Replace(">", "]");
+			string filename = (method.FullName).Replace("<", "[").Replace(">", "]").Replace(":", "-").Replace("*", "");
 
 			if (filename.Length > 200)
 				filename = filename.Substring(0, 200);
 
-			string fullname = Path.Combine(MethodPipelineExportDirectory, filename);
+			string fullname = Path.Combine(MethodPipelineExportDirectory, filename + ".txt");
 
 			File.AppendAllText(fullname, "[" + stage + "]" + Environment.NewLine + Environment.NewLine + log + Environment.NewLine);
 		}

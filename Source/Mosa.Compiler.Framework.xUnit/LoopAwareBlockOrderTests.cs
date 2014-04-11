@@ -34,7 +34,7 @@ namespace Mosa.Compiler.Framework.xUnit
 				int depth = blockOrderAnalysis.GetLoopDepth(block);
 				int depthindex = blockOrderAnalysis.GetLoopIndex(block);
 
-				Console.WriteLine("Block " + block.ToString() + " #" + block.Sequence.ToString() + " -> Depth: " + depth.ToString() + " index: " + depthindex.ToString());
+				Console.WriteLine("Block " + block.ToString() + " #" + block.Sequence.ToString() + " -> Depth: " + depth.ToString() + " Index: " + depthindex.ToString());
 			}
 		}
 

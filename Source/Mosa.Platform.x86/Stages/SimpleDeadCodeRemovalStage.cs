@@ -34,9 +34,9 @@ namespace Mosa.Platform.x86.Stages
 							continue;
 
 						// Remove Nop instructions
-						if (ctx.Instruction is Instructions.Nop)
+						if (ctx.Instruction == X86.Nop)
 						{
-							ctx.Delete(true);
+							ctx.Delete(false);
 							continue;
 						}
 

@@ -58,7 +58,7 @@ namespace Mosa.Compiler.Framework.Stages
 				int depth = blockOrderAnalysis.GetLoopDepth(block);
 				int depthindex = blockOrderAnalysis.GetLoopIndex(block);
 
-				trace.Log("Block " + block.ToString() + " #" + block.Sequence.ToString() + " -> Depth: " + depth.ToString() + " index: " + depthindex.ToString());
+				trace.Log("Block " + block.ToString() + " #" + block.Sequence.ToString() + " -> Depth: " + depth.ToString() + " Index: " + depthindex.ToString());
 			}
 		}
 	}
