@@ -90,7 +90,7 @@ namespace Mosa.Kernel.x86
 		public static uint Reserve(uint size)
 		{
 			uint first = 0xFFFFFFFF; // Marker
-			uint pages = ((size - 1) / PageFrameAllocator.PageSize) + 1;
+			uint requested = ((size - 1) / PageFrameAllocator.PageSize) + 1;
 
 			for (uint at = 0; at < pages; at++)
 			{
@@ -99,17 +99,20 @@ namespace Mosa.Kernel.x86
 					if (first == 0xFFFFFFFF)
 						first = at;
 
-					if (at - first == pages)
+					if (at - first == requested)
 					{
-						for (uint index = 0; index < pages; index++)
+						for (uint index = 0; index < requested; index++)
 							SetPageStatus(first + index, false);
-
+						
 						return ((first * PageFrameAllocator.PageSize) + PageFrameAllocator.ReserveMemory);
 					}
 				}
 				else
+				{
 					first = 0xFFFFFFFF;
+				}
 			}
+
 
 			return 0;
 		}

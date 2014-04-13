@@ -60,21 +60,27 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		public SlotIndex Maximum { get; private set; }
 
+		public bool IsSplit { get; set; }
+
 		private LiveInterval(VirtualRegister virtualRegister, SlotIndex start, SlotIndex end, IList<SlotIndex> uses, IList<SlotIndex> defs)
 			: base(start, end)
 		{
+			// live intervals can not start/end at the same location
+			Debug.Assert(start != end);
+
 			this.VirtualRegister = virtualRegister;
 			this.SpillValue = 0;
 			this.Stage = AllocationStage.Initial;
 			this.ForceSpilled = false;
 			this.NeverSpill = false;
+			this.IsSplit = false;
 
 			SlotIndex max = null;
 			SlotIndex min = null;
 
 			foreach (var use in uses)
 			{
-				if (Contains(use))
+				if (use != Start && (End == use || Contains(use)))
 				{
 					usePositions.Add(use, use);
 
@@ -140,7 +146,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			return new LiveInterval(VirtualRegister, start, end, usePositions.Keys, defPositions.Keys);
 		}
 
-		private SlotIndex GetNext(IList<SlotIndex> slots, SlotIndex start)
+		private static SlotIndex GetNext(IList<SlotIndex> slots, SlotIndex start)
 		{
 			int cnt = slots.Count;
 
@@ -190,14 +196,34 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			return (a > b) ? a : b;
 		}
 
-		public SlotIndex GetNextDefOrUsePosition(SlotIndex at)
+		public SlotIndex GetNextUsePosition(SlotIndex at)
 		{
-			return GetLowestNotNull(GetNext(UsePositions, at), GetNext(DefPositions, at));
+			return GetNext(UsePositions, at);
 		}
 
-		public SlotIndex GetPreviousDefOrUsePosition(SlotIndex at)
+		public SlotIndex GetNextDefPosition(SlotIndex at)
 		{
-			return GetHighestNotNull(GetPrevious(UsePositions, at), GetPrevious(DefPositions, at));
+			return GetNext(DefPositions, at);
 		}
+
+		public SlotIndex GetPreviousUsePosition(SlotIndex at)
+		{
+			return GetPrevious(UsePositions, at);
+		}
+
+		public SlotIndex GetPreviousDefPosition(SlotIndex at)
+		{
+			return GetPrevious(DefPositions, at);
+		}
+
+		//public SlotIndex GetNextDefOrUsePosition(SlotIndex at)
+		//{
+		//	return GetLowestNotNull(GetNextUsePosition(at), GetNextDefPosition(at));
+		//}
+
+		//public SlotIndex GetPreviousDefOrUsePosition(SlotIndex at)
+		//{
+		//	return GetHighestNotNull(GetPrevious(UsePositions, at), GetPrevious(DefPositions, at));
+		//}
 	}
 }

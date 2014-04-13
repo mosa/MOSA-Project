@@ -47,7 +47,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		public bool IsAdjacent(SlotIndex start, SlotIndex end)
 		{
-			return (start == End) || (end == Start);
+			return (start == End || end == Start);
 		}
 
 		public bool IsAdjacent(Interval other)
@@ -58,11 +58,6 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 		public bool Contains(SlotIndex slotIndex)
 		{
 			return (slotIndex >= Start && slotIndex < End);
-		}
-
-		public bool ContainsIncludingAtEnd(SlotIndex slotIndex)
-		{
-			return (slotIndex >= Start && slotIndex <= End);
 		}
 
 		public override string ToString()

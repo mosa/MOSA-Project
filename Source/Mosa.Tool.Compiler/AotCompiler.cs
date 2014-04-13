@@ -85,9 +85,11 @@ namespace Mosa.Tool.Compiler
 			ConfigurableTraceFilter filter = new ConfigurableTraceFilter();
 			filter.MethodMatch = MatchType.None;
 			filter.Method = string.Empty;
-			filter.StageMatch = MatchType.Any;
-			filter.TypeMatch = MatchType.Any;
-			filter.ExcludeInternalMethods = false;
+			filter.StageMatch = MatchType.None;
+			filter.Stage = string.Empty;
+			filter.TypeMatch = MatchType.None;
+			filter.Type = string.Empty;
+			filter.ExcludeInternalMethods = true;
 
 			IInternalTrace internalTrace = new BasicInternalTrace();
 			internalTrace.TraceFilter = filter;

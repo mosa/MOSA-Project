@@ -8,6 +8,7 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
+using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.MosaTypeSystem;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -139,12 +140,15 @@ namespace Mosa.Compiler.Framework.Platform
 			if (result.IsR)
 			{
 				Operand returnFP = Operand.CreateCPURegister(result.Type, returnFloatingPointRegister);
+				context.AppendInstruction(IRInstruction.Gen, returnFP);
 				architecture.InsertMoveInstruction(context, result, returnFP);
 			}
 			else if (result.Is64BitInteger)
 			{
 				Operand returnLow = Operand.CreateCPURegister(result.Type, return32BitRegister);
 				Operand returnHigh = Operand.CreateCPURegister(typeLayout.TypeSystem.BuiltIn.U4, return64BitRegister);
+				context.AppendInstruction(IRInstruction.Gen, returnLow);
+				context.AppendInstruction(IRInstruction.Gen, returnHigh);
 				architecture.InsertMoveInstruction(context, result.Low, returnLow);
 				architecture.InsertMoveInstruction(context, result.High, returnHigh);
 			}
@@ -157,6 +161,7 @@ namespace Mosa.Compiler.Framework.Platform
 			else
 			{
 				Operand returnLow = Operand.CreateCPURegister(result.Type, return32BitRegister);
+				context.AppendInstruction(IRInstruction.Gen, returnLow);
 				architecture.InsertMoveInstruction(context, result, returnLow);
 			}
 		}
