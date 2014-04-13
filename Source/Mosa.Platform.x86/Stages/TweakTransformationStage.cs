@@ -15,7 +15,7 @@ using System.Diagnostics;
 namespace Mosa.Platform.x86.Stages
 {
 	/// <summary>
-	/// TODO: Add pre-IR decomposition stage to account for platform operand requirements (and avoid it here)
+	/// 
 	/// </summary>
 	public sealed class TweakTransformationStage : BaseTransformationStage, IX86Visitor
 	{

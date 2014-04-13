@@ -83,6 +83,12 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IX86Visitor.Mov(Context context)
 		{
+			if (context.Result.IsCPURegister && context.Operand1.IsCPURegister && context.Result.Register == context.Operand1.Register)
+			{
+				context.Delete(false);
+				return;
+			}
+
 			// Mov can not use ESI or EDI registers with 8 or 16 bit memory or register
 			if (context.Operand1.IsCPURegister && (context.Result.IsMemoryAddress || context.Result.IsCPURegister)
 				&& (context.Result.IsByte || context.Result.IsShort || context.Result.IsChar || context.Result.IsBoolean)
@@ -97,6 +103,7 @@ namespace Mosa.Platform.x86.Stages
 				context.AppendInstruction(X86.Mov, dest, EAX);
 				context.AppendInstruction2(X86.Xchg, source, EAX, EAX, source);
 			}
+
 		}
 
 		/// <summary>
@@ -135,6 +142,14 @@ namespace Mosa.Platform.x86.Stages
 
 			var before = context.Previous;
 
+			while (before.IsEmpty && !before.IsBlockStartInstruction)
+			{
+				before = before.Previous;
+			}
+
+			if (before == null || before.IsBlockStartInstruction)
+				return;
+
 			if (!before.Result.IsCPURegister)
 				return;
 
@@ -142,6 +157,15 @@ namespace Mosa.Platform.x86.Stages
 				return;
 
 			before.SetInstruction(X86.Call, null, before.Operand1);
+			context.Delete(false);
+		}
+
+		/// <summary>
+		/// Visitation function for <see cref="IX86Visitor.Nop"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IX86Visitor.Nop(Context context)
+		{
 			context.Delete(false);
 		}
 
@@ -602,14 +626,6 @@ namespace Mosa.Platform.x86.Stages
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IX86Visitor.Neg(Context context)
-		{
-		}
-
-		/// <summary>
-		/// Visitation function for <see cref="IX86Visitor.Nop"/> instructions.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void IX86Visitor.Nop(Context context)
 		{
 		}
 

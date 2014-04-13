@@ -95,7 +95,7 @@ namespace Mosa.Compiler.Framework
 				}
 			}
 
-			throw new ArgumentNullException(@"missing stage to insert after");
+			throw new ArgumentNullException(@"missing stage to insert at");
 		}
 
 		/// <summary>
@@ -118,7 +118,7 @@ namespace Mosa.Compiler.Framework
 				}
 			}
 
-			throw new ArgumentNullException(@"missing stage to insert after");
+			throw new ArgumentNullException(@"missing stage to insert at");
 		}
 
 		/// <summary>
@@ -141,7 +141,7 @@ namespace Mosa.Compiler.Framework
 				}
 			}
 
-			throw new ArgumentNullException(@"missing stage to insert after");
+			throw new ArgumentNullException(@"missing stage to insert at");
 		}
 
 		/// <summary>
