@@ -7,10 +7,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using Mosa.Compiler.Common;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 
 namespace Mosa.Compiler.NewLinker
@@ -21,15 +17,19 @@ namespace Mosa.Compiler.NewLinker
 	public class LinkerObject
 	{
 		public string Name { get; private set; }
+
 		public SectionKind SectionKind { get; private set; }
 
 		public MemoryStream Stream { get; private set; }
 
 		public bool IsAvailable { get { return Stream != null; } }
-		public int Size { get { return Stream != null ? (int)Stream.Length : 0; } }
+
+		public long Size { get { return Stream != null ? Stream.Length : 0; } }
 
 		public bool IsResolved { get; private set; }
-		public int ResolvedSectionOffset { get; private set; }
+
+		public long ResolvedSectionOffset { get; private set; }
+
 		public ulong ResolvedVirtualAddress { get; private set; }
 
 		public LinkerObject(string name, SectionKind sectionKind)
@@ -49,7 +49,7 @@ namespace Mosa.Compiler.NewLinker
 			Stream = new MemoryStream(data);
 		}
 
-		public void SetSectionOffset(int offset)
+		public void SetSectionOffset(long offset)
 		{
 			ResolvedSectionOffset = offset;
 		}

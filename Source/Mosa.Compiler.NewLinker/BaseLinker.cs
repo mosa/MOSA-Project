@@ -32,9 +32,9 @@ namespace Mosa.Compiler.NewLinker
 
 		public long BaseAddress { get; private set; }
 
-		public uint ObjectAlignment { get; private set; }	// previousily called SectionAlignment
+		public int ObjectAlignment { get; private set; }
 
-		public uint SectionAlignment { get; private set; }	// previousily called LoadSectionAlignment
+		public int SectionAlignment { get; private set; }
 
 		public BaseLinker(Endianness endianness, ushort machineType)
 		{
@@ -82,7 +82,14 @@ namespace Mosa.Compiler.NewLinker
 			return linkerObject;
 		}
 
-		//LayoutSections();
+		private void LayoutSections()
+		{
+			foreach (var section in LinkerSections)
+			{
+				section.ResolveLayout(ObjectAlignment, SectionAlignment);
+			}
+		}
+
 		//LayoutObjects();
 		//EmitObjects();
 	}

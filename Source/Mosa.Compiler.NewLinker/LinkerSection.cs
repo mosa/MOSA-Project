@@ -8,10 +8,7 @@
  */
 
 using Mosa.Compiler.Common;
-using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
 
 namespace Mosa.Compiler.NewLinker
 {
@@ -20,24 +17,30 @@ namespace Mosa.Compiler.NewLinker
 	/// </summary>
 	public class LinkerSection
 	{
-		private Dictionary<string, LinkerObject> linkerObjects; 
-		
+		private Dictionary<string, LinkerObject> linkerObjects;
+
 		public string Name { get; private set; }
+
 		public SectionKind SectionKind { get; private set; }
 
+		public ulong BaseVirtualAddress { get; private set; }
+
 		public bool IsResolved { get; private set; }
+
 		public ulong ResolvedSectionOffset { get; private set; }
+
 		public ulong ResolvedVirtualAddress { get; private set; }
 
-		public int Size { get; private set; }
+		public long Size { get; private set; }
 
-		public LinkerSection(string name, SectionKind sectionKind)
+		public LinkerSection(string name, SectionKind sectionKind, ulong baseVirtualAddress)
 		{
 			Name = name;
 			SectionKind = sectionKind;
+			BaseVirtualAddress = baseVirtualAddress;
 			IsResolved = false;
 			linkerObjects = new Dictionary<string, LinkerObject>();
-			
+
 			Size = 0;
 		}
 
@@ -55,9 +58,9 @@ namespace Mosa.Compiler.NewLinker
 			return null;
 		}
 
-		public void ResolveLayout()
+		public void ResolveLayout(int alignment, int sectionAlignment)
 		{
-			foreach(var linkerObject in linkerObjects.Values)
+			foreach (var linkerObject in linkerObjects.Values)
 			{
 				if (linkerObject.IsResolved)
 					continue;
@@ -65,7 +68,14 @@ namespace Mosa.Compiler.NewLinker
 				linkerObject.SetSectionOffset(Size);
 
 				Size = Size + linkerObject.Size;
+
+				Size = Alignment.Align(Size, alignment);
 			}
+
+			Size = Alignment.Align(Size, sectionAlignment);
+
+			IsResolved = true;
 		}
+
 	}
 }
