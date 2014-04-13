@@ -11,9 +11,14 @@ using System.Runtime.CompilerServices;
 
 namespace System.Threading
 {
-	public class SpinLock
+	public struct SpinLock
 	{
-		private static bool bLock = false;
+		private bool bLock;
+
+		public bool IsHeld
+		{
+			get { return bLock; }
+		}
 
 		[MethodImpl(MethodImplOptions.InternalCall)]
 		internal static extern void EnterLock(ref bool spinlock);

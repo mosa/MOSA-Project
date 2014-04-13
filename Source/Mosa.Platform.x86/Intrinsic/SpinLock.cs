@@ -28,7 +28,7 @@ namespace Mosa.Platform.x86.Intrinsic
 		{
 			// Create constant operand and get pointer to lock variable
 			Operand const1 = Operand.CreateConstantSignedInt(methodCompiler.TypeSystem, 0x1);
-			Operand pointer = context.Operand2;
+			Operand pointer = Operand.CreateMemoryAddress(context.Operand2.Type, context.Operand2, 0);
 
 			// Test to acquire lock, if cant acquire jump to top, if we do then continue normal execution
 			context.SetInstruction(X86.Test, null, pointer, const1);
