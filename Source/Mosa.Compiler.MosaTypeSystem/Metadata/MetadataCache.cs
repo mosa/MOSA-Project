@@ -39,7 +39,7 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 		public void AddModule(MosaModule module)
 		{
 			Modules.Add(module.Name, module);
-			var desc = module.GetUnderlyingObject<UnitDesc<ModuleDef, object>>();
+			//var desc = module.GetUnderlyingObject<UnitDesc<ModuleDef, object>>();
 		}
 
 		public MosaModule GetModuleByName(string name)

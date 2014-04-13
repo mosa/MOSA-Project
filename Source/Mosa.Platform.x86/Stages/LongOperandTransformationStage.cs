@@ -56,7 +56,7 @@ namespace Mosa.Platform.x86.Stages
 				return;
 			}
 
-			throw new InvalidProgramException("@can not split" + operand.ToString());
+			//throw new InvalidProgramException("@can not split" + operand.ToString());
 		}
 
 		private void SplitLongOperand(Operand operand, out Operand operandLow, out Operand operandHigh)
@@ -396,7 +396,7 @@ namespace Mosa.Platform.x86.Stages
 			Operand edx = Operand.CreateCPURegister(TypeSystem.BuiltIn.U4, GeneralPurposeRegister.EDX);
 			Operand ecx = Operand.CreateCPURegister(TypeSystem.BuiltIn.U4, GeneralPurposeRegister.ECX);
 			Operand edi = Operand.CreateCPURegister(TypeSystem.BuiltIn.U4, GeneralPurposeRegister.EDI);
-			Operand esi = Operand.CreateCPURegister(TypeSystem.BuiltIn.U4, GeneralPurposeRegister.ESI);
+			//Operand esi = Operand.CreateCPURegister(TypeSystem.BuiltIn.U4, GeneralPurposeRegister.ESI);
 
 			context.SetInstruction(X86.Jmp, newBlocks[0].BasicBlock);
 			LinkBlocks(context, newBlocks[0]);
@@ -561,7 +561,7 @@ namespace Mosa.Platform.x86.Stages
 			Operand ebx = Operand.CreateCPURegister(TypeSystem.BuiltIn.U4, GeneralPurposeRegister.EBX);
 			Operand edx = Operand.CreateCPURegister(TypeSystem.BuiltIn.U4, GeneralPurposeRegister.EDX);
 			Operand ecx = Operand.CreateCPURegister(TypeSystem.BuiltIn.U4, GeneralPurposeRegister.ECX);
-			Operand edi = Operand.CreateCPURegister(TypeSystem.BuiltIn.U4, GeneralPurposeRegister.EDI);
+			//Operand edi = Operand.CreateCPURegister(TypeSystem.BuiltIn.U4, GeneralPurposeRegister.EDI);
 			Operand esi = Operand.CreateCPURegister(TypeSystem.BuiltIn.U4, GeneralPurposeRegister.ESI);
 
 			Context[] newBlocks = CreateNewBlocksWithContexts(12);
@@ -874,8 +874,8 @@ namespace Mosa.Platform.x86.Stages
 			SplitLongOperand(context.Result, out op0L, out op0H);
 			SplitLongOperand(context.Operand1, out op1L, out op1H);
 
-			Operand eax = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
-			Operand edx = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+			//Operand eax = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+			//Operand edx = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 			Operand ecx = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 
 			Context nextBlock = Split(context);

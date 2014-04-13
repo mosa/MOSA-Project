@@ -7,6 +7,8 @@
  *  Stefan Andres Charsley (charsleysa) <charsleysa@gmail.com>
  */
 
+#pragma warning disable 169, 414
+
 namespace System.IO
 {
 	public class MemoryStream : Stream

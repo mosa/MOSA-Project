@@ -41,7 +41,7 @@ namespace Mosa.Platform.x86.Stages
 
 			Operand exceptionMethod = Operand.CreateSymbolFromMethod(TypeSystem, method);
 
-			Operand esp = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.ESP);
+			//Operand esp = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.ESP);
 
 			BasicBlocks basicBlocks = new BasicBlocks();
 			InstructionSet instructionSet = new InstructionSet(25);
