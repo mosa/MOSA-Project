@@ -18,7 +18,6 @@
                     <include name="BuiltInPatch.cs"/>
                     <include name="Patch.cs"/>
                     <include name="ExtendedLinkerSection.cs"/>
-                    <include name="LinkerType.cs"/>
                     <include name="Elf32/Elf32Linker.cs"/>
                     <include name="Elf32/BssSection.cs"/>
                     <include name="Elf32/CodeSection.cs"/>

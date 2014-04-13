@@ -29,6 +29,7 @@
                     <include name="RegisterAllocatorFixture.cs"/>
                     <include name="SSAOptimizationFixture.cs"/>
                     <include name="NewObjectFixture.cs"/>
+                    <include name="StructureFixture.cs"/>
                     <include name="SwitchFixture.cs"/>
                     <include name="X86TestFixture.cs"/>
                     <include name="UInt16Fixture.cs"/>
