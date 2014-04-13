@@ -1703,15 +1703,9 @@ namespace Mosa.Compiler.Framework.Stages
 			if (external != null)
 				intrinsicType = Type.GetType(external);
 			else if (isInternal)
-<<<<<<< HEAD
-				intrinsicTypes.TryGetValue(context.MosaMethod.FullName, out intrinsicType);
-				if (intrinsicType == null)
-					intrinsicTypes.TryGetValue(context.MosaMethod.DeclaringType.FullName + "::" + context.MosaMethod.Name, out intrinsicType);
-=======
 				MethodCompiler.Compiler.IntrinsicTypes.TryGetValue(context.MosaMethod.FullName, out intrinsicType);
 				if (intrinsicType == null)
 					MethodCompiler.Compiler.IntrinsicTypes.TryGetValue(context.MosaMethod.DeclaringType.FullName + "::" + context.MosaMethod.Name, out intrinsicType);
->>>>>>> upstream/master
 
 			if (intrinsicType == null)
 				return false;
