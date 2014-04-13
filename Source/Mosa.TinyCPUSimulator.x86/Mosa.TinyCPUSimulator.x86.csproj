@@ -54,6 +54,7 @@
     </Compile>
     <Compile Include="Emulate\Multiboot.cs" />
     <Compile Include="Emulate\VGAConsole.cs" />
+    <Compile Include="Opcodes\Test.cs" />
     <Compile Include="Opcodes\InternalBreak.cs" />
     <Compile Include="Opcodes\Roundsd.cs" />
     <Compile Include="Opcodes\Roundss.cs" />

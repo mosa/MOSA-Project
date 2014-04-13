@@ -221,13 +221,13 @@ namespace Mosa.Platform.Internal.x86
 		/// Lock
 		/// </summary>
 		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.SpinLock, Mosa.Platform.x86")]
-		public extern static void SpinLock(uint address);
+		public extern static void SpinLock(bool spinlock);
 
 		/// <summary>
 		/// Unlock
 		/// </summary>
 		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.SpinUnlock, Mosa.Platform.x86")]
-		public extern static void SpinUnlock(uint address);
+		public extern static void SpinUnlock(bool spinlock);
 
 		/// <summary>
 		///
