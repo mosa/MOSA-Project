@@ -363,13 +363,12 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 			if (instruction == X86.Sub) return Opcode.Sub;
 			if (instruction == X86.Subsd) return Opcode.Subsd;
 			if (instruction == X86.Subss) return Opcode.Subss;
-			//if (instruction == X86.Ucomisd) return Opcode.Ucomisd;
-			//if (instruction == X86.Ucomiss) return Opcode.Ucomiss;
 			if (instruction == X86.Xchg) return Opcode.Xchg;
 			if (instruction == X86.Xor) return Opcode.Xor;
 			if (instruction == X86.MovCR) return Opcode.Mov;
 			if (instruction == X86.Ucomisd) return Opcode.Ucomisd;
 			if (instruction == X86.Ucomiss) return Opcode.Ucomiss;
+			if (instruction == X86.Test) return Opcode.Test;
 
 			if (instruction == X86.Setcc) return ConvertSetInstruction(conditionCode);
 			if (instruction == X86.Branch) return ConvertBranchInstruction(conditionCode);

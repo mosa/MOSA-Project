@@ -100,7 +100,7 @@ namespace Mosa.Platform.x86.Instructions
 				return R_C;
 			}
 
-			throw new ArgumentException(String.Format(@"x86.Cmp: No opcode for operand types {0} and {1}.", source, third));
+			throw new ArgumentException(String.Format(@"x86.Test: No opcode for operand types {0} and {1}.", source, third));
 		}
 
 		/// <summary>
@@ -110,8 +110,6 @@ namespace Mosa.Platform.x86.Instructions
 		/// <param name="emitter">The emitter.</param>
 		protected override void Emit(Context context, MachineCodeEmitter emitter)
 		{
-			Debug.Assert(context.Result == null);
-
 			OpCode opCode = ComputeOpCode(null, context.Operand1, context.Operand2);
 			emitter.Emit(opCode, context.Operand1, context.Operand2);
 		}

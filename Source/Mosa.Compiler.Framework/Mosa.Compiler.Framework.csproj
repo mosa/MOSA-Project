@@ -86,6 +86,7 @@
     <Compile Include="DelegatePatcher.cs" />
     <Compile Include="Intrinsics\InternalInitializeArray.cs" />
     <Compile Include="Intrinsics\InternalGetType.cs" />
+    <Compile Include="Intrinsics\InternalSpinLock.cs" />
     <Compile Include="IR\CompoundLoad.cs" />
     <Compile Include="IR\CompoundMove.cs" />
     <Compile Include="IR\CompoundStore.cs" />

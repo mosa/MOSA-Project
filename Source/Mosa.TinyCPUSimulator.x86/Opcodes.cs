@@ -124,6 +124,7 @@ namespace Mosa.TinyCPUSimulator.x86
 		public static BaseX86Opcode Roundss = new Roundss();
 		public static BaseX86Opcode Roundsd = new Roundsd();
 		public static BaseX86Opcode FarJmp = new FarJmp();
+		public static BaseX86Opcode Test = new Test();
 
 		public static BaseX86Opcode InternalBreak = new InternalBreak();
 	}
