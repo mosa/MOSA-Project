@@ -17,11 +17,15 @@ namespace Mosa.Compiler.NewLinker
 	/// </summary>
 	public class LinkerSection
 	{
-		private Dictionary<string, LinkerObject> linkerObjects;
+		private List<LinkerObject> linkerObjects;
+
+		private Dictionary<string, LinkerObject> linkerObjectLookup;
 
 		public string Name { get; private set; }
 
 		public SectionKind SectionKind { get; private set; }
+
+		public uint SectionAlignment { get; private set; }
 
 		public ulong BaseVirtualAddress { get; private set; }
 
@@ -33,46 +37,50 @@ namespace Mosa.Compiler.NewLinker
 
 		public long Size { get; private set; }
 
-		public LinkerSection(string name, SectionKind sectionKind, ulong baseVirtualAddress)
+		private object mylock = new object();
+
+		public LinkerSection(SectionKind sectionKind, string name, uint alignment, ulong baseVirtualAddress)
 		{
 			Name = name;
 			SectionKind = sectionKind;
 			BaseVirtualAddress = baseVirtualAddress;
 			IsResolved = false;
-			linkerObjects = new Dictionary<string, LinkerObject>();
-
+			linkerObjectLookup = new Dictionary<string, LinkerObject>();
+			linkerObjects = new List<LinkerObject>();
+			SectionAlignment = alignment;
 			Size = 0;
 		}
 
-		public void AddLinkerObject(LinkerObject linkerObject)
+		internal void AddLinkerObject(LinkerObject linkerObject)
 		{
-			linkerObjects.Add(linkerObject.Name, linkerObject);
+			linkerObjects.Add(linkerObject);
+			linkerObjectLookup.Add(linkerObject.Name, linkerObject);
 		}
 
-		public LinkerObject GetLinkerObject(string name)
+		internal LinkerObject GetLinkerObject(string name)
 		{
 			LinkerObject linkerObject = null;
 
-			linkerObjects.TryGetValue(name, out linkerObject);
+			linkerObjectLookup.TryGetValue(name, out linkerObject);
 
 			return null;
 		}
 
-		public void ResolveLayout(int alignment, int sectionAlignment)
+		internal void ResolveLayout()
 		{
-			foreach (var linkerObject in linkerObjects.Values)
+			foreach (var linkerObject in linkerObjects)
 			{
 				if (linkerObject.IsResolved)
 					continue;
 
-				linkerObject.SetSectionOffset(Size);
+				Size = Alignment.Align(Size, linkerObject.Alignment);
+
+				linkerObject.ResolvedSectionOffset = Size;
 
 				Size = Size + linkerObject.Size;
-
-				Size = Alignment.Align(Size, alignment);
 			}
 
-			Size = Alignment.Align(Size, sectionAlignment);
+			Size = Alignment.Align(Size, SectionAlignment);
 
 			IsResolved = true;
 		}

@@ -50,7 +50,7 @@ namespace Mosa.Compiler.NewLinker
 		/// <value>
 		/// The reference symbol.
 		/// </value>
-		public LinkerObject ReferenceSymbol { get; private set; }
+		public LinkerObject ReferenceObject { get; private set; }
 
 		/// <summary>
 		/// Gets the offset to apply to the reference target.
@@ -81,7 +81,7 @@ namespace Mosa.Compiler.NewLinker
 			this.PatchOffset = patchOffset;
 
 			this.RelativeBase = relativeBase;
-			this.ReferenceSymbol = referenceSymbol;
+			this.ReferenceObject = referenceSymbol;
 			this.ReferenceOffset = referenceOffset;
 		}
 

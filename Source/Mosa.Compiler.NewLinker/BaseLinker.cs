@@ -10,6 +10,7 @@
 using Mosa.Compiler.Common;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 
 namespace Mosa.Compiler.NewLinker
 {
@@ -24,19 +25,19 @@ namespace Mosa.Compiler.NewLinker
 
 		public LinkerObject EntryPoint { get; set; }
 
-		public string OutputFile { get; private set; }
-
 		public Endianness Endianness { get; private set; }
 
 		public uint MachineID { get; private set; }
 
-		public long BaseAddress { get; private set; }
+		public ulong BaseAddress { get; private set; }
 
-		public int ObjectAlignment { get; private set; }
+		public uint FileAlignment { get; protected set; }
 
-		public int SectionAlignment { get; private set; }
+		public uint SectionAlignment { get; protected set; }
 
-		public BaseLinker(Endianness endianness, ushort machineType)
+		private object mylock = new object();
+
+		protected BaseLinker(Endianness endianness, ushort machineType)
 		{
 			LinkerSections = new LinkerSection[4];
 			LinkRequests = new List<LinkRequest>();
@@ -48,49 +49,99 @@ namespace Mosa.Compiler.NewLinker
 			SectionAlignment = 0x1000; // default 1K
 		}
 
-		public void AddSection(LinkerSection linkerSection)
+		protected void AddSection(LinkerSection linkerSection)
 		{
 			LinkerSections[(int)linkerSection.SectionKind] = linkerSection;
 		}
 
-		public void Initialize(string outputFile)
+		public void Link(LinkType linkType, PatchType patchType, LinkerObject patchSymbol, int patchOffset, int relativeBase, LinkerObject referenceSymbol, int referenceOffset)
 		{
-			OutputFile = outputFile;
-		}
-
-		private void Link(LinkType linkType, PatchType patchType, LinkerObject patchSymbol, int patchOffset, int relativeBase, LinkerObject referenceSymbol, int referenceOffset)
-		{
-			var linkRequest = new LinkRequest(linkType, patchType, patchSymbol, patchOffset, relativeBase, referenceSymbol, referenceOffset);
-			LinkRequests.Add(linkRequest);
+			lock (mylock)
+			{
+				var linkRequest = new LinkRequest(linkType, patchType, patchSymbol, patchOffset, relativeBase, referenceSymbol, referenceOffset);
+				LinkRequests.Add(linkRequest);
+			}
 		}
 
 		public LinkerObject CreateObject(string name, SectionKind kind)
 		{
-			var section = LinkerSections[(int)kind];
-
-			Debug.Assert(section != null);
-
-			var linkerObject = section.GetLinkerObject(name);
-
-			if (linkerObject == null)
+			lock (mylock)
 			{
-				linkerObject = new LinkerObject(name, kind);
+				var section = LinkerSections[(int)kind];
 
-				section.AddLinkerObject(linkerObject);
+				Debug.Assert(section != null);
+
+				var linkerObject = section.GetLinkerObject(name);
+
+				if (linkerObject == null)
+				{
+					linkerObject = new LinkerObject(name, kind);
+
+					section.AddLinkerObject(linkerObject);
+				}
+
+				return linkerObject;
 			}
-
-			return linkerObject;
 		}
 
-		private void LayoutSections()
+		private void LayoutObjects()
 		{
 			foreach (var section in LinkerSections)
 			{
-				section.ResolveLayout(ObjectAlignment, SectionAlignment);
+				section.ResolveLayout();
 			}
 		}
 
-		//LayoutObjects();
-		//EmitObjects();
+		//private LayoutSections();
+		//private EmitObjects();
+
+		public bool Emit(Stream stream)
+		{
+			return false;
+		}
+
+		public void ApplyPatches()
+		{
+			foreach (var linkRequest in LinkRequests)
+			{
+				ApplyPatch(linkRequest);
+			}
+		}
+
+		private LinkerSection GetSection(SectionKind kind)
+		{
+			return LinkerSections[(int)kind];
+		}
+
+		private void ApplyPatch(LinkRequest linkRequest)
+		{
+			//var patchSection = GetSection(linkRequest.PatchObject.SectionKind);
+			//var referenceSection = GetSection(linkRequest.ReferenceObject.SectionKind);
+
+			ulong targetAddress = linkRequest.ReferenceObject.ResolvedVirtualAddress + (ulong)linkRequest.ReferenceOffset;
+
+			if (linkRequest.LinkType == LinkType.AbsoluteAddress)
+			{
+				// FIXME: Need a .reloc section with a relocation entry if the module is moved in virtual memory
+				// the runtime loader must patch this link request, we'll fail it until we can do relocations.
+				//throw new NotSupportedException(@".reloc section not supported.");
+			}
+			else
+			{
+				// Change the absolute into a relative offset
+				targetAddress = targetAddress - linkRequest.PatchObject.ResolvedVirtualAddress - (ulong)linkRequest.PatchOffset; 
+			}
+
+			ulong value = Patch.GetResult(linkRequest.PatchType.Patches, (ulong)targetAddress);
+			ulong mask = Patch.GetFinalMask(linkRequest.PatchType.Patches);
+
+			linkRequest.PatchObject.ApplyPatch(
+				linkRequest.PatchOffset,
+				value,
+				mask,
+				linkRequest.PatchType.Size,
+				Endianness
+			);
+		}
 	}
 }

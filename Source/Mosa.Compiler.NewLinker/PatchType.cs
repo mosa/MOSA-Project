@@ -14,13 +14,13 @@ namespace Mosa.Compiler.NewLinker
 	/// </summary>
 	public class PatchType
 	{
-		public readonly int Size;
+		public readonly byte Size;
 		public readonly Patch[] Patches;
 
-		public PatchType(int size, Patch[] patches)
+		public PatchType(byte size, Patch[] patches)
 		{
-			this.Size = size;
-			this.Patches = patches;
+			Size = size;
+			Patches = patches;
 		}
 
 	}

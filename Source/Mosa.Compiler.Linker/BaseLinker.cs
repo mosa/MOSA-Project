@@ -227,6 +227,7 @@ namespace Mosa.Compiler.Linker
 				throw new ArgumentNullException(@"symbol");
 
 			List<LinkRequest> list;
+
 			if (!linkRequests.TryGetValue(targetSymbol, out list))
 			{
 				list = new List<LinkRequest>();

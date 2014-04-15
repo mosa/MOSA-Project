@@ -776,7 +776,7 @@ namespace Mosa.Compiler.Framework.Stages
 			using (Stream stream = linker.Allocate(symbolName, SectionKind.ROData, 0, NativePointerAlignment))
 			{
 				// Method table and sync block
-				linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuiltInPatch.I4, symbolName, 0, 0, @"System.String$mtable", 0);
+				linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuiltInPatch.I4, symbolName, 0, 0, "System.String$mtable", 0);
 				stream.WriteZeroBytes(8);
 
 				// String length field
@@ -784,7 +784,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 				// String data
 				byte[] stringData = Encoding.Unicode.GetBytes(stringdata);
-				Debug.Assert(stringData.Length == stringdata.Length * 2, @"Byte array of string data doesn't match expected string data length");
+				Debug.Assert(stringData.Length == stringdata.Length * 2, "Byte array of string data doesn't match expected string data length");
 				stream.Write(stringData);
 			}
 		}
@@ -1704,8 +1704,8 @@ namespace Mosa.Compiler.Framework.Stages
 				intrinsicType = Type.GetType(external);
 			else if (isInternal)
 				MethodCompiler.Compiler.IntrinsicTypes.TryGetValue(context.MosaMethod.FullName, out intrinsicType);
-				if (intrinsicType == null)
-					MethodCompiler.Compiler.IntrinsicTypes.TryGetValue(context.MosaMethod.DeclaringType.FullName + "::" + context.MosaMethod.Name, out intrinsicType);
+			if (intrinsicType == null)
+				MethodCompiler.Compiler.IntrinsicTypes.TryGetValue(context.MosaMethod.DeclaringType.FullName + "::" + context.MosaMethod.Name, out intrinsicType);
 
 			if (intrinsicType == null)
 				return false;

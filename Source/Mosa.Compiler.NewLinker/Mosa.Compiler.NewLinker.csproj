@@ -52,7 +52,12 @@
     <Compile Include="LinkType.cs" />
     <Compile Include="PatchType.cs" />
     <Compile Include="Patch.cs" />
+    <Compile Include="PE\PELinker.cs" />
     <Compile Include="SectionKind.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Elf32\" />
+    <Folder Include="Elf64\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
