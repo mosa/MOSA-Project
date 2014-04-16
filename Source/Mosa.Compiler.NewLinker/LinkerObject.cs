@@ -23,29 +23,24 @@ namespace Mosa.Compiler.NewLinker
 
 		public MemoryStream Stream { get; private set; }
 
-		public uint Alignment { get; private set; }
+		public uint Alignment { get; internal set; }
 
 		public bool IsAvailable { get { return Stream != null; } }
 
-		public long Size { get { return Stream != null ? Stream.Length : 0; } }
+		public ulong Size { get { return Stream != null ? (ulong)Stream.Length : 0; } }
 
 		public bool IsResolved { get; private set; }
 
-		public long ResolvedSectionOffset { get; internal set; }
+		public ulong ResolvedSectionOffset { get; internal set; }
 
 		public ulong ResolvedVirtualAddress { get; internal set; }
 
-		public LinkerObject(string name, SectionKind sectionKind, uint alignment)
+		internal LinkerObject(string name, SectionKind kind, uint alignment)
 		{
 			Name = name;
-			SectionKind = sectionKind;
 			IsResolved = false;
 			Alignment = alignment;
-		}
-
-		public LinkerObject(string name, SectionKind sectionKind)
-			: this(name, sectionKind, 0)
-		{
+			SectionKind = kind;
 		}
 
 		public void SetData(MemoryStream stream)

@@ -9,6 +9,7 @@
 
 using Mosa.Compiler.Common;
 using System.Collections.Generic;
+using System.IO;
 
 namespace Mosa.Compiler.NewLinker
 {
@@ -17,6 +18,7 @@ namespace Mosa.Compiler.NewLinker
 	/// </summary>
 	public class LinkerSection
 	{
+
 		private List<LinkerObject> linkerObjects;
 
 		private Dictionary<string, LinkerObject> linkerObjectLookup;
@@ -27,23 +29,20 @@ namespace Mosa.Compiler.NewLinker
 
 		public uint SectionAlignment { get; private set; }
 
-		public ulong BaseVirtualAddress { get; private set; }
-
 		public bool IsResolved { get; private set; }
 
 		public ulong ResolvedSectionOffset { get; private set; }
 
 		public ulong ResolvedVirtualAddress { get; private set; }
 
-		public long Size { get; private set; }
+		public ulong Size { get; private set; }
 
 		private object mylock = new object();
 
-		public LinkerSection(SectionKind sectionKind, string name, uint alignment, ulong baseVirtualAddress)
+		public LinkerSection(SectionKind sectionKind, string name, uint alignment)
 		{
 			Name = name;
 			SectionKind = sectionKind;
-			BaseVirtualAddress = baseVirtualAddress;
 			IsResolved = false;
 			linkerObjectLookup = new Dictionary<string, LinkerObject>();
 			linkerObjects = new List<LinkerObject>();
@@ -66,23 +65,40 @@ namespace Mosa.Compiler.NewLinker
 			return null;
 		}
 
-		internal void ResolveLayout()
+		internal void ResolveLayout(ulong sectionOffset, ulong virtualAddress)
 		{
-			foreach (var linkerObject in linkerObjects)
+			ResolvedSectionOffset = sectionOffset;
+			ResolvedVirtualAddress = virtualAddress;
+
+			foreach (var obj in linkerObjectLookup.Values)
 			{
-				if (linkerObject.IsResolved)
+				if (obj.IsResolved)
 					continue;
 
-				Size = Alignment.Align(Size, linkerObject.Alignment);
+				Size = Alignment.Align(Size, obj.Alignment);
 
-				linkerObject.ResolvedSectionOffset = Size;
+				obj.ResolvedSectionOffset = Size;
+				obj.ResolvedVirtualAddress = ResolvedVirtualAddress + Size;
 
-				Size = Size + linkerObject.Size;
+				Size = Size + obj.Size;
 			}
 
 			Size = Alignment.Align(Size, SectionAlignment);
 
 			IsResolved = true;
+		}
+
+		internal void WriteTo(Stream stream)
+		{
+			long start = stream.Position;
+
+			foreach (var obj in linkerObjects)
+			{
+				long at = (long)obj.ResolvedSectionOffset + start;
+				stream.Seek(at, SeekOrigin.Begin);
+				obj.Stream.Position = 0;
+				obj.Stream.WriteTo(stream);
+			}
 		}
 
 	}

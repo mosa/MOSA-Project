@@ -17,7 +17,7 @@ namespace Mosa.Compiler.NewLinker
 	/// <summary>
 	///
 	/// </summary>
-	public class BaseLinker
+	public abstract class BaseLinker
 	{
 		public LinkerSection[] LinkerSections { get; private set; }
 
@@ -45,7 +45,7 @@ namespace Mosa.Compiler.NewLinker
 			Endianness = endianness;
 			MachineID = machineType;
 
-			BaseAddress = 0x00400000; // Use the Win32 default for now, FIXME
+			BaseAddress = 0x00400000; // Use the Win32 default for now
 			SectionAlignment = 0x1000; // default 1K
 		}
 
@@ -63,7 +63,7 @@ namespace Mosa.Compiler.NewLinker
 			}
 		}
 
-		public LinkerObject CreateObject(string name, SectionKind kind)
+		public LinkerObject CreateLinkerObject(string name, SectionKind kind, uint alignment)
 		{
 			lock (mylock)
 			{
@@ -75,30 +75,41 @@ namespace Mosa.Compiler.NewLinker
 
 				if (linkerObject == null)
 				{
-					linkerObject = new LinkerObject(name, kind);
+					linkerObject = new LinkerObject(name, kind, alignment);
 
 					section.AddLinkerObject(linkerObject);
 				}
+
+				linkerObject.Alignment = alignment != 0 ? alignment : 0;
 
 				return linkerObject;
 			}
 		}
 
-		private void LayoutObjects()
+		public LinkerObject GetLinkerObject(string name, SectionKind kind)
 		{
+			return CreateLinkerObject(name, kind, 0);
+		}
+
+		protected void LayoutObjectsAndSections()
+		{
+			// layout objects & sections
+			ulong sectionOffset = 0;
+			ulong virtualAddress = BaseAddress;
+
 			foreach (var section in LinkerSections)
 			{
-				section.ResolveLayout();
+				section.ResolveLayout(sectionOffset, virtualAddress);
+
+				sectionOffset = section.ResolvedSectionOffset + section.Size;
+				virtualAddress = section.ResolvedVirtualAddress + section.Size;
+
+				Debug.Assert(Alignment.Align(sectionOffset, SectionAlignment) == sectionOffset);
 			}
+
 		}
 
-		//private LayoutSections();
-		//private EmitObjects();
-
-		public bool Emit(Stream stream)
-		{
-			return false;
-		}
+		public abstract void CreateFile(Stream stream);
 
 		public void ApplyPatches()
 		{
@@ -129,7 +140,7 @@ namespace Mosa.Compiler.NewLinker
 			else
 			{
 				// Change the absolute into a relative offset
-				targetAddress = targetAddress - linkRequest.PatchObject.ResolvedVirtualAddress - (ulong)linkRequest.PatchOffset; 
+				targetAddress = targetAddress - linkRequest.PatchObject.ResolvedVirtualAddress - (ulong)linkRequest.PatchOffset;
 			}
 
 			ulong value = Patch.GetResult(linkRequest.PatchType.Patches, (ulong)targetAddress);

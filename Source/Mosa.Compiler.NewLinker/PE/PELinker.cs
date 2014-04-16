@@ -12,6 +12,7 @@ using Mosa.Compiler.LinkerFormat.PE;
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Text;
 
 namespace Mosa.Compiler.NewLinker.PE
 {
@@ -22,7 +23,7 @@ namespace Mosa.Compiler.NewLinker.PE
 		/// <summary>
 		/// Specifies the default section alignment in a PE file.
 		/// </summary>
-		private const uint FILE_SECTION_ALIGNMENT = 4096;
+		private const uint FILE_SECTION_ALIGNMENT = 0x1000;
 
 		/// <summary>
 		/// Specifies the default section alignment in virtual memory.
@@ -33,19 +34,47 @@ namespace Mosa.Compiler.NewLinker.PE
 
 		#region Data members
 
+		private ImageNtHeaders ntHeaders = new ImageNtHeaders();
+
+		private ImageDosHeader dosHeader = new ImageDosHeader();
+
 		#endregion Data members
 
 		public PELinker(Endianness endianness, ushort machineType, ulong baseAddress)
 			: base(endianness, machineType)
 		{
-			FileAlignment = SECTION_ALIGNMENT;
-			SectionAlignment = FILE_SECTION_ALIGNMENT;
+			FileAlignment = FILE_SECTION_ALIGNMENT;
+			SectionAlignment = SECTION_ALIGNMENT;
 
-			AddSection(new LinkerSection(SectionKind.Text, ".text", SectionAlignment, baseAddress));
-			AddSection(new LinkerSection(SectionKind.Data, ".data", SectionAlignment, 0));
-			AddSection(new LinkerSection(SectionKind.ROData, ".rodata", SectionAlignment, 0));
-			AddSection(new LinkerSection(SectionKind.BSS, ".bss", SectionAlignment, 0));
+			AddSection(new LinkerSection(SectionKind.Text, ".text", SectionAlignment));
+			AddSection(new LinkerSection(SectionKind.Data, ".data", SectionAlignment));
+			AddSection(new LinkerSection(SectionKind.ROData, ".rodata", SectionAlignment));
+			AddSection(new LinkerSection(SectionKind.BSS, ".bss", SectionAlignment));
+		}
 
+		public override void CreateFile(Stream stream)
+		{
+			LayoutObjectsAndSections();
+
+			using (EndianAwareBinaryWriter writer = new EndianAwareBinaryWriter(stream, Encoding.Unicode, Endianness))
+			{
+				// Write the PE headers
+				WriteDosHeader(writer);
+				WritePEHeader(writer);
+
+				foreach (var section in LinkerSections)
+				{
+					section.WriteTo(stream);
+				}
+
+				// Flush all data to disk
+				writer.Flush();
+
+				// Write the checksum to the file
+				ntHeaders.OptionalHeader.CheckSum = CalculateChecksum(stream);
+				stream.Position = dosHeader.e_lfanew;
+				ntHeaders.Write(writer);
+			}
 		}
 
 		#region Internals
@@ -54,15 +83,13 @@ namespace Mosa.Compiler.NewLinker.PE
 		/// Writes the dos header of the PE file.
 		/// </summary>
 		/// <param name="writer">The writer.</param>
-		private static void WriteDosHeader(EndianAwareBinaryWriter writer)
+		private void WriteDosHeader(EndianAwareBinaryWriter writer)
 		{
 			/*
 			 * This code block generates the default DOS header of a PE image.
 			 * These constants are not further documented here, please consult
 			 * MSDN for their meaning.
 			 */
-
-			var dosHeader = new ImageDosHeader();
 
 			dosHeader.e_magic = ImageDosHeader.DOS_HEADER_MAGIC;
 			dosHeader.e_cblp = 0x0090;
@@ -82,6 +109,7 @@ namespace Mosa.Compiler.NewLinker.PE
 				0x72, 0x65, 0x73, 0x20, 0x61, 0x20, 0x4D, 0x4F, 0x53, 0x41, 0x20, 0x70, 0x6F, 0x77, 0x65, 0x72,
 				0x65, 0x64, 0x20, 0x4F, 0x53, 0x2E, 0x0D, 0x0D, 0x0A, 0x24, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 			};
+
 			writer.Write(message);
 		}
 
@@ -91,14 +119,12 @@ namespace Mosa.Compiler.NewLinker.PE
 		/// <param name="writer">The writer.</param>
 		private void WritePEHeader(EndianAwareBinaryWriter writer)
 		{
-			var ntHeaders = new ImageNtHeaders();
-
 			// Write the PE signature and headers
 			ntHeaders.Signature = ImageNtHeaders.PE_SIGNATURE;
 
 			// Prepare the file header
 			ntHeaders.FileHeader.Machine = ImageFileHeader.IMAGE_FILE_MACHINE_I386;
-			ntHeaders.FileHeader.NumberOfSections = (ushort)CountSections();
+			ntHeaders.FileHeader.NumberOfSections = (ushort)CountNonEmptySections();
 			ntHeaders.FileHeader.TimeDateStamp = (uint)(DateTime.Now - new DateTime(1970, 1, 1, 0, 0, 0)).TotalSeconds;
 			ntHeaders.FileHeader.PointerToSymbolTable = 0;
 			ntHeaders.FileHeader.NumberOfSymbols = 0;
@@ -122,7 +148,7 @@ namespace Mosa.Compiler.NewLinker.PE
 				ntHeaders.OptionalHeader.BaseOfData = (uint)(sectionAddress - BaseAddress);
 			}
 
-			ntHeaders.OptionalHeader.ImageBase = (uint)this.BaseAddress;
+			ntHeaders.OptionalHeader.ImageBase = (uint)BaseAddress;
 			ntHeaders.OptionalHeader.SectionAlignment = (uint)SectionAlignment;
 			ntHeaders.OptionalHeader.FileAlignment = FILE_SECTION_ALIGNMENT;
 			ntHeaders.OptionalHeader.MajorOperatingSystemVersion = 4;
@@ -132,7 +158,7 @@ namespace Mosa.Compiler.NewLinker.PE
 			ntHeaders.OptionalHeader.MajorSubsystemVersion = 4;
 			ntHeaders.OptionalHeader.MinorSubsystemVersion = 0;
 			ntHeaders.OptionalHeader.Win32VersionValue = 0;
-			ntHeaders.OptionalHeader.SizeOfImage = CalculateSizeOfImage();
+			ntHeaders.OptionalHeader.SizeOfImage = (uint)CalculateSizeOfImage();
 			ntHeaders.OptionalHeader.SizeOfHeaders = FILE_SECTION_ALIGNMENT;
 			ntHeaders.OptionalHeader.CheckSum = 0;
 			ntHeaders.OptionalHeader.Subsystem = 0x03;
@@ -197,7 +223,7 @@ namespace Mosa.Compiler.NewLinker.PE
 		/// Counts the valid sections.
 		/// </summary>
 		/// <returns>Determines the number of sections.</returns>
-		private int CountSections()
+		private int CountNonEmptySections()
 		{
 			int sections = 0;
 
@@ -212,11 +238,11 @@ namespace Mosa.Compiler.NewLinker.PE
 			return sections;
 		}
 
-		private uint CalculateSizeOfImage()
+		private ulong CalculateSizeOfImage()
 		{
 			// Reset the size of the image
-			uint virtualSizeOfImage = SectionAlignment;
-			uint sectionEnd;
+			ulong virtualSizeOfImage = SectionAlignment;
+			ulong sectionEnd;
 
 			// Move all sections to their right positions
 			foreach (var sections in LinkerSections)
@@ -224,7 +250,7 @@ namespace Mosa.Compiler.NewLinker.PE
 				// Only use a section with something inside
 				if (sections.Size > 0)
 				{
-					sectionEnd = (uint)sections.ResolvedVirtualAddress + (uint)Alignment.Align(sections.Size, SectionAlignment);
+					sectionEnd = sections.ResolvedVirtualAddress + sections.Size;
 
 					if (sectionEnd > virtualSizeOfImage)
 					{
@@ -233,17 +259,12 @@ namespace Mosa.Compiler.NewLinker.PE
 				}
 			}
 
-			return virtualSizeOfImage - (uint)BaseAddress;
+			return virtualSizeOfImage - BaseAddress;
 		}
 
 		private LinkerSection GetSection(SectionKind sectionKind)
 		{
 			return LinkerSections[(int)sectionKind];
-		}
-
-		private long GetSectionLength(SectionKind sectionKind)
-		{
-			return LinkerSections[(int)sectionKind].Size;
 		}
 
 		/// <summary>
@@ -264,13 +285,13 @@ namespace Mosa.Compiler.NewLinker.PE
 			}
 		}
 
-		private uint CalculateChecksum(string file)
-		{
-			using (FileStream stream = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
-			{
-				return CalculateChecksum(file);
-			}
-		}
+		//private uint CalculateChecksum(string file)
+		//{
+		//	using (FileStream stream = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+		//	{
+		//		return CalculateChecksum(file);
+		//	}
+		//}
 
 		private uint CalculateChecksum(Stream stream)
 		{
