@@ -286,6 +286,7 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 					genericParam.Name = (sig.IsTypeVar ? "!" : "!!") + sig.Number;
 					genericParam.TypeCode = (MosaTypeCode)sig.ElementType;
 					genericParam.GenericParamIndex = (int)sig.Number;
+					genericParam.HasOpenGenericParams = true;
 					genericParam.UnderlyingObject = new UnitDesc<TypeDef, TypeSig>(null, null, sig);
 				}
 				pars[sig.Number] = type;
