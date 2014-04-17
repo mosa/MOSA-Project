@@ -32,11 +32,12 @@ namespace Mosa.TinyCPUSimulator.Adaptor
 		{
 			base.BeginGenerate();
 
-			var section = MethodCompiler.Linker.GetSection(SectionKind.Text) as SimLinkerSection;
+			//TODO!
+			//var section = MethodCompiler.Linker.GetSection(SectionKind.Text) as SimLinkerSection;
 
-			sectionAddress = section.VirtualAddress;
+			//sectionAddress = section.VirtualAddress;
 
-			startPosition = (codeStream as LinkerStream).BaseStream.Position;
+			//startPosition = (codeStream as LinkerStream).BaseStream.Position;
 
 			return;
 		}

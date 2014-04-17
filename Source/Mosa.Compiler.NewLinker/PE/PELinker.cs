@@ -14,7 +14,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Text;
 
-namespace Mosa.Compiler.NewLinker.PE
+namespace Mosa.Compiler.Linker.PE
 {
 	public class PELinker : BaseLinker
 	{
@@ -40,8 +40,7 @@ namespace Mosa.Compiler.NewLinker.PE
 
 		#endregion Data members
 
-		public PELinker(Endianness endianness, ushort machineType, ulong baseAddress)
-			: base(endianness, machineType)
+		public PELinker()
 		{
 			FileAlignment = FILE_SECTION_ALIGNMENT;
 			SectionAlignment = SECTION_ALIGNMENT;
@@ -52,11 +51,17 @@ namespace Mosa.Compiler.NewLinker.PE
 			AddSection(new LinkerSection(SectionKind.BSS, ".bss", SectionAlignment));
 		}
 
+		public virtual void Initalize(ulong baseAddress, Endianness endianness, ushort machineID)
+		{
+			base.Initialize(baseAddress, endianness, machineID);
+			Endianness = Common.Endianness.Little;
+		}
+
 		public override void CreateFile(Stream stream)
 		{
-			LayoutObjectsAndSections();
+			Finalize();
 
-			using (EndianAwareBinaryWriter writer = new EndianAwareBinaryWriter(stream, Encoding.Unicode, Endianness))
+			using (var writer = new EndianAwareBinaryWriter(stream, Encoding.Unicode, Endianness))
 			{
 				// Write the PE headers
 				WriteDosHeader(writer);
@@ -284,14 +289,6 @@ namespace Mosa.Compiler.NewLinker.PE
 				}
 			}
 		}
-
-		//private uint CalculateChecksum(string file)
-		//{
-		//	using (FileStream stream = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
-		//	{
-		//		return CalculateChecksum(file);
-		//	}
-		//}
 
 		private uint CalculateChecksum(Stream stream)
 		{

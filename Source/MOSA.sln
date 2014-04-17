@@ -56,8 +56,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Compiler.Pdb", "Mosa.C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Compiler.LinkerFormat", "Mosa.Compiler.LinkerFormat\Mosa.Compiler.LinkerFormat.csproj", "{CC2E6418-C325-4486-B50D-941EC27053F6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Compiler.Linker", "Mosa.Compiler.Linker\Mosa.Compiler.Linker.csproj", "{65866A51-B229-44C5-AC81-87A90FA1741B}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Compiler.Common", "Mosa.Compiler.Common\Mosa.Compiler.Common.csproj", "{0B1011A6-8FCD-4F9E-BBB8-8DB86E23D2E8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Tool.Explorer", "Mosa.Tool.Explorer\Mosa.Tool.Explorer.csproj", "{49D8DA65-FC99-4C63-ADC6-1B07260F674F}"
@@ -134,7 +132,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.DebugWorld.x86", "Mosa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Test.Collection.x86.xUnit", "Mosa.Test.Collection.x86.xUnit\Mosa.Test.Collection.x86.xUnit.csproj", "{50568E2D-5360-4F71-87E3-A6979D1D858C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Compiler.NewLinker", "Mosa.Compiler.NewLinker\Mosa.Compiler.NewLinker.csproj", "{65866A51-B229-44C5-AC81-87A90FA1741C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Compiler.Linker", "Mosa.Compiler.NewLinker\Mosa.Compiler.Linker.csproj", "{65866A51-B229-44C5-AC81-87A90FA1741C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -326,16 +324,6 @@ Global
 		{CC2E6418-C325-4486-B50D-941EC27053F6}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{CC2E6418-C325-4486-B50D-941EC27053F6}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{CC2E6418-C325-4486-B50D-941EC27053F6}.Release|x86.ActiveCfg = Release|Any CPU
-		{65866A51-B229-44C5-AC81-87A90FA1741B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{65866A51-B229-44C5-AC81-87A90FA1741B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{65866A51-B229-44C5-AC81-87A90FA1741B}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{65866A51-B229-44C5-AC81-87A90FA1741B}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{65866A51-B229-44C5-AC81-87A90FA1741B}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{65866A51-B229-44C5-AC81-87A90FA1741B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{65866A51-B229-44C5-AC81-87A90FA1741B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{65866A51-B229-44C5-AC81-87A90FA1741B}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{65866A51-B229-44C5-AC81-87A90FA1741B}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{65866A51-B229-44C5-AC81-87A90FA1741B}.Release|x86.ActiveCfg = Release|Any CPU
 		{0B1011A6-8FCD-4F9E-BBB8-8DB86E23D2E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{0B1011A6-8FCD-4F9E-BBB8-8DB86E23D2E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0B1011A6-8FCD-4F9E-BBB8-8DB86E23D2E8}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
@@ -748,7 +736,6 @@ Global
 		{75A12A8A-8C8F-4D1E-801B-689D8F781BF4} = {DDBC7F79-A2A1-4D92-9AE7-ADDC838F1E5E}
 		{F970F8CB-8FF1-4244-9A31-D00C6D7AABE5} = {DDBC7F79-A2A1-4D92-9AE7-ADDC838F1E5E}
 		{CC2E6418-C325-4486-B50D-941EC27053F6} = {DDBC7F79-A2A1-4D92-9AE7-ADDC838F1E5E}
-		{65866A51-B229-44C5-AC81-87A90FA1741B} = {DDBC7F79-A2A1-4D92-9AE7-ADDC838F1E5E}
 		{0B1011A6-8FCD-4F9E-BBB8-8DB86E23D2E8} = {DDBC7F79-A2A1-4D92-9AE7-ADDC838F1E5E}
 		{540BEAC7-A2C3-4C46-9F4A-E6E1DF4EF6FC} = {DDBC7F79-A2A1-4D92-9AE7-ADDC838F1E5E}
 		{C286833F-D1CD-4618-98E7-F3A5BA9ECFA1} = {DDBC7F79-A2A1-4D92-9AE7-ADDC838F1E5E}

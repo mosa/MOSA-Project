@@ -130,7 +130,6 @@
     <Compile Include="Analysis\LoopAwareBlockOrder.cs" />
     <Compile Include="CompilationScheduler.cs" />
     <Compile Include="Stages\CheckPlatformOperandCountStage.cs" />
-    <Compile Include="Stages\ObjectFileLayoutStage.cs" />
     <Compile Include="Stages\PlatformIntrinsicTransformationStage.cs" />
     <Compile Include="PlugSystem.cs" />
     <Compile Include="Stages\CheckIROperandCountStage.cs" />
@@ -366,10 +365,6 @@
       <Project>{0B1011A6-8FCD-4F9E-BBB8-8DB86E23D2E8}</Project>
       <Name>Mosa.Compiler.Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Mosa.Compiler.Linker\Mosa.Compiler.Linker.csproj">
-      <Project>{65866A51-B229-44C5-AC81-87A90FA1741B}</Project>
-      <Name>Mosa.Compiler.Linker</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Mosa.Compiler.InternalTrace\Mosa.Compiler.InternalTrace.csproj">
       <Project>{540BEAC7-A2C3-4C46-9F4A-E6E1DF4EF6FC}</Project>
       <Name>Mosa.Compiler.InternalTrace</Name>
@@ -377,6 +372,10 @@
     <ProjectReference Include="..\Mosa.Compiler.MosaTypeSystem\Mosa.Compiler.MosaTypeSystem.csproj">
       <Project>{5f30a68e-05bf-40ea-b576-5ebcde520559}</Project>
       <Name>Mosa.Compiler.MosaTypeSystem</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mosa.Compiler.NewLinker\Mosa.Compiler.Linker.csproj">
+      <Project>{65866a51-b229-44c5-ac81-87a90fa1741c}</Project>
+      <Name>Mosa.Compiler.Linker</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -74,7 +74,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets the linker.
 		/// </summary>
-		public ILinker Linker { get; private set; }
+		public BaseLinker Linker { get; private set; }
 
 		/// <summary>
 		/// Gets the plug system.
@@ -99,7 +99,7 @@ namespace Mosa.Compiler.Framework
 		/// <param name="compilationScheduler">The compilation scheduler.</param>
 		/// <param name="internalTrace">The internal trace.</param>
 		/// <param name="compilerOptions">The compiler options.</param>
-		protected BaseCompiler(BaseArchitecture architecture, TypeSystem typeSystem, MosaTypeLayout typeLayout, ICompilationScheduler compilationScheduler, IInternalTrace internalTrace, ILinker linker, CompilerOptions compilerOptions)
+		protected BaseCompiler(BaseArchitecture architecture, TypeSystem typeSystem, MosaTypeLayout typeLayout, ICompilationScheduler compilationScheduler, IInternalTrace internalTrace, BaseLinker linker, CompilerOptions compilerOptions)
 		{
 			if (architecture == null)
 				throw new ArgumentNullException(@"Architecture");
@@ -118,7 +118,7 @@ namespace Mosa.Compiler.Framework
 			if (Linker == null)
 			{
 				Linker = compilerOptions.LinkerFactory();
-				Linker.Initialize(compilerOptions.OutputFile, architecture.Endianness, architecture.ElfMachineType);
+				Linker.Initialize(compilerOptions.BaseAddress, architecture.Endianness, architecture.ElfMachineType);
 			}
 
 			// Create new dictionary
@@ -130,10 +130,10 @@ namespace Mosa.Compiler.Framework
 				.Where(p => typeof(IIntrinsicInternalMethod).IsAssignableFrom(p) && p.IsClass);
 
 			// Iterate through all the found types
-			foreach (Type t in types)
+			foreach (var t in types)
 			{
 				// Now get all the ReplacementTarget attributes
-				ReplacementTargetAttribute[] attributes = (ReplacementTargetAttribute[])t.GetCustomAttributes(typeof(ReplacementTargetAttribute), true);
+				var attributes = (ReplacementTargetAttribute[])t.GetCustomAttributes(typeof(ReplacementTargetAttribute), true);
 				for (int i = 0; i < attributes.Length; i++)
 				{
 					// Finally add the dictionary entry mapping the target string and the type

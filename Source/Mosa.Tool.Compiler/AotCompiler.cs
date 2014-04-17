@@ -107,7 +107,6 @@ namespace Mosa.Tool.Compiler
 				bootStage,
 				new TypeLayoutStage(),
 				new MetadataStage(),
-				new ObjectFileLayoutStage(),
 				new LinkerFinalizationStage(),
 				compilerOptions.MapFile != null ? new MapFileGenerationStage() : null
 			});

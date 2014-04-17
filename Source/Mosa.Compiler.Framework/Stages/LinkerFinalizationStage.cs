@@ -16,7 +16,7 @@ namespace Mosa.Compiler.Framework.Stages
 	{
 		protected override void Run()
 		{
-			Linker.Commit();
+			Linker.Finalize();
 		}
 	}
 }

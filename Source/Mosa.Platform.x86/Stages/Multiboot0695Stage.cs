@@ -164,7 +164,7 @@ namespace Mosa.Platform.x86.Stages
 
 			Compiler.CompileMethod(multibootMethod, basicBlocks, instructionSet);
 
-			Linker.EntryPoint = Linker.GetSymbol(multibootMethod.FullName);
+			Linker.EntryPoint = Linker.GetLinkerObject(multibootMethod.FullName, SectionKind.Text);
 		}
 
 		#region Internals
@@ -179,64 +179,61 @@ namespace Mosa.Platform.x86.Stages
 		{
 			// HACK: According to the multiboot specification this header must be within the first 8K of the
 			// kernel binary. Since the text section is always first, this should take care of the problem.
-			using (Stream stream = Linker.Allocate(MultibootHeaderSymbolName, SectionKind.Text, 64, 4))
+			var multiboot = Linker.AllocateLinkerObject(MultibootHeaderSymbolName, SectionKind.Text, 64, 4);
+			var stream = multiboot.Stream;
+
+			using (BinaryWriter bw = new BinaryWriter(stream, Encoding.ASCII))
 			{
-				using (BinaryWriter bw = new BinaryWriter(stream, Encoding.ASCII))
+				// flags - multiboot flags
+				uint flags = /*HEADER_MB_FLAG_VIDEO_MODES_REQUIRED | */HEADER_MB_FLAG_MEMORY_INFO_REQUIRED | HEADER_MB_FLAG_MODULES_PAGE_ALIGNED;
+
+				// The multiboot header checksum
+				uint csum = 0;
+
+				// header_addr is the load virtualAddress of the multiboot header
+				uint header_addr = 0;
+
+				// load_addr is the base virtualAddress of the binary in memory
+				uint load_addr = 0;
+
+				// load_end_addr holds the virtualAddress past the last byte to load From the image
+				uint load_end_addr = 0;
+
+				// bss_end_addr is the virtualAddress of the last byte to be zeroed out
+				uint bss_end_addr = 0;
+
+				// entry_point the load virtualAddress of the entry point to invoke
+				// Are we linking an ELF binary?
+				if (Linker is Mosa.Compiler.Linker.PE.PELinker)
 				{
-					// flags - multiboot flags
-					uint flags = /*HEADER_MB_FLAG_VIDEO_MODES_REQUIRED | */HEADER_MB_FLAG_MEMORY_INFO_REQUIRED | HEADER_MB_FLAG_MODULES_PAGE_ALIGNED;
+					// No, special multiboot treatment required
+					flags |= HEADER_MB_FLAG_NON_ELF_BINARY;
 
-					// The multiboot header checksum
-					uint csum = 0;
-
-					// header_addr is the load virtualAddress of the multiboot header
-					uint header_addr = 0;
-
-					// load_addr is the base virtualAddress of the binary in memory
-					uint load_addr = 0;
-
-					// load_end_addr holds the virtualAddress past the last byte to load From the image
-					uint load_end_addr = 0;
-
-					// bss_end_addr is the virtualAddress of the last byte to be zeroed out
-					uint bss_end_addr = 0;
-
-					// entry_point the load virtualAddress of the entry point to invoke
-					// Are we linking an ELF binary?
-					if (!(Linker is Mosa.Compiler.Linker.Elf32.Elf32Linker || Linker is Mosa.Compiler.Linker.Elf64.Elf64Linker))
-					{
-						// Check the linker layout settings
-						if (Linker.LoadSectionAlignment != Linker.SectionAlignment)
-							throw new LinkerException(@"Load and virtual section alignment must be identical if you are booting non-ELF binaries with a multiboot bootloader.");
-
-						// No, special multiboot treatment required
-						flags |= HEADER_MB_FLAG_NON_ELF_BINARY;
-
-						header_addr = (uint)(Linker.GetSection(SectionKind.Text).VirtualAddress + Linker.GetSymbol(MultibootHeaderSymbolName).SectionAddress);
-						load_addr = (uint)Linker.BaseAddress;
-						load_end_addr = 0;
-						bss_end_addr = 0;
-					}
-
-					// Calculate the checksum
-					csum = unchecked(0U - HEADER_MB_MAGIC - flags);
-
-					bw.Write(HEADER_MB_MAGIC);
-					bw.Write(flags);
-					bw.Write(csum);
-					bw.Write(header_addr);
-					bw.Write(load_addr);
-					bw.Write(load_end_addr);
-					bw.Write(bss_end_addr);
-
-					Linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuiltInPatch.I4, MultibootHeaderSymbolName, (int)stream.Position, 0, multibootMethod.FullName, 0);
-					bw.Write((int)0);
-
-					bw.Write(VideoMode);
-					bw.Write(VideoWidth);
-					bw.Write(VideoHeight);
-					bw.Write(VideoDepth);
+					//header_addr = (uint)(Linker.GetSection(SectionKind.Text).VirtualAddress + Linker.GetSymbol(MultibootHeaderSymbolName).SectionAddress);
+					header_addr = (uint)multiboot.ResolvedVirtualAddress;
+					load_addr = (uint)Linker.BaseAddress;
+					load_end_addr = 0;
+					bss_end_addr = 0;
 				}
+
+				// Calculate the checksum
+				csum = unchecked(0U - HEADER_MB_MAGIC - flags);
+
+				bw.Write(HEADER_MB_MAGIC);
+				bw.Write(flags);
+				bw.Write(csum);
+				bw.Write(header_addr);
+				bw.Write(load_addr);
+				bw.Write(load_end_addr);
+				bw.Write(bss_end_addr);
+
+				Linker.Link(LinkType.AbsoluteAddress, BuiltInPatch.I4, multiboot, (int)stream.Position, 0, multibootMethod.FullName, SectionKind.Text, 0);
+				bw.Write((int)0);
+
+				bw.Write(VideoMode);
+				bw.Write(VideoWidth);
+				bw.Write(VideoHeight);
+				bw.Write(VideoDepth);
 			}
 		}
 

@@ -95,7 +95,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets the linker used to resolve external symbols.
 		/// </summary>
-		public ILinker Linker { get; private set; }
+		public BaseLinker Linker { get; private set; }
 
 		/// <summary>
 		/// Gets the method implementation being compiled.

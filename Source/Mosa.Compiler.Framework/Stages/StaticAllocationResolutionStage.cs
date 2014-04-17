@@ -10,7 +10,9 @@
 using Mosa.Compiler.Framework.CIL;
 using Mosa.Compiler.Linker;
 using Mosa.Compiler.MosaTypeSystem;
+using Mosa.Compiler.Common;
 using System.Collections.Generic;
+using System.IO;
 
 namespace Mosa.Compiler.Framework.Stages
 {
@@ -40,24 +42,23 @@ namespace Mosa.Compiler.Framework.Stages
 		private void PerformStaticAllocationOf(Context allocation, Context assignment)
 		{
 			MosaType allocatedType = allocation.MosaMethod.DeclaringType;
-
+			
 			// Allocate a linker symbol to refer to this allocation. Use the destination field name as the linker symbol name.
-			string symbolName = assignment.MosaField.ToString() + @"<<$cctor";
+			var symbolName = MethodCompiler.Linker.AllocateLinkerObject(assignment.MosaField.FullName + @"<<$cctor", SectionKind.BSS, TypeLayout.GetTypeSize(allocatedType), Architecture.NativeAlignment);
+			
+			// FIXME: Do we have to initialize this?
+			string methodTableSymbol = GetMethodTableForType(allocatedType);
 
-			using (var stream = MethodCompiler.Linker.Allocate(symbolName, SectionKind.BSS, TypeLayout.GetTypeSize(allocatedType), 4))
+			if (methodTableSymbol != null)
 			{
-				// FIXME: Do we have to initialize this?
-				string methodTableSymbol = GetMethodTableForType(allocatedType);
-
-				if (methodTableSymbol != null)
-					MethodCompiler.Linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuiltInPatch.I4, symbolName, 0, 0, methodTableSymbol, 0);
+				MethodCompiler.Linker.Link(LinkType.AbsoluteAddress, BuiltInPatch.I4, symbolName, 0, 0, methodTableSymbol, SectionKind.ROData, 0);
 			}
 
 			// Issue a load request before the newobj and before the assignment.
-			Operand symbol1 = InsertLoadBeforeInstruction(allocation, symbolName, assignment.MosaField.FieldType);
+			Operand symbol1 = InsertLoadBeforeInstruction(allocation, symbolName.Name, assignment.MosaField.FieldType);
 			allocation.Operand1 = symbol1;
 
-			Operand symbol2 = InsertLoadBeforeInstruction(assignment, symbolName, assignment.MosaField.FieldType);
+			Operand symbol2 = InsertLoadBeforeInstruction(assignment, symbolName.Name, assignment.MosaField.FieldType);
 			assignment.Operand1 = symbol2;
 
 			// Change the newobj to a call and increase the operand count to include the this ptr.

@@ -11,6 +11,7 @@ using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.Framework.Stages;
 using Mosa.Compiler.MosaTypeSystem;
+using Mosa.Compiler.Linker;
 
 namespace Mosa.TinyCPUSimulator.Adaptor
 {
@@ -49,7 +50,7 @@ namespace Mosa.TinyCPUSimulator.Adaptor
 			MosaMethod method = Compiler.CreateLinkerMethod(StartUpName);
 			Compiler.CompileMethod(method, basicBlocks, instructionSet);
 
-			Linker.EntryPoint = Linker.GetSymbol(method.FullName);
+			Linker.EntryPoint = Linker.GetLinkerObject(method.FullName, SectionKind.Text);
 		}
 
 		#endregion ICompilerStage Members

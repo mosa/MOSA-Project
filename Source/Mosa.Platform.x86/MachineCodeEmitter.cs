@@ -14,6 +14,7 @@ using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Linker;
 using System;
+using System.Diagnostics;
 
 namespace Mosa.Platform.x86
 {
@@ -42,12 +43,14 @@ namespace Mosa.Platform.x86
 		public void EmitCallSite(Operand symbolOperand)
 		{
 			linker.Link(
-				LinkType.RelativeOffset | LinkType.I4,
+				LinkType.RelativeOffset,
 				BuiltInPatch.I4,
 				MethodName,
+				SectionKind.Text,
 				(int)(codeStream.Position - codeStreamBasePosition),
 				(int)(codeStream.Position - codeStreamBasePosition) + 4,
 				symbolOperand.Name,
+				SectionKind.Text,
 				0
 			);
 
@@ -169,20 +172,20 @@ namespace Mosa.Platform.x86
 				// FIXME! remove assertion
 				System.Diagnostics.Debug.Assert(displacement.Displacement == 0);
 
-				linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuiltInPatch.I4, MethodName, pos, 0, displacement.Name, 0);
+				linker.Link(LinkType.AbsoluteAddress, BuiltInPatch.I4, MethodName, SectionKind.Text, pos, 0, displacement.Name, SectionKind.Text, 0); //FIXME!
 				codeStream.Position += 4;
 			}
 			else if (displacement.IsField)
 			{
-				linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuiltInPatch.I4, MethodName, pos, 0, displacement.Field.FullName, displacement.Displacement);
+				linker.Link(LinkType.AbsoluteAddress, BuiltInPatch.I4, MethodName, SectionKind.Text, pos, 0, displacement.Field.FullName, SectionKind.Text, (int)displacement.Displacement); //FIXME!
 				codeStream.Position += 4;
 			}
 			else if (displacement.IsSymbol)
 			{
 				// FIXME! remove assertion
-				System.Diagnostics.Debug.Assert(displacement.Displacement == 0);
+				Debug.Assert(displacement.Displacement == 0);
 
-				linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuiltInPatch.I4, MethodName, pos, 0, displacement.Name, 0);
+				linker.Link(LinkType.AbsoluteAddress, BuiltInPatch.I4, MethodName, SectionKind.Text, pos, 0, displacement.Name, SectionKind.Text, 0); //FIXME!
 				codeStream.Position += 4;
 			}
 			else if (displacement.IsMemoryAddress && displacement.OffsetBase != null && displacement.OffsetBase.IsConstant)
@@ -293,12 +296,8 @@ namespace Mosa.Platform.x86
 		{
 			codeStream.WriteByte(0xEA);
 
-			// HACK: Determines the EIP address of current instruction, should use the linker instead
-			LinkerSection linkerSection = linker.GetSection(SectionKind.Text);
-			if (linkerSection != null) // The Explorer Tool returns null
-			{
-				codeStream.Write((int)(linkerSection.VirtualAddress + linkerSection.Length + 6), Endianness.Little);
-			}
+			//codeStream.Write((int)(linkerSection.VirtualAddress + linkerSection.Length + 6), Endianness.Little);
+			linker.Link(LinkType.AbsoluteAddress, BuiltInPatch.I4, MethodName, SectionKind.Text, (int)codeStream.Position, 6, MethodName, SectionKind.Text, (int)codeStream.Position);
 
 			codeStream.WriteByte(0x08);
 			codeStream.WriteByte(0x00);

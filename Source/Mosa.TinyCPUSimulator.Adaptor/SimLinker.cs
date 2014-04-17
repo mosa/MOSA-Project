@@ -31,43 +31,42 @@ namespace Mosa.TinyCPUSimulator.Adaptor
 		{
 			this.SimAdapter = simAdapter;
 
-			AddSection(new SimLinkerSection(SectionKind.BSS, "BSS", 0x400000, 0x200000, simAdapter));
-			AddSection(new SimLinkerSection(SectionKind.Data, "Data", 0x600000, 0x200000, simAdapter));
-			AddSection(new SimLinkerSection(SectionKind.ROData, "ReadOnlyData", 0x800000, 0x200000, simAdapter));
-			AddSection(new SimLinkerSection(SectionKind.Text, "Text", 0xA00000, 0x200000, simAdapter));
+			AddSection(new LinkerSection(SectionKind.BSS, "BSS", 0));
+			AddSection(new LinkerSection(SectionKind.Data, "Data", 0));
+			AddSection(new LinkerSection(SectionKind.ROData, "ReadOnlyData", 0));
+			AddSection(new LinkerSection(SectionKind.Text, "Text", 0));
 
-			LoadSectionAlignment = 1;
 			SectionAlignment = 1;
 			Endianness = Endianness.Little;	// FIXME: assumes x86
 		}
 
-		protected override void CreateFile()
-		{
-			base.CreateFile();
-
-			foreach (var symbol in Symbols)
-			{
-				SimAdapter.SimCPU.SetSymbol(symbol.Name, (ulong)symbol.VirtualAddress, (ulong)symbol.Length);
-			}
-
-			foreach (var section in Sections)
-			{
-				ulong address = (ulong)section.VirtualAddress;
-
-				var mem = (section as SimLinkerSection).Memory;
-
-				foreach (byte b in mem)
-				{
-					if (b != 0)
-					{
-						SimAdapter.SimCPU.DirectWrite8(address, b);
-					}
-
-					address++;
-				}
-			}
-		}
-
 		#endregion Construction
+
+		public override void CreateFile(System.IO.Stream stream)
+		{
+			//TODO!
+			//	foreach (var symbol in Symbols)
+			//	{
+			//		SimAdapter.SimCPU.SetSymbol(symbol.Name, (ulong)symbol.VirtualAddress, (ulong)symbol.Length);
+			//	}
+
+			//	foreach (var section in LinkerSections)
+			//	{
+			//		ulong address = (ulong)section.VirtualAddress;
+
+			//		var mem = (section as SimLinkerSection).Memory;
+
+			//		foreach (byte b in mem)
+			//		{
+			//			if (b != 0)
+			//			{
+			//				SimAdapter.SimCPU.DirectWrite8(address, b);
+			//			}
+
+			//			address++;
+			//		}
+			//	}
+			//}
+		}
 	}
 }

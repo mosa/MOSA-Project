@@ -50,44 +50,35 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private void CreateTypeDefinitionTable(MosaType type)
 		{
-			string typeNameSymbol = type + @"$tname";
-
 			// Emit type name
-			using (Stream stream = Linker.Allocate(typeNameSymbol, SectionKind.ROData, 0, TypeLayout.NativePointerAlignment))
+			var typeNameSymbol = Linker.AllocateLinkerObject(type + @"$tname", SectionKind.ROData, 0, TypeLayout.NativePointerAlignment);
+			using (var writer = new EndianAwareBinaryWriter(typeNameSymbol.Stream, Architecture.Endianness))
 			{
-				using (EndianAwareBinaryWriter writer = new EndianAwareBinaryWriter(stream, Architecture.Endianness))
-				{
-					EmitStringWithLength(writer, type.FullName);
-				}
+				EmitStringWithLength(writer, type.FullName);
 			}
 
-			string typeTableSymbol = type.FullName + @"$dtable";
-
-			using (Stream stream = Linker.Allocate(typeTableSymbol, SectionKind.ROData, 0, TypeLayout.NativePointerAlignment))
+			var typeTableSymbol = Linker.AllocateLinkerObject(type.FullName + @"$dtable", SectionKind.ROData, 0, TypeLayout.NativePointerAlignment);
+			using (var writer = new EndianAwareBinaryWriter(typeTableSymbol.Stream, Architecture.Endianness))
 			{
-				using (EndianAwareBinaryWriter writer = new EndianAwareBinaryWriter(stream, Architecture.Endianness))
-				{
-					// 1. Size
-					writer.Write((uint)TypeLayout.GetTypeSize(type));
+				// 1. Size
+				writer.Write((uint)TypeLayout.GetTypeSize(type));
 
-					// 2. Metadata Token
-					//writer.Write((uint)type.Token.ToUInt32());
-					writer.Write((uint)0); //FIXME! ^^^
+				// 2. Metadata Token
+				writer.Write((uint)0); //TODO?
 
-					// 3. Pointer to Name
-					Linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuiltInPatch.I4, typeTableSymbol, (int)writer.Position, 0, typeNameSymbol, 0);
-					writer.Position += TypeLayout.NativePointerSize;
+				// 3. Pointer to Name
+				Linker.Link(LinkType.AbsoluteAddress, BuiltInPatch.I4, typeTableSymbol, (int)writer.Position, 0, typeNameSymbol, 0);
+				writer.Position += TypeLayout.NativePointerSize;
 
-					// 4. Pointer to Assembly Definition
-					//linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuiltInPatch.I4, typeTableSymbol, (int)writer.Position, 0, assemblySymbol, 0);
-					writer.Position += TypeLayout.NativePointerSize;
+				// 4. Pointer to Assembly Definition
+				//linker.Link(LinkType.AbsoluteAddress, BuiltInPatch.I4, typeTableSymbol, (int)writer.Position, 0, assemblySymbol, 0);
+				writer.Position += TypeLayout.NativePointerSize;
 
-					// 5. TODO: Constructor that accepts no parameters, if any, for this type
-					writer.WriteZeroBytes(TypeLayout.NativePointerSize);
+				// 5. TODO: Constructor that accepts no parameters, if any, for this type
+				writer.WriteZeroBytes(TypeLayout.NativePointerSize);
 
-					// 6. Flag: IsInterface
-					writer.WriteByte((byte)(type.IsInterface ? 1 : 0));
-				}
+				// 6. Flag: IsInterface
+				writer.WriteByte((byte)(type.IsInterface ? 1 : 0));
 			}
 
 			CreateFieldDefinitions(type);
@@ -97,46 +88,38 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			foreach (MosaField field in type.Fields)
 			{
-				string fieldNameSymbol = field.FullName + @"$name";
-
 				// Emit field name
-				using (Stream stream = Linker.Allocate(fieldNameSymbol, SectionKind.ROData, 0, TypeLayout.NativePointerAlignment))
+				var fieldNameSymbol = Linker.AllocateLinkerObject(field.FullName + @"$name", SectionKind.ROData, 0, TypeLayout.NativePointerAlignment);
+				using (EndianAwareBinaryWriter writer = new EndianAwareBinaryWriter(fieldNameSymbol.Stream, Architecture.Endianness))
 				{
-					using (EndianAwareBinaryWriter writer = new EndianAwareBinaryWriter(stream, Architecture.Endianness))
-					{
-						EmitStringWithLength(writer, field.Name);
-					}
+					EmitStringWithLength(writer, field.Name);
 				}
 
-				string fieldDescSymbol = field.FullName + @"$desc";
-
 				// Emit field descriptor
-				using (Stream stream = Linker.Allocate(fieldDescSymbol, SectionKind.ROData, 0, TypeLayout.NativePointerAlignment))
+				var fieldDescSymbol = Linker.AllocateLinkerObject(field.FullName + @"$desc", SectionKind.ROData, 0, TypeLayout.NativePointerAlignment);
+				using (EndianAwareBinaryWriter writer = new EndianAwareBinaryWriter(fieldNameSymbol.Stream, Architecture.Endianness))
 				{
-					using (EndianAwareBinaryWriter writer = new EndianAwareBinaryWriter(stream, Architecture.Endianness))
+					// 1. Offset / Address
+					if (field.IsStatic && !field.IsLiteral)
 					{
-						// 1. Offset / Address
-						if (field.IsStatic && !field.IsLiteral)
-						{
-							Linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuiltInPatch.I4, fieldDescSymbol, (int)writer.Position, 0, field.FullName, 0);
-						}
-						else
-						{
-							writer.Write(TypeLayout.GetFieldOffset(field));
-							writer.Position -= 4;
-						}
-						writer.Position += TypeLayout.NativePointerSize;
-
-						// 2. Name
-						Linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuiltInPatch.I4, fieldDescSymbol, (int)writer.Position, 0, fieldNameSymbol, 0);
-						writer.Position += TypeLayout.NativePointerSize;
-
-						// 3. Size
-						writer.Write((uint)TypeLayout.GetFieldSize(field));
-
-						// 4. Metadata Token
-						writer.Write((uint)0); //FIXME!
+						Linker.Link(LinkType.AbsoluteAddress, BuiltInPatch.I4, fieldDescSymbol, (int)writer.Position, 0, field.FullName, SectionKind.Data, 0);
 					}
+					else
+					{
+						writer.Write(TypeLayout.GetFieldOffset(field));
+						writer.Position -= 4;
+					}
+					writer.Position += TypeLayout.NativePointerSize;
+
+					// 2. Name
+					Linker.Link(LinkType.AbsoluteAddress, BuiltInPatch.I4, fieldDescSymbol, (int)writer.Position, 0, fieldNameSymbol.Name, SectionKind.Data, 0);
+					writer.Position += TypeLayout.NativePointerSize;
+
+					// 3. Size
+					writer.Write((uint)TypeLayout.GetFieldSize(field));
+
+					// 4. Metadata Token
+					writer.Write((uint)0); // TODO
 				}
 			}
 		}

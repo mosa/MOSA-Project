@@ -7,7 +7,7 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-namespace Mosa.Compiler.NewLinker
+namespace Mosa.Compiler.Linker
 {
 	/// <summary>
 	/// An enumeration identifying common linker sections.

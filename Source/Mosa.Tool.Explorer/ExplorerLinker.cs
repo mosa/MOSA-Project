@@ -8,6 +8,7 @@
  */
 
 using Mosa.Compiler.Linker;
+using System.IO;
 
 namespace Mosa.Tool.Explorer
 {
@@ -20,13 +21,16 @@ namespace Mosa.Tool.Explorer
 		/// </summary>
 		public ExplorerLinker()
 		{
-			LoadSectionAlignment = 1;
 			SectionAlignment = 1;
 
-			AddSection(new ExplorerLinkerSection(SectionKind.Text, @".text", this.BaseAddress + SectionAlignment));
-			AddSection(new ExplorerLinkerSection(SectionKind.Data, @".data", 0));
-			AddSection(new ExplorerLinkerSection(SectionKind.ROData, @".rodata", 0));
-			AddSection(new ExplorerLinkerSection(SectionKind.BSS, @".bss", 0));
+			AddSection(new LinkerSection(SectionKind.Text, @".text",0));
+			AddSection(new LinkerSection(SectionKind.Data, @".data", 0));
+			AddSection(new LinkerSection(SectionKind.ROData, @".rodata", 0));
+			AddSection(new LinkerSection(SectionKind.BSS, @".bss", 0));
+		}
+
+		public override void CreateFile(Stream stream)
+		{
 		}
 
 		#endregion Construction

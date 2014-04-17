@@ -9,7 +9,7 @@
 
 using System;
 
-namespace Mosa.Compiler.NewLinker
+namespace Mosa.Compiler.Linker
 {
 	/// <summary>
 	/// Specifies the type of link to perform by the linker.

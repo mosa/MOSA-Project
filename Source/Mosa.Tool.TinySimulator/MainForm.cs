@@ -45,7 +45,7 @@ namespace Mosa.Tool.TinySimulator
 		public TypeSystem TypeSystem;
 		public MosaTypeLayout TypeLayout;
 		public BaseArchitecture Architecture;
-		public ILinker Linker;
+		public BaseLinker Linker;
 		public SimCPU SimCPU;
 
 		public int MaxHistory { get; set; }

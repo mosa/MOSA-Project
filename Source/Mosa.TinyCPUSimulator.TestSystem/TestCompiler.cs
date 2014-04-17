@@ -25,7 +25,7 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 		protected ISimAdapter adapter;
 		protected ISimAdapter simAdapter;
 		protected BaseArchitecture architecture;
-		protected ILinker linker;
+		protected BaseLinker linker;
 		protected TypeSystem typeSystem;
 		protected MosaTypeLayout typeLayout;
 		protected SimCompiler simCompiler;
@@ -95,9 +95,9 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 
 			Debug.Assert(runtimeMethod != null, runtimeMethod.ToString());
 
-			LinkerSymbol symbol = linker.GetSymbol(runtimeMethod.FullName);
+			var symbol = linker.GetLinkerObject(runtimeMethod.FullName, SectionKind.Text);
 
-			ulong address = (ulong)symbol.VirtualAddress;
+			ulong address = (ulong)symbol.ResolvedVirtualAddress;
 
 			platform.PopulateStack(simAdapter, parameters);
 

@@ -23,21 +23,21 @@ namespace Mosa.Tool.TinySimulator
 		{
 			public string Name { get { return LinkerSymbol.Name; } }
 
-			public long Length { get { return LinkerSymbol.Length; } }
+			public ulong Length { get { return LinkerSymbol.Size; } }
 
-			public string VirtualAddress { get { return MainForm.Format(LinkerSymbol.VirtualAddress, display32); } }
+			public string VirtualAddress { get { return MainForm.Format(LinkerSymbol.ResolvedVirtualAddress, display32); } }
 
-			public long Offset { get { return LinkerSymbol.Offset; } }
+			public ulong Offset { get { return LinkerSymbol.ResolvedSectionOffset; } }
 
 			public string SectionKind { get; set; }
 
-			public string SectionAddress { get { return MainForm.Format(LinkerSymbol.SectionAddress, display32); } }
+			public string SectionAddress { get { return MainForm.Format(LinkerSymbol.ResolvedSectionOffset, display32); } }
 
-			public LinkerSymbol LinkerSymbol;
+			public LinkerObject LinkerSymbol;
 
 			private bool display32;
 
-			public SymbolEntry(LinkerSymbol linkerSymbol, bool display32)
+			public SymbolEntry(LinkerObject linkerSymbol, bool display32)
 			{
 				this.LinkerSymbol = linkerSymbol;
 				this.display32 = display32;
@@ -62,7 +62,7 @@ namespace Mosa.Tool.TinySimulator
 			if (MainForm.Linker == null)
 				return;
 
-			symbols = new List<SymbolEntry>(MainForm.Linker.Symbols.Count);
+			symbols = new List<SymbolEntry>();
 
 			string filter = toolStripTextBox1.Text.Trim();
 			string kind = toolStripComboBox1.SelectedIndex < 1 ? string.Empty : toolStripComboBox1.SelectedItem.ToString().Trim();
@@ -138,7 +138,7 @@ namespace Mosa.Tool.TinySimulator
 			if (clickedSymbolEntry == null)
 				return;
 
-			MainForm.AddWatch(clickedSymbolEntry.Name, (ulong)clickedSymbolEntry.LinkerSymbol.VirtualAddress, (int)clickedSymbolEntry.LinkerSymbol.Length * 8);
+			MainForm.AddWatch(clickedSymbolEntry.Name, (ulong)clickedSymbolEntry.LinkerSymbol.ResolvedVirtualAddress, (int)clickedSymbolEntry.LinkerSymbol.Size);
 		}
 
 		private void MenuItem2_Click(Object sender, EventArgs e)
@@ -146,7 +146,7 @@ namespace Mosa.Tool.TinySimulator
 			if (clickedSymbolEntry == null)
 				return;
 
-			MainForm.AddBreakpoint(clickedSymbolEntry.Name, (ulong)clickedSymbolEntry.LinkerSymbol.VirtualAddress);
+			MainForm.AddBreakpoint(clickedSymbolEntry.Name, (ulong)clickedSymbolEntry.LinkerSymbol.ResolvedVirtualAddress);
 		}
 
 		private void MenuItem3_Click(Object sender, EventArgs e)

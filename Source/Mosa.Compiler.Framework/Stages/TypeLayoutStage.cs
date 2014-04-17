@@ -154,10 +154,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			int methodTableSize = ((headerlinks == null ? 0 : headerlinks.Count) + (methodTable == null ? 0 : methodTable.Count)) * TypeLayout.NativePointerSize;
 
-			using (Stream stream = Compiler.Linker.Allocate(methodTableName, SectionKind.ROData, methodTableSize, TypeLayout.NativePointerAlignment))
-			{
-				stream.Position = methodTableSize;
-			}
+			var methodtable = Compiler.Linker.AllocateLinkerObject(methodTableName, SectionKind.ROData, methodTableSize, TypeLayout.NativePointerAlignment);
 
 			int offset = 0;
 
@@ -167,7 +164,7 @@ namespace Mosa.Compiler.Framework.Stages
 				{
 					if (!string.IsNullOrEmpty(link))
 					{
-						Compiler.Linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuiltInPatch.I4, methodTableName, offset, 0, link, 0);
+						Compiler.Linker.Link(LinkType.AbsoluteAddress, BuiltInPatch.I4, methodtable, offset, 0, link, SectionKind.ROData, 0);
 					}
 
 					offset += TypeLayout.NativePointerSize;
@@ -181,7 +178,7 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				if (!method.IsAbstract)
 				{
-					Compiler.Linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuiltInPatch.I4, methodTableName, offset, 0, method.FullName, 0);
+					Compiler.Linker.Link(LinkType.AbsoluteAddress, BuiltInPatch.I4, methodtable, offset, 0, method.FullName, SectionKind.Text, 0);
 				}
 				offset += TypeLayout.NativePointerSize;
 			}
@@ -189,15 +186,11 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private void AskLinkerToCreateArray(string tableName, byte[] array)
 		{
-			int size = array.Length;
+			var stream = Compiler.Linker.Allocate(tableName, SectionKind.ROData, array.Length, TypeLayout.NativePointerAlignment);
 
-			//FIXME: change  SectionKind.Text to SectionKind.ROData
-			using (var stream = Compiler.Linker.Allocate(tableName, SectionKind.Text, size, TypeLayout.NativePointerAlignment))
+			foreach (byte b in array)
 			{
-				foreach (byte b in array)
-					stream.WriteByte(b);
-
-				stream.Position = size;
+				stream.Write(array);
 			}
 		}
 

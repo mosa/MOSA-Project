@@ -12,8 +12,8 @@
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Linker;
-using Mosa.Compiler.Linker.Elf32;
-using Mosa.Compiler.Linker.Elf64;
+//using Mosa.Compiler.Linker.Elf32;
+//using Mosa.Compiler.Linker.Elf64;
 using Mosa.Compiler.Linker.PE;
 using NDesk.Options;
 using System;
@@ -385,7 +385,7 @@ namespace Mosa.Tool.Compiler
 			sb.Append(" > Output file: ").AppendLine(compilerOptions.OutputFile);
 			sb.Append(" > Input file(s): ").AppendLine(String.Join(", ", new List<string>(GetInputFileNames()).ToArray()));
 			sb.Append(" > Architecture: ").AppendLine(compilerOptions.Architecture.GetType().FullName);
-			sb.Append(" > Binary format: ").AppendLine(compilerOptions.LinkerFactory().Name.ToString());
+			sb.Append(" > Binary format: ").AppendLine(compilerOptions.LinkerFactory().GetType().FullName);
 			sb.Append(" > Boot format: ").AppendLine((compilerOptions.BootStageFactory == null) ? "None" : ((IPipelineStage)compilerOptions.BootStageFactory()).Name);
 			sb.Append(" > Is executable: ").AppendLine(isExecutable.ToString());
 			return sb.ToString();
@@ -481,12 +481,12 @@ namespace Mosa.Tool.Compiler
 			}
 		}
 
-		private static Func<ILinker> GetLinkerFactory(string format)
+		private static Func<BaseLinker> GetLinkerFactory(string format)
 		{
 			switch (format.ToLower())
 			{
-				case "elf32": return delegate { return new Elf32Linker(); };
-				case "elf64": return delegate { return new Elf64Linker(); };
+				//case "elf32": return delegate { return new Elf32Linker(); };
+				//case "elf64": return delegate { return new Elf64Linker(); };
 				case "pe": return delegate { return new PELinker(); };
 
 				default: return null;

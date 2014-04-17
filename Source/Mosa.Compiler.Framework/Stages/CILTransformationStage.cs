@@ -764,29 +764,28 @@ namespace Mosa.Compiler.Framework.Stages
 			 *
 			 */
 
-			ILinker linker = MethodCompiler.Linker;
+			BaseLinker linker = MethodCompiler.Linker;
 			string symbolName = context.Operand1.Name;
 			string stringdata = context.Operand1.StringData;
 
 			context.SetInstruction(IRInstruction.Move, context.Result, context.Operand1);
 
-			if (linker.GetSymbol(symbolName) != null)
-				return;
+			var symbol = linker.AllocateLinkerObject(symbolName, SectionKind.ROData, 0, NativePointerAlignment);
+			var stream = symbol.Stream;
 
-			using (Stream stream = linker.Allocate(symbolName, SectionKind.ROData, 0, NativePointerAlignment))
-			{
-				// Method table and sync block
-				linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuiltInPatch.I4, symbolName, 0, 0, "System.String$mtable", 0);
-				stream.WriteZeroBytes(8);
+			// Method table and sync block
+			linker.Link(LinkType.AbsoluteAddress, BuiltInPatch.I4, symbol, 0, 0, "System.String$mtable", SectionKind.ROData, 0);
 
-				// String length field
-				stream.Write(BitConverter.GetBytes(stringdata.Length), 0, NativePointerSize);
+			stream.WriteZeroBytes(8);
 
-				// String data
-				byte[] stringData = Encoding.Unicode.GetBytes(stringdata);
-				Debug.Assert(stringData.Length == stringdata.Length * 2, "Byte array of string data doesn't match expected string data length");
-				stream.Write(stringData);
-			}
+			// String length field
+			stream.Write(BitConverter.GetBytes(stringdata.Length), 0, NativePointerSize);
+
+			// String data
+			var stringData = Encoding.Unicode.GetBytes(stringdata);
+			Debug.Assert(stringData.Length == stringdata.Length * 2, "Byte array of string data doesn't match expected string data length");
+			stream.Write(stringData);
+
 		}
 
 		/// <summary>

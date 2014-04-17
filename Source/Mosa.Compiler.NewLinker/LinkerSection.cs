@@ -11,7 +11,7 @@ using Mosa.Compiler.Common;
 using System.Collections.Generic;
 using System.IO;
 
-namespace Mosa.Compiler.NewLinker
+namespace Mosa.Compiler.Linker
 {
 	/// <summary>
 	///

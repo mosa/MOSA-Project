@@ -55,7 +55,7 @@ namespace Mosa.Tool.Compiler.Stages
 			using (writer = new StreamWriter(MapFile))
 			{
 				// Emit map file header
-				writer.WriteLine(Linker.OutputFile);
+				writer.WriteLine(CompilerOptions.OutputFile);
 				writer.WriteLine();
 				writer.WriteLine("Timestamp is {0}", DateTime.Now);
 				writer.WriteLine();
@@ -79,7 +79,7 @@ namespace Mosa.Tool.Compiler.Stages
 		/// Emits all the section created in the binary file.
 		/// </summary>
 		/// <param name="linker">The linker.</param>
-		private void EmitSections(ILinker linker)
+		private void EmitSections(BaseLinker linker)
 		{
 			writer.WriteLine("Offset           Virtual          Length           Name                             Class");
 			foreach (LinkerSection section in linker.Sections)
@@ -88,11 +88,11 @@ namespace Mosa.Tool.Compiler.Stages
 			}
 		}
 
-		private class LinkerSymbolComparerByVirtualAddress : IComparer<LinkerSymbol>
+		private class LinkerSymbolComparerByVirtualAddress : IComparer<LinkerObject>
 		{
-			public int Compare(LinkerSymbol x, LinkerSymbol y)
+			public int Compare(LinkerObject x, LinkerObject y)
 			{
-				return (int)(x.VirtualAddress - y.VirtualAddress);
+				return (int)(x.ResolvedVirtualAddress - y.ResolvedVirtualAddress);
 			}
 		}
 
@@ -100,12 +100,14 @@ namespace Mosa.Tool.Compiler.Stages
 		/// Emits all symbols emitted in the binary file.
 		/// </summary>
 		/// <param name="linker">The linker.</param>
-		private void EmitSymbols(ILinker linker)
+		private void EmitSymbols(BaseLinker linker)
 		{
-			List<LinkerSymbol> sorted = new List<LinkerSymbol>();
+			List<LinkerObject> sorted = new List<LinkerObject>();
 
-			foreach (LinkerSymbol symbol in linker.Symbols)
+			foreach (var symbol in linker.Symbols)
+			{
 				sorted.Add(symbol);
+			}
 
 			var comparer = new LinkerSymbolComparerByVirtualAddress();
 			sorted.Sort(comparer);
@@ -113,16 +115,16 @@ namespace Mosa.Tool.Compiler.Stages
 			writer.WriteLine("Offset           Virtual          Length           Section Symbol");
 			foreach (var symbol in sorted)
 			{
-				writer.WriteLine("{0:x16} {1:x16} {2:x16} {3} {4}", symbol.Offset, symbol.VirtualAddress, symbol.Length, symbol.SectionKind.ToString().PadRight(7), symbol.Name);
+				writer.WriteLine("{0:x16} {1:x16} {2:x16} {3} {4}", symbol.ResolvedSectionOffset, symbol.ResolvedVirtualAddress, symbol.Size, symbol.SectionKind.ToString().PadRight(7), symbol.Name);
 			}
 
-			LinkerSymbol entryPoint = linker.EntryPoint;
+			var entryPoint = linker.EntryPoint;
 			if (entryPoint != null)
 			{
 				writer.WriteLine();
 				writer.WriteLine("Entry point is {0}", entryPoint.Name);
-				writer.WriteLine("\tat Offset {0:x16}", entryPoint.Offset);
-				writer.WriteLine("\tat virtual address {0:x16}", entryPoint.VirtualAddress);
+				writer.WriteLine("\tat Offset {0:x16}", entryPoint.ResolvedSectionOffset); // TODO! add section offset too?
+				writer.WriteLine("\tat virtual address {0:x16}", entryPoint.ResolvedVirtualAddress);
 			}
 		}
 
