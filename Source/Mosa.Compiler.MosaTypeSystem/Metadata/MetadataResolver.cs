@@ -181,10 +181,12 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 				MosaType returnType = metadata.Loader.GetType(resolver.Resolve(desc.Signature.RetType));
 				List<MosaParameter> pars = new List<MosaParameter>();
 
-				Debug.Assert(desc.Signature.GetParamCount() == desc.Definition.ParamDefs.Count);
-				for (int i = 0; i < desc.Definition.ParamDefs.Count; i++)
+				Debug.Assert(desc.Signature.GetParamCount() + (desc.Signature.HasThis ? 1 : 0) == desc.Definition.Parameters.Count);
+				foreach (var param in desc.Definition.Parameters)
 				{
-					pars.Add(new MosaParameter(desc.Definition.ParamDefs[i].FullName, metadata.Loader.GetType(resolver.Resolve(desc.Signature.Params[i]))));
+					if(!param.IsNormalMethodParameter)
+						continue;
+					pars.Add(new MosaParameter(param.Name, metadata.Loader.GetType(resolver.Resolve(desc.Signature.Params[param.MethodSigIndex]))));
 				}
 
 				mosaMethod.Signature = new MosaMethodSignature(returnType, pars);
@@ -321,10 +323,27 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 			throw new AssemblyLoadException();
 		}
 
+		MosaMethod ResolveArrayMethod(IMethod method, GenericArgumentResolver resolver)
+		{
+			MosaType type = metadata.Loader.GetType(resolver.Resolve(method.DeclaringType.ToTypeSig()));
+			if (method.Name == "Get")
+				return type.FindMethodByName("Get");
+			else if (method.Name == "Set")
+				return type.FindMethodByName("Set");
+			else if (method.Name == "AddressOf")
+				return type.FindMethodByName("AddressOf");
+			else if (method.Name == ".ctor")
+				return type.FindMethodByName(".ctor");
+			else
+				throw new AssemblyLoadException();
+		}
+
 		MosaMethod ResolveMethodOperand(IMethod operand, GenericArgumentResolver resolver)
 		{
 			if (operand is MethodSpec)
 				return metadata.Loader.LoadGenericMethodInstance((MethodSpec)operand, resolver);
+			else if (operand.DeclaringType.TryGetArraySig() != null || operand.DeclaringType.TryGetSZArraySig() != null)
+				return ResolveArrayMethod(operand, resolver);
 
 			TypeSig declType;
 			MethodDef methodDef = operand as MethodDef;

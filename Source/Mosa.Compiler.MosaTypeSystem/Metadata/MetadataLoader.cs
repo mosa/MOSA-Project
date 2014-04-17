@@ -241,6 +241,7 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 						{
 							modType.Modifier = GetType(((ModifierSig)typeSig).Modifier.ToTypeSig());
 							modType.UnderlyingObject = elementType.GetUnderlyingObject<UnitDesc<TypeDef, TypeSig>>().Clone(typeSig);
+							modType.ElementType = elementType;
 						}
 						break;
 
@@ -316,11 +317,10 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 				{
 					MosaMethod method = metadata.Controller.CreateMethod(result.Methods[i]);
 
-					MethodSig newSig = resolver.Resolve(method.GetMethodSig());
 					using (var mosaMethod = metadata.Controller.MutateMethod(method))
 					{
 						mosaMethod.DeclaringType = result;
-						mosaMethod.UnderlyingObject = method.GetUnderlyingObject<UnitDesc<MethodDef, MethodSig>>().Clone(newSig);
+						mosaMethod.UnderlyingObject = method.GetUnderlyingObject<UnitDesc<MethodDef, MethodSig>>();
 					}
 
 					resultType.Methods[i] = method;
@@ -331,11 +331,10 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 				{
 					MosaField field = metadata.Controller.CreateField(result.Fields[i]);
 
-					FieldSig newSig = new FieldSig(resolver.Resolve(field.GetFieldSig().Type));
 					using (var mosaField = metadata.Controller.MutateField(field))
 					{
 						mosaField.DeclaringType = result;
-						mosaField.UnderlyingObject = field.GetUnderlyingObject<UnitDesc<FieldDef, FieldSig>>().Clone(newSig);
+						mosaField.UnderlyingObject = field.GetUnderlyingObject<UnitDesc<FieldDef, FieldSig>>();
 					}
 
 					resultType.Fields[i] = field;
@@ -359,9 +358,6 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 		{
 			MosaType declType = GetType(resolver.Resolve(method.DeclaringType.ToTypeSig()));
 
-			if (declType.HasOpenGenericParams)
-				throw new AssemblyLoadException();
-
 			MDToken token;
 			if (method is MethodDef)
 				token = ((MethodDef)method).MDToken;
@@ -369,9 +365,10 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 				token = ((MemberRef)method).ResolveMethodThrow().MDToken;
 
 			MosaMethod mosaMethod = null;
+			UnitDesc<MethodDef, MethodSig> desc = null;
 			foreach (var m in declType.Methods)
 			{
-				var desc = m.GetUnderlyingObject<UnitDesc<MethodDef, MethodSig>>();
+				desc = m.GetUnderlyingObject<UnitDesc<MethodDef, MethodSig>>();
 				if (desc.Token.Token == token)
 				{
 					mosaMethod = m;
@@ -382,12 +379,20 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 			if (mosaMethod == null)
 				throw new AssemblyLoadException();
 
-			List<TypeSig> genericArgs;
-
-			genericArgs = new List<TypeSig>();
+			List<TypeSig> genericArgs = new List<TypeSig>();
 			foreach (var genericArg in genericArguments)
 				genericArgs.Add(resolver.Resolve(genericArg));
 			resolver.PushMethodGenericArguments(genericArgs);
+
+			// Check for existing generic method instance
+			var newSig = resolver.Resolve(method.MethodSig);
+			var comparer = new SigComparer();
+			foreach (var m in declType.Methods)
+			{
+				var mDesc = m.GetUnderlyingObject<UnitDesc<MethodDef, MethodSig>>();
+				if (mDesc.Definition == desc.Definition && comparer.Equals(mDesc.Signature, newSig))
+					return m;
+			}
 
 			mosaMethod = metadata.Controller.CreateMethod(mosaMethod);
 
@@ -401,10 +406,8 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 					_mosaMethod.GenericArguments.Add(GetType(newGenericArg));
 				}
 
-				var desc = mosaMethod.GetUnderlyingObject<UnitDesc<MethodDef, MethodSig>>();
-				_mosaMethod.UnderlyingObject = desc = desc.Clone(resolver.Resolve(method.MethodSig));
+				_mosaMethod.UnderlyingObject = desc.Clone(newSig);
 				_mosaMethod.DeclaringType = declType;
-
 
 				_mosaMethod.HasOpenGenericParams = hasOpening;
 			}
