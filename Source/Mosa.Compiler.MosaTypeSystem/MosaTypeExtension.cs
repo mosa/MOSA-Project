@@ -23,6 +23,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 				ptrType.Namespace = type.Namespace;
 				ptrType.Name = type.Name;
 
+				ptrType.HasOpenGenericParams = type.HasOpenGenericParams;
 				ptrType.ElementType = type;
 				ptrType.TypeCode = MosaTypeCode.ManagedPointer;
 
@@ -40,6 +41,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 				ptrType.Namespace = type.Namespace;
 				ptrType.Name = type.Name;
 
+				ptrType.HasOpenGenericParams = type.HasOpenGenericParams;
 				ptrType.ElementType = type;
 				ptrType.TypeCode = MosaTypeCode.UnmanagedPointer;
 
@@ -60,6 +62,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 				arrayType.Namespace = type.Namespace;
 				arrayType.Name = type.Name;
 
+				arrayType.HasOpenGenericParams = type.HasOpenGenericParams;
 				arrayType.BaseType = array;
 				arrayType.ElementType = type;
 				arrayType.TypeCode = MosaTypeCode.SZArray;
@@ -84,6 +87,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 				arrayType.Namespace = type.Namespace;
 				arrayType.Name = type.Name;
 
+				arrayType.HasOpenGenericParams = type.HasOpenGenericParams;
 				arrayType.BaseType = array;
 				arrayType.ElementType = type;
 				arrayType.TypeCode = MosaTypeCode.Array;

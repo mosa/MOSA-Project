@@ -171,14 +171,13 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 					hasOpening |= i.HasOpenGenericParameter();
 				resolver.PushMethodGenericArguments(method.GenericArguments.GetGenericArguments());
 			}
-			else
-				hasOpening |= method.GetMethodSig().HasOpenGenericParameter();
 
 			using (var mosaMethod = metadata.Controller.MutateMethod(method))
 			{
 				var desc = method.GetUnderlyingObject<UnitDesc<MethodDef, MethodSig>>();
 
 				MosaType returnType = metadata.Loader.GetType(resolver.Resolve(desc.Signature.RetType));
+				hasOpening |= returnType.HasOpenGenericParams;
 				List<MosaParameter> pars = new List<MosaParameter>();
 
 				Debug.Assert(desc.Signature.GetParamCount() + (desc.Signature.HasThis ? 1 : 0) == desc.Definition.Parameters.Count);
@@ -186,7 +185,9 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 				{
 					if(!param.IsNormalMethodParameter)
 						continue;
-					pars.Add(new MosaParameter(param.Name, metadata.Loader.GetType(resolver.Resolve(desc.Signature.Params[param.MethodSigIndex]))));
+					var paramType = metadata.Loader.GetType(resolver.Resolve(desc.Signature.Params[param.MethodSigIndex]));
+					pars.Add(new MosaParameter(param.Name, paramType));
+					hasOpening |= paramType.HasOpenGenericParams;
 				}
 
 				mosaMethod.Signature = new MosaMethodSignature(returnType, pars);
