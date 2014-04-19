@@ -170,14 +170,15 @@ namespace Mosa.Platform.x86
 			if (displacement.IsLabel)
 			{
 				// FIXME! remove assertion
-				System.Diagnostics.Debug.Assert(displacement.Displacement == 0);
+				Debug.Assert(displacement.Displacement == 0);
 
-				linker.Link(LinkType.AbsoluteAddress, BuiltInPatch.I4, MethodName, SectionKind.Text, pos, 0, displacement.Name, SectionKind.Text, 0); //FIXME!
+				linker.Link(LinkType.AbsoluteAddress, BuiltInPatch.I4, MethodName, SectionKind.Text, pos, 0, displacement.Name, SectionKind.ROData, 0);
 				codeStream.Position += 4;
 			}
 			else if (displacement.IsField)
 			{
-				linker.Link(LinkType.AbsoluteAddress, BuiltInPatch.I4, MethodName, SectionKind.Text, pos, 0, displacement.Field.FullName, SectionKind.Text, (int)displacement.Displacement); //FIXME!
+				SectionKind section = displacement.Field.Data != null ? section = SectionKind.Data : section = SectionKind.BSS;
+				linker.Link(LinkType.AbsoluteAddress, BuiltInPatch.I4, MethodName, SectionKind.Text, pos, 0, displacement.Field.FullName, section, (int)displacement.Displacement);
 				codeStream.Position += 4;
 			}
 			else if (displacement.IsSymbol)
@@ -185,7 +186,14 @@ namespace Mosa.Platform.x86
 				// FIXME! remove assertion
 				Debug.Assert(displacement.Displacement == 0);
 
-				linker.Link(LinkType.AbsoluteAddress, BuiltInPatch.I4, MethodName, SectionKind.Text, pos, 0, displacement.Name, SectionKind.Text, 0); //FIXME!
+				SectionKind section = SectionKind.ROData;
+
+				if (displacement.Method != null)
+					section = SectionKind.Text;
+				//else if (displacement.StringData != null)
+				//	section = SectionKind.ROData;
+
+				linker.Link(LinkType.AbsoluteAddress, BuiltInPatch.I4, MethodName, SectionKind.Text, pos, 0, displacement.Name, section, 0);
 				codeStream.Position += 4;
 			}
 			else if (displacement.IsMemoryAddress && displacement.OffsetBase != null && displacement.OffsetBase.IsConstant)
@@ -296,7 +304,7 @@ namespace Mosa.Platform.x86
 		{
 			codeStream.WriteByte(0xEA);
 
-			//codeStream.Write((int)(linkerSection.VirtualAddress + linkerSection.Length + 6), Endianness.Little);
+			//codeStream.Write((int)(section.VirtualAddress + section.Length + 6), Endianness.Little);
 			linker.Link(LinkType.AbsoluteAddress, BuiltInPatch.I4, MethodName, SectionKind.Text, (int)codeStream.Position, 6, MethodName, SectionKind.Text, (int)codeStream.Position);
 
 			codeStream.WriteByte(0x08);

@@ -10,9 +10,7 @@
 using Mosa.Compiler.Framework.CIL;
 using Mosa.Compiler.Linker;
 using Mosa.Compiler.MosaTypeSystem;
-using Mosa.Compiler.Common;
 using System.Collections.Generic;
-using System.IO;
 
 namespace Mosa.Compiler.Framework.Stages
 {
@@ -42,10 +40,10 @@ namespace Mosa.Compiler.Framework.Stages
 		private void PerformStaticAllocationOf(Context allocation, Context assignment)
 		{
 			MosaType allocatedType = allocation.MosaMethod.DeclaringType;
-			
+
 			// Allocate a linker symbol to refer to this allocation. Use the destination field name as the linker symbol name.
-			var symbolName = MethodCompiler.Linker.AllocateLinkerObject(assignment.MosaField.FullName + @"<<$cctor", SectionKind.BSS, TypeLayout.GetTypeSize(allocatedType), Architecture.NativeAlignment);
-			
+			var symbolName = MethodCompiler.Linker.CreateSymbol(assignment.MosaField.FullName + @"<<$cctor", SectionKind.BSS, Architecture.NativeAlignment, TypeLayout.GetTypeSize(allocatedType));
+
 			// FIXME: Do we have to initialize this?
 			string methodTableSymbol = GetMethodTableForType(allocatedType);
 

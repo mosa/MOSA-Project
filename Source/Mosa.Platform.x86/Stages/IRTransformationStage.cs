@@ -663,7 +663,6 @@ namespace Mosa.Platform.x86.Stages
 			{
 				if (baseOperand.Type.IsUnmanagedPointer)
 					type = storeType.ToUnmanagedPointer();
-
 				else if (baseOperand.Type.IsManagedPointer)
 					type = storeType.ToManagedPointer();
 			}

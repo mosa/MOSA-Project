@@ -13,8 +13,8 @@ using Mosa.Compiler.InternalTrace;
 using Mosa.Compiler.Linker;
 using Mosa.Compiler.MosaTypeSystem;
 using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Mosa.Compiler.Framework
 {

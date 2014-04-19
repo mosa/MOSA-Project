@@ -50,7 +50,7 @@ namespace Mosa.TinyCPUSimulator.Adaptor
 			MosaMethod method = Compiler.CreateLinkerMethod(StartUpName);
 			Compiler.CompileMethod(method, basicBlocks, instructionSet);
 
-			Linker.EntryPoint = Linker.GetLinkerObject(method.FullName, SectionKind.Text);
+			Linker.EntryPoint = Linker.GetSymbol(method.FullName, SectionKind.Text);
 		}
 
 		#endregion ICompilerStage Members

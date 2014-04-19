@@ -29,7 +29,7 @@ namespace Mosa.Tool.Explorer
 			AddSection(new LinkerSection(SectionKind.BSS, @".bss", 0));
 		}
 
-		public override void CreateFile(Stream stream)
+		public override void Emit(Stream stream)
 		{
 		}
 

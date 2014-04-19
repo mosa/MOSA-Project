@@ -95,7 +95,7 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 
 			Debug.Assert(runtimeMethod != null, runtimeMethod.ToString());
 
-			var symbol = linker.GetLinkerObject(runtimeMethod.FullName, SectionKind.Text);
+			var symbol = linker.GetSymbol(runtimeMethod.FullName, SectionKind.Text);
 
 			ulong address = (ulong)symbol.ResolvedVirtualAddress;
 

@@ -15,7 +15,6 @@ using Mosa.Compiler.MosaTypeSystem;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 
 namespace Mosa.Compiler.Framework
 {
@@ -199,15 +198,6 @@ namespace Mosa.Compiler.Framework
 			{
 				StackLayout.SetStackParameter(index++, parameter.Type, displacement, parameter.Name);
 			}
-		}
-
-		/// <summary>
-		/// Requests a stream to emit native instructions to.
-		/// </summary>
-		/// <returns>A stream object, which can be used to store emitted instructions.</returns>
-		public virtual Stream RequestCodeStream()
-		{
-			return Linker.Allocate(Method.FullName, SectionKind.Text, 0, 0);
 		}
 
 		/// <summary>

@@ -123,7 +123,7 @@ namespace Mosa.Tool.TinySimulator
 			// 
 			this.toolStripLabel2.Name = "toolStripLabel2";
 			this.toolStripLabel2.Size = new System.Drawing.Size(85, 25);
-			this.toolStripLabel2.Text = "Symbol Name:";
+			this.toolStripLabel2.Text = "Symbols Name:";
 			// 
 			// toolStripTextBox1
 			// 

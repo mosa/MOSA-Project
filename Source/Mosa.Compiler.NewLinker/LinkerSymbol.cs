@@ -15,13 +15,13 @@ namespace Mosa.Compiler.Linker
 	/// <summary>
 	///
 	/// </summary>
-	public class LinkerObject
+	public class LinkerSymbol
 	{
 		public string Name { get; private set; }
 
 		public SectionKind SectionKind { get; private set; }
 
-		public MemoryStream Stream { get; private set; }
+		public MemoryStream Stream { get; internal set; }
 
 		public uint Alignment { get; internal set; }
 
@@ -35,7 +35,7 @@ namespace Mosa.Compiler.Linker
 
 		public ulong ResolvedVirtualAddress { get; internal set; }
 
-		internal LinkerObject(string name, SectionKind kind, uint alignment)
+		internal LinkerSymbol(string name, SectionKind kind, uint alignment)
 		{
 			Name = name;
 			IsResolved = false;
@@ -78,8 +78,11 @@ namespace Mosa.Compiler.Linker
 				case 4: Stream.Write((uint)current, endianness); break;
 				case 8: Stream.Write((ulong)current, endianness); break;
 			}
-
 		}
 
+		public override string ToString()
+		{
+			return SectionKind.ToString() + ": " + Name;
+		}
 	}
 }

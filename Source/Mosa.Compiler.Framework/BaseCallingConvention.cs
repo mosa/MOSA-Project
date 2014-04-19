@@ -7,13 +7,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using Mosa.Compiler.Framework;
-
-using Mosa.Compiler.MosaTypeSystem;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-
 namespace Mosa.Compiler.Framework
 {
 	/// <summary>
@@ -22,7 +15,6 @@ namespace Mosa.Compiler.Framework
 	/// </summary>
 	public abstract class BaseCallingConvention
 	{
-
 		#region Methods
 
 		/// <summary>
@@ -64,8 +56,6 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		public abstract int OffsetOfFirstParameter { get; }
 
-		#endregion
-
+		#endregion Methods
 	}
-
 }

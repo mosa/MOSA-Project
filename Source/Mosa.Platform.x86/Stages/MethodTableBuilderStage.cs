@@ -41,7 +41,7 @@ namespace Mosa.Platform.x86.Stages
 		/// </summary>
 		private void CreateTables()
 		{
-			var table = new List<LinkerObject>();
+			var table = new List<LinkerSymbol>();
 			var methods = new List<MosaMethod>();
 
 			// Collect all methods that we can link to
@@ -52,7 +52,7 @@ namespace Mosa.Platform.x86.Stages
 
 				foreach (var method in type.Methods)
 				{
-					var symbol = Linker.GetLinkerObject(method.FullName, SectionKind.Text);
+					var symbol = Linker.GetSymbol(method.FullName, SectionKind.Text);
 
 					table.Add(symbol);
 
@@ -69,12 +69,12 @@ namespace Mosa.Platform.x86.Stages
 		/// Creates the method description table.
 		/// </summary>
 		/// <param name="table">The table.</param>
-		private void CreateMethodLookupTable(IList<LinkerObject> table)
+		private void CreateMethodLookupTable(List<LinkerSymbol> table)
 		{
 			// Allocate the table and fill it
 			var size = 3 * table.Count * TypeLayout.NativePointerSize + TypeLayout.NativePointerSize;
 
-			var methodtable = Linker.AllocateLinkerObject("<$>methodLookupTable", SectionKind.ROData, size, TypeLayout.NativePointerAlignment);
+			var methodtable = Linker.CreateSymbol("<$>methodLookupTable", SectionKind.ROData, TypeLayout.NativePointerAlignment, size);
 			var stream = methodtable.Stream;
 
 			foreach (var entry in table)
@@ -105,7 +105,7 @@ namespace Mosa.Platform.x86.Stages
 			{
 				int size = 3 * TypeLayout.NativePointerSize;
 
-				var section = Linker.AllocateLinkerObject(method.FullName + "$mdtable", SectionKind.ROData, size, TypeLayout.NativePointerAlignment);
+				var section = Linker.CreateSymbol(method.FullName + "$mdtable", SectionKind.ROData, TypeLayout.NativePointerAlignment, size);
 				var stream = section.Stream;
 
 				// Pointer to Exception Handler Table
@@ -118,7 +118,6 @@ namespace Mosa.Platform.x86.Stages
 
 				// Method's Parameter stack size
 				stream.Write(DetermineSizeOfMethodParameters(method), Endianness.Little); // FIXME
-
 			}
 		}
 

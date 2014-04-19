@@ -16,10 +16,7 @@ using Mosa.Compiler.MosaTypeSystem;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Text;
-using System.Reflection;
-using System.Linq;
 
 namespace Mosa.Compiler.Framework.Stages
 {
@@ -31,7 +28,6 @@ namespace Mosa.Compiler.Framework.Stages
 	/// </remarks>
 	public sealed class CILTransformationStage : BaseCodeTransformationStage, CIL.ICILVisitor, IPipelineStage
 	{
-
 		#region ICILVisitor
 
 		/// <summary>
@@ -172,11 +168,11 @@ namespace Mosa.Compiler.Framework.Stages
 			Operand source;
 			if (context.MosaType != null)
 			{
-				source = Operand.CreateManagedSymbol(TypeSystem, TypeSystem.GetTypeByName("System", "RuntimeTypeHandle"), context.MosaType.FullName + "$dtable");
+				source = Operand.CreateLabel(TypeSystem.GetTypeByName("System", "RuntimeTypeHandle"), context.MosaType.FullName + "$dtable");
 			}
 			else if (context.MosaField != null)
 			{
-				source = Operand.CreateManagedSymbol(TypeSystem, TypeSystem.GetTypeByName("System", "RuntimeTypeHandle"), context.MosaField.FullName + "$desc");
+				source = Operand.CreateLabel(TypeSystem.GetTypeByName("System", "RuntimeTypeHandle"), context.MosaField.FullName + "$desc");
 			}
 			else
 				throw new NotImplementCompilerException();
@@ -770,7 +766,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			context.SetInstruction(IRInstruction.Move, context.Result, context.Operand1);
 
-			var symbol = linker.AllocateLinkerObject(symbolName, SectionKind.ROData, 0, NativePointerAlignment);
+			var symbol = linker.CreateSymbol(symbolName, SectionKind.ROData, NativePointerAlignment, 0);
 			var stream = symbol.Stream;
 
 			// Method table and sync block
@@ -785,7 +781,6 @@ namespace Mosa.Compiler.Framework.Stages
 			var stringData = Encoding.Unicode.GetBytes(stringdata);
 			Debug.Assert(stringData.Length == stringdata.Length * 2, "Byte array of string data doesn't match expected string data length");
 			stream.Write(stringData);
-
 		}
 
 		/// <summary>

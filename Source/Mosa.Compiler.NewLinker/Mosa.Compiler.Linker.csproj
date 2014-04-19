@@ -46,12 +46,13 @@
   <ItemGroup>
     <Compile Include="BaseLinker.cs" />
     <Compile Include="LinkerSection.cs" />
-    <Compile Include="LinkerObject.cs" />
+    <Compile Include="LinkerSymbol.cs" />
     <Compile Include="BuiltInPatch.cs" />
     <Compile Include="LinkRequest.cs" />
     <Compile Include="LinkType.cs" />
     <Compile Include="PatchType.cs" />
     <Compile Include="Patch.cs" />
+    <Compile Include="Mem\MemLinker.cs" />
     <Compile Include="PE\PELinker.cs" />
     <Compile Include="SectionKind.cs" />
   </ItemGroup>

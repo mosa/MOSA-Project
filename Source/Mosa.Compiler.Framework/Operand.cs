@@ -593,6 +593,7 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		public static Operand CreateManagedSymbolPointer(TypeSystem typeSystem, MosaType type, string name)
 		{
+			// NOTE: Not being used
 			var operand = new Operand(type.ToManagedPointer());
 			operand.IsSymbol = true;
 			operand.Name = name;
@@ -720,7 +721,7 @@ namespace Mosa.Compiler.Framework
 			operand.Displacement = 0;
 			return operand;
 		}
-
+		
 		/// <summary>
 		/// Creates a new runtime member <see cref="Operand"/>.
 		/// </summary>

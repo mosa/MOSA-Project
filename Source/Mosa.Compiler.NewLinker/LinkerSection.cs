@@ -18,10 +18,9 @@ namespace Mosa.Compiler.Linker
 	/// </summary>
 	public class LinkerSection
 	{
+		public List<LinkerSymbol> Symbols { get; private set; }
 
-		private List<LinkerObject> linkerObjects;
-
-		private Dictionary<string, LinkerObject> linkerObjectLookup;
+		private Dictionary<string, LinkerSymbol> symbolLookup;
 
 		public string Name { get; private set; }
 
@@ -44,25 +43,25 @@ namespace Mosa.Compiler.Linker
 			Name = name;
 			SectionKind = sectionKind;
 			IsResolved = false;
-			linkerObjectLookup = new Dictionary<string, LinkerObject>();
-			linkerObjects = new List<LinkerObject>();
+			symbolLookup = new Dictionary<string, LinkerSymbol>();
+			Symbols = new List<LinkerSymbol>();
 			SectionAlignment = alignment;
 			Size = 0;
 		}
 
-		internal void AddLinkerObject(LinkerObject linkerObject)
+		internal void AddLinkerObject(LinkerSymbol symbol)
 		{
-			linkerObjects.Add(linkerObject);
-			linkerObjectLookup.Add(linkerObject.Name, linkerObject);
+			Symbols.Add(symbol);
+			symbolLookup.Add(symbol.Name, symbol);
 		}
 
-		internal LinkerObject GetLinkerObject(string name)
+		internal LinkerSymbol GetSymbol(string name)
 		{
-			LinkerObject linkerObject = null;
+			LinkerSymbol symbol = null;
 
-			linkerObjectLookup.TryGetValue(name, out linkerObject);
+			symbolLookup.TryGetValue(name, out symbol);
 
-			return null;
+			return symbol;
 		}
 
 		internal void ResolveLayout(ulong sectionOffset, ulong virtualAddress)
@@ -70,17 +69,17 @@ namespace Mosa.Compiler.Linker
 			ResolvedSectionOffset = sectionOffset;
 			ResolvedVirtualAddress = virtualAddress;
 
-			foreach (var obj in linkerObjectLookup.Values)
+			foreach (var symbol in symbolLookup.Values)
 			{
-				if (obj.IsResolved)
+				if (symbol.IsResolved)
 					continue;
 
-				Size = Alignment.Align(Size, obj.Alignment);
+				Size = Alignment.Align(Size, symbol.Alignment);
 
-				obj.ResolvedSectionOffset = Size;
-				obj.ResolvedVirtualAddress = ResolvedVirtualAddress + Size;
+				symbol.ResolvedSectionOffset = Size;
+				symbol.ResolvedVirtualAddress = ResolvedVirtualAddress + Size;
 
-				Size = Size + obj.Size;
+				Size = Size + symbol.Size;
 			}
 
 			Size = Alignment.Align(Size, SectionAlignment);
@@ -92,14 +91,13 @@ namespace Mosa.Compiler.Linker
 		{
 			long start = stream.Position;
 
-			foreach (var obj in linkerObjects)
+			foreach (var symbol in Symbols)
 			{
-				long at = (long)obj.ResolvedSectionOffset + start;
+				long at = (long)symbol.ResolvedSectionOffset + start;
 				stream.Seek(at, SeekOrigin.Begin);
-				obj.Stream.Position = 0;
-				obj.Stream.WriteTo(stream);
+				symbol.Stream.Position = 0;
+				symbol.Stream.WriteTo(stream);
 			}
 		}
-
 	}
 }

@@ -10,6 +10,7 @@
 
 using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.Framework.Platform;
+using Mosa.Compiler.Linker;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -72,25 +73,26 @@ namespace Mosa.Compiler.Framework.Stages
 			if (!EmitBinary)
 				return;
 
+			var symbol = MethodCompiler.Linker.CreateSymbol(MethodCompiler.Method.FullName, SectionKind.Text, 0, 0);
+			codeStream = symbol.Stream;
+
 			// Retrieve a stream to place the code into
-			using (codeStream = MethodCompiler.RequestCodeStream())
-			{
-				// HINT: We need seeking to resolve labels.
-				Debug.Assert(codeStream.CanSeek, @"Can't seek codeReader output stream2.");
-				Debug.Assert(codeStream.CanWrite, @"Can't write to codeReader output stream2.");
 
-				if (!codeStream.CanSeek || !codeStream.CanWrite)
-					throw new NotSupportedException(@"Code stream2 doesn't support seeking or writing.");
+			// HINT: We need seeking to resolve labels.
+			Debug.Assert(codeStream.CanSeek, @"Can't seek codeReader output stream2.");
+			Debug.Assert(codeStream.CanWrite, @"Can't write to codeReader output stream2.");
 
-				// Emit method prologue
-				BeginGenerate();
+			if (!codeStream.CanSeek || !codeStream.CanWrite)
+				throw new NotSupportedException(@"Code stream2 doesn't support seeking or writing.");
 
-				// Emit all instructions
-				EmitInstructions();
+			// Emit method prologue
+			BeginGenerate();
 
-				// Emit the method epilogue
-				EndGenerate();
-			}
+			// Emit all instructions
+			EmitInstructions();
+
+			// Emit the method epilogue
+			EndGenerate();
 
 			UpdateCounter("CodeGeneration.GeneratedInstructions", generatedInstructionCount);
 			UpdateCounter("CodeGeneration.GeneratedBlocks", generatedBlockCount);

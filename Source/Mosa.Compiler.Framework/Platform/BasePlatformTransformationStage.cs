@@ -66,19 +66,16 @@ namespace Mosa.Compiler.Framework.Platform
 
 			string name = String.Format("C_{0}", Guid.NewGuid());
 
-			using (Stream stream = MethodCompiler.Linker.Allocate(name, SectionKind.ROData, size, alignment))
+			var symbol = MethodCompiler.Linker.CreateSymbol(name, SectionKind.ROData, alignment, size);
+			var writer = new BinaryWriter(symbol.Stream);
+
+			if (operand.IsR4)
 			{
-				using (BinaryWriter writer = new BinaryWriter(stream))
-				{
-					if (operand.IsR4)
-					{
-						writer.Write(operand.ConstantSingleFloatingPoint);
-					}
-					else if (operand.IsR8)
-					{
-						writer.Write(operand.ConstantDoubleFloatingPoint);
-					}
-				}
+				writer.Write(operand.ConstantSingleFloatingPoint);
+			}
+			else if (operand.IsR8)
+			{
+				writer.Write(operand.ConstantDoubleFloatingPoint);
 			}
 
 			return Operand.CreateLabel(operand.Type, name);

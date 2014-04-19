@@ -7,6 +7,8 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using System.Diagnostics;
+
 namespace Mosa.Compiler.Linker
 {
 	/// <summary>
@@ -29,7 +31,7 @@ namespace Mosa.Compiler.Linker
 		/// <summary>
 		/// The object that is being patched.
 		/// </summary>
-		public LinkerObject PatchObject { get; private set; }
+		public LinkerSymbol PatchSymbol { get; private set; }
 
 		/// <summary>
 		/// Gets the patch offset.
@@ -50,7 +52,7 @@ namespace Mosa.Compiler.Linker
 		/// <value>
 		/// The reference symbol.
 		/// </value>
-		public LinkerObject ReferenceObject { get; private set; }
+		public LinkerSymbol ReferenceSymbol { get; private set; }
 
 		/// <summary>
 		/// Gets the offset to apply to the reference target.
@@ -72,20 +74,28 @@ namespace Mosa.Compiler.Linker
 		/// <param name="relativeBase">The relative base.</param>
 		/// <param name="referenceSymbol">The reference symbol.</param>
 		/// <param name="referenceOffset">The reference offset.</param>
-		public LinkRequest(LinkType linkType, PatchType patchType, LinkerObject patchSymbol, int patchOffset, int relativeBase, LinkerObject referenceSymbol, int referenceOffset)
+		public LinkRequest(LinkType linkType, PatchType patchType, LinkerSymbol patchSymbol, int patchOffset, int relativeBase, LinkerSymbol referenceSymbol, int referenceOffset)
 		{
+			Debug.Assert(patchSymbol != null);
+			Debug.Assert(referenceSymbol != null);
+
 			this.LinkType = linkType;
 			this.PatchType = patchType;
 
-			this.PatchObject = patchSymbol;
+			this.PatchSymbol = patchSymbol;
 			this.PatchOffset = patchOffset;
 
 			this.RelativeBase = relativeBase;
-			this.ReferenceObject = referenceSymbol;
+			this.ReferenceSymbol = referenceSymbol;
 			this.ReferenceOffset = referenceOffset;
 		}
 
 		#endregion Construction
+
+		public override string ToString()
+		{
+			return PatchSymbol.Name + " -> " + ReferenceSymbol.Name;
+		}
 
 	}
 }

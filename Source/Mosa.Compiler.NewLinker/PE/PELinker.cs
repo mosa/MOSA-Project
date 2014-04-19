@@ -57,9 +57,9 @@ namespace Mosa.Compiler.Linker.PE
 			Endianness = Common.Endianness.Little;
 		}
 
-		public override void CreateFile(Stream stream)
+		public override void Emit(Stream stream)
 		{
-			Finalize();
+			FinalizeLayout();
 
 			using (var writer = new EndianAwareBinaryWriter(stream, Encoding.Unicode, Endianness))
 			{
@@ -67,7 +67,7 @@ namespace Mosa.Compiler.Linker.PE
 				WriteDosHeader(writer);
 				WritePEHeader(writer);
 
-				foreach (var section in LinkerSections)
+				foreach (var section in Sections)
 				{
 					section.WriteTo(stream);
 				}
@@ -185,7 +185,7 @@ namespace Mosa.Compiler.Linker.PE
 			// Write the section headers
 			ulong address = FILE_SECTION_ALIGNMENT;
 
-			foreach (var section in LinkerSections)
+			foreach (var section in Sections)
 			{
 				if (section.Size == 0)
 					continue;
@@ -232,7 +232,7 @@ namespace Mosa.Compiler.Linker.PE
 		{
 			int sections = 0;
 
-			foreach (var section in LinkerSections)
+			foreach (var section in Sections)
 			{
 				if (section.Size > 0)
 				{
@@ -250,7 +250,7 @@ namespace Mosa.Compiler.Linker.PE
 			ulong sectionEnd;
 
 			// Move all sections to their right positions
-			foreach (var sections in LinkerSections)
+			foreach (var sections in Sections)
 			{
 				// Only use a section with something inside
 				if (sections.Size > 0)
@@ -269,7 +269,7 @@ namespace Mosa.Compiler.Linker.PE
 
 		private LinkerSection GetSection(SectionKind sectionKind)
 		{
-			return LinkerSections[(int)sectionKind];
+			return Sections[(int)sectionKind];
 		}
 
 		/// <summary>
@@ -295,22 +295,21 @@ namespace Mosa.Compiler.Linker.PE
 			uint csum = 0;
 			stream.Seek(0, SeekOrigin.Begin);
 
-			using (BinaryReader reader = new EndianAwareBinaryReader(stream, Endianness.Little))
+			var reader = new EndianAwareBinaryReader(stream, Endianness.Little);
+
+			uint l = (uint)stream.Length;
+
+			for (long p = 0; p < l; p += 2)
 			{
-				uint l = (uint)stream.Length;
-
-				for (long p = 0; p < l; p += 2)
+				csum += reader.ReadUInt16();
+				if (csum > 0x0000FFFF)
 				{
-					csum += reader.ReadUInt16();
-					if (csum > 0x0000FFFF)
-					{
-						csum = (csum & 0xFFFF) + (csum >> 16);
-					}
+					csum = (csum & 0xFFFF) + (csum >> 16);
 				}
-
-				csum = (csum & 0xFFFF) + (csum >> 16);
-				csum += l;
 			}
+
+			csum = (csum & 0xFFFF) + (csum >> 16);
+			csum += l;
 
 			return csum;
 		}

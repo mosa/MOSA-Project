@@ -14,6 +14,9 @@ namespace Mosa.Compiler.Common
 
 		public static long Align(long position, uint alignment)
 		{
+			if (alignment == 0)
+				return position;
+
 			long off = position % alignment;
 
 			if (off != 0)
@@ -26,6 +29,9 @@ namespace Mosa.Compiler.Common
 
 		public static ulong Align(ulong position, uint alignment)
 		{
+			if (alignment == 0)
+				return position;
+
 			ulong off = position % alignment;
 
 			if (off != 0)

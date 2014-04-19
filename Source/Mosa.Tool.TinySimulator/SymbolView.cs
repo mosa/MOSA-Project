@@ -33,11 +33,11 @@ namespace Mosa.Tool.TinySimulator
 
 			public string SectionAddress { get { return MainForm.Format(LinkerSymbol.ResolvedSectionOffset, display32); } }
 
-			public LinkerObject LinkerSymbol;
+			public LinkerSymbol LinkerSymbol;
 
 			private bool display32;
 
-			public SymbolEntry(LinkerObject linkerSymbol, bool display32)
+			public SymbolEntry(LinkerSymbol linkerSymbol, bool display32)
 			{
 				this.LinkerSymbol = linkerSymbol;
 				this.display32 = display32;
@@ -67,8 +67,8 @@ namespace Mosa.Tool.TinySimulator
 			string filter = toolStripTextBox1.Text.Trim();
 			string kind = toolStripComboBox1.SelectedIndex < 1 ? string.Empty : toolStripComboBox1.SelectedItem.ToString().Trim();
 
-			int start = 0;
-			int end = Int32.MaxValue;
+			uint start = 0;
+			uint end = UInt32.MaxValue;
 
 			switch (toolStripComboBox2.SelectedIndex)
 			{
@@ -87,7 +87,7 @@ namespace Mosa.Tool.TinySimulator
 				if (kind != string.Empty && symbol.SectionKind.ToString() != kind)
 					continue;
 
-				if (symbol.Length > end || symbol.Length < start)
+				if (symbol.Size > end || symbol.Size < start)
 					continue;
 
 				symbols.Add(new SymbolEntry(symbol, MainForm.Display32));
@@ -132,7 +132,7 @@ namespace Mosa.Tool.TinySimulator
 			m.MenuItems.Add(new MenuItem("Set &Breakpoint", new EventHandler(MenuItem2_Click)));
 			m.Show(dataGridView1, relativeMousePosition);
 		}
-		
+
 		private void MenuItem1_Click(Object sender, EventArgs e)
 		{
 			if (clickedSymbolEntry == null)

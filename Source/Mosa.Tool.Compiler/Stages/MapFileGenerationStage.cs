@@ -82,15 +82,15 @@ namespace Mosa.Tool.Compiler.Stages
 		private void EmitSections(BaseLinker linker)
 		{
 			writer.WriteLine("Offset           Virtual          Length           Name                             Class");
-			foreach (LinkerSection section in linker.Sections)
+			foreach (var section in linker.Sections)
 			{
-				writer.WriteLine("{0:x16} {1:x16} {2:x16} {3} {4}", section.Offset, section.VirtualAddress, section.Length, section.Name.PadRight(32), section.SectionKind);
+				writer.WriteLine("{0:x16} {1:x16} {2:x16} {3} {4}", section.ResolvedSectionOffset, section.ResolvedVirtualAddress, section.Size, section.Name.PadRight(32), section.SectionKind);
 			}
 		}
 
-		private class LinkerSymbolComparerByVirtualAddress : IComparer<LinkerObject>
+		private class LinkerSymbolComparerByVirtualAddress : IComparer<LinkerSymbol>
 		{
-			public int Compare(LinkerObject x, LinkerObject y)
+			public int Compare(LinkerSymbol x, LinkerSymbol y)
 			{
 				return (int)(x.ResolvedVirtualAddress - y.ResolvedVirtualAddress);
 			}
@@ -102,7 +102,7 @@ namespace Mosa.Tool.Compiler.Stages
 		/// <param name="linker">The linker.</param>
 		private void EmitSymbols(BaseLinker linker)
 		{
-			List<LinkerObject> sorted = new List<LinkerObject>();
+			List<LinkerSymbol> sorted = new List<LinkerSymbol>();
 
 			foreach (var symbol in linker.Symbols)
 			{
@@ -112,7 +112,7 @@ namespace Mosa.Tool.Compiler.Stages
 			var comparer = new LinkerSymbolComparerByVirtualAddress();
 			sorted.Sort(comparer);
 
-			writer.WriteLine("Offset           Virtual          Length           Section Symbol");
+			writer.WriteLine("Offset           Virtual          Length           Section Symbols");
 			foreach (var symbol in sorted)
 			{
 				writer.WriteLine("{0:x16} {1:x16} {2:x16} {3} {4}", symbol.ResolvedSectionOffset, symbol.ResolvedVirtualAddress, symbol.Size, symbol.SectionKind.ToString().PadRight(7), symbol.Name);

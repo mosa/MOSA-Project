@@ -13,7 +13,6 @@ using Mosa.Compiler.Framework.Stages;
 using Mosa.Compiler.Linker;
 using Mosa.Compiler.MosaTypeSystem;
 using System.Collections.Generic;
-using System.IO;
 
 // FIXME: Splits this class into platform dependent and independent classes. Move platform independent code into Mosa.Compiler.Framework
 
@@ -165,41 +164,40 @@ namespace Mosa.Platform.x86.Stages
 
 			int tableSize = (entries.Count * NativePointerSize * 5) + NativePointerSize;
 
-			var section = MethodCompiler.Linker.AllocateLinkerObject(MethodCompiler.Method.FullName + @"$etable", SectionKind.ROData, tableSize, NativePointerAlignment);
+			var section = MethodCompiler.Linker.CreateSymbol(MethodCompiler.Method.FullName + @"$etable", SectionKind.ROData, NativePointerAlignment, tableSize);
 			var stream = section.Stream;
 
-			using (var writer = new EndianAwareBinaryWriter(stream, Architecture.Endianness))
+			var writer = new EndianAwareBinaryWriter(stream, Architecture.Endianness);
+
+			foreach (var entry in entries)
 			{
-				foreach (var entry in entries)
+				// FIXME: Assumes x86 platform
+				writer.Write((uint)entry.Kind);
+				writer.Write(entry.Start);
+				writer.Write(entry.Length);
+				writer.Write(entry.Handler);
+
+				if (entry.Kind == ExceptionHandlerType.Exception)
 				{
-					// FIXME: Assumes x86 platform
-					writer.Write((uint)entry.Kind);
-					writer.Write(entry.Start);
-					writer.Write(entry.Length);
-					writer.Write(entry.Handler);
+					// Store method table pointer of the exception object type
+					// The VES exception runtime will uses this to compare exception object types
+					MethodCompiler.Linker.Link(LinkType.AbsoluteAddress, BuiltInPatch.I4, section, (int)writer.Position, 0, entry.Type.FullName + "$mtable", SectionKind.ROData, 0);
 
-					if (entry.Kind == ExceptionHandlerType.Exception)
-					{
-						// Store method table pointer of the exception object type
-						// The VES exception runtime will uses this to compare exception object types
-						MethodCompiler.Linker.Link(LinkType.AbsoluteAddress, BuiltInPatch.I4, section, (int)writer.Position, 0, entry.Type.FullName + "$mtable", SectionKind.ROData, 0);
-
-						writer.Position += NativePointerSize;
-					}
-					else if (entry.Kind == ExceptionHandlerType.Filter)
-					{
-						// TODO: There are no plans in the short term to support filtered exception clause as C# does not use them
-						writer.Position += NativePointerSize;
-					}
-					else
-					{
-						writer.Position += NativePointerSize;
-					}
+					writer.Position += NativePointerSize;
 				}
-
-				// Mark end of table
-				writer.Position += TypeLayout.NativePointerSize;
+				else if (entry.Kind == ExceptionHandlerType.Filter)
+				{
+					// TODO: There are no plans in the short term to support filtered exception clause as C# does not use them
+					writer.Position += NativePointerSize;
+				}
+				else
+				{
+					writer.Position += NativePointerSize;
+				}
 			}
+
+			// Mark end of table
+			writer.Position += TypeLayout.NativePointerSize;
 		}
 	}
 }

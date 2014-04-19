@@ -42,7 +42,7 @@ namespace Mosa.TinyCPUSimulator.Adaptor
 
 		#endregion Construction
 
-		public override void CreateFile(System.IO.Stream stream)
+		public override void Emit(System.IO.Stream stream)
 		{
 			//TODO!
 			//	foreach (var symbol in Symbols)
