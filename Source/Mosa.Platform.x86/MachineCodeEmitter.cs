@@ -54,7 +54,7 @@ namespace Mosa.Platform.x86
 				0
 			);
 
-			codeStream.Position += 4;
+			codeStream.WriteZeroBytes(4);
 		}
 
 		/// <summary>
@@ -173,13 +173,13 @@ namespace Mosa.Platform.x86
 				Debug.Assert(displacement.Displacement == 0);
 
 				linker.Link(LinkType.AbsoluteAddress, BuiltInPatch.I4, MethodName, SectionKind.Text, pos, 0, displacement.Name, SectionKind.ROData, 0);
-				codeStream.Position += 4;
+				codeStream.WriteZeroBytes(4);
 			}
 			else if (displacement.IsField)
 			{
 				SectionKind section = displacement.Field.Data != null ? section = SectionKind.Data : section = SectionKind.BSS;
 				linker.Link(LinkType.AbsoluteAddress, BuiltInPatch.I4, MethodName, SectionKind.Text, pos, 0, displacement.Field.FullName, section, (int)displacement.Displacement);
-				codeStream.Position += 4;
+				codeStream.WriteZeroBytes(4);
 			}
 			else if (displacement.IsSymbol)
 			{
@@ -194,7 +194,7 @@ namespace Mosa.Platform.x86
 				//	section = SectionKind.ROData;
 
 				linker.Link(LinkType.AbsoluteAddress, BuiltInPatch.I4, MethodName, SectionKind.Text, pos, 0, displacement.Name, section, 0);
-				codeStream.Position += 4;
+				codeStream.WriteZeroBytes(4);
 			}
 			else if (displacement.IsMemoryAddress && displacement.OffsetBase != null && displacement.OffsetBase.IsConstant)
 			{
@@ -289,7 +289,7 @@ namespace Mosa.Platform.x86
 				int relOffset = (int)labelPosition - ((int)p.Position + 4);
 
 				// Write relative offset to stream
-				byte[] bytes = BitConverter.GetBytes(relOffset);
+				var bytes = BitConverter.GetBytes(relOffset);
 				codeStream.Write(bytes, 0, bytes.Length);
 			}
 

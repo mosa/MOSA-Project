@@ -196,7 +196,7 @@ namespace Mosa.Compiler.Linker
 			else
 			{
 				// Change the absolute into a relative offset
-				targetAddress = targetAddress - linkRequest.PatchSymbol.ResolvedVirtualAddress - (ulong)linkRequest.PatchOffset;
+				targetAddress = targetAddress - (linkRequest.PatchSymbol.ResolvedVirtualAddress + (ulong)linkRequest.PatchOffset);
 			}
 
 			ulong value = Patch.GetResult(linkRequest.PatchType.Patches, (ulong)targetAddress);

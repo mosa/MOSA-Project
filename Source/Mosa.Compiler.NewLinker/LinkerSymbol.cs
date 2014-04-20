@@ -60,10 +60,10 @@ namespace Mosa.Compiler.Linker
 
 			switch (patchSize)
 			{
-				case 1: current = (ulong)Stream.ReadByte(); break;
-				case 2: current = (ulong)Stream.ReadUInt16(endianness); break;
-				case 4: current = (ulong)Stream.ReadUInt32(endianness); break;
-				case 8: current = (ulong)Stream.ReadUInt64(endianness); break;
+				case 8: current = (ulong)Stream.ReadByte(); break;
+				case 16: current = (ulong)Stream.ReadUInt16(endianness); break;
+				case 32: current = (ulong)Stream.ReadUInt32(endianness); break;
+				case 64: current = (ulong)Stream.ReadUInt64(endianness); break;
 			}
 
 			Stream.Position = offset;
@@ -72,10 +72,10 @@ namespace Mosa.Compiler.Linker
 			// Apply the patch
 			switch (patchSize)
 			{
-				case 1: Stream.WriteByte((byte)current); break;
-				case 2: Stream.Write((ushort)current, endianness); break;
-				case 4: Stream.Write((uint)current, endianness); break;
-				case 8: Stream.Write((ulong)current, endianness); break;
+				case 8: Stream.WriteByte((byte)current); break;
+				case 16: Stream.Write((ushort)current, endianness); break;
+				case 32: Stream.Write((uint)current, endianness); break;
+				case 64: Stream.Write((ulong)current, endianness); break;
 			}
 		}
 

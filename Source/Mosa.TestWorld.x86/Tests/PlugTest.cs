@@ -38,7 +38,10 @@ namespace Mosa.TestWorld.x86.Tests
 		}
 
 		[PlugMethod("Mosa.TestWorld.x86.Tests.PlugTestCase.Double")]
-		public static int Double(int a) { return a + a; }
+		public static int Double(int a)
+		{
+			return a + a;
+		}
 
 		public static int AddZ2Z(ref PlugTestCase plugTestCase, int z)
 		{
