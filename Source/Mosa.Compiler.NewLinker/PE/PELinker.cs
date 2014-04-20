@@ -61,25 +61,20 @@ namespace Mosa.Compiler.Linker.PE
 		{
 			FinalizeLayout();
 
-			using (var writer = new EndianAwareBinaryWriter(stream, Encoding.Unicode, Endianness))
+			var writer = new EndianAwareBinaryWriter(stream, Encoding.Unicode, Endianness);
+
+			// Write the PE headers
+			WriteDosHeader(writer);
+			WritePEHeader(writer);
+
+			stream.Position = FILE_SECTION_ALIGNMENT;
+
+			foreach (var section in Sections)
 			{
-				// Write the PE headers
-				WriteDosHeader(writer);
-				WritePEHeader(writer);
-
-				foreach (var section in Sections)
-				{
-					section.WriteTo(stream);
-				}
-
-				// Flush all data to disk
-				writer.Flush();
-
-				// Write the checksum to the file
-				ntHeaders.OptionalHeader.CheckSum = CalculateChecksum(stream);
-				stream.Position = dosHeader.e_lfanew;
-				ntHeaders.Write(writer);
+				section.WriteTo(stream);
 			}
+
+			stream.WriteZeroBytes((int)(Alignment.Align(stream.Position, FILE_SECTION_ALIGNMENT) - stream.Position));
 		}
 
 		#region Internals
@@ -140,10 +135,11 @@ namespace Mosa.Compiler.Linker.PE
 			ntHeaders.OptionalHeader.Magic = ImageOptionalHeader.IMAGE_OPTIONAL_HEADER_MAGIC;
 			ntHeaders.OptionalHeader.MajorLinkerVersion = 6;
 			ntHeaders.OptionalHeader.MinorLinkerVersion = 0;
-			ntHeaders.OptionalHeader.SizeOfCode = (uint)GetSection(SectionKind.Text).Size;
-			ntHeaders.OptionalHeader.SizeOfInitializedData = (uint)(GetSection(SectionKind.Data).Size + GetSection(SectionKind.ROData).Size);
-			ntHeaders.OptionalHeader.SizeOfUninitializedData = (uint)GetSection(SectionKind.BSS).Size;
-
+			ntHeaders.OptionalHeader.SizeOfCode = (uint)Alignment.Align(GetSection(SectionKind.Text).Size, SectionAlignment);
+			ntHeaders.OptionalHeader.SizeOfInitializedData = (uint)(
+				Alignment.Align(GetSection(SectionKind.Data).Size, SectionAlignment) +
+				Alignment.Align(GetSection(SectionKind.ROData).Size, SectionAlignment));
+			ntHeaders.OptionalHeader.SizeOfUninitializedData = (uint)Alignment.Align(GetSection(SectionKind.BSS).Size, SectionAlignment);
 			ntHeaders.OptionalHeader.AddressOfEntryPoint = (uint)(EntryPoint.ResolvedVirtualAddress - BaseAddress);
 			ntHeaders.OptionalHeader.BaseOfCode = (uint)(GetSection(SectionKind.Text).ResolvedVirtualAddress - BaseAddress);
 
@@ -182,9 +178,6 @@ namespace Mosa.Compiler.Linker.PE
 
 			ntHeaders.Write(writer);
 
-			// Write the section headers
-			ulong address = FILE_SECTION_ALIGNMENT;
-
 			foreach (var section in Sections)
 			{
 				if (section.Size == 0)
@@ -192,15 +185,10 @@ namespace Mosa.Compiler.Linker.PE
 
 				ImageSectionHeader image = new ImageSectionHeader();
 				image.Name = section.Name;
-				image.VirtualSize = (uint)section.Size;
+				image.VirtualSize = 0;
 				image.VirtualAddress = (uint)(section.ResolvedVirtualAddress - BaseAddress);
-
-				if (section.SectionKind != SectionKind.BSS)
-				{
-					image.SizeOfRawData = (uint)section.Size;
-				}
-
-				image.PointerToRawData = (uint)address;
+				image.SizeOfRawData = (section.SectionKind == SectionKind.BSS) ? 0 : (uint)section.Size;
+				image.PointerToRawData = (uint)(FILE_SECTION_ALIGNMENT + section.ResolvedSectionOffset);
 				image.PointerToRelocations = 0;
 				image.PointerToLinenumbers = 0;
 				image.NumberOfRelocations = 0;
@@ -215,13 +203,8 @@ namespace Mosa.Compiler.Linker.PE
 				}
 
 				image.Write(writer);
-
-				address += (ulong)section.Size;
-
-				Debug.Assert(address == Alignment.Align(address, SectionAlignment));
 			}
 
-			WritePaddingToPosition(writer, SectionAlignment);
 		}
 
 		/// <summary>
@@ -245,73 +228,19 @@ namespace Mosa.Compiler.Linker.PE
 
 		private ulong CalculateSizeOfImage()
 		{
-			// Reset the size of the image
-			ulong virtualSizeOfImage = SectionAlignment;
-			ulong sectionEnd;
+			ulong size = FILE_SECTION_ALIGNMENT;
 
-			// Move all sections to their right positions
 			foreach (var sections in Sections)
 			{
-				// Only use a section with something inside
-				if (sections.Size > 0)
-				{
-					sectionEnd = sections.ResolvedVirtualAddress + sections.Size;
-
-					if (sectionEnd > virtualSizeOfImage)
-					{
-						virtualSizeOfImage = sectionEnd;
-					}
-				}
+				size = size + Alignment.Align(sections.Size, SectionAlignment);
 			}
 
-			return virtualSizeOfImage - BaseAddress;
+			return size;
 		}
 
 		private LinkerSection GetSection(SectionKind sectionKind)
 		{
 			return Sections[(int)sectionKind];
-		}
-
-		/// <summary>
-		/// Adds padding to the writer to ensure the next write starts at a specific virtualAddress.
-		/// </summary>
-		/// <param name="writer">The writer.</param>
-		/// <param name="address">The address.</param>
-		private void WritePaddingToPosition(BinaryWriter writer, long address)
-		{
-			long position = writer.BaseStream.Position;
-			Debug.Assert(position <= address, @"Passed the address.");
-			if (position < address)
-			{
-				for (int i = (int)(address - position); i > 0; i--)
-				{
-					writer.Write((byte)0);
-				}
-			}
-		}
-
-		private uint CalculateChecksum(Stream stream)
-		{
-			uint csum = 0;
-			stream.Seek(0, SeekOrigin.Begin);
-
-			var reader = new EndianAwareBinaryReader(stream, Endianness.Little);
-
-			uint l = (uint)stream.Length;
-
-			for (long p = 0; p < l; p += 2)
-			{
-				csum += reader.ReadUInt16();
-				if (csum > 0x0000FFFF)
-				{
-					csum = (csum & 0xFFFF) + (csum >> 16);
-				}
-			}
-
-			csum = (csum & 0xFFFF) + (csum >> 16);
-			csum += l;
-
-			return csum;
 		}
 
 		#endregion Internals

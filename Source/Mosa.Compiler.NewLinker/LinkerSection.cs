@@ -69,7 +69,7 @@ namespace Mosa.Compiler.Linker
 			ResolvedSectionOffset = sectionOffset;
 			ResolvedVirtualAddress = virtualAddress;
 
-			foreach (var symbol in symbolLookup.Values)
+			foreach (var symbol in Symbols)
 			{
 				if (symbol.IsResolved)
 					continue;
@@ -82,7 +82,7 @@ namespace Mosa.Compiler.Linker
 				Size = Size + symbol.Size;
 			}
 
-			Size = Alignment.Align(Size, SectionAlignment);
+			//Size = Alignment.Align(Size, SectionAlignment);
 
 			IsResolved = true;
 		}

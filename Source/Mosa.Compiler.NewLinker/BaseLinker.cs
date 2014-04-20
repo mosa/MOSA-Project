@@ -161,10 +161,10 @@ namespace Mosa.Compiler.Linker
 			{
 				section.ResolveLayout(sectionOffset, virtualAddress);
 
-				sectionOffset = section.ResolvedSectionOffset + section.Size;
-				virtualAddress = section.ResolvedVirtualAddress + section.Size;
+				ulong size = Alignment.Align(section.Size, SectionAlignment);
 
-				Debug.Assert(Alignment.Align(sectionOffset, SectionAlignment) == sectionOffset);
+				sectionOffset = section.ResolvedSectionOffset + size;
+				virtualAddress = section.ResolvedVirtualAddress + size;
 			}
 		}
 

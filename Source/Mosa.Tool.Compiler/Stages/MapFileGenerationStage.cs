@@ -102,20 +102,14 @@ namespace Mosa.Tool.Compiler.Stages
 		/// <param name="linker">The linker.</param>
 		private void EmitSymbols(BaseLinker linker)
 		{
-			List<LinkerSymbol> sorted = new List<LinkerSymbol>();
-
-			foreach (var symbol in linker.Symbols)
-			{
-				sorted.Add(symbol);
-			}
-
-			var comparer = new LinkerSymbolComparerByVirtualAddress();
-			sorted.Sort(comparer);
-
 			writer.WriteLine("Offset           Virtual          Length           Section Symbols");
-			foreach (var symbol in sorted)
+
+			foreach (var section in linker.Sections)
 			{
-				writer.WriteLine("{0:x16} {1:x16} {2:x16} {3} {4}", symbol.ResolvedSectionOffset, symbol.ResolvedVirtualAddress, symbol.Size, symbol.SectionKind.ToString().PadRight(7), symbol.Name);
+				foreach (var symbol in section.Symbols)
+				{
+					writer.WriteLine("{0:x16} {1:x16} {2:x16} {3} {4}", symbol.ResolvedSectionOffset, symbol.ResolvedVirtualAddress, symbol.Size, symbol.SectionKind.ToString().PadRight(7), symbol.Name);
+				}
 			}
 
 			var entryPoint = linker.EntryPoint;

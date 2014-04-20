@@ -81,6 +81,11 @@ namespace Mosa.Platform.x86.Stages
 		/// </summary>
 		private MosaMethod multibootMethod;
 
+		/// <summary>
+		/// The multiboot header
+		/// </summary>
+		private LinkerSymbol multibootHeader;
+
 		#endregion Data members
 
 		#region Construction
@@ -98,6 +103,8 @@ namespace Mosa.Platform.x86.Stages
 		{
 			if (multibootMethod == null)
 			{
+				multibootHeader = Linker.CreateSymbol(MultibootHeaderSymbolName, SectionKind.Text, 4, 64);
+
 				multibootMethod = Compiler.CreateLinkerMethod("MultibootInit");
 
 				Linker.EntryPoint = Linker.GetSymbol(multibootMethod.FullName, SectionKind.Text);
@@ -133,7 +140,7 @@ namespace Mosa.Platform.x86.Stages
 
 		#region Internals
 
-		private const string MultibootHeaderSymbolName = @"<$>mosa-multiboot-header";
+		private const string MultibootHeaderSymbolName = @"<$>mosa-multibootHeader-header";
 
 		/// <summary>
 		/// Writes the multiboot header.
@@ -143,8 +150,8 @@ namespace Mosa.Platform.x86.Stages
 		{
 			// HACK: According to the multiboot specification this header must be within the first 8K of the
 			// kernel binary. Since the text section is always first, this should take care of the problem.
-			var multiboot = Linker.CreateSymbol(MultibootHeaderSymbolName, SectionKind.Text, 4, 0);
-			var stream = multiboot.Stream;
+			multibootHeader = Linker.GetSymbol(MultibootHeaderSymbolName, SectionKind.Text);
+			var stream = multibootHeader.Stream;
 
 			var writer = new BinaryWriter(stream, Encoding.ASCII);
 
@@ -169,7 +176,7 @@ namespace Mosa.Platform.x86.Stages
 			// checksum
 			writer.Write(unchecked(0U - HEADER_MB_MAGIC - flags));
 			// header_addr - load address of the multiboot header
-			Linker.Link(LinkType.AbsoluteAddress, BuiltInPatch.I4, multiboot, (int)stream.Position, 0, multiboot, 0);
+			Linker.Link(LinkType.AbsoluteAddress, BuiltInPatch.I4, multibootHeader, (int)stream.Position, 0, multibootHeader, 0);
 			writer.Write(0);
 			// load_addr - address of the binary in memory
 			writer.Write(load_addr);
@@ -178,7 +185,7 @@ namespace Mosa.Platform.x86.Stages
 			// bss_end_addr - address of the last byte to be zeroed out
 			writer.Write(0);
 			// entry_addr - address of the entry point to invoke
-			Linker.Link(LinkType.AbsoluteAddress, BuiltInPatch.I4, multiboot, (int)stream.Position, 0, Linker.EntryPoint, 0);
+			Linker.Link(LinkType.AbsoluteAddress, BuiltInPatch.I4, multibootHeader, (int)stream.Position, 0, Linker.EntryPoint, 0);
 			writer.Write(0);
 		}
 

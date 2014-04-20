@@ -29,7 +29,7 @@ namespace Mosa.Compiler.Linker
 
 		public ulong Size { get { return Stream != null ? (ulong)Stream.Length : 0; } }
 
-		public bool IsResolved { get; private set; }
+		public bool IsResolved { get { return ResolvedVirtualAddress != 0; } }
 
 		public ulong ResolvedSectionOffset { get; internal set; }
 
@@ -38,7 +38,6 @@ namespace Mosa.Compiler.Linker
 		internal LinkerSymbol(string name, SectionKind kind, uint alignment)
 		{
 			Name = name;
-			IsResolved = false;
 			Alignment = alignment;
 			SectionKind = kind;
 		}
