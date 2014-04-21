@@ -20,6 +20,9 @@ namespace Mosa.Compiler.Linker
 	{
 		public List<LinkerSymbol> Symbols { get; private set; }
 
+		// TODO! for debugging
+		//public List<LinkerSymbol> Ordered { get; private set; }
+
 		private Dictionary<string, LinkerSymbol> symbolLookup;
 
 		public string Name { get; private set; }
@@ -45,6 +48,7 @@ namespace Mosa.Compiler.Linker
 			IsResolved = false;
 			symbolLookup = new Dictionary<string, LinkerSymbol>();
 			Symbols = new List<LinkerSymbol>();
+			//Ordered = new List<LinkerSymbol>();
 			SectionAlignment = alignment;
 			Size = 0;
 		}
@@ -70,6 +74,7 @@ namespace Mosa.Compiler.Linker
 			ResolvedVirtualAddress = virtualAddress;
 
 			foreach (var symbol in Symbols)
+			//foreach (var symbol in Ordered)
 			{
 				if (symbol.IsResolved)
 					continue;
@@ -92,6 +97,7 @@ namespace Mosa.Compiler.Linker
 			long start = stream.Position;
 
 			foreach (var symbol in Symbols)
+			//foreach (var symbol in Ordered)
 			{
 				long at = (long)symbol.ResolvedSectionOffset + start;
 				stream.Seek(at, SeekOrigin.Begin);

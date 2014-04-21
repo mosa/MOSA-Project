@@ -1,1 +1,1 @@
-..\Tools\ndisasm\ndisasm.exe -b 32 -o0x400040 -e 0x1040 build\main.exe > build\asm.txt
+..\Tools\ndisasm\ndisasm.exe -b 32 -o0x400030 -e 0x030 build\main.exe > build\asm.txt

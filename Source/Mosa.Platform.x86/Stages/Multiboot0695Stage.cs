@@ -103,7 +103,7 @@ namespace Mosa.Platform.x86.Stages
 		{
 			if (multibootMethod == null)
 			{
-				multibootHeader = Linker.CreateSymbol(MultibootHeaderSymbolName, SectionKind.Text, 4, 64);
+				multibootHeader = Linker.CreateSymbol(MultibootHeaderSymbolName, SectionKind.Text, 1, 0x30);
 
 				multibootMethod = Compiler.CreateLinkerMethod("MultibootInit");
 

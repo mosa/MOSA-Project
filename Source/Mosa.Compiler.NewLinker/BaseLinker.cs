@@ -95,9 +95,9 @@ namespace Mosa.Compiler.Linker
 			Link(linkType, patchType, patchObject, patchOffset, relativeBase, referenceObject, referenceOffset);
 		}
 
-		public void Link(LinkType linkType, PatchType patchType, LinkerSymbol patchSymbol, int patchOffset, int relativeBase, string referenceSymbol, SectionKind referenceKind, int referenceOffset)
+		public void Link(LinkType linkType, PatchType patchType, LinkerSymbol patchSymbol, int patchOffset, int relativeBase, string referenceSymbol, SectionKind patchRelativeBase, int referenceOffset)
 		{
-			var referenceObject = GetSymbol(referenceSymbol, referenceKind);
+			var referenceObject = GetSymbol(referenceSymbol, patchRelativeBase);
 
 			Link(linkType, patchType, patchSymbol, patchOffset, relativeBase, referenceObject, referenceOffset);
 		}
@@ -141,6 +141,9 @@ namespace Mosa.Compiler.Linker
 			{
 				stream.SetLength(size);
 			}
+
+			// TODO! for debugging
+			//GetSection(kind).Ordered.Add(symbol);
 
 			return symbol;
 		}
@@ -198,6 +201,9 @@ namespace Mosa.Compiler.Linker
 				// Change the absolute into a relative offset
 				targetAddress = targetAddress - (linkRequest.PatchSymbol.ResolvedVirtualAddress + (ulong)linkRequest.PatchOffset);
 			}
+
+
+			targetAddress = targetAddress + (ulong)linkRequest.RelativeBase;
 
 			ulong value = Patch.GetResult(linkRequest.PatchType.Patches, (ulong)targetAddress);
 			ulong mask = Patch.GetFinalMask(linkRequest.PatchType.Patches);

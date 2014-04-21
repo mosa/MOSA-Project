@@ -67,10 +67,9 @@ namespace Mosa.Compiler.Linker.PE
 			WriteDosHeader(writer);
 			WritePEHeader(writer);
 
-			stream.Position = FILE_SECTION_ALIGNMENT;
-
 			foreach (var section in Sections)
 			{
+				stream.Position = (long)(section.ResolvedSectionOffset);
 				section.WriteTo(stream);
 			}
 

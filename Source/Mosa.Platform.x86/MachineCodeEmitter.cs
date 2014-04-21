@@ -47,8 +47,8 @@ namespace Mosa.Platform.x86
 				BuiltInPatch.I4,
 				MethodName,
 				SectionKind.Text,
-				(int)(codeStream.Position - codeStreamBasePosition),
-				(int)(codeStream.Position - codeStreamBasePosition) + 4,
+				(int)codeStream.Position,
+				-4,
 				symbolOperand.Name,
 				SectionKind.Text,
 				0
@@ -165,20 +165,18 @@ namespace Mosa.Platform.x86
 		/// <param name="displacement">The displacement operand.</param>
 		private void WriteDisplacement(Operand displacement)
 		{
-			int pos = (int)(codeStream.Position - codeStreamBasePosition);
-
 			if (displacement.IsLabel)
 			{
 				// FIXME! remove assertion
 				Debug.Assert(displacement.Displacement == 0);
 
-				linker.Link(LinkType.AbsoluteAddress, BuiltInPatch.I4, MethodName, SectionKind.Text, pos, 0, displacement.Name, SectionKind.ROData, 0);
+				linker.Link(LinkType.AbsoluteAddress, BuiltInPatch.I4, MethodName, SectionKind.Text, (int)codeStream.Position, 0, displacement.Name, SectionKind.ROData, 0);
 				codeStream.WriteZeroBytes(4);
 			}
 			else if (displacement.IsField)
 			{
 				SectionKind section = displacement.Field.Data != null ? section = SectionKind.Data : section = SectionKind.BSS;
-				linker.Link(LinkType.AbsoluteAddress, BuiltInPatch.I4, MethodName, SectionKind.Text, pos, 0, displacement.Field.FullName, section, (int)displacement.Displacement);
+				linker.Link(LinkType.AbsoluteAddress, BuiltInPatch.I4, MethodName, SectionKind.Text, (int)codeStream.Position, 0, displacement.Field.FullName, section, (int)displacement.Displacement);
 				codeStream.WriteZeroBytes(4);
 			}
 			else if (displacement.IsSymbol)
@@ -193,7 +191,7 @@ namespace Mosa.Platform.x86
 				//else if (displacement.StringData != null)
 				//	section = SectionKind.ROData;
 
-				linker.Link(LinkType.AbsoluteAddress, BuiltInPatch.I4, MethodName, SectionKind.Text, pos, 0, displacement.Name, section, 0);
+				linker.Link(LinkType.AbsoluteAddress, BuiltInPatch.I4, MethodName, SectionKind.Text, (int)codeStream.Position, 0, displacement.Name, section, 0);
 				codeStream.WriteZeroBytes(4);
 			}
 			else if (displacement.IsMemoryAddress && displacement.OffsetBase != null && displacement.OffsetBase.IsConstant)
@@ -304,9 +302,9 @@ namespace Mosa.Platform.x86
 		{
 			codeStream.WriteByte(0xEA);
 
-			//codeStream.Write((int)(section.VirtualAddress + section.Length + 6), Endianness.Little);
 			linker.Link(LinkType.AbsoluteAddress, BuiltInPatch.I4, MethodName, SectionKind.Text, (int)codeStream.Position, 6, MethodName, SectionKind.Text, (int)codeStream.Position);
 
+			codeStream.WriteZeroBytes(4);
 			codeStream.WriteByte(0x08);
 			codeStream.WriteByte(0x00);
 		}

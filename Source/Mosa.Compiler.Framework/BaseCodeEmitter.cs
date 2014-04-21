@@ -73,11 +73,6 @@ namespace Mosa.Compiler.Framework
 		protected Stream codeStream;
 
 		/// <summary>
-		/// The position that the code stream starts.
-		/// </summary>
-		protected long codeStreamBasePosition;
-
-		/// <summary>
 		/// Holds the linker used to resolve externals.
 		/// </summary>
 		protected BaseLinker linker;
@@ -139,7 +134,6 @@ namespace Mosa.Compiler.Framework
 			this.MethodName = methodName;
 			this.linker = linker;
 			this.codeStream = codeStream;
-			this.codeStreamBasePosition = codeStream.Position;
 			this.TypeSystem = typeSystem;
 		}
 

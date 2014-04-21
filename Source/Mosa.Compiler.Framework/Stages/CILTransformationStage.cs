@@ -766,13 +766,13 @@ namespace Mosa.Compiler.Framework.Stages
 
 			context.SetInstruction(IRInstruction.Move, context.Result, context.Operand1);
 
-			var symbol = linker.CreateSymbol(symbolName, SectionKind.ROData, NativePointerAlignment, 0);
+			var symbol = linker.CreateSymbol(symbolName, SectionKind.ROData, NativePointerAlignment, NativePointerSize * 3 + stringdata.Length * 2);
 			var stream = symbol.Stream;
 
 			// Method table and sync block
 			linker.Link(LinkType.AbsoluteAddress, BuiltInPatch.I4, symbol, 0, 0, "System.String$mtable", SectionKind.ROData, 0);
 
-			stream.WriteZeroBytes(8);
+			stream.WriteZeroBytes(NativePointerSize * 2);
 
 			// String length field
 			stream.Write(BitConverter.GetBytes(stringdata.Length), 0, NativePointerSize);
