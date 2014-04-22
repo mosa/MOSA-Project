@@ -40,11 +40,6 @@ namespace Mosa.Tool.Explorer
 				new MetadataStage(),
 			});
 
-			if (emitBinary)
-				Pipeline.Add(new ICompilerStage[] {
-					new LinkerFinalizationStage(),
-			});
-
 			architecture.ExtendCompilerPipeline(Pipeline);
 		}
 

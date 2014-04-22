@@ -506,7 +506,7 @@ namespace Mosa.Compiler.Framework.Stages
 			Operand methodTableSymbol = GetMethodTableSymbol(classType);
 
 			before.SetOperand(1, methodTableSymbol);
-			before.SetOperand(2, Operand.CreateConstantSignedInt(TypeSystem, (int)TypeLayout.GetTypeSize(classType)));
+			before.SetOperand(2, Operand.CreateConstantSignedInt(TypeSystem, TypeLayout.GetTypeSize(classType)));
 			before.OperandCount = 3;
 			before.Result = thisReference;
 

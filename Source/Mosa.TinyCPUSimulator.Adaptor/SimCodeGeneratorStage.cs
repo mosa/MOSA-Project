@@ -52,7 +52,7 @@ namespace Mosa.TinyCPUSimulator.Adaptor
 			byte opcodeSize = (byte)(end - start);
 
 			var instruction = simAdapter.Convert(context, MethodCompiler.Method, BasicBlocks, opcodeSize);
-			instruction.Source = context.ToString(); // context.Instruction.ToString(context);
+			instruction.Source = context.ToString();
 
 			simAdapter.SimCPU.AddInstruction((ulong)(sectionAddress + startPosition + start), instruction);
 
