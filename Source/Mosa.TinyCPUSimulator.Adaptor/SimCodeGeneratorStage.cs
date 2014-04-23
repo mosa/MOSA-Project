@@ -1,5 +1,5 @@
 ﻿/*
- * (c) 2013 MOSA - The Managed Operating System Alliance
+ * (c) 2014 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
  *
@@ -16,8 +16,8 @@ namespace Mosa.TinyCPUSimulator.Adaptor
 	internal class SimCodeGeneratorStage : CodeGenerationStage
 	{
 		protected ISimAdapter simAdapter;
-		protected long sectionAddress;
-		protected long startPosition;
+		protected LinkerSymbol symbol;
+		protected SimLinker simLinker;
 
 		public SimCodeGeneratorStage(ISimAdapter simAdapter)
 			: base(true)
@@ -25,21 +25,12 @@ namespace Mosa.TinyCPUSimulator.Adaptor
 			this.simAdapter = simAdapter;
 		}
 
-		/// <summary>
-		/// Begins the generate.
-		/// </summary>
-		protected override void BeginGenerate()
+		protected override void Setup()
 		{
-			base.BeginGenerate();
+			base.Setup();
 
-			//TODO!
-			//var section = MethodCompiler.Linker.GetSection(SectionKind.Text) as SimLinkerSection;
-
-			//sectionAddress = section.VirtualAddress;
-
-			//startPosition = (codeStream as LinkerStream).BaseStream.Position;
-
-			return;
+			symbol = MethodCompiler.Linker.GetSymbol(MethodCompiler.Method.FullName, SectionKind.Text);
+			simLinker = MethodCompiler.Linker as SimLinker;
 		}
 
 		protected override void EmitInstruction(Context context, BaseCodeEmitter codeEmitter)
@@ -49,23 +40,19 @@ namespace Mosa.TinyCPUSimulator.Adaptor
 			base.EmitInstruction(context, codeEmitter);
 
 			long end = codeEmitter.CurrentPosition;
-			byte opcodeSize = (byte)(end - start);
 
-			var instruction = simAdapter.Convert(context, MethodCompiler.Method, BasicBlocks, opcodeSize);
+			var instruction = simAdapter.Convert(context, MethodCompiler.Method, BasicBlocks, (byte)(end - start));
+
 			instruction.Source = context.ToString();
 
-			simAdapter.SimCPU.AddInstruction((ulong)(sectionAddress + startPosition + start), instruction);
-
-			return;
+			simLinker.AddInstruction(symbol, start, instruction);
 		}
 
 		protected override void BlockStart(BasicBlock block)
 		{
-			long current = codeEmitter.CurrentPosition;
-
 			base.BlockStart(block);
 
-			simAdapter.SimCPU.SetSymbol(block.ToString() + ":" + MethodCompiler.Method.FullName, (ulong)(sectionAddress + startPosition + current), 0);
+			simLinker.AddTargetSymbol(symbol, (int)codeEmitter.CurrentPosition, block.ToString() + ":" + MethodCompiler.Method.FullName);
 		}
 	}
 }

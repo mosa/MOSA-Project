@@ -39,12 +39,13 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 		public override void InitializeSimulation(ISimAdapter simAdapter)
 		{
 			simAdapter.SimCPU.AddMemory(0x00000000, 0x000A0000, 1); // First 640kb
-
-			simAdapter.SimCPU.Monitor.AddBreakPoint(StopEIP);
 		}
 
 		public override void ResetSimulation(ISimAdapter simAdapter)
 		{
+			simAdapter.SimCPU.Monitor.ClearBreakPoints();
+			simAdapter.SimCPU.Monitor.AddBreakPoint(StopEIP);
+
 			var x86 = simAdapter.SimCPU as CPUx86;
 
 			x86.Reset();

@@ -359,7 +359,7 @@ namespace Mosa.Tool.Explorer
 				{
 					using (PdbReader reader = new PdbReader(fileStream))
 					{
-						tbResult.AppendText("Global symbols: \n");
+						tbResult.AppendText("Global targetSymbols: \n");
 						tbResult.AppendText("======================\n");
 						foreach (CvSymbol symbol in reader.GlobalSymbols)
 						{

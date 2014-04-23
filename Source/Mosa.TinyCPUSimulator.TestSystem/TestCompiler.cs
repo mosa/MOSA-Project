@@ -71,9 +71,11 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 			compilerOptions.EnableSSA = EnableSSA;
 			compilerOptions.EnableSSAOptimizations = EnableSSAOptimizations;
 
-			simCompiler = SimCompiler.Compile(typeSystem, typeLayout, internalTrace, EnableSSA, architecture, simAdapter, linker);
+			compilerOptions.BaseAddress = 0x00400000; // default location
 
 			platform.InitializeSimulation(simAdapter);
+
+			simCompiler = SimCompiler.Compile(typeSystem, typeLayout, internalTrace, EnableSSA, architecture, simAdapter, linker);
 
 			simAdapter.SimCPU.Monitor.DebugOutput = false; // DEBUG OPTION
 		}

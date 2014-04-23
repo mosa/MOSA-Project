@@ -10,7 +10,6 @@
 using Mosa.Compiler.Common;
 using Mosa.Compiler.LinkerFormat.PE;
 using System;
-using System.Diagnostics;
 using System.IO;
 using System.Text;
 
@@ -203,7 +202,6 @@ namespace Mosa.Compiler.Linker.PE
 
 				image.Write(writer);
 			}
-
 		}
 
 		/// <summary>

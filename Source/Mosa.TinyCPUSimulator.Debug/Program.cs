@@ -17,7 +17,7 @@ namespace Mosa.TinyCPUSimulator.Debug
 	{
 		private static void Main(string[] args)
 		{
-			Test8();
+			Test5();
 		}
 
 		private static void Test8()

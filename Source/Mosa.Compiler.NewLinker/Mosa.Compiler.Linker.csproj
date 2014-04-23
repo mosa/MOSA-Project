@@ -52,7 +52,7 @@
     <Compile Include="LinkType.cs" />
     <Compile Include="PatchType.cs" />
     <Compile Include="Patch.cs" />
-    <Compile Include="Mem\MemLinker.cs" />
+    <Compile Include="Flat\FlatLinker.cs" />
     <Compile Include="PE\PELinker.cs" />
     <Compile Include="SectionKind.cs" />
   </ItemGroup>

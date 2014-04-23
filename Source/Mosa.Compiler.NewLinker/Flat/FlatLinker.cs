@@ -10,11 +10,11 @@
 using Mosa.Compiler.Common;
 using System.IO;
 
-namespace Mosa.Compiler.Linker.Mem
+namespace Mosa.Compiler.Linker.Flat
 {
-	public class MemLinker : BaseLinker
+	public class FlatLinker : BaseLinker
 	{
-		public MemLinker()
+		public FlatLinker()
 		{
 			SectionAlignment = 0;
 

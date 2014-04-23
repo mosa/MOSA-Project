@@ -142,9 +142,6 @@ namespace Mosa.Compiler.Linker
 				stream.SetLength(size);
 			}
 
-			// TODO! for debugging
-			//GetSection(kind).Ordered.Add(symbol);
-
 			return symbol;
 		}
 
@@ -157,7 +154,8 @@ namespace Mosa.Compiler.Linker
 		private void LayoutObjectsAndSections()
 		{
 			// layout objects & sections
-			ulong sectionOffset = 0;
+			ulong sectionOffset = 0; 
+			;
 			ulong virtualAddress = BaseAddress;
 
 			foreach (var section in Sections)
@@ -201,7 +199,6 @@ namespace Mosa.Compiler.Linker
 				// Change the absolute into a relative offset
 				targetAddress = targetAddress - (linkRequest.PatchSymbol.ResolvedVirtualAddress + (ulong)linkRequest.PatchOffset);
 			}
-
 
 			targetAddress = targetAddress + (ulong)linkRequest.RelativeBase;
 

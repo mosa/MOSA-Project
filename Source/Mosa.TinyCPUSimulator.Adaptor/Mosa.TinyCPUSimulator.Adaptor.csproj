@@ -67,6 +67,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="SimLinkerFinalizationStage.cs" />
+    <Compile Include="SimStream.cs" />
     <Compile Include="ISimAdapter.cs" />
     <Compile Include="ISimDisplay.cs" />
     <Compile Include="SimCodeGeneratorStage.cs" />
