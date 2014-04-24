@@ -19,7 +19,7 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 {
 	public class TestCompiler
 	{
-		protected BasePlatform platform;
+		protected BaseTestPlatform platform;
 		protected ConfigurableTraceFilter filter = new ConfigurableTraceFilter();
 		protected IInternalTrace internalTrace = new BasicInternalTrace();
 		protected ISimAdapter adapter;
@@ -36,7 +36,7 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 
 		public bool EnableSSAOptimizations { get; set; }
 
-		public TestCompiler(BasePlatform platform)
+		public TestCompiler(BaseTestPlatform platform)
 		{
 			this.platform = platform;
 

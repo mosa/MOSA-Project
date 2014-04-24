@@ -51,6 +51,11 @@ namespace Mosa.TinyCPUSimulator.Adaptor
 		{
 			base.Emit(stream);
 
+			foreach (var symbol in Symbols)
+			{
+				simAdapter.SimCPU.SetSymbol(symbol.Name, symbol.ResolvedVirtualAddress, (ulong)symbol.Size);
+			}
+
 			foreach (var target in targetSymbols)
 			{
 				simAdapter.SimCPU.SetSymbol(target.Item3, target.Item1.ResolvedVirtualAddress + (ulong)target.Item2, 0);

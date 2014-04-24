@@ -62,6 +62,10 @@
       <Project>{50568e2d-5360-4f71-87e0-f6979d2d858a}</Project>
       <Name>Mosa.TinyCPUSimulator.Adaptor</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Mosa.TinyCPUSimulator.TestSystem\Mosa.TinyCPUSimulator.TestSystem.csproj">
+      <Project>{50568e2d-5360-4f71-87e0-a6979d1d858a}</Project>
+      <Name>Mosa.TinyCPUSimulator.TestSystem</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Mosa.TinyCPUSimulator.x86\Mosa.TinyCPUSimulator.x86.csproj">
       <Project>{50568e2d-5360-4f71-87e0-e6979d1d858a}</Project>
       <Name>Mosa.TinyCPUSimulator.x86</Name>
@@ -75,6 +79,7 @@
     <Compile Include="SimTestSystemAdapter.cs" />
     <Compile Include="SimStandardPCAdapter.cs" />
     <Compile Include="SimAdapter.cs" />
+    <Compile Include="TestPlatform.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -30,9 +30,7 @@ namespace Mosa.TinyCPUSimulator.x86.Emulate
 
 			simCPU.AddMemory(PageDirectory, 1024 * 4, 1); // Page Directory (4K)
 			simCPU.AddMemory(PageTable, 8192 * 16 * 4, 1); // Page Table (4Mb)
-
 			simCPU.AddMemory(FreeMemory, 1024 * 1024 * 32, 1); // Free Memory (32Mb)
-
 			simCPU.AddMemory(IdtTable, 256 * 256, 1); // IDT Table
 			simCPU.AddMemory(GdtTable, 8 * 256, 1); // GDT Table
 			simCPU.AddMemory(PageFrameTable, 1024 * 1024 * 4, 1); // Page Table (4Mb)

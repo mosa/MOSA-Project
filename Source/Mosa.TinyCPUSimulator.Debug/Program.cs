@@ -8,8 +8,8 @@
  *
  */
 
-using System;
 using Mosa.Test.Collection.x86.xUnit;
+using System;
 
 namespace Mosa.TinyCPUSimulator.Debug
 {

@@ -154,7 +154,7 @@ namespace Mosa.Compiler.Linker
 		private void LayoutObjectsAndSections()
 		{
 			// layout objects & sections
-			ulong sectionOffset = 0; 
+			ulong sectionOffset = 0;
 			;
 			ulong virtualAddress = BaseAddress;
 

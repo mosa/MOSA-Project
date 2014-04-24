@@ -74,10 +74,6 @@
       <Project>{50568e2d-5360-4f71-87e0-f6979d2d858a}</Project>
       <Name>Mosa.TinyCPUSimulator.Adaptor</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Mosa.TinyCPUSimulator.x86.Adaptor\Mosa.TinyCPUSimulator.x86.Adaptor.csproj">
-      <Project>{50568e2d-5360-4f71-87e0-f6979d1d858a}</Project>
-      <Name>Mosa.TinyCPUSimulator.x86.Adaptor</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Mosa.TinyCPUSimulator.x86\Mosa.TinyCPUSimulator.x86.csproj">
       <Project>{50568e2d-5360-4f71-87e0-e6979d1d858a}</Project>
       <Name>Mosa.TinyCPUSimulator.x86</Name>
@@ -88,9 +84,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BasePlatform.cs" />
+    <Compile Include="BaseTestPlatform.cs" />
     <Compile Include="TestFixture.cs" />
-    <Compile Include="X86Platform.cs" />
     <Compile Include="TestCompiler.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -10,7 +10,6 @@
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.Framework.Stages;
-using Mosa.Compiler.MosaTypeSystem;
 using Mosa.Compiler.Linker;
 
 namespace Mosa.TinyCPUSimulator.Adaptor
