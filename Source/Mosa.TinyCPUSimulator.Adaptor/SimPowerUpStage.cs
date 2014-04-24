@@ -34,20 +34,20 @@ namespace Mosa.TinyCPUSimulator.Adaptor
 
 		protected override void Run()
 		{
-			TypeInitializerSchedulerStage typeInitializerSchedulerStage = Compiler.Pipeline.FindFirst<TypeInitializerSchedulerStage>();
+			var typeInitializerSchedulerStage = Compiler.Pipeline.FindFirst<TypeInitializerSchedulerStage>();
 
-			BasicBlocks basicBlocks = new BasicBlocks();
-			InstructionSet instructionSet = new InstructionSet(25);
-			Context context = instructionSet.CreateNewBlock(basicBlocks);
+			var basicBlocks = new BasicBlocks();
+			var instructionSet = new InstructionSet(25);
+
+			var context = instructionSet.CreateNewBlock(basicBlocks);
 			basicBlocks.AddHeaderBlock(context.BasicBlock);
 
-			Operand entryPoint = Operand.CreateSymbolFromMethod(TypeSystem, typeInitializerSchedulerStage.TypeInitializerMethod);
+			var entryPoint = Operand.CreateSymbolFromMethod(TypeSystem, typeInitializerSchedulerStage.TypeInitializerMethod);
 
 			context.AppendInstruction(IRInstruction.Call, null, entryPoint);
 			context.MosaMethod = typeInitializerSchedulerStage.TypeInitializerMethod;
-			//context.AppendInstruction(IRInstruction.Break);
 
-			MosaMethod method = Compiler.CreateLinkerMethod(StartUpName);
+			var method = Compiler.CreateLinkerMethod(StartUpName);
 			Compiler.CompileMethod(method, basicBlocks, instructionSet);
 
 			Linker.EntryPoint = Linker.GetSymbol(method.FullName, SectionKind.Text);

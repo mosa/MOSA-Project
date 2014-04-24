@@ -78,11 +78,11 @@ namespace Mosa.TinyCPUSimulator.Adaptor
 		/// <returns></returns>
 		public static SimCompiler Compile(TypeSystem typeSystem, MosaTypeLayout typeLayout, IInternalTrace internalTrace, bool enabledSSA, BaseArchitecture architecture, ISimAdapter simAdapter, BaseLinker linker)
 		{
-			CompilerOptions compilerOptions = new CompilerOptions();
+			var compilerOptions = new CompilerOptions();
 			compilerOptions.EnableSSA = enabledSSA;
 			compilerOptions.EnableSSAOptimizations = enabledSSA;
 
-			SimCompiler compiler = new SimCompiler(architecture, typeSystem, typeLayout, linker, compilerOptions, internalTrace, simAdapter);
+			var compiler = new SimCompiler(architecture, typeSystem, typeLayout, linker, compilerOptions, internalTrace, simAdapter);
 
 			compiler.Compile();
 

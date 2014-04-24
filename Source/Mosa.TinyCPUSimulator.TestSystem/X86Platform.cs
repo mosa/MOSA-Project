@@ -38,7 +38,7 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 
 		public override void InitializeSimulation(ISimAdapter simAdapter)
 		{
-			simAdapter.SimCPU.AddMemory(0x00000000, 0x000A0000, 1); // First 640kb
+			simAdapter.SimCPU.AddMemory(0x00400000, 0x00100000, 1); // Start 0x00400000 (1Mb) - Must match linker
 		}
 
 		public override void ResetSimulation(ISimAdapter simAdapter)
