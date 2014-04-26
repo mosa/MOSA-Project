@@ -18,7 +18,7 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 			CPU.AddDevice(new PowerUp(CPU));
 			CPU.AddDevice(new CMOS(CPU));
 			CPU.AddDevice(new Multiboot(CPU));
-			CPU.AddDevice(new MosaKernel(CPU));
+			CPU.AddDevice(new MosaTestMemory(CPU));
 			CPU.AddDevice(new MosaImage(CPU));
 		}
 	}

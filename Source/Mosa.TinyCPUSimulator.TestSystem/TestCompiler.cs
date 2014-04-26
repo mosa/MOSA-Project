@@ -1,5 +1,5 @@
 ﻿/*
- * (c) 2013 MOSA - The Managed Operating System Alliance
+ * (c) 2014 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
  *
@@ -76,20 +76,30 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 			platform.InitializeSimulation(simAdapter);
 
 			simCompiler = SimCompiler.Compile(typeSystem, typeLayout, internalTrace, EnableSSA, architecture, simAdapter, linker);
-		
+
 			//simAdapter.SimCPU.Monitor.DebugOutput = true; // DEBUG OPTION
 
-			Run<int>(string.Empty, "Default", "AssemblyInit");
+			Run<int>(string.Empty, "Default", "AssemblyInit", true);
 
 			//simAdapter.SimCPU.Monitor.DebugOutput = true; // DEBUG OPTION
 		}
 
 		public T Run<T>(string ns, string type, string method, params object[] parameters)
 		{
+			return Run<T>(ns, type, method, true, parameters);
+		}
+
+		protected T Run<T>(string ns, string type, string method, bool reset, params object[] parameters)
+		{
 			CompileTestCode();
 
-			// reset the stack
-			platform.ResetSimulation(simAdapter);
+			if (reset)
+			{
+				// reset the stack
+				platform.ResetSimulation(simAdapter);
+
+				//Run<int>("Mosa.Kernel.x86Test", "KernelMemory", "SetMemory", false, new object[] { (uint)0x00900000 });
+			}
 
 			// Find the test method to execute
 			MosaMethod runtimeMethod = FindMethod(
