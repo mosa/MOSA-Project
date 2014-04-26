@@ -76,8 +76,12 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 			platform.InitializeSimulation(simAdapter);
 
 			simCompiler = SimCompiler.Compile(typeSystem, typeLayout, internalTrace, EnableSSA, architecture, simAdapter, linker);
+		
+			//simAdapter.SimCPU.Monitor.DebugOutput = true; // DEBUG OPTION
 
-			simAdapter.SimCPU.Monitor.DebugOutput = false; // DEBUG OPTION
+			Run<int>(string.Empty, "Default", "AssemblyInit");
+
+			//simAdapter.SimCPU.Monitor.DebugOutput = true; // DEBUG OPTION
 		}
 
 		public T Run<T>(string ns, string type, string method, params object[] parameters)
@@ -110,6 +114,9 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 
 			if (simAdapter.SimCPU.Monitor.BreakAtTick == simAdapter.SimCPU.Tick)
 				throw new Exception("Aborted. Method did not complete under 100000 ticks. " + simAdapter.SimCPU.Tick.ToString());
+
+			if (runtimeMethod.Signature.ReturnType.IsVoid)
+				return default(T);
 
 			object result = platform.GetResult(simAdapter, runtimeMethod.Signature.ReturnType);
 

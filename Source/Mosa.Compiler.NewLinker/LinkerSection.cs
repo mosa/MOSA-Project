@@ -89,11 +89,9 @@ namespace Mosa.Compiler.Linker
 
 		internal void WriteTo(Stream stream)
 		{
-			long start = stream.Position;
-
 			foreach (var symbol in Symbols)
 			{
-				long at = (long)symbol.ResolvedSectionOffset + start;
+				long at = (long)(symbol.ResolvedSectionOffset + ResolvedSectionOffset);
 				stream.Seek(at, SeekOrigin.Begin);
 				symbol.Stream.Position = 0;
 				symbol.Stream.WriteTo(stream);

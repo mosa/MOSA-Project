@@ -23,7 +23,7 @@ namespace Mosa.Compiler.Framework.Stages
 	/// </remarks>
 	public sealed class TypeInitializerSchedulerStage : BaseCompilerStage
 	{
-		public readonly string TypeInitializerName = "AssemblyInit";
+		public readonly static string TypeInitializerName = "AssemblyInit";
 
 		#region Data Members
 
@@ -56,7 +56,7 @@ namespace Mosa.Compiler.Framework.Stages
 			context = instructionSet.CreateNewBlock(basicBlocks);
 			basicBlocks.AddHeaderBlock(context.BasicBlock);
 
-			context.AppendInstruction(IRInstruction.Prologue);
+			//context.AppendInstruction(IRInstruction.Prologue);
 		}
 
 		#endregion Construction
@@ -78,7 +78,9 @@ namespace Mosa.Compiler.Framework.Stages
 				Schedule(TypeSystem.EntryPoint);
 			}
 
-			context.AppendInstruction(IRInstruction.Epilogue);
+			//context.AppendInstruction(IRInstruction.Epilogue);
+
+			context.AppendInstruction(IRInstruction.InternalReturn);
 
 			TypeInitializerMethod = Compiler.CreateLinkerMethod(TypeInitializerName);
 
@@ -93,7 +95,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="method">The method.</param>
 		public void Schedule(MosaMethod method)
 		{
-			Operand symbolOperand = Operand.CreateSymbolFromMethod(TypeSystem, method);
+			var symbolOperand = Operand.CreateSymbolFromMethod(TypeSystem, method);
 			context.AppendInstruction(IRInstruction.Call, null, symbolOperand);
 			context.MosaMethod = method;
 		}

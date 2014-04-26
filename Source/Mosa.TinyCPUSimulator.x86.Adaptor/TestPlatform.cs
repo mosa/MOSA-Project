@@ -177,6 +177,8 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 				return (object)(float)x86.XMM0.Value;
 			else if (type.IsR8)
 				return (object)(double)x86.XMM0.Value;
+			else if (type.IsVoid)
+				return null;
 
 			return null;
 		}

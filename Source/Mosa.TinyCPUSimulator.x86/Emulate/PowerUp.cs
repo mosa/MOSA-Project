@@ -27,8 +27,6 @@ namespace Mosa.TinyCPUSimulator.x86.Emulate
 			simCPU.AddMemory(VectorReset, 0x0000000F, 2); // Vector Reset
 
 			simCPU.AddInstruction(VectorReset, new SimInstruction(Opcode.Call, 4, SimOperand.CreateLabel(32, VectorCall)));
-
-			//simCPU.SetSymbol(VectorCall, VectorReset, 4);
 		}
 
 		public override void Reset()

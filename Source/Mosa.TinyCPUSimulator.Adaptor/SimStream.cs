@@ -9,6 +9,7 @@
 
 using System;
 using System.IO;
+using System.Diagnostics;
 
 namespace Mosa.TinyCPUSimulator.Adaptor
 {
@@ -19,12 +20,12 @@ namespace Mosa.TinyCPUSimulator.Adaptor
 	{
 		private SimCPU simCPU;
 		private long position;
-		private ulong offset;
+		private ulong internaloffset;
 
 		public SimStream(SimCPU simCPU, ulong offset)
 		{
 			this.simCPU = simCPU;
-			this.offset = offset;
+			this.internaloffset = offset;
 		}
 
 		public override bool CanRead { get { return false; } }
@@ -53,7 +54,7 @@ namespace Mosa.TinyCPUSimulator.Adaptor
 
 		public override int ReadByte()
 		{
-			return (int)simCPU.DirectRead8(offset + ((ulong)position++));
+			return (int)simCPU.DirectRead8(internaloffset + ((ulong)position++));
 		}
 
 		public override long Seek(long offset, SeekOrigin origin)
@@ -75,13 +76,15 @@ namespace Mosa.TinyCPUSimulator.Adaptor
 
 		public override void Write(byte[] buffer, int offset, int count)
 		{
-			foreach (var b in buffer)
-				WriteByte(b);
+			for (int i = offset; i < offset + count; i++)
+			{
+				WriteByte(buffer[i]);
+			}
 		}
 
 		public override void WriteByte(byte value)
 		{
-			simCPU.Write8(offset + ((ulong)position++), value);
+			simCPU.Write8(internaloffset + ((ulong)position++), value);
 		}
 	}
 }

@@ -16,7 +16,7 @@ namespace Mosa.TinyCPUSimulator.Adaptor
 {
 	public sealed class SimPowerUpStage : BaseCompilerStage
 	{
-		public readonly string StartUpName = "StartUp";
+		public readonly static string StartUpName = "StartUp";
 
 		#region Construction
 
@@ -33,7 +33,7 @@ namespace Mosa.TinyCPUSimulator.Adaptor
 
 		protected override void Run()
 		{
-			var typeInitializerSchedulerStage = Compiler.Pipeline.FindFirst<TypeInitializerSchedulerStage>();
+			var typeInitializer = Compiler.Pipeline.FindFirst<TypeInitializerSchedulerStage>().TypeInitializerMethod;
 
 			var basicBlocks = new BasicBlocks();
 			var instructionSet = new InstructionSet(25);
@@ -41,10 +41,10 @@ namespace Mosa.TinyCPUSimulator.Adaptor
 			var context = instructionSet.CreateNewBlock(basicBlocks);
 			basicBlocks.AddHeaderBlock(context.BasicBlock);
 
-			var entryPoint = Operand.CreateSymbolFromMethod(TypeSystem, typeInitializerSchedulerStage.TypeInitializerMethod);
+			var entryPoint = Operand.CreateSymbolFromMethod(TypeSystem, typeInitializer);
 
 			context.AppendInstruction(IRInstruction.Call, null, entryPoint);
-			context.MosaMethod = typeInitializerSchedulerStage.TypeInitializerMethod;
+			context.MosaMethod = typeInitializer;
 
 			var method = Compiler.CreateLinkerMethod(StartUpName);
 			Compiler.CompileMethod(method, basicBlocks, instructionSet);

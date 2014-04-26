@@ -188,8 +188,7 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		public MosaMethod CreateLinkerMethod(string methodName)
 		{
-			var method = TypeSystem.CreateLinkerMethod(methodName, TypeSystem.BuiltIn.Void, null);
-			return method;
+			return TypeSystem.CreateLinkerMethod(methodName, TypeSystem.BuiltIn.Void, null);
 		}
 
 		/// <summary>

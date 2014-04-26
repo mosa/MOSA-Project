@@ -305,14 +305,13 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		protected virtual void InitializeType()
 		{
-			typeInitializer = Compiler.Pipeline.FindFirst<TypeInitializerSchedulerStage>();
-
-			if (typeInitializer == null)
-				return;
-
-			// If we're compiling a type initializer, run it immediately.
 			if (Method.IsSpecialName && Method.IsRTSpecialName && Method.IsStatic && Method.Name == ".cctor")
 			{
+				typeInitializer = Compiler.Pipeline.FindFirst<TypeInitializerSchedulerStage>();
+
+				if (typeInitializer == null)
+					return;
+
 				typeInitializer.Schedule(Method);
 			}
 		}
