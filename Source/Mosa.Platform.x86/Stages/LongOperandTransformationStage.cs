@@ -550,19 +550,11 @@ namespace Mosa.Platform.x86.Stages
 			SplitLongOperand(context.Operand1, out op1L, out op1H);
 			SplitLongOperand(context.Operand2, out op2L, out op2H);
 
-			//Operand eax = AllocateVirtualRegister(typeSystem.BuiltIn.U4);
-			//Operand edx = AllocateVirtualRegister(typeSystem.BuiltIn.U4);
-			//Operand ebx = AllocateVirtualRegister(typeSystem.BuiltIn.U4);
-			//Operand ecx = AllocateVirtualRegister(typeSystem.BuiltIn.U4);
-			//Operand edi = AllocateVirtualRegister(typeSystem.BuiltIn.U4);
-			//Operand esi = AllocateVirtualRegister(typeSystem.BuiltIn.U4);
-
-			Operand eax = Operand.CreateCPURegister(TypeSystem.BuiltIn.U4, GeneralPurposeRegister.EAX);
-			Operand ebx = Operand.CreateCPURegister(TypeSystem.BuiltIn.U4, GeneralPurposeRegister.EBX);
-			Operand edx = Operand.CreateCPURegister(TypeSystem.BuiltIn.U4, GeneralPurposeRegister.EDX);
-			Operand ecx = Operand.CreateCPURegister(TypeSystem.BuiltIn.U4, GeneralPurposeRegister.ECX);
-			//Operand edi = Operand.CreateCPURegister(TypeSystem.BuiltIn.U4, GeneralPurposeRegister.EDI);
-			Operand esi = Operand.CreateCPURegister(TypeSystem.BuiltIn.U4, GeneralPurposeRegister.ESI);
+			Operand eax = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
+			Operand edx = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
+			Operand ebx = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
+			Operand ecx = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
+			Operand esi = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
 
 			Context[] newBlocks = CreateNewBlocksWithContexts(12);
 			Context nextBlock = Split(context);

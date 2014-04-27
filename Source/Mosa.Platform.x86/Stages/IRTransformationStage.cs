@@ -831,7 +831,7 @@ namespace Mosa.Platform.x86.Stages
 
 			context.SetInstruction(X86.Mov, v1, Operand.CreateConstantUnsignedInt(TypeSystem, (uint)0x0));
 			context.AppendInstruction2(X86.Div, v1, v2, v1, operand1, operand2);
-			context.AppendInstruction(X86.Mov, result, v1);
+			context.AppendInstruction(X86.Mov, result, v2);
 		}
 
 		/// <summary>
@@ -872,7 +872,7 @@ namespace Mosa.Platform.x86.Stages
 
 			context.SetInstruction(X86.Mov, v1, Operand.CreateConstantUnsignedInt(TypeSystem, (uint)0x0));
 			context.AppendInstruction2(X86.Div, v1, v2, v1, operand1, operand2);
-			context.AppendInstruction(X86.Mov, result, v2);
+			context.AppendInstruction(X86.Mov, result, v1);
 		}
 
 		/// <summary>

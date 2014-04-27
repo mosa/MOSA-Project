@@ -161,8 +161,8 @@ namespace Mosa.Platform.x86.Stages
 				context.AppendInstruction2(X86.Div, EDX, EAX, EDX, EAX, v3);
 			}
 
-			context.AppendInstruction(X86.Mov, result, EAX);
-			context.AppendInstruction(X86.Mov, result2, EDX);
+			context.AppendInstruction(X86.Mov, result2, EAX);
+			context.AppendInstruction(X86.Mov, result, EDX);
 		}
 
 		/// <summary>
