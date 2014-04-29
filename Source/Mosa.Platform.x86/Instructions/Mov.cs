@@ -66,7 +66,7 @@ namespace Mosa.Platform.x86.Instructions
 
 			if (destination.IsMemoryAddress && source.IsConstant)
 			{
-				if (source.IsByte) return RM_C_U8;
+				if (destination.IsByte || destination.IsBoolean) return RM_C_U8;
 				return RM_C;
 			}
 

@@ -55,8 +55,6 @@ namespace Mosa.Compiler.Framework.Stages
 			instructionSet = new InstructionSet(25);
 			context = instructionSet.CreateNewBlock(basicBlocks);
 			basicBlocks.AddHeaderBlock(context.BasicBlock);
-
-			//context.AppendInstruction(IRInstruction.Prologue);
 		}
 
 		#endregion Construction
@@ -77,8 +75,6 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				Schedule(TypeSystem.EntryPoint);
 			}
-
-			//context.AppendInstruction(IRInstruction.Epilogue);
 
 			context.AppendInstruction(IRInstruction.InternalReturn);
 

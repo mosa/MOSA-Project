@@ -150,7 +150,7 @@ namespace Mosa.Platform.x86.Stages
 		{
 			// HACK: According to the multiboot specification this header must be within the first 8K of the
 			// kernel binary. Since the text section is always first, this should take care of the problem.
-			multibootHeader = Linker.GetSymbol(MultibootHeaderSymbolName, SectionKind.Text);
+			//multibootHeader = Linker.GetSymbol(MultibootHeaderSymbolName, SectionKind.Text);
 			var stream = multibootHeader.Stream;
 
 			var writer = new BinaryWriter(stream, Encoding.ASCII);

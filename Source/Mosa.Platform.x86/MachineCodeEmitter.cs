@@ -225,7 +225,7 @@ namespace Mosa.Platform.x86
 			}
 
 			if (op.IsI1)
-				codeStream.WriteByte(Convert.ToByte(op.ConstantSignedInteger));
+				codeStream.WriteByte((byte)op.ConstantSignedInteger);
 			else if (op.IsU1 || op.IsBoolean)
 				codeStream.WriteByte(Convert.ToByte(op.ConstantUnsignedInteger));
 			else if (op.IsU2 || op.IsChar)

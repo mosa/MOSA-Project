@@ -38,6 +38,11 @@ namespace Mosa.Platform.x86.Stages
 			{
 				context.SetInstruction(X86.Movsd, context.Result, context.Operand1);
 			}
+			else if (context.Operand1.IsConstant && (context.Result.Type.IsUI1 || context.Result.Type.IsUI2 || context.Result.IsBoolean || context.Result.IsChar))
+			{
+				// Correct source size of constant based on destination size
+				context.Operand1 = Operand.CreateConstant(context.Result.Type, context.Operand1.ConstantUnsignedInteger);
+			}
 		}
 
 		/// <summary>
