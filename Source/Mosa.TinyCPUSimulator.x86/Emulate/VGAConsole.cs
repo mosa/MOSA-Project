@@ -185,7 +185,7 @@ namespace Mosa.TinyCPUSimulator.x86.Emulate
 		{
 			for (ulong a = address; a < address + (ulong)(size / 8); a++)
 			{
-				if (a >= baseAddress && a < baseAddress + StandardAddressBase)
+				if (a >= baseAddress && a < baseAddress + StandardMemorySize)
 					Write8((uint)a, simCPU.DirectRead8(a));
 			}
 		}
@@ -222,22 +222,21 @@ namespace Mosa.TinyCPUSimulator.x86.Emulate
 		/// <summary>
 		/// Writes at the specified address.
 		/// </summary>
-		/// <param name="address">The address.</param>
+		/// <param name="a">The address.</param>
 		/// <param name="value">The value.</param>
 		protected void Write8(uint address, byte value)
 		{
-			if (memory[address - baseAddress] == value)
-				return;
-
 			memory[address - baseAddress] = value;
 
-			if (address % 2 == 1)
-				address--;
+			uint a = address;
 
-			int text = memory[address - baseAddress];
-			int color = memory[address - baseAddress + 1];
+			if (a % 2 == 1)
+				a--;
 
-			uint index = address - baseAddress - 0x8000;
+			int text = memory[a - baseAddress];
+			int color = memory[a - baseAddress + 1];
+
+			uint index = a - baseAddress - 0x8000;
 
 			ushort y = (ushort)(index / ((uint)width * 2));
 			ushort x2 = (ushort)(index - (y * (uint)width * 2));
