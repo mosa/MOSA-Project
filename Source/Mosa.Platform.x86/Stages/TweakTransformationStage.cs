@@ -15,7 +15,7 @@ using System.Diagnostics;
 namespace Mosa.Platform.x86.Stages
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public sealed class TweakTransformationStage : BaseTransformationStage, IX86Visitor
 	{

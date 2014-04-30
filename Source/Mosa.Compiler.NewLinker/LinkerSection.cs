@@ -74,7 +74,7 @@ namespace Mosa.Compiler.Linker
 				if (symbol.IsResolved)
 					continue;
 
-				Size = Alignment.Align(Size, symbol.Alignment);
+				Size = Alignment.AlignUp(Size, symbol.Alignment);
 
 				symbol.ResolvedSectionOffset = Size;
 				symbol.ResolvedVirtualAddress = ResolvedVirtualAddress + Size;

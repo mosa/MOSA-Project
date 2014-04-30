@@ -192,12 +192,15 @@ namespace Mosa.Compiler.Framework.Platform
 				architecture.GetTypeRequirements(typeLayout, operand.Type, out size, out alignment);
 
 				if (param != null && operand.IsR8 && param.IsR4)
+				{
 					architecture.GetTypeRequirements(typeLayout, param, out size, out alignment);
+				}
 
 				if (size < alignment)
 					size = alignment;
 
 				space -= size;
+
 				Push(typeLayout, context, operand, space, size, scratch);
 			}
 		}
@@ -281,13 +284,10 @@ namespace Mosa.Compiler.Framework.Platform
 
 		public override int OffsetOfFirstLocal { get { return 0; } }
 
-		public override int OffsetOfFirstParameter
-		{
-			//The first parameter is offset by 8 bytes from the start of the stack frame.
-			//- holds the return stack frame, which was pushed by the prologue instruction.
-			//- holds the return address, which was pushed by the call instruction.
-			get { return 8; }
-		}
+		//The first parameter is offset by 8 bytes from the start of the stack frame.
+		//- holds the return stack frame, which was pushed by the prologue instruction.
+		//- holds the return address, which was pushed by the call instruction.
+		public override int OffsetOfFirstParameter { get { return 8; } }
 
 		#endregion Members
 	}

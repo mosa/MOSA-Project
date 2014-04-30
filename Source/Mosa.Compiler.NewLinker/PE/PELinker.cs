@@ -72,7 +72,7 @@ namespace Mosa.Compiler.Linker.PE
 				section.WriteTo(stream);
 			}
 
-			stream.WriteZeroBytes((int)(Alignment.Align(stream.Position, FILE_SECTION_ALIGNMENT) - stream.Position));
+			stream.WriteZeroBytes((int)(Alignment.AlignUp(stream.Position, FILE_SECTION_ALIGNMENT) - stream.Position));
 		}
 
 		#region Internals
@@ -133,11 +133,11 @@ namespace Mosa.Compiler.Linker.PE
 			ntHeaders.OptionalHeader.Magic = ImageOptionalHeader.IMAGE_OPTIONAL_HEADER_MAGIC;
 			ntHeaders.OptionalHeader.MajorLinkerVersion = 6;
 			ntHeaders.OptionalHeader.MinorLinkerVersion = 0;
-			ntHeaders.OptionalHeader.SizeOfCode = (uint)Alignment.Align(GetSection(SectionKind.Text).Size, SectionAlignment);
+			ntHeaders.OptionalHeader.SizeOfCode = (uint)Alignment.AlignUp(GetSection(SectionKind.Text).Size, SectionAlignment);
 			ntHeaders.OptionalHeader.SizeOfInitializedData = (uint)(
-				Alignment.Align(GetSection(SectionKind.Data).Size, SectionAlignment) +
-				Alignment.Align(GetSection(SectionKind.ROData).Size, SectionAlignment));
-			ntHeaders.OptionalHeader.SizeOfUninitializedData = (uint)Alignment.Align(GetSection(SectionKind.BSS).Size, SectionAlignment);
+				Alignment.AlignUp(GetSection(SectionKind.Data).Size, SectionAlignment) +
+				Alignment.AlignUp(GetSection(SectionKind.ROData).Size, SectionAlignment));
+			ntHeaders.OptionalHeader.SizeOfUninitializedData = (uint)Alignment.AlignUp(GetSection(SectionKind.BSS).Size, SectionAlignment);
 			ntHeaders.OptionalHeader.AddressOfEntryPoint = (uint)(EntryPoint.ResolvedVirtualAddress - BaseAddress);
 			ntHeaders.OptionalHeader.BaseOfCode = (uint)(GetSection(SectionKind.Text).ResolvedVirtualAddress - BaseAddress);
 
@@ -229,7 +229,7 @@ namespace Mosa.Compiler.Linker.PE
 
 			foreach (var sections in Sections)
 			{
-				size = size + Alignment.Align(sections.Size, SectionAlignment);
+				size = size + Alignment.AlignUp(sections.Size, SectionAlignment);
 			}
 
 			return size;

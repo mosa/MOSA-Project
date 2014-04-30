@@ -725,7 +725,7 @@ namespace Mosa.Compiler.Framework
 			operand.Displacement = 0;
 			return operand;
 		}
-		
+
 		/// <summary>
 		/// Creates a new runtime member <see cref="Operand"/>.
 		/// </summary>

@@ -17,7 +17,14 @@ namespace Mosa.TinyCPUSimulator.Debug
 	{
 		private static void Main(string[] args)
 		{
-			Test4();
+			Test9();
+		}
+
+		private static void Test9()
+		{
+			var fixture = new SwitchFixture();
+
+			fixture.SwitchI8(a: -9223372036854775808);
 		}
 
 		private static void Test8()

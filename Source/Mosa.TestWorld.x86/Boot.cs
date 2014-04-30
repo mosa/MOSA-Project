@@ -79,10 +79,9 @@ namespace Mosa.TestWorld.x86
 			Console.WriteLine();
 
 			Process();
-			
 		}
 
-		public static  void Process()
+		public static void Process()
 		{
 			CMOS cmos = new CMOS();
 			byte last = 0;

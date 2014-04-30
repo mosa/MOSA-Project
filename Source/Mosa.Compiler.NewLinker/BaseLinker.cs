@@ -162,7 +162,7 @@ namespace Mosa.Compiler.Linker
 			{
 				section.ResolveLayout(sectionOffset, virtualAddress);
 
-				ulong size = Alignment.Align(section.Size, SectionAlignment);
+				ulong size = Alignment.AlignUp(section.Size, SectionAlignment);
 
 				sectionOffset = section.ResolvedSectionOffset + size;
 				virtualAddress = section.ResolvedVirtualAddress + size;
