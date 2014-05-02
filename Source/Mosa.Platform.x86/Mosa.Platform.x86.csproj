@@ -79,7 +79,7 @@
       <Project>{5f30a68e-05bf-40ea-b576-5ebcde520559}</Project>
       <Name>Mosa.Compiler.MosaTypeSystem</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Mosa.Compiler.NewLinker\Mosa.Compiler.Linker.csproj">
+    <ProjectReference Include="..\Mosa.Compiler.Linker\Mosa.Compiler.Linker.csproj">
       <Project>{65866a51-b229-44c5-ac81-87a90fa1741c}</Project>
       <Name>Mosa.Compiler.Linker</Name>
     </ProjectReference>

@@ -132,7 +132,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.DebugWorld.x86", "Mosa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Test.Collection.x86.xUnit", "Mosa.Test.Collection.x86.xUnit\Mosa.Test.Collection.x86.xUnit.csproj", "{50568E2D-5360-4F71-87E3-A6979D1D858C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Compiler.Linker", "Mosa.Compiler.NewLinker\Mosa.Compiler.Linker.csproj", "{65866A51-B229-44C5-AC81-87A90FA1741C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Compiler.Linker", "Mosa.Compiler.Linker\Mosa.Compiler.Linker.csproj", "{65866A51-B229-44C5-AC81-87A90FA1741C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
