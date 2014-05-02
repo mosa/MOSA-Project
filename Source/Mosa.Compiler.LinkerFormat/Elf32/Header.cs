@@ -68,13 +68,13 @@ namespace Mosa.Compiler.LinkerFormat.Elf32
 		/// <summary>
 		/// This member holds the ELF header's size in bytes.
 		/// </summary>
-		public ushort ElfHeaderSize;
+		public static readonly ushort ElfHeaderSize = 0x34;
 
 		/// <summary>
 		/// This member holds the size in bytes of one entry in the file's program header table;
 		/// all entries are the same size.
 		/// </summary>
-		public ushort ProgramHeaderEntrySize;
+		public static readonly ushort ProgramHeaderEntrySize = 0x20;
 
 		/// <summary>
 		/// This member holds the number of entries in the program header table. Thus the
@@ -87,7 +87,7 @@ namespace Mosa.Compiler.LinkerFormat.Elf32
 		/// This member holds a section header's size in bytes. A section header is one entry
 		/// in the section header table; all entries are the same size.
 		/// </summary>
-		public ushort SectionHeaderEntrySize;
+		public static readonly ushort SectionHeaderEntrySize = 0x28;
 
 		/// <summary>
 		/// This member holds the number of entries in the section header table. Thus the
@@ -110,36 +110,26 @@ namespace Mosa.Compiler.LinkerFormat.Elf32
 		public static readonly byte[] MagicNumber = new byte[] { 0x7F, (byte)'E', (byte)'L', (byte)'F' };
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="Header"/> class.
-		/// </summary>
-		public Header()
-		{
-			ElfHeaderSize = 0x34;
-			ProgramHeaderEntrySize = 0x20;
-			SectionHeaderEntrySize = 0x28;
-		}
-
-		/// <summary>
 		/// Writes the specified fs.
 		/// </summary>
 		/// <param name="writer">The writer.</param>
 		public void Write(EndianAwareBinaryWriter writer)
 		{
 			writer.Seek(0, SeekOrigin.Begin);
-			writer.Write(Ident);
-			writer.Write((ushort)Type);
-			writer.Write((ushort)Machine);
-			writer.Write((uint)Version);
-			writer.Write(EntryAddress);
-			writer.Write(ProgramHeaderOffset);
-			writer.Write(SectionHeaderOffset);
-			writer.Write(Flags);
-			writer.Write(ElfHeaderSize);
-			writer.Write(ProgramHeaderEntrySize);
-			writer.Write(ProgramHeaderNumber);
-			writer.Write(SectionHeaderEntrySize);
-			writer.Write(SectionHeaderNumber);
-			writer.Write(SectionHeaderStringIndex);
+			writer.Write(Ident);					// ident
+			writer.Write((ushort)Type);				// type
+			writer.Write((ushort)Machine);			// machine
+			writer.Write((uint)Version);			// version
+			writer.Write(EntryAddress);				// entry
+			writer.Write(ProgramHeaderOffset);		// phoff
+			writer.Write(SectionHeaderOffset);		// shoff
+			writer.Write(Flags);					// flags
+			writer.Write(ElfHeaderSize);			// ehsize
+			writer.Write(ProgramHeaderEntrySize);	// phentsize
+			writer.Write(ProgramHeaderNumber);		// phnum
+			writer.Write(SectionHeaderEntrySize);	// shentsize
+			writer.Write(SectionHeaderNumber);		// shnum
+			writer.Write(SectionHeaderStringIndex);	// shstrndx
 		}
 
 		/// <summary>
@@ -164,10 +154,10 @@ namespace Mosa.Compiler.LinkerFormat.Elf32
 			ProgramHeaderOffset = reader.ReadUInt32();
 			SectionHeaderOffset = reader.ReadUInt32();
 			Flags = reader.ReadUInt32();
-			ElfHeaderSize = reader.ReadUInt16();
-			ProgramHeaderEntrySize = reader.ReadUInt16();
+			//ElfHeaderSize = reader.ReadUInt16();
+			//ProgramHeaderEntrySize = reader.ReadUInt16();
 			ProgramHeaderNumber = reader.ReadUInt16();
-			SectionHeaderEntrySize = reader.ReadUInt16();
+			//SectionHeaderEntrySize = reader.ReadUInt16();
 			SectionHeaderNumber = reader.ReadUInt16();
 			SectionHeaderStringIndex = reader.ReadUInt16();
 		}

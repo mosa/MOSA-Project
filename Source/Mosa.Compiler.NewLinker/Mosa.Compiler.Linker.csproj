@@ -45,6 +45,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseLinker.cs" />
+    <Compile Include="Elf32\Elf32.cs" />
+    <Compile Include="Elf32\SectionAttribute.cs" />
+    <Compile Include="Elf32\SectionHeader.cs" />
+    <Compile Include="Elf32\SectionType.cs" />
     <Compile Include="LinkerSection.cs" />
     <Compile Include="LinkerSymbol.cs" />
     <Compile Include="BuiltInPatch.cs" />
@@ -57,7 +61,6 @@
     <Compile Include="SectionKind.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Elf32\" />
     <Folder Include="Elf64\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

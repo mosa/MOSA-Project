@@ -30,7 +30,7 @@ namespace Mosa.Compiler.Linker
 
 		public bool IsResolved { get; private set; }
 
-		public ulong ResolvedSectionOffset { get; private set; }
+		public ulong ResolvedOffset { get; private set; }
 
 		public ulong ResolvedVirtualAddress { get; private set; }
 
@@ -66,7 +66,7 @@ namespace Mosa.Compiler.Linker
 
 		internal void ResolveLayout(ulong sectionOffset, ulong virtualAddress)
 		{
-			ResolvedSectionOffset = sectionOffset;
+			ResolvedOffset = sectionOffset;
 			ResolvedVirtualAddress = virtualAddress;
 
 			foreach (var symbol in Symbols)
@@ -76,22 +76,22 @@ namespace Mosa.Compiler.Linker
 
 				Size = Alignment.AlignUp(Size, symbol.Alignment);
 
-				symbol.ResolvedSectionOffset = Size;
+				symbol.ResolvedOffset = Size;
 				symbol.ResolvedVirtualAddress = ResolvedVirtualAddress + Size;
 
 				Size = Size + symbol.Size;
 			}
-
-			//Size = Alignment.Align(Size, SectionAlignment);
 
 			IsResolved = true;
 		}
 
 		internal void WriteTo(Stream stream)
 		{
+			ulong start = (ulong)stream.Position + ResolvedOffset;
+
 			foreach (var symbol in Symbols)
 			{
-				long at = (long)(symbol.ResolvedSectionOffset + ResolvedSectionOffset);
+				long at = (long)(start + symbol.ResolvedOffset);
 				stream.Seek(at, SeekOrigin.Begin);
 				symbol.Stream.Position = 0;
 				symbol.Stream.WriteTo(stream);

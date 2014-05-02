@@ -16,24 +16,24 @@ namespace Mosa.Test.Collection
 		Positive51
 	}
 
-	public static class TestEnumU1Class {
+	public static class EnumU1Class {
 		public static bool PositiveConversion() {
 			EnumU1 e = EnumU1.Positive50;
 			return 50 == (byte)e;
 		}
-		public static bool PositivePlusOne_1() {
+		public static bool PositivePlusOne1() {
 			EnumU1 e = EnumU1.Positive50;
 			return 51 == (byte)(e + 1);
 		}
-		public static bool PositivePlusOne_2() {
+		public static bool PositivePlusOne2() {
 			EnumU1 e = EnumU1.Positive50;
 			return EnumU1.Positive51 == e + 1;
 		}
-		public static bool PositiveMinusOne_1() {
+		public static bool PositiveMinusOne1() {
 			EnumU1 e = EnumU1.Positive50;
 			return 49 == (byte)(e - 1);
 		}
-		public static bool PositiveMinusOne_2() {
+		public static bool PositiveMinusOne2() {
 			EnumU1 e = EnumU1.Positive50;
 			return EnumU1.Positive49 == e - 1;
 		}
@@ -185,24 +185,24 @@ namespace Mosa.Test.Collection
 		Positive51
 	}
 
-	public static class TestEnumU2Class {
+	public static class EnumU2Class {
 		public static bool PositiveConversion() {
 			EnumU2 e = EnumU2.Positive50;
 			return 50 == (ushort)e;
 		}
-		public static bool PositivePlusOne_1() {
+		public static bool PositivePlusOne1() {
 			EnumU2 e = EnumU2.Positive50;
 			return 51 == (ushort)(e + 1);
 		}
-		public static bool PositivePlusOne_2() {
+		public static bool PositivePlusOne2() {
 			EnumU2 e = EnumU2.Positive50;
 			return EnumU2.Positive51 == e + 1;
 		}
-		public static bool PositiveMinusOne_1() {
+		public static bool PositiveMinusOne1() {
 			EnumU2 e = EnumU2.Positive50;
 			return 49 == (ushort)(e - 1);
 		}
-		public static bool PositiveMinusOne_2() {
+		public static bool PositiveMinusOne2() {
 			EnumU2 e = EnumU2.Positive50;
 			return EnumU2.Positive49 == e - 1;
 		}
@@ -354,24 +354,24 @@ namespace Mosa.Test.Collection
 		Positive51
 	}
 
-	public static class TestEnumU4Class {
+	public static class EnumU4Class {
 		public static bool PositiveConversion() {
 			EnumU4 e = EnumU4.Positive50;
 			return 50 == (uint)e;
 		}
-		public static bool PositivePlusOne_1() {
+		public static bool PositivePlusOne1() {
 			EnumU4 e = EnumU4.Positive50;
 			return 51 == (uint)(e + 1);
 		}
-		public static bool PositivePlusOne_2() {
+		public static bool PositivePlusOne2() {
 			EnumU4 e = EnumU4.Positive50;
 			return EnumU4.Positive51 == e + 1;
 		}
-		public static bool PositiveMinusOne_1() {
+		public static bool PositiveMinusOne1() {
 			EnumU4 e = EnumU4.Positive50;
 			return 49 == (uint)(e - 1);
 		}
-		public static bool PositiveMinusOne_2() {
+		public static bool PositiveMinusOne2() {
 			EnumU4 e = EnumU4.Positive50;
 			return EnumU4.Positive49 == e - 1;
 		}
@@ -523,24 +523,24 @@ namespace Mosa.Test.Collection
 		Positive51
 	}
 
-	public static class TestEnumU8Class {
+	public static class EnumU8Class {
 		public static bool PositiveConversion() {
 			EnumU8 e = EnumU8.Positive50;
 			return 50 == (ulong)e;
 		}
-		public static bool PositivePlusOne_1() {
+		public static bool PositivePlusOne1() {
 			EnumU8 e = EnumU8.Positive50;
 			return 51 == (ulong)(e + 1);
 		}
-		public static bool PositivePlusOne_2() {
+		public static bool PositivePlusOne2() {
 			EnumU8 e = EnumU8.Positive50;
 			return EnumU8.Positive51 == e + 1;
 		}
-		public static bool PositiveMinusOne_1() {
+		public static bool PositiveMinusOne1() {
 			EnumU8 e = EnumU8.Positive50;
 			return 49 == (ulong)(e - 1);
 		}
-		public static bool PositiveMinusOne_2() {
+		public static bool PositiveMinusOne2() {
 			EnumU8 e = EnumU8.Positive50;
 			return EnumU8.Positive49 == e - 1;
 		}
@@ -695,24 +695,24 @@ namespace Mosa.Test.Collection
 		Positive51
 	}
 
-	public static class TestEnumI1Class {
+	public static class EnumI1Class {
 		public static bool PositiveConversion() {
 			EnumI1 e = EnumI1.Positive50;
 			return 50 == (sbyte)e;
 		}
-		public static bool PositivePlusOne_1() {
+		public static bool PositivePlusOne1() {
 			EnumI1 e = EnumI1.Positive50;
 			return 51 == (sbyte)(e + 1);
 		}
-		public static bool PositivePlusOne_2() {
+		public static bool PositivePlusOne2() {
 			EnumI1 e = EnumI1.Positive50;
 			return EnumI1.Positive51 == e + 1;
 		}
-		public static bool PositiveMinusOne_1() {
+		public static bool PositiveMinusOne1() {
 			EnumI1 e = EnumI1.Positive50;
 			return 49 == (sbyte)(e - 1);
 		}
-		public static bool PositiveMinusOne_2() {
+		public static bool PositiveMinusOne2() {
 			EnumI1 e = EnumI1.Positive50;
 			return EnumI1.Positive49 == e - 1;
 		}
@@ -860,19 +860,19 @@ namespace Mosa.Test.Collection
 			EnumI1 e = EnumI1.Negative50;
 			return -50 == (sbyte)e;
 		}
-		public static bool NegativePlusOne_1() {
+		public static bool NegativePlusOne1() {
 			EnumI1 e = EnumI1.Negative50;
 			return -49 == (sbyte)(e + 1);
 		}
-		public static bool NegativePlusOne_2() {
+		public static bool NegativePlusOne2() {
 			EnumI1 e = EnumI1.Negative50;
 			return EnumI1.Negative49 == e + 1;
 		}
-		public static bool NegativeMinusOne_1() {
+		public static bool NegativeMinusOne1() {
 			EnumI1 e = EnumI1.Negative50;
 			return -51 == (sbyte)(e - 1);
 		}
-		public static bool NegativeMinusOne_2() {
+		public static bool NegativeMinusOne2() {
 			EnumI1 e = EnumI1.Negative50;
 			return EnumI1.Negative51 == e - 1;
 		}
@@ -1027,24 +1027,24 @@ namespace Mosa.Test.Collection
 		Positive51
 	}
 
-	public static class TestEnumI2Class {
+	public static class EnumI2Class {
 		public static bool PositiveConversion() {
 			EnumI2 e = EnumI2.Positive50;
 			return 50 == (short)e;
 		}
-		public static bool PositivePlusOne_1() {
+		public static bool PositivePlusOne1() {
 			EnumI2 e = EnumI2.Positive50;
 			return 51 == (short)(e + 1);
 		}
-		public static bool PositivePlusOne_2() {
+		public static bool PositivePlusOne2() {
 			EnumI2 e = EnumI2.Positive50;
 			return EnumI2.Positive51 == e + 1;
 		}
-		public static bool PositiveMinusOne_1() {
+		public static bool PositiveMinusOne1() {
 			EnumI2 e = EnumI2.Positive50;
 			return 49 == (short)(e - 1);
 		}
-		public static bool PositiveMinusOne_2() {
+		public static bool PositiveMinusOne2() {
 			EnumI2 e = EnumI2.Positive50;
 			return EnumI2.Positive49 == e - 1;
 		}
@@ -1192,19 +1192,19 @@ namespace Mosa.Test.Collection
 			EnumI2 e = EnumI2.Negative50;
 			return -50 == (short)e;
 		}
-		public static bool NegativePlusOne_1() {
+		public static bool NegativePlusOne1() {
 			EnumI2 e = EnumI2.Negative50;
 			return -49 == (short)(e + 1);
 		}
-		public static bool NegativePlusOne_2() {
+		public static bool NegativePlusOne2() {
 			EnumI2 e = EnumI2.Negative50;
 			return EnumI2.Negative49 == e + 1;
 		}
-		public static bool NegativeMinusOne_1() {
+		public static bool NegativeMinusOne1() {
 			EnumI2 e = EnumI2.Negative50;
 			return -51 == (short)(e - 1);
 		}
-		public static bool NegativeMinusOne_2() {
+		public static bool NegativeMinusOne2() {
 			EnumI2 e = EnumI2.Negative50;
 			return EnumI2.Negative51 == e - 1;
 		}
@@ -1359,24 +1359,24 @@ namespace Mosa.Test.Collection
 		Positive51
 	}
 
-	public static class TestEnumI4Class {
+	public static class EnumI4Class {
 		public static bool PositiveConversion() {
 			EnumI4 e = EnumI4.Positive50;
 			return 50 == (int)e;
 		}
-		public static bool PositivePlusOne_1() {
+		public static bool PositivePlusOne1() {
 			EnumI4 e = EnumI4.Positive50;
 			return 51 == (int)(e + 1);
 		}
-		public static bool PositivePlusOne_2() {
+		public static bool PositivePlusOne2() {
 			EnumI4 e = EnumI4.Positive50;
 			return EnumI4.Positive51 == e + 1;
 		}
-		public static bool PositiveMinusOne_1() {
+		public static bool PositiveMinusOne1() {
 			EnumI4 e = EnumI4.Positive50;
 			return 49 == (int)(e - 1);
 		}
-		public static bool PositiveMinusOne_2() {
+		public static bool PositiveMinusOne2() {
 			EnumI4 e = EnumI4.Positive50;
 			return EnumI4.Positive49 == e - 1;
 		}
@@ -1524,19 +1524,19 @@ namespace Mosa.Test.Collection
 			EnumI4 e = EnumI4.Negative50;
 			return -50 == (int)e;
 		}
-		public static bool NegativePlusOne_1() {
+		public static bool NegativePlusOne1() {
 			EnumI4 e = EnumI4.Negative50;
 			return -49 == (int)(e + 1);
 		}
-		public static bool NegativePlusOne_2() {
+		public static bool NegativePlusOne2() {
 			EnumI4 e = EnumI4.Negative50;
 			return EnumI4.Negative49 == e + 1;
 		}
-		public static bool NegativeMinusOne_1() {
+		public static bool NegativeMinusOne1() {
 			EnumI4 e = EnumI4.Negative50;
 			return -51 == (int)(e - 1);
 		}
-		public static bool NegativeMinusOne_2() {
+		public static bool NegativeMinusOne2() {
 			EnumI4 e = EnumI4.Negative50;
 			return EnumI4.Negative51 == e - 1;
 		}
@@ -1691,24 +1691,24 @@ namespace Mosa.Test.Collection
 		Positive51
 	}
 
-	public static class TestEnumI8Class {
+	public static class EnumI8Class {
 		public static bool PositiveConversion() {
 			EnumI8 e = EnumI8.Positive50;
 			return 50 == (long)e;
 		}
-		public static bool PositivePlusOne_1() {
+		public static bool PositivePlusOne1() {
 			EnumI8 e = EnumI8.Positive50;
 			return 51 == (long)(e + 1);
 		}
-		public static bool PositivePlusOne_2() {
+		public static bool PositivePlusOne2() {
 			EnumI8 e = EnumI8.Positive50;
 			return EnumI8.Positive51 == e + 1;
 		}
-		public static bool PositiveMinusOne_1() {
+		public static bool PositiveMinusOne1() {
 			EnumI8 e = EnumI8.Positive50;
 			return 49 == (long)(e - 1);
 		}
-		public static bool PositiveMinusOne_2() {
+		public static bool PositiveMinusOne2() {
 			EnumI8 e = EnumI8.Positive50;
 			return EnumI8.Positive49 == e - 1;
 		}
@@ -1856,19 +1856,19 @@ namespace Mosa.Test.Collection
 			EnumI8 e = EnumI8.Negative50;
 			return -50 == (long)e;
 		}
-		public static bool NegativePlusOne_1() {
+		public static bool NegativePlusOne1() {
 			EnumI8 e = EnumI8.Negative50;
 			return -49 == (long)(e + 1);
 		}
-		public static bool NegativePlusOne_2() {
+		public static bool NegativePlusOne2() {
 			EnumI8 e = EnumI8.Negative50;
 			return EnumI8.Negative49 == e + 1;
 		}
-		public static bool NegativeMinusOne_1() {
+		public static bool NegativeMinusOne1() {
 			EnumI8 e = EnumI8.Negative50;
 			return -51 == (long)(e - 1);
 		}
-		public static bool NegativeMinusOne_2() {
+		public static bool NegativeMinusOne2() {
 			EnumI8 e = EnumI8.Negative50;
 			return EnumI8.Negative51 == e - 1;
 		}

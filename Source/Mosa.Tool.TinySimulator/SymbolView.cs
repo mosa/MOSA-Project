@@ -27,11 +27,11 @@ namespace Mosa.Tool.TinySimulator
 
 			public string VirtualAddress { get { return MainForm.Format(LinkerSymbol.ResolvedVirtualAddress, display32); } }
 
-			public ulong Offset { get { return LinkerSymbol.ResolvedSectionOffset; } }
+			public ulong Offset { get { return LinkerSymbol.ResolvedOffset; } }
 
 			public string SectionKind { get; set; }
 
-			public string SectionAddress { get { return MainForm.Format(LinkerSymbol.ResolvedSectionOffset, display32); } }
+			public string SectionAddress { get { return MainForm.Format(LinkerSymbol.ResolvedOffset, display32); } }
 
 			public LinkerSymbol LinkerSymbol;
 

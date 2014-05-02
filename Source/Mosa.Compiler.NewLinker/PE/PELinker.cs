@@ -29,6 +29,15 @@ namespace Mosa.Compiler.Linker.PE
 		/// </summary>
 		private const uint SECTION_ALIGNMENT = 0x1000;
 
+		// Write the following 64 bytes, which represent the default x86 code to
+		// print a message on the screen.
+		private static readonly byte[] dosmessage = new byte[] {
+				0x0E, 0x1F, 0xBA, 0x0E, 0x00, 0xB4, 0x09, 0xCD, 0x21, 0xB8, 0x01, 0x4C, 0xCD, 0x21, 0x54, 0x68,
+				0x69, 0x73, 0x20, 0x70, 0x72, 0x6F, 0x67, 0x72, 0x61, 0x6D, 0x20, 0x72, 0x65, 0x71, 0x75, 0x69,
+				0x72, 0x65, 0x73, 0x20, 0x61, 0x20, 0x4D, 0x4F, 0x53, 0x41, 0x20, 0x70, 0x6F, 0x77, 0x65, 0x72,
+				0x65, 0x64, 0x20, 0x4F, 0x53, 0x2E, 0x0D, 0x0D, 0x0A, 0x24, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+			};
+
 		#endregion Constants
 
 		#region Data members
@@ -56,10 +65,8 @@ namespace Mosa.Compiler.Linker.PE
 			Endianness = Common.Endianness.Little;
 		}
 
-		public override void Emit(Stream stream)
+		protected override void EmitImplementation(Stream stream)
 		{
-			FinalizeLayout();
-
 			var writer = new EndianAwareBinaryWriter(stream, Encoding.Unicode, Endianness);
 
 			// Write the PE headers
@@ -68,7 +75,7 @@ namespace Mosa.Compiler.Linker.PE
 
 			foreach (var section in Sections)
 			{
-				stream.Position = (long)(section.ResolvedSectionOffset);
+				stream.Position = (long)FILE_SECTION_ALIGNMENT;
 				section.WriteTo(stream);
 			}
 
@@ -99,16 +106,7 @@ namespace Mosa.Compiler.Linker.PE
 			dosHeader.e_lfanew = 0x00000080;
 			dosHeader.Write(writer);
 
-			// Write the following 64 bytes, which represent the default x86 code to
-			// print a message on the screen.
-			var message = new byte[] {
-				0x0E, 0x1F, 0xBA, 0x0E, 0x00, 0xB4, 0x09, 0xCD, 0x21, 0xB8, 0x01, 0x4C, 0xCD, 0x21, 0x54, 0x68,
-				0x69, 0x73, 0x20, 0x70, 0x72, 0x6F, 0x67, 0x72, 0x61, 0x6D, 0x20, 0x72, 0x65, 0x71, 0x75, 0x69,
-				0x72, 0x65, 0x73, 0x20, 0x61, 0x20, 0x4D, 0x4F, 0x53, 0x41, 0x20, 0x70, 0x6F, 0x77, 0x65, 0x72,
-				0x65, 0x64, 0x20, 0x4F, 0x53, 0x2E, 0x0D, 0x0D, 0x0A, 0x24, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-			};
-
-			writer.Write(message);
+			writer.Write(dosmessage);
 		}
 
 		/// <summary>
@@ -183,10 +181,10 @@ namespace Mosa.Compiler.Linker.PE
 
 				ImageSectionHeader image = new ImageSectionHeader();
 				image.Name = section.Name;
-				image.VirtualSize = 0;
+				image.VirtualSize = (uint)section.Size;
 				image.VirtualAddress = (uint)(section.ResolvedVirtualAddress - BaseAddress);
 				image.SizeOfRawData = (section.SectionKind == SectionKind.BSS) ? 0 : (uint)section.Size;
-				image.PointerToRawData = (uint)(FILE_SECTION_ALIGNMENT + section.ResolvedSectionOffset);
+				image.PointerToRawData = (uint)(FILE_SECTION_ALIGNMENT + section.ResolvedOffset);
 				image.PointerToRelocations = 0;
 				image.PointerToLinenumbers = 0;
 				image.NumberOfRelocations = 0;
@@ -214,7 +212,7 @@ namespace Mosa.Compiler.Linker.PE
 
 			foreach (var section in Sections)
 			{
-				if (section.Size > 0)
+				if (section.Size != 0)
 				{
 					sections++;
 				}
@@ -233,11 +231,6 @@ namespace Mosa.Compiler.Linker.PE
 			}
 
 			return size;
-		}
-
-		private LinkerSection GetSection(SectionKind sectionKind)
-		{
-			return Sections[(int)sectionKind];
 		}
 
 		#endregion Internals

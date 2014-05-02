@@ -26,6 +26,5 @@ namespace Mosa.Compiler.Linker
 		/// The link destination receives the absolute address.
 		/// </summary>
 		AbsoluteAddress,
-
 	}
 }

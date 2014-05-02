@@ -30,10 +30,8 @@ namespace Mosa.Compiler.Linker.Flat
 			Endianness = Common.Endianness.Little;
 		}
 
-		public override void Emit(Stream stream)
+		protected override void EmitImplementation(Stream stream)
 		{
-			FinalizeLayout();
-
 			foreach (var section in Sections)
 			{
 				section.WriteTo(stream);

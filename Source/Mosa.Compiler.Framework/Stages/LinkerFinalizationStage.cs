@@ -18,8 +18,6 @@ namespace Mosa.Compiler.Framework.Stages
 	{
 		protected override void Run()
 		{
-			Linker.FinalizeLayout();
-
 			using (var file = new FileStream(CompilerOptions.OutputFile, FileMode.Create))
 			{
 				Linker.Emit(file);

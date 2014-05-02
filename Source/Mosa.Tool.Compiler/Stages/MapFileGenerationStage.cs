@@ -84,7 +84,7 @@ namespace Mosa.Tool.Compiler.Stages
 			writer.WriteLine("Offset           Virtual          Length           Name                             Class");
 			foreach (var section in linker.Sections)
 			{
-				writer.WriteLine("{0:x16} {1:x16} {2:x16} {3} {4}", section.ResolvedSectionOffset, section.ResolvedVirtualAddress, section.Size, section.Name.PadRight(32), section.SectionKind);
+				writer.WriteLine("{0:x16} {1:x16} {2:x16} {3} {4}", section.ResolvedOffset, section.ResolvedVirtualAddress, section.Size, section.Name.PadRight(32), section.SectionKind);
 			}
 		}
 
@@ -101,7 +101,7 @@ namespace Mosa.Tool.Compiler.Stages
 				//foreach (var symbol in section.Ordered)
 				foreach (var symbol in section.Symbols)
 				{
-					writer.WriteLine("{0:x16} {1:x16} {2:x16} {3} {4}", symbol.ResolvedSectionOffset, symbol.ResolvedVirtualAddress, symbol.Size, symbol.SectionKind.ToString().PadRight(7), symbol.Name);
+					writer.WriteLine("{0:x16} {1:x16} {2:x16} {3} {4}", symbol.ResolvedOffset, symbol.ResolvedVirtualAddress, symbol.Size, symbol.SectionKind.ToString().PadRight(7), symbol.Name);
 				}
 			}
 
@@ -110,7 +110,7 @@ namespace Mosa.Tool.Compiler.Stages
 			{
 				writer.WriteLine();
 				writer.WriteLine("Entry point is {0}", entryPoint.Name);
-				writer.WriteLine("\tat Offset {0:x16}", entryPoint.ResolvedSectionOffset); // TODO! add section offset too?
+				writer.WriteLine("\tat Offset {0:x16}", entryPoint.ResolvedOffset); // TODO! add section offset too?
 				writer.WriteLine("\tat virtual address {0:x16}", entryPoint.ResolvedVirtualAddress);
 			}
 		}

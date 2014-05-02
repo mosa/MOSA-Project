@@ -25,8 +25,6 @@ namespace Mosa.TinyCPUSimulator.Adaptor
 
 		protected override void Run()
 		{
-			Linker.FinalizeLayout();
-
 			var file = new SimStream(simCPU, Linker.BaseAddress);
 
 			Linker.Emit(file);

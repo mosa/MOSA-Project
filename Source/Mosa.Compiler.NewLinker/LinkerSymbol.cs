@@ -25,13 +25,13 @@ namespace Mosa.Compiler.Linker
 
 		public uint Alignment { get; internal set; }
 
-		public bool IsAvailable { get { return Stream != null; } }
+		public bool IsDataAvailable { get { return Stream != null; } }
 
 		public ulong Size { get { return Stream != null ? (ulong)Stream.Length : 0; } }
 
 		public bool IsResolved { get { return ResolvedVirtualAddress != 0; } }
 
-		public ulong ResolvedSectionOffset { get; internal set; }
+		public ulong ResolvedOffset { get; internal set; }
 
 		public ulong ResolvedVirtualAddress { get; internal set; }
 

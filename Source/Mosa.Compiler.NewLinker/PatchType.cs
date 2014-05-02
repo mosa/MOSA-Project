@@ -22,6 +22,5 @@ namespace Mosa.Compiler.Linker
 			Size = size;
 			Patches = patches;
 		}
-
 	}
 }

@@ -8,6 +8,7 @@
  */
 
 using Mosa.Compiler.Common;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -145,7 +146,7 @@ namespace Mosa.Compiler.Linker
 			return symbol;
 		}
 
-		public void FinalizeLayout()
+		private void FinalizeLayout()
 		{
 			LayoutObjectsAndSections();
 			ApplyPatches();
@@ -155,7 +156,6 @@ namespace Mosa.Compiler.Linker
 		{
 			// layout objects & sections
 			ulong sectionOffset = 0;
-			;
 			ulong virtualAddress = BaseAddress;
 
 			foreach (var section in Sections)
@@ -164,12 +164,19 @@ namespace Mosa.Compiler.Linker
 
 				ulong size = Alignment.AlignUp(section.Size, SectionAlignment);
 
-				sectionOffset = section.ResolvedSectionOffset + size;
+				sectionOffset = section.ResolvedOffset + size;
 				virtualAddress = section.ResolvedVirtualAddress + size;
 			}
 		}
 
-		public abstract void Emit(Stream stream);
+		protected abstract void EmitImplementation(Stream stream);
+
+		public void Emit(Stream stream)
+		{
+			FinalizeLayout();
+
+			EmitImplementation(stream);
+		}
 
 		private void ApplyPatches()
 		{
@@ -179,7 +186,7 @@ namespace Mosa.Compiler.Linker
 			}
 		}
 
-		private LinkerSection GetSection(SectionKind kind)
+		protected LinkerSection GetSection(SectionKind kind)
 		{
 			return Sections[(int)kind];
 		}
@@ -213,5 +220,89 @@ namespace Mosa.Compiler.Linker
 				Endianness
 			);
 		}
+
+		#region Cache Methods
+
+		public LinkerSymbol GetConstantSymbol(double value)
+		{
+			var data = BitConverter.GetBytes(value);
+
+			string name = "$double$";
+
+			foreach (byte b in data)
+			{
+				name = name + data[0].ToString("x");
+			}
+
+			var symbol = GetSymbol(name, SectionKind.ROData);
+
+			if (!symbol.IsDataAvailable)
+			{
+				symbol.SetData(data);
+			}
+
+			return symbol;
+		}
+
+		public LinkerSymbol GetConstantSymbol(float value)
+		{
+			var data = BitConverter.GetBytes(value);
+
+			string name = "$float$";
+
+			foreach (byte b in data)
+			{
+				name = name + data[0].ToString("x");
+			}
+
+			var symbol = GetSymbol(name, SectionKind.ROData);
+
+			if (!symbol.IsDataAvailable)
+			{
+				symbol.SetData(data);
+			}
+
+			return symbol;
+		}
+
+		public LinkerSymbol GetConstantSymbol(uint value)
+		{
+			string name = "$integer$" + value.ToString("x");
+
+			var symbol = GetSymbol(name, SectionKind.ROData);
+
+			if (!symbol.IsDataAvailable)
+			{
+				symbol.SetData(BitConverter.GetBytes(value));
+			}
+
+			return symbol;
+		}
+
+		public LinkerSymbol GetConstantSymbol(ulong value)
+		{
+			string name = "$long$" + value.ToString("x");
+
+			var symbol = GetSymbol(name, SectionKind.ROData);
+
+			if (!symbol.IsDataAvailable)
+			{
+				symbol.SetData(BitConverter.GetBytes(value));
+			}
+
+			return symbol;
+		}
+
+		public LinkerSymbol GetConstantSymbol(int value)
+		{
+			return GetConstantSymbol((uint)value);
+		}
+
+		public LinkerSymbol GetConstantSymbol(long value)
+		{
+			return GetConstantSymbol((ulong)value);
+		}
+
+		#endregion Cache Methods
 	}
 }

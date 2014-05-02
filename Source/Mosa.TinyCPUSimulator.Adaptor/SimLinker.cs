@@ -47,9 +47,9 @@ namespace Mosa.TinyCPUSimulator.Adaptor
 			instructions.Add(new Tuple<LinkerSymbol, long, SimInstruction>(baseSymbol, offset, instruction));
 		}
 
-		public override void Emit(Stream stream)
+		protected override void EmitImplementation(Stream stream)
 		{
-			base.Emit(stream);
+			base.EmitImplementation(stream);
 
 			foreach (var symbol in Symbols)
 			{

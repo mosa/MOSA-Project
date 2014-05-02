@@ -96,6 +96,5 @@ namespace Mosa.Compiler.Linker
 		{
 			return PatchSymbol.Name + " -> " + ReferenceSymbol.Name;
 		}
-
 	}
 }
