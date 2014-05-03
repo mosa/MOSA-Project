@@ -13,6 +13,7 @@ using Mosa.Compiler.LinkerFormat.Elf32;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Diagnostics;
 
 namespace Mosa.Compiler.Linker.Elf32
 {
@@ -33,6 +34,7 @@ namespace Mosa.Compiler.Linker.Elf32
 		public Elf32()
 		{
 			SectionAlignment = 0x1000;
+			BaseFileOffset = 0x1000;
 
 			AddSection(new LinkerSection(SectionKind.Text, ".text", SectionAlignment));
 			AddSection(new LinkerSection(SectionKind.Data, ".data", SectionAlignment));
@@ -53,18 +55,21 @@ namespace Mosa.Compiler.Linker.Elf32
 
 			// determine offsets
 			uint sectionOffset = (uint)(elfheader.SectionHeaderOffset + (Header.SectionHeaderEntrySize * elfheader.SectionHeaderNumber));
-			stringSection.Offset = sectionOffset + Alignment.AlignUp(GetSection(SectionKind.ROData).Offset + GetSection(SectionKind.ROData).Size, SectionAlignment);
+
+			Debug.Assert(sectionOffset <= BaseFileOffset);
+
+			stringSection.Offset = GetSection(SectionKind.ROData).FileOffset + GetSection(SectionKind.ROData).AlignedSize;
 
 			// Write program headers
-			WriteProgramHeaders(writer, sectionOffset);
+			WriteProgramHeaders(writer);
 
 			// Write section headers
-			WriteSectionHeaders(writer, sectionOffset);
+			WriteSectionHeaders(writer);
 
 			// Write sections
 			foreach (var section in Sections)
 			{
-				stream.Position = (long)sectionOffset;
+				stream.Position = section.FileOffset;
 				section.WriteTo(stream);
 			}
 
@@ -85,7 +90,7 @@ namespace Mosa.Compiler.Linker.Elf32
 			elfheader.Write(writer);
 		}
 
-		private void WriteProgramHeaders(EndianAwareBinaryWriter writer, uint sectionOffset)
+		private void WriteProgramHeaders(EndianAwareBinaryWriter writer)
 		{
 			writer.Position = elfheader.ProgramHeaderOffset;
 
@@ -97,9 +102,9 @@ namespace Mosa.Compiler.Linker.Elf32
 				var pheader = new ProgramHeader
 				{
 					Alignment = 0,
-					FileSize = Alignment.AlignUp(section.Size, SectionAlignment),
-					MemorySize = Alignment.AlignUp(section.Size, SectionAlignment),
-					Offset = section.Offset + sectionOffset,
+					FileSize = section.AlignedSize,
+					MemorySize = section.AlignedSize,
+					Offset = section.FileOffset,
 					VirtualAddress = (uint)section.VirtualAddress,
 					PhysicalAddress = (uint)section.VirtualAddress,
 					Type = ProgramHeaderType.Load,
@@ -112,7 +117,7 @@ namespace Mosa.Compiler.Linker.Elf32
 			}
 		}
 
-		private void WriteSectionHeaders(EndianAwareBinaryWriter writer, uint sectionOffset)
+		private void WriteSectionHeaders(EndianAwareBinaryWriter writer)
 		{
 			writer.Position = elfheader.SectionHeaderOffset;
 
@@ -133,8 +138,8 @@ namespace Mosa.Compiler.Linker.Elf32
 				}
 
 				sheader.Address = (uint)section.VirtualAddress;
-				sheader.Offset = (uint)section.Offset + sectionOffset;
-				sheader.Size = (uint)Alignment.AlignUp(section.Size, SectionAlignment);
+				sheader.Offset = section.FileOffset;
+				sheader.Size = section.AlignedSize;
 				sheader.Size = 0;
 				sheader.Link = 0;
 				sheader.Info = 0;
@@ -168,7 +173,7 @@ namespace Mosa.Compiler.Linker.Elf32
 			stringSection.Type = SectionType.StringTable;
 			stringSection.Flags = (SectionAttribute)0;
 			stringSection.Address = 0;
-			stringSection.Offset = Alignment.AlignUp(GetSection(SectionKind.ROData).Size, SectionAlignment);
+			stringSection.Offset = GetSection(SectionKind.ROData).AlignedSize;
 			stringSection.Size = (uint)stringTable.Count;
 			stringSection.Link = 0;
 			stringSection.Info = 0;

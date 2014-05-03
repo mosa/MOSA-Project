@@ -34,7 +34,7 @@ namespace Mosa.Compiler.Linker
 
 		public uint SectionAlignment { get; protected set; }
 
-		public uint BaseFileOffset { get; private set; }
+		public uint BaseFileOffset { get; set; }
 
 		private object mylock = new object();
 
@@ -156,17 +156,15 @@ namespace Mosa.Compiler.Linker
 		private void LayoutObjectsAndSections()
 		{
 			// layout objects & sections
-			uint sectionOffset = 0;
 			ulong virtualAddress = BaseAddress;
 			uint fileOffset = BaseFileOffset;
 
 			foreach (var section in Sections)
 			{
-				section.ResolveLayout(fileOffset, sectionOffset, virtualAddress);
+				section.ResolveLayout(fileOffset, virtualAddress);
 
-				uint size = Alignment.AlignUp(section.Size, SectionAlignment);
+				uint size = section.AlignedSize;
 
-				sectionOffset = section.Offset + size;
 				virtualAddress = section.VirtualAddress + size;
 				fileOffset = fileOffset + size;
 			}

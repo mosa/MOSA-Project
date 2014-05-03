@@ -83,7 +83,7 @@ namespace Mosa.Tool.Compiler.Stages
 			writer.WriteLine("Offset           Virtual          Length           Name                             Class");
 			foreach (var section in linker.Sections)
 			{
-				writer.WriteLine("{0:x16} {1:x16} {2:x16} {3} {4}", section.Offset, section.VirtualAddress, section.Size, section.Name.PadRight(32), section.SectionKind);
+				writer.WriteLine("{0:x16} {1:x16} {2:x16} {3} {4}", section.FileOffset, section.VirtualAddress, section.Size, section.Name.PadRight(32), section.SectionKind);
 			}
 		}
 

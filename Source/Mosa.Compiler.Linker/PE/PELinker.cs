@@ -47,6 +47,7 @@ namespace Mosa.Compiler.Linker.PE
 		{
 			// Set the default section alignment in virtual memory.
 			SectionAlignment = 0x1000;
+			BaseFileOffset = FILE_SECTION_ALIGNMENT;
 
 			AddSection(new LinkerSection(SectionKind.Text, ".text", SectionAlignment));
 			AddSection(new LinkerSection(SectionKind.Data, ".data", SectionAlignment));
@@ -73,8 +74,6 @@ namespace Mosa.Compiler.Linker.PE
 				stream.Position = (long)FILE_SECTION_ALIGNMENT;
 				section.WriteTo(stream);
 			}
-
-			stream.WriteZeroBytes((int)(Alignment.AlignUp(stream.Position, FILE_SECTION_ALIGNMENT) - stream.Position));
 		}
 
 		#region Internals
@@ -126,11 +125,9 @@ namespace Mosa.Compiler.Linker.PE
 			ntHeaders.OptionalHeader.Magic = ImageOptionalHeader.IMAGE_OPTIONAL_HEADER_MAGIC;
 			ntHeaders.OptionalHeader.MajorLinkerVersion = 6;
 			ntHeaders.OptionalHeader.MinorLinkerVersion = 0;
-			ntHeaders.OptionalHeader.SizeOfCode = Alignment.AlignUp(GetSection(SectionKind.Text).Size, SectionAlignment);
-			ntHeaders.OptionalHeader.SizeOfInitializedData =
-				Alignment.AlignUp(GetSection(SectionKind.Data).Size, SectionAlignment) +
-				Alignment.AlignUp(GetSection(SectionKind.ROData).Size, SectionAlignment);
-			ntHeaders.OptionalHeader.SizeOfUninitializedData = Alignment.AlignUp(GetSection(SectionKind.BSS).Size, SectionAlignment);
+			ntHeaders.OptionalHeader.SizeOfCode = GetSection(SectionKind.Text).AlignedSize;
+			ntHeaders.OptionalHeader.SizeOfInitializedData = GetSection(SectionKind.Data).AlignedSize + GetSection(SectionKind.ROData).AlignedSize;
+			ntHeaders.OptionalHeader.SizeOfUninitializedData = GetSection(SectionKind.BSS).AlignedSize;
 			ntHeaders.OptionalHeader.AddressOfEntryPoint = (uint)(EntryPoint.VirtualAddress - BaseAddress);
 			ntHeaders.OptionalHeader.BaseOfCode = (uint)(GetSection(SectionKind.Text).VirtualAddress - BaseAddress);
 
@@ -179,7 +176,7 @@ namespace Mosa.Compiler.Linker.PE
 				image.VirtualSize = section.Size;
 				image.VirtualAddress = (uint)(section.VirtualAddress - BaseAddress);
 				image.SizeOfRawData = (section.SectionKind == SectionKind.BSS) ? 0 : section.Size;
-				image.PointerToRawData = FILE_SECTION_ALIGNMENT + section.Offset;
+				image.PointerToRawData = section.FileOffset;
 				image.PointerToRelocations = 0;
 				image.PointerToLinenumbers = 0;
 				image.NumberOfRelocations = 0;
@@ -201,9 +198,9 @@ namespace Mosa.Compiler.Linker.PE
 		/// Counts the valid sections.
 		/// </summary>
 		/// <returns>Determines the number of sections.</returns>
-		private int CountNonEmptySections()
+		private uint CountNonEmptySections()
 		{
-			int sections = 0;
+			uint sections = 0;
 
 			foreach (var section in Sections)
 			{
@@ -222,7 +219,7 @@ namespace Mosa.Compiler.Linker.PE
 
 			foreach (var sections in Sections)
 			{
-				size = size + Alignment.AlignUp(sections.Size, SectionAlignment);
+				size = size + sections.AlignedSize;
 			}
 
 			return size;
