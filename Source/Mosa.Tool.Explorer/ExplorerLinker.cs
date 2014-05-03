@@ -23,10 +23,10 @@ namespace Mosa.Tool.Explorer
 		{
 			SectionAlignment = 1;
 
-			AddSection(new LinkerSection(SectionKind.Text, @".text", 0));
-			AddSection(new LinkerSection(SectionKind.Data, @".data", 0));
-			AddSection(new LinkerSection(SectionKind.ROData, @".rodata", 0));
-			AddSection(new LinkerSection(SectionKind.BSS, @".bss", 0));
+			AddSection(new LinkerSection(SectionKind.Text, @".text", SectionAlignment));
+			AddSection(new LinkerSection(SectionKind.Data, @".data", SectionAlignment));
+			AddSection(new LinkerSection(SectionKind.ROData, @".rodata", SectionAlignment));
+			AddSection(new LinkerSection(SectionKind.BSS, @".bss", SectionAlignment));
 		}
 
 		protected override void EmitImplementation(Stream stream)
