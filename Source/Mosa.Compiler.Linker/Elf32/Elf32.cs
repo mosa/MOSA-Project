@@ -73,7 +73,7 @@ namespace Mosa.Compiler.Linker.Elf32
 
 		private void WriteElfHeader(EndianAwareBinaryWriter writer)
 		{
-			ushort sectons = (ushort)CountNonEmptySections();
+			ushort sectons = (ushort)(CountNonEmptySections() + 1);
 
 			elfheader.Type = FileType.Executable;
 			elfheader.Machine = (MachineType)MachineID;
@@ -93,7 +93,7 @@ namespace Mosa.Compiler.Linker.Elf32
 
 			foreach (var section in Sections)
 			{
-				if (section.SectionKind == SectionKind.BSS || section.Size == 0)
+				if (section.Size == 0 && section.SectionKind != SectionKind.BSS)
 					continue;
 
 				var pheader = new ProgramHeader
@@ -122,7 +122,7 @@ namespace Mosa.Compiler.Linker.Elf32
 
 			foreach (var section in Sections)
 			{
-				if (section.SectionKind == SectionKind.BSS || section.Size == 0)
+				if (section.Size == 0 && section.SectionKind != SectionKind.BSS)
 					continue;
 
 				var sheader = new SectionHeader();
