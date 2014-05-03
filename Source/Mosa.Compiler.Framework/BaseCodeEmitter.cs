@@ -73,14 +73,9 @@ namespace Mosa.Compiler.Framework
 		protected Stream codeStream;
 
 		/// <summary>
-		/// The position that the code stream starts.
-		/// </summary>
-		protected long codeStreamBasePosition;
-
-		/// <summary>
 		/// Holds the linker used to resolve externals.
 		/// </summary>
-		protected ILinker linker;
+		protected BaseLinker linker;
 
 		/// <summary>
 		/// List of labels that were emitted.
@@ -131,7 +126,7 @@ namespace Mosa.Compiler.Framework
 		/// <param name="linker">The linker.</param>
 		/// <param name="codeStream">The stream the machine code is written to.</param>
 		/// <param name="typeSystem">The type system.</param>
-		public void Initialize(string methodName, ILinker linker, Stream codeStream, TypeSystem typeSystem)
+		public void Initialize(string methodName, BaseLinker linker, Stream codeStream, TypeSystem typeSystem)
 		{
 			Debug.Assert(codeStream != null);
 			Debug.Assert(linker != null);
@@ -139,7 +134,6 @@ namespace Mosa.Compiler.Framework
 			this.MethodName = methodName;
 			this.linker = linker;
 			this.codeStream = codeStream;
-			this.codeStreamBasePosition = codeStream.Position;
 			this.TypeSystem = typeSystem;
 		}
 

@@ -9,6 +9,8 @@
 
 using System;
 
+#pragma warning disable 169, 414
+
 namespace Mosa.Internal.Plug
 {
 	[AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]

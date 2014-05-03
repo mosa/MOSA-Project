@@ -24,6 +24,7 @@
                     <include name="Emulate/DisplayForm.Designer.cs"/>
                     <include name="Emulate/Multiboot.cs"/>
                     <include name="Emulate/VGAConsole.cs"/>
+                    <include name="Opcodes/Test.cs"/>
                     <include name="Opcodes/InternalBreak.cs"/>
                     <include name="Opcodes/Roundsd.cs"/>
                     <include name="Opcodes/Roundss.cs"/>

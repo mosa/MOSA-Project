@@ -99,13 +99,6 @@ namespace Mosa.TinyCPUSimulator
 			return op;
 		}
 
-		//public static SimOperand CreateLabel(string label)
-		//{
-		//	var op = new SimOperand(32);
-		//	op.Label = label;
-		//	return op;
-		//}
-
 		public static SimOperand CreateLabel(int size, string label)
 		{
 			var op = new SimOperand(size);
@@ -154,7 +147,12 @@ namespace Mosa.TinyCPUSimulator
 					s = s + "*" + Scale.ToString();
 
 				if (Displacement != 0)
-					s = s + "+" + Displacement.ToString();
+				{
+					if (Displacement >= 0)
+						s = s + "+" + Displacement.ToString();
+					else
+						s = s + Displacement.ToString();
+				}
 
 				s = s + "]";
 

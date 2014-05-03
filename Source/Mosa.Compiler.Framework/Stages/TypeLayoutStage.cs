@@ -12,7 +12,6 @@ using Mosa.Compiler.Common;
 using Mosa.Compiler.Linker;
 using Mosa.Compiler.MosaTypeSystem;
 using System.Collections.Generic;
-using System.IO;
 
 namespace Mosa.Compiler.Framework.Stages
 {
@@ -154,10 +153,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			int methodTableSize = ((headerlinks == null ? 0 : headerlinks.Count) + (methodTable == null ? 0 : methodTable.Count)) * TypeLayout.NativePointerSize;
 
-			using (Stream stream = Compiler.Linker.Allocate(methodTableName, SectionKind.ROData, methodTableSize, TypeLayout.NativePointerAlignment))
-			{
-				stream.Position = methodTableSize;
-			}
+			var methodtable = Compiler.Linker.CreateSymbol(methodTableName, SectionKind.ROData, TypeLayout.NativePointerAlignment, methodTableSize);
 
 			int offset = 0;
 
@@ -167,7 +163,7 @@ namespace Mosa.Compiler.Framework.Stages
 				{
 					if (!string.IsNullOrEmpty(link))
 					{
-						Compiler.Linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuiltInPatch.I4, methodTableName, offset, 0, link, 0);
+						Compiler.Linker.Link(LinkType.AbsoluteAddress, BuiltInPatch.I4, methodtable, offset, 0, link, SectionKind.ROData, 0);
 					}
 
 					offset += TypeLayout.NativePointerSize;
@@ -181,7 +177,7 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				if (!method.IsAbstract)
 				{
-					Compiler.Linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuiltInPatch.I4, methodTableName, offset, 0, method.FullName, 0);
+					Compiler.Linker.Link(LinkType.AbsoluteAddress, BuiltInPatch.I4, methodtable, offset, 0, method.FullName, SectionKind.Text, 0);
 				}
 				offset += TypeLayout.NativePointerSize;
 			}
@@ -189,16 +185,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private void AskLinkerToCreateArray(string tableName, byte[] array)
 		{
-			int size = array.Length;
-
-			//FIXME: change  SectionKind.Text to SectionKind.ROData
-			using (var stream = Compiler.Linker.Allocate(tableName, SectionKind.Text, size, TypeLayout.NativePointerAlignment))
-			{
-				foreach (byte b in array)
-					stream.WriteByte(b);
-
-				stream.Position = size;
-			}
+			var symbol = Compiler.Linker.CreateSymbol(tableName, SectionKind.ROData, TypeLayout.NativePointerAlignment, array.Length);
+			symbol.Stream.Write(array);
 		}
 
 		private void AllocateStaticFields(MosaType type)
@@ -234,16 +222,11 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private void AllocateSpace(MosaField field, SectionKind section, int size, int alignment)
 		{
-			using (var stream = Compiler.Linker.Allocate(field.FullName, section, size, alignment))
+			var symbol = Compiler.Linker.CreateSymbol(field.FullName, section, alignment, size);
+
+			if (field.Data != null)
 			{
-				if (field.Data != null)
-				{
-					stream.Write(field.Data, 0, size);
-				}
-				else
-				{
-					stream.WriteZeroBytes(size);
-				}
+				symbol.Stream.Write(field.Data, 0, size);
 			}
 		}
 	}

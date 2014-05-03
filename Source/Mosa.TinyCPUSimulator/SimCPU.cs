@@ -92,7 +92,7 @@ namespace Mosa.TinyCPUSimulator
 		{
 			ulong index = address / BlockSize;
 
-			byte[] block = MemoryBlocks[index];
+			var block = MemoryBlocks[index];
 
 			if (block == null)
 			{
@@ -113,7 +113,7 @@ namespace Mosa.TinyCPUSimulator
 		private void InternalWrite8(ulong address, byte value)
 		{
 			ulong index = address / BlockSize;
-			byte[] block = MemoryBlocks[index];
+			var block = MemoryBlocks[index];
 
 			if (block == null)
 			{
@@ -369,7 +369,9 @@ namespace Mosa.TinyCPUSimulator
 
 				if (Monitor.DebugOutput)
 				{
-					Debug.WriteLine("EIP        EAX        EBX        ECX        EDX        ESI        EDI        ESP        EBP        XMM#0      XMM#1      XMM#2      XMM#3      FLAGS");
+					// Move to CPUx86
+					//Debug.WriteLine("EIP        EAX        EBX        ECX        EDX        ESI        EDI        ESP        EBP        XMM#0      XMM#1      XMM#2      XMM#3      FLAGS");
+					Debug.WriteLine("EIP        EAX        EBX        ECX        EDX        ESI        EDI        ESP        EBP        FLAGS");
 				}
 
 				for (; ; )

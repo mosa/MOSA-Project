@@ -9,7 +9,6 @@
 
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework;
-using System;
 using Mosa.Compiler.MosaTypeSystem;
 
 namespace Mosa.Platform.x64
@@ -321,6 +320,5 @@ namespace Mosa.Platform.x64
 			// TODO
 			return false;
 		}
-
 	}
 }

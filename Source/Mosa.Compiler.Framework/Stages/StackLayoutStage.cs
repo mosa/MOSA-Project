@@ -8,6 +8,7 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using Mosa.Compiler.Common;
 using System.Collections.Generic;
 
 namespace Mosa.Compiler.Framework.Stages
@@ -37,7 +38,7 @@ namespace Mosa.Compiler.Framework.Stages
 		private void LayoutStackVariables()
 		{
 			// assign increasing stack offsets to each variable
-			MethodCompiler.StackLayout.StackSize = LayoutVariables(MethodCompiler.StackLayout.Stack, CallingConvention, CallingConvention.OffsetOfFirstLocal, 1);
+			MethodCompiler.StackLayout.StackSize = LayoutVariables(MethodCompiler.StackLayout.Stack, CallingConvention, CallingConvention.OffsetOfFirstLocal, true);
 		}
 
 		/// <summary>
@@ -45,7 +46,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </summary>
 		private void LayoutParameters()
 		{
-			List<Operand> parameters = new List<Operand>();
+			var parameters = new List<Operand>();
 
 			int offset = 0;
 
@@ -59,7 +60,7 @@ namespace Mosa.Compiler.Framework.Stages
 				parameters.Add(parameter);
 			}
 
-			LayoutVariables(parameters, CallingConvention, CallingConvention.OffsetOfFirstParameter, -1);
+			LayoutVariables(parameters, CallingConvention, CallingConvention.OffsetOfFirstParameter, false);
 		}
 
 		/// <summary>
@@ -68,56 +69,55 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="locals">The enumerable holding all locals.</param>
 		/// <param name="callingConvention">The cc.</param>
 		/// <param name="offsetOfFirst">Specifies the offset of the first stack operand in the list.</param>
-		/// <param name="direction">The direction.</param>
+		/// <param name="isLocalVariable">The direction.</param>
 		/// <returns></returns>
-		private int LayoutVariables(IList<Operand> locals, BaseCallingConvention callingConvention, int offsetOfFirst, int direction)
+		private int LayoutVariables(IList<Operand> locals, BaseCallingConvention callingConvention, int offsetOfFirst, bool isLocalVariable)
 		{
 			int offset = offsetOfFirst;
 
 			foreach (var operand in locals)
 			{
-				if (!operand.IsParameter && operand.IsStackLocal && operand.Uses.Count == 0 && operand.Definitions.Count == 0)
+				bool skip = false;
+
+				if (!operand.IsParameter && operand.Uses.Count == 0 && operand.Definitions.Count == 0)
+				{
+					if (operand.Low == null && operand.High == null)
+					{
+						skip = true;
+					}
+					else if (operand.Low.Uses.Count == 0 && operand.Low.Definitions.Count == 0 && operand.High.Uses.Count == 0 && operand.High.Definitions.Count == 0)
+					{
+						skip = true;
+					}
+				}
+
+				if (skip)
 				{
 					operand.Displacement = 0;
+					continue;
 				}
-				else
+
+				int size, alignment;
+				Architecture.GetTypeRequirements(TypeLayout, operand.Type, out size, out alignment);
+				if (isLocalVariable)
 				{
-					// Does the offset fit the alignment requirement?
-					int alignment = 0;
-					int size = 0;
-					int padding = 0;
-					int thisOffset = 0;
+					offset = offset - size;
+					offset = Alignment.AlignDown(offset, alignment);
+				}
 
-					callingConvention.GetStackRequirements(TypeLayout, operand, out size, out alignment);
-					if (direction == 1)
-					{
-						padding = (offset % alignment);
-						offset -= (padding + size);
-						thisOffset = offset;
-					}
-					else
-					{
-						padding = (offset % alignment);
-						if (padding != 0)
-							padding = alignment - padding;
+				// adjust split children
+				if (operand.Low != null)
+				{
+					operand.Low.Displacement = offset + (operand.Low.Displacement - operand.Displacement);
+					operand.High.Displacement = offset + (operand.High.Displacement - operand.Displacement);
+				}
 
-						thisOffset = offset;
-						offset += (padding + size);
-					}
+				operand.Displacement = offset;
 
-					long existing = operand.Displacement;
-					operand.Displacement = thisOffset;
-
-					// adjust split children
-					if (operand.Low != null)
-					{
-						operand.Low.Displacement = thisOffset + (operand.Low.Displacement - existing);
-					}
-
-					if (operand.High != null)
-					{
-						operand.High.Displacement = thisOffset + (operand.High.Displacement - existing);
-					}
+				if (!isLocalVariable)
+				{
+					offset = offset + size;
+					offset = Alignment.AlignUp(offset, alignment);
 				}
 			}
 

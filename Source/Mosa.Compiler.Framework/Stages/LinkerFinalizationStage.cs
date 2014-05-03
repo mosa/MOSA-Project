@@ -7,6 +7,8 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using System.IO;
+
 namespace Mosa.Compiler.Framework.Stages
 {
 	/// <summary>
@@ -16,7 +18,11 @@ namespace Mosa.Compiler.Framework.Stages
 	{
 		protected override void Run()
 		{
-			Linker.Commit();
+			using (var file = new FileStream(CompilerOptions.OutputFile, FileMode.Create))
+			{
+				Linker.Emit(file);
+				file.Close();
+			}
 		}
 	}
 }

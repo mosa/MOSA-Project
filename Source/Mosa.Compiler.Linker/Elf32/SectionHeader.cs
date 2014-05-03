@@ -67,7 +67,7 @@ namespace Mosa.Compiler.Linker.Elf32
 		public uint Info;
 
 		/// <summary>
-		/// Some sections have virtualAddress alignment constraints. For example, if a section
+		/// Some sections have alignment constraints. For example, if a section
 		/// holds a doubleword, the system must ensure doubleword alignment for the
 		/// entire section.  That is, the value of sh_addr must be congruent to 0,
 		/// modulo the value of sh_addralign. Currently, only 0 and positive

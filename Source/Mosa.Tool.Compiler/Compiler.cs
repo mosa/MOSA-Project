@@ -13,7 +13,6 @@ using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Linker;
 using Mosa.Compiler.Linker.Elf32;
-using Mosa.Compiler.Linker.Elf64;
 using Mosa.Compiler.Linker.PE;
 using NDesk.Options;
 using System;
@@ -213,8 +212,8 @@ namespace Mosa.Tool.Compiler
 			);
 
 			optionSet.Add(
-				"multiboot-video-mode=",
-				"Specify the video mode for multiboot [{text|graphics}].",
+				"multibootHeader-video-mode=",
+				"Specify the video mode for multibootHeader [{text|graphics}].",
 				delegate(string v)
 				{
 					switch (v.ToLower())
@@ -228,13 +227,13 @@ namespace Mosa.Tool.Compiler
 							break;
 
 						default:
-							throw new OptionException("Invalid value for multiboot video mode: " + v, "multiboot-video-mode");
+							throw new OptionException("Invalid value for multibootHeader video mode: " + v, "multibootHeader-video-mode");
 					}
 				}
 			);
 
 			optionSet.Add(
-				"multiboot-video-width=",
+				"multibootHeader-video-width=",
 				"Specify the {width} for video output, in pixels for graphics mode or in characters for text mode.",
 				delegate(string v)
 				{
@@ -246,13 +245,13 @@ namespace Mosa.Tool.Compiler
 					}
 					else
 					{
-						throw new OptionException("Invalid value for multiboot video width: " + v, "multiboot-video-width");
+						throw new OptionException("Invalid value for multibootHeader video width: " + v, "multibootHeader-video-width");
 					}
 				}
 			);
 
 			optionSet.Add(
-				"multiboot-video-height=",
+				"multibootHeader-video-height=",
 				"Specify the {height} for video output, in pixels for graphics mode or in characters for text mode.",
 				delegate(string v)
 				{
@@ -264,13 +263,13 @@ namespace Mosa.Tool.Compiler
 					}
 					else
 					{
-						throw new OptionException("Invalid value for multiboot video height: " + v, "multiboot-video-height");
+						throw new OptionException("Invalid value for multibootHeader video height: " + v, "multibootHeader-video-height");
 					}
 				}
 			);
 
 			optionSet.Add(
-				"multiboot-video-depth=",
+				"multibootHeader-video-depth=",
 				"Specify the {depth} (number of bits per pixel) for graphics mode.",
 				delegate(string v)
 				{
@@ -281,7 +280,7 @@ namespace Mosa.Tool.Compiler
 					}
 					else
 					{
-						throw new OptionException("Invalid value for multiboot video depth: " + v, "multiboot-video-depth");
+						throw new OptionException("Invalid value for multibootHeader video depth: " + v, "multibootHeader-video-depth");
 					}
 				}
 			);
@@ -385,7 +384,7 @@ namespace Mosa.Tool.Compiler
 			sb.Append(" > Output file: ").AppendLine(compilerOptions.OutputFile);
 			sb.Append(" > Input file(s): ").AppendLine(String.Join(", ", new List<string>(GetInputFileNames()).ToArray()));
 			sb.Append(" > Architecture: ").AppendLine(compilerOptions.Architecture.GetType().FullName);
-			sb.Append(" > Binary format: ").AppendLine(compilerOptions.LinkerFactory().Name.ToString());
+			sb.Append(" > Binary format: ").AppendLine(compilerOptions.LinkerFactory().GetType().FullName);
 			sb.Append(" > Boot format: ").AppendLine((compilerOptions.BootStageFactory == null) ? "None" : ((IPipelineStage)compilerOptions.BootStageFactory()).Name);
 			sb.Append(" > Is executable: ").AppendLine(isExecutable.ToString());
 			return sb.ToString();
@@ -475,20 +474,20 @@ namespace Mosa.Tool.Compiler
 		{
 			switch (format.ToLower())
 			{
-				case "multiboot-0.7":
+				case "multibootHeader-0.7":
 				case "mb0.7": return delegate { return new Mosa.Platform.x86.Stages.Multiboot0695Stage(); };
 				default: throw new OptionException(String.Format("Unknown or unsupported boot format {0}.", format), "boot");
 			}
 		}
 
-		private static Func<ILinker> GetLinkerFactory(string format)
+		private static Func<BaseLinker> GetLinkerFactory(string format)
 		{
 			switch (format.ToLower())
 			{
-				case "elf32": return delegate { return new Elf32Linker(); };
-				case "elf64": return delegate { return new Elf64Linker(); };
 				case "pe": return delegate { return new PELinker(); };
-
+				case "elf": return delegate { return new Elf32(); };
+				case "elf32": return delegate { return new Elf32(); };
+				//case "elf64": return delegate { return new Elf64Linker(); };
 				default: return null;
 			}
 		}

@@ -14,19 +14,29 @@
 	<target name="build">
 	    <csc target="library" output="${outputDirectory}/mscorlib.dll" debug="${debug}" unsafe="true" nostdlib="true">
 		<sources>
+                    <include name="System.Collections/IComparer.cs"/>
+                    <include name="System.Collections/IStructuralComparable.cs"/>
+                    <include name="System.Collections/IStructuralEquatable.cs"/>
                     <include name="System.Diagnostics/DebuggerHiddenAttribute.cs"/>
+                    <include name="System.IO/BinaryReader.cs"/>
+                    <include name="System.IO/MemoryStream.cs"/>
                     <include name="System.Reflection/Assembly.cs"/>
+                    <include name="System.Reflection/AssemblyDescriptionAttribute.cs"/>
+                    <include name="System.Reflection/AssemblyTitleAttribute.cs"/>
+                    <include name="System.Reflection/ICustomAttributeProvider.cs"/>
                     <include name="System.Reflection/MemberInfo.cs"/>
                     <include name="System.Reflection/Module.cs"/>
                     <include name="System.Runtime.CompilerServices/CompilationRelaxationsAttribute.cs"/>
                     <include name="System.Runtime.CompilerServices/RuntimeCompatibilityAttribute.cs"/>
                     <include name="System.Runtime.CompilerServices/RuntimeHelpers.cs"/>
                     <include name="System.Runtime.InteropServices/CallingConvention.cs"/>
+                    <include name="System.Runtime.InteropServices/FieldOffsetAttribute.cs"/>
                     <include name="System.Runtime.InteropServices/LayoutKind.cs"/>
                     <include name="System.Runtime.InteropServices/StructLayoutAttribute.cs"/>
                     <include name="System.Runtime.InteropServices/DllImportAttribute.cs"/>
                     <include name="System.Runtime.InteropServices/UnmanagedFunctionPointerAttribute.cs"/>
                     <include name="System.Runtime.InteropServices/UnmanagedType.cs"/>
+                    <include name="System.Threading/SpinLock.cs"/>
                     <include name="System/Activator.cs"/>
                     <include name="System/ArgumentException.cs"/>
                     <include name="System/ArgumentNullException.cs"/>
@@ -38,8 +48,11 @@
                     <include name="System/CLSCompliantAttribute.cs"/>
                     <include name="System.Diagnostics/DebuggableAttribute.cs"/>
                     <include name="System/AsyncCallback.cs"/>
-                    <include name="System/TypedReference.cs"/>
                     <include name="System/IAsyncResult.cs"/>
+                    <include name="System/ICloneable.cs"/>
+                    <include name="System/NotImplementedException.cs"/>
+                    <include name="System/SystemException.cs"/>
+                    <include name="System/TypedReference.cs"/>
                     <include name="System/WaitHandle.cs"/>
                     <include name="System/IComparable.cs"/>
                     <include name="System/Delegate.cs"/>

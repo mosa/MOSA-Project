@@ -44,6 +44,8 @@
     <Compile Include="ControlRegister.cs" />
     <Compile Include="CR0.cs" />
     <Compile Include="Emulate\CMOS.cs" />
+    <Compile Include="Emulate\MosaImage.cs" />
+    <Compile Include="Emulate\MosaTestMemory.cs" />
     <Compile Include="Emulate\MosaKernel.cs" />
     <Compile Include="Emulate\PowerUp.cs" />
     <Compile Include="Emulate\DisplayForm.cs">

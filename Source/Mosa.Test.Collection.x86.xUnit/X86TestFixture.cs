@@ -8,11 +8,12 @@
  */
 
 using Mosa.TinyCPUSimulator.TestSystem;
+using Mosa.TinyCPUSimulator.x86.Adaptor;
 
 namespace Mosa.Test.Collection.x86.xUnit
 {
 	public class X86TestFixture : TestFixture
 	{
-		protected override BasePlatform BasePlatform { get { return new X86Platform(); } }
+		protected override BaseTestPlatform BasePlatform { get { return new TestPlatform(); } }
 	}
 }

@@ -21,6 +21,7 @@
                     <include name="Instructions/Fld.cs"/>
                     <include name="Instructions/MovCR.cs"/>
                     <include name="Instructions/IMul.cs"/>
+                    <include name="Instructions/Test.cs"/>
                     <include name="Instructions/TwoOperandInstruction.cs"/>
                     <include name="Instructions/Addsd.cs"/>
                     <include name="Intrinsic/Div.cs"/>
@@ -79,7 +80,6 @@
                     <include name="Stages/MethodTableBuilderStage.cs"/>
                     <include name="SegmentRegister.cs"/>
                     <include name="Instructions/Branch.cs"/>
-                    <include name="Intrinsic/Test.cs"/>
                     <include name="Instructions/Cvttsd2si.cs"/>
                     <include name="Instructions/Cvttss2si.cs"/>
                     <include name="Instructions/Div.cs"/>

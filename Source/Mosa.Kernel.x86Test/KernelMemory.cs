@@ -1,5 +1,5 @@
 ﻿/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
+ * (c) 2014 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
  *
@@ -13,7 +13,7 @@ namespace Mosa.Kernel.x86Test
 {
 	public static class KernelMemory
 	{
-		private static uint memoryPtr;
+		private static uint memoryPtr = 0x00900000;
 
 		[PlugMethod("Mosa.Platform.Internal.x86.Runtime.AllocateMemory")]
 		static public uint AllocateMemory(uint size)

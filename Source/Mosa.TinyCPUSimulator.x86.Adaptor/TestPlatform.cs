@@ -1,5 +1,5 @@
 ﻿/*
- * (c) 2013 MOSA - The Managed Operating System Alliance
+ * (c) 2014 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
  *
@@ -11,17 +11,16 @@ using Mosa.Compiler.Framework;
 using Mosa.Compiler.MosaTypeSystem;
 using Mosa.Platform.x86;
 using Mosa.TinyCPUSimulator.Adaptor;
-using Mosa.TinyCPUSimulator.x86;
-using Mosa.TinyCPUSimulator.x86.Adaptor;
+using Mosa.TinyCPUSimulator.TestSystem;
 using System;
 
-namespace Mosa.TinyCPUSimulator.TestSystem
+namespace Mosa.TinyCPUSimulator.x86.Adaptor
 {
-	public class X86Platform : BasePlatform
+	public class TestPlatform : BaseTestPlatform
 	{
 		private const uint StopEIP = 0x01000;
 
-		public X86Platform()
+		public TestPlatform()
 			: base("x86")
 		{
 		}
@@ -38,13 +37,13 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 
 		public override void InitializeSimulation(ISimAdapter simAdapter)
 		{
-			simAdapter.SimCPU.AddMemory(0x00000000, 0x000A0000, 1); // First 640kb
-
-			simAdapter.SimCPU.Monitor.AddBreakPoint(StopEIP);
 		}
 
 		public override void ResetSimulation(ISimAdapter simAdapter)
 		{
+			simAdapter.SimCPU.Monitor.ClearBreakPoints();
+			simAdapter.SimCPU.Monitor.AddBreakPoint(StopEIP);
+
 			var x86 = simAdapter.SimCPU as CPUx86;
 
 			x86.Reset();
@@ -178,6 +177,8 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 				return (object)(float)x86.XMM0.Value;
 			else if (type.IsR8)
 				return (object)(double)x86.XMM0.Value;
+			else if (type.IsVoid)
+				return null;
 
 			return null;
 		}

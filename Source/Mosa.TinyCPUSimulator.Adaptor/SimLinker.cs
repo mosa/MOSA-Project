@@ -1,5 +1,5 @@
 /*
- * (c) 2013 MOSA - The Managed Operating System Alliance
+ * (c) 2014 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
  *
@@ -9,17 +9,20 @@
 
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Linker;
+using Mosa.Compiler.Linker.Flat;
+using System.Collections.Generic;
+using System.IO;
 
 namespace Mosa.TinyCPUSimulator.Adaptor
 {
 	/// <summary>
 	/// </summary>
-	public class SimLinker : BaseLinker
+	public class SimLinker : FlatLinker
 	{
-		/// <summary>
-		/// The cpu
-		/// </summary>
-		public ISimAdapter SimAdapter { get; protected set; }
+		private ISimAdapter simAdapter;
+
+		private List<Tuple<LinkerSymbol, int, string>> targetSymbols = new List<Tuple<LinkerSymbol, int, string>>();
+		private List<Tuple<LinkerSymbol, long, SimInstruction>> instructions = new List<Tuple<LinkerSymbol, long, SimInstruction>>();
 
 		#region Construction
 
@@ -29,45 +32,42 @@ namespace Mosa.TinyCPUSimulator.Adaptor
 		/// <param name="simAdapter">The sim adapter.</param>
 		public SimLinker(ISimAdapter simAdapter)
 		{
-			this.SimAdapter = simAdapter;
-
-			AddSection(new SimLinkerSection(SectionKind.BSS, "BSS", 0x400000, 0x200000, simAdapter));
-			AddSection(new SimLinkerSection(SectionKind.Data, "Data", 0x600000, 0x200000, simAdapter));
-			AddSection(new SimLinkerSection(SectionKind.ROData, "ReadOnlyData", 0x800000, 0x200000, simAdapter));
-			AddSection(new SimLinkerSection(SectionKind.Text, "Text", 0xA00000, 0x200000, simAdapter));
-
-			LoadSectionAlignment = 1;
-			SectionAlignment = 1;
-			Endianness = Endianness.Little;	// FIXME: assumes x86
-		}
-
-		protected override void CreateFile()
-		{
-			base.CreateFile();
-
-			foreach (var symbol in Symbols)
-			{
-				SimAdapter.SimCPU.SetSymbol(symbol.Name, (ulong)symbol.VirtualAddress, (ulong)symbol.Length);
-			}
-
-			foreach (var section in Sections)
-			{
-				ulong address = (ulong)section.VirtualAddress;
-
-				var mem = (section as SimLinkerSection).Memory;
-
-				foreach (byte b in mem)
-				{
-					if (b != 0)
-					{
-						SimAdapter.SimCPU.DirectWrite8(address, b);
-					}
-
-					address++;
-				}
-			}
+			this.simAdapter = simAdapter;
 		}
 
 		#endregion Construction
+
+		public void AddTargetSymbol(LinkerSymbol baseSymbol, int offset, string name)
+		{
+			targetSymbols.Add(new Tuple<LinkerSymbol, int, string>(baseSymbol, offset, name));
+		}
+
+		public void AddInstruction(LinkerSymbol baseSymbol, long offset, SimInstruction instruction)
+		{
+			instructions.Add(new Tuple<LinkerSymbol, long, SimInstruction>(baseSymbol, offset, instruction));
+		}
+
+		protected override void EmitImplementation(Stream stream)
+		{
+			base.EmitImplementation(stream);
+
+			foreach (var symbol in Symbols)
+			{
+				simAdapter.SimCPU.SetSymbol(symbol.Name, symbol.VirtualAddress, (ulong)symbol.Size);
+			}
+
+			foreach (var target in targetSymbols)
+			{
+				simAdapter.SimCPU.SetSymbol(target.Item3, target.Item1.VirtualAddress + (ulong)target.Item2, 0);
+			}
+
+			foreach (var target in instructions)
+			{
+				simAdapter.SimCPU.AddInstruction(target.Item1.VirtualAddress + (ulong)target.Item2, target.Item3);
+			}
+
+			targetSymbols = null;
+			instructions = null;
+		}
 	}
 }

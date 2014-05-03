@@ -10,6 +10,8 @@
 using System;
 using System.IO;
 
+#pragma warning disable 169, 414, 219
+
 namespace Mosa.Utility.IsoImage
 {
 	internal class IsoFile : IsoEntry

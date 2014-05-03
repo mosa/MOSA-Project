@@ -15,7 +15,6 @@ using Mosa.Compiler.MosaTypeSystem;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 
 namespace Mosa.Compiler.Framework
 {
@@ -95,7 +94,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets the linker used to resolve external symbols.
 		/// </summary>
-		public ILinker Linker { get; private set; }
+		public BaseLinker Linker { get; private set; }
 
 		/// <summary>
 		/// Gets the method implementation being compiled.
@@ -199,15 +198,6 @@ namespace Mosa.Compiler.Framework
 			{
 				StackLayout.SetStackParameter(index++, parameter.Type, displacement, parameter.Name);
 			}
-		}
-
-		/// <summary>
-		/// Requests a stream to emit native instructions to.
-		/// </summary>
-		/// <returns>A stream object, which can be used to store emitted instructions.</returns>
-		public virtual Stream RequestCodeStream()
-		{
-			return Linker.Allocate(Method.FullName, SectionKind.Text, 0, 0);
 		}
 
 		/// <summary>
@@ -315,14 +305,13 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		protected virtual void InitializeType()
 		{
-			typeInitializer = Compiler.Pipeline.FindFirst<TypeInitializerSchedulerStage>();
-
-			if (typeInitializer == null)
-				return;
-
-			// If we're compiling a type initializer, run it immediately.
 			if (Method.IsSpecialName && Method.IsRTSpecialName && Method.IsStatic && Method.Name == ".cctor")
 			{
+				typeInitializer = Compiler.Pipeline.FindFirst<TypeInitializerSchedulerStage>();
+
+				if (typeInitializer == null)
+					return;
+
 				typeInitializer.Schedule(Method);
 			}
 		}

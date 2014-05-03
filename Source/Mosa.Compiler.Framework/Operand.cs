@@ -416,6 +416,10 @@ namespace Mosa.Compiler.Framework
 				operand.ConstantUnsignedInteger = value;
 			else if (operand.IsSigned)
 				operand.ConstantSignedInteger = (int)value;
+			else if (operand.IsBoolean)
+				operand.ConstantUnsignedInteger = value;
+			else if (operand.IsChar)
+				operand.ConstantUnsignedInteger = value;
 			else
 				throw new InvalidCompilerException();
 
@@ -593,6 +597,7 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		public static Operand CreateManagedSymbolPointer(TypeSystem typeSystem, MosaType type, string name)
 		{
+			// NOTE: Not being used
 			var operand = new Operand(type.ToManagedPointer());
 			operand.IsSymbol = true;
 			operand.Name = name;
@@ -992,7 +997,7 @@ namespace Mosa.Compiler.Framework
 
 				if (IsNull)
 					sb.Append("null");
-				else if (IsUnsigned)
+				else if (IsUnsigned || IsBoolean || IsChar)
 					sb.AppendFormat("{0}", ConstantUnsignedInteger);
 				else if (IsSigned)
 					sb.AppendFormat("{0}", ConstantSignedInteger);

@@ -55,6 +55,14 @@ namespace Mosa.Compiler.Framework
 		#region Properties
 
 		/// <summary>
+		/// Gets or sets the base address.
+		/// </summary>
+		/// <value>
+		/// The base address.
+		/// </value>
+		public ulong BaseAddress { get; set; }
+
+		/// <summary>
 		/// Gets or sets the architecture.
 		/// </summary>
 		/// <value>The architecture.</value>
@@ -145,8 +153,8 @@ namespace Mosa.Compiler.Framework
 		/// <value>
 		/// The linker factory.
 		/// </value>
-		public Func<ILinker> LinkerFactory { get; set; }
-
+		public Func<BaseLinker> LinkerFactory { get; set; }
+		
 		/// <summary>
 		/// Gets or sets the compiler stage responsible for booting.
 		/// </summary>
@@ -161,6 +169,7 @@ namespace Mosa.Compiler.Framework
 		{
 			EnableSSA = false;
 			EnableSSAOptimizations = true;
+			BaseAddress = 0x00400000;
 			DominanceAnalysisFactory = delegate { return new SimpleFastDominance(); };
 			BlockOrderAnalysisFactory = delegate { return new LoopAwareBlockOrder(); };
 		}

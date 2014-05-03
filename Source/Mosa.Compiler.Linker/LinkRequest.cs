@@ -1,11 +1,13 @@
 ﻿/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
+ * (c) 2014 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
- *  Michael Ruck (grover) <sharpos@michaelruck.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
+
+using System.Diagnostics;
 
 namespace Mosa.Compiler.Linker
 {
@@ -14,42 +16,7 @@ namespace Mosa.Compiler.Linker
 	/// </summary>
 	public sealed class LinkRequest
 	{
-		#region Construction
-
-		/// <summary>
-		/// Initializes a new instance of LinkRequest.
-		/// </summary>
-		/// <param name="linkType">Type of the link.</param>
-		/// <param name="patches">The patches.</param>
-		/// <param name="symbolName">The symbol that is being patched.</param>
-		/// <param name="symbolOffset">The symbol offset.</param>
-		/// <param name="relativeBase">The base virtualAddress, if a relative link is required.</param>
-		/// <param name="targetSymbol">The linker symbol to link against.</param>
-		/// <param name="targetOffset">An offset to apply to the link target.</param>
-		public LinkRequest(LinkType linkType, Patch[] patches, string symbolName, int symbolOffset, int relativeBase, string targetSymbol, long targetOffset)
-		{
-			this.SymbolName = symbolName;
-			this.SymbolOffset = symbolOffset;
-			this.LinkType = linkType;
-			this.SymbolRelativeBase = relativeBase;
-			this.TargetSymbol = targetSymbol;
-			this.TargetOffset = targetOffset;
-			this.Patches = patches;
-		}
-
-		#endregion Construction
-
 		#region Properties
-
-		/// <summary>
-		/// The method whose code is being patched.
-		/// </summary>
-		public string SymbolName { get; private set; }
-
-		/// <summary>
-		/// Determines the relative base of the link request.
-		/// </summary>
-		public int SymbolRelativeBase { get; private set; }
 
 		/// <summary>
 		/// The type of link required
@@ -57,30 +24,77 @@ namespace Mosa.Compiler.Linker
 		public LinkType LinkType { get; private set; }
 
 		/// <summary>
-		/// Gets the symbol offset.
+		/// Gets the patches.
+		/// </summary>
+		public PatchType PatchType { get; private set; }
+
+		/// <summary>
+		/// The object that is being patched.
+		/// </summary>
+		public LinkerSymbol PatchSymbol { get; private set; }
+
+		/// <summary>
+		/// Gets the patch offset.
 		/// </summary>
 		/// <value>
 		/// The symbol offset.
 		/// </value>
-		public int SymbolOffset { get; private set; }
+		public int PatchOffset { get; private set; }
 
 		/// <summary>
-		/// Gets the name of the symbol.
+		/// Determines the relative base of the link request.
 		/// </summary>
-		/// <value>The name of the symbol.</value>
-		public string TargetSymbol { get; private set; }
+		public int RelativeBase { get; private set; }
 
 		/// <summary>
-		/// Gets the offset to apply to the link target.
+		/// Gets the reference symbol.
+		/// </summary>
+		/// <value>
+		/// The reference symbol.
+		/// </value>
+		public LinkerSymbol ReferenceSymbol { get; private set; }
+
+		/// <summary>
+		/// Gets the offset to apply to the reference target.
 		/// </summary>
 		/// <value>The offset.</value>
-		public long TargetOffset { get; private set; }
-
-		/// <summary>
-		/// Gets the patches.
-		/// </summary>
-		public Patch[] Patches { get; private set; }
+		public int ReferenceOffset { get; private set; }
 
 		#endregion Properties
+
+		#region Construction
+
+		/// <summary>
+		/// Initializes a new instance of LinkRequest.
+		/// </summary>
+		/// <param name="linkType">Type of the link.</param>
+		/// <param name="patchType">Type of the patch.</param>
+		/// <param name="patchSymbol">The patch symbol.</param>
+		/// <param name="patchOffset">The patch offset.</param>
+		/// <param name="relativeBase">The relative base.</param>
+		/// <param name="referenceSymbol">The reference symbol.</param>
+		/// <param name="referenceOffset">The reference offset.</param>
+		public LinkRequest(LinkType linkType, PatchType patchType, LinkerSymbol patchSymbol, int patchOffset, int relativeBase, LinkerSymbol referenceSymbol, int referenceOffset)
+		{
+			Debug.Assert(patchSymbol != null);
+			Debug.Assert(referenceSymbol != null);
+
+			this.LinkType = linkType;
+			this.PatchType = patchType;
+
+			this.PatchSymbol = patchSymbol;
+			this.PatchOffset = patchOffset;
+
+			this.RelativeBase = relativeBase;
+			this.ReferenceSymbol = referenceSymbol;
+			this.ReferenceOffset = referenceOffset;
+		}
+
+		#endregion Construction
+
+		public override string ToString()
+		{
+			return PatchSymbol.Name + " -> " + ReferenceSymbol.Name;
+		}
 	}
 }

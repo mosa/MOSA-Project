@@ -32,9 +32,6 @@ namespace Mosa.Compiler.Framework.Stages
 				if (local.IsVirtualRegister)
 					continue;
 
-				if (local.Uses.Count == 0)
-					continue;
-
 				if (local.Definitions.Count != 1)
 					continue;
 

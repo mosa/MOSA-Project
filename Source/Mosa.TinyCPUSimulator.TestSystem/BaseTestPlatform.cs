@@ -13,11 +13,11 @@ using Mosa.TinyCPUSimulator.Adaptor;
 
 namespace Mosa.TinyCPUSimulator.TestSystem
 {
-	public abstract class BasePlatform
+	public abstract class BaseTestPlatform
 	{
 		public string Name { get; set; }
 
-		public BasePlatform(string platform)
+		public BaseTestPlatform(string platform)
 		{
 			Name = platform;
 		}
