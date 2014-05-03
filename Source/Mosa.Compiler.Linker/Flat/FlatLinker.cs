@@ -34,6 +34,7 @@ namespace Mosa.Compiler.Linker.Flat
 		{
 			foreach (var section in Sections)
 			{
+				stream.Position = 0;
 				section.WriteTo(stream);
 			}
 		}
