@@ -53,17 +53,17 @@ namespace Mosa.TinyCPUSimulator.Adaptor
 
 			foreach (var symbol in Symbols)
 			{
-				simAdapter.SimCPU.SetSymbol(symbol.Name, symbol.ResolvedVirtualAddress, (ulong)symbol.Size);
+				simAdapter.SimCPU.SetSymbol(symbol.Name, symbol.VirtualAddress, (ulong)symbol.Size);
 			}
 
 			foreach (var target in targetSymbols)
 			{
-				simAdapter.SimCPU.SetSymbol(target.Item3, target.Item1.ResolvedVirtualAddress + (ulong)target.Item2, 0);
+				simAdapter.SimCPU.SetSymbol(target.Item3, target.Item1.VirtualAddress + (ulong)target.Item2, 0);
 			}
 
 			foreach (var target in instructions)
 			{
-				simAdapter.SimCPU.AddInstruction(target.Item1.ResolvedVirtualAddress + (ulong)target.Item2, target.Item3);
+				simAdapter.SimCPU.AddInstruction(target.Item1.VirtualAddress + (ulong)target.Item2, target.Item3);
 			}
 
 			targetSymbols = null;

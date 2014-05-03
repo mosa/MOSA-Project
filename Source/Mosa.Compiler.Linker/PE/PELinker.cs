@@ -24,11 +24,6 @@ namespace Mosa.Compiler.Linker.PE
 		/// </summary>
 		private const uint FILE_SECTION_ALIGNMENT = 0x1000;
 
-		/// <summary>
-		/// Specifies the default section alignment in virtual memory.
-		/// </summary>
-		private const uint SECTION_ALIGNMENT = 0x1000;
-
 		// Write the following 64 bytes, which represent the default x86 code to
 		// print a message on the screen.
 		private static readonly byte[] dosmessage = new byte[] {
@@ -50,8 +45,8 @@ namespace Mosa.Compiler.Linker.PE
 
 		public PELinker()
 		{
-			FileAlignment = FILE_SECTION_ALIGNMENT;
-			SectionAlignment = SECTION_ALIGNMENT;
+			// Set the default section alignment in virtual memory.
+			SectionAlignment = 0x1000;
 
 			AddSection(new LinkerSection(SectionKind.Text, ".text", SectionAlignment));
 			AddSection(new LinkerSection(SectionKind.Data, ".data", SectionAlignment));
@@ -131,22 +126,22 @@ namespace Mosa.Compiler.Linker.PE
 			ntHeaders.OptionalHeader.Magic = ImageOptionalHeader.IMAGE_OPTIONAL_HEADER_MAGIC;
 			ntHeaders.OptionalHeader.MajorLinkerVersion = 6;
 			ntHeaders.OptionalHeader.MinorLinkerVersion = 0;
-			ntHeaders.OptionalHeader.SizeOfCode = (uint)Alignment.AlignUp(GetSection(SectionKind.Text).Size, SectionAlignment);
-			ntHeaders.OptionalHeader.SizeOfInitializedData = (uint)(
+			ntHeaders.OptionalHeader.SizeOfCode = Alignment.AlignUp(GetSection(SectionKind.Text).Size, SectionAlignment);
+			ntHeaders.OptionalHeader.SizeOfInitializedData =
 				Alignment.AlignUp(GetSection(SectionKind.Data).Size, SectionAlignment) +
-				Alignment.AlignUp(GetSection(SectionKind.ROData).Size, SectionAlignment));
-			ntHeaders.OptionalHeader.SizeOfUninitializedData = (uint)Alignment.AlignUp(GetSection(SectionKind.BSS).Size, SectionAlignment);
-			ntHeaders.OptionalHeader.AddressOfEntryPoint = (uint)(EntryPoint.ResolvedVirtualAddress - BaseAddress);
-			ntHeaders.OptionalHeader.BaseOfCode = (uint)(GetSection(SectionKind.Text).ResolvedVirtualAddress - BaseAddress);
+				Alignment.AlignUp(GetSection(SectionKind.ROData).Size, SectionAlignment);
+			ntHeaders.OptionalHeader.SizeOfUninitializedData = Alignment.AlignUp(GetSection(SectionKind.BSS).Size, SectionAlignment);
+			ntHeaders.OptionalHeader.AddressOfEntryPoint = (uint)(EntryPoint.VirtualAddress - BaseAddress);
+			ntHeaders.OptionalHeader.BaseOfCode = (uint)(GetSection(SectionKind.Text).VirtualAddress - BaseAddress);
 
-			ulong sectionAddress = GetSection(SectionKind.Data).ResolvedVirtualAddress;
+			ulong sectionAddress = GetSection(SectionKind.Data).VirtualAddress;
 			if (sectionAddress != 0)
 			{
 				ntHeaders.OptionalHeader.BaseOfData = (uint)(sectionAddress - BaseAddress);
 			}
 
 			ntHeaders.OptionalHeader.ImageBase = (uint)BaseAddress;
-			ntHeaders.OptionalHeader.SectionAlignment = (uint)SectionAlignment;
+			ntHeaders.OptionalHeader.SectionAlignment = SectionAlignment;
 			ntHeaders.OptionalHeader.FileAlignment = FILE_SECTION_ALIGNMENT;
 			ntHeaders.OptionalHeader.MajorOperatingSystemVersion = 4;
 			ntHeaders.OptionalHeader.MinorOperatingSystemVersion = 0;
@@ -155,7 +150,7 @@ namespace Mosa.Compiler.Linker.PE
 			ntHeaders.OptionalHeader.MajorSubsystemVersion = 4;
 			ntHeaders.OptionalHeader.MinorSubsystemVersion = 0;
 			ntHeaders.OptionalHeader.Win32VersionValue = 0;
-			ntHeaders.OptionalHeader.SizeOfImage = (uint)CalculateSizeOfImage();
+			ntHeaders.OptionalHeader.SizeOfImage = CalculateSizeOfImage();
 			ntHeaders.OptionalHeader.SizeOfHeaders = FILE_SECTION_ALIGNMENT;
 			ntHeaders.OptionalHeader.CheckSum = 0;
 			ntHeaders.OptionalHeader.Subsystem = 0x03;
@@ -181,10 +176,10 @@ namespace Mosa.Compiler.Linker.PE
 
 				ImageSectionHeader image = new ImageSectionHeader();
 				image.Name = section.Name;
-				image.VirtualSize = (uint)section.Size;
-				image.VirtualAddress = (uint)(section.ResolvedVirtualAddress - BaseAddress);
-				image.SizeOfRawData = (section.SectionKind == SectionKind.BSS) ? 0 : (uint)section.Size;
-				image.PointerToRawData = (uint)(FILE_SECTION_ALIGNMENT + section.ResolvedOffset);
+				image.VirtualSize = section.Size;
+				image.VirtualAddress = (uint)(section.VirtualAddress - BaseAddress);
+				image.SizeOfRawData = (section.SectionKind == SectionKind.BSS) ? 0 : section.Size;
+				image.PointerToRawData = FILE_SECTION_ALIGNMENT + section.Offset;
 				image.PointerToRelocations = 0;
 				image.PointerToLinenumbers = 0;
 				image.NumberOfRelocations = 0;
@@ -221,9 +216,9 @@ namespace Mosa.Compiler.Linker.PE
 			return sections;
 		}
 
-		private ulong CalculateSizeOfImage()
+		private uint CalculateSizeOfImage()
 		{
-			ulong size = FILE_SECTION_ALIGNMENT;
+			uint size = FILE_SECTION_ALIGNMENT;
 
 			foreach (var sections in Sections)
 			{

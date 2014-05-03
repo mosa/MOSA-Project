@@ -20,16 +20,6 @@ namespace Mosa.Compiler.Linker.Elf32
 	{
 		#region Constants
 
-		/// <summary>
-		/// Specifies the default section alignment in a ELF32 file.
-		/// </summary>
-		private const uint FILE_SECTION_ALIGNMENT = 0x200;
-
-		/// <summary>
-		/// Specifies the default section alignment in virtual memory.
-		/// </summary>
-		private const uint SECTION_ALIGNMENT = 0x1000;
-
 		#endregion Constants
 
 		#region Data members
@@ -42,8 +32,7 @@ namespace Mosa.Compiler.Linker.Elf32
 
 		public Elf32()
 		{
-			FileAlignment = FILE_SECTION_ALIGNMENT;
-			SectionAlignment = SECTION_ALIGNMENT;
+			SectionAlignment = 0x1000;
 
 			AddSection(new LinkerSection(SectionKind.Text, ".text", SectionAlignment));
 			AddSection(new LinkerSection(SectionKind.Data, ".data", SectionAlignment));
@@ -64,7 +53,7 @@ namespace Mosa.Compiler.Linker.Elf32
 
 			// determine offsets
 			uint sectionOffset = (uint)(elfheader.SectionHeaderOffset + (Header.SectionHeaderEntrySize * elfheader.SectionHeaderNumber));
-			stringSection.Offset = sectionOffset + (uint)Alignment.AlignUp(GetSection(SectionKind.ROData).ResolvedOffset + GetSection(SectionKind.ROData).Size, SectionAlignment);
+			stringSection.Offset = sectionOffset + Alignment.AlignUp(GetSection(SectionKind.ROData).Offset + GetSection(SectionKind.ROData).Size, SectionAlignment);
 
 			// Write program headers
 			WriteProgramHeaders(writer, sectionOffset);
@@ -86,7 +75,7 @@ namespace Mosa.Compiler.Linker.Elf32
 		{
 			elfheader.Type = FileType.Executable;
 			elfheader.Machine = (MachineType)MachineID;
-			elfheader.EntryAddress = (uint)EntryPoint.ResolvedVirtualAddress;
+			elfheader.EntryAddress = (uint)EntryPoint.VirtualAddress;
 			elfheader.CreateIdent(IdentClass.Class32, Endianness == Endianness.Little ? IdentData.Data2LSB : IdentData.Data2MSB, null);
 			elfheader.ProgramHeaderOffset = Header.ElfHeaderSize;	// immediately after ELF header
 			elfheader.ProgramHeaderNumber = (ushort)CountNonEmptySections();
@@ -108,11 +97,11 @@ namespace Mosa.Compiler.Linker.Elf32
 				var pheader = new ProgramHeader
 				{
 					Alignment = 0,
-					FileSize = (uint)Alignment.AlignUp(section.Size, SectionAlignment),
-					MemorySize = (uint)Alignment.AlignUp(section.Size, SectionAlignment),
-					Offset = (uint)section.ResolvedOffset + sectionOffset,
-					VirtualAddress = (uint)section.ResolvedVirtualAddress,
-					PhysicalAddress = (uint)section.ResolvedVirtualAddress,
+					FileSize = Alignment.AlignUp(section.Size, SectionAlignment),
+					MemorySize = Alignment.AlignUp(section.Size, SectionAlignment),
+					Offset = section.Offset + sectionOffset,
+					VirtualAddress = (uint)section.VirtualAddress,
+					PhysicalAddress = (uint)section.VirtualAddress,
 					Type = ProgramHeaderType.Load,
 					Flags =
 						(section.SectionKind == SectionKind.Text) ? ProgramHeaderFlags.Read | ProgramHeaderFlags.Execute :
@@ -143,8 +132,8 @@ namespace Mosa.Compiler.Linker.Elf32
 					case SectionKind.BSS: sheader.Type = SectionType.NoBits; sheader.Flags = SectionAttribute.Alloc | SectionAttribute.Write; break;
 				}
 
-				sheader.Address = (uint)section.ResolvedVirtualAddress;
-				sheader.Offset = (uint)section.ResolvedOffset + sectionOffset;
+				sheader.Address = (uint)section.VirtualAddress;
+				sheader.Offset = (uint)section.Offset + sectionOffset;
 				sheader.Size = (uint)Alignment.AlignUp(section.Size, SectionAlignment);
 				sheader.Size = 0;
 				sheader.Link = 0;
@@ -179,7 +168,7 @@ namespace Mosa.Compiler.Linker.Elf32
 			stringSection.Type = SectionType.StringTable;
 			stringSection.Flags = (SectionAttribute)0;
 			stringSection.Address = 0;
-			stringSection.Offset = (uint)Alignment.AlignUp(GetSection(SectionKind.ROData).Size, SectionAlignment);
+			stringSection.Offset = Alignment.AlignUp(GetSection(SectionKind.ROData).Size, SectionAlignment);
 			stringSection.Size = (uint)stringTable.Count;
 			stringSection.Link = 0;
 			stringSection.Info = 0;

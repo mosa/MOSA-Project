@@ -27,13 +27,15 @@ namespace Mosa.Compiler.Linker
 
 		public bool IsDataAvailable { get { return Stream != null; } }
 
-		public ulong Size { get { return Stream != null ? (ulong)Stream.Length : 0; } }
+		public uint Size { get { return Stream != null ? (uint)Stream.Length : 0; } }
 
-		public bool IsResolved { get { return ResolvedVirtualAddress != 0; } }
+		public bool IsResolved { get { return VirtualAddress != 0; } }
 
-		public ulong ResolvedOffset { get; internal set; }
+		public uint SectionOffset { get; internal set; }
 
-		public ulong ResolvedVirtualAddress { get; internal set; }
+		public ulong VirtualAddress { get; internal set; }
+
+		//public uint FileOffset { get; internal set; }
 
 		internal LinkerSymbol(string name, SectionKind kind, uint alignment)
 		{

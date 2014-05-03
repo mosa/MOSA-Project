@@ -11,6 +11,20 @@ namespace Mosa.Compiler.Common
 {
 	public static class Alignment
 	{
+		public static uint AlignUp(uint position, uint alignment)
+		{
+			if (alignment == 0)
+				return position;
+
+			uint off = position % alignment;
+
+			if (off != 0)
+			{
+				position += (alignment - off);
+			}
+
+			return position;
+		}
 
 		public static int AlignUp(int position, int alignment)
 		{
@@ -33,21 +47,6 @@ namespace Mosa.Compiler.Common
 				return position;
 
 			long off = position % alignment;
-
-			if (off != 0)
-			{
-				position += (alignment - off);
-			}
-
-			return position;
-		}
-
-		public static ulong AlignUp(ulong position, uint alignment)
-		{
-			if (alignment == 0)
-				return position;
-
-			ulong off = position % alignment;
 
 			if (off != 0)
 			{

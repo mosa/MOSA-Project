@@ -32,9 +32,9 @@ namespace Mosa.Compiler.Linker
 
 		public ulong BaseAddress { get; private set; }
 
-		public uint FileAlignment { get; protected set; }
-
 		public uint SectionAlignment { get; protected set; }
+
+		public uint BaseFileOffset { get; private set; }
 
 		private object mylock = new object();
 
@@ -65,6 +65,7 @@ namespace Mosa.Compiler.Linker
 
 			BaseAddress = 0x00400000; // Use the Win32 default for now
 			SectionAlignment = 0x1000; // default 1K
+			BaseFileOffset = 0;
 		}
 
 		public virtual void Initialize(ulong baseAddress, Endianness endianness, ushort machineID)
@@ -155,17 +156,19 @@ namespace Mosa.Compiler.Linker
 		private void LayoutObjectsAndSections()
 		{
 			// layout objects & sections
-			ulong sectionOffset = 0;
+			uint sectionOffset = 0;
 			ulong virtualAddress = BaseAddress;
+			uint fileOffset = BaseFileOffset;
 
 			foreach (var section in Sections)
 			{
-				section.ResolveLayout(sectionOffset, virtualAddress);
+				section.ResolveLayout(fileOffset, sectionOffset, virtualAddress);
 
-				ulong size = Alignment.AlignUp(section.Size, SectionAlignment);
+				uint size = Alignment.AlignUp(section.Size, SectionAlignment);
 
-				sectionOffset = section.ResolvedOffset + size;
-				virtualAddress = section.ResolvedVirtualAddress + size;
+				sectionOffset = section.Offset + size;
+				virtualAddress = section.VirtualAddress + size;
+				fileOffset = fileOffset + size;
 			}
 		}
 
@@ -193,7 +196,7 @@ namespace Mosa.Compiler.Linker
 
 		private void ApplyPatch(LinkRequest linkRequest)
 		{
-			ulong targetAddress = linkRequest.ReferenceSymbol.ResolvedVirtualAddress + (ulong)linkRequest.ReferenceOffset;
+			ulong targetAddress = linkRequest.ReferenceSymbol.VirtualAddress + (ulong)linkRequest.ReferenceOffset;
 
 			if (linkRequest.LinkType == LinkType.AbsoluteAddress)
 			{
@@ -204,7 +207,7 @@ namespace Mosa.Compiler.Linker
 			else
 			{
 				// Change the absolute into a relative offset
-				targetAddress = targetAddress - (linkRequest.PatchSymbol.ResolvedVirtualAddress + (ulong)linkRequest.PatchOffset);
+				targetAddress = targetAddress - (linkRequest.PatchSymbol.VirtualAddress + (ulong)linkRequest.PatchOffset);
 			}
 
 			targetAddress = targetAddress + (ulong)linkRequest.RelativeBase;

@@ -101,7 +101,7 @@ namespace Mosa.Compiler.Framework
 
 				result += size;
 
-				Alignment.AlignUp(result, alignment);
+				Alignment.AlignUp(result, (uint)alignment);
 			}
 
 			return result;

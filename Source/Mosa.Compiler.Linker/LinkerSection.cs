@@ -30,11 +30,15 @@ namespace Mosa.Compiler.Linker
 
 		public bool IsResolved { get; private set; }
 
-		public ulong ResolvedOffset { get; private set; }
+		public uint Offset { get; private set; }
 
-		public ulong ResolvedVirtualAddress { get; private set; }
+		public ulong VirtualAddress { get; private set; }
 
-		public ulong Size { get; private set; }
+		public uint FileOffset { get; private set; }
+
+		public uint Size { get; private set; }
+
+		public uint AlignedSize { get { return Alignment.AlignUp(Size, SectionAlignment); } }
 
 		private object mylock = new object();
 
@@ -64,10 +68,11 @@ namespace Mosa.Compiler.Linker
 			return symbol;
 		}
 
-		internal void ResolveLayout(ulong sectionOffset, ulong virtualAddress)
+		internal void ResolveLayout(uint fileOffset, uint sectionOffset, ulong virtualAddress)
 		{
-			ResolvedOffset = sectionOffset;
-			ResolvedVirtualAddress = virtualAddress;
+			Offset = sectionOffset;
+			VirtualAddress = virtualAddress;
+			FileOffset = fileOffset;
 
 			foreach (var symbol in Symbols)
 			{
@@ -76,8 +81,8 @@ namespace Mosa.Compiler.Linker
 
 				Size = Alignment.AlignUp(Size, symbol.Alignment);
 
-				symbol.ResolvedOffset = Size;
-				symbol.ResolvedVirtualAddress = ResolvedVirtualAddress + Size;
+				symbol.SectionOffset = (uint)Size;
+				symbol.VirtualAddress = VirtualAddress + Size;
 
 				Size = Size + symbol.Size;
 			}
@@ -87,11 +92,11 @@ namespace Mosa.Compiler.Linker
 
 		internal void WriteTo(Stream stream)
 		{
-			ulong start = (ulong)stream.Position + ResolvedOffset;
+			ulong start = (ulong)stream.Position + Offset;
 
 			foreach (var symbol in Symbols)
 			{
-				long at = (long)(start + symbol.ResolvedOffset);
+				long at = (long)(start + symbol.SectionOffset);
 				stream.Seek(at, SeekOrigin.Begin);
 				symbol.Stream.Position = 0;
 				symbol.Stream.WriteTo(stream);

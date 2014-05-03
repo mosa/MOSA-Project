@@ -113,7 +113,7 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 
 			var symbol = linker.GetSymbol(runtimeMethod.FullName, SectionKind.Text);
 
-			ulong address = (ulong)symbol.ResolvedVirtualAddress;
+			ulong address = (ulong)symbol.VirtualAddress;
 
 			platform.PopulateStack(simAdapter, parameters);
 
