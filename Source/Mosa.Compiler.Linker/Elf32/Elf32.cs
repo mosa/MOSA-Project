@@ -40,6 +40,8 @@ namespace Mosa.Compiler.Linker.Elf32
 			AddSection(new LinkerSection(SectionKind.Data, ".data", SectionAlignment));
 			AddSection(new LinkerSection(SectionKind.ROData, ".rodata", SectionAlignment));
 			AddSection(new LinkerSection(SectionKind.BSS, ".bss", SectionAlignment));
+
+			stringTable.Add((byte)'\0');
 		}
 
 		/// <summary>
@@ -52,13 +54,6 @@ namespace Mosa.Compiler.Linker.Elf32
 
 			// Write ELF header
 			WriteElfHeader(writer);
-
-			// determine offsets
-			uint sectionOffset = (uint)(elfheader.SectionHeaderOffset + (Header.SectionHeaderEntrySize * elfheader.SectionHeaderNumber));
-
-			Debug.Assert(sectionOffset <= BaseFileOffset);
-
-			stringSection.Offset = GetSection(SectionKind.ROData).FileOffset + GetSection(SectionKind.ROData).AlignedSize;
 
 			// Write program headers
 			WriteProgramHeaders(writer);
@@ -78,15 +73,17 @@ namespace Mosa.Compiler.Linker.Elf32
 
 		private void WriteElfHeader(EndianAwareBinaryWriter writer)
 		{
+			ushort sectons = (ushort)CountNonEmptySections();
+
 			elfheader.Type = FileType.Executable;
 			elfheader.Machine = (MachineType)MachineID;
 			elfheader.EntryAddress = (uint)EntryPoint.VirtualAddress;
 			elfheader.CreateIdent(IdentClass.Class32, Endianness == Endianness.Little ? IdentData.Data2LSB : IdentData.Data2MSB, null);
-			elfheader.ProgramHeaderOffset = Header.ElfHeaderSize;	// immediately after ELF header
-			elfheader.ProgramHeaderNumber = (ushort)CountNonEmptySections();
-			elfheader.SectionHeaderNumber = (ushort)(Sections.Length + 2);
-			elfheader.SectionHeaderOffset = (uint)(elfheader.ProgramHeaderOffset + (Header.ProgramHeaderEntrySize * elfheader.ProgramHeaderNumber)); // immediately after program header
-			elfheader.SectionHeaderStringIndex = 1;
+			elfheader.ProgramHeaderOffset = Header.ElfHeaderSize;
+			elfheader.ProgramHeaderNumber = sectons;
+			elfheader.SectionHeaderNumber = (ushort)(sectons + 2);
+			elfheader.SectionHeaderOffset = (uint)(elfheader.ProgramHeaderOffset + (Header.ProgramHeaderEntrySize * elfheader.ProgramHeaderNumber));
+			elfheader.SectionHeaderStringIndex = (ushort)(sectons + 1);
 			elfheader.Write(writer);
 		}
 
@@ -125,6 +122,9 @@ namespace Mosa.Compiler.Linker.Elf32
 
 			foreach (var section in Sections)
 			{
+				if (section.SectionKind == SectionKind.BSS || section.Size == 0)
+					continue;
+
 				var sheader = new SectionHeader();
 
 				sheader.Name = AddToStringTable(section.Name);
@@ -140,7 +140,6 @@ namespace Mosa.Compiler.Linker.Elf32
 				sheader.Address = (uint)section.VirtualAddress;
 				sheader.Offset = section.FileOffset;
 				sheader.Size = section.AlignedSize;
-				sheader.Size = 0;
 				sheader.Link = 0;
 				sheader.Info = 0;
 				sheader.AddressAlignment = 0;
@@ -149,6 +148,7 @@ namespace Mosa.Compiler.Linker.Elf32
 			}
 
 			WriteStringHeaderSection(writer);
+
 		}
 
 		private static void WriteNullHeaderSection(EndianAwareBinaryWriter writer)
@@ -173,7 +173,7 @@ namespace Mosa.Compiler.Linker.Elf32
 			stringSection.Type = SectionType.StringTable;
 			stringSection.Flags = (SectionAttribute)0;
 			stringSection.Address = 0;
-			stringSection.Offset = GetSection(SectionKind.ROData).AlignedSize;
+			stringSection.Offset = GetSection(SectionKind.ROData).FileOffset + GetSection(SectionKind.ROData).AlignedSize;
 			stringSection.Size = (uint)stringTable.Count;
 			stringSection.Link = 0;
 			stringSection.Info = 0;
@@ -185,7 +185,6 @@ namespace Mosa.Compiler.Linker.Elf32
 		private void WriteStringSection(BinaryWriter writer)
 		{
 			writer.BaseStream.Position = stringSection.Offset;
-			writer.Write((byte)'\0');
 			writer.Write(stringTable.ToArray());
 		}
 
@@ -195,9 +194,9 @@ namespace Mosa.Compiler.Linker.Elf32
 		/// Counts the valid sections.
 		/// </summary>
 		/// <returns>Determines the number of sections.</returns>
-		private int CountNonEmptySections()
+		private uint CountNonEmptySections()
 		{
-			int sections = 0;
+			uint sections = 0;
 
 			foreach (var section in Sections)
 			{
@@ -213,7 +212,7 @@ namespace Mosa.Compiler.Linker.Elf32
 		public uint AddToStringTable(string text)
 		{
 			if (text.Length == 0)
-				return (uint)(stringTable.Count + 1);
+				return 0;
 
 			uint index = (uint)stringTable.Count;
 
