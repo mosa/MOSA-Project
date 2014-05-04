@@ -30,9 +30,9 @@ namespace Mosa.HelloWorld.x86
 			Screen.GotoTop();
 			Screen.Color = Colors.Yellow;
 
-			Screen.Write(@"MOSA OS Version 1.0 '");
+			Screen.Write(@"MOSA OS Version 1.3 '");
 			Screen.Color = Colors.Red;
-			Screen.Write(@"Titan");
+			Screen.Write(@"Neptune");
 			Screen.Color = Colors.Yellow;
 			Screen.Write(@"'                                Copyright 2008-2011");
 			Screen.NextLine();
