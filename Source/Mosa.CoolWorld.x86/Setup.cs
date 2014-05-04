@@ -171,7 +171,7 @@ namespace Mosa.CoolWorld.x86
 
 			//StartDevice(vgaTextAttributes, VGAText);
 
-			PCIControllerManager pciController = new PCIControllerManager(deviceManager);
+			//PCIControllerManager pciController = new PCIControllerManager(deviceManager);
 
 			Boot.Console.Write("Probing PCI devices...");
 

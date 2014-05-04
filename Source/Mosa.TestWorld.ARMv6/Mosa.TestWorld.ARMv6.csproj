@@ -25,7 +25,6 @@
     <OldToolsVersion>3.5</OldToolsVersion>
     <UpgradeBackupLocation />
     <TargetFrameworkProfile />
-    <NoStdLib>True</NoStdLib>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -43,7 +42,6 @@
     <RemoveIntegerChecks>False</RemoveIntegerChecks>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <WarningLevel>4</WarningLevel>
-    <NoStdLib>True</NoStdLib>
     <DebugType>full</DebugType>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -61,7 +59,6 @@
     <RemoveIntegerChecks>False</RemoveIntegerChecks>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <WarningLevel>2</WarningLevel>
-    <NoStdLib>True</NoStdLib>
     <DebugType>none</DebugType>
   </PropertyGroup>
   <ItemGroup>
@@ -75,10 +72,6 @@
     <ProjectReference Include="..\Mosa.Internal.Plug\Mosa.Internal.Plug.csproj">
       <Project>{77961864-DB33-4189-804F-D774022C96E2}</Project>
       <Name>Mosa.Internal.Plug</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Korlib\Korlib.csproj">
-      <Project>{631BC4F3-E2D8-4319-814C-13904CAA17CE}</Project>
-      <Name>Korlib</Name>
     </ProjectReference>
     <ProjectReference Include="..\Mosa.Kernel.ARMv6\Mosa.Kernel.ARMv6.csproj">
       <Project>{4cff6607-4d83-46e6-a1d0-ef045311c98b}</Project>

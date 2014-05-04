@@ -41,7 +41,6 @@
     <RemoveIntegerChecks>False</RemoveIntegerChecks>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <WarningLevel>4</WarningLevel>
-    <NoStdLib>true</NoStdLib>
     <DebugType>full</DebugType>
     <NoWarn>0219,0414</NoWarn>
   </PropertyGroup>
@@ -60,7 +59,6 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <WarningLevel>2</WarningLevel>
     <DebugType>none</DebugType>
-    <NoStdLib>true</NoStdLib>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="ConsoleManager.cs" />
@@ -95,10 +93,6 @@
     <Compile Include="VirtualPageAllocator.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Korlib\Korlib.csproj">
-      <Project>{631BC4F3-E2D8-4319-814C-13904CAA17CE}</Project>
-      <Name>Korlib</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Mosa.Internal.Plug\Mosa.Internal.Plug.csproj">
       <Project>{77961864-DB33-4189-804F-D774022C96E2}</Project>
       <Name>Mosa.Internal.Plug</Name>

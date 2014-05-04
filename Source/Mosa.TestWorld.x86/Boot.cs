@@ -63,7 +63,7 @@ namespace Mosa.TestWorld.x86
 			Screen.Write('A');
 			ConsoleManager.Setup();
 			Screen.Write('B');
-			CMOS cmos = new CMOS();
+			//CMOS cmos = new CMOS();
 			Screen.Write('C');
 			Console = ConsoleManager.Controller.Boot;
 			Screen.Write('D');

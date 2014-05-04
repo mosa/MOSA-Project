@@ -1,2 +1,2 @@
-nant
-cp ../3rdParty/*.dll ../bin/
+#cp ../3rdParty/*.dll ../bin/
+xbuild
