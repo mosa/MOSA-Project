@@ -50,8 +50,8 @@ namespace Mosa.Tool.Compiler
 		private OptionSet optionSet;
 
 		private readonly int majorVersion = 1;
-		private readonly int minorVersion = 2;
-		private readonly string codeName = @"Titan";
+		private readonly int minorVersion = 3;
+		private readonly string codeName = @"Neptune";
 
 		/// <summary>
 		/// A string holding a simple usage description.
