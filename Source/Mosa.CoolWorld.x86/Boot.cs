@@ -68,7 +68,7 @@ namespace Mosa.CoolWorld.x86
 			Console.Goto(24, 0);
 			Console.Color = Colors.White;
 			Console.BackgroundColor = Colors.Green;
-			Console.Write("          Copyright (C) 2008-2001 [Managed Operating System Alliance]");
+			Console.Write("          Copyright (C) 2008-2014 [Managed Operating System Alliance]");
 			FillLine();
 
 			Console.BackgroundColor = Colors.Black;
@@ -148,7 +148,7 @@ namespace Mosa.CoolWorld.x86
 
 		private static uint counter = 0;
 
-		public static void ProcessInterrupt(byte interrupt, byte errorCode)
+		public static void ProcessInterrupt(uint interrupt, uint errorCode)
 		{
 			uint c = Console.Column;
 			uint r = Console.Row;
@@ -186,7 +186,7 @@ namespace Mosa.CoolWorld.x86
 				Console.Write(':');
 				Console.Write(interrupt, 16, 2);
 
-				Mosa.DeviceSystem.HAL.ProcessInterrupt((byte)(interrupt - 0x20), errorCode);
+				Mosa.DeviceSystem.HAL.ProcessInterrupt((uint)(interrupt - 0x20), errorCode);
 
 				//Debug.Trace("Returned from HAL.ProcessInterrupt");
 			}

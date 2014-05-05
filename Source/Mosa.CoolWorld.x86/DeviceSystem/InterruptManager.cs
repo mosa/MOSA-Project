@@ -46,7 +46,8 @@ namespace Mosa.DeviceSystem
 		/// Processes the interrupt.
 		/// </summary>
 		/// <param name="irq">The irq.</param>
-		public void ProcessInterrupt(byte irq, byte error)
+		/// <param name="error">The error.</param>
+		public void ProcessInterrupt(uint irq, uint error)
 		{
 			//Mosa.Kernel.x86.Debug.Trace("Enter InterruptManager.ProcessInterrupt");
 

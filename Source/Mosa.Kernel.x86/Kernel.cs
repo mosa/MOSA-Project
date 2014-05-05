@@ -27,8 +27,8 @@ namespace Mosa.Kernel.x86
 			PageFrameAllocator.Setup();
 			PageTable.Setup();
 			VirtualPageAllocator.Setup();
-			//ProcessManager.Setup();
-			//TaskManager.Setup();
+			ProcessManager.Setup();
+			TaskManager.Setup();
 			SmbiosManager.Setup();
 			ConsoleManager.Setup();
 

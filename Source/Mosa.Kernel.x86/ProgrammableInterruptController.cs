@@ -76,7 +76,7 @@ namespace Mosa.Kernel.x86
 		/// Sends the end of interrupt.
 		/// </summary>
 		/// <param name="irq">The irq.</param>
-		public static void SendEndOfInterrupt(byte irq)
+		public static void SendEndOfInterrupt(uint irq)
 		{
 			if (irq >= 40) // or untranslated IRQ >= 8
 				Native.Out8(PIC2_Command, EOI);

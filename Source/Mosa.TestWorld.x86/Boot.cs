@@ -60,14 +60,16 @@ namespace Mosa.TestWorld.x86
 			ProcessManager.Setup();
 			Screen.Write('9');
 			TaskManager.Setup();
+			Screen.Write('0');
+			IDT.SetInterruptHandler(ProcessInterrupt);
 			Screen.Write('A');
 			ConsoleManager.Setup();
 			Screen.Write('B');
-			//CMOS cmos = new CMOS();
+			CMOS cmos = new CMOS();
 			Screen.Write('C');
-			Console = ConsoleManager.Controller.Boot;
+			int second = cmos.Second;
 			Screen.Write('D');
-			//IDT.SetInterruptHandler(ProcessInterrupt);
+			Console = ConsoleManager.Controller.Boot;
 			Screen.Write('E');
 
 			Console.Color = 0x0E;
@@ -103,7 +105,7 @@ namespace Mosa.TestWorld.x86
 
 		//private static uint counter = 0;
 
-		public static void ProcessInterrupt(byte interrupt, byte errorCode)
+		public static void ProcessInterrupt(uint interrupt, uint errorCode)
 		{
 			//uint c = Console.Column;
 			//uint r = Console.Row;
