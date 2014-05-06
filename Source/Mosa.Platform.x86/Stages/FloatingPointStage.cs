@@ -65,7 +65,6 @@ namespace Mosa.Platform.x86.Stages
 		{
 			// load into a register
 			Operand operand = context.Operand1;
-			Operand result = context.Result;
 
 			Operand register = AllocateVirtualRegister(operand.Type);
 			context.Operand1 = register;

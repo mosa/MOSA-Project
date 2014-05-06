@@ -164,8 +164,8 @@ namespace Mosa.DeviceSystem.PCI
 				case 0x0D1000: return "RF controller";
 				case 0x0D1100: return "Bluetooth";
 				case 0x0D1200: return "Broadband";
-				case 0x0D2000: return "Ethernet (802.11a – 5 GHz)";
-				case 0x0D2100: return "Ethernet (802.11b – 2.4 GHz)";
+				case 0x0D2000: return "Ethernet (802.11a - 5 GHz)";
+				case 0x0D2100: return "Ethernet (802.11b - 2.4 GHz)";
 				case 0x0D8000: return "Wireless controller";
 
 				case 0x0E0000: return "Intelligent I/O (I2O)";

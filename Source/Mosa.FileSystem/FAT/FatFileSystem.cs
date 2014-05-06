@@ -247,7 +247,7 @@ namespace Mosa.FileSystem.FAT
 		public FatType FATType { get { return fatType; } }
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="FAT"/> class.
+		/// Initializes a new instance of the <see cref="FatFileSystem"/> class.
 		/// </summary>
 		/// <param name="partition">The partition.</param>
 		public FatFileSystem(IPartitionDevice partition)
