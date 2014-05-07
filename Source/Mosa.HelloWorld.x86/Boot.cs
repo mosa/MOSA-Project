@@ -377,6 +377,8 @@ namespace Mosa.HelloWorld.x86
 
 		public static void ProcessInterrupt(uint interrupt, uint errorCode)
 		{
+			counter++;
+
 			uint c = Console.Column;
 			uint r = Console.Row;
 			byte col = Console.Color;
@@ -387,7 +389,6 @@ namespace Mosa.HelloWorld.x86
 			Console.Color = Colors.Cyan;
 			Console.BackgroundColor = Colors.Black;
 
-			counter++;
 			Console.Write(counter, 10, 7);
 			Console.Write(':');
 			Console.Write(interrupt, 16, 2);

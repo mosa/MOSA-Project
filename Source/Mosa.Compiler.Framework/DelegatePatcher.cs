@@ -55,8 +55,11 @@ namespace Mosa.Compiler.Framework
 
 			Context context = CreateMethodStructure(methodCompiler, true);
 
-			context.AppendInstruction(IRInstruction.Store, null, thisOperand, methodPointerOffsetOperand, methodPointerOperand);
-			context.AppendInstruction(IRInstruction.Store, null, thisOperand, instanceOffsetOperand, instanceOperand);
+			Operand v1 = methodCompiler.CreateVirtualRegister(thisOperand.Type);
+
+			context.AppendInstruction(IRInstruction.Move, v1, thisOperand);
+			context.AppendInstruction(IRInstruction.Store, null, v1, methodPointerOffsetOperand, methodPointerOperand);
+			context.AppendInstruction(IRInstruction.Store, null, v1, instanceOffsetOperand, instanceOperand);
 			context.AppendInstruction(IRInstruction.Return, methodCompiler.BasicBlocks.EpilogueBlock);
 			context.SetBranch(BasicBlock.EpilogueLabel);
 		}

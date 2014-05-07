@@ -1,5 +1,5 @@
 ﻿/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
+ * (c) 2014 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
  *
@@ -364,15 +364,14 @@ namespace Mosa.Kernel.x86
 		/// <param name="errorCode">The error code.</param>
 		private static void ProcessInterrupt(uint edi, uint esi, uint ebp, uint esp, uint ebx, uint edx, uint ecx, uint eax, uint interrupt, uint errorCode)
 		{
-			//if (interruptHandler != null)
-			//{
-			//	interruptHandler(interrupt, errorCode);
-			//}
-			//else 
 			if (interrupt == 14)
 			{
 				// Page Fault!
 				PageFaultHandler.Fault(errorCode);
+			}
+			else if (interruptHandler != null)
+			{
+				interruptHandler(interrupt, errorCode);
 			}
 
 			ProgrammableInterruptController.SendEndOfInterrupt(interrupt);

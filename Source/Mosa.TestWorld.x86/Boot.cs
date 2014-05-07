@@ -103,32 +103,56 @@ namespace Mosa.TestWorld.x86
 			}
 		}
 
-		//private static uint counter = 0;
+		private static uint counter = 0;
 
 		public static void ProcessInterrupt(uint interrupt, uint errorCode)
 		{
-			//uint c = Console.Column;
-			//uint r = Console.Row;
-			//byte col = Console.Color;
-			//byte back = Console.BackgroundColor;
+			counter++;
 
-			//Console.Column = 31;
-			//Console.Row = 0;
-			//Console.Color = Colors.Cyan;
-			//Console.BackgroundColor = Colors.Black;
+			uint c = Console.Column;
+			uint r = Console.Row;
+			byte col = Console.Color;
+			byte back = Console.BackgroundColor;
 
-			//counter++;
+			Console.Column = 31;
+			Console.Row = 0;
+			Console.Color = Colors.Cyan;
+			Console.BackgroundColor = Colors.Black;
 
-			//Console.Write(counter, 10, 7);
-			//Console.Write(':');
-			//Console.Write(interrupt, 16, 2);
-			//Console.Write(':');
-			//Console.Write(errorCode, 16, 2);
+			Console.Write(counter, 10, 7);
+			Console.Write(':');
+			Console.Write(interrupt, 16, 2);
+			Console.Write(':');
+			Console.Write(errorCode, 16, 2);
 
-			//Console.Column = c;
-			//Console.Row = r;
-			//Console.Color = col;
-			//Console.BackgroundColor = back;
+			if (interrupt == 14)
+			{
+				// Page Fault!
+				PageFaultHandler.Fault(errorCode);
+			}
+			else if (interrupt == 0x20)
+			{
+				// Timer Interrupt! Switch Tasks!
+			}
+			//else
+			//{
+			//	Console.Write('-');
+			//	Console.Write(counter, 10, 7);
+			//	Console.Write(':');
+			//	Console.Write(interrupt, 16, 2);
+
+			//	//if (interrupt == 0x21)
+			//	//{
+			//	//	byte scancode = Keyboard.ReadScanCode();
+			//	//	Console.Write('-');
+			//	//	Console.Write(scancode, 16, 2);
+			//	//}
+			//}
+
+			Console.Column = c;
+			Console.Row = r;
+			Console.Color = col;
+			Console.BackgroundColor = back;
 		}
 
 		public static void Test()

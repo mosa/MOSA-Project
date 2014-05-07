@@ -105,77 +105,77 @@ namespace Mosa.Test.Collection.x86.xUnit
 		[PropertyData("U1")]
 		public void EqualsU1(byte value)
 		{
-			Assert.Equal(true, Run<bool>("Mosa.Test.Collection.BoxingTests.EqualsU1", value));
+			Assert.Equal(Mosa.Test.Collection.BoxingTests.EqualsU1(value), Run<bool>("Mosa.Test.Collection.BoxingTests.EqualsU1", value));
 		}
 
 		[Theory]
 		[PropertyData("U2")]
 		public void EqualsU2(ushort value)
 		{
-			Assert.Equal(true, Run<bool>("Mosa.Test.Collection.BoxingTests.EqualsU2", value));
+			Assert.Equal(Mosa.Test.Collection.BoxingTests.EqualsU2(value), Run<bool>("Mosa.Test.Collection.BoxingTests.EqualsU2", value));
 		}
 
 		[Theory]
 		[PropertyData("U4")]
 		public void EqualsU4(uint value)
 		{
-			Assert.Equal(true, Run<bool>("Mosa.Test.Collection.BoxingTests.EqualsU4", value));
+			Assert.Equal(Mosa.Test.Collection.BoxingTests.EqualsU4(value), Run<bool>("Mosa.Test.Collection.BoxingTests.EqualsU4", value));
 		}
 
 		[Theory]
 		[PropertyData("U8")]
 		public void EqualsU8(ulong value)
 		{
-			Assert.Equal(true, Run<bool>("Mosa.Test.Collection.BoxingTests.EqualsU8", value));
+			Assert.Equal(Mosa.Test.Collection.BoxingTests.EqualsU8(value), Run<bool>("Mosa.Test.Collection.BoxingTests.EqualsU8", value));
 		}
 
 		[Theory]
 		[PropertyData("I1")]
 		public void EqualsI1(sbyte value)
 		{
-			Assert.Equal(true, Run<bool>("Mosa.Test.Collection.BoxingTests.EqualsI1", value));
+			Assert.Equal(Mosa.Test.Collection.BoxingTests.EqualsI1(value), Run<bool>("Mosa.Test.Collection.BoxingTests.EqualsI1", value));
 		}
 
 		[Theory]
 		[PropertyData("I2")]
 		public void EqualsI2(short value)
 		{
-			Assert.Equal(true, Run<bool>("Mosa.Test.Collection.BoxingTests.EqualsI2", value));
+			Assert.Equal(Mosa.Test.Collection.BoxingTests.EqualsI2(value), Run<bool>("Mosa.Test.Collection.BoxingTests.EqualsI2", value));
 		}
 
 		[Theory]
 		[PropertyData("I4")]
 		public void EqualsI4(int value)
 		{
-			Assert.Equal(true, Run<bool>("Mosa.Test.Collection.BoxingTests.EqualsI4", value));
+			Assert.Equal(Mosa.Test.Collection.BoxingTests.EqualsI4(value), Run<bool>("Mosa.Test.Collection.BoxingTests.EqualsI4", value));
 		}
 
 		[Theory]
 		[PropertyData("I8")]
 		public void EqualsI8(long value)
 		{
-			Assert.Equal(true, Run<bool>("Mosa.Test.Collection.BoxingTests.EqualsI8", value));
+			Assert.Equal(Mosa.Test.Collection.BoxingTests.EqualsI8(value), Run<bool>("Mosa.Test.Collection.BoxingTests.EqualsI8", value));
 		}
 
 		[Theory]
 		[PropertyData("R4NotNaN")]
 		public void EqualsR4(float value)
 		{
-			Assert.Equal(true, Run<bool>("Mosa.Test.Collection.BoxingTests.EqualsR4", value));
+			Assert.Equal(Mosa.Test.Collection.BoxingTests.EqualsR4(value), Run<bool>("Mosa.Test.Collection.BoxingTests.EqualsR4", value));
 		}
 
 		[Theory]
 		[PropertyData("R8NotNaN")]
 		public void EqualsR8(double value)
 		{
-			Assert.Equal(true, Run<bool>("Mosa.Test.Collection.BoxingTests.EqualsR8", value));
+			Assert.Equal(Mosa.Test.Collection.BoxingTests.EqualsR8(value), Run<bool>("Mosa.Test.Collection.BoxingTests.EqualsR8", value));
 		}
 
 		[Theory]
 		[PropertyData("C")]
 		public void EqualsC(char value)
 		{
-			Assert.Equal(true, Run<bool>("Mosa.Test.Collection.BoxingTests.EqualsC", value));
+			Assert.Equal(Mosa.Test.Collection.BoxingTests.EqualsC(value), Run<bool>("Mosa.Test.Collection.BoxingTests.EqualsC", value));
 		}
 	}
 }
