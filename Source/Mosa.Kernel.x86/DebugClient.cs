@@ -42,9 +42,9 @@ namespace Mosa.Kernel.x86
 
 		private static ushort com = Serial.COM1;
 
-		private static uint _buffer = 0x1412000;
-		private static uint _index = 0;
-		private static int _length = -1;
+		private static uint buffer = 0x1412000;
+		private static uint index = 0;
+		private static int length = -1;
 
 		public static void Setup(ushort com)
 		{
@@ -120,18 +120,18 @@ namespace Mosa.Kernel.x86
 
 		private static void BadDataAbort()
 		{
-			_index = 0;
-			_length = -1;
+			index = 0;
+			length = -1;
 		}
 
-		private static int GetInt32(uint index)
+		private static int GetInt32(uint offset)
 		{
-			return (Native.Get8(_buffer + index) << 24) | (Native.Get8(_buffer + index + 1) << 16) | (Native.Get8(_buffer + index + 2) << 8) | Native.Get8(_buffer + index + 3);
+			return (Native.Get8(buffer + offset) << 24) | (Native.Get8(buffer + offset + 1) << 16) | (Native.Get8(buffer + offset + 2) << 8) | Native.Get8(buffer + offset + 3);
 		}
 
-		private static uint GetUInt32(uint index)
+		private static uint GetUInt32(uint offset)
 		{
-			return (uint)GetInt32(index);
+			return (uint)GetInt32(offset);
 		}
 
 		public static void Process()
@@ -140,30 +140,30 @@ namespace Mosa.Kernel.x86
 			{
 				byte b = Serial.Read(com);
 
-				Native.Set8(_buffer + _index, b);
-				_index++;
+				Native.Set8(buffer + index, b);
+				index++;
 
-				if (_index == 1 && Native.Get8(_buffer) != (byte)'M')
+				if (index == 1 && Native.Get8(buffer) != (byte)'M')
 					BadDataAbort();
-				else if (_index == 2 && Native.Get8(_buffer + 1) != (byte)'O')
+				else if (index == 2 && Native.Get8(buffer + 1) != (byte)'O')
 					BadDataAbort();
-				else if (_index == 3 && Native.Get8(_buffer + 2) != (byte)'S')
+				else if (index == 3 && Native.Get8(buffer + 2) != (byte)'S')
 					BadDataAbort();
-				else if (_index == 4 && Native.Get8(_buffer + 3) != (byte)'A')
+				else if (index == 4 && Native.Get8(buffer + 3) != (byte)'A')
 					BadDataAbort();
 
-				if (_index >= 16 && _length == -1)
+				if (index >= 16 && length == -1)
 				{
-					_length = (int)GetInt32(12);
+					length = (int)GetInt32(12);
 				}
 
-				if (_length > 4096 || _index > 4096)
+				if (length > 4096 || index > 4096)
 				{
 					BadDataAbort();
 					return;
 				}
 
-				if (_length + 20 == _index)
+				if (length + 20 == index)
 				{
 					ProcessCommand();
 

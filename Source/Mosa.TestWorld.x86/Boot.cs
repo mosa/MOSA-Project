@@ -18,7 +18,7 @@ namespace Mosa.TestWorld.x86
 		public static ConsoleSession Console;
 
 		/// <summary>
-		/// Mains this instance.
+		/// Main
 		/// </summary>
 		public static void Main()
 		{
@@ -114,8 +114,8 @@ namespace Mosa.TestWorld.x86
 			byte col = Console.Color;
 			byte back = Console.BackgroundColor;
 
-			Console.Column = 31;
-			Console.Row = 0;
+			Console.Column = 50;
+			Console.Row = 24;
 			Console.Color = Colors.Cyan;
 			Console.BackgroundColor = Colors.Black;
 
@@ -125,29 +125,24 @@ namespace Mosa.TestWorld.x86
 			Console.Write(':');
 			Console.Write(errorCode, 16, 2);
 
-			if (interrupt == 14)
-			{
-				// Page Fault!
-				PageFaultHandler.Fault(errorCode);
-			}
-			else if (interrupt == 0x20)
+			if (interrupt == 0x20)
 			{
 				// Timer Interrupt! Switch Tasks!
 			}
-			//else
-			//{
-			//	Console.Write('-');
-			//	Console.Write(counter, 10, 7);
-			//	Console.Write(':');
-			//	Console.Write(interrupt, 16, 2);
+			else
+			{
+				Console.Write('-');
+				Console.Write(counter, 10, 7);
+				Console.Write(':');
+				Console.Write(interrupt, 16, 2);
 
-			//	//if (interrupt == 0x21)
-			//	//{
-			//	//	byte scancode = Keyboard.ReadScanCode();
-			//	//	Console.Write('-');
-			//	//	Console.Write(scancode, 16, 2);
-			//	//}
-			//}
+				if (interrupt == 0x21)
+				{
+					byte scancode = Keyboard.ReadScanCode();
+					Console.Write('-');
+					Console.Write(scancode, 16, 2);
+				}
+			}
 
 			Console.Column = c;
 			Console.Row = r;

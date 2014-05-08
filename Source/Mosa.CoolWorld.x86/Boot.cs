@@ -25,12 +25,14 @@ namespace Mosa.CoolWorld.x86
 		public static void Main()
 		{
 			Mosa.Kernel.x86.Kernel.Setup();
-			DebugClient.Setup(Serial.COM1);
-			IDT.SetInterruptHandler(ProcessInterrupt);
-
+			//DebugClient.Setup(Serial.COM1);
+	
 			Console = ConsoleManager.Controller.Boot;
 
 			Console.Clear();
+
+			IDT.SetInterruptHandler(ProcessInterrupt);
+
 			Console.Color = Colors.White;
 			Console.BackgroundColor = Colors.Green;
 
@@ -107,12 +109,12 @@ namespace Mosa.CoolWorld.x86
 
 				if (Setup.CMOS.Second != lastSecond)
 				{
-					DebugClient.SendAlive();
+					//DebugClient.SendAlive();
 					lastSecond = Setup.CMOS.Second;
 					Debug.Trace("Main.Main Ping Alive");
 				}
 
-				DebugClient.Process();
+				//DebugClient.Process();
 				Native.Hlt();
 			}
 		}
@@ -170,12 +172,7 @@ namespace Mosa.CoolWorld.x86
 			Console.Write(':');
 			Console.Write(errorCode, 16, 2);
 
-			if (interrupt == 14)
-			{
-				// Page Fault!
-				PageFaultHandler.Fault(errorCode);
-			}
-			else if (interrupt == 0x20)
+			if (interrupt == 0x20)
 			{
 				// Timer Interrupt! Switch Tasks!
 			}
