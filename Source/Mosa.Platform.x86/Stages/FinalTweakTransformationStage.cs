@@ -30,7 +30,6 @@ namespace Mosa.Platform.x86.Stages
 			// Movsx can not use ESI or EDI registers
 			if (context.Operand1.IsCPURegister && (context.Operand1.Register == GeneralPurposeRegister.ESI || context.Operand1.Register == GeneralPurposeRegister.EDI))
 			{
-				Operand source = context.Operand1;
 				Operand dest = context.Result;
 
 				context.ReplaceInstructionOnly(X86.Mov);
@@ -61,7 +60,6 @@ namespace Mosa.Platform.x86.Stages
 			{
 				Debug.Assert(context.Result.IsCPURegister);
 
-				Operand source = context.Operand1;
 				Operand dest = context.Result;
 
 				context.ReplaceInstructionOnly(X86.Mov);

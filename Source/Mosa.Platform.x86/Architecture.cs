@@ -285,7 +285,6 @@ namespace Mosa.Platform.x86
 		/// <param name="size">The size.</param>
 		public override void InsertCompoundMoveInstruction(Context context, Operand destination, Operand source, int size)
 		{
-			var type = destination.Type;
 			Debug.Assert(size > 0 && size % 4 == 0);
 
 			var src = source;
