@@ -33,6 +33,9 @@ namespace Mosa.Compiler.Framework.Stages
 		private int constantFoldingIntegerCompareCount = 0;
 		private int foldIntegerCompareBranchCount = 0;
 		private int deadCodeEliminationCount = 0;
+		private int simplifyIntegerCompareCount = 0;
+		private int carryAdditionAndSubstraction = 0;
+		private int reduceTruncationAndExpansion = 0;
 		private int blockRemovedCount = 0;
 
 		private Stack<int> worklist = new Stack<int>();
@@ -81,6 +84,9 @@ namespace Mosa.Compiler.Framework.Stages
 			UpdateCounter("SSAOptimizations.ConstantFoldingIntegerCompare", constantFoldingIntegerCompareCount);
 			UpdateCounter("SSAOptimizations.FoldIntegerCompareBranch", foldIntegerCompareBranchCount);
 			UpdateCounter("SSAOptimizations.DeadCodeElimination", deadCodeEliminationCount);
+			UpdateCounter("SSAOptimizations.SimplifyIntegerCompareCount", simplifyIntegerCompareCount);
+			UpdateCounter("SSAOptimizations.CarryAdditionAndSubstraction", carryAdditionAndSubstraction);
+			UpdateCounter("SSAOptimizations.ReduceTruncationAndExpansion", reduceTruncationAndExpansion);
 			UpdateCounter("SSAOptimizations.BlockRemoved", blockRemovedCount);
 
 			worklist = null;
@@ -102,11 +108,14 @@ namespace Mosa.Compiler.Framework.Stages
 			StrengthReductionIntegerAdditionAndSubstraction(context);
 			StrengthReductionLogicalOperators(context);
 			ConstantFoldingIntegerOperations(context);
+			SimplifyIntegerCompare(context);
+			CarryAdditionAndSubstraction(context);
 			SimpleConstantPropagation(context);
 			SimpleCopyPropagation(context);
 			DeadCodeElimination(context);
 			ConstantFoldingIntegerCompare(context);
 			FoldIntegerCompareBranch(context);
+			ReduceTruncationAndExpansion(context);
 		}
 
 		/// <summary>
@@ -498,7 +507,10 @@ namespace Mosa.Compiler.Framework.Stages
 			if (context.IsEmpty)
 				return;
 
-			if (!(context.Instruction == IRInstruction.AddSigned || context.Instruction == IRInstruction.AddUnsigned || context.Instruction == IRInstruction.SubSigned || context.Instruction == IRInstruction.SubUnsigned))
+			if (!(context.Instruction == IRInstruction.AddSigned
+				|| context.Instruction == IRInstruction.AddUnsigned
+				|| context.Instruction == IRInstruction.SubSigned
+				|| context.Instruction == IRInstruction.SubUnsigned))
 				return;
 
 			if (!context.Result.IsVirtualRegister)
@@ -806,8 +818,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (!op1.IsConstant || !op2.IsConstant)
 				return;
 
-			if (context.Next.Instruction != IRInstruction.Jmp)
-				return;
+			Debug.Assert(context.Next.Instruction == IRInstruction.Jmp);
 
 			if (context.BranchTargets[0] == context.Next.BranchTargets[0])
 			{
@@ -834,8 +845,6 @@ namespace Mosa.Compiler.Framework.Stages
 				// TODO: Add more
 				default: return;
 			}
-
-			Debug.Assert(context.Next.Instruction == IRInstruction.Jmp);
 
 			BasicBlock target;
 
@@ -928,6 +937,164 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				CheckAndClearEmptyBlock(next);
 			}
+		}
+
+		/// <summary>
+		/// Simplifies the integer compare.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		private void SimplifyIntegerCompare(Context context)
+		{
+			if (context.IsEmpty)
+				return;
+
+			if (context.Instruction != IRInstruction.IntegerCompare)
+				return;
+
+			if (!context.Result.IsVirtualRegister)
+				return;
+
+			if (context.Result.Uses.Count != 1)
+				return;
+
+			if (context.ConditionCode != ConditionCode.Equal)
+				return;
+
+			Context ctx = new Context(InstructionSet, context.Result.Uses[0]);
+
+			if (ctx.Instruction != IRInstruction.IntegerCompare)
+				return;
+
+			if (ctx.ConditionCode != ConditionCode.Equal)
+				return;
+
+			if (!ctx.Operand2.IsConstant)
+				return;
+
+			if (!ctx.Operand2.IsConstantZero)
+				return;
+
+			Debug.Assert(ctx.Result.Definitions.Count == 1);
+
+			if (trace.Active) trace.Log("*** SimplifyIntegerCompare");
+			AddOperandUsageToWorkList(ctx);
+			if (trace.Active) trace.Log("BEFORE:\t" + ctx.ToString());
+			ctx.SetInstruction(IRInstruction.Move, ctx.Result, context.Result);
+			simplifyIntegerCompareCount++;
+			if (trace.Active) trace.Log("AFTER: \t" + ctx.ToString());
+		}
+
+		private void CarryAdditionAndSubstraction(Context context)
+		{
+			if (context.IsEmpty)
+				return;
+
+			if (!(context.Instruction == IRInstruction.AddSigned || context.Instruction == IRInstruction.AddUnsigned
+				|| context.Instruction == IRInstruction.SubSigned || context.Instruction == IRInstruction.SubUnsigned))
+				return;
+
+			if (!context.Result.IsVirtualRegister)
+				return;
+
+			if (!context.Operand2.IsConstant)
+				return;
+
+			if (context.Result.Uses.Count != 1)
+				return;
+
+			//// Divide by zero!
+			//if ((context.Instruction == IRInstruction.DivSigned || context.Instruction == IRInstruction.DivUnsigned) && context.Operand2.IsConstant && context.Operand2.IsConstantZero)
+			//	return;
+
+			Context ctx = new Context(InstructionSet, context.Result.Uses[0]);
+
+			if (!(ctx.Instruction == IRInstruction.AddSigned || ctx.Instruction == IRInstruction.AddUnsigned
+				|| ctx.Instruction == IRInstruction.SubSigned || ctx.Instruction == IRInstruction.SubUnsigned))
+				return;
+
+			if (!ctx.Result.IsVirtualRegister)
+				return;
+
+			if (!ctx.Operand2.IsConstant)
+				return;
+
+			if (ctx.Result.Definitions.Count != 1)
+				return;
+
+			//// Divide by zero!
+			//if ((ctx.Instruction == IRInstruction.DivSigned || ctx.Instruction == IRInstruction.DivUnsigned) && ctx.Operand2.IsConstant && ctx.Operand2.IsConstantZero)
+			//	return;
+
+			bool add = true;
+
+			if ((context.Instruction == IRInstruction.AddSigned || context.Instruction == IRInstruction.AddUnsigned) &&
+				(ctx.Instruction == IRInstruction.SubSigned || ctx.Instruction == IRInstruction.SubUnsigned))
+			{
+				add = false;
+			}
+			else if ((context.Instruction == IRInstruction.SubSigned || context.Instruction == IRInstruction.SubUnsigned) &&
+				(ctx.Instruction == IRInstruction.AddSigned || ctx.Instruction == IRInstruction.AddUnsigned))
+			{
+				add = false;
+			}
+
+			ulong r = add ? context.Operand2.ConstantUnsignedInteger + ctx.Operand2.ConstantUnsignedInteger :
+				context.Operand2.ConstantUnsignedInteger - ctx.Operand2.ConstantUnsignedInteger;
+
+			Debug.Assert(ctx.Result.Definitions.Count == 1);
+
+			if (trace.Active) trace.Log("*** CarryAdditionAndSubstraction");
+			AddOperandUsageToWorkList(ctx);
+			if (trace.Active) trace.Log("BEFORE:\t" + ctx.ToString());
+			ctx.SetInstruction(IRInstruction.Move, ctx.Result, context.Result);
+			if (trace.Active) trace.Log("AFTER: \t" + ctx.ToString());
+			if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
+			context.Operand2 = Operand.CreateConstant(context.Operand2.Type, r);
+			if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
+			carryAdditionAndSubstraction++;
+		}
+
+		private void ReduceTruncationAndExpansion(Context context)
+		{
+			if (context.IsEmpty)
+				return;
+
+			if (context.Instruction != IRInstruction.ZeroExtendedMove)
+				return;
+
+			if (!context.Operand1.IsVirtualRegister)
+				return;
+
+			if (!context.Result.IsVirtualRegister)
+				return;
+
+			if (context.Result.Uses.Count != 1 || context.Result.Definitions.Count != 1)
+				return;
+
+			if (context.Operand1.Uses.Count != 1 || context.Operand1.Definitions.Count != 1)
+				return;
+
+			Context ctx = new Context(InstructionSet, context.Operand1.Definitions[0]);
+
+			if (ctx.Instruction != IRInstruction.Move)
+				return;
+
+			if (ctx.Result.Uses.Count != 1 || ctx.Result.Definitions.Count != 1)
+				return;
+
+			if (ctx.Operand1.Type != context.Result.Type)
+				return;
+
+			if (trace.Active) trace.Log("*** ReduceTruncationAndExpansion");
+			AddOperandUsageToWorkList(ctx);
+			AddOperandUsageToWorkList(context);
+			if (trace.Active) trace.Log("BEFORE:\t" + ctx.ToString());
+			ctx.Result = context.Result;
+			if (trace.Active) trace.Log("AFTER: \t" + ctx.ToString());
+			if (trace.Active) trace.Log("REMOVED:\t" + ctx.ToString());
+			context.SetInstruction(IRInstruction.Nop);
+			reduceTruncationAndExpansion++;
+			instructionsRemovedCount++;
 		}
 	}
 }
