@@ -34,8 +34,10 @@ namespace Mosa.Compiler.Framework.Stages
 		private int foldIntegerCompareBranchCount = 0;
 		private int deadCodeEliminationCount = 0;
 		private int simplifyIntegerCompareCount = 0;
-		private int carryAdditionAndSubstraction = 0;
 		private int reduceTruncationAndExpansion = 0;
+		private int constantFoldingAdditionAndSubstraction = 0;
+		private int constantFoldingMultiplicationCount = 0;
+		private int constantFoldingDivisionCount = 0;
 		private int blockRemovedCount = 0;
 
 		private Stack<int> worklist = new Stack<int>();
@@ -85,7 +87,9 @@ namespace Mosa.Compiler.Framework.Stages
 			UpdateCounter("SSAOptimizations.FoldIntegerCompareBranch", foldIntegerCompareBranchCount);
 			UpdateCounter("SSAOptimizations.DeadCodeElimination", deadCodeEliminationCount);
 			UpdateCounter("SSAOptimizations.SimplifyIntegerCompareCount", simplifyIntegerCompareCount);
-			UpdateCounter("SSAOptimizations.CarryAdditionAndSubstraction", carryAdditionAndSubstraction);
+			UpdateCounter("SSAOptimizations.ConstantFoldingAdditionAndSubstraction", constantFoldingAdditionAndSubstraction);
+			UpdateCounter("SSAOptimizations.ConstantFoldingMultiplicationCount", constantFoldingMultiplicationCount);
+			UpdateCounter("SSAOptimizations.ConstantFoldingDivisionCount", constantFoldingDivisionCount);
 			UpdateCounter("SSAOptimizations.ReduceTruncationAndExpansion", reduceTruncationAndExpansion);
 			UpdateCounter("SSAOptimizations.BlockRemoved", blockRemovedCount);
 
@@ -108,10 +112,13 @@ namespace Mosa.Compiler.Framework.Stages
 			StrengthReductionIntegerAdditionAndSubstraction(context);
 			StrengthReductionLogicalOperators(context);
 			ConstantFoldingIntegerOperations(context);
-			SimplifyIntegerCompare(context);
-			CarryAdditionAndSubstraction(context);
 			SimpleConstantPropagation(context);
 			SimpleCopyPropagation(context);
+			ConstantMove(context);
+			ConstantFoldingAdditionAndSubstraction(context);
+			ConstantFoldingMultiplication(context);
+			ConstantFoldingDivision(context);
+			SimplifyIntegerCompare(context);
 			DeadCodeElimination(context);
 			ConstantFoldingIntegerCompare(context);
 			FoldIntegerCompareBranch(context);
@@ -984,7 +991,28 @@ namespace Mosa.Compiler.Framework.Stages
 			if (trace.Active) trace.Log("AFTER: \t" + ctx.ToString());
 		}
 
-		private void CarryAdditionAndSubstraction(Context context)
+		private void ConstantMove(Context context)
+		{
+			if (context.IsEmpty)
+				return;
+
+			if (!(context.Instruction == IRInstruction.AddSigned || context.Instruction == IRInstruction.AddUnsigned
+				|| context.Instruction == IRInstruction.MulSigned || context.Instruction == IRInstruction.MulUnsigned))
+				return;
+
+			if (!context.Operand1.IsConstant || context.Operand2.IsConstant)
+				return;
+
+			if (trace.Active) trace.Log("*** ConstantMove");
+			AddOperandUsageToWorkList(context);
+			if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
+			var tmp = context.Operand1;
+			context.Operand1 = context.Operand2;
+			context.Operand2 = tmp;
+			if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
+		}
+
+		private void ConstantFoldingAdditionAndSubstraction(Context context)
 		{
 			if (context.IsEmpty)
 				return;
@@ -1002,10 +1030,6 @@ namespace Mosa.Compiler.Framework.Stages
 			if (context.Result.Uses.Count != 1)
 				return;
 
-			//// Divide by zero!
-			//if ((context.Instruction == IRInstruction.DivSigned || context.Instruction == IRInstruction.DivUnsigned) && context.Operand2.IsConstant && context.Operand2.IsConstantZero)
-			//	return;
-
 			Context ctx = new Context(InstructionSet, context.Result.Uses[0]);
 
 			if (!(ctx.Instruction == IRInstruction.AddSigned || ctx.Instruction == IRInstruction.AddUnsigned
@@ -1020,10 +1044,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (ctx.Result.Definitions.Count != 1)
 				return;
-
-			//// Divide by zero!
-			//if ((ctx.Instruction == IRInstruction.DivSigned || ctx.Instruction == IRInstruction.DivUnsigned) && ctx.Operand2.IsConstant && ctx.Operand2.IsConstantZero)
-			//	return;
 
 			bool add = true;
 
@@ -1043,7 +1063,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			Debug.Assert(ctx.Result.Definitions.Count == 1);
 
-			if (trace.Active) trace.Log("*** CarryAdditionAndSubstraction");
+			if (trace.Active) trace.Log("*** ConstantFoldingAdditionAndSubstraction");
 			AddOperandUsageToWorkList(ctx);
 			if (trace.Active) trace.Log("BEFORE:\t" + ctx.ToString());
 			ctx.SetInstruction(IRInstruction.Move, ctx.Result, context.Result);
@@ -1051,7 +1071,97 @@ namespace Mosa.Compiler.Framework.Stages
 			if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
 			context.Operand2 = Operand.CreateConstant(context.Operand2.Type, r);
 			if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
-			carryAdditionAndSubstraction++;
+			constantFoldingAdditionAndSubstraction++;
+		}
+
+		private void ConstantFoldingMultiplication(Context context)
+		{
+			if (context.IsEmpty)
+				return;
+
+			if (!(context.Instruction == IRInstruction.MulSigned || context.Instruction == IRInstruction.MulUnsigned))
+				return;
+
+			if (!context.Result.IsVirtualRegister)
+				return;
+
+			if (!context.Operand2.IsConstant)
+				return;
+
+			if (context.Result.Uses.Count != 1)
+				return;
+
+			Context ctx = new Context(InstructionSet, context.Result.Uses[0]);
+
+			if (!(ctx.Instruction == IRInstruction.MulSigned || ctx.Instruction == IRInstruction.MulUnsigned))
+				return;
+
+			if (!ctx.Result.IsVirtualRegister)
+				return;
+
+			if (!ctx.Operand2.IsConstant)
+				return;
+
+			if (ctx.Result.Definitions.Count != 1)
+				return;
+
+			ulong r = context.Operand2.ConstantUnsignedInteger * ctx.Operand2.ConstantUnsignedInteger;
+
+			if (trace.Active) trace.Log("*** ConstantFoldingMultiplication");
+			AddOperandUsageToWorkList(ctx);
+			if (trace.Active) trace.Log("BEFORE:\t" + ctx.ToString());
+			ctx.SetInstruction(IRInstruction.Move, ctx.Result, context.Result);
+			if (trace.Active) trace.Log("AFTER: \t" + ctx.ToString());
+			if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
+			context.Operand2 = Operand.CreateConstant(context.Operand2.Type, r);
+			if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
+			constantFoldingMultiplicationCount++;
+		}
+
+		private void ConstantFoldingDivision(Context context)
+		{
+			if (context.IsEmpty)
+				return;
+
+			if (!(context.Instruction == IRInstruction.DivSigned || context.Instruction == IRInstruction.DivUnsigned))
+				return;
+
+			if (!context.Result.IsVirtualRegister)
+				return;
+
+			if (!context.Operand2.IsConstant)
+				return;
+
+			if (context.Result.Uses.Count != 1)
+				return;
+
+			Context ctx = new Context(InstructionSet, context.Result.Uses[0]);
+
+			if (!(ctx.Instruction == IRInstruction.DivSigned || ctx.Instruction == IRInstruction.DivUnsigned))
+				return;
+
+			if (!ctx.Result.IsVirtualRegister)
+				return;
+
+			if (!ctx.Operand2.IsConstant)
+				return;
+
+			if (ctx.Result.Definitions.Count != 1)
+				return;
+
+			ulong r = context.Operand2.ConstantUnsignedInteger * ctx.Operand2.ConstantUnsignedInteger;
+
+			Debug.Assert(ctx.Result.Definitions.Count == 1);
+
+			if (trace.Active) trace.Log("*** ConstantFoldingDivision");
+			AddOperandUsageToWorkList(ctx);
+			if (trace.Active) trace.Log("BEFORE:\t" + ctx.ToString());
+			ctx.SetInstruction(IRInstruction.Move, ctx.Result, context.Result);
+			if (trace.Active) trace.Log("AFTER: \t" + ctx.ToString());
+			if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
+			context.Operand2 = Operand.CreateConstant(context.Operand2.Type, r);
+			if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
+			constantFoldingDivisionCount++;
 		}
 
 		private void ReduceTruncationAndExpansion(Context context)
