@@ -15,217 +15,217 @@ namespace Mosa.Test.Collection.x86.xUnit
 	public class EnumU1Fixture : X86TestFixture
 	{
 		[Fact]
-		public void Conversion()
+		public void PositiveConversion()
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.EnumU1Class.PositiveConversion"));
 		}
 
 		[Fact]
-		public void PlusOne1()
+		public void PositivePlusOne1()
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.EnumU1Class.PositivePlusOne1"));
 		}
 
 		[Fact]
-		public void PlusOne2()
+		public void PositivePlusOne2()
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.EnumU1Class.PositivePlusOne2"));
 		}
 
 		[Fact]
-		public void MinusOne1()
+		public void PositiveMinusOne1()
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.EnumU1Class.PositiveMinusOne1"));
 		}
 
 		[Fact]
-		public void MinusOne2()
+		public void PositiveMinusOne2()
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.EnumU1Class.PositiveMinusOne2"));
 		}
 
 		[Fact]
-		public void Shl()
+		public void PositiveShl()
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.EnumU1Class.PositiveShl"));
 		}
 
 		[Fact]
-		public void Shr()
+		public void PositiveShr()
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.EnumU1Class.PositiveShr"));
 		}
 
 		[Fact]
-		public void Mul2()
+		public void PositiveMul2()
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.EnumU1Class.PositiveMul2"));
 		}
 
 		[Fact]
-		public void Div2()
+		public void PositiveDiv2()
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.EnumU1Class.PositiveDiv2"));
 		}
 
 		[Fact]
-		public void AssignPlusOne()
+		public void PositiveAssignPlusOne()
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.EnumU1Class.PositiveAssignPlusOne"));
 		}
 
 		[Fact]
-		public void AssignMinusOne()
+		public void PositiveAssignMinusOne()
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.EnumU1Class.PositiveAssignMinusOne"));
 		}
 
 		[Fact]
-		public void Preincrement()
+		public void PositivePreincrement()
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.EnumU1Class.PositivePreincrement"));
 		}
 
 		[Fact]
-		public void Predecrement()
+		public void PositivePredecrement()
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.EnumU1Class.PositivePredecrement"));
 		}
 
 		[Fact]
-		public void Postincrement()
+		public void PositivePostincrement()
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.EnumU1Class.PositivePostincrement"));
 		}
 
 		[Fact]
-		public void Postdecrement()
+		public void PositivePostdecrement()
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.EnumU1Class.PositivePostdecrement"));
 		}
 
 		[Fact]
-		public void And()
+		public void PositiveAnd()
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.EnumU1Class.PositiveAnd"));
 		}
 
 		[Fact]
-		public void Or()
+		public void PositiveOr()
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.EnumU1Class.PositiveOr"));
 		}
 
 		[Fact]
-		public void XOr()
+		public void PositiveXOr()
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.EnumU1Class.PositiveXOr"));
 		}
 
 		[Fact]
-		public void Equal1()
+		public void PositiveEqual1()
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.EnumU1Class.PositiveEqual1"));
 		}
 
 		[Fact]
-		public void Equal2()
+		public void PositiveEqual2()
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.EnumU1Class.PositiveEqual2"));
 		}
 
 		[Fact]
-		public void Equal3()
+		public void PositiveEqual3()
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.EnumU1Class.PositiveEqual3"));
 		}
 
 		[Fact]
-		public void NotEqual1()
+		public void PositiveNotEqual1()
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.EnumU1Class.PositiveNotEqual1"));
 		}
 
 		[Fact]
-		public void NotEqual2()
+		public void PositiveNotEqual2()
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.EnumU1Class.PositiveNotEqual2"));
 		}
 
 		[Fact]
-		public void NotEqual3()
+		public void PositiveNotEqual3()
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.EnumU1Class.PositiveNotEqual3"));
 		}
 
 		[Fact]
-		public void GreaterThan1()
+		public void PositiveGreaterThan1()
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.EnumU1Class.PositiveGreaterThan1"));
 		}
 
 		[Fact]
-		public void GreaterThan2()
+		public void PositiveGreaterThan2()
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.EnumU1Class.PositiveGreaterThan2"));
 		}
 
 		[Fact]
-		public void GreaterThan3()
+		public void PositiveGreaterThan3()
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.EnumU1Class.PositiveGreaterThan3"));
 		}
 
 		[Fact]
-		public void LessThan1()
+		public void PositiveLessThan1()
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.EnumU1Class.PositiveLessThan1"));
 		}
 
 		[Fact]
-		public void LessThan2()
+		public void PositiveLessThan2()
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.EnumU1Class.PositiveLessThan2"));
 		}
 
 		[Fact]
-		public void LessThan3()
+		public void PositiveLessThan3()
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.EnumU1Class.PositiveLessThan3"));
 		}
 
 		[Fact]
-		public void GreaterThanOrEqual1()
+		public void PositiveGreaterThanOrEqual1()
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.EnumU1Class.PositiveGreaterThanOrEqual1"));
 		}
 
 		[Fact]
-		public void GreaterThanOrEqual2()
+		public void PositiveGreaterThanOrEqual2()
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.EnumU1Class.PositiveGreaterThanOrEqual2"));
 		}
 
 		[Fact]
-		public void GreaterThanOrEqual3()
+		public void PositiveGreaterThanOrEqual3()
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.EnumU1Class.PositiveGreaterThanOrEqual3"));
 		}
 
 		[Fact]
-		public void LessThanOrEqual1()
+		public void PositiveLessThanOrEqual1()
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.EnumU1Class.PositiveLessThanOrEqual1"));
 		}
 
 		[Fact]
-		public void LessThanOrEqual2()
+		public void PositiveLessThanOrEqual2()
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.EnumU1Class.PositiveLessThanOrEqual2"));
 		}
 
 		[Fact]
-		public void LessThanOrEqual3()
+		public void PositiveLessThanOrEqual3()
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.EnumU1Class.PositiveLessThanOrEqual3"));
 		}
@@ -234,217 +234,217 @@ namespace Mosa.Test.Collection.x86.xUnit
 	public class EnumU2Fixture : X86TestFixture
 	{
 		[Fact]
-		public void Conversion()
+		public void PositiveConversion()
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.EnumU2Class.PositiveConversion"));
 		}
 
 		[Fact]
-		public void PlusOne1()
+		public void PositivePlusOne1()
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.EnumU2Class.PositivePlusOne1"));
 		}
 
 		[Fact]
-		public void PlusOne2()
+		public void PositivePlusOne2()
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.EnumU2Class.PositivePlusOne2"));
 		}
 
 		[Fact]
-		public void MinusOne1()
+		public void PositiveMinusOne1()
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.EnumU2Class.PositiveMinusOne1"));
 		}
 
 		[Fact]
-		public void MinusOne2()
+		public void PositiveMinusOne2()
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.EnumU2Class.PositiveMinusOne2"));
 		}
 
 		[Fact]
-		public void Shl()
+		public void PositiveShl()
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.EnumU2Class.PositiveShl"));
 		}
 
 		[Fact]
-		public void Shr()
+		public void PositiveShr()
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.EnumU2Class.PositiveShr"));
 		}
 
 		[Fact]
-		public void Mul2()
+		public void PositiveMul2()
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.EnumU2Class.PositiveMul2"));
 		}
 
 		[Fact]
-		public void Div2()
+		public void PositiveDiv2()
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.EnumU2Class.PositiveDiv2"));
 		}
 
 		[Fact]
-		public void AssignPlusOne()
+		public void PositiveAssignPlusOne()
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.EnumU2Class.PositiveAssignPlusOne"));
 		}
 
 		[Fact]
-		public void AssignMinusOne()
+		public void PositiveAssignMinusOne()
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.EnumU2Class.PositiveAssignMinusOne"));
 		}
 
 		[Fact]
-		public void Preincrement()
+		public void PositivePreincrement()
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.EnumU2Class.PositivePreincrement"));
 		}
 
 		[Fact]
-		public void Predecrement()
+		public void PositivePredecrement()
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.EnumU2Class.PositivePredecrement"));
 		}
 
 		[Fact]
-		public void Postincrement()
+		public void PositivePostincrement()
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.EnumU2Class.PositivePostincrement"));
 		}
 
 		[Fact]
-		public void Postdecrement()
+		public void PositivePostdecrement()
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.EnumU2Class.PositivePostdecrement"));
 		}
 
 		[Fact]
-		public void And()
+		public void PositiveAnd()
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.EnumU2Class.PositiveAnd"));
 		}
 
 		[Fact]
-		public void Or()
+		public void PositiveOr()
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.EnumU2Class.PositiveOr"));
 		}
 
 		[Fact]
-		public void XOr()
+		public void PositiveXOr()
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.EnumU2Class.PositiveXOr"));
 		}
 
 		[Fact]
-		public void Equal1()
+		public void PositiveEqual1()
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.EnumU2Class.PositiveEqual1"));
 		}
 
 		[Fact]
-		public void Equal2()
+		public void PositiveEqual2()
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.EnumU2Class.PositiveEqual2"));
 		}
 
 		[Fact]
-		public void Equal3()
+		public void PositiveEqual3()
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.EnumU2Class.PositiveEqual3"));
 		}
 
 		[Fact]
-		public void NotEqual1()
+		public void PositiveNotEqual1()
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.EnumU2Class.PositiveNotEqual1"));
 		}
 
 		[Fact]
-		public void NotEqual2()
+		public void PositiveNotEqual2()
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.EnumU2Class.PositiveNotEqual2"));
 		}
 
 		[Fact]
-		public void NotEqual3()
+		public void PositiveNotEqual3()
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.EnumU2Class.PositiveNotEqual3"));
 		}
 
 		[Fact]
-		public void GreaterThan1()
+		public void PositiveGreaterThan1()
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.EnumU2Class.PositiveGreaterThan1"));
 		}
 
 		[Fact]
-		public void GreaterThan2()
+		public void PositiveGreaterThan2()
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.EnumU2Class.PositiveGreaterThan2"));
 		}
 
 		[Fact]
-		public void GreaterThan3()
+		public void PositiveGreaterThan3()
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.EnumU2Class.PositiveGreaterThan3"));
 		}
 
 		[Fact]
-		public void LessThan1()
+		public void PositiveLessThan1()
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.EnumU2Class.PositiveLessThan1"));
 		}
 
 		[Fact]
-		public void LessThan2()
+		public void PositiveLessThan2()
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.EnumU2Class.PositiveLessThan2"));
 		}
 
 		[Fact]
-		public void LessThan3()
+		public void PositiveLessThan3()
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.EnumU2Class.PositiveLessThan3"));
 		}
 
 		[Fact]
-		public void GreaterThanOrEqual1()
+		public void PositiveGreaterThanOrEqual1()
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.EnumU2Class.PositiveGreaterThanOrEqual1"));
 		}
 
 		[Fact]
-		public void GreaterThanOrEqual2()
+		public void PositiveGreaterThanOrEqual2()
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.EnumU2Class.PositiveGreaterThanOrEqual2"));
 		}
 
 		[Fact]
-		public void GreaterThanOrEqual3()
+		public void PositiveGreaterThanOrEqual3()
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.EnumU2Class.PositiveGreaterThanOrEqual3"));
 		}
 
 		[Fact]
-		public void LessThanOrEqual1()
+		public void PositiveLessThanOrEqual1()
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.EnumU2Class.PositiveLessThanOrEqual1"));
 		}
 
 		[Fact]
-		public void LessThanOrEqual2()
+		public void PositiveLessThanOrEqual2()
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.EnumU2Class.PositiveLessThanOrEqual2"));
 		}
 
 		[Fact]
-		public void LessThanOrEqual3()
+		public void PositiveLessThanOrEqual3()
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.EnumU2Class.PositiveLessThanOrEqual3"));
 		}
@@ -453,217 +453,217 @@ namespace Mosa.Test.Collection.x86.xUnit
 	public class EnumU4Fixture : X86TestFixture
 	{
 		[Fact]
-		public void Conversion()
+		public void PositiveConversion()
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.EnumU4Class.PositiveConversion"));
 		}
 
 		[Fact]
-		public void PlusOne1()
+		public void PositivePlusOne1()
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.EnumU4Class.PositivePlusOne1"));
 		}
 
 		[Fact]
-		public void PlusOne2()
+		public void PositivePlusOne2()
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.EnumU4Class.PositivePlusOne2"));
 		}
 
 		[Fact]
-		public void MinusOne1()
+		public void PositiveMinusOne1()
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.EnumU4Class.PositiveMinusOne1"));
 		}
 
 		[Fact]
-		public void MinusOne2()
+		public void PositiveMinusOne2()
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.EnumU4Class.PositiveMinusOne2"));
 		}
 
 		[Fact]
-		public void Shl()
+		public void PositiveShl()
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.EnumU4Class.PositiveShl"));
 		}
 
 		[Fact]
-		public void Shr()
+		public void PositiveShr()
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.EnumU4Class.PositiveShr"));
 		}
 
 		[Fact]
-		public void Mul2()
+		public void PositiveMul2()
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.EnumU4Class.PositiveMul2"));
 		}
 
 		[Fact]
-		public void Div2()
+		public void PositiveDiv2()
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.EnumU4Class.PositiveDiv2"));
 		}
 
 		[Fact]
-		public void AssignPlusOne()
+		public void PositiveAssignPlusOne()
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.EnumU4Class.PositiveAssignPlusOne"));
 		}
 
 		[Fact]
-		public void AssignMinusOne()
+		public void PositiveAssignMinusOne()
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.EnumU4Class.PositiveAssignMinusOne"));
 		}
 
 		[Fact]
-		public void Preincrement()
+		public void PositivePreincrement()
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.EnumU4Class.PositivePreincrement"));
 		}
 
 		[Fact]
-		public void Predecrement()
+		public void PositivePredecrement()
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.EnumU4Class.PositivePredecrement"));
 		}
 
 		[Fact]
-		public void Postincrement()
+		public void PositivePostincrement()
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.EnumU4Class.PositivePostincrement"));
 		}
 
 		[Fact]
-		public void Postdecrement()
+		public void PositivePostdecrement()
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.EnumU4Class.PositivePostdecrement"));
 		}
 
 		[Fact]
-		public void And()
+		public void PositiveAnd()
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.EnumU4Class.PositiveAnd"));
 		}
 
 		[Fact]
-		public void Or()
+		public void PositiveOr()
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.EnumU4Class.PositiveOr"));
 		}
 
 		[Fact]
-		public void XOr()
+		public void PositiveXOr()
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.EnumU4Class.PositiveXOr"));
 		}
 
 		[Fact]
-		public void Equal1()
+		public void PositiveEqual1()
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.EnumU4Class.PositiveEqual1"));
 		}
 
 		[Fact]
-		public void Equal2()
+		public void PositiveEqual2()
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.EnumU4Class.PositiveEqual2"));
 		}
 
 		[Fact]
-		public void Equal3()
+		public void PositiveEqual3()
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.EnumU4Class.PositiveEqual3"));
 		}
 
 		[Fact]
-		public void NotEqual1()
+		public void PositiveNotEqual1()
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.EnumU4Class.PositiveNotEqual1"));
 		}
 
 		[Fact]
-		public void NotEqual2()
+		public void PositiveNotEqual2()
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.EnumU4Class.PositiveNotEqual2"));
 		}
 
 		[Fact]
-		public void NotEqual3()
+		public void PositiveNotEqual3()
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.EnumU4Class.PositiveNotEqual3"));
 		}
 
 		[Fact]
-		public void GreaterThan1()
+		public void PositiveGreaterThan1()
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.EnumU4Class.PositiveGreaterThan1"));
 		}
 
 		[Fact]
-		public void GreaterThan2()
+		public void PositiveGreaterThan2()
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.EnumU4Class.PositiveGreaterThan2"));
 		}
 
 		[Fact]
-		public void GreaterThan3()
+		public void PositiveGreaterThan3()
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.EnumU4Class.PositiveGreaterThan3"));
 		}
 
 		[Fact]
-		public void LessThan1()
+		public void PositiveLessThan1()
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.EnumU4Class.PositiveLessThan1"));
 		}
 
 		[Fact]
-		public void LessThan2()
+		public void PositiveLessThan2()
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.EnumU4Class.PositiveLessThan2"));
 		}
 
 		[Fact]
-		public void LessThan3()
+		public void PositiveLessThan3()
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.EnumU4Class.PositiveLessThan3"));
 		}
 
 		[Fact]
-		public void GreaterThanOrEqual1()
+		public void PositiveGreaterThanOrEqual1()
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.EnumU4Class.PositiveGreaterThanOrEqual1"));
 		}
 
 		[Fact]
-		public void GreaterThanOrEqual2()
+		public void PositiveGreaterThanOrEqual2()
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.EnumU4Class.PositiveGreaterThanOrEqual2"));
 		}
 
 		[Fact]
-		public void GreaterThanOrEqual3()
+		public void PositiveGreaterThanOrEqual3()
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.EnumU4Class.PositiveGreaterThanOrEqual3"));
 		}
 
 		[Fact]
-		public void LessThanOrEqual1()
+		public void PositiveLessThanOrEqual1()
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.EnumU4Class.PositiveLessThanOrEqual1"));
 		}
 
 		[Fact]
-		public void LessThanOrEqual2()
+		public void PositiveLessThanOrEqual2()
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.EnumU4Class.PositiveLessThanOrEqual2"));
 		}
 
 		[Fact]
-		public void LessThanOrEqual3()
+		public void PositiveLessThanOrEqual3()
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.EnumU4Class.PositiveLessThanOrEqual3"));
 		}
