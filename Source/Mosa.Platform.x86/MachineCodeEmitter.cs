@@ -175,7 +175,7 @@ namespace Mosa.Platform.x86
 			}
 			else if (displacement.IsField)
 			{
-				SectionKind section = displacement.Field.Data != null ? section = SectionKind.Data : section = SectionKind.BSS;
+				SectionKind section = displacement.Field.Data != null ? section = SectionKind.ROData : section = SectionKind.BSS;
 				linker.Link(LinkType.AbsoluteAddress, BuiltInPatch.I4, MethodName, SectionKind.Text, (int)codeStream.Position, 0, displacement.Field.FullName, section, (int)displacement.Displacement);
 				codeStream.WriteZeroBytes(4);
 			}
@@ -184,12 +184,7 @@ namespace Mosa.Platform.x86
 				// FIXME! remove assertion
 				Debug.Assert(displacement.Displacement == 0);
 
-				SectionKind section = SectionKind.ROData;
-
-				if (displacement.Method != null)
-					section = SectionKind.Text;
-				//else if (displacement.StringData != null)
-				//	section = SectionKind.ROData;
+				SectionKind section = (displacement.Method != null) ? SectionKind.Text : SectionKind.ROData;
 
 				linker.Link(LinkType.AbsoluteAddress, BuiltInPatch.I4, MethodName, SectionKind.Text, (int)codeStream.Position, 0, displacement.Name, section, 0);
 				codeStream.WriteZeroBytes(4);

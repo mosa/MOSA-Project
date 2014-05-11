@@ -274,7 +274,7 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 			//if (opcode == Opcode.Xchg) return true;
 			if (opcode == Opcode.Xor) return true;
 			//if (opcode == Opcode.Ucomisd) return true;
-			if (opcode == Opcode.Ucomiss) return true;
+			//if (opcode == Opcode.Ucomiss) return true;
 			if (opcode == Opcode.Neg) return true;
 
 			return false;

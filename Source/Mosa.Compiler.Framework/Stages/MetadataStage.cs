@@ -61,8 +61,8 @@ namespace Mosa.Compiler.Framework.Stages
 			// 1. Size
 			writer2.Write((uint)TypeLayout.GetTypeSize(type));
 
-			// 2. Metadata Token
-			writer2.Write((uint)0); //TODO?
+			// 2. Metadata Token [to be removed]
+			writer2.Write((uint)0);
 
 			// 3. Pointer to Name
 			Linker.Link(LinkType.AbsoluteAddress, BuiltInPatch.I4, typeTableSymbol, (int)writer2.Position, 0, typeNameSymbol, 0);
@@ -95,29 +95,23 @@ namespace Mosa.Compiler.Framework.Stages
 				var fieldDescSymbol = Linker.CreateSymbol(field.FullName + @"$desc", SectionKind.ROData, TypeLayout.NativePointerAlignment, 0);
 				var writer2 = new EndianAwareBinaryWriter(fieldDescSymbol.Stream, Architecture.Endianness);
 
-				// 1. Offset / Address
+				// 1. Name
+				Linker.Link(LinkType.AbsoluteAddress, BuiltInPatch.I4, fieldDescSymbol, (int)writer2.Position, 0, fieldNameSymbol.Name, SectionKind.ROData, 0);
+				writer2.Position += TypeLayout.NativePointerSize;
+
+				// 2 & 3. Offset / Address + Size
 				if (field.IsStatic && !field.IsLiteral)
 				{
-					var section = (field.Data != null) ? SectionKind.Data : SectionKind.BSS;
-
+					var section = (field.Data != null) ? SectionKind.ROData : SectionKind.BSS;
 					Linker.Link(LinkType.AbsoluteAddress, BuiltInPatch.I4, fieldDescSymbol, (int)writer2.Position, 0, field.FullName, section, 0);
+					writer2.Position += TypeLayout.NativePointerSize;
+					writer2.Write((field.Data != null) ? field.Data.Length : 0);
 				}
 				else
 				{
 					writer2.Write(TypeLayout.GetFieldOffset(field));
-					writer2.Position -= 4;
 				}
-				writer2.Position += TypeLayout.NativePointerSize;
 
-				// 2. Name
-				Linker.Link(LinkType.AbsoluteAddress, BuiltInPatch.I4, fieldDescSymbol, (int)writer2.Position, 0, fieldNameSymbol.Name, SectionKind.ROData, 0);
-				writer2.Position += TypeLayout.NativePointerSize;
-
-				// 3. Size
-				writer2.Write((uint)TypeLayout.GetFieldSize(field));
-
-				// 4. Metadata Token
-				writer2.Write((uint)0); // TODO
 			}
 		}
 	}

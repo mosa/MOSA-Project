@@ -215,7 +215,7 @@ namespace Mosa.Compiler.Framework.Stages
 			size = (int)TypeLayout.GetFieldSize(field);
 
 			// The linker section to move this field into
-			SectionKind section = field.Data != null ? section = SectionKind.Data : section = SectionKind.BSS;
+			SectionKind section = field.Data != null ? section = SectionKind.ROData : section = SectionKind.BSS;
 
 			AllocateSpace(field, section, size, alignment);
 		}

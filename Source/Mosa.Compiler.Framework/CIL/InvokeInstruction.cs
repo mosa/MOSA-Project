@@ -157,7 +157,9 @@ namespace Mosa.Compiler.Framework.CIL
 				context.Result = compiler.CreateVirtualRegister(method.Signature.ReturnType.GetStackType());
 			}
 			else
+			{
 				context.ResultCount = 0;
+			}
 
 			context.OperandCount = (byte)paramCount;
 		}

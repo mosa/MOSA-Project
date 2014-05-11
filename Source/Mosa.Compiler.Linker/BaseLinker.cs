@@ -232,7 +232,7 @@ namespace Mosa.Compiler.Linker
 
 			foreach (byte b in data)
 			{
-				name = name + data[0].ToString("x");
+				name = name + b.ToString("x");
 			}
 
 			var symbol = GetSymbol(name, SectionKind.ROData);
@@ -253,7 +253,7 @@ namespace Mosa.Compiler.Linker
 
 			foreach (byte b in data)
 			{
-				name = name + data[0].ToString("x");
+				name = name + b.ToString("x");
 			}
 
 			var symbol = GetSymbol(name, SectionKind.ROData);

@@ -200,8 +200,8 @@ namespace Mosa.Platform.x86.Stages
 
 						newBlocks[0].AppendInstruction(X86.Setcc, ConditionCode.NotEqual, result);
 						newBlocks[0].AppendInstruction(X86.Movzx, result, result);
-						newBlocks[0].AppendInstruction(X86.Jmp, newBlocks[0].BasicBlock);
-						LinkBlocks(newBlocks[0], newBlocks[0]);
+						newBlocks[0].AppendInstruction(X86.Jmp, nextBlock.BasicBlock);
+						LinkBlocks(newBlocks[0], nextBlock);
 
 						break;
 					}

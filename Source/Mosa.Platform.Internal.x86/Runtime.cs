@@ -75,7 +75,7 @@ namespace Mosa.Platform.Internal.x86
 		{
 			byte* arrayElements = (byte*)(array + 3);
 			// See symbol $desc for format of field handle
-			byte* fieldData = (byte*)*fieldHandle;
+			byte* fieldData = (byte*)*(fieldHandle + 1);
 			uint dataLength = *(fieldHandle + 2);
 			while (dataLength > 0)
 			{

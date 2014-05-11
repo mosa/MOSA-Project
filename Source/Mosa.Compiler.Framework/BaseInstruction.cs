@@ -147,17 +147,19 @@ namespace Mosa.Compiler.Framework
 				s.Append("]");
 			}
 
-			if (context.ResultCount != 0)
+			for (int i = 0; i < context.ResultCount; i++)
 			{
+				var op = context.GetResult(i);
 				s.Append(" ");
-				s.Append(context.Result);
-
-				if (context.ResultCount == 2)
-				{
-					s.Append(" : ");
-					s.Append(context.Result2);
-				}
+				s.Append(op == null ? "[NULL]" : op.ToString());
+				s.Append(",");
 			}
+
+			if (context.ResultCount > 0)
+			{
+				s.Length = s.Length - 1;
+			}
+
 			if (context.ResultCount > 0 && context.OperandCount > 0)
 			{
 				s.Append(" <=");
@@ -165,8 +167,9 @@ namespace Mosa.Compiler.Framework
 
 			for (int i = 0; i < context.OperandCount; i++)
 			{
+				var op = context.GetOperand(i);
 				s.Append(" ");
-				s.Append(context.GetOperand(i));
+				s.Append(op == null ? "[NULL]" : op.ToString());
 				s.Append(",");
 			}
 

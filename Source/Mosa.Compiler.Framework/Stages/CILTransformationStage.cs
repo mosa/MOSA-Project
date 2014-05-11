@@ -382,18 +382,6 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				var type = context.Previous.MosaType;
 
-				//foreach (var m in type.Methods)
-				//{
-				//	if (m.Name == method.Name)
-				//	{
-				//		if (m.Matches(method))
-				//		{
-				//			method = m;
-				//			break;
-				//		}
-				//	}
-				//}
-
 				context.Previous.Remove();
 
 				ProcessInvokeInstruction(context, method, resultOperand, operands);
