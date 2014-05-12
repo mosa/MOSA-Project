@@ -168,11 +168,11 @@ namespace Mosa.Compiler.Framework.Stages
 			Operand source;
 			if (context.MosaType != null)
 			{
-				source = Operand.CreateLabel(TypeSystem.GetTypeByName("System", "RuntimeTypeHandle"), context.MosaType.FullName + "$dtable");
+				source = Operand.CreateLabel(TypeSystem.GetTypeByName("System", "RuntimeTypeHandle"), context.MosaType.FullName + Metadata.TypeDefinition);
 			}
 			else if (context.MosaField != null)
 			{
-				source = Operand.CreateLabel(TypeSystem.GetTypeByName("System", "RuntimeTypeHandle"), context.MosaField.FullName + "$desc");
+				source = Operand.CreateLabel(TypeSystem.GetTypeByName("System", "RuntimeTypeHandle"), context.MosaField.FullName + Metadata.FieldDefinition);
 			}
 			else
 				throw new NotImplementCompilerException();
@@ -507,7 +507,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private Operand GetMethodTableSymbol(MosaType runtimeType)
 		{
-			return Operand.CreateUnmanagedSymbolPointer(TypeSystem, runtimeType.FullName + "$mtable");
+			return Operand.CreateUnmanagedSymbolPointer(TypeSystem, runtimeType.FullName + Metadata.MethodTable);
 		}
 
 		/// <summary>
@@ -758,7 +758,7 @@ namespace Mosa.Compiler.Framework.Stages
 			var stream = symbol.Stream;
 
 			// Method table and sync block
-			linker.Link(LinkType.AbsoluteAddress, BuiltInPatch.I4, symbol, 0, 0, "System.String$mtable", SectionKind.ROData, 0);
+			linker.Link(LinkType.AbsoluteAddress, BuiltInPatch.I4, symbol, 0, 0, "System.String" + Metadata.MethodTable, SectionKind.ROData, 0);
 
 			stream.WriteZeroBytes(NativePointerSize * 2);
 
