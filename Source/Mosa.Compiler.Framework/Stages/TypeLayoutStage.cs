@@ -55,12 +55,12 @@ namespace Mosa.Compiler.Framework.Stages
 			foreach (MosaType interfaceType in TypeLayout.Interfaces)
 			{
 				if (type.Interfaces.Contains(interfaceType))
-					slots.Add(type.FullName + @"$mtable$" + interfaceType.FullName);
+					slots.Add(type.FullName + Metadata.InterfaceMethodTable + interfaceType.FullName);
 				else
 					slots.Add(null);
 			}
 
-			AskLinkerToCreateMethodTable(type.FullName + @"$itable", null, slots);
+			AskLinkerToCreateMethodTable(type.FullName + Metadata.InterfaceTable, null, slots);
 		}
 
 		private void BuildTypeInterfaceBitmap(MosaType type)
@@ -87,7 +87,7 @@ namespace Mosa.Compiler.Framework.Stages
 				}
 			}
 
-			AskLinkerToCreateArray(type.FullName + @"$ibitmap", bitmap);
+			AskLinkerToCreateArray(type.FullName + Metadata.InterfaceBitmap, bitmap);
 		}
 
 		private void BuildTypeInterfaceTables(MosaType type)
@@ -105,7 +105,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (methodTable == null)
 				return;
 
-			AskLinkerToCreateMethodTable(type.FullName + @"$mtable$" + interfaceType.FullName, methodTable, null);
+			AskLinkerToCreateMethodTable(type.FullName + Metadata.InterfaceMethodTable + interfaceType.FullName, methodTable, null);
 		}
 
 		/// <summary>
@@ -125,11 +125,11 @@ namespace Mosa.Compiler.Framework.Stages
 			if (type.Interfaces.Count == 0)
 				headerlinks.Add(null);
 			else
-				headerlinks.Add(type.FullName + @"$itable");
+				headerlinks.Add(type.FullName + Metadata.InterfaceTable);
 
 			// 2. type metadata pointer - contains the type metadata pointer, used to realize object.GetType().
 			if (!type.IsModule)
-				headerlinks.Add(type.FullName + @"$dtable");
+				headerlinks.Add(type.FullName + Metadata.TypeDefinition);
 			else
 				headerlinks.Add(null);
 
@@ -137,16 +137,16 @@ namespace Mosa.Compiler.Framework.Stages
 			if (type.Interfaces.Count == 0)
 				headerlinks.Add(null);
 			else
-				headerlinks.Add(type.FullName + @"$ibitmap");
+				headerlinks.Add(type.FullName + Metadata.InterfaceBitmap);
 
 			// 4. parent type (if any)
 			if (type.BaseType == null)
 				headerlinks.Add(null);
 			else
-				headerlinks.Add(type.BaseType + @"$mtable");
+				headerlinks.Add(type.BaseType + Metadata.MethodTable);
 
 			var methodTable = TypeLayout.GetMethodTable(type);
-			AskLinkerToCreateMethodTable(type.FullName + @"$mtable", methodTable, headerlinks);
+			AskLinkerToCreateMethodTable(type.FullName + Metadata.MethodTable, methodTable, headerlinks);
 		}
 
 		private void AskLinkerToCreateMethodTable(string methodTableName, IList<MosaMethod> methodTable, IList<string> headerlinks)

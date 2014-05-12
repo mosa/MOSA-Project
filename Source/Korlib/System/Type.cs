@@ -5,10 +5,11 @@
  *
  * Authors:
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
+ *  Stefan Andres Charsley (charsleysa) <charsleysa@gmail.com>
  */
 
-using System.Runtime.InteropServices;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Runtime.CompilerServices;
 
 namespace System
@@ -67,10 +68,16 @@ namespace System
 			return FullName;
 		}
 
+		public TypeAttributes Attributes
+		{
+			get;
+			private set;
+		}
+
 		public Module Module
 		{
 			get;
-			internal set;
+			private set;
 		}
 	}
 }

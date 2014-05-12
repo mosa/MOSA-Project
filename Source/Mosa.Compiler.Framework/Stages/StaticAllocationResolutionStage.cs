@@ -7,6 +7,7 @@
  *  Kai P. Reisert <kpreisert@googlemail.com>
  */
 
+using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.CIL;
 using Mosa.Compiler.Linker;
 using Mosa.Compiler.MosaTypeSystem;
@@ -69,7 +70,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			if (!allocatedType.IsValueType)
 			{
-				return allocatedType.FullName + @"$mtable";
+				return allocatedType.FullName + Metadata.MethodTable;
 			}
 
 			return null;
