@@ -131,7 +131,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="index">The index.</param>
 		private void AddToWorkList(int index)
 		{
-			// work list never gets very large, so the check is inexpensive
+			// work list stays small, so the check is inexpensive
 			if (!worklist.Contains(index))
 				worklist.Push(index);
 		}
@@ -385,8 +385,7 @@ namespace Mosa.Compiler.Framework.Stages
 				  context.Instruction == IRInstruction.MulSigned || context.Instruction == IRInstruction.MulUnsigned ||
 				  context.Instruction == IRInstruction.DivSigned || context.Instruction == IRInstruction.DivUnsigned ||
 				  context.Instruction == IRInstruction.ArithmeticShiftRight ||
-				  context.Instruction == IRInstruction.ShiftLeft || context.Instruction == IRInstruction.ShiftRight
-				 ))
+				  context.Instruction == IRInstruction.ShiftLeft || context.Instruction == IRInstruction.ShiftRight))
 				return;
 
 			if (!context.Result.IsVirtualRegister)
@@ -514,10 +513,8 @@ namespace Mosa.Compiler.Framework.Stages
 			if (context.IsEmpty)
 				return;
 
-			if (!(context.Instruction == IRInstruction.AddSigned
-				|| context.Instruction == IRInstruction.AddUnsigned
-				|| context.Instruction == IRInstruction.SubSigned
-				|| context.Instruction == IRInstruction.SubUnsigned))
+			if (!(context.Instruction == IRInstruction.AddSigned || context.Instruction == IRInstruction.AddUnsigned
+				|| context.Instruction == IRInstruction.SubSigned || context.Instruction == IRInstruction.SubUnsigned))
 				return;
 
 			if (!context.Result.IsVirtualRegister)

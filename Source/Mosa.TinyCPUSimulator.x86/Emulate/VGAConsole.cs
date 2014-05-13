@@ -178,7 +178,9 @@ namespace Mosa.TinyCPUSimulator.x86.Emulate
 			miscellaneous = 0x01;	// set color mode
 
 			for (ulong a = baseAddress; a < baseAddress + StandardMemorySize; a++)
+			{
 				simCPU.DirectWrite8(a, 0);
+			}
 		}
 
 		public override void MemoryWrite(ulong address, byte size)
@@ -186,7 +188,9 @@ namespace Mosa.TinyCPUSimulator.x86.Emulate
 			for (ulong a = address; a < address + (ulong)(size / 8); a++)
 			{
 				if (a >= baseAddress && a < baseAddress + StandardMemorySize)
+				{
 					Write8((uint)a, simCPU.DirectRead8(a));
+				}
 			}
 		}
 
