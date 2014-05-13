@@ -68,6 +68,7 @@
     <Compile Include="System.Reflection\ICustomAttributeProvider.cs" />
     <Compile Include="System.Reflection\MemberInfo.cs" />
     <Compile Include="System.Reflection\Module.cs" />
+    <Compile Include="System.Reflection\TypeAttributes.cs" />
     <Compile Include="System.Runtime.CompilerServices\CompilationRelaxationsAttribute.cs" />
     <Compile Include="System.Runtime.CompilerServices\RuntimeCompatibilityAttribute.cs" />
     <Compile Include="System.Runtime.CompilerServices\RuntimeHelpers.cs" />

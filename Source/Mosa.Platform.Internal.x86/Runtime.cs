@@ -67,7 +67,7 @@ namespace Mosa.Platform.Internal.x86
 		public static void* GetTypeHandle(uint** obj)
 		{
 			// Method table is located at the beginning of object (i.e. *obj )
-			// Type metadata ($dtable) located at the second of the method table (i.e. *(*obj + 1) )
+			// Type metadata (TypeDefinition) located at the second of the method table (i.e. *(*obj + 1) )
 			return (void*)*(*obj + 1);
 		}
 

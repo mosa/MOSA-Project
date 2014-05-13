@@ -79,6 +79,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 			using (var module = Controller.MutateModule(LinkerModule))
 			{
 				module.Name = "@Linker";
+				module.Assembly = "@Linker";
 				module.IsLinkerGenerated = true;
 			}
 			Modules.Add(LinkerModule);
