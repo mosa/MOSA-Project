@@ -17,7 +17,7 @@ namespace Mosa.Compiler.Framework.Intrinsics
 	[ReplacementTarget("System.String::InternalAllocateString")]
 	public sealed class InternalAllocateString : IIntrinsicInternalMethod
 	{
-		private const string StringClassMethodTableSymbolName = @"System.String$mtable";
+		private const string StringClassMethodTableSymbolName = @"System.String" + Metadata.MethodTable;
 
 		/// <summary>
 		/// Replaces the intrinsic call site
