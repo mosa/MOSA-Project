@@ -59,10 +59,16 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 			List<SimOperand> operands = new List<SimOperand>();
 
 			if (context.ResultCount != 0)
-				operands.Add(ConvertToOpcodeOperand(context.Result));
+			{
+				int size = GetSize(context.Result.Type);
+				operands.Add(ConvertToOpcodeOperand(context.Result, size));
+			}
 
 			foreach (var operand in context.Operands)
-				operands.Add(ConvertToOpcodeOperand(operand));
+			{
+				int size = GetSize(operand.Type);
+				operands.Add(ConvertToOpcodeOperand(operand, size));
+			}
 
 			if (context.BranchTargets != null)
 			{
@@ -105,10 +111,8 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 			}
 		}
 
-		private SimOperand ConvertToOpcodeOperand(Operand operand)
+		private SimOperand ConvertToOpcodeOperand(Operand operand, int size)
 		{
-			int size = GetSize(operand.Type);
-
 			if (operand.IsConstant)
 			{
 				return CreateImmediate(operand.ConstantUnsignedInteger, size);
@@ -212,7 +216,7 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 		{
 			if (type.IsUI1 || type.IsBoolean)
 				return 8;
-			else if (type.IsUI2)
+			else if (type.IsUI2 || type.IsChar)
 				return 16;
 			else if (type.IsUI8 || type.IsR8)
 				return 64;
