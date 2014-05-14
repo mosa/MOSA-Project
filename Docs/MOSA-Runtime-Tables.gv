@@ -20,7 +20,7 @@ shape = "record"
 ];
 
 "node2" [
-label = "<f0>Type Definition|Size|Metadata Token|<f2>Pointer to Type Name|<f1>Pointer to Assembly|Pointer to Default Constructor Method (if any)|Flag: Is Interface"
+label = "<f0>Type Definition|Size|<f2>Pointer to Type Name|<f1>Pointer to Assembly|Pointer to Default Constructor Method (if any)|Flag: Is Interface|<f3>Pointer to Method Definition Table|TODO"
 shape = "record"
 ];
 
@@ -50,7 +50,7 @@ shape = "record"
 ];
 
 "node8" [
-label = "<f0>Method Table|<f2>Pointer to Interface Slot Table|Pointer to Type Instance|Pointer to Interface Bitmap|<f1>Pointer to Method Table of Parent Type|Type Metadata Pointer|Pointer to Method 1|..|Pointer to Method N"
+label = "<f0>Method Table|<f2>Pointer to Interface Slot Table|Pointer to Type Instance|Pointer to Interface Bitmap|<f1>Pointer to Method Table of Parent Type||Pointer to Method 1|..|Pointer to Method N"
 shape = "record"
 ];
 
@@ -61,6 +61,26 @@ shape = "record"
 
 "node10" [
 label = "<f0>Interface Method Table|Pointer to Interface Method 1|..|Pointer to Interface Method N"
+shape = "record"
+];
+
+"node11" [
+label = "<f0>Method Definition|<f1>Method Name|Flag: Is Static|Pointer to Return Type Definition|Pointer Parameter Definitions|TODO"
+shape = "record"
+];
+
+"node12" [
+label = "<f0>Method Name|Method Name Length|Method Name"
+shape = "record"
+];
+
+"node13" [
+label = "<f0>GC Tracking Information|TODO"
+shape = "record"
+];
+
+"node14" [
+label = "<f0>Method Definition Table|Number of Methods|<f3>Pointer to Method Definition 1|...|Pointer to Method Definition N"
 shape = "record"
 ];
 
@@ -105,6 +125,22 @@ id = 0
 ];
 
 "node9":f1 -> "node10":f0 [
+id = 0
+];
+
+"node11":f1 -> "node12":f0 [
+id = 0
+];
+
+"node6":f2 -> "node13":f0 [
+id = 0
+];
+
+"node2":f3 -> "node14":f0 [
+id = 0
+];
+
+"node14":f3 -> "node11":f0 [
 id = 0
 ];
 
