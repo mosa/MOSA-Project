@@ -11,7 +11,7 @@ namespace Mosa.TestWorld.x86.Tests
 	public class InterfaceTest : KernelTest
 	{
 		public InterfaceTest()
-			: base("IF")
+			: base("Interface")
 		{
 			testMethods.Add(InterfaceTest1);
 			testMethods.Add(InterfaceTest2);

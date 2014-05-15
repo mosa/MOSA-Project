@@ -11,7 +11,7 @@ namespace Mosa.TestWorld.x86.Tests
 	public class ExceptionTest : KernelTest
 	{
 		public ExceptionTest()
-			: base("EX")
+			: base("Exception")
 		{
 			testMethods.Add(ExceptionTest1);
 			testMethods.Add(ExceptionTest2);

@@ -81,6 +81,8 @@ namespace Mosa.TestWorld.x86
 
 			KernelTest.RunTests();
 
+			Console.Goto(22, 0);
+
 			Process();
 		}
 
