@@ -47,9 +47,10 @@ namespace Mosa.TestWorld.x86.Tests
 		public void PrintResult(bool flag)
 		{
 			byte color = Console.Color;
+
 			if (flag)
 			{
-				Console.Color = Colors.Green;
+				Console.Color = Colors.White;
 				Console.Write("+");
 			}
 			else
@@ -57,8 +58,8 @@ namespace Mosa.TestWorld.x86.Tests
 				Console.Color = Colors.Red;
 				Console.Write("X");
 			}
-			Console.Color = color;
 
+			Console.Color = color;
 		}
 
 		/// <summary>
@@ -84,7 +85,7 @@ namespace Mosa.TestWorld.x86.Tests
 			var interfaceTest = new InterfaceTest();
 			var genericsTest = new GenericTest();
 			var generics2Test = new Generic2Test();
-			var isInstanceTest = new IsInstTest();
+			var isInstanceTest = new IsInstanceTest();
 			var exceptionTest = new ExceptionTest();
 			var plugTestTest = new PlugTestTest();
 			var compareTest = new ComparisonTest();
@@ -108,6 +109,15 @@ namespace Mosa.TestWorld.x86.Tests
 		{
 			Console.Color = Colors.Yellow;
 			Console.Write(testName);
+
+			int len = 15 - testName.Length;
+
+			while (len > 0)
+			{
+				Console.Write(' ');
+				len--;
+			}
+
 			Console.Write(": ");
 
 			//foreach (TestMethod node in testMethods)

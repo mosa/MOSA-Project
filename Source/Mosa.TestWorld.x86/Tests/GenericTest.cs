@@ -10,7 +10,7 @@ namespace Mosa.TestWorld.x86.Tests
 	public class GenericTest : KernelTest
 	{
 		public GenericTest()
-			: base("Gen-T")
+			: base("Generic-T")
 		{
 			testMethods.Add(GenericTest1);
 			testMethods.Add(GenericTest2);

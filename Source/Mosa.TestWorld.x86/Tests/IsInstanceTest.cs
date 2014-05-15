@@ -22,10 +22,10 @@ namespace Mosa.TestWorld.x86.Tests
 
 	public class DD : BB { }
 
-	public class IsInstTest : KernelTest
+	public class IsInstanceTest : KernelTest
 	{
-		public IsInstTest()
-			: base("Inst")
+		public IsInstanceTest()
+			: base("IsInstance")
 		{
 			testMethods.Add(IsInstTest1);
 			testMethods.Add(IsInstTest2);
