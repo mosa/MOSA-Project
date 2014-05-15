@@ -15,7 +15,7 @@ namespace Mosa.Compiler.Linker
 	/// <summary>
 	///
 	/// </summary>
-	public class LinkerSymbol
+	public sealed class LinkerSymbol
 	{
 		public string Name { get; private set; }
 
