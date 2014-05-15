@@ -32,7 +32,7 @@ namespace Mosa.HelloWorld.x86
 			Console.Clear();
 
 			IDT.SetInterruptHandler(ProcessInterrupt);
-			
+
 			Console.Color = Colors.Yellow;
 			Console.BackgroundColor = Colors.Black;
 
@@ -79,7 +79,7 @@ namespace Mosa.HelloWorld.x86
 			Console.WriteLine();
 
 
-			/*Console.Color = Colors.Green;
+			Console.Color = Colors.Green;
 			Console.Write("Memory-Map:");
 			Console.WriteLine();
 
@@ -98,8 +98,9 @@ namespace Mosa.HelloWorld.x86
 				Console.Write("Type: ");
 				Console.Write(Multiboot.GetMemoryMapType(index), 16, 1);
 				Console.WriteLine();
-			}*/
-
+			}
+			Console.WriteLine();
+			Console.WriteLine();
 			Console.Color = Colors.Green;
 			Console.Write("Smbios Info: ");
 			if (SmbiosManager.IsAvailable)

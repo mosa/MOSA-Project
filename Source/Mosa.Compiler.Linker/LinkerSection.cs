@@ -16,7 +16,7 @@ namespace Mosa.Compiler.Linker
 	/// <summary>
 	///
 	/// </summary>
-	public class LinkerSection
+	public sealed class LinkerSection
 	{
 		public List<LinkerSymbol> Symbols { get; private set; }
 

@@ -76,11 +76,12 @@ namespace Mosa.CoolWorld.x86
 			Console.BackgroundColor = Colors.Black;
 			Console.Goto(15, 0);
 			Console.Color = Colors.Green;
-			Console.Write("> ");
+			Console.Write(">");
 			Console.Color = Colors.Yellow;
 
 			Mosa.DeviceDrivers.ScanCodeMap.US KBDMAP = new DeviceDrivers.ScanCodeMap.US();
 			int lastSecond = -1;
+			Console.Write("> ");
 
 			while (true)
 			{

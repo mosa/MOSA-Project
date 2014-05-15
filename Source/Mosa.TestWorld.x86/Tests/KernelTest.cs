@@ -58,6 +58,7 @@ namespace Mosa.TestWorld.x86.Tests
 				Console.Write("X");
 			}
 			Console.Color = color;
+
 		}
 
 		/// <summary>
@@ -67,13 +68,16 @@ namespace Mosa.TestWorld.x86.Tests
 		{
 			Console = Boot.Console;
 
-			Console.Goto(20, 0);
+			Console.Goto(4, 0);
 			Console.Color = Colors.Yellow;
 			Console.Write("[");
 			Console.Color = Colors.White;
 			Console.Write("Tests");
 			Console.Color = Colors.Yellow;
 			Console.Write("]");
+			Console.WriteLine();
+			Console.WriteLine();
+			Console.Color = Colors.Yellow;
 
 			var delegateTest = new DelegateTest();
 			var stringTest = new StringTest();
@@ -102,9 +106,8 @@ namespace Mosa.TestWorld.x86.Tests
 
 		public void Test()
 		{
-			Console.Color = Colors.Gray;
-			Console.Write(" ");
-			Console.Write(this.testName);
+			Console.Color = Colors.Yellow;
+			Console.Write(testName);
 			Console.Write(": ");
 
 			//foreach (TestMethod node in testMethods)
@@ -118,6 +121,9 @@ namespace Mosa.TestWorld.x86.Tests
 				PrintResult(node.value());
 				node = node.next;
 			}
+
+			Console.WriteLine();
+
 		}
 	}
 }
