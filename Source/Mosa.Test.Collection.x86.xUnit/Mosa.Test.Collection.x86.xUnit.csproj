@@ -84,6 +84,7 @@
     <Compile Include="DoubleFixture.cs" />
     <Compile Include="EnumFixture.cs" />
     <Compile Include="ExceptionHandlingFixture.cs" />
+    <Compile Include="InterfaceFixture.cs" />
     <Compile Include="FibonacciFixture.cs" />
     <Compile Include="Int16Fixture.cs" />
     <Compile Include="Int32Fixture.cs" />
