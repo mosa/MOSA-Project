@@ -81,6 +81,7 @@
     <Compile Include="BoxingFixture.cs" />
     <Compile Include="ArrayLayoutFixture.cs" />
     <Compile Include="CallOrderFixture.cs" />
+    <Compile Include="SingleFixture.cs" />
     <Compile Include="DoubleFixture.cs" />
     <Compile Include="EnumFixture.cs" />
     <Compile Include="ExceptionHandlingFixture.cs" />

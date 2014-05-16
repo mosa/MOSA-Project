@@ -17,7 +17,6 @@ namespace Mosa.Test.Collection.x86.xUnit
 	{
 		[Theory]
 		[PropertyData("I4Small")]
-		//[InlineData((int)3)]
 		public void Fibonacci(int value)
 		{
 			Assert.Equal(FibonacciTests.Fibonacci(value), Run<int>("Mosa.Test.Collection.FibonacciTests.Fibonacci", value));
