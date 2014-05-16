@@ -9,8 +9,6 @@
 
 using Xunit;
 using Xunit.Extensions;
-using System.Collections.Generic;
-using Mosa.TinyCPUSimulator.TestSystem;
 
 namespace Mosa.Test.Collection.x86.xUnit
 {
@@ -79,7 +77,7 @@ namespace Mosa.Test.Collection.x86.xUnit
 			{
 				return;
 			}
-			
+
 			Assert.Equal(DoubleTests.RemR8R8(a, b), Run<double>("Mosa.Test.Collection", "DoubleTests", "RemR8R8", a, b));
 		}
 
@@ -90,77 +88,81 @@ namespace Mosa.Test.Collection.x86.xUnit
 			Run<double>("Mosa.Test.Collection", "DoubleTests", "RemR8R8", (double)0, a, (double)0);
 		}
 
-		//[Theory]
-		//[PropertyData("R8R8")]
+		[Theory]
+		[PropertyData("R8SimpleR8Simple")]
 		public void CeqR8R8(double a, double b)
 		{
 			Assert.Equal(DoubleTests.CeqR8R8(a, b), Run<bool>("Mosa.Test.Collection", "DoubleTests", "CeqR8R8", a, b));
 		}
 
-		//[Theory]
-		//[PropertyData("R8R8")]
-		//public void CneqR8R8(double a, double b)
-		//{
-		//	Assert.Equal(DoubleTests.CneqR8R8(a, b), Run<bool>("Mosa.Test.Collection", "DoubleTests", "CneqR8R8", a, b));
-		//}
+		[Theory]
+		[PropertyData("R8SimpleR8Simple")]
+		public void CneqR8R8(double a, double b)
+		{
+			Assert.Equal(DoubleTests.CneqR8R8(a, b), Run<bool>("Mosa.Test.Collection", "DoubleTests", "CneqR8R8", a, b));
+		}
 
-		//[Theory]
-		//[PropertyData("R8R8")]
-		//public void CltR8R8(double a, double b)
-		//{
-		//	Assert.Equal(DoubleTests.CltR8R8(a, b), Run<bool>("Mosa.Test.Collection", "DoubleTests", "CltR8R8", a, b));
-		//}
+		[Theory]
+		[PropertyData("R8SimpleR8Simple")]
+		public void CltR8R8(double a, double b)
+		{
+			Assert.Equal(DoubleTests.CltR8R8(a, b), Run<bool>("Mosa.Test.Collection", "DoubleTests", "CltR8R8", a, b));
+		}
 
-		//[Theory]
-		//[PropertyData("R8R8")]
-		//public void CgtR8R8(double a, double b)
-		//{
-		//	Assert.Equal(DoubleTests.CgtR8R8(a, b), Run<bool>("Mosa.Test.Collection", "DoubleTests", "CgtR8R8", a, b));
-		//}
+		[Theory]
+		[PropertyData("R8SimpleR8Simple")]
+		public void CgtR8R8(double a, double b)
+		{
+			Assert.Equal(DoubleTests.CgtR8R8(a, b), Run<bool>("Mosa.Test.Collection", "DoubleTests", "CgtR8R8", a, b));
+		}
 
-		//[Theory]
-		//[PropertyData("R8R8")]
-		//public void CleR8R8(double a, double b)
-		//{
-		//	Assert.Equal(DoubleTests.CleR8R8(a, b), Run<bool>("Mosa.Test.Collection", "DoubleTests", "CleR8R8", a, b));
-		//}
+		[Theory]
+		[PropertyData("R8SimpleR8Simple")]
+		public void CleR8R8(double a, double b)
+		{
+			Assert.Equal(DoubleTests.CleR8R8(a, b), Run<bool>("Mosa.Test.Collection", "DoubleTests", "CleR8R8", a, b));
+		}
 
-		//[Theory]
-		//[PropertyData("R8R8")]
-		//public void CgeR8R8(double a, double b)
-		//{
-		//	Assert.Equal(DoubleTests.CgeR8R8(a, b), Run<bool>("Mosa.Test.Collection", "DoubleTests", "CgeR8R8", a, b));
-		//}
+		[Theory]
+		[PropertyData("R8SimpleR8Simple")]
+		public void CgeR8R8(double a, double b)
+		{
+			Assert.Equal(DoubleTests.CgeR8R8(a, b), Run<bool>("Mosa.Test.Collection", "DoubleTests", "CgeR8R8", a, b));
+		}
 
-		//[Theory]
-		//public void Newarr()
-		//{
-		//	Assert.True(Run<bool>("Mosa.Test.Collection", "DoubleTests", "Newarr"));
-		//}
+		[Fact]
+		public void Newarr()
+		{
+			Assert.True(Run<bool>("Mosa.Test.Collection", "DoubleTests", "Newarr"));
+		}
 
-		//[Theory]
-		//public void Ldlen([I4Small]int length)
-		//{
-		//	Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "DoubleTests", "Ldlen", length));
-		//}
+		[Theory]
+		[PropertyData("I4Small")]
+		public void Ldlen(int length)
+		{
+			Assert.True(Run<bool>("Mosa.Test.Collection", "DoubleTests", "Ldlen", length));
+		}
 
-		//[Theory]
-		//public void StelemR8([I4Small]int index, double value)
-		//{
-		//	Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "DoubleTests", "Stelem", index, value));
-		//}
+		[Theory]
+		[PropertyData("I4SmallR8Simple")]
+		public void StelemR8(int index, double value)
+		{
+			Assert.True(Run<bool>("Mosa.Test.Collection", "DoubleTests", "Stelem", index, value));
+		}
 
-		//[Theory]
-		//public void LdelemR8([I4Small]int index, double value)
-		//{
-		//	Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "DoubleTests", "Ldelem", index, value));
-		//}
+		[Theory]
+		[PropertyData("I4SmallR8Simple")]
+		public void LdelemR8(int index, double value)
+		{
+			Assert.True(Run<bool>("Mosa.Test.Collection", "DoubleTests", "Ldelem", index, value));
+		}
 
-		//[Theory]
-		//public void LdelemaR8([I4Small]int index, double value)
-		//{
-		//	Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "DoubleTests", "Ldelema", index, value));
-		//}
+		[Theory]
+		[PropertyData("I4SmallR8Simple")]
+		public void LdelemaR8(int index, double value)
+		{
+			Assert.True(Run<bool>("Mosa.Test.Collection", "DoubleTests", "Ldelema", index, value));
+		}
 
 		//[Theory]
 		//[PropertyData("R8")]
