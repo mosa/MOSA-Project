@@ -14,7 +14,7 @@ namespace Mosa.Test.Collection.x86.xUnit
 {
 	public class SingleFixture : X86TestFixture
 	{
-		private static float Tolerance = 0.000001f;
+		//private static float Tolerance = 0.000001f;
 		//private static IComparer<float> target = new ApproximateComparer(Tolerance);
 
 		[Theory]
@@ -31,15 +31,15 @@ namespace Mosa.Test.Collection.x86.xUnit
 			Assert.Equal(SingleTests.SubR4R4(a, b), Run<float>("Mosa.Test.Collection", "SingleTests", "SubR4R4", a, b));
 		}
 
-		//[Theory]
-		//[PropertyData("R4R4")]
+		[Theory]
+		[PropertyData("R4R4")]
 		public void MulR4R4(float a, float b)
 		{
 			Assert.Equal(SingleTests.MulR4R4(a, b), Run<float>("Mosa.Test.Collection", "SingleTests", "MulR4R4", a, b));
 		}
 
-		//[Theory]
-		//[PropertyData("R4R4")]
+		[Theory]
+		[PropertyData("R4R4")]
 		public void DivR4R4(float a, float b)
 		{
 			if (a == int.MinValue && b == -1)

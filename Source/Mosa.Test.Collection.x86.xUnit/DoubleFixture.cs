@@ -14,7 +14,7 @@ namespace Mosa.Test.Collection.x86.xUnit
 {
 	public class DoubleFixture : X86TestFixture
 	{
-		private static double Tolerance = 0.000001d;
+		//private static double Tolerance = 0.000001d;
 		//private static IComparer<double> target = new ApproximateComparer(Tolerance);
 
 		[Theory]
@@ -31,15 +31,15 @@ namespace Mosa.Test.Collection.x86.xUnit
 			Assert.Equal(DoubleTests.SubR8R8(a, b), Run<double>("Mosa.Test.Collection", "DoubleTests", "SubR8R8", a, b));
 		}
 
-		//[Theory]
-		//[PropertyData("R8R8")]
+		[Theory]
+		[PropertyData("R8R8")]
 		public void MulR8R8(double a, double b)
 		{
 			Assert.Equal(DoubleTests.MulR8R8(a, b), Run<double>("Mosa.Test.Collection", "DoubleTests", "MulR8R8", a, b));
 		}
 
-		//[Theory]
-		//[PropertyData("R8R8")]
+		[Theory]
+		[PropertyData("R8R8")]
 		public void DivR8R8(double a, double b)
 		{
 			if (a == int.MinValue && b == -1)
