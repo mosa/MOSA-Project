@@ -7,7 +7,7 @@ fontsize = "16"
 shape = "ellipse"
 ];
 edge [
-minlen = "2"
+minlen = "3"
 ];
 
 "AssemblyListTable" [
@@ -81,7 +81,17 @@ shape = "record"
 ];
 
 "CustomAttribute" [
-label = "<f0>Custom Attribute|<f1>Pointer to Attribute Type|<f2>Size of Value|<f3>Value"
+label = "<f0>Custom Attribute|<f1>Pointer to Attribute Type|<f2>Pointer to Constructor Method|<f3>Number of Arguments|<f4>Pointer to Argument 1|...|Pointer to Argument N"
+shape = "record"
+];
+
+"CustomAttributeArgument" [
+label = "<f0>Custom Attribute Argument|<f1>Pointer to Argument Name|<f2>Argument Size|<f3>Argument"
+shape = "record"
+];
+
+"CustomAttributeArgumentName" [
+label = "<f0>Custom Attribute Argument Name|<f1>Argument Name Length|<f2>Argument Name"
 shape = "record"
 ];
 
@@ -90,6 +100,18 @@ id = 0
 ];
 
 "CustomAttribute":f1 -> "TypeDefinition":f0 [
+id = 0
+];
+
+"CustomAttribute":f2 -> "MethodDefinition":f0 [
+id = 0
+];
+
+"CustomAttribute":f4 -> "CustomAttributeArgument":f0 [
+id = 0
+];
+
+"CustomAttributeArgument":f1 -> "CustomAttributeArgumentName":f0 [
 id = 0
 ];
 
@@ -134,6 +156,10 @@ id = 0
 ];
 
 "TypeDefinition":f5 -> "TypeDefinition":f0 [
+id = 0
+];
+
+"TypeDefinition":f6 -> "MethodDefinition":f0 [
 id = 0
 ];
 
