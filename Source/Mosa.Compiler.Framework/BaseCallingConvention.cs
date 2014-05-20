@@ -20,18 +20,20 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Expands method call instruction represented by the context to perform the method call.
 		/// </summary>
+		/// <param name="compiler">The compiler.</param>
 		/// <param name="typeLayout">The type layouts.</param>
 		/// <param name="context">The context.</param>
-		public abstract void MakeCall(MosaTypeLayout typeLayout, Context context);
+		public abstract void MakeCall(BaseMethodCompiler compiler, MosaTypeLayout typeLayout, Context context);
 
 		/// <summary>
 		/// Requests the calling convention to create an appropriate move instruction to populate the return
 		/// value of a method.
 		/// </summary>
+		/// <param name="compiler">The compiler.</param>
 		/// <param name="typeLayout">The type layouts.</param>
 		/// <param name="context">The context.</param>
 		/// <param name="operand">The operand, that's holding the return value.</param>
-		public abstract void SetReturnValue(MosaTypeLayout typeLayout, Context context, Operand operand);
+		public abstract void SetReturnValue(BaseMethodCompiler compiler, MosaTypeLayout typeLayout, Context context, Operand operand);
 
 		/// <summary>
 		/// Retrieves the offset of the first local variable from the stack frame start.
