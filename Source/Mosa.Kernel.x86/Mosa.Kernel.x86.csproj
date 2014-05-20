@@ -82,7 +82,7 @@
     <Compile Include="PageFrameAllocator.cs" />
     <Compile Include="PageTable.cs" />
     <Compile Include="Panic.cs" />
-    <Compile Include="ProgrammableInterruptController.cs" />
+    <Compile Include="PIC.cs" />
     <Compile Include="ProcessManager.cs" />
     <Compile Include="Screen.cs" />
     <Compile Include="Smbios\BiosInformationStructure.cs" />

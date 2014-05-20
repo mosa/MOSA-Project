@@ -1,5 +1,5 @@
 /*
- * (c) 2008 MOSA - The Managed Operating System Alliance
+ * (c) 2014 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
  *
@@ -10,8 +10,6 @@
 using Mosa.DeviceDrivers.ISA;
 using Mosa.DeviceSystem;
 using Mosa.DeviceSystem.PCI;
-
-//using Mosa.Kernel.x86;
 
 namespace Mosa.CoolWorld.x86
 {
@@ -70,7 +68,7 @@ namespace Mosa.CoolWorld.x86
 			Mosa.DeviceSystem.HAL.SetHardwareAbstraction(hardwareAbstraction);
 
 			// Set the interrupt handler
-			Mosa.DeviceSystem.HAL.SetInterruptHandler(ResourceManager.InterruptManager.ProcessInterrupt);
+			Mosa.DeviceSystem.HAL.SetInterruptHandler(ResourceManager.InterruptManager.ProcessInterrupt);			
 		}
 
 		/// <summary>

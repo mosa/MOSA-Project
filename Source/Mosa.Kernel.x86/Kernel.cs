@@ -21,7 +21,7 @@ namespace Mosa.Kernel.x86
 			IDT.SetInterruptHandler(null);
 			SSE.Setup();
 			Multiboot.Setup();
-			ProgrammableInterruptController.Setup();
+			PIC.Setup();
 			GDT.Setup();
 			IDT.Setup();
 			PageFrameAllocator.Setup();

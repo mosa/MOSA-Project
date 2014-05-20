@@ -8,6 +8,7 @@
  */
 
 using Mosa.DeviceSystem;
+using Mosa.Kernel.x86;
 
 namespace Mosa.DeviceDrivers.ISA
 {
@@ -183,6 +184,8 @@ namespace Mosa.DeviceDrivers.ISA
 		{
 			if (!IsFIFODataAvailable())
 				return 0;
+
+			Screen.Write('X');
 
 			return GetFromFIFO();
 		}

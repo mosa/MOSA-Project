@@ -198,7 +198,7 @@ namespace Mosa.Kernel.x86
 		/// <param name="nexttask">The nexttask.</param>
 		public static void Switch(uint nexttask)
 		{
-			ProgrammableInterruptController.SendEndOfInterrupt(0x20);
+			PIC.SendEndOfInterrupt(0x20);
 
 			// Update current task
 			currenttask = nexttask;

@@ -39,7 +39,9 @@ namespace Mosa.DeviceSystem
 			interruptHandlers = new LinkedList<IHardwareDevice>[MaxInterrupts];
 
 			for (int i = 0; i < MaxInterrupts; i++)
+			{
 				interruptHandlers[i] = new LinkedList<IHardwareDevice>();
+			}
 		}
 
 		/// <summary>
@@ -49,12 +51,18 @@ namespace Mosa.DeviceSystem
 		/// <param name="error">The error.</param>
 		public void ProcessInterrupt(uint irq, uint error)
 		{
+			if (irq == 255)
+				return;
+
+			var handlers = interruptHandlers[irq];
+
 			//Mosa.Kernel.x86.Debug.Trace("Enter InterruptManager.ProcessInterrupt");
 
 			//spinLock.Enter();
-			var handlers = interruptHandlers[irq];
 			var hardwareDevice = handlers.First.value;
-			hardwareDevice.OnInterrupt();
+
+
+			//hardwareDevice.OnInterrupt();
 
 			//foreach (IHardwareDevice hardwareDevice in interruptHandlers[irq])
 			//{
