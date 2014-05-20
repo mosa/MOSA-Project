@@ -26,7 +26,7 @@ namespace Mosa.CoolWorld.x86
 		{
 			Mosa.Kernel.x86.Kernel.Setup();
 			//DebugClient.Setup(Serial.COM1);
-	
+
 			Console = ConsoleManager.Controller.Boot;
 
 			Console.Clear();
@@ -73,15 +73,21 @@ namespace Mosa.CoolWorld.x86
 			Console.Write("          Copyright (C) 2008-2014 [Managed Operating System Alliance]");
 			FillLine();
 
+
+			Process();
+		}
+
+		public static void Process()
+		{
+			int lastSecond = -1;
+
 			Console.BackgroundColor = Colors.Black;
 			Console.Goto(15, 0);
-			Console.Color = Colors.Green;
-			Console.Write(">");
-			Console.Color = Colors.Yellow;
+			Console.Color = Colors.White;
+			Console.Write("> ");
+			Console.Color = Colors.Blue;
 
 			Mosa.DeviceDrivers.ScanCodeMap.US KBDMAP = new DeviceDrivers.ScanCodeMap.US();
-			int lastSecond = -1;
-			Console.Write("> ");
 
 			while (true)
 			{
@@ -89,11 +95,11 @@ namespace Mosa.CoolWorld.x86
 
 				if (scancode != 0)
 				{
-					Debug.Trace("Main.Main Key Scan Code: " + scancode.ToString());
+					//	Debug.Trace("Main.Main Key Scan Code: " + scancode.ToString());
 
 					KeyEvent keyevent = KBDMAP.ConvertScanCode(scancode);
 
-					Debug.Trace("Main.Main Key Character: " + keyevent.Character.ToString());
+					//	Debug.Trace("Main.Main Key Character: " + keyevent.Character.ToString());
 
 					if (keyevent.KeyPress == KeyEvent.Press.Make)
 					{
@@ -105,14 +111,14 @@ namespace Mosa.CoolWorld.x86
 						else if (keyevent.KeyType == KeyType.F2)
 							ConsoleManager.Controller.Active = ConsoleManager.Controller.Debug;
 					}
-					Debug.Trace("Main.Main Key Character: " + ((uint)keyevent.Character).ToString());
+					//	Debug.Trace("Main.Main Key Character: " + ((uint)keyevent.Character).ToString());
 				}
 
 				if (Setup.CMOS.Second != lastSecond)
 				{
 					//DebugClient.SendAlive();
 					lastSecond = Setup.CMOS.Second;
-					Debug.Trace("Main.Main Ping Alive");
+					//Debug.Trace("Main.Main Ping Alive");
 				}
 
 				//DebugClient.Process();

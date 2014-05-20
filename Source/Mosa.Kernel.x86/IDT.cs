@@ -374,7 +374,7 @@ namespace Mosa.Kernel.x86
 				interruptHandler(interrupt, errorCode);
 			}
 
-			ProgrammableInterruptController.SendEndOfInterrupt(interrupt);
+			PIC.SendEndOfInterrupt(interrupt);
 		}
 	}
 }

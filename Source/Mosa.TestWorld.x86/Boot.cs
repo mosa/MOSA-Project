@@ -44,7 +44,7 @@ namespace Mosa.TestWorld.x86
 			Screen.Write('1');
 			Multiboot.Setup();
 			Screen.Write('2');
-			ProgrammableInterruptController.Setup();
+			PIC.Setup();
 			Screen.Write('3');
 			GDT.Setup();
 			Screen.Write('4');
