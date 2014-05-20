@@ -253,7 +253,7 @@ namespace Mosa.Platform.ARMv6
 		/// <param name="destination">The destination.</param>
 		/// <param name="source">The source.</param>
 		/// <param name="size">The size.</param>
-		public override void InsertCompoundMoveInstruction(Context context, Operand destination, Operand source, int size)
+		public override void InsertCompoundMoveInstruction(BaseMethodCompiler compiler, Context context, Operand destination, Operand source, int size)
 		{
 			throw new NotImplementCompilerException();
 		}

@@ -124,11 +124,12 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Create platform compound move.
 		/// </summary>
+		/// <param name="compiler">The compiler.</param>
 		/// <param name="context">The context.</param>
 		/// <param name="destination">The destination.</param>
 		/// <param name="source">The source.</param>
 		/// <param name="size">The size.</param>
-		public abstract void InsertCompoundMoveInstruction(Context context, Operand destination, Operand source, int size);
+		public abstract void InsertCompoundMoveInstruction(BaseMethodCompiler compiler, Context context, Operand destination, Operand source, int size);
 
 		/// <summary>
 		/// Create platform exchange registers.
