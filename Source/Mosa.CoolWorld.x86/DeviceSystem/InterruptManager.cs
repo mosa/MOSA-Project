@@ -61,12 +61,11 @@ namespace Mosa.DeviceSystem
 			//spinLock.Enter();
 			var hardwareDevice = handlers.First.value;
 
-
-			//hardwareDevice.OnInterrupt();
+			hardwareDevice.OnInterrupt();
 
 			//foreach (IHardwareDevice hardwareDevice in interruptHandlers[irq])
 			//{
-			//    hardwareDevice.OnInterrupt();
+			//	hardwareDevice.OnInterrupt();
 			//}
 
 			//spinLock.Exit();
