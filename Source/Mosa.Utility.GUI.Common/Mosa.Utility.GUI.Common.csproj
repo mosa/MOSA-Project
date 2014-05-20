@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Mosa.Utility.GUI.Common</RootNamespace>
     <AssemblyName>Mosa.Utility.GUI.Common</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectGuid>{5A813793-78E2-413C-AA05-FCDD12B7DB04}</ProjectGuid>
     <TargetFrameworkProfile />
