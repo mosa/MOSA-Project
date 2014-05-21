@@ -20,6 +20,8 @@ namespace Mosa.TinyCPUSimulator
 
 		public List<BaseSimDevice> SimDevices { get; private set; }
 
+		public List<BaseSimDevice> SimMemoryDevices { get; private set; }
+
 		public Dictionary<string, SimSymbol> Symbols { get; private set; }
 
 		public ulong Tick { get; private set; }
@@ -54,11 +56,11 @@ namespace Mosa.TinyCPUSimulator
 			MemoryBlocks = new byte[MaxMemory / BlockSize][];
 			InstructionCache = new Dictionary<ulong, SimInstruction>();
 			SimDevices = new List<BaseSimDevice>();
+			SimMemoryDevices = new List<BaseSimDevice>();
 			PortDevices = new BaseSimDevice[65536];
 			Symbols = new Dictionary<string, SimSymbol>();
 			Monitor = new SimMonitor(this);
 			MemoryRegions = new List<MemoryRegion>();
-			//MemoryDelta = new Dictionary<ulong, KeyValuePair<byte, byte>>();
 
 			Tick = 0;
 			IsLittleEndian = true;
@@ -139,7 +141,7 @@ namespace Mosa.TinyCPUSimulator
 
 		protected virtual void MemoryUpdate(ulong address, byte size)
 		{
-			foreach (var device in SimDevices)
+			foreach (var device in SimMemoryDevices)
 			{
 				device.MemoryWrite(address, size);
 			}
@@ -285,6 +287,11 @@ namespace Mosa.TinyCPUSimulator
 		{
 			SimDevices.Add(device);
 			device.Initialize();
+
+			if (device.IsMemoryMonitor)
+			{
+				SimMemoryDevices.Add(device);
+			}
 
 			var ports = device.GetPortList();
 

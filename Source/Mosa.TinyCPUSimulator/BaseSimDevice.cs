@@ -13,9 +13,12 @@ namespace Mosa.TinyCPUSimulator
 	{
 		protected SimCPU simCPU;
 
+		public bool IsMemoryMonitor { get; protected set; }
+
 		public BaseSimDevice(SimCPU simCPU)
 		{
 			this.simCPU = simCPU;
+			IsMemoryMonitor = false;
 		}
 
 		public abstract void Initialize();

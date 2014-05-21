@@ -147,6 +147,7 @@ namespace Mosa.TinyCPUSimulator.x86.Emulate
 			: base(simCPU)
 		{
 			this.dislayForm = dislayForm;
+			this.IsMemoryMonitor = true;
 
 			ioBase = StandardIOBase;
 			baseAddress = StandardAddressBase;
