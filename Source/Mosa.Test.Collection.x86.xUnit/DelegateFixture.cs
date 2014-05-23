@@ -97,5 +97,21 @@ namespace Mosa.Test.Collection.x86.xUnit
 		{
 			Assert.Equal(DelegateTests.CallInstanceDelegateStatic(), Run<int>("Mosa.Test.Collection.DelegateTests.CallInstanceDelegateStatic"));
 		}
+
+		[Fact]
+		//[Theory]
+		//[PropertyData("I4I4")]
+		public void TestInstanceDelegate1()
+		{
+			Assert.Equal(DelegateTests.TestInstanceDelegate1(1), Run<int>("Mosa.Test.Collection.DelegateTests.TestInstanceDelegate1", 1));
+		}
+
+		[Theory]
+		[PropertyData("I4I4")]
+		public void TestInstanceDelegate2(int a, int b)
+		{
+			Assert.Equal(DelegateTests.TestInstanceDelegate2(a, b), Run<int>("Mosa.Test.Collection.DelegateTests.TestInstanceDelegate2", a, b));
+		}
+
 	}
 }

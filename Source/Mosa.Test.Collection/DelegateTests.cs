@@ -49,12 +49,12 @@ namespace Mosa.Test.Collection
 			return status;
 		}
 
-		public static void DelegateVoidTarget1()
+		private static void DelegateVoidTarget1()
 		{
 			status = 1;
 		}
 
-		public static void DelegateVoidTarget2()
+		private static void DelegateVoidTarget2()
 		{
 			status += 2;
 		}
@@ -73,7 +73,7 @@ namespace Mosa.Test.Collection
 			return status;
 		}
 
-		public static void DelegateParametersTarget(int a, int b)
+		private static void DelegateParametersTarget(int a, int b)
 		{
 			status = a * 10000 + b;
 		}
@@ -91,7 +91,7 @@ namespace Mosa.Test.Collection
 			return d();
 		}
 
-		public static int DelegateReturnTarget()
+		private static int DelegateReturnTarget()
 		{
 			return status + 3;
 		}
@@ -109,7 +109,7 @@ namespace Mosa.Test.Collection
 			return result;
 		}
 
-		public static int DelegateParametersReturnTarget(int a, int b)
+		private static int DelegateParametersReturnTarget(int a, int b)
 		{
 			return a * 10000 + b;
 		}
@@ -127,7 +127,7 @@ namespace Mosa.Test.Collection
 			return p;
 		}
 
-		public static object DelegateBoxTarget(int p)
+		private static object DelegateBoxTarget(int p)
 		{
 			return p;
 		}
@@ -153,7 +153,7 @@ namespace Mosa.Test.Collection
 			return res.Value;
 		}
 
-		public struct A
+		private struct A
 		{
 			public int Value;
 
@@ -163,7 +163,7 @@ namespace Mosa.Test.Collection
 			}
 		}
 
-		public static A DelegateReturnStructATarget()
+		private static A DelegateReturnStructATarget()
 		{
 			A a = new A(status);
 			return a;
@@ -177,7 +177,7 @@ namespace Mosa.Test.Collection
 			return res.Value1 == 5 && res.Value2 == 10;
 		}
 
-		public struct B
+		private struct B
 		{
 			public int Value1;
 			public int Value2;
@@ -189,7 +189,7 @@ namespace Mosa.Test.Collection
 			}
 		}
 
-		public static B DelegateReturnStructBTarget()
+		private static B DelegateReturnStructBTarget()
 		{
 			B b = new B(status);
 			return b;
@@ -224,7 +224,7 @@ namespace Mosa.Test.Collection
 		//    return d(50) == 50;
 		//}
 
-		//public static T DelegateGenericTargetReturnTarget<T>(T p)
+		//private static T DelegateGenericTargetReturnTarget<T>(T p)
 		//{
 		//    return p;
 		//}
@@ -233,7 +233,7 @@ namespace Mosa.Test.Collection
 
 		#region InstanceDelegate
 
-		public class AA
+		private class AA
 		{
 			public int Status;
 			public static int StatusStatic;
@@ -278,5 +278,49 @@ namespace Mosa.Test.Collection
 		}
 
 		#endregion InstanceDelegate
+
+		private class Worker
+		{
+			public int Value = 10;
+
+			public int SumPlusValue(int a, int b)
+			{
+				return a + b + Value;
+			}
+
+			public int SumValue(int a)
+			{
+				return a + Value;
+			}
+		}
+
+		private delegate int SumPlusValue(int a, int b);
+
+		private delegate int SumValue(int a);
+
+		public static int TestInstanceDelegate1(int a)
+		{
+			Worker w = new Worker();
+			w.Value = 25;
+
+			SumValue executeSum = w.SumValue;
+
+			int sum = executeSum(a);
+
+			return sum;
+		}
+
+		public static int TestInstanceDelegate2(int a, int b)
+		{
+			Worker w = new Worker();
+			w.Value = 25;
+
+			SumPlusValue executeSum = w.SumPlusValue;
+
+			int sum = executeSum(a, b);
+
+			return sum;
+		}
+
 	}
 }
