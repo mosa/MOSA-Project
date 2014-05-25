@@ -253,7 +253,6 @@ namespace Mosa.Platform.x86
 			alignment = type.IsR8 ? 8 : 4;
 
 			size = type.IsValueType ? typeLayout.GetTypeSize(type) : 4;
-			size += (alignment - (size % alignment)) % alignment;
 		}
 
 		/// <summary>

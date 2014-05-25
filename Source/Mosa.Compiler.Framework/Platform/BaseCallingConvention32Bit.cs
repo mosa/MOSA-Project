@@ -8,6 +8,7 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
+using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.MosaTypeSystem;
 using System.Collections.Generic;
@@ -191,15 +192,17 @@ namespace Mosa.Compiler.Framework.Platform
 				MosaType param = (index + offset >= 0) ? method.Signature.Parameters[index + offset].Type : null;
 
 				int size, alignment;
-				architecture.GetTypeRequirements(typeLayout, operand.Type, out size, out alignment);
 
 				if (param != null && operand.IsR8 && param.IsR4)
 				{
 					architecture.GetTypeRequirements(typeLayout, param, out size, out alignment);
 				}
+				else
+				{
+					architecture.GetTypeRequirements(typeLayout, operand.Type, out size, out alignment);
+				}
 
-				if (size < alignment)
-					size = alignment;
+				size = Alignment.AlignUp(size, alignment);
 
 				space -= size;
 
@@ -259,6 +262,7 @@ namespace Mosa.Compiler.Framework.Platform
 		{
 			int size, alignment;
 			architecture.GetTypeRequirements(typeLayout, operand.Type, out size, out alignment);
+			size = Alignment.AlignUp(size, alignment);
 
 			if (size == 4 || size == 2 || size == 1)
 			{

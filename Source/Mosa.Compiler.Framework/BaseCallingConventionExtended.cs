@@ -99,9 +99,9 @@ namespace Mosa.Compiler.Framework
 					architecture.GetTypeRequirements(typeLayout, param.Type, out size, out alignment);
 				}
 
-				result += size;
-
 				Alignment.AlignUp(result, (uint)alignment);
+
+				result += size;
 			}
 
 			return result;
