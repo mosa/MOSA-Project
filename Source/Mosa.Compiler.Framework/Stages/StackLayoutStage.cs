@@ -101,8 +101,8 @@ namespace Mosa.Compiler.Framework.Stages
 				Architecture.GetTypeRequirements(TypeLayout, operand.Type, out size, out alignment);
 				if (isLocalVariable)
 				{
+					size = Alignment.AlignUp(size, alignment);
 					offset = offset - size;
-					offset = Alignment.AlignDown(offset, alignment);
 				}
 
 				// adjust split children
@@ -116,8 +116,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 				if (!isLocalVariable)
 				{
+					size = Alignment.AlignUp(size, alignment);
 					offset = offset + size;
-					offset = Alignment.AlignUp(offset, alignment);
 				}
 			}
 

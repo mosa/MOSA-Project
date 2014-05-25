@@ -13,7 +13,6 @@ using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Stages;
 using Mosa.Compiler.MosaTypeSystem;
 using Mosa.Platform.ARMv6.Stages;
-using System;
 
 namespace Mosa.Platform.ARMv6
 {
@@ -223,7 +222,6 @@ namespace Mosa.Platform.ARMv6
 			alignment = type.IsR8 ? 8 : 4;
 
 			size = type.IsValueType ? typeLayout.GetTypeSize(type) : 4;
-			size += (alignment - (size % alignment)) % alignment;
 		}
 
 		/// <summary>
@@ -321,7 +319,6 @@ namespace Mosa.Platform.ARMv6
 		{
 			context.AppendInstruction(ARMv6.Sub, destination);
 		}
-
 
 		/// <summary>
 		/// Determines whether [is instruction move] [the specified instruction].
