@@ -7,7 +7,12 @@ fontsize = "16"
 shape = "ellipse"
 ];
 edge [
-minlen = "2"
+minlen = "3"
+];
+
+"NameString" [
+label = "<f0>Name String|<f1>String Length|<f2>String"
+shape = "record"
 ];
 
 "AssemblyListTable" [
@@ -16,22 +21,12 @@ shape = "record"
 ];
 
 "AssemblyDefinition" [
-label = "<f0>Assembly|<f1>Pointer to Assembly Name|<f2>Pointer to Custom Attributes|<f3> Number of Types|<f4>Pointer to Type  Definition 1|...|Pointer to Type  Definition N"
+label = "<f0>Assembly|<f1>Pointer to Assembly Name|<f2>Pointer to Custom Attributes|<f3>Flag: Is Reflection Only|<f4> Number of Types|<f5>Pointer to Type  Definition 1|...|Pointer to Type  Definition N"
 shape = "record"
 ];
 
 "TypeDefinition" [
 label = "<f0>Type Definition|<f1>Pointer to Type Name|<f2>Pointer to Custom Attributes|<f3>Type Size|<f4>Pointer to Assembly|<f5>Pointer to Parent Type|<f6>Pointer to Default Constructor Method|<f7>Flag: Is Interface|<f8>Pointer to Interface Slot Table|<f9>Pointer to Interface Bitmap|<f10>Number of Methods|<f11>Pointer to Method Definition 1|...|Pointer to Method Definition N"
-shape = "record"
-];
-
-"AssemblyName" [
-label = "<f0>Assembly Name|<f1>Assembly Name Length|<f2>Assembly Name"
-shape = "record"
-];
-
-"TypeName" [
-label = "<f0>Type Name|<f1>Type Name Length|<f2>Type Name"
 shape = "record"
 ];
 
@@ -65,11 +60,6 @@ label = "<f0>Method Definition|<f1>Method Name|<f2>Pointer to Custom Attributes|
 shape = "record"
 ];
 
-"MethodName" [
-label = "<f0>Method Name|<f1>Method Name Length|<f2>Method Name"
-shape = "record"
-];
-
 "GCTrackingInformation" [
 label = "<f0>GC Tracking Information|TODO"
 shape = "record"
@@ -81,7 +71,12 @@ shape = "record"
 ];
 
 "CustomAttribute" [
-label = "<f0>Custom Attribute|<f1>Pointer to Attribute Type|<f2>Size of Value|<f3>Value"
+label = "<f0>Custom Attribute|<f1>Pointer to Attribute Type|<f2>Pointer to Constructor Method|<f3>Number of Arguments|<f4>Pointer to Argument 1|...|Pointer to Argument N"
+shape = "record"
+];
+
+"CustomAttributeArgument" [
+label = "<f0>Custom Attribute Argument|<f1>Pointer to Argument Name|<f2>Argument Size|<f3>Argument"
 shape = "record"
 ];
 
@@ -93,11 +88,23 @@ id = 0
 id = 0
 ];
 
+"CustomAttribute":f2 -> "MethodDefinition":f0 [
+id = 0
+];
+
+"CustomAttribute":f4 -> "CustomAttributeArgument":f0 [
+id = 0
+];
+
+"CustomAttributeArgument":f1 -> "NameString":f0 [
+id = 0
+];
+
 "AssemblyListTable":f2 -> "AssemblyDefinition":f0 [
 id = 0
 ];
 
-"AssemblyDefinition":f1 -> "AssemblyName":f0 [
+"AssemblyDefinition":f1 -> "NameString":f0 [
 id = 0
 ];
 
@@ -105,7 +112,7 @@ id = 0
 id = 0
 ];
 
-"AssemblyDefinition":f4 -> "TypeDefinition":f0 [
+"AssemblyDefinition":f5 -> "TypeDefinition":f0 [
 id = 0
 ];
 
@@ -121,7 +128,7 @@ id = 0
 id = 0
 ];
 
-"TypeDefinition":f1 -> "TypeName":f0 [
+"TypeDefinition":f1 -> "NameString":f0 [
 id = 0
 ];
 
@@ -134,6 +141,10 @@ id = 0
 ];
 
 "TypeDefinition":f5 -> "TypeDefinition":f0 [
+id = 0
+];
+
+"TypeDefinition":f6 -> "MethodDefinition":f0 [
 id = 0
 ];
 
@@ -153,11 +164,15 @@ id = 0
 id = 0
 ];
 
-"MethodDefinition":f1 -> "MethodName":f0 [
+"MethodDefinition":f1 -> "NameString":f0 [
 id = 0
 ];
 
 "MethodDefinition":f2 -> "CustomAttributesTable":f0 [
+id = 0
+];
+
+"MethodDefinition":f5 -> "TypeDefinition":f0 [
 id = 0
 ];
 
