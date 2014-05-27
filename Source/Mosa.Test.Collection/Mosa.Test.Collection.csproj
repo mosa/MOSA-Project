@@ -122,6 +122,8 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>LdargaTests.tt</DependentUpon>
     </Compile>
+    <Compile Include="LinkedListTests.cs" />
+    <Compile Include="LinkedList.cs" />
     <Compile Include="NewObjectTests.cs" />
     <Compile Include="SSAOptimizationTest.cs" />
     <Compile Include="RegisterAllocatorTests.cs" />

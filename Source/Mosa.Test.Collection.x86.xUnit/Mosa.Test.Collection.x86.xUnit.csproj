@@ -46,21 +46,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Mosa.Compiler.Common\Mosa.Compiler.Common.csproj">
-      <Project>{0b1011a6-8fcd-4f9e-bbb8-8db86e23d2e8}</Project>
-      <Name>Mosa.Compiler.Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Mosa.Compiler.Framework\Mosa.Compiler.Framework.csproj">
-      <Project>{75a12a8a-8c8f-4d1e-801b-689d8f781bf4}</Project>
-      <Name>Mosa.Compiler.Framework</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Mosa.Test.Collection\Mosa.Test.Collection.csproj">
       <Project>{067aab6b-447a-45ba-9e0d-dfea886b4f69}</Project>
       <Name>Mosa.Test.Collection</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Mosa.TinyCPUSimulator.Adaptor\Mosa.TinyCPUSimulator.Adaptor.csproj">
-      <Project>{50568e2d-5360-4f71-87e0-f6979d2d858a}</Project>
-      <Name>Mosa.TinyCPUSimulator.Adaptor</Name>
     </ProjectReference>
     <ProjectReference Include="..\Mosa.TinyCPUSimulator.TestSystem\Mosa.TinyCPUSimulator.TestSystem.csproj">
       <Project>{50568e2d-5360-4f71-87e0-a6979d1d858a}</Project>
@@ -69,10 +57,6 @@
     <ProjectReference Include="..\Mosa.TinyCPUSimulator.x86.Adaptor\Mosa.TinyCPUSimulator.x86.Adaptor.csproj">
       <Project>{50568e2d-5360-4f71-87e0-f6979d1d858a}</Project>
       <Name>Mosa.TinyCPUSimulator.x86.Adaptor</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Mosa.TinyCPUSimulator\Mosa.TinyCPUSimulator.csproj">
-      <Project>{6f7c06b2-09bf-45bd-8e6b-ae9bf7c7e250}</Project>
-      <Name>Mosa.TinyCPUSimulator</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -86,6 +70,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ForeachFixture.tt</DependentUpon>
     </Compile>
+    <Compile Include="LinkedListFixture.cs" />
     <Compile Include="SingleFixture.cs" />
     <Compile Include="DoubleFixture.cs" />
     <Compile Include="EnumFixture.cs" />

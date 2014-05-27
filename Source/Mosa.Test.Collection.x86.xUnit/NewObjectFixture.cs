@@ -15,9 +15,15 @@ namespace Mosa.Test.Collection.x86.xUnit
 	public class NewObjectFixture : X86TestFixture
 	{
 		[Fact]
-		public void NewObjectWithoutArgs()
+		public void Create()
 		{
-			Assert.True(Run<bool>("Mosa.Test.Collection.NewObjectTests.WithoutArgs"));
+			Assert.Equal(Mosa.Test.Collection.NewObjectTests.Create(), Run<bool>("Mosa.Test.Collection.NewObjectTests.Create"));
+		}
+
+		[Fact]
+		public void CreateAndCallMethod()
+		{
+			Assert.Equal(Mosa.Test.Collection.NewObjectTests.CreateAndCallMethod(), Run<bool>("Mosa.Test.Collection.NewObjectTests.CreateAndCallMethod"));
 		}
 	}
 }

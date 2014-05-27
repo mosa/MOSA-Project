@@ -1,0 +1,59 @@
+﻿/*
+ * (c) 2014 MOSA - The Managed Operating System Alliance
+ *
+ * Licensed under the terms of the New BSD License.
+ *
+ * Authors:
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
+ *
+ */
+
+using Xunit;
+
+namespace Mosa.Test.Collection.x86.xUnit
+{
+	public class LinkedListFixture : X86TestFixture
+	{
+		[Fact]
+		public void Create()
+		{
+			Assert.Equal(Mosa.Test.Collection.LinkedListTests.Create(), Run<bool>("Mosa.Test.Collection.LinkedListTests.Create"));
+		}
+
+		[Fact]
+		public void EmptySize()
+		{
+			Assert.Equal(Mosa.Test.Collection.LinkedListTests.EmptySize(), Run<bool>("Mosa.Test.Collection.LinkedListTests.EmptySize"));
+		}
+
+		[Fact]
+		public void Size1()
+		{
+			Assert.Equal(Mosa.Test.Collection.LinkedListTests.Size1(), Run<bool>("Mosa.Test.Collection.LinkedListTests.Size1"));
+		}
+
+		[Fact]
+		public void First1()
+		{
+			Assert.Equal(Mosa.Test.Collection.LinkedListTests.First1(), Run<bool>("Mosa.Test.Collection.LinkedListTests.First1"));
+		}
+
+		[Fact]
+		public void First2()
+		{
+			Assert.Equal(Mosa.Test.Collection.LinkedListTests.First2(), Run<bool>("Mosa.Test.Collection.LinkedListTests.First2"));
+		}
+
+		[Fact]
+		public void Last1()
+		{
+			Assert.Equal(Mosa.Test.Collection.LinkedListTests.Last1(), Run<bool>("Mosa.Test.Collection.LinkedListTests.Last1"));
+		}
+
+		[Fact]
+		public void Last2()
+		{
+			Assert.Equal(Mosa.Test.Collection.LinkedListTests.Last2(), Run<bool>("Mosa.Test.Collection.LinkedListTests.Last2"));
+		}
+	}
+}
