@@ -51,22 +51,23 @@ namespace Mosa.DeviceSystem
 		/// <param name="error">The error.</param>
 		public void ProcessInterrupt(uint irq, uint error)
 		{
-			if (irq == 255)
-				return;
-
 			var handlers = interruptHandlers[irq];
 
 			//Mosa.Kernel.x86.Debug.Trace("Enter InterruptManager.ProcessInterrupt");
 
 			//spinLock.Enter();
-			var hardwareDevice = handlers.First.value;
 
-			hardwareDevice.OnInterrupt();
+			//Mosa.Kernel.x86.Screen.Goto(14, 0);
+			//Mosa.Kernel.x86.Screen.Write("::");
+			//Mosa.Kernel.x86.Screen.Write(irq);
 
-			//foreach (IHardwareDevice hardwareDevice in interruptHandlers[irq])
-			//{
-			//	hardwareDevice.OnInterrupt();
-			//}
+			//uint i = 0;
+			foreach (var hardwareDevice in handlers)
+			{
+				//Mosa.Kernel.x86.Screen.Write(i++);
+				hardwareDevice.OnInterrupt();
+				//Mosa.Kernel.x86.Screen.Write(':');
+			}
 
 			//spinLock.Exit();
 		}

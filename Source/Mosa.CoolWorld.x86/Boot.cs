@@ -85,7 +85,6 @@ namespace Mosa.CoolWorld.x86
 			Console.Goto(15, 0);
 			Console.Color = Colors.White;
 			Console.Write("> ");
-			Console.Color = Colors.Blue;
 
 			Mosa.DeviceDrivers.ScanCodeMap.US KBDMAP = new DeviceDrivers.ScanCodeMap.US();
 
@@ -164,9 +163,17 @@ namespace Mosa.CoolWorld.x86
 			byte col = Console.Color;
 			byte back = Console.BackgroundColor;
 
-			Console.Column = 55;
-			Console.Row = 23;
 			Console.Color = Colors.Cyan;
+
+			Console.Row = 23;
+			Console.Column = 1;
+			//Console.Write("Total: ");
+			//Console.Write(PageFrameAllocator.TotalPages * PageFrameAllocator.PageSize);
+			Console.Write("Free: ");
+			Console.Write((PageFrameAllocator.TotalPages - PageFrameAllocator.TotalPagesInUse) * PageFrameAllocator.PageSize / (1024 * 1024));
+			Console.Write(" MB");
+
+			Console.Column = 55;
 			Console.BackgroundColor = Colors.Black;
 			Console.Write("        ");
 			Console.Column = 55;

@@ -68,7 +68,7 @@ namespace Mosa.CoolWorld.x86
 			Mosa.DeviceSystem.HAL.SetHardwareAbstraction(hardwareAbstraction);
 
 			// Set the interrupt handler
-			Mosa.DeviceSystem.HAL.SetInterruptHandler(ResourceManager.InterruptManager.ProcessInterrupt);			
+			Mosa.DeviceSystem.HAL.SetInterruptHandler(ResourceManager.InterruptManager.ProcessInterrupt);
 		}
 
 		/// <summary>
@@ -171,7 +171,7 @@ namespace Mosa.CoolWorld.x86
 
 			//PCIControllerManager pciController = new PCIControllerManager(deviceManager);
 
-			Boot.Console.Write("Probing PCI devices...");
+			//Boot.Console.Write("Probing PCI devices...");
 
 			//pciController.CreatePCIDevices();
 			Boot.Console.WriteLine("[Completed]");
