@@ -81,6 +81,11 @@
     <Compile Include="BoxingFixture.cs" />
     <Compile Include="ArrayLayoutFixture.cs" />
     <Compile Include="CallOrderFixture.cs" />
+    <Compile Include="ForeachFixture.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ForeachFixture.tt</DependentUpon>
+    </Compile>
     <Compile Include="SingleFixture.cs" />
     <Compile Include="DoubleFixture.cs" />
     <Compile Include="EnumFixture.cs" />
@@ -117,6 +122,10 @@
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="ForeachFixture.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>ForeachFixture.cs</LastGenOutput>
+    </None>
     <None Include="StructureFixture.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>StructureFixture.cs</LastGenOutput>
