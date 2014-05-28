@@ -356,7 +356,7 @@ namespace Mosa.Platform.x86
 					modRM |= (byte)(op1.Register.RegisterCode << 3);
 				displacement = mop2;
 				if (mop2.EffectiveOffsetBase.RegisterCode == 4)
-					sib = 0xA4;
+					sib = 0x24;
 			}
 			else if (mop2 != null)
 			{
