@@ -74,22 +74,21 @@ namespace System
 
 		public bool Equals(float value)
 		{
-			//return Equals((object)obj);
 			if (IsNaN(value))
 				return IsNaN(_value);
 
 			return (value == _value);
 		}
 
-		//public override bool Equals(object obj)
-		//{
-		//    float value = (float)obj;
+		public override bool Equals(object obj)
+		{
+			float value = (float)obj;
 
-		//    if (IsNaN(value))
-		//        return IsNaN(_value);
+			if (IsNaN(value))
+				return IsNaN(_value);
 
-		//    return (value == _value);
-		//}
+			return (value == _value);
+		}
 
 		public override int GetHashCode()
 		{
