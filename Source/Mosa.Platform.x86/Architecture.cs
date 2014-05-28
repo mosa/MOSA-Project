@@ -192,6 +192,10 @@ namespace Mosa.Platform.x86
 				new ExceptionVectorStage()
 			);
 
+			compilerPipeline.InsertBefore<TypeLayoutStage>(
+				new UnboxStubStage()
+			);
+
 			//FIXME: Uncomment
 			//compilerPipeline.InsertAfterLast<TypeLayoutStage>(
 			//    new MethodTableBuilderStage()
