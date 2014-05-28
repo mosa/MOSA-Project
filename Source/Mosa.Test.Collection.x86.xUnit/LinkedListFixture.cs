@@ -55,5 +55,17 @@ namespace Mosa.Test.Collection.x86.xUnit
 		{
 			Assert.Equal(Mosa.Test.Collection.LinkedListTests.Last2(), Run<bool>("Mosa.Test.Collection.LinkedListTests.Last2"));
 		}
+
+		[Fact]
+		public void PopulateList()
+		{
+			Assert.Equal(Mosa.Test.Collection.LinkedListTests.PopulateList(), Run<bool>("Mosa.Test.Collection.LinkedListTests.PopulateList"));
+		}
+
+		[Fact]
+		public void Foreach()
+		{
+			Assert.Equal(Mosa.Test.Collection.LinkedListTests.Foreach(), Run<int>("Mosa.Test.Collection.LinkedListTests.Foreach"));
+		}
 	}
 }

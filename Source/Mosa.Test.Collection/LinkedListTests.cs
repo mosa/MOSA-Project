@@ -81,5 +81,37 @@ namespace Mosa.Test.Collection
 
 			return IntList.Last == 202;
 		}
+
+		private static LinkedList<int> Populate()
+		{
+			LinkedList<int> IntList = new LinkedList<int>();
+
+			for (int i = 1; i < 10; i++)
+			{
+				IntList.Add(101 * i);
+			}
+
+			return IntList;
+		}
+
+		public static bool PopulateList()
+		{
+			var list = Populate();
+
+			return list.Count == 9;
+		}
+
+		public static int Foreach()
+		{
+			var list = Populate();
+			int sum = 0;
+
+			foreach (var item in list)
+			{
+				sum = sum + item;
+			}
+
+			return sum;
+		}
 	}
 }
