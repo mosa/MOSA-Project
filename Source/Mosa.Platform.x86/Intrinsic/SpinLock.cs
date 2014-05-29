@@ -27,13 +27,16 @@ namespace Mosa.Platform.x86.Intrinsic
 		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, BaseMethodCompiler methodCompiler)
 		{
 			// Create constant operand and get pointer to lock variable
+			Operand const0 = Operand.CreateConstantSignedInt(methodCompiler.TypeSystem, 0x0);
 			Operand const1 = Operand.CreateConstantSignedInt(methodCompiler.TypeSystem, 0x1);
 			Operand pointer = Operand.CreateMemoryAddress(context.Operand2.Type, context.Operand2, 0);
+			Operand @return = context.Result;
 
-			// Test to acquire lock, if cant acquire jump to top, if we do then continue normal execution
-			context.SetInstruction(X86.Test, null, pointer, const1);
-			context.AppendInstruction(X86.Branch, ConditionCode.NotZero, context.BasicBlock);
-			context.AppendInstruction(X86.Mov, pointer, const1);
+			// Test to acquire lock, if we do acquire the lock then set the lock and return true, otherwise return false
+			context.SetInstruction(X86.Mov, @return, const0);
+			context.AppendInstruction(X86.Test, null, pointer, const1);
+			context.AppendInstruction(X86.Cmov, ConditionCode.Zero, pointer, const1);
+			context.AppendInstruction(X86.Cmov, ConditionCode.Zero, @return, const1);
 		}
 
 		#endregion Methods

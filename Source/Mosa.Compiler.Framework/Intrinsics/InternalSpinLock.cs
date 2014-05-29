@@ -34,8 +34,9 @@ namespace Mosa.Compiler.Framework.Intrinsics
 			Operand callTargetOperand = Operand.CreateSymbolFromMethod(methodCompiler.TypeSystem, method);
 
 			Operand refBooleanOperand = context.Operand1;
+			Operand resultOperand = context.Result;
 
-			context.SetInstruction(IRInstruction.IntrinsicMethodCall, null, callTargetOperand, refBooleanOperand);
+			context.SetInstruction(IRInstruction.IntrinsicMethodCall, resultOperand, callTargetOperand, refBooleanOperand);
 			context.MosaMethod = method;
 		}
 	}
