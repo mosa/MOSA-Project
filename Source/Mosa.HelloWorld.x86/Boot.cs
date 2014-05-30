@@ -62,7 +62,7 @@ namespace Mosa.HelloWorld.x86
 			Console.Write(Multiboot.Flags, 2, 32);
 			Console.WriteLine();
 			Console.WriteLine();
-
+			
 			Console.Color = Colors.Green;
 			Console.Write("Size of Memory:   ");
 			Console.Color = Colors.Gray;
@@ -281,6 +281,16 @@ namespace Mosa.HelloWorld.x86
 				else
 					Console.Write((char)186);
 			}
+
+			Console.Goto(24, 0);
+
+			System.Threading.SpinLock splk = new System.Threading.SpinLock();
+
+			bool lockTaken = false; 
+			splk.Enter(ref lockTaken);
+			if (splk.IsHeld) Console.Write("Entered...");
+			splk.Enter(ref lockTaken);
+			if (splk.IsHeld) Console.Write("Should loop...");
 
 			Console.Goto(24, 29);
 			Console.Color = Colors.Yellow;

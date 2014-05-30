@@ -21,14 +21,16 @@ namespace System.Threading
 		}
 
 		[MethodImpl(MethodImplOptions.InternalCall)]
-		internal static extern void EnterLock(ref bool spinlock);
+		internal static extern bool EnterLock(ref bool spinlock);
 
 		[MethodImpl(MethodImplOptions.InternalCall)]
 		internal static extern void ExitLock(ref bool spinlock);
 
-		public void Enter()
+		public void Enter(ref bool lockTaken)
 		{
-			EnterLock(ref bLock);
+			while (!EnterLock(ref bLock)) ;
+
+			lockTaken = true;
 		}
 
 		public void Exit()

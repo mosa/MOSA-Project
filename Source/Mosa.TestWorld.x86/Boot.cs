@@ -79,6 +79,16 @@ namespace Mosa.TestWorld.x86
 
 			Console.WriteLine();
 
+			System.Threading.SpinLock splk = new System.Threading.SpinLock();
+
+			bool lockTaken = false;
+			splk.Enter(ref lockTaken);
+			if (splk.IsHeld) Console.Write("Entered...");
+			splk.Enter(ref lockTaken);
+			if (splk.IsHeld) Console.Write("Should loop...");
+
+			Console.WriteLine();
+
 			KernelTest.RunTests();
 
 			Console.Goto(22, 0);
