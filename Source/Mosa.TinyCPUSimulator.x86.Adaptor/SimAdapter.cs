@@ -280,6 +280,8 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 			//if (opcode == Opcode.Ucomisd) return true;
 			//if (opcode == Opcode.Ucomiss) return true;
 			if (opcode == Opcode.Neg) return true;
+			if (opcode == Opcode.Bts) return true;
+			if (opcode == Opcode.Btr) return true;
 
 			return false;
 		}
@@ -296,7 +298,6 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 			if (instruction == X86.Cdq) return Opcode.Cdq;
 			//if (instruction == X86.Cld) return Opcode.Cld;
 			if (instruction == X86.Cli) return Opcode.Cli;
-			//if (instruction == X86.Cmov) return Opcode.Cmov;
 			if (instruction == X86.Cmp) return Opcode.Cmp;
 			//if (instruction == X86.CmpXchg) return Opcode.CmpXchg;
 			if (instruction == X86.Comisd) return Opcode.Comisd;
@@ -376,6 +377,10 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 
 			if (instruction == X86.Setcc) return ConvertSetInstruction(conditionCode);
 			if (instruction == X86.Branch) return ConvertBranchInstruction(conditionCode);
+			if (instruction == X86.Cmov) return ConvertConditionalMoveInstruction(conditionCode);
+
+			if (instruction == X86.Bts) return Opcode.Bts;
+			if (instruction == X86.Btr) return Opcode.Btr;
 
 			if (instruction == X86.Break) return Opcode.InternalBreak;
 
@@ -430,6 +435,30 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 				case ConditionCode.Carry: return Opcode.Setc;
 				case ConditionCode.Zero: return Opcode.Setz;
 				case ConditionCode.NotZero: return Opcode.Setnz;
+				default: return null;
+			}
+		}
+
+		private static BaseOpcode ConvertConditionalMoveInstruction(ConditionCode conditionCode)
+		{
+			switch (conditionCode)
+			{
+				case ConditionCode.Equal: return Opcode.Cmove;
+				case ConditionCode.LessThan: return Opcode.Cmovl;
+				case ConditionCode.LessOrEqual: return Opcode.Cmovle;
+				case ConditionCode.GreaterOrEqual: return Opcode.Cmovge;
+				case ConditionCode.GreaterThan: return Opcode.Cmovg;
+				case ConditionCode.NotEqual: return Opcode.Cmovne;
+				case ConditionCode.UnsignedGreaterOrEqual: return Opcode.Cmovnc;
+				case ConditionCode.UnsignedGreaterThan: return Opcode.Cmova;
+				case ConditionCode.UnsignedLessOrEqual: return Opcode.Cmovbe;
+				case ConditionCode.UnsignedLessThan: return Opcode.Cmovc;
+				case ConditionCode.Parity: return Opcode.Cmovp;
+				case ConditionCode.NoParity: return Opcode.Cmovnp;
+				case ConditionCode.NoCarry: return Opcode.Cmovnc;
+				case ConditionCode.Carry: return Opcode.Cmovc;
+				case ConditionCode.Zero: return Opcode.Cmovz;
+				case ConditionCode.NotZero: return Opcode.Cmovnz;
 				default: return null;
 			}
 		}
