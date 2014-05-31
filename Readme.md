@@ -22,7 +22,7 @@ Visit our [Getting Started](https://github.com/mosa/MOSA-Project/wiki/Getting-St
 
 **Join the Discussion**
 
-We have our own IRC chat channel #mosa on irc.freenode.org. The IRC channel can be access via this [browser-based client](http://webchat.freenode.net/?channels=mosa)).
+We have our own IRC chat channel #mosa on irc.freenode.org. The IRC channel can be access via this [browser-based client](http://webchat.freenode.net/?channels=mosa).
 
 ### Current Status
 
