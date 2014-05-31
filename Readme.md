@@ -2,11 +2,12 @@ MOSA is an open source software project aiming to create a high quality, cross-p
 
 The MOSA project consists of:
 
-* [[Compiler]] - a high quality, cross-platform, optimizing .NET compiler.
-* [[Kernel]] - a small, micro-kernel operating system.
-* [[Device Drivers Framework]] - a modular, device drivers framework and device drivers.
+* Compiler - a high quality, cross-platform, optimizing .NET compiler.
+* Kernel - a small, micro-kernel operating system.
+* Device Drivers Framework - a modular, device drivers framework and device drivers.
 
-Read our [[Frequently Asked Questions]] for more about this project.
+Read our [Frequently Asked Questions](https://github.com/mosa/MOSA-Project/wiki/Frequently-Asked-Questions) for more about this project.
+
 ### Getting Started
 
 **Download**
@@ -17,7 +18,7 @@ The MOSA project is available as a [zip download](https://github.com/mosa/MOSA-P
 git clone https://github.com/tgiphil/MOSA-Project.git
 </pre>
 
-Visit our [[Getting Started]] page on how to compile and run your first operating system.
+Visit our [Getting Started](https://github.com/mosa/MOSA-Project/wiki/Getting-Started) page on how to compile and run your first operating system.
 
 **Join the Discussion**
 
@@ -33,8 +34,7 @@ The MOSA compiler supports:
 * generic code (example, List<T>), and
 * delegates (static and non-static) and with optional parameters.
 
-### More Information
+### License
 
-* [[License]]
-* [[Authors]]
-* [[Donations]]
+MOSA is licensed under the [New BSD License](http://en.wikipedia.org/wiki/New_BSD):
+
