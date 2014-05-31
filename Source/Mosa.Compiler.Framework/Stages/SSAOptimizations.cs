@@ -31,7 +31,7 @@ namespace Mosa.Compiler.Framework.Stages
 		private int simpleConstantPropagationCount = 0;
 		private int simpleCopyPropagationCount = 0;
 		private int constantFoldingIntegerCompareCount = 0;
-		private int foldIntegerCompareBranchCount = 0;
+		private int strengthReductionIntegerCompareBranchCount = 0;
 		private int deadCodeEliminationCount = 0;
 		private int simplifyIntegerCompareCount = 0;
 		private int reduceTruncationAndExpansion = 0;
@@ -39,6 +39,7 @@ namespace Mosa.Compiler.Framework.Stages
 		private int constantFoldingMultiplicationCount = 0;
 		private int constantFoldingDivisionCount = 0;
 		private int blockRemovedCount = 0;
+		private int liftIntegerCompareBranch = 0;
 
 		private Stack<int> worklist = new Stack<int>();
 
@@ -84,13 +85,14 @@ namespace Mosa.Compiler.Framework.Stages
 			UpdateCounter("SSAOptimizations.SimpleConstantPropagation", simpleConstantPropagationCount);
 			UpdateCounter("SSAOptimizations.SimpleCopyPropagation", simpleCopyPropagationCount);
 			UpdateCounter("SSAOptimizations.ConstantFoldingIntegerCompare", constantFoldingIntegerCompareCount);
-			UpdateCounter("SSAOptimizations.FoldIntegerCompareBranch", foldIntegerCompareBranchCount);
+			UpdateCounter("SSAOptimizations.StrengthReductionIntegerCompareBranch", strengthReductionIntegerCompareBranchCount);
 			UpdateCounter("SSAOptimizations.DeadCodeElimination", deadCodeEliminationCount);
 			UpdateCounter("SSAOptimizations.SimplifyIntegerCompareCount", simplifyIntegerCompareCount);
 			UpdateCounter("SSAOptimizations.ConstantFoldingAdditionAndSubstraction", constantFoldingAdditionAndSubstraction);
 			UpdateCounter("SSAOptimizations.ConstantFoldingMultiplicationCount", constantFoldingMultiplicationCount);
 			UpdateCounter("SSAOptimizations.ConstantFoldingDivisionCount", constantFoldingDivisionCount);
 			UpdateCounter("SSAOptimizations.ReduceTruncationAndExpansion", reduceTruncationAndExpansion);
+			UpdateCounter("SSAOptimizations.LiftIntegerCompareBranch", liftIntegerCompareBranch);
 			UpdateCounter("SSAOptimizations.BlockRemoved", blockRemovedCount);
 
 			worklist = null;
@@ -121,7 +123,8 @@ namespace Mosa.Compiler.Framework.Stages
 			SimplifyIntegerCompare(context);
 			DeadCodeElimination(context);
 			ConstantFoldingIntegerCompare(context);
-			FoldIntegerCompareBranch(context);
+			StrengthReductionIntegerCompareBranch(context);
+			LiftIntegerCompareBranch(context);
 			ReduceTruncationAndExpansion(context);
 		}
 
@@ -804,7 +807,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Folds the integer compare branch.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		private void FoldIntegerCompareBranch(Context context)
+		private void StrengthReductionIntegerCompareBranch(Context context)
 		{
 			if (context.IsEmpty)
 				return;
@@ -826,12 +829,12 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (context.BranchTargets[0] == context.Next.BranchTargets[0])
 			{
-				if (trace.Active) trace.Log("*** FoldIntegerCompareBranch-1");
+				if (trace.Active) trace.Log("*** StrengthReductionIntegerCompareBranch-1");
 				if (trace.Active) trace.Log("REMOVED:\t" + context.ToString());
 				AddOperandUsageToWorkList(context);
 				context.SetInstruction(IRInstruction.Nop);
 				instructionsRemovedCount++;
-				foldIntegerCompareBranchCount++;
+				strengthReductionIntegerCompareBranchCount++;
 				return;
 			}
 
@@ -852,7 +855,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			BasicBlock target;
 
-			if (trace.Active) trace.Log("*** FoldIntegerCompareBranch-2");
+			if (trace.Active) trace.Log("*** StrengthReductionIntegerCompareBranch-2");
 
 			if (compareResult)
 			{
@@ -876,7 +879,7 @@ namespace Mosa.Compiler.Framework.Stages
 			AddOperandUsageToWorkList(context);
 			context.SetInstruction(IRInstruction.Nop);
 			instructionsRemovedCount++;
-			foldIntegerCompareBranchCount++;
+			strengthReductionIntegerCompareBranchCount++;
 
 			// Goto the beginning of the block, to get to the first index of the block
 			Context first = context.Clone();
@@ -1202,6 +1205,47 @@ namespace Mosa.Compiler.Framework.Stages
 			context.SetInstruction(IRInstruction.Nop);
 			reduceTruncationAndExpansion++;
 			instructionsRemovedCount++;
+		}
+
+		private void LiftIntegerCompareBranch(Context context)
+		{
+			if (context.IsEmpty)
+				return;
+
+			if (context.Instruction != IRInstruction.IntegerCompareBranch)
+				return;
+
+			if (!(context.ConditionCode == ConditionCode.NotEqual || context.ConditionCode == ConditionCode.Equal))
+				return;
+
+			if (!((context.Operand1.IsVirtualRegister && context.Operand2.IsConstant && context.Operand2.IsConstantZero) ||
+				(context.Operand2.IsVirtualRegister && context.Operand1.IsConstant && context.Operand1.IsConstantZero)))
+				return;
+
+			var operand = (context.Operand2.IsConstant && context.Operand2.IsConstantZero) ? context.Operand1 : context.Operand2;
+
+			if (context.Operand1.Uses.Count != 1 || context.Operand1.Definitions.Count != 1)
+				return;
+
+			Context ctx = new Context(InstructionSet, context.Operand1.Definitions[0]);
+
+			if (ctx.Instruction != IRInstruction.IntegerCompare)
+				return;
+
+			AddOperandUsageToWorkList(ctx);
+			AddOperandUsageToWorkList(context);
+			if (trace.Active) trace.Log("*** LiftIntegerCompareBranch");
+			if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
+			context.ConditionCode = context.ConditionCode == ConditionCode.NotEqual ? ctx.ConditionCode : ctx.ConditionCode.GetOpposite();
+			context.Operand1 = ctx.Operand1;
+			context.Operand2 = ctx.Operand2;
+			if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
+			if (trace.Active) trace.Log("REMOVED:\t" + ctx.ToString());
+			ctx.SetInstruction(IRInstruction.Nop);
+			liftIntegerCompareBranch++;
+			instructionsRemovedCount++;
+
+			Debug.WriteLine(MethodCompiler.Method.FullName);
 		}
 	}
 }
