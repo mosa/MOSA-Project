@@ -269,7 +269,8 @@ namespace Mosa.Compiler.Framework
 					return ConstantDoubleFloatingPoint == 0;
 				else if (IsR4)
 					return ConstantSingleFloatingPoint == 0;
-
+				else if (IsNull)
+					return true;
 				throw new InvalidCompilerException();
 			}
 		}
@@ -291,7 +292,8 @@ namespace Mosa.Compiler.Framework
 					return ConstantDoubleFloatingPoint == 1;
 				else if (IsR4)
 					return ConstantSingleFloatingPoint == 1;
-
+				else if (IsNull)
+					return false;
 				throw new InvalidCompilerException();
 			}
 		}
