@@ -26,8 +26,6 @@ namespace Mosa.HelloWorld.x86
 		{
 			Mosa.Kernel.x86.Kernel.Setup();
 			//DebugClient.Setup(Serial.COM1);
-			System.Threading.SpinLock splk = new System.Threading.SpinLock();
-			if (splk.IsHeld) Console.Write("Entered...");
 
 			Console = ConsoleManager.Controller.Boot;
 
@@ -286,7 +284,7 @@ namespace Mosa.HelloWorld.x86
 
 			Console.Goto(24, 0);
 
-			//System.Threading.SpinLock splk = new System.Threading.SpinLock();
+			System.Threading.SpinLock splk = new System.Threading.SpinLock();
 
 			//splk.Enter();
 			if (splk.IsHeld) Console.Write("Entered...");
