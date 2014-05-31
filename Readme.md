@@ -36,5 +36,5 @@ The MOSA compiler supports:
 
 ### License
 
-MOSA is licensed under the [New BSD License](http://en.wikipedia.org/wiki/New_BSD):
+MOSA is licensed under the [New BSD License](http://en.wikipedia.org/wiki/New_BSD).
 
