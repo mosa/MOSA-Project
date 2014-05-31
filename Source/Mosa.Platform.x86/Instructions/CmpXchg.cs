@@ -31,7 +31,7 @@ namespace Mosa.Platform.x86.Instructions
 		/// Initializes a new instance of <see cref="CmpXchg"/>.
 		/// </summary>
 		public CmpXchg() :
-			base(0, 2)
+			base(1, 3)
 		{
 		}
 
@@ -48,7 +48,7 @@ namespace Mosa.Platform.x86.Instructions
 		/// <returns></returns>
 		protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
 		{
-			if ((source.IsRegister || source.IsMemoryAddress) && third.IsRegister) return RM_R;
+			if ((destination.IsRegister || destination.IsMemoryAddress) && source.IsRegister) return RM_R;
 
 			throw new ArgumentException(String.Format(@"x86.CmpXchg: No opcode for operand types {0} and {1}.", source, third));
 		}
@@ -60,10 +60,8 @@ namespace Mosa.Platform.x86.Instructions
 		/// <param name="emitter">The emitter.</param>
 		protected override void Emit(Context context, MachineCodeEmitter emitter)
 		{
-			Debug.Assert(context.Result == null);
-
-			OpCode opCode = ComputeOpCode(null, context.Operand1, context.Operand2);
-			emitter.Emit(opCode, context.Operand1, context.Operand2);
+			OpCode opCode = ComputeOpCode(context.Operand1, context.Operand2, context.Operand3);
+			emitter.Emit(opCode, context.Operand1, context.Operand2, context.Operand3);
 		}
 
 		/// <summary>

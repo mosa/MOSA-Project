@@ -28,17 +28,19 @@ namespace Mosa.Platform.x86.Intrinsic
 		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, BaseMethodCompiler methodCompiler)
 		{
 			// Create operands
+			Operand const0 = Operand.CreateConstantSignedInt(methodCompiler.TypeSystem, 0x0);
+			Operand const1 = Operand.CreateConstantSignedInt(methodCompiler.TypeSystem, 0x1);
 			Operand pointer = Operand.CreateMemoryAddress(context.Operand2.Type, context.Operand2, 0);
-			Operand notused = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.U4, x86.GeneralPurposeRegister.EAX);
-			Operand register = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.U4, x86.GeneralPurposeRegister.EBX);//methodCompiler.CreateVirtualRegister(methodCompiler.TypeSystem.BuiltIn.U4);
+			Operand eax = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.U4, x86.GeneralPurposeRegister.EAX);
+			Operand register = methodCompiler.CreateVirtualRegister(methodCompiler.TypeSystem.BuiltIn.U4);
 			Operand @return = context.Result;
 
 			// Test to acquire lock, if we do acquire the lock then set the lock and return true, otherwise return false
-			context.SetInstruction(X86.Xor, notused, notused, notused);
-			context.AppendInstruction(X86.Xor, register, register, register);
-			context.AppendInstruction(X86.Inc, register);
+			context.SetInstruction(X86.Mov, register, const1);
+			context.AppendInstruction(X86.Mov, @return, const0);
+			context.AppendInstruction(X86.Mov, eax, const0);
 			context.AppendInstruction(X86.Lock);
-			context.AppendInstruction(X86.CmpXchg, null, pointer, register);
+			context.AppendInstruction(X86.CmpXchg, pointer, pointer, register, eax);
 			context.AppendInstruction(X86.Setcc, ConditionCode.Equal, @return);
 		}
 
