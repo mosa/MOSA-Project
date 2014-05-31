@@ -59,6 +59,7 @@
     <Compile Include="Opcodes\Btr.cs" />
     <Compile Include="Opcodes\Bts.cs" />
     <Compile Include="Opcodes\Cmov.cs" />
+    <Compile Include="Opcodes\Lock.cs" />
     <Compile Include="Opcodes\Test.cs" />
     <Compile Include="Opcodes\InternalBreak.cs" />
     <Compile Include="Opcodes\Roundsd.cs" />

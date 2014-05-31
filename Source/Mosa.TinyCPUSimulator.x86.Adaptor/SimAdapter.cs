@@ -381,6 +381,7 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 
 			if (instruction == X86.Bts) return Opcode.Bts;
 			if (instruction == X86.Btr) return Opcode.Btr;
+			if (instruction == X86.Lock) return Opcode.Lock;
 
 			if (instruction == X86.Break) return Opcode.InternalBreak;
 
