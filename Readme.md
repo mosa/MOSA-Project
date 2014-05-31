@@ -1,5 +1,40 @@
-Managed Operating System Alliance
-=================================
-The Managed Operating System Alliance (MOSA) Framework is a set of tools, specifications and source code to foster development of managed operating systems based on the Common Intermediate Language.
+MOSA is an open source software project aiming to create a high quality, cross-platform, optimizing .NET compiler designed specifically to support a managed operating system based on the .NET framework.
 
-For more information about the project, the bugtracker, wiki and authors, please visit https://github.com/mosa/MOSA-Project/wiki
+The MOSA project consists of:
+
+* [[Compiler]] - a high quality, cross-platform, optimizing .NET compiler.
+* [[Kernel]] - a small, micro-kernel operating system.
+* [[Device Drivers Framework]] - a modular, device drivers framework and device drivers.
+
+Read our [[Frequently Asked Questions]] for more about this project.
+### Getting Started
+
+**Download**
+
+The MOSA project is available as a [zip download](https://github.com/mosa/MOSA-Project/archive/master.zip) or via git:
+
+<pre>
+git clone https://github.com/tgiphil/MOSA-Project.git
+</pre>
+
+Visit our [[Getting Started]] page on how to compile and run your first operating system.
+
+**Join the Discussion**
+
+We have our own IRC chat channel #mosa on irc.freenode.org. The IRC channel can be access via this [browser-based client](http://webchat.freenode.net/?channels=mosa)).
+
+### Current Status
+
+The MOSA compiler supports:
+
+* almost all non-object oriented code (arithmetic, assignment, bitwise logic, bitwise shifts, boolean logic, conditional evaluation, equality testing, calling functions, increment and decrement,  member selection, object size, order relations, reference and dereference, sequencing, and subexpression grouping), 
+* basic object oriented code (such as new operator, member methods and virtual methods), 
+* basic type conversion (implicit type and explicit type conversion on primitives types and "is" and "as" operators), 
+* generic code (example, List<T>), and
+* delegates (static and non-static) and with optional parameters.
+
+### More Information
+
+* [[License]]
+* [[Authors]]
+* [[Donations]]
