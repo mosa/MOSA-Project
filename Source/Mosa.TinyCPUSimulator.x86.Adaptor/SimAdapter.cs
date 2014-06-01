@@ -364,6 +364,7 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 			if (instruction == X86.Shr) return Opcode.Shr;
 			if (instruction == X86.Shrd) return Opcode.Shrd;
 			if (instruction == X86.Sti) return Opcode.Sti;
+			if (instruction == X86.Pause) return Opcode.Pause;
 			//if (instruction == X86.Stos) return Opcode.Stos;
 			if (instruction == X86.Sub) return Opcode.Sub;
 			if (instruction == X86.Subsd) return Opcode.Subsd;

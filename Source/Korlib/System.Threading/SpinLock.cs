@@ -19,23 +19,17 @@ namespace System.Threading
 		{
 			get { return bLock; }
 		}
-
-		[MethodImpl(MethodImplOptions.InternalCall)]
-		internal static extern bool EnterLock(ref bool spinlock);
-
-		[MethodImpl(MethodImplOptions.InternalCall)]
-		internal static extern void ExitLock(ref bool spinlock);
-
+		
 		public void Enter(ref bool lockTaken)
 		{
-			while (!EnterLock(ref bLock)) ;
+			//while (!EnterLock(ref bLock)) ;
 
 			lockTaken = true;
 		}
 
 		public void Exit()
 		{
-			ExitLock(ref bLock);
+			//ExitLock(ref bLock);
 		}
 	}
 }

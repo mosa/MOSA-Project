@@ -285,7 +285,10 @@ namespace Mosa.Platform.Internal.x86
 		public extern static uint Div(ulong n, uint d);
 
 		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.SyncCompareAndSwap, Mosa.Platform.x86")]
-		public extern bool SyncCompareAndSwap(uint address, int oldval, int newval);
+		public extern static bool SyncCompareAndSwap(ref bool lockTaken, int oldval, int newval);
+
+		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.Pause, Mosa.Platform.x86")]
+		public extern static void Pause();
 
 		#endregion Intrinsic
 	}
