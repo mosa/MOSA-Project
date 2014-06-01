@@ -13,10 +13,7 @@ namespace System.Threading
 	{
 		private bool bLock;
 
-		public bool IsHeld
-		{
-			get { return bLock; }
-		}
+		public bool IsHeld { get { return bLock; } }
 
 		internal static void InternalEnter(ref bool lockTaken) { }
 
@@ -26,12 +23,14 @@ namespace System.Threading
 		{
 			InternalEnter(ref bLock);
 
-			//lockTaken = true;
+			lockTaken = bLock;
 		}
 
 		public void Exit()
 		{
-			//ExitLock(ref bLock);
+			InternalExit(ref bLock);
+
+			bLock = false;
 		}
 	}
 }
