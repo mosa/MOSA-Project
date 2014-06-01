@@ -7,11 +7,13 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using Mosa.Internal.Plug;
+
 namespace Mosa.Platform.Internal.x86
 {
 	public unsafe static class SpinLock
 	{
-
+		[PlugMethod("System.Threading.SpinLock.InternalEnter")]
 		public static void Enter(ref bool lockTaken)
 		{
 			while (!Native.SyncCompareAndSwap(ref lockTaken, 0, 1))
@@ -21,7 +23,6 @@ namespace Mosa.Platform.Internal.x86
 				//	Native.Pause();
 				//}
 			}
-
 		}
 	}
 }
