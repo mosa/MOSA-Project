@@ -32,13 +32,14 @@ namespace Mosa.Platform.x86.Intrinsic
 			var newval = context.Operand3;
 			var result = context.Result;
 			
-			Operand eax = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.U4, x86.GeneralPurposeRegister.EAX);
-			Operand v1 = methodCompiler.CreateVirtualRegister(methodCompiler.TypeSystem.BuiltIn.U4);
+			var eax = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.U4, x86.GeneralPurposeRegister.EAX);
+			var v1 = methodCompiler.CreateVirtualRegister(methodCompiler.TypeSystem.BuiltIn.U4);
+			var mem1 = Operand.CreateMemoryAddress(pointer.Type, v1, 0);
 
-			context.SetInstruction(X86.Mov, eax, oldval);
 			context.SetInstruction(X86.Mov, v1, newval);
+			context.AppendInstruction(X86.Mov, eax, oldval);
 			context.AppendInstruction(X86.Lock);
-			context.AppendInstruction(X86.CmpXchg, pointer, pointer, v1, eax);
+			context.AppendInstruction(X86.CmpXchg, mem1, mem1, v1, eax);
 			context.AppendInstruction(X86.Setcc, ConditionCode.Equal, result);
 		}
 

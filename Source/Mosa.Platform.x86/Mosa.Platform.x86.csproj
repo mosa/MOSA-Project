@@ -142,8 +142,6 @@
     <Compile Include="Intrinsic\Get.cs" />
     <Compile Include="Intrinsic\Hlt.cs" />
     <Compile Include="Intrinsic\Set.cs" />
-    <Compile Include="Intrinsic\SpinUnlock.cs" />
-    <Compile Include="Intrinsic\SpinLock.cs" />
     <Compile Include="Intrinsic\CpuIdEax.cs" />
     <Compile Include="Intrinsic\CpuIdEbx.cs" />
     <Compile Include="Intrinsic\CpuIdEcx.cs" />
