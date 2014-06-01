@@ -34,18 +34,6 @@ namespace Mosa.Platform.Internal.x86
 		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.Cli, Mosa.Platform.x86")]
 		public extern static void Cli();
 
-		///// <summary>
-		///// Wraps the x86 cmpxchg instruction
-		///// </summary>
-		//[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.CmpXchg, Mosa.Platform.x86")]
-		//public extern static void CmpXchg16(ref short first, short second);
-
-		///// <summary>
-		///// Wraps the x86 cmpxchg instruction
-		///// </summary>
-		//[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.CmpXchg, Mosa.Platform.x86")]
-		//public extern static void CmpXchg32(ref int first, int second);
-
 		/// <summary>
 		/// Wraps the x86 lgdt instruction to load global descriptor table
 		/// </summary>
@@ -295,6 +283,9 @@ namespace Mosa.Platform.Internal.x86
 
 		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.Div, Mosa.Platform.x86")]
 		public extern static uint Div(ulong n, uint d);
+
+		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.SyncCompareAndSwap, Mosa.Platform.x86")]
+		public extern bool SyncCompareAndSwap(uint address, int oldval, int newval);
 
 		#endregion Intrinsic
 	}

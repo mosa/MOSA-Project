@@ -102,6 +102,7 @@
     <Compile Include="Instructions\TwoOperandInstruction.cs" />
     <Compile Include="Instructions\AddSD.cs" />
     <Compile Include="Intrinsic\Div.cs" />
+    <Compile Include="Intrinsic\SyncCompareAndSwap.cs" />
     <Compile Include="Stages\BuildStackStage.cs" />
     <Compile Include="Stages\UnboxStubStage.cs" />
     <Compile Include="Stages\FloatingPointStage.cs" />
