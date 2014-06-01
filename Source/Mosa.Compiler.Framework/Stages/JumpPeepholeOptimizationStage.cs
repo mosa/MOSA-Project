@@ -8,8 +8,6 @@
  *  Marcelo Caetano (marcelocaetano) <marcelo.caetano@ymail.com>
  */
 
-using Mosa.Compiler.Framework.IR;
-using Mosa.Compiler.Framework;
 using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework.Stages
@@ -56,6 +54,5 @@ namespace Mosa.Compiler.Framework.Stages
 				context.Remove();
 			}
 		}
-
 	}
 }

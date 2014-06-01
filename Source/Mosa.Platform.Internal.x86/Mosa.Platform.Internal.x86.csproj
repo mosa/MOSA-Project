@@ -63,6 +63,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Division.cs" />
+    <Compile Include="SpinLock.cs" />
     <Compile Include="Runtime.cs" />
     <Compile Include="Native.cs" />
   </ItemGroup>

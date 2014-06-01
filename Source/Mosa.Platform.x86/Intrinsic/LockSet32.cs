@@ -12,9 +12,9 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.x86.Intrinsic
 {
 	/// <summary>
-	/// Representations a spin unlock
+	///
 	/// </summary>
-	public sealed class SpinUnlock : IIntrinsicPlatformMethod
+	public sealed class LockSet : IIntrinsicPlatformMethod
 	{
 		#region Methods
 
@@ -25,12 +25,17 @@ namespace Mosa.Platform.x86.Intrinsic
 		/// <param name="typeSystem">The type system.</param>
 		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, BaseMethodCompiler methodCompiler)
 		{
-			// Create constant operand
-			Operand const0 = Operand.CreateConstantSignedInt(methodCompiler.TypeSystem, 0x0);
-			Operand pointer = Operand.CreateMemoryAddress(context.Operand2.Type, context.Operand2, 0);
+			Operand dest = context.Operand1;
+			Operand value = context.Operand2;
 
-			// Set the variable locked to 0 signifying that the lock is free
-			context.SetInstruction(X86.Mov, pointer, const0);
+			Operand v1 = methodCompiler.CreateVirtualRegister(dest.Type);
+			Operand v2 = methodCompiler.CreateVirtualRegister(value.Type);
+			Operand memory = Operand.CreateMemoryAddress(context.MosaMethod.Signature.Parameters[1].Type, v1, 0);
+
+			context.SetInstruction(X86.Mov, v1, dest);
+			context.AppendInstruction(X86.Mov, v2, value);
+			context.AppendInstruction(X86.Lock);
+			context.AppendInstruction(X86.Mov, memory, v2);
 		}
 
 		#endregion Methods

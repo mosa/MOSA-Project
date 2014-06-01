@@ -232,7 +232,7 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 			if (opcode == Opcode.Addss) return true;
 			if (opcode == Opcode.And) return true;
 			//if (opcode == Opcode.Cld) return true;
-			//if (opcode == Opcode.CmpXchg) return true;
+			if (opcode == Opcode.CmpXchg) return true;
 			if (opcode == Opcode.Comisd) return true;
 			if (opcode == Opcode.Comiss) return true;
 			//if (opcode == Opcode.Cvtsd2ss) return true;
@@ -299,7 +299,7 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 			//if (instruction == X86.Cld) return Opcode.Cld;
 			if (instruction == X86.Cli) return Opcode.Cli;
 			if (instruction == X86.Cmp) return Opcode.Cmp;
-			//if (instruction == X86.CmpXchg) return Opcode.CmpXchg;
+			if (instruction == X86.CmpXchg) return Opcode.CmpXchg;
 			if (instruction == X86.Comisd) return Opcode.Comisd;
 			if (instruction == X86.Comiss) return Opcode.Comiss;
 			if (instruction == X86.CpuId) return Opcode.Cpuid;
@@ -364,6 +364,7 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 			if (instruction == X86.Shr) return Opcode.Shr;
 			if (instruction == X86.Shrd) return Opcode.Shrd;
 			if (instruction == X86.Sti) return Opcode.Sti;
+			if (instruction == X86.Pause) return Opcode.Pause;
 			//if (instruction == X86.Stos) return Opcode.Stos;
 			if (instruction == X86.Sub) return Opcode.Sub;
 			if (instruction == X86.Subsd) return Opcode.Subsd;
@@ -377,7 +378,7 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 
 			if (instruction == X86.Setcc) return ConvertSetInstruction(conditionCode);
 			if (instruction == X86.Branch) return ConvertBranchInstruction(conditionCode);
-			if (instruction == X86.Cmov) return ConvertConditionalMoveInstruction(conditionCode);
+			if (instruction == X86.Cmovcc) return ConvertConditionalMoveInstruction(conditionCode);
 
 			if (instruction == X86.Bts) return Opcode.Bts;
 			if (instruction == X86.Btr) return Opcode.Btr;

@@ -16,14 +16,14 @@ namespace Mosa.Platform.x86.Instructions
 	/// <summary>
 	/// Representation a x86 Cmov instruction.
 	/// </summary>
-	public sealed class Cmov : X86Instruction
+	public sealed class Cmovcc : X86Instruction
 	{
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of <see cref="Cmov"/>.
+		/// Initializes a new instance of <see cref="Cmovcc"/>.
 		/// </summary>
-		public Cmov() :
+		public Cmovcc() :
 			base(0, 2)
 		{
 		}

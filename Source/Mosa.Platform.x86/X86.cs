@@ -49,7 +49,7 @@ namespace Mosa.Platform.x86
 		/// <summary>
 		///
 		/// </summary>
-		public static readonly Cmov Cmov = new Cmov();
+		public static readonly Cmovcc Cmovcc = new Cmovcc();
 
 		/// <summary>
 		///

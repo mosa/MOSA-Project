@@ -51,7 +51,7 @@ namespace Mosa.Compiler.Framework.CIL
 			{
 				MosaMethod toBeReplaced = HandleConstrained(ctx, decoder, ctx.Previous);
 				base.Decode(ctx, decoder);
-				
+
 				if (toBeReplaced != null)
 				{
 					ctx.MosaMethod = toBeReplaced;

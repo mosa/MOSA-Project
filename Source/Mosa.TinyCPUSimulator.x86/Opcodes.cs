@@ -148,6 +148,8 @@ namespace Mosa.TinyCPUSimulator.x86
 		public static BaseX86Opcode Bts = new Bts();
 		public static BaseX86Opcode Btr = new Btr();
 		public static BaseX86Opcode Lock = new Lock();
+		public static BaseX86Opcode Pause = new Pause();
+		public static BaseX86Opcode CmpXchg = new CmpXchg();
 
 		public static BaseX86Opcode InternalBreak = new InternalBreak();
 	}

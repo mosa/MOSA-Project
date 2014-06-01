@@ -9,14 +9,10 @@
 
 namespace Mosa.TinyCPUSimulator.x86.Opcodes
 {
-	public class Setnp : BaseX86Opcode
+	public class Pause : BaseX86Opcode
 	{
 		public override void Execute(CPUx86 cpu, SimInstruction instruction)
-		{
-			if (!cpu.EFLAGS.Parity)
-			{
-				StoreValue(cpu, instruction.Operand1, 1, 8);
-			}
+		{			
 		}
 	}
 }

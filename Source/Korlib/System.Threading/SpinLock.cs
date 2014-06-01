@@ -7,33 +7,30 @@
  *  Stefan Andres Charsley (charsleysa) <charsleysa@gmail.com>
  */
 
-using System.Runtime.CompilerServices;
-
 namespace System.Threading
 {
 	public struct SpinLock
 	{
 		private bool bLock;
 
-		public bool IsHeld
+		public bool IsHeld { get { return bLock; } }
+
+		internal static void InternalEnter(ref bool lockTaken) { }
+
+		internal static void InternalExit(ref bool lockTaken) { }
+
+		public void Enter(ref bool lockTaken)
 		{
-			get { return bLock; }
-		}
+			InternalEnter(ref bLock);
 
-		[MethodImpl(MethodImplOptions.InternalCall)]
-		internal static extern void EnterLock(ref bool spinlock);
-
-		[MethodImpl(MethodImplOptions.InternalCall)]
-		internal static extern void ExitLock(ref bool spinlock);
-
-		public void Enter()
-		{
-			EnterLock(ref bLock);
+			lockTaken = bLock;
 		}
 
 		public void Exit()
 		{
-			ExitLock(ref bLock);
+			InternalExit(ref bLock);
+
+			bLock = false;
 		}
 	}
 }
