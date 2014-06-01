@@ -26,7 +26,7 @@ namespace System.Threading
 		{
 			InternalEnter(ref bLock);
 
-			lockTaken = true;
+			//lockTaken = true;
 		}
 
 		public void Exit()
