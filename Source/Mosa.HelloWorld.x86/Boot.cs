@@ -286,10 +286,9 @@ namespace Mosa.HelloWorld.x86
 
 			System.Threading.SpinLock splk = new System.Threading.SpinLock();
 
-			bool lockTaken = false; 
-			splk.Enter(ref lockTaken);
+			//splk.Enter();
 			if (splk.IsHeld) Console.Write("Entered...");
-			splk.Enter(ref lockTaken);
+			//splk.Enter();
 			if (splk.IsHeld) Console.Write("Should loop...");
 
 			Console.Goto(24, 29);

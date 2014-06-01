@@ -1244,8 +1244,6 @@ namespace Mosa.Compiler.Framework.Stages
 			ctx.SetInstruction(IRInstruction.Nop);
 			liftIntegerCompareBranch++;
 			instructionsRemovedCount++;
-
-			Debug.WriteLine(MethodCompiler.Method.FullName);
 		}
 	}
 }
