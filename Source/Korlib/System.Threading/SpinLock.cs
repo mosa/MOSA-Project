@@ -7,8 +7,6 @@
  *  Stefan Andres Charsley (charsleysa) <charsleysa@gmail.com>
  */
 
-using System.Runtime.CompilerServices;
-
 namespace System.Threading
 {
 	public struct SpinLock

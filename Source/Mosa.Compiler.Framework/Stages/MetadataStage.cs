@@ -180,7 +180,6 @@ namespace Mosa.Compiler.Framework.Stages
 				{
 					writer2.Write(TypeLayout.GetFieldOffset(field));
 				}
-
 			}
 		}
 	}

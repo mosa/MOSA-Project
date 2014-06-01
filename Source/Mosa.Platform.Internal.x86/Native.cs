@@ -198,88 +198,35 @@ namespace Mosa.Platform.Internal.x86
 		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.GetCR4, Mosa.Platform.x86")]
 		public extern static uint GetCR4();
 
-		/// <summary>
-		/// Jumps the global interrupt handler.
-		/// </summary>
-		/// <returns></returns>
-		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.GetIDTJumpLocation, Mosa.Platform.x86")]
-		public extern static uint GetIDTJumpLocation(uint irq);
-
-		/// <summary>
-		/// Lock
-		/// </summary>
-		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.SpinLock, Mosa.Platform.x86")]
-		public extern static bool SpinLock(bool spinlock);
-
-		/// <summary>
-		/// Unlock
-		/// </summary>
-		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.SpinUnlock, Mosa.Platform.x86")]
-		public extern static void SpinUnlock(bool spinlock);
-
-		/// <summary>
-		///
-		/// </summary>
 		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.Get, Mosa.Platform.x86")]
 		public extern static byte Get8(uint address);
 
-		/// <summary>
-		///
-		/// </summary>
 		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.Get, Mosa.Platform.x86")]
 		public extern static ushort Get16(uint address);
 
-		/// <summary>
-		///
-		/// </summary>
 		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.Get, Mosa.Platform.x86")]
 		public extern static uint Get32(uint address);
 
-		/// <summary>
-		///
-		/// </summary>
 		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.Get, Mosa.Platform.x86")]
 		public extern static ulong Get64(uint address);
 
-		/// <summary>
-		///
-		/// </summary>
 		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.Set, Mosa.Platform.x86")]
 		public extern static void Set8(uint address, byte value);
 
-		/// <summary>
-		///
-		/// </summary>
 		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.Set, Mosa.Platform.x86")]
 		public extern static void Set16(uint address, ushort value);
 
-		/// <summary>
-		///
-		/// </summary>
 		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.Set, Mosa.Platform.x86")]
 		public extern static void Set32(uint address, uint value);
 
-		/// <summary>
-		///
-		/// </summary>
 		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.Set, Mosa.Platform.x86")]
 		public extern static void Set64(uint address, ulong value);
-
-		/// <summary>
-		/// Switches the task.
-		/// </summary>
-		/// <param name="esp">The esp.</param>
-		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.SwitchTask, Mosa.Platform.x86")]
-		public extern static void SwitchTask(uint esp);
 
 		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.GetEIP, Mosa.Platform.x86")]
 		public extern static uint GetEIP();
 
 		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.GetEBP, Mosa.Platform.x86")]
 		public extern static uint GetEBP();
-
-		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.GetMethodLookupTable, Mosa.Platform.x86")]
-		public extern static uint GetMethodLookupTable(uint ptr);
 
 		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.Div, Mosa.Platform.x86")]
 		public extern static uint Div(ulong n, uint d);
@@ -289,6 +236,15 @@ namespace Mosa.Platform.Internal.x86
 
 		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.Pause, Mosa.Platform.x86")]
 		public extern static void Pause();
+
+		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.GetIDTJumpLocation, Mosa.Platform.x86")]
+		public extern static uint GetIDTJumpLocation(uint irq);
+
+		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.GetMethodLookupTable, Mosa.Platform.x86")]
+		public extern static uint GetMethodLookupTable(uint ptr);
+
+		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.SwitchTask, Mosa.Platform.x86")]
+		public extern static void SwitchTask(uint esp);
 
 		#endregion Intrinsic
 	}

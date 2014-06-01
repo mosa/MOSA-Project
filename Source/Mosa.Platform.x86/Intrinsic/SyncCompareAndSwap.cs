@@ -9,7 +9,6 @@
  */
 
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.IR;
 
 namespace Mosa.Platform.x86.Intrinsic
 {
@@ -31,7 +30,7 @@ namespace Mosa.Platform.x86.Intrinsic
 			var oldval = context.Operand2;
 			var newval = context.Operand3;
 			var result = context.Result;
-			
+
 			var eax = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.U4, x86.GeneralPurposeRegister.EAX);
 			var v1 = methodCompiler.CreateVirtualRegister(methodCompiler.TypeSystem.BuiltIn.U4);
 			var mem1 = Operand.CreateMemoryAddress(pointer.Type, v1, 0);

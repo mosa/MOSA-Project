@@ -71,7 +71,7 @@ namespace Mosa.Kernel.x86
 		/// <summary>
 		/// Setups the task manager.
 		/// </summary>
-		public static  void Setup()
+		public static void Setup()
 		{
 			// Allocate memory for the task table
 			table = (uint)VirtualPageAllocator.Reserve(slots * Offset.TotalSize);

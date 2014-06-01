@@ -147,7 +147,7 @@ namespace Mosa.Platform.x86.Stages
 			Operand ecx = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.ECX);
 			Operand ebx = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EBX);
 
-			context.SetInstruction(X86.Nop);
+			context.Remove();
 
 			if (SaveRegisters)
 			{

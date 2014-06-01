@@ -154,7 +154,7 @@ namespace Mosa.Compiler.Framework
 		/// The linker factory.
 		/// </value>
 		public Func<BaseLinker> LinkerFactory { get; set; }
-		
+
 		/// <summary>
 		/// Gets or sets the compiler stage responsible for booting.
 		/// </summary>

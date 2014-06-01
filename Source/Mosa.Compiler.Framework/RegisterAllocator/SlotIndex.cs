@@ -41,7 +41,9 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 		}
 
 		public bool IsOnHalfStep { get { return slotType != SlotType.Normal; } }
+
 		public bool IsOnHalfStepForward { get { return slotType == SlotType.HalfStepForward; } }
+
 		public bool IsOnHalfStepBack { get { return slotType == SlotType.HalfStepBack; } }
 
 		private SlotIndex(InstructionSet instructionSet, int index, SlotType slotType)
