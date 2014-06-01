@@ -18,16 +18,13 @@ namespace System.Threading
 			get { return bLock; }
 		}
 
-		//[MethodImplAttribute(MethodImplOptions.InternalCall)]
-		//internal static extern void Enter(ref bool lockTaken);
+		internal static void InternalEnter(ref bool lockTaken) { }
 
-		internal static void InternalEnter(ref bool lockTaken)
-		{
-		}
+		internal static void InternalExit(ref bool lockTaken) { }
 
 		public void Enter(ref bool lockTaken)
 		{
-			InternalEnter(ref lockTaken);
+			InternalEnter(ref bLock);
 
 			lockTaken = true;
 		}
