@@ -31,7 +31,7 @@ namespace System.Threading
 		{
 			InternalEnter(ref lockTaken);
 
-			lockTaken = true;
+			//lockTaken = true;
 		}
 
 		public void Exit()

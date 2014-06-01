@@ -34,7 +34,7 @@ namespace Mosa.Platform.x86.Intrinsic
 			
 			var eax = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.U4, x86.GeneralPurposeRegister.EAX);
 			var v1 = methodCompiler.CreateVirtualRegister(methodCompiler.TypeSystem.BuiltIn.U4);
-			var mem1 = Operand.CreateMemoryAddress(pointer.Type, v1, 0);
+			var mem1 = Operand.CreateMemoryAddress(pointer.Type, pointer, 0);
 
 			context.SetInstruction(X86.Mov, v1, newval);
 			context.AppendInstruction(X86.Mov, eax, oldval);
