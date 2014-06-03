@@ -15,9 +15,9 @@ namespace Mosa.Compiler.Framework.Stages
 	/// <summary>
 	///
 	/// </summary>
-	public sealed class PromoteLocalVariablesStage : BaseMethodCompilerStage
+	public class PromoteLocalVariablesStage : BaseMethodCompilerStage
 	{
-		private CompilerTrace trace;
+		protected CompilerTrace trace;
 
 		protected override void Run()
 		{
@@ -45,7 +45,7 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 		}
 
-		private bool ContainsAddressOf(Operand local)
+		protected bool ContainsAddressOf(Operand local)
 		{
 			foreach (int index in local.Uses)
 			{
@@ -58,7 +58,7 @@ namespace Mosa.Compiler.Framework.Stages
 			return false;
 		}
 
-		private void Promote(Operand local)
+		protected void Promote(Operand local)
 		{
 			var v = MethodCompiler.CreateVirtualRegister(local.Type);
 
