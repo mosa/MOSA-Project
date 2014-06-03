@@ -31,16 +31,24 @@ namespace Mosa.Platform.x86.Stages
 			if (context.Operand1.IsCPURegister && (context.Operand1.Register == GeneralPurposeRegister.ESI || context.Operand1.Register == GeneralPurposeRegister.EDI))
 			{
 				Operand dest = context.Result;
+				Operand source = context.Operand1;
 
-				context.ReplaceInstructionOnly(X86.Mov);
+				if (source.Register != dest.Register)
+				{
+					context.SetInstruction(X86.Mov, dest, source);
+				}
+				else
+				{
+					context.Remove();
+				}
 
-				if (context.Operand1.IsShort || context.Operand1.IsChar)
+				if (source.IsShort || source.IsChar)
 				{
 					context.AppendInstruction(X86.And, dest, dest, Operand.CreateConstantUnsignedInt(MethodCompiler.TypeSystem, (uint)0x0000ffff));
 					context.AppendInstruction(X86.Xor, dest, dest, Operand.CreateConstantUnsignedInt(MethodCompiler.TypeSystem, (uint)0x00010000));
 					context.AppendInstruction(X86.Sub, dest, dest, Operand.CreateConstantUnsignedInt(MethodCompiler.TypeSystem, (uint)0x00010000));
 				}
-				else if (context.Operand1.IsByte || context.Operand1.IsBoolean)
+				else if (source.IsByte || source.IsBoolean)
 				{
 					context.AppendInstruction(X86.And, dest, dest, Operand.CreateConstantUnsignedInt(MethodCompiler.TypeSystem, (uint)0x000000ff));
 					context.AppendInstruction(X86.Xor, dest, dest, Operand.CreateConstantUnsignedInt(MethodCompiler.TypeSystem, (uint)0x00000100));
@@ -61,14 +69,22 @@ namespace Mosa.Platform.x86.Stages
 				Debug.Assert(context.Result.IsCPURegister);
 
 				Operand dest = context.Result;
+				Operand source = context.Operand1;
 
-				context.ReplaceInstructionOnly(X86.Mov);
+				if (source.Register != dest.Register)
+				{
+					context.SetInstruction(X86.Mov, dest, source);
+				}
+				else
+				{
+					context.Remove();
+				}
 
-				if (context.Operand1.IsShort || context.Operand1.IsChar)
+				if (dest.IsShort || dest.IsChar)
 				{
 					context.AppendInstruction(X86.And, dest, dest, Operand.CreateConstantUnsignedInt(TypeSystem, (uint)0xffff));
 				}
-				else if (context.Operand1.IsByte || context.Operand1.IsBoolean)
+				else if (dest.IsByte || dest.IsBoolean)
 				{
 					context.AppendInstruction(X86.And, dest, dest, Operand.CreateConstantUnsignedInt(TypeSystem, (uint)0xff));
 				}
