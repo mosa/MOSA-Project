@@ -65,6 +65,7 @@
     <Compile Include="BoxingFixture.cs" />
     <Compile Include="ArrayLayoutFixture.cs" />
     <Compile Include="CallOrderFixture.cs" />
+    <Compile Include="StringFixture.cs" />
     <Compile Include="ForeachFixture.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

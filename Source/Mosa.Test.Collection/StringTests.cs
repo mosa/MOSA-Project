@@ -14,25 +14,31 @@ namespace Mosa.Test.Collection
 		public static string valueA = "Foo";
 		public static string valueB = "Something";
 
-		public static bool LengthMustMatch()
+		public static int CheckLength()
 		{
-			return 3 == valueA.Length;
+			return valueA.Length;
 		}
 
-		public static bool FirstCharacterMustMatch()
+		public static char CheckFirstCharacter()
 		{
-			return 'F' == valueA[0];
+			return valueA[0];
 		}
 
-		public static bool LastCharacterMustMatch()
+		public static char CheckLastCharacter()
+		{
+			return valueA[valueA.Length - 1];
+		}
+
+		public static char LastCharacterMustMatch()
 		{
 			char ch = '\0';
-			for (int index = 0; index < valueA.Length; index++)
+
+			for (int index = 0; index < valueB.Length; index++)
 			{
-				ch = valueA[index];
+				ch = valueB[index];
 			}
 
-			return 'o' == ch;
+			return ch;
 		}
 	}
 }
