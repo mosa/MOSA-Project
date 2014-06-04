@@ -21,7 +21,7 @@ namespace Mosa.Compiler.Framework.Stages
 	public sealed class SSAOptimizations : BaseMethodCompilerStage
 	{
 		private int instructionsRemovedCount = 0;
-		private int simplifyExtendedMoveCount = 0;
+		private int simplifyExtendedMoveWithConstantCount = 0;
 		private int simplifySubtractionCount = 0;
 		private int strengthReductionMultiplicationCount = 0;
 		private int strengthReductionDivisionCount = 0;
@@ -39,7 +39,8 @@ namespace Mosa.Compiler.Framework.Stages
 		private int constantFoldingMultiplicationCount = 0;
 		private int constantFoldingDivisionCount = 0;
 		private int blockRemovedCount = 0;
-		private int liftIntegerCompareBranch = 0;
+		private int foldIntegerCompareBranch = 0;
+		private int reduceZeroExtendedMove = 0;
 
 		private Stack<int> worklist = new Stack<int>();
 
@@ -74,8 +75,7 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 
 			UpdateCounter("SSAOptimizations.IRInstructionRemoved", instructionsRemovedCount);
-
-			UpdateCounter("SSAOptimizations.SimplifyExtendedMove", simplifyExtendedMoveCount);
+			UpdateCounter("SSAOptimizations.SimplifyExtendedMoveWithConstant", simplifyExtendedMoveWithConstantCount);
 			UpdateCounter("SSAOptimizations.SimplifySubtraction", simplifySubtractionCount);
 			UpdateCounter("SSAOptimizations.StrengthReductionMultiplication", strengthReductionMultiplicationCount);
 			UpdateCounter("SSAOptimizations.StrengthReductionDivision", strengthReductionDivisionCount);
@@ -92,7 +92,8 @@ namespace Mosa.Compiler.Framework.Stages
 			UpdateCounter("SSAOptimizations.ConstantFoldingMultiplicationCount", constantFoldingMultiplicationCount);
 			UpdateCounter("SSAOptimizations.ConstantFoldingDivisionCount", constantFoldingDivisionCount);
 			UpdateCounter("SSAOptimizations.ReduceTruncationAndExpansion", reduceTruncationAndExpansion);
-			UpdateCounter("SSAOptimizations.LiftIntegerCompareBranch", liftIntegerCompareBranch);
+			UpdateCounter("SSAOptimizations.FoldIntegerCompareBranch", foldIntegerCompareBranch);
+			UpdateCounter("SSAOptimizations.ReduceZeroExtendedMove", reduceZeroExtendedMove);
 			UpdateCounter("SSAOptimizations.BlockRemoved", blockRemovedCount);
 
 			worklist = null;
@@ -107,24 +108,25 @@ namespace Mosa.Compiler.Framework.Stages
 
 			//if (trace.IsLogging) trace.Log("@REVIEW:\t" + context.ToString());
 
-			SimplifyExtendedMove(context);
+			SimpleConstantPropagation(context);
+			SimpleCopyPropagation(context);
+			DeadCodeElimination(context);
 			SimplifySubtraction(context);
 			StrengthReductionMultiplication(context);
 			StrengthReductionDivision(context);
 			StrengthReductionIntegerAdditionAndSubstraction(context);
 			StrengthReductionLogicalOperators(context);
 			ConstantFoldingIntegerOperations(context);
-			SimpleConstantPropagation(context);
-			SimpleCopyPropagation(context);
+			ReduceZeroExtendedMove(context);
 			ConstantMove(context);
 			ConstantFoldingAdditionAndSubstraction(context);
 			ConstantFoldingMultiplication(context);
 			ConstantFoldingDivision(context);
 			SimplifyIntegerCompare(context);
-			DeadCodeElimination(context);
 			ConstantFoldingIntegerCompare(context);
+			FoldIntegerCompareBranch(context);
+			SimplifyExtendedMoveWithConstant(context);
 			StrengthReductionIntegerCompareBranch(context);
-			LiftIntegerCompareBranch(context);
 			ReduceTruncationAndExpansion(context);
 		}
 
@@ -666,7 +668,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Simplifies extended moves with a constant
 		/// </summary>
 		/// <param name="context">The context.</param>
-		private void SimplifyExtendedMove(Context context)
+		private void SimplifyExtendedMoveWithConstant(Context context)
 		{
 			if (context.IsEmpty)
 				return;
@@ -677,11 +679,11 @@ namespace Mosa.Compiler.Framework.Stages
 			if (!context.Result.IsVirtualRegister)
 				return;
 
+			if (!context.Operand1.IsConstant)
+				return;
+
 			Operand result = context.Result;
 			Operand op1 = context.Operand1;
-
-			if (!op1.IsConstant)
-				return;
 
 			Operand newOperand;
 
@@ -696,10 +698,10 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 
 			AddOperandUsageToWorkList(context);
-			if (trace.Active) trace.Log("*** SimplifyExtendedMove");
+			if (trace.Active) trace.Log("*** SimplifyExtendedMoveWithConstant");
 			if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
 			context.SetInstruction(IRInstruction.Move, result, newOperand);
-			simplifyExtendedMoveCount++;
+			simplifyExtendedMoveWithConstantCount++;
 			if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
 		}
 
@@ -1042,8 +1044,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (!ctx.Operand2.IsConstant)
 				return;
 
-			if (ctx.Result.Definitions.Count != 1)
-				return;
+			Debug.Assert(ctx.Result.Definitions.Count == 1);
 
 			bool add = true;
 
@@ -1102,8 +1103,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (!ctx.Operand2.IsConstant)
 				return;
 
-			if (ctx.Result.Definitions.Count != 1)
-				return;
+			Debug.Assert(ctx.Result.Definitions.Count == 1);
 
 			ulong r = context.Operand2.ConstantUnsignedInteger * ctx.Operand2.ConstantUnsignedInteger;
 
@@ -1145,14 +1145,11 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (!ctx.Operand2.IsConstant)
 				return;
-
-			if (ctx.Result.Definitions.Count != 1)
-				return;
-
-			ulong r = context.Operand2.ConstantUnsignedInteger * ctx.Operand2.ConstantUnsignedInteger;
-
+			
 			Debug.Assert(ctx.Result.Definitions.Count == 1);
 
+			ulong r = context.Operand2.ConstantUnsignedInteger * ctx.Operand2.ConstantUnsignedInteger;
+			
 			if (trace.Active) trace.Log("*** ConstantFoldingDivision");
 			AddOperandUsageToWorkList(ctx);
 			if (trace.Active) trace.Log("BEFORE:\t" + ctx.ToString());
@@ -1162,6 +1159,31 @@ namespace Mosa.Compiler.Framework.Stages
 			context.Operand2 = Operand.CreateConstant(context.Operand2.Type, r);
 			if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
 			constantFoldingDivisionCount++;
+		}
+
+		private void ReduceZeroExtendedMove(Context context)
+		{
+			if (context.IsEmpty)
+				return;
+
+			if (context.Instruction != IRInstruction.ZeroExtendedMove)
+				return;
+
+			if (!context.Operand1.IsVirtualRegister)
+				return;
+
+			if (!context.Result.IsVirtualRegister)
+				return;
+
+			//if (!CanCopyPropagation(context.Result, context.Operand1))
+			//	return;
+
+			if (trace.Active) trace.Log("*** ReduceZeroExtendedMove");
+			AddOperandUsageToWorkList(context);
+			if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
+			context.SetInstruction(IRInstruction.Move, context.Result, context.Operand1);
+			if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
+			reduceZeroExtendedMove++;
 		}
 
 		private void ReduceTruncationAndExpansion(Context context)
@@ -1178,8 +1200,10 @@ namespace Mosa.Compiler.Framework.Stages
 			if (!context.Result.IsVirtualRegister)
 				return;
 
-			if (context.Result.Uses.Count != 1 || context.Result.Definitions.Count != 1)
+			if (context.Result.Uses.Count != 1)
 				return;
+
+			Debug.Assert(context.Result.Definitions.Count == 1);
 
 			if (context.Operand1.Uses.Count != 1 || context.Operand1.Definitions.Count != 1)
 				return;
@@ -1189,8 +1213,10 @@ namespace Mosa.Compiler.Framework.Stages
 			if (ctx.Instruction != IRInstruction.Move)
 				return;
 
-			if (ctx.Result.Uses.Count != 1 || ctx.Result.Definitions.Count != 1)
+			if (ctx.Result.Uses.Count != 1)
 				return;
+
+			Debug.Assert(ctx.Result.Definitions.Count == 1);
 
 			if (ctx.Operand1.Type != context.Result.Type)
 				return;
@@ -1207,7 +1233,7 @@ namespace Mosa.Compiler.Framework.Stages
 			instructionsRemovedCount++;
 		}
 
-		private void LiftIntegerCompareBranch(Context context)
+		private void FoldIntegerCompareBranch(Context context)
 		{
 			if (context.IsEmpty)
 				return;
@@ -1234,7 +1260,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			AddOperandUsageToWorkList(ctx);
 			AddOperandUsageToWorkList(context);
-			if (trace.Active) trace.Log("*** LiftIntegerCompareBranch");
+			if (trace.Active) trace.Log("*** FoldIntegerCompareBranch");
 			if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
 			context.ConditionCode = context.ConditionCode == ConditionCode.NotEqual ? ctx.ConditionCode : ctx.ConditionCode.GetOpposite();
 			context.Operand1 = ctx.Operand1;
@@ -1242,7 +1268,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
 			if (trace.Active) trace.Log("REMOVED:\t" + ctx.ToString());
 			ctx.SetInstruction(IRInstruction.Nop);
-			liftIntegerCompareBranch++;
+			foldIntegerCompareBranch++;
 			instructionsRemovedCount++;
 		}
 	}

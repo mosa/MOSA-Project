@@ -67,12 +67,14 @@
 			this.toolStripButton4 = new System.Windows.Forms.ToolStripButton();
 			this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
 			this.cbPlatform = new System.Windows.Forms.ComboBox();
+			this.enableSSAOptimizations = new System.Windows.Forms.ToolStripMenuItem();
 			label2 = new System.Windows.Forms.Label();
 			label1 = new System.Windows.Forms.Label();
 			stageLabel = new System.Windows.Forms.Label();
 			label3 = new System.Windows.Forms.Label();
 			this.statusStrip1.SuspendLayout();
 			this.menuStrip1.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
 			this.splitContainer1.Panel1.SuspendLayout();
 			this.splitContainer1.Panel2.SuspendLayout();
 			this.splitContainer1.SuspendLayout();
@@ -208,6 +210,7 @@
             this.showSizes,
             this.includeTestKorlibToolStripMenuItem,
             this.enableSSAToolStripMenuItem,
+            this.enableSSAOptimizations,
             this.enableBinaryCodeGenerationToolStripMenuItem});
 			this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
 			this.optionsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
@@ -471,6 +474,15 @@
 			this.cbPlatform.Size = new System.Drawing.Size(78, 21);
 			this.cbPlatform.TabIndex = 28;
 			// 
+			// enableSSAOptimizations
+			// 
+			this.enableSSAOptimizations.Checked = true;
+			this.enableSSAOptimizations.CheckOnClick = true;
+			this.enableSSAOptimizations.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.enableSSAOptimizations.Name = "enableSSAOptimizations";
+			this.enableSSAOptimizations.Size = new System.Drawing.Size(237, 22);
+			this.enableSSAOptimizations.Text = "Enable SSA Optimizations";
+			// 
 			// Main
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -491,6 +503,7 @@
 			this.menuStrip1.PerformLayout();
 			this.splitContainer1.Panel1.ResumeLayout(false);
 			this.splitContainer1.Panel2.ResumeLayout(false);
+			((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
 			this.splitContainer1.ResumeLayout(false);
 			this.tabControl1.ResumeLayout(false);
 			this.tabPage1.ResumeLayout(false);
@@ -539,5 +552,6 @@
 		private System.Windows.Forms.RichTextBox rbOtherResult;
 		private System.Windows.Forms.ToolStripMenuItem enableBinaryCodeGenerationToolStripMenuItem;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+		private System.Windows.Forms.ToolStripMenuItem enableSSAOptimizations;
 	}
 }

@@ -39,7 +39,7 @@ namespace Mosa.TestWorld.x86
 
 			SSE.Setup();
 			Screen.Write('0');
-			//DebugClient.Setup(Serial.COM1);
+			DebugClient.Setup(Serial.COM1);
 			IDT.SetInterruptHandler(null);
 			Screen.Write('1');
 			Multiboot.Setup();
@@ -83,17 +83,17 @@ namespace Mosa.TestWorld.x86
 
 			Console.WriteLine();
 
-			System.Threading.SpinLock splk = new System.Threading.SpinLock();
+			//System.Threading.SpinLock splk = new System.Threading.SpinLock();
 
-			bool lockTaken = false;
-			splk.Enter(ref lockTaken);
-			if (splk.IsHeld) 
-				Console.Write("Entered...");
+			//bool lockTaken = false;
+			//splk.Enter(ref lockTaken);
+			//if (splk.IsHeld)
+			//	Console.Write("Entered...");
 
-			lockTaken = false;
-			splk.Enter(ref lockTaken);
-			
-			Console.Write("Should have looped!!!");
+			//lockTaken = false;
+			//splk.Enter(ref lockTaken);
+
+			//Console.Write("Should have looped!!!");
 
 			Console.Goto(22, 0);
 

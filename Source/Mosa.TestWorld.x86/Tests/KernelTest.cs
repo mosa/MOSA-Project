@@ -133,7 +133,6 @@ namespace Mosa.TestWorld.x86.Tests
 			}
 
 			Console.WriteLine();
-
 		}
 	}
 }

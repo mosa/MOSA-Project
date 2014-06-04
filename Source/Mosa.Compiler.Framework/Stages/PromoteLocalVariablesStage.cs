@@ -9,6 +9,7 @@
 
 using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.InternalTrace;
+using Mosa.Compiler.MosaTypeSystem;
 
 namespace Mosa.Compiler.Framework.Stages
 {
@@ -60,7 +61,9 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected void Promote(Operand local)
 		{
-			var v = MethodCompiler.CreateVirtualRegister(local.Type);
+			var stacktype = local.Type.GetStackType();
+
+			var v = MethodCompiler.CreateVirtualRegister(stacktype);
 
 			if (trace.Active) trace.Log("*** Replacing: " + local.ToString() + " with " + v.ToString());
 

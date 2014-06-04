@@ -38,13 +38,16 @@ namespace Mosa.TinyCPUSimulator.Adaptor
 				new StaticAllocationResolutionStage(),
 				new CILTransformationStage(),
 				new ConvertCompoundMoveStage(),
-				(compilerOptions.EnableSSA) ? new PromoteLocalVariablesStage() : null,
+				new PromoteLocalVariablesStage(),
+
 				(compilerOptions.EnableSSA) ? new EdgeSplitStage() : null,
 				(compilerOptions.EnableSSA) ? new PhiPlacementStage() : null,
 				(compilerOptions.EnableSSA) ? new EnterSSAStage() : null,
 				(compilerOptions.EnableSSA && compilerOptions.EnableSSAOptimizations) ? new SSAOptimizations() : null,
 				(compilerOptions.EnableSSA) ? new LeaveSSA() : null,
-				(compilerOptions.EnableSSA) ? new ConvertCompoundMoveStage() : null,
+				
+				new PromoteLocalVariablesStage(),
+			
 				new PlatformStubStage(),
 				new	PlatformEdgeSplitStage(),
 				new GreedyRegisterAllocatorStage(),
