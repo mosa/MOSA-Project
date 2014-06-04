@@ -16,9 +16,6 @@ namespace Mosa.Compiler.Framework.Stages
 	{
 		protected override void Run()
 		{
-			//if (MethodCompiler.Method.FullName.Contains("Mosa.Kernel.x86.Screen::Write(System.S"))
-			//	return;
-
 			// Unable to optimize SSA w/ exceptions or finally handlers present
 			if (BasicBlocks.HeadBlocks.Count != 1)
 				return;
@@ -44,8 +41,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 				if (local.Definitions.Count == 0 || local.Uses.Count == 0)
 					continue;
-
-				//System.Diagnostics.Debug.WriteLine(this.MethodCompiler.Method.FullName.ToString() + " - " + local.ToString());
 
 				Promote(local);
 			}

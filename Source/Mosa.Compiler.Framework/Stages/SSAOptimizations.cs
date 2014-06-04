@@ -189,6 +189,9 @@ namespace Mosa.Compiler.Framework.Stages
 			if (!context.Result.IsVirtualRegister)
 				return;
 
+			if (context.Instruction == IRInstruction.Call || context.Instruction == IRInstruction.IntrinsicMethodCall)
+				return;
+
 			if (context.Instruction == IRInstruction.Move && context.Operand1.IsVirtualRegister && context.Operand1 == context.Result)
 			{
 				if (trace.Active) trace.Log("*** DeadCodeElimination");
@@ -197,11 +200,10 @@ namespace Mosa.Compiler.Framework.Stages
 				context.SetInstruction(IRInstruction.Nop);
 				instructionsRemovedCount++;
 				deadCodeEliminationCount++;
-				//context.Remove();
 				return;
 			}
 
-			if (context.Result.Uses.Count != 0 || context.Instruction == IRInstruction.Call || context.Instruction == IRInstruction.IntrinsicMethodCall)
+			if (context.Result.Uses.Count != 0)
 				return;
 
 			if (trace.Active) trace.Log("*** DeadCodeElimination");
@@ -210,7 +212,6 @@ namespace Mosa.Compiler.Framework.Stages
 			context.SetInstruction(IRInstruction.Nop);
 			instructionsRemovedCount++;
 			deadCodeEliminationCount++;
-			//context.Remove();
 			return;
 		}
 
@@ -325,7 +326,7 @@ namespace Mosa.Compiler.Framework.Stages
 			Debug.Assert(context.Result.Definitions.Count == 1);
 
 			// If the pointer or reference types are different, we can not copy propagation because type information would be lost.
-			// Also if the operand sign is different, we cannot do it as it required a signed/unsigned extended move, not a normal move
+			// Also if the operand sign is different, we cannot do it as it requires a signed/unsigned extended move, not a normal move
 			if (!CanCopyPropagation(context.Result, context.Operand1))
 				return;
 
@@ -370,8 +371,6 @@ namespace Mosa.Compiler.Framework.Stages
 			AddOperandUsageToWorkList(context);
 			context.SetInstruction(IRInstruction.Nop);
 			instructionsRemovedCount++;
-
-			//context.Remove();
 		}
 
 		/// <summary>
