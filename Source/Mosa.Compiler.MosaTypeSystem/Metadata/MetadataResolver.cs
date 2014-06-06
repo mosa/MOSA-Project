@@ -192,6 +192,12 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 
 				mosaMethod.Signature = new MosaMethodSignature(returnType, pars);
 
+				foreach (var methodImpl in desc.Definition.Overrides)
+				{
+					Debug.Assert(methodImpl.MethodBody == desc.Definition);
+					mosaMethod.Overrides.Add(ResolveMethodOperand(methodImpl.MethodDeclaration, null));
+				}
+
 				if (desc.Definition.HasBody)
 					ResolveBody(desc.Definition, mosaMethod, desc.Definition.Body, resolver);
 
@@ -357,9 +363,12 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 			else
 				declType = methodDef.DeclaringType.ToTypeSig();
 
+			if (resolver != null)
+				declType = resolver.Resolve(declType);
+
 			MDToken methodToken = methodDef.MDToken;
 
-			MosaType type = metadata.Loader.GetType(resolver.Resolve(declType));
+			MosaType type = metadata.Loader.GetType(declType);
 			foreach (var method in type.Methods)
 			{
 				var desc = method.GetUnderlyingObject<UnitDesc<MethodDef, MethodSig>>();
