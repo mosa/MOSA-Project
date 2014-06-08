@@ -43,7 +43,7 @@ namespace Mosa.TinyCPUSimulator.x86.Opcodes
 	{
 		public override void Execute(CPUx86 cpu, SimInstruction instruction)
 		{
-			SetValue(cpu, instruction, cpu.EFLAGS.Carry && cpu.EFLAGS.Zero);
+			SetValue(cpu, instruction, cpu.EFLAGS.Carry || cpu.EFLAGS.Zero);
 		}
 	}
 
@@ -99,7 +99,7 @@ namespace Mosa.TinyCPUSimulator.x86.Opcodes
 	{
 		public override void Execute(CPUx86 cpu, SimInstruction instruction)
 		{
-			SetValue(cpu, instruction, cpu.EFLAGS.Sign != cpu.EFLAGS.Overflow);
+			SetValue(cpu, instruction, cpu.EFLAGS.Sign != cpu.EFLAGS.Overflow || cpu.EFLAGS.Zero);
 		}
 	}
 
