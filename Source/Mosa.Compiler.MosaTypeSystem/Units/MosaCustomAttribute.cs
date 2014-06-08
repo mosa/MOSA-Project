@@ -7,6 +7,9 @@
  *  Ki (kiootic) <kiootic@gmail.com>
  */
 
+using System.Collections.Generic;
+using Mosa.Compiler.Common;
+
 namespace Mosa.Compiler.MosaTypeSystem
 {
 	public class MosaCustomAttribute
@@ -15,10 +18,13 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public object[] Arguments { get; private set; }
 
-		public MosaCustomAttribute(MosaMethod ctor, object[] args)
+		public Tuple<string, bool, object>[] NamedArguments { get; private set; }
+
+		public MosaCustomAttribute(MosaMethod ctor, object[] args, Tuple<string, bool, object>[] namedArgs)
 		{
 			Constructor = ctor;
 			Arguments = args;
+			NamedArguments = namedArgs;
 		}
 	}
 }

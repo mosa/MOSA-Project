@@ -52,7 +52,7 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 					}
 					ResolveType(type);
 				}
-				else if (unit is MosaField || unit is MosaMethod)
+				else if (unit is MosaField || unit is MosaMethod || unit is MosaModule)
 					resolveQueue.Enqueue(unit);
 			}
 
@@ -65,6 +65,12 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 					ResolveField((MosaField)unit);
 				if (unit is MosaMethod)
 					ResolveMethod((MosaMethod)unit);
+				if (unit is MosaModule)
+				{
+					MosaModule module = (MosaModule)unit;
+					using (var mosaModule = metadata.Controller.MutateModule(module))
+						ResolveCustomAttributes(mosaModule, module.GetUnderlyingObject<UnitDesc<ModuleDef, ModuleSig>>().Definition);
+				}
 			}
 
 			foreach (var module in metadata.Cache.Modules.Values)
@@ -106,7 +112,14 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 					else
 						values[i] = attr.ConstructorArguments[i].Value;
 				}
-				unit.CustomAttributes.Add(new MosaCustomAttribute(mosaCtor, values));
+
+				Tuple<string, bool, object>[] namedArgs = new Tuple<string, bool, object>[attr.NamedArguments.Count];
+				for (int i = 0; i < namedArgs.Length; i++)
+				{
+					namedArgs[i] = new Tuple<string, bool, object>(attr.NamedArguments[i].Name.String, attr.NamedArguments[i].IsField, attr.NamedArguments[i].Value);
+				}
+
+				unit.CustomAttributes.Add(new MosaCustomAttribute(mosaCtor, values, namedArgs));
 			}
 		}
 

@@ -60,7 +60,7 @@ namespace Mosa.Compiler.Framework.Stages
 					slots.Add(null);
 			}
 
-			AskLinkerToCreateMethodTable(type.FullName + Metadata.InterfaceTable, null, slots);
+			AskLinkerToCreateMethodTable(type.FullName + Metadata.InterfaceSlotTable, null, slots);
 		}
 
 		private void BuildTypeInterfaceBitmap(MosaType type)
@@ -125,7 +125,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (type.Interfaces.Count == 0)
 				headerlinks.Add(null);
 			else
-				headerlinks.Add(type.FullName + Metadata.InterfaceTable);
+				headerlinks.Add(type.FullName + Metadata.InterfaceSlotTable);
 
 			// 2. type metadata pointer - contains the type metadata pointer, used to realize object.GetType().
 			if (!type.IsModule)
