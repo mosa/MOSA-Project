@@ -42,6 +42,7 @@ namespace Mosa.Compiler.Framework.Stages
 		private int foldIntegerCompareBranch = 0;
 		private int reduceZeroExtendedMove = 0;
 		private int foldIntegerCompare = 0;
+		private int simplifyExtendedMove = 0;
 
 		private Stack<int> worklist = new Stack<int>();
 
@@ -52,6 +53,8 @@ namespace Mosa.Compiler.Framework.Stages
 			// Unable to optimize SSA w/ exceptions or finally handlers present
 			if (BasicBlocks.HeadBlocks.Count != 1)
 				return;
+
+			trace = CreateTrace();
 
 			// initialize worklist
 			foreach (BasicBlock block in BasicBlocks)
@@ -95,6 +98,7 @@ namespace Mosa.Compiler.Framework.Stages
 			UpdateCounter("SSAOptimizations.ReduceTruncationAndExpansion", reduceTruncationAndExpansion);
 			UpdateCounter("SSAOptimizations.FoldIntegerCompareBranch", foldIntegerCompareBranch);
 			UpdateCounter("SSAOptimizations.FoldIntegerCompare", foldIntegerCompare);
+			UpdateCounter("SSAOptimizations.SimplifyExtendedMove", simplifyExtendedMove);
 			UpdateCounter("SSAOptimizations.ReduceZeroExtendedMove", reduceZeroExtendedMove);
 			UpdateCounter("SSAOptimizations.BlockRemoved", blockRemovedCount);
 
@@ -105,10 +109,6 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			if (context.IsEmpty)
 				return;
-
-			trace = CreateTrace();
-
-			//if (trace.IsLogging) trace.Log("@REVIEW:\t" + context.ToString());
 
 			SimpleConstantPropagation(context);
 			SimpleCopyPropagation(context);
@@ -131,6 +131,7 @@ namespace Mosa.Compiler.Framework.Stages
 			SimplifyExtendedMoveWithConstant(context);
 			StrengthReductionIntegerCompareBranch(context);
 			ReduceTruncationAndExpansion(context);
+			SimplifyExtendedMove(context);
 		}
 
 		/// <summary>
@@ -273,33 +274,45 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 		}
 
-		private bool CanCopyPropagation(Operand result, Operand destination)
+		private bool CanCopyPropagation(Operand source, Operand destination)
 		{
-			if (result.IsPointer && destination.IsPointer)
+			if (source.IsPointer && destination.IsPointer)
 				return true;
 
-			if (result.IsReferenceType && destination.IsReferenceType)
+			if (source.IsReferenceType && destination.IsReferenceType)
 				return true;
 
-			if (result.Type.IsArray & destination.Type.IsArray & result.Type.ElementType == destination.Type.ElementType)
+			if (source.Type.IsArray & destination.Type.IsArray & source.Type.ElementType == destination.Type.ElementType)
 				return true;
 
-			if (result.Type.IsUI1 & destination.Type.IsUI1)
+			if (source.Type.IsUI1 & destination.Type.IsUI1)
 				return true;
 
-			if (result.Type.IsUI2 & destination.Type.IsUI2)
+			if (source.Type.IsUI2 & destination.Type.IsUI2)
 				return true;
 
-			if (result.Type.IsUI4 & destination.Type.IsUI4)
+			if (source.Type.IsUI4 & destination.Type.IsUI4)
 				return true;
 
-			if (result.Type.IsUI8 & destination.Type.IsUI8)
+			if (source.Type.IsUI8 & destination.Type.IsUI8)
 				return true;
 
-			if (result.IsValueType || destination.IsValueType)
+			if (NativePointerSize == 4 && destination.IsI && (source.IsI4 || source.IsU4))
+				return true;
+
+			if (NativePointerSize == 4 && source.IsI && (destination.IsI4 || destination.IsU4))
+				return true;
+
+			if (NativePointerSize == 8 && destination.IsI && (source.IsI8 || source.IsU8))
+				return true;
+
+			if (NativePointerSize == 8 && source.IsI && (destination.IsI8 || destination.IsU8))
+				return true;
+
+			if (source.IsValueType || destination.IsValueType)
 				return false;
 
-			if (result.Type == destination.Type)
+			if (source.Type == destination.Type)
 				return true;
 
 			return false;
@@ -1318,6 +1331,35 @@ namespace Mosa.Compiler.Framework.Stages
 			ctx.SetInstruction(IRInstruction.Nop);
 			foldIntegerCompare++;
 			instructionsRemovedCount++;
+		}
+
+		/// <summary>
+		/// Simplifies sign/zero extended move
+		/// </summary>
+		/// <param name="context">The context.</param>
+		private void SimplifyExtendedMove(Context context)
+		{
+			if (context.IsEmpty)
+				return;
+
+			if (!(context.Instruction == IRInstruction.ZeroExtendedMove || context.Instruction == IRInstruction.SignExtendedMove))
+				return;
+
+			if (!context.Result.IsVirtualRegister || !context.Operand1.IsVirtualRegister)
+				return;
+
+			if (!((NativePointerSize == 4 && context.Result.IsI && (context.Operand1.IsI4 || context.Operand1.IsU4)) ||
+				(NativePointerSize == 4 && context.Operand1.IsI && (context.Result.IsI4 || context.Result.IsU4)) ||
+				(NativePointerSize == 8 && context.Result.IsI && (context.Operand1.IsI8 || context.Operand1.IsU8)) ||
+				(NativePointerSize == 8 && context.Operand1.IsI && (context.Result.IsI8 || context.Result.IsU8))))
+				return;
+
+			AddOperandUsageToWorkList(context);
+			if (trace.Active) trace.Log("*** SimplifyExtendedMove");
+			if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
+			context.SetInstruction(IRInstruction.Move, context.Result, context.Operand1);
+			simplifyExtendedMove++;
+			if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
 		}
 	}
 }
