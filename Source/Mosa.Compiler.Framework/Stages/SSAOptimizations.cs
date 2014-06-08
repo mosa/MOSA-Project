@@ -41,6 +41,7 @@ namespace Mosa.Compiler.Framework.Stages
 		private int blockRemovedCount = 0;
 		private int foldIntegerCompareBranch = 0;
 		private int reduceZeroExtendedMove = 0;
+		private int foldIntegerCompare = 0;
 
 		private Stack<int> worklist = new Stack<int>();
 
@@ -93,6 +94,7 @@ namespace Mosa.Compiler.Framework.Stages
 			UpdateCounter("SSAOptimizations.ConstantFoldingDivisionCount", constantFoldingDivisionCount);
 			UpdateCounter("SSAOptimizations.ReduceTruncationAndExpansion", reduceTruncationAndExpansion);
 			UpdateCounter("SSAOptimizations.FoldIntegerCompareBranch", foldIntegerCompareBranch);
+			UpdateCounter("SSAOptimizations.FoldIntegerCompare", foldIntegerCompare);
 			UpdateCounter("SSAOptimizations.ReduceZeroExtendedMove", reduceZeroExtendedMove);
 			UpdateCounter("SSAOptimizations.BlockRemoved", blockRemovedCount);
 
@@ -124,6 +126,7 @@ namespace Mosa.Compiler.Framework.Stages
 			ConstantFoldingDivision(context);
 			SimplifyIntegerCompare(context);
 			ConstantFoldingIntegerCompare(context);
+			FoldIntegerCompare(context);
 			FoldIntegerCompareBranch(context);
 			SimplifyExtendedMoveWithConstant(context);
 			StrengthReductionIntegerCompareBranch(context);
@@ -1144,11 +1147,11 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (!ctx.Operand2.IsConstant)
 				return;
-			
+
 			Debug.Assert(ctx.Result.Definitions.Count == 1);
 
 			ulong r = context.Operand2.ConstantUnsignedInteger * ctx.Operand2.ConstantUnsignedInteger;
-			
+
 			if (trace.Active) trace.Log("*** ConstantFoldingDivision");
 			AddOperandUsageToWorkList(ctx);
 			if (trace.Active) trace.Log("BEFORE:\t" + ctx.ToString());
@@ -1249,10 +1252,12 @@ namespace Mosa.Compiler.Framework.Stages
 
 			var operand = (context.Operand2.IsConstant && context.Operand2.IsConstantZero) ? context.Operand1 : context.Operand2;
 
-			if (context.Operand1.Uses.Count != 1 || context.Operand1.Definitions.Count != 1)
+			if (operand.Uses.Count != 1)
 				return;
 
-			Context ctx = new Context(InstructionSet, context.Operand1.Definitions[0]);
+			Debug.Assert(operand.Definitions.Count == 1);
+
+			Context ctx = new Context(InstructionSet, operand.Definitions[0]);
 
 			if (ctx.Instruction != IRInstruction.IntegerCompare)
 				return;
@@ -1268,6 +1273,50 @@ namespace Mosa.Compiler.Framework.Stages
 			if (trace.Active) trace.Log("REMOVED:\t" + ctx.ToString());
 			ctx.SetInstruction(IRInstruction.Nop);
 			foldIntegerCompareBranch++;
+			instructionsRemovedCount++;
+		}
+
+		private void FoldIntegerCompare(Context context)
+		{
+			if (context.IsEmpty)
+				return;
+
+			if (context.Instruction != IRInstruction.IntegerCompare)
+				return;
+
+			if (!(context.ConditionCode == ConditionCode.NotEqual || context.ConditionCode == ConditionCode.Equal))
+				return;
+
+			if (!((context.Operand1.IsVirtualRegister && context.Operand2.IsConstant && context.Operand2.IsConstantZero) ||
+				(context.Operand2.IsVirtualRegister && context.Operand1.IsConstant && context.Operand1.IsConstantZero)))
+				return;
+
+			var operand = (context.Operand2.IsConstant && context.Operand2.IsConstantZero) ? context.Operand1 : context.Operand2;
+
+			if (operand.Uses.Count != 1)
+				return;
+
+			if (operand.Definitions.Count != 1)
+				return;
+
+			Debug.Assert(operand.Definitions.Count == 1);
+
+			Context ctx = new Context(InstructionSet, operand.Definitions[0]);
+
+			if (ctx.Instruction != IRInstruction.IntegerCompare)
+				return;
+
+			AddOperandUsageToWorkList(ctx);
+			AddOperandUsageToWorkList(context);
+			if (trace.Active) trace.Log("*** FoldIntegerCompare");
+			if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
+			context.ConditionCode = context.ConditionCode == ConditionCode.NotEqual ? ctx.ConditionCode : ctx.ConditionCode.GetOpposite();
+			context.Operand1 = ctx.Operand1;
+			context.Operand2 = ctx.Operand2;
+			if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
+			if (trace.Active) trace.Log("REMOVED:\t" + ctx.ToString());
+			ctx.SetInstruction(IRInstruction.Nop);
+			foldIntegerCompare++;
 			instructionsRemovedCount++;
 		}
 	}
