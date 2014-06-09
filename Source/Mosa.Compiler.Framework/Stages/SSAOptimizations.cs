@@ -44,7 +44,7 @@ namespace Mosa.Compiler.Framework.Stages
 		private int reduceZeroExtendedMove = 0;
 		private int foldIntegerCompare = 0;
 		private int simplifyExtendedMove = 0;
-		private int foldLoadOffset = 0;
+		private int foldLoadStoreOffsets = 0;
 
 		private Stack<int> worklist = new Stack<int>();
 
@@ -103,7 +103,7 @@ namespace Mosa.Compiler.Framework.Stages
 			UpdateCounter("SSAOptimizations.FoldIntegerCompare", foldIntegerCompare);
 			UpdateCounter("SSAOptimizations.SimplifyExtendedMove", simplifyExtendedMove);
 			UpdateCounter("SSAOptimizations.ReduceZeroExtendedMove", reduceZeroExtendedMove);
-			UpdateCounter("SSAOptimizations.FoldLoadOffset", foldLoadOffset);
+			UpdateCounter("SSAOptimizations.FoldLoadStoreOffsets", foldLoadStoreOffsets);
 			UpdateCounter("SSAOptimizations.BlockRemoved", blockRemovedCount);
 
 			worklist = null;
@@ -119,13 +119,13 @@ namespace Mosa.Compiler.Framework.Stages
 			SimpleBackwardCopyPropagation(context);
 			DeadCodeElimination(context);
 			SimplifySubtraction(context);
+			ConstantMove(context);
 			StrengthReductionMultiplication(context);
 			StrengthReductionDivision(context);
 			StrengthReductionIntegerAdditionAndSubstraction(context);
 			StrengthReductionLogicalOperators(context);
 			ConstantFoldingIntegerOperations(context);
 			ReduceZeroExtendedMove(context);
-			ConstantMove(context);
 			ConstantFoldingAdditionAndSubstraction(context);
 			ConstantFoldingMultiplication(context);
 			ConstantFoldingDivision(context);
@@ -137,7 +137,7 @@ namespace Mosa.Compiler.Framework.Stages
 			StrengthReductionIntegerCompareBranch(context);
 			ReduceTruncationAndExpansion(context);
 			SimplifyExtendedMove(context);
-			FoldLoadOffset(context);
+			FoldLoadStoreOffsets(context);
 		}
 
 		/// <summary>
@@ -788,50 +788,61 @@ namespace Mosa.Compiler.Framework.Stages
 			if (!context.Result.IsVirtualRegister)
 				return;
 
+			if (!context.Operand2.IsConstant)
+				return;
+
 			Operand result = context.Result;
 			Operand op1 = context.Operand1;
 			Operand op2 = context.Operand2;
 
-			if (context.Instruction == IRInstruction.LogicalOr && op1.IsConstant && !op2.IsConstant && op1.IsConstantZero)
+			if (context.Instruction == IRInstruction.LogicalOr)
 			{
-				AddOperandUsageToWorkList(context);
-				if (trace.Active) trace.Log("*** StrengthReductionLogicalOperators");
-				if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
-				context.SetInstruction(IRInstruction.Move, result, Operand.CreateConstant(context.Result.Type, op2.ConstantSignedInteger));
-				strengthReductionLogicalOperatorsCount++;
-				if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
+				if (op2.IsConstantZero)
+				{
+					AddOperandUsageToWorkList(context);
+					if (trace.Active) trace.Log("*** StrengthReductionLogicalOperators");
+					if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
+					context.SetInstruction(IRInstruction.Move, result, op1);
+					strengthReductionLogicalOperatorsCount++;
+					if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
+					return;
+				}
 			}
-
-			if (context.Instruction == IRInstruction.LogicalOr && op2.IsConstant && !op1.IsConstant && op2.IsConstantZero)
+			else if (context.Instruction == IRInstruction.LogicalAnd)
 			{
-				AddOperandUsageToWorkList(context);
-				if (trace.Active) trace.Log("*** StrengthReductionLogicalOperators");
-				if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
-				context.SetInstruction(IRInstruction.Move, result, Operand.CreateConstant(context.Result.Type, op1.ConstantSignedInteger));
-				strengthReductionLogicalOperatorsCount++;
-				if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
-			}
+				if (op2.IsConstantZero)
+				{
+					AddOperandUsageToWorkList(context);
+					if (trace.Active) trace.Log("*** StrengthReductionLogicalOperators");
+					if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
+					context.SetInstruction(IRInstruction.Move, result, Operand.CreateConstant(context.Result.Type, 0));
+					strengthReductionLogicalOperatorsCount++;
+					if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
+					return;
+				}
 
-			if (context.Instruction == IRInstruction.LogicalAnd && op1.IsConstant && !op1.IsConstant && op1.IsConstantZero)
-			{
-				AddOperandUsageToWorkList(context);
-				if (trace.Active) trace.Log("*** StrengthReductionLogicalOperators");
-				if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
-				context.SetInstruction(IRInstruction.Move, result, Operand.CreateConstant(context.Result.Type, 0));
-				strengthReductionLogicalOperatorsCount++;
-				if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
-			}
+				if ((result.IsI4 || result.IsU4) && op2.ConstantUnsignedInteger == 0xFFFFFFFF)
+				{
+					AddOperandUsageToWorkList(context);
+					if (trace.Active) trace.Log("*** StrengthReductionLogicalOperators");
+					if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
+					context.SetInstruction(IRInstruction.Move, result, op1);
+					strengthReductionLogicalOperatorsCount++;
+					if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
+					return;
+				}
 
-			if (context.Instruction == IRInstruction.LogicalAnd && op2.IsConstant && !op1.IsConstant && op2.IsConstantZero)
-			{
-				AddOperandUsageToWorkList(context);
-				if (trace.Active) trace.Log("*** StrengthReductionLogicalOperators");
-				if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
-				context.SetInstruction(IRInstruction.Move, result, Operand.CreateConstant(context.Result.Type, 0));
-				strengthReductionLogicalOperatorsCount++;
-				if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
+				if ((result.IsI8 || result.IsU8) && op2.ConstantUnsignedInteger == 0xFFFFFFFFFFFFFFFF)
+				{
+					AddOperandUsageToWorkList(context);
+					if (trace.Active) trace.Log("*** StrengthReductionLogicalOperators");
+					if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
+					context.SetInstruction(IRInstruction.Move, result, op1);
+					strengthReductionLogicalOperatorsCount++;
+					if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
+					return;
+				}
 			}
-
 			// TODO: Add more strength reductions especially for AND w/ 0xFF, 0xFFFF, 0xFFFFFFFF, etc when source or destination are same or smaller
 		}
 
@@ -1029,18 +1040,23 @@ namespace Mosa.Compiler.Framework.Stages
 				return;
 
 			if (!(context.Instruction == IRInstruction.AddSigned || context.Instruction == IRInstruction.AddUnsigned
-				|| context.Instruction == IRInstruction.MulSigned || context.Instruction == IRInstruction.MulUnsigned))
+				|| context.Instruction == IRInstruction.MulSigned || context.Instruction == IRInstruction.MulUnsigned
+				|| context.Instruction == IRInstruction.LogicalAnd || context.Instruction == IRInstruction.LogicalOr
+				|| context.Instruction == IRInstruction.LogicalXor))
 				return;
 
-			if (!context.Operand1.IsConstant || context.Operand2.IsConstant)
+			if (context.Operand2.IsConstant)
 				return;
 
-			if (trace.Active) trace.Log("*** ConstantMove");
+			if (!context.Operand1.IsConstant)
+				return;
+
 			AddOperandUsageToWorkList(context);
+			if (trace.Active) trace.Log("*** ConstantMove");
 			if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
-			var tmp = context.Operand1;
+			var op1 = context.Operand1;
 			context.Operand1 = context.Operand2;
-			context.Operand2 = tmp;
+			context.Operand2 = op1;
 			if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
 		}
 
@@ -1442,12 +1458,12 @@ namespace Mosa.Compiler.Framework.Stages
 		}
 
 
-		private void FoldLoadOffset(Context context)
+		private void FoldLoadStoreOffsets(Context context)
 		{
 			if (context.IsEmpty)
 				return;
 
-			if (context.Instruction != IRInstruction.Load)
+			if (!(context.Instruction == IRInstruction.Load || context.Instruction == IRInstruction.Store))
 				return;
 
 			if (!context.Operand2.IsConstant)
@@ -1481,14 +1497,14 @@ namespace Mosa.Compiler.Framework.Stages
 
 			AddOperandUsageToWorkList(context);
 			AddOperandUsageToWorkList(ctx);
-			if (trace.Active) trace.Log("*** FoldLoadOffset");
+			if (trace.Active) trace.Log("*** FoldLoadStoreOffsets");
 			if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
 			context.Operand1 = ctx.Operand1;
 			context.Operand2 = constant;
-			if (trace.Active) trace.Log("AFTER:\t" + context.ToString());
+			if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
 			if (trace.Active) trace.Log("REMOVED:\t" + ctx.ToString());
 			ctx.SetInstruction(IRInstruction.Nop);
-			foldLoadOffset++;
+			foldLoadStoreOffsets++;
 			instructionsRemovedCount++;
 		}
 	}

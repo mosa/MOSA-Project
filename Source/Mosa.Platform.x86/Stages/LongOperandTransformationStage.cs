@@ -1075,7 +1075,7 @@ namespace Mosa.Platform.x86.Stages
 				context.AppendInstruction(X86.Mov, op0L, v2);
 				context.AppendInstruction(X86.Mov, op0H, v3);
 			}
-			else if (op1.IsI4)
+			else if (op1.IsI4 || op1.IsPointer)
 			{
 				Operand v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 				Operand v2 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
