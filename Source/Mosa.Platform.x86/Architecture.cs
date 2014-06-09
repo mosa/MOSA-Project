@@ -192,7 +192,7 @@ namespace Mosa.Platform.x86
 				new ExceptionVectorStage()
 			);
 
-			compilerPipeline.InsertBefore<TypeLayoutStage>(
+			compilerPipeline.InsertBefore<MetadataStage>(
 				new UnboxStubStage()
 			);
 

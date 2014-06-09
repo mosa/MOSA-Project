@@ -469,7 +469,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			ReplaceWithVmCall(context, VmCall.AllocateArray);
 
-			context.SetOperand(1, GetMethodTableSymbol(arrayType));
+			context.SetOperand(1, GetTypeDefinitionSymbol(arrayType));
 			context.SetOperand(2, Operand.CreateConstantSignedInt(TypeSystem, (int)elementSize));
 			context.SetOperand(3, lengthOperand);
 			context.OperandCount = 4;
@@ -491,9 +491,9 @@ namespace Mosa.Compiler.Framework.Stages
 
 			ReplaceWithVmCall(before, VmCall.AllocateObject);
 
-			Operand methodTableSymbol = GetMethodTableSymbol(classType);
+			Operand typeDefinitionSymbol = GetTypeDefinitionSymbol(classType);
 
-			before.SetOperand(1, methodTableSymbol);
+			before.SetOperand(1, typeDefinitionSymbol);
 			before.SetOperand(2, Operand.CreateConstantSignedInt(TypeSystem, TypeLayout.GetTypeSize(classType)));
 			before.OperandCount = 3;
 			before.Result = thisReference;
@@ -505,9 +505,9 @@ namespace Mosa.Compiler.Framework.Stages
 			ProcessInvokeInstruction(context, context.MosaMethod, null, operands);
 		}
 
-		private Operand GetMethodTableSymbol(MosaType runtimeType)
+		private Operand GetTypeDefinitionSymbol(MosaType runtimeType)
 		{
-			return Operand.CreateUnmanagedSymbolPointer(TypeSystem, runtimeType.FullName + Metadata.MethodTable);
+			return Operand.CreateUnmanagedSymbolPointer(TypeSystem, runtimeType.FullName + Metadata.TypeDefinition);
 		}
 
 		/// <summary>
@@ -531,13 +531,13 @@ namespace Mosa.Compiler.Framework.Stages
 			Operand result = context.Result;
 
 			MosaType classType = result.Type;
-			Operand methodTableSymbol = GetMethodTableSymbol(classType);
+			Operand typeDefinitionSymbol = GetTypeDefinitionSymbol(classType);
 
 			if (!classType.IsInterface)
 			{
 				ReplaceWithVmCall(context, VmCall.IsInstanceOfType);
 
-				context.SetOperand(1, methodTableSymbol);
+				context.SetOperand(1, typeDefinitionSymbol);
 				context.SetOperand(2, reference);
 				context.OperandCount = 3;
 				context.ResultCount = 1;
@@ -580,7 +580,7 @@ namespace Mosa.Compiler.Framework.Stages
 			context.SetInstruction(IRInstruction.Nop);
 			ReplaceWithVmCall(context, vmCall);
 
-			var methodTableSymbol = GetMethodTableSymbol(type);
+			var typeDefinitionSymbol = GetTypeDefinitionSymbol(type);
 
 			context.SetOperand(1, value);
 			if (vmCall == VmCall.Unbox)
@@ -637,9 +637,9 @@ namespace Mosa.Compiler.Framework.Stages
 			context.SetInstruction(IRInstruction.Nop);
 			ReplaceWithVmCall(context, vmCall);
 
-			var methodTableSymbol = GetMethodTableSymbol(type);
+			var typeDefinitionSymbol = GetTypeDefinitionSymbol(type);
 
-			context.SetOperand(1, methodTableSymbol);
+			context.SetOperand(1, typeDefinitionSymbol);
 			if (vmCall == VmCall.Box)
 			{
 				Operand adr = MethodCompiler.CreateVirtualRegister(type.ToManagedPointer());
@@ -757,8 +757,8 @@ namespace Mosa.Compiler.Framework.Stages
 			var symbol = linker.CreateSymbol(symbolName, SectionKind.ROData, NativePointerAlignment, NativePointerSize * 3 + stringdata.Length * 2);
 			var stream = symbol.Stream;
 
-			// Method table and sync block
-			linker.Link(LinkType.AbsoluteAddress, BuiltInPatch.I4, symbol, 0, 0, "System.String" + Metadata.MethodTable, SectionKind.ROData, 0);
+			// Type Definition and sync block
+			linker.Link(LinkType.AbsoluteAddress, BuiltInPatch.I4, symbol, 0, 0, "System.String" + Metadata.TypeDefinition, SectionKind.ROData, 0);
 
 			stream.WriteZeroBytes(NativePointerSize * 2);
 
@@ -1683,11 +1683,15 @@ namespace Mosa.Compiler.Framework.Stages
 			Type intrinsicType = null;
 
 			if (external != null)
+			{
 				intrinsicType = Type.GetType(external);
+			}
 			else if (isInternal)
+			{
 				MethodCompiler.Compiler.IntrinsicTypes.TryGetValue(context.MosaMethod.FullName, out intrinsicType);
-			if (intrinsicType == null)
-				MethodCompiler.Compiler.IntrinsicTypes.TryGetValue(context.MosaMethod.DeclaringType.FullName + "::" + context.MosaMethod.Name, out intrinsicType);
+				if (intrinsicType == null)
+					MethodCompiler.Compiler.IntrinsicTypes.TryGetValue(context.MosaMethod.DeclaringType.FullName + "::" + context.MosaMethod.Name, out intrinsicType);
+			}
 
 			if (intrinsicType == null)
 				return false;

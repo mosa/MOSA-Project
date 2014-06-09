@@ -16,7 +16,7 @@ namespace Mosa.Compiler.Framework.Intrinsics
 	[ReplacementTarget("System.String::InternalAllocateString")]
 	public sealed class InternalAllocateString : IIntrinsicInternalMethod
 	{
-		private const string StringClassMethodTableSymbolName = @"System.String" + Metadata.MethodTable;
+		private const string StringClassTypeDefinitionSymbolName = @"System.String" + Metadata.TypeDefinition;
 
 		/// <summary>
 		/// Replaces the intrinsic call site
@@ -34,11 +34,11 @@ namespace Mosa.Compiler.Framework.Intrinsics
 
 			Operand callTargetOperand = Operand.CreateSymbolFromMethod(methodCompiler.TypeSystem, method);
 
-			Operand methodTableOperand = Operand.CreateUnmanagedSymbolPointer(methodCompiler.TypeSystem, StringClassMethodTableSymbolName);
+			Operand typeDefinitionOperand = Operand.CreateUnmanagedSymbolPointer(methodCompiler.TypeSystem, StringClassTypeDefinitionSymbolName);
 			Operand lengthOperand = context.Operand1;
 			Operand result = context.Result;
 
-			context.SetInstruction(IRInstruction.Call, result, callTargetOperand, methodTableOperand, lengthOperand);
+			context.SetInstruction(IRInstruction.Call, result, callTargetOperand, typeDefinitionOperand, lengthOperand);
 			context.MosaMethod = method;
 		}
 	}

@@ -43,7 +43,6 @@ namespace Mosa.TinyCPUSimulator.Adaptor
 				new MethodCompilerSchedulerStage(),
 				new TypeInitializerSchedulerStage(),
 				new SimPowerUpStage(),
-				new TypeLayoutStage(),
 				new MetadataStage(),
 				new SimLinkerFinalizationStage(simAdapter.SimCPU),
 			});

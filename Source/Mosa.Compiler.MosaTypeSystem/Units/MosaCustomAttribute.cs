@@ -16,11 +16,11 @@ namespace Mosa.Compiler.MosaTypeSystem
 	{
 		public MosaMethod Constructor { get; private set; }
 
-		public object[] Arguments { get; private set; }
+		public Tuple<object, MosaTypeCode>[] Arguments { get; private set; }
 
-		public Tuple<string, bool, object>[] NamedArguments { get; private set; }
+		public Tuple<string, bool, object, MosaTypeCode>[] NamedArguments { get; private set; }
 
-		public MosaCustomAttribute(MosaMethod ctor, object[] args, Tuple<string, bool, object>[] namedArgs)
+		public MosaCustomAttribute(MosaMethod ctor, Tuple<object, MosaTypeCode>[] args, Tuple<string, bool, object, MosaTypeCode>[] namedArgs)
 		{
 			Constructor = ctor;
 			Arguments = args;

@@ -69,7 +69,7 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 				{
 					MosaModule module = (MosaModule)unit;
 					using (var mosaModule = metadata.Controller.MutateModule(module))
-						ResolveCustomAttributes(mosaModule, module.GetUnderlyingObject<UnitDesc<ModuleDef, ModuleSig>>().Definition);
+						ResolveCustomAttributes(mosaModule, module.GetUnderlyingObject<UnitDesc<ModuleDef, object>>().Definition);
 				}
 			}
 
@@ -104,19 +104,19 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 				if (mosaCtor == null)
 					throw new AssemblyLoadException();
 
-				object[] values = new object[attr.ConstructorArguments.Count];
+				Tuple<object, MosaTypeCode>[] values = new Tuple<object, MosaTypeCode>[attr.ConstructorArguments.Count];
 				for (int i = 0; i < values.Length; i++)
 				{
 					if (attr.ConstructorArguments[i].Value is UTF8String)
-						values[i] = ((UTF8String)attr.ConstructorArguments[i].Value).String;
+						values[i] = new Tuple<object,MosaTypeCode>(((UTF8String)attr.ConstructorArguments[i].Value).String, MosaTypeCode.String);
 					else
-						values[i] = attr.ConstructorArguments[i].Value;
+						values[i] = new Tuple<object, MosaTypeCode>(attr.ConstructorArguments[i].Value, (MosaTypeCode)attr.ConstructorArguments[i].Type.ElementType);
 				}
 
-				Tuple<string, bool, object>[] namedArgs = new Tuple<string, bool, object>[attr.NamedArguments.Count];
+				Tuple<string, bool, object, MosaTypeCode>[] namedArgs = new Tuple<string, bool, object, MosaTypeCode>[attr.NamedArguments.Count];
 				for (int i = 0; i < namedArgs.Length; i++)
 				{
-					namedArgs[i] = new Tuple<string, bool, object>(attr.NamedArguments[i].Name.String, attr.NamedArguments[i].IsField, attr.NamedArguments[i].Value);
+					namedArgs[i] = new Tuple<string, bool, object, MosaTypeCode>(attr.NamedArguments[i].Name.String, attr.NamedArguments[i].IsField, attr.NamedArguments[i].Value, (MosaTypeCode)attr.NamedArguments[i].ArgumentType.ElementType);
 				}
 
 				unit.CustomAttributes.Add(new MosaCustomAttribute(mosaCtor, values, namedArgs));
