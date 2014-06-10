@@ -1,28 +1,33 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿/*
+ * (c) 2014 MOSA - The Managed Operating System Alliance
+ *
+ * Licensed under the terms of the New BSD License.
+ *
+ * Authors:
+ *  Stefan Andres Charsley (charsleysa) <charsleysa@gmail.com>
+ */
+
 
 namespace Mosa.Compiler.Common
 {
 	public struct Metadata
 	{
-		public const string AssemblyListTable = "$_$assemblylisttable";
-		public const string MethodLookupTable = "$_$methodlookuptable";
+		public const string AssemblyListTable = "<$>AssemblyListTable";
+		public const string MethodLookupTable = "<$>MethodLookupTable";
+		public const string NameString = "$Name";
 
-		public const string AssemblyDefinition = "$assemblydef";
-		public const string AssemblyName = "$assemblyname";
+		public const string AssemblyDefinition = "$AssemblyDef";
+		public const string TypeDefinition = "$TypeDef";
+		public const string MethodDefinition = "$MethodDef";
+		public const string FieldDefinition = "$FieldDef";
 
-		public const string TypeDefinition = "$typedef";
-		public const string TypeName = "$typename";
+		public const string CustomAttributeListTable = "$CustomAttributeListTable";
+		public const string CustomAttributeTable = "$CustomAttributeTable";
+		public const string CustomAttributeArgument = "$CustomAttributeArgument";
 
-		public const string FieldDefinition = "$fielddef";
-		public const string FieldName = "$fieldname";
+		public const string InterfaceMethodTable = "$IMethodTable$";
 
-		public const string MethodTable = "$methodtable";
-		public const string InterfaceMethodTable = "$i_methodtable$";
-
-		public const string InterfaceTable = "$interfacetable";
-		public const string InterfaceBitmap = "$interfacebitmap";
+		public const string InterfaceSlotTable = "$InterfaceSlotTable";
+		public const string InterfaceBitmap = "$InterfaceBitmap";
 	}
 }

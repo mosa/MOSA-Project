@@ -61,7 +61,7 @@ namespace Mosa.Platform.x86.Stages
 
 				// Stack frame hasn't been pushed yet, so subtract a pointer.
 				var thisOffset = Architecture.CallingConvention.OffsetOfFirstParameter - Architecture.NativePointerSize;
-				// Actual value in boxed form is after a method table and a sync block, so 2 pointers.
+				// Actual value in boxed form is after type definition and a sync block, so 2 pointers.
 				var valueOffset = Architecture.NativePointerSize * 2;
 
 				var thisArg = Operand.CreateMemoryAddress(TypeSystem.BuiltIn.I4, esp, thisOffset);

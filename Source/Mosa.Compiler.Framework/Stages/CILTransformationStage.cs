@@ -393,27 +393,60 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				Operand thisPtr = context.Operand1;
 
-				Operand methodTable = MethodCompiler.CreateVirtualRegister(TypeSystem.BuiltIn.Pointer);
+				Operand typeDefinition = MethodCompiler.CreateVirtualRegister(TypeSystem.BuiltIn.Pointer);
+				Operand methodDefinition = MethodCompiler.CreateVirtualRegister(TypeSystem.BuiltIn.Pointer);
 				Operand methodPtr = MethodCompiler.CreateVirtualRegister(TypeSystem.BuiltIn.Pointer);
 
 				if (!method.DeclaringType.IsInterface)
 				{
-					int methodTableOffset = CalculateMethodTableOffset(method) + (NativePointerSize * 4);
-					context.SetInstruction(IRInstruction.Load, methodTable, thisPtr, Operand.CreateConstantSignedInt(TypeSystem, 0));
-					context.AppendInstruction(IRInstruction.Load, methodPtr, methodTable, Operand.CreateConstantSignedInt(TypeSystem, (int)methodTableOffset));
+					// methodDefinitionOffset is as follows (slot * NativePointerSize) + (NativePointerSize * 10)
+					// We use 10 as that is the number of NativePointerSized fields until the start of methodDefinition pointers
+					int methodDefinitionOffset = CalculateMethodTableOffset(method) + (NativePointerSize * 10);
+
+					// Same as above except for methodPointer
+					int methodPointerOffset = (NativePointerSize * 4);
+
+					// Get the TypeDef pointer
+					context.SetInstruction(IRInstruction.Load, typeDefinition, thisPtr, Operand.CreateConstantSignedInt(TypeSystem, 0));
+
+					// Get the MethodDef pointer
+					context.AppendInstruction(IRInstruction.Load, methodDefinition, typeDefinition, Operand.CreateConstantSignedInt(TypeSystem, (int)methodDefinitionOffset));
+
+					// Get the address of the method
+					context.AppendInstruction(IRInstruction.Load, methodPtr, methodDefinition, Operand.CreateConstantSignedInt(TypeSystem, (int)methodPointerOffset));
 				}
 				else
 				{
-					int methodTableOffset = CalculateMethodTableOffset(method);
-					int slotOffset = CalculateInterfaceSlotOffset(method);
+					// Offset for InterfaceSlotTable in TypeDef
+					int interfaceSlotTableOffset = (NativePointerSize * 7);
 
+					// Offset for InterfaceMethodTable in InterfaceSlotTable
+					int interfaceMethodTableOffset = (NativePointerSize * 1) + CalculateInterfaceSlotOffset(method);
+
+					// Offset for MethodDef in InterfaceMethodTable
+					int methodDefinitionOffset = (NativePointerSize * 1) + CalculateMethodTableOffset(method);
+
+					// Offset for Method pointer in MethodDef
+					int methodPointerOffset = (NativePointerSize * 4);
+
+					// Operands to hold pointers
 					Operand interfaceSlotPtr = MethodCompiler.CreateVirtualRegister(TypeSystem.BuiltIn.Pointer);
 					Operand interfaceMethodTablePtr = MethodCompiler.CreateVirtualRegister(TypeSystem.BuiltIn.Pointer);
 
-					context.SetInstruction(IRInstruction.Load, methodTable, thisPtr, Operand.CreateConstantSignedInt(TypeSystem, 0));
-					context.AppendInstruction(IRInstruction.Load, interfaceSlotPtr, methodTable, Operand.CreateConstantSignedInt(TypeSystem, 0));
-					context.AppendInstruction(IRInstruction.Load, interfaceMethodTablePtr, interfaceSlotPtr, Operand.CreateConstantSignedInt(TypeSystem, (int)slotOffset));
-					context.AppendInstruction(IRInstruction.Load, methodPtr, interfaceMethodTablePtr, Operand.CreateConstantSignedInt(TypeSystem, (int)methodTableOffset));
+					// Get the TypeDef pointer
+					context.SetInstruction(IRInstruction.Load, typeDefinition, thisPtr, Operand.CreateConstantSignedInt(TypeSystem, 0));
+
+					// Get the Interface Slot Table pointer
+					context.AppendInstruction(IRInstruction.Load, interfaceSlotPtr, typeDefinition, Operand.CreateConstantSignedInt(TypeSystem, (int)interfaceSlotTableOffset));
+
+					// Get the Interface Method Table pointer
+					context.AppendInstruction(IRInstruction.Load, interfaceMethodTablePtr, interfaceSlotPtr, Operand.CreateConstantSignedInt(TypeSystem, (int)interfaceMethodTableOffset));
+
+					// Get the MethodDef pointer
+					context.AppendInstruction(IRInstruction.Load, methodDefinition, interfaceMethodTablePtr, Operand.CreateConstantSignedInt(TypeSystem, (int)methodDefinitionOffset));
+
+					// Get the address of the method
+					context.AppendInstruction(IRInstruction.Load, methodPtr, methodDefinition, Operand.CreateConstantSignedInt(TypeSystem, (int)methodPointerOffset));
 				}
 
 				context.AppendInstruction(IRInstruction.Nop);
@@ -469,7 +502,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			ReplaceWithVmCall(context, VmCall.AllocateArray);
 
-			context.SetOperand(1, GetMethodTableSymbol(arrayType));
+			context.SetOperand(1, GetTypeDefinitionSymbol(arrayType));
 			context.SetOperand(2, Operand.CreateConstantSignedInt(TypeSystem, (int)elementSize));
 			context.SetOperand(3, lengthOperand);
 			context.OperandCount = 4;
@@ -491,9 +524,9 @@ namespace Mosa.Compiler.Framework.Stages
 
 			ReplaceWithVmCall(before, VmCall.AllocateObject);
 
-			Operand methodTableSymbol = GetMethodTableSymbol(classType);
+			Operand typeDefinitionSymbol = GetTypeDefinitionSymbol(classType);
 
-			before.SetOperand(1, methodTableSymbol);
+			before.SetOperand(1, typeDefinitionSymbol);
 			before.SetOperand(2, Operand.CreateConstantSignedInt(TypeSystem, TypeLayout.GetTypeSize(classType)));
 			before.OperandCount = 3;
 			before.Result = thisReference;
@@ -505,9 +538,9 @@ namespace Mosa.Compiler.Framework.Stages
 			ProcessInvokeInstruction(context, context.MosaMethod, null, operands);
 		}
 
-		private Operand GetMethodTableSymbol(MosaType runtimeType)
+		private Operand GetTypeDefinitionSymbol(MosaType runtimeType)
 		{
-			return Operand.CreateUnmanagedSymbolPointer(TypeSystem, runtimeType.FullName + Metadata.MethodTable);
+			return Operand.CreateUnmanagedSymbolPointer(TypeSystem, runtimeType.FullName + Metadata.TypeDefinition);
 		}
 
 		/// <summary>
@@ -531,13 +564,13 @@ namespace Mosa.Compiler.Framework.Stages
 			Operand result = context.Result;
 
 			MosaType classType = result.Type;
-			Operand methodTableSymbol = GetMethodTableSymbol(classType);
+			Operand typeDefinitionSymbol = GetTypeDefinitionSymbol(classType);
 
 			if (!classType.IsInterface)
 			{
 				ReplaceWithVmCall(context, VmCall.IsInstanceOfType);
 
-				context.SetOperand(1, methodTableSymbol);
+				context.SetOperand(1, typeDefinitionSymbol);
 				context.SetOperand(2, reference);
 				context.OperandCount = 3;
 				context.ResultCount = 1;
@@ -580,7 +613,7 @@ namespace Mosa.Compiler.Framework.Stages
 			context.SetInstruction(IRInstruction.Nop);
 			ReplaceWithVmCall(context, vmCall);
 
-			var methodTableSymbol = GetMethodTableSymbol(type);
+			var typeDefinitionSymbol = GetTypeDefinitionSymbol(type);
 
 			context.SetOperand(1, value);
 			if (vmCall == VmCall.Unbox)
@@ -637,9 +670,9 @@ namespace Mosa.Compiler.Framework.Stages
 			context.SetInstruction(IRInstruction.Nop);
 			ReplaceWithVmCall(context, vmCall);
 
-			var methodTableSymbol = GetMethodTableSymbol(type);
+			var typeDefinitionSymbol = GetTypeDefinitionSymbol(type);
 
-			context.SetOperand(1, methodTableSymbol);
+			context.SetOperand(1, typeDefinitionSymbol);
 			if (vmCall == VmCall.Box)
 			{
 				Operand adr = MethodCompiler.CreateVirtualRegister(type.ToManagedPointer());
@@ -757,8 +790,8 @@ namespace Mosa.Compiler.Framework.Stages
 			var symbol = linker.CreateSymbol(symbolName, SectionKind.ROData, NativePointerAlignment, NativePointerSize * 3 + stringdata.Length * 2);
 			var stream = symbol.Stream;
 
-			// Method table and sync block
-			linker.Link(LinkType.AbsoluteAddress, BuiltInPatch.I4, symbol, 0, 0, "System.String" + Metadata.MethodTable, SectionKind.ROData, 0);
+			// Type Definition and sync block
+			linker.Link(LinkType.AbsoluteAddress, BuiltInPatch.I4, symbol, 0, 0, "System.String" + Metadata.TypeDefinition, SectionKind.ROData, 0);
 
 			stream.WriteZeroBytes(NativePointerSize * 2);
 
@@ -1683,11 +1716,15 @@ namespace Mosa.Compiler.Framework.Stages
 			Type intrinsicType = null;
 
 			if (external != null)
+			{
 				intrinsicType = Type.GetType(external);
+			}
 			else if (isInternal)
+			{
 				MethodCompiler.Compiler.IntrinsicTypes.TryGetValue(context.MosaMethod.FullName, out intrinsicType);
-			if (intrinsicType == null)
-				MethodCompiler.Compiler.IntrinsicTypes.TryGetValue(context.MosaMethod.DeclaringType.FullName + "::" + context.MosaMethod.Name, out intrinsicType);
+				if (intrinsicType == null)
+					MethodCompiler.Compiler.IntrinsicTypes.TryGetValue(context.MosaMethod.DeclaringType.FullName + "::" + context.MosaMethod.Name, out intrinsicType);
+			}
 
 			if (intrinsicType == null)
 				return false;

@@ -46,11 +46,11 @@ namespace Mosa.Compiler.Framework.Stages
 			var symbolName = MethodCompiler.Linker.CreateSymbol(assignment.MosaField.FullName + @"<<$cctor", SectionKind.BSS, Architecture.NativeAlignment, TypeLayout.GetTypeSize(allocatedType));
 
 			// FIXME: Do we have to initialize this?
-			string methodTableSymbol = GetMethodTableForType(allocatedType);
+			string typeDefinitionSymbol = GetTypeDefinition(allocatedType);
 
-			if (methodTableSymbol != null)
+			if (typeDefinitionSymbol != null)
 			{
-				MethodCompiler.Linker.Link(LinkType.AbsoluteAddress, BuiltInPatch.I4, symbolName, 0, 0, methodTableSymbol, SectionKind.ROData, 0);
+				MethodCompiler.Linker.Link(LinkType.AbsoluteAddress, BuiltInPatch.I4, symbolName, 0, 0, typeDefinitionSymbol, SectionKind.ROData, 0);
 			}
 
 			// Issue a load request before the newobj and before the assignment.
@@ -66,11 +66,11 @@ namespace Mosa.Compiler.Framework.Stages
 			allocation.ReplaceInstructionOnly(CILInstruction.Get(OpCode.Call));
 		}
 
-		private string GetMethodTableForType(MosaType allocatedType)
+		private string GetTypeDefinition(MosaType allocatedType)
 		{
 			if (!allocatedType.IsValueType)
 			{
-				return allocatedType.FullName + Metadata.MethodTable;
+				return allocatedType.FullName + Metadata.TypeDefinition;
 			}
 
 			return null;

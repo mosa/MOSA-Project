@@ -36,7 +36,6 @@ namespace Mosa.Tool.Explorer
 				new PlugStage(),
 				new MethodCompilerSchedulerStage(),
 				new TypeInitializerSchedulerStage(),
-				new TypeLayoutStage(),
 				new MetadataStage(),
 			});
 

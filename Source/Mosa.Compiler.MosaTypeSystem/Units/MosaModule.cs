@@ -16,6 +16,8 @@ namespace Mosa.Compiler.MosaTypeSystem
 	{
 		public string Assembly { get; private set; }
 
+		public bool IsReflectionOnly { get; private set; }
+
 		public MosaMethod EntryPoint { get; private set; }
 
 		public IDictionary<uint, MosaType> Types { get; private set; }
@@ -36,6 +38,8 @@ namespace Mosa.Compiler.MosaTypeSystem
 			}
 
 			public string Assembly { set { module.Assembly = value; } }
+
+			public bool IsReflectionOnly { set { module.IsReflectionOnly = value; } }
 
 			public MosaMethod EntryPoint { set { module.EntryPoint = value; } }
 
