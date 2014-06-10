@@ -393,27 +393,60 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				Operand thisPtr = context.Operand1;
 
-				Operand methodTable = MethodCompiler.CreateVirtualRegister(TypeSystem.BuiltIn.Pointer);
+				Operand typeDefinition = MethodCompiler.CreateVirtualRegister(TypeSystem.BuiltIn.Pointer);
+				Operand methodDefinition = MethodCompiler.CreateVirtualRegister(TypeSystem.BuiltIn.Pointer);
 				Operand methodPtr = MethodCompiler.CreateVirtualRegister(TypeSystem.BuiltIn.Pointer);
 
 				if (!method.DeclaringType.IsInterface)
 				{
-					int methodTableOffset = CalculateMethodTableOffset(method) + (NativePointerSize * 4);
-					context.SetInstruction(IRInstruction.Load, methodTable, thisPtr, Operand.CreateConstantSignedInt(TypeSystem, 0));
-					context.AppendInstruction(IRInstruction.Load, methodPtr, methodTable, Operand.CreateConstantSignedInt(TypeSystem, (int)methodTableOffset));
+					// methodDefinitionOffset is as follows (slot * NativePointerSize) + (NativePointerSize * 10)
+					// We use 10 as that is the number of NativePointerSized fields until the start of methodDefinition pointers
+					int methodDefinitionOffset = CalculateMethodTableOffset(method) + (NativePointerSize * 10);
+
+					// Same as above except for methodPointer
+					int methodPointerOffset = (NativePointerSize * 4);
+
+					// Get the TypeDef pointer
+					context.SetInstruction(IRInstruction.Load, typeDefinition, thisPtr, Operand.CreateConstantSignedInt(TypeSystem, 0));
+
+					// Get the MethodDef pointer
+					context.AppendInstruction(IRInstruction.Load, methodDefinition, typeDefinition, Operand.CreateConstantSignedInt(TypeSystem, (int)methodDefinitionOffset));
+
+					// Get the address of the method
+					context.AppendInstruction(IRInstruction.Load, methodPtr, methodDefinition, Operand.CreateConstantSignedInt(TypeSystem, (int)methodPointerOffset));
 				}
 				else
 				{
-					int methodTableOffset = CalculateMethodTableOffset(method);
-					int slotOffset = CalculateInterfaceSlotOffset(method);
+					// Offset for InterfaceSlotTable in TypeDef
+					int interfaceSlotTableOffset = (NativePointerSize * 7);
 
+					// Offset for InterfaceMethodTable in InterfaceSlotTable
+					int interfaceMethodTableOffset = (NativePointerSize * 1) + CalculateInterfaceSlotOffset(method);
+
+					// Offset for MethodDef in InterfaceMethodTable
+					int methodDefinitionOffset = (NativePointerSize * 1) + CalculateMethodTableOffset(method);
+
+					// Offset for Method pointer in MethodDef
+					int methodPointerOffset = (NativePointerSize * 4);
+
+					// Operands to hold pointers
 					Operand interfaceSlotPtr = MethodCompiler.CreateVirtualRegister(TypeSystem.BuiltIn.Pointer);
 					Operand interfaceMethodTablePtr = MethodCompiler.CreateVirtualRegister(TypeSystem.BuiltIn.Pointer);
 
-					context.SetInstruction(IRInstruction.Load, methodTable, thisPtr, Operand.CreateConstantSignedInt(TypeSystem, 0));
-					context.AppendInstruction(IRInstruction.Load, interfaceSlotPtr, methodTable, Operand.CreateConstantSignedInt(TypeSystem, 0));
-					context.AppendInstruction(IRInstruction.Load, interfaceMethodTablePtr, interfaceSlotPtr, Operand.CreateConstantSignedInt(TypeSystem, (int)slotOffset));
-					context.AppendInstruction(IRInstruction.Load, methodPtr, interfaceMethodTablePtr, Operand.CreateConstantSignedInt(TypeSystem, (int)methodTableOffset));
+					// Get the TypeDef pointer
+					context.SetInstruction(IRInstruction.Load, typeDefinition, thisPtr, Operand.CreateConstantSignedInt(TypeSystem, 0));
+
+					// Get the Interface Slot Table pointer
+					context.AppendInstruction(IRInstruction.Load, interfaceSlotPtr, typeDefinition, Operand.CreateConstantSignedInt(TypeSystem, (int)interfaceSlotTableOffset));
+
+					// Get the Interface Method Table pointer
+					context.AppendInstruction(IRInstruction.Load, interfaceMethodTablePtr, interfaceSlotPtr, Operand.CreateConstantSignedInt(TypeSystem, (int)interfaceMethodTableOffset));
+
+					// Get the MethodDef pointer
+					context.AppendInstruction(IRInstruction.Load, methodDefinition, interfaceMethodTablePtr, Operand.CreateConstantSignedInt(TypeSystem, (int)methodDefinitionOffset));
+
+					// Get the address of the method
+					context.AppendInstruction(IRInstruction.Load, methodPtr, methodDefinition, Operand.CreateConstantSignedInt(TypeSystem, (int)methodPointerOffset));
 				}
 
 				context.AppendInstruction(IRInstruction.Nop);

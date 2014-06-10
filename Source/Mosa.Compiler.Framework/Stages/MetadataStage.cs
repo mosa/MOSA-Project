@@ -56,6 +56,10 @@ namespace Mosa.Compiler.Framework.Stages
 			// Create the definitions along the way
 			foreach (var module in TypeSystem.Modules)
 			{
+				// Exclude Linker generated stuff for now since it's causing issues
+				if (module.IsLinkerGenerated)
+					continue;
+
 				var assemblyTableSymbol = CreateAssemblyDefinitionTable(module);
 
 				// Link
@@ -84,6 +88,11 @@ namespace Mosa.Compiler.Framework.Stages
 				Linker.Link(LinkType.AbsoluteAddress, BuiltInPatch.I4, assemblyTableSymbol, (int)writer1.Position, 0, customAttributeListSymbol, 0);
 			}
 			writer1.WriteZeroBytes(TypeLayout.NativePointerSize);
+
+			// 3. Flags: IsReflectionOnly (32bit length)
+			uint flags = 0x0;
+			if (module.IsReflectionOnly) flags |= 0x1;
+			writer1.Write(flags);
 
 			// 4. Number of Types
 			uint count = 0;
@@ -141,19 +150,24 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 			writer1.WriteZeroBytes(TypeLayout.NativePointerSize);
 
-			// 3. Size
+			// 3. Flags: IsInterface
+			writer1.Write((uint)(type.IsInterface ? 1 : 0));
+
+			// 4. Size
 			writer1.Write((uint)TypeLayout.GetTypeSize(type));
 
-			// 4. Pointer to Assembly Definition
+			// 5. Pointer to Assembly Definition
 			Linker.Link(LinkType.AbsoluteAddress, BuiltInPatch.I4, typeTableSymbol, (int)writer1.Position, 0, assemblyTableSymbol, 0);
 			writer1.WriteZeroBytes(TypeLayout.NativePointerSize);
 
-			// 4. Pointer to Parent Type
+			// 6. Pointer to Parent Type
 			if (type.BaseType != null)
+			{
 				Linker.Link(LinkType.AbsoluteAddress, BuiltInPatch.I4, typeTableSymbol, (int)writer1.Position, 0, type.BaseType.FullName + Metadata.TypeDefinition, SectionKind.ROData, 0);
+			}
 			writer1.WriteZeroBytes(TypeLayout.NativePointerSize);
 
-			// 6. Constructor that accepts no parameters, if any, for this type
+			// 7. Constructor that accepts no parameters, if any, for this type
 			foreach (var method in type.Methods)
 			{
 				if (!method.Name.Equals(".ctor") || !(method.Signature.Parameters.Count == 0) || method.HasOpenGenericParams)
@@ -163,9 +177,6 @@ namespace Mosa.Compiler.Framework.Stages
 				break;
 			}
 			writer1.WriteZeroBytes(TypeLayout.NativePointerSize);
-
-			// 7. Flag: IsInterface
-			writer1.WriteByte((byte)(type.IsInterface ? 1 : 0));
 
 			// If the type is not an interface continue, otherwise just pad until the end
 			if (!type.IsInterface)
@@ -189,20 +200,15 @@ namespace Mosa.Compiler.Framework.Stages
 					writer1.WriteZeroBytes(TypeLayout.NativePointerSize * 2);
 				}
 
+				// For the next part we'll need to get the list of methods from the MosaTypeLayout
+				var methodList = TypeLayout.GetMethodTable(type) ?? new List<MosaMethod>();
+
 				// 10. Number of Methods
-				uint count = 0;
-				foreach (MosaMethod method in type.Methods)
-				{
-					if (!method.IsAbstract && !method.IsInternal && method.ExternMethod == null && !method.HasOpenGenericParams) count++;
-				}
-				writer1.Write(count);
+				writer1.Write(methodList.Count);
 
 				// 11. Pointer to Method Definitions
-				foreach (MosaMethod method in type.Methods)
+				foreach (MosaMethod method in methodList)
 				{
-					if (method.IsAbstract || method.IsInternal || !(method.ExternMethod == null) || method.HasOpenGenericParams)
-						continue;
-
 					// Create definition and get the symbol
 					var methodDefinitionSymbol = CreateMethodDefinitionTable(method);
 
@@ -293,16 +299,19 @@ namespace Mosa.Compiler.Framework.Stages
 			var interfaceMethodTableSymbol = Linker.CreateSymbol(type.FullName + Metadata.InterfaceMethodTable + interfaceType.FullName, SectionKind.ROData, TypeLayout.NativePointerAlignment, 0);
 			var writer1 = new EndianAwareBinaryWriter(interfaceMethodTableSymbol.Stream, Architecture.Endianness);
 
-			var methodTable = TypeLayout.GetInterfaceTable(type, interfaceType) ?? new MosaMethod[0];
+			var interfaceMethodTable = TypeLayout.GetInterfaceTable(type, interfaceType) ?? new MosaMethod[0];
 
 			// 1. Number of Interface Methods
-			writer1.Write((uint)methodTable.Length);
+			writer1.Write((uint)interfaceMethodTable.Length);
 
 			// 2. Pointers to Method Definitions
-			foreach (MosaMethod method in methodTable)
+			foreach (MosaMethod method in interfaceMethodTable)
 			{
+				// Create definition and get the symbol
+				var methodDefinitionSymbol = CreateMethodDefinitionTable(method);
+
 				// Link
-				Linker.Link(LinkType.AbsoluteAddress, BuiltInPatch.I4, interfaceMethodTableSymbol, (int)writer1.Position, 0, method.FullName + Metadata.MethodDefinition, SectionKind.ROData, 0);
+				Linker.Link(LinkType.AbsoluteAddress, BuiltInPatch.I4, interfaceMethodTableSymbol, (int)writer1.Position, 0, methodDefinitionSymbol, 0);
 				writer1.WriteZeroBytes(TypeLayout.NativePointerSize);
 			}
 
@@ -335,18 +344,39 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 			writer1.WriteZeroBytes(TypeLayout.NativePointerSize);
 
-			// 3. Pointer to Method
-			Linker.Link(LinkType.AbsoluteAddress, BuiltInPatch.I4, methodTableSymbol, (int)writer1.Position, 0, method.FullName, SectionKind.Text, 0);
+			// 3. Flags: IsStatic, IsAbstract, HasGenericParams (32bit length)
+			uint flags = 0x0;
+			if (method.IsStatic) flags |= 0x1;
+			if (method.IsAbstract) flags |= 0x2;
+			if (method.HasOpenGenericParams) flags |= 0x4;
+			writer1.Write(flags);
+
+			// 4. Local Stack Size (High 16bits) and Parameter Stack Size (Low 16bits)
+			uint paramStackSize = method.MaxStack << 16;
+			foreach (MosaParameter param in method.Signature.Parameters)
+			{
+				paramStackSize += (uint)TypeLayout.GetTypeSize(param.Type);
+			}
+			writer1.Write(paramStackSize);
+
+
+			// 5. Pointer to Method
+			if (!method.IsAbstract && !method.HasOpenGenericParams)
+				Linker.Link(LinkType.AbsoluteAddress, BuiltInPatch.I4, methodTableSymbol, (int)writer1.Position, 0, method.FullName, SectionKind.Text, 0);
 			writer1.WriteZeroBytes(TypeLayout.NativePointerSize);
 
-			// 4. Flag: IsStatic
-			writer1.WriteByte((byte)(method.IsStatic ? 1 : 0));
-
-			// 5. Pointer to return Type
-			Linker.Link(LinkType.AbsoluteAddress, BuiltInPatch.I4, methodTableSymbol, (int)writer1.Position, 0, method.Signature.ReturnType.FullName + Metadata.TypeDefinition, SectionKind.ROData, 0);
+			// 6. Pointer to return Type
+			if (!method.IsAbstract && !method.HasOpenGenericParams)
+				Linker.Link(LinkType.AbsoluteAddress, BuiltInPatch.I4, methodTableSymbol, (int)writer1.Position, 0, method.Signature.ReturnType.FullName + Metadata.TypeDefinition, SectionKind.ROData, 0);
 			writer1.WriteZeroBytes(TypeLayout.NativePointerSize);
 
-			// 6. Pointer to Parameter Definitions
+			// 7. Pointer to Exception Hanlder Table
+			// TODO: This has yet to be designed.
+
+			// 8. Pointer to GC Tracking information
+			// TODO: This has yet to be designed.
+
+			// 9. Pointer to Parameter Definitions
 			// TODO: This has yet to be designed.
 
 			// Return methodTableSymbol for linker usage
@@ -543,10 +573,10 @@ namespace Mosa.Compiler.Framework.Stages
 					writer1.Write((bool)value);
 					break;
 				case MosaTypeCode.U1:
-					writer1.Write((sbyte)value);
+					writer1.Write((byte)value);
 					break;
 				case MosaTypeCode.I1:
-					writer1.Write((byte)value);
+					writer1.Write((sbyte)value);
 					break;
 
 				// 2 byte
