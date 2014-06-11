@@ -433,9 +433,6 @@ namespace Mosa.Compiler.Framework.Stages
 					Operand interfaceSlotPtr = MethodCompiler.CreateVirtualRegister(TypeSystem.BuiltIn.Pointer);
 					Operand interfaceMethodTablePtr = MethodCompiler.CreateVirtualRegister(TypeSystem.BuiltIn.Pointer);
 
-					// Before we start, we must check to see if it is the parent class that implements the method and not the current class
-					//var methods = TypeLayout.GetInterfaceTable()
-
 					// Get the TypeDef pointer
 					context.SetInstruction(IRInstruction.Load, typeDefinition, thisPtr, Operand.CreateConstantSignedInt(TypeSystem, 0));
 

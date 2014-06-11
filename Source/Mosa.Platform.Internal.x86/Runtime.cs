@@ -105,34 +105,25 @@ namespace Mosa.Platform.Internal.x86
 
 		public static uint IsInstanceOfInterfaceType(int interfaceSlot, uint obj)
 		{
-			if (obj == 0)
-				return 0;
-
 			uint objTypeDefinition = ((uint*)obj)[0];
 
-			// Check parent definitions as well to see if they implement the interface
-			while (objTypeDefinition != 0)
-			{
-				uint bitmap = ((uint*)(objTypeDefinition))[8];
+			if (objTypeDefinition == 0)
+				return 0;
 
-				if (bitmap == 0)
-				{
-					objTypeDefinition = ((uint*)objTypeDefinition)[5];
-					continue;
-				}
+			uint bitmap = ((uint*)(objTypeDefinition))[8];
 
-				int index = interfaceSlot / 32;
-				int bit = interfaceSlot % 32;
-				uint value = ((uint*)bitmap)[index];
-				uint result = value & (uint)(1 << bit);
+			if (bitmap == 0)
+				return 0;
 
-				if (result != 0)
-					return obj;
+			int index = interfaceSlot / 32;
+			int bit = interfaceSlot % 32;
+			uint value = ((uint*)bitmap)[index];
+			uint result = value & (uint)(1 << bit);
 
-				objTypeDefinition = ((uint*)objTypeDefinition)[5];
-			}
+			if (result == 0)
+				return 0;
 
-			return 0;
+			return obj;
 		}
 
 		public static uint Castclass(uint typeDefinition, uint obj)
