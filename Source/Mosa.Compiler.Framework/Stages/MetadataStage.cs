@@ -515,6 +515,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private int ComputeArgumentSize(MosaType type, object value)
 		{
+			if (type.IsEnum)
+				type = type.GetEnumUnderlyingType();
 			switch (type.TypeCode)
 			{
 				// 1 byte
@@ -562,6 +564,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private void WriteArgument(EndianAwareBinaryWriter writer, LinkerSymbol symbol, MosaType type, object value)
 		{
+			if (type.IsEnum)
+				type = type.GetEnumUnderlyingType();
 			switch (type.TypeCode)
 			{
 				// 1 byte
