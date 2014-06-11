@@ -52,7 +52,7 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 					}
 					ResolveType(type);
 				}
-				else if (unit is MosaField || unit is MosaMethod)
+				else if (unit is MosaField || unit is MosaMethod || unit is MosaModule)
 					resolveQueue.Enqueue(unit);
 			}
 
@@ -65,6 +65,12 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 					ResolveField((MosaField)unit);
 				if (unit is MosaMethod)
 					ResolveMethod((MosaMethod)unit);
+				if (unit is MosaModule)
+				{
+					MosaModule module = (MosaModule)unit;
+					using (var mosaModule = metadata.Controller.MutateModule(module))
+						ResolveCustomAttributes(mosaModule, module.GetUnderlyingObject<UnitDesc<ModuleDef, object>>().Definition);
+				}
 			}
 
 			foreach (var module in metadata.Cache.Modules.Values)
@@ -98,15 +104,22 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 				if (mosaCtor == null)
 					throw new AssemblyLoadException();
 
-				object[] values = new object[attr.ConstructorArguments.Count];
+				Tuple<object, MosaTypeCode>[] values = new Tuple<object, MosaTypeCode>[attr.ConstructorArguments.Count];
 				for (int i = 0; i < values.Length; i++)
 				{
 					if (attr.ConstructorArguments[i].Value is UTF8String)
-						values[i] = ((UTF8String)attr.ConstructorArguments[i].Value).String;
+						values[i] = new Tuple<object,MosaTypeCode>(((UTF8String)attr.ConstructorArguments[i].Value).String, MosaTypeCode.String);
 					else
-						values[i] = attr.ConstructorArguments[i].Value;
+						values[i] = new Tuple<object, MosaTypeCode>(attr.ConstructorArguments[i].Value, (MosaTypeCode)attr.ConstructorArguments[i].Type.ElementType);
 				}
-				unit.CustomAttributes.Add(new MosaCustomAttribute(mosaCtor, values));
+
+				Tuple<string, bool, object, MosaTypeCode>[] namedArgs = new Tuple<string, bool, object, MosaTypeCode>[attr.NamedArguments.Count];
+				for (int i = 0; i < namedArgs.Length; i++)
+				{
+					namedArgs[i] = new Tuple<string, bool, object, MosaTypeCode>(attr.NamedArguments[i].Name.String, attr.NamedArguments[i].IsField, attr.NamedArguments[i].Value, (MosaTypeCode)attr.NamedArguments[i].ArgumentType.ElementType);
+				}
+
+				unit.CustomAttributes.Add(new MosaCustomAttribute(mosaCtor, values, namedArgs));
 			}
 		}
 

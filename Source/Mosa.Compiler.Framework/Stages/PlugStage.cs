@@ -37,7 +37,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 				if (typeAttribute != null)
 				{
-					plugTypeTarget = (string)typeAttribute.Arguments[0];
+					plugTypeTarget = (string)typeAttribute.Arguments[0].Item1;
 				}
 
 				foreach (var method in type.Methods)
@@ -51,7 +51,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 					if (methodAttribute != null)
 					{
-						plugMethodTarget = (string)methodAttribute.Arguments[0];
+						plugMethodTarget = (string)methodAttribute.Arguments[0].Item1;
 					}
 
 					if (plugTypeTarget != null || plugMethodTarget != null)

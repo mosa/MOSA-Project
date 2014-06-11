@@ -105,7 +105,6 @@ namespace Mosa.Tool.Compiler
 				new MethodCompilerSchedulerStage(),
 				new TypeInitializerSchedulerStage(),
 				bootStage,
-				new TypeLayoutStage(),
 				new MetadataStage(),
 				new LinkerFinalizationStage(),
 				compilerOptions.MapFile != null ? new MapFileGenerationStage() : null

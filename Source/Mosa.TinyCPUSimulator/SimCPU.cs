@@ -7,6 +7,7 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 
@@ -350,6 +351,9 @@ namespace Mosa.TinyCPUSimulator
 				Tick++;
 				LastException = null;
 				LastProgramCounter = CurrentProgramCounter;
+
+				if (CurrentInstruction == null)
+					throw new NotSupportedException();
 
 				LastInstruction = CurrentInstruction;
 

@@ -285,9 +285,6 @@ namespace Mosa.Compiler.Framework
 			if (type.IsModule)
 				return;
 
-			if (type.HasOpenGenericParams)
-				return;
-
 			if (type.BaseType == null && !type.IsInterface && type.FullName != "System.Object")   // ghost types like generic params, function ptr, etc.
 				return;
 
@@ -490,6 +487,15 @@ namespace Mosa.Compiler.Framework
 
 			foreach (var method in type.Methods)
 			{
+				/*if (method.HasOpenGenericParams)
+					continue;
+
+				if (method.IsAbstract)
+				{
+					if (!method.IsNewSlot)
+						continue;
+				}*/
+
 				if (method.IsVirtual)
 				{
 					if (method.IsNewSlot)
@@ -508,6 +514,12 @@ namespace Mosa.Compiler.Framework
 				else
 				{
 					if (method.IsStatic && method.IsRTSpecialName)
+					{
+						int slot = methodTable.Count;
+						methodTable.Add(method);
+						methodTableOffsets.Add(method, slot);
+					}
+					else if (!method.IsInternal && method.ExternMethod == null)
 					{
 						int slot = methodTable.Count;
 						methodTable.Add(method);
