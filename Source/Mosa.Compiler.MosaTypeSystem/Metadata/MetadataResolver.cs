@@ -84,9 +84,30 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 			}
 		}
 
+		MosaCustomAttribute.Argument ToMosaCAArgument(CAArgument arg)
+		{
+			var value = arg.Value;
+			if (value is UTF8String)
+			{
+				value = ((UTF8String)value).String;
+			}
+			else if (value is TypeSig)
+			{
+				value = metadata.Loader.GetType((TypeSig)value);
+			}
+			else if (value is CAArgument[])
+			{
+				var valueArray = (CAArgument[])value;
+				var resultArray = new MosaCustomAttribute.Argument[valueArray.Length];
+				for (int i = 0; i < resultArray.Length; i++)
+					resultArray[i] = ToMosaCAArgument(valueArray[i]);
+			}
+
+			return new MosaCustomAttribute.Argument(metadata.Loader.GetType(arg.Type), value);
+		}
+
 		void ResolveCustomAttributes(MosaUnit.MutatorBase unit, IHasCustomAttribute obj)
 		{
-			// TODO: More detail parsing
 			foreach (var attr in obj.CustomAttributes)
 			{
 				MosaType type = metadata.Loader.GetType(attr.AttributeType.ToTypeSig());
@@ -104,19 +125,15 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 				if (mosaCtor == null)
 					throw new AssemblyLoadException();
 
-				Tuple<object, MosaTypeCode>[] values = new Tuple<object, MosaTypeCode>[attr.ConstructorArguments.Count];
+				var values = new MosaCustomAttribute.Argument[attr.ConstructorArguments.Count];
 				for (int i = 0; i < values.Length; i++)
-				{
-					if (attr.ConstructorArguments[i].Value is UTF8String)
-						values[i] = new Tuple<object,MosaTypeCode>(((UTF8String)attr.ConstructorArguments[i].Value).String, MosaTypeCode.String);
-					else
-						values[i] = new Tuple<object, MosaTypeCode>(attr.ConstructorArguments[i].Value, (MosaTypeCode)attr.ConstructorArguments[i].Type.ElementType);
-				}
+					values[i] = ToMosaCAArgument(attr.ConstructorArguments[i]);
 
-				Tuple<string, bool, object, MosaTypeCode>[] namedArgs = new Tuple<string, bool, object, MosaTypeCode>[attr.NamedArguments.Count];
+				var namedArgs = new MosaCustomAttribute.NamedArgument[attr.NamedArguments.Count];
 				for (int i = 0; i < namedArgs.Length; i++)
 				{
-					namedArgs[i] = new Tuple<string, bool, object, MosaTypeCode>(attr.NamedArguments[i].Name.String, attr.NamedArguments[i].IsField, attr.NamedArguments[i].Value, (MosaTypeCode)attr.NamedArguments[i].ArgumentType.ElementType);
+					var namedArg = attr.NamedArguments[i];
+					namedArgs[i] = new MosaCustomAttribute.NamedArgument(namedArg.Name, namedArg.IsField, ToMosaCAArgument(namedArg.Argument));
 				}
 
 				unit.CustomAttributes.Add(new MosaCustomAttribute(mosaCtor, values, namedArgs));

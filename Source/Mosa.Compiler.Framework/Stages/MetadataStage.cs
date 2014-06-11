@@ -492,17 +492,17 @@ namespace Mosa.Compiler.Framework.Stages
 			for (int i = 0; i < ca.Arguments.Length; i++)
 			{
 				// Build definition
-				var customAttributeArgumentSymbol = CreateCustomAttributeArgument(name, i, null, ca.Arguments[i].Item1, ca.Arguments[i].Item2);
+				var customAttributeArgumentSymbol = CreateCustomAttributeArgument(name, i, null, ca.Arguments[i]);
 
 				// Link
 				Linker.Link(LinkType.AbsoluteAddress, BuiltInPatch.I4, customAttributeTableSymbol, (int)writer1.Position, 0, customAttributeArgumentSymbol, 0);
 				writer1.WriteZeroBytes(TypeLayout.NativePointerSize);
 			}
 
-			foreach (Mosa.Compiler.Common.Tuple<string, bool, object, MosaTypeCode> namedArg in ca.NamedArguments)
+			foreach (var namedArg in ca.NamedArguments)
 			{
 				// Build definition
-				var customAttributeArgumentSymbol = CreateCustomAttributeArgument(name, 0, namedArg.Item1, namedArg.Item3, namedArg.Item4);
+				var customAttributeArgumentSymbol = CreateCustomAttributeArgument(name, 0, namedArg.Name, namedArg.Argument);
 
 				// Link
 				Linker.Link(LinkType.AbsoluteAddress, BuiltInPatch.I4, customAttributeTableSymbol, (int)writer1.Position, 0, customAttributeArgumentSymbol, 0);
@@ -513,7 +513,134 @@ namespace Mosa.Compiler.Framework.Stages
 			return customAttributeTableSymbol;
 		}
 
-		private LinkerSymbol CreateCustomAttributeArgument(string symbolName, int count, string name, object value, MosaTypeCode typeCode)
+		private int ComputeArgumentSize(MosaType type, object value)
+		{
+			switch (type.TypeCode)
+			{
+				// 1 byte
+				case MosaTypeCode.Boolean:
+				case MosaTypeCode.U1:
+				case MosaTypeCode.I1:
+					return 1;
+
+				// 2 bytes
+				case MosaTypeCode.Char:
+				case MosaTypeCode.U2:
+				case MosaTypeCode.I2:
+					return 2;
+
+				// 4 bytes
+				case MosaTypeCode.U4:
+				case MosaTypeCode.I4:
+				case MosaTypeCode.R4:
+					return 4;
+
+				// 8 bytes
+				case MosaTypeCode.U8:
+				case MosaTypeCode.I8:
+				case MosaTypeCode.R8:
+					return 8;
+
+				default:
+					if (type.IsArray)
+					{
+						Debug.Assert(value is MosaCustomAttribute.Argument[]);
+						var arr = (MosaCustomAttribute.Argument[])value;
+						int size = 0;
+						foreach (var elem in arr)
+							size += ComputeArgumentSize(elem.Type, elem.Value);
+						return size;
+					}
+					else if (type.IsReferenceType) // System.String or System.Type
+					{
+						return TypeLayout.NativePointerSize;
+					}
+					else
+						throw new NotSupportedException();
+			}
+		}
+
+		private void WriteArgument(EndianAwareBinaryWriter writer, LinkerSymbol symbol, MosaType type, object value)
+		{
+			switch (type.TypeCode)
+			{
+				// 1 byte
+				case MosaTypeCode.Boolean:
+					writer.Write((bool)value);
+					break;
+				case MosaTypeCode.U1:
+					writer.Write((byte)value);
+					break;
+				case MosaTypeCode.I1:
+					writer.Write((sbyte)value);
+					break;
+
+				// 2 bytes
+				case MosaTypeCode.Char:
+					writer.Write((char)value);
+					break;
+				case MosaTypeCode.U2:
+					writer.Write((ushort)value);
+					break;
+				case MosaTypeCode.I2:
+					writer.Write((short)value);
+					break;
+
+				// 4 bytes
+				case MosaTypeCode.U4:
+					writer.Write((uint)value);
+					break;
+				case MosaTypeCode.I4:
+					writer.Write((int)value);
+					break;
+				case MosaTypeCode.R4:
+					writer.Write((float)value);
+					break;
+
+				// 8 bytes
+				case MosaTypeCode.U8:
+					writer.Write((ulong)value);
+					break;
+				case MosaTypeCode.I8:
+					writer.Write((long)value);
+					break;
+				case MosaTypeCode.R8:
+					writer.Write((double)value);
+					break;
+
+				default:
+					if (type.IsArray)
+					{
+						Debug.Assert(value is MosaCustomAttribute.Argument[]);
+						var arr = (MosaCustomAttribute.Argument[])value;
+						writer.Write(arr.Length);
+						foreach (var elem in arr)
+							WriteArgument(writer, symbol, elem.Type, elem.Value);
+					}
+					else if (type.IsReferenceType) // System.String or System.Type
+					{
+						if (type.TypeCode == MosaTypeCode.String)
+						{
+							var str = (string)value;
+							writer.Write(str.Length);
+							writer.Write(System.Text.Encoding.Unicode.GetBytes(str));
+						}
+						else if (type.FullName == "System.Type")
+						{
+							var valueType = (MosaType)value;
+							Linker.Link(LinkType.AbsoluteAddress, BuiltInPatch.I4, symbol, (int)writer.Position, 0, valueType.FullName + Metadata.TypeDefinition, SectionKind.ROData, 0);
+							writer.WriteZeroBytes(TypeLayout.NativePointerSize);
+						}
+						else
+							throw new NotSupportedException();
+					}
+					else
+						throw new NotSupportedException();
+					break;
+			}
+		}
+
+		private LinkerSymbol CreateCustomAttributeArgument(string symbolName, int count, string name, MosaCustomAttribute.Argument arg)
 		{
 			string nameForSymbol = (name == null) ? count.ToString() : name;
 			nameForSymbol = symbolName + ":" + nameForSymbol;
@@ -528,93 +655,15 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 			writer1.WriteZeroBytes(TypeLayout.NativePointerSize);
 
-			// 2. Argument Size (High 16 bits is MosaTypeCode, Low 16 bits is length in bytes)
-			uint size = (uint)typeCode << 16;
-			switch (typeCode)
-			{
-				// 1 byte
-				case MosaTypeCode.Boolean:
-				case MosaTypeCode.U1:
-				case MosaTypeCode.I1:
-					size |= 1;
-					break;
+			// 2. Argument Type Pointer
+			Linker.Link(LinkType.AbsoluteAddress, BuiltInPatch.I4, symbol, (int)writer1.Position, 0, arg.Type.FullName + Metadata.TypeDefinition, SectionKind.ROData, 0);
+			writer1.WriteZeroBytes(TypeLayout.NativePointerSize);
 
-				// 2 byte
-				case MosaTypeCode.Char:
-				case MosaTypeCode.U2:
-				case MosaTypeCode.I2:
-					size |= 2;
-					break;
+			// 3. Argument Size
+			writer1.Write(ComputeArgumentSize(arg.Type, arg.Value));
 
-				// 4 byte
-				case MosaTypeCode.U4:
-				case MosaTypeCode.I4:
-				case MosaTypeCode.R4:
-					size |= 4;
-					break;
-
-				// 8 byte
-				case MosaTypeCode.U8:
-				case MosaTypeCode.I8:
-				case MosaTypeCode.R8:
-					size |= 8;
-					break;
-
-				default:
-					break;
-			}
-			writer1.Write(size);
-
-			// 3. Argument Value
-			switch (typeCode)
-			{
-				// 1 byte
-				case MosaTypeCode.Boolean:
-					writer1.Write((bool)value);
-					break;
-				case MosaTypeCode.U1:
-					writer1.Write((byte)value);
-					break;
-				case MosaTypeCode.I1:
-					writer1.Write((sbyte)value);
-					break;
-
-				// 2 byte
-				case MosaTypeCode.Char:
-					writer1.Write((char)value);
-					break;
-				case MosaTypeCode.U2:
-					writer1.Write((ushort)value);
-					break;
-				case MosaTypeCode.I2:
-					writer1.Write((short)value);
-					break;
-
-				// 4 byte
-				case MosaTypeCode.U4:
-					writer1.Write((uint)value);
-					break;
-				case MosaTypeCode.I4:
-					writer1.Write((int)value);
-					break;
-				case MosaTypeCode.R4:
-					writer1.Write((float)value);
-					break;
-
-				// 8 byte
-				case MosaTypeCode.U8:
-					writer1.Write((ulong)value);
-					break;
-				case MosaTypeCode.I8:
-					writer1.Write((long)value);
-					break;
-				case MosaTypeCode.R8:
-					writer1.Write((double)value);
-					break;
-
-				default:
-					break;
-			}
+			// 4. Argument Value
+			WriteArgument(writer1, symbol, arg.Type, arg.Value);
 
 			// Return symbol for linker usage
 			return symbol;
