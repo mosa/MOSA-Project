@@ -71,7 +71,7 @@ shape = "record"
 ];
 
 "CustomAttributeArgument" [
-label = "<f0>Custom Attribute Argument|<f1>Pointer to Argument Name|<f2>Argument Type \| Argument Size|<f3>Argument"
+label = "<f0>Custom Attribute Argument|<f1>Pointer to Argument Name|<f2>Argument Type | Argument Size|<f3>Argument"
 shape = "record"
 ];
 
@@ -92,6 +92,10 @@ id = 0
 ];
 
 "CustomAttributeArgument":f1 -> "NameString":f0 [
+id = 0
+];
+
+"CustomAttributeArgument":f2 -> "TypeDefinition":f0 [
 id = 0
 ];
 
