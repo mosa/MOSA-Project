@@ -16,6 +16,7 @@ namespace Mosa.TestWorld.x86.Tests
 			testMethods.Add(InterfaceTest1);
 			testMethods.Add(InterfaceTest2);
 			testMethods.Add(InterfaceTest3);
+			testMethods.Add(InterfaceTest4);
 		}
 
 		public static bool InterfaceTest1()
@@ -40,6 +41,14 @@ namespace Mosa.TestWorld.x86.Tests
 			bool result = (b.A() == 2);
 			return result;
 		}
+
+		public static bool InterfaceTest4()
+		{
+			TestClassB tc = new TestClassB();
+			IInterfaceA a = tc;
+			bool result = (a.A() == 1);
+			return result;
+		}
 	}
 
 	public interface IInterfaceA
@@ -61,6 +70,27 @@ namespace Mosa.TestWorld.x86.Tests
 			return 1;
 		}
 
+		int IInterfaceAB.A()
+		{
+			return 2;
+		}
+
+		public int B()
+		{
+			return 3;
+		}
+	}
+
+	public class TestClassA : IInterfaceA
+	{
+		public int A()
+		{
+			return 1;
+		}
+	}
+
+	public class TestClassB : TestClassA, IInterfaceAB
+	{
 		int IInterfaceAB.A()
 		{
 			return 2;

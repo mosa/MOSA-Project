@@ -425,10 +425,17 @@ namespace Mosa.Compiler.Framework
 			{
 				foreach (var overrideTarget in method.Overrides)
 				{
+					// Get clean name for overrideTarget
+					var cleanOverrideTargetName = GetCleanMethodName(overrideTarget.Name);
+
 					int slot = 0;
 					foreach (var interfaceMethod in interfaceType.Methods)
 					{
-						if (overrideTarget.Equals(interfaceMethod))
+						// Get clean name for interfaceMethod
+						var cleanInterfaceMethodName = GetCleanMethodName(interfaceMethod.Name);
+
+						// Check that the signatures match and the names
+						if (overrideTarget.Equals(interfaceMethod) && cleanOverrideTargetName.Equals(cleanInterfaceMethodName))
 						{
 							methodTable[slot] = method;
 						}

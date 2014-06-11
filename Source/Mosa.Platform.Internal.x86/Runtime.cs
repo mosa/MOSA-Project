@@ -73,7 +73,7 @@ namespace Mosa.Platform.Internal.x86
 		public static void InitializeArray(uint* array, uint* fieldHandle)
 		{
 			byte* arrayElements = (byte*)(array + 3);
-			// See symbol $desc for format of field handle
+			// See FieldDefinition for format of field handle
 			byte* fieldData = (byte*)*(fieldHandle + 1);
 			uint dataLength = *(fieldHandle + 2);
 			while (dataLength > 0)
@@ -105,25 +105,34 @@ namespace Mosa.Platform.Internal.x86
 
 		public static uint IsInstanceOfInterfaceType(int interfaceSlot, uint obj)
 		{
+			if (obj == 0)
+				return 0;
+
 			uint objTypeDefinition = ((uint*)obj)[0];
 
-			if (objTypeDefinition == 0)
-				return 0;
+			// Check parent definitions as well to see if they implement the interface
+			while (objTypeDefinition != 0)
+			{
+				uint bitmap = ((uint*)(objTypeDefinition))[8];
 
-			uint bitmap = ((uint*)(objTypeDefinition))[8];
+				if (bitmap == 0)
+				{
+					objTypeDefinition = ((uint*)objTypeDefinition)[5];
+					continue;
+				}
 
-			if (bitmap == 0)
-				return 0;
+				int index = interfaceSlot / 32;
+				int bit = interfaceSlot % 32;
+				uint value = ((uint*)bitmap)[index];
+				uint result = value & (uint)(1 << bit);
 
-			int index = interfaceSlot / 32;
-			int bit = interfaceSlot % 32;
-			uint value = ((uint*)bitmap)[index];
-			uint result = value & (uint)(1 << bit);
+				if (result != 0)
+					return obj;
 
-			if (result == 0)
-				return 0;
+				objTypeDefinition = ((uint*)objTypeDefinition)[5];
+			}
 
-			return obj;
+			return 0;
 		}
 
 		public static uint Castclass(uint typeDefinition, uint obj)
