@@ -52,7 +52,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			var slots = new List<string>(TypeLayout.Interfaces.Count);
 
-			foreach (MosaType interfaceType in TypeLayout.Interfaces)
+			foreach (var interfaceType in TypeLayout.Interfaces)
 			{
 				if (type.Interfaces.Contains(interfaceType))
 					slots.Add(type.FullName + Metadata.InterfaceMethodTable + interfaceType.FullName);

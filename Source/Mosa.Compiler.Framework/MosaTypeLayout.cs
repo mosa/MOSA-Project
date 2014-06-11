@@ -233,7 +233,7 @@ namespace Mosa.Compiler.Framework
 
 			ResolveType(type);
 
-			MosaMethod[] methodTable = new MosaMethod[interfaceType.Methods.Count];
+			var methodTable = new MosaMethod[interfaceType.Methods.Count];
 
 			// Implicit Interface Methods
 			for (int slot = 0; slot < interfaceType.Methods.Count; slot++)

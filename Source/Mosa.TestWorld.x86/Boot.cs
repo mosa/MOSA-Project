@@ -169,7 +169,14 @@ namespace Mosa.TestWorld.x86
 
 		public static void Test()
 		{
-			//Mosa.Test.Collection.UInt64Tests.DivU8U8(18446744073709551615, 4294967294);
+			long a = 0;
+
+			long b = 100;
+
+			if ((a = b) == 100)
+			{
+				Console.WriteLine("True");
+			}
 		}
 
 		//public static void Mandelbrot()

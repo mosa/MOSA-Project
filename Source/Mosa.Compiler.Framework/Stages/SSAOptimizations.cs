@@ -57,6 +57,8 @@ namespace Mosa.Compiler.Framework.Stages
 				return;
 
 			trace = CreateTrace();
+			
+			PromoteLocalVariable();
 
 			// initialize worklist
 			foreach (BasicBlock block in BasicBlocks)
@@ -71,13 +73,13 @@ namespace Mosa.Compiler.Framework.Stages
 
 					Do(ctx);
 
-					while (worklist.Count != 0)
-					{
-						int index = worklist.Pop();
-						Context ctx2 = new Context(InstructionSet, index);
-						Do(ctx2);
-					}
+					ProcessWorkList();
 				}
+			}
+
+			while (PromoteLocalVariable())
+			{
+				ProcessWorkList();
 			}
 
 			UpdateCounter("SSAOptimizations.IRInstructionRemoved", instructionsRemovedCount);
@@ -109,6 +111,16 @@ namespace Mosa.Compiler.Framework.Stages
 			worklist = null;
 		}
 
+		private void ProcessWorkList()
+		{
+			while (worklist.Count != 0)
+			{
+				int index = worklist.Pop();
+				Context ctx2 = new Context(InstructionSet, index);
+				Do(ctx2);
+			}
+		}
+
 		private void Do(Context context)
 		{
 			if (context.IsEmpty)
@@ -118,12 +130,14 @@ namespace Mosa.Compiler.Framework.Stages
 			SimpleForwardCopyPropagation(context);
 			SimpleBackwardCopyPropagation(context);
 			DeadCodeElimination(context);
+			DeadCodeElimination2(context);
 			SimplifySubtraction(context);
 			ConstantMove(context);
 			StrengthReductionMultiplication(context);
 			StrengthReductionDivision(context);
 			StrengthReductionIntegerAdditionAndSubstraction(context);
 			StrengthReductionLogicalOperators(context);
+			StrengthReductionShiftOperators(context);
 			ConstantFoldingIntegerOperations(context);
 			ReduceZeroExtendedMove(context);
 			ConstantFoldingAdditionAndSubstraction(context);
@@ -182,6 +196,123 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				AddOperandUsageToWorkList(operand);
 			}
+		}
+
+		private bool ContainsAddressOf(Operand local)
+		{
+			foreach (int index in local.Uses)
+			{
+				Context ctx = new Context(InstructionSet, index);
+
+				if (ctx.Instruction == IRInstruction.AddressOf)
+					return true;
+			}
+
+			return false;
+		}
+
+		private bool PromoteLocalVariable()
+		{
+			bool promoted = false;
+
+			trace = CreateTrace();
+
+			foreach (var local in MethodCompiler.LocalVariables)
+			{
+				if (local.IsVirtualRegister)
+					continue;
+
+				if (local.Definitions.Count != 1)
+					continue;
+
+				if (!local.IsReferenceType && !local.IsInteger && !local.IsR && !local.IsChar && !local.IsBoolean && !local.IsPointer && !local.IsI && !local.IsU)
+					continue;
+
+				if (ContainsAddressOf(local))
+					continue;
+
+				promoted = true;
+				PromoteTempVariable(local);
+			}
+
+			return promoted;
+		}
+
+		private void PromoteTempVariable(Operand local)
+		{
+			var stacktype = local.Type.GetStackType();
+
+			var v = MethodCompiler.CreateVirtualRegister(stacktype);
+
+			if (trace.Active) trace.Log("*** PromoteTempVariable");
+			if (trace.Active) trace.Log("Replacing: " + local.ToString() + " with " + v.ToString());
+
+			foreach (int index in local.Uses.ToArray())
+			{
+				Context ctx = new Context(InstructionSet, index);
+
+				AddOperandUsageToWorkList(ctx);
+
+				for (int i = 0; i < ctx.OperandCount; i++)
+				{
+					Operand operand = ctx.GetOperand(i);
+
+					if (local == operand)
+					{
+						if (trace.Active) trace.Log("BEFORE:\t" + ctx.ToString());
+						ctx.SetOperand(i, v);
+						if (trace.Active) trace.Log("AFTER: \t" + ctx.ToString());
+					}
+				}
+			}
+
+			foreach (int index in local.Definitions.ToArray())
+			{
+				Context ctx = new Context(InstructionSet, index);
+				AddOperandUsageToWorkList(ctx);
+
+				for (int i = 0; i < ctx.OperandCount; i++)
+				{
+					Operand operand = ctx.GetResult(i);
+
+					if (local == operand)
+					{
+						if (trace.Active) trace.Log("BEFORE:\t" + ctx.ToString());
+						ctx.SetResult(i, v);
+						if (trace.Active) trace.Log("AFTER: \t" + ctx.ToString());
+					}
+				}
+			}
+		}
+
+
+		private void DeadCodeElimination2(Context context)
+		{
+			if (context.IsEmpty)
+				return;
+
+			if (context.ResultCount != 1)
+				return;
+
+			if (context.Result.IsVirtualRegister)
+				return;
+
+			if (!context.Result.IsStackLocal)
+				return;
+
+			if (context.Result.Uses.Count != 0)
+				return;
+
+			if (context.Instruction == IRInstruction.Call || context.Instruction == IRInstruction.IntrinsicMethodCall)
+				return;
+
+			if (trace.Active) trace.Log("*** DeadCodeElimination-2");
+			if (trace.Active) trace.Log("REMOVED:\t" + context.ToString());
+			AddOperandUsageToWorkList(context);
+			context.SetInstruction(IRInstruction.Nop);
+			instructionsRemovedCount++;
+			deadCodeEliminationCount++;
+			return;
 		}
 
 		/// <summary>
@@ -303,16 +434,16 @@ namespace Mosa.Compiler.Framework.Stages
 			if (source.Type.IsUI8 & destination.Type.IsUI8)
 				return true;
 
-			if (NativePointerSize == 4 && (destination.IsI || destination.IsPointer) && (source.IsI4 || source.IsU4))
+			if (NativePointerSize == 4 && (destination.IsI || destination.IsU || destination.IsPointer) && (source.IsI4 || source.IsU4))
 				return true;
 
-			if (NativePointerSize == 4 && (source.IsI || source.IsPointer) && (destination.IsI4 || destination.IsU4))
+			if (NativePointerSize == 4 && (source.IsI || source.IsU || source.IsPointer) && (destination.IsI4 || destination.IsU4))
 				return true;
 
-			if (NativePointerSize == 8 && (destination.IsI || destination.IsPointer) && (source.IsI8 || source.IsU8))
+			if (NativePointerSize == 8 && (destination.IsI || destination.IsU || destination.IsPointer) && (source.IsI8 || source.IsU8))
 				return true;
 
-			if (NativePointerSize == 8 && (source.IsI || source.IsPointer) && (destination.IsI8 || destination.IsU8))
+			if (NativePointerSize == 8 && (source.IsI || source.IsU || source.IsPointer) && (destination.IsI8 || destination.IsU8))
 				return true;
 
 			if (source.IsR4 && destination.IsR4)
@@ -361,23 +492,16 @@ namespace Mosa.Compiler.Framework.Stages
 			if (!CanCopyPropagation(context.Result, context.Operand1))
 				return;
 
-			Operand destinationOperand = context.Result;
-			Operand sourceOperand = context.Operand1;
+			Operand destination = context.Result;
+			Operand source = context.Operand1;
 
-			//if (trace.IsLogging) trace.Log("REVIEWING:\t" + context.ToString());
+			if (ContainsAddressOf(destination))
+				return;
 
 			// for each statement T that uses operand, substituted c in statement T
-			foreach (int index in destinationOperand.Uses.ToArray())
-			{
-				Context ctx = new Context(InstructionSet, index);
-
-				if (ctx.Instruction == IRInstruction.AddressOf)
-					return;
-			}
-
 			AddOperandUsageToWorkList(context);
 
-			foreach (int index in destinationOperand.Uses.ToArray())
+			foreach (int index in destination.Uses.ToArray())
 			{
 				Context ctx = new Context(InstructionSet, index);
 
@@ -385,18 +509,18 @@ namespace Mosa.Compiler.Framework.Stages
 				{
 					Operand operand = ctx.GetOperand(i);
 
-					if (destinationOperand == operand)
+					if (destination == operand)
 					{
 						if (trace.Active) trace.Log("*** SimpleForwardCopyPropagation");
 						if (trace.Active) trace.Log("BEFORE:\t" + ctx.ToString());
-						ctx.SetOperand(i, sourceOperand);
+						ctx.SetOperand(i, source);
 						simpleForwardCopyPropagationCount++;
 						if (trace.Active) trace.Log("AFTER: \t" + ctx.ToString());
 					}
 				}
 			}
 
-			Debug.Assert(destinationOperand.Uses.Count == 0);
+			Debug.Assert(destination.Uses.Count == 0);
 
 			if (trace.Active) trace.Log("REMOVED:\t" + context.ToString());
 			AddOperandUsageToWorkList(context);
@@ -847,7 +971,41 @@ namespace Mosa.Compiler.Framework.Stages
 		}
 
 		/// <summary>
-		/// Folds the integer compare branch.
+		/// Strength reduction shift operators.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		private void StrengthReductionShiftOperators(Context context)
+		{
+			if (context.IsEmpty)
+				return;
+
+			if (!(context.Instruction == IRInstruction.ShiftLeft || context.Instruction == IRInstruction.ShiftRight || context.Instruction == IRInstruction.ArithmeticShiftRight))
+				return;
+
+			if (!context.Result.IsVirtualRegister)
+				return;
+
+			if (!context.Operand2.IsConstant)
+				return;
+
+			Operand result = context.Result;
+			Operand op1 = context.Operand1;
+			Operand op2 = context.Operand2;
+
+			if (op2.IsConstantZero)
+			{
+				AddOperandUsageToWorkList(context);
+				if (trace.Active) trace.Log("*** StrengthReductionShiftOperators");
+				if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
+				context.SetInstruction(IRInstruction.Move, result, op1);
+				//strengthReductionLogicalOperatorsCount++;
+				if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
+				return;
+			}
+		}
+
+		/// <summary>
+		/// Strength reduction integer compare branch.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		private void StrengthReductionIntegerCompareBranch(Context context)
@@ -1393,8 +1551,6 @@ namespace Mosa.Compiler.Framework.Stages
 			if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
 		}
 
-
-
 		/// <summary>
 		/// Simple backward copy propagation.
 		/// </summary>
@@ -1418,8 +1574,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (context.Operand1.Uses.Count != 1)
 				return;
-
-
 
 			// If the pointer or reference types are different, we can not copy propagation because type information would be lost.
 			// Also if the operand sign is different, we cannot do it as it requires a signed/unsigned extended move, not a normal move
@@ -1457,13 +1611,13 @@ namespace Mosa.Compiler.Framework.Stages
 			instructionsRemovedCount++;
 		}
 
-
 		private void FoldLoadStoreOffsets(Context context)
 		{
 			if (context.IsEmpty)
 				return;
 
-			if (!(context.Instruction == IRInstruction.Load || context.Instruction == IRInstruction.Store))
+			if (!(context.Instruction == IRInstruction.Load || context.Instruction == IRInstruction.Store
+				|| context.Instruction == IRInstruction.LoadSignExtended || context.Instruction == IRInstruction.LoadZeroExtended))
 				return;
 
 			if (!context.Operand2.IsConstant)
