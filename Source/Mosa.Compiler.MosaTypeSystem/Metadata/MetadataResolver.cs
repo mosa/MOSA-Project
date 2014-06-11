@@ -87,6 +87,15 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 			}
 		}
 
+		private void ResolveInterfacesInBaseTypes(MosaType.Mutator mosaType, MosaType baseType)
+		{
+			foreach (MosaType iface in baseType.Interfaces)
+				mosaType.Interfaces.Add(iface);
+
+			if (baseType.BaseType != null)
+				ResolveInterfacesInBaseTypes(mosaType, baseType.BaseType);
+		}
+
 		MosaCustomAttribute.Argument ToMosaCAArgument(CAArgument arg)
 		{
 			var value = arg.Value;
