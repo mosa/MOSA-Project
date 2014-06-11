@@ -49,6 +49,9 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 
 						foreach (var iface in typeDef.Interfaces)
 							mosaType.Interfaces.Add(metadata.Loader.GetType(iface.Interface.ToTypeSig()));
+
+						if (typeDef.BaseType != null)
+							ResolveInterfacesInBaseTypes(mosaType, type.BaseType);
 					}
 					ResolveType(type);
 				}
@@ -82,6 +85,15 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 						mosaModule.EntryPoint = metadata.Cache.GetMethodByToken(new ScopedToken(moduleDef, moduleDef.EntryPoint.MDToken));
 				}
 			}
+		}
+
+		private void ResolveInterfacesInBaseTypes(MosaType.Mutator mosaType, MosaType baseType)
+		{
+			foreach (MosaType iface in baseType.Interfaces)
+				mosaType.Interfaces.Add(iface);
+
+			if (baseType.BaseType != null)
+				ResolveInterfacesInBaseTypes(mosaType, baseType.BaseType);
 		}
 
 		MosaCustomAttribute.Argument ToMosaCAArgument(CAArgument arg)
