@@ -40,8 +40,6 @@ namespace Mosa.Platform.x86.Instructions
 				return RM_C;
 			else
 				return RM_R;
-
-			throw new ArgumentException(@"No opcode for operand type.");
 		}
 
 		/// <summary>
