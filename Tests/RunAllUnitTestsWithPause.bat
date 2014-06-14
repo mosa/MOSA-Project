@@ -1,0 +1,3 @@
+CALL RunAllUnitTests.bat
+
+pause

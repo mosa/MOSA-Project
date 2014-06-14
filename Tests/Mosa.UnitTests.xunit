@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <xunit>
   <assemblies>
-    <assembly filename="..\bin\Mosa.Platform.Internal.x86.xUnit.dll" shadow-copy="true" />
-    <assembly filename="..\bin\Mosa.Compiler.Framework.xUnit.dll" shadow-copy="true" />
-    <assembly filename="..\bin\Mosa.Test.Collection.x86.xUnit.dll" shadow-copy="true" />
+    <assembly filename="..\bin\Mosa.Platform.Internal.x86.xUnit.dll" shadow-copy="true" Verbose="false"/>
+    <assembly filename="..\bin\Mosa.Compiler.Framework.xUnit.dll" shadow-copy="true" Verbose="false"/>
+    <assembly filename="..\bin\Mosa.Test.Collection.x86.xUnit.dll" shadow-copy="true" Verbose="false"/>
   </assemblies>
 </xunit>
