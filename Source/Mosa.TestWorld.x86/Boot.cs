@@ -169,14 +169,7 @@ namespace Mosa.TestWorld.x86
 
 		public static void Test()
 		{
-			long a = 0;
-
-			long b = 100;
-
-			if ((a = b) == 100)
-			{
-				Console.WriteLine("True");
-			}
+			// Stub
 		}
 
 		//public static void Mandelbrot()
