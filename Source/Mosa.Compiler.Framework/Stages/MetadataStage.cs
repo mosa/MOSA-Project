@@ -229,6 +229,10 @@ namespace Mosa.Compiler.Framework.Stages
 			return typeTableSymbol;
 		}
 
+		#endregion
+
+		#region Interface Bitmap and Tables
+
 		private LinkerSymbol CreateInterfaceBitmap(MosaType type)
 		{
 			var bitmap = new byte[(((TypeLayout.Interfaces.Count - 1) / 8) + 1)];
