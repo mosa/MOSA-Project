@@ -99,7 +99,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 			}
 		}
 
-		static void AddArrayMethods(TypeSystem typeSystem, MosaType arrayType, MosaType.Mutator type, MosaArrayInfo info)
+		private static void AddArrayMethods(TypeSystem typeSystem, MosaType arrayType, MosaType.Mutator type, MosaArrayInfo info)
 		{
 			// Remove all methods & fields --> Since BaseType = System.Array, they're automatically inherited.
 			type.Methods.Clear();

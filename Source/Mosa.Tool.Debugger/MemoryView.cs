@@ -7,8 +7,8 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
 using Mosa.Utility.DebugEngine;
+using System;
 
 namespace Mosa.Tool.Debugger
 {

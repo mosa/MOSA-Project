@@ -80,7 +80,6 @@ namespace Mosa.Test.Collection
 			return z;
 		}
 
-
 		public static int Pressure7C(int a, int b, int c, int d, int e, int f, int g)
 		{
 			int z = a + b + c + d + e + f + g;

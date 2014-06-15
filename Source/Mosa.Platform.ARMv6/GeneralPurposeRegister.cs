@@ -250,6 +250,5 @@ namespace Mosa.Platform.ARMv6
 		}
 
 		#endregion Properties
-
 	}
 }

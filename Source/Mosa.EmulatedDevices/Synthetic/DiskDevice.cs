@@ -7,8 +7,8 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System.IO;
 using Mosa.DeviceSystem;
+using System.IO;
 
 namespace Mosa.EmulatedDevices.Synthetic
 {

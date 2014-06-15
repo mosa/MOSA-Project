@@ -31,7 +31,7 @@ namespace Mosa.Platform.x86.Instructions
 		private static readonly OpCode R_M_U8 = new OpCode(new byte[] { 0x8A }); // Move r/m8 to R8
 		private static readonly OpCode SR_R = new OpCode(new byte[] { 0x8E });
 		private static readonly OpCode M_C_16 = new OpCode(new byte[] { 0x66, 0xC7 });
-		
+
 		#endregion Data Members
 
 		#region Construction

@@ -12,7 +12,7 @@ namespace System.Collections
 	/// <summary>
 	/// Interface for "System.Collections.IStructuralEquatable"
 	/// </summary>
-	interface IStructuralEquatable
+	internal interface IStructuralEquatable
 	{
 		bool Equals(Object other, IEqualityComparer comparer);
 

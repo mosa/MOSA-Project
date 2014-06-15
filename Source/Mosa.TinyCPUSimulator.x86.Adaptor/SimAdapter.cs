@@ -338,7 +338,7 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 			if (instruction == X86.Mulsd) return Opcode.Mulsd;
 			if (instruction == X86.Mulss) return Opcode.Mulss;
 			if (instruction == X86.Neg) return Opcode.Neg;
-			////if (instruction == X86.Nop) return Opcode.Nop; 
+			////if (instruction == X86.Nop) return Opcode.Nop;
 			if (instruction == X86.Not) return Opcode.Not;
 			if (instruction == X86.Or) return Opcode.Or;
 			if (instruction == X86.Out) return Opcode.Out;

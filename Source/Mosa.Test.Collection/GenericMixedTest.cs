@@ -1,5 +1,4 @@
-﻿
-namespace Mosa.Test.Collection
+﻿namespace Mosa.Test.Collection
 {
 	//public static class GenericMixedTest
 	//{
@@ -113,7 +112,6 @@ namespace Mosa.Test.Collection
 	//			testResult |= 0x200;
 	//		if (q[3] == 0x87654321)
 	//			testResult |= 0x400;
-
 
 	//		if (list.ToString(0) == "[1, MOSA Generics]")
 	//			testResult |= 0x800;

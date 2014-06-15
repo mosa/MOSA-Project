@@ -6,6 +6,7 @@
  * Authors:
  *  Stefan Andres Charsley (charsleysa) <charsleysa@gmail.com>
  */
+
 using System.Runtime.InteropServices;
 
 namespace System.Reflection

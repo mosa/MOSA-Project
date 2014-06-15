@@ -50,7 +50,6 @@ namespace Mosa.Compiler.MosaTypeSystem
 		{
 			if (this == Vector)
 				return "[]";
-
 			else if (sig == null)
 			{
 				StringBuilder result = new StringBuilder();

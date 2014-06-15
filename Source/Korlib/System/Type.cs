@@ -9,7 +9,6 @@
  */
 
 using System.Reflection;
-using System.Runtime.InteropServices;
 using System.Runtime.CompilerServices;
 
 namespace System
@@ -24,7 +23,8 @@ namespace System
 			this.m_handle = handle;
 		}
 
-		RuntimeTypeHandle m_handle;
+		private RuntimeTypeHandle m_handle;
+
 		public RuntimeTypeHandle TypeHandle
 		{
 			get
@@ -33,7 +33,8 @@ namespace System
 			}
 		}
 
-		string m_fullName;
+		private string m_fullName;
+
 		public string FullName
 		{
 			get
@@ -46,7 +47,7 @@ namespace System
 			}
 		}
 
-		unsafe string InternalGetFullName(IntPtr handle)
+		private unsafe string InternalGetFullName(IntPtr handle)
 		{
 			int* namePtr = *(int**)(handle.ToInt32() + 8);
 			int length = *namePtr;

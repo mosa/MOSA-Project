@@ -8,14 +8,12 @@
  *  Marcelo Caetano (marcelocaetano) <marcelo.caetano@ymail.com>
  */
 
-using System;
 using Mosa.Compiler.Framework;
-using Mosa.Platform.ARMv6;
 
 namespace Mosa.Platform.ARMv6.Instructions
 {
 	/// <summary>
-	/// Mul instruction: 
+	/// Mul instruction:
 	/// Performs a 32x32 multiply that generates a 32-bit result.The instruction can operate on signed or unsigned quantities.
 	/// </summary>
 	public class Mul : ARMv6Instruction

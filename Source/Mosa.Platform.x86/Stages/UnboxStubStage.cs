@@ -7,11 +7,8 @@
  *  Ki (kiootic) <kiootic@gmail.com>
  */
 
-using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Linker;
 using Mosa.Compiler.MosaTypeSystem;
-using System.Collections.Generic;
 
 namespace Mosa.Platform.x86.Stages
 {
@@ -37,7 +34,7 @@ namespace Mosa.Platform.x86.Stages
 			}
 		}
 
-		void CreateUnboxStub(MosaType type)
+		private void CreateUnboxStub(MosaType type)
 		{
 			var methodTable = Compiler.TypeLayout.GetMethodTable(type);
 			for (int i = 0; i < methodTable.Count; i++)

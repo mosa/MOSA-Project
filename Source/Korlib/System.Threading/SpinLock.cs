@@ -15,9 +15,13 @@ namespace System.Threading
 
 		public bool IsHeld { get { return bLock; } }
 
-		internal static void InternalEnter(ref bool lockTaken) { }
+		internal static void InternalEnter(ref bool lockTaken)
+		{
+		}
 
-		internal static void InternalExit(ref bool lockTaken) { }
+		internal static void InternalExit(ref bool lockTaken)
+		{
+		}
 
 		public void Enter(ref bool lockTaken)
 		{

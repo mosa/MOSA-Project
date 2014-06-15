@@ -7,9 +7,8 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using Xunit;
-using Xunit.Extensions;
 using Mosa.Compiler.Common;
+using Xunit;
 
 namespace Mosa.Compiler.Framework.xUnit
 {

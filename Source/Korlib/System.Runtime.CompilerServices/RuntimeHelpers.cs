@@ -5,8 +5,6 @@
  *
  */
 
-using System.Runtime.InteropServices;
-
 namespace System.Runtime.CompilerServices
 {
 	public static class RuntimeHelpers

@@ -62,7 +62,7 @@ namespace Mosa.HelloWorld.x86
 			Console.Write(Multiboot.Flags, 2, 32);
 			Console.WriteLine();
 			Console.WriteLine();
-			
+
 			Console.Color = Colors.Green;
 			Console.Write("Size of Memory:   ");
 			Console.Color = Colors.Gray;

@@ -20,8 +20,6 @@ namespace Mosa.Platform.ARMv6.Stages
 	/// </remarks>
 	public sealed class IRTransformationStage : BaseTransformationStage, IIRVisitor
 	{
-		
-
 		#region IIRVisitor
 
 		/// <summary>

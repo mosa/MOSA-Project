@@ -6,7 +6,6 @@
  */
 
 using Mosa.Kernel.x86;
-using Mosa.Platform.Internal.x86;
 
 namespace Mosa.DebugWorld.x86
 {
@@ -15,7 +14,6 @@ namespace Mosa.DebugWorld.x86
 	/// </summary>
 	public static class Boot
 	{
-
 		/// <summary>
 		/// Mains this instance.
 		/// </summary>

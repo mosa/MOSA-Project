@@ -7,9 +7,6 @@
  *  Ki (kiootic) <kiootic@gmail.com>
  */
 
-using System.Collections.Generic;
-using Mosa.Compiler.Common;
-
 namespace Mosa.Compiler.MosaTypeSystem
 {
 	public class MosaCustomAttribute
@@ -36,7 +33,9 @@ namespace Mosa.Compiler.MosaTypeSystem
 			}
 
 			public string Name { get; private set; }
+
 			public bool IsField { get; private set; }
+
 			public Argument Argument { get; set; }
 		}
 

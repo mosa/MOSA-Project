@@ -41,10 +41,8 @@ namespace Mosa.Tool.Mono.UpdateProject
 
 				if (opt.ToLower().Equals("-update")) UpdateOnChange = false;
 				else if (opt.ToLower().Equals("+update")) UpdateOnChange = true;
-
 				else if (opt.ToLower().StartsWith("-source:")) Source = opt.Substring(8);
 				else if (opt.ToLower().StartsWith("-destination:")) Destination = opt.Substring(13);
-
 				else if (opt.ToLower().EndsWith(".csproj"))
 				{
 					Projects.Add(opt);

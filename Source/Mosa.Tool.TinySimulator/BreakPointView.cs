@@ -8,10 +8,9 @@
  */
 
 using Mosa.TinyCPUSimulator;
+using System;
 using System.ComponentModel;
 using System.Windows.Forms;
-using System.Collections.Generic;
-using System;
 
 namespace Mosa.Tool.TinySimulator
 {
@@ -118,6 +117,5 @@ namespace Mosa.Tool.TinySimulator
 
 			Clipboard.SetText(breakPointEntry.Name);
 		}
-
 	}
 }

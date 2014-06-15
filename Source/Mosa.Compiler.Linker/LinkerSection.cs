@@ -94,7 +94,6 @@ namespace Mosa.Compiler.Linker
 				stream.Seek(FileOffset + symbol.SectionOffset, SeekOrigin.Begin);
 				symbol.Stream.Position = 0;
 				symbol.Stream.WriteTo(stream);
-
 			}
 
 			stream.WriteZeroBytes((int)(FileOffset + AlignedSize - stream.Position));

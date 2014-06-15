@@ -1,5 +1,5 @@
-﻿using WeifenLuo.WinFormsUI.Docking;
-using Mosa.Utility.DebugEngine;
+﻿using Mosa.Utility.DebugEngine;
+using WeifenLuo.WinFormsUI.Docking;
 
 namespace Mosa.Tool.Debugger
 {

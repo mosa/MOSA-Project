@@ -8,7 +8,6 @@
  */
 
 using System.Collections.Generic;
-using Mosa.TinyCPUSimulator;
 
 namespace Mosa.TinyCPUSimulator.x86
 {
@@ -24,37 +23,61 @@ namespace Mosa.TinyCPUSimulator.x86
 		public override string[] FlagList { get { return flagList; } }
 
 		public uint EIP { get; private set; }
+
 		public uint EAX { get; private set; }
+
 		public uint EBX { get; private set; }
+
 		public uint ECX { get; private set; }
+
 		public uint EDX { get; private set; }
+
 		public uint ESP { get; private set; }
+
 		public uint EBP { get; private set; }
+
 		public uint ESI { get; private set; }
+
 		public uint EDI { get; private set; }
 
 		public uint EFLAGS { get; private set; }
 
 		public bool Zero { get; private set; }
+
 		public bool Parity { get; private set; }
+
 		public bool Carry { get; private set; }
+
 		public bool Direction { get; private set; }
+
 		public bool Sign { get; private set; }
+
 		public bool Adjust { get; private set; }
+
 		public bool Overflow { get; private set; }
 
 		public uint CR0 { get; private set; }
+
 		public uint CR2 { get; private set; }
+
 		public uint CR3 { get; private set; }
+
 		public uint CR4 { get; private set; }
 
 		public double XMM0 { get; private set; }
+
 		public double XMM1 { get; private set; }
+
 		public double XMM2 { get; private set; }
+
 		public double XMM3 { get; private set; }
+
 		public double XMM4 { get; private set; }
+
 		public double XMM5 { get; private set; }
+
 		public double XMM6 { get; private set; }
+
 		public double XMM7 { get; private set; }
 
 		public SimState(CPUx86 x86)
@@ -116,7 +139,6 @@ namespace Mosa.TinyCPUSimulator.x86
 				esp = esp + 4;
 				index++;
 			}
-
 		}
 
 		private void AddStackFrame(CPUx86 x86)
@@ -208,6 +230,5 @@ namespace Mosa.TinyCPUSimulator.x86
 				default: return null;
 			}
 		}
-
 	}
 }

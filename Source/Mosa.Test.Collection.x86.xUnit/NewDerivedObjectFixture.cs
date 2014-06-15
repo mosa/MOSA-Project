@@ -24,21 +24,18 @@ namespace Mosa.Test.Collection.x86.xUnit
 		public void WithOneArg()
 		{
 			Assert.Equal(Mosa.Test.Collection.DerivedNewObjectTests.WithOneArg(), Run<bool>("Mosa.Test.Collection.DerivedNewObjectTests.WithOneArg"));
-
 		}
 
 		[Fact]
 		public void WithTwoArgs()
 		{
 			Assert.Equal(Mosa.Test.Collection.DerivedNewObjectTests.WithTwoArgs(), Run<bool>("Mosa.Test.Collection.DerivedNewObjectTests.WithTwoArgs"));
-
 		}
 
 		[Fact]
 		public void WithThreeArgs()
 		{
 			Assert.Equal(Mosa.Test.Collection.DerivedNewObjectTests.WithThreeArgs(), Run<bool>("Mosa.Test.Collection.DerivedNewObjectTests.WithThreeArgs"));
-
 		}
 	}
 }

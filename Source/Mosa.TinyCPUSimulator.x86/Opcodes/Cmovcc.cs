@@ -9,7 +9,6 @@
 
 namespace Mosa.TinyCPUSimulator.x86.Opcodes
 {
-
 	public class Cmova : Mov
 	{
 		public override void Execute(CPUx86 cpu, SimInstruction instruction)

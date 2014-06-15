@@ -32,7 +32,7 @@ namespace Mosa.Kernel.x86
 			}
 
 			// TODO: acquire lock
-			
+
 			counter++;
 
 			uint physicalpage = PageFrameAllocator.Allocate();

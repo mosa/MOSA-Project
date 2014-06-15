@@ -1,5 +1,5 @@
-﻿using Mosa.TinyCPUSimulator.Adaptor;
-using Mosa.TinyCPUSimulator;
+﻿using Mosa.TinyCPUSimulator;
+using Mosa.TinyCPUSimulator.Adaptor;
 using System;
 using System.Drawing;
 using System.Windows.Forms;

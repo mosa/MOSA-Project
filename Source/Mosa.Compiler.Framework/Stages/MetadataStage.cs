@@ -9,12 +9,12 @@
  *  Stefan Andres Charsley (charsleysa) <charsleysa@gmail.com>
  */
 
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Linker;
 using Mosa.Compiler.MosaTypeSystem;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework.Stages
 {
@@ -39,7 +39,7 @@ namespace Mosa.Compiler.Framework.Stages
 			return symbol;
 		}
 
-		#endregion
+		#endregion Helper Functions
 
 		#region Assembly Tables
 
@@ -125,7 +125,7 @@ namespace Mosa.Compiler.Framework.Stages
 			return assemblyTableSymbol;
 		}
 
-		#endregion
+		#endregion Assembly Tables
 
 		#region TypeDefinition
 
@@ -229,7 +229,7 @@ namespace Mosa.Compiler.Framework.Stages
 			return typeTableSymbol;
 		}
 
-		#endregion
+		#endregion TypeDefinition
 
 		#region Interface Bitmap and Tables
 
@@ -323,7 +323,7 @@ namespace Mosa.Compiler.Framework.Stages
 			return interfaceMethodTableSymbol;
 		}
 
-		#endregion
+		#endregion Interface Bitmap and Tables
 
 		#region MethodDefinition
 
@@ -363,7 +363,6 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 			writer1.Write(paramStackSize);
 
-
 			// 5. Pointer to Method
 			if (!method.IsAbstract && !method.HasOpenGenericParams)
 				Linker.Link(LinkType.AbsoluteAddress, BuiltInPatch.I4, methodTableSymbol, (int)writer1.Position, 0, method.FullName, SectionKind.Text, 0);
@@ -387,7 +386,7 @@ namespace Mosa.Compiler.Framework.Stages
 			return methodTableSymbol;
 		}
 
-		#endregion
+		#endregion MethodDefinition
 
 		#region FieldDefinition
 
@@ -442,7 +441,7 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 		}
 
-		#endregion
+		#endregion FieldDefinition
 
 		#region Custom Attributes
 
@@ -576,9 +575,11 @@ namespace Mosa.Compiler.Framework.Stages
 				case MosaTypeCode.Boolean:
 					writer.Write((bool)value);
 					break;
+
 				case MosaTypeCode.U1:
 					writer.Write((byte)value);
 					break;
+
 				case MosaTypeCode.I1:
 					writer.Write((sbyte)value);
 					break;
@@ -587,9 +588,11 @@ namespace Mosa.Compiler.Framework.Stages
 				case MosaTypeCode.Char:
 					writer.Write((char)value);
 					break;
+
 				case MosaTypeCode.U2:
 					writer.Write((ushort)value);
 					break;
+
 				case MosaTypeCode.I2:
 					writer.Write((short)value);
 					break;
@@ -598,9 +601,11 @@ namespace Mosa.Compiler.Framework.Stages
 				case MosaTypeCode.U4:
 					writer.Write((uint)value);
 					break;
+
 				case MosaTypeCode.I4:
 					writer.Write((int)value);
 					break;
+
 				case MosaTypeCode.R4:
 					writer.Write((float)value);
 					break;
@@ -609,9 +614,11 @@ namespace Mosa.Compiler.Framework.Stages
 				case MosaTypeCode.U8:
 					writer.Write((ulong)value);
 					break;
+
 				case MosaTypeCode.I8:
 					writer.Write((long)value);
 					break;
+
 				case MosaTypeCode.R8:
 					writer.Write((double)value);
 					break;
@@ -677,6 +684,6 @@ namespace Mosa.Compiler.Framework.Stages
 			return symbol;
 		}
 
-		#endregion
+		#endregion Custom Attributes
 	}
 }

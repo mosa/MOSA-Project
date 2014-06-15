@@ -7,6 +7,7 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  *  Stefan Andres Charsley (charsleysa) <charsleysa@gmail.com>
  */
+
 using System.Collections;
 
 namespace System
@@ -129,7 +130,6 @@ namespace System
 
 		bool ICollection.IsSynchronized
 		{
-
 			//TODO
 			get
 			{
