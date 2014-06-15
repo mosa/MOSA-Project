@@ -9,16 +9,6 @@ using Mosa.Kernel.x86;
 using Mosa.Platform.Internal.x86;
 using Mosa.TestWorld.x86.Tests;
 
-public class SimpleClass
-{
-	public int intContent;
-
-	public SimpleClass()
-	{
-		intContent = 7;
-	}
-}
-
 namespace Mosa.TestWorld.x86
 {
 	/// <summary>
@@ -28,36 +18,10 @@ namespace Mosa.TestWorld.x86
 	{
 		public static ConsoleSession Console;
 
-		public static void SimpleTest()
-		{
-			Screen.Color = 0x0;
-			Screen.Clear();
-			Screen.GotoTop();
-			Screen.Color = 0x0E;
-
-			SimpleClass va = new SimpleClass();
-			if (va == null)
-			{
-				Panic.Now(12345);
-			}
-
-			Screen.Write("OK");
-
-			while (true)
-			{
-			}
-		}
-
-		public static void Main()
-		{
-			Mosa.Kernel.x86.Kernel.Setup();
-			Boot.SimpleTest();
-		}
-
 		/// <summary>
 		/// Main
 		/// </summary>
-		public static void Main2()
+		public static void Main()
 		{
 			Screen.Color = 0x0;
 			Screen.Clear();
@@ -208,6 +172,32 @@ namespace Mosa.TestWorld.x86
 			// Stub
 		}
 
+		public static void SimpleTest()
+		{
+			Screen.Color = 0x0;
+			Screen.Clear();
+			Screen.GotoTop();
+			Screen.Color = 0x0E;
+
+			SimpleClass va = new SimpleClass();
+			if (va == null)
+			{
+				Panic.Now(12345);
+			}
+
+			Screen.Write("OK");
+
+			while (true)
+			{
+			}
+		}
+
+		public static void Main3()
+		{
+			Mosa.Kernel.x86.Kernel.Setup();
+			Boot.SimpleTest();
+		}
+
 		//public static void Mandelbrot()
 		//{
 		//	double xmin = -2.1;
@@ -256,5 +246,15 @@ namespace Mosa.TestWorld.x86
 		//		x += intigralX;
 		//	}
 		//}
+	}
+
+	public class SimpleClass
+	{
+		public int intContent;
+
+		public SimpleClass()
+		{
+			intContent = 7;
+		}
 	}
 }
