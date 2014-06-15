@@ -15,7 +15,9 @@ namespace Mosa.TinyCPUSimulator
 {
 	public class SimCPU
 	{
-		public Dictionary<ulong, SimInstruction> InstructionCache { get; private set; }
+		private Dictionary<ulong, SimInstruction> InstructionCache { get; set; }
+
+		private Dictionary<ulong, string> SourceInformation { get; set; }
 
 		public BaseSimDevice[] PortDevices { get; private set; }
 
@@ -41,8 +43,6 @@ namespace Mosa.TinyCPUSimulator
 
 		public virtual ulong FramePointer { get { return 0; } set { return; } }
 
-		//public Dictionary<ulong, KeyValuePair<byte, byte>> MemoryDelta { get; private set; }
-
 		public SimCPUException LastException { get; set; }
 
 		public List<MemoryRegion> MemoryRegions { get; private set; }
@@ -56,6 +56,7 @@ namespace Mosa.TinyCPUSimulator
 		{
 			MemoryBlocks = new byte[MaxMemory / BlockSize][];
 			InstructionCache = new Dictionary<ulong, SimInstruction>();
+			SourceInformation = new Dictionary<ulong, string>();
 			SimDevices = new List<BaseSimDevice>();
 			SimMemoryDevices = new List<BaseSimDevice>();
 			PortDevices = new BaseSimDevice[65536];
@@ -275,6 +276,11 @@ namespace Mosa.TinyCPUSimulator
 			InstructionCache.Add(address, instruction);
 		}
 
+		public void AddSourceInformation(ulong address, string information)
+		{
+			SourceInformation.Add(address, information);
+		}
+
 		protected SimInstruction GetInstruction(ulong address)
 		{
 			SimInstruction instruction = null;
@@ -282,6 +288,15 @@ namespace Mosa.TinyCPUSimulator
 			InstructionCache.TryGetValue(address, out instruction);
 
 			return instruction;
+		}
+
+		public string GetSourceInformation(ulong address)
+		{
+			string source = null;
+
+			SourceInformation.TryGetValue(address, out source);
+
+			return source;
 		}
 
 		public void AddDevice(BaseSimDevice device)
@@ -315,9 +330,7 @@ namespace Mosa.TinyCPUSimulator
 				if (CurrentProgramCounter == lastDecodedProgramCounter && lastDecodedProgramCounter != 0)
 					return lastDecodedInstruction;
 
-				lastDecodedInstruction = DecodeOpcode(CurrentProgramCounter);
-
-				// if lastDecodedInstruction is null --- a binary decode would be necessary
+				lastDecodedInstruction = GetOpcode(CurrentProgramCounter);
 
 				lastDecodedProgramCounter = CurrentProgramCounter;
 
@@ -325,13 +338,22 @@ namespace Mosa.TinyCPUSimulator
 			}
 		}
 
-		public virtual SimInstruction DecodeOpcode(ulong address)
+		public SimInstruction GetOpcode(ulong address)
 		{
 			var instruction = GetInstruction(address);
 
-			// if instruction is null --- a binary decode would be necessary
+			if (instruction == null)
+			{
+				instruction = DecodeOpcode(address);
+				AddInstruction(address, instruction);
+			}
 
 			return instruction;
+		}
+
+		public virtual SimInstruction DecodeOpcode(ulong address)
+		{
+			return null;
 		}
 
 		protected virtual void ExecuteOpcode(SimInstruction instruction)

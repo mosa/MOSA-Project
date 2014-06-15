@@ -57,7 +57,7 @@ namespace Mosa.Compiler.Framework.Stages
 				return;
 
 			trace = CreateTrace();
-			
+
 			PromoteLocalVariable();
 
 			// initialize worklist
@@ -284,7 +284,6 @@ namespace Mosa.Compiler.Framework.Stages
 				}
 			}
 		}
-
 
 		private void DeadCodeElimination2(Context context)
 		{

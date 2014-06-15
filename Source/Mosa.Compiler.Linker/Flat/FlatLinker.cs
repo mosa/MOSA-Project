@@ -34,7 +34,7 @@ namespace Mosa.Compiler.Linker.Flat
 		{
 			foreach (var section in Sections)
 			{
-				stream.Position = 0;
+				stream.Position = section.FileOffset;
 				section.WriteTo(stream);
 			}
 		}
