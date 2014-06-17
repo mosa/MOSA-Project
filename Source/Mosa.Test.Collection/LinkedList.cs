@@ -444,7 +444,7 @@ namespace Mosa.Test.Collection
 				yield return cur.value;*/
 		}
 
-		public struct Enumerator : IEnumerator<T>, IEnumerator
+		public class Enumerator : IEnumerator<T>, IEnumerator
 		{
 			private const string VersionKey = "version";
 			private const string IndexKey = "index";
