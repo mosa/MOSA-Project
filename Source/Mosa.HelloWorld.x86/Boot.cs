@@ -45,6 +45,8 @@ namespace Mosa.HelloWorld.x86
 			splk.Enter(ref @lock);
 			if (@lock) Console.Write("Can't get here!");
 
+			Console.Goto(0, 0);
+
 			Console.Color = Colors.Yellow;
 			Console.BackgroundColor = Colors.Black;
 
