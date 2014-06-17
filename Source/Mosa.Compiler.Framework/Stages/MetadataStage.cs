@@ -56,10 +56,6 @@ namespace Mosa.Compiler.Framework.Stages
 			// Create the definitions along the way
 			foreach (var module in TypeSystem.Modules)
 			{
-				// Exclude Linker generated stuff for now since it's causing issues
-				if (module.IsLinkerGenerated)
-					continue;
-
 				var assemblyTableSymbol = CreateAssemblyDefinitionTable(module);
 
 				// Link
@@ -98,8 +94,9 @@ namespace Mosa.Compiler.Framework.Stages
 			uint count = 0;
 			foreach (var type in module.Types.Values)
 			{
-				if (type.IsModule/* || (type.BaseType == null && !type.IsInterface && type.FullName != "System.Object")*/)   // ghost types like generic params, function ptr, etc.
+				if (type.IsModule)
 					continue;
+
 				count++;
 			}
 			writer1.Write(count);
@@ -111,8 +108,8 @@ namespace Mosa.Compiler.Framework.Stages
 				if (type.IsModule)
 					continue;
 
-				/*if (type.BaseType == null && !type.IsInterface && type.FullName != "System.Object")   // ghost types like generic params, function ptr, etc.
-					continue;*/
+				// Run the type through the TypeLayout system
+				TypeLayout.ResolveType(type);
 
 				var typeTableSymbol = CreateTypeDefinitionTable(type, assemblyTableSymbol);
 
@@ -150,8 +147,11 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 			writer1.WriteZeroBytes(TypeLayout.NativePointerSize);
 
-			// 3. Flags: IsInterface
-			writer1.Write((uint)(type.IsInterface ? 1 : 0));
+			// 3. Flags: IsInterface, HasGenericParams (32bit length)
+			uint flags = 0x0;
+			if (type.IsInterface) flags |= 0x1;
+			if (type.HasOpenGenericParams) flags |= 0x2;
+			writer1.Write(flags);
 
 			// 4. Size
 			writer1.Write((uint)TypeLayout.GetTypeSize(type));
@@ -364,13 +364,12 @@ namespace Mosa.Compiler.Framework.Stages
 			writer1.Write(paramStackSize);
 
 			// 5. Pointer to Method
-			if (!method.IsAbstract && !method.HasOpenGenericParams)
+			if (!method.IsAbstract)
 				Linker.Link(LinkType.AbsoluteAddress, BuiltInPatch.I4, methodTableSymbol, (int)writer1.Position, 0, method.FullName, SectionKind.Text, 0);
 			writer1.WriteZeroBytes(TypeLayout.NativePointerSize);
 
 			// 6. Pointer to return Type
-			if (!method.IsAbstract && !method.HasOpenGenericParams)
-				Linker.Link(LinkType.AbsoluteAddress, BuiltInPatch.I4, methodTableSymbol, (int)writer1.Position, 0, method.Signature.ReturnType.FullName + Metadata.TypeDefinition, SectionKind.ROData, 0);
+			Linker.Link(LinkType.AbsoluteAddress, BuiltInPatch.I4, methodTableSymbol, (int)writer1.Position, 0, method.Signature.ReturnType.FullName + Metadata.TypeDefinition, SectionKind.ROData, 0);
 			writer1.WriteZeroBytes(TypeLayout.NativePointerSize);
 
 			// 7. Pointer to Exception Hanlder Table

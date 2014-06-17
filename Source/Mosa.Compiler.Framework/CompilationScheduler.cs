@@ -53,7 +53,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		void ICompilationScheduler.TrackTypeAllocated(MosaType type)
 		{
-			Debug.Assert(!type.HasOpenGenericParams);
+			//Debug.Assert(!type.HasOpenGenericParams);
 
 			if (type.IsModule)
 				return;
@@ -68,7 +68,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		void ICompilationScheduler.TrackMethodInvoked(MosaMethod method)
 		{
-			Debug.Assert(!method.HasOpenGenericParams);
+			//Debug.Assert(!method.HasOpenGenericParams);
 
 			methodsInvoked.AddIfNew(method);
 
@@ -77,7 +77,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		void ICompilationScheduler.TrackFieldReferenced(MosaField field)
 		{
-			Debug.Assert(!field.FieldType.HasOpenGenericParams);
+			//Debug.Assert(!field.FieldType.HasOpenGenericParams);
 
 			(this as ICompilationScheduler).TrackTypeAllocated(field.DeclaringType);
 		}
@@ -104,9 +104,6 @@ namespace Mosa.Compiler.Framework.Stages
 			if (type.IsInterface)
 				return;
 
-			if (type.HasOpenGenericParams)
-				return;
-
 			if (type.IsInterface || type.IsPointer)
 				return;
 
@@ -123,7 +120,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private void CompileMethod(MosaMethod method)
 		{
-			if (method.HasOpenGenericParams || method.IsAbstract)
+			if (method.IsAbstract)
 				return;
 
 			if (methodScheduled.Contains(method))
