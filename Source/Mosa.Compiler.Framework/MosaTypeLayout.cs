@@ -209,9 +209,6 @@ namespace Mosa.Compiler.Framework
 			if (type.IsModule)
 				return null;
 
-			if (type.HasOpenGenericParams)
-				return null;
-
 			if (type.BaseType == null && !type.IsInterface && type.FullName != "System.Object")   // ghost types like generic params, function ptr, etc.
 				return null;
 
@@ -280,7 +277,7 @@ namespace Mosa.Compiler.Framework
 			}
 		}
 
-		private void ResolveType(MosaType type)
+		public void ResolveType(MosaType type)
 		{
 			if (type.IsModule)
 				return;
@@ -336,9 +333,6 @@ namespace Mosa.Compiler.Framework
 			Debug.Assert(type.IsInterface);
 
 			if (type.IsModule)
-				return;
-
-			if (type.HasOpenGenericParams)
 				return;
 
 			if (interfaces.Contains(type))
@@ -545,15 +539,6 @@ namespace Mosa.Compiler.Framework
 
 			foreach (var method in type.Methods)
 			{
-				/*if (method.HasOpenGenericParams)
-					continue;
-
-				if (method.IsAbstract)
-				{
-					if (!method.IsNewSlot)
-						continue;
-				}*/
-
 				if (method.IsVirtual)
 				{
 					if (method.IsNewSlot)

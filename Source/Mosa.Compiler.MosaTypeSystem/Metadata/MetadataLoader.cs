@@ -11,6 +11,7 @@ using dnlib.DotNet;
 using Mosa.Compiler.Common;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Mosa.Compiler.MosaTypeSystem.Metadata
 {
@@ -273,6 +274,7 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 
 		private MosaType LoadGenericParam(GenericSig sig)
 		{
+			//Debug.Assert(false, sig.FullName);
 			MosaType[] pars = sig.IsTypeVar ? var : mvar;
 			MosaType type = pars[sig.Number];
 
@@ -290,6 +292,7 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 					genericParam.UnderlyingObject = new UnitDesc<TypeDef, TypeSig>(null, null, sig);
 				}
 				pars[sig.Number] = type;
+				metadata.Controller.AddType(type);
 			}
 
 			return type;
@@ -297,6 +300,7 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 
 		private MosaType LoadGenericTypeInstanceSig(GenericInstSig typeSig)
 		{
+			//Debug.Assert(false, typeSig.FullName);
 			MosaType origin = GetType(typeSig.GenericType);
 			MosaType result = metadata.Controller.CreateType(origin);
 			var desc = result.GetUnderlyingObject<UnitDesc<TypeDef, TypeSig>>();
