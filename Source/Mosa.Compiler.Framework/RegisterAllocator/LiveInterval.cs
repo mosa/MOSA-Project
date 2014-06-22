@@ -13,7 +13,7 @@ using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework.RegisterAllocator
 {
-	public class LiveInterval : Interval	// alternative name is LiveRange
+	public class LiveInterval : LiveRange
 	{
 		public enum AllocationStage
 		{
@@ -24,10 +24,6 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			Max = 4,
 		}
 
-		private SortedList<SlotIndex, SlotIndex> usePositions = new SortedList<SlotIndex, SlotIndex>();
-
-		private SortedList<SlotIndex, SlotIndex> defPositions = new SortedList<SlotIndex, SlotIndex>();
-
 		public VirtualRegister VirtualRegister { get; private set; }
 
 		public int SpillValue { get; set; }
@@ -37,12 +33,6 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 		public LiveIntervalTrack LiveIntervalTrack { get; set; }
 
 		public AllocationStage Stage { get; set; }
-
-		public IList<SlotIndex> UsePositions { get { return usePositions.Keys; } }
-
-		public IList<SlotIndex> DefPositions { get { return defPositions.Keys; } }
-
-		public bool IsEmpty { get { return usePositions.Count == 0 && defPositions.Count == 0; } }
 
 		public bool IsPhysicalRegister { get { return VirtualRegister.IsPhysicalRegister; } }
 
@@ -56,56 +46,17 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		public bool NeverSpill { get; set; }
 
-		public SlotIndex Minimum { get; private set; }
-
-		public SlotIndex Maximum { get; private set; }
-
 		public bool IsSplit { get; set; }
 
 		private LiveInterval(VirtualRegister virtualRegister, SlotIndex start, SlotIndex end, IList<SlotIndex> uses, IList<SlotIndex> defs)
-			: base(start, end)
+			: base(start, end, uses, defs)
 		{
-			// live intervals can not start/end at the same location
-			Debug.Assert(start != end);
-
 			this.VirtualRegister = virtualRegister;
 			this.SpillValue = 0;
 			this.Stage = AllocationStage.Initial;
 			this.ForceSpilled = false;
 			this.NeverSpill = false;
 			this.IsSplit = false;
-
-			SlotIndex max = null;
-			SlotIndex min = null;
-
-			foreach (var use in uses)
-			{
-				if (use != Start && (End == use || Contains(use)))
-				{
-					usePositions.Add(use, use);
-
-					if (max == null || use > max)
-						max = use;
-					if (min == null || use < min)
-						min = use;
-				}
-			}
-
-			foreach (var def in defs)
-			{
-				if (Contains(def))
-				{
-					defPositions.Add(def, def);
-
-					if (max == null || def > max)
-						max = def;
-					if (min == null || def < min)
-						min = def;
-				}
-			}
-
-			this.Minimum = min;
-			this.Maximum = max;
 		}
 
 		public LiveInterval(VirtualRegister virtualRegister, SlotIndex start, SlotIndex end)
@@ -143,87 +94,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		public LiveInterval Split(SlotIndex start, SlotIndex end)
 		{
-			return new LiveInterval(VirtualRegister, start, end, usePositions.Keys, defPositions.Keys);
+			return new LiveInterval(VirtualRegister, start, end, UsePositions, DefPositions);
 		}
-
-		private static SlotIndex GetNext(IList<SlotIndex> slots, SlotIndex start)
-		{
-			int cnt = slots.Count;
-
-			for (int i = 0; i < cnt; i++)
-			{
-				var slot = slots[i];
-
-				if (slot > start)
-				{
-					return slot;
-				}
-			}
-
-			return null;
-		}
-
-		private SlotIndex GetPrevious(IList<SlotIndex> slots, SlotIndex start)
-		{
-			for (int i = slots.Count - 1; i >= 0; i--)
-			{
-				var slot = slots[i];
-
-				if (slot < start)
-				{
-					return slot;
-				}
-			}
-
-			return null;
-		}
-
-		private SlotIndex GetLowestNotNull(SlotIndex a, SlotIndex b)
-		{
-			if (a == null)
-				return b;
-			if (b == null)
-				return a;
-			return (a < b) ? a : b;
-		}
-
-		private SlotIndex GetHighestNotNull(SlotIndex a, SlotIndex b)
-		{
-			if (a == null)
-				return b;
-			if (b == null)
-				return a;
-			return (a > b) ? a : b;
-		}
-
-		public SlotIndex GetNextUsePosition(SlotIndex at)
-		{
-			return GetNext(UsePositions, at);
-		}
-
-		public SlotIndex GetNextDefPosition(SlotIndex at)
-		{
-			return GetNext(DefPositions, at);
-		}
-
-		public SlotIndex GetPreviousUsePosition(SlotIndex at)
-		{
-			return GetPrevious(UsePositions, at);
-		}
-
-		public SlotIndex GetPreviousDefPosition(SlotIndex at)
-		{
-			return GetPrevious(DefPositions, at);
-		}
-
-		//public SlotIndex GetNextDefOrUsePosition(SlotIndex at)
-		//{
-		//	return GetLowestNotNull(GetNextUsePosition(at), GetNextDefPosition(at));
-		//}
-
-		//public SlotIndex GetPreviousDefOrUsePosition(SlotIndex at)
-		//{
-		//	return GetHighestNotNull(GetPrevious(UsePositions, at), GetPrevious(DefPositions, at));
-		//}
 	}
 }

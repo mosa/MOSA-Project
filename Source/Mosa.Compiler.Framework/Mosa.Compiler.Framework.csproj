@@ -92,6 +92,7 @@
     <Compile Include="IR\CompoundMove.cs" />
     <Compile Include="IR\CompoundStore.cs" />
     <Compile Include="Analysis\IBlockOrderAnalysis.cs" />
+    <Compile Include="RegisterAllocator\LiveRange.cs" />
     <Compile Include="RegisterAllocator\MoveHint.cs" />
     <Compile Include="ShiftType.cs" />
     <Compile Include="ConditionCodeExtension.cs" />

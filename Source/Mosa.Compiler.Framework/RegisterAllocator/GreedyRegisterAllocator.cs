@@ -1026,12 +1026,11 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		private bool SplitInterval(LiveInterval liveInterval, SlotIndex at, bool addToQueue)
 		{
-			var low = GetLowerOptimalSplitLocation(liveInterval, at);
-
-			if (low == liveInterval.Start)
-			{
+			// can not split on use position
+			if (liveInterval.UsePositions.Contains(at))
 				return false;
-			}
+
+			var low = GetLowerOptimalSplitLocation(liveInterval, at);
 
 			var high = GetUpperOptimalSplitLocation(liveInterval, at);
 
@@ -1154,7 +1153,10 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 				at = firstDef;
 			}
 
-			if (at == liveInterval.End)
+			if (at >= liveInterval.End)
+				return false;
+
+			if (at <= liveInterval.Start)
 				return false;
 
 			if (trace.Active) trace.Log(" Splitting around first use/def");

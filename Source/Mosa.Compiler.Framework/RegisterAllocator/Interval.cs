@@ -25,14 +25,6 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			this.End = end;
 		}
 
-		public Interval CreateExpandedInterval(Interval interval)
-		{
-			var start = Start < interval.Start ? Start : interval.Start;
-			var end = End > interval.End ? End : interval.End;
-
-			return new Interval(start, end);
-		}
-
 		public int Length { get { return End - Start; } }
 
 		public bool Intersects(SlotIndex start, SlotIndex end)
