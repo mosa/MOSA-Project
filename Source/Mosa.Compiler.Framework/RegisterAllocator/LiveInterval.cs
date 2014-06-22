@@ -13,8 +13,9 @@ using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework.RegisterAllocator
 {
-	public class LiveInterval : LiveRange
+	public class LiveInterval
 	{
+
 		public enum AllocationStage
 		{
 			Initial = 0,
@@ -23,6 +24,8 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			Spillable = 3,
 			Max = 4,
 		}
+
+		public LiveRange LiveRange { get; private set; }
 
 		public VirtualRegister VirtualRegister { get; private set; }
 
@@ -48,9 +51,45 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		public bool IsSplit { get; set; }
 
+		#region Short Cuts
+
+		public SlotIndex Start { get { return LiveRange.Start; } }
+
+		public SlotIndex End { get { return LiveRange.End; } }
+
+		public IList<SlotIndex> UsePositions { get { return LiveRange.UsePositions; } }
+
+		public IList<SlotIndex> DefPositions { get { return LiveRange.DefPositions; } }
+
+		public int Length { get { return LiveRange.Length; } }
+
+		public bool IsEmpty { get { return LiveRange.IsEmpty; } }
+
+		public SlotIndex Minimum { get { return LiveRange.Minimum; } }
+
+		public SlotIndex Maximum { get { return LiveRange.Maximum; } }
+
+		public bool IsAdjacent(SlotIndex start, SlotIndex end) { return LiveRange.IsAdjacent(start, end); }
+
+		public bool Intersects(SlotIndex start, SlotIndex end) { return LiveRange.Intersects(start, end); }
+
+		public bool IsAdjacent(Interval other) { return LiveRange.IsAdjacent(other); }
+
+		public bool Intersects(Interval other) { return LiveRange.Intersects(other); }
+
+		public bool Contains(SlotIndex start) { return LiveRange.Contains(start); }
+
+		public bool IsAdjacent(LiveInterval other) { return LiveRange.IsAdjacent(other.LiveRange); }
+
+		public bool Intersects(LiveInterval other) { return LiveRange.Intersects(other.LiveRange); }
+
+
+		#endregion
+
 		private LiveInterval(VirtualRegister virtualRegister, SlotIndex start, SlotIndex end, IList<SlotIndex> uses, IList<SlotIndex> defs)
-			: base(start, end, uses, defs)
 		{
+			this.LiveRange = new LiveRange(start, end, uses, defs);
+
 			this.VirtualRegister = virtualRegister;
 			this.SpillValue = 0;
 			this.Stage = AllocationStage.Initial;

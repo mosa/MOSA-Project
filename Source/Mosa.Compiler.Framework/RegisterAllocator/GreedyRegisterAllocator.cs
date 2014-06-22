@@ -1226,10 +1226,10 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			slots[1] = blockStart > liveInterval.Start ? blockStart : null;
 			if (trace.Active) trace.Log("   Block Start : " + (slots[1] != null ? slots[1].ToString() : "null"));
 
-			slots[2] = liveInterval.GetPreviousUsePosition(at);
+			slots[2] = liveInterval.LiveRange.GetPreviousUsePosition(at);
 			if (trace.Active) trace.Log("  Previous Use : " + (slots[2] != null ? slots[2].ToString() : "null"));
 
-			slots[3] = liveInterval.GetPreviousDefPosition(at);
+			slots[3] = liveInterval.LiveRange.GetPreviousDefPosition(at);
 			if (trace.Active) trace.Log("  Previous Def : " + (slots[3] != null ? slots[3].ToString() : "null"));
 
 			var max = GetMaximum(slots);
@@ -1243,7 +1243,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 		{
 			if (trace.Active) trace.Log("-High Splitting: " + liveInterval.ToString() + " move: " + at.ToString());
 
-			var next = liveInterval.GetNextUsePosition(at);
+			var next = liveInterval.LiveRange.GetNextUsePosition(at);
 
 			if (next == null)
 			{
@@ -1262,7 +1262,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			slots[2] = next != null ? next.HalfStepBack : null;
 			if (trace.Active) trace.Log("      Next Use : " + (slots[2] != null ? slots[2].ToString() : "null"));
 
-			slots[3] = liveInterval.GetNextDefPosition(at);
+			slots[3] = liveInterval.LiveRange.GetNextDefPosition(at);
 			if (trace.Active) trace.Log("      Next Def : " + (slots[3] != null ? slots[3].ToString() : "null"));
 
 			var min = GetMinimum(slots);
