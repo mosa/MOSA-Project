@@ -74,6 +74,7 @@
     <DebugType>none</DebugType>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="LiveRangeTests.cs" />
     <Compile Include="SimplePriorityQueueTests.cs" />
     <Compile Include="PatchTests.cs" />
     <Compile Include="LoopAwareBlockOrderTests.cs" />

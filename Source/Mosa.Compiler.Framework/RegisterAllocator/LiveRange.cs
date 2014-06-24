@@ -122,13 +122,35 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 		public List<LiveRange> SplitAt(SlotIndex at)
 		{
 			Debug.Assert(!defPositions.ContainsKey(at));
+			Debug.Assert(Start != at);
+			//Debug.Assert(at != End);
+			Debug.Assert(at >= Start && at <= End);
 
-			List<LiveRange> range = new List<LiveRange>(2);
+			var ranges = new List<LiveRange>(2);
 
-			range.Add(new LiveRange(Start, at, UsePositions, DefPositions));
-			range.Add(new LiveRange(at, End, UsePositions, DefPositions));
+			ranges.Add(new LiveRange(Start, at, UsePositions, DefPositions));
+			ranges.Add(new LiveRange(at, End, UsePositions, DefPositions));
 
-			return range;
+			return ranges;
+		}
+
+		public List<LiveRange> SplitAt(SlotIndex low, SlotIndex high)
+		{
+			Debug.Assert(!defPositions.ContainsKey(low));
+			Debug.Assert(!defPositions.ContainsKey(high));
+			Debug.Assert(low != high);
+			Debug.Assert(Start != low);
+			//Debug.Assert(End != high);
+			Debug.Assert(low >= Start && low <= End);
+			Debug.Assert(high >= Start && high <= End);
+
+			var ranges = new List<LiveRange>(3);
+
+			ranges.Add(new LiveRange(Start, low, UsePositions, DefPositions));
+			ranges.Add(new LiveRange(low, high, UsePositions, DefPositions));
+			ranges.Add(new LiveRange(high, End, UsePositions, DefPositions));
+
+			return ranges;
 		}
 	}
 }
