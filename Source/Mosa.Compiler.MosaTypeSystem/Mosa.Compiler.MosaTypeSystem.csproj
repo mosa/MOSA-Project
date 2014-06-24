@@ -85,6 +85,7 @@
     <Compile Include="Metadata\UnitDescs.cs" />
     <Compile Include="MosaTypeExtension.cs" />
     <Compile Include="SignatureName.cs" />
+    <Compile Include="MosaTypeAttributes.cs" />
     <Compile Include="TypeSystemExtensions.cs" />
     <Compile Include="Units\MosaArrayInfo.cs" />
     <Compile Include="Units\MosaCustomAttribute.cs" />

@@ -26,7 +26,7 @@ shape = "record"
 ];
 
 "TypeDefinition" [
-label = "<f0>Type Definition|<f1>Pointer to Type Name|<f2>Pointer to Custom Attributes|<f3>Flag: Is Interface|<f4>Type Size|<f5>Pointer to Assembly|<f6>Pointer to Parent Type|<f7>Pointer to Default Constructor Method|<f8>Pointer to Interface Slot Table|<f9>Pointer to Interface Bitmap|<f10>Number of Methods|<f11>Pointer to Method Definition 1|...|Pointer to Method Definition N"
+label = "<f0>Type Definition|<f1>Pointer to Type Name|<f2>Pointer to Custom Attributes|<f3>Type Attributes|<f4>Type Size|<f5>Pointer to Assembly|<f6>Pointer to Parent Type|<f7>Pointer to Default Constructor Method|<f8>Pointer to Interface Slot Table|<f9>Pointer to Interface Bitmap|<f10>Number of Methods|<f11>Pointer to Method Definition 1|...|Pointer to Method Definition N"
 shape = "record"
 ];
 

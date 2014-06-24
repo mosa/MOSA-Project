@@ -147,11 +147,8 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 			writer1.WriteZeroBytes(TypeLayout.NativePointerSize);
 
-			// 3. Flags: IsInterface, HasGenericParams (32bit length)
-			uint flags = 0x0;
-			if (type.IsInterface) flags |= 0x1;
-			if (type.HasOpenGenericParams) flags |= 0x2;
-			writer1.Write(flags);
+			// 3. Attributes
+			writer1.Write((uint)type.TypeAttributes);
 
 			// 4. Size
 			writer1.Write((uint)TypeLayout.GetTypeSize(type));

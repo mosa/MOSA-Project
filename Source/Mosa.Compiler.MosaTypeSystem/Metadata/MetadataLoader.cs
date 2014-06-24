@@ -94,6 +94,7 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 					type.ClassSize = (int)typeDef.ClassSize;
 					type.PackingSize = typeDef.PackingSize;
 				}
+				type.TypeAttributes = (MosaTypeAttributes)typeDef.Attributes;
 				type.TypeCode = (MosaTypeCode)typeSig.ElementType;
 
 				// Load members

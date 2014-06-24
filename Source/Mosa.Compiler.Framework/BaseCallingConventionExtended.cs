@@ -79,7 +79,7 @@ namespace Mosa.Compiler.Framework
 		protected static int CalculateStackSizeForParameters(MosaTypeLayout typeLayout, BaseArchitecture architecture, List<Operand> operands, MosaMethod method)
 		{
 			Debug.Assert((method.Signature.Parameters.Count + (method.HasThis ? 1 : 0) == operands.Count) ||
-			(method.DeclaringType.IsDelegate && method.Signature.Parameters.Count == operands.Count));
+			(method.DeclaringType.IsDelegate && method.Signature.Parameters.Count == operands.Count), method.FullName);
 
 			int offset = method.Signature.Parameters.Count - operands.Count;
 			int result = 0;

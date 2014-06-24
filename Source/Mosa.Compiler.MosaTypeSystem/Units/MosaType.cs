@@ -51,6 +51,8 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public IList<MosaType> Interfaces { get; private set; }
 
+		public MosaTypeAttributes TypeAttributes { get; private set; }
+
 		public MosaTypeCode TypeCode { get; private set; }
 
 		public bool IsU1 { get { return TypeCode == MosaTypeCode.U1; } }
@@ -254,6 +256,8 @@ namespace Mosa.Compiler.MosaTypeSystem
 			public IList<MosaField> Fields { get { return type.fields; } }
 
 			public IList<MosaType> Interfaces { get { return type.interfaces; } }
+
+			public MosaTypeAttributes TypeAttributes { set { type.TypeAttributes = value; } }
 
 			public MosaTypeCode TypeCode { set { type.TypeCode = value; } }
 

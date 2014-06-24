@@ -250,6 +250,40 @@ namespace System
 			return this;
 		}
 
+		public unsafe string ToUpper()
+		{
+			String result = InternalAllocateString(this.length);
+			char* chars = result.first_char;
+
+			for (int i = 0; i < this.length; i++)
+			{
+				char c = this[i];
+				if (c >= 97 && c <= 122)
+					c = (char)(c - 32);
+				*chars = c;
+				chars++;
+			}
+
+			return result;
+		}
+
+		public unsafe string ToLower()
+		{
+			String result = InternalAllocateString(this.length);
+			char* chars = result.first_char;
+
+			for (int i = 0; i < this.length; i++)
+			{
+				char c = this[i];
+				if (c >= 65 && c <= 90)
+					c = (char)(c + 32);
+				*chars = c;
+				chars++;
+			}
+
+			return result;
+		}
+
 		// TODO: Seems some compiler bugs prevent the original algorithms from working...
 		public unsafe static string Concat(String a, String b)
 		{
