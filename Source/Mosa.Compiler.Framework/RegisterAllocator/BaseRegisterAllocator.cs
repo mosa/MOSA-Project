@@ -123,17 +123,10 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			// Generate trace information for live intervals
 			TraceLiveIntervals("InitialLiveIntervals", false);
 
-			// Collect move locations
-			//CollectMoveHints();
-
-			// Generate trace information for move hints
-			//TraceMoveHints();
-
-			// Split intervals at call sites
-			//SplitIntervalsAtCallSites();
+			AdditionalSetup();
 
 			// Calculate spill costs for live intervals
-			CalculateSpillCosts();
+			AssignSpillCosts();
 
 			// Populate priority queue
 			PopulatePriorityQueue();
@@ -163,7 +156,9 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			TraceLiveIntervals("PostLiveIntervals", true);
 		}
 
-		protected static string ToString(BitArray bitArray)
+		protected abstract void AdditionalSetup();
+
+		private static string ToString(BitArray bitArray)
 		{
 			var builder = new StringBuilder();
 
@@ -175,7 +170,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			return builder.ToString();
 		}
 
-		protected void TraceBlocks()
+		private void TraceBlocks()
 		{
 			if (!Trace.Active)
 				return;
@@ -192,7 +187,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			}
 		}
 
-		protected void TraceLiveIntervals(string stage, bool operand)
+		private void TraceLiveIntervals(string stage, bool operand)
 		{
 			if (!Trace.Active)
 				return;
@@ -217,12 +212,12 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			}
 		}
 
-		protected String LiveIntervalsToString(List<LiveInterval> liveIntervals)
+		private String LiveIntervalsToString(List<LiveInterval> liveIntervals)
 		{
 			return LiveIntervalsToString(liveIntervals, false);
 		}
 
-		protected String LiveIntervalsToString(List<LiveInterval> liveIntervals, bool operand)
+		private String LiveIntervalsToString(List<LiveInterval> liveIntervals, bool operand)
 		{
 			if (liveIntervals.Count == 0)
 				return string.Empty;
@@ -263,10 +258,11 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		protected int GetIndex(Operand operand)
 		{
+			//FUTURE: Make private by refactoring
 			return (operand.IsCPURegister) ? (operand.Register.Index) : (operand.Index + PhysicalRegisterCount - 1);
 		}
 
-		protected void CreateExtendedBlocks()
+		private void CreateExtendedBlocks()
 		{
 			var blockOrder = new LoopAwareBlockOrder(this.BasicBlocks);
 
@@ -306,7 +302,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			}
 		}
 
-		protected void NumberInstructions()
+		private void NumberInstructions()
 		{
 			NumberInstructions(BasicBlocks, InstructionSet);
 
@@ -318,7 +314,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			}
 		}
 
-		protected void TraceNumberInstructions()
+		private void TraceNumberInstructions()
 		{
 			if (!Trace.Active)
 				return;
@@ -349,7 +345,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			}
 		}
 
-		protected void ComputeLocalLiveSets()
+		private void ComputeLocalLiveSets()
 		{
 			var liveSetTrace = new CompilerTrace(Trace, "ComputeLocalLiveSets");
 
@@ -430,7 +426,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			}
 		}
 
-		protected void ComputeGlobalLiveSets()
+		private void ComputeGlobalLiveSets()
 		{
 			bool changed = true;
 			while (changed)
@@ -463,7 +459,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			}
 		}
 
-		protected void BuildLiveIntervals()
+		private void BuildLiveIntervals()
 		{
 			var intervalTrace = new CompilerTrace(Trace, "BuildLiveIntervals");
 
@@ -574,7 +570,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			}
 		}
 
-		protected ExtendedBlock GetContainingBlock(SlotIndex slotIndex)
+		private ExtendedBlock GetContainingBlock(SlotIndex slotIndex)
 		{
 			foreach (var block in ExtendedBlocks)
 			{
@@ -603,29 +599,9 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			return GetContainingBlock(slotIndex).Start;
 		}
 
-		protected virtual int GetSpillCost(SlotIndex use, int factor)
-		{
-			return factor * GetLoopDepth(use) * 100;
-		}
+		protected abstract void CalculateSpillCost(LiveInterval liveInterval);
 
-		protected virtual void CalculateSpillCost(LiveInterval liveInterval)
-		{
-			int spillvalue = 0;
-
-			foreach (var use in liveInterval.UsePositions)
-			{
-				spillvalue += GetSpillCost(use, 100);
-			}
-
-			foreach (var use in liveInterval.DefPositions)
-			{
-				spillvalue += GetSpillCost(use, 115);
-			}
-
-			liveInterval.SpillValue = spillvalue;
-		}
-
-		protected void CalculateSpillCosts()
+		private void AssignSpillCosts()
 		{
 			foreach (var virtualRegister in VirtualRegisters)
 			{
@@ -651,10 +627,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			}
 		}
 
-		protected virtual int CalculatePriorityValue(LiveInterval liveInterval)
-		{
-			return liveInterval.Length | ((int)(((int)LiveInterval.AllocationStage.Max - liveInterval.Stage)) << 28);
-		}
+		protected abstract int CalculatePriorityValue(LiveInterval liveInterval);
 
 		protected void AddPriorityQueue(LiveInterval liveInterval)
 		{
@@ -667,7 +640,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			PriorityQueue.Enqueue(value, liveInterval);
 		}
 
-		protected void PopulatePriorityQueue()
+		private void PopulatePriorityQueue()
 		{
 			foreach (var virtualRegister in VirtualRegisters)
 			{
@@ -689,7 +662,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			}
 		}
 
-		protected void ProcessPriorityQueue()
+		private void ProcessPriorityQueue()
 		{
 			while (!PriorityQueue.IsEmpty)
 			{
@@ -782,11 +755,115 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			return false;
 		}
 
-		protected abstract void ProcessLiveInterval(LiveInterval liveInterval);
+		protected abstract bool PlaceLiveInterval(LiveInterval liveInterval);
+
+		private void ProcessLiveInterval(LiveInterval liveInterval)
+		{
+			Debug.Assert(liveInterval.LiveIntervalTrack == null);
+			Debug.Assert(!liveInterval.IsSplit);
+
+			if (Trace.Active)
+			{
+				Trace.Log("Processing Interval: " + liveInterval.ToString() + " / Length: " + liveInterval.Length.ToString() + " / Spill Cost: " + liveInterval.SpillCost.ToString() + " / Stage: " + liveInterval.Stage.ToString());
+				Trace.Log("  Defs (" + liveInterval.DefPositions.Count.ToString() + "): " + SlotsToString(liveInterval.DefPositions));
+				Trace.Log("  Uses (" + liveInterval.UsePositions.Count.ToString() + "): " + SlotsToString(liveInterval.UsePositions));
+			}
+
+			if (PlaceLiveInterval(liveInterval))
+			{
+				return;
+			}
+
+			if (Trace.Active) Trace.Log("  No live intervals to evicts");
+
+			// No live intervals to evict!
+
+			// prepare to split live interval
+			if (liveInterval.Stage == LiveInterval.AllocationStage.Initial)
+			{
+				if (Trace.Active) Trace.Log("  Re-queued for split level 1 stage");
+				liveInterval.Stage = LiveInterval.AllocationStage.SplitLevel1;
+				AddPriorityQueue(liveInterval);
+				return;
+			}
+
+			// split live interval - level 1
+			if (liveInterval.Stage == LiveInterval.AllocationStage.SplitLevel1)
+			{
+				if (Trace.Active) Trace.Log("  Attempting to split interval - level 1");
+
+				if (TrySplitInterval(liveInterval, 1))
+				{
+					return;
+				}
+
+				// Move to split level 2 stage
+				if (Trace.Active) Trace.Log("  Re-queued for split interval - level 2");
+
+				liveInterval.Stage = LiveInterval.AllocationStage.SplitLevel2;
+				AddPriorityQueue(liveInterval);
+				return;
+			}
+
+			// split live interval - level 2
+			if (liveInterval.Stage == LiveInterval.AllocationStage.SplitLevel2)
+			{
+				if (Trace.Active) Trace.Log("  Attempting to split interval - level 2");
+
+				if (TrySplitInterval(liveInterval, 2))
+				{
+					return;
+				}
+
+				// Move to spill stage
+				if (Trace.Active) Trace.Log("  Re-queued for spillable stage");
+
+				liveInterval.Stage = LiveInterval.AllocationStage.SplitLevel3;
+				AddPriorityQueue(liveInterval);
+				return;
+			}
+
+			// split live interval - level 3
+			if (liveInterval.Stage == LiveInterval.AllocationStage.SplitLevel3)
+			{
+				if (Trace.Active) Trace.Log("  Attempting to split interval - level 3");
+
+				if (TrySplitInterval(liveInterval, 3))
+				{
+					return;
+				}
+
+				// Move to spill stage
+				if (Trace.Active) Trace.Log("  Re-queued for spillable stage");
+
+				liveInterval.Stage = LiveInterval.AllocationStage.SplitFinal;
+				AddPriorityQueue(liveInterval);
+				return;
+			}
+
+			// Final split option
+			if (liveInterval.Stage == LiveInterval.AllocationStage.SplitFinal)
+			{
+				if (Trace.Active) Trace.Log("  Final split option");
+
+				SplitLastResort(liveInterval);
+				return;
+			}
+
+			return;
+		}
 
 		protected abstract bool TrySplitInterval(LiveInterval liveInterval, int level);
 
-		protected IEnumerable<VirtualRegister> GetVirtualRegisters(BitArray array)
+		private void SplitLastResort(LiveInterval liveInterval)
+		{
+			// This is the last option when all other split option fail.
+			// Split interval up into very small pieces that can always be placed.
+
+			// TODO
+		}
+
+		private IEnumerable<VirtualRegister> GetVirtualRegisters(BitArray array)
 		{
 			for (int i = 0; i < array.Count; i++)
 			{
@@ -797,42 +874,6 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 						yield return virtualRegister;
 				}
 			}
-		}
-
-		protected SlotIndex GetMaximum(SlotIndex[] slots)
-		{
-			SlotIndex max = null;
-
-			foreach (var slot in slots)
-			{
-				if (slot == null)
-					continue;
-
-				if (max == null || slot > max)
-				{
-					max = slot;
-				}
-			}
-
-			return max;
-		}
-
-		protected SlotIndex GetMinimum(SlotIndex[] slots)
-		{
-			SlotIndex min = null;
-
-			foreach (var slot in slots)
-			{
-				if (slot == null)
-					continue;
-
-				if (min == null || slot < min)
-				{
-					min = slot;
-				}
-			}
-
-			return min;
 		}
 
 		protected SlotIndex FindCallSiteInInterval(LiveInterval liveInterval)

@@ -15,14 +15,14 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 {
 	public class LiveInterval
 	{
-
 		public enum AllocationStage
 		{
 			Initial = 0,
 			SplitLevel1 = 1,
 			SplitLevel2 = 2,
-			Spillable = 3,
-			Max = 4,
+			SplitLevel3 = 3,
+			SplitFinal = 4,
+			Max = 5,
 		}
 
 		public LiveRange LiveRange { get; private set; }
@@ -69,22 +69,42 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		public SlotIndex Maximum { get { return LiveRange.Maximum; } }
 
-		public bool IsAdjacent(SlotIndex start, SlotIndex end) { return LiveRange.IsAdjacent(start, end); }
+		public bool IsAdjacent(SlotIndex start, SlotIndex end)
+		{
+			return LiveRange.IsAdjacent(start, end);
+		}
 
-		public bool Intersects(SlotIndex start, SlotIndex end) { return LiveRange.Intersects(start, end); }
+		public bool Intersects(SlotIndex start, SlotIndex end)
+		{
+			return LiveRange.Intersects(start, end);
+		}
 
-		public bool IsAdjacent(Interval other) { return LiveRange.IsAdjacent(other); }
+		public bool IsAdjacent(Interval other)
+		{
+			return LiveRange.IsAdjacent(other);
+		}
 
-		public bool Intersects(Interval other) { return LiveRange.Intersects(other); }
+		public bool Intersects(Interval other)
+		{
+			return LiveRange.Intersects(other);
+		}
 
-		public bool Contains(SlotIndex start) { return LiveRange.Contains(start); }
+		public bool Contains(SlotIndex start)
+		{
+			return LiveRange.Contains(start);
+		}
 
-		public bool IsAdjacent(LiveInterval other) { return LiveRange.IsAdjacent(other.LiveRange); }
+		public bool IsAdjacent(LiveInterval other)
+		{
+			return LiveRange.IsAdjacent(other.LiveRange);
+		}
 
-		public bool Intersects(LiveInterval other) { return LiveRange.Intersects(other.LiveRange); }
+		public bool Intersects(LiveInterval other)
+		{
+			return LiveRange.Intersects(other.LiveRange);
+		}
 
-
-		#endregion
+		#endregion Short Cuts
 
 		private LiveInterval(VirtualRegister virtualRegister, SlotIndex start, SlotIndex end, IList<SlotIndex> uses, IList<SlotIndex> defs)
 		{

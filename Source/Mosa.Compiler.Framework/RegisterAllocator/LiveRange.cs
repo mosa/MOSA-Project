@@ -119,12 +119,23 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			return GetPrevious(DefPositions, at);
 		}
 
+		public bool CanSplitAt(SlotIndex at)
+		{
+			if (Start == at)
+				return false;
+
+			if (at < Start && at > End)
+				return false;
+
+			if (defPositions.ContainsKey(at))
+				return false;
+
+			return true;
+		}
+
 		public List<LiveRange> SplitAt(SlotIndex at)
 		{
-			Debug.Assert(!defPositions.ContainsKey(at));
-			Debug.Assert(Start != at);
-			//Debug.Assert(at != End);
-			Debug.Assert(at >= Start && at <= End);
+			Debug.Assert(CanSplitAt(at));
 
 			var ranges = new List<LiveRange>(2);
 
@@ -134,15 +145,35 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			return ranges;
 		}
 
+		public bool CanSplitAt(SlotIndex low, SlotIndex high)
+		{
+			if (low == high)
+				return false;
+
+			if (Start == low)
+				return false;
+
+			if (low < Start && low > End)
+				return false;
+
+			if (high < Start && high > End)
+				return false;
+
+			if (low >= high)
+				return false;
+
+			if (defPositions.ContainsKey(low))
+				return false;
+
+			if (defPositions.ContainsKey(high))
+				return false;
+
+			return true;
+		}
+
 		public List<LiveRange> SplitAt(SlotIndex low, SlotIndex high)
 		{
-			Debug.Assert(!defPositions.ContainsKey(low));
-			Debug.Assert(!defPositions.ContainsKey(high));
-			Debug.Assert(low != high);
-			Debug.Assert(Start != low);
-			//Debug.Assert(End != high);
-			Debug.Assert(low >= Start && low <= End);
-			Debug.Assert(high >= Start && high <= End);
+			Debug.Assert(CanSplitAt(low, high));
 
 			var ranges = new List<LiveRange>(3);
 
