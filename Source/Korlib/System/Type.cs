@@ -1,5 +1,5 @@
 ﻿/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
+ * (c) 2014 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
  *
@@ -16,12 +16,13 @@ namespace System
 	/// <summary>
 	/// Implementation of the "System.Type" class.
 	/// </summary>
-	public class Type
+	public class Type : MemberInfo
 	{
 		private Type(RuntimeTypeHandle handle)
 		{
 			this.m_handle = handle;
 			this.FullName = InternalGetFullName(handle);
+			this.Attributes = InternalGetAttributes(handle);
 		}
 
 		private RuntimeTypeHandle m_handle;
@@ -52,17 +53,17 @@ namespace System
 			private set;
 		}
 
-		public Type GetType(string typeName)
+		public static Type GetType(string typeName)
 		{
 			return GetType(typeName, false, false);
 		}
 
-		public Type GetType(string typeName, bool throwOnError)
+		public static Type GetType(string typeName, bool throwOnError)
 		{
 			return GetType(typeName, throwOnError, false);
 		}
 
-		public Type GetType(string typeName, bool throwOnError, bool ignoreCase)
+		public static Type GetType(string typeName, bool throwOnError, bool ignoreCase)
 		{
 			RuntimeTypeHandle handle = InternalGetTypeHandleByName(typeName, throwOnError, ignoreCase);
 			return new Type(handle);
@@ -73,6 +74,9 @@ namespace System
 
 		[MethodImplAttribute(MethodImplOptions.InternalCall)]
 		private static extern string InternalGetFullName(RuntimeTypeHandle handle);
+
+		[MethodImplAttribute(MethodImplOptions.InternalCall)]
+		private static extern TypeAttributes InternalGetAttributes(RuntimeTypeHandle handle);
 
 		public static Type GetTypeFromHandle(RuntimeTypeHandle handle)
 		{
@@ -85,6 +89,59 @@ namespace System
 		public override string ToString()
 		{
 			return FullName;
+		}
+
+		public override bool Equals(object obj)
+		{
+			if (!(obj is System.Type))
+				return false;
+
+			return ((Type)obj).m_handle == m_handle;
+		}
+
+		public bool Equals(Type obj)
+		{
+			return (obj).m_handle == m_handle;
+		}
+
+		public override int GetHashCode()
+		{
+			return base.GetHashCode();
+		}
+
+		public override Type DeclaringType
+		{
+			get { throw new NotImplementedException(); }
+		}
+
+		public override MemberTypes MemberType
+		{
+			get { throw new NotImplementedException(); }
+		}
+
+		public override string Name
+		{
+			get { throw new NotImplementedException(); }
+		}
+
+		public override Type ReflectedType
+		{
+			get { throw new NotImplementedException(); }
+		}
+
+		public override object[] GetCustomAttributes(bool inherit)
+		{
+			throw new NotImplementedException();
+		}
+
+		public override object[] GetCustomAttributes(Type attributeType, bool inherit)
+		{
+			throw new NotImplementedException();
+		}
+
+		public override bool IsDefined(Type attributeType, bool inherit)
+		{
+			throw new NotImplementedException();
 		}
 	}
 }

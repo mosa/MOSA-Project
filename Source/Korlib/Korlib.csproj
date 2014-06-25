@@ -67,6 +67,7 @@
     <Compile Include="System.Reflection\AssemblyTitleAttribute.cs" />
     <Compile Include="System.Reflection\ICustomAttributeProvider.cs" />
     <Compile Include="System.Reflection\MemberInfo.cs" />
+    <Compile Include="System.Reflection\MemberTypes.cs" />
     <Compile Include="System.Reflection\Module.cs" />
     <Compile Include="System.Reflection\MosaTypeCode.cs" />
     <Compile Include="System.Reflection\TypeAttributes.cs" />

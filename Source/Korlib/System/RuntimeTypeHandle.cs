@@ -28,5 +28,28 @@ namespace System
 				return m_ptr;
 			}
 		}
+
+		public override bool Equals(object obj)
+		{
+			if (!(obj is System.RuntimeTypeHandle))
+				return false;
+
+			return ((RuntimeTypeHandle)obj).m_ptr == m_ptr;
+		}
+
+		public static bool operator ==(RuntimeTypeHandle value1, RuntimeTypeHandle value2)
+		{
+			return value1.Equals(value2);
+		}
+
+		public static bool operator !=(RuntimeTypeHandle value1, RuntimeTypeHandle value2)
+		{
+			return !value1.Equals(value2);
+		}
+
+		public override int GetHashCode()
+		{
+			return base.GetHashCode();
+		}
 	}
 }

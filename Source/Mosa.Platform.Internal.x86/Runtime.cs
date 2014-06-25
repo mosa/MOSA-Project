@@ -11,6 +11,7 @@
 
 using System;
 using System.Runtime.InteropServices;
+using System.Reflection;
 
 namespace Mosa.Platform.Internal.x86
 {
@@ -83,7 +84,7 @@ namespace Mosa.Platform.Internal.x86
 		private static MetadataVector[] Assemblies;
 		private static MetadataVector[] Types;
 
-		public static string Metdadata_InitializeString(uint* ptr)
+		public static string Metadata_InitializeString(uint* ptr)
 		{
 			int length = (int)(ptr[0]);
 			return new string((sbyte*)++ptr, 0, length);
@@ -109,7 +110,7 @@ namespace Mosa.Platform.Internal.x86
 
 				// Populate the MetadataVector
 				Assemblies[i].Pointer = ptr;
-				Assemblies[i].Name = Metdadata_InitializeString((uint*)(ptr[0]));
+				Assemblies[i].Name = Metadata_InitializeString((uint*)(ptr[0]));
 
 				// Increment the type count
 				typeCount += ptr[3];
@@ -135,7 +136,7 @@ namespace Mosa.Platform.Internal.x86
 
 					// Populate the MetadataVector
 					Types[typeCount + j].Pointer = typePtr;
-					Types[typeCount + j].Name = Metdadata_InitializeString((uint*)(typePtr[0]));
+					Types[typeCount + j].Name = Metadata_InitializeString((uint*)(typePtr[0]));
 				}
 
 				// Increment the type count
@@ -180,7 +181,13 @@ namespace Mosa.Platform.Internal.x86
 		public static string Metadata_Type_GetFullName(RuntimeTypeHandle* typeDefinition)
 		{
 			// Name pointer located at the beginning of the TypeDefinition
-			return Metdadata_InitializeString((uint*)((uint*)typeDefinition)[0]);
+			return Metadata_InitializeString((uint*)((uint*)typeDefinition)[0]);
+		}
+
+		public static TypeAttributes Metadata_Type_GetAttributes(RuntimeTypeHandle* typeDefinition)
+		{
+			// Type attributes located at 3rd position of TypeDefinition
+			return (TypeAttributes)((uint*)typeDefinition)[2];
 		}
 
 		#endregion Metadata - Type

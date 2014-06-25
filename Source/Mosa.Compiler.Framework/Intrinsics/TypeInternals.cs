@@ -14,6 +14,7 @@ namespace Mosa.Compiler.Framework.Intrinsics
 {
 	[ReplacementTarget("System.Type::GetTypeHandle")]
 	[ReplacementTarget("System.Type::InternalGetFullName")]
+	[ReplacementTarget("System.Type::InternalGetAttributes")]
 	[ReplacementTarget("System.Type::InternalGetTypeHandleByName")]
 	public sealed class TypeInternals : IIntrinsicInternalMethod
 	{
@@ -27,15 +28,19 @@ namespace Mosa.Compiler.Framework.Intrinsics
 			switch (context.MosaMethod.Name)
 			{
 				case "GetTypeHandle":
-					this.GetTypeHandle(context, methodCompiler);
+					this.Internal(context, methodCompiler, "Metadata_Type_GetHandleFromObject");
 					break;
 
 				case "InternalGetFullName":
-					this.InternalGetFullname(context, methodCompiler);
+					this.Internal(context, methodCompiler, "Metadata_Type_GetFullName");
+					break;
+
+				case "InternalGetAttributes":
+					this.Internal(context, methodCompiler, "Metadata_Type_GetAttributes");
 					break;
 
 				case "InternalGetTypeHandleByName":
-					this.InternalGetTypeHandleByName(context, methodCompiler);
+					this.Internal(context, methodCompiler, "Metadata_Type_GetHandleByName");
 					break;
 
 				default:
@@ -43,62 +48,26 @@ namespace Mosa.Compiler.Framework.Intrinsics
 			}
 		}
 
-		private void GetTypeHandle(Context context, BaseMethodCompiler methodCompiler)
+		private void Internal(Context context, BaseMethodCompiler methodCompiler, string internalMethod)
 		{
 			string arch = "Mosa.Platform.Internal." + methodCompiler.Architecture.PlatformName;
 
 			var type = methodCompiler.TypeSystem.GetTypeByName(arch, "Runtime");
 			Debug.Assert(type != null, "Cannot find " + arch + ".Runtime");
 
-			var method = type.FindMethodByName("Metadata_Type_GetHandleFromObject");
+			var method = type.FindMethodByName(internalMethod);
 
 			Operand callTargetOperand = Operand.CreateSymbolFromMethod(methodCompiler.TypeSystem, method);
 
-			Operand objectOperand = context.Operand1;
+			Operand[] operands = new Operand[context.OperandCount];
+			for (int i = 0; i < context.OperandCount; i++)
+				operands[i] = context.GetOperand(i);
 			Operand result = context.Result;
 
-			context.SetInstruction(IRInstruction.Call, result, callTargetOperand, objectOperand);
-			context.MosaMethod = method;
-		}
-
-		private void InternalGetFullname(Context context, BaseMethodCompiler methodCompiler)
-		{
-			string arch = "Mosa.Platform.Internal." + methodCompiler.Architecture.PlatformName;
-
-			var type = methodCompiler.TypeSystem.GetTypeByName(arch, "Runtime");
-			Debug.Assert(type != null, "Cannot find " + arch + ".Runtime");
-
-			var method = type.FindMethodByName("Metadata_Type_GetFullName");
-
-			Operand callTargetOperand = Operand.CreateSymbolFromMethod(methodCompiler.TypeSystem, method);
-
-			Operand objectOperand = context.Operand1;
-			Operand result = context.Result;
-
-			context.SetInstruction(IRInstruction.Call, result, callTargetOperand, objectOperand);
-			context.MosaMethod = method;
-		}
-
-		private void InternalGetTypeHandleByName(Context context, BaseMethodCompiler methodCompiler)
-		{
-			string arch = "Mosa.Platform.Internal." + methodCompiler.Architecture.PlatformName;
-
-			var type = methodCompiler.TypeSystem.GetTypeByName(arch, "Runtime");
-			Debug.Assert(type != null, "Cannot find " + arch + ".Runtime");
-
-			var method = type.FindMethodByName("Metadata_Type_GetHandleByName");
-
-			Operand callTargetOperand = Operand.CreateSymbolFromMethod(methodCompiler.TypeSystem, method);
-
-			Operand typeNameOperand = context.Operand1;
-			Operand throwOnErrorOperand = context.Operand2;
-			Operand ignoreCaseOperand = context.Operand3;
-			Operand result = context.Result;
-
-			context.SetInstruction(IRInstruction.Call, result, callTargetOperand, typeNameOperand);
-			context.SetOperand(2, throwOnErrorOperand);
-			context.SetOperand(3, ignoreCaseOperand);
-			context.OperandCount = 4;
+			context.SetInstruction(IRInstruction.Call, result, callTargetOperand);
+			for (int i = 0; i < operands.Length; i++)
+				context.SetOperand(1 + i, operands[i]);
+			context.OperandCount = (byte)(1 + operands.Length);
 			context.MosaMethod = method;
 		}
 	}
