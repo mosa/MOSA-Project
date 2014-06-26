@@ -176,6 +176,16 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			return null;
 		}
 
+		public void ReplaceWithSplit(LiveInterval source, IList<LiveInterval> liveIntervals)
+		{
+			Remove(source);
+
+			foreach(var liveInterval in liveIntervals)
+			{
+				Add(liveInterval);
+			}
+		}
+
 		/// <summary>
 		/// Returns a <see cref="System.String" /> that represents this instance.
 		/// </summary>

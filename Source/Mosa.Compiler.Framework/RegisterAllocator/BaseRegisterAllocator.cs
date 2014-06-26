@@ -572,6 +572,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		private ExtendedBlock GetContainingBlock(SlotIndex slotIndex)
 		{
+			// FUTURE: Cache results
 			foreach (var block in ExtendedBlocks)
 			{
 				if (block.Contains(slotIndex))
@@ -629,9 +630,17 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		protected abstract int CalculatePriorityValue(LiveInterval liveInterval);
 
+		protected void AddPriorityQueue(IList<LiveInterval> liveIntervals)
+		{
+			foreach (var liveInterval in liveIntervals)
+			{
+				AddPriorityQueue(liveInterval);
+			}
+		}
+
 		protected void AddPriorityQueue(LiveInterval liveInterval)
 		{
-			Debug.Assert(!liveInterval.IsSplit);
+			//Debug.Assert(!liveInterval.IsSplit);
 			Debug.Assert(liveInterval.LiveIntervalTrack == null);
 
 			// priority is based on allocation stage (primary, lower first) and interval size (secondary, higher first)
@@ -755,12 +764,40 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			return false;
 		}
 
-		protected abstract bool PlaceLiveInterval(LiveInterval liveInterval);
+		protected virtual bool PlaceLiveInterval(LiveInterval liveInterval)
+		{
+			// For now, empty intervals will stay spilled
+			if (liveInterval.IsEmpty)
+			{
+				if (Trace.Active) Trace.Log("  Spilled");
+
+				liveInterval.VirtualRegister.IsSpilled = true;
+				AddSpilledInterval(liveInterval);
+
+				return true;
+			}
+
+			// Find any available track and place interval there
+			if (PlaceLiveIntervalOnAnyAvailableTrack(liveInterval))
+			{
+				return true;
+			}
+
+			if (Trace.Active) Trace.Log("  No free register available");
+
+			// No place for live interval; find live interval(s) to evict based on spill costs
+			if (PlaceLiveIntervalOnTrackAllowEvictions(liveInterval))
+			{
+				return true;
+			}
+
+			return false;
+		}
 
 		private void ProcessLiveInterval(LiveInterval liveInterval)
 		{
 			Debug.Assert(liveInterval.LiveIntervalTrack == null);
-			Debug.Assert(!liveInterval.IsSplit);
+			//Debug.Assert(!liveInterval.IsSplit);
 
 			if (Trace.Active)
 			{
@@ -860,7 +897,52 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			// This is the last option when all other split option fail.
 			// Split interval up into very small pieces that can always be placed.
 
-			// TODO
+			// 1. Find the first use or def
+			// 2. Determine split location
+			// 3. Split the range into two (or maybe more ranges)
+
+			if (liveInterval.IsEmpty)
+			{
+				SpilledIntervals.Add(liveInterval);
+				return;
+			}
+
+			var liveRange = liveInterval.LiveRange;
+			SlotIndex splitAt = null;
+
+			if (liveRange.IsDefFirst)
+			{
+				if (liveRange.Start == liveRange.FirstDef)
+				{
+					splitAt = liveRange.Start.HalfStepForward;
+				}
+				else
+				{
+					splitAt = liveRange.FirstDef.HalfStepBack;
+				}
+
+			}
+			else
+			{
+				Debug.Assert(liveRange.FirstUse != liveRange.Start);
+
+				if (liveRange.FirstUse != liveRange.End)
+				{
+					splitAt = liveRange.FirstUse.HalfStepForward;
+				}
+				else
+				{
+					splitAt = liveRange.FirstUse.HalfStepBack;
+				}
+			}
+
+			var intervals = liveInterval.SplitAt(splitAt);
+
+			liveInterval.VirtualRegister.ReplaceWithSplit(liveInterval, intervals);
+
+			AddPriorityQueue(intervals);
+
+			return;
 		}
 
 		private IEnumerable<VirtualRegister> GetVirtualRegisters(BitArray array)

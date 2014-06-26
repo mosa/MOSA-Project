@@ -16,18 +16,19 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 	/// <summary>
 	///
 	/// </summary>
-	public sealed class GreedyRegisterAllocator : BaseRegisterAllocator
+	public sealed class GreedyRegisterAllocator : BasicRegisterAllocator
 	{
 		private Dictionary<SlotIndex, MoveHint> moveHints;
 
 		public GreedyRegisterAllocator(BasicBlocks basicBlocks, VirtualRegisters compilerVirtualRegisters, InstructionSet instructionSet, StackLayout stackLayout, BaseArchitecture architecture, CompilerTrace trace)
 			: base(basicBlocks, compilerVirtualRegisters, instructionSet, stackLayout, architecture, trace)
 		{
-			moveHints = new Dictionary<SlotIndex, MoveHint>();
 		}
 
 		protected override void AdditionalSetup()
 		{
+			moveHints = new Dictionary<SlotIndex, MoveHint>();
+
 			// Collect move locations
 			CollectMoveHints();
 
@@ -205,33 +206,9 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			return false;
 		}
 
-		private void SplitIntervalsAtCallSites()
+		protected override void SplitIntervalAtCallSite(LiveInterval liveInterval, SlotIndex callSite)
 		{
-			foreach (var virtualRegister in VirtualRegisters)
-			{
-				if (virtualRegister.IsPhysicalRegister)
-					continue;
-
-				for (int i = 0; i < virtualRegister.LiveIntervals.Count; i++)
-				{
-					LiveInterval liveInterval = virtualRegister.LiveIntervals[i];
-
-					if (liveInterval.ForceSpilled)
-						continue;
-
-					if (liveInterval.IsEmpty)
-						continue;
-
-					var callSite = FindCallSiteInInterval(liveInterval);
-
-					if (callSite == null)
-						continue;
-
-					SplitInterval(liveInterval, callSite, false);
-
-					i = 0; // list was modified
-				}
-			}
+			SplitInterval(liveInterval, callSite, false);
 		}
 
 		protected override bool TrySplitInterval(LiveInterval liveInterval, int level)
@@ -278,7 +255,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			CalculateSpillCost(first);
 			CalculateSpillCost(last);
 
-			liveInterval.IsSplit = true;
+			//liveInterval.IsSplit = true;
 
 			var virtualRegister = liveInterval.VirtualRegister;
 

@@ -28,6 +28,16 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		public SlotIndex Maximum { get; private set; }
 
+		public SlotIndex FirstUse { get { return usePositions.Count == 0 ? null : usePositions.Values[0]; } }
+
+		public SlotIndex FirstDef { get { return defPositions.Count == 0 ? null : defPositions.Values[0]; } }
+
+		public SlotIndex LastUse { get { return usePositions.Count == 0 ? null : usePositions.Values[usePositions.Count - 1]; } }
+
+		public SlotIndex LastDef { get { return defPositions.Count == 0 ? null : defPositions.Values[defPositions.Count - 1]; } }
+
+		public bool IsDefFirst { get; private set; }
+
 		public LiveRange(SlotIndex start, SlotIndex end, IList<SlotIndex> uses, IList<SlotIndex> defs)
 			: base(start, end)
 		{
@@ -63,8 +73,15 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 				}
 			}
 
-			this.Minimum = min;
-			this.Maximum = max;
+			Minimum = min;
+			Maximum = max;
+
+			if (FirstDef == null)
+				IsDefFirst = false;
+			else if (FirstUse == null)
+				IsDefFirst = true;
+			else if (FirstDef < FirstUse)
+				IsDefFirst = true;
 		}
 
 		private static SlotIndex GetNext(IList<SlotIndex> slots, SlotIndex start)
@@ -124,7 +141,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			if (Start == at)
 				return false;
 
-			if (at < Start && at > End)
+			if (at <= Start || at >= End)
 				return false;
 
 			if (defPositions.ContainsKey(at))
@@ -153,10 +170,10 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			if (Start == low)
 				return false;
 
-			if (low < Start && low > End)
+			if (low <= Start || low >= End)
 				return false;
 
-			if (high < Start && high > End)
+			if (high <= Start || high >= End)
 				return false;
 
 			if (low >= high)

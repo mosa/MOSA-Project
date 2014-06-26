@@ -13,7 +13,7 @@ using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework.RegisterAllocator
 {
-	public class LiveInterval
+	public sealed class LiveInterval
 	{
 		public enum AllocationStage
 		{
@@ -48,8 +48,6 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 		public bool ForceSpilled { get; set; }
 
 		public bool NeverSpill { get; set; }
-
-		public bool IsSplit { get; set; }
 
 		#region Short Cuts
 
@@ -115,7 +113,6 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			this.Stage = AllocationStage.Initial;
 			this.ForceSpilled = false;
 			this.NeverSpill = false;
-			this.IsSplit = false;
 		}
 
 		public LiveInterval(VirtualRegister virtualRegister, SlotIndex start, SlotIndex end)
@@ -143,7 +140,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		public override string ToString()
 		{
-			return VirtualRegister.ToString() + " between " + base.ToString();
+			return VirtualRegister.ToString() + " between " + LiveRange.ToString();
 		}
 
 		public void Evict()
@@ -151,8 +148,30 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			this.LiveIntervalTrack.Evict(this);
 		}
 
+		private LiveInterval CreateSplit(LiveRange liveRange)
+		{
+			return new LiveInterval(VirtualRegister, liveRange.Start, liveRange.End, LiveRange.UsePositions, LiveRange.DefPositions);
+		}
+
+		public IList<LiveInterval> SplitAt(SlotIndex at)
+		{
+			Debug.Assert(LiveRange.CanSplitAt(at));
+
+			var liveRanges = LiveRange.SplitAt(at);
+
+			var intervals = new List<LiveInterval>(liveRanges.Count);
+
+			foreach (var liveRange in liveRanges)
+			{
+				intervals.Add(CreateSplit(liveRange));
+			}
+
+			return intervals;
+		}
+
 		public LiveInterval Split(SlotIndex start, SlotIndex end)
 		{
+			// Depreciated
 			return new LiveInterval(VirtualRegister, start, end, UsePositions, DefPositions);
 		}
 	}
