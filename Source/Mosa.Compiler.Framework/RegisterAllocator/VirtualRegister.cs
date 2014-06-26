@@ -180,7 +180,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 		{
 			Remove(source);
 
-			foreach(var liveInterval in liveIntervals)
+			foreach (var liveInterval in liveIntervals)
 			{
 				Add(liveInterval);
 			}

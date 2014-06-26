@@ -600,6 +600,14 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			return GetContainingBlock(slotIndex).Start;
 		}
 
+		protected void CalculateSpillCost(IList<LiveInterval> liveIntervals)
+		{
+			foreach (var liveInterval in liveIntervals)
+			{
+				CalculateSpillCost(liveInterval);
+			}
+		}
+
 		protected abstract void CalculateSpillCost(LiveInterval liveInterval);
 
 		private void AssignSpillCosts()
@@ -920,7 +928,6 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 				{
 					splitAt = liveRange.FirstDef.HalfStepBack;
 				}
-
 			}
 			else
 			{
@@ -928,7 +935,14 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 				if (liveRange.FirstUse != liveRange.End)
 				{
-					splitAt = liveRange.FirstUse.HalfStepForward;
+					if (liveRange.FirstDef != null && liveRange.FirstDef == liveRange.FirstUse)
+					{
+						splitAt = liveRange.FirstUse.HalfStepForward;
+					}
+					else
+					{
+						splitAt = liveRange.FirstUse;
+					}
 				}
 				else
 				{
@@ -937,6 +951,8 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			}
 
 			var intervals = liveInterval.SplitAt(splitAt);
+
+			CalculateSpillCost(intervals);
 
 			liveInterval.VirtualRegister.ReplaceWithSplit(liveInterval, intervals);
 
