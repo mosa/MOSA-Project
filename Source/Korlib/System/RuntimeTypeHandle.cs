@@ -39,12 +39,12 @@ namespace System
 
 		public static bool operator ==(RuntimeTypeHandle value1, RuntimeTypeHandle value2)
 		{
-			return value1.Equals(value2);
+			return value1.m_ptr == value2.m_ptr;
 		}
 
 		public static bool operator !=(RuntimeTypeHandle value1, RuntimeTypeHandle value2)
 		{
-			return !value1.Equals(value2);
+			return value1.m_ptr != value2.m_ptr;
 		}
 
 		public override int GetHashCode()

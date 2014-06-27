@@ -132,7 +132,7 @@ namespace Mosa.Platform.Internal.x86
 				for (uint j = 0; j < assemblyTypeCount; j++)
 				{
 					// Get the pointer to the Type Metadata
-					uint* typePtr = (uint*)assemblyPtr[4 + j];
+					uint* typePtr = (uint*)(assemblyPtr[4 + j]);
 
 					// Populate the MetadataVector
 					Types[typeCount + j].Pointer = typePtr;
@@ -154,34 +154,45 @@ namespace Mosa.Platform.Internal.x86
 			return (RuntimeTypeHandle*)((uint*)obj)[0];
 		}
 
-		public static RuntimeTypeHandle* Metadata_Type_GetHandleByName(string typeName, bool throwOnError, bool ignoreCase)
+		public static RuntimeTypeHandle* Metadata_Type_GetHandleByName(string typeName, bool ignoreCase)
 		{
 			// If we are ignoring casing then lower the casing
 			if (ignoreCase)
 				typeName = typeName.ToLower();
 
-			// Exceptions are not yet implemented so ignore throwOnError
 			// Loop through all the types and check to see if we have a match
 			for (uint i = 0; i < Types.Length; i++)
 			{
-				// Get the name, if we are ignoring casing then lower the casing
-				string name = (ignoreCase) ? Types[i].Name.ToLower() : Types[i].Name;
+				// Get the name
+				// FIXME: for some reason using the name in the MetadataVector doesn't work
+				//string name = Types[i].Name;
+				string name = Metadata_InitializeString((uint*)Types[i].Pointer[0]);
+
+				// Compare the length, if not a match then skip
+				if (typeName.Length != name.Length)
+					continue;
+
+				// If we are ignoring casing then lower the casing
+				if (ignoreCase)
+					name = name.ToLower();
 
 				// Compare name with desired name, if not a match then continue
-				if (!typeName.Equals(name)) continue;
+				if (typeName != name)
+					continue;
 
 				// Once we have a match return result
 				return (RuntimeTypeHandle*)Types[i].Pointer;
 			}
 
-			// If we didn't find anything then we should panic, return null
+			// If we didn't find anything then return a null pointer
 			return (RuntimeTypeHandle*)0;
 		}
 
 		public static string Metadata_Type_GetFullName(RuntimeTypeHandle* typeDefinition)
 		{
 			// Name pointer located at the beginning of the TypeDefinition
-			return Metadata_InitializeString((uint*)((uint*)typeDefinition)[0]);
+			uint* ptr = (uint*)typeDefinition;
+			return Metadata_InitializeString((uint*)ptr[0]);
 		}
 
 		public static TypeAttributes Metadata_Type_GetAttributes(RuntimeTypeHandle* typeDefinition)

@@ -3,6 +3,7 @@
  *
  * Licensed under the terms of the New BSD License.
  *
+ * Authors:
  *  Stefan Andres Charsley (charsleysa) <charsleysa@gmail.com>
  */
 
@@ -20,9 +21,11 @@ namespace Mosa.TestWorld.x86.Tests
 
 		public static bool FindTypeByNameTest()
 		{
-			Type bootType = typeof(Mosa.TestWorld.x86.Boot);
-			Type foundType = Type.GetType("Mosa.TestWorld.x86.Boot");
-			return foundType.Equals(bootType);
+			Type bootType = typeof(System.String);
+			Type foundType = Type.GetType("System.String");
+			//if (foundType == null) // Need to wait until the register allocator bug is fixed
+			//	return false;
+			return bootType.Equals(foundType);
 		}
 	}
 }

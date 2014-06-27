@@ -8,6 +8,7 @@
  *  Stefan Andres Charsley (charsleysa) <charsleysa@gmail.com>
  */
 
+using System;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 
@@ -21,8 +22,8 @@ namespace System
 		private Type(RuntimeTypeHandle handle)
 		{
 			this.m_handle = handle;
-			this.FullName = InternalGetFullName(handle);
-			this.Attributes = InternalGetAttributes(handle);
+			this.FullName = InternalGetFullName(this.m_handle);
+			this.Attributes = InternalGetAttributes(this.m_handle);
 		}
 
 		private RuntimeTypeHandle m_handle;
@@ -65,12 +66,24 @@ namespace System
 
 		public static Type GetType(string typeName, bool throwOnError, bool ignoreCase)
 		{
-			RuntimeTypeHandle handle = InternalGetTypeHandleByName(typeName, throwOnError, ignoreCase);
+			RuntimeTypeHandle handle = InternalGetTypeHandleByName(typeName, ignoreCase);
+			
+			// Check that we got a valid handle
+			if (handle.Value == new IntPtr(0))
+			{
+				// The handle is invalid so check to see if we should throw an error, otherwise return null
+				if (throwOnError)
+					throw new ArgumentNullException();
+				else
+					return null;
+			}
+
+			// If handle is valid then return the type
 			return new Type(handle);
 		}
 
 		[MethodImplAttribute(MethodImplOptions.InternalCall)]
-		private static extern RuntimeTypeHandle InternalGetTypeHandleByName(string typeName, bool throwOnError, bool ignoreCase);
+		private static extern RuntimeTypeHandle InternalGetTypeHandleByName(string typeName, bool ignoreCase);
 
 		[MethodImplAttribute(MethodImplOptions.InternalCall)]
 		private static extern string InternalGetFullName(RuntimeTypeHandle handle);

@@ -168,11 +168,11 @@ namespace Mosa.Compiler.Framework.Stages
 			Operand source;
 			if (context.MosaType != null)
 			{
-				source = Operand.CreateLabel(TypeSystem.GetTypeByName("System", "RuntimeTypeHandle"), context.MosaType.FullName + Metadata.TypeDefinition);
+				source = Operand.CreateManagedSymbol(TypeSystem, TypeSystem.GetTypeByName("System", "RuntimeTypeHandle"), context.MosaType.FullName + Metadata.TypeDefinition);
 			}
 			else if (context.MosaField != null)
 			{
-				source = Operand.CreateLabel(TypeSystem.GetTypeByName("System", "RuntimeTypeHandle"), context.MosaField.FullName + Metadata.FieldDefinition);
+				source = Operand.CreateManagedSymbol(TypeSystem, TypeSystem.GetTypeByName("System", "RuntimeFieldHandle"), context.MosaField.FullName + Metadata.FieldDefinition);
 			}
 			else
 				throw new NotImplementCompilerException();
