@@ -1,5 +1,5 @@
 ﻿/*
- * (c) 2013 MOSA - The Managed Operating System Alliance
+ * (c) 2014 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
  *
@@ -14,33 +14,34 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 {
 	public class MoveResolver
 	{
-		protected List<Move> moves;
+		public readonly List<Move> Moves;
 
-		protected int index;
-		protected bool before;
+		public readonly int Index;
+		public readonly bool Before;
+
+		public MoveResolver(int index, bool before)
+		{
+			Moves = new List<Move>();
+
+			Before = before;
+			Index = index;
+		}
 
 		public MoveResolver(BasicBlock anchor, BasicBlock source, BasicBlock destination)
+			: this(source == anchor ? source.EndIndex : destination.StartIndex, source == anchor)
 		{
-			Debug.Assert(source != null);
-			Debug.Assert(destination != null);
-			Debug.Assert(anchor != null);
-
-			this.moves = new List<Move>();
-
-			this.before = source == anchor;
-			this.index = before ? source.EndIndex : destination.StartIndex;			         
 		}
 
 		public void AddMove(Operand source, Operand destination)
 		{
-			moves.Add(new Move(source, destination));
+			Moves.Add(new Move(source, destination));
 		}
 
 		private int FindIndex(Register register, bool source)
 		{
-			for (int i = 0; i < moves.Count; i++)
+			for (int i = 0; i < Moves.Count; i++)
 			{
-				var move = moves[i];
+				var move = Moves[i];
 
 				var operand = source ? move.Source : move.Destination;
 
@@ -62,9 +63,9 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			{
 				loop = false;
 
-				for (int i = 0; i < moves.Count; i++)
+				for (int i = 0; i < Moves.Count; i++)
 				{
-					var move = moves[i];
+					var move = Moves[i];
 
 					if (!(move.Source.IsCPURegister || move.Destination.IsCPURegister))
 						continue;
@@ -77,7 +78,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 					architecture.InsertMoveInstruction(context, move.Destination, move.Source);
 					context.Marked = true;
 
-					moves.RemoveAt(i);
+					Moves.RemoveAt(i);
 
 					loop = true;
 				}
@@ -92,9 +93,9 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			{
 				loop = false;
 
-				for (int i = 0; i < moves.Count; i++)
+				for (int i = 0; i < Moves.Count; i++)
 				{
-					var move = moves[i];
+					var move = Moves[i];
 
 					if (!(move.Source.IsCPURegister || move.Destination.IsCPURegister))
 						continue;
@@ -104,16 +105,19 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 					if (other == -1)
 						continue;
 
-					architecture.InsertExchangeInstruction(context, moves[other].Source, move.Source);
+					architecture.InsertExchangeInstruction(context, Moves[other].Source, move.Source);
 					context.Marked = true;
-					moves[other].Source = move.Source;
-					moves.RemoveAt(i);
+
+					//Moves[other].Source = move.Source;
+					Moves[other] = new Move(move.Source, Moves[other].Destination);
+
+					Moves.RemoveAt(i);
 
 					if (other > i)
 						other--;
 
-					if (moves[other].Source.Register == moves[other].Destination.Register)
-						moves.RemoveAt(other);
+					if (Moves[other].Source.Register == Moves[other].Destination.Register)
+						Moves.RemoveAt(other);
 
 					loop = true;
 				}
@@ -122,9 +126,9 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		protected void CreateMemoryMoves(BaseArchitecture architecture, Context context)
 		{
-			for (int i = 0; i < moves.Count; i++)
+			for (int i = 0; i < Moves.Count; i++)
 			{
-				var move = moves[i];
+				var move = Moves[i];
 
 				if (!(move.Source.IsCPURegister || move.Destination.IsCPURegister))
 					continue;
@@ -135,12 +139,12 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		public void InsertResolvingMoves(BaseArchitecture architecture, InstructionSet instructionSet)
 		{
-			if (moves.Count == 0)
+			if (Moves.Count == 0)
 				return;
 
-			var context = new Context(instructionSet, index);
+			var context = new Context(instructionSet, Index);
 
-			if (before)
+			if (Before)
 			{
 				context.GotoPrevious();
 
@@ -155,7 +159,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			TryExchange(architecture, context);
 			CreateMemoryMoves(architecture, context);
 
-			Debug.Assert(moves.Count == 0);
+			Debug.Assert(Moves.Count == 0);
 		}
 	}
 }

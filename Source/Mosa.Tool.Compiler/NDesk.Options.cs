@@ -281,7 +281,7 @@ namespace NDesk.Options
 			if (c.Option == null)
 				throw new InvalidOperationException("OptionContext.Option is null.");
 			if (index >= c.Option.MaxValueCount)
-				throw new ArgumentOutOfRangeException("index");
+				throw new ArgumentOutOfRangeException("Index");
 			if (c.Option.OptionValueType == OptionValueType.Required &&
 				index >= values.Count)
 				throw new OptionException(string.Format(

@@ -11,19 +11,18 @@ using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework.RegisterAllocator
 {
-	public class Move
+	public class MoveExtended<T>
 	{
-		public readonly Operand Source;
+		public readonly Move Move;
 
-		public readonly Operand Destination;
+		public readonly T Value;
 
-		public Move(Operand source, Operand destination)
+		public MoveExtended(Move move, T value)
 		{
-			Debug.Assert(source != null);
-			Debug.Assert(destination != null);
+			Debug.Assert(move != null);
 
-			Source = source;
-			Destination = destination;
+			Move = move;
+			Value = value;
 		}
 	}
 }

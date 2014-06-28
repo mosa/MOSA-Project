@@ -16,7 +16,6 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 	// TODO: Use data structures which are faster at finding intersetions, and add & evicting intervals.
 	public class LiveIntervalTrack
 	{
-
 		public readonly List<LiveInterval> liveIntervals = new List<LiveInterval>();
 
 		public readonly bool IsReserved;

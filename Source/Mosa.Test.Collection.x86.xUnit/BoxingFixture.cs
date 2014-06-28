@@ -15,8 +15,8 @@ namespace Mosa.Test.Collection.x86.xUnit
 {
 	public class BoxingFixture : X86TestFixture
 	{
-		private double DoubleTolerance = 0.000001d;
-		private float FloatTolerance = 0.00001f;
+		//private double DoubleTolerance = 0.000001d;
+		//private float FloatTolerance = 0.00001f;
 
 		[Theory]
 		[PropertyData("U1")]

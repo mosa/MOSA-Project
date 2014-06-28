@@ -164,7 +164,7 @@ namespace Mosa.Compiler.Framework
 				}
 			}
 
-			throw new ArgumentNullException(@"missing stage destinationstination insert before");
+			throw new ArgumentNullException(@"missing stage destinatioBeforetion insert before");
 		}
 
 		/// <summary>
@@ -219,7 +219,7 @@ namespace Mosa.Compiler.Framework
 					return i;
 			}
 
-			throw new ArgumentNullException(@"missing stage destinationstination insert before");
+			throw new ArgumentNullException(@"missing stage destinatioBeforetion insert before");
 		}
 
 		#endregion Methods

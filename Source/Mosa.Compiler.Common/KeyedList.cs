@@ -8,7 +8,6 @@
  */
 
 using System.Collections.Generic;
-using System.Collections;
 
 namespace Mosa.Compiler.Common
 {
@@ -37,7 +36,5 @@ namespace Mosa.Compiler.Common
 
 			list.Add(value);
 		}
-
-
 	}
 }
