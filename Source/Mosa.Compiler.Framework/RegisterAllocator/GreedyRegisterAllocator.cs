@@ -303,7 +303,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 				Debug.Assert(next > liveInterval.Start);
 
-				if (Trace.Active) Trace.Log("  Register " + track.ToString() + " free up destination " + next.ToString());
+				if (Trace.Active) Trace.Log("  Register " + track.ToString() + " free up to " + next.ToString());
 
 				if (furthestUsed == null || furthestUsed < next)
 					furthestUsed = next;

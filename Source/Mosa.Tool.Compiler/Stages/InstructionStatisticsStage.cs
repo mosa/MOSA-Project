@@ -94,7 +94,7 @@ namespace Mosa.Tool.Compiler.Stages
 			writer.WriteLine("  - Total number of methods:\t\t\t {0}", numberOfMethods);
 			writer.WriteLine("  - Total number of instructions:\t\t\t {0}", numberOfInstructions);
 			writer.WriteLine("  - Number of disjoint instructions:\t\t\t {0}", disjointInstructions.Count);
-			writer.WriteLine("  - Ratio of disjoint instructions destinationstination total number:\t {0}", string.Format("{0:.00}%", ((double)disjointInstructions.Count / (double)numberOfInstructions)).Substring(1));
+			writer.WriteLine("  - Ratio of disjoint instructions to total number:\t {0}", string.Format("{0:.00}%", ((double)disjointInstructions.Count / (double)numberOfInstructions)).Substring(1));
 			writer.WriteLine();
 			writer.WriteLine("Namespace statistics:");
 			writer.WriteLine("---------------------");

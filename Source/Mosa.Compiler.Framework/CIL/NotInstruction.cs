@@ -62,7 +62,7 @@ namespace Mosa.Compiler.Framework.CIL
 			// Validate the operand
 			var result = opTable[(int)ctx.Operand1.Type.GetStackTypeCode()];
 			if (StackTypeCode.Unknown == result)
-				throw new InvalidOperationException(@"Invalid operand destinationstination Not instruction.");
+				throw new InvalidOperationException(@"Invalid operand to Not instruction.");
 
 			ctx.Result = compiler.CreateVirtualRegister(ctx.Operand1.Type);
 		}

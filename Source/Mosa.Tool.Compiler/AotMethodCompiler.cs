@@ -50,7 +50,7 @@ namespace Mosa.Tool.Compiler
 				(compilerOptions.EnableSSA) ? new EnterSSAStage() : null,
 				(compilerOptions.EnableSSA && compilerOptions.EnableSSAOptimizations) ? new SSAOptimizations() : null,
 				(compilerOptions.EnableSSA) ? new LeaveSSA() : null,
-
+				
 				new PromoteTempVariablesStage(),
 
 				new PlatformStubStage(),

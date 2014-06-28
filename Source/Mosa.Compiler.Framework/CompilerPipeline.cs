@@ -95,7 +95,7 @@ namespace Mosa.Compiler.Framework
 				}
 			}
 
-			throw new ArgumentNullException(@"missing stage destinationstination insert at");
+			throw new ArgumentNullException(@"missing stage to insert at");
 		}
 
 		/// <summary>
@@ -118,7 +118,7 @@ namespace Mosa.Compiler.Framework
 				}
 			}
 
-			throw new ArgumentNullException(@"missing stage destinationstination insert at");
+			throw new ArgumentNullException(@"missing stage to insert at");
 		}
 
 		/// <summary>
@@ -141,7 +141,7 @@ namespace Mosa.Compiler.Framework
 				}
 			}
 
-			throw new ArgumentNullException(@"missing stage destinationstination insert at");
+			throw new ArgumentNullException(@"missing stage to insert at");
 		}
 
 		/// <summary>
@@ -164,7 +164,7 @@ namespace Mosa.Compiler.Framework
 				}
 			}
 
-			throw new ArgumentNullException(@"missing stage destinatioBeforetion insert before");
+			throw new ArgumentNullException(@"missing stage to insert before");
 		}
 
 		/// <summary>
@@ -219,7 +219,7 @@ namespace Mosa.Compiler.Framework
 					return i;
 			}
 
-			throw new ArgumentNullException(@"missing stage destinatioBeforetion insert before");
+			throw new ArgumentNullException(@"missing stage to insert before");
 		}
 
 		#endregion Methods

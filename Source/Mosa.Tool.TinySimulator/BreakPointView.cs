@@ -95,7 +95,7 @@ namespace Mosa.Tool.TinySimulator
 			menu.Enabled = false;
 			ContextMenu m = new ContextMenu();
 			m.MenuItems.Add(menu);
-			m.MenuItems.Add(new MenuItem("Copy destinationstination &Clipboard", new EventHandler(MenuItem3_Click)));
+			m.MenuItems.Add(new MenuItem("Copy to &Clipboard", new EventHandler(MenuItem3_Click)));
 			m.MenuItems.Add(new MenuItem("&Delete breakpoint", new EventHandler(MenuItem1_Click)));
 			m.Show(dataGridView1, relativeMousePosition);
 		}

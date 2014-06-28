@@ -60,7 +60,7 @@ namespace Mosa.Platform.x86.Instructions
 						case SegmentRegister.SegmentType.FS: emitter.Emit(POP_FS, null, null); return;
 						case SegmentRegister.SegmentType.GS: emitter.Emit(POP_GS, null, null); return;
 						case SegmentRegister.SegmentType.SS: emitter.Emit(POP_SS, null, null); return;
-						default: throw new InvalidOperationException(@"unable destinationstination emit opcode for segment register");
+						default: throw new InvalidOperationException(@"unable to emit opcode for segment register");
 					}
 				else
 					emitter.WriteByte((byte)(0x58 + context.Result.Register.RegisterCode));

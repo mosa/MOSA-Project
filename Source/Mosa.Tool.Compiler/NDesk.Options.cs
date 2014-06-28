@@ -281,11 +281,11 @@ namespace NDesk.Options
 			if (c.Option == null)
 				throw new InvalidOperationException("OptionContext.Option is null.");
 			if (index >= c.Option.MaxValueCount)
-				throw new ArgumentOutOfRangeException("Index");
+				throw new ArgumentOutOfRangeException("index");
 			if (c.Option.OptionValueType == OptionValueType.Required &&
 				index >= values.Count)
 				throw new OptionException(string.Format(
-					c.OptionSet.MessageLocalizer("Missing required key for option '{0}'."), c.OptionName),
+					c.OptionSet.MessageLocalizer("Missing required value for option '{0}'."), c.OptionName),
 										   c.OptionName);
 		}
 
@@ -448,7 +448,7 @@ namespace NDesk.Options
 			{
 				throw new OptionException(
 					string.Format(
-						c.OptionSet.MessageLocalizer("Could not convert string `{0}' destinationstination type {1} for option `{2}'."),
+						c.OptionSet.MessageLocalizer("Could not convert string `{0}' to type {1} for option `{2}'."),
 						value, typeof(T).Name, c.OptionName),
 					c.OptionName, e);
 			}
@@ -489,7 +489,7 @@ namespace NDesk.Options
 
 			if (count <= 1 && seps.Count != 0)
 				throw new ArgumentException(
-					string.Format("Cannot provide key/key separators for Options taking {0} key(s).", count),
+					string.Format("Cannot provide key/value separators for Options taking {0} value(s).", count),
 					"prototype");
 			if (count > 1)
 			{
@@ -514,7 +514,7 @@ namespace NDesk.Options
 					case '{':
 						if (start != -1)
 							throw new ArgumentException(
-								string.Format("Ill-formed name/key separator found in \"{0}\".", name),
+								string.Format("Ill-formed name/value separator found in \"{0}\".", name),
 								"prototype");
 						start = i + 1;
 						break;
@@ -522,7 +522,7 @@ namespace NDesk.Options
 					case '}':
 						if (start == -1)
 							throw new ArgumentException(
-								string.Format("Ill-formed name/key separator found in \"{0}\".", name),
+								string.Format("Ill-formed name/value separator found in \"{0}\".", name),
 								"prototype");
 						seps.Add(name.Substring(start, i - start));
 						start = -1;
@@ -536,7 +536,7 @@ namespace NDesk.Options
 			}
 			if (start != -1)
 				throw new ArgumentException(
-					string.Format("Ill-formed name/key separator found in \"{0}\".", name),
+					string.Format("Ill-formed name/value separator found in \"{0}\".", name),
 					"prototype");
 		}
 
@@ -882,7 +882,7 @@ namespace NDesk.Options
 		}
 
 		private readonly Regex ValueOption = new Regex(
-			@"^(?<flag>--|-|/)(?<name>[^:=]+)((?<sep>[:=])(?<key>.*))?$");
+			@"^(?<flag>--|-|/)(?<name>[^:=]+)((?<sep>[:=])(?<value>.*))?$");
 
 		protected bool GetOptionParts(string argument, out string flag, out string name, out string sep, out string value)
 		{
@@ -897,10 +897,10 @@ namespace NDesk.Options
 			}
 			flag = m.Groups["flag"].Value;
 			name = m.Groups["name"].Value;
-			if (m.Groups["sep"].Success && m.Groups["key"].Success)
+			if (m.Groups["sep"].Success && m.Groups["value"].Success)
 			{
 				sep = m.Groups["sep"].Value;
-				value = m.Groups["key"].Value;
+				value = m.Groups["value"].Value;
 			}
 			return true;
 		}

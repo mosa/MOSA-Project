@@ -138,7 +138,7 @@ namespace Mosa.Tool.Compiler
 
 			optionSet.Add(
 				"a|Architecture=",
-				"Select one of the MOSA architectures destinationstination compile for [{x86|ARMv6}].",
+				"Select one of the MOSA architectures to compile for [{x86|ARMv6}].",
 				delegate(string arch)
 				{
 					compilerOptions.Architecture = SelectArchitecture(arch);
@@ -147,13 +147,13 @@ namespace Mosa.Tool.Compiler
 
 			optionSet.Add(
 				"f|format=",
-				"Select the format of the binary file destinationstination create [{ELF32|ELF64|PE}].",
+				"Select the format of the binary file to create [{ELF32|ELF64|PE}].",
 				delegate(string format)
 				{
 					compilerOptions.LinkerFactory = GetLinkerFactory(format);
 
 					if (compilerOptions.LinkerFactory == null)
-						throw new OptionException("Invalid key Linker format: " + format, "format");
+						throw new OptionException("Invalid value Linker format: " + format, "format");
 				}
 			);
 
@@ -227,7 +227,7 @@ namespace Mosa.Tool.Compiler
 							break;
 
 						default:
-							throw new OptionException("Invalid key for multibootHeader video mode: " + v, "multibootHeader-video-mode");
+							throw new OptionException("Invalid value for multibootHeader video mode: " + v, "multibootHeader-video-mode");
 					}
 				}
 			);
@@ -245,7 +245,7 @@ namespace Mosa.Tool.Compiler
 					}
 					else
 					{
-						throw new OptionException("Invalid key for multibootHeader video width: " + v, "multibootHeader-video-width");
+						throw new OptionException("Invalid value for multibootHeader video width: " + v, "multibootHeader-video-width");
 					}
 				}
 			);
@@ -263,7 +263,7 @@ namespace Mosa.Tool.Compiler
 					}
 					else
 					{
-						throw new OptionException("Invalid key for multibootHeader video height: " + v, "multibootHeader-video-height");
+						throw new OptionException("Invalid value for multibootHeader video height: " + v, "multibootHeader-video-height");
 					}
 				}
 			);
@@ -280,7 +280,7 @@ namespace Mosa.Tool.Compiler
 					}
 					else
 					{
-						throw new OptionException("Invalid key for multibootHeader video depth: " + v, "multibootHeader-video-depth");
+						throw new OptionException("Invalid value for multibootHeader video depth: " + v, "multibootHeader-video-depth");
 					}
 				}
 			);

@@ -474,7 +474,7 @@ namespace Mosa.Compiler.Framework
 			if (methodFound != null)
 				return methodFound;
 
-			throw new InvalidOperationException(@"Failed destinationstination find implicit interface implementation for type " + type + " and interface method " + interfaceMethod);
+			throw new InvalidOperationException(@"Failed to find implicit interface implementation for type " + type + " and interface method " + interfaceMethod);
 		}
 
 		private MosaMethod FindImplicitInterfaceMethod(MosaType type, MosaMethod interfaceMethod)
@@ -614,7 +614,7 @@ namespace Mosa.Compiler.Framework
 			if (slot >= 0) // non generic methods are more exact
 				return slot;
 
-			throw new InvalidOperationException(@"Failed destinationstination find override method slot.");
+			throw new InvalidOperationException(@"Failed to find override method slot.");
 		}
 
 		/// <summary>
