@@ -92,7 +92,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 					if (other != -1)
 						continue;
 
-					moves.Add(move.Destination, move.Source, ResolvedMoveType.Move);
+					moves.Add(move.Source, move.Destination, ResolvedMoveType.Move);
 
 					Moves.RemoveAt(i);
 
