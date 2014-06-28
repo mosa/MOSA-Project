@@ -14,27 +14,10 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 {
 	public class MoveResolver
 	{
-		protected BasicBlock Anchor;
-		protected BasicBlock Source;
-		protected BasicBlock Destination;
-
 		protected List<Move> moves;
 
-		protected class Move
-		{
-			public Operand Source { get; set; }
-
-			public Operand Destination { get; set; }
-
-			public Move(Operand source, Operand destination)
-			{
-				Debug.Assert(source != null);
-				Debug.Assert(destination != null);
-
-				Source = source;
-				Destination = destination;
-			}
-		}
+		protected int index;
+		protected bool before;
 
 		public MoveResolver(BasicBlock anchor, BasicBlock source, BasicBlock destination)
 		{
@@ -42,10 +25,10 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			Debug.Assert(destination != null);
 			Debug.Assert(anchor != null);
 
-			this.Anchor = anchor;
-			this.Source = source;
-			this.Destination = destination;
 			this.moves = new List<Move>();
+
+			this.before = source == anchor;
+			this.index = before ? source.EndIndex : destination.StartIndex;			         
 		}
 
 		public void AddMove(Operand source, Operand destination)
@@ -59,7 +42,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			{
 				var move = moves[i];
 
-				Operand operand = source ? move.Source : move.Destination;
+				var operand = source ? move.Source : move.Destination;
 
 				if (!operand.IsCPURegister)
 					continue;
@@ -155,9 +138,9 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			if (moves.Count == 0)
 				return;
 
-			Context context = new Context(instructionSet, Source == Anchor ? Source.EndIndex : Destination.StartIndex);
+			var context = new Context(instructionSet, index);
 
-			if (Source == Anchor)
+			if (before)
 			{
 				context.GotoPrevious();
 

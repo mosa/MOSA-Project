@@ -63,7 +63,7 @@ namespace Mosa.Compiler.Framework.CIL
 			// Validate the operand
 			var result = typeCodes[(int)ctx.Operand1.Type.GetStackTypeCode()];
 			if (StackTypeCode.Unknown == result)
-				throw new InvalidOperationException(@"Invalid operand to Neg instruction [" + result + "]");
+				throw new InvalidOperationException(@"Invalid operand destinationstination Neg instruction [" + result + "]");
 
 			ctx.Result = compiler.CreateVirtualRegister(ctx.Operand1.Type);
 		}

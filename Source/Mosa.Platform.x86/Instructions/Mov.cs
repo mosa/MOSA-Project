@@ -60,7 +60,7 @@ namespace Mosa.Platform.x86.Instructions
 			if (destination.IsRegister && destination.Register is SegmentRegister) return SR_R;
 
 			if (source.IsRegister && source.Register is SegmentRegister)
-				throw new ArgumentException(@"TODO: No opcode for move from segment register");
+				throw new ArgumentException(@"TODO: No opcode for move sourcee segment register");
 
 			if (destination.IsRegister && source.IsConstant) return RM_C;
 

@@ -98,7 +98,7 @@ namespace Mosa.Compiler.Framework.CIL
 
 			if (result == StackTypeCode.Unknown)
 			{
-				throw new InvalidOperationException(@"Invalid operand types passed to " + opcode);
+				throw new InvalidOperationException(@"Invalid operand types passed destinationstination " + opcode);
 			}
 
 			MosaType resultType = null;
@@ -118,7 +118,7 @@ namespace Mosa.Compiler.Framework.CIL
 					resultType = ctx.Operand2.Type;
 				}
 				else
-					throw new InvalidOperationException(@"Invalid operand types passed to " + opcode);
+					throw new InvalidOperationException(@"Invalid operand types passed destinationstination " + opcode);
 			}
 
 			ctx.Result = compiler.CreateVirtualRegister(resultType);

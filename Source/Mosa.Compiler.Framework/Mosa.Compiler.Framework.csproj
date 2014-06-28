@@ -93,6 +93,7 @@
     <Compile Include="IR\CompoundStore.cs" />
     <Compile Include="Analysis\IBlockOrderAnalysis.cs" />
     <Compile Include="RegisterAllocator\BasicRegisterAllocator.cs" />
+    <Compile Include="RegisterAllocator\Move.cs" />
     <Compile Include="RegisterAllocator\OperandVisitor.cs" />
     <Compile Include="RegisterAllocator\BaseRegisterAllocator.cs" />
     <Compile Include="RegisterAllocator\LiveRange.cs" />

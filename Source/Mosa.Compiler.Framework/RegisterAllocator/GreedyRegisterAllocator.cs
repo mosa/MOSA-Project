@@ -303,7 +303,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 				Debug.Assert(next > liveInterval.Start);
 
-				if (Trace.Active) Trace.Log("  Register " + track.ToString() + " free up to " + next.ToString());
+				if (Trace.Active) Trace.Log("  Register " + track.ToString() + " free up destination " + next.ToString());
 
 				if (furthestUsed == null || furthestUsed < next)
 					furthestUsed = next;
@@ -332,7 +332,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 				return false;
 			}
 
-			if (Trace.Active) Trace.Log("  Partial free up to: " + furthestUsed.ToString());
+			if (Trace.Active) Trace.Log("  Partial free up destination: " + furthestUsed.ToString());
 
 			return SplitInterval(liveInterval, furthestUsed, true);
 		}

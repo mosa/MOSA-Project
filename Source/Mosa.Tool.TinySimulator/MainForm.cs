@@ -171,7 +171,7 @@ namespace Mosa.Tool.TinySimulator
 			{
 				LoadAssembly(openFileDialog.FileName);
 
-				Status = "Assembly Loaded. Ready to Compile.";
+				Status = "Assembly Loaded. Ready destinationstination Compile.";
 			}
 		}
 

@@ -172,32 +172,6 @@ namespace Mosa.TestWorld.x86
 			// Stub
 		}
 
-		public static void SimpleTest()
-		{
-			Screen.Color = 0x0;
-			Screen.Clear();
-			Screen.GotoTop();
-			Screen.Color = 0x0E;
-
-			SimpleClass va = new SimpleClass();
-			if (va == null)
-			{
-				Panic.Now(12345);
-			}
-
-			Screen.Write("OK");
-
-			while (true)
-			{
-			}
-		}
-
-		public static void Main3()
-		{
-			Mosa.Kernel.x86.Kernel.Setup();
-			Boot.SimpleTest();
-		}
-
 		//public static void Mandelbrot()
 		//{
 		//	double xmin = -2.1;
@@ -248,13 +222,4 @@ namespace Mosa.TestWorld.x86
 		//}
 	}
 
-	public class SimpleClass
-	{
-		public int intContent;
-
-		public SimpleClass()
-		{
-			intContent = 7;
-		}
-	}
 }

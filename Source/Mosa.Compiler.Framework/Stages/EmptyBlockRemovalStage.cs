@@ -69,14 +69,14 @@ namespace Mosa.Compiler.Framework.Stages
 
 				if (trace.Active)
 				{
-					trace.Log("  Add target to NextBlock of " + from.ToString());
+					trace.Log("  Add target destinationstination NextBlock of " + from.ToString());
 				}
 
 				target.PreviousBlocks.AddIfNew(from);
 
 				if (trace.Active)
 				{
-					trace.Log("  Add " + from.ToString() + " to PreviousBlock of " + target.ToString());
+					trace.Log("  Add " + from.ToString() + " destinationstination PreviousBlock of " + target.ToString());
 				}
 
 				ReplaceBranchTargets(from, block, target);

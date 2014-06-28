@@ -200,7 +200,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			}
 			else
 			{
-				return VirtualRegisterOperand.ToString();
+				return string.Format("V_{0}", VirtualRegisterOperand.Index);
 			}
 		}
 	}
