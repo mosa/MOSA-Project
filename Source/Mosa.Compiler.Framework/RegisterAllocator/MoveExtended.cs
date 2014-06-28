@@ -7,21 +7,20 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System.Diagnostics;
-
 namespace Mosa.Compiler.Framework.RegisterAllocator
 {
 	public class MoveExtended<T>
 	{
-		public readonly Move Move;
-
 		public readonly T Value;
 
-		public MoveExtended(Move move, T value)
-		{
-			Debug.Assert(move != null);
+		public readonly Operand Source;
 
-			Move = move;
+		public readonly Operand Destination;
+
+		public MoveExtended(Operand source, Operand destination, T value)
+		{
+			Source = source;
+			Destination = destination;
 			Value = value;
 		}
 	}

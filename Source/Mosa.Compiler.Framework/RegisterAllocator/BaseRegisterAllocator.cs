@@ -1203,10 +1203,9 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 			foreach (var key in moves.Keys)
 			{
-				foreach (var list in moves.Collection[key])
-				{
-					InsertRegisterMoves(key, list.Destination, list.Source);
-				}
+				MoveResolver moveResolver = new MoveResolver(key.Index, key.IsOnHalfStepBack, moves[key]);
+
+				moveResolver.InsertResolvingMoves(Architecture, InstructionSet);
 			}
 		}
 
