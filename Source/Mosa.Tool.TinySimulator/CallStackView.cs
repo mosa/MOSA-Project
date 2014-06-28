@@ -98,7 +98,7 @@ namespace Mosa.Tool.TinySimulator
 			ContextMenu m = new ContextMenu();
 			m.MenuItems.Add(menu);
 			m.MenuItems.Add(new MenuItem("Copy to &Clipboard", new EventHandler(MenuItem3_Click)));
-			m.MenuItems.Add(new MenuItem("&Jump destinationstination", new EventHandler(MenuItem1_Click)));
+			m.MenuItems.Add(new MenuItem("&Jump to", new EventHandler(MenuItem1_Click)));
 			m.MenuItems.Add(new MenuItem("Set &Breakpoint", new EventHandler(MenuItem2_Click)));
 			m.Show(treeView1, relativeMousePosition);
 		}
