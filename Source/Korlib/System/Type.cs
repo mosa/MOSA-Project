@@ -17,9 +17,11 @@ namespace System
 	/// <summary>
 	/// Implementation of the "System.Type" class.
 	/// </summary>
+	[Serializable]
+	[StructLayout(LayoutKind.Sequential)]
 	public class Type : MemberInfo
 	{
-		private Type(RuntimeTypeHandle handle)
+		protected Type(RuntimeTypeHandle handle)
 		{
 			this.m_handle = handle;
 			this.FullName = InternalGetFullName(this.m_handle);

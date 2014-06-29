@@ -345,12 +345,8 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 			writer1.WriteZeroBytes(TypeLayout.NativePointerSize);
 
-			// 3. Flags: IsStatic, IsAbstract, HasGenericParams (32bit length)
-			uint flags = 0x0;
-			if (method.IsStatic) flags |= 0x1;
-			if (method.IsAbstract) flags |= 0x2;
-			if (method.HasOpenGenericParams) flags |= 0x4;
-			writer1.Write(flags);
+			// 3. Attributes
+			writer1.Write((uint)method.MethodAttributes);
 
 			// 4. Local Stack Size (High 16bits) and Parameter Stack Size (Low 16bits)
 			uint paramStackSize = method.MaxStack << 16;
@@ -369,7 +365,7 @@ namespace Mosa.Compiler.Framework.Stages
 			Linker.Link(LinkType.AbsoluteAddress, BuiltInPatch.I4, methodTableSymbol, (int)writer1.Position, 0, method.Signature.ReturnType.FullName + Metadata.TypeDefinition, SectionKind.ROData, 0);
 			writer1.WriteZeroBytes(TypeLayout.NativePointerSize);
 
-			// 7. Pointer to Exception Hanlder Table
+			// 7. Pointer to Exception Handler Table
 			// TODO: This has yet to be designed.
 
 			// 8. Pointer to GC Tracking information
@@ -401,7 +397,11 @@ namespace Mosa.Compiler.Framework.Stages
 				Linker.Link(LinkType.AbsoluteAddress, BuiltInPatch.I4, fieldDefSymbol, (int)writer1.Position, 0, fieldNameSymbol, 0);
 				writer1.WriteZeroBytes(TypeLayout.NativePointerSize);
 
-				// 2 & 3. Offset / Address + Size
+				// 2. Pointer to Field Type
+				Linker.Link(LinkType.AbsoluteAddress, BuiltInPatch.I4, fieldDefSymbol, (int)writer1.Position, 0, field.FieldType.FullName + Metadata.TypeDefinition, SectionKind.ROData, 0);
+				writer1.WriteZeroBytes(TypeLayout.NativePointerSize);
+
+				// 3 & 4. Offset / Address + Size
 				if (field.IsStatic && !field.IsLiteral)
 				{
 					var section = (field.Data != null) ? SectionKind.ROData : SectionKind.BSS;
@@ -411,6 +411,7 @@ namespace Mosa.Compiler.Framework.Stages
 				}
 				else
 				{
+					writer1.WriteZeroBytes(TypeLayout.NativePointerSize);
 					writer1.Write(TypeLayout.GetFieldOffset(field));
 				}
 

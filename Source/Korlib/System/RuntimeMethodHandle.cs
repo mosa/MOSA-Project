@@ -11,11 +11,11 @@
 namespace System
 {
 	/// <summary>
-	/// Represents a field using an internal metadata token.
+	/// Represents a method using an internal metadata token.
 	/// </summary>
-	public struct RuntimeFieldHandle
+	public struct RuntimeMethodHandle
 	{
-		internal RuntimeFieldHandle(IntPtr handle)
+		internal RuntimeMethodHandle(IntPtr handle)
 		{
 			this.m_ptr = handle;
 		}
@@ -35,18 +35,18 @@ namespace System
 
 		public override bool Equals(object obj)
 		{
-			if (!(obj is System.RuntimeFieldHandle))
+			if (!(obj is System.RuntimeMethodHandle))
 				return false;
 
-			return ((RuntimeFieldHandle)obj).m_ptr == m_ptr;
+			return ((RuntimeMethodHandle)obj).m_ptr == m_ptr;
 		}
 
-		public static bool operator ==(RuntimeFieldHandle value1, RuntimeFieldHandle value2)
+		public static bool operator ==(RuntimeMethodHandle value1, RuntimeMethodHandle value2)
 		{
 			return value1.m_ptr == value2.m_ptr;
 		}
 
-		public static bool operator !=(RuntimeFieldHandle value1, RuntimeFieldHandle value2)
+		public static bool operator !=(RuntimeMethodHandle value1, RuntimeMethodHandle value2)
 		{
 			return value1.m_ptr != value2.m_ptr;
 		}
