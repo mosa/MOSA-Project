@@ -11,7 +11,7 @@ using System;
 using System.Runtime.InteropServices;
 using System.Reflection;
 
-namespace Mosa.Platform.Internal.x86.Builders
+namespace System
 {
 	public sealed unsafe class _Assembly : Assembly
 	{
