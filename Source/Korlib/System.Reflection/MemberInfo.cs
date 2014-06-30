@@ -8,6 +8,10 @@
  *  Stefan Andres Charsley (charsleysa) <charsleysa@gmail.com>
  */
 
+using System;
+using System.Collections;
+using System.Collections.Generic;
+
 namespace System.Reflection
 {
 	/// <summary>
@@ -16,6 +20,11 @@ namespace System.Reflection
 	[SerializableAttribute]
 	public abstract class MemberInfo : ICustomAttributeProvider
 	{
+		/// <summary>
+		/// A collection that contains this member's custom attributes.
+		/// </summary>
+		public virtual IEnumerable<CustomAttributeData> CustomAttributes { get; protected set; }
+
 		/// <summary>
 		/// Gets the class that declares this member.
 		/// </summary>
@@ -35,6 +44,14 @@ namespace System.Reflection
 		/// Gets the class object that was used to obtain this instance of MemberInfo.
 		/// </summary>
 		public abstract Type ReflectedType { get; }
+
+		/// <summary>
+		/// Gets a value that identifies a metadata element.
+		/// </summary>
+		public virtual int MetadataToken
+		{
+			get { return 0; }
+		}
 
 		protected MemberInfo() { }
 

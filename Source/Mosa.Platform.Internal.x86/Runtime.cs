@@ -149,57 +149,60 @@ namespace Mosa.Platform.Internal.x86
 
 		#region Metadata - Type
 
-		public static RuntimeTypeHandle* Metadata_Type_GetHandleFromObject(void* obj)
+		public unsafe static class Type
 		{
-			// TypeDefinition is located at the beginning of object (i.e. *obj )
-			return (RuntimeTypeHandle*)((uint*)obj)[0];
-		}
-
-		public static RuntimeTypeHandle* Metadata_Type_GetHandleByName(string typeName, bool ignoreCase)
-		{
-			// If we are ignoring casing then lower the casing
-			if (ignoreCase)
-				typeName = typeName.ToLower();
-
-			// Loop through all the types and check to see if we have a match
-			for (uint i = 0; i < Types.Length; i++)
+			public static RuntimeTypeHandle* GetHandleFromObject(void* obj)
 			{
-				// Get the name
-				// FIXME: for some reason using the name in the MetadataVector doesn't work
-				//string name = Types[i].Name;
-				string name = Metadata_InitializeString((uint*)Types[i].Pointer[0]);
-
-				// Compare the length, if not a match then skip
-				if (typeName.Length != name.Length)
-					continue;
-
-				// If we are ignoring casing then lower the casing
-				if (ignoreCase)
-					name = name.ToLower();
-
-				// Compare name with desired name, if not a match then continue
-				if (typeName != name)
-					continue;
-
-				// Once we have a match return result
-				return (RuntimeTypeHandle*)Types[i].Pointer;
+				// TypeDefinition is located at the beginning of object (i.e. *obj )
+				return (RuntimeTypeHandle*)((uint*)obj)[0];
 			}
 
-			// If we didn't find anything then return a null pointer
-			return (RuntimeTypeHandle*)0;
-		}
+			public static RuntimeTypeHandle* GetHandleByName(string typeName, bool ignoreCase)
+			{
+				// If we are ignoring casing then lower the casing
+				if (ignoreCase)
+					typeName = typeName.ToLower();
 
-		public static string Metadata_Type_GetFullName(RuntimeTypeHandle* typeDefinition)
-		{
-			// Name pointer located at the beginning of the TypeDefinition
-			uint* ptr = (uint*)typeDefinition;
-			return Metadata_InitializeString((uint*)ptr[0]);
-		}
+				// Loop through all the types and check to see if we have a match
+				for (uint i = 0; i < Types.Length; i++)
+				{
+					// Get the name
+					// FIXME: for some reason using the name in the MetadataVector doesn't work
+					//string name = Types[i].Name;
+					string name = Metadata_InitializeString((uint*)Types[i].Pointer[0]);
 
-		public static TypeAttributes Metadata_Type_GetAttributes(RuntimeTypeHandle* typeDefinition)
-		{
-			// Type attributes located at 3rd position of TypeDefinition
-			return (TypeAttributes)((uint*)typeDefinition)[2];
+					// Compare the length, if not a match then skip
+					if (typeName.Length != name.Length)
+						continue;
+
+					// If we are ignoring casing then lower the casing
+					if (ignoreCase)
+						name = name.ToLower();
+
+					// Compare name with desired name, if not a match then continue
+					if (typeName != name)
+						continue;
+
+					// Once we have a match return result
+					return (RuntimeTypeHandle*)Types[i].Pointer;
+				}
+
+				// If we didn't find anything then return a null pointer
+				return (RuntimeTypeHandle*)0;
+			}
+
+			public static string GetFullName(RuntimeTypeHandle* typeDefinition)
+			{
+				// Name pointer located at the beginning of the TypeDefinition
+				uint* ptr = (uint*)typeDefinition;
+				return Metadata_InitializeString((uint*)ptr[0]);
+			}
+
+			public static TypeAttributes GetAttributes(RuntimeTypeHandle* typeDefinition)
+			{
+				// Type attributes located at 3rd position of TypeDefinition
+				return (TypeAttributes)((uint*)typeDefinition)[2];
+			}
 		}
 
 		#endregion Metadata - Type
@@ -221,35 +224,35 @@ namespace Mosa.Platform.Internal.x86
 			}
 		}
 
-		public static uint IsInstanceOfType(RuntimeTypeHandle* typeDefinition, void* obj)
+		public static void* IsInstanceOfType(RuntimeTypeHandle* typeDefinition, void* obj)
 		{
 			if (obj == null)
-				return 0;
+				return null;
 
 			RuntimeTypeHandle* objTypeDefinition = (RuntimeTypeHandle*)((uint*)obj)[0];
 
 			while (objTypeDefinition != null)
 			{
 				if (objTypeDefinition == typeDefinition)
-					return (uint)obj;
+					return (void*)obj;
 
 				objTypeDefinition = (RuntimeTypeHandle*)((uint*)objTypeDefinition)[5];
 			}
 
-			return 0;
+			return null;
 		}
 
-		public static uint IsInstanceOfInterfaceType(int interfaceSlot, void* obj)
+		public static void* IsInstanceOfInterfaceType(int interfaceSlot, void* obj)
 		{
 			RuntimeTypeHandle* objTypeDefinition = (RuntimeTypeHandle*)((uint*)obj)[0];
 
 			if (objTypeDefinition == null)
-				return 0;
+				return null;
 
-			uint bitmap = ((uint*)(objTypeDefinition))[8];
+			uint bitmap = ((uint*)(objTypeDefinition))[9];
 
 			if (bitmap == 0)
-				return 0;
+				return null;
 
 			int index = interfaceSlot / 32;
 			int bit = interfaceSlot % 32;
@@ -257,15 +260,15 @@ namespace Mosa.Platform.Internal.x86
 			uint result = value & (uint)(1 << bit);
 
 			if (result == 0)
-				return 0;
+				return null;
 
-			return (uint)obj;
+			return obj;
 		}
 
-		public static uint Castclass(RuntimeTypeHandle* typeDefinition, void* obj)
+		public static void* Castclass(RuntimeTypeHandle* typeDefinition, void* obj)
 		{
 			//TODO: Fake result
-			return (uint)obj;
+			return obj;
 		}
 
 		// TODO: efficiency?
@@ -366,7 +369,7 @@ namespace Mosa.Platform.Internal.x86
 
 		public static uint GetSizeOfObject(void* obj)
 		{
-			RuntimeTypeHandle* typeDefinition = Metadata_Type_GetHandleFromObject(obj);
+			RuntimeTypeHandle* typeDefinition = Runtime.Type.GetHandleFromObject(obj);
 
 			return GetSizeOfType(typeDefinition);
 		}

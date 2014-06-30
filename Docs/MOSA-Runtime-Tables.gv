@@ -41,7 +41,7 @@ shape = "record"
 ];
 
 "FieldDefinition" [
-label = "<f0>Field List Table|<f1>Pointer to Field Name|<f2>Pointer to Field Type|<f3>~Address|<f4>Offset / Size"
+label = "<f0>Field Definition|<f1>Pointer to Field Name|<f2>Pointer to Field Type|<f3>~Address|<f4>Offset / Size"
 shape = "record"
 ];
 
@@ -61,7 +61,7 @@ shape = "record"
 ];
 
 "InterfaceMethodTable" [
-label = "<f0>Interface Method Table|<f1>Number of Methods|<f2>Pointer to Method Definition 1|..|Pointer to Method Definition N"
+label = "<f0>Interface Method Table|<f1>Pointer to Interface Type|<f2>Number of Methods|<f3>Pointer to Method Definition 1|..|Pointer to Method Definition N"
 shape = "record"
 ];
 
@@ -166,7 +166,11 @@ id = 0
 id = 0
 ];
 
-"InterfaceMethodTable":f2 -> "MethodDefinition":f0 [
+"InterfaceMethodTable":f1 -> "TypeDefinition":f0 [
+id = 0
+];
+
+"InterfaceMethodTable":f3 -> "MethodDefinition":f0 [
 id = 0
 ];
 

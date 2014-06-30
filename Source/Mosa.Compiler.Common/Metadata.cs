@@ -19,6 +19,7 @@ namespace Mosa.Compiler.Common
 		public const string TypeDefinition = "$TypeDef";
 		public const string MethodDefinition = "$MethodDef";
 		public const string FieldDefinition = "$FieldDef";
+		public const string FieldListTable = "$FieldListTable";
 
 		public const string CustomAttributeListTable = "$CustomAttributeListTable";
 		public const string CustomAttributeTable = "$CustomAttributeTable";
