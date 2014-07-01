@@ -1199,47 +1199,28 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		protected void InsertRegisterMoves()
 		{
+			var insertTrace = new CompilerTrace(Trace, "InsertRegisterMoves");
+
 			var moves = GetRegisterMoves();
 
 			foreach (var key in moves.Keys)
 			{
-				MoveResolver moveResolver = new MoveResolver(key.Index, key.IsOnHalfStepBack, moves[key]);
+				MoveResolver moveResolver = new MoveResolver(key.Index, !key.IsOnHalfStepForward, moves[key]);
 
 				moveResolver.InsertResolvingMoves(Architecture, InstructionSet);
-			}
-		}
 
-		protected void InsertRegisterMoves(SlotIndex slot, Operand destination, Operand source)
-		{
-			var insertTrace = new CompilerTrace(Trace, "InsertRegisterMoves");
+				if (insertTrace.Active)
+				{
+					foreach (var move in moves[key])
+					{
+						//insertTrace.Log("REGISTER: " + virtualRegister.ToString());
+						insertTrace.Log("  AT: " + key.ToString());
+						insertTrace.Log("FROM: " + move.Source.ToString());
+						insertTrace.Log("  TO: " + move.Destination.ToString());
 
-			Context context = new Context(InstructionSet, slot.Index);
-
-			if (slot.IsOnHalfStepBack)
-			{
-				context.GotoPrevious();
-
-				//while (context.IsEmpty || context.Instruction.FlowControl == FlowControl.UnconditionalBranch || context.Instruction.FlowControl == FlowControl.ConditionalBranch || context.Instruction.FlowControl == FlowControl.Return)
-				//{
-				//	context.GotoPrevious();
-				//}
-			}
-
-			Architecture.InsertMoveInstruction(context,
-				destination,
-				source
-			);
-
-			context.Marked = true;
-
-			if (insertTrace.Active)
-			{
-				//insertTrace.Log("REGISTER: " + virtualRegister.ToString());
-				insertTrace.Log("POSITION: " + slot.ToString());
-				insertTrace.Log("    FROM: " + source.ToString());
-				insertTrace.Log("      TO: " + destination.ToString());
-
-				insertTrace.Log("");
+						insertTrace.Log("");
+					}
+				}
 			}
 		}
 

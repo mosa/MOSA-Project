@@ -1,8 +1,20 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <xunit>
   <assemblies>
-    <assembly filename="..\bin\Mosa.Platform.Internal.x86.xUnit.dll" shadow-copy="true" Verbose="false"/>
-    <assembly filename="..\bin\Mosa.Compiler.Framework.xUnit.dll" shadow-copy="true" Verbose="false"/>
-    <assembly filename="..\bin\Mosa.Test.Collection.x86.xUnit.dll" shadow-copy="true" Verbose="false"/>
+    <assembly filename="..\bin\Mosa.Platform.Internal.x86.xUnit.dll" shadow-copy="true" Verbose="false">
+	<output type="html" filename="results\Mosa.Platform.Internal.x86.xUnit.html"/>
+	<output type="xml" filename="results\Mosa.Platform.Internal.x86.xUnit.xml"/>
+	<output type="nunit" filename="results\Mosa.Platform.Internal.x86.xUnit.2.xml"/>
+    </assembly>
+    <assembly filename="..\bin\Mosa.Compiler.Framework.xUnit.dll" shadow-copy="true" Verbose="false">
+	<output type="html" filename="results\Mosa.Compiler.Framework.xUnit.html"/>
+	<output type="xml" filename="results\Mosa.Compiler.Framework.xUnit.xml"/>
+	<output type="nunit" filename="results\Mosa.Compiler.Framework.xUnit.2.xml"/>
+    </assembly>
+    <assembly filename="..\bin\Mosa.Test.Collection.x86.xUnit.dll" shadow-copy="true" Verbose="false">
+	<output type="html" filename="results\\Mosa.Test.Collection.x86.xUnit.html"/>
+	<output type="xml" filename="results\\Mosa.Test.Collection.x86.xUnit.xml"/>
+	<output type="nunit" filename="results\\Mosa.Test.Collection.x86.xUnit.2.xml"/>
+    </assembly>
   </assemblies>
 </xunit>

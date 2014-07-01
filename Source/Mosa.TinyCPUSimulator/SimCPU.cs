@@ -273,6 +273,7 @@ namespace Mosa.TinyCPUSimulator
 
 		public void AddInstruction(ulong address, SimInstruction instruction)
 		{
+			//Debug.Assert(!InstructionCache.ContainsKey(address), instruction.ToString());
 			InstructionCache.Add(address, instruction);
 		}
 
@@ -345,6 +346,12 @@ namespace Mosa.TinyCPUSimulator
 			if (instruction == null)
 			{
 				instruction = DecodeOpcode(address);
+
+				if (instruction == null)
+				{
+					throw new SimCPUException();
+				}
+
 				AddInstruction(address, instruction);
 			}
 
