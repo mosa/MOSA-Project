@@ -65,6 +65,7 @@
     <Compile Include="System.Reflection\Assembly.cs" />
     <Compile Include="System.Reflection\AssemblyDescriptionAttribute.cs" />
     <Compile Include="System.Reflection\AssemblyTitleAttribute.cs" />
+    <Compile Include="System.Reflection\ConstructorInfo.cs" />
     <Compile Include="System.Reflection\CustomAttributeData.cs" />
     <Compile Include="System.Reflection\ICustomAttributeProvider.cs" />
     <Compile Include="System.Reflection\IntrospectionExtensions.cs" />
@@ -74,7 +75,9 @@
     <Compile Include="System.Reflection\MethodAttributes.cs" />
     <Compile Include="System.Reflection\MethodBase.cs" />
     <Compile Include="System.Reflection\Module.cs" />
-    <Compile Include="System.Reflection\MosaTypeCode.cs" />
+    <Compile Include="System.Reflection\ParameterAttributes.cs" />
+    <Compile Include="System.Reflection\TypeCode.cs" />
+    <Compile Include="System.Reflection\ParameterInfo.cs" />
     <Compile Include="System.Reflection\TypeAttributes.cs" />
     <Compile Include="System.Reflection\TypeInfo.cs" />
     <Compile Include="System.Runtime.CompilerServices\CompilationRelaxationsAttribute.cs" />

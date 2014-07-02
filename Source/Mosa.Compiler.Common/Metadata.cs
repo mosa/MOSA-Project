@@ -11,7 +11,7 @@ namespace Mosa.Compiler.Common
 {
 	public struct Metadata
 	{
-		public const string AssemblyListTable = "<$>AssemblyListTable";
+		public const string AssembliesTable = "<$>AssembliesTable";
 		public const string MethodLookupTable = "<$>MethodLookupTable";
 		public const string NameString = "$Name";
 
@@ -19,10 +19,10 @@ namespace Mosa.Compiler.Common
 		public const string TypeDefinition = "$TypeDef";
 		public const string MethodDefinition = "$MethodDef";
 		public const string FieldDefinition = "$FieldDef";
-		public const string FieldListTable = "$FieldListTable";
+		public const string FieldsTable = "$FieldsTable";
 
-		public const string CustomAttributeListTable = "$CustomAttributeListTable";
-		public const string CustomAttributeTable = "$CustomAttributeTable";
+		public const string CustomAttributesTable = "$CustomAttributesTable";
+		public const string CustomAttribute = "$CustomAttribute";
 		public const string CustomAttributeArgument = "$CustomAttributeArgument";
 
 		public const string InterfaceMethodTable = "$IMethodTable$";

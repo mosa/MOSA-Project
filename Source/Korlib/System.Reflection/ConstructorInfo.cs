@@ -22,7 +22,7 @@ namespace System.Reflection
 		public static readonly string ConstructorName = ".ctor";
 
 		/// <summary>
-		/// Represents the name of the type constructor method as it is stored in metadata. This name is always ".vctor". This field is read-only.
+		/// Represents the name of the type constructor method as it is stored in metadata. This name is always ".cctor". This field is read-only.
 		/// </summary>
 		public static readonly string TypeConstructorName = ".cctor";
 
@@ -72,8 +72,14 @@ namespace System.Reflection
 		/// <param name="left">The first object to compare.</param>
 		/// <param name="right">The second object to compare.</param>
 		/// <returns>True if left is equal to right; otherwise, False.</returns>
-		public static bool operator ==(MethodBase left, MethodBase right)
+		public static bool operator ==(ConstructorInfo left, ConstructorInfo right)
 		{
+			if (object.ReferenceEquals(left, right))
+				return true;
+
+			if ((object)left == null || (object)right == null)
+				return false;
+
 			return left.Equals(right);
 		}
 
@@ -83,9 +89,9 @@ namespace System.Reflection
 		/// <param name="left">The first object to compare.</param>
 		/// <param name="right">The second object to compare.</param>
 		/// <returns>True if left is not equal to right; otherwise, False.</returns>
-		public static bool operator !=(MethodBase left, MethodBase right)
+		public static bool operator !=(ConstructorInfo left, ConstructorInfo right)
 		{
-			return !left.Equals(right);
+			return !(left == right);
 		}
 	}
 }

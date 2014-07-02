@@ -234,7 +234,18 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 					if (!param.IsNormalMethodParameter)
 						continue;
 					var paramType = metadata.Loader.GetType(resolver.Resolve(desc.Signature.Params[param.MethodSigIndex]));
-					pars.Add(new MosaParameter(param.Name, paramType));
+					var parameter = metadata.Controller.CreateParameter();
+
+					using (var mosaParameter = metadata.Controller.MutateParameter(parameter))
+					{
+						mosaParameter.Name = param.Name;
+						mosaParameter.ParameterAttributes = (MosaParameterAttributes)param.ParamDef.Attributes;
+						mosaParameter.ParameterType = paramType;
+						mosaParameter.DeclaringMethod = method;
+						ResolveCustomAttributes(mosaParameter, param.ParamDef);
+					}
+
+					pars.Add(parameter);
 					hasOpening |= paramType.HasOpenGenericParams;
 				}
 

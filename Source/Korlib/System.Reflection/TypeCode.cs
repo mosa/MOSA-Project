@@ -9,7 +9,7 @@
 
 namespace System.Reflection
 {
-	public enum MosaTypeCode
+	public enum TypeCode
 	{
 		Void = 1,
 		Boolean = 2,

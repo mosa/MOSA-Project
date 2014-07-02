@@ -15,7 +15,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 	/// Method Attributes.
 	/// </summary>
 	[Flags]
-	public enum MosaMethodAttributes : uint
+	public enum MosaMethodAttributes : ushort
 	{
 		/// <summary>
 		/// Member access mask - Use this mask to retrieve accessibility information.

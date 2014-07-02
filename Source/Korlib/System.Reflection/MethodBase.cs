@@ -50,7 +50,7 @@ namespace System.Reflection
 		{
 			get
 			{
-				return (this is ConstructorInfo);
+				return (this.MemberType & MemberTypes.Constructor) == MemberTypes.Constructor;
 			}
 		}
 
@@ -230,8 +230,7 @@ namespace System.Reflection
 		/// <returns>A 32-bit signed integer hash code.</returns>
 		public override int GetHashCode()
 		{
-			// TODO
-			return base.GetHashCode();
+			return this.MethodHandle.Value.ToInt32();
 		}
 
 		/// <summary>
@@ -284,7 +283,13 @@ namespace System.Reflection
 		/// <returns>True if left is equal to right; otherwise, False.</returns>
 		public static bool operator ==(MethodBase left, MethodBase right)
 		{
-			return left.Equals(right);
+			if (object.ReferenceEquals(left, right))
+				return true;
+
+			if ((object)left == null || (object)right == null)
+				return false;
+
+			return left.MethodHandle == right.MethodHandle;
 		}
 
 		/// <summary>
@@ -295,7 +300,7 @@ namespace System.Reflection
 		/// <returns>True if left is not equal to right; otherwise, False.</returns>
 		public static bool operator !=(MethodBase left, MethodBase right)
 		{
-			return !left.Equals(right);
+			return !(left == right);
 		}
 	}
 }

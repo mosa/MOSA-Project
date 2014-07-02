@@ -41,19 +41,19 @@ namespace System
 			return ((RuntimeMethodHandle)obj).m_ptr == m_ptr;
 		}
 
-		public static bool operator ==(RuntimeMethodHandle value1, RuntimeMethodHandle value2)
+		public static bool operator ==(RuntimeMethodHandle left, RuntimeMethodHandle right)
 		{
-			return value1.m_ptr == value2.m_ptr;
+			return left.m_ptr == right.m_ptr;
 		}
 
-		public static bool operator !=(RuntimeMethodHandle value1, RuntimeMethodHandle value2)
+		public static bool operator !=(RuntimeMethodHandle left, RuntimeMethodHandle right)
 		{
-			return value1.m_ptr != value2.m_ptr;
+			return !(left == right);
 		}
 
 		public override int GetHashCode()
 		{
-			return base.GetHashCode();
+			return this.m_ptr.ToInt32();
 		}
 	}
 }

@@ -36,6 +36,14 @@ namespace System.Reflection
 		public abstract MemberTypes MemberType { get; }
 
 		/// <summary>
+		/// Gets a value that identifies a metadata element.
+		/// </summary>
+		public virtual int MetadataToken
+		{
+			get { return 0; }
+		}
+
+		/// <summary>
 		/// Gets the name of the current member.
 		/// </summary>
 		public abstract string Name { get; }
@@ -44,14 +52,6 @@ namespace System.Reflection
 		/// Gets the class object that was used to obtain this instance of MemberInfo.
 		/// </summary>
 		public abstract Type ReflectedType { get; }
-
-		/// <summary>
-		/// Gets a value that identifies a metadata element.
-		/// </summary>
-		public virtual int MetadataToken
-		{
-			get { return 0; }
-		}
 
 		protected MemberInfo() { }
 

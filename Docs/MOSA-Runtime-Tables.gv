@@ -18,6 +18,7 @@ shape = "record"
 "NameString" [
 label = "<f0>Name String|<f1>String Length|<f2>String"
 shape = "record"
+color = "red"
 ];
 
 "AssemblyListTable" [
@@ -33,15 +34,16 @@ shape = "record"
 "TypeDefinition" [
 label = "<f0>Type Definition|<f1>Pointer to Type Name|<f2>~Pointer to Custom Attributes|<f3>Type Attributes|<f4>Type Size|<f5>Pointer to Assembly|<f6>~Pointer to Parent Type|<f7>~Pointer to Default Constructor Method|<f8>~Pointer to Field List Table|<f9>~Pointer to Interface Slot Table|<f10>~Pointer to Interface Bitmap|<f11>~Number of Methods|<f12>~Pointer to Method Definition 1|...|Pointer to Method Definition N"
 shape = "record"
+color = "blue"
 ];
 
-"FieldListTable" [
-label = "<f0>Field List Table|<f1>Number of Fields|<f1>Pointer to Field Definition 1|...|Pointer to Field Definition N"
+"FieldsTable" [
+label = "<f0>Fields Table|<f1>Number of Fields|<f1>Pointer to Field Definition 1|...|Pointer to Field Definition N"
 shape = "record"
 ];
 
 "FieldDefinition" [
-label = "<f0>Field Definition|<f1>Pointer to Field Name|<f2>Pointer to Field Type|<f3>~Address|<f4>Offset / Size"
+label = "<f0>Field Definition|<f1>Pointer to Field Name|<f2>~Pointer to Custom Attributes|<f3>Pointer to Field Type|<f4>~Address|<f5>Offset / Size"
 shape = "record"
 ];
 
@@ -66,7 +68,13 @@ shape = "record"
 ];
 
 "MethodDefinition" [
-label = "<f0>Method Definition|<f1>Pointer to Method Name|<f2>~Pointer to Custom Attributes|<f3>Method Attributes|<f4>Local \| Parameter Stack Size|<f5>Pointer to Method|<f6>Pointer to Return Type Definition|<f7>Pointer to Exception Handler Table|<f8>Pointer to GC Tracking Information|<f9>Pointer Parameter Definitions"
+label = "<f0>Method Definition|<f1>Pointer to Method Name|<f2>~Pointer to Custom Attributes|<f3>Method Attributes|<f4>Local \| Parameter Stack Size|<f5>Pointer to Method|<f6>Pointer to Return Type Definition|<f7>Pointer to Exception Handler Table|<f8>Pointer to GC Tracking Information|<f9>Number of Parameters|<f10>Pointer to Parameter Definition 1|...|Pointer to Parameter Definition N"
+shape = "record"
+color = "green"
+];
+
+"ParameterDefinition" [
+label = "<f0>Parameter Definition|<f1>Pointer to Parameter Name|<f2>~Pointer to Custom Attributes|<f3>Parameter Attributes|<f4>Pointer to Parameter Type"
 shape = "record"
 ];
 
@@ -96,10 +104,12 @@ id = 0
 
 "CustomAttribute":f1 -> "TypeDefinition":f0 [
 id = 0
+color = "blue"
 ];
 
 "CustomAttribute":f2 -> "MethodDefinition":f0 [
 id = 0
+color = "green"
 ];
 
 "CustomAttribute":f4 -> "CustomAttributeArgument":f0 [
@@ -108,10 +118,12 @@ id = 0
 
 "CustomAttributeArgument":f1 -> "NameString":f0 [
 id = 0
+color = "red"
 ];
 
 "CustomAttributeArgument":f2 -> "TypeDefinition":f0 [
 id = 0
+color = "blue"
 ];
 
 "AssemblyListTable":f2 -> "AssemblyDefinition":f0 [
@@ -120,6 +132,7 @@ id = 0
 
 "AssemblyDefinition":f1 -> "NameString":f0 [
 id = 0
+color = "red"
 ];
 
 "AssemblyDefinition":f2 -> "CustomAttributesTable":f0 [
@@ -128,10 +141,12 @@ id = 0
 
 "AssemblyDefinition":f5 -> "TypeDefinition":f0 [
 id = 0
+color = "blue"
 ];
 
 "TypeDefinition":f1 -> "NameString":f0 [
 id = 0
+color = "red"
 ];
 
 "TypeDefinition":f2 -> "CustomAttributesTable":f0 [
@@ -144,13 +159,15 @@ id = 0
 
 "TypeDefinition":f6 -> "TypeDefinition":f0 [
 id = 0
+color = "blue"
 ];
 
 "TypeDefinition":f7 -> "MethodDefinition":f0 [
 id = 0
+color = "green"
 ];
 
-"TypeDefinition":f8 -> "FieldListTable":f0 [
+"TypeDefinition":f8 -> "FieldsTable":f0 [
 id = 0
 ];
 
@@ -160,6 +177,7 @@ id = 0
 
 "TypeDefinition":f12 -> "MethodDefinition":f0 [
 id = 0
+color = "green"
 ];
 
 "InterfaceSlotTable":f2 -> "InterfaceMethodTable":f0 [
@@ -168,14 +186,17 @@ id = 0
 
 "InterfaceMethodTable":f1 -> "TypeDefinition":f0 [
 id = 0
+color = "blue"
 ];
 
 "InterfaceMethodTable":f3 -> "MethodDefinition":f0 [
 id = 0
+color = "green"
 ];
 
 "MethodLookupTable":f3 -> "MethodDefinition":f0 [
 id = 0
+color = "green"
 ];
 
 "MethodDefinition":f7 -> "ExceptionHandlerTable":f0 [
@@ -184,6 +205,7 @@ id = 0
 
 "MethodDefinition":f1 -> "NameString":f0 [
 id = 0
+color = "red"
 ];
 
 "MethodDefinition":f2 -> "CustomAttributesTable":f0 [
@@ -192,22 +214,52 @@ id = 0
 
 "MethodDefinition":f6 -> "TypeDefinition":f0 [
 id = 0
+color = "blue"
 ];
 
 "MethodDefinition":f8 -> "GCTrackingInformation":f0 [
 id = 0
 ];
 
+"MethodDefinition":f10 -> "ParameterDefinition":f0 [
+id = 0
+];
+
+"ParameterDefinition":f1 -> "NameString":f0 [
+id = 0
+color = "red"
+];
+
+"ParameterDefinition":f2 -> "CustomAttributesTable":f0 [
+id = 0
+];
+
+"ParameterDefinition":f4 -> "TypeDefinition":f0 [
+id = 0
+color = "blue"
+];
+
 "ExceptionHandlerTable":f5 -> "TypeDefinition":f0 [
 id = 0
+color = "blue"
 ];
 
-"FieldListTable":f1 -> "FieldDefinition":f0 [
+"FieldsTable":f1 -> "FieldDefinition":f0 [
 id = 0
 ];
 
-"FieldDefinition":f2 -> "TypeDefinition":f0 [
+"FieldDefinition":f1 -> "NameString":f0 [
 id = 0
+color = "red"
+];
+
+"FieldDefinition":f2 -> "CustomAttributesTable":f0 [
+id = 0
+];
+
+"FieldDefinition":f3 -> "TypeDefinition":f0 [
+id = 0
+color = "blue"
 ];
 
 }
