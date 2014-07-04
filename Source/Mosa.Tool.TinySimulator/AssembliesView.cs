@@ -8,8 +8,8 @@
  */
 
 using Mosa.Compiler.MosaTypeSystem;
-using System;
 using Mosa.Utility.GUI.Common;
+using System;
 
 namespace Mosa.Tool.TinySimulator
 {
@@ -22,7 +22,7 @@ namespace Mosa.Tool.TinySimulator
 		}
 
 		public void UpdateTree()
-		{			
+		{
 			TypeSystemTree.UpdateTree(treeView, MainForm.TypeSystem, MainForm.TypeLayout, true);
 		}
 

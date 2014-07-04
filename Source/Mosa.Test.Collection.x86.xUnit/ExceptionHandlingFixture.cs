@@ -9,7 +9,6 @@
  */
 
 using Xunit;
-using Xunit.Extensions;
 
 namespace Mosa.Test.Collection.x86.xUnit
 {

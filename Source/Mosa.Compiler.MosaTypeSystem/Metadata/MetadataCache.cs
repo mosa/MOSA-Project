@@ -8,10 +8,10 @@
  *  Ki (kiootic) <kiootic@gmail.com>
  */
 
-using System;
-using System.Collections.Generic;
 using dnlib.DotNet;
 using Mosa.Compiler.Common;
+using System;
+using System.Collections.Generic;
 
 namespace Mosa.Compiler.MosaTypeSystem.Metadata
 {
@@ -27,7 +27,7 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 		private Dictionary<ScopedToken, MosaMethod> methodLookup = new Dictionary<ScopedToken, MosaMethod>();
 		private Dictionary<ScopedToken, MosaField> fieldLookup = new Dictionary<ScopedToken, MosaField>();
 
-		uint stringIdCounter;
+		private uint stringIdCounter;
 		internal Dictionary<string, uint> stringHeapLookup = new Dictionary<string, uint>(StringComparer.Ordinal);
 		internal Dictionary<uint, string> stringHeapLookup2 = new Dictionary<uint, string>();
 

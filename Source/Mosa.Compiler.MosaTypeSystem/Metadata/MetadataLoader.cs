@@ -11,7 +11,6 @@ using dnlib.DotNet;
 using Mosa.Compiler.Common;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 
 namespace Mosa.Compiler.MosaTypeSystem.Metadata
 {

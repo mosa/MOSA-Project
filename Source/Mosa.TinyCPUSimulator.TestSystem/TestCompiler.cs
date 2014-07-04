@@ -139,7 +139,7 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 			}
 			catch (InvalidCastException e)
 			{
-				Debug.Assert(false, String.Format(@"Failed to convert result {0} of type {1} to type {2}.", result, result.GetType(), typeof(T).ToString()));
+				Debug.Assert(false, String.Format("Failed to convert result {0} of destinationpe {1} destination type {2}.", result, result.GetType(), typeof(T).ToString()));
 				throw e;
 			}
 		}

@@ -13,7 +13,8 @@ namespace Mosa.Tool.TinySimulator
 {
 	public partial class StatusView : SimulatorDockContent
 	{
-		public StatusView(MainForm mainForm) : base(mainForm)
+		public StatusView(MainForm mainForm)
+			: base(mainForm)
 		{
 			InitializeComponent();
 		}
@@ -21,7 +22,7 @@ namespace Mosa.Tool.TinySimulator
 		public override void UpdateDock(BaseSimState simState)
 		{
 			var currentInstruction = simState.Instruction;
-			var nextInstruction = SimCPU.DecodeOpcode(simState.NextIP);
+			var nextInstruction = SimCPU.GetOpcode(simState.NextIP);
 
 			textBox1.Text = simState.Tick.ToString();
 			textBox2.Text = currentInstruction != null ? currentInstruction.ToString() : "-BLANK-";

@@ -1,5 +1,5 @@
 ﻿/*
- * (c) 2013 MOSA - The Managed Operating System Alliance
+ * (c) 2014 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
  *
@@ -14,52 +14,53 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 {
 	public class MoveResolver
 	{
-		protected BasicBlock Anchor;
-		protected BasicBlock Source;
-		protected BasicBlock Destination;
+		public enum ResolvedMoveType { Move, Exchange };
 
-		protected List<Move> moves;
-
-		protected class Move
+		public class ResolvedMoveList : List<MoveExtended<ResolvedMoveType>>
 		{
-			public Operand Source { get; set; }
-
-			public Operand Destination { get; set; }
-
-			public Move(Operand source, Operand destination)
+			public void Add(Operand source, Operand destination, ResolvedMoveType type)
 			{
-				Debug.Assert(source != null);
-				Debug.Assert(destination != null);
-
-				Source = source;
-				Destination = destination;
+				Add(new MoveExtended<ResolvedMoveType>(source, destination, type));
 			}
 		}
 
-		public MoveResolver(BasicBlock anchor, BasicBlock source, BasicBlock destination)
-		{
-			Debug.Assert(source != null);
-			Debug.Assert(destination != null);
-			Debug.Assert(anchor != null);
+		public readonly List<Move> Moves;
 
-			this.Anchor = anchor;
-			this.Source = source;
-			this.Destination = destination;
-			this.moves = new List<Move>();
+		public readonly int Index;
+		public readonly bool Before;
+
+		public MoveResolver(int index, bool before)
+		{
+			Moves = new List<Move>();
+
+			Before = before;
+			Index = index;
+		}
+
+		public MoveResolver(int index, bool before, List<Move> moves)
+			: this(index, before)
+		{
+			foreach (var move in moves)
+				Moves.Add(move);
+		}
+
+		public MoveResolver(BasicBlock anchor, BasicBlock source, BasicBlock destination)
+			: this(source == anchor ? source.EndIndex : destination.StartIndex, source == anchor)
+		{
 		}
 
 		public void AddMove(Operand source, Operand destination)
 		{
-			moves.Add(new Move(source, destination));
+			Moves.Add(new Move(source, destination));
 		}
 
 		private int FindIndex(Register register, bool source)
 		{
-			for (int i = 0; i < moves.Count; i++)
+			for (int i = 0; i < Moves.Count; i++)
 			{
-				var move = moves[i];
+				var move = Moves[i];
 
-				Operand operand = source ? move.Source : move.Destination;
+				var operand = source ? move.Source : move.Destination;
 
 				if (!operand.IsCPURegister)
 					continue;
@@ -71,7 +72,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			return -1;
 		}
 
-		protected void TrySimpleMoves(BaseArchitecture architecture, Context context)
+		protected void TrySimpleMoves(ResolvedMoveList moves)
 		{
 			bool loop = true;
 
@@ -79,9 +80,9 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			{
 				loop = false;
 
-				for (int i = 0; i < moves.Count; i++)
+				for (int i = 0; i < Moves.Count; i++)
 				{
-					var move = moves[i];
+					var move = Moves[i];
 
 					if (!(move.Source.IsCPURegister || move.Destination.IsCPURegister))
 						continue;
@@ -91,17 +92,16 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 					if (other != -1)
 						continue;
 
-					architecture.InsertMoveInstruction(context, move.Destination, move.Source);
-					context.Marked = true;
+					moves.Add(move.Source, move.Destination, ResolvedMoveType.Move);
 
-					moves.RemoveAt(i);
+					Moves.RemoveAt(i);
 
 					loop = true;
 				}
 			}
 		}
 
-		protected void TryExchange(BaseArchitecture architecture, Context context)
+		protected void TryExchange(ResolvedMoveList moves)
 		{
 			bool loop = true;
 
@@ -109,9 +109,9 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			{
 				loop = false;
 
-				for (int i = 0; i < moves.Count; i++)
+				for (int i = 0; i < Moves.Count; i++)
 				{
-					var move = moves[i];
+					var move = Moves[i];
 
 					if (!(move.Source.IsCPURegister || move.Destination.IsCPURegister))
 						continue;
@@ -121,43 +121,58 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 					if (other == -1)
 						continue;
 
-					architecture.InsertExchangeInstruction(context, moves[other].Source, move.Source);
-					context.Marked = true;
-					moves[other].Source = move.Source;
-					moves.RemoveAt(i);
+					moves.Add(Moves[other].Source, move.Source, ResolvedMoveType.Exchange);
+
+					//Moves[other].Source = move.Source;
+					Moves[other] = new Move(move.Source, Moves[other].Destination);
+
+					Moves.RemoveAt(i);
 
 					if (other > i)
 						other--;
 
-					if (moves[other].Source.Register == moves[other].Destination.Register)
-						moves.RemoveAt(other);
+					if (Moves[other].Source.Register == Moves[other].Destination.Register)
+						Moves.RemoveAt(other);
 
 					loop = true;
 				}
 			}
 		}
 
-		protected void CreateMemoryMoves(BaseArchitecture architecture, Context context)
+		protected void CreateMemoryMoves(ResolvedMoveList moves)
 		{
-			for (int i = 0; i < moves.Count; i++)
+			for (int i = 0; i < Moves.Count; i++)
 			{
-				var move = moves[i];
+				var move = Moves[i];
 
 				if (!(move.Source.IsCPURegister || move.Destination.IsCPURegister))
 					continue;
 
-				architecture.InsertMoveInstruction(context, move.Destination, move.Source);
+				moves.Add(move.Destination, move.Source, ResolvedMoveType.Move);
 			}
+		}
+
+		public ResolvedMoveList GetResolveMoves()
+		{
+			var moves = new ResolvedMoveList();
+
+			TrySimpleMoves(moves);
+			TryExchange(moves);
+			CreateMemoryMoves(moves);
+
+			return moves;
 		}
 
 		public void InsertResolvingMoves(BaseArchitecture architecture, InstructionSet instructionSet)
 		{
-			if (moves.Count == 0)
+			if (Moves.Count == 0)
 				return;
 
-			Context context = new Context(instructionSet, Source == Anchor ? Source.EndIndex : Destination.StartIndex);
+			var moves = GetResolveMoves();
 
-			if (Source == Anchor)
+			var context = new Context(instructionSet, Index);
+
+			if (Before)
 			{
 				context.GotoPrevious();
 
@@ -168,11 +183,21 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 				}
 			}
 
-			TrySimpleMoves(architecture, context);
-			TryExchange(architecture, context);
-			CreateMemoryMoves(architecture, context);
+			foreach (var move in moves)
+			{
+				if (move.Value == ResolvedMoveType.Move)
+				{
+					architecture.InsertMoveInstruction(context, move.Destination, move.Source);
+				}
+				else
+				{
+					architecture.InsertExchangeInstruction(context, move.Destination, move.Source);
+				}
 
-			Debug.Assert(moves.Count == 0);
+				context.Marked = true;
+			}
+
+			Debug.Assert(Moves.Count == 0);
 		}
 	}
 }

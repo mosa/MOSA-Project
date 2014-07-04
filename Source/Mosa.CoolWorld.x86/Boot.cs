@@ -73,7 +73,6 @@ namespace Mosa.CoolWorld.x86
 			Console.Write("          Copyright (C) 2008-2014 [Managed Operating System Alliance]");
 			FillLine();
 
-
 			Process();
 		}
 

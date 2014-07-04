@@ -10,7 +10,6 @@ namespace Mosa.Test.Collection
 {
 	public static class SSAOptimizationTest
 	{
-
 		public static bool OptimizationTest1()
 		{
 			int a = 10;
@@ -143,6 +142,5 @@ namespace Mosa.Test.Collection
 
 			return c;
 		}
-
 	}
 }

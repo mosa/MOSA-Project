@@ -7,10 +7,9 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using Mosa.DeviceSystem;
 using System;
 using System.Collections.Generic;
-
-using Mosa.DeviceSystem;
 
 namespace Mosa.EmulatedDevices.Synthetic
 {

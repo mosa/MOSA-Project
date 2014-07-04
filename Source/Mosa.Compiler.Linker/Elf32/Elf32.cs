@@ -13,7 +13,6 @@ using Mosa.Compiler.LinkerFormat.Elf32;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using System.Diagnostics;
 
 namespace Mosa.Compiler.Linker.Elf32
 {
@@ -148,7 +147,6 @@ namespace Mosa.Compiler.Linker.Elf32
 			}
 
 			WriteStringHeaderSection(writer);
-
 		}
 
 		private static void WriteNullHeaderSection(EndianAwareBinaryWriter writer)

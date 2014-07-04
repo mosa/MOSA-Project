@@ -8,13 +8,13 @@
  */
 
 using dnlib.DotNet;
-using Mosa.Compiler.Common;
 
 namespace Mosa.Compiler.MosaTypeSystem.Metadata
 {
-	class CLRMetadata : IMetadata
+	internal class CLRMetadata : IMetadata
 	{
-		MosaModuleLoader moduleLoader;
+		private MosaModuleLoader moduleLoader;
+
 		public CLRMetadata(MosaModuleLoader loader)
 		{
 			this.moduleLoader = loader;

@@ -7,10 +7,10 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using Mosa.Utility.DebugEngine;
 using System;
 using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
-using Mosa.Utility.DebugEngine;
 
 namespace Mosa.Tool.Debugger
 {

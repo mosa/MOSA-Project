@@ -91,7 +91,7 @@ namespace Mosa.Test.Collection.x86.xUnit
 		[PropertyData("I4")]
 		public void OptimizationTest13(int a)
 		{
-			Assert.Equal(Mosa.Test.Collection.SSAOptimizationTest.OptimizationTest13(a), Run<int>("Mosa.Test.Collection.SSAOptimizationTest.OptimizationTest13",a));
+			Assert.Equal(Mosa.Test.Collection.SSAOptimizationTest.OptimizationTest13(a), Run<int>("Mosa.Test.Collection.SSAOptimizationTest.OptimizationTest13", a));
 		}
 	}
 }

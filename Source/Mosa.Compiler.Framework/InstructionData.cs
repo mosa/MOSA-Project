@@ -212,8 +212,8 @@ namespace Mosa.Compiler.Framework
 		{
 			if (additionalOperands == null) additionalOperands = new Operand[253];
 
-			Debug.Assert(index < 255, @"No index");
-			Debug.Assert(index >= 3, @"No index");
+			Debug.Assert(index < 255, @"No Index");
+			Debug.Assert(index >= 3, @"No Index");
 
 			additionalOperands[index - 3] = operand;
 		}
@@ -227,8 +227,8 @@ namespace Mosa.Compiler.Framework
 		{
 			if (additionalOperands == null) return null;
 
-			Debug.Assert(index < 255, @"No index");
-			Debug.Assert(index >= 3, @"No index");
+			Debug.Assert(index < 255, @"No Index");
+			Debug.Assert(index >= 3, @"No Index");
 
 			return additionalOperands[index - 3];
 		}

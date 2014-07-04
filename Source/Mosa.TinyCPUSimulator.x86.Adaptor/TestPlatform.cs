@@ -37,6 +37,7 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 
 		public override void InitializeSimulation(ISimAdapter simAdapter)
 		{
+			//simAdapter.SimCPU.AddInstruction(StopEIP, new SimInstruction(Opcode.Nop, 1));
 		}
 
 		public override void ResetSimulation(ISimAdapter simAdapter)
@@ -51,6 +52,8 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 			// Start of stack
 			x86.ESP.Value = 0x00080000;
 			x86.EBP.Value = x86.ESP.Value;
+
+			simAdapter.SimCPU.Write8(StopEIP, 0x90);
 		}
 
 		private void WriteStackValue(ISimAdapter simAdapter, uint value)

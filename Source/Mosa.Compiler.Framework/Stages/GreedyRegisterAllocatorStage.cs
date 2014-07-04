@@ -22,6 +22,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 			var allocator = new GreedyRegisterAllocator(BasicBlocks, MethodCompiler.VirtualRegisters, InstructionSet, MethodCompiler.StackLayout, Architecture, trace);
 
+			allocator.Start();
+
 			return;
 		}
 	}

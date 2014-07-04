@@ -9,32 +9,33 @@
 
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Text;
 
 namespace Mosa.Compiler.Framework.RegisterAllocator
 {
 	// TODO: Use data structures which are faster at finding intersetions, and add & evicting intervals.
 	public class LiveIntervalTrack
 	{
-		protected List<LiveInterval> liveIntervals = new List<LiveInterval>();
-		protected Register register;
-		protected bool reserved;
+		public readonly List<LiveInterval> liveIntervals = new List<LiveInterval>();
 
-		public Register Register { get { return register; } }
+		public readonly bool IsReserved;
 
-		public bool IsFloatingPoint { get { return register.IsFloatingPoint; } }
+		public readonly Register Register;
 
-		public bool IsInteger { get { return register.IsInteger; } }
+		public bool IsFloatingPoint { get { return Register.IsFloatingPoint; } }
 
-		public bool IsReserved { get { return reserved; } }
+		public bool IsInteger { get { return Register.IsInteger; } }
 
 		public LiveIntervalTrack(Register register, bool reserved)
 		{
-			this.register = register;
-			this.reserved = reserved;
+			this.Register = register;
+			this.IsReserved = reserved;
 		}
 
 		public void Add(LiveInterval liveInterval)
 		{
+			Debug.Assert(!Intersects(liveInterval));
+
 			liveIntervals.Add(liveInterval);
 
 			liveInterval.LiveIntervalTrack = this;
@@ -132,7 +133,25 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		public override string ToString()
 		{
-			return register.ToString();
+			return Register.ToString();
+		}
+
+		public string ToString2()
+		{
+			StringBuilder sb = new StringBuilder();
+
+			sb.Append(Register.ToString());
+			sb.Append(' ');
+
+			foreach (var interval in liveIntervals)
+			{
+				sb.Append(interval.ToString());
+				sb.Append(", ");
+			}
+
+			sb.Length = sb.Length - 2;
+
+			return sb.ToString();
 		}
 	}
 }

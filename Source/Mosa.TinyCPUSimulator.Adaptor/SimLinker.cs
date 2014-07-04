@@ -23,6 +23,7 @@ namespace Mosa.TinyCPUSimulator.Adaptor
 
 		private List<Tuple<LinkerSymbol, int, string>> targetSymbols = new List<Tuple<LinkerSymbol, int, string>>();
 		private List<Tuple<LinkerSymbol, long, SimInstruction>> instructions = new List<Tuple<LinkerSymbol, long, SimInstruction>>();
+		private List<Tuple<LinkerSymbol, long, string>> source = new List<Tuple<LinkerSymbol, long, string>>();
 
 		#region Construction
 
@@ -47,6 +48,11 @@ namespace Mosa.TinyCPUSimulator.Adaptor
 			instructions.Add(new Tuple<LinkerSymbol, long, SimInstruction>(baseSymbol, offset, instruction));
 		}
 
+		public void AddSourceInformation(LinkerSymbol baseSymbol, long offset, string information)
+		{
+			source.Add(new Tuple<LinkerSymbol, long, string>(baseSymbol, offset, information));
+		}
+
 		protected override void EmitImplementation(Stream stream)
 		{
 			base.EmitImplementation(stream);
@@ -66,8 +72,14 @@ namespace Mosa.TinyCPUSimulator.Adaptor
 				simAdapter.SimCPU.AddInstruction(target.Item1.VirtualAddress + (ulong)target.Item2, target.Item3);
 			}
 
+			foreach (var target in source)
+			{
+				simAdapter.SimCPU.AddSourceInformation(target.Item1.VirtualAddress + (ulong)target.Item2, target.Item3);
+			}
+
 			targetSymbols = null;
 			instructions = null;
+			source = null;
 		}
 	}
 }

@@ -8,7 +8,6 @@
  */
 
 using System;
-using Mosa.TinyCPUSimulator;
 
 namespace Mosa.TinyCPUSimulator.x86
 {

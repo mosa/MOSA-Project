@@ -7,8 +7,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
-
 namespace Mosa.TinyCPUSimulator.x86
 {
 	/// <summary>
@@ -284,6 +282,22 @@ namespace Mosa.TinyCPUSimulator.x86
 		public override void ExtendState(BaseSimState simState)
 		{
 			simState.ExtendState(this);
+		}
+
+		public override SimInstruction DecodeOpcode(ulong address)
+		{
+			ulong at = address;
+
+			var opcode = DirectRead8(at++);
+
+			switch (opcode)
+			{
+				case 0x90: return new SimInstruction(Opcode.Nop, 1);
+				case 0xFA: return new SimInstruction(Opcode.Cli, 1);
+				case 0xFB: return new SimInstruction(Opcode.Sti, 1);
+				case 0xC3: return new SimInstruction(Opcode.Ret, 1);
+				default: return null;
+			}
 		}
 	}
 }

@@ -52,7 +52,7 @@ namespace System
 			if (IsNegativeInfinity(_value) && IsNegativeInfinity(value))
 				return 0;
 
-			if (IsNaN(value)) 
+			if (IsNaN(value))
 				if (IsNaN(_value))
 					return 0;
 				else

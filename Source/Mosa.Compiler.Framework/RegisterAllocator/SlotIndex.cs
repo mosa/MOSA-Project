@@ -159,46 +159,6 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			}
 		}
 
-		//public SlotIndex Next
-		//{
-		//	get
-		//	{
-		//		if (slotType == SlotType.HalfStepBefore)
-		//		{
-		//			return new SlotIndex(instructionSet, Index, SlotType.Normal);
-		//		}
-
-		//		int next = instructionSet.Next(Index);
-
-		//		while (instructionSet.Data[next].Instruction == null)
-		//		{
-		//			next = instructionSet.Next(next);
-		//		}
-
-		//		return new SlotIndex(instructionSet, next);
-		//	}
-		//}
-
-		//public SlotIndex Previous
-		//{
-		//	get
-		//	{
-		//		if (slotType == SlotType.HalfStepAfter)
-		//		{
-		//			return new SlotIndex(instructionSet, Index, SlotType.Normal);
-		//		}
-
-		//		int previous = instructionSet.Previous(Index);
-
-		//		while (instructionSet.Data[previous].Instruction == null)
-		//		{
-		//			previous = instructionSet.Previous(previous);
-		//		}
-
-		//		return new SlotIndex(instructionSet, previous);
-		//	}
-		//}
-
 		public bool IsBlockStartInstruction
 		{
 			get

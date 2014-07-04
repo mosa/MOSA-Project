@@ -25,7 +25,7 @@ namespace Mosa.TinyCPUSimulator
 
 		public byte OpcodeSize { get; private set; }
 
-		public string Source { get; set; }
+		//public string Source { get; set; }
 
 		private SimInstruction(BaseOpcode opcode, byte opcodeSize, int operandCount)
 		{

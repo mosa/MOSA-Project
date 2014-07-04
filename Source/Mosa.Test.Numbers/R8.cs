@@ -55,6 +55,5 @@ namespace Mosa.Test.Numbers
 
 			return list;
 		}
-
 	}
 }

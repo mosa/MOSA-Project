@@ -8,18 +8,18 @@
  */
 
 using Mosa.TinyCPUSimulator;
+using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
-using System;
 
 namespace Mosa.Tool.TinySimulator
 {
 	public partial class CallStackView : SimulatorDockContent
 	{
-
 		private class CallStackEntry : TreeNode
 		{
 			public string MethodName { get; private set; }
+
 			public ulong Address { get; private set; }
 
 			private SimSymbol SimSymbol;
@@ -41,7 +41,6 @@ namespace Mosa.Tool.TinySimulator
 			{
 				SimSymbol = simSymbol;
 			}
-
 		}
 
 		public CallStackView(MainForm mainForm)
@@ -127,6 +126,5 @@ namespace Mosa.Tool.TinySimulator
 
 			Clipboard.SetText(clickedNode.MethodName);
 		}
-
 	}
 }

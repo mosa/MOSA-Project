@@ -111,6 +111,5 @@ namespace Mosa.Test.Collection.x86.xUnit
 		{
 			Assert.Equal(DelegateTests.TestInstanceDelegate2(a, b), Run<int>("Mosa.Test.Collection.DelegateTests.TestInstanceDelegate2", a, b));
 		}
-
 	}
 }

@@ -15,7 +15,6 @@ namespace Mosa.Tool.TinySimulator
 {
 	public partial class ScriptView : SimulatorDockContent
 	{
-
 		private int lineNbr = 0;
 		private bool wait = false;
 

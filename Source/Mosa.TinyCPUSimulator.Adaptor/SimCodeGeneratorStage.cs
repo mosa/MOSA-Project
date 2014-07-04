@@ -43,9 +43,12 @@ namespace Mosa.TinyCPUSimulator.Adaptor
 
 			var instruction = simAdapter.Convert(context, MethodCompiler.Method, BasicBlocks, (byte)(end - start));
 
-			instruction.Source = context.ToString();
+			if (instruction != null)
+			{
+				simLinker.AddInstruction(symbol, start, instruction);
+			}
 
-			simLinker.AddInstruction(symbol, start, instruction);
+			simLinker.AddSourceInformation(symbol, start, context.ToString());
 		}
 
 		protected override void BlockStart(BasicBlock block)

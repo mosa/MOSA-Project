@@ -9,7 +9,6 @@
  */
 
 using Mosa.Compiler.Framework;
-using System;
 
 namespace Mosa.Platform.x86.Instructions
 {

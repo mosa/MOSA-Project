@@ -321,6 +321,5 @@ namespace Mosa.Test.Collection
 
 			return sum;
 		}
-
 	}
 }

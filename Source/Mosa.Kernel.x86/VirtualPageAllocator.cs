@@ -103,7 +103,7 @@ namespace Mosa.Kernel.x86
 					{
 						for (uint index = 0; index < requested; index++)
 							SetPageStatus(first + index, false);
-						
+
 						return ((first * PageFrameAllocator.PageSize) + PageFrameAllocator.ReserveMemory);
 					}
 				}
@@ -112,7 +112,6 @@ namespace Mosa.Kernel.x86
 					first = 0xFFFFFFFF;
 				}
 			}
-
 
 			return 0;
 		}

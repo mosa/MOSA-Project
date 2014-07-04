@@ -9,7 +9,6 @@
 
 namespace Mosa.Test.Collection
 {
-
 	public class DerivedNewObjectTests : NewObjectTests
 	{
 		private readonly int int32;

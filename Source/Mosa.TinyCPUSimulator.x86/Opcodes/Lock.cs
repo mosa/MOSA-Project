@@ -12,7 +12,7 @@ namespace Mosa.TinyCPUSimulator.x86.Opcodes
 	public class Lock : BaseX86Opcode
 	{
 		public override void Execute(CPUx86 cpu, SimInstruction instruction)
-		{			
+		{
 		}
 	}
 }
