@@ -32,7 +32,8 @@ namespace Mosa.Compiler.MosaTypeSystem
 		{
 			return ParameterType.Equals(parameter.ParameterType) 
 				&& ParameterAttributes.Equals(parameter.ParameterAttributes)
-				&& CustomAttributes.Equals(parameter.CustomAttributes);
+				&& CustomAttributes.Equals(parameter.CustomAttributes)
+				&& Name.Equals(parameter.Name);
 		}
 
 		public bool Equals(MosaType type)
@@ -60,7 +61,8 @@ namespace Mosa.Compiler.MosaTypeSystem
 			{
 				if (parameter.ParameterType != null)
 				{
-					parameter.FullName = string.Concat(parameter.ParameterType.FullName, " ", parameter.DeclaringMethod.FullName, "::", parameter.Name);
+					string signatureName = (parameter.DeclaringMethod == null) ? "<FunctionPointer>" : parameter.DeclaringMethod.FullName;
+					parameter.FullName = string.Concat(parameter.ParameterType.FullName, " ", signatureName, "::", parameter.Name);
 					parameter.ShortName = string.Concat(parameter.Name, " : ", parameter.ParameterType.ShortName);
 				}
 			}

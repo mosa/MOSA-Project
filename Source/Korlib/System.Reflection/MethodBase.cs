@@ -39,7 +39,7 @@ namespace System.Reflection
 		{
 			get
 			{
-				return (this.Attributes & MethodAttributes.Assembly) == MethodAttributes.Assembly;
+				return (this.Attributes & MethodAttributes.MemberAccessMask) == MethodAttributes.Assembly;
 			}
 		}
 
@@ -61,7 +61,7 @@ namespace System.Reflection
 		{
 			get
 			{
-				return (this.Attributes & MethodAttributes.Family) == MethodAttributes.Assembly;
+				return (this.Attributes & MethodAttributes.MemberAccessMask) == MethodAttributes.Assembly;
 			}
 		}
 
@@ -72,7 +72,7 @@ namespace System.Reflection
 		{
 			get
 			{
-				return (this.Attributes & MethodAttributes.FamANDAssem) == MethodAttributes.FamANDAssem;
+				return (this.Attributes & MethodAttributes.MemberAccessMask) == MethodAttributes.FamANDAssem;
 			}
 		}
 
@@ -83,7 +83,7 @@ namespace System.Reflection
 		{
 			get
 			{
-				return (this.Attributes & MethodAttributes.FamORAssem) == MethodAttributes.FamORAssem;
+				return (this.Attributes & MethodAttributes.MemberAccessMask) == MethodAttributes.FamORAssem;
 			}
 		}
 
@@ -138,7 +138,7 @@ namespace System.Reflection
 		{
 			get
 			{
-				return (this.Attributes & MethodAttributes.Private) == MethodAttributes.Private;
+				return (this.Attributes & MethodAttributes.MemberAccessMask) == MethodAttributes.Private;
 			}
 		}
 
@@ -149,7 +149,7 @@ namespace System.Reflection
 		{
 			get
 			{
-				return (this.Attributes & MethodAttributes.Public) == MethodAttributes.Public;
+				return (this.Attributes & MethodAttributes.MemberAccessMask) == MethodAttributes.Public;
 			}
 		}
 

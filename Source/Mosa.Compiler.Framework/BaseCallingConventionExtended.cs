@@ -93,10 +93,10 @@ namespace Mosa.Compiler.Framework
 
 				var param = (index + offset >= 0) ? method.Signature.Parameters[index + offset] : null;
 
-				if (param != null && operand.IsR8 && param.Type.IsR4)
+				if (param != null && operand.IsR8 && param.ParameterType.IsR4)
 				{
 					//  adjust for parameter size on stack when method parameter is R4 while the calling variable is R8
-					architecture.GetTypeRequirements(typeLayout, param.Type, out size, out alignment);
+					architecture.GetTypeRequirements(typeLayout, param.ParameterType, out size, out alignment);
 				}
 
 				Alignment.AlignUp(result, (uint)alignment);

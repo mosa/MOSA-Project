@@ -67,6 +67,10 @@
     <Compile Include="System.Reflection\AssemblyTitleAttribute.cs" />
     <Compile Include="System.Reflection\ConstructorInfo.cs" />
     <Compile Include="System.Reflection\CustomAttributeData.cs" />
+    <Compile Include="System.Reflection\CustomAttributeNamedArgument.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="System.Reflection\CustomAttributeTypedArgument.cs" />
     <Compile Include="System.Reflection\ICustomAttributeProvider.cs" />
     <Compile Include="System.Reflection\IntrospectionExtensions.cs" />
     <Compile Include="System.Reflection\IReflectableType.cs" />

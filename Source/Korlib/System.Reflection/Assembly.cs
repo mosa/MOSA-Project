@@ -83,11 +83,22 @@ namespace System.Reflection
 			return Activator.CreateInstance(t);
 		}
 
+		/// <summary>
+		/// Gets all the custom attributes for this assembly.
+		/// </summary>
+		/// <param name="inherit">This argument is ignored for objects of type Assembly.</param>
+		/// <returns>An array that contains the custom attributes for this assembly.</returns>
 		public virtual object[] GetCustomAttributes(bool inherit)
 		{
 			throw new NotImplementedException();
 		}
 
+		/// <summary>
+		/// Gets the custom attributes for this assembly as specified by type.
+		/// </summary>
+		/// <param name="attributeType">The type for which the custom attributes are to be returned.</param>
+		/// <param name="inherit">This argument is ignored for objects of type Assembly.</param>
+		/// <returns>An array that contains the custom attributes for this assembly as specified by attributeType.</returns>
 		public virtual object[] GetCustomAttributes(Type attributeType, bool inherit)
 		{
 			throw new NotImplementedException();
@@ -124,6 +135,12 @@ namespace System.Reflection
 		/// <returns>True if left is equal to right; otherwise, False.</returns>
 		public static bool operator ==(Assembly left, Assembly right)
 		{
+			if (object.ReferenceEquals(left, right))
+				return true;
+
+			if ((object)left == null || (object)right == null)
+				return false;
+
 			return left.FullName == right.FullName;
 		}
 
@@ -135,7 +152,7 @@ namespace System.Reflection
 		/// <returns>True if left is not equal to right; otherwise, False.</returns>
 		public static bool operator !=(Assembly left, Assembly right)
 		{
-			return left.FullName != right.FullName;
+			return !(left == right);
 		}
 	}
 }
