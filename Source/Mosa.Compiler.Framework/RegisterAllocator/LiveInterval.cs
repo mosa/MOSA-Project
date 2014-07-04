@@ -155,8 +155,6 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		public IList<LiveInterval> SplitAt(SlotIndex at)
 		{
-			Debug.Assert(LiveRange.CanSplitAt(at));
-
 			var liveRanges = LiveRange.SplitAt(at);
 
 			var intervals = new List<LiveInterval>(liveRanges.Count);
@@ -169,10 +167,19 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			return intervals;
 		}
 
-		public LiveInterval Split(SlotIndex start, SlotIndex end)
+		public IList<LiveInterval> SplitAt(SlotIndex low, SlotIndex high)
 		{
-			// Depreciated
-			return new LiveInterval(VirtualRegister, start, end, UsePositions, DefPositions);
+			var liveRanges = LiveRange.SplitAt(low, high);
+
+			var intervals = new List<LiveInterval>(liveRanges.Count);
+
+			foreach (var liveRange in liveRanges)
+			{
+				intervals.Add(CreateSplit(liveRange));
+			}
+
+			return intervals;
 		}
+
 	}
 }

@@ -138,13 +138,10 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		public bool CanSplitAt(SlotIndex at)
 		{
-			if (Start == at)
-				return false;
-
 			if (at <= Start || at >= End)
 				return false;
 
-			if (defPositions.ContainsKey(at))
+			if (usePositions.ContainsKey(at))
 				return false;
 
 			return true;
@@ -164,12 +161,6 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		public bool CanSplitAt(SlotIndex low, SlotIndex high)
 		{
-			if (low == high)
-				return false;
-
-			if (Start == low)
-				return false;
-
 			if (low <= Start || low >= End)
 				return false;
 
@@ -179,10 +170,10 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			if (low >= high)
 				return false;
 
-			if (defPositions.ContainsKey(low))
+			if (usePositions.ContainsKey(low))
 				return false;
 
-			if (defPositions.ContainsKey(high))
+			if (usePositions.ContainsKey(high))
 				return false;
 
 			return true;
@@ -190,6 +181,11 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		public List<LiveRange> SplitAt(SlotIndex low, SlotIndex high)
 		{
+			if (low == high)
+			{
+				return SplitAt(low);
+			}
+
 			Debug.Assert(CanSplitAt(low, high));
 
 			var ranges = new List<LiveRange>(3);

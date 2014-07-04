@@ -490,7 +490,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 					}
 				}
 
-				Context context = new Context(InstructionSet, block.BasicBlock, block.BasicBlock.EndIndex);
+				var context = new Context(InstructionSet, block.BasicBlock, block.BasicBlock.EndIndex);
 
 				while (!context.IsBlockStartInstruction)
 				{
@@ -704,7 +704,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 			track.Add(liveInterval);
 
-			if (Trace.Active) Trace.Log("    Track: " + track.ToString2());
+			//if (Trace.Active) Trace.Log("    Track: " + track.ToString2());
 
 			return true;
 		}
@@ -750,7 +750,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 				{
 					if (intersections.Count != 0)
 					{
-						if (Trace.Active) Trace.Log("  Evicting live intervals");
+						if (Trace.Active) Trace.Log("  Evicting live newIntervals");
 
 						track.Evict(intersections);
 
@@ -821,7 +821,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 				return;
 			}
 
-			if (Trace.Active) Trace.Log("  No live intervals destination evicts");
+			if (Trace.Active) Trace.Log("  No live newIntervals destination evicts");
 
 			// No live intervals to evict!
 
@@ -922,12 +922,14 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 			if (liveRange.IsDefFirst)
 			{
-				if (liveRange.Start == liveRange.FirstDef)
+				if (liveRange.FirstDef == liveRange.Start)
 				{
-					splitAt = liveRange.Start.HalfStepForward;
+					// must split after def
+					splitAt = liveRange.FirstDef.HalfStepForward;
 				}
 				else
 				{
+					// split after def
 					splitAt = liveRange.FirstDef.HalfStepBack;
 				}
 			}
@@ -935,40 +937,47 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			{
 				Debug.Assert(liveRange.FirstUse != liveRange.Start);
 
-				if (liveRange.FirstUse != liveRange.End)
+				if (liveRange.FirstUse == liveRange.End)
 				{
-					if (liveRange.FirstDef != null && liveRange.FirstDef == liveRange.FirstUse)
-					{
-						splitAt = liveRange.FirstUse.HalfStepForward;
-					}
-					else
-					{
-						splitAt = liveRange.FirstUse;
-					}
+					// must split before use
+					splitAt = liveRange.FirstUse.HalfStepBack;
+				}
+				else if (liveRange.FirstUse.HalfStepBack == liveRange.Start)
+				{
+					splitAt = liveRange.FirstUse.HalfStepForward;
 				}
 				else
 				{
 					splitAt = liveRange.FirstUse.HalfStepBack;
 				}
+
 			}
 
 			var intervals = liveInterval.SplitAt(splitAt);
 
-			CalculateSpillCosts(intervals);
+			ReplaceIntervals(liveInterval, intervals, true);
 
-			liveInterval.VirtualRegister.ReplaceWithSplit(liveInterval, intervals);
+			return;
+		}
+
+		protected void ReplaceIntervals(LiveInterval replaceLiveInterval, IList<LiveInterval> newIntervals, bool addToQueue)
+		{
+			CalculateSpillCosts(newIntervals);
+
+			replaceLiveInterval.VirtualRegister.ReplaceWithSplit(replaceLiveInterval, newIntervals);
 
 			if (Trace.Active)
 			{
-				foreach (var interval in intervals)
+				foreach (var interval in newIntervals)
 				{
 					Trace.Log(" New Split: " + interval.ToString());
 				}
 			}
 
-			AddPriorityQueue(intervals);
-
-			return;
+			if (addToQueue)
+			{
+				AddPriorityQueue(newIntervals);
+			}
 		}
 
 		private IEnumerable<VirtualRegister> GetVirtualRegisters(BitArray array)
