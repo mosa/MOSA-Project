@@ -10,8 +10,8 @@
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.Framework.RegisterAllocator;
-using Xunit;
 using System.Collections.Generic;
+using Xunit;
 
 namespace Mosa.Compiler.Framework.xUnit
 {

@@ -165,7 +165,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			{
 				if (slotType != SlotType.Normal)
 					return false;
-				
+
 				return instructionSet.Data[Index].Instruction == IRInstruction.BlockStart;
 			}
 		}
