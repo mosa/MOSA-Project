@@ -10,8 +10,6 @@
 using Mosa.Compiler.InternalTrace;
 using System.Collections.Generic;
 using System.Diagnostics;
-using Mosa.Compiler.Common;
-using System;
 
 namespace Mosa.Compiler.Framework.RegisterAllocator
 {
@@ -398,7 +396,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 			var c = liveInterval.LiveRange.GetPreviousUsePosition(at);
 			if (c != null && c.HalfStepForward <= at)
-				c = c.HalfStepForward; 
+				c = c.HalfStepForward;
 			if (Trace.Active) Trace.Log("  Previous Use : " + (c != null ? c.ToString() : "null"));
 
 			var d = liveInterval.LiveRange.GetPreviousDefPosition(at);

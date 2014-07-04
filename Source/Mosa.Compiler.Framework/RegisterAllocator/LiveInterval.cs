@@ -180,6 +180,5 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 			return intervals;
 		}
-
 	}
 }

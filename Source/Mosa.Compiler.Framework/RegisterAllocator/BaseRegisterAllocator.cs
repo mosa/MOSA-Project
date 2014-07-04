@@ -950,7 +950,6 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 				{
 					splitAt = liveRange.FirstUse.HalfStepBack;
 				}
-
 			}
 
 			var intervals = liveInterval.SplitAt(splitAt);
