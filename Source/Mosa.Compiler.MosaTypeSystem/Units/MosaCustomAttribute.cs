@@ -7,6 +7,8 @@
  *  Ki (kiootic) <kiootic@gmail.com>
  */
 
+using System.Collections.Generic;
+
 namespace Mosa.Compiler.MosaTypeSystem
 {
 	public class MosaCustomAttribute
