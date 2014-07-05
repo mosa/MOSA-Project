@@ -626,14 +626,13 @@ namespace Mosa.Platform.x86.Stages
 			Operand value = context.Operand3;
 			MosaType storeType = context.MosaType;
 
-			//if (value.IsR4 || storeType.IsR4) // <--- this one is right
 			if (value.IsR8 && (storeType ?? value.Type).IsR4)
 			{
 				Operand xmm1 = AllocateVirtualRegister(TypeSystem.BuiltIn.R4);
 				context.InsertBefore().AppendInstruction(X86.Cvtsd2ss, xmm1, value);
 				value = xmm1;
 			}
-			else
+			else if (value.IsMemoryAddress)
 			{
 				Operand v2 = AllocateVirtualRegister(value.Type);
 				context.InsertBefore().AppendInstruction(X86.Mov, v2, value);
