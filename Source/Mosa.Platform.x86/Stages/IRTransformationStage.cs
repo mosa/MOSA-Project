@@ -34,7 +34,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">Initializeontext.</param>
 		void IIRVisitor.AddSigned(Context context)
 		{
-			ReplaceInstructionAndAnyFloatingPointConstant(context, X86.Add);
+			context.ReplaceInstructionOnly(X86.Add);
 		}
 
 		/// <summary>
@@ -43,7 +43,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IIRVisitor.AddUnsigned(Context context)
 		{
-			ReplaceInstructionAndAnyFloatingPointConstant(context, X86.Add);
+			context.ReplaceInstructionOnly(X86.Add);
 		}
 
 		/// <summary>
@@ -53,9 +53,9 @@ namespace Mosa.Platform.x86.Stages
 		void IIRVisitor.AddFloat(Context context)
 		{
 			if (context.Result.IsR4)
-				ReplaceInstructionAndAnyFloatingPointConstant(context, X86.Addss);
+				context.ReplaceInstructionOnly(X86.Addss);
 			else
-				ReplaceInstructionAndAnyFloatingPointConstant(context, X86.Addsd);
+				context.ReplaceInstructionOnly(X86.Addsd);
 		}
 
 		/// <summary>
@@ -65,9 +65,9 @@ namespace Mosa.Platform.x86.Stages
 		void IIRVisitor.DivFloat(Context context)
 		{
 			if (context.Result.IsR4)
-				ReplaceInstructionAndAnyFloatingPointConstant(context, X86.Divss);
+				context.ReplaceInstructionOnly(X86.Divss);
 			else
-				ReplaceInstructionAndAnyFloatingPointConstant(context, X86.Divsd);
+				context.ReplaceInstructionOnly(X86.Divsd);
 		}
 
 		/// <summary>
@@ -594,7 +594,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IIRVisitor.ArithmeticShiftRight(Context context)
 		{
-			ReplaceInstructionAndAnyFloatingPointConstant(context, X86.Sar);
+			context.ReplaceInstructionOnly(X86.Sar);
 		}
 
 		/// <summary>
@@ -603,7 +603,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IIRVisitor.ShiftLeft(Context context)
 		{
-			ReplaceInstructionAndAnyFloatingPointConstant(context, X86.Shl);
+			context.ReplaceInstructionOnly(X86.Shl);
 		}
 
 		/// <summary>
@@ -612,7 +612,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IIRVisitor.ShiftRight(Context context)
 		{
-			ReplaceInstructionAndAnyFloatingPointConstant(context, X86.Shr);
+			context.ReplaceInstructionOnly(X86.Shr);
 		}
 
 		/// <summary>
@@ -696,9 +696,9 @@ namespace Mosa.Platform.x86.Stages
 		void IIRVisitor.MulFloat(Context context)
 		{
 			if (context.Result.IsR4)
-				ReplaceInstructionAndAnyFloatingPointConstant(context, X86.Mulss);
+				context.ReplaceInstructionOnly(X86.Mulss);
 			else
-				ReplaceInstructionAndAnyFloatingPointConstant(context, X86.Mulsd);
+				context.ReplaceInstructionOnly(X86.Mulsd);
 		}
 
 		/// <summary>
@@ -708,9 +708,9 @@ namespace Mosa.Platform.x86.Stages
 		void IIRVisitor.SubFloat(Context context)
 		{
 			if (context.Result.IsR4)
-				ReplaceInstructionAndAnyFloatingPointConstant(context, X86.Subss);
+				context.ReplaceInstructionOnly(X86.Subss);
 			else
-				ReplaceInstructionAndAnyFloatingPointConstant(context, X86.Subsd);
+				context.ReplaceInstructionOnly(X86.Subsd);
 		}
 
 		/// <summary>
@@ -1050,20 +1050,5 @@ namespace Mosa.Platform.x86.Stages
 		}
 
 		#endregion IIRVisitor - Unused
-
-		#region Internals
-
-		/// <summary>
-		/// Removes the any floating point constant and replace instruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		/// <param name="instruction">The instruction.</param>
-		private void ReplaceInstructionAndAnyFloatingPointConstant(Context context, BaseInstruction instruction)
-		{
-			EmitFloatingPointConstants(context);
-			context.ReplaceInstructionOnly(instruction);
-		}
-
-		#endregion Internals
 	}
 }

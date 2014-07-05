@@ -28,7 +28,7 @@ namespace Mosa.Platform.ARMv6.Stages
 		/// <param name="context">The context.</param>
 		void IIRVisitor.AddSigned(Context context)
 		{
-			ReplaceInstructionAndAnyFloatingPointConstant(context, ARMv6.Add);
+			context.ReplaceInstructionOnly(ARMv6.Add);
 		}
 
 		/// <summary>
@@ -37,7 +37,7 @@ namespace Mosa.Platform.ARMv6.Stages
 		/// <param name="context">The context.</param>
 		void IIRVisitor.AddUnsigned(Context context)
 		{
-			ReplaceInstructionAndAnyFloatingPointConstant(context, ARMv6.Add);
+			context.ReplaceInstructionOnly(ARMv6.Add);
 		}
 
 		/// <summary>
@@ -427,17 +427,6 @@ namespace Mosa.Platform.ARMv6.Stages
 		#endregion IIRVisitor - Unused
 
 		#region Internals
-
-		/// <summary>
-		/// Removes the any floating point constant and replace instruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		/// <param name="instruction">The instruction.</param>
-		private void ReplaceInstructionAndAnyFloatingPointConstant(Context context, BaseInstruction instruction)
-		{
-			EmitFloatingPointConstants(context);
-			context.ReplaceInstructionOnly(instruction);
-		}
 
 		#endregion Internals
 	}
