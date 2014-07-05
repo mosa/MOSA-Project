@@ -92,8 +92,6 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IIRVisitor.FloatCompare(Context context)
 		{
-			EmitFloatingPointConstants(context);
-
 			Operand result = context.Result;
 			Operand left = context.Operand1;
 			Operand right = context.Operand2;
@@ -263,8 +261,6 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IIRVisitor.IntegerCompareBranch(Context context)
 		{
-			EmitFloatingPointConstants(context);
-
 			int target = context.BranchTargets[0];
 			var condition = context.ConditionCode;
 			var operand1 = context.Operand1;
@@ -281,8 +277,6 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IIRVisitor.IntegerCompare(Context context)
 		{
-			EmitFloatingPointConstants(context);
-
 			var condition = context.ConditionCode;
 			var resultOperand = context.Result;
 			var operand1 = context.Operand1;
@@ -719,8 +713,6 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IIRVisitor.SubSigned(Context context)
 		{
-			//EmitResultConstants(context);
-			EmitFloatingPointConstants(context);
 			context.ReplaceInstructionOnly(X86.Sub);
 		}
 
@@ -730,8 +722,6 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IIRVisitor.SubUnsigned(Context context)
 		{
-			//EmitResultConstants(context);
-			EmitFloatingPointConstants(context);
 			context.ReplaceInstructionOnly(X86.Sub);
 		}
 
@@ -741,8 +731,6 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IIRVisitor.MulSigned(Context context)
 		{
-			EmitFloatingPointConstants(context);
-
 			Operand result = context.Result;
 			Operand operand1 = context.Operand1;
 			Operand operand2 = context.Operand2;
@@ -757,8 +745,6 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IIRVisitor.MulUnsigned(Context context)
 		{
-			EmitFloatingPointConstants(context);
-
 			Operand result = context.Result;
 			Operand operand1 = context.Operand1;
 			Operand operand2 = context.Operand2;
@@ -773,8 +759,6 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IIRVisitor.DivSigned(Context context)
 		{
-			EmitFloatingPointConstants(context);
-
 			Operand operand1 = context.Operand1;
 			Operand operand2 = context.Operand2;
 			Operand result = context.Result;
@@ -793,8 +777,6 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IIRVisitor.DivUnsigned(Context context)
 		{
-			EmitFloatingPointConstants(context);
-
 			Operand operand1 = context.Operand1;
 			Operand operand2 = context.Operand2;
 			Operand result = context.Result;
@@ -813,8 +795,6 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IIRVisitor.RemSigned(Context context)
 		{
-			EmitFloatingPointConstants(context);
-
 			Operand result = context.Result;
 			Operand operand1 = context.Operand1;
 			Operand operand2 = context.Operand2;
@@ -834,8 +814,6 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IIRVisitor.RemUnsigned(Context context)
 		{
-			EmitFloatingPointConstants(context);
-
 			Operand result = context.Result;
 			Operand operand1 = context.Operand1;
 			Operand operand2 = context.Operand2;
@@ -854,8 +832,6 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IIRVisitor.RemFloat(Context context)
 		{
-			EmitFloatingPointConstants(context);
-
 			Operand result = context.Result;
 			Operand operand1 = context.Operand1;
 			Operand operand2 = context.Operand2;
