@@ -50,6 +50,10 @@ namespace Mosa.Platform.Internal.x86.xUnit
 		[InlineData((ulong)0x02F0FFFFFFFFFFFF, (ulong)0x12FFFF0FFF)]
 		[InlineData((ulong)0x00F0FF32FFFFFFFF, (ulong)0x12FFFF0FFF)]
 		[InlineData((ulong)0x00F0FFFF43FFFFFF, (ulong)0x12FFFF0FFF)]
+		[InlineData((ulong)0xFFFFFFFFFFFFFFFF, (ulong)0xFFFFFFFFFFFFFFFE)]
+		[InlineData(ulong.MaxValue, ulong.MaxValue - 1)]
+		[InlineData(ulong.MaxValue - 1, ulong.MaxValue)]
+		[InlineData(ulong.MaxValue, ulong.MaxValue)]
 		public void udiv64(ulong n, ulong d)
 		{
 			ulong expected = n / d;
