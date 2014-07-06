@@ -7,37 +7,63 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using Mosa.Compiler.Framework.IR;
 using System;
 using System.Diagnostics;
-using Mosa.Compiler.Framework.IR;
 
 namespace Mosa.Compiler.Framework.RegisterAllocator
 {
 	public class SlotIndex : IComparable
 	{
+		private enum SlotType { Normal, HalfStepBack, HalfStepForward };
+
+		public const int Increment = 2;
+
+		public readonly int Index;
+
 		private InstructionSet instructionSet;
 
-		private int index;
+		private SlotType slotType;
 
-		public SlotIndex(InstructionSet instructionSet, int index)
+		public int SlotNumber
+		{
+			get
+			{
+				int slot = instructionSet.Data[Index].SlotNumber;
+
+				if (slotType == SlotType.HalfStepForward)
+					slot++;
+				else if (slotType == SlotType.HalfStepBack)
+					slot--;
+
+				return slot;
+			}
+		}
+
+		public bool IsOnHalfStep { get { return slotType != SlotType.Normal; } }
+
+		public bool IsOnHalfStepForward { get { return slotType == SlotType.HalfStepForward; } }
+
+		public bool IsOnHalfStepBack { get { return slotType == SlotType.HalfStepBack; } }
+
+		private SlotIndex(InstructionSet instructionSet, int index, SlotType slotType)
 		{
 			Debug.Assert(index >= 0);
 
 			this.instructionSet = instructionSet;
-			this.index = index;
+			this.Index = index;
+			this.slotType = slotType;
+		}
+
+		public SlotIndex(InstructionSet instructionSet, int index)
+			: this(instructionSet, index, SlotType.Normal)
+		{
 		}
 
 		public SlotIndex(Context context)
+			: this(context.InstructionSet, context.Index, SlotType.Normal)
 		{
-			Debug.Assert(context.Index >= 0);
-
-			this.instructionSet = context.InstructionSet;
-			this.index = context.Index;
 		}
-
-		public int Index { get { return index; } }
-
-		public int SlotNumber { get { return instructionSet.Data[index].SlotNumber; } }
 
 		public static int operator -(SlotIndex s1, SlotIndex s2)
 		{
@@ -95,7 +121,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			if (!(s is SlotIndex))
 				return false;
 
-			return ((s as SlotIndex).index == index);
+			return ((s as SlotIndex).Index == Index);
 		}
 
 		public override int GetHashCode()
@@ -115,33 +141,21 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			return SlotNumber.ToString();
 		}
 
-		public SlotIndex Next
+		public SlotIndex HalfStepForward
 		{
 			get
 			{
-				int next = instructionSet.Next(index);
-
-				while (instructionSet.Data[next].Instruction == null)
-				{
-					next = instructionSet.Next(next);
-				}
-
-				return new SlotIndex(instructionSet, next);
+				Debug.Assert(slotType == SlotType.Normal);
+				return new SlotIndex(instructionSet, Index, SlotType.HalfStepForward);
 			}
 		}
 
-		public SlotIndex Previous
+		public SlotIndex HalfStepBack
 		{
 			get
 			{
-				int previous = instructionSet.Previous(index);
-
-				while (instructionSet.Data[previous].Instruction == null)
-				{
-					previous = instructionSet.Previous(previous);
-				}
-
-				return new SlotIndex(instructionSet, previous);
+				Debug.Assert(slotType == SlotType.Normal);
+				return new SlotIndex(instructionSet, Index, SlotType.HalfStepBack);
 			}
 		}
 
@@ -149,7 +163,10 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 		{
 			get
 			{
-				return instructionSet.Data[index].Instruction == IRInstruction.BlockStart;
+				if (slotType != SlotType.Normal)
+					return false;
+
+				return instructionSet.Data[Index].Instruction == IRInstruction.BlockStart;
 			}
 		}
 
@@ -157,7 +174,10 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 		{
 			get
 			{
-				return instructionSet.Data[index].Instruction == IRInstruction.BlockEnd;
+				if (slotType != SlotType.Normal)
+					return false;
+
+				return instructionSet.Data[Index].Instruction == IRInstruction.BlockEnd;
 			}
 		}
 	}

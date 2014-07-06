@@ -10,13 +10,13 @@
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.Framework.Stages;
-using Mosa.Compiler.MosaTypeSystem;
+using Mosa.Compiler.Linker;
 
 namespace Mosa.TinyCPUSimulator.Adaptor
 {
-	public sealed class SimPowerUpStage : BaseCompilerStage, ICompilerStage, IPipelineStage
+	public sealed class SimPowerUpStage : BaseCompilerStage
 	{
-		public readonly string StartUpName = "StartUp";
+		public readonly static string StartUpName = "StartUp";
 
 		#region Construction
 
@@ -31,33 +31,25 @@ namespace Mosa.TinyCPUSimulator.Adaptor
 
 		#region ICompilerStage Members
 
-		void ICompilerStage.Setup(BaseCompiler compiler)
+		protected override void Run()
 		{
-			base.Setup(compiler);
-		}
+			var typeInitializer = Compiler.Pipeline.FindFirst<TypeInitializerSchedulerStage>().TypeInitializerMethod;
 
-		/// <summary>
-		/// Performs stage specific processing on the compiler context.
-		/// </summary>
-		void ICompilerStage.Run()
-		{
-			TypeInitializerSchedulerStage typeInitializerSchedulerStage = compiler.Pipeline.FindFirst<TypeInitializerSchedulerStage>();
+			var basicBlocks = new BasicBlocks();
+			var instructionSet = new InstructionSet(25);
 
-			BasicBlocks basicBlocks = new BasicBlocks();
-			InstructionSet instructionSet = new InstructionSet(25);
-			Context context = instructionSet.CreateNewBlock(basicBlocks);
+			var context = instructionSet.CreateNewBlock(basicBlocks);
 			basicBlocks.AddHeaderBlock(context.BasicBlock);
 
-			Operand entryPoint = Operand.CreateSymbolFromMethod(typeSystem, typeInitializerSchedulerStage.TypeInitializerMethod);
+			var entryPoint = Operand.CreateSymbolFromMethod(TypeSystem, typeInitializer);
 
 			context.AppendInstruction(IRInstruction.Call, null, entryPoint);
-			context.MosaMethod = typeInitializerSchedulerStage.TypeInitializerMethod;
-			//context.AppendInstruction(IRInstruction.Break);
+			context.MosaMethod = typeInitializer;
 
-			MosaMethod method = compiler.CreateLinkerMethod(StartUpName);
-			compiler.CompileMethod(method, basicBlocks, instructionSet);
+			var method = Compiler.CreateLinkerMethod(StartUpName);
+			Compiler.CompileMethod(method, basicBlocks, instructionSet);
 
-			linker.EntryPoint = linker.GetSymbol(method.FullName);
+			Linker.EntryPoint = Linker.GetSymbol(method.FullName, SectionKind.Text);
 		}
 
 		#endregion ICompilerStage Members

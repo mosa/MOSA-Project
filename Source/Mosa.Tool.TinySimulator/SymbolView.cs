@@ -23,15 +23,15 @@ namespace Mosa.Tool.TinySimulator
 		{
 			public string Name { get { return LinkerSymbol.Name; } }
 
-			public long Length { get { return LinkerSymbol.Length; } }
+			public ulong Length { get { return LinkerSymbol.Size; } }
 
 			public string VirtualAddress { get { return MainForm.Format(LinkerSymbol.VirtualAddress, display32); } }
 
-			public long Offset { get { return LinkerSymbol.Offset; } }
+			public ulong Offset { get { return LinkerSymbol.SectionOffset; } }
 
 			public string SectionKind { get; set; }
 
-			public string SectionAddress { get { return MainForm.Format(LinkerSymbol.SectionAddress, display32); } }
+			public string SectionAddress { get { return MainForm.Format(LinkerSymbol.SectionOffset, display32); } }
 
 			public LinkerSymbol LinkerSymbol;
 
@@ -62,13 +62,13 @@ namespace Mosa.Tool.TinySimulator
 			if (MainForm.Linker == null)
 				return;
 
-			symbols = new List<SymbolEntry>(MainForm.Linker.Symbols.Count);
+			symbols = new List<SymbolEntry>();
 
 			string filter = toolStripTextBox1.Text.Trim();
 			string kind = toolStripComboBox1.SelectedIndex < 1 ? string.Empty : toolStripComboBox1.SelectedItem.ToString().Trim();
 
-			int start = 0;
-			int end = Int32.MaxValue;
+			uint start = 0;
+			uint end = UInt32.MaxValue;
 
 			switch (toolStripComboBox2.SelectedIndex)
 			{
@@ -87,7 +87,7 @@ namespace Mosa.Tool.TinySimulator
 				if (kind != string.Empty && symbol.SectionKind.ToString() != kind)
 					continue;
 
-				if (symbol.Length > end || symbol.Length < start)
+				if (symbol.Size > end || symbol.Size < start)
 					continue;
 
 				symbols.Add(new SymbolEntry(symbol, MainForm.Display32));
@@ -132,13 +132,13 @@ namespace Mosa.Tool.TinySimulator
 			m.MenuItems.Add(new MenuItem("Set &Breakpoint", new EventHandler(MenuItem2_Click)));
 			m.Show(dataGridView1, relativeMousePosition);
 		}
-		
+
 		private void MenuItem1_Click(Object sender, EventArgs e)
 		{
 			if (clickedSymbolEntry == null)
 				return;
 
-			MainForm.AddWatch(clickedSymbolEntry.Name, (ulong)clickedSymbolEntry.LinkerSymbol.VirtualAddress, (int)clickedSymbolEntry.LinkerSymbol.Length * 8);
+			MainForm.AddWatch(clickedSymbolEntry.Name, (ulong)clickedSymbolEntry.LinkerSymbol.VirtualAddress, (int)clickedSymbolEntry.LinkerSymbol.Size);
 		}
 
 		private void MenuItem2_Click(Object sender, EventArgs e)

@@ -19,7 +19,6 @@ namespace Mosa.TinyCPUSimulator
 
 		public SimCPU CPU { get; private set; }
 
-
 		public bool Stop { get; set; }
 
 		public ulong BreakAtTick { get; set; }

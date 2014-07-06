@@ -24,27 +24,14 @@ namespace Mosa.Platform.x86.Stages
 	/// <remarks>
 	/// This transformation stage transforms IR instructions into their equivalent X86 sequences.
 	/// </remarks>
-	public sealed class IRTransformationStage : BaseTransformationStage, IIRVisitor, IMethodCompilerStage
+	public sealed class IRTransformationStage : BaseTransformationStage, IIRVisitor
 	{
-		#region IMethodCompilerStage
-
-		/// <summary>
-		/// Setup stage specific processing on the compiler context.
-		/// </summary>
-		/// <param name="methodCompiler">The compiler context to perform processing in.</param>
-		void IMethodCompilerStage.Setup(BaseMethodCompiler methodCompiler)
-		{
-			base.Setup(methodCompiler);
-		}
-
-		#endregion IMethodCompilerStage
-
 		#region IIRVisitor
 
 		/// <summary>
 		/// Visitation function for AddSigned.
 		/// </summary>
-		/// <param name="context">The context.</param>
+		/// <param name="context">Initializeontext.</param>
 		void IIRVisitor.AddSigned(Context context)
 		{
 			ReplaceInstructionAndAnyFloatingPointConstant(context, X86.Add);
@@ -139,13 +126,13 @@ namespace Mosa.Platform.x86.Stages
 			// Compare using the smallest precision
 			if (left.IsR4 && right.IsR8)
 			{
-				Operand rop = AllocateVirtualRegister(typeSystem.BuiltIn.R4);
+				Operand rop = AllocateVirtualRegister(TypeSystem.BuiltIn.R4);
 				before.SetInstruction(X86.Cvtsd2ss, rop, right);
 				right = rop;
 			}
 			if (left.IsR8 && right.IsR4)
 			{
-				Operand rop = AllocateVirtualRegister(typeSystem.BuiltIn.R4);
+				Operand rop = AllocateVirtualRegister(TypeSystem.BuiltIn.R4);
 				before.SetInstruction(X86.Cvtsd2ss, rop, left);
 				left = rop;
 			}
@@ -176,7 +163,7 @@ namespace Mosa.Platform.x86.Stages
 						Context[] newBlocks = CreateNewBlocksWithContexts(2);
 						Context nextBlock = Split(context);
 
-						context.SetInstruction(X86.Mov, result, Operand.CreateConstantSignedInt(typeSystem, 1));
+						context.SetInstruction(X86.Mov, result, Operand.CreateConstantSignedInt(TypeSystem, 1));
 						context.AppendInstruction(instruction, null, left, right);
 						context.AppendInstruction(X86.Branch, ConditionCode.Parity, newBlocks[1].BasicBlock);
 						context.AppendInstruction(X86.Jmp, newBlocks[0].BasicBlock);
@@ -186,7 +173,7 @@ namespace Mosa.Platform.x86.Stages
 						newBlocks[0].AppendInstruction(X86.Jmp, nextBlock.BasicBlock);
 						LinkBlocks(newBlocks[0], newBlocks[1], nextBlock);
 
-						newBlocks[1].AppendInstruction(X86.Mov, result, Operand.CreateConstantSignedInt(typeSystem, 0));
+						newBlocks[1].AppendInstruction(X86.Mov, result, Operand.CreateConstantSignedInt(TypeSystem, 0));
 						newBlocks[1].AppendInstruction(X86.Jmp, nextBlock.BasicBlock);
 						LinkBlocks(newBlocks[1], nextBlock);
 
@@ -205,7 +192,7 @@ namespace Mosa.Platform.x86.Stages
 						Context[] newBlocks = CreateNewBlocksWithContexts(1);
 						Context nextBlock = Split(context);
 
-						context.SetInstruction(X86.Mov, result, Operand.CreateConstantSignedInt(typeSystem, 1));
+						context.SetInstruction(X86.Mov, result, Operand.CreateConstantSignedInt(TypeSystem, 1));
 						context.AppendInstruction(instruction, null, left, right);
 						context.AppendInstruction(X86.Branch, ConditionCode.Parity, nextBlock.BasicBlock);
 						context.AppendInstruction(X86.Jmp, newBlocks[0].BasicBlock);
@@ -213,8 +200,8 @@ namespace Mosa.Platform.x86.Stages
 
 						newBlocks[0].AppendInstruction(X86.Setcc, ConditionCode.NotEqual, result);
 						newBlocks[0].AppendInstruction(X86.Movzx, result, result);
-						newBlocks[0].AppendInstruction(X86.Jmp, newBlocks[0].BasicBlock);
-						LinkBlocks(newBlocks[0], newBlocks[0]);
+						newBlocks[0].AppendInstruction(X86.Jmp, nextBlock.BasicBlock);
+						LinkBlocks(newBlocks[0], nextBlock);
 
 						break;
 					}
@@ -226,7 +213,7 @@ namespace Mosa.Platform.x86.Stages
 						//	ucomisd	xmm1, xmm0
 						//	seta	al
 
-						context.SetInstruction(X86.Mov, result, Operand.CreateConstantSignedInt(typeSystem, 0));
+						context.SetInstruction(X86.Mov, result, Operand.CreateConstantSignedInt(TypeSystem, 0));
 						context.AppendInstruction(instruction, null, right, left);
 						context.AppendInstruction(X86.Setcc, ConditionCode.UnsignedGreaterThan, result);
 						break;
@@ -238,7 +225,7 @@ namespace Mosa.Platform.x86.Stages
 						//	ucomisd	xmm0, xmm1
 						//	seta	al
 
-						context.SetInstruction(X86.Mov, result, Operand.CreateConstantSignedInt(typeSystem, 0));
+						context.SetInstruction(X86.Mov, result, Operand.CreateConstantSignedInt(TypeSystem, 0));
 						context.AppendInstruction(instruction, null, left, right);
 						context.AppendInstruction(X86.Setcc, ConditionCode.UnsignedGreaterThan, result);
 						break;
@@ -250,7 +237,7 @@ namespace Mosa.Platform.x86.Stages
 						//	ucomisd	xmm1, xmm0
 						//	setae	al
 
-						context.SetInstruction(X86.Mov, result, Operand.CreateConstantSignedInt(typeSystem, 0));
+						context.SetInstruction(X86.Mov, result, Operand.CreateConstantSignedInt(TypeSystem, 0));
 						context.AppendInstruction(instruction, null, left, right);
 						context.AppendInstruction(X86.Setcc, ConditionCode.NoCarry, result);
 						break;
@@ -262,7 +249,7 @@ namespace Mosa.Platform.x86.Stages
 						//	ucomisd	xmm0, xmm1
 						//	setae	al
 
-						context.SetInstruction(X86.Mov, result, Operand.CreateConstantSignedInt(typeSystem, 0));
+						context.SetInstruction(X86.Mov, result, Operand.CreateConstantSignedInt(TypeSystem, 0));
 						context.AppendInstruction(instruction, null, right, left);
 						context.AppendInstruction(X86.Setcc, ConditionCode.NoCarry, result);
 						break;
@@ -301,9 +288,9 @@ namespace Mosa.Platform.x86.Stages
 			var operand1 = context.Operand1;
 			var operand2 = context.Operand2;
 
-			Operand v1 = AllocateVirtualRegister(typeSystem.BuiltIn.U1);
+			Operand v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 
-			context.SetInstruction(X86.Mov, v1, Operand.CreateConstantSignedInt(typeSystem, 0));
+			context.SetInstruction(X86.Mov, v1, Operand.CreateConstantSignedInt(TypeSystem, 0));
 
 			context.AppendInstruction(X86.Cmp, null, operand1, operand2);
 
@@ -312,7 +299,7 @@ namespace Mosa.Platform.x86.Stages
 			else
 				context.AppendInstruction(X86.Setcc, condition, v1);
 
-			context.AppendInstruction(X86.Movzx, resultOperand, v1);
+			context.AppendInstruction(X86.Mov, resultOperand, v1);
 		}
 
 		/// <summary>
@@ -370,7 +357,7 @@ namespace Mosa.Platform.x86.Stages
 		void IIRVisitor.CompoundLoad(Context context)
 		{
 			var type = context.Result.Type;
-			int typeSize = typeLayout.GetTypeSize(type);
+			int typeSize = TypeLayout.GetTypeSize(type);
 			Debug.Assert(typeSize > 0 && typeSize % 4 == 0 && context.Operand2.IsConstant);
 
 			int offset = (int)context.Operand2.ConstantSignedInteger;
@@ -378,25 +365,17 @@ namespace Mosa.Platform.x86.Stages
 			var dest = context.Result;
 			Debug.Assert(dest.IsMemoryAddress);
 
-			if (dest.EffectiveOffsetBase == GeneralPurposeRegister.ESP)
-				dest = Operand.CreateMemoryAddress(typeSystem.BuiltIn.I4, Operand.CreateCPURegister(typeSystem.BuiltIn.I4, GeneralPurposeRegister.ESP), dest.Displacement + 12);
+			var srcReg = MethodCompiler.CreateVirtualRegister(dest.Type.TypeSystem.BuiltIn.I4);
+			var dstReg = MethodCompiler.CreateVirtualRegister(dest.Type.TypeSystem.BuiltIn.I4);
+			var tmp = MethodCompiler.CreateVirtualRegister(dest.Type.TypeSystem.BuiltIn.I4);
 
-			var edi = Operand.CreateCPURegister(typeSystem.BuiltIn.I4, GeneralPurposeRegister.EDI);
-			var esi = Operand.CreateCPURegister(typeSystem.BuiltIn.I4, GeneralPurposeRegister.ESI);
-			var edx = Operand.CreateCPURegister(typeSystem.BuiltIn.I4, GeneralPurposeRegister.EDX);
-			context.SetInstruction(X86.Push, null, edi);
-			context.AppendInstruction(X86.Push, null, esi);
-			context.AppendInstruction(X86.Push, null, edx);
-			context.AppendInstruction(X86.Mov, edi, src);
-			context.AppendInstruction(X86.Lea, esi, dest);
+			context.AppendInstruction(X86.Mov, srcReg, src);
+			context.AppendInstruction(X86.Lea, dstReg, dest);
 			for (int i = 0; i < typeSize; i += 4)
 			{
-				context.AppendInstruction(X86.Mov, edx, Operand.CreateMemoryAddress(typeSystem.BuiltIn.I4, edi, i + offset));
-				context.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(typeSystem.BuiltIn.I4, esi, i), edx);
+				context.AppendInstruction(X86.Mov, tmp, Operand.CreateMemoryAddress(TypeSystem.BuiltIn.I4, srcReg, i + offset));
+				context.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(TypeSystem.BuiltIn.I4, dstReg, i), tmp);
 			}
-			context.AppendInstruction(X86.Pop, edx);
-			context.AppendInstruction(X86.Pop, esi);
-			context.AppendInstruction(X86.Pop, edi);
 		}
 
 		/// <summary>
@@ -410,7 +389,7 @@ namespace Mosa.Platform.x86.Stages
 			var type = context.MosaType;
 			var offset = context.Operand2;
 
-			var v1 = AllocateVirtualRegister(typeSystem.BuiltIn.I4);
+			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 			long offsetPtr = 0;
 
 			context.SetInstruction(X86.Mov, v1, source);
@@ -493,9 +472,9 @@ namespace Mosa.Platform.x86.Stages
 
 			context.SetInstruction(X86.Mov, context.Result, context.Operand1);
 			if (dest.IsByte)
-				context.AppendInstruction(X86.Xor, dest, dest, Operand.CreateConstantUnsignedInt(typeSystem, 0xFF));
+				context.AppendInstruction(X86.Xor, dest, dest, Operand.CreateConstantUnsignedInt(TypeSystem, 0xFF));
 			else if (dest.IsU2)
-				context.AppendInstruction(X86.Xor, dest, dest, Operand.CreateConstantUnsignedInt(typeSystem, 0xFFFF));
+				context.AppendInstruction(X86.Xor, dest, dest, Operand.CreateConstantUnsignedInt(TypeSystem, 0xFFFF));
 			else
 				context.AppendInstruction(X86.Not, dest, dest);
 		}
@@ -542,34 +521,24 @@ namespace Mosa.Platform.x86.Stages
 		void IIRVisitor.CompoundMove(Context context)
 		{
 			var type = context.Result.Type;
-			int typeSize = typeLayout.GetTypeSize(type);
+			int typeSize = TypeLayout.GetTypeSize(type);
 			Debug.Assert(typeSize > 0 && typeSize % 4 == 0);
 
 			var src = context.Operand1;
 			var dest = context.Result;
 			Debug.Assert(src.IsMemoryAddress && dest.IsMemoryAddress);
 
-			if (src.EffectiveOffsetBase == GeneralPurposeRegister.ESP)
-				src = Operand.CreateMemoryAddress(src.Type.TypeSystem.BuiltIn.I4, Operand.CreateCPURegister(src.Type.TypeSystem.BuiltIn.I4, GeneralPurposeRegister.ESP), src.Displacement + 12);
-			if (dest.EffectiveOffsetBase == GeneralPurposeRegister.ESP)
-				dest = Operand.CreateMemoryAddress(dest.Type.TypeSystem.BuiltIn.I4, Operand.CreateCPURegister(dest.Type.TypeSystem.BuiltIn.I4, GeneralPurposeRegister.ESP), dest.Displacement + 12);
+			var srcReg = MethodCompiler.CreateVirtualRegister(dest.Type.TypeSystem.BuiltIn.I4);
+			var dstReg = MethodCompiler.CreateVirtualRegister(dest.Type.TypeSystem.BuiltIn.I4);
+			var tmp = MethodCompiler.CreateVirtualRegister(dest.Type.TypeSystem.BuiltIn.I4);
 
-			var edi = Operand.CreateCPURegister(typeSystem.BuiltIn.I4, GeneralPurposeRegister.EDI);
-			var esi = Operand.CreateCPURegister(typeSystem.BuiltIn.I4, GeneralPurposeRegister.ESI);
-			var edx = Operand.CreateCPURegister(typeSystem.BuiltIn.I4, GeneralPurposeRegister.EDX);
-			context.SetInstruction(X86.Push, null, edi);
-			context.AppendInstruction(X86.Push, null, esi);
-			context.AppendInstruction(X86.Push, null, edx);
-			context.AppendInstruction(X86.Lea, edi, src);
-			context.AppendInstruction(X86.Lea, esi, dest);
+			context.AppendInstruction(X86.Lea, srcReg, src);
+			context.AppendInstruction(X86.Lea, dstReg, dest);
 			for (int i = 0; i < typeSize; i += 4)
 			{
-				context.AppendInstruction(X86.Mov, edx, Operand.CreateMemoryAddress(typeSystem.BuiltIn.I4, edi, i));
-				context.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(typeSystem.BuiltIn.I4, esi, i), edx);
+				context.AppendInstruction(X86.Mov, tmp, Operand.CreateMemoryAddress(TypeSystem.BuiltIn.I4, srcReg, i));
+				context.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(TypeSystem.BuiltIn.I4, dstReg, i), tmp);
 			}
-			context.AppendInstruction(X86.Pop, edx);
-			context.AppendInstruction(X86.Pop, esi);
-			context.AppendInstruction(X86.Pop, edi);
 		}
 
 		/// <summary>
@@ -595,7 +564,7 @@ namespace Mosa.Platform.x86.Stages
 
 				context.Remove();
 
-				callingConvention.SetReturnValue(typeLayout, context, returnOperand);
+				CallingConvention.SetReturnValue(MethodCompiler, TypeLayout, context, returnOperand);
 
 				context.AppendInstruction(X86.Jmp);
 				context.SetBranch(Int32.MaxValue);
@@ -659,14 +628,14 @@ namespace Mosa.Platform.x86.Stages
 
 			if (value.IsR8 && (storeType ?? value.Type).IsR4)
 			{
-				Operand xmm1 = AllocateVirtualRegister(typeSystem.BuiltIn.R4);
+				Operand xmm1 = AllocateVirtualRegister(TypeSystem.BuiltIn.R4);
 				context.InsertBefore().AppendInstruction(X86.Cvtsd2ss, xmm1, value);
 				value = xmm1;
 			}
-			else
+			else if (value.IsMemoryAddress)
 			{
-				Operand v2 = AllocateVirtualRegister(storeType ?? value.Type);
-				context.InsertBefore().AppendInstruction(X86.Mov, v2, value); // FIXME
+				Operand v2 = AllocateVirtualRegister(value.Type);
+				context.InsertBefore().AppendInstruction(X86.Mov, v2, value);
 				value = v2;
 			}
 
@@ -675,7 +644,6 @@ namespace Mosa.Platform.x86.Stages
 			{
 				if (baseOperand.Type.IsUnmanagedPointer)
 					type = storeType.ToUnmanagedPointer();
-
 				else if (baseOperand.Type.IsManagedPointer)
 					type = storeType.ToManagedPointer();
 			}
@@ -700,7 +668,7 @@ namespace Mosa.Platform.x86.Stages
 		void IIRVisitor.CompoundStore(Context context)
 		{
 			var type = context.Operand3.Type;
-			int typeSize = typeLayout.GetTypeSize(type);
+			int typeSize = TypeLayout.GetTypeSize(type);
 			Debug.Assert(typeSize > 0 && typeSize % 4 == 0 && context.Operand2.IsConstant);
 
 			int offset = (int)context.Operand2.ConstantSignedInteger;
@@ -708,25 +676,17 @@ namespace Mosa.Platform.x86.Stages
 			var dest = context.Operand1;
 			Debug.Assert(src.IsMemoryAddress);
 
-			if (src.EffectiveOffsetBase == GeneralPurposeRegister.ESP)
-				src = Operand.CreateMemoryAddress(typeSystem.BuiltIn.I4, Operand.CreateCPURegister(typeSystem.BuiltIn.I4, GeneralPurposeRegister.ESP), src.Displacement + 12);
+			var srcReg = MethodCompiler.CreateVirtualRegister(dest.Type.TypeSystem.BuiltIn.I4);
+			var dstReg = MethodCompiler.CreateVirtualRegister(dest.Type.TypeSystem.BuiltIn.I4);
+			var tmp = MethodCompiler.CreateVirtualRegister(dest.Type.TypeSystem.BuiltIn.I4);
 
-			var edi = Operand.CreateCPURegister(typeSystem.BuiltIn.I4, GeneralPurposeRegister.EDI);
-			var esi = Operand.CreateCPURegister(typeSystem.BuiltIn.I4, GeneralPurposeRegister.ESI);
-			var edx = Operand.CreateCPURegister(typeSystem.BuiltIn.I4, GeneralPurposeRegister.EDX);
-			context.SetInstruction(X86.Push, null, edi);
-			context.AppendInstruction(X86.Push, null, esi);
-			context.AppendInstruction(X86.Push, null, edx);
-			context.AppendInstruction(X86.Lea, edi, src);
-			context.AppendInstruction(X86.Mov, esi, dest);
+			context.AppendInstruction(X86.Lea, srcReg, src);
+			context.AppendInstruction(X86.Mov, dstReg, dest);
 			for (int i = 0; i < typeSize; i += 4)
 			{
-				context.AppendInstruction(X86.Mov, edx, Operand.CreateMemoryAddress(typeSystem.BuiltIn.I4, edi, i));
-				context.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(typeSystem.BuiltIn.I4, esi, i + offset), edx);
+				context.AppendInstruction(X86.Mov, tmp, Operand.CreateMemoryAddress(TypeSystem.BuiltIn.I4, srcReg, i));
+				context.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(TypeSystem.BuiltIn.I4, dstReg, i + offset), tmp);
 			}
-			context.AppendInstruction(X86.Pop, edx);
-			context.AppendInstruction(X86.Pop, esi);
-			context.AppendInstruction(X86.Pop, edi);
 		}
 
 		/// <summary>
@@ -787,7 +747,7 @@ namespace Mosa.Platform.x86.Stages
 			Operand operand1 = context.Operand1;
 			Operand operand2 = context.Operand2;
 
-			Operand v1 = AllocateVirtualRegister(typeSystem.BuiltIn.U4);
+			Operand v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
 			context.SetInstruction2(X86.Mul, v1, result, operand1, operand2);
 		}
 
@@ -803,7 +763,7 @@ namespace Mosa.Platform.x86.Stages
 			Operand operand1 = context.Operand1;
 			Operand operand2 = context.Operand2;
 
-			Operand v1 = AllocateVirtualRegister(typeSystem.BuiltIn.U4);
+			Operand v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
 			context.SetInstruction2(X86.Mul, v1, result, operand1, operand2);
 		}
 
@@ -819,9 +779,9 @@ namespace Mosa.Platform.x86.Stages
 			Operand operand2 = context.Operand2;
 			Operand result = context.Result;
 
-			Operand v1 = AllocateVirtualRegister(typeSystem.BuiltIn.I4);
-			Operand v2 = AllocateVirtualRegister(typeSystem.BuiltIn.U4);
-			Operand v3 = AllocateVirtualRegister(typeSystem.BuiltIn.I4);
+			Operand v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+			Operand v2 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
+			Operand v3 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 
 			context.SetInstruction2(X86.Cdq, v1, v2, operand1);
 			context.AppendInstruction2(X86.IDiv, v3, result, v1, v2, operand2);
@@ -839,12 +799,12 @@ namespace Mosa.Platform.x86.Stages
 			Operand operand2 = context.Operand2;
 			Operand result = context.Result;
 
-			Operand v1 = AllocateVirtualRegister(typeSystem.BuiltIn.U4);
-			Operand v2 = AllocateVirtualRegister(typeSystem.BuiltIn.U4);
+			Operand v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
+			Operand v2 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
 
-			context.SetInstruction(X86.Mov, v1, Operand.CreateConstantUnsignedInt(typeSystem, (uint)0x0));
+			context.SetInstruction(X86.Mov, v1, Operand.CreateConstantUnsignedInt(TypeSystem, (uint)0x0));
 			context.AppendInstruction2(X86.Div, v1, v2, v1, operand1, operand2);
-			context.AppendInstruction(X86.Mov, result, v1);
+			context.AppendInstruction(X86.Mov, result, v2);
 		}
 
 		/// <summary>
@@ -859,9 +819,9 @@ namespace Mosa.Platform.x86.Stages
 			Operand operand1 = context.Operand1;
 			Operand operand2 = context.Operand2;
 
-			Operand v1 = AllocateVirtualRegister(typeSystem.BuiltIn.I4);
-			Operand v2 = AllocateVirtualRegister(typeSystem.BuiltIn.U4);
-			Operand v3 = AllocateVirtualRegister(typeSystem.BuiltIn.I4);
+			Operand v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+			Operand v2 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
+			Operand v3 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 
 			// FIXME
 			context.SetInstruction2(X86.Cdq, v1, v2, operand1);
@@ -880,12 +840,12 @@ namespace Mosa.Platform.x86.Stages
 			Operand operand1 = context.Operand1;
 			Operand operand2 = context.Operand2;
 
-			Operand v1 = AllocateVirtualRegister(typeSystem.BuiltIn.U4);
-			Operand v2 = AllocateVirtualRegister(typeSystem.BuiltIn.U4);
+			Operand v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
+			Operand v2 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
 
-			context.SetInstruction(X86.Mov, v1, Operand.CreateConstantUnsignedInt(typeSystem, (uint)0x0));
+			context.SetInstruction(X86.Mov, v1, Operand.CreateConstantUnsignedInt(TypeSystem, (uint)0x0));
 			context.AppendInstruction2(X86.Div, v1, v2, v1, operand1, operand2);
-			context.AppendInstruction(X86.Mov, result, v2);
+			context.AppendInstruction(X86.Mov, result, v1);
 		}
 
 		/// <summary>
@@ -900,12 +860,12 @@ namespace Mosa.Platform.x86.Stages
 			Operand operand1 = context.Operand1;
 			Operand operand2 = context.Operand2;
 
-			Operand xmm1 = AllocateVirtualRegister(typeSystem.BuiltIn.R8);
-			Operand xmm2 = AllocateVirtualRegister(typeSystem.BuiltIn.R8);
-			Operand xmm3 = AllocateVirtualRegister(typeSystem.BuiltIn.R8);
+			Operand xmm1 = AllocateVirtualRegister(TypeSystem.BuiltIn.R8);
+			Operand xmm2 = AllocateVirtualRegister(TypeSystem.BuiltIn.R8);
+			Operand xmm3 = AllocateVirtualRegister(TypeSystem.BuiltIn.R8);
 
 			context.SetInstruction(X86.Divsd, xmm1, operand1, operand2);
-			context.AppendInstruction(X86.Roundsd, xmm2, xmm1, Operand.CreateConstant(typeSystem.BuiltIn.U1, 0x3));
+			context.AppendInstruction(X86.Roundsd, xmm2, xmm1, Operand.CreateConstant(TypeSystem.BuiltIn.U1, 0x3));
 			context.AppendInstruction(X86.Mulsd, xmm3, operand2, xmm2);
 			context.AppendInstruction(X86.Subsd, result, operand1, xmm3);
 		}
@@ -923,7 +883,7 @@ namespace Mosa.Platform.x86.Stages
 
 			for (int i = 0; i < targets.Length - 1; ++i)
 			{
-				context.AppendInstruction(X86.Cmp, null, operand, Operand.CreateConstantSignedInt(typeSystem, i));
+				context.AppendInstruction(X86.Cmp, null, operand, Operand.CreateConstantSignedInt(TypeSystem, i));
 				context.AppendInstruction(X86.Branch, ConditionCode.Equal);
 				context.SetBranch(targets[i]);
 			}
@@ -969,7 +929,7 @@ namespace Mosa.Platform.x86.Stages
 			}
 			else
 			{
-				callingConvention.MakeCall(typeLayout, context);
+				CallingConvention.MakeCall(MethodCompiler, TypeLayout, context);
 			}
 		}
 
@@ -1010,9 +970,10 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IIRVisitor.Throw(Context context)
 		{
-			var type = typeSystem.GetTypeByName("Mosa.Internal", "ExceptionEngine");
+			/*
+			var type = TypeSystem.GetTypeByName("Mosa.Internal", "ExceptionEngine");
 			var runtimeMethod = type.FindMethodByName("ThrowException");
-			Operand throwMethod = Operand.CreateSymbolFromMethod(typeSystem, runtimeMethod);
+			Operand throwMethod = Operand.CreateSymbolFromMethod(TypeSystem, runtimeMethod);
 
 			// Push exception object onto stack
 			context.SetInstruction(X86.Push, null, context.Operand1);
@@ -1022,6 +983,7 @@ namespace Mosa.Platform.x86.Stages
 
 			// Call exception handling
 			context.AppendInstruction(X86.Call, null, throwMethod);
+			 */
 		}
 
 		/// <summary>
@@ -1031,7 +993,7 @@ namespace Mosa.Platform.x86.Stages
 		void IIRVisitor.ExceptionPrologue(Context context)
 		{
 			// Exception Handler will pass the exception object in the register - EDX was choosen
-			context.SetInstruction(X86.Mov, context.Result, Operand.CreateCPURegister(typeSystem.BuiltIn.Object, GeneralPurposeRegister.EDX));
+			context.SetInstruction(X86.Mov, context.Result, Operand.CreateCPURegister(TypeSystem.BuiltIn.Object, GeneralPurposeRegister.EDX));
 
 			// Alternative method is to pop it off the stack instead, going passing via register for now
 			//context.SetInstruction(CPUx86.Instruction.PopInstruction, context.Result);

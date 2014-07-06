@@ -7,7 +7,6 @@
  *  Kai Patrick Reisert (Boddlnagg) <kpreisert@googlemail.com> 
  *
  */
- 
 
 namespace Mosa.Test.Collection
 {

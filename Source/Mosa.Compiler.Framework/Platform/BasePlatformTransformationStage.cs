@@ -11,9 +11,6 @@
 
 using Mosa.Compiler.Linker;
 
-using System;
-using System.IO;
-
 namespace Mosa.Compiler.Framework.Platform
 {
 	/// <summary>
@@ -61,27 +58,18 @@ namespace Mosa.Compiler.Framework.Platform
 			if (!operand.IsConstant || !operand.IsR)
 				return operand;
 
-			int size, alignment;
-			architecture.GetTypeRequirements(typeLayout, operand.Type, out size, out alignment);
+			LinkerSymbol symbol;
 
-			string name = String.Format("C_{0}", Guid.NewGuid());
-
-			using (Stream stream = methodCompiler.Linker.Allocate(name, SectionKind.ROData, size, alignment))
+			if (operand.IsR4)
 			{
-				using (BinaryWriter writer = new BinaryWriter(stream))
-				{
-					if (operand.IsR4)
-					{
-						writer.Write(operand.ConstantSingleFloatingPoint);
-					}
-					else if (operand.IsR8)
-					{
-						writer.Write(operand.ConstantDoubleFloatingPoint);
-					}
-				}
+				symbol = MethodCompiler.Linker.GetConstantSymbol(operand.ConstantSingleFloatingPoint);
+			}
+			else
+			{
+				symbol = MethodCompiler.Linker.GetConstantSymbol(operand.ConstantDoubleFloatingPoint);
 			}
 
-			return Operand.CreateLabel(operand.Type, name);
+			return Operand.CreateLabel(operand.Type, symbol.Name);
 		}
 
 		#endregion Emit Constant Methods

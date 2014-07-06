@@ -22,7 +22,7 @@ namespace Mosa.DeviceSystem
 		/// <summary>
 		///
 		/// </summary>
-		public delegate void HandleInterrupt(byte irq, byte error);
+		public delegate void HandleInterrupt(uint irq, uint error);
 
 		static private HandleInterrupt handleInterrupt;
 
@@ -48,7 +48,8 @@ namespace Mosa.DeviceSystem
 		/// Processes the interrupt.
 		/// </summary>
 		/// <param name="irq">The irq.</param>
-		public static void ProcessInterrupt(byte irq, byte error)
+		/// <param name="error">The error.</param>
+		public static void ProcessInterrupt(uint irq, uint error)
 		{
 			//Mosa.Kernel.x86.Debug.Trace("Enter HAL.ProcessInterrupt");
 			handleInterrupt(irq, error);

@@ -1,99 +1,89 @@
 ﻿/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
+ * (c) 2014 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
- *  Michael Ruck (grover) <sharpos@michaelruck.de>
- *
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
-using System.Diagnostics;
+using Mosa.Compiler.Common;
+using System.IO;
 
 namespace Mosa.Compiler.Linker
 {
 	/// <summary>
-	/// Represents a single symbol for the linker.
+	///
 	/// </summary>
 	public sealed class LinkerSymbol
 	{
-		#region Construction
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="LinkerSymbol" /> class.
-		/// </summary>
-		/// <param name="name">The name of the symbol.</param>
-		/// <param name="section">The section holding the symbol.</param>
-		/// <param name="sectionAddress">Holds the section relative address of the symbol.</param>
-		/// <exception cref="System.ArgumentNullException">@name</exception>
-		/// <exception cref="System.ArgumentException">@Name can't be empty.;@name</exception>
-		/// <exception cref="T:System.ArgumentException"><paramref name="name" /> is empty.</exception>
-		/// <exception cref="T:System.ArgumentNullException"><paramref name="name" /> is null.</exception>
-		public LinkerSymbol(string name, SectionKind section, long sectionAddress)
-		{
-			Debug.Assert(!String.IsNullOrEmpty(name), @"LinkerSymbol requires a proper name.");
-			if (name == null)
-				throw new ArgumentNullException(@"name");
-			if (name.Length == 0)
-				throw new ArgumentException(@"Name can't be empty.", @"name");
-
-			this.Name = name;
-			this.SectionKind = section;
-			this.SectionAddress = sectionAddress;
-		}
-
-		#endregion Construction
-
-		#region Properties
-
-		/// <summary>
-		/// Gets the virtualAddress of the linker symbol.
-		/// </summary>
-		/// <value>The virtualAddress of the linker symbol.</value>
-		public long VirtualAddress { get; set; }
-
-		/// <summary>
-		/// Gets or sets the length of the linker symbol in bytes.
-		/// </summary>
-		/// <value>The length in bytes.</value>
-		public long Length { get; set; }
-
-		/// <summary>
-		/// Retrieves the symbol name.
-		/// </summary>
-		/// <value>The name of the linker symbol.</value>
 		public string Name { get; private set; }
 
-		/// <summary>
-		/// Gets or sets the offset of the symbol in the file.
-		/// </summary>
-		/// <value>The symbol offset.</value>
-		public long Offset { get; set; }
+		public SectionKind SectionKind { get; private set; }
 
-		/// <summary>
-		/// Gets the section holding the symbol.
-		/// </summary>
-		/// <value>The section.</value>
-		public SectionKind SectionKind { get; set; }
+		public MemoryStream Stream { get; internal set; }
 
-		/// <summary>
-		/// Gets the section start relative virtualAddress of the symbol.
-		/// </summary>
-		/// <value>The section start relative virtualAddress.</value>
-		public long SectionAddress { get; set; }
+		public uint Alignment { get; internal set; }
 
-		/// <summary>
-		/// Returns a <see cref="System.String"/> that represents this instance.
-		/// </summary>
-		/// <returns>
-		/// A <see cref="System.String"/> that represents this instance.
-		/// </returns>
-		public override string ToString()
+		public bool IsDataAvailable { get { return Stream != null; } }
+
+		public uint Size { get { return Stream != null ? (uint)Stream.Length : 0; } }
+
+		public bool IsResolved { get { return VirtualAddress != 0; } }
+
+		public uint SectionOffset { get; internal set; }
+
+		public ulong VirtualAddress { get; internal set; }
+
+		//public uint FileOffset { get; internal set; }
+
+		internal LinkerSymbol(string name, SectionKind kind, uint alignment)
 		{
-			return this.Name;
+			Name = name;
+			Alignment = alignment;
+			SectionKind = kind;
 		}
 
-		#endregion Properties
+		public void SetData(MemoryStream stream)
+		{
+			Stream = stream;
+		}
+
+		public void SetData(byte[] data)
+		{
+			Stream = new MemoryStream(data);
+		}
+
+		public void ApplyPatch(long offset, ulong value, ulong mask, byte patchSize, Endianness endianness)
+		{
+			Stream.Position = offset;
+
+			ulong current = 0;
+
+			switch (patchSize)
+			{
+				case 8: current = (ulong)Stream.ReadByte(); break;
+				case 16: current = (ulong)Stream.ReadUInt16(endianness); break;
+				case 32: current = (ulong)Stream.ReadUInt32(endianness); break;
+				case 64: current = (ulong)Stream.ReadUInt64(endianness); break;
+			}
+
+			Stream.Position = offset;
+			current = (current & ~mask) | value;
+
+			// Apply the patch
+			switch (patchSize)
+			{
+				case 8: Stream.WriteByte((byte)current); break;
+				case 16: Stream.Write((ushort)current, endianness); break;
+				case 32: Stream.Write((uint)current, endianness); break;
+				case 64: Stream.Write((ulong)current, endianness); break;
+			}
+		}
+
+		public override string ToString()
+		{
+			return SectionKind.ToString() + ": " + Name;
+		}
 	}
 }

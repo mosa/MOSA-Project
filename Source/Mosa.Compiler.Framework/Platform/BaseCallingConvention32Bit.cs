@@ -8,6 +8,8 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
+using Mosa.Compiler.Common;
+using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.MosaTypeSystem;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -48,7 +50,7 @@ namespace Mosa.Compiler.Framework.Platform
 		/// </summary>
 		/// <param name="typeLayout">The type layouts.</param>
 		/// <param name="context">The context.</param>
-		public override void MakeCall(MosaTypeLayout typeLayout, Context context)
+		public override void MakeCall(BaseMethodCompiler compiler, MosaTypeLayout typeLayout, Context context)
 		{
 			/*
 			 * Calling convention is right-to-left, pushed on the stack. Return value in EAX for integral
@@ -81,14 +83,14 @@ namespace Mosa.Compiler.Framework.Platform
 			if (stackSize != 0 || returnSize != 0)
 			{
 				ReserveStackSizeForCall(typeLayout.TypeSystem, context, stackSize + returnSize, scratch);
-				PushOperands(typeLayout, context, method, operands, stackSize, scratch);
+				PushOperands(compiler, typeLayout, context, method, operands, stackSize, scratch);
 			}
 
 			// the mov/call two-instructions combo is to help facilitate the register allocator
 			architecture.InsertMoveInstruction(context, scratch, target);
 			architecture.InsertCallInstruction(context, scratch);
 
-			CleanupReturnValue(typeLayout, context, result);
+			CleanupReturnValue(compiler, typeLayout, context, result);
 			FreeStackAfterCall(typeLayout.TypeSystem, context, stackSize + returnSize);
 		}
 
@@ -128,10 +130,11 @@ namespace Mosa.Compiler.Framework.Platform
 		/// <summary>
 		/// Cleanups the return value.
 		/// </summary>
+		/// <param name="compiler">The compiler.</param>
 		/// <param name="typeLayout">The type layouts.</param>
 		/// <param name="context">The context.</param>
 		/// <param name="result">The result.</param>
-		private void CleanupReturnValue(MosaTypeLayout typeLayout, Context context, Operand result)
+		private void CleanupReturnValue(BaseMethodCompiler compiler, MosaTypeLayout typeLayout, Context context, Operand result)
 		{
 			if (result == null)
 				return;
@@ -139,12 +142,15 @@ namespace Mosa.Compiler.Framework.Platform
 			if (result.IsR)
 			{
 				Operand returnFP = Operand.CreateCPURegister(result.Type, returnFloatingPointRegister);
+				context.AppendInstruction(IRInstruction.Gen, returnFP);
 				architecture.InsertMoveInstruction(context, result, returnFP);
 			}
 			else if (result.Is64BitInteger)
 			{
 				Operand returnLow = Operand.CreateCPURegister(result.Type, return32BitRegister);
 				Operand returnHigh = Operand.CreateCPURegister(typeLayout.TypeSystem.BuiltIn.U4, return64BitRegister);
+				context.AppendInstruction(IRInstruction.Gen, returnLow);
+				context.AppendInstruction(IRInstruction.Gen, returnHigh);
 				architecture.InsertMoveInstruction(context, result.Low, returnLow);
 				architecture.InsertMoveInstruction(context, result.High, returnHigh);
 			}
@@ -152,11 +158,12 @@ namespace Mosa.Compiler.Framework.Platform
 			{
 				int size = typeLayout.GetTypeSize(result.Type);
 				Operand stackPointerReg = Operand.CreateCPURegister(typeLayout.TypeSystem.BuiltIn.Pointer, architecture.StackPointerRegister);
-				architecture.InsertCompoundMoveInstruction(context, result, Operand.CreateMemoryAddress(result.Type, stackPointerReg, 0), size);
+				architecture.InsertCompoundMoveInstruction(compiler, context, result, Operand.CreateMemoryAddress(result.Type, stackPointerReg, 0), size);
 			}
 			else
 			{
 				Operand returnLow = Operand.CreateCPURegister(result.Type, return32BitRegister);
+				context.AppendInstruction(IRInstruction.Gen, returnLow);
 				architecture.InsertMoveInstruction(context, result, returnLow);
 			}
 		}
@@ -164,13 +171,14 @@ namespace Mosa.Compiler.Framework.Platform
 		/// <summary>
 		/// Calculates the remaining space.
 		/// </summary>
+		/// <param name="compiler">The compiler.</param>
 		/// <param name="typeLayout">The type layouts.</param>
 		/// <param name="context">The context.</param>
 		/// <param name="method">The method.</param>
 		/// <param name="operands">The operand stack.</param>
 		/// <param name="space">The space.</param>
 		/// <param name="scratch">The scratch.</param>
-		private void PushOperands(MosaTypeLayout typeLayout, Context context, MosaMethod method, List<Operand> operands, int space, Operand scratch)
+		private void PushOperands(BaseMethodCompiler compiler, MosaTypeLayout typeLayout, Context context, MosaMethod method, List<Operand> operands, int space, Operand scratch)
 		{
 			Debug.Assert((method.Signature.Parameters.Count + (method.HasThis ? 1 : 0) == operands.Count) ||
 						(method.DeclaringType.IsDelegate && method.Signature.Parameters.Count == operands.Count));
@@ -184,29 +192,35 @@ namespace Mosa.Compiler.Framework.Platform
 				MosaType param = (index + offset >= 0) ? method.Signature.Parameters[index + offset].Type : null;
 
 				int size, alignment;
-				architecture.GetTypeRequirements(typeLayout, operand.Type, out size, out alignment);
 
 				if (param != null && operand.IsR8 && param.IsR4)
+				{
 					architecture.GetTypeRequirements(typeLayout, param, out size, out alignment);
+				}
+				else
+				{
+					architecture.GetTypeRequirements(typeLayout, operand.Type, out size, out alignment);
+				}
 
-				if (size < alignment)
-					size = alignment;
+				size = Alignment.AlignUp(size, alignment);
 
 				space -= size;
-				Push(typeLayout, context, operand, space, size, scratch);
+
+				Push(compiler, typeLayout, context, operand, space, size, scratch);
 			}
 		}
 
 		/// <summary>
 		/// Pushes the specified instructions.
 		/// </summary>
+		/// <param name="compiler">The compiler.</param>
 		/// <param name="typeLayout">The type layout.</param>
 		/// <param name="context">The context.</param>
 		/// <param name="op">The op.</param>
 		/// <param name="stackSize">Size of the stack.</param>
 		/// <param name="parameterSize">Size of the parameter.</param>
 		/// <param name="scratch">The scratch.</param>
-		private void Push(MosaTypeLayout typeLayout, Context context, Operand op, int stackSize, int parameterSize, Operand scratch)
+		private void Push(BaseMethodCompiler compiler, MosaTypeLayout typeLayout, Context context, Operand op, int stackSize, int parameterSize, Operand scratch)
 		{
 			if (op.Is64BitInteger)
 			{
@@ -228,7 +242,7 @@ namespace Mosa.Compiler.Framework.Platform
 			}
 			else if (typeLayout.IsCompoundType(op.Type))
 			{
-				architecture.InsertCompoundMoveInstruction(context, Operand.CreateMemoryAddress(op.Type, scratch, stackSize), op, typeLayout.GetTypeSize(op.Type));
+				architecture.InsertCompoundMoveInstruction(compiler, context, Operand.CreateMemoryAddress(op.Type, scratch, stackSize), op, typeLayout.GetTypeSize(op.Type));
 			}
 			else
 			{
@@ -240,13 +254,15 @@ namespace Mosa.Compiler.Framework.Platform
 		/// Requests the calling convention to create an appropriate move instruction to populate the return
 		/// value of a method.
 		/// </summary>
+		/// <param name="compiler">The compiler.</param>
 		/// <param name="typeLayout">The type layouts.</param>
 		/// <param name="context">The context.</param>
 		/// <param name="operand">The operand, that's holding the return value.</param>
-		public override void SetReturnValue(MosaTypeLayout typeLayout, Context context, Operand operand)
+		public override void SetReturnValue(BaseMethodCompiler compiler, MosaTypeLayout typeLayout, Context context, Operand operand)
 		{
 			int size, alignment;
 			architecture.GetTypeRequirements(typeLayout, operand.Type, out size, out alignment);
+			size = Alignment.AlignUp(size, alignment);
 
 			if (size == 4 || size == 2 || size == 1)
 			{
@@ -270,19 +286,16 @@ namespace Mosa.Compiler.Framework.Platform
 			else if (typeLayout.IsCompoundType(operand.Type))
 			{
 				Operand stackBaseReg = Operand.CreateCPURegister(typeLayout.TypeSystem.BuiltIn.Pointer, architecture.StackFrameRegister);
-				architecture.InsertCompoundMoveInstruction(context, Operand.CreateMemoryAddress(operand.Type, stackBaseReg, 8), operand, size);
+				architecture.InsertCompoundMoveInstruction(compiler, context, Operand.CreateMemoryAddress(operand.Type, stackBaseReg, 8), operand, size);
 			}
 		}
 
 		public override int OffsetOfFirstLocal { get { return 0; } }
 
-		public override int OffsetOfFirstParameter
-		{
-			//The first parameter is offset by 8 bytes from the start of the stack frame.
-			//- holds the return stack frame, which was pushed by the prologue instruction.
-			//- holds the return address, which was pushed by the call instruction.
-			get { return 8; }
-		}
+		//The first parameter is offset by 8 bytes from the start of the stack frame.
+		//- holds the return stack frame, which was pushed by the prologue instruction.
+		//- holds the return address, which was pushed by the call instruction.
+		public override int OffsetOfFirstParameter { get { return 8; } }
 
 		#endregion Members
 	}

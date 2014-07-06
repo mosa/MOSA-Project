@@ -45,7 +45,6 @@ namespace Mosa.Compiler.Framework.CIL
 			var type = (MosaType)decoder.Instruction.Operand;
 
 			throw new NotImplementCompilerException();
-		
 		}
 
 		/// <summary>

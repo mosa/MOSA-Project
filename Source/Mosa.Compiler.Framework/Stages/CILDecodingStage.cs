@@ -8,11 +8,11 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System.Diagnostics;
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.CIL;
 using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.MosaTypeSystem;
+using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework.Stages
 {
@@ -25,7 +25,7 @@ namespace Mosa.Compiler.Framework.Stages
 	/// representation. The instructions are grouped into basic Blocks
 	/// for easier local optimizations in later compiler stages.
 	/// </remarks>
-	public sealed class CILDecodingStage : BaseMethodCompilerStage, IMethodCompilerStage, IInstructionDecoder, IPipelineStage
+	public sealed class CILDecodingStage : BaseMethodCompilerStage, IInstructionDecoder
 	{
 		#region Data members
 
@@ -36,44 +36,37 @@ namespace Mosa.Compiler.Framework.Stages
 
 		#endregion Data members
 
-		#region IMethodCompilerStage Members
-
-		/// <summary>
-		/// Performs stage specific processing on the compiler context.
-		/// </summary>
-		void IMethodCompilerStage.Run()
+		protected override void Run()
 		{
 			// No CIL decoding if this is a linker generated method
-			if (methodCompiler.Method.IsLinkerGenerated)
+			if (MethodCompiler.Method.IsLinkerGenerated)
 				return;
 
-			MosaMethod plugMethod = methodCompiler.Compiler.PlugSystem.GetPlugMethod(methodCompiler.Method);
+			MosaMethod plugMethod = MethodCompiler.Compiler.PlugSystem.GetPlugMethod(MethodCompiler.Method);
 
 			if (plugMethod != null)
 			{
-				Operand plugSymbol = Operand.CreateSymbolFromMethod(typeSystem, plugMethod);
+				Operand plugSymbol = Operand.CreateSymbolFromMethod(TypeSystem, plugMethod);
 				Context context = CreateNewBlockWithContext(-1);
 				context.AppendInstruction(IRInstruction.Jmp, null, plugSymbol);
-				basicBlocks.AddHeaderBlock(context.BasicBlock);
+				BasicBlocks.AddHeaderBlock(context.BasicBlock);
 				return;
 			}
 
-			if (methodCompiler.Method.Code.Count == 0)
+			if (MethodCompiler.Method.Code.Count == 0)
 			{
-				if (DelegatePatcher.PatchDelegate(methodCompiler))
+				if (DelegatePatcher.PatchDelegate(MethodCompiler))
 					return;
 
-				methodCompiler.Stop();
+				MethodCompiler.Stop();
 				return;
 			}
 
-			methodCompiler.SetLocalVariables(methodCompiler.Method.LocalVariables);
+			MethodCompiler.SetLocalVariables(MethodCompiler.Method.LocalVariables);
 
 			/* Decode the instructions */
-			Decode(methodCompiler);
+			Decode(MethodCompiler);
 		}
-
-		#endregion IMethodCompilerStage Members
 
 		#region Internals
 
@@ -85,14 +78,14 @@ namespace Mosa.Compiler.Framework.Stages
 		private void Decode(BaseMethodCompiler compiler)
 		{
 			// Create context
-			Context context = new Context(instructionSet);
+			Context context = new Context(InstructionSet);
 
 			// Prefix instruction
 			bool prefix = false;
 
-			for (int i = 0; i < methodCompiler.Method.Code.Count; i++)
+			for (int i = 0; i < MethodCompiler.Method.Code.Count; i++)
 			{
-				MosaInstruction instr = methodCompiler.Method.Code[i];
+				MosaInstruction instr = MethodCompiler.Method.Code[i];
 				var op = (OpCode)instr.OpCode;
 
 				BaseCILInstruction instruction = CILInstruction.Get(op);
@@ -125,7 +118,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <value></value>
 		BaseMethodCompiler IInstructionDecoder.Compiler
 		{
-			get { return methodCompiler; }
+			get { return MethodCompiler; }
 		}
 
 		/// <summary>
@@ -134,7 +127,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <value></value>
 		MosaMethod IInstructionDecoder.Method
 		{
-			get { return methodCompiler.Method; }
+			get { return MethodCompiler.Method; }
 		}
 
 		/// <summary>
@@ -151,7 +144,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <value>
 		/// The type system.
 		/// </value>
-		TypeSystem IInstructionDecoder.TypeSystem { get { return typeSystem; } }
+		TypeSystem IInstructionDecoder.TypeSystem { get { return TypeSystem; } }
 
 		#endregion BaseInstructionDecoder Members
 	}

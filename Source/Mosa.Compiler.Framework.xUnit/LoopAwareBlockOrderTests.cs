@@ -15,10 +15,10 @@ namespace Mosa.Compiler.Framework.xUnit
 {
 	public class LoopAwareBlockOrderTests
 	{
-		internal static void Dump(BasicBlocks basicBlocks, LoopAwareBlockOrder loopAwareBlockOrder)
+		internal static void Dump(BasicBlocks basicBlocks, IBlockOrderAnalysis blockOrderAnalysis)
 		{
 			int index = 0;
-			foreach (var block in loopAwareBlockOrder.NewBlockOrder)
+			foreach (var block in blockOrderAnalysis.NewBlockOrder)
 			{
 				if (block != null)
 					Console.WriteLine("# " + index.ToString() + " Block " + block.ToString() + " #" + block.Sequence.ToString());
@@ -31,10 +31,10 @@ namespace Mosa.Compiler.Framework.xUnit
 
 			foreach (var block in basicBlocks)
 			{
-				int depth = loopAwareBlockOrder.GetLoopDepth(block);
-				int depthindex = loopAwareBlockOrder.GetLoopIndex(block);
+				int depth = blockOrderAnalysis.GetLoopDepth(block);
+				int depthindex = blockOrderAnalysis.GetLoopIndex(block);
 
-				Console.WriteLine("Block " + block.ToString() + " #" + block.Sequence.ToString() + " -> Depth: " + depth.ToString() + " index: " + depthindex.ToString());
+				Console.WriteLine("Block " + block.ToString() + " #" + block.Sequence.ToString() + " -> Depth: " + depth.ToString() + " Index: " + depthindex.ToString());
 			}
 		}
 
@@ -43,7 +43,7 @@ namespace Mosa.Compiler.Framework.xUnit
 		{
 			var basicBlocks = BlockTests.Scenario1;
 
-			LoopAwareBlockOrder loopAwareBlockOrder = new LoopAwareBlockOrder(basicBlocks);
+			var loopAwareBlockOrder = new LoopAwareBlockOrder(basicBlocks);
 
 			Assert.Equal(loopAwareBlockOrder.GetLoopDepth(basicBlocks[0]), 0);
 			Assert.Equal(loopAwareBlockOrder.GetLoopDepth(basicBlocks[1]), 1);

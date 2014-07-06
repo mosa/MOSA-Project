@@ -80,31 +80,32 @@ namespace Mosa.Tool.Compiler
 			}
 
 			var typeSystem = TypeSystem.Load(moduleLoader.CreateMetadata());
-
 			MosaTypeLayout typeLayout = new MosaTypeLayout(typeSystem, compilerOptions.Architecture.NativePointerSize, compilerOptions.Architecture.NativeAlignment);
 
 			ConfigurableTraceFilter filter = new ConfigurableTraceFilter();
 			filter.MethodMatch = MatchType.None;
 			filter.Method = string.Empty;
-			filter.StageMatch = MatchType.Any;
-			filter.TypeMatch = MatchType.Any;
-			filter.ExcludeInternalMethods = false;
+			filter.StageMatch = MatchType.None;
+			filter.Stage = string.Empty;
+			filter.TypeMatch = MatchType.None;
+			filter.Type = string.Empty;
+			filter.ExcludeInternalMethods = true;
 
 			IInternalTrace internalTrace = new BasicInternalTrace();
 			internalTrace.TraceFilter = filter;
 
 			AotCompiler aot = new AotCompiler(compilerOptions.Architecture, typeSystem, typeLayout, internalTrace, compilerOptions);
 
-			aot.Pipeline.AddRange(new ICompilerStage[] {
-				compilerOptions.BootCompilerStage,
-				new MethodPipelineExportStage(),
+			var bootStage = compilerOptions.BootStageFactory != null ? compilerOptions.BootStageFactory() : null;
+
+			aot.Pipeline.Add(new ICompilerStage[] {
+				bootStage,
+				compilerOptions.MethodPipelineExportDirectory != null ?  new MethodPipelineExportStage(): null,
 				new PlugStage(),
 				new MethodCompilerSchedulerStage(),
 				new TypeInitializerSchedulerStage(),
-				compilerOptions.BootCompilerStage,
-				new TypeLayoutStage(),
+				bootStage,
 				new MetadataStage(),
-				new ObjectFileLayoutStage(),
 				new LinkerFinalizationStage(),
 				compilerOptions.MapFile != null ? new MapFileGenerationStage() : null
 			});

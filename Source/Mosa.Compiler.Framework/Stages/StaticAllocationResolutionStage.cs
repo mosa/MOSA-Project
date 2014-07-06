@@ -7,6 +7,7 @@
  *  Kai P. Reisert <kpreisert@googlemail.com>
  */
 
+using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.CIL;
 using Mosa.Compiler.Linker;
 using Mosa.Compiler.MosaTypeSystem;
@@ -14,11 +15,11 @@ using System.Collections.Generic;
 
 namespace Mosa.Compiler.Framework.Stages
 {
-	public class StaticAllocationResolutionStage : BaseMethodCompilerStage, IMethodCompilerStage
+	public class StaticAllocationResolutionStage : BaseMethodCompilerStage
 	{
-		void IMethodCompilerStage.Run()
+		protected override void Run()
 		{
-			if (methodCompiler.Method.Name == @".cctor")
+			if (MethodCompiler.Method.Name == @".cctor")
 			{
 				AttemptToStaticallyAllocateObjects();
 			}
@@ -42,22 +43,21 @@ namespace Mosa.Compiler.Framework.Stages
 			MosaType allocatedType = allocation.MosaMethod.DeclaringType;
 
 			// Allocate a linker symbol to refer to this allocation. Use the destination field name as the linker symbol name.
-			string symbolName = assignment.MosaField.ToString() + @"<<$cctor";
+			var symbolName = MethodCompiler.Linker.CreateSymbol(assignment.MosaField.FullName + @"<<$cctor", SectionKind.BSS, Architecture.NativeAlignment, TypeLayout.GetTypeSize(allocatedType));
 
-			using (var stream = methodCompiler.Linker.Allocate(symbolName, SectionKind.BSS, typeLayout.GetTypeSize(allocatedType), 4))
+			// FIXME: Do we have to initialize this?
+			string typeDefinitionSymbol = GetTypeDefinition(allocatedType);
+
+			if (typeDefinitionSymbol != null)
 			{
-				// FIXME: Do we have to initialize this?
-				string methodTableSymbol = GetMethodTableForType(allocatedType);
-
-				if (methodTableSymbol != null)
-					methodCompiler.Linker.Link(LinkType.AbsoluteAddress | LinkType.I4, BuiltInPatch.I4, symbolName, 0, 0, methodTableSymbol, 0);
+				MethodCompiler.Linker.Link(LinkType.AbsoluteAddress, BuiltInPatch.I4, symbolName, 0, 0, typeDefinitionSymbol, SectionKind.ROData, 0);
 			}
 
 			// Issue a load request before the newobj and before the assignment.
-			Operand symbol1 = InsertLoadBeforeInstruction(allocation, symbolName, assignment.MosaField.FieldType);
+			Operand symbol1 = InsertLoadBeforeInstruction(allocation, symbolName.Name, assignment.MosaField.FieldType);
 			allocation.Operand1 = symbol1;
 
-			Operand symbol2 = InsertLoadBeforeInstruction(assignment, symbolName, assignment.MosaField.FieldType);
+			Operand symbol2 = InsertLoadBeforeInstruction(assignment, symbolName.Name, assignment.MosaField.FieldType);
 			assignment.Operand1 = symbol2;
 
 			// Change the newobj to a call and increase the operand count to include the this ptr.
@@ -66,11 +66,11 @@ namespace Mosa.Compiler.Framework.Stages
 			allocation.ReplaceInstructionOnly(CILInstruction.Get(OpCode.Call));
 		}
 
-		private string GetMethodTableForType(MosaType allocatedType)
+		private string GetTypeDefinition(MosaType allocatedType)
 		{
 			if (!allocatedType.IsValueType)
 			{
-				return allocatedType.FullName + @"$mtable";
+				return allocatedType.FullName + Metadata.TypeDefinition;
 			}
 
 			return null;
@@ -79,8 +79,8 @@ namespace Mosa.Compiler.Framework.Stages
 		private Operand InsertLoadBeforeInstruction(Context context, string symbolName, MosaType type)
 		{
 			Context before = context.InsertBefore();
-			Operand result = methodCompiler.CreateVirtualRegister(type);
-			Operand op = Operand.CreateManagedSymbol(typeSystem, type, symbolName);
+			Operand result = MethodCompiler.CreateVirtualRegister(type);
+			Operand op = Operand.CreateManagedSymbol(TypeSystem, type, symbolName);
 
 			before.SetInstruction(CILInstruction.Get(OpCode.Ldc_i4), result, op);
 
@@ -89,9 +89,9 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private IEnumerable<Context> ScanForOperatorNew()
 		{
-			foreach (BasicBlock block in basicBlocks)
+			foreach (BasicBlock block in BasicBlocks)
 			{
-				for (Context context = new Context(instructionSet, block); !context.IsBlockEndInstruction; context.GotoNext())
+				for (Context context = new Context(InstructionSet, block); !context.IsBlockEndInstruction; context.GotoNext())
 				{
 					if (!context.IsEmpty && (context.Instruction is NewobjInstruction || context.Instruction is NewarrInstruction))
 					{

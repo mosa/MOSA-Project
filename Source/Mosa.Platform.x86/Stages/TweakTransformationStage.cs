@@ -15,9 +15,9 @@ using System.Diagnostics;
 namespace Mosa.Platform.x86.Stages
 {
 	/// <summary>
-	/// TODO: Add pre-IR decomposition stage to account for platform operand requirements (and avoid it here)
+	///
 	/// </summary>
-	public sealed class TweakTransformationStage : BaseTransformationStage, IX86Visitor, IMethodCompilerStage
+	public sealed class TweakTransformationStage : BaseTransformationStage, IX86Visitor
 	{
 		#region IX86Visitor
 
@@ -37,6 +37,11 @@ namespace Mosa.Platform.x86.Stages
 			else if (context.Result.IsR8)
 			{
 				context.SetInstruction(X86.Movsd, context.Result, context.Operand1);
+			}
+			else if (context.Operand1.IsConstant && (context.Result.Type.IsUI1 || context.Result.Type.IsUI2 || context.Result.IsBoolean || context.Result.IsChar))
+			{
+				// Correct source size of constant based on destination size
+				context.Operand1 = Operand.CreateConstant(context.Result.Type, context.Operand1.ConstantUnsignedInteger);
 			}
 		}
 
@@ -148,7 +153,7 @@ namespace Mosa.Platform.x86.Stages
 
 			if (right.IsConstant && (left.IsChar || left.IsShort || left.IsByte))
 			{
-				Operand edx = AllocateVirtualRegister(typeSystem.BuiltIn.I4);
+				Operand edx = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 				Context before = context.InsertBefore();
 
 				if (left.IsSigned)
@@ -809,13 +814,13 @@ namespace Mosa.Platform.x86.Stages
 		{
 		}
 
-        /// <summary>
-        /// Visitation function for <see cref="IX86Visitor.Test"/> instructions.
-        /// </summary>
-        /// <param name="context">The context.</param>
-        void IX86Visitor.Test(Context context)
-        {
-        }
+		/// <summary>
+		/// Visitation function for <see cref="IX86Visitor.Test"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IX86Visitor.Test(Context context)
+		{
+		}
 
 		#endregion IX86Visitor - Unused
 
@@ -831,7 +836,7 @@ namespace Mosa.Platform.x86.Stages
 			if (context.Operand2.IsByte)
 				return;
 
-			context.Operand2 = Operand.CreateConstant(typeSystem.BuiltIn.U1, context.Operand2.ConstantUnsignedInteger);
+			context.Operand2 = Operand.CreateConstant(TypeSystem.BuiltIn.U1, context.Operand2.ConstantUnsignedInteger);
 		}
 	}
 }

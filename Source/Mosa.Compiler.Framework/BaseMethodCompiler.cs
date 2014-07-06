@@ -11,11 +11,10 @@
 using Mosa.Compiler.Framework.Stages;
 using Mosa.Compiler.InternalTrace;
 using Mosa.Compiler.Linker;
-
 using Mosa.Compiler.MosaTypeSystem;
 using System;
 using System.Collections.Generic;
-using System.IO;
+using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework
 {
@@ -62,7 +61,7 @@ namespace Mosa.Compiler.Framework
 			this.Compiler = compiler;
 			this.Method = method;
 			this.Type = method.DeclaringType;
-			this.Scheduler = compiler.Scheduler;
+			this.Scheduler = compiler.CompilationScheduler;
 			this.Architecture = compiler.Architecture;
 			this.TypeSystem = compiler.TypeSystem;
 			this.TypeLayout = Compiler.TypeLayout;
@@ -74,10 +73,13 @@ namespace Mosa.Compiler.Framework
 			this.StackLayout = new StackLayout(Architecture, method.Signature.Parameters.Count + (method.HasThis || method.HasExplicitThis ? 1 : 0));
 			this.VirtualRegisters = new VirtualRegisters(Architecture);
 			this.LocalVariables = emptyOperandList;
+			this.DominanceAnalysis = new DominanceAnalysis(Compiler.CompilerOptions.DominanceAnalysisFactory, this.BasicBlocks);
 
 			EvaluateParameterOperands();
 
 			this.stop = false;
+
+			Debug.Assert(this.Linker != null);
 		}
 
 		#endregion Construction
@@ -92,7 +94,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets the linker used to resolve external symbols.
 		/// </summary>
-		public ILinker Linker { get; private set; }
+		public BaseLinker Linker { get; private set; }
 
 		/// <summary>
 		/// Gets the method implementation being compiled.
@@ -165,6 +167,11 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		public VirtualRegisters VirtualRegisters { get; private set; }
 
+		/// <summary>
+		/// Gets the dominance analysis.
+		/// </summary>
+		public DominanceAnalysis DominanceAnalysis { get; private set; }
+
 		#endregion Properties
 
 		#region Methods
@@ -194,15 +201,6 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Requests a stream to emit native instructions to.
-		/// </summary>
-		/// <returns>A stream object, which can be used to store emitted instructions.</returns>
-		public virtual Stream RequestCodeStream()
-		{
-			return Linker.Allocate(Method.FullName, SectionKind.Text, 0, 0);
-		}
-
-		/// <summary>
 		/// Compiles the method referenced by this method compiler.
 		/// </summary>
 		public void Compile()
@@ -211,8 +209,8 @@ namespace Mosa.Compiler.Framework
 
 			foreach (IMethodCompilerStage stage in Pipeline)
 			{
-				stage.Setup(this);
-				stage.Run();
+				stage.Initialize(this);
+				stage.Execute();
 
 				Mosa.Compiler.InternalTrace.InstructionLogger.Run(this, stage);
 
@@ -307,14 +305,13 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		protected virtual void InitializeType()
 		{
-			typeInitializer = Compiler.Pipeline.FindFirst<TypeInitializerSchedulerStage>();
-
-			if (typeInitializer == null)
-				return;
-
-			// If we're compiling a type initializer, run it immediately.
 			if (Method.IsSpecialName && Method.IsRTSpecialName && Method.IsStatic && Method.Name == ".cctor")
 			{
+				typeInitializer = Compiler.Pipeline.FindFirst<TypeInitializerSchedulerStage>();
+
+				if (typeInitializer == null)
+					return;
+
 				typeInitializer.Schedule(Method);
 			}
 		}

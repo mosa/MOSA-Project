@@ -12,7 +12,7 @@ namespace Mosa.Compiler.Framework.CIL
 	/// <summary>
 	///
 	/// </summary>
-	public class BranchInstruction : BaseCILInstruction, IBranchInstruction
+	public class BranchInstruction : BaseCILInstruction
 	{
 		#region Construction
 
@@ -68,11 +68,5 @@ namespace Mosa.Compiler.Framework.CIL
 		}
 
 		#endregion Methods
-
-		/// <summary>
-		/// Determines if the branch is conditional.
-		/// </summary>
-		/// <value></value>
-		public bool IsConditional { get { return false; } }
 	}
 }

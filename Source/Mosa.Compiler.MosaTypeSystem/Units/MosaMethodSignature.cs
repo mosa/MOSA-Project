@@ -7,15 +7,16 @@
  *  Ki (kiootic) <kiootic@gmail.com>
  */
 
+using Mosa.Compiler.Common;
 using System;
 using System.Collections.Generic;
-using Mosa.Compiler.Common;
 
 namespace Mosa.Compiler.MosaTypeSystem
 {
 	public class MosaMethodSignature : IEquatable<MosaMethodSignature>
 	{
 		public MosaType ReturnType { get; private set; }
+
 		public IList<MosaParameter> Parameters { get; private set; }
 
 		public MosaMethodSignature(MosaType returnType, IList<MosaParameter> parameter)
@@ -30,7 +31,8 @@ namespace Mosa.Compiler.MosaTypeSystem
 				   this.Parameters.SequenceEquals(sig.Parameters);
 		}
 
-		string sig;
+		private string sig;
+
 		public override string ToString()
 		{
 			return sig ?? (sig = SignatureName.GetSignature("", this, true));

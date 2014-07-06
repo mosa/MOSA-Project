@@ -14,16 +14,13 @@ namespace Mosa.Platform.x86.Stages
 	/// <summary>
 	///
 	/// </summary>
-	public class CheckOperandCountStage : BaseMethodCompilerStage, IMethodCompilerStage, IPipelineStage
+	public class CheckOperandCountStage : BaseMethodCompilerStage
 	{
-		/// <summary>
-		/// Performs stage specific processing on the compiler context.
-		/// </summary>
-		void IMethodCompilerStage.Run()
+		protected override void Run()
 		{
-			foreach (var block in basicBlocks)
+			foreach (var block in BasicBlocks)
 			{
-				for (var context = new Context(this.instructionSet, block); !context.IsBlockEndInstruction; context.GotoNext())
+				for (var context = new Context(this.InstructionSet, block); !context.IsBlockEndInstruction; context.GotoNext())
 				{
 					if (!(context.Instruction is X86Instruction))
 						continue;

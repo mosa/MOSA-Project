@@ -15,6 +15,9 @@ namespace Mosa.Compiler.MosaTypeSystem
 	public class MosaModule : MosaUnit
 	{
 		public string Assembly { get; private set; }
+
+		public bool IsReflectionOnly { get; private set; }
+
 		public MosaMethod EntryPoint { get; private set; }
 
 		public IDictionary<uint, MosaType> Types { get; private set; }
@@ -26,7 +29,8 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public class Mutator : MosaUnit.MutatorBase
 		{
-			MosaModule module;
+			private MosaModule module;
+
 			internal Mutator(MosaModule module)
 				: base(module)
 			{
@@ -34,6 +38,9 @@ namespace Mosa.Compiler.MosaTypeSystem
 			}
 
 			public string Assembly { set { module.Assembly = value; } }
+
+			public bool IsReflectionOnly { set { module.IsReflectionOnly = value; } }
+
 			public MosaMethod EntryPoint { set { module.EntryPoint = value; } }
 
 			public override void Dispose()

@@ -7,104 +7,175 @@ fontsize = "16"
 shape = "ellipse"
 ];
 edge [
+minlen = "3"
 ];
 
-"node0" [
-label = "<f0>Assembly Table|Number of Assemblies|<f1>Pointer to Assembly 1|..|Pointer to Assembly N"
+"NameString" [
+label = "<f0>Name String|<f1>String Length|<f2>String"
 shape = "record"
 ];
 
-"node1" [
-label = "<f0>Assembly|<f2>Pointer to Assembly Name| Number of Types|<f1>Pointer to Type  Definition 1|...|Pointer to Type  Definition N"
+"AssemblyListTable" [
+label = "<f0>Assembly Table|<f1>Number of Assemblies|<f2>Pointer to Assembly 1|..|Pointer to Assembly N"
 shape = "record"
 ];
 
-"node2" [
-label = "<f0>Type Definition|Size|Metadata Token|<f2>Pointer to Type Name|<f1>Pointer to Assembly|Pointer to Default Constructor Method (if any)|Flag: Is Interface"
+"AssemblyDefinition" [
+label = "<f0>Assembly|<f1>Pointer to Assembly Name|<f2>Pointer to Custom Attributes|<f3>Flags: IsReflectionOnly|<f4> Number of Types|<f5>Pointer to Type  Definition 1|...|Pointer to Type  Definition N"
 shape = "record"
 ];
 
-"node3" [
-label = "<f0>Assembly Name|Assembly Name Length|Assembly Name"
+"TypeDefinition" [
+label = "<f0>Type Definition|<f1>Pointer to Type Name|<f2>Pointer to Custom Attributes|<f3>Flag: Is Interface|<f4>Type Size|<f5>Pointer to Assembly|<f6>Pointer to Parent Type|<f7>Pointer to Default Constructor Method|<f8>Pointer to Interface Slot Table|<f9>Pointer to Interface Bitmap|<f10>Number of Methods|<f11>Pointer to Method Definition 1|...|Pointer to Method Definition N"
 shape = "record"
 ];
 
-"node4" [
-label = "<f0>Type Name|Type Name Length|Type Name"
+"MethodLookupTable" [
+label = "<f0>Method Lookup Table|<f1>Pointer to Method (Starting Address)|<f2>Method Size|<f3>Pointer to Method Definition"
 shape = "record"
 ];
 
-"node5" [
-label = "<f0>Method Lookup Table|Pointer to Method (Starting Address)|Method Size|<f1>Pointer to Method Description Table"
+"ExceptionHandlerTable" [
+label = "<f0>Exception Handler Table|<f1>Handler Type|<f2>Pointer to Protected Block|<f3>Length of Protected Block|<f4>Offset of Handler from Method Start Address|<f5>Pointer to Exception Type|<f6>Offset of Filter from Method Start Address"
 shape = "record"
 ];
 
-"node6" [
-label = "<f0>Method Description|<f1>Pointer to Exception Handler Table|<f2>Pointer to GC Tracking Information|Local Stack Size|Parameter Stack Size"
+"InterfaceSlotTable" [
+label = "<f0>Interface Slot Table|<f1>Number of Interface Method Tables|<f2>Pointer to Interface Method Table 1|...|Pointer to Interface Method Table N"
 shape = "record"
 ];
 
-"node7" [
-label = "<f0>Exception Handler Table|Handler Type|Pointer to Protected Block|Length of Protected Block|Offset of Handler from Method Start Address|<f1>Pointer to Exception Type's Method Table|Offset of Filter from Method Start Address"
+"InterfaceMethodTable" [
+label = "<f0>Interface Method Table|<f1>Number of Methods|<f2>Pointer to Method Definition 1|..|Pointer to Method Definition N"
 shape = "record"
 ];
 
-"node8" [
-label = "<f0>Method Table|<f2>Pointer to Interface Slot Table|Pointer to Type Instance|Pointer to Interface Bitmap|<f1>Pointer to Method Table of Parent Type|Type Metadata Pointer|Pointer to Method 1|..|Pointer to Method N"
+"MethodDefinition" [
+label = "<f0>Method Definition|<f1>Method Name|<f2>Pointer to Custom Attributes|<f3>Flags: IsStatic, IsAbstract|<f4>Local Stack Size \| Parameter Stack Size|<f5>Pointer to Method|<f6>Pointer to Return Type Definition|<f7>Pointer to Exception Handler Table|<f8>Pointer to GC Tracking Information|<f9>Pointer Parameter Definitions"
 shape = "record"
 ];
 
-"node9" [
-label = "<f0>Interface Slot Table|<f1>Pointer to Interface Method Table 1|...|Pointer to Interface Method Table N"
+"GCTrackingInformation" [
+label = "<f0>GC Tracking Information|TODO"
 shape = "record"
 ];
 
-"node10" [
-label = "<f0>Interface Method Table|Pointer to Interface Method 1|..|Pointer to Interface Method N"
+"CustomAttributesTable" [
+label = "<f0>Custom Attributes Table|<f1>Number of Attributes|<f2>Pointer to Custom Attribute 1|...|Pointer to Custom Attribute N"
 shape = "record"
 ];
 
-"node0":f1 -> "node1":f0 [
+"CustomAttribute" [
+label = "<f0>Custom Attribute|<f1>Pointer to Attribute Type|<f2>Pointer to Constructor Method|<f3>Number of Arguments|<f4>Pointer to Argument 1|...|Pointer to Argument N"
+shape = "record"
+];
+
+"CustomAttributeArgument" [
+label = "<f0>Custom Attribute Argument|<f1>Pointer to Argument Name|<f2>Argument Type | Argument Size|<f3>Argument"
+shape = "record"
+];
+
+"CustomAttributesTable":f2 -> "CustomAttribute":f0 [
 id = 0
 ];
 
-"node1":f1 -> "node2":f0 [
+"CustomAttribute":f1 -> "TypeDefinition":f0 [
 id = 0
 ];
 
-"node2":f1 -> "node1":f0 [
+"CustomAttribute":f2 -> "MethodDefinition":f0 [
 id = 0
 ];
 
-"node1":f2 -> "node3":f0 [
+"CustomAttribute":f4 -> "CustomAttributeArgument":f0 [
 id = 0
 ];
 
-"node2":f2 -> "node4":f0 [
+"CustomAttributeArgument":f1 -> "NameString":f0 [
 id = 0
 ];
 
-"node5":f1 -> "node6":f0 [
+"CustomAttributeArgument":f2 -> "TypeDefinition":f0 [
 id = 0
 ];
 
-"node6":f1 -> "node7":f0 [
+"AssemblyListTable":f2 -> "AssemblyDefinition":f0 [
 id = 0
 ];
 
-"node7":f1 -> "node8":f0 [
+"AssemblyDefinition":f1 -> "NameString":f0 [
 id = 0
 ];
 
-"node8":f1 -> "node8":f0 [
+"AssemblyDefinition":f2 -> "CustomAttributesTable":f0 [
 id = 0
 ];
 
-"node8":f2 -> "node9":f0 [
+"AssemblyDefinition":f5 -> "TypeDefinition":f0 [
 id = 0
 ];
 
-"node9":f1 -> "node10":f0 [
+"TypeDefinition":f1 -> "NameString":f0 [
+id = 0
+];
+
+"TypeDefinition":f2 -> "CustomAttributesTable":f0 [
+id = 0
+];
+
+"TypeDefinition":f5 -> "AssemblyDefinition":f0 [
+id = 0
+];
+
+"TypeDefinition":f6 -> "TypeDefinition":f0 [
+id = 0
+];
+
+"TypeDefinition":f7 -> "MethodDefinition":f0 [
+id = 0
+];
+
+"TypeDefinition":f8 -> "InterfaceSlotTable":f0 [
+id = 0
+];
+
+"TypeDefinition":f11 -> "MethodDefinition":f0 [
+id = 0
+];
+
+"InterfaceSlotTable":f2 -> "InterfaceMethodTable":f0 [
+id = 0
+];
+
+"InterfaceMethodTable":f2 -> "MethodDefinition":f0 [
+id = 0
+];
+
+"MethodLookupTable":f3 -> "MethodDefinition":f0 [
+id = 0
+];
+
+"MethodDefinition":f7 -> "ExceptionHandlerTable":f0 [
+id = 0
+];
+
+"MethodDefinition":f1 -> "NameString":f0 [
+id = 0
+];
+
+"MethodDefinition":f2 -> "CustomAttributesTable":f0 [
+id = 0
+];
+
+"MethodDefinition":f6 -> "TypeDefinition":f0 [
+id = 0
+];
+
+"MethodDefinition":f8 -> "GCTrackingInformation":f0 [
+id = 0
+];
+
+"ExceptionHandlerTable":f5 -> "TypeDefinition":f0 [
 id = 0
 ];
 

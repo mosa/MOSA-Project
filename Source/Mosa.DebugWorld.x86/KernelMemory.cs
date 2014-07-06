@@ -22,6 +22,5 @@ namespace Mosa.Kernel.x86Test
 			memoryPtr = alloc + size;
 			return alloc;
 		}
-
 	}
 }

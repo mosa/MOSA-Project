@@ -45,7 +45,7 @@ namespace Mosa.Tool.TinySimulator
 		public TypeSystem TypeSystem;
 		public MosaTypeLayout TypeLayout;
 		public BaseArchitecture Architecture;
-		public ILinker Linker;
+		public BaseLinker Linker;
 		public SimCPU SimCPU;
 
 		public int MaxHistory { get; set; }
@@ -183,7 +183,6 @@ namespace Mosa.Tool.TinySimulator
 			moduleLoader.LoadModuleFromFile(filename);
 
 			TypeSystem = TypeSystem.Load(moduleLoader.CreateMetadata());
-
 			TypeLayout = new MosaTypeLayout(TypeSystem, 4, 4);
 
 			assembliesView.UpdateTree();

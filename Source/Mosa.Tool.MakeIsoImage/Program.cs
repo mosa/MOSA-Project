@@ -90,7 +90,6 @@ namespace Mosa.Tool.MakeIsoImage
 
 				Console.WriteLine("Completed!");
 			}
-
 			catch (Exception e)
 			{
 				Console.Error.WriteLine("Error: " + e.ToString());

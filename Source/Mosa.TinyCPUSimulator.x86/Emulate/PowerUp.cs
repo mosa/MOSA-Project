@@ -22,13 +22,11 @@ namespace Mosa.TinyCPUSimulator.x86.Emulate
 		public override void Initialize()
 		{
 			var x86 = simCPU as CPUx86;
-			
+
 			simCPU.AddMemory(0x00000000, 0x000A0000, 1); // First 640kb
 			simCPU.AddMemory(VectorReset, 0x0000000F, 2); // Vector Reset
 
 			simCPU.AddInstruction(VectorReset, new SimInstruction(Opcode.Call, 4, SimOperand.CreateLabel(32, VectorCall)));
-
-			//simCPU.SetSymbol(VectorCall, VectorReset, 4);
 		}
 
 		public override void Reset()

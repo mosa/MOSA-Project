@@ -242,6 +242,15 @@ namespace Mosa.Kernel.x86
 		/// Writes the specified value.
 		/// </summary>
 		/// <param name="val">The val.</param>
+		public void Write(uint val)
+		{
+			Write(val, 10, -1);
+		}
+
+		/// <summary>
+		/// Writes the specified value.
+		/// </summary>
+		/// <param name="val">The val.</param>
 		/// <param name="digits">The digits.</param>
 		/// <param name="size">The size.</param>
 		public void Write(uint val, byte digits, int size)

@@ -106,7 +106,8 @@ namespace Mosa.Kernel.x86
 		/// <returns>The page</returns>
 		public static uint Allocate()
 		{
-			if (at == map) return 0; // out of memory
+			if (at == map)
+				return 0; // out of memory
 
 			totalUsedPages++;
 			uint avail = Native.Get32(at);

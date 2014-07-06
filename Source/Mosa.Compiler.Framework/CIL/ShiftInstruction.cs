@@ -7,7 +7,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-
 using Mosa.Compiler.MosaTypeSystem;
 using System;
 using System.Diagnostics;

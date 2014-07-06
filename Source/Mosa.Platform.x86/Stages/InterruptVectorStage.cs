@@ -15,24 +15,12 @@ namespace Mosa.Platform.x86.Stages
 	/// <summary>
 	///
 	/// </summary>
-	public sealed class InterruptVectorStage : BaseCompilerStage, ICompilerStage, IPipelineStage
+	public sealed class InterruptVectorStage : BaseCompilerStage
 	{
-		#region ICompilerStage Members
-
-		void ICompilerStage.Setup(BaseCompiler compiler)
-		{
-			base.Setup(compiler);
-		}
-
-		/// <summary>
-		/// Performs stage specific processing on the compiler context.
-		/// </summary>
-		void ICompilerStage.Run()
+		protected override void Run()
 		{
 			CreateInterruptVectors();
 		}
-
-		#endregion ICompilerStage Members
 
 		#region Internal
 
@@ -41,7 +29,7 @@ namespace Mosa.Platform.x86.Stages
 		/// </summary>
 		private void CreateInterruptVectors()
 		{
-			var type = typeSystem.GetTypeByName("Mosa.Kernel.x86", "IDT");
+			var type = TypeSystem.GetTypeByName("Mosa.Kernel.x86", "IDT");
 
 			if (type == null)
 				return;
@@ -51,9 +39,9 @@ namespace Mosa.Platform.x86.Stages
 			if (method == null)
 				return;
 
-			Operand interrupt = Operand.CreateSymbolFromMethod(typeSystem, method);
+			Operand interrupt = Operand.CreateSymbolFromMethod(TypeSystem, method);
 
-			Operand esp = Operand.CreateCPURegister(typeSystem.BuiltIn.I4, GeneralPurposeRegister.ESP);
+			Operand esp = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.ESP);
 
 			for (int i = 0; i <= 255; i++)
 			{
@@ -64,17 +52,17 @@ namespace Mosa.Platform.x86.Stages
 
 				ctx.AppendInstruction(X86.Cli);
 				if (i <= 7 || i >= 16 | i == 9) // For IRQ 8, 10, 11, 12, 13, 14 the cpu will automatically pushed the error code
-					ctx.AppendInstruction(X86.Push, null, Operand.CreateConstantUnsignedInt(typeSystem, 0));
-				ctx.AppendInstruction(X86.Push, null, Operand.CreateConstantUnsignedInt(typeSystem, (uint)i));
+					ctx.AppendInstruction(X86.Push, null, Operand.CreateConstantUnsignedInt(TypeSystem, 0));
+				ctx.AppendInstruction(X86.Push, null, Operand.CreateConstantUnsignedInt(TypeSystem, (uint)i));
 				ctx.AppendInstruction(X86.Pushad);
 				ctx.AppendInstruction(X86.Call, null, interrupt);
 				ctx.AppendInstruction(X86.Popad);
-				ctx.AppendInstruction(X86.Add, esp, esp, Operand.CreateConstantUnsignedInt(typeSystem, 8));
+				ctx.AppendInstruction(X86.Add, esp, esp, Operand.CreateConstantUnsignedInt(TypeSystem, 8));
 				ctx.AppendInstruction(X86.Sti);
 				ctx.AppendInstruction(X86.IRetd);
 
-				var interruptMethod = compiler.CreateLinkerMethod("InterruptISR" + i.ToString());
-				compiler.CompileMethod(interruptMethod, basicBlocks, instructionSet);
+				var interruptMethod = Compiler.CreateLinkerMethod("InterruptISR" + i.ToString());
+				Compiler.CompileMethod(interruptMethod, basicBlocks, instructionSet);
 			}
 		}
 

@@ -8,14 +8,12 @@
  *  Marcelo Caetano (marcelocaetano) <marcelo.caetano@ymail.com>
  */
 
-using System;
 using Mosa.Compiler.Framework;
-using Mosa.Platform.ARMv6;
 
 namespace Mosa.Platform.ARMv6.Instructions
 {
 	/// <summary>
-	/// Swi instruction: 
+	/// Swi instruction:
 	/// Instruction is used to cause an SVCall (The Supervisor Call) exception to occur
 	/// </summary>
 	public class Swi : ARMv6Instruction

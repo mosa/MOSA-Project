@@ -1,5 +1,4 @@
-﻿ 
-using System;
+﻿using System;
 
 namespace Mosa.Test.Collection
 {
@@ -13,6 +12,11 @@ namespace Mosa.Test.Collection
 			return (byte)o;
 		}
 
+		public static bool EqualsU1(byte value)
+		{
+			object o = value;
+			return o.Equals(value);
+		}
 		
 		public static ushort BoxU2(ushort value) 
 		{
@@ -20,6 +24,11 @@ namespace Mosa.Test.Collection
 			return (ushort)o;
 		}
 
+		public static bool EqualsU2(ushort value)
+		{
+			object o = value;
+			return o.Equals(value);
+		}
 		
 		public static uint BoxU4(uint value) 
 		{
@@ -27,6 +36,11 @@ namespace Mosa.Test.Collection
 			return (uint)o;
 		}
 
+		public static bool EqualsU4(uint value)
+		{
+			object o = value;
+			return o.Equals(value);
+		}
 		
 		public static ulong BoxU8(ulong value) 
 		{
@@ -34,6 +48,11 @@ namespace Mosa.Test.Collection
 			return (ulong)o;
 		}
 
+		public static bool EqualsU8(ulong value)
+		{
+			object o = value;
+			return o.Equals(value);
+		}
 		
 		public static sbyte BoxI1(sbyte value) 
 		{
@@ -41,6 +60,11 @@ namespace Mosa.Test.Collection
 			return (sbyte)o;
 		}
 
+		public static bool EqualsI1(sbyte value)
+		{
+			object o = value;
+			return o.Equals(value);
+		}
 		
 		public static short BoxI2(short value) 
 		{
@@ -48,6 +72,11 @@ namespace Mosa.Test.Collection
 			return (short)o;
 		}
 
+		public static bool EqualsI2(short value)
+		{
+			object o = value;
+			return o.Equals(value);
+		}
 		
 		public static int BoxI4(int value) 
 		{
@@ -55,6 +84,11 @@ namespace Mosa.Test.Collection
 			return (int)o;
 		}
 
+		public static bool EqualsI4(int value)
+		{
+			object o = value;
+			return o.Equals(value);
+		}
 		
 		public static long BoxI8(long value) 
 		{
@@ -62,6 +96,11 @@ namespace Mosa.Test.Collection
 			return (long)o;
 		}
 
+		public static bool EqualsI8(long value)
+		{
+			object o = value;
+			return o.Equals(value);
+		}
 		
 		public static float BoxR4(float value) 
 		{
@@ -69,6 +108,11 @@ namespace Mosa.Test.Collection
 			return (float)o;
 		}
 
+		public static bool EqualsR4(float value)
+		{
+			object o = value;
+			return o.Equals(value);
+		}
 		
 		public static double BoxR8(double value) 
 		{
@@ -76,6 +120,11 @@ namespace Mosa.Test.Collection
 			return (double)o;
 		}
 
+		public static bool EqualsR8(double value)
+		{
+			object o = value;
+			return o.Equals(value);
+		}
 		
 		public static char BoxC(char value) 
 		{
@@ -83,6 +132,10 @@ namespace Mosa.Test.Collection
 			return (char)o;
 		}
 
+		public static bool EqualsC(char value)
+		{
+			object o = value;
+			return o.Equals(value);
+		}
 		}
 }
-			

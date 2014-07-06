@@ -269,6 +269,26 @@ namespace Mosa.Test.Numbers
 			}
 		}
 
+		public static IEnumerable<object[]> I4SmallR4Simple
+		{
+			get
+			{
+				foreach (var i1 in Mosa.Test.Numbers.Series.I4Small)
+					foreach (var i2 in Mosa.Test.Numbers.Series.R4Simple)
+						yield return new object[] { i1, i2 };
+			}
+		}
+
+		public static IEnumerable<object[]> I4SmallR8Simple
+		{
+			get
+			{
+				foreach (var i1 in Mosa.Test.Numbers.Series.I4Small)
+					foreach (var i2 in Mosa.Test.Numbers.Series.R8Simple)
+						yield return new object[] { i1, i2 };
+			}
+		}
+
 		public static IEnumerable<object[]> I4I1UpTo32
 		{
 			get
@@ -407,7 +427,7 @@ namespace Mosa.Test.Numbers
 			}
 		}
 
-		public static IEnumerable<object[]> MiniI8MiniI8MiniI8MiniI8
+		public static IEnumerable<object[]> I8MiniI8MiniI8MiniI8Mini
 		{
 			get
 			{
@@ -656,6 +676,15 @@ namespace Mosa.Test.Numbers
 			}
 		}
 
+		public static IEnumerable<object[]> R4NotNaN
+		{
+			get
+			{
+				foreach (var i1 in Series.R4NotNaN)
+					yield return new object[] { i1 };
+			}
+		}
+
 		public static IEnumerable<object[]> R4R4
 		{
 			get
@@ -677,11 +706,30 @@ namespace Mosa.Test.Numbers
 			}
 		}
 
+		public static IEnumerable<object[]> R4SimpleR4Simple
+		{
+			get
+			{
+				foreach (var i1 in Mosa.Test.Numbers.Series.R4Simple)
+					foreach (var i2 in Mosa.Test.Numbers.Series.R4Simple)
+						yield return new object[] { i1, i2 };
+			}
+		}
+
 		public static IEnumerable<object[]> R8
 		{
 			get
 			{
 				foreach (var i1 in Mosa.Test.Numbers.R8.Series)
+					yield return new object[] { i1 };
+			}
+		}
+
+		public static IEnumerable<object[]> R8NotNaN
+		{
+			get
+			{
+				foreach (var i1 in Series.R8NotNaN)
 					yield return new object[] { i1 };
 			}
 		}
@@ -692,6 +740,16 @@ namespace Mosa.Test.Numbers
 			{
 				foreach (var i1 in Mosa.Test.Numbers.R8.Series)
 					foreach (var i2 in Mosa.Test.Numbers.R8.Series)
+						yield return new object[] { i1, i2 };
+			}
+		}
+
+		public static IEnumerable<object[]> R8SimpleR8Simple
+		{
+			get
+			{
+				foreach (var i1 in Mosa.Test.Numbers.Series.R8Simple)
+					foreach (var i2 in Mosa.Test.Numbers.Series.R8Simple)
 						yield return new object[] { i1, i2 };
 			}
 		}

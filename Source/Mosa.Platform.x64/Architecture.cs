@@ -9,7 +9,6 @@
 
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework;
-using System;
 using Mosa.Compiler.MosaTypeSystem;
 
 namespace Mosa.Platform.x64
@@ -242,7 +241,7 @@ namespace Mosa.Platform.x64
 		/// <param name="destination">The destination.</param>
 		/// <param name="source">The source.</param>
 		/// <param name="size">The size.</param>
-		public override void InsertCompoundMoveInstruction(Context context, Operand destination, Operand source, int size)
+		public override void InsertCompoundMoveInstruction(BaseMethodCompiler compiler, Context context, Operand destination, Operand source, int size)
 		{
 			// TODO
 		}
@@ -309,6 +308,17 @@ namespace Mosa.Platform.x64
 		public override void InsertSubInstruction(Context context, Operand destination, Operand source1, Operand source2)
 		{
 			// TODO
+		}
+
+		/// <summary>
+		/// Determines whether [is instruction move] [the specified instruction].
+		/// </summary>
+		/// <param name="instruction">The instruction.</param>
+		/// <returns></returns>
+		public override bool IsInstructionMove(BaseInstruction instruction)
+		{
+			// TODO
+			return false;
 		}
 	}
 }

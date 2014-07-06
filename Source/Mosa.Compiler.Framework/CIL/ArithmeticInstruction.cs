@@ -19,7 +19,7 @@ namespace Mosa.Compiler.Framework.CIL
 	{
 		#region Static data members
 
-		const StackTypeCode StackTypeCode_Pointer = StackTypeCode.UnmanagedPointer;    // For table format
+		private const StackTypeCode StackTypeCode_Pointer = StackTypeCode.UnmanagedPointer;    // For table format
 
 		/// <summary>
 		/// Generic operand validation table. Not used for add and sub.

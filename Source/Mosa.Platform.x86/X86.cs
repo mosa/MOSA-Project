@@ -49,7 +49,7 @@ namespace Mosa.Platform.x86
 		/// <summary>
 		///
 		/// </summary>
-		public static readonly Cmov Cmov = new Cmov();
+		public static readonly Cmovcc Cmovcc = new Cmovcc();
 
 		/// <summary>
 		///
@@ -456,9 +456,19 @@ namespace Mosa.Platform.x86
 		/// </summary>
 		public static readonly Fld Fld = new Fld();
 
-        /// <summary>
-        ///
-        /// </summary>
-        public static readonly Test Test = new Test();
+		/// <summary>
+		///
+		/// </summary>
+		public static readonly Test Test = new Test();
+
+		/// <summary>
+		///
+		/// </summary>
+		public static readonly Bts Bts = new Bts();
+
+		/// <summary>
+		///
+		/// </summary>
+		public static readonly Btr Btr = new Btr();
 	}
 }

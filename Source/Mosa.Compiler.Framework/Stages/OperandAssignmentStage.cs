@@ -8,17 +8,17 @@
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
 */
 
-using System.Collections;
-using System.Collections.Generic;
 using Mosa.Compiler.Framework.CIL;
 using Mosa.Compiler.Framework.IR;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace Mosa.Compiler.Framework.Stages
 {
 	/// <summary>
 	///
 	/// </summary>
-	public sealed class OperandAssignmentStage : BaseMethodCompilerStage, IMethodCompilerStage
+	public sealed class OperandAssignmentStage : BaseMethodCompilerStage
 	{
 		/// <summary>
 		///
@@ -72,12 +72,12 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </summary>
 		private Stack<Operand>[] scheduledMoves;
 
-		/// <summary>
-		/// Runs the specified compiler.
-		/// </summary>
-		void IMethodCompilerStage.Run()
+		protected override void Run()
 		{
-			foreach (BasicBlock headBlock in basicBlocks.HeadBlocks)
+			if (MethodCompiler.Method.Code.Count == 0)
+				return;
+
+			foreach (BasicBlock headBlock in BasicBlocks.HeadBlocks)
 				Trace(headBlock);
 		}
 
@@ -87,11 +87,11 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="headBlock">The head block.</param>
 		private void Trace(BasicBlock headBlock)
 		{
-			outgoingStack = new Stack<Operand>[basicBlocks.Count];
-			scheduledMoves = new Stack<Operand>[basicBlocks.Count];
-			processed = new BitArray(basicBlocks.Count);
+			outgoingStack = new Stack<Operand>[BasicBlocks.Count];
+			scheduledMoves = new Stack<Operand>[BasicBlocks.Count];
+			processed = new BitArray(BasicBlocks.Count);
 			processed.SetAll(false);
-			enqueued = new BitArray(basicBlocks.Count);
+			enqueued = new BitArray(BasicBlocks.Count);
 			enqueued.SetAll(false);
 
 			processed.Set(headBlock.Sequence, true);
@@ -157,18 +157,20 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="operandStack">The operand stack.</param>
 		private void AssignOperands(BasicBlock block, Stack<Operand> operandStack)
 		{
-			for (var ctx = new Context(instructionSet, block); !ctx.IsBlockEndInstruction; ctx.GotoNext())
+			for (var ctx = new Context(InstructionSet, block); !ctx.IsBlockEndInstruction; ctx.GotoNext())
 			{
 				if (ctx.IsEmpty)
 					continue;
 
-				if (ctx.Instruction == IRInstruction.BlockEnd || ctx.Instruction == IRInstruction.BlockStart)
+				if (ctx.IsBlockEndInstruction || ctx.IsBlockStartInstruction)
 					continue;
 
 				if (ctx.Instruction == IRInstruction.Jmp)
 					continue;
 
-				if (!(ctx.Instruction is IBranchInstruction) && !(ctx.Instruction is BaseCILInstruction) && ctx.Instruction != IRInstruction.ExceptionPrologue)
+				if (!(ctx.Instruction.FlowControl == FlowControl.ConditionalBranch || ctx.Instruction.FlowControl == FlowControl.UnconditionalBranch || ctx.Instruction.FlowControl == FlowControl.Return)
+					&& !(ctx.Instruction is BaseCILInstruction)
+					&& ctx.Instruction != IRInstruction.ExceptionPrologue)
 					continue;
 
 				if (ctx.Instruction == IRInstruction.ExceptionPrologue)
@@ -179,7 +181,7 @@ namespace Mosa.Compiler.Framework.Stages
 				else
 				{
 					AssignOperandsFromCILStack(ctx, operandStack);
-					(ctx.Instruction as BaseCILInstruction).Resolve(ctx, methodCompiler);
+					(ctx.Instruction as BaseCILInstruction).Resolve(ctx, MethodCompiler);
 					PushResultOperands(ctx, operandStack);
 				}
 			}
@@ -196,7 +198,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			foreach (var operand in operandStack)
 			{
-				joinStack.Push(methodCompiler.CreateVirtualRegister(operand.Type));
+				joinStack.Push(MethodCompiler.CreateVirtualRegister(operand.Type));
 			}
 
 			foreach (var b in block.PreviousBlocks)
@@ -222,11 +224,11 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="joinStack">The join stack.</param>
 		private void CreateOutgoingMoves(BasicBlock block, Stack<Operand> operandStack, Stack<Operand> joinStack)
 		{
-			var context = new Context(instructionSet, block, block.EndIndex);
+			var context = new Context(InstructionSet, block, block.EndIndex);
 
 			context.GotoPrevious();
 
-			while (context.Instruction is IBranchInstruction || context.Instruction == IRInstruction.Jmp)
+			while ((context.Instruction.FlowControl == FlowControl.ConditionalBranch || context.Instruction.FlowControl == FlowControl.UnconditionalBranch || context.Instruction.FlowControl == FlowControl.Return) || context.Instruction == IRInstruction.Jmp)
 			{
 				context.GotoPrevious();
 			}

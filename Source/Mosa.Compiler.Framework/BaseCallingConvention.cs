@@ -7,13 +7,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using Mosa.Compiler.Framework;
-
-using Mosa.Compiler.MosaTypeSystem;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-
 namespace Mosa.Compiler.Framework
 {
 	/// <summary>
@@ -22,37 +15,25 @@ namespace Mosa.Compiler.Framework
 	/// </summary>
 	public abstract class BaseCallingConvention
 	{
-
 		#region Methods
 
 		/// <summary>
 		/// Expands method call instruction represented by the context to perform the method call.
 		/// </summary>
+		/// <param name="compiler">The compiler.</param>
 		/// <param name="typeLayout">The type layouts.</param>
 		/// <param name="context">The context.</param>
-		public abstract void MakeCall(MosaTypeLayout typeLayout, Context context);
-
-		/// <summary>
-		/// Retrieves the stack requirements of a stack operand.
-		/// </summary>
-		/// <param name="typeLayout">The type layouts.</param>
-		/// <param name="stackOperand">The operand to calculate the stack requirements for.</param>
-		/// <param name="size">Receives the size of the operand in bytes.</param>
-		/// <param name="alignment">Receives the alignment requirements of the operand in bytes.</param>
-		/// <remarks>
-		/// A stack operand is a parameter or a local variable. This function is used to properly build stack
-		/// frame offsets for either type of stack operand.
-		/// </remarks>
-		public abstract void GetStackRequirements(MosaTypeLayout typeLayout, Operand stackOperand, out int size, out int alignment);
+		public abstract void MakeCall(BaseMethodCompiler compiler, MosaTypeLayout typeLayout, Context context);
 
 		/// <summary>
 		/// Requests the calling convention to create an appropriate move instruction to populate the return
 		/// value of a method.
 		/// </summary>
+		/// <param name="compiler">The compiler.</param>
 		/// <param name="typeLayout">The type layouts.</param>
 		/// <param name="context">The context.</param>
 		/// <param name="operand">The operand, that's holding the return value.</param>
-		public abstract void SetReturnValue(MosaTypeLayout typeLayout, Context context, Operand operand);
+		public abstract void SetReturnValue(BaseMethodCompiler compiler, MosaTypeLayout typeLayout, Context context, Operand operand);
 
 		/// <summary>
 		/// Retrieves the offset of the first local variable from the stack frame start.
@@ -64,8 +45,6 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		public abstract int OffsetOfFirstParameter { get; }
 
-		#endregion
-
+		#endregion Methods
 	}
-
 }

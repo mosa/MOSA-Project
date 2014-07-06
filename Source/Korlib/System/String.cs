@@ -8,7 +8,6 @@
  */
 
 using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
 
 namespace System
 {
@@ -113,7 +112,7 @@ namespace System
 		////[MethodImplAttribute(MethodImplOptions.InternalCall)]
 		////public unsafe extern String(char* value, int startIndex, int length);
 
-		[DllImportAttribute(@"Mosa.Compiler.Framework.Intrinsics.InternalAllocateString, Mosa.Compiler.Framework")]
+		[MethodImplAttribute(MethodImplOptions.InternalCall)]
 		internal static extern string InternalAllocateString(int length);
 
 		private static unsafe string CreateString(char c, int count)

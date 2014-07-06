@@ -17,7 +17,7 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 	{
 		private static Dictionary<Type, TestCompiler> testCompilers = new Dictionary<Type, TestCompiler>();
 
-		protected virtual BasePlatform BasePlatform { get { return null; } }
+		protected virtual BaseTestPlatform BasePlatform { get { return null; } }
 
 		private TestCompiler TestCompiler
 		{
@@ -118,7 +118,7 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 		public static IEnumerable<object[]> I4MiniI4MiniI4MiniI4Mini { get { return Combinations.I4MiniI4MiniI4MiniI4Mini; } }
 
 		public static IEnumerable<object[]> I4MiniI4MiniI4MiniI4MiniI4MiniI4MiniI4Mini { get { return Combinations.I4MiniI4MiniI4MiniI4MiniI4MiniI4MiniI4Mini; } }
-		
+
 		public static IEnumerable<object[]> I4SmallI4SmallI4SmallI4SmallI4SmallI4SmallI4Small { get { return Combinations.I4SmallI4SmallI4SmallI4SmallI4SmallI4SmallI4Small; } }
 
 		public static IEnumerable<object[]> I8 { get { return Combinations.I8; } }
@@ -165,22 +165,38 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 
 		public static IEnumerable<object[]> R4 { get { return Combinations.R4; } }
 
+		public static IEnumerable<object[]> R4NotNaN { get { return Combinations.R4NotNaN; } }
+
 		public static IEnumerable<object[]> R4R4 { get { return Combinations.R4R4; } }
 
 		public static IEnumerable<object[]> R4MiniR4MiniR4Mini { get { return Combinations.R4MiniR4MiniR4Mini; } }
 
 		public static IEnumerable<object[]> R8 { get { return Combinations.R8; } }
 
+		public static IEnumerable<object[]> R8NotNaN { get { return Combinations.R8NotNaN; } }
+
 		public static IEnumerable<object[]> R8R8 { get { return Combinations.R8R8; } }
 
 		public static IEnumerable<object[]> R8MiniR8MiniR8Mini { get { return Combinations.R8MiniR8MiniR8Mini; } }
 
 		public static IEnumerable<object[]> I8I8I8I8 { get { return Combinations.I8I8I8I8; } }
+
 		public static IEnumerable<object[]> U4U8U8U8 { get { return Combinations.U4U8U8U8; } }
+
 		public static IEnumerable<object[]> U8U8U8U8 { get { return Combinations.U8U8U8U8; } }
 
-		public static IEnumerable<object[]> MiniI8MiniI8MiniI8MiniI8 { get { return Combinations.MiniI8MiniI8MiniI8MiniI8; } }
+		public static IEnumerable<object[]> I8MiniI8MiniI8MiniI8Mini { get { return Combinations.I8MiniI8MiniI8MiniI8Mini; } }
+
 		public static IEnumerable<object[]> U4MiniU8MiniU8MiniU8Mini { get { return Combinations.U4MiniU8MiniU8MiniU8Mini; } }
+
 		public static IEnumerable<object[]> U8MiniU8MiniU8MiniU8Mini { get { return Combinations.U8MiniU8MiniU8MiniU8Mini; } }
+
+		public static IEnumerable<object[]> R4SimpleR4Simple { get { return Combinations.R4SimpleR4Simple; } }
+
+		public static IEnumerable<object[]> R8SimpleR8Simple { get { return Combinations.R8SimpleR8Simple; } }
+
+		public static IEnumerable<object[]> I4SmallR8Simple { get { return Combinations.I4SmallR8Simple; } }
+
+		public static IEnumerable<object[]> I4SmallR4Simple { get { return Combinations.I4SmallR4Simple; } }
 	}
 }

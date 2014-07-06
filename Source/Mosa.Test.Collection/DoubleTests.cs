@@ -13,7 +13,6 @@ namespace Mosa.Test.Collection
 {
 	public static class DoubleTests
 	{
-
 		public static double AddR8R8(double first, double second)
 		{
 			return (first + second);

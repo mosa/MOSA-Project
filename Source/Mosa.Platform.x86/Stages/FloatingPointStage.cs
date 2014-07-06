@@ -14,16 +14,13 @@ namespace Mosa.Platform.x86.Stages
 	/// <summary>
 	///
 	/// </summary>
-	public class FloatingPointStage : BaseTransformationStage, IMethodCompilerStage
+	public class FloatingPointStage : BaseTransformationStage
 	{
-		/// <summary>
-		/// Remove immediate floating point constants - constant must be in registers or memory locations
-		/// </summary>
-		void IMethodCompilerStage.Run()
+		protected override void Run()
 		{
-			foreach (var block in basicBlocks)
+			foreach (var block in BasicBlocks)
 			{
-				for (var context = new Context(this.instructionSet, block); !context.IsBlockEndInstruction; context.GotoNext())
+				for (var context = new Context(this.InstructionSet, block); !context.IsBlockEndInstruction; context.GotoNext())
 				{
 					if (context.IsEmpty || !(context.Instruction is X86Instruction))
 						continue;
@@ -68,7 +65,6 @@ namespace Mosa.Platform.x86.Stages
 		{
 			// load into a register
 			Operand operand = context.Operand1;
-			Operand result = context.Result;
 
 			Operand register = AllocateVirtualRegister(operand.Type);
 			context.Operand1 = register;

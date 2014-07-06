@@ -18,21 +18,8 @@ namespace Mosa.Platform.ARMv6.Stages
 	/// <remarks>
 	/// This transformation stage transforms IR instructions into their equivalent ARMv6 sequences.
 	/// </remarks>
-	public sealed class IRTransformationStage : BaseTransformationStage, IIRVisitor, IMethodCompilerStage
+	public sealed class IRTransformationStage : BaseTransformationStage, IIRVisitor
 	{
-		#region IMethodCompilerStage
-
-		/// <summary>
-		/// Setups the specified method compiler.
-		/// </summary>
-		/// <param name="methodCompiler">The method compiler.</param>
-		void IMethodCompilerStage.Setup(BaseMethodCompiler methodCompiler)
-		{
-			base.Setup(methodCompiler);
-		}
-
-		#endregion IMethodCompilerStage
-
 		#region IIRVisitor
 
 		/// <summary>

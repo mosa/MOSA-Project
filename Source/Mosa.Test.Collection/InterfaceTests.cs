@@ -39,6 +39,27 @@ namespace Mosa.Test.Collection
 		}
 	}
 
+	public class InterfaceTestClassA : IInterfaceA
+	{
+		public int A()
+		{
+			return 1;
+		}
+	}
+
+	public class InterfaceTestClassB : InterfaceTestClassA, IInterfaceAB
+	{
+		int IInterfaceAB.A()
+		{
+			return 2;
+		}
+
+		public int B()
+		{
+			return 3;
+		}
+	}
+
 	public static class InterfaceTests
 	{
 		public static int InterfaceTest1()
@@ -59,6 +80,13 @@ namespace Mosa.Test.Collection
 			InterfaceTestClass tc = new InterfaceTestClass();
 			IInterfaceAB b = tc;
 			return b.A();
+		}
+
+		public static int InterfaceTest4()
+		{
+			InterfaceTestClassB tc = new InterfaceTestClassB();
+			IInterfaceA a = tc;
+			return a.A();
 		}
 	}
 }

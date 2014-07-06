@@ -17,7 +17,7 @@ namespace Mosa.Compiler.Framework.Analysis
 	/// <summary>
 	/// The Loop Aware Block Ordering reorders blocks to optimize loops and reduce the distance of jumps and branches.
 	/// </summary>
-	public sealed class LoopAwareBlockOrder
+	public sealed class LoopAwareBlockOrder : IBlockOrderAnalysis
 	{
 		#region Data members
 
@@ -97,7 +97,23 @@ namespace Mosa.Compiler.Framework.Analysis
 
 		#endregion Priority class
 
-		#region Properties
+		/// <summary>
+		/// Initializes a new instance of the <see cref="LoopAwareBlockOrder"/> class.
+		/// </summary>
+		public LoopAwareBlockOrder()
+		{
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="LoopAwareBlockOrder"/> class.
+		/// </summary>
+		/// <param name="basicBlocks">The basic blocks.</param>
+		public LoopAwareBlockOrder(BasicBlocks basicBlocks)
+		{
+			PerformAnalysis(basicBlocks);
+		}
+
+		#region IBlockOrderAnalysis
 
 		public BasicBlock[] NewBlockOrder { get { return blockOrder; } }
 
@@ -111,29 +127,34 @@ namespace Mosa.Compiler.Framework.Analysis
 			return loopIndex[block.Sequence];
 		}
 
-		#endregion Properties
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="LoopAwareBlockOrder"/> class.
-		/// </summary>
-		/// <param name="basicBlocks">The basic blocks.</param>
-		public LoopAwareBlockOrder(BasicBlocks basicBlocks)
+		public void PerformAnalysis(BasicBlocks basicBlocks)
 		{
 			this.basicBlocks = basicBlocks;
-			this.blockCount = basicBlocks.Count;
-			this.loopEnds = new List<BasicBlock>();
-			this.loopCount = 0;
-			this.loopHeader = new BitArray(blockCount, false);
-			this.forwardBranchesCount = new int[blockCount];
-			this.loopBlockIndex = new int[blockCount];
-			this.loopDepth = new int[blockCount];
-			this.loopIndex = new int[blockCount];
-			this.blockOrder = new BasicBlock[blockCount];
-			this.orderIndex = 0;
+
+			blockCount = basicBlocks.Count;
+			loopEnds = new List<BasicBlock>();
+			loopCount = 0;
+			loopHeader = new BitArray(blockCount, false);
+			forwardBranchesCount = new int[blockCount];
+			loopBlockIndex = new int[blockCount];
+			loopDepth = new int[blockCount];
+			loopIndex = new int[blockCount];
+			blockOrder = new BasicBlock[blockCount];
+			orderIndex = 0;
 
 			foreach (var head in basicBlocks.HeadBlocks)
+			{
 				Start(head);
+			}
+
+			loopHeader = null;
+			loopEnds = null;
+			loopHeader = null;
+			loopBlockIndex = null;
+			forwardBranchesCount = null;
 		}
+
+		#endregion IBlockOrderAnalysis
 
 		#region Members
 

@@ -7,6 +7,8 @@
  *  Ki (kiootic) <kiootic@gmail.com>
  */
 
+using System.Collections.Generic;
+
 namespace Mosa.Compiler.MosaTypeSystem
 {
 	public static class MosaTypeExtension
@@ -21,6 +23,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 				ptrType.Namespace = type.Namespace;
 				ptrType.Name = type.Name;
 
+				ptrType.HasOpenGenericParams = type.HasOpenGenericParams;
 				ptrType.ElementType = type;
 				ptrType.TypeCode = MosaTypeCode.ManagedPointer;
 
@@ -38,6 +41,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 				ptrType.Namespace = type.Namespace;
 				ptrType.Name = type.Name;
 
+				ptrType.HasOpenGenericParams = type.HasOpenGenericParams;
 				ptrType.ElementType = type;
 				ptrType.TypeCode = MosaTypeCode.UnmanagedPointer;
 
@@ -58,17 +62,13 @@ namespace Mosa.Compiler.MosaTypeSystem
 				arrayType.Namespace = type.Namespace;
 				arrayType.Name = type.Name;
 
-				arrayType.Fields.Clear();
-				arrayType.Methods.Clear();
-
+				arrayType.HasOpenGenericParams = type.HasOpenGenericParams;
 				arrayType.BaseType = array;
 				arrayType.ElementType = type;
 				arrayType.TypeCode = MosaTypeCode.SZArray;
 				arrayType.ArrayInfo = MosaArrayInfo.Vector;
 
-				// Add three array accessors as defined in standard (Get, Set, Address)
-
-				// TODO: Add them
+				AddArrayMethods(type.TypeSystem, result, arrayType, MosaArrayInfo.Vector);
 
 				return result;
 			}
@@ -76,13 +76,108 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public static MosaType ToArray(this MosaType type, MosaArrayInfo info)
 		{
-			MosaType result = type.ToSZArray();
+			MosaType array = type.TypeSystem.GetTypeByName(type.TypeSystem.CorLib, "System", "Array");
+			MosaType result = type.TypeSystem.Controller.CreateType(array);
 			using (var arrayType = type.TypeSystem.Controller.MutateType(result))
 			{
+				// See Partition II 14.2 Arrays
+
+				arrayType.Module = type.Module;
+				arrayType.DeclaringType = type.DeclaringType;
+				arrayType.Namespace = type.Namespace;
+				arrayType.Name = type.Name;
+
+				arrayType.HasOpenGenericParams = type.HasOpenGenericParams;
+				arrayType.BaseType = array;
+				arrayType.ElementType = type;
 				arrayType.TypeCode = MosaTypeCode.Array;
 				arrayType.ArrayInfo = info;
+
+				AddArrayMethods(type.TypeSystem, result, arrayType, info);
+
 				return result;
 			}
+		}
+
+		private static void AddArrayMethods(TypeSystem typeSystem, MosaType arrayType, MosaType.Mutator type, MosaArrayInfo info)
+		{
+			// Remove all methods & fields --> Since BaseType = System.Array, they're automatically inherited.
+			type.Methods.Clear();
+			type.Fields.Clear();
+
+			// Add three array accessors as defined in standard (Get, Set, Address)
+			// Also, constructor.
+
+			uint rank = info.Rank;
+
+			MosaMethod methodGet = typeSystem.Controller.CreateMethod();
+			using (var method = typeSystem.Controller.MutateMethod(methodGet))
+			{
+				method.DeclaringType = arrayType;
+				method.Name = "Get";
+				method.IsInternalCall = true;
+				method.IsRTSpecialName = method.IsSpecialName = true;
+				method.IsFinal = true;
+				method.HasThis = true;
+
+				List<MosaParameter> parameters = new List<MosaParameter>();
+				for (uint i = 0; i < rank; i++)
+					parameters.Add(new MosaParameter("index" + i, typeSystem.BuiltIn.I4));
+				method.Signature = new MosaMethodSignature(arrayType.ElementType, parameters);
+			}
+			type.Methods.Add(methodGet);
+
+			MosaMethod methodSet = typeSystem.Controller.CreateMethod();
+			using (var method = typeSystem.Controller.MutateMethod(methodSet))
+			{
+				method.DeclaringType = arrayType;
+				method.Name = "Set";
+				method.IsInternalCall = true;
+				method.IsRTSpecialName = method.IsSpecialName = true;
+				method.IsFinal = true;
+				method.HasThis = true;
+
+				List<MosaParameter> parameters = new List<MosaParameter>();
+				for (uint i = 0; i < rank; i++)
+					parameters.Add(new MosaParameter("index" + i, typeSystem.BuiltIn.I4));
+				parameters.Add(new MosaParameter("value", arrayType.ElementType));
+				method.Signature = new MosaMethodSignature(typeSystem.BuiltIn.Void, parameters);
+			}
+			type.Methods.Add(methodSet);
+
+			MosaMethod methodAdrOf = typeSystem.Controller.CreateMethod();
+			using (var method = typeSystem.Controller.MutateMethod(methodAdrOf))
+			{
+				method.DeclaringType = arrayType;
+				method.Name = "AddressOr";
+				method.IsInternalCall = true;
+				method.IsRTSpecialName = method.IsSpecialName = true;
+				method.IsFinal = true;
+				method.HasThis = true;
+
+				List<MosaParameter> parameters = new List<MosaParameter>();
+				for (uint i = 0; i < rank; i++)
+					parameters.Add(new MosaParameter("index" + i, typeSystem.BuiltIn.I4));
+				method.Signature = new MosaMethodSignature(arrayType.ElementType.ToManagedPointer(), parameters);
+			}
+			type.Methods.Add(methodAdrOf);
+
+			MosaMethod methodCtor = typeSystem.Controller.CreateMethod();
+			using (var method = typeSystem.Controller.MutateMethod(methodCtor))
+			{
+				method.DeclaringType = arrayType;
+				method.Name = ".ctor";
+				method.IsInternalCall = true;
+				method.IsRTSpecialName = method.IsSpecialName = true;
+				method.IsFinal = true;
+				method.HasThis = true;
+
+				List<MosaParameter> parameters = new List<MosaParameter>();
+				for (uint i = 0; i < rank; i++)
+					parameters.Add(new MosaParameter("length" + i, typeSystem.BuiltIn.I4));
+				method.Signature = new MosaMethodSignature(typeSystem.BuiltIn.Void, parameters);
+			}
+			type.Methods.Add(methodCtor);
 		}
 
 		public static MosaType ToFnPtr(this TypeSystem typeSystem, MosaMethodSignature signature)
@@ -131,6 +226,13 @@ namespace Mosa.Compiler.MosaTypeSystem
 					return field.FieldType;
 			}
 			return null;
+		}
+
+		public static MosaType RemoveModifiers(this MosaType type)
+		{
+			while (type.Modifier != null)
+				type = type.ElementType;
+			return type;
 		}
 	}
 }

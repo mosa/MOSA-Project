@@ -9,32 +9,31 @@
 
 using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.InternalTrace;
+using Mosa.Compiler.MosaTypeSystem;
 
 namespace Mosa.Compiler.Framework.Stages
 {
 	/// <summary>
 	///
 	/// </summary>
-	public sealed class PromoteLocalVariablesStage : BaseMethodCompilerStage, IMethodCompilerStage, IPipelineStage
+	public class PromoteLocalVariablesStage : BaseMethodCompilerStage
 	{
-		private CompilerTrace trace;
+		protected CompilerTrace trace;
 
-		#region IMethodCompilerStage Members
-
-		/// <summary>
-		/// Performs stage specific processing on the compiler context.
-		/// </summary>
-		void IMethodCompilerStage.Run()
+		protected override void Run()
 		{
 			// Unable to optimize SSA w/ exceptions or finally handlers present
-			if (basicBlocks.HeadBlocks.Count != 1)
+			if (BasicBlocks.HeadBlocks.Count != 1)
 				return;
 
 			trace = CreateTrace();
 
-			foreach (var local in methodCompiler.LocalVariables)
+			foreach (var local in MethodCompiler.LocalVariables)
 			{
-				if (local.Uses.Count == 0)
+				if (local.IsVirtualRegister)
+					continue;
+
+				if (local.Definitions.Count != 1)
 					continue;
 
 				if (!local.IsReferenceType && !local.IsInteger && !local.IsR && !local.IsChar && !local.IsBoolean && !local.IsPointer)
@@ -47,13 +46,11 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 		}
 
-		#endregion IMethodCompilerStage Members
-
-		private bool ContainsAddressOf(Operand local)
+		protected bool ContainsAddressOf(Operand local)
 		{
 			foreach (int index in local.Uses)
 			{
-				Context ctx = new Context(instructionSet, index);
+				Context ctx = new Context(InstructionSet, index);
 
 				if (ctx.Instruction == IRInstruction.AddressOf)
 					return true;
@@ -62,15 +59,17 @@ namespace Mosa.Compiler.Framework.Stages
 			return false;
 		}
 
-		private void Promote(Operand local)
+		protected void Promote(Operand local)
 		{
-			var v = methodCompiler.CreateVirtualRegister(local.Type);
+			var stacktype = local.Type.GetStackType();
+
+			var v = MethodCompiler.CreateVirtualRegister(stacktype);
 
 			if (trace.Active) trace.Log("*** Replacing: " + local.ToString() + " with " + v.ToString());
 
 			foreach (int index in local.Uses.ToArray())
 			{
-				Context ctx = new Context(instructionSet, index);
+				Context ctx = new Context(InstructionSet, index);
 
 				for (int i = 0; i < ctx.OperandCount; i++)
 				{
@@ -87,7 +86,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			foreach (int index in local.Definitions.ToArray())
 			{
-				Context ctx = new Context(instructionSet, index);
+				Context ctx = new Context(InstructionSet, index);
 
 				for (int i = 0; i < ctx.OperandCount; i++)
 				{

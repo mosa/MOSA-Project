@@ -17,24 +17,23 @@ namespace Mosa.Compiler.Framework.Stages
 	/// <summary>
 	///
 	/// </summary>
-	public class LeaveSSA : BaseMethodCompilerStage, IMethodCompilerStage, IPipelineStage
+	public class LeaveSSA : BaseMethodCompilerStage
 	{
 		private Dictionary<Operand, Operand> finalVirtualRegisters;
 
-		/// <summary>
-		/// Performs stage specific processing on the compiler context.
-		/// </summary>
-		void IMethodCompilerStage.Run()
+		protected override void Run()
 		{
 			finalVirtualRegisters = new Dictionary<Operand, Operand>();
 
-			foreach (var block in basicBlocks)
+			foreach (var block in BasicBlocks)
 			{
-				for (var context = new Context(instructionSet, block); !context.IsBlockEndInstruction; context.GotoNext())
+				for (var context = new Context(InstructionSet, block); !context.IsBlockEndInstruction; context.GotoNext())
 				{
 					if (context.Instruction == IRInstruction.Phi)
 					{
-						ProcessPhiInstruction(block, context);
+						Debug.Assert(context.OperandCount == context.BasicBlock.PreviousBlocks.Count);
+
+						ProcessPhiInstruction(context);
 					}
 
 					for (var i = 0; i < context.OperandCount; ++i)
@@ -66,7 +65,7 @@ namespace Mosa.Compiler.Framework.Stages
 				if (operand.SSAVersion == 0)
 					final = operand.SSAParent;
 				else
-					final = methodCompiler.CreateVirtualRegister(operand.Type);
+					final = MethodCompiler.CreateVirtualRegister(operand.Type);
 
 				finalVirtualRegisters.Add(operand, final);
 			}
@@ -77,14 +76,15 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <summary>
 		/// Processes the phi instruction.
 		/// </summary>
-		/// <param name="block">The block.</param>
 		/// <param name="context">The context.</param>
-		private void ProcessPhiInstruction(BasicBlock block, Context context)
+		private void ProcessPhiInstruction(Context context)
 		{
-			for (var index = 0; index < block.PreviousBlocks.Count; index++)
+			var sourceBlocks = context.Other as BasicBlock[];
+
+			for (var index = 0; index < context.BasicBlock.PreviousBlocks.Count; index++)
 			{
-				var predecessor = block.PreviousBlocks[index];
 				var operand = context.GetOperand(index);
+				var predecessor = sourceBlocks[index];
 
 				InsertCopyStatement(predecessor, context.Result, operand);
 			}
@@ -100,7 +100,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="operand">The operand.</param>
 		private void InsertCopyStatement(BasicBlock predecessor, Operand result, Operand operand)
 		{
-			var context = new Context(instructionSet, predecessor, predecessor.EndIndex);
+			var context = new Context(InstructionSet, predecessor, predecessor.EndIndex);
 
 			context.GotoPrevious();
 
@@ -117,7 +117,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (destination != source)
 			{
-				architecture.InsertMoveInstruction(context, destination, source);
+				context.AppendInstruction(IRInstruction.Move, destination, source);
 			}
 		}
 	}

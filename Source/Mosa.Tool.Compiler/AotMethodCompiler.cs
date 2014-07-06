@@ -34,7 +34,7 @@ namespace Mosa.Tool.Compiler
 		{
 			var compilerOptions = compiler.CompilerOptions;
 
-			Pipeline.AddRange(new IMethodCompilerStage[] {
+			Pipeline.Add(new IMethodCompilerStage[] {
 				new CILDecodingStage(),
 				new BasicBlockBuilderStage(),
 				new StackSetupStage(),
@@ -43,20 +43,22 @@ namespace Mosa.Tool.Compiler
 				new StaticAllocationResolutionStage(),
 				new CILTransformationStage(),
 				new ConvertCompoundMoveStage(),
-				(compilerOptions.EnableSSA) ? new PromoteLocalVariablesStage() : null,
+				//new PromoteLocalVariablesStage(),
+
 				(compilerOptions.EnableSSA) ? new EdgeSplitStage() : null,
-				(compilerOptions.EnableSSA) ? new DominanceCalculationStage() : null,
 				(compilerOptions.EnableSSA) ? new PhiPlacementStage() : null,
 				(compilerOptions.EnableSSA) ? new EnterSSAStage() : null,
 				(compilerOptions.EnableSSA && compilerOptions.EnableSSAOptimizations) ? new SSAOptimizations() : null,
 				(compilerOptions.EnableSSA) ? new LeaveSSA() : null,
-				(compilerOptions.EnableSSA) ? new ConvertCompoundMoveStage() : null,
+
+				new PromoteTempVariablesStage(),
+
 				new PlatformStubStage(),
 				new	PlatformEdgeSplitStage(),
 				new GreedyRegisterAllocatorStage(),
 				new StackLayoutStage(),
 				new EmptyBlockRemovalStage(),
-				new LoopAwareBlockOrderStage(),
+				new BlockOrderingStage(),
 				new CodeGenerationStage(),
 			});
 		}

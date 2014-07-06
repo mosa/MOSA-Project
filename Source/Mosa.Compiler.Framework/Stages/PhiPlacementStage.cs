@@ -7,17 +7,18 @@
  *  Simon Wollwage (rootnode) <rootnode@mosa-project.org>
  */
 
-using System;
-using System.Collections.Generic;
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.IR;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework.Stages
 {
 	/// <summary>
 	///	Places phi instructions for the SSA transformation
 	/// </summary>
-	public class PhiPlacementStage : BaseMethodCompilerStage, IMethodCompilerStage, IPipelineStage
+	public class PhiPlacementStage : BaseMethodCompilerStage
 	{
 		/// <summary>
 		///
@@ -64,13 +65,10 @@ namespace Mosa.Compiler.Framework.Stages
 			get { return assignments; }
 		}
 
-		/// <summary>
-		/// Performs stage specific processing on the compiler context.
-		/// </summary>
-		void IMethodCompilerStage.Run()
+		protected override void Run()
 		{
 			// Method is empty - must be a plugged method
-			if (basicBlocks.HeadBlocks.Count == 0)
+			if (BasicBlocks.HeadBlocks.Count == 0)
 				return;
 
 			CollectAssignments();
@@ -88,16 +86,11 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </summary>
 		private void CollectAssignments()
 		{
-			foreach (var block in basicBlocks)
-				for (var context = new Context(instructionSet, block); !context.IsBlockEndInstruction; context.GotoNext())
+			foreach (var block in BasicBlocks)
+				for (var context = new Context(InstructionSet, block); !context.IsBlockEndInstruction; context.GotoNext())
 					if (!context.IsEmpty && context.Result != null)
 						if (context.Result.IsVirtualRegister)
 							AddToAssignments(context.Result, block);
-
-			// FUTURE: Only include parameter operands if reachable from the given header block
-			foreach (var headBlock in basicBlocks.HeadBlocks)
-				foreach (var op in methodCompiler.Parameters)
-					AddToAssignments(op, headBlock);
 		}
 
 		/// <summary>
@@ -125,15 +118,21 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="variable">The variable.</param>
 		private void InsertPhiInstruction(BasicBlock block, Operand variable)
 		{
-			var context = new Context(instructionSet, block);
+			var context = new Context(InstructionSet, block);
 			context.AppendInstruction(IRInstruction.Phi, variable);
 
-			for (var i = 0; i < block.PreviousBlocks.Count; ++i)
+			var sourceBlocks = new BasicBlock[block.PreviousBlocks.Count];
+			context.Other = sourceBlocks;
+
+			for (var i = 0; i < block.PreviousBlocks.Count; i++)
 			{
 				context.SetOperand(i, variable);
+				sourceBlocks[i] = block.PreviousBlocks[i];
 			}
 
 			context.OperandCount = (byte)block.PreviousBlocks.Count;
+
+			Debug.Assert(context.OperandCount == context.BasicBlock.PreviousBlocks.Count);
 		}
 
 		/// <summary>
@@ -141,7 +140,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </summary>
 		private void PlacePhiFunctionsMinimal()
 		{
-			foreach (var headBlock in basicBlocks.HeadBlocks)
+			foreach (var headBlock in BasicBlocks.HeadBlocks)
 			{
 				PlacePhiFunctionsMinimal(headBlock);
 			}
@@ -152,7 +151,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </summary>
 		private void PlacePhiFunctionsMinimal(BasicBlock headBlock)
 		{
-			var dominanceCalculation = methodCompiler.Pipeline.FindFirst<DominanceCalculationStage>().GetDominanceProvider(headBlock);
+			var analysis = MethodCompiler.DominanceAnalysis.GetDominanceAnalysis(headBlock);
 
 			foreach (var t in assignments)
 			{
@@ -163,7 +162,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 				blocks.AddIfNew(headBlock);
 
-				var idf = dominanceCalculation.IteratedDominanceFrontier(blocks);
+				var idf = analysis.IteratedDominanceFrontier(blocks);
 
 				foreach (var n in idf)
 				{

@@ -13,7 +13,6 @@ using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Stages;
 using Mosa.Compiler.MosaTypeSystem;
 using Mosa.Platform.ARMv6.Stages;
-using System;
 
 namespace Mosa.Platform.ARMv6
 {
@@ -223,7 +222,6 @@ namespace Mosa.Platform.ARMv6
 			alignment = type.IsR8 ? 8 : 4;
 
 			size = type.IsValueType ? typeLayout.GetTypeSize(type) : 4;
-			size += (alignment - (size % alignment)) % alignment;
 		}
 
 		/// <summary>
@@ -253,7 +251,7 @@ namespace Mosa.Platform.ARMv6
 		/// <param name="destination">The destination.</param>
 		/// <param name="source">The source.</param>
 		/// <param name="size">The size.</param>
-		public override void InsertCompoundMoveInstruction(Context context, Operand destination, Operand source, int size)
+		public override void InsertCompoundMoveInstruction(BaseMethodCompiler compiler, Context context, Operand destination, Operand source, int size)
 		{
 			throw new NotImplementCompilerException();
 		}
@@ -320,6 +318,16 @@ namespace Mosa.Platform.ARMv6
 		public override void InsertSubInstruction(Context context, Operand destination, Operand source1, Operand source2)
 		{
 			context.AppendInstruction(ARMv6.Sub, destination);
+		}
+
+		/// <summary>
+		/// Determines whether [is instruction move] [the specified instruction].
+		/// </summary>
+		/// <param name="instruction">The instruction.</param>
+		/// <returns></returns>
+		public override bool IsInstructionMove(BaseInstruction instruction)
+		{
+			return (instruction == ARMv6.Mov);
 		}
 	}
 }

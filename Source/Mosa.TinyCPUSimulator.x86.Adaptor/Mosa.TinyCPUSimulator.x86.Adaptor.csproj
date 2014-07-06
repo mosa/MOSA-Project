@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Mosa.TinyCPUSimulator.x86.Adaptor</RootNamespace>
     <AssemblyName>Mosa.TinyCPUSimulator.x86.Adaptor</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -50,10 +50,6 @@
       <Project>{75a12a8a-8c8f-4d1e-801b-689d8f781bf4}</Project>
       <Name>Mosa.Compiler.Framework</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Mosa.Compiler.Linker\Mosa.Compiler.Linker.csproj">
-      <Project>{65866a51-b229-44c5-ac81-87a90fa1741b}</Project>
-      <Name>Mosa.Compiler.Linker</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Mosa.Compiler.MosaTypeSystem\Mosa.Compiler.MosaTypeSystem.csproj">
       <Project>{5f30a68e-05bf-40ea-b576-5ebcde520559}</Project>
       <Name>Mosa.Compiler.MosaTypeSystem</Name>
@@ -65,6 +61,10 @@
     <ProjectReference Include="..\Mosa.TinyCPUSimulator.Adaptor\Mosa.TinyCPUSimulator.Adaptor.csproj">
       <Project>{50568e2d-5360-4f71-87e0-f6979d2d858a}</Project>
       <Name>Mosa.TinyCPUSimulator.Adaptor</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mosa.TinyCPUSimulator.TestSystem\Mosa.TinyCPUSimulator.TestSystem.csproj">
+      <Project>{50568e2d-5360-4f71-87e0-a6979d1d858a}</Project>
+      <Name>Mosa.TinyCPUSimulator.TestSystem</Name>
     </ProjectReference>
     <ProjectReference Include="..\Mosa.TinyCPUSimulator.x86\Mosa.TinyCPUSimulator.x86.csproj">
       <Project>{50568e2d-5360-4f71-87e0-e6979d1d858a}</Project>
@@ -79,6 +79,7 @@
     <Compile Include="SimTestSystemAdapter.cs" />
     <Compile Include="SimStandardPCAdapter.cs" />
     <Compile Include="SimAdapter.cs" />
+    <Compile Include="TestPlatform.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

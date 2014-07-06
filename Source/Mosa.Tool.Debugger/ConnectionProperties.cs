@@ -7,10 +7,10 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using Mosa.Utility.DebugEngine;
 using System;
 using System.IO.Pipes;
 using System.Net.Sockets;
-using Mosa.Utility.DebugEngine;
 
 namespace Mosa.Tool.Debugger
 {

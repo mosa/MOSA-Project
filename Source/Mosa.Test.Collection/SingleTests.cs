@@ -13,7 +13,6 @@ namespace Mosa.Test.Collection
 {
 	public static class SingleTests
 	{
-	
 		public static float AddR4R4(float first, float second)
 		{
 			return (first + second);
@@ -111,6 +110,5 @@ namespace Mosa.Test.Collection
 		{
 			return Single.IsNaN(value);
 		}
-
 	}
 }

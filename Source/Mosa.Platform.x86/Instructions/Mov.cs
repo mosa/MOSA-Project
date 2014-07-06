@@ -10,6 +10,7 @@
 
 using Mosa.Compiler.Framework;
 using System;
+using System.Diagnostics;
 
 namespace Mosa.Platform.x86.Instructions
 {
@@ -22,14 +23,14 @@ namespace Mosa.Platform.x86.Instructions
 
 		private static readonly OpCode RM_C = new OpCode(new byte[] { 0xC7 }, 0); // Move imm32 to r/m32
 		private static readonly OpCode RM_C_U8 = new OpCode(new byte[] { 0xC6 }, 0); // Move imm8 to r/m8
-		private static readonly OpCode R_R_16 = new OpCode(new byte[] { 0x66, 0x8B });
+		private static readonly OpCode R_RM_16 = new OpCode(new byte[] { 0x66, 0x8B });
 		private static readonly OpCode RM_R_U8 = new OpCode(new byte[] { 0x88 });
 		private static readonly OpCode R_RM = new OpCode(new byte[] { 0x8B });
-		private static readonly OpCode R_M_16 = new OpCode(new byte[] { 0x66, 0x8B });
 		private static readonly OpCode M_R = new OpCode(new byte[] { 0x89 });
 		private static readonly OpCode M_R_16 = new OpCode(new byte[] { 0x66, 0x89 });
 		private static readonly OpCode R_M_U8 = new OpCode(new byte[] { 0x8A }); // Move r/m8 to R8
 		private static readonly OpCode SR_R = new OpCode(new byte[] { 0x8E });
+		private static readonly OpCode M_C_16 = new OpCode(new byte[] { 0x66, 0xC7 });
 
 		#endregion Data Members
 
@@ -59,13 +60,14 @@ namespace Mosa.Platform.x86.Instructions
 			if (destination.IsRegister && destination.Register is SegmentRegister) return SR_R;
 
 			if (source.IsRegister && source.Register is SegmentRegister)
-				throw new ArgumentException(@"TODO: No opcode for move from segment register");
+				throw new ArgumentException(@"TODO: No opcode for move sourcee segment register");
 
 			if (destination.IsRegister && source.IsConstant) return RM_C;
 
 			if (destination.IsMemoryAddress && source.IsConstant)
 			{
-				if (source.IsByte) return RM_C_U8;
+				if (destination.IsByte || destination.IsBoolean) return RM_C_U8;
+				if (destination.IsChar || destination.IsShort) return M_C_16;
 				return RM_C;
 			}
 
@@ -75,17 +77,17 @@ namespace Mosa.Platform.x86.Instructions
 
 			if (destination.IsRegister && source.IsRegister)
 			{
-				// HACK: there is no opcode for "mov reg, esi(I1)/edi(U1)" (i.e. no way to access lower byte of esi/edi without extra instruction)
-				if ((source.IsByte || destination.IsByte) &&
-					!(source.Register == GeneralPurposeRegister.ESI || source.Register == GeneralPurposeRegister.EDI)) return R_M_U8;
-				if (source.IsChar || destination.IsChar || source.IsShort || destination.IsShort) return R_R_16;
+				Debug.Assert(!((source.IsByte || destination.IsByte) && (source.Register == GeneralPurposeRegister.ESI || source.Register == GeneralPurposeRegister.EDI)));
+
+				if (source.IsByte || destination.IsByte) return R_M_U8;
+				if (source.IsChar || destination.IsChar || source.IsShort || destination.IsShort) return R_RM_16;
 				return R_RM;
 			}
 
 			if (destination.IsRegister && source.IsMemoryAddress)
 			{
 				if (destination.IsByte) return R_M_U8;
-				if (destination.IsChar || destination.IsShort) return R_M_16;
+				if (destination.IsChar || destination.IsShort) return R_RM_16;
 				return R_RM;
 			}
 

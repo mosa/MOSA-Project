@@ -25,5 +25,10 @@ namespace Mosa.TinyCPUSimulator
 			Address = address;
 			Size = size;
 		}
+
+		public override string ToString()
+		{
+			return "0x" + Address.ToString("X") + " " + Name;
+		}
 	}
 }

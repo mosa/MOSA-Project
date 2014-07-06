@@ -7,6 +7,7 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 
@@ -14,11 +15,15 @@ namespace Mosa.TinyCPUSimulator
 {
 	public class SimCPU
 	{
-		public Dictionary<ulong, SimInstruction> InstructionCache { get; private set; }
+		private Dictionary<ulong, SimInstruction> InstructionCache { get; set; }
+
+		private Dictionary<ulong, string> SourceInformation { get; set; }
 
 		public BaseSimDevice[] PortDevices { get; private set; }
 
 		public List<BaseSimDevice> SimDevices { get; private set; }
+
+		public List<BaseSimDevice> SimMemoryDevices { get; private set; }
 
 		public Dictionary<string, SimSymbol> Symbols { get; private set; }
 
@@ -38,8 +43,6 @@ namespace Mosa.TinyCPUSimulator
 
 		public virtual ulong FramePointer { get { return 0; } set { return; } }
 
-		//public Dictionary<ulong, KeyValuePair<byte, byte>> MemoryDelta { get; private set; }
-
 		public SimCPUException LastException { get; set; }
 
 		public List<MemoryRegion> MemoryRegions { get; private set; }
@@ -53,12 +56,13 @@ namespace Mosa.TinyCPUSimulator
 		{
 			MemoryBlocks = new byte[MaxMemory / BlockSize][];
 			InstructionCache = new Dictionary<ulong, SimInstruction>();
+			SourceInformation = new Dictionary<ulong, string>();
 			SimDevices = new List<BaseSimDevice>();
+			SimMemoryDevices = new List<BaseSimDevice>();
 			PortDevices = new BaseSimDevice[65536];
 			Symbols = new Dictionary<string, SimSymbol>();
 			Monitor = new SimMonitor(this);
 			MemoryRegions = new List<MemoryRegion>();
-			//MemoryDelta = new Dictionary<ulong, KeyValuePair<byte, byte>>();
 
 			Tick = 0;
 			IsLittleEndian = true;
@@ -92,7 +96,7 @@ namespace Mosa.TinyCPUSimulator
 		{
 			ulong index = address / BlockSize;
 
-			byte[] block = MemoryBlocks[index];
+			var block = MemoryBlocks[index];
 
 			if (block == null)
 			{
@@ -113,7 +117,7 @@ namespace Mosa.TinyCPUSimulator
 		private void InternalWrite8(ulong address, byte value)
 		{
 			ulong index = address / BlockSize;
-			byte[] block = MemoryBlocks[index];
+			var block = MemoryBlocks[index];
 
 			if (block == null)
 			{
@@ -139,7 +143,7 @@ namespace Mosa.TinyCPUSimulator
 
 		protected virtual void MemoryUpdate(ulong address, byte size)
 		{
-			foreach (var device in SimDevices)
+			foreach (var device in SimMemoryDevices)
 			{
 				device.MemoryWrite(address, size);
 			}
@@ -269,7 +273,13 @@ namespace Mosa.TinyCPUSimulator
 
 		public void AddInstruction(ulong address, SimInstruction instruction)
 		{
+			//Debug.Assert(!InstructionCache.ContainsKey(address), instruction.ToString());
 			InstructionCache.Add(address, instruction);
+		}
+
+		public void AddSourceInformation(ulong address, string information)
+		{
+			SourceInformation.Add(address, information);
 		}
 
 		protected SimInstruction GetInstruction(ulong address)
@@ -281,10 +291,24 @@ namespace Mosa.TinyCPUSimulator
 			return instruction;
 		}
 
+		public string GetSourceInformation(ulong address)
+		{
+			string source = null;
+
+			SourceInformation.TryGetValue(address, out source);
+
+			return source;
+		}
+
 		public void AddDevice(BaseSimDevice device)
 		{
 			SimDevices.Add(device);
 			device.Initialize();
+
+			if (device.IsMemoryMonitor)
+			{
+				SimMemoryDevices.Add(device);
+			}
 
 			var ports = device.GetPortList();
 
@@ -307,9 +331,7 @@ namespace Mosa.TinyCPUSimulator
 				if (CurrentProgramCounter == lastDecodedProgramCounter && lastDecodedProgramCounter != 0)
 					return lastDecodedInstruction;
 
-				lastDecodedInstruction = DecodeOpcode(CurrentProgramCounter);
-
-				// if lastDecodedInstruction is null --- a binary decode would be necessary
+				lastDecodedInstruction = GetOpcode(CurrentProgramCounter);
 
 				lastDecodedProgramCounter = CurrentProgramCounter;
 
@@ -317,13 +339,28 @@ namespace Mosa.TinyCPUSimulator
 			}
 		}
 
-		public virtual SimInstruction DecodeOpcode(ulong address)
+		public SimInstruction GetOpcode(ulong address)
 		{
 			var instruction = GetInstruction(address);
 
-			// if instruction is null --- a binary decode would be necessary
+			if (instruction == null)
+			{
+				instruction = DecodeOpcode(address);
+
+				if (instruction == null)
+				{
+					throw new SimCPUException();
+				}
+
+				AddInstruction(address, instruction);
+			}
 
 			return instruction;
+		}
+
+		public virtual SimInstruction DecodeOpcode(ulong address)
+		{
+			return null;
 		}
 
 		protected virtual void ExecuteOpcode(SimInstruction instruction)
@@ -343,6 +380,9 @@ namespace Mosa.TinyCPUSimulator
 				Tick++;
 				LastException = null;
 				LastProgramCounter = CurrentProgramCounter;
+
+				if (CurrentInstruction == null)
+					throw new NotSupportedException();
 
 				LastInstruction = CurrentInstruction;
 
@@ -369,7 +409,9 @@ namespace Mosa.TinyCPUSimulator
 
 				if (Monitor.DebugOutput)
 				{
-					Debug.WriteLine("EIP        EAX        EBX        ECX        EDX        ESI        EDI        ESP        EBP        XMM#0      XMM#1      XMM#2      XMM#3      FLAGS");
+					// Move to CPUx86
+					//Debug.WriteLine("EIP        EAX        EBX        ECX        EDX        ESI        EDI        ESP        EBP        XMM#0      XMM#1      XMM#2      XMM#3      FLAGS");
+					Debug.WriteLine("EIP        EAX        EBX        ECX        EDX        ESI        EDI        ESP        EBP        FLAGS");
 				}
 
 				for (; ; )

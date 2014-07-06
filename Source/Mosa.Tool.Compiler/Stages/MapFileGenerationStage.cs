@@ -10,7 +10,6 @@
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Linker;
 using System;
-using System.Collections.Generic;
 using System.IO;
 
 namespace Mosa.Tool.Compiler.Stages
@@ -18,7 +17,7 @@ namespace Mosa.Tool.Compiler.Stages
 	/// <summary>
 	/// An compilation stage, which generates a map file of the built binary file.
 	/// </summary>
-	public sealed class MapFileGenerationStage : BaseCompilerStage, ICompilerStage, IPipelineStage
+	public sealed class MapFileGenerationStage : BaseCompilerStage
 	{
 		#region Data members
 
@@ -42,18 +41,12 @@ namespace Mosa.Tool.Compiler.Stages
 
 		#endregion Construction
 
-		#region ICompilerStage Members
-
-		void ICompilerStage.Setup(BaseCompiler compiler)
+		protected override void Setup()
 		{
-			base.Setup(compiler);
-			this.MapFile = compiler.CompilerOptions.MapFile;
+			this.MapFile = CompilerOptions.MapFile;
 		}
 
-		/// <summary>
-		/// Performs stage specific processing on the compiler context.
-		/// </summary>
-		void ICompilerStage.Run()
+		protected override void Run()
 		{
 			if (string.IsNullOrEmpty(MapFile))
 				return;
@@ -61,25 +54,23 @@ namespace Mosa.Tool.Compiler.Stages
 			using (writer = new StreamWriter(MapFile))
 			{
 				// Emit map file header
-				writer.WriteLine(linker.OutputFile);
+				writer.WriteLine(CompilerOptions.OutputFile);
 				writer.WriteLine();
 				writer.WriteLine("Timestamp is {0}", DateTime.Now);
 				writer.WriteLine();
-				writer.WriteLine("Preferred load address is {0:x16}", linker.BaseAddress);
+				writer.WriteLine("Preferred load address is {0:x16}", Linker.BaseAddress);
 				writer.WriteLine();
 
 				// Emit the sections
-				EmitSections(linker);
+				EmitSections(Linker);
 				writer.WriteLine();
 
 				// Emit all symbols
-				EmitSymbols(linker);
+				EmitSymbols(Linker);
 
 				writer.Close();
 			}
 		}
-
-		#endregion ICompilerStage Members
 
 		#region Internals
 
@@ -87,20 +78,12 @@ namespace Mosa.Tool.Compiler.Stages
 		/// Emits all the section created in the binary file.
 		/// </summary>
 		/// <param name="linker">The linker.</param>
-		private void EmitSections(ILinker linker)
+		private void EmitSections(BaseLinker linker)
 		{
 			writer.WriteLine("Offset           Virtual          Length           Name                             Class");
-			foreach (LinkerSection section in linker.Sections)
+			foreach (var section in linker.Sections)
 			{
-				writer.WriteLine("{0:x16} {1:x16} {2:x16} {3} {4}", section.Offset, section.VirtualAddress, section.Length, section.Name.PadRight(32), section.SectionKind);
-			}
-		}
-
-		private class LinkerSymbolComparerByVirtualAddress : IComparer<LinkerSymbol>
-		{
-			public int Compare(LinkerSymbol x, LinkerSymbol y)
-			{
-				return (int)(x.VirtualAddress - y.VirtualAddress);
+				writer.WriteLine("{0:x16} {1:x16} {2:x16} {3} {4}", section.FileOffset, section.VirtualAddress, section.Size, section.Name.PadRight(32), section.SectionKind);
 			}
 		}
 
@@ -108,28 +91,25 @@ namespace Mosa.Tool.Compiler.Stages
 		/// Emits all symbols emitted in the binary file.
 		/// </summary>
 		/// <param name="linker">The linker.</param>
-		private void EmitSymbols(ILinker linker)
+		private void EmitSymbols(BaseLinker linker)
 		{
-			List<LinkerSymbol> sorted = new List<LinkerSymbol>();
+			writer.WriteLine("Offset           Virtual          Length           Section Symbols");
 
-			foreach (LinkerSymbol symbol in linker.Symbols)
-				sorted.Add(symbol);
-
-			var comparer = new LinkerSymbolComparerByVirtualAddress();
-			sorted.Sort(comparer);
-
-			writer.WriteLine("Offset           Virtual          Length           Section Symbol");
-			foreach (var symbol in sorted)
+			foreach (var section in linker.Sections)
 			{
-				writer.WriteLine("{0:x16} {1:x16} {2:x16} {3} {4}", symbol.Offset, symbol.VirtualAddress, symbol.Length, symbol.SectionKind.ToString().PadRight(7), symbol.Name);
+				//foreach (var symbol in section.Ordered)
+				foreach (var symbol in section.Symbols)
+				{
+					writer.WriteLine("{0:x16} {1:x16} {2:x16} {3} {4}", symbol.SectionOffset, symbol.VirtualAddress, symbol.Size, symbol.SectionKind.ToString().PadRight(7), symbol.Name);
+				}
 			}
 
-			LinkerSymbol entryPoint = linker.EntryPoint;
+			var entryPoint = linker.EntryPoint;
 			if (entryPoint != null)
 			{
 				writer.WriteLine();
 				writer.WriteLine("Entry point is {0}", entryPoint.Name);
-				writer.WriteLine("\tat Offset {0:x16}", entryPoint.Offset);
+				writer.WriteLine("\tat Offset {0:x16}", entryPoint.SectionOffset); // TODO! add section offset too?
 				writer.WriteLine("\tat virtual address {0:x16}", entryPoint.VirtualAddress);
 			}
 		}

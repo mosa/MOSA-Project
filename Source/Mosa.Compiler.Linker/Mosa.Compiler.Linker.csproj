@@ -5,13 +5,14 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{65866A51-B229-44C5-AC81-87A90FA1741B}</ProjectGuid>
+    <ProjectGuid>{65866A51-B229-44C5-AC81-87A90FA1741C}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Mosa.Compiler.Linker</RootNamespace>
     <AssemblyName>Mosa.Compiler.Linker</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -34,45 +35,6 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BaseLinker.cs" />
-    <Compile Include="BuiltInPatch.cs" />
-    <Compile Include="Patch.cs" />
-    <Compile Include="ExtendedLinkerSection.cs" />
-    <Compile Include="LinkerType.cs" />
-    <Compile Include="Elf32\Elf32Linker.cs" />
-    <Compile Include="Elf32\BssSection.cs" />
-    <Compile Include="Elf32\CodeSection.cs" />
-    <Compile Include="Elf32\DataSection.cs" />
-    <Compile Include="Elf32\NullSection.cs" />
-    <Compile Include="Elf32\RoDataSection.cs" />
-    <Compile Include="Elf32\Elf32LinkerSection.cs" />
-    <Compile Include="Elf32\SectionAttribute.cs" />
-    <Compile Include="Elf32\SectionHeader.cs" />
-    <Compile Include="Elf32\SectionType.cs" />
-    <Compile Include="Elf32\StringTableSection.cs" />
-    <Compile Include="Elf64\Elf64Linker.cs" />
-    <Compile Include="Elf64\BssSection.cs" />
-    <Compile Include="Elf64\CodeSection.cs" />
-    <Compile Include="Elf64\DataSection.cs" />
-    <Compile Include="Elf64\NullSection.cs" />
-    <Compile Include="Elf64\RoDataSection.cs" />
-    <Compile Include="Elf64\Elf64LinkerSection.cs" />
-    <Compile Include="Elf64\SectionAttribute.cs" />
-    <Compile Include="Elf64\SectionHeader.cs" />
-    <Compile Include="Elf64\SectionType.cs" />
-    <Compile Include="Elf64\StringTableSection.cs" />
-    <Compile Include="ILinker.cs" />
-    <Compile Include="LinkerException.cs" />
-    <Compile Include="LinkerSection.cs" />
-    <Compile Include="LinkerStream.cs" />
-    <Compile Include="LinkerSymbol.cs" />
-    <Compile Include="LinkRequest.cs" />
-    <Compile Include="LinkType.cs" />
-    <Compile Include="PE\PELinkerSection.cs" />
-    <Compile Include="PE\PELinker.cs" />
-    <Compile Include="SectionKind.cs" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\Mosa.Compiler.Common\Mosa.Compiler.Common.csproj">
       <Project>{0B1011A6-8FCD-4F9E-BBB8-8DB86E23D2E8}</Project>
       <Name>Mosa.Compiler.Common</Name>
@@ -81,6 +43,26 @@
       <Project>{CC2E6418-C325-4486-B50D-941EC27053F6}</Project>
       <Name>Mosa.Compiler.LinkerFormat</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BaseLinker.cs" />
+    <Compile Include="Elf32\Elf32.cs" />
+    <Compile Include="Elf32\SectionAttribute.cs" />
+    <Compile Include="Elf32\SectionHeader.cs" />
+    <Compile Include="Elf32\SectionType.cs" />
+    <Compile Include="LinkerSection.cs" />
+    <Compile Include="LinkerSymbol.cs" />
+    <Compile Include="BuiltInPatch.cs" />
+    <Compile Include="LinkRequest.cs" />
+    <Compile Include="LinkType.cs" />
+    <Compile Include="PatchType.cs" />
+    <Compile Include="Patch.cs" />
+    <Compile Include="Flat\FlatLinker.cs" />
+    <Compile Include="PE\PELinker.cs" />
+    <Compile Include="SectionKind.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Elf64\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

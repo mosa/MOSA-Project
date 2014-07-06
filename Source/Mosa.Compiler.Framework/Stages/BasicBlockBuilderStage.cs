@@ -9,7 +9,6 @@
  */
 
 using Mosa.Compiler.Framework.IR;
-using Mosa.Compiler.Framework.Linker;
 using System.Collections.Generic;
 using System.Diagnostics;
 
@@ -19,7 +18,7 @@ namespace Mosa.Compiler.Framework.Stages
 	/// This compilation stage is used by method compilers after the
 	/// IL decoding stage to build basic Blocks out of the instruction list.
 	/// </summary>
-	public sealed class BasicBlockBuilderStage : BaseMethodCompilerStage, IMethodCompilerStage, IPipelineStage
+	public sealed class BasicBlockBuilderStage : BaseMethodCompilerStage
 	{
 		#region Data members
 
@@ -35,21 +34,16 @@ namespace Mosa.Compiler.Framework.Stages
 
 		#endregion Data members
 
-		#region IMethodCompilerStage members
-
-		/// <summary>
-		/// Performs stage specific processing on the compiler context.
-		/// </summary>
-		void IMethodCompilerStage.Run()
+		protected override void Run()
 		{
 			// No basic block building if this is a linker generated method
-			if (methodCompiler.Method.IsLinkerGenerated)
+			if (MethodCompiler.Method.IsLinkerGenerated)
 				return;
 
-			if (methodCompiler.Compiler.PlugSystem.GetPlugMethod(methodCompiler.Method) != null)
+			if (MethodCompiler.Compiler.PlugSystem.GetPlugMethod(MethodCompiler.Method) != null)
 				return;
 
-			if (methodCompiler.Method.Code.Count == 0)
+			if (MethodCompiler.Method.Code.Count == 0)
 				return;
 
 			// Create the prologue block
@@ -59,7 +53,7 @@ namespace Mosa.Compiler.Framework.Stages
 			context.AppendInstruction(IRInstruction.Jmp);
 			context.SetBranch(0);
 			prologue = context.BasicBlock;
-			basicBlocks.AddHeaderBlock(prologue);
+			BasicBlocks.AddHeaderBlock(prologue);
 
 			SplitIntoBlocks(0);
 
@@ -70,24 +64,22 @@ namespace Mosa.Compiler.Framework.Stages
 			// Link all the blocks together
 			BuildBlockLinks(prologue);
 
-			foreach (var clause in methodCompiler.Method.ExceptionBlocks)
+			foreach (var clause in MethodCompiler.Method.ExceptionBlocks)
 			{
 				if (clause.HandlerOffset != 0)
 				{
-					BasicBlock basicBlock = basicBlocks.GetByLabel(clause.HandlerOffset);
+					BasicBlock basicBlock = BasicBlocks.GetByLabel(clause.HandlerOffset);
 					BuildBlockLinks(basicBlock);
-					basicBlocks.AddHeaderBlock(basicBlock);
+					BasicBlocks.AddHeaderBlock(basicBlock);
 				}
 				if (clause.FilterOffset != null)
 				{
-					BasicBlock basicBlock = basicBlocks.GetByLabel(clause.FilterOffset.Value);
+					BasicBlock basicBlock = BasicBlocks.GetByLabel(clause.FilterOffset.Value);
 					BuildBlockLinks(basicBlock);
-					basicBlocks.AddHeaderBlock(basicBlock);
+					BasicBlocks.AddHeaderBlock(basicBlock);
 				}
 			}
 		}
-
-		#endregion IMethodCompilerStage members
 
 		/// <summary>
 		/// Finds all targets.
@@ -100,7 +92,7 @@ namespace Mosa.Compiler.Framework.Stages
 			targets.Add(index, -1);
 
 			// Find out all targets labels
-			for (Context ctx = new Context(instructionSet, index); ctx.Index >= 0; ctx.GotoNext())
+			for (Context ctx = new Context(InstructionSet, index); ctx.Index >= 0; ctx.GotoNext())
 			{
 				switch (ctx.Instruction.FlowControl)
 				{
@@ -140,7 +132,7 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 
 			// Add Exception Class targets
-			foreach (var clause in methodCompiler.Method.ExceptionBlocks)
+			foreach (var clause in MethodCompiler.Method.ExceptionBlocks)
 			{
 				if (!targets.ContainsKey(clause.HandlerOffset))
 					targets.Add(clause.HandlerOffset, -1);
@@ -155,7 +147,7 @@ namespace Mosa.Compiler.Framework.Stages
 			BasicBlock currentBlock = null;
 			Context previous = null;
 
-			for (Context ctx = new Context(instructionSet, index); ctx.Index >= 0; ctx.GotoNext())
+			for (Context ctx = new Context(InstructionSet, index); ctx.Index >= 0; ctx.GotoNext())
 			{
 				if (targets.ContainsKey(ctx.Label))
 				{
@@ -179,7 +171,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 					Context prev = ctx.InsertBefore();
 					prev.SetInstruction(IRInstruction.BlockStart);
-					currentBlock = basicBlocks.CreateBlock(ctx.Label, prev.Index);
+					currentBlock = BasicBlocks.CreateBlock(ctx.Label, prev.Index);
 
 					targets.Remove(ctx.Label);
 				}
@@ -223,8 +215,8 @@ namespace Mosa.Compiler.Framework.Stages
 							FindAndLinkBlock(block, target);
 
 						int nextIndex = ctx.Index + 1;
-						if (nextIndex < this.instructionSet.Used)
-							FindAndLinkBlock(block, instructionSet.Data[nextIndex].Label);
+						if (nextIndex < this.InstructionSet.Used)
+							FindAndLinkBlock(block, InstructionSet.Data[nextIndex].Label);
 
 						continue;
 					case FlowControl.EndFinally: return;
@@ -241,7 +233,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private void FindAndLinkBlock(BasicBlock block, int target)
 		{
-			BasicBlock next = basicBlocks.GetByLabel(target);
+			BasicBlock next = BasicBlocks.GetByLabel(target);
 			if (!block.NextBlocks.Contains(next))
 			{
 				LinkBlocks(block, next);

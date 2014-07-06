@@ -25,30 +25,39 @@ namespace Mosa.CoolWorld.x86
 		public static void Main()
 		{
 			Mosa.Kernel.x86.Kernel.Setup();
-			DebugClient.Setup(Serial.COM1);
-			IDT.SetInterruptHandler(ProcessInterrupt);
+			//DebugClient.Setup(Serial.COM1);
 
 			Console = ConsoleManager.Controller.Boot;
 
 			Console.Clear();
+
+			IDT.SetInterruptHandler(ProcessInterrupt);
+
 			Console.Color = Colors.White;
 			Console.BackgroundColor = Colors.Green;
 
-			Console.Write(@"                   MOSA OS Version 1.2 - Compiler Version 1.2");
+			Console.Write(@"                   MOSA OS Version 1.3 - Compiler Version 1.3");
 			FillLine();
 			Console.Color = Colors.White;
 			Console.BackgroundColor = Colors.Black;
 
-			BiosInformationStructure biosInfo = new BiosInformationStructure();
-			CpuStructure cpuInfo = new CpuStructure();
+			if (SmbiosManager.IsAvailable)
+			{
+				BiosInformationStructure biosInfo = new BiosInformationStructure();
+				CpuStructure cpuInfo = new CpuStructure();
 
-			Console.WriteLine("> Checking BIOS...");
-			BulletPoint(); Console.Write("Vendor  "); InBrackets(biosInfo.BiosVendor, Colors.White, Colors.LightBlue); Console.WriteLine();
-			BulletPoint(); Console.Write("Version "); InBrackets(biosInfo.BiosVersion, Colors.White, Colors.LightBlue); Console.WriteLine();
+				Console.WriteLine("> Checking BIOS...");
+				BulletPoint(); Console.Write("Vendor  "); InBrackets(biosInfo.BiosVendor, Colors.White, Colors.LightBlue); Console.WriteLine();
+				BulletPoint(); Console.Write("Version "); InBrackets(biosInfo.BiosVersion, Colors.White, Colors.LightBlue); Console.WriteLine();
 
-			Console.WriteLine("> Checking CPU...");
-			BulletPoint(); Console.Write("Vendor  "); InBrackets(cpuInfo.Vendor, Colors.White, Colors.LightBlue); Console.WriteLine();
-			BulletPoint(); Console.Write("Version "); InBrackets(cpuInfo.Version, Colors.White, Colors.LightBlue); Console.WriteLine();
+				Console.WriteLine("> Checking CPU...");
+				BulletPoint(); Console.Write("Vendor  "); InBrackets(cpuInfo.Vendor, Colors.White, Colors.LightBlue); Console.WriteLine();
+				BulletPoint(); Console.Write("Version "); InBrackets(cpuInfo.Version, Colors.White, Colors.LightBlue); Console.WriteLine();
+			}
+			else
+			{
+				Console.WriteLine("> No SMBIOS available!");
+			}
 
 			Console.WriteLine("> Initializing hardware abstraction layer...");
 			Setup.Initialize();
@@ -61,17 +70,22 @@ namespace Mosa.CoolWorld.x86
 			Console.Goto(24, 0);
 			Console.Color = Colors.White;
 			Console.BackgroundColor = Colors.Green;
-			Console.Write("          Copyright (C) 2008-2001 [Managed Operating System Alliance]");
+			Console.Write("          Copyright (C) 2008-2014 [Managed Operating System Alliance]");
 			FillLine();
+
+			Process();
+		}
+
+		public static void Process()
+		{
+			int lastSecond = -1;
 
 			Console.BackgroundColor = Colors.Black;
 			Console.Goto(15, 0);
-			Console.Color = Colors.Green;
+			Console.Color = Colors.White;
 			Console.Write("> ");
-			Console.Color = Colors.Yellow;
 
 			Mosa.DeviceDrivers.ScanCodeMap.US KBDMAP = new DeviceDrivers.ScanCodeMap.US();
-			int lastSecond = -1;
 
 			while (true)
 			{
@@ -79,11 +93,11 @@ namespace Mosa.CoolWorld.x86
 
 				if (scancode != 0)
 				{
-					Debug.Trace("Main.Main Key Scan Code: " + scancode.ToString());
+					//	Debug.Trace("Main.Main Key Scan Code: " + scancode.ToString());
 
 					KeyEvent keyevent = KBDMAP.ConvertScanCode(scancode);
 
-					Debug.Trace("Main.Main Key Character: " + keyevent.Character.ToString());
+					//	Debug.Trace("Main.Main Key Character: " + keyevent.Character.ToString());
 
 					if (keyevent.KeyPress == KeyEvent.Press.Make)
 					{
@@ -95,17 +109,17 @@ namespace Mosa.CoolWorld.x86
 						else if (keyevent.KeyType == KeyType.F2)
 							ConsoleManager.Controller.Active = ConsoleManager.Controller.Debug;
 					}
-					Debug.Trace("Main.Main Key Character: " + ((uint)keyevent.Character).ToString());
+					//	Debug.Trace("Main.Main Key Character: " + ((uint)keyevent.Character).ToString());
 				}
 
 				if (Setup.CMOS.Second != lastSecond)
 				{
-					DebugClient.SendAlive();
+					//DebugClient.SendAlive();
 					lastSecond = Setup.CMOS.Second;
-					Debug.Trace("Main.Main Ping Alive");
+					//Debug.Trace("Main.Main Ping Alive");
 				}
 
-				DebugClient.Process();
+				//DebugClient.Process();
 				Native.Hlt();
 			}
 		}
@@ -141,16 +155,24 @@ namespace Mosa.CoolWorld.x86
 
 		private static uint counter = 0;
 
-		public static void ProcessInterrupt(byte interrupt, byte errorCode)
+		public static void ProcessInterrupt(uint interrupt, uint errorCode)
 		{
 			uint c = Console.Column;
 			uint r = Console.Row;
 			byte col = Console.Color;
 			byte back = Console.BackgroundColor;
 
-			Console.Column = 55;
-			Console.Row = 23;
 			Console.Color = Colors.Cyan;
+
+			Console.Row = 23;
+			Console.Column = 1;
+			//Console.Write("Total: ");
+			//Console.Write(PageFrameAllocator.TotalPages * PageFrameAllocator.PageSize);
+			Console.Write("Free: ");
+			Console.Write((PageFrameAllocator.TotalPages - PageFrameAllocator.TotalPagesInUse) * PageFrameAllocator.PageSize / (1024 * 1024));
+			Console.Write(" MB");
+
+			Console.Column = 55;
 			Console.BackgroundColor = Colors.Black;
 			Console.Write("        ");
 			Console.Column = 55;
@@ -163,12 +185,7 @@ namespace Mosa.CoolWorld.x86
 			Console.Write(':');
 			Console.Write(errorCode, 16, 2);
 
-			if (interrupt == 14)
-			{
-				// Page Fault!
-				PageFaultHandler.Fault(errorCode);
-			}
-			else if (interrupt == 0x20)
+			if (interrupt == 0x20)
 			{
 				// Timer Interrupt! Switch Tasks!
 			}
@@ -179,7 +196,7 @@ namespace Mosa.CoolWorld.x86
 				Console.Write(':');
 				Console.Write(interrupt, 16, 2);
 
-				Mosa.DeviceSystem.HAL.ProcessInterrupt((byte)(interrupt - 0x20), errorCode);
+				Mosa.DeviceSystem.HAL.ProcessInterrupt((uint)(interrupt - 0x20), errorCode);
 
 				//Debug.Trace("Returned from HAL.ProcessInterrupt");
 			}

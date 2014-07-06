@@ -7,8 +7,8 @@
  *  Ki (kiootic) <kiootic@gmail.com>
  */
 
-using System.Collections.Generic;
 using Mosa.Compiler.Framework.IR;
+using System.Collections.Generic;
 
 namespace Mosa.Compiler.Framework.Stages
 {
@@ -18,35 +18,35 @@ namespace Mosa.Compiler.Framework.Stages
 	/// convert them into respective compound instructions, which will be expanded into
 	/// multiple native instructions by platform layer.
 	/// </summary>
-	public class ConvertCompoundMoveStage : BaseMethodCompilerStage, IMethodCompilerStage
+	public class ConvertCompoundMoveStage : BaseMethodCompilerStage
 	{
-		Dictionary<Operand, Operand> repl = new Dictionary<Operand, Operand>();
+		private Dictionary<Operand, Operand> repl = new Dictionary<Operand, Operand>();
 
-		void IMethodCompilerStage.Run()
+		protected override void Run()
 		{
-			for (int index = 0; index < basicBlocks.Count; index++)
-				for (Context ctx = new Context(instructionSet, basicBlocks[index]); !ctx.IsBlockEndInstruction; ctx.GotoNext())
+			for (int index = 0; index < BasicBlocks.Count; index++)
+				for (Context ctx = new Context(InstructionSet, BasicBlocks[index]); !ctx.IsBlockEndInstruction; ctx.GotoNext())
 					if (!ctx.IsEmpty)
 						ProcessInstruction(ctx.Clone());
 
-			for (int index = 0; index < basicBlocks.Count; index++)
-				for (Context ctx = new Context(instructionSet, basicBlocks[index]); !ctx.IsBlockEndInstruction; ctx.GotoNext())
+			for (int index = 0; index < BasicBlocks.Count; index++)
+				for (Context ctx = new Context(InstructionSet, BasicBlocks[index]); !ctx.IsBlockEndInstruction; ctx.GotoNext())
 					if (!ctx.IsEmpty)
 						ReplaceOperands(ctx.Clone());
 
 			repl.Clear();
 		}
 
-		void ProcessInstruction(Context ctx)
+		private void ProcessInstruction(Context ctx)
 		{
 			if (ctx.Instruction is Load)
 			{
 				if (ctx.MosaType != null &&
-					typeLayout.IsCompoundType(ctx.MosaType) && !ctx.MosaType.IsUI8 && !ctx.MosaType.IsR8)
+					TypeLayout.IsCompoundType(ctx.MosaType) && !ctx.MosaType.IsUI8 && !ctx.MosaType.IsR8)
 				{
 					if (ctx.Result.IsVirtualRegister && !repl.ContainsKey(ctx.Result))
 					{
-						repl[ctx.Result] = methodCompiler.StackLayout.AddStackLocal(ctx.MosaType);
+						repl[ctx.Result] = MethodCompiler.StackLayout.AddStackLocal(ctx.MosaType);
 					}
 					ctx.ReplaceInstructionOnly(IRInstruction.CompoundLoad);
 				}
@@ -54,11 +54,11 @@ namespace Mosa.Compiler.Framework.Stages
 			else if (ctx.Instruction is Store)
 			{
 				if (ctx.MosaType != null &&
-					typeLayout.IsCompoundType(ctx.MosaType) && !ctx.MosaType.IsUI8 && !ctx.MosaType.IsR8)
+					TypeLayout.IsCompoundType(ctx.MosaType) && !ctx.MosaType.IsUI8 && !ctx.MosaType.IsR8)
 				{
 					if (ctx.Operand3.IsVirtualRegister && !repl.ContainsKey(ctx.Operand3))
 					{
-						repl[ctx.Operand3] = methodCompiler.StackLayout.AddStackLocal(ctx.Result.Type);
+						repl[ctx.Operand3] = MethodCompiler.StackLayout.AddStackLocal(ctx.Result.Type);
 					}
 					ctx.ReplaceInstructionOnly(IRInstruction.CompoundStore);
 				}
@@ -66,15 +66,15 @@ namespace Mosa.Compiler.Framework.Stages
 			else if (ctx.Instruction is Move)
 			{
 				if (ctx.Result.Type.Equals(ctx.Operand1.Type) &&
-					typeLayout.IsCompoundType(ctx.Result.Type) && !ctx.Result.Type.IsUI8 && !ctx.Result.Type.IsR8)
+					TypeLayout.IsCompoundType(ctx.Result.Type) && !ctx.Result.Type.IsUI8 && !ctx.Result.Type.IsR8)
 				{
 					if (ctx.Result.IsVirtualRegister && !repl.ContainsKey(ctx.Result))
 					{
-						repl[ctx.Result] = methodCompiler.StackLayout.AddStackLocal(ctx.Result.Type);
+						repl[ctx.Result] = MethodCompiler.StackLayout.AddStackLocal(ctx.Result.Type);
 					}
 					if (ctx.Operand1.IsVirtualRegister && !repl.ContainsKey(ctx.Operand1))
 					{
-						repl[ctx.Operand1] = methodCompiler.StackLayout.AddStackLocal(ctx.Operand1.Type);
+						repl[ctx.Operand1] = MethodCompiler.StackLayout.AddStackLocal(ctx.Operand1.Type);
 					}
 					ctx.ReplaceInstructionOnly(IRInstruction.CompoundMove);
 				}
@@ -82,17 +82,17 @@ namespace Mosa.Compiler.Framework.Stages
 			else if (ctx.Instruction is Call)
 			{
 				if (ctx.Result != null &&
-					typeLayout.IsCompoundType(ctx.Result.Type) && !ctx.Result.Type.IsUI8 && !ctx.Result.Type.IsR8)
+					TypeLayout.IsCompoundType(ctx.Result.Type) && !ctx.Result.Type.IsUI8 && !ctx.Result.Type.IsR8)
 				{
 					if (ctx.Result.IsVirtualRegister && !repl.ContainsKey(ctx.Result))
 					{
-						repl[ctx.Result] = methodCompiler.StackLayout.AddStackLocal(ctx.Result.Type);
+						repl[ctx.Result] = MethodCompiler.StackLayout.AddStackLocal(ctx.Result.Type);
 					}
 				}
 			}
 		}
 
-		void ReplaceOperands(Context ctx)
+		private void ReplaceOperands(Context ctx)
 		{
 			if (ctx.Result != null && repl.ContainsKey(ctx.Result))
 				ctx.Result = repl[ctx.Result];

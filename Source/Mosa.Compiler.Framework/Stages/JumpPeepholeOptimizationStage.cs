@@ -8,8 +8,6 @@
  *  Marcelo Caetano (marcelocaetano) <marcelo.caetano@ymail.com>
  */
 
-using Mosa.Compiler.Framework.IR;
-using Mosa.Compiler.Framework;
 using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework.Stages
@@ -17,7 +15,7 @@ namespace Mosa.Compiler.Framework.Stages
 	/// <summary>
 	/// This stages removes jumps to the next instruction
 	/// </summary>
-	public sealed class JumpPeepholeOptimizationStage : BaseCodeTransformationStage, IMethodCompilerStage
+	public sealed class JumpPeepholeOptimizationStage : BaseCodeTransformationStage
 	{
 		// TODO:
 		// 1. If first branch is to the next basic block,
@@ -25,21 +23,16 @@ namespace Mosa.Compiler.Framework.Stages
 		//           part of code: ConditionCode = GetOppositeConditionCode(ConditionCode);
 		// 2. If the basic block contains only a single jump instruction, rewrite all jumps to avoid it.
 
-		#region IMethodCompilerStage Members
-
-		/// <summary>
-		/// Performs stage specific processing on the compiler context.
-		/// </summary>
-		void IMethodCompilerStage.Run()
+		protected override void Run()
 		{
 			var trace = CreateTrace();
 
-			for (int f = 0; f < basicBlocks.Count - 1; f++)
+			for (int f = 0; f < BasicBlocks.Count - 1; f++)
 			{
-				var from = basicBlocks[f];
-				var next = basicBlocks[f + 1];
+				var from = BasicBlocks[f];
+				var next = BasicBlocks[f + 1];
 
-				Context context = new Context(instructionSet, from, from.EndIndex);
+				Context context = new Context(InstructionSet, from, from.EndIndex);
 				context.GotoPrevious();
 
 				while (context.IsEmpty)
@@ -61,7 +54,5 @@ namespace Mosa.Compiler.Framework.Stages
 				context.Remove();
 			}
 		}
-
-		#endregion IMethodCompilerStage Members
 	}
 }

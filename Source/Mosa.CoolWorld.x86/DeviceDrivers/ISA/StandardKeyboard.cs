@@ -134,11 +134,9 @@ namespace Mosa.DeviceDrivers.ISA
 		}
 
 		/// <summary>
-		/// Determines whether FIFO data is available
+		/// Determines whether [is fifo data available].
 		/// </summary>
-		/// <returns>
-		/// 	<c>true</c> if [FIFO data is available]; otherwise, <c>false</c>.
-		/// </returns>
+		/// <returns></returns>
 		protected bool IsFIFODataAvailable()
 		{
 			return (fifoEnd != fifoStart);
@@ -152,7 +150,7 @@ namespace Mosa.DeviceDrivers.ISA
 		/// </returns>
 		protected bool IsFIFOFull()
 		{
-			if ((((fifoEnd + 1) == fifoSize) ? 0 : fifoEnd + 1) == fifoStart)
+			if (((fifoEnd + 1 == fifoSize) ? 0 : fifoEnd + 1) == fifoStart)
 				return true;
 			else
 				return false;
@@ -163,16 +161,13 @@ namespace Mosa.DeviceDrivers.ISA
 		/// </summary>
 		protected void ReadScanCode()
 		{
-			//Mosa.Kernel.x86.Debug.Trace("Enter StandardKeyboard.ReadScanCode");
 			spinLock.Enter();
 
 			byte scancode = commandPort.Read8();
-			Mosa.Kernel.x86.Debug.Trace("Keyboard read: " + scancode.ToString() + " from port: " + dataPort.Address.ToString());
+
 			AddToFIFO(scancode);
 
 			spinLock.Exit();
-
-			//Mosa.Kernel.x86.Debug.Trace("Exit StandardKeyboard.ReadScanCode");
 		}
 
 		/// <summary>

@@ -7,8 +7,8 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System.Collections.Generic;
 using Mosa.DeviceSystem;
+using System.Collections.Generic;
 
 namespace Mosa.EmulatedKernel
 {

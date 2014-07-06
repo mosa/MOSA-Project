@@ -16,23 +16,20 @@ namespace Mosa.Compiler.Framework.Stages
 	/// <summary>
 	/// This stage inserts the ExceptionPrologue IR instruction at the beginning of each exception block.
 	/// </summary>
-	public class ExceptionPrologueStage : BaseMethodCompilerStage, IMethodCompilerStage
+	public class ExceptionPrologueStage : BaseMethodCompilerStage
 	{
-		/// <summary>
-		/// Runs the specified compiler.
-		/// </summary>
-		void IMethodCompilerStage.Run()
+		protected override void Run()
 		{
 			// Handler Code
-			foreach (var clause in methodCompiler.Method.ExceptionBlocks)
+			foreach (var clause in MethodCompiler.Method.ExceptionBlocks)
 			{
 				if (clause.HandlerType == ExceptionHandlerType.Exception)
 				{
-					var block = basicBlocks.GetByLabel(clause.HandlerOffset);
+					var block = BasicBlocks.GetByLabel(clause.HandlerOffset);
 
-					var context = new Context(instructionSet, block).InsertBefore();
+					var context = new Context(InstructionSet, block).InsertBefore();
 
-					Operand exceptionObject = methodCompiler.CreateVirtualRegister(clause.Type);
+					Operand exceptionObject = MethodCompiler.CreateVirtualRegister(clause.Type);
 
 					context.SetInstruction(IRInstruction.ExceptionPrologue, exceptionObject);
 				}

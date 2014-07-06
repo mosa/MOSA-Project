@@ -1,5 +1,5 @@
 ﻿/*
- * (c) 2012 MOSA - The Managed Operating System Alliance
+ * (c) 2014 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
  *
@@ -10,9 +10,9 @@
 namespace Mosa.Compiler.Linker
 {
 	/// <summary>
-	/// Specifies the patch
+	/// A component of a patch
 	/// </summary>
-	public struct Patch
+	public class Patch
 	{
 		public readonly int Shift;
 		public readonly ulong Mask;

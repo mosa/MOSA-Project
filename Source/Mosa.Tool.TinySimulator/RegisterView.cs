@@ -36,6 +36,5 @@ namespace Mosa.Tool.TinySimulator
 
 			this.Refresh();
 		}
-
 	}
 }

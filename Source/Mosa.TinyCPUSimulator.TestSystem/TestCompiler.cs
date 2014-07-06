@@ -1,5 +1,5 @@
 ﻿/*
- * (c) 2013 MOSA - The Managed Operating System Alliance
+ * (c) 2014 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
  *
@@ -19,13 +19,13 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 {
 	public class TestCompiler
 	{
-		protected BasePlatform platform;
+		protected BaseTestPlatform platform;
 		protected ConfigurableTraceFilter filter = new ConfigurableTraceFilter();
 		protected IInternalTrace internalTrace = new BasicInternalTrace();
 		protected ISimAdapter adapter;
 		protected ISimAdapter simAdapter;
 		protected BaseArchitecture architecture;
-		protected ILinker linker;
+		protected BaseLinker linker;
 		protected TypeSystem typeSystem;
 		protected MosaTypeLayout typeLayout;
 		protected SimCompiler simCompiler;
@@ -36,7 +36,7 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 
 		public bool EnableSSAOptimizations { get; set; }
 
-		public TestCompiler(BasePlatform platform)
+		public TestCompiler(BaseTestPlatform platform)
 		{
 			this.platform = platform;
 
@@ -71,19 +71,35 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 			compilerOptions.EnableSSA = EnableSSA;
 			compilerOptions.EnableSSAOptimizations = EnableSSAOptimizations;
 
-			simCompiler = SimCompiler.Compile(typeSystem, typeLayout, internalTrace, EnableSSA, architecture, simAdapter, linker);
+			compilerOptions.BaseAddress = 0x00400000; // default location
 
 			platform.InitializeSimulation(simAdapter);
 
-			simAdapter.SimCPU.Monitor.DebugOutput = false; // DEBUG OPTION
+			simCompiler = SimCompiler.Compile(typeSystem, typeLayout, internalTrace, EnableSSA, architecture, simAdapter, linker);
+
+			//simAdapter.SimCPU.Monitor.DebugOutput = true; // DEBUG OPTION
+
+			Run<int>(string.Empty, "Default", "AssemblyInit", true);
+
+			//simAdapter.SimCPU.Monitor.DebugOutput = true; // DEBUG OPTION
 		}
 
 		public T Run<T>(string ns, string type, string method, params object[] parameters)
 		{
+			return Run<T>(ns, type, method, true, parameters);
+		}
+
+		protected T Run<T>(string ns, string type, string method, bool reset, params object[] parameters)
+		{
 			CompileTestCode();
 
-			// reset the stack
-			platform.ResetSimulation(simAdapter);
+			if (reset)
+			{
+				// reset the stack
+				platform.ResetSimulation(simAdapter);
+
+				//Run<int>("Mosa.Kernel.x86Test", "KernelMemory", "SetMemory", false, new object[] { (uint)0x00900000 });
+			}
 
 			// Find the test method to execute
 			MosaMethod runtimeMethod = FindMethod(
@@ -95,7 +111,7 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 
 			Debug.Assert(runtimeMethod != null, runtimeMethod.ToString());
 
-			LinkerSymbol symbol = linker.GetSymbol(runtimeMethod.FullName);
+			var symbol = linker.GetSymbol(runtimeMethod.FullName, SectionKind.Text);
 
 			ulong address = (ulong)symbol.VirtualAddress;
 
@@ -109,6 +125,9 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 			if (simAdapter.SimCPU.Monitor.BreakAtTick == simAdapter.SimCPU.Tick)
 				throw new Exception("Aborted. Method did not complete under 100000 ticks. " + simAdapter.SimCPU.Tick.ToString());
 
+			if (runtimeMethod.Signature.ReturnType.IsVoid)
+				return default(T);
+
 			object result = platform.GetResult(simAdapter, runtimeMethod.Signature.ReturnType);
 
 			try
@@ -120,7 +139,7 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 			}
 			catch (InvalidCastException e)
 			{
-				Debug.Assert(false, String.Format(@"Failed to convert result {0} of type {1} to type {2}.", result, result.GetType(), typeof(T).ToString()));
+				Debug.Assert(false, String.Format("Failed to convert result {0} of destinationpe {1} destination type {2}.", result, result.GetType(), typeof(T).ToString()));
 				throw e;
 			}
 		}

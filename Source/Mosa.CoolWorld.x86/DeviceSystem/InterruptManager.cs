@@ -39,26 +39,35 @@ namespace Mosa.DeviceSystem
 			interruptHandlers = new LinkedList<IHardwareDevice>[MaxInterrupts];
 
 			for (int i = 0; i < MaxInterrupts; i++)
+			{
 				interruptHandlers[i] = new LinkedList<IHardwareDevice>();
+			}
 		}
 
 		/// <summary>
 		/// Processes the interrupt.
 		/// </summary>
 		/// <param name="irq">The irq.</param>
-		public void ProcessInterrupt(byte irq, byte error)
+		/// <param name="error">The error.</param>
+		public void ProcessInterrupt(uint irq, uint error)
 		{
+			var handlers = interruptHandlers[irq];
+
 			//Mosa.Kernel.x86.Debug.Trace("Enter InterruptManager.ProcessInterrupt");
 
 			//spinLock.Enter();
-			var handlers = interruptHandlers[irq];
-			var hardwareDevice = handlers.First.value;
-			hardwareDevice.OnInterrupt();
 
-			//foreach (IHardwareDevice hardwareDevice in interruptHandlers[irq])
-			//{
-			//    hardwareDevice.OnInterrupt();
-			//}
+			//Mosa.Kernel.x86.Screen.Goto(14, 0);
+			//Mosa.Kernel.x86.Screen.Write("::");
+			//Mosa.Kernel.x86.Screen.Write(irq);
+
+			//uint i = 0;
+			foreach (var hardwareDevice in handlers)
+			{
+				//Mosa.Kernel.x86.Screen.Write(i++);
+				hardwareDevice.OnInterrupt();
+				//Mosa.Kernel.x86.Screen.Write(':');
+			}
 
 			//spinLock.Exit();
 		}

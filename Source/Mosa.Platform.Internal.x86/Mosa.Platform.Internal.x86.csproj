@@ -14,7 +14,7 @@
     <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
     <DefaultTargetSchema>IE50</DefaultTargetSchema>
     <DelaySign>false</DelaySign>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>
     </AppDesignerFolder>
@@ -63,6 +63,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Division.cs" />
+    <Compile Include="SpinLock.cs" />
     <Compile Include="Runtime.cs" />
     <Compile Include="Native.cs" />
   </ItemGroup>

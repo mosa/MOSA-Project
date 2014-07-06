@@ -14,7 +14,7 @@
     <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
     <DefaultTargetSchema>IE50</DefaultTargetSchema>
     <DelaySign>false</DelaySign>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <OutputType>Library</OutputType>
     <RootNamespace>Mosa.Compiler.Framework</RootNamespace>
     <FileUpgradeFlags>
@@ -77,14 +77,28 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Analysis\IDominanceProvider.cs" />
+    <Compile Include="Analysis\NaturalBlockOrder.cs" />
+    <Compile Include="Analysis\ReverseBlockOrder.cs" />
+    <Compile Include="Analysis\SimpleTraceBlockOrder.cs" />
+    <Compile Include="DominanceAnalysis.cs" />
+    <Compile Include="Analysis\IDominanceAnalysis.cs" />
     <Compile Include="BaseCallingConventionExtended.cs" />
     <Compile Include="DelegatePatcher.cs" />
     <Compile Include="Intrinsics\InternalInitializeArray.cs" />
     <Compile Include="Intrinsics\InternalGetType.cs" />
+    <Compile Include="IR\Kill.cs" />
+    <Compile Include="IR\Gen.cs" />
     <Compile Include="IR\CompoundLoad.cs" />
     <Compile Include="IR\CompoundMove.cs" />
     <Compile Include="IR\CompoundStore.cs" />
+    <Compile Include="Analysis\IBlockOrderAnalysis.cs" />
+    <Compile Include="RegisterAllocator\BasicRegisterAllocator.cs" />
+    <Compile Include="RegisterAllocator\MoveExtended.cs" />
+    <Compile Include="RegisterAllocator\Move.cs" />
+    <Compile Include="RegisterAllocator\OperandVisitor.cs" />
+    <Compile Include="RegisterAllocator\BaseRegisterAllocator.cs" />
+    <Compile Include="RegisterAllocator\LiveRange.cs" />
+    <Compile Include="RegisterAllocator\MoveHint.cs" />
     <Compile Include="ShiftType.cs" />
     <Compile Include="ConditionCodeExtension.cs" />
     <Compile Include="BasicBlocks.cs" />
@@ -96,13 +110,13 @@
     <Compile Include="RegisterAllocator\MoveResolver.cs" />
     <Compile Include="RegisterAllocator\Interval.cs" />
     <Compile Include="RegisterAllocator\SlotIndex.cs" />
-    <Compile Include="RegisterAllocator\LiveIntervalUnion.cs" />
+    <Compile Include="RegisterAllocator\LiveIntervalTrack.cs" />
     <Compile Include="RegisterAllocator\ExtendedBlock.cs" />
     <Compile Include="RegisterAllocator\LiveInterval.cs" />
     <Compile Include="RegisterAllocator\VirtualRegister.cs" />
     <Compile Include="RegisterAllocator\GreedyRegisterAllocator.cs" />
-    <Compile Include="Linker\LinkerFactory.cs" />
     <Compile Include="Stages\ConvertCompoundMoveStage.cs" />
+    <Compile Include="Stages\PromoteTempVariablesStage.cs" />
     <Compile Include="Stages\PromoteLocalVariablesStage.cs" />
     <Compile Include="Stages\StopStage.cs" />
     <Compile Include="Stages\BaseEdgeSplitStage.cs" />
@@ -122,11 +136,10 @@
     <Compile Include="Analysis\LoopAwareBlockOrder.cs" />
     <Compile Include="CompilationScheduler.cs" />
     <Compile Include="Stages\CheckPlatformOperandCountStage.cs" />
-    <Compile Include="Stages\ObjectFileLayoutStage.cs" />
     <Compile Include="Stages\PlatformIntrinsicTransformationStage.cs" />
     <Compile Include="PlugSystem.cs" />
     <Compile Include="Stages\CheckIROperandCountStage.cs" />
-    <Compile Include="Stages\LoopAwareBlockOrderStage.cs" />
+    <Compile Include="Stages\BlockOrderingStage.cs" />
     <Compile Include="Stages\SSAOptimizations.cs" />
     <Compile Include="Stages\EdgeSplitStage.cs" />
     <Compile Include="Stages\TypeInitializerSchedulerStage.cs" />
@@ -171,7 +184,6 @@
     <Compile Include="CompilerOptions.cs" />
     <Compile Include="Stages\PhiPlacementStage.cs" />
     <Compile Include="Stages\StaticAllocationResolutionStage.cs" />
-    <Compile Include="Stages\TypeLayoutStage.cs" />
     <Compile Include="IR\Throw.cs" />
     <Compile Include="Intrinsics\InternalAllocateString.cs" />
     <Compile Include="IR\AddFloat.cs" />
@@ -208,7 +220,6 @@
     <Compile Include="CIL\DupInstruction.cs" />
     <Compile Include="CIL\EndFilterInstruction.cs" />
     <Compile Include="CIL\EndFinallyInstruction.cs" />
-    <Compile Include="CIL\IBranchInstruction.cs" />
     <Compile Include="CIL\InitblkInstruction.cs" />
     <Compile Include="CIL\InitObjInstruction.cs" />
     <Compile Include="CIL\InvokeInstruction.cs" />
@@ -307,8 +318,6 @@
     <Compile Include="InstructionSet.cs" />
     <Compile Include="InstructionData.cs" />
     <Compile Include="CIL\BaseCILInstruction.cs" />
-    <Compile Include="Stages\ReverseBlockOrderStage.cs" />
-    <Compile Include="Stages\SimpleTraceBlockOrderStage.cs" />
     <Compile Include="BaseCompiler.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -325,9 +334,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="CompilerPipeline.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Stages\DominanceCalculationStage.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="FlowControl.cs">
@@ -364,10 +370,6 @@
       <Project>{0B1011A6-8FCD-4F9E-BBB8-8DB86E23D2E8}</Project>
       <Name>Mosa.Compiler.Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Mosa.Compiler.Linker\Mosa.Compiler.Linker.csproj">
-      <Project>{65866A51-B229-44C5-AC81-87A90FA1741B}</Project>
-      <Name>Mosa.Compiler.Linker</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Mosa.Compiler.InternalTrace\Mosa.Compiler.InternalTrace.csproj">
       <Project>{540BEAC7-A2C3-4C46-9F4A-E6E1DF4EF6FC}</Project>
       <Name>Mosa.Compiler.InternalTrace</Name>
@@ -375,6 +377,10 @@
     <ProjectReference Include="..\Mosa.Compiler.MosaTypeSystem\Mosa.Compiler.MosaTypeSystem.csproj">
       <Project>{5f30a68e-05bf-40ea-b576-5ebcde520559}</Project>
       <Name>Mosa.Compiler.MosaTypeSystem</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mosa.Compiler.Linker\Mosa.Compiler.Linker.csproj">
+      <Project>{65866a51-b229-44c5-ac81-87a90fa1741c}</Project>
+      <Name>Mosa.Compiler.Linker</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

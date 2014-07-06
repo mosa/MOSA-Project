@@ -11,7 +11,6 @@
 using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.InternalTrace;
 using Mosa.Compiler.MosaTypeSystem;
-using System;
 using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework
@@ -19,56 +18,56 @@ namespace Mosa.Compiler.Framework
 	/// <summary>
 	/// Basic base class for method compiler pipeline stages
 	/// </summary>
-	public abstract class BaseMethodCompilerStage
+	public abstract class BaseMethodCompilerStage : IMethodCompilerStage
 	{
-		#region Data members
+		#region Properties
 
 		/// <summary>
 		/// Hold the method compiler
 		/// </summary>
-		protected BaseMethodCompiler methodCompiler;
+		protected BaseMethodCompiler MethodCompiler { get; private set; }
 
 		/// <summary>
 		/// The architecture of the compilation process
 		/// </summary>
-		protected BaseArchitecture architecture;
+		protected BaseArchitecture Architecture { get; private set; }
 
 		/// <summary>
 		/// Holds the instruction set
 		/// </summary>
-		protected InstructionSet instructionSet;
+		protected InstructionSet InstructionSet { get; private set; }
 
 		/// <summary>
 		/// List of basic blocks found during decoding
 		/// </summary>
-		protected BasicBlocks basicBlocks;
+		protected BasicBlocks BasicBlocks { get; private set; }
 
 		/// <summary>
 		/// Holds the type system
 		/// </summary>
-		protected TypeSystem typeSystem;
+		protected TypeSystem TypeSystem { get; private set; }
 
 		/// <summary>
 		/// Holds the type layout interface
 		/// </summary>
-		protected MosaTypeLayout typeLayout;
+		protected MosaTypeLayout TypeLayout { get; private set; }
 
 		/// <summary>
 		/// Holds the calling convention interface
 		/// </summary>
-		protected BaseCallingConvention callingConvention;
+		protected BaseCallingConvention CallingConvention { get; private set; }
 
 		/// <summary>
-		/// Holds the Native Pointer Size
+		/// Holds the native pointer size
 		/// </summary>
-		protected int nativePointerSize;
+		protected int NativePointerSize { get; private set; }
 
 		/// <summary>
-		/// Holds the Native Pointer Alignment
+		/// Holds the native pointer alignment
 		/// </summary>
-		protected int nativePointerAlignment;
+		protected int NativePointerAlignment { get; private set; }
 
-		#endregion Data members
+		#endregion Properties
 
 		#region IPipelineStage Members
 
@@ -86,24 +85,39 @@ namespace Mosa.Compiler.Framework
 		/// Setups the specified compiler.
 		/// </summary>
 		/// <param name="compiler">The compiler.</param>
-		public void Setup(BaseMethodCompiler compiler)
+		void IMethodCompilerStage.Initialize(BaseMethodCompiler compiler)
 		{
-			if (compiler == null)
-				throw new ArgumentNullException(@"compiler");
+			MethodCompiler = compiler;
+			InstructionSet = compiler.InstructionSet;
+			BasicBlocks = compiler.BasicBlocks;
+			Architecture = compiler.Architecture;
+			TypeSystem = compiler.TypeSystem;
+			TypeLayout = compiler.TypeLayout;
+			CallingConvention = Architecture.CallingConvention;
 
-			methodCompiler = compiler;
-			instructionSet = compiler.InstructionSet;
-			basicBlocks = compiler.BasicBlocks;
-			architecture = compiler.Architecture;
-			typeSystem = compiler.TypeSystem;
-			typeLayout = compiler.TypeLayout;
-			callingConvention = architecture.CallingConvention;
+			NativePointerSize = Architecture.NativePointerSize;
+			NativePointerAlignment = Architecture.NativeAlignment;
 
-			nativePointerSize = architecture.NativePointerSize;
-			nativePointerAlignment = architecture.NativeAlignment;
+			Setup();
+		}
+
+		void IMethodCompilerStage.Execute()
+		{
+			Run();
 		}
 
 		#endregion IMethodCompilerStage members
+
+		#region Overrides
+
+		protected virtual void Setup()
+		{ }
+
+		protected virtual void Run()
+		{
+		}
+
+		#endregion Overrides
 
 		#region Methods
 
@@ -113,7 +127,7 @@ namespace Mosa.Compiler.Framework
 		/// <value>
 		/// 	<c>true</c> if this instance has exception or finally; otherwise, <c>false</c>.
 		/// </value>
-		protected bool HasExceptionOrFinally { get { return methodCompiler.Method.ExceptionBlocks.Count != 0; } }
+		protected bool HasExceptionOrFinally { get { return MethodCompiler.Method.ExceptionBlocks.Count != 0; } }
 
 		/// <summary>
 		/// Creates the context.
@@ -122,7 +136,7 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		protected Context CreateContext(BasicBlock block)
 		{
-			return new Context(instructionSet, block);
+			return new Context(InstructionSet, block);
 		}
 
 		/// <summary>
@@ -132,7 +146,7 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		protected Context CreateContext(int index)
 		{
-			return new Context(instructionSet, index);
+			return new Context(InstructionSet, index);
 		}
 
 		/// <summary>
@@ -142,7 +156,7 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		protected Operand AllocateVirtualRegister(MosaType type)
 		{
-			return methodCompiler.VirtualRegisters.Allocate(type);
+			return MethodCompiler.VirtualRegisters.Allocate(type);
 		}
 
 		#endregion Methods
@@ -156,7 +170,7 @@ namespace Mosa.Compiler.Framework
 		/// <param name="destination">The destination.</param>
 		protected void LinkBlocks(Context source, BasicBlock destination)
 		{
-			basicBlocks.LinkBlocks(source.BasicBlock, destination);
+			BasicBlocks.LinkBlocks(source.BasicBlock, destination);
 		}
 
 		/// <summary>
@@ -166,7 +180,7 @@ namespace Mosa.Compiler.Framework
 		/// <param name="destination">The destination.</param>
 		protected void LinkBlocks(Context source, Context destination)
 		{
-			basicBlocks.LinkBlocks(source.BasicBlock, destination.BasicBlock);
+			BasicBlocks.LinkBlocks(source.BasicBlock, destination.BasicBlock);
 		}
 
 		/// <summary>
@@ -177,8 +191,8 @@ namespace Mosa.Compiler.Framework
 		/// <param name="destination2">The destination2.</param>
 		protected void LinkBlocks(Context source, Context destination, Context destination2)
 		{
-			basicBlocks.LinkBlocks(source.BasicBlock, destination.BasicBlock);
-			basicBlocks.LinkBlocks(source.BasicBlock, destination2.BasicBlock);
+			BasicBlocks.LinkBlocks(source.BasicBlock, destination.BasicBlock);
+			BasicBlocks.LinkBlocks(source.BasicBlock, destination2.BasicBlock);
 		}
 
 		/// <summary>
@@ -189,8 +203,8 @@ namespace Mosa.Compiler.Framework
 		/// <param name="destination2">The destination2.</param>
 		protected void LinkBlocks(Context source, Context destination, BasicBlock destination2)
 		{
-			basicBlocks.LinkBlocks(source.BasicBlock, destination.BasicBlock);
-			basicBlocks.LinkBlocks(source.BasicBlock, destination2);
+			BasicBlocks.LinkBlocks(source.BasicBlock, destination.BasicBlock);
+			BasicBlocks.LinkBlocks(source.BasicBlock, destination2);
 		}
 
 		/// <summary>
@@ -201,8 +215,8 @@ namespace Mosa.Compiler.Framework
 		/// <param name="destination2">The destination2.</param>
 		protected void LinkBlocks(Context source, BasicBlock destination, BasicBlock destination2)
 		{
-			basicBlocks.LinkBlocks(source.BasicBlock, destination);
-			basicBlocks.LinkBlocks(source.BasicBlock, destination2);
+			BasicBlocks.LinkBlocks(source.BasicBlock, destination);
+			BasicBlocks.LinkBlocks(source.BasicBlock, destination2);
 		}
 
 		/// <summary>
@@ -212,7 +226,7 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		protected Context CreateNewBlockWithContext(int label)
 		{
-			return instructionSet.CreateNewBlock(basicBlocks, label);
+			return InstructionSet.CreateNewBlock(BasicBlocks, label);
 		}
 
 		/// <summary>
@@ -221,7 +235,7 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		protected Context CreateNewBlockWithContext()
 		{
-			return instructionSet.CreateNewBlock(basicBlocks);
+			return InstructionSet.CreateNewBlock(BasicBlocks);
 		}
 
 		/// <summary>
@@ -251,8 +265,8 @@ namespace Mosa.Compiler.Framework
 
 			Context next = ctx.Clone();
 			next.AppendInstruction(IRInstruction.BlockStart);
-			BasicBlock nextBlock = basicBlocks.CreateBlockWithAutoLabel(next.Index, current.BasicBlock.EndIndex);
-			Context nextContext = new Context(instructionSet, nextBlock);
+			BasicBlock nextBlock = BasicBlocks.CreateBlockWithAutoLabel(next.Index, current.BasicBlock.EndIndex);
+			Context nextContext = new Context(InstructionSet, nextBlock);
 
 			foreach (BasicBlock block in current.BasicBlock.NextBlocks)
 			{
@@ -281,7 +295,7 @@ namespace Mosa.Compiler.Framework
 			if (block.NextBlocks.Count != 1)
 				return false;
 
-			var ctx = new Context(instructionSet, block);
+			var ctx = new Context(InstructionSet, block);
 
 			Debug.Assert(ctx.IsBlockStartInstruction);
 			ctx.GotoNext();
@@ -306,7 +320,7 @@ namespace Mosa.Compiler.Framework
 		/// <param name="block">The block.</param>
 		protected void EmptyBlockOfAllInstructions(BasicBlock block)
 		{
-			var ctx = new Context(instructionSet, block);
+			var ctx = new Context(InstructionSet, block);
 			Debug.Assert(ctx.IsBlockStartInstruction);
 			ctx.GotoNext();
 
@@ -330,7 +344,7 @@ namespace Mosa.Compiler.Framework
 		protected void ReplaceBranchTargets(BasicBlock block, BasicBlock oldTarget, BasicBlock newTarget)
 		{
 			// Replace any jump/branch target in block (from) with js
-			var ctx = new Context(instructionSet, block, block.EndIndex);
+			var ctx = new Context(InstructionSet, block, block.EndIndex);
 			Debug.Assert(ctx.IsBlockEndInstruction);
 
 			do
@@ -367,12 +381,12 @@ namespace Mosa.Compiler.Framework
 
 		public CompilerTrace CreateTrace()
 		{
-			return new CompilerTrace(this.methodCompiler.InternalTrace, this.methodCompiler.Method, this.methodCompiler.FormatStageName(this as IPipelineStage));
+			return new CompilerTrace(this.MethodCompiler.InternalTrace, this.MethodCompiler.Method, this.MethodCompiler.FormatStageName(this as IPipelineStage));
 		}
 
 		public CompilerTrace CreateTrace(string section)
 		{
-			return new CompilerTrace(this.methodCompiler.InternalTrace, this.methodCompiler.Method, this.methodCompiler.FormatStageName(this as IPipelineStage), section);
+			return new CompilerTrace(this.MethodCompiler.InternalTrace, this.MethodCompiler.Method, this.MethodCompiler.FormatStageName(this as IPipelineStage), section);
 		}
 
 		#endregion Trace Helper Methods
@@ -384,7 +398,7 @@ namespace Mosa.Compiler.Framework
 		/// <param name="count">The count.</param>
 		public void UpdateCounter(string name, int count)
 		{
-			methodCompiler.Compiler.Counters.UpdateCounter(name, count);
+			MethodCompiler.Compiler.Counters.UpdateCounter(name, count);
 		}
 
 		/// <summary>
@@ -394,12 +408,12 @@ namespace Mosa.Compiler.Framework
 		{
 			Debug.WriteLine(string.Empty);
 
-			Debug.WriteLine("METHOD: " + methodCompiler.Method.FullName);
+			Debug.WriteLine("METHOD: " + MethodCompiler.Method.FullName);
 			Debug.WriteLine("STAGE : " + (before ? "[BEFORE] " : "[AFTER] ") + this.GetType().Name);
 			Debug.WriteLine(string.Empty);
 
-			for (int index = 0; index < basicBlocks.Count; index++)
-				for (Context ctx = new Context(instructionSet, basicBlocks[index]); !ctx.IsBlockEndInstruction; ctx.GotoNext())
+			for (int index = 0; index < BasicBlocks.Count; index++)
+				for (Context ctx = new Context(InstructionSet, BasicBlocks[index]); !ctx.IsBlockEndInstruction; ctx.GotoNext())
 					if (!ctx.IsEmpty)
 						Debug.WriteLine(ctx.ToString());
 		}

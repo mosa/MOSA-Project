@@ -20,6 +20,7 @@ namespace System
 		}
 
 		private IntPtr m_ptr;
+
 		public IntPtr Value
 		{
 			get

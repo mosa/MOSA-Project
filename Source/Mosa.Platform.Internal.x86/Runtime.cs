@@ -21,10 +21,10 @@ namespace Mosa.Platform.Internal.x86
 			return 0;
 		}
 
-		public static void* AllocateObject(void* methodTable, uint classSize)
+		public static void* AllocateObject(void* typeDefinition, uint classSize)
 		{
 			// An object has the following memory layout:
-			//   - IntPtr MTable
+			//   - IntPtr TypeDef
 			//   - IntPtr SyncBlock
 			//   - 0 .. n object data fields
 
@@ -32,16 +32,16 @@ namespace Mosa.Platform.Internal.x86
 			void* memory = (void*)AllocateMemory(allocationSize);
 
 			uint* destination = (uint*)memory;
-			destination[0] = (uint)methodTable;
+			destination[0] = (uint)typeDefinition;
 			destination[1] = 0; // No sync block initially
 
 			return memory;
 		}
 
-		public static void* AllocateArray(void* methodTable, uint elementSize, uint elements)
+		public static void* AllocateArray(void* typeDefinition, uint elementSize, uint elements)
 		{
 			// An array has the following memory layout:
-			//   - IntPtr MTable
+			//   - IntPtr TypeDef
 			//   - IntPtr SyncBlock
 			//   - int length
 			//   - ElementType[length] elements
@@ -52,30 +52,29 @@ namespace Mosa.Platform.Internal.x86
 			void* memory = (void*)AllocateMemory(allocationSize);
 
 			uint* destination = (uint*)memory;
-			destination[0] = (uint)methodTable;
+			destination[0] = (uint)typeDefinition;
 			destination[1] = 0; // No sync block initially
 			destination[2] = elements;
 
 			return memory;
 		}
 
-		public static void* AllocateString(void* methodTable, uint length)
+		public static void* AllocateString(void* typeDefinition, uint length)
 		{
-			return AllocateArray(methodTable, 2, length);
+			return AllocateArray(typeDefinition, 2, length);
 		}
 
-		public static void* GetTypeHandle(uint** obj)
+		public static void* GetTypeHandle(void* obj)
 		{
-			// Method table is located at the beginning of object (i.e. *obj )
-			// Type metadata ($dtable) located at the second of the method table (i.e. *(*obj + 1) )
-			return (void*)*(*obj + 1);
+			// TypeDefinition is located at the beginning of object (i.e. *obj )
+			return (void*)((uint*)obj)[0];
 		}
 
 		public static void InitializeArray(uint* array, uint* fieldHandle)
 		{
 			byte* arrayElements = (byte*)(array + 3);
-			// See symbol $desc for format of field handle
-			byte* fieldData = (byte*)*fieldHandle;
+			// See FieldDefinition for format of field handle
+			byte* fieldData = (byte*)*(fieldHandle + 1);
 			uint dataLength = *(fieldHandle + 2);
 			while (dataLength > 0)
 			{
@@ -86,19 +85,19 @@ namespace Mosa.Platform.Internal.x86
 			}
 		}
 
-		public static uint IsInstanceOfType(uint methodTable, uint obj)
+		public static uint IsInstanceOfType(uint typeDefinition, uint obj)
 		{
 			if (obj == 0)
 				return 0;
 
-			uint objMethodTable = ((uint*)obj)[0];
+			uint objTypeDefinition = ((uint*)obj)[0];
 
-			while (objMethodTable != 0)
+			while (objTypeDefinition != 0)
 			{
-				if (objMethodTable == methodTable)
+				if (objTypeDefinition == typeDefinition)
 					return obj;
 
-				objMethodTable = ((uint*)objMethodTable)[3];
+				objTypeDefinition = ((uint*)objTypeDefinition)[5];
 			}
 
 			return 0;
@@ -106,12 +105,12 @@ namespace Mosa.Platform.Internal.x86
 
 		public static uint IsInstanceOfInterfaceType(int interfaceSlot, uint obj)
 		{
-			uint objMethodTable = ((uint*)obj)[0];
+			uint objTypeDefinition = ((uint*)obj)[0];
 
-			if (objMethodTable == 0)
+			if (objTypeDefinition == 0)
 				return 0;
 
-			uint bitmap = ((uint*)(objMethodTable))[2];
+			uint bitmap = ((uint*)(objTypeDefinition))[8];
 
 			if (bitmap == 0)
 				return 0;
@@ -127,7 +126,7 @@ namespace Mosa.Platform.Internal.x86
 			return obj;
 		}
 
-		public static uint Castclass(uint methodTable, uint obj)
+		public static uint Castclass(uint typeDefinition, uint obj)
 		{
 			//TODO: Fake result
 			return obj;
@@ -160,37 +159,37 @@ namespace Mosa.Platform.Internal.x86
 			}
 		}
 
-		public static void* Box8(void* methodTable, byte value)
+		public static void* Box8(void* typeDefinition, byte value)
 		{
-			byte* memory = (byte*)AllocateObject(methodTable, 4);	// 4 for alignment
+			byte* memory = (byte*)AllocateObject(typeDefinition, 4);	// 4 for alignment
 			*(byte*)(memory + (nativeIntSize * 2)) = value;
 			return memory;
 		}
 
-		public static void* Box16(void* methodTable, ushort value)
+		public static void* Box16(void* typeDefinition, ushort value)
 		{
-			byte* memory = (byte*)AllocateObject(methodTable, 4);	// 4 for alignment
+			byte* memory = (byte*)AllocateObject(typeDefinition, 4);	// 4 for alignment
 			*(ushort*)(memory + (nativeIntSize * 2)) = value;
 			return memory;
 		}
 
-		public static void* Box32(void* methodTable, uint value)
+		public static void* Box32(void* typeDefinition, uint value)
 		{
-			byte* memory = (byte*)AllocateObject(methodTable, 4);
+			byte* memory = (byte*)AllocateObject(typeDefinition, 4);
 			*(uint*)(memory + (nativeIntSize * 2)) = value;
 			return memory;
 		}
 
-		public static void* Box64(void* methodTable, ulong value)
+		public static void* Box64(void* typeDefinition, ulong value)
 		{
-			byte* memory = (byte*)AllocateObject(methodTable, 8);
+			byte* memory = (byte*)AllocateObject(typeDefinition, 8);
 			*(ulong*)(memory + (nativeIntSize * 2)) = value;
 			return memory;
 		}
 
-		public static void* Box(void* methodTable, void* value, uint size)
+		public static void* Box(void* typeDefinition, void* value, uint size)
 		{
-			byte* memory = (byte*)AllocateObject(methodTable, size);
+			byte* memory = (byte*)AllocateObject(typeDefinition, size);
 			Memcpy(memory + nativeIntSize * 2, value, size);
 			return memory;
 		}
@@ -227,19 +226,14 @@ namespace Mosa.Platform.Internal.x86
 
 		public static uint GetSizeOfObject(void* obj)
 		{
-			void* methodTable = (void*)((uint*)obj)[0];
+			void* typeDefinition = (void*)((uint*)obj)[0];
 
-			return GetSizeOfType((void*)methodTable);
+			return GetSizeOfType((void*)typeDefinition);
 		}
 
-		public static uint GetSizeOfType(void* methodTable)
+		public static uint GetSizeOfType(void* typeDefinition)
 		{
-			uint definitionTable = ((uint*)methodTable)[4];
-
-			if (definitionTable == 0)
-				return 0; // Not good
-
-			uint sizeOf = ((uint*)definitionTable)[0];
+			uint sizeOf = ((uint*)typeDefinition)[3];
 
 			return sizeOf;
 		}

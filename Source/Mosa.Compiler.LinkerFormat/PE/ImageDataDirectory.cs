@@ -7,8 +7,8 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-using System;
 using Mosa.Compiler.Common;
+using System;
 
 namespace Mosa.Compiler.LinkerFormat.PE
 {

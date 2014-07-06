@@ -14,7 +14,7 @@
     <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
     <DefaultTargetSchema>IE50</DefaultTargetSchema>
     <DelaySign>false</DelaySign>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>
     </AppDesignerFolder>
@@ -74,6 +74,7 @@
     <DebugType>none</DebugType>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="LiveRangeTests.cs" />
     <Compile Include="SimplePriorityQueueTests.cs" />
     <Compile Include="PatchTests.cs" />
     <Compile Include="LoopAwareBlockOrderTests.cs" />
@@ -93,7 +94,7 @@
       <Name>Mosa.Compiler.Framework</Name>
     </ProjectReference>
     <ProjectReference Include="..\Mosa.Compiler.Linker\Mosa.Compiler.Linker.csproj">
-      <Project>{65866a51-b229-44c5-ac81-87a90fa1741b}</Project>
+      <Project>{65866a51-b229-44c5-ac81-87a90fa1741c}</Project>
       <Name>Mosa.Compiler.Linker</Name>
     </ProjectReference>
   </ItemGroup>

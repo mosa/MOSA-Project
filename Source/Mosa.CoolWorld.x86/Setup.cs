@@ -1,5 +1,5 @@
 /*
- * (c) 2008 MOSA - The Managed Operating System Alliance
+ * (c) 2014 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
  *
@@ -10,8 +10,6 @@
 using Mosa.DeviceDrivers.ISA;
 using Mosa.DeviceSystem;
 using Mosa.DeviceSystem.PCI;
-
-//using Mosa.Kernel.x86;
 
 namespace Mosa.CoolWorld.x86
 {
@@ -171,9 +169,9 @@ namespace Mosa.CoolWorld.x86
 
 			//StartDevice(vgaTextAttributes, VGAText);
 
-			PCIControllerManager pciController = new PCIControllerManager(deviceManager);
+			//PCIControllerManager pciController = new PCIControllerManager(deviceManager);
 
-			Boot.Console.Write("Probing PCI devices...");
+			//Boot.Console.Write("Probing PCI devices...");
 
 			//pciController.CreatePCIDevices();
 			Boot.Console.WriteLine("[Completed]");

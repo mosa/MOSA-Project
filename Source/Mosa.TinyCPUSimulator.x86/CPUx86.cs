@@ -7,9 +7,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
-using System.Collections.Generic;
-
 namespace Mosa.TinyCPUSimulator.x86
 {
 	/// <summary>
@@ -216,9 +213,6 @@ namespace Mosa.TinyCPUSimulator.x86
 
 		protected override void ExecuteOpcode(SimInstruction instruction)
 		{
-			uint eip = EIP.Value;
-			uint flag = EFLAGS.Value;
-
 			try
 			{
 				instruction.Opcode.Execute(this, instruction);
@@ -267,10 +261,10 @@ namespace Mosa.TinyCPUSimulator.x86
 		{
 			//s.AppendLine("EIP        EAX        EBX        ECX        EDX        ESI        EDI        ESP        EBP        FLAGS");
 			return Hex(EIP.Value) + " " + Hex(EAX.Value) + " " + Hex(EBX.Value) + " " + Hex(ECX.Value) + " " + Hex(EDX.Value) + " " + Hex(ESI.Value) + " " + Hex(EDI.Value) + " " + Hex(ESP.Value) + " " + Hex(EBP.Value) + " "
-				+ (String.Format("{0:F}", XMM0.Value)) + " "
-				+ (String.Format("{0:F}", XMM1.Value)) + " "
-				+ (String.Format("{0:F}", XMM2.Value)) + " "
-				+ (String.Format("{0:F}", XMM3.Value)) + " "
+				//+ (String.Format("{0:F}", XMM0.Value)) + " "
+				//+ (String.Format("{0:F}", XMM1.Value)) + " "
+				//+ (String.Format("{0:F}", XMM2.Value)) + " "
+				//+ (String.Format("{0:F}", XMM3.Value)) + " "
 				+ (EFLAGS.Zero ? "Z" : "-")
 				+ (EFLAGS.Carry ? "C" : "-")
 				+ (EFLAGS.Direction ? "D" : "-")
@@ -288,6 +282,22 @@ namespace Mosa.TinyCPUSimulator.x86
 		public override void ExtendState(BaseSimState simState)
 		{
 			simState.ExtendState(this);
+		}
+
+		public override SimInstruction DecodeOpcode(ulong address)
+		{
+			ulong at = address;
+
+			var opcode = DirectRead8(at++);
+
+			switch (opcode)
+			{
+				case 0x90: return new SimInstruction(Opcode.Nop, 1);
+				case 0xFA: return new SimInstruction(Opcode.Cli, 1);
+				case 0xFB: return new SimInstruction(Opcode.Sti, 1);
+				case 0xC3: return new SimInstruction(Opcode.Ret, 1);
+				default: return null;
+			}
 		}
 	}
 }

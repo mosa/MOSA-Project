@@ -52,7 +52,7 @@ namespace System
 			if (IsNegativeInfinity(_value) && IsNegativeInfinity(value))
 				return 0;
 
-			if (IsNaN(value)) 
+			if (IsNaN(value))
 				if (IsNaN(_value))
 					return 0;
 				else
@@ -74,27 +74,25 @@ namespace System
 
 		public bool Equals(double value)
 		{
-			//return Equals((object)obj);
 			if (IsNaN(value))
 				return IsNaN(_value);
 
 			return (value == _value);
 		}
 
-		//public override bool Equals(object obj)
-		//{
-		//    double value = (double)obj;
+		public override bool Equals(object obj)
+		{
+			double value = (double)obj;
 
-		//    if (IsNaN(value))
-		//        return IsNaN(_value);
+			if (IsNaN(value))
+				return IsNaN(_value);
 
-		//    return (value == _value);
-		//}
+			return (value == _value);
+		}
 
 		public override int GetHashCode()
 		{
 			return (int)_value;
 		}
-
 	}
 }

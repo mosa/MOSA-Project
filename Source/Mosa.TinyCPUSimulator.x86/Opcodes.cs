@@ -17,6 +17,26 @@ namespace Mosa.TinyCPUSimulator.x86
 		public static BaseX86Opcode Adc = new Adc();
 		public static BaseX86Opcode And = new And();
 		public static BaseX86Opcode Mov = new Mov();
+		public static BaseX86Opcode Cmovo = new Cmovo();
+		public static BaseX86Opcode Cmovno = new Cmovno();
+		public static BaseX86Opcode Cmovc = new Cmovc();
+		public static BaseX86Opcode Cmovb = new Cmovb();
+		public static BaseX86Opcode Cmovae = new Cmovae();
+		public static BaseX86Opcode Cmovnc = new Cmovnc();
+		public static BaseX86Opcode Cmove = new Cmove();
+		public static BaseX86Opcode Cmovz = new Cmovz();
+		public static BaseX86Opcode Cmovne = new Cmovne();
+		public static BaseX86Opcode Cmovnz = new Cmovnz();
+		public static BaseX86Opcode Cmovbe = new Cmovbe();
+		public static BaseX86Opcode Cmova = new Cmova();
+		public static BaseX86Opcode Cmovs = new Cmovs();
+		public static BaseX86Opcode Cmovns = new Cmovns();
+		public static BaseX86Opcode Cmovp = new Cmovp();
+		public static BaseX86Opcode Cmovnp = new Cmovnp();
+		public static BaseX86Opcode Cmovl = new Cmovl();
+		public static BaseX86Opcode Cmovge = new Cmovge();
+		public static BaseX86Opcode Cmovle = new Cmovle();
+		public static BaseX86Opcode Cmovg = new Cmovg();
 		public static BaseX86Opcode Jo = new Jo();
 		public static BaseX86Opcode Jno = new Jno();
 		public static BaseX86Opcode Jc = new Jc();
@@ -124,6 +144,12 @@ namespace Mosa.TinyCPUSimulator.x86
 		public static BaseX86Opcode Roundss = new Roundss();
 		public static BaseX86Opcode Roundsd = new Roundsd();
 		public static BaseX86Opcode FarJmp = new FarJmp();
+		public static BaseX86Opcode Test = new Test();
+		public static BaseX86Opcode Bts = new Bts();
+		public static BaseX86Opcode Btr = new Btr();
+		public static BaseX86Opcode Lock = new Lock();
+		public static BaseX86Opcode Pause = new Pause();
+		public static BaseX86Opcode CmpXchg = new CmpXchg();
 
 		public static BaseX86Opcode InternalBreak = new InternalBreak();
 	}

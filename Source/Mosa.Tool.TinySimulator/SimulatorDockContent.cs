@@ -1,6 +1,5 @@
 ﻿using Mosa.TinyCPUSimulator;
 using WeifenLuo.WinFormsUI.Docking;
-using System.Windows.Forms;
 
 namespace Mosa.Tool.TinySimulator
 {

@@ -25,6 +25,7 @@ namespace Mosa.Tool.Explorer
 	{
 		private CodeForm form = new CodeForm();
 		private IInternalTrace internalTrace = new BasicInternalTrace();
+		private MosaModuleLoader assemblyLoader;
 		private TypeSystem typeSystem;
 		private ConfigurableTraceFilter filter = new ConfigurableTraceFilter();
 		private MosaTypeLayout typeLayout;
@@ -178,9 +179,13 @@ namespace Mosa.Tool.Explorer
 
 			filter.MethodMatch = MatchType.Any;
 
-			ExplorerCompiler.Compile(typeSystem, typeLayout, internalTrace, cbPlatform.Text, enableSSAToolStripMenuItem.Checked, enableBinaryCodeGenerationToolStripMenuItem.Checked);
+			CreateTypeSystemAndLayout();
+
+			ExplorerCompiler.Compile(typeSystem, typeLayout, internalTrace, cbPlatform.Text, enableSSAToolStripMenuItem.Checked, enableSSAOptimizations.Checked, enableBinaryCodeGenerationToolStripMenuItem.Checked);
+
 			tabControl1.SelectedTab = tabPage1;
 			rbOtherResult.Text = compileLog.ToString();
+			UpdateTree();
 
 			toolStripStatusLabel1.Text = "Compiled!";
 		}
@@ -316,7 +321,7 @@ namespace Mosa.Tool.Explorer
 
 		protected void LoadAssembly(string filename, bool includeTestComponents, string platform)
 		{
-			MosaModuleLoader assemblyLoader = new MosaModuleLoader();
+			assemblyLoader = new MosaModuleLoader();
 
 			if (includeTestComponents)
 			{
@@ -329,11 +334,17 @@ namespace Mosa.Tool.Explorer
 			assemblyLoader.AddPrivatePath(Path.GetDirectoryName(filename));
 			assemblyLoader.LoadModuleFromFile(filename);
 
-			typeSystem = TypeSystem.Load(assemblyLoader.CreateMetadata());
-
-			typeLayout = new MosaTypeLayout(typeSystem, 4, 4); // FIXME
-
+			CreateTypeSystemAndLayout();
 			UpdateTree();
+		}
+
+		protected void CreateTypeSystemAndLayout()
+		{
+			if (assemblyLoader == null)
+				return;
+
+			typeSystem = TypeSystem.Load(assemblyLoader.CreateMetadata());
+			typeLayout = new MosaTypeLayout(typeSystem, 4, 4); // FIXME
 		}
 
 		protected void LoadAssemblyDebugInfo(string assemblyFileName)
@@ -348,7 +359,7 @@ namespace Mosa.Tool.Explorer
 				{
 					using (PdbReader reader = new PdbReader(fileStream))
 					{
-						tbResult.AppendText("Global symbols: \n");
+						tbResult.AppendText("Global targetSymbols: \n");
 						tbResult.AppendText("======================\n");
 						foreach (CvSymbol symbol in reader.GlobalSymbols)
 						{
@@ -393,7 +404,6 @@ namespace Mosa.Tool.Explorer
 		private void toolStripButton3_Click(object sender, EventArgs e)
 		{
 			Compile();
-			UpdateTree();
 		}
 
 		private void cbLabels_SelectedIndexChanged(object sender, EventArgs e)
@@ -441,7 +451,6 @@ namespace Mosa.Tool.Explorer
 		private void toolStripButton4_Click(object sender, EventArgs e)
 		{
 			Compile();
-			UpdateTree();
 		}
 	}
 }

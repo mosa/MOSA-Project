@@ -392,6 +392,7 @@ namespace Mosa.DeviceDrivers.PCI.VideoCard
 
 				case DisplayModeState.Unknown:
 					return false;
+
 				default:
 					return false;
 			}

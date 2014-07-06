@@ -7,10 +7,10 @@
 *  Phil Garcia (tgiphil) <phil@thinkedge.com>
 */
 
-using System;
-using System.IO;
 using Mosa.DeviceSystem;
 using Mosa.FileSystem.FAT;
+using System;
+using System.IO;
 
 namespace Mosa.Utility.BootImage
 {

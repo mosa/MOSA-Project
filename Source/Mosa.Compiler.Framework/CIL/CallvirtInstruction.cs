@@ -7,7 +7,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System.Diagnostics;
 using Mosa.Compiler.Common;
 using Mosa.Compiler.MosaTypeSystem;
 
@@ -52,6 +51,7 @@ namespace Mosa.Compiler.Framework.CIL
 			{
 				MosaMethod toBeReplaced = HandleConstrained(ctx, decoder, ctx.Previous);
 				base.Decode(ctx, decoder);
+
 				if (toBeReplaced != null)
 				{
 					ctx.MosaMethod = toBeReplaced;
@@ -59,15 +59,18 @@ namespace Mosa.Compiler.Framework.CIL
 				}
 			}
 			else
+			{
 				base.Decode(ctx, decoder);
+			}
 		}
 
-		MosaMethod HandleConstrained(Context ctx, IInstructionDecoder decoder, Context constrained)
+		private MosaMethod HandleConstrained(Context ctx, IInstructionDecoder decoder, Context constrained)
 		{
 			var type = constrained.MosaType;
 			var method = (MosaMethod)decoder.Instruction.Operand;
 
 			ctx.MosaType = type;
+
 			if (type.IsValueType)
 			{
 				MosaMethod implMethod = null;
@@ -96,7 +99,9 @@ namespace Mosa.Compiler.Framework.CIL
 					return implMethod;
 				}
 				else
+				{
 					throw new CompilerException();
+				}
 			}
 			else
 			{
@@ -106,6 +111,7 @@ namespace Mosa.Compiler.Framework.CIL
 				constrained.Result = LoadInstruction.CreateResultOperand(decoder, type);
 				constrained.MosaType = type;
 			}
+
 			return null;
 		}
 

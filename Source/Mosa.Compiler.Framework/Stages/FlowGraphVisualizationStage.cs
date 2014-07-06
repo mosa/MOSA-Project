@@ -15,7 +15,7 @@ namespace Mosa.Compiler.Framework.Stages
 	/// <summary>
 	/// The FlowGraph Visualization Stage emits flowgraphs for graphviz.
 	/// </summary>
-	public class FlowGraphVisualizationStage : BaseMethodCompilerStage, IMethodCompilerStage, IPipelineStage
+	public class FlowGraphVisualizationStage : BaseMethodCompilerStage
 	{
 		#region Data members
 
@@ -53,30 +53,27 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </summary>
 		public static readonly FlowGraphVisualizationStage Instance = new FlowGraphVisualizationStage();
 
-		/// <summary>
-		/// Runs the specified compiler.
-		/// </summary>
-		void IMethodCompilerStage.Run()
+		protected override void Run()
 		{
-			if (!methodCount.ContainsKey(methodCompiler.Method.Name))
-				methodCount[methodCompiler.Method.Name] = 0;
+			if (!methodCount.ContainsKey(MethodCompiler.Method.Name))
+				methodCount[MethodCompiler.Method.Name] = 0;
 
-			++methodCount[methodCompiler.Method.Name];
+			++methodCount[MethodCompiler.Method.Name];
 
 			// Retrieve the first block
-			firstBlock = basicBlocks.PrologueBlock;
+			firstBlock = BasicBlocks.PrologueBlock;
 
 			workList = new Stack<BasicBlock>();
 			workList.Push(firstBlock);
-			workArray = new BitArray(basicBlocks.Count);
+			workArray = new BitArray(BasicBlocks.Count);
 
-			string methodName = methodCompiler.Method.Name;
+			string methodName = MethodCompiler.Method.Name;
 			methodName = methodName.Replace("<", "");
 			methodName = methodName.Replace(">", "");
 			methodName = methodName.Replace("$", "");
 			methodName = methodName.Replace(".", "");
 
-			IPipelineStage previousStage = methodCompiler.GetStage(typeof(IMethodCompilerStage));
+			IPipelineStage previousStage = MethodCompiler.GetStage(typeof(IMethodCompilerStage));
 
 			dotFile.WriteLine("subgraph cluster" + methodName + "_FlowGraph {");
 
@@ -88,7 +85,7 @@ namespace Mosa.Compiler.Framework.Stages
 			string nodes = string.Empty;
 			string edges = string.Empty;
 
-			foreach (BasicBlock block in basicBlocks)
+			foreach (BasicBlock block in BasicBlocks)
 			{
 				string nodeName = string.Empty;
 				string nodeContent = string.Empty;
@@ -103,7 +100,7 @@ namespace Mosa.Compiler.Framework.Stages
 				int field = 0;
 				int i = 0;
 
-				for (Context ctx = new Context(instructionSet, block); !ctx.IsBlockEndInstruction; ctx.GotoNext())
+				for (Context ctx = new Context(InstructionSet, block); !ctx.IsBlockEndInstruction; ctx.GotoNext())
 				{
 					if (ctx.IsEmpty)
 						continue;
@@ -154,7 +151,7 @@ namespace Mosa.Compiler.Framework.Stages
 				//dotFile = new System.IO.StreamWriter("dotGraph_" + compiler.Method.Name + "_" + methodCount[compiler.Method.Name] + ".dot");
 				dotFile = new System.IO.StreamWriter("dotGraph.dot");
 				dotFile.WriteLine("digraph \"\" {");
-				dotFile.WriteLine("label = \"" + methodCompiler.Method.DeclaringType.Module.Name + "\"");
+				dotFile.WriteLine("label = \"" + MethodCompiler.Method.DeclaringType.Module.Name + "\"");
 			}
 			catch (System.Exception)
 			{

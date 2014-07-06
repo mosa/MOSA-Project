@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Mosa.Test.Collection</RootNamespace>
     <AssemblyName>Mosa.Test.Collection</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
@@ -122,6 +122,8 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>LdargaTests.tt</DependentUpon>
     </Compile>
+    <Compile Include="LinkedListTests.cs" />
+    <Compile Include="LinkedList.cs" />
     <Compile Include="NewObjectTests.cs" />
     <Compile Include="SSAOptimizationTest.cs" />
     <Compile Include="RegisterAllocatorTests.cs" />

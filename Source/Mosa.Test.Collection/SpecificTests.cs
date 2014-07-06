@@ -7,8 +7,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
-
 namespace Mosa.Test.Collection
 {
 	public static class SpecificTests
@@ -50,6 +48,5 @@ namespace Mosa.Test.Collection
 		//{
 		//	return Double.IsPositiveInfinity(Double.NegativeInfinity);
 		//}
-
 	}
 }

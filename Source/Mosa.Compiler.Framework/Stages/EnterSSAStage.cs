@@ -7,37 +7,33 @@
  *  Simon Wollwage (rootnode) <rootnode@mosa-project.org>
  */
 
+using Mosa.Compiler.Framework.Analysis;
 using Mosa.Compiler.Framework.IR;
 using System.Collections.Generic;
 using System.Diagnostics;
-using Mosa.Compiler.Framework.Analysis;
 
 namespace Mosa.Compiler.Framework.Stages
 {
 	/// <summary>
 	///
 	/// </summary>
-	public sealed class EnterSSAStage : BaseMethodCompilerStage, IMethodCompilerStage, IPipelineStage
+	public sealed class EnterSSAStage : BaseMethodCompilerStage
 	{
 		private PhiPlacementStage phiPlacementStage;
 		private Dictionary<Operand, Stack<int>> variables;
 		private Dictionary<Operand, int> counts;
-		private IDominanceProvider dominanceCalculation;
 
 		private Dictionary<Operand, Operand[]> ssaOperands = new Dictionary<Operand, Operand[]>();
 
-		/// <summary>
-		/// Performs stage specific processing on the compiler context.
-		/// </summary>
-		void IMethodCompilerStage.Run()
+		protected override void Run()
 		{
 			// Method is empty - must be a plugged method
-			if (basicBlocks.HeadBlocks.Count == 0)
+			if (BasicBlocks.HeadBlocks.Count == 0)
 				return;
 
-			phiPlacementStage = methodCompiler.Pipeline.FindFirst<PhiPlacementStage>();
+			phiPlacementStage = MethodCompiler.Pipeline.FindFirst<PhiPlacementStage>();
 
-			foreach (var headBlock in basicBlocks.HeadBlocks)
+			foreach (var headBlock in BasicBlocks.HeadBlocks)
 			{
 				EnterSSA(headBlock);
 			}
@@ -51,7 +47,8 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="headBlock">The head block.</param>
 		private void EnterSSA(BasicBlock headBlock)
 		{
-			dominanceCalculation = methodCompiler.Pipeline.FindFirst<DominanceCalculationStage>().GetDominanceProvider(headBlock);
+			var analysis = MethodCompiler.DominanceAnalysis.GetDominanceAnalysis(headBlock);
+
 			variables = new Dictionary<Operand, Stack<int>>();
 			counts = new Dictionary<Operand, int>();
 
@@ -60,26 +57,13 @@ namespace Mosa.Compiler.Framework.Stages
 				AddToAssignments(op);
 			}
 
-			foreach (var op in methodCompiler.Parameters)
-			{
-				AddToAssignments(op);
-			}
-
-			foreach (var op in methodCompiler.LocalVariables)
-			{
-				if (op.Uses.Count != 0)
-				{
-					AddToAssignments(op);
-				}
-			}
-
 			if (headBlock.NextBlocks.Count > 0)
 			{
-				RenameVariables(headBlock.NextBlocks[0]);
+				RenameVariables(headBlock.NextBlocks[0], analysis);
 			}
 
 			// Clean up
-			dominanceCalculation = null;
+			analysis = null;
 			variables = null;
 			counts = null;
 		}
@@ -123,17 +107,16 @@ namespace Mosa.Compiler.Framework.Stages
 			return ssaOperand;
 		}
 
-		//
-
 		/// <summary>
 		/// Renames the variables.
 		/// </summary>
 		/// <param name="block">The block.</param>
-		private void RenameVariables(BasicBlock block)
+		/// <param name="dominance">The dominance provider.</param>
+		private void RenameVariables(BasicBlock block, IDominanceAnalysis dominance)
 		{
-			for (var context = new Context(instructionSet, block); !context.IsBlockEndInstruction; context.GotoNext())
+			for (var context = new Context(InstructionSet, block); !context.IsBlockEndInstruction; context.GotoNext())
 			{
-				if (!(context.Instruction is Phi))
+				if (context.Instruction != IRInstruction.Phi)
 				{
 					for (var i = 0; i < context.OperandCount; ++i)
 					{
@@ -142,10 +125,10 @@ namespace Mosa.Compiler.Framework.Stages
 						if (op == null || !op.IsVirtualRegister)
 							continue;
 
-						//Debug.Assert(variables.ContainsKey(op), op.ToString() + " is not in dictionary [block = " + block + "]");
+						Debug.Assert(variables.ContainsKey(op), op.ToString() + " is not in dictionary [block = " + block + "]");
 
-						var index = variables[op].Peek();
-						context.SetOperand(i, GetSSAOperand(op, index));
+						var version = variables[op].Peek();
+						context.SetOperand(i, GetSSAOperand(op, version));
 					}
 				}
 
@@ -161,29 +144,31 @@ namespace Mosa.Compiler.Framework.Stages
 
 			foreach (var s in block.NextBlocks)
 			{
-				var j = WhichPredecessor(s, block); // ???
+				var index = WhichPredecessor(s, block); // okay since the block list order does not change between this stage and PhiPlacementStage
 
-				for (var context = new Context(instructionSet, s); !context.IsBlockEndInstruction; context.GotoNext())
+				for (var context = new Context(InstructionSet, s); !context.IsBlockEndInstruction; context.GotoNext())
 				{
-					if (!(context.Instruction is Phi))
+					if (context.Instruction != IRInstruction.Phi)
 						continue;
 
-					var op = context.GetOperand(j);
+					Debug.Assert(context.OperandCount == context.BasicBlock.PreviousBlocks.Count);
+
+					var op = context.GetOperand(index);
 
 					if (variables[op].Count > 0)
 					{
-						var index = variables[op].Peek();
-						context.SetOperand(j, GetSSAOperand(context.GetOperand(j), index));
+						var version = variables[op].Peek();
+						context.SetOperand(index, GetSSAOperand(context.GetOperand(index), version));
 					}
 				}
 			}
 
-			foreach (var s in dominanceCalculation.GetChildren(block))
+			foreach (var s in dominance.GetChildren(block))
 			{
-				RenameVariables(s);
+				RenameVariables(s, dominance);
 			}
 
-			for (var context = new Context(instructionSet, block); !context.IsBlockEndInstruction; context.GotoNext())
+			for (var context = new Context(InstructionSet, block); !context.IsBlockEndInstruction; context.GotoNext())
 			{
 				if (!context.IsEmpty && context.Result != null && context.Result.IsVirtualRegister)
 				{

@@ -8,8 +8,6 @@
  */
 
 using Xunit;
-using Xunit.Extensions;
-using Mosa.Compiler.Framework;
 
 namespace Mosa.Compiler.Framework.xUnit
 {

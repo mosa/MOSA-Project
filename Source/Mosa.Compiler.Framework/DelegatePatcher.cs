@@ -55,8 +55,11 @@ namespace Mosa.Compiler.Framework
 
 			Context context = CreateMethodStructure(methodCompiler, true);
 
-			context.AppendInstruction(IRInstruction.Store, null, thisOperand, methodPointerOffsetOperand, methodPointerOperand);
-			context.AppendInstruction(IRInstruction.Store, null, thisOperand, instanceOffsetOperand, instanceOperand);
+			Operand v1 = methodCompiler.CreateVirtualRegister(thisOperand.Type);
+
+			context.AppendInstruction(IRInstruction.Move, v1, thisOperand);
+			context.AppendInstruction(IRInstruction.Store, null, v1, methodPointerOffsetOperand, methodPointerOperand);
+			context.AppendInstruction(IRInstruction.Store, null, v1, instanceOffsetOperand, instanceOperand);
 			context.AppendInstruction(IRInstruction.Return, methodCompiler.BasicBlocks.EpilogueBlock);
 			context.SetBranch(BasicBlock.EpilogueLabel);
 		}
@@ -112,6 +115,7 @@ namespace Mosa.Compiler.Framework
 			methodCompiler.BasicBlocks.LinkBlocks(b0.BasicBlock, b1.BasicBlock);
 			methodCompiler.BasicBlocks.LinkBlocks(b0.BasicBlock, b2.BasicBlock);
 
+			// no instance
 			b1.AppendInstruction(IRInstruction.Call, opReturn, opMethod);
 			b1.MosaMethod = methodCompiler.Method;
 			for (int i = 1; i < methodCompiler.Parameters.Length; i++)
@@ -121,17 +125,18 @@ namespace Mosa.Compiler.Framework
 			b1.AppendInstruction(IRInstruction.Jmp, b3.BasicBlock);
 			methodCompiler.BasicBlocks.LinkBlocks(b1.BasicBlock, b3.BasicBlock);
 
+			// instance
 			b2.AppendInstruction(IRInstruction.Call, opReturn, opMethod);
 			b2.MosaMethod = methodCompiler.Method;
+			b2.AddOperand(opInstance);
 			for (int i = 1; i < methodCompiler.Parameters.Length; i++)
 			{
 				b2.AddOperand(vrs[i]);
 			}
-			b2.AddOperand(opInstance);
-
 			b2.AppendInstruction(IRInstruction.Jmp, b3.BasicBlock);
 			methodCompiler.BasicBlocks.LinkBlocks(b2.BasicBlock, b3.BasicBlock);
 
+			// return
 			b3.AppendInstruction(IRInstruction.Return, methodCompiler.BasicBlocks.EpilogueBlock);
 			if (withReturn)
 			{

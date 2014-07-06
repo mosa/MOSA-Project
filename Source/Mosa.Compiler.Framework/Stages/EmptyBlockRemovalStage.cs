@@ -7,28 +7,27 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System.Diagnostics;
-using System.Collections.Generic;
 using Mosa.Compiler.Common;
 using Mosa.Compiler.InternalTrace;
-using Mosa.Compiler.Framework.IR;
+using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework.Stages
 {
 	/// <summary>
 	///	This stage removes empty blocks.
 	/// </summary>
-	public class EmptyBlockRemovalStage : BaseMethodCompilerStage, IMethodCompilerStage, IPipelineStage
+	public class EmptyBlockRemovalStage : BaseMethodCompilerStage
 	{
 		protected BaseInstruction jumpInstruction;
 
-		public virtual void Run()
+		protected override void Run()
 		{
 			var trace = CreateTrace();
 
-			List<KeyValuePair<BasicBlock, BasicBlock>> worklist = new List<KeyValuePair<BasicBlock, BasicBlock>>();
+			List<Tuple<BasicBlock, BasicBlock>> worklist = new List<Tuple<BasicBlock, BasicBlock>>();
 
-			foreach (var block in basicBlocks)
+			foreach (var block in BasicBlocks)
 			{
 				// don't process other unusual blocks (header blocks, return block, etc.)
 				if (block.NextBlocks.Count == 0 || block.PreviousBlocks.Count == 0)
@@ -88,6 +87,5 @@ namespace Mosa.Compiler.Framework.Stages
 
 			EmptyBlockOfAllInstructions(block);
 		}
-
 	}
 }

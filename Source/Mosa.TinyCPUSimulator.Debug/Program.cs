@@ -8,8 +8,8 @@
  *
  */
 
-using System;
 using Mosa.Test.Collection.x86.xUnit;
+using System;
 
 namespace Mosa.TinyCPUSimulator.Debug
 {
@@ -17,7 +17,21 @@ namespace Mosa.TinyCPUSimulator.Debug
 	{
 		private static void Main(string[] args)
 		{
-			Test8();
+			Test10();
+		}
+
+		private static void Test10()
+		{
+			var fixture = new DelegateFixture();
+
+			fixture.CallDelegateVoid1();
+		}
+
+		private static void Test9()
+		{
+			var fixture = new ArrayLayoutFixture();
+
+			fixture.ArrayR4();
 		}
 
 		private static void Test8()

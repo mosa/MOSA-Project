@@ -8,11 +8,13 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using Mosa.Compiler.Framework.Linker;
+using Mosa.Compiler.Common;
 using Mosa.Compiler.InternalTrace;
 using Mosa.Compiler.Linker;
 using Mosa.Compiler.MosaTypeSystem;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Mosa.Compiler.Framework
 {
@@ -22,59 +24,69 @@ namespace Mosa.Compiler.Framework
 	/// </summary>
 	public abstract class BaseCompiler
 	{
-		#region Data members
+		#region Properties
 
 		/// <summary>
-		/// The compiler target architecture.
+		/// Returns the architecture used by the compiler.
 		/// </summary>
-		private BaseArchitecture architecture;
+		public BaseArchitecture Architecture { get; private set; }
 
 		/// <summary>
-		/// The pipeline of the compiler.
+		/// Gets the pipeline.
 		/// </summary>
-		private CompilerPipeline pipeline;
+		/// <value>The pipeline.</value>
+		public CompilerPipeline Pipeline { get; private set; }
 
 		/// <summary>
-		/// Holds the current type system during compilation.
+		/// Gets the type system.
 		/// </summary>
-		private TypeSystem typeSystem;
+		/// <value>The type system.</value>
+		public TypeSystem TypeSystem { get; private set; }
 
 		/// <summary>
-		/// Holds the current type layout during complication
+		/// Gets the type layout.
 		/// </summary>
-		private MosaTypeLayout typeLayout;
+		/// <value>The type layout.</value>
+		public MosaTypeLayout TypeLayout { get; private set; }
 
 		/// <summary>
-		/// Holds the current internal log
+		/// Gets the internal log.
 		/// </summary>
-		private IInternalTrace internalTrace;
+		/// <value>The internal log.</value>
+		public IInternalTrace InternalTrace { get; private set; }
 
 		/// <summary>
-		/// Holds the compiler option set
+		/// Gets the compiler options.
 		/// </summary>
-		private CompilerOptions compilerOptions;
+		/// <value>The compiler options.</value>
+		public CompilerOptions CompilerOptions { get; private set; }
 
 		/// <summary>
-		/// Holds the counters
+		/// Gets the counters.
 		/// </summary>
-		private Counters counters;
+		public Counters Counters { get; private set; }
 
 		/// <summary>
-		/// Holds the compilation scheduler
+		/// Gets the scheduler.
 		/// </summary>
-		private ICompilationScheduler compilationScheduler;
+		public ICompilationScheduler CompilationScheduler { get; private set; }
 
 		/// <summary>
-		/// Holds the linker
+		/// Gets the linker.
 		/// </summary>
-		private ILinker linker;
+		public BaseLinker Linker { get; private set; }
 
 		/// <summary>
-		/// Holds the plug system
+		/// Gets the plug system.
 		/// </summary>
-		private readonly PlugSystem plugSystem;
+		public PlugSystem PlugSystem { get; private set; }
 
-		#endregion Data members
+		/// <summary>
+		/// Gets the list of Intrinsic Types for internal call replacements.
+		/// </summary>
+		public Dictionary<string, Type> IntrinsicTypes { get; private set; }
+
+		#endregion Properties
 
 		#region Construction
 
@@ -87,83 +99,50 @@ namespace Mosa.Compiler.Framework
 		/// <param name="compilationScheduler">The compilation scheduler.</param>
 		/// <param name="internalTrace">The internal trace.</param>
 		/// <param name="compilerOptions">The compiler options.</param>
-		protected BaseCompiler(BaseArchitecture architecture, TypeSystem typeSystem, MosaTypeLayout typeLayout, ICompilationScheduler compilationScheduler, IInternalTrace internalTrace, ILinker linker, CompilerOptions compilerOptions)
+		protected BaseCompiler(BaseArchitecture architecture, TypeSystem typeSystem, MosaTypeLayout typeLayout, ICompilationScheduler compilationScheduler, IInternalTrace internalTrace, BaseLinker linker, CompilerOptions compilerOptions)
 		{
 			if (architecture == null)
-				throw new ArgumentNullException(@"architecture");
+				throw new ArgumentNullException(@"Architecture");
 
-			this.pipeline = new CompilerPipeline();
-			this.architecture = architecture;
-			this.typeSystem = typeSystem;
-			this.typeLayout = typeLayout;
-			this.internalTrace = internalTrace;
-			this.compilerOptions = compilerOptions;
-			this.counters = new Counters();
-			this.compilationScheduler = compilationScheduler;
-			this.linker = (linker != null) ? linker : LinkerFactory.Create(compilerOptions.LinkerType, compilerOptions, architecture);
-			this.plugSystem = new PlugSystem();
+			Pipeline = new CompilerPipeline();
+			Architecture = architecture;
+			TypeSystem = typeSystem;
+			TypeLayout = typeLayout;
+			InternalTrace = internalTrace;
+			CompilerOptions = compilerOptions;
+			Counters = new Counters();
+			CompilationScheduler = compilationScheduler;
+			PlugSystem = new PlugSystem();
+			Linker = linker;
+
+			if (Linker == null)
+			{
+				Linker = compilerOptions.LinkerFactory();
+				Linker.Initialize(compilerOptions.BaseAddress, architecture.Endianness, architecture.ElfMachineType);
+			}
+
+			// Create new dictionary
+			IntrinsicTypes = new Dictionary<string, Type>();
+
+			// Get all the classes that implement the IIntrinsicInternalMethod interface
+			IEnumerable<Type> types = AppDomain.CurrentDomain.GetAssemblies()
+				.SelectMany(s => s.GetTypes())
+				.Where(p => typeof(IIntrinsicInternalMethod).IsAssignableFrom(p) && p.IsClass);
+
+			// Iterate through all the found types
+			foreach (var t in types)
+			{
+				// Now get all the ReplacementTarget attributes
+				var attributes = (ReplacementTargetAttribute[])t.GetCustomAttributes(typeof(ReplacementTargetAttribute), true);
+				for (int i = 0; i < attributes.Length; i++)
+				{
+					// Finally add the dictionary entry mapping the target string and the type
+					IntrinsicTypes.Add(attributes[i].Target, t);
+				}
+			}
 		}
 
 		#endregion Construction
-
-		#region Properties
-
-		/// <summary>
-		/// Returns the architecture used by the compiler.
-		/// </summary>
-		public BaseArchitecture Architecture { get { return architecture; } }
-
-		/// <summary>
-		/// Gets the pipeline.
-		/// </summary>
-		/// <value>The pipeline.</value>
-		public CompilerPipeline Pipeline { get { return pipeline; } }
-
-		/// <summary>
-		/// Gets the type system.
-		/// </summary>
-		/// <value>The type system.</value>
-		public TypeSystem TypeSystem { get { return typeSystem; } }
-
-		/// <summary>
-		/// Gets the type layout.
-		/// </summary>
-		/// <value>The type layout.</value>
-		public MosaTypeLayout TypeLayout { get { return typeLayout; } }
-
-		/// <summary>
-		/// Gets the internal log.
-		/// </summary>
-		/// <value>The internal log.</value>
-		public IInternalTrace InternalTrace { get { return internalTrace; } }
-
-		/// <summary>
-		/// Gets the compiler options.
-		/// </summary>
-		/// <value>The compiler options.</value>
-		public CompilerOptions CompilerOptions { get { return compilerOptions; } }
-
-		/// <summary>
-		/// Gets the counters.
-		/// </summary>
-		public Counters Counters { get { return counters; } }
-
-		/// <summary>
-		/// Gets the scheduler.
-		/// </summary>
-		public ICompilationScheduler Scheduler { get { return compilationScheduler; } }
-
-		/// <summary>
-		/// Gets the linker.
-		/// </summary>
-		public ILinker Linker { get { return linker; } }
-
-		/// <summary>
-		/// Gets the plug system.
-		/// </summary>
-		public PlugSystem PlugSystem { get { return plugSystem; } }
-
-		#endregion Properties
 
 		#region Methods
 
@@ -209,8 +188,7 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		public MosaMethod CreateLinkerMethod(string methodName)
 		{
-			var method = typeSystem.CreateLinkerMethod(methodName, typeSystem.BuiltIn.Void, null);
-			return method;
+			return TypeSystem.CreateLinkerMethod(methodName, TypeSystem.BuiltIn.Void, null);
 		}
 
 		/// <summary>
@@ -227,7 +205,7 @@ namespace Mosa.Compiler.Framework
 			foreach (ICompilerStage stage in Pipeline)
 			{
 				// Setup Compiler
-				stage.Setup(this);
+				stage.Initialize(this);
 			}
 
 			foreach (ICompilerStage stage in Pipeline)
@@ -235,7 +213,7 @@ namespace Mosa.Compiler.Framework
 				Trace(CompilerEvent.CompilerStageStart, stage.Name);
 
 				// Execute stage
-				stage.Run();
+				stage.Execute();
 
 				Trace(CompilerEvent.CompilerStageEnd, stage.Name);
 			}
@@ -278,7 +256,7 @@ namespace Mosa.Compiler.Framework
 		/// <param name="message">The message.</param>
 		protected void Trace(CompilerEvent compilerEvent, string message)
 		{
-			internalTrace.CompilerEventListener.SubmitTraceEvent(compilerEvent, message);
+			InternalTrace.CompilerEventListener.SubmitTraceEvent(compilerEvent, message);
 		}
 
 		/// <summary>
@@ -288,7 +266,7 @@ namespace Mosa.Compiler.Framework
 		/// <param name="count">The count.</param>
 		protected void UpdateCounter(string name, int count)
 		{
-			counters.UpdateCounter(name, count);
+			Counters.UpdateCounter(name, count);
 		}
 
 		#endregion Helper Methods

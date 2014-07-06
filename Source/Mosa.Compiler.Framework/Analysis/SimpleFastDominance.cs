@@ -24,7 +24,7 @@ namespace Mosa.Compiler.Framework.Analysis
 	/// The implementation is based on "A Simple, Fast Dominance Algorithm" by Keith D. Cooper,
 	/// Timothy J. Harvey, and Ken Kennedy, Rice University in Houston, Texas, USA.
 	/// </remarks>
-	public sealed class SimpleFastDominance : IDominanceProvider
+	public sealed class SimpleFastDominance : IDominanceAnalysis
 	{
 		#region Data members
 
@@ -51,12 +51,26 @@ namespace Mosa.Compiler.Framework.Analysis
 		#endregion Data members
 
 		/// <summary>
-		/// Performs stage specific processing on the compiler context.
+		/// Initializes a new instance of the <see cref="SimpleFastDominance"/> class.
 		/// </summary>
+		public SimpleFastDominance()
+		{
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="SimpleFastDominance"/> class.
+		/// </summary>
+		/// <param name="basicBlocks">The basic blocks.</param>
+		/// <param name="entryBlock">The entry block.</param>
 		public SimpleFastDominance(BasicBlocks basicBlocks, BasicBlock entryBlock)
 		{
+			PerformAnalysis(basicBlocks, entryBlock);
+		}
+
+		public void PerformAnalysis(BasicBlocks basicBlocks, BasicBlock entryBlock)
+		{
 			// Blocks in reverse post order topology
-			List<BasicBlock> blocks = BasicBlocks.ReversePostorder(entryBlock);
+			var blocks = BasicBlocks.ReversePostorder(entryBlock);
 
 			CalculateDominance(blocks);
 			CalculateChildren(blocks);
@@ -78,7 +92,7 @@ namespace Mosa.Compiler.Framework.Analysis
 			while (changed)
 			{
 				changed = false;
-				foreach (BasicBlock b in reversePostOrder)
+				foreach (var b in reversePostOrder)
 				{
 					BasicBlock idom = null;
 
@@ -123,7 +137,7 @@ namespace Mosa.Compiler.Framework.Analysis
 		{
 			foreach (var block in basicBlocks)
 			{
-				var immediateDominator = (this as IDominanceProvider).GetImmediateDominator(block);
+				var immediateDominator = (this as IDominanceAnalysis).GetImmediateDominator(block);
 
 				if (immediateDominator == null)
 					continue;
@@ -148,11 +162,11 @@ namespace Mosa.Compiler.Framework.Analysis
 		/// </summary>
 		private void CalculateDominanceFrontier(List<BasicBlock> basicBlocks)
 		{
-			foreach (BasicBlock b in basicBlocks)
+			foreach (var b in basicBlocks)
 			{
 				if (b.PreviousBlocks.Count > 1)
 				{
-					foreach (BasicBlock p in b.PreviousBlocks)
+					foreach (var p in b.PreviousBlocks)
 					{
 						BasicBlock runner = p;
 
@@ -183,7 +197,7 @@ namespace Mosa.Compiler.Framework.Analysis
 		/// </summary>
 		/// <param name="blocks">The blocks.</param>
 		/// <returns></returns>
-		List<BasicBlock> IDominanceProvider.IteratedDominanceFrontier(List<BasicBlock> blocks)
+		List<BasicBlock> IDominanceAnalysis.IteratedDominanceFrontier(List<BasicBlock> blocks)
 		{
 			var result = new List<BasicBlock>();
 			var workList = new Queue<BasicBlock>();
@@ -194,7 +208,7 @@ namespace Mosa.Compiler.Framework.Analysis
 			while (workList.Count > 0)
 			{
 				var n = workList.Dequeue();
-				var dominanceFrontier = (this as IDominanceProvider).GetDominanceFrontier(n);
+				var dominanceFrontier = (this as IDominanceAnalysis).GetDominanceFrontier(n);
 				if (dominanceFrontier == null)
 					continue;
 
@@ -210,9 +224,9 @@ namespace Mosa.Compiler.Framework.Analysis
 			return result;
 		}
 
-		#region IDominanceProvider Members
+		#region IDominanceAnalysis Members
 
-		BasicBlock IDominanceProvider.GetImmediateDominator(BasicBlock block)
+		BasicBlock IDominanceAnalysis.GetImmediateDominator(BasicBlock block)
 		{
 			if (block == null)
 				throw new ArgumentNullException(@"block");
@@ -224,7 +238,7 @@ namespace Mosa.Compiler.Framework.Analysis
 			return idom;
 		}
 
-		List<BasicBlock> IDominanceProvider.GetDominators(BasicBlock block)
+		List<BasicBlock> IDominanceAnalysis.GetDominators(BasicBlock block)
 		{
 			if (block == null)
 				throw new ArgumentNullException(@"block");
@@ -247,12 +261,12 @@ namespace Mosa.Compiler.Framework.Analysis
 			return result;
 		}
 
-		List<BasicBlock> IDominanceProvider.GetDominanceFrontier()
+		List<BasicBlock> IDominanceAnalysis.GetDominanceFrontier()
 		{
 			return domFrontier;
 		}
 
-		List<BasicBlock> IDominanceProvider.GetDominanceFrontier(BasicBlock block)
+		List<BasicBlock> IDominanceAnalysis.GetDominanceFrontier(BasicBlock block)
 		{
 			if (block == null)
 				throw new ArgumentNullException(@"block");
@@ -265,7 +279,7 @@ namespace Mosa.Compiler.Framework.Analysis
 				return new List<BasicBlock>(); // Empty List
 		}
 
-		List<BasicBlock> IDominanceProvider.GetChildren(BasicBlock block)
+		List<BasicBlock> IDominanceAnalysis.GetChildren(BasicBlock block)
 		{
 			List<BasicBlock> child;
 
@@ -275,7 +289,7 @@ namespace Mosa.Compiler.Framework.Analysis
 				return new List<BasicBlock>(); // Empty List
 		}
 
-		#endregion IDominanceProvider Members
+		#endregion IDominanceAnalysis Members
 
 		#region Internals
 

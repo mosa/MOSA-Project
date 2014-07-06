@@ -25,14 +25,6 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			this.End = end;
 		}
 
-		public Interval CreateExpandedInterval(Interval interval)
-		{
-			var start = Start < interval.Start ? Start : interval.Start;
-			var end = End > interval.End ? End : interval.End;
-
-			return new Interval(start, end);
-		}
-
 		public int Length { get { return End - Start; } }
 
 		public bool Intersects(SlotIndex start, SlotIndex end)
@@ -47,7 +39,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		public bool IsAdjacent(SlotIndex start, SlotIndex end)
 		{
-			return (start == End) || (end == Start);
+			return (start == End || end == Start);
 		}
 
 		public bool IsAdjacent(Interval other)
@@ -58,11 +50,6 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 		public bool Contains(SlotIndex slotIndex)
 		{
 			return (slotIndex >= Start && slotIndex < End);
-		}
-
-		public bool ContainsIncludingAtEnd(SlotIndex slotIndex)
-		{
-			return (slotIndex >= Start && slotIndex <= End);
 		}
 
 		public override string ToString()

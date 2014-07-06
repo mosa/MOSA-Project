@@ -5,9 +5,12 @@
  *
  * Authors:
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
+ *  Stefan Andres Charsley (charsleysa) <charsleysa@gmail.com>
  */
 
-using System.Runtime.InteropServices;
+using System.Reflection;
+using System.Runtime.CompilerServices;
+
 namespace System
 {
 	/// <summary>
@@ -20,7 +23,8 @@ namespace System
 			this.m_handle = handle;
 		}
 
-		RuntimeTypeHandle m_handle;
+		private RuntimeTypeHandle m_handle;
+
 		public RuntimeTypeHandle TypeHandle
 		{
 			get
@@ -29,7 +33,8 @@ namespace System
 			}
 		}
 
-		string m_fullName;
+		private string m_fullName;
+
 		public string FullName
 		{
 			get
@@ -42,7 +47,7 @@ namespace System
 			}
 		}
 
-		unsafe string InternalGetFullName(IntPtr handle)
+		private unsafe string InternalGetFullName(IntPtr handle)
 		{
 			int* namePtr = *(int**)(handle.ToInt32() + 8);
 			int length = *namePtr;
@@ -56,12 +61,24 @@ namespace System
 			return new Type(handle);
 		}
 
-		[DllImport("Mosa.Compiler.Framework.Intrinsics.InternalGetType, Mosa.Compiler.Framework")]
+		[MethodImplAttribute(MethodImplOptions.InternalCall)]
 		public static extern RuntimeTypeHandle GetTypeHandle(object obj);
-		
+
 		public override string ToString()
 		{
 			return FullName;
+		}
+
+		public TypeAttributes Attributes
+		{
+			get;
+			private set;
+		}
+
+		public Module Module
+		{
+			get;
+			private set;
 		}
 	}
 }

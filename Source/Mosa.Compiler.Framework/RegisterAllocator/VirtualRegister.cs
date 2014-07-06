@@ -114,7 +114,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 					liveRange = liveRange.CreateExpandedLiveRange(start, end);
 					liveIntervals[i] = liveRange;
 
-					for (int z = i + 1; z < liveIntervals.Count; z++) 
+					for (int z = i + 1; z < liveIntervals.Count; z++)
 					{
 						var nextLiveRange = liveIntervals[z];
 						if (liveRange.IsAdjacent(nextLiveRange) || liveRange.Intersects(nextLiveRange))
@@ -176,6 +176,16 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			return null;
 		}
 
+		public void ReplaceWithSplit(LiveInterval source, IList<LiveInterval> liveIntervals)
+		{
+			Remove(source);
+
+			foreach (var liveInterval in liveIntervals)
+			{
+				Add(liveInterval);
+			}
+		}
+
 		/// <summary>
 		/// Returns a <see cref="System.String" /> that represents this instance.
 		/// </summary>
@@ -190,7 +200,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			}
 			else
 			{
-				return VirtualRegisterOperand.ToString();
+				return string.Format("V_{0}", VirtualRegisterOperand.Index);
 			}
 		}
 	}

@@ -7,7 +7,9 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using Mosa.Compiler.Framework.Analysis;
 using Mosa.Compiler.Linker;
+using System;
 
 namespace Mosa.Compiler.Framework
 {
@@ -53,6 +55,14 @@ namespace Mosa.Compiler.Framework
 		#region Properties
 
 		/// <summary>
+		/// Gets or sets the base address.
+		/// </summary>
+		/// <value>
+		/// The base address.
+		/// </value>
+		public ulong BaseAddress { get; set; }
+
+		/// <summary>
 		/// Gets or sets the architecture.
 		/// </summary>
 		/// <value>The architecture.</value>
@@ -63,19 +73,6 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		/// <value>The output file.</value>
 		public string OutputFile { get; set; }
-
-		/// <summary>
-		/// Gets or sets the linker type.
-		/// </summary>
-		/// <value>
-		/// The type of the linker type.
-		/// </value>
-		public LinkerType LinkerType { get; set; }
-
-		/// <summary>
-		/// Gets or sets the compiler stage responsible for booting.
-		/// </summary>
-		public ICompilerStage BootCompilerStage { get; set; }
 
 		/// <summary>
 		/// Gets or sets the statistics file.
@@ -134,6 +131,35 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		public string MethodPipelineExportDirectory { get; set; }
 
+		/// <summary>
+		/// Gets or sets the dominance analysis factory.
+		/// </summary>
+		/// <value>
+		/// The dominance analysis factory.
+		/// </value>
+		public Func<IDominanceAnalysis> DominanceAnalysisFactory { get; set; }
+
+		/// <summary>
+		/// Gets or sets the block order analysis.
+		/// </summary>
+		/// <value>
+		/// The block order analysis.
+		/// </value>
+		public Func<IBlockOrderAnalysis> BlockOrderAnalysisFactory { get; set; }
+
+		/// <summary>
+		/// Gets or sets the linker factory.
+		/// </summary>
+		/// <value>
+		/// The linker factory.
+		/// </value>
+		public Func<BaseLinker> LinkerFactory { get; set; }
+
+		/// <summary>
+		/// Gets or sets the compiler stage responsible for booting.
+		/// </summary>
+		public Func<ICompilerStage> BootStageFactory { get; set; }
+
 		#endregion Properties
 
 		/// <summary>
@@ -142,7 +168,10 @@ namespace Mosa.Compiler.Framework
 		public CompilerOptions()
 		{
 			EnableSSA = false;
-			EnableSSAOptimizations = true;
+			EnableSSAOptimizations = false;
+			BaseAddress = 0x00400000;
+			DominanceAnalysisFactory = delegate { return new SimpleFastDominance(); };
+			BlockOrderAnalysisFactory = delegate { return new LoopAwareBlockOrder(); };
 		}
 	}
 }

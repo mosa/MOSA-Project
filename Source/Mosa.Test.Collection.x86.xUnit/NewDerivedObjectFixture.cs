@@ -15,31 +15,27 @@ namespace Mosa.Test.Collection.x86.xUnit
 	public class NewDerivedObjectFixture : X86TestFixture
 	{
 		[Fact]
-		public void NewDerivedObjectWithoutArgs()
+		public void WithoutArgs()
 		{
-			bool result = Run<bool>("Mosa.Test.Collection.DerivedNewObjectTests.WithoutArgs");
-			Assert.True(result);
+			Assert.Equal(Mosa.Test.Collection.DerivedNewObjectTests.WithoutArgs(), Run<bool>("Mosa.Test.Collection.DerivedNewObjectTests.WithoutArgs"));
 		}
 
 		[Fact]
-		public void NewDerivedObjectWithOneArg()
+		public void WithOneArg()
 		{
-			bool result = Run<bool>("Mosa.Test.Collection.DerivedNewObjectTests.WithOneArg");
-			Assert.True(result);
+			Assert.Equal(Mosa.Test.Collection.DerivedNewObjectTests.WithOneArg(), Run<bool>("Mosa.Test.Collection.DerivedNewObjectTests.WithOneArg"));
 		}
 
 		[Fact]
-		public void NewDerivedObjectjWithTwoArgs()
+		public void WithTwoArgs()
 		{
-			bool result = Run<bool>("Mosa.Test.Collection.DerivedNewObjectTests.WithTwoArgs");
-			Assert.True(result);
+			Assert.Equal(Mosa.Test.Collection.DerivedNewObjectTests.WithTwoArgs(), Run<bool>("Mosa.Test.Collection.DerivedNewObjectTests.WithTwoArgs"));
 		}
 
 		[Fact]
-		public void NewDerivedObjectWithThreeArgs()
+		public void WithThreeArgs()
 		{
-			bool result = Run<bool>("Mosa.Test.Collection", @"DerivedNewObjectTests", @"WithThreeArgs");
-			Assert.True(result);
+			Assert.Equal(Mosa.Test.Collection.DerivedNewObjectTests.WithThreeArgs(), Run<bool>("Mosa.Test.Collection.DerivedNewObjectTests.WithThreeArgs"));
 		}
 	}
 }

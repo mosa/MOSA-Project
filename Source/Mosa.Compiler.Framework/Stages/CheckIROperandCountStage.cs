@@ -14,16 +14,13 @@ namespace Mosa.Compiler.Framework.Stages
 	/// <summary>
 	///
 	/// </summary>
-	public class CheckIROperandCountStage : BaseMethodCompilerStage, IMethodCompilerStage, IPipelineStage
+	public class CheckIROperandCountStage : BaseMethodCompilerStage
 	{
-		/// <summary>
-		/// Performs stage specific processing on the compiler context.
-		/// </summary>
-		void IMethodCompilerStage.Run()
+		protected override void Run()
 		{
-			foreach (var block in basicBlocks)
+			foreach (var block in BasicBlocks)
 			{
-				for (var context = new Context(this.instructionSet, block); !context.IsBlockEndInstruction; context.GotoNext())
+				for (var context = new Context(this.InstructionSet, block); !context.IsBlockEndInstruction; context.GotoNext())
 				{
 					if (!(context.Instruction is IR.BaseIRInstruction))
 						continue;

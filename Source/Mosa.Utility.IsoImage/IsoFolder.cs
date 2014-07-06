@@ -28,7 +28,7 @@ namespace Mosa.Utility.IsoImage
 			var tmp = path.IndexOf('/');
 			if (tmp >= 0)
 			{
-				string subpath = path.Substring(tmp + 1).Trim();
+				//string subpath = path.Substring(tmp + 1).Trim();
 				path = path.Substring(0, tmp).Trim();
 			}
 		}

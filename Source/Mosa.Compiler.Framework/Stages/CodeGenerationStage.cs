@@ -10,6 +10,7 @@
 
 using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.Framework.Platform;
+using Mosa.Compiler.Linker;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -19,7 +20,7 @@ namespace Mosa.Compiler.Framework.Stages
 	/// <summary>
 	/// Base class for code generation stages.
 	/// </summary>
-	public class CodeGenerationStage : BaseMethodCompilerStage, IMethodCompilerStage, IPipelineStage
+	public class CodeGenerationStage : BaseMethodCompilerStage
 	{
 		#region Data members
 
@@ -32,6 +33,9 @@ namespace Mosa.Compiler.Framework.Stages
 		///
 		/// </summary>
 		protected BaseCodeEmitter codeEmitter;
+
+		private int generatedInstructionCount = 0;
+		private int generatedBlockCount = 0;
 
 		#endregion Data members
 
@@ -64,36 +68,37 @@ namespace Mosa.Compiler.Framework.Stages
 
 		#endregion Construction
 
-		#region Methods
-
-		/// <summary>
-		/// Performs stage specific processing on the compiler context.
-		/// </summary>
-		void IMethodCompilerStage.Run()
+		protected override void Run()
 		{
 			if (!EmitBinary)
 				return;
 
+			var symbol = MethodCompiler.Linker.CreateSymbol(MethodCompiler.Method.FullName, SectionKind.Text, 0, 0);
+			codeStream = symbol.Stream;
+
 			// Retrieve a stream to place the code into
-			using (codeStream = methodCompiler.RequestCodeStream())
-			{
-				// HINT: We need seeking to resolve labels.
-				Debug.Assert(codeStream.CanSeek, @"Can't seek codeReader output stream.");
-				Debug.Assert(codeStream.CanWrite, @"Can't write to codeReader output stream.");
 
-				if (!codeStream.CanSeek || !codeStream.CanWrite)
-					throw new NotSupportedException(@"Code stream doesn't support seeking or writing.");
+			// HINT: We need seeking to resolve labels.
+			Debug.Assert(codeStream.CanSeek, @"Can't seek codeReader output stream2.");
+			Debug.Assert(codeStream.CanWrite, @"Can't write to codeReader output stream2.");
 
-				// Emit method prologue
-				BeginGenerate();
+			if (!codeStream.CanSeek || !codeStream.CanWrite)
+				throw new NotSupportedException(@"Code stream2 doesn't support seeking or writing.");
 
-				// Emit all instructions
-				EmitInstructions();
+			// Emit method prologue
+			BeginGenerate();
 
-				// Emit the method epilogue
-				EndGenerate();
-			}
+			// Emit all instructions
+			EmitInstructions();
+
+			// Emit the method epilogue
+			EndGenerate();
+
+			UpdateCounter("CodeGeneration.GeneratedInstructions", generatedInstructionCount);
+			UpdateCounter("CodeGeneration.GeneratedBlocks", generatedBlockCount);
 		}
+
+		#region Methods
 
 		/// <summary>
 		/// Called to emit a list of instructions offered by the instruction provider.
@@ -102,18 +107,22 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			var trace = CreateTrace();
 
-			foreach (BasicBlock block in basicBlocks)
+			foreach (BasicBlock block in BasicBlocks)
 			{
 				BlockStart(block);
 
-				for (Context context = new Context(instructionSet, block); !context.IsBlockEndInstruction; context.GotoNext())
+				for (Context context = new Context(InstructionSet, block); !context.IsBlockEndInstruction; context.GotoNext())
 				{
-					if (context.IsEmpty || context.Instruction == IRInstruction.BlockStart)
+					if (context.IsEmpty || context.IsBlockStartInstruction)
+						continue;
+
+					if (context.Instruction == IRInstruction.Gen || context.Instruction == IRInstruction.Kill)
 						continue;
 
 					if (context.Instruction is BasePlatformInstruction)
 					{
 						EmitInstruction(context, codeEmitter);
+						generatedInstructionCount++;
 					}
 					else
 					{
@@ -122,6 +131,7 @@ namespace Mosa.Compiler.Framework.Stages
 				}
 
 				BlockEnd(block);
+				generatedBlockCount++;
 			}
 		}
 
@@ -140,8 +150,8 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </summary>
 		protected virtual void BeginGenerate()
 		{
-			codeEmitter = architecture.GetCodeEmitter();
-			codeEmitter.Initialize(methodCompiler.Method.FullName, methodCompiler.Linker, codeStream, typeSystem);
+			codeEmitter = Architecture.GetCodeEmitter();
+			codeEmitter.Initialize(MethodCompiler.Method.FullName, MethodCompiler.Linker, codeStream, TypeSystem);
 		}
 
 		/// <summary>

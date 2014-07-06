@@ -69,7 +69,7 @@ namespace Mosa.Test.Collection.x86.xUnit
 		}
 
 		[Theory]
-		[PropertyData("MiniI8MiniI8MiniI8MiniI8")]
+		[PropertyData("I8MiniI8MiniI8MiniI8Mini")]
 		public void CallOrderI8I8I8I8(long a, long b, long c, long d)
 		{
 			Assert.Equal(Mosa.Test.Collection.CallOrderTests.CallOrderI8I8I8I8(a, b, c, d), Run<bool>("Mosa.Test.Collection.CallOrderTests.CallOrderI8I8I8I8", a, b, c, d));
@@ -94,7 +94,6 @@ namespace Mosa.Test.Collection.x86.xUnit
 		public void CallOrderU8U8U8U8(ulong a, ulong b, ulong c, ulong d)
 		{
 			Assert.Equal(Mosa.Test.Collection.CallOrderTests.CallOrderU8U8U8U8(a, b, c, d), Run<bool>("Mosa.Test.Collection.CallOrderTests.CallOrderU8U8U8U8", a, b, c, d));
-
 		}
 
 		[Theory]

@@ -1,9 +1,8 @@
-﻿
-namespace Mosa.Test.Collection
+﻿namespace Mosa.Test.Collection
 {
 	public static class ValueTypeTests
 	{
-		struct valuetype
+		private struct valuetype
 		{
 			public byte a;
 			public short b;
@@ -20,7 +19,8 @@ namespace Mosa.Test.Collection
 				return ((int)(a + b + c + d)).ToString();
 			}
 		}
-		class wrapper
+
+		private class wrapper
 		{
 			public valuetype content;
 		}
@@ -35,7 +35,8 @@ namespace Mosa.Test.Collection
 			return p.a == 1 && p.b == 7 & p.c == 21 && p.d == 171;
 		}
 
-		static valuetype staticField;
+		private static valuetype staticField;
+
 		public static bool TestValueTypeStaticField()
 		{
 			valuetype p = new valuetype();
@@ -61,10 +62,11 @@ namespace Mosa.Test.Collection
 			return obj.content.a == 1 && obj.content.b == 7 & obj.content.c == 21 && obj.content.d == 171;
 		}
 
-		static bool ParameterOk(valuetype p)
+		private static bool ParameterOk(valuetype p)
 		{
 			return p.a == 1 && p.b == 7 & p.c == 21 && p.d == 171;
 		}
+
 		public static bool TestValueTypeParameter()
 		{
 			valuetype p = new valuetype();
@@ -76,7 +78,7 @@ namespace Mosa.Test.Collection
 			return ParameterOk(p);
 		}
 
-		static valuetype GetValue()
+		private static valuetype GetValue()
 		{
 			valuetype p = new valuetype();
 			p.a = 1;
@@ -85,17 +87,19 @@ namespace Mosa.Test.Collection
 			p.d = 171;
 			return p;
 		}
+
 		public static bool TestValueTypeReturnValue()
 		{
 			valuetype p = GetValue();
 			return p.a == 1 && p.b == 7 & p.c == 21 && p.d == 171;
 		}
 
-		static bool BoxOk(object box)
+		private static bool BoxOk(object box)
 		{
 			valuetype p = (valuetype)box;
 			return p.a == 1 && p.b == 7 & p.c == 21 && p.d == 171;
 		}
+
 		public static bool TestValueTypeBox()
 		{
 			valuetype p = new valuetype();
@@ -131,7 +135,7 @@ namespace Mosa.Test.Collection
 			return p.ToString() == "200";
 		}
 
-		static bool ByRefModify(ref valuetype p)
+		private static bool ByRefModify(ref valuetype p)
 		{
 			bool result = p.Check(3, 11, 41, 83);
 			p.a = 1;
@@ -148,7 +152,8 @@ namespace Mosa.Test.Collection
 			result &= p.Check(1, 7, 21, 171);
 			return result;
 		}
-		static bool ByRefOk(ref valuetype p)
+
+		private static bool ByRefOk(ref valuetype p)
 		{
 			return p.a == 1 && p.b == 7 & p.c == 21 && p.d == 171;
 		}

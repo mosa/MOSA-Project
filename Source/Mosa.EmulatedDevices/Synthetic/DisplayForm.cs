@@ -1,8 +1,7 @@
-﻿using System;
+﻿using Mosa.DeviceSystem;
+using System;
 using System.Drawing;
 using System.Windows.Forms;
-
-using Mosa.DeviceSystem;
 
 namespace Mosa.EmulatedDevices.Synthetic
 {

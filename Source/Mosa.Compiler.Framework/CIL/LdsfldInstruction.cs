@@ -7,8 +7,8 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System.Diagnostics;
 using Mosa.Compiler.MosaTypeSystem;
+using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework.CIL
 {

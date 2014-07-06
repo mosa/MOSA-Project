@@ -480,6 +480,19 @@ namespace Mosa.Test.Numbers
 			get { foreach (float a in R4) if (!float.IsNaN(a) && a <= Int32.MaxValue && a >= Int32.MinValue) yield return a; }
 		}
 
+		public static IEnumerable<float> R4Simple
+		{
+			get
+			{
+				yield return 0f;
+				yield return 1f;
+				yield return 2f;
+				yield return 4f;
+				yield return 8f;
+				yield return 10f;
+			}
+		}
+
 		#endregion R4 Types
 
 		#region R8 Types
@@ -556,6 +569,19 @@ namespace Mosa.Test.Numbers
 		public static IEnumerable<double> R8FitsI4
 		{
 			get { foreach (double a in R8) if (!double.IsNaN(a) && a <= Int32.MaxValue && a >= Int32.MinValue) yield return a; }
+		}
+
+		public static IEnumerable<double> R8Simple
+		{
+			get
+			{
+				yield return 0d;
+				yield return 1d;
+				yield return 2d;
+				yield return 4d;
+				yield return 8d;
+				yield return 10d;
+			}
 		}
 
 		#endregion R8 Types

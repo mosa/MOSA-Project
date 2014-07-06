@@ -7,7 +7,7 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using Mosa.Compiler.Framework;
+using Mosa.Compiler.Common;
 using Mosa.Compiler.MosaTypeSystem;
 using System;
 using System.Collections.Generic;
@@ -21,7 +21,6 @@ namespace Mosa.Compiler.Framework
 	/// </summary>
 	public abstract class BaseCallingConventionExtended : BaseCallingConvention
 	{
-
 		#region Data members
 
 		/// <summary>
@@ -40,26 +39,12 @@ namespace Mosa.Compiler.Framework
 		public BaseCallingConventionExtended(BaseArchitecture architecture)
 		{
 			if (architecture == null)
-				throw new ArgumentNullException(@"architecture");
+				throw new ArgumentNullException(@"Architecture");
 
 			this.architecture = architecture;
 		}
 
 		#endregion Construction
-
-		#region Members
-
-		public override void GetStackRequirements(MosaTypeLayout typeLayout, Operand stackOperand, out int size, out int alignment)
-		{
-			// Special treatment for some stack types
-			// FIXME: Handle the size and alignment requirements of value types
-			architecture.GetTypeRequirements(typeLayout, stackOperand.Type, out size, out alignment);
-
-			if (size < alignment)
-				size = alignment;
-		}
-
-		#endregion
 
 		#region Helper Methods
 
@@ -109,10 +94,12 @@ namespace Mosa.Compiler.Framework
 				var param = (index + offset >= 0) ? method.Signature.Parameters[index + offset] : null;
 
 				if (param != null && operand.IsR8 && param.Type.IsR4)
+				{
+					//  adjust for parameter size on stack when method parameter is R4 while the calling variable is R8
 					architecture.GetTypeRequirements(typeLayout, param.Type, out size, out alignment);
+				}
 
-				if (size < alignment)
-					size = alignment;
+				Alignment.AlignUp(result, (uint)alignment);
 
 				result += size;
 			}
@@ -120,7 +107,6 @@ namespace Mosa.Compiler.Framework
 			return result;
 		}
 
-		#endregion
+		#endregion Helper Methods
 	}
-
 }

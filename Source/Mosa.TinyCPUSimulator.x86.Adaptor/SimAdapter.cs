@@ -59,10 +59,16 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 			List<SimOperand> operands = new List<SimOperand>();
 
 			if (context.ResultCount != 0)
-				operands.Add(ConvertToOpcodeOperand(context.Result));
+			{
+				int size = GetSize(context.Result.Type);
+				operands.Add(ConvertToOpcodeOperand(context.Result, size));
+			}
 
 			foreach (var operand in context.Operands)
-				operands.Add(ConvertToOpcodeOperand(operand));
+			{
+				int size = GetSize(operand.Type);
+				operands.Add(ConvertToOpcodeOperand(operand, size));
+			}
 
 			if (context.BranchTargets != null)
 			{
@@ -105,10 +111,8 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 			}
 		}
 
-		private SimOperand ConvertToOpcodeOperand(Operand operand)
+		private SimOperand ConvertToOpcodeOperand(Operand operand, int size)
 		{
-			int size = GetSize(operand.Type);
-
 			if (operand.IsConstant)
 			{
 				return CreateImmediate(operand.ConstantUnsignedInteger, size);
@@ -212,7 +216,7 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 		{
 			if (type.IsUI1 || type.IsBoolean)
 				return 8;
-			else if (type.IsUI2)
+			else if (type.IsUI2 || type.IsChar)
 				return 16;
 			else if (type.IsUI8 || type.IsR8)
 				return 64;
@@ -228,7 +232,7 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 			if (opcode == Opcode.Addss) return true;
 			if (opcode == Opcode.And) return true;
 			//if (opcode == Opcode.Cld) return true;
-			//if (opcode == Opcode.CmpXchg) return true;
+			if (opcode == Opcode.CmpXchg) return true;
 			if (opcode == Opcode.Comisd) return true;
 			if (opcode == Opcode.Comiss) return true;
 			//if (opcode == Opcode.Cvtsd2ss) return true;
@@ -274,8 +278,10 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 			//if (opcode == Opcode.Xchg) return true;
 			if (opcode == Opcode.Xor) return true;
 			//if (opcode == Opcode.Ucomisd) return true;
-			if (opcode == Opcode.Ucomiss) return true;
+			//if (opcode == Opcode.Ucomiss) return true;
 			if (opcode == Opcode.Neg) return true;
+			if (opcode == Opcode.Bts) return true;
+			if (opcode == Opcode.Btr) return true;
 
 			return false;
 		}
@@ -291,10 +297,9 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 			if (instruction == X86.Call) return Opcode.Call;
 			if (instruction == X86.Cdq) return Opcode.Cdq;
 			//if (instruction == X86.Cld) return Opcode.Cld;
-			if (instruction == X86.Cli) return Opcode.Cli;
-			//if (instruction == X86.Cmov) return Opcode.Cmov;
+			////if (instruction == X86.Cli) return Opcode.Cli;
 			if (instruction == X86.Cmp) return Opcode.Cmp;
-			//if (instruction == X86.CmpXchg) return Opcode.CmpXchg;
+			if (instruction == X86.CmpXchg) return Opcode.CmpXchg;
 			if (instruction == X86.Comisd) return Opcode.Comisd;
 			if (instruction == X86.Comiss) return Opcode.Comiss;
 			if (instruction == X86.CpuId) return Opcode.Cpuid;
@@ -333,7 +338,7 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 			if (instruction == X86.Mulsd) return Opcode.Mulsd;
 			if (instruction == X86.Mulss) return Opcode.Mulss;
 			if (instruction == X86.Neg) return Opcode.Neg;
-			if (instruction == X86.Nop) return Opcode.Nop;
+			////if (instruction == X86.Nop) return Opcode.Nop;
 			if (instruction == X86.Not) return Opcode.Not;
 			if (instruction == X86.Or) return Opcode.Or;
 			if (instruction == X86.Out) return Opcode.Out;
@@ -349,7 +354,7 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 			//if (instruction == X86.Rdpmc) return Opcode.Rdpmc;
 			//if (instruction == X86.Rdtsc) return Opcode.Rdtsc;
 			//if (instruction == X86.Rep) return Opcode.Rep;
-			if (instruction == X86.Ret) return Opcode.Ret;
+			////if (instruction == X86.Ret) return Opcode.Ret;
 			if (instruction == X86.Roundsd) return Opcode.Roundsd;
 			if (instruction == X86.Roundss) return Opcode.Roundss;
 			if (instruction == X86.Sar) return Opcode.Sar;
@@ -358,21 +363,26 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 			if (instruction == X86.Shld) return Opcode.Shld;
 			if (instruction == X86.Shr) return Opcode.Shr;
 			if (instruction == X86.Shrd) return Opcode.Shrd;
-			if (instruction == X86.Sti) return Opcode.Sti;
+			////if (instruction == X86.Sti) return Opcode.Sti;
+			if (instruction == X86.Pause) return Opcode.Pause;
 			//if (instruction == X86.Stos) return Opcode.Stos;
 			if (instruction == X86.Sub) return Opcode.Sub;
 			if (instruction == X86.Subsd) return Opcode.Subsd;
 			if (instruction == X86.Subss) return Opcode.Subss;
-			//if (instruction == X86.Ucomisd) return Opcode.Ucomisd;
-			//if (instruction == X86.Ucomiss) return Opcode.Ucomiss;
 			if (instruction == X86.Xchg) return Opcode.Xchg;
 			if (instruction == X86.Xor) return Opcode.Xor;
 			if (instruction == X86.MovCR) return Opcode.Mov;
 			if (instruction == X86.Ucomisd) return Opcode.Ucomisd;
 			if (instruction == X86.Ucomiss) return Opcode.Ucomiss;
+			if (instruction == X86.Test) return Opcode.Test;
 
 			if (instruction == X86.Setcc) return ConvertSetInstruction(conditionCode);
 			if (instruction == X86.Branch) return ConvertBranchInstruction(conditionCode);
+			if (instruction == X86.Cmovcc) return ConvertConditionalMoveInstruction(conditionCode);
+
+			if (instruction == X86.Bts) return Opcode.Bts;
+			if (instruction == X86.Btr) return Opcode.Btr;
+			if (instruction == X86.Lock) return Opcode.Lock;
 
 			if (instruction == X86.Break) return Opcode.InternalBreak;
 
@@ -427,6 +437,30 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 				case ConditionCode.Carry: return Opcode.Setc;
 				case ConditionCode.Zero: return Opcode.Setz;
 				case ConditionCode.NotZero: return Opcode.Setnz;
+				default: return null;
+			}
+		}
+
+		private static BaseOpcode ConvertConditionalMoveInstruction(ConditionCode conditionCode)
+		{
+			switch (conditionCode)
+			{
+				case ConditionCode.Equal: return Opcode.Cmove;
+				case ConditionCode.LessThan: return Opcode.Cmovl;
+				case ConditionCode.LessOrEqual: return Opcode.Cmovle;
+				case ConditionCode.GreaterOrEqual: return Opcode.Cmovge;
+				case ConditionCode.GreaterThan: return Opcode.Cmovg;
+				case ConditionCode.NotEqual: return Opcode.Cmovne;
+				case ConditionCode.UnsignedGreaterOrEqual: return Opcode.Cmovnc;
+				case ConditionCode.UnsignedGreaterThan: return Opcode.Cmova;
+				case ConditionCode.UnsignedLessOrEqual: return Opcode.Cmovbe;
+				case ConditionCode.UnsignedLessThan: return Opcode.Cmovc;
+				case ConditionCode.Parity: return Opcode.Cmovp;
+				case ConditionCode.NoParity: return Opcode.Cmovnp;
+				case ConditionCode.NoCarry: return Opcode.Cmovnc;
+				case ConditionCode.Carry: return Opcode.Cmovc;
+				case ConditionCode.Zero: return Opcode.Cmovz;
+				case ConditionCode.NotZero: return Opcode.Cmovnz;
 				default: return null;
 			}
 		}

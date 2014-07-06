@@ -14,21 +14,14 @@ namespace Mosa.Compiler.Framework
 	/// <summary>
 	/// Base class for code transformation stages.
 	/// </summary>
-	public abstract class BaseCodeTransformationStage : BaseMethodCompilerStage, IMethodCompilerStage, IVisitor
+	public abstract class BaseCodeTransformationStage : BaseMethodCompilerStage, IVisitor
 	{
-		#region IMethodCompilerStage Members
-
-		/// <summary>
-		/// Performs stage specific processing on the compiler context.
-		/// </summary>
-		public virtual void Run()
+		protected override void Run()
 		{
-			for (int index = 0; index < basicBlocks.Count; index++)
-				for (Context ctx = new Context(instructionSet, basicBlocks[index]); !ctx.IsBlockEndInstruction; ctx.GotoNext())
+			for (int index = 0; index < BasicBlocks.Count; index++)
+				for (Context ctx = new Context(InstructionSet, BasicBlocks[index]); !ctx.IsBlockEndInstruction; ctx.GotoNext())
 					if (!ctx.IsEmpty)
 						ctx.Clone().Visit(this);
 		}
-
-		#endregion IMethodCompilerStage Members
 	}
 }

@@ -25,7 +25,7 @@ namespace Mosa.Test.Collection
 		Positive51
 	}
 
-	public static class Test<#= enumType #>Class {
+	public static class <#= enumType #>Class {
 <#		List<KeyValuePair<int, string>> numbers = new List<KeyValuePair<int, string>>();
 		numbers.Add(new KeyValuePair<int, string>(50, "Positive"));
 		if (isSigned) numbers.Add(new KeyValuePair<int, string>(-50, "Negative"));
@@ -39,19 +39,19 @@ namespace Mosa.Test.Collection
 			<#= enumType #> e = <#= enumElement #>;
 			return <#= value #> == (<#= valueType #>)e;
 		}
-		public static bool <#= number.Value #>PlusOne_1() {
+		public static bool <#= number.Value #>PlusOne1() {
 			<#= enumType #> e = <#= enumElement #>;
 			return <#= value + 1 #> == (<#= valueType #>)(e + 1);
 		}
-		public static bool <#= number.Value #>PlusOne_2() {
+		public static bool <#= number.Value #>PlusOne2() {
 			<#= enumType #> e = <#= enumElement #>;
 			return <#= enumElementPlusOne #> == e + 1;
 		}
-		public static bool <#= number.Value #>MinusOne_1() {
+		public static bool <#= number.Value #>MinusOne1() {
 			<#= enumType #> e = <#= enumElement #>;
 			return <#= value - 1 #> == (<#= valueType #>)(e - 1);
 		}
-		public static bool <#= number.Value #>MinusOne_2() {
+		public static bool <#= number.Value #>MinusOne2() {
 			<#= enumType #> e = <#= enumElement #>;
 			return <#= enumElementMinusOne #> == e - 1;
 		}
