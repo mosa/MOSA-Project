@@ -143,6 +143,7 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 			field.HasDefault = fieldDef.HasDefault;
 			field.Offset = fieldDef.FieldOffset;
 			field.Data = fieldDef.InitialValue;
+			field.FieldAttributes = (MosaFieldAttributes)fieldDef.Attributes;
 		}
 
 		private void LoadMethod(MosaType declType, MosaMethod.Mutator method, MethodDef methodDef)

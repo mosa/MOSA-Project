@@ -17,7 +17,7 @@ namespace System
 	[Serializable]
 	public class Object
 	{
-		private IntPtr methodTablePtr;
+		private IntPtr typeDefinitionPtr;
 
 		private IntPtr syncBlock;
 
@@ -31,36 +31,36 @@ namespace System
 		/// <summary>
 		/// Determines whether the specified <see cref="Object"/> is equal to the current <see cref="Object"/>.
 		/// </summary>
-		/// <param name="obj">
+		/// <param name="o">
 		/// The <see cref="Object"/> to compare with the current <see cref="Object"/>.
 		/// </param>
 		/// <returns>
 		/// true if the specified <see cref="Object"/> is equal to the current <see cref="Object"/>;
 		/// otherwise, false.
 		/// </returns>
-		public virtual bool Equals(object obj)
+		public virtual bool Equals(object o)
 		{
-			return this == obj;
+			return this == o;
 		}
 
 		/// <summary>
 		/// Determines whether the specified <see cref="Object"/> instances are considered equal.
 		/// </summary>
-		/// <param name="objA">The first <see cref="Object"/> to compare.</param>
-		/// <param name="objB">The second <see cref="Object"/> to compare.</param>
+		/// <param name="left">The first <see cref="Object"/> to compare.</param>
+		/// <param name="right">The second <see cref="Object"/> to compare.</param>
 		/// <returns>
 		/// true if objA is the same instance as objB or if both are null references
 		/// or if objA.Equals(objB) returns true; otherwise, false.
 		/// </returns>
-		public static bool Equals(object objA, object objB)
+		public static bool Equals(object left, object right)
 		{
-			if (objA == objB)
+			if (left == right)
 				return true;
 
-			if (objA == null || objB == null)
+			if (left == null || right == null)
 				return false;
 
-			return objA.Equals(objB);
+			return left.Equals(right);
 		}
 
 		/// <summary>
@@ -101,15 +101,15 @@ namespace System
 		/// <summary>
 		/// Determines whether the specified <see cref="Object"/> instances are the same instance.
 		/// </summary>
-		/// <param name="objA">The first <see cref="Object"/> to compare.</param>
-		/// <param name="objB">The second <see cref="Object"/> to compare.</param>
+		/// <param name="left">The first <see cref="Object"/> to compare.</param>
+		/// <param name="right">The second <see cref="Object"/> to compare.</param>
 		/// <returns>
 		/// true if objA is the same instance as objB or if both are null references;
 		/// otherwise, false.
 		/// </returns>
-		public static bool ReferenceEquals(object objA, object objB)
+		public static bool ReferenceEquals(object left, object right)
 		{
-			return (objA == objB);
+			return (left == right);
 		}
 
 		/// <summary>

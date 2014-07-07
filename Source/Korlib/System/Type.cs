@@ -21,6 +21,8 @@ namespace System
 	[Serializable]
 	public abstract class Type : MemberInfo
 	{
+		internal const BindingFlags DefaultBindingFlags = BindingFlags.Public | BindingFlags.Static | BindingFlags.Instance;
+
 		/// <summary>
 		/// Separates names in the namespace of the Type. This field is read-only.
 		/// </summary>
@@ -34,7 +36,7 @@ namespace System
 		/// <summary>
 		/// Represents a missing value in the Type information. This field is read-only.
 		/// </summary>
-		public static readonly object Missing;
+		public static readonly object Missing = null;
 
 		/// <summary>
 		/// Gets the Assembly in which the type is declared. For generic types, gets the Assembly in which the generic type is defined.
@@ -377,6 +379,22 @@ namespace System
 		}
 
 		/// <summary>
+		/// Gets the handle for the current Type.
+		/// </summary>
+		public virtual RuntimeTypeHandle TypeHandle
+		{
+			get { throw new NotImplementedException(); }
+		}
+
+		/// <summary>
+		/// Gets the initializer for the Type.
+		/// </summary>
+		public ConstructorInfo TypeInitializer
+		{
+			get { throw new NotImplementedException(); }
+		}
+
+		/// <summary>
 		/// Initializes a new instance of the Type class.
 		/// </summary>
 		/// <param name="handle"></param>
@@ -384,5 +402,163 @@ namespace System
 		{
 		}
 
+		/// <summary>
+		/// Determines if the underlying system type of the current Type is the same as the underlying system type of the specified Object.
+		/// </summary>
+		/// <param name="o">The object whose underlying system type is to be compared with the underlying system type of the current Type.</param>
+		/// <returns>True if the underlying system type of o is the same as the underlying system type of the current Type; otherwise, False. This method also returns False if the object specified by the o parameter is not a Type.</returns>
+		public override bool Equals(object o)
+		{
+			if (!(o is Type))
+				return false;
+
+			return ((Type)o).TypeHandle == this.TypeHandle;
+		}
+
+		/// <summary>
+		/// Determines if the underlying system type of the current Type is the same as the underlying system type of the specified Type.
+		/// </summary>
+		/// <param name="o">The object whose underlying system type is to be compared with the underlying system type of the current Type.</param>
+		/// <returns>True if the underlying system type of o is the same as the underlying system type of the current Type; otherwise, False.</returns>
+		public virtual bool Equals(Type o)
+		{
+			return o.TypeHandle == this.TypeHandle;
+		}
+
+		/// <summary>
+		/// Gets the number of dimensions in an Array.
+		/// </summary>
+		/// <returns>An Int32 containing the number of dimensions in the current Type.</returns>
+		public virtual int GetArrayRank()
+		{
+			throw new NotSupportedException();
+		}
+
+		/// <summary>
+		/// When overridden in a derived class, implements the Attributes property and gets a bitmask indicating the attributes associated with the Type.
+		/// </summary>
+		/// <returns>A TypeAttributes object representing the attribute set of the Type.</returns>
+		protected abstract TypeAttributes GetAttributeFlagsImpl();
+
+		/// <summary>
+		/// Searches for a public instance constructor whose parameters match the types in the specified array.
+		/// </summary>
+		/// <param name="types">
+		/// An array of Type objects representing the number, order, and type of the parameters for the desired constructor.
+		/// -or-
+		/// An empty array of Type objects, to get a constructor that takes no parameters. Such an empty array is provided by the static field Type.EmptyTypes.
+		/// </param>
+		/// <returns>An object representing the public instance constructor whose parameters match the types in the parameter type array, if found; otherwise, null.</returns>
+		public ConstructorInfo GetConstructor(Type[] types)
+		{
+			if (types == null)
+				throw new ArgumentNullException("types");
+
+			for (int i = 0; i < types.Length; i++)
+			{
+				if (types[i] == null)
+					throw new ArgumentNullException("types");
+			}
+
+			if (types.Rank > 1)
+				throw new ArgumentException("types is multidimensional.", "types");
+
+			// TODO
+			throw new NotImplementedException();
+		}
+
+		/// <summary>
+		/// Returns all the public constructors defined for the current Type.
+		/// </summary>
+		/// <returns>An array of ConstructorInfo objects representing all the public instance constructors defined for the current Type, but not including the type initializer (static constructor). If no public instance constructors are defined for the current Type, or if the current Type represents a type parameter in the definition of a generic type or generic method, an empty array of type ConstructorInfo is returned.</returns>
+		public ConstructorInfo[] GetConstructors()
+		{
+			// TODO
+			throw new NotImplementedException();
+		}
+
+		/// <summary>
+		/// Searches for the members defined for the current Type whose DefaultMemberAttribute is set.
+		/// </summary>
+		/// <returns>
+		/// An array of MemberInfo objects representing all default members of the current Type.
+		/// -or- 
+		/// An empty array of type MemberInfo, if the current Type does not have default members.
+		/// </returns>
+		public virtual MemberInfo[] GetDefaultMembers()
+		{
+			// TODO
+			throw new NotImplementedException();
+		}
+
+		/// <summary>
+		/// When overridden in a derived class, returns the Type of the object encompassed or referred to by the current array, pointer or reference type.
+		/// </summary>
+		/// <returns>The Type of the object encompassed or referred to by the current array, pointer, or reference type, or null if the current Type is not an array or a pointer, or is not passed by reference, or represents a generic type or a type parameter in the definition of a generic type or generic method.</returns>
+		public abstract Type GetElementType();
+
+		/// <summary>
+		/// Returns the name of the constant that has the specified value, for the current enumeration type.
+		/// </summary>
+		/// <param name="value">The value whose name is to be retrieved.</param>
+		/// <returns>The name of the member of the current enumeration type that has the specified value, or null if no such constant is found.</returns>
+		public virtual string GetEnumName(object value)
+		{
+			if (value == null)
+				throw new ArgumentNullException("value");
+
+			Type valueType = value.GetType();
+
+			if (!valueType.IsEnum)
+				throw new ArgumentException("The current type is not an enumeration.", "value");
+
+			if (!this.IsInstanceOfType(value))
+				throw new ArgumentException("value is neither of the current type nor does it have the same underlying type as the current type.", "value");
+
+			// TODO
+			throw new NotImplementedException();
+		}
+
+		/// <summary>
+		/// Returns the names of the members of the current enumeration type.
+		/// </summary>
+		/// <returns>An array that contains the names of the members of the enumeration.</returns>
+		public virtual string[] GetEnumNames()
+		{
+			// TODO
+			throw new NotImplementedException();
+		}
+
+		/// <summary>
+		/// Returns an array of the values of the constants in the current enumeration type.
+		/// </summary>
+		/// <returns>An array that contains the values. The elements of the array are sorted by the binary values (that is, the unsigned values) of the enumeration constants.</returns>
+		public virtual Array GetEnumValues()
+		{
+			// TODO
+			throw new NotImplementedException();
+		}
+
+		/// <summary>
+		/// Searches for the public field with the specified name.
+		/// </summary>
+		/// <param name="name">The string containing the name of the data field to get.</param>
+		/// <returns>An object representing the public field with the specified name, if found; otherwise, null.</returns>
+		public FieldInfo GetField(string name)
+		{
+			return this.GetField(name, DefaultBindingFlags);
+		}
+
+		/// <summary>
+		/// Searches for the specified field, using the specified binding constraints.
+		/// </summary>
+		/// <param name="name">The string containing the name of the data field to get.</param>
+		/// <param name="bindingAttr"></param>
+		/// <returns>
+		/// A bitmask comprised of one or more BindingFlags that specify how the search is conducted.
+		/// -or-
+		/// Zero, to return null.
+		/// </returns>
+		public abstract FieldInfo GetField(string name, BindingFlags bindingAttr);
 	}
 }

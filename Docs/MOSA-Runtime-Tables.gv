@@ -43,7 +43,7 @@ shape = "record"
 ];
 
 "FieldDefinition" [
-label = "<f0>Field Definition|<f1>Pointer to Field Name|<f2>~Pointer to Custom Attributes|<f3>Pointer to Field Type|<f4>~Address|<f5>Offset / Size"
+label = "<f0>Field Definition|<f1>Pointer to Field Name|<f2>~Pointer to Custom Attributes|<f3>Field Attributes|<f4>Pointer to Field Type|<f5>~Address|<f6>Offset / Size"
 shape = "record"
 ];
 
@@ -257,7 +257,7 @@ color = "red"
 id = 0
 ];
 
-"FieldDefinition":f3 -> "TypeDefinition":f0 [
+"FieldDefinition":f4 -> "TypeDefinition":f0 [
 id = 0
 color = "blue"
 ];

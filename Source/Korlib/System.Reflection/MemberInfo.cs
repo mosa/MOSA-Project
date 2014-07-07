@@ -15,7 +15,7 @@ using System.Collections.Generic;
 namespace System.Reflection
 {
 	/// <summary>
-	/// Implementation of the "System.Reflection.MemberInfo" class
+	/// Obtains information about the attributes of a member and provides access to member metadata.
 	/// </summary>
 	[SerializableAttribute]
 	public abstract class MemberInfo : ICustomAttributeProvider

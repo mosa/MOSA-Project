@@ -14,6 +14,8 @@ namespace Mosa.Compiler.MosaTypeSystem
 {
 	public class MosaField : MosaUnit, IEquatable<MosaField>
 	{
+		public MosaFieldAttributes FieldAttributes { get; private set; }
+
 		public MosaModule Module { get; private set; }
 
 		public MosaType DeclaringType { get; private set; }
@@ -55,6 +57,8 @@ namespace Mosa.Compiler.MosaTypeSystem
 			{
 				this.field = field;
 			}
+
+			public MosaFieldAttributes FieldAttributes { set { field.FieldAttributes = value; } }
 
 			public MosaModule Module { set { field.Module = value; } }
 
