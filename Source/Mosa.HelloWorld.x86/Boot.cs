@@ -25,7 +25,7 @@ namespace Mosa.HelloWorld.x86
 		public static void Main()
 		{
 			Mosa.Kernel.x86.Kernel.Setup();
-			//DebugClient.Setup(Serial.COM1);
+			DebugClient.Setup(Serial.COM1);
 
 			Console = ConsoleManager.Controller.Boot;
 
@@ -315,10 +315,10 @@ namespace Mosa.HelloWorld.x86
 				if (cmos.Second != last)
 				{
 					last = cmos.Second;
-					//DebugClient.SendAlive();
+					DebugClient.SendAlive();
 				}
 
-				//DebugClient.Process();
+				DebugClient.Process();
 				Native.Hlt();
 			}
 		}
