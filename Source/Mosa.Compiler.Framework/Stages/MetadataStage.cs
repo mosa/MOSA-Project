@@ -361,11 +361,14 @@ namespace Mosa.Compiler.Framework.Stages
 				}
 				writer1.WriteZeroBytes(TypeLayout.NativePointerSize);
 
-				// 3. Pointer to Field Type
+				// 3. Attributes
+				writer1.Write((uint)field.FieldAttributes);
+
+				// 4. Pointer to Field Type
 				Linker.Link(LinkType.AbsoluteAddress, BuiltInPatch.I4, fieldDefSymbol, (int)writer2.Position, 0, field.FieldType.FullName + Metadata.TypeDefinition, SectionKind.ROData, 0);
 				writer2.WriteZeroBytes(TypeLayout.NativePointerSize);
 
-				// 4 & 5. Offset / Address + Size
+				// 5 & 6. Offset / Address + Size
 				if (field.IsStatic && !field.IsLiteral)
 				{
 					var section = (field.Data != null) ? SectionKind.ROData : SectionKind.BSS;

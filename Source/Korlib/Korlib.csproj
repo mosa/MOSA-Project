@@ -60,17 +60,22 @@
     <Compile Include="System.Collections\IStructuralComparable.cs" />
     <Compile Include="System.Collections\IStructuralEquatable.cs" />
     <Compile Include="System.Diagnostics\DebuggerHiddenAttribute.cs" />
+    <Compile Include="System.Globalization\CultureInfo.cs" />
     <Compile Include="System.IO\BinaryReader.cs" />
     <Compile Include="System.IO\MemoryStream.cs" />
     <Compile Include="System.Reflection\Assembly.cs" />
     <Compile Include="System.Reflection\AssemblyDescriptionAttribute.cs" />
     <Compile Include="System.Reflection\AssemblyTitleAttribute.cs" />
+    <Compile Include="System.Reflection\Binder.cs" />
+    <Compile Include="System.Reflection\BindingFlags.cs" />
     <Compile Include="System.Reflection\ConstructorInfo.cs" />
     <Compile Include="System.Reflection\CustomAttributeData.cs" />
     <Compile Include="System.Reflection\CustomAttributeNamedArgument.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="System.Reflection\CustomAttributeTypedArgument.cs" />
+    <Compile Include="System.Reflection\FieldAttributes.cs" />
+    <Compile Include="System.Reflection\FieldInfo.cs" />
     <Compile Include="System.Reflection\ICustomAttributeProvider.cs" />
     <Compile Include="System.Reflection\IntrospectionExtensions.cs" />
     <Compile Include="System.Reflection\IReflectableType.cs" />
@@ -80,6 +85,7 @@
     <Compile Include="System.Reflection\MethodBase.cs" />
     <Compile Include="System.Reflection\Module.cs" />
     <Compile Include="System.Reflection\ParameterAttributes.cs" />
+    <Compile Include="System.Reflection\ParameterModifier.cs" />
     <Compile Include="System.Reflection\TypeCode.cs" />
     <Compile Include="System.Reflection\ParameterInfo.cs" />
     <Compile Include="System.Reflection\TypeAttributes.cs" />
@@ -110,6 +116,7 @@
     <Compile Include="System\AsyncCallback.cs" />
     <Compile Include="System\IAsyncResult.cs" />
     <Compile Include="System\ICloneable.cs" />
+    <Compile Include="System\IFormatProvider.cs" />
     <Compile Include="System\NotImplementedException.cs" />
     <Compile Include="System\RuntimeMethodHandle.cs" />
     <Compile Include="System\SystemException.cs" />

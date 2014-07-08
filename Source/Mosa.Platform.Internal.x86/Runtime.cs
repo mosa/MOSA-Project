@@ -213,8 +213,8 @@ namespace Mosa.Platform.Internal.x86
 			byte* arrayElements = (byte*)(array + 3);
 
 			// See FieldDefinition for format of field handle
-			byte* fieldData = (byte*)*(fieldHandlePtr + 1);
-			uint dataLength = *(fieldHandlePtr + 2);
+			byte* fieldData = (byte*)*(fieldHandlePtr + 4);
+			uint dataLength = *(fieldHandlePtr + 5);
 			while (dataLength > 0)
 			{
 				*arrayElements = *fieldData;
