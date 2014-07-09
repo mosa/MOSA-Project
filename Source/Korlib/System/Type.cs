@@ -81,6 +81,14 @@ namespace System
 		}
 
 		/// <summary>
+		/// Gets a reference to the default binder, which implements internal rules for selecting the appropriate members to be called by InvokeMember.
+		/// </summary>
+		public static Binder DefaultBinder
+		{
+			get { throw new NotImplementedException(); }
+		}
+
+		/// <summary>
 		/// Gets the fully qualified name of the Type, including the namespace of the Type but not the assembly.
 		/// </summary>
 		public abstract string Fullname { get; }
@@ -546,19 +554,395 @@ namespace System
 		/// <returns>An object representing the public field with the specified name, if found; otherwise, null.</returns>
 		public FieldInfo GetField(string name)
 		{
-			return this.GetField(name, DefaultBindingFlags);
+			return this.GetField(name, Type.DefaultBindingFlags);
 		}
 
 		/// <summary>
 		/// Searches for the specified field, using the specified binding constraints.
 		/// </summary>
 		/// <param name="name">The string containing the name of the data field to get.</param>
-		/// <param name="bindingAttr"></param>
-		/// <returns>
+		/// <param name="bindingAttr">
 		/// A bitmask comprised of one or more BindingFlags that specify how the search is conducted.
 		/// -or-
 		/// Zero, to return null.
-		/// </returns>
+		/// </param>
+		/// <returns>An object representing the field that matches the specified requirements, if found; otherwise, null.</returns>
 		public abstract FieldInfo GetField(string name, BindingFlags bindingAttr);
+
+		/// <summary>
+		/// Returns all the public fields of the current Type.
+		/// </summary>
+		/// <returns>
+		/// An array of FieldInfo objects representing all the public fields defined for the current Type.
+		/// -or- 
+		/// An empty array of type FieldInfo, if no public fields are defined for the current Type.
+		/// </returns>
+		public FieldInfo[] GetFields()
+		{
+			return this.GetFields(Type.DefaultBindingFlags);
+		}
+
+		/// <summary>
+		/// When overridden in a derived class, searches for the fields defined for the current Type, using the specified binding constraints.
+		/// </summary>
+		/// <param name="bindingAttr">
+		/// A bitmask comprised of one or more BindingFlags that specify how the search is conducted.
+		/// -or-
+		/// Zero, to return null.
+		/// </param>
+		/// <returns>
+		/// An array of FieldInfo objects representing all fields defined for the current Type that match the specified binding constraints.
+		/// -or- 
+		/// An empty array of type FieldInfo, if no fields are defined for the current Type, or if none of the defined fields match the binding constraints.
+		/// </returns>
+		public abstract FieldInfo[] GetFields(BindingFlags bindingAttr);
+
+		/// <summary>
+		/// Returns an array of Type objects that represent the type arguments of a generic type or the type parameters of a generic type definition.
+		/// </summary>
+		/// <returns>An array of Type objects that represent the type arguments of a generic type. Returns an empty array if the current type is not a generic type.</returns>
+		public virtual Type[] GetGenericArguments()
+		{
+			throw new NotSupportedException();
+		}
+
+		/// <summary>
+		/// Returns an array of Type objects that represent the constraints on the current generic type parameter.
+		/// </summary>
+		/// <returns>An array of Type objects that represent the constraints on the current generic type parameter.</returns>
+		public virtual Type[] GetGenericParameterConstraints()
+		{
+			throw new NotSupportedException();
+		}
+
+		/// <summary>
+		/// Returns a Type object that represents a generic type definition from which the current generic type can be constructed.
+		/// </summary>
+		/// <returns>A Type object representing a generic type from which the current type can be constructed.</returns>
+		public virtual Type[] GetGenericTypeDefinition()
+		{
+			throw new NotSupportedException();
+		}
+
+		/// <summary>
+		/// Returns the hash code for this instance.
+		/// </summary>
+		/// <returns>The hash code for this instance.</returns>
+		public override int GetHashCode()
+		{
+			// TODO
+			return base.GetHashCode();
+		}
+
+		/// <summary>
+		/// Searches for the interface with the specified name.
+		/// </summary>
+		/// <param name="name">The string containing the name of the interface to get. For generic interfaces, this is the mangled name.</param>
+		/// <returns>An object representing the interface with the specified name, implemented or inherited by the current Type, if found; otherwise, null.</returns>
+		public Type GetInterface(string name)
+		{
+			return this.GetInterface(name, false);
+		}
+
+		/// <summary>
+		/// When overridden in a derived class, searches for the specified interface, specifying whether to do a case-insensitive search for the interface name.
+		/// </summary>
+		/// <param name="name">The string containing the name of the interface to get. For generic interfaces, this is the mangled name.</param>
+		/// <param name="ignoreCase">
+		/// True to ignore the case of that part of name that specifies the simple interface name (the part that specifies the namespace must be correctly cased).
+		/// -or-
+		/// False to perform a case-sensitive search for all parts of name.
+		/// </param>
+		/// <returns>An object representing the interface with the specified name, implemented or inherited by the current Type, if found; otherwise, null.</returns>
+		public abstract Type GetInterface(string name, bool ignoreCase);
+
+		/// <summary>
+		/// When overridden in a derived class, gets all the interfaces implemented or inherited by the current Type.
+		/// </summary>
+		/// <returns>
+		/// An array of Type objects representing all the interfaces implemented or inherited by the current Type.
+		/// -or- 
+		/// An empty array of type Type, if no interfaces are implemented or inherited by the current Type.
+		/// </returns>
+		public abstract Type GetInterfaces();
+
+		/// <summary>
+		/// Searches for the public members with the specified name.
+		/// </summary>
+		/// <param name="name">The string containing the name of the public members to get.</param>
+		/// <returns>An array of MemberInfo objects representing the public members with the specified name, if found; otherwise, an empty array.</returns>
+		public MemberInfo[] GetMember(string name)
+		{
+			return this.GetMember(name, MemberTypes.All, Type.DefaultBindingFlags);
+		}
+
+		/// <summary>
+		/// Searches for the specified members, using the specified binding constraints.
+		/// </summary>
+		/// <param name="name">The string containing the name of the members to get.</param>
+		/// <param name="bindingAttr">
+		/// A bitmask comprised of one or more BindingFlags that specify how the search is conducted.
+		/// -or-
+		/// Zero, to return null.
+		/// </param>
+		/// <returns>An array of MemberInfo objects representing the public members with the specified name, if found; otherwise, an empty array.</returns>
+		public virtual MemberInfo[] GetMember(string name, BindingFlags bindingAttr)
+		{
+			return this.GetMember(name, MemberTypes.All, bindingAttr);
+		}
+
+		/// <summary>
+		/// Searches for the specified members of the specified member type, using the specified binding constraints.
+		/// </summary>
+		/// <param name="name">The string containing the name of the members to get.</param>
+		/// <param name="type">The value to search for.</param>
+		/// <param name="bindingAttr">
+		/// A bitmask comprised of one or more BindingFlags that specify how the search is conducted.
+		/// -or-
+		/// Zero, to return null.
+		/// </param>
+		/// <returns>An array of MemberInfo objects representing the public members with the specified name, if found; otherwise, an empty array.</returns>
+		public virtual MemberInfo[] GetMember(string name, MemberTypes type, BindingFlags bindingAttr)
+		{
+			throw new NotSupportedException();
+		}
+
+		/// <summary>
+		/// Returns all the public members of the current Type.
+		/// </summary>
+		/// <returns>
+		/// An array of MemberInfo objects representing all the public members of the current Type.\
+		/// -or- 
+		/// An empty array of type MemberInfo, if the current Type does not have public members.
+		/// </returns>
+		public MemberInfo[] GetMembers()
+		{
+			return this.GetMembers(Type.DefaultBindingFlags);
+		}
+
+		/// <summary>
+		/// When overridden in a derived class, searches for the members defined for the current Type, using the specified binding constraints.
+		/// </summary>
+		/// <param name="bindingAttr">
+		/// A bitmask comprised of one or more BindingFlags that specify how the search is conducted.
+		/// -or-
+		/// Zero, to return null.
+		/// </param>
+		/// <returns>
+		/// An array of MemberInfo objects representing all members defined for the current Type that match the specified binding constraints.
+		/// -or- 
+		/// An empty array of type MemberInfo, if no members are defined for the current Type, or if none of the defined members match the binding constraints.
+		/// </returns>
+		public abstract MemberInfo[] GetMembers(BindingFlags bindingAttr);
+
+		/// <summary>
+		/// Searches for the public method with the specified name.
+		/// </summary>
+		/// <param name="name">The string containing the name of the public method to get.</param>
+		/// <returns>An object that represents the public method with the specified name, if found; otherwise, null.</returns>
+		public MethodInfo GetMethod(string name)
+		{
+			return this.GetMethodImpl(name, Type.DefaultBindingFlags, Type.DefaultBinder, CallingConventions.Any, Type.EmptyTypes, new ParameterModifier[0]);
+		}
+
+		/// <summary>
+		/// Searches for the specified method, using the specified binding constraints.
+		/// </summary>
+		/// <param name="name">The string containing the name of the method to get.</param>
+		/// <param name="bindingAttr">
+		/// A bitmask comprised of one or more BindingFlags that specify how the search is conducted.
+		/// -or-
+		/// Zero, to return null.
+		/// </param>
+		/// <returns>An object representing the method that matches the specified requirements, if found; otherwise, null.</returns>
+		public MethodInfo GetMethod(string name, BindingFlags bindingAttr)
+		{
+			return this.GetMethodImpl(name, bindingAttr, Type.DefaultBinder, CallingConventions.Any, Type.EmptyTypes, new ParameterModifier[0]);
+		}
+
+		/// <summary>
+		/// Searches for the specified public method whose parameters match the specified argument types.
+		/// </summary>
+		/// <param name="name">The string containing the name of the method to get.</param>
+		/// <param name="types">
+		/// An array of Type objects representing the number, order, and type of the parameters for the method to get.
+		/// -or-
+		/// An empty array of the type Type (as provided by the EmptyTypes field) to get a method that takes no parameters.
+		/// </param>
+		/// <returns>An object representing the public method whose parameters match the specified argument types, if found; otherwise, null.</returns>
+		public MethodInfo GetMethod(string name, Type[] types)
+		{
+			return this.GetMethodImpl(name, Type.DefaultBindingFlags, Type.DefaultBinder, CallingConventions.Any, types, new ParameterModifier[0]);
+		}
+
+		/// <summary>
+		/// Searches for the specified public method whose parameters match the specified argument types and modifiers.
+		/// </summary>
+		/// <param name="name">The string containing the name of the method to get.</param>
+		/// <param name="types">
+		/// An array of Type objects representing the number, order, and type of the parameters for the method to get.
+		/// -or-
+		/// An empty array of the type Type (as provided by the EmptyTypes field) to get a method that takes no parameters.
+		/// </param>
+		/// <param name="modifiers">An array of ParameterModifier objects representing the attributes associated with the corresponding element in the types array. To be only used when calling through COM interop, and only parameters that are passed by reference are handled. The default binder does not process this parameter.</param>
+		/// <returns>An object representing the method that matches the specified requirements, if found; otherwise, null.</returns>
+		public MethodInfo GetMethod(string name, Type[] types, ParameterModifier[] modifiers)
+		{
+			return this.GetMethodImpl(name, Type.DefaultBindingFlags, Type.DefaultBinder, CallingConventions.Any, types, modifiers);
+		}
+
+		/// <summary>
+		/// Searches for the specified method whose parameters match the specified argument types and modifiers, using the specified binding constraints.
+		/// </summary>
+		/// <param name="name">The string containing the name of the method to get.</param>
+		/// <param name="bindingAttr">
+		/// A bitmask comprised of one or more BindingFlags that specify how the search is conducted.
+		/// -or-
+		/// Zero, to return null.
+		/// </param>
+		/// <param name="binder">
+		/// An object that defines a set of properties and enables binding, which can involve selection of an overloaded method, coercion of argument types, and invocation of a member through reflection.
+		/// -or-
+		/// A null reference to use the DefaultBinder.
+		/// </param>
+		/// <param name="types">
+		/// An array of Type objects representing the number, order, and type of the parameters for the method to get.
+		/// -or-
+		/// An empty array of the type Type (as provided by the EmptyTypes field) to get a method that takes no parameters.
+		/// </param>
+		/// <param name="modifiers">An array of ParameterModifier objects representing the attributes associated with the corresponding element in the types array. To be only used when calling through COM interop, and only parameters that are passed by reference are handled. The default binder does not process this parameter.</param>
+		/// <returns>An object representing the method that matches the specified requirements, if found; otherwise, null.</returns>
+		public MethodInfo GetMethod(string name, BindingFlags bindingAttr, Binder binder, Type[] types, ParameterModifier[] modifiers)
+		{
+			return this.GetMethodImpl(name, bindingAttr, binder, CallingConventions.Any, types, modifiers);
+		}
+
+		/// <summary>
+		/// Searches for the specified method whose parameters match the specified argument types and modifiers, using the specified binding constraints and the specified calling convention.
+		/// </summary>
+		/// <param name="name">The string containing the name of the method to get.</param>
+		/// <param name="bindingAttr">
+		/// A bitmask comprised of one or more BindingFlags that specify how the search is conducted.
+		/// -or-
+		/// Zero, to return null.
+		/// </param>
+		/// <param name="binder">
+		/// An object that defines a set of properties and enables binding, which can involve selection of an overloaded method, coercion of argument types, and invocation of a member through reflection.
+		/// -or-
+		/// A null reference to use the DefaultBinder.
+		/// </param>
+		/// <param name="callConvention">The object that specifies the set of rules to use regarding the order and layout of arguments, how the return value is passed, what registers are used for arguments, and what process cleans up the stack.</param>
+		/// <param name="types">
+		/// An array of Type objects representing the number, order, and type of the parameters for the method to get.
+		/// -or-
+		/// An empty array of the type Type (as provided by the EmptyTypes field) to get a method that takes no parameters.
+		/// </param>
+		/// <param name="modifiers">An array of ParameterModifier objects representing the attributes associated with the corresponding element in the types array. To be only used when calling through COM interop, and only parameters that are passed by reference are handled. The default binder does not process this parameter.</param>
+		/// <returns>An object representing the method that matches the specified requirements, if found; otherwise, null.</returns>
+		public MethodInfo GetMethod(string name, BindingFlags bindingAttr, Binder binder, CallingConventions callConvention, Type[] types, ParameterModifier[] modifiers)
+		{
+			return this.GetMethodImpl(name, bindingAttr, binder, callConvention, types, modifiers);
+		}
+
+		/// <summary>
+		/// When overridden in a derived class, searches for the specified method whose parameters match the specified argument types and modifiers, using the specified binding constraints and the specified calling convention.
+		/// </summary>
+		/// <param name="name">The string containing the name of the method to get.</param>
+		/// <param name="bindingAttr">
+		/// A bitmask comprised of one or more BindingFlags that specify how the search is conducted.
+		/// -or-
+		/// Zero, to return null.
+		/// </param>
+		/// <param name="binder">
+		/// An object that defines a set of properties and enables binding, which can involve selection of an overloaded method, coercion of argument types, and invocation of a member through reflection.
+		/// -or-
+		/// A null reference to use the DefaultBinder.
+		/// </param>
+		/// <param name="callConvention">The object that specifies the set of rules to use regarding the order and layout of arguments, how the return value is passed, what registers are used for arguments, and what process cleans up the stack.</param>
+		/// <param name="types">
+		/// An array of Type objects representing the number, order, and type of the parameters for the method to get.
+		/// -or-
+		/// An empty array of the type Type (as provided by the EmptyTypes field) to get a method that takes no parameters.
+		/// -or-
+		/// null. If types is null, arguments are not matched.
+		/// </param>
+		/// <param name="modifiers">An array of ParameterModifier objects representing the attributes associated with the corresponding element in the types array. The default binder does not process this parameter.</param>
+		/// <returns>An object representing the method that matches the specified requirements, if found; otherwise, null.</returns>
+		protected abstract MethodInfo GetMethodImpl(string name, BindingFlags bindingAttr, Binder binder, CallingConventions callConvention, Type[] types, ParameterModifier[] modifiers);
+
+		/// <summary>
+		/// Returns all the public methods of the current Type.
+		/// </summary>
+		/// <returns>
+		/// An array of MethodInfo objects representing all the public methods defined for the current Type.
+		/// -or- 
+		/// An empty array of type MethodInfo, if no public methods are defined for the current Type.
+		/// </returns>
+		public MethodInfo[] GetMethods()
+		{
+			return this.GetMethods(Type.DefaultBindingFlags);
+		}
+
+		/// <summary>
+		/// When overridden in a derived class, searches for the methods defined for the current Type, using the specified binding constraints.
+		/// </summary>
+		/// <param name="bindingAttr">
+		/// A bitmask comprised of one or more BindingFlags that specify how the search is conducted.
+		/// -or-
+		/// Zero, to return null.
+		/// </param>
+		/// <returns>
+		/// An array of MethodInfo objects representing all methods defined for the current Type that match the specified binding constraints.
+		/// -or- 
+		/// An empty array of type MethodInfo, if no methods are defined for the current Type, or if none of the defined methods match the binding constraints.
+		/// </returns>
+		public abstract MethodInfo[] GetMethods(BindingFlags bindingAttr);
+
+		// !!!!!!!!!!!!!!!!!!!!!!
+		// BIG TODO: Propertes!!!
+		// !!!!!!!!!!!!!!!!!!!!!!
+
+		/// <summary>
+		/// Gets the Type with the specified name, performing a case-sensitive search.
+		/// </summary>
+		/// <param name="typeName">The assembly-qualified name of the type to get. See AssemblyQualifiedName. If the type is in the currently executing assembly or in Mscorlib.dll, it is sufficient to supply the type name qualified by its namespace.</param>
+		/// <returns>The type with the specified name, if found; otherwise, null.</returns>
+		public static Type GetType(string typeName)
+		{
+			return Type.GetTypeImpl(typeName, false, false);
+		}
+
+		/// <summary>
+		/// Gets the Type with the specified name, performing a case-sensitive search and specifying whether to throw an exception if the type is not found.
+		/// </summary>
+		/// <param name="typeName">The assembly-qualified name of the type to get. See AssemblyQualifiedName. If the type is in the currently executing assembly or in Mscorlib.dll, it is sufficient to supply the type name qualified by its namespace.</param>
+		/// <param name="throwOnError">True to throw an exception if the type cannot be found; False to return null. Specifying False also suppresses some other exception conditions, but not all of them.</param>
+		/// <returns>The type with the specified name. If the type is not found, the throwOnError parameter specifies whether null is returned or an exception is thrown. In some cases, an exception is thrown regardless of the value of throwOnError.</returns>
+		public static Type GetType(string typeName, bool throwOnError)
+		{
+			return Type.GetTypeImpl(typeName, throwOnError, false);
+		}
+
+		/// <summary>
+		/// Gets the Type with the specified name, specifying whether to perform a case-sensitive search and whether to throw an exception if the type is not found.
+		/// </summary>
+		/// <param name="typeName">The assembly-qualified name of the type to get. See AssemblyQualifiedName. If the type is in the currently executing assembly or in Mscorlib.dll, it is sufficient to supply the type name qualified by its namespace.</param>
+		/// <param name="throwOnError">True to throw an exception if the type cannot be found; False to return null. Specifying False also suppresses some other exception conditions, but not all of them.</param>
+		/// <param name="ignoreCase">True to perform a case-insensitive search for typeName, False to perform a case-sensitive search for typeName.</param>
+		/// <returns>The type with the specified name. If the type is not found, the throwOnError parameter specifies whether null is returned or an exception is thrown. In some cases, an exception is thrown regardless of the value of throwOnError.</returns>
+		public static Type GetType(string typeName, bool throwOnError, bool ignoreCase)
+		{
+			return Type.GetTypeImpl(typeName, throwOnError, ignoreCase);
+		}
+
+		/// <summary>
+		/// Gets the Type with the specified name, specifying whether to perform a case-sensitive search and whether to throw an exception if the type is not found.
+		/// </summary>
+		/// <param name="typeName">The assembly-qualified name of the type to get. See AssemblyQualifiedName. If the type is in the currently executing assembly or in Mscorlib.dll, it is sufficient to supply the type name qualified by its namespace.</param>
+		/// <param name="throwOnError">True to throw an exception if the type cannot be found; False to return null. Specifying False also suppresses some other exception conditions, but not all of them.</param>
+		/// <param name="ignoreCase">True to perform a case-insensitive search for typeName, False to perform a case-sensitive search for typeName.</param>
+		/// <returns>The type with the specified name. If the type is not found, the throwOnError parameter specifies whether null is returned or an exception is thrown. In some cases, an exception is thrown regardless of the value of throwOnError.</returns>
+		[MethodImpl(MethodImplOptions.InternalCall)]
+		private static extern Type GetTypeImpl(string typeName, bool throwOnError, bool ignoreCase);
 	}
 }

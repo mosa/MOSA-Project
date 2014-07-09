@@ -68,6 +68,7 @@
     <Compile Include="System.Reflection\AssemblyTitleAttribute.cs" />
     <Compile Include="System.Reflection\Binder.cs" />
     <Compile Include="System.Reflection\BindingFlags.cs" />
+    <Compile Include="System.Reflection\CallingConventions.cs" />
     <Compile Include="System.Reflection\ConstructorInfo.cs" />
     <Compile Include="System.Reflection\CustomAttributeData.cs" />
     <Compile Include="System.Reflection\CustomAttributeNamedArgument.cs">
@@ -83,6 +84,7 @@
     <Compile Include="System.Reflection\MemberTypes.cs" />
     <Compile Include="System.Reflection\MethodAttributes.cs" />
     <Compile Include="System.Reflection\MethodBase.cs" />
+    <Compile Include="System.Reflection\MethodInfo.cs" />
     <Compile Include="System.Reflection\Module.cs" />
     <Compile Include="System.Reflection\ParameterAttributes.cs" />
     <Compile Include="System.Reflection\ParameterModifier.cs" />
