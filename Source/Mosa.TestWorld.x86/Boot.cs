@@ -23,6 +23,47 @@ namespace Mosa.TestWorld.x86
 		/// </summary>
 		public static void Main()
 		{
+			//Start();
+
+			Debug();
+		}
+
+		public static void Debug()
+		{
+			Screen.Color = 0x0;
+			Screen.Clear();
+			Screen.GotoTop();
+			Screen.Color = 0x0E;
+			Screen.Write('D');
+			Screen.Write('E');
+			Screen.Write('B');
+			Screen.Write('U');
+			Screen.Write('G');
+			Screen.NextLine();
+			Screen.NextLine();
+
+			DebugClient.Setup(Serial.COM1);
+			
+			byte last = 0;
+
+			while (true)
+			{
+				
+				byte second = CMOS.Second;
+				
+				if (second % 10 != 5 & last != second)
+				{
+					last = CMOS.Second;
+					Screen.Write('-'); 
+					DebugClient.SendAlive();
+				}
+				
+				DebugClient.Process();
+			}
+		}
+
+		public static void Start()
+		{
 			Screen.Color = 0x0;
 			Screen.Clear();
 			Screen.GotoTop();
@@ -64,12 +105,11 @@ namespace Mosa.TestWorld.x86
 			Screen.Write('A');
 			ConsoleManager.Setup();
 			Screen.Write('B');
-			CMOS cmos = new CMOS();
+			int second = CMOS.Second;
 			Screen.Write('C');
-			int second = cmos.Second;
-			Screen.Write('D');
 			Console = ConsoleManager.Controller.Boot;
-			Screen.Write('E');
+			Screen.Write('D');
+			//Screen.Write('E');
 
 			Console.Color = 0x0E;
 			Console.BackgroundColor = 1;
@@ -102,19 +142,18 @@ namespace Mosa.TestWorld.x86
 
 		public static void Process()
 		{
-			CMOS cmos = new CMOS();
 			byte last = 0;
 
 			while (true)
 			{
-				if (cmos.Second != last)
+				if (CMOS.Second != last)
 				{
-					last = cmos.Second;
-					//DebugClient.SendAlive();
+					last = CMOS.Second;
+					DebugClient.SendAlive();
 					Screen.Write('.');
 				}
 
-				//DebugClient.Process();
+				DebugClient.Process();
 
 				Native.Hlt();
 			}

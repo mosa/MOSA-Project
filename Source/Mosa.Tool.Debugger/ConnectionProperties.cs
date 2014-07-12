@@ -41,12 +41,12 @@ namespace Mosa.Tool.Debugger
 
 		private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			tbPort.Enabled = (comboBox1.SelectedIndex != 0);
-			tbNamedPipe.Visible = (comboBox1.SelectedIndex == 0);
-			tbServerName.Visible = (comboBox1.SelectedIndex != 0);
+			tbPort.Enabled = (comboBox1.SelectedIndex != 2);
+			tbNamedPipe.Visible = (comboBox1.SelectedIndex == 2);
+			tbServerName.Visible = (comboBox1.SelectedIndex != 2);
 
-			lbPipeName.Visible = (comboBox1.SelectedIndex == 0);
-			lbServerName.Visible = (comboBox1.SelectedIndex != 0);
+			lbPipeName.Visible = (comboBox1.SelectedIndex == 2);
+			lbServerName.Visible = (comboBox1.SelectedIndex != 2);
 		}
 
 		private void button1_Click(object sender, EventArgs e)

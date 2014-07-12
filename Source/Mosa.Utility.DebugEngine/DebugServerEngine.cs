@@ -90,10 +90,10 @@ namespace Mosa.Utility.DebugEngine
 
 		private void SendInteger(int i)
 		{
-			SendByte(i >> 24 & 0xFF);
-			SendByte(i >> 16 & 0xFF);
-			SendByte(i >> 8 & 0xFF);
 			SendByte(i & 0xFF);
+			SendByte(i >> 8 & 0xFF);
+			SendByte(i >> 16 & 0xFF);
+			SendByte(i >> 24 & 0xFF);
 		}
 
 		private void SendMagic()

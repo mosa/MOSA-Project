@@ -29,7 +29,7 @@ log: bochsout.txt
 # disable the mouse, since DLX is text only
 mouse: enabled=0
 
-com1: enabled=1, mode=pipe-client, dev=\\.\pipe\MOSA
+com1: enabled=1, mode=pipe-server, dev=\\.\pipe\MOSA
 
 # enable sse
 cpuid: mmx=1, sep=1, sse=sse4_2, apic=xapic, aes=1, movbe=1, xsave=1

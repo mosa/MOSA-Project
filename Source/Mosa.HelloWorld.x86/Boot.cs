@@ -39,7 +39,6 @@ namespace Mosa.HelloWorld.x86
 			System.Threading.SpinLock splk = new System.Threading.SpinLock();
 			bool @lock = false;
 
-			if (@lock) Console.Write("This won't output!");
 			splk.Enter(ref @lock);
 			if (@lock) Console.Write("Entered!");
 			splk.Enter(ref @lock);
@@ -55,7 +54,6 @@ namespace Mosa.HelloWorld.x86
 			Console.Write("Neptune");
 			Console.Color = Colors.Yellow;
 			Console.Write("'                                Copyright 2008-2014");
-			//Console.WriteLine();
 
 			Console.Color = 0x0F;
 			Console.Write(new String((char)205, 60));
@@ -303,18 +301,18 @@ namespace Mosa.HelloWorld.x86
 
 			Console.Goto(12, 0);
 
-			CMOS cmos = new CMOS();
-
 			byte last = 0;
 
 			while (true)
 			{
-				DisplayCMOS(cmos);
-				DisplayTime(cmos);
+				DisplayCMOS();
+				DisplayTime();
 
-				if (cmos.Second != last)
+				byte second = CMOS.Second;
+
+				if (second % 10 != 5 & last != second)
 				{
-					last = cmos.Second;
+					last = CMOS.Second;
 					DebugClient.SendAlive();
 				}
 
@@ -326,7 +324,7 @@ namespace Mosa.HelloWorld.x86
 		/// <summary>
 		/// Displays the seconds.
 		/// </summary>
-		private static void DisplayCMOS(CMOS cmos)
+		private static void DisplayCMOS()
 		{
 			Console.Row = 2;
 			Console.Column = 65;
@@ -341,7 +339,7 @@ namespace Mosa.HelloWorld.x86
 				Console.Column = 65;
 				for (byte y = 0; y < 4; y++)
 				{
-					Console.Write(cmos.Get(i), 16, 2);
+					Console.Write(CMOS.Get(i), 16, 2);
 					Console.Write(' ');
 					i++;
 				}
@@ -352,7 +350,7 @@ namespace Mosa.HelloWorld.x86
 		/// <summary>
 		/// Displays the seconds.
 		/// </summary>
-		private static void DisplayTime(CMOS cmos)
+		private static void DisplayTime()
 		{
 			Console.Goto(24, 52);
 			Console.Color = Colors.Green;
@@ -360,34 +358,34 @@ namespace Mosa.HelloWorld.x86
 
 			byte bcd = 10;
 
-			if (cmos.BCD)
+			if (CMOS.BCD)
 				bcd = 16;
 
 			Console.Color = Colors.White;
-			Console.Write(cmos.Hour, bcd, 2);
+			Console.Write(CMOS.Hour, bcd, 2);
 			Console.Color = Colors.Gray;
 			Console.Write(':');
 			Console.Color = Colors.White;
-			Console.Write(cmos.Minute, bcd, 2);
+			Console.Write(CMOS.Minute, bcd, 2);
 			Console.Color = Colors.Gray;
 			Console.Write(':');
 			Console.Color = Colors.White;
-			Console.Write(cmos.Second, bcd, 2);
+			Console.Write(CMOS.Second, bcd, 2);
 			Console.Write(' ');
 			Console.Color = Colors.Gray;
 			Console.Write('(');
 			Console.Color = Colors.White;
-			Console.Write(cmos.Month, bcd, 2);
+			Console.Write(CMOS.Month, bcd, 2);
 			Console.Color = Colors.Gray;
 			Console.Write('/');
 			Console.Color = Colors.White;
-			Console.Write(cmos.Day, bcd, 2);
+			Console.Write(CMOS.Day, bcd, 2);
 			Console.Color = Colors.Gray;
 			Console.Write('/');
 			Console.Color = Colors.White;
 			Console.Write('2');
 			Console.Write('0');
-			Console.Write(cmos.Year, bcd, 2);
+			Console.Write(CMOS.Year, bcd, 2);
 			Console.Color = Colors.Gray;
 			Console.Write(')');
 		}
