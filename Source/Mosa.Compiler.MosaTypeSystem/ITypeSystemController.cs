@@ -19,6 +19,8 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		MosaField CreateField(MosaField source = null);
 
+		MosaProperty CreateProperty(MosaProperty source = null);
+
 		MosaParameter CreateParameter(MosaParameter source = null);
 
 		MosaModule.Mutator MutateModule(MosaModule module);
@@ -29,7 +31,9 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		MosaField.Mutator MutateField(MosaField field);
 
-		MosaParameter.Mutator MutateParameter(MosaParameter field);
+		MosaProperty.Mutator MutateProperty(MosaProperty property);
+
+		MosaParameter.Mutator MutateParameter(MosaParameter parameter);
 
 		void AddModule(MosaModule module);
 

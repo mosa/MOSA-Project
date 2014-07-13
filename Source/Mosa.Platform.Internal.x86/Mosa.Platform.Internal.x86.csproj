@@ -66,6 +66,8 @@
   <ItemGroup>
     <Compile Include="Builders\_Assembly.cs" />
     <Compile Include="Division.cs" />
+    <Compile Include="Implementations\TypeImpl.cs" />
+    <Compile Include="MetadataStructures\MetadataTypeStruct.cs" />
     <Compile Include="SpinLock.cs" />
     <Compile Include="Runtime.cs" />
     <Compile Include="Native.cs" />

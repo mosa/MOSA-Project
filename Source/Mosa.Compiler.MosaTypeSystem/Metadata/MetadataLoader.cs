@@ -122,6 +122,18 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 					metadata.Cache.AddMethod(mosaMethod);
 					LoadedUnits.Add(mosaMethod);
 				}
+
+				foreach (var propertyDef in typeDef.Properties)
+				{
+					MosaProperty mosaProperty = metadata.Controller.CreateProperty();
+
+					using (var property = metadata.Controller.MutateProperty(mosaProperty))
+						LoadProperty(mosaType, property, propertyDef);
+
+					type.Properties.Add(mosaProperty);
+					metadata.Cache.AddProperty(mosaProperty);
+					LoadedUnits.Add(mosaProperty);
+				}
 			}
 			typeCache[typeSig] = mosaType;
 			metadata.Controller.AddType(mosaType);
@@ -132,7 +144,6 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 		private void LoadField(MosaType declType, MosaField.Mutator field, FieldDef fieldDef)
 		{
 			FieldSig fieldSig = fieldDef.FieldSig;
-			field.Module = declType.Module;
 			field.UnderlyingObject = new UnitDesc<FieldDef, FieldSig>(fieldDef.Module, fieldDef, fieldSig);
 
 			field.DeclaringType = declType;
@@ -170,6 +181,17 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 			method.IsSpecialName = methodDef.IsSpecialName;
 			if (methodDef.HasImplMap)
 				method.ExternMethod = methodDef.ImplMap.Module.Name;
+		}
+
+		private void LoadProperty(MosaType declType, MosaProperty.Mutator property, PropertyDef propertyDef)
+		{
+			PropertySig propertySig = propertyDef.PropertySig;
+			property.UnderlyingObject = new UnitDesc<PropertyDef, PropertySig>(propertyDef.Module, propertyDef, propertySig);
+
+			property.DeclaringType = declType;
+			property.Name = propertyDef.Name;
+
+			property.PropertyAttributes = (MosaPropertyAttributes)propertyDef.Attributes;
 		}
 
 		public MosaType GetType(TypeSig typeSig)

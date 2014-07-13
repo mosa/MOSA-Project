@@ -399,9 +399,9 @@ namespace Mosa.Compiler.Framework.Stages
 
 				if (!method.DeclaringType.IsInterface)
 				{
-					// methodDefinitionOffset is as follows (slot * NativePointerSize) + (NativePointerSize * 11)
-					// We use 11 as that is the number of NativePointerSized fields until the start of methodDefinition pointers
-					int methodDefinitionOffset = CalculateMethodTableOffset(method) + (NativePointerSize * 11);
+					// methodDefinitionOffset is as follows (slot * NativePointerSize) + (NativePointerSize * 12)
+					// We use 12 as that is the number of NativePointerSized fields until the start of methodDefinition pointers
+					int methodDefinitionOffset = CalculateMethodTableOffset(method) + (NativePointerSize * 12);
 
 					// Same as above except for methodPointer
 					int methodPointerOffset = (NativePointerSize * 4);
@@ -418,7 +418,7 @@ namespace Mosa.Compiler.Framework.Stages
 				else
 				{
 					// Offset for InterfaceSlotTable in TypeDef
-					int interfaceSlotTableOffset = (NativePointerSize * 8);
+					int interfaceSlotTableOffset = (NativePointerSize * 9);
 
 					// Offset for InterfaceMethodTable in InterfaceSlotTable
 					int interfaceMethodTableOffset = (NativePointerSize * 1) + CalculateInterfaceSlotOffset(method);

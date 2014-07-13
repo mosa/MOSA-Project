@@ -200,6 +200,35 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 				ResolveCustomAttributes(mosaField, field.GetUnderlyingObject<UnitDesc<FieldDef, FieldSig>>().Definition);
 			}
 		}
+		private void ResolveProperty(MosaProperty property)
+		{
+			GenericArgumentResolver resolver = new GenericArgumentResolver();
+
+			if (property.DeclaringType.GenericArguments.Count > 0)
+				resolver.PushTypeGenericArguments(property.DeclaringType.GenericArguments.GetGenericArguments());
+
+			using (var mosaProperty = metadata.Controller.MutateProperty(property))
+			{
+				mosaProperty.PropertyType = metadata.Loader.GetType(resolver.Resolve(property.GetPropertySig().RetType));
+
+				var propertyDesc = property.GetUnderlyingObject<UnitDesc<PropertyDef, PropertySig>>();
+
+				if (propertyDesc.Definition.GetMethod != null)
+				{
+					var getterDesc = new UnitDesc<MethodDef, MethodSig>(propertyDesc.Definition.GetMethod.Module, propertyDesc.Definition.GetMethod, propertyDesc.Definition.GetMethod.MethodSig);
+					mosaProperty.GetterMethod = metadata.Cache.GetMethodByToken(getterDesc.Token);
+				}
+
+				if (propertyDesc.Definition.SetMethod != null)
+				{
+					var setterDesc = new UnitDesc<MethodDef, MethodSig>(propertyDesc.Definition.SetMethod.Module, propertyDesc.Definition.SetMethod, propertyDesc.Definition.SetMethod.MethodSig);
+					mosaProperty.SetterMethod = metadata.Cache.GetMethodByToken(setterDesc.Token);
+				}
+
+				ResolveCustomAttributes(mosaProperty, property.GetUnderlyingObject<UnitDesc<PropertyDef, PropertySig>>().Definition);
+			}
+		}
+
 
 		private void ResolveMethod(MosaMethod method)
 		{

@@ -86,6 +86,7 @@
     <Compile Include="System.Reflection\MethodBase.cs" />
     <Compile Include="System.Reflection\MethodInfo.cs" />
     <Compile Include="System.Reflection\Module.cs" />
+    <Compile Include="System.Reflection\PropertyAttributes.cs" />
     <Compile Include="System.Reflection\ParameterAttributes.cs" />
     <Compile Include="System.Reflection\ParameterModifier.cs" />
     <Compile Include="System.Reflection\TypeCode.cs" />

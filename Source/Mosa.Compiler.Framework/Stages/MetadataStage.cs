@@ -175,10 +175,19 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 			writer1.WriteZeroBytes(TypeLayout.NativePointerSize);
 
+			// 8. Properties (if any)
+			if (type.Properties.Count > 0)
+			{
+				var propertiesSymbol = CreatePropertyDefinitions(type);
+				Linker.Link(LinkType.AbsoluteAddress, BuiltInPatch.I4, typeTableSymbol, (int)writer1.Position, 0, propertiesSymbol, 0);
+			}
+			writer1.WriteZeroBytes(TypeLayout.NativePointerSize);
+
+
 			// If the type is not an interface continue, otherwise just pad until the end
 			if (!type.IsInterface)
 			{
-				// 8. Fields (if any)
+				// 9. Fields (if any)
 				if (type.Fields.Count > 0)
 				{
 					var fieldsSymbol = CreateFieldDefinitions(type);
@@ -189,29 +198,29 @@ namespace Mosa.Compiler.Framework.Stages
 				// If the type doesn't use interfaces then skip 9 and 10
 				if (type.Interfaces.Count > 0)
 				{
-					// 9. Pointer to Interface Slots
+					// 10. Pointer to Interface Slots
 					var interfaceSlotTableSymbol = CreateInterfaceSlotTable(type);
 					Linker.Link(LinkType.AbsoluteAddress, BuiltInPatch.I4, typeTableSymbol, (int)writer1.Position, 0, interfaceSlotTableSymbol, 0);
 					writer1.WriteZeroBytes(TypeLayout.NativePointerSize);
 
-					// 10. Pointer to Interface Bitmap
+					// 11. Pointer to Interface Bitmap
 					var interfaceBitmapSymbol = CreateInterfaceBitmap(type);
 					Linker.Link(LinkType.AbsoluteAddress, BuiltInPatch.I4, typeTableSymbol, (int)writer1.Position, 0, interfaceBitmapSymbol, 0);
 					writer1.WriteZeroBytes(TypeLayout.NativePointerSize);
 				}
 				else
 				{
-					// Fill 9 and 10 with zeros
+					// Fill 10 and 11 with zeros
 					writer1.WriteZeroBytes(TypeLayout.NativePointerSize * 2);
 				}
 
 				// For the next part we'll need to get the list of methods from the MosaTypeLayout
 				var methodList = TypeLayout.GetMethodTable(type) ?? new List<MosaMethod>();
 
-				// 11. Number of Methods
+				// 12. Number of Methods
 				writer1.Write(methodList.Count);
 
-				// 12. Pointer to Method Definitions
+				// 13. Pointer to Method Definitions
 				foreach (MosaMethod method in methodList)
 				{
 					// Create definition and get the symbol
@@ -224,7 +233,7 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 			else
 			{
-				// Fill 8, 9, 10, 11 with zeros, 12 can be left out.
+				// Fill 9, 10, 11, 12 with zeros, 13 can be left out.
 				writer1.WriteZeroBytes(TypeLayout.NativePointerSize * 4);
 			}
 
@@ -332,9 +341,9 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private LinkerSymbol CreateFieldDefinitions(MosaType type)
 		{
-			// Emit field list table
-			var fieldListTableSymbol = Linker.CreateSymbol(type.FullName + Metadata.FieldsTable, SectionKind.ROData, TypeLayout.NativePointerAlignment, 0);
-			var writer1 = new EndianAwareBinaryWriter(fieldListTableSymbol.Stream, Architecture.Endianness);
+			// Emit fields table
+			var fieldsTableSymbol = Linker.CreateSymbol(type.FullName + Metadata.FieldsTable, SectionKind.ROData, TypeLayout.NativePointerAlignment, 0);
+			var writer1 = new EndianAwareBinaryWriter(fieldsTableSymbol.Stream, Architecture.Endianness);
 
 			// 1. Number of Fields
 			writer1.Write((uint)type.Fields.Count);
@@ -404,15 +413,76 @@ namespace Mosa.Compiler.Framework.Stages
 				}
 
 				// Add pointer to field list
-				Linker.Link(LinkType.AbsoluteAddress, BuiltInPatch.I4, fieldListTableSymbol, (int)writer1.Position, 0, fieldDefSymbol, 0);
+				Linker.Link(LinkType.AbsoluteAddress, BuiltInPatch.I4, fieldsTableSymbol, (int)writer1.Position, 0, fieldDefSymbol, 0);
+				writer1.WriteZeroBytes(TypeLayout.NativePointerSize);
+			}
+
+			// Return fieldsTableSymbol for linker usage
+			return fieldsTableSymbol;
+		}
+
+		#endregion FieldDefinition
+
+		#region PropertyDefinition
+
+		private LinkerSymbol CreatePropertyDefinitions(MosaType type)
+		{
+			// Emit properties table
+			var propertiesTableSymbol = Linker.CreateSymbol(type.FullName + Metadata.PropertiesTable, SectionKind.ROData, TypeLayout.NativePointerAlignment, 0);
+			var writer1 = new EndianAwareBinaryWriter(propertiesTableSymbol.Stream, Architecture.Endianness);
+
+			// 1. Number of Properties
+			writer1.Write((uint)type.Properties.Count);
+
+			// 2. Pointers to Property Definitions
+			foreach (MosaProperty property in type.Properties)
+			{
+				// Emit field name
+				var fieldNameSymbol = EmitStringWithLength(property.FullName + Metadata.NameString, property.Name);
+
+				// Emit property definition
+				var propertyDefSymbol = Linker.CreateSymbol(property.FullName + Metadata.PropertyDefinition, SectionKind.ROData, TypeLayout.NativePointerAlignment, 0);
+				var writer2 = new EndianAwareBinaryWriter(propertyDefSymbol.Stream, Architecture.Endianness);
+
+				// 1. Name
+				Linker.Link(LinkType.AbsoluteAddress, BuiltInPatch.I4, propertyDefSymbol, (int)writer2.Position, 0, fieldNameSymbol, 0);
+				writer2.WriteZeroBytes(TypeLayout.NativePointerSize);
+
+				// 2. Pointer to Custom Attributes
+				if (property.CustomAttributes.Count > 0)
+				{
+					var customAttributesTableSymbol = CreateCustomAttributesTable(property);
+					Linker.Link(LinkType.AbsoluteAddress, BuiltInPatch.I4, propertyDefSymbol, (int)writer1.Position, 0, customAttributesTableSymbol, 0);
+				}
+				writer1.WriteZeroBytes(TypeLayout.NativePointerSize);
+
+				// 3. Attributes
+				writer1.Write((uint)property.PropertyAttributes);
+
+				// 4. Pointer to Property Type
+				Linker.Link(LinkType.AbsoluteAddress, BuiltInPatch.I4, propertyDefSymbol, (int)writer2.Position, 0, property.PropertyType.FullName + Metadata.TypeDefinition, SectionKind.ROData, 0);
+				writer2.WriteZeroBytes(TypeLayout.NativePointerSize);
+
+				// 5. Pointer to Getter Method Definition
+				if (property.GetterMethod != null)
+					Linker.Link(LinkType.AbsoluteAddress, BuiltInPatch.I4, propertyDefSymbol, (int)writer2.Position, 0, property.GetterMethod.FullName + Metadata.MethodDefinition, SectionKind.ROData, 0);
+				writer2.WriteZeroBytes(TypeLayout.NativePointerSize);
+
+				// 6. Pointer to Setter Method Definition
+				if (property.SetterMethod != null)
+					Linker.Link(LinkType.AbsoluteAddress, BuiltInPatch.I4, propertyDefSymbol, (int)writer2.Position, 0, property.SetterMethod.FullName + Metadata.MethodDefinition, SectionKind.ROData, 0);
+				writer2.WriteZeroBytes(TypeLayout.NativePointerSize);
+
+				// Add pointer to properties table
+				Linker.Link(LinkType.AbsoluteAddress, BuiltInPatch.I4, propertiesTableSymbol, (int)writer1.Position, 0, propertyDefSymbol, 0);
 				writer1.WriteZeroBytes(TypeLayout.NativePointerSize);
 			}
 
 			// Return fieldListTableSymbol for linker usage
-			return fieldListTableSymbol;
+			return propertiesTableSymbol;
 		}
 
-		#endregion FieldDefinition
+		#endregion PropertyDefinition
 
 		#region MethodDefinition
 
@@ -484,7 +554,7 @@ namespace Mosa.Compiler.Framework.Stages
 			return methodTableSymbol;
 		}
 
-		#endregion
+		#endregion MethodDefinition
 
 		#region ParameterDefinition
 
@@ -520,13 +590,13 @@ namespace Mosa.Compiler.Framework.Stages
 			return parameterTableSymbol;
 		}
 
-		#endregion
+		#endregion ParameterDefinition
 
 		#region Custom Attributes
 
 		private LinkerSymbol CreateCustomAttributesTable(MosaUnit unit)
 		{
-			// Emit custom attribute list
+			// Emit custom attributes table
 			var customAttributesTableSymbol = Linker.CreateSymbol(unit.FullName + Metadata.CustomAttributesTable, SectionKind.ROData, TypeLayout.NativePointerAlignment, 0);
 			var writer1 = new EndianAwareBinaryWriter(customAttributesTableSymbol.Stream, Architecture.Endianness);
 

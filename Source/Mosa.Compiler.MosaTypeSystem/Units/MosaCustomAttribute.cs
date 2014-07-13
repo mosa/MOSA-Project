@@ -5,6 +5,7 @@
  *
  * Authors:
  *  Ki (kiootic) <kiootic@gmail.com>
+ *  Stefan Andres Charsley (charsleysa) <charsleysa@gmail.com>
  */
 
 using System.Collections.Generic;

@@ -86,6 +86,7 @@
     <Compile Include="MosaFieldAttributes.cs" />
     <Compile Include="MosaMethodAttributes.cs" />
     <Compile Include="MosaParameterAttributes.cs" />
+    <Compile Include="MosaPropertyAttributes.cs" />
     <Compile Include="MosaTypeExtension.cs" />
     <Compile Include="SignatureName.cs" />
     <Compile Include="MosaTypeAttributes.cs" />
@@ -102,6 +103,7 @@
     <Compile Include="BuiltInTypes.cs" />
     <Compile Include="Metadata\MetadataLoader.cs" />
     <Compile Include="Metadata\MetadataCache.cs" />
+    <Compile Include="Units\MosaProperty.cs" />
     <Compile Include="Units\MosaUnit.cs" />
     <Compile Include="Metadata\ScopedToken.cs" />
     <Compile Include="SignatureComparer.cs" />

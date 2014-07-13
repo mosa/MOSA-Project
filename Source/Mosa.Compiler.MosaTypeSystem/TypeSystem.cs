@@ -237,6 +237,24 @@ namespace Mosa.Compiler.MosaTypeSystem
 				}
 			}
 
+			public MosaProperty CreateProperty(MosaProperty source = null)
+			{
+				if (source == null)
+				{
+					return new MosaProperty()
+					{
+						ID = id++,
+						TypeSystem = typeSystem
+					};
+				}
+				else
+				{
+					MosaProperty result = source.Clone();
+					result.ID = id++;
+					return result;
+				}
+			}
+
 			public MosaParameter CreateParameter(MosaParameter source = null)
 			{
 				if (source == null)
@@ -273,6 +291,11 @@ namespace Mosa.Compiler.MosaTypeSystem
 			public MosaField.Mutator MutateField(MosaField field)
 			{
 				return new MosaField.Mutator(field);
+			}
+
+			public MosaProperty.Mutator MutateProperty(MosaProperty property)
+			{
+				return new MosaProperty.Mutator(property);
 			}
 
 			public MosaParameter.Mutator MutateParameter(MosaParameter Parameter)

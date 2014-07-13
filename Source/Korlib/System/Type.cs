@@ -12,6 +12,7 @@ using System;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Runtime.CompilerServices;
+using System.Globalization;
 
 namespace System
 {
@@ -130,7 +131,7 @@ namespace System
 		/// </summary>
 		public bool IsArray
 		{
-			get { throw new NotImplementedException(); }
+			get { return this.IsArrayImpl(); }
 		}
 
 		/// <summary>
@@ -742,7 +743,10 @@ namespace System
 		/// <returns>An object that represents the public method with the specified name, if found; otherwise, null.</returns>
 		public MethodInfo GetMethod(string name)
 		{
-			return this.GetMethodImpl(name, Type.DefaultBindingFlags, Type.DefaultBinder, CallingConventions.Any, Type.EmptyTypes, new ParameterModifier[0]);
+			if (name == null)
+				throw new ArgumentNullException("name");
+
+			return this.GetMethodImpl(name, DefaultBindingFlags, null, CallingConventions.Any, null, null);
 		}
 
 		/// <summary>
@@ -757,7 +761,10 @@ namespace System
 		/// <returns>An object representing the method that matches the specified requirements, if found; otherwise, null.</returns>
 		public MethodInfo GetMethod(string name, BindingFlags bindingAttr)
 		{
-			return this.GetMethodImpl(name, bindingAttr, Type.DefaultBinder, CallingConventions.Any, Type.EmptyTypes, new ParameterModifier[0]);
+			if (name == null)
+				throw new ArgumentNullException("name");
+
+			return this.GetMethodImpl(name, bindingAttr, null, CallingConventions.Any, null, null);
 		}
 
 		/// <summary>
@@ -772,7 +779,7 @@ namespace System
 		/// <returns>An object representing the public method whose parameters match the specified argument types, if found; otherwise, null.</returns>
 		public MethodInfo GetMethod(string name, Type[] types)
 		{
-			return this.GetMethodImpl(name, Type.DefaultBindingFlags, Type.DefaultBinder, CallingConventions.Any, types, new ParameterModifier[0]);
+			return this.GetMethod(name, Type.DefaultBindingFlags, null, CallingConventions.Any, types, null);
 		}
 
 		/// <summary>
@@ -788,7 +795,7 @@ namespace System
 		/// <returns>An object representing the method that matches the specified requirements, if found; otherwise, null.</returns>
 		public MethodInfo GetMethod(string name, Type[] types, ParameterModifier[] modifiers)
 		{
-			return this.GetMethodImpl(name, Type.DefaultBindingFlags, Type.DefaultBinder, CallingConventions.Any, types, modifiers);
+			return this.GetMethod(name, Type.DefaultBindingFlags, null, types, modifiers);
 		}
 
 		/// <summary>
@@ -814,7 +821,7 @@ namespace System
 		/// <returns>An object representing the method that matches the specified requirements, if found; otherwise, null.</returns>
 		public MethodInfo GetMethod(string name, BindingFlags bindingAttr, Binder binder, Type[] types, ParameterModifier[] modifiers)
 		{
-			return this.GetMethodImpl(name, bindingAttr, binder, CallingConventions.Any, types, modifiers);
+			return this.GetMethod(name, bindingAttr, binder, CallingConventions.Any, types, modifiers);
 		}
 
 		/// <summary>
@@ -841,6 +848,18 @@ namespace System
 		/// <returns>An object representing the method that matches the specified requirements, if found; otherwise, null.</returns>
 		public MethodInfo GetMethod(string name, BindingFlags bindingAttr, Binder binder, CallingConventions callConvention, Type[] types, ParameterModifier[] modifiers)
 		{
+			if (name == null)
+				throw new ArgumentNullException("name");
+
+			if (types == null)
+				throw new ArgumentNullException("types");
+
+			for (int i = 0; i < types.Length; i++)
+			{
+				if (types[i] == null)
+					throw new ArgumentNullException("types");
+			}
+
 			return this.GetMethodImpl(name, bindingAttr, binder, callConvention, types, modifiers);
 		}
 
@@ -944,5 +963,270 @@ namespace System
 		/// <returns>The type with the specified name. If the type is not found, the throwOnError parameter specifies whether null is returned or an exception is thrown. In some cases, an exception is thrown regardless of the value of throwOnError.</returns>
 		[MethodImpl(MethodImplOptions.InternalCall)]
 		private static extern Type GetTypeImpl(string typeName, bool throwOnError, bool ignoreCase);
+
+		/// <summary>
+		/// Gets the types of the objects in the specified array.
+		/// </summary>
+		/// <param name="args">An array of objects whose types to determine.</param>
+		/// <returns>An array of Type objects representing the types of the corresponding elements in args.</returns>
+		public static Type[] GetTypeArray(object[] args)
+		{
+			if (args == null)
+				throw new ArgumentNullException("args");
+
+			Type[] argTypes = new Type[args.Length];
+			for (int i = 0; i < args.Length; i++)
+			{
+				argTypes[i] = args[i].GetType();
+			}
+
+			return argTypes;
+		}
+
+		/// <summary>
+		/// Gets the underlying type code of the specified Type.
+		/// </summary>
+		/// <param name="type">The type whose underlying type code to get.</param>
+		/// <returns>The code of the underlying type, or Empty if type is null.</returns>
+		public static TypeCode GetTypeCode(Type type)
+		{
+			return type.GetTypeCodeImpl();
+		}
+
+		/// <summary>
+		/// Returns the underlying type code of the specified Type.
+		/// </summary>
+		/// <returns>The code of the underlying type.</returns>
+		protected virtual TypeCode GetTypeCodeImpl()
+		{
+			throw new NotImplementedException();
+		}
+
+		/// <summary>
+		/// Gets the type referenced by the specified type handle.
+		/// </summary>
+		/// <param name="handle">The object that refers to the type.</param>
+		/// <returns></returns>
+		public static Type GetTypeFromHandle(RuntimeTypeHandle handle)
+		{
+			return Type.GetTypeFromHandleImpl(handle);
+		}
+
+		/// <summary>
+		/// Gets the type referenced by the specified type handle.
+		/// </summary>
+		/// <param name="handle">The object that refers to the type.</param>
+		/// <returns>The type referenced by the specified RuntimeTypeHandle, or null if the Value property of handle is null.</returns>
+		[MethodImpl(MethodImplOptions.InternalCall)]
+		private static extern Type GetTypeFromHandleImpl(RuntimeTypeHandle handle);
+
+		/// <summary>
+		/// Gets the handle for the Type of a specified object.
+		/// </summary>
+		/// <param name="o">The object for which to get the type handle.</param>
+		/// <returns>The handle for the Type of the specified Object.</returns>
+		public static RuntimeTypeHandle GetTypeHandle(object o)
+		{
+			if (o == null)
+				throw new ArgumentNullException("o");
+
+			return o.GetType().TypeHandle;
+		}
+
+		/// <summary>
+		/// When overridden in a derived class, implements the HasElementType property and determines whether the current Type encompasses or refers to another type; that is, whether the current Type is an array, a pointer, or is passed by reference.
+		/// </summary>
+		/// <returns>True if the Type is an array, a pointer, or is passed by reference; otherwise, False.</returns>
+		protected abstract bool HasElementTypeImpl();
+
+		/// <summary>
+		/// Invokes the specified member, using the specified binding constraints and matching the specified argument list.
+		/// </summary>
+		/// <param name="name">
+		/// The string containing the name of the constructor, method, property, or field member to invoke.
+		/// -or-
+		/// An empty string ("") to invoke the default member.
+		/// </param>
+		/// <param name="invokeAttr">
+		/// A bitmask comprised of one or more BindingFlags that specify how the search is conducted.
+		/// The access can be one of the BindingFlags such as Public, NonPublic, Private, InvokeMethod, GetField, and so on.
+		/// The type of lookup need not be specified. If the type of lookup is omitted, BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static are used.
+		/// </param>
+		/// <param name="binder">
+		/// An object that defines a set of properties and enables binding, which can involve selection of an overloaded method, coercion of argument types, and invocation of a member through reflection.
+		/// -or-
+		/// A null reference , to use the DefaultBinder. Note that explicitly defining a Binder object may be required for successfully invoking method overloads with variable arguments.
+		/// </param>
+		/// <param name="target">The object on which to invoke the specified member.</param>
+		/// <param name="args">An array containing the arguments to pass to the member to invoke.</param>
+		/// <returns>An object representing the return value of the invoked member.</returns>
+		public object InvokeMember(string name, BindingFlags invokeAttr, Binder binder, object target, object[] args)
+		{
+			return this.InvokeMember(name, invokeAttr, binder, target, args, null, null, null);
+		}
+
+		/// <summary>
+		/// Invokes the specified member, using the specified binding constraints and matching the specified argument list and culture.
+		/// </summary>
+		/// <param name="name">
+		/// The string containing the name of the constructor, method, property, or field member to invoke.
+		/// -or-
+		/// An empty string ("") to invoke the default member.
+		/// </param>
+		/// <param name="invokeAttr">
+		/// A bitmask comprised of one or more BindingFlags that specify how the search is conducted.
+		/// The access can be one of the BindingFlags such as Public, NonPublic, Private, InvokeMethod, GetField, and so on.
+		/// The type of lookup need not be specified. If the type of lookup is omitted, BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static are used.
+		/// </param>
+		/// <param name="binder">
+		/// An object that defines a set of properties and enables binding, which can involve selection of an overloaded method, coercion of argument types, and invocation of a member through reflection.
+		/// -or-
+		/// A null reference , to use the DefaultBinder. Note that explicitly defining a Binder object may be required for successfully invoking method overloads with variable arguments.
+		/// </param>
+		/// <param name="target">The object on which to invoke the specified member.</param>
+		/// <param name="args">An array containing the arguments to pass to the member to invoke.</param>
+		/// <param name="culture">
+		/// The CultureInfo object representing the globalization locale to use, which may be necessary for locale-specific conversions, such as converting a numeric String to a Double.
+		/// -or-
+		/// A null reference to use the current thread's CultureInfo.
+		/// </param>
+		/// <returns>An object representing the return value of the invoked member.</returns>
+		public object InvokeMember(string name, BindingFlags invokeAttr, Binder binder, object target, object[] args, CultureInfo culture)
+		{
+			return this.InvokeMember(name, invokeAttr, binder, target, args, null, culture, null);
+		}
+
+		/// <summary>
+		/// When overridden in a derived class, invokes the specified member, using the specified binding constraints and matching the specified argument list, modifiers and culture.
+		/// </summary>
+		/// <param name="name">
+		/// The string containing the name of the constructor, method, property, or field member to invoke.
+		/// -or-
+		/// An empty string ("") to invoke the default member.
+		/// </param>
+		/// <param name="invokeAttr">
+		/// A bitmask comprised of one or more BindingFlags that specify how the search is conducted.
+		/// The access can be one of the BindingFlags such as Public, NonPublic, Private, InvokeMethod, GetField, and so on.
+		/// The type of lookup need not be specified. If the type of lookup is omitted, BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static are used.
+		/// </param>
+		/// <param name="binder">
+		/// An object that defines a set of properties and enables binding, which can involve selection of an overloaded method, coercion of argument types, and invocation of a member through reflection.
+		/// -or-
+		/// A null reference , to use the DefaultBinder. Note that explicitly defining a Binder object may be required for successfully invoking method overloads with variable arguments.
+		/// </param>
+		/// <param name="target">The object on which to invoke the specified member.</param>
+		/// <param name="args">An array containing the arguments to pass to the member to invoke.</param>
+		/// <param name="modifiers">
+		/// An array of ParameterModifier objects representing the attributes associated with the corresponding element in the args array. A parameter's associated attributes are stored in the member's signature. 
+		/// The default binder processes this parameter only when calling a COM component.
+		/// </param>
+		/// <param name="culture">
+		/// The CultureInfo object representing the globalization locale to use, which may be necessary for locale-specific conversions, such as converting a numeric String to a Double.
+		/// -or-
+		/// A null reference to use the current thread's CultureInfo.
+		/// </param>
+		/// <param name="namedParameters">An array containing the names of the parameters to which the values in the args array are passed.</param>
+		/// <returns>An object representing the return value of the invoked member.</returns>
+		public abstract object InvokeMember(string name, BindingFlags invokeAttr, Binder binder, object target, object[] args, ParameterModifier[] modifiers, CultureInfo culture, string[] namedParameters);
+
+		/// <summary>
+		/// When overridden in a derived class, implements the IsArray property and determines whether the Type is an array.
+		/// </summary>
+		/// <returns>True if the Type is an array; otherwise, False.</returns>
+		protected abstract bool IsArrayImpl();
+
+		/// <summary>
+		/// Determines whether an instance of the current Type can be assigned from an instance of the specified Type.
+		/// </summary>
+		/// <param name="c">The type to compare with the current type.</param>
+		/// <returns>
+		/// True if c and the current Type represent the same type, or if the current Type is in the inheritance hierarchy of c, or if the current Type is an interface that c implements, or if c is a generic type parameter and the current Type represents one of the constraints of c, or if c represents a value type and the current Type represents Nullable<c>. False if none of these conditions are true, or if c is null.
+		/// </returns>
+		public virtual bool IsAssignableFrom(Type c)
+		{
+			// TODO
+			throw new NotImplementedException();
+		}
+
+		/// <summary>
+		/// When overridden in a derived class, implements the IsByRef property and determines whether the Type is passed by reference.
+		/// </summary>
+		/// <returns>True if the Type is passed by reference; otherwise, False.</returns>
+		protected abstract bool IsByRefImpl();
+
+		/// <summary>
+		/// Implements the IsContextful property and determines whether the Type can be hosted in a context.
+		/// </summary>
+		/// <returns>True if the Type can be hosted in a context; otherwise, False.</returns>
+		protected virtual bool IsContextfulImpl()
+		{
+			throw new NotImplementedException();
+		}
+
+		/// <summary>
+		/// Returns a value that indicates whether the specified value exists in the current enumeration type.
+		/// </summary>
+		/// <param name="value">The value to be tested.</param>
+		/// <returns>True if the specified value is a member of the current enumeration type; otherwise, False.</returns>
+		public virtual bool IsEnumDefined(object value)
+		{
+			if (value == null)
+				throw new ArgumentNullException("value");
+
+			if (!this.IsEnum)
+				throw new ArgumentException("The current type is not an enumeration.");
+
+			// TODO
+			throw new NotImplementedException();
+		}
+
+		/// <summary>
+		/// Determines whether the specified object is an instance of the current Type.
+		/// </summary>
+		/// <param name="o">The object to compare with the current type.</param>
+		/// <returns>
+		/// True if the current Type is in the inheritance hierarchy of the object represented by o, or if the current Type is an interface that o supports.
+		/// False if neither of these conditions is the case, or if o is null, or if the current Type is an open generic type (that is, ContainsGenericParameters returns true).
+		/// </returns>
+		public virtual bool IsInstanceOfType(object o)
+		{
+			var oType = o.GetType();
+
+			if (oType == this)
+				return true;
+
+			do
+			{
+				oType = oType.BaseType;
+
+				if (oType == this)
+					return true;
+			}
+			while (oType != oType.BaseType);
+
+			return false;
+		}
+
+		/// <summary>
+		/// When overridden in a derived class, implements the IsPointer property and determines whether the Type is a pointer.
+		/// </summary>
+		/// <returns>True if the Type is a pointer; otherwise, False.</returns>
+		protected abstract bool IsPointerImpl();
+
+		/// <summary>
+		/// When overridden in a derived class, implements the IsPrimitive property and determines whether the Type is one of the primitive types.
+		/// </summary>
+		/// <returns>True if the Type is one of the primitive types; otherwise, False.</returns>
+		protected abstract bool IsPrimitiveImpl();
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="c"></param>
+		/// <returns></returns>
+		public virtual bool IsSubclassOf(Type c)
+		{
+
+		}
 	}
 }
