@@ -59,7 +59,7 @@ namespace Mosa.Tool.Debugger
 
 		public void ProcessResponses(DebugMessage response)
 		{
-			string formatted = events.Count.ToString() + " : RECEIVED: #" + response.ID.ToString() + " -> " + FormatResponseMessage(response);
+			string formatted = events.Count.ToString() + ": " + FormatResponseMessage(response) + " (" + response.ID.ToString() + ")";
 
 			events.Add(formatted);
 

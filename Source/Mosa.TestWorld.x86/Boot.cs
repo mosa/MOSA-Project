@@ -23,43 +23,9 @@ namespace Mosa.TestWorld.x86
 		/// </summary>
 		public static void Main()
 		{
-			//Start();
+			Start();
 
-			Debug();
-		}
-
-		public static void Debug()
-		{
-			Screen.Color = 0x0;
-			Screen.Clear();
-			Screen.GotoTop();
-			Screen.Color = 0x0E;
-			Screen.Write('D');
-			Screen.Write('E');
-			Screen.Write('B');
-			Screen.Write('U');
-			Screen.Write('G');
-			Screen.NextLine();
-			Screen.NextLine();
-
-			DebugClient.Setup(Serial.COM1);
-			
-			byte last = 0;
-
-			while (true)
-			{
-				
-				byte second = CMOS.Second;
-				
-				if (second % 10 != 5 & last != second)
-				{
-					last = CMOS.Second;
-					Screen.Write('-'); 
-					DebugClient.SendAlive();
-				}
-				
-				DebugClient.Process();
-			}
+			//EnterDebugger();
 		}
 
 		public static void Start()
@@ -206,9 +172,37 @@ namespace Mosa.TestWorld.x86
 			Console.BackgroundColor = back;
 		}
 
-		public static void Test()
+		public static void EnterDebugger()
 		{
-			// Stub
+			Screen.Color = 0x0;
+			Screen.Clear();
+			Screen.GotoTop();
+			Screen.Color = 0x0E;
+			Screen.Write('D');
+			Screen.Write('E');
+			Screen.Write('B');
+			Screen.Write('U');
+			Screen.Write('G');
+			Screen.NextLine();
+			Screen.NextLine();
+
+			DebugClient.Setup(Serial.COM1);
+
+			byte last = 0;
+
+			while (true)
+			{
+
+				byte second = CMOS.Second;
+
+				if (second % 10 != 5 & last != second)
+				{
+					last = CMOS.Second;
+					DebugClient.SendAlive();
+				}
+
+				DebugClient.Process();
+			}
 		}
 
 		//public static void Mandelbrot()

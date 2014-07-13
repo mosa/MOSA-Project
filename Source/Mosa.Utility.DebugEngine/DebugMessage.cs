@@ -43,10 +43,10 @@ namespace Mosa.Utility.DebugEngine
 			int index = 0;
 			foreach (int i in data)
 			{
-				this.CommandData[index++] = (byte)((i >> 24) & 0xFF);
-				this.CommandData[index++] = (byte)((i >> 16) & 0xFF);
-				this.CommandData[index++] = (byte)((i >> 8) & 0xFF);
 				this.CommandData[index++] = (byte)(i & 0xFF);
+				this.CommandData[index++] = (byte)((i >> 8) & 0xFF);
+				this.CommandData[index++] = (byte)((i >> 16) & 0xFF);
+				this.CommandData[index++] = (byte)((i >> 24) & 0xFF);
 			}
 		}
 

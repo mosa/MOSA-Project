@@ -120,7 +120,6 @@ namespace Mosa.Kernel.x86
 
 		private static void BadDataAbort()
 		{
-			//Screen.Write('#');
 			index = 0;
 			length = -1;
 		}
@@ -135,8 +134,6 @@ namespace Mosa.Kernel.x86
 			return (uint)GetInt32(offset);
 		}
 
-		//static uint count = 0;
-
 		public static void Process()
 		{
 			if (!Serial.IsDataReady(com))
@@ -144,27 +141,6 @@ namespace Mosa.Kernel.x86
 
 			byte b = Serial.Read(com);
 
-			//if (index == 0)
-			//{
-			//	Screen.Goto(1, 0);
-			//	Screen.Write(++count);
-			//	Screen.Write(' ');
-			//	Screen.Write(' ');
-			//	Screen.Write(' ');
-			//	Screen.NextLine();
-			//}
-
-			//Screen.NextLine();
-			//Screen.Write(index);
-			//Screen.Write(':');
-			//Screen.Write((char)b);
-			//Screen.Write(' ');
-			//Screen.Write('-');
-			//Screen.Write(' ');
-			//Screen.Write((uint)b);
-			//Screen.Write(' ');
-			//Screen.Write(' '); 
-			
 			bool bad = false;
 
 			if (index == 0 && b != (byte)'M')
@@ -212,10 +188,7 @@ namespace Mosa.Kernel.x86
 			int checksum = GetInt32(16);
 
 			// TODO: validate checksum
-			Screen.Write('E');
-			Screen.Write((uint)code);
-			Screen.Write('E');
-
+		
 			switch (code)
 			{
 				case Codes.Ping: SendResponse(id, Codes.Ping); return;
@@ -238,7 +211,9 @@ namespace Mosa.Kernel.x86
 			SendInteger(bytes); // bytes
 
 			for (uint i = 0; i < bytes; i++)
+			{
 				SendByte((Native.Get8(startingAddress + i)));
+			}
 		}
 
 		private static void Scattered32BitReadMemory()
