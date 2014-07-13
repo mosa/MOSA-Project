@@ -90,10 +90,10 @@ namespace Mosa.Utility.DebugEngine
 
 		private void SendInteger(int i)
 		{
-			SendByte(i >> 24 & 0xFF);
-			SendByte(i >> 16 & 0xFF);
-			SendByte(i >> 8 & 0xFF);
 			SendByte(i & 0xFF);
+			SendByte(i >> 8 & 0xFF);
+			SendByte(i >> 16 & 0xFF);
+			SendByte(i >> 24 & 0xFF);
 		}
 
 		private void SendMagic()
@@ -194,16 +194,24 @@ namespace Mosa.Utility.DebugEngine
 
 		private void Push(byte b)
 		{
-			buffer[index++] = b;
+			bool bad = false;
 
-			if (index == 1 && buffer[0] != (byte)'M')
+			if (index == 0 && b != (byte)'M')
+				bad = true;
+			else if (index == 1 && b != (byte)'O')
+				bad = true;
+			else if (index == 2 && b != (byte)'S')
+				bad = true;
+			else if (index == 3 && b != (byte)'A')
+				bad = true;
+
+			if (bad)
+			{
 				BadDataAbort();
-			else if (index == 2 && buffer[1] != (byte)'O')
-				BadDataAbort();
-			else if (index == 3 && buffer[2] != (byte)'S')
-				BadDataAbort();
-			else if (index == 4 && buffer[3] != (byte)'A')
-				BadDataAbort();
+				return;
+			}
+
+			buffer[index++] = b;
 
 			if (index >= 16 && length == -1)
 			{

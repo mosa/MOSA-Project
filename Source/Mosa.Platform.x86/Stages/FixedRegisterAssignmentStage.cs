@@ -27,7 +27,7 @@ namespace Mosa.Platform.x86.Stages
 		{
 			if (context.Result.IsCPURegister && context.Operand1.IsCPURegister &&
 				context.Result.Register == GeneralPurposeRegister.EAX &&
-				context.Operand1.Register == GeneralPurposeRegister.EDX)
+				(context.Operand1.Register == GeneralPurposeRegister.EDX || context.Operand1.IsConstant))
 				return;
 
 			Operand result = context.Result;
@@ -47,11 +47,10 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IX86Visitor.Out(Context context)
 		{
-			// TRANSFORM: OUT <= EDX, EAX
-			// OPTIONAL TODO: IN imm8, EAX
+			// TRANSFORM: OUT <= EDX, EAX && OUT <= imm8, EAX
 
 			if (context.Operand1.IsCPURegister && context.Operand2.IsCPURegister &&
-				context.Operand1.Register == GeneralPurposeRegister.EDX &&
+				(context.Operand1.Register == GeneralPurposeRegister.EDX || context.Operand1.IsConstant) &&
 				context.Operand2.Register == GeneralPurposeRegister.EAX)
 				return;
 
@@ -310,6 +309,10 @@ namespace Mosa.Platform.x86.Stages
 			context.AppendInstruction(X86.Shrd, result, operand1, operand2, ECX);
 		}
 
+		#endregion IX86Visitor
+
+		#region IX86Visitor - Unused
+
 		/// <summary>
 		/// Visitation function for <see cref="IX86Visitor.CmpXchg"/> instructions.
 		/// </summary>
@@ -325,10 +328,6 @@ namespace Mosa.Platform.x86.Stages
 		void IX86Visitor.CpuId(Context context)
 		{
 		}
-
-		#endregion IX86Visitor
-
-		#region IX86Visitor - Unused
 
 		/// <summary>
 		/// Visitation function for <see cref="IX86Visitor.Cmov"/> instructions.

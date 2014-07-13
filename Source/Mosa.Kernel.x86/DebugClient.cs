@@ -126,7 +126,7 @@ namespace Mosa.Kernel.x86
 
 		private static int GetInt32(uint offset)
 		{
-			return (Native.Get8(buffer + offset) << 24) | (Native.Get8(buffer + offset + 1) << 16) | (Native.Get8(buffer + offset + 2) << 8) | Native.Get8(buffer + offset + 3);
+			return (Native.Get8(buffer + offset + 3) << 24) | (Native.Get8(buffer + offset + 2) << 16) | (Native.Get8(buffer + offset + 1) << 8) | Native.Get8(buffer + offset + 0);
 		}
 
 		private static uint GetUInt32(uint offset)
@@ -136,39 +136,47 @@ namespace Mosa.Kernel.x86
 
 		public static void Process()
 		{
-			if (Serial.IsDataReady(com))
+			if (!Serial.IsDataReady(com))
+				return;
+
+			byte b = Serial.Read(com);
+
+			bool bad = false;
+
+			if (index == 0 && b != (byte)'M')
+				bad = true;
+			else if (index == 1 && b != (byte)'O')
+				bad = true;
+			else if (index == 2 && b != (byte)'S')
+				bad = true;
+			else if (index == 3 && b != (byte)'A')
+				bad = true;
+
+			if (bad)
 			{
-				byte b = Serial.Read(com);
+				BadDataAbort();
+				return;
+			}
 
-				Native.Set8(buffer + index, b);
-				index++;
+			Native.Set8(buffer + index, b);
+			index++;
 
-				if (index == 1 && Native.Get8(buffer) != (byte)'M')
-					BadDataAbort();
-				else if (index == 2 && Native.Get8(buffer + 1) != (byte)'O')
-					BadDataAbort();
-				else if (index == 3 && Native.Get8(buffer + 2) != (byte)'S')
-					BadDataAbort();
-				else if (index == 4 && Native.Get8(buffer + 3) != (byte)'A')
-					BadDataAbort();
+			if (index >= 16 && length == -1)
+			{
+				length = (int)GetInt32(12);
+			}
 
-				if (index >= 16 && length == -1)
-				{
-					length = (int)GetInt32(12);
-				}
+			if (length > 4096 || index > 4096)
+			{
+				BadDataAbort();
+				return;
+			}
 
-				if (length > 4096 || index > 4096)
-				{
-					BadDataAbort();
-					return;
-				}
+			if (length + 20 == index)
+			{
+				ProcessCommand();
 
-				if (length + 20 == index)
-				{
-					ProcessCommand();
-
-					BadDataAbort();
-				}
+				BadDataAbort();
 			}
 		}
 
@@ -180,7 +188,7 @@ namespace Mosa.Kernel.x86
 			int checksum = GetInt32(16);
 
 			// TODO: validate checksum
-
+		
 			switch (code)
 			{
 				case Codes.Ping: SendResponse(id, Codes.Ping); return;
@@ -203,7 +211,9 @@ namespace Mosa.Kernel.x86
 			SendInteger(bytes); // bytes
 
 			for (uint i = 0; i < bytes; i++)
+			{
 				SendByte((Native.Get8(startingAddress + i)));
+			}
 		}
 
 		private static void Scattered32BitReadMemory()

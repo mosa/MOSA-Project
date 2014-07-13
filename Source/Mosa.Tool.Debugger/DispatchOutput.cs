@@ -7,21 +7,21 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using System;
+using System.Collections.Generic;
 using Mosa.Utility.DebugEngine;
 
 namespace Mosa.Tool.Debugger
 {
 	public partial class DispatchOutput : DebuggerDockContent
 	{
-		private string[] events;
-		private int eventIndex;
+		private List<string> events;
 
 		public DispatchOutput()
 		{
 			InitializeComponent();
 
-			events = new string[50];
-			eventIndex = 0;
+			events = new List<string>();
 
 			//DebugEngine.SetDispatchMethod(this, Dispatch);
 		}
@@ -59,28 +59,17 @@ namespace Mosa.Tool.Debugger
 
 		public void ProcessResponses(DebugMessage response)
 		{
-			string formatted = "RECEIVED: #" + response.ID.ToString() + " -> " + FormatResponseMessage(response);
+			string formatted = events.Count.ToString() + ": " + FormatResponseMessage(response) + " (" + response.ID.ToString() + ")";
 
-			events[eventIndex++] = formatted;
+			events.Add(formatted);
 
-			if (eventIndex == events.Length)
-				eventIndex = 0;
-
-			listBox1.Items.Clear();
-
-			int start = eventIndex;
-			for (int i = 0; i < events.Length; i++)
+			if (listBox1.Items.Count == 25)
 			{
-				start--;
-
-				if (start < 0)
-					start = events.Length - 1;
-
-				if (events[start] == null)
-					return;
-
-				listBox1.Items.Add(events[start]);
+				listBox1.Items.RemoveAt(listBox1.Items.Count - 1);
 			}
+
+			listBox1.Items.Insert(0, formatted);
+
 		}
 	}
 }

@@ -12,14 +12,14 @@ namespace Mosa.Kernel.x86
 	/// <summary>
 	///
 	/// </summary>
-	public class CMOS
+	public static class CMOS
 	{
 		/// <summary>
 		/// Gets the specified index.
 		/// </summary>
 		/// <param name="index">The index.</param>
 		/// <returns></returns>
-		public byte Get(byte index)
+		public static byte Get(byte index)
 		{
 			//Native.Cli();
 			Native.Out(0x70, index);
@@ -38,7 +38,7 @@ namespace Mosa.Kernel.x86
 		/// <param name="index">The index.</param>
 		/// <param name="value">The value.</param>
 		/// <returns></returns>
-		public void Set(byte index, byte value)
+		public static void Set(byte index, byte value)
 		{
 			//Native.Cli();
 			Native.Out(0x70, index);
@@ -53,7 +53,7 @@ namespace Mosa.Kernel.x86
 		/// <summary>
 		/// Delays the io bus.
 		/// </summary>
-		private void Delay()
+		private static void Delay()
 		{
 			Native.In(0x80);
 			Native.Out(0x80, 0);
@@ -63,48 +63,48 @@ namespace Mosa.Kernel.x86
 		/// Gets the second.
 		/// </summary>
 		/// <value>The second.</value>
-		public byte Second { get { return Get(0); } }
+		public static byte Second { get { return Get(0); } }
 
 		/// <summary>
 		/// Gets the minute.
 		/// </summary>
 		/// <value>The minute.</value>
-		public byte Minute { get { return Get(2); } }
+		public static byte Minute { get { return Get(2); } }
 
 		/// <summary>
 		/// Gets the hour.
 		/// </summary>
 		/// <value>The hour.</value>
-		public byte Hour { get { return Get(4); } }
+		public static byte Hour { get { return Get(4); } }
 
 		/// <summary>
 		/// Gets the year.
 		/// </summary>
 		/// <value>The year.</value>
-		public byte Year { get { return Get(9); } }
+		public static byte Year { get { return Get(9); } }
 
 		/// <summary>
 		/// Gets the month.
 		/// </summary>
 		/// <value>The month.</value>
-		public byte Month { get { return Get(8); } }
+		public static byte Month { get { return Get(8); } }
 
 		/// <summary>
 		/// Gets the day.
 		/// </summary>
 		/// <value>The day.</value>
-		public byte Day { get { return Get(7); } }
+		public static byte Day { get { return Get(7); } }
 
 		/// <summary>
 		/// Gets the BCD.
 		/// </summary>
 		/// <value>The BCD.</value>
-		public bool BCD { get { return (Get(0x0B) & 0x04) == 0x00; } }
+		public static bool BCD { get { return (Get(0x0B) & 0x04) == 0x00; } }
 
 		/// <summary>
 		/// Dump multiboot info.
 		/// </summary>
-		public void Dump(ConsoleSession console, uint row, uint col)
+		public static void Dump(ConsoleSession console, uint row, uint col)
 		{
 			console.Row = row;
 			console.Column = col;
