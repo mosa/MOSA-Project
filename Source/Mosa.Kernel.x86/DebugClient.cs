@@ -40,6 +40,8 @@ namespace Mosa.Kernel.x86
 
 		#endregion Codes
 
+		private static bool enabled = false;
+
 		private static ushort com = Serial.COM1;
 
 		private static uint buffer = 0x1412000;
@@ -48,6 +50,7 @@ namespace Mosa.Kernel.x86
 
 		public static void Setup(ushort com)
 		{
+			enabled = true;
 			Serial.SetupPort(com);
 			DebugClient.com = com;
 		}
@@ -136,6 +139,9 @@ namespace Mosa.Kernel.x86
 
 		public static void Process()
 		{
+			if (!enabled)
+				return;
+
 			if (!Serial.IsDataReady(com))
 				return;
 

@@ -364,6 +364,8 @@ namespace Mosa.Kernel.x86
 		/// <param name="errorCode">The error code.</param>
 		private static void ProcessInterrupt(uint edi, uint esi, uint ebp, uint esp, uint ebx, uint edx, uint ecx, uint eax, uint interrupt, uint errorCode)
 		{
+			DebugClient.Process();
+
 			if (interrupt == 14)
 			{
 				// Page Fault!

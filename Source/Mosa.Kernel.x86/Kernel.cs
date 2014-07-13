@@ -18,6 +18,7 @@ namespace Mosa.Kernel.x86
 	{
 		public static void Setup()
 		{
+			DebugClient.Setup(Serial.COM1);
 			IDT.SetInterruptHandler(null);
 			SSE.Setup();
 			Multiboot.Setup();
@@ -31,8 +32,6 @@ namespace Mosa.Kernel.x86
 			TaskManager.Setup();
 			SmbiosManager.Setup();
 			ConsoleManager.Setup();
-
-			//Serial.Setup();
 		}
 	}
 }

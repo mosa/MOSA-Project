@@ -25,7 +25,6 @@ namespace Mosa.HelloWorld.x86
 		public static void Main()
 		{
 			Mosa.Kernel.x86.Kernel.Setup();
-			DebugClient.Setup(Serial.COM1);
 
 			Console = ConsoleManager.Controller.Boot;
 
@@ -316,7 +315,6 @@ namespace Mosa.HelloWorld.x86
 					DebugClient.SendAlive();
 				}
 
-				DebugClient.Process();
 				Native.Hlt();
 			}
 		}
