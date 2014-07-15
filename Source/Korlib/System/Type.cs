@@ -49,7 +49,7 @@ namespace System
 		/// </summary>
 		public TypeAttributes Attributes
 		{
-			get { throw new NotImplementedException(); }
+			get { return this.GetAttributeFlagsImpl(); }
 		}
 
 		/// <summary>
@@ -70,7 +70,7 @@ namespace System
 		/// </summary>
 		public virtual MethodBase DeclaringMethod
 		{
-			get { throw new NotImplementedException(); }
+			get { return null; }
 		}
 
 		/// <summary>
@@ -92,7 +92,7 @@ namespace System
 		/// <summary>
 		/// Gets the fully qualified name of the Type, including the namespace of the Type but not the assembly.
 		/// </summary>
-		public abstract string Fullname { get; }
+		public abstract string FullName { get; }
 
 		/// <summary>
 		/// Gets an array of the generic type arguments for this type.
@@ -107,7 +107,7 @@ namespace System
 		/// </summary>
 		public bool HasElementType
 		{
-			get { throw new NotImplementedException(); }
+			get { return this.HasElementTypeImpl(); }
 		}
 
 		/// <summary>
@@ -155,7 +155,7 @@ namespace System
 		/// </summary>
 		public bool IsByRef
 		{
-			get { throw new NotImplementedException(); }
+			get { return this.IsByRefImpl(); }
 		}
 
 		/// <summary>
@@ -179,7 +179,7 @@ namespace System
 		/// </summary>
 		public bool IsContextful
 		{
-			get { throw new NotImplementedException(); }
+			get { return this.IsContextfulImpl(); }
 		}
 
 		/// <summary>
@@ -187,7 +187,7 @@ namespace System
 		/// </summary>
 		public virtual bool IsEnum
 		{
-			get { throw new NotImplementedException(); }
+			get { return this.IsSubclassOf(typeof(Enum)); }
 		}
 
 		/// <summary>
@@ -291,7 +291,7 @@ namespace System
 		/// </summary>
 		public bool IsPointer
 		{
-			get { throw new NotImplementedException(); }
+			get { return this.IsPointerImpl(); }
 		}
 
 		/// <summary>
@@ -299,7 +299,7 @@ namespace System
 		/// </summary>
 		public bool IsPrimitive
 		{
-			get { throw new NotImplementedException(); }
+			get { return this.IsPrimitiveImpl(); }
 		}
 
 		/// <summary>
@@ -347,7 +347,7 @@ namespace System
 		/// </summary>
 		public bool IsValueType
 		{
-			get { throw new NotImplementedException(); }
+			get { return this.IsValueTypeImpl(); }
 		}
 
 		/// <summary>
@@ -384,7 +384,7 @@ namespace System
 		/// </summary>
 		public virtual StructLayoutAttribute StructLayoutAttribute
 		{
-			get { throw new NotSupportedException(); }
+			get { throw new NotSupportedException("The invoked method is not supported in the base class."); }
 		}
 
 		/// <summary>
@@ -400,7 +400,10 @@ namespace System
 		/// </summary>
 		public ConstructorInfo TypeInitializer
 		{
-			get { throw new NotImplementedException(); }
+			get
+			{
+				return this.GetConstructorImpl(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static, null, CallingConventions.Any, Type.EmptyTypes, null);
+			}
 		}
 
 		/// <summary>
@@ -414,24 +417,24 @@ namespace System
 		/// <summary>
 		/// Determines if the underlying system type of the current Type is the same as the underlying system type of the specified Object.
 		/// </summary>
-		/// <param name="o">The object whose underlying system type is to be compared with the underlying system type of the current Type.</param>
+		/// <param name="obj">The object whose underlying system type is to be compared with the underlying system type of the current Type.</param>
 		/// <returns>True if the underlying system type of o is the same as the underlying system type of the current Type; otherwise, False. This method also returns False if the object specified by the o parameter is not a Type.</returns>
-		public override bool Equals(object o)
+		public override bool Equals(object obj)
 		{
-			if (!(o is Type))
+			if (!(obj is Type))
 				return false;
 
-			return ((Type)o).TypeHandle == this.TypeHandle;
+			return ((Type)obj).TypeHandle == this.TypeHandle;
 		}
 
 		/// <summary>
 		/// Determines if the underlying system type of the current Type is the same as the underlying system type of the specified Type.
 		/// </summary>
-		/// <param name="o">The object whose underlying system type is to be compared with the underlying system type of the current Type.</param>
+		/// <param name="obj">The object whose underlying system type is to be compared with the underlying system type of the current Type.</param>
 		/// <returns>True if the underlying system type of o is the same as the underlying system type of the current Type; otherwise, False.</returns>
-		public virtual bool Equals(Type o)
+		public virtual bool Equals(Type obj)
 		{
-			return o.TypeHandle == this.TypeHandle;
+			return obj.TypeHandle == this.TypeHandle;
 		}
 
 		/// <summary>
@@ -440,7 +443,7 @@ namespace System
 		/// <returns>An Int32 containing the number of dimensions in the current Type.</returns>
 		public virtual int GetArrayRank()
 		{
-			throw new NotSupportedException();
+			throw new NotSupportedException("The invoked method is not supported in the base class. Derived classes must provide an implementation.");
 		}
 
 		/// <summary>
@@ -460,21 +463,91 @@ namespace System
 		/// <returns>An object representing the public instance constructor whose parameters match the types in the parameter type array, if found; otherwise, null.</returns>
 		public ConstructorInfo GetConstructor(Type[] types)
 		{
+			return this.GetConstructor(BindingFlags.Public | BindingFlags.Instance, null, CallingConventions.Any, types, null);
+		}
+
+		/// <summary>
+		/// Searches for a constructor whose parameters match the specified argument types and modifiers, using the specified binding constraints.
+		/// </summary>
+		/// <param name="bindingAttr">
+		/// A bitmask comprised of one or more BindingFlags that specify how the search is conducted.
+		/// -or-
+		/// Zero, to return null.
+		/// </param>
+		/// <param name="binder">
+		/// An object that defines a set of properties and enables binding, which can involve selection of an overloaded method, coercion of argument types, and invocation of a member through reflection.
+		/// -or-
+		/// A null reference, to use the DefaultBinder.
+		/// </param>
+		/// <param name="types">
+		/// An array of Type objects representing the number, order, and type of the parameters for the constructor to get.
+		/// -or-
+		/// An empty array of the type Type (as provided by the EmptyTypes field) to get a constructor that takes no parameters.
+		/// </param>
+		/// <param name="modifiers">An array of ParameterModifier objects representing the attributes associated with the corresponding element in the types array. The default binder does not process this parameter.</param>
+		/// <returns>A ConstructorInfo object representing the constructor that matches the specified requirements, if found; otherwise, null.</returns>
+		public ConstructorInfo GetConstructor(BindingFlags bindingAttr, Binder binder, Type[] types, ParameterModifier[] modifiers)
+		{
+			return this.GetConstructor(bindingAttr, binder, CallingConventions.Any, types, modifiers);
+		}
+
+		/// <summary>
+		/// Searches for a constructor whose parameters match the specified argument types and modifiers, using the specified binding constraints and the specified calling convention.
+		/// </summary>
+		/// <param name="bindingAttr">
+		/// A bitmask comprised of one or more BindingFlags that specify how the search is conducted.
+		/// -or-
+		/// Zero, to return null.
+		/// </param>
+		/// <param name="binder">
+		/// An object that defines a set of properties and enables binding, which can involve selection of an overloaded method, coercion of argument types, and invocation of a member through reflection.
+		/// -or-
+		/// A null reference, to use the DefaultBinder.
+		/// </param>
+		/// <param name="callConvention">The object that specifies the set of rules to use regarding the order and layout of arguments, how the return value is passed, what registers are used for arguments, and the stack is cleaned up.</param>
+		/// <param name="types">
+		/// An array of Type objects representing the number, order, and type of the parameters for the constructor to get.
+		/// -or-
+		/// An empty array of the type Type (as provided by the EmptyTypes field) to get a constructor that takes no parameters.
+		/// </param>
+		/// <param name="modifiers">An array of ParameterModifier objects representing the attributes associated with the corresponding element in the types array. The default binder does not process this parameter.</param>
+		/// <returns>A ConstructorInfo object representing the constructor that matches the specified requirements, if found; otherwise, null.</returns>
+		public ConstructorInfo GetConstructor(BindingFlags bindingAttr, Binder binder, CallingConventions callConvention, Type[] types, ParameterModifier[] modifiers)
+		{
 			if (types == null)
 				throw new ArgumentNullException("types");
 
-			for (int i = 0; i < types.Length; i++)
+			foreach (Type t in types)
 			{
-				if (types[i] == null)
+				if (t == null)
 					throw new ArgumentNullException("types");
 			}
 
-			if (types.Rank > 1)
-				throw new ArgumentException("types is multidimensional.", "types");
-
-			// TODO
-			throw new NotImplementedException();
+			return this.GetConstructorImpl(bindingAttr, binder, callConvention, types, modifiers);
 		}
+
+		/// <summary>
+		/// When overridden in a derived class, searches for a constructor whose parameters match the specified argument types and modifiers, using the specified binding constraints and the specified calling convention.
+		/// </summary>
+		/// <param name="bindingAttr">
+		/// A bitmask comprised of one or more BindingFlags that specify how the search is conducted.
+		/// -or-
+		/// Zero, to return null.
+		/// </param>
+		/// <param name="binder">
+		/// An object that defines a set of properties and enables binding, which can involve selection of an overloaded method, coercion of argument types, and invocation of a member through reflection.
+		/// -or-
+		/// A null reference, to use the DefaultBinder.
+		/// </param>
+		/// <param name="callConvention">The object that specifies the set of rules to use regarding the order and layout of arguments, how the return value is passed, what registers are used for arguments, and the stack is cleaned up.</param>
+		/// <param name="types">
+		/// An array of Type objects representing the number, order, and type of the parameters for the constructor to get.
+		/// -or-
+		/// An empty array of the type Type (as provided by the EmptyTypes field) to get a constructor that takes no parameters.
+		/// </param>
+		/// <param name="modifiers">An array of ParameterModifier objects representing the attributes associated with the corresponding element in the types array. The default binder does not process this parameter.</param>
+		/// <returns>A ConstructorInfo object representing the constructor that matches the specified requirements, if found; otherwise, null.</returns>
+		protected abstract ConstructorInfo GetConstructorImpl(BindingFlags bindingAttr, Binder binder, CallingConventions callConvention, Type[] types, ParameterModifier[] modifiers);
 
 		/// <summary>
 		/// Returns all the public constructors defined for the current Type.
@@ -604,7 +677,7 @@ namespace System
 		/// <returns>An array of Type objects that represent the type arguments of a generic type. Returns an empty array if the current type is not a generic type.</returns>
 		public virtual Type[] GetGenericArguments()
 		{
-			throw new NotSupportedException();
+			throw new NotSupportedException("The invoked method is not supported in the base class. Derived classes must provide an implementation.");
 		}
 
 		/// <summary>
@@ -613,7 +686,7 @@ namespace System
 		/// <returns>An array of Type objects that represent the constraints on the current generic type parameter.</returns>
 		public virtual Type[] GetGenericParameterConstraints()
 		{
-			throw new NotSupportedException();
+			throw new NotSupportedException("The invoked method is not supported in the base class. Derived classes must provide an implementation.");
 		}
 
 		/// <summary>
@@ -622,7 +695,7 @@ namespace System
 		/// <returns>A Type object representing a generic type from which the current type can be constructed.</returns>
 		public virtual Type[] GetGenericTypeDefinition()
 		{
-			throw new NotSupportedException();
+			throw new NotSupportedException("The invoked method is not supported in the base class. Derived classes must provide an implementation.");
 		}
 
 		/// <summary>
@@ -665,7 +738,7 @@ namespace System
 		/// -or- 
 		/// An empty array of type Type, if no interfaces are implemented or inherited by the current Type.
 		/// </returns>
-		public abstract Type GetInterfaces();
+		public abstract Type[] GetInterfaces();
 
 		/// <summary>
 		/// Searches for the public members with the specified name.
@@ -705,7 +778,7 @@ namespace System
 		/// <returns>An array of MemberInfo objects representing the public members with the specified name, if found; otherwise, an empty array.</returns>
 		public virtual MemberInfo[] GetMember(string name, MemberTypes type, BindingFlags bindingAttr)
 		{
-			throw new NotSupportedException();
+			throw new NotSupportedException("The invoked method is not supported in the base class. Derived classes must provide an implementation.");
 		}
 
 		/// <summary>
@@ -1190,19 +1263,18 @@ namespace System
 		/// </returns>
 		public virtual bool IsInstanceOfType(object o)
 		{
+			if (o == null || this.ContainsGenericParameters)
+				return false;
+
 			var oType = o.GetType();
 
-			if (oType == this)
-				return true;
+			for (Type type = oType; type != null; type = type.BaseType)
+				if (type == this) return true;
 
-			do
-			{
-				oType = oType.BaseType;
+			var oInterfaces = oType.GetInterfaces();
 
-				if (oType == this)
-					return true;
-			}
-			while (oType != oType.BaseType);
+			for (int i = 0; i < oInterfaces.Length; i++)
+				if (oInterfaces[i] == this) return true;
 
 			return false;
 		}
@@ -1220,13 +1292,121 @@ namespace System
 		protected abstract bool IsPrimitiveImpl();
 
 		/// <summary>
-		/// 
+		/// Determines whether the class represented by the current Type derives from the class represented by the specified Type.
 		/// </summary>
-		/// <param name="c"></param>
-		/// <returns></returns>
+		/// <param name="c">The type to compare with the current type.</param>
+		/// <returns>True if the Type represented by the c parameter and the current Type represent classes, and the class represented by the current Type derives from the class represented by c; otherwise, False. This method also returns False if c and the current Type represent the same class.</returns>
 		public virtual bool IsSubclassOf(Type c)
 		{
+			if (c == null || c == this)
+				return false;
 
+			for (Type type = BaseType; type != null; type = type.BaseType)
+				if (type == c) return true;
+
+			return false;
+		}
+
+		/// <summary>
+		/// Implements the IsValueType property and determines whether the Type is a value type; that is, not a class or an interface.
+		/// </summary>
+		/// <returns>True if the Type is a value type; otherwise, False.</returns>
+		protected virtual bool IsValueTypeImpl()
+		{
+			if (this == typeof(ValueType) || this == typeof(Enum))
+				return false;
+
+			return this.IsSubclassOf(typeof(ValueType));
+		}
+
+		/// <summary>
+		/// Returns a Type object representing a one-dimensional array of the current type, with a lower bound of zero.
+		/// </summary>
+		/// <returns>A Type object representing a one-dimensional array of the current type, with a lower bound of zero.</returns>
+		public virtual Type MakeArrayType()
+		{
+			throw new NotSupportedException("The invoked method is not supported in the base class. Derived classes must provide an implementation.");
+		}
+
+		/// <summary>
+		/// Returns a Type object representing an array of the current type, with the specified number of dimensions.
+		/// </summary>
+		/// <param name="rank">The number of dimensions for the array. This number must be less than or equal to 32.</param>
+		/// <returns>An object representing an array of the current type, with the specified number of dimensions.</returns>
+		public virtual Type MakeArrayType(int rank)
+		{
+			throw new NotSupportedException("The invoked method is not supported in the base class. Derived classes must provide an implementation.");
+		}
+
+		/// <summary>
+		/// Returns a Type object that represents the current type when passed as a ref parameter.
+		/// </summary>
+		/// <returns>A Type object that represents the current type when passed as a ref parameter.</returns>
+		public virtual Type MakeByRefType()
+		{
+			throw new NotSupportedException("The invoked method is not supported in the base class. Derived classes must provide an implementation.");
+		}
+
+		/// <summary>
+		/// Substitutes the elements of an array of types for the type parameters of the current generic type definition and returns a Type object representing the resulting constructed type.
+		/// </summary>
+		/// <param name="typeArguments">An array of types to be substituted for the type parameters of the current generic type.</param>
+		/// <returns>A Type representing the constructed type formed by substituting the elements of typeArguments for the type parameters of the current generic type.</returns>
+		public virtual Type MakeGenericType(params Type[] typeArguments)
+		{
+			throw new NotSupportedException("The invoked method is not supported in the base class. Derived classes must provide an implementation.");
+		}
+
+		/// <summary>
+		/// Returns a Type object that represents a pointer to the current type.
+		/// </summary>
+		/// <returns>A Type object that represents a pointer to the current type.</returns>
+		public virtual Type MakePointerType()
+		{
+			throw new NotSupportedException("The invoked method is not supported in the base class. Derived classes must provide an implementation.");
+		}
+
+		/// <summary>
+		/// Gets the Type with the specified name, specifying whether to perform a case-sensitive search and whether to throw an exception if the type is not found. The type is loaded for reflection only, not for execution.
+		/// </summary>
+		/// <param name="typeName">The assembly-qualified name of the Type to get.</param>
+		/// <param name="throwIfNotFound">True to throw a TypeLoadException if the type cannot be found; False to return null if the type cannot be found. Specifying False also suppresses some other exception conditions, but not all of them.</param>
+		/// <param name="ignoreCase">True to perform a case-insensitive search for typeName; False to perform a case-sensitive search for typeName.</param>
+		/// <returns>The type with the specified name, if found; otherwise, null. If the type is not found, the throwIfNotFound parameter specifies whether null is returned or an exception is thrown. In some cases, an exception is thrown regardless of the value of throwIfNotFound.</returns>
+		public static Type ReflectionOnlyGetType(string typeName, bool throwIfNotFound, bool ignoreCase)
+		{
+			throw new NotImplementedException();
+		}
+
+		/// <summary>
+		/// Returns a String representing the name of the current Type.
+		/// </summary>
+		/// <returns>A String representing the name of the current Type.</returns>
+		public override string ToString()
+		{
+			return this.FullName;
+		}
+
+		/// <summary>
+		/// Indicates whether two Type objects are equal.
+		/// </summary>
+		/// <param name="left">The first object to compare.</param>
+		/// <param name="right">The second object to compare.</param>
+		/// <returns>True if left is equal to right; otherwise, False.</returns>
+		public static bool operator ==(Type left, Type right)
+		{
+			return object.ReferenceEquals(left, right);
+		}
+
+		/// <summary>
+		/// Indicates whether two Type objects are not equal.
+		/// </summary>
+		/// <param name="left">The first object to compare.</param>
+		/// <param name="right">The second object to compare.</param>
+		/// <returns>True if left is not equal to right; otherwise, False.</returns>
+		public static bool operator !=(Type left, Type right)
+		{
+			return !(left == right);
 		}
 	}
 }

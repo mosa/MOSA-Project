@@ -31,16 +31,16 @@ namespace System
 		/// <summary>
 		/// Determines whether the specified <see cref="Object"/> is equal to the current <see cref="Object"/>.
 		/// </summary>
-		/// <param name="o">
+		/// <param name="obj">
 		/// The <see cref="Object"/> to compare with the current <see cref="Object"/>.
 		/// </param>
 		/// <returns>
 		/// true if the specified <see cref="Object"/> is equal to the current <see cref="Object"/>;
 		/// otherwise, false.
 		/// </returns>
-		public virtual bool Equals(object o)
+		public virtual bool Equals(object obj)
 		{
-			return this == o;
+			return this == obj;
 		}
 
 		/// <summary>

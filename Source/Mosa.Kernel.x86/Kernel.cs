@@ -30,7 +30,7 @@ namespace Mosa.Kernel.x86
 			PageTable.Setup();
 			VirtualPageAllocator.Setup();
 			ProcessManager.Setup();
-			Runtime.Metadata_InitializeLookup();
+			Runtime.Setup();
 			TaskManager.Setup();
 			SmbiosManager.Setup();
 			ConsoleManager.Setup();
