@@ -66,12 +66,12 @@ namespace Mosa.Utility.DebugEngine
 
 		public int GetInt32(int index)
 		{
-			return (ResponseData[index] << 24) | (ResponseData[index + 1] << 16) | (ResponseData[index + 2] << 8) | (ResponseData[index + 3]);
+			return (ResponseData[index + 3] << 24) | (ResponseData[index + 2] << 16) | (ResponseData[index + 1] << 8) | ResponseData[index];
 		}
 
 		public uint GetUInt32(int index)
 		{
-			return (uint)((ResponseData[index] << 24) | (ResponseData[index + 1] << 16) | (ResponseData[index + 2] << 8) | (ResponseData[index + 3]));
+			return (uint)GetInt32(index);
 		}
 	}
 }

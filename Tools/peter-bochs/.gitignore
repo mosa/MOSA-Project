@@ -11,3 +11,7 @@ peter-bochs.xml
 jogl.jar
 os.log
 run.txt
+gluegen-rt.dll
+jogl.dll
+jogl_awt.dll
+jogl_cg.dll

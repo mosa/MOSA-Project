@@ -106,6 +106,7 @@ namespace Mosa.Kernel.x86
 			Native.Set8(address + 1, color);
 
 			Next();
+			UpdateCursor();
 		}
 
 		/// <summary>
@@ -128,6 +129,7 @@ namespace Mosa.Kernel.x86
 		{
 			Column = 0;
 			Row = 0;
+			UpdateCursor();
 		}
 
 		/// <summary>
@@ -137,6 +139,7 @@ namespace Mosa.Kernel.x86
 		{
 			Column = 0;
 			Row++;
+			UpdateCursor();
 		}
 
 		/// <summary>
@@ -157,7 +160,7 @@ namespace Mosa.Kernel.x86
 		}
 
 		/// <summary>
-		/// Sets the cursor.
+		/// Gotos the specified row and column.
 		/// </summary>
 		/// <param name="row">The row.</param>
 		/// <param name="col">The col.</param>
@@ -165,6 +168,28 @@ namespace Mosa.Kernel.x86
 		{
 			Row = row;
 			Column = col;
+			UpdateCursor();
+		}
+
+		/// <summary>
+		/// Sets the cursor.
+		/// </summary>
+		/// <param name="row">The row.</param>
+		/// <param name="col">The col.</param>
+		public static void SetCursor(uint row, uint col)
+		{
+			uint location = (row * Columns + col);
+
+			Native.Out8(0x3D4, 0x0F);
+			Native.Out8(0x3D5, (byte)(location & 0xFF));
+
+			Native.Out8(0x3D4, 0x0E);
+			Native.Out8(0x3D5, (byte)((location >> 8) & 0xFF));
+		}
+
+		public static void UpdateCursor()
+		{
+			SetCursor(Row, Column);
 		}
 
 		/// <summary>
@@ -215,6 +240,7 @@ namespace Mosa.Kernel.x86
 			Column = x;
 			Row = y;
 			Skip(count);
+			UpdateCursor();
 		}
 	}
 }

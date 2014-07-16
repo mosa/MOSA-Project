@@ -7,9 +7,8 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
-using System.Collections.Generic;
 using Mosa.Utility.DebugEngine;
+using System.Collections.Generic;
 
 namespace Mosa.Tool.Debugger
 {
@@ -69,7 +68,6 @@ namespace Mosa.Tool.Debugger
 			}
 
 			listBox1.Items.Insert(0, formatted);
-
 		}
 	}
 }
