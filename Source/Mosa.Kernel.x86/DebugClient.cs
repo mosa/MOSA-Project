@@ -12,7 +12,7 @@ using Mosa.Platform.Internal.x86;
 namespace Mosa.Kernel.x86
 {
 	/// <summary>
-	/// Debugger
+	/// Client Side Debugger
 	/// </summary>
 	public static class DebugClient
 	{
@@ -62,10 +62,10 @@ namespace Mosa.Kernel.x86
 
 		private static void SendInteger(int i)
 		{
-			SendByte(i >> 24 & 0xFF);
-			SendByte(i >> 16 & 0xFF);
-			SendByte(i >> 8 & 0xFF);
 			SendByte(i & 0xFF);
+			SendByte(i >> 8 & 0xFF);
+			SendByte(i >> 16 & 0xFF);
+			SendByte(i >> 24 & 0xFF);
 		}
 
 		private static void SendInteger(uint i)
@@ -123,8 +123,18 @@ namespace Mosa.Kernel.x86
 
 		private static void BadDataAbort()
 		{
+			ResetBuffer();
+		}
+
+		private static void ResetBuffer()
+		{
 			index = 0;
 			length = -1;
+		}
+
+		private static byte GetByte(uint offset)
+		{
+			return Native.Get8(buffer + offset);
 		}
 
 		private static int GetInt32(uint offset)
@@ -182,7 +192,7 @@ namespace Mosa.Kernel.x86
 			{
 				ProcessCommand();
 
-				BadDataAbort();
+				ResetBuffer();
 			}
 		}
 
@@ -194,13 +204,14 @@ namespace Mosa.Kernel.x86
 			int checksum = GetInt32(16);
 
 			// TODO: validate checksum
-		
+
 			switch (code)
 			{
 				case Codes.Ping: SendResponse(id, Codes.Ping); return;
 				case Codes.ReadMemory: ReadMemory(); return;
 				case Codes.ReadCR3: SendResponse(id, Codes.ReadCR3, (int)Native.GetCR3()); return;
 				case Codes.Scattered32BitReadMemory: Scattered32BitReadMemory(); return;
+				case Codes.WriteMemory: WriteMemory(); return;
 				default: return;
 			}
 		}
@@ -208,17 +219,17 @@ namespace Mosa.Kernel.x86
 		private static void ReadMemory()
 		{
 			int id = GetInt32(4);
-			uint startingAddress = (uint)GetInt32(20);
+			uint start = (uint)GetInt32(20);
 			uint bytes = (uint)GetInt32(24);
 
 			SendResponse(id, Codes.ReadMemory, (int)(bytes + 8), 0);
 
-			SendInteger(startingAddress); // starting address
+			SendInteger(start); // starting address
 			SendInteger(bytes); // bytes
 
 			for (uint i = 0; i < bytes; i++)
 			{
-				SendByte((Native.Get8(startingAddress + i)));
+				SendByte((Native.Get8(start + i)));
 			}
 		}
 
@@ -234,6 +245,35 @@ namespace Mosa.Kernel.x86
 				uint address = GetUInt32((uint)((i * 4) + 20));
 				SendInteger(address);
 				SendInteger(Native.Get32(address));
+			}
+		}
+
+		private static void WriteMemory()
+		{
+			int id = GetInt32(4);
+			uint start = GetUInt32(20);
+			uint bytes = GetUInt32(24);
+
+			SendResponse(id, Codes.WriteMemory);
+
+			uint at = 0;
+
+			while (at + 4 < bytes)
+			{
+				uint value = GetUInt32(28 + at);
+
+				Native.Set32(start + at, value);
+
+				at = at + 4;
+			}
+
+			while (at < bytes)
+			{
+				byte value = GetByte(28 + at);
+
+				Native.Set8(start + at, value);
+
+				at = at + 1;
 			}
 		}
 	}

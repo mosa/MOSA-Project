@@ -188,7 +188,6 @@ namespace Mosa.TestWorld.x86
 
 			while (true)
 			{
-
 				byte second = CMOS.Second;
 
 				if (second % 10 != 5 & last != second)
