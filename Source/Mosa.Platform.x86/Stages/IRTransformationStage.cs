@@ -352,12 +352,12 @@ namespace Mosa.Platform.x86.Stages
 		{
 			var type = context.Result.Type;
 			int typeSize = TypeLayout.GetTypeSize(type);
-			Debug.Assert(typeSize > 0 && typeSize % 4 == 0 && context.Operand2.IsConstant);
+			Debug.Assert(typeSize > 0 && typeSize % 4 == 0 && context.Operand2.IsConstant, context.Operand2.Name);
 
 			int offset = (int)context.Operand2.ConstantSignedInteger;
 			var src = context.Operand1;
 			var dest = context.Result;
-			Debug.Assert(dest.IsMemoryAddress);
+			Debug.Assert(dest.IsMemoryAddress, dest.Name);
 
 			var srcReg = MethodCompiler.CreateVirtualRegister(dest.Type.TypeSystem.BuiltIn.I4);
 			var dstReg = MethodCompiler.CreateVirtualRegister(dest.Type.TypeSystem.BuiltIn.I4);

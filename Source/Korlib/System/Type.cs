@@ -1103,8 +1103,16 @@ namespace System
 			if (o == null)
 				throw new ArgumentNullException("o");
 
-			return o.GetType().TypeHandle;
+			return Type.GetTypeHandleImpl(o);
 		}
+
+		/// <summary>
+		/// Gets the handle for the Type of a specified object.
+		/// </summary>
+		/// <param name="o">The object for which to get the type handle.</param>
+		/// <returns>The handle for the Type of the specified Object.</returns>
+		[MethodImpl(MethodImplOptions.InternalCall)]
+		private static extern RuntimeTypeHandle GetTypeHandleImpl(object o);
 
 		/// <summary>
 		/// When overridden in a derived class, implements the HasElementType property and determines whether the current Type encompasses or refers to another type; that is, whether the current Type is an array, a pointer, or is passed by reference.

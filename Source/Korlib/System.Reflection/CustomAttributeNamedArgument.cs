@@ -107,7 +107,7 @@ namespace System.Reflection
 		public override int GetHashCode()
 		{
 			// TODO
-			return base.GetHashCode();
+			return 0;
 		}
 
 		/// <summary>

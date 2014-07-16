@@ -12,20 +12,12 @@ using System.Runtime.InteropServices;
 namespace Mosa.Platform.Internal.x86
 {
 	[StructLayout(LayoutKind.Sequential)]
-	public unsafe struct MetadataTypeStruct
+	public unsafe struct MetadataAssemblyStruct
 	{
 		public uint* Name;
 		public uint* CustomAttributes;
 		public uint Attributes;
-		public uint Size;
-		public uint* Assembly;
-		public MetadataTypeStruct* ParentType;
-		public uint* DefaultConstructor;
-		public uint* Properties;
-		public uint* Fields;
-		public uint* SlotTable;
-		public uint* Bitmap;
-		public uint NumberOfMethods;
-		public const uint MethodsOffset = 12;
+		public uint NumberOfTypes;
+		public const uint TypesOffset = 4;
 	}
 }

@@ -68,6 +68,7 @@
     <Compile Include="Builders\_Type.cs" />
     <Compile Include="Division.cs" />
     <Compile Include="Implementations\TypeImpl.cs" />
+    <Compile Include="MetadataStructures\MetadataAssemblyStruct.cs" />
     <Compile Include="MetadataStructures\MetadataTypeStruct.cs" />
     <Compile Include="SpinLock.cs" />
     <Compile Include="Runtime.cs" />

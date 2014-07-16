@@ -5,6 +5,7 @@
  *
  * Authors:
  *  Ki (kiootic) <kiootic@gmail.com>
+ *  Stefan Andres Charsley (charsleysa) <charsleysa@gmail.com>
  */
 
 using dnlib.DotNet;
@@ -56,7 +57,7 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 					}
 					ResolveType(type);
 				}
-				else if (unit is MosaField || unit is MosaMethod || unit is MosaModule)
+				else if (unit is MosaField || unit is MosaMethod || unit is MosaModule || unit is MosaProperty)
 					resolveQueue.Enqueue(unit);
 			}
 
@@ -69,6 +70,8 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 					ResolveField((MosaField)unit);
 				if (unit is MosaMethod)
 					ResolveMethod((MosaMethod)unit);
+				if (unit is MosaProperty)
+					ResolveProperty((MosaProperty)unit);
 				if (unit is MosaModule)
 				{
 					MosaModule module = (MosaModule)unit;
@@ -200,6 +203,7 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 				ResolveCustomAttributes(mosaField, field.GetUnderlyingObject<UnitDesc<FieldDef, FieldSig>>().Definition);
 			}
 		}
+
 		private void ResolveProperty(MosaProperty property)
 		{
 			GenericArgumentResolver resolver = new GenericArgumentResolver();

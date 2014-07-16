@@ -10,30 +10,43 @@
 using System;
 using System.Runtime.InteropServices;
 using System.Reflection;
+using Mosa.Platform.Internal.x86;
+using x86Runtime = Mosa.Platform.Internal.x86.Runtime;
 
 namespace System
 {
 	public sealed unsafe class _Type : Type
 	{
-		internal _Type(RuntimeTypeHandle handle)
+		private MetadataTypeStruct* typeStruct;
+		private _Assembly assembly;
+		private string fullname;
+
+		internal _Type(RuntimeTypeHandle handle, _Assembly assembly)
 			: base(handle)
 		{
-
+			this.assembly = assembly;
+			this.typeStruct = (MetadataTypeStruct*)((uint**)&handle)[0];
+			this.fullname = x86Runtime.InitializeMetadataString((*this.typeStruct).Name);
 		}
 
 		public override Assembly Assembly
 		{
-			get { throw new NotImplementedException(); }
+			get { return this.assembly; }
 		}
 
 		public override Type BaseType
 		{
-			get { throw new NotImplementedException(); }
+			get
+			{
+				RuntimeTypeHandle handle = new RuntimeTypeHandle();
+				((uint*)&handle)[0] = (uint)(*this.typeStruct).ParentType;
+				return Type.GetTypeFromHandle(handle);
+			}
 		}
 
 		public override string FullName
 		{
-			get { throw new NotImplementedException(); }
+			get { return this.fullname; }
 		}
 
 		public override string Namespace
@@ -43,7 +56,7 @@ namespace System
 
 		protected override TypeAttributes GetAttributeFlagsImpl()
 		{
-			throw new NotImplementedException();
+			return (TypeAttributes)(*this.typeStruct).Attributes;
 		}
 
 		public override Type GetElementType()
@@ -132,6 +145,11 @@ namespace System
 		}
 
 		public override bool IsDefined(Type attributeType, bool inherit)
+		{
+			throw new NotImplementedException();
+		}
+
+		protected override ConstructorInfo GetConstructorImpl(BindingFlags bindingAttr, Binder binder, CallingConventions callConvention, Type[] types, ParameterModifier[] modifiers)
 		{
 			throw new NotImplementedException();
 		}

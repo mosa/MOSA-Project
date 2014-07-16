@@ -1,10 +1,11 @@
 ﻿/*
- * (c) 2013 MOSA - The Managed Operating System Alliance
+ * (c) 2014 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
+ *  Stefan Andres Charsley (charsleysa) <charsleysa@gmail.com>
  */
 
 using System;
@@ -30,10 +31,10 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public bool Equals(MosaParameter parameter)
 		{
-			return ParameterType.Equals(parameter.ParameterType) 
-				&& ParameterAttributes.Equals(parameter.ParameterAttributes)
-				&& CustomAttributes.Equals(parameter.CustomAttributes)
-				&& Name.Equals(parameter.Name);
+			return ParameterType.Equals(parameter.ParameterType);
+				//&& ParameterAttributes.Equals(parameter.ParameterAttributes)
+				//&& CustomAttributes.Equals(parameter.CustomAttributes)
+				//&& Name.Equals(parameter.Name);
 		}
 
 		public bool Equals(MosaType type)
