@@ -15,7 +15,7 @@ namespace Mosa.Platform.Internal.x86
 {
 	public unsafe static class TypeImpl
 	{
-		public static RuntimeTypeHandle* GetHandleFromObject(void* obj)
+		public static RuntimeTypeHandle* GetTypeHandleImpl(void* obj)
 		{
 			// TypeDefinition is located at the beginning of object (i.e. *obj )
 			RuntimeTypeHandle handle = new RuntimeTypeHandle();

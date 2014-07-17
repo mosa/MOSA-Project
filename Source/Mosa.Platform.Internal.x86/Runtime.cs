@@ -267,7 +267,7 @@ namespace Mosa.Platform.Internal.x86
 
 		public static uint GetSizeOfObject(void* obj)
 		{
-			RuntimeTypeHandle* typeDefinition = TypeImpl.GetHandleFromObject(obj);
+			RuntimeTypeHandle* typeDefinition = TypeImpl.GetTypeHandleImpl(obj);
 
 			return GetSizeOfType(typeDefinition);
 		}
