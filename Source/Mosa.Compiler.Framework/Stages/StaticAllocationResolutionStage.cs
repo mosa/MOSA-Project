@@ -12,6 +12,7 @@ using Mosa.Compiler.Framework.CIL;
 using Mosa.Compiler.Linker;
 using Mosa.Compiler.MosaTypeSystem;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework.Stages
 {
@@ -95,7 +96,11 @@ namespace Mosa.Compiler.Framework.Stages
 				{
 					if (!context.IsEmpty && (context.Instruction is NewobjInstruction || context.Instruction is NewarrInstruction))
 					{
-						//Debug.WriteLine(@"StaticAllocationResolutionStage: Found a newobj or newarr instruction.");
+						if (context.Instruction is NewarrInstruction)
+						{
+							Debug.WriteLine(@"StaticAllocationResolutionStage: Cannot process newarr instruction yet.");
+							continue;
+						}
 						yield return context.Clone();
 					}
 				}
