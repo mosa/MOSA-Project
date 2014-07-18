@@ -218,6 +218,7 @@ namespace Mosa.Platform.x86
 					new PlatformIntrinsicTransformationStage(),
 					new LongOperandTransformationStage(),
 
+					new StopStage(),
 					new IRTransformationStage(),
 				    new TweakTransformationStage(),
 
