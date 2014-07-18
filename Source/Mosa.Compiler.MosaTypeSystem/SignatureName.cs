@@ -24,7 +24,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 				{
 					if (i != 0)
 						result.Append(", ");
-					result.Append(sig.Parameters[i].Type.Name);
+					result.Append(sig.Parameters[i].ParameterType.Name);
 				}
 				result.Append(") : ");
 				result.Append(sig.ReturnType.Name);
@@ -40,7 +40,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 				{
 					if (i != 0)
 						result.Append(", ");
-					result.Append(sig.Parameters[i].Type.FullName);
+					result.Append(sig.Parameters[i].ParameterType.FullName);
 				}
 				result.Append(")");
 				return result.ToString();

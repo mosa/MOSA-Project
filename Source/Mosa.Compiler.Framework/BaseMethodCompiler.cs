@@ -196,7 +196,7 @@ namespace Mosa.Compiler.Framework
 
 			foreach (var parameter in Method.Signature.Parameters)
 			{
-				StackLayout.SetStackParameter(index++, parameter.Type, displacement, parameter.Name);
+				StackLayout.SetStackParameter(index++, parameter.ParameterType, displacement, parameter.Name);
 			}
 		}
 

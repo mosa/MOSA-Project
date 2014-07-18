@@ -72,6 +72,7 @@
     <Compile Include="Tests\IsInstanceTest.cs" />
     <Compile Include="Tests\PlugTest.cs" />
     <Compile Include="Tests\OptimizationTest.cs" />
+    <Compile Include="Tests\ReflectionTest.cs" />
     <Compile Include="Tests\StringTest.cs" />
     <Compile Include="Tests\InterfaceTest.cs" />
     <Compile Include="Tests\GenericTest.cs" />

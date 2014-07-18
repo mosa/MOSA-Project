@@ -6,6 +6,7 @@
  * Authors:
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  *  Ki (kiootic) <kiootic@gmail.com>
+ *  Stefan Andres Charsley (charsleysa) <charsleysa@gmail.com>
  */
 
 using System;
@@ -14,7 +15,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 {
 	public class MosaField : MosaUnit, IEquatable<MosaField>
 	{
-		public MosaModule Module { get; private set; }
+		public MosaFieldAttributes FieldAttributes { get; private set; }
 
 		public MosaType DeclaringType { get; private set; }
 
@@ -56,7 +57,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 				this.field = field;
 			}
 
-			public MosaModule Module { set { field.Module = value; } }
+			public MosaFieldAttributes FieldAttributes { set { field.FieldAttributes = value; } }
 
 			public MosaType DeclaringType { set { field.DeclaringType = value; } }
 

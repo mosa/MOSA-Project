@@ -1,9 +1,11 @@
 /*
- * (c) 2008 MOSA - The Managed Operating System Alliance
+ * (c) 2014 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
  *
+ * Authors:
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
+ *  Stefan Andres Charsley (charsleysa) <charsleysa@gmail.com>
  */
 
 using System;
@@ -22,6 +24,8 @@ namespace Mosa.TestWorld.x86.Tests
 			testMethods.Add(SubStringTest);
 			testMethods.Add(IndexOfTest);
 			testMethods.Add(LengthTest);
+			testMethods.Add(ToUpperTest);
+			testMethods.Add(ToLowerTest);
 		}
 
 		public static bool ConcatTest1()
@@ -88,6 +92,20 @@ namespace Mosa.TestWorld.x86.Tests
 			string main = "123456789";
 
 			return main.Length == 9;
+		}
+
+		public static bool ToUpperTest()
+		{
+			string s1 = "ABC";
+			string s2 = "abc".ToUpper();
+			return s1.Equals(s2);
+		}
+
+		public static bool ToLowerTest()
+		{
+			string s1 = "abc";
+			string s2 = "ABC".ToLower();
+			return s1.Equals(s2);
 		}
 	}
 }

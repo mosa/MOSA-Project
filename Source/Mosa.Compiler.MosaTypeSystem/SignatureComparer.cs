@@ -104,7 +104,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 			foreach (var param in method.Parameters)
 			{
-				result += result * 7 + GetHashCode(param.Type);
+				result += result * 7 + GetHashCode(param.ParameterType);
 			}
 			return result;
 		}

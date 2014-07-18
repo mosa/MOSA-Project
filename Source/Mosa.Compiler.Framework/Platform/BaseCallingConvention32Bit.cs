@@ -189,7 +189,7 @@ namespace Mosa.Compiler.Framework.Platform
 			{
 				Operand operand = operands[index];
 
-				MosaType param = (index + offset >= 0) ? method.Signature.Parameters[index + offset].Type : null;
+				MosaType param = (index + offset >= 0) ? method.Signature.Parameters[index + offset].ParameterType : null;
 
 				int size, alignment;
 

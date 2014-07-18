@@ -1,5 +1,5 @@
 ﻿/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
+ * (c) 2014 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
  *
@@ -7,7 +7,12 @@
  *  Michael Fröhlich (grover) <michael.ruck@michaelruck.de>
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
+ *  Stefan Andres Charsley (charsleysa) <charsleysa@gmail.com>
  */
+
+using System;
+using System.Runtime.InteropServices;
+using System.Reflection;
 
 namespace Mosa.Platform.Internal.x86
 {
@@ -15,13 +20,15 @@ namespace Mosa.Platform.Internal.x86
 	{
 		private const uint nativeIntSize = 4;
 
+		#region Allocation
+
 		// This method will be plugged by "Mosa.Kernel.x86.KernelMemory.AllocateMemory"
 		private static uint AllocateMemory(uint size)
 		{
 			return 0;
 		}
 
-		public static void* AllocateObject(void* typeDefinition, uint classSize)
+		public static void* AllocateObject(RuntimeTypeHandle* handle, uint classSize)
 		{
 			// An object has the following memory layout:
 			//   - IntPtr TypeDef
@@ -32,13 +39,13 @@ namespace Mosa.Platform.Internal.x86
 			void* memory = (void*)AllocateMemory(allocationSize);
 
 			uint* destination = (uint*)memory;
-			destination[0] = (uint)typeDefinition;
+			destination[0] = ((uint*)handle)[0];
 			destination[1] = 0; // No sync block initially
 
 			return memory;
 		}
 
-		public static void* AllocateArray(void* typeDefinition, uint elementSize, uint elements)
+		public static void* AllocateArray(RuntimeTypeHandle* handle, uint elementSize, uint elements)
 		{
 			// An array has the following memory layout:
 			//   - IntPtr TypeDef
@@ -52,30 +59,58 @@ namespace Mosa.Platform.Internal.x86
 			void* memory = (void*)AllocateMemory(allocationSize);
 
 			uint* destination = (uint*)memory;
-			destination[0] = (uint)typeDefinition;
+			destination[0] = ((uint*)handle)[0];
 			destination[1] = 0; // No sync block initially
 			destination[2] = elements;
 
 			return memory;
 		}
 
-		public static void* AllocateString(void* typeDefinition, uint length)
+		public static void* AllocateString(RuntimeTypeHandle* handle, uint length)
 		{
-			return AllocateArray(typeDefinition, 2, length);
+			return AllocateArray(handle, sizeof(char), length);
 		}
 
-		public static void* GetTypeHandle(void* obj)
+		#endregion Allocation
+
+		#region Metadata Lookup
+
+		internal static _Assembly[] Assemblies;
+
+		public static string InitializeMetadataString(uint* ptr)
 		{
-			// TypeDefinition is located at the beginning of object (i.e. *obj )
-			return (void*)((uint*)obj)[0];
+			int length = (int)(ptr[0]);
+			return new string((sbyte*)++ptr, 0, length);
 		}
 
-		public static void InitializeArray(uint* array, uint* fieldHandle)
+		public static void Setup()
 		{
+			// Get AssemblyListTable and Assembly count
+			uint* assemblyListTable = Native.GetAssemblyListTable();
+			uint assemblyCount = assemblyListTable[0];
+
+			// Create new MetadataVector array for assemblies using count
+			Assemblies = new _Assembly[assemblyCount];
+
+			// Loop through and populate the array
+			for (uint i = 0; i < assemblyCount; i++)
+			{
+				// Get the pointer to the Assembly Metadata
+				uint* ptr = (uint*)(assemblyListTable[1 + i]);
+				Assemblies[i] = new _Assembly(ptr);
+			}
+		}
+
+		#endregion Metadata Lookup
+
+		public static void InitializeArray(uint* array, RuntimeFieldHandle* handle)
+		{
+			uint* fieldDefinition = ((uint**)handle)[0];
 			byte* arrayElements = (byte*)(array + 3);
+
 			// See FieldDefinition for format of field handle
-			byte* fieldData = (byte*)*(fieldHandle + 1);
-			uint dataLength = *(fieldHandle + 2);
+			byte* fieldData = (byte*)*(fieldDefinition + 4);
+			uint dataLength = *(fieldDefinition + 5);
 			while (dataLength > 0)
 			{
 				*arrayElements = *fieldData;
@@ -85,48 +120,50 @@ namespace Mosa.Platform.Internal.x86
 			}
 		}
 
-		public static uint IsInstanceOfType(uint typeDefinition, uint obj)
+		public static void* IsInstanceOfType(RuntimeTypeHandle* handle, void* obj)
 		{
-			if (obj == 0)
-				return 0;
+			if (obj == null || handle == null)
+				return null;
 
-			uint objTypeDefinition = ((uint*)obj)[0];
+			MetadataTypeStruct* typeDefinition = (MetadataTypeStruct*)((uint**)handle)[0];
 
-			while (objTypeDefinition != 0)
+			MetadataTypeStruct* objTypeDefinition = (MetadataTypeStruct*)((uint*)obj)[0];
+
+			while (objTypeDefinition != null)
 			{
 				if (objTypeDefinition == typeDefinition)
-					return obj;
+					return (void*)obj;
 
-				objTypeDefinition = ((uint*)objTypeDefinition)[5];
+				objTypeDefinition = (*objTypeDefinition).ParentType;
 			}
 
-			return 0;
+			return null;
 		}
 
-		public static uint IsInstanceOfInterfaceType(int interfaceSlot, uint obj)
+		public static void* IsInstanceOfInterfaceType(int interfaceSlot, void* obj)
 		{
-			uint objTypeDefinition = ((uint*)obj)[0];
+			MetadataTypeStruct* objTypeDefinition = (MetadataTypeStruct*)((uint*)obj)[0];
 
-			if (objTypeDefinition == 0)
-				return 0;
+			if (objTypeDefinition == null)
+				return null;
 
-			uint bitmap = ((uint*)(objTypeDefinition))[8];
+			uint* bitmap = (*objTypeDefinition).Bitmap;
 
-			if (bitmap == 0)
-				return 0;
+			if (bitmap == null)
+				return null;
 
 			int index = interfaceSlot / 32;
 			int bit = interfaceSlot % 32;
-			uint value = ((uint*)bitmap)[index];
+			uint value = bitmap[index];
 			uint result = value & (uint)(1 << bit);
 
 			if (result == 0)
-				return 0;
+				return null;
 
 			return obj;
 		}
 
-		public static uint Castclass(uint typeDefinition, uint obj)
+		public static void* Castclass(MetadataTypeStruct* typeDefinition, void* obj)
 		{
 			//TODO: Fake result
 			return obj;
@@ -159,37 +196,39 @@ namespace Mosa.Platform.Internal.x86
 			}
 		}
 
-		public static void* Box8(void* typeDefinition, byte value)
+		#region (Un)Boxing
+
+		public static void* Box8(RuntimeTypeHandle* handle, byte value)
 		{
-			byte* memory = (byte*)AllocateObject(typeDefinition, 4);	// 4 for alignment
+			byte* memory = (byte*)AllocateObject(handle, 4);	// 4 for alignment
 			*(byte*)(memory + (nativeIntSize * 2)) = value;
 			return memory;
 		}
 
-		public static void* Box16(void* typeDefinition, ushort value)
+		public static void* Box16(RuntimeTypeHandle* handle, ushort value)
 		{
-			byte* memory = (byte*)AllocateObject(typeDefinition, 4);	// 4 for alignment
+			byte* memory = (byte*)AllocateObject(handle, 4);	// 4 for alignment
 			*(ushort*)(memory + (nativeIntSize * 2)) = value;
 			return memory;
 		}
 
-		public static void* Box32(void* typeDefinition, uint value)
+		public static void* Box32(RuntimeTypeHandle* handle, uint value)
 		{
-			byte* memory = (byte*)AllocateObject(typeDefinition, 4);
+			byte* memory = (byte*)AllocateObject(handle, 4);
 			*(uint*)(memory + (nativeIntSize * 2)) = value;
 			return memory;
 		}
 
-		public static void* Box64(void* typeDefinition, ulong value)
+		public static void* Box64(RuntimeTypeHandle* handle, ulong value)
 		{
-			byte* memory = (byte*)AllocateObject(typeDefinition, 8);
+			byte* memory = (byte*)AllocateObject(handle, 8);
 			*(ulong*)(memory + (nativeIntSize * 2)) = value;
 			return memory;
 		}
 
-		public static void* Box(void* typeDefinition, void* value, uint size)
+		public static void* Box(RuntimeTypeHandle* handle, void* value, uint size)
 		{
-			byte* memory = (byte*)AllocateObject(typeDefinition, size);
+			byte* memory = (byte*)AllocateObject(handle, size);
 			Memcpy(memory + nativeIntSize * 2, value, size);
 			return memory;
 		}
@@ -220,20 +259,24 @@ namespace Mosa.Platform.Internal.x86
 			return vt;
 		}
 
+		#endregion (Un)Boxing
+
 		public static void Throw(uint something)
 		{
 		}
 
 		public static uint GetSizeOfObject(void* obj)
 		{
-			void* typeDefinition = (void*)((uint*)obj)[0];
+			RuntimeTypeHandle* typeDefinition = TypeImpl.GetTypeHandleImpl(obj);
 
-			return GetSizeOfType((void*)typeDefinition);
+			return GetSizeOfType(typeDefinition);
 		}
 
-		public static uint GetSizeOfType(void* typeDefinition)
+		public static uint GetSizeOfType(RuntimeTypeHandle* handle)
 		{
-			uint sizeOf = ((uint*)typeDefinition)[3];
+			MetadataTypeStruct* typeDefinition = (MetadataTypeStruct*)((uint*)handle)[0];
+
+			uint sizeOf = (*typeDefinition).Size;
 
 			return sizeOf;
 		}
