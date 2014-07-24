@@ -15,34 +15,7 @@ namespace Mosa.Platform.Internal.x86
 {
 	public unsafe static class TypeImpl
 	{
-		public static RuntimeTypeHandle* GetTypeHandleImpl(void* obj)
-		{
-			// TypeDefinition is located at the beginning of object (i.e. *obj )
-			RuntimeTypeHandle handle = new RuntimeTypeHandle();
-			((uint*)&handle)[0] = ((uint*)obj)[0];
-			return &handle;
-		}
-
-		private static Type GetTypeFromHandleImpl(RuntimeTypeHandle handle)
-		{
-			// Iterate through all the assemblies and look for the type handle
-			for (int i = 0; i < Runtime.Assemblies.Length; i++)
-			{
-				for (int j = 0; j < Runtime.Assemblies[i].handles.Length; j++)
-				{
-					// If its not a match then skip
-					if (Runtime.Assemblies[i].handles[j] != handle) continue;
-
-					// If we get here then its a match so return it
-					return Runtime.Assemblies[i].types[j];
-				}
-			}
-
-			// If we didn't find a match then return null
-			return null;
-		}
-
-		private static Type GetTypeImpl(string typeName, bool throwOnError, bool ignoreCase)
+		public static Type GetTypeImpl(string typeName, bool throwOnError, bool ignoreCase)
 		{
 			if (typeName == null)
 				throw new ArgumentNullException("typeName");
@@ -72,6 +45,33 @@ namespace Mosa.Platform.Internal.x86
 				throw new TypeLoadException();
 			else
 				return null;
+		}
+
+		public static RuntimeTypeHandle* GetTypeHandleImpl(void* obj)
+		{
+			// TypeDefinition is located at the beginning of object (i.e. *obj )
+			RuntimeTypeHandle handle = new RuntimeTypeHandle();
+			((uint*)&handle)[0] = ((uint*)obj)[0];
+			return &handle;
+		}
+
+		public static Type GetTypeFromHandleImpl(RuntimeTypeHandle handle)
+		{
+			// Iterate through all the assemblies and look for the type handle
+			for (int i = 0; i < Runtime.Assemblies.Length; i++)
+			{
+				for (int j = 0; j < Runtime.Assemblies[i].handles.Length; j++)
+				{
+					// If its not a match then skip
+					if (Runtime.Assemblies[i].handles[j] != handle) continue;
+
+					// If we get here then its a match so return it
+					return Runtime.Assemblies[i].types[j];
+				}
+			}
+
+			// If we didn't find a match then return null
+			return null;
 		}
 	}
 }

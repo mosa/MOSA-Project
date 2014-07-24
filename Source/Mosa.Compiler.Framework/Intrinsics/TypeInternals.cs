@@ -14,9 +14,9 @@ using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework.Intrinsics
 {
-	[ReplacementTarget("System.Type::GetHandleFromObject")]
-	[ReplacementTarget("System.Type::GetTypeHandleImpl")]
 	[ReplacementTarget("System.Type::GetTypeImpl")]
+	[ReplacementTarget("System.Type::GetTypeHandleImpl")]
+	[ReplacementTarget("System.Type::GetTypeFromHandleImpl")]
 	public sealed class TypeInternals : InternalsBase, IIntrinsicInternalMethod
 	{
 		/// <summary>

@@ -366,12 +366,12 @@ namespace Mosa.Compiler.Framework.Stages
 				if (field.CustomAttributes.Count > 0)
 				{
 					var customAttributesTableSymbol = CreateCustomAttributesTable(field);
-					Linker.Link(LinkType.AbsoluteAddress, BuiltInPatch.I4, fieldDefSymbol, (int)writer1.Position, 0, customAttributesTableSymbol, 0);
+					Linker.Link(LinkType.AbsoluteAddress, BuiltInPatch.I4, fieldDefSymbol, (int)writer2.Position, 0, customAttributesTableSymbol, 0);
 				}
-				writer1.WriteZeroBytes(TypeLayout.NativePointerSize);
+				writer2.WriteZeroBytes(TypeLayout.NativePointerSize);
 
 				// 3. Attributes
-				writer1.Write((uint)field.FieldAttributes);
+				writer2.Write((uint)field.FieldAttributes);
 
 				// 4. Pointer to Field Type
 				Linker.Link(LinkType.AbsoluteAddress, BuiltInPatch.I4, fieldDefSymbol, (int)writer2.Position, 0, field.FieldType.FullName + Metadata.TypeDefinition, SectionKind.ROData, 0);
@@ -462,16 +462,25 @@ namespace Mosa.Compiler.Framework.Stages
 				// 4. Pointer to Property Type
 				Linker.Link(LinkType.AbsoluteAddress, BuiltInPatch.I4, propertyDefSymbol, (int)writer2.Position, 0, property.PropertyType.FullName + Metadata.TypeDefinition, SectionKind.ROData, 0);
 				writer2.WriteZeroBytes(TypeLayout.NativePointerSize);
+				
+				// If the type is a property then skip linking the methods
+				if (!type.IsInterface)
+				{
+					// 5. Pointer to Getter Method Definition
+					if (property.GetterMethod != null)
+						Linker.Link(LinkType.AbsoluteAddress, BuiltInPatch.I4, propertyDefSymbol, (int)writer2.Position, 0, property.GetterMethod.FullName + Metadata.MethodDefinition, SectionKind.ROData, 0);
+					writer2.WriteZeroBytes(TypeLayout.NativePointerSize);
 
-				// 5. Pointer to Getter Method Definition
-				if (property.GetterMethod != null)
-					Linker.Link(LinkType.AbsoluteAddress, BuiltInPatch.I4, propertyDefSymbol, (int)writer2.Position, 0, property.GetterMethod.FullName + Metadata.MethodDefinition, SectionKind.ROData, 0);
-				writer2.WriteZeroBytes(TypeLayout.NativePointerSize);
-
-				// 6. Pointer to Setter Method Definition
-				if (property.SetterMethod != null)
-					Linker.Link(LinkType.AbsoluteAddress, BuiltInPatch.I4, propertyDefSymbol, (int)writer2.Position, 0, property.SetterMethod.FullName + Metadata.MethodDefinition, SectionKind.ROData, 0);
-				writer2.WriteZeroBytes(TypeLayout.NativePointerSize);
+					// 6. Pointer to Setter Method Definition
+					if (property.SetterMethod != null)
+						Linker.Link(LinkType.AbsoluteAddress, BuiltInPatch.I4, propertyDefSymbol, (int)writer2.Position, 0, property.SetterMethod.FullName + Metadata.MethodDefinition, SectionKind.ROData, 0);
+					writer2.WriteZeroBytes(TypeLayout.NativePointerSize);
+				}
+				else
+				{
+					// Fill 5 and 6 with zeros.
+					writer1.WriteZeroBytes(TypeLayout.NativePointerSize * 2);
+				}
 
 				// Add pointer to properties table
 				Linker.Link(LinkType.AbsoluteAddress, BuiltInPatch.I4, propertiesTableSymbol, (int)writer1.Position, 0, propertyDefSymbol, 0);

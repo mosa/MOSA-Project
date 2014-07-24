@@ -97,7 +97,7 @@ namespace Mosa.Utility.GUI.Common
 
 							if (property.GetterMethod != null)
 							{
-								TreeNode getterNode = new TreeNode(property.GetterMethod.ShortName);
+								TreeNode getterNode = new ViewNode<MosaMethod>(property.GetterMethod, property.GetterMethod.ShortName);
 								propertyNode.Nodes.Add(getterNode);
 
 								if (property.GetterMethod.IsStatic)
@@ -136,7 +136,7 @@ namespace Mosa.Utility.GUI.Common
 
 							if (property.SetterMethod != null)
 							{
-								TreeNode setterNode = new TreeNode(property.SetterMethod.ShortName);
+								TreeNode setterNode = new ViewNode<MosaMethod>(property.SetterMethod, property.SetterMethod.ShortName);
 								propertyNode.Nodes.Add(setterNode);
 
 								if (property.SetterMethod.IsStatic)
