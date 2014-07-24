@@ -97,10 +97,6 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				loadInstruction = IRInstruction.LoadZeroExtended;
 			}
-			else if (TypeLayout.IsCompoundType(type))
-			{
-				loadInstruction = IRInstruction.CompoundLoad;
-			}
 
 			context.SetInstruction(loadInstruction, destination, source, Operand.CreateConstantSignedInt(TypeSystem, 0));
 			context.MosaType = type;
@@ -448,6 +444,10 @@ namespace Mosa.Compiler.Framework.Stages
 					// Get the address of the method
 					context.AppendInstruction(IRInstruction.Load, methodPtr, methodDefinition, Operand.CreateConstantSignedInt(TypeSystem, (int)methodPointerOffset));
 				}
+
+				// If the method is delcared by a valuetype then we need the this pointer to point to the value in the box
+				if (method.DeclaringType.IsValueType)
+					context.AppendInstruction(IRInstruction.AddUnsigned, operands[0], operands[0], Operand.CreateConstantSignedInt(TypeSystem, NativePointerSize * 2));
 
 				context.AppendInstruction(IRInstruction.Nop);
 				ProcessInvokeInstruction(context, method, methodPtr, resultOperand, operands);

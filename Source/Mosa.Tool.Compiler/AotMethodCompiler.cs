@@ -42,7 +42,7 @@ namespace Mosa.Tool.Compiler
 				new OperandAssignmentStage(),
 				new StaticAllocationResolutionStage(),
 				new CILTransformationStage(),
-				new ConvertCompoundMoveStage(),
+				new ConvertCompoundStage(),
 				//new PromoteLocalVariablesStage(),
 
 				(compilerOptions.EnableSSA) ? new EdgeSplitStage() : null,
