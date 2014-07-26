@@ -114,10 +114,10 @@ namespace Mosa.Compiler.Framework
 		/// <value>
 		///   <c>true</c> if [update status flags]; otherwise, <c>false</c>.
 		/// </value>
-		public bool UpdateStatusFlags
+		public bool UpdateStatus
 		{
-			get { return instructionSet.Data[index].UpdateStatusFlags; }
-			set { instructionSet.Data[index].UpdateStatusFlags = value; }
+			get { return instructionSet.Data[index].UpdateStatus; }
+			set { instructionSet.Data[index].UpdateStatus = value; }
 		}
 
 		/// <summary>
@@ -806,6 +806,19 @@ namespace Mosa.Compiler.Framework
 		/// Sets the instruction.
 		/// </summary>
 		/// <param name="instruction">The instruction.</param>
+		/// <param name="updateStatus">if set to <c>true</c> [update status].</param>
+		/// <param name="result">The result.</param>
+		public void SetInstruction(BaseInstruction instruction, bool updateStatus, Operand result)
+		{
+			SetInstruction(instruction, 0, 1);
+			Result = result;
+			UpdateStatus = updateStatus;
+		}
+
+		/// <summary>
+		/// Sets the instruction.
+		/// </summary>
+		/// <param name="instruction">The instruction.</param>
 		/// <param name="result">The result.</param>
 		/// <param name="operand1">The operand1.</param>
 		public void SetInstruction(BaseInstruction instruction, Operand result, Operand operand1)
@@ -813,6 +826,20 @@ namespace Mosa.Compiler.Framework
 			SetInstruction(instruction, 1, (byte)((result == null) ? 0 : 1));
 			Result = result;
 			Operand1 = operand1;
+		}
+
+		/// <summary>
+		/// Sets the instruction.
+		/// </summary>
+		/// <param name="instruction">The instruction.</param>
+		/// <param name="result">The result.</param>
+		/// <param name="operand1">The operand1.</param>
+		public void SetInstruction(BaseInstruction instruction, bool updateStatus, Operand result, Operand operand1)
+		{
+			SetInstruction(instruction, 1, (byte)((result == null) ? 0 : 1));
+			Result = result;
+			Operand1 = operand1;
+			UpdateStatus = updateStatus;
 		}
 
 		/// <summary>
@@ -885,6 +912,23 @@ namespace Mosa.Compiler.Framework
 		/// Sets the instruction.
 		/// </summary>
 		/// <param name="instruction">The instruction.</param>
+		/// <param name="updateStatus">if set to <c>true</c> [update status].</param>
+		/// <param name="result">The result.</param>
+		/// <param name="operand1">The operand1.</param>
+		/// <param name="operand2">The operand2.</param>
+		public void SetInstruction(BaseInstruction instruction, bool updateStatus, Operand result, Operand operand1, Operand operand2)
+		{
+			SetInstruction(instruction, 2, (byte)((result == null) ? 0 : 1));
+			Result = result;
+			Operand1 = operand1;
+			Operand2 = operand2;
+			UpdateStatus = updateStatus;
+		}
+
+		/// <summary>
+		/// Sets the instruction.
+		/// </summary>
+		/// <param name="instruction">The instruction.</param>
 		/// <param name="condition">The condition.</param>
 		/// <param name="result">The result.</param>
 		/// <param name="operand1">The operand1.</param>
@@ -894,6 +938,23 @@ namespace Mosa.Compiler.Framework
 			Result = result;
 			Operand1 = operand1;
 			ConditionCode = condition;
+		}
+
+		/// <summary>
+		/// Sets the instruction.
+		/// </summary>
+		/// <param name="instruction">The instruction.</param>
+		/// <param name="condition">The condition.</param>
+		/// <param name="updateStatus">if set to <c>true</c> [update status].</param>
+		/// <param name="result">The result.</param>
+		/// <param name="operand1">The operand1.</param>
+		public void SetInstruction(BaseInstruction instruction, ConditionCode condition, bool updateStatus, Operand result, Operand operand1)
+		{
+			SetInstruction(instruction, 1, (byte)((result == null) ? 0 : 1));
+			Result = result;
+			Operand1 = operand1;
+			ConditionCode = condition;
+			UpdateStatus = updateStatus;
 		}
 
 		/// <summary>
@@ -910,6 +971,25 @@ namespace Mosa.Compiler.Framework
 			Operand1 = operand1;
 			Operand2 = operand2;
 			ConditionCode = condition;
+		}
+
+		/// <summary>
+		/// Sets the instruction.
+		/// </summary>
+		/// <param name="instruction">The instruction.</param>
+		/// <param name="condition">The condition.</param>
+		/// <param name="updateStatus">if set to <c>true</c> [update status].</param>
+		/// <param name="result">The result.</param>
+		/// <param name="operand1">The operand1.</param>
+		/// <param name="operand2">The operand2.</param>
+		public void SetInstruction(BaseInstruction instruction, ConditionCode condition, bool updateStatus, Operand result, Operand operand1, Operand operand2)
+		{
+			SetInstruction(instruction, 2, (byte)((result == null) ? 0 : 1));
+			Result = result;
+			Operand1 = operand1;
+			Operand2 = operand2;
+			ConditionCode = condition;
+			UpdateStatus = updateStatus;
 		}
 
 		/// <summary>

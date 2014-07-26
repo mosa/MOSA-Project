@@ -108,7 +108,7 @@ namespace Mosa.Platform.ARMv6
 			Write(value);
 		}
 
-		public void EmitDataProcessingInstructionWithRegister(ConditionCode conditionCode, byte opcode, bool setCondition, int firstRegister, int destinationRegister, int secondRegister, ShiftType secondShiftType)
+		public void EmitInstructionWithRegister(ConditionCode conditionCode, byte opcode, bool setCondition, int firstRegister, int destinationRegister, ShiftType secondShiftType, int secondRegister)
 		{
 			Debug.Assert(opcode <= 0xF);
 			Debug.Assert(destinationRegister <= 0xF);
@@ -118,7 +118,7 @@ namespace Mosa.Platform.ARMv6
 			uint value = 0;
 
 			value |= (uint)(GetConditionCode(conditionCode) << 28);
-			value |= (uint)(0x1 << 25);
+			value |= (uint)(0x0 << 25);
 			value |= (uint)(opcode << 21);
 			value |= (uint)(setCondition ? 1 : 0 << 20);
 			value |= (uint)(firstRegister << 16);
@@ -129,7 +129,7 @@ namespace Mosa.Platform.ARMv6
 			Write(value);
 		}
 
-		public void EmitDataProcessingInstructionWithImmediate(ConditionCode conditionCode, byte opcode, bool setCondition, int firstRegister, int destinationRegister, int rotate, int immediate)
+		public void EmitInstructionWithImmediate(ConditionCode conditionCode, byte opcode, bool setCondition, int firstRegister, int destinationRegister, int rotate, int immediate)
 		{
 			Debug.Assert(opcode <= 0xF);
 			Debug.Assert(destinationRegister <= 0xF);

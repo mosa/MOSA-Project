@@ -8,6 +8,7 @@
  *  Marcelo Caetano (marcelocaetano) <marcelo.caetano@ymail.com>
  */
 
+using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework;
 
 namespace Mosa.Platform.ARMv6.Instructions

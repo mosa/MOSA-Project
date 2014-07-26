@@ -14,16 +14,17 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.ARMv6.Instructions
 {
 	/// <summary>
-	/// Orr instruction: Bitwise OR
+	/// Rsc instruction: Reverse Subtract Carry
+	/// Subtracts second operand from first operand plus carry minus 1. ARMv6-M only supports an immediate value of 0.
 	/// </summary>
-	public class Orr : ARMv6Instruction
+	public class Rsc : ARMv6Instruction
 	{
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of <see cref="Orr"/>.
+		/// Initializes a new instance of <see cref="Rsb"/>.
 		/// </summary>
-		public Orr() :
+		public Rsc() :
 			base(1, 3)
 		{
 		}
@@ -39,7 +40,7 @@ namespace Mosa.Platform.ARMv6.Instructions
 		/// <param name="emitter">The emitter.</param>
 		protected override void Emit(Context context, MachineCodeEmitter emitter)
 		{
-			EmitDataProcessingInstruction(context, emitter, Bits.b1100);
+			EmitDataProcessingInstruction(context, emitter, Bits.b0111);
 		}
 
 		/// <summary>
@@ -49,7 +50,7 @@ namespace Mosa.Platform.ARMv6.Instructions
 		/// <param name="context">The context.</param>
 		public override void Visit(IARMv6Visitor visitor, Context context)
 		{
-			visitor.Orr(context);
+			visitor.Rsb(context);
 		}
 
 		#endregion Methods

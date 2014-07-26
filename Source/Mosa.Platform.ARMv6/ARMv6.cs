@@ -97,6 +97,11 @@ namespace Mosa.Platform.ARMv6
 		public static readonly Rsb Rsb = new Rsb();
 
 		/// <summary>
+		/// Rsc instruction
+		/// </summary>
+		public static readonly Rsc Rsc = new Rsc();
+
+		/// <summary>
 		/// Sbc instruction
 		/// </summary>
 		public static readonly Sbc Sbc = new Sbc();
@@ -110,6 +115,11 @@ namespace Mosa.Platform.ARMv6
 		/// Tst instruction
 		/// </summary>
 		public static readonly Tst Tst = new Tst();
+
+		/// <summary>
+		/// Teq instruction
+		/// </summary>
+		public static readonly Teq Teq = new Teq();
 
 		/// <summary>
 		/// Asr instruction
