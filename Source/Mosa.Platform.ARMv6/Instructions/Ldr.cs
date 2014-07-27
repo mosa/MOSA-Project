@@ -39,7 +39,7 @@ namespace Mosa.Platform.ARMv6.Instructions
 		/// <param name="emitter">The emitter.</param>
 		protected override void Emit(Context context, MachineCodeEmitter emitter)
 		{
-			// TODO
+			EmitMemoryLoadStore(context, emitter, TransferType.Load);
 		}
 
 		/// <summary>

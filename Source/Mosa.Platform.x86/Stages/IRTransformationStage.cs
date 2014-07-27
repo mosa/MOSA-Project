@@ -77,7 +77,6 @@ namespace Mosa.Platform.x86.Stages
 		void IIRVisitor.AddressOf(Context context)
 		{
 			Operand result = context.Result;
-
 			Operand register = AllocateVirtualRegister(result.Type);
 
 			context.Result = register;

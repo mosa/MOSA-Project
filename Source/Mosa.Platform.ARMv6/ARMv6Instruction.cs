@@ -87,6 +87,50 @@ namespace Mosa.Platform.ARMv6
 				throw new InvalidCompilerException();
 			}
 		}
+		protected void EmitMultiplyInstruction(Context context, MachineCodeEmitter emitter)
+		{
+			if (!context.Operand3.IsRegister)
+			{
+				emitter.EmitMultiply(context.ConditionCode, context.UpdateStatus, context.Operand1.Register.Index, context.Result.Register.Index, context.Operand2.Register.Index);
+			}
+			else 
+			{
+				emitter.EmitMultiplyWithAccumulate(context.ConditionCode, context.UpdateStatus, context.Operand1.Register.Index, context.Result.Register.Index, context.Operand2.Register.Index, context.Operand3.Register.Index);
+			}
+		}
+
+		protected void EmitMemoryLoadStore(Context context, MachineCodeEmitter emitter, TransferType transferType)
+		{
+			if (context.Operand2.IsConstant)
+			{
+				emitter.EmitSingleDataTransfer(
+					context.ConditionCode,
+					Indexing.Post,
+					OffsetDirection.Up,
+					TransferSize.Word,
+					WriteBack.NoWriteBack,
+					transferType,
+					context.Operand1.Index,
+					context.Result.Index,
+					(uint)context.Operand2.ConstantUnsignedInteger
+				);
+			}
+			else
+			{
+				emitter.EmitSingleDataTransfer(
+					  context.ConditionCode,
+					  Indexing.Post,
+					  OffsetDirection.Up,
+					  TransferSize.Word,
+					  WriteBack.NoWriteBack,
+					  transferType,
+					  context.Operand1.Index,
+					  context.Result.Index,
+					  context.Operand2.ShiftType,
+					  context.Operand3.Index
+				  );
+			}
+		}
 
 		#endregion Methods
 
