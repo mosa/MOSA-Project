@@ -45,6 +45,7 @@
 			this.snippetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.showSizes = new System.Windows.Forms.ToolStripMenuItem();
+			this.displayShortName = new System.Windows.Forms.ToolStripMenuItem();
 			this.includeTestKorlibToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.enableSSAToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.enableSSAOptimizations = new System.Windows.Forms.ToolStripMenuItem();
@@ -68,7 +69,6 @@
 			this.toolStripButton4 = new System.Windows.Forms.ToolStripButton();
 			this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
 			this.cbPlatform = new System.Windows.Forms.ComboBox();
-			this.displayShortName = new System.Windows.Forms.ToolStripMenuItem();
 			label2 = new System.Windows.Forms.Label();
 			label1 = new System.Windows.Forms.Label();
 			stageLabel = new System.Windows.Forms.Label();
@@ -228,6 +228,15 @@
 			this.showSizes.Text = "Show Sizes";
 			this.showSizes.Click += new System.EventHandler(this.showSizes_Click);
 			// 
+			// displayShortName
+			// 
+			this.displayShortName.Checked = true;
+			this.displayShortName.CheckOnClick = true;
+			this.displayShortName.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.displayShortName.Name = "displayShortName";
+			this.displayShortName.Size = new System.Drawing.Size(237, 22);
+			this.displayShortName.Text = "Display Short Name";
+			// 
 			// includeTestKorlibToolStripMenuItem
 			// 
 			this.includeTestKorlibToolStripMenuItem.CheckOnClick = true;
@@ -312,7 +321,7 @@
 			this.tabControl1.Location = new System.Drawing.Point(3, 3);
 			this.tabControl1.Name = "tabControl1";
 			this.tabControl1.SelectedIndex = 0;
-			this.tabControl1.Size = new System.Drawing.Size(537, 405);
+			this.tabControl1.Size = new System.Drawing.Size(536, 405);
 			this.tabControl1.TabIndex = 38;
 			// 
 			// tabPage1
@@ -328,7 +337,7 @@
 			this.tabPage1.Location = new System.Drawing.Point(4, 25);
 			this.tabPage1.Name = "tabPage1";
 			this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPage1.Size = new System.Drawing.Size(529, 376);
+			this.tabPage1.Size = new System.Drawing.Size(528, 376);
 			this.tabPage1.TabIndex = 0;
 			this.tabPage1.Text = "Instructions";
 			// 
@@ -390,7 +399,7 @@
 			this.tabPage2.Location = new System.Drawing.Point(4, 25);
 			this.tabPage2.Name = "tabPage2";
 			this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPage2.Size = new System.Drawing.Size(529, 376);
+			this.tabPage2.Size = new System.Drawing.Size(528, 376);
 			this.tabPage2.TabIndex = 1;
 			this.tabPage2.Text = "Debug";
 			// 
@@ -478,21 +487,11 @@
 			this.cbPlatform.FormattingEnabled = true;
 			this.cbPlatform.Items.AddRange(new object[] {
             "x86",
-            "ARMv6",
-            "AVR32"});
+            "ARMv6"});
 			this.cbPlatform.Location = new System.Drawing.Point(221, 27);
 			this.cbPlatform.Name = "cbPlatform";
 			this.cbPlatform.Size = new System.Drawing.Size(78, 21);
 			this.cbPlatform.TabIndex = 28;
-			// 
-			// displayShortName
-			// 
-			this.displayShortName.Checked = true;
-			this.displayShortName.CheckOnClick = true;
-			this.displayShortName.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.displayShortName.Name = "displayShortName";
-			this.displayShortName.Size = new System.Drawing.Size(237, 22);
-			this.displayShortName.Text = "Display Short Name";
 			// 
 			// Main
 			// 
