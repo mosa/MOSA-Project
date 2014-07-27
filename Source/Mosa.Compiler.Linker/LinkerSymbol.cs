@@ -40,7 +40,6 @@ namespace Mosa.Compiler.Linker
 
 		internal LinkerSymbol(string name, SectionKind kind, uint alignment)
 		{
-			Debug.Assert(name != "System.Object System.IAsyncResult::get_AsyncState()$MethodDef", name);
 			Name = name;
 			Alignment = alignment;
 			SectionKind = kind;

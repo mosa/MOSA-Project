@@ -32,7 +32,6 @@ namespace System
 				{
 					((uint*)handle)[0] = ((uint)this.assemblyStruct) + MetadataAssemblyStruct.TypesOffset + i;
 				}
-				this.handles[i] = this.handles[i];
 				this.types[i] = new _Type(this.handles[i], this);
 			}
 		}
