@@ -14,7 +14,7 @@ using Mosa.Compiler.MosaTypeSystem;
 using System;
 using System.IO;
 
-namespace Mosa.Tool.Compiler.Stages
+namespace Mosa.Compiler.Framework.Stages
 {
 	/// <summary>
 	/// An compilation stage, which exports each method pipeline stage

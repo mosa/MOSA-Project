@@ -12,11 +12,10 @@ using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Stages;
 using Mosa.Compiler.InternalTrace;
 using Mosa.Compiler.MosaTypeSystem;
-using Mosa.Tool.Compiler.Stages;
 using System.Collections.Generic;
 using System.IO;
 
-namespace Mosa.Tool.Compiler
+namespace Mosa.Utility.Aot
 {
 	public class AotCompiler : BaseCompiler
 	{

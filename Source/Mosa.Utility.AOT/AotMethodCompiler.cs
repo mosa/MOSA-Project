@@ -13,7 +13,7 @@ using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Stages;
 using Mosa.Compiler.MosaTypeSystem;
 
-namespace Mosa.Tool.Compiler
+namespace Mosa.Utility.Aot
 {
 	/// <summary>
 	/// Specializes <see cref="AotMethodCompiler"/> for AOT purposes.

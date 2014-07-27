@@ -14,6 +14,7 @@ using Mosa.Compiler.Framework;
 using Mosa.Compiler.Linker;
 using Mosa.Compiler.Linker.Elf32;
 using Mosa.Compiler.Linker.PE;
+using Mosa.Utility.Aot;
 using NDesk.Options;
 using System;
 using System.Collections.Generic;

@@ -11,7 +11,7 @@ using Mosa.Compiler.Framework;
 using System;
 using System.Collections.Generic;
 
-namespace Mosa.Tool.Compiler.Stages
+namespace Mosa.Compiler.Framework.Stages
 {
 	/// <summary>
 	/// This stage just saves statistics about the code we're compiling, for example
