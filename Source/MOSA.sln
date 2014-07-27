@@ -126,6 +126,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Test.Collection.x86.xU
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Compiler.Linker", "Mosa.Compiler.Linker\Mosa.Compiler.Linker.csproj", "{65866A51-B229-44C5-AC81-87A90FA1741C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Tool.Launcher", "Mosa.Tool.Launcher\Mosa.Tool.Launcher.csproj", "{B69C2F31-5161-47BB-9FD3-2F2F2BCCF659}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -656,6 +658,16 @@ Global
 		{65866A51-B229-44C5-AC81-87A90FA1741C}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{65866A51-B229-44C5-AC81-87A90FA1741C}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{65866A51-B229-44C5-AC81-87A90FA1741C}.Release|x86.ActiveCfg = Release|Any CPU
+		{B69C2F31-5161-47BB-9FD3-2F2F2BCCF659}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B69C2F31-5161-47BB-9FD3-2F2F2BCCF659}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B69C2F31-5161-47BB-9FD3-2F2F2BCCF659}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{B69C2F31-5161-47BB-9FD3-2F2F2BCCF659}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{B69C2F31-5161-47BB-9FD3-2F2F2BCCF659}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{B69C2F31-5161-47BB-9FD3-2F2F2BCCF659}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B69C2F31-5161-47BB-9FD3-2F2F2BCCF659}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B69C2F31-5161-47BB-9FD3-2F2F2BCCF659}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{B69C2F31-5161-47BB-9FD3-2F2F2BCCF659}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{B69C2F31-5161-47BB-9FD3-2F2F2BCCF659}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -713,5 +725,6 @@ Global
 		{577B8294-334B-4E02-BE1A-CBA8ABAF8931} = {1AB7FA6A-829C-4DCF-BCA6-A27156D8DA26}
 		{50568E2D-5360-4F71-87E3-A6979D1D858C} = {88D3D1D0-85D2-4301-A9EA-3F964CB05415}
 		{65866A51-B229-44C5-AC81-87A90FA1741C} = {DDBC7F79-A2A1-4D92-9AE7-ADDC838F1E5E}
+		{B69C2F31-5161-47BB-9FD3-2F2F2BCCF659} = {D032B24A-CE3A-4881-BACE-CC4FE0AFD69D}
 	EndGlobalSection
 EndGlobal
