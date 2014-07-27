@@ -101,7 +101,9 @@ namespace Mosa.CoolWorld.x86
 					if (keyevent.KeyPress == KeyEvent.Press.Make)
 					{
 						if (keyevent.Character != 0)
+						{
 							Console.Write(keyevent.Character);
+						}
 
 						if (keyevent.KeyType == KeyType.F1)
 							ConsoleManager.Controller.Active = ConsoleManager.Controller.Boot;

@@ -14,8 +14,18 @@ using System.Diagnostics;
 
 namespace Mosa.Platform.ARMv6
 {
+	public enum Indexing { Pre, Post };
+
+	public enum TransferSize { Byte, Word };
+
+	public enum TransferType { Store, Load };
+
+	public enum WriteBack { NoWriteBack, Write }
+
+	public enum OffsetDirection { Up, Down };
+
 	/// <summary>
-	/// An AVR32 machine code emitter.
+	/// An ARMv6 machine code emitter.
 	/// </summary>
 	public sealed class MachineCodeEmitter : BaseCodeEmitter
 	{
@@ -108,7 +118,7 @@ namespace Mosa.Platform.ARMv6
 			Write(value);
 		}
 
-		public void EmitDataProcessingInstructionWithRegister(ConditionCode conditionCode, byte opcode, bool setCondition, int firstRegister, int destinationRegister, int secondRegister, ShiftType secondShiftType)
+		public void EmitInstructionWithRegister(ConditionCode conditionCode, byte opcode, bool setCondition, int firstRegister, int destinationRegister, ShiftType secondShiftType, int secondRegister)
 		{
 			Debug.Assert(opcode <= 0xF);
 			Debug.Assert(destinationRegister <= 0xF);
@@ -118,7 +128,7 @@ namespace Mosa.Platform.ARMv6
 			uint value = 0;
 
 			value |= (uint)(GetConditionCode(conditionCode) << 28);
-			value |= (uint)(0x1 << 25);
+			value |= (uint)(0x0 << 25);
 			value |= (uint)(opcode << 21);
 			value |= (uint)(setCondition ? 1 : 0 << 20);
 			value |= (uint)(firstRegister << 16);
@@ -129,7 +139,7 @@ namespace Mosa.Platform.ARMv6
 			Write(value);
 		}
 
-		public void EmitDataProcessingInstructionWithImmediate(ConditionCode conditionCode, byte opcode, bool setCondition, int firstRegister, int destinationRegister, int rotate, int immediate)
+		public void EmitInstructionWithImmediate(ConditionCode conditionCode, byte opcode, bool setCondition, int firstRegister, int destinationRegister, int rotate, int immediate)
 		{
 			Debug.Assert(opcode <= 0xF);
 			Debug.Assert(destinationRegister <= 0xF);
@@ -185,6 +195,53 @@ namespace Mosa.Platform.ARMv6
 			value |= (uint)(secondRegister << 8);
 			value |= (uint)(Bits.b1001 << 4);
 			value |= (uint)accumulateRegister;
+
+			Write(value);
+		}
+
+		public void EmitSingleDataTransfer(ConditionCode conditionCode, Indexing indexing, OffsetDirection offsetDirection, TransferSize transferSize, WriteBack writeBack, TransferType transferType, int firstRegister, int destinationRegister, uint immediate)
+		{
+			Debug.Assert(destinationRegister <= 0xF);
+			Debug.Assert(firstRegister <= 0xF);
+			Debug.Assert(immediate <= 0xFFF);
+
+			uint value = 0;
+
+			value |= (uint)(GetConditionCode(conditionCode) << 28);
+			value |= (uint)(1 << 26);
+			value |= (uint)(1 << 25);
+			value |= (uint)((indexing == Indexing.Post ? 0 : 1) << 24);
+			value |= (uint)((transferSize == TransferSize.Word ? 0 : 1) << 23);
+			value |= (uint)((offsetDirection == OffsetDirection.Down ? 0 : 1) << 22);
+			value |= (uint)((writeBack == WriteBack.NoWriteBack ? 0 : 1) << 21);
+			value |= (uint)((transferType == TransferType.Store ? 0 : 1) << 20);
+			value |= (uint)(destinationRegister << 12);
+			value |= (uint)(firstRegister << 16);
+			value |= (uint)immediate;
+
+			Write(value);
+		}
+
+		public void EmitSingleDataTransfer(ConditionCode conditionCode, Indexing indexing, OffsetDirection offsetDirection, TransferSize transferSize, WriteBack writeBack, TransferType transferType, int firstRegister, int destinationRegister, ShiftType secondShiftType, int secondRegister)
+		{
+			Debug.Assert(destinationRegister <= 0xF);
+			Debug.Assert(firstRegister <= 0xF);
+			Debug.Assert(secondRegister <= 0xF);
+
+			uint value = 0;
+
+			value |= (uint)(GetConditionCode(conditionCode) << 28);
+			value |= (uint)(1 << 26);
+			value |= (uint)(1 << 25);
+			value |= (uint)((indexing == Indexing.Post ? 0 : 1) << 24);
+			value |= (uint)((transferSize == TransferSize.Word ? 0 : 1) << 23);
+			value |= (uint)((offsetDirection == OffsetDirection.Down ? 0 : 1) << 22);
+			value |= (uint)((writeBack == WriteBack.NoWriteBack ? 0 : 1) << 21);
+			value |= (uint)((transferType == TransferType.Store ? 0 : 1) << 20);
+			value |= (uint)(destinationRegister << 12);
+			value |= (uint)(firstRegister << 16);
+			value |= (uint)(GetShiftTypeCode(secondShiftType) << 4);
+			value |= (uint)secondRegister;
 
 			Write(value);
 		}

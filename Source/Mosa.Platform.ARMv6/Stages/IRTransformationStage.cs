@@ -134,6 +134,7 @@ namespace Mosa.Platform.ARMv6.Stages
 		/// <param name="context">The context.</param>
 		void IIRVisitor.LogicalOr(Context context)
 		{
+			context.ReplaceInstructionOnly(ARMv6.Orr);
 		}
 
 		/// <summary>
@@ -142,6 +143,7 @@ namespace Mosa.Platform.ARMv6.Stages
 		/// <param name="context">The context.</param>
 		void IIRVisitor.LogicalXor(Context context)
 		{
+
 		}
 
 		/// <summary>
@@ -230,6 +232,7 @@ namespace Mosa.Platform.ARMv6.Stages
 		/// <param name="context">The context.</param>
 		void IIRVisitor.SubSigned(Context context)
 		{
+			context.ReplaceInstructionOnly(ARMv6.Sub);
 		}
 
 		/// <summary>
@@ -238,6 +241,7 @@ namespace Mosa.Platform.ARMv6.Stages
 		/// <param name="context">The context.</param>
 		void IIRVisitor.SubUnsigned(Context context)
 		{
+			context.ReplaceInstructionOnly(ARMv6.Sub);
 		}
 
 		/// <summary>
@@ -376,14 +380,26 @@ namespace Mosa.Platform.ARMv6.Stages
 		{
 		}
 
+		/// <summary>
+		/// Visitation function for CompoundLoad.
+		/// </summary>
+		/// <param name="context">The context.</param>
 		void IIRVisitor.CompoundLoad(Context context)
 		{
 		}
 
+		/// <summary>
+		/// Visitation function for CompoundMove.
+		/// </summary>
+		/// <param name="context">The context.</param>
 		void IIRVisitor.CompoundMove(Context context)
 		{
 		}
 
+		/// <summary>
+		/// Visitation function for CompoundStore.
+		/// </summary>
+		/// <param name="context">The context.</param>
 		void IIRVisitor.CompoundStore(Context context)
 		{
 		}

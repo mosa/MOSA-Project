@@ -50,8 +50,14 @@ namespace Mosa.Kernel.x86
 			}
 
 			Mosa.Kernel.x86.Screen.Goto(console.Row, console.Column);
+			UpdateCursor(console);
 
 			active = console;
+		}
+
+		public void UpdateCursor(ConsoleSession console)
+		{
+			Mosa.Kernel.x86.Screen.SetCursor(console.Row, console.Column);
 		}
 
 		public void RawWrite(ConsoleSession console, uint row, uint column, char chr, byte color)

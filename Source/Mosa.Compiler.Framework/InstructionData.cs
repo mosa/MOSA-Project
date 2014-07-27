@@ -120,12 +120,12 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Gets or sets a value indicating whether [set status flag].
+		/// Gets or sets a value indicating whether the insturction updates the status flag.
 		/// </summary>
 		/// <value>
 		///   <c>true</c> if [set status flag]; otherwise, <c>false</c>.
 		/// </value>
-		public bool UpdateStatusFlags
+		public bool UpdateStatus
 		{
 			get { return (packed & 0x16) == 0x16; }
 			set { if (value) packed = packed | 0x16; else packed = (uint)(packed & ~0x16); }

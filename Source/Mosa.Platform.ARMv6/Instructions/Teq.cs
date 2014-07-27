@@ -14,16 +14,17 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.ARMv6.Instructions
 {
 	/// <summary>
-	/// Orr instruction: Bitwise OR
+	/// Teq instruction: Test
+	/// Sets flags. Like EOR but with no destination register.
 	/// </summary>
-	public class Orr : ARMv6Instruction
+	public class Teq : ARMv6Instruction
 	{
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of <see cref="Orr"/>.
+		/// Initializes a new instance of <see cref="Tst"/>.
 		/// </summary>
-		public Orr() :
+		public Teq() :
 			base(1, 3)
 		{
 		}
@@ -39,7 +40,8 @@ namespace Mosa.Platform.ARMv6.Instructions
 		/// <param name="emitter">The emitter.</param>
 		protected override void Emit(Context context, MachineCodeEmitter emitter)
 		{
-			EmitDataProcessingInstruction(context, emitter, Bits.b1100);
+			EmitDataProcessingInstruction(context, emitter, Bits.b1001);
+
 		}
 
 		/// <summary>
@@ -49,7 +51,7 @@ namespace Mosa.Platform.ARMv6.Instructions
 		/// <param name="context">The context.</param>
 		public override void Visit(IARMv6Visitor visitor, Context context)
 		{
-			visitor.Orr(context);
+			visitor.Tst(context);
 		}
 
 		#endregion Methods
