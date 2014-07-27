@@ -21,7 +21,7 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 	{
 		protected BaseTestPlatform platform;
 		protected ConfigurableTraceFilter filter = new ConfigurableTraceFilter();
-		protected IInternalTrace internalTrace = new BasicInternalTrace();
+		protected IInternalTrace internalTrace = new InternalTrace();
 		protected ISimAdapter adapter;
 		protected ISimAdapter simAdapter;
 		protected BaseArchitecture architecture;

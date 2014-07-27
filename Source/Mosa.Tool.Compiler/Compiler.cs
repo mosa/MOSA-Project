@@ -20,6 +20,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using Mosa.Compiler.InternalTrace;
 
 namespace Mosa.Tool.Compiler
 {
@@ -397,7 +398,19 @@ namespace Mosa.Tool.Compiler
 
 		private void Compile()
 		{
-			AotCompiler.Compile(compilerOptions, inputFiles);
+			ConfigurableTraceFilter filter = new ConfigurableTraceFilter();
+			filter.MethodMatch = MatchType.None;
+			filter.Method = string.Empty;
+			filter.StageMatch = MatchType.None;
+			filter.Stage = string.Empty;
+			filter.TypeMatch = MatchType.None;
+			filter.Type = string.Empty;
+			filter.ExcludeInternalMethods = true;
+
+			IInternalTrace internalTrace = new InternalTrace();
+			internalTrace.TraceFilter = filter;
+
+			AotCompiler.Compile(compilerOptions, inputFiles, internalTrace);
 		}
 
 		/// <summary>
@@ -458,16 +471,8 @@ namespace Mosa.Tool.Compiler
 		{
 			switch (architecture.ToLower())
 			{
-				case "x86":
-					return Mosa.Platform.x86.Architecture.CreateArchitecture(Mosa.Platform.x86.ArchitectureFeatureFlags.AutoDetect);
-
-				//case "avr32":
-				//	return Mosa.Platform.AVR32.Architecture.CreateArchitecture(Mosa.Platform.AVR32.ArchitectureFeatureFlags.AutoDetect);
-
-				case "x64":
-
-				default:
-					throw new OptionException(String.Format("Unknown or unsupported Architecture {0}.", architecture), "Architecture");
+				case "x86": return Mosa.Platform.x86.Architecture.CreateArchitecture(Mosa.Platform.x86.ArchitectureFeatureFlags.AutoDetect);
+				default: throw new NotImplementCompilerException(String.Format("Unknown or unsupported Architecture {0}.", architecture));
 			}
 		}
 
@@ -477,7 +482,7 @@ namespace Mosa.Tool.Compiler
 			{
 				case "multibootHeader-0.7":
 				case "mb0.7": return delegate { return new Mosa.Platform.x86.Stages.Multiboot0695Stage(); };
-				default: throw new OptionException(String.Format("Unknown or unsupported boot format {0}.", format), "boot");
+				default: throw new NotImplementCompilerException(String.Format("Unknown or unsupported boot format {0}.", format));
 			}
 		}
 

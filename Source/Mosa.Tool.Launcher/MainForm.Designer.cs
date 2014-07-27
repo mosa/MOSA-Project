@@ -53,11 +53,17 @@
 			this.groupBox5 = new System.Windows.Forms.GroupBox();
 			this.checkBox6 = new System.Windows.Forms.CheckBox();
 			this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
+			this.button1 = new System.Windows.Forms.Button();
+			this.groupBox6 = new System.Windows.Forms.GroupBox();
+			this.cbEmulator = new System.Windows.Forms.ComboBox();
+			this.label2 = new System.Windows.Forms.Label();
+			this.cbBootFormat = new System.Windows.Forms.ComboBox();
 			this.groupBox1.SuspendLayout();
 			this.groupBox2.SuspendLayout();
 			this.groupBox3.SuspendLayout();
 			this.groupBox4.SuspendLayout();
 			this.groupBox5.SuspendLayout();
+			this.groupBox6.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// openFileDialog1
@@ -82,7 +88,7 @@
 			this.groupBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.groupBox1.Location = new System.Drawing.Point(12, 240);
 			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(231, 100);
+			this.groupBox1.Size = new System.Drawing.Size(241, 122);
 			this.groupBox1.TabIndex = 8;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Optimizations:";
@@ -110,7 +116,7 @@
 			this.cbEnableSSA.Name = "cbEnableSSA";
 			this.cbEnableSSA.Size = new System.Drawing.Size(208, 17);
 			this.cbEnableSSA.TabIndex = 6;
-			this.cbEnableSSA.Text = "Eanble Static Single Assignment (SSA)";
+			this.cbEnableSSA.Text = "Enable Static Single Assignment (SSA)";
 			this.cbEnableSSA.UseVisualStyleBackColor = true;
 			// 
 			// groupBox2
@@ -120,7 +126,7 @@
 			this.groupBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.groupBox2.Location = new System.Drawing.Point(259, 240);
 			this.groupBox2.Name = "groupBox2";
-			this.groupBox2.Size = new System.Drawing.Size(166, 100);
+			this.groupBox2.Size = new System.Drawing.Size(166, 70);
 			this.groupBox2.TabIndex = 13;
 			this.groupBox2.TabStop = false;
 			this.groupBox2.Text = "Diagnostic Output:";
@@ -153,6 +159,8 @@
 			// 
 			this.groupBox3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBox3.Controls.Add(this.label2);
+			this.groupBox3.Controls.Add(this.cbBootFormat);
 			this.groupBox3.Controls.Add(this.label5);
 			this.groupBox3.Controls.Add(this.cbPlatform);
 			this.groupBox3.Controls.Add(this.btnDestination);
@@ -172,7 +180,7 @@
 			// 
 			this.label5.AutoSize = true;
 			this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.label5.Location = new System.Drawing.Point(271, 54);
+			this.label5.Location = new System.Drawing.Point(293, 54);
 			this.label5.Name = "label5";
 			this.label5.Size = new System.Drawing.Size(57, 13);
 			this.label5.TabIndex = 30;
@@ -185,7 +193,7 @@
 			this.cbPlatform.Items.AddRange(new object[] {
             "x86",
             "ARMv6"});
-			this.cbPlatform.Location = new System.Drawing.Point(344, 51);
+			this.cbPlatform.Location = new System.Drawing.Point(356, 51);
 			this.cbPlatform.Name = "cbPlatform";
 			this.cbPlatform.Size = new System.Drawing.Size(78, 21);
 			this.cbPlatform.TabIndex = 29;
@@ -247,7 +255,7 @@
 			this.cbLinkerFormat.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.cbLinkerFormat.FormattingEnabled = true;
 			this.cbLinkerFormat.Items.AddRange(new object[] {
-            "ELF32 (default)",
+            "ELF32",
             "PE32"});
 			this.cbLinkerFormat.Location = new System.Drawing.Point(122, 78);
 			this.cbLinkerFormat.Name = "cbLinkerFormat";
@@ -312,9 +320,9 @@
 			// 
 			this.groupBox5.Controls.Add(this.checkBox6);
 			this.groupBox5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.groupBox5.Location = new System.Drawing.Point(442, 240);
+			this.groupBox5.Location = new System.Drawing.Point(259, 316);
 			this.groupBox5.Name = "groupBox5";
-			this.groupBox5.Size = new System.Drawing.Size(198, 100);
+			this.groupBox5.Size = new System.Drawing.Size(166, 46);
 			this.groupBox5.TabIndex = 18;
 			this.groupBox5.TabStop = false;
 			this.groupBox5.Text = "Debugger:";
@@ -323,18 +331,77 @@
 			// 
 			this.checkBox6.AutoSize = true;
 			this.checkBox6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.checkBox6.Location = new System.Drawing.Point(6, 19);
+			this.checkBox6.Location = new System.Drawing.Point(6, 25);
 			this.checkBox6.Name = "checkBox6";
 			this.checkBox6.Size = new System.Drawing.Size(112, 17);
 			this.checkBox6.TabIndex = 13;
 			this.checkBox6.Text = "Launch Debugger";
 			this.checkBox6.UseVisualStyleBackColor = true;
 			// 
+			// button1
+			// 
+			this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.button1.Location = new System.Drawing.Point(432, 337);
+			this.button1.Name = "button1";
+			this.button1.Size = new System.Drawing.Size(208, 23);
+			this.button1.TabIndex = 19;
+			this.button1.Text = "Launch";
+			this.button1.UseVisualStyleBackColor = true;
+			this.button1.Click += new System.EventHandler(this.button1_Click);
+			// 
+			// groupBox6
+			// 
+			this.groupBox6.Controls.Add(this.cbEmulator);
+			this.groupBox6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.groupBox6.Location = new System.Drawing.Point(432, 241);
+			this.groupBox6.Name = "groupBox6";
+			this.groupBox6.Size = new System.Drawing.Size(208, 90);
+			this.groupBox6.TabIndex = 21;
+			this.groupBox6.TabStop = false;
+			this.groupBox6.Text = "Virtual Emulator:";
+			// 
+			// cbEmulator
+			// 
+			this.cbEmulator.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.cbEmulator.FormattingEnabled = true;
+			this.cbEmulator.Items.AddRange(new object[] {
+            "QEMU",
+            "Bochs",
+            "VMware",
+            "PeterBochs"});
+			this.cbEmulator.Location = new System.Drawing.Point(10, 19);
+			this.cbEmulator.Name = "cbEmulator";
+			this.cbEmulator.Size = new System.Drawing.Size(184, 21);
+			this.cbEmulator.TabIndex = 21;
+			// 
+			// label2
+			// 
+			this.label2.AutoSize = true;
+			this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.label2.Location = new System.Drawing.Point(271, 81);
+			this.label2.Name = "label2";
+			this.label2.Size = new System.Drawing.Size(79, 13);
+			this.label2.TabIndex = 32;
+			this.label2.Text = "Boot Format:";
+			// 
+			// cbBootFormat
+			// 
+			this.cbBootFormat.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.cbBootFormat.FormattingEnabled = true;
+			this.cbBootFormat.Items.AddRange(new object[] {
+            "MultibootHeader v0.7"});
+			this.cbBootFormat.Location = new System.Drawing.Point(356, 78);
+			this.cbBootFormat.Name = "cbBootFormat";
+			this.cbBootFormat.Size = new System.Drawing.Size(78, 21);
+			this.cbBootFormat.TabIndex = 31;
+			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(652, 352);
+			this.ClientSize = new System.Drawing.Size(652, 374);
+			this.Controls.Add(this.groupBox6);
+			this.Controls.Add(this.button1);
 			this.Controls.Add(this.groupBox5);
 			this.Controls.Add(this.groupBox4);
 			this.Controls.Add(this.groupBox3);
@@ -354,6 +421,7 @@
 			this.groupBox4.PerformLayout();
 			this.groupBox5.ResumeLayout(false);
 			this.groupBox5.PerformLayout();
+			this.groupBox6.ResumeLayout(false);
 			this.ResumeLayout(false);
 
 		}
@@ -385,5 +453,10 @@
 		private System.Windows.Forms.Label label5;
 		private System.Windows.Forms.ComboBox cbPlatform;
 		private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
+		private System.Windows.Forms.Button button1;
+		private System.Windows.Forms.GroupBox groupBox6;
+		private System.Windows.Forms.ComboBox cbEmulator;
+		private System.Windows.Forms.Label label2;
+		private System.Windows.Forms.ComboBox cbBootFormat;
 	}
 }

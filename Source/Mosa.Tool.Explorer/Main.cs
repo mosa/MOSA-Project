@@ -24,7 +24,7 @@ namespace Mosa.Tool.Explorer
 	public partial class Main : Form, ICompilerEventListener, ITraceListener
 	{
 		private CodeForm form = new CodeForm();
-		private IInternalTrace internalTrace = new BasicInternalTrace();
+		private IInternalTrace internalTrace = new InternalTrace();
 		private MosaModuleLoader assemblyLoader;
 		private TypeSystem typeSystem;
 		private ConfigurableTraceFilter filter = new ConfigurableTraceFilter();
@@ -52,6 +52,7 @@ namespace Mosa.Tool.Explorer
 			internalTrace.TraceListener = this;
 			internalTrace.TraceFilter = filter;
 
+			filter.Active = true;
 			filter.ExcludeInternalMethods = false;
 			filter.MethodMatch = MatchType.Any;
 			filter.StageMatch = MatchType.Exclude;

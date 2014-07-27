@@ -99,6 +99,7 @@
     <Compile Include="RegisterAllocator\BaseRegisterAllocator.cs" />
     <Compile Include="RegisterAllocator\LiveRange.cs" />
     <Compile Include="RegisterAllocator\MoveHint.cs" />
+    <Compile Include="ReplacementTargetAttribute.cs" />
     <Compile Include="ShiftType.cs" />
     <Compile Include="ConditionCodeExtension.cs" />
     <Compile Include="BasicBlocks.cs" />

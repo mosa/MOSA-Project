@@ -67,7 +67,8 @@ namespace Mosa.Utility.Aot
 				yield return file.FullName;
 		}
 
-		public static void Compile(CompilerOptions compilerOptions, List<FileInfo> inputFiles)
+
+		public static void Compile(CompilerOptions compilerOptions, List<FileInfo> inputFiles, IInternalTrace internalTrace)
 		{
 			var moduleLoader = new MosaModuleLoader();
 
@@ -80,18 +81,6 @@ namespace Mosa.Utility.Aot
 
 			var typeSystem = TypeSystem.Load(moduleLoader.CreateMetadata());
 			MosaTypeLayout typeLayout = new MosaTypeLayout(typeSystem, compilerOptions.Architecture.NativePointerSize, compilerOptions.Architecture.NativeAlignment);
-
-			ConfigurableTraceFilter filter = new ConfigurableTraceFilter();
-			filter.MethodMatch = MatchType.None;
-			filter.Method = string.Empty;
-			filter.StageMatch = MatchType.None;
-			filter.Stage = string.Empty;
-			filter.TypeMatch = MatchType.None;
-			filter.Type = string.Empty;
-			filter.ExcludeInternalMethods = true;
-
-			IInternalTrace internalTrace = new BasicInternalTrace();
-			internalTrace.TraceFilter = filter;
 
 			AotCompiler aot = new AotCompiler(compilerOptions.Architecture, typeSystem, typeLayout, internalTrace, compilerOptions);
 

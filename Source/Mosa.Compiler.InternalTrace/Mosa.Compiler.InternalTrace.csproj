@@ -63,7 +63,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BasicCompilerEventListener.cs" />
-    <Compile Include="BasicInternalTrace.cs" />
+    <Compile Include="InternalTrace.cs" />
     <Compile Include="CompilerEvent.cs" />
     <Compile Include="ConfigurableTraceFilter.cs" />
     <Compile Include="CompilerTrace.cs" />

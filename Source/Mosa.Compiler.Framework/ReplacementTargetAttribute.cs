@@ -1,6 +1,13 @@
-﻿using System;
+﻿/*
+ * (c) 2014 MOSA - The Managed Operating System Alliance
+ *
+ * Licensed under the terms of the New BSD License.
+ *
+ */
 
-namespace Mosa.Compiler.Common
+using System;
+
+namespace Mosa.Compiler.Framework
 {
 	/// <summary>
 	/// Used for defining targets when using intrinsic replacements
