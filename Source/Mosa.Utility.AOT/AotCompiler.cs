@@ -67,7 +67,6 @@ namespace Mosa.Utility.Aot
 				yield return file.FullName;
 		}
 
-
 		public static void Compile(CompilerOptions compilerOptions, List<FileInfo> inputFiles, CompilerTrace compilerTrace)
 		{
 			var moduleLoader = new MosaModuleLoader();

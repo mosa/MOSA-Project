@@ -19,15 +19,10 @@ namespace Mosa.Compiler.InternalTrace
 
 		public CompilerTrace()
 		{
-			TraceListener = new DebugTraceListener();
 			CompilerEventListener = new BasicCompilerEventListener();
+			TraceListener = new DebugTraceListener();
 			TraceFilter = new ConfigurableTraceFilter();
 		}
 
-		public CompilerTrace(ITraceListener traceListener, ICompilerEventListener compilerEventListener)
-		{
-			TraceListener = traceListener;
-			CompilerEventListener = compilerEventListener;
-		}
 	}
 }

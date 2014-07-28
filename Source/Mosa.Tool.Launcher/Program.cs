@@ -27,7 +27,6 @@ namespace Mosa.Tool.Launcher
 
 			if (args.Length != 0)
 			{
-				
 			}
 
 			Application.Run(main);

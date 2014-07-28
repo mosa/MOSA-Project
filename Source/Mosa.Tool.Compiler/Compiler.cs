@@ -11,6 +11,7 @@
 
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework;
+using Mosa.Compiler.InternalTrace;
 using Mosa.Compiler.Linker;
 using Mosa.Compiler.Linker.Elf32;
 using Mosa.Compiler.Linker.PE;
@@ -20,7 +21,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using Mosa.Compiler.InternalTrace;
 
 namespace Mosa.Tool.Compiler
 {
