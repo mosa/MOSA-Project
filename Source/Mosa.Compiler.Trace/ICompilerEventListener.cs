@@ -12,5 +12,7 @@ namespace Mosa.Compiler.InternalTrace
 	public interface ICompilerEventListener
 	{
 		void SubmitTraceEvent(CompilerEvent compilerStage, string info);
+
+		void SubmitMethodStatus(int totalMethods, int queuedMethods);
 	}
 }

@@ -51,6 +51,16 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		protected CompilerOptions CompilerOptions { get { return Compiler.CompilerOptions; } }
 
+		/// <summary>
+		/// Holds the compiler trace
+		/// </summary>
+		protected CompilerTrace CompilerTrace { get { return Compiler.CompilerTrace; } }
+		
+		/// <summary>
+		/// Holds the compiler scheduler
+		/// </summary>
+		protected ICompilationScheduler CompilationScheduler { get { return Compiler.CompilationScheduler; } }
+
 		#endregion Properties
 
 		#region IPipelineStage Members
@@ -101,12 +111,12 @@ namespace Mosa.Compiler.Framework
 
 		protected void Trace(CompilerEvent compilerEvent, string message)
 		{
-			Compiler.CompilerTrace.CompilerEventListener.SubmitTraceEvent(compilerEvent, message);
+			CompilerTrace.CompilerEventListener.SubmitTraceEvent(compilerEvent, message);
 		}
 
 		protected void Trace(MosaMethod method, string stage, string line)
 		{
-			Compiler.CompilerTrace.TraceListener.SubmitDebugStageInformation(method, stage, line);
+			CompilerTrace.TraceListener.SubmitDebugStageInformation(method, stage, line);
 		}
 
 		#endregion Helper Methods

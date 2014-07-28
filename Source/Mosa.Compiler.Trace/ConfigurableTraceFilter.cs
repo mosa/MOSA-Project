@@ -17,6 +17,7 @@ namespace Mosa.Compiler.InternalTrace
 	public class ConfigurableTraceFilter : ITraceFilter
 	{
 		public bool Active { get; set; }
+
 		public bool ExcludeInternalMethods = true;
 
 		public string Type = string.Empty;

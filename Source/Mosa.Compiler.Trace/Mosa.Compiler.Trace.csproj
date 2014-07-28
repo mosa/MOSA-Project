@@ -62,7 +62,7 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BasicCompilerEventListener.cs" />
+    <Compile Include="ConsoleEventListener.cs" />
     <Compile Include="CompilerTrace.cs" />
     <Compile Include="CompilerEvent.cs" />
     <Compile Include="ConfigurableTraceFilter.cs" />

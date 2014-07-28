@@ -398,17 +398,11 @@ namespace Mosa.Tool.Compiler
 
 		private void Compile()
 		{
-			ConfigurableTraceFilter filter = new ConfigurableTraceFilter();
-			filter.MethodMatch = MatchType.None;
-			filter.Method = string.Empty;
-			filter.StageMatch = MatchType.None;
-			filter.Stage = string.Empty;
-			filter.TypeMatch = MatchType.None;
-			filter.Type = string.Empty;
-			filter.ExcludeInternalMethods = true;
-
 			CompilerTrace compilerTrace = new CompilerTrace();
-			compilerTrace.TraceFilter = filter;
+			
+			var listener = new ConsoleEventListener();
+			//listener.Quiet = false;
+			compilerTrace.CompilerEventListener = listener;
 
 			AotCompiler.Compile(compilerOptions, inputFiles, compilerTrace);
 		}

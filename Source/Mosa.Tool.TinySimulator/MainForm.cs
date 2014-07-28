@@ -485,5 +485,10 @@ namespace Mosa.Tool.TinySimulator
 		{
 			outputView.AddOutput(data);
 		}
+
+		void ICompilerEventListener.SubmitMethodStatus(int totalMethods, int queuedMethods)
+		{
+		}
+
 	}
 }
