@@ -21,7 +21,7 @@ using System.Windows.Forms;
 
 namespace Mosa.Tool.Launcher
 {
-	public partial class MainForm : Form
+	public partial class MainForm : Form, ICompilerEventListener
 	{
 		public string SourceFile { get; set; }
 
@@ -32,19 +32,35 @@ namespace Mosa.Tool.Launcher
 			InitializeComponent();
 		}
 
+		void ICompilerEventListener.SubmitTraceEvent(CompilerEvent compilerStage, string info)
+		{
+
+		}
+
+		void ICompilerEventListener.SubmitMethodStatus(int totalMethods, int queuedMethods)
+		{
+			progressBar1.Maximum = totalMethods;
+			progressBar1.Value = totalMethods - queuedMethods;
+		}
+
 		private void btnSource_Click(object sender, EventArgs e)
 		{
 			if (openFileDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK)
 			{
-				SourceFile = openFileDialog1.FileName;
-				lbSource.Text = Path.GetFileName(SourceFile);
-				lbSourceDirectory.Text = Path.GetDirectoryName(SourceFile);
+				SetSource(openFileDialog1.FileName);
+			}
+		}
 
-				if (String.IsNullOrWhiteSpace(DestinationDirectory))
-				{
-					DestinationDirectory = Path.GetDirectoryName(SourceFile) + Path.DirectorySeparatorChar + "build";
-					lbDestinationDirectory.Text = DestinationDirectory;
-				}
+		public void SetSource(string filename)
+		{
+			SourceFile = filename;
+			lbSource.Text = Path.GetFileName(SourceFile);
+			lbSourceDirectory.Text = Path.GetDirectoryName(SourceFile);
+
+			if (String.IsNullOrWhiteSpace(DestinationDirectory))
+			{
+				DestinationDirectory = Path.GetDirectoryName(SourceFile) + Path.DirectorySeparatorChar + "build";
+				lbDestinationDirectory.Text = DestinationDirectory;
 			}
 		}
 
@@ -59,16 +75,24 @@ namespace Mosa.Tool.Launcher
 
 		private void button1_Click(object sender, EventArgs e)
 		{
+			var destinationDirectory = DestinationDirectory + Path.DirectorySeparatorChar;
+
 			var compilerOptions = new CompilerOptions();
 			compilerOptions.EnableSSA = cbEnableSSA.Checked;
 			compilerOptions.EnableSSAOptimizations = cbEnableSSAOptimizations.Checked;
-			compilerOptions.OutputFile = this.DestinationDirectory + Path.DirectorySeparatorChar + Path.GetFileNameWithoutExtension(SourceFile) + ".bin";
+			compilerOptions.OutputFile = destinationDirectory + Path.GetFileNameWithoutExtension(SourceFile) + ".bin";
 
 			compilerOptions.Architecture = SelectArchitecture(cbPlatform.SelectedItem.ToString());
 			compilerOptions.LinkerFactory = GetLinkerFactory(cbLinkerFormat.SelectedItem.ToString());
 			compilerOptions.BootStageFactory = GetBootStageFactory(cbBootFormat.SelectedItem.ToString());
 
+			if (!Directory.Exists(destinationDirectory))
+			{
+				Directory.CreateDirectory(destinationDirectory);
+			}
+
 			CompilerTrace compilerTrace = new CompilerTrace();
+			compilerTrace.CompilerEventListener = this;
 
 			var inputFiles = new List<FileInfo>();
 			inputFiles.Add(new FileInfo(SourceFile));

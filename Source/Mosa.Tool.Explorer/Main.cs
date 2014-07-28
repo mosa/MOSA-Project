@@ -61,7 +61,7 @@ namespace Mosa.Tool.Explorer
 
 		private void SetStatus(string status)
 		{
-			toolStripStatusLabel2.Text = status;
+			toolStripStatusLabel.Text = status;
 		}
 
 		private void Main_Load(object sender, EventArgs e)

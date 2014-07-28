@@ -9,6 +9,7 @@
 
 using System;
 using System.Windows.Forms;
+using System.IO;
 
 namespace Mosa.Tool.Launcher
 {
@@ -27,6 +28,14 @@ namespace Mosa.Tool.Launcher
 
 			if (args.Length != 0)
 			{
+				if (args[0].IndexOf(Path.DirectorySeparatorChar) >= 0)
+				{
+					main.SetSource(args[0]);
+				}
+				else
+				{
+					main.SetSource(Path.Combine(Directory.GetCurrentDirectory(), args[0]));
+				}
 			}
 
 			Application.Run(main);
