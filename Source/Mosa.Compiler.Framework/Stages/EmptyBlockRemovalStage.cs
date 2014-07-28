@@ -44,7 +44,7 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 		}
 
-		private void RemoveBlock(BasicBlock block, CompilerTrace trace)
+		private void RemoveBlock(BasicBlock block, SectionTrace trace)
 		{
 			Debug.Assert(block.NextBlocks.Count == 1);
 

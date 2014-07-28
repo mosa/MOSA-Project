@@ -1,25 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using System.IO;
+﻿/*
+ * (c) 2014 MOSA - The Managed Operating System Alliance
+ *
+ * Licensed under the terms of the New BSD License.
+ *
+ * Authors:
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
+ */
+
+using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Linker;
 using Mosa.Compiler.InternalTrace;
+using Mosa.Compiler.Linker;
 using Mosa.Compiler.Linker.Elf32;
 using Mosa.Compiler.Linker.PE;
-using Mosa.Compiler.Common;
 using Mosa.Utility.Aot;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Windows.Forms;
 
 namespace Mosa.Tool.Launcher
 {
 	public partial class MainForm : Form
 	{
 		public string SourceFile { get; set; }
+
 		public string DestinationDirectory { get; set; }
 
 		public MainForm()
@@ -63,13 +68,12 @@ namespace Mosa.Tool.Launcher
 			compilerOptions.LinkerFactory = GetLinkerFactory(cbLinkerFormat.SelectedItem.ToString());
 			compilerOptions.BootStageFactory = GetBootStageFactory(cbBootFormat.SelectedItem.ToString());
 
-			IInternalTrace internalTrace = new InternalTrace();
-			internalTrace.TraceListener = null;
+			CompilerTrace compilerTrace = new CompilerTrace();
 
 			var inputFiles = new List<FileInfo>();
 			inputFiles.Add(new FileInfo(SourceFile));
 
-			AotCompiler.Compile(compilerOptions, inputFiles, internalTrace);
+			AotCompiler.Compile(compilerOptions, inputFiles, compilerTrace);
 		}
 
 		/// <summary>
@@ -119,7 +123,5 @@ namespace Mosa.Tool.Launcher
 				default: return null;
 			}
 		}
-
-
 	}
 }

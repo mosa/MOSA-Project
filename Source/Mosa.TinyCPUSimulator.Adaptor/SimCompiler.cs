@@ -30,10 +30,10 @@ namespace Mosa.TinyCPUSimulator.Adaptor
 		/// <param name="typeLayout">The type layout.</param>
 		/// <param name="linker">The linker.</param>
 		/// <param name="compilerOptions">The compiler options.</param>
-		/// <param name="internalTrace">The internal trace.</param>
+		/// <param name="compilerTrace">The internal trace.</param>
 		/// <param name="simAdapter">The sim adapter.</param>
-		public SimCompiler(BaseArchitecture architecture, TypeSystem typeSystem, MosaTypeLayout typeLayout, BaseLinker linker, CompilerOptions compilerOptions, IInternalTrace internalTrace, ISimAdapter simAdapter) :
-			base(architecture, typeSystem, typeLayout, new CompilationScheduler(typeSystem, true), internalTrace, linker, compilerOptions)
+		public SimCompiler(BaseArchitecture architecture, TypeSystem typeSystem, MosaTypeLayout typeLayout, BaseLinker linker, CompilerOptions compilerOptions, CompilerTrace compilerTrace, ISimAdapter simAdapter) :
+			base(architecture, typeSystem, typeLayout, new CompilationScheduler(typeSystem, true), compilerTrace, linker, compilerOptions)
 		{
 			this.simAdapter = simAdapter;
 
@@ -69,19 +69,19 @@ namespace Mosa.TinyCPUSimulator.Adaptor
 		/// </summary>
 		/// <param name="typeSystem">The type system.</param>
 		/// <param name="typeLayout">The type layout.</param>
-		/// <param name="internalTrace">The internal trace.</param>
+		/// <param name="compilerTrace">The internal trace.</param>
 		/// <param name="enabledSSA">if set to <c>true</c> [enabled ssa].</param>
 		/// <param name="architecture">The architecture.</param>
 		/// <param name="simAdapter">The sim adapter.</param>
 		/// <param name="linker">The linker.</param>
 		/// <returns></returns>
-		public static SimCompiler Compile(TypeSystem typeSystem, MosaTypeLayout typeLayout, IInternalTrace internalTrace, bool enabledSSA, BaseArchitecture architecture, ISimAdapter simAdapter, BaseLinker linker)
+		public static SimCompiler Compile(TypeSystem typeSystem, MosaTypeLayout typeLayout, CompilerTrace compilerTrace, bool enabledSSA, BaseArchitecture architecture, ISimAdapter simAdapter, BaseLinker linker)
 		{
 			var compilerOptions = new CompilerOptions();
 			compilerOptions.EnableSSA = enabledSSA;
 			compilerOptions.EnableSSAOptimizations = enabledSSA;
 
-			var compiler = new SimCompiler(architecture, typeSystem, typeLayout, linker, compilerOptions, internalTrace, simAdapter);
+			var compiler = new SimCompiler(architecture, typeSystem, typeLayout, linker, compilerOptions, compilerTrace, simAdapter);
 
 			compiler.Compile();
 

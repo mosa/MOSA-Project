@@ -25,10 +25,10 @@ namespace Mosa.Utility.Aot
 		/// <param name="architecture">The architecture.</param>
 		/// <param name="typeSystem">The type system.</param>
 		/// <param name="typeLayout">The type layout.</param>
-		/// <param name="internalTrace">The internal trace.</param>
+		/// <param name="compilerTrace">The internal trace.</param>
 		/// <param name="compilerOptions">The compiler options.</param>
-		public AotCompiler(BaseArchitecture architecture, TypeSystem typeSystem, MosaTypeLayout typeLayout, IInternalTrace internalTrace, CompilerOptions compilerOptions)
-			: base(architecture, typeSystem, typeLayout, new CompilationScheduler(typeSystem, true), internalTrace, null, compilerOptions)
+		public AotCompiler(BaseArchitecture architecture, TypeSystem typeSystem, MosaTypeLayout typeLayout, CompilerTrace compilerTrace, CompilerOptions compilerOptions)
+			: base(architecture, typeSystem, typeLayout, new CompilationScheduler(typeSystem, true), compilerTrace, null, compilerOptions)
 		{
 		}
 
@@ -68,7 +68,7 @@ namespace Mosa.Utility.Aot
 		}
 
 
-		public static void Compile(CompilerOptions compilerOptions, List<FileInfo> inputFiles, IInternalTrace internalTrace)
+		public static void Compile(CompilerOptions compilerOptions, List<FileInfo> inputFiles, CompilerTrace compilerTrace)
 		{
 			var moduleLoader = new MosaModuleLoader();
 
@@ -82,7 +82,7 @@ namespace Mosa.Utility.Aot
 			var typeSystem = TypeSystem.Load(moduleLoader.CreateMetadata());
 			MosaTypeLayout typeLayout = new MosaTypeLayout(typeSystem, compilerOptions.Architecture.NativePointerSize, compilerOptions.Architecture.NativeAlignment);
 
-			AotCompiler aot = new AotCompiler(compilerOptions.Architecture, typeSystem, typeLayout, internalTrace, compilerOptions);
+			AotCompiler aot = new AotCompiler(compilerOptions.Architecture, typeSystem, typeLayout, compilerTrace, compilerOptions);
 
 			var bootStage = compilerOptions.BootStageFactory != null ? compilerOptions.BootStageFactory() : null;
 

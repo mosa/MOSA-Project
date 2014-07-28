@@ -64,8 +64,8 @@ namespace Mosa.Compiler.Framework.Stages
 				filter.StageMatch = MatchType.Contains;
 				filter.Stage = "CodeGen";
 
-				Compiler.InternalTrace.TraceFilter = filter;
-				Compiler.InternalTrace.TraceListener = this;
+				Compiler.CompilerTrace.TraceFilter = filter;
+				Compiler.CompilerTrace.TraceListener = this;
 
 				Directory.CreateDirectory(MethodPipelineExportDirectory);
 			}

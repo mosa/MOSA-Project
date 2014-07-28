@@ -101,12 +101,12 @@ namespace Mosa.Compiler.Framework
 
 		protected void Trace(CompilerEvent compilerEvent, string message)
 		{
-			Compiler.InternalTrace.CompilerEventListener.SubmitTraceEvent(compilerEvent, message);
+			Compiler.CompilerTrace.CompilerEventListener.SubmitTraceEvent(compilerEvent, message);
 		}
 
 		protected void Trace(MosaMethod method, string stage, string line)
 		{
-			Compiler.InternalTrace.TraceListener.SubmitDebugStageInformation(method, stage, line);
+			Compiler.CompilerTrace.TraceListener.SubmitDebugStageInformation(method, stage, line);
 		}
 
 		#endregion Helper Methods

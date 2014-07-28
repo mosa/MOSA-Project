@@ -407,10 +407,10 @@ namespace Mosa.Tool.Compiler
 			filter.Type = string.Empty;
 			filter.ExcludeInternalMethods = true;
 
-			IInternalTrace internalTrace = new InternalTrace();
-			internalTrace.TraceFilter = filter;
+			CompilerTrace compilerTrace = new CompilerTrace();
+			compilerTrace.TraceFilter = filter;
 
-			AotCompiler.Compile(compilerOptions, inputFiles, internalTrace);
+			AotCompiler.Compile(compilerOptions, inputFiles, compilerTrace);
 		}
 
 		/// <summary>

@@ -40,7 +40,7 @@ namespace Mosa.Tool.TinySimulator
 		private OutputView outputView;
 		private ScriptView scriptView;
 
-		public IInternalTrace InternalTrace = new InternalTrace();
+		public CompilerTrace InternalTrace = new CompilerTrace();
 		public ConfigurableTraceFilter Filter = new ConfigurableTraceFilter();
 		public TypeSystem TypeSystem;
 		public MosaTypeLayout TypeLayout;

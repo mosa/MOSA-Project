@@ -50,10 +50,12 @@ namespace Mosa.Compiler.Framework
 		public MosaTypeLayout TypeLayout { get; private set; }
 
 		/// <summary>
-		/// Gets the internal log.
+		/// Gets the compiler trace.
 		/// </summary>
-		/// <value>The internal log.</value>
-		public IInternalTrace InternalTrace { get; private set; }
+		/// <value>
+		/// The compiler trace.
+		/// </value>
+		public CompilerTrace CompilerTrace { get; private set; }
 
 		/// <summary>
 		/// Gets the compiler options.
@@ -97,9 +99,11 @@ namespace Mosa.Compiler.Framework
 		/// <param name="typeSystem">The type system.</param>
 		/// <param name="typeLayout">The type layout.</param>
 		/// <param name="compilationScheduler">The compilation scheduler.</param>
-		/// <param name="internalTrace">The internal trace.</param>
+		/// <param name="compilerTrace">The compiler trace.</param>
+		/// <param name="linker">The linker.</param>
 		/// <param name="compilerOptions">The compiler options.</param>
-		protected BaseCompiler(BaseArchitecture architecture, TypeSystem typeSystem, MosaTypeLayout typeLayout, ICompilationScheduler compilationScheduler, IInternalTrace internalTrace, BaseLinker linker, CompilerOptions compilerOptions)
+		/// <exception cref="System.ArgumentNullException">@Architecture</exception>
+		protected BaseCompiler(BaseArchitecture architecture, TypeSystem typeSystem, MosaTypeLayout typeLayout, ICompilationScheduler compilationScheduler, CompilerTrace compilerTrace, BaseLinker linker, CompilerOptions compilerOptions)
 		{
 			if (architecture == null)
 				throw new ArgumentNullException(@"Architecture");
@@ -108,7 +112,7 @@ namespace Mosa.Compiler.Framework
 			Architecture = architecture;
 			TypeSystem = typeSystem;
 			TypeLayout = typeLayout;
-			InternalTrace = internalTrace;
+			CompilerTrace = compilerTrace;
 			CompilerOptions = compilerOptions;
 			Counters = new Counters();
 			CompilationScheduler = compilationScheduler;
@@ -256,7 +260,7 @@ namespace Mosa.Compiler.Framework
 		/// <param name="message">The message.</param>
 		protected void Trace(CompilerEvent compilerEvent, string message)
 		{
-			InternalTrace.CompilerEventListener.SubmitTraceEvent(compilerEvent, message);
+			CompilerTrace.CompilerEventListener.SubmitTraceEvent(compilerEvent, message);
 		}
 
 		/// <summary>

@@ -58,7 +58,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Compiler.Common", "Mos
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Tool.Explorer", "Mosa.Tool.Explorer\Mosa.Tool.Explorer.csproj", "{49D8DA65-FC99-4C63-ADC6-1B07260F674F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Compiler.InternalTrace", "Mosa.Compiler.InternalTrace\Mosa.Compiler.InternalTrace.csproj", "{540BEAC7-A2C3-4C46-9F4A-E6E1DF4EF6FC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Compiler.Trace", "Mosa.Compiler.Trace\Mosa.Compiler.Trace.csproj", "{540BEAC7-A2C3-4C46-9F4A-E6E1DF4EF6FC}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Utilities", "Utilities", "{90065B0F-1BFE-40D8-AED5-11096B2535B0}"
 EndProject

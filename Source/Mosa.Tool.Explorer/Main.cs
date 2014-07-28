@@ -24,7 +24,7 @@ namespace Mosa.Tool.Explorer
 	public partial class Main : Form, ICompilerEventListener, ITraceListener
 	{
 		private CodeForm form = new CodeForm();
-		private IInternalTrace internalTrace = new InternalTrace();
+		private CompilerTrace compilerTrace = new CompilerTrace();
 		private MosaModuleLoader assemblyLoader;
 		private TypeSystem typeSystem;
 		private ConfigurableTraceFilter filter = new ConfigurableTraceFilter();
@@ -48,9 +48,9 @@ namespace Mosa.Tool.Explorer
 		public Main()
 		{
 			InitializeComponent();
-			internalTrace.CompilerEventListener = this;
-			internalTrace.TraceListener = this;
-			internalTrace.TraceFilter = filter;
+			compilerTrace.CompilerEventListener = this;
+			compilerTrace.TraceListener = this;
+			compilerTrace.TraceFilter = filter;
 
 			filter.Active = true;
 			filter.ExcludeInternalMethods = false;
@@ -182,7 +182,7 @@ namespace Mosa.Tool.Explorer
 
 			CreateTypeSystemAndLayout();
 
-			ExplorerCompiler.Compile(typeSystem, typeLayout, internalTrace, cbPlatform.Text, enableSSAToolStripMenuItem.Checked, enableSSAOptimizations.Checked, enableBinaryCodeGenerationToolStripMenuItem.Checked);
+			ExplorerCompiler.Compile(typeSystem, typeLayout, compilerTrace, cbPlatform.Text, enableSSAToolStripMenuItem.Checked, enableSSAOptimizations.Checked, enableBinaryCodeGenerationToolStripMenuItem.Checked);
 
 			tabControl1.SelectedTab = tabPage1;
 			rbOtherResult.Text = compileLog.ToString();
