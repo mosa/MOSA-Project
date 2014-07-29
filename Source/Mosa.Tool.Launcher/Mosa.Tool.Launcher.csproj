@@ -67,6 +67,11 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Mosa.Compiler.Common\Mosa.Compiler.Common.csproj">
@@ -117,17 +122,44 @@
       <Project>{3bf17c10-a1fb-4517-923e-b609c2fd8282}</Project>
       <Name>Mosa.Utility.Aot</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Mosa.Utility.BootImage\Mosa.Utility.BootImage.csproj">
+      <Project>{65f7691a-b355-4d98-bb97-0b19f13e2190}</Project>
+      <Name>Mosa.Utility.BootImage</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Mosa.Utility.GUI.Common\Mosa.Utility.GUI.Common.csproj">
       <Project>{5a813793-78e2-413c-aa05-fcdd12b7db04}</Project>
       <Name>Mosa.Utility.GUI.Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Mosa.Utility.IsoImage\Mosa.Utility.IsoImage.csproj">
+      <Project>{3bf17c10-f7fb-4517-923e-b609c2fd8282}</Project>
+      <Name>Mosa.Utility.IsoImage</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <EmbeddedResource Include="..\..\Tools\syslinux\mbr.bin">
+      <Link>Resources\mbr.bin</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\Tools\syslinux\boot.bin">
+      <Link>Resources\boot.bin</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\Tools\syslinux\ldlinux.sys">
+      <Link>Resources\ldlinux.sys</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\Tools\syslinux\mboot.c32">
+      <Link>Resources\mboot.c32</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\Run\ISO\syslinux\syslinux.cfg">
+      <Link>Resources\syslinux.cfg</Link>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

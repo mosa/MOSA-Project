@@ -25,8 +25,10 @@ namespace Mosa.Utility.BootImage
 		/// <param name="options">The options.</param>
 		static public void Create(Options options)
 		{
-			if (System.IO.File.Exists(options.DiskImageFileName))
-				System.IO.File.Delete(options.DiskImageFileName);
+			if (File.Exists(options.DiskImageFileName))
+			{
+				File.Delete(options.DiskImageFileName);
+			}
 
 			uint blockCount = options.BlockCount;
 
@@ -39,7 +41,7 @@ namespace Mosa.Utility.BootImage
 				}
 			}
 
-			DiskGeometry diskGeometry = new Mosa.DeviceSystem.DiskGeometry();
+			var diskGeometry = new Mosa.DeviceSystem.DiskGeometry();
 			diskGeometry.GuessGeometry(blockCount);
 
 			// Create disk image file
@@ -245,6 +247,8 @@ namespace Mosa.Utility.BootImage
 
 				diskDevice.WriteBlock(blockCount, 1, footer);
 			}
+
+			diskDevice.Dispose();
 		}
 	}
 }

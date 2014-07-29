@@ -18,6 +18,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
+using Mosa.Utility.BootImage;
+using System.Reflection;
 
 namespace Mosa.Tool.Launcher
 {
@@ -27,14 +29,40 @@ namespace Mosa.Tool.Launcher
 
 		public string DestinationDirectory { get; set; }
 
+		protected DateTime compileStartTime;
+
 		public MainForm()
 		{
 			InitializeComponent();
 		}
 
+		public void AddOutput(string data)
+		{
+			richTextBox1.AppendText(data);
+			richTextBox1.AppendText("\n");
+			richTextBox1.Update();
+		}
+
+
+		public void AddCounters(string data)
+		{
+			richTextBox2.AppendText(data);
+			richTextBox2.AppendText("\n");
+			richTextBox2.Update();
+		}
+
 		void ICompilerEventListener.SubmitTraceEvent(CompilerEvent compilerStage, string info)
 		{
+			if (compilerStage == CompilerEvent.CompilerStageStart || compilerStage == CompilerEvent.CompilerStageEnd)
+			{
+				string status = "Compiling: " + String.Format("{0:0.00}", (DateTime.Now - compileStartTime).TotalSeconds) + " secs: " + compilerStage.ToText() + ": " + info;
 
+				AddOutput(status);
+			}
+			else if (compilerStage == CompilerEvent.Counter)
+			{
+				AddCounters(info);
+			}
 		}
 
 		void ICompilerEventListener.SubmitMethodStatus(int totalMethods, int queuedMethods)
@@ -71,33 +99,7 @@ namespace Mosa.Tool.Launcher
 			cbLinkerFormat.SelectedIndex = 0;
 			cbEmulator.SelectedIndex = 0;
 			cbBootFormat.SelectedIndex = 0;
-		}
-
-		private void button1_Click(object sender, EventArgs e)
-		{
-			var destinationDirectory = DestinationDirectory + Path.DirectorySeparatorChar;
-
-			var compilerOptions = new CompilerOptions();
-			compilerOptions.EnableSSA = cbEnableSSA.Checked;
-			compilerOptions.EnableSSAOptimizations = cbEnableSSAOptimizations.Checked;
-			compilerOptions.OutputFile = destinationDirectory + Path.GetFileNameWithoutExtension(SourceFile) + ".bin";
-
-			compilerOptions.Architecture = SelectArchitecture(cbPlatform.SelectedItem.ToString());
-			compilerOptions.LinkerFactory = GetLinkerFactory(cbLinkerFormat.SelectedItem.ToString());
-			compilerOptions.BootStageFactory = GetBootStageFactory(cbBootFormat.SelectedItem.ToString());
-
-			if (!Directory.Exists(destinationDirectory))
-			{
-				Directory.CreateDirectory(destinationDirectory);
-			}
-
-			CompilerTrace compilerTrace = new CompilerTrace();
-			compilerTrace.CompilerEventListener = this;
-
-			var inputFiles = new List<FileInfo>();
-			inputFiles.Add(new FileInfo(SourceFile));
-
-			AotCompiler.Compile(compilerOptions, inputFiles, compilerTrace);
+			cbBootFileSystem.SelectedIndex = 0;
 		}
 
 		/// <summary>
@@ -147,5 +149,90 @@ namespace Mosa.Tool.Launcher
 				default: return null;
 			}
 		}
+
+		private void btnDestination_Click(object sender, EventArgs e)
+		{
+			if (folderBrowserDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+			{
+				DestinationDirectory = folderBrowserDialog1.SelectedPath;
+				lbDestinationDirectory.Text = DestinationDirectory;
+			}
+		}
+
+		private void button1_Click_1(object sender, EventArgs e)
+		{
+			richTextBox1.Clear();
+			richTextBox2.Clear();
+			tabControl1.SelectedTab = tabPage2;
+			CompileAndLaunch();
+		}
+
+		protected byte[] GetResource(string name)
+		{
+			var assembly = Assembly.GetExecutingAssembly();
+			var stream = assembly.GetManifestResourceStream("Mosa.Tool.Launcher.Resources." + name);
+			var binary = new BinaryReader(stream);
+			return binary.ReadBytes((int)stream.Length);
+		}
+
+		private void CompileAndLaunch()
+		{
+			compileStartTime = DateTime.Now;
+
+			var destinationDirectory = DestinationDirectory + Path.DirectorySeparatorChar;
+
+			var compilerOptions = new CompilerOptions();
+			compilerOptions.EnableSSA = cbEnableSSA.Checked;
+			compilerOptions.EnableSSAOptimizations = cbEnableSSAOptimizations.Checked;
+			compilerOptions.OutputFile = destinationDirectory + Path.GetFileNameWithoutExtension(SourceFile) + ".bin";
+
+			compilerOptions.Architecture = SelectArchitecture(cbPlatform.SelectedItem.ToString());
+			compilerOptions.LinkerFactory = GetLinkerFactory(cbLinkerFormat.SelectedItem.ToString());
+			compilerOptions.BootStageFactory = GetBootStageFactory(cbBootFormat.SelectedItem.ToString());
+
+			if (cbGenerateMapFile.Checked)
+			{
+				compilerOptions.MapFile = destinationDirectory + Path.GetFileNameWithoutExtension(SourceFile) + ".map";
+			}
+
+			if (!Directory.Exists(destinationDirectory))
+			{
+				Directory.CreateDirectory(destinationDirectory);
+			}
+
+			CompilerTrace compilerTrace = new CompilerTrace();
+			compilerTrace.CompilerEventListener = this;
+
+			var inputFiles = new List<FileInfo>();
+			inputFiles.Add(new FileInfo(SourceFile));
+
+			AotCompiler.Compile(compilerOptions, inputFiles, compilerTrace);
+
+			Options options = new Options();
+
+			options.MBRCode = GetResource("mbr.bin");
+			options.FatBootCode = GetResource("boot.bin");
+
+			options.IncludeFiles.Add(new IncludeFile("ldlinux.sys", GetResource("ldlinux.sys")));
+			options.IncludeFiles.Add(new IncludeFile("mboot.c32", GetResource("mboot.c32")));
+			options.IncludeFiles.Add(new IncludeFile("syslinux.cfg", GetResource("syslinux.cfg")));
+			options.IncludeFiles.Add(new IncludeFile(compilerOptions.OutputFile, "main.exe"));
+
+			options.VolumeLabel = "MOSABOOT";
+			options.PatchSyslinuxOption = true;
+
+			switch (cbImageFormat.SelectedIndex)
+			{
+				case 0: options.ImageFormat = ImageFormatType.IMG; break;
+				case 1: options.ImageFormat = ImageFormatType.VHD; break;
+				case 2: options.ImageFormat = ImageFormatType.VDI; break;
+				default: break;
+			}
+
+			options.DiskImageFileName = destinationDirectory + "bootimage.img";
+
+			Generator.Create(options);
+		}
+
 	}
 }
