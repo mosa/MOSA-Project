@@ -48,7 +48,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private Stack<int> worklist = new Stack<int>();
 
-		private CompilerTrace trace;
+		private SectionTrace trace;
 
 		protected override void Run()
 		{

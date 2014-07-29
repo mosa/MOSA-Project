@@ -18,12 +18,17 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			while (true)
 			{
-				var method = Compiler.CompilationScheduler.GetMethodToCompile();
+				var method = CompilationScheduler.GetMethodToCompile();
 
 				if (method == null)
 					break;
 
 				Compiler.CompileMethod(method, null, null);
+
+				CompilerTrace.CompilerEventListener.SubmitMethodStatus(
+					CompilationScheduler.TotalMethods,
+					CompilationScheduler.TotalQueuedMethods
+				);
 			}
 		}
 	}

@@ -16,6 +16,8 @@ namespace Mosa.Compiler.InternalTrace
 
 	public class ConfigurableTraceFilter : ITraceFilter
 	{
+		public bool Active { get; set; }
+
 		public bool ExcludeInternalMethods = true;
 
 		public string Type = string.Empty;
@@ -26,13 +28,24 @@ namespace Mosa.Compiler.InternalTrace
 		public MatchType MethodMatch = MatchType.Contains;
 		public MatchType StageMatch = MatchType.Any;
 
+		public ConfigurableTraceFilter()
+		{
+			Active = false;
+		}
+
 		bool ITraceFilter.IsMatch(MosaMethod method, string stage)
 		{
+			if (!Active)
+				return false;
+
 			return IsMatch(method.DeclaringType.Name, method.Name, stage);
 		}
 
 		protected bool IsMatch(string type, string method, string stage)
 		{
+			if (!Active)
+				return false; 
+			
 			if (ExcludeInternalMethods && method.Contains("<$>"))
 				return false;
 

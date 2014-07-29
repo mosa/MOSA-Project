@@ -44,7 +44,6 @@
     <Compile Include="Metadata.cs" />
     <Compile Include="NotImplementCompilerException.cs" />
     <Compile Include="CompilerException.cs" />
-    <Compile Include="ReplacementTargetAttribute.cs" />
     <Compile Include="SimplePriorityQueue.cs" />
     <Compile Include="Endianness .cs" />
     <Compile Include="ListExtension.cs" />

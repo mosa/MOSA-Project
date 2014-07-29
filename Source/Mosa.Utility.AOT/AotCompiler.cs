@@ -12,11 +12,10 @@ using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Stages;
 using Mosa.Compiler.InternalTrace;
 using Mosa.Compiler.MosaTypeSystem;
-using Mosa.Tool.Compiler.Stages;
 using System.Collections.Generic;
 using System.IO;
 
-namespace Mosa.Tool.Compiler
+namespace Mosa.Utility.Aot
 {
 	public class AotCompiler : BaseCompiler
 	{
@@ -26,10 +25,10 @@ namespace Mosa.Tool.Compiler
 		/// <param name="architecture">The architecture.</param>
 		/// <param name="typeSystem">The type system.</param>
 		/// <param name="typeLayout">The type layout.</param>
-		/// <param name="internalTrace">The internal trace.</param>
+		/// <param name="compilerTrace">The internal trace.</param>
 		/// <param name="compilerOptions">The compiler options.</param>
-		public AotCompiler(BaseArchitecture architecture, TypeSystem typeSystem, MosaTypeLayout typeLayout, IInternalTrace internalTrace, CompilerOptions compilerOptions)
-			: base(architecture, typeSystem, typeLayout, new CompilationScheduler(typeSystem, true), internalTrace, null, compilerOptions)
+		public AotCompiler(BaseArchitecture architecture, TypeSystem typeSystem, MosaTypeLayout typeLayout, CompilerTrace compilerTrace, CompilerOptions compilerOptions)
+			: base(architecture, typeSystem, typeLayout, new CompilationScheduler(typeSystem, true), compilerTrace, null, compilerOptions)
 		{
 		}
 
@@ -68,7 +67,7 @@ namespace Mosa.Tool.Compiler
 				yield return file.FullName;
 		}
 
-		public static void Compile(CompilerOptions compilerOptions, List<FileInfo> inputFiles)
+		public static void Compile(CompilerOptions compilerOptions, List<FileInfo> inputFiles, CompilerTrace compilerTrace)
 		{
 			var moduleLoader = new MosaModuleLoader();
 
@@ -82,19 +81,7 @@ namespace Mosa.Tool.Compiler
 			var typeSystem = TypeSystem.Load(moduleLoader.CreateMetadata());
 			MosaTypeLayout typeLayout = new MosaTypeLayout(typeSystem, compilerOptions.Architecture.NativePointerSize, compilerOptions.Architecture.NativeAlignment);
 
-			ConfigurableTraceFilter filter = new ConfigurableTraceFilter();
-			filter.MethodMatch = MatchType.None;
-			filter.Method = string.Empty;
-			filter.StageMatch = MatchType.None;
-			filter.Stage = string.Empty;
-			filter.TypeMatch = MatchType.None;
-			filter.Type = string.Empty;
-			filter.ExcludeInternalMethods = true;
-
-			IInternalTrace internalTrace = new BasicInternalTrace();
-			internalTrace.TraceFilter = filter;
-
-			AotCompiler aot = new AotCompiler(compilerOptions.Architecture, typeSystem, typeLayout, internalTrace, compilerOptions);
+			AotCompiler aot = new AotCompiler(compilerOptions.Architecture, typeSystem, typeLayout, compilerTrace, compilerOptions);
 
 			var bootStage = compilerOptions.BootStageFactory != null ? compilerOptions.BootStageFactory() : null;
 

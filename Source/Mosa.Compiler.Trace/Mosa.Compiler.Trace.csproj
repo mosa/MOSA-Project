@@ -9,14 +9,14 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <AssemblyKeyContainerName>
     </AssemblyKeyContainerName>
-    <AssemblyName>Mosa.Compiler.InternalTrace</AssemblyName>
+    <AssemblyName>Mosa.Compiler.Trace</AssemblyName>
     <DefaultClientScript>JScript</DefaultClientScript>
     <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
     <DefaultTargetSchema>IE50</DefaultTargetSchema>
     <DelaySign>false</DelaySign>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <OutputType>Library</OutputType>
-    <RootNamespace>Mosa.Compiler.InternalTrace</RootNamespace>
+    <RootNamespace>Mosa.Compiler.Trace</RootNamespace>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <OldToolsVersion>3.5</OldToolsVersion>
@@ -48,7 +48,7 @@
     <ConfigurationOverrideFile>
     </ConfigurationOverrideFile>
     <DefineConstants>TRACE</DefineConstants>
-    <DocumentationFile>..\..\bin\Mosa.Compiler.InternalTrace.xml</DocumentationFile>
+    <DocumentationFile>..\..\bin\Mosa.Compiler.Trace.xml</DocumentationFile>
     <FileAlignment>4096</FileAlignment>
     <Optimize>true</Optimize>
     <OutputPath>..\..\bin\</OutputPath>
@@ -62,17 +62,16 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BasicCompilerEventListener.cs" />
-    <Compile Include="BasicInternalTrace.cs" />
+    <Compile Include="ConsoleEventListener.cs" />
+    <Compile Include="CompilerTrace.cs" />
     <Compile Include="CompilerEvent.cs" />
     <Compile Include="ConfigurableTraceFilter.cs" />
-    <Compile Include="CompilerTrace.cs" />
+    <Compile Include="SectionTrace.cs" />
     <Compile Include="DebugCompilerEventListener.cs" />
     <Compile Include="DebugTraceListener.cs" />
     <Compile Include="ICompilerEventListener.cs" />
     <Compile Include="ITraceFilter.cs" />
     <Compile Include="ITraceListener.cs" />
-    <Compile Include="IInternalTrace.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Mosa.Compiler.MosaTypeSystem\Mosa.Compiler.MosaTypeSystem.csproj">

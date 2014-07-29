@@ -20,7 +20,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 	{
 		private Dictionary<SlotIndex, MoveHint> moveHints;
 
-		public GreedyRegisterAllocator(BasicBlocks basicBlocks, VirtualRegisters compilerVirtualRegisters, InstructionSet instructionSet, StackLayout stackLayout, BaseArchitecture architecture, CompilerTrace trace)
+		public GreedyRegisterAllocator(BasicBlocks basicBlocks, VirtualRegisters compilerVirtualRegisters, InstructionSet instructionSet, StackLayout stackLayout, BaseArchitecture architecture, SectionTrace trace)
 			: base(basicBlocks, compilerVirtualRegisters, instructionSet, stackLayout, architecture, trace)
 		{
 		}
@@ -472,7 +472,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			if (!Trace.Active)
 				return;
 
-			var moveHintTrace = new CompilerTrace(Trace, "MoveHints");
+			var moveHintTrace = new SectionTrace(Trace, "MoveHints");
 
 			foreach (var moveHint in moveHints)
 			{

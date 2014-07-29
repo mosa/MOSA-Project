@@ -35,6 +35,8 @@
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Main));
 			this.statusStrip1 = new System.Windows.Forms.StatusStrip();
 			this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
+			this.toolStripProgressBar1 = new System.Windows.Forms.ToolStripProgressBar();
+			this.toolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
 			this.menuStrip1 = new System.Windows.Forms.MenuStrip();
 			this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -45,6 +47,7 @@
 			this.snippetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.showSizes = new System.Windows.Forms.ToolStripMenuItem();
+			this.displayShortName = new System.Windows.Forms.ToolStripMenuItem();
 			this.includeTestKorlibToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.enableSSAToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.enableSSAOptimizations = new System.Windows.Forms.ToolStripMenuItem();
@@ -68,7 +71,6 @@
 			this.toolStripButton4 = new System.Windows.Forms.ToolStripButton();
 			this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
 			this.cbPlatform = new System.Windows.Forms.ComboBox();
-			this.displayShortName = new System.Windows.Forms.ToolStripMenuItem();
 			label2 = new System.Windows.Forms.Label();
 			label1 = new System.Windows.Forms.Label();
 			stageLabel = new System.Windows.Forms.Label();
@@ -129,7 +131,9 @@
 			// statusStrip1
 			// 
 			this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripStatusLabel1});
+            this.toolStripStatusLabel1,
+            this.toolStripProgressBar1,
+            this.toolStripStatusLabel});
 			this.statusStrip1.Location = new System.Drawing.Point(0, 466);
 			this.statusStrip1.Name = "statusStrip1";
 			this.statusStrip1.Size = new System.Drawing.Size(811, 22);
@@ -140,6 +144,16 @@
 			// 
 			this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
 			this.toolStripStatusLabel1.Size = new System.Drawing.Size(0, 17);
+			// 
+			// toolStripProgressBar1
+			// 
+			this.toolStripProgressBar1.Name = "toolStripProgressBar1";
+			this.toolStripProgressBar1.Size = new System.Drawing.Size(200, 16);
+			// 
+			// toolStripStatusLabel
+			// 
+			this.toolStripStatusLabel.Name = "toolStripStatusLabel";
+			this.toolStripStatusLabel.Size = new System.Drawing.Size(0, 17);
 			// 
 			// menuStrip1
 			// 
@@ -228,6 +242,15 @@
 			this.showSizes.Text = "Show Sizes";
 			this.showSizes.Click += new System.EventHandler(this.showSizes_Click);
 			// 
+			// displayShortName
+			// 
+			this.displayShortName.Checked = true;
+			this.displayShortName.CheckOnClick = true;
+			this.displayShortName.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.displayShortName.Name = "displayShortName";
+			this.displayShortName.Size = new System.Drawing.Size(237, 22);
+			this.displayShortName.Text = "Display Short Name";
+			// 
 			// includeTestKorlibToolStripMenuItem
 			// 
 			this.includeTestKorlibToolStripMenuItem.CheckOnClick = true;
@@ -312,7 +335,7 @@
 			this.tabControl1.Location = new System.Drawing.Point(3, 3);
 			this.tabControl1.Name = "tabControl1";
 			this.tabControl1.SelectedIndex = 0;
-			this.tabControl1.Size = new System.Drawing.Size(537, 405);
+			this.tabControl1.Size = new System.Drawing.Size(534, 405);
 			this.tabControl1.TabIndex = 38;
 			// 
 			// tabPage1
@@ -328,7 +351,7 @@
 			this.tabPage1.Location = new System.Drawing.Point(4, 25);
 			this.tabPage1.Name = "tabPage1";
 			this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPage1.Size = new System.Drawing.Size(529, 376);
+			this.tabPage1.Size = new System.Drawing.Size(526, 376);
 			this.tabPage1.TabIndex = 0;
 			this.tabPage1.Text = "Instructions";
 			// 
@@ -390,7 +413,7 @@
 			this.tabPage2.Location = new System.Drawing.Point(4, 25);
 			this.tabPage2.Name = "tabPage2";
 			this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPage2.Size = new System.Drawing.Size(529, 376);
+			this.tabPage2.Size = new System.Drawing.Size(526, 376);
 			this.tabPage2.TabIndex = 1;
 			this.tabPage2.Text = "Debug";
 			// 
@@ -478,21 +501,11 @@
 			this.cbPlatform.FormattingEnabled = true;
 			this.cbPlatform.Items.AddRange(new object[] {
             "x86",
-            "ARMv6",
-            "AVR32"});
+            "ARMv6"});
 			this.cbPlatform.Location = new System.Drawing.Point(221, 27);
 			this.cbPlatform.Name = "cbPlatform";
 			this.cbPlatform.Size = new System.Drawing.Size(78, 21);
 			this.cbPlatform.TabIndex = 28;
-			// 
-			// displayShortName
-			// 
-			this.displayShortName.Checked = true;
-			this.displayShortName.CheckOnClick = true;
-			this.displayShortName.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.displayShortName.Name = "displayShortName";
-			this.displayShortName.Size = new System.Drawing.Size(237, 22);
-			this.displayShortName.Text = "Display Short Name";
 			// 
 			// Main
 			// 
@@ -565,5 +578,7 @@
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
 		private System.Windows.Forms.ToolStripMenuItem enableSSAOptimizations;
 		private System.Windows.Forms.ToolStripMenuItem displayShortName;
+		private System.Windows.Forms.ToolStripProgressBar toolStripProgressBar1;
+		private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel;
 	}
 }

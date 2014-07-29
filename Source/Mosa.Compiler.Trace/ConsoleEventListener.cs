@@ -8,14 +8,11 @@
  */
 
 using System;
-using System.Diagnostics;
 
 namespace Mosa.Compiler.InternalTrace
 {
-	public class BasicCompilerEventListener : ICompilerEventListener
+	public class ConsoleEventListener : ICompilerEventListener
 	{
-		public bool DebugOutput = false;
-		public bool ConsoleOutput = true;
 		public bool Quiet = true;
 
 		protected string supressed = null;
@@ -33,12 +30,6 @@ namespace Mosa.Compiler.InternalTrace
 
 		void ICompilerEventListener.SubmitTraceEvent(CompilerEvent compilerStage, string info)
 		{
-			if (DebugOutput)
-				Debug.WriteLine(compilerStage.ToString() + ": " + info);
-
-			if (!ConsoleOutput)
-				return;
-
 			switch (compilerStage)
 			{
 				case CompilerEvent.CompilingMethod:
@@ -115,5 +106,10 @@ namespace Mosa.Compiler.InternalTrace
 				default: break;
 			}
 		}
+
+		void ICompilerEventListener.SubmitMethodStatus(int totalMethods, int queuedMethods)
+		{
+		}
+
 	}
 }

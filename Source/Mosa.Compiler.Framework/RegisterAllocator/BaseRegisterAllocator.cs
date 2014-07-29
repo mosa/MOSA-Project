@@ -46,9 +46,9 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		private readonly List<SlotIndex> CallSlots;
 
-		protected readonly CompilerTrace Trace;
+		protected readonly SectionTrace Trace;
 
-		public BaseRegisterAllocator(BasicBlocks basicBlocks, VirtualRegisters compilerVirtualRegisters, InstructionSet instructionSet, StackLayout stackLayout, BaseArchitecture architecture, CompilerTrace trace)
+		public BaseRegisterAllocator(BasicBlocks basicBlocks, VirtualRegisters compilerVirtualRegisters, InstructionSet instructionSet, StackLayout stackLayout, BaseArchitecture architecture, SectionTrace trace)
 		{
 			this.Trace = trace;
 
@@ -175,7 +175,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			if (!Trace.Active)
 				return;
 
-			var sectionTrace = new CompilerTrace(Trace, "Extended Blocks");
+			var sectionTrace = new SectionTrace(Trace, "Extended Blocks");
 
 			foreach (var block in ExtendedBlocks)
 			{
@@ -192,7 +192,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			if (!Trace.Active)
 				return;
 
-			var registerTrace = new CompilerTrace(Trace, stage);
+			var registerTrace = new SectionTrace(Trace, stage);
 
 			foreach (var virtualRegister in VirtualRegisters)
 			{
@@ -319,7 +319,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			if (!Trace.Active)
 				return;
 
-			var number = new CompilerTrace(Trace, "InstructionNumber");
+			var number = new SectionTrace(Trace, "InstructionNumber");
 
 			int index = SlotIndex.Increment;
 
@@ -347,7 +347,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		private void ComputeLocalLiveSets()
 		{
-			var liveSetTrace = new CompilerTrace(Trace, "ComputeLocalLiveSets");
+			var liveSetTrace = new SectionTrace(Trace, "ComputeLocalLiveSets");
 
 			foreach (var block in ExtendedBlocks)
 			{
@@ -461,7 +461,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		private void BuildLiveIntervals()
 		{
-			var intervalTrace = new CompilerTrace(Trace, "BuildLiveIntervals");
+			var intervalTrace = new SectionTrace(Trace, "BuildLiveIntervals");
 
 			for (int b = BasicBlocks.Count - 1; b >= 0; b--)
 			{
@@ -1125,7 +1125,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		protected void ResolveDataFlow()
 		{
-			var resolverTrace = new CompilerTrace(Trace, "ResolveDataFlow");
+			var resolverTrace = new SectionTrace(Trace, "ResolveDataFlow");
 
 			MoveResolver[,] moveResolvers = new MoveResolver[2, BasicBlocks.Count];
 
@@ -1207,7 +1207,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		protected void InsertRegisterMoves()
 		{
-			var insertTrace = new CompilerTrace(Trace, "InsertRegisterMoves");
+			var insertTrace = new SectionTrace(Trace, "InsertRegisterMoves");
 
 			var moves = GetRegisterMoves();
 

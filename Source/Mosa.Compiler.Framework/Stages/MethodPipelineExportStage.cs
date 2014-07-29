@@ -8,13 +8,12 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-using Mosa.Compiler.Framework;
 using Mosa.Compiler.InternalTrace;
 using Mosa.Compiler.MosaTypeSystem;
 using System;
 using System.IO;
 
-namespace Mosa.Tool.Compiler.Stages
+namespace Mosa.Compiler.Framework.Stages
 {
 	/// <summary>
 	/// An compilation stage, which exports each method pipeline stage
@@ -64,8 +63,8 @@ namespace Mosa.Tool.Compiler.Stages
 				filter.StageMatch = MatchType.Contains;
 				filter.Stage = "CodeGen";
 
-				Compiler.InternalTrace.TraceFilter = filter;
-				Compiler.InternalTrace.TraceListener = this;
+				Compiler.CompilerTrace.TraceFilter = filter;
+				Compiler.CompilerTrace.TraceListener = this;
 
 				Directory.CreateDirectory(MethodPipelineExportDirectory);
 			}

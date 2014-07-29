@@ -16,7 +16,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 	/// </summary>
 	public class BasicRegisterAllocator : BaseRegisterAllocator
 	{
-		public BasicRegisterAllocator(BasicBlocks basicBlocks, VirtualRegisters compilerVirtualRegisters, InstructionSet instructionSet, StackLayout stackLayout, BaseArchitecture architecture, CompilerTrace trace)
+		public BasicRegisterAllocator(BasicBlocks basicBlocks, VirtualRegisters compilerVirtualRegisters, InstructionSet instructionSet, StackLayout stackLayout, BaseArchitecture architecture, SectionTrace trace)
 			: base(basicBlocks, compilerVirtualRegisters, instructionSet, stackLayout, architecture, trace)
 		{
 		}

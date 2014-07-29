@@ -17,5 +17,9 @@ namespace Mosa.Compiler.InternalTrace
 		{
 			Debug.WriteLine(compilerStage.ToString() + ": " + info);
 		}
+
+		void ICompilerEventListener.SubmitMethodStatus(int totalMethods, int queuedMethods)
+		{
+		}
 	}
 }

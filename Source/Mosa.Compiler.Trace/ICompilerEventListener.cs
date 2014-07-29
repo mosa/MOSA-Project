@@ -9,12 +9,10 @@
 
 namespace Mosa.Compiler.InternalTrace
 {
-	public interface IInternalTrace
+	public interface ICompilerEventListener
 	{
-		ITraceListener TraceListener { get; set; }
+		void SubmitTraceEvent(CompilerEvent compilerStage, string info);
 
-		ITraceFilter TraceFilter { get; set; }
-
-		ICompilerEventListener CompilerEventListener { get; set; }
+		void SubmitMethodStatus(int totalMethods, int queuedMethods);
 	}
 }

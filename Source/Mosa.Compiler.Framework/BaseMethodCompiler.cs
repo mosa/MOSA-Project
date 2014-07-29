@@ -65,7 +65,7 @@ namespace Mosa.Compiler.Framework
 			this.Architecture = compiler.Architecture;
 			this.TypeSystem = compiler.TypeSystem;
 			this.TypeLayout = Compiler.TypeLayout;
-			this.InternalTrace = Compiler.InternalTrace;
+			this.InternalTrace = Compiler.CompilerTrace;
 			this.Linker = compiler.Linker;
 			this.BasicBlocks = basicBlocks ?? new BasicBlocks();
 			this.InstructionSet = instructionSet ?? new InstructionSet(256);
@@ -145,7 +145,7 @@ namespace Mosa.Compiler.Framework
 		/// Gets the internal logging interface
 		/// </summary>
 		/// <value>The log.</value>
-		public IInternalTrace InternalTrace { get; private set; }
+		public CompilerTrace InternalTrace { get; private set; }
 
 		/// <summary>
 		/// Gets the local variables.

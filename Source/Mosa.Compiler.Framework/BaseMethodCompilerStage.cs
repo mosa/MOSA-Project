@@ -379,14 +379,14 @@ namespace Mosa.Compiler.Framework
 
 		#region Trace Helper Methods
 
-		public CompilerTrace CreateTrace()
+		public SectionTrace CreateTrace()
 		{
-			return new CompilerTrace(this.MethodCompiler.InternalTrace, this.MethodCompiler.Method, this.MethodCompiler.FormatStageName(this as IPipelineStage));
+			return new SectionTrace(this.MethodCompiler.InternalTrace, this.MethodCompiler.Method, this.MethodCompiler.FormatStageName(this as IPipelineStage));
 		}
 
-		public CompilerTrace CreateTrace(string section)
+		public SectionTrace CreateTrace(string section)
 		{
-			return new CompilerTrace(this.MethodCompiler.InternalTrace, this.MethodCompiler.Method, this.MethodCompiler.FormatStageName(this as IPipelineStage), section);
+			return new SectionTrace(this.MethodCompiler.InternalTrace, this.MethodCompiler.Method, this.MethodCompiler.FormatStageName(this as IPipelineStage), section);
 		}
 
 		#endregion Trace Helper Methods

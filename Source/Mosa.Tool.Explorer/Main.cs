@@ -24,7 +24,7 @@ namespace Mosa.Tool.Explorer
 	public partial class Main : Form, ICompilerEventListener, ITraceListener
 	{
 		private CodeForm form = new CodeForm();
-		private IInternalTrace internalTrace = new BasicInternalTrace();
+		private CompilerTrace compilerTrace = new CompilerTrace();
 		private MosaModuleLoader assemblyLoader;
 		private TypeSystem typeSystem;
 		private ConfigurableTraceFilter filter = new ConfigurableTraceFilter();
@@ -48,20 +48,26 @@ namespace Mosa.Tool.Explorer
 		public Main()
 		{
 			InitializeComponent();
-			internalTrace.CompilerEventListener = this;
-			internalTrace.TraceListener = this;
-			internalTrace.TraceFilter = filter;
+			compilerTrace.CompilerEventListener = this;
+			compilerTrace.TraceListener = this;
+			compilerTrace.TraceFilter = filter;
 
+			filter.Active = true;
 			filter.ExcludeInternalMethods = false;
 			filter.MethodMatch = MatchType.Any;
 			filter.StageMatch = MatchType.Exclude;
 			filter.Stage = "PlatformStubStage|ExceptionLayoutStage|DominanceCalculationStage|CodeGenerationStage";
 		}
 
+		private void SetStatus(string status)
+		{
+			toolStripStatusLabel.Text = status;
+		}
+
 		private void Main_Load(object sender, EventArgs e)
 		{
 			cbPlatform.SelectedIndex = 0;
-			statusStrip1.Text = "Ready!";
+			SetStatus("Ready!");
 		}
 
 		private void openToolStripMenuItem_Click(object sender, EventArgs e)
@@ -91,7 +97,7 @@ namespace Mosa.Tool.Explorer
 
 			LoadAssembly(filename, includeTestKorlibToolStripMenuItem.Checked, cbPlatform.Text);
 
-			toolStripStatusLabel1.Text = "Assemblies Loaded!";
+			SetStatus("Assemblies Loaded!");
 		}
 
 		protected void UpdateTree()
@@ -118,7 +124,7 @@ namespace Mosa.Tool.Explorer
 		{
 			if (compilerStage != CompilerEvent.DebugInfo)
 			{
-				toolStripStatusLabel1.Text = compilerStage.ToText() + ": " + info;
+				SetStatus(compilerStage.ToText() + ": " + info);
 				toolStripStatusLabel1.GetCurrentParent().Refresh();
 			}
 
@@ -181,13 +187,13 @@ namespace Mosa.Tool.Explorer
 
 			CreateTypeSystemAndLayout();
 
-			ExplorerCompiler.Compile(typeSystem, typeLayout, internalTrace, cbPlatform.Text, enableSSAToolStripMenuItem.Checked, enableSSAOptimizations.Checked, enableBinaryCodeGenerationToolStripMenuItem.Checked);
+			ExplorerCompiler.Compile(typeSystem, typeLayout, compilerTrace, cbPlatform.Text, enableSSAToolStripMenuItem.Checked, enableSSAOptimizations.Checked, enableBinaryCodeGenerationToolStripMenuItem.Checked);
 
 			tabControl1.SelectedTab = tabPage1;
 			rbOtherResult.Text = compileLog.ToString();
 			UpdateTree();
 
-			toolStripStatusLabel1.Text = "Compiled!";
+			SetStatus("Compiled!");
 		}
 
 		private static BaseArchitecture GetArchitecture(string platform)
@@ -508,7 +514,7 @@ namespace Mosa.Tool.Explorer
 		private void cbLabels_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			tbResult.Text = string.Empty;
-			toolStripStatusLabel1.Text = string.Empty;
+			SetStatus(string.Empty);
 
 			if (currentInstructionLog == null)
 				return;
@@ -518,7 +524,7 @@ namespace Mosa.Tool.Explorer
 			if (node == null)
 				return;
 
-			toolStripStatusLabel1.Text = node.Type.FullName;
+			SetStatus(node.Type.FullName);
 
 			if (cbLabels.SelectedIndex == 0)
 			{
@@ -564,6 +570,12 @@ namespace Mosa.Tool.Explorer
 		private void toolStripButton4_Click(object sender, EventArgs e)
 		{
 			Compile();
+		}
+
+		void ICompilerEventListener.SubmitMethodStatus(int totalMethods, int queuedMethods)
+		{
+			toolStripProgressBar1.Maximum = totalMethods;
+			toolStripProgressBar1.Value = totalMethods - queuedMethods;
 		}
 	}
 }

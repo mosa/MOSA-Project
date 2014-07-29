@@ -143,7 +143,6 @@ namespace Mosa.Platform.ARMv6.Stages
 		/// <param name="context">The context.</param>
 		void IIRVisitor.LogicalXor(Context context)
 		{
-
 		}
 
 		/// <summary>
@@ -441,9 +440,5 @@ namespace Mosa.Platform.ARMv6.Stages
 		}
 
 		#endregion IIRVisitor - Unused
-
-		#region Internals
-
-		#endregion Internals
 	}
 }

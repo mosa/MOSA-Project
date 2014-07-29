@@ -13,6 +13,7 @@ namespace Mosa.Compiler.InternalTrace
 {
 	public interface ITraceFilter
 	{
+		bool Active { get; set; }
 		bool IsMatch(MosaMethod method, string stage);
 	}
 }

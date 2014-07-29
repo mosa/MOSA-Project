@@ -21,7 +21,7 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 	{
 		protected BaseTestPlatform platform;
 		protected ConfigurableTraceFilter filter = new ConfigurableTraceFilter();
-		protected IInternalTrace internalTrace = new BasicInternalTrace();
+		protected CompilerTrace compilerTrace = new CompilerTrace();
 		protected ISimAdapter adapter;
 		protected ISimAdapter simAdapter;
 		protected BaseArchitecture architecture;
@@ -41,7 +41,7 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 			this.platform = platform;
 
 			filter.MethodMatch = MatchType.None;
-			internalTrace.TraceFilter = filter;
+			compilerTrace.TraceFilter = filter;
 			EnableSSA = true;
 			EnableSSAOptimizations = true;
 
@@ -75,7 +75,7 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 
 			platform.InitializeSimulation(simAdapter);
 
-			simCompiler = SimCompiler.Compile(typeSystem, typeLayout, internalTrace, EnableSSA, architecture, simAdapter, linker);
+			simCompiler = SimCompiler.Compile(typeSystem, typeLayout, compilerTrace, EnableSSA, architecture, simAdapter, linker);
 
 			//simAdapter.SimCPU.Monitor.DebugOutput = true; // DEBUG OPTION
 
