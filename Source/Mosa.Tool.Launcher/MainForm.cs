@@ -100,6 +100,7 @@ namespace Mosa.Tool.Launcher
 			cbEmulator.SelectedIndex = 0;
 			cbBootFormat.SelectedIndex = 0;
 			cbBootFileSystem.SelectedIndex = 0;
+			tabControl1.SelectedTab = tabPage1;
 		}
 
 		/// <summary>

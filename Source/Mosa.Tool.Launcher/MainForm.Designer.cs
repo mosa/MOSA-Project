@@ -235,6 +235,7 @@
 			this.btnSource.TabIndex = 18;
 			this.btnSource.Text = "Source:";
 			this.btnSource.UseVisualStyleBackColor = true;
+			this.btnSource.Click += new System.EventHandler(this.btnSource_Click);
 			// 
 			// lbSource
 			// 
@@ -342,6 +343,7 @@
 			this.btnDestination.TabIndex = 17;
 			this.btnDestination.Text = "Destination:";
 			this.btnDestination.UseVisualStyleBackColor = true;
+			this.btnDestination.Click += new System.EventHandler(this.btnDestination_Click);
 			// 
 			// cbImageFormat
 			// 
@@ -371,9 +373,9 @@
 			this.lbDestinationDirectory.AutoSize = true;
 			this.lbDestinationDirectory.Location = new System.Drawing.Point(119, 23);
 			this.lbDestinationDirectory.Name = "lbDestinationDirectory";
-			this.lbDestinationDirectory.Size = new System.Drawing.Size(68, 13);
+			this.lbDestinationDirectory.Size = new System.Drawing.Size(113, 13);
 			this.lbDestinationDirectory.TabIndex = 14;
-			this.lbDestinationDirectory.Text = "{Destination}";
+			this.lbDestinationDirectory.Text = "{Destination Directory}";
 			// 
 			// label3
 			// 
