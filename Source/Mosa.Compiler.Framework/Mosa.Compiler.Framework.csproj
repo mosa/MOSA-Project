@@ -80,7 +80,7 @@
     <Compile Include="Analysis\NaturalBlockOrder.cs" />
     <Compile Include="Analysis\ReverseBlockOrder.cs" />
     <Compile Include="Analysis\SimpleTraceBlockOrder.cs" />
-    <Compile Include="DominanceAnalysis.cs" />
+    <Compile Include="Analysis\Dominance.cs" />
     <Compile Include="Analysis\IDominanceAnalysis.cs" />
     <Compile Include="BaseCallingConventionExtended.cs" />
     <Compile Include="DelegatePatcher.cs" />
