@@ -62,10 +62,21 @@
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
 			this.cbEnableSSAOptimizations = new System.Windows.Forms.CheckBox();
 			this.cbEnableSSA = new System.Windows.Forms.CheckBox();
+			this.tabPage4 = new System.Windows.Forms.TabPage();
+			this.groupBox8 = new System.Windows.Forms.GroupBox();
+			this.button5 = new System.Windows.Forms.Button();
+			this.lbNDISASMExecutable = new System.Windows.Forms.Label();
+			this.groupBox7 = new System.Windows.Forms.GroupBox();
+			this.lbQEMUBIOSDirectory = new System.Windows.Forms.Label();
+			this.button3 = new System.Windows.Forms.Button();
+			this.button2 = new System.Windows.Forms.Button();
+			this.lbQEMUExecutable = new System.Windows.Forms.Label();
 			this.tabPage2 = new System.Windows.Forms.TabPage();
 			this.richTextBox1 = new System.Windows.Forms.RichTextBox();
 			this.tabPage3 = new System.Windows.Forms.TabPage();
 			this.richTextBox2 = new System.Windows.Forms.RichTextBox();
+			this.openFileDialog2 = new System.Windows.Forms.OpenFileDialog();
+			this.cbExitOnLaunch = new System.Windows.Forms.CheckBox();
 			this.tabControl1.SuspendLayout();
 			this.tabPage1.SuspendLayout();
 			this.groupBox6.SuspendLayout();
@@ -74,6 +85,9 @@
 			this.groupBox3.SuspendLayout();
 			this.groupBox2.SuspendLayout();
 			this.groupBox1.SuspendLayout();
+			this.tabPage4.SuspendLayout();
+			this.groupBox8.SuspendLayout();
+			this.groupBox7.SuspendLayout();
 			this.tabPage2.SuspendLayout();
 			this.tabPage3.SuspendLayout();
 			this.SuspendLayout();
@@ -100,6 +114,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.tabControl1.Appearance = System.Windows.Forms.TabAppearance.FlatButtons;
 			this.tabControl1.Controls.Add(this.tabPage1);
+			this.tabControl1.Controls.Add(this.tabPage4);
 			this.tabControl1.Controls.Add(this.tabPage2);
 			this.tabControl1.Controls.Add(this.tabPage3);
 			this.tabControl1.ItemSize = new System.Drawing.Size(48, 18);
@@ -127,12 +142,13 @@
 			this.tabPage1.Name = "tabPage1";
 			this.tabPage1.Size = new System.Drawing.Size(672, 345);
 			this.tabPage1.TabIndex = 0;
-			this.tabPage1.Text = "Options";
+			this.tabPage1.Text = "MOSA Options";
 			// 
 			// groupBox6
 			// 
 			this.groupBox6.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBox6.Controls.Add(this.cbExitOnLaunch);
 			this.groupBox6.Controls.Add(this.cbEmulator);
 			this.groupBox6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.groupBox6.Location = new System.Drawing.Point(428, 212);
@@ -184,6 +200,7 @@
 			// checkBox6
 			// 
 			this.checkBox6.AutoSize = true;
+			this.checkBox6.Enabled = false;
 			this.checkBox6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.checkBox6.Location = new System.Drawing.Point(6, 25);
 			this.checkBox6.Name = "checkBox6";
@@ -414,6 +431,8 @@
 			// cbGenerateASMFile
 			// 
 			this.cbGenerateASMFile.AutoSize = true;
+			this.cbGenerateASMFile.Checked = true;
+			this.cbGenerateASMFile.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.cbGenerateASMFile.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.cbGenerateASMFile.Location = new System.Drawing.Point(6, 42);
 			this.cbGenerateASMFile.Name = "cbGenerateASMFile";
@@ -473,6 +492,102 @@
 			this.cbEnableSSA.Text = "Enable Static Single Assignment (SSA)";
 			this.cbEnableSSA.UseVisualStyleBackColor = true;
 			// 
+			// tabPage4
+			// 
+			this.tabPage4.Controls.Add(this.groupBox8);
+			this.tabPage4.Controls.Add(this.groupBox7);
+			this.tabPage4.Location = new System.Drawing.Point(4, 22);
+			this.tabPage4.Name = "tabPage4";
+			this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
+			this.tabPage4.Size = new System.Drawing.Size(672, 345);
+			this.tabPage4.TabIndex = 3;
+			this.tabPage4.Text = "Application Settings";
+			this.tabPage4.UseVisualStyleBackColor = true;
+			// 
+			// groupBox8
+			// 
+			this.groupBox8.Controls.Add(this.button5);
+			this.groupBox8.Controls.Add(this.lbNDISASMExecutable);
+			this.groupBox8.Location = new System.Drawing.Point(8, 17);
+			this.groupBox8.Name = "groupBox8";
+			this.groupBox8.Size = new System.Drawing.Size(654, 50);
+			this.groupBox8.TabIndex = 1;
+			this.groupBox8.TabStop = false;
+			this.groupBox8.Text = "NDISASM:";
+			// 
+			// button5
+			// 
+			this.button5.Enabled = false;
+			this.button5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.button5.Location = new System.Drawing.Point(6, 19);
+			this.button5.Name = "button5";
+			this.button5.Size = new System.Drawing.Size(106, 23);
+			this.button5.TabIndex = 20;
+			this.button5.Text = "Executable:";
+			this.button5.UseVisualStyleBackColor = true;
+			// 
+			// lbNDISASMExecutable
+			// 
+			this.lbNDISASMExecutable.AutoSize = true;
+			this.lbNDISASMExecutable.Location = new System.Drawing.Point(118, 24);
+			this.lbNDISASMExecutable.Name = "lbNDISASMExecutable";
+			this.lbNDISASMExecutable.Size = new System.Drawing.Size(120, 13);
+			this.lbNDISASMExecutable.TabIndex = 19;
+			this.lbNDISASMExecutable.Text = "{NDISASM Executable}";
+			// 
+			// groupBox7
+			// 
+			this.groupBox7.Controls.Add(this.lbQEMUBIOSDirectory);
+			this.groupBox7.Controls.Add(this.button3);
+			this.groupBox7.Controls.Add(this.button2);
+			this.groupBox7.Controls.Add(this.lbQEMUExecutable);
+			this.groupBox7.Location = new System.Drawing.Point(8, 82);
+			this.groupBox7.Name = "groupBox7";
+			this.groupBox7.Size = new System.Drawing.Size(654, 88);
+			this.groupBox7.TabIndex = 0;
+			this.groupBox7.TabStop = false;
+			this.groupBox7.Text = "QEMU:";
+			// 
+			// lbQEMUBIOSDirectory
+			// 
+			this.lbQEMUBIOSDirectory.AutoSize = true;
+			this.lbQEMUBIOSDirectory.Location = new System.Drawing.Point(118, 53);
+			this.lbQEMUBIOSDirectory.Name = "lbQEMUBIOSDirectory";
+			this.lbQEMUBIOSDirectory.Size = new System.Drawing.Size(120, 13);
+			this.lbQEMUBIOSDirectory.TabIndex = 22;
+			this.lbQEMUBIOSDirectory.Text = "{QEMU BIOS Directory}";
+			// 
+			// button3
+			// 
+			this.button3.Enabled = false;
+			this.button3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.button3.Location = new System.Drawing.Point(6, 48);
+			this.button3.Name = "button3";
+			this.button3.Size = new System.Drawing.Size(106, 23);
+			this.button3.TabIndex = 21;
+			this.button3.Text = "BIOS Directory:";
+			this.button3.UseVisualStyleBackColor = true;
+			// 
+			// button2
+			// 
+			this.button2.Enabled = false;
+			this.button2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.button2.Location = new System.Drawing.Point(6, 19);
+			this.button2.Name = "button2";
+			this.button2.Size = new System.Drawing.Size(106, 23);
+			this.button2.TabIndex = 20;
+			this.button2.Text = "Executable:";
+			this.button2.UseVisualStyleBackColor = true;
+			// 
+			// lbQEMUExecutable
+			// 
+			this.lbQEMUExecutable.AutoSize = true;
+			this.lbQEMUExecutable.Location = new System.Drawing.Point(118, 24);
+			this.lbQEMUExecutable.Name = "lbQEMUExecutable";
+			this.lbQEMUExecutable.Size = new System.Drawing.Size(103, 13);
+			this.lbQEMUExecutable.TabIndex = 19;
+			this.lbQEMUExecutable.Text = "{QEMU Executable}";
+			// 
 			// tabPage2
 			// 
 			this.tabPage2.Controls.Add(this.richTextBox1);
@@ -523,6 +638,24 @@
 			this.richTextBox2.Text = "";
 			this.richTextBox2.WordWrap = false;
 			// 
+			// openFileDialog2
+			// 
+			this.openFileDialog2.DefaultExt = "*.exe";
+			this.openFileDialog2.Filter = "Executable|*.exe";
+			this.openFileDialog2.Title = "Select Assembly";
+			// 
+			// cbExitOnLaunch
+			// 
+			this.cbExitOnLaunch.AutoSize = true;
+			this.cbExitOnLaunch.Enabled = false;
+			this.cbExitOnLaunch.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.cbExitOnLaunch.Location = new System.Drawing.Point(10, 52);
+			this.cbExitOnLaunch.Name = "cbExitOnLaunch";
+			this.cbExitOnLaunch.Size = new System.Drawing.Size(97, 17);
+			this.cbExitOnLaunch.TabIndex = 22;
+			this.cbExitOnLaunch.Text = "Exit on Launch";
+			this.cbExitOnLaunch.UseVisualStyleBackColor = true;
+			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -537,6 +670,7 @@
 			this.tabControl1.ResumeLayout(false);
 			this.tabPage1.ResumeLayout(false);
 			this.groupBox6.ResumeLayout(false);
+			this.groupBox6.PerformLayout();
 			this.groupBox5.ResumeLayout(false);
 			this.groupBox5.PerformLayout();
 			this.groupBox4.ResumeLayout(false);
@@ -547,6 +681,11 @@
 			this.groupBox2.PerformLayout();
 			this.groupBox1.ResumeLayout(false);
 			this.groupBox1.PerformLayout();
+			this.tabPage4.ResumeLayout(false);
+			this.groupBox8.ResumeLayout(false);
+			this.groupBox8.PerformLayout();
+			this.groupBox7.ResumeLayout(false);
+			this.groupBox7.PerformLayout();
 			this.tabPage2.ResumeLayout(false);
 			this.tabPage3.ResumeLayout(false);
 			this.ResumeLayout(false);
@@ -593,5 +732,16 @@
 		private System.Windows.Forms.RichTextBox richTextBox1;
 		private System.Windows.Forms.TabPage tabPage3;
 		private System.Windows.Forms.RichTextBox richTextBox2;
+		private System.Windows.Forms.TabPage tabPage4;
+		private System.Windows.Forms.GroupBox groupBox7;
+		private System.Windows.Forms.Label lbQEMUBIOSDirectory;
+		private System.Windows.Forms.Button button3;
+		private System.Windows.Forms.Button button2;
+		private System.Windows.Forms.Label lbQEMUExecutable;
+		private System.Windows.Forms.OpenFileDialog openFileDialog2;
+		private System.Windows.Forms.GroupBox groupBox8;
+		private System.Windows.Forms.Button button5;
+		private System.Windows.Forms.Label lbNDISASMExecutable;
+		private System.Windows.Forms.CheckBox cbExitOnLaunch;
 	}
 }
