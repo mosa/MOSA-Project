@@ -149,6 +149,7 @@
     <Compile Include="Stages\EdgeSplitStage.cs" />
     <Compile Include="Stages\TypeInitializerSchedulerStage.cs" />
     <Compile Include="MosaTypeLayout.cs" />
+    <Compile Include="Stages\UnboxValueTypeStage.cs" />
     <Compile Include="VirtualRegisters.cs" />
     <Compile Include="BaseCodeEmitter.cs" />
     <Compile Include="BaseInstruction.cs" />

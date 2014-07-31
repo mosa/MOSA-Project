@@ -320,7 +320,11 @@ namespace Mosa.Compiler.Framework.Stages
 			// 1. Number of Interface Methods
 			writer1.Write((uint)interfaceMethodTable.Length);
 
-			// 2. Pointers to Method Definitions
+			// 2. Pointer to Interface Type
+			Linker.Link(LinkType.AbsoluteAddress, BuiltInPatch.I4, interfaceMethodTableSymbol, (int)writer1.Position, 0, interfaceType.FullName + Metadata.TypeDefinition, SectionKind.ROData, 0);
+			writer1.WriteZeroBytes(TypeLayout.NativePointerSize);
+
+			// 3. Pointers to Method Definitions
 			foreach (MosaMethod method in interfaceMethodTable)
 			{
 				// Create definition and get the symbol

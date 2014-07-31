@@ -22,9 +22,11 @@ namespace Mosa.TestWorld.x86.Tests
 		public static bool FindTypeByNameTest()
 		{
 			Type bootType = typeof(System.String);
+			if (bootType == null)
+				return false;
 			Type foundType = Type.GetType("System.String");
-			//if (foundType == null) // Need to wait until the register allocator bug is fixed
-			//	return false;
+			if (foundType == null)
+				return false;
 			return bootType.Equals(foundType);
 		}
 	}

@@ -1,10 +1,11 @@
 /*
- * (c) 2008 MOSA - The Managed Operating System Alliance
+ * (c) 2014 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
  *  Kai P. Reisert <kpreisert@googlemail.com>
+ *  Stefan Andres Charsley (charsleysa) <charsleysa@gmail.com>
  */
 
 using Mosa.Compiler.Common;
@@ -54,13 +55,11 @@ namespace Mosa.Compiler.Framework.Stages
 			// Allocate a linker symbol to refer to this allocation. Use the destination field name as the linker symbol name.
 			var symbolName = MethodCompiler.Linker.CreateSymbol(assignment.MosaField.FullName + @"<<$cctor", SectionKind.ROData, Architecture.NativeAlignment, typeSize);
 
-			// FIXME: Do we have to initialize this?
+			// Try to get typeDefinitionSymbol if allocatedType isn't a value type
 			string typeDefinitionSymbol = GetTypeDefinition(allocatedType);
 
 			if (typeDefinitionSymbol != null)
-			{
 				MethodCompiler.Linker.Link(LinkType.AbsoluteAddress, BuiltInPatch.I4, symbolName, 0, 0, typeDefinitionSymbol, SectionKind.ROData, 0);
-			}
 
 			// Issue a load request before the newobj and before the assignment.
 			Operand symbol1 = InsertLoadBeforeInstruction(allocation, symbolName.Name, assignment.MosaField.FieldType);
@@ -87,10 +86,7 @@ namespace Mosa.Compiler.Framework.Stages
 		private string GetTypeDefinition(MosaType allocatedType)
 		{
 			if (!allocatedType.IsValueType)
-			{
 				return allocatedType.FullName + Metadata.TypeDefinition;
-			}
-
 			return null;
 		}
 

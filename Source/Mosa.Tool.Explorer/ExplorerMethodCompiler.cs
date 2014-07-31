@@ -38,6 +38,7 @@ namespace Mosa.Tool.Explorer
 				new StaticAllocationResolutionStage(),
 				new CILTransformationStage(),
 				new ConvertCompoundStage(),
+				new UnboxValueTypeStage(),
 				//new PromoteLocalVariablesStage(),
 
 				(compilerOptions.EnableSSA) ? new EdgeSplitStage() : null,

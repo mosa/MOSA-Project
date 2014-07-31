@@ -1,11 +1,12 @@
 /*
- * (c) 2008 MOSA - The Managed Operating System Alliance
+ * (c) 2014 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
+ *  Stefan Andres Charsley (charsleysa) <charsleysa@gmail.com>
  */
 
 using Mosa.Compiler.Common;
@@ -162,19 +163,23 @@ namespace Mosa.Compiler.Framework.Stages
 			// TODO: remove VmCall.GetHandleForToken?
 
 			Operand source;
+			Operand runtimeHandle;
 			if (context.MosaType != null)
 			{
-				source = Operand.CreateManagedSymbol(TypeSystem, TypeSystem.GetTypeByName("System", "RuntimeTypeHandle"), context.MosaType.FullName + Metadata.TypeDefinition);
+				source = Operand.CreateUnmanagedSymbolPointer(TypeSystem, context.MosaType.FullName + Metadata.TypeDefinition);
+				runtimeHandle = MethodCompiler.StackLayout.AddStackLocal(TypeSystem.GetTypeByName("System", "RuntimeTypeHandle"));
 			}
 			else if (context.MosaField != null)
 			{
-				source = Operand.CreateManagedSymbol(TypeSystem, TypeSystem.GetTypeByName("System", "RuntimeFieldHandle"), context.MosaField.FullName + Metadata.FieldDefinition);
+				source = Operand.CreateUnmanagedSymbolPointer(TypeSystem, context.MosaField.FullName + Metadata.FieldDefinition);
+				runtimeHandle = MethodCompiler.StackLayout.AddStackLocal(TypeSystem.GetTypeByName("System", "RuntimeFieldHandle"));
 			}
 			else
 				throw new NotImplementCompilerException();
 
 			Operand destination = context.Result;
-			context.SetInstruction(IRInstruction.Move, destination, source);
+			context.SetInstruction(IRInstruction.Move, runtimeHandle, source);
+			context.AppendInstruction(IRInstruction.Move, destination, runtimeHandle);
 		}
 
 		/// <summary>
@@ -445,10 +450,6 @@ namespace Mosa.Compiler.Framework.Stages
 					context.AppendInstruction(IRInstruction.Load, methodPtr, methodDefinition, Operand.CreateConstantSignedInt(TypeSystem, (int)methodPointerOffset));
 				}
 
-				// If the method is delcared by a valuetype then we need the this pointer to point to the value in the box
-				if (method.DeclaringType.IsValueType)
-					context.AppendInstruction(IRInstruction.AddUnsigned, operands[0], operands[0], Operand.CreateConstantSignedInt(TypeSystem, NativePointerSize * 2));
-
 				context.AppendInstruction(IRInstruction.Nop);
 				ProcessInvokeInstruction(context, method, methodPtr, resultOperand, operands);
 			}
@@ -502,7 +503,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			ReplaceWithVmCall(context, VmCall.AllocateArray);
 
-			context.SetOperand(1, GetTypeDefinitionSymbol(arrayType));
+			context.SetOperand(1, GetRuntimeTypeHandle(arrayType, context));
 			context.SetOperand(2, Operand.CreateConstantSignedInt(TypeSystem, (int)elementSize));
 			context.SetOperand(3, lengthOperand);
 			context.OperandCount = 4;
@@ -524,9 +525,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			ReplaceWithVmCall(before, VmCall.AllocateObject);
 
-			Operand typeDefinitionSymbol = GetTypeDefinitionSymbol(classType);
-
-			before.SetOperand(1, typeDefinitionSymbol);
+			before.SetOperand(1, GetRuntimeTypeHandle(classType, before));
 			before.SetOperand(2, Operand.CreateConstantSignedInt(TypeSystem, TypeLayout.GetTypeSize(classType)));
 			before.OperandCount = 3;
 			before.Result = thisReference;
@@ -538,9 +537,15 @@ namespace Mosa.Compiler.Framework.Stages
 			ProcessInvokeInstruction(context, context.MosaMethod, null, operands);
 		}
 
-		private Operand GetTypeDefinitionSymbol(MosaType runtimeType)
+		private Operand GetRuntimeTypeHandle(MosaType runtimeType, Context context)
 		{
-			return Operand.CreateUnmanagedSymbolPointer(TypeSystem, runtimeType.FullName + Metadata.TypeDefinition);
+			var typeDef = Operand.CreateUnmanagedSymbolPointer(TypeSystem, runtimeType.FullName + Metadata.TypeDefinition);
+			var runtimeTypeHandle = MethodCompiler.StackLayout.AddStackLocal(TypeSystem.GetTypeByName("System", "RuntimeTypeHandle"));
+			var runtimeTypeHandlePtr = MethodCompiler.CreateVirtualRegister(TypeSystem.BuiltIn.Pointer);
+			var before = context.InsertBefore();
+			before.SetInstruction(IRInstruction.Move, runtimeTypeHandle, typeDef);
+			before.AppendInstruction(IRInstruction.AddressOf, runtimeTypeHandlePtr, runtimeTypeHandle);
+			return runtimeTypeHandlePtr;
 		}
 
 		/// <summary>
@@ -564,13 +569,12 @@ namespace Mosa.Compiler.Framework.Stages
 			Operand result = context.Result;
 
 			MosaType classType = result.Type;
-			Operand typeDefinitionSymbol = GetTypeDefinitionSymbol(classType);
 
 			if (!classType.IsInterface)
 			{
 				ReplaceWithVmCall(context, VmCall.IsInstanceOfType);
 
-				context.SetOperand(1, typeDefinitionSymbol);
+				context.SetOperand(1, GetRuntimeTypeHandle(classType, context));
 				context.SetOperand(2, reference);
 				context.OperandCount = 3;
 				context.ResultCount = 1;
@@ -612,8 +616,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 			context.SetInstruction(IRInstruction.Nop);
 			ReplaceWithVmCall(context, vmCall);
-
-			var typeDefinitionSymbol = GetTypeDefinitionSymbol(type);
 
 			context.SetOperand(1, value);
 			if (vmCall == VmCall.Unbox)
@@ -670,9 +672,7 @@ namespace Mosa.Compiler.Framework.Stages
 			context.SetInstruction(IRInstruction.Nop);
 			ReplaceWithVmCall(context, vmCall);
 
-			var typeDefinitionSymbol = GetTypeDefinitionSymbol(type);
-
-			context.SetOperand(1, typeDefinitionSymbol);
+			context.SetOperand(1, GetRuntimeTypeHandle(type, context));
 			if (vmCall == VmCall.Box)
 			{
 				Operand adr = MethodCompiler.CreateVirtualRegister(type.ToManagedPointer());
