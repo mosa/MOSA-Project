@@ -27,7 +27,6 @@ namespace Mosa.Tool.Launcher
 	public partial class MainForm : Form, ICompilerEventListener
 	{
 		public string SourceFile { get; set; }
-
 		public string DestinationDirectory { get; set; }
 
 		protected DateTime compileStartTime;
@@ -89,12 +88,6 @@ namespace Mosa.Tool.Launcher
 			SourceFile = filename;
 			lbSource.Text = Path.GetFileName(SourceFile);
 			lbSourceDirectory.Text = Path.GetDirectoryName(SourceFile);
-
-			if (String.IsNullOrWhiteSpace(DestinationDirectory))
-			{
-				DestinationDirectory = Path.GetDirectoryName(SourceFile) + Path.DirectorySeparatorChar + "build";
-				lbDestinationDirectory.Text = DestinationDirectory;
-			}
 		}
 
 		private void MainForm_Load(object sender, EventArgs e)
@@ -107,12 +100,25 @@ namespace Mosa.Tool.Launcher
 			cbBootFileSystem.SelectedIndex = 0;
 			tabControl1.SelectedTab = tabPage1;
 
+			if (DestinationDirectory == null)
+			{
+				DestinationDirectory = Path.Combine(Path.GetTempPath(), "MOSA");
+			}
+
+			lbDestinationDirectory.Text = DestinationDirectory;
+
 			// find QEMU executable
 			lbQEMUExecutable.Text = TryFind(
 				"qemu-system-i386.exe",
 				new string[] {
+					@"%MOSA%\Tools\QEMU\",
+					@"%MOSA%\QEMU\",
 					@"..\Tools\QEMU\",
-					@"\Tools\QEMU\"
+					@"\Tools\QEMU\",
+					@"%ProgramFiles%\qemu\",
+					@"%ProgramFiles(x86)%\qemu\",
+					//@"C:\Program Files (x86)\qemu\",
+					//@"C:\Program Files\qemu\"
 				}
 			);
 
@@ -130,11 +136,30 @@ namespace Mosa.Tool.Launcher
 			lbNDISASMExecutable.Text = TryFind(
 				   "ndisasm.exe",
 				   new string[] {
+					@"%MOSA%\Tools\ndisasm\",
+					@"%MOSA%\ndisasm\",
 					@"..\Tools\ndisasm\",
 					@"\Tools\ndisasm\"
 				}
 			);
 
+			lbBOCHSExecutable.Text = TryFind(
+				"bochs.exe",
+				new string[] {
+					@"%MOSA%\Tools\Bochs\",
+					@"%MOSA%\Bochs\",
+					@"..\Tools\Bochs\",
+					@"\Tools\Bochs\",
+					@"%ProgramFiles%\Bochs-2.6.5\",
+					@"%ProgramFiles(x86)%\Bochs-2.6.5\",
+					//@"C:\Program Files (x86)\Bochs-2.6.5\",
+					//@"C:\Program Files\Bochs-2.6.5\",
+					@"%ProgramFiles%\Bochs-2.6.2\",
+					@"%ProgramFiles(x86)%\Bochs-2.6.2\",
+					//@"C:\Program Files (x86)\Bochs-2.6.2\",
+					//@"C:\Program Files\Bochs-2.6.2\"
+				}
+			);
 		}
 
 		private string TryFind(string file, IList<string> directories)
@@ -229,7 +254,13 @@ namespace Mosa.Tool.Launcher
 			richTextBox2.Clear();
 			tabControl1.SelectedTab = tabPage2;
 			Compile();
-			Launch();
+
+			Launch(cbExitOnLaunch.Checked);
+
+			if (cbExitOnLaunch.Checked)
+			{
+				Application.Exit();
+			}
 		}
 
 		protected byte[] GetResource(string name)
@@ -244,9 +275,7 @@ namespace Mosa.Tool.Launcher
 		{
 			compileStartTime = DateTime.Now;
 
-			var destinationDirectory = DestinationDirectory + Path.DirectorySeparatorChar;
-
-			compiledFile = destinationDirectory + Path.GetFileNameWithoutExtension(SourceFile) + ".bin";
+			compiledFile = Path.Combine(DestinationDirectory, Path.GetFileNameWithoutExtension(SourceFile) + ".bin");
 
 			var compilerOptions = new CompilerOptions();
 			compilerOptions.EnableSSA = cbEnableSSA.Checked;
@@ -259,12 +288,12 @@ namespace Mosa.Tool.Launcher
 
 			if (cbGenerateMapFile.Checked)
 			{
-				compilerOptions.MapFile = destinationDirectory + Path.GetFileNameWithoutExtension(SourceFile) + ".map";
+				compilerOptions.MapFile = Path.Combine(DestinationDirectory, Path.GetFileNameWithoutExtension(SourceFile) + ".map");
 			}
 
-			if (!Directory.Exists(destinationDirectory))
+			if (!Directory.Exists(DestinationDirectory))
 			{
-				Directory.CreateDirectory(destinationDirectory);
+				Directory.CreateDirectory(DestinationDirectory);
 			}
 
 			CompilerTrace compilerTrace = new CompilerTrace();
@@ -296,7 +325,7 @@ namespace Mosa.Tool.Launcher
 				default: break;
 			}
 
-			imageFile = destinationDirectory + "bootimage.img";
+			imageFile = Path.Combine(DestinationDirectory, Path.GetFileNameWithoutExtension(SourceFile) + ".img");
 			options.DiskImageFileName = imageFile;
 
 			Generator.Create(options);
@@ -307,10 +336,12 @@ namespace Mosa.Tool.Launcher
 			}
 		}
 
-		private void Launch()
+		private void Launch(bool exit)
 		{
 			if (cbEmulator.SelectedIndex == 0)
-				LaunchQemu();
+				LaunchQemu(exit);
+			else if (cbEmulator.SelectedIndex == 1)
+				LaunchBochs(exit);
 		}
 
 		private static string Quote(string location)
@@ -318,7 +349,7 @@ namespace Mosa.Tool.Launcher
 			return '"' + location + '"';
 		}
 
-		private string LaunchApplication(string app, string args)
+		private string LaunchApplication(string app, string args, bool waitForExit)
 		{
 			AddOutput("Launching Application: " + app);
 			AddOutput("Arguments: " + args);
@@ -327,13 +358,22 @@ namespace Mosa.Tool.Launcher
 			start.FileName = app;
 			start.Arguments = args;
 			start.UseShellExecute = false;
+			start.CreateNoWindow = true;
 			start.RedirectStandardOutput = true;
+			start.RedirectStandardError = true;
 
 			var process = Process.Start(start);
 			var output = process.StandardOutput.ReadToEnd();
-			process.WaitForExit();
 
-			return output;
+			if (waitForExit)
+			{
+				process.WaitForExit();
+			}
+
+			//return output;
+			var error = process.StandardError.ReadToEnd();
+
+			return output + error;
 		}
 
 		private void LaunchNDISASM()
@@ -341,20 +381,45 @@ namespace Mosa.Tool.Launcher
 			string arg =
 				"-b 32 -o0x400030 -e 0x1030 " + Quote(compiledFile);
 
-			var output = LaunchApplication(lbNDISASMExecutable.Text, arg);
+			var output = LaunchApplication(lbNDISASMExecutable.Text, arg, true);
 
 			var asmfile = Path.Combine(DestinationDirectory, Path.GetFileNameWithoutExtension(SourceFile) + ".asm");
 
 			File.WriteAllText(asmfile, output);
 		}
 
-		private void LaunchQemu()
+		private void LaunchQemu(bool exit)
 		{
 			string arg =
 				"-hda " + Quote(imageFile) +
 				" -L " + Quote(lbQEMUBIOSDirectory.Text);
 
-			var output = LaunchApplication(lbQEMUExecutable.Text, arg);
+			var output = LaunchApplication(lbQEMUExecutable.Text, arg, !exit);
+
+			AddOutput(output);
+		}
+
+		private void LaunchBochs(bool exit)
+		{
+			var logfile = Path.Combine(DestinationDirectory, Path.GetFileNameWithoutExtension(SourceFile) + "-bochs.log");
+			var exeDir = Path.GetDirectoryName(lbBOCHSExecutable.Text);
+
+			string arg =
+				//"-q" +
+				"-n" +
+				//" -noconsole" +
+				" megs:64" +
+				" ata0:enabled=1,ioaddr1=0x1f0,ioaddr2=0x3f0,irq=14" +
+				" cpuid:mmx=1,sep=1,sse=sse4_2,apic=xapic,aes=1,movbe=1,xsave=1" +
+				" boot:c" +	
+				//" config_interface:win32config" +
+				//" display_library:win32" +
+				" log:" + Quote(logfile) +
+				" ata0-master:type=disk,path=" + Quote(imageFile) + ",biosdetect=none,cylinders=0,heads=0,spt=0" +
+				" romimage:file=" + Quote(Path.Combine(exeDir, "BIOS-bochs-latest")) +
+				" vgaromimage:file=" + Quote(Path.Combine(exeDir, "VGABIOS-lgpl-latest"));
+
+			var output = LaunchApplication(lbBOCHSExecutable.Text, arg, !exit);
 
 			AddOutput(output);
 		}

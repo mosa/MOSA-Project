@@ -34,6 +34,7 @@
 			this.tabControl1 = new System.Windows.Forms.TabControl();
 			this.tabPage1 = new System.Windows.Forms.TabPage();
 			this.groupBox6 = new System.Windows.Forms.GroupBox();
+			this.cbExitOnLaunch = new System.Windows.Forms.CheckBox();
 			this.cbEmulator = new System.Windows.Forms.ComboBox();
 			this.button1 = new System.Windows.Forms.Button();
 			this.groupBox5 = new System.Windows.Forms.GroupBox();
@@ -76,7 +77,9 @@
 			this.tabPage3 = new System.Windows.Forms.TabPage();
 			this.richTextBox2 = new System.Windows.Forms.RichTextBox();
 			this.openFileDialog2 = new System.Windows.Forms.OpenFileDialog();
-			this.cbExitOnLaunch = new System.Windows.Forms.CheckBox();
+			this.groupBox9 = new System.Windows.Forms.GroupBox();
+			this.button6 = new System.Windows.Forms.Button();
+			this.lbBOCHSExecutable = new System.Windows.Forms.Label();
 			this.tabControl1.SuspendLayout();
 			this.tabPage1.SuspendLayout();
 			this.groupBox6.SuspendLayout();
@@ -90,6 +93,7 @@
 			this.groupBox7.SuspendLayout();
 			this.tabPage2.SuspendLayout();
 			this.tabPage3.SuspendLayout();
+			this.groupBox9.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// openFileDialog1
@@ -157,6 +161,17 @@
 			this.groupBox6.TabIndex = 28;
 			this.groupBox6.TabStop = false;
 			this.groupBox6.Text = "Virtual Emulator:";
+			// 
+			// cbExitOnLaunch
+			// 
+			this.cbExitOnLaunch.AutoSize = true;
+			this.cbExitOnLaunch.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.cbExitOnLaunch.Location = new System.Drawing.Point(10, 52);
+			this.cbExitOnLaunch.Name = "cbExitOnLaunch";
+			this.cbExitOnLaunch.Size = new System.Drawing.Size(97, 17);
+			this.cbExitOnLaunch.TabIndex = 22;
+			this.cbExitOnLaunch.Text = "Exit on Launch";
+			this.cbExitOnLaunch.UseVisualStyleBackColor = true;
 			// 
 			// cbEmulator
 			// 
@@ -494,6 +509,7 @@
 			// 
 			// tabPage4
 			// 
+			this.tabPage4.Controls.Add(this.groupBox9);
 			this.tabPage4.Controls.Add(this.groupBox8);
 			this.tabPage4.Controls.Add(this.groupBox7);
 			this.tabPage4.Location = new System.Drawing.Point(4, 22);
@@ -644,17 +660,36 @@
 			this.openFileDialog2.Filter = "Executable|*.exe";
 			this.openFileDialog2.Title = "Select Assembly";
 			// 
-			// cbExitOnLaunch
+			// groupBox9
 			// 
-			this.cbExitOnLaunch.AutoSize = true;
-			this.cbExitOnLaunch.Enabled = false;
-			this.cbExitOnLaunch.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.cbExitOnLaunch.Location = new System.Drawing.Point(10, 52);
-			this.cbExitOnLaunch.Name = "cbExitOnLaunch";
-			this.cbExitOnLaunch.Size = new System.Drawing.Size(97, 17);
-			this.cbExitOnLaunch.TabIndex = 22;
-			this.cbExitOnLaunch.Text = "Exit on Launch";
-			this.cbExitOnLaunch.UseVisualStyleBackColor = true;
+			this.groupBox9.Controls.Add(this.button6);
+			this.groupBox9.Controls.Add(this.lbBOCHSExecutable);
+			this.groupBox9.Location = new System.Drawing.Point(8, 176);
+			this.groupBox9.Name = "groupBox9";
+			this.groupBox9.Size = new System.Drawing.Size(654, 56);
+			this.groupBox9.TabIndex = 23;
+			this.groupBox9.TabStop = false;
+			this.groupBox9.Text = "BOCHS:";
+			// 
+			// button6
+			// 
+			this.button6.Enabled = false;
+			this.button6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.button6.Location = new System.Drawing.Point(6, 19);
+			this.button6.Name = "button6";
+			this.button6.Size = new System.Drawing.Size(106, 23);
+			this.button6.TabIndex = 20;
+			this.button6.Text = "Executable:";
+			this.button6.UseVisualStyleBackColor = true;
+			// 
+			// lbBOCHSExecutable
+			// 
+			this.lbBOCHSExecutable.AutoSize = true;
+			this.lbBOCHSExecutable.Location = new System.Drawing.Point(118, 24);
+			this.lbBOCHSExecutable.Name = "lbBOCHSExecutable";
+			this.lbBOCHSExecutable.Size = new System.Drawing.Size(108, 13);
+			this.lbBOCHSExecutable.TabIndex = 19;
+			this.lbBOCHSExecutable.Text = "{BOCHS Executable}";
 			// 
 			// MainForm
 			// 
@@ -688,6 +723,8 @@
 			this.groupBox7.PerformLayout();
 			this.tabPage2.ResumeLayout(false);
 			this.tabPage3.ResumeLayout(false);
+			this.groupBox9.ResumeLayout(false);
+			this.groupBox9.PerformLayout();
 			this.ResumeLayout(false);
 
 		}
@@ -743,5 +780,8 @@
 		private System.Windows.Forms.Button button5;
 		private System.Windows.Forms.Label lbNDISASMExecutable;
 		private System.Windows.Forms.CheckBox cbExitOnLaunch;
+		private System.Windows.Forms.GroupBox groupBox9;
+		private System.Windows.Forms.Button button6;
+		private System.Windows.Forms.Label lbBOCHSExecutable;
 	}
 }
