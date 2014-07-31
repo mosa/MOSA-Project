@@ -15,6 +15,7 @@ using Mosa.Compiler.MosaTypeSystem;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using Mosa.Compiler.Framework.Analysis;
 
 namespace Mosa.Compiler.Framework
 {
@@ -73,7 +74,7 @@ namespace Mosa.Compiler.Framework
 			this.StackLayout = new StackLayout(Architecture, method.Signature.Parameters.Count + (method.HasThis || method.HasExplicitThis ? 1 : 0));
 			this.VirtualRegisters = new VirtualRegisters(Architecture);
 			this.LocalVariables = emptyOperandList;
-			this.DominanceAnalysis = new DominanceAnalysis(Compiler.CompilerOptions.DominanceAnalysisFactory, this.BasicBlocks);
+			this.DominanceAnalysis = new Dominance(Compiler.CompilerOptions.DominanceAnalysisFactory, this.BasicBlocks);
 
 			EvaluateParameterOperands();
 
@@ -170,7 +171,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets the dominance analysis.
 		/// </summary>
-		public DominanceAnalysis DominanceAnalysis { get; private set; }
+		public Dominance DominanceAnalysis { get; private set; }
 
 		#endregion Properties
 

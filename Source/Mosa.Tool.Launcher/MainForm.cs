@@ -14,9 +14,12 @@ using Mosa.Compiler.Linker;
 using Mosa.Compiler.Linker.Elf32;
 using Mosa.Compiler.Linker.PE;
 using Mosa.Utility.Aot;
+using Mosa.Utility.BootImage;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
+using System.Reflection;
 using System.Windows.Forms;
 
 namespace Mosa.Tool.Launcher
@@ -27,14 +30,44 @@ namespace Mosa.Tool.Launcher
 
 		public string DestinationDirectory { get; set; }
 
+		protected DateTime compileStartTime;
+		protected string compiledFile;
+		protected string imageFile;
+
 		public MainForm()
 		{
 			InitializeComponent();
 		}
 
+		public void AddOutput(string data)
+		{
+			if (data == null)
+				return;
+
+			richTextBox1.AppendText(data);
+			richTextBox1.AppendText("\n");
+			richTextBox1.Update();
+		}
+
+		public void AddCounters(string data)
+		{
+			richTextBox2.AppendText(data);
+			richTextBox2.AppendText("\n");
+			richTextBox2.Update();
+		}
+
 		void ICompilerEventListener.SubmitTraceEvent(CompilerEvent compilerStage, string info)
 		{
+			if (compilerStage == CompilerEvent.CompilerStageStart || compilerStage == CompilerEvent.CompilerStageEnd)
+			{
+				string status = "Compiling: " + String.Format("{0:0.00}", (DateTime.Now - compileStartTime).TotalSeconds) + " secs: " + compilerStage.ToText() + ": " + info;
 
+				AddOutput(status);
+			}
+			else if (compilerStage == CompilerEvent.Counter)
+			{
+				AddCounters(info);
+			}
 		}
 
 		void ICompilerEventListener.SubmitMethodStatus(int totalMethods, int queuedMethods)
@@ -71,33 +104,65 @@ namespace Mosa.Tool.Launcher
 			cbLinkerFormat.SelectedIndex = 0;
 			cbEmulator.SelectedIndex = 0;
 			cbBootFormat.SelectedIndex = 0;
+			cbBootFileSystem.SelectedIndex = 0;
+			tabControl1.SelectedTab = tabPage1;
+
+			// find QEMU executable
+			lbQEMUExecutable.Text = TryFind(
+				"qemu-system-i386.exe",
+				new string[] {
+					@"..\Tools\QEMU\",
+					@"\Tools\QEMU\"
+				}
+			);
+
+			lbQEMUBIOSDirectory.Text = Path.GetDirectoryName(
+				TryFind(
+					"bios.bin",
+					new string[] {
+						Path.GetDirectoryName(lbQEMUExecutable.Text),
+						Path.Combine(Path.GetDirectoryName(lbQEMUExecutable.Text),"bios")
+					}
+				)
+			);
+
+			// find NDISMASM
+			lbNDISASMExecutable.Text = TryFind(
+				   "ndisasm.exe",
+				   new string[] {
+					@"..\Tools\ndisasm\",
+					@"\Tools\ndisasm\"
+				}
+			);
+
 		}
 
-		private void button1_Click(object sender, EventArgs e)
+		private string TryFind(string file, IList<string> directories)
 		{
-			var destinationDirectory = DestinationDirectory + Path.DirectorySeparatorChar;
+			string location;
 
-			var compilerOptions = new CompilerOptions();
-			compilerOptions.EnableSSA = cbEnableSSA.Checked;
-			compilerOptions.EnableSSAOptimizations = cbEnableSSAOptimizations.Checked;
-			compilerOptions.OutputFile = destinationDirectory + Path.GetFileNameWithoutExtension(SourceFile) + ".bin";
-
-			compilerOptions.Architecture = SelectArchitecture(cbPlatform.SelectedItem.ToString());
-			compilerOptions.LinkerFactory = GetLinkerFactory(cbLinkerFormat.SelectedItem.ToString());
-			compilerOptions.BootStageFactory = GetBootStageFactory(cbBootFormat.SelectedItem.ToString());
-
-			if (!Directory.Exists(destinationDirectory))
+			foreach (var directory in directories)
 			{
-				Directory.CreateDirectory(destinationDirectory);
+				if (TryFind(file, directory, out location))
+					return location;
 			}
 
-			CompilerTrace compilerTrace = new CompilerTrace();
-			compilerTrace.CompilerEventListener = this;
+			return string.Empty;
+		}
 
-			var inputFiles = new List<FileInfo>();
-			inputFiles.Add(new FileInfo(SourceFile));
+		private bool TryFind(string file, string directory, out string location)
+		{
+			string combine = Path.Combine(directory, file);
 
-			AotCompiler.Compile(compilerOptions, inputFiles, compilerTrace);
+			if (File.Exists(combine))
+			{
+				location = combine;
+				return true;
+			}
+
+			location = string.Empty;
+
+			return false;
 		}
 
 		/// <summary>
@@ -141,11 +206,157 @@ namespace Mosa.Tool.Launcher
 			switch (format.ToLower())
 			{
 				case "pe": return delegate { return new PELinker(); };
+				case "pe32": return delegate { return new PELinker(); };
 				case "elf": return delegate { return new Elf32(); };
 				case "elf32": return delegate { return new Elf32(); };
 				//case "elf64": return delegate { return new Elf64Linker(); };
 				default: return null;
 			}
+		}
+
+		private void btnDestination_Click(object sender, EventArgs e)
+		{
+			if (folderBrowserDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+			{
+				DestinationDirectory = folderBrowserDialog1.SelectedPath;
+				lbDestinationDirectory.Text = DestinationDirectory;
+			}
+		}
+
+		private void button1_Click_1(object sender, EventArgs e)
+		{
+			richTextBox1.Clear();
+			richTextBox2.Clear();
+			tabControl1.SelectedTab = tabPage2;
+			Compile();
+			Launch();
+		}
+
+		protected byte[] GetResource(string name)
+		{
+			var assembly = Assembly.GetExecutingAssembly();
+			var stream = assembly.GetManifestResourceStream("Mosa.Tool.Launcher.Resources." + name);
+			var binary = new BinaryReader(stream);
+			return binary.ReadBytes((int)stream.Length);
+		}
+
+		private void Compile()
+		{
+			compileStartTime = DateTime.Now;
+
+			var destinationDirectory = DestinationDirectory + Path.DirectorySeparatorChar;
+
+			compiledFile = destinationDirectory + Path.GetFileNameWithoutExtension(SourceFile) + ".bin";
+
+			var compilerOptions = new CompilerOptions();
+			compilerOptions.EnableSSA = cbEnableSSA.Checked;
+			compilerOptions.EnableSSAOptimizations = cbEnableSSAOptimizations.Checked;
+			compilerOptions.OutputFile = compiledFile;
+
+			compilerOptions.Architecture = SelectArchitecture(cbPlatform.SelectedItem.ToString());
+			compilerOptions.LinkerFactory = GetLinkerFactory(cbLinkerFormat.SelectedItem.ToString());
+			compilerOptions.BootStageFactory = GetBootStageFactory(cbBootFormat.SelectedItem.ToString());
+
+			if (cbGenerateMapFile.Checked)
+			{
+				compilerOptions.MapFile = destinationDirectory + Path.GetFileNameWithoutExtension(SourceFile) + ".map";
+			}
+
+			if (!Directory.Exists(destinationDirectory))
+			{
+				Directory.CreateDirectory(destinationDirectory);
+			}
+
+			CompilerTrace compilerTrace = new CompilerTrace();
+			compilerTrace.CompilerEventListener = this;
+
+			var inputFiles = new List<FileInfo>();
+			inputFiles.Add(new FileInfo(SourceFile));
+
+			AotCompiler.Compile(compilerOptions, inputFiles, compilerTrace);
+
+			Options options = new Options();
+
+			options.MBRCode = GetResource("mbr.bin");
+			options.FatBootCode = GetResource("boot.bin");
+
+			options.IncludeFiles.Add(new IncludeFile("ldlinux.sys", GetResource("ldlinux.sys")));
+			options.IncludeFiles.Add(new IncludeFile("mboot.c32", GetResource("mboot.c32")));
+			options.IncludeFiles.Add(new IncludeFile("syslinux.cfg", GetResource("syslinux.cfg")));
+			options.IncludeFiles.Add(new IncludeFile(compilerOptions.OutputFile, "main.exe"));
+
+			options.VolumeLabel = "MOSABOOT";
+			options.PatchSyslinuxOption = true;
+
+			switch (cbImageFormat.SelectedIndex)
+			{
+				case 0: options.ImageFormat = ImageFormatType.IMG; break;
+				case 1: options.ImageFormat = ImageFormatType.VHD; break;
+				case 2: options.ImageFormat = ImageFormatType.VDI; break;
+				default: break;
+			}
+
+			imageFile = destinationDirectory + "bootimage.img";
+			options.DiskImageFileName = imageFile;
+
+			Generator.Create(options);
+
+			if (cbGenerateASMFile.Checked)
+			{
+				LaunchNDISASM();
+			}
+		}
+
+		private void Launch()
+		{
+			if (cbEmulator.SelectedIndex == 0)
+				LaunchQemu();
+		}
+
+		private static string Quote(string location)
+		{
+			return '"' + location + '"';
+		}
+
+		private string LaunchApplication(string app, string args)
+		{
+			AddOutput("Launching Application: " + app);
+			AddOutput("Arguments: " + args);
+
+			ProcessStartInfo start = new ProcessStartInfo();
+			start.FileName = app;
+			start.Arguments = args;
+			start.UseShellExecute = false;
+			start.RedirectStandardOutput = true;
+
+			var process = Process.Start(start);
+			var output = process.StandardOutput.ReadToEnd();
+			process.WaitForExit();
+
+			return output;
+		}
+
+		private void LaunchNDISASM()
+		{
+			string arg =
+				"-b 32 -o0x400030 -e 0x1030 " + Quote(compiledFile);
+
+			var output = LaunchApplication(lbNDISASMExecutable.Text, arg);
+
+			var asmfile = Path.Combine(DestinationDirectory, Path.GetFileNameWithoutExtension(SourceFile) + ".asm");
+
+			File.WriteAllText(asmfile, output);
+		}
+
+		private void LaunchQemu()
+		{
+			string arg =
+				"-hda " + Quote(imageFile) +
+				" -L " + Quote(lbQEMUBIOSDirectory.Text);
+
+			var output = LaunchApplication(lbQEMUExecutable.Text, arg);
+
+			AddOutput(output);
 		}
 	}
 }

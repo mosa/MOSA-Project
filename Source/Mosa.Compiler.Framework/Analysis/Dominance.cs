@@ -11,9 +11,9 @@ using Mosa.Compiler.Framework.Analysis;
 using System;
 using System.Collections.Generic;
 
-namespace Mosa.Compiler.Framework
+namespace Mosa.Compiler.Framework.Analysis
 {
-	public sealed class DominanceAnalysis
+	public sealed class Dominance
 	{
 		#region Data members
 
@@ -27,7 +27,7 @@ namespace Mosa.Compiler.Framework
 
 		#region Constructors
 
-		public DominanceAnalysis(Func<IDominanceAnalysis> dominanceAnalysisFactory, BasicBlocks basicBlocks)
+		public Dominance(Func<IDominanceAnalysis> dominanceAnalysisFactory, BasicBlocks basicBlocks)
 		{
 			this.dominanceAnalysisFactory = dominanceAnalysisFactory;
 			this.basicBlocks = basicBlocks;
