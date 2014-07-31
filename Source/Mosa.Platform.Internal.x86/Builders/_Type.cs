@@ -25,7 +25,7 @@ namespace System
 			: base(handle)
 		{
 			this.assembly = assembly;
-			this.typeStruct = (MetadataTypeStruct*)((uint**)&handle)[0];
+			this.typeStruct = (MetadataTypeStruct*)((uint***)&handle)[0][0];
 			this.fullname = x86Runtime.InitializeMetadataString((*this.typeStruct).Name);
 		}
 

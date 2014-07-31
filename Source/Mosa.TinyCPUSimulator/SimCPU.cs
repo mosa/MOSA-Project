@@ -349,7 +349,8 @@ namespace Mosa.TinyCPUSimulator
 
 				if (instruction == null)
 				{
-					throw new SimCPUException();
+					return instruction;
+					//throw new SimCPUException();
 				}
 
 				AddInstruction(address, instruction);
@@ -398,6 +399,10 @@ namespace Mosa.TinyCPUSimulator
 			catch (SimCPUException e)
 			{
 				LastException = e;
+			}
+			catch (NotSupportedException e)
+			{
+				Monitor.Stop = true;
 			}
 		}
 

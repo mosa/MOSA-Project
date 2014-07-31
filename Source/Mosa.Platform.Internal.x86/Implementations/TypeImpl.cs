@@ -51,7 +51,7 @@ namespace Mosa.Platform.Internal.x86
 		{
 			// TypeDefinition is located at the beginning of object (i.e. *obj )
 			RuntimeTypeHandle handle = new RuntimeTypeHandle();
-			((uint*)&handle)[0] = ((uint*)obj)[0];
+			((uint**)&handle)[0][0] = ((uint*)obj)[0];
 			return &handle;
 		}
 

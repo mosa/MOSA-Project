@@ -30,7 +30,7 @@ namespace System
 			{
 				fixed (RuntimeTypeHandle* handle = &this.handles[i])
 				{
-					((uint*)handle)[0] = ((uint)this.assemblyStruct) + MetadataAssemblyStruct.TypesOffset + i;
+					((uint**)handle)[0] = ((uint*)this.assemblyStruct) + MetadataAssemblyStruct.TypesOffset + i;
 				}
 				this.types[i] = new _Type(this.handles[i], this);
 			}

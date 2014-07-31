@@ -1213,7 +1213,18 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="context">The context.</param>
 		void CIL.ICILVisitor.InitObj(Context context)
 		{
-			// TODO: Not implemented!
+			// Get the ptr and clear context
+			Operand ptr = context.Operand1;
+			context.SetInstruction(IRInstruction.Nop, null, null);
+
+			// Setup context for VmCall
+			ReplaceWithVmCall(context, VmCall.Memset);
+
+			// Set the operands
+			context.SetOperand(1, ptr);
+			context.SetOperand(2, Operand.CreateConstantUnsignedByte(TypeSystem, 0));
+			context.SetOperand(3, Operand.CreateConstantUnsignedInt(TypeSystem, (uint)TypeLayout.GetTypeSize(ptr.Type.ElementType)));
+			context.OperandCount = 4;
 		}
 
 		/// <summary>

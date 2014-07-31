@@ -18,7 +18,7 @@ namespace Mosa.Platform.Internal.x86
 {
 	public unsafe static class Runtime
 	{
-		private const uint nativeIntSize = 4;
+		public const uint NativeIntSize = 4;
 
 		#region Allocation
 
@@ -35,7 +35,7 @@ namespace Mosa.Platform.Internal.x86
 			//   - IntPtr SyncBlock
 			//   - 0 .. n object data fields
 
-			uint allocationSize = (2 * nativeIntSize) + classSize;
+			uint allocationSize = (2 * NativeIntSize) + classSize;
 			void* memory = (void*)AllocateMemory(allocationSize);
 
 			uint* destination = (uint*)memory;
@@ -54,7 +54,7 @@ namespace Mosa.Platform.Internal.x86
 			//   - ElementType[length] elements
 			//   - Padding
 
-			uint allocationSize = (nativeIntSize * 3) + (uint)(elements * elementSize);
+			uint allocationSize = (NativeIntSize * 3) + (uint)(elements * elementSize);
 			allocationSize = (allocationSize + 3) & ~3u;	// Align to 4-bytes boundary
 			void* memory = (void*)AllocateMemory(allocationSize);
 
@@ -73,7 +73,7 @@ namespace Mosa.Platform.Internal.x86
 
 		#endregion Allocation
 
-		#region Metadata Lookup
+		#region Metadata
 
 		internal static _Assembly[] Assemblies;
 
@@ -101,7 +101,7 @@ namespace Mosa.Platform.Internal.x86
 			}
 		}
 
-		#endregion Metadata Lookup
+		#endregion Metadata
 
 		public static void InitializeArray(uint* array, RuntimeFieldHandle* handle)
 		{
@@ -196,66 +196,77 @@ namespace Mosa.Platform.Internal.x86
 			}
 		}
 
+		public static void Memset(void* dest, byte value, uint size)
+		{
+			byte* _dest = (byte*)dest;
+			while (size > 0)
+			{
+				*_dest = value;
+				_dest++;
+				size--;
+			}
+		}
+
 		#region (Un)Boxing
 
 		public static void* Box8(RuntimeTypeHandle* handle, byte value)
 		{
 			byte* memory = (byte*)AllocateObject(handle, 4);	// 4 for alignment
-			*(byte*)(memory + (nativeIntSize * 2)) = value;
+			*(byte*)(memory + (NativeIntSize * 2)) = value;
 			return memory;
 		}
 
 		public static void* Box16(RuntimeTypeHandle* handle, ushort value)
 		{
 			byte* memory = (byte*)AllocateObject(handle, 4);	// 4 for alignment
-			*(ushort*)(memory + (nativeIntSize * 2)) = value;
+			*(ushort*)(memory + (NativeIntSize * 2)) = value;
 			return memory;
 		}
 
 		public static void* Box32(RuntimeTypeHandle* handle, uint value)
 		{
 			byte* memory = (byte*)AllocateObject(handle, 4);
-			*(uint*)(memory + (nativeIntSize * 2)) = value;
+			*(uint*)(memory + (NativeIntSize * 2)) = value;
 			return memory;
 		}
 
 		public static void* Box64(RuntimeTypeHandle* handle, ulong value)
 		{
 			byte* memory = (byte*)AllocateObject(handle, 8);
-			*(ulong*)(memory + (nativeIntSize * 2)) = value;
+			*(ulong*)(memory + (NativeIntSize * 2)) = value;
 			return memory;
 		}
 
 		public static void* Box(RuntimeTypeHandle* handle, void* value, uint size)
 		{
 			byte* memory = (byte*)AllocateObject(handle, size);
-			Memcpy(memory + nativeIntSize * 2, value, size);
+			Memcpy(memory + NativeIntSize * 2, value, size);
 			return memory;
 		}
 
 		public static byte Unbox8(void* box)
 		{
-			return *(byte*)((byte*)box + nativeIntSize * 2);
+			return *(byte*)((byte*)box + NativeIntSize * 2);
 		}
 
 		public static ushort Unbox16(void* box)
 		{
-			return *(ushort*)((byte*)box + nativeIntSize * 2);
+			return *(ushort*)((byte*)box + NativeIntSize * 2);
 		}
 
 		public static uint* Unbox32(void* box)
 		{
-			return (uint*)((byte*)box + nativeIntSize * 2);
+			return (uint*)((byte*)box + NativeIntSize * 2);
 		}
 
 		public static ulong* Unbox64(void* box)
 		{
-			return (ulong*)((byte*)box + nativeIntSize * 2);
+			return (ulong*)((byte*)box + NativeIntSize * 2);
 		}
 
 		public static void* Unbox(void* box, void* vt, uint size)
 		{
-			Memcpy(vt, (byte*)box + nativeIntSize * 2, size);
+			Memcpy(vt, (byte*)box + NativeIntSize * 2, size);
 			return vt;
 		}
 
