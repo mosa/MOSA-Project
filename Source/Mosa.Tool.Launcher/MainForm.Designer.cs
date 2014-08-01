@@ -64,6 +64,9 @@
 			this.cbEnableSSAOptimizations = new System.Windows.Forms.CheckBox();
 			this.cbEnableSSA = new System.Windows.Forms.CheckBox();
 			this.tabPage4 = new System.Windows.Forms.TabPage();
+			this.groupBox9 = new System.Windows.Forms.GroupBox();
+			this.button6 = new System.Windows.Forms.Button();
+			this.lbBOCHSExecutable = new System.Windows.Forms.Label();
 			this.groupBox8 = new System.Windows.Forms.GroupBox();
 			this.button5 = new System.Windows.Forms.Button();
 			this.lbNDISASMExecutable = new System.Windows.Forms.Label();
@@ -77,9 +80,11 @@
 			this.tabPage3 = new System.Windows.Forms.TabPage();
 			this.richTextBox2 = new System.Windows.Forms.RichTextBox();
 			this.openFileDialog2 = new System.Windows.Forms.OpenFileDialog();
-			this.groupBox9 = new System.Windows.Forms.GroupBox();
-			this.button6 = new System.Windows.Forms.Button();
-			this.lbBOCHSExecutable = new System.Windows.Forms.Label();
+			this.nmMemory = new System.Windows.Forms.NumericUpDown();
+			this.label6 = new System.Windows.Forms.Label();
+			this.groupBox10 = new System.Windows.Forms.GroupBox();
+			this.button4 = new System.Windows.Forms.Button();
+			this.lbVMwarePlayerExecutable = new System.Windows.Forms.Label();
 			this.tabControl1.SuspendLayout();
 			this.tabPage1.SuspendLayout();
 			this.groupBox6.SuspendLayout();
@@ -89,11 +94,13 @@
 			this.groupBox2.SuspendLayout();
 			this.groupBox1.SuspendLayout();
 			this.tabPage4.SuspendLayout();
+			this.groupBox9.SuspendLayout();
 			this.groupBox8.SuspendLayout();
 			this.groupBox7.SuspendLayout();
 			this.tabPage2.SuspendLayout();
 			this.tabPage3.SuspendLayout();
-			this.groupBox9.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.nmMemory)).BeginInit();
+			this.groupBox10.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// openFileDialog1
@@ -128,7 +135,7 @@
 			this.tabControl1.Name = "tabControl1";
 			this.tabControl1.Padding = new System.Drawing.Point(0, 0);
 			this.tabControl1.SelectedIndex = 0;
-			this.tabControl1.Size = new System.Drawing.Size(680, 371);
+			this.tabControl1.Size = new System.Drawing.Size(680, 375);
 			this.tabControl1.TabIndex = 22;
 			// 
 			// tabPage1
@@ -144,7 +151,7 @@
 			this.tabPage1.Location = new System.Drawing.Point(4, 22);
 			this.tabPage1.Margin = new System.Windows.Forms.Padding(0);
 			this.tabPage1.Name = "tabPage1";
-			this.tabPage1.Size = new System.Drawing.Size(672, 345);
+			this.tabPage1.Size = new System.Drawing.Size(672, 349);
 			this.tabPage1.TabIndex = 0;
 			this.tabPage1.Text = "MOSA Options";
 			// 
@@ -152,12 +159,14 @@
 			// 
 			this.groupBox6.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBox6.Controls.Add(this.label6);
+			this.groupBox6.Controls.Add(this.nmMemory);
 			this.groupBox6.Controls.Add(this.cbExitOnLaunch);
 			this.groupBox6.Controls.Add(this.cbEmulator);
 			this.groupBox6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.groupBox6.Location = new System.Drawing.Point(428, 212);
 			this.groupBox6.Name = "groupBox6";
-			this.groupBox6.Size = new System.Drawing.Size(234, 90);
+			this.groupBox6.Size = new System.Drawing.Size(234, 99);
 			this.groupBox6.TabIndex = 28;
 			this.groupBox6.TabStop = false;
 			this.groupBox6.Text = "Virtual Emulator:";
@@ -166,7 +175,7 @@
 			// 
 			this.cbExitOnLaunch.AutoSize = true;
 			this.cbExitOnLaunch.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.cbExitOnLaunch.Location = new System.Drawing.Point(10, 52);
+			this.cbExitOnLaunch.Location = new System.Drawing.Point(10, 76);
 			this.cbExitOnLaunch.Name = "cbExitOnLaunch";
 			this.cbExitOnLaunch.Size = new System.Drawing.Size(97, 17);
 			this.cbExitOnLaunch.TabIndex = 22;
@@ -193,7 +202,7 @@
 			this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.button1.Location = new System.Drawing.Point(428, 308);
+			this.button1.Location = new System.Drawing.Point(428, 317);
 			this.button1.Name = "button1";
 			this.button1.Size = new System.Drawing.Size(234, 23);
 			this.button1.TabIndex = 27;
@@ -207,7 +216,7 @@
 			this.groupBox5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.groupBox5.Location = new System.Drawing.Point(255, 287);
 			this.groupBox5.Name = "groupBox5";
-			this.groupBox5.Size = new System.Drawing.Size(166, 46);
+			this.groupBox5.Size = new System.Drawing.Size(166, 53);
 			this.groupBox5.TabIndex = 26;
 			this.groupBox5.TabStop = false;
 			this.groupBox5.Text = "Debugger:";
@@ -476,7 +485,7 @@
 			this.groupBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.groupBox1.Location = new System.Drawing.Point(8, 211);
 			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(241, 122);
+			this.groupBox1.Size = new System.Drawing.Size(241, 129);
 			this.groupBox1.TabIndex = 22;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Optimizations:";
@@ -509,16 +518,48 @@
 			// 
 			// tabPage4
 			// 
+			this.tabPage4.Controls.Add(this.groupBox10);
 			this.tabPage4.Controls.Add(this.groupBox9);
 			this.tabPage4.Controls.Add(this.groupBox8);
 			this.tabPage4.Controls.Add(this.groupBox7);
 			this.tabPage4.Location = new System.Drawing.Point(4, 22);
 			this.tabPage4.Name = "tabPage4";
 			this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPage4.Size = new System.Drawing.Size(672, 345);
+			this.tabPage4.Size = new System.Drawing.Size(672, 349);
 			this.tabPage4.TabIndex = 3;
 			this.tabPage4.Text = "Application Settings";
 			this.tabPage4.UseVisualStyleBackColor = true;
+			// 
+			// groupBox9
+			// 
+			this.groupBox9.Controls.Add(this.button6);
+			this.groupBox9.Controls.Add(this.lbBOCHSExecutable);
+			this.groupBox9.Location = new System.Drawing.Point(8, 176);
+			this.groupBox9.Name = "groupBox9";
+			this.groupBox9.Size = new System.Drawing.Size(654, 56);
+			this.groupBox9.TabIndex = 23;
+			this.groupBox9.TabStop = false;
+			this.groupBox9.Text = "BOCHS:";
+			// 
+			// button6
+			// 
+			this.button6.Enabled = false;
+			this.button6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.button6.Location = new System.Drawing.Point(6, 19);
+			this.button6.Name = "button6";
+			this.button6.Size = new System.Drawing.Size(106, 23);
+			this.button6.TabIndex = 20;
+			this.button6.Text = "Executable:";
+			this.button6.UseVisualStyleBackColor = true;
+			// 
+			// lbBOCHSExecutable
+			// 
+			this.lbBOCHSExecutable.AutoSize = true;
+			this.lbBOCHSExecutable.Location = new System.Drawing.Point(118, 24);
+			this.lbBOCHSExecutable.Name = "lbBOCHSExecutable";
+			this.lbBOCHSExecutable.Size = new System.Drawing.Size(108, 13);
+			this.lbBOCHSExecutable.TabIndex = 19;
+			this.lbBOCHSExecutable.Text = "{BOCHS Executable}";
 			// 
 			// groupBox8
 			// 
@@ -660,48 +701,82 @@
 			this.openFileDialog2.Filter = "Executable|*.exe";
 			this.openFileDialog2.Title = "Select Assembly";
 			// 
-			// groupBox9
+			// nmMemory
 			// 
-			this.groupBox9.Controls.Add(this.button6);
-			this.groupBox9.Controls.Add(this.lbBOCHSExecutable);
-			this.groupBox9.Location = new System.Drawing.Point(8, 176);
-			this.groupBox9.Name = "groupBox9";
-			this.groupBox9.Size = new System.Drawing.Size(654, 56);
-			this.groupBox9.TabIndex = 23;
-			this.groupBox9.TabStop = false;
-			this.groupBox9.Text = "BOCHS:";
+			this.nmMemory.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.nmMemory.Location = new System.Drawing.Point(67, 50);
+			this.nmMemory.Maximum = new decimal(new int[] {
+            2048,
+            0,
+            0,
+            0});
+			this.nmMemory.Minimum = new decimal(new int[] {
+            64,
+            0,
+            0,
+            0});
+			this.nmMemory.Name = "nmMemory";
+			this.nmMemory.Size = new System.Drawing.Size(56, 20);
+			this.nmMemory.TabIndex = 23;
+			this.nmMemory.Value = new decimal(new int[] {
+            128,
+            0,
+            0,
+            0});
 			// 
-			// button6
+			// label6
 			// 
-			this.button6.Enabled = false;
-			this.button6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.button6.Location = new System.Drawing.Point(6, 19);
-			this.button6.Name = "button6";
-			this.button6.Size = new System.Drawing.Size(106, 23);
-			this.button6.TabIndex = 20;
-			this.button6.Text = "Executable:";
-			this.button6.UseVisualStyleBackColor = true;
+			this.label6.AutoSize = true;
+			this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.label6.Location = new System.Drawing.Point(7, 52);
+			this.label6.Name = "label6";
+			this.label6.Size = new System.Drawing.Size(54, 13);
+			this.label6.TabIndex = 24;
+			this.label6.Text = "Memory:";
 			// 
-			// lbBOCHSExecutable
+			// groupBox10
 			// 
-			this.lbBOCHSExecutable.AutoSize = true;
-			this.lbBOCHSExecutable.Location = new System.Drawing.Point(118, 24);
-			this.lbBOCHSExecutable.Name = "lbBOCHSExecutable";
-			this.lbBOCHSExecutable.Size = new System.Drawing.Size(108, 13);
-			this.lbBOCHSExecutable.TabIndex = 19;
-			this.lbBOCHSExecutable.Text = "{BOCHS Executable}";
+			this.groupBox10.Controls.Add(this.button4);
+			this.groupBox10.Controls.Add(this.lbVMwarePlayerExecutable);
+			this.groupBox10.Location = new System.Drawing.Point(8, 238);
+			this.groupBox10.Name = "groupBox10";
+			this.groupBox10.Size = new System.Drawing.Size(654, 56);
+			this.groupBox10.TabIndex = 24;
+			this.groupBox10.TabStop = false;
+			this.groupBox10.Text = "VMware Player:";
+			// 
+			// button4
+			// 
+			this.button4.Enabled = false;
+			this.button4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.button4.Location = new System.Drawing.Point(6, 19);
+			this.button4.Name = "button4";
+			this.button4.Size = new System.Drawing.Size(106, 23);
+			this.button4.TabIndex = 20;
+			this.button4.Text = "Executable:";
+			this.button4.UseVisualStyleBackColor = true;
+			// 
+			// lbVMwarePlayerExecutable
+			// 
+			this.lbVMwarePlayerExecutable.AutoSize = true;
+			this.lbVMwarePlayerExecutable.Location = new System.Drawing.Point(118, 24);
+			this.lbVMwarePlayerExecutable.Name = "lbVMwarePlayerExecutable";
+			this.lbVMwarePlayerExecutable.Size = new System.Drawing.Size(142, 13);
+			this.lbVMwarePlayerExecutable.TabIndex = 19;
+			this.lbVMwarePlayerExecutable.Text = "{VMware Player Executable}";
 			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(678, 402);
+			this.ClientSize = new System.Drawing.Size(678, 406);
 			this.Controls.Add(this.progressBar1);
 			this.Controls.Add(this.tabControl1);
 			this.Name = "MainForm";
 			this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
 			this.Text = "MOSA Launcher";
 			this.Load += new System.EventHandler(this.MainForm_Load);
+			this.Shown += new System.EventHandler(this.MainForm_Shown);
 			this.tabControl1.ResumeLayout(false);
 			this.tabPage1.ResumeLayout(false);
 			this.groupBox6.ResumeLayout(false);
@@ -717,14 +792,17 @@
 			this.groupBox1.ResumeLayout(false);
 			this.groupBox1.PerformLayout();
 			this.tabPage4.ResumeLayout(false);
+			this.groupBox9.ResumeLayout(false);
+			this.groupBox9.PerformLayout();
 			this.groupBox8.ResumeLayout(false);
 			this.groupBox8.PerformLayout();
 			this.groupBox7.ResumeLayout(false);
 			this.groupBox7.PerformLayout();
 			this.tabPage2.ResumeLayout(false);
 			this.tabPage3.ResumeLayout(false);
-			this.groupBox9.ResumeLayout(false);
-			this.groupBox9.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.nmMemory)).EndInit();
+			this.groupBox10.ResumeLayout(false);
+			this.groupBox10.PerformLayout();
 			this.ResumeLayout(false);
 
 		}
@@ -783,5 +861,10 @@
 		private System.Windows.Forms.GroupBox groupBox9;
 		private System.Windows.Forms.Button button6;
 		private System.Windows.Forms.Label lbBOCHSExecutable;
+		private System.Windows.Forms.Label label6;
+		private System.Windows.Forms.NumericUpDown nmMemory;
+		private System.Windows.Forms.GroupBox groupBox10;
+		private System.Windows.Forms.Button button4;
+		private System.Windows.Forms.Label lbVMwarePlayerExecutable;
 	}
 }

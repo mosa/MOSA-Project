@@ -21,6 +21,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Windows.Forms;
+using System.Text;
 
 namespace Mosa.Tool.Launcher
 {
@@ -28,6 +29,8 @@ namespace Mosa.Tool.Launcher
 	{
 		public string SourceFile { get; set; }
 		public string DestinationDirectory { get; set; }
+		public bool ExitOnLaunch { get; set; }
+		public bool AutoLaunch { get; set; }
 
 		protected DateTime compileStartTime;
 		protected string compiledFile;
@@ -36,6 +39,20 @@ namespace Mosa.Tool.Launcher
 		public MainForm()
 		{
 			InitializeComponent();
+			AutoLaunch = false;
+			ExitOnLaunch = false;
+		}
+
+		private void MainForm_Shown(object sender, EventArgs e)
+		{
+			lbSource.Text = Path.GetFileName(SourceFile);
+			lbSourceDirectory.Text = Path.GetDirectoryName(SourceFile);
+			cbExitOnLaunch.Checked = ExitOnLaunch;
+
+			this.Refresh();
+
+			if (AutoLaunch)
+				CompilerAndLaunch();
 		}
 
 		public void AddOutput(string data)
@@ -79,15 +96,22 @@ namespace Mosa.Tool.Launcher
 		{
 			if (openFileDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK)
 			{
-				SetSource(openFileDialog1.FileName);
+				SourceFile = openFileDialog1.FileName;
+
+				lbSource.Text = Path.GetFileName(SourceFile);
+				lbSourceDirectory.Text = Path.GetDirectoryName(SourceFile);
+
 			}
 		}
 
-		public void SetSource(string filename)
+		private string CombineParameterAndDirectory(string parameter, string subdirectory)
 		{
-			SourceFile = filename;
-			lbSource.Text = Path.GetFileName(SourceFile);
-			lbSourceDirectory.Text = Path.GetDirectoryName(SourceFile);
+			var variable = Environment.GetEnvironmentVariable(parameter);
+
+			if (variable == null)
+				return null;
+
+			return Path.Combine(variable, subdirectory);
 		}
 
 		private void MainForm_Load(object sender, EventArgs e)
@@ -111,14 +135,12 @@ namespace Mosa.Tool.Launcher
 			lbQEMUExecutable.Text = TryFind(
 				"qemu-system-i386.exe",
 				new string[] {
-					@"%MOSA%\Tools\QEMU\",
-					@"%MOSA%\QEMU\",
-					@"..\Tools\QEMU\",
-					@"\Tools\QEMU\",
-					@"%ProgramFiles%\qemu\",
-					@"%ProgramFiles(x86)%\qemu\",
-					//@"C:\Program Files (x86)\qemu\",
-					//@"C:\Program Files\qemu\"
+					CombineParameterAndDirectory("MOSA",@"Tools\QEMU"),
+					CombineParameterAndDirectory("MOSA",@"QEMU"),
+					@"..\Tools\QEMU",
+					@"\Tools\QEMU",
+					CombineParameterAndDirectory("ProgramFiles",@"qemu"),
+					CombineParameterAndDirectory("ProgramFiles(x86)",@"qemu")
 				}
 			);
 
@@ -136,28 +158,34 @@ namespace Mosa.Tool.Launcher
 			lbNDISASMExecutable.Text = TryFind(
 				   "ndisasm.exe",
 				   new string[] {
-					@"%MOSA%\Tools\ndisasm\",
-					@"%MOSA%\ndisasm\",
+					CombineParameterAndDirectory("MOSA",@"Tools\ndisasm"),
+					CombineParameterAndDirectory("MOSA",@"ndisasm"),
 					@"..\Tools\ndisasm\",
 					@"\Tools\ndisasm\"
 				}
 			);
 
+			// find BOCHS
 			lbBOCHSExecutable.Text = TryFind(
 				"bochs.exe",
 				new string[] {
-					@"%MOSA%\Tools\Bochs\",
-					@"%MOSA%\Bochs\",
+					CombineParameterAndDirectory("ProgramFiles",@"Bochs-2.6.5"),
+					CombineParameterAndDirectory("ProgramFiles(x86)",@"Bochs-2.6.5"),
+					CombineParameterAndDirectory("ProgramFiles",@"Bochs-2.6.2"),
+					CombineParameterAndDirectory("ProgramFiles(x86)",@"Bochs-2.6.2"),
+					CombineParameterAndDirectory("MOSA",@"Tools\Bochs"),
+					CombineParameterAndDirectory("MOSA",@"Bochs"),
 					@"..\Tools\Bochs\",
-					@"\Tools\Bochs\",
-					@"%ProgramFiles%\Bochs-2.6.5\",
-					@"%ProgramFiles(x86)%\Bochs-2.6.5\",
-					//@"C:\Program Files (x86)\Bochs-2.6.5\",
-					//@"C:\Program Files\Bochs-2.6.5\",
-					@"%ProgramFiles%\Bochs-2.6.2\",
-					@"%ProgramFiles(x86)%\Bochs-2.6.2\",
-					//@"C:\Program Files (x86)\Bochs-2.6.2\",
-					//@"C:\Program Files\Bochs-2.6.2\"
+					@"\Tools\Bochs\"
+				}
+			);
+
+			// find vmware player
+			lbVMwarePlayerExecutable.Text = TryFind(
+				"vmplayer.exe",
+				new string[] {
+					Path.Combine(Environment.GetEnvironmentVariable("ProgramFiles"),@"VMware\VMware Player"),
+					Path.Combine(Environment.GetEnvironmentVariable("ProgramFiles(x86)"),@"VMware\VMware Player")
 				}
 			);
 		}
@@ -177,6 +205,11 @@ namespace Mosa.Tool.Launcher
 
 		private bool TryFind(string file, string directory, out string location)
 		{
+			location = string.Empty;
+
+			if (directory == null)
+				return false;
+
 			string combine = Path.Combine(directory, file);
 
 			if (File.Exists(combine))
@@ -184,8 +217,6 @@ namespace Mosa.Tool.Launcher
 				location = combine;
 				return true;
 			}
-
-			location = string.Empty;
 
 			return false;
 		}
@@ -250,9 +281,13 @@ namespace Mosa.Tool.Launcher
 
 		private void button1_Click_1(object sender, EventArgs e)
 		{
+			CompilerAndLaunch();
+		}
+
+		private void CompilerAndLaunch()
+		{
 			richTextBox1.Clear();
 			richTextBox2.Clear();
-			tabControl1.SelectedTab = tabPage2;
 			Compile();
 
 			Launch(cbExitOnLaunch.Checked);
@@ -262,7 +297,6 @@ namespace Mosa.Tool.Launcher
 				Application.Exit();
 			}
 		}
-
 		protected byte[] GetResource(string name)
 		{
 			var assembly = Assembly.GetExecutingAssembly();
@@ -317,15 +351,17 @@ namespace Mosa.Tool.Launcher
 			options.VolumeLabel = "MOSABOOT";
 			options.PatchSyslinuxOption = true;
 
+			string vmext = ".img";
+
 			switch (cbImageFormat.SelectedIndex)
 			{
 				case 0: options.ImageFormat = ImageFormatType.IMG; break;
-				case 1: options.ImageFormat = ImageFormatType.VHD; break;
-				case 2: options.ImageFormat = ImageFormatType.VDI; break;
+				case 1: options.ImageFormat = ImageFormatType.VHD; vmext = ".vhd"; break;
+				case 2: options.ImageFormat = ImageFormatType.VDI; vmext = ".vdi"; break;
 				default: break;
 			}
 
-			imageFile = Path.Combine(DestinationDirectory, Path.GetFileNameWithoutExtension(SourceFile) + ".img");
+			imageFile = Path.Combine(DestinationDirectory, Path.GetFileNameWithoutExtension(SourceFile) + vmext);
 			options.DiskImageFileName = imageFile;
 
 			Generator.Create(options);
@@ -338,10 +374,13 @@ namespace Mosa.Tool.Launcher
 
 		private void Launch(bool exit)
 		{
-			if (cbEmulator.SelectedIndex == 0)
-				LaunchQemu(exit);
-			else if (cbEmulator.SelectedIndex == 1)
-				LaunchBochs(exit);
+			switch (cbEmulator.SelectedIndex)
+			{
+				case 0: LaunchQemu(exit); break;
+				case 1: LaunchBochs(exit); break;
+				case 2: LaunchVMwarePlayer(exit); break;
+				default: break;
+			}
 		}
 
 		private static string Quote(string location)
@@ -363,17 +402,18 @@ namespace Mosa.Tool.Launcher
 			start.RedirectStandardError = true;
 
 			var process = Process.Start(start);
-			var output = process.StandardOutput.ReadToEnd();
 
 			if (waitForExit)
 			{
+				var output = process.StandardOutput.ReadToEnd();
+
 				process.WaitForExit();
+
+				var error = process.StandardError.ReadToEnd();
+				return output + error;
 			}
 
-			//return output;
-			var error = process.StandardError.ReadToEnd();
-
-			return output + error;
+			return string.Empty;
 		}
 
 		private void LaunchNDISASM()
@@ -402,26 +442,84 @@ namespace Mosa.Tool.Launcher
 		private void LaunchBochs(bool exit)
 		{
 			var logfile = Path.Combine(DestinationDirectory, Path.GetFileNameWithoutExtension(SourceFile) + "-bochs.log");
+			var configfile = Path.Combine(DestinationDirectory, Path.GetFileNameWithoutExtension(SourceFile) + ".bxrc");
 			var exeDir = Path.GetDirectoryName(lbBOCHSExecutable.Text);
 
+			var fileVersionInfo = FileVersionInfo.GetVersionInfo(lbBOCHSExecutable.Text);
+
+			// simd or sse
+			var simd = "simd";
+
+			if (!(fileVersionInfo.FileMajorPart >= 2 && fileVersionInfo.FileMinorPart >= 6 && fileVersionInfo.FileBuildPart >= 5))
+				simd = "sse";
+
+			var sb = new StringBuilder();
+
+			sb.AppendLine("megs: " + nmMemory.Value.ToString());
+			sb.AppendLine("ata0: enabled=1,ioaddr1=0x1f0,ioaddr2=0x3f0,irq=14");
+			sb.AppendLine("cpuid: mmx=1,sep=1," + simd + "=sse4_2,apic=xapic,aes=1,movbe=1,xsave=1");
+			sb.AppendLine("boot: c");
+			sb.AppendLine("log: " + Quote(logfile));
+			sb.AppendLine("ata0-master: type=disk,path=" + Quote(imageFile) + ",biosdetect=none,cylinders=0,heads=0,spt=0");
+			sb.AppendLine("romimage: file=" + Quote(Path.Combine(exeDir, "BIOS-bochs-latest")));
+			sb.AppendLine("vgaromimage: file=" + Quote(Path.Combine(exeDir, "VGABIOS-lgpl-latest")));
+
+			//sb.AppendLine("com1: enabled=1, mode=pipe-server, dev=\\.\pipe\MOSA");
+
+			File.WriteAllText(configfile, sb.ToString());
+
 			string arg =
-				//"-q" +
-				"-n" +
-				//" -noconsole" +
-				" megs:64" +
-				" ata0:enabled=1,ioaddr1=0x1f0,ioaddr2=0x3f0,irq=14" +
-				" cpuid:mmx=1,sep=1,sse=sse4_2,apic=xapic,aes=1,movbe=1,xsave=1" +
-				" boot:c" +	
-				//" config_interface:win32config" +
-				//" display_library:win32" +
-				" log:" + Quote(logfile) +
-				" ata0-master:type=disk,path=" + Quote(imageFile) + ",biosdetect=none,cylinders=0,heads=0,spt=0" +
-				" romimage:file=" + Quote(Path.Combine(exeDir, "BIOS-bochs-latest")) +
-				" vgaromimage:file=" + Quote(Path.Combine(exeDir, "VGABIOS-lgpl-latest"));
+				"-q " +
+				"-f " + Quote(configfile);
 
 			var output = LaunchApplication(lbBOCHSExecutable.Text, arg, !exit);
 
 			AddOutput(output);
 		}
+
+		private void LaunchVMwarePlayer(bool exit)
+		{
+			var logfile = Path.Combine(DestinationDirectory, Path.GetFileNameWithoutExtension(SourceFile) + "-vmx.log");
+			var configfile = Path.Combine(DestinationDirectory, Path.GetFileNameWithoutExtension(SourceFile) + ".vmx");
+
+			var sb = new StringBuilder();
+
+			sb.AppendLine(".encoding = \"windows-1252\"");
+			sb.AppendLine("config.version = \"8\"");
+			sb.AppendLine("virtualHW.version = \"4\"");
+			sb.AppendLine("memsize = " + Quote(nmMemory.Value.ToString()));
+			sb.AppendLine("ide0:0.present = \"FALSE\"");
+			sb.AppendLine("ide0:0.fileName = \"auto detect\"");
+			sb.AppendLine("ide1:0.present = \"FALSE\"");
+			sb.AppendLine("ide1:0.fileName = \"auto detect\"");
+			sb.AppendLine("ide1:0.deviceType = \"cdrom-raw\"");
+			sb.AppendLine("floppy0.present = \"FALSE\"");
+			sb.AppendLine("displayName = \"MOSA - " + Path.GetFileNameWithoutExtension(SourceFile) + "\"");
+			sb.AppendLine("guestOS = \"other\"");
+			sb.AppendLine("priority.grabbed = \"normal\"");
+			sb.AppendLine("priority.ungrabbed = \"normal\"");
+			sb.AppendLine("scsi0:0.present = \"TRUE\"");
+			sb.AppendLine("scsi0:0.fileName = " + Quote(imageFile));
+			sb.AppendLine("scsi0:0.redo = \"\"");
+
+			//sb.AppendLine("ide0:0.fileName = " + Quote(imageFile));
+			//sb.AppendLine("ide0:0.deviceType = \"cdrom-image\"");
+
+			//sb.AppendLine("serial0.present = \"TRUE\"");
+			//sb.AppendLine("serial0.yieldOnMsrRead = \"FALSE\"");
+			//sb.AppendLine("serial0.fileType = \"pipe\"");
+			//sb.AppendLine("serial0.fileName = \"\\\\.\\pipe\\MOSA\"");
+			//sb.AppendLine("serial0.pipe.endPoint = \"server\"");
+			//sb.AppendLine("serial0.tryNoRxLoss = \"FALSE\"");
+
+			File.WriteAllText(configfile, sb.ToString());
+
+			string arg = Quote(configfile);
+
+			var output = LaunchApplication(lbVMwarePlayerExecutable.Text, arg, !exit);
+
+			AddOutput(output);
+		}
+
 	}
 }

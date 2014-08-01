@@ -26,15 +26,26 @@ namespace Mosa.Tool.Launcher
 
 			var main = new MainForm();
 
-			if (args.Length != 0)
+			foreach (var arg in args)
 			{
-				if (args[0].IndexOf(Path.DirectorySeparatorChar) >= 0)
+				if (arg == "-q")
 				{
-					main.SetSource(args[0]);
+					main.ExitOnLaunch = true;
+					continue;
+				}
+				else if (arg == "-a")
+				{
+					main.AutoLaunch = true;
+					continue;
+				}
+
+				if (arg.IndexOf(Path.DirectorySeparatorChar) >= 0)
+				{
+					main.SourceFile = arg;
 				}
 				else
 				{
-					main.SetSource(Path.Combine(Directory.GetCurrentDirectory(), args[0]));
+					main.SourceFile = Path.Combine(Directory.GetCurrentDirectory(), arg);
 				}
 			}
 
