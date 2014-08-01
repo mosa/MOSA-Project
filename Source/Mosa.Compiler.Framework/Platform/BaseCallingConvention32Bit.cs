@@ -64,7 +64,7 @@ namespace Mosa.Compiler.Framework.Platform
 			Operand result = context.Result;
 			MosaMethod method = context.MosaMethod;
 
-			Debug.Assert(method != null);
+			Debug.Assert(method != null, context.ToString());
 
 			Operand scratch = Operand.CreateCPURegister(typeLayout.TypeSystem.BuiltIn.Pointer, scratchRegister);
 

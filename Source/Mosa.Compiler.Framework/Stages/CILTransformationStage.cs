@@ -253,6 +253,37 @@ namespace Mosa.Compiler.Framework.Stages
 			if (ProcessExternalCall(context))
 				return;
 
+			// If the method being called is a virtual method then we need to box the value type
+			if (context.MosaMethod.IsVirtual &&
+				context.Operand1.Type.ElementType != null &&
+				context.Operand1.Type.ElementType.IsValueType &&
+				context.MosaMethod.DeclaringType == context.Operand1.Type.ElementType)
+			{
+				// Get the value type, size and native alignment
+				MosaType type = context.Operand1.Type.ElementType;
+				int typeSize = TypeLayout.GetTypeSize(type);
+				int alignment = TypeLayout.NativePointerAlignment;
+				typeSize += (alignment - (typeSize % alignment)) % alignment;
+
+				// Create a virtual register to hold our boxed value
+				var boxedValue = MethodCompiler.CreateVirtualRegister(TypeSystem.BuiltIn.Object);
+
+				// Create a new context before the call and set it as a VmCall
+				var before = context.InsertBefore();
+				before.SetInstruction(IRInstruction.Nop);
+				ReplaceWithVmCall(before, VmCall.Box);
+
+				// Populate the operands for the VmCall and result
+				before.SetOperand(1, GetRuntimeTypeHandle(type, before));
+				before.SetOperand(2, context.Operand1);
+				before.SetOperand(3, Operand.CreateConstantUnsignedInt(TypeSystem, (uint)typeSize));
+				before.OperandCount = 4;
+				before.Result = boxedValue;
+
+				// Now replace the value type pointer with the boxed value virtual register
+				context.Operand1 = boxedValue;
+			}
+
 			ProcessInvokeInstruction(context, context.MosaMethod, context.Result, new List<Operand>(context.Operands));
 		}
 
@@ -540,12 +571,10 @@ namespace Mosa.Compiler.Framework.Stages
 		private Operand GetRuntimeTypeHandle(MosaType runtimeType, Context context)
 		{
 			var typeDef = Operand.CreateUnmanagedSymbolPointer(TypeSystem, runtimeType.FullName + Metadata.TypeDefinition);
-			var runtimeTypeHandle = MethodCompiler.StackLayout.AddStackLocal(TypeSystem.GetTypeByName("System", "RuntimeTypeHandle"));
-			var runtimeTypeHandlePtr = MethodCompiler.CreateVirtualRegister(TypeSystem.BuiltIn.Pointer);
+			var runtimeTypeHandle = MethodCompiler.CreateVirtualRegister(TypeSystem.GetTypeByName("System", "RuntimeTypeHandle"));//MethodCompiler.StackLayout.AddStackLocal(TypeSystem.GetTypeByName("System", "RuntimeTypeHandle"));
 			var before = context.InsertBefore();
 			before.SetInstruction(IRInstruction.Move, runtimeTypeHandle, typeDef);
-			before.AppendInstruction(IRInstruction.AddressOf, runtimeTypeHandlePtr, runtimeTypeHandle);
-			return runtimeTypeHandlePtr;
+			return runtimeTypeHandle;
 		}
 
 		/// <summary>
@@ -688,7 +717,6 @@ namespace Mosa.Compiler.Framework.Stages
 				context.OperandCount = 3;
 			}
 			context.Result = result;
-			return;
 		}
 
 		/// <summary>
@@ -986,9 +1014,20 @@ namespace Mosa.Compiler.Framework.Stages
 			MosaType arrayType = arrayOperand.Type;
 			Debug.Assert(arrayType.ElementType == result.Type.ElementType);
 
+			//
+			// The sequence we're emitting is:
+			//
+			//      arrayAddress = arrayOperand + 12
+			//      offset = arrayIndexOperand * elementSize
+			//      result = arrayAddress + offset
+			//
+			// The array data starts at offset 12 from the array object itself. The 12 is a assumption of x86,
+			// which might change for other platforms. This is automatically calculated using the plaform native pointer size.
+			//
+
 			Operand arrayAddress = LoadArrayBaseAddress(context, arrayType, arrayOperand);
 			Operand elementOffset = CalculateArrayElementOffset(context, arrayType, arrayIndexOperand);
-			context.AppendInstruction(IRInstruction.AddSigned, result, arrayAddress, elementOffset);
+			context.SetInstruction(IRInstruction.AddSigned, result, arrayAddress, elementOffset);
 		}
 
 		private Operand CalculateArrayElementOffset(Context context, MosaType arrayType, Operand arrayIndexOperand)
@@ -996,20 +1035,9 @@ namespace Mosa.Compiler.Framework.Stages
 			int elementSizeInBytes = 0, alignment = 0;
 			Architecture.GetTypeRequirements(TypeLayout, arrayType.ElementType, out elementSizeInBytes, out alignment);
 
-			//
-			// The sequence we're emitting is:
-			//
-			//      offset = arrayIndexOperand * elementSize
-			//      temp = offset + 12
-			//      result = *(arrayOperand * temp)
-			//
-			// The array data starts at offset 12 from the array object itself. The 12 is a hardcoded assumption
-			// of x86, which might change for other platforms. We need to refactor this into some helper classes.
-			//
-
 			Operand elementOffset = MethodCompiler.CreateVirtualRegister(TypeSystem.BuiltIn.I4);
 			Operand elementSizeOperand = Operand.CreateConstantSignedInt(TypeSystem, (int)elementSizeInBytes);
-			context.AppendInstruction(IRInstruction.MulSigned, elementOffset, arrayIndexOperand, elementSizeOperand);
+			context.InsertBefore().SetInstruction(IRInstruction.MulSigned, elementOffset, arrayIndexOperand, elementSizeOperand);
 
 			return elementOffset;
 		}
@@ -1019,9 +1047,9 @@ namespace Mosa.Compiler.Framework.Stages
 			var arrayPointer = arrayType.ElementType.ToManagedPointer();
 
 			Operand arrayAddress = MethodCompiler.CreateVirtualRegister(arrayPointer);
-			Operand fixedOffset = Operand.CreateConstantSignedInt(TypeSystem, (int)12);
+			Operand fixedOffset = Operand.CreateConstantSignedInt(TypeSystem, (NativePointerSize * 3));
 
-			context.SetInstruction(IRInstruction.AddSigned, arrayAddress, arrayOperand, fixedOffset);
+			context.InsertBefore().SetInstruction(IRInstruction.AddSigned, arrayAddress, arrayOperand, fixedOffset);
 
 			return arrayAddress;
 		}
@@ -1048,12 +1076,23 @@ namespace Mosa.Compiler.Framework.Stages
 				loadInstruction = IRInstruction.LoadZeroExtended;
 			}
 
+			//
+			// The sequence we're emitting is:
+			//
+			//      arrayAddress = arrayOperand + 12
+			//      offset = arrayIndexOperand * elementSize
+			//      result = *(arrayAddress + offset)
+			//
+			// The array data starts at offset 12 from the array object itself. The 12 is a assumption of x86,
+			// which might change for other platforms. This is automatically calculated using the plaform native pointer size.
+			//
+
 			Operand arrayAddress = LoadArrayBaseAddress(context, arraySigType, arrayOperand);
 			Operand elementOffset = CalculateArrayElementOffset(context, arraySigType, arrayIndexOperand);
 
 			Debug.Assert(elementOffset != null);
 
-			context.AppendInstruction(loadInstruction, result, arrayAddress, elementOffset);
+			context.SetInstruction(loadInstruction, result, arrayAddress, elementOffset);
 			context.MosaType = arraySigType.ElementType;
 		}
 

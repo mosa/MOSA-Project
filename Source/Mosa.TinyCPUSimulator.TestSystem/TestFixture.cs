@@ -15,7 +15,7 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 {
 	public class TestFixture
 	{
-		private static Dictionary<Type, TestCompiler> testCompilers = new Dictionary<Type, TestCompiler>();
+		private static TestCompiler testCompiler;
 
 		protected virtual BaseTestPlatform BasePlatform { get { return null; } }
 
@@ -23,15 +23,11 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 		{
 			get
 			{
-				TestCompiler testCompiler;
-
-				if (!testCompilers.TryGetValue(this.GetType(), out testCompiler))
+				if (testCompiler == null)
 				{
 					testCompiler = new TestCompiler(BasePlatform);
 					testCompiler.EnableSSA = true;
 					testCompiler.EnableSSAOptimizations = true;
-
-					testCompilers.Add(this.GetType(), testCompiler);
 				}
 
 				return testCompiler;

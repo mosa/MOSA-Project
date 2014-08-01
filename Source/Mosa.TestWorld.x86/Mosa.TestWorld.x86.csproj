@@ -25,6 +25,7 @@
     <OldToolsVersion>3.5</OldToolsVersion>
     <UpgradeBackupLocation />
     <TargetFrameworkProfile />
+    <NoStdLib>true</NoStdLib>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -43,6 +44,7 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <WarningLevel>4</WarningLevel>
     <DebugType>full</DebugType>
+    <NoWarn>1685</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -60,6 +62,7 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <WarningLevel>2</WarningLevel>
     <DebugType>none</DebugType>
+    <NoWarn>1685</NoWarn>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Boot.cs" />
@@ -78,6 +81,10 @@
     <Compile Include="Tests\GenericTest.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Korlib\Korlib.csproj">
+      <Project>{631bc4f3-e2d8-4319-814c-13904caa17ce}</Project>
+      <Name>Korlib</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Mosa.ClassLib\Mosa.ClassLib.csproj">
       <Project>{27A3C89C-1967-45FF-A77E-94F44995C42C}</Project>
       <Name>Mosa.ClassLib</Name>

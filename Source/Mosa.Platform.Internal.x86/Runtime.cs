@@ -23,12 +23,12 @@ namespace Mosa.Platform.Internal.x86
 		#region Allocation
 
 		// This method will be plugged by "Mosa.Kernel.x86.KernelMemory.AllocateMemory"
-		private static uint AllocateMemory(uint size)
+		public static uint AllocateMemory(uint size)
 		{
 			return 0;
 		}
 
-		public static void* AllocateObject(RuntimeTypeHandle* handle, uint classSize)
+		public static void* AllocateObject(RuntimeTypeHandle handle, uint classSize)
 		{
 			// An object has the following memory layout:
 			//   - IntPtr TypeDef
@@ -39,13 +39,13 @@ namespace Mosa.Platform.Internal.x86
 			void* memory = (void*)AllocateMemory(allocationSize);
 
 			uint* destination = (uint*)memory;
-			destination[0] = ((uint*)handle)[0];
+			destination[0] = ((uint*)&handle)[0];
 			destination[1] = 0; // No sync block initially
 
 			return memory;
 		}
 
-		public static void* AllocateArray(RuntimeTypeHandle* handle, uint elementSize, uint elements)
+		public static void* AllocateArray(RuntimeTypeHandle handle, uint elementSize, uint elements)
 		{
 			// An array has the following memory layout:
 			//   - IntPtr TypeDef
@@ -59,14 +59,14 @@ namespace Mosa.Platform.Internal.x86
 			void* memory = (void*)AllocateMemory(allocationSize);
 
 			uint* destination = (uint*)memory;
-			destination[0] = ((uint*)handle)[0];
+			destination[0] = ((uint*)&handle)[0];
 			destination[1] = 0; // No sync block initially
 			destination[2] = elements;
 
 			return memory;
 		}
 
-		public static void* AllocateString(RuntimeTypeHandle* handle, uint length)
+		public static void* AllocateString(RuntimeTypeHandle handle, uint length)
 		{
 			return AllocateArray(handle, sizeof(char), length);
 		}
@@ -103,9 +103,9 @@ namespace Mosa.Platform.Internal.x86
 
 		#endregion Metadata
 
-		public static void InitializeArray(uint* array, RuntimeFieldHandle* handle)
+		public static void InitializeArray(uint* array, RuntimeFieldHandle handle)
 		{
-			uint* fieldDefinition = ((uint**)handle)[0];
+			uint* fieldDefinition = ((uint**)&handle)[0];
 			byte* arrayElements = (byte*)(array + 3);
 
 			// See FieldDefinition for format of field handle
@@ -120,12 +120,12 @@ namespace Mosa.Platform.Internal.x86
 			}
 		}
 
-		public static void* IsInstanceOfType(RuntimeTypeHandle* handle, void* obj)
+		public static void* IsInstanceOfType(RuntimeTypeHandle handle, void* obj)
 		{
-			if (obj == null || handle == null)
+			if (obj == null)
 				return null;
 
-			MetadataTypeStruct* typeDefinition = (MetadataTypeStruct*)((uint**)handle)[0];
+			MetadataTypeStruct* typeDefinition = (MetadataTypeStruct*)((uint**)&handle)[0];
 
 			MetadataTypeStruct* objTypeDefinition = (MetadataTypeStruct*)((uint*)obj)[0];
 
@@ -163,11 +163,11 @@ namespace Mosa.Platform.Internal.x86
 			return obj;
 		}
 
-		public static void* Castclass(MetadataTypeStruct* typeDefinition, void* obj)
+		/*public static void* Castclass(MetadataTypeStruct* typeDefinition, void* obj)
 		{
 			//TODO: Fake result
 			return obj;
-		}
+		}*/
 
 		// TODO: efficiency?
 		public static void Memcpy(void* dest, void* src, uint count)
@@ -209,35 +209,35 @@ namespace Mosa.Platform.Internal.x86
 
 		#region (Un)Boxing
 
-		public static void* Box8(RuntimeTypeHandle* handle, byte value)
+		public static void* Box8(RuntimeTypeHandle handle, byte value)
 		{
 			byte* memory = (byte*)AllocateObject(handle, 4);	// 4 for alignment
 			*(byte*)(memory + (NativeIntSize * 2)) = value;
 			return memory;
 		}
 
-		public static void* Box16(RuntimeTypeHandle* handle, ushort value)
+		public static void* Box16(RuntimeTypeHandle handle, ushort value)
 		{
 			byte* memory = (byte*)AllocateObject(handle, 4);	// 4 for alignment
 			*(ushort*)(memory + (NativeIntSize * 2)) = value;
 			return memory;
 		}
 
-		public static void* Box32(RuntimeTypeHandle* handle, uint value)
+		public static void* Box32(RuntimeTypeHandle handle, uint value)
 		{
 			byte* memory = (byte*)AllocateObject(handle, 4);
 			*(uint*)(memory + (NativeIntSize * 2)) = value;
 			return memory;
 		}
 
-		public static void* Box64(RuntimeTypeHandle* handle, ulong value)
+		public static void* Box64(RuntimeTypeHandle handle, ulong value)
 		{
 			byte* memory = (byte*)AllocateObject(handle, 8);
 			*(ulong*)(memory + (NativeIntSize * 2)) = value;
 			return memory;
 		}
 
-		public static void* Box(RuntimeTypeHandle* handle, void* value, uint size)
+		public static void* Box(RuntimeTypeHandle handle, void* value, uint size)
 		{
 			byte* memory = (byte*)AllocateObject(handle, size);
 			Memcpy(memory + NativeIntSize * 2, value, size);
@@ -276,7 +276,7 @@ namespace Mosa.Platform.Internal.x86
 		{
 		}
 
-		public static uint GetSizeOfObject(void* obj)
+		/*public static uint GetSizeOfObject(void* obj)
 		{
 			RuntimeTypeHandle* typeDefinition = TypeImpl.GetTypeHandleImpl(obj);
 
@@ -290,6 +290,6 @@ namespace Mosa.Platform.Internal.x86
 			uint sizeOf = (*typeDefinition).Size;
 
 			return sizeOf;
-		}
+		}*/
 	}
 }

@@ -33,6 +33,11 @@ namespace System
 			}
 		}
 
+		public bool Equals(RuntimeTypeHandle obj)
+		{
+			return Equals((object)obj);
+		}
+
 		public override bool Equals(object obj)
 		{
 			if (!(obj is System.RuntimeTypeHandle))

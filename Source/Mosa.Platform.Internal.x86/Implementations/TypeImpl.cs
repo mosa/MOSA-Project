@@ -47,12 +47,12 @@ namespace Mosa.Platform.Internal.x86
 				return null;
 		}
 
-		public static RuntimeTypeHandle* GetTypeHandleImpl(void* obj)
+		public static RuntimeTypeHandle GetTypeHandleImpl(void* obj)
 		{
 			// TypeDefinition is located at the beginning of object (i.e. *obj )
 			RuntimeTypeHandle handle = new RuntimeTypeHandle();
-			((uint**)&handle)[0][0] = ((uint*)obj)[0];
-			return &handle;
+			((uint*)&handle)[0] = ((uint*)obj)[0];
+			return handle;
 		}
 
 		public static Type GetTypeFromHandleImpl(RuntimeTypeHandle handle)
@@ -60,10 +60,11 @@ namespace Mosa.Platform.Internal.x86
 			// Iterate through all the assemblies and look for the type handle
 			for (int i = 0; i < Runtime.Assemblies.Length; i++)
 			{
-				for (int j = 0; j < Runtime.Assemblies[i].handles.Length; j++)
+				for (int j = 0; j < Runtime.Assemblies[i].types.Length; j++)
 				{
 					// If its not a match then skip
-					if (Runtime.Assemblies[i].handles[j] != handle) continue;
+					if (Runtime.Assemblies[i].types[j].TypeHandle != handle)
+						continue;
 
 					// If we get here then its a match so return it
 					return Runtime.Assemblies[i].types[j];

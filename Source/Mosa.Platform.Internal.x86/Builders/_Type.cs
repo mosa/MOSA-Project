@@ -20,11 +20,13 @@ namespace System
 		private MetadataTypeStruct* typeStruct;
 		private _Assembly assembly;
 		private string fullname;
+		private RuntimeTypeHandle handle;
 
 		internal _Type(RuntimeTypeHandle handle, _Assembly assembly)
 			: base(handle)
 		{
 			this.assembly = assembly;
+			this.handle = handle;
 			this.typeStruct = (MetadataTypeStruct*)((uint***)&handle)[0][0];
 			this.fullname = x86Runtime.InitializeMetadataString((*this.typeStruct).Name);
 		}
@@ -41,6 +43,14 @@ namespace System
 				RuntimeTypeHandle handle = new RuntimeTypeHandle();
 				((uint*)&handle)[0] = (uint)(*this.typeStruct).ParentType;
 				return Type.GetTypeFromHandle(handle);
+			}
+		}
+
+		public override RuntimeTypeHandle TypeHandle
+		{
+			get
+			{
+				return this.handle;
 			}
 		}
 

@@ -49,6 +49,8 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 			simAdapter = platform.CreateSimAdaptor();
 
 			linker = new SimLinker(simAdapter);
+
+			CompileTestCode();
 		}
 
 		protected void CompileTestCode()
@@ -91,8 +93,6 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 
 		protected T Run<T>(string ns, string type, string method, bool reset, params object[] parameters)
 		{
-			CompileTestCode();
-
 			if (reset)
 			{
 				// reset the stack

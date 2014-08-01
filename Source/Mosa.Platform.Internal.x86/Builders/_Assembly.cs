@@ -28,11 +28,10 @@ namespace System
 			this.types = new Type[(*this.assemblyStruct).NumberOfTypes];
 			for (uint i = 0; i < this.types.Length; i++)
 			{
-				fixed (RuntimeTypeHandle* handle = &this.handles[i])
-				{
-					((uint**)handle)[0] = ((uint*)this.assemblyStruct) + MetadataAssemblyStruct.TypesOffset + i;
-				}
-				this.types[i] = new _Type(this.handles[i], this);
+				RuntimeTypeHandle handle = new RuntimeTypeHandle();
+				((uint**)&handle)[0] = ((uint*)this.assemblyStruct) + MetadataAssemblyStruct.TypesOffset + i;
+				this.handles[i] = handle;
+				this.types[i] = new _Type(handle, this);
 			}
 		}
 	}
