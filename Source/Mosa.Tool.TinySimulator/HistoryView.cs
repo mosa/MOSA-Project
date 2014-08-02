@@ -62,6 +62,9 @@ namespace Mosa.Tool.TinySimulator
 			if (!MainForm.Record)
 				return;
 
+			if (simState.IP == 0xFFFFFFF0)
+				return;
+
 			string methodName = SimCPU.FindSymbol(simState.IP).Name;
 
 			lock (pendingHistory)

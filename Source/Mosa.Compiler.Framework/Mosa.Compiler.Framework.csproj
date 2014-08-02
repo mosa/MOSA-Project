@@ -85,7 +85,8 @@
     <Compile Include="BaseCallingConventionExtended.cs" />
     <Compile Include="DelegatePatcher.cs" />
     <Compile Include="Intrinsics\InternalInitializeArray.cs" />
-    <Compile Include="Intrinsics\InternalGetType.cs" />
+    <Compile Include="Intrinsics\InternalsBase.cs" />
+    <Compile Include="Intrinsics\TypeInternals.cs" />
     <Compile Include="IR\Kill.cs" />
     <Compile Include="IR\Gen.cs" />
     <Compile Include="IR\CompoundLoad.cs" />
@@ -116,7 +117,7 @@
     <Compile Include="RegisterAllocator\LiveInterval.cs" />
     <Compile Include="RegisterAllocator\VirtualRegister.cs" />
     <Compile Include="RegisterAllocator\GreedyRegisterAllocator.cs" />
-    <Compile Include="Stages\ConvertCompoundMoveStage.cs" />
+    <Compile Include="Stages\ConvertCompoundStage.cs" />
     <Compile Include="Stages\InstructionStatisticsStage.cs" />
     <Compile Include="Stages\MapFileGenerationStage.cs" />
     <Compile Include="Stages\MethodPipelineExportStage.cs" />
@@ -148,6 +149,7 @@
     <Compile Include="Stages\EdgeSplitStage.cs" />
     <Compile Include="Stages\TypeInitializerSchedulerStage.cs" />
     <Compile Include="MosaTypeLayout.cs" />
+    <Compile Include="Stages\UnboxValueTypeStage.cs" />
     <Compile Include="VirtualRegisters.cs" />
     <Compile Include="BaseCodeEmitter.cs" />
     <Compile Include="BaseInstruction.cs" />

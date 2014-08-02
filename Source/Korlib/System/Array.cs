@@ -28,6 +28,15 @@ namespace System
 		}
 
 		/// <summary>
+		/// Gets the rank (number of dimensions) of the Array. For example, a one-dimensional array returns 1, a two-dimensional array returns 2, and so on.
+		/// </summary>
+		public int Rank
+		{
+			// TODO
+			get { return 0; }
+		}
+
+		/// <summary>
 		///
 		/// </summary>
 		public void SetValue(object value, int index)

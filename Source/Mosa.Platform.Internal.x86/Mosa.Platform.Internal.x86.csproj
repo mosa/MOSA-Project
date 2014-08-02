@@ -43,6 +43,7 @@
     <WarningLevel>4</WarningLevel>
     <DebugType>full</DebugType>
     <NoStdLib>true</NoStdLib>
+    <NoWarn>1685</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -60,9 +61,15 @@
     <WarningLevel>2</WarningLevel>
     <DebugType>none</DebugType>
     <NoStdLib>true</NoStdLib>
+    <NoWarn>1685</NoWarn>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Builders\_Assembly.cs" />
+    <Compile Include="Builders\_Type.cs" />
     <Compile Include="Division.cs" />
+    <Compile Include="Implementations\TypeImpl.cs" />
+    <Compile Include="MetadataStructures\MetadataAssemblyStruct.cs" />
+    <Compile Include="MetadataStructures\MetadataTypeStruct.cs" />
     <Compile Include="SpinLock.cs" />
     <Compile Include="Runtime.cs" />
     <Compile Include="Native.cs" />

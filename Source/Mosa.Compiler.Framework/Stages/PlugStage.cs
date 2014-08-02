@@ -145,7 +145,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (targetMethod.Signature.Parameters.Count != plugMethod.Signature.Parameters.Count - 1)
 				return false;
 
-			if (plugMethod.Signature.Parameters[0].Type.IsValueType && !plugMethod.Signature.Parameters[0].Type.IsManagedPointer)
+			if (plugMethod.Signature.Parameters[0].ParameterType.IsValueType && !plugMethod.Signature.Parameters[0].ParameterType.IsManagedPointer)
 				return false;
 
 			// TODO: Compare plug.Parameters[0].Type to the target's type

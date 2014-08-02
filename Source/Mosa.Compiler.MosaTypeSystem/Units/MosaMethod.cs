@@ -54,6 +54,8 @@ namespace Mosa.Compiler.MosaTypeSystem
 		private List<MosaInstruction> instructions;
 		private List<MosaExceptionHandler> exceptionHandlers;
 
+		public MosaMethodAttributes MethodAttributes { get; private set; }
+
 		public IList<MosaLocal> LocalVariables { get; private set; }
 
 		public uint MaxStack { get; private set; }
@@ -140,6 +142,8 @@ namespace Mosa.Compiler.MosaTypeSystem
 			public bool HasOpenGenericParams { set { method.HasOpenGenericParams = value; } }
 
 			public IList<MosaType> GenericArguments { get { return method.genericArguments; } }
+
+			public MosaMethodAttributes MethodAttributes { set { method.MethodAttributes = value; } }
 
 			public IList<MosaLocal> LocalVariables { get { return method.localVars; } }
 

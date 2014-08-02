@@ -43,6 +43,7 @@
     <WarningLevel>4</WarningLevel>
     <DebugType>full</DebugType>
     <NoStdLib>true</NoStdLib>
+    <NoWarn>1685</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -60,6 +61,7 @@
     <WarningLevel>2</WarningLevel>
     <DebugType>none</DebugType>
     <NoStdLib>true</NoStdLib>
+    <NoWarn>1685</NoWarn>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Native.cs" />

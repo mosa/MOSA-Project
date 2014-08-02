@@ -18,7 +18,7 @@ namespace Mosa.Compiler.Framework.Stages
 	/// convert them into respective compound instructions, which will be expanded into
 	/// multiple native instructions by platform layer.
 	/// </summary>
-	public class ConvertCompoundMoveStage : BaseMethodCompilerStage
+	public class ConvertCompoundStage : BaseMethodCompilerStage
 	{
 		private Dictionary<Operand, Operand> repl = new Dictionary<Operand, Operand>();
 

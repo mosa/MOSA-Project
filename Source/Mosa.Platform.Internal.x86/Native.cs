@@ -17,7 +17,7 @@ namespace Mosa.Platform.Internal.x86
 	/// <summary>
 	/// Provides stub methods for selected x86 native assembly instructions.
 	/// </summary>
-	public static class Native
+	public static unsafe class Native
 	{
 		#region Intrinsic
 
@@ -242,6 +242,9 @@ namespace Mosa.Platform.Internal.x86
 
 		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.GetIDTJumpLocation, Mosa.Platform.x86")]
 		public extern static uint GetIDTJumpLocation(uint irq);
+
+		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.GetAssemblyListTable, Mosa.Platform.x86")]
+		public extern static uint* GetAssemblyListTable();
 
 		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.GetMethodLookupTable, Mosa.Platform.x86")]
 		public extern static uint GetMethodLookupTable(uint ptr);

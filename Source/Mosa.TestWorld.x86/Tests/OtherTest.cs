@@ -1,5 +1,5 @@
 /*
- * (c) 2012 MOSA - The Managed Operating System Alliance
+ * (c) 2014 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
  *
@@ -15,6 +15,7 @@ namespace Mosa.TestWorld.x86.Tests
 		{
 			testMethods.Add(OtherTest1);
 			testMethods.Add(OtherTest2);
+			testMethods.Add(OtherTest3);
 		}
 
 		private static uint StaticValue = 0x200000;
@@ -30,5 +31,15 @@ namespace Mosa.TestWorld.x86.Tests
 		{
 			return StaticValue == 0x200000;
 		}
+
+		public static bool OtherTest3()
+		{
+			return 3.Equals(3);
+		}
+	}
+
+	public struct TestStruct
+	{
+		public byte One;
 	}
 }

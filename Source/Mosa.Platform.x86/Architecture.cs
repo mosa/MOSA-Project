@@ -192,9 +192,10 @@ namespace Mosa.Platform.x86
 				new ExceptionVectorStage()
 			);
 
-			compilerPipeline.InsertBefore<MetadataStage>(
-				new UnboxStubStage()
-			);
+			// Trying out IR based solution
+			//compilerPipeline.InsertBefore<MetadataStage>(
+			//	new UnboxStubStage()
+			//);
 
 			//FIXME: Uncomment
 			//compilerPipeline.InsertAfterLast<TypeLayoutStage>(
@@ -218,6 +219,7 @@ namespace Mosa.Platform.x86
 					new PlatformIntrinsicTransformationStage(),
 					new LongOperandTransformationStage(),
 
+					//new StopStage(),
 					new IRTransformationStage(),
 				    new TweakTransformationStage(),
 
