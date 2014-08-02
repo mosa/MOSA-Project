@@ -29,7 +29,7 @@ namespace System
 			for (uint i = 0; i < this.types.Length; i++)
 			{
 				RuntimeTypeHandle handle = new RuntimeTypeHandle();
-				((uint**)&handle)[0] = ((uint*)this.assemblyStruct) + MetadataAssemblyStruct.TypesOffset + i;
+				((uint**)&handle)[0] = MetadataAssemblyStruct.GetTypeDefinitionAddress(assemblyStruct, i);
 				this.handles[i] = handle;
 				this.types[i] = new _Type(handle, this);
 			}

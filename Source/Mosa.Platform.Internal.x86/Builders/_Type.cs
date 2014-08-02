@@ -27,7 +27,7 @@ namespace System
 		{
 			this.assembly = assembly;
 			this.handle = handle;
-			this.typeStruct = (MetadataTypeStruct*)((uint***)&handle)[0][0];
+			this.typeStruct = (MetadataTypeStruct*)((uint**)&handle)[0];
 			this.fullname = x86Runtime.InitializeMetadataString((*this.typeStruct).Name);
 		}
 
@@ -40,8 +40,16 @@ namespace System
 		{
 			get
 			{
+				// Get the address of the parent type definition
+				uint* parentPtr = (uint*)(*this.typeStruct).ParentType;
+
+				// If null (0) then there is no base type so return null
+				if (parentPtr == null)
+					return null;
+
+				// Otherwise generate a handle and find the type from handle
 				RuntimeTypeHandle handle = new RuntimeTypeHandle();
-				((uint*)&handle)[0] = (uint)(*this.typeStruct).ParentType;
+				((uint**)&handle)[0] = parentPtr;
 				return Type.GetTypeFromHandle(handle);
 			}
 		}

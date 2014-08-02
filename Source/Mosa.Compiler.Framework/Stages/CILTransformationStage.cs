@@ -167,12 +167,12 @@ namespace Mosa.Compiler.Framework.Stages
 			if (context.MosaType != null)
 			{
 				source = Operand.CreateUnmanagedSymbolPointer(TypeSystem, context.MosaType.FullName + Metadata.TypeDefinition);
-				runtimeHandle = MethodCompiler.StackLayout.AddStackLocal(TypeSystem.GetTypeByName("System", "RuntimeTypeHandle"));
+				runtimeHandle = MethodCompiler.CreateVirtualRegister(TypeSystem.GetTypeByName("System", "RuntimeTypeHandle"));
 			}
 			else if (context.MosaField != null)
 			{
 				source = Operand.CreateUnmanagedSymbolPointer(TypeSystem, context.MosaField.FullName + Metadata.FieldDefinition);
-				runtimeHandle = MethodCompiler.StackLayout.AddStackLocal(TypeSystem.GetTypeByName("System", "RuntimeFieldHandle"));
+				runtimeHandle = MethodCompiler.CreateVirtualRegister(TypeSystem.GetTypeByName("System", "RuntimeFieldHandle"));
 			}
 			else
 				throw new NotImplementCompilerException();
@@ -571,7 +571,7 @@ namespace Mosa.Compiler.Framework.Stages
 		private Operand GetRuntimeTypeHandle(MosaType runtimeType, Context context)
 		{
 			var typeDef = Operand.CreateUnmanagedSymbolPointer(TypeSystem, runtimeType.FullName + Metadata.TypeDefinition);
-			var runtimeTypeHandle = MethodCompiler.CreateVirtualRegister(TypeSystem.GetTypeByName("System", "RuntimeTypeHandle"));//MethodCompiler.StackLayout.AddStackLocal(TypeSystem.GetTypeByName("System", "RuntimeTypeHandle"));
+			var runtimeTypeHandle = MethodCompiler.CreateVirtualRegister(TypeSystem.GetTypeByName("System", "RuntimeTypeHandle"));
 			var before = context.InsertBefore();
 			before.SetInstruction(IRInstruction.Move, runtimeTypeHandle, typeDef);
 			return runtimeTypeHandle;
@@ -1109,7 +1109,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			Operand arrayAddress = LoadArrayBaseAddress(context, arrayType, arrayOperand);
 			Operand elementOffset = CalculateArrayElementOffset(context, arrayType, arrayIndexOperand);
-			context.AppendInstruction(IRInstruction.Store, null, arrayAddress, elementOffset, value);
+			context.SetInstruction(IRInstruction.Store, null, arrayAddress, elementOffset, value);
 			context.MosaType = arrayType.ElementType;
 		}
 

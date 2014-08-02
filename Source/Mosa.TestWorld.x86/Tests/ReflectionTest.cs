@@ -16,10 +16,26 @@ namespace Mosa.TestWorld.x86.Tests
 		public ReflectionTest()
 			: base("Reflection")
 		{
+			testMethods.Add(PointerTest);
+			testMethods.Add(HandleTest);
 			testMethods.Add(FindTypeOfTest);
 			testMethods.Add(FindTypeByNameTest);
 			testMethods.Add(CompareTypeHandlesTest);
 			testMethods.Add(TypeHandleFromObjectTest);
+		}
+
+		public static bool PointerTest()
+		{
+			IntPtr ptr1 = new IntPtr(30);
+			IntPtr ptr2 = new IntPtr(30);
+			return (ptr1 == ptr2);
+		}
+
+		public static bool HandleTest()
+		{
+			RuntimeTypeHandle handle1 = new RuntimeTypeHandle();
+			RuntimeTypeHandle handle2 = new RuntimeTypeHandle();
+			return (handle1 == handle2);
 		}
 
 		public static bool FindTypeOfTest()
@@ -36,9 +52,8 @@ namespace Mosa.TestWorld.x86.Tests
 
 		public static bool CompareTypeHandlesTest()
 		{
-			Type foundType1 = Type.GetType("System.String");
-			Type foundType2 = Type.GetType("System.String");
-			return foundType1.TypeHandle == foundType2.TypeHandle;
+			Type foundType = Type.GetType("System.String");
+			return foundType == Type.GetTypeFromHandle(foundType.TypeHandle);
 		}
 
 		public static bool TypeHandleFromObjectTest()

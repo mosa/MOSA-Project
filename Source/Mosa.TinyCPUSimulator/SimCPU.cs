@@ -383,7 +383,7 @@ namespace Mosa.TinyCPUSimulator
 				LastProgramCounter = CurrentProgramCounter;
 
 				if (CurrentInstruction == null)
-					throw new NotSupportedException();
+					throw new NotSupportedException("Instruction is invalid!");
 
 				LastInstruction = CurrentInstruction;
 
@@ -402,6 +402,7 @@ namespace Mosa.TinyCPUSimulator
 			}
 			catch (NotSupportedException e)
 			{
+				LastException = new SimCPUException();
 				Monitor.Stop = true;
 			}
 		}
