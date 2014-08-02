@@ -66,14 +66,16 @@ namespace Mosa.TestWorld.x86
 			Screen.Write('9');
 			ProcessManager.Setup();
 			Screen.Write('0');
-			TaskManager.Setup();
+			Runtime.Setup();
 			Screen.Write('A');
-			IDT.SetInterruptHandler(ProcessInterrupt);
+			TaskManager.Setup();
 			Screen.Write('B');
-			ConsoleManager.Setup();
+			IDT.SetInterruptHandler(ProcessInterrupt);
 			Screen.Write('C');
-			Console = ConsoleManager.Controller.Boot;
+			ConsoleManager.Setup();
 			Screen.Write('D');
+			Console = ConsoleManager.Controller.Boot;
+			Screen.Write('E');
 
 			Console.Color = 0x0E;
 			Console.BackgroundColor = 1;

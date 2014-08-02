@@ -18,26 +18,24 @@ namespace System
 		/// Initializes a new instance of the <see cref="ArgumentNullException"/> class.
 		/// </summary>
 		public ArgumentNullException()
-			: this("Argument cannot be null.")
+			: base("Argument cannot be null.")
 		{ }
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="ArgumentNullException"/> class.
+		/// Initializes a new instance of the <see cref="ArgumentNullException"/> class with the name of the parameter that causes this exception.
 		/// </summary>
-		/// <param name="message">The message.</param>
-		public ArgumentNullException(string message)
-			: base(message)
+		/// <param name="paramName"></param>
+		public ArgumentNullException(string paramName)
+			: base("Argument cannot be null.", paramName)
 		{ }
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="ArgumentNullException"/> class.
+		/// Initializes an instance of the <see cref="ArgumentNullException"/> class with a specified error message and the name of the parameter that causes this exception.
 		/// </summary>
-		/// <param name="message">The message.</param>
-		/// <param name="paramName">Name of the param.</param>
-		public ArgumentNullException(string message, string paramName)
-			: base(message)
-		{
-			this.paramName = paramName;
-		}
+		/// <param name="paramName">The name of the parameter that caused the exception.</param>
+		/// <param name="message">A message that describes the error.</param>
+		public ArgumentNullException(string paramName, string message)
+			: base(message, paramName)
+		{ }
 	}
 }

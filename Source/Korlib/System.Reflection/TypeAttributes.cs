@@ -12,6 +12,7 @@ namespace System.Reflection
 	/// <summary>
 	/// TypeDef and ExportedType flags.
 	/// </summary>
+	[Flags]
 	public enum TypeAttributes : uint
 	{
 		/// <summary>

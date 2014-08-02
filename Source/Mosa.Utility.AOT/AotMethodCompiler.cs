@@ -42,7 +42,8 @@ namespace Mosa.Utility.Aot
 				new OperandAssignmentStage(),
 				new StaticAllocationResolutionStage(),
 				new CILTransformationStage(),
-				new ConvertCompoundMoveStage(),
+				new ConvertCompoundStage(),
+				new UnboxValueTypeStage(),
 				//new PromoteLocalVariablesStage(),
 
 				(compilerOptions.EnableSSA) ? new EdgeSplitStage() : null,

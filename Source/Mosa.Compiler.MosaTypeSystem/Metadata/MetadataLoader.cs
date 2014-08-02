@@ -94,6 +94,7 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 					type.ClassSize = (int)typeDef.ClassSize;
 					type.PackingSize = typeDef.PackingSize;
 				}
+				type.TypeAttributes = (MosaTypeAttributes)typeDef.Attributes;
 				type.TypeCode = (MosaTypeCode)typeSig.ElementType;
 
 				// Load members
@@ -121,6 +122,18 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 					metadata.Cache.AddMethod(mosaMethod);
 					LoadedUnits.Add(mosaMethod);
 				}
+
+				foreach (var propertyDef in typeDef.Properties)
+				{
+					MosaProperty mosaProperty = metadata.Controller.CreateProperty();
+
+					using (var property = metadata.Controller.MutateProperty(mosaProperty))
+						LoadProperty(mosaType, property, propertyDef);
+
+					type.Properties.Add(mosaProperty);
+					metadata.Cache.AddProperty(mosaProperty);
+					LoadedUnits.Add(mosaProperty);
+				}
 			}
 			typeCache[typeSig] = mosaType;
 			metadata.Controller.AddType(mosaType);
@@ -131,7 +144,6 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 		private void LoadField(MosaType declType, MosaField.Mutator field, FieldDef fieldDef)
 		{
 			FieldSig fieldSig = fieldDef.FieldSig;
-			field.Module = declType.Module;
 			field.UnderlyingObject = new UnitDesc<FieldDef, FieldSig>(fieldDef.Module, fieldDef, fieldSig);
 
 			field.DeclaringType = declType;
@@ -142,6 +154,7 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 			field.HasDefault = fieldDef.HasDefault;
 			field.Offset = fieldDef.FieldOffset;
 			field.Data = fieldDef.InitialValue;
+			field.FieldAttributes = (MosaFieldAttributes)fieldDef.Attributes;
 		}
 
 		private void LoadMethod(MosaType declType, MosaMethod.Mutator method, MethodDef methodDef)
@@ -153,6 +166,7 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 			method.DeclaringType = declType;
 			method.Name = methodDef.Name;
 
+			method.MethodAttributes = (MosaMethodAttributes)methodDef.Attributes;
 			method.IsAbstract = methodDef.IsAbstract;
 			method.IsStatic = methodDef.IsStatic;
 			method.HasThis = methodDef.HasThis;
@@ -167,6 +181,17 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 			method.IsSpecialName = methodDef.IsSpecialName;
 			if (methodDef.HasImplMap)
 				method.ExternMethod = methodDef.ImplMap.Module.Name;
+		}
+
+		private void LoadProperty(MosaType declType, MosaProperty.Mutator property, PropertyDef propertyDef)
+		{
+			PropertySig propertySig = propertyDef.PropertySig;
+			property.UnderlyingObject = new UnitDesc<PropertyDef, PropertySig>(propertyDef.Module, propertyDef, propertySig);
+
+			property.DeclaringType = declType;
+			property.Name = propertyDef.Name;
+
+			property.PropertyAttributes = (MosaPropertyAttributes)propertyDef.Attributes;
 		}
 
 		public MosaType GetType(TypeSig typeSig)
@@ -211,7 +236,18 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 					MosaType returnType = GetType(fnPtr.RetType);
 					List<MosaParameter> pars = new List<MosaParameter>();
 					for (int i = 0; i < fnPtr.Params.Count; i++)
-						pars.Add(new MosaParameter("A_" + i, GetType(fnPtr.Params[i])));
+					{
+						var parameter = metadata.Controller.CreateParameter();
+
+						using (var mosaParameter = metadata.Controller.MutateParameter(parameter))
+						{
+							mosaParameter.Name = "A_" + i;
+							mosaParameter.ParameterAttributes = MosaParameterAttributes.In;
+							mosaParameter.ParameterType = GetType(fnPtr.Params[i]);
+						}
+
+						pars.Add(parameter);
+					}
 					return metadata.TypeSystem.ToFnPtr(new MosaMethodSignature(returnType, pars));
 				}
 				else

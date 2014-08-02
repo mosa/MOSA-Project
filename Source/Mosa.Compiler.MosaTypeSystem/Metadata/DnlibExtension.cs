@@ -114,6 +114,11 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 			return field.GetUnderlyingObject<UnitDesc<FieldDef, FieldSig>>().Signature;
 		}
 
+		public static PropertySig GetPropertySig(this MosaProperty property)
+		{
+			return property.GetUnderlyingObject<UnitDesc<PropertyDef, PropertySig>>().Signature;
+		}
+
 		public static IList<TypeSig> GetGenericArguments(this IList<MosaType> types)
 		{
 			List<TypeSig> result = new List<TypeSig>();

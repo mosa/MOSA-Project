@@ -9,7 +9,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <AssemblyName>mscorlib</AssemblyName>
     <DelaySign>false</DelaySign>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>
     </AppDesignerFolder>
@@ -18,6 +18,7 @@
     </FileUpgradeFlags>
     <OldToolsVersion>3.5</OldToolsVersion>
     <TargetFrameworkProfile />
+    <NoStdLib>True</NoStdLib>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -36,7 +37,7 @@
     <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
     <WarningLevel>4</WarningLevel>
     <NoStdLib>True</NoStdLib>
-    <NoWarn>0169;0649</NoWarn>
+    <NoWarn>0169;0649;1685</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -52,25 +53,49 @@
     <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
     <WarningLevel>2</WarningLevel>
     <NoStdLib>True</NoStdLib>
-    <NoWarn>
-    </NoWarn>
+    <NoWarn>0169;0649;1685</NoWarn>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="System.Collections\IComparer.cs" />
     <Compile Include="System.Collections\IStructuralComparable.cs" />
     <Compile Include="System.Collections\IStructuralEquatable.cs" />
     <Compile Include="System.Diagnostics\DebuggerHiddenAttribute.cs" />
+    <Compile Include="System.Globalization\CultureInfo.cs" />
     <Compile Include="System.IO\BinaryReader.cs" />
     <Compile Include="System.IO\MemoryStream.cs" />
     <Compile Include="System.Reflection\Assembly.cs" />
     <Compile Include="System.Reflection\AssemblyDescriptionAttribute.cs" />
     <Compile Include="System.Reflection\AssemblyTitleAttribute.cs" />
+    <Compile Include="System.Reflection\Binder.cs" />
+    <Compile Include="System.Reflection\BindingFlags.cs" />
+    <Compile Include="System.Reflection\CallingConventions.cs" />
+    <Compile Include="System.Reflection\ConstructorInfo.cs" />
+    <Compile Include="System.Reflection\CustomAttributeData.cs" />
+    <Compile Include="System.Reflection\CustomAttributeNamedArgument.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="System.Reflection\CustomAttributeTypedArgument.cs" />
+    <Compile Include="System.Reflection\FieldAttributes.cs" />
+    <Compile Include="System.Reflection\FieldInfo.cs" />
     <Compile Include="System.Reflection\ICustomAttributeProvider.cs" />
+    <Compile Include="System.Reflection\IntrospectionExtensions.cs" />
+    <Compile Include="System.Reflection\IReflectableType.cs" />
     <Compile Include="System.Reflection\MemberInfo.cs" />
+    <Compile Include="System.Reflection\MemberTypes.cs" />
+    <Compile Include="System.Reflection\MethodAttributes.cs" />
+    <Compile Include="System.Reflection\MethodBase.cs" />
+    <Compile Include="System.Reflection\MethodInfo.cs" />
     <Compile Include="System.Reflection\Module.cs" />
-    <Compile Include="System.Reflection\MosaTypeCode.cs" />
+    <Compile Include="System.Reflection\PropertyAttributes.cs" />
+    <Compile Include="System.Reflection\ParameterAttributes.cs" />
+    <Compile Include="System.Reflection\ParameterModifier.cs" />
+    <Compile Include="System.Reflection\PropertyInfo.cs" />
+    <Compile Include="System.Reflection\TypeCode.cs" />
+    <Compile Include="System.Reflection\ParameterInfo.cs" />
     <Compile Include="System.Reflection\TypeAttributes.cs" />
+    <Compile Include="System.Reflection\TypeInfo.cs" />
     <Compile Include="System.Runtime.CompilerServices\CompilationRelaxationsAttribute.cs" />
+    <Compile Include="System.Runtime.CompilerServices\ExtensionAttribute.cs" />
     <Compile Include="System.Runtime.CompilerServices\RuntimeCompatibilityAttribute.cs" />
     <Compile Include="System.Runtime.CompilerServices\RuntimeHelpers.cs" />
     <Compile Include="System.Runtime.InteropServices\CallingConvention.cs" />
@@ -95,10 +120,13 @@
     <Compile Include="System\AsyncCallback.cs" />
     <Compile Include="System\IAsyncResult.cs" />
     <Compile Include="System\ICloneable.cs" />
+    <Compile Include="System\IFormatProvider.cs" />
     <Compile Include="System\NotImplementedException.cs" />
+    <Compile Include="System\RuntimeMethodHandle.cs" />
     <Compile Include="System\SystemException.cs" />
     <Compile Include="System\TypedReference.cs" />
     <Compile Include="System\Random.cs" />
+    <Compile Include="System\TypeLoadException.cs" />
     <Compile Include="System\WaitHandle.cs" />
     <Compile Include="System\IComparable.cs" />
     <Compile Include="System\Delegate.cs" />

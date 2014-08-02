@@ -26,6 +26,7 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 		private Dictionary<ScopedToken, MosaType> typeLookup = new Dictionary<ScopedToken, MosaType>();
 		private Dictionary<ScopedToken, MosaMethod> methodLookup = new Dictionary<ScopedToken, MosaMethod>();
 		private Dictionary<ScopedToken, MosaField> fieldLookup = new Dictionary<ScopedToken, MosaField>();
+		private Dictionary<ScopedToken, MosaProperty> propertyLookup = new Dictionary<ScopedToken, MosaProperty>();
 
 		private uint stringIdCounter;
 		internal Dictionary<string, uint> stringHeapLookup = new Dictionary<string, uint>(StringComparer.Ordinal);
@@ -79,6 +80,16 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 		public MosaField GetFieldByToken(ScopedToken token)
 		{
 			return fieldLookup[token];
+		}
+
+		public void AddProperty(MosaProperty property)
+		{
+			propertyLookup.Add(property.GetUnderlyingObject<UnitDesc<PropertyDef, PropertySig>>().Token, property);
+		}
+
+		public MosaProperty GetPropertyByToken(ScopedToken token)
+		{
+			return propertyLookup[token];
 		}
 
 		public uint GetStringId(string value)

@@ -5,7 +5,10 @@
  *
  * Authors:
  *  Ki (kiootic) <kiootic@gmail.com>
+ *  Stefan Andres Charsley (charsleysa) <charsleysa@gmail.com>
  */
+
+using System.Collections.Generic;
 
 namespace Mosa.Compiler.MosaTypeSystem
 {
@@ -50,6 +53,43 @@ namespace Mosa.Compiler.MosaTypeSystem
 			Constructor = ctor;
 			Arguments = args;
 			NamedArguments = namedArgs;
+		}
+	}
+
+	public class MosaCustomAttributeList : List<MosaCustomAttribute>
+	{
+		// This implementation isn't perfect but covers most cases
+		public override bool Equals(object obj)
+		{
+			if (!(obj is MosaCustomAttributeList))
+				return false;
+
+			if (object.ReferenceEquals(this, obj))
+				return true;
+
+			var customAttributeList = obj as MosaCustomAttributeList;
+
+			if (customAttributeList.Count != this.Count)
+				return false;
+
+			for (int i = 0; i < this.Count; i++)
+			{
+				if (!customAttributeList[i].Constructor.DeclaringType.Equals(this[i].Constructor.DeclaringType))
+					return false;
+
+				if (customAttributeList[i].Arguments.Length != this[i].Arguments.Length)
+					return false;
+
+				if (customAttributeList[i].NamedArguments.Length != this[i].NamedArguments.Length)
+					return false;
+			}
+
+			return true;
+		}
+
+		public override int GetHashCode()
+		{
+			return base.GetHashCode();
 		}
 	}
 }

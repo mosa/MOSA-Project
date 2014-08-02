@@ -28,13 +28,13 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public bool IsLinkerGenerated { get; private set; }
 
-		private List<MosaCustomAttribute> customAttributes;
+		private MosaCustomAttributeList customAttributes;
 
 		public IList<MosaCustomAttribute> CustomAttributes { get; private set; }
 
 		internal MosaUnit()
 		{
-			CustomAttributes = (customAttributes = new List<MosaCustomAttribute>()).AsReadOnly();
+			CustomAttributes = (customAttributes = new MosaCustomAttributeList()).AsReadOnly();
 			Name = "";
 		}
 
