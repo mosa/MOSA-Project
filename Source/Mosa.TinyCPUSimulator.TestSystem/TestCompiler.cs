@@ -17,7 +17,7 @@ using System.Diagnostics;
 
 namespace Mosa.TinyCPUSimulator.TestSystem
 {
-	public class TestCompiler
+	public class TestCompiler : ICompilerEventListener
 	{
 		protected BaseTestPlatform platform;
 		protected ConfigurableTraceFilter filter = new ConfigurableTraceFilter();
@@ -40,10 +40,11 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 		{
 			this.platform = platform;
 
-			filter.MethodMatch = MatchType.None;
-			compilerTrace.TraceFilter = filter;
 			EnableSSA = true;
 			EnableSSAOptimizations = true;
+
+			compilerTrace.TraceFilter.Active = false;
+			compilerTrace.CompilerEventListener = this;
 
 			architecture = platform.CreateArchitecture();
 			simAdapter = platform.CreateSimAdaptor();
@@ -170,6 +171,16 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 			}
 
 			return null;
+		}
+
+		void ICompilerEventListener.SubmitTraceEvent(CompilerEvent compilerStage, string info)
+		{
+		
+		}
+
+		void ICompilerEventListener.SubmitMethodStatus(int totalMethods, int queuedMethods)
+		{
+
 		}
 	}
 }
