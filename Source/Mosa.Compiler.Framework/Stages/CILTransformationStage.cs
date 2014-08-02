@@ -1109,7 +1109,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			Operand arrayAddress = LoadArrayBaseAddress(context, arrayType, arrayOperand);
 			Operand elementOffset = CalculateArrayElementOffset(context, arrayType, arrayIndexOperand);
-			context.AppendInstruction(IRInstruction.Store, null, arrayAddress, elementOffset, value);
+			context.SetInstruction(IRInstruction.Store, null, arrayAddress, elementOffset, value);
 			context.MosaType = arrayType.ElementType;
 		}
 
