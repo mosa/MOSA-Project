@@ -110,6 +110,5 @@ namespace Mosa.Compiler.InternalTrace
 		void ICompilerEventListener.SubmitMethodStatus(int totalMethods, int queuedMethods)
 		{
 		}
-
 	}
 }

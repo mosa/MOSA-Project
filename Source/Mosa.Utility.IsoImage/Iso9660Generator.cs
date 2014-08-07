@@ -170,7 +170,7 @@ namespace Mosa.Utility.IsoImage
 
 			generator = new Generator(pedantic);
 			GenerateIso(); // 1st pass to calculate offsets
-			using (FileStream stream = File.OpenWrite(isoFileName))
+			using (var stream = File.OpenWrite(isoFileName))
 			{
 				generator.ResetWithFileStream(stream);
 				GenerateIso(); // 2nd pass to actually write the data
@@ -225,14 +225,13 @@ namespace Mosa.Utility.IsoImage
 				IsoEntry e = f.entries[key];
 				if (e.IsFile)
 				{
-					throw new Exception("cannot create directory \"" + ar[i].Trim() + "\", a file by that Name already exists");
+					throw new Exception("cannot create directory \"" + ar[i].Trim() + "\", a file by that Filename already exists");
 
 					//return;
 				}
 				f = (IsoFolder)e;
 			}
-			var x = new IsoFile(fileInfo);
-			x.Name = ar[i].Trim();
+			var x = new IsoFile(fileInfo, ar[i].Trim());
 			key = ar[i].Trim().ToLower();
 			if (f.entries.ContainsKey(key))
 			{
@@ -395,7 +394,7 @@ namespace Mosa.Utility.IsoImage
 			ide.Byte(0, 5); // System Type, according to El Torito figure 3 this MUST be a copy of the "System Type" from the boot image. In practice this appears to not be the case.
 			ide.Byte(0, 6); // Unused, must be 0
 			if (bootLoadSize == 0)
-				bootLoadSize = (short)((f.fileInfo.Length - 1) / 0x200 + 1);
+				bootLoadSize = (short)((f.Length - 1) / 0x200 + 1);
 			ide.ShortLSB(bootLoadSize, 7, 8); // Sector Count
 			ide.IntLSB(boot.DataBlock, 9, 12); // Logical Block of boot image
 			ide.Zero(13, 32); // unused
@@ -568,7 +567,7 @@ namespace Mosa.Utility.IsoImage
 			if (e.IsFile)
 			{
 				IsoFile f = (IsoFile)e;
-				if ((f.fileInfo.Attributes & FileAttributes.Hidden) != 0)
+				if (f.Hidden)
 					flags |= 1; // hidden
 			}
 			else
@@ -698,7 +697,7 @@ namespace Mosa.Utility.IsoImage
 		private void GenFile(IsoFile f)
 		{
 			f.DataBlock = generator.Index / LogicalBlockSize;
-			f.DataLength = (int)f.fileInfo.Length;
+			f.DataLength = (int)f.Length;
 			generator.WriteFile(f, PrimaryVolumeDescriptor);
 			generator.FinishBlock();
 		}

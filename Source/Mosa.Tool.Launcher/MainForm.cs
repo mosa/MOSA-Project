@@ -20,17 +20,34 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
-using System.Windows.Forms;
 using System.Text;
+using System.Windows.Forms;
 
 namespace Mosa.Tool.Launcher
 {
 	public partial class MainForm : Form, ICompilerEventListener
 	{
+		public enum VMEmulator { Qemu, WMware, Boches };
+
+		public enum VMDiskFormat { NotSpecified, IMG, VHD, VDI, ISO };
+
 		public string SourceFile { get; set; }
+
 		public string DestinationDirectory { get; set; }
+
 		public bool ExitOnLaunch { get; set; }
+
 		public bool AutoLaunch { get; set; }
+
+		public bool GenerateMap { get; set; }
+
+		public bool GenerateASM { get; set; }
+
+		public VMEmulator Emulator { get; set; }
+
+		public bool MOSADebugger { get; set; }
+
+		public VMDiskFormat DiskImage { get; set; }
 
 		protected DateTime compileStartTime;
 		protected string compiledFile;
@@ -41,6 +58,9 @@ namespace Mosa.Tool.Launcher
 			InitializeComponent();
 			AutoLaunch = false;
 			ExitOnLaunch = false;
+			GenerateASM = false;
+			GenerateMap = false;
+			DiskImage = VMDiskFormat.NotSpecified;
 		}
 
 		private void MainForm_Shown(object sender, EventArgs e)
@@ -48,6 +68,27 @@ namespace Mosa.Tool.Launcher
 			lbSource.Text = Path.GetFileName(SourceFile);
 			lbSourceDirectory.Text = Path.GetDirectoryName(SourceFile);
 			cbExitOnLaunch.Checked = ExitOnLaunch;
+			cbGenerateASMFile.Checked = GenerateASM;
+			cbGenerateMapFile.Checked = GenerateMap;
+
+			switch (Emulator)
+			{
+				case VMEmulator.Qemu: cbEmulator.SelectedIndex = 0; cbImageFormat.SelectedIndex = 0; break;
+				case VMEmulator.Boches: cbEmulator.SelectedIndex = 1; cbImageFormat.SelectedIndex = 0; break;
+				case VMEmulator.WMware: cbEmulator.SelectedIndex = 2; cbImageFormat.SelectedIndex = 3; break;
+				default: break;
+			}
+
+			switch (DiskImage)
+			{
+				case VMDiskFormat.IMG: cbImageFormat.SelectedIndex = 0; break;
+				case VMDiskFormat.VHD: cbImageFormat.SelectedIndex = 1; break;
+				case VMDiskFormat.VDI: cbImageFormat.SelectedIndex = 2; break;
+				case VMDiskFormat.ISO: cbImageFormat.SelectedIndex = 3; break;
+				default: break;
+			}
+
+			cbMOSADebugger.Checked = MOSADebugger;
 
 			this.Refresh();
 
@@ -100,7 +141,6 @@ namespace Mosa.Tool.Launcher
 
 				lbSource.Text = Path.GetFileName(SourceFile);
 				lbSourceDirectory.Text = Path.GetDirectoryName(SourceFile);
-
 			}
 		}
 
@@ -138,7 +178,7 @@ namespace Mosa.Tool.Launcher
 					CombineParameterAndDirectory("MOSA",@"Tools\QEMU"),
 					CombineParameterAndDirectory("MOSA",@"QEMU"),
 					@"..\Tools\QEMU",
-					@"\Tools\QEMU",
+					@"Tools\QEMU",
 					CombineParameterAndDirectory("ProgramFiles",@"qemu"),
 					CombineParameterAndDirectory("ProgramFiles(x86)",@"qemu")
 				}
@@ -160,8 +200,8 @@ namespace Mosa.Tool.Launcher
 				   new string[] {
 					CombineParameterAndDirectory("MOSA",@"Tools\ndisasm"),
 					CombineParameterAndDirectory("MOSA",@"ndisasm"),
-					@"..\Tools\ndisasm\",
-					@"\Tools\ndisasm\"
+					@"..\Tools\ndisasm",
+					@"Tools\ndisasm"
 				}
 			);
 
@@ -175,8 +215,8 @@ namespace Mosa.Tool.Launcher
 					CombineParameterAndDirectory("ProgramFiles(x86)",@"Bochs-2.6.2"),
 					CombineParameterAndDirectory("MOSA",@"Tools\Bochs"),
 					CombineParameterAndDirectory("MOSA",@"Bochs"),
-					@"..\Tools\Bochs\",
-					@"\Tools\Bochs\"
+					@"..\Tools\Bochs",
+					@"Tools\Bochs"
 				}
 			);
 
@@ -286,9 +326,17 @@ namespace Mosa.Tool.Launcher
 
 		private void CompilerAndLaunch()
 		{
+			if (CheckKeyPressed())
+				return;
+
 			richTextBox1.Clear();
 			richTextBox2.Clear();
+			tabControl1.SelectedTab = tabPage2;
+
 			Compile();
+
+			if (CheckKeyPressed())
+				return;
 
 			Launch(cbExitOnLaunch.Checked);
 
@@ -297,6 +345,7 @@ namespace Mosa.Tool.Launcher
 				Application.Exit();
 			}
 		}
+
 		protected byte[] GetResource(string name)
 		{
 			var assembly = Assembly.GetExecutingAssembly();
@@ -330,7 +379,7 @@ namespace Mosa.Tool.Launcher
 				Directory.CreateDirectory(DestinationDirectory);
 			}
 
-			CompilerTrace compilerTrace = new CompilerTrace();
+			var compilerTrace = new CompilerTrace();
 			compilerTrace.CompilerEventListener = this;
 
 			var inputFiles = new List<FileInfo>();
@@ -338,7 +387,24 @@ namespace Mosa.Tool.Launcher
 
 			AotCompiler.Compile(compilerOptions, inputFiles, compilerTrace);
 
-			Options options = new Options();
+			if (cbImageFormat.SelectedIndex != 3)
+			{
+				CreateISOImage(compiledFile);
+			}
+			else
+			{
+				CreateDiskImage(compiledFile);
+			}
+
+			if (cbGenerateASMFile.Checked)
+			{
+				LaunchNDISASM();
+			}
+		}
+
+		private void CreateDiskImage(string compiledFile)
+		{
+			var options = new Options();
 
 			options.MBRCode = GetResource("mbr.bin");
 			options.FatBootCode = GetResource("boot.bin");
@@ -346,7 +412,7 @@ namespace Mosa.Tool.Launcher
 			options.IncludeFiles.Add(new IncludeFile("ldlinux.sys", GetResource("ldlinux.sys")));
 			options.IncludeFiles.Add(new IncludeFile("mboot.c32", GetResource("mboot.c32")));
 			options.IncludeFiles.Add(new IncludeFile("syslinux.cfg", GetResource("syslinux.cfg")));
-			options.IncludeFiles.Add(new IncludeFile(compilerOptions.OutputFile, "main.exe"));
+			options.IncludeFiles.Add(new IncludeFile(compiledFile, "main.exe"));
 
 			options.VolumeLabel = "MOSABOOT";
 			options.PatchSyslinuxOption = true;
@@ -365,11 +431,26 @@ namespace Mosa.Tool.Launcher
 			options.DiskImageFileName = imageFile;
 
 			Generator.Create(options);
+		}
 
-			if (cbGenerateASMFile.Checked)
-			{
-				LaunchNDISASM();
-			}
+		private void CreateISOImage(string compiledFile)
+		{
+			var options = new Utility.IsoImage.Options();
+
+			//options.IncludeFiles.Add(new IncludeFile("ldlinux.sys", GetResource("ldlinux.sys")));
+			//options.IncludeFiles.Add(new IncludeFile("mboot.c32", GetResource("mboot.c32")));
+			//options.IncludeFiles.Add(new IncludeFile("syslinux.cfg", GetResource("syslinux.cfg")));
+			//options.IncludeFiles.Add(new IncludeFile(compiledFile, "main.exe"));
+
+			// mboot.c32	isolinux.bin	isolinux.cfg	main.exe
+
+			options.BootInfoTable = true;
+			options.BootLoadSize = 4;
+			options.VolumeLabel = "MOSABOOT";
+			options.BootFileName = "main.exe";
+
+			var iso = new Utility.IsoImage.Iso9660Generator(options);
+			iso.Generate();
 		}
 
 		private void Launch(bool exit)
@@ -521,5 +602,9 @@ namespace Mosa.Tool.Launcher
 			AddOutput(output);
 		}
 
+		private bool CheckKeyPressed()
+		{
+			return ((Control.ModifierKeys & Keys.Shift) != 0) || ((Control.ModifierKeys & Keys.Control) != 0);
+		}
 	}
 }

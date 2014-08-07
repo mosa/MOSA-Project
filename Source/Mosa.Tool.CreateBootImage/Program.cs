@@ -10,6 +10,7 @@
 using Mosa.Utility.BootImage;
 using System;
 using System.IO;
+using Mosa.Compiler.Common;
 
 namespace Mosa.Tool.CreateBootImage
 {
@@ -20,9 +21,9 @@ namespace Mosa.Tool.CreateBootImage
 	{
 		public static Options Parse(string filename)
 		{
-			Options options = new Options();
+			var options = new Options();
 
-			StreamReader reader = File.OpenText(filename);
+			var reader = File.OpenText(filename);
 
 			while (true)
 			{
@@ -89,7 +90,7 @@ namespace Mosa.Tool.CreateBootImage
 
 			try
 			{
-				Options options = Parse(args[0]);
+				var options = Parse(args[0]);
 
 				if (options == null)
 				{

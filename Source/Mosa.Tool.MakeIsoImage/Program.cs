@@ -42,8 +42,6 @@ namespace Mosa.Tool.MakeIsoImage
 					switch (args[i].Trim())
 					{
 						case "-boot":
-
-							//							iso.AddBootFile(args[i], new System.IO.FileInfo(args[i]));
 							options.BootFileName = args[++i];
 							break;
 

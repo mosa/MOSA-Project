@@ -44,7 +44,7 @@ namespace Mosa.DeviceSystem
 		}
 
 		/// <summary>
-		/// Creates the partition devices.
+		/// Creates the devices.
 		/// </summary>
 		public void CreatePCIDevices()
 		{

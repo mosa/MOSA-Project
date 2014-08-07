@@ -164,9 +164,7 @@
     <EmbeddedResource Include="..\..\Tools\syslinux\mboot.c32">
       <Link>Resources\mboot.c32</Link>
     </EmbeddedResource>
-    <EmbeddedResource Include="..\..\Run\ISO\syslinux\syslinux.cfg">
-      <Link>Resources\syslinux.cfg</Link>
-    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\syslinux.cfg" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="MainForm.resx">

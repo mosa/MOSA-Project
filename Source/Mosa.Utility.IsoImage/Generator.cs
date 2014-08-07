@@ -137,24 +137,17 @@ namespace Mosa.Utility.IsoImage
 		/// <param Name="primaryVolumeDescriptor">the PVD block, passed in case we need to generate the Boot Info Table</param>
 		public void WriteFile(IsoFile f, int primaryVolumeDescriptor)
 		{
-			if (f.fileInfo.Length > 0xffffffff)
+			if (f.Length > 0xffffffff)
 				throw new NotImplementedException(">4G files not implemented");
 
-			int bytes = (int)f.fileInfo.Length;
+			int bytes = (int)f.Length;
 			if (this.fs == null)
 			{
 				this.Index += bytes;
 				return;
 			}
 
-			// TODO FIXME - create smaller reusable buffer and read fixed-size chunks at a time...
-			byte[] b = new byte[bytes];
-
-			using (FileStream stream = f.fileInfo.OpenRead())
-			{
-				if (bytes != stream.Read(b, 0, bytes))
-					throw new Exception("number of bytes read from file != reported length of file: " + f.fileInfo.Name);
-			}
+			var b = f.Content;
 
 			if (f.BootInfoTable)
 			{
@@ -167,7 +160,7 @@ namespace Mosa.Utility.IsoImage
 				Bytes(b, 0, 8);
 				Bytes(ConvertTo.Int2LSB(primaryVolumeDescriptor));
 				Bytes(ConvertTo.Int2LSB(f.DataBlock));
-				Bytes(ConvertTo.Int2LSB((int)f.fileInfo.Length));
+				Bytes(ConvertTo.Int2LSB((int)f.Length));
 				Bytes(ConvertTo.Int2LSB((int)checksum));
 				DupByte(0, 40); // reserved
 				Bytes(b, 64, bytes - 64);

@@ -7,9 +7,10 @@
 *  Phil Garcia (tgiphil) <phil@thinkedge.com>
 */
 
+using System;
 using System.IO;
 
-namespace Mosa.Utility.BootImage
+namespace Mosa.Compiler.Common
 {
 	/// <summary>
 	///
@@ -18,9 +19,9 @@ namespace Mosa.Utility.BootImage
 	{
 		public string Filename;
 
-		public string Newname;
-
 		public byte[] Content;
+
+		public int Length { get { return Content.Length; } }
 
 		public bool ReadOnly = false;
 		public bool Hidden = false;
@@ -33,14 +34,14 @@ namespace Mosa.Utility.BootImage
 		/// <param name="filename">The filename.</param>
 		public IncludeFile(string filename)
 		{
-			Filename = filename;
+			if (Environment.OSVersion.Platform == PlatformID.Win32Windows || Environment.OSVersion.Platform == PlatformID.Win32NT)
+				Filename = filename.Replace('\\', '/');
 
-			Newname = filename.Replace('\\', '/');
+			//int at = Filename.LastIndexOf('/');
+			//if (at > 0)
+			//	Filename = Filename.Substring(at + 1, Filename.Length - at - 1);
 
-			int at = Newname.LastIndexOf('/');
-
-			if (at > 0)
-				Newname = Newname.Substring(at + 1, Newname.Length - at - 1);
+			Filename = Path.GetFileName(filename);
 
 			Content = File.ReadAllBytes(filename);
 		}
@@ -52,8 +53,7 @@ namespace Mosa.Utility.BootImage
 		/// <param name="newname">The newname.</param>
 		public IncludeFile(string filename, string newname)
 		{
-			Filename = filename;
-			Newname = newname;
+			Filename = newname;
 
 			Content = File.ReadAllBytes(filename);
 		}
@@ -66,7 +66,6 @@ namespace Mosa.Utility.BootImage
 		public IncludeFile(string filename, byte[] content)
 		{
 			Filename = filename;
-			Newname = filename;
 			Content = content;
 		}
 	}

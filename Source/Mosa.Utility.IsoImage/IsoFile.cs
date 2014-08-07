@@ -23,13 +23,34 @@ namespace Mosa.Utility.IsoImage
 			BootInfoTable = 1 << 1
 		}
 
+		//public IncludeFile IncludeFile;
+
 		public FileInfo fileInfo;
 		public Flags flags;
 
-		public IsoFile(FileInfo fi)
+		public long Length { get { return fileInfo.Length; } }
+
+		public bool Hidden { get { return (fileInfo.Attributes & FileAttributes.Hidden) != 0; } }
+
+		public byte[] Content
+		{
+			get
+			{
+				var b = new byte[Length];
+
+				var datastream = fileInfo.OpenRead();
+
+				datastream.Read(b, 0, (int)Length);
+
+				return b;
+			}
+		}
+
+		public IsoFile(FileInfo fi, string filename)
 		{
 			fileInfo = fi;
 			flags = 0;
+			Name = filename;
 		}
 
 		public bool BootFile
