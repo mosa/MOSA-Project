@@ -7,6 +7,7 @@
 *  Phil Garcia (tgiphil) <phil@thinkedge.com>
 */
 
+using Mosa.Compiler.Common;
 using System.Collections.Generic;
 
 namespace Mosa.Utility.IsoImage
@@ -21,9 +22,9 @@ namespace Mosa.Utility.IsoImage
 		public string VolumeLabel = string.Empty;
 		public bool Pedantic = false;
 		public string IsoFileName = null;
-		public string BootFileName = null;
+		public IncludeFile BootFile = null;
 
-		public List<string> IncludeFiles = new List<string>();
+		public List<IncludeFile> IncludeFiles = new List<IncludeFile>();
 
 		public Options()
 		{

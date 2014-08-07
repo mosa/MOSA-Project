@@ -7,7 +7,6 @@
 *  Phil Garcia (tgiphil) <phil@thinkedge.com>
 */
 
-using System;
 using System.IO;
 
 namespace Mosa.Compiler.Common
@@ -34,15 +33,7 @@ namespace Mosa.Compiler.Common
 		/// <param name="filename">The filename.</param>
 		public IncludeFile(string filename)
 		{
-			if (Environment.OSVersion.Platform == PlatformID.Win32Windows || Environment.OSVersion.Platform == PlatformID.Win32NT)
-				Filename = filename.Replace('\\', '/');
-
-			//int at = Filename.LastIndexOf('/');
-			//if (at > 0)
-			//	Filename = Filename.Substring(at + 1, Filename.Length - at - 1);
-
 			Filename = Path.GetFileName(filename);
-
 			Content = File.ReadAllBytes(filename);
 		}
 

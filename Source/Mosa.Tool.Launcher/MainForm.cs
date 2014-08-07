@@ -437,17 +437,14 @@ namespace Mosa.Tool.Launcher
 		{
 			var options = new Utility.IsoImage.Options();
 
-			//options.IncludeFiles.Add(new IncludeFile("ldlinux.sys", GetResource("ldlinux.sys")));
-			//options.IncludeFiles.Add(new IncludeFile("mboot.c32", GetResource("mboot.c32")));
-			//options.IncludeFiles.Add(new IncludeFile("syslinux.cfg", GetResource("syslinux.cfg")));
-			//options.IncludeFiles.Add(new IncludeFile(compiledFile, "main.exe"));
-
-			// mboot.c32	isolinux.bin	isolinux.cfg	main.exe
+			options.IncludeFiles.Add(new IncludeFile("isolinux.bin", GetResource("isolinux.bin")));
+			options.IncludeFiles.Add(new IncludeFile("mboot.c32", GetResource("mboot.c32")));
+			options.IncludeFiles.Add(new IncludeFile("isolinux.cfg", GetResource("syslinux.cfg")));
 
 			options.BootInfoTable = true;
 			options.BootLoadSize = 4;
 			options.VolumeLabel = "MOSABOOT";
-			options.BootFileName = "main.exe";
+			options.BootFile = new IncludeFile(compiledFile, "main.exe");
 
 			var iso = new Utility.IsoImage.Iso9660Generator(options);
 			iso.Generate();

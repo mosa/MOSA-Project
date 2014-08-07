@@ -7,6 +7,7 @@
  *  Royce Mitchell III (royce3) <royce3 [at] gmail [dot] com>
  */
 
+using Mosa.Compiler.Common;
 using Mosa.Utility.IsoImage;
 using System;
 
@@ -42,7 +43,7 @@ namespace Mosa.Tool.MakeIsoImage
 					switch (args[i].Trim())
 					{
 						case "-boot":
-							options.BootFileName = args[++i];
+							options.BootFile = new IncludeFile(args[++i]);
 							break;
 
 						case "-boot-load-size":
@@ -81,7 +82,7 @@ namespace Mosa.Tool.MakeIsoImage
 				}
 
 				while (i < args.Length)
-					options.IncludeFiles.Add(args[i++]);
+					options.IncludeFiles.Add(new IncludeFile(args[i++]));
 
 				Iso9660Generator iso = new Iso9660Generator(options);
 				iso.Generate();

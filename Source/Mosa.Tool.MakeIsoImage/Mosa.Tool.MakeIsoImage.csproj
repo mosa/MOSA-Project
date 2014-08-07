@@ -49,6 +49,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Mosa.Compiler.Common\Mosa.Compiler.Common.csproj">
+      <Project>{0b1011a6-8fcd-4f9e-bbb8-8db86e23d2e8}</Project>
+      <Name>Mosa.Compiler.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Mosa.Utility.IsoImage\Mosa.Utility.IsoImage.csproj">
       <Project>{3BF17C10-F7FB-4517-923E-B609C2FD8282}</Project>
       <Name>Mosa.Utility.IsoImage</Name>

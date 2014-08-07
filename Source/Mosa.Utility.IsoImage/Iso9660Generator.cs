@@ -9,6 +9,7 @@
 
 #define ROCKRIDGE
 
+using Mosa.Compiler.Common;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -55,61 +56,54 @@ namespace Mosa.Utility.IsoImage
 			SetBootInfoTable(options.BootInfoTable);
 			BootLoadSize(options.BootLoadSize);
 
-			if (options.BootFileName != null)
-				AddBootFile(options.BootFileName, new FileInfo(options.BootFileName));
-
-			foreach (string file in options.IncludeFiles)
-				AddDirectoryTree(file, string.Empty);
-		}
-
-		protected void AddDirectoryTree(string root, string virtualPrepend)
-		{
-			if (Environment.OSVersion.Platform == PlatformID.Win32Windows || Environment.OSVersion.Platform == PlatformID.Win32NT)
-				root = root.Replace('/', '\\');
-
-			DirectoryInfo dirinfo = new DirectoryInfo(root);
-
-			foreach (FileInfo file in dirinfo.GetFiles())
-				AddFile(virtualPrepend + file.Name, file);
-
-			foreach (DirectoryInfo dir in dirinfo.GetDirectories())
+			if (options.BootFile != null)
 			{
-				MkDir(virtualPrepend + dir.Name);
-				AddDirectoryTree(root + '/' + dir.Name, virtualPrepend + dir.Name + '/');
+				AddBootFile(string.Empty, options.BootFile);
+			}
+
+			foreach (var file in options.IncludeFiles)
+			{
+				AddFile(file);
 			}
 		}
 
 		/// <summary>
-		/// sets the volume label of the image
+		/// Sets the volume label of the image
 		/// </summary>
 		/// <param Name="volumeLabel">the requested volume label</param>
-		protected void SetVolumeLabel(string volumeLabel)
+		protected void SetVolumeLabel(string label)
 		{
 			// TODO FIXME - fixup label to make sure it's compatible...
 			int maxLength = 72 - 41 + 1;
 
-			this.volumeLabel = volumeLabel.Replace('.', '_');
-			if (this.volumeLabel.Length > maxLength)
-				this.volumeLabel = this.volumeLabel.Substring(0, maxLength);
+			volumeLabel = label.Replace('.', '_');
+
+			if (volumeLabel.Length > maxLength)
+			{
+				volumeLabel = volumeLabel.Substring(0, maxLength);
+			}
 		}
 
 		/// <summary>
 		/// Create directory in ISO file
 		/// </summary>
-		protected void MkDir(string path)
+		protected void MakeDirectory(string path)
 		{
-			IsoFolder f = isoRoot;
-			string[] ar = NormalizePath(path).Split('/');
+			var f = isoRoot;
+			var ar = NormalizePath(path).Split('/');
+
 			for (int i = 0; i < ar.Length; i++)
 			{
 				string key = ar[i].Trim().ToLower();
+
 				if (!f.entries.ContainsKey(key))
 				{
 					var subf = new IsoFolder();
 					subf.Name = ar[i].Trim();
 					f.entries[key] = subf;
 				}
-				IsoEntry e = f.entries[key];
+
+				var e = f.entries[key];
 				if (e.IsFile)
 				{
 					//throw new Exception("cannot create directory \"" + ar[i].Trim() + "\", a file by that Name already exists");
@@ -122,21 +116,21 @@ namespace Mosa.Utility.IsoImage
 		/// <summary>
 		/// add a "normal" file to the ISO ( not a boot file )
 		/// </summary>
-		protected void AddFile(string sPath, FileInfo fileInfo)
+		protected void AddFile(IncludeFile file)
 		{
-			AddFileEx(NormalizePath(sPath), fileInfo);
+			AddFileEx(NormalizePath(file.Filename), file);
 		}
 
 		/// <summary>
 		/// add a boot file to the ISO
 		/// TODO FIXME - add support for boot images other than x86
 		/// </summary>
-		protected void AddBootFile(string path, FileInfo fileInfo)
+		protected void AddBootFile(string path, IncludeFile file)
 		{
 			if (boot != null)
 				throw new Exception("only one boot file can be added to an ISO");
 
-			boot = AddFileEx(NormalizePath(path), fileInfo);
+			boot = AddFileEx(NormalizePath(path), file);
 			boot.BootFile = true;
 			boot.BootInfoTable = bootInfoTable;
 		}
@@ -185,7 +179,7 @@ namespace Mosa.Utility.IsoImage
 		private bool bootInfoTable;
 
 		/// <summary>
-		/// take a path and convert back-slashes to forward slashes and remove trailing slash if it exists
+		/// Take a path and convert back-slashes to forward slashes and remove trailing slash if it exists
 		/// </summary>
 		private string NormalizePath(string path)
 		{
@@ -201,13 +195,14 @@ namespace Mosa.Utility.IsoImage
 			// remove trailing slash if necessary
 			if (path[path.Length - 1] == '/')
 				path = path.Substring(0, path.Length - 1);
+
 			return path;
 		}
 
 		/// <summary>
 		/// add a file to the ISO ( common implementation - called by AddFile() and AddBootFile() )
 		/// </summary>
-		private IsoFile AddFileEx(string path, FileInfo fileInfo)
+		private IsoFile AddFileEx(string path, IncludeFile file)
 		{
 			string key;
 			string[] ar = NormalizePath(path).Split('/');
@@ -231,7 +226,7 @@ namespace Mosa.Utility.IsoImage
 				}
 				f = (IsoFolder)e;
 			}
-			var x = new IsoFile(fileInfo, ar[i].Trim());
+			var x = new IsoFile(file, ar[i].Trim());
 			key = ar[i].Trim().ToLower();
 			if (f.entries.ContainsKey(key))
 			{

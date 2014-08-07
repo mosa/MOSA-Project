@@ -165,6 +165,9 @@
       <Link>Resources\mboot.c32</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\syslinux.cfg" />
+    <EmbeddedResource Include="..\..\Tools\syslinux\isolinux.bin">
+      <Link>Resources\isolinux.bin</Link>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="MainForm.resx">

@@ -7,8 +7,8 @@
  *  Royce Mitchell III (royce3) <royce3 [at] gmail [dot] com>
  */
 
+using Mosa.Compiler.Common;
 using System;
-using System.IO;
 
 #pragma warning disable 169, 414, 219
 
@@ -23,32 +23,19 @@ namespace Mosa.Utility.IsoImage
 			BootInfoTable = 1 << 1
 		}
 
-		//public IncludeFile IncludeFile;
+		private IncludeFile includeFile;
 
-		public FileInfo fileInfo;
 		public Flags flags;
 
-		public long Length { get { return fileInfo.Length; } }
+		public long Length { get { return includeFile.Length; } }
 
-		public bool Hidden { get { return (fileInfo.Attributes & FileAttributes.Hidden) != 0; } }
+		public bool Hidden { get { return includeFile.Hidden; } }
 
-		public byte[] Content
+		public byte[] Content { get { return includeFile.Content; } }
+
+		public IsoFile(IncludeFile file, string filename)
 		{
-			get
-			{
-				var b = new byte[Length];
-
-				var datastream = fileInfo.OpenRead();
-
-				datastream.Read(b, 0, (int)Length);
-
-				return b;
-			}
-		}
-
-		public IsoFile(FileInfo fi, string filename)
-		{
-			fileInfo = fi;
+			includeFile = file;
 			flags = 0;
 			Name = filename;
 		}
