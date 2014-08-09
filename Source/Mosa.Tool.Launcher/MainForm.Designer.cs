@@ -227,8 +227,7 @@
 			this.cbEmulator.Items.AddRange(new object[] {
             "QEMU",
             "Bochs",
-            "VMware",
-            "PeterBochs"});
+            "VMware"});
 			this.cbEmulator.Location = new System.Drawing.Point(10, 19);
 			this.cbEmulator.Name = "cbEmulator";
 			this.cbEmulator.Size = new System.Drawing.Size(171, 21);
@@ -429,9 +428,9 @@
 			this.cbImageFormat.FormattingEnabled = true;
 			this.cbImageFormat.Items.AddRange(new object[] {
             "IMG (.img)",
+            "ISO Image (.iso)",
             "VMware (.vhd)",
-            "Virtual Box (.vdi)",
-            "ISO Image (.iso)"});
+            "Virtual Box (.vdi)"});
 			this.cbImageFormat.Location = new System.Drawing.Point(504, 51);
 			this.cbImageFormat.Name = "cbImageFormat";
 			this.cbImageFormat.Size = new System.Drawing.Size(100, 21);

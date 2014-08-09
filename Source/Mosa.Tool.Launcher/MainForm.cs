@@ -75,16 +75,17 @@ namespace Mosa.Tool.Launcher
 			{
 				case VMEmulator.Qemu: cbEmulator.SelectedIndex = 0; cbImageFormat.SelectedIndex = 0; break;
 				case VMEmulator.Boches: cbEmulator.SelectedIndex = 1; cbImageFormat.SelectedIndex = 0; break;
-				case VMEmulator.WMware: cbEmulator.SelectedIndex = 2; cbImageFormat.SelectedIndex = 3; break;
+				case VMEmulator.WMware: cbEmulator.SelectedIndex = 2; cbImageFormat.SelectedIndex = 1; break;
 				default: break;
 			}
 
 			switch (DiskImage)
 			{
 				case VMDiskFormat.IMG: cbImageFormat.SelectedIndex = 0; break;
-				case VMDiskFormat.VHD: cbImageFormat.SelectedIndex = 1; break;
-				case VMDiskFormat.VDI: cbImageFormat.SelectedIndex = 2; break;
-				case VMDiskFormat.ISO: cbImageFormat.SelectedIndex = 3; break;
+				case VMDiskFormat.ISO: cbImageFormat.SelectedIndex = 1; break;
+				case VMDiskFormat.VHD: cbImageFormat.SelectedIndex = 2; break;
+				case VMDiskFormat.VDI: cbImageFormat.SelectedIndex = 3; break;
+
 				default: break;
 			}
 
@@ -402,7 +403,7 @@ namespace Mosa.Tool.Launcher
 
 			AotCompiler.Compile(compilerOptions, inputFiles, compilerTrace);
 
-			if (cbImageFormat.SelectedIndex == 3)
+			if (cbImageFormat.SelectedIndex == 1)
 			{
 				CreateISOImage(compiledFile);
 			}
@@ -448,26 +449,6 @@ namespace Mosa.Tool.Launcher
 			Generator.Create(options);
 		}
 
-		//private void CreateISOImage2(string compiledFile)
-		//{
-		//	var options = new Utility.IsoImage.Options();
-
-		//	options.IncludeFiles.Add(new IncludeFile("isolinux.bin", GetResource("isolinux.bin")));
-		//	options.IncludeFiles.Add(new IncludeFile("mboot.c32", GetResource("mboot.c32")));
-		//	options.IncludeFiles.Add(new IncludeFile("isolinux.cfg", GetResource("syslinux.cfg")));
-
-		//	options.BootInfoTable = true;
-		//	options.BootLoadSize = 4;
-		//	options.VolumeLabel = "MOSABOOT";
-		//	options.BootFile = new IncludeFile(compiledFile, "main.exe");
-
-		//	imageFile = Path.Combine(DestinationDirectory, Path.GetFileNameWithoutExtension(SourceFile) + ".iso");
-		//	options.IsoFileName = imageFile;
-
-		//	var iso = new Utility.IsoImage.Iso9660Generator(options);
-		//	iso.Generate();
-		//}
-
 		private void CreateISOImage(string compiledFile)
 		{
 			string isoDirectory = Path.Combine(DestinationDirectory, "iso");
@@ -476,7 +457,7 @@ namespace Mosa.Tool.Launcher
 			{
 				Directory.Delete(isoDirectory, true);
 			}
-			
+
 			Directory.CreateDirectory(isoDirectory);
 
 			File.WriteAllBytes(Path.Combine(isoDirectory, "isolinux.bin"), GetResource("isolinux.bin"));
@@ -561,8 +542,19 @@ namespace Mosa.Tool.Launcher
 		private void LaunchQemu(bool exit)
 		{
 			string arg =
-				"-hda " + Quote(imageFile) +
+
 				" -L " + Quote(lbQEMUBIOSDirectory.Text);
+
+			if (cbImageFormat.SelectedIndex == 1)
+			{
+				arg = arg +
+					" -cdrom " + Quote(imageFile);
+			}
+			else
+			{
+				arg = arg +
+					" -hda " + Quote(imageFile);
+			}
 
 			var output = LaunchApplication(lbQEMUExecutable.Text, arg, !exit);
 
@@ -588,12 +580,19 @@ namespace Mosa.Tool.Launcher
 			sb.AppendLine("megs: " + nmMemory.Value.ToString());
 			sb.AppendLine("ata0: enabled=1,ioaddr1=0x1f0,ioaddr2=0x3f0,irq=14");
 			sb.AppendLine("cpuid: mmx=1,sep=1," + simd + "=sse4_2,apic=xapic,aes=1,movbe=1,xsave=1");
-			sb.AppendLine("boot: c");
+			sb.AppendLine("boot: cdrom,disk");
 			sb.AppendLine("log: " + Quote(logfile));
-			sb.AppendLine("ata0-master: type=disk,path=" + Quote(imageFile) + ",biosdetect=none,cylinders=0,heads=0,spt=0");
 			sb.AppendLine("romimage: file=" + Quote(Path.Combine(exeDir, "BIOS-bochs-latest")));
 			sb.AppendLine("vgaromimage: file=" + Quote(Path.Combine(exeDir, "VGABIOS-lgpl-latest")));
 
+			if (cbImageFormat.SelectedIndex == 1)
+			{
+				sb.AppendLine("ata0-master: type=cdrom,path=" + Quote(imageFile) + ",status=inserted");
+			}
+			else
+			{
+				sb.AppendLine("ata0-master: type=disk,path=" + Quote(imageFile) + ",biosdetect=none,cylinders=0,heads=0,spt=0");
+			}
 			//sb.AppendLine("com1: enabled=1, mode=pipe-server, dev=\\.\pipe\MOSA");
 
 			File.WriteAllText(configfile, sb.ToString());
@@ -623,14 +622,11 @@ namespace Mosa.Tool.Launcher
 			sb.AppendLine("guestOS = \"other\"");
 			sb.AppendLine("priority.grabbed = \"normal\"");
 			sb.AppendLine("priority.ungrabbed = \"normal\"");
-
 			sb.AppendLine("virtualHW.productCompatibility = \"hosted\"");
-			//sb.AppendLine("uuid.location = \"56 4d ce 7c bf 87 31 d7-e4 9d ef de b7 17 f6 5b\"");
-			//sb.AppendLine("uuid.bios = \"56 4d ce 7c bf 87 31 d7-e4 9d ef de b7 17 f6 5b\"");
+			sb.AppendLine("ide0:0.present = \"TRUE\"");
 
-			if (cbImageFormat.SelectedIndex == 3)
+			if (cbImageFormat.SelectedIndex == 1)
 			{
-				sb.AppendLine("ide0:0.present = \"TRUE\"");
 				sb.AppendLine("ide0:0.deviceType = \"cdrom-image\"");
 				sb.AppendLine("ide0:0.fileName = " + Quote(imageFile));
 			}
@@ -638,17 +634,9 @@ namespace Mosa.Tool.Launcher
 			{
 				sb.AppendLine("ide0:0.present = \"TRUE\"");
 				sb.AppendLine("ide0:0.fileName = " + Quote(imageFile));
-
-				//sb.AppendLine("scsi0:0.present = \"TRUE\"");
-				//sb.AppendLine("scsi0:0.fileName = " + Quote(imageFile));
-				//sb.AppendLine("scsi0:0.redo = \"\"");
 			}
 
 			sb.AppendLine("floppy0.present = \"FALSE\"");
-
-			//sb.AppendLine("ide1:0.present = \"FALSE\"");
-			//sb.AppendLine("ide1:0.fileName = \"auto detect\"");
-			//sb.AppendLine("ide1:0.deviceType = \"cdrom-raw\"");
 
 			//sb.AppendLine("serial0.present = \"TRUE\"");
 			//sb.AppendLine("serial0.yieldOnMsrRead = \"FALSE\"");
