@@ -42,6 +42,7 @@ namespace Mosa.Tool.Launcher
 					case "-vhd": main.DiskImage = MainForm.VMDiskFormat.VHD; continue;
 					case "-img": main.DiskImage = MainForm.VMDiskFormat.IMG; continue;
 					case "-vdi": main.DiskImage = MainForm.VMDiskFormat.VDI; continue;
+					case "-iso": main.DiskImage = MainForm.VMDiskFormat.ISO; continue;
 					default: break;
 				}
 

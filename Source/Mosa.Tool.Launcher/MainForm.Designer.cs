@@ -85,6 +85,9 @@
 			this.tabPage3 = new System.Windows.Forms.TabPage();
 			this.richTextBox2 = new System.Windows.Forms.RichTextBox();
 			this.openFileDialog2 = new System.Windows.Forms.OpenFileDialog();
+			this.groupBox11 = new System.Windows.Forms.GroupBox();
+			this.button7 = new System.Windows.Forms.Button();
+			this.lbmkisofsExecutable = new System.Windows.Forms.Label();
 			this.tabControl1.SuspendLayout();
 			this.tabPage1.SuspendLayout();
 			this.groupBox6.SuspendLayout();
@@ -101,6 +104,7 @@
 			this.groupBox7.SuspendLayout();
 			this.tabPage2.SuspendLayout();
 			this.tabPage3.SuspendLayout();
+			this.groupBox11.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// openFileDialog1
@@ -115,7 +119,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.progressBar1.Location = new System.Drawing.Point(0, 6);
 			this.progressBar1.Name = "progressBar1";
-			this.progressBar1.Size = new System.Drawing.Size(680, 20);
+			this.progressBar1.Size = new System.Drawing.Size(637, 20);
 			this.progressBar1.TabIndex = 3;
 			// 
 			// tabControl1
@@ -135,7 +139,7 @@
 			this.tabControl1.Name = "tabControl1";
 			this.tabControl1.Padding = new System.Drawing.Point(0, 0);
 			this.tabControl1.SelectedIndex = 0;
-			this.tabControl1.Size = new System.Drawing.Size(680, 375);
+			this.tabControl1.Size = new System.Drawing.Size(637, 363);
 			this.tabControl1.TabIndex = 22;
 			// 
 			// tabPage1
@@ -151,7 +155,7 @@
 			this.tabPage1.Location = new System.Drawing.Point(4, 22);
 			this.tabPage1.Margin = new System.Windows.Forms.Padding(0);
 			this.tabPage1.Name = "tabPage1";
-			this.tabPage1.Size = new System.Drawing.Size(672, 349);
+			this.tabPage1.Size = new System.Drawing.Size(629, 337);
 			this.tabPage1.TabIndex = 0;
 			this.tabPage1.Text = "MOSA Options";
 			// 
@@ -164,12 +168,12 @@
 			this.groupBox6.Controls.Add(this.cbExitOnLaunch);
 			this.groupBox6.Controls.Add(this.cbEmulator);
 			this.groupBox6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.groupBox6.Location = new System.Drawing.Point(428, 212);
+			this.groupBox6.Location = new System.Drawing.Point(428, 203);
 			this.groupBox6.Name = "groupBox6";
-			this.groupBox6.Size = new System.Drawing.Size(234, 99);
+			this.groupBox6.Size = new System.Drawing.Size(191, 99);
 			this.groupBox6.TabIndex = 28;
 			this.groupBox6.TabStop = false;
-			this.groupBox6.Text = "Virtual VMEmulator:";
+			this.groupBox6.Text = "Virtual Machine Emulator:";
 			// 
 			// label6
 			// 
@@ -227,7 +231,7 @@
             "PeterBochs"});
 			this.cbEmulator.Location = new System.Drawing.Point(10, 19);
 			this.cbEmulator.Name = "cbEmulator";
-			this.cbEmulator.Size = new System.Drawing.Size(184, 21);
+			this.cbEmulator.Size = new System.Drawing.Size(171, 21);
 			this.cbEmulator.TabIndex = 21;
 			// 
 			// button1
@@ -235,9 +239,9 @@
 			this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.button1.Location = new System.Drawing.Point(428, 317);
+			this.button1.Location = new System.Drawing.Point(428, 308);
 			this.button1.Name = "button1";
-			this.button1.Size = new System.Drawing.Size(234, 23);
+			this.button1.Size = new System.Drawing.Size(191, 23);
 			this.button1.TabIndex = 27;
 			this.button1.Text = "Compile and Emulator";
 			this.button1.UseVisualStyleBackColor = true;
@@ -247,7 +251,7 @@
 			// 
 			this.groupBox5.Controls.Add(this.cbMOSADebugger);
 			this.groupBox5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.groupBox5.Location = new System.Drawing.Point(255, 287);
+			this.groupBox5.Location = new System.Drawing.Point(255, 278);
 			this.groupBox5.Name = "groupBox5";
 			this.groupBox5.Size = new System.Drawing.Size(166, 53);
 			this.groupBox5.TabIndex = 26;
@@ -276,7 +280,7 @@
 			this.groupBox4.Controls.Add(this.lbSource);
 			this.groupBox4.Location = new System.Drawing.Point(5, 7);
 			this.groupBox4.Name = "groupBox4";
-			this.groupBox4.Size = new System.Drawing.Size(657, 75);
+			this.groupBox4.Size = new System.Drawing.Size(614, 70);
 			this.groupBox4.TabIndex = 25;
 			this.groupBox4.TabStop = false;
 			this.groupBox4.Text = "Source:";
@@ -336,9 +340,9 @@
 			this.groupBox3.Controls.Add(this.lbDestinationDirectory);
 			this.groupBox3.Controls.Add(this.label3);
 			this.groupBox3.Controls.Add(this.cbLinkerFormat);
-			this.groupBox3.Location = new System.Drawing.Point(5, 88);
+			this.groupBox3.Location = new System.Drawing.Point(5, 83);
 			this.groupBox3.Name = "groupBox3";
-			this.groupBox3.Size = new System.Drawing.Size(657, 114);
+			this.groupBox3.Size = new System.Drawing.Size(614, 113);
 			this.groupBox3.TabIndex = 24;
 			this.groupBox3.TabStop = false;
 			this.groupBox3.Text = "Output:";
@@ -426,10 +430,11 @@
 			this.cbImageFormat.Items.AddRange(new object[] {
             "IMG (.img)",
             "VMware (.vhd)",
-            "Virtual Box (.vdi)"});
+            "Virtual Box (.vdi)",
+            "ISO Image (.iso)"});
 			this.cbImageFormat.Location = new System.Drawing.Point(504, 51);
 			this.cbImageFormat.Name = "cbImageFormat";
-			this.cbImageFormat.Size = new System.Drawing.Size(113, 21);
+			this.cbImageFormat.Size = new System.Drawing.Size(100, 21);
 			this.cbImageFormat.TabIndex = 16;
 			// 
 			// label1
@@ -459,7 +464,7 @@
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(87, 13);
 			this.label3.TabIndex = 12;
-			this.label3.Text = "IMG Format:";
+			this.label3.Text = "Image Format:";
 			// 
 			// cbLinkerFormat
 			// 
@@ -478,7 +483,7 @@
 			this.groupBox2.Controls.Add(this.cbGenerateASMFile);
 			this.groupBox2.Controls.Add(this.cbGenerateMapFile);
 			this.groupBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.groupBox2.Location = new System.Drawing.Point(255, 211);
+			this.groupBox2.Location = new System.Drawing.Point(255, 202);
 			this.groupBox2.Name = "groupBox2";
 			this.groupBox2.Size = new System.Drawing.Size(166, 70);
 			this.groupBox2.TabIndex = 23;
@@ -512,7 +517,7 @@
 			this.groupBox1.Controls.Add(this.cbEnableSSAOptimizations);
 			this.groupBox1.Controls.Add(this.cbEnableSSA);
 			this.groupBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.groupBox1.Location = new System.Drawing.Point(8, 211);
+			this.groupBox1.Location = new System.Drawing.Point(5, 202);
 			this.groupBox1.Name = "groupBox1";
 			this.groupBox1.Size = new System.Drawing.Size(241, 129);
 			this.groupBox1.TabIndex = 22;
@@ -547,6 +552,7 @@
 			// 
 			// tabPage4
 			// 
+			this.tabPage4.Controls.Add(this.groupBox11);
 			this.tabPage4.Controls.Add(this.groupBox10);
 			this.tabPage4.Controls.Add(this.groupBox9);
 			this.tabPage4.Controls.Add(this.groupBox8);
@@ -563,7 +569,7 @@
 			// 
 			this.groupBox10.Controls.Add(this.button4);
 			this.groupBox10.Controls.Add(this.lbVMwarePlayerExecutable);
-			this.groupBox10.Location = new System.Drawing.Point(8, 238);
+			this.groupBox10.Location = new System.Drawing.Point(8, 229);
 			this.groupBox10.Name = "groupBox10";
 			this.groupBox10.Size = new System.Drawing.Size(654, 56);
 			this.groupBox10.TabIndex = 24;
@@ -594,7 +600,7 @@
 			// 
 			this.groupBox9.Controls.Add(this.button6);
 			this.groupBox9.Controls.Add(this.lbBOCHSExecutable);
-			this.groupBox9.Location = new System.Drawing.Point(8, 176);
+			this.groupBox9.Location = new System.Drawing.Point(8, 167);
 			this.groupBox9.Name = "groupBox9";
 			this.groupBox9.Size = new System.Drawing.Size(654, 56);
 			this.groupBox9.TabIndex = 23;
@@ -658,7 +664,7 @@
 			this.groupBox7.Controls.Add(this.button3);
 			this.groupBox7.Controls.Add(this.button2);
 			this.groupBox7.Controls.Add(this.lbQEMUExecutable);
-			this.groupBox7.Location = new System.Drawing.Point(8, 82);
+			this.groupBox7.Location = new System.Drawing.Point(8, 73);
 			this.groupBox7.Name = "groupBox7";
 			this.groupBox7.Size = new System.Drawing.Size(654, 88);
 			this.groupBox7.TabIndex = 0;
@@ -761,11 +767,42 @@
 			this.openFileDialog2.Filter = "Executable|*.exe";
 			this.openFileDialog2.Title = "Select Assembly";
 			// 
+			// groupBox11
+			// 
+			this.groupBox11.Controls.Add(this.button7);
+			this.groupBox11.Controls.Add(this.lbmkisofsExecutable);
+			this.groupBox11.Location = new System.Drawing.Point(8, 291);
+			this.groupBox11.Name = "groupBox11";
+			this.groupBox11.Size = new System.Drawing.Size(654, 56);
+			this.groupBox11.TabIndex = 25;
+			this.groupBox11.TabStop = false;
+			this.groupBox11.Text = "mkisofs:";
+			// 
+			// button7
+			// 
+			this.button7.Enabled = false;
+			this.button7.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.button7.Location = new System.Drawing.Point(6, 19);
+			this.button7.Name = "button7";
+			this.button7.Size = new System.Drawing.Size(106, 23);
+			this.button7.TabIndex = 20;
+			this.button7.Text = "Executable:";
+			this.button7.UseVisualStyleBackColor = true;
+			// 
+			// lbmkisofsExecutable
+			// 
+			this.lbmkisofsExecutable.AutoSize = true;
+			this.lbmkisofsExecutable.Location = new System.Drawing.Point(118, 24);
+			this.lbmkisofsExecutable.Name = "lbmkisofsExecutable";
+			this.lbmkisofsExecutable.Size = new System.Drawing.Size(106, 13);
+			this.lbmkisofsExecutable.TabIndex = 19;
+			this.lbmkisofsExecutable.Text = "{mkisofs Executable}";
+			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(678, 406);
+			this.ClientSize = new System.Drawing.Size(635, 394);
 			this.Controls.Add(this.progressBar1);
 			this.Controls.Add(this.tabControl1);
 			this.Name = "MainForm";
@@ -799,6 +836,8 @@
 			this.groupBox7.PerformLayout();
 			this.tabPage2.ResumeLayout(false);
 			this.tabPage3.ResumeLayout(false);
+			this.groupBox11.ResumeLayout(false);
+			this.groupBox11.PerformLayout();
 			this.ResumeLayout(false);
 
 		}
@@ -862,5 +901,8 @@
 		private System.Windows.Forms.GroupBox groupBox10;
 		private System.Windows.Forms.Button button4;
 		private System.Windows.Forms.Label lbVMwarePlayerExecutable;
+		private System.Windows.Forms.GroupBox groupBox11;
+		private System.Windows.Forms.Button button7;
+		private System.Windows.Forms.Label lbmkisofsExecutable;
 	}
 }
