@@ -1,11 +1,12 @@
 ﻿/*
- * (c) 2013 MOSA - The Managed Operating System Alliance
+ * (c) 2014 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  *  Ki (kiootic) <kiootic@gmail.com>
+ *  Stefan Andres Charsley (charsleysa) <charsleysa@gmail.com>
  */
 
 using Mosa.Compiler.Common;
@@ -43,13 +44,18 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		private List<MosaMethod> methods;
 		private List<MosaField> fields;
+		private List<MosaProperty> properties;
 		private List<MosaType> interfaces;
 
 		public IList<MosaMethod> Methods { get; private set; }
 
+		public IList<MosaProperty> Properties { get; private set; }
+
 		public IList<MosaField> Fields { get; private set; }
 
 		public IList<MosaType> Interfaces { get; private set; }
+
+		public MosaTypeAttributes TypeAttributes { get; private set; }
 
 		public MosaTypeCode TypeCode { get; private set; }
 
@@ -164,6 +170,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 			Methods = (methods = new List<MosaMethod>()).AsReadOnly();
 			Fields = (fields = new List<MosaField>()).AsReadOnly();
+			Properties = (properties = new List<MosaProperty>()).AsReadOnly();
 			Interfaces = (interfaces = new List<MosaType>()).AsReadOnly();
 
 			GenericArguments = (genericArguments = new List<MosaType>()).AsReadOnly();
@@ -175,6 +182,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 			result.Methods = (result.methods = new List<MosaMethod>(this.methods)).AsReadOnly();
 			result.Fields = (result.fields = new List<MosaField>(this.fields)).AsReadOnly();
+			result.Properties = (result.properties = new List<MosaProperty>(this.properties)).AsReadOnly();
 			result.Interfaces = (result.interfaces = new List<MosaType>(this.interfaces)).AsReadOnly();
 
 			result.GenericArguments = (result.genericArguments = new List<MosaType>(this.genericArguments)).AsReadOnly();
@@ -253,7 +261,11 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 			public IList<MosaField> Fields { get { return type.fields; } }
 
+			public IList<MosaProperty> Properties { get { return type.properties; } }
+
 			public IList<MosaType> Interfaces { get { return type.interfaces; } }
+
+			public MosaTypeAttributes TypeAttributes { set { type.TypeAttributes = value; } }
 
 			public MosaTypeCode TypeCode { set { type.TypeCode = value; } }
 

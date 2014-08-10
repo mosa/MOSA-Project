@@ -9,6 +9,7 @@
 
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.IR;
+using Mosa.Compiler.MosaTypeSystem;
 using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework.Intrinsics
@@ -34,12 +35,21 @@ namespace Mosa.Compiler.Framework.Intrinsics
 
 			Operand callTargetOperand = Operand.CreateSymbolFromMethod(methodCompiler.TypeSystem, method);
 
-			Operand typeDefinitionOperand = Operand.CreateUnmanagedSymbolPointer(methodCompiler.TypeSystem, StringClassTypeDefinitionSymbolName);
+			Operand typeDefinitionOperand = GetRuntimeTypeHandle(context, methodCompiler);
 			Operand lengthOperand = context.Operand1;
 			Operand result = context.Result;
 
 			context.SetInstruction(IRInstruction.Call, result, callTargetOperand, typeDefinitionOperand, lengthOperand);
 			context.MosaMethod = method;
+		}
+
+		private Operand GetRuntimeTypeHandle(Context context, BaseMethodCompiler methodCompiler)
+		{
+			var typeDef = Operand.CreateUnmanagedSymbolPointer(methodCompiler.TypeSystem, StringClassTypeDefinitionSymbolName);
+			var runtimeTypeHandle = methodCompiler.CreateVirtualRegister(methodCompiler.TypeSystem.GetTypeByName("System", "RuntimeTypeHandle"));
+			var before = context.InsertBefore();
+			before.SetInstruction(IRInstruction.Move, runtimeTypeHandle, typeDef);
+			return runtimeTypeHandle;
 		}
 	}
 }

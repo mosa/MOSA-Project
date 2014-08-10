@@ -90,6 +90,7 @@ namespace Mosa.TestWorld.x86.Tests
 			var plugTestTest = new PlugTestTest();
 			var compareTest = new ComparisonTest();
 			var simpleTest = new OptimizationTest();
+			var reflectionTest = new ReflectionTest();
 			var otherTest = new OtherTest();
 
 			delegateTest.Test();
@@ -102,6 +103,7 @@ namespace Mosa.TestWorld.x86.Tests
 			plugTestTest.Test();
 			compareTest.Test();
 			simpleTest.Test();
+			reflectionTest.Test();
 			otherTest.Test();
 		}
 

@@ -83,8 +83,13 @@
     <Compile Include="ExceptionHandlerType.cs" />
     <Compile Include="Metadata\CLRMetadata.cs" />
     <Compile Include="Metadata\UnitDescs.cs" />
+    <Compile Include="MosaFieldAttributes.cs" />
+    <Compile Include="MosaMethodAttributes.cs" />
+    <Compile Include="MosaParameterAttributes.cs" />
+    <Compile Include="MosaPropertyAttributes.cs" />
     <Compile Include="MosaTypeExtension.cs" />
     <Compile Include="SignatureName.cs" />
+    <Compile Include="MosaTypeAttributes.cs" />
     <Compile Include="TypeSystemExtensions.cs" />
     <Compile Include="Units\MosaArrayInfo.cs" />
     <Compile Include="Units\MosaCustomAttribute.cs" />
@@ -98,6 +103,7 @@
     <Compile Include="BuiltInTypes.cs" />
     <Compile Include="Metadata\MetadataLoader.cs" />
     <Compile Include="Metadata\MetadataCache.cs" />
+    <Compile Include="Units\MosaProperty.cs" />
     <Compile Include="Units\MosaUnit.cs" />
     <Compile Include="Metadata\ScopedToken.cs" />
     <Compile Include="SignatureComparer.cs" />

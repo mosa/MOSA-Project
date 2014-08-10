@@ -82,6 +82,99 @@ namespace Mosa.Utility.GUI.Common
 						}
 					}
 
+					if (type.Properties.Count != 0)
+					{
+						TreeNode propertiesNode = new TreeNode("Properties");
+						if (showSizes)
+							propertiesNode.Text = propertiesNode.Text + " (Count: " + type.Properties.Count.ToString() + ")";
+
+						typeNode.Nodes.Add(propertiesNode);
+
+						foreach (MosaProperty property in type.Properties)
+						{
+							TreeNode propertyNode = new ViewNode<MosaProperty>(property, property.ShortName);
+							propertiesNode.Nodes.Add(propertyNode);
+
+							if (property.GetterMethod != null)
+							{
+								TreeNode getterNode = new ViewNode<MosaMethod>(property.GetterMethod, property.GetterMethod.ShortName);
+								propertyNode.Nodes.Add(getterNode);
+
+								if (property.GetterMethod.IsStatic)
+									getterNode.Text = getterNode.Text + " [Static]";
+
+								if (property.GetterMethod.IsAbstract)
+									getterNode.Text = getterNode.Text + " [Abstract]";
+
+								if (property.GetterMethod.IsNewSlot)
+									getterNode.Text = getterNode.Text + " [NewSlot]";
+
+								if (property.GetterMethod.IsVirtual)
+									getterNode.Text = getterNode.Text + " [Virtual]";
+
+								if (property.GetterMethod.IsFinal)
+									getterNode.Text = getterNode.Text + " [Final]";
+
+								if (property.GetterMethod.IsSpecialName)
+									getterNode.Text = getterNode.Text + " [SpecialName]";
+
+								if (property.GetterMethod.IsRTSpecialName)
+									getterNode.Text = getterNode.Text + " [RTSpecialName]";
+
+								if (property.GetterMethod.GenericArguments.Count != 0)
+								{
+									TreeNode genericParameterNodes = new TreeNode("Generic Arguments Types");
+									getterNode.Nodes.Add(genericParameterNodes);
+
+									foreach (var genericParameter in property.GetterMethod.GenericArguments)
+									{
+										TreeNode GenericParameterNode = new TreeNode(genericParameter.Name);
+										genericParameterNodes.Nodes.Add(GenericParameterNode);
+									}
+								}
+							}
+
+							if (property.SetterMethod != null)
+							{
+								TreeNode setterNode = new ViewNode<MosaMethod>(property.SetterMethod, property.SetterMethod.ShortName);
+								propertyNode.Nodes.Add(setterNode);
+
+								if (property.SetterMethod.IsStatic)
+									setterNode.Text = setterNode.Text + " [Static]";
+
+								if (property.SetterMethod.IsAbstract)
+									setterNode.Text = setterNode.Text + " [Abstract]";
+
+								if (property.SetterMethod.IsNewSlot)
+									setterNode.Text = setterNode.Text + " [NewSlot]";
+
+								if (property.SetterMethod.IsVirtual)
+									setterNode.Text = setterNode.Text + " [Virtual]";
+
+								if (property.SetterMethod.IsFinal)
+									setterNode.Text = setterNode.Text + " [Final]";
+
+								if (property.SetterMethod.IsSpecialName)
+									setterNode.Text = setterNode.Text + " [SpecialName]";
+
+								if (property.SetterMethod.IsRTSpecialName)
+									setterNode.Text = setterNode.Text + " [RTSpecialName]";
+
+								if (property.SetterMethod.GenericArguments.Count != 0)
+								{
+									TreeNode genericParameterNodes = new TreeNode("Generic Arguments Types");
+									setterNode.Nodes.Add(genericParameterNodes);
+
+									foreach (var genericParameter in property.SetterMethod.GenericArguments)
+									{
+										TreeNode GenericParameterNode = new TreeNode(genericParameter.Name);
+										genericParameterNodes.Nodes.Add(GenericParameterNode);
+									}
+								}
+							}
+						}
+					}
+
 					if (type.Methods.Count != 0)
 					{
 						TreeNode methodsNode = new TreeNode("Methods");
@@ -89,6 +182,8 @@ namespace Mosa.Utility.GUI.Common
 
 						foreach (MosaMethod method in type.Methods)
 						{
+							if (method.ShortName.StartsWith("set_") || method.ShortName.StartsWith("get_")) continue;
+
 							TreeNode methodNode = new ViewNode<MosaMethod>(method, method.ShortName);
 							methodsNode.Nodes.Add(methodNode);
 
