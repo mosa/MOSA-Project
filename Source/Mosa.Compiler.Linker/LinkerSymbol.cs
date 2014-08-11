@@ -9,6 +9,7 @@
 
 using Mosa.Compiler.Common;
 using System.IO;
+using System.Diagnostics;
 
 namespace Mosa.Compiler.Linker
 {

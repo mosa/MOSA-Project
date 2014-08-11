@@ -125,6 +125,7 @@
     <Compile Include="Instructions\Rev16.cs" />
     <Compile Include="Instructions\Revsh.cs" />
     <Compile Include="Instructions\Ror.cs" />
+    <Compile Include="Instructions\Rsc.cs" />
     <Compile Include="Instructions\Rsb.cs" />
     <Compile Include="Instructions\Sbc.cs" />
     <Compile Include="Instructions\Sev.cs" />
@@ -139,6 +140,7 @@
     <Compile Include="Instructions\Swi.cs" />
     <Compile Include="Instructions\Sxtb.cs" />
     <Compile Include="Instructions\Sxth.cs" />
+    <Compile Include="Instructions\Teq.cs" />
     <Compile Include="Instructions\Tst.cs" />
     <Compile Include="Instructions\Uxtb.cs" />
     <Compile Include="Instructions\Uxth.cs" />

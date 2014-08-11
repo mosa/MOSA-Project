@@ -15,6 +15,7 @@ using Mosa.Compiler.MosaTypeSystem;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using Mosa.Compiler.Framework.Analysis;
 
 namespace Mosa.Compiler.Framework
 {
@@ -65,7 +66,7 @@ namespace Mosa.Compiler.Framework
 			this.Architecture = compiler.Architecture;
 			this.TypeSystem = compiler.TypeSystem;
 			this.TypeLayout = Compiler.TypeLayout;
-			this.InternalTrace = Compiler.InternalTrace;
+			this.InternalTrace = Compiler.CompilerTrace;
 			this.Linker = compiler.Linker;
 			this.BasicBlocks = basicBlocks ?? new BasicBlocks();
 			this.InstructionSet = instructionSet ?? new InstructionSet(256);
@@ -73,7 +74,7 @@ namespace Mosa.Compiler.Framework
 			this.StackLayout = new StackLayout(Architecture, method.Signature.Parameters.Count + (method.HasThis || method.HasExplicitThis ? 1 : 0));
 			this.VirtualRegisters = new VirtualRegisters(Architecture);
 			this.LocalVariables = emptyOperandList;
-			this.DominanceAnalysis = new DominanceAnalysis(Compiler.CompilerOptions.DominanceAnalysisFactory, this.BasicBlocks);
+			this.DominanceAnalysis = new Dominance(Compiler.CompilerOptions.DominanceAnalysisFactory, this.BasicBlocks);
 
 			EvaluateParameterOperands();
 
@@ -145,7 +146,7 @@ namespace Mosa.Compiler.Framework
 		/// Gets the internal logging interface
 		/// </summary>
 		/// <value>The log.</value>
-		public IInternalTrace InternalTrace { get; private set; }
+		public CompilerTrace InternalTrace { get; private set; }
 
 		/// <summary>
 		/// Gets the local variables.
@@ -170,7 +171,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets the dominance analysis.
 		/// </summary>
-		public DominanceAnalysis DominanceAnalysis { get; private set; }
+		public Dominance DominanceAnalysis { get; private set; }
 
 		#endregion Properties
 
@@ -196,7 +197,7 @@ namespace Mosa.Compiler.Framework
 
 			foreach (var parameter in Method.Signature.Parameters)
 			{
-				StackLayout.SetStackParameter(index++, parameter.Type, displacement, parameter.Name);
+				StackLayout.SetStackParameter(index++, parameter.ParameterType, displacement, parameter.Name);
 			}
 		}
 

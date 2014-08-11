@@ -19,7 +19,7 @@ namespace Mosa.Compiler.Framework.Stages
 	{
 		#region Data members
 
-		private CompilerTrace trace;
+		private SectionTrace trace;
 
 		#endregion Data members
 

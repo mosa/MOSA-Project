@@ -25,8 +25,10 @@ namespace Mosa.Utility.BootImage
 		/// <param name="options">The options.</param>
 		static public void Create(Options options)
 		{
-			if (System.IO.File.Exists(options.DiskImageFileName))
-				System.IO.File.Delete(options.DiskImageFileName);
+			if (File.Exists(options.DiskImageFileName))
+			{
+				File.Delete(options.DiskImageFileName);
+			}
 
 			uint blockCount = options.BlockCount;
 
@@ -39,7 +41,7 @@ namespace Mosa.Utility.BootImage
 				}
 			}
 
-			DiskGeometry diskGeometry = new Mosa.DeviceSystem.DiskGeometry();
+			var diskGeometry = new Mosa.DeviceSystem.DiskGeometry();
 			diskGeometry.GuessGeometry(blockCount);
 
 			// Create disk image file
@@ -128,7 +130,7 @@ namespace Mosa.Utility.BootImage
 
 			fat.SetVolumeName(options.VolumeLabel);
 
-			foreach (IncludeFile includeFile in options.IncludeFiles)
+			foreach (var includeFile in options.IncludeFiles)
 			{
 				Mosa.FileSystem.FAT.FatFileAttributes fileAttributes = new Mosa.FileSystem.FAT.FatFileAttributes();
 				if (includeFile.Archive) fileAttributes |= Mosa.FileSystem.FAT.FatFileAttributes.Archive;
@@ -137,7 +139,7 @@ namespace Mosa.Utility.BootImage
 				if (includeFile.System) fileAttributes |= Mosa.FileSystem.FAT.FatFileAttributes.System;
 
 				//byte[] file = File.ReadAllBytes(includeFile.Filename);
-				string newname = (Path.GetFileNameWithoutExtension(includeFile.Newname).PadRight(8).Substring(0, 8) + Path.GetExtension(includeFile.Newname).PadRight(4).Substring(1, 3)).ToUpper();
+				string newname = (Path.GetFileNameWithoutExtension(includeFile.Filename).PadRight(8).Substring(0, 8) + Path.GetExtension(includeFile.Filename).PadRight(4).Substring(1, 3)).ToUpper();
 				FatFileLocation location = fat.CreateFile(newname, fileAttributes, 0);
 
 				if (!location.Valid)
@@ -245,6 +247,8 @@ namespace Mosa.Utility.BootImage
 
 				diskDevice.WriteBlock(blockCount, 1, footer);
 			}
+
+			diskDevice.Dispose();
 		}
 	}
 }

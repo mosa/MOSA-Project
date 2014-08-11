@@ -80,12 +80,13 @@
     <Compile Include="Analysis\NaturalBlockOrder.cs" />
     <Compile Include="Analysis\ReverseBlockOrder.cs" />
     <Compile Include="Analysis\SimpleTraceBlockOrder.cs" />
-    <Compile Include="DominanceAnalysis.cs" />
+    <Compile Include="Analysis\Dominance.cs" />
     <Compile Include="Analysis\IDominanceAnalysis.cs" />
     <Compile Include="BaseCallingConventionExtended.cs" />
     <Compile Include="DelegatePatcher.cs" />
     <Compile Include="Intrinsics\InternalInitializeArray.cs" />
-    <Compile Include="Intrinsics\InternalGetType.cs" />
+    <Compile Include="Intrinsics\InternalsBase.cs" />
+    <Compile Include="Intrinsics\TypeInternals.cs" />
     <Compile Include="IR\Kill.cs" />
     <Compile Include="IR\Gen.cs" />
     <Compile Include="IR\CompoundLoad.cs" />
@@ -99,6 +100,7 @@
     <Compile Include="RegisterAllocator\BaseRegisterAllocator.cs" />
     <Compile Include="RegisterAllocator\LiveRange.cs" />
     <Compile Include="RegisterAllocator\MoveHint.cs" />
+    <Compile Include="ReplacementTargetAttribute.cs" />
     <Compile Include="ShiftType.cs" />
     <Compile Include="ConditionCodeExtension.cs" />
     <Compile Include="BasicBlocks.cs" />
@@ -115,7 +117,10 @@
     <Compile Include="RegisterAllocator\LiveInterval.cs" />
     <Compile Include="RegisterAllocator\VirtualRegister.cs" />
     <Compile Include="RegisterAllocator\GreedyRegisterAllocator.cs" />
-    <Compile Include="Stages\ConvertCompoundMoveStage.cs" />
+    <Compile Include="Stages\ConvertCompoundStage.cs" />
+    <Compile Include="Stages\InstructionStatisticsStage.cs" />
+    <Compile Include="Stages\MapFileGenerationStage.cs" />
+    <Compile Include="Stages\MethodPipelineExportStage.cs" />
     <Compile Include="Stages\PromoteTempVariablesStage.cs" />
     <Compile Include="Stages\PromoteLocalVariablesStage.cs" />
     <Compile Include="Stages\StopStage.cs" />
@@ -144,6 +149,7 @@
     <Compile Include="Stages\EdgeSplitStage.cs" />
     <Compile Include="Stages\TypeInitializerSchedulerStage.cs" />
     <Compile Include="MosaTypeLayout.cs" />
+    <Compile Include="Stages\UnboxValueTypeStage.cs" />
     <Compile Include="VirtualRegisters.cs" />
     <Compile Include="BaseCodeEmitter.cs" />
     <Compile Include="BaseInstruction.cs" />
@@ -370,9 +376,9 @@
       <Project>{0B1011A6-8FCD-4F9E-BBB8-8DB86E23D2E8}</Project>
       <Name>Mosa.Compiler.Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Mosa.Compiler.InternalTrace\Mosa.Compiler.InternalTrace.csproj">
+    <ProjectReference Include="..\Mosa.Compiler.Trace\Mosa.Compiler.Trace.csproj">
       <Project>{540BEAC7-A2C3-4C46-9F4A-E6E1DF4EF6FC}</Project>
-      <Name>Mosa.Compiler.InternalTrace</Name>
+      <Name>Mosa.Compiler.Trace</Name>
     </ProjectReference>
     <ProjectReference Include="..\Mosa.Compiler.MosaTypeSystem\Mosa.Compiler.MosaTypeSystem.csproj">
       <Project>{5f30a68e-05bf-40ea-b576-5ebcde520559}</Project>

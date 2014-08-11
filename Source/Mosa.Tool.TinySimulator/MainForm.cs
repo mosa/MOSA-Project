@@ -40,7 +40,7 @@ namespace Mosa.Tool.TinySimulator
 		private OutputView outputView;
 		private ScriptView scriptView;
 
-		public IInternalTrace InternalTrace = new BasicInternalTrace();
+		public CompilerTrace InternalTrace = new CompilerTrace();
 		public ConfigurableTraceFilter Filter = new ConfigurableTraceFilter();
 		public TypeSystem TypeSystem;
 		public MosaTypeLayout TypeLayout;
@@ -74,11 +74,8 @@ namespace Mosa.Tool.TinySimulator
 		public MainForm()
 		{
 			InitializeComponent();
-			Filter.MethodMatch = MatchType.None;
-			Filter.Method = string.Empty;
-			Filter.StageMatch = MatchType.Any;
-			Filter.TypeMatch = MatchType.Any;
-			Filter.ExcludeInternalMethods = false;
+
+			Filter.Active = false;
 
 			InternalTrace.TraceFilter = Filter;
 			InternalTrace.CompilerEventListener = this;
@@ -488,5 +485,10 @@ namespace Mosa.Tool.TinySimulator
 		{
 			outputView.AddOutput(data);
 		}
+
+		void ICompilerEventListener.SubmitMethodStatus(int totalMethods, int queuedMethods)
+		{
+		}
+
 	}
 }

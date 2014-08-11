@@ -17,11 +17,11 @@ using System.Diagnostics;
 
 namespace Mosa.TinyCPUSimulator.TestSystem
 {
-	public class TestCompiler
+	public class TestCompiler : ICompilerEventListener
 	{
 		protected BaseTestPlatform platform;
 		protected ConfigurableTraceFilter filter = new ConfigurableTraceFilter();
-		protected IInternalTrace internalTrace = new BasicInternalTrace();
+		protected CompilerTrace compilerTrace = new CompilerTrace();
 		protected ISimAdapter adapter;
 		protected ISimAdapter simAdapter;
 		protected BaseArchitecture architecture;
@@ -40,15 +40,18 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 		{
 			this.platform = platform;
 
-			filter.MethodMatch = MatchType.None;
-			internalTrace.TraceFilter = filter;
 			EnableSSA = true;
 			EnableSSAOptimizations = true;
+
+			compilerTrace.TraceFilter.Active = false;
+			compilerTrace.CompilerEventListener = this;
 
 			architecture = platform.CreateArchitecture();
 			simAdapter = platform.CreateSimAdaptor();
 
 			linker = new SimLinker(simAdapter);
+
+			CompileTestCode();
 		}
 
 		protected void CompileTestCode()
@@ -75,7 +78,7 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 
 			platform.InitializeSimulation(simAdapter);
 
-			simCompiler = SimCompiler.Compile(typeSystem, typeLayout, internalTrace, EnableSSA, architecture, simAdapter, linker);
+			simCompiler = SimCompiler.Compile(typeSystem, typeLayout, compilerTrace, EnableSSA, architecture, simAdapter, linker);
 
 			//simAdapter.SimCPU.Monitor.DebugOutput = true; // DEBUG OPTION
 
@@ -91,8 +94,6 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 
 		protected T Run<T>(string ns, string type, string method, bool reset, params object[] parameters)
 		{
-			CompileTestCode();
-
 			if (reset)
 			{
 				// reset the stack
@@ -170,6 +171,16 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 			}
 
 			return null;
+		}
+
+		void ICompilerEventListener.SubmitTraceEvent(CompilerEvent compilerStage, string info)
+		{
+		
+		}
+
+		void ICompilerEventListener.SubmitMethodStatus(int totalMethods, int queuedMethods)
+		{
+
 		}
 	}
 }

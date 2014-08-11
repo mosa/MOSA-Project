@@ -63,23 +63,10 @@
     <StartupObject>Mosa.Tool.Compiler.Program</StartupObject>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="dnlib, Version=1.0.1.0, Culture=neutral, PublicKeyToken=50e96378b6e77999, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\3rdParty\dnlib.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AotCompiler.cs" />
-    <Compile Include="Stages\MethodPipelineExportStage.cs" />
-    <Compile Include="Stages\MapFileGenerationStage.cs" />
-    <Compile Include="AotMethodCompiler.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Compiler.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Stages\InstructionStatisticsStage.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="NDesk.Options.cs">
@@ -92,17 +79,9 @@
       <Project>{0b1011a6-8fcd-4f9e-bbb8-8db86e23d2e8}</Project>
       <Name>Mosa.Compiler.Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Mosa.Compiler.LinkerFormat\Mosa.Compiler.LinkerFormat.csproj">
-      <Project>{CC2E6418-C325-4486-B50D-941EC27053F6}</Project>
-      <Name>Mosa.Compiler.LinkerFormat</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Mosa.Compiler.MosaTypeSystem\Mosa.Compiler.MosaTypeSystem.csproj">
-      <Project>{5f30a68e-05bf-40ea-b576-5ebcde520559}</Project>
-      <Name>Mosa.Compiler.MosaTypeSystem</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Mosa.Compiler.InternalTrace\Mosa.Compiler.InternalTrace.csproj">
+    <ProjectReference Include="..\Mosa.Compiler.Trace\Mosa.Compiler.Trace.csproj">
       <Project>{540BEAC7-A2C3-4C46-9F4A-E6E1DF4EF6FC}</Project>
-      <Name>Mosa.Compiler.InternalTrace</Name>
+      <Name>Mosa.Compiler.Trace</Name>
     </ProjectReference>
     <ProjectReference Include="..\Mosa.Compiler.Framework\Mosa.Compiler.Framework.csproj">
       <Project>{75A12A8A-8C8F-4D1E-801B-689D8F781BF4}</Project>
@@ -112,9 +91,17 @@
       <Project>{65866a51-b229-44c5-ac81-87a90fa1741c}</Project>
       <Name>Mosa.Compiler.Linker</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Mosa.Platform.ARMv6\Mosa.Platform.ARMv6.csproj">
+      <Project>{0fb92651-3ee8-441d-84f2-c4dfda68e8a5}</Project>
+      <Name>Mosa.Platform.ARMv6</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Mosa.Platform.x86\Mosa.Platform.x86.csproj">
-      <Project>{DE30CBE9-50F3-4A3E-BCC9-A8A36348530E}</Project>
+      <Project>{de30cbe9-50f3-4a3e-bcc9-a8a36348530e}</Project>
       <Name>Mosa.Platform.x86</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mosa.Utility.AOT\Mosa.Utility.Aot.csproj">
+      <Project>{3bf17c10-a1fb-4517-923e-b609c2fd8282}</Project>
+      <Name>Mosa.Utility.Aot</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

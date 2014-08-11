@@ -37,12 +37,19 @@ namespace Mosa.Compiler.Framework
 		MosaMethod GetMethodToCompile();
 
 		/// <summary>
-		/// Determines whether the method scheduled to be compiled.
+		/// Gets the total methods.
 		/// </summary>
-		/// <param name="method">The method.</param>
-		/// <returns>
-		///   <c>true</c> if method is scheduled to be compiled; otherwise, <c>false</c>.
-		/// </returns>
-		bool IsMethodScheduled(MosaMethod method);
+		/// <value>
+		/// The total methods.
+		/// </value>
+		int TotalMethods { get; }
+
+		/// <summary>
+		/// Gets the queued methods.
+		/// </summary>
+		/// <value>
+		/// The queued methods.
+		/// </value>
+		int TotalQueuedMethods { get; }
 	}
 }

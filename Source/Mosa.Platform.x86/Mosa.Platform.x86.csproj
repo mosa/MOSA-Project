@@ -67,9 +67,9 @@
       <Project>{0B1011A6-8FCD-4F9E-BBB8-8DB86E23D2E8}</Project>
       <Name>Mosa.Compiler.Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Mosa.Compiler.InternalTrace\Mosa.Compiler.InternalTrace.csproj">
+    <ProjectReference Include="..\Mosa.Compiler.Trace\Mosa.Compiler.Trace.csproj">
       <Project>{540beac7-a2c3-4c46-9f4a-e6e1df4ef6fc}</Project>
-      <Name>Mosa.Compiler.InternalTrace</Name>
+      <Name>Mosa.Compiler.Trace</Name>
     </ProjectReference>
     <ProjectReference Include="..\Mosa.Compiler.Framework\Mosa.Compiler.Framework.csproj">
       <Project>{75A12A8A-8C8F-4D1E-801B-689D8F781BF4}</Project>
@@ -102,6 +102,7 @@
     <Compile Include="Instructions\TwoOperandInstruction.cs" />
     <Compile Include="Instructions\AddSD.cs" />
     <Compile Include="Intrinsic\Div.cs" />
+    <Compile Include="Intrinsic\GetAssemblyListTable.cs" />
     <Compile Include="Intrinsic\Pause.cs" />
     <Compile Include="Intrinsic\LockSet32.cs" />
     <Compile Include="Intrinsic\SyncCompareAndSwap.cs" />
@@ -125,7 +126,6 @@
     <Compile Include="Stages\InterruptVectorStage.cs" />
     <Compile Include="Intrinsic\GetEBP.cs" />
     <Compile Include="Intrinsic\GetMethodLookupTable.cs" />
-    <Compile Include="Intrinsic\GetEip.cs" />
     <Compile Include="Intrinsic\Cli.cs" />
     <Compile Include="Intrinsic\GetControlRegisterBase.cs" />
     <Compile Include="Intrinsic\GetCR0.cs" />

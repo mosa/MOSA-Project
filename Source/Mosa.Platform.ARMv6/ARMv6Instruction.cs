@@ -7,12 +7,13 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework;
 
 namespace Mosa.Platform.ARMv6
 {
 	/// <summary>
-	///
+	/// 
 	/// </summary>
 	public abstract class ARMv6Instruction : BaseInstruction
 	{
@@ -62,6 +63,73 @@ namespace Mosa.Platform.ARMv6
 		public void Emit(Context context, BaseCodeEmitter emitter)
 		{
 			Emit(context, emitter as MachineCodeEmitter);
+		}
+
+		/// <summary>
+		/// Emits the data processing instruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <param name="emitter">The emitter.</param>
+		/// <param name="opcode">The opcode.</param>
+		/// <exception cref="InvalidCompilerException"></exception>
+		protected void EmitDataProcessingInstruction(Context context, MachineCodeEmitter emitter, byte opcode)
+		{
+			if (context.Operand2.IsRegister && context.Operand3.IsShift)
+			{
+				emitter.EmitInstructionWithRegister(context.ConditionCode, opcode, context.UpdateStatus, context.Operand1.Register.Index, context.Result.Register.Index, context.Operand3.ShiftType, context.Operand2.Register.Index);
+			}
+			else if (context.Operand2.IsConstant && context.Operand3.IsConstant)
+			{
+				emitter.EmitInstructionWithImmediate(context.ConditionCode, opcode, context.UpdateStatus, context.Operand1.Register.Index, context.Result.Register.Index, (int)context.Operand2.ConstantSignedInteger, (int)context.Operand3.ConstantSignedInteger);
+			}
+			else
+			{
+				throw new InvalidCompilerException();
+			}
+		}
+		protected void EmitMultiplyInstruction(Context context, MachineCodeEmitter emitter)
+		{
+			if (!context.Operand3.IsRegister)
+			{
+				emitter.EmitMultiply(context.ConditionCode, context.UpdateStatus, context.Operand1.Register.Index, context.Result.Register.Index, context.Operand2.Register.Index);
+			}
+			else 
+			{
+				emitter.EmitMultiplyWithAccumulate(context.ConditionCode, context.UpdateStatus, context.Operand1.Register.Index, context.Result.Register.Index, context.Operand2.Register.Index, context.Operand3.Register.Index);
+			}
+		}
+
+		protected void EmitMemoryLoadStore(Context context, MachineCodeEmitter emitter, TransferType transferType)
+		{
+			if (context.Operand2.IsConstant)
+			{
+				emitter.EmitSingleDataTransfer(
+					context.ConditionCode,
+					Indexing.Post,
+					OffsetDirection.Up,
+					TransferSize.Word,
+					WriteBack.NoWriteBack,
+					transferType,
+					context.Operand1.Index,
+					context.Result.Index,
+					(uint)context.Operand2.ConstantUnsignedInteger
+				);
+			}
+			else
+			{
+				emitter.EmitSingleDataTransfer(
+					  context.ConditionCode,
+					  Indexing.Post,
+					  OffsetDirection.Up,
+					  TransferSize.Word,
+					  WriteBack.NoWriteBack,
+					  transferType,
+					  context.Operand1.Index,
+					  context.Result.Index,
+					  context.Operand2.ShiftType,
+					  context.Operand3.Index
+				  );
+			}
 		}
 
 		#endregion Methods

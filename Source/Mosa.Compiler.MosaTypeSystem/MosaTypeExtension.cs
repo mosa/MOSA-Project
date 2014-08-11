@@ -122,7 +122,17 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 				List<MosaParameter> parameters = new List<MosaParameter>();
 				for (uint i = 0; i < rank; i++)
-					parameters.Add(new MosaParameter("index" + i, typeSystem.BuiltIn.I4));
+				{
+					var indexParam = typeSystem.Controller.CreateParameter();
+					using (var mosaParameter = typeSystem.Controller.MutateParameter(indexParam))
+					{
+						mosaParameter.Name = "index" + i;
+						mosaParameter.ParameterAttributes = MosaParameterAttributes.In;
+						mosaParameter.ParameterType = typeSystem.BuiltIn.I4;
+						mosaParameter.DeclaringMethod = methodGet;
+					}
+					parameters.Add(indexParam);
+				}
 				method.Signature = new MosaMethodSignature(arrayType.ElementType, parameters);
 			}
 			type.Methods.Add(methodGet);
@@ -139,8 +149,28 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 				List<MosaParameter> parameters = new List<MosaParameter>();
 				for (uint i = 0; i < rank; i++)
-					parameters.Add(new MosaParameter("index" + i, typeSystem.BuiltIn.I4));
-				parameters.Add(new MosaParameter("value", arrayType.ElementType));
+				{
+					var indexParam = typeSystem.Controller.CreateParameter();
+					using (var mosaParameter = typeSystem.Controller.MutateParameter(indexParam))
+					{
+						mosaParameter.Name = "index" + i;
+						mosaParameter.ParameterAttributes = MosaParameterAttributes.In;
+						mosaParameter.ParameterType = typeSystem.BuiltIn.I4;
+						mosaParameter.DeclaringMethod = methodSet;
+					}
+					parameters.Add(indexParam);
+				}
+
+				var valueParam = typeSystem.Controller.CreateParameter();
+				using (var mosaParameter = typeSystem.Controller.MutateParameter(valueParam))
+				{
+					mosaParameter.Name = "value";
+					mosaParameter.ParameterAttributes = MosaParameterAttributes.In;
+					mosaParameter.ParameterType = arrayType.ElementType;
+					mosaParameter.DeclaringMethod = methodSet;
+				}
+				parameters.Add(valueParam);
+
 				method.Signature = new MosaMethodSignature(typeSystem.BuiltIn.Void, parameters);
 			}
 			type.Methods.Add(methodSet);
@@ -157,7 +187,17 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 				List<MosaParameter> parameters = new List<MosaParameter>();
 				for (uint i = 0; i < rank; i++)
-					parameters.Add(new MosaParameter("index" + i, typeSystem.BuiltIn.I4));
+				{
+					var indexParam = typeSystem.Controller.CreateParameter();
+					using (var mosaParameter = typeSystem.Controller.MutateParameter(indexParam))
+					{
+						mosaParameter.Name = "index" + i;
+						mosaParameter.ParameterAttributes = MosaParameterAttributes.In;
+						mosaParameter.ParameterType = typeSystem.BuiltIn.I4;
+						mosaParameter.DeclaringMethod = methodAdrOf;
+					}
+					parameters.Add(indexParam);
+				}
 				method.Signature = new MosaMethodSignature(arrayType.ElementType.ToManagedPointer(), parameters);
 			}
 			type.Methods.Add(methodAdrOf);
@@ -174,7 +214,17 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 				List<MosaParameter> parameters = new List<MosaParameter>();
 				for (uint i = 0; i < rank; i++)
-					parameters.Add(new MosaParameter("length" + i, typeSystem.BuiltIn.I4));
+				{
+					var lengthParam = typeSystem.Controller.CreateParameter();
+					using (var mosaParameter = typeSystem.Controller.MutateParameter(lengthParam))
+					{
+						mosaParameter.Name = "length" + i;
+						mosaParameter.ParameterAttributes = MosaParameterAttributes.In;
+						mosaParameter.ParameterType = typeSystem.BuiltIn.I4;
+						mosaParameter.DeclaringMethod = methodCtor;
+					}
+					parameters.Add(lengthParam);
+				}
 				method.Signature = new MosaMethodSignature(typeSystem.BuiltIn.Void, parameters);
 			}
 			type.Methods.Add(methodCtor);

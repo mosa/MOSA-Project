@@ -34,6 +34,7 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="IncludeFile.cs" />
     <Compile Include="KeyedList.cs" />
     <Compile Include="Alignment.cs" />
     <Compile Include="InvalidMetadataException.cs" />
@@ -44,7 +45,6 @@
     <Compile Include="Metadata.cs" />
     <Compile Include="NotImplementCompilerException.cs" />
     <Compile Include="CompilerException.cs" />
-    <Compile Include="ReplacementTargetAttribute.cs" />
     <Compile Include="SimplePriorityQueue.cs" />
     <Compile Include="Endianness .cs" />
     <Compile Include="ListExtension.cs" />

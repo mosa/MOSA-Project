@@ -18,7 +18,7 @@ namespace Mosa.Compiler.Framework.Stages
 	/// </summary>
 	public class PromoteLocalVariablesStage : BaseMethodCompilerStage
 	{
-		protected CompilerTrace trace;
+		protected SectionTrace trace;
 
 		protected override void Run()
 		{

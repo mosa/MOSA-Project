@@ -20,14 +20,12 @@ namespace Mosa.Compiler.Framework.Stages
 	{
 		#region Data Members
 
-		private readonly List<MosaType> typesAllocated = new List<MosaType>();
-		private readonly List<MosaMethod> methodsInvoked = new List<MosaMethod>();
-
 		private readonly HashSet<MosaType> typeScheduled = new HashSet<MosaType>();
-		private readonly HashSet<MosaMethod> methodScheduled = new HashSet<MosaMethod>();
-		private readonly Queue<MosaMethod> methodQueue = new Queue<MosaMethod>();
 
-		private readonly Mosa.Compiler.MosaTypeSystem.TypeSystem typeSystem;
+		private readonly Queue<MosaMethod> methodQueue = new Queue<MosaMethod>();
+		private readonly HashSet<MosaMethod> methodScheduled = new HashSet<MosaMethod>();
+
+		private readonly TypeSystem typeSystem;
 
 		private readonly bool compileAllMethods;
 
@@ -52,12 +50,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 		void ICompilationScheduler.TrackTypeAllocated(MosaType type)
 		{
-			//Debug.Assert(!type.HasOpenGenericParams);
-
 			if (type.IsModule)
 				return;
-
-			typesAllocated.AddIfNew(type);
 
 			if (compileAllMethods)
 			{
@@ -67,30 +61,14 @@ namespace Mosa.Compiler.Framework.Stages
 
 		void ICompilationScheduler.TrackMethodInvoked(MosaMethod method)
 		{
-			//Debug.Assert(!method.HasOpenGenericParams);
-
-			methodsInvoked.AddIfNew(method);
+			CompileMethod(method);
 
 			(this as ICompilationScheduler).TrackTypeAllocated(method.DeclaringType);
 		}
 
 		void ICompilationScheduler.TrackFieldReferenced(MosaField field)
 		{
-			//Debug.Assert(!field.FieldType.HasOpenGenericParams);
-
 			(this as ICompilationScheduler).TrackTypeAllocated(field.DeclaringType);
-		}
-
-		/// <summary>
-		/// Determines whether the method scheduled to be compiled.
-		/// </summary>
-		/// <param name="method">The method.</param>
-		/// <returns>
-		///   <c>true</c> if method is scheduled to be compiled; otherwise, <c>false</c>.
-		/// </returns>
-		bool ICompilationScheduler.IsMethodScheduled(MosaMethod method)
-		{
-			return methodScheduled.Contains(method);
 		}
 
 		#endregion ICompilationScheduler members
@@ -136,5 +114,21 @@ namespace Mosa.Compiler.Framework.Stages
 
 			return methodQueue.Dequeue();
 		}
+
+		/// <summary>
+		/// Gets the total methods.
+		/// </summary>
+		/// <value>
+		/// The total methods.
+		/// </value>
+		public int TotalMethods { get { return methodScheduled.Count; } }
+
+		/// <summary>
+		/// Gets the queued methods.
+		/// </summary>
+		/// <value>
+		/// The queued methods.
+		/// </value>
+		public int TotalQueuedMethods { get { return methodQueue.Count; } }
 	}
 }

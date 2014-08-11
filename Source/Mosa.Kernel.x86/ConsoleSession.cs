@@ -35,7 +35,7 @@ namespace Mosa.Kernel.x86
 		public uint Column
 		{
 			get { return column; }
-			set { column = value; }
+			set { column = value; consoleManager.UpdateCursor(this); }
 		}
 
 		/// <summary>
@@ -44,7 +44,7 @@ namespace Mosa.Kernel.x86
 		public uint Row
 		{
 			get { return row; }
-			set { row = value; }
+			set { row = value; consoleManager.UpdateCursor(this); }
 		}
 
 		public byte Color

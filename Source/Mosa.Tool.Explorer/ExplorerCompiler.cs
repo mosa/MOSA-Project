@@ -24,10 +24,10 @@ namespace Mosa.Tool.Explorer
 		/// <param name="architecture">The compiler target architecture.</param>
 		/// <param name="typeSystem">The type system.</param>
 		/// <param name="typeLayout">The type layout.</param>
-		/// <param name="internalTrace">The internal trace.</param>
+		/// <param name="compilerTrace">The internal trace.</param>
 		/// <param name="compilerOptions">The compiler options.</param>
-		public ExplorerCompiler(BaseArchitecture architecture, TypeSystem typeSystem, MosaTypeLayout typeLayout, IInternalTrace internalTrace, CompilerOptions compilerOptions, bool emitBinary) :
-			base(architecture, typeSystem, typeLayout, new CompilationScheduler(typeSystem, true), internalTrace, new ExplorerLinker(), compilerOptions)
+		public ExplorerCompiler(BaseArchitecture architecture, TypeSystem typeSystem, MosaTypeLayout typeLayout, CompilerTrace compilerTrace, CompilerOptions compilerOptions, bool emitBinary) :
+			base(architecture, typeSystem, typeLayout, new CompilationScheduler(typeSystem, true), compilerTrace, new ExplorerLinker(), compilerOptions)
 		{
 			this.emitBinary = emitBinary;
 
@@ -61,11 +61,12 @@ namespace Mosa.Tool.Explorer
 		/// </summary>
 		/// <param name="typeSystem">The type system.</param>
 		/// <param name="typeLayout">The type layout.</param>
-		/// <param name="internalTrace">The internal trace.</param>
+		/// <param name="compilerTrace">The compiler trace.</param>
 		/// <param name="platform">The platform.</param>
 		/// <param name="enabledSSA">if set to <c>true</c> [enabled ssa].</param>
+		/// <param name="enableSSAOptimizations">if set to <c>true</c> [enable ssa optimizations].</param>
 		/// <param name="emitBinary">if set to <c>true</c> [emit binary].</param>
-		public static void Compile(TypeSystem typeSystem, MosaTypeLayout typeLayout, IInternalTrace internalTrace, string platform, bool enabledSSA, bool enableSSAOptimizations, bool emitBinary)
+		public static void Compile(TypeSystem typeSystem, MosaTypeLayout typeLayout, CompilerTrace compilerTrace, string platform, bool enabledSSA, bool enableSSAOptimizations, bool emitBinary)
 		{
 			BaseArchitecture architecture;
 
@@ -82,7 +83,7 @@ namespace Mosa.Tool.Explorer
 			compilerOptions.EnableSSA = enabledSSA;
 			compilerOptions.EnableSSAOptimizations = enabledSSA && enableSSAOptimizations;
 
-			ExplorerCompiler compiler = new ExplorerCompiler(architecture, typeSystem, typeLayout, internalTrace, compilerOptions, emitBinary);
+			ExplorerCompiler compiler = new ExplorerCompiler(architecture, typeSystem, typeLayout, compilerTrace, compilerOptions, emitBinary);
 
 			compiler.Compile();
 		}
