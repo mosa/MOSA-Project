@@ -126,7 +126,6 @@
     <Compile Include="Stages\InterruptVectorStage.cs" />
     <Compile Include="Intrinsic\GetEBP.cs" />
     <Compile Include="Intrinsic\GetMethodLookupTable.cs" />
-    <Compile Include="Intrinsic\GetEip.cs" />
     <Compile Include="Intrinsic\Cli.cs" />
     <Compile Include="Intrinsic\GetControlRegisterBase.cs" />
     <Compile Include="Intrinsic\GetCR0.cs" />
