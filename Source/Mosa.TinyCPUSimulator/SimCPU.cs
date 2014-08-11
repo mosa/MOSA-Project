@@ -47,14 +47,14 @@ namespace Mosa.TinyCPUSimulator
 
 		public List<MemoryRegion> MemoryRegions { get; private set; }
 
-		private byte[][] MemoryBlocks;
+		private uint[][] MemoryBlocks;
 
-		internal static ulong BlockSize = 1024 * 1024; // 1 MB
+		internal static uint BlockSize = 1024 * 1024; // 1 MB
 		internal static ulong MaxMemory = 1024L * 1024L * 1024L * 4L; // 4 GB
 
 		public SimCPU()
 		{
-			MemoryBlocks = new byte[MaxMemory / BlockSize][];
+			MemoryBlocks = new uint[MaxMemory / BlockSize][];
 			InstructionCache = new Dictionary<ulong, SimInstruction>();
 			SourceInformation = new Dictionary<ulong, string>();
 			SimDevices = new List<BaseSimDevice>();
@@ -92,9 +92,11 @@ namespace Mosa.TinyCPUSimulator
 			}
 		}
 
-		private byte InternalRead8(ulong address)
+		private uint InternalRead32(ulong address)
 		{
-			ulong index = address / BlockSize;
+			Debug.Assert(address % 4 == 0);
+			
+			ulong index = address / BlockSize / 4;
 
 			var block = MemoryBlocks[index];
 
@@ -104,19 +106,23 @@ namespace Mosa.TinyCPUSimulator
 				if (!IsValidMemoryReference(address))
 					throw new InvalidMemoryAccess(address);
 
-				block = new byte[BlockSize];
+				block = new uint[BlockSize];
 
 				MemoryBlocks[index] = block;
 
 				return 0;
 			}
 
-			return block[address % BlockSize];
+			uint offset = (uint)((address / 4) % BlockSize);
+
+			return block[offset];
 		}
 
-		private void InternalWrite8(ulong address, byte value)
+		private void InternalWrite32(ulong address, uint value, uint mask)
 		{
-			ulong index = address / BlockSize;
+			Debug.Assert(address % 4 == 0);
+
+			ulong index = address / BlockSize / 4;
 			var block = MemoryBlocks[index];
 
 			if (block == null)
@@ -128,12 +134,14 @@ namespace Mosa.TinyCPUSimulator
 				if (!IsValidMemoryReference(address))
 					throw new InvalidMemoryAccess(address);
 
-				block = new byte[BlockSize];
+				block = new uint[BlockSize / 4];
 
 				MemoryBlocks[index] = block;
 			}
 
-			block[address % BlockSize] = value;
+			uint offset = (uint)((address / 4) % BlockSize);
+
+			block[offset] = (block[offset] & ~mask) | (value & mask);
 		}
 
 		protected virtual ulong TranslateToPhysical(ulong address)
@@ -149,68 +157,157 @@ namespace Mosa.TinyCPUSimulator
 			}
 		}
 
-		public void DirectWrite8(ulong address, byte value)
-		{
-			InternalWrite8(address, value);
-
-			MemoryUpdate(address, 8);
-		}
-
-		public void DirectWrite16(ulong address, ushort value)
+		public uint EndianSwap(uint value)
 		{
 			if (IsLittleEndian)
+				return value;
+
+			return ((value & 0x000000FF) << 24) | ((value & 0x0000FF00) << 8) |
+				((value & 0x00FF0000) >> 8) | ((value & 0xFF000000) >> 24);
+		}
+
+		public ushort EndianSwap(ushort value)
+		{
+			if (IsLittleEndian)
+				return value;
+
+			return (ushort)(((value & 0xFF) << 8) | ((value & 0xFF00) >> 8));
+		}
+
+		public uint DirectRead32(ulong address)
+		{
+			uint offset = (uint)(address % 4);
+
+			uint value = 0;
+
+			if (offset == 0)
 			{
-				InternalWrite8(address + 0, (byte)(value & 0xFF));
-				InternalWrite8(address + 1, (byte)(value >> 8 & 0xFF));
+				value = InternalRead32(address);
 			}
-			else
+			else if (offset == 1)
 			{
-				InternalWrite8(address + 1, (byte)(value & 0xFF));
-				InternalWrite8(address + 0, (byte)(value >> 8 & 0xFF));
+				value =
+					((InternalRead32(address - 1) & 0xFFFFFF00) << 8) |
+					((InternalRead32(address + 3) & 0xFF000000) >> 24);
+			}
+			else if (offset == 2)
+			{
+				value =
+					((InternalRead32(address - 2) & 0xFFFF0000) << 16) |
+					((InternalRead32(address + 2) & 0xFFFF0000) >> 16);
+			}
+			else if (offset == 3)
+			{
+				value =
+					((InternalRead32(address - 3) & 0xFF000000) << 24) |
+					((InternalRead32(address + 1) & 0xFFFFFF00) >> 8);
 			}
 
-			MemoryUpdate(address, 16);
+			return EndianSwap(value);
+		}
+
+		public ushort DirectRead16(ulong address)
+		{
+			uint offset = (uint)(address % 4);
+
+			ushort value = 0;
+
+			if (offset == 0)
+			{
+				value = (ushort)((InternalRead32(address) & 0xFFFF0000) >> 16);
+			}
+			else if (offset == 1)
+			{
+				value = (ushort)((InternalRead32(address - 1) & 0x00FFFF00) >> 8);
+			}
+			else if (offset == 2)
+			{
+				value = (ushort)(InternalRead32(address - 2) & 0x0000FFFF);
+			}
+			else if (offset == 3)
+			{
+				value = (ushort)((InternalRead32(address - 3) & 0x000000FF) | ((InternalRead32(address + 1) & 0xFF000000) >> 24));
+			}
+
+			return value;
+		}
+
+		public byte DirectRead8(ulong address)
+		{
+			uint offset = (uint)(address % 4);
+
+			uint value = InternalRead32(address - offset);
+
+			int shift = (3 - (int)offset) * 8;
+
+			return (byte)((value >> shift) & 0xFF);
 		}
 
 		public void DirectWrite32(ulong address, uint value)
 		{
-			if (IsLittleEndian)
+			uint offset = (uint)(address % 4);
+
+			value = EndianSwap(value);
+
+			if (offset == 0)
 			{
-				InternalWrite8(address + 0, (byte)(value & 0xFF));
-				InternalWrite8(address + 1, (byte)(value >> 8 & 0xFF));
-				InternalWrite8(address + 2, (byte)(value >> 16 & 0xFF));
-				InternalWrite8(address + 3, (byte)(value >> 24 & 0xFF));
+				InternalWrite32(address, value, 0xFFFFFFFF);
 			}
-			else
+			else if (offset == 1)
 			{
-				InternalWrite8(address + 3, (byte)(value & 0xFF));
-				InternalWrite8(address + 2, (byte)(value >> 8 & 0xFF));
-				InternalWrite8(address + 1, (byte)(value >> 16 & 0xFF));
-				InternalWrite8(address + 0, (byte)(value >> 24 & 0xFF));
+				InternalWrite32(address - 1, value >> 8, 0x00FFFFFF);
+				InternalWrite32(address + 3, value << 24, 0xFF000000);
+			}
+			else if (offset == 2)
+			{
+				InternalWrite32(address - 2, value >> 16, 0x0000FFFF);
+				InternalWrite32(address + 2, value << 16, 0xFFFF0000);
+			}
+			else if (offset == 3)
+			{
+				InternalWrite32(address - 3, value >> 24, 0x000000FF);
+				InternalWrite32(address + 1, value << 8, 0xFFFFFF00);
 			}
 
 			MemoryUpdate(address, 32);
 		}
 
-		public byte DirectRead8(ulong address)
+		public void DirectWrite16(ulong address, ushort value)
 		{
-			return InternalRead8(address);
+			uint offset = (uint)(address % 4);
+
+			value = EndianSwap(value);
+
+			if (offset == 0)
+			{
+				InternalWrite32(address - 0, ((uint)value << 16), 0xFFFF0000);
+			}
+			else if (offset == 1)
+			{
+				InternalWrite32(address - 1, ((uint)value << 8), 0x00FFFF00);
+			}
+			else if (offset == 2)
+			{
+				InternalWrite32(address - 2, ((uint)value), 0x0000FFFF);
+			}
+			else if (offset == 3)
+			{
+				InternalWrite32(address - 3, ((uint)value >> 8), 0x000000FF);
+				InternalWrite32(address + 1, ((uint)value << 24), 0xFF000000);
+			}
+
+			MemoryUpdate(address, 16);
 		}
 
-		public ushort DirectRead16(ulong address)
+		public void DirectWrite8(ulong address, byte value)
 		{
-			if (IsLittleEndian)
-				return (ushort)(DirectRead8(address + 0) | (DirectRead8(address + 1) << 8));
-			else
-				return (ushort)(DirectRead8(address + 1) | (DirectRead8(address + 0) << 8));
-		}
+			uint offset = (uint)(address % 4);
 
-		public uint DirectRead32(ulong address)
-		{
-			if (IsLittleEndian)
-				return (uint)(DirectRead8(address + 0) | (DirectRead8(address + 1) << 8) | (DirectRead8(address + 2) << 16) | (DirectRead8(address + 3) << 24));
-			else
-				return (uint)(DirectRead8(address + 3) | (DirectRead8(address + 2) << 8) | (DirectRead8(address + 1) << 16) | (DirectRead8(address + 0) << 24));
+			int shift = (3 - (int)offset) * 8;
+
+			InternalWrite32(address - offset, ((uint)value) << shift, (uint)0xFF << shift);
+
+			MemoryUpdate(address, 8);
 		}
 
 		public void Write8(ulong address, byte value)
