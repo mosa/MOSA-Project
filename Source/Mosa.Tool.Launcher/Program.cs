@@ -9,6 +9,7 @@
 
 using System;
 using System.IO;
+using System.Diagnostics;
 using System.Windows.Forms;
 
 namespace Mosa.Tool.Launcher
@@ -55,7 +56,7 @@ namespace Mosa.Tool.Launcher
 					main.SourceFile = Path.Combine(Directory.GetCurrentDirectory(), arg);
 				}
 			}
-
+			Debugger.Launch();
 			Application.Run(main);
 		}
 	}
