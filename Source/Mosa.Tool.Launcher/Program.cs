@@ -56,7 +56,7 @@ namespace Mosa.Tool.Launcher
 					main.SourceFile = Path.Combine(Directory.GetCurrentDirectory(), arg);
 				}
 			}
-			Debugger.Launch();
+			//Debugger.Launch();
 			Application.Run(main);
 		}
 	}
