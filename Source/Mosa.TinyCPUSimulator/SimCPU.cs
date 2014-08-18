@@ -10,6 +10,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using Mosa.Compiler.Common;
 
 namespace Mosa.TinyCPUSimulator
 {
@@ -47,14 +48,14 @@ namespace Mosa.TinyCPUSimulator
 
 		public List<MemoryRegion> MemoryRegions { get; private set; }
 
-		private byte[][] MemoryBlocks;
+		private uint[][] MemoryBlocks;
 
-		internal static ulong BlockSize = 1024 * 1024; // 1 MB
+		internal static uint BlockSize = 1024 * 1024 / 4; // 1 MB
 		internal static ulong MaxMemory = 1024L * 1024L * 1024L * 4L; // 4 GB
 
 		public SimCPU()
 		{
-			MemoryBlocks = new byte[MaxMemory / BlockSize][];
+			MemoryBlocks = new uint[MaxMemory / BlockSize][];
 			InstructionCache = new Dictionary<ulong, SimInstruction>();
 			SourceInformation = new Dictionary<ulong, string>();
 			SimDevices = new List<BaseSimDevice>();
@@ -92,9 +93,11 @@ namespace Mosa.TinyCPUSimulator
 			}
 		}
 
-		private byte InternalRead8(ulong address)
+		private uint InternalRead32(ulong address)
 		{
-			ulong index = address / BlockSize;
+			Debug.Assert(address % 4 == 0);
+
+			ulong index = address / (BlockSize * 4);
 
 			var block = MemoryBlocks[index];
 
@@ -104,19 +107,23 @@ namespace Mosa.TinyCPUSimulator
 				if (!IsValidMemoryReference(address))
 					throw new InvalidMemoryAccess(address);
 
-				block = new byte[BlockSize];
+				block = new uint[BlockSize];
 
 				MemoryBlocks[index] = block;
 
 				return 0;
 			}
 
-			return block[address % BlockSize];
+			uint offset = (uint)((address / 4) % BlockSize);
+
+			return block[offset];
 		}
 
-		private void InternalWrite8(ulong address, byte value)
+		private void InternalWrite32(ulong address, uint value, uint mask)
 		{
-			ulong index = address / BlockSize;
+			Debug.Assert(address % 4 == 0);
+
+			ulong index = address / (BlockSize * 4);
 			var block = MemoryBlocks[index];
 
 			if (block == null)
@@ -128,12 +135,79 @@ namespace Mosa.TinyCPUSimulator
 				if (!IsValidMemoryReference(address))
 					throw new InvalidMemoryAccess(address);
 
-				block = new byte[BlockSize];
+				block = new uint[BlockSize];
 
 				MemoryBlocks[index] = block;
 			}
 
-			block[address % BlockSize] = value;
+			uint offset = (uint)((address / 4) % BlockSize);
+
+			uint newvalue = (block[offset] & ~mask) | (value & mask);
+
+			block[offset] = newvalue;
+
+			Debug.Assert(InternalRead32(address) == newvalue); // very slow performance if assert enabled
+		}
+
+		protected virtual uint InternalRead32Ex(ulong address)
+		{
+			var offset = address % 4;
+
+			if (offset == 0)
+			{
+				return InternalRead32(address);
+			}
+			else if (offset == 1)
+			{
+				uint a = InternalRead32(address - 1);
+				uint b = InternalRead32(address + 3);
+
+				return (a & 0x00FFFFFF) | (b & 0xFF000000);
+			}
+			else if (offset == 2)
+			{
+				uint a = InternalRead32(address - 2);
+				uint b = InternalRead32(address + 2);
+
+				return (a & 0x0000FFFF) | (b & 0xFFFF0000);
+			}
+			else if (offset == 3)
+			{
+				uint a = InternalRead32(address - 3);
+				uint b = InternalRead32(address + 1);
+
+				return (a & 0x000000FF) | (b & 0xFFFFFF00);
+			}
+
+			throw new InvalidProgramException();
+		}
+
+		protected virtual uint InternalRead16Ex(ulong address)
+		{
+			var offset = address % 4;
+
+			uint a = InternalRead32(address - 1);
+
+			if (offset == 0)
+			{
+				return (a & 0xFFFF0000) >> 16;
+			}
+			else if (offset == 1)
+			{
+				return (a & 0x00FFFF00) >> 8;
+			}
+			else if (offset == 2)
+			{
+				return (a & 0x0000FFFF);
+			}
+			else if (offset == 3)
+			{
+				uint b = InternalRead32(address + 1);
+
+				return ((a & 0x000000FF) << 8) | ((b & 0xFF000000) >> 24);
+			}
+
+			throw new InvalidProgramException();
 		}
 
 		protected virtual ulong TranslateToPhysical(ulong address)
@@ -149,68 +223,134 @@ namespace Mosa.TinyCPUSimulator
 			}
 		}
 
-		public void DirectWrite8(ulong address, byte value)
+		public uint DirectRead32(ulong address)
 		{
-			InternalWrite8(address, value);
+			uint value = InternalRead32Ex(address);
 
-			MemoryUpdate(address, 8);
-		}
+			if (Endian.NativeIsLittleEndian)
+				value = Endian.Swap(value);
 
-		public void DirectWrite16(ulong address, ushort value)
-		{
-			if (IsLittleEndian)
-			{
-				InternalWrite8(address + 0, (byte)(value & 0xFF));
-				InternalWrite8(address + 1, (byte)(value >> 8 & 0xFF));
-			}
-			else
-			{
-				InternalWrite8(address + 1, (byte)(value & 0xFF));
-				InternalWrite8(address + 0, (byte)(value >> 8 & 0xFF));
-			}
+			//Debug.Assert(((uint)DirectRead16(address) | ((uint)DirectRead16(address + 2) << 16)) == value);
 
-			MemoryUpdate(address, 16);
+			return value;
 		}
 
 		public void DirectWrite32(ulong address, uint value)
 		{
-			if (IsLittleEndian)
+			uint offset = (uint)(address % 4);
+
+			if (offset == 0)
 			{
-				InternalWrite8(address + 0, (byte)(value & 0xFF));
-				InternalWrite8(address + 1, (byte)(value >> 8 & 0xFF));
-				InternalWrite8(address + 2, (byte)(value >> 16 & 0xFF));
-				InternalWrite8(address + 3, (byte)(value >> 24 & 0xFF));
+				InternalWrite32(address, value, 0xFFFFFFFF);
 			}
-			else
+			else if (offset == 1)
 			{
-				InternalWrite8(address + 3, (byte)(value & 0xFF));
-				InternalWrite8(address + 2, (byte)(value >> 8 & 0xFF));
-				InternalWrite8(address + 1, (byte)(value >> 16 & 0xFF));
-				InternalWrite8(address + 0, (byte)(value >> 24 & 0xFF));
+				InternalWrite32(address - 1, value, 0x00FFFFFF);
+				InternalWrite32(address + 3, value & 0xFF000000, 0xFF000000);
 			}
+			else if (offset == 2)
+			{
+				InternalWrite32(address - 2, value, 0x0000FFFF);
+				InternalWrite32(address + 2, value & 0xFFFF0000, 0xFFFF0000);
+			}
+			else if (offset == 3)
+			{
+				InternalWrite32(address - 3, value, 0x000000FF);
+				InternalWrite32(address + 1, value & 0xFFFFFF00, 0xFFFFFF00);
+			}
+
+			Debug.Assert(((uint)DirectRead16(address) | ((uint)DirectRead16(address + 2) << 16)) == value);
+			Debug.Assert(DirectRead32(address) == value);	// very slow performance if assert enabled
 
 			MemoryUpdate(address, 32);
 		}
 
-		public byte DirectRead8(ulong address)
-		{
-			return InternalRead8(address);
-		}
-
 		public ushort DirectRead16(ulong address)
 		{
-			if (IsLittleEndian)
-				return (ushort)(DirectRead8(address + 0) | (DirectRead8(address + 1) << 8));
-			else
-				return (ushort)(DirectRead8(address + 1) | (DirectRead8(address + 0) << 8));
+			uint offset = (uint)(address % 4);
+
+			uint value = 0;
+
+			if (offset == 0)
+			{
+				uint a = InternalRead32(address);
+
+				value = a & 0x0000FFFF;
+			}
+			else if (offset == 1)
+			{
+				uint a = InternalRead32(address - 1);
+
+				value = (a >> 8) & 0x0000FFFF;
+			}
+			else if (offset == 2)
+			{
+				uint a = InternalRead32(address - 2);
+
+				value = (a >> 16) & 0x0000FFFF;
+			}
+			else if (offset == 3)
+			{
+				uint a = InternalRead32(address - 3);
+				uint b = InternalRead32(address + 1);
+
+				value = ((a >> 24) & 0x000000FF) | ((b & 0xFF000000) >> 24);
+			}
+
+			return (ushort)value;
 		}
 
-		public uint DirectRead32(ulong address)
+		public void DirectWrite16(ulong address, ushort value)
 		{
-			if (IsLittleEndian)
-				return (uint)(DirectRead8(address + 0) | (DirectRead8(address + 1) << 8) | (DirectRead8(address + 2) << 16) | (DirectRead8(address + 3) << 24));
-			else
-				return (uint)(DirectRead8(address + 3) | (DirectRead8(address + 2) << 8) | (DirectRead8(address + 1) << 16) | (DirectRead8(address + 0) << 24));
+			uint offset = (uint)(address % 4);
+
+			var val = (uint)value;
+
+			if (offset == 0)
+			{
+				InternalWrite32(address, val, 0x0000FFFF);
+			}
+			else if (offset == 1)
+			{
+				InternalWrite32(address - 1, val << 8, 0x00FFFF00);
+			}
+			else if (offset == 2)
+			{
+				InternalWrite32(address - 2, val << 16, 0xFFFF0000);
+			}
+			else if (offset == 3)
+			{
+				InternalWrite32(address - 3, val << 24, 0x00000FF);
+				InternalWrite32(address + 1, (val & 0x0000FF00) << 16, 0xFF000000);
+			}
+
+			Debug.Assert(DirectRead16(address) == val);	// very slow performance if assert enabled
+
+			MemoryUpdate(address, 16);
+		}
+
+		public byte DirectRead8(ulong address)
+		{
+			uint offset = (uint)(address % 4);
+
+			uint value = InternalRead32(address - offset);
+
+			int shift = (3 - (int)offset) * 8;
+
+			return (byte)((value >> shift) & 0xFF);
+		}
+
+		public void DirectWrite8(ulong address, byte value)
+		{
+			uint offset = (uint)(address % 4);
+
+			int shift = (3 - (int)offset) * 8;
+
+			InternalWrite32(address - offset, ((uint)value) << shift, (uint)0xFF << shift);
+
+			Debug.Assert(DirectRead8(address) == value);	// very slow performance if assert enabled
+
+			MemoryUpdate(address, 8);
 		}
 
 		public void Write8(ulong address, byte value)
