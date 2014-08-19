@@ -92,6 +92,19 @@ namespace Mosa.TinyCPUSimulator
 			}
 		}
 
+		protected virtual ulong TranslateToPhysical(ulong address)
+		{
+			return address;
+		}
+
+		protected virtual void MemoryUpdate(ulong address, byte size)
+		{
+			foreach (var device in SimMemoryDevices)
+			{
+				device.MemoryWrite(address, size);
+			}
+		}
+
 		private byte InternalRead8(ulong address)
 		{
 			ulong index = address / BlockSize;
@@ -134,19 +147,6 @@ namespace Mosa.TinyCPUSimulator
 			}
 
 			block[address % BlockSize] = value;
-		}
-
-		protected virtual ulong TranslateToPhysical(ulong address)
-		{
-			return address;
-		}
-
-		protected virtual void MemoryUpdate(ulong address, byte size)
-		{
-			foreach (var device in SimMemoryDevices)
-			{
-				device.MemoryWrite(address, size);
-			}
 		}
 
 		public void DirectWrite8(ulong address, byte value)
