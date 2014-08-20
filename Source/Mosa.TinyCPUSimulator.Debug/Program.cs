@@ -30,7 +30,7 @@ namespace Mosa.TinyCPUSimulator.Debug
 		{
 			var fixture = new BooleanFixture();
 
-			fixture.LdelemaB(10,true);
+			fixture.LdelemaB(10, true);
 		}
 
 		private static void Test11()
