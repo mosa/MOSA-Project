@@ -199,15 +199,15 @@ namespace Mosa.TinyCPUSimulator.x86
 			{
 				((operand.Register) as Register32Bit).Value = value;
 			}
-
-			if (operand.IsLabel)
+			else if (operand.IsLabel)
 			{
 				uint address = (uint)cpu.GetSymbol(operand.Label).Address;
 
 				Write(cpu, address, value, size);
-			}
 
-			if (operand.IsMemory)
+				return;
+			}
+			else if (operand.IsMemory)
 			{
 				uint address = GetAddress(cpu, operand);
 
