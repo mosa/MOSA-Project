@@ -12,7 +12,7 @@ namespace Mosa.TinyCPUSimulator.x86
 	/// <summary>
 	/// X86 protected mode only emulator
 	/// </summary>
-	public class CPUx86 : SimCPU
+	public sealed class CPUx86 : SimCPU
 	{
 		public Register32Bit EIP { get; private set; }
 

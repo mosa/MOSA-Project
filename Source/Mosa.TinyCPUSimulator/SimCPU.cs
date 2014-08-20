@@ -7,14 +7,14 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using Mosa.Compiler.Common;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using Mosa.Compiler.Common;
 
 namespace Mosa.TinyCPUSimulator
 {
-	public class SimCPU
+	public abstract class SimCPU
 	{
 		private Dictionary<ulong, SimInstruction> InstructionCache { get; set; }
 
@@ -175,21 +175,21 @@ namespace Mosa.TinyCPUSimulator
 				uint a = InternalRead32Ex(address - 1);
 				uint b = InternalRead32Ex(address + 3);
 
-				return (a & 0x00FFFFFF) | (b & 0xFF000000);
+				return ((a & 0x00FFFFFF) << 8) | ((b & 0xFF000000) >> 24);
 			}
 			else if (offset == 2)
 			{
 				uint a = InternalRead32Ex(address - 2);
 				uint b = InternalRead32Ex(address + 2);
 
-				return (a & 0x0000FFFF) | (b & 0xFFFF0000);
+				return ((a & 0x0000FFFF) << 16) | ((b & 0xFFFF0000) >> 16);
 			}
 			else if (offset == 3)
 			{
 				uint a = InternalRead32Ex(address - 3);
 				uint b = InternalRead32Ex(address + 1);
 
-				return (a & 0x000000FF) | (b & 0xFFFFFF00);
+				return ((a & 0x000000FF) << 24) | ((b & 0xFFFFFF00) >> 8);
 			}
 
 			throw new InvalidProgramException();
@@ -244,19 +244,22 @@ namespace Mosa.TinyCPUSimulator
 			}
 			else if (offset == 1)
 			{
-				InternalWrite32Ex(address - 1, value, 0x00FFFFFF);
-				InternalWrite32Ex(address + 3, value, 0xFF000000);
+				InternalWrite32Ex(address - 1, value >> 8, 0x00FFFFFF);
+				InternalWrite32Ex(address + 3, value << 24, 0xFF000000);
 			}
 			else if (offset == 2)
 			{
-				InternalWrite32Ex(address - 2, value, 0x0000FFFF);
-				InternalWrite32Ex(address + 2, value, 0xFFFF0000);
+				InternalWrite32Ex(address - 2, value >> 16, 0x0000FFFF);
+				InternalWrite32Ex(address + 2, value << 16, 0xFFFF0000);
 			}
 			else if (offset == 3)
 			{
-				InternalWrite32Ex(address - 3, value, 0x000000FF);
-				InternalWrite32Ex(address + 1, value, 0xFFFFFF00);
+				InternalWrite32Ex(address - 3, value >> 24, 0x000000FF);
+				InternalWrite32Ex(address + 1, value << 8, 0xFFFFFF00);
 			}
+
+			// very slow performance if assert enabled
+			Debug.Assert(InternalRead32(address) == value);
 		}
 
 		protected void InternalWrite16(ulong address, ushort value)
@@ -280,6 +283,9 @@ namespace Mosa.TinyCPUSimulator
 				InternalWrite32Ex(address - 2, ((uint)value >> 8), 0x000000FF);
 				InternalWrite32Ex(address + 1, ((uint)value << 24), 0xFF000000);
 			}
+
+			// very slow performance if assert enabled
+			Debug.Assert(InternalRead16(address) == value);
 		}
 
 		protected void InternalWrite8(ulong address, byte value)
@@ -291,7 +297,7 @@ namespace Mosa.TinyCPUSimulator
 			InternalWrite32Ex(address - offset, ((uint)value) << shift, (uint)0xFF << shift);
 
 			// very slow performance if assert enabled
-			Debug.Assert(DirectRead8(address) == value);
+			Debug.Assert(InternalRead8(address) == value);
 		}
 
 		public uint DirectRead32(ulong address)
@@ -338,6 +344,8 @@ namespace Mosa.TinyCPUSimulator
 			Debug.Assert(DirectRead32(address) == value);
 			//Debug.Assert(((uint)DirectRead16(address) | ((uint)DirectRead16(address + 2) << 16)) == value);
 
+			//Debug.WriteLine(address.ToString("X") + ": " + value.ToString("X"));
+
 			MemoryUpdate(address, 32);
 		}
 
@@ -355,6 +363,8 @@ namespace Mosa.TinyCPUSimulator
 			// very slow performance if assert enabled
 			Debug.Assert(DirectRead16(address) == value);
 
+			//Debug.WriteLine(address.ToString("X") + ": " + value.ToString("X"));
+
 			MemoryUpdate(address, 16);
 		}
 
@@ -362,10 +372,13 @@ namespace Mosa.TinyCPUSimulator
 		{
 			InternalWrite8(address, value);
 
+			// very slow performance if assert enabled
+			Debug.Assert(DirectRead8(address) == value);
+
+			//Debug.WriteLine(address.ToString("X") + ": " + value.ToString("X"));
+
 			MemoryUpdate(address, 8);
 		}
-
-
 
 		public void Write8(ulong address, byte value)
 		{
