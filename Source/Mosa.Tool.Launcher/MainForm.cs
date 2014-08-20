@@ -29,7 +29,7 @@ namespace Mosa.Tool.Launcher
 	{
 		public enum VMEmulator { Qemu, WMware, Boches };
 
-		public enum VMDiskFormat { NotSpecified, IMG, VHD, VDI, ISO };
+		public enum VMDiskFormat { NotSpecified, IMG, VHD, VDI, ISO, VMDK };
 
 		public string SourceFile { get; set; }
 
@@ -75,7 +75,7 @@ namespace Mosa.Tool.Launcher
 			{
 				case VMEmulator.Qemu: cbEmulator.SelectedIndex = 0; cbImageFormat.SelectedIndex = 0; break;
 				case VMEmulator.Boches: cbEmulator.SelectedIndex = 1; cbImageFormat.SelectedIndex = 0; break;
-				case VMEmulator.WMware: cbEmulator.SelectedIndex = 2; cbImageFormat.SelectedIndex = 1; break;
+				case VMEmulator.WMware: cbEmulator.SelectedIndex = 2; cbImageFormat.SelectedIndex = 4; break;
 				default: break;
 			}
 
@@ -85,6 +85,7 @@ namespace Mosa.Tool.Launcher
 				case VMDiskFormat.ISO: cbImageFormat.SelectedIndex = 1; break;
 				case VMDiskFormat.VHD: cbImageFormat.SelectedIndex = 2; break;
 				case VMDiskFormat.VDI: cbImageFormat.SelectedIndex = 3; break;
+				case VMDiskFormat.VMDK: cbImageFormat.SelectedIndex = 4; break;
 
 				default: break;
 			}
@@ -175,6 +176,18 @@ namespace Mosa.Tool.Launcher
 			// find QEMU executable
 			lbQEMUExecutable.Text = TryFind(
 				"qemu-system-i386.exe",
+				new string[] {
+					CombineParameterAndDirectory("MOSA",@"Tools\QEMU"),
+					CombineParameterAndDirectory("MOSA",@"QEMU"),
+					@"..\Tools\QEMU",
+					@"Tools\QEMU",
+					CombineParameterAndDirectory("ProgramFiles",@"qemu"),
+					CombineParameterAndDirectory("ProgramFiles(x86)",@"qemu")
+				}
+			);
+
+			lbQEMUImgApplication.Text = TryFind(
+				"qemu-img.exe",
 				new string[] {
 					CombineParameterAndDirectory("MOSA",@"Tools\QEMU"),
 					CombineParameterAndDirectory("MOSA",@"QEMU"),
@@ -410,6 +423,11 @@ namespace Mosa.Tool.Launcher
 			else
 			{
 				CreateDiskImage(compiledFile);
+
+				if (cbImageFormat.SelectedIndex == 4)
+				{
+					CreateVMDK(imageFile);
+				}
 			}
 
 			if (cbGenerateASMFile.Checked)
@@ -440,6 +458,7 @@ namespace Mosa.Tool.Launcher
 				case 0: options.ImageFormat = ImageFormatType.IMG; break;
 				case 1: options.ImageFormat = ImageFormatType.VHD; vmext = ".vhd"; break;
 				case 2: options.ImageFormat = ImageFormatType.VDI; vmext = ".vdi"; break;
+				case 4: options.ImageFormat = ImageFormatType.IMG; break;
 				default: break;
 			}
 
@@ -481,6 +500,26 @@ namespace Mosa.Tool.Launcher
 			var output = LaunchApplication(lbmkisofsExecutable.Text, arg, true);
 
 			AddOutput(output);
+		}
+
+		private void CreateVMDK(string compiledFile)
+		{
+			var vmdkFile = Path.Combine(DestinationDirectory, Path.GetFileNameWithoutExtension(SourceFile) + ".vmdk");
+
+			string arg =
+				"convert" +
+				" -f" +
+				" raw" +
+				" -O" +
+				" vmdk " +
+				Quote(imageFile) + " " +
+				Quote(vmdkFile);
+
+			var output = LaunchApplication(lbQEMUImgApplication.Text, arg, true);
+
+			AddOutput(output);
+
+			imageFile = vmdkFile;
 		}
 
 		private void Launch(bool exit)
@@ -624,16 +663,14 @@ namespace Mosa.Tool.Launcher
 			sb.AppendLine("priority.ungrabbed = \"normal\"");
 			sb.AppendLine("virtualHW.productCompatibility = \"hosted\"");
 			sb.AppendLine("ide0:0.present = \"TRUE\"");
+			sb.AppendLine("ide0:0.fileName = " + Quote(imageFile));
 
 			if (cbImageFormat.SelectedIndex == 1)
 			{
 				sb.AppendLine("ide0:0.deviceType = \"cdrom-image\"");
-				sb.AppendLine("ide0:0.fileName = " + Quote(imageFile));
 			}
 			else
 			{
-				sb.AppendLine("ide0:0.present = \"TRUE\"");
-				sb.AppendLine("ide0:0.fileName = " + Quote(imageFile));
 			}
 
 			sb.AppendLine("floppy0.present = \"FALSE\"");
