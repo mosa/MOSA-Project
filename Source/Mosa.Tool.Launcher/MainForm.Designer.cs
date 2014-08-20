@@ -32,7 +32,7 @@
 			this.progressBar1 = new System.Windows.Forms.ProgressBar();
 			this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
 			this.tabControl1 = new System.Windows.Forms.TabControl();
-			this.tabPage1 = new System.Windows.Forms.TabPage();
+			this.tbOptions = new System.Windows.Forms.TabPage();
 			this.groupBox6 = new System.Windows.Forms.GroupBox();
 			this.label6 = new System.Windows.Forms.Label();
 			this.nmMemory = new System.Windows.Forms.NumericUpDown();
@@ -78,10 +78,10 @@
 			this.button3 = new System.Windows.Forms.Button();
 			this.button2 = new System.Windows.Forms.Button();
 			this.lbQEMUExecutable = new System.Windows.Forms.Label();
-			this.tabPage2 = new System.Windows.Forms.TabPage();
-			this.richTextBox1 = new System.Windows.Forms.RichTextBox();
+			this.tpOutput = new System.Windows.Forms.TabPage();
+			this.rtbOutput = new System.Windows.Forms.RichTextBox();
 			this.tabPage3 = new System.Windows.Forms.TabPage();
-			this.richTextBox2 = new System.Windows.Forms.RichTextBox();
+			this.rtbCounters = new System.Windows.Forms.RichTextBox();
 			this.openFileDialog2 = new System.Windows.Forms.OpenFileDialog();
 			this.lbQEMUImgApplication = new System.Windows.Forms.Label();
 			this.button8 = new System.Windows.Forms.Button();
@@ -92,7 +92,7 @@
 			this.checkBox1 = new System.Windows.Forms.CheckBox();
 			this.cbMOSADebugger = new System.Windows.Forms.CheckBox();
 			this.tabControl1.SuspendLayout();
-			this.tabPage1.SuspendLayout();
+			this.tbOptions.SuspendLayout();
 			this.groupBox6.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.nmMemory)).BeginInit();
 			this.groupBox4.SuspendLayout();
@@ -104,7 +104,7 @@
 			this.groupBox9.SuspendLayout();
 			this.groupBox8.SuspendLayout();
 			this.groupBox7.SuspendLayout();
-			this.tabPage2.SuspendLayout();
+			this.tpOutput.SuspendLayout();
 			this.tabPage3.SuspendLayout();
 			this.groupBox2.SuspendLayout();
 			this.groupBox5.SuspendLayout();
@@ -131,9 +131,9 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.tabControl1.Appearance = System.Windows.Forms.TabAppearance.FlatButtons;
-			this.tabControl1.Controls.Add(this.tabPage1);
+			this.tabControl1.Controls.Add(this.tbOptions);
 			this.tabControl1.Controls.Add(this.tabPage4);
-			this.tabControl1.Controls.Add(this.tabPage2);
+			this.tabControl1.Controls.Add(this.tpOutput);
 			this.tabControl1.Controls.Add(this.tabPage3);
 			this.tabControl1.ItemSize = new System.Drawing.Size(48, 18);
 			this.tabControl1.Location = new System.Drawing.Point(0, 32);
@@ -147,20 +147,20 @@
 			// 
 			// tabPage1
 			// 
-			this.tabPage1.BackColor = System.Drawing.SystemColors.Control;
-			this.tabPage1.Controls.Add(this.groupBox5);
-			this.tabPage1.Controls.Add(this.groupBox2);
-			this.tabPage1.Controls.Add(this.groupBox6);
-			this.tabPage1.Controls.Add(this.button1);
-			this.tabPage1.Controls.Add(this.groupBox4);
-			this.tabPage1.Controls.Add(this.groupBox3);
-			this.tabPage1.Controls.Add(this.groupBox1);
-			this.tabPage1.Location = new System.Drawing.Point(4, 22);
-			this.tabPage1.Margin = new System.Windows.Forms.Padding(0);
-			this.tabPage1.Name = "tabPage1";
-			this.tabPage1.Size = new System.Drawing.Size(629, 343);
-			this.tabPage1.TabIndex = 0;
-			this.tabPage1.Text = "MOSA Options";
+			this.tbOptions.BackColor = System.Drawing.SystemColors.Control;
+			this.tbOptions.Controls.Add(this.groupBox5);
+			this.tbOptions.Controls.Add(this.groupBox2);
+			this.tbOptions.Controls.Add(this.groupBox6);
+			this.tbOptions.Controls.Add(this.button1);
+			this.tbOptions.Controls.Add(this.groupBox4);
+			this.tbOptions.Controls.Add(this.groupBox3);
+			this.tbOptions.Controls.Add(this.groupBox1);
+			this.tbOptions.Location = new System.Drawing.Point(4, 22);
+			this.tbOptions.Margin = new System.Windows.Forms.Padding(0);
+			this.tbOptions.Name = "tbOptions";
+			this.tbOptions.Size = new System.Drawing.Size(629, 343);
+			this.tbOptions.TabIndex = 0;
+			this.tbOptions.Text = "MOSA Options";
 			// 
 			// groupBox6
 			// 
@@ -702,32 +702,32 @@
 			// 
 			// tabPage2
 			// 
-			this.tabPage2.Controls.Add(this.richTextBox1);
-			this.tabPage2.Location = new System.Drawing.Point(4, 22);
-			this.tabPage2.Name = "tabPage2";
-			this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPage2.Size = new System.Drawing.Size(629, 337);
-			this.tabPage2.TabIndex = 1;
-			this.tabPage2.Text = "Output";
-			this.tabPage2.UseVisualStyleBackColor = true;
+			this.tpOutput.Controls.Add(this.rtbOutput);
+			this.tpOutput.Location = new System.Drawing.Point(4, 22);
+			this.tpOutput.Name = "tpOutput";
+			this.tpOutput.Padding = new System.Windows.Forms.Padding(3);
+			this.tpOutput.Size = new System.Drawing.Size(629, 337);
+			this.tpOutput.TabIndex = 1;
+			this.tpOutput.Text = "Output";
+			this.tpOutput.UseVisualStyleBackColor = true;
 			// 
 			// richTextBox1
 			// 
-			this.richTextBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+			this.rtbOutput.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.richTextBox1.Font = new System.Drawing.Font("Consolas", 8F);
-			this.richTextBox1.Location = new System.Drawing.Point(0, 0);
-			this.richTextBox1.Name = "richTextBox1";
-			this.richTextBox1.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedBoth;
-			this.richTextBox1.Size = new System.Drawing.Size(672, 342);
-			this.richTextBox1.TabIndex = 0;
-			this.richTextBox1.Text = "";
-			this.richTextBox1.WordWrap = false;
+			this.rtbOutput.Font = new System.Drawing.Font("Consolas", 8F);
+			this.rtbOutput.Location = new System.Drawing.Point(0, 0);
+			this.rtbOutput.Name = "rtbOutput";
+			this.rtbOutput.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedBoth;
+			this.rtbOutput.Size = new System.Drawing.Size(672, 342);
+			this.rtbOutput.TabIndex = 0;
+			this.rtbOutput.Text = "";
+			this.rtbOutput.WordWrap = false;
 			// 
 			// tabPage3
 			// 
-			this.tabPage3.Controls.Add(this.richTextBox2);
+			this.tabPage3.Controls.Add(this.rtbCounters);
 			this.tabPage3.Location = new System.Drawing.Point(4, 22);
 			this.tabPage3.Name = "tabPage3";
 			this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
@@ -738,17 +738,17 @@
 			// 
 			// richTextBox2
 			// 
-			this.richTextBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+			this.rtbCounters.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.richTextBox2.Font = new System.Drawing.Font("Consolas", 8F);
-			this.richTextBox2.Location = new System.Drawing.Point(0, 1);
-			this.richTextBox2.Name = "richTextBox2";
-			this.richTextBox2.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedBoth;
-			this.richTextBox2.Size = new System.Drawing.Size(672, 342);
-			this.richTextBox2.TabIndex = 1;
-			this.richTextBox2.Text = "";
-			this.richTextBox2.WordWrap = false;
+			this.rtbCounters.Font = new System.Drawing.Font("Consolas", 8F);
+			this.rtbCounters.Location = new System.Drawing.Point(0, 1);
+			this.rtbCounters.Name = "rtbCounters";
+			this.rtbCounters.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedBoth;
+			this.rtbCounters.Size = new System.Drawing.Size(672, 342);
+			this.rtbCounters.TabIndex = 1;
+			this.rtbCounters.Text = "";
+			this.rtbCounters.WordWrap = false;
 			// 
 			// openFileDialog2
 			// 
@@ -859,7 +859,7 @@
 			this.Load += new System.EventHandler(this.MainForm_Load);
 			this.Shown += new System.EventHandler(this.MainForm_Shown);
 			this.tabControl1.ResumeLayout(false);
-			this.tabPage1.ResumeLayout(false);
+			this.tbOptions.ResumeLayout(false);
 			this.groupBox6.ResumeLayout(false);
 			this.groupBox6.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.nmMemory)).EndInit();
@@ -880,7 +880,7 @@
 			this.groupBox8.PerformLayout();
 			this.groupBox7.ResumeLayout(false);
 			this.groupBox7.PerformLayout();
-			this.tabPage2.ResumeLayout(false);
+			this.tpOutput.ResumeLayout(false);
 			this.tabPage3.ResumeLayout(false);
 			this.groupBox2.ResumeLayout(false);
 			this.groupBox2.PerformLayout();
@@ -896,7 +896,7 @@
 		private System.Windows.Forms.ProgressBar progressBar1;
 		private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
 		private System.Windows.Forms.TabControl tabControl1;
-		private System.Windows.Forms.TabPage tabPage2;
+		private System.Windows.Forms.TabPage tpOutput;
 		private System.Windows.Forms.GroupBox groupBox6;
 		private System.Windows.Forms.ComboBox cbEmulator;
 		private System.Windows.Forms.Button button1;
@@ -919,12 +919,12 @@
 		private System.Windows.Forms.GroupBox groupBox1;
 		private System.Windows.Forms.CheckBox cbEnableSSAOptimizations;
 		private System.Windows.Forms.CheckBox cbEnableSSA;
-		private System.Windows.Forms.TabPage tabPage1;
+		private System.Windows.Forms.TabPage tbOptions;
 		private System.Windows.Forms.Label label4;
 		private System.Windows.Forms.ComboBox cbBootFileSystem;
-		private System.Windows.Forms.RichTextBox richTextBox1;
+		private System.Windows.Forms.RichTextBox rtbOutput;
 		private System.Windows.Forms.TabPage tabPage3;
-		private System.Windows.Forms.RichTextBox richTextBox2;
+		private System.Windows.Forms.RichTextBox rtbCounters;
 		private System.Windows.Forms.TabPage tabPage4;
 		private System.Windows.Forms.GroupBox groupBox7;
 		private System.Windows.Forms.Label lbQEMUBIOSDirectory;

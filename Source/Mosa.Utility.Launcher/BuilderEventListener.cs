@@ -23,7 +23,6 @@ namespace Mosa.Utility.Launcher
 				string status = "Compiling: " + String.Format("{0:0.00}", (DateTime.Now - builder.CompileStartTime).TotalSeconds) + " secs: " + compilerStage.ToText() + ": " + info;
 
 				builder.AddOutput(status);
-
 			}
 			else if (compilerStage == CompilerEvent.Counter)
 			{

@@ -31,6 +31,7 @@ namespace Mosa.Utility.Launcher
 		public AppLocations AppLocations { get; set; }
 
 		public IList<string> Log { get; private set; }
+
 		public IList<string> Counters { get; private set; }
 
 		public DateTime CompileStartTime { get; private set; }
@@ -71,7 +72,7 @@ namespace Mosa.Utility.Launcher
 			Counters.Add(data);
 		}
 
-		private void Compile()
+		public void Compile()
 		{
 			CompileStartTime = DateTime.Now;
 
@@ -127,7 +128,7 @@ namespace Mosa.Utility.Launcher
 		protected byte[] GetResource(string name)
 		{
 			var assembly = Assembly.GetExecutingAssembly();
-			var stream = assembly.GetManifestResourceStream("Mosa.Tool.Launcher.Resources." + name);
+			var stream = assembly.GetManifestResourceStream("Mosa.Utility.Launcher.Resources." + name);
 			var binary = new BinaryReader(stream);
 			return binary.ReadBytes((int)stream.Length);
 		}
@@ -263,13 +264,13 @@ namespace Mosa.Utility.Launcher
 			File.WriteAllText(asmfile, output);
 		}
 
-		private void Launch(bool exit)
+		public void Launch()
 		{
 			switch (Options.Emulator)
 			{
-				case EmulatorType.Qemu: LaunchQemu(exit); break;
-				case EmulatorType.Boches: LaunchBochs(exit); break;
-				case EmulatorType.WMware: LaunchVMwarePlayer(exit); break;
+				case EmulatorType.Qemu: LaunchQemu(Options.ExitOnLaunch); break;
+				case EmulatorType.Boches: LaunchBochs(Options.ExitOnLaunch); break;
+				case EmulatorType.WMware: LaunchVMwarePlayer(Options.ExitOnLaunch); break;
 				default: throw new InvalidOperationException();
 			}
 		}

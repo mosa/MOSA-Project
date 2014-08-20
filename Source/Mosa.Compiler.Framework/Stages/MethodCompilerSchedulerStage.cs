@@ -27,7 +27,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 				CompilerTrace.CompilerEventListener.SubmitMethodStatus(
 					CompilationScheduler.TotalMethods,
-					CompilationScheduler.TotalQueuedMethods
+					CompilationScheduler.TotalMethods - CompilationScheduler.TotalQueuedMethods
 				);
 			}
 		}

@@ -47,6 +47,8 @@ namespace Mosa.Utility.Launcher
 
 		public PlatformType PlatformType { get; set; }
 
+		public FileSystemFormat FileSystemFormat { get; set; }
+
 		public Options()
 		{
 			EnableSSA = true;
@@ -54,7 +56,11 @@ namespace Mosa.Utility.Launcher
 			Emulator = EmulatorType.Qemu;
 			ImageFormat = ImageFormat.IMG;
 			BootFormat = BootFormat.Multiboot_0_7;
+			PlatformType = PlatformType.X86;
+			LinkerFormat = Launcher.LinkerFormat.Elf32;
 			MemoryInMB = 128;
+			DestinationDirectory = Path.Combine(Path.GetTempPath(), "MOSA");
+			FileSystemFormat = FileSystemFormat.FAT16;
 		}
 
 		public void LoadArguments(string[] args)

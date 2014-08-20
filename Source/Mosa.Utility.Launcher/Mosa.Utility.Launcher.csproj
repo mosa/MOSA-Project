@@ -76,6 +76,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BuilderEventListener.cs" />
+    <Compile Include="IBuilderEvent.cs" />
+    <Compile Include="FileSystemFormat.cs" />
     <Compile Include="LinkerFormat.cs" />
     <Compile Include="PlatformType.cs" />
     <Compile Include="Builder.cs" />
