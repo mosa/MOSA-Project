@@ -290,11 +290,6 @@ namespace Mosa.Tool.Launcher
 			return false;
 		}
 
-		/// <summary>
-		/// Selects the architecture.
-		/// </summary>
-		/// <param name="architecture">The architecture.</param>
-		/// <returns></returns>
 		private static BaseArchitecture SelectArchitecture(string architecture)
 		{
 			switch (architecture.ToLower())
@@ -304,12 +299,6 @@ namespace Mosa.Tool.Launcher
 			}
 		}
 
-		/// <summary>
-		/// Gets the boot stage factory.
-		/// </summary>
-		/// <param name="format">The format.</param>
-		/// <returns></returns>
-		/// <exception cref="NotImplementCompilerException"></exception>
 		private static Func<ICompilerStage> GetBootStageFactory(string format)
 		{
 			switch (format.ToLower())
@@ -321,11 +310,6 @@ namespace Mosa.Tool.Launcher
 			}
 		}
 
-		/// <summary>
-		/// Gets the linker factory.
-		/// </summary>
-		/// <param name="format">The format.</param>
-		/// <returns></returns>
 		private static Func<BaseLinker> GetLinkerFactory(string format)
 		{
 			switch (format.ToLower())

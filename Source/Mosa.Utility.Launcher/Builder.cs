@@ -31,29 +31,49 @@ namespace Mosa.Utility.Launcher
 		public AppLocations AppLocations { get; set; }
 
 		public IList<string> Log { get; private set; }
+		public IList<string> Counters { get; private set; }
 
-		protected DateTime compileStartTime;
+		public DateTime CompileStartTime { get; private set; }
+
+		public IBuilderEvent BuilderEvent { get; private set; }
+
 		protected string compiledFile;
 		protected string imageFile;
 
-		protected ICompilerEventListener compilerEventListener; // TODO: Needs to be set
+		protected ICompilerEventListener eventListener;
 
-		public Builder()
+		public Builder(Options options, AppLocations appLocations, IBuilderEvent builderEvent)
 		{
 			Log = new List<string>();
+			Counters = new List<string>();
+			eventListener = new BuilderEventListener(this);
+			Options = options;
+			AppLocations = appLocations;
+			BuilderEvent = builderEvent;
 		}
 
-		public void AddOutput(string data)
+		public void AddOutput(string status)
+		{
+			if (status == null)
+				return;
+
+			Log.Add(status);
+
+			if (BuilderEvent != null)
+				BuilderEvent.NewStatus(status);
+		}
+
+		public void AddCounters(string data)
 		{
 			if (data == null)
 				return;
 
-			Log.Add(data);
+			Counters.Add(data);
 		}
 
 		private void Compile()
 		{
-			compileStartTime = DateTime.Now;
+			CompileStartTime = DateTime.Now;
 
 			compiledFile = Path.Combine(Options.DestinationDirectory, Path.GetFileNameWithoutExtension(Options.SourceFile) + ".bin");
 
@@ -77,7 +97,7 @@ namespace Mosa.Utility.Launcher
 			}
 
 			var compilerTrace = new CompilerTrace();
-			compilerTrace.CompilerEventListener = compilerEventListener;
+			compilerTrace.CompilerEventListener = eventListener;
 
 			var inputFiles = new List<FileInfo>();
 			inputFiles.Add(new FileInfo(Options.SourceFile));
@@ -369,6 +389,7 @@ namespace Mosa.Utility.Launcher
 		/// </summary>
 		/// <param name="platformType">Type of the platform.</param>
 		/// <returns></returns>
+		/// <exception cref="NotImplementCompilerException">Unknown or unsupported Architecture</exception>
 		/// <exception cref="Mosa.Compiler.Common.NotImplementCompilerException">Unknown or unsupported Architecture</exception>
 		private static BaseArchitecture SelectArchitecture(PlatformType platformType)
 		{
@@ -398,7 +419,7 @@ namespace Mosa.Utility.Launcher
 		/// <summary>
 		/// Gets the linker factory.
 		/// </summary>
-		/// <param name="format">The format.</param>
+		/// <param name="linkerType">Type of the linker.</param>
 		/// <returns></returns>
 		private static Func<BaseLinker> GetLinkerFactory(LinkerFormat linkerType)
 		{

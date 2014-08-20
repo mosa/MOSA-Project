@@ -13,6 +13,6 @@ namespace Mosa.Compiler.InternalTrace
 	{
 		void SubmitTraceEvent(CompilerEvent compilerStage, string info);
 
-		void SubmitMethodStatus(int totalMethods, int queuedMethods);
+		void SubmitMethodStatus(int totalMethods, int completedMethods);
 	}
 }

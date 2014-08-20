@@ -160,7 +160,7 @@ namespace Mosa.TinyCPUSimulator
 			block[offset] = newvalue;
 
 			// very slow performance if assert enabled
-			//Debug.Assert(InternalRead32(address) == newvalue); 
+			//Debug.Assert(InternalRead32(address) == newvalue);
 		}
 
 		protected uint InternalRead32(ulong address)
