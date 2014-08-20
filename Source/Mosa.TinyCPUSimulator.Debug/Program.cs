@@ -17,7 +17,27 @@ namespace Mosa.TinyCPUSimulator.Debug
 	{
 		private static void Main(string[] args)
 		{
-			Test10();
+			//Test5a();
+			//Test5b();
+			//Test5c();
+			//Test3();
+			//Test4();
+			//Test11();
+			Test12();
+		}
+
+		private static void Test12()
+		{
+			var fixture = new BooleanFixture();
+
+			fixture.LdelemaB(10,true);
+		}
+
+		private static void Test11()
+		{
+			var fixture = new FibonacciFixture();
+
+			fixture.Fibonacci(10);
 		}
 
 		private static void Test10()
@@ -55,11 +75,25 @@ namespace Mosa.TinyCPUSimulator.Debug
 			fixture.AddR8R8(200, 100);
 		}
 
-		private static void Test5()
+		private static void Test5a()
 		{
 			var fixture = new UInt32Fixture();
 
-			fixture.AddU4U4(200, 100);
+			fixture.AddU4U4(1, 2);
+		}
+
+		private static void Test5b()
+		{
+			var fixture = new UInt16Fixture();
+
+			fixture.AddU2U2(1, 2);
+		}
+
+		private static void Test5c()
+		{
+			var fixture = new UInt8Fixture();
+
+			fixture.AddU1U1(1, 2);
 		}
 
 		private static void Test4()
