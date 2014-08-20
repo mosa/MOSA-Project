@@ -159,7 +159,8 @@ namespace Mosa.TinyCPUSimulator
 
 			block[offset] = newvalue;
 
-			Debug.Assert(InternalRead32(address) == newvalue); // very slow performance if assert enabled
+			// very slow performance if assert enabled
+			//Debug.Assert(InternalRead32(address) == newvalue); 
 		}
 
 		protected uint InternalRead32(ulong address)
@@ -259,7 +260,7 @@ namespace Mosa.TinyCPUSimulator
 			}
 
 			// very slow performance if assert enabled
-			Debug.Assert(InternalRead32(address) == value);
+			//Debug.Assert(InternalRead32(address) == value);
 		}
 
 		protected void InternalWrite16(ulong address, ushort value)
@@ -285,7 +286,7 @@ namespace Mosa.TinyCPUSimulator
 			}
 
 			// very slow performance if assert enabled
-			Debug.Assert(InternalRead16(address) == value);
+			//Debug.Assert(InternalRead16(address) == value);
 		}
 
 		protected void InternalWrite8(ulong address, byte value)
@@ -297,7 +298,7 @@ namespace Mosa.TinyCPUSimulator
 			InternalWrite32Ex(address - offset, ((uint)value) << shift, (uint)0xFF << shift);
 
 			// very slow performance if assert enabled
-			Debug.Assert(InternalRead8(address) == value);
+			//Debug.Assert(InternalRead8(address) == value);
 		}
 
 		public uint DirectRead32(ulong address)
@@ -341,8 +342,7 @@ namespace Mosa.TinyCPUSimulator
 			InternalWrite32(address, val);
 
 			// very slow performance if assert enabled
-			Debug.Assert(DirectRead32(address) == value);
-			//Debug.Assert(((uint)DirectRead16(address) | ((uint)DirectRead16(address + 2) << 16)) == value);
+			//Debug.Assert(DirectRead32(address) == value);
 
 			//Debug.WriteLine(address.ToString("X") + ": " + value.ToString("X"));
 
@@ -361,7 +361,7 @@ namespace Mosa.TinyCPUSimulator
 			InternalWrite16(address, val);
 
 			// very slow performance if assert enabled
-			Debug.Assert(DirectRead16(address) == value);
+			//Debug.Assert(DirectRead16(address) == value);
 
 			//Debug.WriteLine(address.ToString("X") + ": " + value.ToString("X"));
 
@@ -373,7 +373,7 @@ namespace Mosa.TinyCPUSimulator
 			InternalWrite8(address, value);
 
 			// very slow performance if assert enabled
-			Debug.Assert(DirectRead8(address) == value);
+			//Debug.Assert(DirectRead8(address) == value);
 
 			//Debug.WriteLine(address.ToString("X") + ": " + value.ToString("X"));
 
