@@ -8,7 +8,6 @@
  */
 
 using Mosa.Test.Numbers;
-using System;
 using System.Collections.Generic;
 
 namespace Mosa.TinyCPUSimulator.TestSystem

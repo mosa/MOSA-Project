@@ -175,12 +175,10 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 
 		void ICompilerEventListener.SubmitTraceEvent(CompilerEvent compilerStage, string info)
 		{
-		
 		}
 
 		void ICompilerEventListener.SubmitMethodStatus(int totalMethods, int queuedMethods)
 		{
-
 		}
 	}
 }
