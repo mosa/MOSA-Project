@@ -1,2 +1,2 @@
 cd Source
-CALL Compile-Debug.bat
+CALL Compile.bat
