@@ -52,8 +52,8 @@ namespace Mosa.Tool.Launcher
 			//Builder.Options.AutoLaunch = cbExitOnLaunch;
 			Options.EnableSSA = cbEnableSSA.Checked;
 			Options.EnableSSAOptimizations = cbEnableSSAOptimizations.Checked;
-			Options.GenerateASM = cbGenerateASMFile.Checked;
-			Options.GenerateMap = cbGenerateMapFile.Checked;
+			Options.GenerateASMFile = cbGenerateASMFile.Checked;
+			Options.GenerateMapFile = cbGenerateMapFile.Checked;
 			Options.ExitOnLaunch = cbExitOnLaunch.Checked;
 			Options.MOSADebugger = cbMOSADebugger.Checked;
 			Options.MemoryInMB = (uint)nmMemory.Value;
@@ -111,7 +111,6 @@ namespace Mosa.Tool.Launcher
 				case 0: Options.BootFormat = BootFormat.Multiboot_0_7; break;
 				default: Options.BootFormat = BootFormat.NotSpecified; break;
 			}
-
 		}
 
 		private void UpdateInterfaceOptions()
@@ -119,8 +118,8 @@ namespace Mosa.Tool.Launcher
 			//Builder.Options.AutoLaunch = cbExitOnLaunch;
 			cbEnableSSA.Checked = Options.EnableSSA;
 			cbEnableSSAOptimizations.Checked = Options.EnableSSAOptimizations;
-			cbGenerateASMFile.Checked = Options.GenerateASM;
-			cbGenerateMapFile.Checked = Options.GenerateMap;
+			cbGenerateASMFile.Checked = Options.GenerateASMFile;
+			cbGenerateMapFile.Checked = Options.GenerateMapFile;
 			cbExitOnLaunch.Checked = Options.ExitOnLaunch;
 			cbMOSADebugger.Checked = Options.MOSADebugger;
 			nmMemory.Value = Options.MemoryInMB;
@@ -171,6 +170,8 @@ namespace Mosa.Tool.Launcher
 			}
 
 			lbDestinationDirectory.Text = Options.DestinationDirectory;
+			lbSource.Text = Options.SourceFile;
+			lbSourceDirectory.Text = Path.GetDirectoryName(Options.SourceFile);
 		}
 
 		void IBuilderEvent.NewStatus(string info)
@@ -182,6 +183,8 @@ namespace Mosa.Tool.Launcher
 		{
 			progressBar1.Maximum = total;
 			progressBar1.Value = at;
+
+			//progressBar1.Refresh();
 		}
 
 		private void MainForm_Shown(object sender, EventArgs e)

@@ -21,10 +21,6 @@ namespace Mosa.Utility.Launcher
 
 		public bool AutoLaunch { get; set; }
 
-		public bool GenerateMap { get; set; }
-
-		public bool GenerateASM { get; set; }
-
 		public EmulatorType Emulator { get; set; }
 
 		public bool MOSADebugger { get; set; }
@@ -39,7 +35,7 @@ namespace Mosa.Utility.Launcher
 
 		public bool GenerateASMFile { get; set; }
 
-		public bool GenerateMAPFile { get; set; }
+		public bool GenerateMapFile { get; set; }
 
 		public LinkerFormat LinkerFormat { get; set; }
 
@@ -72,8 +68,8 @@ namespace Mosa.Utility.Launcher
 					case "-e": ExitOnLaunch = true; continue;
 					case "-q": ExitOnLaunch = true; continue;
 					case "-a": AutoLaunch = true; continue;
-					case "-map": GenerateMap = true; continue;
-					case "-asm": GenerateASM = true; continue;
+					case "-map": GenerateMapFile = true; continue;
+					case "-asm": GenerateASMFile = true; continue;
 					case "-qemu": Emulator = EmulatorType.Qemu; continue;
 					case "-vmware": Emulator = EmulatorType.WMware; continue;
 					case "-bochs": Emulator = EmulatorType.Boches; continue;
@@ -82,6 +78,7 @@ namespace Mosa.Utility.Launcher
 					case "-img": ImageFormat = ImageFormat.IMG; continue;
 					case "-vdi": ImageFormat = ImageFormat.VDI; continue;
 					case "-iso": ImageFormat = ImageFormat.ISO; continue;
+					case "-vmdk": ImageFormat = ImageFormat.VMDK; continue;
 					case "-elf32": LinkerFormat = LinkerFormat.Elf32; continue;
 					case "-elf": LinkerFormat = LinkerFormat.Elf32; continue;
 					case "-pe32": LinkerFormat = LinkerFormat.PE32; continue;

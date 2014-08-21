@@ -572,10 +572,10 @@ namespace Mosa.Tool.Explorer
 			Compile();
 		}
 
-		void ICompilerEventListener.SubmitMethodStatus(int totalMethods, int queuedMethods)
+		void ICompilerEventListener.SubmitMethodStatus(int totalMethods, int completedMethods)
 		{
 			toolStripProgressBar1.Maximum = totalMethods;
-			toolStripProgressBar1.Value = totalMethods - queuedMethods;
+			toolStripProgressBar1.Value = completedMethods;
 		}
 	}
 }

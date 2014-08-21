@@ -87,7 +87,7 @@ namespace Mosa.Utility.Launcher
 			compilerOptions.LinkerFactory = GetLinkerFactory(Options.LinkerFormat);
 			compilerOptions.BootStageFactory = GetBootStageFactory(Options.BootFormat);
 
-			if (Options.GenerateMAPFile)
+			if (Options.GenerateMapFile)
 			{
 				compilerOptions.MapFile = Path.Combine(Options.DestinationDirectory, Path.GetFileNameWithoutExtension(Options.SourceFile) + ".map");
 			}
