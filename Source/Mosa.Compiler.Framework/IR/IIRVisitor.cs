@@ -315,6 +315,12 @@ namespace Mosa.Compiler.Framework.IR
 		void ExceptionPrologue(Context context);
 
 		/// <summary>
+		/// Visitation function for FinallyPrologue.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void FinallyPrologue(Context context);
+
+		/// <summary>
 		/// Visitation function for intrinsic the method call.
 		/// </summary>
 		/// <param name="context">The context.</param>

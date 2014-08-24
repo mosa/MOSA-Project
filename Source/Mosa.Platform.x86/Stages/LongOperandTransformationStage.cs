@@ -1800,10 +1800,18 @@ namespace Mosa.Platform.x86.Stages
 		}
 
 		/// <summary>
-		/// Visitation function for ExceptionPrologueInstruction"/> instructions.
+		/// Visitation function for ExceptionPrologue.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IIRVisitor.ExceptionPrologue(Context context)
+		{
+		}
+
+		/// <summary>
+		/// Visitation function for FinallyPrologue.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IIRVisitor.FinallyPrologue(Context context)
 		{
 		}
 

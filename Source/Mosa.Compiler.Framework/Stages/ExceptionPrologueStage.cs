@@ -23,15 +23,21 @@ namespace Mosa.Compiler.Framework.Stages
 			// Handler Code
 			foreach (var clause in MethodCompiler.Method.ExceptionBlocks)
 			{
+				var block = BasicBlocks.GetByLabel(clause.HandlerOffset);
+
+				var context = new Context(InstructionSet, block).InsertBefore();
+
 				if (clause.HandlerType == ExceptionHandlerType.Exception)
 				{
-					var block = BasicBlocks.GetByLabel(clause.HandlerOffset);
-
-					var context = new Context(InstructionSet, block).InsertBefore();
-
-					Operand exceptionObject = MethodCompiler.CreateVirtualRegister(clause.Type);
+					var exceptionObject = MethodCompiler.CreateVirtualRegister(clause.Type);
 
 					context.SetInstruction(IRInstruction.ExceptionPrologue, exceptionObject);
+				}
+				else if (clause.HandlerType == ExceptionHandlerType.Finally)
+				{
+					var exceptionObject = MethodCompiler.CreateVirtualRegister(clause.Type);
+
+					context.SetInstruction(IRInstruction.FinallyPrologue, exceptionObject);
 				}
 			}
 		}

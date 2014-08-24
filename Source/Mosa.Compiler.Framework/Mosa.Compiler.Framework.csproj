@@ -87,6 +87,7 @@
     <Compile Include="Intrinsics\InternalInitializeArray.cs" />
     <Compile Include="Intrinsics\InternalsBase.cs" />
     <Compile Include="Intrinsics\TypeInternals.cs" />
+    <Compile Include="IR\FinallyPrologue.cs" />
     <Compile Include="IR\Kill.cs" />
     <Compile Include="IR\Gen.cs" />
     <Compile Include="IR\CompoundLoad.cs" />

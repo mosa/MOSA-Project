@@ -965,7 +965,7 @@ namespace Mosa.Platform.x86.Stages
 		}
 
 		/// <summary>
-		/// Visitation function for ExceptionPrologueInstruction.
+		/// Visitation function for ExceptionPrologue.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IIRVisitor.ExceptionPrologue(Context context)
@@ -975,6 +975,14 @@ namespace Mosa.Platform.x86.Stages
 
 			// Alternative method is to pop it off the stack instead, going passing via register for now
 			//context.SetInstruction(CPUx86.Instruction.PopInstruction, context.Result);
+		}
+
+		/// <summary>
+		/// Visitation function for FinallyPrologue.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IIRVisitor.FinallyPrologue(Context context)
+		{
 		}
 
 		/// <summary>

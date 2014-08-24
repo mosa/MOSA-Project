@@ -267,6 +267,11 @@ namespace Mosa.Compiler.Framework.IR
 		/// <summary>
 		///
 		/// </summary>
+		public static readonly BaseIRInstruction FinallyPrologue = new FinallyPrologue();
+
+		/// <summary>
+		///
+		/// </summary>
 		public static readonly BaseIRInstruction IntrinsicMethodCall = new IntrinsicMethodCall();
 
 		/// <summary>
