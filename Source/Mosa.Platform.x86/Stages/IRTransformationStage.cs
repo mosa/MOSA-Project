@@ -965,23 +965,52 @@ namespace Mosa.Platform.x86.Stages
 		}
 
 		/// <summary>
-		/// Visitation function for ExceptionPrologue.
+		/// Visitation function for StartTry.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.ExceptionPrologue(Context context)
+		void IIRVisitor.StartTry(Context context)
 		{
-			// Exception Handler will pass the exception object in the register - EDX was choosen
-			context.SetInstruction(X86.Mov, context.Result, Operand.CreateCPURegister(TypeSystem.BuiltIn.Object, GeneralPurposeRegister.EDX));
-
-			// Alternative method is to pop it off the stack instead, going passing via register for now
-			//context.SetInstruction(CPUx86.Instruction.PopInstruction, context.Result);
 		}
 
 		/// <summary>
-		/// Visitation function for FinallyPrologue.
+		/// Visitation function for StartTry.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.FinallyPrologue(Context context)
+		void IIRVisitor.StartFinally(Context context)
+		{
+		}
+
+		/// <summary>
+		/// Visitation function for StartException.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IIRVisitor.StartException(Context context)
+		{
+			// Exception Handler will pass the exception object in the register - EDX was choosen
+			context.SetInstruction(X86.Mov, context.Result, Operand.CreateCPURegister(TypeSystem.BuiltIn.Object, GeneralPurposeRegister.EDX));
+		}
+
+		/// <summary>
+		/// Visitation function for EndTry.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IIRVisitor.EndTry(Context context)
+		{
+		}
+
+		/// <summary>
+		/// Visitation function for EndException.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IIRVisitor.EndException(Context context)
+		{
+		}
+
+		/// <summary>
+		/// Visitation function for EndFinally.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IIRVisitor.EndFinally(Context context)
 		{
 		}
 

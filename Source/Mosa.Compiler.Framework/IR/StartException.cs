@@ -10,16 +10,16 @@
 namespace Mosa.Compiler.Framework.IR
 {
 	/// <summary>
-	/// An abstract intermediate representation of the method exception.
+	/// An abstract intermediate representation of the start of an exception block.
 	/// </summary>
-	public sealed class ExceptionPrologue : BaseIRInstruction
+	public sealed class StartException : BaseIRInstruction
 	{
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of <see cref="ExceptionPrologue"/>.
+		/// Initializes a new instance of <see cref="StartException"/>.
 		/// </summary>
-		public ExceptionPrologue() :
+		public StartException() :
 			base(0, 1)
 		{
 		}
@@ -35,7 +35,7 @@ namespace Mosa.Compiler.Framework.IR
 		/// <param name="context">The context.</param>
 		public override void Visit(IIRVisitor visitor, Context context)
 		{
-			visitor.ExceptionPrologue(context);
+			visitor.StartException(context);
 		}
 
 		#endregion Instruction Overrides

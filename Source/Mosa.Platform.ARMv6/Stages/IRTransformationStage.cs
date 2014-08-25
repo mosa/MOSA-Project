@@ -364,18 +364,50 @@ namespace Mosa.Platform.ARMv6.Stages
 		}
 
 		/// <summary>
-		/// Visitation function for ExceptionPrologue.
+		/// Visitation function for StartTry.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.ExceptionPrologue(Context context)
+		void IIRVisitor.StartTry(Context context)
 		{
 		}
 
 		/// <summary>
-		/// Visitation function for FinallyPrologue.
+		/// Visitation function for StartException.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.FinallyPrologue(Context context)
+		void IIRVisitor.StartException(Context context)
+		{
+		}
+
+		/// <summary>
+		/// Visitation function for StartFinally.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IIRVisitor.StartFinally(Context context)
+		{
+		}
+
+		/// <summary>
+		/// Visitation function for EndTry.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IIRVisitor.EndTry(Context context)
+		{
+		}
+
+		/// <summary>
+		/// Visitation function for EndException.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IIRVisitor.EndException(Context context)
+		{
+		}
+
+		/// <summary>
+		/// Visitation function for EndFinally.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IIRVisitor.EndFinally(Context context)
 		{
 		}
 

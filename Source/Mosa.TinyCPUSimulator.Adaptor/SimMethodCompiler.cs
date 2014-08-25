@@ -33,7 +33,7 @@ namespace Mosa.TinyCPUSimulator.Adaptor
 				new CILDecodingStage(),
 				new BasicBlockBuilderStage(),
 				new StackSetupStage(),
-				new ExceptionPrologueStage(),
+				new ProtectedBlockStage(),
 				new OperandAssignmentStage(),
 				new StaticAllocationResolutionStage(),
 				new CILTransformationStage(),

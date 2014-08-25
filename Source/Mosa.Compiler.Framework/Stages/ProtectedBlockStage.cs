@@ -1,5 +1,5 @@
 ﻿/*
- * (c) 2011 MOSA - The Managed Operating System Alliance
+ * (c) 2014 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
  *
@@ -14,32 +14,43 @@ using Mosa.Compiler.MosaTypeSystem;
 namespace Mosa.Compiler.Framework.Stages
 {
 	/// <summary>
-	/// This stage inserts the ExceptionPrologue IR instruction at the beginning of each exception block.
+	/// This stage inserts IR instructions related to protected blocks.
 	/// </summary>
-	public class ExceptionPrologueStage : BaseMethodCompilerStage
+	public class ProtectedBlockStage : BaseMethodCompilerStage
 	{
 		protected override void Run()
 		{
+			MethodCompiler.CreateExceptionReturnOperands();
+			
+			// Handler Code
+			foreach (var clause in MethodCompiler.Method.ExceptionBlocks)
+			{
+				var block = BasicBlocks.GetByLabel(clause.TryOffset);
+
+				//
+
+			}
+			
 			// Handler Code
 			foreach (var clause in MethodCompiler.Method.ExceptionBlocks)
 			{
 				var block = BasicBlocks.GetByLabel(clause.HandlerOffset);
 
-				var context = new Context(InstructionSet, block).InsertBefore();
+				var context = new Context(InstructionSet, block);
 
 				if (clause.HandlerType == ExceptionHandlerType.Exception)
 				{
 					var exceptionObject = MethodCompiler.CreateVirtualRegister(clause.Type);
 
-					context.SetInstruction(IRInstruction.ExceptionPrologue, exceptionObject);
+					context.AppendInstruction(IRInstruction.StartException, exceptionObject);
 				}
 				else if (clause.HandlerType == ExceptionHandlerType.Finally)
 				{
-					var exceptionObject = MethodCompiler.CreateVirtualRegister(clause.Type);
-
-					context.SetInstruction(IRInstruction.FinallyPrologue, exceptionObject);
+					context.AppendInstruction(IRInstruction.StartFinally);
 				}
 			}
+
+
 		}
 	}
 }

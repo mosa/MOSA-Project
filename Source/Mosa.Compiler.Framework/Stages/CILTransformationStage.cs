@@ -1167,7 +1167,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="context">The context.</param>
 		void CIL.ICILVisitor.Endfinally(Context context)
 		{
-			context.SetInstruction(IRInstruction.InternalReturn);
+			context.SetInstruction(IRInstruction.EndFinally);
 		}
 
 		private MosaExceptionHandler FindImmediateClause(Context context)
@@ -1201,14 +1201,17 @@ namespace Mosa.Compiler.Framework.Stages
 				if (clause != null)
 				{
 					// Find finally block
-					BasicBlock finallyBlock = BasicBlocks.GetByLabel(clause.HandlerOffset);
+					var finallyBlock = BasicBlocks.GetByLabel(clause.HandlerOffset);
 
-					Context before = context.InsertBefore();
-					before.SetInstruction(IRInstruction.Call, finallyBlock);
+					var before = context.InsertBefore();
+
+					before.SetInstruction(IRInstruction.EndException, finallyBlock);
 				}
 			}
 			else if (clause.IsLabelWithinHandler(context.Label))
 			{
+				context.ReplaceInstructionOnly(IRInstruction.EndException);
+
 				// nothing!
 			}
 			else
@@ -1216,7 +1219,6 @@ namespace Mosa.Compiler.Framework.Stages
 				throw new Exception("can not find leave clause");
 			}
 
-			context.ReplaceInstructionOnly(IRInstruction.Jmp);
 		}
 
 		/// <summary>

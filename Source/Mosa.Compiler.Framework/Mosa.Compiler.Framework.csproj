@@ -87,7 +87,11 @@
     <Compile Include="Intrinsics\InternalInitializeArray.cs" />
     <Compile Include="Intrinsics\InternalsBase.cs" />
     <Compile Include="Intrinsics\TypeInternals.cs" />
-    <Compile Include="IR\FinallyPrologue.cs" />
+    <Compile Include="IR\EndException.cs" />
+    <Compile Include="IR\EndFinally.cs" />
+    <Compile Include="IR\EndTry.cs" />
+    <Compile Include="IR\StartTry.cs" />
+    <Compile Include="IR\StartFinally.cs" />
     <Compile Include="IR\Kill.cs" />
     <Compile Include="IR\Gen.cs" />
     <Compile Include="IR\CompoundLoad.cs" />
@@ -181,8 +185,8 @@
     <Compile Include="StackLayout.cs" />
     <Compile Include="Stages\MultipleDefinitionMarkerStage.cs" />
     <Compile Include="Stages\PlugStage.cs" />
-    <Compile Include="Stages\ExceptionPrologueStage.cs" />
-    <Compile Include="IR\ExceptionPrologue.cs" />
+    <Compile Include="Stages\ProtectedBlockStage.cs" />
+    <Compile Include="IR\StartException.cs" />
     <Compile Include="Stages\MetadataStage.cs" />
     <Compile Include="Stages\EnterSSAStage.cs" />
     <Compile Include="InstructionLogger.cs" />

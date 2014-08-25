@@ -10,17 +10,17 @@
 namespace Mosa.Compiler.Framework.IR
 {
 	/// <summary>
-	/// An abstract intermediate representation of the finally prologue.
+	/// An abstract intermediate representation of the start of an finally block.
 	/// </summary>
-	public sealed class FinallyPrologue : BaseIRInstruction
+	public sealed class StartFinally : BaseIRInstruction
 	{
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of <see cref="FinallyPrologue"/>.
+		/// Initializes a new instance of <see cref="StartFinally"/>.
 		/// </summary>
-		public FinallyPrologue() :
-			base(0, 1)
+		public StartFinally() :
+			base(0, 0)
 		{
 		}
 
@@ -35,7 +35,7 @@ namespace Mosa.Compiler.Framework.IR
 		/// <param name="context">The context.</param>
 		public override void Visit(IIRVisitor visitor, Context context)
 		{
-			visitor.FinallyPrologue(context);
+			visitor.StartFinally(context);
 		}
 
 		#endregion Instruction Overrides

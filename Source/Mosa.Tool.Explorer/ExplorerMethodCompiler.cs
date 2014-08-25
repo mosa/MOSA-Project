@@ -33,7 +33,7 @@ namespace Mosa.Tool.Explorer
 				new CILDecodingStage(),
 				new BasicBlockBuilderStage(),
 				new StackSetupStage(),
-				new ExceptionPrologueStage(),
+				new ProtectedBlockStage(),
 				new OperandAssignmentStage(),
 				new StaticAllocationResolutionStage(),
 				new CILTransformationStage(),

@@ -124,23 +124,23 @@ namespace Mosa.TestWorld.x86.Tests
 			return (a == 232);
 		}
 
-		//public static bool ExceptionTest5()
-		//{
-		//    int a = 10;
+		public static bool ExceptionTest5()
+		{
+			int a = 10;
 
-		//    try
-		//    {
-		//        a = a + 2;
-		//        throw new System.Exception();
-		//    }
-		//    catch
-		//    {
-		//        a = a + 50;
-		//    }
+			try
+			{
+				a = a + 2;
+				//throw new System.Exception();
+			}
+			catch
+			{
+				a = a + 50;
+			}
 
-		//    a = a + 7;
+			a = a + 7;
 
-		//    return (a == 69);
-		//}
+			return (a == 69);
+		}
 	}
 }

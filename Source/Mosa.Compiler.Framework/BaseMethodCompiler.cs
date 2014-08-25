@@ -8,6 +8,7 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using Mosa.Compiler.Framework.Analysis;
 using Mosa.Compiler.Framework.Stages;
 using Mosa.Compiler.InternalTrace;
 using Mosa.Compiler.Linker;
@@ -15,7 +16,6 @@ using Mosa.Compiler.MosaTypeSystem;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using Mosa.Compiler.Framework.Analysis;
 
 namespace Mosa.Compiler.Framework
 {
@@ -44,46 +44,17 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		private bool stop;
 
+		/// <summary>
+		/// The empty operand list
+		/// </summary>
 		private static readonly Operand[] emptyOperandList = new Operand[0];
 
-		#endregion Data Members
-
-		#region Construction
-
 		/// <summary>
-		/// Initializes a new instance of the <see cref="BaseMethodCompiler" /> class.
+		/// Contains temp operand that contains return address for the exception handler
 		/// </summary>
-		/// <param name="compiler">The assembly compiler.</param>
-		/// <param name="method">The method to compile by this instance.</param>
-		/// <param name="basicBlocks">The basic blocks.</param>
-		/// <param name="instructionSet">The instruction set.</param>
-		protected BaseMethodCompiler(BaseCompiler compiler, MosaMethod method, BasicBlocks basicBlocks, InstructionSet instructionSet)
-		{
-			this.Compiler = compiler;
-			this.Method = method;
-			this.Type = method.DeclaringType;
-			this.Scheduler = compiler.CompilationScheduler;
-			this.Architecture = compiler.Architecture;
-			this.TypeSystem = compiler.TypeSystem;
-			this.TypeLayout = Compiler.TypeLayout;
-			this.InternalTrace = Compiler.CompilerTrace;
-			this.Linker = compiler.Linker;
-			this.BasicBlocks = basicBlocks ?? new BasicBlocks();
-			this.InstructionSet = instructionSet ?? new InstructionSet(256);
-			this.Pipeline = new CompilerPipeline();
-			this.StackLayout = new StackLayout(Architecture, method.Signature.Parameters.Count + (method.HasThis || method.HasExplicitThis ? 1 : 0));
-			this.VirtualRegisters = new VirtualRegisters(Architecture);
-			this.LocalVariables = emptyOperandList;
-			this.DominanceAnalysis = new Dominance(Compiler.CompilerOptions.DominanceAnalysisFactory, this.BasicBlocks);
+		private Dictionary<BasicBlock, Operand> exceptionReturnOperand = new Dictionary<BasicBlock, Operand>();
 
-			EvaluateParameterOperands();
-
-			this.stop = false;
-
-			Debug.Assert(this.Linker != null);
-		}
-
-		#endregion Construction
+		#endregion Data Members
 
 		#region Properties
 
@@ -173,7 +144,50 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		public Dominance DominanceAnalysis { get; private set; }
 
+		/// <summary>
+		/// Gets the parameters.
+		/// </summary>
+		public Operand[] Parameters { get { return StackLayout.Parameters; } }
+
 		#endregion Properties
+
+		#region Construction
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="BaseMethodCompiler" /> class.
+		/// </summary>
+		/// <param name="compiler">The assembly compiler.</param>
+		/// <param name="method">The method to compile by this instance.</param>
+		/// <param name="basicBlocks">The basic blocks.</param>
+		/// <param name="instructionSet">The instruction set.</param>
+		protected BaseMethodCompiler(BaseCompiler compiler, MosaMethod method, BasicBlocks basicBlocks, InstructionSet instructionSet)
+		{
+			this.Compiler = compiler;
+			this.Method = method;
+			this.Type = method.DeclaringType;
+			this.Scheduler = compiler.CompilationScheduler;
+			this.Architecture = compiler.Architecture;
+			this.TypeSystem = compiler.TypeSystem;
+			this.TypeLayout = Compiler.TypeLayout;
+			this.InternalTrace = Compiler.CompilerTrace;
+			this.Linker = compiler.Linker;
+			this.BasicBlocks = basicBlocks ?? new BasicBlocks();
+			this.InstructionSet = instructionSet ?? new InstructionSet(256);
+			this.Pipeline = new CompilerPipeline();
+			this.StackLayout = new StackLayout(Architecture, method.Signature.Parameters.Count + (method.HasThis || method.HasExplicitThis ? 1 : 0));
+			this.VirtualRegisters = new VirtualRegisters(Architecture);
+			this.LocalVariables = emptyOperandList;
+			this.DominanceAnalysis = new Dominance(Compiler.CompilerOptions.DominanceAnalysisFactory, this.BasicBlocks);
+
+			EvaluateParameterOperands();
+			//CreateExceptionReturnOperands();
+
+			this.stop = false;
+
+			Debug.Assert(this.Linker != null);
+		}
+
+		#endregion Construction
 
 		#region Methods
 
@@ -269,10 +283,17 @@ namespace Mosa.Compiler.Framework
 			return StackLayout.GetStackParameter(index);
 		}
 
-		/// <summary>
-		/// Gets the parameters.
-		/// </summary>
-		public Operand[] Parameters { get { return StackLayout.Parameters; } }
+		public void CreateExceptionReturnOperands()
+		{
+			foreach (var clause in Method.ExceptionBlocks)
+			{
+				var block = BasicBlocks.GetByLabel(clause.HandlerOffset);
+
+				var temp = StackLayout.AddStackLocal(TypeSystem.BuiltIn.Pointer);
+
+				exceptionReturnOperand.Add(block, temp);
+			}
+		}
 
 		/// <summary>
 		/// Allocates the local variable virtual registers.

@@ -309,16 +309,40 @@ namespace Mosa.Compiler.Framework.IR
 		void Throw(Context context);
 
 		/// <summary>
-		/// Visitation function for ExceptionPrologue.
+		/// Visitation function for StartTry.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void ExceptionPrologue(Context context);
+		void StartTry(Context context);
 
 		/// <summary>
-		/// Visitation function for FinallyPrologue.
+		/// Visitation function for StartException.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void FinallyPrologue(Context context);
+		void StartException(Context context);
+
+		/// <summary>
+		/// Visitation function for StartFinally.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void StartFinally(Context context);
+
+		/// <summary>
+		/// Visitation function for EndTry.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void EndTry(Context context);
+
+		/// <summary>
+		/// Visitation function for EndException.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void EndException(Context context);
+
+		/// <summary>
+		/// Visitation function for EndFinally.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void EndFinally(Context context);
 
 		/// <summary>
 		/// Visitation function for intrinsic the method call.
