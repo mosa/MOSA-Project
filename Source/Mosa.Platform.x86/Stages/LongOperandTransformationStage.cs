@@ -1803,7 +1803,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for StartTry.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.StartTry(Context context)
+		void IIRVisitor.TryStart(Context context)
 		{
 		}
 
@@ -1811,7 +1811,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for StartException.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.StartException(Context context)
+		void IIRVisitor.ExceptionStart(Context context)
 		{
 		}
 
@@ -1819,7 +1819,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for StartFinally.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.StartFinally(Context context)
+		void IIRVisitor.FinallyStart(Context context)
 		{
 		}
 
@@ -1827,7 +1827,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for EndTry.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.EndTry(Context context)
+		void IIRVisitor.TryEnd(Context context)
 		{
 		}
 
@@ -1835,7 +1835,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for EndException.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.EndException(Context context)
+		void IIRVisitor.ExceptionEnd(Context context)
 		{
 		}
 
@@ -1843,7 +1843,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for EndFinally.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.EndFinally(Context context)
+		void IIRVisitor.FinallyEnd(Context context)
 		{
 		}
 

@@ -37,6 +37,9 @@ namespace Mosa.Tool.Explorer
 				new OperandAssignmentStage(),
 				new StaticAllocationResolutionStage(),
 				new CILTransformationStage(),
+
+				new StopStage(), //TEMP
+
 				new ConvertCompoundStage(),
 				new UnboxValueTypeStage(),
 				//new PromoteLocalVariablesStage(),

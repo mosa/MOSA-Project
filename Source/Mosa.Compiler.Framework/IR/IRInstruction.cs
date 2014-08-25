@@ -262,32 +262,32 @@ namespace Mosa.Compiler.Framework.IR
 		/// <summary>
 		///
 		/// </summary>
-		public static readonly BaseIRInstruction StartTry = new StartTry();
+		public static readonly BaseIRInstruction TryStart = new TryStart();
 
 		/// <summary>
 		///
 		/// </summary>
-		public static readonly BaseIRInstruction StartException = new StartException();
+		public static readonly BaseIRInstruction ExceptionStart = new ExceptionStart();
 
 		/// <summary>
 		///
 		/// </summary>
-		public static readonly BaseIRInstruction StartFinally = new StartFinally();
+		public static readonly BaseIRInstruction FinallyStart = new FinallyStart();
 
 		/// <summary>
 		///
 		/// </summary>
-		public static readonly BaseIRInstruction EndTry = new EndTry();
+		public static readonly BaseIRInstruction TryEnd = new TryEnd();
 
 		/// <summary>
 		///
 		/// </summary>
-		public static readonly BaseIRInstruction EndException = new EndException();
+		public static readonly BaseIRInstruction ExceptionEnd = new ExceptionEnd();
 
 		/// <summary>
 		///
 		/// </summary>
-		public static readonly BaseIRInstruction EndFinally = new EndFinally();
+		public static readonly BaseIRInstruction FinallyEnd = new FinallyEnd();
 
 		/// <summary>
 		///

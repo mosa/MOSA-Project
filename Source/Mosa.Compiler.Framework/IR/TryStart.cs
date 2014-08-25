@@ -12,14 +12,14 @@ namespace Mosa.Compiler.Framework.IR
 	/// <summary>
 	/// An abstract intermediate representation of the start of an try block.
 	/// </summary>
-	public sealed class StartTry : BaseIRInstruction
+	public sealed class TryStart : BaseIRInstruction
 	{
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of <see cref="StartTry"/>.
+		/// Initializes a new instance of <see cref="TryStart"/>.
 		/// </summary>
-		public StartTry() :
+		public TryStart() :
 			base(0, 0)
 		{
 		}
@@ -35,7 +35,7 @@ namespace Mosa.Compiler.Framework.IR
 		/// <param name="context">The context.</param>
 		public override void Visit(IIRVisitor visitor, Context context)
 		{
-			visitor.StartTry(context);
+			visitor.TryStart(context);
 		}
 
 		#endregion Instruction Overrides

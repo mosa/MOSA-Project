@@ -25,32 +25,28 @@ namespace Mosa.Compiler.Framework.Stages
 			// Handler Code
 			foreach (var clause in MethodCompiler.Method.ExceptionBlocks)
 			{
-				var block = BasicBlocks.GetByLabel(clause.TryOffset);
+				var tryBlock = BasicBlocks.GetByLabel(clause.TryOffset);
 
-				var context = new Context(InstructionSet, block);
+				var context = new Context(InstructionSet, tryBlock);
 
-				context.AppendInstruction(IRInstruction.StartTry);
-			}
+				context.AppendInstruction(IRInstruction.TryStart);
 
-			// Handler Code
-			foreach (var clause in MethodCompiler.Method.ExceptionBlocks)
-			{
-				var block = BasicBlocks.GetByLabel(clause.HandlerOffset);
+				// find handler block
+				var handlerBlock = BasicBlocks.GetByLabel(clause.HandlerOffset);
 
-				var context = new Context(InstructionSet, block);
+				context = new Context(InstructionSet, handlerBlock);
 
 				if (clause.HandlerType == ExceptionHandlerType.Exception)
 				{
 					var exceptionObject = MethodCompiler.CreateVirtualRegister(clause.Type);
 
-					context.AppendInstruction(IRInstruction.StartException, exceptionObject);
+					context.AppendInstruction(IRInstruction.ExceptionStart, exceptionObject);
 				}
 				else if (clause.HandlerType == ExceptionHandlerType.Finally)
 				{
-					context.AppendInstruction(IRInstruction.StartFinally);
+					context.AppendInstruction(IRInstruction.FinallyStart);
 				}
 			}
-
 
 		}
 	}

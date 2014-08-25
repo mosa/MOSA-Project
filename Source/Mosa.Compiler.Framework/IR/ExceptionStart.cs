@@ -10,17 +10,17 @@
 namespace Mosa.Compiler.Framework.IR
 {
 	/// <summary>
-	/// An abstract intermediate representation of the end of the try block.
+	/// An abstract intermediate representation of the start of an exception block.
 	/// </summary>
-	public sealed class EndTry : BaseIRInstruction
+	public sealed class ExceptionStart : BaseIRInstruction
 	{
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of <see cref="EndTry"/>.
+		/// Initializes a new instance of <see cref="ExceptionStart"/>.
 		/// </summary>
-		public EndTry() :
-			base(0, 0)
+		public ExceptionStart() :
+			base(0, 1)
 		{
 		}
 
@@ -35,7 +35,7 @@ namespace Mosa.Compiler.Framework.IR
 		/// <param name="context">The context.</param>
 		public override void Visit(IIRVisitor visitor, Context context)
 		{
-			visitor.EndTry(context);
+			visitor.ExceptionStart(context);
 		}
 
 		#endregion Instruction Overrides

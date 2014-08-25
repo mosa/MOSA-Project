@@ -312,37 +312,37 @@ namespace Mosa.Compiler.Framework.IR
 		/// Visitation function for StartTry.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void StartTry(Context context);
+		void TryStart(Context context);
 
 		/// <summary>
-		/// Visitation function for StartException.
+		/// Visitation function for ExceptionStart.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void StartException(Context context);
+		void ExceptionStart(Context context);
 
 		/// <summary>
-		/// Visitation function for StartFinally.
+		/// Visitation function for FinallyStart.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void StartFinally(Context context);
+		void FinallyStart(Context context);
 
 		/// <summary>
-		/// Visitation function for EndTry.
+		/// Visitation function for TryEnd.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void EndTry(Context context);
+		void TryEnd(Context context);
 
 		/// <summary>
-		/// Visitation function for EndException.
+		/// Visitation function for ExceptionEnd.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void EndException(Context context);
+		void ExceptionEnd(Context context);
 
 		/// <summary>
 		/// Visitation function for EndFinally.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void EndFinally(Context context);
+		void FinallyEnd(Context context);
 
 		/// <summary>
 		/// Visitation function for intrinsic the method call.

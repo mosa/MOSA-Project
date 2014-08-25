@@ -12,14 +12,14 @@ namespace Mosa.Compiler.Framework.IR
 	/// <summary>
 	/// An abstract intermediate representation of the start of an finally block.
 	/// </summary>
-	public sealed class StartFinally : BaseIRInstruction
+	public sealed class FinallyStart : BaseIRInstruction
 	{
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of <see cref="StartFinally"/>.
+		/// Initializes a new instance of <see cref="FinallyStart"/>.
 		/// </summary>
-		public StartFinally() :
+		public FinallyStart() :
 			base(0, 0)
 		{
 		}
@@ -35,7 +35,7 @@ namespace Mosa.Compiler.Framework.IR
 		/// <param name="context">The context.</param>
 		public override void Visit(IIRVisitor visitor, Context context)
 		{
-			visitor.StartFinally(context);
+			visitor.FinallyStart(context);
 		}
 
 		#endregion Instruction Overrides

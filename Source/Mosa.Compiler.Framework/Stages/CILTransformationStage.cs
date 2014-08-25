@@ -1167,10 +1167,10 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="context">The context.</param>
 		void CIL.ICILVisitor.Endfinally(Context context)
 		{
-			context.SetInstruction(IRInstruction.EndFinally);
+			context.ReplaceInstructionOnly(IRInstruction.FinallyEnd);
 		}
 
-		private MosaExceptionHandler FindImmediateClause(Context context)
+		private MosaExceptionHandler FindImmediateTryClause(Context context)
 		{
 			MosaExceptionHandler innerClause = null;
 
@@ -1178,7 +1178,24 @@ namespace Mosa.Compiler.Framework.Stages
 
 			foreach (var clause in MethodCompiler.Method.ExceptionBlocks)
 			{
-				if (clause.IsLabelWithinTry(label) || clause.IsLabelWithinHandler(label))
+				if (clause.IsLabelWithinTry(label))
+				{
+					return clause;
+				}
+			}
+
+			return null;
+		}
+
+		private MosaExceptionHandler FindImmediateExceptionHandlingClause(Context context)
+		{
+			MosaExceptionHandler innerClause = null;
+
+			int label = context.Label;
+
+			foreach (var clause in MethodCompiler.Method.ExceptionBlocks)
+			{
+				if (clause.IsLabelWithinTry(label))
 				{
 					return clause;
 				}
@@ -1194,29 +1211,20 @@ namespace Mosa.Compiler.Framework.Stages
 		void CIL.ICILVisitor.Leave(Context context)
 		{
 			// Find enclosing finally clause
-			MosaExceptionHandler clause = FindImmediateClause(context);
+			MosaExceptionHandler clause = FindImmediateTryClause(context);
 
-			if (clause.IsLabelWithinTry(context.Label))
+			if (clause != null)
 			{
-				if (clause != null)
-				{
-					// Find finally block
-					var finallyBlock = BasicBlocks.GetByLabel(clause.HandlerOffset);
+				// Find finally block
+				var finallyBlock = BasicBlocks.GetByLabel(clause.HandlerOffset);
 
-					var before = context.InsertBefore();
+				//var before = context.InsertBefore();
 
-					before.SetInstruction(IRInstruction.EndException, finallyBlock);
-				}
-			}
-			else if (clause.IsLabelWithinHandler(context.Label))
-			{
-				context.ReplaceInstructionOnly(IRInstruction.EndException);
-
-				// nothing!
+				context.SetInstruction(IRInstruction.TryEnd, finallyBlock);
 			}
 			else
 			{
-				throw new Exception("can not find leave clause");
+				context.ReplaceInstructionOnly(IRInstruction.ExceptionEnd);
 			}
 
 		}

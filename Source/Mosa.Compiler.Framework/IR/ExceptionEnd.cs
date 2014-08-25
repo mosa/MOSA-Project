@@ -12,14 +12,14 @@ namespace Mosa.Compiler.Framework.IR
 	/// <summary>
 	/// An abstract intermediate representation of the end of a exception block.
 	/// </summary>
-	public sealed class EndException : BaseIRInstruction
+	public sealed class ExceptionEnd : BaseIRInstruction
 	{
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of <see cref="EndException"/>.
+		/// Initializes a new instance of <see cref="ExceptionEnd"/>.
 		/// </summary>
-		public EndException() :
+		public ExceptionEnd() :
 			base(0, 1)
 		{
 		}
@@ -35,7 +35,7 @@ namespace Mosa.Compiler.Framework.IR
 		/// <param name="context">The context.</param>
 		public override void Visit(IIRVisitor visitor, Context context)
 		{
-			visitor.EndException(context);
+			visitor.ExceptionEnd(context);
 		}
 
 		#endregion Instruction Overrides

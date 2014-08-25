@@ -289,9 +289,8 @@ namespace Mosa.Compiler.Framework
 			{
 				var block = BasicBlocks.GetByLabel(clause.HandlerOffset);
 
-				var temp = StackLayout.AddStackLocal(TypeSystem.BuiltIn.Pointer);
-
-				exceptionReturnOperand.Add(block, temp);
+				var register = VirtualRegisters.Allocate(TypeSystem.BuiltIn.Pointer);
+				exceptionReturnOperand.Add(block, register);
 			}
 		}
 

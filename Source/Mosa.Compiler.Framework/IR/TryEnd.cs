@@ -10,16 +10,16 @@
 namespace Mosa.Compiler.Framework.IR
 {
 	/// <summary>
-	/// An abstract intermediate representation of the end of a finally block.
+	/// An abstract intermediate representation of the end of the try block.
 	/// </summary>
-	public sealed class EndFinally : BaseIRInstruction
+	public sealed class TryEnd : BaseIRInstruction
 	{
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of <see cref="EndFinally"/>.
+		/// Initializes a new instance of <see cref="TryEnd"/>.
 		/// </summary>
-		public EndFinally() :
+		public TryEnd() :
 			base(0, 0)
 		{
 		}
@@ -35,7 +35,7 @@ namespace Mosa.Compiler.Framework.IR
 		/// <param name="context">The context.</param>
 		public override void Visit(IIRVisitor visitor, Context context)
 		{
-			visitor.EndFinally(context);
+			visitor.TryEnd(context);
 		}
 
 		#endregion Instruction Overrides
