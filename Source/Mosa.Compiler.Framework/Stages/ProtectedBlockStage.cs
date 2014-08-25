@@ -21,16 +21,17 @@ namespace Mosa.Compiler.Framework.Stages
 		protected override void Run()
 		{
 			MethodCompiler.CreateExceptionReturnOperands();
-			
+
 			// Handler Code
 			foreach (var clause in MethodCompiler.Method.ExceptionBlocks)
 			{
 				var block = BasicBlocks.GetByLabel(clause.TryOffset);
 
-				//
+				var context = new Context(InstructionSet, block);
 
+				context.AppendInstruction(IRInstruction.StartTry);
 			}
-			
+
 			// Handler Code
 			foreach (var clause in MethodCompiler.Method.ExceptionBlocks)
 			{
