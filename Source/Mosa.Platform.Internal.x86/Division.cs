@@ -1,115 +1,206 @@
 ﻿/*
- * (c) 2013 MOSA - The Managed Operating System Alliance
+ * (c) 2014 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
+ *  Stefan Andres Charsley (charsleysa) <charsleysa@gmail.com>
  */
-
-//Source:
-// http://www.cs.usfca.edu/~benson/cs326/pintos/pintos/src/lib/arithmetic.c
-
-//License:
-// http://www.stanford.edu/class/cs140/projects/pintos/pintos_14.html#SEC172
-
-//Pintos, including its documentation, is subject to the following license:
-//Copyright © 2004, 2005, 2006 Board of Trustees, Leland Stanford Jr. University. All rights reserved.
-//Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-//The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-//THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-//Code derived from Nachos is subject to the following license:
-//Copyright © 1992-1996 The Regents of the University of California. All rights reserved.
-//Permission to use, copy, modify, and distribute this software and its documentation for any purpose, without fee, and without written agreement is hereby granted, provided that the above copyright notice and the following two paragraphs appear in all copies of this software.
-//IN NO EVENT SHALL THE UNIVERSITY OF CALIFORNIA BE LIABLE TO ANY PARTY FOR DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES ARISING OUT OF THE USE OF THIS SOFTWARE AND ITS DOCUMENTATION, EVEN IF THE UNIVERSITY OF CALIFORNIA HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//THE UNIVERSITY OF CALIFORNIA SPECIFICALLY DISCLAIMS ANY WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE. THE SOFTWARE PROVIDED HEREUNDER IS ON AN "AS IS" BASIS, AND THE UNIVERSITY OF CALIFORNIA HAS NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
 
 namespace Mosa.Platform.Internal.x86
 {
-	public static class Division
+	public unsafe struct Long
 	{
-		/* Returns the number of leading zero bits in X,  which must be nonzero. */
+		public uint _lo;
+		public int _hi;
+	}
 
-		public static int nlz(uint x)
-		{
-			int n = 0;
+	public unsafe struct ULong
+	{
+		public uint _lo;
+		public uint _hi;
+	}
 
-			if (x <= 0x0000FFFF)
-			{
-				n += 16;
-				x <<= 16;
-			}
-			if (x <= 0x00FFFFFF)
-			{
-				n += 8;
-				x <<= 8;
-			}
-			if (x <= 0x0FFFFFFF)
-			{
-				n += 4;
-				x <<= 4;
-			}
-			if (x <= 0x3FFFFFFF)
-			{
-				n += 2;
-				x <<= 2;
-			}
-			if (x <= 0x7FFFFFFF)
-				n++;
-
-			return n;
-		}
+	public unsafe static class Division
+	{
 
 		/* Divides unsigned 64-bit N by unsigned 64-bit D and returns the quotient. */
 
 		public static ulong udiv64(ulong n, ulong d)
 		{
-			if ((d >> 32) == 0)
-			{
-				ulong b = 1L << 32;
-				uint n1 = (uint)(n >> 32);
-				uint n0 = (uint)n;
-				uint d0 = (uint)d;
-
-				return Native.Div(b * (n1 % d0) + n0, d0) + b * (n1 / d0);
-			}
-			else
-			{
-				if (n < d)
-					return 0;
-				else
-				{
-					uint d1 = (uint)(d >> 32);
-					int s = nlz(d1);
-					ulong q = Native.Div(n >> 1, (uint)((d << s) >> 32)) >> (31 - s);
-					return n - (q - 1) * d < d ? q - 1 : q;
-				}
-			}
+			ulong quotient;
+			ulong remainder;
+			DivUmod(n, d, out quotient, out remainder);
+			return quotient;
 		}
 
 		/* Divides unsigned 64-bit N by unsigned 64-bit D and returns the remainder. */
 
-		public static uint umod64(ulong n, ulong d)
+		public static ulong umod64(ulong n, ulong d)
 		{
-			return (uint)(n - d * udiv64(n, d));
+			ulong quotient;
+			ulong remainder;
+			DivUmod(n, d, out quotient, out remainder);
+			return remainder;
 		}
 
 		/* Divides signed 64-bit N by signed 64-bit D and returns the quotient. */
 
 		public static long sdiv64(long n, long d)
 		{
-			ulong n_abs = (ulong)(n >= 0 ? n : -n);
-			ulong d_abs = (ulong)(d >= 0 ? d : -d);
-			ulong q_abs = udiv64(n_abs, d_abs);
-			return (n < 0) == (d < 0) ? (long)q_abs : -(long)q_abs;
+			long quotient;
+			long remainder;
+			DivMod(n, d, out quotient, out remainder);
+			return quotient;
 		}
 
 		/* Divides signed 64-bit N by signed 64-bit D and returns the remainder. */
 
-		public static int smod64(long n, long d)
+		public static long smod64(long n, long d)
 		{
-			return (int)(n - d * sdiv64(n, d));
+			long quotient;
+			long remainder;
+			DivMod(n, d, out quotient, out remainder);
+			return remainder;
+		}
+
+		public static void DivUmod(ulong dividend, ulong divisor, out ulong quotient, out ulong remainder)
+		{
+			bool isFlipped = false;
+			quotient = dividend;
+			remainder = 0;
+			for (int i = 0; i < 65; i++)
+			{
+				// Left shift Remainder:Quotient by 1
+				remainder <<= 1;
+				if (isFlipped)
+				{
+					fixed (ulong* ptr = &remainder)
+					{
+						(*((ULong*)ptr))._lo |= 1;
+					}
+				}
+				fixed (ulong* ptr = &quotient)
+				{
+					isFlipped = ((*((ULong*)ptr))._hi & 0x80000000) == 0x80000000;
+				}
+				quotient <<= 1;
+
+				if (remainder >= divisor)
+				{
+					remainder -= divisor;
+					quotient++;
+				}
+			}
+		}
+
+		public unsafe static void DivMod(long dividend, long divisor, out long quotient, out long remainder)
+		{
+			// Catch divide by zero and just return zero
+			if (dividend == 0 || divisor == 0)
+			{
+				quotient = 0;
+				remainder = 0;
+				return;
+			}
+
+			// Catch divide by same number
+			if (dividend == divisor)
+			{
+				quotient = 1;
+				remainder = 0;
+				return;
+			}
+
+			// Catch divide by one
+			if (divisor == 1 || divisor == -1)
+			{
+				quotient = dividend * divisor;
+				remainder = 0;
+				return;
+			}
+
+			// Catch divide by same number but opposite sign
+			if (dividend == (divisor * -1))
+			{
+				quotient = -1;
+				remainder = 0;
+				return;
+			}
+
+			// Determine the sign of the results and make the operands positive.
+			int remainderSign = 1;
+			int quotientSign = 1;
+			ulong uQuotient = (ulong)dividend;
+			ulong uRemainder = 0;
+			ulong uDivisor = (ulong)divisor;
+			bool isFlipped = false;
+			if (dividend < 0)
+			{
+				if (dividend == -9223372036854775808)
+					uQuotient = (ulong)dividend;
+				else
+					uQuotient = (ulong)-dividend;
+				remainderSign = -1;
+			}
+			if (divisor < 0)
+			{
+				if (divisor == -9223372036854775808)
+					uDivisor = (ulong)divisor;
+				else
+					uDivisor = (ulong)-divisor;
+				quotientSign = -1;
+			}
+
+			quotientSign *= remainderSign;
+
+			for (int i = 0; i < 65; i++)
+			{
+				// Left shift Remainder:Quotient by 1
+				uRemainder <<= 1;
+				if (isFlipped)
+				{
+					(*((ULong*)&uRemainder))._lo |= 1;
+				}
+				isFlipped = ((*((ULong*)&uQuotient))._hi & 0x80000000) == 0x80000000;
+				uQuotient <<= 1;
+				
+				if (uRemainder >= uDivisor)
+				{
+					uRemainder -= uDivisor;
+					uQuotient++;
+				}
+			}
+			unchecked
+			{
+				quotient = (long)uQuotient;
+				remainder = (long)uRemainder;
+			}
+			
+			// Adjust sign of the results.
+			if (quotient != 0)
+			{
+				fixed (long* ptr = &quotient)
+				{
+					int oldSign = (((*((Long*)ptr))._hi & 0x80000000) == 0x80000000) ? -1 : 1;
+					if ((oldSign == -1 && quotientSign == -1))
+						quotient += 1;
+
+					quotient *= quotientSign;
+				}
+			}
+			if (remainder != 0)
+			{
+				fixed (long* ptr = &remainder)
+				{
+					int oldSign = (((*((Long*)ptr))._hi & 0x80000000) == 0x80000000) ? -1 : 1;
+					if ((oldSign == -1 && remainderSign == -1))
+						remainder += 1;
+
+					remainder *= remainderSign;
+				}
+			}
 		}
 	}
 }

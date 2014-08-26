@@ -32,16 +32,7 @@ namespace Mosa.HelloWorld.x86
 
 			IDT.SetInterruptHandler(ProcessInterrupt);
 
-			Console.Goto(24, 0);
 			Console.Color = Colors.White;
-
-			System.Threading.SpinLock splk = new System.Threading.SpinLock();
-			bool @lock = false;
-
-			splk.Enter(ref @lock);
-			if (@lock) Console.Write("Entered!");
-			splk.Enter(ref @lock);
-			if (@lock) Console.Write("Can't get here!");
 
 			Console.Goto(0, 0);
 

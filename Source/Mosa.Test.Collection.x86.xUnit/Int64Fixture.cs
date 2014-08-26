@@ -70,6 +70,13 @@ namespace Mosa.Test.Collection.x86.xUnit
 				return;
 			}
 
+			// C# can't handle this case and throws an OverflowException, but MOSA can handle it
+			if (a == -9223372036854775808 && b == -1)
+			{
+				Assert.Equal(0, Run<long>("Mosa.Test.Collection.Int64Tests.RemI8I8", a, b));
+				return;
+			}
+
 			Assert.Equal(Int64Tests.RemI8I8(a, b), Run<long>("Mosa.Test.Collection.Int64Tests.RemI8I8", a, b));
 		}
 
