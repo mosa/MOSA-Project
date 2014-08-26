@@ -1211,16 +1211,11 @@ namespace Mosa.Compiler.Framework.Stages
 		void CIL.ICILVisitor.Leave(Context context)
 		{
 			// Find enclosing finally clause
-			MosaExceptionHandler clause = FindImmediateTryClause(context);
+			var clause = FindImmediateTryClause(context);
 
 			if (clause != null)
 			{
-				// Find finally block
-				var finallyBlock = BasicBlocks.GetByLabel(clause.HandlerOffset);
-
-				//var before = context.InsertBefore();
-
-				context.SetInstruction(IRInstruction.TryEnd, finallyBlock);
+				context.ReplaceInstructionOnly(IRInstruction.TryEnd);
 			}
 			else
 			{

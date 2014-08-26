@@ -36,16 +36,17 @@ namespace Mosa.Tool.Explorer
 				new ProtectedBlockStage(),
 				new OperandAssignmentStage(),
 				new StaticAllocationResolutionStage(),
-				new CILTransformationStage(),
 
-				new StopStage(), //TEMP
+				new StopStage(), //TEMP			
+								
+				new CILTransformationStage(),
 
 				new ConvertCompoundStage(),
 				new UnboxValueTypeStage(),
-				//new PromoteLocalVariablesStage(),
-
+				
 				(compilerOptions.EnableSSA) ? new EdgeSplitStage() : null,
 				(compilerOptions.EnableSSA) ? new PhiPlacementStage() : null,
+
 				(compilerOptions.EnableSSA) ? new EnterSSAStage() : null,
 				(compilerOptions.EnableSSA && compilerOptions.EnableSSAOptimizations) ? new SSAOptimizations() : null,
 				(compilerOptions.EnableSSA) ? new LeaveSSA() : null,

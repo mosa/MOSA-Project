@@ -221,7 +221,7 @@ namespace Mosa.Compiler.Framework.Stages
 						continue;
 					case FlowControl.EndFinally: return;
 					case FlowControl.Leave:
-						FindAndLinkBlock(block, ctx.BranchTargets[0]);
+						//FindAndLinkBlock(block, ctx.BranchTargets[0]);
 						return;
 
 					default:
