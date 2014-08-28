@@ -939,7 +939,7 @@ namespace Mosa.Compiler.Framework.Stages
 				return;
 			}
 
-			throw new NotSupportedException(@"CILTransformationStage.UnaryBranch doesn't support CIL opcode " + opcode);
+			throw new NotImplementCompilerException(@"CILTransformationStage.UnaryBranch doesn't support CIL opcode " + opcode);
 		}
 
 		/// <summary>
@@ -983,7 +983,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="context">The context.</param>
 		void CIL.ICILVisitor.Cpobj(Context context)
 		{
-			throw new NotSupportedException();
+			throw new NotImplementCompilerException();
 		}
 
 		/// <summary>
@@ -1132,7 +1132,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="context">The context.</param>
 		void CIL.ICILVisitor.Refanyval(Context context)
 		{
-			throw new NotSupportedException();
+			throw new NotImplementCompilerException();
 		}
 
 		/// <summary>
@@ -1141,7 +1141,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="context">The context.</param>
 		void CIL.ICILVisitor.UnaryArithmetic(Context context)
 		{
-			throw new NotSupportedException();
+			throw new NotImplementCompilerException();
 		}
 
 		/// <summary>
@@ -1149,7 +1149,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="context">The context.</param>
 		void CIL.ICILVisitor.Mkrefany(Context context)
 		{
-			throw new NotSupportedException();
+			throw new NotImplementCompilerException();
 		}
 
 		/// <summary>
@@ -1158,7 +1158,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="context">The context.</param>
 		void CIL.ICILVisitor.ArithmeticOverflow(Context context)
 		{
-			throw new NotSupportedException();
+			throw new NotImplementCompilerException();
 		}
 
 		/// <summary>
@@ -1167,41 +1167,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="context">The context.</param>
 		void CIL.ICILVisitor.Endfinally(Context context)
 		{
-			context.ReplaceInstructionOnly(IRInstruction.FinallyEnd);
-		}
-
-		private MosaExceptionHandler FindImmediateTryClause(Context context)
-		{
-			MosaExceptionHandler innerClause = null;
-
-			int label = context.Label;
-
-			foreach (var clause in MethodCompiler.Method.ExceptionBlocks)
-			{
-				if (clause.IsLabelWithinTry(label))
-				{
-					return clause;
-				}
-			}
-
-			return null;
-		}
-
-		private MosaExceptionHandler FindImmediateExceptionHandlingClause(Context context)
-		{
-			MosaExceptionHandler innerClause = null;
-
-			int label = context.Label;
-
-			foreach (var clause in MethodCompiler.Method.ExceptionBlocks)
-			{
-				if (clause.IsLabelWithinTry(label))
-				{
-					return clause;
-				}
-			}
-
-			return null;
+			throw new InvalidCompilerException();
 		}
 
 		/// <summary>
@@ -1210,18 +1176,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="context">The context.</param>
 		void CIL.ICILVisitor.Leave(Context context)
 		{
-			// Find enclosing finally clause
-			var clause = FindImmediateTryClause(context);
-
-			if (clause != null)
-			{
-				context.ReplaceInstructionOnly(IRInstruction.TryEnd);
-			}
-			else
-			{
-				context.ReplaceInstructionOnly(IRInstruction.ExceptionEnd);
-			}
-
+			throw new InvalidCompilerException();
 		}
 
 		/// <summary>
@@ -1230,7 +1185,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="context">The context.</param>
 		void CIL.ICILVisitor.Arglist(Context context)
 		{
-			throw new NotSupportedException();
+			throw new NotImplementCompilerException();
 		}
 
 		/// <summary>
@@ -1239,7 +1194,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="context">The context.</param>
 		void CIL.ICILVisitor.Localalloc(Context context)
 		{
-			throw new NotSupportedException();
+			throw new NotImplementCompilerException();
 		}
 
 		/// <summary>
@@ -1248,7 +1203,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="context">The context.</param>
 		void CIL.ICILVisitor.Endfilter(Context context)
 		{
-			throw new NotSupportedException();
+			throw new NotImplementCompilerException();
 		}
 
 		/// <summary>
@@ -1277,7 +1232,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="context">The context.</param>
 		void CIL.ICILVisitor.Prefix(Context context)
 		{
-			throw new NotSupportedException();
+			throw new NotImplementCompilerException();
 		}
 
 		/// <summary>
@@ -1286,7 +1241,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="context">The context.</param>
 		void CIL.ICILVisitor.Sizeof(Context context)
 		{
-			throw new NotSupportedException();
+			throw new NotImplementCompilerException();
 		}
 
 		/// <summary>
@@ -1295,7 +1250,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="context">The context.</param>
 		void CIL.ICILVisitor.Refanytype(Context context)
 		{
-			throw new NotSupportedException();
+			throw new NotImplementCompilerException();
 		}
 
 		/// <summary>

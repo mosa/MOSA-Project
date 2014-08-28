@@ -22,7 +22,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 		/// <summary>
 		///
 		/// </summary>
-		public int TryOffset { get; private set; }
+		public int TryStart { get; private set; }
 
 		/// <summary>
 		///
@@ -32,7 +32,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 		/// <summary>
 		///
 		/// </summary>
-		public int HandlerOffset { get; private set; }
+		public int HandlerStart { get; private set; }
 
 		/// <summary>
 		///
@@ -58,7 +58,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 		/// </returns>
 		public bool IsLabelWithinTry(int label)
 		{
-			return (label >= TryOffset && label < TryEnd);
+			return (label >= TryStart && label < TryEnd);
 		}
 
 		/// <summary>
@@ -70,21 +70,17 @@ namespace Mosa.Compiler.MosaTypeSystem
 		/// </returns>
 		public bool IsLabelWithinHandler(int label)
 		{
-			return (label >= HandlerOffset && label < HandlerEnd);
+			return (label >= HandlerStart && label < HandlerEnd);
 		}
 
-		public MosaExceptionHandler(
-			ExceptionHandlerType ehType,
-			int tryOffset, int tryEnd,
-			int handlerOffset, int handlerEnd,
-			MosaType type, int? filterOffset)
+		public MosaExceptionHandler(ExceptionHandlerType ehType, int tryStart, int tryEnd, int handlerStart, int handlerEnd, MosaType type, int? filterOffset)
 		{
 			HandlerType = ehType;
 
-			TryOffset = tryOffset;
+			TryStart = tryStart;
 			TryEnd = tryEnd;
 
-			HandlerOffset = handlerOffset;
+			HandlerStart = handlerStart;
 			HandlerEnd = handlerEnd;
 
 			Type = type;

@@ -8,7 +8,9 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
+using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.IR;
+using Mosa.Compiler.InternalTrace;
 using System.Collections.Generic;
 using System.Diagnostics;
 
@@ -32,6 +34,11 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </summary>
 		private BasicBlock prologue;
 
+		/// <summary>
+		/// The trace
+		/// </summary>
+		private SectionTrace trace;
+
 		#endregion Data members
 
 		protected override void Run()
@@ -46,8 +53,10 @@ namespace Mosa.Compiler.Framework.Stages
 			if (MethodCompiler.Method.Code.Count == 0)
 				return;
 
+			trace = CreateTrace();
+
 			// Create the prologue block
-			Context context = CreateNewBlockWithContext(BasicBlock.PrologueLabel);
+			var context = CreateNewBlockWithContext(BasicBlock.PrologueLabel);
 
 			// Add a jump instruction to the first block from the prologue
 			context.AppendInstruction(IRInstruction.Jmp);
@@ -55,44 +64,51 @@ namespace Mosa.Compiler.Framework.Stages
 			prologue = context.BasicBlock;
 			BasicBlocks.AddHeaderBlock(prologue);
 
-			SplitIntoBlocks(0);
+			// Create the basic blocks
+			var targets = FindBasicBlockTargets();
+			CreateBasicBlocksFromTargets(targets);
 
 			// Create the epilogue block
 			context = CreateNewBlockWithContext(BasicBlock.EpilogueLabel);
 			epilogue = context.BasicBlock;
 
 			// Link all the blocks together
-			BuildBlockLinks(prologue);
+			BuildBasicBlockLinks(prologue);
 
 			foreach (var clause in MethodCompiler.Method.ExceptionBlocks)
 			{
-				if (clause.HandlerOffset != 0)
+				if (clause.HandlerStart != 0)
 				{
-					BasicBlock basicBlock = BasicBlocks.GetByLabel(clause.HandlerOffset);
-					BuildBlockLinks(basicBlock);
+					trace.Log("Exception HandlerOffset: 0x" + clause.HandlerStart.ToString("X4"));
+
+					var basicBlock = BasicBlocks.GetByLabel(clause.HandlerStart);
+					BuildBasicBlockLinks(basicBlock);
 					BasicBlocks.AddHeaderBlock(basicBlock);
 				}
 				if (clause.FilterOffset != null)
 				{
-					BasicBlock basicBlock = BasicBlocks.GetByLabel(clause.FilterOffset.Value);
-					BuildBlockLinks(basicBlock);
+					trace.Log("Exception FilterOffset: 0x" + clause.FilterOffset.Value.ToString("X4"));
+
+					var basicBlock = BasicBlocks.GetByLabel(clause.FilterOffset.Value);
+					BuildBasicBlockLinks(basicBlock);
 					BasicBlocks.AddHeaderBlock(basicBlock);
 				}
 			}
 		}
 
 		/// <summary>
-		/// Finds all targets.
+		/// Finds basic block targets.
 		/// </summary>
-		/// <param name="index">The index.</param>
-		private void SplitIntoBlocks(int index)
+		/// <returns></returns>
+		/// <exception cref="InvalidCompilerException"></exception>
+		private SortedSet<int> FindBasicBlockTargets()
 		{
-			Dictionary<int, int> targets = new Dictionary<int, int>();
+			var targets = new SortedSet<int>();
 
-			targets.Add(index, -1);
+			targets.Add(0);
 
 			// Find out all targets labels
-			for (Context ctx = new Context(InstructionSet, index); ctx.Index >= 0; ctx.GotoNext())
+			for (var ctx = new Context(InstructionSet, 0); ctx.Index >= 0; ctx.GotoNext())
 			{
 				switch (ctx.Instruction.FlowControl)
 				{
@@ -102,142 +118,162 @@ namespace Mosa.Compiler.Framework.Stages
 					case FlowControl.Return: continue;
 					case FlowControl.Throw: continue;
 					case FlowControl.UnconditionalBranch:
-
-						// Unconditional branch
-						Debug.Assert(ctx.BranchTargets.Length == 1);
-						if (!targets.ContainsKey(ctx.BranchTargets[0]))
-							targets.Add(ctx.BranchTargets[0], -1);
-						continue;
+						{
+							Debug.Assert(ctx.BranchTargets.Length == 1);
+							targets.AddIfNew(ctx.BranchTargets[0]);
+							continue;
+						}
 					case FlowControl.Switch: goto case FlowControl.ConditionalBranch;
 					case FlowControl.ConditionalBranch:
-
-						// Conditional branch with multiple targets
-						foreach (int target in ctx.BranchTargets)
-							if (!targets.ContainsKey(target))
-								targets.Add(target, -1);
-						int next = ctx.Next.Label;
-						if (!targets.ContainsKey(next))
-							targets.Add(next, -1);
-						continue;
+						{
+							foreach (int target in ctx.BranchTargets)
+								targets.AddIfNew(target);
+							targets.AddIfNew(ctx.Next.Label);
+							continue;
+						}
 					case FlowControl.EndFinally: continue;
 					case FlowControl.Leave:
-						Debug.Assert(ctx.BranchTargets.Length == 1);
-						if (!targets.ContainsKey(ctx.BranchTargets[0]))
-							targets.Add(ctx.BranchTargets[0], -1);
-						continue;
+						{
+							Debug.Assert(ctx.BranchTargets.Length == 1);
+							targets.AddIfNew(ctx.BranchTargets[0]);
+							continue;
+						}
 					default:
-						Debug.Assert(false);
-						break;
+						throw new InvalidCompilerException();
 				}
 			}
 
-			// Add Exception Class targets
+			// Add exception targets
 			foreach (var clause in MethodCompiler.Method.ExceptionBlocks)
 			{
-				if (!targets.ContainsKey(clause.HandlerOffset))
-					targets.Add(clause.HandlerOffset, -1);
+				targets.AddIfNew(clause.HandlerStart);
+				targets.AddIfNew(clause.TryStart);
 
-				if (!targets.ContainsKey(clause.TryOffset))
-					targets.Add(clause.TryOffset, -1);
-
-				if (clause.FilterOffset != null && !targets.ContainsKey(clause.FilterOffset.Value))
-					targets.Add(clause.FilterOffset.Value, -1);
+				if (clause.FilterOffset != null)
+					targets.AddIfNew(clause.FilterOffset.Value);
 			}
 
+			foreach (var target in targets)
+			{
+				trace.Log("Target: " + target.ToString("X4"));
+			}
+
+			return targets;
+		}
+
+		/// <summary>
+		/// Creates the basic blocks from targets.
+		/// </summary>
+		/// <param name="targets">The targets.</param>
+		private void CreateBasicBlocksFromTargets(SortedSet<int> targets)
+		{
 			BasicBlock currentBlock = null;
 			Context previous = null;
 
-			for (Context ctx = new Context(InstructionSet, index); ctx.Index >= 0; ctx.GotoNext())
+			for (var ctx = new Context(InstructionSet, 0); ctx.Index >= 0; previous = ctx.Clone(), ctx.GotoNext())
 			{
-				if (targets.ContainsKey(ctx.Label))
+				if (!targets.Contains(ctx.Label))
+					continue;
+
+				if (currentBlock != null)
 				{
-					if (currentBlock != null)
+					previous = ctx.Previous;
+
+					var flow = previous.Instruction.FlowControl;
+
+					if (flow == FlowControl.Next || flow == FlowControl.Call || flow == FlowControl.ConditionalBranch || flow == FlowControl.Switch)
 					{
-						previous = ctx.Previous;
-
-						var flow = previous.Instruction.FlowControl;
-
-						if (flow == FlowControl.Next || flow == FlowControl.Call || flow == FlowControl.ConditionalBranch || flow == FlowControl.Switch)
-						{
-							// This jump joins fall-through blocks, by giving them a proper end.
-							previous.AppendInstruction(IRInstruction.Jmp);
-							previous.SetBranch(ctx.Label);
-						}
-
-						// Close current block
-						previous.AppendInstruction(IRInstruction.BlockEnd);
-						currentBlock.EndIndex = previous.Index;
+						// This jump joins fall-through blocks by giving them a proper end.
+						previous.AppendInstruction(IRInstruction.Jmp);
+						previous.SetBranch(ctx.Label);
 					}
 
-					Context prev = ctx.InsertBefore();
-					prev.SetInstruction(IRInstruction.BlockStart);
-					currentBlock = BasicBlocks.CreateBlock(ctx.Label, prev.Index);
-
-					targets.Remove(ctx.Label);
+					// Close current block
+					previous.AppendInstruction(IRInstruction.BlockEnd);
+					currentBlock.EndIndex = previous.Index;
 				}
 
-				previous = ctx.Clone();
+				Context prev = ctx.InsertBefore();
+				prev.SetInstruction(IRInstruction.BlockStart);
+				currentBlock = BasicBlocks.CreateBlock(ctx.Label, prev.Index);
 			}
 
 			// Close current block
 			previous.AppendInstruction(IRInstruction.BlockEnd);
 			currentBlock.EndIndex = previous.Index;
-
-			Debug.Assert(targets.Count <= 1);
 		}
 
 		/// <summary>
-		/// Builds the block links.
+		/// Builds the basic block links.
 		/// </summary>
-		/// <param name="block">The current block.</param>
-		private void BuildBlockLinks(BasicBlock block)
+		/// <param name="block">The block.</param>
+		/// <exception cref="InvalidCompilerException"></exception>
+		private void BuildBasicBlockLinks(BasicBlock block)
 		{
-			for (Context ctx = CreateContext(block); !ctx.IsBlockEndInstruction; ctx.GotoNext())
+			for (var ctx = CreateContext(block); !ctx.IsBlockEndInstruction; ctx.GotoNext())
 			{
 				switch (ctx.Instruction.FlowControl)
 				{
 					case FlowControl.Next: continue;
 					case FlowControl.Call: continue;
 					case FlowControl.Return:
-						if (!block.NextBlocks.Contains(epilogue))
-							LinkBlocks(block, epilogue);
-						return;
-
+						{
+							if (!block.NextBlocks.Contains(epilogue))
+								LinkBlocks(block, epilogue);
+							return;
+						}
 					case FlowControl.Break: goto case FlowControl.UnconditionalBranch;
 					case FlowControl.Throw: continue;
 					case FlowControl.Switch: goto case FlowControl.ConditionalBranch;
 					case FlowControl.UnconditionalBranch:
-						FindAndLinkBlock(block, ctx.BranchTargets[0]);
-						return;
-
+						{
+							LinkBlocks(block, ctx.BranchTargets[0]);
+							return;
+						}
 					case FlowControl.ConditionalBranch:
-						foreach (int target in ctx.BranchTargets)
-							FindAndLinkBlock(block, target);
+						{
+							foreach (int target in ctx.BranchTargets)
+								LinkBlocks(block, target);
 
-						int nextIndex = ctx.Index + 1;
-						if (nextIndex < this.InstructionSet.Used)
-							FindAndLinkBlock(block, InstructionSet.Data[nextIndex].Label);
-
-						continue;
+							int nextIndex = ctx.Index + 1;
+							if (nextIndex < this.InstructionSet.Used)
+								LinkBlocks(block, InstructionSet.Data[nextIndex].Label);
+							continue;
+						}
 					case FlowControl.EndFinally: return;
 					case FlowControl.Leave:
-						//FindAndLinkBlock(block, ctx.BranchTargets[0]);
-						return;
+						{
+							bool createLink = false;
 
+							var entry = FindImmediateExceptionEntry(ctx);
+
+							if (entry != null)
+							{
+								if (entry.IsLabelWithinTry(ctx.Label))
+									createLink = true;
+							}
+
+							if (createLink)
+							{
+								foreach (int target in ctx.BranchTargets)
+									LinkBlocks(block, target);
+							}
+
+							return;
+						}
 					default:
-						Debug.Assert(false);
-						break;
+						throw new InvalidCompilerException();
 				}
 			}
 		}
 
-		private void FindAndLinkBlock(BasicBlock block, int target)
+		private void LinkBlocks(BasicBlock block, int target)
 		{
-			BasicBlock next = BasicBlocks.GetByLabel(target);
+			var next = BasicBlocks.GetByLabel(target);
 			if (!block.NextBlocks.Contains(next))
 			{
 				LinkBlocks(block, next);
-				BuildBlockLinks(next);
+				BuildBasicBlockLinks(next);
 			}
 		}
 

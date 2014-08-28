@@ -107,16 +107,16 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			var trace = CreateTrace();
 
-			foreach (BasicBlock block in BasicBlocks)
+			foreach (var block in BasicBlocks)
 			{
 				BlockStart(block);
 
-				for (Context context = new Context(InstructionSet, block); !context.IsBlockEndInstruction; context.GotoNext())
+				for (var context = new Context(InstructionSet, block); !context.IsBlockEndInstruction; context.GotoNext())
 				{
-					if (context.IsEmpty || context.IsBlockStartInstruction)
+					if (context.IsEmpty)
 						continue;
 
-					if (context.Instruction == IRInstruction.Gen || context.Instruction == IRInstruction.Kill)
+					if (context.Instruction.IgnoreDuringCodeGeneration)
 						continue;
 
 					if (context.Instruction is BasePlatformInstruction)

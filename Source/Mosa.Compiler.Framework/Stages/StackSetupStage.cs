@@ -27,14 +27,14 @@ namespace Mosa.Compiler.Framework.Stages
 				return;
 
 			// Create a prologue instruction
-			Context prologueCtx = new Context(InstructionSet, BasicBlocks.PrologueBlock);
+			var prologueCtx = new Context(InstructionSet, BasicBlocks.PrologueBlock);
 			prologueCtx.AppendInstruction(IRInstruction.Prologue);
 			prologueCtx.Label = -1;
 
 			if (BasicBlocks.EpilogueBlock != null)
 			{
 				// Create an epilogue instruction
-				Context epilogueCtx = new Context(InstructionSet, BasicBlocks.EpilogueBlock);
+				var epilogueCtx = new Context(InstructionSet, BasicBlocks.EpilogueBlock);
 				epilogueCtx.AppendInstruction(IRInstruction.Epilogue);
 				epilogueCtx.Label = Int32.MaxValue;
 			}

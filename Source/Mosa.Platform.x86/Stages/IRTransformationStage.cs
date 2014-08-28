@@ -805,7 +805,6 @@ namespace Mosa.Platform.x86.Stages
 			Operand v2 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
 			Operand v3 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 
-			// FIXME
 			context.SetInstruction2(X86.Cdq, v1, v2, operand1);
 			context.AppendInstruction2(X86.IDiv, result, v3, v1, v2, operand2);
 		}

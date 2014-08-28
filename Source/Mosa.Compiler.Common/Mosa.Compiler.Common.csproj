@@ -42,6 +42,7 @@
     <Compile Include="BitArrayExtension.cs" />
     <Compile Include="AssemblyLoadException.cs" />
     <Compile Include="InvalidCompilerException.cs" />
+    <Compile Include="SortedSetExtension.cs" />
     <Compile Include="Metadata.cs" />
     <Compile Include="NotImplementCompilerException.cs" />
     <Compile Include="CompilerException.cs" />

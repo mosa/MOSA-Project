@@ -287,7 +287,7 @@ namespace Mosa.Compiler.Framework
 		{
 			foreach (var clause in Method.ExceptionBlocks)
 			{
-				var block = BasicBlocks.GetByLabel(clause.HandlerOffset);
+				var block = BasicBlocks.GetByLabel(clause.HandlerStart);
 
 				var register = VirtualRegisters.Allocate(TypeSystem.BuiltIn.Pointer);
 				exceptionReturnOperand.Add(block, register);

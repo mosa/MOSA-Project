@@ -320,7 +320,7 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 					(int)eh.TryStart.Offset,
 					(int)eh.TryEnd.Offset,
 					(int)eh.HandlerStart.Offset,
-					(int)eh.TryEnd.Offset,
+					(int)eh.HandlerEnd.Offset,
 					eh.CatchType == null ? null : metadata.Loader.GetType(resolver.Resolve(eh.CatchType.ToTypeSig())),
 					eh.FilterStart == null ? null : (int?)eh.FilterStart.Offset
 				));

@@ -19,9 +19,17 @@ namespace Mosa.Compiler.Framework
 		protected override void Run()
 		{
 			for (int index = 0; index < BasicBlocks.Count; index++)
-				for (Context ctx = new Context(InstructionSet, BasicBlocks[index]); !ctx.IsBlockEndInstruction; ctx.GotoNext())
-					if (!ctx.IsEmpty)
+			{
+				for (var ctx = new Context(InstructionSet, BasicBlocks[index]); !ctx.IsBlockEndInstruction; ctx.GotoNext())
+				{
+					{
+						if (ctx.IsEmpty)
+							continue;
+
 						ctx.Clone().Visit(this);
+					}
+				}
+			}
 		}
 	}
 }

@@ -17,6 +17,8 @@ namespace Mosa.TestWorld.x86.Tests
 			testMethods.Add(ExceptionTest2);
 			testMethods.Add(ExceptionTest3);
 			testMethods.Add(ExceptionTest4);
+			testMethods.Add(ExceptionTest5);
+			testMethods.Add(ExceptionTest6);
 		}
 
 		public static bool ExceptionTest1()
@@ -141,6 +143,63 @@ namespace Mosa.TestWorld.x86.Tests
 			a = a + 7;
 
 			return (a == 69);
+		}
+
+		public static bool ExceptionTest6()
+		{
+			int a = 10;
+
+			try
+			{
+				a = a + 20;
+			}
+			catch
+			{
+				a = a + 30;
+			}
+			finally
+			{
+				a = a + 40;
+			}
+
+			a = a + 50;
+
+			return (a == 80);
+		}
+
+		public static bool ExceptionTest7()
+		{
+			int a = 10;
+
+			try
+			{
+				a = a + 15;
+				try
+				{
+					a = a + 20;
+				}
+				catch
+				{
+					try
+					{
+						a = a + 30;
+					}
+					catch
+					{
+						a = a + 40;
+					}
+					a = a + 50;
+				}
+				a = a + 55;
+			}
+			catch
+			{
+				a = a + 40;
+			}
+
+			a = a + 60;
+
+			return (a == 120);
 		}
 	}
 }

@@ -132,7 +132,7 @@ namespace Mosa.Platform.x86.Stages
 					uint filter = 0;
 					MosaType type = clause.Type;
 
-					handler = (uint)codeEmitter.GetPosition(clause.HandlerOffset);
+					handler = (uint)codeEmitter.GetPosition(clause.HandlerStart);
 
 					if (kind == ExceptionHandlerType.Filter)
 					{
