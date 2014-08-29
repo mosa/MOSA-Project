@@ -542,19 +542,10 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IIRVisitor.Return(Context context)
 		{
-			Debug.Assert(context.BranchTargets != null);
+			//Debug.Assert(context.BranchTargets != null);
 
 			if (context.Operand1 != null)
 			{
-				// HACK - to support test suit on windows
-				//if (context.Operand1.IsR)
-				//{
-				//	Operand stack = methodCompiler.StackLayout.AddStackLocal(context.Operand1.Type);
-				//	Context before = context.InsertBefore();
-				//	architecture.InsertMoveInstruction(before, stack, context.Operand1);
-				//	before.AppendInstruction(X86.Fld, null, stack);
-				//}
-
 				var returnOperand = context.Operand1;
 
 				context.Remove();
@@ -577,7 +568,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IIRVisitor.InternalReturn(Context context)
 		{
-			Debug.Assert(context.BranchTargets == null);
+			//Debug.Assert(context.BranchTargets == null);
 
 			// To return from an internal method call (usually from within a finally or exception clause)
 			context.SetInstruction(X86.Ret);
@@ -853,7 +844,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IIRVisitor.Switch(Context context)
 		{
-			int[] targets = context.BranchTargets;
+			var targets = context.BranchTargets;
 			Operand operand = context.Operand1;
 
 			context.Remove();
@@ -1014,6 +1005,21 @@ namespace Mosa.Platform.x86.Stages
 		}
 
 		/// <summary>
+		/// Visitation function for CallFinally.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IIRVisitor.CallFinally(Context context)
+		{
+			// TODO
+			var EDI = Operand.CreateCPURegister(TypeSystem.BuiltIn.Pointer, GeneralPurposeRegister.EDI);
+
+			//var addr = context.o
+
+			context.SetInstruction(IRInstruction.KillAll);
+			context.AppendInstruction(X86.Mov, EDI, null);
+		}
+
+		/// <summary>
 		/// Visitation function for IntegerToFloatingPointConversion.
 		/// </summary>
 		/// <param name="context">The context.</param>
@@ -1060,14 +1066,6 @@ namespace Mosa.Platform.x86.Stages
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IIRVisitor.IntrinsicMethodCall(Context context)
-		{
-		}
-
-		/// <summary>
-		/// Visitation function for CallFinally.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void IIRVisitor.CallFinally(Context context)
 		{
 		}
 

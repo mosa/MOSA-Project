@@ -354,12 +354,11 @@ namespace Mosa.Compiler.Framework
 			while (ctx.IsEmpty);
 
 			// Find branch or jump to (to) and replace it with js
-			//while (ctx.BranchTargets != null)
 			while (!ctx.IsBlockStartInstruction)
 			{
 				if (ctx.BranchTargets != null)
 				{
-					int[] targets = ctx.BranchTargets;
+					var targets = ctx.BranchTargets;
 					for (int index = 0; index < targets.Length; index++)
 					{
 						if (targets[index] == oldTarget.Label)

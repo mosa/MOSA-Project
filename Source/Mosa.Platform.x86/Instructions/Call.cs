@@ -20,7 +20,7 @@ namespace Mosa.Platform.x86.Instructions
 		#region Data Member
 
 		private static readonly OpCode RegCall = new OpCode(new byte[] { 0xFF }, 2);
-		private static readonly byte[] LabelCall = new byte[] { 0xE8 };
+		private static readonly byte[] CALL = new byte[] { 0xE8 };
 
 		#endregion Data Member
 
@@ -53,7 +53,7 @@ namespace Mosa.Platform.x86.Instructions
 		{
 			if (context.OperandCount == 0)
 			{
-				emitter.EmitRelativeBranch(LabelCall, context.BranchTargets[0]);
+				emitter.EmitRelativeBranch(CALL, context.BranchTargets[0]);
 				return;
 			}
 

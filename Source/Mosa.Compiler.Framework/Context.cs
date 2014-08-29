@@ -424,15 +424,7 @@ namespace Mosa.Compiler.Framework
 		public bool BranchHint
 		{
 			get { return instructionSet.Data[index].BranchHint; }
-			set
-			{
-				instructionSet.Data[index].BranchHint = value;
-				if (block != null && BranchTargets != null && BranchTargets.Length == 1)
-					if (value)
-						block.HintTarget = BranchTargets[0];
-					else
-						block.HintTarget = -1;
-			}
+			set { instructionSet.Data[index].BranchHint = value; }
 		}
 
 		/// <summary>

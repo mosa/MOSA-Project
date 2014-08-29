@@ -190,7 +190,7 @@ namespace Mosa.Compiler.Framework
 			{
 				for (int i = 0; (i < 2) && (i < context.BranchTargets.Length); i++)
 				{
-					s.Append(String.Format(@" L_{0:X4},", context.BranchTargets[i]));
+					s.Append(String.Format(" L_{0:X4},", context.BranchTargets[i]));
 				}
 
 				if (context.BranchTargets.Length > 2)

@@ -44,7 +44,7 @@ namespace Mosa.Compiler.Framework.Stages
 					continue;
 
 				Debug.Assert(context.Instruction.FlowControl == FlowControl.UnconditionalBranch);
-				Debug.Assert(context.BranchTargets.Length == 1);
+				//Debug.Assert(context.BranchTargets.Length == 1);
 
 				var target = context.BranchTargets[0];
 

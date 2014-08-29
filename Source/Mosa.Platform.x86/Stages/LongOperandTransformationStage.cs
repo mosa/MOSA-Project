@@ -696,7 +696,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		private void ExpandBinaryBranch(Context context)
 		{
-			Debug.Assert(context.BranchTargets.Length == 1);
+			//Debug.Assert(context.BranchTargets.Length == 1);
 
 			Operand op1L, op1H, op2L, op2H;
 			SplitLongOperand(context.Operand1, out op1L, out op1H);
