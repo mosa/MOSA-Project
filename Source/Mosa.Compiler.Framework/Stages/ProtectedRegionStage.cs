@@ -14,9 +14,9 @@ using Mosa.Compiler.MosaTypeSystem;
 namespace Mosa.Compiler.Framework.Stages
 {
 	/// <summary>
-	/// This stage inserts IR instructions related to protected blocks.
+	/// This stage inserts IR instructions related to protected regions.
 	/// </summary>
-	public class ProtectedBlockStage : BaseMethodCompilerStage
+	public class ProtectedRegionStage : BaseMethodCompilerStage
 	{
 		protected override void Run()
 		{
@@ -31,11 +31,11 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private void InsertBlockProtectInstructions()
 		{
-			foreach (var clause in MethodCompiler.Method.ExceptionBlocks)
+			foreach (var entry in MethodCompiler.Method.ExceptionBlocks)
 			{
-				var tryBlock = BasicBlocks.GetByLabel(clause.TryStart);
+				var tryBlock = BasicBlocks.GetByLabel(entry.TryStart);
 
-				var tryFilter = BasicBlocks.GetByLabel(clause.HandlerStart);
+				var tryHandler = BasicBlocks.GetByLabel(entry.HandlerStart);
 
 				var context = new Context(InstructionSet, tryBlock);
 
@@ -44,20 +44,17 @@ namespace Mosa.Compiler.Framework.Stages
 					context.GotoNext();
 				}
 
-				context.AppendInstruction(IRInstruction.TryStart, tryFilter);
+				context.AppendInstruction(IRInstruction.TryStart, tryHandler);
 
-				// find handler block
-				var handlerBlock = BasicBlocks.GetByLabel(clause.HandlerStart);
+				context = new Context(InstructionSet, tryHandler);
 
-				context = new Context(InstructionSet, handlerBlock);
-
-				if (clause.HandlerType == ExceptionHandlerType.Exception)
+				if (entry.HandlerType == ExceptionHandlerType.Exception)
 				{
-					var exceptionObject = MethodCompiler.CreateVirtualRegister(clause.Type);
+					var exceptionObject = MethodCompiler.CreateVirtualRegister(entry.Type);
 
 					context.AppendInstruction(IRInstruction.ExceptionStart, exceptionObject);
 				}
-				else if (clause.HandlerType == ExceptionHandlerType.Finally)
+				else if (entry.HandlerType == ExceptionHandlerType.Finally)
 				{
 					context.AppendInstruction(IRInstruction.FinallyStart);
 				}
@@ -94,11 +91,14 @@ namespace Mosa.Compiler.Framework.Stages
 
 					if (createLink)
 					{
-						var finallyBlock = BasicBlocks.GetByLabel(context.BranchTargets[0]);
+						var tryEndNext = context.BranchTargets[0];
+						var tryEndNextBlock = BasicBlocks.GetByLabel(tryEndNext);
 
-						context.ReplaceInstructionOnly(IRInstruction.TryEnd);
-						context.AppendInstruction(IRInstruction.Jmp, finallyBlock);
-						//LinkBlocks(context, finallyBlock);
+						var finallyBlock = BasicBlocks.GetByLabel(entry.HandlerStart);
+
+						context.SetInstruction(IRInstruction.CallFinally, finallyBlock);
+						context.AppendInstruction(IRInstruction.TryEnd);
+						context.AppendInstruction(IRInstruction.Jmp, tryEndNextBlock);
 					}
 					else
 					{

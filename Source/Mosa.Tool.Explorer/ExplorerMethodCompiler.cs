@@ -32,7 +32,7 @@ namespace Mosa.Tool.Explorer
 			Pipeline.Add(new IMethodCompilerStage[] {
 				new CILDecodingStage(),
 				new BasicBlockBuilderStage(),
-				new ProtectedBlockStage(),
+				new ProtectedRegionStage(),
 				new StackSetupStage(),
 				new OperandAssignmentStage(),
 				new StaticAllocationResolutionStage(),
@@ -40,13 +40,13 @@ namespace Mosa.Tool.Explorer
 				new ConvertCompoundStage(),
 				new UnboxValueTypeStage(),
 
-				new StopStage(), //TEMP
-
 				(compilerOptions.EnableSSA) ? new EdgeSplitStage() : null,
 				(compilerOptions.EnableSSA) ? new PhiPlacementStage() : null,
 				(compilerOptions.EnableSSA) ? new EnterSSAStage() : null,
 				(compilerOptions.EnableSSA && compilerOptions.EnableSSAOptimizations) ? new SSAOptimizations() : null,
 				(compilerOptions.EnableSSA) ? new LeaveSSA() : null,
+				
+				new StopStage(), //TEMP
 
 				new PromoteTempVariablesStage(),
 

@@ -313,5 +313,15 @@ namespace Mosa.Compiler.Framework.IR
 		///
 		/// </summary>
 		public static readonly BaseIRInstruction Kill = new Kill();
+
+		/// <summary>
+		///
+		/// </summary>
+		public static readonly BaseIRInstruction KillAll = new KillAll();
+
+		/// <summary>
+		///
+		/// </summary>
+		public static readonly BaseIRInstruction CallFinally = new CallFinally();
 	}
 }

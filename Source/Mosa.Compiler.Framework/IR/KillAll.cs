@@ -1,17 +1,17 @@
 ﻿namespace Mosa.Compiler.Framework.IR
 {
 	/// <summary>
-	/// Intermediate representation of kill.
+	/// Intermediate representation of kill all.
 	/// </summary>
-	public sealed class Kill : BaseIRInstruction
+	public sealed class KillAll : BaseIRInstruction
 	{
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="Kill"/> class.
+		/// Initializes a new instance of the <see cref="KillAll" /> class.
 		/// </summary>
-		public Kill()
-			: base(1, 0)
+		public KillAll()
+			: base(0, 0)
 		{
 		}
 

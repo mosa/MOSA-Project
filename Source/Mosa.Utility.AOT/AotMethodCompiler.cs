@@ -37,7 +37,7 @@ namespace Mosa.Utility.Aot
 			Pipeline.Add(new IMethodCompilerStage[] {
 				new CILDecodingStage(),
 				new BasicBlockBuilderStage(),
-				new ProtectedBlockStage(),
+				new ProtectedRegionStage(),
 				new StackSetupStage(),
 				new OperandAssignmentStage(),
 				new StaticAllocationResolutionStage(),

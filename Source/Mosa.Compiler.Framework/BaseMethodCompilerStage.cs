@@ -379,40 +379,6 @@ namespace Mosa.Compiler.Framework
 
 		#region Protected Block Methods
 
-		protected MosaExceptionHandler FindImmediateTryEntry(Context context)
-		{
-			MosaExceptionHandler innerClause = null;
-
-			int label = context.Label;
-
-			foreach (var clause in MethodCompiler.Method.ExceptionBlocks)
-			{
-				if (clause.IsLabelWithinTry(label))
-				{
-					return clause;
-				}
-			}
-
-			return null;
-		}
-
-		protected MosaExceptionHandler FindImmediateExceptionHandlingEntry(Context context)
-		{
-			MosaExceptionHandler innerClause = null;
-
-			int label = context.Label;
-
-			foreach (var clause in MethodCompiler.Method.ExceptionBlocks)
-			{
-				if (clause.IsLabelWithinHandler(label))
-				{
-					return clause;
-				}
-			}
-
-			return null;
-		}
-
 		protected MosaExceptionHandler FindImmediateExceptionEntry(Context context)
 		{
 			MosaExceptionHandler innerClause = null;

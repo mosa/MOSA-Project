@@ -32,7 +32,7 @@ namespace Mosa.TinyCPUSimulator.Adaptor
 			Pipeline.Add(new IMethodCompilerStage[] {
 				new CILDecodingStage(),
 				new BasicBlockBuilderStage(),
-				new ProtectedBlockStage(),
+				new ProtectedRegionStage(),
 				new StackSetupStage(),
 				new OperandAssignmentStage(),
 				new StaticAllocationResolutionStage(),

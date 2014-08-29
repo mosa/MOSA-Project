@@ -9,6 +9,7 @@
 
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.Analysis;
+using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.InternalTrace;
 using System;
 using System.Collections;
@@ -388,7 +389,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 						}
 					}
 
-					if (context.Instruction.FlowControl == FlowControl.Call)
+					if (context.Instruction.FlowControl == FlowControl.Call || context.Instruction == IRInstruction.KillAll)
 					{
 						for (int s = 0; s < PhysicalRegisterCount; s++)
 						{
@@ -500,7 +501,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 						OperandVisitor visitor = new OperandVisitor(context);
 
-						if (context.Instruction.FlowControl == FlowControl.Call)
+						if (context.Instruction.FlowControl == FlowControl.Call || context.Instruction == IRInstruction.KillAll)
 						{
 							for (int s = 0; s < PhysicalRegisterCount; s++)
 							{

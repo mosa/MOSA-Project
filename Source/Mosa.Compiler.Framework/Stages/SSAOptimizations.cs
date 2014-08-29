@@ -52,6 +52,10 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected override void Run()
 		{
+			// Method is empty - must be a plugged method
+			if (BasicBlocks.HeadBlocks.Count == 0)
+				return;
+
 			// Unable to optimize SSA w/ exceptions or finally handlers present
 			if (BasicBlocks.HeadBlocks.Count != 1)
 				return;
