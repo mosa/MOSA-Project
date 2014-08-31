@@ -142,7 +142,7 @@ namespace Mosa.TestWorld.x86.Tests
 
 			a = a + 7;
 
-			return (a == 69);
+			return (a == 19);
 		}
 
 		public static bool ExceptionTest6()

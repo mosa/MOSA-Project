@@ -92,10 +92,17 @@ namespace Mosa.Compiler.Framework.Stages
 						var tryEndNext = context.BranchTargets[0];
 						var tryEndNextBlock = BasicBlocks.GetByLabel(tryEndNext);
 
-						var finallyBlock = BasicBlocks.GetByLabel(entry.HandlerStart);
+						if (entry.HandlerType == ExceptionHandlerType.Finally)
+						{
+							var finallyBlock = BasicBlocks.GetByLabel(entry.HandlerStart);
 
-						context.SetInstruction(IRInstruction.CallFinally, finallyBlock);
-						context.AppendInstruction(IRInstruction.TryEnd);
+							context.SetInstruction(IRInstruction.CallFinally, finallyBlock);
+							context.AppendInstruction(IRInstruction.TryEnd);
+						}
+						else
+						{
+							context.SetInstruction(IRInstruction.TryEnd);
+						}
 						context.AppendInstruction(IRInstruction.Jmp, tryEndNextBlock);
 					}
 					else

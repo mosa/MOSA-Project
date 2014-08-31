@@ -115,5 +115,28 @@ namespace Mosa.Test.Collection
 
 			return a;
 		}
+
+		public static int TryFinally5()
+		{
+			int a = 10;
+
+			try
+			{
+				a = a + 20;
+			}
+			catch
+			{
+				a = a + 30;
+			}
+			finally
+			{
+				a = a + 40;
+			}
+
+			a = a + 50;
+
+			return a;
+		}
+
 	}
 }

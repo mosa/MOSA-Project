@@ -69,7 +69,7 @@ namespace Mosa.Compiler.Framework.Stages
 					}
 					else if (ctx.Instruction == IRInstruction.ExceptionEnd)
 					{
-						ctx.AppendInstruction(IRInstruction.InternalReturn);
+						ctx.SetInstruction(IRInstruction.InternalReturn);
 					}
 				}
 			}

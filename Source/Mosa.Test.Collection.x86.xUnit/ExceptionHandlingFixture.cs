@@ -37,5 +37,11 @@ namespace Mosa.Test.Collection.x86.xUnit
 		{
 			Assert.Equal(ExceptionHandlingTests.TryFinally4(), Run<int>("Mosa.Test.Collection.ExceptionHandlingTests.TryFinally4"));
 		}
+
+		[Fact]
+		public void TryFinally5()
+		{
+			Assert.Equal(ExceptionHandlingTests.TryFinally5(), Run<int>("Mosa.Test.Collection.ExceptionHandlingTests.TryFinally5"));
+		}
 	}
 }
