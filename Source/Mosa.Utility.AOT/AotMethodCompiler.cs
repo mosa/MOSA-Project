@@ -53,6 +53,7 @@ namespace Mosa.Utility.Aot
 				(compilerOptions.EnableSSA) ? new LeaveSSA() : null,
 
 				new PromoteTempVariablesStage(),
+				new ExceptionStage(),
 
 				new PlatformStubStage(),
 				new	PlatformEdgeSplitStage(),

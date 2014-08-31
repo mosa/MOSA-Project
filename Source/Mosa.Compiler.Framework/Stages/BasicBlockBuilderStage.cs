@@ -34,11 +34,6 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </summary>
 		private BasicBlock prologue;
 
-		/// <summary>
-		/// The trace
-		/// </summary>
-		private SectionTrace trace;
-
 		#endregion Data members
 
 		protected override void Run()
@@ -52,8 +47,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (MethodCompiler.Method.Code.Count == 0)
 				return;
-
-			trace = CreateTrace();
 
 			// Create the prologue block
 			var context = CreateNewBlockWithContext(BasicBlock.PrologueLabel);
@@ -79,7 +72,7 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				if (clause.HandlerStart != 0)
 				{
-					trace.Log("Exception HandlerOffset: 0x" + clause.HandlerStart.ToString("X4"));
+					//trace.Log("Exception HandlerOffset: 0x" + clause.HandlerStart.ToString("X4"));
 
 					var basicBlock = BasicBlocks.GetByLabel(clause.HandlerStart);
 					BuildBasicBlockLinks(basicBlock);
@@ -87,7 +80,7 @@ namespace Mosa.Compiler.Framework.Stages
 				}
 				if (clause.FilterOffset != null)
 				{
-					trace.Log("Exception FilterOffset: 0x" + clause.FilterOffset.Value.ToString("X4"));
+					//trace.Log("Exception FilterOffset: 0x" + clause.FilterOffset.Value.ToString("X4"));
 
 					var basicBlock = BasicBlocks.GetByLabel(clause.FilterOffset.Value);
 					BuildBasicBlockLinks(basicBlock);
@@ -119,7 +112,7 @@ namespace Mosa.Compiler.Framework.Stages
 					case FlowControl.Throw: continue;
 					case FlowControl.UnconditionalBranch:
 						{
-							Debug.Assert(ctx.BranchTargets.Length == 1);
+							//Debug.Assert(ctx.BranchTargets.Length == 1);
 							targets.AddIfNew(ctx.BranchTargets[0]);
 							continue;
 						}
@@ -134,7 +127,7 @@ namespace Mosa.Compiler.Framework.Stages
 					case FlowControl.EndFinally: continue;
 					case FlowControl.Leave:
 						{
-							Debug.Assert(ctx.BranchTargets.Length == 1);
+							//Debug.Assert(ctx.BranchTargets.Length == 1);
 							targets.AddIfNew(ctx.BranchTargets[0]);
 							continue;
 						}
@@ -153,10 +146,10 @@ namespace Mosa.Compiler.Framework.Stages
 					targets.AddIfNew(clause.FilterOffset.Value);
 			}
 
-			foreach (var target in targets)
-			{
-				trace.Log("Target: " + target.ToString("X4"));
-			}
+			//foreach (var target in targets)
+			//{
+			//	//trace.Log("Target: " + target.ToString("X4"));
+			//}
 
 			return targets;
 		}

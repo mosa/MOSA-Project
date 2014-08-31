@@ -233,7 +233,6 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 			}
 		}
 
-
 		private void ResolveMethod(MosaMethod method)
 		{
 			GenericArgumentResolver resolver = new GenericArgumentResolver();

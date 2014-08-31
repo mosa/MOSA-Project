@@ -71,19 +71,6 @@ namespace Mosa.Platform.x86.Instructions
 				return M_R;
 			}
 
-			/*
-			if (source.IsRegister && third.IsMemoryAddress)
-			{
-				if (third.IsByte || source.IsByte)
-					return R_M_8;
-				if (third.IsChar || source.IsChar)
-					return R_M_16;
-				if (third.IsShort || source.IsShort)
-					return R_M_16;
-				return R_M;
-			}
-			*/
-
 			if (source.IsRegister && third.IsRegister) return R_R;
 
 			if (source.IsMemoryAddress && third.IsConstant) return M_C;

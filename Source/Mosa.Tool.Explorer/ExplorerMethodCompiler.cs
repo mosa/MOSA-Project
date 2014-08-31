@@ -45,10 +45,11 @@ namespace Mosa.Tool.Explorer
 				(compilerOptions.EnableSSA) ? new EnterSSAStage() : null,
 				(compilerOptions.EnableSSA && compilerOptions.EnableSSAOptimizations) ? new SSAOptimizations() : null,
 				(compilerOptions.EnableSSA) ? new LeaveSSA() : null,
-				
-				new StopStage(), //TEMP
 
 				new PromoteTempVariablesStage(),
+				new ExceptionStage(),
+
+				//new StopStage(), //TEMP
 
 				new PlatformStubStage(),
 				new	PlatformEdgeSplitStage(),

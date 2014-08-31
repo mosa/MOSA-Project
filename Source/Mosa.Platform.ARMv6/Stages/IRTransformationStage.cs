@@ -170,6 +170,14 @@ namespace Mosa.Platform.ARMv6.Stages
 		}
 
 		/// <summary>
+		/// Visitation function for InternalCall.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IIRVisitor.InternalCall(Context context)
+		{
+		}
+
+		/// <summary>
 		/// Visitation function for InternalReturn.
 		/// </summary>
 		/// <param name="context">The context.</param>

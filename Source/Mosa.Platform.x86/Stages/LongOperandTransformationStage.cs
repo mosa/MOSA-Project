@@ -1173,6 +1173,14 @@ namespace Mosa.Platform.x86.Stages
 		#region IIRVisitor - Unused
 
 		/// <summary>
+		/// Visitation function for InternalCall.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IIRVisitor.InternalCall(Context context)
+		{
+		}
+
+		/// <summary>
 		/// Visitation function for InternalReturn.
 		/// </summary>
 		/// <param name="context">The context.</param>

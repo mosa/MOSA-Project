@@ -157,6 +157,14 @@ namespace Mosa.Platform.ARMv6
 		}
 
 		/// <summary>
+		/// Retrieves the exception register of the architecture.
+		/// </summary>
+		public override Register ExceptionRegister
+		{
+			get { return GeneralPurposeRegister.R10; }
+		}
+
+		/// <summary>
 		/// Retrieves the program counter register of the ARMv6.
 		/// </summary>
 		public override Register ProgramCounter

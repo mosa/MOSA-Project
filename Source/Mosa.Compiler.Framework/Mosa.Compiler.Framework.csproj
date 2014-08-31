@@ -87,6 +87,7 @@
     <Compile Include="Intrinsics\InternalInitializeArray.cs" />
     <Compile Include="Intrinsics\InternalsBase.cs" />
     <Compile Include="Intrinsics\TypeInternals.cs" />
+    <Compile Include="IR\InternalCall.cs" />
     <Compile Include="IR\ExceptionEnd.cs" />
     <Compile Include="IR\CallFinally.cs" />
     <Compile Include="IR\FinallyEnd.cs" />
@@ -124,6 +125,7 @@
     <Compile Include="RegisterAllocator\LiveInterval.cs" />
     <Compile Include="RegisterAllocator\VirtualRegister.cs" />
     <Compile Include="RegisterAllocator\GreedyRegisterAllocator.cs" />
+    <Compile Include="Stages\ExceptionStage.cs" />
     <Compile Include="Stages\ConvertCompoundStage.cs" />
     <Compile Include="Stages\InstructionStatisticsStage.cs" />
     <Compile Include="Stages\MapFileGenerationStage.cs" />

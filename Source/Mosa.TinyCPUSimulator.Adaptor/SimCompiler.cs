@@ -69,7 +69,7 @@ namespace Mosa.TinyCPUSimulator.Adaptor
 		/// </summary>
 		/// <param name="typeSystem">The type system.</param>
 		/// <param name="typeLayout">The type layout.</param>
-		/// <param name="compilerTrace">The internal trace.</param>
+		/// <param name="compilerTrace">The inter
 		/// <param name="enabledSSA">if set to <c>true</c> [enabled ssa].</param>
 		/// <param name="architecture">The architecture.</param>
 		/// <param name="simAdapter">The sim adapter.</param>

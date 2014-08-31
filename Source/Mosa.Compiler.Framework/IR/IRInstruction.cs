@@ -192,6 +192,11 @@ namespace Mosa.Compiler.Framework.IR
 		/// <summary>
 		///
 		/// </summary>
+		public static readonly BaseIRInstruction InternalCall = new InternalCall();
+
+		/// <summary>
+		///
+		/// </summary>
 		public static readonly BaseIRInstruction InternalReturn = new InternalReturn();
 
 		/// <summary>

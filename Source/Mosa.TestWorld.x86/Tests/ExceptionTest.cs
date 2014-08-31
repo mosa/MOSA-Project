@@ -164,7 +164,7 @@ namespace Mosa.TestWorld.x86.Tests
 
 			a = a + 50;
 
-			return (a == 80);
+			return (a == 120);
 		}
 
 		public static bool ExceptionTest7()

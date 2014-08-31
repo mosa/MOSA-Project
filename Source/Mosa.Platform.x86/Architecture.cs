@@ -146,6 +146,14 @@ namespace Mosa.Platform.x86
 		}
 
 		/// <summary>
+		/// Retrieves the exception register of the architecture.
+		/// </summary>
+		public override Register ExceptionRegister
+		{
+			get { return GeneralPurposeRegister.EDI; }
+		}
+
+		/// <summary>
 		/// Retrieves the program counter register of the x86.
 		/// </summary>
 		public override Register ProgramCounter

@@ -109,6 +109,14 @@ namespace Mosa.Platform.x64
 		}
 
 		/// <summary>
+		/// Retrieves the exception register of the architecture.
+		/// </summary>
+		public override Register ExceptionRegister
+		{
+			get { return null; /* GeneralPurposeRegister.EDI;*/ }
+		}
+
+		/// <summary>
 		/// Retrieves the stack pointer register of the x64.
 		/// </summary>
 		public override Register ProgramCounter

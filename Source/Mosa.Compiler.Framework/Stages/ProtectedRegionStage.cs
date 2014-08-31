@@ -20,10 +20,8 @@ namespace Mosa.Compiler.Framework.Stages
 	{
 		protected override void Run()
 		{
-			if (!HasExceptionOrFinally)
+			if (!HasProtectedRegions)
 				return;
-
-			MethodCompiler.CreateExceptionReturnOperands();
 
 			InsertBlockProtectInstructions();
 			UpdateBlockProtectInstructions();

@@ -62,6 +62,11 @@ namespace Mosa.Compiler.Framework
 		public abstract Register ProgramCounter { get; }
 
 		/// <summary>
+		/// Retrieves the exception register of the architecture.
+		/// </summary>
+		public abstract Register ExceptionRegister { get; }
+
+		/// <summary>
 		/// Gets the name of the platform.
 		/// </summary>
 		public abstract string PlatformName { get; }

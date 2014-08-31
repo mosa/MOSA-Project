@@ -563,12 +563,21 @@ namespace Mosa.Platform.x86.Stages
 		}
 
 		/// <summary>
+		/// Visitation function for InternalCall.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IIRVisitor.InternalCall(Context context)
+		{
+			context.ReplaceInstructionOnly(X86.Call);
+		}
+
+		/// <summary>
 		/// Visitation function for InternalReturn.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IIRVisitor.InternalReturn(Context context)
 		{
-			//Debug.Assert(context.BranchTargets == null);
+			Debug.Assert(context.BranchTargets == null);
 
 			// To return from an internal method call (usually from within a finally or exception clause)
 			context.SetInstruction(X86.Ret);
@@ -955,71 +964,6 @@ namespace Mosa.Platform.x86.Stages
 		}
 
 		/// <summary>
-		/// Visitation function for TryStart.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void IIRVisitor.TryStart(Context context)
-		{
-		}
-
-		/// <summary>
-		/// Visitation function for FinallyStart.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void IIRVisitor.FinallyStart(Context context)
-		{
-		}
-
-		/// <summary>
-		/// Visitation function for ExceptionStart.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void IIRVisitor.ExceptionStart(Context context)
-		{
-			// Exception Handler will pass the exception object in the register - EDX was choosen
-			context.SetInstruction(X86.Mov, context.Result, Operand.CreateCPURegister(TypeSystem.BuiltIn.Object, GeneralPurposeRegister.EDX));
-		}
-
-		/// <summary>
-		/// Visitation function for TryEnd.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void IIRVisitor.TryEnd(Context context)
-		{
-		}
-
-		/// <summary>
-		/// Visitation function for ExceptionEnd.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void IIRVisitor.ExceptionEnd(Context context)
-		{
-		}
-
-		/// <summary>
-		/// Visitation function for FinallyEnd.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void IIRVisitor.FinallyEnd(Context context)
-		{
-		}
-
-		/// <summary>
-		/// Visitation function for CallFinally.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void IIRVisitor.CallFinally(Context context)
-		{
-			// TODO
-			var EDI = Operand.CreateCPURegister(TypeSystem.BuiltIn.Pointer, GeneralPurposeRegister.EDI);
-
-			//var addr = context.o
-
-			context.SetInstruction(IRInstruction.KillAll);
-			context.AppendInstruction(X86.Mov, EDI, null);
-		}
-
-		/// <summary>
 		/// Visitation function for IntegerToFloatingPointConversion.
 		/// </summary>
 		/// <param name="context">The context.</param>
@@ -1066,6 +1010,62 @@ namespace Mosa.Platform.x86.Stages
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IIRVisitor.IntrinsicMethodCall(Context context)
+		{
+		}
+
+		/// <summary>
+		/// Visitation function for TryStart.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IIRVisitor.TryStart(Context context)
+		{
+		}
+
+		/// <summary>
+		/// Visitation function for FinallyStart.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IIRVisitor.FinallyStart(Context context)
+		{
+		}
+
+		/// <summary>
+		/// Visitation function for ExceptionStart.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IIRVisitor.ExceptionStart(Context context)
+		{
+		}
+
+		/// <summary>
+		/// Visitation function for TryEnd.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IIRVisitor.TryEnd(Context context)
+		{
+		}
+
+		/// <summary>
+		/// Visitation function for ExceptionEnd.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IIRVisitor.ExceptionEnd(Context context)
+		{
+		}
+
+		/// <summary>
+		/// Visitation function for FinallyEnd.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IIRVisitor.FinallyEnd(Context context)
+		{
+		}
+
+		/// <summary>
+		/// Visitation function for CallFinally.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IIRVisitor.CallFinally(Context context)
 		{
 		}
 

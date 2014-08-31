@@ -153,6 +153,12 @@ namespace Mosa.Compiler.Framework.IR
 		void Return(Context context);
 
 		/// <summary>
+		/// Visitation function for InternalCall.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void InternalCall(Context context);
+
+		/// <summary>
 		/// Visitation function for InternalReturn.
 		/// </summary>
 		/// <param name="context">The context.</param>
@@ -343,7 +349,7 @@ namespace Mosa.Compiler.Framework.IR
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void FinallyEnd(Context context);
-		
+
 		/// <summary>
 		/// Visitation function for CallFinally.
 		/// </summary>

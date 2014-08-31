@@ -50,9 +50,9 @@ namespace Mosa.Compiler.Framework
 		private static readonly Operand[] emptyOperandList = new Operand[0];
 
 		/// <summary>
-		/// Contains temp operand that contains return address for the exception handler
+		/// The basic block operands
 		/// </summary>
-		private Dictionary<BasicBlock, Operand> exceptionReturnOperand = new Dictionary<BasicBlock, Operand>();
+		private Dictionary<BasicBlock, Operand> basicBlockOperands;
 
 		#endregion Data Members
 
@@ -283,15 +283,23 @@ namespace Mosa.Compiler.Framework
 			return StackLayout.GetStackParameter(index);
 		}
 
-		public void CreateExceptionReturnOperands()
+		public Operand GetBasicBlockOperand(BasicBlock basicBlock)
 		{
-			foreach (var clause in Method.ExceptionBlocks)
+			// very lazy initialization
+			if (basicBlockOperands == null)
 			{
-				var block = BasicBlocks.GetByLabel(clause.HandlerStart);
-
-				var register = VirtualRegisters.Allocate(TypeSystem.BuiltIn.Pointer);
-				exceptionReturnOperand.Add(block, register);
+				basicBlockOperands = new Dictionary<BasicBlock, Operand>();
 			}
+
+			Operand operand = null;
+
+			if (!basicBlockOperands.TryGetValue(basicBlock, out operand))
+			{
+				operand = Operand.CreateBasicBlock(TypeSystem, basicBlock);
+				basicBlockOperands.Add(basicBlock, operand);
+			}
+
+			return operand;
 		}
 
 		/// <summary>

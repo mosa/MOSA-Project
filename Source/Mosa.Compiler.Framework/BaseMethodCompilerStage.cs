@@ -122,12 +122,12 @@ namespace Mosa.Compiler.Framework
 		#region Methods
 
 		/// <summary>
-		/// Gets a value indicating whether this instance has exception or finally.
+		/// Gets a value indicating whether this instance has protected regions.
 		/// </summary>
 		/// <value>
-		/// 	<c>true</c> if this instance has exception or finally; otherwise, <c>false</c>.
+		/// <c>true</c> if this instance has protected regions; otherwise, <c>false</c>.
 		/// </value>
-		protected bool HasExceptionOrFinally { get { return MethodCompiler.Method.ExceptionBlocks.Count != 0; } }
+		protected bool HasProtectedRegions { get { return MethodCompiler.Method.ExceptionBlocks.Count != 0; } }
 
 		/// <summary>
 		/// Creates the context.
