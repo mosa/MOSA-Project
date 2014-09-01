@@ -10,9 +10,7 @@
 
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.IR;
-using Mosa.Compiler.InternalTrace;
 using System.Collections.Generic;
-using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework.Stages
 {
