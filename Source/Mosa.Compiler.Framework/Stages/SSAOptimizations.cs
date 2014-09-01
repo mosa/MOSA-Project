@@ -56,18 +56,14 @@ namespace Mosa.Compiler.Framework.Stages
 			if (BasicBlocks.HeadBlocks.Count == 0)
 				return;
 
-			// Unable to optimize SSA w/ exceptions or finally handlers present
-			if (BasicBlocks.HeadBlocks.Count != 1)
-				return;
-
 			trace = CreateTrace();
 
 			PromoteLocalVariable();
 
 			// initialize worklist
-			foreach (BasicBlock block in BasicBlocks)
+			foreach (var block in BasicBlocks)
 			{
-				for (Context ctx = new Context(InstructionSet, block); !ctx.IsBlockEndInstruction; ctx.GotoNext())
+				for (var ctx = new Context(InstructionSet, block); !ctx.IsBlockEndInstruction; ctx.GotoNext())
 				{
 					if (ctx.IsEmpty)
 						continue;

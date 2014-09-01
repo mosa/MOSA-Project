@@ -204,10 +204,6 @@ namespace Mosa.Platform.ARMv6
 			        new IRTransformationStage(),
 			    });
 
-			//methodCompilerPipeline.InsertAfterLast<IBlockOrderStage>(
-			//    new SimplePeepholeOptimizationStage()
-			//);
-
 			//methodCompilerPipeline.InsertAfterLast<CodeGenerationStage>(
 			//    new ExceptionLayoutStage()
 			//);

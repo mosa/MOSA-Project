@@ -118,7 +118,6 @@
     <Compile Include="Stages\AddressModeConversionStage.cs" />
     <Compile Include="ControlRegister.cs" />
     <Compile Include="Stages\FixedRegisterAssignmentStage.cs" />
-    <Compile Include="Stages\ExceptionVectorStage.cs" />
     <Compile Include="Instructions\FarJmp.cs" />
     <Compile Include="Instructions\Leave.cs" />
     <Compile Include="Instructions\RoundSS.cs" />

@@ -39,51 +39,48 @@ namespace Mosa.Platform.x86.Stages
 			//BuildSort();
 
 			// Step 2 - Assign blocks to innermost exception clause
-			AssignBlocksToClauses();
+			AssignBlocksToProtectedRegions();
 
 			// Step 3 - Emit table of PC ranges and the clause handler
 			EmitProtectedBlockTable();
 		}
 
-		private void AssignBlocksToClauses()
+		private void AssignBlocksToProtectedRegions()
 		{
-			if (MethodCompiler.Method.ExceptionBlocks.Count == 0)
+			if (!HasProtectedRegions)
 				return;
 
 			blockExceptions = new Dictionary<BasicBlock, MosaExceptionHandler>();
 
-			foreach (BasicBlock block in BasicBlocks)
+			foreach (var block in BasicBlocks)
 			{
-				MosaExceptionHandler clause = FindExceptionClause(block);
+				var entry = FindExceptionClause(block);
 
-				if (clause != null)
+				if (entry == null)
+					return;
+
+				List<BasicBlock> blocks;
+
+				if (!exceptionBlocks.TryGetValue(entry, out blocks))
 				{
-					List<BasicBlock> blocks;
-
-					if (!exceptionBlocks.TryGetValue(clause, out blocks))
-					{
-						blocks = new List<BasicBlock>();
-						exceptionBlocks.Add(clause, blocks);
-					}
-
-					blocks.Add(block);
-					blockExceptions.Add(block, clause);
+					blocks = new List<BasicBlock>();
+					exceptionBlocks.Add(entry, blocks);
 				}
+
+				blocks.Add(block);
+				blockExceptions.Add(block, entry);
 			}
 		}
 
 		private MosaExceptionHandler FindExceptionClause(BasicBlock block)
 		{
-			Context ctx = new Context(InstructionSet, block);
+			var ctx = new Context(InstructionSet, block);
 			int label = ctx.Label;
 
-			foreach (var clause in MethodCompiler.Method.ExceptionBlocks)
+			foreach (var entry in MethodCompiler.Method.ExceptionBlocks)
 			{
-				if (clause.IsLabelWithinTry(label))
-					return clause;
-
-				//if (clause.IsLabelWithinHandler(label))
-				//    return null;
+				if (entry.IsLabelWithinTry(label))
+					return entry;
 			}
 
 			return null;
@@ -115,28 +112,28 @@ namespace Mosa.Platform.x86.Stages
 
 		private void EmitProtectedBlockTable()
 		{
-			List<ProtectedBlock> entries = new List<ProtectedBlock>();
+			var entries = new List<ProtectedBlock>();
 
-			foreach (var clause in MethodCompiler.Method.ExceptionBlocks)
+			foreach (var entry in MethodCompiler.Method.ExceptionBlocks)
 			{
-				ProtectedBlock prev = new ProtectedBlock();
+				var prev = new ProtectedBlock();
 
-				foreach (BasicBlock block in exceptionBlocks[clause])
+				foreach (var block in exceptionBlocks[entry])
 				{
 					uint start = (uint)codeEmitter.GetPosition(block.Label);
 					uint end = (uint)codeEmitter.GetPosition(block.Label + 0x0F000000);
 
-					ExceptionHandlerType kind = clause.HandlerType;
+					var kind = entry.HandlerType;
 
 					uint handler = 0;
 					uint filter = 0;
-					MosaType type = clause.Type;
+					var type = entry.Type;
 
-					handler = (uint)codeEmitter.GetPosition(clause.HandlerStart);
+					handler = (uint)codeEmitter.GetPosition(entry.HandlerStart);
 
 					if (kind == ExceptionHandlerType.Filter)
 					{
-						filter = (uint)codeEmitter.GetPosition(clause.FilterOffset.Value);
+						filter = (uint)codeEmitter.GetPosition(entry.FilterOffset.Value);
 					}
 
 					// TODO: Optimization - Search for existing exception protected region (before or after) to merge the current block
@@ -155,9 +152,9 @@ namespace Mosa.Platform.x86.Stages
 					else
 					{
 						// new protection block sequence
-						ProtectedBlock entry = new ProtectedBlock(start, end, handler, kind, type, filter);
-						entries.Add(entry);
-						prev = entry;
+						var protectedBlock = new ProtectedBlock(start, end, handler, kind, type, filter);
+						entries.Add(protectedBlock);
+						prev = protectedBlock;
 					}
 				}
 			}

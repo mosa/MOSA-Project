@@ -195,20 +195,6 @@ namespace Mosa.Platform.x86
 			compilerPipeline.InsertAfterFirst<ICompilerStage>(
 				new InterruptVectorStage()
 			);
-
-			compilerPipeline.InsertAfterFirst<InterruptVectorStage>(
-				new ExceptionVectorStage()
-			);
-
-			// Trying out IR based solution
-			//compilerPipeline.InsertBefore<MetadataStage>(
-			//	new UnboxStubStage()
-			//);
-
-			//FIXME: Uncomment
-			//compilerPipeline.InsertAfterLast<TypeLayoutStage>(
-			//    new MethodTableBuilderStage()
-			//);
 		}
 
 		/// <summary>
@@ -249,9 +235,8 @@ namespace Mosa.Platform.x86
 				new JumpPeepholeOptimizationStage()
 			);
 
-			// FIXME: Disabled for now
 			//methodCompilerPipeline.InsertAfterLast<CodeGenerationStage>(
-			//    new ExceptionLayoutStage()
+			//	new ExceptionLayoutStage()
 			//);
 		}
 
