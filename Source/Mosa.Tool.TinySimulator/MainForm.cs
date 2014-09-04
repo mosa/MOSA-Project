@@ -98,7 +98,9 @@ namespace Mosa.Tool.TinySimulator
 			outputView = new OutputView(this);
 			scriptView = new ScriptView(this);
 
+			Thread.CurrentThread.Priority = ThreadPriority.Highest;
 			worker = new Thread(ExecuteThread);
+			worker.IsBackground = false;
 			worker.Name = "SimCPU";
 			worker.Start();
 		}
@@ -296,6 +298,7 @@ namespace Mosa.Tool.TinySimulator
 		}
 
 		private long lastTimeTick = 0;
+		private Queue<BaseSimState> stateQueue = new Queue<BaseSimState>();
 
 		private void UpdateSimState(BaseSimState simState, bool forceUpdate)
 		{
@@ -308,8 +311,19 @@ namespace Mosa.Tool.TinySimulator
 
 			simState.TotalElapsedSeconds = secs;
 
-			AddHistory(simState);
+			stateQueue.Enqueue(simState);
+			if (stateQueue.Count > MaxHistory)
+				stateQueue.Dequeue(); // Throw away
+
 			AddWatch(simState);
+
+			if (forceUpdate)
+			{
+				while (stateQueue.Count > 0)
+				{
+					AddHistory(stateQueue.Dequeue());
+				}
+			}
 
 			if (forceUpdate || simState.Tick == 0 || DateTime.Now.Ticks > lastTimeTick + 2500000)
 			{
@@ -318,7 +332,7 @@ namespace Mosa.Tool.TinySimulator
 					UpdateAllDocks(simState);
 				};
 
-				Invoke(method);
+				BeginInvoke(method);
 
 				lastTimeTick = DateTime.Now.Ticks;
 			}
