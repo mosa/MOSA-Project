@@ -67,15 +67,7 @@ namespace Mosa.Tool.TinySimulator
 
 			string methodName = SimCPU.FindSymbol(simState.IP).Name;
 
-			lock (pendingHistory)
-			{
-				pendingHistory.Enqueue(new HistoryEntry(simState, methodName, MainForm.Display32));
-
-				while (pendingHistory.Count > MainForm.MaxHistory)
-				{
-					pendingHistory.Dequeue();
-				}
-			}
+			pendingHistory.Enqueue(new HistoryEntry(simState, methodName, MainForm.Display32));
 		}
 
 		public override void UpdateDock(BaseSimState simState)
@@ -89,25 +81,22 @@ namespace Mosa.Tool.TinySimulator
 			if (!MainForm.Record)
 				return;
 
-			lock (pendingHistory)
+			if (pendingHistory.Count == 0)
+				return;
+
+			dataGridView1.DataSource = null;
+
+			if (pendingHistory.Count >= MainForm.MaxHistory)
 			{
-				if (pendingHistory.Count == 0)
-					return;
-
-				dataGridView1.DataSource = null;
-
-				if (pendingHistory.Count >= MainForm.MaxHistory)
-				{
-					history.Clear();
-				}
-
-				foreach (var entry in pendingHistory)
-				{
-					history.Add(entry);
-				}
-
-				pendingHistory.Clear();
+				history.Clear();
 			}
+
+			foreach (var entry in pendingHistory)
+			{
+				history.Add(entry);
+			}
+
+			pendingHistory.Clear();
 
 			while (history.Count > MainForm.MaxHistory)
 			{
