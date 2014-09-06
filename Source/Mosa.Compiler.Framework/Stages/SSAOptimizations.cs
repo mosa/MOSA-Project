@@ -57,8 +57,8 @@ namespace Mosa.Compiler.Framework.Stages
 				return;
 
 			// Unable to optimize SSA w/ exceptions or finally handlers present
-			if (BasicBlocks.HeadBlocks.Count != 1)
-				return;
+			//if (BasicBlocks.HeadBlocks.Count != 1)
+			//	return;
 
 			trace = CreateTrace();
 
@@ -1460,7 +1460,9 @@ namespace Mosa.Compiler.Framework.Stages
 			if (operand.Uses.Count != 1)
 				return;
 
-			Debug.Assert(operand.Definitions.Count == 1);
+			if (operand.Definitions.Count != 1)
+				throw new Common.InvalidCompilerException();
+			//Debug.Assert(operand.Definitions.Count == 1);
 
 			Context ctx = new Context(InstructionSet, operand.Definitions[0]);
 

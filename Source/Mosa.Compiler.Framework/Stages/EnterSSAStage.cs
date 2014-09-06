@@ -57,10 +57,7 @@ namespace Mosa.Compiler.Framework.Stages
 				AddToAssignments(op);
 			}
 
-			if (headBlock.NextBlocks.Count > 0)
-			{
-				RenameVariables(headBlock.NextBlocks[0], analysis);
-			}
+			RenameVariables(headBlock, analysis);
 
 			// Clean up
 			analysis = null;
