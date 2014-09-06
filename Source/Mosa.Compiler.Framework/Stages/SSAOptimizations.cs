@@ -56,6 +56,10 @@ namespace Mosa.Compiler.Framework.Stages
 			if (BasicBlocks.HeadBlocks.Count == 0)
 				return;
 
+			// Unable to optimize SSA w/ exceptions or finally handlers present
+			if (BasicBlocks.HeadBlocks.Count != 1)
+				return;
+
 			trace = CreateTrace();
 
 			PromoteLocalVariable();
