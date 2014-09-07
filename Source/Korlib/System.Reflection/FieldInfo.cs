@@ -131,14 +131,6 @@ namespace System.Reflection
 		}
 
 		/// <summary>
-		/// Gets a MemberTypes value indicating that this member is a field.
-		/// </summary>
-		public override MemberTypes MemberType
-		{
-			get { return MemberTypes.Field; }
-		}
-
-		/// <summary>
 		/// Initializes a new instance of the FieldInfo class.
 		/// </summary>
 		protected FieldInfo()

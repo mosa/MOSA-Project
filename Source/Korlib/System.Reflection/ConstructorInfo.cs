@@ -27,14 +27,6 @@ namespace System.Reflection
 		public static readonly string TypeConstructorName = ".cctor";
 
 		/// <summary>
-		/// Gets a <see cref="System.Reflection.MemberTypes">MemberTypes</see> value indicating that this member is a constructor.
-		/// </summary>
-		public override MemberTypes MemberType
-		{
-			get { return MemberTypes.Constructor; }
-		}
-
-		/// <summary>
 		/// Invokes the constructor reflected by the instance that has the specified parameters, providing default values for the parameters not commonly used.
 		/// </summary>
 		/// <param name="parameters">An array of values that matches the number, order and type (under the constraints of the default binder) of the parameters for this constructor. If this constructor takes no parameters, then use either an array with zero elements or null, as in Object[] parameters = new Object[0]. Any object in this array that is not explicitly initialized with a value will contain the default value for that object type. For reference-type elements, this value is null. For value-type elements, this value is 0, 0.0, or false, depending on the specific element type.</param>

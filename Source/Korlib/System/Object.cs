@@ -7,6 +7,7 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using System.Runtime.CompilerServices;
 namespace System
 {
 	/// <summary>
@@ -40,7 +41,7 @@ namespace System
 		/// </returns>
 		public virtual bool Equals(object obj)
 		{
-			return this == obj;
+			return RuntimeHelpers.Equals(this, obj);
 		}
 
 		/// <summary>
@@ -71,8 +72,7 @@ namespace System
 		/// </returns>
 		public virtual int GetHashCode()
 		{
-			// Todo: Implement GetHashCode as location in memory.
-			return 0;
+			return RuntimeHelpers.GetHashCode(this);
 		}
 
 		/// <summary>
@@ -82,10 +82,8 @@ namespace System
 		/// The <see cref="Type"/> instance that represents the exact runtime type of the current
 		/// instance.
 		/// </returns>
-		public Type GetType()
-		{
-			return Type.GetTypeFromHandle(Type.GetTypeHandle(this));
-		}
+		[MethodImpl(MethodImplOptions.InternalCall)]
+		public extern Type GetType();
 
 		/// <summary>
 		/// Creates a shallow copy of the current <see cref="Object"/>.
@@ -93,10 +91,8 @@ namespace System
 		/// <returns>
 		/// A shallow copy of the current System.Object.
 		/// </returns>
-		protected object MemberwiseClone()
-		{
-			return new Object();
-		}
+		[MethodImpl(MethodImplOptions.InternalCall)]
+		protected extern object MemberwiseClone();
 
 		/// <summary>
 		/// Determines whether the specified <see cref="Object"/> instances are the same instance.

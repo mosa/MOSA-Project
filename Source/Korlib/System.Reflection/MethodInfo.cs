@@ -17,14 +17,6 @@ namespace System.Reflection
 	public abstract class MethodInfo : MethodBase
 	{
 		/// <summary>
-		/// Gets a <see cref="System.Reflection.MemberTypes">MemberTypes</see> value indicating that this member is a method.
-		/// </summary>
-		public override MemberTypes MemberType
-		{
-			get { return MemberTypes.Method; }
-		}
-
-		/// <summary>
 		/// Gets a ParameterInfo object that contains information about the return type of the method, such as whether the return type has custom modifiers.
 		/// </summary>
 		public virtual ParameterInfo ReturnParameter

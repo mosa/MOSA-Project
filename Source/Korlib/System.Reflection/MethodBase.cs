@@ -50,7 +50,7 @@ namespace System.Reflection
 		{
 			get
 			{
-				return (this.MemberType & MemberTypes.Constructor) == MemberTypes.Constructor;
+				return (this is ConstructorInfo && !IsStatic && (this.Attributes & MethodAttributes.RTSpecialName) == MethodAttributes.RTSpecialName);
 			}
 		}
 
@@ -205,16 +205,6 @@ namespace System.Reflection
 		}
 
 		/// <summary>
-		/// Returns a MethodBase object representing the currently executing method.
-		/// </summary>
-		/// <returns>A MethodBase object representing the currently executing method.</returns>
-		public static MethodBase GetCurrentMethod()
-		{
-			// TODO
-			throw new NotImplementedException();
-		}
-
-		/// <summary>
 		/// Returns an array of Type objects that represent the type arguments of a generic method or the type parameters of a generic method definition.
 		/// </summary>
 		/// <returns>An array of Type objects that represent the type arguments of a generic method or the type parameters of a generic method definition. Returns an empty array if the current method is not a generic method.</returns>
@@ -230,7 +220,7 @@ namespace System.Reflection
 		/// <returns>A 32-bit signed integer hash code.</returns>
 		public override int GetHashCode()
 		{
-			return this.MethodHandle.Value.ToInt32();
+			return base.GetHashCode();
 		}
 
 		/// <summary>
@@ -273,34 +263,6 @@ namespace System.Reflection
 		{
 			// TODO
 			throw new NotImplementedException();
-		}
-
-		/// <summary>
-		/// Indicates whether two MethodBase objects are equal.
-		/// </summary>
-		/// <param name="left">The first object to compare.</param>
-		/// <param name="right">The second object to compare.</param>
-		/// <returns>True if left is equal to right; otherwise, False.</returns>
-		public static bool operator ==(MethodBase left, MethodBase right)
-		{
-			if (object.ReferenceEquals(left, right))
-				return true;
-
-			if ((object)left == null || (object)right == null)
-				return false;
-
-			return left.MethodHandle == right.MethodHandle;
-		}
-
-		/// <summary>
-		/// Indicates whether two MethodBase objects are not equal.
-		/// </summary>
-		/// <param name="left">The first object to compare.</param>
-		/// <param name="right">The second object to compare.</param>
-		/// <returns>True if left is not equal to right; otherwise, False.</returns>
-		public static bool operator !=(MethodBase left, MethodBase right)
-		{
-			return !(left == right);
 		}
 	}
 }
