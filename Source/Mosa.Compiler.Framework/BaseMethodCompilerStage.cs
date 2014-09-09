@@ -127,7 +127,7 @@ namespace Mosa.Compiler.Framework
 		/// <value>
 		/// <c>true</c> if this instance has protected regions; otherwise, <c>false</c>.
 		/// </value>
-		protected bool HasProtectedRegions { get { return MethodCompiler.Method.ExceptionBlocks.Count != 0; } }
+		protected bool HasProtectedRegions { get { return MethodCompiler.Method.ExceptionHandlers.Count != 0; } }
 
 		/// <summary>
 		/// Creates the context.
@@ -384,11 +384,11 @@ namespace Mosa.Compiler.Framework
 
 			int label = context.Label;
 
-			foreach (var clause in MethodCompiler.Method.ExceptionBlocks)
+			foreach (var handler in MethodCompiler.Method.ExceptionHandlers)
 			{
-				if (clause.IsLabelWithinTry(label) || clause.IsLabelWithinHandler(label))
+				if (handler.IsLabelWithinTry(label) || handler.IsLabelWithinHandler(label))
 				{
-					return clause;
+					return handler;
 				}
 			}
 

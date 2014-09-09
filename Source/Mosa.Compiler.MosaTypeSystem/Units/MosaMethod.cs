@@ -62,7 +62,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public IList<MosaInstruction> Code { get; private set; }
 
-		public IList<MosaExceptionHandler> ExceptionBlocks { get; private set; }
+		public IList<MosaExceptionHandler> ExceptionHandlers { get; private set; }
 
 		private List<MosaMethod> overrides;
 
@@ -76,7 +76,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 			LocalVariables = (localVars = new List<MosaLocal>()).AsReadOnly();
 			Code = (instructions = new List<MosaInstruction>()).AsReadOnly();
-			ExceptionBlocks = (exceptionHandlers = new List<MosaExceptionHandler>()).AsReadOnly();
+			ExceptionHandlers = (exceptionHandlers = new List<MosaExceptionHandler>()).AsReadOnly();
 
 			Overrides = (overrides = new List<MosaMethod>()).AsReadOnly();
 		}
@@ -89,7 +89,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 			result.LocalVariables = (result.localVars = new List<MosaLocal>(this.localVars)).AsReadOnly();
 			result.Code = (result.instructions = new List<MosaInstruction>(this.instructions)).AsReadOnly();
-			result.ExceptionBlocks = (result.exceptionHandlers = new List<MosaExceptionHandler>(this.exceptionHandlers)).AsReadOnly();
+			result.ExceptionHandlers = (result.exceptionHandlers = new List<MosaExceptionHandler>(this.exceptionHandlers)).AsReadOnly();
 
 			result.Overrides = (result.overrides = new List<MosaMethod>(this.overrides)).AsReadOnly();
 

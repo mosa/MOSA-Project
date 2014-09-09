@@ -199,6 +199,16 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
+		/// Determines whether [contains] [the specified block].
+		/// </summary>
+		/// <param name="block">The block.</param>
+		/// <returns></returns>
+		public bool Contains(BasicBlock block)
+		{
+			return basicBlocks.Contains(block);
+		}
+
+		/// <summary>
 		/// Links the blocks.
 		/// </summary>
 		/// <param name="source">The source.</param>

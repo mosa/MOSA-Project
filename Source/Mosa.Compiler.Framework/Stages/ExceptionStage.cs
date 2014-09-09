@@ -79,9 +79,9 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			exceptionRegisters = new Dictionary<BasicBlock, Operand>();
 
-			foreach (var entry in MethodCompiler.Method.ExceptionBlocks)
+			foreach (var handler in MethodCompiler.Method.ExceptionHandlers)
 			{
-				var block = BasicBlocks.GetByLabel(entry.HandlerStart);
+				var block = BasicBlocks.GetByLabel(handler.HandlerStart);
 
 				var register = AllocateVirtualRegister(TypeSystem.BuiltIn.Pointer);
 

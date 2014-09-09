@@ -187,13 +187,19 @@ namespace Mosa.Tool.Explorer
 
 			CreateTypeSystemAndLayout();
 
-			ExplorerCompiler.Compile(typeSystem, typeLayout, compilerTrace, cbPlatform.Text, enableSSAToolStripMenuItem.Checked, enableSSAOptimizations.Checked, enableBinaryCodeGenerationToolStripMenuItem.Checked);
+			//try
+			//{
+				ExplorerCompiler.Compile(typeSystem, typeLayout, compilerTrace, cbPlatform.Text, enableSSAToolStripMenuItem.Checked, enableSSAOptimizations.Checked, enableBinaryCodeGenerationToolStripMenuItem.Checked);
+				SetStatus("Compiled!");
+			//}
+			//catch (Exception e)
+			//{
+			//	SetStatus("ERROR: " + toolStripStatusLabel.Text + " " + e.ToString());
+			//}
 
 			tabControl1.SelectedTab = tabPage1;
 			rbOtherResult.Text = compileLog.ToString();
 			UpdateTree();
-
-			SetStatus("Compiled!");
 		}
 
 		private static BaseArchitecture GetArchitecture(string platform)

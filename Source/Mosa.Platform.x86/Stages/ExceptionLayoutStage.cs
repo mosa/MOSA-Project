@@ -10,6 +10,7 @@
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Stages;
+using Mosa.Compiler.Framework.Analysis;
 using Mosa.Compiler.Linker;
 using Mosa.Compiler.MosaTypeSystem;
 using System.Collections.Generic;
@@ -32,6 +33,8 @@ namespace Mosa.Platform.x86.Stages
 
 		protected override void Run()
 		{
+			ProtectedRegion.FinalizeAll(BasicBlocks, MethodCompiler.ProtectedRegions);
+
 			codeEmitter = MethodCompiler.Pipeline.FindFirst<CodeGenerationStage>().CodeEmitter;
 
 			// Step 1 - Sort the exception clauses into postorder-traversal
@@ -77,10 +80,10 @@ namespace Mosa.Platform.x86.Stages
 			var ctx = new Context(InstructionSet, block);
 			int label = ctx.Label;
 
-			foreach (var entry in MethodCompiler.Method.ExceptionBlocks)
+			foreach (var handler in MethodCompiler.Method.ExceptionHandlers)
 			{
-				if (entry.IsLabelWithinTry(label))
-					return entry;
+				if (handler.IsLabelWithinTry(label))
+					return handler;
 			}
 
 			return null;
@@ -114,37 +117,37 @@ namespace Mosa.Platform.x86.Stages
 		{
 			var entries = new List<ProtectedBlock>();
 
-			foreach (var entry in MethodCompiler.Method.ExceptionBlocks)
+			foreach (var handler in MethodCompiler.Method.ExceptionHandlers)
 			{
 				var prev = new ProtectedBlock();
 
-				foreach (var block in exceptionBlocks[entry])
+				foreach (var block in exceptionBlocks[handler])
 				{
 					uint start = (uint)codeEmitter.GetPosition(block.Label);
 					uint end = (uint)codeEmitter.GetPosition(block.Label + 0x0F000000);
 
-					var kind = entry.HandlerType;
+					var kind = handler.HandlerType;
 
-					uint handler = 0;
+					uint handlerStart = 0;
 					uint filter = 0;
-					var type = entry.Type;
+					var type = handler.Type;
 
-					handler = (uint)codeEmitter.GetPosition(entry.HandlerStart);
+					handlerStart = (uint)codeEmitter.GetPosition(handler.HandlerStart);
 
 					if (kind == ExceptionHandlerType.Filter)
 					{
-						filter = (uint)codeEmitter.GetPosition(entry.FilterOffset.Value);
+						filter = (uint)codeEmitter.GetPosition(handler.FilterOffset.Value);
 					}
 
 					// TODO: Optimization - Search for existing exception protected region (before or after) to merge the current block
 
 					// Simple optimization assuming blocks are somewhat sorted by position
-					if (prev.End == start && prev.Kind == kind && prev.Handler == handler && prev.Filter == filter && prev.Type == type)
+					if (prev.End == start && prev.Kind == kind && prev.Handler == handlerStart && prev.Filter == filter && prev.Type == type)
 					{
 						// merge protected blocks sequence
 						prev.End = end;
 					}
-					else if (prev.Start == end && prev.Kind == kind && prev.Handler == handler && prev.Filter == filter && prev.Type == type)
+					else if (prev.Start == end && prev.Kind == kind && prev.Handler == handlerStart && prev.Filter == filter && prev.Type == type)
 					{
 						// merge protected blocks sequence
 						prev.Start = start;
@@ -152,7 +155,7 @@ namespace Mosa.Platform.x86.Stages
 					else
 					{
 						// new protection block sequence
-						var protectedBlock = new ProtectedBlock(start, end, handler, kind, type, filter);
+						var protectedBlock = new ProtectedBlock(start, end, handlerStart, kind, type, filter);
 						entries.Add(protectedBlock);
 						prev = protectedBlock;
 					}

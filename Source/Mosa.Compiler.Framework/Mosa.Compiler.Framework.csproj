@@ -78,6 +78,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Analysis\NaturalBlockOrder.cs" />
+    <Compile Include="Analysis\ProtectedRegion.cs" />
     <Compile Include="Analysis\ReverseBlockOrder.cs" />
     <Compile Include="Analysis\SimpleTraceBlockOrder.cs" />
     <Compile Include="Analysis\Dominance.cs" />
