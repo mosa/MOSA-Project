@@ -183,7 +183,6 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 			writer1.WriteZeroBytes(TypeLayout.NativePointerSize);
 
-
 			// If the type is not an interface continue, otherwise just pad until the end
 			if (!type.IsInterface)
 			{
@@ -466,7 +465,7 @@ namespace Mosa.Compiler.Framework.Stages
 				// 4. Pointer to Property Type
 				Linker.Link(LinkType.AbsoluteAddress, BuiltInPatch.I4, propertyDefSymbol, (int)writer2.Position, 0, property.PropertyType.FullName + Metadata.TypeDefinition, SectionKind.ROData, 0);
 				writer2.WriteZeroBytes(TypeLayout.NativePointerSize);
-				
+
 				// If the type is a property then skip linking the methods
 				if (!type.IsInterface)
 				{
@@ -530,7 +529,6 @@ namespace Mosa.Compiler.Framework.Stages
 				paramStackSize += (uint)TypeLayout.GetTypeSize(param.ParameterType);
 			}
 			writer1.Write(paramStackSize);
-
 
 			// 5. Pointer to Method
 			if (!method.IsAbstract)

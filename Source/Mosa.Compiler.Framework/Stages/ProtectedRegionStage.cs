@@ -7,6 +7,7 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
 */
 
+using Mosa.Compiler.Framework.Analysis;
 using Mosa.Compiler.Framework.CIL;
 using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.MosaTypeSystem;
@@ -25,15 +26,17 @@ namespace Mosa.Compiler.Framework.Stages
 
 			InsertBlockProtectInstructions();
 			UpdateBlockProtectInstructions();
+
+			MethodCompiler.SetProtectedRegions(ProtectedRegion.CreateProtectedRegions(BasicBlocks, MethodCompiler.Method.ExceptionHandlers));
 		}
 
 		private void InsertBlockProtectInstructions()
 		{
-			foreach (var entry in MethodCompiler.Method.ExceptionBlocks)
+			foreach (var handler in MethodCompiler.Method.ExceptionHandlers)
 			{
-				var tryBlock = BasicBlocks.GetByLabel(entry.TryStart);
+				var tryBlock = BasicBlocks.GetByLabel(handler.TryStart);
 
-				var tryHandler = BasicBlocks.GetByLabel(entry.HandlerStart);
+				var tryHandler = BasicBlocks.GetByLabel(handler.HandlerStart);
 
 				var context = new Context(InstructionSet, tryBlock);
 
@@ -46,20 +49,20 @@ namespace Mosa.Compiler.Framework.Stages
 
 				context = new Context(InstructionSet, tryHandler);
 
-				if (entry.HandlerType == ExceptionHandlerType.Exception)
+				if (handler.HandlerType == ExceptionHandlerType.Exception)
 				{
-					var exceptionObject = MethodCompiler.CreateVirtualRegister(entry.Type);
+					var exceptionObject = MethodCompiler.CreateVirtualRegister(handler.Type);
 
 					context.AppendInstruction(IRInstruction.ExceptionStart, exceptionObject);
 				}
-				else if (entry.HandlerType == ExceptionHandlerType.Finally)
+				else if (handler.HandlerType == ExceptionHandlerType.Finally)
 				{
 					context.AppendInstruction(IRInstruction.FinallyStart);
 				}
 			}
 		}
 
-		public void UpdateBlockProtectInstructions()
+		private void UpdateBlockProtectInstructions()
 		{
 			foreach (var block in BasicBlocks)
 			{
@@ -79,7 +82,7 @@ namespace Mosa.Compiler.Framework.Stages
 					// Find enclosing finally clause
 					bool createLink = false;
 
-					var entry = FindImmediateExceptionEntry(context);
+					var entry = FindImmediateExceptionHandler(context);
 
 					if (entry != null)
 					{
@@ -112,5 +115,7 @@ namespace Mosa.Compiler.Framework.Stages
 				}
 			}
 		}
+
+		//private List<ProtectRegionBlockInfo> ProtectedRegionBlocks = new List<ProtectRegionBlockInfo>();
 	}
 }

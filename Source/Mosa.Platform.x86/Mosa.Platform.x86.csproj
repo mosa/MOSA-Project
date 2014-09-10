@@ -121,7 +121,6 @@
     <Compile Include="Instructions\FarJmp.cs" />
     <Compile Include="Instructions\Leave.cs" />
     <Compile Include="Instructions\RoundSS.cs" />
-    <Compile Include="Stages\ExceptionLayoutStage.cs" />
     <Compile Include="Stages\InterruptVectorStage.cs" />
     <Compile Include="Intrinsic\GetEBP.cs" />
     <Compile Include="Intrinsic\GetMethodLookupTable.cs" />

@@ -44,13 +44,11 @@ namespace Mosa.Compiler.Common
 
 		public override void Write(double value)
 		{
-			// TODO
 			base.Write(value);
 		}
 
 		public override void Write(float value)
 		{
-			// TODO
 			base.Write(value);
 		}
 

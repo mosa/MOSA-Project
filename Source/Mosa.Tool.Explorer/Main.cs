@@ -56,7 +56,7 @@ namespace Mosa.Tool.Explorer
 			filter.ExcludeInternalMethods = false;
 			filter.MethodMatch = MatchType.Any;
 			filter.StageMatch = MatchType.Exclude;
-			filter.Stage = "PlatformStubStage|ExceptionLayoutStage|DominanceCalculationStage|CodeGenerationStage";
+			filter.Stage = "PlatformStubStage|ProtectedRegionLayoutStage|DominanceCalculationStage|CodeGenerationStage";
 		}
 
 		private void SetStatus(string status)
@@ -187,13 +187,19 @@ namespace Mosa.Tool.Explorer
 
 			CreateTypeSystemAndLayout();
 
+			//try
+			//{
 			ExplorerCompiler.Compile(typeSystem, typeLayout, compilerTrace, cbPlatform.Text, enableSSAToolStripMenuItem.Checked, enableSSAOptimizations.Checked, enableBinaryCodeGenerationToolStripMenuItem.Checked);
+			SetStatus("Compiled!");
+			//}
+			//catch (Exception e)
+			//{
+			//	SetStatus("ERROR: " + toolStripStatusLabel.Text + " " + e.ToString());
+			//}
 
 			tabControl1.SelectedTab = tabPage1;
 			rbOtherResult.Text = compileLog.ToString();
 			UpdateTree();
-
-			SetStatus("Compiled!");
 		}
 
 		private static BaseArchitecture GetArchitecture(string platform)

@@ -58,6 +58,7 @@ namespace Mosa.Tool.Explorer
 				new EmptyBlockRemovalStage(),
 				new BlockOrderingStage(),
 				new CodeGenerationStage(emitBinary),
+				new ProtectedRegionLayoutStage(),
 			});
 		}
 	}

@@ -26,6 +26,8 @@ namespace Mosa.Compiler.Framework
 						if (ctx.IsEmpty)
 							continue;
 
+						instructionCount++;
+
 						ctx.Clone().Visit(this);
 					}
 				}

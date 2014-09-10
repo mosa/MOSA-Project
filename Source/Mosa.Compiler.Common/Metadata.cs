@@ -31,5 +31,7 @@ namespace Mosa.Compiler.Common
 
 		public const string InterfaceSlotTable = "$InterfaceSlotTable";
 		public const string InterfaceBitmap = "$InterfaceBitmap";
+
+		public const string ProtectedRegionTable = "$ProtectedRegionTable";
 	}
 }
