@@ -53,13 +53,23 @@ namespace Mosa.Compiler.Framework.Stages
 
 				foreach (var block in region.IncludedBlocks)
 				{
-					uint start = (uint)codeEmitter.GetPosition(block.Label);
-					uint end = (uint)codeEmitter.GetPosition(block.Label + 0x0F000000);
+					long start = codeEmitter.GetPosition(block.Label);
+					long end = codeEmitter.GetPosition(block.Label + 0x0F000000);
 
 					writer.Write((uint)region.Handler.HandlerType);
-					writer.Write(start);
-					writer.Write(end - start);
-					writer.Write(handler);
+
+					if (NativePointerSize == 32)
+					{
+						writer.Write((uint)start);
+						writer.Write((uint)(end - start));
+						writer.Write((uint)handler);
+					}
+					else
+					{
+						writer.Write((ulong)start);
+						writer.Write((uint)(end - start));
+						writer.Write((ulong)handler);
+					}
 
 					if (trace.Active)
 						trace.Log("   Block: " + block.ToString() + " Offsets: #" + start.ToString() + "-" + end.ToString() + "]");
@@ -68,7 +78,7 @@ namespace Mosa.Compiler.Framework.Stages
 					{
 						// Store method table pointer of the exception object type
 						// The VES exception runtime will uses this to compare exception object types
-						MethodCompiler.Linker.Link(LinkType.AbsoluteAddress, BuiltInPatch.I4, section, (int)writer.Position, 0, region.Handler.Type.FullName + "$mtable", SectionKind.ROData, 0);
+						MethodCompiler.Linker.Link(LinkType.AbsoluteAddress, (NativePointerSize == 32) ? BuiltInPatch.I4 : BuiltInPatch.I8, section, (int)writer.Position, 0, region.Handler.Type.FullName + "$mtable", SectionKind.ROData, 0);
 
 						writer.Position += NativePointerSize;
 					}
