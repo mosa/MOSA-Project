@@ -29,6 +29,11 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				for (var context = new Context(InstructionSet, block); !context.IsBlockEndInstruction; context.GotoNext())
 				{
+					if (context.IsEmpty)
+						continue;
+
+					instructionCount++;
+
 					if (context.Instruction == IRInstruction.Phi)
 					{
 						Debug.Assert(context.OperandCount == context.BasicBlock.PreviousBlocks.Count);
@@ -54,6 +59,11 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 
 			finalVirtualRegisters = null;
+		}
+
+		protected override void Finish()
+		{
+			UpdateCounter("LeaveSSA.IRInstructions", instructionCount);
 		}
 
 		private Operand GetFinalVirtualRegister(Operand operand)

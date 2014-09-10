@@ -235,9 +235,6 @@ namespace Mosa.Platform.x86
 				new JumpPeepholeOptimizationStage()
 			);
 
-			//methodCompilerPipeline.InsertAfterLast<CodeGenerationStage>(
-			//	new ExceptionLayoutStage()
-			//);
 		}
 
 		/// <summary>

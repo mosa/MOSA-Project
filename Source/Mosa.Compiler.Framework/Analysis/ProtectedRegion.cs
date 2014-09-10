@@ -7,14 +7,11 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
 */
 
-using System.Collections.Generic;
-using Mosa.Compiler.Framework.CIL;
-using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.MosaTypeSystem;
+using System.Collections.Generic;
 
 namespace Mosa.Compiler.Framework.Analysis
 {
-
 	public class ProtectedRegion
 	{
 		public MosaExceptionHandler Handler { get; private set; }
@@ -23,13 +20,15 @@ namespace Mosa.Compiler.Framework.Analysis
 		private List<BasicBlock> excluded = new List<BasicBlock>();
 		private List<BasicBlock> final = new List<BasicBlock>();
 
+		public IList<BasicBlock> IncludedBlocks { get { return final.AsReadOnly(); } }
+
 		public ProtectedRegion(BasicBlocks basicBlocks, MosaExceptionHandler exceptionHandler)
 		{
 			this.Handler = exceptionHandler;
 
 			foreach (var block in basicBlocks)
 			{
-				if (block.StartIndex >= exceptionHandler.TryStart && block.StartIndex < exceptionHandler.TryEnd)
+				if (block.Label >= exceptionHandler.TryStart && block.Label < exceptionHandler.TryEnd)
 					included.Add(block);
 				else
 					excluded.Add(block);
@@ -79,7 +78,7 @@ namespace Mosa.Compiler.Framework.Analysis
 
 		public static void FinalizeAll(BasicBlocks basicBlocks, IList<ProtectedRegion> protectedRegions)
 		{
-			foreach(var region in protectedRegions)
+			foreach (var region in protectedRegions)
 			{
 				region.Finalize(basicBlocks);
 			}

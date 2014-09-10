@@ -236,7 +236,7 @@ namespace Mosa.Compiler.Framework.Stages
 						{
 							bool createLink = false;
 
-							var entry = FindImmediateExceptionEntry(ctx);
+							var entry = FindImmediateExceptionHandler(ctx);
 
 							if (entry != null)
 							{

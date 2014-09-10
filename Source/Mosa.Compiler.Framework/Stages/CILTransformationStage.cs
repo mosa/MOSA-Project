@@ -1640,8 +1640,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private void CheckAndConvertInstruction(Context context)
 		{
-			Operand destinationOperand = context.Result;
-			Operand sourceOperand = context.Operand1;
+			var destinationOperand = context.Result;
+			var sourceOperand = context.Operand1;
 
 			int destIndex = GetIndex(destinationOperand.Type);
 			int srcIndex = GetIndex(sourceOperand.Type);
@@ -1765,7 +1765,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="operands">The operands.</param>
 		private void ProcessInvokeInstruction(Context context, MosaMethod method, Operand resultOperand, List<Operand> operands)
 		{
-			Operand symbolOperand = Operand.CreateSymbolFromMethod(TypeSystem, method);
+			var symbolOperand = Operand.CreateSymbolFromMethod(TypeSystem, method);
 			ProcessInvokeInstruction(context, method, symbolOperand, resultOperand, operands);
 		}
 
@@ -1798,8 +1798,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private bool CanSkipDueToRecursiveSystemObjectCtorCall(Context context)
 		{
-			MosaMethod currentMethod = MethodCompiler.Method;
-			MosaMethod invokeTarget = context.MosaMethod;
+			var currentMethod = MethodCompiler.Method;
+			var invokeTarget = context.MosaMethod;
 
 			// Skip recursive System.Object ctor calls.
 			if (currentMethod.DeclaringType.FullName == @"System.Object" &&
@@ -1886,7 +1886,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			Operand result = context.Result;
 
-			List<Operand> operands = new List<Operand>(context.Operands);
+			var operands = new List<Operand>(context.Operands);
 
 			ProcessInvokeInstruction(context, method, result, operands);
 

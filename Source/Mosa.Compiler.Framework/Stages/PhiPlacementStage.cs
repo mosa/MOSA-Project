@@ -60,10 +60,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <summary>
 		/// Gets the assignments.
 		/// </summary>
-		public Dictionary<Operand, List<BasicBlock>> Assignments
-		{
-			get { return assignments; }
-		}
+		public Dictionary<Operand, List<BasicBlock>> Assignments { get { return assignments; } }
 
 		protected override void Run()
 		{
@@ -81,16 +78,34 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 		}
 
+		protected override void Finish()
+		{
+			UpdateCounter("PhiPlacement.IRInstructions", instructionCount);
+		}
+
 		/// <summary>
 		/// Collects the assignments.
 		/// </summary>
 		private void CollectAssignments()
 		{
 			foreach (var block in BasicBlocks)
+			{
 				for (var context = new Context(InstructionSet, block); !context.IsBlockEndInstruction; context.GotoNext())
-					if (!context.IsEmpty && context.Result != null)
-						if (context.Result.IsVirtualRegister)
-							AddToAssignments(context.Result, block);
+				{
+					if (context.IsEmpty)
+						continue;
+
+					instructionCount++;
+
+					if (context.Result == null)
+						continue;
+
+					if (context.Result.IsVirtualRegister)
+					{
+						AddToAssignments(context.Result, block);
+					}
+				}
+			}
 		}
 
 		/// <summary>

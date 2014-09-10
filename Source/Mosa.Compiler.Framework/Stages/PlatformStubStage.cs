@@ -14,6 +14,7 @@ namespace Mosa.Compiler.Framework.Stages
 	/// </summary>
 	public sealed class PlatformStubStage : BaseMethodCompilerStage, IPipelineStage
 	{
+
 		#region IPipelineStage Members
 
 		/// <summary>

@@ -20,6 +20,12 @@ namespace Mosa.Compiler.Framework
 	/// </summary>
 	public abstract class BaseMethodCompilerStage : IMethodCompilerStage
 	{
+		#region Data members
+
+		protected int instructionCount = 0;
+
+		#endregion Data members
+
 		#region Properties
 
 		/// <summary>
@@ -104,6 +110,7 @@ namespace Mosa.Compiler.Framework
 		void IMethodCompilerStage.Execute()
 		{
 			Run();
+			Finish();
 		}
 
 		#endregion IMethodCompilerStage members
@@ -114,8 +121,10 @@ namespace Mosa.Compiler.Framework
 		{ }
 
 		protected virtual void Run()
-		{
-		}
+		{ }
+
+		protected virtual void Finish()
+		{ }
 
 		#endregion Overrides
 
@@ -376,9 +385,9 @@ namespace Mosa.Compiler.Framework
 
 		#endregion Block Operations
 
-		#region Protected Block Methods
+		#region Protected Region Methods
 
-		protected MosaExceptionHandler FindImmediateExceptionEntry(Context context)
+		protected MosaExceptionHandler FindImmediateExceptionHandler(Context context)
 		{
 			MosaExceptionHandler innerClause = null;
 
@@ -395,7 +404,7 @@ namespace Mosa.Compiler.Framework
 			return null;
 		}
 
-		#endregion Protected Block Methods
+		#endregion Protected Region Methods
 
 		#region Trace Helper Methods
 

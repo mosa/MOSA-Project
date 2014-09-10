@@ -12,7 +12,6 @@ using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.CIL;
 using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.MosaTypeSystem;
-using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework.Stages
 {
@@ -42,7 +41,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (MethodCompiler.Method.IsLinkerGenerated)
 				return;
 
-			MosaMethod plugMethod = MethodCompiler.Compiler.PlugSystem.GetPlugMethod(MethodCompiler.Method);
+			var plugMethod = MethodCompiler.Compiler.PlugSystem.GetPlugMethod(MethodCompiler.Method);
 
 			if (plugMethod != null)
 			{
@@ -68,6 +67,11 @@ namespace Mosa.Compiler.Framework.Stages
 			Decode(MethodCompiler);
 		}
 
+		protected override void Finish()
+		{
+			UpdateCounter("CILDecoding.Instructions", instructionCount);
+		}
+
 		#region Internals
 
 		/// <summary>
@@ -78,33 +82,33 @@ namespace Mosa.Compiler.Framework.Stages
 		private void Decode(BaseMethodCompiler compiler)
 		{
 			// Create context
-			Context context = new Context(InstructionSet);
+			var context = new Context(InstructionSet);
 
 			// Prefix instruction
 			bool prefix = false;
 
 			for (int i = 0; i < MethodCompiler.Method.Code.Count; i++)
 			{
-				MosaInstruction instr = MethodCompiler.Method.Code[i];
-				var op = (OpCode)instr.OpCode;
+				instruction = MethodCompiler.Method.Code[i];
+				var op = (OpCode)instruction.OpCode;
 
-				BaseCILInstruction instruction = CILInstruction.Get(op);
+				var cilInstruction = CILInstruction.Get(op);
 
-				if (instruction == null)
+				if (cilInstruction == null)
 				{
 					throw new InvalidMetadataException();
 				}
 
 				// Create and initialize the corresponding instruction
-				context.AppendInstruction(instruction);
-				context.Label = instr.Offset;
+				context.AppendInstruction(cilInstruction);
+				context.Label = instruction.Offset;
 				context.HasPrefix = prefix;
-				this.instruction = instr;
-				instruction.Decode(context, this);
+				cilInstruction.Decode(context, this);
 
-				Debug.Assert(context.Instruction != null);
+				//Debug.Assert(context.Instruction != null);
 
-				prefix = (instruction is PrefixInstruction);
+				prefix = (cilInstruction is PrefixInstruction);
+				instructionCount++;
 			}
 		}
 
@@ -116,27 +120,18 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Gets the compiler, that is currently executing.
 		/// </summary>
 		/// <value></value>
-		BaseMethodCompiler IInstructionDecoder.Compiler
-		{
-			get { return MethodCompiler; }
-		}
+		BaseMethodCompiler IInstructionDecoder.Compiler { get { return MethodCompiler; } }
 
 		/// <summary>
 		/// Gets the MosaMethod being compiled.
 		/// </summary>
 		/// <value></value>
-		MosaMethod IInstructionDecoder.Method
-		{
-			get { return MethodCompiler.Method; }
-		}
+		MosaMethod IInstructionDecoder.Method { get { return MethodCompiler.Method; } }
 
 		/// <summary>
 		/// Gets the Instruction being decoded.
 		/// </summary>
-		MosaInstruction IInstructionDecoder.Instruction
-		{
-			get { return instruction; }
-		}
+		MosaInstruction IInstructionDecoder.Instruction { get { return instruction; } }
 
 		/// <summary>
 		/// Gets the type system.

@@ -7,11 +7,10 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
 */
 
-using System.Collections.Generic;
+using Mosa.Compiler.Framework.Analysis;
 using Mosa.Compiler.Framework.CIL;
 using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.MosaTypeSystem;
-using Mosa.Compiler.Framework.Analysis;
 
 namespace Mosa.Compiler.Framework.Stages
 {
@@ -83,7 +82,7 @@ namespace Mosa.Compiler.Framework.Stages
 					// Find enclosing finally clause
 					bool createLink = false;
 
-					var entry = FindImmediateExceptionEntry(context);
+					var entry = FindImmediateExceptionHandler(context);
 
 					if (entry != null)
 					{
@@ -118,6 +117,5 @@ namespace Mosa.Compiler.Framework.Stages
 		}
 
 		//private List<ProtectRegionBlockInfo> ProtectedRegionBlocks = new List<ProtectRegionBlockInfo>();
-
 	}
 }

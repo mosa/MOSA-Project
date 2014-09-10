@@ -47,7 +47,7 @@ namespace Mosa.Compiler.Framework.Stages
 					}
 					else if (ctx.Instruction == IRInstruction.FinallyStart)
 					{
-						var header = FindImmediateExceptionEntry(ctx);
+						var header = FindImmediateExceptionHandler(ctx);
 						var headerBlock = BasicBlocks.GetByLabel(header.HandlerStart);
 
 						var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.Pointer);
@@ -57,7 +57,7 @@ namespace Mosa.Compiler.Framework.Stages
 					}
 					else if (ctx.Instruction == IRInstruction.FinallyEnd)
 					{
-						var header = FindImmediateExceptionEntry(ctx);
+						var header = FindImmediateExceptionHandler(ctx);
 						var headerBlock = BasicBlocks.GetByLabel(header.HandlerStart);
 
 						ctx.SetInstruction(IRInstruction.Move, exceptionRegister, exceptionRegisters[headerBlock]);

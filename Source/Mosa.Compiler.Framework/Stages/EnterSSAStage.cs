@@ -41,6 +41,13 @@ namespace Mosa.Compiler.Framework.Stages
 			ssaOperands = null;
 		}
 
+		protected override void Finish()
+		{
+			// Clean up
+			variables = null;
+			counts = null;
+		}
+
 		/// <summary>
 		/// Enters the SSA.
 		/// </summary>
@@ -61,11 +68,6 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				RenameVariables(headBlock.NextBlocks[0], analysis);
 			}
-
-			// Clean up
-			analysis = null;
-			variables = null;
-			counts = null;
 		}
 
 		/// <summary>
