@@ -9,6 +9,7 @@
 
 using Mosa.Compiler.MosaTypeSystem;
 using System.Collections.Generic;
+using Mosa.Compiler.Common;
 
 namespace Mosa.Compiler.Framework.Analysis
 {
@@ -83,5 +84,6 @@ namespace Mosa.Compiler.Framework.Analysis
 				region.Finalize(basicBlocks);
 			}
 		}
+
 	}
 }

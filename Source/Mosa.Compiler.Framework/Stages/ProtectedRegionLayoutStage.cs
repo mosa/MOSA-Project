@@ -11,7 +11,7 @@ using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.Analysis;
 using Mosa.Compiler.Linker;
 using Mosa.Compiler.MosaTypeSystem;
-using Mosa.Compiler.InternalTrace;
+using System.Collections.Generic;
 
 namespace Mosa.Compiler.Framework.Stages
 {
@@ -49,12 +49,25 @@ namespace Mosa.Compiler.Framework.Stages
 				var handler = (uint)codeEmitter.GetPosition(region.Handler.HandlerStart);
 
 				if (trace.Active)
-					trace.Log("Handler: " + region.Handler.TryStart.ToString("X4") + " to " + region.Handler.TryEnd.ToString("X4") + " Handler: " + region.Handler.HandlerStart.ToString("X4") + " Offset: #" + handler.ToString("X4"));
+					trace.Log("Handler: " + region.Handler.TryStart.ToString("X4") + " to " + region.Handler.TryEnd.ToString("X4") + " Handler: " + region.Handler.HandlerStart.ToString("X4") + " Offset: [" + handler.ToString("X4") + "]");
+
+				List<Tuple<int, int>> sections = new List<Tuple<int, int>>();
 
 				foreach (var block in region.IncludedBlocks)
 				{
-					long start = codeEmitter.GetPosition(block.Label);
-					long end = codeEmitter.GetPosition(block.Label + 0x0F000000);
+					int start = codeEmitter.GetPosition(block.Label);
+					int end = codeEmitter.GetPosition(block.Label + 0x0F000000);
+
+					if (trace.Active)
+						trace.Log("   Block: " + block.ToString() + " [" + start.ToString() + "-" + end.ToString() + "]");
+
+					AddSection(sections, start, end);
+				}
+
+				foreach (var s in sections)
+				{
+					int start = s.Item1;
+					int end = s.Item2;
 
 					writer.Write((uint)region.Handler.HandlerType);
 
@@ -72,7 +85,7 @@ namespace Mosa.Compiler.Framework.Stages
 					}
 
 					if (trace.Active)
-						trace.Log("   Block: " + block.ToString() + " Offsets: #" + start.ToString() + "-" + end.ToString() + "]");
+						trace.Log("     Section: [" + start.ToString() + "-" + end.ToString() + "]");
 
 					if (region.Handler.HandlerType == ExceptionHandlerType.Exception)
 					{
@@ -91,6 +104,44 @@ namespace Mosa.Compiler.Framework.Stages
 					{
 						writer.Position += NativePointerSize;
 					}
+				}
+			}
+		}
+
+		private Tuple<int, int> FindConnectingSection(List<Tuple<int, int>> sections, int start, int end)
+		{
+			foreach (var section in sections)
+			{
+				if (section.Item1 == end || section.Item2 == start)
+				{
+					return section;
+				}
+			}
+
+			return null;
+		}
+
+		private void AddSection(List<Tuple<int, int>> sections, int start, int end)
+		{
+			while (true)
+			{
+				var find = FindConnectingSection(sections, start, end);
+
+				if (find == null)
+				{
+					sections.Add(new Tuple<int, int>(start, end));
+					return;
+				}
+
+				sections.Remove(find);
+
+				if (find.Item1 == end)
+				{
+					end = find.Item2;
+				}
+				else if (find.Item2 == start)
+				{
+					start = find.Item1;
 				}
 			}
 		}

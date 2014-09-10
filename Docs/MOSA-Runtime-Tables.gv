@@ -63,7 +63,7 @@ shape = "record"
 ];
 
 "ExceptionHandlerTable" [
-label = "<f0>Exception Handler Table|<f1>Handler Type|<f2>Pointer to Protected Block|<f3>Length of Protected Block|<f4>Offset of Handler from Method Start Address|<f5>Pointer to Exception Type|<f6>Offset of Filter from Method Start Address"
+label = "<f0>Protected Region Table|<f1>Handler Type|<f2>Pointer to Protected Region|<f3>Length of Protected Region|<f4>Offset of Handler from Method Start Address|<f5>Pointer to Exception Type|<f6>Offset of Filter from Method Start Address"
 shape = "record"
 ];
 
