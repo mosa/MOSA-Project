@@ -49,7 +49,7 @@ namespace Mosa.Compiler.Framework.Stages
 				var handler = (uint)codeEmitter.GetPosition(region.Handler.HandlerStart);
 
 				if (trace.Active)
-					trace.Log("Handler: " + region.Handler.TryStart.ToString("X4") + " to " + region.Handler.TryEnd.ToString("X4") + " At: " + handler.ToString("X4"));
+					trace.Log("Handler: " + region.Handler.TryStart.ToString("X4") + " to " + region.Handler.TryEnd.ToString("X4") + " Handler: " + region.Handler.HandlerStart.ToString("X4") + " Offset: #" + handler.ToString("X4"));
 
 				foreach (var block in region.IncludedBlocks)
 				{
@@ -62,7 +62,7 @@ namespace Mosa.Compiler.Framework.Stages
 					writer.Write(handler);
 
 					if (trace.Active)
-						trace.Log("   Block: " + block.ToString() + " [" + start.ToString() + "-" + end.ToString() + "]");
+						trace.Log("   Block: " + block.ToString() + " Offsets: #" + start.ToString() + "-" + end.ToString() + "]");
 
 					if (region.Handler.HandlerType == ExceptionHandlerType.Exception)
 					{
