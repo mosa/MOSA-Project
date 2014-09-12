@@ -89,6 +89,11 @@ namespace Mosa.TestWorld.x86
 
 			Console.WriteLine();
 
+			string caller = Runtime.GetCallerName();
+		
+			Console.Write("Caller: ");
+			Console.WriteLine(caller);
+
 			//System.Threading.SpinLock splk = new System.Threading.SpinLock();
 
 			//bool lockTaken = false;

@@ -88,17 +88,6 @@ namespace Mosa.Platform.x86.Stages
 
 		#endregion Data members
 
-		#region Construction
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="Multiboot0695Stage"/> class.
-		/// </summary>
-		public Multiboot0695Stage()
-		{
-		}
-
-		#endregion Construction
-
 		protected override void Run()
 		{
 			if (multibootMethod == null)

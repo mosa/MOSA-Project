@@ -84,7 +84,7 @@ namespace Mosa.Platform.Internal.x86
 		public static void Setup()
 		{
 			// Get AssemblyListTable and Assembly count
-			uint* assemblyListTable = Native.GetAssemblyListTable();
+			uint* assemblyListTable = (uint*)Native.GetAssemblyListTable();
 			uint assemblyCount = assemblyListTable[0];
 
 			// Create new MetadataVector array for assemblies using count
@@ -268,7 +268,12 @@ namespace Mosa.Platform.Internal.x86
 		{
 		}
 
-		public static void* GetMethodDefinition(uint address)
+		public static void Fault(int code)
+		{
+			// TODO
+		}
+
+		public static void* _GetMethodDefinition(uint address)
 		{
 			int* table = (int*)Native.GetMethodLookupTable();
 			uint entries = (uint)table[0];
@@ -293,9 +298,9 @@ namespace Mosa.Platform.Internal.x86
 			return null;
 		}
 
-		public static void* GetProtectedRegionEntryByAddress(uint address, uint exceptionType)
+		public static void* _GetProtectedRegionEntryByAddress(uint address, uint exceptionType)
 		{
-			int* methodDefination = (int*)GetMethodDefinition(address);
+			int* methodDefination = (int*)_GetMethodDefinition(address);
 
 			if (methodDefination == null)
 				Fault(0x000001);
@@ -331,10 +336,90 @@ namespace Mosa.Platform.Internal.x86
 			return null;
 		}
 
-		public static void Fault(int code)
+		public static uint GetMethodDefinition(uint address)
 		{
-			// TODO
+			uint table = Native.GetMethodLookupTable();
+			uint entries = Native.Get32(table);
+
+			table = table + 4;
+
+			while (entries > 0)
+			{
+				uint addr = Native.Get32(table);
+				uint size = Native.Get32(table + 4);
+
+				if (address >= addr && address < addr + size)
+				{
+					return Native.Get32(table + 8);
+				}
+
+				table = table + 12;
+
+				entries--;
+			}
+
+			return 0;
 		}
 
+		public static uint GetProtectedRegionEntryByAddress(uint address, uint exceptionType)
+		{
+			uint methodDefination = GetMethodDefinition(address);
+
+			if (methodDefination == 0)
+				Fault(0x000001);
+
+			uint table = Native.Get32(methodDefination + (4 * 7));
+
+			if (table == 0)
+				return 0;
+
+			uint entries = Native.Get32(table);
+
+			table = table + 4;
+
+			while (entries > 0)
+			{
+				uint addr = Native.Get32(table + 4);
+				uint size = Native.Get32(table + 8);
+				uint type = Native.Get32(table + 16);
+
+				if (address >= addr && address < addr + size)
+				{
+					if (type != 0 || type == exceptionType)
+					{
+						return addr;
+					}
+				}
+
+				table = table + 12;
+
+				entries--;
+			}
+
+			return 0;
+		}
+
+		public static string GetCallerName()
+		{
+			uint ebp = Native.GetEBP();
+			uint caller = Native.Get32(ebp + 4);
+			uint methodDef = GetMethodDefinition(caller);
+
+			uint name = Native.Get32(methodDef);
+
+			string method = InitializeMetadataString((uint*)name);
+
+			return method;
+		}
+
+		public static void HandlerException()
+		{
+			uint ebp = Native.GetEBP();
+			uint caller = Native.Get32(ebp + 4);
+			uint exceptionObject = Native.GetExceptionRegister();
+			uint exceptionType = Native.Get32(exceptionObject);
+
+
+		}
 	}
 }

@@ -247,6 +247,12 @@ namespace Mosa.Kernel.x86
 			Write(val, 10, -1);
 		}
 
+		public void WriteLine(uint val, byte digits, int size)
+		{
+			Write(val, digits, size);
+			WriteLine();
+		}
+
 		/// <summary>
 		/// Writes the specified value.
 		/// </summary>

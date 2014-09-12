@@ -241,13 +241,16 @@ namespace Mosa.Platform.Internal.x86
 		public extern static uint GetIDTJumpLocation(uint irq);
 
 		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.GetAssemblyListTable, Mosa.Platform.x86")]
-		public extern static uint* GetAssemblyListTable();
+		public extern static uint GetAssemblyListTable();
 
 		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.GetMethodLookupTable, Mosa.Platform.x86")]
-		public extern static uint* GetMethodLookupTable();
+		public extern static uint GetMethodLookupTable();
 
 		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.SwitchTask, Mosa.Platform.x86")]
 		public extern static void SwitchTask(uint esp);
+
+		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.GetExceptionRegister, Mosa.Platform.x86")]
+		public extern static uint GetExceptionRegister();
 
 		#endregion Intrinsic
 	}

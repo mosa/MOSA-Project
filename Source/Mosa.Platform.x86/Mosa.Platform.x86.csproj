@@ -103,6 +103,7 @@
     <Compile Include="Instructions\AddSD.cs" />
     <Compile Include="Intrinsic\Div.cs" />
     <Compile Include="Intrinsic\GetAssemblyListTable.cs" />
+    <Compile Include="Intrinsic\GetExceptionRegister.cs" />
     <Compile Include="Intrinsic\Pause.cs" />
     <Compile Include="Intrinsic\LockSet32.cs" />
     <Compile Include="Intrinsic\SyncCompareAndSwap.cs" />
