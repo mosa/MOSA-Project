@@ -5,7 +5,6 @@
  *
  */
 
-using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.IR;
 using System.Diagnostics;
 

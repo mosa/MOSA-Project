@@ -64,7 +64,7 @@ namespace Mosa.Compiler.Framework.Stages
 					AddSection(sections, start, end);
 				}
 
-				//int size = sections.Count * 4 * ((NativePointerSize == 4) ? 5 : 7);
+				writer.Write(sections.Count);
 
 				foreach (var s in sections)
 				{

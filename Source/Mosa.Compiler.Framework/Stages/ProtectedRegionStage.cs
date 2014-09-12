@@ -115,7 +115,5 @@ namespace Mosa.Compiler.Framework.Stages
 				}
 			}
 		}
-
-		//private List<ProtectRegionBlockInfo> ProtectedRegionBlocks = new List<ProtectRegionBlockInfo>();
 	}
 }

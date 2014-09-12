@@ -7,7 +7,7 @@
  *  Stefan Andres Charsley (charsleysa) <charsleysa@gmail.com>
  */
 
-namespace Mosa.Compiler.Common
+namespace Mosa.Compiler.Framework
 {
 	public struct Metadata
 	{

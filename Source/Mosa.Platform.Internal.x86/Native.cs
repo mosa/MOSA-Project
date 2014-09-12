@@ -244,7 +244,7 @@ namespace Mosa.Platform.Internal.x86
 		public extern static uint* GetAssemblyListTable();
 
 		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.GetMethodLookupTable, Mosa.Platform.x86")]
-		public extern static uint GetMethodLookupTable(uint ptr);
+		public extern static uint* GetMethodLookupTable();
 
 		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.SwitchTask, Mosa.Platform.x86")]
 		public extern static void SwitchTask(uint esp);

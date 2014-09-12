@@ -14,10 +14,6 @@ namespace Mosa.Compiler.Framework.Platform
 	/// </summary>
 	public abstract class BasePlatformInstruction : BaseInstruction
 	{
-		#region Data members
-
-		#endregion Data members
-
 		#region Construction
 
 		/// <summary>

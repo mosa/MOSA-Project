@@ -102,6 +102,10 @@
     <Compile Include="IR\CompoundMove.cs" />
     <Compile Include="IR\CompoundStore.cs" />
     <Compile Include="Analysis\IBlockOrderAnalysis.cs" />
+    <Compile Include="Metadata.cs">
+      <SubType>
+      </SubType>
+    </Compile>
     <Compile Include="RegisterAllocator\BasicRegisterAllocator.cs" />
     <Compile Include="RegisterAllocator\MoveExtended.cs" />
     <Compile Include="RegisterAllocator\Move.cs" />
@@ -126,6 +130,7 @@
     <Compile Include="RegisterAllocator\LiveInterval.cs" />
     <Compile Include="RegisterAllocator\VirtualRegister.cs" />
     <Compile Include="RegisterAllocator\GreedyRegisterAllocator.cs" />
+    <Compile Include="Stages\MethodLookupTableStage.cs" />
     <Compile Include="Stages\ProtectedRegionLayoutStage.cs" />
     <Compile Include="Stages\ExceptionStage.cs" />
     <Compile Include="Stages\ConvertCompoundStage.cs" />

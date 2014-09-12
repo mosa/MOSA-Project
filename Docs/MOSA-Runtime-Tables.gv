@@ -58,12 +58,12 @@ shape = "record"
 ];
 
 "MethodLookupTable" [
-label = "<f0>Method Lookup Table|<f1>Pointer to Method (Starting Address)|<f2>Method Size|<f3>Pointer to Method Definition"
+label = "<f0>Method Lookup Table|Number of Methods|<f1>Pointer to Method (Starting Address)|<f2>Method Size|<f3>Pointer to Method Definition"
 shape = "record"
 ];
 
 "ProtectedRegionTable" [
-label = "<f0>Protected Region Table|<f1>Handler Type|<f2>Pointer to Protected Region|<f3>Length of Protected Region|<f4>Offset of Handler from Method Start Address|<f5>Pointer to Exception Type|<f6>Offset of Filter from Method Start Address"
+label = "<f0>Protected Region Table|Number of Regions|<f1>Handler Type|<f2>Pointer to Protected Region|<f3>Length of Protected Region|<f4>Offset of Handler from Method Start Address|<f5>Pointer to Exception Type|<f6>Offset of Filter from Method Start Address"
 shape = "record"
 ];
 
@@ -78,7 +78,7 @@ shape = "record"
 ];
 
 "MethodDefinition" [
-label = "<f0>Method Definition|<f1>Pointer to Method Name|<f2>~Pointer to Custom Attributes|<f3>Method Attributes|<f4>Local Parameter Stack Size|<f5>Pointer to Method|<f6>Pointer to Return Type Definition|<f7>Pointer to Protected Region Table|<f8>Pointer to GC Tracking Information|<f9>Number of Parameters|<f10>Pointer to Parameter Definition 1|...|Pointer to Parameter Definition N"
+label = "<f0>Method Definition|<f1>Pointer to Method Name|<f2>~Pointer to Custom Attributes|<f3>Method Attributes|<f4>Local Parameter Stack Size|<f5>Pointer to Method|<f6>Pointer to Return Type Definition|<f7>~Pointer to Protected Region Table|<f8>Pointer to GC Tracking Information|<f9>Number of Parameters|<f10>Pointer to Parameter Definition 1|...|Pointer to Parameter Definition N"
 shape = "record"
 color = "green"
 ];

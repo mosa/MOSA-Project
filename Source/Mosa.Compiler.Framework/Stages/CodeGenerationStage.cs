@@ -8,7 +8,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.Framework.Platform;
 using Mosa.Compiler.Linker;
 using System;

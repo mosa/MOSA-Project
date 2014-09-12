@@ -7,11 +7,8 @@
  *  Stefan Andres Charsley (charsleysa) <charsleysa@gmail.com>
  */
 
-using System;
-using System.Runtime.InteropServices;
-using System.Reflection;
 using Mosa.Platform.Internal.x86;
-using x86Runtime = Mosa.Platform.Internal.x86.Runtime;
+using System.Reflection;
 
 namespace System
 {

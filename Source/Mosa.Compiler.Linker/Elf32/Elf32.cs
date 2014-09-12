@@ -18,10 +18,6 @@ namespace Mosa.Compiler.Linker.Elf32
 {
 	public class Elf32 : BaseLinker
 	{
-		#region Constants
-
-		#endregion Constants
-
 		#region Data members
 
 		protected Header elfheader = new Header();

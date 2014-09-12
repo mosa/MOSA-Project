@@ -11,8 +11,6 @@
  */
 
 using System;
-using System.Runtime.InteropServices;
-using System.Reflection;
 
 namespace Mosa.Platform.Internal.x86
 {
@@ -163,12 +161,6 @@ namespace Mosa.Platform.Internal.x86
 			return obj;
 		}
 
-		/*public static void* Castclass(MetadataTypeStruct* typeDefinition, void* obj)
-		{
-			//TODO: Fake result
-			return obj;
-		}*/
-
 		// TODO: efficiency?
 		public static void Memcpy(void* dest, void* src, uint count)
 		{
@@ -276,20 +268,73 @@ namespace Mosa.Platform.Internal.x86
 		{
 		}
 
-		/*public static uint GetSizeOfObject(void* obj)
+		public static void* GetMethodDefinition(uint address)
 		{
-			RuntimeTypeHandle* typeDefinition = TypeImpl.GetTypeHandleImpl(obj);
+			int* table = (int*)Native.GetMethodLookupTable();
+			uint entries = (uint)table[0];
 
-			return GetSizeOfType(typeDefinition);
+			table = table + 4;
+
+			while (entries > 0)
+			{
+				uint addr = (uint)table[0];
+				uint size = (uint)table[1];
+
+				if (addr >= address && addr + size < address)
+				{
+					return (void*)table[3];
+				}
+
+				table = table + 12;
+
+				entries--;
+			}
+
+			return null;
 		}
 
-		public static uint GetSizeOfType(RuntimeTypeHandle* handle)
+		public static void* GetProtectedRegionEntryByAddress(uint address, uint exceptionType)
 		{
-			MetadataTypeStruct* typeDefinition = (MetadataTypeStruct*)((uint*)handle)[0];
+			int* methodDefination = (int*)GetMethodDefinition(address);
 
-			uint sizeOf = (*typeDefinition).Size;
+			if (methodDefination == null)
+				Fault(0x000001);
 
-			return sizeOf;
-		}*/
+			int* table = (int*)(methodDefination[7]);
+
+			if (table == null)
+				return null;
+
+			uint entries = (uint)table[0];
+
+			table = table + 4;
+
+			while (entries > 0)
+			{
+				uint addr = (uint)table[1];
+				uint size = (uint)table[2];
+				uint type = (uint)table[4];
+
+				if (address >= addr && address < addr + size)
+				{
+					if (type != 0 || type == exceptionType)
+					{
+						return (void*)addr;
+					}
+				}
+
+				table = table + 12;
+
+				entries--;
+			}
+
+			return null;
+		}
+
+		public static void Fault(int code)
+		{
+			// TODO
+		}
+
 	}
 }

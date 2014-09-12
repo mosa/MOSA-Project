@@ -8,12 +8,10 @@
  *  Stefan Andres Charsley (charsleysa) <charsleysa@gmail.com>
  */
 
-using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.CIL;
 using Mosa.Compiler.Linker;
 using Mosa.Compiler.MosaTypeSystem;
 using System.Collections.Generic;
-using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework.Stages
 {
@@ -141,7 +139,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			MosaType allocationType = (allocation.MosaMethod != null) ? allocation.MosaMethod.DeclaringType : allocation.Result.Type.ElementType;
 			MosaType storageType = assignment.MosaField.DeclaringType;
-			
+
 			return ReferenceEquals(allocationType, storageType);
 		}
 

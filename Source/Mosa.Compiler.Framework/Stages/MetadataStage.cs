@@ -549,7 +549,7 @@ namespace Mosa.Compiler.Framework.Stages
 				Linker.Link(LinkType.AbsoluteAddress, NativePatchType, methodTableSymbol, (int)writer1.Position, 0, method.FullName, SectionKind.Text, 0);
 			writer1.WriteZeroBytes(TypeLayout.NativePointerSize);
 
-			// 6. Pointer to return Type
+			// 6. Pointer to return type
 			Linker.Link(LinkType.AbsoluteAddress, NativePatchType, methodTableSymbol, (int)writer1.Position, 0, method.Signature.ReturnType.FullName + Metadata.TypeDefinition, SectionKind.ROData, 0);
 			writer1.WriteZeroBytes(TypeLayout.NativePointerSize);
 

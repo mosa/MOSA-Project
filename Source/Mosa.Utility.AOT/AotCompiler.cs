@@ -92,6 +92,7 @@ namespace Mosa.Utility.Aot
 				new MethodCompilerSchedulerStage(),
 				new TypeInitializerSchedulerStage(),
 				bootStage,
+				new MethodLookupTableStage(),
 				new MetadataStage(),
 				new LinkerFinalizationStage(),
 				compilerOptions.MapFile != null ? new MapFileGenerationStage() : null
