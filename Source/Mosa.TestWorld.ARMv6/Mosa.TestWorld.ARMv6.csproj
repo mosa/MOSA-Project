@@ -69,9 +69,9 @@
       <Project>{27A3C89C-1967-45FF-A77E-94F44995C42C}</Project>
       <Name>Mosa.ClassLib</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Mosa.Internal.Plug\Mosa.Internal.Plug.csproj">
+    <ProjectReference Include="..\Mosa.Internal\Mosa.Internal.csproj">
       <Project>{77961864-DB33-4189-804F-D774022C96E2}</Project>
-      <Name>Mosa.Internal.Plug</Name>
+      <Name>Mosa.Internal</Name>
     </ProjectReference>
     <ProjectReference Include="..\Mosa.Kernel.ARMv6\Mosa.Kernel.ARMv6.csproj">
       <Project>{4cff6607-4d83-46e6-a1d0-ef045311c98b}</Project>

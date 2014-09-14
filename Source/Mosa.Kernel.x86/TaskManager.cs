@@ -50,20 +50,21 @@ namespace Mosa.Kernel.x86
 
 		internal struct StackSetupOffset
 		{
-			public static readonly uint EFLAG = 0;
-			public static readonly uint CS = 4;
-			public static readonly uint EIP = 8;
-			public static readonly uint ErrorCode = 12;
-			public static readonly uint IRQ = 16;
-			public static readonly uint EAX = 20;
-			public static readonly uint ECX = 24;
-			public static readonly uint EDX = 28;
-			public static readonly uint EBX = 32;
-			public static readonly uint ESP = 36;
-			public static readonly uint EBP = 40;
-			public static readonly uint ESI = 44;
-			public static readonly uint EDI = 48;
-			public static readonly uint InitialSize = 54;
+			public static readonly uint SENTINEL = 0;
+			public static readonly uint EFLAG = 4;
+			public static readonly uint CS = 8;
+			public static readonly uint EIP = 12;
+			public static readonly uint ErrorCode = 16;
+			public static readonly uint IRQ = 20;
+			public static readonly uint EAX = 24;
+			public static readonly uint ECX = 28;
+			public static readonly uint EDX = 32;
+			public static readonly uint EBX = 36;
+			public static readonly uint ESP = 40;
+			public static readonly uint EBP = 44;
+			public static readonly uint ESI = 48;
+			public static readonly uint EDI = 52;
+			public static readonly uint InitialSize = 56;
 		}
 
 		#endregion Data members
@@ -128,6 +129,7 @@ namespace Mosa.Kernel.x86
 			Native.Set32(task + Offset.ESP, stack + StackSetupOffset.InitialSize); // TODO
 
 			// Setup Stack
+			Native.Set32(stacktop - StackSetupOffset.SENTINEL, 0);	// important for traversing the stack backwards
 			Native.Set32(stacktop - StackSetupOffset.EFLAG, 0);
 			Native.Set32(stacktop - StackSetupOffset.CS, 0);
 			Native.Set32(stacktop - StackSetupOffset.EIP, eip);
@@ -137,8 +139,8 @@ namespace Mosa.Kernel.x86
 			Native.Set32(stacktop - StackSetupOffset.ECX, 0);
 			Native.Set32(stacktop - StackSetupOffset.EDX, 0);
 			Native.Set32(stacktop - StackSetupOffset.EBX, 0);
-			Native.Set32(stacktop - StackSetupOffset.ESP, stacktop);
-			Native.Set32(stacktop - StackSetupOffset.EBP, stacktop);
+			Native.Set32(stacktop - StackSetupOffset.ESP, stacktop + 4);
+			Native.Set32(stacktop - StackSetupOffset.EBP, stacktop + 4);
 			Native.Set32(stacktop - StackSetupOffset.ESI, 0);
 			Native.Set32(stacktop - StackSetupOffset.EDI, 0);
 

@@ -70,18 +70,18 @@
     <Compile Include="Implementations\TypeImpl.cs" />
     <Compile Include="MetadataStructures\MetadataAssemblyStruct.cs" />
     <Compile Include="MetadataStructures\MetadataTypeStruct.cs" />
+    <Compile Include="Native.cs" />
     <Compile Include="SpinLock.cs" />
     <Compile Include="Runtime.cs" />
-    <Compile Include="Native.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Korlib\Korlib.csproj">
       <Project>{631BC4F3-E2D8-4319-814C-13904CAA17CE}</Project>
       <Name>Korlib</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Mosa.Internal.Plug\Mosa.Internal.Plug.csproj">
+    <ProjectReference Include="..\Mosa.Internal\Mosa.Internal.csproj">
       <Project>{77961864-db33-4189-804f-d774022c96e2}</Project>
-      <Name>Mosa.Internal.Plug</Name>
+      <Name>Mosa.Internal</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />

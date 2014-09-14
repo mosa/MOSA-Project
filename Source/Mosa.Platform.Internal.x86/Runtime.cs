@@ -270,87 +270,24 @@ namespace Mosa.Platform.Internal.x86
 
 		public static void Fault(int code)
 		{
-			// TODO
-		}
-
-		public static void* _GetMethodDefinition(uint address)
-		{
-			int* table = (int*)Native.GetMethodLookupTable();
-			uint entries = (uint)table[0];
-
-			table = table + 4;
-
-			while (entries > 0)
-			{
-				uint addr = (uint)table[0];
-				uint size = (uint)table[1];
-
-				if (addr >= address && addr + size < address)
-				{
-					return (void*)table[3];
-				}
-
-				table = table + 12;
-
-				entries--;
-			}
-
-			return null;
-		}
-
-		public static void* _GetProtectedRegionEntryByAddress(uint address, uint exceptionType)
-		{
-			int* methodDefination = (int*)_GetMethodDefinition(address);
-
-			if (methodDefination == null)
-				Fault(0x000001);
-
-			int* table = (int*)(methodDefination[7]);
-
-			if (table == null)
-				return null;
-
-			uint entries = (uint)table[0];
-
-			table = table + 4;
-
-			while (entries > 0)
-			{
-				uint addr = (uint)table[1];
-				uint size = (uint)table[2];
-				uint type = (uint)table[4];
-
-				if (address >= addr && address < addr + size)
-				{
-					if (type != 0 || type == exceptionType)
-					{
-						return (void*)addr;
-					}
-				}
-
-				table = table + 12;
-
-				entries--;
-			}
-
-			return null;
+			// TODO - go panic
 		}
 
 		public static uint GetMethodDefinition(uint address)
 		{
 			uint table = Native.GetMethodLookupTable();
-			uint entries = Native.Get32(table);
+			uint entries = Mosa.Internal.Native.Load32(table);
 
 			table = table + 4;
 
 			while (entries > 0)
 			{
-				uint addr = Native.Get32(table);
-				uint size = Native.Get32(table + 4);
+				uint addr = Mosa.Internal.Native.Load32(table);
+				uint size = Mosa.Internal.Native.Load32(table, 4);
 
 				if (address >= addr && address < addr + size)
 				{
-					return Native.Get32(table + 8);
+					return Mosa.Internal.Native.Load32(table, 8);
 				}
 
 				table = table + 12;
@@ -361,14 +298,42 @@ namespace Mosa.Platform.Internal.x86
 			return 0;
 		}
 
-		public static uint GetProtectedRegionEntryByAddress(uint address, uint exceptionType)
+		public static uint GetProtectedRegionEntryByAddress(uint address, uint exceptionType, uint methodDef)
 		{
-			uint methodDefination = GetMethodDefinition(address);
+			uint table = Native.Get32(methodDef + (NativeIntSize * 7));
 
-			if (methodDefination == 0)
-				Fault(0x000001);
+			if (table == 0)
+				return 0;
 
-			uint table = Native.Get32(methodDefination + (4 * 7));
+			uint entries = Mosa.Internal.Native.Load32(table);
+
+			table = table + 4;
+
+			while (entries > 0)
+			{
+				uint addr = Mosa.Internal.Native.Load32(table, NativeIntSize * 1);
+				uint size = Mosa.Internal.Native.Load32(table, NativeIntSize * 2);
+				uint type = Mosa.Internal.Native.Load32(table, NativeIntSize * 4);
+
+				if (address >= addr && address < addr + size)
+				{
+					if (type != 0 || type == exceptionType)
+					{
+						return table;
+					}
+				}
+
+				table = table + NativeIntSize * 6;
+
+				entries--;
+			}
+
+			return 0;
+		}
+
+		public static uint GetProtectedRegionEntryByAddress2(uint address, uint exceptionType, uint methodDef)
+		{
+			uint table = Native.Get32(methodDef + (NativeIntSize * 7));
 
 			if (table == 0)
 				return 0;
@@ -379,19 +344,19 @@ namespace Mosa.Platform.Internal.x86
 
 			while (entries > 0)
 			{
-				uint addr = Native.Get32(table + 4);
-				uint size = Native.Get32(table + 8);
-				uint type = Native.Get32(table + 16);
+				uint addr = Native.Get32(table + NativeIntSize * 1);
+				uint size = Native.Get32(table + NativeIntSize * 2);
+				uint type = Native.Get32(table + NativeIntSize * 4);
 
 				if (address >= addr && address < addr + size)
 				{
 					if (type != 0 || type == exceptionType)
 					{
-						return addr;
+						return table;
 					}
 				}
 
-				table = table + 12;
+				table = table + NativeIntSize * 6;
 
 				entries--;
 			}
@@ -399,27 +364,96 @@ namespace Mosa.Platform.Internal.x86
 			return 0;
 		}
 
-		public static string GetCallerName()
+		public static uint GetStackFrame(uint depth)
 		{
 			uint ebp = Native.GetEBP();
-			uint caller = Native.Get32(ebp + 4);
-			uint methodDef = GetMethodDefinition(caller);
 
-			uint name = Native.Get32(methodDef);
+			while (depth > 0)
+			{
+				depth--;
 
-			string method = InitializeMetadataString((uint*)name);
+				ebp = Mosa.Internal.Native.Load32(ebp);
 
-			return method;
+				if (ebp == 0)
+					return 0;
+			}
+
+			return ebp;
+		}
+
+		public static uint GetReturnAddressFromStackFrame(uint stackframe)
+		{
+			return Mosa.Internal.Native.Load32(stackframe, NativeIntSize);
+		}
+
+		public static uint GetReturnAddressFromStackFrame2(uint stackframe)
+		{
+			return Mosa.Internal.Native.Load32(stackframe, NativeIntSize);
+		}
+
+		public static void SetReturnAddressForStackFrame(uint stackframe, uint value)
+		{
+			Native.Set32(stackframe + NativeIntSize, value);
+		}
+
+		public static string GetMethodDefinitionName(uint methodDef)
+		{
+			uint name = Mosa.Internal.Native.Load32(methodDef);
+
+			return InitializeMetadataString((uint*)name);
+		}
+
+		public static uint GetMethodDefinitionFromStackFrameDepth(uint depth)
+		{
+			uint ebp = GetStackFrame(depth + 1);
+
+			uint address = GetReturnAddressFromStackFrame(ebp);
+
+			return GetMethodDefinition(address);
 		}
 
 		public static void HandlerException()
 		{
-			uint ebp = Native.GetEBP();
-			uint caller = Native.Get32(ebp + 4);
+			uint stackFrame = GetStackFrame(0);
+
+			uint returnAdddress = GetReturnAddressFromStackFrame(stackFrame);
+
+			if (returnAdddress == 0)
+			{
+				// hit the top of stack!
+				Fault(2);
+			}
+
 			uint exceptionObject = Native.GetExceptionRegister();
-			uint exceptionType = Native.Get32(exceptionObject);
+			uint exceptionType = Mosa.Internal.Native.Load32(exceptionObject);
 
+			uint methodDef = GetMethodDefinition(returnAdddress);
 
+			if (methodDef == 0)
+			{
+				// can't find method defination
+				Fault(3);
+			}
+
+			uint protectedRegion = GetProtectedRegionEntryByAddress(returnAdddress, exceptionType, methodDef);
+
+			if (protectedRegion != 0)
+			{
+				// found handler for current method, call it
+
+				uint methodStart = Mosa.Internal.Native.Load32(methodDef, NativeIntSize * 4);
+				uint handlerOffset = Mosa.Internal.Native.Load32(protectedRegion, NativeIntSize * 3);
+
+				uint target = methodDef + handlerOffset;
+
+				SetReturnAddressForStackFrame(stackFrame, target);
+			}
+			else
+			{
+				// no handler in method
+
+				//TODO: unwind stack and re-start check
+			}
 		}
 	}
 }

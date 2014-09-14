@@ -13,12 +13,19 @@ using System;
 
 namespace Mosa.Internal.Plug
 {
-	[AttributeUsage(AttributeTargets.Parameter, AllowMultiple = false)]
-	public sealed class PlugFieldAttribute : Attribute
+	[AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
+	public sealed class MethodAttribute : Attribute
 	{
 		private string target;
+		private string signature = null;
 
-		public PlugFieldAttribute(string target)
+		public MethodAttribute(string target, string signature)
+		{
+			this.target = target;
+			this.signature = signature;
+		}
+
+		public MethodAttribute(string target)
 		{
 			this.target = target;
 		}

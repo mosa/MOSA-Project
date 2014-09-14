@@ -85,6 +85,7 @@
     <Compile Include="Analysis\IDominanceAnalysis.cs" />
     <Compile Include="BaseCallingConventionExtended.cs" />
     <Compile Include="DelegatePatcher.cs" />
+    <Compile Include="Intrinsics\Load.cs" />
     <Compile Include="Intrinsics\InternalInitializeArray.cs" />
     <Compile Include="Intrinsics\InternalsBase.cs" />
     <Compile Include="Intrinsics\TypeInternals.cs" />
