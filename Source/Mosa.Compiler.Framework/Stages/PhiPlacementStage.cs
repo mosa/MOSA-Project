@@ -136,13 +136,14 @@ namespace Mosa.Compiler.Framework.Stages
 			var context = new Context(InstructionSet, block);
 			context.AppendInstruction(IRInstruction.Phi, variable);
 
-			var sourceBlocks = new BasicBlock[block.PreviousBlocks.Count];
+			//var sourceBlocks = new BasicBlock[block.PreviousBlocks.Count];
+			var sourceBlocks = new List<BasicBlock>(block.PreviousBlocks.Count);
 			context.Other = sourceBlocks;
 
 			for (var i = 0; i < block.PreviousBlocks.Count; i++)
 			{
 				context.SetOperand(i, variable);
-				sourceBlocks[i] = block.PreviousBlocks[i];
+				sourceBlocks.Add(block.PreviousBlocks[i]);
 			}
 
 			context.OperandCount = (byte)block.PreviousBlocks.Count;

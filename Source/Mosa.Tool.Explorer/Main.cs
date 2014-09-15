@@ -541,6 +541,9 @@ namespace Mosa.Tool.Explorer
 					if (displayShortName.Checked)
 						line = UpdateLine(line);
 
+					if (line.Contains("IR.BlockStart") || line.Contains("IR.BlockEnd"))
+						continue;
+
 					tbResult.AppendText(line);
 				}
 
@@ -564,6 +567,9 @@ namespace Mosa.Tool.Explorer
 				{
 					if (displayShortName.Checked)
 						line = UpdateLine(line);
+
+					if (line.Contains("IR.BlockStart") || line.Contains("IR.BlockEnd"))
+						continue;
 
 					tbResult.AppendText(line);
 

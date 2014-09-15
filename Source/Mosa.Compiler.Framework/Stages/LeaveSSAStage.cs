@@ -36,7 +36,9 @@ namespace Mosa.Compiler.Framework.Stages
 
 					if (context.Instruction == IRInstruction.Phi)
 					{
-						Debug.Assert(context.OperandCount == context.BasicBlock.PreviousBlocks.Count);
+						//Debug.Assert(context.OperandCount == context.BasicBlock.PreviousBlocks.Count);
+						if (context.OperandCount != context.BasicBlock.PreviousBlocks.Count)
+							throw new Mosa.Compiler.Common.InvalidCompilerException(context.ToString());
 
 						ProcessPhiInstruction(context);
 					}
@@ -89,7 +91,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="context">The context.</param>
 		private void ProcessPhiInstruction(Context context)
 		{
-			var sourceBlocks = context.Other as BasicBlock[];
+			var sourceBlocks = context.Other as List<BasicBlock>;
 
 			for (var index = 0; index < context.BasicBlock.PreviousBlocks.Count; index++)
 			{

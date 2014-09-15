@@ -33,6 +33,8 @@ namespace Mosa.Utility.Launcher
 
 		public bool EnableSSAOptimizations { get; set; }
 
+		public bool EnablePromoteTemporaryVariables { get; set; }
+
 		public bool GenerateASMFile { get; set; }
 
 		public bool GenerateMapFile { get; set; }
@@ -49,6 +51,7 @@ namespace Mosa.Utility.Launcher
 		{
 			EnableSSA = true;
 			EnableSSAOptimizations = true;
+			EnablePromoteTemporaryVariables = true;
 			Emulator = EmulatorType.Qemu;
 			ImageFormat = ImageFormat.IMG;
 			BootFormat = BootFormat.Multiboot_0_7;

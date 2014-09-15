@@ -132,13 +132,13 @@
     <Compile Include="RegisterAllocator\VirtualRegister.cs" />
     <Compile Include="RegisterAllocator\GreedyRegisterAllocator.cs" />
     <Compile Include="Stages\MethodLookupTableStage.cs" />
+    <Compile Include="Stages\PromoteTempVariablesStage.cs" />
     <Compile Include="Stages\ProtectedRegionLayoutStage.cs" />
     <Compile Include="Stages\ExceptionStage.cs" />
     <Compile Include="Stages\ConvertCompoundStage.cs" />
     <Compile Include="Stages\InstructionStatisticsStage.cs" />
     <Compile Include="Stages\MapFileGenerationStage.cs" />
     <Compile Include="Stages\MethodPipelineExportStage.cs" />
-    <Compile Include="Stages\PromoteTempVariablesStage.cs" />
     <Compile Include="Stages\PromoteLocalVariablesStage.cs" />
     <Compile Include="Stages\StopStage.cs" />
     <Compile Include="Stages\BaseEdgeSplitStage.cs" />

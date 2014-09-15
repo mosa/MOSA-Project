@@ -81,8 +81,10 @@ namespace Mosa.Tool.Explorer
 			}
 
 			CompilerOptions compilerOptions = new CompilerOptions();
+
 			compilerOptions.EnableSSA = enabledSSA;
 			compilerOptions.EnableSSAOptimizations = enabledSSA && enableSSAOptimizations;
+			compilerOptions.EnablePromoteTemporaryVariablesOptimization = compilerOptions.EnableSSAOptimizations; // FIXME - default is okay for now
 
 			ExplorerCompiler compiler = new ExplorerCompiler(architecture, typeSystem, typeLayout, compilerTrace, compilerOptions, emitBinary);
 
