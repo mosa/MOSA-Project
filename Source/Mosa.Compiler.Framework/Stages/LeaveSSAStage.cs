@@ -23,6 +23,9 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected override void Run()
 		{
+			if (HasProtectedRegions)
+				return;
+
 			finalVirtualRegisters = new Dictionary<Operand, Operand>();
 
 			foreach (var block in BasicBlocks)

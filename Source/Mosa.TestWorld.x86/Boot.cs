@@ -85,7 +85,7 @@ namespace Mosa.TestWorld.x86
 
 			Console.WriteLine();
 
-			//KernelTest.RunTests();
+			KernelTest.RunTests();
 
 			Console.WriteLine();
 

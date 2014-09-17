@@ -31,6 +31,9 @@ namespace Mosa.Compiler.Framework.Stages
 			if (BasicBlocks.HeadBlocks.Count == 0)
 				return;
 
+			if (HasProtectedRegions)
+				return;
+
 			phiPlacementStage = MethodCompiler.Pipeline.FindFirst<PhiPlacementStage>();
 
 			foreach (var headBlock in BasicBlocks.HeadBlocks)

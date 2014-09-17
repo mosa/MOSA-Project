@@ -26,6 +26,9 @@ namespace Mosa.Compiler.Framework.Stages
 			if (BasicBlocks.HeadBlocks.Count != 1)
 				return;
 
+			if (HasProtectedRegions)
+				return;
+
 			trace = CreateTrace();
 
 			foreach (var local in MethodCompiler.LocalVariables)
