@@ -16,10 +16,10 @@ namespace Mosa.Compiler.Framework.Stages
 	{
 		protected override void Run()
 		{
-			// Unable to optimize SSA w/ exceptions or finally handlers present
-			if (BasicBlocks.HeadBlocks.Count != 1)
+			if (!HasCode)
 				return;
 
+			// Unable to optimize SSA w/ exceptions or finally handlers present
 			if (HasProtectedRegions)
 				return;
 

@@ -131,6 +131,14 @@ namespace Mosa.Compiler.Framework
 		#region Methods
 
 		/// <summary>
+		/// Gets a value indicating whether this instance has code.
+		/// </summary>
+		/// <value>
+		///   <c>true</c> if this instance has code; otherwise, <c>false</c>.
+		/// </value>
+		protected bool HasCode { get { return BasicBlocks.HeadBlocks.Count != 0; } }
+
+		/// <summary>
 		/// Gets a value indicating whether this instance has protected regions.
 		/// </summary>
 		/// <value>

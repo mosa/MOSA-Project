@@ -53,7 +53,7 @@ namespace Mosa.Compiler.Framework.Stages
 		protected override void Run()
 		{
 			// Method is empty - must be a plugged method
-			if (BasicBlocks.HeadBlocks.Count == 0)
+			if (!HasCode)
 				return;
 
 			if (HasProtectedRegions)

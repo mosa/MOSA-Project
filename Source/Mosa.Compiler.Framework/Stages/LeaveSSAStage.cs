@@ -23,6 +23,9 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected override void Run()
 		{
+			if (!HasCode)
+				return; 
+			
 			if (HasProtectedRegions)
 				return;
 
