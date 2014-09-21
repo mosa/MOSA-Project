@@ -1859,11 +1859,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="internalCallTarget">The internal call target.</param>
 		private void ReplaceWithVmCall(Context context, VmCall internalCallTarget)
 		{
-			var type = TypeSystem.GetTypeByName("Mosa.Platform.Internal." + MethodCompiler.Architecture.PlatformName, "Runtime");
-
-			Debug.Assert(type != null, "Cannot find platform runtime type");
-
-			var method = type.FindMethodByName(internalCallTarget.ToString());
+			var method = PlatformInternalRuntimeType.FindMethodByName(internalCallTarget.ToString());
 
 			Debug.Assert(method != null, "Cannot find method: " + internalCallTarget.ToString());
 

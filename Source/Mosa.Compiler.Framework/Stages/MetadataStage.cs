@@ -538,7 +538,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			// 4. Local Stack Size (High 16bits) and Parameter Stack Size (Low 16bits)
 			uint paramStackSize = method.MaxStack << 16;
-			foreach (MosaParameter param in method.Signature.Parameters)
+			foreach (var param in method.Signature.Parameters)
 			{
 				paramStackSize += (uint)TypeLayout.GetTypeSize(param.ParameterType);
 			}
@@ -546,7 +546,9 @@ namespace Mosa.Compiler.Framework.Stages
 
 			// 5. Pointer to Method
 			if (!method.IsAbstract)
+			{
 				Linker.Link(LinkType.AbsoluteAddress, NativePatchType, methodTableSymbol, (int)writer1.Position, 0, method.FullName, SectionKind.Text, 0);
+			}
 			writer1.WriteZeroBytes(TypeLayout.NativePointerSize);
 
 			// 6. Pointer to return type
@@ -555,7 +557,9 @@ namespace Mosa.Compiler.Framework.Stages
 
 			// 7. Pointer to Exception Handler Table
 			if (method.ExceptionHandlers.Count != 0)
+			{
 				Linker.Link(LinkType.AbsoluteAddress, NativePatchType, methodTableSymbol, (int)writer1.Position, 0, method.FullName + Metadata.ProtectedRegionTable, SectionKind.ROData, 0);
+			}
 			writer1.WriteZeroBytes(TypeLayout.NativePointerSize);
 
 			// 8. Pointer to GC Tracking information

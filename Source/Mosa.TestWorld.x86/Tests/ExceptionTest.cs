@@ -1,5 +1,5 @@
 /*
- * (c) 2008 MOSA - The Managed Operating System Alliance
+ * (c) 2014 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
  *
@@ -20,6 +20,7 @@ namespace Mosa.TestWorld.x86.Tests
 			testMethods.Add(ExceptionTest5);
 			testMethods.Add(ExceptionTest6);
 			testMethods.Add(ExceptionTest7);
+			testMethods.Add(ExceptionTest8);
 		}
 
 		public static bool ExceptionTest1()

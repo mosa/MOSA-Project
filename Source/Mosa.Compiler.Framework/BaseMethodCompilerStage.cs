@@ -73,6 +73,14 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		protected int NativePointerAlignment { get; private set; }
 
+		/// <summary>
+		/// Gets the type of the platform internal runtime.
+		/// </summary>
+		/// <value>
+		/// The type of the platform internal runtime.
+		/// </value>
+		protected MosaType PlatformInternalRuntimeType { get { return MethodCompiler.Compiler.PlatformInternalRuntimeType; } }
+
 		#endregion Properties
 
 		#region IPipelineStage Members

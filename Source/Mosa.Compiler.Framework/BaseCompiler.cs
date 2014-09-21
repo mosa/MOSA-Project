@@ -23,6 +23,7 @@ namespace Mosa.Compiler.Framework
 	/// </summary>
 	public abstract class BaseCompiler
 	{
+
 		#region Properties
 
 		/// <summary>
@@ -87,6 +88,14 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		public Dictionary<string, Type> IntrinsicTypes { get; private set; }
 
+		/// <summary>
+		/// Gets the type of the platform internal runtime.
+		/// </summary>
+		/// <value>
+		/// The type of the platform internal runtime.
+		/// </value>
+		public MosaType PlatformInternalRuntimeType { get; private set; }
+
 		#endregion Properties
 
 		#region Construction
@@ -143,6 +152,8 @@ namespace Mosa.Compiler.Framework
 					IntrinsicTypes.Add(attributes[i].Target, t);
 				}
 			}
+
+			PlatformInternalRuntimeType = GetPlatformInternalRuntimeType();
 		}
 
 		#endregion Construction
@@ -270,6 +281,15 @@ namespace Mosa.Compiler.Framework
 		protected void UpdateCounter(string name, int count)
 		{
 			Counters.UpdateCounter(name, count);
+		}
+
+		protected MosaType GetPlatformInternalRuntimeType()
+		{
+			string ns = "Mosa.Platform.Internal." + Architecture.PlatformName;
+
+			var type = TypeSystem.GetTypeByName(ns, "Runtime");
+
+			return type;
 		}
 
 		#endregion Helper Methods

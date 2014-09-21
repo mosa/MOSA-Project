@@ -172,5 +172,28 @@ namespace Mosa.Test.Collection
 
 			return a;
 		}
+
+		public static int ExceptionTest1()
+		{
+			int a = 10;
+
+			try
+			{
+				a = a + 2;
+
+				if (a > 0)
+					throw new System.Exception();
+
+				a = a + 1000;
+			}
+			catch
+			{
+				a = a + 50;
+			}
+
+			a = a + 7;
+
+			return a;
+		}
 	}
 }

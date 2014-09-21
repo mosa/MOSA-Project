@@ -22,21 +22,6 @@ namespace Mosa.Compiler.Framework
 		#region Data members
 
 		/// <summary>
-		/// Holds the type system
-		/// </summary>
-		private Mosa.Compiler.MosaTypeSystem.TypeSystem typeSystem;
-
-		/// <summary>
-		/// Holds the Native Pointer Size
-		/// </summary>
-		private int nativePointerSize;
-
-		/// <summary>
-		/// Holds the Native Pointer Alignment
-		/// </summary>
-		private int nativePointerAlignment;
-
-		/// <summary>
 		/// Holds a set of types
 		/// </summary>
 		private HashSet<MosaType> typeSet = new HashSet<MosaType>();
@@ -86,9 +71,9 @@ namespace Mosa.Compiler.Framework
 		/// <param name="nativePointerAlignment">The native pointer alignment.</param>
 		public MosaTypeLayout(TypeSystem typeSystem, int nativePointerSize, int nativePointerAlignment)
 		{
-			this.nativePointerAlignment = nativePointerAlignment;
-			this.nativePointerSize = nativePointerSize;
-			this.typeSystem = typeSystem;
+			NativePointerAlignment = nativePointerAlignment;
+			NativePointerSize = nativePointerSize;
+			TypeSystem = typeSystem;
 
 			Debug.Assert(nativePointerSize >= 4);
 
@@ -99,19 +84,19 @@ namespace Mosa.Compiler.Framework
 		/// Gets the type system associated with this instance.
 		/// </summary>
 		/// <value>The type system.</value>
-		public TypeSystem TypeSystem { get { return typeSystem; } }
+		public TypeSystem TypeSystem { get; private set; }
 
 		/// <summary>
 		/// Gets the size of the native pointer.
 		/// </summary>
 		/// <value>The size of the native pointer.</value>
-		public int NativePointerSize { get { return nativePointerSize; } }
+		public int NativePointerSize { get; private set; }
 
 		/// <summary>
 		/// Gets the native pointer alignment.
 		/// </summary>
 		/// <value>The native pointer alignment.</value>
-		public int NativePointerAlignment { get { return nativePointerAlignment; } }
+		public int NativePointerAlignment { get; private set; }
 
 		/// <summary>
 		/// Gets the method table offset.
@@ -252,7 +237,7 @@ namespace Mosa.Compiler.Framework
 		public bool IsCompoundType(MosaType type)
 		{
 			// i.e. whether copying of the type requires multiple move
-			int? primitiveSize = type.GetPrimitiveSize(nativePointerSize);
+			int? primitiveSize = type.GetPrimitiveSize(NativePointerSize);
 			if (primitiveSize != null && primitiveSize > 8)
 				return true;
 
@@ -260,7 +245,7 @@ namespace Mosa.Compiler.Framework
 				return false;
 
 			int typeSize = GetTypeSize(type);
-			if (typeSize > nativePointerSize)
+			if (typeSize > NativePointerSize)
 				return true;
 
 			return false;
@@ -271,7 +256,7 @@ namespace Mosa.Compiler.Framework
 		private void ResolveLayouts()
 		{
 			// Enumerate all types and do an appropriate type layout
-			foreach (MosaType type in typeSystem.AllTypes)
+			foreach (var type in TypeSystem.AllTypes)
 			{
 				ResolveType(type);
 			}
@@ -307,7 +292,7 @@ namespace Mosa.Compiler.Framework
 				ResolveInterfaceType(interfaceType);
 			}
 
-			int? size = type.GetPrimitiveSize((int)nativePointerSize);
+			int? size = type.GetPrimitiveSize(NativePointerSize);
 			if (size != null)
 			{
 				typeSizes[type] = size.Value;
@@ -353,7 +338,7 @@ namespace Mosa.Compiler.Framework
 			int typeSize = 0;
 
 			// Receives the size/alignment
-			int packingSize = type.PackingSize ?? nativePointerAlignment;
+			int packingSize = type.PackingSize ?? NativePointerAlignment;
 
 			if (type.BaseType != null)
 			{
@@ -625,7 +610,7 @@ namespace Mosa.Compiler.Framework
 		private int GetMemorySize(MosaType type)
 		{
 			Debug.Assert(!type.IsValueType);
-			return nativePointerSize;
+			return NativePointerSize;
 		}
 
 		#endregion Internal

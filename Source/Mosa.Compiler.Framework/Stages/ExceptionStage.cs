@@ -38,7 +38,15 @@ namespace Mosa.Compiler.Framework.Stages
 					if (ctx.IsEmpty)
 						continue;
 
-					if (ctx.Instruction == IRInstruction.CallFinally)
+					if (ctx.Instruction == IRInstruction.Throw)
+					{
+						var method = PlatformInternalRuntimeType.FindMethodByName("ExceptionHandler");
+
+						ctx.SetInstruction(IRInstruction.Move, exceptionRegister, ctx.Operand1);						
+						ctx.AppendInstruction(IRInstruction.Call, null, Operand.CreateSymbolFromMethod(TypeSystem, method));
+						ctx.MosaMethod = method;
+					}
+					else if (ctx.Instruction == IRInstruction.CallFinally)
 					{
 						var target = ctx.BranchTargets[0];
 
@@ -62,22 +70,21 @@ namespace Mosa.Compiler.Framework.Stages
 						var header = FindImmediateExceptionHandler(ctx);
 						var headerBlock = BasicBlocks.GetByLabel(header.HandlerStart);
 
-						ctx.SetInstruction(IRInstruction.InternalReturn);
+						var newBlocks = CreateNewBlocksWithContexts(2);
 
-						// For future use
+						ctx.SetInstruction(IRInstruction.Move, exceptionRegister, exceptionRegisters[headerBlock]);
+						ctx.AppendInstruction(IRInstruction.IntegerCompareBranch, ConditionCode.Equal, null, exceptionRegister, nullOperand);
+						ctx.SetBranch(newBlocks[0].BasicBlock);
+						ctx.AppendInstruction(IRInstruction.Jmp, newBlocks[1].BasicBlock);
+						LinkBlocks(ctx, newBlocks[0]);
+						LinkBlocks(ctx, newBlocks[1]);
 
-						//var newBlocks = CreateNewBlocksWithContexts(2);
+						newBlocks[0].AppendInstruction(IRInstruction.InternalReturn);
 
-						//ctx.SetInstruction(IRInstruction.Move, exceptionRegister, exceptionRegisters[headerBlock]);
-						//ctx.AppendInstruction(IRInstruction.IntegerCompareBranch, ConditionCode.Equal, null, exceptionRegister, nullOperand);
-						//ctx.SetBranch(newBlocks[1].BasicBlock);
-						//ctx.AppendInstruction(IRInstruction.Jmp, newBlocks[0].BasicBlock);
-						//LinkBlocks(ctx, newBlocks[0]);
-						//LinkBlocks(ctx, newBlocks[1]);
+						var method = PlatformInternalRuntimeType.FindMethodByName("ExceptionHandler");
 
-						//newBlocks[0].AppendInstruction(IRInstruction.InternalReturn);
-
-						//newBlocks[1].AppendInstruction(IRInstruction.InternalReturn);
+						newBlocks[1].AppendInstruction(IRInstruction.Call, null, Operand.CreateSymbolFromMethod(TypeSystem, method));
+						newBlocks[1].MosaMethod = method;
 					}
 					else if (ctx.Instruction == IRInstruction.ExceptionStart)
 					{

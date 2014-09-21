@@ -24,12 +24,7 @@ namespace Mosa.Compiler.Framework.Intrinsics
 		/// <param name="methodCompiler">The method compiler.</param>
 		void IIntrinsicInternalMethod.ReplaceIntrinsicCall(Context context, BaseMethodCompiler methodCompiler)
 		{
-			string arch = "Mosa.Platform.Internal." + methodCompiler.Architecture.PlatformName;
-
-			var type = methodCompiler.TypeSystem.GetTypeByName(arch, "Runtime");
-			Debug.Assert(type != null, "Cannot find " + arch + ".Runtime");
-
-			var method = type.FindMethodByName("AllocateString");
+			var method = methodCompiler.Compiler.PlatformInternalRuntimeType.FindMethodByName("AllocateString");
 
 			Operand callTargetOperand = Operand.CreateSymbolFromMethod(methodCompiler.TypeSystem, method);
 

@@ -300,7 +300,7 @@ namespace Mosa.Platform.Internal.x86
 
 		public static uint GetProtectedRegionEntryByAddress(uint address, uint exceptionType, uint methodDef)
 		{
-			uint table = Native.Get32(methodDef + (NativeIntSize * 7));
+			uint table = Native.Get32(methodDef + (NativeIntSize * 6));
 
 			if (table == 0)
 				return 0;
@@ -412,7 +412,7 @@ namespace Mosa.Platform.Internal.x86
 			return GetMethodDefinition(address);
 		}
 
-		public static void HandlerException()
+		public static void ExceptionHandler()
 		{
 			uint stackFrame = GetStackFrame(0);
 
@@ -447,6 +447,8 @@ namespace Mosa.Platform.Internal.x86
 				uint target = methodDef + handlerOffset;
 
 				SetReturnAddressForStackFrame(stackFrame, target);
+
+				return;
 			}
 			else
 			{
