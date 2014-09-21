@@ -300,7 +300,7 @@ namespace Mosa.Platform.Internal.x86
 
 		public static uint GetProtectedRegionEntryByAddress(uint address, uint exceptionType, uint methodDef)
 		{
-			uint table = Native.Get32(methodDef + (NativeIntSize * 6));
+			uint table = Mosa.Internal.Native.Load32(methodDef, NativeIntSize * 6);
 
 			if (table == 0)
 				return 0;
@@ -323,40 +323,7 @@ namespace Mosa.Platform.Internal.x86
 					}
 				}
 
-				table = table + NativeIntSize * 6;
-
-				entries--;
-			}
-
-			return 0;
-		}
-
-		public static uint GetProtectedRegionEntryByAddress2(uint address, uint exceptionType, uint methodDef)
-		{
-			uint table = Native.Get32(methodDef + (NativeIntSize * 7));
-
-			if (table == 0)
-				return 0;
-
-			uint entries = Native.Get32(table);
-
-			table = table + 4;
-
-			while (entries > 0)
-			{
-				uint addr = Native.Get32(table + NativeIntSize * 1);
-				uint size = Native.Get32(table + NativeIntSize * 2);
-				uint type = Native.Get32(table + NativeIntSize * 4);
-
-				if (address >= addr && address < addr + size)
-				{
-					if (type != 0 || type == exceptionType)
-					{
-						return table;
-					}
-				}
-
-				table = table + NativeIntSize * 6;
+				table = table + (NativeIntSize * 6);
 
 				entries--;
 			}
@@ -386,11 +353,6 @@ namespace Mosa.Platform.Internal.x86
 			return Mosa.Internal.Native.Load32(stackframe, NativeIntSize);
 		}
 
-		public static uint GetReturnAddressFromStackFrame2(uint stackframe)
-		{
-			return Mosa.Internal.Native.Load32(stackframe, NativeIntSize);
-		}
-
 		public static void SetReturnAddressForStackFrame(uint stackframe, uint value)
 		{
 			Native.Set32(stackframe + NativeIntSize, value);
@@ -414,7 +376,7 @@ namespace Mosa.Platform.Internal.x86
 
 		public static void ExceptionHandler()
 		{
-			uint stackFrame = GetStackFrame(0);
+			uint stackFrame = GetStackFrame(1);
 
 			uint returnAdddress = GetReturnAddressFromStackFrame(stackFrame);
 
