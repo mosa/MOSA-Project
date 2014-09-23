@@ -44,8 +44,7 @@ namespace System.Reflection
 		/// <returns>True if obj equals the type and value of this instance; otherwise, False.</returns>
 		public override bool Equals(object obj)
 		{
-			// TODO
-			return base.Equals(obj);
+			return (object)this == obj;
 		}
 
 		/// <summary>
@@ -54,36 +53,7 @@ namespace System.Reflection
 		/// <returns>A 32-bit signed integer hash code.</returns>
 		public override int GetHashCode()
 		{
-			// TODO
 			return base.GetHashCode();
-		}
-
-		/// <summary>
-		/// Indicates whether two ConstructorInfo objects are equal.
-		/// </summary>
-		/// <param name="left">The first object to compare.</param>
-		/// <param name="right">The second object to compare.</param>
-		/// <returns>True if left is equal to right; otherwise, False.</returns>
-		public static bool operator ==(ConstructorInfo left, ConstructorInfo right)
-		{
-			if (object.ReferenceEquals(left, right))
-				return true;
-
-			if ((object)left == null || (object)right == null)
-				return false;
-
-			return left.Equals(right);
-		}
-
-		/// <summary>
-		/// Indicates whether two ConstructorInfo objects are not equal.
-		/// </summary>
-		/// <param name="left">The first object to compare.</param>
-		/// <param name="right">The second object to compare.</param>
-		/// <returns>True if left is not equal to right; otherwise, False.</returns>
-		public static bool operator !=(ConstructorInfo left, ConstructorInfo right)
-		{
-			return !(left == right);
 		}
 	}
 }

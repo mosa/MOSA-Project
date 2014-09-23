@@ -121,13 +121,6 @@ namespace System
 		}
 
 		/// <summary>
-		/// Initializes a new instance of the Type class.
-		/// </summary>
-		internal Type()
-		{
-		}
-
-		/// <summary>
 		/// Determines if the underlying system type of the current Type is the same as the underlying system type of the specified Object.
 		/// </summary>
 		/// <param name="obj">The object whose underlying system type is to be compared with the underlying system type of the current Type.</param>

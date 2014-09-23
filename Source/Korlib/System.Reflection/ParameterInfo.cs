@@ -14,7 +14,7 @@ using System.Collections.Generic;
 namespace System.Reflection
 {
 	[Serializable]
-	public class ParameterInfo : ICustomAttributeProvider
+	public class ParameterInfo
 	{
 		/// <summary>
 		/// The attributes of the parameter.
@@ -59,7 +59,7 @@ namespace System.Reflection
 		/// </summary>
 		public virtual IEnumerable<CustomAttributeData> CustomAttributes
 		{
-			get { return this.GetCustomAttributesData(); }
+			get { return new CustomAttributeData[0]; }
 		}
 
 		/// <summary>
@@ -111,14 +111,6 @@ namespace System.Reflection
 		}
 
 		/// <summary>
-		/// Gets a value that identifies this parameter in metadata.
-		/// </summary>
-		public virtual int MetadataToken
-		{
-			get { return 0; }
-		}
-
-		/// <summary>
 		/// Gets the name of the parameter.
 		/// </summary>
 		public virtual string Name
@@ -140,63 +132,6 @@ namespace System.Reflection
 		public virtual int Position
 		{
 			get { return this.PositionImpl; }
-		}
-
-		/// <summary>
-		/// Gets a value indicating the default value if the parameter has a default value.
-		/// </summary>
-		public virtual object RawDefaultValue
-		{
-			get { return this.DefaultValueImpl; }
-		}
-
-		/// <summary>
-		/// Initializes a new instance of the ParameterInfo class.
-		/// </summary>
-		protected ParameterInfo()
-		{
-
-		}
-
-		/// <summary>
-		/// Gets all the custom attributes defined on this parameter.
-		/// </summary>
-		/// <param name="inherit">This argument is ignored for objects of this type.</param>
-		/// <returns>An array that contains all the custom attributes applied to this parameter.</returns>
-		public virtual object[] GetCustomAttributes(bool inherit)
-		{
-			throw new NotImplementedException();
-		}
-
-		/// <summary>
-		/// Gets the custom attributes of the specified type or its derived types that are applied to this parameter.
-		/// </summary>
-		/// <param name="attributeType">The custom attributes identified by type.</param>
-		/// <param name="inherit">This argument is ignored for objects of this type.</param>
-		/// <returns>An array that contains the custom attributes of the specified type or its derived types.</returns>
-		public object[] GetCustomAttributes(Type attributeType, bool inherit)
-		{
-			throw new NotImplementedException();
-		}
-
-		/// <summary>
-		/// Determines whether the custom attribute of the specified type or its derived types is applied to this parameter.
-		/// </summary>
-		/// <param name="attributeType">The Type object to search for.</param>
-		/// <param name="inherit">This argument is ignored for objects of this type.</param>
-		/// <returns>True if one or more instances of attributeType or its derived types are applied to this parameter; otherwise, False.</returns>
-		public bool IsDefined(Type attributeType, bool inherit)
-		{
-			throw new NotImplementedException();
-		}
-
-		/// <summary>
-		/// Returns a list of CustomAttributeData objects for the current parameter, which can be used in the reflection-only context.
-		/// </summary>
-		/// <returns>A generic list of CustomAttributeData objects representing data about the attributes that have been applied to the current parameter.</returns>
-		public virtual IList<CustomAttributeData> GetCustomAttributesData()
-		{
-			throw new NotImplementedException();
 		}
 	}
 }

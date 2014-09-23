@@ -65,13 +65,6 @@ namespace System.Reflection
 		}
 
 		/// <summary>
-		/// Initializes a new instance of the PropertyInfo class.
-		/// </summary>
-		protected PropertyInfo()
-		{
-		}
-
-		/// <summary>
 		/// Returns a value that indicates whether this instance is equal to a specified object.
 		/// </summary>
 		/// <param name="obj">An object to compare with this instance, or null.</param>

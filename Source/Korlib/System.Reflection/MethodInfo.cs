@@ -33,18 +33,6 @@ namespace System.Reflection
 		}
 
 		/// <summary>
-		/// Gets the custom attributes for the return type.
-		/// </summary>
-		public abstract ICustomAttributeProvider ReturnTypeCustomAttributes { get; }
-
-		/// <summary>
-		/// Initializes a new instance of the MethodInfo class.
-		/// </summary>
-		protected MethodInfo()
-		{
-		}
-
-		/// <summary>
 		/// Creates a delegate of the specified type from this method.
 		/// </summary>
 		/// <param name="delegateType">The type of the delegate to create.</param>
@@ -74,15 +62,8 @@ namespace System.Reflection
 		/// <returns>True if obj equals the type and value of this instance; otherwise, False.</returns>
 		public override bool Equals(object obj)
 		{
-			// TODO
-			return base.Equals(obj);
+			return (object)this == obj;
 		}
-
-		/// <summary>
-		/// When overridden in a derived class, returns the MethodInfo object for the method on the direct or indirect base class in which the method represented by this instance was first declared.
-		/// </summary>
-		/// <returns>A MethodInfo object for the first implementation of this method.</returns>
-		public abstract MethodInfo GetBaseDefinition();
 
 		/// <summary>
 		/// Returns an array of Type objects that represent the type arguments of a generic method or the type parameters of a generic method definition.
@@ -90,7 +71,6 @@ namespace System.Reflection
 		/// <returns>An array of Type objects that represent the type arguments of a generic method or the type parameters of a generic method definition. Returns an empty array if the current method is not a generic method.</returns>
 		public override Type[] GetGenericArguments()
 		{
-			// TODO
 			throw new NotSupportedException();
 		}
 
@@ -100,7 +80,6 @@ namespace System.Reflection
 		/// <returns>A MethodInfo object representing a generic method definition from which the current method can be constructed.</returns>
 		public virtual MethodInfo GetGenericMethodDefinition()
 		{
-			// TODO
 			throw new NotSupportedException();
 		}
 
@@ -110,7 +89,6 @@ namespace System.Reflection
 		/// <returns>A 32-bit signed integer hash code.</returns>
 		public override int GetHashCode()
 		{
-			// TODO
 			return base.GetHashCode();
 		}
 
@@ -121,36 +99,7 @@ namespace System.Reflection
 		/// <returns>A MethodInfo object that represents the constructed method formed by substituting the elements of typeArguments for the type parameters of the current generic method definition.</returns>
 		public virtual MethodInfo MakeGenericMethod(params Type[] typeArguments)
 		{
-			// TODO
 			throw new NotSupportedException();
-		}
-
-		/// <summary>
-		/// Indicates whether two MethodInfo objects are equal.
-		/// </summary>
-		/// <param name="left">The first object to compare.</param>
-		/// <param name="right">The second object to compare.</param>
-		/// <returns>True if left is equal to right; otherwise, False.</returns>
-		public static bool operator ==(MethodInfo left, MethodInfo right)
-		{
-			if (object.ReferenceEquals(left, right))
-				return true;
-
-			if ((object)left == null || (object)right == null)
-				return false;
-
-			return left.Equals(right);
-		}
-
-		/// <summary>
-		/// Indicates whether two MethodInfo objects are not equal.
-		/// </summary>
-		/// <param name="left">The first object to compare.</param>
-		/// <param name="right">The second object to compare.</param>
-		/// <returns>True if left is not equal to right; otherwise, False.</returns>
-		public static bool operator !=(MethodInfo left, MethodInfo right)
-		{
-			return !(left == right);
 		}
 	}
 }

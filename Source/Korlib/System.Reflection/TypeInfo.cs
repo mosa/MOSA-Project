@@ -422,11 +422,6 @@ namespace System.Reflection
 		public abstract string Namespace { get; }
 
 		/// <summary>
-		/// 
-		/// </summary>
-		internal TypeInfo() { }
-
-		/// <summary>
 		/// Returns the current type as a Type object.
 		/// </summary>
 		/// <returns></returns>

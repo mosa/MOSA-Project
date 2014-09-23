@@ -16,53 +16,47 @@ namespace System
 	public sealed unsafe class _Type : Type
 	{
 		private MetadataTypeStruct* typeStruct;
-		private _Assembly assembly;
 		private string fullname;
 		private RuntimeTypeHandle handle;
 
-		internal _Type(RuntimeTypeHandle handle, _Assembly assembly)
-			: base(handle)
+		public override string AssemblyQualifiedName
 		{
-			this.assembly = assembly;
-			this.handle = handle;
-			this.typeStruct = (MetadataTypeStruct*)((uint**)&handle)[0];
-			this.fullname = x86Runtime.InitializeMetadataString((*this.typeStruct).Name);
+			get { throw new NotImplementedException(); }
 		}
 
-		public override Assembly Assembly
+		public override Type DeclaringType
 		{
-			get { return this.assembly; }
-		}
-
-		public override Type BaseType
-		{
-			get
-			{
-				// Get the address of the parent type definition
-				uint* parentPtr = (uint*)(*this.typeStruct).ParentType;
-
-				// If null (0) then there is no base type so return null
-				if (parentPtr == null)
-					return null;
-
-				// Otherwise generate a handle and find the type from handle
-				RuntimeTypeHandle handle = new RuntimeTypeHandle();
-				((uint**)&handle)[0] = parentPtr;
-				return Type.GetTypeFromHandle(handle);
-			}
-		}
-
-		public override RuntimeTypeHandle TypeHandle
-		{
-			get
-			{
-				return this.handle;
-			}
+			get { throw new NotImplementedException(); }
 		}
 
 		public override string FullName
 		{
-			get { return this.fullname; }
+			get { throw new NotImplementedException(); }
+		}
+
+		public override int GenericParameterPosition
+		{
+			get { throw new NotImplementedException(); }
+		}
+
+		public override Type[] GenericTypeArguments
+		{
+			get { throw new NotImplementedException(); }
+		}
+
+		public override bool IsConstructedGenericType
+		{
+			get { throw new NotImplementedException(); }
+		}
+
+		public override bool IsGenericParameter
+		{
+			get { throw new NotImplementedException(); }
+		}
+
+		public override string Name
+		{
+			get { throw new NotImplementedException(); }
 		}
 
 		public override string Namespace
@@ -70,9 +64,16 @@ namespace System
 			get { throw new NotImplementedException(); }
 		}
 
-		protected override TypeAttributes GetAttributeFlagsImpl()
+		internal _Type(RuntimeTypeHandle handle)
 		{
-			return (TypeAttributes)(*this.typeStruct).Attributes;
+			this.handle = handle;
+			this.typeStruct = (MetadataTypeStruct*)((uint**)&handle)[0];
+			this.fullname = x86Runtime.InitializeMetadataString((*this.typeStruct).Name);
+		}
+
+		public override int GetArrayRank()
+		{
+			throw new NotImplementedException();
 		}
 
 		public override Type GetElementType()
@@ -80,47 +81,12 @@ namespace System
 			throw new NotImplementedException();
 		}
 
-		public override FieldInfo GetField(string name, BindingFlags bindingAttr)
-		{
-			throw new NotImplementedException();
-		}
-
-		public override FieldInfo[] GetFields(BindingFlags bindingAttr)
-		{
-			throw new NotImplementedException();
-		}
-
-		public override Type GetInterface(string name, bool ignoreCase)
-		{
-			throw new NotImplementedException();
-		}
-
-		public override Type[] GetInterfaces()
-		{
-			throw new NotImplementedException();
-		}
-
-		public override MemberInfo[] GetMembers(BindingFlags bindingAttr)
-		{
-			throw new NotImplementedException();
-		}
-
-		protected override MethodInfo GetMethodImpl(string name, BindingFlags bindingAttr, Binder binder, CallingConventions callConvention, Type[] types, ParameterModifier[] modifiers)
-		{
-			throw new NotImplementedException();
-		}
-
-		public override MethodInfo[] GetMethods(BindingFlags bindingAttr)
+		public override Type[] GetGenericTypeDefinition()
 		{
 			throw new NotImplementedException();
 		}
 
 		protected override bool HasElementTypeImpl()
-		{
-			throw new NotImplementedException();
-		}
-
-		public override object InvokeMember(string name, BindingFlags invokeAttr, Binder binder, object target, object[] args, ParameterModifier[] modifiers, Globalization.CultureInfo culture, string[] namedParameters)
 		{
 			throw new NotImplementedException();
 		}
@@ -135,37 +101,37 @@ namespace System
 			throw new NotImplementedException();
 		}
 
+		protected override bool IsNestedImpl()
+		{
+			throw new NotImplementedException();
+		}
+
 		protected override bool IsPointerImpl()
 		{
 			throw new NotImplementedException();
 		}
 
-		protected override bool IsPrimitiveImpl()
+		public override Type MakeArrayType()
 		{
 			throw new NotImplementedException();
 		}
 
-		public override string Name
-		{
-			get { throw new NotImplementedException(); }
-		}
-
-		public override object[] GetCustomAttributes(bool inherit)
+		public override Type MakeArrayType(int rank)
 		{
 			throw new NotImplementedException();
 		}
 
-		public override object[] GetCustomAttributes(Type attributeType, bool inherit)
+		public override Type MakeByRefType()
 		{
 			throw new NotImplementedException();
 		}
 
-		public override bool IsDefined(Type attributeType, bool inherit)
+		public override Type MakeGenericType(params Type[] typeArguments)
 		{
 			throw new NotImplementedException();
 		}
 
-		protected override ConstructorInfo GetConstructorImpl(BindingFlags bindingAttr, Binder binder, CallingConventions callConvention, Type[] types, ParameterModifier[] modifiers)
+		public override Type MakePointerType()
 		{
 			throw new NotImplementedException();
 		}

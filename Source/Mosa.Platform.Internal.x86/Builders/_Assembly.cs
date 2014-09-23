@@ -18,6 +18,11 @@ namespace System
 		internal Type[] types;
 		internal RuntimeTypeHandle[] handles;
 
+		public override Collections.Generic.IEnumerable<TypeInfo> DefinedTypes
+		{
+			get { throw new NotImplementedException(); }
+		}
+
 		internal _Assembly(uint* pointer)
 		{
 			this.assemblyStruct = (MetadataAssemblyStruct*)pointer;
@@ -28,7 +33,7 @@ namespace System
 				RuntimeTypeHandle handle = new RuntimeTypeHandle();
 				((uint**)&handle)[0] = MetadataAssemblyStruct.GetTypeDefinitionAddress(assemblyStruct, i);
 				this.handles[i] = handle;
-				this.types[i] = new _Type(handle, this);
+				this.types[i] = new _Type(handle);
 			}
 		}
 	}
