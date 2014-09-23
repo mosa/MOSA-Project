@@ -29,7 +29,7 @@ namespace Mosa.TestWorld.x86.Tests
 		}
 	}
 
-	[PlugType("Mosa.TestWorld.x86.Tests.PlugTestCase")]
+	[Type("Mosa.TestWorld.x86.Tests.PlugTestCase")]
 	internal static class PlugTestImplementation
 	{
 		public static int AddOne(int a)
@@ -37,7 +37,7 @@ namespace Mosa.TestWorld.x86.Tests
 			return a + 1;
 		}
 
-		[PlugMethod("Mosa.TestWorld.x86.Tests.PlugTestCase.Double")]
+		[Method("Mosa.TestWorld.x86.Tests.PlugTestCase.Double")]
 		public static int Double(int a)
 		{
 			return a + a;

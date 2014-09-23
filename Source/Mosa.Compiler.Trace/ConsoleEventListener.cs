@@ -73,6 +73,21 @@ namespace Mosa.Compiler.InternalTrace
 						break;
 					}
 
+				case CompilerEvent.Exception:
+					{
+						if (Quiet && !string.IsNullOrEmpty(supressed))
+						{
+							DisplayCompilingMethod(supressed);
+							supressed = null;
+						}
+
+						Console.ForegroundColor = ConsoleColor.Red;
+						Console.Write(@"[Exception]  ");
+						Console.ForegroundColor = ConsoleColor.White;
+						Console.WriteLine(info);
+						break;
+					}
+
 				case CompilerEvent.Error:
 					{
 						if (Quiet && !string.IsNullOrEmpty(supressed))

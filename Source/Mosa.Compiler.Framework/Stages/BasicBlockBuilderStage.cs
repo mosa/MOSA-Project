@@ -66,21 +66,21 @@ namespace Mosa.Compiler.Framework.Stages
 			// Link all the blocks together
 			BuildBasicBlockLinks(prologue);
 
-			foreach (var clause in MethodCompiler.Method.ExceptionBlocks)
+			foreach (var handler in MethodCompiler.Method.ExceptionHandlers)
 			{
-				if (clause.HandlerStart != 0)
+				if (handler.HandlerStart != 0)
 				{
 					//trace.Log("Exception HandlerOffset: 0x" + clause.HandlerStart.ToString("X4"));
 
-					var basicBlock = BasicBlocks.GetByLabel(clause.HandlerStart);
+					var basicBlock = BasicBlocks.GetByLabel(handler.HandlerStart);
 					BuildBasicBlockLinks(basicBlock);
 					BasicBlocks.AddHeaderBlock(basicBlock);
 				}
-				if (clause.FilterOffset != null)
+				if (handler.FilterOffset != null)
 				{
 					//trace.Log("Exception FilterOffset: 0x" + clause.FilterOffset.Value.ToString("X4"));
 
-					var basicBlock = BasicBlocks.GetByLabel(clause.FilterOffset.Value);
+					var basicBlock = BasicBlocks.GetByLabel(handler.FilterOffset.Value);
 					BuildBasicBlockLinks(basicBlock);
 					BasicBlocks.AddHeaderBlock(basicBlock);
 				}
@@ -135,13 +135,13 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 
 			// Add exception targets
-			foreach (var clause in MethodCompiler.Method.ExceptionBlocks)
+			foreach (var handler in MethodCompiler.Method.ExceptionHandlers)
 			{
-				targets.AddIfNew(clause.HandlerStart);
-				targets.AddIfNew(clause.TryStart);
+				targets.AddIfNew(handler.HandlerStart);
+				targets.AddIfNew(handler.TryStart);
 
-				if (clause.FilterOffset != null)
-					targets.AddIfNew(clause.FilterOffset.Value);
+				if (handler.FilterOffset != null)
+					targets.AddIfNew(handler.FilterOffset.Value);
 			}
 
 			//foreach (var target in targets)
@@ -236,7 +236,7 @@ namespace Mosa.Compiler.Framework.Stages
 						{
 							bool createLink = false;
 
-							var entry = FindImmediateExceptionEntry(ctx);
+							var entry = FindImmediateExceptionHandler(ctx);
 
 							if (entry != null)
 							{

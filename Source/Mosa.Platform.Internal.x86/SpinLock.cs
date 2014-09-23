@@ -13,7 +13,7 @@ namespace Mosa.Platform.Internal.x86
 {
 	public unsafe static class SpinLock
 	{
-		[PlugMethod("System.Threading.SpinLock.InternalEnter")]
+		[Method("System.Threading.SpinLock.InternalEnter")]
 		public static void Enter(ref bool spinlock)
 		{
 			while (!Native.SyncCompareAndSwap(ref spinlock, 0, 1))
@@ -25,7 +25,7 @@ namespace Mosa.Platform.Internal.x86
 			}
 		}
 
-		[PlugMethod("System.Threading.SpinLock.InternalExit")]
+		[Method("System.Threading.SpinLock.InternalExit")]
 		public static void Exit(ref bool spinlock)
 		{
 			Native.SyncSet(ref spinlock, 0);

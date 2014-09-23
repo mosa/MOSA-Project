@@ -31,6 +31,9 @@ namespace Mosa.Compiler.Framework.Stages
 			if (BasicBlocks.HeadBlocks.Count == 0)
 				return;
 
+			if (HasProtectedRegions)
+				return;
+
 			phiPlacementStage = MethodCompiler.Pipeline.FindFirst<PhiPlacementStage>();
 
 			foreach (var headBlock in BasicBlocks.HeadBlocks)
@@ -39,6 +42,13 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 
 			ssaOperands = null;
+		}
+
+		protected override void Finish()
+		{
+			// Clean up
+			variables = null;
+			counts = null;
 		}
 
 		/// <summary>
@@ -61,11 +71,6 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				RenameVariables(headBlock.NextBlocks[0], analysis);
 			}
-
-			// Clean up
-			analysis = null;
-			variables = null;
-			counts = null;
 		}
 
 		/// <summary>

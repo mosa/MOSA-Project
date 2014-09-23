@@ -44,15 +44,15 @@ namespace Mosa.Utility.Aot
 				new CILTransformationStage(),
 				new ConvertCompoundStage(),
 				new UnboxValueTypeStage(),
-				//new PromoteLocalVariablesStage(),
-
+				
+				(compilerOptions.EnablePromoteTemporaryVariablesOptimization) ? new PromoteTempVariablesStage() : null,
+				
 				(compilerOptions.EnableSSA) ? new EdgeSplitStage() : null,
 				(compilerOptions.EnableSSA) ? new PhiPlacementStage() : null,
 				(compilerOptions.EnableSSA) ? new EnterSSAStage() : null,
 				(compilerOptions.EnableSSA && compilerOptions.EnableSSAOptimizations) ? new SSAOptimizations() : null,
 				(compilerOptions.EnableSSA) ? new LeaveSSA() : null,
 
-				new PromoteTempVariablesStage(),
 				new ExceptionStage(),
 
 				new PlatformStubStage(),
@@ -62,6 +62,7 @@ namespace Mosa.Utility.Aot
 				new EmptyBlockRemovalStage(),
 				new BlockOrderingStage(),
 				new CodeGenerationStage(),
+				new ProtectedRegionLayoutStage(),
 			});
 		}
 

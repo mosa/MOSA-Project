@@ -205,6 +205,12 @@ namespace Mosa.Tool.Compiler
 			);
 
 			optionSet.Add(
+				@"promote-temps|enable-promote-temporary-variables-optimization",
+				@"Performs single static assignments optimizations.",
+				enable => compilerOptions.EnablePromoteTemporaryVariablesOptimization = enable != null
+			);
+
+			optionSet.Add(
 				"stats=",
 				"Generate instruction statistics {file} of the produced binary.",
 				delegate(string file)

@@ -20,6 +20,12 @@ namespace Mosa.Compiler.Framework
 	/// </summary>
 	public abstract class BaseMethodCompilerStage : IMethodCompilerStage
 	{
+		#region Data members
+
+		protected int instructionCount = 0;
+
+		#endregion Data members
+
 		#region Properties
 
 		/// <summary>
@@ -104,6 +110,7 @@ namespace Mosa.Compiler.Framework
 		void IMethodCompilerStage.Execute()
 		{
 			Run();
+			Finish();
 		}
 
 		#endregion IMethodCompilerStage members
@@ -114,8 +121,10 @@ namespace Mosa.Compiler.Framework
 		{ }
 
 		protected virtual void Run()
-		{
-		}
+		{ }
+
+		protected virtual void Finish()
+		{ }
 
 		#endregion Overrides
 
@@ -127,7 +136,7 @@ namespace Mosa.Compiler.Framework
 		/// <value>
 		/// <c>true</c> if this instance has protected regions; otherwise, <c>false</c>.
 		/// </value>
-		protected bool HasProtectedRegions { get { return MethodCompiler.Method.ExceptionBlocks.Count != 0; } }
+		protected bool HasProtectedRegions { get { return MethodCompiler.Method.ExceptionHandlers.Count != 0; } }
 
 		/// <summary>
 		/// Creates the context.
@@ -376,26 +385,26 @@ namespace Mosa.Compiler.Framework
 
 		#endregion Block Operations
 
-		#region Protected Block Methods
+		#region Protected Region Methods
 
-		protected MosaExceptionHandler FindImmediateExceptionEntry(Context context)
+		protected MosaExceptionHandler FindImmediateExceptionHandler(Context context)
 		{
 			MosaExceptionHandler innerClause = null;
 
 			int label = context.Label;
 
-			foreach (var clause in MethodCompiler.Method.ExceptionBlocks)
+			foreach (var handler in MethodCompiler.Method.ExceptionHandlers)
 			{
-				if (clause.IsLabelWithinTry(label) || clause.IsLabelWithinHandler(label))
+				if (handler.IsLabelWithinTry(label) || handler.IsLabelWithinHandler(label))
 				{
-					return clause;
+					return handler;
 				}
 			}
 
 			return null;
 		}
 
-		#endregion Protected Block Methods
+		#endregion Protected Region Methods
 
 		#region Trace Helper Methods
 

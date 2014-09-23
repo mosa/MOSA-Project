@@ -101,6 +101,14 @@ namespace Mosa.Compiler.Framework
 		public bool EnableSSAOptimizations { get; set; }
 
 		/// <summary>
+		/// Gets or sets a value indicating whether [enable promote temporary variables optimization].
+		/// </summary>
+		/// <value>
+		/// <c>true</c> if [enable promote temporary variables optimization]; otherwise, <c>false</c>.
+		/// </value>
+		public bool EnablePromoteTemporaryVariablesOptimization { get; set; }
+
+		/// <summary>
 		/// Gets or sets a value indicating whether static allocations are enabled.
 		/// </summary>
 		/// <value>
@@ -167,8 +175,9 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		public CompilerOptions()
 		{
-			EnableSSA = false;
-			EnableSSAOptimizations = false;
+			EnableSSA = true;
+			EnableSSAOptimizations = true;
+			EnablePromoteTemporaryVariablesOptimization = true;
 			BaseAddress = 0x00400000;
 			DominanceAnalysisFactory = delegate { return new SimpleFastDominance(); };
 			BlockOrderAnalysisFactory = delegate { return new LoopAwareBlockOrder(); };

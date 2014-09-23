@@ -43,6 +43,7 @@ namespace Mosa.TinyCPUSimulator.Adaptor
 				new MethodCompilerSchedulerStage(),
 				new TypeInitializerSchedulerStage(),
 				new SimPowerUpStage(),
+				new MethodLookupTableStage(),
 				new MetadataStage(),
 				new SimLinkerFinalizationStage(simAdapter.SimCPU),
 			});
@@ -75,11 +76,13 @@ namespace Mosa.TinyCPUSimulator.Adaptor
 		/// <param name="simAdapter">The sim adapter.</param>
 		/// <param name="linker">The linker.</param>
 		/// <returns></returns>
-		public static SimCompiler Compile(TypeSystem typeSystem, MosaTypeLayout typeLayout, CompilerTrace compilerTrace, bool enabledSSA, BaseArchitecture architecture, ISimAdapter simAdapter, BaseLinker linker)
+		public static SimCompiler Compile(TypeSystem typeSystem, MosaTypeLayout typeLayout, CompilerTrace compilerTrace, bool enableOptimizations, BaseArchitecture architecture, ISimAdapter simAdapter, BaseLinker linker)
 		{
 			var compilerOptions = new CompilerOptions();
-			compilerOptions.EnableSSA = enabledSSA;
-			compilerOptions.EnableSSAOptimizations = enabledSSA;
+			
+			compilerOptions.EnableSSA = enableOptimizations;
+			compilerOptions.EnableSSAOptimizations = enableOptimizations;
+			compilerOptions.EnablePromoteTemporaryVariablesOptimization = enableOptimizations;
 
 			var compiler = new SimCompiler(architecture, typeSystem, typeLayout, linker, compilerOptions, compilerTrace, simAdapter);
 

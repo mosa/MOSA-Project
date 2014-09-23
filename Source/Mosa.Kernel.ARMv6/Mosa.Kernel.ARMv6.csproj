@@ -65,9 +65,9 @@
     <Compile Include="KernelMemory.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Mosa.Internal.Plug\Mosa.Internal.Plug.csproj">
+    <ProjectReference Include="..\Mosa.Internal\Mosa.Internal.csproj">
       <Project>{77961864-DB33-4189-804F-D774022C96E2}</Project>
-      <Name>Mosa.Internal.Plug</Name>
+      <Name>Mosa.Internal</Name>
     </ProjectReference>
     <ProjectReference Include="..\Mosa.Platform.Internal.ARMv6\Mosa.Platform.Internal.ARMv6.csproj">
       <Project>{599d1c00-7c78-4211-a958-1285c4cb76c9}</Project>

@@ -78,12 +78,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Analysis\NaturalBlockOrder.cs" />
+    <Compile Include="Analysis\ProtectedRegion.cs" />
     <Compile Include="Analysis\ReverseBlockOrder.cs" />
     <Compile Include="Analysis\SimpleTraceBlockOrder.cs" />
     <Compile Include="Analysis\Dominance.cs" />
     <Compile Include="Analysis\IDominanceAnalysis.cs" />
     <Compile Include="BaseCallingConventionExtended.cs" />
     <Compile Include="DelegatePatcher.cs" />
+    <Compile Include="Intrinsics\Load.cs" />
     <Compile Include="Intrinsics\InternalInitializeArray.cs" />
     <Compile Include="Intrinsics\InternalsBase.cs" />
     <Compile Include="Intrinsics\TypeInternals.cs" />
@@ -101,6 +103,10 @@
     <Compile Include="IR\CompoundMove.cs" />
     <Compile Include="IR\CompoundStore.cs" />
     <Compile Include="Analysis\IBlockOrderAnalysis.cs" />
+    <Compile Include="Metadata.cs">
+      <SubType>
+      </SubType>
+    </Compile>
     <Compile Include="RegisterAllocator\BasicRegisterAllocator.cs" />
     <Compile Include="RegisterAllocator\MoveExtended.cs" />
     <Compile Include="RegisterAllocator\Move.cs" />
@@ -125,12 +131,14 @@
     <Compile Include="RegisterAllocator\LiveInterval.cs" />
     <Compile Include="RegisterAllocator\VirtualRegister.cs" />
     <Compile Include="RegisterAllocator\GreedyRegisterAllocator.cs" />
+    <Compile Include="Stages\MethodLookupTableStage.cs" />
+    <Compile Include="Stages\PromoteTempVariablesStage.cs" />
+    <Compile Include="Stages\ProtectedRegionLayoutStage.cs" />
     <Compile Include="Stages\ExceptionStage.cs" />
     <Compile Include="Stages\ConvertCompoundStage.cs" />
     <Compile Include="Stages\InstructionStatisticsStage.cs" />
     <Compile Include="Stages\MapFileGenerationStage.cs" />
     <Compile Include="Stages\MethodPipelineExportStage.cs" />
-    <Compile Include="Stages\PromoteTempVariablesStage.cs" />
     <Compile Include="Stages\PromoteLocalVariablesStage.cs" />
     <Compile Include="Stages\StopStage.cs" />
     <Compile Include="Stages\BaseEdgeSplitStage.cs" />

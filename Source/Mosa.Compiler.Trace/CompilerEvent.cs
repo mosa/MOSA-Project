@@ -21,6 +21,7 @@ namespace Mosa.Compiler.InternalTrace
 		SchedulingMethod,
 		Plug,
 		Error,
+		Exception,
 		Warning,
 		Counter,
 	};
@@ -40,6 +41,7 @@ namespace Mosa.Compiler.InternalTrace
 				case CompilerEvent.CompilerStageStart: return "Stage Started";
 				case CompilerEvent.CompilerStageEnd: return "Stage Ended";
 				case CompilerEvent.Error: return "Error";
+				case CompilerEvent.Exception: return "Exception";
 				case CompilerEvent.Warning: return "Warning";
 				default: return stage.ToString();
 			}

@@ -9,7 +9,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <AssemblyKeyContainerName>
     </AssemblyKeyContainerName>
-    <AssemblyName>Mosa.Internal.Plug</AssemblyName>
+    <AssemblyName>Mosa.Internal</AssemblyName>
     <DefaultClientScript>JScript</DefaultClientScript>
     <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
     <DefaultTargetSchema>IE50</DefaultTargetSchema>
@@ -18,7 +18,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>
     </AppDesignerFolder>
-    <RootNamespace>Mosa.Internal.Plug</RootNamespace>
+    <RootNamespace>Mosa.Internal</RootNamespace>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <OldToolsVersion>3.5</OldToolsVersion>
@@ -51,7 +51,7 @@
     <ConfigurationOverrideFile>
     </ConfigurationOverrideFile>
     <DefineConstants>TRACE</DefineConstants>
-    <DocumentationFile>..\..\bin\Mosa.Internal.Plug.xml</DocumentationFile>
+    <DocumentationFile>..\..\bin\Mosa.Internal.xml</DocumentationFile>
     <FileAlignment>4096</FileAlignment>
     <Optimize>true</Optimize>
     <OutputPath>..\..\bin\</OutputPath>
@@ -70,9 +70,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="PlugFieldAttribute.cs" />
-    <Compile Include="PlugMethodAttribute.cs" />
-    <Compile Include="PlugTypeAttribute.cs" />
+    <Compile Include="Native.cs" />
+    <Compile Include="Plug\FieldAttribute.cs" />
+    <Compile Include="Plug\MethodAttribute.cs" />
+    <Compile Include="Plug\TypeAttribute.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />
   <PropertyGroup>

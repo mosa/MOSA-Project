@@ -89,6 +89,8 @@ namespace Mosa.TestWorld.x86
 
 			Console.WriteLine();
 
+			DumpStackTrace();
+
 			//System.Threading.SpinLock splk = new System.Threading.SpinLock();
 
 			//bool lockTaken = false;
@@ -121,6 +123,31 @@ namespace Mosa.TestWorld.x86
 
 				Native.Hlt();
 			}
+		}
+
+		public static void DumpStackTrace()
+		{
+			uint depth = 0;
+
+			while (true)
+			{
+				uint methodDef = Runtime.GetMethodDefinitionFromStackFrameDepth(depth);
+
+				if (methodDef == 0)
+					return;
+
+				string caller = Runtime.GetMethodDefinitionName(methodDef);
+
+				if (caller == null)
+					return;
+
+				Console.Write(depth, 10, 2);
+				Console.Write(":");
+				Console.WriteLine(caller);
+
+				depth++;
+			}
+
 		}
 
 		private static uint counter = 0;

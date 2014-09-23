@@ -14,11 +14,11 @@ using System;
 namespace Mosa.Internal.Plug
 {
 	[AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
-	public sealed class PlugTypeAttribute : Attribute
+	public sealed class TypeAttribute : Attribute
 	{
 		private string target;
 
-		public PlugTypeAttribute(string target)
+		public TypeAttribute(string target)
 		{
 			this.target = target;
 		}

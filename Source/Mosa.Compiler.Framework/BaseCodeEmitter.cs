@@ -80,7 +80,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// List of labels that were emitted.
 		/// </summary>
-		private readonly Dictionary<int, long> labels = new Dictionary<int, long>();
+		private readonly Dictionary<int, int> labels = new Dictionary<int, int>();
 
 		/// <summary>
 		/// Patches we need to perform.
@@ -155,7 +155,7 @@ namespace Mosa.Compiler.Framework
 			Debug.Assert(!labels.ContainsKey(label));
 
 			// Add this label to the label list, so we can resolve the jump later on
-			labels.Add(label, codeStream.Position);
+			labels.Add(label, (int)codeStream.Position);
 
 			//Debug.WriteLine("LABEL: " + label.ToString() + " @" + codeStream.Position.ToString());
 		}
@@ -165,7 +165,7 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		/// <param name="label">The label.</param>
 		/// <returns></returns>
-		public long GetPosition(int label)
+		public int GetPosition(int label)
 		{
 			return labels[label];
 		}
@@ -174,7 +174,7 @@ namespace Mosa.Compiler.Framework
 		/// Gets the current position.
 		/// </summary>
 		/// <value>The current position.</value>
-		public long CurrentPosition { get { return codeStream.Position; } }
+		public int CurrentPosition { get { return (int)codeStream.Position; } }
 
 		#endregion BaseCodeEmitter Members
 
@@ -202,12 +202,12 @@ namespace Mosa.Compiler.Framework
 
 		#endregion Code Generation Members
 
-		protected bool TryGetLabel(int label, out long position)
+		protected bool TryGetLabel(int label, out int position)
 		{
 			return labels.TryGetValue(label, out position);
 		}
 
-		protected void AddPatch(int label, long position)
+		protected void AddPatch(int label, int position)
 		{
 			patches.Add(new Patch(label, position));
 		}

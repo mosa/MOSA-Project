@@ -88,17 +88,6 @@ namespace Mosa.Platform.x86.Stages
 
 		#endregion Data members
 
-		#region Construction
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="Multiboot0695Stage"/> class.
-		/// </summary>
-		public Multiboot0695Stage()
-		{
-		}
-
-		#endregion Construction
-
 		protected override void Run()
 		{
 			if (multibootMethod == null)
@@ -119,6 +108,7 @@ namespace Mosa.Platform.x86.Stages
 			var ecx = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.ECX);
 			var eax = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EAX);
 			var ebx = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EBX);
+			var ebp = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EBP);
 
 			var basicBlocks = new BasicBlocks();
 			var instructionSet = new InstructionSet(25);
@@ -126,13 +116,20 @@ namespace Mosa.Platform.x86.Stages
 			var ctx = instructionSet.CreateNewBlock(basicBlocks);
 			basicBlocks.AddHeaderBlock(ctx.BasicBlock);
 
+			// set sentinal on the stack to indicate the start of the stack
+			var zero = Operand.CreateConstant(TypeSystem.BuiltIn.I4, 0);
+			ctx.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(TypeSystem.BuiltIn.I4, ebp, 0), zero);
+			
+			// store multiboot registers eax and ebx at 0x200000 and 0x200004 respectively
 			ctx.AppendInstruction(X86.Mov, ecx, Operand.CreateConstantSignedInt(TypeSystem, 0x200000));
 			ctx.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(TypeSystem.BuiltIn.I4, ecx, 0), eax);
 			ctx.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(TypeSystem.BuiltIn.I4, ecx, 4), ebx);
 
+			// call type initializer
 			var entryPoint = Operand.CreateSymbolFromMethod(TypeSystem, typeInitializerSchedulerStage.TypeInitializerMethod);
-
 			ctx.AppendInstruction(X86.Call, null, entryPoint);
+
+			// should never get here
 			ctx.AppendInstruction(X86.Ret);
 
 			Compiler.CompileMethod(multibootMethod, basicBlocks, instructionSet);

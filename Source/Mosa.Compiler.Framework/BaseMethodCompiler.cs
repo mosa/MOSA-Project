@@ -149,6 +149,14 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		public Operand[] Parameters { get { return StackLayout.Parameters; } }
 
+		/// <summary>
+		/// Gets the protected regions.
+		/// </summary>
+		/// <value>
+		/// The protected regions.
+		/// </value>
+		public IList<ProtectedRegion> ProtectedRegions { get; private set; }
+
 		#endregion Properties
 
 		#region Construction
@@ -224,13 +232,22 @@ namespace Mosa.Compiler.Framework
 
 			foreach (IMethodCompilerStage stage in Pipeline)
 			{
-				stage.Initialize(this);
-				stage.Execute();
+				try
+				{
+					stage.Initialize(this);
+					stage.Execute();
 
-				Mosa.Compiler.InternalTrace.InstructionLogger.Run(this, stage);
+					Mosa.Compiler.InternalTrace.InstructionLogger.Run(this, stage);
 
-				if (stop)
-					break;
+					if (stop)
+						break;
+				}
+				catch (Exception e)
+				{
+					InternalTrace.TraceListener.SubmitDebugStageInformation(Method, stage.Name + "-Exception", e.ToString());
+					InternalTrace.CompilerEventListener.SubmitTraceEvent(CompilerEvent.Exception, Method.FullName + " @ " + stage.Name);
+					return;
+				}
 			}
 
 			InitializeType();
@@ -327,6 +344,15 @@ namespace Mosa.Compiler.Framework
 
 				LocalVariables[index] = operand;
 			}
+		}
+
+		/// <summary>
+		/// Sets the protected regions.
+		/// </summary>
+		/// <param name="protectedRegions">The protected regions.</param>
+		public void SetProtectedRegions(IList<ProtectedRegion> protectedRegions)
+		{
+			ProtectedRegions = protectedRegions;
 		}
 
 		/// <summary>

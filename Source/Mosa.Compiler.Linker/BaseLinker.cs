@@ -194,23 +194,33 @@ namespace Mosa.Compiler.Linker
 
 		private void ApplyPatch(LinkRequest linkRequest)
 		{
-			ulong targetAddress = linkRequest.ReferenceSymbol.VirtualAddress + (ulong)linkRequest.ReferenceOffset;
+			ulong value = 0;
 
-			if (linkRequest.LinkType == LinkType.AbsoluteAddress)
+			if (linkRequest.LinkType == LinkType.Size)
 			{
-				// FIXME: Need a .reloc section with a relocation entry if the module is moved in virtual memory
-				// the runtime loader must patch this link request, we'll fail it until we can do relocations.
-				//throw new NotSupportedException(@".reloc section not supported.");
+				value = linkRequest.ReferenceSymbol.Size;
 			}
 			else
 			{
-				// Change the absolute into a relative offset
-				targetAddress = targetAddress - (linkRequest.PatchSymbol.VirtualAddress + (ulong)linkRequest.PatchOffset);
+				ulong targetAddress = linkRequest.ReferenceSymbol.VirtualAddress + (ulong)linkRequest.ReferenceOffset;
+
+				if (linkRequest.LinkType == LinkType.AbsoluteAddress)
+				{
+					// FIXME: Need a .reloc section with a relocation entry if the module is moved in virtual memory
+					// the runtime loader must patch this link request, we'll fail it until we can do relocations.
+					//throw new NotSupportedException(@".reloc section not supported.");
+				}
+				else
+				{
+					// Change the absolute into a relative offset
+					targetAddress = targetAddress - (linkRequest.PatchSymbol.VirtualAddress + (ulong)linkRequest.PatchOffset);
+				}
+
+				targetAddress = targetAddress + (ulong)linkRequest.RelativeBase;
+
+				value = Patch.GetResult(linkRequest.PatchType.Patches, (ulong)targetAddress);
 			}
 
-			targetAddress = targetAddress + (ulong)linkRequest.RelativeBase;
-
-			ulong value = Patch.GetResult(linkRequest.PatchType.Patches, (ulong)targetAddress);
 			ulong mask = Patch.GetFinalMask(linkRequest.PatchType.Patches);
 
 			linkRequest.PatchSymbol.ApplyPatch(

@@ -91,7 +91,7 @@ namespace Mosa.TestWorld.x86.Tests
 			var compareTest = new ComparisonTest();
 			var simpleTest = new OptimizationTest();
 			var reflectionTest = new ReflectionTest();
-			var int64Test = new Int64Test();
+			//var int64Test = new Int64Test();
 			var otherTest = new OtherTest();
 
 			delegateTest.Test();
@@ -105,7 +105,7 @@ namespace Mosa.TestWorld.x86.Tests
 			compareTest.Test();
 			simpleTest.Test();
 			reflectionTest.Test();
-			int64Test.Test();
+			//int64Test.Test();
 			otherTest.Test();
 		}
 

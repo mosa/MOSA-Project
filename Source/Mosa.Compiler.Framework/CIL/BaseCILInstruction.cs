@@ -119,9 +119,5 @@ namespace Mosa.Compiler.Framework.CIL
 		}
 
 		#endregion Methods
-
-		#region Static Methods
-
-		#endregion Static Methods
 	}
 }

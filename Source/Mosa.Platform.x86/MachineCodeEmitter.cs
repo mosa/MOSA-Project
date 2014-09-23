@@ -245,7 +245,7 @@ namespace Mosa.Platform.x86
 			int relOffset = 0;
 
 			// The position in the code stream of the label
-			long position;
+			int position;
 
 			// Did we see the label?
 			if (TryGetLabel(label, out position))
@@ -256,7 +256,7 @@ namespace Mosa.Platform.x86
 			else
 			{
 				// Forward jump, we can't resolve yet - store a patch
-				AddPatch(label, codeStream.Position);
+				AddPatch(label, (int)codeStream.Position);
 			}
 
 			// Emit the relative jump offset (zero if we don't know it yet!)
@@ -270,7 +270,7 @@ namespace Mosa.Platform.x86
 
 			foreach (Patch p in Patches)
 			{
-				long labelPosition;
+				int labelPosition;
 				if (!TryGetLabel(p.Label, out labelPosition))
 				{
 					throw new ArgumentException(@"Missing label while resolving patches.", @"label");

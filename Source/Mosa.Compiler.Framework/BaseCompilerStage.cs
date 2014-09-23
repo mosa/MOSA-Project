@@ -55,7 +55,7 @@ namespace Mosa.Compiler.Framework
 		/// Holds the compiler trace
 		/// </summary>
 		protected CompilerTrace CompilerTrace { get { return Compiler.CompilerTrace; } }
-		
+
 		/// <summary>
 		/// Holds the compiler scheduler
 		/// </summary>

@@ -56,6 +56,9 @@ namespace Mosa.Compiler.Framework.Stages
 			if (BasicBlocks.HeadBlocks.Count == 0)
 				return;
 
+			if (HasProtectedRegions)
+				return;
+
 			trace = CreateTrace();
 
 			PromoteLocalVariable();
@@ -1144,6 +1147,36 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				CheckAndClearEmptyBlock(next);
 			}
+
+			// Update PHI lists
+			foreach (var next in nextBlocks)
+			{
+				for (var context = new Context(InstructionSet, next); !context.IsBlockEndInstruction; context.GotoNext())
+				{
+					if (context.IsEmpty)
+						continue;
+
+					if (context.Instruction != IRInstruction.Phi)
+						continue;
+
+					var sourceBlocks = context.Other as List<BasicBlock>;
+
+					int index = sourceBlocks.IndexOf(block);
+
+					if (index < 0)
+						continue;
+
+					sourceBlocks.RemoveAt(index);
+
+					for (int i = index; index < context.OperandCount - 1; index++)
+					{
+						context.SetOperand(i, context.GetOperand(i + 1));
+					}
+
+					context.SetOperand(context.OperandCount - 1, null);
+					context.OperandCount--;
+				}
+			}
 		}
 
 		/// <summary>
@@ -1456,7 +1489,9 @@ namespace Mosa.Compiler.Framework.Stages
 			if (operand.Uses.Count != 1)
 				return;
 
-			Debug.Assert(operand.Definitions.Count == 1);
+			if (operand.Definitions.Count != 1)
+				throw new Common.InvalidCompilerException();
+			//Debug.Assert(operand.Definitions.Count == 1);
 
 			Context ctx = new Context(InstructionSet, operand.Definitions[0]);
 

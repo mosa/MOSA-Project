@@ -64,7 +64,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Utility.BootImage", "M
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Platform.x64", "Mosa.Platform.x64\Mosa.Platform.x64.csproj", "{F445DB8E-E25A-41EF-A158-C742F14E94E4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Internal.Plug", "Mosa.Internal.Plug\Mosa.Internal.Plug.csproj", "{77961864-DB33-4189-804F-D774022C96E2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Internal", "Mosa.Internal\Mosa.Internal.csproj", "{77961864-DB33-4189-804F-D774022C96E2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Platform.x86", "Mosa.Platform.x86\Mosa.Platform.x86.csproj", "{DE30CBE9-50F3-4A3E-BCC9-A8A36348530E}"
 EndProject

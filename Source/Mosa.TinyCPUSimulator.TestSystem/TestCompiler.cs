@@ -30,18 +30,13 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 		protected MosaTypeLayout typeLayout;
 		protected SimCompiler simCompiler;
 
-		protected CompilerOptions compilerOptions = new CompilerOptions();
-
-		public bool EnableSSA { get; set; }
-
-		public bool EnableSSAOptimizations { get; set; }
+		public bool EnableOptimizations { get; set; }
 
 		public TestCompiler(BaseTestPlatform platform)
 		{
 			this.platform = platform;
 
-			EnableSSA = true;
-			EnableSSAOptimizations = true;
+			EnableOptimizations = true;
 
 			compilerTrace.TraceFilter.Active = false;
 			compilerTrace.CompilerEventListener = this;
@@ -71,14 +66,9 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 
 			typeLayout = new MosaTypeLayout(typeSystem, 4, 4);
 
-			compilerOptions.EnableSSA = EnableSSA;
-			compilerOptions.EnableSSAOptimizations = EnableSSAOptimizations;
-
-			compilerOptions.BaseAddress = 0x00400000; // default location
-
 			platform.InitializeSimulation(simAdapter);
 
-			simCompiler = SimCompiler.Compile(typeSystem, typeLayout, compilerTrace, EnableSSA, architecture, simAdapter, linker);
+			simCompiler = SimCompiler.Compile(typeSystem, typeLayout, compilerTrace, EnableOptimizations, architecture, simAdapter, linker);
 
 			//simAdapter.SimCPU.Monitor.DebugOutput = true; // DEBUG OPTION
 
