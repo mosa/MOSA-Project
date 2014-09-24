@@ -113,8 +113,8 @@ namespace Mosa.Utility.Launcher
 				VMwarePlayer = TryFind(
 					"vmplayer.exe",
 					new string[] {
-					Path.Combine(Environment.GetEnvironmentVariable("ProgramFiles"),@"VMware\VMware Player"),
-					Path.Combine(Environment.GetEnvironmentVariable("ProgramFiles(x86)"),@"VMware\VMware Player")
+					CombineParameterAndDirectory("ProgramFiles",@"VMware\VMware Player"),
+					CombineParameterAndDirectory("ProgramFiles(x86)",@"VMware\VMware Player")
 				}
 				);
 			}
@@ -125,10 +125,10 @@ namespace Mosa.Utility.Launcher
 				mkisofs = TryFind(
 					"mkisofs.exe",
 					new string[] {
-					Path.Combine(Environment.GetEnvironmentVariable("ProgramFiles"),@"VMware\VMware Player"),
-					Path.Combine(Environment.GetEnvironmentVariable("ProgramFiles(x86)"),@"VMware\VMware Player"),
-					Path.Combine(Environment.GetEnvironmentVariable("ProgramFiles"),@"cdrtools"),
-					Path.Combine(Environment.GetEnvironmentVariable("ProgramFiles(x86)"),@"cdrtools"),
+					CombineParameterAndDirectory("ProgramFiles",@"VMware\VMware Player"),
+					CombineParameterAndDirectory("ProgramFiles(x86)",@"VMware\VMware Player"),
+					CombineParameterAndDirectory("ProgramFiles",@"cdrtools"),
+					CombineParameterAndDirectory("ProgramFiles(x86)",@"cdrtools"),
 					CombineParameterAndDirectory("MOSA",@"Tools\mkisofs"),
 					CombineParameterAndDirectory("MOSA",@"mkisofs"),
 					@"..\Tools\mkisofs",
