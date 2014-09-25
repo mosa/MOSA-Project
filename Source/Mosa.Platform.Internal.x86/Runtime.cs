@@ -305,19 +305,32 @@ namespace Mosa.Platform.Internal.x86
 			if (table == 0)
 				return 0;
 
+			uint method = Mosa.Internal.Native.Load32(methodDef, NativeIntSize * 4);
+
+			if (method == 0)
+				return 0;
+
 			uint entries = Mosa.Internal.Native.Load32(table);
 
 			table = table + 4;
 
 			while (entries > 0)
 			{
-				uint addr = Mosa.Internal.Native.Load32(table, NativeIntSize * 1);
+				uint start = Mosa.Internal.Native.Load32(table, NativeIntSize * 1);
 				uint size = Mosa.Internal.Native.Load32(table, NativeIntSize * 2);
-				uint type = Mosa.Internal.Native.Load32(table, NativeIntSize * 4);
 
-				if (address >= addr && address < addr + size)
+				if (address >= (method + start) && address < (method + start + size))
 				{
-					if (type != 0 || type == exceptionType)
+					uint type = Mosa.Internal.Native.Load32(table, NativeIntSize * 0);
+
+					if (type == 0)
+					{
+						return table;
+					}
+
+					uint exceptiontype = Mosa.Internal.Native.Load32(table, NativeIntSize * 4);
+
+					if (exceptiontype == exceptionType)
 					{
 						return table;
 					}
@@ -406,7 +419,7 @@ namespace Mosa.Platform.Internal.x86
 				uint methodStart = Mosa.Internal.Native.Load32(methodDef, NativeIntSize * 4);
 				uint handlerOffset = Mosa.Internal.Native.Load32(protectedRegion, NativeIntSize * 3);
 
-				uint target = methodDef + handlerOffset;
+				uint target = methodStart + handlerOffset;
 
 				SetReturnAddressForStackFrame(stackFrame, target);
 

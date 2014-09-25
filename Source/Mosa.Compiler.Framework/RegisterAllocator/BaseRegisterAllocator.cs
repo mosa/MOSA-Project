@@ -822,9 +822,8 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 				return;
 			}
 
-			if (Trace.Active) Trace.Log("  No live newIntervals destination evicts");
-
 			// No live intervals to evict!
+			if (Trace.Active) Trace.Log("  No live new to evicts");
 
 			// prepare to split live interval
 			if (liveInterval.Stage == LiveInterval.AllocationStage.Initial)

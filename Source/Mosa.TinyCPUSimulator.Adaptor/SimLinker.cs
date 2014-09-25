@@ -12,6 +12,7 @@ using Mosa.Compiler.Linker;
 using Mosa.Compiler.Linker.Flat;
 using System.Collections.Generic;
 using System.IO;
+using System.Diagnostics;
 
 namespace Mosa.TinyCPUSimulator.Adaptor
 {
@@ -60,6 +61,7 @@ namespace Mosa.TinyCPUSimulator.Adaptor
 			foreach (var symbol in Symbols)
 			{
 				simAdapter.SimCPU.SetSymbol(symbol.Name, symbol.VirtualAddress, (ulong)symbol.Size);
+				//Debug.WriteLine("0x" + symbol.VirtualAddress.ToString("X") + " " + symbol.Name);
 			}
 
 			foreach (var target in targetSymbols)

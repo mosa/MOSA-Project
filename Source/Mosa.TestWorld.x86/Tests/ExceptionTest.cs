@@ -224,7 +224,7 @@ namespace Mosa.TestWorld.x86.Tests
 
 			a = a + 7;
 
-			return (a == 19);
+			return (a == 69);
 		}
 	}
 }

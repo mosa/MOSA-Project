@@ -71,12 +71,16 @@ namespace Mosa.Compiler.Framework.Stages
 					int start = s.Item1;
 					int end = s.Item2;
 
+					// 1. Handler type
 					writer.Write((uint)region.Handler.HandlerType);
 
 					if (NativePointerSize == 4)
 					{
+						// 2. Offset to start
 						writer.Write((uint)start);
+						// 3. Length
 						writer.Write((uint)(end - start));
+						// 4. Offset to handler
 						writer.Write((uint)handler);
 					}
 					else
@@ -86,9 +90,9 @@ namespace Mosa.Compiler.Framework.Stages
 						writer.Write((ulong)handler);
 					}
 
-					if (trace.Active)
-						trace.Log("     Section: [" + start.ToString() + "-" + end.ToString() + "]");
+					if (trace.Active) trace.Log("     Section: [" + start.ToString() + "-" + end.ToString() + "]");
 
+					// 5. Exception object type
 					if (region.Handler.HandlerType == ExceptionHandlerType.Exception)
 					{
 						// Store method table pointer of the exception object type
