@@ -11,6 +11,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 
 namespace Mosa.Platform.Internal.x86
 {
@@ -73,7 +74,7 @@ namespace Mosa.Platform.Internal.x86
 
 		#region Metadata
 
-		internal static _Assembly[] Assemblies;
+		internal static LinkedList<RuntimeAssembly> Assemblies = new LinkedList<RuntimeAssembly>();
 
 		public static string InitializeMetadataString(uint* ptr)
 		{
@@ -87,36 +88,16 @@ namespace Mosa.Platform.Internal.x86
 			uint* assemblyListTable = (uint*)Native.GetAssemblyListTable();
 			uint assemblyCount = assemblyListTable[0];
 
-			// Create new MetadataVector array for assemblies using count
-			Assemblies = new _Assembly[assemblyCount];
-
 			// Loop through and populate the array
 			for (uint i = 0; i < assemblyCount; i++)
 			{
 				// Get the pointer to the Assembly Metadata
 				uint* ptr = (uint*)(assemblyListTable[1 + i]);
-				Assemblies[i] = new _Assembly(ptr);
+				Assemblies.Add(new RuntimeAssembly(ptr));
 			}
 		}
 
 		#endregion Metadata
-
-		public static void InitializeArray(uint* array, RuntimeFieldHandle handle)
-		{
-			uint* fieldDefinition = ((uint**)&handle)[0];
-			byte* arrayElements = (byte*)(array + 3);
-
-			// See FieldDefinition for format of field handle
-			byte* fieldData = (byte*)*(fieldDefinition + 4);
-			uint dataLength = *(fieldDefinition + 5);
-			while (dataLength > 0)
-			{
-				*arrayElements = *fieldData;
-				arrayElements++;
-				fieldData++;
-				dataLength--;
-			}
-		}
 
 		public static void* IsInstanceOfType(RuntimeTypeHandle handle, void* obj)
 		{

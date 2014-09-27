@@ -13,7 +13,7 @@ using x86Runtime = Mosa.Platform.Internal.x86.Runtime;
 
 namespace System
 {
-	public sealed unsafe class _Type : Type
+	public sealed unsafe class RuntimeType : Type
 	{
 		private MetadataTypeStruct* typeStruct;
 		private string fullname;
@@ -64,7 +64,7 @@ namespace System
 			get { throw new NotImplementedException(); }
 		}
 
-		internal _Type(RuntimeTypeHandle handle)
+		internal RuntimeType(RuntimeTypeHandle handle)
 		{
 			this.handle = handle;
 			this.typeStruct = (MetadataTypeStruct*)((uint**)&handle)[0];

@@ -167,7 +167,6 @@ namespace System
 		/// <returns>The hash code for this instance.</returns>
 		public override int GetHashCode()
 		{
-			// TODO
 			return base.GetHashCode();
 		}
 

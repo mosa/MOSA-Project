@@ -9,31 +9,31 @@
 
 using Mosa.Platform.Internal.x86;
 using System.Reflection;
+using System.Collections.Generic;
 
 namespace System
 {
-	public sealed unsafe class _Assembly : Assembly
+	public sealed unsafe class RuntimeAssembly : Assembly
 	{
 		internal MetadataAssemblyStruct* assemblyStruct;
-		internal Type[] types;
-		internal RuntimeTypeHandle[] handles;
+		internal LinkedList<Type> typeList = new LinkedList<Type>();
+		internal LinkedList<RuntimeTypeHandle> typeHandles = new LinkedList<RuntimeTypeHandle>();
 
-		public override Collections.Generic.IEnumerable<TypeInfo> DefinedTypes
+		public override IEnumerable<TypeInfo> DefinedTypes
 		{
 			get { throw new NotImplementedException(); }
 		}
 
-		internal _Assembly(uint* pointer)
+		internal RuntimeAssembly(uint* pointer)
 		{
 			this.assemblyStruct = (MetadataAssemblyStruct*)pointer;
-			this.handles = new RuntimeTypeHandle[(*this.assemblyStruct).NumberOfTypes];
-			this.types = new Type[(*this.assemblyStruct).NumberOfTypes];
-			for (uint i = 0; i < this.types.Length; i++)
+			uint typeCount = (*this.assemblyStruct).NumberOfTypes;
+			for (uint i = 0; i < typeCount; i++)
 			{
 				RuntimeTypeHandle handle = new RuntimeTypeHandle();
 				((uint**)&handle)[0] = MetadataAssemblyStruct.GetTypeDefinitionAddress(assemblyStruct, i);
-				this.handles[i] = handle;
-				this.types[i] = new _Type(handle);
+				this.typeHandles.Add(handle);
+				this.typeList.Add(new RuntimeType(handle));
 			}
 		}
 	}

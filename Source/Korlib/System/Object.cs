@@ -30,6 +30,13 @@ namespace System
 		}
 
 		/// <summary>
+		/// Object destructor.
+		/// </summary>
+		~Object()
+		{
+		}
+
+		/// <summary>
 		/// Determines whether the specified <see cref="Object"/> is equal to the current <see cref="Object"/>.
 		/// </summary>
 		/// <param name="obj">
@@ -50,8 +57,8 @@ namespace System
 		/// <param name="left">The first <see cref="Object"/> to compare.</param>
 		/// <param name="right">The second <see cref="Object"/> to compare.</param>
 		/// <returns>
-		/// true if objA is the same instance as objB or if both are null references
-		/// or if objA.Equals(objB) returns true; otherwise, false.
+		/// true if left is the same instance as right or if both are null references
+		/// or if left.Equals(right) returns true; otherwise, false.
 		/// </returns>
 		public static bool Equals(object left, object right)
 		{
@@ -100,7 +107,7 @@ namespace System
 		/// <param name="left">The first <see cref="Object"/> to compare.</param>
 		/// <param name="right">The second <see cref="Object"/> to compare.</param>
 		/// <returns>
-		/// true if objA is the same instance as objB or if both are null references;
+		/// true if left is the same instance as right or if both are null references;
 		/// otherwise, false.
 		/// </returns>
 		public static bool ReferenceEquals(object left, object right)
