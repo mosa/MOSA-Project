@@ -1,5 +1,5 @@
 ﻿/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
+ * (c) 2014 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
  *
@@ -22,22 +22,20 @@ namespace System
 		{ }
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="ArgumentOutOfRangeException"/> class.
+		/// Initializes a new instance of the <see cref="ArgumentOutOfRangeException"/> class with the name of the parameter that causes this exception.
 		/// </summary>
-		/// <param name="message">The message.</param>
-		public ArgumentOutOfRangeException(string message)
-			: base(message)
+		/// <param name="paramName"></param>
+		public ArgumentOutOfRangeException(string paramName)
+			: base("Argument is out of range.", paramName)
 		{ }
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="ArgumentOutOfRangeException"/> class.
+		/// Initializes an instance of the <see cref="ArgumentOutOfRangeException"/> class with the name of the parameter that causes this exception and a specified error message.
 		/// </summary>
-		/// <param name="message">The message.</param>
-		/// <param name="paramName">Name of the param.</param>
-		public ArgumentOutOfRangeException(string message, string paramName)
-			: base(message)
-		{
-			this.paramName = paramName;
-		}
+		/// <param name="paramName">The name of the parameter that caused the exception.</param>
+		/// <param name="message">A message that describes the error.</param>
+		public ArgumentOutOfRangeException(string paramName, string message)
+			: base(message, paramName)
+		{ }
 	}
 }

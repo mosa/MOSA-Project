@@ -19,7 +19,7 @@ namespace System.Reflection
 	[Serializable]
 	public class CustomAttributeData
 	{
-		private ConstructorInfo ctorInfo;
+		private Type attributeType;
 		private IList<CustomAttributeTypedArgument> ctorArgs;
 		private IList<CustomAttributeNamedArgument> namedArgs;
 
@@ -28,15 +28,7 @@ namespace System.Reflection
 		/// </summary>
 		public Type AttributeType
 		{
-			get { return ctorInfo.DeclaringType; }
-		}
-
-		/// <summary>
-		/// An object that represents the constructor that would have initialized the custom attribute represented by the current instance of the CustomAttributeData class.
-		/// </summary>
-		public virtual ConstructorInfo Constructor
-		{
-			get { return this.ctorInfo; }
+			get { return this.attributeType; }
 		}
 
 		/// <summary>
@@ -53,47 +45,6 @@ namespace System.Reflection
 		public virtual IList<CustomAttributeNamedArgument> NamedArguments
 		{
 			get { return this.namedArgs; }
-		}
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="CustomAttributeData">CustomAttributeData</see> class.
-		/// </summary>
-		protected CustomAttributeData() { }
-
-		/// <summary>
-		/// Returns a list of <see cref="CustomAttributeData">CustomAttributeData</see> objects representing data about the attributes that have been applied to the target assembly.
-		/// </summary>
-		/// <param name="target">The assembly whose custom attribute data is to be retrieved.</param>
-		/// <returns>A list of objects that represent data about the attributes that have been applied to the target assembly.</returns>
-		public static IList<CustomAttributeData> GetCustomAttributes(Assembly target)
-		{
-			if (target == null)
-				throw new ArgumentNullException("target");
-			throw new NotImplementedException();
-		}
-
-		/// <summary>
-		/// Returns a list of <see cref="CustomAttributeData">CustomAttributeData</see> objects representing data about the attributes that have been applied to the target member.
-		/// </summary>
-		/// <param name="target">The member whose attribute data is to be retrieved.</param>
-		/// <returns>A list of objects that represent data about the attributes that have been applied to the target member.</returns>
-		public static IList<CustomAttributeData> GetCustomAttributes(MemberInfo target)
-		{
-			if (target == null)
-				throw new ArgumentNullException("target");
-			throw new NotImplementedException();
-		}
-
-		/// <summary>
-		/// Returns a list of <see cref="CustomAttributeData">CustomAttributeData</see> objects representing data about the attributes that have been applied to the target parameter.
-		/// </summary>
-		/// <param name="target">The parameter whose attribute data is to be retrieved.</param>
-		/// <returns>A list of objects that represent data about the attributes that have been applied to the target parameter.</returns>
-		public static IList<CustomAttributeData> GetCustomAttributes(ParameterInfo target)
-		{
-			if (target == null)
-				throw new ArgumentNullException("target");
-			throw new NotImplementedException();
 		}
 	}
 }

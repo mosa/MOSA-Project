@@ -7,6 +7,7 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using System.Runtime.CompilerServices;
 namespace System
 {
 	/// <summary>
@@ -29,6 +30,13 @@ namespace System
 		}
 
 		/// <summary>
+		/// Object destructor.
+		/// </summary>
+		~Object()
+		{
+		}
+
+		/// <summary>
 		/// Determines whether the specified <see cref="Object"/> is equal to the current <see cref="Object"/>.
 		/// </summary>
 		/// <param name="obj">
@@ -40,7 +48,7 @@ namespace System
 		/// </returns>
 		public virtual bool Equals(object obj)
 		{
-			return this == obj;
+			return RuntimeHelpers.Equals(this, obj);
 		}
 
 		/// <summary>
@@ -49,8 +57,8 @@ namespace System
 		/// <param name="left">The first <see cref="Object"/> to compare.</param>
 		/// <param name="right">The second <see cref="Object"/> to compare.</param>
 		/// <returns>
-		/// true if objA is the same instance as objB or if both are null references
-		/// or if objA.Equals(objB) returns true; otherwise, false.
+		/// true if left is the same instance as right or if both are null references
+		/// or if left.Equals(right) returns true; otherwise, false.
 		/// </returns>
 		public static bool Equals(object left, object right)
 		{
@@ -71,8 +79,7 @@ namespace System
 		/// </returns>
 		public virtual int GetHashCode()
 		{
-			// Todo: Implement GetHashCode as location in memory.
-			return 0;
+			return RuntimeHelpers.GetHashCode(this);
 		}
 
 		/// <summary>
@@ -82,10 +89,8 @@ namespace System
 		/// The <see cref="Type"/> instance that represents the exact runtime type of the current
 		/// instance.
 		/// </returns>
-		public Type GetType()
-		{
-			return Type.GetTypeFromHandle(Type.GetTypeHandle(this));
-		}
+		[MethodImpl(MethodImplOptions.InternalCall)]
+		public extern Type GetType();
 
 		/// <summary>
 		/// Creates a shallow copy of the current <see cref="Object"/>.
@@ -93,10 +98,8 @@ namespace System
 		/// <returns>
 		/// A shallow copy of the current System.Object.
 		/// </returns>
-		protected object MemberwiseClone()
-		{
-			return new Object();
-		}
+		[MethodImpl(MethodImplOptions.InternalCall)]
+		protected extern object MemberwiseClone();
 
 		/// <summary>
 		/// Determines whether the specified <see cref="Object"/> instances are the same instance.
@@ -104,7 +107,7 @@ namespace System
 		/// <param name="left">The first <see cref="Object"/> to compare.</param>
 		/// <param name="right">The second <see cref="Object"/> to compare.</param>
 		/// <returns>
-		/// true if objA is the same instance as objB or if both are null references;
+		/// true if left is the same instance as right or if both are null references;
 		/// otherwise, false.
 		/// </returns>
 		public static bool ReferenceEquals(object left, object right)

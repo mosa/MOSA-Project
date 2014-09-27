@@ -9,10 +9,9 @@
 
 namespace Mosa.Compiler.Framework.Intrinsics
 {
-	[ReplacementTarget("System.Type::GetTypeImpl")]
-	[ReplacementTarget("System.Type::GetTypeHandleImpl")]
-	[ReplacementTarget("System.Type::GetTypeFromHandleImpl")]
-	public sealed class TypeInternals : InternalsBase, IIntrinsicInternalMethod
+	[ReplacementTarget("System.Object::GetType")]
+	[ReplacementTarget("System.Object::MemberwiseClone")]
+	public sealed class InternalsForObject : InternalsBase, IIntrinsicInternalMethod
 	{
 		/// <summary>
 		/// Replaces the intrinsic call site
@@ -21,7 +20,7 @@ namespace Mosa.Compiler.Framework.Intrinsics
 		/// <param name="methodCompiler">The method compiler.</param>
 		void IIntrinsicInternalMethod.ReplaceIntrinsicCall(Context context, BaseMethodCompiler methodCompiler)
 		{
-			this.Internal(context, methodCompiler, context.MosaMethod.Name, "TypeImpl");
+			this.Internal(context, methodCompiler, context.MosaMethod.Name, "InternalsForObject");
 		}
 	}
 }

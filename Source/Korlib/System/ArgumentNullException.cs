@@ -1,5 +1,5 @@
 ﻿/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
+ * (c) 2014 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
  *
@@ -30,7 +30,7 @@ namespace System
 		{ }
 
 		/// <summary>
-		/// Initializes an instance of the <see cref="ArgumentNullException"/> class with a specified error message and the name of the parameter that causes this exception.
+		/// Initializes an instance of the <see cref="ArgumentNullException"/> class with the name of the parameter that causes this exception and a specified error message.
 		/// </summary>
 		/// <param name="paramName">The name of the parameter that caused the exception.</param>
 		/// <param name="message">A message that describes the error.</param>

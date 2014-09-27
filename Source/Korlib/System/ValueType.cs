@@ -14,5 +14,9 @@ namespace System
 	/// </summary>
 	public class ValueType : Object
 	{
+		public override string ToString()
+		{
+			return this.GetType().ToString();
+		}
 	}
 }

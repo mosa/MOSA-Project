@@ -24,6 +24,7 @@
     <OldToolsVersion>3.5</OldToolsVersion>
     <UpgradeBackupLocation />
     <TargetFrameworkProfile />
+    <NoStdLib>true</NoStdLib>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -42,7 +43,7 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <WarningLevel>4</WarningLevel>
     <DebugType>full</DebugType>
-    <NoWarn>0219,0414</NoWarn>
+    <NoWarn>1685,0219,0414</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -59,6 +60,7 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <WarningLevel>2</WarningLevel>
     <DebugType>none</DebugType>
+    <NoWarn>1685</NoWarn>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="ConsoleManager.cs" />
@@ -93,6 +95,10 @@
     <Compile Include="VirtualPageAllocator.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Korlib\Korlib.csproj">
+      <Project>{631bc4f3-e2d8-4319-814c-13904caa17ce}</Project>
+      <Name>Korlib</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Mosa.Internal\Mosa.Internal.csproj">
       <Project>{77961864-DB33-4189-804F-D774022C96E2}</Project>
       <Name>Mosa.Internal</Name>
