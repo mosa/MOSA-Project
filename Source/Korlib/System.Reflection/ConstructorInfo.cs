@@ -27,14 +27,6 @@ namespace System.Reflection
 		public static readonly string TypeConstructorName = ".cctor";
 
 		/// <summary>
-		/// Gets a <see cref="System.Reflection.MemberTypes">MemberTypes</see> value indicating that this member is a constructor.
-		/// </summary>
-		public override MemberTypes MemberType
-		{
-			get { return MemberTypes.Constructor; }
-		}
-
-		/// <summary>
 		/// Invokes the constructor reflected by the instance that has the specified parameters, providing default values for the parameters not commonly used.
 		/// </summary>
 		/// <param name="parameters">An array of values that matches the number, order and type (under the constraints of the default binder) of the parameters for this constructor. If this constructor takes no parameters, then use either an array with zero elements or null, as in Object[] parameters = new Object[0]. Any object in this array that is not explicitly initialized with a value will contain the default value for that object type. For reference-type elements, this value is null. For value-type elements, this value is 0, 0.0, or false, depending on the specific element type.</param>
@@ -52,8 +44,7 @@ namespace System.Reflection
 		/// <returns>True if obj equals the type and value of this instance; otherwise, False.</returns>
 		public override bool Equals(object obj)
 		{
-			// TODO
-			return base.Equals(obj);
+			return (object)this == obj;
 		}
 
 		/// <summary>
@@ -62,36 +53,7 @@ namespace System.Reflection
 		/// <returns>A 32-bit signed integer hash code.</returns>
 		public override int GetHashCode()
 		{
-			// TODO
 			return base.GetHashCode();
-		}
-
-		/// <summary>
-		/// Indicates whether two ConstructorInfo objects are equal.
-		/// </summary>
-		/// <param name="left">The first object to compare.</param>
-		/// <param name="right">The second object to compare.</param>
-		/// <returns>True if left is equal to right; otherwise, False.</returns>
-		public static bool operator ==(ConstructorInfo left, ConstructorInfo right)
-		{
-			if (object.ReferenceEquals(left, right))
-				return true;
-
-			if ((object)left == null || (object)right == null)
-				return false;
-
-			return left.Equals(right);
-		}
-
-		/// <summary>
-		/// Indicates whether two ConstructorInfo objects are not equal.
-		/// </summary>
-		/// <param name="left">The first object to compare.</param>
-		/// <param name="right">The second object to compare.</param>
-		/// <returns>True if left is not equal to right; otherwise, False.</returns>
-		public static bool operator !=(ConstructorInfo left, ConstructorInfo right)
-		{
-			return !(left == right);
 		}
 	}
 }

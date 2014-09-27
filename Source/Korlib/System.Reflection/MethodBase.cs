@@ -10,6 +10,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 namespace System.Reflection
 {
@@ -20,6 +21,28 @@ namespace System.Reflection
 		/// Gets the attributes associated with this method.
 		/// </summary>
 		public abstract MethodAttributes Attributes { get; }
+
+		/// <summary>
+		/// Gets a value indicating the calling conventions for this method.
+		/// </summary>
+		public virtual CallingConventions CallingConvention
+		{
+			get
+			{
+				return CallingConventions.Standard;
+			}
+		}
+
+		/// <summary>
+		/// Gets a value indicating whether the generic method contains unassigned generic type parameters.
+		/// </summary>
+		public virtual bool ContainsGenericParameters
+		{
+			get
+			{
+				return false;
+			}
+		}
 
 		/// <summary>
 		/// Gets a value indicating whether the method is abstract.
@@ -50,7 +73,7 @@ namespace System.Reflection
 		{
 			get
 			{
-				return (this.MemberType & MemberTypes.Constructor) == MemberTypes.Constructor;
+				return (this is ConstructorInfo && !IsStatic && (this.Attributes & MethodAttributes.RTSpecialName) == MethodAttributes.RTSpecialName);
 			}
 		}
 
@@ -187,31 +210,13 @@ namespace System.Reflection
 		}
 
 		/// <summary>
-		/// Gets a handle to the internal metadata representation of a method.
-		/// </summary>
-		public abstract RuntimeMethodHandle MethodHandle { get; }
-
-		/// <summary>
 		/// Returns a value that indicates whether this instance is equal to a specified object.
 		/// </summary>
 		/// <param name="obj">An object to compare with this instance, or null.</param>
 		/// <returns>True if obj equals the type and value of this instance; otherwise, False.</returns>
 		public override bool Equals(object obj)
 		{
-			if (!(obj is MethodBase))
-				return false;
-
-			return ((MethodBase)obj).MethodHandle == this.MethodHandle;
-		}
-
-		/// <summary>
-		/// Returns a MethodBase object representing the currently executing method.
-		/// </summary>
-		/// <returns>A MethodBase object representing the currently executing method.</returns>
-		public static MethodBase GetCurrentMethod()
-		{
-			// TODO
-			throw new NotImplementedException();
+			return (object)this == obj;
 		}
 
 		/// <summary>
@@ -220,8 +225,7 @@ namespace System.Reflection
 		/// <returns>An array of Type objects that represent the type arguments of a generic method or the type parameters of a generic method definition. Returns an empty array if the current method is not a generic method.</returns>
 		public virtual Type[] GetGenericArguments()
 		{
-			// TODO
-			throw new NotImplementedException();
+			throw new NotSupportedException();
 		}
 
 		/// <summary>
@@ -230,7 +234,7 @@ namespace System.Reflection
 		/// <returns>A 32-bit signed integer hash code.</returns>
 		public override int GetHashCode()
 		{
-			return this.MethodHandle.Value.ToInt32();
+			return base.GetHashCode();
 		}
 
 		/// <summary>
@@ -273,34 +277,6 @@ namespace System.Reflection
 		{
 			// TODO
 			throw new NotImplementedException();
-		}
-
-		/// <summary>
-		/// Indicates whether two MethodBase objects are equal.
-		/// </summary>
-		/// <param name="left">The first object to compare.</param>
-		/// <param name="right">The second object to compare.</param>
-		/// <returns>True if left is equal to right; otherwise, False.</returns>
-		public static bool operator ==(MethodBase left, MethodBase right)
-		{
-			if (object.ReferenceEquals(left, right))
-				return true;
-
-			if ((object)left == null || (object)right == null)
-				return false;
-
-			return left.MethodHandle == right.MethodHandle;
-		}
-
-		/// <summary>
-		/// Indicates whether two MethodBase objects are not equal.
-		/// </summary>
-		/// <param name="left">The first object to compare.</param>
-		/// <param name="right">The second object to compare.</param>
-		/// <returns>True if left is not equal to right; otherwise, False.</returns>
-		public static bool operator !=(MethodBase left, MethodBase right)
-		{
-			return !(left == right);
 		}
 	}
 }

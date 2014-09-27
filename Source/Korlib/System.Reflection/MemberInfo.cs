@@ -18,14 +18,14 @@ namespace System.Reflection
 	/// Obtains information about the attributes of a member and provides access to member metadata.
 	/// </summary>
 	[SerializableAttribute]
-	public abstract class MemberInfo : ICustomAttributeProvider
+	public abstract class MemberInfo
 	{
 		/// <summary>
 		/// A collection that contains this member's custom attributes.
 		/// </summary>
 		public virtual IEnumerable<CustomAttributeData> CustomAttributes
 		{
-			get { return this.GetCustomAttributesData(); }
+			get { return new CustomAttributeData[0]; }
 		}
 
 		/// <summary>
@@ -34,63 +34,27 @@ namespace System.Reflection
 		public abstract Type DeclaringType { get; }
 
 		/// <summary>
-		/// When overridden in a derived class, gets a <see cref="System.Reflection.MemberTypes">MemberTypes</see> value indicating the type of the member — method, constructor, event, and so on.
-		/// </summary>
-		public abstract MemberTypes MemberType { get; }
-
-		/// <summary>
-		/// Gets a value that identifies a metadata element.
-		/// </summary>
-		public virtual int MetadataToken
-		{
-			get { return 0; }
-		}
-
-		/// <summary>
 		/// Gets the name of the current member.
 		/// </summary>
 		public abstract string Name { get; }
 
 		/// <summary>
-		/// Gets the class object that was used to obtain this instance of MemberInfo.
+		/// Returns a value that indicates whether this instance is equal to a specified object.
 		/// </summary>
-		public abstract Type ReflectedType { get; }
-
-		protected MemberInfo()
+		/// <param name="obj">An object to compare with this instance, or null.</param>
+		/// <returns>True if obj equals the type and value of this instance; otherwise, False.</returns>
+		public override bool Equals(object obj)
 		{
-
+			return (object)this == obj;
 		}
 
 		/// <summary>
-		/// When overridden in a derived class, returns an array of all custom attributes applied to this member.
+		/// Returns the hash code for this instance.
 		/// </summary>
-		/// <param name="inherit">True to search this member's inheritance chain to find the attributes; otherwise, False. This parameter is ignored for properties and events.</param>
-		/// <returns>An array that contains all the custom attributes applied to this member, or an array with zero elements if no attributes are defined.</returns>
-		public abstract object[] GetCustomAttributes(bool inherit);
-
-		/// <summary>
-		/// When overridden in a derived class, returns an array of custom attributes applied to this member and identified by Type.
-		/// </summary>
-		/// <param name="attributeType">The type of attribute to search for. Only attributes that are assignable to this type are returned.</param>
-		/// <param name="inherit">True to search this member's inheritance chain to find the attributes; otherwise, False. This parameter is ignored for properties and events.</param>
-		/// <returns>An array of custom attributes applied to this member, or an array with zero elements if no attributes assignable to attributeType have been applied.</returns>
-		public abstract object[] GetCustomAttributes(Type attributeType, bool inherit);
-
-		/// <summary>
-		/// When overridden in a derived class, indicates whether one or more attributes of the specified type or of its derived types is applied to this member.
-		/// </summary>
-		/// <param name="attributeType">The type of custom attribute to search for. The search includes derived types.</param>
-		/// <param name="inherit">True to search this member's inheritance chain to find the attributes; otherwise, False. This parameter is ignored for properties and events.</param>
-		/// <returns>True if one or more instances of attributeType or any of its derived types is applied to this member; otherwise, False.</returns>
-		public abstract bool IsDefined(Type attributeType, bool inherit);
-
-		/// <summary>
-		/// Returns a list of CustomAttributeData objects representing data about the attributes that have been applied to the target member.
-		/// </summary>
-		/// <returns>A generic list of CustomAttributeData objects representing data about the attributes that have been applied to the target member.</returns>
-		public virtual IList<CustomAttributeData> GetCustomAttributesData()
+		/// <returns>A 32-bit signed integer hash code.</returns>
+		public override int GetHashCode()
 		{
-			throw new NotImplementedException();
+			return base.GetHashCode();
 		}
 	}
 }

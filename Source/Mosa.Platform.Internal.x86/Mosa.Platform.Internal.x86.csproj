@@ -64,10 +64,12 @@
     <NoWarn>1685</NoWarn>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Builders\_Assembly.cs" />
-    <Compile Include="Builders\_Type.cs" />
+    <Compile Include="Builders\RuntimeAssembly.cs" />
+    <Compile Include="Builders\RuntimeType.cs" />
     <Compile Include="Division.cs" />
-    <Compile Include="Implementations\TypeImpl.cs" />
+    <Compile Include="Internals\InternalsForObject.cs" />
+    <Compile Include="Internals\InternalsForRuntimeHelpers.cs" />
+    <Compile Include="Internals\InternalsForType.cs" />
     <Compile Include="MetadataStructures\MetadataAssemblyStruct.cs" />
     <Compile Include="MetadataStructures\MetadataTypeStruct.cs" />
     <Compile Include="Native.cs" />

@@ -85,10 +85,12 @@
     <Compile Include="Analysis\IDominanceAnalysis.cs" />
     <Compile Include="BaseCallingConventionExtended.cs" />
     <Compile Include="DelegatePatcher.cs" />
+    <Compile Include="Intrinsics\GetObjectAddress.cs" />
+    <Compile Include="Intrinsics\InternalsForObject.cs" />
+    <Compile Include="Intrinsics\InternalsForRuntimeHelpers.cs" />
     <Compile Include="Intrinsics\Load.cs" />
-    <Compile Include="Intrinsics\InternalInitializeArray.cs" />
     <Compile Include="Intrinsics\InternalsBase.cs" />
-    <Compile Include="Intrinsics\TypeInternals.cs" />
+    <Compile Include="Intrinsics\InternalsForType.cs" />
     <Compile Include="IR\InternalCall.cs" />
     <Compile Include="IR\ExceptionEnd.cs" />
     <Compile Include="IR\CallFinally.cs" />

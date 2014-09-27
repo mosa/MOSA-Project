@@ -56,6 +56,8 @@
     <NoWarn>0169;0649;1685</NoWarn>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="System.Collections.Generic\LinkedList.cs" />
+    <Compile Include="System.Collections.Generic\LinkedListNode.cs" />
     <Compile Include="System.Collections\IComparer.cs" />
     <Compile Include="System.Collections\IStructuralComparable.cs" />
     <Compile Include="System.Collections\IStructuralEquatable.cs" />
@@ -66,8 +68,6 @@
     <Compile Include="System.Reflection\Assembly.cs" />
     <Compile Include="System.Reflection\AssemblyDescriptionAttribute.cs" />
     <Compile Include="System.Reflection\AssemblyTitleAttribute.cs" />
-    <Compile Include="System.Reflection\Binder.cs" />
-    <Compile Include="System.Reflection\BindingFlags.cs" />
     <Compile Include="System.Reflection\CallingConventions.cs" />
     <Compile Include="System.Reflection\ConstructorInfo.cs" />
     <Compile Include="System.Reflection\CustomAttributeData.cs" />
@@ -88,7 +88,6 @@
     <Compile Include="System.Reflection\Module.cs" />
     <Compile Include="System.Reflection\PropertyAttributes.cs" />
     <Compile Include="System.Reflection\ParameterAttributes.cs" />
-    <Compile Include="System.Reflection\ParameterModifier.cs" />
     <Compile Include="System.Reflection\PropertyInfo.cs" />
     <Compile Include="System.Reflection\TypeCode.cs" />
     <Compile Include="System.Reflection\ParameterInfo.cs" />
@@ -107,6 +106,7 @@
     <Compile Include="System.Runtime.InteropServices\UnmanagedType.cs" />
     <Compile Include="System.Runtime.Versioning\TargetFrameworkAttribute.cs" />
     <Compile Include="System.Threading\SpinLock.cs" />
+    <Compile Include="System\Action.cs" />
     <Compile Include="System\Activator.cs" />
     <Compile Include="System\ArgumentException.cs" />
     <Compile Include="System\ArgumentNullException.cs" />
@@ -118,6 +118,7 @@
     <Compile Include="System\CLSCompliantAttribute.cs" />
     <Compile Include="System.Diagnostics\DebuggableAttribute.cs" />
     <Compile Include="System\AsyncCallback.cs" />
+    <Compile Include="System\Func.cs" />
     <Compile Include="System\IAsyncResult.cs" />
     <Compile Include="System\ICloneable.cs" />
     <Compile Include="System\IFormatProvider.cs" />

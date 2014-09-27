@@ -1,10 +1,11 @@
 ﻿/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
+ * (c) 2014 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
+ *  Stefan Andres Charsley (charsleysa) <charsleysa@gmail.com>
 */
 
 using System.Runtime.CompilerServices;
@@ -26,6 +27,9 @@ namespace Mosa.Internal
 
 		[MethodImplAttribute(MethodImplOptions.InternalCall)]
 		public static extern uint Load32(uint address, uint offset);
+
+		[MethodImplAttribute(MethodImplOptions.InternalCall)]
+		public static extern void* GetObjectAddress(object obj);
 
 		#endregion Intrinsic
 	}

@@ -406,6 +406,9 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="context">The context.</param>
 		void CIL.ICILVisitor.Callvirt(Context context)
 		{
+			if (ProcessExternalCall(context))
+				return;
+
 			MosaMethod method = context.MosaMethod;
 			Operand resultOperand = context.Result;
 			List<Operand> operands = new List<Operand>(context.Operands);
@@ -1734,6 +1737,8 @@ namespace Mosa.Compiler.Framework.Stages
 				MethodCompiler.Compiler.IntrinsicTypes.TryGetValue(context.MosaMethod.FullName, out intrinsicType);
 				if (intrinsicType == null)
 					MethodCompiler.Compiler.IntrinsicTypes.TryGetValue(context.MosaMethod.DeclaringType.FullName + "::" + context.MosaMethod.Name, out intrinsicType);
+
+				Debug.Assert(intrinsicType != null, "Method is internal but no processor found: " + context.MosaMethod.FullName);
 			}
 
 			if (intrinsicType == null)
