@@ -147,7 +147,6 @@ namespace Mosa.TestWorld.x86
 
 				depth++;
 			}
-
 		}
 
 		private static uint counter = 0;

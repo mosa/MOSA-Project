@@ -85,6 +85,22 @@ namespace Mosa.Compiler.Framework.Stages
 					BasicBlocks.AddHeaderBlock(basicBlock);
 				}
 			}
+
+			if (HasProtectedRegions)
+			{
+				foreach (var target in targets)
+				{
+					var basicBlock = BasicBlocks.GetByLabel(target);
+
+					if (basicBlock.PreviousBlocks.Count == 0 && !BasicBlocks.HeadBlocks.Contains(basicBlock))
+					{
+						// block was targeted (probably by an leave instruction within a protected region)
+						BasicBlocks.AddHeaderBlock(basicBlock);
+
+						BuildBasicBlockLinks(basicBlock);
+					}
+				}
+			}
 		}
 
 		/// <summary>

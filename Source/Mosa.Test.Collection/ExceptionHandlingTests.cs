@@ -7,6 +7,8 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using System;
+
 namespace Mosa.Test.Collection
 {
 	public static class ExceptionHandlingTests
@@ -182,13 +184,80 @@ namespace Mosa.Test.Collection
 				a = a + 2;
 
 				if (a > 0)
-					throw new System.Exception();
+					throw new Exception();
 
 				a = a + 1000;
 			}
 			catch
 			{
 				a = a + 50;
+			}
+
+			a = a + 7;
+
+			return a;
+		}
+
+
+		public static int ExceptionTest2()
+		{
+			int a = 10;
+
+			try
+			{
+				a = a + 2;
+
+				if (a > 0)
+					throw new Exception();
+
+				a = a + 1000;
+			}
+			catch
+			{
+				a = a + 50;
+			}
+			finally
+			{
+				a = a + 2000;
+			}
+
+			a = a + 7;
+
+			return a;
+		}
+
+		public static int ExceptionTest3()
+		{
+			int a = 10;
+
+			try
+			{
+				try
+				{
+					a = a + 2;
+
+					if (a > 0)
+						throw new Exception();
+
+					a = a + 1000;
+				}
+				catch
+				{
+					a = a + 50;
+				}
+				finally
+				{
+					a = a + 2000;
+					throw new Exception();
+				}
+			}
+			catch
+			{
+				a = a + 51;
+			}
+			finally
+			{
+				a = a + 5000;
 			}
 
 			a = a + 7;

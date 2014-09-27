@@ -55,5 +55,17 @@ namespace Mosa.Test.Collection.x86.xUnit
 		{
 			Assert.Equal(ExceptionHandlingTests.ExceptionTest1(), Run<int>("Mosa.Test.Collection.ExceptionHandlingTests.ExceptionTest1"));
 		}
+
+		[Fact]
+		public void ExceptionTest2()
+		{
+			Assert.Equal(ExceptionHandlingTests.ExceptionTest2(), Run<int>("Mosa.Test.Collection.ExceptionHandlingTests.ExceptionTest2"));
+		}
+
+		[Fact]
+		public void ExceptionTest3()
+		{
+			Assert.Equal(ExceptionHandlingTests.ExceptionTest3(), Run<int>("Mosa.Test.Collection.ExceptionHandlingTests.ExceptionTest3"));
+		}
 	}
 }

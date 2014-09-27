@@ -6,6 +6,8 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using System;
+
 namespace Mosa.TestWorld.x86.Tests
 {
 	public class ExceptionTest : KernelTest
@@ -213,7 +215,7 @@ namespace Mosa.TestWorld.x86.Tests
 				a = a + 2;
 
 				if (a > 0)
-					throw new System.Exception();
+					throw new Exception();
 
 				a = a + 1000;
 			}

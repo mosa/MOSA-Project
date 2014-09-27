@@ -232,7 +232,7 @@ namespace Mosa.Compiler.Framework
 
 			foreach (IMethodCompilerStage stage in Pipeline)
 			{
-				//try
+				try
 				{
 					stage.Initialize(this);
 					stage.Execute();
@@ -242,12 +242,12 @@ namespace Mosa.Compiler.Framework
 					if (stop)
 						break;
 				}
-				//catch (Exception e)
-				//{
-				//	InternalTrace.TraceListener.SubmitDebugStageInformation(Method, stage.Name + "-Exception", e.ToString());
-				//	InternalTrace.CompilerEventListener.SubmitTraceEvent(CompilerEvent.Exception, Method.FullName + " @ " + stage.Name);
-				//	return;
-				//}
+				catch (Exception e)
+				{
+					InternalTrace.TraceListener.SubmitDebugStageInformation(Method, stage.Name + "-Exception", e.ToString());
+					InternalTrace.CompilerEventListener.SubmitTraceEvent(CompilerEvent.Exception, Method.FullName + " @ " + stage.Name);
+					return;
+				}
 			}
 
 			InitializeType();
