@@ -67,5 +67,11 @@ namespace Mosa.Test.Collection.x86.xUnit
 		{
 			Assert.Equal(Mosa.Test.Collection.LinkedListTests.Foreach(), Run<int>("Mosa.Test.Collection.LinkedListTests.Foreach"));
 		}
+
+		[Fact]
+		public void ForeachNested()
+		{
+			Assert.Equal(Mosa.Test.Collection.LinkedListTests.ForeachNested(), Run<int>("Mosa.Test.Collection.LinkedListTests.ForeachNested"));
+		}
 	}
 }

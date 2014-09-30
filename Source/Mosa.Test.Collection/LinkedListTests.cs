@@ -113,5 +113,26 @@ namespace Mosa.Test.Collection
 
 			return sum;
 		}
+
+		public static int ForeachNested()
+		{
+			var list = Populate();
+			var nestedList = Populate();
+			int sum = 0;
+			int nestedSum = 0;
+			int nestedCount = 0;
+
+			foreach (var item in list)
+			{
+				sum = sum + item;
+				foreach (var nestedItem in nestedList)
+				{
+					nestedSum = nestedSum + nestedItem;
+					nestedSum = nestedSum / ++nestedCount;
+				}
+			}
+
+			return sum + nestedSum;
+		}
 	}
 }

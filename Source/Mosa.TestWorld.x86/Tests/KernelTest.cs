@@ -6,7 +6,7 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using Mosa.ClassLib;
+using System.Collections.Generic;
 using Mosa.Kernel.x86;
 
 namespace Mosa.TestWorld.x86.Tests
@@ -104,9 +104,9 @@ namespace Mosa.TestWorld.x86.Tests
 			plugTestTest.Test();
 			compareTest.Test();
 			simpleTest.Test();
+			otherTest.Test();
 			reflectionTest.Test();
 			//int64Test.Test();
-			otherTest.Test();
 		}
 
 		public void Test()
@@ -132,8 +132,8 @@ namespace Mosa.TestWorld.x86.Tests
 			var node = testMethods.First;
 			while (node != null)
 			{
-				PrintResult(node.value());
-				node = node.next;
+				PrintResult(node.Value());
+				node = node.Next;
 			}
 
 			Console.WriteLine();

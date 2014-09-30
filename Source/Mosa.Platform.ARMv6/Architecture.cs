@@ -333,5 +333,16 @@ namespace Mosa.Platform.ARMv6
 		{
 			return (instruction == ARMv6.Mov);
 		}
+
+		/// <summary>
+		/// Inserts the address of instruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <param name="destination">The destination.</param>
+		/// <param name="source">The source.</param>
+		public override void InsertAddressOfInstruction(Context context, Operand destination, Operand source)
+		{
+			// TODO
+		}
 	}
 }

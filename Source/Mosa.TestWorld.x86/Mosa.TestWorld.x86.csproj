@@ -101,10 +101,6 @@
       <Project>{631bc4f3-e2d8-4319-814c-13904caa17ce}</Project>
       <Name>Korlib</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Mosa.ClassLib\Mosa.ClassLib.csproj">
-      <Project>{27A3C89C-1967-45FF-A77E-94F44995C42C}</Project>
-      <Name>Mosa.ClassLib</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Mosa.Internal\Mosa.Internal.csproj">
       <Project>{77961864-DB33-4189-804F-D774022C96E2}</Project>
       <Name>Mosa.Internal</Name>

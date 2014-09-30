@@ -352,6 +352,17 @@ namespace Mosa.Platform.x86
 		}
 
 		/// <summary>
+		/// Inserts the address of instruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <param name="destination">The destination.</param>
+		/// <param name="source">The source.</param>
+		public override void InsertAddressOfInstruction(Context context, Operand destination, Operand source)
+		{
+			context.AppendInstruction(X86.Lea, destination, source);
+		}
+
+		/// <summary>
 		/// Inserts the add instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
