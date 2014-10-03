@@ -42,7 +42,7 @@ namespace Mosa.Compiler.Framework.Stages
 					{
 						var method = PlatformInternalRuntimeType.FindMethodByName("ExceptionHandler");
 
-						ctx.SetInstruction(IRInstruction.Move, exceptionRegister, ctx.Operand1);						
+						ctx.SetInstruction(IRInstruction.Move, exceptionRegister, ctx.Operand1);
 						ctx.AppendInstruction(IRInstruction.Call, null, Operand.CreateSymbolFromMethod(TypeSystem, method));
 						ctx.MosaMethod = method;
 					}
@@ -88,7 +88,8 @@ namespace Mosa.Compiler.Framework.Stages
 					}
 					else if (ctx.Instruction == IRInstruction.ExceptionStart)
 					{
-						ctx.SetInstruction(IRInstruction.Move, ctx.Result, exceptionRegister);
+						ctx.SetInstruction(IRInstruction.Gen, exceptionRegister);
+						ctx.AppendInstruction(IRInstruction.Move, ctx.Result, exceptionRegister);
 					}
 					else if (ctx.Instruction == IRInstruction.ExceptionEnd)
 					{

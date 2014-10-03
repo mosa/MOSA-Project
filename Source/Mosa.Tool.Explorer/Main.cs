@@ -189,7 +189,7 @@ namespace Mosa.Tool.Explorer
 
 			//try
 			//{
-			ExplorerCompiler.Compile(typeSystem, typeLayout, compilerTrace, cbPlatform.Text, enableSSAToolStripMenuItem.Checked, enableSSAOptimizations.Checked, enableBinaryCodeGenerationToolStripMenuItem.Checked);
+			ExplorerCompiler.Compile(typeSystem, typeLayout, compilerTrace, cbPlatform.Text, enableSSAToolStripMenuItem.Checked, enableOptimizations.Checked, enableBinaryCodeGenerationToolStripMenuItem.Checked);
 			SetStatus("Compiled!");
 			//}
 			//catch (Exception e)

@@ -201,7 +201,7 @@ namespace Mosa.Tool.Compiler
 			optionSet.Add(
 				@"ssa-optimize|enable-single-static-assignment-optimizations",
 				@"Performs single static assignments optimizations.",
-				enable => compilerOptions.EnableSSAOptimizations = enable != null
+				enable => compilerOptions.EnableOptimizations = enable != null
 			);
 
 			optionSet.Add(

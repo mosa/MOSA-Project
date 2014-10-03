@@ -58,7 +58,7 @@
 			this.label3 = new System.Windows.Forms.Label();
 			this.cbLinkerFormat = new System.Windows.Forms.ComboBox();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
-			this.cbEnableSSAOptimizations = new System.Windows.Forms.CheckBox();
+			this.cbEnableOptimizations = new System.Windows.Forms.CheckBox();
 			this.cbEnableSSA = new System.Windows.Forms.CheckBox();
 			this.tabPage4 = new System.Windows.Forms.TabPage();
 			this.groupBox11 = new System.Windows.Forms.GroupBox();
@@ -460,7 +460,7 @@
 			// 
 			// groupBox1
 			// 
-			this.groupBox1.Controls.Add(this.cbEnableSSAOptimizations);
+			this.groupBox1.Controls.Add(this.cbEnableOptimizations);
 			this.groupBox1.Controls.Add(this.cbEnableSSA);
 			this.groupBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.groupBox1.Location = new System.Drawing.Point(5, 196);
@@ -472,16 +472,16 @@
 			// 
 			// cbEnableSSAOptimizations
 			// 
-			this.cbEnableSSAOptimizations.AutoSize = true;
-			this.cbEnableSSAOptimizations.Checked = true;
-			this.cbEnableSSAOptimizations.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.cbEnableSSAOptimizations.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.cbEnableSSAOptimizations.Location = new System.Drawing.Point(6, 42);
-			this.cbEnableSSAOptimizations.Name = "cbEnableSSAOptimizations";
-			this.cbEnableSSAOptimizations.Size = new System.Drawing.Size(148, 17);
-			this.cbEnableSSAOptimizations.TabIndex = 7;
-			this.cbEnableSSAOptimizations.Text = "Enable SSA Optimizations";
-			this.cbEnableSSAOptimizations.UseVisualStyleBackColor = true;
+			this.cbEnableOptimizations.AutoSize = true;
+			this.cbEnableOptimizations.Checked = true;
+			this.cbEnableOptimizations.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.cbEnableOptimizations.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.cbEnableOptimizations.Location = new System.Drawing.Point(6, 42);
+			this.cbEnableOptimizations.Name = "cbEnableSSAOptimizations";
+			this.cbEnableOptimizations.Size = new System.Drawing.Size(148, 17);
+			this.cbEnableOptimizations.TabIndex = 7;
+			this.cbEnableOptimizations.Text = "Enable SSA Optimizations";
+			this.cbEnableOptimizations.UseVisualStyleBackColor = true;
 			// 
 			// cbEnableSSA
 			// 
@@ -917,7 +917,7 @@
 		private System.Windows.Forms.Label label3;
 		private System.Windows.Forms.ComboBox cbLinkerFormat;
 		private System.Windows.Forms.GroupBox groupBox1;
-		private System.Windows.Forms.CheckBox cbEnableSSAOptimizations;
+		private System.Windows.Forms.CheckBox cbEnableOptimizations;
 		private System.Windows.Forms.CheckBox cbEnableSSA;
 		private System.Windows.Forms.TabPage tbOptions;
 		private System.Windows.Forms.Label label4;

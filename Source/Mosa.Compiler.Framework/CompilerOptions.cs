@@ -98,7 +98,7 @@ namespace Mosa.Compiler.Framework
 		/// <value>
 		/// 	<c>true</c> if [enable SSA optimizations]; otherwise, <c>false</c>.
 		/// </value>
-		public bool EnableSSAOptimizations { get; set; }
+		public bool EnableOptimizations { get; set; }
 
 		/// <summary>
 		/// Gets or sets a value indicating whether [enable promote temporary variables optimization].
@@ -176,7 +176,7 @@ namespace Mosa.Compiler.Framework
 		public CompilerOptions()
 		{
 			EnableSSA = true;
-			EnableSSAOptimizations = true;
+			EnableOptimizations = true;
 			EnablePromoteTemporaryVariablesOptimization = true;
 			BaseAddress = 0x00400000;
 			DominanceAnalysisFactory = delegate { return new SimpleFastDominance(); };

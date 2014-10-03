@@ -133,6 +133,7 @@
     <Compile Include="RegisterAllocator\LiveInterval.cs" />
     <Compile Include="RegisterAllocator\VirtualRegister.cs" />
     <Compile Include="RegisterAllocator\GreedyRegisterAllocator.cs" />
+    <Compile Include="Stages\MethodExceptionLookupTableStage.cs" />
     <Compile Include="Stages\MethodLookupTableStage.cs" />
     <Compile Include="Stages\PromoteTempVariablesStage.cs" />
     <Compile Include="Stages\ProtectedRegionLayoutStage.cs" />
@@ -164,7 +165,7 @@
     <Compile Include="PlugSystem.cs" />
     <Compile Include="Stages\CheckIROperandCountStage.cs" />
     <Compile Include="Stages\BlockOrderingStage.cs" />
-    <Compile Include="Stages\SSAOptimizations.cs" />
+    <Compile Include="Stages\IROptimizationStage.cs" />
     <Compile Include="Stages\EdgeSplitStage.cs" />
     <Compile Include="Stages\TypeInitializerSchedulerStage.cs" />
     <Compile Include="MosaTypeLayout.cs" />

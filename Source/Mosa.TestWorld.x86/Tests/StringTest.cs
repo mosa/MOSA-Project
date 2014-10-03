@@ -26,6 +26,8 @@ namespace Mosa.TestWorld.x86.Tests
 			testMethods.Add(LengthTest);
 			testMethods.Add(ToUpperTest);
 			testMethods.Add(ToLowerTest);
+			testMethods.Add(SubStringTest2);
+			testMethods.Add(SubStringTest3);
 		}
 
 		public static bool ConcatTest1()
@@ -106,6 +108,22 @@ namespace Mosa.TestWorld.x86.Tests
 			string s1 = "abc";
 			string s2 = "ABC".ToLower();
 			return s1.Equals(s2);
+		}
+
+		public static bool SubStringTest2()
+		{
+			string main = "abcdefghi";
+			string sub1 = main.Substring(6);
+
+			return string.Equals("ghi", sub1);
+		}
+
+		public static bool SubStringTest3()
+		{
+			string main = "abcdefghi";
+			string sub2 = main.Substring(0, 3);
+
+			return string.Equals("abc", sub2);
 		}
 	}
 }

@@ -12,7 +12,7 @@ namespace Mosa.Compiler.Framework
 	public struct Metadata
 	{
 		public const string AssembliesTable = "<$>AssembliesTable";
-		public const string MethodLookupTable = "<$>MethodLookupTable";
+
 		public const string NameString = "$Name";
 
 		public const string AssemblyDefinition = "$AssemblyDef";
@@ -33,5 +33,8 @@ namespace Mosa.Compiler.Framework
 		public const string InterfaceBitmap = "$InterfaceBitmap";
 
 		public const string ProtectedRegionTable = "$ProtectedRegionTable";
+
+		public const string MethodLookupTable = "<$>MethodLookupTable";
+		public const string MethodExceptionLookupTable = "<$>MethodExceptionLookupTable";
 	}
 }

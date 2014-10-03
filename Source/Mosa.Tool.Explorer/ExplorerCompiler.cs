@@ -37,6 +37,7 @@ namespace Mosa.Tool.Explorer
 				new MethodCompilerSchedulerStage(),
 				new TypeInitializerSchedulerStage(),
 				new MethodLookupTableStage(),
+				new MethodExceptionLookupTableStage(),
 				new MetadataStage(),
 			});
 
@@ -65,9 +66,9 @@ namespace Mosa.Tool.Explorer
 		/// <param name="compilerTrace">The compiler trace.</param>
 		/// <param name="platform">The platform.</param>
 		/// <param name="enabledSSA">if set to <c>true</c> [enabled ssa].</param>
-		/// <param name="enableSSAOptimizations">if set to <c>true</c> [enable ssa optimizations].</param>
+		/// <param name="enableOptimizations">if set to <c>true</c> [enable ssa optimizations].</param>
 		/// <param name="emitBinary">if set to <c>true</c> [emit binary].</param>
-		public static void Compile(TypeSystem typeSystem, MosaTypeLayout typeLayout, CompilerTrace compilerTrace, string platform, bool enabledSSA, bool enableSSAOptimizations, bool emitBinary)
+		public static void Compile(TypeSystem typeSystem, MosaTypeLayout typeLayout, CompilerTrace compilerTrace, string platform, bool enabledSSA, bool enableOptimizations, bool emitBinary)
 		{
 			BaseArchitecture architecture;
 
@@ -83,8 +84,8 @@ namespace Mosa.Tool.Explorer
 			CompilerOptions compilerOptions = new CompilerOptions();
 
 			compilerOptions.EnableSSA = enabledSSA;
-			compilerOptions.EnableSSAOptimizations = enabledSSA && enableSSAOptimizations;
-			compilerOptions.EnablePromoteTemporaryVariablesOptimization = compilerOptions.EnableSSAOptimizations; // FIXME - default is okay for now
+			compilerOptions.EnableOptimizations = enableOptimizations;
+			compilerOptions.EnablePromoteTemporaryVariablesOptimization = compilerOptions.EnableOptimizations; // FIXME - default is okay for now
 
 			ExplorerCompiler compiler = new ExplorerCompiler(architecture, typeSystem, typeLayout, compilerTrace, compilerOptions, emitBinary);
 

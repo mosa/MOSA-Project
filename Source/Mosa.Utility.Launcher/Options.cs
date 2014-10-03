@@ -31,7 +31,7 @@ namespace Mosa.Utility.Launcher
 
 		public bool EnableSSA { get; set; }
 
-		public bool EnableSSAOptimizations { get; set; }
+		public bool EnableOptimizations { get; set; }
 
 		public bool EnablePromoteTemporaryVariables { get; set; }
 
@@ -50,7 +50,7 @@ namespace Mosa.Utility.Launcher
 		public Options()
 		{
 			EnableSSA = true;
-			EnableSSAOptimizations = true;
+			EnableOptimizations = true;
 			EnablePromoteTemporaryVariables = true;
 			Emulator = EmulatorType.Qemu;
 			ImageFormat = ImageFormat.IMG;

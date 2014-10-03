@@ -18,7 +18,7 @@ namespace Mosa.Compiler.Framework.Stages
 	/// <summary>
 	///
 	/// </summary>
-	public sealed class SSAOptimizations : BaseMethodCompilerStage
+	public sealed class IROptimizationStage : BaseMethodCompilerStage
 	{
 		private int instructionsRemovedCount = 0;
 		private int simplifyExtendedMoveWithConstantCount = 0;
@@ -45,6 +45,7 @@ namespace Mosa.Compiler.Framework.Stages
 		private int foldIntegerCompare = 0;
 		private int simplifyExtendedMove = 0;
 		private int foldLoadStoreOffsets = 0;
+		private int constantMoveToRight = 0;
 
 		private Stack<int> worklist = new Stack<int>();
 
@@ -85,31 +86,32 @@ namespace Mosa.Compiler.Framework.Stages
 				ProcessWorkList();
 			}
 
-			UpdateCounter("SSAOptimizations.IRInstructionRemoved", instructionsRemovedCount);
-			UpdateCounter("SSAOptimizations.SimplifyExtendedMoveWithConstant", simplifyExtendedMoveWithConstantCount);
-			UpdateCounter("SSAOptimizations.SimplifySubtraction", simplifySubtractionCount);
-			UpdateCounter("SSAOptimizations.StrengthReductionMultiplication", strengthReductionMultiplicationCount);
-			UpdateCounter("SSAOptimizations.StrengthReductionDivision", strengthReductionDivisionCount);
-			UpdateCounter("SSAOptimizations.StrengthReductionIntegerAdditionAndSubstraction", strengthReductionIntegerAdditionAndSubstractionCount);
-			UpdateCounter("SSAOptimizations.StrengthReductionLogicalOperators", strengthReductionLogicalOperatorsCount);
-			UpdateCounter("SSAOptimizations.ConstantFoldingIntegerOperations", constantFoldingIntegerOperationsCount);
-			UpdateCounter("SSAOptimizations.SimpleConstantPropagation", simpleConstantPropagationCount);
-			UpdateCounter("SSAOptimizations.SimpleForwardCopyPropagation", simpleForwardCopyPropagationCount);
-			UpdateCounter("SSAOptimizations.SimpleBackwardCopyPropagation", simpleBackwardCopyPropagation);
-			UpdateCounter("SSAOptimizations.ConstantFoldingIntegerCompare", constantFoldingIntegerCompareCount);
-			UpdateCounter("SSAOptimizations.StrengthReductionIntegerCompareBranch", strengthReductionIntegerCompareBranchCount);
-			UpdateCounter("SSAOptimizations.DeadCodeElimination", deadCodeEliminationCount);
-			UpdateCounter("SSAOptimizations.SimplifyIntegerCompareCount", simplifyIntegerCompareCount);
-			UpdateCounter("SSAOptimizations.ConstantFoldingAdditionAndSubstraction", constantFoldingAdditionAndSubstraction);
-			UpdateCounter("SSAOptimizations.ConstantFoldingMultiplicationCount", constantFoldingMultiplicationCount);
-			UpdateCounter("SSAOptimizations.ConstantFoldingDivisionCount", constantFoldingDivisionCount);
-			UpdateCounter("SSAOptimizations.ReduceTruncationAndExpansion", reduceTruncationAndExpansion);
-			UpdateCounter("SSAOptimizations.FoldIntegerCompareBranch", foldIntegerCompareBranch);
-			UpdateCounter("SSAOptimizations.FoldIntegerCompare", foldIntegerCompare);
-			UpdateCounter("SSAOptimizations.SimplifyExtendedMove", simplifyExtendedMove);
-			UpdateCounter("SSAOptimizations.ReduceZeroExtendedMove", reduceZeroExtendedMove);
-			UpdateCounter("SSAOptimizations.FoldLoadStoreOffsets", foldLoadStoreOffsets);
-			UpdateCounter("SSAOptimizations.BlockRemoved", blockRemovedCount);
+			UpdateCounter("IROptimizations.IRInstructionRemoved", instructionsRemovedCount);
+			UpdateCounter("IROptimizations.SimplifyExtendedMoveWithConstant", simplifyExtendedMoveWithConstantCount);
+			UpdateCounter("IROptimizations.SimplifySubtraction", simplifySubtractionCount);
+			UpdateCounter("IROptimizations.StrengthReductionMultiplication", strengthReductionMultiplicationCount);
+			UpdateCounter("IROptimizations.StrengthReductionDivision", strengthReductionDivisionCount);
+			UpdateCounter("IROptimizations.StrengthReductionIntegerAdditionAndSubstraction", strengthReductionIntegerAdditionAndSubstractionCount);
+			UpdateCounter("IROptimizations.StrengthReductionLogicalOperators", strengthReductionLogicalOperatorsCount);
+			UpdateCounter("IROptimizations.ConstantFoldingIntegerOperations", constantFoldingIntegerOperationsCount);
+			UpdateCounter("IROptimizations.SimpleConstantPropagation", simpleConstantPropagationCount);
+			UpdateCounter("IROptimizations.SimpleForwardCopyPropagation", simpleForwardCopyPropagationCount);
+			UpdateCounter("IROptimizations.SimpleBackwardCopyPropagation", simpleBackwardCopyPropagation);
+			UpdateCounter("IROptimizations.ConstantFoldingIntegerCompare", constantFoldingIntegerCompareCount);
+			UpdateCounter("IROptimizations.StrengthReductionIntegerCompareBranch", strengthReductionIntegerCompareBranchCount);
+			UpdateCounter("IROptimizations.DeadCodeElimination", deadCodeEliminationCount);
+			UpdateCounter("IROptimizations.SimplifyIntegerCompareCount", simplifyIntegerCompareCount);
+			UpdateCounter("IROptimizations.ConstantFoldingAdditionAndSubstraction", constantFoldingAdditionAndSubstraction);
+			UpdateCounter("IROptimizations.ConstantFoldingMultiplicationCount", constantFoldingMultiplicationCount);
+			UpdateCounter("IROptimizations.ConstantFoldingDivisionCount", constantFoldingDivisionCount);
+			UpdateCounter("IROptimizations.ReduceTruncationAndExpansion", reduceTruncationAndExpansion);
+			UpdateCounter("IROptimizations.FoldIntegerCompareBranch", foldIntegerCompareBranch);
+			UpdateCounter("IROptimizations.FoldIntegerCompare", foldIntegerCompare);
+			UpdateCounter("IROptimizations.SimplifyExtendedMove", simplifyExtendedMove);
+			UpdateCounter("IROptimizations.ReduceZeroExtendedMove", reduceZeroExtendedMove);
+			UpdateCounter("IROptimizations.ConstantMoveToRight", constantMoveToRight);
+			UpdateCounter("IROptimizations.FoldLoadStoreOffsets", foldLoadStoreOffsets);
+			UpdateCounter("IROptimizations.BlockRemoved", blockRemovedCount);
 
 			worklist = null;
 		}
@@ -135,7 +137,7 @@ namespace Mosa.Compiler.Framework.Stages
 			DeadCodeElimination(context);
 			DeadCodeElimination2(context);
 			SimplifySubtraction(context);
-			ConstantMove(context);
+			ConstantMoveToRight(context);
 			StrengthReductionMultiplication(context);
 			StrengthReductionDivision(context);
 			StrengthReductionIntegerAdditionAndSubstraction(context);
@@ -299,6 +301,9 @@ namespace Mosa.Compiler.Framework.Stages
 			if (context.Result.IsVirtualRegister)
 				return;
 
+			if (context.Result.Definitions.Count != 1)
+				return;
+
 			if (!context.Result.IsStackLocal)
 				return;
 
@@ -330,6 +335,9 @@ namespace Mosa.Compiler.Framework.Stages
 				return;
 
 			if (!context.Result.IsVirtualRegister)
+				return;
+
+			if (context.Result.Definitions.Count != 1)
 				return;
 
 			if (context.Instruction == IRInstruction.Call || context.Instruction == IRInstruction.IntrinsicMethodCall)
@@ -373,6 +381,9 @@ namespace Mosa.Compiler.Framework.Stages
 			if (!context.Result.IsVirtualRegister)
 				return;
 
+			if (context.Result.Definitions.Count != 1)
+				return;
+
 			if (!context.Operand1.IsConstant)
 				return;
 
@@ -384,7 +395,7 @@ namespace Mosa.Compiler.Framework.Stages
 			// for each statement T that uses operand, substituted c in statement T
 			foreach (int index in destination.Uses.ToArray())
 			{
-				Context ctx = new Context(InstructionSet, index);
+				var ctx = new Context(InstructionSet, index);
 
 				if (ctx.Instruction == IRInstruction.AddressOf)
 					continue;
@@ -478,16 +489,20 @@ namespace Mosa.Compiler.Framework.Stages
 			if (context.Instruction != IRInstruction.Move)
 				return;
 
-			if (context.Operand1.IsConstant)
+			if (!context.Result.IsVirtualRegister)
 				return;
 
-			if (!context.Result.IsVirtualRegister)
+			if (context.Result.Definitions.Count != 1)
+				return;
+
+			if (context.Operand1.Definitions.Count != 1)
+				return;
+
+			if (context.Operand1.IsConstant)
 				return;
 
 			if (!context.Operand1.IsVirtualRegister)
 				return;
-
-			Debug.Assert(context.Result.Definitions.Count == 1);
 
 			// If the pointer or reference types are different, we can not copy propagation because type information would be lost.
 			// Also if the operand sign is different, we cannot do it as it requires a signed/unsigned extended move, not a normal move
@@ -505,7 +520,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			foreach (int index in destination.Uses.ToArray())
 			{
-				Context ctx = new Context(InstructionSet, index);
+				var ctx = new Context(InstructionSet, index);
 
 				for (int i = 0; i < ctx.OperandCount; i++)
 				{
@@ -833,6 +848,9 @@ namespace Mosa.Compiler.Framework.Stages
 				return;
 
 			if (!context.Result.IsVirtualRegister)
+				return;
+
+			if (context.Result.Definitions.Count != 1)
 				return;
 
 			if (!context.Operand1.IsConstant)
@@ -1194,6 +1212,9 @@ namespace Mosa.Compiler.Framework.Stages
 			if (!context.Result.IsVirtualRegister)
 				return;
 
+			if (context.Result.Definitions.Count != 1)
+				return;
+
 			if (context.Result.Uses.Count != 1)
 				return;
 
@@ -1214,7 +1235,8 @@ namespace Mosa.Compiler.Framework.Stages
 			if (!ctx.Operand2.IsConstantZero)
 				return;
 
-			Debug.Assert(ctx.Result.Definitions.Count == 1);
+			if (ctx.Result.Definitions.Count != 1)
+				return;
 
 			if (trace.Active) trace.Log("*** SimplifyIntegerCompare");
 			AddOperandUsageToWorkList(ctx);
@@ -1224,7 +1246,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (trace.Active) trace.Log("AFTER: \t" + ctx.ToString());
 		}
 
-		private void ConstantMove(Context context)
+		private void ConstantMoveToRight(Context context)
 		{
 			if (context.IsEmpty)
 				return;
@@ -1242,12 +1264,13 @@ namespace Mosa.Compiler.Framework.Stages
 				return;
 
 			AddOperandUsageToWorkList(context);
-			if (trace.Active) trace.Log("*** ConstantMove");
+			if (trace.Active) trace.Log("*** ConstantMoveToRight");
 			if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
 			var op1 = context.Operand1;
 			context.Operand1 = context.Operand2;
 			context.Operand2 = op1;
 			if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
+			constantMoveToRight++;
 		}
 
 		private void ConstantFoldingAdditionAndSubstraction(Context context)
@@ -1260,6 +1283,9 @@ namespace Mosa.Compiler.Framework.Stages
 				return;
 
 			if (!context.Result.IsVirtualRegister)
+				return;
+
+			if (context.Result.Definitions.Count != 1)
 				return;
 
 			if (!context.Operand2.IsConstant)
@@ -1322,6 +1348,9 @@ namespace Mosa.Compiler.Framework.Stages
 			if (!context.Result.IsVirtualRegister)
 				return;
 
+			if (context.Result.Definitions.Count != 1)
+				return;
+
 			if (!context.Operand2.IsConstant)
 				return;
 
@@ -1363,6 +1392,9 @@ namespace Mosa.Compiler.Framework.Stages
 				return;
 
 			if (!context.Result.IsVirtualRegister)
+				return;
+
+			if (context.Result.Definitions.Count != 1)
 				return;
 
 			if (!context.Operand2.IsConstant)
@@ -1439,7 +1471,8 @@ namespace Mosa.Compiler.Framework.Stages
 			if (context.Result.Uses.Count != 1)
 				return;
 
-			Debug.Assert(context.Result.Definitions.Count == 1);
+			if (context.Result.Definitions.Count != 1)
+				return;
 
 			if (context.Operand1.Uses.Count != 1 || context.Operand1.Definitions.Count != 1)
 				return;
@@ -1490,8 +1523,7 @@ namespace Mosa.Compiler.Framework.Stages
 				return;
 
 			if (operand.Definitions.Count != 1)
-				throw new Common.InvalidCompilerException();
-			//Debug.Assert(operand.Definitions.Count == 1);
+				return;
 
 			Context ctx = new Context(InstructionSet, operand.Definitions[0]);
 
@@ -1603,10 +1635,16 @@ namespace Mosa.Compiler.Framework.Stages
 			if (!context.Result.IsVirtualRegister)
 				return;
 
+			if (context.Result.Definitions.Count != 1)
+				return;
+
 			if (!context.Operand1.IsVirtualRegister)
 				return;
 
 			if (context.Operand1.Uses.Count != 1)
+				return;
+
+			if (context.Operand1.Definitions.Count != 1)
 				return;
 
 			// If the pointer or reference types are different, we can not copy propagation because type information would be lost.
