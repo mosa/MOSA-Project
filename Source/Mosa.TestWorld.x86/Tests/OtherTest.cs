@@ -20,6 +20,7 @@ namespace Mosa.TestWorld.x86.Tests
 			testMethods.Add(OtherTest2);
 			testMethods.Add(OtherTest3);
 			testMethods.Add(ForeachNestedTest);
+			testMethods.Add(StructNewObjTest);
 		}
 
 		private static uint StaticValue = 0x200000;
@@ -73,10 +74,31 @@ namespace Mosa.TestWorld.x86.Tests
 
 			return IntList;
 		}
+
+		public static bool StructNewObjTest()
+		{
+			Pair t1 = default(Pair);
+			try { t1 = new Pair(5, 10); }
+			catch { }
+
+			return (t1.A == 5 && t1.B == 10);
+		}
 	}
 
 	public struct TestStruct
 	{
 		public byte One;
+	}
+
+	public struct Pair
+	{
+		public int A;
+		public int B;
+
+		public Pair(int a, int b)
+		{
+			A = a;
+			B = b;
+		}
 	}
 }

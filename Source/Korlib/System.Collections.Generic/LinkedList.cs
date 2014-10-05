@@ -419,7 +419,7 @@ namespace System.Collections.Generic
 			return new Enumerator(this);
 		}
 
-		public class Enumerator : IEnumerator<T>, IEnumerator, IDisposable
+		public struct Enumerator : IEnumerator<T>, IEnumerator, IDisposable
 		{
 			private LinkedList<T> list;
 			private LinkedListNode<T> current;
