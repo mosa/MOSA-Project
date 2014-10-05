@@ -16,7 +16,7 @@ namespace Mosa.Compiler.Framework.Stages
 	/// <summary>
 	/// Emits method lookup table
 	/// </summary>
-	public class MethodLookupTableStage : BaseCompilerStage
+	public class MethodExceptionLookupTableStage : BaseCompilerStage
 	{
 		#region Data members
 
@@ -34,13 +34,13 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected override void Run()
 		{
-			CreateMethodLookupTable();
+			CreateMethodExceptionLookupTable();
 		}
 
-		protected void CreateMethodLookupTable()
+		protected void CreateMethodExceptionLookupTable()
 		{
 			// Emit assembly list
-			var methodLookupTable = Linker.CreateSymbol(Metadata.MethodLookupTable, SectionKind.ROData, TypeLayout.NativePointerAlignment, 0);
+			var methodLookupTable = Linker.CreateSymbol(Metadata.MethodExceptionLookupTable, SectionKind.ROData, TypeLayout.NativePointerAlignment, 0);
 			var writer = new EndianAwareBinaryWriter(methodLookupTable.Stream, Architecture.Endianness);
 
 			// 1. Number of methods
@@ -61,6 +61,9 @@ namespace Mosa.Compiler.Framework.Stages
 					foreach (var method in methodList)
 					{
 						if (method.IsAbstract)
+							continue;
+
+						if (method.ExceptionHandlers.Count == 0)
 							continue;
 
 						count++;
@@ -84,6 +87,9 @@ namespace Mosa.Compiler.Framework.Stages
 					foreach (var method in methodList)
 					{
 						if (method.IsAbstract)
+							continue;
+
+						if (method.ExceptionHandlers.Count == 0)
 							continue;
 
 						// 1. Pointer to Method

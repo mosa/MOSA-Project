@@ -80,7 +80,7 @@ namespace Mosa.Utility.Launcher
 
 			var compilerOptions = new CompilerOptions();
 			compilerOptions.EnableSSA = Options.EnableSSA;
-			compilerOptions.EnableSSAOptimizations = Options.EnableSSAOptimizations;
+			compilerOptions.EnableOptimizations = Options.EnableOptimizations;
 			compilerOptions.OutputFile = compiledFile;
 
 			compilerOptions.Architecture = SelectArchitecture(Options.PlatformType);

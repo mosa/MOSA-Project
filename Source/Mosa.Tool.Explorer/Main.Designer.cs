@@ -50,7 +50,7 @@
 			this.displayShortName = new System.Windows.Forms.ToolStripMenuItem();
 			this.includeTestKorlibToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.enableSSAToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.enableSSAOptimizations = new System.Windows.Forms.ToolStripMenuItem();
+			this.enableOptimizations = new System.Windows.Forms.ToolStripMenuItem();
 			this.enableBinaryCodeGenerationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
 			this.treeView = new System.Windows.Forms.TreeView();
@@ -226,7 +226,7 @@
             this.displayShortName,
             this.includeTestKorlibToolStripMenuItem,
             this.enableSSAToolStripMenuItem,
-            this.enableSSAOptimizations,
+            this.enableOptimizations,
             this.enableBinaryCodeGenerationToolStripMenuItem});
 			this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
 			this.optionsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
@@ -267,14 +267,14 @@
 			this.enableSSAToolStripMenuItem.Size = new System.Drawing.Size(237, 22);
 			this.enableSSAToolStripMenuItem.Text = "Enable SSA";
 			// 
-			// enableSSAOptimizations
+			// enableOptimizations
 			// 
-			this.enableSSAOptimizations.Checked = true;
-			this.enableSSAOptimizations.CheckOnClick = true;
-			this.enableSSAOptimizations.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.enableSSAOptimizations.Name = "enableSSAOptimizations";
-			this.enableSSAOptimizations.Size = new System.Drawing.Size(237, 22);
-			this.enableSSAOptimizations.Text = "Enable SSA Optimizations";
+			this.enableOptimizations.Checked = true;
+			this.enableOptimizations.CheckOnClick = true;
+			this.enableOptimizations.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.enableOptimizations.Name = "enableOptimizations";
+			this.enableOptimizations.Size = new System.Drawing.Size(237, 22);
+			this.enableOptimizations.Text = "Enable Optimizations";
 			// 
 			// enableBinaryCodeGenerationToolStripMenuItem
 			// 
@@ -335,7 +335,7 @@
 			this.tabControl1.Location = new System.Drawing.Point(3, 3);
 			this.tabControl1.Name = "tabControl1";
 			this.tabControl1.SelectedIndex = 0;
-			this.tabControl1.Size = new System.Drawing.Size(534, 405);
+			this.tabControl1.Size = new System.Drawing.Size(533, 405);
 			this.tabControl1.TabIndex = 38;
 			// 
 			// tabPage1
@@ -351,7 +351,7 @@
 			this.tabPage1.Location = new System.Drawing.Point(4, 25);
 			this.tabPage1.Name = "tabPage1";
 			this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPage1.Size = new System.Drawing.Size(526, 376);
+			this.tabPage1.Size = new System.Drawing.Size(525, 376);
 			this.tabPage1.TabIndex = 0;
 			this.tabPage1.Text = "Instructions";
 			// 
@@ -413,7 +413,7 @@
 			this.tabPage2.Location = new System.Drawing.Point(4, 25);
 			this.tabPage2.Name = "tabPage2";
 			this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPage2.Size = new System.Drawing.Size(526, 376);
+			this.tabPage2.Size = new System.Drawing.Size(525, 376);
 			this.tabPage2.TabIndex = 1;
 			this.tabPage2.Text = "Debug";
 			// 
@@ -576,7 +576,7 @@
 		private System.Windows.Forms.RichTextBox rbOtherResult;
 		private System.Windows.Forms.ToolStripMenuItem enableBinaryCodeGenerationToolStripMenuItem;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
-		private System.Windows.Forms.ToolStripMenuItem enableSSAOptimizations;
+		private System.Windows.Forms.ToolStripMenuItem enableOptimizations;
 		private System.Windows.Forms.ToolStripMenuItem displayShortName;
 		private System.Windows.Forms.ToolStripProgressBar toolStripProgressBar1;
 		private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel;

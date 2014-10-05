@@ -198,7 +198,6 @@ namespace Mosa.Test.Collection
 			return a;
 		}
 
-
 		public static int ExceptionTest2()
 		{
 			int a = 10;

@@ -200,7 +200,14 @@ namespace Mosa.Tool.TinySimulator
 
 			compileStartTime = DateTime.Now;
 
-			SimCompiler.Compile(TypeSystem, TypeLayout, InternalTrace, true, Architecture, simAdapter, Linker);
+			var compilerOptions = new CompilerOptions();
+
+			compilerOptions.EnableSSA = true;
+			compilerOptions.EnableOptimizations = true;
+			compilerOptions.EnablePromoteTemporaryVariablesOptimization = true;
+
+			SimCompiler.Compile(TypeSystem, TypeLayout, InternalTrace, compilerOptions, Architecture, simAdapter, Linker);
+
 			SimCPU = simAdapter.SimCPU;
 
 			SimCPU.Monitor.BreakAtTick = 1;

@@ -279,6 +279,36 @@ namespace Mosa.Platform.Internal.x86
 			return 0;
 		}
 
+		public static uint GetMethodDefinitionViaMethodExceptionLookup(uint address)
+		{
+			uint table = Native.GetMethodExceptionLookupTable();
+			//uint table = Native.GetMethodLookupTable();
+
+			if (table == 0)
+				return 0;
+
+			uint entries = Mosa.Internal.Native.Load32(table);
+
+			table = table + 4;
+
+			while (entries > 0)
+			{
+				uint addr = Mosa.Internal.Native.Load32(table);
+				uint size = Mosa.Internal.Native.Load32(table, 4);
+
+				if (address >= addr && address < addr + size)
+				{
+					return Mosa.Internal.Native.Load32(table, 8);
+				}
+
+				table = table + 12;
+
+				entries--;
+			}
+
+			return 0;
+		}
+
 		public static uint GetProtectedRegionEntryByAddress(uint address, uint exceptionType, uint methodDef)
 		{
 			uint table = Mosa.Internal.Native.Load32(methodDef, NativeIntSize * 6);
@@ -370,6 +400,9 @@ namespace Mosa.Platform.Internal.x86
 
 		public static void ExceptionHandler()
 		{
+			// capture this register immediately
+			uint exceptionObject = Native.GetExceptionRegister();
+
 			uint stackFrame = GetStackFrame(1);
 
 			uint returnAdddress = GetReturnAddressFromStackFrame(stackFrame);
@@ -380,38 +413,32 @@ namespace Mosa.Platform.Internal.x86
 				Fault(2);
 			}
 
-			uint exceptionObject = Native.GetExceptionRegister();
 			uint exceptionType = Mosa.Internal.Native.Load32(exceptionObject);
 
-			uint methodDef = GetMethodDefinition(returnAdddress);
+			uint methodDef = GetMethodDefinitionViaMethodExceptionLookup(returnAdddress);
 
-			if (methodDef == 0)
+			if (methodDef != 0)
 			{
-				// can't find method defination
-				Fault(3);
+				uint protectedRegion = GetProtectedRegionEntryByAddress(returnAdddress, exceptionType, methodDef);
+
+				if (protectedRegion != 0)
+				{
+					// found handler for current method, call it
+
+					uint methodStart = Mosa.Internal.Native.Load32(methodDef, NativeIntSize * 4);
+					uint handlerOffset = Mosa.Internal.Native.Load32(protectedRegion, NativeIntSize * 3);
+
+					uint target = methodStart + handlerOffset;
+
+					SetReturnAddressForStackFrame(stackFrame, target);
+
+					return;
+				}
 			}
 
-			uint protectedRegion = GetProtectedRegionEntryByAddress(returnAdddress, exceptionType, methodDef);
+			// no handler in method
 
-			if (protectedRegion != 0)
-			{
-				// found handler for current method, call it
-
-				uint methodStart = Mosa.Internal.Native.Load32(methodDef, NativeIntSize * 4);
-				uint handlerOffset = Mosa.Internal.Native.Load32(protectedRegion, NativeIntSize * 3);
-
-				uint target = methodStart + handlerOffset;
-
-				SetReturnAddressForStackFrame(stackFrame, target);
-
-				return;
-			}
-			else
-			{
-				// no handler in method
-
-				//TODO: unwind stack and re-start check
-			}
+			//TODO: unwind stack and re-start check
 		}
 	}
 }

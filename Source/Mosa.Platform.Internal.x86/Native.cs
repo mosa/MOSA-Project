@@ -246,6 +246,9 @@ namespace Mosa.Platform.Internal.x86
 		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.GetMethodLookupTable, Mosa.Platform.x86")]
 		public extern static uint GetMethodLookupTable();
 
+		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.GetMethodExceptionLookupTable, Mosa.Platform.x86")]
+		public extern static uint GetMethodExceptionLookupTable();
+
 		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.SwitchTask, Mosa.Platform.x86")]
 		public extern static void SwitchTask(uint esp);
 

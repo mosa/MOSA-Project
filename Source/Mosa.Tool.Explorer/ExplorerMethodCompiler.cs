@@ -39,13 +39,13 @@ namespace Mosa.Tool.Explorer
 				new CILTransformationStage(),
 				new ConvertCompoundStage(),
 				new UnboxValueTypeStage(),
-				
+
 				(compilerOptions.EnablePromoteTemporaryVariablesOptimization) ? new PromoteTempVariablesStage() : null,
 
 				(compilerOptions.EnableSSA) ? new EdgeSplitStage() : null,
 				(compilerOptions.EnableSSA) ? new PhiPlacementStage() : null,
 				(compilerOptions.EnableSSA) ? new EnterSSAStage() : null,
-				(compilerOptions.EnableSSA && compilerOptions.EnableSSAOptimizations) ? new SSAOptimizations() : null,
+				(compilerOptions.EnableOptimizations) ? new IROptimizationStage() : null,
 				(compilerOptions.EnableSSA) ? new LeaveSSA() : null,
 
 				new ExceptionStage(),
