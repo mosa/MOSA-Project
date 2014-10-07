@@ -14,6 +14,16 @@ namespace Mosa.Test.Collection
 			return (structure.One.Equals(one));
 		}
 	
+		public static bool StructTestSet2U1(byte one, byte two)
+		{
+			Struct3U1 structure;
+			
+			structure.One = one;
+			structure.Two = two;
+			
+			return (structure.One.Equals(one) && structure.Two.Equals(two));
+		}
+	
 		public static bool StructTestSet3U1(byte one, byte two, byte three)
 		{
 			Struct3U1 structure;
@@ -31,6 +41,16 @@ namespace Mosa.Test.Collection
 			structure.One = one;
 	
 			return (structure.One.Equals(one));
+		}
+	
+		public static bool StructTestSet2U2(ushort one, ushort two)
+		{
+			Struct3U2 structure;
+			
+			structure.One = one;
+			structure.Two = two;
+			
+			return (structure.One.Equals(one) && structure.Two.Equals(two));
 		}
 	
 		public static bool StructTestSet3U2(ushort one, ushort two, ushort three)
@@ -52,6 +72,16 @@ namespace Mosa.Test.Collection
 			return (structure.One.Equals(one));
 		}
 	
+		public static bool StructTestSet2U4(uint one, uint two)
+		{
+			Struct3U4 structure;
+			
+			structure.One = one;
+			structure.Two = two;
+			
+			return (structure.One.Equals(one) && structure.Two.Equals(two));
+		}
+	
 		public static bool StructTestSet3U4(uint one, uint two, uint three)
 		{
 			Struct3U4 structure;
@@ -69,6 +99,16 @@ namespace Mosa.Test.Collection
 			structure.One = one;
 	
 			return (structure.One.Equals(one));
+		}
+	
+		public static bool StructTestSet2U8(ulong one, ulong two)
+		{
+			Struct3U8 structure;
+			
+			structure.One = one;
+			structure.Two = two;
+			
+			return (structure.One.Equals(one) && structure.Two.Equals(two));
 		}
 	
 		public static bool StructTestSet3U8(ulong one, ulong two, ulong three)
@@ -90,6 +130,16 @@ namespace Mosa.Test.Collection
 			return (structure.One.Equals(one));
 		}
 	
+		public static bool StructTestSet2I1(sbyte one, sbyte two)
+		{
+			Struct3I1 structure;
+			
+			structure.One = one;
+			structure.Two = two;
+			
+			return (structure.One.Equals(one) && structure.Two.Equals(two));
+		}
+	
 		public static bool StructTestSet3I1(sbyte one, sbyte two, sbyte three)
 		{
 			Struct3I1 structure;
@@ -107,6 +157,16 @@ namespace Mosa.Test.Collection
 			structure.One = one;
 	
 			return (structure.One.Equals(one));
+		}
+	
+		public static bool StructTestSet2I2(short one, short two)
+		{
+			Struct3I2 structure;
+			
+			structure.One = one;
+			structure.Two = two;
+			
+			return (structure.One.Equals(one) && structure.Two.Equals(two));
 		}
 	
 		public static bool StructTestSet3I2(short one, short two, short three)
@@ -128,6 +188,16 @@ namespace Mosa.Test.Collection
 			return (structure.One.Equals(one));
 		}
 	
+		public static bool StructTestSet2I4(int one, int two)
+		{
+			Struct3I4 structure;
+			
+			structure.One = one;
+			structure.Two = two;
+			
+			return (structure.One.Equals(one) && structure.Two.Equals(two));
+		}
+	
 		public static bool StructTestSet3I4(int one, int two, int three)
 		{
 			Struct3I4 structure;
@@ -145,6 +215,16 @@ namespace Mosa.Test.Collection
 			structure.One = one;
 	
 			return (structure.One.Equals(one));
+		}
+	
+		public static bool StructTestSet2I8(long one, long two)
+		{
+			Struct3I8 structure;
+			
+			structure.One = one;
+			structure.Two = two;
+			
+			return (structure.One.Equals(one) && structure.Two.Equals(two));
 		}
 	
 		public static bool StructTestSet3I8(long one, long two, long three)
@@ -166,6 +246,16 @@ namespace Mosa.Test.Collection
 			return (structure.One.Equals(one));
 		}
 	
+		public static bool StructTestSet2R4(float one, float two)
+		{
+			Struct3R4 structure;
+			
+			structure.One = one;
+			structure.Two = two;
+			
+			return (structure.One.Equals(one) && structure.Two.Equals(two));
+		}
+	
 		public static bool StructTestSet3R4(float one, float two, float three)
 		{
 			Struct3R4 structure;
@@ -183,6 +273,16 @@ namespace Mosa.Test.Collection
 			structure.One = one;
 	
 			return (structure.One.Equals(one));
+		}
+	
+		public static bool StructTestSet2R8(double one, double two)
+		{
+			Struct3R8 structure;
+			
+			structure.One = one;
+			structure.Two = two;
+			
+			return (structure.One.Equals(one) && structure.Two.Equals(two));
 		}
 	
 		public static bool StructTestSet3R8(double one, double two, double three)
@@ -204,6 +304,16 @@ namespace Mosa.Test.Collection
 			return (structure.One.Equals(one));
 		}
 	
+		public static bool StructTestSet2C(char one, char two)
+		{
+			Struct3C structure;
+			
+			structure.One = one;
+			structure.Two = two;
+			
+			return (structure.One.Equals(one) && structure.Two.Equals(two));
+		}
+	
 		public static bool StructTestSet3C(char one, char two, char three)
 		{
 			Struct3C structure;
@@ -222,6 +332,12 @@ namespace Mosa.Test.Collection
 		public byte One;
 	}
 	
+	public struct Struct2U1
+	{
+		public byte One;
+		public byte Two;
+	}
+	
 	public struct Struct3U1
 	{
 		public byte One;
@@ -231,6 +347,12 @@ namespace Mosa.Test.Collection
 		public struct Struct1U2
 	{
 		public ushort One;
+	}
+	
+	public struct Struct2U2
+	{
+		public ushort One;
+		public ushort Two;
 	}
 	
 	public struct Struct3U2
@@ -244,6 +366,12 @@ namespace Mosa.Test.Collection
 		public uint One;
 	}
 	
+	public struct Struct2U4
+	{
+		public uint One;
+		public uint Two;
+	}
+	
 	public struct Struct3U4
 	{
 		public uint One;
@@ -253,6 +381,12 @@ namespace Mosa.Test.Collection
 		public struct Struct1U8
 	{
 		public ulong One;
+	}
+	
+	public struct Struct2U8
+	{
+		public ulong One;
+		public ulong Two;
 	}
 	
 	public struct Struct3U8
@@ -266,6 +400,12 @@ namespace Mosa.Test.Collection
 		public sbyte One;
 	}
 	
+	public struct Struct2I1
+	{
+		public sbyte One;
+		public sbyte Two;
+	}
+	
 	public struct Struct3I1
 	{
 		public sbyte One;
@@ -275,6 +415,12 @@ namespace Mosa.Test.Collection
 		public struct Struct1I2
 	{
 		public short One;
+	}
+	
+	public struct Struct2I2
+	{
+		public short One;
+		public short Two;
 	}
 	
 	public struct Struct3I2
@@ -288,6 +434,12 @@ namespace Mosa.Test.Collection
 		public int One;
 	}
 	
+	public struct Struct2I4
+	{
+		public int One;
+		public int Two;
+	}
+	
 	public struct Struct3I4
 	{
 		public int One;
@@ -297,6 +449,12 @@ namespace Mosa.Test.Collection
 		public struct Struct1I8
 	{
 		public long One;
+	}
+	
+	public struct Struct2I8
+	{
+		public long One;
+		public long Two;
 	}
 	
 	public struct Struct3I8
@@ -310,6 +468,12 @@ namespace Mosa.Test.Collection
 		public float One;
 	}
 	
+	public struct Struct2R4
+	{
+		public float One;
+		public float Two;
+	}
+	
 	public struct Struct3R4
 	{
 		public float One;
@@ -321,6 +485,12 @@ namespace Mosa.Test.Collection
 		public double One;
 	}
 	
+	public struct Struct2R8
+	{
+		public double One;
+		public double Two;
+	}
+	
 	public struct Struct3R8
 	{
 		public double One;
@@ -330,6 +500,12 @@ namespace Mosa.Test.Collection
 		public struct Struct1C
 	{
 		public char One;
+	}
+	
+	public struct Struct2C
+	{
+		public char One;
+		public char Two;
 	}
 	
 	public struct Struct3C

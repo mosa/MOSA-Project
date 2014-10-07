@@ -31,7 +31,7 @@ namespace System
 
 		public override string FullName
 		{
-			get { throw new NotImplementedException(); }
+			get { return this.fullname; }
 		}
 
 		public override int GenericParameterPosition

@@ -554,15 +554,33 @@ namespace Mosa.Compiler.Framework.Stages
 
 			var classType = context.MosaMethod.DeclaringType;
 			var thisReference = context.Result;
-
+			
 			Context before = context.InsertBefore();
 
-			ReplaceWithVmCall(before, VmCall.AllocateObject);
+			if (TypeLayout.IsCompoundType(thisReference.Type))
+			{
+				var newThis = MethodCompiler.StackLayout.AddStackLocal(thisReference.Type);
 
-			before.SetOperand(1, GetRuntimeTypeHandle(classType, before));
-			before.SetOperand(2, Operand.CreateConstantSignedInt(TypeSystem, TypeLayout.GetTypeSize(classType)));
-			before.OperandCount = 3;
-			before.Result = thisReference;
+				for (int i = 0; i < context.Next.OperandCount; i++)
+				{
+					if (context.Next.GetOperand(i) == thisReference)
+					{
+						context.Next.SetOperand(i, newThis);
+					}
+				}
+
+				thisReference = MethodCompiler.CreateVirtualRegister(thisReference.Type.ToManagedPointer());
+				before.SetInstruction(IRInstruction.AddressOf, thisReference, newThis);
+			}
+			else
+			{
+				ReplaceWithVmCall(before, VmCall.AllocateObject);
+
+				before.SetOperand(1, GetRuntimeTypeHandle(classType, before));
+				before.SetOperand(2, Operand.CreateConstantSignedInt(TypeSystem, TypeLayout.GetTypeSize(classType)));
+				before.OperandCount = 3;
+				before.Result = thisReference;
+			}
 
 			// Result is the this pointer, now invoke the real constructor
 			List<Operand> operands = new List<Operand>(context.Operands);

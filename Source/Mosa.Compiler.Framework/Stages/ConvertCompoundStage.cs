@@ -68,6 +68,34 @@ namespace Mosa.Compiler.Framework.Stages
 				if (ctx.Result.Type.Equals(ctx.Operand1.Type) &&
 					TypeLayout.IsCompoundType(ctx.Result.Type) && !ctx.Result.Type.IsUI8 && !ctx.Result.Type.IsR8)
 				{
+					// If this move is proceded by a return then remove this instruction
+					// It is basically a double up caused by some instructions result in the same instruction output
+					if (ctx.Next.Instruction is Return && ctx.Next.Operand1 == ctx.Result)
+					{
+						ctx.Next.Operand1 = ctx.Operand1;
+						ctx.InsertBefore().SetInstruction(IRInstruction.Nop);
+						ctx.Remove();
+						return;
+					}
+
+					// If this move is preceded by a compount move (which will turn into a compound move) remove this instruction
+					// It is basically a double up caused by some instructions result in the same IR output
+					if ((ctx.Previous.Instruction is CompoundMove
+							|| ctx.Previous.Instruction is CompoundLoad
+							|| ctx.Previous.Instruction is Call)
+						&& ctx.Previous.Result == ctx.Operand1)
+					{
+						if (repl.ContainsKey(ctx.Previous.Result))
+						{
+							repl[ctx.Result] = repl[ctx.Previous.Result];
+							repl.Remove(ctx.Previous.Result);
+						}
+						ctx.Previous.Result = ctx.Result;
+						ctx.InsertBefore().SetInstruction(IRInstruction.Nop);
+						ctx.Remove();
+						return;
+					}
+
 					if (ctx.Result.IsVirtualRegister && !repl.ContainsKey(ctx.Result))
 					{
 						repl[ctx.Result] = MethodCompiler.StackLayout.AddStackLocal(ctx.Result.Type);
