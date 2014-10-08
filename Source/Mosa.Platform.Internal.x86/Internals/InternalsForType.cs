@@ -45,18 +45,26 @@ namespace Mosa.Platform.Internal.x86
 			// Iterate through all the assemblies and look for the type handle
 			foreach (RuntimeAssembly assembly in Runtime.Assemblies)
 			{
-				foreach (RuntimeType type in assembly.typeList)
-				{
-					// If its not a match then skip
-					if (type.TypeHandle != handle)
-						continue;
-
-					// If we get here then its a match so return it
-					return type;
-				}
+				Type found = Loop(assembly, handle);
+				if (found == null) continue;
+				return found;
 			}
 
 			// If we didn't find a match then return null
+			return null;
+		}
+
+		private static Type Loop(RuntimeAssembly assembly, RuntimeTypeHandle handle)
+		{
+			foreach (RuntimeType type in assembly.typeList)
+			{
+				// If its not a match then skip
+				if (type.TypeHandle != handle)
+					continue;
+
+				// If we get here then its a match so return it
+				return type;
+			}
 			return null;
 		}
 	}

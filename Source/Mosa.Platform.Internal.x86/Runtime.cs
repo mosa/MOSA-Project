@@ -74,7 +74,7 @@ namespace Mosa.Platform.Internal.x86
 
 		#region Metadata
 
-		internal static LinkedList<RuntimeAssembly> Assemblies = new LinkedList<RuntimeAssembly>();
+		internal static LinkedList<RuntimeAssembly> Assemblies;
 
 		public static string InitializeMetadataString(uint* ptr)
 		{
@@ -87,6 +87,7 @@ namespace Mosa.Platform.Internal.x86
 			// Get AssemblyListTable and Assembly count
 			uint* assemblyListTable = (uint*)Native.GetAssemblyListTable();
 			uint assemblyCount = assemblyListTable[0];
+			Assemblies = new LinkedList<RuntimeAssembly>();
 
 			// Loop through and populate the array
 			for (uint i = 0; i < assemblyCount; i++)
@@ -171,12 +172,24 @@ namespace Mosa.Platform.Internal.x86
 
 		public static void Memset(void* dest, byte value, uint size)
 		{
-			byte* _dest = (byte*)dest;
+			uint* _dest = (uint*)dest;
+			uint s = size & 3;
+			size >>= 2;
+			uint value4 = (uint)((value << 24) + (value << 16) + (value << 8) + value);
+
 			while (size > 0)
 			{
-				*_dest = value;
+				*_dest = value4;
 				_dest++;
 				size--;
+			}
+
+			byte* __dest = (byte*)_dest;
+			while (s > 0)
+			{
+				*__dest = value;
+				__dest++;
+				s--;
 			}
 		}
 

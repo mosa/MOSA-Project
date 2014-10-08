@@ -73,8 +73,8 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 
 			var compilerOptions = new CompilerOptions();
 
-			compilerOptions.EnableSSA = EnableOptimizations;
-			compilerOptions.EnableOptimizations = EnableSSA;
+			compilerOptions.EnableSSA = EnableSSA;
+			compilerOptions.EnableOptimizations = EnableOptimizations;
 			compilerOptions.EnablePromoteTemporaryVariablesOptimization = EnableOptimizations;
 
 			simCompiler = SimCompiler.Compile(typeSystem, typeLayout, compilerTrace, compilerOptions, architecture, simAdapter, linker);
