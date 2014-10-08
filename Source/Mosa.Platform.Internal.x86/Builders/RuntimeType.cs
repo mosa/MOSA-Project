@@ -64,6 +64,11 @@ namespace System
 			get { throw new NotImplementedException(); }
 		}
 
+		public override RuntimeTypeHandle TypeHandle
+		{
+			get { return this.handle; }
+		}
+
 		internal RuntimeType(RuntimeTypeHandle handle)
 		{
 			this.handle = handle;
