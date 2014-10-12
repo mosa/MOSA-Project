@@ -234,6 +234,40 @@ namespace Mosa.Test.Collection
 				try
 				{
 					a = a + 2;
+				}
+				catch
+				{
+					a = a + 50;
+				}
+				finally
+				{
+					a = a + 2000;
+					throw new Exception();
+				}
+			}
+			catch
+			{
+				a = a + 51;
+			}
+			finally
+			{
+				a = a + 5000;
+			}
+
+			a = a + 7;
+
+			return a;
+		}
+
+		public static int ExceptionTest4()
+		{
+			int a = 10;
+
+			try
+			{
+				try
+				{
+					a = a + 2;
 
 					if (a > 0)
 						throw new Exception();

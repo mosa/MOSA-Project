@@ -42,6 +42,8 @@ namespace Mosa.Compiler.Framework.Stages
 			var section = MethodCompiler.Linker.CreateSymbol(MethodCompiler.Method.FullName + Metadata.ProtectedRegionTable, SectionKind.ROData, NativePointerAlignment, 0);
 			var stream = section.Stream;
 
+			int sectioncount = 0;
+
 			var writer = new EndianAwareBinaryWriter(stream, Architecture.Endianness);
 
 			foreach (var region in MethodCompiler.ProtectedRegions)
@@ -50,6 +52,10 @@ namespace Mosa.Compiler.Framework.Stages
 
 				if (trace.Active)
 					trace.Log("Handler: " + region.Handler.TryStart.ToString("X4") + " to " + region.Handler.TryEnd.ToString("X4") + " Handler: " + region.Handler.HandlerStart.ToString("X4") + " Offset: [" + handler.ToString("X4") + "]");
+
+				//DEBUG
+				if (MethodCompiler.Method.FullName.Contains("ExceptionHandlingTests::ExceptionTest3"))
+					System.Diagnostics.Debug.WriteLine("Handler: " + region.Handler.TryStart.ToString("X4") + " to " + region.Handler.TryEnd.ToString("X4") + " Handler: " + region.Handler.HandlerStart.ToString("X4") + " Offset: [" + handler.ToString("X4") + "]");
 
 				List<Tuple<int, int>> sections = new List<Tuple<int, int>>();
 
@@ -61,15 +67,22 @@ namespace Mosa.Compiler.Framework.Stages
 					if (trace.Active)
 						trace.Log("   Block: " + block.ToString() + " [" + start.ToString() + "-" + end.ToString() + "]");
 
+					//DEBUG
+					if (MethodCompiler.Method.FullName.Contains("ExceptionHandlingTests::ExceptionTest3"))
+						System.Diagnostics.Debug.WriteLine("   Block: " + block.ToString() + " [" + start.ToString() + "-" + end.ToString() + "]");
+
 					AddSection(sections, start, end);
 				}
 
-				writer.Write(sections.Count);
+				// dummy for now
+				writer.Write(0);
 
 				foreach (var s in sections)
 				{
 					int start = s.Item1;
 					int end = s.Item2;
+
+					sectioncount++;
 
 					// 1. Handler type
 					writer.Write((uint)region.Handler.HandlerType);
@@ -78,19 +91,22 @@ namespace Mosa.Compiler.Framework.Stages
 					{
 						// 2. Offset to start
 						writer.Write((uint)start);
-						// 3. Length
-						writer.Write((uint)(end - start));
+						// 3. Offset to end
+						writer.Write((uint)end);
 						// 4. Offset to handler
 						writer.Write((uint)handler);
 					}
 					else
 					{
 						writer.Write((ulong)start);
-						writer.Write((uint)(end - start));
+						writer.Write((uint)end);
 						writer.Write((ulong)handler);
 					}
 
 					if (trace.Active) trace.Log("     Section: [" + start.ToString() + "-" + end.ToString() + "]");
+
+					if (MethodCompiler.Method.FullName.Contains("ExceptionHandlingTests::ExceptionTest3"))
+						System.Diagnostics.Debug.WriteLine("     Section: [" + start.ToString() + "-" + end.ToString() + "]");
 
 					// 5. Exception object type
 					if (region.Handler.HandlerType == ExceptionHandlerType.Exception)
@@ -110,6 +126,9 @@ namespace Mosa.Compiler.Framework.Stages
 					writer.WriteZeroBytes(NativePointerSize);
 				}
 			}
+
+			writer.Position = 0;
+			writer.Write(sectioncount);
 		}
 
 		private Tuple<int, int> FindConnectingSection(List<Tuple<int, int>> sections, int start, int end)

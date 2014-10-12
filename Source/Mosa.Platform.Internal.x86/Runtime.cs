@@ -321,6 +321,8 @@ namespace Mosa.Platform.Internal.x86
 			if (method == 0)
 				return 0;
 
+			uint offset = address - method;
+
 			uint entries = Mosa.Internal.Native.Load32(table);
 
 			table = table + 4;
@@ -328,9 +330,9 @@ namespace Mosa.Platform.Internal.x86
 			while (entries > 0)
 			{
 				uint start = Mosa.Internal.Native.Load32(table, NativeIntSize * 1);
-				uint size = Mosa.Internal.Native.Load32(table, NativeIntSize * 2);
+				uint end = Mosa.Internal.Native.Load32(table, NativeIntSize * 2);
 
-				if (address >= (method + start) && address < (method + start + size))
+				if ((offset >= start) && (offset < end))
 				{
 					uint type = Mosa.Internal.Native.Load32(table, NativeIntSize * 0);
 
@@ -347,7 +349,7 @@ namespace Mosa.Platform.Internal.x86
 					}
 				}
 
-				table = table + (NativeIntSize * 6);
+				table = table + (NativeIntSize * 5);
 
 				entries--;
 			}
@@ -419,7 +421,7 @@ namespace Mosa.Platform.Internal.x86
 
 			if (methodDef != 0)
 			{
-				uint protectedRegion = GetProtectedRegionEntryByAddress(returnAdddress, exceptionType, methodDef);
+				uint protectedRegion = GetProtectedRegionEntryByAddress(returnAdddress - 1, exceptionType, methodDef);
 
 				if (protectedRegion != 0)
 				{
