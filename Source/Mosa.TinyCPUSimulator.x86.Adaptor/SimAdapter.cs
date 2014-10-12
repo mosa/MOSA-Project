@@ -12,6 +12,8 @@ using Mosa.Compiler.MosaTypeSystem;
 using Mosa.Platform.x86;
 using Mosa.TinyCPUSimulator.Adaptor;
 using System.Collections.Generic;
+using System;
+using System.Diagnostics;
 
 namespace Mosa.TinyCPUSimulator.x86.Adaptor
 {
@@ -67,6 +69,22 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 			foreach (var operand in context.Operands)
 			{
 				int size = GetSize(operand.Type);
+
+				if (context.Instruction == X86.Mov && context.Result.IsMemoryAddress)
+				{
+					if (context.Result.IsPointer
+						&& !operand.IsPointer
+						&& context.Result.Type.ElementType != null
+						&& (GetSize(context.Result.Type.ElementType) < size))
+					{
+						size = GetSize(context.Result.Type.ElementType);
+					}
+					else if (context.Result.IsByte || context.Result.IsChar || context.Result.IsShort)
+					{
+						size = GetSize(context.Result.Type);
+					}
+				}
+
 				operands.Add(ConvertToOpcodeOperand(operand, size));
 			}
 
@@ -135,6 +153,13 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 				else
 					return CreateLabel(size, operand.Field.FullName);
 			}
+			else if (operand.IsSymbol)
+			{
+				if (operand.IsMemoryAddress)
+					return CreateMemoryAddressLabel(size, operand.Name);
+				else
+					return CreateLabel(size, operand.Name);
+			}
 			else if (operand.IsMemoryAddress)
 			{
 				if (operand.OffsetBase != null && operand.OffsetBase.IsConstant)
@@ -145,13 +170,6 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 				{
 					return CreateMemoryAddressOperand(size, ConvertToRegister(operand.EffectiveOffsetBase), null, 0, (int)operand.Displacement);
 				}
-			}
-			else if (operand.IsSymbol)
-			{
-				if (operand.IsMemoryAddress)
-					return CreateMemoryAddressLabel(size, operand.Name);
-				else
-					return CreateLabel(size, operand.Name);
 			}
 			return null;
 		}
@@ -199,7 +217,7 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 				if (register == CPU.EBX) return CPU.BX;
 				if (register == CPU.ECX) return CPU.CX;
 				if (register == CPU.EDX) return CPU.DX;
-				if (register == CPU.EDI) return CPU.SI;
+				if (register == CPU.ESI) return CPU.SI;
 				if (register == CPU.EDI) return CPU.DI;
 			}
 			else if (size == 8)
