@@ -16,6 +16,16 @@ namespace Mosa.Test.Collection
 			return (structure.One.Equals(one));
 		}
 	
+		public static bool StructTestSet2<#= number.Value #>(<#= number.Key #> one, <#= number.Key #> two)
+		{
+			Struct3<#= number.Value #> structure;
+			
+			structure.One = one;
+			structure.Two = two;
+			
+			return (structure.One.Equals(one) && structure.Two.Equals(two));
+		}
+	
 		public static bool StructTestSet3<#= number.Value #>(<#= number.Key #> one, <#= number.Key #> two, <#= number.Key #> three)
 		{
 			Struct3<#= number.Value #> structure;
@@ -34,6 +44,12 @@ namespace Mosa.Test.Collection
 	public struct Struct1<#= number.Value #>
 	{
 		public <#= number.Key #> One;
+	}
+	
+	public struct Struct2<#= number.Value #>
+	{
+		public <#= number.Key #> One;
+		public <#= number.Key #> Two;
 	}
 	
 	public struct Struct3<#= number.Value #>

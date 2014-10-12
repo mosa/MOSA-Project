@@ -12,6 +12,8 @@ using Mosa.Compiler.MosaTypeSystem;
 using Mosa.Platform.x86;
 using Mosa.TinyCPUSimulator.Adaptor;
 using System.Collections.Generic;
+using System;
+using System.Diagnostics;
 
 namespace Mosa.TinyCPUSimulator.x86.Adaptor
 {
@@ -67,6 +69,22 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 			foreach (var operand in context.Operands)
 			{
 				int size = GetSize(operand.Type);
+
+				if (context.Instruction == X86.Mov && context.Result.IsMemoryAddress)
+				{
+					if (context.Result.IsPointer
+						&& !operand.IsPointer
+						&& context.Result.Type.ElementType != null
+						&& (GetSize(context.Result.Type.ElementType) < size))
+					{
+						size = GetSize(context.Result.Type.ElementType);
+					}
+					else if (context.Result.IsByte || context.Result.IsChar || context.Result.IsShort)
+					{
+						size = GetSize(context.Result.Type);
+					}
+				}
+
 				operands.Add(ConvertToOpcodeOperand(operand, size));
 			}
 
@@ -135,6 +153,13 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 				else
 					return CreateLabel(size, operand.Field.FullName);
 			}
+			else if (operand.IsSymbol)
+			{
+				if (operand.IsMemoryAddress)
+					return CreateMemoryAddressLabel(size, operand.Name);
+				else
+					return CreateLabel(size, operand.Name);
+			}
 			else if (operand.IsMemoryAddress)
 			{
 				if (operand.OffsetBase != null && operand.OffsetBase.IsConstant)
@@ -145,13 +170,6 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 				{
 					return CreateMemoryAddressOperand(size, ConvertToRegister(operand.EffectiveOffsetBase), null, 0, (int)operand.Displacement);
 				}
-			}
-			else if (operand.IsSymbol)
-			{
-				if (operand.IsMemoryAddress)
-					return CreateMemoryAddressLabel(size, operand.Name);
-				else
-					return CreateLabel(size, operand.Name);
 			}
 			return null;
 		}
@@ -199,7 +217,7 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 				if (register == CPU.EBX) return CPU.BX;
 				if (register == CPU.ECX) return CPU.CX;
 				if (register == CPU.EDX) return CPU.DX;
-				if (register == CPU.EDI) return CPU.SI;
+				if (register == CPU.ESI) return CPU.SI;
 				if (register == CPU.EDI) return CPU.DI;
 			}
 			else if (size == 8)
@@ -297,7 +315,7 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 			if (instruction == X86.Call) return Opcode.Call;
 			if (instruction == X86.Cdq) return Opcode.Cdq;
 			//if (instruction == X86.Cld) return Opcode.Cld;
-			////if (instruction == X86.Cli) return Opcode.Cli;
+			if (instruction == X86.Cli) return Opcode.Cli;
 			if (instruction == X86.Cmp) return Opcode.Cmp;
 			if (instruction == X86.CmpXchg) return Opcode.CmpXchg;
 			if (instruction == X86.Comisd) return Opcode.Comisd;
@@ -338,7 +356,7 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 			if (instruction == X86.Mulsd) return Opcode.Mulsd;
 			if (instruction == X86.Mulss) return Opcode.Mulss;
 			if (instruction == X86.Neg) return Opcode.Neg;
-			////if (instruction == X86.Nop) return Opcode.Nop;
+			if (instruction == X86.Nop) return Opcode.Nop;
 			if (instruction == X86.Not) return Opcode.Not;
 			if (instruction == X86.Or) return Opcode.Or;
 			if (instruction == X86.Out) return Opcode.Out;
@@ -354,7 +372,7 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 			//if (instruction == X86.Rdpmc) return Opcode.Rdpmc;
 			//if (instruction == X86.Rdtsc) return Opcode.Rdtsc;
 			//if (instruction == X86.Rep) return Opcode.Rep;
-			////if (instruction == X86.Ret) return Opcode.Ret;
+			if (instruction == X86.Ret) return Opcode.Ret;
 			if (instruction == X86.Roundsd) return Opcode.Roundsd;
 			if (instruction == X86.Roundss) return Opcode.Roundss;
 			if (instruction == X86.Sar) return Opcode.Sar;
@@ -363,7 +381,7 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 			if (instruction == X86.Shld) return Opcode.Shld;
 			if (instruction == X86.Shr) return Opcode.Shr;
 			if (instruction == X86.Shrd) return Opcode.Shrd;
-			////if (instruction == X86.Sti) return Opcode.Sti;
+			if (instruction == X86.Sti) return Opcode.Sti;
 			if (instruction == X86.Pause) return Opcode.Pause;
 			//if (instruction == X86.Stos) return Opcode.Stos;
 			if (instruction == X86.Sub) return Opcode.Sub;

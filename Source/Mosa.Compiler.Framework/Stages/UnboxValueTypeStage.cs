@@ -24,8 +24,8 @@ namespace Mosa.Compiler.Framework.Stages
 				return;
 
 			// The method and method declaring type must not have generic parameters
-			if (MethodCompiler.Method.HasOpenGenericParams || MethodCompiler.Method.DeclaringType.HasOpenGenericParams)
-				return;
+			//if (MethodCompiler.Method.HasOpenGenericParams || MethodCompiler.Method.DeclaringType.HasOpenGenericParams)
+			//	return;
 
 			// If the method is static, non-virtual or is a constructor then don't process
 			if (MethodCompiler.Method.IsStatic || !MethodCompiler.Method.IsVirtual || MethodCompiler.Method.Name.Equals(".ctor"))

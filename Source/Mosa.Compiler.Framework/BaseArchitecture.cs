@@ -159,6 +159,14 @@ namespace Mosa.Compiler.Framework
 		public abstract void InsertJumpInstruction(Context context, BasicBlock destination);
 
 		/// <summary>
+		/// Inserts the address of instruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <param name="destination">The destination.</param>
+		/// <param name="source">The source.</param>
+		public abstract void InsertAddressOfInstruction(Context context, Operand destination, Operand source);
+
+		/// <summary>
 		/// Inserts the call instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>

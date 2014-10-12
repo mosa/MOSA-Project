@@ -318,9 +318,12 @@ namespace Mosa.Tool.TinySimulator
 
 			simState.TotalElapsedSeconds = secs;
 
-			stateQueue.Enqueue(simState);
-			if (stateQueue.Count > MaxHistory)
-				stateQueue.Dequeue(); // Throw away
+			if (this.Record)
+			{
+				stateQueue.Enqueue(simState);
+				if (stateQueue.Count > MaxHistory)
+					stateQueue.Dequeue(); // Throw away
+			}
 
 			AddWatch(simState);
 

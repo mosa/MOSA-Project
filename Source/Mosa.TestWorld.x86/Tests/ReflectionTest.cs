@@ -19,9 +19,9 @@ namespace Mosa.TestWorld.x86.Tests
 			testMethods.Add(PointerTest);
 			testMethods.Add(HandleTest);
 			testMethods.Add(FindTypeOfTest);
-			testMethods.Add(FindTypeByNameTest);
-			testMethods.Add(CompareTypeHandlesTest);
-			testMethods.Add(TypeHandleFromObjectTest);
+			//testMethods.Add(FindTypeByNameTest);
+			//testMethods.Add(CompareTypeHandlesTest);
+			//testMethods.Add(TypeHandleFromObjectTest);
 		}
 
 		public static bool PointerTest()

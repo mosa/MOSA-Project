@@ -31,7 +31,7 @@ namespace System
 
 		public override string FullName
 		{
-			get { throw new NotImplementedException(); }
+			get { return this.fullname; }
 		}
 
 		public override int GenericParameterPosition
@@ -62,6 +62,11 @@ namespace System
 		public override string Namespace
 		{
 			get { throw new NotImplementedException(); }
+		}
+
+		public override RuntimeTypeHandle TypeHandle
+		{
+			get { return this.handle; }
 		}
 
 		internal RuntimeType(RuntimeTypeHandle handle)

@@ -60,7 +60,12 @@ namespace Mosa.Compiler.Framework.Stages
 				parameters.Add(parameter);
 			}
 
-			LayoutVariables(parameters, CallingConvention, CallingConvention.OffsetOfFirstParameter, false);
+			int returnSize = 0;
+			if (TypeLayout.IsCompoundType(MethodCompiler.Method.Signature.ReturnType))
+			{
+				returnSize = TypeLayout.GetTypeSize(MethodCompiler.Method.Signature.ReturnType);
+			}
+			LayoutVariables(parameters, CallingConvention, CallingConvention.OffsetOfFirstParameter + returnSize, false);
 		}
 
 		/// <summary>
