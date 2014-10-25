@@ -23,6 +23,7 @@ namespace Mosa.TinyCPUSimulator.Debug
 			//Test3();
 			//Test4();
 			//Test11();
+
 			Test13();
 		}
 
@@ -30,7 +31,7 @@ namespace Mosa.TinyCPUSimulator.Debug
 		{
 			var fixture = new _ExceptionHandlingFixture();
 
-			//fixture.ExceptionTest3();
+			fixture.ExceptionTest3();
 			//fixture.TryFinally1();
 		}
 

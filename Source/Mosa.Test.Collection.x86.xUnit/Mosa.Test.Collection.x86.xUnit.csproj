@@ -84,7 +84,7 @@
     <Compile Include="Int8Fixture.cs" />
     <Compile Include="NewDerivedObjectFixture.cs" />
     <Compile Include="RegisterAllocatorFixture.cs" />
-    <Compile Include="SSAOptimizationFixture.cs" />
+    <Compile Include="OptimizationFixture.cs" />
     <Compile Include="NewObjectFixture.cs" />
     <Compile Include="StructureFixture.cs">
       <AutoGen>True</AutoGen>

@@ -599,9 +599,9 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Gotoes the first.
+		/// Goto the first instruction
 		/// </summary>
-		public void GotoFirst() // TODO: REMOVE THIS METHOD
+		public void GotoFirst()
 		{
 			while (true)
 			{
@@ -609,6 +609,20 @@ namespace Mosa.Compiler.Framework
 					break;
 
 				GotoPrevious();
+			}
+		}
+
+		/// <summary>
+		/// Goto the last instruction.
+		/// </summary>
+		public void GotoLast()
+		{
+			while (true)
+			{
+				if (IsBlockEndInstruction)
+					break;
+
+				GotoNext();
 			}
 		}
 

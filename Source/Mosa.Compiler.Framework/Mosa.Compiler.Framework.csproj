@@ -77,6 +77,7 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Analysis\ConditionalConstantPropagation.cs" />
     <Compile Include="Analysis\NaturalBlockOrder.cs" />
     <Compile Include="Analysis\ProtectedRegion.cs" />
     <Compile Include="Analysis\ReverseBlockOrder.cs" />
@@ -133,6 +134,7 @@
     <Compile Include="RegisterAllocator\LiveInterval.cs" />
     <Compile Include="RegisterAllocator\VirtualRegister.cs" />
     <Compile Include="RegisterAllocator\GreedyRegisterAllocator.cs" />
+    <Compile Include="Stages\ConditionalConstantPropagationStage.cs" />
     <Compile Include="Stages\MethodExceptionLookupTableStage.cs" />
     <Compile Include="Stages\MethodLookupTableStage.cs" />
     <Compile Include="Stages\PromoteTempVariablesStage.cs" />

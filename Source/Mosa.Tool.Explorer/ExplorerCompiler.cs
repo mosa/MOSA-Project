@@ -68,7 +68,7 @@ namespace Mosa.Tool.Explorer
 		/// <param name="enabledSSA">if set to <c>true</c> [enabled ssa].</param>
 		/// <param name="enableOptimizations">if set to <c>true</c> [enable ssa optimizations].</param>
 		/// <param name="emitBinary">if set to <c>true</c> [emit binary].</param>
-		public static void Compile(TypeSystem typeSystem, MosaTypeLayout typeLayout, CompilerTrace compilerTrace, string platform, bool enabledSSA, bool enableOptimizations, bool emitBinary)
+		public static void Compile(TypeSystem typeSystem, MosaTypeLayout typeLayout, CompilerTrace compilerTrace, string platform, CompilerOptions compilerOptions, bool emitBinary)
 		{
 			BaseArchitecture architecture;
 
@@ -80,12 +80,6 @@ namespace Mosa.Tool.Explorer
 				default:
 					architecture = Mosa.Platform.x86.Architecture.CreateArchitecture(Mosa.Platform.x86.ArchitectureFeatureFlags.AutoDetect); break;
 			}
-
-			CompilerOptions compilerOptions = new CompilerOptions();
-
-			compilerOptions.EnableSSA = enabledSSA;
-			compilerOptions.EnableOptimizations = enableOptimizations;
-			compilerOptions.EnablePromoteTemporaryVariablesOptimization = compilerOptions.EnableOptimizations; // FIXME - default is okay for now
 
 			ExplorerCompiler compiler = new ExplorerCompiler(architecture, typeSystem, typeLayout, compilerTrace, compilerOptions, emitBinary);
 

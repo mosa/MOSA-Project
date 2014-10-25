@@ -278,9 +278,12 @@ namespace Mosa.Emulator
 
 			//while (keyboard.GetKeyPressed() == null) ;
 
-			Mosa.HelloWorld.x86.Boot.Main();
+			//Mosa.HelloWorld.x86.Boot.Main();
 
 			//EmulatorDemo.StartDemo();
+
+			while (true)
+				;
 
 			return;
 		}

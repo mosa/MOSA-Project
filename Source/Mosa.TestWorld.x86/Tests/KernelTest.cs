@@ -6,8 +6,8 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System.Collections.Generic;
 using Mosa.Kernel.x86;
+using System.Collections.Generic;
 
 namespace Mosa.TestWorld.x86.Tests
 {
@@ -100,7 +100,7 @@ namespace Mosa.TestWorld.x86.Tests
 			genericsTest.Test();
 			generics2Test.Test();
 			isInstanceTest.Test();
-			exceptionTest.Test();
+			//exceptionTest.Test();
 			plugTestTest.Test();
 			compareTest.Test();
 			simpleTest.Test();

@@ -44,7 +44,9 @@ namespace Mosa.Compiler.Framework.Stages
 					{
 						//Debug.Assert(context.OperandCount == context.BasicBlock.PreviousBlocks.Count);
 						if (context.OperandCount != context.BasicBlock.PreviousBlocks.Count)
+						{
 							throw new Mosa.Compiler.Common.InvalidCompilerException(context.ToString());
+						}
 
 						ProcessPhiInstruction(context);
 					}

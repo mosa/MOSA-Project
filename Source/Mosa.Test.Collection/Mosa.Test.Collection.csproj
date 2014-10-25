@@ -125,7 +125,7 @@
     <Compile Include="LinkedListTests.cs" />
     <Compile Include="LinkedList.cs" />
     <Compile Include="NewObjectTests.cs" />
-    <Compile Include="SSAOptimizationTest.cs" />
+    <Compile Include="OptimizationTest.cs" />
     <Compile Include="RegisterAllocatorTests.cs" />
     <Compile Include="SpecificTests.cs" />
     <Compile Include="ForeachTests.cs">

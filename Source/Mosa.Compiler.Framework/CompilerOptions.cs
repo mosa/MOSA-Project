@@ -109,6 +109,14 @@ namespace Mosa.Compiler.Framework
 		public bool EnablePromoteTemporaryVariablesOptimization { get; set; }
 
 		/// <summary>
+		/// Gets or sets a value indicating whether [enable conditional constant propagation].
+		/// </summary>
+		/// <value>
+		/// <c>true</c> if [enable conditional constant propagation]; otherwise, <c>false</c>.
+		/// </value>
+		public bool EnableConditionalConstantPropagation { get; set; }
+
+		/// <summary>
 		/// Gets or sets a value indicating whether static allocations are enabled.
 		/// </summary>
 		/// <value>
@@ -178,6 +186,7 @@ namespace Mosa.Compiler.Framework
 			EnableSSA = true;
 			EnableOptimizations = true;
 			EnablePromoteTemporaryVariablesOptimization = true;
+			EnableConditionalConstantPropagation = true;
 			BaseAddress = 0x00400000;
 			DominanceAnalysisFactory = delegate { return new SimpleFastDominance(); };
 			BlockOrderAnalysisFactory = delegate { return new LoopAwareBlockOrder(); };

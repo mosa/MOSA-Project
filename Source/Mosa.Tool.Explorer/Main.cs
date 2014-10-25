@@ -44,6 +44,9 @@ namespace Mosa.Tool.Explorer
 		}
 
 		private StringBuilder compileLog = new StringBuilder();
+		private StringBuilder counterLog = new StringBuilder();
+		private StringBuilder errorLog = new StringBuilder();
+		private string methodName;
 
 		public Main()
 		{
@@ -128,7 +131,24 @@ namespace Mosa.Tool.Explorer
 				toolStripStatusLabel1.GetCurrentParent().Refresh();
 			}
 
-			compileLog.Append(String.Format("{0:0.00}", (DateTime.Now - compileStartTime).TotalSeconds) + " secs: " + compilerStage.ToText() + ": " + info + "\n");
+			if (compilerStage == CompilerEvent.CompilingMethod)
+			{
+				methodName = info;
+			}
+
+			if (compilerStage == CompilerEvent.Error)
+			{
+				errorLog.AppendLine("Method: " + methodName);
+				errorLog.AppendLine(compilerStage.ToText() + ": " + info);
+			}
+			else if (compilerStage == CompilerEvent.Counter)
+			{
+				counterLog.AppendLine(compilerStage.ToText() + ": " + info);
+			}
+			else
+			{
+				compileLog.AppendLine(String.Format("{0:0.00}", (DateTime.Now - compileStartTime).TotalSeconds) + " secs: " + compilerStage.ToText() + ": " + info);
+			}
 		}
 
 		void ITraceListener.SubmitInstructionTraceInformation(MosaMethod method, string stage, string log)
@@ -187,9 +207,16 @@ namespace Mosa.Tool.Explorer
 
 			CreateTypeSystemAndLayout();
 
+			CompilerOptions compilerOptions = new CompilerOptions();
+
+			compilerOptions.EnableSSA = enableSSAToolStripMenuItem.Checked;
+			compilerOptions.EnableOptimizations = enableOptimizations.Checked;
+			compilerOptions.EnablePromoteTemporaryVariablesOptimization = compilerOptions.EnableOptimizations; // FIXME - default is okay for now
+			compilerOptions.EnableConditionalConstantPropagation = enableConditionalConstantPropagationToolStripMenuItem.Checked;
+
 			//try
 			//{
-			ExplorerCompiler.Compile(typeSystem, typeLayout, compilerTrace, cbPlatform.Text, enableSSAToolStripMenuItem.Checked, enableOptimizations.Checked, enableBinaryCodeGenerationToolStripMenuItem.Checked);
+			ExplorerCompiler.Compile(typeSystem, typeLayout, compilerTrace, cbPlatform.Text, compilerOptions, enableBinaryCodeGenerationToolStripMenuItem.Checked);
 			SetStatus("Compiled!");
 			//}
 			//catch (Exception e)
@@ -198,7 +225,11 @@ namespace Mosa.Tool.Explorer
 			//}
 
 			tabControl1.SelectedTab = tabPage1;
-			rbOtherResult.Text = compileLog.ToString();
+
+			rbLog.Text = compileLog.ToString();
+			rbErrors.Text = errorLog.ToString();
+			rbCounters.Text = counterLog.ToString();
+
 			UpdateTree();
 		}
 

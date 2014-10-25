@@ -46,6 +46,8 @@ namespace Mosa.Compiler.Framework.Stages
 		private int simplifyExtendedMove = 0;
 		private int foldLoadStoreOffsets = 0;
 		private int constantMoveToRight = 0;
+		private int foldConstantPhi = 0;
+		private int simplifyPhi = 0;
 
 		private Stack<int> worklist = new Stack<int>();
 
@@ -111,6 +113,8 @@ namespace Mosa.Compiler.Framework.Stages
 			UpdateCounter("IROptimizations.ReduceZeroExtendedMove", reduceZeroExtendedMove);
 			UpdateCounter("IROptimizations.ConstantMoveToRight", constantMoveToRight);
 			UpdateCounter("IROptimizations.FoldLoadStoreOffsets", foldLoadStoreOffsets);
+			UpdateCounter("IROptimizations.FoldConstantPhi", foldConstantPhi);
+			UpdateCounter("IROptimizations.SimplifyPhi", simplifyPhi);
 			UpdateCounter("IROptimizations.BlockRemoved", blockRemovedCount);
 
 			worklist = null;
@@ -157,6 +161,8 @@ namespace Mosa.Compiler.Framework.Stages
 			ReduceTruncationAndExpansion(context);
 			SimplifyExtendedMove(context);
 			FoldLoadStoreOffsets(context);
+			FoldConstantPhi(context);
+			SimplifyPhi(context);
 		}
 
 		/// <summary>
@@ -378,6 +384,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (context.Instruction != IRInstruction.Move)
 				return;
 
+			//FUTURE: Replace with: "if !(context.Result.IsVirtualRegister || context.Result.IsStackLocal)"
 			if (!context.Result.IsVirtualRegister)
 				return;
 
@@ -1104,7 +1111,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			// Goto the beginning of the block, to get to the first index of the block
 			Context first = context.Clone();
-			first.GotoFirst(); // FIXME: use block start index
+			first.GotoFirst();
 
 			// Find block based on first index
 			BasicBlock currentBlock = null;
@@ -1732,6 +1739,64 @@ namespace Mosa.Compiler.Framework.Stages
 			ctx.SetInstruction(IRInstruction.Nop);
 			foldLoadStoreOffsets++;
 			instructionsRemovedCount++;
+		}
+
+		/// <summary>
+		/// Folds the constant phi instruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		private void FoldConstantPhi(Context context)
+		{
+			if (context.IsEmpty)
+				return;
+
+			if (context.Instruction != IRInstruction.Phi)
+				return;
+
+			if (!context.Result.IsInteger)
+				return;
+
+			Operand operand1 = context.Operand1;
+			Operand result = context.Result;
+
+			foreach (var operand in context.Operands)
+			{
+				if (!operand.IsConstant)
+					return;
+
+				if (operand.ConstantUnsignedInteger != operand1.ConstantUnsignedInteger)
+					return;
+			}
+
+			if (trace.Active) trace.Log("*** FoldConstantPhiInstruction");
+			if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
+			AddOperandUsageToWorkList(context);
+			context.SetInstruction(IRInstruction.Move, result, operand1);
+			if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
+			foldConstantPhi++;
+		}
+
+		/// <summary>
+		/// Simplifies the phi.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		private void SimplifyPhi(Context context)
+		{
+			if (context.IsEmpty)
+				return;
+
+			if (context.Instruction != IRInstruction.Phi)
+				return;
+
+			if (context.OperandCount != 1)
+				return;
+
+			if (trace.Active) trace.Log("*** SimplifyPhiInstruction");
+			if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
+			AddOperandUsageToWorkList(context);
+			context.SetInstruction(IRInstruction.Move, context.Result, context.Operand1);
+			if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
+			simplifyPhi++;
 		}
 	}
 }

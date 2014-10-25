@@ -205,6 +205,7 @@ namespace Mosa.Tool.TinySimulator
 			compilerOptions.EnableSSA = true;
 			compilerOptions.EnableOptimizations = true;
 			compilerOptions.EnablePromoteTemporaryVariablesOptimization = true;
+			compilerOptions.EnableConditionalConstantPropagation = true;
 
 			SimCompiler.Compile(TypeSystem, TypeLayout, InternalTrace, compilerOptions, Architecture, simAdapter, Linker);
 
@@ -513,6 +514,5 @@ namespace Mosa.Tool.TinySimulator
 		void ICompilerEventListener.SubmitMethodStatus(int totalMethods, int queuedMethods)
 		{
 		}
-
 	}
 }
