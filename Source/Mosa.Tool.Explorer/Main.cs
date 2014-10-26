@@ -46,6 +46,8 @@ namespace Mosa.Tool.Explorer
 		private StringBuilder compileLog = new StringBuilder();
 		private StringBuilder counterLog = new StringBuilder();
 		private StringBuilder errorLog = new StringBuilder();
+		private StringBuilder exceptionLog = new StringBuilder();
+
 		private string methodName;
 
 		public Main()
@@ -141,6 +143,12 @@ namespace Mosa.Tool.Explorer
 				errorLog.AppendLine("Method: " + methodName);
 				errorLog.AppendLine(compilerStage.ToText() + ": " + info);
 			}
+			if (compilerStage == CompilerEvent.Exception)
+			{
+				exceptionLog.AppendLine("Method: " + methodName);
+				exceptionLog.AppendLine(compilerStage.ToText() + ": " + info);
+				compileLog.AppendLine(String.Format("{0:0.00}", (DateTime.Now - compileStartTime).TotalSeconds) + " secs: " + compilerStage.ToText() + ": " + info);
+			}
 			else if (compilerStage == CompilerEvent.Counter)
 			{
 				counterLog.AppendLine(compilerStage.ToText() + ": " + info);
@@ -229,6 +237,7 @@ namespace Mosa.Tool.Explorer
 			rbLog.Text = compileLog.ToString();
 			rbErrors.Text = errorLog.ToString();
 			rbCounters.Text = counterLog.ToString();
+			rbException.Text = exceptionLog.ToString();
 
 			UpdateTree();
 		}

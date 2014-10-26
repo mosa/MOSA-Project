@@ -51,8 +51,8 @@
 			this.includeTestKorlibToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.enableSSAToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.enableOptimizations = new System.Windows.Forms.ToolStripMenuItem();
-			this.enableBinaryCodeGenerationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.enableConditionalConstantPropagationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.enableBinaryCodeGenerationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
 			this.treeView = new System.Windows.Forms.TreeView();
 			this.splitContainer1 = new System.Windows.Forms.SplitContainer();
@@ -78,6 +78,8 @@
 			this.toolStripButton4 = new System.Windows.Forms.ToolStripButton();
 			this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
 			this.cbPlatform = new System.Windows.Forms.ComboBox();
+			this.tabPage6 = new System.Windows.Forms.TabPage();
+			this.rbException = new System.Windows.Forms.RichTextBox();
 			label2 = new System.Windows.Forms.Label();
 			label1 = new System.Windows.Forms.Label();
 			stageLabel = new System.Windows.Forms.Label();
@@ -95,6 +97,7 @@
 			this.tabPage4.SuspendLayout();
 			this.tabPage5.SuspendLayout();
 			this.toolStrip1.SuspendLayout();
+			this.tabPage6.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// label2
@@ -287,6 +290,14 @@
 			this.enableOptimizations.Size = new System.Drawing.Size(293, 22);
 			this.enableOptimizations.Text = "Enable Optimizations";
 			// 
+			// enableConditionalConstantPropagationToolStripMenuItem
+			// 
+			this.enableConditionalConstantPropagationToolStripMenuItem.Checked = true;
+			this.enableConditionalConstantPropagationToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.enableConditionalConstantPropagationToolStripMenuItem.Name = "enableConditionalConstantPropagationToolStripMenuItem";
+			this.enableConditionalConstantPropagationToolStripMenuItem.Size = new System.Drawing.Size(293, 22);
+			this.enableConditionalConstantPropagationToolStripMenuItem.Text = "Enable Conditional Constant Propagation";
+			// 
 			// enableBinaryCodeGenerationToolStripMenuItem
 			// 
 			this.enableBinaryCodeGenerationToolStripMenuItem.Checked = true;
@@ -295,14 +306,6 @@
 			this.enableBinaryCodeGenerationToolStripMenuItem.Name = "enableBinaryCodeGenerationToolStripMenuItem";
 			this.enableBinaryCodeGenerationToolStripMenuItem.Size = new System.Drawing.Size(293, 22);
 			this.enableBinaryCodeGenerationToolStripMenuItem.Text = "Enable Binary Code Generation";
-			// 
-			// enableConditionalConstantPropagationToolStripMenuItem
-			// 
-			this.enableConditionalConstantPropagationToolStripMenuItem.Checked = true;
-			this.enableConditionalConstantPropagationToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.enableConditionalConstantPropagationToolStripMenuItem.Name = "enableConditionalConstantPropagationToolStripMenuItem";
-			this.enableConditionalConstantPropagationToolStripMenuItem.Size = new System.Drawing.Size(293, 22);
-			this.enableConditionalConstantPropagationToolStripMenuItem.Text = "Enable Conditional Constant Propagation";
 			// 
 			// openFileDialog
 			// 
@@ -353,11 +356,12 @@
 			this.tabControl1.Controls.Add(this.tabPage3);
 			this.tabControl1.Controls.Add(this.tabPage4);
 			this.tabControl1.Controls.Add(this.tabPage5);
+			this.tabControl1.Controls.Add(this.tabPage6);
 			this.tabControl1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.tabControl1.Location = new System.Drawing.Point(3, 3);
 			this.tabControl1.Name = "tabControl1";
 			this.tabControl1.SelectedIndex = 0;
-			this.tabControl1.Size = new System.Drawing.Size(530, 405);
+			this.tabControl1.Size = new System.Drawing.Size(529, 405);
 			this.tabControl1.TabIndex = 38;
 			// 
 			// tabPage1
@@ -373,7 +377,7 @@
 			this.tabPage1.Location = new System.Drawing.Point(4, 25);
 			this.tabPage1.Name = "tabPage1";
 			this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPage1.Size = new System.Drawing.Size(522, 376);
+			this.tabPage1.Size = new System.Drawing.Size(521, 376);
 			this.tabPage1.TabIndex = 0;
 			this.tabPage1.Text = "Instructions";
 			// 
@@ -435,7 +439,7 @@
 			this.tabPage2.Location = new System.Drawing.Point(4, 25);
 			this.tabPage2.Name = "tabPage2";
 			this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPage2.Size = new System.Drawing.Size(522, 376);
+			this.tabPage2.Size = new System.Drawing.Size(521, 376);
 			this.tabPage2.TabIndex = 1;
 			this.tabPage2.Text = "Debug";
 			// 
@@ -473,7 +477,7 @@
 			this.tabPage3.Location = new System.Drawing.Point(4, 25);
 			this.tabPage3.Name = "tabPage3";
 			this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPage3.Size = new System.Drawing.Size(522, 376);
+			this.tabPage3.Size = new System.Drawing.Size(521, 376);
 			this.tabPage3.TabIndex = 2;
 			this.tabPage3.Text = "Errors";
 			// 
@@ -497,7 +501,7 @@
 			this.tabPage4.Location = new System.Drawing.Point(4, 25);
 			this.tabPage4.Name = "tabPage4";
 			this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPage4.Size = new System.Drawing.Size(522, 376);
+			this.tabPage4.Size = new System.Drawing.Size(521, 376);
 			this.tabPage4.TabIndex = 3;
 			this.tabPage4.Text = "Log";
 			// 
@@ -521,7 +525,7 @@
 			this.tabPage5.Location = new System.Drawing.Point(4, 25);
 			this.tabPage5.Name = "tabPage5";
 			this.tabPage5.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPage5.Size = new System.Drawing.Size(522, 376);
+			this.tabPage5.Size = new System.Drawing.Size(521, 376);
 			this.tabPage5.TabIndex = 4;
 			this.tabPage5.Text = "Counters";
 			// 
@@ -601,6 +605,30 @@
 			this.cbPlatform.Size = new System.Drawing.Size(78, 21);
 			this.cbPlatform.TabIndex = 28;
 			// 
+			// tabPage6
+			// 
+			this.tabPage6.Controls.Add(this.rbException);
+			this.tabPage6.Location = new System.Drawing.Point(4, 25);
+			this.tabPage6.Name = "tabPage6";
+			this.tabPage6.Padding = new System.Windows.Forms.Padding(3);
+			this.tabPage6.Size = new System.Drawing.Size(521, 376);
+			this.tabPage6.TabIndex = 5;
+			this.tabPage6.Text = "Exceptions";
+			this.tabPage6.UseVisualStyleBackColor = true;
+			// 
+			// rbException
+			// 
+			this.rbException.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.rbException.Font = new System.Drawing.Font("Lucida Console", 8F);
+			this.rbException.Location = new System.Drawing.Point(-4, 0);
+			this.rbException.Name = "rbException";
+			this.rbException.Size = new System.Drawing.Size(528, 376);
+			this.rbException.TabIndex = 2;
+			this.rbException.Text = "";
+			this.rbException.WordWrap = false;
+			// 
 			// Main
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -632,6 +660,7 @@
 			this.tabPage5.ResumeLayout(false);
 			this.toolStrip1.ResumeLayout(false);
 			this.toolStrip1.PerformLayout();
+			this.tabPage6.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -684,5 +713,7 @@
 		private System.Windows.Forms.TabPage tabPage5;
 		private System.Windows.Forms.RichTextBox rbCounters;
 		private System.Windows.Forms.ToolStripMenuItem enableConditionalConstantPropagationToolStripMenuItem;
+		private System.Windows.Forms.TabPage tabPage6;
+		private System.Windows.Forms.RichTextBox rbException;
 	}
 }

@@ -92,6 +92,8 @@ namespace Mosa.Compiler.Framework.Analysis
 		protected readonly SectionTrace Trace;
 		protected readonly SectionTrace MainTrace;
 
+		protected readonly KeyedList<BasicBlock, int> phiStatements = new KeyedList<BasicBlock, int>();
+
 		public ConditionalConstantPropagation(BasicBlocks basicBlocks, InstructionSet instructionSet, SectionTrace trace)
 		{
 			this.Trace = trace;
@@ -124,6 +126,9 @@ namespace Mosa.Compiler.Framework.Analysis
 			}
 
 			DumpTrace();
+
+			// Release
+			phiStatements = null;
 		}
 
 		public List<Tuple<Operand, ulong>> GetIntegerConstants()
@@ -207,6 +212,11 @@ namespace Mosa.Compiler.Framework.Analysis
 			blockWorklist.Push(block);
 		}
 
+		protected void AddInstruction(int index)
+		{
+			instructionWorkList.Push(index);
+		}
+
 		protected void AddInstruction(Context context)
 		{
 			instructionWorkList.Push(context.Index);
@@ -244,6 +254,17 @@ namespace Mosa.Compiler.Framework.Analysis
 			}
 
 			ProcessInstructionsContinuiously(new Context(InstructionSet, block));
+
+			// re-analysis phi statements
+			var phiUse = phiStatements.Get(block);
+
+			if (phiUse == null)
+				return;
+
+			foreach (int index in phiUse)
+			{
+				AddInstruction(index);
+			}
 		}
 
 		protected void ProcessInstructionsContinuiously(Context context)
@@ -282,7 +303,7 @@ namespace Mosa.Compiler.Framework.Analysis
 
 		protected bool ProcessInstruction(Context context)
 		{
-			if (MainTrace.Active) MainTrace.Log(context.ToString());
+			//if (MainTrace.Active) MainTrace.Log(context.ToString());
 
 			var instruction = context.Instruction;
 
@@ -602,6 +623,8 @@ namespace Mosa.Compiler.Framework.Analysis
 
 		private void Phi(Context context)
 		{
+			//if (Trace.Active) Trace.Log(context.ToString());
+
 			var result = GetVariableState(context.Result);
 
 			if (result.IsOverDefined)
@@ -613,17 +636,26 @@ namespace Mosa.Compiler.Framework.Analysis
 
 			var currentBlock = GetBlock(context, true);
 
+			//if (Trace.Active) Trace.Log("Loop: " + currentBlock.PreviousBlocks.Count.ToString());
+
 			for (var index = 0; index < currentBlock.PreviousBlocks.Count; index++)
 			{
+
 				var op = context.GetOperand(index);
 
 				var predecessor = sourceBlocks[index];
 				bool executable = blockStates[predecessor.Sequence];
 
+				//if (Trace.Active) Trace.Log("# " + index.ToString() + ": " + predecessor.ToString() + " " + (executable ? "Yes" : "No"));
+
+				phiStatements.AddIfNew(predecessor, context.Index);
+
 				if (!executable)
 					continue;
 
 				var operand = GetVariableState(op);
+
+				//if (Trace.Active) Trace.Log("# " + index.ToString() + ": " + operand.ToString());
 
 				if (operand.IsOverDefined)
 				{

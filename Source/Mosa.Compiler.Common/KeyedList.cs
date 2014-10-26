@@ -36,5 +36,32 @@ namespace Mosa.Compiler.Common
 
 			list.Add(value);
 		}
+
+		public void AddIfNew(T key, V value)
+		{
+			List<V> list;
+
+			if (!Collection.TryGetValue(key, out list))
+			{
+				list = new List<V>();
+
+				if (!list.Contains(value))
+				{
+					Collection.Add(key, list);
+				}
+			}
+
+			list.Add(value);
+		}
+
+		public List<V> Get(T key)
+		{
+			List<V> list = null;
+
+			Collection.TryGetValue(key, out list);
+
+			return list;
+		}
+
 	}
 }

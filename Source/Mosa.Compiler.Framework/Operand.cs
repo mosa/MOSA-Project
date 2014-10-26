@@ -438,6 +438,8 @@ namespace Mosa.Compiler.Framework
 				operand.ConstantUnsignedInteger = value;
 			else if (operand.IsChar)
 				operand.ConstantUnsignedInteger = value;
+			else if (operand.IsPointer)
+				operand.ConstantUnsignedInteger = value;
 			else
 				throw new InvalidCompilerException();
 

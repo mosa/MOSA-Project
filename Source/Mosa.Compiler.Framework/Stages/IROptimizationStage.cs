@@ -30,24 +30,25 @@ namespace Mosa.Compiler.Framework.Stages
 		private int constantFoldingIntegerOperationsCount = 0;
 		private int simpleConstantPropagationCount = 0;
 		private int simpleForwardCopyPropagationCount = 0;
-		private int simpleBackwardCopyPropagation = 0;
+		private int simpleBackwardCopyPropagationCount = 0;
 		private int constantFoldingIntegerCompareCount = 0;
 		private int strengthReductionIntegerCompareBranchCount = 0;
 		private int deadCodeEliminationCount = 0;
 		private int simplifyIntegerCompareCount = 0;
-		private int reduceTruncationAndExpansion = 0;
-		private int constantFoldingAdditionAndSubstraction = 0;
+		private int reduceTruncationAndExpansionCount = 0;
+		private int constantFoldingAdditionAndSubstractionCount = 0;
 		private int constantFoldingMultiplicationCount = 0;
 		private int constantFoldingDivisionCount = 0;
 		private int blockRemovedCount = 0;
-		private int foldIntegerCompareBranch = 0;
-		private int reduceZeroExtendedMove = 0;
-		private int foldIntegerCompare = 0;
-		private int simplifyExtendedMove = 0;
-		private int foldLoadStoreOffsets = 0;
-		private int constantMoveToRight = 0;
-		private int foldConstantPhi = 0;
-		private int simplifyPhi = 0;
+		private int foldIntegerCompareBranchCount = 0;
+		private int reduceZeroExtendedMoveCount = 0;
+		private int foldIntegerCompareCount = 0;
+		private int simplifyExtendedMoveCount = 0;
+		private int foldLoadStoreOffsetsCount = 0;
+		private int constantMoveToRightCount = 0;
+		private int foldConstantPhiCount = 0;
+		private int simplifyPhiCount = 0;
+		private int removeUselessPhiCount = 0;
 
 		private Stack<int> worklist = new Stack<int>();
 
@@ -98,24 +99,25 @@ namespace Mosa.Compiler.Framework.Stages
 			UpdateCounter("IROptimizations.ConstantFoldingIntegerOperations", constantFoldingIntegerOperationsCount);
 			UpdateCounter("IROptimizations.SimpleConstantPropagation", simpleConstantPropagationCount);
 			UpdateCounter("IROptimizations.SimpleForwardCopyPropagation", simpleForwardCopyPropagationCount);
-			UpdateCounter("IROptimizations.SimpleBackwardCopyPropagation", simpleBackwardCopyPropagation);
+			UpdateCounter("IROptimizations.SimpleBackwardCopyPropagation", simpleBackwardCopyPropagationCount);
 			UpdateCounter("IROptimizations.ConstantFoldingIntegerCompare", constantFoldingIntegerCompareCount);
 			UpdateCounter("IROptimizations.StrengthReductionIntegerCompareBranch", strengthReductionIntegerCompareBranchCount);
 			UpdateCounter("IROptimizations.DeadCodeElimination", deadCodeEliminationCount);
-			UpdateCounter("IROptimizations.SimplifyIntegerCompareCount", simplifyIntegerCompareCount);
-			UpdateCounter("IROptimizations.ConstantFoldingAdditionAndSubstraction", constantFoldingAdditionAndSubstraction);
-			UpdateCounter("IROptimizations.ConstantFoldingMultiplicationCount", constantFoldingMultiplicationCount);
-			UpdateCounter("IROptimizations.ConstantFoldingDivisionCount", constantFoldingDivisionCount);
-			UpdateCounter("IROptimizations.ReduceTruncationAndExpansion", reduceTruncationAndExpansion);
-			UpdateCounter("IROptimizations.FoldIntegerCompareBranch", foldIntegerCompareBranch);
-			UpdateCounter("IROptimizations.FoldIntegerCompare", foldIntegerCompare);
-			UpdateCounter("IROptimizations.SimplifyExtendedMove", simplifyExtendedMove);
-			UpdateCounter("IROptimizations.ReduceZeroExtendedMove", reduceZeroExtendedMove);
-			UpdateCounter("IROptimizations.ConstantMoveToRight", constantMoveToRight);
-			UpdateCounter("IROptimizations.FoldLoadStoreOffsets", foldLoadStoreOffsets);
-			UpdateCounter("IROptimizations.FoldConstantPhi", foldConstantPhi);
-			UpdateCounter("IROptimizations.SimplifyPhi", simplifyPhi);
+			UpdateCounter("IROptimizations.SimplifyIntegerCompare", simplifyIntegerCompareCount);
+			UpdateCounter("IROptimizations.ConstantFoldingAdditionAndSubstraction", constantFoldingAdditionAndSubstractionCount);
+			UpdateCounter("IROptimizations.ConstantFoldingMultiplication", constantFoldingMultiplicationCount);
+			UpdateCounter("IROptimizations.ConstantFoldingDivision", constantFoldingDivisionCount);
+			UpdateCounter("IROptimizations.ReduceTruncationAndExpansion", reduceTruncationAndExpansionCount);
+			UpdateCounter("IROptimizations.FoldIntegerCompareBranch", foldIntegerCompareBranchCount);
+			UpdateCounter("IROptimizations.FoldIntegerCompare", foldIntegerCompareCount);
+			UpdateCounter("IROptimizations.SimplifyExtendedMove", simplifyExtendedMoveCount);
+			UpdateCounter("IROptimizations.ReduceZeroExtendedMove", reduceZeroExtendedMoveCount);
+			UpdateCounter("IROptimizations.ConstantMoveToRight", constantMoveToRightCount);
+			UpdateCounter("IROptimizations.FoldLoadStoreOffsets", foldLoadStoreOffsetsCount);
+			UpdateCounter("IROptimizations.FoldConstantPhi", foldConstantPhiCount);
+			UpdateCounter("IROptimizations.SimplifyPhi", simplifyPhiCount);
 			UpdateCounter("IROptimizations.BlockRemoved", blockRemovedCount);
+			UpdateCounter("IROptimizations.RemoveUselessPhi", removeUselessPhiCount);
 
 			worklist = null;
 		}
@@ -163,6 +165,7 @@ namespace Mosa.Compiler.Framework.Stages
 			FoldLoadStoreOffsets(context);
 			FoldConstantPhi(context);
 			SimplifyPhi(context);
+			RemoveUselessPhi(context);
 		}
 
 		/// <summary>
@@ -1277,7 +1280,7 @@ namespace Mosa.Compiler.Framework.Stages
 			context.Operand1 = context.Operand2;
 			context.Operand2 = op1;
 			if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
-			constantMoveToRight++;
+			constantMoveToRightCount++;
 		}
 
 		private void ConstantFoldingAdditionAndSubstraction(Context context)
@@ -1341,7 +1344,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
 			context.Operand2 = Operand.CreateConstant(context.Operand2.Type, r);
 			if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
-			constantFoldingAdditionAndSubstraction++;
+			constantFoldingAdditionAndSubstractionCount++;
 		}
 
 		private void ConstantFoldingMultiplication(Context context)
@@ -1458,7 +1461,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
 			context.SetInstruction(IRInstruction.Move, context.Result, context.Operand1);
 			if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
-			reduceZeroExtendedMove++;
+			reduceZeroExtendedMoveCount++;
 		}
 
 		private void ReduceTruncationAndExpansion(Context context)
@@ -1505,7 +1508,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (trace.Active) trace.Log("AFTER: \t" + ctx.ToString());
 			if (trace.Active) trace.Log("REMOVED:\t" + ctx.ToString());
 			context.SetInstruction(IRInstruction.Nop);
-			reduceTruncationAndExpansion++;
+			reduceTruncationAndExpansionCount++;
 			instructionsRemovedCount++;
 		}
 
@@ -1547,7 +1550,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
 			if (trace.Active) trace.Log("REMOVED:\t" + ctx.ToString());
 			ctx.SetInstruction(IRInstruction.Nop);
-			foldIntegerCompareBranch++;
+			foldIntegerCompareBranchCount++;
 			instructionsRemovedCount++;
 		}
 
@@ -1591,7 +1594,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
 			if (trace.Active) trace.Log("REMOVED:\t" + ctx.ToString());
 			ctx.SetInstruction(IRInstruction.Nop);
-			foldIntegerCompare++;
+			foldIntegerCompareCount++;
 			instructionsRemovedCount++;
 		}
 
@@ -1620,7 +1623,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (trace.Active) trace.Log("*** SimplifyExtendedMove");
 			if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
 			context.SetInstruction(IRInstruction.Move, context.Result, context.Operand1);
-			simplifyExtendedMove++;
+			simplifyExtendedMoveCount++;
 			if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
 		}
 
@@ -1677,7 +1680,7 @@ namespace Mosa.Compiler.Framework.Stages
 					if (trace.Active) trace.Log("*** SimpleBackwardCopyPropagation");
 					if (trace.Active) trace.Log("BEFORE:\t" + ctx.ToString());
 					ctx.SetOperand(i, source);
-					simpleBackwardCopyPropagation++;
+					simpleBackwardCopyPropagationCount++;
 					if (trace.Active) trace.Log("AFTER: \t" + ctx.ToString());
 				}
 			}
@@ -1737,7 +1740,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
 			if (trace.Active) trace.Log("REMOVED:\t" + ctx.ToString());
 			ctx.SetInstruction(IRInstruction.Nop);
-			foldLoadStoreOffsets++;
+			foldLoadStoreOffsetsCount++;
 			instructionsRemovedCount++;
 		}
 
@@ -1751,6 +1754,9 @@ namespace Mosa.Compiler.Framework.Stages
 				return;
 
 			if (context.Instruction != IRInstruction.Phi)
+				return;
+
+			if (context.Result.Definitions.Count != 1)
 				return;
 
 			if (!context.Result.IsInteger)
@@ -1773,7 +1779,7 @@ namespace Mosa.Compiler.Framework.Stages
 			AddOperandUsageToWorkList(context);
 			context.SetInstruction(IRInstruction.Move, result, operand1);
 			if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
-			foldConstantPhi++;
+			foldConstantPhiCount++;
 		}
 
 		/// <summary>
@@ -1791,12 +1797,42 @@ namespace Mosa.Compiler.Framework.Stages
 			if (context.OperandCount != 1)
 				return;
 
+			if (context.Result.Definitions.Count != 1)
+				return;
+
 			if (trace.Active) trace.Log("*** SimplifyPhiInstruction");
 			if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
 			AddOperandUsageToWorkList(context);
 			context.SetInstruction(IRInstruction.Move, context.Result, context.Operand1);
 			if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
-			simplifyPhi++;
+			simplifyPhiCount++;
 		}
+
+		private void RemoveUselessPhi(Context context)
+		{
+			if (context.IsEmpty)
+				return;
+
+			if (context.Instruction != IRInstruction.Phi)
+				return;
+
+			if (context.Result.Definitions.Count != 1)
+				return;
+
+			int index = context.Index;
+			var result = context.Result;
+
+			foreach (var use in context.Result.Uses)
+			{
+				if (use != index)
+					return;
+			}
+
+			AddOperandUsageToWorkList(context);
+			if (trace.Active) trace.Log("REMOVED:\t" + context.ToString());
+			context.SetInstruction(IRInstruction.Nop);
+			removeUselessPhiCount++;
+		}
+
 	}
 }
