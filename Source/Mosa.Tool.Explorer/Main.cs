@@ -208,6 +208,11 @@ namespace Mosa.Tool.Explorer
 
 		private void Compile()
 		{
+			compileLog.Clear();
+			errorLog.Clear();
+			counterLog.Clear();
+			exceptionLog.Clear();
+
 			compileStartTime = DateTime.Now;
 			methodStages.Clear();
 
@@ -215,16 +220,16 @@ namespace Mosa.Tool.Explorer
 
 			CreateTypeSystemAndLayout();
 
-			CompilerOptions compilerOptions = new CompilerOptions();
+			var compilerOptions = new CompilerOptions();
 
-			compilerOptions.EnableSSA = enableSSAToolStripMenuItem.Checked;
+			compilerOptions.EnableSSA = enableSSA.Checked;
 			compilerOptions.EnableOptimizations = enableOptimizations.Checked;
 			compilerOptions.EnablePromoteTemporaryVariablesOptimization = compilerOptions.EnableOptimizations; // FIXME - default is okay for now
-			compilerOptions.EnableConditionalConstantPropagation = enableConditionalConstantPropagationToolStripMenuItem.Checked;
+			compilerOptions.EnableConditionalConstantPropagation = enableConditionalConstantPropagation.Checked;
 
 			//try
 			//{
-			ExplorerCompiler.Compile(typeSystem, typeLayout, compilerTrace, cbPlatform.Text, compilerOptions, enableBinaryCodeGenerationToolStripMenuItem.Checked);
+			ExplorerCompiler.Compile(typeSystem, typeLayout, compilerTrace, cbPlatform.Text, compilerOptions, enableBinaryCodeGeneration.Checked);
 			SetStatus("Compiled!");
 			//}
 			//catch (Exception e)

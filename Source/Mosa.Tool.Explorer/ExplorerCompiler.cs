@@ -81,7 +81,7 @@ namespace Mosa.Tool.Explorer
 					architecture = Mosa.Platform.x86.Architecture.CreateArchitecture(Mosa.Platform.x86.ArchitectureFeatureFlags.AutoDetect); break;
 			}
 
-			ExplorerCompiler compiler = new ExplorerCompiler(architecture, typeSystem, typeLayout, compilerTrace, compilerOptions, emitBinary);
+			var compiler = new ExplorerCompiler(architecture, typeSystem, typeLayout, compilerTrace, compilerOptions, emitBinary);
 
 			compiler.Compile();
 		}
