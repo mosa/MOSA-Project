@@ -1833,6 +1833,5 @@ namespace Mosa.Compiler.Framework.Stages
 			context.SetInstruction(IRInstruction.Nop);
 			removeUselessPhiCount++;
 		}
-
 	}
 }

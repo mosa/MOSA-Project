@@ -36,27 +36,5 @@ namespace Mosa.TinyCPUSimulator.x86.Emulate
 			simCPU.AddMemory(PageFrameTable, 1024 * 1024 * 4, 1); // Page Table (4Mb)
 			simCPU.AddMemory(VirtualPageBitMap, 1024 * 1024, 1); // Virtual Page BitMap (4Mb)
 		}
-
-		public override void Reset()
-		{
-		}
-
-		public override void MemoryWrite(ulong address, byte size)
-		{
-		}
-
-		public override void PortWrite(uint port, byte value)
-		{
-		}
-
-		public override byte PortRead(uint port)
-		{
-			return 0;
-		}
-
-		public override ushort[] GetPortList()
-		{
-			return null;
-		}
 	}
 }

@@ -86,23 +86,5 @@ namespace Mosa.TinyCPUSimulator.x86.Emulate
 				multiboot = multiboot + 24;
 			}
 		}
-
-		public override void MemoryWrite(ulong address, byte size)
-		{
-		}
-
-		public override void PortWrite(uint port, byte value)
-		{
-		}
-
-		public override byte PortRead(uint port)
-		{
-			return 0;
-		}
-
-		public override ushort[] GetPortList()
-		{
-			return null;
-		}
 	}
 }

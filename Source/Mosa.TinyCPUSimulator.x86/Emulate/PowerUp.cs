@@ -40,23 +40,5 @@ namespace Mosa.TinyCPUSimulator.x86.Emulate
 			// Start EIP
 			x86.EIP.Value = VectorReset;
 		}
-
-		public override void MemoryWrite(ulong address, byte size)
-		{
-		}
-
-		public override void PortWrite(uint port, byte value)
-		{
-		}
-
-		public override byte PortRead(uint port)
-		{
-			return 0;
-		}
-
-		public override ushort[] GetPortList()
-		{
-			return null;
-		}
 	}
 }

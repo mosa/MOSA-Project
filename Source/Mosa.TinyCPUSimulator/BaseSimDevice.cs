@@ -21,13 +21,21 @@ namespace Mosa.TinyCPUSimulator
 			IsMemoryMonitor = false;
 		}
 
-		public abstract void Initialize();
+		public virtual void Initialize()
+		{
+		}
 
-		public abstract void Reset();
+		public virtual void Reset()
+		{
+		}
 
-		public abstract void MemoryWrite(ulong address, byte size);
+		public virtual void MemoryWrite(ulong address, byte size)
+		{
+		}
 
-		public abstract void PortWrite(uint port, byte value);
+		public virtual void PortWrite(uint port, byte value)
+		{
+		}
 
 		public virtual byte PortRead(uint port)
 		{

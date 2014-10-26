@@ -52,8 +52,6 @@ namespace Mosa.Tool.Explorer
 
 				new ExceptionStage(),
 
-				//new StopStage(), //TEMP
-
 				new PlatformStubStage(),
 				new	PlatformEdgeSplitStage(),
 				new GreedyRegisterAllocatorStage(),

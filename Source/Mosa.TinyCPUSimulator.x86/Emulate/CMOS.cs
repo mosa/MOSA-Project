@@ -40,13 +40,14 @@ namespace Mosa.TinyCPUSimulator.x86.Emulate
 		{
 		}
 
-		public override void Initialize()
-		{
-		}
-
 		public override void Reset()
 		{
 			index = 0;
+		}
+
+		public override ushort[] GetPortList()
+		{
+			return GetPortList(StandardIOBase, 1);
 		}
 
 		public override void MemoryWrite(ulong address, byte size)

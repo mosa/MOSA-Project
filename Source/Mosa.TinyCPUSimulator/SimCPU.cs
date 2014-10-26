@@ -415,6 +415,50 @@ namespace Mosa.TinyCPUSimulator
 			Symbols.Add(name, new SimSymbol(name, address, size));
 		}
 
+		public void Write8Port(uint port, byte value)
+		{
+			var device = PortDevices[port];
+
+			if (device == null)
+				return;
+
+			device.PortWrite(port, value);
+		}
+
+		public void Write16Port(uint port, ushort value)
+		{
+			Write8Port(port, (byte)(value & 0xFF));
+			Write8Port(port + 1, (byte)((value >> 8) & 0xFF));
+		}
+
+		public void Write32Port(uint port, uint value)
+		{
+			Write8Port(port, (byte)(value & 0xFF));
+			Write8Port(port + 1, (byte)((value >> 8) & 0xFF));
+			Write8Port(port + 2, (byte)((value >> 16) & 0xFF));
+			Write8Port(port + 3, (byte)((value >> 24) & 0xFF));
+		}
+
+		public byte Read8Port(uint port)
+		{
+			var device = PortDevices[port];
+
+			if (device == null)
+				return 0;
+
+			return device.PortRead(port);
+		}
+
+		public ushort Read16Port(uint port)
+		{
+			return (ushort)(Read8Port(port) | (Read8Port(port + 1) >> 8));
+		}
+
+		public uint Read32Port(uint port)
+		{
+			return (uint)(Read8Port(port) | (Read8Port(port + 1) >> 8) | (Read8Port(port + 2) >> 16) | (Read8Port(port + 3) >> 24));
+		}
+
 		public SimSymbol GetSymbol(string name)
 		{
 			SimSymbol symbol = null;
