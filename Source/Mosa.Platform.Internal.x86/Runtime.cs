@@ -262,9 +262,22 @@ namespace Mosa.Platform.Internal.x86
 		{
 		}
 
-		public static void Fault(int code)
+		public static void DebugOutput(byte code)
 		{
-			// TODO - go panic
+			Native.Out8(0xE9, code);
+		}
+
+		public static void DebugOutput(uint code)
+		{
+			Native.Out8(0xE9, (byte)(code & 0xFF));
+			Native.Out8(0xE9, (byte)((code >> 8) & 0xFF));
+			Native.Out8(0xE9, (byte)((code >> 16) & 0xFF));
+			Native.Out8(0xE9, (byte)((code >> 24) & 0xFF));
+		}
+
+		public static void Fault(uint code)
+		{
+			DebugOutput(code);
 		}
 
 		public static uint GetMethodDefinition(uint address)
@@ -289,13 +302,13 @@ namespace Mosa.Platform.Internal.x86
 				entries--;
 			}
 
+			DebugOutput((byte)0xA1);
 			return 0;
 		}
 
 		public static uint GetMethodDefinitionViaMethodExceptionLookup(uint address)
 		{
 			uint table = Native.GetMethodExceptionLookupTable();
-			//uint table = Native.GetMethodLookupTable();
 
 			if (table == 0)
 				return 0;
@@ -319,11 +332,14 @@ namespace Mosa.Platform.Internal.x86
 				entries--;
 			}
 
+			DebugOutput((byte)0xA2);
 			return 0;
 		}
 
 		public static uint GetProtectedRegionEntryByAddress(uint address, uint exceptionType, uint methodDef)
 		{
+			DebugOutput((byte)0xB0);
+
 			uint table = Mosa.Internal.Native.Load32(methodDef, NativeIntSize * 6);
 
 			if (table == 0)
@@ -334,19 +350,32 @@ namespace Mosa.Platform.Internal.x86
 			if (method == 0)
 				return 0;
 
+			DebugOutput(address);
+			DebugOutput(method);
+
 			uint offset = address - method;
 
 			uint entries = Mosa.Internal.Native.Load32(table);
 
 			table = table + 4;
 
+			DebugOutput((byte)0xB1);
+			DebugOutput((byte)entries);
+
+			DebugOutput(offset);
+
 			while (entries > 0)
 			{
 				uint start = Mosa.Internal.Native.Load32(table, NativeIntSize * 1);
 				uint end = Mosa.Internal.Native.Load32(table, NativeIntSize * 2);
 
+				DebugOutput(start);
+				DebugOutput(end);
+
 				if ((offset >= start) && (offset < end))
 				{
+					DebugOutput((byte)0xFF);
+
 					uint type = Mosa.Internal.Native.Load32(table, NativeIntSize * 0);
 
 					if (type == 0)
@@ -367,6 +396,7 @@ namespace Mosa.Platform.Internal.x86
 				entries--;
 			}
 
+			DebugOutput((byte)0xA3);
 			return 0;
 		}
 

@@ -20,7 +20,7 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 			CPU.AddDevice(new Multiboot(CPU));
 			CPU.AddDevice(new MosaTestMemory(CPU));
 			CPU.AddDevice(new MosaImage(CPU));
-			CPU.AddDevice(new BochDebug(CPU, System.Console.Out));
+			CPU.AddDevice(new BochDebug(CPU));
 		}
 	}
 }
