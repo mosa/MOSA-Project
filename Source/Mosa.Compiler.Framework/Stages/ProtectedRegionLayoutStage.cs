@@ -42,9 +42,12 @@ namespace Mosa.Compiler.Framework.Stages
 			var section = MethodCompiler.Linker.CreateSymbol(MethodCompiler.Method.FullName + Metadata.ProtectedRegionTable, SectionKind.ROData, NativePointerAlignment, 0);
 			var stream = section.Stream;
 
+			var writer = new EndianAwareBinaryWriter(stream, Architecture.Endianness);
+
 			int sectioncount = 0;
 
-			var writer = new EndianAwareBinaryWriter(stream, Architecture.Endianness);
+			// dummy for now
+			writer.Write((uint)0);
 
 			foreach (var region in MethodCompiler.ProtectedRegions)
 			{
@@ -68,14 +71,11 @@ namespace Mosa.Compiler.Framework.Stages
 						trace.Log("   Block: " + block.ToString() + " [" + start.ToString() + "-" + end.ToString() + "]");
 
 					//DEBUG
-					if (MethodCompiler.Method.FullName.Contains("ExceptionHandlingTests::ExceptionTest3"))
-						System.Diagnostics.Debug.WriteLine("   Block: " + block.ToString() + " [" + start.ToString() + "-" + end.ToString() + "]");
+					//if (MethodCompiler.Method.FullName.Contains("ExceptionHandlingTests::ExceptionTest3"))
+					//	System.Diagnostics.Debug.WriteLine("   Block: " + block.ToString() + " [" + start.ToString() + "-" + end.ToString() + "]");
 
 					AddSection(sections, start, end);
 				}
-
-				// dummy for now
-				writer.Write(0);
 
 				foreach (var s in sections)
 				{
@@ -84,16 +84,13 @@ namespace Mosa.Compiler.Framework.Stages
 
 					sectioncount++;
 
-					// 1. Handler type
-					writer.Write((uint)region.Handler.HandlerType);
-
 					if (NativePointerSize == 4)
 					{
-						// 2. Offset to start
+						// 1. Offset to start
 						writer.Write((uint)start);
-						// 3. Offset to end
+						// 2. Offset to end
 						writer.Write((uint)end);
-						// 4. Offset to handler
+						// 3. Offset to handler
 						writer.Write((uint)handler);
 					}
 					else
@@ -102,6 +99,9 @@ namespace Mosa.Compiler.Framework.Stages
 						writer.Write((uint)end);
 						writer.Write((ulong)handler);
 					}
+
+					// 4. Handler type
+					writer.Write((uint)region.Handler.HandlerType);
 
 					if (trace.Active) trace.Log("     Section: [" + start.ToString() + "-" + end.ToString() + "]");
 
@@ -122,8 +122,8 @@ namespace Mosa.Compiler.Framework.Stages
 					else
 					{
 					}
-
 					writer.WriteZeroBytes(NativePointerSize);
+					writer.Write(0xAAAAAAAA);
 				}
 			}
 

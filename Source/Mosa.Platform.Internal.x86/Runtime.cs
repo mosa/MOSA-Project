@@ -352,6 +352,7 @@ namespace Mosa.Platform.Internal.x86
 
 			DebugOutput(address);
 			DebugOutput(method);
+			DebugOutput(table);
 
 			uint offset = address - method;
 
@@ -366,8 +367,8 @@ namespace Mosa.Platform.Internal.x86
 
 			while (entries > 0)
 			{
-				uint start = Mosa.Internal.Native.Load32(table, NativeIntSize * 1);
-				uint end = Mosa.Internal.Native.Load32(table, NativeIntSize * 2);
+				uint start = Mosa.Internal.Native.Load32(table, NativeIntSize * 0);
+				uint end = Mosa.Internal.Native.Load32(table, NativeIntSize * 1);
 
 				DebugOutput(start);
 				DebugOutput(end);
@@ -376,7 +377,7 @@ namespace Mosa.Platform.Internal.x86
 				{
 					DebugOutput((byte)0xFF);
 
-					uint type = Mosa.Internal.Native.Load32(table, NativeIntSize * 0);
+					uint type = Mosa.Internal.Native.Load32(table, NativeIntSize * 3);
 
 					if (type == 0)
 					{
@@ -391,7 +392,7 @@ namespace Mosa.Platform.Internal.x86
 					}
 				}
 
-				table = table + (NativeIntSize * 5);
+				table = table + (NativeIntSize * 6);
 
 				entries--;
 			}
