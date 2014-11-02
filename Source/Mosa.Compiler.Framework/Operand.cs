@@ -433,7 +433,7 @@ namespace Mosa.Compiler.Framework
 			if (operand.IsUnsigned)
 				operand.ConstantUnsignedInteger = value;
 			else if (operand.IsSigned)
-				operand.ConstantSignedInteger = (int)value;
+				operand.ConstantSignedInteger = (long)value;
 			else if (operand.IsBoolean)
 				operand.ConstantUnsignedInteger = value;
 			else if (operand.IsChar)

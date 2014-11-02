@@ -1238,9 +1238,14 @@ namespace Mosa.Test.Collection.x86.xUnit
 		}
 
 		[Fact]
-		public void Div2()
+		public void PositiveDiv2()
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.EnumI4Class.PositiveDiv2"));
+		}
+
+		[Fact]
+		public void NegativeDiv2()
+		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.EnumI4Class.NegativeDiv2"));
 		}
 

@@ -22,9 +22,9 @@ namespace Mosa.TinyCPUSimulator.Debug
 			//Test5c();
 			//Test3();
 			//Test4();
-			//Test11();
+			Test11();
 
-			Test13();
+			//Test13();
 		}
 
 		private static void Test13()
@@ -46,7 +46,7 @@ namespace Mosa.TinyCPUSimulator.Debug
 		{
 			var fixture = new FibonacciFixture();
 
-			fixture.Fibonacci(10);
+			fixture.Fibonacci(3);
 		}
 
 		private static void Test10()

@@ -24,6 +24,7 @@ namespace Mosa.Compiler.Framework.Stages
 		protected SectionTrace trace;
 
 		protected int conditionalConstantPropagation = 0;
+		protected int instructionsRemovedCount = 0;
 
 		protected override void Setup()
 		{
@@ -38,9 +39,11 @@ namespace Mosa.Compiler.Framework.Stages
 			var constants = analysis.GetIntegerConstants();
 
 			ReplaceVirtualRegistersWithConstants(constants);
+			//RemoveDeadBlocks(deadBlocks);
 
 			UpdateCounter("ConditionalConstantPropagation.ConstantVariableCount", constants.Count);
 			UpdateCounter("ConditionalConstantPropagation.ConstantVariableUse", conditionalConstantPropagation);
+			UpdateCounter("ConditionalConstantPropagation.IRInstructionRemoved", instructionsRemovedCount);
 		}
 
 		protected void ReplaceVirtualRegistersWithConstants(List<Tuple<Operand, ulong>> constantVirtualRegisters)
@@ -80,6 +83,39 @@ namespace Mosa.Compiler.Framework.Stages
 					conditionalConstantPropagation++;
 					if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
 				}
+			}
+		}
+
+		protected void RemoveDeadBlocks(List<BasicBlock> blocks)
+		{
+			foreach (var block in blocks)
+			{
+				RemoveDeadBlockInstructions(block);
+			}
+		}
+
+		protected void RemoveDeadBlockInstructions(BasicBlock block)
+		{
+			for (var context = new Context(InstructionSet, block); !context.IsBlockEndInstruction; context.GotoNext())
+			{
+				if (context.IsEmpty)
+					continue;
+
+				if (context.IsBlockStartInstruction)
+					continue;
+
+				if (context.Instruction == IRInstruction.Nop)
+					continue;
+
+				if (context.Instruction == IRInstruction.Epilogue)
+					continue;
+
+				if (context.Instruction == IRInstruction.Jmp || context.Instruction == IRInstruction.IntegerCompareBranch)
+					continue;
+
+				if (trace.Active) trace.Log("REMOVED:\t" + context.ToString());
+				context.SetInstruction(IRInstruction.Nop);
+				instructionsRemovedCount++;
 			}
 		}
 	}

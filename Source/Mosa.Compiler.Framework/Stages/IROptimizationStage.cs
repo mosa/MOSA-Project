@@ -154,7 +154,7 @@ namespace Mosa.Compiler.Framework.Stages
 			ConstantFoldingAdditionAndSubstraction(context);
 			ConstantFoldingMultiplication(context);
 			ConstantFoldingDivision(context);
-			SimplifyIntegerCompare(context);
+			//SimplifyIntegerCompare(context);
 			ConstantFoldingIntegerCompare(context);
 			FoldIntegerCompare(context);
 			FoldIntegerCompareBranch(context);
@@ -614,9 +614,13 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				constant = Operand.CreateConstant(result.Type, op1.ConstantUnsignedInteger * op2.ConstantUnsignedInteger);
 			}
-			else if (context.Instruction == IRInstruction.DivSigned || context.Instruction == IRInstruction.DivUnsigned)
+			else if (context.Instruction == IRInstruction.DivUnsigned)
 			{
 				constant = Operand.CreateConstant(result.Type, op1.ConstantUnsignedInteger / op2.ConstantUnsignedInteger);
+			}
+			else if (context.Instruction == IRInstruction.DivSigned)
+			{
+				constant = Operand.CreateConstant(result.Type, op1.ConstantSignedInteger / op2.ConstantSignedInteger);
 			}
 			else if (context.Instruction == IRInstruction.ArithmeticShiftRight)
 			{
@@ -1154,7 +1158,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			block.NextBlocks.Clear();
 
-			for (Context context = new Context(InstructionSet, block); !context.IsBlockEndInstruction; context.GotoNext())
+			for (var context = new Context(InstructionSet, block); !context.IsBlockEndInstruction; context.GotoNext())
 			{
 				if (context.IsEmpty)
 					continue;
@@ -1207,12 +1211,52 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 		}
 
+		private void SimplifyIntegerCompare(Context context)
+		{
+			// Buggy
+			if (context.IsEmpty)
+				return;
+
+			if (context.Instruction != IRInstruction.IntegerCompare)
+				return;
+
+			if (!context.Result.IsVirtualRegister)
+				return;
+
+			if (context.Result.Definitions.Count != 1)
+				return;
+
+			if (context.ConditionCode != ConditionCode.NotEqual)
+				return;
+
+			if (context.Operand2.IsConstant && context.Operand2.IsConstantZero)
+			{
+				if (trace.Active) trace.Log("*** SimplifyIntegerCompare");
+				AddOperandUsageToWorkList(context);
+				if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
+				context.SetInstruction(IRInstruction.Move, context.Result, context.Operand1);
+				simplifyIntegerCompareCount++;
+				if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
+			}
+			else if (context.Operand1.IsConstant && context.Operand1.IsConstantZero)
+			{
+				if (trace.Active) trace.Log("*** SimplifyIntegerCompare2");
+				AddOperandUsageToWorkList(context);
+				if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
+				context.SetInstruction(IRInstruction.Move, context.Result, context.Operand2);
+				simplifyIntegerCompareCount++;
+				if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
+			}
+
+		}
+
 		/// <summary>
 		/// Simplifies the integer compare.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		private void SimplifyIntegerCompare(Context context)
+		private void SimplifyIntegerCompare2(Context context)
 		{
+			// Buggy
 			if (context.IsEmpty)
 				return;
 
@@ -1426,7 +1470,9 @@ namespace Mosa.Compiler.Framework.Stages
 
 			Debug.Assert(ctx.Result.Definitions.Count == 1);
 
-			ulong r = context.Operand2.ConstantUnsignedInteger * ctx.Operand2.ConstantUnsignedInteger;
+			ulong r = (ctx.Instruction == IRInstruction.DivSigned) ?
+				(ulong)(context.Operand2.ConstantSignedInteger / ctx.Operand2.ConstantSignedInteger) :
+				context.Operand2.ConstantUnsignedInteger / ctx.Operand2.ConstantUnsignedInteger;
 
 			if (trace.Active) trace.Log("*** ConstantFoldingDivision");
 			AddOperandUsageToWorkList(ctx);
