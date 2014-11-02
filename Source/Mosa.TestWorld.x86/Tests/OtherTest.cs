@@ -19,8 +19,11 @@ namespace Mosa.TestWorld.x86.Tests
 			testMethods.Add(OtherTest1);
 			testMethods.Add(OtherTest2);
 			testMethods.Add(OtherTest3);
+			testMethods.Add(OtherTest4);
+			testMethods.Add(OtherTest5);
 			testMethods.Add(ForeachNestedTest);
 			testMethods.Add(StructNewObjTest);
+			testMethods.Add(StructNotBoxed);
 		}
 
 		private static uint StaticValue = 0x200000;
@@ -40,6 +43,16 @@ namespace Mosa.TestWorld.x86.Tests
 		public static bool OtherTest3()
 		{
 			return 3.Equals(3);
+		}
+
+		public static bool OtherTest4()
+		{
+			return 3.Equals((object)3);
+		}
+
+		public static bool OtherTest5()
+		{
+			return ((object)3).Equals(3);
 		}
 
 		public static bool ForeachNestedTest()
@@ -83,11 +96,31 @@ namespace Mosa.TestWorld.x86.Tests
 
 			return (t1.A == 5 && t1.B == 10);
 		}
+
+		public static bool StructNotBoxed()
+		{
+			NotBoxedStruct s = new NotBoxedStruct();
+			s.ToString();
+			s.ToString();
+			s.ToString();
+			return s.I == 3;
+		}
 	}
 
 	public struct TestStruct
 	{
 		public byte One;
+	}
+
+	public struct NotBoxedStruct
+	{
+		public int I;
+
+		public override string ToString()
+		{
+			I++;
+			return "";
+		}
 	}
 
 	public struct Pair
