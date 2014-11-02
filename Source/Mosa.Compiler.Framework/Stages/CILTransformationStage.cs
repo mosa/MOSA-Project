@@ -259,32 +259,53 @@ namespace Mosa.Compiler.Framework.Stages
 				context.Operand1.Type.ElementType.IsValueType &&
 				context.MosaMethod.DeclaringType == context.Operand1.Type.ElementType)
 			{
-				// Get the value type, size and native alignment
-				MosaType type = context.Operand1.Type.ElementType;
-				int typeSize = TypeLayout.GetTypeSize(type);
-				int alignment = TypeLayout.NativePointerAlignment;
-				typeSize += (alignment - (typeSize % alignment)) % alignment;
+				if (OverridesMethod(context.MosaMethod))
+				{
+					var before = context.InsertBefore();
+					before.SetInstruction(IRInstruction.SubSigned, context.Operand1, context.Operand1, Operand.CreateConstantSignedInt(TypeSystem, NativePointerSize * 2));
+				}
+				else
+				{
+					// Get the value type, size and native alignment
+					MosaType type = context.Operand1.Type.ElementType;
+					int typeSize = TypeLayout.GetTypeSize(type);
+					int alignment = TypeLayout.NativePointerAlignment;
+					typeSize += (alignment - (typeSize % alignment)) % alignment;
 
-				// Create a virtual register to hold our boxed value
-				var boxedValue = MethodCompiler.CreateVirtualRegister(TypeSystem.BuiltIn.Object);
+					// Create a virtual register to hold our boxed value
+					var boxedValue = MethodCompiler.CreateVirtualRegister(TypeSystem.BuiltIn.Object);
 
-				// Create a new context before the call and set it as a VmCall
-				var before = context.InsertBefore();
-				before.SetInstruction(IRInstruction.Nop);
-				ReplaceWithVmCall(before, VmCall.Box);
+					// Create a new context before the call and set it as a VmCall
+					var before = context.InsertBefore();
+					before.SetInstruction(IRInstruction.Nop);
+					ReplaceWithVmCall(before, VmCall.Box);
 
-				// Populate the operands for the VmCall and result
-				before.SetOperand(1, GetRuntimeTypeHandle(type, before));
-				before.SetOperand(2, context.Operand1);
-				before.SetOperand(3, Operand.CreateConstantUnsignedInt(TypeSystem, (uint)typeSize));
-				before.OperandCount = 4;
-				before.Result = boxedValue;
+					// Populate the operands for the VmCall and result
+					before.SetOperand(1, GetRuntimeTypeHandle(type, before));
+					before.SetOperand(2, context.Operand1);
+					before.SetOperand(3, Operand.CreateConstantUnsignedInt(TypeSystem, (uint)typeSize));
+					before.OperandCount = 4;
+					before.Result = boxedValue;
 
-				// Now replace the value type pointer with the boxed value virtual register
-				context.Operand1 = boxedValue;
+					// Now replace the value type pointer with the boxed value virtual register
+					context.Operand1 = boxedValue;
+				}
 			}
 
 			ProcessInvokeInstruction(context, context.MosaMethod, context.Result, new List<Operand>(context.Operands));
+		}
+
+		private bool OverridesMethod(MosaMethod method)
+		{
+			if (method.Overrides == null)
+				return false;
+			if (method.DeclaringType.BaseType.Name.Equals("ValueType"))
+				return true;
+			if (method.DeclaringType.BaseType.Name.Equals("Object"))
+				return true;
+			if (method.DeclaringType.BaseType.Name.Equals("Enum"))
+				return true;
+			return false;
 		}
 
 		/// <summary>
@@ -418,6 +439,48 @@ namespace Mosa.Compiler.Framework.Stages
 				var type = context.Previous.MosaType;
 
 				context.Previous.Remove();
+
+				if (type.IsValueType)
+				{
+					if (type.Methods.Contains(method))
+					{
+						// If the method being called is a virtual method then we need to box the value type
+						if (context.MosaMethod.IsVirtual &&
+							context.Operand1.Type.ElementType != null &&
+							context.Operand1.Type.ElementType.IsValueType &&
+							context.MosaMethod.DeclaringType == context.Operand1.Type.ElementType)
+						{
+							var before = context.InsertBefore();
+							before.SetInstruction(IRInstruction.SubSigned, context.Operand1, context.Operand1, Operand.CreateConstantSignedInt(TypeSystem, NativePointerSize * 2));
+						}
+					}
+					else
+					{
+						// Get the value type, size and native alignment
+						MosaType elementType = context.Operand1.Type.ElementType;
+						int typeSize = TypeLayout.GetTypeSize(elementType);
+						int alignment = TypeLayout.NativePointerAlignment;
+						typeSize += (alignment - (typeSize % alignment)) % alignment;
+
+						// Create a virtual register to hold our boxed value
+						var boxedValue = MethodCompiler.CreateVirtualRegister(TypeSystem.BuiltIn.Object);
+
+						// Create a new context before the call and set it as a VmCall
+						var before = context.InsertBefore();
+						before.SetInstruction(IRInstruction.Nop);
+						ReplaceWithVmCall(before, VmCall.Box);
+
+						// Populate the operands for the VmCall and result
+						before.SetOperand(1, GetRuntimeTypeHandle(elementType, before));
+						before.SetOperand(2, context.Operand1);
+						before.SetOperand(3, Operand.CreateConstantUnsignedInt(TypeSystem, (uint)typeSize));
+						before.OperandCount = 4;
+						before.Result = boxedValue;
+
+						// Now replace the value type pointer with the boxed value virtual register
+						context.Operand1 = boxedValue;
+					}
+				}
 
 				ProcessInvokeInstruction(context, method, resultOperand, operands);
 
