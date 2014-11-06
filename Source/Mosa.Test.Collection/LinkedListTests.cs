@@ -29,7 +29,7 @@ namespace Mosa.Test.Collection
 		{
 			LinkedList<int> IntList = new LinkedList<int>();
 
-			IntList.Add(101);
+			IntList.AddLast(101);
 
 			return IntList.Count == 1;
 		}
@@ -38,8 +38,8 @@ namespace Mosa.Test.Collection
 		{
 			LinkedList<int> IntList = new LinkedList<int>();
 
-			IntList.Add(101);
-			IntList.Add(202);
+			IntList.AddLast(101);
+			IntList.AddLast(202);
 
 			return IntList.Count == 2;
 		}
@@ -48,38 +48,38 @@ namespace Mosa.Test.Collection
 		{
 			LinkedList<int> IntList = new LinkedList<int>();
 
-			IntList.Add(101);
+			IntList.AddLast(101);
 
-			return IntList.First == 101;
+			return IntList.First.Value == 101;
 		}
 
 		public static bool First2()
 		{
 			LinkedList<int> IntList = new LinkedList<int>();
 
-			IntList.Add(101);
-			IntList.Add(202);
+			IntList.AddLast(101);
+			IntList.AddLast(202);
 
-			return IntList.First == 101;
+			return IntList.First.Value == 101;
 		}
 
 		public static bool Last1()
 		{
 			LinkedList<int> IntList = new LinkedList<int>();
 
-			IntList.Add(101);
+			IntList.AddLast(101);
 
-			return IntList.Last == 101;
+			return IntList.Last.Value == 101;
 		}
 
 		public static bool Last2()
 		{
 			LinkedList<int> IntList = new LinkedList<int>();
 
-			IntList.Add(101);
-			IntList.Add(202);
+			IntList.AddLast(101);
+			IntList.AddLast(202);
 
-			return IntList.Last == 202;
+			return IntList.Last.Value == 202;
 		}
 
 		private static LinkedList<int> Populate()
@@ -88,7 +88,7 @@ namespace Mosa.Test.Collection
 
 			for (int i = 1; i < 10; i++)
 			{
-				IntList.Add(101 * i);
+				IntList.AddLast(101 * i);
 			}
 
 			return IntList;
@@ -133,6 +133,40 @@ namespace Mosa.Test.Collection
 			}
 
 			return sum + nestedSum;
+		}
+
+		public static int ForeachBreak()
+		{
+			LinkedList<Holder> IntList = new LinkedList<Holder>();
+
+			for (int i = 1; i < 10; i++)
+			{
+				Holder h = new Holder();
+				h.value1 = 101 * i;
+				h.value2 = 101 * i;
+				h.value3 = 101 * i;
+				IntList.AddLast(h);
+			}
+
+			int sum = 0;
+
+			foreach (var item in IntList)
+			{
+				sum += item.value1;
+				sum = sum + item.value2;
+				sum = sum + item.value3;
+				if (sum > 5000)
+					break;
+			}
+
+			return sum;
+		}
+
+		private struct Holder
+		{
+			public int value1;
+			public int value2;
+			public int value3;
 		}
 	}
 }

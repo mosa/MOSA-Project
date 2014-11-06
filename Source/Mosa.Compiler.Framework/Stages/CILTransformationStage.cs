@@ -442,13 +442,15 @@ namespace Mosa.Compiler.Framework.Stages
 
 				if (type.IsValueType)
 				{
+					method = GetMethodOrOverride(type, method);
+
 					if (type.Methods.Contains(method))
 					{
 						// If the method being called is a virtual method then we need to box the value type
-						if (context.MosaMethod.IsVirtual &&
+						if (method.IsVirtual &&
 							context.Operand1.Type.ElementType != null &&
 							context.Operand1.Type.ElementType.IsValueType &&
-							context.MosaMethod.DeclaringType == context.Operand1.Type.ElementType)
+							method.DeclaringType == context.Operand1.Type.ElementType)
 						{
 							var before = context.InsertBefore();
 							before.SetInstruction(IRInstruction.SubSigned, context.Operand1, context.Operand1, Operand.CreateConstantSignedInt(TypeSystem, NativePointerSize * 2));
@@ -480,11 +482,9 @@ namespace Mosa.Compiler.Framework.Stages
 						// Now replace the value type pointer with the boxed value virtual register
 						context.Operand1 = boxedValue;
 					}
+					ProcessInvokeInstruction(context, method, resultOperand, operands);
+					return;
 				}
-
-				ProcessInvokeInstruction(context, method, resultOperand, operands);
-
-				return;
 			}
 
 			if (method.IsVirtual)
@@ -556,6 +556,21 @@ namespace Mosa.Compiler.Framework.Stages
 				// we have to make this explicitly somehow.
 				ProcessInvokeInstruction(context, method, resultOperand, operands);
 			}
+		}
+
+		private MosaMethod GetMethodOrOverride(MosaType type, MosaMethod method)
+		{
+			MosaMethod implMethod = null;
+			if (method.DeclaringType.Module == TypeSystem.CorLib
+				&& (method.DeclaringType.Name.Equals("ValueType")
+					|| method.DeclaringType.Name.Equals("Object")
+					|| method.DeclaringType.Name.Equals("Enum"))
+				&& (implMethod = type.FindMethodBySignature(method.Name, method.Signature)) != null
+			)
+			{
+				return implMethod;
+			}
+			return method;
 		}
 
 		private int CalculateMethodTableOffset(MosaMethod invokeTarget)

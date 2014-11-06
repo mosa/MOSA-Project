@@ -1,92 +1,41 @@
-/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
+﻿/*
+ * (c) 2014 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
+ *  Stefan Andres Charsley (charsleysa) <charsleysa@gmail.com>
  */
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
 namespace Mosa.Test.Collection
 {
 	/// <summary>
-	/// Implements a linked list
+	/// Represents a doubly linked list.
 	/// </summary>
 	/// <typeparam name="T"></typeparam>
 	public class LinkedList<T> : IEnumerable<T>, ICollection<T>
 	{
-		/// <summary>
-		///
-		/// </summary>
-		/// <typeparam name="U"></typeparam>
-		public class LinkedListNode<U>
-		{
-			/// <summary>
-			///
-			/// </summary>
-			public U value;
-
-			/// <summary>
-			///
-			/// </summary>
-			public LinkedListNode<U> next;
-
-			/// <summary>
-			///
-			/// </summary>
-			public LinkedListNode<U> previous;
-
-			/// <summary>
-			/// Initializes a new instance of the <see cref="T:LinkedList.U:LinkedListNode"/> class.
-			/// </summary>
-			/// <param name="value">The value.</param>
-			/// <param name="previous">The previous.</param>
-			/// <param name="next">The next.</param>
-			public LinkedListNode(U value, LinkedListNode<U> previous, LinkedListNode<U> next)
-			{
-				this.value = value;
-				this.next = next;
-				this.previous = previous;
-			}
-		}
-
-		/// <summary>
-		///
-		/// </summary>
-		protected LinkedListNode<T> first;
-
-		/// <summary>
-		///
-		/// </summary>
 		protected int count;
+		protected LinkedListNode<T> first;
+		protected LinkedListNode<T> last;
 
 		/// <summary>
-		/// Gets a value indicating whether the <see cref="T:ICollection`1"/> is read-only.
+		/// Gets the number of nodes actually contained in the LinkedList<T>.
 		/// </summary>
-		/// <value></value>
-		/// <returns>true if the <see cref="T:ICollection`1"/> is read-only; otherwise, false.
-		/// </returns>
-		public bool IsReadOnly { get { return false; } }
-
-		/// <summary>
-		/// Gets the number of elements contained in the <see cref="T:ICollection`1"/>.
-		/// </summary>
-		/// <value></value>
-		/// <returns>
-		/// The number of elements contained in the <see cref="T:ICollection`1"/>.
-		/// </returns>
 		public int Count
 		{
 			get
 			{
 				var result = 0;
-				var node = first;
+				var node = First;
 				while (node != null)
 				{
-					node = node.next;
+					node = node.Next;
 					result++;
 				}
 				return result;
@@ -94,20 +43,20 @@ namespace Mosa.Test.Collection
 		}
 
 		/// <summary>
-		///
+		/// Gets the first node of the LinkedList<T>.
 		/// </summary>
-		public T First { get { return first.value; } }
+		public LinkedListNode<T> First
+		{
+			get { return first; }
+		}
 
 		/// <summary>
-		///
+		/// Gets the last node of the LinkedList<T>.
 		/// </summary>
-		protected LinkedListNode<T> last;
-
-		/// <summary>
-		/// Gets the last.
-		/// </summary>
-		/// <value>The last.</value>
-		public T Last { get { return last.value; } }
+		public LinkedListNode<T> Last
+		{
+			get { return last; }
+		}
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="T:LinkedList"/> class.
@@ -116,6 +65,20 @@ namespace Mosa.Test.Collection
 		{
 			first = last = null;
 			count = 0;
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the LinkedList<T> class that contains elements copied from the specified IEnumerable and has sufficient capacity to accommodate the number of elements copied.
+		/// </summary>
+		/// <param name="collection">The IEnumerable whose elements are copied to the new LinkedList<T>.</param>
+		public LinkedList(IEnumerable<T> collection)
+			: this()
+		{
+			if (collection == null)
+				throw new ArgumentNullException("collection");
+
+			foreach(T value in collection)
+				AddLast(value);
 		}
 
 		/// <summary>
@@ -195,7 +158,10 @@ namespace Mosa.Test.Collection
 		/// <returns></returns>
 		public LinkedListNode<T> AddLast(T value)
 		{
-			LinkedListNode<T> node = new LinkedListNode<T>(value, last, null);
+			LinkedListNode<T> node = new LinkedListNode<T>(value);
+			node.list = this;
+			node.previous = last;
+			node.next = null;
 			return AddLast(node);
 		}
 
@@ -227,7 +193,10 @@ namespace Mosa.Test.Collection
 		/// <returns></returns>
 		public LinkedListNode<T> AddFirst(T value)
 		{
-			LinkedListNode<T> node = new LinkedListNode<T>(value, null, first);
+			LinkedListNode<T> node = new LinkedListNode<T>(value);
+			node.list = this;
+			node.previous = null;
+			node.next = first;
 			return AddFirst(node);
 		}
 
@@ -258,7 +227,10 @@ namespace Mosa.Test.Collection
 			if (node == null)
 				return null;
 
-			LinkedListNode<T> cur = new LinkedListNode<T>(value, node, node.next);
+			LinkedListNode<T> cur = new LinkedListNode<T>(value);
+			cur.list = this;
+			cur.previous = node;
+			cur.next = node.next;
 
 			if (node.next != null)
 				node.next.previous = cur;
@@ -282,7 +254,10 @@ namespace Mosa.Test.Collection
 			if (node == null)
 				return null;
 
-			LinkedListNode<T> cur = new LinkedListNode<T>(value, node.previous, node);
+			LinkedListNode<T> cur = new LinkedListNode<T>(value);
+			cur.list = this;
+			cur.previous = node.previous;
+			cur.next = node;
 
 			if (node.previous != null)
 				node.previous.next = cur;
@@ -380,16 +355,16 @@ namespace Mosa.Test.Collection
 		public void CopyTo(T[] array, int arrayIndex)
 		{
 			if (array == null)
-				return;
+				throw new ArgumentNullException("array");
 			if (arrayIndex < 0)
-				return;
+				throw new ArgumentOutOfRangeException("index");
 
 			//if (array.Rank != 1)
 			//    throw new ArgumentException();
 			//if (array.Length - arrayIndex + array.GetLowerBound(0) < count)
 			//    throw new ArgumentException();
 
-			LinkedListNode<T> cur = first;
+			LinkedListNode<T> cur = First;
 
 			while (cur != null)
 			{
@@ -406,7 +381,7 @@ namespace Mosa.Test.Collection
 		{
 			T[] array = new T[this.count];
 
-			LinkedListNode<T> cur = first;
+			LinkedListNode<T> cur = First;
 			uint index = 0;
 
 			while (cur != null)
@@ -419,6 +394,14 @@ namespace Mosa.Test.Collection
 		}
 
 		/// <summary>
+		/// Gets a value indicating whether the <see cref="T:ICollection`1"/> is read-only.
+		/// </summary>
+		/// <value></value>
+		/// <returns>true if the <see cref="T:ICollection`1"/> is read-only; otherwise, false.
+		/// </returns>
+		bool ICollection<T>.IsReadOnly { get { return false; } }
+
+		/// <summary>
 		/// Returns an enumerator that iterates through the collection.
 		/// </summary>
 		/// <returns>
@@ -426,9 +409,7 @@ namespace Mosa.Test.Collection
 		/// </returns>
 		IEnumerator<T> IEnumerable<T>.GetEnumerator()
 		{
-			return new Enumerator(this);/*
-			for (LinkedListNode<T> cur = first; cur != null; cur = cur.next)
-				yield return cur.value;*/
+			return new Enumerator(this);
 		}
 
 		/// <summary>
@@ -437,19 +418,13 @@ namespace Mosa.Test.Collection
 		/// <returns>
 		/// An <see cref="T:System.Collections.IEnumerator"/> object that can be used to iterate through the collection.
 		/// </returns>
-		System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+		IEnumerator IEnumerable.GetEnumerator()
 		{
-			return new Enumerator(this);/*
-			for (LinkedListNode<T> cur = first; cur != null; cur = cur.next)
-				yield return cur.value;*/
+			return new Enumerator(this);
 		}
 
-		public class Enumerator : IEnumerator<T>, IEnumerator
+		public struct Enumerator : IEnumerator<T>, IEnumerator, IDisposable
 		{
-			private const string VersionKey = "version";
-			private const string IndexKey = "index";
-			private const string ListKey = "list";
-
 			private LinkedList<T> list;
 			private LinkedListNode<T> current;
 			private int index;
@@ -465,52 +440,60 @@ namespace Mosa.Test.Collection
 			{
 				get
 				{
-					return current.value;
-				}
-			}
+					if (list == null)
+						throw new ObjectDisposedException(null);
 
-			object IEnumerator.Current
-			{
-				get { return null; }
+					return this.current.value;
+				}
 			}
 
 			public bool MoveNext()
 			{
 				if (list == null)
-					return false;
+					throw new ObjectDisposedException(null);
 
 				if (current == null)
+				{
 					current = list.first;
+				}
 				else
 				{
 					current = current.next;
 					if (current == list.first)
 						current = null;
 				}
+
 				if (current == null)
 				{
 					index = -1;
 					return false;
 				}
+
 				++index;
 				return true;
-			}
-
-			void IEnumerator.Reset()
-			{
-				if (list == null)
-					return;
-
-				current = null;
-				index = -1;
 			}
 
 			public void Dispose()
 			{
 				if (list == null)
-					return;
+					throw new ObjectDisposedException(null);
+
 				current = null;
 				list = null;
+			}
+
+			object IEnumerator.Current
+			{
+				get { return this.Current; }
+			}
+
+			void IEnumerator.Reset()
+			{
+				if (list == null)
+					throw new ObjectDisposedException(null);
+
+				current = null;
+				index = -1;
 			}
 		}
 	}
