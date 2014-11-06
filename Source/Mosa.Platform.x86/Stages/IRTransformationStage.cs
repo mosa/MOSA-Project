@@ -664,9 +664,12 @@ namespace Mosa.Platform.x86.Stages
 		{
 			var type = context.Operand3.Type;
 			int typeSize = TypeLayout.GetTypeSize(type);
-			Debug.Assert(typeSize > 0 && typeSize % 4 == 0 && context.Operand2.IsConstant);
+			Debug.Assert(typeSize > 0 && typeSize % 4 == 0, MethodCompiler.Method.FullName);
 
-			int offset = (int)context.Operand2.ConstantSignedInteger;
+			int offset = 0;
+			if (context.Operand2.IsConstant)
+				offset = (int)context.Operand2.ConstantSignedInteger;
+			var offsetop = context.Operand2;
 			var src = context.Operand3;
 			var dest = context.Operand1;
 			Debug.Assert(src.IsMemoryAddress);
@@ -678,6 +681,9 @@ namespace Mosa.Platform.x86.Stages
 			context.SetInstruction(X86.Nop);
 			context.AppendInstruction(X86.Lea, srcReg, src);
 			context.AppendInstruction(X86.Mov, dstReg, dest);
+			if (!offsetop.IsConstant)
+				context.AppendInstruction(X86.Add, dstReg, dstReg, offsetop);
+
 			for (int i = 0; i < typeSize; i += 4)
 			{
 				context.AppendInstruction(X86.Mov, tmp, Operand.CreateMemoryAddress(TypeSystem.BuiltIn.I4, srcReg, i));

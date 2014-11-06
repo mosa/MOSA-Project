@@ -15,24 +15,6 @@ namespace Mosa.Platform.Internal.x86.xUnit
 	public class DivisionTests
 	{
 		[Theory]
-		//[InlineData((uint)0, (int)32)]	// does not matter
-		[InlineData((uint)1, (int)31)]
-		[InlineData((uint)2, (int)30)]
-		[InlineData((uint)4, (int)29)]
-		[InlineData((uint)8, (int)28)]
-		[InlineData((uint)16, (int)27)]
-		[InlineData((uint)32, (int)26)]
-		[InlineData((uint)64, (int)25)]
-		[InlineData((uint)128, (int)24)]
-		[InlineData((uint)256, (int)23)]
-		[InlineData((uint)512, (int)22)]
-		[InlineData((uint)0xFFFFFFFF, (int)0)]
-		public void nlz(uint value, int expected)
-		{
-			Assert.Equal(expected, Division.nlz(value));
-		}
-
-		[Theory]
 		[InlineData((ulong)0x1, (ulong)0x1)]
 		[InlineData((ulong)0x2, (ulong)0x1)]
 		[InlineData((ulong)0x2, (ulong)0x100)]

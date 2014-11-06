@@ -24,6 +24,7 @@ namespace Mosa.TestWorld.x86.Tests
 			testMethods.Add(ForeachNestedTest);
 			testMethods.Add(StructNewObjTest);
 			testMethods.Add(StructNotBoxed);
+			testMethods.Add(ForeachBreak);
 		}
 
 		private static uint StaticValue = 0x200000;
@@ -104,6 +105,29 @@ namespace Mosa.TestWorld.x86.Tests
 			s.ToString();
 			s.ToString();
 			return s.I == 3;
+		}
+
+		public static bool ForeachBreak()
+		{
+			LinkedList<Pair> PairList = new LinkedList<Pair>();
+			for (int i = 1; i < 10; i++)
+			{
+				Pair p = new Pair(10 * i, 20 * i);
+				PairList.Add(p);
+			}
+
+			Pair found = FindPair(PairList);
+			return (found.A == 90 && found.B == 180);
+		}
+
+		private static Pair FindPair(LinkedList<Pair> PairList)
+		{
+			foreach (Pair p in PairList)
+			{
+				if (p.A == 90 && p.B == 180)
+					return p;
+			}
+			return new Pair(0, 0);
 		}
 	}
 
