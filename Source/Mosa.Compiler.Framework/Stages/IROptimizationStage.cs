@@ -27,6 +27,7 @@ namespace Mosa.Compiler.Framework.Stages
 		private int strengthReductionDivisionCount = 0;
 		private int strengthReductionIntegerAdditionAndSubstractionCount = 0;
 		private int strengthReductionLogicalOperatorsCount = 0;
+		private int strengthReductionShiftOperators = 0;
 		private int constantFoldingIntegerOperationsCount = 0;
 		private int simpleConstantPropagationCount = 0;
 		private int simpleForwardCopyPropagationCount = 0;
@@ -96,6 +97,7 @@ namespace Mosa.Compiler.Framework.Stages
 			UpdateCounter("IROptimizations.StrengthReductionDivision", strengthReductionDivisionCount);
 			UpdateCounter("IROptimizations.StrengthReductionIntegerAdditionAndSubstraction", strengthReductionIntegerAdditionAndSubstractionCount);
 			UpdateCounter("IROptimizations.StrengthReductionLogicalOperators", strengthReductionLogicalOperatorsCount);
+			UpdateCounter("IROptimizations.StrengthReductionShiftOperators", strengthReductionShiftOperators);
 			UpdateCounter("IROptimizations.ConstantFoldingIntegerOperations", constantFoldingIntegerOperationsCount);
 			UpdateCounter("IROptimizations.SimpleConstantPropagation", simpleConstantPropagationCount);
 			UpdateCounter("IROptimizations.SimpleForwardCopyPropagation", simpleForwardCopyPropagationCount);
@@ -1032,10 +1034,22 @@ namespace Mosa.Compiler.Framework.Stages
 				if (trace.Active) trace.Log("*** StrengthReductionShiftOperators");
 				if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
 				context.SetInstruction(IRInstruction.Move, result, op1);
-				//strengthReductionLogicalOperatorsCount++;
+				strengthReductionShiftOperators++;
 				if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
 				return;
 			}
+
+			if (op1.IsConstantZero)
+			{
+				AddOperandUsageToWorkList(context);
+				if (trace.Active) trace.Log("*** StrengthReductionShiftOperators-2");
+				if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
+				context.SetInstruction(IRInstruction.Move, result, op1);
+				strengthReductionShiftOperators++;
+				if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
+				return;
+			}
+
 		}
 
 		/// <summary>
@@ -1117,7 +1131,7 @@ namespace Mosa.Compiler.Framework.Stages
 			strengthReductionIntegerCompareBranchCount++;
 
 			// Goto the beginning of the block, to get to the first index of the block
-			Context first = context.Clone();
+			var first = context.Clone();
 			first.GotoFirst();
 
 			// Find block based on first index
@@ -1213,7 +1227,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private void SimplifyIntegerCompare(Context context)
 		{
-			// Buggy
+			//FIXME: Buggy
 			if (context.IsEmpty)
 				return;
 
@@ -1240,14 +1254,13 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 			else if (context.Operand1.IsConstant && context.Operand1.IsConstantZero)
 			{
-				if (trace.Active) trace.Log("*** SimplifyIntegerCompare2");
+				if (trace.Active) trace.Log("*** SimplifyIntegerCompare-2");
 				AddOperandUsageToWorkList(context);
 				if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
 				context.SetInstruction(IRInstruction.Move, context.Result, context.Operand2);
 				simplifyIntegerCompareCount++;
 				if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
 			}
-
 		}
 
 		/// <summary>
@@ -1256,7 +1269,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="context">The context.</param>
 		private void SimplifyIntegerCompare2(Context context)
 		{
-			// Buggy
+			//FIXME: Buggy
 			if (context.IsEmpty)
 				return;
 
@@ -1275,7 +1288,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (context.ConditionCode != ConditionCode.Equal)
 				return;
 
-			Context ctx = new Context(InstructionSet, context.Result.Uses[0]);
+			var ctx = new Context(InstructionSet, context.Result.Uses[0]);
 
 			if (ctx.Instruction != IRInstruction.IntegerCompare)
 				return;
@@ -1292,7 +1305,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (ctx.Result.Definitions.Count != 1)
 				return;
 
-			if (trace.Active) trace.Log("*** SimplifyIntegerCompare");
+			if (trace.Active) trace.Log("*** SimplifyIntegerCompare-3");
 			AddOperandUsageToWorkList(ctx);
 			if (trace.Active) trace.Log("BEFORE:\t" + ctx.ToString());
 			ctx.SetInstruction(IRInstruction.Move, ctx.Result, context.Result);
@@ -1411,7 +1424,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (context.Result.Uses.Count != 1)
 				return;
 
-			Context ctx = new Context(InstructionSet, context.Result.Uses[0]);
+			var ctx = new Context(InstructionSet, context.Result.Uses[0]);
 
 			if (!(ctx.Instruction == IRInstruction.MulSigned || ctx.Instruction == IRInstruction.MulUnsigned))
 				return;
@@ -1457,7 +1470,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (context.Result.Uses.Count != 1)
 				return;
 
-			Context ctx = new Context(InstructionSet, context.Result.Uses[0]);
+			var ctx = new Context(InstructionSet, context.Result.Uses[0]);
 
 			if (!(ctx.Instruction == IRInstruction.DivSigned || ctx.Instruction == IRInstruction.DivUnsigned))
 				return;
@@ -1499,9 +1512,6 @@ namespace Mosa.Compiler.Framework.Stages
 			if (!context.Result.IsVirtualRegister)
 				return;
 
-			//if (!CanCopyPropagation(context.Result, context.Operand1))
-			//	return;
-
 			if (trace.Active) trace.Log("*** ReduceZeroExtendedMove");
 			AddOperandUsageToWorkList(context);
 			if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
@@ -1533,7 +1543,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (context.Operand1.Uses.Count != 1 || context.Operand1.Definitions.Count != 1)
 				return;
 
-			Context ctx = new Context(InstructionSet, context.Operand1.Definitions[0]);
+			var ctx = new Context(InstructionSet, context.Operand1.Definitions[0]);
 
 			if (ctx.Instruction != IRInstruction.Move)
 				return;
@@ -1581,7 +1591,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (operand.Definitions.Count != 1)
 				return;
 
-			Context ctx = new Context(InstructionSet, operand.Definitions[0]);
+			var ctx = new Context(InstructionSet, operand.Definitions[0]);
 
 			if (ctx.Instruction != IRInstruction.IntegerCompare)
 				return;
@@ -1625,7 +1635,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			Debug.Assert(operand.Definitions.Count == 1);
 
-			Context ctx = new Context(InstructionSet, operand.Definitions[0]);
+			var ctx = new Context(InstructionSet, operand.Definitions[0]);
 
 			if (ctx.Instruction != IRInstruction.IntegerCompare)
 				return;
@@ -1715,7 +1725,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			AddOperandUsageToWorkList(context);
 
-			Context ctx = new Context(InstructionSet, source.Definitions[0]);
+			var ctx = new Context(InstructionSet, source.Definitions[0]);
 
 			for (int i = 0; i < ctx.OperandCount; i++)
 			{

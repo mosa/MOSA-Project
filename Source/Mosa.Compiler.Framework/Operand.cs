@@ -279,7 +279,9 @@ namespace Mosa.Compiler.Framework
 		{
 			get
 			{
-				if (IsInteger)
+				if (!IsConstant)
+					return false;
+				else if (IsInteger)
 					return ConstantUnsignedInteger == 0;
 				else if (IsR8)
 					return ConstantDoubleFloatingPoint == 0;
@@ -302,7 +304,9 @@ namespace Mosa.Compiler.Framework
 		{
 			get
 			{
-				if (IsInteger)
+				if (!IsConstant)
+					return false;
+				else if (IsInteger)
 					return ConstantUnsignedInteger == 1;
 				else if (IsR8)
 					return ConstantDoubleFloatingPoint == 1;

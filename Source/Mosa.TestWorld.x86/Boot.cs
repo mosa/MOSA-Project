@@ -81,7 +81,7 @@ namespace Mosa.TestWorld.x86
 			Console.BackgroundColor = 1;
 			Console.WriteLine();
 			Console.WriteLine();
-			Console.WriteLine("MOSA is alive!");
+			Console.Write("!MOSA is alive!");
 
 			Console.WriteLine();
 
@@ -90,6 +90,8 @@ namespace Mosa.TestWorld.x86
 			Console.WriteLine();
 
 			DumpStackTrace();
+
+
 
 			//System.Threading.SpinLock splk = new System.Threading.SpinLock();
 
@@ -102,6 +104,8 @@ namespace Mosa.TestWorld.x86
 			//splk.Enter(ref lockTaken);
 
 			//Console.Write("Should have looped!!!");
+
+
 
 			Console.Goto(22, 0);
 
