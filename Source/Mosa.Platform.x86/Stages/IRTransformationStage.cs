@@ -205,7 +205,7 @@ namespace Mosa.Platform.x86.Stages
 
 				case ConditionCode.LessThan:
 					{
-						//	a>b and a<b
+						//	a<b
 						//	mov	eax, 0
 						//	ucomisd	xmm1, xmm0
 						//	seta	al
@@ -217,7 +217,7 @@ namespace Mosa.Platform.x86.Stages
 					}
 				case ConditionCode.GreaterThan:
 					{
-						//	a>b and a<b
+						//	a>b
 						//	mov	eax, 0
 						//	ucomisd	xmm0, xmm1
 						//	seta	al
@@ -229,26 +229,26 @@ namespace Mosa.Platform.x86.Stages
 					}
 				case ConditionCode.LessOrEqual:
 					{
-						//	a<=b and a>=b
+						//	a<=b
 						//	mov	eax, 0
 						//	ucomisd	xmm1, xmm0
 						//	setae	al
 
 						context.SetInstruction(X86.Mov, result, Operand.CreateConstantSignedInt(TypeSystem, 0));
-						context.AppendInstruction(instruction, null, left, right);
-						context.AppendInstruction(X86.Setcc, ConditionCode.NoCarry, result);
+						context.AppendInstruction(instruction, null, right, left);
+						context.AppendInstruction(X86.Setcc, ConditionCode.UnsignedGreaterOrEqual, result);
 						break;
 					}
 				case ConditionCode.GreaterOrEqual:
 					{
-						//	a<=b and a>=b
+						//	a>=b
 						//	mov	eax, 0
 						//	ucomisd	xmm0, xmm1
 						//	setae	al
 
 						context.SetInstruction(X86.Mov, result, Operand.CreateConstantSignedInt(TypeSystem, 0));
-						context.AppendInstruction(instruction, null, right, left);
-						context.AppendInstruction(X86.Setcc, ConditionCode.NoCarry, result);
+						context.AppendInstruction(instruction, null, left, right);
+						context.AppendInstruction(X86.Setcc, ConditionCode.UnsignedGreaterOrEqual, result);
 						break;
 					}
 			}
