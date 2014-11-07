@@ -71,6 +71,11 @@ namespace Mosa.Compiler.Framework
 		public int[] BranchTargets;
 
 		/// <summary>
+		/// The instruction size
+		/// </summary>
+		public InstructionSize Size;
+
+		/// <summary>
 		/// Holds the "other" object
 		/// </summary>
 		public object Other;

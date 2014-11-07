@@ -395,6 +395,18 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
+		/// Gets or sets the instruction size.
+		/// </summary>
+		/// <value>
+		/// The instruction size.
+		/// </value>
+		public InstructionSize Size
+		{
+			get { return instructionSet.Data[index].Size; }
+			set { instructionSet.Data[index].Size = value; }
+		}
+
+		/// <summary>
 		/// Gets a value indicating whether this instance is empty.
 		/// </summary>
 		/// <value>
