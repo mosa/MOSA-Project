@@ -9,6 +9,8 @@
 
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.MosaTypeSystem;
+using System.Linq;
+using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace Mosa.Utility.GUI.Common
@@ -22,13 +24,35 @@ namespace Mosa.Utility.GUI.Common
 
 			foreach (var module in typeSystem.Modules)
 			{
+				List<TreeNode> namespaces = new List<TreeNode>();
+
 				TreeNode moduleNode = new TreeNode(module.Name);
 				treeView.Nodes.Add(moduleNode);
 
-				foreach (MosaType type in module.Types.Values)
+				List<MosaType> typeList = (new List<MosaType>(module.Types.Values)).OrderBy(o=>o.FullName).ToList();
+
+				foreach (MosaType type in typeList)
 				{
+					TreeNode namespaceNode = null;
+					string @namespace = (string.IsNullOrWhiteSpace(type.Namespace)) ? "[No Namespace]" : type.Namespace;
+					foreach (TreeNode node in namespaces)
+					{
+						if (node.Text.Equals(@namespace))
+						{
+							namespaceNode = node;
+							break;
+						}
+					}
+
+					if (namespaceNode == null)
+					{
+						namespaceNode = new TreeNode(@namespace);
+						moduleNode.Nodes.Add(namespaceNode);
+						namespaces.Add(namespaceNode);
+					}
+
 					TreeNode typeNode = new TreeNode(type.FullName);
-					moduleNode.Nodes.Add(typeNode);
+					namespaceNode.Nodes.Add(typeNode);
 
 					if (type.BaseType != null)
 					{

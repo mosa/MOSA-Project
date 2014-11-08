@@ -287,14 +287,14 @@ namespace Mosa.Compiler.MosaTypeSystem
 			{
 				SignatureName.UpdateType(type);
 				StringBuilder fName = new StringBuilder();
-				if (!string.IsNullOrEmpty(type.Namespace))
-				{
-					fName.Append(type.Namespace);
-					fName.Append(".");
-				}
-				else if (type.DeclaringType != null)
+				if (type.DeclaringType != null && type.DeclaringType != type.ElementType)
 				{
 					fName.Append(type.DeclaringType.FullName);
+					fName.Append("+");
+				}
+				else if (!string.IsNullOrEmpty(type.Namespace))
+				{
+					fName.Append(type.Namespace);
 					fName.Append(".");
 				}
 				fName.Append(type.Name);
