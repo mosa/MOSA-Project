@@ -174,7 +174,10 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 					mosaType.BaseType = metadata.Loader.GetType(resolver.Resolve(type.BaseType.GetTypeSig()));
 
 				if (type.DeclaringType != null)
+				{
 					mosaType.DeclaringType = metadata.Loader.GetType(resolver.Resolve(type.DeclaringType.GetTypeSig()));
+					mosaType.Namespace = type.DeclaringType.Namespace;
+				}
 
 				for (int i = 0; i < type.Interfaces.Count; i++)
 					mosaType.Interfaces[i] = metadata.Loader.GetType(resolver.Resolve(type.Interfaces[i].GetTypeSig()));
