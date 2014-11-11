@@ -62,7 +62,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 						var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.Pointer);
 
-						ctx.SetInstruction(IRInstruction.Gen, exceptionRegister);
+						ctx.SetInstruction(IRInstruction.KillAll);
+						ctx.AppendInstruction(IRInstruction.Gen, exceptionRegister);
 						ctx.AppendInstruction(IRInstruction.Move, exceptionRegisters[headerBlock], exceptionRegister);
 					}
 					else if (ctx.Instruction == IRInstruction.FinallyEnd)
@@ -88,7 +89,8 @@ namespace Mosa.Compiler.Framework.Stages
 					}
 					else if (ctx.Instruction == IRInstruction.ExceptionStart)
 					{
-						ctx.SetInstruction(IRInstruction.Gen, exceptionRegister);
+						ctx.SetInstruction(IRInstruction.KillAll);
+						ctx.AppendInstruction(IRInstruction.Gen, exceptionRegister);
 						ctx.AppendInstruction(IRInstruction.Move, ctx.Result, exceptionRegister);
 					}
 					else if (ctx.Instruction == IRInstruction.ExceptionEnd)

@@ -124,7 +124,12 @@ namespace Mosa.Compiler.Framework
 		/// </returns>
 		public virtual string ToString(Context context)
 		{
-			StringBuilder s = new StringBuilder(ToString());
+			var s = new StringBuilder(ToString());
+
+			var size = GetSizeString(context.Size);
+
+			if (size != string.Empty)
+				s.Append("/" + size);
 
 			if (context.ConditionCode != ConditionCode.Undefined)
 			{
@@ -135,16 +140,16 @@ namespace Mosa.Compiler.Framework
 
 			if (context.MosaType != null)
 			{
-				s.Append(" [");
+				s.Append(" [[");
 				s.Append(context.MosaType.FullName);
-				s.Append("]");
+				s.Append("]]");
 			}
 
 			if (context.MosaField != null)
 			{
-				s.Append(" [");
+				s.Append(" [[");
 				s.Append(context.MosaField.FullName);
-				s.Append("]");
+				s.Append("]]");
 			}
 
 			string mod = GetModifier(context);
@@ -269,6 +274,19 @@ namespace Mosa.Compiler.Framework
 				case ConditionCode.Always: return @"always";
 
 				default: throw new NotSupportedException();
+			}
+		}
+
+		public static string GetSizeString(InstructionSize size)
+		{
+			switch (size)
+			{
+				case InstructionSize.Size32: return "32";
+				case InstructionSize.Size8: return "8";
+				case InstructionSize.Size16: return "16";
+				case InstructionSize.Size64: return "64";
+				case InstructionSize.Native: return "Native";
+				default: return string.Empty;
 			}
 		}
 

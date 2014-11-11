@@ -33,23 +33,21 @@ namespace Mosa.Test.Numbers
 			list.Add(0);
 			list.Add(1);
 			list.Add(2);
-			list.Add(double.MinValue);
-			list.Add(double.MaxValue);
+			//list.Add(double.MinValue);
+			//list.Add(double.MaxValue);
 			list.Add(double.NaN);
 			list.Add(double.PositiveInfinity);
 			list.Add(double.NegativeInfinity);
-			list.Add(1.00012);
-			list.Add(17.0002501);
+			list.Add(17);
 			list.Add(23);
-			list.Add(12321452132.561);
+			list.Add(12321452132);
 
 			// negatives
 			list.Add(-1);
 			list.Add(-2);
-			list.Add(-1.00012);
-			list.Add(-17.0002501);
+			list.Add(-17);
 			list.Add(-23);
-			list.Add(-12321452132.561);
+			list.Add(-12321452132);
 
 			list.Sort();
 

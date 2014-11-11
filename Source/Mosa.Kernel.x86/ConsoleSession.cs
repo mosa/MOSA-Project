@@ -114,7 +114,9 @@ namespace Mosa.Kernel.x86
 			textcolor[address] = (byte)color;
 
 			if (consoleManager != null)
+			{
 				consoleManager.RawWrite(this, Row, Column, chr, (byte)color);
+			}
 
 			Next();
 		}

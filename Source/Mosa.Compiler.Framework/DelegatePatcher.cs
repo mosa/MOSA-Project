@@ -45,6 +45,8 @@ namespace Mosa.Compiler.Framework
 			Operand instanceOperand = methodCompiler.Parameters[1];
 			Operand methodPointerOperand = methodCompiler.Parameters[2];
 
+			var size = methodCompiler.Architecture.NativePointerSize == 4 ? InstructionSize.Size32 : InstructionSize.Size64;
+
 			MosaField methodPointerField = GetField(methodCompiler.Method.DeclaringType, "methodPointer");
 			int methodPointerOffset = methodCompiler.TypeLayout.GetFieldOffset(methodPointerField);
 			Operand methodPointerOffsetOperand = Operand.CreateConstantSignedInt(methodCompiler.TypeSystem, methodPointerOffset);
@@ -58,8 +60,10 @@ namespace Mosa.Compiler.Framework
 			Operand v1 = methodCompiler.CreateVirtualRegister(thisOperand.Type);
 
 			context.AppendInstruction(IRInstruction.Move, v1, thisOperand);
-			context.AppendInstruction(IRInstruction.Store, null, v1, methodPointerOffsetOperand, methodPointerOperand);
-			context.AppendInstruction(IRInstruction.Store, null, v1, instanceOffsetOperand, instanceOperand);
+			context.AppendInstruction(IRInstruction.Store, size, null, v1, methodPointerOffsetOperand, methodPointerOperand);
+			context.MosaType = methodPointerOperand.Type;
+			context.AppendInstruction(IRInstruction.Store, size, null, v1, instanceOffsetOperand, instanceOperand);
+			context.MosaType = instanceOperand.Type; 
 			context.AppendInstruction(IRInstruction.Return, methodCompiler.BasicBlocks.EpilogueBlock);
 			context.SetBranch(BasicBlock.EpilogueLabel);
 		}
@@ -75,6 +79,8 @@ namespace Mosa.Compiler.Framework
 			MosaField instanceField = GetField(methodCompiler.Method.DeclaringType, "instance");
 			int instanceOffset = methodCompiler.TypeLayout.GetFieldOffset(instanceField);
 			Operand instanceOffsetOperand = Operand.CreateConstantSignedInt(methodCompiler.TypeSystem, instanceOffset);
+
+			var size = methodCompiler.Architecture.NativePointerSize == 4 ? InstructionSize.Size32 : InstructionSize.Size64;
 
 			Context b0 = CreateMethodStructure(methodCompiler, false);
 			Context b1 = CreateNewBlock(methodCompiler);
@@ -106,8 +112,8 @@ namespace Mosa.Compiler.Framework
 			Operand opReturn = withReturn ? methodCompiler.VirtualRegisters.Allocate(methodCompiler.TypeSystem.BuiltIn.Object) : null;
 			Operand c0 = Operand.CreateConstantSignedInt(methodCompiler.TypeSystem, 0);
 
-			b0.AppendInstruction(IRInstruction.Load, opMethod, thisOperand, methodPointerOffsetOperand);
-			b0.AppendInstruction(IRInstruction.Load, opInstance, thisOperand, instanceOffsetOperand);
+			b0.AppendInstruction(IRInstruction.Load, size, opMethod, thisOperand, methodPointerOffsetOperand);
+			b0.AppendInstruction(IRInstruction.Load, size, opInstance, thisOperand, instanceOffsetOperand);
 			b0.AppendInstruction(IRInstruction.IntegerCompare, ConditionCode.Equal, opCompare, opInstance, c0);
 			b0.AppendInstruction(IRInstruction.IntegerCompareBranch, ConditionCode.Equal, null, opCompare, c0);
 			b0.SetBranch(b2.BasicBlock);

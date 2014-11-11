@@ -26,6 +26,8 @@ namespace Mosa.Compiler.Framework.Stages
 		protected int conditionalConstantPropagation = 0;
 		protected int instructionsRemovedCount = 0;
 
+		protected bool changed = false;
+
 		protected override void Setup()
 		{
 			trace = CreateTrace();
@@ -33,6 +35,10 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected override void Run()
 		{
+			// FIXME - VERY TEMPORARY HACK!
+			//if (MethodCompiler.Method.FullName.Contains("ConsoleSession::.ctor(System.Byte"))
+			//	return;
+
 			var analysis = new ConditionalConstantPropagation(BasicBlocks, InstructionSet, trace);
 
 			var deadBlocks = analysis.GetDeadBlocked();
@@ -44,6 +50,11 @@ namespace Mosa.Compiler.Framework.Stages
 			UpdateCounter("ConditionalConstantPropagation.ConstantVariableCount", constants.Count);
 			UpdateCounter("ConditionalConstantPropagation.ConstantVariableUse", conditionalConstantPropagation);
 			UpdateCounter("ConditionalConstantPropagation.IRInstructionRemoved", instructionsRemovedCount);
+
+			//if (changed)
+			//{
+			//	this.MethodCompiler.InternalTrace.CompilerEventListener.SubmitTraceEvent(CompilerEvent.Special, "SCCP: " + MethodCompiler.Method.ToString());
+			//}
 		}
 
 		protected void ReplaceVirtualRegistersWithConstants(List<Tuple<Operand, ulong>> constantVirtualRegisters)
@@ -82,6 +93,8 @@ namespace Mosa.Compiler.Framework.Stages
 					context.SetOperand(i, constant);
 					conditionalConstantPropagation++;
 					if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
+
+					changed = true;
 				}
 			}
 		}

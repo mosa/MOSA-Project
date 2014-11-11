@@ -395,6 +395,18 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
+		/// Gets or sets the instruction size.
+		/// </summary>
+		/// <value>
+		/// The instruction size.
+		/// </value>
+		public InstructionSize Size
+		{
+			get { return instructionSet.Data[index].Size; }
+			set { instructionSet.Data[index].Size = value; }
+		}
+
+		/// <summary>
 		/// Gets a value indicating whether this instance is empty.
 		/// </summary>
 		/// <value>
@@ -635,6 +647,7 @@ namespace Mosa.Compiler.Framework
 			Operand2 = null;
 			Operand3 = null;
 			Result = null;
+			Size = InstructionSize.None;
 			if (OperandCount >= 3)
 				for (int i = 3; i < OperandCount; i++)
 					SetOperand(i, null);
@@ -724,6 +737,7 @@ namespace Mosa.Compiler.Framework
 			Operand3 = null;
 			Result = null;
 			Result2 = null;
+			Size = InstructionSize.None;
 		}
 
 		/// <summary>
@@ -832,6 +846,19 @@ namespace Mosa.Compiler.Framework
 			SetInstruction(instruction, 1, (byte)((result == null) ? 0 : 1));
 			Result = result;
 			Operand1 = operand1;
+		}
+
+		/// <summary>
+		/// Sets the instruction.
+		/// </summary>
+		/// <param name="instruction">The instruction.</param>
+		/// <param name="size">The size.</param>
+		/// <param name="result">The result.</param>
+		/// <param name="operand1">The operand1.</param>
+		public void SetInstruction(BaseInstruction instruction, InstructionSize size, Operand result, Operand operand1)
+		{
+			SetInstruction(instruction, result, operand1);
+			Size = size;
 		}
 
 		/// <summary>
@@ -1016,6 +1043,35 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
+		/// Sets the instruction.
+		/// </summary>
+		/// <param name="instruction">The instruction.</param>
+		/// <param name="size">The size.</param>
+		/// <param name="result">The result.</param>
+		/// <param name="operand1">The operand1.</param>
+		/// <param name="operand2">The operand2.</param>
+		public void SetInstruction(BaseInstruction instruction, InstructionSize size, Operand result, Operand operand1, Operand operand2)
+		{
+			SetInstruction(instruction, result, operand1, operand2);
+			Size = size;
+		}
+
+		/// <summary>
+		/// Sets the instruction.
+		/// </summary>
+		/// <param name="instruction">The instruction.</param>
+		/// <param name="size">The size.</param>
+		/// <param name="result">The result.</param>
+		/// <param name="operand1">The operand1.</param>
+		/// <param name="operand2">The operand2.</param>
+		/// <param name="operand3">The operand3.</param>
+		public void SetInstruction(BaseInstruction instruction, InstructionSize size, Operand result, Operand operand1, Operand operand2, Operand operand3)
+		{
+			SetInstruction(instruction, result, operand1, operand2, operand3);
+			Size = size;
+		}
+
+		/// <summary>
 		/// Appends an (empty) instruction after the current index.
 		/// </summary>
 		private void AppendInstruction()
@@ -1143,6 +1199,19 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
+		/// Appends the instruction after the current index.
+		/// </summary>
+		/// <param name="instruction">The instruction.</param>
+		/// <param name="size">The size.</param>
+		/// <param name="result">The result.</param>
+		/// <param name="operand1">The operand1.</param>
+		public void AppendInstruction(BaseInstruction instruction, InstructionSize size, Operand result, Operand operand1)
+		{
+			AppendInstruction(instruction, result, operand1);
+			Size = size;
+		}
+
+		/// <summary>
 		/// Appends an instruction after the current index.
 		/// </summary>
 		/// <param name="instruction">The instruction to append.</param>
@@ -1225,6 +1294,20 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
+		/// Appends the instruction.
+		/// </summary>
+		/// <param name="instruction">The instruction.</param>
+		/// <param name="size">The size.</param>
+		/// <param name="result">The result.</param>
+		/// <param name="operand1">The operand1.</param>
+		/// <param name="operand2">The operand2.</param>
+		public void AppendInstruction(BaseInstruction instruction, InstructionSize size, Operand result, Operand operand1, Operand operand2)
+		{
+			AppendInstruction();
+			SetInstruction(instruction, size, result, operand1, operand2);
+		}
+
+		/// <summary>
 		/// Appends an instruction after the current index.
 		/// </summary>
 		/// <param name="instruction">The instruction to append.</param>
@@ -1236,6 +1319,21 @@ namespace Mosa.Compiler.Framework
 		{
 			AppendInstruction();
 			SetInstruction(instruction, result, operand1, operand2, operand3);
+		}
+
+		/// <summary>
+		/// Appends the instruction.
+		/// </summary>
+		/// <param name="instruction">The instruction.</param>
+		/// <param name="size">The size.</param>
+		/// <param name="result">The result.</param>
+		/// <param name="operand1">The operand1.</param>
+		/// <param name="operand2">The operand2.</param>
+		/// <param name="operand3">The operand3.</param>
+		public void AppendInstruction(BaseInstruction instruction, InstructionSize size, Operand result, Operand operand1, Operand operand2, Operand operand3)
+		{
+			AppendInstruction();
+			SetInstruction(instruction, size, result, operand1, operand2, operand3);
 		}
 
 		/// <summary>

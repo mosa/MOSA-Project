@@ -313,7 +313,8 @@ namespace Mosa.Platform.x86.Stages
 			Operand result = context.Result;
 			Operand baseOperand = context.Operand1;
 			Operand offsetOperand = context.Operand2;
-			var type = context.MosaType;
+			//var type = context.MosaType;
+			var size = context.Size;
 
 			if (offsetOperand.IsConstant)
 			{
@@ -321,12 +322,12 @@ namespace Mosa.Platform.x86.Stages
 
 				var mov = GetMove(result, mem);
 
-				if (result.IsR8 && type.IsR4)
+				if (result.IsR8 && size == InstructionSize.Size32)
 				{
 					mov = X86.Cvtss2sd;
 				}
 
-				context.SetInstruction(mov, result, mem);
+				context.SetInstruction(mov, size, result, mem);
 			}
 			else
 			{
@@ -338,12 +339,12 @@ namespace Mosa.Platform.x86.Stages
 
 				var mov = GetMove(result, mem);
 
-				if (result.IsR8 && type.IsR4)
+				if (result.IsR8 && size == InstructionSize.Size32)
 				{
 					mov = X86.Cvtss2sd;
 				}
 
-				context.AppendInstruction(mov, result, mem);
+				context.AppendInstruction(mov, size, result, mem);
 			}
 		}
 
@@ -619,44 +620,46 @@ namespace Mosa.Platform.x86.Stages
 			Operand baseOperand = context.Operand1;
 			Operand offsetOperand = context.Operand2;
 			Operand value = context.Operand3;
-			MosaType storeType = context.MosaType;
 
-			if (value.IsR8 && (storeType ?? value.Type).IsR4)
+			var size = context.Size;
+
+			if (value.IsR8 && size == InstructionSize.Size32)
 			{
 				Operand xmm1 = AllocateVirtualRegister(TypeSystem.BuiltIn.R4);
-				context.InsertBefore().AppendInstruction(X86.Cvtsd2ss, xmm1, value);
+				context.InsertBefore().AppendInstruction(X86.Cvtsd2ss, size, xmm1, value);
 				value = xmm1;
 			}
 			else if (value.IsMemoryAddress)
 			{
 				Operand v2 = AllocateVirtualRegister(value.Type);
-				context.InsertBefore().AppendInstruction(X86.Mov, v2, value);
+				context.InsertBefore().AppendInstruction(X86.Mov, size, v2, value);
 				value = v2;
 			}
 
+			MosaType storeType = context.MosaType;
 			MosaType type = baseOperand.Type;
-			if (storeType != null)
-			{
-				if (baseOperand.Type.IsUnmanagedPointer)
-					type = storeType.ToUnmanagedPointer();
-				else if (baseOperand.Type.IsManagedPointer)
-					type = storeType.ToManagedPointer();
-			}
+
+
+			if (baseOperand.Type.IsUnmanagedPointer)
+				type = storeType.ToUnmanagedPointer();
+			else if (baseOperand.Type.IsManagedPointer)
+				type = storeType.ToManagedPointer();
+
 
 			if (offsetOperand.IsConstant)
 			{
-				Operand mem = Operand.CreateMemoryAddress(type, baseOperand, offsetOperand.ConstantSignedInteger);
+				Operand mem = Operand.CreateMemoryAddress(storeType, baseOperand, offsetOperand.ConstantSignedInteger);
 
-				context.SetInstruction(GetMove(mem, value), mem, value);
+				context.SetInstruction(GetMove(mem, value), size, mem, value);
 			}
 			else
 			{
 				Operand v1 = AllocateVirtualRegister(type);
-				Operand mem = Operand.CreateMemoryAddress(type, v1, 0);
+				Operand mem = Operand.CreateMemoryAddress(storeType, v1, 0);
 
 				context.SetInstruction(X86.Mov, v1, baseOperand);
 				context.AppendInstruction(X86.Add, v1, v1, offsetOperand);
-				context.AppendInstruction(GetMove(mem, value), mem, value);
+				context.AppendInstruction(GetMove(mem, value), size, mem, value);
 			}
 		}
 
@@ -668,7 +671,10 @@ namespace Mosa.Platform.x86.Stages
 
 			int offset = 0;
 			if (context.Operand2.IsConstant)
+			{
 				offset = (int)context.Operand2.ConstantSignedInteger;
+			}
+
 			var offsetop = context.Operand2;
 			var src = context.Operand3;
 			var dest = context.Operand1;
@@ -681,8 +687,11 @@ namespace Mosa.Platform.x86.Stages
 			context.SetInstruction(X86.Nop);
 			context.AppendInstruction(X86.Lea, srcReg, src);
 			context.AppendInstruction(X86.Mov, dstReg, dest);
+
 			if (!offsetop.IsConstant)
+			{
 				context.AppendInstruction(X86.Add, dstReg, dstReg, offsetop);
+			}
 
 			for (int i = 0; i < typeSize; i += 4)
 			{

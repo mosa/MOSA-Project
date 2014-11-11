@@ -24,6 +24,7 @@ namespace Mosa.Compiler.InternalTrace
 		Exception,
 		Warning,
 		Counter,
+		Special,
 	};
 
 	public static class CompilerEventExtension

@@ -188,7 +188,6 @@ namespace Mosa.Compiler.Framework
 			this.DominanceAnalysis = new Dominance(Compiler.CompilerOptions.DominanceAnalysisFactory, this.BasicBlocks);
 
 			EvaluateParameterOperands();
-			//CreateExceptionReturnOperands();
 
 			this.stop = false;
 

@@ -73,7 +73,7 @@ namespace Mosa.Compiler.Framework.Analysis
 
 				if (IsConstant)
 				{
-					s = s + " = " + ConstantUnsignedInteger.ToString() + " : " + ((long)ConstantUnsignedInteger).ToString();
+					s = s + " = " + ConstantUnsignedInteger.ToString();
 				}
 
 				return s;
@@ -312,9 +312,7 @@ namespace Mosa.Compiler.Framework.Analysis
 
 			var instruction = context.Instruction;
 
-			if (instruction == IRInstruction.Move ||
-				instruction == IRInstruction.ZeroExtendedMove ||
-				instruction == IRInstruction.SignExtendedMove)
+			if (instruction == IRInstruction.Move)
 			{
 				Move(context);
 			}
@@ -323,7 +321,9 @@ namespace Mosa.Compiler.Framework.Analysis
 			{
 				Call(context);
 			}
-			else if (instruction == IRInstruction.Load)
+			else if (instruction == IRInstruction.Load ||
+				context.Instruction == IRInstruction.LoadSignExtended ||
+				context.Instruction == IRInstruction.LoadZeroExtended)
 			{
 				Load(context);
 			}
@@ -337,8 +337,10 @@ namespace Mosa.Compiler.Framework.Analysis
 				instruction == IRInstruction.DivUnsigned ||
 				instruction == IRInstruction.RemSigned ||
 				instruction == IRInstruction.RemUnsigned ||
-				instruction == IRInstruction.IntegerCompare
-				)
+				instruction == IRInstruction.IntegerCompare ||
+				instruction == IRInstruction.ShiftLeft ||
+				instruction == IRInstruction.ShiftRight ||
+				instruction == IRInstruction.ArithmeticShiftRight)
 			{
 				IntegerOperation(context);
 			}
@@ -357,6 +359,11 @@ namespace Mosa.Compiler.Framework.Analysis
 			else if (context.Instruction == IRInstruction.AddressOf)
 			{
 				AddressOf(context);
+			}
+			else if (instruction == IRInstruction.ZeroExtendedMove ||
+				instruction == IRInstruction.SignExtendedMove)
+			{
+				Move(context);
 			}
 			else
 			{
@@ -498,6 +505,18 @@ namespace Mosa.Compiler.Framework.Analysis
 				{
 					UpdateToConstant(result, operand1.ConstantSignedInteger % operand2.ConstantSignedInteger);
 				}
+				else if (instruction == IRInstruction.ArithmeticShiftRight)
+				{
+					UpdateToConstant(result, ((long)operand1.ConstantUnsignedInteger) >> (int)operand2.ConstantUnsignedInteger);
+				}
+				else if (instruction == IRInstruction.ShiftRight)
+				{
+					UpdateToConstant(result, operand1.ConstantUnsignedInteger >> (int)operand2.ConstantUnsignedInteger);
+				}
+				else if (instruction == IRInstruction.ShiftLeft)
+				{
+					UpdateToConstant(result, operand1.ConstantUnsignedInteger << (int)operand2.ConstantUnsignedInteger);
+				}
 				else if (instruction == IRInstruction.IntegerCompare)
 				{
 					bool? compare = Compare(operand1, operand2, context.ConditionCode);
@@ -546,17 +565,19 @@ namespace Mosa.Compiler.Framework.Analysis
 			if (result.IsOverDefined)
 				return;
 
-			// if any operands are overdefined, then results are overdefined
-			foreach (var op in context.Operands)
-			{
-				var operand = GetVariableState(op);
+			UpdateToOverDefined(result);
 
-				if (operand.IsOverDefined)
-				{
-					UpdateToOverDefined(result);
-					return;
-				}
-			}
+			//// if any operands are overdefined, then results are overdefined
+			//foreach (var op in context.Operands)
+			//{
+			//	var operand = GetVariableState(op);
+
+			//	if (operand.IsOverDefined)
+			//	{
+			//		UpdateToOverDefined(result);
+			//		return;
+			//	}
+			//}
 		}
 
 		private bool IntegerCompareBranch(Context context)
@@ -587,7 +608,8 @@ namespace Mosa.Compiler.Framework.Analysis
 				return !compare.Value;
 			}
 
-			return false;
+			Branch(context);
+			return true;
 		}
 
 		private static bool? Compare(VariableState operand1, VariableState operand2, ConditionCode conditionCode)
@@ -658,7 +680,6 @@ namespace Mosa.Compiler.Framework.Analysis
 
 			for (var index = 0; index < currentBlock.PreviousBlocks.Count; index++)
 			{
-
 				var op = context.GetOperand(index);
 
 				var predecessor = sourceBlocks[index];

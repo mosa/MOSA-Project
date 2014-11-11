@@ -33,6 +33,12 @@
 			this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
 			this.tabControl1 = new System.Windows.Forms.TabControl();
 			this.tbOptions = new System.Windows.Forms.TabPage();
+			this.groupBox5 = new System.Windows.Forms.GroupBox();
+			this.checkBox1 = new System.Windows.Forms.CheckBox();
+			this.cbMOSADebugger = new System.Windows.Forms.CheckBox();
+			this.groupBox2 = new System.Windows.Forms.GroupBox();
+			this.cbGenerateASMFile = new System.Windows.Forms.CheckBox();
+			this.cbGenerateMapFile = new System.Windows.Forms.CheckBox();
 			this.groupBox6 = new System.Windows.Forms.GroupBox();
 			this.label6 = new System.Windows.Forms.Label();
 			this.nmMemory = new System.Windows.Forms.NumericUpDown();
@@ -74,6 +80,8 @@
 			this.button5 = new System.Windows.Forms.Button();
 			this.lbNDISASMExecutable = new System.Windows.Forms.Label();
 			this.groupBox7 = new System.Windows.Forms.GroupBox();
+			this.lbQEMUImgApplication = new System.Windows.Forms.Label();
+			this.button8 = new System.Windows.Forms.Button();
 			this.lbQEMUBIOSDirectory = new System.Windows.Forms.Label();
 			this.button3 = new System.Windows.Forms.Button();
 			this.button2 = new System.Windows.Forms.Button();
@@ -83,16 +91,11 @@
 			this.tabPage3 = new System.Windows.Forms.TabPage();
 			this.rtbCounters = new System.Windows.Forms.RichTextBox();
 			this.openFileDialog2 = new System.Windows.Forms.OpenFileDialog();
-			this.lbQEMUImgApplication = new System.Windows.Forms.Label();
-			this.button8 = new System.Windows.Forms.Button();
-			this.groupBox2 = new System.Windows.Forms.GroupBox();
-			this.cbGenerateASMFile = new System.Windows.Forms.CheckBox();
-			this.cbGenerateMapFile = new System.Windows.Forms.CheckBox();
-			this.groupBox5 = new System.Windows.Forms.GroupBox();
-			this.checkBox1 = new System.Windows.Forms.CheckBox();
-			this.cbMOSADebugger = new System.Windows.Forms.CheckBox();
+			this.cbEnableConditionalConstantPropagation = new System.Windows.Forms.CheckBox();
 			this.tabControl1.SuspendLayout();
 			this.tbOptions.SuspendLayout();
+			this.groupBox5.SuspendLayout();
+			this.groupBox2.SuspendLayout();
 			this.groupBox6.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.nmMemory)).BeginInit();
 			this.groupBox4.SuspendLayout();
@@ -106,8 +109,6 @@
 			this.groupBox7.SuspendLayout();
 			this.tpOutput.SuspendLayout();
 			this.tabPage3.SuspendLayout();
-			this.groupBox2.SuspendLayout();
-			this.groupBox5.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// openFileDialog1
@@ -145,7 +146,7 @@
 			this.tabControl1.Size = new System.Drawing.Size(637, 369);
 			this.tabControl1.TabIndex = 22;
 			// 
-			// tabPage1
+			// tbOptions
 			// 
 			this.tbOptions.BackColor = System.Drawing.SystemColors.Control;
 			this.tbOptions.Controls.Add(this.groupBox5);
@@ -161,6 +162,76 @@
 			this.tbOptions.Size = new System.Drawing.Size(629, 343);
 			this.tbOptions.TabIndex = 0;
 			this.tbOptions.Text = "MOSA Options";
+			// 
+			// groupBox5
+			// 
+			this.groupBox5.Controls.Add(this.checkBox1);
+			this.groupBox5.Controls.Add(this.cbMOSADebugger);
+			this.groupBox5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.groupBox5.Location = new System.Drawing.Point(243, 266);
+			this.groupBox5.Name = "groupBox5";
+			this.groupBox5.Size = new System.Drawing.Size(179, 65);
+			this.groupBox5.TabIndex = 31;
+			this.groupBox5.TabStop = false;
+			this.groupBox5.Text = "Debugger:";
+			// 
+			// checkBox1
+			// 
+			this.checkBox1.AutoSize = true;
+			this.checkBox1.Enabled = false;
+			this.checkBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.checkBox1.Location = new System.Drawing.Point(6, 41);
+			this.checkBox1.Name = "checkBox1";
+			this.checkBox1.Size = new System.Drawing.Size(107, 17);
+			this.checkBox1.TabIndex = 14;
+			this.checkBox1.Text = "MOSA Debugger";
+			this.checkBox1.UseVisualStyleBackColor = true;
+			// 
+			// cbMOSADebugger
+			// 
+			this.cbMOSADebugger.AutoSize = true;
+			this.cbMOSADebugger.Enabled = false;
+			this.cbMOSADebugger.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.cbMOSADebugger.Location = new System.Drawing.Point(6, 19);
+			this.cbMOSADebugger.Name = "cbMOSADebugger";
+			this.cbMOSADebugger.Size = new System.Drawing.Size(123, 17);
+			this.cbMOSADebugger.TabIndex = 13;
+			this.cbMOSADebugger.Text = "MOSA TinySimulator";
+			this.cbMOSADebugger.UseVisualStyleBackColor = true;
+			// 
+			// groupBox2
+			// 
+			this.groupBox2.Controls.Add(this.cbGenerateASMFile);
+			this.groupBox2.Controls.Add(this.cbGenerateMapFile);
+			this.groupBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.groupBox2.Location = new System.Drawing.Point(243, 196);
+			this.groupBox2.Name = "groupBox2";
+			this.groupBox2.Size = new System.Drawing.Size(179, 63);
+			this.groupBox2.TabIndex = 29;
+			this.groupBox2.TabStop = false;
+			this.groupBox2.Text = "Diagnostic Output:";
+			// 
+			// cbGenerateASMFile
+			// 
+			this.cbGenerateASMFile.AutoSize = true;
+			this.cbGenerateASMFile.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.cbGenerateASMFile.Location = new System.Drawing.Point(6, 42);
+			this.cbGenerateASMFile.Name = "cbGenerateASMFile";
+			this.cbGenerateASMFile.Size = new System.Drawing.Size(115, 17);
+			this.cbGenerateASMFile.TabIndex = 14;
+			this.cbGenerateASMFile.Text = "Generate ASM File";
+			this.cbGenerateASMFile.UseVisualStyleBackColor = true;
+			// 
+			// cbGenerateMapFile
+			// 
+			this.cbGenerateMapFile.AutoSize = true;
+			this.cbGenerateMapFile.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.cbGenerateMapFile.Location = new System.Drawing.Point(6, 19);
+			this.cbGenerateMapFile.Name = "cbGenerateMapFile";
+			this.cbGenerateMapFile.Size = new System.Drawing.Size(115, 17);
+			this.cbGenerateMapFile.TabIndex = 13;
+			this.cbGenerateMapFile.Text = "Generate MAP File";
+			this.cbGenerateMapFile.UseVisualStyleBackColor = true;
 			// 
 			// groupBox6
 			// 
@@ -460,6 +531,7 @@
 			// 
 			// groupBox1
 			// 
+			this.groupBox1.Controls.Add(this.cbEnableConditionalConstantPropagation);
 			this.groupBox1.Controls.Add(this.cbEnableOptimizations);
 			this.groupBox1.Controls.Add(this.cbEnableSSA);
 			this.groupBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -470,14 +542,14 @@
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Optimizations:";
 			// 
-			// cbEnableSSAOptimizations
+			// cbEnableOptimizations
 			// 
 			this.cbEnableOptimizations.AutoSize = true;
 			this.cbEnableOptimizations.Checked = true;
 			this.cbEnableOptimizations.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.cbEnableOptimizations.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.cbEnableOptimizations.Location = new System.Drawing.Point(6, 42);
-			this.cbEnableOptimizations.Name = "cbEnableSSAOptimizations";
+			this.cbEnableOptimizations.Name = "cbEnableOptimizations";
 			this.cbEnableOptimizations.Size = new System.Drawing.Size(148, 17);
 			this.cbEnableOptimizations.TabIndex = 7;
 			this.cbEnableOptimizations.Text = "Enable SSA Optimizations";
@@ -660,6 +732,26 @@
 			this.groupBox7.TabStop = false;
 			this.groupBox7.Text = "QEMU:";
 			// 
+			// lbQEMUImgApplication
+			// 
+			this.lbQEMUImgApplication.AutoSize = true;
+			this.lbQEMUImgApplication.Location = new System.Drawing.Point(118, 75);
+			this.lbQEMUImgApplication.Name = "lbQEMUImgApplication";
+			this.lbQEMUImgApplication.Size = new System.Drawing.Size(171, 13);
+			this.lbQEMUImgApplication.TabIndex = 24;
+			this.lbQEMUImgApplication.Text = "{QEMU qemu-img.exe Executable}";
+			// 
+			// button8
+			// 
+			this.button8.Enabled = false;
+			this.button8.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.button8.Location = new System.Drawing.Point(6, 70);
+			this.button8.Name = "button8";
+			this.button8.Size = new System.Drawing.Size(106, 23);
+			this.button8.TabIndex = 23;
+			this.button8.Text = "qemu-img:";
+			this.button8.UseVisualStyleBackColor = true;
+			// 
 			// lbQEMUBIOSDirectory
 			// 
 			this.lbQEMUBIOSDirectory.AutoSize = true;
@@ -700,18 +792,18 @@
 			this.lbQEMUExecutable.TabIndex = 19;
 			this.lbQEMUExecutable.Text = "{QEMU Executable}";
 			// 
-			// tabPage2
+			// tpOutput
 			// 
 			this.tpOutput.Controls.Add(this.rtbOutput);
 			this.tpOutput.Location = new System.Drawing.Point(4, 22);
 			this.tpOutput.Name = "tpOutput";
 			this.tpOutput.Padding = new System.Windows.Forms.Padding(3);
-			this.tpOutput.Size = new System.Drawing.Size(629, 337);
+			this.tpOutput.Size = new System.Drawing.Size(629, 343);
 			this.tpOutput.TabIndex = 1;
 			this.tpOutput.Text = "Output";
 			this.tpOutput.UseVisualStyleBackColor = true;
 			// 
-			// richTextBox1
+			// rtbOutput
 			// 
 			this.rtbOutput.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
@@ -731,12 +823,12 @@
 			this.tabPage3.Location = new System.Drawing.Point(4, 22);
 			this.tabPage3.Name = "tabPage3";
 			this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPage3.Size = new System.Drawing.Size(629, 337);
+			this.tabPage3.Size = new System.Drawing.Size(629, 343);
 			this.tabPage3.TabIndex = 2;
 			this.tabPage3.Text = "Counters";
 			this.tabPage3.UseVisualStyleBackColor = true;
 			// 
-			// richTextBox2
+			// rtbCounters
 			// 
 			this.rtbCounters.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
@@ -756,95 +848,18 @@
 			this.openFileDialog2.Filter = "Executable|*.exe";
 			this.openFileDialog2.Title = "Select Assembly";
 			// 
-			// lbQEMUImgApplication
+			// cbEnableConditionalConstantPropagation
 			// 
-			this.lbQEMUImgApplication.AutoSize = true;
-			this.lbQEMUImgApplication.Location = new System.Drawing.Point(118, 75);
-			this.lbQEMUImgApplication.Name = "lbQEMUImgApplication";
-			this.lbQEMUImgApplication.Size = new System.Drawing.Size(171, 13);
-			this.lbQEMUImgApplication.TabIndex = 24;
-			this.lbQEMUImgApplication.Text = "{QEMU qemu-img.exe Executable}";
-			// 
-			// button8
-			// 
-			this.button8.Enabled = false;
-			this.button8.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.button8.Location = new System.Drawing.Point(6, 70);
-			this.button8.Name = "button8";
-			this.button8.Size = new System.Drawing.Size(106, 23);
-			this.button8.TabIndex = 23;
-			this.button8.Text = "qemu-img:";
-			this.button8.UseVisualStyleBackColor = true;
-			// 
-			// groupBox2
-			// 
-			this.groupBox2.Controls.Add(this.cbGenerateASMFile);
-			this.groupBox2.Controls.Add(this.cbGenerateMapFile);
-			this.groupBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.groupBox2.Location = new System.Drawing.Point(243, 196);
-			this.groupBox2.Name = "groupBox2";
-			this.groupBox2.Size = new System.Drawing.Size(179, 63);
-			this.groupBox2.TabIndex = 29;
-			this.groupBox2.TabStop = false;
-			this.groupBox2.Text = "Diagnostic Output:";
-			// 
-			// cbGenerateASMFile
-			// 
-			this.cbGenerateASMFile.AutoSize = true;
-			this.cbGenerateASMFile.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.cbGenerateASMFile.Location = new System.Drawing.Point(6, 42);
-			this.cbGenerateASMFile.Name = "cbGenerateASMFile";
-			this.cbGenerateASMFile.Size = new System.Drawing.Size(115, 17);
-			this.cbGenerateASMFile.TabIndex = 14;
-			this.cbGenerateASMFile.Text = "Generate ASM File";
-			this.cbGenerateASMFile.UseVisualStyleBackColor = true;
-			// 
-			// cbGenerateMapFile
-			// 
-			this.cbGenerateMapFile.AutoSize = true;
-			this.cbGenerateMapFile.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.cbGenerateMapFile.Location = new System.Drawing.Point(6, 19);
-			this.cbGenerateMapFile.Name = "cbGenerateMapFile";
-			this.cbGenerateMapFile.Size = new System.Drawing.Size(115, 17);
-			this.cbGenerateMapFile.TabIndex = 13;
-			this.cbGenerateMapFile.Text = "Generate MAP File";
-			this.cbGenerateMapFile.UseVisualStyleBackColor = true;
-			// 
-			// groupBox5
-			// 
-			this.groupBox5.Controls.Add(this.checkBox1);
-			this.groupBox5.Controls.Add(this.cbMOSADebugger);
-			this.groupBox5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.groupBox5.Location = new System.Drawing.Point(243, 266);
-			this.groupBox5.Name = "groupBox5";
-			this.groupBox5.Size = new System.Drawing.Size(179, 65);
-			this.groupBox5.TabIndex = 31;
-			this.groupBox5.TabStop = false;
-			this.groupBox5.Text = "Debugger:";
-			// 
-			// checkBox1
-			// 
-			this.checkBox1.AutoSize = true;
-			this.checkBox1.Enabled = false;
-			this.checkBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.checkBox1.Location = new System.Drawing.Point(6, 41);
-			this.checkBox1.Name = "checkBox1";
-			this.checkBox1.Size = new System.Drawing.Size(107, 17);
-			this.checkBox1.TabIndex = 14;
-			this.checkBox1.Text = "MOSA Debugger";
-			this.checkBox1.UseVisualStyleBackColor = true;
-			// 
-			// cbMOSADebugger
-			// 
-			this.cbMOSADebugger.AutoSize = true;
-			this.cbMOSADebugger.Enabled = false;
-			this.cbMOSADebugger.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.cbMOSADebugger.Location = new System.Drawing.Point(6, 19);
-			this.cbMOSADebugger.Name = "cbMOSADebugger";
-			this.cbMOSADebugger.Size = new System.Drawing.Size(123, 17);
-			this.cbMOSADebugger.TabIndex = 13;
-			this.cbMOSADebugger.Text = "MOSA TinySimulator";
-			this.cbMOSADebugger.UseVisualStyleBackColor = true;
+			this.cbEnableConditionalConstantPropagation.AutoSize = true;
+			this.cbEnableConditionalConstantPropagation.Checked = true;
+			this.cbEnableConditionalConstantPropagation.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.cbEnableConditionalConstantPropagation.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.cbEnableConditionalConstantPropagation.Location = new System.Drawing.Point(6, 65);
+			this.cbEnableConditionalConstantPropagation.Name = "cbEnableConditionalConstantPropagation";
+			this.cbEnableConditionalConstantPropagation.Size = new System.Drawing.Size(219, 17);
+			this.cbEnableConditionalConstantPropagation.TabIndex = 8;
+			this.cbEnableConditionalConstantPropagation.Text = "Enable Conditional Constant Propagation";
+			this.cbEnableConditionalConstantPropagation.UseVisualStyleBackColor = true;
 			// 
 			// MainForm
 			// 
@@ -860,6 +875,10 @@
 			this.Shown += new System.EventHandler(this.MainForm_Shown);
 			this.tabControl1.ResumeLayout(false);
 			this.tbOptions.ResumeLayout(false);
+			this.groupBox5.ResumeLayout(false);
+			this.groupBox5.PerformLayout();
+			this.groupBox2.ResumeLayout(false);
+			this.groupBox2.PerformLayout();
 			this.groupBox6.ResumeLayout(false);
 			this.groupBox6.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.nmMemory)).EndInit();
@@ -882,10 +901,6 @@
 			this.groupBox7.PerformLayout();
 			this.tpOutput.ResumeLayout(false);
 			this.tabPage3.ResumeLayout(false);
-			this.groupBox2.ResumeLayout(false);
-			this.groupBox2.PerformLayout();
-			this.groupBox5.ResumeLayout(false);
-			this.groupBox5.PerformLayout();
 			this.ResumeLayout(false);
 
 		}
@@ -955,5 +970,6 @@
 		private System.Windows.Forms.GroupBox groupBox2;
 		private System.Windows.Forms.CheckBox cbGenerateASMFile;
 		private System.Windows.Forms.CheckBox cbGenerateMapFile;
+		private System.Windows.Forms.CheckBox cbEnableConditionalConstantPropagation;
 	}
 }

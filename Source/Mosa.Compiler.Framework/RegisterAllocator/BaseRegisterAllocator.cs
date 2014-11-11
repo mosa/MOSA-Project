@@ -228,9 +228,9 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			foreach (var liveInterval in liveIntervals)
 			{
 				if (operand && !liveInterval.IsPhysicalRegister)
-					sb.Append("[" + liveInterval.Start.ToString() + ", " + liveInterval.End.ToString() + "]/" + liveInterval.AssignedOperand.ToString() + ",");
+					sb.Append("[" + liveInterval.Start.ToString() + "," + liveInterval.End.ToString() + "]/" + liveInterval.AssignedOperand.ToString() + ",");
 				else
-					sb.Append("[" + liveInterval.Start.ToString() + ", " + liveInterval.End.ToString() + "],");
+					sb.Append("[" + liveInterval.Start.ToString() + "," + liveInterval.End.ToString() + "],");
 			}
 
 			if (sb[sb.Length - 1] == ',')
@@ -362,9 +362,22 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 				liveGen.Set(StackPointerRegister.Index, true);
 
 				if (ProgramCounter != null)
+				{
 					liveGen.Set(ProgramCounter.Index, true);
+				}
 
-				for (Context context = new Context(InstructionSet, block.BasicBlock); !context.IsBlockEndInstruction; context.GotoNext())
+				if (BasicBlocks.HeadBlocks.Contains(block.BasicBlock))
+				{
+					for (int s = 0; s < PhysicalRegisterCount; s++)
+					{
+						liveKill.Set(s, true);
+					}
+
+					if (liveSetTrace.Active)
+						liveSetTrace.Log("KILL ALL PHYSICAL");
+				}
+
+				for (var context = new Context(InstructionSet, block.BasicBlock); !context.IsBlockEndInstruction; context.GotoNext())
 				{
 					if (context.IsEmpty)
 						continue;
@@ -468,6 +481,9 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			{
 				var block = ExtendedBlocks[b];
 
+				if (intervalTrace.Active)
+					intervalTrace.Log("Block # " + block.BasicBlock.Sequence.ToString());
+
 				for (int r = 0; r < RegisterCount; r++)
 				{
 					if (!block.LiveOut.Get(r))
@@ -539,7 +555,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 							else
 							{
 								// This is necesary to handled a result that is never used!
-								// Common with instructions which more than one result
+								// Common with instructions with more than one result
 								if (intervalTrace.Active) intervalTrace.Log("Add (Unused) " + register.ToString() + " : " + slotIndex + " destination " + slotIndex);
 								if (intervalTrace.Active) intervalTrace.Log("   Before: " + LiveIntervalsToString(register.LiveIntervals));
 								register.AddLiveInterval(slotIndex, slotIndex.HalfStepForward);

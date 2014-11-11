@@ -81,6 +81,14 @@ namespace Mosa.Compiler.Framework
 		/// </value>
 		protected MosaType PlatformInternalRuntimeType { get { return MethodCompiler.Compiler.PlatformInternalRuntimeType; } }
 
+		/// <summary>
+		/// Gets the size of the native instruction.
+		/// </summary>
+		/// <value>
+		/// The size of the native instruction.
+		/// </value>
+		protected InstructionSize NativeInstructionSize { get; private set; }
+
 		#endregion Properties
 
 		#region IPipelineStage Members
@@ -111,6 +119,8 @@ namespace Mosa.Compiler.Framework
 
 			NativePointerSize = Architecture.NativePointerSize;
 			NativePointerAlignment = Architecture.NativeAlignment;
+
+			NativeInstructionSize = NativePointerSize == 32 ? InstructionSize.Size32 : InstructionSize.Size64;
 
 			Setup();
 		}
@@ -462,5 +472,77 @@ namespace Mosa.Compiler.Framework
 					if (!ctx.IsEmpty)
 						Debug.WriteLine(ctx.ToString());
 		}
+
+		#region Instruction Size Helpers
+
+		/// <summary>
+		/// Gets the size of the instruction.
+		/// </summary>
+		/// <param name="operand">The operand.</param>
+		/// <returns></returns>
+		public static InstructionSize GetInstructionSize(MosaType type)
+		{
+			if (type.IsPointer && type.ElementType != null)
+			{
+				return GetInstructionSize(type.ElementType);
+			}
+
+			if (type.IsUI1 || type.IsBoolean)
+				return InstructionSize.Size8;
+
+			if (type.IsUI2 || type.IsChar)
+				return InstructionSize.Size16;
+
+			if (type.IsR4)
+				return InstructionSize.Size32;
+
+			if (type.IsR8)
+				return InstructionSize.Size64;
+
+			return InstructionSize.Size32;
+		}
+
+		/// <summary>
+		/// Gets the size of the instruction.
+		/// </summary>
+		/// <param name="operand">The operand.</param>
+		/// <returns></returns>
+		public static InstructionSize GetInstructionSize(Operand operand)
+		{
+			if (operand.IsPointer && operand.Type.ElementType != null)
+			{
+				GetInstructionSize(operand.Type.ElementType);
+			}
+
+			if (operand.IsByte || operand.IsBoolean)
+				return InstructionSize.Size8;
+
+			if (operand.IsChar || operand.IsShort)
+				return InstructionSize.Size16;
+
+			if (operand.IsR4)
+				return InstructionSize.Size32;
+
+			if (operand.IsR8)
+				return InstructionSize.Size64;
+
+			return InstructionSize.Size32;
+		}
+
+		/// <summary>
+		/// Gets the size of the instruction.
+		/// </summary>
+		/// <param name="size">The size.</param>
+		/// <param name="operand">The operand.</param>
+		/// <returns></returns>
+		public static InstructionSize GetInstructionSize(InstructionSize size, Operand operand)
+		{
+			if (size != InstructionSize.None)
+				return size;
+
+			return GetInstructionSize(operand);
+		}
+
+		#endregion Instruction Size Helpers
 	}
 }

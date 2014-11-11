@@ -25,12 +25,12 @@ namespace Mosa.Compiler.Framework.Stages
 		protected override void Run()
 		{
 			for (int index = 0; index < BasicBlocks.Count; index++)
-				for (Context ctx = new Context(InstructionSet, BasicBlocks[index]); !ctx.IsBlockEndInstruction; ctx.GotoNext())
+				for (var ctx = new Context(InstructionSet, BasicBlocks[index]); !ctx.IsBlockEndInstruction; ctx.GotoNext())
 					if (!ctx.IsEmpty)
 						ProcessInstruction(ctx.Clone());
 
 			for (int index = 0; index < BasicBlocks.Count; index++)
-				for (Context ctx = new Context(InstructionSet, BasicBlocks[index]); !ctx.IsBlockEndInstruction; ctx.GotoNext())
+				for (var ctx = new Context(InstructionSet, BasicBlocks[index]); !ctx.IsBlockEndInstruction; ctx.GotoNext())
 					if (!ctx.IsEmpty)
 						ReplaceOperands(ctx.Clone());
 
@@ -39,7 +39,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private void ProcessInstruction(Context ctx)
 		{
-			if (ctx.Instruction is Load)
+			if (ctx.Instruction == IRInstruction.Load)
 			{
 				if (ctx.MosaType != null &&
 					TypeLayout.IsCompoundType(ctx.MosaType) && !ctx.MosaType.IsUI8 && !ctx.MosaType.IsR8)
@@ -51,7 +51,7 @@ namespace Mosa.Compiler.Framework.Stages
 					ctx.ReplaceInstructionOnly(IRInstruction.CompoundLoad);
 				}
 			}
-			else if (ctx.Instruction is Store)
+			else if (ctx.Instruction == IRInstruction.Store)
 			{
 				if (ctx.MosaType != null &&
 					TypeLayout.IsCompoundType(ctx.MosaType) && !ctx.MosaType.IsUI8 && !ctx.MosaType.IsR8)
@@ -63,14 +63,14 @@ namespace Mosa.Compiler.Framework.Stages
 					ctx.ReplaceInstructionOnly(IRInstruction.CompoundStore);
 				}
 			}
-			else if (ctx.Instruction is Move)
+			else if (ctx.Instruction == IRInstruction.Move)
 			{
 				if (ctx.Result.Type.Equals(ctx.Operand1.Type) &&
 					TypeLayout.IsCompoundType(ctx.Result.Type) && !ctx.Result.Type.IsUI8 && !ctx.Result.Type.IsR8)
 				{
 					// If this move is proceded by a return then remove this instruction
 					// It is basically a double up caused by some instructions result in the same instruction output
-					if (ctx.Next.Instruction is Return && ctx.Next.Operand1 == ctx.Result)
+					if (ctx.Next.Instruction == IRInstruction.Return && ctx.Next.Operand1 == ctx.Result)
 					{
 						ctx.Next.Operand1 = ctx.Operand1;
 						ctx.InsertBefore().SetInstruction(IRInstruction.Nop);
@@ -80,9 +80,9 @@ namespace Mosa.Compiler.Framework.Stages
 
 					// If this move is preceded by a compount move (which will turn into a compound move) remove this instruction
 					// It is basically a double up caused by some instructions result in the same IR output
-					if ((ctx.Previous.Instruction is CompoundMove
-							|| ctx.Previous.Instruction is CompoundLoad
-							|| ctx.Previous.Instruction is Call)
+					if ((ctx.Previous.Instruction == IRInstruction.CompoundMove
+							|| ctx.Previous.Instruction == IRInstruction.CompoundLoad
+							|| ctx.Previous.Instruction == IRInstruction.Call)
 						&& ctx.Previous.Result == ctx.Operand1)
 					{
 						if (repl.ContainsKey(ctx.Previous.Result))
@@ -107,7 +107,7 @@ namespace Mosa.Compiler.Framework.Stages
 					ctx.ReplaceInstructionOnly(IRInstruction.CompoundMove);
 				}
 			}
-			else if (ctx.Instruction is Call)
+			else if (ctx.Instruction == IRInstruction.Call)
 			{
 				if (ctx.Result != null &&
 					TypeLayout.IsCompoundType(ctx.Result.Type) && !ctx.Result.Type.IsUI8 && !ctx.Result.Type.IsR8)
