@@ -22,13 +22,15 @@ namespace Mosa.Compiler.Framework.Intrinsics
 		/// <param name="methodCompiler">The method compiler.</param>
 		void IIntrinsicInternalMethod.ReplaceIntrinsicCall(Context context, BaseMethodCompiler methodCompiler)
 		{
+			var size = methodCompiler.Architecture.NativePointerSize == 4 ? InstructionSize.Size32 : InstructionSize.Size64;
+
 			if (context.OperandCount == 1)
 			{
-				context.SetInstruction(IRInstruction.Load, context.Result, context.Operand1, Operand.CreateConstantSignedInt(methodCompiler.TypeSystem, 0));
+				context.SetInstruction(IRInstruction.Load, size, context.Result, context.Operand1, Operand.CreateConstantSignedInt(methodCompiler.TypeSystem, 0));
 			}
 			else if (context.OperandCount == 2)
 			{
-				context.SetInstruction(IRInstruction.Load, context.Result, context.Operand1, context.Operand2);
+				context.SetInstruction(IRInstruction.Load, size, context.Result, context.Operand1, context.Operand2);
 			}
 			else
 			{

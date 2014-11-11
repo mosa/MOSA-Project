@@ -24,7 +24,7 @@ namespace Mosa.TestWorld.x86.Tests
 			testMethods.Add(ForeachNestedTest);
 			testMethods.Add(StructNewObjTest);
 			testMethods.Add(StructNotBoxed);
-			//testMethods.Add(ForeachBreak);
+			testMethods.Add(ForeachBreak);
 		}
 
 		private static uint StaticValue = 0x200000;

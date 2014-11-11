@@ -1049,7 +1049,6 @@ namespace Mosa.Compiler.Framework.Stages
 				if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
 				return;
 			}
-
 		}
 
 		/// <summary>

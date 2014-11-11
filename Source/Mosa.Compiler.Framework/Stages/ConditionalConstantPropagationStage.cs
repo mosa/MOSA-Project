@@ -36,8 +36,8 @@ namespace Mosa.Compiler.Framework.Stages
 		protected override void Run()
 		{
 			// FIXME - VERY TEMPORARY HACK!
-			if (MethodCompiler.Method.FullName.Contains("ConsoleSession::.ctor(System.Byte"))
-				return;
+			//if (MethodCompiler.Method.FullName.Contains("ConsoleSession::.ctor(System.Byte"))
+			//	return;
 
 			var analysis = new ConditionalConstantPropagation(BasicBlocks, InstructionSet, trace);
 
@@ -51,10 +51,10 @@ namespace Mosa.Compiler.Framework.Stages
 			UpdateCounter("ConditionalConstantPropagation.ConstantVariableUse", conditionalConstantPropagation);
 			UpdateCounter("ConditionalConstantPropagation.IRInstructionRemoved", instructionsRemovedCount);
 
-			if (changed)
-			{
-				this.MethodCompiler.InternalTrace.CompilerEventListener.SubmitTraceEvent(CompilerEvent.Special, "SCCP: " + MethodCompiler.Method.ToString());
-			}
+			//if (changed)
+			//{
+			//	this.MethodCompiler.InternalTrace.CompilerEventListener.SubmitTraceEvent(CompilerEvent.Special, "SCCP: " + MethodCompiler.Method.ToString());
+			//}
 		}
 
 		protected void ReplaceVirtualRegistersWithConstants(List<Tuple<Operand, ulong>> constantVirtualRegisters)
