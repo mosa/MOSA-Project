@@ -313,7 +313,7 @@ namespace Mosa.Platform.x86.Stages
 			Operand result = context.Result;
 			Operand baseOperand = context.Operand1;
 			Operand offsetOperand = context.Operand2;
-			//var type = context.MosaType;
+			var type = context.MosaType;
 			var size = context.Size;
 
 			if (offsetOperand.IsConstant)
@@ -322,7 +322,7 @@ namespace Mosa.Platform.x86.Stages
 
 				var mov = GetMove(result, mem);
 
-				if (result.IsR8 && size == InstructionSize.Size32)
+				if (result.IsR8 && type.IsR4) // size == InstructionSize.Size32)
 				{
 					mov = X86.Cvtss2sd;
 				}
@@ -339,7 +339,7 @@ namespace Mosa.Platform.x86.Stages
 
 				var mov = GetMove(result, mem);
 
-				if (result.IsR8 && size == InstructionSize.Size32)
+				if (result.IsR8 && type.IsR4) // size == InstructionSize.Size32)
 				{
 					mov = X86.Cvtss2sd;
 				}
@@ -621,9 +621,11 @@ namespace Mosa.Platform.x86.Stages
 			Operand offsetOperand = context.Operand2;
 			Operand value = context.Operand3;
 
+			MosaType storeType = context.MosaType;
+			var type = baseOperand.Type;
 			var size = context.Size;
 
-			if (value.IsR8 && size == InstructionSize.Size32)
+			if (value.IsR8 && type.IsR4) //&& size == InstructionSize.Size32)
 			{
 				Operand xmm1 = AllocateVirtualRegister(TypeSystem.BuiltIn.R4);
 				context.InsertBefore().AppendInstruction(X86.Cvtsd2ss, size, xmm1, value);
@@ -636,15 +638,6 @@ namespace Mosa.Platform.x86.Stages
 				value = v2;
 			}
 
-			MosaType storeType = context.MosaType;
-			MosaType type = baseOperand.Type;
-
-
-			if (baseOperand.Type.IsUnmanagedPointer)
-				type = storeType.ToUnmanagedPointer();
-			else if (baseOperand.Type.IsManagedPointer)
-				type = storeType.ToManagedPointer();
-
 
 			if (offsetOperand.IsConstant)
 			{
@@ -654,6 +647,11 @@ namespace Mosa.Platform.x86.Stages
 			}
 			else
 			{
+				if (type.IsUnmanagedPointer)
+					type = storeType.ToUnmanagedPointer();
+				else if (type.IsManagedPointer)
+					type = storeType.ToManagedPointer();
+
 				Operand v1 = AllocateVirtualRegister(type);
 				Operand mem = Operand.CreateMemoryAddress(storeType, v1, 0);
 

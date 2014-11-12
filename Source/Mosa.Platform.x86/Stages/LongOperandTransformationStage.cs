@@ -676,8 +676,8 @@ namespace Mosa.Platform.x86.Stages
 
 			Operand v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
 
-			// Fortunately in 32-bit mode, we can't have 64-bit offsets, so this plan add should suffice.
-			if (offset.IsConstant && offset.IsConstantOne)
+			// Fortunately in 32-bit mode, we can't have 64-bit offsets so a 32-bit add willl work.
+			if (offset.IsConstant && offset.IsConstantZero)
 			{
 				context.SetInstruction(X86.Mov, v1, address);
 			}
@@ -982,7 +982,8 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IIRVisitor.Store(Context context)
 		{
-			if ((context.MosaType ?? context.Operand3.Type).IsUI8)
+			//if ((context.MosaType ?? context.Operand3.Type).IsUI8)
+			if (context.MosaType.IsUI8)
 			{
 				ExpandStore(context);
 			}
