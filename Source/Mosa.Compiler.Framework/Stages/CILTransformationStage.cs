@@ -767,7 +767,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			Operand tmp = MethodCompiler.CreateVirtualRegister(type.ToManagedPointer());
 			context.Result = tmp;
-			
+
 			var size = GetInstructionSize(tmp);
 
 			context.AppendInstruction(IRInstruction.Load, size, result, tmp, Operand.CreateConstantUnsignedInt(TypeSystem, 0));

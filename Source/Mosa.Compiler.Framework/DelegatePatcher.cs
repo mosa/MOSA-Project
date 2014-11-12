@@ -63,7 +63,7 @@ namespace Mosa.Compiler.Framework
 			context.AppendInstruction(IRInstruction.Store, size, null, v1, methodPointerOffsetOperand, methodPointerOperand);
 			context.MosaType = methodPointerOperand.Type;
 			context.AppendInstruction(IRInstruction.Store, size, null, v1, instanceOffsetOperand, instanceOperand);
-			context.MosaType = instanceOperand.Type; 
+			context.MosaType = instanceOperand.Type;
 			context.AppendInstruction(IRInstruction.Return, methodCompiler.BasicBlocks.EpilogueBlock);
 			context.SetBranch(BasicBlock.EpilogueLabel);
 		}

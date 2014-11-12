@@ -365,6 +365,10 @@ namespace Mosa.Compiler.Framework.Analysis
 			{
 				Move(context);
 			}
+			else if (instruction == IRInstruction.Switch)
+			{
+				Switch(context);
+			}
 			else
 			{
 				// for all other instructions
@@ -566,18 +570,6 @@ namespace Mosa.Compiler.Framework.Analysis
 				return;
 
 			UpdateToOverDefined(result);
-
-			//// if any operands are overdefined, then results are overdefined
-			//foreach (var op in context.Operands)
-			//{
-			//	var operand = GetVariableState(op);
-
-			//	if (operand.IsOverDefined)
-			//	{
-			//		UpdateToOverDefined(result);
-			//		return;
-			//	}
-			//}
 		}
 
 		private bool IntegerCompareBranch(Context context)
@@ -633,13 +625,14 @@ namespace Mosa.Compiler.Framework.Analysis
 
 		private void Branch(Context context)
 		{
-			Debug.Assert(context.BranchTargets.Length == 1);
+			//Debug.Assert(context.BranchTargets.Length == 1);
 
-			int target = context.BranchTargets[0];
+			foreach (var target in context.BranchTargets)
+			{
+				var block = BasicBlocks.GetByLabel(target);
 
-			var block = BasicBlocks.GetByLabel(target);
-
-			AddExecutionBlock(block);
+				AddExecutionBlock(block);
+			}
 		}
 
 		private BasicBlock GetBlock(Context context, bool backwards)
@@ -659,6 +652,12 @@ namespace Mosa.Compiler.Framework.Analysis
 			}
 
 			return block;
+		}
+
+		private void Switch(Context context)
+		{
+			// no optimization attempted
+			Branch(context);
 		}
 
 		private void Phi(Context context)
