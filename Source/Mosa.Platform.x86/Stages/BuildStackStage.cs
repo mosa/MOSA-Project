@@ -65,7 +65,7 @@ namespace Mosa.Platform.x86.Stages
 		private void UpdateEpilogue()
 		{
 			// Update epilogue Block
-			var epilogueBlock = this.BasicBlocks.EpilogueBlock;
+			var epilogueBlock = BasicBlocks.EpilogueBlock;
 
 			if (epilogueBlock != null)
 			{

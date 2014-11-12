@@ -638,7 +638,6 @@ namespace Mosa.Platform.x86.Stages
 				value = v2;
 			}
 
-
 			if (offsetOperand.IsConstant)
 			{
 				Operand mem = Operand.CreateMemoryAddress(storeType, baseOperand, offsetOperand.ConstantSignedInteger);
