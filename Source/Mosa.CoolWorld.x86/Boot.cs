@@ -197,7 +197,7 @@ namespace Mosa.CoolWorld.x86
 				Console.Write(':');
 				Console.Write(interrupt, 16, 2);
 
-				Mosa.DeviceSystem.HAL.ProcessInterrupt((uint)(interrupt - 0x20), errorCode);
+				Mosa.DeviceSystem.HAL.ProcessInterrupt((byte)(interrupt - 0x20));
 
 				//Debug.Trace("Returned from HAL.ProcessInterrupt");
 			}

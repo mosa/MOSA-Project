@@ -90,9 +90,40 @@ namespace Mosa.CoolWorld.x86.HAL
 		/// </summary>
 		/// <param name="index">The index.</param>
 		/// <returns></returns>
+		uint IMemory.Read24(uint index)
+		{
+			return Native.Get16(address + index) + (uint)(Native.Get8(address + index + 2) << 16);
+		}
+
+		/// <summary>
+		/// Writes the specified index.
+		/// </summary>
+		/// <param name="index">The index.</param>
+		/// <param name="value">The value.</param>
+		void IMemory.Write24(uint index, uint value)
+		{
+			Native.Set16(address + index, (ushort)(value & (uint)0xFFFF));
+		}
+
+		/// <summary>
+		/// Reads the specified index.
+		/// </summary>
+		/// <param name="index">The index.</param>
+		/// <returns></returns>
 		uint IMemory.Read32(uint index)
 		{
 			return Native.Get32(address + index);
+		}
+
+		/// <summary>
+		/// Reads the specified index.
+		/// </summary>
+		/// <param name="index">The index.</param>
+		/// <param name="count">The count.</param>
+		/// <returns></returns>
+		uint IMemory.Read32(uint index, byte count)
+		{
+			throw new System.NotImplementedException();
 		}
 
 		/// <summary>
@@ -103,6 +134,17 @@ namespace Mosa.CoolWorld.x86.HAL
 		void IMemory.Write32(uint index, uint value)
 		{
 			Native.Set32(address + index, value);
+		}
+
+		/// <summary>
+		/// Writes the specified index.
+		/// </summary>
+		/// <param name="index">The index.</param>
+		/// <param name="value">The value.</param>
+		/// <param name="count">The count.</param>
+		void IMemory.Write32(uint index, uint value, byte count)
+		{
+			throw new System.NotImplementedException();
 		}
 	}
 }

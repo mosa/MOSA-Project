@@ -5,10 +5,10 @@ namespace Mosa.HelloWorld.x86.Tests
 		public ExceptionTest()
 			: base("EX")
 		{
-			testMethods.Add(ExceptionTest1);
-			testMethods.Add(ExceptionTest2);
-			testMethods.Add(ExceptionTest3);
-			testMethods.Add(ExceptionTest4);
+			testMethods.AddLast(ExceptionTest1);
+			testMethods.AddLast(ExceptionTest2);
+			testMethods.AddLast(ExceptionTest3);
+			testMethods.AddLast(ExceptionTest4);
 		}
 
 		public static bool ExceptionTest1()

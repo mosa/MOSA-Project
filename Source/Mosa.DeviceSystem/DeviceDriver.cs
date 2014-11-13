@@ -1,5 +1,5 @@
 ﻿/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
+ * (c) 2014 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
  *
@@ -7,7 +7,8 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using Mosa.ClassLib;
+using System;
+using System.Collections.Generic;
 
 namespace Mosa.DeviceSystem
 {
@@ -17,7 +18,7 @@ namespace Mosa.DeviceSystem
 	public class DeviceDriver
 	{
 		private IDeviceDriver deviceDriverAttribute;
-		private System.Type driverType;
+		private Type driverType;
 		private LinkedList<DeviceDriverPhysicalMemoryAttribute> memoryAttributes;
 
 		/// <summary>
@@ -30,7 +31,7 @@ namespace Mosa.DeviceSystem
 		/// Gets the type of the driver.
 		/// </summary>
 		/// <value>The type of the driver.</value>
-		public System.Type DriverType { get { return driverType; } }
+		public Type DriverType { get { return driverType; } }
 
 		/// <summary>
 		/// Gets the memory attributes.
@@ -43,7 +44,7 @@ namespace Mosa.DeviceSystem
 		/// </summary>
 		/// <param name="deviceDriverAttribute">The device driver attribute.</param>
 		/// <param name="driverType">Type of the driver.</param>
-		public DeviceDriver(IDeviceDriver deviceDriverAttribute, System.Type driverType)
+		public DeviceDriver(IDeviceDriver deviceDriverAttribute, Type driverType)
 		{
 			this.deviceDriverAttribute = deviceDriverAttribute;
 			this.driverType = driverType;

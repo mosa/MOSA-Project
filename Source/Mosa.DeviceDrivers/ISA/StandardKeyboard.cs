@@ -166,7 +166,7 @@ namespace Mosa.DeviceDrivers.ISA
 		{
 			spinLock.Enter();
 
-			AddToFIFO(dataPort.Read8());
+			AddToFIFO(commandPort.Read8());
 
 			spinLock.Exit();
 		}

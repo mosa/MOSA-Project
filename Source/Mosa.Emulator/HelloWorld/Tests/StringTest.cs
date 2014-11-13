@@ -7,13 +7,13 @@ namespace Mosa.HelloWorld.x86.Tests
 		public StringTest()
 			: base("String")
 		{
-			testMethods.Add(ConcatTest1);
-			testMethods.Add(ConcatTest2);
-			testMethods.Add(ConcatTest3);
-			testMethods.Add(ConcatTest4);
-			testMethods.Add(SubStringTest);
-			testMethods.Add(IndexOfTest);
-			testMethods.Add(LengthTest);
+			testMethods.AddLast(ConcatTest1);
+			testMethods.AddLast(ConcatTest2);
+			testMethods.AddLast(ConcatTest3);
+			testMethods.AddLast(ConcatTest4);
+			testMethods.AddLast(SubStringTest);
+			testMethods.AddLast(IndexOfTest);
+			testMethods.AddLast(LengthTest);
 		}
 
 		public static bool ConcatTest1()

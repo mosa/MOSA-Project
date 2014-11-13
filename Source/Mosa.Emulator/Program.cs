@@ -14,6 +14,7 @@ using Mosa.FileSystem.FAT;
 using System;
 using System.Threading;
 using System.Windows.Forms;
+using System.Collections.Generic;
 
 namespace Mosa.Emulator
 {
@@ -106,7 +107,7 @@ namespace Mosa.Emulator
 			LinkedList<IDevice> devices = Mosa.DeviceSystem.Setup.DeviceManager.GetDevices(new FindDevice.WithName("VGAText"));
 
 			// Create a screen interface to the text VGA device
-			ITextScreen screen = new TextScreen((ITextDevice)devices.First.value);
+			ITextScreen screen = new TextScreen((ITextDevice)devices.First.Value);
 
 			// Create synthetic keyboard device
 			Mosa.EmulatedDevices.Synthetic.Keyboard keyboard = new Mosa.EmulatedDevices.Synthetic.Keyboard(Mosa.EmulatedDevices.Setup.PrimaryDisplayForm);

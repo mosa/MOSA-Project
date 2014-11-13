@@ -60,9 +60,6 @@
     <Compile Include="BinaryFormat.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="LinkedList.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Math.cs">
       <SubType>Code</SubType>
     </Compile>

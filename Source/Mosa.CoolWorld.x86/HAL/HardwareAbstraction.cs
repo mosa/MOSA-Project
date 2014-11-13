@@ -59,9 +59,9 @@ namespace Mosa.CoolWorld.x86.HAL
 		/// Processes the interrupt.
 		/// </summary>
 		/// <param name="irq">The irq.</param>
-		void IHardwareAbstraction.ProcessInterrupt(byte irq, byte error)
+		void IHardwareAbstraction.ProcessInterrupt(byte irq)
 		{
-			Mosa.DeviceSystem.HAL.ProcessInterrupt(irq, error);
+			Mosa.DeviceSystem.HAL.ProcessInterrupt(irq);
 		}
 
 		/// <summary>

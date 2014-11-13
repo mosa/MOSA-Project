@@ -5,9 +5,9 @@
 		public InterfaceTest()
 			: base("IF")
 		{
-			testMethods.Add(InterfaceTest1);
-			testMethods.Add(InterfaceTest2);
-			testMethods.Add(InterfaceTest3);
+			testMethods.AddLast(InterfaceTest1);
+			testMethods.AddLast(InterfaceTest2);
+			testMethods.AddLast(InterfaceTest3);
 		}
 
 		public static bool InterfaceTest1()

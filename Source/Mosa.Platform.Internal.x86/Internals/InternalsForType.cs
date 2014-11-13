@@ -20,8 +20,6 @@ namespace Mosa.Platform.Internal.x86
 			if (typeName == null)
 				throw new ArgumentNullException("typeName");
 
-			Type returnType = null;
-
 			// Iterate through all the assemblies and look for the type name
 			foreach (RuntimeAssembly assembly in Runtime.Assemblies)
 			{
@@ -31,12 +29,9 @@ namespace Mosa.Platform.Internal.x86
 					if (type.FullName != typeName) continue;
 
 					// If we get here then its a match so return it
-					returnType = type;
+					return type;
 				}
 			}
-
-			if (returnType != null)
-				return returnType;
 
 			// If we didn't find a match then throw error if throwOnError, otherwise return null
 			if (throwOnError)
@@ -47,9 +42,6 @@ namespace Mosa.Platform.Internal.x86
 
 		public static Type GetTypeFromHandleImpl(RuntimeTypeHandle handle)
 		{
-			// Holder for the type to return
-			Type returnType = null;
-
 			// Iterate through all the assemblies and look for the type handle
 			foreach (RuntimeAssembly assembly in Runtime.Assemblies)
 			{
@@ -60,12 +52,12 @@ namespace Mosa.Platform.Internal.x86
 						continue;
 
 					// If we get here then its a match so return it
-					returnType = type;
+					return type;
 				}
 			}
 			
 			// If we didn't find a match then return null
-			return returnType;
+			return null;
 		}
 	}
 }

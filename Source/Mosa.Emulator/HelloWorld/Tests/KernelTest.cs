@@ -1,6 +1,7 @@
 ﻿using Mosa.ClassLib;
 using Mosa.Kernel;
 using Mosa.Kernel.x86;
+using System.Collections.Generic;
 
 namespace Mosa.HelloWorld.x86.Tests
 {
@@ -94,8 +95,8 @@ namespace Mosa.HelloWorld.x86.Tests
 			var node = testMethods.First;
 			while (node != null)
 			{
-				PrintResult(node.value());
-				node = node.next;
+				PrintResult(node.Value());
+				node = node.Next;
 			}
 		}
 	}

@@ -12,15 +12,15 @@ namespace Mosa.HelloWorld.x86.Tests
 		public GenericTest()
 			: base("Gen-T")
 		{
-			testMethods.Add(GenericTest1);
-			testMethods.Add(GenericTest2);
-			testMethods.Add(GenericTest3);
-			testMethods.Add(GenericTest4);
-			testMethods.Add(GenericTest5);
-			testMethods.Add(GenericTest6);
-			testMethods.Add(GenericTest7);
-			testMethods.Add(GenericTest8);
-			testMethods.Add(GenericTest9);
+			testMethods.AddLast(GenericTest1);
+			testMethods.AddLast(GenericTest2);
+			testMethods.AddLast(GenericTest3);
+			testMethods.AddLast(GenericTest4);
+			testMethods.AddLast(GenericTest5);
+			testMethods.AddLast(GenericTest6);
+			testMethods.AddLast(GenericTest7);
+			testMethods.AddLast(GenericTest8);
+			testMethods.AddLast(GenericTest9);
 		}
 
 		public static bool GenericTest1()
