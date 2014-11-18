@@ -225,7 +225,7 @@ namespace Mosa.Tool.Explorer
 			compilerOptions.EnableSSA = enableSSA.Checked;
 			compilerOptions.EnableOptimizations = enableOptimizations.Checked;
 			compilerOptions.EnablePromoteTemporaryVariablesOptimization = compilerOptions.EnableOptimizations; // FIXME - default is okay for now
-			compilerOptions.EnableConditionalConstantPropagation = enableConditionalConstantPropagation.Checked;
+			compilerOptions.EnableSparseConditionalConstantPropagation = enableSparseConditionalConstantPropagation.Checked;
 
 			//try
 			//{

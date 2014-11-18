@@ -35,7 +35,6 @@ namespace Mosa.Compiler.Framework.Stages
 		private int constantFoldingIntegerCompareCount = 0;
 		private int strengthReductionIntegerCompareBranchCount = 0;
 		private int deadCodeEliminationCount = 0;
-		private int simplifyIntegerCompareCount = 0;
 		private int reduceTruncationAndExpansionCount = 0;
 		private int constantFoldingAdditionAndSubstractionCount = 0;
 		private int constantFoldingMultiplicationCount = 0;
@@ -105,7 +104,6 @@ namespace Mosa.Compiler.Framework.Stages
 			UpdateCounter("IROptimizations.ConstantFoldingIntegerCompare", constantFoldingIntegerCompareCount);
 			UpdateCounter("IROptimizations.StrengthReductionIntegerCompareBranch", strengthReductionIntegerCompareBranchCount);
 			UpdateCounter("IROptimizations.DeadCodeElimination", deadCodeEliminationCount);
-			UpdateCounter("IROptimizations.SimplifyIntegerCompare", simplifyIntegerCompareCount);
 			UpdateCounter("IROptimizations.ConstantFoldingAdditionAndSubstraction", constantFoldingAdditionAndSubstractionCount);
 			UpdateCounter("IROptimizations.ConstantFoldingMultiplication", constantFoldingMultiplicationCount);
 			UpdateCounter("IROptimizations.ConstantFoldingDivision", constantFoldingDivisionCount);
@@ -156,7 +154,6 @@ namespace Mosa.Compiler.Framework.Stages
 			ConstantFoldingAdditionAndSubstraction(context);
 			ConstantFoldingMultiplication(context);
 			ConstantFoldingDivision(context);
-			//SimplifyIntegerCompare(context);
 			ConstantFoldingIntegerCompare(context);
 			FoldIntegerCompare(context);
 			FoldIntegerCompareBranch(context);
@@ -1156,8 +1153,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (block.PreviousBlocks.Count != 0 || BasicBlocks.HeadBlocks.Contains(block))
 				return;
 
-			if (trace.Active) trace.Log("*** RemoveBlock");
-			if (trace.Active) trace.Log("    Block: " + block.ToString());
+			if (trace.Active) trace.Log("*** RemoveBlock: " + block.ToString());
 
 			blockRemovedCount++;
 
@@ -1222,94 +1218,6 @@ namespace Mosa.Compiler.Framework.Stages
 					context.OperandCount--;
 				}
 			}
-		}
-
-		private void SimplifyIntegerCompare(Context context)
-		{
-			//FIXME: Buggy
-			if (context.IsEmpty)
-				return;
-
-			if (context.Instruction != IRInstruction.IntegerCompare)
-				return;
-
-			if (!context.Result.IsVirtualRegister)
-				return;
-
-			if (context.Result.Definitions.Count != 1)
-				return;
-
-			if (context.ConditionCode != ConditionCode.NotEqual)
-				return;
-
-			if (context.Operand2.IsConstant && context.Operand2.IsConstantZero)
-			{
-				if (trace.Active) trace.Log("*** SimplifyIntegerCompare");
-				AddOperandUsageToWorkList(context);
-				if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
-				context.SetInstruction(IRInstruction.Move, context.Result, context.Operand1);
-				simplifyIntegerCompareCount++;
-				if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
-			}
-			else if (context.Operand1.IsConstant && context.Operand1.IsConstantZero)
-			{
-				if (trace.Active) trace.Log("*** SimplifyIntegerCompare-2");
-				AddOperandUsageToWorkList(context);
-				if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
-				context.SetInstruction(IRInstruction.Move, context.Result, context.Operand2);
-				simplifyIntegerCompareCount++;
-				if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
-			}
-		}
-
-		/// <summary>
-		/// Simplifies the integer compare.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		private void SimplifyIntegerCompare2(Context context)
-		{
-			//FIXME: Buggy
-			if (context.IsEmpty)
-				return;
-
-			if (context.Instruction != IRInstruction.IntegerCompare)
-				return;
-
-			if (!context.Result.IsVirtualRegister)
-				return;
-
-			if (context.Result.Definitions.Count != 1)
-				return;
-
-			if (context.Result.Uses.Count != 1)
-				return;
-
-			if (context.ConditionCode != ConditionCode.Equal)
-				return;
-
-			var ctx = new Context(InstructionSet, context.Result.Uses[0]);
-
-			if (ctx.Instruction != IRInstruction.IntegerCompare)
-				return;
-
-			if (ctx.ConditionCode != ConditionCode.Equal)
-				return;
-
-			if (!ctx.Operand2.IsConstant)
-				return;
-
-			if (!ctx.Operand2.IsConstantZero)
-				return;
-
-			if (ctx.Result.Definitions.Count != 1)
-				return;
-
-			if (trace.Active) trace.Log("*** SimplifyIntegerCompare-3");
-			AddOperandUsageToWorkList(ctx);
-			if (trace.Active) trace.Log("BEFORE:\t" + ctx.ToString());
-			ctx.SetInstruction(IRInstruction.Move, ctx.Result, context.Result);
-			simplifyIntegerCompareCount++;
-			if (trace.Active) trace.Log("AFTER: \t" + ctx.ToString());
 		}
 
 		private void ConstantMoveToRight(Context context)

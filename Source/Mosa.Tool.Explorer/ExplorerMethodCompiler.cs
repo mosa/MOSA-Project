@@ -45,7 +45,7 @@ namespace Mosa.Tool.Explorer
 				(compilerOptions.EnableSSA) ? new EdgeSplitStage() : null,
 				(compilerOptions.EnableSSA) ? new PhiPlacementStage() : null,
 				(compilerOptions.EnableSSA) ? new EnterSSAStage() : null,
-				(compilerOptions.EnableSSA && compilerOptions.EnableConditionalConstantPropagation) ? new ConditionalConstantPropagationStage() : null,
+				(compilerOptions.EnableSSA && compilerOptions.EnableSparseConditionalConstantPropagation) ? new SparseConditionalConstantPropagationStage() : null,
 				(compilerOptions.EnableOptimizations) ? new IROptimizationStage() : null,
 				//(compilerOptions.EnableConditionalConstantPropagation && compilerOptions.EnableOptimizations && compilerOptions.EnableSSA) ? new ConditionalConstantPropagationStage() : null,
 				//(compilerOptions.EnableConditionalConstantPropagation && compilerOptions.EnableOptimizations && compilerOptions.EnableSSA) ? new IROptimizationStage() : null,

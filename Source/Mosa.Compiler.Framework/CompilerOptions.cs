@@ -114,7 +114,7 @@ namespace Mosa.Compiler.Framework
 		/// <value>
 		/// <c>true</c> if [enable conditional constant propagation]; otherwise, <c>false</c>.
 		/// </value>
-		public bool EnableConditionalConstantPropagation { get; set; }
+		public bool EnableSparseConditionalConstantPropagation { get; set; }
 
 		/// <summary>
 		/// Gets or sets a value indicating whether static allocations are enabled.
@@ -143,7 +143,8 @@ namespace Mosa.Compiler.Framework
 		public PortableExecutableStruct PortableExecutable;
 
 		/// <summary>
-		/// Gets or sets the method pipeline export directory, used for debugging
+		/// Gets or sets the method pipeline export directory, used for de
+		/// ing
 		/// </summary>
 		public string MethodPipelineExportDirectory { get; set; }
 
@@ -186,7 +187,7 @@ namespace Mosa.Compiler.Framework
 			EnableSSA = true;
 			EnableOptimizations = true;
 			EnablePromoteTemporaryVariablesOptimization = true;
-			EnableConditionalConstantPropagation = true;
+			EnableSparseConditionalConstantPropagation = true;
 			BaseAddress = 0x00400000;
 			DominanceAnalysisFactory = delegate { return new SimpleFastDominance(); };
 			BlockOrderAnalysisFactory = delegate { return new LoopAwareBlockOrder(); };

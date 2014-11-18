@@ -51,7 +51,7 @@
 			this.includeTestKorlibToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.enableSSA = new System.Windows.Forms.ToolStripMenuItem();
 			this.enableOptimizations = new System.Windows.Forms.ToolStripMenuItem();
-			this.enableConditionalConstantPropagation = new System.Windows.Forms.ToolStripMenuItem();
+			this.enableSparseConditionalConstantPropagation = new System.Windows.Forms.ToolStripMenuItem();
 			this.enableBinaryCodeGeneration = new System.Windows.Forms.ToolStripMenuItem();
 			this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
 			this.treeView = new System.Windows.Forms.TreeView();
@@ -240,7 +240,7 @@
             this.includeTestKorlibToolStripMenuItem,
             this.enableSSA,
             this.enableOptimizations,
-            this.enableConditionalConstantPropagation,
+            this.enableSparseConditionalConstantPropagation,
             this.enableBinaryCodeGeneration});
 			this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
 			this.optionsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
@@ -292,12 +292,12 @@
 			// 
 			// enableConditionalConstantPropagation
 			// 
-			this.enableConditionalConstantPropagation.Checked = true;
-			this.enableConditionalConstantPropagation.CheckOnClick = true;
-			this.enableConditionalConstantPropagation.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.enableConditionalConstantPropagation.Name = "enableConditionalConstantPropagation";
-			this.enableConditionalConstantPropagation.Size = new System.Drawing.Size(293, 22);
-			this.enableConditionalConstantPropagation.Text = "Enable Conditional Constant Propagation";
+			this.enableSparseConditionalConstantPropagation.Checked = true;
+			this.enableSparseConditionalConstantPropagation.CheckOnClick = true;
+			this.enableSparseConditionalConstantPropagation.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.enableSparseConditionalConstantPropagation.Name = "enableConditionalConstantPropagation";
+			this.enableSparseConditionalConstantPropagation.Size = new System.Drawing.Size(293, 22);
+			this.enableSparseConditionalConstantPropagation.Text = "Enable Conditional Constant Propagation";
 			// 
 			// enableBinaryCodeGeneration
 			// 
@@ -713,7 +713,7 @@
 		private System.Windows.Forms.RichTextBox rbLog;
 		private System.Windows.Forms.TabPage tabPage5;
 		private System.Windows.Forms.RichTextBox rbCounters;
-		private System.Windows.Forms.ToolStripMenuItem enableConditionalConstantPropagation;
+		private System.Windows.Forms.ToolStripMenuItem enableSparseConditionalConstantPropagation;
 		private System.Windows.Forms.TabPage tabPage6;
 		private System.Windows.Forms.RichTextBox rbException;
 	}

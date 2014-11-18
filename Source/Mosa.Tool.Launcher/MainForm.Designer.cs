@@ -64,6 +64,7 @@
 			this.label3 = new System.Windows.Forms.Label();
 			this.cbLinkerFormat = new System.Windows.Forms.ComboBox();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
+			this.cbEnableConditionalConstantPropagation = new System.Windows.Forms.CheckBox();
 			this.cbEnableOptimizations = new System.Windows.Forms.CheckBox();
 			this.cbEnableSSA = new System.Windows.Forms.CheckBox();
 			this.tabPage4 = new System.Windows.Forms.TabPage();
@@ -91,7 +92,6 @@
 			this.tabPage3 = new System.Windows.Forms.TabPage();
 			this.rtbCounters = new System.Windows.Forms.RichTextBox();
 			this.openFileDialog2 = new System.Windows.Forms.OpenFileDialog();
-			this.cbEnableConditionalConstantPropagation = new System.Windows.Forms.CheckBox();
 			this.tabControl1.SuspendLayout();
 			this.tbOptions.SuspendLayout();
 			this.groupBox5.SuspendLayout();
@@ -542,6 +542,19 @@
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Optimizations:";
 			// 
+			// cbEnableConditionalConstantPropagation
+			// 
+			this.cbEnableConditionalConstantPropagation.AutoSize = true;
+			this.cbEnableConditionalConstantPropagation.Checked = true;
+			this.cbEnableConditionalConstantPropagation.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.cbEnableConditionalConstantPropagation.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.cbEnableConditionalConstantPropagation.Location = new System.Drawing.Point(6, 65);
+			this.cbEnableConditionalConstantPropagation.Name = "cbEnableConditionalConstantPropagation";
+			this.cbEnableConditionalConstantPropagation.Size = new System.Drawing.Size(219, 17);
+			this.cbEnableConditionalConstantPropagation.TabIndex = 8;
+			this.cbEnableConditionalConstantPropagation.Text = "Enable Conditional Constant Propagation";
+			this.cbEnableConditionalConstantPropagation.UseVisualStyleBackColor = true;
+			// 
 			// cbEnableOptimizations
 			// 
 			this.cbEnableOptimizations.AutoSize = true;
@@ -812,7 +825,7 @@
 			this.rtbOutput.Location = new System.Drawing.Point(0, 0);
 			this.rtbOutput.Name = "rtbOutput";
 			this.rtbOutput.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedBoth;
-			this.rtbOutput.Size = new System.Drawing.Size(672, 342);
+			this.rtbOutput.Size = new System.Drawing.Size(629, 342);
 			this.rtbOutput.TabIndex = 0;
 			this.rtbOutput.Text = "";
 			this.rtbOutput.WordWrap = false;
@@ -837,7 +850,7 @@
 			this.rtbCounters.Location = new System.Drawing.Point(0, 1);
 			this.rtbCounters.Name = "rtbCounters";
 			this.rtbCounters.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedBoth;
-			this.rtbCounters.Size = new System.Drawing.Size(672, 342);
+			this.rtbCounters.Size = new System.Drawing.Size(629, 342);
 			this.rtbCounters.TabIndex = 1;
 			this.rtbCounters.Text = "";
 			this.rtbCounters.WordWrap = false;
@@ -847,19 +860,6 @@
 			this.openFileDialog2.DefaultExt = "*.exe";
 			this.openFileDialog2.Filter = "Executable|*.exe";
 			this.openFileDialog2.Title = "Select Assembly";
-			// 
-			// cbEnableConditionalConstantPropagation
-			// 
-			this.cbEnableConditionalConstantPropagation.AutoSize = true;
-			this.cbEnableConditionalConstantPropagation.Checked = true;
-			this.cbEnableConditionalConstantPropagation.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.cbEnableConditionalConstantPropagation.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.cbEnableConditionalConstantPropagation.Location = new System.Drawing.Point(6, 65);
-			this.cbEnableConditionalConstantPropagation.Name = "cbEnableConditionalConstantPropagation";
-			this.cbEnableConditionalConstantPropagation.Size = new System.Drawing.Size(219, 17);
-			this.cbEnableConditionalConstantPropagation.TabIndex = 8;
-			this.cbEnableConditionalConstantPropagation.Text = "Enable Conditional Constant Propagation";
-			this.cbEnableConditionalConstantPropagation.UseVisualStyleBackColor = true;
 			// 
 			// MainForm
 			// 

@@ -81,7 +81,7 @@ namespace Mosa.Utility.Launcher
 			var compilerOptions = new CompilerOptions();
 			compilerOptions.EnableSSA = Options.EnableSSA;
 			compilerOptions.EnableOptimizations = Options.EnableOptimizations;
-			compilerOptions.EnableConditionalConstantPropagation = Options.EnableConditionalConstantPropagation;
+			compilerOptions.EnableSparseConditionalConstantPropagation = Options.EnableConditionalConstantPropagation;
 			compilerOptions.OutputFile = compiledFile;
 
 			compilerOptions.Architecture = SelectArchitecture(Options.PlatformType);

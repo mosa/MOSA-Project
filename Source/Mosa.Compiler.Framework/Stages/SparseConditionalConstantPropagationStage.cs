@@ -19,7 +19,7 @@ namespace Mosa.Compiler.Framework.Stages
 	/// <summary>
 	///
 	/// </summary>
-	public class ConditionalConstantPropagationStage : BaseMethodCompilerStage
+	public class SparseConditionalConstantPropagationStage : BaseMethodCompilerStage
 	{
 		protected SectionTrace trace;
 
@@ -114,8 +114,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected void RemoveDeadBlock(BasicBlock block)
 		{
-			if (trace.Active) trace.Log("*** RemoveBlock");
-			if (trace.Active) trace.Log("    Block: " + block.ToString());
+			if (trace.Active) trace.Log("*** RemoveBlock: " + block.ToString());
 
 			foreach (var prev in block.PreviousBlocks)
 			{

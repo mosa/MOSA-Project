@@ -50,7 +50,7 @@ namespace Mosa.Utility.Aot
 				(compilerOptions.EnableSSA) ? new EdgeSplitStage() : null,
 				(compilerOptions.EnableSSA) ? new PhiPlacementStage() : null,
 				(compilerOptions.EnableSSA) ? new EnterSSAStage() : null,
-				(compilerOptions.EnableConditionalConstantPropagation && compilerOptions.EnableSSA) ? new ConditionalConstantPropagationStage() : null,
+				(compilerOptions.EnableSparseConditionalConstantPropagation && compilerOptions.EnableSSA) ? new SparseConditionalConstantPropagationStage() : null,
 				(compilerOptions.EnableOptimizations) ? new IROptimizationStage() : null,
 				//(compilerOptions.EnableConditionalConstantPropagation && compilerOptions.EnableOptimizations && compilerOptions.EnableSSA) ? new ConditionalConstantPropagationStage() : null,
 				//(compilerOptions.EnableConditionalConstantPropagation && compilerOptions.EnableOptimizations && compilerOptions.EnableSSA) ? new IROptimizationStage() : null,
