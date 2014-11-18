@@ -64,8 +64,8 @@
 			this.label3 = new System.Windows.Forms.Label();
 			this.cbLinkerFormat = new System.Windows.Forms.ComboBox();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
-			this.cbEnableConditionalConstantPropagation = new System.Windows.Forms.CheckBox();
-			this.cbEnableOptimizations = new System.Windows.Forms.CheckBox();
+			this.cbEnableSparseConditionalConstantPropagation = new System.Windows.Forms.CheckBox();
+			this.cbEnableIROptimizations = new System.Windows.Forms.CheckBox();
 			this.cbEnableSSA = new System.Windows.Forms.CheckBox();
 			this.tabPage4 = new System.Windows.Forms.TabPage();
 			this.groupBox11 = new System.Windows.Forms.GroupBox();
@@ -168,9 +168,9 @@
 			this.groupBox5.Controls.Add(this.checkBox1);
 			this.groupBox5.Controls.Add(this.cbMOSADebugger);
 			this.groupBox5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.groupBox5.Location = new System.Drawing.Point(243, 266);
+			this.groupBox5.Location = new System.Drawing.Point(283, 266);
 			this.groupBox5.Name = "groupBox5";
-			this.groupBox5.Size = new System.Drawing.Size(179, 65);
+			this.groupBox5.Size = new System.Drawing.Size(139, 65);
 			this.groupBox5.TabIndex = 31;
 			this.groupBox5.TabStop = false;
 			this.groupBox5.Text = "Debugger:";
@@ -204,9 +204,9 @@
 			this.groupBox2.Controls.Add(this.cbGenerateASMFile);
 			this.groupBox2.Controls.Add(this.cbGenerateMapFile);
 			this.groupBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.groupBox2.Location = new System.Drawing.Point(243, 196);
+			this.groupBox2.Location = new System.Drawing.Point(283, 196);
 			this.groupBox2.Name = "groupBox2";
-			this.groupBox2.Size = new System.Drawing.Size(179, 63);
+			this.groupBox2.Size = new System.Drawing.Size(139, 63);
 			this.groupBox2.TabIndex = 29;
 			this.groupBox2.TabStop = false;
 			this.groupBox2.Text = "Diagnostic Output:";
@@ -531,42 +531,42 @@
 			// 
 			// groupBox1
 			// 
-			this.groupBox1.Controls.Add(this.cbEnableConditionalConstantPropagation);
-			this.groupBox1.Controls.Add(this.cbEnableOptimizations);
+			this.groupBox1.Controls.Add(this.cbEnableSparseConditionalConstantPropagation);
+			this.groupBox1.Controls.Add(this.cbEnableIROptimizations);
 			this.groupBox1.Controls.Add(this.cbEnableSSA);
 			this.groupBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.groupBox1.Location = new System.Drawing.Point(5, 196);
 			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(232, 135);
+			this.groupBox1.Size = new System.Drawing.Size(272, 135);
 			this.groupBox1.TabIndex = 22;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Optimizations:";
 			// 
-			// cbEnableConditionalConstantPropagation
+			// cbEnableSparseConditionalConstantPropagation
 			// 
-			this.cbEnableConditionalConstantPropagation.AutoSize = true;
-			this.cbEnableConditionalConstantPropagation.Checked = true;
-			this.cbEnableConditionalConstantPropagation.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.cbEnableConditionalConstantPropagation.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.cbEnableConditionalConstantPropagation.Location = new System.Drawing.Point(6, 65);
-			this.cbEnableConditionalConstantPropagation.Name = "cbEnableConditionalConstantPropagation";
-			this.cbEnableConditionalConstantPropagation.Size = new System.Drawing.Size(219, 17);
-			this.cbEnableConditionalConstantPropagation.TabIndex = 8;
-			this.cbEnableConditionalConstantPropagation.Text = "Enable Conditional Constant Propagation";
-			this.cbEnableConditionalConstantPropagation.UseVisualStyleBackColor = true;
+			this.cbEnableSparseConditionalConstantPropagation.AutoSize = true;
+			this.cbEnableSparseConditionalConstantPropagation.Checked = true;
+			this.cbEnableSparseConditionalConstantPropagation.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.cbEnableSparseConditionalConstantPropagation.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.cbEnableSparseConditionalConstantPropagation.Location = new System.Drawing.Point(6, 65);
+			this.cbEnableSparseConditionalConstantPropagation.Name = "cbEnableSparseConditionalConstantPropagation";
+			this.cbEnableSparseConditionalConstantPropagation.Size = new System.Drawing.Size(255, 17);
+			this.cbEnableSparseConditionalConstantPropagation.TabIndex = 8;
+			this.cbEnableSparseConditionalConstantPropagation.Text = "Enable Sparse Conditional Constant Propagation";
+			this.cbEnableSparseConditionalConstantPropagation.UseVisualStyleBackColor = true;
 			// 
-			// cbEnableOptimizations
+			// cbEnableIROptimizations
 			// 
-			this.cbEnableOptimizations.AutoSize = true;
-			this.cbEnableOptimizations.Checked = true;
-			this.cbEnableOptimizations.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.cbEnableOptimizations.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.cbEnableOptimizations.Location = new System.Drawing.Point(6, 42);
-			this.cbEnableOptimizations.Name = "cbEnableOptimizations";
-			this.cbEnableOptimizations.Size = new System.Drawing.Size(148, 17);
-			this.cbEnableOptimizations.TabIndex = 7;
-			this.cbEnableOptimizations.Text = "Enable SSA Optimizations";
-			this.cbEnableOptimizations.UseVisualStyleBackColor = true;
+			this.cbEnableIROptimizations.AutoSize = true;
+			this.cbEnableIROptimizations.Checked = true;
+			this.cbEnableIROptimizations.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.cbEnableIROptimizations.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.cbEnableIROptimizations.Location = new System.Drawing.Point(6, 42);
+			this.cbEnableIROptimizations.Name = "cbEnableIROptimizations";
+			this.cbEnableIROptimizations.Size = new System.Drawing.Size(138, 17);
+			this.cbEnableIROptimizations.TabIndex = 7;
+			this.cbEnableIROptimizations.Text = "Enable IR Optimizations";
+			this.cbEnableIROptimizations.UseVisualStyleBackColor = true;
 			// 
 			// cbEnableSSA
 			// 
@@ -932,7 +932,7 @@
 		private System.Windows.Forms.Label label3;
 		private System.Windows.Forms.ComboBox cbLinkerFormat;
 		private System.Windows.Forms.GroupBox groupBox1;
-		private System.Windows.Forms.CheckBox cbEnableOptimizations;
+		private System.Windows.Forms.CheckBox cbEnableIROptimizations;
 		private System.Windows.Forms.CheckBox cbEnableSSA;
 		private System.Windows.Forms.TabPage tbOptions;
 		private System.Windows.Forms.Label label4;
@@ -970,6 +970,6 @@
 		private System.Windows.Forms.GroupBox groupBox2;
 		private System.Windows.Forms.CheckBox cbGenerateASMFile;
 		private System.Windows.Forms.CheckBox cbGenerateMapFile;
-		private System.Windows.Forms.CheckBox cbEnableConditionalConstantPropagation;
+		private System.Windows.Forms.CheckBox cbEnableSparseConditionalConstantPropagation;
 	}
 }

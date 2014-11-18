@@ -51,8 +51,8 @@ namespace Mosa.Tool.Launcher
 		{
 			//Builder.Options.AutoLaunch = cbExitOnLaunch;
 			Options.EnableSSA = cbEnableSSA.Checked;
-			Options.EnableOptimizations = cbEnableOptimizations.Checked;
-			Options.EnableConditionalConstantPropagation = cbEnableConditionalConstantPropagation.Checked;
+			Options.EnableIROptimizations = cbEnableIROptimizations.Checked;
+			Options.EnableSparseConditionalConstantPropagation = cbEnableSparseConditionalConstantPropagation.Checked;
 			Options.GenerateASMFile = cbGenerateASMFile.Checked;
 			Options.GenerateMapFile = cbGenerateMapFile.Checked;
 			Options.ExitOnLaunch = cbExitOnLaunch.Checked;
@@ -118,8 +118,8 @@ namespace Mosa.Tool.Launcher
 		{
 			//Builder.Options.AutoLaunch = cbExitOnLaunch;
 			cbEnableSSA.Checked = Options.EnableSSA;
-			cbEnableOptimizations.Checked = Options.EnableOptimizations;
-			cbEnableConditionalConstantPropagation.Checked = Options.EnableConditionalConstantPropagation;
+			cbEnableIROptimizations.Checked = Options.EnableIROptimizations;
+			cbEnableSparseConditionalConstantPropagation.Checked = Options.EnableSparseConditionalConstantPropagation;
 			cbGenerateASMFile.Checked = Options.GenerateASMFile;
 			cbGenerateMapFile.Checked = Options.GenerateMapFile;
 			cbExitOnLaunch.Checked = Options.ExitOnLaunch;

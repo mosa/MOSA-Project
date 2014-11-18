@@ -31,11 +31,11 @@ namespace Mosa.Utility.Launcher
 
 		public bool EnableSSA { get; set; }
 
-		public bool EnableOptimizations { get; set; }
+		public bool EnableIROptimizations { get; set; }
 
 		public bool EnablePromoteTemporaryVariables { get; set; }
 
-		public bool EnableConditionalConstantPropagation { get; set; }
+		public bool EnableSparseConditionalConstantPropagation { get; set; }
 
 		public bool GenerateASMFile { get; set; }
 
@@ -52,9 +52,9 @@ namespace Mosa.Utility.Launcher
 		public Options()
 		{
 			EnableSSA = true;
-			EnableOptimizations = true;
+			EnableIROptimizations = true;
 			EnablePromoteTemporaryVariables = true;
-			EnableConditionalConstantPropagation = true;
+			EnableSparseConditionalConstantPropagation = true;
 			Emulator = EmulatorType.Qemu;
 			ImageFormat = ImageFormat.IMG;
 			BootFormat = BootFormat.Multiboot_0_7;
