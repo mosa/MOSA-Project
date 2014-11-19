@@ -41,6 +41,7 @@
     <DocumentationFile>..\..\bin\Mosa.Utility.BootImage.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="BlockFileStream.cs" />
     <Compile Include="Options.cs" />
     <Compile Include="Generator.cs" />
   </ItemGroup>
@@ -57,10 +58,6 @@
       <Project>{6509477A-7360-4937-A1B9-26FED0A75CDA}</Project>
       <Name>Mosa.DeviceSystem</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Mosa.EmulatedDevices\Mosa.EmulatedDevices.csproj">
-      <Project>{4BCC3783-8374-4E44-A843-22C0C5624C92}</Project>
-      <Name>Mosa.EmulatedDevices</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Mosa.FileSystem\Mosa.FileSystem.csproj">
       <Project>{D89972FD-A930-4D0C-B393-1895E78FAFAB}</Project>
       <Name>Mosa.FileSystem</Name>
@@ -68,6 +65,9 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

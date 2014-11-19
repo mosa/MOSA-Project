@@ -7,7 +7,7 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using Mosa.ClassLib;
+using System.Collections.Generic;
 using Mosa.DeviceSystem.PCI;
 
 namespace Mosa.DeviceSystem
@@ -86,8 +86,8 @@ namespace Mosa.DeviceSystem
 		/// </summary>
 		public void RegisterBuiltInDeviceDrivers()
 		{
-			System.Reflection.Assembly assemblyInfo = typeof(DeviceDriverRegistry).Module.Assembly;
-			RegisterDeviceDrivers(assemblyInfo);
+			//System.Reflection.Assembly assemblyInfo = typeof(DeviceDriverRegistry).Module.Assembly;
+			//RegisterDeviceDrivers(assemblyInfo);
 		}
 
 		/// <summary>
@@ -96,13 +96,14 @@ namespace Mosa.DeviceSystem
 		/// <param name="assemblyInfo">The assembly info.</param>
 		public void RegisterDeviceDrivers(System.Reflection.Assembly assemblyInfo)
 		{
-			System.Type[] types = assemblyInfo.GetTypes();
+			/*System.Type[] types = assemblyInfo.GetTypes();
 
 			foreach (System.Type type in types)
 			{
 				object[] attributes = type.GetCustomAttributes(typeof(IDeviceDriver), false);
 
 				foreach (object attribute in attributes)
+				{
 					if (((attribute as IDeviceDriver).Platforms & platformArchitecture) != 0)
 					{
 						DeviceDriver deviceDriver = new DeviceDriver(attribute as IDeviceDriver, type);
@@ -114,7 +115,8 @@ namespace Mosa.DeviceSystem
 
 						deviceDrivers.Add(deviceDriver);
 					}
-			}
+				}
+			}*/
 		}
 	}
 }
