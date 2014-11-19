@@ -16,12 +16,15 @@ namespace System
 	public sealed unsafe class RuntimeType : Type
 	{
 		private MetadataTypeStruct* typeStruct;
+		private string assemblyQualifiedName;
+		private string name;
+		private string @namespace;
 		private string fullname;
 		private RuntimeTypeHandle handle;
 
 		public override string AssemblyQualifiedName
 		{
-			get { throw new NotImplementedException(); }
+			get { return this.assemblyQualifiedName; }
 		}
 
 		public override Type DeclaringType
@@ -56,12 +59,12 @@ namespace System
 
 		public override string Name
 		{
-			get { throw new NotImplementedException(); }
+			get { return this.name; }
 		}
 
 		public override string Namespace
 		{
-			get { throw new NotImplementedException(); }
+			get { return this.@namespace; }
 		}
 
 		public override RuntimeTypeHandle TypeHandle
@@ -73,6 +76,9 @@ namespace System
 		{
 			this.handle = handle;
 			this.typeStruct = (MetadataTypeStruct*)((uint**)&handle)[0];
+			this.assemblyQualifiedName = x86Runtime.InitializeMetadataString((*this.typeStruct).Name);
+			this.name = x86Runtime.InitializeMetadataString((*this.typeStruct).Name);
+			this.@namespace = x86Runtime.InitializeMetadataString((*this.typeStruct).Name);
 			this.fullname = x86Runtime.InitializeMetadataString((*this.typeStruct).Name);
 		}
 

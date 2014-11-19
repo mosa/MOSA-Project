@@ -1,21 +1,23 @@
-/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
+﻿/*
+ * (c) 2014 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
+ *  Stefan Andres Charsley (charsleysa) <charsleysa@gmail.com>
  */
 
 using Mosa.DeviceSystem;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using System.IO;
 
-namespace Mosa.EmulatedDevices.Synthetic
+namespace Mosa.Utility.BootImage
 {
-	/// <summary>
-	/// Emulates a disk device
-	/// </summary>
-	public class DiskDevice : Device, IDiskDevice
+	public class BlockFileStream : Device, IDiskDevice
 	{
 		/// <summary>
 		///
@@ -28,10 +30,10 @@ namespace Mosa.EmulatedDevices.Synthetic
 		public uint BlockOffset = 0;
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="DiskDevice"/> class.
+		/// Initializes a new instance of the <see cref="BlockFileStream"/> class.
 		/// </summary>
 		/// <param name="filename">The filename.</param>
-		public DiskDevice(string filename)
+		public BlockFileStream(string filename)
 		{
 			base.name = "DiskDevice_" + Path.GetFileName(filename);
 			base.parent = null;

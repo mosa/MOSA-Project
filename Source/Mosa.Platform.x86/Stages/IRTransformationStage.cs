@@ -521,14 +521,21 @@ namespace Mosa.Platform.x86.Stages
 
 			var src = context.Operand1;
 			var dest = context.Result;
-			Debug.Assert(src.IsMemoryAddress && dest.IsMemoryAddress);
+			Debug.Assert((src.IsMemoryAddress || src.IsSymbol) && dest.IsMemoryAddress, context.ToString());
 
 			var srcReg = MethodCompiler.CreateVirtualRegister(dest.Type.TypeSystem.BuiltIn.I4);
 			var dstReg = MethodCompiler.CreateVirtualRegister(dest.Type.TypeSystem.BuiltIn.I4);
 			var tmp = MethodCompiler.CreateVirtualRegister(dest.Type.TypeSystem.BuiltIn.I4);
 
 			context.SetInstruction(X86.Nop);
-			context.AppendInstruction(X86.Lea, srcReg, src);
+			if (src.IsSymbol)
+			{
+				context.AppendInstruction(X86.Mov, srcReg, src);
+			}
+			else
+			{
+				context.AppendInstruction(X86.Lea, srcReg, src);
+			}
 			context.AppendInstruction(X86.Lea, dstReg, dest);
 			for (int i = 0; i < typeSize; i += 4)
 			{

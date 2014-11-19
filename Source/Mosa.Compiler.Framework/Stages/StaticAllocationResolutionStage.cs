@@ -60,11 +60,8 @@ namespace Mosa.Compiler.Framework.Stages
 				MethodCompiler.Linker.Link(LinkType.AbsoluteAddress, BuiltInPatch.I4, symbolName, 0, 0, typeDefinitionSymbol, SectionKind.ROData, 0);
 
 			// Issue a load request before the newobj and before the assignment.
-			Operand symbol1 = InsertLoadBeforeInstruction(allocation, symbolName.Name, assignment.MosaField.FieldType);
-			allocation.Operand1 = symbol1;
-
-			Operand symbol2 = InsertLoadBeforeInstruction(assignment, symbolName.Name, assignment.MosaField.FieldType);
-			assignment.Operand1 = symbol2;
+			Operand symbol1 = InsertLoadBeforeInstruction(assignment, symbolName.Name, assignment.MosaField.FieldType);
+			assignment.Operand1 = symbol1;
 
 			// Change the newobj to a call and increase the operand count to include the this ptr.
 			// If the instruction is a newarr, then just replace with a nop instead
@@ -76,7 +73,16 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 			else
 			{
+				Operand symbol2 = InsertLoadBeforeInstruction(allocation, symbolName.Name, assignment.MosaField.FieldType);
+				IEnumerable<Operand> ops = allocation.Operands;
 				allocation.OperandCount++;
+				allocation.Operand1 = symbol2;
+				int i = 0;
+				foreach (Operand op in ops)
+				{
+					i++;
+					allocation.SetOperand(i, op);
+				}
 				allocation.ReplaceInstructionOnly(CILInstruction.Get(OpCode.Call));
 			}
 		}

@@ -478,7 +478,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets the size of the instruction.
 		/// </summary>
-		/// <param name="operand">The operand.</param>
+		/// <param name="type">The type.</param>
 		/// <returns></returns>
 		public static InstructionSize GetInstructionSize(MosaType type)
 		{

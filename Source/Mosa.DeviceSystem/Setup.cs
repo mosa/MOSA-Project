@@ -7,7 +7,7 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using Mosa.ClassLib;
+using System.Collections.Generic;
 using Mosa.DeviceSystem.PCI;
 
 namespace Mosa.DeviceSystem

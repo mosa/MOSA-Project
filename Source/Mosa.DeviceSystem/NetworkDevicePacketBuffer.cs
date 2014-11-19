@@ -7,7 +7,7 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using Mosa.ClassLib;
+using System.Collections.Generic;
 
 namespace Mosa.DeviceSystem
 {
@@ -148,7 +148,7 @@ namespace Mosa.DeviceSystem
 				if (receiveQueue.Count == 0)
 					return null;
 
-				byte[] data = receiveQueue.First.value;
+				byte[] data = receiveQueue.First.Value;
 				receiveQueue.RemoveFirst();
 
 				return data;
@@ -207,7 +207,7 @@ namespace Mosa.DeviceSystem
 
 				while (receiveQueue.Count != 0)
 				{
-					byte[] data = receiveQueue.First.value;
+					byte[] data = receiveQueue.First.Value;
 
 					if (networkDevice.SendPacket(data))
 						receiveQueue.RemoveFirst();
