@@ -100,7 +100,7 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 
 			var size = GetInstructionSize(type);
-			context.SetInstruction(loadInstruction, size, destination, source, Operand.CreateConstantSignedInt(TypeSystem, 0));
+			context.SetInstruction(loadInstruction, size, destination, source, ConstantZero);
 			context.MosaType = type;
 		}
 
@@ -214,11 +214,11 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (TypeLayout.IsCompoundType(type))
 			{
-				context.SetInstruction(IRInstruction.CompoundStore, size, null, context.Operand1, Operand.CreateConstantSignedInt(MethodCompiler.TypeSystem, 0), context.Operand2);
+				context.SetInstruction(IRInstruction.CompoundStore, size, null, context.Operand1, ConstantZero, context.Operand2);
 			}
 			else
 			{
-				context.SetInstruction(IRInstruction.Store, size, null, context.Operand1, Operand.CreateConstantSignedInt(MethodCompiler.TypeSystem, 0), context.Operand2);
+				context.SetInstruction(IRInstruction.Store, size, null, context.Operand1, ConstantZero, context.Operand2);
 			}
 
 			context.MosaType = type;
@@ -233,7 +233,7 @@ namespace Mosa.Compiler.Framework.Stages
 			var field = context.MosaField;
 			var size = GetInstructionSize(field.FieldType);
 
-			context.SetInstruction(IRInstruction.Store, size, null, Operand.CreateField(field), Operand.CreateConstantSignedInt(MethodCompiler.TypeSystem, 0), context.Operand1);
+			context.SetInstruction(IRInstruction.Store, size, null, Operand.CreateField(field), ConstantZero, context.Operand1);
 			context.MosaType = field.FieldType;
 		}
 
@@ -514,7 +514,7 @@ namespace Mosa.Compiler.Framework.Stages
 					int methodPointerOffset = (NativePointerSize * 4);
 
 					// Get the TypeDef pointer
-					context.SetInstruction(IRInstruction.Load, NativeInstructionSize, typeDefinition, thisPtr, Operand.CreateConstantSignedInt(TypeSystem, 0));
+					context.SetInstruction(IRInstruction.Load, NativeInstructionSize, typeDefinition, thisPtr, ConstantZero);
 
 					// Get the MethodDef pointer
 					context.AppendInstruction(IRInstruction.Load, NativeInstructionSize, methodDefinition, typeDefinition, Operand.CreateConstantSignedInt(TypeSystem, (int)methodDefinitionOffset));
@@ -541,7 +541,7 @@ namespace Mosa.Compiler.Framework.Stages
 					Operand interfaceMethodTablePtr = MethodCompiler.CreateVirtualRegister(TypeSystem.BuiltIn.Pointer);
 
 					// Get the TypeDef pointer
-					context.SetInstruction(IRInstruction.Load, NativeInstructionSize, typeDefinition, thisPtr, Operand.CreateConstantSignedInt(TypeSystem, 0));
+					context.SetInstruction(IRInstruction.Load, NativeInstructionSize, typeDefinition, thisPtr, ConstantZero);
 
 					// Get the Interface Slot Table pointer
 					context.AppendInstruction(IRInstruction.Load, NativeInstructionSize, interfaceSlotPtr, typeDefinition, Operand.CreateConstantSignedInt(TypeSystem, (int)interfaceSlotTableOffset));
@@ -774,7 +774,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			var size = GetInstructionSize(tmp);
 
-			context.AppendInstruction(IRInstruction.Load, size, result, tmp, Operand.CreateConstantUnsignedInt(TypeSystem, 0));
+			context.AppendInstruction(IRInstruction.Load, size, result, tmp, ConstantZero);
 			context.MosaType = type;
 			return;
 		}
