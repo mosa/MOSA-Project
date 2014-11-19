@@ -18,7 +18,7 @@ namespace Mosa.Compiler.Framework.Analysis
 	/// <summary>
 	///
 	/// </summary>
-	public class ConditionalConstantPropagation
+	public class SparseConditionalConstantPropagation
 	{
 		protected class VariableState
 		{
@@ -96,7 +96,7 @@ namespace Mosa.Compiler.Framework.Analysis
 
 		protected readonly KeyedList<BasicBlock, int> phiStatements = new KeyedList<BasicBlock, int>();
 
-		public ConditionalConstantPropagation(BasicBlocks basicBlocks, InstructionSet instructionSet, SectionTrace trace)
+		public SparseConditionalConstantPropagation(BasicBlocks basicBlocks, InstructionSet instructionSet, SectionTrace trace)
 		{
 			this.Trace = trace;
 			this.BasicBlocks = basicBlocks;

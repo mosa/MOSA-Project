@@ -640,9 +640,18 @@ namespace Mosa.Platform.x86.Stages
 
 			if (offsetOperand.IsConstant)
 			{
-				Operand mem = Operand.CreateMemoryAddress(storeType, baseOperand, offsetOperand.ConstantSignedInteger);
+				if (baseOperand.IsField)
+				{
+					Debug.Assert(offsetOperand.IsConstantZero);
+					Debug.Assert(baseOperand.Field.IsStatic);
 
-				context.SetInstruction(GetMove(mem, value), size, mem, value);
+					context.SetInstruction(GetMove(baseOperand, value), size, baseOperand, value);
+				}
+				else
+				{
+					var mem = Operand.CreateMemoryAddress(storeType, baseOperand, offsetOperand.ConstantSignedInteger);
+					context.SetInstruction(GetMove(mem, value), size, mem, value);
+				}
 			}
 			else
 			{
@@ -988,6 +997,38 @@ namespace Mosa.Platform.x86.Stages
 			else
 				throw new NotSupportedException();
 		}
+
+		///// <summary>
+		///// Visitation function for StackLoad.
+		///// </summary>
+		///// <param name="context">The context.</param>
+		//void IIRVisitor.StackLoad(Context context)
+		//{
+		//}
+
+		///// <summary>
+		///// Visitation function for StackStore.
+		///// </summary>
+		///// <param name="context">The context.</param>
+		//void IIRVisitor.StackStore(Context context)
+		//{
+		//}
+
+		///// <summary>
+		///// Visitation function for ParamLoad.
+		///// </summary>
+		///// <param name="context">The context.</param>
+		//void IIRVisitor.ParamLoad(Context context)
+		//{
+		//}
+
+		///// <summary>
+		///// Visitation function for ParamStore.
+		///// </summary>
+		///// <param name="context">The context.</param>
+		//void IIRVisitor.ParamStore(Context context)
+		//{
+		//}
 
 		#endregion IIRVisitor
 

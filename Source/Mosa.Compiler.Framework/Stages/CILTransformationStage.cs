@@ -55,7 +55,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="context">The context.</param>
 		void CIL.ICILVisitor.Ldloc(Context context)
 		{
-			ProcessLoadInstruction(context);
+			context.ReplaceInstructionOnly(IRInstruction.Move);
 		}
 
 		/// <summary>
@@ -230,7 +230,11 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="context">The context.</param>
 		void CIL.ICILVisitor.Stsfld(Context context)
 		{
-			context.SetInstruction(IRInstruction.Move, Operand.CreateField(context.MosaField), context.Operand1);
+			var field = context.MosaField;
+			var size = GetInstructionSize(field.FieldType);
+
+			context.SetInstruction(IRInstruction.Store, size, null, Operand.CreateField(field), Operand.CreateConstantSignedInt(MethodCompiler.TypeSystem, 0), context.Operand1);
+			context.MosaType = field.FieldType;
 		}
 
 		/// <summary>

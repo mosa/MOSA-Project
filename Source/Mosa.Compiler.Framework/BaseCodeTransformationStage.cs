@@ -16,6 +16,15 @@ namespace Mosa.Compiler.Framework
 	/// </summary>
 	public abstract class BaseCodeTransformationStage : BaseMethodCompilerStage, IVisitor
 	{
+		protected Operand ConstantZero;
+
+		protected override void Setup()
+		{
+			base.Setup();
+
+			ConstantZero = Operand.CreateConstantUnsignedInt(MethodCompiler.TypeSystem, 0);
+		}
+
 		protected override void Run()
 		{
 			for (int index = 0; index < BasicBlocks.Count; index++)

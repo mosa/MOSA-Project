@@ -9,7 +9,7 @@
 
 using System.Collections.Generic;
 
-namespace Mosa.Compiler.Framework.RegisterAllocator
+namespace Mosa.Compiler.Framework
 {
 	public sealed class OperandVisitor
 	{

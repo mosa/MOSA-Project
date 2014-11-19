@@ -451,6 +451,38 @@ namespace Mosa.Platform.ARMv6.Stages
 		{
 		}
 
+		///// <summary>
+		///// Visitation function for StackLoad.
+		///// </summary>
+		///// <param name="context">The context.</param>
+		//void IIRVisitor.StackLoad(Context context)
+		//{
+		//}
+
+		///// <summary>
+		///// Visitation function for StackStore.
+		///// </summary>
+		///// <param name="context">The context.</param>
+		//void IIRVisitor.StackStore(Context context)
+		//{
+		//}
+
+		///// <summary>
+		///// Visitation function for ParamLoad.
+		///// </summary>
+		///// <param name="context">The context.</param>
+		//void IIRVisitor.ParamLoad(Context context)
+		//{
+		//}
+
+		///// <summary>
+		///// Visitation function for ParamStore.
+		///// </summary>
+		///// <param name="context">The context.</param>
+		//void IIRVisitor.ParamStore(Context context)
+		//{
+		//}
+
 		#endregion IIRVisitor
 
 		#region IIRVisitor - Unused

@@ -35,7 +35,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected override void Run()
 		{
-			var analysis = new ConditionalConstantPropagation(BasicBlocks, InstructionSet, trace);
+			var analysis = new SparseConditionalConstantPropagation(BasicBlocks, InstructionSet, trace);
 
 			var deadBlocks = analysis.GetDeadBlocked();
 			var constants = analysis.GetIntegerConstants();

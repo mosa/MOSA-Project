@@ -361,5 +361,29 @@ namespace Mosa.Compiler.Framework.IR
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IntrinsicMethodCall(Context context);
+
+		///// <summary>
+		///// Visitation function for StackLoad.
+		///// </summary>
+		///// <param name="context">The context.</param>
+		//void StackLoad(Context context);
+
+		///// <summary>
+		///// Visitation function for StackStore.
+		///// </summary>
+		///// <param name="context">The context.</param>
+		//void StackStore(Context context);
+
+		///// <summary>
+		///// Visitation function for ParamLoad.
+		///// </summary>
+		///// <param name="context">The context.</param>
+		//void ParamLoad(Context context);
+
+		///// <summary>
+		///// Visitation function for ParamStore.
+		///// </summary>
+		///// <param name="context">The context.</param>
+		//void ParamStore(Context context);
 	}
 }
