@@ -45,7 +45,7 @@ namespace Mosa.Utility.BootImage
 			diskGeometry.GuessGeometry(blockCount);
 
 			// Create disk image file
-			Mosa.EmulatedDevices.Synthetic.DiskDevice diskDevice = new Mosa.EmulatedDevices.Synthetic.DiskDevice(options.DiskImageFileName);
+			BlockFileStream diskDevice = new BlockFileStream(options.DiskImageFileName);
 
 			if (options.ImageFormat == ImageFormatType.VDI)
 			{

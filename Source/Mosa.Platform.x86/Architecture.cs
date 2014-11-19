@@ -205,7 +205,7 @@ namespace Mosa.Platform.x86
 		{
 			// FIXME: Create a specific code generator instance using requested feature flags.
 			// FIXME: Add some more optimization passes, which take advantage of advanced x86 instructions
-			// and packed operations available with MMX/SSE extensions
+			// and packed operations available with SSE extensions
 			methodCompilerPipeline.InsertAfterLast<PlatformStubStage>(
 				new IMethodCompilerStage[]
 				{
