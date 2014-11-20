@@ -15,25 +15,32 @@ namespace Mosa.Utility.Launcher
 	internal class BuilderEventListener : ICompilerEventListener
 	{
 		private Builder builder;
+		private object compilerEventListenerLock = new object();
 
 		void ICompilerEventListener.SubmitTraceEvent(CompilerEvent compilerStage, string info)
 		{
-			if (compilerStage == CompilerEvent.CompilerStageStart || compilerStage == CompilerEvent.CompilerStageEnd || compilerStage == CompilerEvent.Exception)
+			lock (compilerEventListenerLock)
 			{
-				string status = "Compiling: " + String.Format("{0:0.00}", (DateTime.Now - builder.CompileStartTime).TotalSeconds) + " secs: " + compilerStage.ToText() + ": " + info;
+				if (compilerStage == CompilerEvent.CompilerStageStart || compilerStage == CompilerEvent.CompilerStageEnd || compilerStage == CompilerEvent.Exception)
+				{
+					string status = "Compiling: " + String.Format("{0:0.00}", (DateTime.Now - builder.CompileStartTime).TotalSeconds) + " secs: " + compilerStage.ToText() + ": " + info;
 
-				builder.AddOutput(status);
-			}
-			else if (compilerStage == CompilerEvent.Counter)
-			{
-				builder.AddCounters(info);
+					builder.AddOutput(status);
+				}
+				else if (compilerStage == CompilerEvent.Counter)
+				{
+					builder.AddCounters(info);
+				}
 			}
 		}
 
 		void ICompilerEventListener.SubmitMethodStatus(int totalMethods, int completedMethods)
 		{
-			if (builder.BuilderEvent != null)
-				builder.BuilderEvent.UpdateProgress(totalMethods, completedMethods);
+			lock (compilerEventListenerLock)
+			{
+				if (builder.BuilderEvent != null)
+					builder.BuilderEvent.UpdateProgress(totalMethods, completedMethods);
+			}
 		}
 
 		public BuilderEventListener(Builder builder)
