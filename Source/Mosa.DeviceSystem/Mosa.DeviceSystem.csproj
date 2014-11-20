@@ -90,7 +90,6 @@
     <Compile Include="GUIDPartitionTable.cs" />
     <Compile Include="PartitionType.cs" />
     <Compile Include="PCIControllerManager.cs" />
-    <Compile Include="PCI\DeviceTable.cs" />
     <Compile Include="PCI\IDeviceResource.cs" />
     <Compile Include="PCI\IPCIDevice.cs" />
     <Compile Include="PCI\PCIDevice.cs" />

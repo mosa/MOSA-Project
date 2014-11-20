@@ -139,6 +139,7 @@
     <Compile Include="RegisterAllocator\LiveInterval.cs" />
     <Compile Include="RegisterAllocator\VirtualRegister.cs" />
     <Compile Include="RegisterAllocator\GreedyRegisterAllocator.cs" />
+    <Compile Include="Stages\IRCleanup.cs" />
     <Compile Include="Stages\DeadCodeRemovalStage.cs" />
     <Compile Include="Stages\SparseConditionalConstantPropagationStage.cs" />
     <Compile Include="Stages\MethodExceptionLookupTableStage.cs" />

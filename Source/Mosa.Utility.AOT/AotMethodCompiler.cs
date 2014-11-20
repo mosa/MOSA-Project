@@ -52,12 +52,11 @@ namespace Mosa.Utility.Aot
 				(compilerOptions.EnableSSA) ? new EnterSSAStage() : null,
 				(compilerOptions.EnableSparseConditionalConstantPropagation && compilerOptions.EnableSSA) ? new SparseConditionalConstantPropagationStage() : null,
 				(compilerOptions.EnableOptimizations) ? new IROptimizationStage() : null,
-				//(compilerOptions.EnableConditionalConstantPropagation && compilerOptions.EnableOptimizations && compilerOptions.EnableSSA) ? new ConditionalConstantPropagationStage() : null,
-				//(compilerOptions.EnableConditionalConstantPropagation && compilerOptions.EnableOptimizations && compilerOptions.EnableSSA) ? new IROptimizationStage() : null,
+				//(compilerOptions.EnableSSA) ? new DeadCodeRemovalStage() : null,
 				(compilerOptions.EnableSSA) ? new LeaveSSA() : null,
 
+				new IRCleanup(),
 				new ExceptionStage(),
-
 				new PlatformStubStage(),
 				new	PlatformEdgeSplitStage(),
 				new GreedyRegisterAllocatorStage(),
