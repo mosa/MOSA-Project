@@ -125,85 +125,97 @@ namespace Mosa.Tool.Explorer
 			UpdateTree();
 		}
 
+		private object traceListenerLock = new object();
+		private object compilerEventListenerLock = new object();
+
 		void ICompilerEventListener.SubmitTraceEvent(CompilerEvent compilerStage, string info)
 		{
-			if (compilerStage != CompilerEvent.DebugInfo)
+			lock (compilerEventListenerLock)
 			{
-				SetStatus(compilerStage.ToText() + ": " + info);
-				toolStripStatusLabel1.GetCurrentParent().Refresh();
-			}
+				if (compilerStage != CompilerEvent.DebugInfo)
+				{
+					SetStatus(compilerStage.ToText() + ": " + info);
+					toolStripStatusLabel1.GetCurrentParent().Refresh();
+				}
 
-			if (compilerStage == CompilerEvent.CompilingMethod)
-			{
-				methodName = info;
-			}
+				if (compilerStage == CompilerEvent.CompilingMethod)
+				{
+					methodName = info;
+				}
 
-			if (compilerStage == CompilerEvent.Error)
-			{
-				errorLog.AppendLine("Method: " + methodName);
-				errorLog.AppendLine(compilerStage.ToText() + ": " + info);
-			}
-			if (compilerStage == CompilerEvent.Exception)
-			{
-				exceptionLog.AppendLine("Method: " + methodName);
-				exceptionLog.AppendLine(compilerStage.ToText() + ": " + info);
-				compileLog.AppendLine(String.Format("{0:0.00}", (DateTime.Now - compileStartTime).TotalSeconds) + " secs: " + compilerStage.ToText() + ": " + info);
-			}
-			else if (compilerStage == CompilerEvent.Counter)
-			{
-				counterLog.AppendLine(compilerStage.ToText() + ": " + info);
-			}
-			else
-			{
-				compileLog.AppendLine(String.Format("{0:0.00}", (DateTime.Now - compileStartTime).TotalSeconds) + " secs: " + compilerStage.ToText() + ": " + info);
+				if (compilerStage == CompilerEvent.Error)
+				{
+					errorLog.AppendLine("Method: " + methodName);
+					errorLog.AppendLine(compilerStage.ToText() + ": " + info);
+				}
+				if (compilerStage == CompilerEvent.Exception)
+				{
+					exceptionLog.AppendLine("Method: " + methodName);
+					exceptionLog.AppendLine(compilerStage.ToText() + ": " + info);
+					compileLog.AppendLine(String.Format("{0:0.00}", (DateTime.Now - compileStartTime).TotalSeconds) + " secs: " + compilerStage.ToText() + ": " + info);
+				}
+				else if (compilerStage == CompilerEvent.Counter)
+				{
+					counterLog.AppendLine(compilerStage.ToText() + ": " + info);
+				}
+				else
+				{
+					compileLog.AppendLine(String.Format("{0:0.00}", (DateTime.Now - compileStartTime).TotalSeconds) + " secs: " + compilerStage.ToText() + ": " + info);
+				}
 			}
 		}
 
 		void ITraceListener.SubmitInstructionTraceInformation(MosaMethod method, string stage, string log)
 		{
-			MethodStages methodStage;
-
-			if (!methodStages.TryGetValue(method, out methodStage))
+			lock (traceListenerLock)
 			{
-				methodStage = new MethodStages();
-				methodStages.Add(method, methodStage);
-			}
+				MethodStages methodStage;
 
-			methodStage.OrderedStageNames.AddIfNew(stage);
+				if (!methodStages.TryGetValue(method, out methodStage))
+				{
+					methodStage = new MethodStages();
+					methodStages.Add(method, methodStage);
+				}
 
-			StringBuilder stringbuilder;
+				methodStage.OrderedStageNames.AddIfNew(stage);
 
-			if (methodStage.InstructionLogs.TryGetValue(stage, out stringbuilder))
-			{
-				stringbuilder.Append(log);
-			}
-			else
-			{
-				stringbuilder = new StringBuilder(log);
-				methodStage.InstructionLogs.Add(stage, stringbuilder);
+				StringBuilder stringbuilder;
+
+				if (methodStage.InstructionLogs.TryGetValue(stage, out stringbuilder))
+				{
+					stringbuilder.Append(log);
+				}
+				else
+				{
+					stringbuilder = new StringBuilder(log);
+					methodStage.InstructionLogs.Add(stage, stringbuilder);
+				}
 			}
 		}
 
 		void ITraceListener.SubmitDebugStageInformation(MosaMethod method, string stage, string line)
 		{
-			MethodStages methodStage;
-
-			if (!methodStages.TryGetValue(method, out methodStage))
+			lock (traceListenerLock)
 			{
-				methodStage = new MethodStages();
-				methodStages.Add(method, methodStage);
+				MethodStages methodStage;
+
+				if (!methodStages.TryGetValue(method, out methodStage))
+				{
+					methodStage = new MethodStages();
+					methodStages.Add(method, methodStage);
+				}
+
+				methodStage.OrderedDebugStageNames.AddIfNew(stage);
+
+				StringBuilder stringbuilder;
+
+				if (!methodStage.DebugLogs.TryGetValue(stage, out stringbuilder))
+				{
+					stringbuilder = new StringBuilder(line.Length + 2);
+					methodStage.DebugLogs.Add(stage, stringbuilder);
+				}
+				stringbuilder.AppendLine(line);
 			}
-
-			methodStage.OrderedDebugStageNames.AddIfNew(stage);
-
-			StringBuilder stringbuilder;
-
-			if (!methodStage.DebugLogs.TryGetValue(stage, out stringbuilder))
-			{
-				stringbuilder = new StringBuilder(line.Length + 2);
-				methodStage.DebugLogs.Add(stage, stringbuilder);
-			}
-			stringbuilder.AppendLine(line);
 		}
 
 		private void Compile()
