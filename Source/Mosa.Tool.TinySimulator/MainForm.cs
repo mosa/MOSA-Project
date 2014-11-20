@@ -105,21 +105,16 @@ namespace Mosa.Tool.TinySimulator
 			worker.Start();
 		}
 
-		private object compilerEventListenerLock = new object();
-
 		void ICompilerEventListener.SubmitTraceEvent(CompilerEvent compilerStage, string info)
 		{
-			lock (compilerEventListenerLock)
+			if (compilerStage == CompilerEvent.CompilerStageStart || compilerStage == CompilerEvent.CompilerStageEnd)
 			{
-				if (compilerStage == CompilerEvent.CompilerStageStart || compilerStage == CompilerEvent.CompilerStageEnd)
-				{
-					string status = "Compiling: " + String.Format("{0:0.00}", (DateTime.Now - compileStartTime).TotalSeconds) + " secs: " + compilerStage.ToText() + ": " + info;
+				string status = "Compiling: " + String.Format("{0:0.00}", (DateTime.Now - compileStartTime).TotalSeconds) + " secs: " + compilerStage.ToText() + ": " + info;
 
-					toolStripStatusLabel1.Text = status;
-					toolStripStatusLabel1.GetCurrentParent().Refresh();
+				toolStripStatusLabel1.Text = status;
+				toolStripStatusLabel1.GetCurrentParent().Refresh();
 
-					AddOutput(status);
-				}
+				AddOutput(status);
 			}
 		}
 
