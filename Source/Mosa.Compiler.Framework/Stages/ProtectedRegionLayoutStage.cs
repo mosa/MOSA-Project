@@ -64,6 +64,10 @@ namespace Mosa.Compiler.Framework.Stages
 
 				foreach (var block in region.IncludedBlocks)
 				{
+					// Check if block continues to exist
+					if (!BasicBlocks.Contains(block))
+						continue;
+
 					int start = codeEmitter.GetPosition(block.Label);
 					int end = codeEmitter.GetPosition(block.Label + 0x0F000000);
 
