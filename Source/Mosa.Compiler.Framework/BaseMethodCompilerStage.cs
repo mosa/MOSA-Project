@@ -8,6 +8,7 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
+using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.InternalTrace;
 using Mosa.Compiler.MosaTypeSystem;
@@ -407,6 +408,30 @@ namespace Mosa.Compiler.Framework
 				}
 				while (ctx.IsEmpty);
 			}
+		}
+
+		protected void RemoveEmptyBlockWithSingleJump(BasicBlock block)
+		{
+			Debug.Assert(block.NextBlocks.Count == 1);
+
+			BasicBlock target = block.NextBlocks[0];
+
+			target.PreviousBlocks.Remove(block);
+
+			foreach (var from in block.PreviousBlocks)
+			{
+				from.NextBlocks.Remove(block);
+				from.NextBlocks.AddIfNew(target);
+
+				target.PreviousBlocks.AddIfNew(from);
+
+				ReplaceBranchTargets(from, block, target);
+			}
+
+			block.NextBlocks.Clear();
+			block.PreviousBlocks.Clear();
+
+			EmptyBlockOfAllInstructions(block);
 		}
 
 		#endregion Block Operations
