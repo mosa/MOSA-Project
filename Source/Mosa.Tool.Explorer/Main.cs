@@ -229,7 +229,7 @@ namespace Mosa.Tool.Explorer
 
 			//try
 			//{
-			ExplorerCompiler.Compile(typeSystem, typeLayout, compilerTrace, cbPlatform.Text, compilerOptions, enableBinaryCodeGeneration.Checked);
+			ExplorerCompiler.Compile(typeSystem, typeLayout, compilerTrace, GetArchitecture(cbPlatform.Text), compilerOptions, enableBinaryCodeGeneration.Checked);
 			SetStatus("Compiled!");
 			//}
 			//catch (Exception e)

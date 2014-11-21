@@ -30,18 +30,24 @@ namespace Mosa.Utility.Aot
 		public AotCompiler(BaseArchitecture architecture, TypeSystem typeSystem, MosaTypeLayout typeLayout, CompilerTrace compilerTrace, CompilerOptions compilerOptions)
 			: base(architecture, typeSystem, typeLayout, new CompilationScheduler(typeSystem, true), compilerTrace, null, compilerOptions)
 		{
-		}
+			var bootStage = compilerOptions.BootStageFactory != null ? compilerOptions.BootStageFactory() : null;
 
-		/// <summary>
-		/// Runs this instance.
-		/// </summary>
-		public void Run()
-		{
+			Pipeline.Add(new ICompilerStage[] {
+				bootStage,
+				compilerOptions.MethodPipelineExportDirectory != null ?  new MethodPipelineExportStage(): null,
+				new PlugStage(),
+				new MethodCompilerSchedulerStage(),
+				new TypeInitializerSchedulerStage(),
+				bootStage,
+				new MethodLookupTableStage(),
+				new MethodExceptionLookupTableStage(),
+				new MetadataStage(),
+				new LinkerFinalizationStage(),
+				compilerOptions.MapFile != null ? new MapFileGenerationStage() : null
+			});
+
 			// Build the default compiler pipeline
 			Architecture.ExtendCompilerPipeline(this.Pipeline);
-
-			// Run the compiler
-			Compile();
 		}
 
 		/// <summary>
@@ -79,27 +85,12 @@ namespace Mosa.Utility.Aot
 			}
 
 			var typeSystem = TypeSystem.Load(moduleLoader.CreateMetadata());
-			MosaTypeLayout typeLayout = new MosaTypeLayout(typeSystem, compilerOptions.Architecture.NativePointerSize, compilerOptions.Architecture.NativeAlignment);
 
-			AotCompiler aot = new AotCompiler(compilerOptions.Architecture, typeSystem, typeLayout, compilerTrace, compilerOptions);
+			var typeLayout = new MosaTypeLayout(typeSystem, compilerOptions.Architecture.NativePointerSize, compilerOptions.Architecture.NativeAlignment);
 
-			var bootStage = compilerOptions.BootStageFactory != null ? compilerOptions.BootStageFactory() : null;
+			var compiler = new AotCompiler(compilerOptions.Architecture, typeSystem, typeLayout, compilerTrace, compilerOptions);
 
-			aot.Pipeline.Add(new ICompilerStage[] {
-				bootStage,
-				compilerOptions.MethodPipelineExportDirectory != null ?  new MethodPipelineExportStage(): null,
-				new PlugStage(),
-				new MethodCompilerSchedulerStage(),
-				new TypeInitializerSchedulerStage(),
-				bootStage,
-				new MethodLookupTableStage(),
-				new MethodExceptionLookupTableStage(),
-				new MetadataStage(),
-				new LinkerFinalizationStage(),
-				compilerOptions.MapFile != null ? new MapFileGenerationStage() : null
-			});
-
-			aot.Run();
+			compiler.Compile();
 		}
 	}
 }

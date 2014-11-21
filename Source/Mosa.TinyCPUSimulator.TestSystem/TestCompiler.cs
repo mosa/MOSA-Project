@@ -28,7 +28,6 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 		protected BaseLinker linker;
 		protected TypeSystem typeSystem;
 		protected MosaTypeLayout typeLayout;
-		protected SimCompiler simCompiler;
 
 		public bool EnableSSA { get; set; }
 
@@ -54,10 +53,7 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 
 		protected void CompileTestCode()
 		{
-			if (simCompiler != null)
-				return;
-
-			MosaModuleLoader moduleLoader = new MosaModuleLoader();
+			var moduleLoader = new MosaModuleLoader();
 
 			moduleLoader.AddPrivatePath(System.IO.Directory.GetCurrentDirectory());
 			moduleLoader.LoadModuleFromFile("mscorlib.dll");
@@ -66,8 +62,6 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 			moduleLoader.LoadModuleFromFile("Mosa.Kernel." + platform.Name + "Test.dll");
 
 			typeSystem = TypeSystem.Load(moduleLoader.CreateMetadata());
-
-			typeLayout = new MosaTypeLayout(typeSystem, 4, 4);
 
 			platform.InitializeSimulation(simAdapter);
 
@@ -78,7 +72,9 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 			compilerOptions.EnablePromoteTemporaryVariablesOptimization = EnableOptimizations;
 			compilerOptions.EnableSparseConditionalConstantPropagation = EnableOptimizations;
 
-			simCompiler = SimCompiler.Compile(typeSystem, typeLayout, compilerTrace, compilerOptions, architecture, simAdapter, linker);
+			typeLayout = new MosaTypeLayout(typeSystem, compilerOptions.Architecture.NativePointerSize, compilerOptions.Architecture.NativeAlignment);
+
+			SimCompiler.Compile(typeSystem, typeLayout, compilerTrace, compilerOptions, architecture, simAdapter, linker);
 
 			//simAdapter.SimCPU.Monitor.DebugOutput = true; // DEBUG OPTION
 

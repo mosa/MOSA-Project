@@ -26,6 +26,7 @@ namespace Mosa.Tool.Explorer
 		/// <param name="typeLayout">The type layout.</param>
 		/// <param name="compilerTrace">The internal trace.</param>
 		/// <param name="compilerOptions">The compiler options.</param>
+		/// <param name="emitBinary">if set to <c>true</c> [emit binary].</param>
 		public ExplorerCompiler(BaseArchitecture architecture, TypeSystem typeSystem, MosaTypeLayout typeLayout, CompilerTrace compilerTrace, CompilerOptions compilerOptions, bool emitBinary) :
 			base(architecture, typeSystem, typeLayout, new CompilationScheduler(typeSystem, true), compilerTrace, new ExplorerLinker(), compilerOptions)
 		{
@@ -64,23 +65,11 @@ namespace Mosa.Tool.Explorer
 		/// <param name="typeSystem">The type system.</param>
 		/// <param name="typeLayout">The type layout.</param>
 		/// <param name="compilerTrace">The compiler trace.</param>
-		/// <param name="platform">The platform.</param>
-		/// <param name="enabledSSA">if set to <c>true</c> [enabled ssa].</param>
-		/// <param name="enableOptimizations">if set to <c>true</c> [enable ssa optimizations].</param>
+		/// <param name="architecture">The architecture.</param>
+		/// <param name="compilerOptions">The compiler options.</param>
 		/// <param name="emitBinary">if set to <c>true</c> [emit binary].</param>
-		public static void Compile(TypeSystem typeSystem, MosaTypeLayout typeLayout, CompilerTrace compilerTrace, string platform, CompilerOptions compilerOptions, bool emitBinary)
+		public static void Compile(TypeSystem typeSystem, MosaTypeLayout typeLayout, CompilerTrace compilerTrace, BaseArchitecture architecture, CompilerOptions compilerOptions, bool emitBinary)
 		{
-			BaseArchitecture architecture;
-
-			switch (platform.ToLower())
-			{
-				case "x86": architecture = Mosa.Platform.x86.Architecture.CreateArchitecture(Mosa.Platform.x86.ArchitectureFeatureFlags.AutoDetect); break;
-				case "armv6": architecture = Mosa.Platform.ARMv6.Architecture.CreateArchitecture(Mosa.Platform.ARMv6.ArchitectureFeatureFlags.AutoDetect); break;
-				//case "avr32": architecture = Mosa.Platform.AVR32.Architecture.CreateArchitecture(Mosa.Platform.AVR32.ArchitectureFeatureFlags.AutoDetect); break;
-				default:
-					architecture = Mosa.Platform.x86.Architecture.CreateArchitecture(Mosa.Platform.x86.ArchitectureFeatureFlags.AutoDetect); break;
-			}
-
 			var compiler = new ExplorerCompiler(architecture, typeSystem, typeLayout, compilerTrace, compilerOptions, emitBinary);
 
 			compiler.Compile();
