@@ -24,14 +24,14 @@ namespace Mosa.Compiler.Framework
 
 		void Begin();
 
-		void CompilerAll();
+		void Compile();
 
 		void CompilerType(MosaType type);
 
 		void CompilerMethod(MosaMethod method);
 
-		void Resolve();
+		void ResolveSymbols();
 
-		//void Finalize();
+		void FinalizeOutput();
 	}
 }

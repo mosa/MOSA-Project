@@ -182,7 +182,7 @@ namespace Mosa.Tool.TinySimulator
 			moduleLoader.LoadModuleFromFile(filename);
 
 			TypeSystem = TypeSystem.Load(moduleLoader.CreateMetadata());
-			TypeLayout = new MosaTypeLayout(TypeSystem, 4, 4);
+			TypeLayout = new MosaTypeLayout(TypeSystem, 4, 4); // FIXME
 
 			assembliesView.UpdateTree();
 		}

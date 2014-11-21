@@ -53,6 +53,8 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 
 		protected void CompileTestCode()
 		{
+			platform.InitializeSimulation(simAdapter);
+
 			var moduleLoader = new MosaModuleLoader();
 
 			moduleLoader.AddPrivatePath(System.IO.Directory.GetCurrentDirectory());
@@ -62,8 +64,6 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 			moduleLoader.LoadModuleFromFile("Mosa.Kernel." + platform.Name + "Test.dll");
 
 			typeSystem = TypeSystem.Load(moduleLoader.CreateMetadata());
-
-			platform.InitializeSimulation(simAdapter);
 
 			var compilerOptions = new CompilerOptions();
 
