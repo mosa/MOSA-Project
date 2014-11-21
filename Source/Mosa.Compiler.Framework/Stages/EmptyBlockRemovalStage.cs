@@ -8,9 +8,7 @@
  */
 
 using Mosa.Compiler.Common;
-using Mosa.Compiler.InternalTrace;
 using System.Collections.Generic;
-using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework.Stages
 {
@@ -19,13 +17,9 @@ namespace Mosa.Compiler.Framework.Stages
 	/// </summary>
 	public class EmptyBlockRemovalStage : BaseMethodCompilerStage
 	{
-		protected BaseInstruction jumpInstruction;
-
 		protected override void Run()
 		{
-			var trace = CreateTrace();
-
-			List<Tuple<BasicBlock, BasicBlock>> worklist = new List<Tuple<BasicBlock, BasicBlock>>();
+			//var trace = CreateTrace();
 
 			foreach (var block in BasicBlocks)
 			{
@@ -40,52 +34,18 @@ namespace Mosa.Compiler.Framework.Stages
 				if (!IsEmptyBlockWithSingleJump(block))
 					continue;
 
-				RemoveBlock(block, trace);
+				//if (trace.Active)
+				//{
+				//	trace.Log("====== Removing: " + block.ToString() + " # " + block.Sequence);
+				//	trace.Log("     New Target: " + block.NextBlocks[0].ToString());
+				//	foreach (var from in block.PreviousBlocks)
+				//	{
+				//		trace.Log("Previous Blocks: " + from.ToString());
+				//	}
+				//}
+
+				RemoveEmptyBlockWithSingleJump(block);
 			}
-		}
-
-		private void RemoveBlock(BasicBlock block, SectionTrace trace)
-		{
-			Debug.Assert(block.NextBlocks.Count == 1);
-
-			BasicBlock target = block.NextBlocks[0];
-
-			if (trace.Active)
-			{
-				trace.Log("====== Removing: " + block.ToString() + " # " + block.Sequence);
-				trace.Log("     New Target: " + target.ToString());
-				foreach (var from in block.PreviousBlocks)
-				{
-					trace.Log("Previous Blocks: " + from.ToString());
-				}
-			}
-
-			target.PreviousBlocks.Remove(block);
-
-			foreach (var from in block.PreviousBlocks)
-			{
-				from.NextBlocks.Remove(block);
-				from.NextBlocks.AddIfNew(target);
-
-				if (trace.Active)
-				{
-					trace.Log("  Add target to NextBlock of " + from.ToString());
-				}
-
-				target.PreviousBlocks.AddIfNew(from);
-
-				if (trace.Active)
-				{
-					trace.Log("  Add " + from.ToString() + " to PreviousBlock of " + target.ToString());
-				}
-
-				ReplaceBranchTargets(from, block, target);
-			}
-
-			block.NextBlocks.Clear();
-			block.PreviousBlocks.Clear();
-
-			EmptyBlockOfAllInstructions(block);
 		}
 	}
 }

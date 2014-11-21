@@ -23,8 +23,6 @@ namespace Mosa.Compiler.Framework.Stages
 	{
 		protected override void Run()
 		{
-			// FUTURE: Consolidate empty blocks, etc.
-
 			// Remove Nops
 			foreach (var block in BasicBlocks)
 			{
@@ -39,6 +37,23 @@ namespace Mosa.Compiler.Framework.Stages
 						continue;
 					}
 				}
+			}
+
+			// copied from EmptyBlockRemovalStage.cs
+			foreach (var block in BasicBlocks)
+			{
+				// don't process other unusual blocks (header blocks, return block, etc.)
+				if (block.NextBlocks.Count == 0 || block.PreviousBlocks.Count == 0)
+					continue;
+
+				// don't remove block if it jumps back to itself
+				if (block.PreviousBlocks.Contains(block))
+					continue;
+
+				if (!IsEmptyBlockWithSingleJump(block))
+					continue;
+
+				RemoveEmptyBlockWithSingleJump(block);
 			}
 		}
 	}
