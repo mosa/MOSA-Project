@@ -19,7 +19,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 	{
 		public AssemblyResolver Resolver { get; private set; }
 
-		public IList<ModuleDefMD> Modules { get; private set; }
+		internal IList<ModuleDefMD> Modules { get; private set; }
 
 		private List<string> privatePaths = new List<string>();
 
@@ -80,16 +80,12 @@ namespace Mosa.Compiler.MosaTypeSystem
 		/// Loads the module.
 		/// </summary>
 		/// <param name="file">The file path of the module to load.</param>
-		/// <returns>
-		/// The loaded module.
-		/// </returns>
-		public ModuleDefMD LoadModuleFromFile(string file)
+		public void LoadModuleFromFile(string file)
 		{
 			ModuleDefMD module = ModuleDefMD.Load(file, Resolver.DefaultModuleContext);
 			module.EnableTypeDefFindCache = true;
 
 			LoadDependencies(module);
-			return module;
 		}
 
 		void IModuleLoader.LoadModuleFromFile(string file)

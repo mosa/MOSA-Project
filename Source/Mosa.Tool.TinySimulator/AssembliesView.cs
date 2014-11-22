@@ -23,7 +23,7 @@ namespace Mosa.Tool.TinySimulator
 
 		public void UpdateTree()
 		{
-			TypeSystemTree.UpdateTree(treeView, MainForm.TypeSystem, MainForm.TypeLayout, true);
+			TypeSystemTree.UpdateTree(treeView, MainForm.Compiler.TypeSystem, MainForm.Compiler.TypeLayout, true);
 		}
 
 		protected string FormatRuntimeMember(MosaField field)

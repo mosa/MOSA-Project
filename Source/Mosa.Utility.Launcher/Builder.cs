@@ -26,6 +26,8 @@ namespace Mosa.Utility.Launcher
 {
 	public class Builder
 	{
+		public MosaCompiler Compiler { get; set; }
+
 		public Options Options { get; set; }
 
 		public AppLocations AppLocations { get; set; }
@@ -45,6 +47,7 @@ namespace Mosa.Utility.Launcher
 
 		public Builder(Options options, AppLocations appLocations, IBuilderEvent builderEvent)
 		{
+			Compiler = new MosaCompiler();
 			Log = new List<string>();
 			Counters = new List<string>();
 			eventListener = new BuilderEventListener(this);
@@ -78,19 +81,20 @@ namespace Mosa.Utility.Launcher
 
 			compiledFile = Path.Combine(Options.DestinationDirectory, Path.GetFileNameWithoutExtension(Options.SourceFile) + ".bin");
 
-			var compilerOptions = new CompilerOptions();
-			compilerOptions.EnableSSA = Options.EnableSSA;
-			compilerOptions.EnableOptimizations = Options.EnableIROptimizations;
-			compilerOptions.EnableSparseConditionalConstantPropagation = Options.EnableSparseConditionalConstantPropagation;
-			compilerOptions.OutputFile = compiledFile;
+			Compiler.CompilerEngineFactory = delegate { return new AotCompiler(); };
 
-			compilerOptions.Architecture = SelectArchitecture(Options.PlatformType);
-			compilerOptions.LinkerFactory = GetLinkerFactory(Options.LinkerFormat);
-			compilerOptions.BootStageFactory = GetBootStageFactory(Options.BootFormat);
+			Compiler.CompilerOptions.EnableSSA = Options.EnableSSA;
+			Compiler.CompilerOptions.EnableOptimizations = Options.EnableIROptimizations;
+			Compiler.CompilerOptions.EnableSparseConditionalConstantPropagation = Options.EnableSparseConditionalConstantPropagation;
+			Compiler.CompilerOptions.OutputFile = compiledFile;
+
+			Compiler.CompilerOptions.Architecture = SelectArchitecture(Options.PlatformType);
+			Compiler.CompilerOptions.LinkerFactory = GetLinkerFactory(Options.LinkerFormat);
+			Compiler.CompilerOptions.BootStageFactory = GetBootStageFactory(Options.BootFormat);
 
 			if (Options.GenerateMapFile)
 			{
-				compilerOptions.MapFile = Path.Combine(Options.DestinationDirectory, Path.GetFileNameWithoutExtension(Options.SourceFile) + ".map");
+				Compiler.CompilerOptions.MapFile = Path.Combine(Options.DestinationDirectory, Path.GetFileNameWithoutExtension(Options.SourceFile) + ".map");
 			}
 
 			if (!Directory.Exists(Options.DestinationDirectory))
@@ -98,13 +102,14 @@ namespace Mosa.Utility.Launcher
 				Directory.CreateDirectory(Options.DestinationDirectory);
 			}
 
-			var compilerTrace = new CompilerTrace();
-			compilerTrace.CompilerEventListener = eventListener;
+			Compiler.CompilerTrace.CompilerEventListener = eventListener;
 
 			var inputFiles = new List<FileInfo>();
 			inputFiles.Add(new FileInfo(Options.SourceFile));
 
-			AotCompiler.Compile(compilerOptions, inputFiles, compilerTrace);
+			Compiler.Load(inputFiles);
+
+			Compiler.StartCompiler();
 
 			if (Options.ImageFormat == ImageFormat.ISO)
 			{

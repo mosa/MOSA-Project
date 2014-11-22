@@ -58,8 +58,6 @@ namespace Mosa.Compiler.Framework.Stages
 			if (logging)
 			{
 				filter.MethodMatch = MatchType.Any;
-				//filter.StageMatch = MatchType.Exclude;
-				//filter.Stage = "PlatformStubStage|ExceptionLayoutStage";
 				filter.StageMatch = MatchType.Contains;
 				filter.Stage = "CodeGen";
 

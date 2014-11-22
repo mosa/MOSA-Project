@@ -13,7 +13,7 @@ namespace Mosa.Compiler.InternalTrace
 	{
 		public ITraceListener TraceListener { get; set; }
 
-		public ITraceFilter TraceFilter { get; set; }
+		public ConfigurableTraceFilter TraceFilter { get; set; }
 
 		public ICompilerEventListener CompilerEventListener { get; set; }
 
@@ -23,6 +23,5 @@ namespace Mosa.Compiler.InternalTrace
 			TraceListener = new DebugTraceListener();
 			TraceFilter = new ConfigurableTraceFilter();
 		}
-
 	}
 }

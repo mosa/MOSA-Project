@@ -23,8 +23,9 @@ namespace Mosa.Compiler.Framework
 	/// </summary>
 	public abstract class BaseCompiler
 	{
-
 		#region Properties
+
+		public MosaCompiler Compiler { get; private set; }
 
 		/// <summary>
 		/// Returns the architecture used by the compiler.
@@ -98,40 +99,26 @@ namespace Mosa.Compiler.Framework
 
 		#endregion Properties
 
-		#region Construction
+		#region Methods
 
-		/// <summary>
-		/// Initializes a new compiler instance.
-		/// </summary>
-		/// <param name="architecture">The compiler target architecture.</param>
-		/// <param name="typeSystem">The type system.</param>
-		/// <param name="typeLayout">The type layout.</param>
-		/// <param name="compilationScheduler">The compilation scheduler.</param>
-		/// <param name="compilerTrace">The compiler trace.</param>
-		/// <param name="linker">The linker.</param>
-		/// <param name="compilerOptions">The compiler options.</param>
-		/// <exception cref="System.ArgumentNullException">@Architecture</exception>
-		protected BaseCompiler(BaseArchitecture architecture, TypeSystem typeSystem, MosaTypeLayout typeLayout, ICompilationScheduler compilationScheduler, CompilerTrace compilerTrace, BaseLinker linker, CompilerOptions compilerOptions)
+		public void Initialize(MosaCompiler compiler)
 		{
-			if (architecture == null)
-				throw new ArgumentNullException(@"Architecture");
+			if (compiler == null)
+				throw new ArgumentNullException(@"compiler");
+
+			Compiler = compiler;
+
+			Architecture = Compiler.CompilerOptions.Architecture;
+			TypeSystem = Compiler.TypeSystem;
+			TypeLayout = Compiler.TypeLayout;
+			CompilerTrace = Compiler.CompilerTrace;
+			CompilerOptions = Compiler.CompilerOptions;
+			CompilationScheduler = Compiler.CompilationScheduler;
+			Linker = compiler.Linker;
 
 			Pipeline = new CompilerPipeline();
-			Architecture = architecture;
-			TypeSystem = typeSystem;
-			TypeLayout = typeLayout;
-			CompilerTrace = compilerTrace;
-			CompilerOptions = compilerOptions;
 			Counters = new Counters();
-			CompilationScheduler = compilationScheduler;
 			PlugSystem = new PlugSystem();
-			Linker = linker;
-
-			if (Linker == null)
-			{
-				Linker = compilerOptions.LinkerFactory();
-				Linker.Initialize(compilerOptions.BaseAddress, architecture.Endianness, architecture.ElfMachineType);
-			}
 
 			// Create new dictionary
 			IntrinsicTypes = new Dictionary<string, Type>();
@@ -154,11 +141,20 @@ namespace Mosa.Compiler.Framework
 			}
 
 			PlatformInternalRuntimeType = GetPlatformInternalRuntimeType();
+
+			// Extended Setup
+			ExtendCompilerSetup();
+
+			// Build the default compiler pipeline
+			Architecture.ExtendCompilerPipeline(this.Pipeline);
 		}
 
-		#endregion Construction
-
-		#region Methods
+		/// <summary>
+		/// Extends the compiler setup.
+		/// </summary>
+		public virtual void ExtendCompilerSetup()
+		{
+		}
 
 		/// <summary>
 		/// Compiles the method.
@@ -170,20 +166,10 @@ namespace Mosa.Compiler.Framework
 		{
 			Trace(CompilerEvent.CompilingMethod, method.FullName);
 
-			BaseMethodCompiler methodCompiler = CreateMethodCompiler(method, basicBlocks, instructionSet);
+			var methodCompiler = CreateMethodCompiler(method, basicBlocks, instructionSet);
 			Architecture.ExtendMethodCompilerPipeline(methodCompiler.Pipeline);
 
 			methodCompiler.Compile();
-
-			//try
-			//{
-			//    methodCompiler.Compile();
-			//}
-			//catch (Exception e)
-			//{
-			//    HandleCompilationException(e);
-			//    throw;
-			//}
 		}
 
 		/// <summary>
@@ -193,7 +179,7 @@ namespace Mosa.Compiler.Framework
 		/// <param name="basicBlocks">The basic blocks.</param>
 		/// <param name="instructionSet">The instruction set.</param>
 		/// <returns></returns>
-		public abstract BaseMethodCompiler CreateMethodCompiler(MosaMethod method, BasicBlocks basicBlocks, InstructionSet instructionSet);
+		protected abstract BaseMethodCompiler CreateMethodCompiler(MosaMethod method, BasicBlocks basicBlocks, InstructionSet instructionSet);
 
 		/// <summary>
 		/// Compiles the linker method.
@@ -212,7 +198,7 @@ namespace Mosa.Compiler.Framework
 		/// The method iterates the compilation stage chain and runs each
 		/// stage on the input.
 		/// </remarks>
-		public void Compile()
+		internal void Compile()
 		{
 			BeginCompile();
 

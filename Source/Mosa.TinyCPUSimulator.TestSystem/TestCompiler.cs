@@ -19,34 +19,33 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 {
 	public class TestCompiler : ICompilerEventListener
 	{
+		protected MosaCompiler compiler = new MosaCompiler();
+
 		protected BaseTestPlatform platform;
-		protected ConfigurableTraceFilter filter = new ConfigurableTraceFilter();
-		protected CompilerTrace compilerTrace = new CompilerTrace();
+
 		protected ISimAdapter adapter;
+
 		protected ISimAdapter simAdapter;
-		protected BaseArchitecture architecture;
-		protected BaseLinker linker;
-		protected TypeSystem typeSystem;
-		protected MosaTypeLayout typeLayout;
 
-		public bool EnableSSA { get; set; }
-
-		public bool EnableOptimizations { get; set; }
+		protected SimLinker linker;
 
 		public TestCompiler(BaseTestPlatform platform)
 		{
 			this.platform = platform;
 
-			EnableOptimizations = true;
-			EnableSSA = true;
-
-			compilerTrace.TraceFilter.Active = false;
-			compilerTrace.CompilerEventListener = this;
-
-			architecture = platform.CreateArchitecture();
 			simAdapter = platform.CreateSimAdaptor();
 
-			linker = new SimLinker(simAdapter);
+			compiler.CompilerTrace.TraceFilter.Active = false;
+			compiler.CompilerTrace.CompilerEventListener = this;
+
+			compiler.CompilerOptions.EnableOptimizations = true;
+			compiler.CompilerOptions.EnableSSA = true;
+			compiler.CompilerOptions.EnablePromoteTemporaryVariablesOptimization = true;
+			compiler.CompilerOptions.EnableSparseConditionalConstantPropagation = true;
+
+			compiler.CompilerOptions.Architecture = platform.CreateArchitecture();
+			compiler.CompilerOptions.LinkerFactory = delegate { return new SimLinker(simAdapter); };
+			compiler.CompilerEngineFactory = delegate { return new SimCompiler(simAdapter); };
 
 			CompileTestCode();
 		}
@@ -63,18 +62,11 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 			moduleLoader.LoadModuleFromFile("Mosa.Test.Collection.dll");
 			moduleLoader.LoadModuleFromFile("Mosa.Kernel." + platform.Name + "Test.dll");
 
-			typeSystem = TypeSystem.Load(moduleLoader.CreateMetadata());
+			compiler.Load(TypeSystem.Load(moduleLoader.CreateMetadata()));
 
-			var compilerOptions = new CompilerOptions();
+			compiler.StartCompiler();
 
-			compilerOptions.EnableSSA = EnableSSA;
-			compilerOptions.EnableOptimizations = EnableOptimizations;
-			compilerOptions.EnablePromoteTemporaryVariablesOptimization = EnableOptimizations;
-			compilerOptions.EnableSparseConditionalConstantPropagation = EnableOptimizations;
-
-			typeLayout = new MosaTypeLayout(typeSystem, compilerOptions.Architecture.NativePointerSize, compilerOptions.Architecture.NativeAlignment);
-
-			SimCompiler.Compile(typeSystem, typeLayout, compilerTrace, compilerOptions, architecture, simAdapter, linker);
+			linker = compiler.Linker as SimLinker;
 
 			//simAdapter.SimCPU.Monitor.DebugOutput = true; // DEBUG OPTION
 
@@ -143,7 +135,7 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 
 		private MosaMethod FindMethod(string ns, string type, string method, params object[] parameters)
 		{
-			foreach (var t in typeSystem.AllTypes)
+			foreach (var t in compiler.TypeSystem.AllTypes)
 			{
 				if (t.Name != type)
 					continue;

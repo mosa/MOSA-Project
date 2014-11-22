@@ -10,31 +10,22 @@
 
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Stages;
-using Mosa.Compiler.InternalTrace;
 using Mosa.Compiler.MosaTypeSystem;
-using System.Collections.Generic;
-using System.IO;
 
 namespace Mosa.Utility.Aot
 {
 	public class AotCompiler : BaseCompiler
 	{
 		/// <summary>
-		/// Initializes a new instance of the <see cref="AotCompiler" /> class.
+		/// Extends the compiler setup.
 		/// </summary>
-		/// <param name="architecture">The architecture.</param>
-		/// <param name="typeSystem">The type system.</param>
-		/// <param name="typeLayout">The type layout.</param>
-		/// <param name="compilerTrace">The internal trace.</param>
-		/// <param name="compilerOptions">The compiler options.</param>
-		public AotCompiler(BaseArchitecture architecture, TypeSystem typeSystem, MosaTypeLayout typeLayout, CompilerTrace compilerTrace, CompilerOptions compilerOptions)
-			: base(architecture, typeSystem, typeLayout, new CompilationScheduler(typeSystem, true), compilerTrace, null, compilerOptions)
+		public override void ExtendCompilerSetup()
 		{
-			var bootStage = compilerOptions.BootStageFactory != null ? compilerOptions.BootStageFactory() : null;
+			var bootStage = CompilerOptions.BootStageFactory != null ? CompilerOptions.BootStageFactory() : null;
 
 			Pipeline.Add(new ICompilerStage[] {
 				bootStage,
-				compilerOptions.MethodPipelineExportDirectory != null ?  new MethodPipelineExportStage(): null,
+				CompilerOptions.MethodPipelineExportDirectory != null ?  new MethodPipelineExportStage(): null,
 				new PlugStage(),
 				new MethodCompilerSchedulerStage(),
 				new TypeInitializerSchedulerStage(),
@@ -43,11 +34,8 @@ namespace Mosa.Utility.Aot
 				new MethodExceptionLookupTableStage(),
 				new MetadataStage(),
 				new LinkerFinalizationStage(),
-				compilerOptions.MapFile != null ? new MapFileGenerationStage() : null
+				CompilerOptions.MapFile != null ? new MapFileGenerationStage() : null
 			});
-
-			// Build the default compiler pipeline
-			Architecture.ExtendCompilerPipeline(this.Pipeline);
 		}
 
 		/// <summary>
@@ -59,38 +47,9 @@ namespace Mosa.Utility.Aot
 		/// <returns>
 		/// An instance of a MethodCompilerBase for the given type/method pair.
 		/// </returns>
-		public override BaseMethodCompiler CreateMethodCompiler(MosaMethod method, BasicBlocks basicBlocks, InstructionSet instructionSet)
+		protected override BaseMethodCompiler CreateMethodCompiler(MosaMethod method, BasicBlocks basicBlocks, InstructionSet instructionSet)
 		{
 			return new AotMethodCompiler(this, method, basicBlocks, instructionSet);
-		}
-
-		/// <summary>
-		/// Gets a list of input file names.
-		/// </summary>
-		private static IEnumerable<string> GetInputFileNames(List<FileInfo> inputFiles)
-		{
-			foreach (FileInfo file in inputFiles)
-				yield return file.FullName;
-		}
-
-		public static void Compile(CompilerOptions compilerOptions, List<FileInfo> inputFiles, CompilerTrace compilerTrace)
-		{
-			var moduleLoader = new MosaModuleLoader();
-
-			moduleLoader.AddPrivatePath(GetInputFileNames(inputFiles));
-
-			foreach (string file in GetInputFileNames(inputFiles))
-			{
-				moduleLoader.LoadModuleFromFile(file);
-			}
-
-			var typeSystem = TypeSystem.Load(moduleLoader.CreateMetadata());
-
-			var typeLayout = new MosaTypeLayout(typeSystem, compilerOptions.Architecture.NativePointerSize, compilerOptions.Architecture.NativeAlignment);
-
-			var compiler = new AotCompiler(compilerOptions.Architecture, typeSystem, typeLayout, compilerTrace, compilerOptions);
-
-			compiler.Compile();
 		}
 	}
 }

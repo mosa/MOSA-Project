@@ -34,6 +34,7 @@ namespace Mosa.Utility.Aot
 		{
 			var compilerOptions = compiler.CompilerOptions;
 
+			// Populate the pipeline
 			Pipeline.Add(new IMethodCompilerStage[] {
 				new CILDecodingStage(),
 				new BasicBlockBuilderStage(),

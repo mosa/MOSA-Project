@@ -86,7 +86,7 @@
     <Compile Include="Analysis\IDominanceAnalysis.cs" />
     <Compile Include="BaseCallingConventionExtended.cs" />
     <Compile Include="DelegatePatcher.cs" />
-    <Compile Include="ICompiler.cs" />
+    <Compile Include="MosaCompiler.cs" />
     <Compile Include="InstructionSize.cs" />
     <Compile Include="Intrinsics\GetObjectAddress.cs" />
     <Compile Include="Intrinsics\InternalsForObject.cs" />

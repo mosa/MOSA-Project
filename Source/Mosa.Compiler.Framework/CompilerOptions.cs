@@ -177,6 +177,14 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		public Func<ICompilerStage> BootStageFactory { get; set; }
 
+		/// <summary>
+		/// Gets or sets a value indicating whether [emit binary].
+		/// </summary>
+		/// <value>
+		///   <c>true</c> if [emit binary]; otherwise, <c>false</c>.
+		/// </value>
+		public bool EmitBinary { get; set; }
+
 		#endregion Properties
 
 		/// <summary>
@@ -191,6 +199,7 @@ namespace Mosa.Compiler.Framework
 			BaseAddress = 0x00400000;
 			DominanceAnalysisFactory = delegate { return new SimpleFastDominance(); };
 			BlockOrderAnalysisFactory = delegate { return new LoopAwareBlockOrder(); };
+			EmitBinary = true;
 		}
 	}
 }

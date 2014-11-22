@@ -24,14 +24,12 @@ namespace Mosa.Tool.Explorer
 	public partial class Main : Form, ICompilerEventListener, ITraceListener
 	{
 		private CodeForm form = new CodeForm();
-		private CompilerTrace compilerTrace = new CompilerTrace();
-		private MosaModuleLoader assemblyLoader;
-		private TypeSystem typeSystem;
-		private ConfigurableTraceFilter filter = new ConfigurableTraceFilter();
-		private MosaTypeLayout typeLayout;
+
 		private DateTime compileStartTime;
 		private StringBuilder currentInstructionLog;
 		private string[] currentInstructionLogLines;
+
+		private MosaCompiler Compiler = new MosaCompiler();
 
 		private Dictionary<MosaMethod, MethodStages> methodStages = new Dictionary<MosaMethod, MethodStages>();
 
@@ -53,15 +51,18 @@ namespace Mosa.Tool.Explorer
 		public Main()
 		{
 			InitializeComponent();
-			compilerTrace.CompilerEventListener = this;
-			compilerTrace.TraceListener = this;
-			compilerTrace.TraceFilter = filter;
 
-			filter.Active = true;
-			filter.ExcludeInternalMethods = false;
-			filter.MethodMatch = MatchType.Any;
-			filter.StageMatch = MatchType.Exclude;
-			filter.Stage = "PlatformStubStage|ProtectedRegionLayoutStage|DominanceCalculationStage|CodeGenerationStage";
+			Compiler.CompilerTrace.CompilerEventListener = this;
+			Compiler.CompilerTrace.TraceListener = this;
+
+			Compiler.CompilerTrace.TraceFilter.Active = true;
+			Compiler.CompilerTrace.TraceFilter.ExcludeInternalMethods = false;
+			Compiler.CompilerTrace.TraceFilter.MethodMatch = MatchType.Any;
+			Compiler.CompilerTrace.TraceFilter.StageMatch = MatchType.Exclude;
+			Compiler.CompilerTrace.TraceFilter.Stage = "PlatformStubStage|ProtectedRegionLayoutStage|DominanceCalculationStage|CodeGenerationStage";
+
+			Compiler.CompilerEngineFactory = delegate { return new ExplorerCompiler(); };
+			Compiler.CompilerOptions.LinkerFactory = delegate { return new ExplorerLinker(); };
 		}
 
 		private void SetStatus(string status)
@@ -107,7 +108,7 @@ namespace Mosa.Tool.Explorer
 
 		protected void UpdateTree()
 		{
-			TypeSystemTree.UpdateTree(treeView, typeSystem, typeLayout, showSizes.Checked);
+			TypeSystemTree.UpdateTree(treeView, Compiler.TypeSystem, Compiler.TypeLayout, showSizes.Checked);
 		}
 
 		private void quitToolStripMenuItem_Click(object sender, EventArgs e)
@@ -216,26 +217,15 @@ namespace Mosa.Tool.Explorer
 			compileStartTime = DateTime.Now;
 			methodStages.Clear();
 
-			filter.MethodMatch = MatchType.Any;
+			Compiler.CompilerOptions.EnableSSA = enableSSA.Checked;
+			Compiler.CompilerOptions.EnableOptimizations = enableOptimizations.Checked;
+			Compiler.CompilerOptions.EnablePromoteTemporaryVariablesOptimization = enableOptimizations.Checked;
+			Compiler.CompilerOptions.EnableSparseConditionalConstantPropagation = enableSparseConditionalConstantPropagation.Checked;
+			Compiler.CompilerOptions.EmitBinary = enableBinaryCodeGeneration.Checked;
 
-			CreateTypeSystemAndLayout();
+			Compiler.StartCompiler();
 
-			var compilerOptions = new CompilerOptions();
-
-			compilerOptions.EnableSSA = enableSSA.Checked;
-			compilerOptions.EnableOptimizations = enableOptimizations.Checked;
-			compilerOptions.EnablePromoteTemporaryVariablesOptimization = compilerOptions.EnablePromoteTemporaryVariablesOptimization;
-			compilerOptions.EnableSparseConditionalConstantPropagation = enableSparseConditionalConstantPropagation.Checked;
-
-			//try
-			//{
-			ExplorerCompiler.Compile(typeSystem, typeLayout, compilerTrace, GetArchitecture(cbPlatform.Text), compilerOptions, enableBinaryCodeGeneration.Checked);
 			SetStatus("Compiled!");
-			//}
-			//catch (Exception e)
-			//{
-			//	SetStatus("ERROR: " + toolStripStatusLabel.Text + " " + e.ToString());
-			//}
 
 			tabControl1.SelectedTab = tabPage1;
 
@@ -477,30 +467,26 @@ namespace Mosa.Tool.Explorer
 
 		protected void LoadAssembly(string filename, bool includeTestComponents, string platform)
 		{
-			assemblyLoader = new MosaModuleLoader();
+			Compiler.CompilerOptions.Architecture = GetArchitecture(cbPlatform.Text);
+
+			var moduleLoader = new MosaModuleLoader();
 
 			if (includeTestComponents)
 			{
-				assemblyLoader.AddPrivatePath(System.IO.Directory.GetCurrentDirectory());
-				assemblyLoader.LoadModuleFromFile("mscorlib.dll");
-				assemblyLoader.LoadModuleFromFile("Mosa.Platform.Internal." + platform + ".dll");
-				assemblyLoader.LoadModuleFromFile("Mosa.Kernel.x86Test.dll");
+				moduleLoader.AddPrivatePath(System.IO.Directory.GetCurrentDirectory());
+				moduleLoader.LoadModuleFromFile("mscorlib.dll");
+				moduleLoader.LoadModuleFromFile("Mosa.Platform.Internal." + platform + ".dll");
+				moduleLoader.LoadModuleFromFile("Mosa.Kernel.x86Test.dll");
 			}
 
-			assemblyLoader.AddPrivatePath(Path.GetDirectoryName(filename));
-			assemblyLoader.LoadModuleFromFile(filename);
+			moduleLoader.AddPrivatePath(Path.GetDirectoryName(filename));
+			moduleLoader.LoadModuleFromFile(filename);
 
-			CreateTypeSystemAndLayout();
+			var metadata = moduleLoader.CreateMetadata();
+
+			Compiler.Load(TypeSystem.Load(metadata));
+
 			UpdateTree();
-		}
-
-		protected void CreateTypeSystemAndLayout()
-		{
-			if (assemblyLoader == null)
-				return;
-
-			typeSystem = TypeSystem.Load(assemblyLoader.CreateMetadata());
-			typeLayout = new MosaTypeLayout(typeSystem, 4, 4); // FIXME
 		}
 
 		protected void LoadAssemblyDebugInfo(string assemblyFileName)

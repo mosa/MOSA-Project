@@ -9,7 +9,6 @@
 
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.InternalTrace;
-using Mosa.Compiler.Linker;
 using Mosa.Compiler.MosaTypeSystem;
 using Mosa.TinyCPUSimulator;
 using Mosa.TinyCPUSimulator.Adaptor;
@@ -40,12 +39,8 @@ namespace Mosa.Tool.TinySimulator
 		private OutputView outputView;
 		private ScriptView scriptView;
 
-		public CompilerTrace InternalTrace = new CompilerTrace();
-		public ConfigurableTraceFilter Filter = new ConfigurableTraceFilter();
-		public TypeSystem TypeSystem;
-		public MosaTypeLayout TypeLayout;
-		public BaseArchitecture Architecture;
-		public BaseLinker Linker;
+		public MosaCompiler Compiler = new MosaCompiler();
+
 		public SimCPU SimCPU;
 
 		public int MaxHistory { get; set; }
@@ -75,10 +70,10 @@ namespace Mosa.Tool.TinySimulator
 		{
 			InitializeComponent();
 
-			Filter.Active = false;
+			Compiler.CompilerTrace.TraceFilter.Active = false;
+			Compiler.CompilerTrace.CompilerEventListener = this;
 
-			InternalTrace.TraceFilter = Filter;
-			InternalTrace.CompilerEventListener = this;
+			Compiler.CompilerOptions.Architecture = GetArchitecture("x86");
 
 			MaxHistory = 1000;
 
@@ -149,7 +144,7 @@ namespace Mosa.Tool.TinySimulator
 			if (CompileOnLaunch != null)
 			{
 				LoadAssembly(CompileOnLaunch);
-				StartSimulator("x86");
+				StartSimulator();
 			}
 		}
 
@@ -176,38 +171,36 @@ namespace Mosa.Tool.TinySimulator
 
 		public void LoadAssembly(string filename)
 		{
-			MosaModuleLoader moduleLoader = new MosaModuleLoader();
+			var moduleLoader = new MosaModuleLoader();
 
 			moduleLoader.AddPrivatePath(System.IO.Path.GetDirectoryName(filename));
 			moduleLoader.LoadModuleFromFile(filename);
 
-			TypeSystem = TypeSystem.Load(moduleLoader.CreateMetadata());
-			TypeLayout = new MosaTypeLayout(TypeSystem, 4, 4); // FIXME
+			Compiler.Load(TypeSystem.Load(moduleLoader.CreateMetadata()));
 
 			assembliesView.UpdateTree();
 		}
 
-		public void StartSimulator(string platform)
+		public void StartSimulator()
 		{
-			if (TypeSystem == null)
+			if (Compiler.TypeSystem == null)
 				return;
 
 			Status = "Compiling...";
 
-			Architecture = GetArchitecture(platform);
-			var simAdapter = GetSimAdaptor(platform);
-			Linker = new SimLinker(simAdapter);
+			var simAdapter = GetSimAdaptor("x86");
 
 			compileStartTime = DateTime.Now;
 
-			var compilerOptions = new CompilerOptions();
+			Compiler.CompilerOptions.EnableSSA = true;
+			Compiler.CompilerOptions.EnableOptimizations = true;
+			Compiler.CompilerOptions.EnablePromoteTemporaryVariablesOptimization = true;
+			Compiler.CompilerOptions.EnableSparseConditionalConstantPropagation = true;
 
-			compilerOptions.EnableSSA = true;
-			compilerOptions.EnableOptimizations = true;
-			compilerOptions.EnablePromoteTemporaryVariablesOptimization = true;
-			compilerOptions.EnableSparseConditionalConstantPropagation = true;
+			Compiler.CompilerOptions.LinkerFactory = delegate { return new SimLinker(simAdapter); };
+			Compiler.CompilerEngineFactory = delegate { return new SimCompiler(simAdapter); };
 
-			SimCompiler.Compile(TypeSystem, TypeLayout, InternalTrace, compilerOptions, Architecture, simAdapter, Linker);
+			Compiler.StartCompiler();
 
 			SimCPU = simAdapter.SimCPU;
 
@@ -280,12 +273,12 @@ namespace Mosa.Tool.TinySimulator
 
 		private void toolStripButton1_Click(object sender, EventArgs e)
 		{
-			if (TypeSystem == null)
+			if (Compiler.TypeSystem == null)
 			{
 				LoadAssembly();
 			}
 
-			StartSimulator("x86");
+			StartSimulator();
 		}
 
 		public void UpdateAllDocks(BaseSimState simState)

@@ -10,7 +10,7 @@
 using Mosa.Compiler.MosaTypeSystem;
 using System.Collections.Generic;
 
-namespace Mosa.Compiler.Framework.Stages
+namespace Mosa.Compiler.Framework
 {
 	/// <summary>
 	/// Schedules compilation of types/methods.
