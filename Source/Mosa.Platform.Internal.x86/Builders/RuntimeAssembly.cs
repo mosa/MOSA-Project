@@ -8,8 +8,8 @@
  */
 
 using Mosa.Platform.Internal.x86;
-using System.Reflection;
 using System.Collections.Generic;
+using System.Reflection;
 
 namespace System
 {

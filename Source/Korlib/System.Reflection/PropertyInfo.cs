@@ -7,11 +7,6 @@
  *  Stefan Andres Charsley (charsleysa) <charsleysa@gmail.com>
  */
 
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Globalization;
-
 namespace System.Reflection
 {
 	/// <summary>
@@ -103,7 +98,7 @@ namespace System.Reflection
 		/// </summary>
 		/// <param name="obj">The object whose property value will be returned.</param>
 		/// <returns>The property value of the specified object.</returns>
-		public object GetValue (object obj)
+		public object GetValue(object obj)
 		{
 			return this.GetValue(obj, null);
 		}
@@ -124,9 +119,9 @@ namespace System.Reflection
 		/// </summary>
 		/// <param name="obj">The object whose property value will be set.</param>
 		/// <param name="value">The new property value.</param>
-		public void SetValue (object obj, object value)
+		public void SetValue(object obj, object value)
 		{
-			this.SetValue (obj, value, null);
+			this.SetValue(obj, value, null);
 		}
 
 		/// <summary>

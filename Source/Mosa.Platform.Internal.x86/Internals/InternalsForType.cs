@@ -8,8 +8,6 @@
  */
 
 using System;
-using System.Runtime.InteropServices;
-using System.Reflection;
 
 namespace Mosa.Platform.Internal.x86
 {
@@ -55,7 +53,7 @@ namespace Mosa.Platform.Internal.x86
 					return type;
 				}
 			}
-			
+
 			// If we didn't find a match then return null
 			return null;
 		}

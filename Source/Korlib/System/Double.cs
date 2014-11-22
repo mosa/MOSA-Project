@@ -63,7 +63,7 @@ namespace System
 					return 0;
 				else
 					return -1;
-			
+
 			if (_value > value)
 				return 1;
 			else if (_value < value)

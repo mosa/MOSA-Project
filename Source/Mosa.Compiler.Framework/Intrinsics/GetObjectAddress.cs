@@ -7,7 +7,6 @@
  *  Stefan Andres Charsley (charsleysa) <charsleysa@gmail.com>
  */
 
-using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.IR;
 
 namespace Mosa.Compiler.Framework.Intrinsics

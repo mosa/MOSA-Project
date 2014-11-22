@@ -91,8 +91,6 @@ namespace Mosa.TestWorld.x86
 
 			DumpStackTrace();
 
-
-
 			//System.Threading.SpinLock splk = new System.Threading.SpinLock();
 
 			//bool lockTaken = false;
@@ -104,8 +102,6 @@ namespace Mosa.TestWorld.x86
 			//splk.Enter(ref lockTaken);
 
 			//Console.Write("Should have looped!!!");
-
-
 
 			Console.Goto(22, 0);
 

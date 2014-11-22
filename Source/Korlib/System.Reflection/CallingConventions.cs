@@ -7,8 +7,6 @@
  *  Stefan Andres Charsley (charsleysa) <charsleysa@gmail.com>
  */
 
-using System;
-
 namespace System.Reflection
 {
 	/// <summary>
@@ -47,5 +45,4 @@ namespace System.Reflection
 		/// </summary>
 		ExplicitThis = 0x40,
 	}
-
 }

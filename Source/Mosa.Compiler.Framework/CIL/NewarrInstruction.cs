@@ -48,7 +48,7 @@ namespace Mosa.Compiler.Framework.CIL
 			// checks in an optimization stage later on, if we find that a value never exceeds the array
 			// bounds.
 
-			MosaType arrayType  = type.ToSZArray();
+			MosaType arrayType = type.ToSZArray();
 			if (!arrayType.Module.Types.ContainsKey(arrayType.ID))
 				arrayType.Module.Types.Add(arrayType.ID, arrayType);
 

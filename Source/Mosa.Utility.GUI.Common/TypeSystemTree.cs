@@ -9,8 +9,8 @@
 
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.MosaTypeSystem;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace Mosa.Utility.GUI.Common
@@ -29,7 +29,7 @@ namespace Mosa.Utility.GUI.Common
 				TreeNode moduleNode = new TreeNode(module.Name);
 				treeView.Nodes.Add(moduleNode);
 
-				List<MosaType> typeList = (new List<MosaType>(module.Types.Values)).OrderBy(o=>o.FullName).ToList();
+				List<MosaType> typeList = (new List<MosaType>(module.Types.Values)).OrderBy(o => o.FullName).ToList();
 
 				foreach (MosaType type in typeList)
 				{

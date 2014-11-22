@@ -46,10 +46,10 @@ namespace System
 
 		public override bool Equals(object obj)
 		{
-		    if (!(obj is System.IntPtr))
-		        return false;
+			if (!(obj is System.IntPtr))
+				return false;
 
-		    return ((IntPtr)obj)._value == _value;
+			return ((IntPtr)obj)._value == _value;
 		}
 
 		public override int GetHashCode()
@@ -91,12 +91,12 @@ namespace System
 
 		public static bool operator ==(IntPtr value1, IntPtr value2)
 		{
-		    return (value1._value == value2._value);
+			return (value1._value == value2._value);
 		}
 
 		public static bool operator !=(IntPtr value1, IntPtr value2)
 		{
-		    return (value1._value != value2._value);
+			return (value1._value != value2._value);
 		}
 
 		//public static explicit operator IntPtr(int value)

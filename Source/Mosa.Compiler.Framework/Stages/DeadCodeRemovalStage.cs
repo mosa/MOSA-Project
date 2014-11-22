@@ -7,12 +7,9 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using Mosa.Compiler.Common;
-using Mosa.Compiler.Framework.Analysis;
 using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.InternalTrace;
 using System.Collections.Generic;
-using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework.Stages
 {
@@ -129,7 +126,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected void Mark()
 		{
-
 			var markTrace = CreateTrace("Mark");
 
 			while (instructionWorkList.Count != 0)

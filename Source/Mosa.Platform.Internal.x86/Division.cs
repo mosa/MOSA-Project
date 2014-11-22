@@ -24,7 +24,6 @@ namespace Mosa.Platform.Internal.x86
 
 	public unsafe static class Division
 	{
-
 		/* Divides unsigned 64-bit N by unsigned 64-bit D and returns the quotient. */
 
 		public static ulong udiv64(ulong n, ulong d)
@@ -165,7 +164,7 @@ namespace Mosa.Platform.Internal.x86
 				}
 				isFlipped = ((*((ULong*)&uQuotient))._hi & 0x80000000) == 0x80000000;
 				uQuotient <<= 1;
-				
+
 				if (uRemainder >= uDivisor)
 				{
 					uRemainder -= uDivisor;
@@ -177,7 +176,7 @@ namespace Mosa.Platform.Internal.x86
 				quotient = (long)uQuotient;
 				remainder = (long)uRemainder;
 			}
-			
+
 			// Adjust sign of the results.
 			if (quotient != 0)
 			{

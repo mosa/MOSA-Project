@@ -21,10 +21,12 @@ namespace Mosa.Compiler.MosaTypeSystem
 		/// Parameter is [In]
 		/// </summary>
 		In = 0x0001,
+
 		/// <summary>
 		/// Parameter is [out]
 		/// </summary>
 		Out = 0x0002,
+
 		/// <summary>
 		/// Parameter is optional
 		/// </summary>
@@ -34,6 +36,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 		/// Parameter has default value.
 		/// </summary>
 		HasDefault = 0x1000,
+
 		/// <summary>
 		/// Parameter has FieldMarshal.
 		/// </summary>

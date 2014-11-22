@@ -38,6 +38,5 @@ namespace System
 		public SystemException(string message, Exception innerException)
 			: base(message, innerException)
 		{ }
-
 	}
 }

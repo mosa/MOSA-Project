@@ -24,7 +24,6 @@ namespace Mosa.Platform.Internal.x86
 
 	public unsafe static class Division
 	{
-
 		/* Divides unsigned 64-bit N by unsigned 64-bit D and returns the quotient. */
 
 		public static ulong udiv64(ulong n, ulong d)

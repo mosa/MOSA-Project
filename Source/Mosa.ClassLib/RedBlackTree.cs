@@ -17,55 +17,60 @@ namespace Mosa.ClassLib
 	public class RedBlackTree<K, T> where K : System.IComparable
 	{
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected enum Color
 		{
 			/// <summary>
-			/// 
+			///
 			/// </summary>
 			Red = 1,
 
 			/// <summary>
-			/// 
+			///
 			/// </summary>
 			Black = 0
 		};
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <typeparam name="X"></typeparam>
 		/// <typeparam name="Y"></typeparam>
 		protected class RedBlackTreeNode<X, Y> where X : System.IComparable
 		{
 			/// <summary>
-			/// 
+			///
 			/// </summary>
 			public Color color;
+
 			/// <summary>
-			/// 
+			///
 			/// </summary>
 			public Y data;
+
 			/// <summary>
-			/// 
+			///
 			/// </summary>
 			public X key;
+
 			/// <summary>
-			/// 
+			///
 			/// </summary>
 			public RedBlackTreeNode<X, Y> parent;
+
 			/// <summary>
-			/// 
+			///
 			/// </summary>
 			public RedBlackTreeNode<X, Y> left;
+
 			/// <summary>
-			/// 
+			///
 			/// </summary>
 			public RedBlackTreeNode<X, Y> right;
 
 			/// <summary>
-			/// Initializes a new instance 
+			/// Initializes a new instance
 			/// </summary>
 			/// <param name="key">The key.</param>
 			/// <param name="data">The data.</param>
@@ -76,16 +81,15 @@ namespace Mosa.ClassLib
 				this.color = color;
 				this.data = data;
 			}
-
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected RedBlackTreeNode<K, T> root;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected uint size = 0;
 
@@ -607,7 +611,5 @@ namespace Mosa.ClassLib
 
 			return cur;
 		}
-
 	}
-
 }

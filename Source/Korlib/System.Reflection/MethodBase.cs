@@ -7,11 +7,6 @@
  *  Stefan Andres Charsley (charsleysa) <charsleysa@gmail.com>
  */
 
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-
 namespace System.Reflection
 {
 	[Serializable]

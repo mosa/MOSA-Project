@@ -7,8 +7,6 @@
  *  Stefan Andres Charsley (charsleysa) <charsleysa@gmail.com>
  */
 
-using System;
-
 namespace System.Reflection
 {
 	/// <summary>
@@ -21,10 +19,12 @@ namespace System.Reflection
 		/// Parameter is [in]
 		/// </summary>
 		In = 0x0001,
+
 		/// <summary>
 		/// Parameter is [out]
 		/// </summary>
 		Out = 0x0002,
+
 		/// <summary>
 		/// Parameter is optional
 		/// </summary>
@@ -34,6 +34,7 @@ namespace System.Reflection
 		/// Parameter has default value.
 		/// </summary>
 		HasDefault = 0x1000,
+
 		/// <summary>
 		/// Parameter has FieldMarshal.
 		/// </summary>
