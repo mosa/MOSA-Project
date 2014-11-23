@@ -103,7 +103,7 @@ namespace Mosa.Platform.x86.Stages
 				return;
 			}
 
-			var typeInitializerSchedulerStage = Compiler.Pipeline.FindFirst<TypeInitializerSchedulerStage>();
+			var typeInitializerSchedulerStage = Compiler.PreCompilePipeline.FindFirst<TypeInitializerSchedulerStage>();
 
 			var ecx = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.ECX);
 			var eax = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EAX);

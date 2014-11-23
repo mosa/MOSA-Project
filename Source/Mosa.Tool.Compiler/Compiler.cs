@@ -405,7 +405,7 @@ namespace Mosa.Tool.Compiler
 		{
 			compiler.CompilerTrace.CompilerEventListener = new ConsoleEventListener();
 
-			compiler.StartCompiler();
+			compiler.Execute();
 		}
 
 		/// <summary>

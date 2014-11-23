@@ -33,7 +33,7 @@ namespace Mosa.TinyCPUSimulator.Adaptor
 
 		protected override void Run()
 		{
-			var typeInitializer = Compiler.Pipeline.FindFirst<TypeInitializerSchedulerStage>().TypeInitializerMethod;
+			var typeInitializer = Compiler.PreCompilePipeline.FindFirst<TypeInitializerSchedulerStage>().TypeInitializerMethod;
 
 			var basicBlocks = new BasicBlocks();
 			var instructionSet = new InstructionSet(25);

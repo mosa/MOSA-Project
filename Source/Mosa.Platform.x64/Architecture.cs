@@ -150,10 +150,10 @@ namespace Mosa.Platform.x64
 		}
 
 		/// <summary>
-		/// Extends the assembly compiler pipeline with x64 specific stages.
+		/// Extends the pre compiler pipeline with x64 specific stages.
 		/// </summary>
 		/// <param name="compilerPipeline">The pipeline to extend.</param>
-		public override void ExtendCompilerPipeline(CompilerPipeline compilerPipeline)
+		public override void ExtendPreCompilerPipeline(CompilerPipeline compilerPipeline)
 		{
 			//assemblyCompilerPipeline.InsertAfterFirst<ICompilerStage>(
 			//    new InterruptVectorStage()
@@ -166,6 +166,14 @@ namespace Mosa.Platform.x64
 			//assemblyCompilerPipeline.InsertAfterLast<TypeLayoutStage>(
 			//    new MethodTableBuilderStage()
 			//);
+		}
+		
+		/// <summary>
+		/// Extends the post compiler pipeline with x64 specific stages.
+		/// </summary>
+		/// <param name="compilerPipeline">The pipeline to extend.</param>
+		public override void ExtendPostCompilerPipeline(CompilerPipeline compilerPipeline)
+		{
 		}
 
 		/// <summary>

@@ -36,9 +36,12 @@ namespace Mosa.TinyCPUSimulator.Adaptor
 		public override void ExtendCompilerSetup()
 		{
 			// Build the assembly compiler pipeline
-			Pipeline.Add(new ICompilerStage[] {
+			PreCompilePipeline.Add(new ICompilerStage[] {
 				new PlugStage(),
-				new MethodCompilerSchedulerStage(),
+				//new MethodCompilerSchedulerStage(),
+			});
+
+			PostCompilePipeline.Add(new ICompilerStage[] {
 				new TypeInitializerSchedulerStage(),
 				new SimPowerUpStage(),
 				new MethodLookupTableStage(),

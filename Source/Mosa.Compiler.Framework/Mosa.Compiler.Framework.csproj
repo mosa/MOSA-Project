@@ -162,7 +162,6 @@
     <Compile Include="Stages\GreedyRegisterAllocatorStage.cs" />
     <Compile Include="Stages\LinkerFinalizationStage.cs" />
     <Compile Include="IIntrinsicInternalMethod.cs" />
-    <Compile Include="ICompilationScheduler.cs" />
     <Compile Include="Counters.cs" />
     <Compile Include="IR\IntrinsicMethodCall.cs" />
     <Compile Include="IR\LoadZeroExtended.cs" />
@@ -239,7 +238,6 @@
     <Compile Include="IR\SubSigned.cs" />
     <Compile Include="IR\SubUnsigned.cs" />
     <Compile Include="IR\Switch.cs" />
-    <Compile Include="Stages\MethodCompilerSchedulerStage.cs" />
     <Compile Include="Stages\PlatformStubStage.cs" />
     <Compile Include="IIntrinsicPlatformMethod.cs" />
     <Compile Include="IPipelineStage.cs" />

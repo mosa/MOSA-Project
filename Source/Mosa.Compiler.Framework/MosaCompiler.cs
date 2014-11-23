@@ -32,7 +32,7 @@ namespace Mosa.Compiler.Framework
 
 		public MosaTypeLayout TypeLayout { get; private set; }
 
-		public ICompilationScheduler CompilationScheduler { get; private set; }
+		public CompilationScheduler CompilationScheduler { get; private set; }
 
 		public BaseLinker Linker { get; private set; }
 
@@ -49,7 +49,9 @@ namespace Mosa.Compiler.Framework
 		private static IEnumerable<string> GetInputFileNames(List<FileInfo> inputFiles)
 		{
 			foreach (FileInfo file in inputFiles)
+			{
 				yield return file.FullName;
+			}
 		}
 
 		public void Load(List<FileInfo> inputFiles)
@@ -70,10 +72,19 @@ namespace Mosa.Compiler.Framework
 
 			TypeLayout = new MosaTypeLayout(typeSystem, CompilerOptions.Architecture.NativePointerSize, CompilerOptions.Architecture.NativeAlignment);
 
-			CompilationScheduler = new CompilationScheduler(TypeSystem, true);
+			CompilationScheduler = new CompilationScheduler(TypeSystem);
 		}
 
-		public void StartCompiler()
+		public void Execute()
+		{
+			Initialize();
+			PreCompile();
+			ScheduleAll();
+			Compile();
+			PostCompile();
+		}
+
+		public void Initialize()
 		{
 			Linker = CompilerOptions.LinkerFactory();
 			Linker.Initialize(CompilerOptions.BaseAddress, CompilerOptions.Architecture.Endianness, CompilerOptions.Architecture.ElfMachineType);
@@ -81,20 +92,37 @@ namespace Mosa.Compiler.Framework
 			BaseCompiler = CompilerEngineFactory();
 
 			BaseCompiler.Initialize(this);
+		}
 
+		private void PreCompile()
+		{
+			BaseCompiler.PreCompile();
+		}
+
+		private void ScheduleAll()
+		{
+			CompilationScheduler.ScheduleAll();
+		}
+
+		private void Schedule(MosaType type)
+		{
+			CompilationScheduler.Schedule(type);
+		}
+
+		private void Schedule(MosaMethod method)
+		{
+			CompilationScheduler.Schedule(method);
+		}
+
+		private void Compile()
+		{
 			BaseCompiler.Compile();
 		}
 
-		private void CompilerType(MosaType type)
-		{ }
+		private void PostCompile()
+		{
+			BaseCompiler.PostCompile();
+		}
 
-		private void CompilerMethod(MosaMethod method)
-		{ }
-
-		private void ResolveSymbols()
-		{ }
-
-		private void FinalizeOutput()
-		{ }
 	}
 }

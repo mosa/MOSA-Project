@@ -33,10 +33,14 @@ namespace Mosa.Compiler.Framework
 		public BaseArchitecture Architecture { get; private set; }
 
 		/// <summary>
-		/// Gets the pipeline.
+		/// Gets the pre compile pipeline.
 		/// </summary>
-		/// <value>The pipeline.</value>
-		public CompilerPipeline Pipeline { get; private set; }
+		public CompilerPipeline PreCompilePipeline { get; private set; }
+
+		/// <summary>
+		/// Gets the post compile pipeline.
+		/// </summary>
+		public CompilerPipeline PostCompilePipeline { get; private set; }
 
 		/// <summary>
 		/// Gets the type system.
@@ -72,7 +76,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets the scheduler.
 		/// </summary>
-		public ICompilationScheduler CompilationScheduler { get; private set; }
+		public CompilationScheduler CompilationScheduler { get; private set; }
 
 		/// <summary>
 		/// Gets the linker.
@@ -116,7 +120,8 @@ namespace Mosa.Compiler.Framework
 			CompilationScheduler = Compiler.CompilationScheduler;
 			Linker = compiler.Linker;
 
-			Pipeline = new CompilerPipeline();
+			PreCompilePipeline = new CompilerPipeline();
+			PostCompilePipeline = new CompilerPipeline();
 			Counters = new Counters();
 			PlugSystem = new PlugSystem();
 
@@ -145,8 +150,11 @@ namespace Mosa.Compiler.Framework
 			// Extended Setup
 			ExtendCompilerSetup();
 
-			// Build the default compiler pipeline
-			Architecture.ExtendCompilerPipeline(this.Pipeline);
+			// Build the default pre-compiler pipeline
+			Architecture.ExtendPreCompilerPipeline(this.PreCompilePipeline);
+
+			// Build the default post-compiler pipeline
+			Architecture.ExtendPostCompilerPipeline(this.PostCompilePipeline);
 		}
 
 		/// <summary>
@@ -192,23 +200,65 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Executes the compiler using the configured stages.
+		/// Executes the compiler pre compiler stages.
 		/// </summary>
 		/// <remarks>
 		/// The method iterates the compilation stage chain and runs each
 		/// stage on the input.
 		/// </remarks>
-		internal void Compile()
+		internal void PreCompile()
 		{
-			BeginCompile();
-
-			foreach (ICompilerStage stage in Pipeline)
+			foreach (ICompilerStage stage in PreCompilePipeline)
 			{
 				// Setup Compiler
 				stage.Initialize(this);
 			}
 
-			foreach (ICompilerStage stage in Pipeline)
+			foreach (ICompilerStage stage in PreCompilePipeline)
+			{
+				Trace(CompilerEvent.CompilerStageStart, stage.Name);
+
+				// Execute stage
+				stage.Execute();
+
+				Trace(CompilerEvent.CompilerStageEnd, stage.Name);
+			}
+		}
+
+		public void Compile()
+		{
+			while (true)
+			{
+				var method = CompilationScheduler.GetMethodToCompile();
+
+				if (method == null)
+					return;
+
+				CompileMethod(method, null, null);
+
+				CompilerTrace.CompilerEventListener.SubmitMethodStatus(
+					CompilationScheduler.TotalMethods,
+					CompilationScheduler.TotalMethods - CompilationScheduler.TotalQueuedMethods
+				);
+			}
+		}
+
+		/// <summary>
+		/// Executes the compiler post compiler stages.
+		/// </summary>
+		/// <remarks>
+		/// The method iterates the compilation stage chain and runs each
+		/// stage on the input.
+		/// </remarks>
+		internal void PostCompile()
+		{
+			foreach (ICompilerStage stage in PostCompilePipeline)
+			{
+				// Setup Compiler
+				stage.Initialize(this);
+			}
+
+			foreach (ICompilerStage stage in PostCompilePipeline)
 			{
 				Trace(CompilerEvent.CompilerStageStart, stage.Name);
 
@@ -218,23 +268,7 @@ namespace Mosa.Compiler.Framework
 				Trace(CompilerEvent.CompilerStageEnd, stage.Name);
 			}
 
-			EndCompile();
-
 			ExportCounters();
-		}
-
-		/// <summary>
-		/// Called when compilation is about to begin.
-		/// </summary>
-		protected virtual void BeginCompile()
-		{
-		}
-
-		/// <summary>
-		/// Called when compilation has completed.
-		/// </summary>
-		protected virtual void EndCompile()
-		{
 		}
 
 		#endregion Methods

@@ -59,7 +59,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Holds the compiler scheduler
 		/// </summary>
-		protected ICompilationScheduler CompilationScheduler { get { return Compiler.CompilationScheduler; } }
+		protected CompilationScheduler CompilationScheduler { get { return Compiler.CompilationScheduler; } }
 
 		#endregion Properties
 

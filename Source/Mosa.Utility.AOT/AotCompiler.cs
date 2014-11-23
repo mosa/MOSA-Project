@@ -23,11 +23,14 @@ namespace Mosa.Utility.Aot
 		{
 			var bootStage = CompilerOptions.BootStageFactory != null ? CompilerOptions.BootStageFactory() : null;
 
-			Pipeline.Add(new ICompilerStage[] {
+			PreCompilePipeline.Add(new ICompilerStage[] {
 				bootStage,
 				CompilerOptions.MethodPipelineExportDirectory != null ?  new MethodPipelineExportStage(): null,
 				new PlugStage(),
 				new MethodCompilerSchedulerStage(),
+			});
+
+			PostCompilePipeline.Add(new ICompilerStage[] {
 				new TypeInitializerSchedulerStage(),
 				bootStage,
 				new MethodLookupTableStage(),

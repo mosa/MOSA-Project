@@ -21,9 +21,13 @@ namespace Mosa.Tool.Explorer
 		public override void ExtendCompilerSetup()
 		{
 			// Build the assembly compiler pipeline
-			Pipeline.Add(new ICompilerStage[] {
+			PreCompilePipeline.Add(new ICompilerStage[] {
 				new PlugStage(),
-				new MethodCompilerSchedulerStage(),
+				//new MethodCompilerSchedulerStage(),
+			});
+
+			// Build the assembly compiler pipeline
+			PostCompilePipeline.Add(new ICompilerStage[] {
 				new TypeInitializerSchedulerStage(),
 				new MethodLookupTableStage(),
 				new MethodExceptionLookupTableStage(),

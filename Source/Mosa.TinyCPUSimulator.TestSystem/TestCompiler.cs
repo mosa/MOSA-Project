@@ -64,7 +64,7 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 
 			compiler.Load(TypeSystem.Load(moduleLoader.CreateMetadata()));
 
-			compiler.StartCompiler();
+			compiler.Execute();
 
 			linker = compiler.Linker as SimLinker;
 

@@ -223,7 +223,7 @@ namespace Mosa.Tool.Explorer
 			Compiler.CompilerOptions.EnableSparseConditionalConstantPropagation = enableSparseConditionalConstantPropagation.Checked;
 			Compiler.CompilerOptions.EmitBinary = enableBinaryCodeGeneration.Checked;
 
-			Compiler.StartCompiler();
+			Compiler.Execute();
 
 			SetStatus("Compiled!");
 

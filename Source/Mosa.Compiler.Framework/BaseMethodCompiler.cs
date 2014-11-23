@@ -94,7 +94,7 @@ namespace Mosa.Compiler.Framework
 		/// Retrieves the compilation scheduler.
 		/// </summary>
 		/// <value>The compilation scheduler.</value>
-		public ICompilationScheduler Scheduler { get; private set; }
+		public CompilationScheduler Scheduler { get; private set; }
 
 		/// <summary>
 		/// Provides access to the pipeline of this compiler.
@@ -361,7 +361,7 @@ namespace Mosa.Compiler.Framework
 		{
 			if (Method.IsSpecialName && Method.IsRTSpecialName && Method.IsStatic && Method.Name == ".cctor")
 			{
-				typeInitializer = Compiler.Pipeline.FindFirst<TypeInitializerSchedulerStage>();
+				typeInitializer = Compiler.PreCompilePipeline.FindFirst<TypeInitializerSchedulerStage>();
 
 				if (typeInitializer == null)
 					return;

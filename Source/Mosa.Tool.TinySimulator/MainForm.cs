@@ -200,7 +200,7 @@ namespace Mosa.Tool.TinySimulator
 			Compiler.CompilerOptions.LinkerFactory = delegate { return new SimLinker(simAdapter); };
 			Compiler.CompilerEngineFactory = delegate { return new SimCompiler(simAdapter); };
 
-			Compiler.StartCompiler();
+			Compiler.Execute();
 
 			SimCPU = simAdapter.SimCPU;
 
