@@ -27,7 +27,7 @@ namespace Mosa.Utility.Aot
 				bootStage,
 				CompilerOptions.MethodPipelineExportDirectory != null ?  new MethodPipelineExportStage(): null,
 				new PlugStage(),
-				new MethodCompilerSchedulerStage(),
+				//new MethodCompilerSchedulerStage(),
 			});
 
 			PostCompilePipeline.Add(new ICompilerStage[] {

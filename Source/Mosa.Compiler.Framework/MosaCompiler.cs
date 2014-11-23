@@ -94,32 +94,32 @@ namespace Mosa.Compiler.Framework
 			BaseCompiler.Initialize(this);
 		}
 
-		private void PreCompile()
+		public void PreCompile()
 		{
 			BaseCompiler.PreCompile();
 		}
 
-		private void ScheduleAll()
+		public void ScheduleAll()
 		{
 			CompilationScheduler.ScheduleAll();
 		}
 
-		private void Schedule(MosaType type)
+		public void Schedule(MosaType type)
 		{
 			CompilationScheduler.Schedule(type);
 		}
 
-		private void Schedule(MosaMethod method)
+		public void Schedule(MosaMethod method)
 		{
 			CompilationScheduler.Schedule(method);
 		}
 
-		private void Compile()
+		public void Compile()
 		{
 			BaseCompiler.Compile();
 		}
 
-		private void PostCompile()
+		public void PostCompile()
 		{
 			BaseCompiler.PostCompile();
 		}

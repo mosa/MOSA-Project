@@ -33,6 +33,10 @@ namespace Mosa.Tool.Explorer
 
 		private Dictionary<MosaMethod, MethodStages> methodStages = new Dictionary<MosaMethod, MethodStages>();
 
+		private enum CompileStage { Nothing, Loaded, PreCompiled, Compiled };
+
+		private CompileStage Stage = CompileStage.Nothing;
+
 		private class MethodStages
 		{
 			public List<string> OrderedStageNames = new List<string>();
@@ -102,6 +106,8 @@ namespace Mosa.Tool.Explorer
 			}
 
 			LoadAssembly(filename, includeTestKorlibToolStripMenuItem.Checked, cbPlatform.Text);
+
+			methodStages.Clear();
 
 			SetStatus("Assemblies Loaded!");
 		}
@@ -207,23 +213,49 @@ namespace Mosa.Tool.Explorer
 			stringbuilder.AppendLine(line);
 		}
 
-		private void Compile()
+		private void SetCompilerOptions()
+		{
+			Compiler.CompilerOptions.EnableSSA = enableSSA.Checked;
+			Compiler.CompilerOptions.EnableOptimizations = enableOptimizations.Checked;
+			Compiler.CompilerOptions.EnablePromoteTemporaryVariablesOptimization = enableOptimizations.Checked;
+			Compiler.CompilerOptions.EnableSparseConditionalConstantPropagation = enableSparseConditionalConstantPropagation.Checked;
+			Compiler.CompilerOptions.EmitBinary = enableBinaryCodeGeneration.Checked;
+		}
+
+		private void CleanGUI()
 		{
 			compileLog.Clear();
 			errorLog.Clear();
 			counterLog.Clear();
 			exceptionLog.Clear();
 
+			rbLog.Text = string.Empty;
+			rbErrors.Text = string.Empty;
+			rbCounters.Text = string.Empty;
+			rbException.Text = string.Empty;
+		}
+
+		private void Compile()
+		{
 			compileStartTime = DateTime.Now;
-			methodStages.Clear();
+			SetCompilerOptions();
 
-			Compiler.CompilerOptions.EnableSSA = enableSSA.Checked;
-			Compiler.CompilerOptions.EnableOptimizations = enableOptimizations.Checked;
-			Compiler.CompilerOptions.EnablePromoteTemporaryVariablesOptimization = enableOptimizations.Checked;
-			Compiler.CompilerOptions.EnableSparseConditionalConstantPropagation = enableSparseConditionalConstantPropagation.Checked;
-			Compiler.CompilerOptions.EmitBinary = enableBinaryCodeGeneration.Checked;
+			if (Stage == CompileStage.PreCompiled)
+			{
+				Compiler.ScheduleAll();
+				Compiler.Compile();
+				Compiler.PostCompile();
+			}
+			else
+			{
+				CleanGUI();
 
-			Compiler.Execute();
+				methodStages.Clear();
+
+				Compiler.Execute();
+			}
+
+			Stage = CompileStage.Compiled;
 
 			SetStatus("Compiled!");
 
@@ -262,6 +294,17 @@ namespace Mosa.Tool.Explorer
 			return node;
 		}
 
+		private void PreCompile()
+		{
+			if (Stage == CompileStage.Loaded)
+			{
+				SetCompilerOptions();
+				Compiler.Initialize();
+				Compiler.PreCompile();
+				Stage = CompileStage.PreCompiled;
+			}
+		}
+
 		private void treeView_AfterSelect(object sender, TreeViewEventArgs e)
 		{
 			tbResult.Text = string.Empty;
@@ -270,6 +313,15 @@ namespace Mosa.Tool.Explorer
 
 			if (node == null)
 				return;
+
+			PreCompile();
+
+			if (!Compiler.CompilationScheduler.IsScheduled(node.Type))
+			{
+				Compiler.Schedule(node.Type);
+
+				Compiler.Compile();
+			}
 
 			MethodStages methodStage;
 
@@ -487,6 +539,8 @@ namespace Mosa.Tool.Explorer
 			Compiler.Load(TypeSystem.Load(metadata));
 
 			UpdateTree();
+
+			Stage = CompileStage.Loaded;
 		}
 
 		protected void LoadAssemblyDebugInfo(string assemblyFileName)
