@@ -66,6 +66,9 @@ namespace Mosa.Compiler.Framework
 			if (methodScheduled.Contains(method))
 				return;
 
+			if (method.IsLinkerGenerated)
+				return;
+
 			lock (mylock)
 			{
 				methodScheduled.Add(method);

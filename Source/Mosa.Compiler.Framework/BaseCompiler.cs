@@ -214,6 +214,12 @@ namespace Mosa.Compiler.Framework
 				stage.Initialize(this);
 			}
 
+			foreach (ICompilerStage stage in PostCompilePipeline)
+			{
+				// Setup Compiler
+				stage.Initialize(this);
+			}
+
 			foreach (ICompilerStage stage in PreCompilePipeline)
 			{
 				Trace(CompilerEvent.CompilerStageStart, stage.Name);
@@ -252,11 +258,6 @@ namespace Mosa.Compiler.Framework
 		/// </remarks>
 		internal void PostCompile()
 		{
-			foreach (ICompilerStage stage in PostCompilePipeline)
-			{
-				// Setup Compiler
-				stage.Initialize(this);
-			}
 
 			foreach (ICompilerStage stage in PostCompilePipeline)
 			{

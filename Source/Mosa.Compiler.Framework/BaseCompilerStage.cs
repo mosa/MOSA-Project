@@ -8,6 +8,7 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using System.Diagnostics;
 using Mosa.Compiler.InternalTrace;
 using Mosa.Compiler.Linker;
 using Mosa.Compiler.MosaTypeSystem;
@@ -77,6 +78,8 @@ namespace Mosa.Compiler.Framework
 
 		void ICompilerStage.Initialize(BaseCompiler compiler)
 		{
+			Debug.Assert(compiler != null);
+
 			this.Compiler = compiler;
 
 			Setup();
