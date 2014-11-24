@@ -81,7 +81,7 @@ namespace Mosa.Utility.Launcher
 
 			compiledFile = Path.Combine(Options.DestinationDirectory, Path.GetFileNameWithoutExtension(Options.SourceFile) + ".bin");
 
-			Compiler.CompilerEngineFactory = delegate { return new AotCompiler(); };
+			Compiler.CompilerFactory = delegate { return new AotCompiler(); };
 
 			Compiler.CompilerOptions.EnableSSA = Options.EnableSSA;
 			Compiler.CompilerOptions.EnableOptimizations = Options.EnableIROptimizations;
@@ -109,7 +109,7 @@ namespace Mosa.Utility.Launcher
 
 			Compiler.Load(inputFiles);
 
-			Compiler.Execute();
+			Compiler.Execute(true);
 
 			if (Options.ImageFormat == ImageFormat.ISO)
 			{

@@ -45,7 +45,7 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 
 			compiler.CompilerOptions.Architecture = platform.CreateArchitecture();
 			compiler.CompilerOptions.LinkerFactory = delegate { return new SimLinker(simAdapter); };
-			compiler.CompilerEngineFactory = delegate { return new SimCompiler(simAdapter); };
+			compiler.CompilerFactory = delegate { return new SimCompiler(simAdapter); };
 
 			CompileTestCode();
 		}

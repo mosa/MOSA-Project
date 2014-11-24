@@ -66,7 +66,7 @@ namespace Mosa.Tool.Compiler
 		/// </summary>
 		public Compiler()
 		{
-			compiler.CompilerEngineFactory = delegate { return new AotCompiler(); };
+			compiler.CompilerFactory = delegate { return new AotCompiler(); };
 
 			usageString = "Usage: mosacl -o outputfile --Architecture=[x86|avr32] --format=[ELF32|ELF64|PE] {--boot=[mb0.7]} {additional options} inputfiles";
 			optionSet = new OptionSet();

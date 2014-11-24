@@ -65,7 +65,7 @@ namespace Mosa.Tool.Explorer
 			Compiler.CompilerTrace.TraceFilter.StageMatch = MatchType.Exclude;
 			Compiler.CompilerTrace.TraceFilter.Stage = "PlatformStubStage|ProtectedRegionLayoutStage|DominanceCalculationStage|CodeGenerationStage";
 
-			Compiler.CompilerEngineFactory = delegate { return new ExplorerCompiler(); };
+			Compiler.CompilerFactory = delegate { return new ExplorerCompiler(); };
 			Compiler.CompilerOptions.LinkerFactory = delegate { return new ExplorerLinker(); };
 		}
 
@@ -134,6 +134,16 @@ namespace Mosa.Tool.Explorer
 
 		void ICompilerEventListener.SubmitTraceEvent(CompilerEvent compilerStage, string info)
 		{
+			MethodInvoker method = delegate()
+			{
+				SubmitTraceEvent(compilerStage, info);
+			};
+
+			Invoke(method);
+		}
+
+		void SubmitTraceEvent(CompilerEvent compilerStage, string info)
+		{
 			if (compilerStage != CompilerEvent.DebugInfo)
 			{
 				SetStatus(compilerStage.ToText() + ": " + info);
@@ -168,6 +178,16 @@ namespace Mosa.Tool.Explorer
 
 		void ITraceListener.SubmitInstructionTraceInformation(MosaMethod method, string stage, string log)
 		{
+			MethodInvoker method2 = delegate()
+			{
+				SubmitInstructionTraceInformation(method, stage, log);
+			};
+
+			Invoke(method2);
+		}
+	
+		void SubmitInstructionTraceInformation(MosaMethod method, string stage, string log)
+		{
 			MethodStages methodStage;
 
 			if (!methodStages.TryGetValue(method, out methodStage))
@@ -190,8 +210,18 @@ namespace Mosa.Tool.Explorer
 				methodStage.InstructionLogs.Add(stage, stringbuilder);
 			}
 		}
-
+		
 		void ITraceListener.SubmitDebugStageInformation(MosaMethod method, string stage, string line)
+		{
+			MethodInvoker method2 = delegate()
+			{
+				SubmitDebugStageInformation(method, stage, line);
+			};
+
+			Invoke(method2);
+		}
+
+		void SubmitDebugStageInformation(MosaMethod method, string stage, string line)
 		{
 			MethodStages methodStage;
 
@@ -252,7 +282,7 @@ namespace Mosa.Tool.Explorer
 
 				methodStages.Clear();
 
-				Compiler.Execute();
+				Compiler.Execute(true);
 			}
 
 			Stage = CompileStage.Compiled;
@@ -670,6 +700,16 @@ namespace Mosa.Tool.Explorer
 		}
 
 		void ICompilerEventListener.SubmitMethodStatus(int totalMethods, int completedMethods)
+		{
+			MethodInvoker method = delegate()
+			{
+				SubmitMethodStatus(totalMethods, completedMethods);
+			};
+
+			Invoke(method);
+		}
+
+		void SubmitMethodStatus(int totalMethods, int completedMethods)
 		{
 			toolStripProgressBar1.Maximum = totalMethods;
 			toolStripProgressBar1.Value = completedMethods;

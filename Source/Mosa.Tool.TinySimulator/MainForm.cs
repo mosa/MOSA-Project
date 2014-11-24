@@ -198,7 +198,7 @@ namespace Mosa.Tool.TinySimulator
 			Compiler.CompilerOptions.EnableSparseConditionalConstantPropagation = true;
 
 			Compiler.CompilerOptions.LinkerFactory = delegate { return new SimLinker(simAdapter); };
-			Compiler.CompilerEngineFactory = delegate { return new SimCompiler(simAdapter); };
+			Compiler.CompilerFactory = delegate { return new SimCompiler(simAdapter); };
 
 			Compiler.Execute();
 

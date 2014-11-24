@@ -14,6 +14,7 @@ using Mosa.Compiler.MosaTypeSystem;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 
 namespace Mosa.Compiler.Framework
 {
@@ -249,6 +250,66 @@ namespace Mosa.Compiler.Framework
 			}
 		}
 
+		public void ThreadedCompile()
+		{
+			ExecuteThreadedCompile();
+
+			//ManualResetEvent mre = new ManualResetEvent(false);
+
+			//ThreadPool.QueueUserWorkItem(new WaitCallback(delegate
+			//	{
+			//		ExecuteThreadedCompile();
+
+			//		mre.Set();
+			//	}
+			//));
+
+			//mre.WaitOne();
+		}
+
+		public void ExecuteThreadedCompile()
+		{
+			ThreadPool.SetMinThreads(4, 4);
+			ThreadPool.SetMaxThreads(8, 8);
+
+			using (var finished = new CountdownEvent(1))
+			{
+				while (true)
+				{
+					finished.AddCount();
+
+					var method = CompilationScheduler.GetMethodToCompile();
+
+					if (method == null)
+					{
+						finished.Signal();
+						break;
+					}
+
+					ThreadPool.QueueUserWorkItem(
+						new WaitCallback(delegate
+						{
+							try
+							{
+								CompileMethod(method, null, null);
+							}
+							finally
+							{
+								finished.Signal();
+							}
+						}
+					));
+
+					CompilerTrace.CompilerEventListener.SubmitMethodStatus(
+						CompilationScheduler.TotalMethods,
+						CompilationScheduler.TotalMethods - CompilationScheduler.TotalQueuedMethods);
+				}
+
+				finished.Signal();
+				finished.Wait();
+			}
+		}
+
 		/// <summary>
 		/// Executes the compiler post compiler stages.
 		/// </summary>
@@ -258,7 +319,6 @@ namespace Mosa.Compiler.Framework
 		/// </remarks>
 		internal void PostCompile()
 		{
-
 			foreach (ICompilerStage stage in PostCompilePipeline)
 			{
 				Trace(CompilerEvent.CompilerStageStart, stage.Name);

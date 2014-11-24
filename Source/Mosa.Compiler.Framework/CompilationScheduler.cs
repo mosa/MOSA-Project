@@ -78,7 +78,10 @@ namespace Mosa.Compiler.Framework
 
 		public bool IsScheduled(MosaMethod method)
 		{
-			return methodScheduled.Contains(method);
+			lock (mylock)
+			{
+				return methodScheduled.Contains(method);
+			}
 		}
 
 		public void TrackTypeAllocated(MosaType type)

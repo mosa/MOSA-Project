@@ -18,7 +18,7 @@ namespace Mosa.Compiler.Framework
 {
 	public class MosaCompiler
 	{
-		public Func<BaseCompiler> CompilerEngineFactory { get; set; }
+		public Func<BaseCompiler> CompilerFactory { get; set; }
 
 		protected BaseCompiler BaseCompiler { get; private set; }
 
@@ -74,13 +74,23 @@ namespace Mosa.Compiler.Framework
 
 			CompilationScheduler = new CompilationScheduler(TypeSystem);
 		}
-
+	
 		public void Execute()
+		{
+			Execute(false);
+		}
+		
+		public void Execute(bool threaded)
 		{
 			Initialize();
 			PreCompile();
 			ScheduleAll();
-			Compile();
+			
+			if (threaded)
+				ThreadedCompile();
+			else
+				Compile();
+
 			PostCompile();
 		}
 
@@ -89,7 +99,7 @@ namespace Mosa.Compiler.Framework
 			Linker = CompilerOptions.LinkerFactory();
 			Linker.Initialize(CompilerOptions.BaseAddress, CompilerOptions.Architecture.Endianness, CompilerOptions.Architecture.ElfMachineType);
 
-			BaseCompiler = CompilerEngineFactory();
+			BaseCompiler = CompilerFactory();
 
 			BaseCompiler.Initialize(this);
 		}
@@ -119,10 +129,14 @@ namespace Mosa.Compiler.Framework
 			BaseCompiler.Compile();
 		}
 
+		public void ThreadedCompile()
+		{
+			BaseCompiler.ThreadedCompile();
+		}
+
 		public void PostCompile()
 		{
 			BaseCompiler.PostCompile();
 		}
-
 	}
 }

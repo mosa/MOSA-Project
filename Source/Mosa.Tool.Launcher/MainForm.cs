@@ -176,17 +176,35 @@ namespace Mosa.Tool.Launcher
 			lbSourceDirectory.Text = Path.GetDirectoryName(Options.SourceFile);
 		}
 
-		void IBuilderEvent.NewStatus(string info)
+		private void NewStatus(string info)
 		{
 			AddOutput(info);
 		}
 
-		void IBuilderEvent.UpdateProgress(int total, int at)
+		void IBuilderEvent.NewStatus(string info)
+		{
+			MethodInvoker method = delegate()
+			{
+				NewStatus(info);
+			};
+
+			Invoke(method);
+		}
+
+		private void UpdateProgress(int total, int at)
 		{
 			progressBar1.Maximum = total;
 			progressBar1.Value = at;
+		}
 
-			//progressBar1.Refresh();
+		void IBuilderEvent.UpdateProgress(int total, int at)
+		{
+			MethodInvoker method = delegate()
+			{
+				UpdateProgress(total, at);
+			};
+
+			Invoke(method);
 		}
 
 		private void MainForm_Shown(object sender, EventArgs e)
