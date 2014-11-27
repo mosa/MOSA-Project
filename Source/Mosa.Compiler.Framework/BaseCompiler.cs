@@ -252,19 +252,20 @@ namespace Mosa.Compiler.Framework
 
 		public void ThreadedCompile()
 		{
-			ExecuteThreadedCompile();
+			//ExecuteThreadedCompile();
 
-			//ManualResetEvent mre = new ManualResetEvent(false);
+			ManualResetEvent mre = new ManualResetEvent(false);
 
-			//ThreadPool.QueueUserWorkItem(new WaitCallback(delegate
-			//	{
-			//		ExecuteThreadedCompile();
+			// Create thread for compiler
+			ThreadPool.QueueUserWorkItem(new WaitCallback(delegate
+				{
+					ExecuteThreadedCompile();
 
-			//		mre.Set();
-			//	}
-			//));
+					mre.Set();
+				}
+			));
 
-			//mre.WaitOne();
+			mre.WaitOne();
 		}
 
 		public void ExecuteThreadedCompile()
@@ -296,13 +297,17 @@ namespace Mosa.Compiler.Framework
 							finally
 							{
 								finished.Signal();
+
+								CompilerTrace.CompilerEventListener.SubmitMethodStatus(
+									CompilationScheduler.TotalMethods,
+									CompilationScheduler.TotalMethods - CompilationScheduler.TotalQueuedMethods);
 							}
 						}
 					));
 
-					CompilerTrace.CompilerEventListener.SubmitMethodStatus(
-						CompilationScheduler.TotalMethods,
-						CompilationScheduler.TotalMethods - CompilationScheduler.TotalQueuedMethods);
+					//CompilerTrace.CompilerEventListener.SubmitMethodStatus(
+					//	CompilationScheduler.TotalMethods,
+					//	CompilationScheduler.TotalMethods - CompilationScheduler.TotalQueuedMethods);
 				}
 
 				finished.Signal();
