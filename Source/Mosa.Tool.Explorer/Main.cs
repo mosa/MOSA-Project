@@ -17,6 +17,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace Mosa.Tool.Explorer
@@ -142,7 +143,7 @@ namespace Mosa.Tool.Explorer
 			Invoke(method);
 		}
 
-		void SubmitTraceEvent(CompilerEvent compilerStage, string info)
+		private void SubmitTraceEvent(CompilerEvent compilerStage, string info)
 		{
 			if (compilerStage != CompilerEvent.DebugInfo)
 			{
@@ -185,8 +186,8 @@ namespace Mosa.Tool.Explorer
 
 			Invoke(method2);
 		}
-	
-		void SubmitInstructionTraceInformation(MosaMethod method, string stage, string log)
+
+		private void SubmitInstructionTraceInformation(MosaMethod method, string stage, string log)
 		{
 			MethodStages methodStage;
 
@@ -210,7 +211,7 @@ namespace Mosa.Tool.Explorer
 				methodStage.InstructionLogs.Add(stage, stringbuilder);
 			}
 		}
-		
+
 		void ITraceListener.SubmitDebugStageInformation(MosaMethod method, string stage, string line)
 		{
 			MethodInvoker method2 = delegate()
@@ -221,7 +222,7 @@ namespace Mosa.Tool.Explorer
 			Invoke(method2);
 		}
 
-		void SubmitDebugStageInformation(MosaMethod method, string stage, string line)
+		private void SubmitDebugStageInformation(MosaMethod method, string stage, string line)
 		{
 			MethodStages methodStage;
 
@@ -282,8 +283,32 @@ namespace Mosa.Tool.Explorer
 
 				methodStages.Clear();
 
-				Compiler.Execute(false);
+				toolStrip1.Enabled = false;
+
+				//Compiler.Execute(new WaitCallback(OnCompileCompleted));
+
+				ThreadPool.QueueUserWorkItem(new WaitCallback(delegate
+					{
+						Compiler.Execute(Environment.ProcessorCount);
+						OnCompileCompleted();
+					}
+				));
 			}
+		}
+
+		private void OnCompileCompleted()
+		{
+			MethodInvoker method = delegate()
+			{
+				CompileCompleted();
+			};
+
+			Invoke(method);
+		}
+
+		private void CompileCompleted()
+		{
+			toolStrip1.Enabled = true;
 
 			Stage = CompileStage.Compiled;
 
@@ -709,7 +734,7 @@ namespace Mosa.Tool.Explorer
 			Invoke(method);
 		}
 
-		void SubmitMethodStatus(int totalMethods, int completedMethods)
+		private void SubmitMethodStatus(int totalMethods, int completedMethods)
 		{
 			toolStripProgressBar1.Maximum = totalMethods;
 			toolStripProgressBar1.Value = completedMethods;

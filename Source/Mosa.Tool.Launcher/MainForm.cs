@@ -8,10 +8,9 @@
  */
 
 using Mosa.Utility.Launcher;
-
-//using Mosa.Utility.BootImage;
 using System;
 using System.IO;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace Mosa.Tool.Launcher
@@ -280,8 +279,26 @@ namespace Mosa.Tool.Launcher
 
 			tabControl1.SelectedTab = tpOutput;
 
-			Builder.Compile();
+			ThreadPool.QueueUserWorkItem(new WaitCallback(delegate
+				{
+					Builder.Compile();
+					OnCompileCompleted();
+				}
+			));
+		}
 
+		private void OnCompileCompleted()
+		{
+			MethodInvoker method = delegate()
+			{
+				CompileCompleted();
+			};
+
+			Invoke(method);
+		}
+
+		private void CompileCompleted()
+		{
 			foreach (var line in Builder.Counters)
 			{
 				AddCounters(line);

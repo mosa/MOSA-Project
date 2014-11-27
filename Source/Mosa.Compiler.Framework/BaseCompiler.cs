@@ -232,7 +232,7 @@ namespace Mosa.Compiler.Framework
 			}
 		}
 
-		public void Compile()
+		public void ExecuteCompile()
 		{
 			while (true)
 			{
@@ -250,68 +250,50 @@ namespace Mosa.Compiler.Framework
 			}
 		}
 
-		public void ThreadedCompile()
+		public void ExecuteThreadedCompile(int threads)
 		{
-			//ExecuteThreadedCompile();
-
-			ManualResetEvent mre = new ManualResetEvent(false);
-
-			// Create thread for compiler
-			ThreadPool.QueueUserWorkItem(new WaitCallback(delegate
-				{
-					ExecuteThreadedCompile();
-
-					mre.Set();
-				}
-			));
-
-			mre.WaitOne();
-		}
-
-		public void ExecuteThreadedCompile()
-		{
-			ThreadPool.SetMinThreads(4, 4);
-			ThreadPool.SetMaxThreads(8, 8);
-
 			using (var finished = new CountdownEvent(1))
 			{
-				while (true)
+				for (int i = 0; i < threads; i++)
 				{
 					finished.AddCount();
-
-					var method = CompilationScheduler.GetMethodToCompile();
-
-					if (method == null)
-					{
-						finished.Signal();
-						break;
-					}
 
 					ThreadPool.QueueUserWorkItem(
 						new WaitCallback(delegate
 						{
 							try
 							{
-								CompileMethod(method, null, null);
+								CompileWorker();
 							}
 							finally
 							{
 								finished.Signal();
-
-								CompilerTrace.CompilerEventListener.SubmitMethodStatus(
-									CompilationScheduler.TotalMethods,
-									CompilationScheduler.TotalMethods - CompilationScheduler.TotalQueuedMethods);
 							}
 						}
 					));
-
-					//CompilerTrace.CompilerEventListener.SubmitMethodStatus(
-					//	CompilationScheduler.TotalMethods,
-					//	CompilationScheduler.TotalMethods - CompilationScheduler.TotalQueuedMethods);
 				}
 
 				finished.Signal();
 				finished.Wait();
+			}
+		}
+
+		public void CompileWorker()
+		{
+			while (true)
+			{
+				var method = CompilationScheduler.GetMethodToCompile();
+
+				if (method == null)
+				{
+					break;
+				}
+
+				CompileMethod(method, null, null);
+
+				CompilerTrace.CompilerEventListener.SubmitMethodStatus(
+					CompilationScheduler.TotalMethods,
+					CompilationScheduler.TotalMethods - CompilationScheduler.TotalQueuedMethods);
 			}
 		}
 

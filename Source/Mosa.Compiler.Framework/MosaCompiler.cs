@@ -74,23 +74,22 @@ namespace Mosa.Compiler.Framework
 
 			CompilationScheduler = new CompilationScheduler(TypeSystem);
 		}
-	
+
 		public void Execute()
-		{
-			Execute(false);
-		}
-		
-		public void Execute(bool threaded)
 		{
 			Initialize();
 			PreCompile();
 			ScheduleAll();
-			
-			if (threaded)
-				ThreadedCompile();
-			else
-				Compile();
+			Compile();
+			PostCompile();
+		}
 
+		public void Execute(int threads)
+		{
+			Initialize();
+			PreCompile();
+			ScheduleAll();
+			BaseCompiler.ExecuteThreadedCompile(threads);
 			PostCompile();
 		}
 
@@ -126,12 +125,7 @@ namespace Mosa.Compiler.Framework
 
 		public void Compile()
 		{
-			BaseCompiler.Compile();
-		}
-
-		public void ThreadedCompile()
-		{
-			BaseCompiler.ThreadedCompile();
+			BaseCompiler.ExecuteCompile();
 		}
 
 		public void PostCompile()

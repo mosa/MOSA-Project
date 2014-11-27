@@ -21,6 +21,7 @@ namespace Mosa.Compiler.Framework
 
 		private readonly Queue<MosaMethod> methodQueue = new Queue<MosaMethod>();
 		private readonly HashSet<MosaMethod> methodScheduled = new HashSet<MosaMethod>();
+		//private readonly HashSet<MosaMethod> methodCompiled = new HashSet<MosaMethod>();
 
 		private readonly TypeSystem typeSystem;
 

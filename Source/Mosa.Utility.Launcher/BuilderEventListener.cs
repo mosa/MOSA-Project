@@ -9,7 +9,6 @@
 
 using Mosa.Compiler.InternalTrace;
 using System;
-using System.Threading;
 
 namespace Mosa.Utility.Launcher
 {
