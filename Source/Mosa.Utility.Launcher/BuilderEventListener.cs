@@ -16,18 +16,22 @@ namespace Mosa.Utility.Launcher
 	internal class BuilderEventListener : ICompilerEventListener
 	{
 		private Builder builder;
+		private object mylock = new object();
 
 		void ICompilerEventListener.SubmitTraceEvent(CompilerEvent compilerStage, string info)
 		{
-			if (compilerStage == CompilerEvent.CompilerStageStart || compilerStage == CompilerEvent.CompilerStageEnd || compilerStage == CompilerEvent.Exception)
+			lock (mylock)
 			{
-				string status = "Compiling: " + String.Format("{0:0.00}", (DateTime.Now - builder.CompileStartTime).TotalSeconds) + " secs: " + compilerStage.ToText() + ": " + info;
+				if (compilerStage == CompilerEvent.CompilerStageStart || compilerStage == CompilerEvent.CompilerStageEnd || compilerStage == CompilerEvent.Exception)
+				{
+					string status = "Compiling: " + String.Format("{0:0.00}", (DateTime.Now - builder.CompileStartTime).TotalSeconds) + " secs: " + compilerStage.ToText() + ": " + info;
 
-				builder.AddOutput(status);
-			}
-			else if (compilerStage == CompilerEvent.Counter)
-			{
-				builder.AddCounters(info);
+					builder.AddOutput(status);
+				}
+				else if (compilerStage == CompilerEvent.Counter)
+				{
+					builder.AddCounters(info);
+				}
 			}
 		}
 
