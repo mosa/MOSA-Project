@@ -102,6 +102,16 @@ namespace Mosa.Tool.TinySimulator
 
 		void ICompilerEventListener.SubmitTraceEvent(CompilerEvent compilerStage, string info)
 		{
+			MethodInvoker method = delegate()
+			{
+				SubmitTraceEvent(compilerStage, info);
+			};
+
+			Invoke(method);
+		}
+
+		private void SubmitTraceEvent(CompilerEvent compilerStage, string info)
+		{
 			if (compilerStage == CompilerEvent.CompilerStageStart || compilerStage == CompilerEvent.CompilerStageEnd)
 			{
 				string status = "Compiling: " + String.Format("{0:0.00}", (DateTime.Now - compileStartTime).TotalSeconds) + " secs: " + compilerStage.ToText() + ": " + info;
@@ -165,7 +175,7 @@ namespace Mosa.Tool.TinySimulator
 			{
 				LoadAssembly(openFileDialog.FileName);
 
-				Status = "Assembly Loaded. Ready to Compile.";
+				Status = "Assembly Loaded.";
 			}
 		}
 
@@ -188,6 +198,24 @@ namespace Mosa.Tool.TinySimulator
 
 			Status = "Compiling...";
 
+			toolStrip1.Enabled = false;
+
+			ThreadPool.QueueUserWorkItem(new WaitCallback(delegate
+			{
+				try
+				{
+					Compile();
+				}
+				finally
+				{
+					OnCompileCompleted();
+				}
+			}
+			));
+		}
+
+		private void Compile()
+		{
 			var simAdapter = GetSimAdaptor("x86");
 
 			compileStartTime = DateTime.Now;
@@ -200,7 +228,7 @@ namespace Mosa.Tool.TinySimulator
 			Compiler.CompilerOptions.LinkerFactory = delegate { return new SimLinker(simAdapter); };
 			Compiler.CompilerFactory = delegate { return new SimCompiler(simAdapter); };
 
-			Compiler.Execute();
+			Compiler.Execute(Environment.ProcessorCount);
 
 			SimCPU = simAdapter.SimCPU;
 
@@ -210,10 +238,25 @@ namespace Mosa.Tool.TinySimulator
 			SimCPU.Reset();
 
 			Display32 = SimCPU.GetState().NativeRegisterSize == 32;
+		}
 
-			SimCPU.Monitor.OnExecutionStepCompleted(true);
+		private void OnCompileCompleted()
+		{
+			MethodInvoker method = delegate()
+			{
+				CompileCompleted();
+			};
+
+			Invoke(method);
+		}
+
+		private void CompileCompleted()
+		{
+			toolStrip1.Enabled = true;
 
 			Status = "Compiled.";
+
+			SimCPU.Monitor.OnExecutionStepCompleted(true);
 
 			symbolView.CreateEntries();
 		}
@@ -277,6 +320,8 @@ namespace Mosa.Tool.TinySimulator
 			{
 				LoadAssembly();
 			}
+
+			outputView.Show();
 
 			StartSimulator();
 		}

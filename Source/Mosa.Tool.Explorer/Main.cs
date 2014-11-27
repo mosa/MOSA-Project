@@ -289,8 +289,14 @@ namespace Mosa.Tool.Explorer
 
 				ThreadPool.QueueUserWorkItem(new WaitCallback(delegate
 					{
-						Compiler.Execute(Environment.ProcessorCount);
-						OnCompileCompleted();
+						try
+						{
+							Compiler.Execute(Environment.ProcessorCount);
+						}
+						finally
+						{
+							OnCompileCompleted();
+						}
 					}
 				));
 			}

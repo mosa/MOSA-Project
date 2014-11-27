@@ -281,8 +281,14 @@ namespace Mosa.Tool.Launcher
 
 			ThreadPool.QueueUserWorkItem(new WaitCallback(delegate
 				{
-					Builder.Compile();
-					OnCompileCompleted();
+					try
+					{
+						Builder.Compile();
+					}
+					finally
+					{
+						OnCompileCompleted();
+					}
 				}
 			));
 		}
