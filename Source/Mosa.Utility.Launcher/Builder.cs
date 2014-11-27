@@ -109,7 +109,7 @@ namespace Mosa.Utility.Launcher
 
 			Compiler.Load(inputFiles);
 
-			Compiler.Execute(true);
+			Compiler.Execute(false);
 
 			if (Options.ImageFormat == ImageFormat.ISO)
 			{

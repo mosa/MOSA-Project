@@ -282,7 +282,7 @@ namespace Mosa.Tool.Explorer
 
 				methodStages.Clear();
 
-				Compiler.Execute(true);
+				Compiler.Execute(false);
 			}
 
 			Stage = CompileStage.Compiled;
