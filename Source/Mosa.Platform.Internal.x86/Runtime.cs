@@ -290,14 +290,14 @@ namespace Mosa.Platform.Internal.x86
 			while (entries > 0)
 			{
 				uint addr = Mosa.Internal.Native.Load32(table);
-				uint size = Mosa.Internal.Native.Load32(table, 4);
+				uint size = Mosa.Internal.Native.Load32(table, NativeIntSize);
 
 				if (address >= addr && address < addr + size)
 				{
-					return Mosa.Internal.Native.Load32(table, 8);
+					return Mosa.Internal.Native.Load32(table, NativeIntSize * 2);
 				}
 
-				table = table + 12;
+				table = table + (NativeIntSize * 3);
 
 				entries--;
 			}
@@ -315,19 +315,19 @@ namespace Mosa.Platform.Internal.x86
 
 			uint entries = Mosa.Internal.Native.Load32(table);
 
-			table = table + 4;
+			table = table + NativeIntSize;
 
 			while (entries > 0)
 			{
 				uint addr = Mosa.Internal.Native.Load32(table);
-				uint size = Mosa.Internal.Native.Load32(table, 4);
+				uint size = Mosa.Internal.Native.Load32(table, NativeIntSize);
 
 				if (address >= addr && address < addr + size)
 				{
-					return Mosa.Internal.Native.Load32(table, 8);
+					return Mosa.Internal.Native.Load32(table, NativeIntSize * 2);
 				}
 
-				table = table + 12;
+				table = table + (NativeIntSize * 3);
 
 				entries--;
 			}

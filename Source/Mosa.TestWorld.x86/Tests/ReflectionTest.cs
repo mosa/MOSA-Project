@@ -22,6 +22,7 @@ namespace Mosa.TestWorld.x86.Tests
 			testMethods.Add(FindTypeByNameTest);
 			testMethods.Add(CompareTypeHandlesTest);
 			testMethods.Add(TypeHandleFromObjectTest);
+			testMethods.Add(ElementTypeTest);
 		}
 
 		public static bool PointerTest()
@@ -60,6 +61,13 @@ namespace Mosa.TestWorld.x86.Tests
 		{
 			string hello = "hi";
 			return (hello.GetType() != null);
+		}
+
+		public static bool ElementTypeTest()
+		{
+			Type foundType = Type.GetType("System.Int32[]");
+			Type elementType = Type.GetType("System.Int32");
+			return foundType.HasElementType && foundType.GetElementType().Equals(elementType);
 		}
 	}
 }

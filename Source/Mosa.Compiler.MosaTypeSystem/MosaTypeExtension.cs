@@ -69,9 +69,9 @@ namespace Mosa.Compiler.MosaTypeSystem
 				arrayType.ArrayInfo = MosaArrayInfo.Vector;
 
 				AddArrayMethods(type.TypeSystem, result, arrayType, MosaArrayInfo.Vector);
-
-				return result;
 			}
+			type.TypeSystem.Controller.AddType(result);
+			return result;
 		}
 
 		public static MosaType ToArray(this MosaType type, MosaArrayInfo info)

@@ -10,6 +10,7 @@
 using Mosa.Platform.Internal.x86;
 using System.Reflection;
 using System.Collections.Generic;
+using x86Runtime = Mosa.Platform.Internal.x86.Runtime;
 
 namespace System
 {
@@ -19,22 +20,41 @@ namespace System
 		internal LinkedList<Type> typeList = new LinkedList<Type>();
 		internal LinkedList<RuntimeTypeHandle> typeHandles = new LinkedList<RuntimeTypeHandle>();
 
+		private string fullName;
+
 		public override IEnumerable<TypeInfo> DefinedTypes
 		{
 			get { throw new NotImplementedException(); }
 		}
 
+		public override string FullName
+		{
+			get { return fullName; }
+		}
+
 		internal RuntimeAssembly(uint* pointer)
 		{
 			this.assemblyStruct = (MetadataAssemblyStruct*)pointer;
+			this.fullName = x86Runtime.InitializeMetadataString((*this.assemblyStruct).Name);
 			uint typeCount = (*this.assemblyStruct).NumberOfTypes;
 			for (uint i = 0; i < typeCount; i++)
 			{
 				RuntimeTypeHandle handle = new RuntimeTypeHandle();
 				((uint**)&handle)[0] = MetadataAssemblyStruct.GetTypeDefinitionAddress(assemblyStruct, i);
-				this.typeHandles.Add(handle);
-				this.typeList.Add(new RuntimeType(handle));
+
+				if (this.typeHandles.Contains(handle))
+					continue;
+
+				this.ProcessType(handle);
 			}
+		}
+
+		internal RuntimeType ProcessType(RuntimeTypeHandle handle)
+		{
+			this.typeHandles.Add(handle);
+			var type = new RuntimeType(handle, this);
+			this.typeList.Add(type);
+			return type;
 		}
 	}
 }

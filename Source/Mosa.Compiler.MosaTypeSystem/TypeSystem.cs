@@ -313,6 +313,8 @@ namespace Mosa.Compiler.MosaTypeSystem
 				type.Module.Types.Add(type.ID, type);
 				if (string.IsNullOrEmpty(type.Signature))	// i.e. elementary types
 					typeSystem.typeLookup[Tuple.Create(type.Module, type.Namespace, type.Name)] = type;
+				else
+					typeSystem.typeLookup[Tuple.Create(type.Module, type.Namespace, type.Name + type.Signature)] = type;
 			}
 
 			public void SetCorLib(MosaModule module)
