@@ -22,17 +22,16 @@ namespace Mosa.TinyCPUSimulator.Debug
 			//Test5c();
 			//Test3();
 			//Test4();
-			Test11();
+			//Test11();
 
-			//Test13();
+			Test13();
 		}
 
 		private static void Test13()
 		{
 			var fixture = new _ExceptionHandlingFixture();
 
-			fixture.ExceptionTest3();
-			//fixture.TryFinally1();
+			fixture.ExceptionTest1();
 		}
 
 		private static void Test12()

@@ -7,17 +7,22 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using Mosa.Compiler.InternalTrace;
+using Mosa.Compiler.Trace;
 using System;
 
 namespace Mosa.Utility.Launcher
 {
-	internal class BuilderEventListener : ICompilerEventListener
+	internal class BuilderEventListener : ITraceListener
 	{
 		private Builder builder;
 		private object mylock = new object();
 
-		void ICompilerEventListener.SubmitTraceEvent(CompilerEvent compilerStage, string info)
+		public BuilderEventListener(Builder builder)
+		{
+			this.builder = builder;
+		}
+
+		void ITraceListener.OnNewCompilerTraceEvent(CompilerEvent compilerStage, string info, int threadID)
 		{
 			lock (mylock)
 			{
@@ -34,15 +39,14 @@ namespace Mosa.Utility.Launcher
 			}
 		}
 
-		void ICompilerEventListener.SubmitMethodStatus(int totalMethods, int completedMethods)
+		void ITraceListener.OnUpdatedCompilerProgress(int totalMethods, int completedMethods)
 		{
 			if (builder.BuilderEvent != null)
 				builder.BuilderEvent.UpdateProgress(totalMethods, completedMethods);
 		}
 
-		public BuilderEventListener(Builder builder)
+		void ITraceListener.OnNewTraceLog(TraceLog traceLog)
 		{
-			this.builder = builder;
 		}
 	}
 }

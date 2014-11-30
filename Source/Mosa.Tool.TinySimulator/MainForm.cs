@@ -8,7 +8,7 @@
  */
 
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.InternalTrace;
+using Mosa.Compiler.Trace;
 using Mosa.Compiler.MosaTypeSystem;
 using Mosa.TinyCPUSimulator;
 using Mosa.TinyCPUSimulator.Adaptor;
@@ -21,7 +21,7 @@ using WeifenLuo.WinFormsUI.Docking;
 
 namespace Mosa.Tool.TinySimulator
 {
-	public partial class MainForm : Form, ICompilerEventListener
+	public partial class MainForm : Form, ITraceListener
 	{
 		private AssembliesView assembliesView;
 		private RegisterView registersView;
@@ -71,7 +71,7 @@ namespace Mosa.Tool.TinySimulator
 			InitializeComponent();
 
 			Compiler.CompilerTrace.TraceFilter.Active = false;
-			Compiler.CompilerTrace.CompilerEventListener = this;
+			Compiler.CompilerTrace.TraceListener = this;
 
 			Compiler.CompilerOptions.Architecture = GetArchitecture("x86");
 
@@ -98,16 +98,6 @@ namespace Mosa.Tool.TinySimulator
 			worker.IsBackground = false;
 			worker.Name = "SimCPU";
 			worker.Start();
-		}
-
-		void ICompilerEventListener.SubmitTraceEvent(CompilerEvent compilerStage, string info)
-		{
-			MethodInvoker method = delegate()
-			{
-				SubmitTraceEvent(compilerStage, info);
-			};
-
-			Invoke(method);
 		}
 
 		private void SubmitTraceEvent(CompilerEvent compilerStage, string info)
@@ -549,7 +539,21 @@ namespace Mosa.Tool.TinySimulator
 			outputView.AddOutput(data);
 		}
 
-		void ICompilerEventListener.SubmitMethodStatus(int totalMethods, int queuedMethods)
+		void ITraceListener.OnNewCompilerTraceEvent(CompilerEvent compilerStage, string info, int threadID)
+		{
+			MethodInvoker call = delegate()
+			{
+				SubmitTraceEvent(compilerStage, info);
+			};
+
+			Invoke(call);
+		}
+
+		void ITraceListener.OnUpdatedCompilerProgress(int totalMethods, int completedMethods)
+		{
+		}
+
+		void ITraceListener.OnNewTraceLog(TraceLog traceLog)
 		{
 		}
 	}

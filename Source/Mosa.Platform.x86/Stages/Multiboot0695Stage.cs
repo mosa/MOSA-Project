@@ -132,7 +132,7 @@ namespace Mosa.Platform.x86.Stages
 			// should never get here
 			ctx.AppendInstruction(X86.Ret);
 
-			Compiler.CompileMethod(multibootMethod, basicBlocks, instructionSet);
+			Compiler.CompileMethod(multibootMethod, basicBlocks, instructionSet, 0);
 		}
 
 		#region Internals

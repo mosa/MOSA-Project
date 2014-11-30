@@ -10,8 +10,9 @@
 
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.IR;
-using Mosa.Compiler.InternalTrace;
+using Mosa.Compiler.Trace;
 using Mosa.Compiler.MosaTypeSystem;
+using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework
@@ -19,11 +20,13 @@ namespace Mosa.Compiler.Framework
 	/// <summary>
 	/// Basic base class for method compiler pipeline stages
 	/// </summary>
-	public abstract class BaseMethodCompilerStage : IMethodCompilerStage
+	public abstract class BaseMethodCompilerStage : IMethodCompilerStage, ITraceFactory
 	{
 		#region Data members
 
 		protected int instructionCount = 0;
+
+		private List<TraceLog> traceLogs;
 
 		#endregion Data members
 
@@ -123,12 +126,17 @@ namespace Mosa.Compiler.Framework
 
 			NativeInstructionSize = NativePointerSize == 32 ? InstructionSize.Size32 : InstructionSize.Size64;
 
+			traceLogs = new List<TraceLog>();
+
 			Setup();
 		}
 
 		void IMethodCompilerStage.Execute()
 		{
 			Run();
+
+			SubmitTraceLogs(traceLogs);
+
 			Finish();
 		}
 
@@ -457,16 +465,76 @@ namespace Mosa.Compiler.Framework
 
 		#endregion Protected Region Methods
 
-		#region Trace Helper Methods
+		#region ITraceSectionFactory
 
-		public SectionTrace CreateTrace()
+		TraceLog ITraceFactory.CreateTraceLog(string section)
 		{
-			return new SectionTrace(this.MethodCompiler.InternalTrace, this.MethodCompiler.Method, this.MethodCompiler.FormatStageName(this as IPipelineStage));
+			return CreateTraceLog(section);
 		}
 
-		public SectionTrace CreateTrace(string section)
+		#endregion ITraceSectionFactory
+
+		#region Trace Helper Methods
+
+		public string GetFormattedStageName()
 		{
-			return new SectionTrace(this.MethodCompiler.InternalTrace, this.MethodCompiler.Method, this.MethodCompiler.FormatStageName(this as IPipelineStage), section);
+			return MethodCompiler.FormatStageName(this as IPipelineStage);
+		}
+
+		public bool IsTraceable()
+		{
+			return MethodCompiler.Trace.TraceFilter.IsMatch(MethodCompiler.Method, GetFormattedStageName());
+		}
+
+		protected TraceLog CreateTraceLog()
+		{
+			bool active = IsTraceable();
+
+			var traceLog = new TraceLog(TraceType.DebugTrace, MethodCompiler.Method, GetFormattedStageName(), active);
+
+			if (active)
+				traceLogs.Add(traceLog);
+
+			return traceLog;
+		}
+
+		public TraceLog CreateTraceLog(string section)
+		{
+			bool active = IsTraceable();
+
+			var traceLog = new TraceLog(TraceType.DebugTrace, MethodCompiler.Method, GetFormattedStageName(), section, active);
+
+			if (active)
+				traceLogs.Add(traceLog);
+
+			return traceLog;
+		}
+
+		private void SubmitTraceLog(TraceLog traceLog)
+		{
+			if (!traceLog.Active)
+				return;
+
+			MethodCompiler.Trace.NewTraceLog(traceLog);
+		}
+
+		private void SubmitTraceLogs(IList<TraceLog> traceLogs)
+		{
+			if (traceLogs == null)
+				return;
+
+			foreach (var traceLog in traceLogs)
+			{
+				if (traceLog != null)
+				{
+					SubmitTraceLog(traceLog);
+				}
+			}
+		}
+
+		protected void NewCompilerTraceEvent(CompilerEvent compileEvent, string message)
+		{
+			MethodCompiler.Trace.NewCompilerTraceEvent(compileEvent, message, MethodCompiler.ThreadID);
 		}
 
 		#endregion Trace Helper Methods

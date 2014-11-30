@@ -25,7 +25,6 @@ namespace Mosa.Utility.Aot
 
 			PreCompilePipeline.Add(new ICompilerStage[] {
 				bootStage,
-				CompilerOptions.MethodPipelineExportDirectory != null ?  new MethodPipelineExportStage(): null,
 				new PlugStage(),
 				//new MethodCompilerSchedulerStage(),
 			});
@@ -50,9 +49,9 @@ namespace Mosa.Utility.Aot
 		/// <returns>
 		/// An instance of a MethodCompilerBase for the given type/method pair.
 		/// </returns>
-		protected override BaseMethodCompiler CreateMethodCompiler(MosaMethod method, BasicBlocks basicBlocks, InstructionSet instructionSet)
+		protected override BaseMethodCompiler CreateMethodCompiler(MosaMethod method, BasicBlocks basicBlocks, InstructionSet instructionSet, int threadID)
 		{
-			return new AotMethodCompiler(this, method, basicBlocks, instructionSet);
+			return new AotMethodCompiler(this, method, basicBlocks, instructionSet, threadID);
 		}
 	}
 }

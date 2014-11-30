@@ -9,7 +9,7 @@
 
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.IR;
-using Mosa.Compiler.InternalTrace;
+using Mosa.Compiler.Trace;
 using System.Collections.Generic;
 using System.Diagnostics;
 
@@ -91,14 +91,14 @@ namespace Mosa.Compiler.Framework.Analysis
 
 		protected readonly BasicBlocks BasicBlocks;
 		protected readonly InstructionSet InstructionSet;
-		protected readonly SectionTrace Trace;
-		protected readonly SectionTrace MainTrace;
+		protected readonly ITraceFactory TraceFactory;
+		protected readonly TraceLog MainTrace;
 
 		protected readonly KeyedList<BasicBlock, int> phiStatements = new KeyedList<BasicBlock, int>();
 
-		public SparseConditionalConstantPropagation(BasicBlocks basicBlocks, InstructionSet instructionSet, SectionTrace trace)
+		public SparseConditionalConstantPropagation(BasicBlocks basicBlocks, InstructionSet instructionSet, ITraceFactory traceFactory)
 		{
-			this.Trace = trace;
+			this.TraceFactory = traceFactory;
 			this.BasicBlocks = basicBlocks;
 			this.InstructionSet = instructionSet;
 
@@ -163,9 +163,9 @@ namespace Mosa.Compiler.Framework.Analysis
 			return list;
 		}
 
-		private SectionTrace CreateTrace(string name)
+		private TraceLog CreateTrace(string name)
 		{
-			var sectionTrace = new SectionTrace(Trace, name);
+			var sectionTrace = TraceFactory.CreateTraceLog(name);
 			return sectionTrace;
 		}
 

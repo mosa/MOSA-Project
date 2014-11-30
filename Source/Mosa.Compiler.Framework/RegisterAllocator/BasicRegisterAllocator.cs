@@ -7,7 +7,7 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using Mosa.Compiler.InternalTrace;
+using Mosa.Compiler.Trace;
 
 namespace Mosa.Compiler.Framework.RegisterAllocator
 {
@@ -16,8 +16,8 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 	/// </summary>
 	public class BasicRegisterAllocator : BaseRegisterAllocator
 	{
-		public BasicRegisterAllocator(BasicBlocks basicBlocks, VirtualRegisters compilerVirtualRegisters, InstructionSet instructionSet, StackLayout stackLayout, BaseArchitecture architecture, SectionTrace trace)
-			: base(basicBlocks, compilerVirtualRegisters, instructionSet, stackLayout, architecture, trace)
+		public BasicRegisterAllocator(BasicBlocks basicBlocks, VirtualRegisters compilerVirtualRegisters, InstructionSet instructionSet, StackLayout stackLayout, BaseArchitecture architecture, ITraceFactory traceFactory)
+			: base(basicBlocks, compilerVirtualRegisters, instructionSet, stackLayout, architecture, traceFactory)
 		{
 		}
 

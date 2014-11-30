@@ -8,7 +8,6 @@
  */
 
 using Mosa.Compiler.Framework.Analysis;
-using Mosa.Compiler.InternalTrace;
 
 namespace Mosa.Compiler.Framework.Stages
 {
@@ -17,30 +16,26 @@ namespace Mosa.Compiler.Framework.Stages
 	/// </summary>
 	public class BlockOrderingStage : BaseMethodCompilerStage
 	{
-		#region Data members
-
-		private SectionTrace trace;
-
-		#endregion Data members
-
 		protected override void Run()
 		{
-			trace = CreateTrace();
-
 			var blockOrderAnalysis = MethodCompiler.Compiler.CompilerOptions.BlockOrderAnalysisFactory();
+
 			blockOrderAnalysis.PerformAnalysis(BasicBlocks);
 
 			BasicBlocks.ReorderBlocks(blockOrderAnalysis.NewBlockOrder);
 
-			if (trace.Active)
-			{
-				DumpTrace(blockOrderAnalysis);
-			}
+			DumpTrace(blockOrderAnalysis);
 		}
 
 		private void DumpTrace(IBlockOrderAnalysis blockOrderAnalysis)
 		{
+			var trace = CreateTraceLog();
+
+			if (!trace.Active)
+				return;
+
 			int index = 0;
+
 			foreach (var block in blockOrderAnalysis.NewBlockOrder)
 			{
 				if (block != null)

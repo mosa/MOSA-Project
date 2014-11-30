@@ -8,7 +8,7 @@
  */
 
 using Mosa.Compiler.Framework.IR;
-using Mosa.Compiler.InternalTrace;
+using Mosa.Compiler.Trace;
 using System.Collections.Generic;
 
 namespace Mosa.Compiler.Framework.Stages
@@ -18,7 +18,7 @@ namespace Mosa.Compiler.Framework.Stages
 	/// </summary>
 	public class DeadCodeRemovalStage : BaseMethodCompilerStage
 	{
-		protected SectionTrace trace;
+		protected TraceLog trace;
 
 		protected int instructionsRemovedCount = 0;
 
@@ -30,7 +30,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected override void Setup()
 		{
-			trace = CreateTrace();
+			trace = CreateTraceLog();
 		}
 
 		protected override void Run()
@@ -126,7 +126,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected void Mark()
 		{
-			var markTrace = CreateTrace("Mark");
+			var markTrace = CreateTraceLog("Mark");
 
 			while (instructionWorkList.Count != 0)
 			{
@@ -228,7 +228,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (!trace.Active)
 				return;
 
-			var instructionTrace = CreateTrace("Instructions");
+			var instructionTrace = CreateTraceLog("Instructions");
 
 			foreach (var block in BasicBlocks)
 			{

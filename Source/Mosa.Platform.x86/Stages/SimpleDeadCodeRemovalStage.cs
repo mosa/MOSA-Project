@@ -19,7 +19,7 @@ namespace Mosa.Platform.x86.Stages
 	{
 		protected override void Run()
 		{
-			var trace = CreateTrace();
+			var trace = CreateTraceLog();
 
 			bool changed = true;
 			while (changed)

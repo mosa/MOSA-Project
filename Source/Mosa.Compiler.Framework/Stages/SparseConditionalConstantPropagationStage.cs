@@ -10,7 +10,7 @@
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.Analysis;
 using Mosa.Compiler.Framework.IR;
-using Mosa.Compiler.InternalTrace;
+using Mosa.Compiler.Trace;
 using System.Collections.Generic;
 using System.Diagnostics;
 
@@ -21,7 +21,7 @@ namespace Mosa.Compiler.Framework.Stages
 	/// </summary>
 	public class SparseConditionalConstantPropagationStage : BaseMethodCompilerStage
 	{
-		protected SectionTrace trace;
+		protected TraceLog trace;
 
 		protected int conditionalConstantPropagation = 0;
 		protected int instructionsRemovedCount = 0;
@@ -30,12 +30,12 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected override void Setup()
 		{
-			trace = CreateTrace();
+			trace = CreateTraceLog();
 		}
 
 		protected override void Run()
 		{
-			var analysis = new SparseConditionalConstantPropagation(BasicBlocks, InstructionSet, trace);
+			var analysis = new SparseConditionalConstantPropagation(BasicBlocks, InstructionSet, this);
 
 			var deadBlocks = analysis.GetDeadBlocked();
 			var constants = analysis.GetIntegerConstants();

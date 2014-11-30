@@ -7,7 +7,7 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-namespace Mosa.Compiler.InternalTrace
+namespace Mosa.Compiler.Trace
 {
 	public enum CompilerEvent
 	{

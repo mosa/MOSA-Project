@@ -9,9 +9,9 @@
 
 using System;
 
-namespace Mosa.Compiler.InternalTrace
+namespace Mosa.Compiler.Trace.BuiltIn
 {
-	public class ConsoleEventListener : ICompilerEventListener
+	public class ConsoleEventListener : ITraceListener
 	{
 		public bool Quiet = true;
 
@@ -28,7 +28,7 @@ namespace Mosa.Compiler.InternalTrace
 			Console.WriteLine(info);
 		}
 
-		void ICompilerEventListener.SubmitTraceEvent(CompilerEvent compilerStage, string info)
+		protected void TraceEvent(CompilerEvent compilerStage, string info)
 		{
 			switch (compilerStage)
 			{
@@ -122,7 +122,16 @@ namespace Mosa.Compiler.InternalTrace
 			}
 		}
 
-		void ICompilerEventListener.SubmitMethodStatus(int totalMethods, int queuedMethods)
+		void ITraceListener.OnNewCompilerTraceEvent(CompilerEvent compilerStage, string info, int threadID)
+		{
+			TraceEvent(compilerStage, info);
+		}
+
+		void ITraceListener.OnUpdatedCompilerProgress(int totalMethods, int completedMethods)
+		{
+		}
+
+		void ITraceListener.OnNewTraceLog(TraceLog traceLog)
 		{
 		}
 	}

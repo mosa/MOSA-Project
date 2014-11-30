@@ -143,12 +143,6 @@ namespace Mosa.Compiler.Framework
 		public PortableExecutableStruct PortableExecutable;
 
 		/// <summary>
-		/// Gets or sets the method pipeline export directory, used for de
-		/// ing
-		/// </summary>
-		public string MethodPipelineExportDirectory { get; set; }
-
-		/// <summary>
 		/// Gets or sets the dominance analysis factory.
 		/// </summary>
 		/// <value>

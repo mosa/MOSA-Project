@@ -23,8 +23,9 @@ namespace Mosa.TinyCPUSimulator.Adaptor
 		/// <param name="simAdapter">The sim adapter.</param>
 		/// <param name="basicBlocks">The basic blocks.</param>
 		/// <param name="instructionSet">The instruction set.</param>
-		public SimMethodCompiler(SimCompiler compiler, MosaMethod method, ISimAdapter simAdapter, BasicBlocks basicBlocks, InstructionSet instructionSet)
-			: base(compiler, method, basicBlocks, instructionSet)
+		/// <param name="threadID">The thread identifier.</param>
+		public SimMethodCompiler(SimCompiler compiler, MosaMethod method, ISimAdapter simAdapter, BasicBlocks basicBlocks, InstructionSet instructionSet, int threadID)
+			: base(compiler, method, basicBlocks, instructionSet, threadID)
 		{
 			var compilerOptions = Compiler.CompilerOptions;
 

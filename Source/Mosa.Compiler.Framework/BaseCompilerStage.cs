@@ -8,7 +8,7 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using Mosa.Compiler.InternalTrace;
+using Mosa.Compiler.Trace;
 using Mosa.Compiler.Linker;
 using Mosa.Compiler.MosaTypeSystem;
 using System.Diagnostics;
@@ -112,14 +112,9 @@ namespace Mosa.Compiler.Framework
 
 		#region Helper Methods
 
-		protected void Trace(CompilerEvent compilerEvent, string message)
+		protected void NewCompilerTraceEvent(CompilerEvent compilerEvent, string message)
 		{
-			CompilerTrace.CompilerEventListener.SubmitTraceEvent(compilerEvent, message);
-		}
-
-		protected void Trace(MosaMethod method, string stage, string line)
-		{
-			CompilerTrace.TraceListener.SubmitDebugStageInformation(method, stage, line);
+			CompilerTrace.NewCompilerTraceEvent(compilerEvent, message, 0);
 		}
 
 		#endregion Helper Methods

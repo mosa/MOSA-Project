@@ -60,9 +60,9 @@ namespace Mosa.TinyCPUSimulator.Adaptor
 		/// <returns>
 		/// An instance of a MethodCompilerBase for the given type/method pair.
 		/// </returns>
-		protected override BaseMethodCompiler CreateMethodCompiler(MosaMethod method, BasicBlocks basicBlocks, InstructionSet instructionSet)
+		protected override BaseMethodCompiler CreateMethodCompiler(MosaMethod method, BasicBlocks basicBlocks, InstructionSet instructionSet, int threadID)
 		{
-			return new SimMethodCompiler(this, method, simAdapter, basicBlocks, instructionSet);
+			return new SimMethodCompiler(this, method, simAdapter, basicBlocks, instructionSet, threadID);
 		}
 	}
 }

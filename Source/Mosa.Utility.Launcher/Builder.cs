@@ -9,7 +9,7 @@
 
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.InternalTrace;
+using Mosa.Compiler.Trace;
 using Mosa.Compiler.Linker;
 using Mosa.Compiler.Linker.Elf32;
 using Mosa.Compiler.Linker.PE;
@@ -43,7 +43,7 @@ namespace Mosa.Utility.Launcher
 		protected string compiledFile;
 		protected string imageFile;
 
-		protected ICompilerEventListener eventListener;
+		protected ITraceListener eventListener;
 
 		public Builder(Options options, AppLocations appLocations, IBuilderEvent builderEvent)
 		{
@@ -102,7 +102,7 @@ namespace Mosa.Utility.Launcher
 				Directory.CreateDirectory(Options.DestinationDirectory);
 			}
 
-			Compiler.CompilerTrace.CompilerEventListener = eventListener;
+			Compiler.CompilerTrace.TraceListener = eventListener;
 
 			var inputFiles = new List<FileInfo>();
 			inputFiles.Add(new FileInfo(Options.SourceFile));

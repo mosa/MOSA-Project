@@ -7,7 +7,7 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using Mosa.Compiler.InternalTrace;
+using Mosa.Compiler.Trace;
 using System.Collections.Generic;
 using System.Diagnostics;
 
@@ -20,8 +20,8 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 	{
 		private Dictionary<SlotIndex, MoveHint> moveHints;
 
-		public GreedyRegisterAllocator(BasicBlocks basicBlocks, VirtualRegisters compilerVirtualRegisters, InstructionSet instructionSet, StackLayout stackLayout, BaseArchitecture architecture, SectionTrace trace)
-			: base(basicBlocks, compilerVirtualRegisters, instructionSet, stackLayout, architecture, trace)
+		public GreedyRegisterAllocator(BasicBlocks basicBlocks, VirtualRegisters compilerVirtualRegisters, InstructionSet instructionSet, StackLayout stackLayout, BaseArchitecture architecture, ITraceFactory traceFactory)
+			: base(basicBlocks, compilerVirtualRegisters, instructionSet, stackLayout, architecture, traceFactory)
 		{
 		}
 
@@ -469,10 +469,10 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		private void TraceMoveHints()
 		{
-			if (!Trace.Active)
-				return;
+			var moveHintTrace = CreateTrace("MoveHints");
 
-			var moveHintTrace = new SectionTrace(Trace, "MoveHints");
+			if (!moveHintTrace.Active)
+				return;
 
 			foreach (var moveHint in moveHints)
 			{

@@ -7,6 +7,7 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using Mosa.Compiler.Trace;
 using Mosa.Compiler.MosaTypeSystem;
 using System;
 
@@ -85,7 +86,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 						if (targetType == null)
 						{
-							Trace(InternalTrace.CompilerEvent.Warning,
+							NewCompilerTraceEvent(CompilerEvent.Warning,
 								String.Format("Plug target type {0} not found. Ignoring plug.",
 								targetAssemblyName != null ? (targetFullTypeName + "(in " + targetAssemblyName + ")") : targetFullTypeName));
 							continue;
@@ -122,7 +123,7 @@ namespace Mosa.Compiler.Framework.Stages
 						}
 						else
 						{
-							Trace(InternalTrace.CompilerEvent.Warning,
+							NewCompilerTraceEvent(CompilerEvent.Warning,
 								String.Format("No matching plug target method {0} found in type {1}. Ignoring plug.",
 								targetMethodName, targetType.ToString()));
 						}
@@ -133,7 +134,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private void Patch(MosaMethod targetMethod, MosaMethod method)
 		{
-			Trace(InternalTrace.CompilerEvent.Plug, targetMethod.FullName + " with " + method.FullName);
+			NewCompilerTraceEvent(CompilerEvent.Plug, targetMethod.FullName + " with " + method.FullName);
 			Compiler.PlugSystem.CreatePlug(method, targetMethod);
 		}
 

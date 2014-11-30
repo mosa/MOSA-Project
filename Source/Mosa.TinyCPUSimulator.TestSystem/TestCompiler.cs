@@ -8,7 +8,7 @@
  */
 
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.InternalTrace;
+using Mosa.Compiler.Trace;
 using Mosa.Compiler.Linker;
 using Mosa.Compiler.MosaTypeSystem;
 using Mosa.TinyCPUSimulator.Adaptor;
@@ -17,7 +17,7 @@ using System.Diagnostics;
 
 namespace Mosa.TinyCPUSimulator.TestSystem
 {
-	public class TestCompiler : ICompilerEventListener
+	public class TestCompiler : ITraceListener
 	{
 		protected MosaCompiler compiler = new MosaCompiler();
 
@@ -36,7 +36,7 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 			simAdapter = platform.CreateSimAdaptor();
 
 			compiler.CompilerTrace.TraceFilter.Active = false;
-			compiler.CompilerTrace.CompilerEventListener = this;
+			compiler.CompilerTrace.TraceListener = this;
 
 			compiler.CompilerOptions.EnableOptimizations = true;
 			compiler.CompilerOptions.EnableSSA = true;
@@ -161,11 +161,15 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 			return null;
 		}
 
-		void ICompilerEventListener.SubmitTraceEvent(CompilerEvent compilerStage, string info)
+		void ITraceListener.OnNewCompilerTraceEvent(CompilerEvent compilerStage, string info, int threadID)
 		{
 		}
 
-		void ICompilerEventListener.SubmitMethodStatus(int totalMethods, int queuedMethods)
+		void ITraceListener.OnUpdatedCompilerProgress(int totalMethods, int completedMethods)
+		{
+		}
+
+		void ITraceListener.OnNewTraceLog(TraceLog traceLog)
 		{
 		}
 	}

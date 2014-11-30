@@ -8,7 +8,7 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using Mosa.Compiler.InternalTrace;
+using Mosa.Compiler.Trace;
 using Mosa.Compiler.Linker;
 using Mosa.Compiler.MosaTypeSystem;
 using System;
@@ -171,11 +171,12 @@ namespace Mosa.Compiler.Framework
 		/// <param name="method">The method.</param>
 		/// <param name="basicBlocks">The basic blocks.</param>
 		/// <param name="instructionSet">The instruction set.</param>
-		public void CompileMethod(MosaMethod method, BasicBlocks basicBlocks, InstructionSet instructionSet)
+		/// <param name="threadID">The thread identifier.</param>
+		public void CompileMethod(MosaMethod method, BasicBlocks basicBlocks, InstructionSet instructionSet, int threadID)
 		{
-			Trace(CompilerEvent.CompilingMethod, method.FullName);
+			NewCompilerTraceEvent(CompilerEvent.CompilingMethod, method.FullName, threadID);
 
-			var methodCompiler = CreateMethodCompiler(method, basicBlocks, instructionSet);
+			var methodCompiler = CreateMethodCompiler(method, basicBlocks, instructionSet, threadID);
 			Architecture.ExtendMethodCompilerPipeline(methodCompiler.Pipeline);
 
 			methodCompiler.Compile();
@@ -188,7 +189,7 @@ namespace Mosa.Compiler.Framework
 		/// <param name="basicBlocks">The basic blocks.</param>
 		/// <param name="instructionSet">The instruction set.</param>
 		/// <returns></returns>
-		protected abstract BaseMethodCompiler CreateMethodCompiler(MosaMethod method, BasicBlocks basicBlocks, InstructionSet instructionSet);
+		protected abstract BaseMethodCompiler CreateMethodCompiler(MosaMethod method, BasicBlocks basicBlocks, InstructionSet instructionSet, int threadID);
 
 		/// <summary>
 		/// Compiles the linker method.
@@ -223,12 +224,12 @@ namespace Mosa.Compiler.Framework
 
 			foreach (ICompilerStage stage in PreCompilePipeline)
 			{
-				Trace(CompilerEvent.CompilerStageStart, stage.Name);
+				NewCompilerTraceEvent(CompilerEvent.CompilerStageStart, stage.Name);
 
 				// Execute stage
 				stage.Execute();
 
-				Trace(CompilerEvent.CompilerStageEnd, stage.Name);
+				NewCompilerTraceEvent(CompilerEvent.CompilerStageEnd, stage.Name);
 			}
 		}
 
@@ -241,9 +242,9 @@ namespace Mosa.Compiler.Framework
 				if (method == null)
 					return;
 
-				CompileMethod(method, null, null);
+				CompileMethod(method, null, null, 0);
 
-				CompilerTrace.CompilerEventListener.SubmitMethodStatus(
+				CompilerTrace.UpdatedCompilerProgress(
 					CompilationScheduler.TotalMethods,
 					CompilationScheduler.TotalMethods - CompilationScheduler.TotalQueuedMethods
 				);
@@ -254,16 +255,18 @@ namespace Mosa.Compiler.Framework
 		{
 			using (var finished = new CountdownEvent(1))
 			{
-				for (int i = 0; i < threads; i++)
+				for (int threadID = 0; threadID < threads; threadID++)
 				{
 					finished.AddCount();
+
+					int tid = threadID + 1;
 
 					ThreadPool.QueueUserWorkItem(
 						new WaitCallback(delegate
 						{
 							try
 							{
-								CompileWorker();
+								CompileWorker(tid);
 							}
 							finally
 							{
@@ -278,7 +281,7 @@ namespace Mosa.Compiler.Framework
 			}
 		}
 
-		public void CompileWorker()
+		public void CompileWorker(int threadID)
 		{
 			while (true)
 			{
@@ -289,9 +292,9 @@ namespace Mosa.Compiler.Framework
 					break;
 				}
 
-				CompileMethod(method, null, null);
+				CompileMethod(method, null, null, threadID);
 
-				CompilerTrace.CompilerEventListener.SubmitMethodStatus(
+				CompilerTrace.UpdatedCompilerProgress(
 					CompilationScheduler.TotalMethods,
 					CompilationScheduler.TotalMethods - CompilationScheduler.TotalQueuedMethods);
 			}
@@ -308,12 +311,12 @@ namespace Mosa.Compiler.Framework
 		{
 			foreach (ICompilerStage stage in PostCompilePipeline)
 			{
-				Trace(CompilerEvent.CompilerStageStart, stage.Name);
+				NewCompilerTraceEvent(CompilerEvent.CompilerStageStart, stage.Name);
 
 				// Execute stage
 				stage.Execute();
 
-				Trace(CompilerEvent.CompilerStageEnd, stage.Name);
+				NewCompilerTraceEvent(CompilerEvent.CompilerStageEnd, stage.Name);
 			}
 
 			ExportCounters();
@@ -325,7 +328,7 @@ namespace Mosa.Compiler.Framework
 		{
 			foreach (var counter in Counters.Export())
 			{
-				Trace(CompilerEvent.Counter, counter);
+				NewCompilerTraceEvent(CompilerEvent.Counter, counter);
 			}
 		}
 
@@ -336,9 +339,19 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		/// <param name="compilerEvent">The compiler event.</param>
 		/// <param name="message">The message.</param>
-		protected void Trace(CompilerEvent compilerEvent, string message)
+		protected void NewCompilerTraceEvent(CompilerEvent compilerEvent, string message)
 		{
-			CompilerTrace.CompilerEventListener.SubmitTraceEvent(compilerEvent, message);
+			CompilerTrace.NewCompilerTraceEvent(compilerEvent, message, 0);
+		}
+
+		/// <summary>
+		/// Traces the specified compiler event.
+		/// </summary>
+		/// <param name="compilerEvent">The compiler event.</param>
+		/// <param name="message">The message.</param>
+		protected void NewCompilerTraceEvent(CompilerEvent compilerEvent, string message, int threadID)
+		{
+			CompilerTrace.NewCompilerTraceEvent(compilerEvent, message, threadID);
 		}
 
 		/// <summary>

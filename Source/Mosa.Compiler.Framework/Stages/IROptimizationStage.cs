@@ -8,7 +8,7 @@
  */
 
 using Mosa.Compiler.Framework.IR;
-using Mosa.Compiler.InternalTrace;
+using Mosa.Compiler.Trace;
 using Mosa.Compiler.MosaTypeSystem;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -52,7 +52,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private Stack<int> worklist = new Stack<int>();
 
-		private SectionTrace trace;
+		private TraceLog trace;
 
 		protected override void Run()
 		{
@@ -63,7 +63,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (HasProtectedRegions)
 				return;
 
-			trace = CreateTrace();
+			trace = CreateTraceLog();
 
 			PromoteLocalVariable();
 
@@ -227,8 +227,6 @@ namespace Mosa.Compiler.Framework.Stages
 		private bool PromoteLocalVariable()
 		{
 			bool promoted = false;
-
-			trace = CreateTrace();
 
 			foreach (var local in MethodCompiler.LocalVariables)
 			{

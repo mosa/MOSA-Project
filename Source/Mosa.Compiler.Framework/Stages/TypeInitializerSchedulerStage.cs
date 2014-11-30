@@ -80,7 +80,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			TypeInitializerMethod = Compiler.CreateLinkerMethod(TypeInitializerName);
 
-			Compiler.CompileMethod(TypeInitializerMethod, basicBlocks, instructionSet);
+			Compiler.CompileMethod(TypeInitializerMethod, basicBlocks, instructionSet, 0);
 		}
 
 		#region Methods

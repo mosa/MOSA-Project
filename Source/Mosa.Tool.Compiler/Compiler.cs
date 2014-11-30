@@ -11,7 +11,7 @@
 
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.InternalTrace;
+using Mosa.Compiler.Trace.BuiltIn;
 using Mosa.Compiler.Linker;
 using Mosa.Compiler.Linker.Elf32;
 using Mosa.Compiler.Linker.PE;
@@ -173,15 +173,6 @@ namespace Mosa.Tool.Compiler
 				delegate(string file)
 				{
 					compiler.CompilerOptions.MapFile = file;
-				}
-			);
-
-			optionSet.Add(
-				"interrupt-pipeline-export-dir|mped=",
-				"The interrupt pipeline export directory {file}.",
-				delegate(string dir)
-				{
-					compiler.CompilerOptions.MethodPipelineExportDirectory = dir;
 				}
 			);
 
@@ -403,7 +394,7 @@ namespace Mosa.Tool.Compiler
 
 		private void Compile()
 		{
-			compiler.CompilerTrace.CompilerEventListener = new ConsoleEventListener();
+			compiler.CompilerTrace.TraceListener = new ConsoleEventListener();
 
 			compiler.Execute();
 		}

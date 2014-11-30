@@ -1,5 +1,5 @@
 ﻿/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
+ * (c) 2014 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
  *
@@ -7,14 +7,14 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using Mosa.Compiler.MosaTypeSystem;
-
-namespace Mosa.Compiler.InternalTrace
+namespace Mosa.Compiler.Trace
 {
 	public interface ITraceListener
 	{
-		void SubmitInstructionTraceInformation(MosaMethod method, string stage, string line);
+		void OnNewCompilerTraceEvent(CompilerEvent compilerStage, string message, int threadID);
 
-		void SubmitDebugStageInformation(MosaMethod method, string stage, string line);
+		void OnUpdatedCompilerProgress(int totalMethods, int completedMethods);
+
+		void OnNewTraceLog(TraceLog traceLog);
 	}
 }
