@@ -8,8 +8,8 @@
  */
 
 using Mosa.Platform.Internal.x86;
-using System.Reflection;
 using System.Collections.Generic;
+using System.Reflection;
 using x86Runtime = Mosa.Platform.Internal.x86.Runtime;
 
 namespace System
@@ -17,7 +17,7 @@ namespace System
 	public sealed unsafe class RuntimeAssembly : Assembly
 	{
 		internal MetadataAssemblyStruct* assemblyStruct;
-		internal LinkedList<Type> typeList = new LinkedList<Type>();
+		internal LinkedList<RuntimeType> typeList = new LinkedList<RuntimeType>();
 		internal LinkedList<RuntimeTypeHandle> typeHandles = new LinkedList<RuntimeTypeHandle>();
 
 		private string fullName;
@@ -30,6 +30,21 @@ namespace System
 		public override string FullName
 		{
 			get { return fullName; }
+		}
+
+		public override IEnumerable<Type> ExportedTypes
+		{
+			get
+			{
+				LinkedList<Type> types = new LinkedList<Type>();
+				foreach (RuntimeType type in typeList)
+				{
+					if ((type.attributes & TypeAttributes.VisibilityMask) != TypeAttributes.Public)
+						continue;
+					types.Add(type);
+				}
+				return types;
+			}
 		}
 
 		internal RuntimeAssembly(uint* pointer)
@@ -52,9 +67,17 @@ namespace System
 		internal RuntimeType ProcessType(RuntimeTypeHandle handle)
 		{
 			this.typeHandles.Add(handle);
-			var type = new RuntimeType(handle, this);
+			var type = new RuntimeType(handle);
 			this.typeList.Add(type);
 			return type;
+		}
+
+		internal void Phase2()
+		{
+			foreach (RuntimeType type in typeList)
+			{
+				type.FindRelativeTypes();
+			}
 		}
 	}
 }

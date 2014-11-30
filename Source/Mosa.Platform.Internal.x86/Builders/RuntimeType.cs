@@ -8,6 +8,7 @@
  */
 
 using Mosa.Platform.Internal.x86;
+using System.Reflection;
 using x86Runtime = Mosa.Platform.Internal.x86.Runtime;
 
 namespace System
@@ -21,7 +22,7 @@ namespace System
 		private string fullname;
 		private RuntimeTypeHandle handle;
 		private TypeCode typeCode;
-		private TypeAttributes attributes;
+		internal TypeAttributes attributes; // FIXME: this should be private, only temporarily internal
 		private Type declaringType;
 		private Type elementType;
 
@@ -47,17 +48,19 @@ namespace System
 
 		public override Type[] GenericTypeArguments
 		{
-			get { throw new NotSupportedException(); }
+			get { return new Type[0]; }
 		}
 
 		public override bool IsConstructedGenericType
 		{
-			get { throw new NotSupportedException(); }
+			// We don't know so just return false
+			get { return false; }
 		}
 
 		public override bool IsGenericParameter
 		{
-			get { throw new NotSupportedException(); }
+			// We don't know so just return false
+			get { return false; }
 		}
 
 		public override string Name
@@ -75,7 +78,7 @@ namespace System
 			get { return this.handle; }
 		}
 
-		internal RuntimeType(RuntimeTypeHandle handle, RuntimeAssembly assembly)
+		internal RuntimeType(RuntimeTypeHandle handle)
 		{
 			this.handle = handle;
 			this.typeStruct = (MetadataTypeStruct*)((uint**)&handle)[0];
@@ -87,19 +90,22 @@ namespace System
 
 			this.typeCode = (TypeCode)((*this.typeStruct).Attributes >> 24);
 			this.attributes = (TypeAttributes)((*this.typeStruct).Attributes & 0x00FFFFFF);
+		}
 
+		internal void FindRelativeTypes()
+		{
 			if ((*this.typeStruct).DeclaringType != null)
 			{
 				RuntimeTypeHandle declaringHandle = new RuntimeTypeHandle();
-				((uint**)&handle)[0] = (uint*)(*this.typeStruct).DeclaringType;
-				this.declaringType = Mosa.Platform.Internal.x86.InternalsForType.GetTypeFromHandleImpl(declaringHandle);
+				((uint**)&declaringHandle)[0] = (uint*)(*this.typeStruct).DeclaringType;
+				this.declaringType = Type.GetTypeFromHandle(declaringHandle);
 			}
 
 			if ((*this.typeStruct).ElementType != null)
 			{
 				RuntimeTypeHandle elementHandle = new RuntimeTypeHandle();
-				((uint**)&handle)[0] = (uint*)(*this.typeStruct).ElementType;
-				this.elementType = Mosa.Platform.Internal.x86.InternalsForType.GetTypeFromHandleImpl(elementHandle);
+				((uint**)&elementHandle)[0] = (uint*)((*this.typeStruct).ElementType);
+				this.elementType = Type.GetTypeFromHandle(elementHandle);
 			}
 		}
 
@@ -114,8 +120,9 @@ namespace System
 			return this.elementType;
 		}
 
-		public override Type[] GetGenericTypeDefinition()
+		public override Type GetGenericTypeDefinition()
 		{
+			// No planned support
 			throw new NotSupportedException();
 		}
 
@@ -147,26 +154,31 @@ namespace System
 
 		public override Type MakeArrayType()
 		{
+			// No planned support
 			throw new NotSupportedException();
 		}
 
 		public override Type MakeArrayType(int rank)
 		{
+			// No planned support
 			throw new NotSupportedException();
 		}
 
 		public override Type MakeByRefType()
 		{
+			// No planned support
 			throw new NotSupportedException();
 		}
 
 		public override Type MakeGenericType(params Type[] typeArguments)
 		{
+			// No planned support
 			throw new NotSupportedException();
 		}
 
 		public override Type MakePointerType()
 		{
+			// No planned support
 			throw new NotSupportedException();
 		}
 	}

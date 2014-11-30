@@ -96,6 +96,11 @@ namespace Mosa.Platform.Internal.x86
 				uint* ptr = (uint*)(assemblyListTable[1 + i]);
 				Assemblies.Add(new RuntimeAssembly(ptr));
 			}
+
+			foreach (RuntimeAssembly assembly in Assemblies)
+			{
+				assembly.Phase2();
+			}
 		}
 
 		#endregion Metadata
