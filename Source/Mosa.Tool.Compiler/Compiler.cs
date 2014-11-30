@@ -395,7 +395,7 @@ namespace Mosa.Tool.Compiler
 		private void Compile()
 		{
 			compiler.CompilerTrace.TraceListener = new ConsoleEventListener();
-
+			compiler.Load(inputFiles);
 			compiler.Execute();
 		}
 
@@ -404,7 +404,7 @@ namespace Mosa.Tool.Compiler
 		/// </summary>
 		private IEnumerable<string> GetInputFileNames()
 		{
-			foreach (FileInfo file in this.inputFiles)
+			foreach (FileInfo file in inputFiles)
 				yield return file.FullName;
 		}
 
