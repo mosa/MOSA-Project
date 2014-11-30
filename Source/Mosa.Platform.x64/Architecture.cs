@@ -167,7 +167,7 @@ namespace Mosa.Platform.x64
 			//    new MethodTableBuilderStage()
 			//);
 		}
-		
+
 		/// <summary>
 		/// Extends the post compiler pipeline with x64 specific stages.
 		/// </summary>

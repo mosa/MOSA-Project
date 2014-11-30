@@ -9,8 +9,8 @@
  */
 
 using Mosa.Compiler.Framework.Platform;
-using Mosa.Compiler.Trace;
 using Mosa.Compiler.Linker;
+using Mosa.Compiler.Trace;
 using System;
 using System.Diagnostics;
 using System.IO;

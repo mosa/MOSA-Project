@@ -7,8 +7,8 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using Mosa.Compiler.Trace;
 using Mosa.Compiler.MosaTypeSystem;
+using Mosa.Compiler.Trace;
 using System;
 
 namespace Mosa.Compiler.Framework.Stages

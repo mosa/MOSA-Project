@@ -8,9 +8,9 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using Mosa.Compiler.Trace;
 using Mosa.Compiler.Linker;
 using Mosa.Compiler.MosaTypeSystem;
+using Mosa.Compiler.Trace;
 using System;
 using System.Collections.Generic;
 using System.Linq;

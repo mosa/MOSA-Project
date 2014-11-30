@@ -10,8 +10,8 @@
 
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.IR;
-using Mosa.Compiler.Trace;
 using Mosa.Compiler.MosaTypeSystem;
+using Mosa.Compiler.Trace;
 using System.Collections.Generic;
 using System.Diagnostics;
 

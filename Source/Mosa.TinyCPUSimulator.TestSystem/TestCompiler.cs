@@ -8,9 +8,9 @@
  */
 
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Trace;
 using Mosa.Compiler.Linker;
 using Mosa.Compiler.MosaTypeSystem;
+using Mosa.Compiler.Trace;
 using Mosa.TinyCPUSimulator.Adaptor;
 using System;
 using System.Diagnostics;
