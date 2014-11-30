@@ -20,7 +20,6 @@ namespace Mosa.Compiler.Framework.Stages
 	{
 		protected override void Run()
 		{
-			
 			// The method declaring type must be a valuetype
 			if (!MethodCompiler.Type.IsValueType)
 				return;
@@ -42,7 +41,7 @@ namespace Mosa.Compiler.Framework.Stages
 				return;
 
 			// Get our first viable context
-			var context = GetFirstContext(BasicBlocks.PrologueBlock.NextBlocks[0]); 
+			var context = GetFirstContext(BasicBlocks.PrologueBlock.NextBlocks[0]);
 
 			// If we didn't get a viable context then the method is empty
 			if (context == null)
@@ -59,7 +58,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 			// Now push the this pointer by two native pointer sizes
 			context.SetInstruction(IRInstruction.AddSigned, thisPtr, thisPtr, Operand.CreateConstantSignedInt(TypeSystem, NativePointerSize * 2));
-			
 		}
 
 		private Context GetFirstContext(BasicBlock block)

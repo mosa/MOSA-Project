@@ -9,6 +9,7 @@
  */
 
 using Mosa.Compiler.Framework.Platform;
+using Mosa.Compiler.Trace;
 using Mosa.Compiler.Linker;
 using System;
 using System.Diagnostics;
@@ -104,7 +105,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </summary>
 		protected virtual void EmitInstructions()
 		{
-			var trace = CreateTrace();
+			var trace = CreateTraceLog();
 
 			foreach (var block in BasicBlocks)
 			{
@@ -125,7 +126,7 @@ namespace Mosa.Compiler.Framework.Stages
 					}
 					else
 					{
-						trace.Log(InternalTrace.CompilerEvent.Error, "Missing Code Transformation: " + context.ToString());
+						NewCompilerTraceEvent(CompilerEvent.Error, "Missing Code Transformation: " + context.ToString());
 					}
 				}
 

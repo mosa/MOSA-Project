@@ -10,69 +10,39 @@
 using Mosa.Compiler.MosaTypeSystem;
 using System.Collections.Generic;
 
-namespace Mosa.Compiler.Framework.Stages
+namespace Mosa.Compiler.Framework
 {
 	/// <summary>
 	/// Schedules compilation of types/methods.
 	/// </summary>
-	public sealed class CompilationScheduler : ICompilationScheduler
+	public sealed class CompilationScheduler
 	{
 		#region Data Members
 
-		private readonly HashSet<MosaType> typeScheduled = new HashSet<MosaType>();
-
 		private readonly Queue<MosaMethod> methodQueue = new Queue<MosaMethod>();
 		private readonly HashSet<MosaMethod> methodScheduled = new HashSet<MosaMethod>();
+		//private readonly HashSet<MosaMethod> methodCompiled = new HashSet<MosaMethod>();
 
 		private readonly TypeSystem typeSystem;
 
-		private readonly bool compileAllMethods;
+		private object mylock = new object();
 
 		#endregion Data Members
 
-		public CompilationScheduler(TypeSystem typeSystem, bool compileAllMethods)
+		public CompilationScheduler(TypeSystem typeSystem)
 		{
 			this.typeSystem = typeSystem;
-			this.compileAllMethods = compileAllMethods;
+		}
 
-			if (compileAllMethods)
+		public void ScheduleAll()
+		{
+			foreach (var type in typeSystem.AllTypes)
 			{
-				// forces all types to get compiled
-				foreach (MosaType type in typeSystem.AllTypes)
-				{
-					CompileType(type);
-				}
+				Schedule(type);
 			}
 		}
 
-		#region ICompilationScheduler members
-
-		void ICompilationScheduler.TrackTypeAllocated(MosaType type)
-		{
-			if (type.IsModule)
-				return;
-
-			if (compileAllMethods)
-			{
-				CompileType(type);
-			}
-		}
-
-		void ICompilationScheduler.TrackMethodInvoked(MosaMethod method)
-		{
-			CompileMethod(method);
-
-			(this as ICompilationScheduler).TrackTypeAllocated(method.DeclaringType);
-		}
-
-		void ICompilationScheduler.TrackFieldReferenced(MosaField field)
-		{
-			(this as ICompilationScheduler).TrackTypeAllocated(field.DeclaringType);
-		}
-
-		#endregion ICompilationScheduler members
-
-		private void CompileType(MosaType type)
+		public void Schedule(MosaType type)
 		{
 			if (type.IsModule)
 				return;
@@ -83,18 +53,13 @@ namespace Mosa.Compiler.Framework.Stages
 			if (type.IsInterface || type.IsPointer)
 				return;
 
-			if (typeScheduled.Contains(type))
-				return;
-
-			typeScheduled.Add(type);
-
 			foreach (var method in type.Methods)
 			{
-				CompileMethod(method);
+				Schedule(method);
 			}
 		}
 
-		private void CompileMethod(MosaMethod method)
+		public void Schedule(MosaMethod method)
 		{
 			if (method.IsAbstract)
 				return;
@@ -102,16 +67,48 @@ namespace Mosa.Compiler.Framework.Stages
 			if (methodScheduled.Contains(method))
 				return;
 
-			methodScheduled.Add(method);
-			methodQueue.Enqueue(method);
+			if (method.IsLinkerGenerated)
+				return;
+
+			lock (mylock)
+			{
+				methodScheduled.Add(method);
+				methodQueue.Enqueue(method);
+			}
 		}
 
-		MosaMethod ICompilationScheduler.GetMethodToCompile()
+		public bool IsScheduled(MosaMethod method)
 		{
-			if (methodQueue.Count == 0)
-				return null;
+			lock (mylock)
+			{
+				return methodScheduled.Contains(method);
+			}
+		}
 
-			return methodQueue.Dequeue();
+		public void TrackTypeAllocated(MosaType type)
+		{
+			// TODO
+		}
+
+		public void TrackMethodInvoked(MosaMethod method)
+		{
+			// TODO
+		}
+
+		public void TrackFieldReferenced(MosaField field)
+		{
+			// TODO
+		}
+
+		public MosaMethod GetMethodToCompile()
+		{
+			lock (mylock)
+			{
+				if (methodQueue.Count == 0)
+					return null;
+
+				return methodQueue.Dequeue();
+			}
 		}
 
 		/// <summary>

@@ -8,12 +8,13 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using Mosa.Compiler.InternalTrace;
+using Mosa.Compiler.Trace;
 using Mosa.Compiler.Linker;
 using Mosa.Compiler.MosaTypeSystem;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 
 namespace Mosa.Compiler.Framework
 {
@@ -23,8 +24,9 @@ namespace Mosa.Compiler.Framework
 	/// </summary>
 	public abstract class BaseCompiler
 	{
-
 		#region Properties
+
+		public MosaCompiler Compiler { get; private set; }
 
 		/// <summary>
 		/// Returns the architecture used by the compiler.
@@ -32,10 +34,14 @@ namespace Mosa.Compiler.Framework
 		public BaseArchitecture Architecture { get; private set; }
 
 		/// <summary>
-		/// Gets the pipeline.
+		/// Gets the pre compile pipeline.
 		/// </summary>
-		/// <value>The pipeline.</value>
-		public CompilerPipeline Pipeline { get; private set; }
+		public CompilerPipeline PreCompilePipeline { get; private set; }
+
+		/// <summary>
+		/// Gets the post compile pipeline.
+		/// </summary>
+		public CompilerPipeline PostCompilePipeline { get; private set; }
 
 		/// <summary>
 		/// Gets the type system.
@@ -71,7 +77,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets the scheduler.
 		/// </summary>
-		public ICompilationScheduler CompilationScheduler { get; private set; }
+		public CompilationScheduler CompilationScheduler { get; private set; }
 
 		/// <summary>
 		/// Gets the linker.
@@ -98,40 +104,27 @@ namespace Mosa.Compiler.Framework
 
 		#endregion Properties
 
-		#region Construction
+		#region Methods
 
-		/// <summary>
-		/// Initializes a new compiler instance.
-		/// </summary>
-		/// <param name="architecture">The compiler target architecture.</param>
-		/// <param name="typeSystem">The type system.</param>
-		/// <param name="typeLayout">The type layout.</param>
-		/// <param name="compilationScheduler">The compilation scheduler.</param>
-		/// <param name="compilerTrace">The compiler trace.</param>
-		/// <param name="linker">The linker.</param>
-		/// <param name="compilerOptions">The compiler options.</param>
-		/// <exception cref="System.ArgumentNullException">@Architecture</exception>
-		protected BaseCompiler(BaseArchitecture architecture, TypeSystem typeSystem, MosaTypeLayout typeLayout, ICompilationScheduler compilationScheduler, CompilerTrace compilerTrace, BaseLinker linker, CompilerOptions compilerOptions)
+		public void Initialize(MosaCompiler compiler)
 		{
-			if (architecture == null)
-				throw new ArgumentNullException(@"Architecture");
+			if (compiler == null)
+				throw new ArgumentNullException(@"compiler");
 
-			Pipeline = new CompilerPipeline();
-			Architecture = architecture;
-			TypeSystem = typeSystem;
-			TypeLayout = typeLayout;
-			CompilerTrace = compilerTrace;
-			CompilerOptions = compilerOptions;
+			Compiler = compiler;
+
+			Architecture = Compiler.CompilerOptions.Architecture;
+			TypeSystem = Compiler.TypeSystem;
+			TypeLayout = Compiler.TypeLayout;
+			CompilerTrace = Compiler.CompilerTrace;
+			CompilerOptions = Compiler.CompilerOptions;
+			CompilationScheduler = Compiler.CompilationScheduler;
+			Linker = compiler.Linker;
+
+			PreCompilePipeline = new CompilerPipeline();
+			PostCompilePipeline = new CompilerPipeline();
 			Counters = new Counters();
-			CompilationScheduler = compilationScheduler;
 			PlugSystem = new PlugSystem();
-			Linker = linker;
-
-			if (Linker == null)
-			{
-				Linker = compilerOptions.LinkerFactory();
-				Linker.Initialize(compilerOptions.BaseAddress, architecture.Endianness, architecture.ElfMachineType);
-			}
 
 			// Create new dictionary
 			IntrinsicTypes = new Dictionary<string, Type>();
@@ -154,11 +147,23 @@ namespace Mosa.Compiler.Framework
 			}
 
 			PlatformInternalRuntimeType = GetPlatformInternalRuntimeType();
+
+			// Extended Setup
+			ExtendCompilerSetup();
+
+			// Build the default pre-compiler pipeline
+			Architecture.ExtendPreCompilerPipeline(this.PreCompilePipeline);
+
+			// Build the default post-compiler pipeline
+			Architecture.ExtendPostCompilerPipeline(this.PostCompilePipeline);
 		}
 
-		#endregion Construction
-
-		#region Methods
+		/// <summary>
+		/// Extends the compiler setup.
+		/// </summary>
+		public virtual void ExtendCompilerSetup()
+		{
+		}
 
 		/// <summary>
 		/// Compiles the method.
@@ -166,24 +171,15 @@ namespace Mosa.Compiler.Framework
 		/// <param name="method">The method.</param>
 		/// <param name="basicBlocks">The basic blocks.</param>
 		/// <param name="instructionSet">The instruction set.</param>
-		public void CompileMethod(MosaMethod method, BasicBlocks basicBlocks, InstructionSet instructionSet)
+		/// <param name="threadID">The thread identifier.</param>
+		public void CompileMethod(MosaMethod method, BasicBlocks basicBlocks, InstructionSet instructionSet, int threadID)
 		{
-			Trace(CompilerEvent.CompilingMethod, method.FullName);
+			NewCompilerTraceEvent(CompilerEvent.CompilingMethod, method.FullName, threadID);
 
-			BaseMethodCompiler methodCompiler = CreateMethodCompiler(method, basicBlocks, instructionSet);
+			var methodCompiler = CreateMethodCompiler(method, basicBlocks, instructionSet, threadID);
 			Architecture.ExtendMethodCompilerPipeline(methodCompiler.Pipeline);
 
 			methodCompiler.Compile();
-
-			//try
-			//{
-			//    methodCompiler.Compile();
-			//}
-			//catch (Exception e)
-			//{
-			//    HandleCompilationException(e);
-			//    throw;
-			//}
 		}
 
 		/// <summary>
@@ -193,7 +189,7 @@ namespace Mosa.Compiler.Framework
 		/// <param name="basicBlocks">The basic blocks.</param>
 		/// <param name="instructionSet">The instruction set.</param>
 		/// <returns></returns>
-		public abstract BaseMethodCompiler CreateMethodCompiler(MosaMethod method, BasicBlocks basicBlocks, InstructionSet instructionSet);
+		protected abstract BaseMethodCompiler CreateMethodCompiler(MosaMethod method, BasicBlocks basicBlocks, InstructionSet instructionSet, int threadID);
 
 		/// <summary>
 		/// Compiles the linker method.
@@ -206,49 +202,124 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Executes the compiler using the configured stages.
+		/// Executes the compiler pre compiler stages.
 		/// </summary>
 		/// <remarks>
 		/// The method iterates the compilation stage chain and runs each
 		/// stage on the input.
 		/// </remarks>
-		public void Compile()
+		internal void PreCompile()
 		{
-			BeginCompile();
-
-			foreach (ICompilerStage stage in Pipeline)
+			foreach (ICompilerStage stage in PreCompilePipeline)
 			{
 				// Setup Compiler
 				stage.Initialize(this);
 			}
 
-			foreach (ICompilerStage stage in Pipeline)
+			foreach (ICompilerStage stage in PostCompilePipeline)
 			{
-				Trace(CompilerEvent.CompilerStageStart, stage.Name);
+				// Setup Compiler
+				stage.Initialize(this);
+			}
+
+			foreach (ICompilerStage stage in PreCompilePipeline)
+			{
+				NewCompilerTraceEvent(CompilerEvent.CompilerStageStart, stage.Name);
 
 				// Execute stage
 				stage.Execute();
 
-				Trace(CompilerEvent.CompilerStageEnd, stage.Name);
+				NewCompilerTraceEvent(CompilerEvent.CompilerStageEnd, stage.Name);
+			}
+		}
+
+		public void ExecuteCompile()
+		{
+			while (true)
+			{
+				var method = CompilationScheduler.GetMethodToCompile();
+
+				if (method == null)
+					return;
+
+				CompileMethod(method, null, null, 0);
+
+				CompilerTrace.UpdatedCompilerProgress(
+					CompilationScheduler.TotalMethods,
+					CompilationScheduler.TotalMethods - CompilationScheduler.TotalQueuedMethods
+				);
+			}
+		}
+
+		public void ExecuteThreadedCompile(int threads)
+		{
+			using (var finished = new CountdownEvent(1))
+			{
+				for (int threadID = 0; threadID < threads; threadID++)
+				{
+					finished.AddCount();
+
+					int tid = threadID + 1;
+
+					ThreadPool.QueueUserWorkItem(
+						new WaitCallback(delegate
+						{
+							try
+							{
+								CompileWorker(tid);
+							}
+							finally
+							{
+								finished.Signal();
+							}
+						}
+					));
+				}
+
+				finished.Signal();
+				finished.Wait();
+			}
+		}
+
+		public void CompileWorker(int threadID)
+		{
+			while (true)
+			{
+				var method = CompilationScheduler.GetMethodToCompile();
+
+				if (method == null)
+				{
+					break;
+				}
+
+				CompileMethod(method, null, null, threadID);
+
+				CompilerTrace.UpdatedCompilerProgress(
+					CompilationScheduler.TotalMethods,
+					CompilationScheduler.TotalMethods - CompilationScheduler.TotalQueuedMethods);
+			}
+		}
+
+		/// <summary>
+		/// Executes the compiler post compiler stages.
+		/// </summary>
+		/// <remarks>
+		/// The method iterates the compilation stage chain and runs each
+		/// stage on the input.
+		/// </remarks>
+		internal void PostCompile()
+		{
+			foreach (ICompilerStage stage in PostCompilePipeline)
+			{
+				NewCompilerTraceEvent(CompilerEvent.CompilerStageStart, stage.Name);
+
+				// Execute stage
+				stage.Execute();
+
+				NewCompilerTraceEvent(CompilerEvent.CompilerStageEnd, stage.Name);
 			}
 
-			EndCompile();
-
 			ExportCounters();
-		}
-
-		/// <summary>
-		/// Called when compilation is about to begin.
-		/// </summary>
-		protected virtual void BeginCompile()
-		{
-		}
-
-		/// <summary>
-		/// Called when compilation has completed.
-		/// </summary>
-		protected virtual void EndCompile()
-		{
 		}
 
 		#endregion Methods
@@ -257,7 +328,7 @@ namespace Mosa.Compiler.Framework
 		{
 			foreach (var counter in Counters.Export())
 			{
-				Trace(CompilerEvent.Counter, counter);
+				NewCompilerTraceEvent(CompilerEvent.Counter, counter);
 			}
 		}
 
@@ -268,9 +339,19 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		/// <param name="compilerEvent">The compiler event.</param>
 		/// <param name="message">The message.</param>
-		protected void Trace(CompilerEvent compilerEvent, string message)
+		protected void NewCompilerTraceEvent(CompilerEvent compilerEvent, string message)
 		{
-			CompilerTrace.CompilerEventListener.SubmitTraceEvent(compilerEvent, message);
+			CompilerTrace.NewCompilerTraceEvent(compilerEvent, message, 0);
+		}
+
+		/// <summary>
+		/// Traces the specified compiler event.
+		/// </summary>
+		/// <param name="compilerEvent">The compiler event.</param>
+		/// <param name="message">The message.</param>
+		protected void NewCompilerTraceEvent(CompilerEvent compilerEvent, string message, int threadID)
+		{
+			CompilerTrace.NewCompilerTraceEvent(compilerEvent, message, threadID);
 		}
 
 		/// <summary>

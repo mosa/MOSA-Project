@@ -25,6 +25,10 @@ namespace Mosa.TinyCPUSimulator.Adaptor
 		private List<Tuple<LinkerSymbol, long, SimInstruction>> instructions = new List<Tuple<LinkerSymbol, long, SimInstruction>>();
 		private List<Tuple<LinkerSymbol, long, string>> source = new List<Tuple<LinkerSymbol, long, string>>();
 
+		private object mylock1 = new object();
+		private object mylock2 = new object();
+		private object mylock3 = new object();
+
 		#region Construction
 
 		/// <summary>
@@ -40,17 +44,26 @@ namespace Mosa.TinyCPUSimulator.Adaptor
 
 		public void AddTargetSymbol(LinkerSymbol baseSymbol, int offset, string name)
 		{
-			targetSymbols.Add(new Tuple<LinkerSymbol, int, string>(baseSymbol, offset, name));
+			lock (mylock1)
+			{
+				targetSymbols.Add(new Tuple<LinkerSymbol, int, string>(baseSymbol, offset, name));
+			}
 		}
 
 		public void AddInstruction(LinkerSymbol baseSymbol, long offset, SimInstruction instruction)
 		{
-			instructions.Add(new Tuple<LinkerSymbol, long, SimInstruction>(baseSymbol, offset, instruction));
+			lock (mylock2)
+			{
+				instructions.Add(new Tuple<LinkerSymbol, long, SimInstruction>(baseSymbol, offset, instruction));
+			}
 		}
 
 		public void AddSourceInformation(LinkerSymbol baseSymbol, long offset, string information)
 		{
-			source.Add(new Tuple<LinkerSymbol, long, string>(baseSymbol, offset, information));
+			lock (mylock3)
+			{
+				source.Add(new Tuple<LinkerSymbol, long, string>(baseSymbol, offset, information));
+			}
 		}
 
 		protected override void EmitImplementation(Stream stream)

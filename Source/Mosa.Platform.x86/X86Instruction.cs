@@ -106,7 +106,5 @@ namespace Mosa.Platform.x86
 		}
 
 		#endregion Operand Overrides
-
-
 	}
 }

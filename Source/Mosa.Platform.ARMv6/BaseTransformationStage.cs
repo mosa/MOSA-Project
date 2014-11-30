@@ -42,9 +42,5 @@ namespace Mosa.Platform.ARMv6
 				return ARMv6.Mov;
 			}
 		}
-
-		#region Emit Methods
-
-		#endregion Emit Methods
 	}
 }

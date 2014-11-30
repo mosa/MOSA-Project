@@ -152,8 +152,8 @@ namespace Mosa.Tool.TinySimulator
 
 		protected void Compile(int lineNbr, string data)
 		{
-			AddOutput(lineNbr, "STATUS: Compile for " + data);
-			MainForm.StartSimulator(data);
+			AddOutput(lineNbr, "STATUS: Compiling");
+			MainForm.StartSimulator();
 		}
 
 		protected void AddBreakpointByLabel(int lineNbr, string data)

@@ -10,7 +10,7 @@
 
 using Mosa.Compiler.Framework.Analysis;
 using Mosa.Compiler.Framework.Stages;
-using Mosa.Compiler.InternalTrace;
+using Mosa.Compiler.Trace;
 using Mosa.Compiler.Linker;
 using Mosa.Compiler.MosaTypeSystem;
 using System;
@@ -94,7 +94,7 @@ namespace Mosa.Compiler.Framework
 		/// Retrieves the compilation scheduler.
 		/// </summary>
 		/// <value>The compilation scheduler.</value>
-		public ICompilationScheduler Scheduler { get; private set; }
+		public CompilationScheduler Scheduler { get; private set; }
 
 		/// <summary>
 		/// Provides access to the pipeline of this compiler.
@@ -117,7 +117,7 @@ namespace Mosa.Compiler.Framework
 		/// Gets the internal logging interface
 		/// </summary>
 		/// <value>The log.</value>
-		public CompilerTrace InternalTrace { get; private set; }
+		public CompilerTrace Trace { get; private set; }
 
 		/// <summary>
 		/// Gets the local variables.
@@ -157,6 +157,14 @@ namespace Mosa.Compiler.Framework
 		/// </value>
 		public IList<ProtectedRegion> ProtectedRegions { get; private set; }
 
+		/// <summary>
+		/// Gets the thread identifier.
+		/// </summary>
+		/// <value>
+		/// The thread identifier.
+		/// </value>
+		public int ThreadID { get; private set; }
+
 		#endregion Properties
 
 		#region Construction
@@ -168,7 +176,8 @@ namespace Mosa.Compiler.Framework
 		/// <param name="method">The method to compile by this instance.</param>
 		/// <param name="basicBlocks">The basic blocks.</param>
 		/// <param name="instructionSet">The instruction set.</param>
-		protected BaseMethodCompiler(BaseCompiler compiler, MosaMethod method, BasicBlocks basicBlocks, InstructionSet instructionSet)
+		/// <param name="threadID">The thread identifier.</param>
+		protected BaseMethodCompiler(BaseCompiler compiler, MosaMethod method, BasicBlocks basicBlocks, InstructionSet instructionSet, int threadID)
 		{
 			this.Compiler = compiler;
 			this.Method = method;
@@ -177,7 +186,7 @@ namespace Mosa.Compiler.Framework
 			this.Architecture = compiler.Architecture;
 			this.TypeSystem = compiler.TypeSystem;
 			this.TypeLayout = Compiler.TypeLayout;
-			this.InternalTrace = Compiler.CompilerTrace;
+			this.Trace = Compiler.CompilerTrace;
 			this.Linker = compiler.Linker;
 			this.BasicBlocks = basicBlocks ?? new BasicBlocks();
 			this.InstructionSet = instructionSet ?? new InstructionSet(256);
@@ -185,6 +194,7 @@ namespace Mosa.Compiler.Framework
 			this.StackLayout = new StackLayout(Architecture, method.Signature.Parameters.Count + (method.HasThis || method.HasExplicitThis ? 1 : 0));
 			this.VirtualRegisters = new VirtualRegisters(Architecture);
 			this.LocalVariables = emptyOperandList;
+			this.ThreadID = threadID;
 			this.DominanceAnalysis = new Dominance(Compiler.CompilerOptions.DominanceAnalysisFactory, this.BasicBlocks);
 
 			EvaluateParameterOperands();
@@ -236,7 +246,7 @@ namespace Mosa.Compiler.Framework
 					stage.Initialize(this);
 					stage.Execute();
 
-					Mosa.Compiler.InternalTrace.InstructionLogger.Run(this, stage);
+					Mosa.Compiler.Trace.InstructionLogger.Run(this, stage);
 
 					if (stop)
 						break;
@@ -361,7 +371,7 @@ namespace Mosa.Compiler.Framework
 		{
 			if (Method.IsSpecialName && Method.IsRTSpecialName && Method.IsStatic && Method.Name == ".cctor")
 			{
-				typeInitializer = Compiler.Pipeline.FindFirst<TypeInitializerSchedulerStage>();
+				typeInitializer = Compiler.PostCompilePipeline.FindFirst<TypeInitializerSchedulerStage>();
 
 				if (typeInitializer == null)
 					return;

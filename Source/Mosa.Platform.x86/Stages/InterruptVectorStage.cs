@@ -62,7 +62,7 @@ namespace Mosa.Platform.x86.Stages
 				ctx.AppendInstruction(X86.IRetd);
 
 				var interruptMethod = Compiler.CreateLinkerMethod("InterruptISR" + i.ToString());
-				Compiler.CompileMethod(interruptMethod, basicBlocks, instructionSet);
+				Compiler.CompileMethod(interruptMethod, basicBlocks, instructionSet, 0);
 			}
 		}
 

@@ -86,6 +86,7 @@
     <Compile Include="Analysis\IDominanceAnalysis.cs" />
     <Compile Include="BaseCallingConventionExtended.cs" />
     <Compile Include="DelegatePatcher.cs" />
+    <Compile Include="MosaCompiler.cs" />
     <Compile Include="InstructionSize.cs" />
     <Compile Include="Intrinsics\GetObjectAddress.cs" />
     <Compile Include="Intrinsics\InternalsForObject.cs" />
@@ -150,7 +151,6 @@
     <Compile Include="Stages\ConvertCompoundStage.cs" />
     <Compile Include="Stages\InstructionStatisticsStage.cs" />
     <Compile Include="Stages\MapFileGenerationStage.cs" />
-    <Compile Include="Stages\MethodPipelineExportStage.cs" />
     <Compile Include="Stages\PromoteLocalVariablesStage.cs" />
     <Compile Include="Stages\StopStage.cs" />
     <Compile Include="Stages\BaseEdgeSplitStage.cs" />
@@ -161,7 +161,6 @@
     <Compile Include="Stages\GreedyRegisterAllocatorStage.cs" />
     <Compile Include="Stages\LinkerFinalizationStage.cs" />
     <Compile Include="IIntrinsicInternalMethod.cs" />
-    <Compile Include="ICompilationScheduler.cs" />
     <Compile Include="Counters.cs" />
     <Compile Include="IR\IntrinsicMethodCall.cs" />
     <Compile Include="IR\LoadZeroExtended.cs" />
@@ -238,7 +237,6 @@
     <Compile Include="IR\SubSigned.cs" />
     <Compile Include="IR\SubUnsigned.cs" />
     <Compile Include="IR\Switch.cs" />
-    <Compile Include="Stages\MethodCompilerSchedulerStage.cs" />
     <Compile Include="Stages\PlatformStubStage.cs" />
     <Compile Include="IIntrinsicPlatformMethod.cs" />
     <Compile Include="IPipelineStage.cs" />

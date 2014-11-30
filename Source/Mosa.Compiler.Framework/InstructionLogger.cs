@@ -13,7 +13,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Mosa.Compiler.InternalTrace
+namespace Mosa.Compiler.Trace
 {
 	/// <summary>
 	/// Logs all instructions.
@@ -23,7 +23,7 @@ namespace Mosa.Compiler.InternalTrace
 		public static void Run(BaseMethodCompiler methodCompiler, IPipelineStage stage)
 		{
 			Run(
-				methodCompiler.InternalTrace,
+				methodCompiler.Trace,
 				methodCompiler.FormatStageName(stage),
 				methodCompiler.Method,
 				methodCompiler.InstructionSet,
@@ -36,50 +36,43 @@ namespace Mosa.Compiler.InternalTrace
 			if (compilerTrace == null)
 				return;
 
-			if (compilerTrace.TraceListener == null)
-				return;
-
 			if (!compilerTrace.TraceFilter.IsMatch(method, stage))
 				return;
 
-			StringBuilder text = new StringBuilder();
+			var traceLog = new TraceLog(TraceType.InstructionList, method, stage, true);
 
-			text.AppendLine(String.Format("IR representation of method {0} after stage {1}:", method.FullName, stage));
-			text.AppendLine();
+			traceLog.Log(String.Format("IR representation of method {0} after stage {1}:", method.FullName, stage));
+			traceLog.Log();
 
 			if (basicBlocks.Count > 0)
 			{
-				foreach (BasicBlock block in basicBlocks)
+				foreach (var block in basicBlocks)
 				{
-					text.AppendFormat("Block #{0} - Label L_{1:X4}", block.Sequence, block.Label);
-					if (basicBlocks.IsHeaderBlock(block))
-						text.Append(" [Header]");
-					text.AppendLine();
+					traceLog.Log(String.Format("Block #{0} - Label L_{1:X4}", block.Sequence, block.Label)
+						+ (basicBlocks.IsHeaderBlock(block) ? " [Header]" : string.Empty));
 
-					text.AppendFormat("  Prev: ");
-					text.AppendLine(ListBlocks(block.PreviousBlocks));
+					traceLog.Log("  Prev: " + ListBlocks(block.PreviousBlocks));
 
-					LogInstructions(text, new Context(instructionSet, block));
+					LogInstructions(traceLog, new Context(instructionSet, block));
 
-					text.AppendFormat("  Next: ");
-					text.AppendLine(ListBlocks(block.NextBlocks));
+					traceLog.Log("  Next: " + ListBlocks(block.NextBlocks));
 
-					text.AppendLine();
+					traceLog.Log();
 				}
 			}
 			else
 			{
-				LogInstructions(text, new Context(instructionSet, 0));
+				LogInstructions(traceLog, new Context(instructionSet, 0));
 			}
 
-			compilerTrace.TraceListener.SubmitInstructionTraceInformation(method, stage, text.ToString());
+			compilerTrace.NewTraceLog(traceLog);
 		}
 
 		private static string ListBlocks(IList<BasicBlock> blocks)
 		{
-			StringBuilder text = new StringBuilder();
+			var text = new StringBuilder();
 
-			foreach (BasicBlock next in blocks)
+			foreach (var next in blocks)
 			{
 				if (text.Length != 0)
 					text.Append(", ");
@@ -93,26 +86,27 @@ namespace Mosa.Compiler.InternalTrace
 		/// <summary>
 		/// Logs the instructions in the given enumerable to the trace.
 		/// </summary>
+		/// <param name="traceLog">The trace log.</param>
 		/// <param name="ctx">The context.</param>
-		private static void LogInstructions(StringBuilder text, Context ctx)
+		private static void LogInstructions(TraceLog traceLog, Context ctx)
 		{
 			for (; ctx.Index >= 0; ctx.GotoNext())
 			{
 				if (ctx.IsEmpty) // || ctx.IsBlockStartInstruction || ctx.IsBlockEndInstruction)
 					continue;
 
-				text.AppendFormat("L_{0:X4}", ctx.Label);
+				var sb = new StringBuilder();
+
+				sb.AppendFormat("L_{0:X4}", ctx.Label);
 
 				if (ctx.Marked)
-					text.AppendFormat("*");
+					sb.Append("*");
 				else
-					text.AppendFormat(" ");
+					sb.Append(" ");
 
-				//if (ctx.SlotNumber != 0)
-				//	text.AppendFormat("/{0}", ctx.SlotNumber.ToString());
+				sb.AppendFormat("{0}", ctx.Instruction.ToString(ctx));
 
-				text.AppendFormat("{0}", ctx.Instruction.ToString(ctx));
-				text.AppendLine();
+				traceLog.Log(sb.ToString());
 
 				if (ctx.IsBlockEndInstruction)
 					return;

@@ -8,7 +8,7 @@
  */
 
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.InternalTrace;
+using Mosa.Compiler.Trace;
 using Mosa.Compiler.Linker;
 using Mosa.Compiler.MosaTypeSystem;
 using Mosa.TinyCPUSimulator.Adaptor;
@@ -17,47 +17,44 @@ using System.Diagnostics;
 
 namespace Mosa.TinyCPUSimulator.TestSystem
 {
-	public class TestCompiler : ICompilerEventListener
+	public class TestCompiler : ITraceListener
 	{
+		protected MosaCompiler compiler = new MosaCompiler();
+
 		protected BaseTestPlatform platform;
-		protected ConfigurableTraceFilter filter = new ConfigurableTraceFilter();
-		protected CompilerTrace compilerTrace = new CompilerTrace();
+
 		protected ISimAdapter adapter;
+
 		protected ISimAdapter simAdapter;
-		protected BaseArchitecture architecture;
-		protected BaseLinker linker;
-		protected TypeSystem typeSystem;
-		protected MosaTypeLayout typeLayout;
-		protected SimCompiler simCompiler;
 
-		public bool EnableSSA { get; set; }
-
-		public bool EnableOptimizations { get; set; }
+		protected SimLinker linker;
 
 		public TestCompiler(BaseTestPlatform platform)
 		{
 			this.platform = platform;
 
-			EnableOptimizations = true;
-			EnableSSA = true;
-
-			compilerTrace.TraceFilter.Active = false;
-			compilerTrace.CompilerEventListener = this;
-
-			architecture = platform.CreateArchitecture();
 			simAdapter = platform.CreateSimAdaptor();
 
-			linker = new SimLinker(simAdapter);
+			compiler.CompilerTrace.TraceFilter.Active = false;
+			compiler.CompilerTrace.TraceListener = this;
+
+			compiler.CompilerOptions.EnableOptimizations = true;
+			compiler.CompilerOptions.EnableSSA = true;
+			compiler.CompilerOptions.EnablePromoteTemporaryVariablesOptimization = true;
+			compiler.CompilerOptions.EnableSparseConditionalConstantPropagation = true;
+
+			compiler.CompilerOptions.Architecture = platform.CreateArchitecture();
+			compiler.CompilerOptions.LinkerFactory = delegate { return new SimLinker(simAdapter); };
+			compiler.CompilerFactory = delegate { return new SimCompiler(simAdapter); };
 
 			CompileTestCode();
 		}
 
 		protected void CompileTestCode()
 		{
-			if (simCompiler != null)
-				return;
+			platform.InitializeSimulation(simAdapter);
 
-			MosaModuleLoader moduleLoader = new MosaModuleLoader();
+			var moduleLoader = new MosaModuleLoader();
 
 			moduleLoader.AddPrivatePath(System.IO.Directory.GetCurrentDirectory());
 			moduleLoader.LoadModuleFromFile("mscorlib.dll");
@@ -65,20 +62,11 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 			moduleLoader.LoadModuleFromFile("Mosa.Test.Collection.dll");
 			moduleLoader.LoadModuleFromFile("Mosa.Kernel." + platform.Name + "Test.dll");
 
-			typeSystem = TypeSystem.Load(moduleLoader.CreateMetadata());
+			compiler.Load(TypeSystem.Load(moduleLoader.CreateMetadata()));
 
-			typeLayout = new MosaTypeLayout(typeSystem, 4, 4);
+			compiler.Execute();
 
-			platform.InitializeSimulation(simAdapter);
-
-			var compilerOptions = new CompilerOptions();
-
-			compilerOptions.EnableSSA = EnableSSA;
-			compilerOptions.EnableOptimizations = EnableOptimizations;
-			compilerOptions.EnablePromoteTemporaryVariablesOptimization = EnableOptimizations;
-			compilerOptions.EnableSparseConditionalConstantPropagation = EnableOptimizations;
-
-			simCompiler = SimCompiler.Compile(typeSystem, typeLayout, compilerTrace, compilerOptions, architecture, simAdapter, linker);
+			linker = compiler.Linker as SimLinker;
 
 			//simAdapter.SimCPU.Monitor.DebugOutput = true; // DEBUG OPTION
 
@@ -147,7 +135,7 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 
 		private MosaMethod FindMethod(string ns, string type, string method, params object[] parameters)
 		{
-			foreach (var t in typeSystem.AllTypes)
+			foreach (var t in compiler.TypeSystem.AllTypes)
 			{
 				if (t.Name != type)
 					continue;
@@ -173,11 +161,15 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 			return null;
 		}
 
-		void ICompilerEventListener.SubmitTraceEvent(CompilerEvent compilerStage, string info)
+		void ITraceListener.OnNewCompilerTraceEvent(CompilerEvent compilerStage, string info, int threadID)
 		{
 		}
 
-		void ICompilerEventListener.SubmitMethodStatus(int totalMethods, int queuedMethods)
+		void ITraceListener.OnUpdatedCompilerProgress(int totalMethods, int completedMethods)
+		{
+		}
+
+		void ITraceListener.OnNewTraceLog(TraceLog traceLog)
 		{
 		}
 	}

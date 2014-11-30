@@ -25,7 +25,6 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 				if (testCompiler == null)
 				{
 					testCompiler = new TestCompiler(BasePlatform);
-					testCompiler.EnableOptimizations = true;
 				}
 
 				return testCompiler;

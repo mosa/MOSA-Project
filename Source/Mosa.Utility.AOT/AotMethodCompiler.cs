@@ -29,11 +29,13 @@ namespace Mosa.Utility.Aot
 		/// <param name="method">The method.</param>
 		/// <param name="basicBlocks">The basic blocks.</param>
 		/// <param name="instructionSet">The instruction set.</param>
-		public AotMethodCompiler(BaseCompiler compiler, MosaMethod method, BasicBlocks basicBlocks, InstructionSet instructionSet)
-			: base(compiler, method, basicBlocks, instructionSet)
+		/// <param name="threadID"></param>
+		public AotMethodCompiler(BaseCompiler compiler, MosaMethod method, BasicBlocks basicBlocks, InstructionSet instructionSet, int threadID)
+			: base(compiler, method, basicBlocks, instructionSet, threadID)
 		{
 			var compilerOptions = compiler.CompilerOptions;
 
+			// Populate the pipeline
 			Pipeline.Add(new IMethodCompilerStage[] {
 				new CILDecodingStage(),
 				new BasicBlockBuilderStage(),

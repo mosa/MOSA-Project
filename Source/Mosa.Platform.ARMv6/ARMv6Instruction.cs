@@ -13,7 +13,7 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.ARMv6
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public abstract class ARMv6Instruction : BaseInstruction
 	{
@@ -87,13 +87,14 @@ namespace Mosa.Platform.ARMv6
 				throw new InvalidCompilerException();
 			}
 		}
+
 		protected void EmitMultiplyInstruction(Context context, MachineCodeEmitter emitter)
 		{
 			if (!context.Operand3.IsRegister)
 			{
 				emitter.EmitMultiply(context.ConditionCode, context.UpdateStatus, context.Operand1.Register.Index, context.Result.Register.Index, context.Operand2.Register.Index);
 			}
-			else 
+			else
 			{
 				emitter.EmitMultiplyWithAccumulate(context.ConditionCode, context.UpdateStatus, context.Operand1.Register.Index, context.Result.Register.Index, context.Operand2.Register.Index, context.Operand3.Register.Index);
 			}

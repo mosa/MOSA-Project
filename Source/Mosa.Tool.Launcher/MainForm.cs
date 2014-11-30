@@ -8,10 +8,9 @@
  */
 
 using Mosa.Utility.Launcher;
-
-//using Mosa.Utility.BootImage;
 using System;
 using System.IO;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace Mosa.Tool.Launcher
@@ -176,17 +175,35 @@ namespace Mosa.Tool.Launcher
 			lbSourceDirectory.Text = Path.GetDirectoryName(Options.SourceFile);
 		}
 
-		void IBuilderEvent.NewStatus(string info)
+		private void NewStatus(string info)
 		{
 			AddOutput(info);
 		}
 
-		void IBuilderEvent.UpdateProgress(int total, int at)
+		void IBuilderEvent.NewStatus(string info)
+		{
+			MethodInvoker method = delegate()
+			{
+				NewStatus(info);
+			};
+
+			Invoke(method);
+		}
+
+		private void UpdateProgress(int total, int at)
 		{
 			progressBar1.Maximum = total;
 			progressBar1.Value = at;
+		}
 
-			//progressBar1.Refresh();
+		void IBuilderEvent.UpdateProgress(int total, int at)
+		{
+			MethodInvoker method = delegate()
+			{
+				UpdateProgress(total, at);
+			};
+
+			Invoke(method);
 		}
 
 		private void MainForm_Shown(object sender, EventArgs e)
@@ -262,8 +279,32 @@ namespace Mosa.Tool.Launcher
 
 			tabControl1.SelectedTab = tpOutput;
 
-			Builder.Compile();
+			ThreadPool.QueueUserWorkItem(new WaitCallback(delegate
+				{
+					try
+					{
+						Builder.Compile();
+					}
+					finally
+					{
+						OnCompileCompleted();
+					}
+				}
+			));
+		}
 
+		private void OnCompileCompleted()
+		{
+			MethodInvoker method = delegate()
+			{
+				CompileCompleted();
+			};
+
+			Invoke(method);
+		}
+
+		private void CompileCompleted()
+		{
 			foreach (var line in Builder.Counters)
 			{
 				AddCounters(line);

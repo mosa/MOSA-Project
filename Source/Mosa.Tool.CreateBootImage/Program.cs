@@ -7,10 +7,10 @@
 *  Phil Garcia (tgiphil) <phil@thinkedge.com>
 */
 
+using Mosa.Compiler.Common;
 using Mosa.Utility.BootImage;
 using System;
 using System.IO;
-using Mosa.Compiler.Common;
 
 namespace Mosa.Tool.CreateBootImage
 {

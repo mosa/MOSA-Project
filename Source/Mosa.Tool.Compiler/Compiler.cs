@@ -11,7 +11,7 @@
 
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.InternalTrace;
+using Mosa.Compiler.Trace.BuiltIn;
 using Mosa.Compiler.Linker;
 using Mosa.Compiler.Linker.Elf32;
 using Mosa.Compiler.Linker.PE;
@@ -31,10 +31,7 @@ namespace Mosa.Tool.Compiler
 	{
 		#region Data
 
-		/// <summary>
-		/// Holds the compiler options
-		/// </summary>
-		private CompilerOptions compilerOptions = new CompilerOptions();
+		protected MosaCompiler compiler = new MosaCompiler();
 
 		/// <summary>
 		/// Holds a list of input files.
@@ -69,6 +66,8 @@ namespace Mosa.Tool.Compiler
 		/// </summary>
 		public Compiler()
 		{
+			compiler.CompilerFactory = delegate { return new AotCompiler(); };
+
 			usageString = "Usage: mosacl -o outputfile --Architecture=[x86|avr32] --format=[ELF32|ELF64|PE] {--boot=[mb0.7]} {additional options} inputfiles";
 			optionSet = new OptionSet();
 			inputFiles = new List<FileInfo>();
@@ -134,7 +133,7 @@ namespace Mosa.Tool.Compiler
 				"Specify the bootable format of the produced binary [{mb0.7}].",
 				delegate(string format)
 				{
-					compilerOptions.BootStageFactory = GetBootStageFactory(format);
+					compiler.CompilerOptions.BootStageFactory = GetBootStageFactory(format);
 				}
 			);
 
@@ -143,7 +142,7 @@ namespace Mosa.Tool.Compiler
 				"Select one of the MOSA architectures to compile for [{x86|ARMv6}].",
 				delegate(string arch)
 				{
-					compilerOptions.Architecture = SelectArchitecture(arch);
+					compiler.CompilerOptions.Architecture = SelectArchitecture(arch);
 				}
 			);
 
@@ -152,9 +151,9 @@ namespace Mosa.Tool.Compiler
 				"Select the format of the binary file to create [{ELF32|ELF64|PE}].",
 				delegate(string format)
 				{
-					compilerOptions.LinkerFactory = GetLinkerFactory(format);
+					compiler.CompilerOptions.LinkerFactory = GetLinkerFactory(format);
 
-					if (compilerOptions.LinkerFactory == null)
+					if (compiler.CompilerOptions.LinkerFactory == null)
 						throw new OptionException("Invalid value Linker format: " + format, "format");
 				}
 			);
@@ -164,7 +163,7 @@ namespace Mosa.Tool.Compiler
 				"The name of the output {file}.",
 				delegate(string file)
 				{
-					compilerOptions.OutputFile = file;
+					compiler.CompilerOptions.OutputFile = file;
 				}
 			);
 
@@ -173,41 +172,32 @@ namespace Mosa.Tool.Compiler
 				"Generate a map {file} of the produced binary.",
 				delegate(string file)
 				{
-					compilerOptions.MapFile = file;
-				}
-			);
-
-			optionSet.Add(
-				"interrupt-pipeline-export-dir|mped=",
-				"The interrupt pipeline export directory {file}.",
-				delegate(string dir)
-				{
-					compilerOptions.MethodPipelineExportDirectory = dir;
+					compiler.CompilerOptions.MapFile = file;
 				}
 			);
 
 			optionSet.Add(
 				@"sa|enable-static-alloc",
 				@"Performs static allocations at compile time.",
-				enable => compilerOptions.EnableStaticAllocations = enable != null
+				enable => compiler.CompilerOptions.EnableStaticAllocations = enable != null
 			);
 
 			optionSet.Add(
 				@"ssa|enable-single-static-assignment-form",
 				@"Performs single static assignments at compile time.",
-				enable => compilerOptions.EnableSSA = enable != null
+				enable => compiler.CompilerOptions.EnableSSA = enable != null
 			);
 
 			optionSet.Add(
 				@"ssa-optimize|enable-single-static-assignment-optimizations",
 				@"Performs single static assignments optimizations.",
-				enable => compilerOptions.EnableOptimizations = enable != null
+				enable => compiler.CompilerOptions.EnableOptimizations = enable != null
 			);
 
 			optionSet.Add(
 				@"promote-temps|enable-promote-temporary-variables-optimization",
 				@"Performs single static assignments optimizations.",
-				enable => compilerOptions.EnablePromoteTemporaryVariablesOptimization = enable != null
+				enable => compiler.CompilerOptions.EnablePromoteTemporaryVariablesOptimization = enable != null
 			);
 
 			optionSet.Add(
@@ -215,7 +205,7 @@ namespace Mosa.Tool.Compiler
 				"Generate instruction statistics {file} of the produced binary.",
 				delegate(string file)
 				{
-					compilerOptions.StatisticsFile = file;
+					compiler.CompilerOptions.StatisticsFile = file;
 				}
 			);
 
@@ -227,11 +217,11 @@ namespace Mosa.Tool.Compiler
 					switch (v.ToLower())
 					{
 						case "text":
-							compilerOptions.Multiboot.VideoMode = 1;
+							compiler.CompilerOptions.Multiboot.VideoMode = 1;
 							break;
 
 						case "graphics":
-							compilerOptions.Multiboot.VideoMode = 0;
+							compiler.CompilerOptions.Multiboot.VideoMode = 0;
 							break;
 
 						default:
@@ -249,7 +239,7 @@ namespace Mosa.Tool.Compiler
 					if (uint.TryParse(v, out val))
 					{
 						// TODO: this probably needs further validation
-						compilerOptions.Multiboot.VideoWidth = val;
+						compiler.CompilerOptions.Multiboot.VideoWidth = val;
 					}
 					else
 					{
@@ -267,7 +257,7 @@ namespace Mosa.Tool.Compiler
 					if (uint.TryParse(v, out val))
 					{
 						// TODO: this probably needs further validation
-						compilerOptions.Multiboot.VideoHeight = val;
+						compiler.CompilerOptions.Multiboot.VideoHeight = val;
 					}
 					else
 					{
@@ -284,7 +274,7 @@ namespace Mosa.Tool.Compiler
 					uint val;
 					if (uint.TryParse(v, out val))
 					{
-						compilerOptions.Multiboot.VideoDepth = val;
+						compiler.CompilerOptions.Multiboot.VideoDepth = val;
 					}
 					else
 					{
@@ -332,24 +322,24 @@ namespace Mosa.Tool.Compiler
 				// Process boot format:
 				// Boot format only matters if it's an executable
 				// Process this only now, because input files must be known
-				if (!isExecutable && compilerOptions.BootStageFactory != null)
+				if (!isExecutable && compiler.CompilerOptions.BootStageFactory != null)
 				{
 					Console.WriteLine("Warning: Ignoring boot format, because target is not an executable.");
 					Console.WriteLine();
 				}
 
 				// Check for missing options
-				if (compilerOptions.LinkerFactory == null)
+				if (compiler.CompilerOptions.LinkerFactory == null)
 				{
 					throw new OptionException("No binary format specified.", "format");
 				}
 
-				if (String.IsNullOrEmpty(compilerOptions.OutputFile))
+				if (String.IsNullOrEmpty(compiler.CompilerOptions.OutputFile))
 				{
 					throw new OptionException("No output file specified.", "o");
 				}
 
-				if (compilerOptions.Architecture == null)
+				if (compiler.CompilerOptions.Architecture == null)
 				{
 					throw new OptionException("No Architecture specified.", "Architecture");
 				}
@@ -389,11 +379,11 @@ namespace Mosa.Tool.Compiler
 		public override string ToString()
 		{
 			StringBuilder sb = new StringBuilder();
-			sb.Append(" > Output file: ").AppendLine(compilerOptions.OutputFile);
+			sb.Append(" > Output file: ").AppendLine(compiler.CompilerOptions.OutputFile);
 			sb.Append(" > Input file(s): ").AppendLine(String.Join(", ", new List<string>(GetInputFileNames()).ToArray()));
-			sb.Append(" > Architecture: ").AppendLine(compilerOptions.Architecture.GetType().FullName);
-			sb.Append(" > Binary format: ").AppendLine(compilerOptions.LinkerFactory().GetType().FullName);
-			sb.Append(" > Boot format: ").AppendLine((compilerOptions.BootStageFactory == null) ? "None" : ((IPipelineStage)compilerOptions.BootStageFactory()).Name);
+			sb.Append(" > Architecture: ").AppendLine(compiler.CompilerOptions.Architecture.GetType().FullName);
+			sb.Append(" > Binary format: ").AppendLine(compiler.CompilerOptions.LinkerFactory().GetType().FullName);
+			sb.Append(" > Boot format: ").AppendLine((compiler.CompilerOptions.BootStageFactory == null) ? "None" : ((IPipelineStage)compiler.CompilerOptions.BootStageFactory()).Name);
 			sb.Append(" > Is executable: ").AppendLine(isExecutable.ToString());
 			return sb.ToString();
 		}
@@ -404,13 +394,9 @@ namespace Mosa.Tool.Compiler
 
 		private void Compile()
 		{
-			CompilerTrace compilerTrace = new CompilerTrace();
-			
-			var listener = new ConsoleEventListener();
-			//listener.Quiet = false;
-			compilerTrace.CompilerEventListener = listener;
+			compiler.CompilerTrace.TraceListener = new ConsoleEventListener();
 
-			AotCompiler.Compile(compilerOptions, inputFiles, compilerTrace);
+			compiler.Execute();
 		}
 
 		/// <summary>

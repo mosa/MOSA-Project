@@ -7,8 +7,6 @@
  *  Stefan Andres Charsley (charsleysa) <charsleysa@gmail.com>
  */
 
-using System;
-using System.Collections;
 using System.Collections.Generic;
 
 namespace System.Reflection
@@ -453,7 +451,7 @@ namespace System.Reflection
 			if (name == null)
 				throw new ArgumentNullException("name");
 
-			foreach(var info in DeclaredFields)
+			foreach (var info in DeclaredFields)
 			{
 				if (info.Name != name)
 					continue;
@@ -572,7 +570,7 @@ namespace System.Reflection
 
 			return false;
 		}
-		
+
 		/// <summary>
 		/// Determines whether the class represented by the current Type derives from the class represented by the specified Type.
 		/// </summary>
@@ -584,7 +582,7 @@ namespace System.Reflection
 				return false;
 
 			Type type = this.BaseType;
-			while(type != null)
+			while (type != null)
 			{
 				if (type == c)
 					return true;

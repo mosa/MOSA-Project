@@ -77,7 +77,7 @@ namespace Mosa.Test.Collection
 			if (collection == null)
 				throw new ArgumentNullException("collection");
 
-			foreach(T value in collection)
+			foreach (T value in collection)
 				AddLast(value);
 		}
 

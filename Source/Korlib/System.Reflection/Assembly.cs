@@ -8,8 +8,6 @@
  *  Stefan Andres Charsley (charsleysa) <charsleysa@gmail.com>
  */
 
-using System;
-using System.Collections;
 using System.Collections.Generic;
 
 namespace System.Reflection
@@ -31,7 +29,7 @@ namespace System.Reflection
 		public abstract IEnumerable<TypeInfo> DefinedTypes { get; }
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public virtual IEnumerable<Type> ExportedTypes
 		{

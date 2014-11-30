@@ -37,7 +37,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private void EmitProtectedRegionTable()
 		{
-			var trace = CreateTrace("Regions");
+			var trace = CreateTraceLog("Regions");
 
 			var section = MethodCompiler.Linker.CreateSymbol(MethodCompiler.Method.FullName + Metadata.ProtectedRegionTable, SectionKind.ROData, NativePointerAlignment, 0);
 			var stream = section.Stream;

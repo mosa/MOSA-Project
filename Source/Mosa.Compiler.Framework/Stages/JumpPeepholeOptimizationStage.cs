@@ -25,7 +25,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected override void Run()
 		{
-			var trace = CreateTrace();
+			var trace = CreateTraceLog();
 
 			for (int f = 0; f < BasicBlocks.Count - 1; f++)
 			{

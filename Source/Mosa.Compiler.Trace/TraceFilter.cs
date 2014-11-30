@@ -10,11 +10,11 @@
 using Mosa.Compiler.MosaTypeSystem;
 using System;
 
-namespace Mosa.Compiler.InternalTrace
+namespace Mosa.Compiler.Trace
 {
 	public enum MatchType { Exact, Contains, StartsWith, Any, Except, NotContains, NotStartsWith, Exclude, None };
 
-	public class ConfigurableTraceFilter : ITraceFilter
+	public class TraceFilter
 	{
 		public bool Active { get; set; }
 
@@ -28,12 +28,12 @@ namespace Mosa.Compiler.InternalTrace
 		public MatchType MethodMatch = MatchType.Contains;
 		public MatchType StageMatch = MatchType.Any;
 
-		public ConfigurableTraceFilter()
+		public TraceFilter()
 		{
 			Active = false;
 		}
 
-		bool ITraceFilter.IsMatch(MosaMethod method, string stage)
+		public bool IsMatch(MosaMethod method, string stage)
 		{
 			if (!Active)
 				return false;
@@ -41,11 +41,11 @@ namespace Mosa.Compiler.InternalTrace
 			return IsMatch(method.DeclaringType.Name, method.Name, stage);
 		}
 
-		protected bool IsMatch(string type, string method, string stage)
+		public bool IsMatch(string type, string method, string stage)
 		{
 			if (!Active)
-				return false; 
-			
+				return false;
+
 			if (ExcludeInternalMethods && method.Contains("<$>"))
 				return false;
 

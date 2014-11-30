@@ -12,8 +12,6 @@ using Mosa.Compiler.MosaTypeSystem;
 using Mosa.Platform.x86;
 using Mosa.TinyCPUSimulator.Adaptor;
 using System.Collections.Generic;
-using System;
-using System.Diagnostics;
 
 namespace Mosa.TinyCPUSimulator.x86.Adaptor
 {

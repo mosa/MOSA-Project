@@ -8,7 +8,7 @@
  */
 
 using Mosa.Compiler.Framework.IR;
-using Mosa.Compiler.InternalTrace;
+using Mosa.Compiler.Trace;
 using Mosa.Compiler.MosaTypeSystem;
 
 namespace Mosa.Compiler.Framework.Stages
@@ -18,14 +18,14 @@ namespace Mosa.Compiler.Framework.Stages
 	/// </summary>
 	public class PromoteLocalVariablesStage : BaseMethodCompilerStage
 	{
-		protected SectionTrace trace;
+		protected TraceLog trace;
 
 		protected override void Run()
 		{
 			if (!HasCode)
 				return;
 
-			trace = CreateTrace();
+			trace = CreateTraceLog();
 
 			foreach (var local in MethodCompiler.LocalVariables)
 			{

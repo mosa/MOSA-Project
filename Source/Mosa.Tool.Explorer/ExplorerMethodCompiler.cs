@@ -22,9 +22,9 @@ namespace Mosa.Tool.Explorer
 		/// <param name="method">The method.</param>
 		/// <param name="basicBlocks">The basic blocks.</param>
 		/// <param name="instructionSet">The instruction set.</param>
-		/// <param name="emitBinary">if set to <c>true</c> [emit binary].</param>
-		public ExplorerMethodCompiler(ExplorerCompiler compiler, MosaMethod method, BasicBlocks basicBlocks, InstructionSet instructionSet, bool emitBinary)
-			: base(compiler, method, basicBlocks, instructionSet)
+		/// <param name="threadID">The thread identifier.</param>
+		public ExplorerMethodCompiler(ExplorerCompiler compiler, MosaMethod method, BasicBlocks basicBlocks, InstructionSet instructionSet, int threadID)
+			: base(compiler, method, basicBlocks, instructionSet, threadID)
 		{
 			var compilerOptions = Compiler.CompilerOptions;
 
@@ -58,8 +58,8 @@ namespace Mosa.Tool.Explorer
 				new StackLayoutStage(),
 				new EmptyBlockRemovalStage(),
 				new BlockOrderingStage(),
-				new CodeGenerationStage(emitBinary),
-				(emitBinary) ? new ProtectedRegionLayoutStage() : null
+				new CodeGenerationStage(compilerOptions.EmitBinary),
+				(compilerOptions.EmitBinary) ? new ProtectedRegionLayoutStage() : null
 			});
 		}
 	}

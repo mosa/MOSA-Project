@@ -8,7 +8,6 @@
  */
 
 using Mosa.Compiler.Framework.IR;
-using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework.Intrinsics
 {

@@ -8,8 +8,7 @@
  */
 
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.InternalTrace;
-using Mosa.Compiler.Linker;
+using Mosa.Compiler.Trace;
 using Mosa.Compiler.MosaTypeSystem;
 using Mosa.TinyCPUSimulator;
 using Mosa.TinyCPUSimulator.Adaptor;
@@ -22,7 +21,7 @@ using WeifenLuo.WinFormsUI.Docking;
 
 namespace Mosa.Tool.TinySimulator
 {
-	public partial class MainForm : Form, ICompilerEventListener
+	public partial class MainForm : Form, ITraceListener
 	{
 		private AssembliesView assembliesView;
 		private RegisterView registersView;
@@ -40,12 +39,8 @@ namespace Mosa.Tool.TinySimulator
 		private OutputView outputView;
 		private ScriptView scriptView;
 
-		public CompilerTrace InternalTrace = new CompilerTrace();
-		public ConfigurableTraceFilter Filter = new ConfigurableTraceFilter();
-		public TypeSystem TypeSystem;
-		public MosaTypeLayout TypeLayout;
-		public BaseArchitecture Architecture;
-		public BaseLinker Linker;
+		public MosaCompiler Compiler = new MosaCompiler();
+
 		public SimCPU SimCPU;
 
 		public int MaxHistory { get; set; }
@@ -75,10 +70,10 @@ namespace Mosa.Tool.TinySimulator
 		{
 			InitializeComponent();
 
-			Filter.Active = false;
+			Compiler.CompilerTrace.TraceFilter.Active = false;
+			Compiler.CompilerTrace.TraceListener = this;
 
-			InternalTrace.TraceFilter = Filter;
-			InternalTrace.CompilerEventListener = this;
+			Compiler.CompilerOptions.Architecture = GetArchitecture("x86");
 
 			MaxHistory = 1000;
 
@@ -105,7 +100,7 @@ namespace Mosa.Tool.TinySimulator
 			worker.Start();
 		}
 
-		void ICompilerEventListener.SubmitTraceEvent(CompilerEvent compilerStage, string info)
+		private void SubmitTraceEvent(CompilerEvent compilerStage, string info)
 		{
 			if (compilerStage == CompilerEvent.CompilerStageStart || compilerStage == CompilerEvent.CompilerStageEnd)
 			{
@@ -149,7 +144,7 @@ namespace Mosa.Tool.TinySimulator
 			if (CompileOnLaunch != null)
 			{
 				LoadAssembly(CompileOnLaunch);
-				StartSimulator("x86");
+				StartSimulator();
 			}
 		}
 
@@ -170,44 +165,60 @@ namespace Mosa.Tool.TinySimulator
 			{
 				LoadAssembly(openFileDialog.FileName);
 
-				Status = "Assembly Loaded. Ready to Compile.";
+				Status = "Assembly Loaded.";
 			}
 		}
 
 		public void LoadAssembly(string filename)
 		{
-			MosaModuleLoader moduleLoader = new MosaModuleLoader();
+			var moduleLoader = new MosaModuleLoader();
 
 			moduleLoader.AddPrivatePath(System.IO.Path.GetDirectoryName(filename));
 			moduleLoader.LoadModuleFromFile(filename);
 
-			TypeSystem = TypeSystem.Load(moduleLoader.CreateMetadata());
-			TypeLayout = new MosaTypeLayout(TypeSystem, 4, 4);
+			Compiler.Load(TypeSystem.Load(moduleLoader.CreateMetadata()));
 
 			assembliesView.UpdateTree();
 		}
 
-		public void StartSimulator(string platform)
+		public void StartSimulator()
 		{
-			if (TypeSystem == null)
+			if (Compiler.TypeSystem == null)
 				return;
 
 			Status = "Compiling...";
 
-			Architecture = GetArchitecture(platform);
-			var simAdapter = GetSimAdaptor(platform);
-			Linker = new SimLinker(simAdapter);
+			toolStrip1.Enabled = false;
+
+			ThreadPool.QueueUserWorkItem(new WaitCallback(delegate
+			{
+				try
+				{
+					Compile();
+				}
+				finally
+				{
+					OnCompileCompleted();
+				}
+			}
+			));
+		}
+
+		private void Compile()
+		{
+			var simAdapter = GetSimAdaptor("x86");
 
 			compileStartTime = DateTime.Now;
 
-			var compilerOptions = new CompilerOptions();
+			Compiler.CompilerOptions.EnableSSA = true;
+			Compiler.CompilerOptions.EnableOptimizations = true;
+			Compiler.CompilerOptions.EnablePromoteTemporaryVariablesOptimization = true;
+			Compiler.CompilerOptions.EnableSparseConditionalConstantPropagation = true;
 
-			compilerOptions.EnableSSA = true;
-			compilerOptions.EnableOptimizations = true;
-			compilerOptions.EnablePromoteTemporaryVariablesOptimization = true;
-			compilerOptions.EnableSparseConditionalConstantPropagation = true;
+			Compiler.CompilerOptions.LinkerFactory = delegate { return new SimLinker(simAdapter); };
+			Compiler.CompilerFactory = delegate { return new SimCompiler(simAdapter); };
 
-			SimCompiler.Compile(TypeSystem, TypeLayout, InternalTrace, compilerOptions, Architecture, simAdapter, Linker);
+			Compiler.Execute(Environment.ProcessorCount);
 
 			SimCPU = simAdapter.SimCPU;
 
@@ -217,10 +228,25 @@ namespace Mosa.Tool.TinySimulator
 			SimCPU.Reset();
 
 			Display32 = SimCPU.GetState().NativeRegisterSize == 32;
+		}
 
-			SimCPU.Monitor.OnExecutionStepCompleted(true);
+		private void OnCompileCompleted()
+		{
+			MethodInvoker method = delegate()
+			{
+				CompileCompleted();
+			};
+
+			Invoke(method);
+		}
+
+		private void CompileCompleted()
+		{
+			toolStrip1.Enabled = true;
 
 			Status = "Compiled.";
+
+			SimCPU.Monitor.OnExecutionStepCompleted(true);
 
 			symbolView.CreateEntries();
 		}
@@ -280,12 +306,14 @@ namespace Mosa.Tool.TinySimulator
 
 		private void toolStripButton1_Click(object sender, EventArgs e)
 		{
-			if (TypeSystem == null)
+			if (Compiler.TypeSystem == null)
 			{
 				LoadAssembly();
 			}
 
-			StartSimulator("x86");
+			outputView.Show();
+
+			StartSimulator();
 		}
 
 		public void UpdateAllDocks(BaseSimState simState)
@@ -511,7 +539,21 @@ namespace Mosa.Tool.TinySimulator
 			outputView.AddOutput(data);
 		}
 
-		void ICompilerEventListener.SubmitMethodStatus(int totalMethods, int queuedMethods)
+		void ITraceListener.OnNewCompilerTraceEvent(CompilerEvent compilerStage, string info, int threadID)
+		{
+			MethodInvoker call = delegate()
+			{
+				SubmitTraceEvent(compilerStage, info);
+			};
+
+			Invoke(call);
+		}
+
+		void ITraceListener.OnUpdatedCompilerProgress(int totalMethods, int completedMethods)
+		{
+		}
+
+		void ITraceListener.OnNewTraceLog(TraceLog traceLog)
 		{
 		}
 	}

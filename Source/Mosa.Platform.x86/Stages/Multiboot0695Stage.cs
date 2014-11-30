@@ -103,7 +103,7 @@ namespace Mosa.Platform.x86.Stages
 				return;
 			}
 
-			var typeInitializerSchedulerStage = Compiler.Pipeline.FindFirst<TypeInitializerSchedulerStage>();
+			var typeInitializerSchedulerStage = Compiler.PostCompilePipeline.FindFirst<TypeInitializerSchedulerStage>();
 
 			var ecx = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.ECX);
 			var eax = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EAX);
@@ -119,7 +119,7 @@ namespace Mosa.Platform.x86.Stages
 			// set sentinal on the stack to indicate the start of the stack
 			var zero = Operand.CreateConstant(TypeSystem.BuiltIn.I4, 0);
 			ctx.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(TypeSystem.BuiltIn.I4, ebp, 0), zero);
-			
+
 			// store multiboot registers eax and ebx at 0x200000 and 0x200004 respectively
 			ctx.AppendInstruction(X86.Mov, ecx, Operand.CreateConstantSignedInt(TypeSystem, 0x200000));
 			ctx.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(TypeSystem.BuiltIn.I4, ecx, 0), eax);
@@ -132,7 +132,7 @@ namespace Mosa.Platform.x86.Stages
 			// should never get here
 			ctx.AppendInstruction(X86.Ret);
 
-			Compiler.CompileMethod(multibootMethod, basicBlocks, instructionSet);
+			Compiler.CompileMethod(multibootMethod, basicBlocks, instructionSet, 0);
 		}
 
 		#region Internals

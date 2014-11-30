@@ -46,7 +46,6 @@
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
 			this.dockPanel = new WeifenLuo.WinFormsUI.Docking.DockPanel();
 			this.toolStrip1 = new System.Windows.Forms.ToolStrip();
-			this.toolStripButton3 = new System.Windows.Forms.ToolStripButton();
 			this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
 			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
@@ -124,7 +123,6 @@
 			// toolStrip1
 			// 
 			this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripButton3,
             this.toolStripButton1,
             this.toolStripSeparator1,
             this.toolStripButton2});
@@ -134,22 +132,13 @@
 			this.toolStrip1.TabIndex = 28;
 			this.toolStrip1.Text = "toolStrip1";
 			// 
-			// toolStripButton3
-			// 
-			this.toolStripButton3.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton3.Image")));
-			this.toolStripButton3.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.toolStripButton3.Name = "toolStripButton3";
-			this.toolStripButton3.Size = new System.Drawing.Size(56, 22);
-			this.toolStripButton3.Text = "Open";
-			this.toolStripButton3.Click += new System.EventHandler(this.toolStripButton3_Click);
-			// 
 			// toolStripButton1
 			// 
 			this.toolStripButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton1.Image")));
 			this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButton1.Name = "toolStripButton1";
-			this.toolStripButton1.Size = new System.Drawing.Size(72, 22);
-			this.toolStripButton1.Text = "Compile";
+			this.toolStripButton1.Size = new System.Drawing.Size(117, 22);
+			this.toolStripButton1.Text = "Open && Compile";
 			this.toolStripButton1.Click += new System.EventHandler(this.toolStripButton1_Click);
 			// 
 			// toolStripSeparator1
@@ -218,7 +207,6 @@
 		private System.Windows.Forms.ToolStripButton toolStripButton2;
 		private System.Windows.Forms.StatusStrip statusStrip1;
 		private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
-		private System.Windows.Forms.ToolStripButton toolStripButton3;
 		private System.Windows.Forms.OpenFileDialog openFileDialog;
 	}
 }

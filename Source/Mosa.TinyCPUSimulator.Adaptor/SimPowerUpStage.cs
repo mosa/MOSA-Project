@@ -33,7 +33,7 @@ namespace Mosa.TinyCPUSimulator.Adaptor
 
 		protected override void Run()
 		{
-			var typeInitializer = Compiler.Pipeline.FindFirst<TypeInitializerSchedulerStage>().TypeInitializerMethod;
+			var typeInitializer = Compiler.PostCompilePipeline.FindFirst<TypeInitializerSchedulerStage>().TypeInitializerMethod;
 
 			var basicBlocks = new BasicBlocks();
 			var instructionSet = new InstructionSet(25);
@@ -47,7 +47,7 @@ namespace Mosa.TinyCPUSimulator.Adaptor
 			context.MosaMethod = typeInitializer;
 
 			var method = Compiler.CreateLinkerMethod(StartUpName);
-			Compiler.CompileMethod(method, basicBlocks, instructionSet);
+			Compiler.CompileMethod(method, basicBlocks, instructionSet, 0);
 
 			Linker.EntryPoint = Linker.GetSymbol(method.FullName, SectionKind.Text);
 		}

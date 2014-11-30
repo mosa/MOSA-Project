@@ -67,7 +67,7 @@ namespace Mosa.Platform.x86.Stages
 				ctx.AppendInstruction(X86.Mov, thisArg, eax);
 				ctx.AppendInstruction(X86.Jmp, null, Operand.CreateSymbolFromMethod(TypeSystem, method));
 
-				Compiler.CompileMethod(unboxStub, basicBlocks, instructionSet);
+				Compiler.CompileMethod(unboxStub, basicBlocks, instructionSet, 0);
 				methodTable[i] = unboxStub;
 			}
 		}

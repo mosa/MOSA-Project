@@ -41,7 +41,6 @@ namespace Mosa.Platform.ARMv6.Instructions
 		protected override void Emit(Context context, MachineCodeEmitter emitter)
 		{
 			EmitDataProcessingInstruction(context, emitter, Bits.b1000);
-
 		}
 
 		/// <summary>

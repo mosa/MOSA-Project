@@ -23,7 +23,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (HasProtectedRegions)
 				return;
 
-			trace = CreateTrace();
+			trace = CreateTraceLog();
 
 			foreach (var local in MethodCompiler.LocalVariables)
 			{

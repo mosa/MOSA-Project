@@ -8,8 +8,6 @@
  */
 
 using System;
-using System.Runtime.InteropServices;
-using System.Reflection;
 
 namespace Mosa.Platform.Internal.x86
 {

@@ -9,7 +9,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <AssemblyKeyContainerName>
     </AssemblyKeyContainerName>
-    <AssemblyName>Mosa.Compiler.Trace</AssemblyName>
+    <AssemblyName>Mosa.Compiler.InternalTrace</AssemblyName>
     <DefaultClientScript>JScript</DefaultClientScript>
     <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
     <DefaultTargetSchema>IE50</DefaultTargetSchema>
@@ -48,7 +48,7 @@
     <ConfigurationOverrideFile>
     </ConfigurationOverrideFile>
     <DefineConstants>TRACE</DefineConstants>
-    <DocumentationFile>..\..\bin\Mosa.Compiler.Trace.xml</DocumentationFile>
+    <DocumentationFile>..\..\bin\Mosa.Compiler.InternalTrace.xml</DocumentationFile>
     <FileAlignment>4096</FileAlignment>
     <Optimize>true</Optimize>
     <OutputPath>..\..\bin\</OutputPath>
@@ -62,16 +62,14 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ConsoleEventListener.cs" />
+    <Compile Include="BuiltIn\ConsoleEventListener.cs" />
     <Compile Include="CompilerTrace.cs" />
     <Compile Include="CompilerEvent.cs" />
-    <Compile Include="ConfigurableTraceFilter.cs" />
-    <Compile Include="SectionTrace.cs" />
-    <Compile Include="DebugCompilerEventListener.cs" />
-    <Compile Include="DebugTraceListener.cs" />
-    <Compile Include="ICompilerEventListener.cs" />
-    <Compile Include="ITraceFilter.cs" />
+    <Compile Include="ITraceFactory.cs" />
     <Compile Include="ITraceListener.cs" />
+    <Compile Include="TraceFilter.cs" />
+    <Compile Include="TraceLog.cs" />
+    <Compile Include="BuiltIn\DebugCompilerEventListener.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Mosa.Compiler.MosaTypeSystem\Mosa.Compiler.MosaTypeSystem.csproj">

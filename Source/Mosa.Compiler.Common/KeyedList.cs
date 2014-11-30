@@ -62,6 +62,5 @@ namespace Mosa.Compiler.Common
 
 			return list;
 		}
-
 	}
 }

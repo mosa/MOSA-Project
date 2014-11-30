@@ -21,7 +21,7 @@ namespace Mosa.Compiler.Framework.Stages
 	{
 		protected override void Run()
 		{
-			List<Tuple<BasicBlock, BasicBlock>> worklist = new List<Tuple<BasicBlock, BasicBlock>>();
+			var worklist = new List<Tuple<BasicBlock, BasicBlock>>();
 
 			foreach (var from in BasicBlocks)
 			{

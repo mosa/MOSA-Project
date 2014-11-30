@@ -59,7 +59,7 @@ namespace Mosa.Tool.TinySimulator
 
 		public void CreateEntries()
 		{
-			if (MainForm.Linker == null)
+			if (MainForm.Compiler.Linker == null)
 				return;
 
 			symbols = new List<SymbolEntry>();
@@ -79,7 +79,7 @@ namespace Mosa.Tool.TinySimulator
 				default: break;
 			}
 
-			foreach (var symbol in MainForm.Linker.Symbols)
+			foreach (var symbol in MainForm.Compiler.Linker.Symbols)
 			{
 				if (!(filter.Length == 0 || symbol.Name.Contains(filter)))
 					continue;

@@ -7,38 +7,46 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using Mosa.Compiler.InternalTrace;
+using Mosa.Compiler.Trace;
 using System;
 
 namespace Mosa.Utility.Launcher
 {
-	internal class BuilderEventListener : ICompilerEventListener
+	internal class BuilderEventListener : ITraceListener
 	{
 		private Builder builder;
+		private object mylock = new object();
 
-		void ICompilerEventListener.SubmitTraceEvent(CompilerEvent compilerStage, string info)
+		public BuilderEventListener(Builder builder)
 		{
-			if (compilerStage == CompilerEvent.CompilerStageStart || compilerStage == CompilerEvent.CompilerStageEnd || compilerStage == CompilerEvent.Exception)
-			{
-				string status = "Compiling: " + String.Format("{0:0.00}", (DateTime.Now - builder.CompileStartTime).TotalSeconds) + " secs: " + compilerStage.ToText() + ": " + info;
+			this.builder = builder;
+		}
 
-				builder.AddOutput(status);
-			}
-			else if (compilerStage == CompilerEvent.Counter)
+		void ITraceListener.OnNewCompilerTraceEvent(CompilerEvent compilerStage, string info, int threadID)
+		{
+			lock (mylock)
 			{
-				builder.AddCounters(info);
+				if (compilerStage == CompilerEvent.CompilerStageStart || compilerStage == CompilerEvent.CompilerStageEnd || compilerStage == CompilerEvent.Exception)
+				{
+					string status = "Compiling: " + String.Format("{0:0.00}", (DateTime.Now - builder.CompileStartTime).TotalSeconds) + " secs: " + compilerStage.ToText() + ": " + info;
+
+					builder.AddOutput(status);
+				}
+				else if (compilerStage == CompilerEvent.Counter)
+				{
+					builder.AddCounters(info);
+				}
 			}
 		}
 
-		void ICompilerEventListener.SubmitMethodStatus(int totalMethods, int completedMethods)
+		void ITraceListener.OnUpdatedCompilerProgress(int totalMethods, int completedMethods)
 		{
 			if (builder.BuilderEvent != null)
 				builder.BuilderEvent.UpdateProgress(totalMethods, completedMethods);
 		}
 
-		public BuilderEventListener(Builder builder)
+		void ITraceListener.OnNewTraceLog(TraceLog traceLog)
 		{
-			this.builder = builder;
 		}
 	}
 }
