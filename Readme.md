@@ -2,7 +2,7 @@ MOSA is an open source software project aiming to create a high quality, cross-p
 
 The MOSA project consists of:
 
-* Compiler - a high quality, cross-platform, optimizing .NET compiler.
+* Compiler - a high quality, mulithreaded, cross-platform, optimizing .NET compiler.
 * Kernel - a small, micro-kernel operating system.
 * Device Drivers Framework - a modular, device drivers framework and device drivers.
 
