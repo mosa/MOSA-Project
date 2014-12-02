@@ -1,3 +1,5 @@
+[![Build status](https://ci.appveyor.com/api/projects/status/dq5e28x88m6h044i/branch/master?svg=true)](https://ci.appveyor.com/project/mosa/mosa-project/branch/master)
+
 MOSA is an open source software project aiming to create a high quality, cross-platform, optimizing .NET compiler designed specifically to support a managed operating system based on the .NET framework.
 
 The MOSA project consists of:
