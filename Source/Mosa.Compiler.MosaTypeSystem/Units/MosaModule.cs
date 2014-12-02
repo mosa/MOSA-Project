@@ -12,7 +12,7 @@ using System.Collections.Generic;
 
 namespace Mosa.Compiler.MosaTypeSystem
 {
-	public class MosaModule : MosaUnit
+	public sealed class MosaModule : MosaUnit
 	{
 		public string Assembly { get; private set; }
 

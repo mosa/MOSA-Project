@@ -14,7 +14,7 @@ using System.Text;
 
 namespace Mosa.Compiler.MosaTypeSystem
 {
-	public class MosaMethod : MosaUnit, IEquatable<MosaMethod>
+	public sealed class MosaMethod : MosaUnit, IEquatable<MosaMethod>
 	{
 		public MosaModule Module { get; private set; }
 

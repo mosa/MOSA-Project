@@ -65,6 +65,7 @@
     <Compile Include="BaseSetup.cs" />
     <Compile Include="BaseSimDevice.cs" />
     <Compile Include="PageFaultException.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SimSymbol.cs" />
     <Compile Include="BaseSimState.cs" />
     <Compile Include="RegisterFloatingPoint.cs" />
@@ -97,9 +98,7 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Properties\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\Mosa.Compiler.Common\Mosa.Compiler.Common.csproj">
       <Project>{0b1011a6-8fcd-4f9e-bbb8-8db86e23d2e8}</Project>

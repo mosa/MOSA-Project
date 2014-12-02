@@ -42,6 +42,7 @@
     <Compile Include="BitArrayExtension.cs" />
     <Compile Include="AssemblyLoadException.cs" />
     <Compile Include="InvalidCompilerException.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SortedSetExtension.cs" />
     <Compile Include="NotImplementCompilerException.cs" />
     <Compile Include="CompilerException.cs" />
@@ -54,9 +55,7 @@
     <Compile Include="StreamExtension.cs" />
     <Compile Include="Tuple.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Properties\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Reference Include="System" />
   </ItemGroup>

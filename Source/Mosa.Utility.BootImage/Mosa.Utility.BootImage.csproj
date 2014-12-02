@@ -44,6 +44,7 @@
     <Compile Include="BlockFileStream.cs" />
     <Compile Include="Options.cs" />
     <Compile Include="Generator.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Mosa.ClassLib\Mosa.ClassLib.csproj">
@@ -63,9 +64,7 @@
       <Name>Mosa.FileSystem</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Properties\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Reference Include="System" />
   </ItemGroup>

@@ -75,6 +75,7 @@
     <Compile Include="Program.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
     <ProjectReference Include="..\Mosa.Compiler.Common\Mosa.Compiler.Common.csproj">
       <Project>{0b1011a6-8fcd-4f9e-bbb8-8db86e23d2e8}</Project>
       <Name>Mosa.Compiler.Common</Name>

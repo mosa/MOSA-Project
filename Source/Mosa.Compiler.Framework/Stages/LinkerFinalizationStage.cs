@@ -21,7 +21,6 @@ namespace Mosa.Compiler.Framework.Stages
 			using (var file = new FileStream(CompilerOptions.OutputFile, FileMode.Create))
 			{
 				Linker.Emit(file);
-				file.Close();
 			}
 		}
 	}

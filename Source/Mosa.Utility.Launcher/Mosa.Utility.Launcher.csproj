@@ -86,6 +86,7 @@
     <Compile Include="BootFormat.cs" />
     <Compile Include="ImageFormat.cs" />
     <Compile Include="Options.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Mosa.Compiler.Common\Mosa.Compiler.Common.csproj">

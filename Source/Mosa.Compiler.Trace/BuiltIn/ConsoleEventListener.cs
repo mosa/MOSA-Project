@@ -11,13 +11,13 @@ using System;
 
 namespace Mosa.Compiler.Trace.BuiltIn
 {
-	public class ConsoleEventListener : ITraceListener
+	public sealed class ConsoleEventListener : ITraceListener
 	{
 		public bool Quiet = true;
 
-		protected string supressed = null;
+		private string supressed = null;
 
-		protected void DisplayCompilingMethod(string info)
+        private void DisplayCompilingMethod(string info)
 		{
 			if (string.IsNullOrEmpty(info))
 				return;
@@ -28,7 +28,7 @@ namespace Mosa.Compiler.Trace.BuiltIn
 			Console.WriteLine(info);
 		}
 
-		protected void TraceEvent(CompilerEvent compilerStage, string info)
+        private void TraceEvent(CompilerEvent compilerStage, string info)
 		{
 			switch (compilerStage)
 			{

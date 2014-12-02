@@ -79,6 +79,10 @@
   <ItemGroup>
     <Compile Include="Architecture.cs" />
     <Compile Include="ArchitectureFeatureFlags.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />
   <PropertyGroup>
