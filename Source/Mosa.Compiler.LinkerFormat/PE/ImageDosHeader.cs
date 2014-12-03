@@ -185,8 +185,6 @@ namespace Mosa.Compiler.LinkerFormat.PE
 
 		#endregion Data members
 
-
-
 		#region Methods
 
 		/// <summary>

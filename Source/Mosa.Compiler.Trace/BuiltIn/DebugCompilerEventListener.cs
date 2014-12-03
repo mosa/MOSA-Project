@@ -11,7 +11,7 @@ using System.Diagnostics;
 
 namespace Mosa.Compiler.Trace.BuiltIn
 {
-	public class DebugCompilerEventListener : ITraceListener
+	public sealed class DebugCompilerEventListener : ITraceListener
 	{
 		void ITraceListener.OnNewCompilerTraceEvent(CompilerEvent compilerStage, string info, int threadID)
 		{

@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("MOSA Project")]
-[assembly: AssemblyProduct("MOSA Test")]
+[assembly: AssemblyProduct("Mosa.Compiler.Framework.xUnit")]
 [assembly: AssemblyCopyright("Copyright © MOSA Project 2012")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

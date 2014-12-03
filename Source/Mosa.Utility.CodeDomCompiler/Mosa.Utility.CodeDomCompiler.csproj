@@ -70,5 +70,6 @@
   <ItemGroup>
     <Compile Include="Compiler.cs" />
     <Compile Include="CompilerSettings.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
 </Project>

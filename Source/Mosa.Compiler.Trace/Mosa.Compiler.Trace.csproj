@@ -67,6 +67,7 @@
     <Compile Include="CompilerEvent.cs" />
     <Compile Include="ITraceFactory.cs" />
     <Compile Include="ITraceListener.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TraceFilter.cs" />
     <Compile Include="TraceLog.cs" />
     <Compile Include="BuiltIn\DebugCompilerEventListener.cs" />

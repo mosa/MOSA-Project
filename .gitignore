@@ -1,6 +1,18 @@
-*.pdb
-*.vcproj.*.user
-*.resharper.user
+# User-specific files
+
+*.suo 
+*.user 
+*.userosscache 
+*.sln.docstates 
+
+# Build results
+
+[Oo]bj/
+[Bb]in
+[Dd]ebug*/
+[Rr]elease*/
+
+*.[Oo]bj
 *.suo
 *.ncb
 *.aps
@@ -12,7 +24,7 @@
 *.pidb
 *.userprefs
 *.FileListAbsolute.txt
-*.Cache
+*.[Cc]ache
 *.tlog
 *.vs10x
 *.exe.manifest
@@ -21,9 +33,6 @@
 *.vsp
 Thumbs.db
 build.force
-obj
-/bin
-/Bin
-/bin2
 /tmp
 /tags
+

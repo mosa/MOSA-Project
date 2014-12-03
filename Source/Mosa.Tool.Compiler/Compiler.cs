@@ -11,10 +11,10 @@
 
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Trace.BuiltIn;
 using Mosa.Compiler.Linker;
 using Mosa.Compiler.Linker.Elf32;
 using Mosa.Compiler.Linker.PE;
+using Mosa.Compiler.Trace.BuiltIn;
 using Mosa.Utility.Aot;
 using NDesk.Options;
 using System;
@@ -395,7 +395,7 @@ namespace Mosa.Tool.Compiler
 		private void Compile()
 		{
 			compiler.CompilerTrace.TraceListener = new ConsoleEventListener();
-
+			compiler.Load(inputFiles);
 			compiler.Execute();
 		}
 
@@ -404,7 +404,7 @@ namespace Mosa.Tool.Compiler
 		/// </summary>
 		private IEnumerable<string> GetInputFileNames()
 		{
-			foreach (FileInfo file in this.inputFiles)
+			foreach (FileInfo file in inputFiles)
 				yield return file.FullName;
 		}
 

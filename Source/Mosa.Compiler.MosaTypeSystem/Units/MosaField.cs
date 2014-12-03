@@ -13,7 +13,7 @@ using System;
 
 namespace Mosa.Compiler.MosaTypeSystem
 {
-	public class MosaField : MosaUnit, IEquatable<MosaField>
+	public sealed class MosaField : MosaUnit, IEquatable<MosaField>
 	{
 		public MosaFieldAttributes FieldAttributes { get; private set; }
 

@@ -180,11 +180,11 @@ namespace Mosa.Tool.Launcher
 			AddOutput(info);
 		}
 
-		void IBuilderEvent.NewStatus(string info)
+		void IBuilderEvent.NewStatus(string status)
 		{
 			MethodInvoker method = delegate()
 			{
-				NewStatus(info);
+				NewStatus(status);
 			};
 
 			Invoke(method);

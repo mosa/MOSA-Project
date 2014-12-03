@@ -88,6 +88,7 @@
     <Compile Include="MosaParameterAttributes.cs" />
     <Compile Include="MosaPropertyAttributes.cs" />
     <Compile Include="MosaTypeExtension.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SignatureName.cs" />
     <Compile Include="MosaTypeAttributes.cs" />
     <Compile Include="TypeSystemExtensions.cs" />

@@ -86,6 +86,7 @@
     <Compile Include="Analysis\IDominanceAnalysis.cs" />
     <Compile Include="BaseCallingConventionExtended.cs" />
     <Compile Include="DelegatePatcher.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="MosaCompiler.cs" />
     <Compile Include="InstructionSize.cs" />
     <Compile Include="Intrinsics\GetObjectAddress.cs" />
@@ -346,7 +347,6 @@
     <Compile Include="IR\TwoOperandInstruction.cs" />
     <Compile Include="IR\ZeroExtendedMove.cs" />
     <Compile Include="IVisitor.cs" />
-    <Compile Include="Stages\FlowGraphVisualizationStage.cs" />
     <Compile Include="CIL\NopInstruction.cs" />
     <Compile Include="InstructionSet.cs" />
     <Compile Include="InstructionData.cs" />

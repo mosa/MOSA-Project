@@ -59,6 +59,7 @@
     <Compile Include="Patch.cs" />
     <Compile Include="Flat\FlatLinker.cs" />
     <Compile Include="PE\PELinker.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SectionKind.cs" />
   </ItemGroup>
   <ItemGroup>

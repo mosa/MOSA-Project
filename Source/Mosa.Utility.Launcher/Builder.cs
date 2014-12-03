@@ -9,10 +9,10 @@
 
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Trace;
 using Mosa.Compiler.Linker;
 using Mosa.Compiler.Linker.Elf32;
 using Mosa.Compiler.Linker.PE;
+using Mosa.Compiler.Trace;
 using Mosa.Utility.Aot;
 using Mosa.Utility.BootImage;
 using System;
@@ -42,15 +42,14 @@ namespace Mosa.Utility.Launcher
 
 		protected string compiledFile;
 		protected string imageFile;
-
-		protected ITraceListener eventListener;
+		protected ITraceListener traceListener;
 
 		public Builder(Options options, AppLocations appLocations, IBuilderEvent builderEvent)
 		{
 			Compiler = new MosaCompiler();
 			Log = new List<string>();
 			Counters = new List<string>();
-			eventListener = new BuilderEventListener(this);
+			traceListener = new BuilderEventListener(this);
 			Options = options;
 			AppLocations = appLocations;
 			BuilderEvent = builderEvent;
@@ -102,7 +101,7 @@ namespace Mosa.Utility.Launcher
 				Directory.CreateDirectory(Options.DestinationDirectory);
 			}
 
-			Compiler.CompilerTrace.TraceListener = eventListener;
+			Compiler.CompilerTrace.TraceListener = traceListener;
 
 			var inputFiles = new List<FileInfo>();
 			inputFiles.Add(new FileInfo(Options.SourceFile));
