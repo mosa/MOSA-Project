@@ -14,7 +14,7 @@ namespace Mosa.Platform.x86.Intrinsic
 	/// <summary>
 	/// Representations the x86 out instruction.
 	/// </summary>
-	public sealed class Out : IIntrinsicPlatformMethod
+	public sealed class Out8 : IIntrinsicPlatformMethod
 	{
 		#region Methods
 
@@ -25,7 +25,7 @@ namespace Mosa.Platform.x86.Intrinsic
 		/// <param name="typeSystem">The type system.</param>
 		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, BaseMethodCompiler methodCompiler)
 		{
-			context.SetInstruction(X86.Out, null, context.Operand1, context.Operand2);
+			context.SetInstruction(X86.Out, InstructionSize.Size8, null, context.Operand1, context.Operand2);
 		}
 
 		#endregion Methods

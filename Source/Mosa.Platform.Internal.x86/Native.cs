@@ -73,25 +73,19 @@ namespace Mosa.Platform.Internal.x86
 		/// <summary>
 		/// Wraps the x86 out instruction to write to an 8-bit port.
 		/// </summary>
-		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.Out, Mosa.Platform.x86")]
+		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.Out8, Mosa.Platform.x86")]
 		public extern static void Out8(ushort address, byte value);
-
-		/// <summary>
-		/// Wraps the x86 out instruction to write to an 8-bit port.
-		/// </summary>
-		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.Out, Mosa.Platform.x86")]
-		public extern static void Out(ushort address, byte value);
 
 		/// <summary>
 		/// Wraps the x86 out instruction to write to a 16-bit port.
 		/// </summary>
-		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.Out, Mosa.Platform.x86")]
+		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.Out16, Mosa.Platform.x86")]
 		public extern static void Out16(ushort address, ushort value);
 
 		/// <summary>
 		/// Wraps the x86 out instruction to write to a 32-bit port.
 		/// </summary>
-		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.Out, Mosa.Platform.x86")]
+		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.Out32, Mosa.Platform.x86")]
 		public extern static void Out32(ushort address, uint value);
 
 		/// <summary>
