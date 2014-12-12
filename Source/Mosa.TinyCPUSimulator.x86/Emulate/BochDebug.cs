@@ -20,21 +20,21 @@ namespace Mosa.TinyCPUSimulator.x86.Emulate
 
 		protected readonly TextWriter debug;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="BochDebug"/> class.
-        /// </summary>
-        /// <param name="simCPU">The sim cpu.</param>
+		/// <summary>
+		/// Initializes a new instance of the <see cref="BochDebug"/> class.
+		/// </summary>
+		/// <param name="simCPU">The sim cpu.</param>
 		public BochDebug(SimCPU simCPU)
 			: base(simCPU)
 		{
 			debug = null;
 		}
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="BochDebug"/> class.
-        /// </summary>
-        /// <param name="simCPU">The sim cpu.</param>
-        /// <param name="output">The output.</param>
+		/// <summary>
+		/// Initializes a new instance of the <see cref="BochDebug"/> class.
+		/// </summary>
+		/// <param name="simCPU">The sim cpu.</param>
+		/// <param name="output">The output.</param>
 		public BochDebug(SimCPU simCPU, TextWriter output)
 			: base(simCPU)
 		{

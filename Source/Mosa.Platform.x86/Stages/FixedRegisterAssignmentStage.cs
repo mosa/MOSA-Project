@@ -48,7 +48,7 @@ namespace Mosa.Platform.x86.Stages
 		void IX86Visitor.Out(Context context)
 		{
 			// TRANSFORM: OUT <= EDX, EAX && OUT <= imm8, EAX
-            var size = context.Size;
+			var size = context.Size;
 
 			if (context.Operand1.IsCPURegister && context.Operand2.IsCPURegister &&
 				(context.Operand1.Register == GeneralPurposeRegister.EDX || context.Operand1.IsConstant) &&

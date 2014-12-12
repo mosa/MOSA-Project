@@ -8,8 +8,8 @@
  */
 
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Trace;
 using Mosa.Compiler.MosaTypeSystem;
+using Mosa.Compiler.Trace;
 using Mosa.TinyCPUSimulator;
 using Mosa.TinyCPUSimulator.Adaptor;
 using System;

@@ -93,69 +93,69 @@ namespace Mosa.TinyCPUSimulator
 			return SimOperand.CreateMemoryAddressLabel(size, label);
 		}
 
-        public void Add(BaseOpcode opcode, byte size, byte opcodeSize)
+		public void Add(BaseOpcode opcode, byte size, byte opcodeSize)
 		{
 			Add(new SimInstruction(opcode, size, opcodeSize));
 		}
 
-        public void Add(BaseOpcode opcode, byte size, SimOperand operand1, byte opcodeSize)
+		public void Add(BaseOpcode opcode, byte size, SimOperand operand1, byte opcodeSize)
 		{
-            Add(new SimInstruction(opcode, size, operand1, opcodeSize));
+			Add(new SimInstruction(opcode, size, operand1, opcodeSize));
 		}
 
-        public void Add(BaseOpcode opcode, byte size, SimOperand operand1, SimOperand operand2, byte opcodeSize)
+		public void Add(BaseOpcode opcode, byte size, SimOperand operand1, SimOperand operand2, byte opcodeSize)
 		{
-            Add(new SimInstruction(opcode, size, operand1, operand2, opcodeSize));
+			Add(new SimInstruction(opcode, size, operand1, operand2, opcodeSize));
 		}
 
-        public void Add(BaseOpcode opcode, byte size, SimOperand operand1, SimOperand operand2, SimOperand operand3, byte opcodeSize)
+		public void Add(BaseOpcode opcode, byte size, SimOperand operand1, SimOperand operand2, SimOperand operand3, byte opcodeSize)
 		{
-            Add(new SimInstruction(opcode, size, operand1, operand2, operand3, opcodeSize));
+			Add(new SimInstruction(opcode, size, operand1, operand2, operand3, opcodeSize));
 		}
 
-        public void Add(BaseOpcode opcode, byte size, SimOperand operand1, SimOperand operand2, SimOperand operand3, SimOperand operand4, byte opcodeSize)
+		public void Add(BaseOpcode opcode, byte size, SimOperand operand1, SimOperand operand2, SimOperand operand3, SimOperand operand4, byte opcodeSize)
 		{
-            Add(new SimInstruction(opcode, size, operand1, operand2, operand3, operand4, opcodeSize));
+			Add(new SimInstruction(opcode, size, operand1, operand2, operand3, operand4, opcodeSize));
 		}
 
-        public void Add(BaseOpcode opcode, byte size, SimRegister register1, byte opcodeSize)
+		public void Add(BaseOpcode opcode, byte size, SimRegister register1, byte opcodeSize)
 		{
-            Add(new SimInstruction(opcode, size, CreateOperand(register1), opcodeSize));
+			Add(new SimInstruction(opcode, size, CreateOperand(register1), opcodeSize));
 		}
 
-        public void Add(BaseOpcode opcode, byte size, SimRegister register1, SimRegister register2, byte opcodeSize)
+		public void Add(BaseOpcode opcode, byte size, SimRegister register1, SimRegister register2, byte opcodeSize)
 		{
-            Add(new SimInstruction(opcode, size, CreateOperand(register1), CreateOperand(register2), opcodeSize));
+			Add(new SimInstruction(opcode, size, CreateOperand(register1), CreateOperand(register2), opcodeSize));
 		}
 
-        public void Add(BaseOpcode opcode, byte size, SimRegister register1, SimRegister register2, SimRegister register3, byte opcodeSize)
+		public void Add(BaseOpcode opcode, byte size, SimRegister register1, SimRegister register2, SimRegister register3, byte opcodeSize)
 		{
-            Add(new SimInstruction(opcode, size, CreateOperand(register1), CreateOperand(register2), CreateOperand(register3), opcodeSize));
+			Add(new SimInstruction(opcode, size, CreateOperand(register1), CreateOperand(register2), CreateOperand(register3), opcodeSize));
 		}
 
-        public void Add(BaseOpcode opcode, byte size, SimRegister register1, SimRegister register2, SimRegister register3, SimRegister register4, byte opcodeSize)
+		public void Add(BaseOpcode opcode, byte size, SimRegister register1, SimRegister register2, SimRegister register3, SimRegister register4, byte opcodeSize)
 		{
-            Add(new SimInstruction(opcode, size, CreateOperand(register1), CreateOperand(register2), CreateOperand(register3), CreateOperand(register4), opcodeSize));
+			Add(new SimInstruction(opcode, size, CreateOperand(register1), CreateOperand(register2), CreateOperand(register3), CreateOperand(register4), opcodeSize));
 		}
 
-        public void Add(BaseOpcode opcode, byte size, SimRegister register1, SimOperand operand2, byte opcodeSize)
+		public void Add(BaseOpcode opcode, byte size, SimRegister register1, SimOperand operand2, byte opcodeSize)
 		{
-            Add(new SimInstruction(opcode, size, CreateOperand(register1), operand2, opcodeSize));
+			Add(new SimInstruction(opcode, size, CreateOperand(register1), operand2, opcodeSize));
 		}
 
-        public void Add(BaseOpcode opcode, byte size, SimOperand operand1, SimRegister register2, byte opcodeSize)
+		public void Add(BaseOpcode opcode, byte size, SimOperand operand1, SimRegister register2, byte opcodeSize)
 		{
-            Add(new SimInstruction(opcode, size, operand1, CreateOperand(register2), opcodeSize));
+			Add(new SimInstruction(opcode, size, operand1, CreateOperand(register2), opcodeSize));
 		}
 
-        public void Add(BaseOpcode opcode, byte size, SimRegister register1, uint immediate2, byte opcodeSize)
+		public void Add(BaseOpcode opcode, byte size, SimRegister register1, uint immediate2, byte opcodeSize)
 		{
-            Add(new SimInstruction(opcode, size, CreateOperand(register1), CreateImmediate(immediate2), opcodeSize));
+			Add(new SimInstruction(opcode, size, CreateOperand(register1), CreateImmediate(immediate2), opcodeSize));
 		}
 
-        public void Add(BaseOpcode opcode, byte size, SimRegister register1, int immediate2, byte opcodeSize)
+		public void Add(BaseOpcode opcode, byte size, SimRegister register1, int immediate2, byte opcodeSize)
 		{
-            Add(new SimInstruction(opcode, size, CreateOperand(register1), CreateImmediate(immediate2), opcodeSize));
+			Add(new SimInstruction(opcode, size, CreateOperand(register1), CreateImmediate(immediate2), opcodeSize));
 		}
 	}
 }

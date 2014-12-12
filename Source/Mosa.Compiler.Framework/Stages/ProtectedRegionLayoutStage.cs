@@ -49,6 +49,9 @@ namespace Mosa.Compiler.Framework.Stages
 			// dummy for now
 			writer.Write((uint)0);
 
+			if (trace.Active)
+				trace.Log("*****");
+
 			foreach (var region in MethodCompiler.ProtectedRegions)
 			{
 				var handler = (uint)codeEmitter.GetPosition(region.Handler.HandlerStart);
