@@ -24,11 +24,11 @@ namespace Mosa.TinyCPUSimulator.Debug
 
 		public void RunTest()
 		{
-            Add(Opcode.Mov, 32, CPU.EAX, 0x100, 1);
-            Add(Opcode.Mov, 32, CPU.EBX, 0x200, 1);
-            Add(Opcode.Add, 32, CPU.EAX, CPU.EBX, 1);
+			Add(Opcode.Mov, 32, CPU.EAX, 0x100, 1);
+			Add(Opcode.Mov, 32, CPU.EBX, 0x200, 1);
+			Add(Opcode.Add, 32, CPU.EAX, CPU.EBX, 1);
 
-            Add(Opcode.Mov, 32, CreateMemoryAddressOperand(32, CPU.EBX, CPU.EAX, 1, 0), CPU.EBX, 1);
+			Add(Opcode.Mov, 32, CreateMemoryAddressOperand(32, CPU.EBX, CPU.EAX, 1, 0), CPU.EBX, 1);
 
 			CPU.Monitor.AddBreakPoint(Address);
 

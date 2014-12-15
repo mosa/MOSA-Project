@@ -1335,7 +1335,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			// Get the ptr and clear context
 			Operand ptr = context.Operand1;
-			context.SetInstruction(IRInstruction.Nop, null, null);
+			context.SetInstruction(IRInstruction.Nop);
 
 			// Setup context for VmCall
 			ReplaceWithVmCall(context, VmCall.Memset);

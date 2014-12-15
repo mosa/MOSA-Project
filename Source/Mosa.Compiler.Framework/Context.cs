@@ -778,6 +778,18 @@ namespace Mosa.Compiler.Framework
 		/// Sets the instruction.
 		/// </summary>
 		/// <param name="instruction">The instruction.</param>
+		/// <param name="block1">The block1.</param>
+		/// <param name="block2">The block2.</param>
+		public void SetInstruction(BaseInstruction instruction, BasicBlock block1, BasicBlock block2)
+		{
+			SetInstruction(instruction);
+			SetBranch(block1, block2);
+		}
+
+		/// <summary>
+		/// Sets the instruction.
+		/// </summary>
+		/// <param name="instruction">The instruction.</param>
 		/// <param name="condition">The code.</param>
 		public void SetInstruction(BaseInstruction instruction, ConditionCode condition)
 		{
@@ -1153,6 +1165,17 @@ namespace Mosa.Compiler.Framework
 		/// Appends an instruction after the current index.
 		/// </summary>
 		/// <param name="instruction">The instruction to append.</param>
+		/// <param name="block">The basic block.</param>
+		public void AppendInstruction(BaseInstruction instruction, BasicBlock block1, BasicBlock block2)
+		{
+			AppendInstruction();
+			SetInstruction(instruction, block1, block2);
+		}
+
+		/// <summary>
+		/// Appends an instruction after the current index.
+		/// </summary>
+		/// <param name="instruction">The instruction to append.</param>
 		/// <param name="code">The condition code.</param>
 		/// <param name="block">The basic block.</param>
 		public void AppendInstruction(BaseInstruction instruction, ConditionCode code, BasicBlock block)
@@ -1401,6 +1424,16 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
+		/// Sets the branch targets.
+		/// </summary>
+		/// <param name="block1">The block1.</param>
+		/// <param name="block2">The block2.</param>
+		public void SetBranch(BasicBlock block1, BasicBlock block2)
+		{
+			SetBranch(block1.Label, block2.Label);
+		}
+
+		/// <summary>
 		/// Sets the branch target.
 		/// </summary>
 		/// <param name="target1">The first target.</param>
@@ -1410,6 +1443,20 @@ namespace Mosa.Compiler.Framework
 				AllocateBranchTargets(1);
 
 			BranchTargets[0] = target1;
+		}
+
+		/// <summary>
+		/// Sets the branch target.
+		/// </summary>
+		/// <param name="target1">The target1.</param>
+		/// <param name="target2">The target2.</param>
+		public void SetBranch(int target1, int target2)
+		{
+			if (BranchTargets == null)
+				AllocateBranchTargets(2);
+
+			BranchTargets[0] = target1;
+			BranchTargets[1] = target2;
 		}
 
 		/// <summary>

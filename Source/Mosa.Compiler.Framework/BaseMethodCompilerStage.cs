@@ -400,13 +400,17 @@ namespace Mosa.Compiler.Framework
 			// Find branch or jump to (to) and replace it with js
 			while (!ctx.IsBlockStartInstruction)
 			{
-				if (ctx.BranchTargets != null)
+				if (ctx.Instruction.FlowControl == FlowControl.ConditionalBranch ||
+						ctx.Instruction.FlowControl == FlowControl.UnconditionalBranch)
 				{
 					var targets = ctx.BranchTargets;
+
 					for (int index = 0; index < targets.Length; index++)
 					{
 						if (targets[index] == oldTarget.Label)
+						{
 							targets[index] = newTarget.Label;
+						}
 					}
 				}
 
@@ -455,6 +459,23 @@ namespace Mosa.Compiler.Framework
 			foreach (var handler in MethodCompiler.Method.ExceptionHandlers)
 			{
 				if (handler.IsLabelWithinTry(label) || handler.IsLabelWithinHandler(label))
+				{
+					return handler;
+				}
+			}
+
+			return null;
+		}
+
+		protected MosaExceptionHandler FindFinallyHandler(Context context)
+		{
+			MosaExceptionHandler innerClause = null;
+
+			int label = context.Label;
+
+			foreach (var handler in MethodCompiler.Method.ExceptionHandlers)
+			{
+				if (handler.IsLabelWithinHandler(label))
 				{
 					return handler;
 				}

@@ -7,6 +7,7 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
 */
 
+using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.Analysis;
 using Mosa.Compiler.Framework.CIL;
 using Mosa.Compiler.Framework.IR;
@@ -19,6 +20,8 @@ namespace Mosa.Compiler.Framework.Stages
 	/// </summary>
 	public class ProtectedRegionStage : BaseMethodCompilerStage
 	{
+		private KeyedList<MosaExceptionHandler, BasicBlock> returns = new KeyedList<MosaExceptionHandler, BasicBlock>();
+
 		protected override void Run()
 		{
 			if (!HasProtectedRegions)
@@ -57,7 +60,11 @@ namespace Mosa.Compiler.Framework.Stages
 				}
 				else if (handler.HandlerType == ExceptionHandlerType.Finally)
 				{
-					context.AppendInstruction(IRInstruction.FinallyStart);
+					var exceptionType = TypeSystem.GetTypeByName("System", "Exception");
+
+					var exceptionObject = MethodCompiler.CreateVirtualRegister(exceptionType);
+
+					context.AppendInstruction(IRInstruction.FinallyStart, exceptionObject);
 				}
 			}
 		}
@@ -75,7 +82,18 @@ namespace Mosa.Compiler.Framework.Stages
 
 				if (context.Instruction is EndFinallyInstruction)
 				{
-					context.ReplaceInstructionOnly(IRInstruction.FinallyEnd);
+					context.SetInstruction(IRInstruction.FinallyEnd);
+
+					var entry = FindFinallyHandler(context);
+					var list = returns.Get(entry);
+
+					if (list == null)
+						return;
+
+					foreach (var returnBlock in list)
+					{
+						context.AppendInstruction(IRInstruction.FinallyReturn, returnBlock);
+					}
 				}
 				else if (context.Instruction is LeaveInstruction)
 				{
@@ -92,21 +110,23 @@ namespace Mosa.Compiler.Framework.Stages
 
 					if (createLink)
 					{
-						var tryEndNext = context.BranchTargets[0];
-						var tryEndNextBlock = BasicBlocks.GetByLabel(tryEndNext);
+						var tryFinally = context.BranchTargets[0];
+						var tryFinallyBlock = BasicBlocks.GetByLabel(tryFinally);
+
+						returns.Add(entry, tryFinallyBlock);
+
+						context.SetInstruction(IRInstruction.TryEnd);
 
 						if (entry.HandlerType == ExceptionHandlerType.Finally)
 						{
 							var finallyBlock = BasicBlocks.GetByLabel(entry.HandlerStart);
 
-							context.SetInstruction(IRInstruction.CallFinally, finallyBlock);
-							context.AppendInstruction(IRInstruction.TryEnd);
+							context.AppendInstruction(IRInstruction.CallFinally, finallyBlock, tryFinallyBlock);
 						}
 						else
 						{
-							context.SetInstruction(IRInstruction.TryEnd);
+							context.AppendInstruction(IRInstruction.Jmp, tryFinallyBlock);
 						}
-						context.AppendInstruction(IRInstruction.Jmp, tryEndNextBlock);
 					}
 					else
 					{

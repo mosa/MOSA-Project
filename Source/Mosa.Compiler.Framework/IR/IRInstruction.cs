@@ -293,6 +293,11 @@ namespace Mosa.Compiler.Framework.IR
 		///
 		/// </summary>
 		public static readonly BaseIRInstruction FinallyEnd = new FinallyEnd();
+		
+		/// <summary>
+		///
+		/// </summary>
+		public static readonly BaseIRInstruction FinallyReturn = new FinallyReturn();
 
 		/// <summary>
 		///

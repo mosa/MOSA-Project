@@ -17,7 +17,9 @@ namespace Mosa.Compiler.Framework.IR
 
 		#endregion Construction
 
-		#region Methods
+		#region IRInstruction Overrides
+
+		public override FlowControl FlowControl { get { return FlowControl.ConditionalBranch; } }
 
 		/// <summary>
 		/// Abstract visitor method for intermediate representation visitors.
@@ -29,6 +31,6 @@ namespace Mosa.Compiler.Framework.IR
 			visitor.IntegerCompareBranch(context);
 		}
 
-		#endregion Methods
+		#endregion IRInstruction Overrides
 	}
 }

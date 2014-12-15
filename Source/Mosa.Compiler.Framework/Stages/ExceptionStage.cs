@@ -52,7 +52,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 						ctx.SetInstruction(IRInstruction.KillAll);
 						ctx.AppendInstruction(IRInstruction.Move, exceptionRegister, nullOperand);
-						ctx.AppendInstruction(IRInstruction.InternalCall);
+						ctx.AppendInstruction(IRInstruction.Call);
 						ctx.SetBranch(target);
 					}
 					else if (ctx.Instruction == IRInstruction.FinallyStart)
