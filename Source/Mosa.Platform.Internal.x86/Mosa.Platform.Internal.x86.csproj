@@ -65,6 +65,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Builders\RuntimeAssembly.cs" />
+    <Compile Include="Builders\RuntimeCustomAttributeData.cs" />
     <Compile Include="Builders\RuntimeType.cs" />
     <Compile Include="Builders\RuntimeTypeInfo.cs" />
     <Compile Include="Division.cs" />

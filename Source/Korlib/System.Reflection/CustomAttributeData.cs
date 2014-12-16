@@ -17,9 +17,9 @@ namespace System.Reflection
 	[Serializable]
 	public class CustomAttributeData
 	{
-		private Type attributeType;
-		private IList<CustomAttributeTypedArgument> ctorArgs;
-		private IList<CustomAttributeNamedArgument> namedArgs;
+		protected Type attributeType;
+		protected IList<CustomAttributeTypedArgument> ctorArgs;
+		protected IList<CustomAttributeNamedArgument> namedArgs;
 
 		/// <summary>
 		/// The type of the attribute.

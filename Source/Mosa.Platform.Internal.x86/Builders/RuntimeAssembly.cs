@@ -41,7 +41,7 @@ namespace System
 				{
 					if ((type.attributes & TypeAttributes.VisibilityMask) != TypeAttributes.Public)
 						continue;
-					types.Add(type);
+					types.AddLast(type);
 				}
 				return types;
 			}
@@ -66,9 +66,9 @@ namespace System
 
 		internal RuntimeType ProcessType(RuntimeTypeHandle handle)
 		{
-			this.typeHandles.Add(handle);
+			this.typeHandles.AddLast(handle);
 			var type = new RuntimeType(handle);
-			this.typeList.Add(type);
+			this.typeList.AddLast(type);
 			return type;
 		}
 

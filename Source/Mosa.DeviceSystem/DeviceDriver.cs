@@ -57,7 +57,7 @@ namespace Mosa.DeviceSystem
 		/// <param name="memoryAttribute">The memory attribute.</param>
 		public void Add(DeviceDriverPhysicalMemoryAttribute memoryAttribute)
 		{
-			memoryAttributes.Add(memoryAttribute);
+			memoryAttributes.AddLast(memoryAttribute);
 		}
 	}
 }

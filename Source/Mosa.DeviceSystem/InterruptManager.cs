@@ -70,7 +70,7 @@ namespace Mosa.DeviceSystem
 			try
 			{
 				spinLock.Enter();
-				interruptHandlers[irq].Add(hardwareDevice);
+				interruptHandlers[irq].AddLast(hardwareDevice);
 			}
 			finally
 			{

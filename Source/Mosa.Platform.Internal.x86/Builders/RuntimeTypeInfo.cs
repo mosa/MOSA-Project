@@ -24,12 +24,16 @@ namespace System
 		private string fullname;
 		private TypeCode typeCode;
 		private TypeAttributes attributes;
+		private Type baseType;
 		private Type declaringType;
 		private Type elementType;
 
+		internal readonly Type ValueType = typeof(System.ValueType);
+		internal readonly Type EnumType = typeof(System.Enum);
+
 		public override string AssemblyQualifiedName
 		{
-			get { throw new NotImplementedException(); }
+			get { return this.assemblyQualifiedName; }
 		}
 
 		public override Assembly Assembly
@@ -44,7 +48,7 @@ namespace System
 
 		public override Type BaseType
 		{
-			get { throw new NotImplementedException(); }
+			get { return (this.IsInterface) ? null : this.baseType; }
 		}
 
 		public override bool ContainsGenericParameters
@@ -79,7 +83,7 @@ namespace System
 
 		public override bool IsEnum
 		{
-			get { throw new NotImplementedException(); }
+			get { return this.BaseType == EnumType; }
 		}
 
 		public override bool IsGenericParameter
@@ -130,6 +134,15 @@ namespace System
 			this.typeCode = (TypeCode)((*this.typeStruct).Attributes >> 24);
 			this.attributes = (TypeAttributes)((*this.typeStruct).Attributes & 0x00FFFFFF);
 
+			// Base Type
+			if ((*this.typeStruct).ParentType != null)
+			{
+				RuntimeTypeHandle parentHandle = new RuntimeTypeHandle();
+				((uint**)&parentHandle)[0] = (uint*)((*this.typeStruct).ParentType);
+				this.baseType = Type.GetTypeFromHandle(parentHandle);
+			}
+
+			// Declaring Type
 			if ((*this.typeStruct).DeclaringType != null)
 			{
 				RuntimeTypeHandle declaringHandle = new RuntimeTypeHandle();
@@ -137,6 +150,7 @@ namespace System
 				this.declaringType = Type.GetTypeFromHandle(declaringHandle);
 			}
 
+			// Element Type
 			if ((*this.typeStruct).ElementType != null)
 			{
 				RuntimeTypeHandle elementHandle = new RuntimeTypeHandle();
@@ -147,8 +161,7 @@ namespace System
 
 		public override Type AsType()
 		{
-			// TODO
-			return base.AsType();
+			return Type.GetTypeFromHandle(this.handle);
 		}
 
 		public override int GetArrayRank()
@@ -164,12 +177,14 @@ namespace System
 
 		public override Type[] GetGenericParameterConstraints()
 		{
-			throw new NotImplementedException();
+			// No planned support
+			throw new NotSupportedException();
 		}
 
 		public override Type GetGenericTypeDefinition()
 		{
-			throw new NotImplementedException();
+			// No planned support
+			throw new NotSupportedException();
 		}
 
 		protected override bool HasElementTypeImpl()
@@ -200,12 +215,21 @@ namespace System
 
 		protected override bool IsPrimitiveImpl()
 		{
-			throw new NotImplementedException();
+			return (this.typeCode == TypeCode.Boolean
+				|| this.typeCode == TypeCode.Char
+				|| (this.typeCode >= TypeCode.I && this.typeCode <= TypeCode.I8)
+				|| (this.typeCode >= TypeCode.U && this.typeCode <= TypeCode.U8)
+				|| this.typeCode == TypeCode.R4
+				|| this.typeCode == TypeCode.R8);
 		}
 
 		protected override bool IsValueTypeImpl()
 		{
-			throw new NotImplementedException();
+			Type thisType = this.AsType();
+			if (thisType == ValueType || thisType == EnumType)
+				return false;
+
+			return this.IsSubclassOf(ValueType);
 		}
 
 		public override Type MakeArrayType()

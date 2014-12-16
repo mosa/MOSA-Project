@@ -100,8 +100,8 @@ namespace Mosa.DeviceSystem
 			{
 				switch (pciBaseAddress.Region)
 				{
-					case AddressType.IO: ioPortRegions.Add(new IOPortRegion((ushort)pciBaseAddress.Address, (ushort)pciBaseAddress.Size)); break;
-					case AddressType.Memory: memoryRegions.Add(new MemoryRegion(pciBaseAddress.Address, pciBaseAddress.Size)); break;
+					case AddressType.IO: ioPortRegions.AddLast(new IOPortRegion((ushort)pciBaseAddress.Address, (ushort)pciBaseAddress.Size)); break;
+					case AddressType.Memory: memoryRegions.AddLast(new MemoryRegion(pciBaseAddress.Address, pciBaseAddress.Size)); break;
 					default: break;
 				}
 			}
@@ -111,7 +111,7 @@ namespace Mosa.DeviceSystem
 				if (memoryAttribute.MemorySize > 0)
 				{
 					IMemory memory = HAL.AllocateMemory(memoryAttribute.MemorySize, memoryAttribute.MemoryAlignment);
-					memoryRegions.Add(new MemoryRegion(memory.Address, memory.Size));
+					memoryRegions.AddLast(new MemoryRegion(memory.Address, memory.Size));
 				}
 			}
 
@@ -158,19 +158,19 @@ namespace Mosa.DeviceSystem
 				LinkedList<IIOPortRegion> ioPortRegions = new LinkedList<IIOPortRegion>();
 				LinkedList<IMemoryRegion> memoryRegions = new LinkedList<IMemoryRegion>();
 
-				ioPortRegions.Add(new IOPortRegion(driverAtttribute.BasePort, driverAtttribute.PortRange));
+				ioPortRegions.AddLast(new IOPortRegion(driverAtttribute.BasePort, driverAtttribute.PortRange));
 
 				if (driverAtttribute.AltBasePort != 0x00)
-					ioPortRegions.Add(new IOPortRegion(driverAtttribute.AltBasePort, driverAtttribute.AltPortRange));
+					ioPortRegions.AddLast(new IOPortRegion(driverAtttribute.AltBasePort, driverAtttribute.AltPortRange));
 
 				if (driverAtttribute.BaseAddress != 0x00)
-					memoryRegions.Add(new MemoryRegion(driverAtttribute.BaseAddress, driverAtttribute.AddressRange));
+					memoryRegions.AddLast(new MemoryRegion(driverAtttribute.BaseAddress, driverAtttribute.AddressRange));
 
 				foreach (DeviceDriverPhysicalMemoryAttribute memoryAttribute in deviceDriver.MemoryAttributes)
 					if (memoryAttribute.MemorySize > 0)
 					{
 						IMemory memory = HAL.AllocateMemory(memoryAttribute.MemorySize, memoryAttribute.MemoryAlignment);
-						memoryRegions.Add(new MemoryRegion(memory.Address, memory.Size));
+						memoryRegions.AddLast(new MemoryRegion(memory.Address, memory.Size));
 					}
 
 				IHardwareResources hardwareResources = new HardwareResources(resourceManager, ioPortRegions.ToArray(), memoryRegions.ToArray(), new InterruptHandler(resourceManager.InterruptManager, driverAtttribute.IRQ, hardwareDevice));

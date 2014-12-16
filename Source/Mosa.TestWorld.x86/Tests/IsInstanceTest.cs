@@ -27,17 +27,17 @@ namespace Mosa.TestWorld.x86.Tests
 		public IsInstanceTest()
 			: base("IsInstance")
 		{
-			testMethods.Add(IsInstTest1);
-			testMethods.Add(IsInstTest2);
-			testMethods.Add(IsInstTest3);
-			testMethods.Add(IsInstTest4);
-			testMethods.Add(IsInstTest5);
-			testMethods.Add(IsInstTest6);
-			testMethods.Add(IsInstTest7);
-			testMethods.Add(IsInstTest8);
-			testMethods.Add(IsInstTest9);
-			testMethods.Add(IsInstTest10);
-			testMethods.Add(IsInstTest11);
+			testMethods.AddLast(IsInstTest1);
+			testMethods.AddLast(IsInstTest2);
+			testMethods.AddLast(IsInstTest3);
+			testMethods.AddLast(IsInstTest4);
+			testMethods.AddLast(IsInstTest5);
+			testMethods.AddLast(IsInstTest6);
+			testMethods.AddLast(IsInstTest7);
+			testMethods.AddLast(IsInstTest8);
+			testMethods.AddLast(IsInstTest9);
+			testMethods.AddLast(IsInstTest10);
+			testMethods.AddLast(IsInstTest11);
 		}
 
 		public static bool IsInstTest1()

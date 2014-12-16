@@ -94,7 +94,7 @@ namespace Mosa.Platform.Internal.x86
 			{
 				// Get the pointer to the Assembly Metadata
 				uint* ptr = (uint*)(assemblyListTable[1 + i]);
-				Assemblies.Add(new RuntimeAssembly(ptr));
+				Assemblies.AddLast(new RuntimeAssembly(ptr));
 			}
 
 			foreach (RuntimeAssembly assembly in Assemblies)

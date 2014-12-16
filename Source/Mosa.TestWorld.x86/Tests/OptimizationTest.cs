@@ -13,17 +13,17 @@ namespace Mosa.TestWorld.x86.Tests
 		public OptimizationTest()
 			: base("Optimization")
 		{
-			testMethods.Add(OptimizationTest1);
-			testMethods.Add(OptimizationTest2);
-			testMethods.Add(OptimizationTest3);
-			testMethods.Add(OptimizationTest4);
-			testMethods.Add(OptimizationTest5);
-			testMethods.Add(OptimizationTest6);
-			testMethods.Add(OptimizationTest7);
-			testMethods.Add(OptimizationTest8);
-			testMethods.Add(OptimizationTest9);
-			testMethods.Add(OptimizationTest10);
-			testMethods.Add(OptimizationTest11);
+			testMethods.AddLast(OptimizationTest1);
+			testMethods.AddLast(OptimizationTest2);
+			testMethods.AddLast(OptimizationTest3);
+			testMethods.AddLast(OptimizationTest4);
+			testMethods.AddLast(OptimizationTest5);
+			testMethods.AddLast(OptimizationTest6);
+			testMethods.AddLast(OptimizationTest7);
+			testMethods.AddLast(OptimizationTest8);
+			testMethods.AddLast(OptimizationTest9);
+			testMethods.AddLast(OptimizationTest10);
+			testMethods.AddLast(OptimizationTest11);
 		}
 
 		public static bool OptimizationTest1()

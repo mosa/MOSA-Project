@@ -41,7 +41,7 @@ namespace Mosa.DeviceSystem
 		public void Add(IDevice device)
 		{
 			spinLock.Enter();
-			devices.Add(device);
+			devices.AddLast(device);
 			spinLock.Exit();
 		}
 
@@ -58,7 +58,7 @@ namespace Mosa.DeviceSystem
 
 			foreach (IDevice device in devices)
 				if (match.IsMatch(device))
-					list.Add(device);
+					list.AddLast(device);
 
 			spinLock.Exit();
 
@@ -79,7 +79,7 @@ namespace Mosa.DeviceSystem
 
 			foreach (IDevice device in devices)
 				if (match1.IsMatch(device) && (match2.IsMatch(device)))
-					list.Add(device);
+					list.AddLast(device);
 
 			spinLock.Exit();
 
@@ -101,7 +101,7 @@ namespace Mosa.DeviceSystem
 
 			foreach (IDevice device in devices)
 				if (match1.IsMatch(device) && (match2.IsMatch(device)) && (match3.IsMatch(device)))
-					list.Add(device);
+					list.AddLast(device);
 
 			spinLock.Exit();
 
@@ -131,7 +131,7 @@ namespace Mosa.DeviceSystem
 					}
 
 				if (matched)
-					list.Add(device);
+					list.AddLast(device);
 			}
 
 			spinLock.Exit();
@@ -160,7 +160,7 @@ namespace Mosa.DeviceSystem
 			LinkedList<IDevice> list = new LinkedList<IDevice>();
 
 			foreach (IDevice device in devices)
-				list.Add(device);
+				list.AddLast(device);
 
 			spinLock.Exit();
 

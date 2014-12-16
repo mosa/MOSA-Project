@@ -16,14 +16,14 @@ namespace Mosa.TestWorld.x86.Tests
 		public ReflectionTest()
 			: base("Reflection")
 		{
-			testMethods.Add(PointerTest);
-			testMethods.Add(HandleTest);
-			testMethods.Add(FindTypeOfTest);
-			testMethods.Add(FindTypeByNameTest);
-			testMethods.Add(CompareTypeHandlesTest);
-			testMethods.Add(TypeHandleFromObjectTest);
-			testMethods.Add(DeclaringTypeTest);
-			testMethods.Add(ElementTypeTest);
+			testMethods.AddLast(PointerTest);
+			testMethods.AddLast(HandleTest);
+			testMethods.AddLast(FindTypeOfTest);
+			testMethods.AddLast(FindTypeByNameTest);
+			testMethods.AddLast(CompareTypeHandlesTest);
+			testMethods.AddLast(TypeHandleFromObjectTest);
+			testMethods.AddLast(DeclaringTypeTest);
+			testMethods.AddLast(ElementTypeTest);
 		}
 
 		public static bool PointerTest()
