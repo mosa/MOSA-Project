@@ -17,17 +17,17 @@ namespace Mosa.TestWorld.x86.Tests
 		public StringTest()
 			: base("String")
 		{
-			testMethods.Add(ConcatTest1);
-			testMethods.Add(ConcatTest2);
-			testMethods.Add(ConcatTest3);
-			testMethods.Add(ConcatTest4);
-			testMethods.Add(SubStringTest);
-			testMethods.Add(IndexOfTest);
-			testMethods.Add(LengthTest);
-			testMethods.Add(ToUpperTest);
-			testMethods.Add(ToLowerTest);
-			testMethods.Add(SubStringTest2);
-			testMethods.Add(SubStringTest3);
+			testMethods.AddLast(ConcatTest1);
+			testMethods.AddLast(ConcatTest2);
+			testMethods.AddLast(ConcatTest3);
+			testMethods.AddLast(ConcatTest4);
+			testMethods.AddLast(SubStringTest);
+			testMethods.AddLast(IndexOfTest);
+			testMethods.AddLast(LengthTest);
+			testMethods.AddLast(ToUpperTest);
+			testMethods.AddLast(ToLowerTest);
+			testMethods.AddLast(SubStringTest2);
+			testMethods.AddLast(SubStringTest3);
 		}
 
 		public static bool ConcatTest1()

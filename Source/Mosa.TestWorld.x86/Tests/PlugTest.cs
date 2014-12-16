@@ -54,9 +54,9 @@ namespace Mosa.TestWorld.x86.Tests
 		public PlugTestTest()
 			: base("Plug")
 		{
-			testMethods.Add(PlugTestTest1);
-			testMethods.Add(PlugTestTest2);
-			testMethods.Add(PlugTestTest3);
+			testMethods.AddLast(PlugTestTest1);
+			testMethods.AddLast(PlugTestTest2);
+			testMethods.AddLast(PlugTestTest3);
 		}
 
 		public static bool PlugTestTest1()

@@ -155,7 +155,7 @@ namespace System
 		/// Returns a Type object that represents a generic type definition from which the current generic type can be constructed.
 		/// </summary>
 		/// <returns>A Type object representing a generic type from which the current type can be constructed.</returns>
-		public abstract Type[] GetGenericTypeDefinition();
+		public abstract Type GetGenericTypeDefinition();
 
 		/// <summary>
 		/// Returns the hash code for this instance.

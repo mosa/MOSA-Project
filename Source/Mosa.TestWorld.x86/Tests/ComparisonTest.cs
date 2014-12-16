@@ -15,9 +15,9 @@ namespace Mosa.TestWorld.x86.Tests
 		public ComparisonTest()
 			: base("Comparison")
 		{
-			testMethods.Add(CompareTest1);
-			testMethods.Add(CompareTest2);
-			testMethods.Add(CompareTest3);
+			testMethods.AddLast(CompareTest1);
+			testMethods.AddLast(CompareTest2);
+			testMethods.AddLast(CompareTest3);
 		}
 
 		public static bool CompareTest1()

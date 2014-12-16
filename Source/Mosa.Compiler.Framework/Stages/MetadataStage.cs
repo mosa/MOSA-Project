@@ -99,7 +99,7 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 			writer1.WriteZeroBytes(TypeLayout.NativePointerSize);
 
-			// 3. Flags: IsReflectionOnly (32bit length)
+			// 3. Attributes - IsReflectionOnly (32bit length)
 			uint flags = 0x0;
 			if (module.IsReflectionOnly) flags |= 0x1;
 			writer1.Write(flags);
@@ -161,8 +161,8 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 			writer1.WriteZeroBytes(TypeLayout.NativePointerSize);
 
-			// 3. Attributes
-			writer1.Write((uint)type.TypeAttributes);
+			// 3. Type Code & Attributes
+			writer1.Write(((uint)type.TypeCode << 24) + (uint)type.TypeAttributes);
 
 			// 4. Size
 			writer1.Write((uint)TypeLayout.GetTypeSize(type));
@@ -178,7 +178,21 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 			writer1.WriteZeroBytes(TypeLayout.NativePointerSize);
 
-			// 7. Constructor that accepts no parameters, if any, for this type
+			// 7. Pointer to Declaring Type
+			if (type.DeclaringType != null)
+			{
+				Linker.Link(LinkType.AbsoluteAddress, NativePatchType, typeTableSymbol, (int)writer1.Position, 0, type.DeclaringType.FullName + Metadata.TypeDefinition, SectionKind.ROData, 0);
+			}
+			writer1.WriteZeroBytes(TypeLayout.NativePointerSize);
+
+			// 8. Pointer to Element Type
+			if (type.ElementType != null)
+			{
+				Linker.Link(LinkType.AbsoluteAddress, NativePatchType, typeTableSymbol, (int)writer1.Position, 0, type.ElementType.FullName + Metadata.TypeDefinition, SectionKind.ROData, 0);
+			}
+			writer1.WriteZeroBytes(TypeLayout.NativePointerSize);
+
+			// 9. Constructor that accepts no parameters, if any, for this type
 			foreach (var method in type.Methods)
 			{
 				if (!method.Name.Equals(".ctor") || !(method.Signature.Parameters.Count == 0) || method.HasOpenGenericParams)
@@ -189,7 +203,7 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 			writer1.WriteZeroBytes(TypeLayout.NativePointerSize);
 
-			// 8. Properties (if any)
+			// 10. Properties (if any)
 			if (type.Properties.Count > 0)
 			{
 				var propertiesSymbol = CreatePropertyDefinitions(type);
@@ -200,7 +214,7 @@ namespace Mosa.Compiler.Framework.Stages
 			// If the type is not an interface continue, otherwise just pad until the end
 			if (!type.IsInterface)
 			{
-				// 9. Fields (if any)
+				// 11. Fields (if any)
 				if (type.Fields.Count > 0)
 				{
 					var fieldsSymbol = CreateFieldDefinitions(type);
@@ -211,29 +225,29 @@ namespace Mosa.Compiler.Framework.Stages
 				// If the type doesn't use interfaces then skip 9 and 10
 				if (type.Interfaces.Count > 0)
 				{
-					// 10. Pointer to Interface Slots
+					// 12. Pointer to Interface Slots
 					var interfaceSlotTableSymbol = CreateInterfaceSlotTable(type);
 					Linker.Link(LinkType.AbsoluteAddress, NativePatchType, typeTableSymbol, (int)writer1.Position, 0, interfaceSlotTableSymbol, 0);
 					writer1.WriteZeroBytes(TypeLayout.NativePointerSize);
 
-					// 11. Pointer to Interface Bitmap
+					// 13. Pointer to Interface Bitmap
 					var interfaceBitmapSymbol = CreateInterfaceBitmap(type);
 					Linker.Link(LinkType.AbsoluteAddress, NativePatchType, typeTableSymbol, (int)writer1.Position, 0, interfaceBitmapSymbol, 0);
 					writer1.WriteZeroBytes(TypeLayout.NativePointerSize);
 				}
 				else
 				{
-					// Fill 10 and 11 with zeros
+					// Fill 12 and 13 with zeros
 					writer1.WriteZeroBytes(TypeLayout.NativePointerSize * 2);
 				}
 
 				// For the next part we'll need to get the list of methods from the MosaTypeLayout
 				var methodList = TypeLayout.GetMethodTable(type) ?? new List<MosaMethod>();
 
-				// 12. Number of Methods
+				// 14. Number of Methods
 				writer1.Write(methodList.Count);
 
-				// 13. Pointer to Method Definitions
+				// 15. Pointer to Method Definitions
 				foreach (MosaMethod method in methodList)
 				{
 					// Create definition and get the symbol
@@ -246,7 +260,7 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 			else
 			{
-				// Fill 9, 10, 11, 12 with zeros, 13 can be left out.
+				// Fill 11, 12, 13, 14 with zeros, 15 can be left out.
 				writer1.WriteZeroBytes(TypeLayout.NativePointerSize * 4);
 			}
 

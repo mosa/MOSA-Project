@@ -13,22 +13,52 @@ using x86Runtime = Mosa.Platform.Internal.x86.Runtime;
 
 namespace System
 {
-	public sealed unsafe class RuntimeType : Type
+	public sealed unsafe class RuntimeTypeInfo : TypeInfo
 	{
 		private MetadataTypeStruct* typeStruct;
+		private Assembly assembly;
+		private RuntimeTypeHandle handle;
 		private string assemblyQualifiedName;
 		private string name;
 		private string @namespace;
 		private string fullname;
-		private RuntimeTypeHandle handle;
 		private TypeCode typeCode;
-		internal TypeAttributes attributes; // FIXME: this should be private, only temporarily internal
+		private TypeAttributes attributes;
+		private Type baseType;
 		private Type declaringType;
 		private Type elementType;
+
+		internal readonly Type ValueType = typeof(System.ValueType);
+		internal readonly Type EnumType = typeof(System.Enum);
 
 		public override string AssemblyQualifiedName
 		{
 			get { return this.assemblyQualifiedName; }
+		}
+
+		public override Assembly Assembly
+		{
+			get { return this.assembly; }
+		}
+
+		public override TypeAttributes Attributes
+		{
+			get { return this.attributes; }
+		}
+
+		public override Type BaseType
+		{
+			get { return (this.IsInterface) ? null : this.baseType; }
+		}
+
+		public override bool ContainsGenericParameters
+		{
+			get { throw new NotImplementedException(); }
+		}
+
+		public override MethodBase DeclaringMethod
+		{
+			get { throw new NotImplementedException(); }
 		}
 
 		public override Type DeclaringType
@@ -51,13 +81,30 @@ namespace System
 			get { return new Type[0]; }
 		}
 
-		public override bool IsConstructedGenericType
+		public override bool IsEnum
+		{
+			get { return this.BaseType == EnumType; }
+		}
+
+		public override bool IsGenericParameter
 		{
 			// We don't know so just return false
 			get { return false; }
 		}
 
-		public override bool IsGenericParameter
+		public override bool IsGenericType
+		{
+			// We don't know so just return false
+			get { return false; }
+		}
+
+		public override bool IsGenericTypeDefinition
+		{
+			// We don't know so just return false
+			get { return false; }
+		}
+
+		public override bool IsSerializable
 		{
 			// We don't know so just return false
 			get { return false; }
@@ -73,13 +120,9 @@ namespace System
 			get { return this.@namespace; }
 		}
 
-		public override RuntimeTypeHandle TypeHandle
+		public RuntimeTypeInfo(RuntimeTypeHandle handle, Assembly assembly)
 		{
-			get { return this.handle; }
-		}
-
-		internal RuntimeType(RuntimeTypeHandle handle)
-		{
+			this.assembly = assembly;
 			this.handle = handle;
 			this.typeStruct = (MetadataTypeStruct*)((uint**)&handle)[0];
 
@@ -90,10 +133,16 @@ namespace System
 
 			this.typeCode = (TypeCode)((*this.typeStruct).Attributes >> 24);
 			this.attributes = (TypeAttributes)((*this.typeStruct).Attributes & 0x00FFFFFF);
-		}
 
-		internal void FindRelativeTypes()
-		{
+			// Base Type
+			if ((*this.typeStruct).ParentType != null)
+			{
+				RuntimeTypeHandle parentHandle = new RuntimeTypeHandle();
+				((uint**)&parentHandle)[0] = (uint*)((*this.typeStruct).ParentType);
+				this.baseType = Type.GetTypeFromHandle(parentHandle);
+			}
+
+			// Declaring Type
 			if ((*this.typeStruct).DeclaringType != null)
 			{
 				RuntimeTypeHandle declaringHandle = new RuntimeTypeHandle();
@@ -101,12 +150,18 @@ namespace System
 				this.declaringType = Type.GetTypeFromHandle(declaringHandle);
 			}
 
+			// Element Type
 			if ((*this.typeStruct).ElementType != null)
 			{
 				RuntimeTypeHandle elementHandle = new RuntimeTypeHandle();
 				((uint**)&elementHandle)[0] = (uint*)((*this.typeStruct).ElementType);
 				this.elementType = Type.GetTypeFromHandle(elementHandle);
 			}
+		}
+
+		public override Type AsType()
+		{
+			return Type.GetTypeFromHandle(this.handle);
 		}
 
 		public override int GetArrayRank()
@@ -118,6 +173,12 @@ namespace System
 		public override Type GetElementType()
 		{
 			return this.elementType;
+		}
+
+		public override Type[] GetGenericParameterConstraints()
+		{
+			// No planned support
+			throw new NotSupportedException();
 		}
 
 		public override Type GetGenericTypeDefinition()
@@ -150,6 +211,25 @@ namespace System
 		protected override bool IsPointerImpl()
 		{
 			return this.typeCode == TypeCode.ManagedPointer || this.typeCode == TypeCode.UnmanagedPointer;
+		}
+
+		protected override bool IsPrimitiveImpl()
+		{
+			return (this.typeCode == TypeCode.Boolean
+				|| this.typeCode == TypeCode.Char
+				|| (this.typeCode >= TypeCode.I && this.typeCode <= TypeCode.I8)
+				|| (this.typeCode >= TypeCode.U && this.typeCode <= TypeCode.U8)
+				|| this.typeCode == TypeCode.R4
+				|| this.typeCode == TypeCode.R8);
+		}
+
+		protected override bool IsValueTypeImpl()
+		{
+			Type thisType = this.AsType();
+			if (thisType == ValueType || thisType == EnumType)
+				return false;
+
+			return this.IsSubclassOf(ValueType);
 		}
 
 		public override Type MakeArrayType()

@@ -15,13 +15,13 @@ namespace Mosa.TestWorld.x86.Tests
 		public Generic2Test()
 			: base("Generic-N")
 		{
-			testMethods.Add(GenericTest1);
-			testMethods.Add(GenericTest2);
-			testMethods.Add(GenericTest3);
-			testMethods.Add(GenericTest4);
-			testMethods.Add(GenericTest5);
-			testMethods.Add(GenericTest6);
-			testMethods.Add(GenericTest7);
+			testMethods.AddLast(GenericTest1);
+			testMethods.AddLast(GenericTest2);
+			testMethods.AddLast(GenericTest3);
+			testMethods.AddLast(GenericTest4);
+			testMethods.AddLast(GenericTest5);
+			testMethods.AddLast(GenericTest6);
+			testMethods.AddLast(GenericTest7);
 		}
 
 		public static bool GenericTest1()
@@ -48,8 +48,8 @@ namespace Mosa.TestWorld.x86.Tests
 		{
 			var list = new LinkedList<int>();
 
-			list.Add(10);
-			list.Add(20);
+			list.AddLast(10);
+			list.AddLast(20);
 
 			return list.First.Value == 10;
 		}
@@ -58,9 +58,9 @@ namespace Mosa.TestWorld.x86.Tests
 		{
 			var list = new LinkedList<int>();
 
-			list.Add(10);
-			list.Add(20);
-			list.Add(30);
+			list.AddLast(10);
+			list.AddLast(20);
+			list.AddLast(30);
 
 			return list.First.Value == 10 && list.Last.Value == 30 && list.Find(20).Value == 20;
 		}
@@ -69,11 +69,11 @@ namespace Mosa.TestWorld.x86.Tests
 		{
 			var list = new LinkedList<int>();
 
-			list.Add(30);
-			list.Add(10);
-			list.Add(30);
-			list.Add(20);
-			list.Add(30);
+			list.AddLast(30);
+			list.AddLast(10);
+			list.AddLast(30);
+			list.AddLast(20);
+			list.AddLast(30);
 
 			return list.FindLast(30) == list.Last;
 		}
@@ -82,11 +82,11 @@ namespace Mosa.TestWorld.x86.Tests
 		{
 			var list = new LinkedList<int>();
 
-			list.Add(30);
-			list.Add(10);
-			list.Add(30);
-			list.Add(20);
-			list.Add(30);
+			list.AddLast(30);
+			list.AddLast(10);
+			list.AddLast(30);
+			list.AddLast(20);
+			list.AddLast(30);
 
 			return list.FindLast(30) != list.First;
 		}
@@ -98,8 +98,8 @@ namespace Mosa.TestWorld.x86.Tests
 			IntClass value1 = new IntClass(9);
 			IntClass value2 = new IntClass(2);
 
-			list.Add(value1);
-			list.Add(value2);
+			list.AddLast(value1);
+			list.AddLast(value2);
 
 			IntClass first = list.First.Value;
 

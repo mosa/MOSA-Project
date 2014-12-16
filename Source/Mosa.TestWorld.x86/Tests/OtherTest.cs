@@ -16,15 +16,15 @@ namespace Mosa.TestWorld.x86.Tests
 		public OtherTest()
 			: base("Other")
 		{
-			testMethods.Add(OtherTest1);
-			testMethods.Add(OtherTest2);
-			testMethods.Add(OtherTest3);
-			testMethods.Add(OtherTest4);
-			testMethods.Add(OtherTest5);
-			testMethods.Add(ForeachNestedTest);
-			testMethods.Add(StructNewObjTest);
-			testMethods.Add(StructNotBoxed);
-			testMethods.Add(ForeachBreak);
+			testMethods.AddLast(OtherTest1);
+			testMethods.AddLast(OtherTest2);
+			testMethods.AddLast(OtherTest3);
+			testMethods.AddLast(OtherTest4);
+			testMethods.AddLast(OtherTest5);
+			testMethods.AddLast(ForeachNestedTest);
+			testMethods.AddLast(StructNewObjTest);
+			testMethods.AddLast(StructNotBoxed);
+			testMethods.AddLast(ForeachBreak);
 		}
 
 		private static uint StaticValue = 0x200000;
@@ -83,7 +83,7 @@ namespace Mosa.TestWorld.x86.Tests
 
 			for (int i = 1; i < 10; i++)
 			{
-				IntList.Add(101 * i);
+				IntList.AddLast(101 * i);
 			}
 
 			return IntList;
@@ -113,7 +113,7 @@ namespace Mosa.TestWorld.x86.Tests
 			for (int i = 1; i < 10; i++)
 			{
 				Pair p = new Pair(10 * i, 20 * i);
-				PairList.Add(p);
+				PairList.AddLast(p);
 			}
 
 			Pair found = FindPair(PairList);

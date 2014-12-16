@@ -15,14 +15,14 @@ namespace Mosa.TestWorld.x86.Tests
 		public ExceptionTest()
 			: base("Exception")
 		{
-			testMethods.Add(ExceptionTest1);
-			testMethods.Add(ExceptionTest2);
-			testMethods.Add(ExceptionTest3);
-			testMethods.Add(ExceptionTest4);
-			testMethods.Add(ExceptionTest5);
-			testMethods.Add(ExceptionTest6);
-			testMethods.Add(ExceptionTest7);
-			testMethods.Add(ExceptionTest8);
+			testMethods.AddLast(ExceptionTest1);
+			testMethods.AddLast(ExceptionTest2);
+			testMethods.AddLast(ExceptionTest3);
+			testMethods.AddLast(ExceptionTest4);
+			testMethods.AddLast(ExceptionTest5);
+			testMethods.AddLast(ExceptionTest6);
+			testMethods.AddLast(ExceptionTest7);
+			testMethods.AddLast(ExceptionTest8);
 		}
 
 		public static bool ExceptionTest1()
