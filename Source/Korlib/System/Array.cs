@@ -74,15 +74,15 @@ namespace System
 			}
 		}
 
-		[MethodImplAttribute (MethodImplOptions.InternalCall)]
-		public extern int GetLength (int dimension);
+		[MethodImplAttribute(MethodImplOptions.InternalCall)]
+		public extern int GetLength(int dimension);
 
-		[MethodImplAttribute (MethodImplOptions.InternalCall)]
-		public extern int GetLowerBound (int dimension);
+		[MethodImplAttribute(MethodImplOptions.InternalCall)]
+		public extern int GetLowerBound(int dimension);
 
-		public int GetUpperBound (int dimension)
+		public int GetUpperBound(int dimension)
 		{
-			return GetLowerBound (dimension) + GetLength (dimension) - 1;
+			return GetLowerBound(dimension) + GetLength(dimension) - 1;
 		}
 
 		object ICloneable.Clone()
@@ -190,7 +190,7 @@ namespace System
 
 		// TODO Support multidimensional arrays
 		[Serializable]
-		private sealed class SZArrayEnumerator : IEnumerator
+		private sealed class SZArrayEnumerator : IEnumerator, IDisposable
 		{
 			Array array;
 			int currentPosition;
@@ -231,6 +231,10 @@ namespace System
 			{
 				currentPosition = -1;
 			}
+
+			public void Dispose()
+			{
+			}
 		}
 
 		int IStructuralComparable.CompareTo(object other, IComparer comparer)
@@ -257,172 +261,172 @@ namespace System
 			// TODO
 			throw new NotImplementedException();
 		}
-	}
 
-	// ---------------------------------------------- //
-	// -------------------SZARRAYS------------------- //
-	// ---------------------------------------------- //
-	// The "this" in methods inside this class is not an instance of SZArrayHelper.
-	// It is actually an array. The generic type parameter is filled in by the compiler.
-	// This only occurs for SZ arrays. The methods are attached and the generic interfaces are added.
-	private sealed class SZArrayHelper
-	{
-		private SZArrayHelper()
+		// ---------------------------------------------- //
+		// -------------------SZARRAYS------------------- //
+		// ---------------------------------------------- //
+		// The "this" in methods inside this class is not an instance of SZArrayHelper.
+		// It is actually an array. The generic type parameter is filled in by the compiler.
+		// This only occurs for SZ arrays. The methods are attached and the generic interfaces are added.
+		private sealed class SZArrayHelper
 		{
-			throw new InvalidOperationException("Cannot instantiate this class!!!");
-		}
-
-		// -----------------------------------------------------------
-		// ------- Implement IEnumerable<T> interface methods --------
-		// -----------------------------------------------------------
-		private IEnumerator<T> GetEnumerator<T>()
-		{
-			return new SZGenericArrayEnumerator<T>(RuntimeHelpers.UnsafeCast<T[]>(this));
-		}
-
-		// -----------------------------------------------------------
-		// ------- Implement ICollection<T> interface methods --------
-		// -----------------------------------------------------------
-		void CopyTo<T>(T[] array, int index)
-		{
-			if (array != null && array.Rank != 1)
-				throw new ArgumentException("Multidimensional arrays are not supported");
-
-			T[] _this = RuntimeHelpers.UnsafeCast<T[]>(this);
-			Array.Copy(_this, 0, array, index, _this.Length);
-		}
-
-		int get_Count<T>()
-		{
-			T[] @this = RuntimeHelpers.UnsafeCast<T[]>(this);
-			return @this.Length;
-		}
-
-		// -----------------------------------------------------------
-		// ---------- Implement IList<T> interface methods -----------
-		// -----------------------------------------------------------
-		T get_Item<T>(int index)
-		{
-			T[] @this = RuntimeHelpers.UnsafeCast<T[]>(this);
-			if ((uint)index >= (uint)@this.Length)
-				throw new ArgumentOutOfRangeException("index");
-
-			return @this[index];
-		}
-
-		void set_Item<T>(int index, T value)
-		{
-			T[] @this = RuntimeHelpers.UnsafeCast<T[]>(this);
-			if ((uint)index >= (uint)@this.Length)
-				throw new ArgumentOutOfRangeException("index");
-
-			@this[index] = value;
-		}
-
-		void Add<T>(T value)
-		{
-			// NOT SUPPORTED
-			throw new NotSupportedException();
-		}
-
-		bool Contains<T>(T value)
-		{
-			T[] @this = RuntimeHelpers.UnsafeCast<T[]>(this);
-			return Array.IndexOf(@this, value) != -1;
-		}
-
-		bool get_IsReadOnly<T>()
-		{
-			return true;
-		}
-
-		void Clear<T>()
-		{
-			// NOT SUPPORTED
-			throw new NotSupportedException();
-		}
-
-		int IndexOf<T>(T value)
-		{
-			T[] @this = RuntimeHelpers.UnsafeCast<T[]>(this);
-			return Array.IndexOf(@this, value);
-		}
-
-		void Insert<T>(int index, T value)
-		{
-			// NOT SUPPORTED
-			throw new NotSupportedException();
-		}
-
-		bool Remove<T>(T value)
-		{
-			// NOT SUPPORTED
-			throw new NotSupportedException();
-		}
-
-		void RemoveAt<T>(int index)
-		{
-			// NOT SUPPORTED
-			throw new NotSupportedException();
-		}
-
-		// This is a normal generic Enumerator for SZ arrays.
-		// It doesn't have any of the "this" stuff that SZArrayHelper does.
-		[Serializable]
-		private sealed class SZGenericArrayEnumerator<T> : IEnumerator<T>
-		{
-			T[] array;
-			int currentPosition;
-			int length;
-
-			public SZGenericArrayEnumerator(T[] array)
+			private SZArrayHelper()
 			{
-				if (array.Rank != 1 || array.GetLowerBound(0) != 0)
-					throw new InvalidOperationException("SZGenericArrayEnumerator only works on single dimension arrays with a lower bound of zero.");
-				this.array = array;
-				this.currentPosition = -1;
-				this.length = array.Length;
+				throw new InvalidOperationException("Cannot instantiate this class!!!");
 			}
 
-			public T Current
+			// -----------------------------------------------------------
+			// ------- Implement IEnumerable<T> interface methods --------
+			// -----------------------------------------------------------
+			private IEnumerator<T> GetEnumerator<T>()
 			{
-				get
+				return new SZGenericArrayEnumerator<T>(RuntimeHelpers.UnsafeCast<T[]>(this));
+			}
+
+			// -----------------------------------------------------------
+			// ------- Implement ICollection<T> interface methods --------
+			// -----------------------------------------------------------
+			void CopyTo<T>(T[] array, int index)
+			{
+				if (array != null && array.Rank != 1)
+					throw new ArgumentException("Multidimensional arrays are not supported");
+
+				T[] _this = RuntimeHelpers.UnsafeCast<T[]>(this);
+				Array.Copy(_this, 0, array, index, _this.Length);
+			}
+
+			int get_Count<T>()
+			{
+				T[] @this = RuntimeHelpers.UnsafeCast<T[]>(this);
+				return @this.Length;
+			}
+
+			// -----------------------------------------------------------
+			// ---------- Implement IList<T> interface methods -----------
+			// -----------------------------------------------------------
+			T get_Item<T>(int index)
+			{
+				T[] @this = RuntimeHelpers.UnsafeCast<T[]>(this);
+				if ((uint)index >= (uint)@this.Length)
+					throw new ArgumentOutOfRangeException("index");
+
+				return @this[index];
+			}
+
+			void set_Item<T>(int index, T value)
+			{
+				T[] @this = RuntimeHelpers.UnsafeCast<T[]>(this);
+				if ((uint)index >= (uint)@this.Length)
+					throw new ArgumentOutOfRangeException("index");
+
+				@this[index] = value;
+			}
+
+			void Add<T>(T value)
+			{
+				// NOT SUPPORTED
+				throw new NotSupportedException();
+			}
+
+			bool Contains<T>(T value)
+			{
+				T[] @this = RuntimeHelpers.UnsafeCast<T[]>(this);
+				return Array.IndexOf(@this, value) != -1;
+			}
+
+			bool get_IsReadOnly<T>()
+			{
+				return true;
+			}
+
+			void Clear<T>()
+			{
+				// NOT SUPPORTED
+				throw new NotSupportedException();
+			}
+
+			int IndexOf<T>(T value)
+			{
+				T[] @this = RuntimeHelpers.UnsafeCast<T[]>(this);
+				return Array.IndexOf(@this, value);
+			}
+
+			void Insert<T>(int index, T value)
+			{
+				// NOT SUPPORTED
+				throw new NotSupportedException();
+			}
+
+			bool Remove<T>(T value)
+			{
+				// NOT SUPPORTED
+				throw new NotSupportedException();
+			}
+
+			void RemoveAt<T>(int index)
+			{
+				// NOT SUPPORTED
+				throw new NotSupportedException();
+			}
+
+			// This is a normal generic Enumerator for SZ arrays.
+			// It doesn't have any of the "this" stuff that SZArrayHelper does.
+			[Serializable]
+			private sealed class SZGenericArrayEnumerator<T> : IEnumerator<T>, IDisposable
+			{
+				T[] array;
+				int currentPosition;
+				int length;
+
+				public SZGenericArrayEnumerator(T[] array)
 				{
-					if (currentPosition < 0)
-						throw new InvalidOperationException("Enumeration has not started.");
-					if (currentPosition >= length)
-						throw new InvalidOperationException("Enumeration has already ended.");
-					return array[currentPosition];
+					if (array.Rank != 1 || array.GetLowerBound(0) != 0)
+						throw new InvalidOperationException("SZGenericArrayEnumerator only works on single dimension arrays with a lower bound of zero.");
+					this.array = array;
+					this.currentPosition = -1;
+					this.length = array.Length;
 				}
-			}
 
-			public bool MoveNext()
-			{
-				if (currentPosition < length)
-					currentPosition++;
-				if (currentPosition < length)
-					return true;
-				else
-					return false;
-			}
+				public T Current
+				{
+					get
+					{
+						if (currentPosition < 0)
+							throw new InvalidOperationException("Enumeration has not started.");
+						if (currentPosition >= length)
+							throw new InvalidOperationException("Enumeration has already ended.");
+						return array[currentPosition];
+					}
+				}
 
-			public void Reset()
-			{
-				currentPosition = -1;
-			}
+				public bool MoveNext()
+				{
+					if (currentPosition < length)
+						currentPosition++;
+					if (currentPosition < length)
+						return true;
+					else
+						return false;
+				}
 
-			public void Dispose()
-			{
-			}
+				public void Reset()
+				{
+					currentPosition = -1;
+				}
 
-			object IEnumerator.Current
-			{
-				get { return this.Current; }
-			}
+				public void Dispose()
+				{
+				}
 
-			void IEnumerator.Reset()
-			{
-				this.currentPosition = -1;
+				object IEnumerator.Current
+				{
+					get { return this.Current; }
+				}
+
+				void IEnumerator.Reset()
+				{
+					this.currentPosition = -1;
+				}
 			}
 		}
 	}
