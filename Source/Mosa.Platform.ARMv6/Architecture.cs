@@ -165,6 +165,14 @@ namespace Mosa.Platform.ARMv6
 		}
 
 		/// <summary>
+		/// Gets the finally return block register.
+		/// </summary>
+		public override Register FinallyReturnBlockRegister
+		{
+			get { return GeneralPurposeRegister.R9; }
+		}
+
+		/// <summary>
 		/// Retrieves the program counter register of the ARMv6.
 		/// </summary>
 		public override Register ProgramCounter

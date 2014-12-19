@@ -8,6 +8,7 @@
  */
 
 using Mosa.Compiler.Framework.IR;
+using Mosa.Compiler.MosaTypeSystem;
 using System.Collections.Generic;
 
 namespace Mosa.Compiler.Framework.Stages
@@ -16,18 +17,26 @@ namespace Mosa.Compiler.Framework.Stages
 	/// </summary>
 	public class ExceptionStage : BaseMethodCompilerStage
 	{
-		protected Dictionary<BasicBlock, Operand> exceptionRegisters;
+		protected Dictionary<BasicBlock, Operand> exceptionVirtualRegisters;
+		protected Dictionary<BasicBlock, Operand> finallyReturnVirtualRegisters;
+
+		protected MosaType exceptionType;
 
 		protected override void Run()
 		{
 			if (!HasProtectedRegions)
 				return;
 
-			var exceptionRegister = Operand.CreateCPURegister(TypeLayout.TypeSystem.BuiltIn.Pointer, Architecture.ExceptionRegister);
+			exceptionVirtualRegisters = new Dictionary<BasicBlock, Operand>();
+			finallyReturnVirtualRegisters = new Dictionary<BasicBlock, Operand>();
+
+			exceptionType = TypeSystem.GetTypeByName("System", "Exception");
+
+			var exceptionRegister = Operand.CreateCPURegister(exceptionType, Architecture.ExceptionRegister);
+
+			var finallyReturnBlockRegister = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, Architecture.FinallyReturnBlockRegister);
 
 			var nullOperand = Operand.GetNull(TypeSystem);
-
-			CreateExceptionReturnOperands();
 
 			for (int i = 0; i < BasicBlocks.Count; i++)
 			{
@@ -57,23 +66,33 @@ namespace Mosa.Compiler.Framework.Stages
 					}
 					else if (ctx.Instruction == IRInstruction.FinallyStart)
 					{
-						var header = FindImmediateExceptionHandler(ctx);
-						var headerBlock = BasicBlocks.GetByLabel(header.HandlerStart);
+						var exceptionVirtualRegister = ctx.Result;
+						var finallyReturnBlockVirtualRegister = ctx.Result2;
 
-						var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.Pointer);
+						//var header = FindImmediateExceptionHandler(ctx);
+						//var headerBlock = BasicBlocks.GetByLabel(header.HandlerStart);
+
+						exceptionVirtualRegisters.Add(ctx.BasicBlock, exceptionRegister);
+						finallyReturnVirtualRegisters.Add(ctx.BasicBlock, finallyReturnBlockRegister);
 
 						ctx.SetInstruction(IRInstruction.KillAll);
 						ctx.AppendInstruction(IRInstruction.Gen, exceptionRegister);
-						ctx.AppendInstruction(IRInstruction.Move, exceptionRegisters[headerBlock], exceptionRegister);
+						ctx.AppendInstruction(IRInstruction.Gen, finallyReturnBlockRegister);
+
+						ctx.AppendInstruction(IRInstruction.Move, exceptionVirtualRegister, exceptionRegister);
+						ctx.AppendInstruction(IRInstruction.Move, finallyReturnBlockVirtualRegister, finallyReturnBlockRegister);
 					}
 					else if (ctx.Instruction == IRInstruction.FinallyEnd)
 					{
 						var header = FindImmediateExceptionHandler(ctx);
 						var headerBlock = BasicBlocks.GetByLabel(header.HandlerStart);
 
+						var exceptionVirtualRegister = exceptionVirtualRegisters[headerBlock];
+						var finallyReturnBlockVirtualRegister = finallyReturnVirtualRegisters[headerBlock];
+
 						var newBlocks = CreateNewBlocksWithContexts(2);
 
-						ctx.SetInstruction(IRInstruction.Move, exceptionRegister, exceptionRegisters[headerBlock]);
+						ctx.SetInstruction(IRInstruction.Move, exceptionRegister, exceptionVirtualRegister);
 						ctx.AppendInstruction(IRInstruction.IntegerCompareBranch, ConditionCode.Equal, null, exceptionRegister, nullOperand);
 						ctx.SetBranch(newBlocks[0].BasicBlock);
 						ctx.AppendInstruction(IRInstruction.Jmp, newBlocks[1].BasicBlock);
@@ -89,9 +108,11 @@ namespace Mosa.Compiler.Framework.Stages
 					}
 					else if (ctx.Instruction == IRInstruction.ExceptionStart)
 					{
+						var exceptionVirtualRegister = ctx.Result;
+
 						ctx.SetInstruction(IRInstruction.KillAll);
 						ctx.AppendInstruction(IRInstruction.Gen, exceptionRegister);
-						ctx.AppendInstruction(IRInstruction.Move, ctx.Result, exceptionRegister);
+						ctx.AppendInstruction(IRInstruction.Move, exceptionVirtualRegister, exceptionRegister);
 					}
 					else if (ctx.Instruction == IRInstruction.ExceptionEnd)
 					{
@@ -103,18 +124,31 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 		}
 
-		protected void CreateExceptionReturnOperands()
-		{
-			exceptionRegisters = new Dictionary<BasicBlock, Operand>();
+		//protected void CreateExceptionReturnOperands()
+		//{
+		//	exceptionVirtualRegisters = new Dictionary<BasicBlock, Operand>();
+		//	finallyReturnVirtualRegister = new Dictionary<BasicBlock, Operand>();
 
-			foreach (var handler in MethodCompiler.Method.ExceptionHandlers)
-			{
-				var block = BasicBlocks.GetByLabel(handler.HandlerStart);
+		//	foreach (var handler in MethodCompiler.Method.ExceptionHandlers)
+		//	{
+		//		var block = BasicBlocks.GetByLabel(handler.HandlerStart);
 
-				var register = AllocateVirtualRegister(TypeSystem.BuiltIn.Pointer);
+		//		MosaType specificExceptionType = exceptionType;
 
-				exceptionRegisters.Add(block, register);
-			}
-		}
+		//		if (handler.HandlerType == ExceptionHandlerType.Exception)
+		//		{
+		//			specificExceptionType = handler.Type;
+		//		}
+
+		//		var register = AllocateVirtualRegister(exceptionType);
+
+		//		exceptionVirtualRegisters.Add(block, register);
+
+		//		if (handler.HandlerType == ExceptionHandlerType.Finally)
+		//		{
+		//			finallyReturnVirtualRegister.Add(block, AllocateVirtualRegister(TypeSystem.BuiltIn.I4));
+		//		}
+		//	}
+		//}
 	}
 }

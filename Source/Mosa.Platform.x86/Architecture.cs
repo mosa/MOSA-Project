@@ -154,6 +154,14 @@ namespace Mosa.Platform.x86
 		}
 
 		/// <summary>
+		/// Gets the finally return block register.
+		/// </summary>
+		public override Register FinallyReturnBlockRegister
+		{
+			get { return GeneralPurposeRegister.EDX; }
+		}
+
+		/// <summary>
 		/// Retrieves the program counter register of the x86.
 		/// </summary>
 		public override Register ProgramCounter

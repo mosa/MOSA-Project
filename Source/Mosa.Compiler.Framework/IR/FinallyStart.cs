@@ -20,7 +20,7 @@ namespace Mosa.Compiler.Framework.IR
 		/// Initializes a new instance of <see cref="FinallyStart"/>.
 		/// </summary>
 		public FinallyStart() :
-			base(0, 0)
+			base(0, 2)
 		{
 		}
 

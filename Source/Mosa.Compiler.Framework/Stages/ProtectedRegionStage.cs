@@ -22,10 +22,14 @@ namespace Mosa.Compiler.Framework.Stages
 	{
 		private KeyedList<MosaExceptionHandler, BasicBlock> returns = new KeyedList<MosaExceptionHandler, BasicBlock>();
 
+		private MosaType exceptionType;
+
 		protected override void Run()
 		{
 			if (!HasProtectedRegions)
 				return;
+
+			exceptionType = TypeSystem.GetTypeByName("System", "Exception");
 
 			InsertBlockProtectInstructions();
 			UpdateBlockProtectInstructions();
@@ -60,11 +64,10 @@ namespace Mosa.Compiler.Framework.Stages
 				}
 				else if (handler.HandlerType == ExceptionHandlerType.Finally)
 				{
-					var exceptionType = TypeSystem.GetTypeByName("System", "Exception");
-
 					var exceptionObject = MethodCompiler.CreateVirtualRegister(exceptionType);
+					var finallyOperand = MethodCompiler.CreateVirtualRegister(TypeSystem.BuiltIn.I4);
 
-					context.AppendInstruction(IRInstruction.FinallyStart, exceptionObject);
+					context.AppendInstruction2(IRInstruction.FinallyStart, exceptionObject, finallyOperand);
 				}
 			}
 		}
