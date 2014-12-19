@@ -7,7 +7,7 @@ fontsize = "16"
 shape = "ellipse"
 ];
 edge [
-minlen = "3"
+minlen = "4"
 ];
 
 "Key" [
@@ -32,7 +32,7 @@ shape = "record"
 ];
 
 "TypeDefinition" [
-label = "<f0>Type Definition|<f1>Pointer to Type Name|<f2>~Pointer to Custom Attributes|<f3>Type Attributes|<f4>Type Size|<f5>Pointer to Assembly|<f6>~Pointer to Parent Type|<f7>~Pointer to Default Constructor Method|<f8>~Pointer to Properties Table|<f9>~Pointer to Fields Table|<f10>~Pointer to Interface Slot Table|<f11>~Pointer to Interface Bitmap|<f12>~Number of Methods|<f13>~Pointer to Method Definition 1|...|Pointer to Method Definition N"
+label = "<f0>Type Definition|<f1>Pointer to Type Name|<f2>~Pointer to Custom Attributes|<f3>Type Code & Attributes|<f4>Type Size|<f5>Pointer to Assembly|<f6>~Pointer to Parent Type|<f7>~Pointer to Declaring Type|<f8>~Pointer to Element Type|<f9>~Pointer to Default Constructor Method|<f10>~Pointer to Properties Table|<f11>~Pointer to Fields Table|<f12>~Pointer to Interface Slot Table|<f13>~Pointer to Interface Bitmap|<f14>~Number of Methods|<f15>~Pointer to Method Definition 1|...|Pointer to Method Definition N"
 shape = "record"
 color = "blue"
 ];
@@ -78,7 +78,7 @@ shape = "record"
 ];
 
 "MethodDefinition" [
-label = "<f0>Method Definition|<f1>Pointer to Method Name|<f2>~Pointer to Custom Attributes|<f3>Method Attributes|<f4>Local Parameter Stack Size|<f5>Pointer to Method|<f6>Pointer to Return Type Definition|<f7>~Pointer to Protected Region Table|<f8>Pointer to GC Tracking Information|<f9>Number of Parameters|<f10>Pointer to Parameter Definition 1|...|Pointer to Parameter Definition N"
+label = "<f0>Method Definition|<f1>Pointer to Method Name|<f2>~Pointer to Custom Attributes|<f3>Method Attributes|<f4>Local & Parameter Stack Size|<f5>Pointer to Method|<f6>Pointer to Return Type Definition|<f7>~Pointer to Protected Region Table|<f8>Pointer to GC Tracking Information|<f9>Number of Parameters|<f10>Pointer to Parameter Definition 1|...|Pointer to Parameter Definition N"
 shape = "record"
 color = "green"
 ];
@@ -172,24 +172,24 @@ id = 0
 color = "blue"
 ];
 
-"TypeDefinition":f7 -> "MethodDefinition":f0 [
+"TypeDefinition":f9 -> "MethodDefinition":f0 [
 id = 0
 color = "green"
 ];
 
-"TypeDefinition":f8 -> "PropertiesTable":f0 [
+"TypeDefinition":f10 -> "PropertiesTable":f0 [
 id = 0
 ];
 
-"TypeDefinition":f9 -> "FieldsTable":f0 [
+"TypeDefinition":f11 -> "FieldsTable":f0 [
 id = 0
 ];
 
-"TypeDefinition":f10 -> "InterfaceSlotTable":f0 [
+"TypeDefinition":f12 -> "InterfaceSlotTable":f0 [
 id = 0
 ];
 
-"TypeDefinition":f13 -> "MethodDefinition":f0 [
+"TypeDefinition":f15 -> "MethodDefinition":f0 [
 id = 0
 color = "green"
 ];

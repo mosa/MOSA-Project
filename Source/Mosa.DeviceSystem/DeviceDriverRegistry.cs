@@ -76,7 +76,7 @@ namespace Mosa.DeviceSystem
 
 			foreach (DeviceDriver deviceDriver in deviceDrivers)
 				if (deviceDriver.Attribute is ISADeviceDriverAttribute)
-					isaDeviceDrivers.Add(deviceDriver);
+					isaDeviceDrivers.AddLast(deviceDriver);
 
 			return isaDeviceDrivers;
 		}

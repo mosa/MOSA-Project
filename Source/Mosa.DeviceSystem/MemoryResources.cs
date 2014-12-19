@@ -64,7 +64,7 @@ namespace Mosa.DeviceSystem
 			}
 
 			for (byte r = 0; r < hardwareResources.MemoryRegionCount; r++)
-				memoryRegions.Add(hardwareResources.GetMemoryRegion(r));
+				memoryRegions.AddLast(hardwareResources.GetMemoryRegion(r));
 
 			spinLock.Exit();
 

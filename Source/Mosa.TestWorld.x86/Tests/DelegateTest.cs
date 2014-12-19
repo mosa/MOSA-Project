@@ -15,8 +15,8 @@ namespace Mosa.TestWorld.x86.Tests
 		public DelegateTest()
 			: base("Delegate")
 		{
-			testMethods.Add(DelegateTest1);
-			testMethods.Add(DelegateTest2);
+			testMethods.AddLast(DelegateTest1);
+			testMethods.AddLast(DelegateTest2);
 		}
 
 		public static bool DelegateTest1()

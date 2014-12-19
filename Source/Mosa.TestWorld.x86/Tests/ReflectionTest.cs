@@ -16,12 +16,14 @@ namespace Mosa.TestWorld.x86.Tests
 		public ReflectionTest()
 			: base("Reflection")
 		{
-			testMethods.Add(PointerTest);
-			testMethods.Add(HandleTest);
-			testMethods.Add(FindTypeOfTest);
-			testMethods.Add(FindTypeByNameTest);
-			testMethods.Add(CompareTypeHandlesTest);
-			testMethods.Add(TypeHandleFromObjectTest);
+			testMethods.AddLast(PointerTest);
+			testMethods.AddLast(HandleTest);
+			testMethods.AddLast(FindTypeOfTest);
+			testMethods.AddLast(FindTypeByNameTest);
+			testMethods.AddLast(CompareTypeHandlesTest);
+			testMethods.AddLast(TypeHandleFromObjectTest);
+			testMethods.AddLast(DeclaringTypeTest);
+			testMethods.AddLast(ElementTypeTest);
 		}
 
 		public static bool PointerTest()
@@ -60,6 +62,20 @@ namespace Mosa.TestWorld.x86.Tests
 		{
 			string hello = "hi";
 			return (hello.GetType() != null);
+		}
+
+		public static bool DeclaringTypeTest()
+		{
+			Type foundType = Type.GetType("System.Int32&");
+			Type declaringType = Type.GetType("System.Int32");
+			return foundType.DeclaringType != null && foundType.DeclaringType.Equals(declaringType);
+		}
+
+		public static bool ElementTypeTest()
+		{
+			Type foundType = Type.GetType("System.Int32[]");
+			Type elementType = Type.GetType("System.Int32");
+			return foundType.HasElementType && foundType.GetElementType().Equals(elementType);
 		}
 	}
 }

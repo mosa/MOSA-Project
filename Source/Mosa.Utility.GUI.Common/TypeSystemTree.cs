@@ -62,8 +62,14 @@ namespace Mosa.Utility.GUI.Common
 
 					if (type.DeclaringType != null)
 					{
-						TreeNode baseTypeNode = new TreeNode("Enclosing Type: " + type.DeclaringType.FullName);
-						typeNode.Nodes.Add(baseTypeNode);
+						TreeNode declaringTypeNode = new TreeNode("Declaring Type: " + type.DeclaringType.FullName);
+						typeNode.Nodes.Add(declaringTypeNode);
+					}
+
+					if (type.ElementType != null)
+					{
+						TreeNode elementTypeNode = new TreeNode("Element Type: " + type.ElementType.FullName);
+						typeNode.Nodes.Add(elementTypeNode);
 					}
 
 					if (type.Interfaces.Count != 0)

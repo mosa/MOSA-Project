@@ -94,7 +94,12 @@ namespace Mosa.Platform.Internal.x86
 			{
 				// Get the pointer to the Assembly Metadata
 				uint* ptr = (uint*)(assemblyListTable[1 + i]);
-				Assemblies.Add(new RuntimeAssembly(ptr));
+				Assemblies.AddLast(new RuntimeAssembly(ptr));
+			}
+
+			foreach (RuntimeAssembly assembly in Assemblies)
+			{
+				assembly.Phase2();
 			}
 		}
 
@@ -300,14 +305,14 @@ namespace Mosa.Platform.Internal.x86
 			while (entries > 0)
 			{
 				uint addr = Mosa.Internal.Native.Load32(table);
-				uint size = Mosa.Internal.Native.Load32(table, 4);
+				uint size = Mosa.Internal.Native.Load32(table, NativeIntSize);
 
 				if (address >= addr && address < addr + size)
 				{
-					return Mosa.Internal.Native.Load32(table, 8);
+					return Mosa.Internal.Native.Load32(table, NativeIntSize * 2);
 				}
 
-				table = table + 12;
+				table = table + (NativeIntSize * 3);
 
 				entries--;
 			}
@@ -324,19 +329,19 @@ namespace Mosa.Platform.Internal.x86
 
 			uint entries = Mosa.Internal.Native.Load32(table);
 
-			table = table + 4;
+			table = table + NativeIntSize;
 
 			while (entries > 0)
 			{
 				uint addr = Mosa.Internal.Native.Load32(table);
-				uint size = Mosa.Internal.Native.Load32(table, 4);
+				uint size = Mosa.Internal.Native.Load32(table, NativeIntSize);
 
 				if (address >= addr && address < addr + size)
 				{
-					return Mosa.Internal.Native.Load32(table, 8);
+					return Mosa.Internal.Native.Load32(table, NativeIntSize * 2);
 				}
 
-				table = table + 12;
+				table = table + (NativeIntSize * 3);
 
 				entries--;
 			}

@@ -32,23 +32,31 @@ namespace System
 		/// </summary>
 		public int Rank
 		{
-			// TODO
-			get { return 0; }
+			// TODO: support multidimensional arrays
+			get { return 1; }
 		}
 
 		/// <summary>
 		///
 		/// </summary>
-		public void SetValue(object value, int index)
+		public void SetValue(object value, params int[] indices)
 		{
+			if (indices == null)
+				throw new ArgumentNullException("indices");
+			if (this.Rank != indices.Length)
+				throw new ArgumentException("The number of dimensions in the current Array is not equal to the number of elements in indices.", "indices");
 			// TODO
 		}
 
 		/// <summary>
 		///
 		/// </summary>
-		public object GetValue(int index)
+		public object GetValue(params int[] indices)
 		{
+			if (indices == null)
+				throw new ArgumentNullException("indices");
+			if (this.Rank != indices.Length)
+				throw new ArgumentException("The number of dimensions in the current Array is not equal to the number of elements in indices.", "indices");
 			// TODO
 			return null;
 		}
@@ -160,7 +168,7 @@ namespace System
 			throw new NotImplementedException();
 		}
 
-		IEnumerator IEnumerable.GetEnumerator()
+		public IEnumerator GetEnumerator()
 		{
 			throw new NotImplementedException();
 		}

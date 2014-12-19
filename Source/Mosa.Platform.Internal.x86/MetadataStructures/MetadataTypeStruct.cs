@@ -20,12 +20,19 @@ namespace Mosa.Platform.Internal.x86
 		public uint Size;
 		public uint* Assembly;
 		public MetadataTypeStruct* ParentType;
+		public MetadataTypeStruct* DeclaringType;
+		public MetadataTypeStruct* ElementType;
 		public uint* DefaultConstructor;
 		public uint* Properties;
 		public uint* Fields;
 		public uint* SlotTable;
 		public uint* Bitmap;
 		public uint NumberOfMethods;
-		public const uint MethodsOffset = 12;
+		public const uint MethodsOffset = 14;
+
+		public static uint* GetMethodDefinitionAddress(MetadataTypeStruct* data, uint slot)
+		{
+			return (uint*)*((uint*)data + MetadataTypeStruct.MethodsOffset + slot);
+		}
 	}
 }

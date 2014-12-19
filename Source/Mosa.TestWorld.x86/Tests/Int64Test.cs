@@ -13,16 +13,16 @@ namespace Mosa.TestWorld.x86.Tests
 		public Int64Test()
 			: base("Int64")
 		{
-			testMethods.Add(Int64Test1);
-			testMethods.Add(Int64Test2);
-			testMethods.Add(Int64Test3);
-			testMethods.Add(Int64Test4);
-			testMethods.Add(Int64Test5);
-			testMethods.Add(Int64Test6);
-			testMethods.Add(Int64Test7);
-			testMethods.Add(Int64Test8);
-			testMethods.Add(Int64Test9);
-			testMethods.Add(Int64Test10);
+			testMethods.AddLast(Int64Test1);
+			testMethods.AddLast(Int64Test2);
+			testMethods.AddLast(Int64Test3);
+			testMethods.AddLast(Int64Test4);
+			testMethods.AddLast(Int64Test5);
+			testMethods.AddLast(Int64Test6);
+			testMethods.AddLast(Int64Test7);
+			testMethods.AddLast(Int64Test8);
+			testMethods.AddLast(Int64Test9);
+			testMethods.AddLast(Int64Test10);
 		}
 
 		public static bool Int64Test1()

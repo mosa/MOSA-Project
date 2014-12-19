@@ -44,7 +44,7 @@ namespace Mosa.DeviceSystem
 				if (diskControllerDevice.Open(drive))
 				{
 					IDiskDevice diskDevice = new DiskDevice(diskControllerDevice, drive, false);
-					devices.Add(diskDevice as IDevice);
+					devices.AddLast(diskDevice as IDevice);
 				}
 			}
 

@@ -289,7 +289,7 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 						result = elementType.ToSZArray();
 						using (var arrayType = metadata.Controller.MutateType(result))
 							arrayType.UnderlyingObject = elementType.GetUnderlyingObject<UnitDesc<TypeDef, TypeSig>>().Clone(typeSig);
-						break;
+						return result;
 
 					case ElementType.Array:
 						ArraySig array = (ArraySig)typeSig;
