@@ -17,5 +17,8 @@ namespace System.Runtime.CompilerServices
 
 		[MethodImpl(MethodImplOptions.InternalCall)]
 		public new static extern bool Equals(Object o1, Object o2);
+
+		[MethodImpl(MethodImplOptions.InternalCall)]
+		internal static extern T UnsafeCast<T>(Object o) where T : class;
 	}
 }

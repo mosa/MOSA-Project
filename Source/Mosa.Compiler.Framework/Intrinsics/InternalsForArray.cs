@@ -9,11 +9,9 @@
 
 namespace Mosa.Compiler.Framework.Intrinsics
 {
-	[ReplacementTarget("System.Runtime.CompilerServices.RuntimeHelpers::InitializeArray")]
-	[ReplacementTarget("System.Runtime.CompilerServices.RuntimeHelpers::GetHashCode")]
-	[ReplacementTarget("System.Runtime.CompilerServices.RuntimeHelpers::Equals")]
-	[ReplacementTarget("System.Runtime.CompilerServices.RuntimeHelpers::UnsafeCast")]
-	public sealed class InternalsForRuntimeHelpers : InternalsBase, IIntrinsicInternalMethod
+	[ReplacementTarget("System.Array::GetLength")]
+	[ReplacementTarget("System.Array::GetLowerBound")]
+	public sealed class InternalsForArray : InternalsBase, IIntrinsicInternalMethod
 	{
 		/// <summary>
 		/// Replaces the intrinsic call site
@@ -22,7 +20,7 @@ namespace Mosa.Compiler.Framework.Intrinsics
 		/// <param name="methodCompiler">The method compiler.</param>
 		void IIntrinsicInternalMethod.ReplaceIntrinsicCall(Context context, BaseMethodCompiler methodCompiler)
 		{
-			this.Internal(context, methodCompiler, context.MosaMethod.Name, "InternalsForRuntimeHelpers");
+			this.Internal(context, methodCompiler, context.MosaMethod.Name, "InternalsForArray");
 		}
 	}
 }

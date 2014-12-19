@@ -69,6 +69,7 @@
     <Compile Include="Builders\RuntimeType.cs" />
     <Compile Include="Builders\RuntimeTypeInfo.cs" />
     <Compile Include="Division.cs" />
+    <Compile Include="Internals\InternalsForArray.cs" />
     <Compile Include="Internals\InternalsForObject.cs" />
     <Compile Include="Internals\InternalsForRuntimeHelpers.cs" />
     <Compile Include="Internals\InternalsForType.cs" />
