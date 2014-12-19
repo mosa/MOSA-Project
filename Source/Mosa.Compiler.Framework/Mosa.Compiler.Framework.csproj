@@ -88,6 +88,7 @@
     <Compile Include="DelegatePatcher.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="IR\FinallyReturn.cs" />
+    <Compile Include="Intrinsics\InternalsForArray.cs" />
     <Compile Include="MosaCompiler.cs" />
     <Compile Include="InstructionSize.cs" />
     <Compile Include="Intrinsics\GetObjectAddress.cs" />

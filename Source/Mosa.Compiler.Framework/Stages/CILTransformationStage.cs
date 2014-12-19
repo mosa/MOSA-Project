@@ -570,6 +570,11 @@ namespace Mosa.Compiler.Framework.Stages
 		private MosaMethod GetMethodOrOverride(MosaType type, MosaMethod method)
 		{
 			MosaMethod implMethod = null;
+			if (type.Methods.Contains(method)
+				&& (implMethod = type.FindMethodBySignature(method.Name, method.Signature)) != null)
+			{
+				return implMethod;
+			}
 			if (method.DeclaringType.Module == TypeSystem.CorLib
 				&& (method.DeclaringType.Name.Equals("ValueType")
 					|| method.DeclaringType.Name.Equals("Object")
@@ -580,6 +585,14 @@ namespace Mosa.Compiler.Framework.Stages
 				return implMethod;
 			}
 			return method;
+		}
+
+		private bool TypeContainsMethodObjective(MosaType type, MosaMethod method)
+		{
+			foreach (var m in type.Methods)
+				if (((object)m).Equals(method))
+					return true;
+			return false;
 		}
 
 		private int CalculateMethodTableOffset(MosaMethod invokeTarget)

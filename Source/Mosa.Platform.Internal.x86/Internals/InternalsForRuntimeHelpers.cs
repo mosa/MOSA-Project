@@ -42,5 +42,10 @@ namespace Mosa.Platform.Internal.x86
 				dataLength--;
 			}
 		}
+
+		public static void* UnsafeCast(void* o)
+		{
+			return o;
+		}
 	}
 }
