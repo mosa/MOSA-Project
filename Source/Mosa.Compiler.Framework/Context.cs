@@ -1178,7 +1178,8 @@ namespace Mosa.Compiler.Framework
 		/// Appends an instruction after the current index.
 		/// </summary>
 		/// <param name="instruction">The instruction to append.</param>
-		/// <param name="block">The basic block.</param>
+		/// <param name="block1">The block1.</param>
+		/// <param name="block2">The block2.</param>
 		public void AppendInstruction(BaseInstruction instruction, BasicBlock block1, BasicBlock block2)
 		{
 			AppendInstruction();
