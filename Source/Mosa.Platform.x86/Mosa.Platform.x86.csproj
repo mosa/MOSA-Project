@@ -159,6 +159,7 @@
     <Compile Include="Intrinsic\Lidt.cs" />
     <Compile Include="Intrinsic\Nop.cs" />
     <Compile Include="Intrinsic\Out8.cs" />
+    <Compile Include="Intrinsic\Out.cs" />
     <Compile Include="Intrinsic\Sti.cs" />
     <Compile Include="Stages\CheckOperandCountStage.cs" />
     <Compile Include="Stages\MethodTableBuilderStage.cs" />
