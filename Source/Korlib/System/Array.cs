@@ -192,9 +192,9 @@ namespace System
 		[Serializable]
 		private sealed class SZArrayEnumerator : IEnumerator, IDisposable
 		{
-			Array array;
-			int currentPosition;
-			int length;
+			private Array array;
+			private int currentPosition;
+			private int length;
 
 			public SZArrayEnumerator(Array array)
 			{
@@ -286,7 +286,7 @@ namespace System
 			// -----------------------------------------------------------
 			// ------- Implement ICollection<T> interface methods --------
 			// -----------------------------------------------------------
-			void CopyTo<T>(T[] array, int index)
+			private void CopyTo<T>(T[] array, int index)
 			{
 				if (array != null && array.Rank != 1)
 					throw new ArgumentException("Multidimensional arrays are not supported");
@@ -295,7 +295,7 @@ namespace System
 				Array.Copy(_this, 0, array, index, _this.Length);
 			}
 
-			int get_Count<T>()
+			private int get_Count<T>()
 			{
 				T[] @this = RuntimeHelpers.UnsafeCast<T[]>(this);
 				return @this.Length;
@@ -304,7 +304,7 @@ namespace System
 			// -----------------------------------------------------------
 			// ---------- Implement IList<T> interface methods -----------
 			// -----------------------------------------------------------
-			T get_Item<T>(int index)
+			private T get_Item<T>(int index)
 			{
 				T[] @this = RuntimeHelpers.UnsafeCast<T[]>(this);
 				if ((uint)index >= (uint)@this.Length)
@@ -313,7 +313,7 @@ namespace System
 				return @this[index];
 			}
 
-			void set_Item<T>(int index, T value)
+			private void set_Item<T>(int index, T value)
 			{
 				T[] @this = RuntimeHelpers.UnsafeCast<T[]>(this);
 				if ((uint)index >= (uint)@this.Length)
@@ -322,48 +322,48 @@ namespace System
 				@this[index] = value;
 			}
 
-			void Add<T>(T value)
+			private void Add<T>(T value)
 			{
 				// NOT SUPPORTED
 				throw new NotSupportedException();
 			}
 
-			bool Contains<T>(T value)
+			private bool Contains<T>(T value)
 			{
 				T[] @this = RuntimeHelpers.UnsafeCast<T[]>(this);
 				return Array.IndexOf(@this, value) != -1;
 			}
 
-			bool get_IsReadOnly<T>()
+			private bool get_IsReadOnly<T>()
 			{
 				return true;
 			}
 
-			void Clear<T>()
+			private void Clear<T>()
 			{
 				// NOT SUPPORTED
 				throw new NotSupportedException();
 			}
 
-			int IndexOf<T>(T value)
+			private int IndexOf<T>(T value)
 			{
 				T[] @this = RuntimeHelpers.UnsafeCast<T[]>(this);
 				return Array.IndexOf(@this, value);
 			}
 
-			void Insert<T>(int index, T value)
+			private void Insert<T>(int index, T value)
 			{
 				// NOT SUPPORTED
 				throw new NotSupportedException();
 			}
 
-			bool Remove<T>(T value)
+			private bool Remove<T>(T value)
 			{
 				// NOT SUPPORTED
 				throw new NotSupportedException();
 			}
 
-			void RemoveAt<T>(int index)
+			private void RemoveAt<T>(int index)
 			{
 				// NOT SUPPORTED
 				throw new NotSupportedException();
@@ -374,9 +374,9 @@ namespace System
 			[Serializable]
 			private sealed class SZGenericArrayEnumerator<T> : IEnumerator<T>, IDisposable
 			{
-				T[] array;
-				int currentPosition;
-				int length;
+				private T[] array;
+				private int currentPosition;
+				private int length;
 
 				public SZGenericArrayEnumerator(T[] array)
 				{

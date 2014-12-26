@@ -3,3 +3,10 @@
 
 # Custom for Visual Studio
 *.cs     diff=csharp
+*.sln    merge=union
+*.csproj merge=union
+
+# Image files are treated as binary by default.
+#*.jpg   binary
+#*.png   binary
+#*.gif   binary
