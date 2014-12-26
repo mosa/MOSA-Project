@@ -93,9 +93,13 @@ namespace Mosa.Compiler.Framework.Stages
 					if (list == null)
 						return;
 
+					context.AppendInstruction(IRInstruction.FinallyReturn);
+					context.AllocateBranchTargets((uint)list.Count);
+
 					foreach (var returnBlock in list)
 					{
-						context.AppendInstruction(IRInstruction.FinallyReturn, returnBlock);
+						//context.AppendInstruction(IRInstruction.FinallyReturn, returnBlock);
+						context.SetBranch(returnBlock);
 					}
 				}
 				else if (context.Instruction is LeaveInstruction)
