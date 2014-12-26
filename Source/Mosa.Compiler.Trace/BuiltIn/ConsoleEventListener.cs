@@ -17,7 +17,7 @@ namespace Mosa.Compiler.Trace.BuiltIn
 
 		private string supressed = null;
 
-        private void DisplayCompilingMethod(string info)
+		private void DisplayCompilingMethod(string info)
 		{
 			if (string.IsNullOrEmpty(info))
 				return;
@@ -28,7 +28,7 @@ namespace Mosa.Compiler.Trace.BuiltIn
 			Console.WriteLine(info);
 		}
 
-        private void TraceEvent(CompilerEvent compilerStage, string info)
+		private void TraceEvent(CompilerEvent compilerStage, string info)
 		{
 			switch (compilerStage)
 			{
