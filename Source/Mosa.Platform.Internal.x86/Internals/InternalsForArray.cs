@@ -7,8 +7,6 @@
  *  Stefan Andres Charsley (charsleysa) <charsleysa@gmail.com>
  */
 
-using System;
-
 namespace Mosa.Platform.Internal.x86
 {
 	// TODO: Implement properly for SZ arrays and multi dimensional arrays
