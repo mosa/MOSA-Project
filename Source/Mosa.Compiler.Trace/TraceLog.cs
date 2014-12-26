@@ -80,10 +80,7 @@ namespace Mosa.Compiler.Trace
 
 			foreach (var line in Lines)
 			{
-				if (sb.Length == 0)
-					sb.AppendLine();
-				else
-					sb.AppendLine(line);
+				sb.AppendLine(line);
 			}
 
 			return sb.ToString();

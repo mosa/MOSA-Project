@@ -127,6 +127,7 @@ namespace Mosa.Compiler.Framework.Stages
 							ctx.SetInstruction(IRInstruction.IntegerCompareBranch, ConditionCode.Equal, null, finallyReturnBlockVirtualRegister, Operand.CreateConstantSignedInt(TypeSystem, targets[0]));
 							ctx.SetBranch(targets[0]);
 							ctx.AppendInstruction(IRInstruction.Jmp, newBlocks[0].BasicBlock);
+							LinkBlocks(ctx, newBlocks[0].BasicBlock);
 
 							for (int b = 1; b < targets.Length - 2; b++)
 							{
@@ -134,10 +135,11 @@ namespace Mosa.Compiler.Framework.Stages
 								newBlocks[b - 1].SetBranch(targets[b]);
 								newBlocks[b - 1].AppendInstruction(IRInstruction.Jmp, newBlocks[b + 1].BasicBlock);
 								newBlocks[b - 1].SetBranch(newBlocks[b + 1].BasicBlock);
+								//LinkBlocks(newBlocks[b - 1], BasicBlocks.GetByLabel(targets[b])); // don't include
+								LinkBlocks(newBlocks[b - 1], newBlocks[b + 1].BasicBlock);
 							}
 
 							newBlocks[targets.Length - 2].AppendInstruction(IRInstruction.Jmp, BasicBlocks.GetByLabel(targets[targets.Length - 1]));
-
 						}
 					}
 					else if (ctx.Instruction == IRInstruction.ExceptionStart)
@@ -157,8 +159,7 @@ namespace Mosa.Compiler.Framework.Stages
 				}
 			}
 
-
-			MethodCompiler.Stop();
+			//MethodCompiler.Stop();
 		}
 	}
 }
