@@ -12,6 +12,7 @@ using Mosa.Compiler.Framework.Analysis;
 using Mosa.Compiler.Framework.CIL;
 using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.MosaTypeSystem;
+using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework.Stages
 {
@@ -28,6 +29,9 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			if (!HasProtectedRegions)
 				return;
+
+			//if (MethodCompiler.Method.FullName.Contains("FindPair"))
+			//	Debug.Assert(false, MethodCompiler.Method.Name);
 
 			exceptionType = TypeSystem.GetTypeByName("System", "Exception");
 
@@ -96,10 +100,11 @@ namespace Mosa.Compiler.Framework.Stages
 					context.AppendInstruction(IRInstruction.FinallyReturn);
 					context.AllocateBranchTargets((uint)list.Count);
 
+					int targetNumber = 0;
 					foreach (var returnBlock in list)
 					{
-						//context.AppendInstruction(IRInstruction.FinallyReturn, returnBlock);
-						context.SetBranch(returnBlock);
+						context.BranchTargets[targetNumber] = returnBlock.Label;
+						targetNumber++;
 					}
 				}
 				else if (context.Instruction is LeaveInstruction)

@@ -55,7 +55,7 @@ namespace Mosa.TestWorld.x86.Tests
 		public static bool CompareTypeHandlesTest()
 		{
 			Type foundType = Type.GetType("System.String");
-			return foundType == Type.GetTypeFromHandle(foundType.TypeHandle);
+			return (foundType != null && foundType == Type.GetTypeFromHandle(foundType.TypeHandle));
 		}
 
 		public static bool TypeHandleFromObjectTest()
@@ -68,14 +68,14 @@ namespace Mosa.TestWorld.x86.Tests
 		{
 			Type foundType = Type.GetType("System.Int32&");
 			Type declaringType = Type.GetType("System.Int32");
-			return foundType.DeclaringType != null && foundType.DeclaringType.Equals(declaringType);
+			return (foundType != null && foundType.DeclaringType != null && foundType.DeclaringType.Equals(declaringType));
 		}
 
 		public static bool ElementTypeTest()
 		{
 			Type foundType = Type.GetType("System.Int32[]");
 			Type elementType = Type.GetType("System.Int32");
-			return foundType.HasElementType && foundType.GetElementType().Equals(elementType);
+			return (foundType != null && foundType.HasElementType && foundType.GetElementType().Equals(elementType));
 		}
 	}
 }
