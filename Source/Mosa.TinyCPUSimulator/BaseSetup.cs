@@ -35,16 +35,20 @@ namespace Mosa.TinyCPUSimulator
 
 		private Dictionary<SimRegister, SimOperand> registerOperands = new Dictionary<SimRegister, SimOperand>();
 
+		private object myLock = new object();
+
 		protected SimOperand CreateOperand(SimRegister register)
 		{
 			SimOperand operand = null;
 
-			if (!registerOperands.TryGetValue(register, out operand))
+			lock (myLock)
 			{
-				operand = new SimOperand(register);
-				registerOperands.Add(register, operand);
+				if (!registerOperands.TryGetValue(register, out operand))
+				{
+					operand = new SimOperand(register);
+					registerOperands.Add(register, operand);
+				}
 			}
-
 			return operand;
 		}
 
