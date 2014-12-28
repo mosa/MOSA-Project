@@ -226,7 +226,7 @@ namespace Mosa.Platform.x86
 				new IMethodCompilerStage[]
 				{
 					//new CheckOperandCountStage(),
-					new PlatformIntrinsicTransformationStage(),
+					new PlatformIntrinsicStage(),
 					new LongOperandTransformationStage(),
 
 					//new StopStage(),

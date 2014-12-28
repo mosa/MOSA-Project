@@ -94,6 +94,16 @@ namespace Mosa.Test.Collection
 			return IntList;
 		}
 
+		private static LinkedList<int> Populate2()
+		{
+			var IntList = new LinkedList<int>();
+
+			IntList.AddLast(100);
+			IntList.AddLast(300);
+
+			return IntList;
+		}
+
 		public static bool PopulateList()
 		{
 			var list = Populate();
@@ -115,6 +125,24 @@ namespace Mosa.Test.Collection
 		}
 
 		public static int ForeachNested()
+		{
+			var list = Populate2();
+			int sum = 0;
+
+			foreach (var item in list)
+			{
+				sum = sum + item;
+
+				foreach (var nested in list)
+				{
+					sum = sum + nested;
+				}
+			}
+
+			return sum;
+		}
+
+		public static int ForeachNested2()
 		{
 			var list = Populate();
 			var nestedList = Populate();

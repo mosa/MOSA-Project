@@ -172,7 +172,7 @@
     <Compile Include="Analysis\LoopAwareBlockOrder.cs" />
     <Compile Include="CompilationScheduler.cs" />
     <Compile Include="Stages\CheckPlatformOperandCountStage.cs" />
-    <Compile Include="Stages\PlatformIntrinsicTransformationStage.cs" />
+    <Compile Include="Stages\PlatformIntrinsicStage.cs" />
     <Compile Include="PlugSystem.cs" />
     <Compile Include="Stages\CheckIROperandCountStage.cs" />
     <Compile Include="Stages\BlockOrderingStage.cs" />
