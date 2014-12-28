@@ -22,6 +22,7 @@ namespace Mosa.TestWorld.x86.Tests
 			testMethods.AddLast(OtherTest4);
 			testMethods.AddLast(OtherTest5);
 			testMethods.AddLast(ForeachNestedTest);
+			testMethods.AddLast(ForeachNested2Test);
 			testMethods.AddLast(StructNewObjTest);
 			testMethods.AddLast(StructNotBoxed);
 			testMethods.AddLast(ForeachBreak);
@@ -77,6 +78,24 @@ namespace Mosa.TestWorld.x86.Tests
 			return (sum + nestedSum) == 4556;
 		}
 
+		public static bool ForeachNested2Test()
+		{
+			var list = Populate2();
+			int sum = 0;
+
+			foreach (var item in list)
+			{
+				sum = sum + item;
+
+				foreach (var nested in list)
+				{
+					sum = sum + nested;
+				}
+			}
+
+			return sum == 1200;
+		}
+
 		private static LinkedList<int> Populate()
 		{
 			LinkedList<int> IntList = new LinkedList<int>();
@@ -85,6 +104,16 @@ namespace Mosa.TestWorld.x86.Tests
 			{
 				IntList.AddLast(101 * i);
 			}
+
+			return IntList;
+		}
+
+		private static LinkedList<int> Populate2()
+		{
+			var IntList = new LinkedList<int>();
+
+			IntList.AddLast(100);
+			IntList.AddLast(300);
 
 			return IntList;
 		}

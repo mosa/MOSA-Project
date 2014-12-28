@@ -165,29 +165,25 @@ namespace Mosa.Test.Collection
 
 		public static int ForeachBreak()
 		{
-			LinkedList<Holder> IntList = new LinkedList<Holder>();
-
+			LinkedList<Holder> holderList = new LinkedList<Holder>();
 			for (int i = 1; i < 10; i++)
 			{
-				Holder h = new Holder();
-				h.value1 = 101 * i;
-				h.value2 = 101 * i;
-				h.value3 = 101 * i;
-				IntList.AddLast(h);
+				var p = new Holder(10 * i, 20 * i, 30 * i);
+				holderList.AddLast(p);
 			}
 
-			int sum = 0;
+			var found = FindHolder(holderList);
+			return (found.value1 + found.value2 + found.value3);
+		}
 
-			foreach (var item in IntList)
+		private static Holder FindHolder(LinkedList<Holder> holderList)
+		{
+			foreach (var p in holderList)
 			{
-				sum += item.value1;
-				sum = sum + item.value2;
-				sum = sum + item.value3;
-				if (sum > 5000)
-					break;
+				if (p.value1 == 90 && p.value2 == 180 && p.value3 == 270)
+					return p;
 			}
-
-			return sum;
+			return new Holder(0, 0, 0);
 		}
 
 		private struct Holder
@@ -195,6 +191,13 @@ namespace Mosa.Test.Collection
 			public int value1;
 			public int value2;
 			public int value3;
+
+			public Holder(int v1, int v2, int v3)
+			{
+				value1 = v1;
+				value2 = v2;
+				value3 = v3;
+			}
 		}
 	}
 }

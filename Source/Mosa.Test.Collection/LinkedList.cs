@@ -143,15 +143,6 @@ namespace Mosa.Test.Collection
 		}
 
 		/// <summary>
-		/// Adds the specified value.
-		/// </summary>
-		/// <param name="value">The value.</param>
-		public void Add(T value)
-		{
-			AddLast(value);
-		}
-
-		/// <summary>
 		/// Adds the last.
 		/// </summary>
 		/// <param name="value">The value.</param>
@@ -391,6 +382,24 @@ namespace Mosa.Test.Collection
 			}
 
 			return array;
+		}
+
+		/// <summary>
+		/// Returns an enumerator that iterates through the <see cref="T:LinkedList`1"/>.
+		/// </summary>
+		/// <returns>An <see cref="T:LinkedList`1.Enumerator"/> for the <see cref="T:LinkedList`1"/>.</returns>
+		public LinkedList<T>.Enumerator GetEnumerator()
+		{
+			return new Enumerator(this);
+		}
+
+		/// <summary>
+		/// Adds an item at the end of the <see cref="T:ICollection`1"/>.
+		/// </summary>
+		/// <param name="value">The value to add at the end of the <see cref="T:ICollection`1"/>.</param>
+		void ICollection<T>.Add(T value)
+		{
+			AddLast(value);
 		}
 
 		/// <summary>

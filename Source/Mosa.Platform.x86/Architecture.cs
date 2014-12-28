@@ -158,7 +158,7 @@ namespace Mosa.Platform.x86
 		/// </summary>
 		public override Register FinallyReturnBlockRegister
 		{
-			get { return GeneralPurposeRegister.EDX; }
+			get { return GeneralPurposeRegister.ESI; }
 		}
 
 		/// <summary>
