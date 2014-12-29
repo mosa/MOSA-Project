@@ -14,7 +14,7 @@ using Mosa.Compiler.MosaTypeSystem;
 namespace Mosa.Compiler.Framework.Stages
 {
 	/// <summary>
-	/// This stage inserts the ExceptionPrologue IR instruction at the beginning of each exception block.
+	/// This stage inserts the ExceptionStart IR instruction at the beginning of each exception block.
 	/// </summary>
 	public class ExceptionPrologueStage : BaseMethodCompilerStage
 	{

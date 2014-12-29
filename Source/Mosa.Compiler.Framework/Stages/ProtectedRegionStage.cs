@@ -57,13 +57,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 				context = new Context(InstructionSet, tryHandler);
 
-				//if (handler.HandlerType == ExceptionHandlerType.Exception)
-				//{
-				//	var exceptionObject = MethodCompiler.CreateVirtualRegister(handler.Type);
-
-				//	context.AppendInstruction(IRInstruction.ExceptionStart, exceptionObject);
-				//}
-				//else
 				if (handler.HandlerType == ExceptionHandlerType.Finally)
 				{
 					var exceptionObject = MethodCompiler.CreateVirtualRegister(exceptionType);
