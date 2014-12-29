@@ -22,10 +22,10 @@ namespace Mosa.Platform.x86.Instructions
 		#region Data Members
 
 		private static readonly OpCode R_8 = new OpCode(new byte[] { 0xEE });
-		private static readonly OpCode R_32 = new OpCode(new byte[] { 0xE7 });
+		private static readonly OpCode R_32 = new OpCode(new byte[] { 0xEF });
 
 		private static readonly OpCode C_8 = new OpCode(new byte[] { 0xE6 });
-		private static readonly OpCode C_32 = new OpCode(new byte[] { 0xEF });
+		private static readonly OpCode C_32 = new OpCode(new byte[] { 0xE7 });
 
 		#endregion Data Members
 
@@ -47,20 +47,20 @@ namespace Mosa.Platform.x86.Instructions
 		/// <param name="source">The source operand.</param>
 		/// <returns></returns>
 		/// <exception cref="System.ArgumentException">@No opcode for operand type. [ + destination + ,  + source + )</exception>
-		private OpCode ComputeOpCode(InstructionSize size, Operand source, Operand third)
+		private OpCode ComputeOpCode(InstructionSize size, Operand destination, Operand source)
 		{
-			Debug.Assert(source.IsConstant || source.IsCPURegister);
+			Debug.Assert(destination.IsConstant || destination.IsCPURegister);
 
 			//size = BaseMethodCompilerStage.GetInstructionSize(size, destination);
 
-			if (source.IsCPURegister)
+			if (destination.IsCPURegister)
 			{
 				if (size == InstructionSize.Size8)
 					return R_8;
 
 				return R_32;
 			}
-			if (source.IsConstant)
+			if (destination.IsConstant)
 			{
 				if (size == InstructionSize.Size8)
 					return C_8;
@@ -80,7 +80,7 @@ namespace Mosa.Platform.x86.Instructions
 		{
 			var opCode = ComputeOpCode(context.Size, context.Operand1, context.Operand2);
 
-			if (context.Operand2.IsConstant)
+			if (context.Operand1.IsConstant)
 			{
 				emitter.Emit(opCode, context.Operand1, null);
 			}
