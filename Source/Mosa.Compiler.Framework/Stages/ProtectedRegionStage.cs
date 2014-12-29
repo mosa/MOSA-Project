@@ -125,27 +125,19 @@ namespace Mosa.Compiler.Framework.Stages
 							var finallyBlock = BasicBlocks.GetByLabel(entry.HandlerStart);
 
 							context.AppendInstruction(IRInstruction.CallFinally, finallyBlock, tryFinallyBlock);
+
+							// Fix flow
+							var nextBlock = context.BasicBlock.NextBlocks[context.BasicBlock.NextBlocks.Count - 1];
+							nextBlock.PreviousBlocks.Remove(context.BasicBlock);
+							context.BasicBlock.NextBlocks.Remove(nextBlock);
+							LinkBlocks(context, finallyBlock);
 						}
 						else
 						{
 							context.AppendInstruction(IRInstruction.Jmp, tryFinallyBlock);
 						}
 
-						// Fix flow control
 						Debug.Assert(context.BasicBlock.NextBlocks.Count <= 1);
-
-						//if (context.BasicBlock.NextBlocks.Count == 1)
-						//{
-						//	var nextBlock = context.BasicBlock.NextBlocks[0];
-
-						//	if (!BasicBlocks.HeadBlocks.Contains(nextBlock))
-						//	{
-						//		BasicBlocks.AddHeaderBlock(nextBlock);
-						//	}
-
-						//	context.BasicBlock.NextBlocks.Clear();
-						//	nextBlock.PreviousBlocks.Remove(context.BasicBlock);
-						//}
 					}
 					else
 					{

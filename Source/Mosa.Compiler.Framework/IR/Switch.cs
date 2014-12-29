@@ -11,6 +11,21 @@ namespace Mosa.Compiler.Framework.IR
 {
 	public class Switch : BaseIRInstruction
 	{
+		#region Properties
+
+		/// <summary>
+		/// Determines flow behavior of this instruction.
+		/// </summary>
+		/// <value></value>
+		/// <remarks>
+		/// Knowledge of control flow is required for correct basic block
+		/// building. Any instruction that alters the control flow must override
+		/// this property and correctly identify its control flow modifications.
+		/// </remarks>
+		public override FlowControl FlowControl { get { return FlowControl.Switch; } }
+
+		#endregion Properties
+
 		#region Construction
 
 		/// <summary>

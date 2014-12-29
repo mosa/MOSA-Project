@@ -401,7 +401,8 @@ namespace Mosa.Compiler.Framework
 			while (!ctx.IsBlockStartInstruction)
 			{
 				if (ctx.Instruction.FlowControl == FlowControl.ConditionalBranch ||
-						ctx.Instruction.FlowControl == FlowControl.UnconditionalBranch)
+					ctx.Instruction.FlowControl == FlowControl.UnconditionalBranch ||
+					ctx.Instruction.FlowControl == FlowControl.Switch)
 				{
 					var targets = ctx.BranchTargets;
 
