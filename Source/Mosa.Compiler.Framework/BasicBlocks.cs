@@ -249,6 +249,16 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
+		/// Removes the header block.
+		/// </summary>
+		/// <param name="basicBlock">The basic block.</param>
+		public void RemoveHeaderBlock(BasicBlock basicBlock)
+		{
+			if (headBlocks.Contains(basicBlock))
+				headBlocks.Remove(basicBlock);
+		}
+
+		/// <summary>
 		/// Determines whether [is header block] [the specified basic block].
 		/// </summary>
 		/// <param name="basicBlock">The basic block.</param>
