@@ -32,14 +32,14 @@ namespace Mosa.Compiler.Framework
 
 		public static Context CreateNewBlock(this InstructionSet instructionSet, BasicBlocks basicBlocks)
 		{
-			Context ctx = new Context(instructionSet);
+			var ctx = new Context(instructionSet);
 
 			ctx.AppendInstruction(IRInstruction.BlockStart);
 			int start = ctx.Index;
 			ctx.AppendInstruction(IRInstruction.BlockEnd);
 			int last = ctx.Index;
 
-			BasicBlock block = basicBlocks.CreateBlockWithAutoLabel(start, last);
+			var block = basicBlocks.CreateBlockWithAutoLabel(start, last);
 			ctx.BasicBlock = block;
 
 			ctx.GotoPrevious();

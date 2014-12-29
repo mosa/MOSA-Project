@@ -30,9 +30,6 @@ namespace Mosa.Compiler.Framework.Stages
 			if (!HasProtectedRegions)
 				return;
 
-			//if (MethodCompiler.Method.FullName.Contains("FindPair"))
-			//	Debug.Assert(false, MethodCompiler.Method.Name);
-
 			exceptionType = TypeSystem.GetTypeByName("System", "Exception");
 
 			InsertBlockProtectInstructions();
@@ -60,13 +57,14 @@ namespace Mosa.Compiler.Framework.Stages
 
 				context = new Context(InstructionSet, tryHandler);
 
-				if (handler.HandlerType == ExceptionHandlerType.Exception)
-				{
-					var exceptionObject = MethodCompiler.CreateVirtualRegister(handler.Type);
+				//if (handler.HandlerType == ExceptionHandlerType.Exception)
+				//{
+				//	var exceptionObject = MethodCompiler.CreateVirtualRegister(handler.Type);
 
-					context.AppendInstruction(IRInstruction.ExceptionStart, exceptionObject);
-				}
-				else if (handler.HandlerType == ExceptionHandlerType.Finally)
+				//	context.AppendInstruction(IRInstruction.ExceptionStart, exceptionObject);
+				//}
+				//else
+				if (handler.HandlerType == ExceptionHandlerType.Finally)
 				{
 					var exceptionObject = MethodCompiler.CreateVirtualRegister(exceptionType);
 					var finallyOperand = MethodCompiler.CreateVirtualRegister(TypeSystem.BuiltIn.I4);
@@ -139,6 +137,22 @@ namespace Mosa.Compiler.Framework.Stages
 						{
 							context.AppendInstruction(IRInstruction.Jmp, tryFinallyBlock);
 						}
+
+						// Fix flow control
+						Debug.Assert(context.BasicBlock.NextBlocks.Count <= 1);
+
+						//if (context.BasicBlock.NextBlocks.Count == 1)
+						//{
+						//	var nextBlock = context.BasicBlock.NextBlocks[0];
+
+						//	if (!BasicBlocks.HeadBlocks.Contains(nextBlock))
+						//	{
+						//		BasicBlocks.AddHeaderBlock(nextBlock);
+						//	}
+
+						//	context.BasicBlock.NextBlocks.Clear();
+						//	nextBlock.PreviousBlocks.Remove(context.BasicBlock);
+						//}
 					}
 					else
 					{

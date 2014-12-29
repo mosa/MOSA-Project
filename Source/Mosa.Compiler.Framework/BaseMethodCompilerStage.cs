@@ -312,7 +312,7 @@ namespace Mosa.Compiler.Framework
 			BasicBlock nextBlock = BasicBlocks.CreateBlockWithAutoLabel(next.Index, current.BasicBlock.EndIndex);
 			Context nextContext = new Context(InstructionSet, nextBlock);
 
-			foreach (BasicBlock block in current.BasicBlock.NextBlocks)
+			foreach (var block in current.BasicBlock.NextBlocks)
 			{
 				nextBlock.NextBlocks.Add(block);
 				block.PreviousBlocks.Remove(current.BasicBlock);

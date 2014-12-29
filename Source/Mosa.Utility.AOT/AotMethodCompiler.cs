@@ -39,13 +39,16 @@ namespace Mosa.Utility.Aot
 			Pipeline.Add(new IMethodCompilerStage[] {
 				new CILDecodingStage(),
 				new BasicBlockBuilderStage(),
-				new ProtectedRegionStage(),
 				new StackSetupStage(),
+				new ExceptionPrologueStage(),
 				new OperandAssignmentStage(),
+				new ProtectedRegionStage(),
+				//new ProtectedRegionFlowUpdateStage(),
 				new StaticAllocationResolutionStage(),
 				new CILTransformationStage(),
 				new ConvertCompoundStage(),
 				new UnboxValueTypeStage(),
+				new ExceptionStage(),
 
 				(compilerOptions.EnablePromoteTemporaryVariablesOptimization) ? new PromoteTempVariablesStage() : null,
 
@@ -58,7 +61,6 @@ namespace Mosa.Utility.Aot
 				(compilerOptions.EnableSSA) ? new LeaveSSA() : null,
 
 				new IRCleanup(),
-				new ExceptionStage(),
 				new PlatformStubStage(),
 				new	PlatformEdgeSplitStage(),
 				new GreedyRegisterAllocatorStage(),
