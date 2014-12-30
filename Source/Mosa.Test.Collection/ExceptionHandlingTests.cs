@@ -175,6 +175,30 @@ namespace Mosa.Test.Collection
 			return a;
 		}
 
+		public static int TryFinally7()
+		{
+			// This doesn't actually generate a try/finally
+			// but it uses the Leave instruction outside of protected regions
+			// so we must test that the compiler can handle this scenario
+			return TryFinally7Part();
+		}
+
+		private static int TryFinally7Part()
+		{
+			int[] b = new int[10];
+			for (int i = 0; i < b.Length; i++)
+			{
+				b[i] = 100 * i;
+			}
+
+			foreach(var j in b)
+			{
+				if (j == 900)
+					return j;
+			}
+			return 0;
+		}
+
 		public static int ExceptionTest1()
 		{
 			int a = 10;

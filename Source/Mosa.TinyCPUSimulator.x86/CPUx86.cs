@@ -292,10 +292,10 @@ namespace Mosa.TinyCPUSimulator.x86
 
 			switch (opcode)
 			{
-				case 0x90: return new SimInstruction(Opcode.Nop, 1);
-				case 0xFA: return new SimInstruction(Opcode.Cli, 1);
-				case 0xFB: return new SimInstruction(Opcode.Sti, 1);
-				case 0xC3: return new SimInstruction(Opcode.Ret, 1);
+				case 0x90: return new SimInstruction(Opcode.Nop, 0, 1);
+				case 0xFA: return new SimInstruction(Opcode.Cli, 0, 1);
+				case 0xFB: return new SimInstruction(Opcode.Sti, 0, 1);
+				case 0xC3: return new SimInstruction(Opcode.Ret, 0, 1);
 				default: return null;
 			}
 		}

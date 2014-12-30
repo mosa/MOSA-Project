@@ -8,7 +8,9 @@
  */
 
 using Mosa.Compiler.Framework.IR;
+using Mosa.Compiler.MosaTypeSystem;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework.Stages
 {
@@ -16,18 +18,26 @@ namespace Mosa.Compiler.Framework.Stages
 	/// </summary>
 	public class ExceptionStage : BaseMethodCompilerStage
 	{
-		protected Dictionary<BasicBlock, Operand> exceptionRegisters;
+		protected Dictionary<BasicBlock, Operand> exceptionVirtualRegisters;
+		protected Dictionary<BasicBlock, Operand> finallyReturnVirtualRegisters;
+
+		protected MosaType exceptionType;
 
 		protected override void Run()
 		{
 			if (!HasProtectedRegions)
 				return;
 
-			var exceptionRegister = Operand.CreateCPURegister(TypeLayout.TypeSystem.BuiltIn.Pointer, Architecture.ExceptionRegister);
+			exceptionVirtualRegisters = new Dictionary<BasicBlock, Operand>();
+			finallyReturnVirtualRegisters = new Dictionary<BasicBlock, Operand>();
+
+			exceptionType = TypeSystem.GetTypeByName("System", "Exception");
+
+			var exceptionRegister = Operand.CreateCPURegister(exceptionType, Architecture.ExceptionRegister);
+
+			var finallyReturnBlockRegister = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, Architecture.FinallyReturnBlockRegister);
 
 			var nullOperand = Operand.GetNull(TypeSystem);
-
-			CreateExceptionReturnOperands();
 
 			for (int i = 0; i < BasicBlocks.Count; i++)
 			{
@@ -49,49 +59,100 @@ namespace Mosa.Compiler.Framework.Stages
 					else if (ctx.Instruction == IRInstruction.CallFinally)
 					{
 						var target = ctx.BranchTargets[0];
+						var finallyReturn = ctx.BranchTargets[1];
 
 						ctx.SetInstruction(IRInstruction.KillAll);
 						ctx.AppendInstruction(IRInstruction.Move, exceptionRegister, nullOperand);
-						ctx.AppendInstruction(IRInstruction.InternalCall);
+						ctx.AppendInstruction(IRInstruction.Move, finallyReturnBlockRegister, Operand.CreateConstantSignedInt(TypeSystem, finallyReturn));
+						ctx.AppendInstruction(IRInstruction.Jmp);
 						ctx.SetBranch(target);
 					}
 					else if (ctx.Instruction == IRInstruction.FinallyStart)
 					{
-						var header = FindImmediateExceptionHandler(ctx);
-						var headerBlock = BasicBlocks.GetByLabel(header.HandlerStart);
+						// Remove from header blocks
+						BasicBlocks.RemoveHeaderBlock(ctx.BasicBlock);
 
-						var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.Pointer);
+						var exceptionVirtualRegister = ctx.Result;
+						var finallyReturnBlockVirtualRegister = ctx.Result2;
+
+						exceptionVirtualRegisters.Add(ctx.BasicBlock, exceptionVirtualRegister);
+						finallyReturnVirtualRegisters.Add(ctx.BasicBlock, finallyReturnBlockRegister);
 
 						ctx.SetInstruction(IRInstruction.KillAll);
 						ctx.AppendInstruction(IRInstruction.Gen, exceptionRegister);
-						ctx.AppendInstruction(IRInstruction.Move, exceptionRegisters[headerBlock], exceptionRegister);
+						ctx.AppendInstruction(IRInstruction.Gen, finallyReturnBlockRegister);
+
+						ctx.AppendInstruction(IRInstruction.Move, exceptionVirtualRegister, exceptionRegister);
+						ctx.AppendInstruction(IRInstruction.Move, finallyReturnBlockVirtualRegister, finallyReturnBlockRegister);
 					}
 					else if (ctx.Instruction == IRInstruction.FinallyEnd)
 					{
 						var header = FindImmediateExceptionHandler(ctx);
 						var headerBlock = BasicBlocks.GetByLabel(header.HandlerStart);
 
-						var newBlocks = CreateNewBlocksWithContexts(2);
+						var exceptionVirtualRegister = exceptionVirtualRegisters[headerBlock];
+						var finallyReturnBlockVirtualRegister = finallyReturnVirtualRegisters[headerBlock];
 
-						ctx.SetInstruction(IRInstruction.Move, exceptionRegister, exceptionRegisters[headerBlock]);
-						ctx.AppendInstruction(IRInstruction.IntegerCompareBranch, ConditionCode.Equal, null, exceptionRegister, nullOperand);
+						var newBlocks = CreateNewBlocksWithContexts(1);
+						var nextBlock = Split(ctx);
+
+						ctx.SetInstruction(IRInstruction.IntegerCompareBranch, ConditionCode.NotEqual, null, exceptionVirtualRegister, nullOperand);
 						ctx.SetBranch(newBlocks[0].BasicBlock);
-						ctx.AppendInstruction(IRInstruction.Jmp, newBlocks[1].BasicBlock);
+						ctx.AppendInstruction(IRInstruction.Jmp, nextBlock.BasicBlock);
 						LinkBlocks(ctx, newBlocks[0]);
-						LinkBlocks(ctx, newBlocks[1]);
-
-						newBlocks[0].AppendInstruction(IRInstruction.InternalReturn);
+						LinkBlocks(ctx, nextBlock);
 
 						var method = PlatformInternalRuntimeType.FindMethodByName("ExceptionHandler");
 
-						newBlocks[1].AppendInstruction(IRInstruction.Call, null, Operand.CreateSymbolFromMethod(TypeSystem, method));
-						newBlocks[1].MosaMethod = method;
+						newBlocks[0].AppendInstruction(IRInstruction.Move, exceptionRegister, exceptionVirtualRegister);
+						newBlocks[0].AppendInstruction(IRInstruction.Call, null, Operand.CreateSymbolFromMethod(TypeSystem, method));
+						newBlocks[0].MosaMethod = method;
+					}
+					else if (ctx.Instruction == IRInstruction.FinallyReturn)
+					{
+						var targets = ctx.BranchTargets;
+
+						var header = FindImmediateExceptionHandler(ctx);
+						var headerBlock = BasicBlocks.GetByLabel(header.HandlerStart);
+
+						var finallyReturnBlockVirtualRegister = finallyReturnVirtualRegisters[headerBlock];
+
+						Debug.Assert(targets.Length != 0);
+
+						if (targets.Length == 1)
+						{
+							ctx.SetInstruction(IRInstruction.Jmp, BasicBlocks.GetByLabel(targets[0]));
+							LinkBlocks(ctx, BasicBlocks.GetByLabel(targets[0]));
+						}
+						else
+						{
+							var newBlocks = CreateNewBlocksWithContexts(targets.Length - 1);
+
+							ctx.SetInstruction(IRInstruction.IntegerCompareBranch, ConditionCode.Equal, null, finallyReturnBlockVirtualRegister, Operand.CreateConstantSignedInt(TypeSystem, targets[0]));
+							ctx.SetBranch(targets[0]);
+							ctx.AppendInstruction(IRInstruction.Jmp, newBlocks[0].BasicBlock);
+							LinkBlocks(ctx, BasicBlocks.GetByLabel(targets[0]), newBlocks[0].BasicBlock);
+
+							for (int b = 1; b < targets.Length - 2; b++)
+							{
+								newBlocks[b - 1].AppendInstruction(IRInstruction.IntegerCompareBranch, ConditionCode.Equal, null, finallyReturnBlockVirtualRegister, Operand.CreateConstantSignedInt(TypeSystem, targets[b]));
+								newBlocks[b - 1].SetBranch(targets[b]);
+								newBlocks[b - 1].AppendInstruction(IRInstruction.Jmp, newBlocks[b + 1].BasicBlock);
+								newBlocks[b - 1].SetBranch(newBlocks[b + 1].BasicBlock);
+								LinkBlocks(newBlocks[b - 1], BasicBlocks.GetByLabel(targets[b]), newBlocks[b + 1].BasicBlock);
+							}
+
+							newBlocks[targets.Length - 2].AppendInstruction(IRInstruction.Jmp, BasicBlocks.GetByLabel(targets[targets.Length - 1]));
+							LinkBlocks(newBlocks[targets.Length - 2], BasicBlocks.GetByLabel(targets[targets.Length - 1]));
+						}
 					}
 					else if (ctx.Instruction == IRInstruction.ExceptionStart)
 					{
+						var exceptionVirtualRegister = ctx.Result;
+
 						ctx.SetInstruction(IRInstruction.KillAll);
 						ctx.AppendInstruction(IRInstruction.Gen, exceptionRegister);
-						ctx.AppendInstruction(IRInstruction.Move, ctx.Result, exceptionRegister);
+						ctx.AppendInstruction(IRInstruction.Move, exceptionVirtualRegister, exceptionRegister);
 					}
 					else if (ctx.Instruction == IRInstruction.ExceptionEnd)
 					{
@@ -101,20 +162,8 @@ namespace Mosa.Compiler.Framework.Stages
 					}
 				}
 			}
-		}
 
-		protected void CreateExceptionReturnOperands()
-		{
-			exceptionRegisters = new Dictionary<BasicBlock, Operand>();
-
-			foreach (var handler in MethodCompiler.Method.ExceptionHandlers)
-			{
-				var block = BasicBlocks.GetByLabel(handler.HandlerStart);
-
-				var register = AllocateVirtualRegister(TypeSystem.BuiltIn.Pointer);
-
-				exceptionRegisters.Add(block, register);
-			}
+			//MethodCompiler.Stop();
 		}
 	}
 }

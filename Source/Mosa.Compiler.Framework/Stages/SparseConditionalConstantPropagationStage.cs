@@ -128,7 +128,9 @@ namespace Mosa.Compiler.Framework.Stages
 
 				while (context.IsEmpty || context.IsBlockEndInstruction || context.BranchTargets != null)
 				{
-					if (context.BranchTargets != null)
+					if (context.Instruction.FlowControl == FlowControl.ConditionalBranch ||
+						context.Instruction.FlowControl == FlowControl.UnconditionalBranch ||
+						context.Instruction.FlowControl == FlowControl.Switch)
 					{
 						Debug.Assert(context.BranchTargets.Length == 1);
 

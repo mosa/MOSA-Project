@@ -22,7 +22,7 @@ namespace Mosa.Kernel.x86
 		public static byte Get(byte index)
 		{
 			//Native.Cli();
-			Native.Out(0x70, index);
+			Native.Out8(0x70, index);
 			Native.Nop();
 			Native.Nop();
 			Native.Nop();
@@ -41,11 +41,11 @@ namespace Mosa.Kernel.x86
 		public static void Set(byte index, byte value)
 		{
 			//Native.Cli();
-			Native.Out(0x70, index);
+			Native.Out8(0x70, index);
 			Native.Nop();
 			Native.Nop();
 			Native.Nop();
-			Native.Out(0x71, value);
+			Native.Out8(0x71, value);
 
 			//Native.Sti();
 		}
@@ -56,7 +56,7 @@ namespace Mosa.Kernel.x86
 		private static void Delay()
 		{
 			Native.In(0x80);
-			Native.Out(0x80, 0);
+			Native.Out8(0x80, 0);
 		}
 
 		/// <summary>

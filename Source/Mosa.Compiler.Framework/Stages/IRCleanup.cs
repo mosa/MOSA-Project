@@ -35,6 +35,13 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 
 			// copied from EmptyBlockRemovalStage.cs
+
+			// don't remove any blocks given unusual flow control
+			if (HasProtectedRegions)
+				return;
+
+			//var trace = CreateTraceLog();
+
 			foreach (var block in BasicBlocks)
 			{
 				// don't process other unusual blocks (header blocks, return block, etc.)
@@ -47,6 +54,17 @@ namespace Mosa.Compiler.Framework.Stages
 
 				if (!IsEmptyBlockWithSingleJump(block))
 					continue;
+
+				//if (trace.Active)
+				//{
+				//	trace.Log("====== Removing: " + block.ToString() + " # " + block.Sequence);
+				//	trace.Log("     New Target: " + block.NextBlocks[0].ToString());
+				//	foreach (var from in block.PreviousBlocks)
+				//	{
+				//		trace.Log("Previous Blocks: " + from.ToString());
+				//	}
+				//}
+
 
 				RemoveEmptyBlockWithSingleJump(block);
 			}

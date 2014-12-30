@@ -1389,6 +1389,14 @@ namespace Mosa.Platform.x86.Stages
 		{
 		}
 
+		/// <summary>
+		/// Visitation function for FinallyReturn.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IIRVisitor.FinallyReturn(Context context)
+		{
+		}
+
 		///// <summary>
 		///// Visitation function for StackLoad.
 		///// </summary>

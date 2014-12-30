@@ -43,6 +43,7 @@
     <Compile Include="BaseX86Opcode.cs" />
     <Compile Include="ControlRegister.cs" />
     <Compile Include="CR0.cs" />
+    <Compile Include="Emulate\MosaDebug.cs" />
     <Compile Include="Emulate\BochDebug.cs" />
     <Compile Include="Emulate\CMOS.cs" />
     <Compile Include="Emulate\MosaImage.cs" />

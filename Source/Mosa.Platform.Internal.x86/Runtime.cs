@@ -269,15 +269,25 @@ namespace Mosa.Platform.Internal.x86
 
 		public static void DebugOutput(byte code)
 		{
-			Native.Out8(0xE9, code);
+			Native.Out8(0xEA, code);
 		}
 
 		public static void DebugOutput(uint code)
 		{
-			Native.Out8(0xE9, (byte)(code & 0xFF));
-			Native.Out8(0xE9, (byte)((code >> 8) & 0xFF));
-			Native.Out8(0xE9, (byte)((code >> 16) & 0xFF));
-			Native.Out8(0xE9, (byte)((code >> 24) & 0xFF));
+			Native.Out8(0xEB, (byte)((code >> 24) & 0xFF));
+			Native.Out8(0xEB, (byte)((code >> 16) & 0xFF));
+			Native.Out8(0xEB, (byte)((code >> 8) & 0xFF));
+			Native.Out8(0xEB, (byte)(code & 0xFF));
+		}
+
+		public static void DebugOutput(string msg)
+		{
+			foreach (var c in msg)
+			{
+				Native.Out8(0xEC, (byte)c);
+			}
+
+			Native.Out8(0xEC, 0);
 		}
 
 		public static void Fault(uint code)
@@ -307,7 +317,6 @@ namespace Mosa.Platform.Internal.x86
 				entries--;
 			}
 
-			DebugOutput((byte)0xA1);
 			return 0;
 		}
 
@@ -337,13 +346,19 @@ namespace Mosa.Platform.Internal.x86
 				entries--;
 			}
 
-			DebugOutput((byte)0xA2);
 			return 0;
 		}
 
 		public static uint GetProtectedRegionEntryByAddress(uint address, uint exceptionType, uint methodDef)
 		{
-			DebugOutput((byte)0xB0);
+			//DebugOutput("===GetProtectedRegionEntryByAddress===");
+
+			//DebugOutput("address:");
+			//DebugOutput(address);
+			//DebugOutput("exceptionType:");
+			//DebugOutput(exceptionType);
+			//DebugOutput("methodDef:");
+			//DebugOutput(methodDef);
 
 			uint table = Mosa.Internal.Native.Load32(methodDef, NativeIntSize * 6);
 
@@ -355,54 +370,73 @@ namespace Mosa.Platform.Internal.x86
 			if (method == 0)
 				return 0;
 
-			DebugOutput(address);
-			DebugOutput(method);
-			DebugOutput(table);
+			//DebugOutput("table:");
+			//DebugOutput(table);
+			//DebugOutput("method:");
+			//DebugOutput(method);
 
 			uint offset = address - method;
 
+			//DebugOutput("offset:");
+			//DebugOutput(offset);
+
 			uint entries = Mosa.Internal.Native.Load32(table);
+
+			//DebugOutput("entries:");
+			//DebugOutput(entries);
 
 			table = table + 4;
 
-			DebugOutput((byte)0xB1);
-			DebugOutput((byte)entries);
-
-			DebugOutput(offset);
-
 			while (entries > 0)
 			{
+				//DebugOutput("entry:");
+				//DebugOutput(entries);
+
 				uint start = Mosa.Internal.Native.Load32(table, NativeIntSize * 0);
 				uint end = Mosa.Internal.Native.Load32(table, NativeIntSize * 1);
 
-				DebugOutput(start);
-				DebugOutput(end);
+				//DebugOutput("start:");
+				//DebugOutput(start);
+
+				//DebugOutput("start:");
+				//DebugOutput(end);
 
 				if ((offset >= start) && (offset < end))
 				{
-					DebugOutput((byte)0xFF);
-
 					uint type = Mosa.Internal.Native.Load32(table, NativeIntSize * 3);
+
+					//DebugOutput("type:");
+					//DebugOutput(type);
 
 					if (type == 0)
 					{
+						//DebugOutput("entry found:");
+						//DebugOutput(table);
+
 						return table;
 					}
 
 					uint exceptiontype = Mosa.Internal.Native.Load32(table, NativeIntSize * 4);
 
+					//DebugOutput("exceptiontype:");
+					//DebugOutput(exceptiontype);
+
 					if (exceptiontype == exceptionType)
 					{
+						//DebugOutput("entry found:");
+						//DebugOutput(table);
+
 						return table;
 					}
 				}
 
-				table = table + (NativeIntSize * 6);
+				table = table + (NativeIntSize * 5);
 
 				entries--;
 			}
 
-			DebugOutput((byte)0xA3);
+			//DebugOutput("No entry found");
+
 			return 0;
 		}
 
@@ -430,6 +464,13 @@ namespace Mosa.Platform.Internal.x86
 
 		public static void SetReturnAddressForStackFrame(uint stackframe, uint value)
 		{
+			//DebugOutput("===SetReturnAddressForStackFrame===");
+			//DebugOutput("stackframe:");
+			//DebugOutput(stackframe);
+
+			//DebugOutput("current value:");
+			//DebugOutput(Native.Get32(stackframe + NativeIntSize));
+
 			Native.Set32(stackframe + NativeIntSize, value);
 		}
 
@@ -456,12 +497,14 @@ namespace Mosa.Platform.Internal.x86
 
 			uint stackFrame = GetStackFrame(1);
 
+			//DebugOutput("===ExceptionHandler===");
+
 			uint returnAdddress = GetReturnAddressFromStackFrame(stackFrame);
 
 			if (returnAdddress == 0)
 			{
 				// hit the top of stack!
-				Fault(2);
+				Fault(0XBAD00002);
 			}
 
 			uint exceptionType = Mosa.Internal.Native.Load32(exceptionObject);
@@ -477,9 +520,17 @@ namespace Mosa.Platform.Internal.x86
 					// found handler for current method, call it
 
 					uint methodStart = Mosa.Internal.Native.Load32(methodDef, NativeIntSize * 4);
-					uint handlerOffset = Mosa.Internal.Native.Load32(protectedRegion, NativeIntSize * 3);
+					uint handlerOffset = Mosa.Internal.Native.Load32(protectedRegion, NativeIntSize * 2);
+
+					//DebugOutput("methodStart:");
+					//DebugOutput(methodStart);
+					//DebugOutput("handlerOffset:");
+					//DebugOutput(handlerOffset);
 
 					uint target = methodStart + handlerOffset;
+
+					//DebugOutput("target:");
+					//DebugOutput(target);
 
 					SetReturnAddressForStackFrame(stackFrame, target);
 

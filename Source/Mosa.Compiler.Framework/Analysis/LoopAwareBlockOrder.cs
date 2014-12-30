@@ -235,7 +235,7 @@ namespace Mosa.Compiler.Framework.Analysis
 			if (loopCount == 0)
 				return;
 
-			Stack<BasicBlock> worklist = new Stack<BasicBlock>();
+			var worklist = new Stack<BasicBlock>();
 
 			foreach (var loopEnd in loopEnds)
 			{
@@ -269,7 +269,7 @@ namespace Mosa.Compiler.Framework.Analysis
 		{
 			visited = new BitArray(blockCount, false);
 
-			Stack<BasicBlock> worklist = new Stack<BasicBlock>();
+			var worklist = new Stack<BasicBlock>();
 
 			worklist.Push(start);
 
@@ -306,19 +306,19 @@ namespace Mosa.Compiler.Framework.Analysis
 		private void ComputeOrder(BasicBlock start)
 		{
 			// Create sorted worklist
-			SortedList<Priority, BasicBlock> workList = new SortedList<Priority, BasicBlock>();
+			var workList = new SortedList<Priority, BasicBlock>();
 
 			// Start worklist with first block
 			workList.Add(new Priority(0, 0, true), start);
 
 			while (workList.Count != 0)
 			{
-				BasicBlock block = workList.Values[workList.Count - 1];
+				var block = workList.Values[workList.Count - 1];
 				workList.RemoveAt(workList.Count - 1);
 
 				blockOrder[orderIndex++] = block;
 
-				foreach (BasicBlock successor in block.NextBlocks)
+				foreach (var successor in block.NextBlocks)
 				{
 					forwardBranchesCount[successor.Sequence]--;
 

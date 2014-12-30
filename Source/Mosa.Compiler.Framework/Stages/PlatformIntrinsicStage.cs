@@ -15,13 +15,13 @@ namespace Mosa.Compiler.Framework.Stages
 	/// <summary>
 	///
 	/// </summary>
-	public sealed class PlatformIntrinsicTransformationStage : BaseMethodCompilerStage
+	public sealed class PlatformIntrinsicStage : BaseMethodCompilerStage
 	{
 		protected override void Run()
 		{
-			foreach (BasicBlock block in BasicBlocks)
+			foreach (var block in BasicBlocks)
 			{
-				for (Context context = CreateContext(block); !context.IsBlockEndInstruction; context.GotoNext())
+				for (var context = CreateContext(block); !context.IsBlockEndInstruction; context.GotoNext())
 				{
 					if (context.IsEmpty)
 						continue;

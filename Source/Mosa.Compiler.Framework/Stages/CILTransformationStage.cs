@@ -1310,7 +1310,11 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="context">The context.</param>
 		void CIL.ICILVisitor.Leave(Context context)
 		{
-			throw new InvalidCompilerException();
+			// If leave is inside a protected region it should have been processed by another stage and removed.
+			// If we reach here then the leave is not inside a protected region and must act like a branch.
+			// We must also tell the compiler to link the two blocks together
+			context.ReplaceInstructionOnly(IRInstruction.Jmp);
+			LinkBlocks(context, BasicBlocks.GetByLabel(context.BranchTargets[0]));
 		}
 
 		/// <summary>
@@ -1348,7 +1352,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			// Get the ptr and clear context
 			Operand ptr = context.Operand1;
-			context.SetInstruction(IRInstruction.Nop, null, null);
+			context.SetInstruction(IRInstruction.Nop);
 
 			// Setup context for VmCall
 			ReplaceWithVmCall(context, VmCall.Memset);

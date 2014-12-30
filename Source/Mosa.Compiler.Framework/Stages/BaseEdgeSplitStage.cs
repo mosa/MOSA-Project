@@ -54,7 +54,7 @@ namespace Mosa.Compiler.Framework.Stages
 		private void SplitEdge(BasicBlock from, BasicBlock to)
 		{
 			// Create new block z
-			Context ctx = CreateNewBlockWithContext();
+			var ctx = CreateNewBlockWithContext();
 			InsertJumpInstruction(ctx, to);
 			ctx.Label = -1;
 

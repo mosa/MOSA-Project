@@ -369,6 +369,10 @@ namespace Mosa.Compiler.Framework.Analysis
 			{
 				Switch(context);
 			}
+			else if (instruction == IRInstruction.FinallyStart)
+			{
+				FinallyStart(context);
+			}
 			else
 			{
 				// for all other instructions
@@ -555,6 +559,15 @@ namespace Mosa.Compiler.Framework.Analysis
 
 			UpdateToOverDefined(result);
 			UpdateToOverDefined(operand1);
+		}
+
+		private void FinallyStart(Context context)
+		{
+			var result = GetVariableState(context.Result);
+			//var result2 = GetVariableState(context.Result2);
+
+			UpdateToOverDefined(result);
+			//UpdateToOverDefined(result2);
 		}
 
 		private void Default(Context context)

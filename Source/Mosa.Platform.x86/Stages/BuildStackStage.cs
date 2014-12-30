@@ -29,31 +29,21 @@ namespace Mosa.Platform.x86.Stages
 			UpdateEpilogue();
 		}
 
-		public bool SaveRegisters { get; set; }
-
-		public bool InsertBreaks { get; set; }
-
-		public BuildStackStage()
-		{
-			SaveRegisters = false;
-			InsertBreaks = false;
-		}
-
 		/// <summary>
 		/// Updates the prologue.
 		/// </summary>
 		private void UpdatePrologue()
 		{
 			// Update prologue Block
-			var prologueBlock = this.BasicBlocks.PrologueBlock;
+			var prologueBlock = BasicBlocks.PrologueBlock;
 
 			if (prologueBlock != null)
 			{
-				Context prologueContext = new Context(InstructionSet, prologueBlock);
+				var prologueContext = new Context(InstructionSet, prologueBlock);
 
 				prologueContext.GotoNext();
 
-				Debug.Assert(prologueContext.Instruction is Prologue);
+				Debug.Assert(prologueContext.Instruction == IRInstruction.Prologue);
 
 				AddPrologueInstructions(prologueContext);
 			}
@@ -69,7 +59,7 @@ namespace Mosa.Platform.x86.Stages
 
 			if (epilogueBlock != null)
 			{
-				Context epilogueContext = new Context(InstructionSet, epilogueBlock);
+				var epilogueContext = new Context(InstructionSet, epilogueBlock);
 
 				epilogueContext.GotoNext();
 
@@ -78,7 +68,7 @@ namespace Mosa.Platform.x86.Stages
 					epilogueContext.GotoNext();
 				}
 
-				Debug.Assert(epilogueContext.Instruction is Epilogue);
+				Debug.Assert(epilogueContext.Instruction == IRInstruction.Epilogue);
 
 				AddEpilogueInstructions(epilogueContext);
 			}
@@ -93,43 +83,12 @@ namespace Mosa.Platform.x86.Stages
 			Operand ebp = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EBP);
 			Operand esp = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.ESP);
 
-			//Operand eax = Operand.CreateCPURegister(typeSystem.BuiltIn.I4, GeneralPurposeRegister.EAX);
-			Operand edx = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EDX);
-			Operand edi = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EDI);
-			Operand ecx = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.ECX);
-			Operand ebx = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EBX);
-
 			context.SetInstruction(X86.Push, null, ebp);
 			context.AppendInstruction(X86.Mov, ebp, esp);
 
 			if (MethodCompiler.StackLayout.StackSize != 0)
 			{
 				context.AppendInstruction(X86.Sub, esp, esp, Operand.CreateConstantSignedInt(TypeSystem, -MethodCompiler.StackLayout.StackSize));
-			}
-
-			if (InsertBreaks)// && !methodCompiler.Method.FullName.Equals(".cctor"))
-			{
-				//Note that if you debug using visual studio you must enable unmanaged code
-				//debugging, otherwise the function will never return and the breakpoint will
-				//never appear.
-
-				// int 3
-				context.AppendInstruction(X86.Break);
-
-				// Uncomment this line to enable breakpoints within Bochs
-				//context.AppendInstruction(CPUx86.Instruction.BochsDebug);
-			}
-
-			if (SaveRegisters)
-			{
-				// Save EDX for int32 return values (or do not save EDX for non-int64 return values)
-				if (!MethodCompiler.Method.Signature.ReturnType.IsUI8)
-				{
-					context.AppendInstruction(X86.Push, null, edx);
-				}
-				context.AppendInstruction(X86.Push, null, edi);
-				context.AppendInstruction(X86.Push, null, ecx);
-				context.AppendInstruction(X86.Push, null, ebx);
 			}
 		}
 
@@ -142,25 +101,7 @@ namespace Mosa.Platform.x86.Stages
 			Operand ebp = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EBP);
 			Operand esp = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.ESP);
 
-			Operand edx = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EDX);
-			Operand edi = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EDI);
-			Operand ecx = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.ECX);
-			Operand ebx = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EBX);
-
 			context.Remove();
-
-			if (SaveRegisters)
-			{
-				context.AppendInstruction(X86.Pop, ebx);
-				context.AppendInstruction(X86.Pop, ecx);
-				context.AppendInstruction(X86.Pop, edi);
-
-				// Save EDX for int32 return values (or do not save EDX for non-int64 return values)
-				if (!MethodCompiler.Method.Signature.ReturnType.IsUI8)
-				{
-					context.AppendInstruction(X86.Pop, edx);
-				}
-			}
 
 			if (MethodCompiler.StackLayout.StackSize != 0)
 			{

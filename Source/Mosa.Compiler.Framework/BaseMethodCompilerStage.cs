@@ -124,7 +124,7 @@ namespace Mosa.Compiler.Framework
 			NativePointerSize = Architecture.NativePointerSize;
 			NativePointerAlignment = Architecture.NativeAlignment;
 
-			NativeInstructionSize = NativePointerSize == 32 ? InstructionSize.Size32 : InstructionSize.Size64;
+			NativeInstructionSize = NativePointerSize == 4 ? InstructionSize.Size32 : InstructionSize.Size64;
 
 			traceLogs = new List<TraceLog>();
 
@@ -312,7 +312,7 @@ namespace Mosa.Compiler.Framework
 			BasicBlock nextBlock = BasicBlocks.CreateBlockWithAutoLabel(next.Index, current.BasicBlock.EndIndex);
 			Context nextContext = new Context(InstructionSet, nextBlock);
 
-			foreach (BasicBlock block in current.BasicBlock.NextBlocks)
+			foreach (var block in current.BasicBlock.NextBlocks)
 			{
 				nextBlock.NextBlocks.Add(block);
 				block.PreviousBlocks.Remove(current.BasicBlock);
@@ -400,13 +400,18 @@ namespace Mosa.Compiler.Framework
 			// Find branch or jump to (to) and replace it with js
 			while (!ctx.IsBlockStartInstruction)
 			{
-				if (ctx.BranchTargets != null)
+				if (ctx.Instruction.FlowControl == FlowControl.ConditionalBranch ||
+					ctx.Instruction.FlowControl == FlowControl.UnconditionalBranch ||
+					ctx.Instruction.FlowControl == FlowControl.Switch)
 				{
 					var targets = ctx.BranchTargets;
+
 					for (int index = 0; index < targets.Length; index++)
 					{
 						if (targets[index] == oldTarget.Label)
+						{
 							targets[index] = newTarget.Label;
+						}
 					}
 				}
 
@@ -455,6 +460,23 @@ namespace Mosa.Compiler.Framework
 			foreach (var handler in MethodCompiler.Method.ExceptionHandlers)
 			{
 				if (handler.IsLabelWithinTry(label) || handler.IsLabelWithinHandler(label))
+				{
+					return handler;
+				}
+			}
+
+			return null;
+		}
+
+		protected MosaExceptionHandler FindFinallyHandler(Context context)
+		{
+			MosaExceptionHandler innerClause = null;
+
+			int label = context.Label;
+
+			foreach (var handler in MethodCompiler.Method.ExceptionHandlers)
+			{
+				if (handler.IsLabelWithinHandler(label))
 				{
 					return handler;
 				}

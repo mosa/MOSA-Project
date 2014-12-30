@@ -7,10 +7,12 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
 */
 
+using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.Analysis;
 using Mosa.Compiler.Framework.CIL;
 using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.MosaTypeSystem;
+using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework.Stages
 {
@@ -19,10 +21,16 @@ namespace Mosa.Compiler.Framework.Stages
 	/// </summary>
 	public class ProtectedRegionStage : BaseMethodCompilerStage
 	{
+		private KeyedList<MosaExceptionHandler, BasicBlock> returns = new KeyedList<MosaExceptionHandler, BasicBlock>();
+
+		private MosaType exceptionType;
+
 		protected override void Run()
 		{
 			if (!HasProtectedRegions)
 				return;
+
+			exceptionType = TypeSystem.GetTypeByName("System", "Exception");
 
 			InsertBlockProtectInstructions();
 			UpdateBlockProtectInstructions();
@@ -49,15 +57,12 @@ namespace Mosa.Compiler.Framework.Stages
 
 				context = new Context(InstructionSet, tryHandler);
 
-				if (handler.HandlerType == ExceptionHandlerType.Exception)
+				if (handler.HandlerType == ExceptionHandlerType.Finally)
 				{
-					var exceptionObject = MethodCompiler.CreateVirtualRegister(handler.Type);
+					var exceptionObject = MethodCompiler.CreateVirtualRegister(exceptionType);
+					var finallyOperand = MethodCompiler.CreateVirtualRegister(TypeSystem.BuiltIn.I4);
 
-					context.AppendInstruction(IRInstruction.ExceptionStart, exceptionObject);
-				}
-				else if (handler.HandlerType == ExceptionHandlerType.Finally)
-				{
-					context.AppendInstruction(IRInstruction.FinallyStart);
+					context.AppendInstruction2(IRInstruction.FinallyStart, exceptionObject, finallyOperand);
 				}
 			}
 		}
@@ -75,7 +80,23 @@ namespace Mosa.Compiler.Framework.Stages
 
 				if (context.Instruction is EndFinallyInstruction)
 				{
-					context.ReplaceInstructionOnly(IRInstruction.FinallyEnd);
+					context.SetInstruction(IRInstruction.FinallyEnd);
+
+					var entry = FindFinallyHandler(context);
+					var list = returns.Get(entry);
+
+					if (list == null)
+						return;
+
+					context.AppendInstruction(IRInstruction.FinallyReturn);
+					context.AllocateBranchTargets((uint)list.Count);
+
+					int targetNumber = 0;
+					foreach (var returnBlock in list)
+					{
+						context.BranchTargets[targetNumber] = returnBlock.Label;
+						targetNumber++;
+					}
 				}
 				else if (context.Instruction is LeaveInstruction)
 				{
@@ -92,21 +113,31 @@ namespace Mosa.Compiler.Framework.Stages
 
 					if (createLink)
 					{
-						var tryEndNext = context.BranchTargets[0];
-						var tryEndNextBlock = BasicBlocks.GetByLabel(tryEndNext);
+						var tryFinally = context.BranchTargets[0];
+						var tryFinallyBlock = BasicBlocks.GetByLabel(tryFinally);
+
+						returns.Add(entry, tryFinallyBlock);
+
+						context.SetInstruction(IRInstruction.TryEnd);
 
 						if (entry.HandlerType == ExceptionHandlerType.Finally)
 						{
 							var finallyBlock = BasicBlocks.GetByLabel(entry.HandlerStart);
 
-							context.SetInstruction(IRInstruction.CallFinally, finallyBlock);
-							context.AppendInstruction(IRInstruction.TryEnd);
+							context.AppendInstruction(IRInstruction.CallFinally, finallyBlock, tryFinallyBlock);
+
+							// Fix flow
+							var nextBlock = context.BasicBlock.NextBlocks[context.BasicBlock.NextBlocks.Count - 1];
+							nextBlock.PreviousBlocks.Remove(context.BasicBlock);
+							context.BasicBlock.NextBlocks.Remove(nextBlock);
+							LinkBlocks(context, finallyBlock);
 						}
 						else
 						{
-							context.SetInstruction(IRInstruction.TryEnd);
+							context.AppendInstruction(IRInstruction.Jmp, tryFinallyBlock);
 						}
-						context.AppendInstruction(IRInstruction.Jmp, tryEndNextBlock);
+
+						Debug.Assert(context.BasicBlock.NextBlocks.Count <= 1);
 					}
 					else
 					{

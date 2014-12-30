@@ -15,7 +15,8 @@ namespace Mosa.TinyCPUSimulator.x86.Opcodes
 		{
 			uint a = LoadValue(cpu, instruction.Operand1);
 			uint b = LoadValue(cpu, instruction.Operand2);
-			int size = instruction.Operand2.Size;
+
+			int size = instruction.Size != 0 ? instruction.Size : instruction.Operand2.Size;
 
 			if (size == 8)
 				cpu.Write8Port(a, (byte)b);

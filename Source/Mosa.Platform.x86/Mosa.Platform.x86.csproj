@@ -107,6 +107,8 @@
     <Compile Include="Intrinsic\GetAssemblyListTable.cs" />
     <Compile Include="Intrinsic\GetExceptionRegister.cs" />
     <Compile Include="Intrinsic\GetMethodExceptionLookupTable.cs" />
+    <Compile Include="Intrinsic\Out16.cs" />
+    <Compile Include="Intrinsic\Out32.cs" />
     <Compile Include="Intrinsic\Pause.cs" />
     <Compile Include="Intrinsic\LockSet32.cs" />
     <Compile Include="Intrinsic\SyncCompareAndSwap.cs" />
@@ -156,7 +158,7 @@
     <Compile Include="Intrinsic\Lgdt.cs" />
     <Compile Include="Intrinsic\Lidt.cs" />
     <Compile Include="Intrinsic\Nop.cs" />
-    <Compile Include="Intrinsic\Out.cs" />
+    <Compile Include="Intrinsic\Out8.cs" />
     <Compile Include="Intrinsic\Sti.cs" />
     <Compile Include="Stages\CheckOperandCountStage.cs" />
     <Compile Include="Stages\MethodTableBuilderStage.cs" />

@@ -117,6 +117,14 @@ namespace Mosa.Platform.x64
 		}
 
 		/// <summary>
+		/// Gets the finally return block register.
+		/// </summary>
+		public override Register FinallyReturnBlockRegister
+		{
+			get { return null; /* GeneralPurposeRegister.EDX;*/ }
+		}
+
+		/// <summary>
 		/// Retrieves the stack pointer register of the x64.
 		/// </summary>
 		public override Register ProgramCounter

@@ -16,6 +16,10 @@ namespace Mosa.Compiler.Framework.Stages
 	{
 		protected override void Run()
 		{
+			// don't remove any blocks given unusual flow control
+			if (HasProtectedRegions)
+				return;
+
 			//var trace = CreateTrace();
 
 			foreach (var block in BasicBlocks)

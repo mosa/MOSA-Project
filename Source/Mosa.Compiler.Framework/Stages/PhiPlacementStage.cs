@@ -68,6 +68,9 @@ namespace Mosa.Compiler.Framework.Stages
 			if (BasicBlocks.HeadBlocks.Count == 0)
 				return;
 
+			if (HasProtectedRegions)
+				return;
+
 			CollectAssignments();
 
 			switch (strategy)

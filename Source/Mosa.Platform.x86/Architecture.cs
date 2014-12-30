@@ -154,6 +154,14 @@ namespace Mosa.Platform.x86
 		}
 
 		/// <summary>
+		/// Gets the finally return block register.
+		/// </summary>
+		public override Register FinallyReturnBlockRegister
+		{
+			get { return GeneralPurposeRegister.ESI; }
+		}
+
+		/// <summary>
 		/// Retrieves the program counter register of the x86.
 		/// </summary>
 		public override Register ProgramCounter
@@ -218,7 +226,7 @@ namespace Mosa.Platform.x86
 				new IMethodCompilerStage[]
 				{
 					//new CheckOperandCountStage(),
-					new PlatformIntrinsicTransformationStage(),
+					new PlatformIntrinsicStage(),
 					new LongOperandTransformationStage(),
 
 					//new StopStage(),
