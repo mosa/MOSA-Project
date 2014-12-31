@@ -61,24 +61,19 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		private Dictionary<MosaType, List<MosaMethod>> typeMethodTables = new Dictionary<MosaType, List<MosaMethod>>();
 
-		#endregion Data members
+		/// <summary>
+		/// The method stack sizes
+		/// </summary>
+		private Dictionary<MosaMethod, int> methodStackSizes = new Dictionary<MosaMethod, int>();
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="MosaTypeLayout" /> class.
+		/// The method parameter stack sizes
 		/// </summary>
-		/// <param name="typeSystem">The type system.</param>
-		/// <param name="nativePointerSize">Size of the native pointer.</param>
-		/// <param name="nativePointerAlignment">The native pointer alignment.</param>
-		public MosaTypeLayout(TypeSystem typeSystem, int nativePointerSize, int nativePointerAlignment)
-		{
-			NativePointerAlignment = nativePointerAlignment;
-			NativePointerSize = nativePointerSize;
-			TypeSystem = typeSystem;
+		private Dictionary<MosaMethod, int> methodParameterStackSizes = new Dictionary<MosaMethod, int>();
 
-			Debug.Assert(nativePointerSize >= 4);
+		#endregion Data members
 
-			ResolveLayouts();
-		}
+		#region Properties
 
 		/// <summary>
 		/// Gets the type system associated with this instance.
@@ -97,6 +92,30 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		/// <value>The native pointer alignment.</value>
 		public int NativePointerAlignment { get; private set; }
+
+		/// <summary>
+		/// Get a list of interfaces
+		/// </summary>
+		public IList<MosaType> Interfaces { get { return interfaces; } }
+
+		#endregion Properties
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="MosaTypeLayout" /> class.
+		/// </summary>
+		/// <param name="typeSystem">The type system.</param>
+		/// <param name="nativePointerSize">Size of the native pointer.</param>
+		/// <param name="nativePointerAlignment">The native pointer alignment.</param>
+		public MosaTypeLayout(TypeSystem typeSystem, int nativePointerSize, int nativePointerAlignment)
+		{
+			NativePointerAlignment = nativePointerAlignment;
+			NativePointerSize = nativePointerSize;
+			TypeSystem = typeSystem;
+
+			Debug.Assert(nativePointerSize >= 4);
+
+			ResolveLayouts();
+		}
 
 		/// <summary>
 		/// Gets the method table offset.
@@ -229,11 +248,6 @@ namespace Mosa.Compiler.Framework
 			return methodTable;
 		}
 
-		/// <summary>
-		/// Get a list of interfaces
-		/// </summary>
-		public IList<MosaType> Interfaces { get { return interfaces; } }
-
 		public bool IsCompoundType(MosaType type)
 		{
 			// i.e. whether copying of the type requires multiple move
@@ -249,6 +263,48 @@ namespace Mosa.Compiler.Framework
 				return true;
 
 			return false;
+		}
+
+		public void SetMethodStackSize(MosaMethod method, int size)
+		{
+			methodStackSizes.Add(method, size);
+		}
+
+		public void SetMethodParameterStackSize(MosaMethod method, int size)
+		{
+			methodParameterStackSizes.Add(method, size);
+		}
+
+		public int GetMethodStackSize(MosaMethod method)
+		{
+			var size = 0;
+
+			if (!methodStackSizes.TryGetValue(method, out size))
+			{
+				if ((method.MethodAttributes & MosaMethodAttributes.Abstract) == MosaMethodAttributes.Abstract)
+					return 0;
+
+				return 0;
+				//throw new InvalidCompilerException();
+			}
+
+			return size;
+		}
+
+		public int GetMethodParameterStackSize(MosaMethod method)
+		{
+			var size = 0;
+
+			if (!methodParameterStackSizes.TryGetValue(method, out size))
+			{
+				if ((method.MethodAttributes & MosaMethodAttributes.Abstract) == MosaMethodAttributes.Abstract)
+					return 0;
+
+				return 0;
+				//throw new InvalidCompilerException();
+			}
+
+			return size;
 		}
 
 		#region Internal - Layout

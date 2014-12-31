@@ -38,7 +38,11 @@ namespace Mosa.Compiler.Framework.Stages
 		private void LayoutStackVariables()
 		{
 			// assign increasing stack offsets to each variable
-			MethodCompiler.StackLayout.StackSize = LayoutVariables(MethodCompiler.StackLayout.Stack, CallingConvention, CallingConvention.OffsetOfFirstLocal, true);
+			int size = LayoutVariables(MethodCompiler.StackLayout.Stack, CallingConvention, CallingConvention.OffsetOfFirstLocal, true);
+
+			MethodCompiler.StackLayout.StackSize = size;
+
+			MethodCompiler.TypeLayout.SetMethodStackSize(MethodCompiler.Method, size);
 		}
 
 		/// <summary>
@@ -65,7 +69,12 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				returnSize = TypeLayout.GetTypeSize(MethodCompiler.Method.Signature.ReturnType);
 			}
-			LayoutVariables(parameters, CallingConvention, CallingConvention.OffsetOfFirstParameter + returnSize, false);
+
+			int size = LayoutVariables(parameters, CallingConvention, CallingConvention.OffsetOfFirstParameter + returnSize, false);
+
+			MethodCompiler.StackLayout.StackParameterSize = size;
+
+			MethodCompiler.TypeLayout.SetMethodParameterStackSize(MethodCompiler.Method, size);
 		}
 
 		/// <summary>

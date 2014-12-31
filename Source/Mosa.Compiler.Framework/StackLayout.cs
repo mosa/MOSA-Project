@@ -10,9 +10,6 @@
 using Mosa.Compiler.MosaTypeSystem;
 using System.Collections.Generic;
 
-// NOTE: Eventually all temporary stack locals will be converted to virtual registers and
-//       removed from this StackLayout class except for spill slots
-
 namespace Mosa.Compiler.Framework
 {
 	/// <summary>
@@ -39,6 +36,14 @@ namespace Mosa.Compiler.Framework
 		/// The size of the stack memory.
 		/// </value>
 		public int StackSize { get; set; }
+
+		/// <summary>
+		/// Gets or sets the size of the stack parameter.
+		/// </summary>
+		/// <value>
+		/// The size of the stack parameter.
+		/// </value>
+		public int StackParameterSize { get; set; }
 
 		/// <summary>
 		/// Gets the parameters.
