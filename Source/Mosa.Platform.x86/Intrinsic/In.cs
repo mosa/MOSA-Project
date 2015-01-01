@@ -14,7 +14,7 @@ namespace Mosa.Platform.x86.Intrinsic
 	/// <summary>
 	/// Representations the x86 in instruction.
 	/// </summary>
-	public sealed class In : IIntrinsicPlatformMethod
+	internal sealed class In : IIntrinsicPlatformMethod
 	{
 		#region Methods
 

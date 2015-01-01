@@ -18,7 +18,7 @@ namespace Mosa.Platform.x86.Intrinsic
 	/// <summary>
 	/// Representations a jump to the global interrupt handler.
 	/// </summary>
-	public sealed class GetIDTJumpLocation : IIntrinsicPlatformMethod
+	internal sealed class GetIDTJumpLocation : IIntrinsicPlatformMethod
 	{
 		#region Methods
 

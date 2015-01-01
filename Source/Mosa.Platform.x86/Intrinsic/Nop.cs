@@ -14,7 +14,7 @@ namespace Mosa.Platform.x86.Intrinsic
 	/// <summary>
 	///
 	/// </summary>
-	public class Nop : IIntrinsicPlatformMethod
+	internal class Nop : IIntrinsicPlatformMethod
 	{
 		#region Methods
 

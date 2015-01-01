@@ -15,7 +15,7 @@ namespace Mosa.Platform.x86.Intrinsic
 	/// <summary>
 	/// Representations the x86 Pause instruction.
 	/// </summary>
-	public sealed class Pause : IIntrinsicPlatformMethod
+	internal sealed class Pause : IIntrinsicPlatformMethod
 	{
 		#region Methods
 

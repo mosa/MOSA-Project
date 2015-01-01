@@ -13,7 +13,7 @@ namespace Mosa.Platform.x86.Intrinsic
 	/// <summary>
 	///
 	/// </summary>
-	public sealed class SetCR3 : SetControlRegisterBase
+	internal sealed class SetCR3 : SetControlRegisterBase
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="SetCR3"/> class.

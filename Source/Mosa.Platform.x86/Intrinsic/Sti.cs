@@ -15,7 +15,7 @@ namespace Mosa.Platform.x86.Intrinsic
 	/// <summary>
 	/// Representations the x86 sti instruction.
 	/// </summary>
-	public sealed class Sti : IIntrinsicPlatformMethod
+	internal sealed class Sti : IIntrinsicPlatformMethod
 	{
 		#region Methods
 
