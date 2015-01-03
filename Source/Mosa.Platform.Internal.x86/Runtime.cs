@@ -475,13 +475,6 @@ namespace Mosa.Platform.Internal.x86
 
 		public static void SetReturnAddressForStackFrame(uint stackframe, uint value)
 		{
-			//DebugOutput("===SetReturnAddressForStackFrame===");
-			//DebugOutput("stackframe:");
-			//DebugOutput(stackframe);
-
-			//DebugOutput("current value:");
-			//DebugOutput(Native.Get32(stackframe + NativeIntSize));
-
 			Native.Set32(stackframe + NativeIntSize, value);
 		}
 
@@ -533,17 +526,17 @@ namespace Mosa.Platform.Internal.x86
 						uint methodStart = Mosa.Internal.Native.Load32(methodDef, NativeIntSize * 4);
 						uint stackSize = Mosa.Internal.Native.Load32(methodDef, NativeIntSize * 3) & 0xFFFF; // lower 16-bits only
 						uint handlerOffset = Mosa.Internal.Native.Load32(protectedRegion, NativeIntSize * 2);
+						uint previousFrame = GetPreviousStackFrame(stackFrame);
 
 						uint jumpTarget = methodStart + handlerOffset;
-						uint newStack = stackFrame - 8 + stackSize;
-						stackFrame = stackFrame + 24;
+						uint newStack = previousFrame - stackSize;
 
 						//DebugOutput(jumpTarget);
 						//DebugOutput(stackSize);
-						//DebugOutput(stackFrame);
 						//DebugOutput(newStack);
+						//DebugOutput(previousFrame);
 
-						Native.FrameJump(jumpTarget, newStack, stackFrame);
+						Native.FrameJump(jumpTarget, newStack, previousFrame);
 					}
 				}
 

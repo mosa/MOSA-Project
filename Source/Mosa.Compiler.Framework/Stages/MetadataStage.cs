@@ -554,9 +554,6 @@ namespace Mosa.Compiler.Framework.Stages
 			int value = TypeLayout.GetMethodStackSize(method) | (TypeLayout.GetMethodParameterStackSize(method) << 16);
 			writer1.Write(value);
 
-			if (method.FullName.Contains("ExceptionTest1"))
-				Debug.WriteLine("Stack Size: 0x" + value.ToString("X"));
-
 			// 5. Pointer to Method
 			if (!method.IsAbstract)
 			{
