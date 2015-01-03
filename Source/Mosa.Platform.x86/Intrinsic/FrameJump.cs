@@ -25,12 +25,6 @@ namespace Mosa.Platform.x86.Intrinsic
 		/// <param name="typeSystem">The type system.</param>
 		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, BaseMethodCompiler methodCompiler)
 		{
-			// Call Native.FrameJump(v0/new eip v1/new esp, v2/new ebp)
-			//		MOV EBP <= v2
-			//		MOV ESP <= v1
-			//		JMP EAX
-			//		RET
-
 			Operand v0 = context.Operand1;
 			Operand v1 = context.Operand2;
 			Operand v2 = context.Operand3;
@@ -41,8 +35,6 @@ namespace Mosa.Platform.x86.Intrinsic
 			Operand eax = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EAX);
 			Operand ebx = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EBX);
 			Operand ecx = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I4, GeneralPurposeRegister.ECX);
-
-			//Operand returnAddress = Operand.CreateMemoryAddress(methodCompiler.TypeSystem.BuiltIn.I4, ebp, -4);
 
 			// Move all virtual registers into physical registers - necessary since stack frame pointer will change
 			context.SetInstruction(X86.Mov, eax, v0);

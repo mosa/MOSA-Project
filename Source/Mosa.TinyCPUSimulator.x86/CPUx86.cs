@@ -175,7 +175,7 @@ namespace Mosa.TinyCPUSimulator.x86
 			ESI.Value = 0;
 			EBP.Value = 0;
 			ESP.Value = 0;
-			ESP.Value = 0;
+			EDI.Value = 0;
 
 			CR0.Value = 0;
 			CR2.Value = 0;

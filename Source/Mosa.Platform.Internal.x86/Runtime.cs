@@ -531,22 +531,19 @@ namespace Mosa.Platform.Internal.x86
 						// found handler for current method, call it
 
 						uint methodStart = Mosa.Internal.Native.Load32(methodDef, NativeIntSize * 4);
-						//uint stackSize = Mosa.Internal.Native.Load32(methodDef, NativeIntSize * 3) & 0xFFFF; // lower 16-bits only
+						uint stackSize = Mosa.Internal.Native.Load32(methodDef, NativeIntSize * 3) & 0xFFFF; // lower 16-bits only
 						uint handlerOffset = Mosa.Internal.Native.Load32(protectedRegion, NativeIntSize * 2);
 
-						//stackFrame = stackFrame - 8;
 						uint jumpTarget = methodStart + handlerOffset;
-						//uint newStack = stackFrame + stackSize;
+						uint newStack = stackFrame - 8 + stackSize;
+						stackFrame = stackFrame + 24;
 
 						//DebugOutput(jumpTarget);
 						//DebugOutput(stackSize);
 						//DebugOutput(stackFrame);
 						//DebugOutput(newStack);
 
-						//Native.FrameJump(jumpTarget, newStack, stackFrame);
-						SetReturnAddressForStackFrame(stackFrame, jumpTarget);
-
-						return;
+						Native.FrameJump(jumpTarget, newStack, stackFrame);
 					}
 				}
 

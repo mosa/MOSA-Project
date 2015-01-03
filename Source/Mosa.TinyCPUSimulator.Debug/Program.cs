@@ -33,7 +33,7 @@ namespace Mosa.TinyCPUSimulator.Debug
 
 			fixture.ExceptionTest3();
 
-            //fixture.ExceptionTest4();
+            fixture.ExceptionTest3();
 		}
 
 		private static void Test12()
