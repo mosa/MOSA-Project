@@ -53,6 +53,7 @@ namespace Mosa.Compiler.Framework.Stages
 						var method = PlatformInternalRuntimeType.FindMethodByName("ExceptionHandler");
 
 						ctx.SetInstruction(IRInstruction.Move, exceptionRegister, ctx.Operand1);
+						//ctx.AppendInstruction(IRInstruction.KillAllExcept, null, exceptionRegister);
 						ctx.AppendInstruction(IRInstruction.Call, null, Operand.CreateSymbolFromMethod(TypeSystem, method));
 						ctx.MosaMethod = method;
 					}

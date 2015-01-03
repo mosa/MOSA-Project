@@ -105,6 +105,7 @@
     <Compile Include="Instructions\AddSD.cs" />
     <Compile Include="Intrinsic\Div.cs" />
     <Compile Include="Intrinsic\GetAssemblyListTable.cs" />
+    <Compile Include="Intrinsic\FrameJump.cs" />
     <Compile Include="Intrinsic\GetExceptionRegister.cs" />
     <Compile Include="Intrinsic\GetMethodExceptionLookupTable.cs" />
     <Compile Include="Intrinsic\Out16.cs" />

@@ -17,7 +17,7 @@ namespace Mosa.Platform.Internal.x86
 {
 	public unsafe static class Runtime
 	{
-		public const uint NativeIntSize = 4;
+		internal const uint NativeIntSize = 4;
 
 		#region Allocation
 
@@ -290,6 +290,12 @@ namespace Mosa.Platform.Internal.x86
 			Native.Out8(0xEC, 0);
 		}
 
+		public static void DebugOutput(string msg, uint code)
+		{
+			DebugOutput(msg);
+			DebugOutput(code);
+		}
+
 		public static void Fault(uint code)
 		{
 			DebugOutput(code);
@@ -440,6 +446,11 @@ namespace Mosa.Platform.Internal.x86
 			return 0;
 		}
 
+		public static uint GetPreviousStackFrame(uint ebp)
+		{
+			return Mosa.Internal.Native.Load32(ebp);
+		}
+
 		public static uint GetStackFrame(uint depth)
 		{
 			uint ebp = Native.GetEBP();
@@ -448,7 +459,7 @@ namespace Mosa.Platform.Internal.x86
 			{
 				depth--;
 
-				ebp = Mosa.Internal.Native.Load32(ebp);
+				ebp = GetPreviousStackFrame(ebp);
 
 				if (ebp == 0)
 					return 0;
@@ -497,50 +508,52 @@ namespace Mosa.Platform.Internal.x86
 
 			uint stackFrame = GetStackFrame(1);
 
-			//DebugOutput("===ExceptionHandler===");
-
-			uint returnAdddress = GetReturnAddressFromStackFrame(stackFrame);
-
-			if (returnAdddress == 0)
+			for (; ; )
 			{
-				// hit the top of stack!
-				Fault(0XBAD00002);
-			}
+				uint returnAdddress = GetReturnAddressFromStackFrame(stackFrame);
 
-			uint exceptionType = Mosa.Internal.Native.Load32(exceptionObject);
-
-			uint methodDef = GetMethodDefinitionViaMethodExceptionLookup(returnAdddress);
-
-			if (methodDef != 0)
-			{
-				uint protectedRegion = GetProtectedRegionEntryByAddress(returnAdddress - 1, exceptionType, methodDef);
-
-				if (protectedRegion != 0)
+				if (returnAdddress == 0)
 				{
-					// found handler for current method, call it
-
-					uint methodStart = Mosa.Internal.Native.Load32(methodDef, NativeIntSize * 4);
-					uint handlerOffset = Mosa.Internal.Native.Load32(protectedRegion, NativeIntSize * 2);
-
-					//DebugOutput("methodStart:");
-					//DebugOutput(methodStart);
-					//DebugOutput("handlerOffset:");
-					//DebugOutput(handlerOffset);
-
-					uint target = methodStart + handlerOffset;
-
-					//DebugOutput("target:");
-					//DebugOutput(target);
-
-					SetReturnAddressForStackFrame(stackFrame, target);
-
-					return;
+					// hit the top of stack!
+					Fault(0XBAD00002);
 				}
+
+				uint exceptionType = Mosa.Internal.Native.Load32(exceptionObject);
+
+				uint methodDef = GetMethodDefinitionViaMethodExceptionLookup(returnAdddress);
+
+				if (methodDef != 0)
+				{
+					uint protectedRegion = GetProtectedRegionEntryByAddress(returnAdddress - 1, exceptionType, methodDef);
+
+					if (protectedRegion != 0)
+					{
+						// found handler for current method, call it
+
+						uint methodStart = Mosa.Internal.Native.Load32(methodDef, NativeIntSize * 4);
+						//uint stackSize = Mosa.Internal.Native.Load32(methodDef, NativeIntSize * 3) & 0xFFFF; // lower 16-bits only
+						uint handlerOffset = Mosa.Internal.Native.Load32(protectedRegion, NativeIntSize * 2);
+
+						//stackFrame = stackFrame - 8;
+						uint jumpTarget = methodStart + handlerOffset;
+						//uint newStack = stackFrame + stackSize;
+
+						//DebugOutput(jumpTarget);
+						//DebugOutput(stackSize);
+						//DebugOutput(stackFrame);
+						//DebugOutput(newStack);
+
+						//Native.FrameJump(jumpTarget, newStack, stackFrame);
+						SetReturnAddressForStackFrame(stackFrame, jumpTarget);
+
+						return;
+					}
+				}
+
+				// no handler in method, go up the stack
+				stackFrame = GetPreviousStackFrame(stackFrame);
 			}
 
-			// no handler in method
-
-			//TODO: unwind stack and re-start check
 		}
 	}
 }

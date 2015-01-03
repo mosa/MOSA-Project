@@ -550,38 +550,39 @@ namespace Mosa.Compiler.Framework.Stages
 			// 3. Attributes
 			writer1.Write((uint)method.MethodAttributes);
 
-			// 4. Local Stack Size (16 Bits)
-			writer1.Write((ushort)TypeLayout.GetMethodStackSize(method));
+			// 4. Local Stack Size (16 Bits) && Parameter Stack Size (16 Bits)
+			int value = TypeLayout.GetMethodStackSize(method) | (TypeLayout.GetMethodParameterStackSize(method) << 16);
+			writer1.Write(value);
 
-			// 5. Parameter Stack Size (16 Bits)
-			writer1.Write((ushort)TypeLayout.GetMethodParameterStackSize(method));
+			if (method.FullName.Contains("ExceptionTest1"))
+				Debug.WriteLine("Stack Size: 0x" + value.ToString("X"));
 
-			// 6. Pointer to Method
+			// 5. Pointer to Method
 			if (!method.IsAbstract)
 			{
 				Linker.Link(LinkType.AbsoluteAddress, NativePatchType, methodTableSymbol, (int)writer1.Position, 0, method.FullName, SectionKind.Text, 0);
 			}
 			writer1.WriteZeroBytes(TypeLayout.NativePointerSize);
 
-			// 7. Pointer to return type
+			// 6. Pointer to return type
 			Linker.Link(LinkType.AbsoluteAddress, NativePatchType, methodTableSymbol, (int)writer1.Position, 0, method.Signature.ReturnType.FullName + Metadata.TypeDefinition, SectionKind.ROData, 0);
 			writer1.WriteZeroBytes(TypeLayout.NativePointerSize);
 
-			// 8. Pointer to Exception Handler Table
+			// 7. Pointer to Exception Handler Table
 			if (method.ExceptionHandlers.Count != 0)
 			{
 				Linker.Link(LinkType.AbsoluteAddress, NativePatchType, methodTableSymbol, (int)writer1.Position, 0, method.FullName + Metadata.ProtectedRegionTable, SectionKind.ROData, 0);
 			}
 			writer1.WriteZeroBytes(TypeLayout.NativePointerSize);
 
-			// 9. Pointer to GC Tracking information
+			// 8. Pointer to GC Tracking information
 			// TODO: This has yet to be designed.
 			writer1.WriteZeroBytes(TypeLayout.NativePointerSize);
 
-			// 10. Number of Parameters
+			// 9. Number of Parameters
 			writer1.Write((uint)method.Signature.Parameters.Count);
 
-			// 11. Pointers to Parameter Definitions
+			// 10. Pointers to Parameter Definitions
 			foreach (var parameter in method.Signature.Parameters)
 			{
 				// Create definition and get the symbol
