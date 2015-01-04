@@ -25,9 +25,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected override void Run()
 		{
-			if (!HasProtectedRegions)
-				return;
-
 			exceptionVirtualRegisters = new Dictionary<BasicBlock, Operand>();
 			finallyReturnVirtualRegisters = new Dictionary<BasicBlock, Operand>();
 
@@ -163,8 +160,6 @@ namespace Mosa.Compiler.Framework.Stages
 					}
 				}
 			}
-
-			//MethodCompiler.Stop();
 		}
 	}
 }
