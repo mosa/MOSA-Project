@@ -19,9 +19,23 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public MosaType PropertyType { get; private set; }
 
-		public MosaMethod GetterMethod { get; private set; }
+		public MosaType InterfaceType { get; private set; }
 
-		public MosaMethod SetterMethod { get; private set; }
+		public MosaMethod GetterMethod
+		{
+			get
+			{
+				return this.DeclaringType.FindMethodByName("get_" + this.Name);
+			}
+		}
+
+		public MosaMethod SetterMethod
+		{
+			get
+			{
+				return this.DeclaringType.FindMethodByName("set_" + this.Name);
+			}
+		}
 
 		internal MosaProperty()
 		{
@@ -53,9 +67,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 			public MosaType PropertyType { set { property.PropertyType = value; } }
 
-			public MosaMethod GetterMethod { set { property.GetterMethod = value; } }
-
-			public MosaMethod SetterMethod { set { property.SetterMethod = value; } }
+			public MosaType InterfaceType { set { property.InterfaceType = value; } }
 
 			public override void Dispose()
 			{

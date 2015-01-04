@@ -26,10 +26,16 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 		}
 
 		private Queue<MosaUnit> resolveQueue = new Queue<MosaUnit>();
+		private Queue<MosaType> arrayResolveQueue = new Queue<MosaType>();
 
 		public void EnqueueForResolve(MosaUnit unit)
 		{
 			resolveQueue.Enqueue(unit);
+		}
+
+		public void EnqueueForArrayResolve(MosaType type)
+		{
+			arrayResolveQueue.Enqueue(type);
 		}
 
 		public void Resolve()
@@ -88,6 +94,12 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 					using (var mosaModule = metadata.Controller.MutateModule(module))
 						mosaModule.EntryPoint = metadata.Cache.GetMethodByToken(new ScopedToken(moduleDef, moduleDef.EntryPoint.MDToken));
 				}
+			}
+
+			while (arrayResolveQueue.Count > 0)
+			{
+				MosaType type = arrayResolveQueue.Dequeue();
+				type.FinishSZArray();
 			}
 		}
 
@@ -186,6 +198,9 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 
 				ResolveCustomAttributes(mosaType, type.GetUnderlyingObject<UnitDesc<TypeDef, TypeSig>>().Definition);
 			}
+
+			// Add type again to make it easier to find
+			metadata.Controller.AddType(type);
 		}
 
 		private void ResolveField(MosaField field)
@@ -217,20 +232,6 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 			using (var mosaProperty = metadata.Controller.MutateProperty(property))
 			{
 				mosaProperty.PropertyType = metadata.Loader.GetType(resolver.Resolve(property.GetPropertySig().RetType));
-
-				var propertyDesc = property.GetUnderlyingObject<UnitDesc<PropertyDef, PropertySig>>();
-
-				if (propertyDesc.Definition.GetMethod != null)
-				{
-					var getterDesc = new UnitDesc<MethodDef, MethodSig>(propertyDesc.Definition.GetMethod.Module, propertyDesc.Definition.GetMethod, propertyDesc.Definition.GetMethod.MethodSig);
-					mosaProperty.GetterMethod = metadata.Cache.GetMethodByToken(getterDesc.Token);
-				}
-
-				if (propertyDesc.Definition.SetMethod != null)
-				{
-					var setterDesc = new UnitDesc<MethodDef, MethodSig>(propertyDesc.Definition.SetMethod.Module, propertyDesc.Definition.SetMethod, propertyDesc.Definition.SetMethod.MethodSig);
-					mosaProperty.SetterMethod = metadata.Cache.GetMethodByToken(setterDesc.Token);
-				}
 
 				ResolveCustomAttributes(mosaProperty, property.GetUnderlyingObject<UnitDesc<PropertyDef, PropertySig>>().Definition);
 			}
@@ -345,7 +346,14 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 
 			object operand = instruction.Operand;
 
-			if (instruction.Operand is ITypeDefOrRef)
+			// Special case: newarr instructions need to have their operand changed now so that the type is a SZArray
+			if (instruction.OpCode == OpCodes.Newarr)
+			{
+				var typeSig = resolver.Resolve(((ITypeDefOrRef)instruction.Operand).ToTypeSig());
+				var szArraySig = new SZArraySig(typeSig);
+				operand = metadata.Loader.GetType(szArraySig);
+			}
+			else if (instruction.Operand is ITypeDefOrRef)
 			{
 				operand = ResolveTypeOperand((ITypeDefOrRef)instruction.Operand, resolver);
 			}

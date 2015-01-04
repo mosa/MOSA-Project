@@ -287,10 +287,14 @@ namespace Mosa.Compiler.MosaTypeSystem
 			{
 				SignatureName.UpdateType(type);
 				StringBuilder fName = new StringBuilder();
+				StringBuilder sName = new StringBuilder();
+
 				if (type.DeclaringType != null && type.DeclaringType != type.ElementType)
 				{
 					fName.Append(type.DeclaringType.FullName);
 					fName.Append("+");
+					sName.Append(type.DeclaringType.Name);
+					sName.Append("+");
 				}
 				else if (!string.IsNullOrEmpty(type.Namespace))
 				{
@@ -300,7 +304,8 @@ namespace Mosa.Compiler.MosaTypeSystem
 				fName.Append(type.Name);
 				fName.Append(type.Signature);
 				type.FullName = fName.ToString();
-				type.ShortName = type.Name;
+				sName.Append(type.Name);
+				type.ShortName = sName.ToString();
 			}
 		}
 	}
