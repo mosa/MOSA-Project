@@ -14,7 +14,7 @@ namespace Mosa.Platform.x86.Intrinsic
 	/// <summary>
 	///
 	/// </summary>
-	public sealed class Get : IIntrinsicPlatformMethod
+	internal sealed class Get : IIntrinsicPlatformMethod
 	{
 		#region Methods
 

@@ -45,7 +45,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		private readonly List<LiveInterval> SpilledIntervals;
 
-		private readonly List<SlotIndex> CallSlots;
+		private readonly List<SlotIndex> KillAll;
 
 		protected readonly ITraceFactory TraceFactory;
 
@@ -99,7 +99,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			PriorityQueue = new SimpleKeyPriorityQueue<LiveInterval>();
 			SpilledIntervals = new List<LiveInterval>();
 
-			CallSlots = new List<SlotIndex>();
+			KillAll = new List<SlotIndex>();
 		}
 
 		protected TraceLog CreateTrace(string name)
@@ -422,6 +422,21 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 						if (liveSetTrace.Active)
 							liveSetTrace.Log("KILL ALL PHYSICAL");
 					}
+					else if (context.Instruction == IRInstruction.KillAllExcept)
+					{
+						var except = context.Operand1.Register.Index;
+
+						for (int s = 0; s < PhysicalRegisterCount; s++)
+						{
+							if (s != except)
+							{
+								liveKill.Set(s, true);
+							}
+						}
+
+						if (liveSetTrace.Active)
+							liveSetTrace.Log("KILL EXCEPT PHYSICAL: " + context.Operand1.ToString());
+					}
 
 					foreach (var ops in visitor.Output)
 					{
@@ -538,7 +553,23 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 								if (intervalTrace.Active) intervalTrace.Log("    After: " + LiveIntervalsToString(register.LiveIntervals));
 							}
 
-							CallSlots.Add(slotIndex);
+							KillAll.Add(slotIndex);
+						}
+						else if (context.Instruction == IRInstruction.KillAllExcept)
+						{
+							for (int s = 0; s < PhysicalRegisterCount; s++)
+							{
+								var except = context.Operand1.Register.Index;
+
+								if (s == except)
+									continue;
+
+								var register = VirtualRegisters[s];
+								if (intervalTrace.Active) intervalTrace.Log("Add (Call) " + register.ToString() + " : " + slotIndex + " destination " + slotIndex.HalfStepForward);
+								if (intervalTrace.Active) intervalTrace.Log("   Before: " + LiveIntervalsToString(register.LiveIntervals));
+								register.AddLiveInterval(slotIndex, slotIndex.HalfStepForward);
+								if (intervalTrace.Active) intervalTrace.Log("    After: " + LiveIntervalsToString(register.LiveIntervals));
+							}
 						}
 
 						foreach (var result in visitor.Output)
@@ -1020,7 +1051,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		protected SlotIndex FindCallSiteInInterval(LiveInterval liveInterval)
 		{
-			foreach (SlotIndex slot in CallSlots)
+			foreach (SlotIndex slot in KillAll)
 			{
 				if (liveInterval.Contains(slot))
 					return slot;

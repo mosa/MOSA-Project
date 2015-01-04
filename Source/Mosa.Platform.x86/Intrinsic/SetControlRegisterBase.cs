@@ -15,7 +15,7 @@ namespace Mosa.Platform.x86.Intrinsic
 	/// <summary>
 	///
 	/// </summary>
-	public class SetControlRegisterBase : IIntrinsicPlatformMethod
+	internal class SetControlRegisterBase : IIntrinsicPlatformMethod
 	{
 		private ControlRegister control;
 

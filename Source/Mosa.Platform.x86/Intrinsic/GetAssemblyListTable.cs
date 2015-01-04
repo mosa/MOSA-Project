@@ -16,7 +16,7 @@ namespace Mosa.Platform.x86.Intrinsic
 	/// <summary>
 	///
 	/// </summary>
-	public class GetAssemblyListTable : IIntrinsicPlatformMethod
+	internal class GetAssemblyListTable : IIntrinsicPlatformMethod
 	{
 		#region Methods
 

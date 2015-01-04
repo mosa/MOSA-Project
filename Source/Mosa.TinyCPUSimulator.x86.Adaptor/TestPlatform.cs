@@ -44,16 +44,56 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 		{
 			simAdapter.SimCPU.Monitor.ClearBreakPoints();
 			simAdapter.SimCPU.Monitor.AddBreakPoint(StopEIP);
+			simAdapter.SimCPU.Tick = 0;
+			simAdapter.SimCPU.LastException = null;
+			simAdapter.SimCPU.Monitor.Stop = false;
 
 			var x86 = simAdapter.SimCPU as CPUx86;
 
 			x86.Reset();
 
-			// Start of stack
+			// Set start of stack
 			x86.ESP.Value = 0x00080000;
 			x86.EBP.Value = x86.ESP.Value;
 
 			simAdapter.SimCPU.Write8(StopEIP, 0x90);
+		}
+
+		public override void PrepareToExecuteMethod(ISimAdapter simAdapter, ulong address, params object[] parameters)
+		{
+			var x86 = simAdapter.SimCPU as CPUx86;
+
+			// Clear last exception
+			x86.LastException = null;
+
+			// Clear registers
+			x86.EFLAGS.Value = 0;
+			x86.EAX.Value = 0;
+			x86.EBX.Value = 0;
+			x86.ECX.Value = 0;
+			x86.EDX.Value = 0;
+			x86.ESI.Value = 0;
+
+			// Set start of stack
+			x86.ESP.Value = 0x00080000;
+			x86.EBP.Value = x86.ESP.Value;
+
+			// Write NOP instruction to 0x01000
+			simAdapter.SimCPU.Write8(StopEIP, 0x90);
+
+			// Set starting address
+			x86.EIP.Value = (uint)address;
+
+			for (int i = parameters.Length - 1; i >= 0; i--)
+			{
+				PopulateStack(simAdapter, parameters[i]);
+			}
+
+			// Put return address on stack
+			WriteStackValue(simAdapter, StopEIP);
+
+			// Clear stop
+			simAdapter.SimCPU.Monitor.Stop = false;
 		}
 
 		private void WriteStackValue(ISimAdapter simAdapter, uint value)
@@ -64,7 +104,7 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 			x86.Write32(x86.ESP.Value, value);
 		}
 
-		public override void PopulateStack(ISimAdapter simAdapter, object parameter)
+		public void PopulateStack(ISimAdapter simAdapter, object parameter)
 		{
 			if ((parameter == null) || !(parameter is ValueType))
 			{
@@ -132,24 +172,6 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 			{
 				throw new InvalidProgramException();
 			}
-		}
-
-		public override void PopulateStack(ISimAdapter simAdapter, params object[] parameters)
-		{
-			for (int i = parameters.Length - 1; i >= 0; i--)
-			{
-				PopulateStack(simAdapter, parameters[i]);
-			}
-		}
-
-		public override void PrepareToExecuteMethod(ISimAdapter simAdapter, ulong address)
-		{
-			var x86 = simAdapter.SimCPU as CPUx86;
-
-			x86.EIP.Value = (uint)address;
-
-			// push the return address on stack
-			WriteStackValue(simAdapter, StopEIP);
 		}
 
 		public override object GetResult(ISimAdapter simAdapter, MosaType type)

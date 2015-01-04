@@ -293,7 +293,7 @@ namespace Mosa.Compiler.Framework.IR
 		///
 		/// </summary>
 		public static readonly BaseIRInstruction FinallyEnd = new FinallyEnd();
-		
+
 		/// <summary>
 		///
 		/// </summary>
@@ -328,6 +328,11 @@ namespace Mosa.Compiler.Framework.IR
 		///
 		/// </summary>
 		public static readonly BaseIRInstruction KillAll = new KillAll();
+
+		/// <summary>
+		///
+		/// </summary>
+		public static readonly BaseIRInstruction KillAllExcept = new KillAllExcept();
 
 		/// <summary>
 		///

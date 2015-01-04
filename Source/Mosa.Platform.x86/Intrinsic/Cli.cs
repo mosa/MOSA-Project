@@ -15,7 +15,7 @@ namespace Mosa.Platform.x86.Intrinsic
 	/// <summary>
 	/// Representations the x86 cli instruction.
 	/// </summary>
-	public sealed class Cli : IIntrinsicPlatformMethod
+	internal sealed class Cli : IIntrinsicPlatformMethod
 	{
 		#region Methods
 

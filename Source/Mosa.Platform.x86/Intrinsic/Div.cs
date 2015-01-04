@@ -16,7 +16,7 @@ namespace Mosa.Platform.x86.Intrinsic
 	/// <summary>
 	/// Representations the x86 Div instruction.
 	/// </summary>
-	public sealed class Div : IIntrinsicPlatformMethod
+	internal sealed class Div : IIntrinsicPlatformMethod
 	{
 		#region Methods
 

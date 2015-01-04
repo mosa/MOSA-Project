@@ -14,7 +14,7 @@ namespace Mosa.Platform.x86.Intrinsic
 	/// <summary>
 	///
 	/// </summary>
-	public sealed class RestoreContext : IIntrinsicPlatformMethod
+	internal sealed class RestoreContext : IIntrinsicPlatformMethod
 	{
 		#region Methods
 

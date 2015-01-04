@@ -14,7 +14,7 @@ namespace Mosa.Platform.x86.Intrinsic
 	/// <summary>
 	///
 	/// </summary>
-	public sealed class SwitchTask : IIntrinsicPlatformMethod
+	internal sealed class SwitchTask : IIntrinsicPlatformMethod
 	{
 		#region Methods
 

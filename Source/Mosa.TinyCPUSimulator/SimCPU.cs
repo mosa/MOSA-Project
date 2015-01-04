@@ -28,7 +28,7 @@ namespace Mosa.TinyCPUSimulator
 
 		public Dictionary<string, SimSymbol> Symbols { get; private set; }
 
-		public ulong Tick { get; private set; }
+		public ulong Tick { get; set; }
 
 		public SimMonitor Monitor { get; private set; }
 
@@ -609,10 +609,12 @@ namespace Mosa.TinyCPUSimulator
 			}
 			catch (SimCPUException e)
 			{
+				Debug.WriteLine("SIM: " + e.ToString());
 				LastException = e;
 			}
 			catch (NotSupportedException e)
 			{
+				Debug.WriteLine(e.ToString());
 				LastException = new SimCPUException();
 				Monitor.Stop = true;
 			}

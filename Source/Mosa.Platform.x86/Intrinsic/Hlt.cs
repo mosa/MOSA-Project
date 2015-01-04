@@ -14,7 +14,7 @@ namespace Mosa.Platform.x86.Intrinsic
 	/// <summary>
 	/// Representations the x86 hlt instruction.
 	/// </summary>
-	public class Hlt : IIntrinsicPlatformMethod
+	internal class Hlt : IIntrinsicPlatformMethod
 	{
 		#region Methods
 

@@ -14,7 +14,7 @@ namespace Mosa.Platform.x86.Intrinsic
 	/// <summary>
 	/// Representations the x86 out instruction.
 	/// </summary>
-	public sealed class Out32 : IIntrinsicPlatformMethod
+	internal sealed class Out32 : IIntrinsicPlatformMethod
 	{
 		#region Methods
 
