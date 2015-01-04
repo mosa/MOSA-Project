@@ -301,6 +301,17 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 			}
 		}
 
+ 		private static int ResolveOffset(CilBody body, Instruction instruction)
+ 		{
+ 			if (instruction == null)
+			{
+				instruction = body.Instructions[body.Instructions.Count - 1];
+				return (int)(instruction.Offset + instruction.GetSize());
+			}
+			else
+				return (int)instruction.Offset;
+ 		}
+
 		private void ResolveBody(MethodDef methodDef, MosaMethod.Mutator method, CilBody body, GenericArgumentResolver resolver)
 		{
 			method.LocalVariables.Clear();
@@ -319,10 +330,10 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 			{
 				method.ExceptionBlocks.Add(new MosaExceptionHandler(
 					(ExceptionHandlerType)eh.HandlerType,
-					(int)eh.TryStart.Offset,
-					(int)eh.TryEnd.Offset,
-					(int)eh.HandlerStart.Offset,
-					(int)eh.HandlerEnd.Offset,
+					ResolveOffset(body, eh.TryStart),
+					ResolveOffset(body, eh.TryEnd),
+					ResolveOffset(body, eh.HandlerStart),
+					ResolveOffset(body, eh.HandlerEnd),
 					eh.CatchType == null ? null : metadata.Loader.GetType(resolver.Resolve(eh.CatchType.ToTypeSig())),
 					eh.FilterStart == null ? null : (int?)eh.FilterStart.Offset
 				));
