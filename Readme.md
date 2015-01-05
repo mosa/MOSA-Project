@@ -33,7 +33,7 @@ You will also need the following prerequisites:
 
 **Windows**
 
-Install any [Visual Studio 2013](http://www.visualstudio.com) edition; even the free [Express Edition](http://www.microsoft.com/express/Downloads) from [Microsoft](http://www.microsoft.com).
+Install any [Visual Studio 2013](http://www.visualstudio.com) edition from [Microsoft](http://www.microsoft.com), including the free [Express Edition](http://www.microsoft.com/express/Downloads).
 
 **Linux**
 
