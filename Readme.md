@@ -27,9 +27,41 @@ The MOSA project is available as a [zip download](https://github.com/mosa/MOSA-P
 git clone https://github.com/tgiphil/MOSA-Project.git
 </pre>
 
-Visit our [Getting Started](https://github.com/mosa/MOSA-Project/wiki/Getting-Started) page on how to compile and run your first operating system.
+### Prerequisites
 
-**Join the Discussion**
+You will also need the following prerequisites:
+
+**Windows**
+
+Install any [Visual Studio 2013](http://www.visualstudio.com) edition; even the free [Express Edition](http://www.microsoft.com/express/Downloads) from [Microsoft](http://www.microsoft.com).
+
+**Linux**
+
+Install [Mono](http://www.mono-project.com) and [Qemu](http://wiki.qemu.org/Main_Page).
+
+<pre>
+sudo apt-get -y install mono-devel qemu
+</pre>
+
+**Mac**
+
+Install [Mono](http://www.mono-project.com) and [Qemu](http://wiki.qemu.org/Main_Page).
+
+### Running
+
+**Windows**
+
+Double click on the "Compile.bat" script in the root directory to compile all the tools, sample kernels, and demos.
+
+Next double click on the "Launcher.bat" script, which will bring up the MOSA Launcher tool (screenshot below) that can:
+
+* Compile the operating system
+* Create a virtual disk image, with the compiled binary and boot loader
+* Launch a virtual machine instance (QEMU by default)
+
+By default, the CoolWorld operating system demo is pre-selected. Click the "Compiler and Emulator" button to compile and launch the demo.
+
+### Join the Discussion
 
 We have our own IRC chat channel #mosa on irc.freenode.org. The IRC channel can be access via this [browser-based client](http://webchat.freenode.net/?channels=mosa).
 
@@ -42,6 +74,7 @@ The MOSA compiler supports:
 * basic type conversion (implicit type and explicit type conversion on primitives types and "is" and "as" operators), 
 * generic code (example, List<T>), and
 * delegates (static and non-static) and with optional parameters.
+* exceptiong handling (try, finally, and catch code blocks)
 
 ### License
 
