@@ -17,6 +17,17 @@ The MOSA project consists of:
 
 Read our [Frequently Asked Questions](https://github.com/mosa/MOSA-Project/wiki/Frequently-Asked-Questions) for more about this project.
 
+### Current Status
+
+The MOSA compiler supports:
+
+* almost all non-object oriented code (arithmetic, assignment, bitwise logic, bitwise shifts, boolean logic, conditional evaluation, equality testing, calling functions, increment and decrement,  member selection, object size, order relations, reference and dereference, sequencing, and subexpression grouping), 
+* basic object oriented code (such as new operator, member methods and virtual methods), 
+* basic type conversion (implicit type and explicit type conversion on primitives types and "is" and "as" operators), 
+* generic code (example, List<T>), and
+* delegates (static and non-static) and with optional parameters.
+* exceptiong handling (try, finally, and catch code blocks)
+
 ### Getting Started
 
 **Download**
@@ -64,17 +75,6 @@ By default, the CoolWorld operating system demo is pre-selected. Click the "Comp
 ### Join the Discussion
 
 We have our own IRC chat channel #mosa on irc.freenode.org. The IRC channel can be access via this [browser-based client](http://webchat.freenode.net/?channels=mosa).
-
-### Current Status
-
-The MOSA compiler supports:
-
-* almost all non-object oriented code (arithmetic, assignment, bitwise logic, bitwise shifts, boolean logic, conditional evaluation, equality testing, calling functions, increment and decrement,  member selection, object size, order relations, reference and dereference, sequencing, and subexpression grouping), 
-* basic object oriented code (such as new operator, member methods and virtual methods), 
-* basic type conversion (implicit type and explicit type conversion on primitives types and "is" and "as" operators), 
-* generic code (example, List<T>), and
-* delegates (static and non-static) and with optional parameters.
-* exceptiong handling (try, finally, and catch code blocks)
 
 ### License
 
