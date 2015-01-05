@@ -249,6 +249,9 @@ namespace Mosa.Platform.Internal.x86
 		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.GetExceptionRegister, Mosa.Platform.x86")]
 		public extern static uint GetExceptionRegister();
 
+		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.FrameJump, Mosa.Platform.x86")]
+		public extern static void FrameJump(uint eip, uint esp, uint ebp);
+
 		#endregion Intrinsic
 	}
 }

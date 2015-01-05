@@ -191,7 +191,7 @@ namespace Mosa.Test.Collection
 				b[i] = 100 * i;
 			}
 
-			foreach(var j in b)
+			foreach (var j in b)
 			{
 				if (j == 900)
 					return j;
@@ -320,6 +320,148 @@ namespace Mosa.Test.Collection
 			a = a + 7;
 
 			return a;
+		}
+
+		public static int ExceptionTest5()
+		{
+			int a = 10;
+
+			try
+			{
+				int b = ExceptionTest5Exception();
+				a = a + b;
+			}
+			catch
+			{
+				a = a + 20;
+			}
+
+			return a;
+		}
+
+		private static int ExceptionTest5Exception()
+		{
+			throw new Exception();
+		}
+
+		public static int ExceptionTest6()
+		{
+			int a = 10;
+
+			try
+			{
+				int b = ExceptionTest6Exception();
+				a = a + b;
+			}
+			catch
+			{
+				a = a + 20;
+			}
+			finally
+			{
+				a = a + 40;
+			}
+
+			return a;
+		}
+
+		private static int ExceptionTest6Exception()
+		{
+			try
+			{
+				throw new Exception();
+			}
+			catch
+			{
+				throw new Exception();
+			}
+		}
+
+		public static int ExceptionTest7()
+		{
+			int a = 10;
+
+			try
+			{
+				int b = ExceptionTest7Thru();
+				a = a + b;
+			}
+			catch
+			{
+				a = a + 20;
+			}
+			finally
+			{
+				a = a + 40;
+			}
+
+			return a;
+		}
+
+		private static int ExceptionTest7Thru()
+		{
+			return ExceptionTest7Exception();
+		}
+
+		private static int ExceptionTest7Exception()
+		{
+			try
+			{
+				throw new Exception();
+			}
+			catch
+			{
+				throw new Exception();
+			}
+		}
+
+		public static int ExceptionTest8()
+		{
+			int a = 10;
+
+			try
+			{
+				int b = ExceptionTest8Finally();
+				a = a + b;
+			}
+			catch
+			{
+				a = a + 20;
+			}
+			finally
+			{
+				a = a + 40;
+			}
+
+			return a;
+		}
+
+		private static int ExceptionTest8Finally()
+		{
+			int a = 0;
+
+			try
+			{
+				a = ExceptionTest8Exception();
+			}
+			finally
+			{
+				a = a + 90;
+			}
+
+			return a;
+		}
+
+		private static int ExceptionTest8Exception()
+		{
+			try
+			{
+				throw new Exception();
+			}
+			catch
+			{
+				throw new Exception();
+			}
 		}
 	}
 }

@@ -14,7 +14,7 @@ namespace Mosa.Platform.x86.Intrinsic
 	/// <summary>
 	/// Representations the x86 CPUID instruction.
 	/// </summary>
-	public sealed class CpuIdEdx : IIntrinsicPlatformMethod
+	internal sealed class CpuIdEdx : IIntrinsicPlatformMethod
 	{
 		#region Methods
 

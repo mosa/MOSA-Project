@@ -14,7 +14,7 @@ namespace Mosa.Platform.x86.Intrinsic
 	/// <summary>
 	/// Representations the x86 Invlpg instruction.
 	/// </summary>
-	public sealed class Invlpg : IIntrinsicPlatformMethod
+	internal sealed class Invlpg : IIntrinsicPlatformMethod
 	{
 		#region Methods
 

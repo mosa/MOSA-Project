@@ -14,7 +14,7 @@ namespace Mosa.Platform.x86.Intrinsic
 	/// <summary>
 	/// Representations the x86 BochsDebug instruction.
 	/// </summary>
-	public sealed class BochsDebug : IIntrinsicPlatformMethod
+	internal sealed class BochsDebug : IIntrinsicPlatformMethod
 	{
 		#region Methods
 

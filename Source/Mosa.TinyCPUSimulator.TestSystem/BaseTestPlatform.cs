@@ -30,11 +30,7 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 
 		public abstract void ResetSimulation(ISimAdapter simAdapter);
 
-		public abstract void PopulateStack(ISimAdapter simAdapter, object parameter);
-
-		public abstract void PopulateStack(ISimAdapter simAdapter, params object[] parameters);
-
-		public abstract void PrepareToExecuteMethod(ISimAdapter simAdapter, ulong address);
+		public abstract void PrepareToExecuteMethod(ISimAdapter simAdapter, ulong address, params object[] parameters);
 
 		public abstract object GetResult(ISimAdapter simAdapter, MosaType type);
 	}

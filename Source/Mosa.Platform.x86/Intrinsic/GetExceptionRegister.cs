@@ -14,7 +14,7 @@ namespace Mosa.Platform.x86.Intrinsic
 	/// <summary>
 	///
 	/// </summary>
-	public class GetExceptionRegister : IIntrinsicPlatformMethod
+	internal class GetExceptionRegister : IIntrinsicPlatformMethod
 	{
 		#region Methods
 

@@ -104,11 +104,9 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 
 			ulong address = (ulong)symbol.VirtualAddress;
 
-			platform.PopulateStack(simAdapter, parameters);
+			platform.PrepareToExecuteMethod(simAdapter, address, parameters);
 
-			platform.PrepareToExecuteMethod(simAdapter, address);
-
-			simAdapter.SimCPU.Monitor.BreakAtTick = simAdapter.SimCPU.Tick + 500000; // nothing should take this long
+			simAdapter.SimCPU.Monitor.BreakAtTick = simAdapter.SimCPU.Monitor.BreakAtTick + 500000; // nothing should take this long
 			simAdapter.SimCPU.Execute();
 
 			if (simAdapter.SimCPU.Monitor.BreakAtTick == simAdapter.SimCPU.Tick)

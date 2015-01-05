@@ -189,14 +189,14 @@ namespace Mosa.Tool.Compiler
 			);
 
 			optionSet.Add(
-				@"ssa-optimize|enable-single-static-assignment-optimizations",
+				@"optimize|enable-optimizations|ssa-optimize",
 				@"Performs single static assignments optimizations.",
 				enable => compiler.CompilerOptions.EnableOptimizations = enable != null
 			);
 
 			optionSet.Add(
 				@"promote-temps|enable-promote-temporary-variables-optimization",
-				@"Performs single static assignments optimizations.",
+				@"Enables temporary variables promotion optimization.",
 				enable => compiler.CompilerOptions.EnablePromoteTemporaryVariablesOptimization = enable != null
 			);
 

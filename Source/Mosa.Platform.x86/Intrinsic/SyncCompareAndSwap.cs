@@ -15,7 +15,7 @@ namespace Mosa.Platform.x86.Intrinsic
 	/// <summary>
 	/// Representations a SyncCompareAndSwap Intrinsic
 	/// </summary>
-	public sealed class SyncCompareAndSwap : IIntrinsicPlatformMethod
+	internal sealed class SyncCompareAndSwap : IIntrinsicPlatformMethod
 	{
 		#region Methods
 

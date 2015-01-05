@@ -59,10 +59,6 @@ namespace Mosa.Compiler.Framework.Stages
 				if (trace.Active)
 					trace.Log("Handler: " + region.Handler.TryStart.ToString("X4") + " to " + region.Handler.TryEnd.ToString("X4") + " Handler: " + region.Handler.HandlerStart.ToString("X4") + " Offset: [" + handler.ToString("X4") + "]");
 
-				//DEBUG
-				if (MethodCompiler.Method.FullName.Contains("ExceptionHandlingTests::ExceptionTest1"))
-					System.Diagnostics.Debug.WriteLine("Handler: " + region.Handler.TryStart.ToString("X4") + " to " + region.Handler.TryEnd.ToString("X4") + " Handler: " + region.Handler.HandlerStart.ToString("X4") + " Offset: [" + handler.ToString("X4") + "]");
-
 				List<Tuple<int, int>> sections = new List<Tuple<int, int>>();
 
 				foreach (var block in region.IncludedBlocks)
@@ -76,10 +72,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 					if (trace.Active)
 						trace.Log("   Block: " + block.ToString() + " [" + start.ToString() + "-" + end.ToString() + "]");
-
-					//DEBUG
-					//if (MethodCompiler.Method.FullName.Contains("ExceptionHandlingTests::ExceptionTest1"))
-					//	System.Diagnostics.Debug.WriteLine("   Block: " + block.ToString() + " [" + start.ToString() + "-" + end.ToString() + "]");
 
 					AddSection(sections, start, end);
 				}
@@ -111,9 +103,6 @@ namespace Mosa.Compiler.Framework.Stages
 					writer.Write((uint)region.Handler.HandlerType);
 
 					if (trace.Active) trace.Log("     Section: [" + start.ToString() + "-" + end.ToString() + "]");
-
-					if (MethodCompiler.Method.FullName.Contains("ExceptionHandlingTests::ExceptionTest1"))
-						System.Diagnostics.Debug.WriteLine("     Section: [" + start.ToString() + "-" + end.ToString() + "]");
 
 					// 5. Exception object type
 					if (region.Handler.HandlerType == ExceptionHandlerType.Exception)

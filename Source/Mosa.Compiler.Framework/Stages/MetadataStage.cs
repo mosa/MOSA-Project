@@ -248,7 +248,7 @@ namespace Mosa.Compiler.Framework.Stages
 				writer1.Write(methodList.Count);
 
 				// 15. Pointer to Method Definitions
-				foreach (MosaMethod method in methodList)
+				foreach (var method in methodList)
 				{
 					// Create definition and get the symbol
 					var methodDefinitionSymbol = CreateMethodDefinition(method);
@@ -550,13 +550,9 @@ namespace Mosa.Compiler.Framework.Stages
 			// 3. Attributes
 			writer1.Write((uint)method.MethodAttributes);
 
-			// 4. Local Stack Size (High 16bits) and Parameter Stack Size (Low 16bits)
-			uint paramStackSize = method.MaxStack << 16;
-			foreach (var param in method.Signature.Parameters)
-			{
-				paramStackSize += (uint)TypeLayout.GetTypeSize(param.ParameterType);
-			}
-			writer1.Write(paramStackSize);
+			// 4. Local Stack Size (16 Bits) && Parameter Stack Size (16 Bits)
+			int value = TypeLayout.GetMethodStackSize(method) | (TypeLayout.GetMethodParameterStackSize(method) << 16);
+			writer1.Write(value);
 
 			// 5. Pointer to Method
 			if (!method.IsAbstract)
@@ -584,7 +580,7 @@ namespace Mosa.Compiler.Framework.Stages
 			writer1.Write((uint)method.Signature.Parameters.Count);
 
 			// 10. Pointers to Parameter Definitions
-			foreach (MosaParameter parameter in method.Signature.Parameters)
+			foreach (var parameter in method.Signature.Parameters)
 			{
 				// Create definition and get the symbol
 				var parameterDefinitionSymbol = CreateParameterDefinition(parameter);

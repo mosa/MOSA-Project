@@ -14,7 +14,7 @@ namespace Mosa.Platform.x86.Intrinsic
 	/// <summary>
 	/// Representations the x86 Lidt instruction.
 	/// </summary>
-	public sealed class Lidt : IIntrinsicPlatformMethod
+	internal sealed class Lidt : IIntrinsicPlatformMethod
 	{
 		#region Methods
 

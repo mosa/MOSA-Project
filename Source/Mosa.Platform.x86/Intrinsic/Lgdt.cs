@@ -14,7 +14,7 @@ namespace Mosa.Platform.x86.Intrinsic
 	/// <summary>
 	/// Representations the x86 Lgdt instruction.
 	/// </summary>
-	public sealed class Lgdt : IIntrinsicPlatformMethod
+	internal sealed class Lgdt : IIntrinsicPlatformMethod
 	{
 		#region Methods
 
