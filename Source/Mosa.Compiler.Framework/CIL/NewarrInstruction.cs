@@ -48,11 +48,7 @@ namespace Mosa.Compiler.Framework.CIL
 			// checks in an optimization stage later on, if we find that a value never exceeds the array
 			// bounds.
 
-			MosaType arrayType = type.TypeSystem.GetTypeByName(type.Module, type.Namespace, type.Name + type.Signature + "[]");
-			if (arrayType == null)
-				arrayType = type.ToSZArray();
-
-			ctx.Result = decoder.Compiler.CreateVirtualRegister(arrayType);
+			ctx.Result = decoder.Compiler.CreateVirtualRegister(type);
 		}
 
 		/// <summary>

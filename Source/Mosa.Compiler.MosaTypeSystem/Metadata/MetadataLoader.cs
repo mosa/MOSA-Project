@@ -32,6 +32,8 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 		private Dictionary<TypeSig, MosaType> typeCache = new Dictionary<TypeSig, MosaType>(new TypeSigComparer());
 		private MosaType[] mvar = new MosaType[0x100];
 		private MosaType[] var = new MosaType[0x100];
+		private ClassOrValueTypeSig szHelperSig = null;
+		private ClassOrValueTypeSig iListSig = null;
 
 		public IList<MosaUnit> LoadedUnits { get; private set; }
 
@@ -72,6 +74,13 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 		private void Load(MosaModule module, TypeDef typeDef)
 		{
 			TypeSig typeSig = typeDef.ToTypeSig();
+
+			// Check to see if its one of our classes we need for SZ Arrays
+			if (typeDef.Name.Contains("SZArrayHelper`1"))
+				szHelperSig = typeSig as ClassOrValueTypeSig;
+			else if (typeDef.Name.Contains("IList`1"))
+				iListSig = typeSig as ClassOrValueTypeSig;
+
 			MosaType mosaType = metadata.Controller.CreateType();
 			using (var type = metadata.Controller.MutateType(mosaType))
 			{
@@ -286,9 +295,12 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 						return result;           // Don't add again to controller
 
 					case ElementType.SZArray:
+						GetType(new GenericInstSig(szHelperSig, typeSig.Next));
+						GetType(new GenericInstSig(iListSig, typeSig.Next));
 						result = elementType.ToSZArray();
 						using (var arrayType = metadata.Controller.MutateType(result))
 							arrayType.UnderlyingObject = elementType.GetUnderlyingObject<UnitDesc<TypeDef, TypeSig>>().Clone(typeSig);
+						metadata.Resolver.EnqueueForArrayResolve(result);
 						return result;
 
 					case ElementType.Array:
@@ -380,6 +392,22 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 
 					resultType.Fields[i] = field;
 					metadata.Resolver.EnqueueForResolve(field);
+				}
+
+				for (int i = 0; i < result.Properties.Count; i++)
+				{
+					MosaProperty property = metadata.Controller.CreateProperty(result.Properties[i]);
+
+					PropertySig newSig = property.GetPropertySig().Clone();
+					newSig.RetType = resolver.Resolve(newSig.RetType);
+					using (var mosaProperty = metadata.Controller.MutateProperty(property))
+					{
+						mosaProperty.DeclaringType = result;
+						mosaProperty.UnderlyingObject = property.GetUnderlyingObject<UnitDesc<PropertyDef, PropertySig>>().Clone(newSig);
+					}
+
+					resultType.Properties[i] = property;
+					metadata.Resolver.EnqueueForResolve(property);
 				}
 
 				resultType.HasOpenGenericParams = typeSig.HasOpenGenericParameter();
