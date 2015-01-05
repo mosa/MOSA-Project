@@ -19,21 +19,23 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public MosaType PropertyType { get; private set; }
 
-		public MosaType InterfaceType { get; private set; }
+		public string GetterMethodName { get; private set; }
 
 		public MosaMethod GetterMethod
 		{
 			get
 			{
-				return this.DeclaringType.FindMethodByName("get_" + this.Name);
+				return this.DeclaringType.FindMethodByName(this.GetterMethodName);
 			}
 		}
+
+		public string SetterMethodName { get; private set; }
 
 		public MosaMethod SetterMethod
 		{
 			get
 			{
-				return this.DeclaringType.FindMethodByName("set_" + this.Name);
+				return this.DeclaringType.FindMethodByName(this.SetterMethodName);
 			}
 		}
 
@@ -67,7 +69,19 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 			public MosaType PropertyType { set { property.PropertyType = value; } }
 
-			public MosaType InterfaceType { set { property.InterfaceType = value; } }
+			private string GetCleanMethodName(string fullName)
+			{
+				if (!fullName.Contains("."))
+					return fullName;
+				return fullName.Substring(fullName.LastIndexOf(".") + 1);
+			}
+
+			private string GetUncleanMethodPrefix(string fullName)
+			{
+				if (!fullName.Contains("."))
+					return fullName;
+				return fullName.Substring(0, fullName.LastIndexOf("."));
+			}
 
 			public override void Dispose()
 			{
@@ -75,6 +89,16 @@ namespace Mosa.Compiler.MosaTypeSystem
 				{
 					property.FullName = string.Concat(property.PropertyType.FullName, " ", property.DeclaringType.FullName, "::", property.Name);
 					property.ShortName = string.Concat(property.Name, " : ", property.PropertyType.ShortName);
+
+					if (GetCleanMethodName(property.Name) != GetUncleanMethodPrefix(property.Name))
+						property.GetterMethodName = GetUncleanMethodPrefix(property.Name) + ".get_" + GetCleanMethodName(property.Name);
+					else
+						property.GetterMethodName = "get_" + property.Name;
+
+					if (GetCleanMethodName(property.Name) != GetUncleanMethodPrefix(property.Name))
+						property.SetterMethodName = GetUncleanMethodPrefix(property.Name) + ".set_" + GetCleanMethodName(property.Name);
+					else
+						property.SetterMethodName = "set_" + property.Name;
 				}
 			}
 		}

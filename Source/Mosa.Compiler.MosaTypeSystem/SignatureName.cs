@@ -61,7 +61,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 				{
 					if (i != 0)
 						result.Append(", ");
-					result.Append(type.GenericArguments[i].Name);
+					result.Append(type.GenericArguments[i].FullName);
 				}
 				result.Append(">");
 			}

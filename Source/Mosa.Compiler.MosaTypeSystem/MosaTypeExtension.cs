@@ -84,23 +84,28 @@ namespace Mosa.Compiler.MosaTypeSystem
 			using (var type = typeSystem.Controller.MutateType(arrayType))
 			{
 				// Add the methods to the mutable type
-				MosaType szHelper = typeSystem.GetTypeByName(typeSystem.CorLib, "System", "Array+SZArrayHelper`1<" + arrayType.ElementType.Name + ">");
-
-				foreach (var method in szHelper.Methods)
+				MosaType szHelper = typeSystem.GetTypeByName(typeSystem.CorLib, "System", "Array+SZArrayHelper`1<" + arrayType.ElementType.FullName + ">");
+				using (var szHelperType = typeSystem.Controller.MutateType(szHelper))
 				{
-					var newMethod = typeSystem.Controller.CreateMethod(method);
-					using (var mMethod = typeSystem.Controller.MutateMethod(newMethod))
+					foreach (var method in szHelper.Methods)
 					{
-						mMethod.DeclaringType = arrayType;
+						var newMethod = typeSystem.Controller.CreateMethod(method);
+						using (var mMethod = typeSystem.Controller.MutateMethod(newMethod))
+						{
+							mMethod.DeclaringType = arrayType;
+						}
+						type.Methods.Add(newMethod);
 					}
-					type.Methods.Add(newMethod);
+
+					// Stops the methods from being compiled twice in two different classes
+					szHelperType.Methods.Clear();
 				}
 
 				// Add interfaces to the type and copy properties from interfaces into type so we can expose them
 				var list = new LinkedList<MosaType>();
-				list.AddLast(typeSystem.GetTypeByName(typeSystem.CorLib, "System.Collections.Generic", "IList`1<" + arrayType.ElementType.Name + ">"));
-				list.AddLast(typeSystem.GetTypeByName(typeSystem.CorLib, "System.Collections.Generic", "ICollection`1<" + arrayType.ElementType.Name + ">"));
-				list.AddLast(typeSystem.GetTypeByName(typeSystem.CorLib, "System.Collections.Generic", "IEnumerable`1<" + arrayType.ElementType.Name + ">"));
+				list.AddLast(typeSystem.GetTypeByName(typeSystem.CorLib, "System.Collections.Generic", "IList`1<" + arrayType.ElementType.FullName + ">"));
+				list.AddLast(typeSystem.GetTypeByName(typeSystem.CorLib, "System.Collections.Generic", "ICollection`1<" + arrayType.ElementType.FullName + ">"));
+				list.AddLast(typeSystem.GetTypeByName(typeSystem.CorLib, "System.Collections.Generic", "IEnumerable`1<" + arrayType.ElementType.FullName + ">"));
 				foreach (var iface in list)
 				{
 					type.Interfaces.Add(iface);
