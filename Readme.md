@@ -1,6 +1,6 @@
 [![Build status][build-status-image]][build-status]  [![Issue Stats][pull-requests-image]][pull-requests]  [![Issue Stats][issues-closed-image]][issues-closed]
 
-[build-status-image]: https://ci.appveyor.com/api/projects/status/dq5e28x88m6h044i/branch/master?svg=true
+[build-status-image]: https://ci.appveyor.com/api/projects/status/kkbi4h3hevy5vjj1/branch/master?svg=true
 [build-status]: https://ci.appveyor.com/project/mosa/mosa-project/branch/master
 [pull-requests-image]: http://www.issuestats.com/github/mosa/mosa-project/badge/pr
 [pull-requests]: http://www.issuestats.com/github/mosa/mosa-project
