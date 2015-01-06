@@ -20,6 +20,7 @@ namespace Mosa.Compiler.Framework.Stages
 		#region Data members
 
 		private BaseCodeEmitter codeEmitter;
+		private PatchType NativePatchType;
 
 		#endregion Data members
 
@@ -32,6 +33,11 @@ namespace Mosa.Compiler.Framework.Stages
 
 			codeEmitter = MethodCompiler.Pipeline.FindFirst<CodeGenerationStage>().CodeEmitter;
 
+			if (TypeLayout.NativePointerSize == 4)
+				NativePatchType = BuiltInPatch.I4;
+			else
+				NativePatchType = BuiltInPatch.I8;
+
 			EmitProtectedRegionTable();
 		}
 
@@ -39,14 +45,12 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			var trace = CreateTraceLog("Regions");
 
-			var section = MethodCompiler.Linker.CreateSymbol(MethodCompiler.Method.FullName + Metadata.ProtectedRegionTable, SectionKind.ROData, NativePointerAlignment, 0);
-			var stream = section.Stream;
-
-			var writer = new EndianAwareBinaryWriter(stream, Architecture.Endianness);
+			var protectedRegionTableSymbol = MethodCompiler.Linker.CreateSymbol(MethodCompiler.Method.FullName + Metadata.ProtectedRegionTable, SectionKind.ROData, NativePointerAlignment, 0);
+			var writer = new EndianAwareBinaryWriter(protectedRegionTableSymbol.Stream, Architecture.Endianness);
 
 			int sectioncount = 0;
 
-			// dummy for now
+			// 1. Number of Regions (dummy for now)
 			writer.Write((uint)0);
 
 			if (trace.Active)
@@ -83,48 +87,58 @@ namespace Mosa.Compiler.Framework.Stages
 
 					sectioncount++;
 
-					if (NativePointerSize == 4)
-					{
-						// 1. Offset to start
-						writer.Write((uint)start);
-						// 2. Offset to end
-						writer.Write((uint)end);
-						// 3. Offset to handler
-						writer.Write((uint)handler);
-					}
-					else
-					{
-						writer.Write((ulong)start);
-						writer.Write((uint)end);
-						writer.Write((ulong)handler);
-					}
+					var name = MethodCompiler.Method.FullName + Metadata.ProtectedRegionTable + "$" + sectioncount.ToString();
+					var protectedRegionDefinition = CreateProtectedRegionDefinition(name, (uint)start, (uint)end, handler, region.Handler.HandlerType, region.Handler.Type);
+					MethodCompiler.Linker.Link(LinkType.AbsoluteAddress, NativePatchType, protectedRegionTableSymbol, (int)writer.Position, 0, protectedRegionDefinition, 0);
+					writer.WriteZeroBytes(TypeLayout.NativePointerSize);
 
-					// 4. Handler type
-					writer.Write((uint)region.Handler.HandlerType);
-
-					if (trace.Active) trace.Log("     Section: [" + start.ToString() + "-" + end.ToString() + "]");
-
-					// 5. Exception object type
-					if (region.Handler.HandlerType == ExceptionHandlerType.Exception)
-					{
-						// Store method table pointer of the exception object type
-						// The VES exception runtime will uses this to compare exception object types
-						MethodCompiler.Linker.Link(LinkType.AbsoluteAddress, (NativePointerSize == 4) ? BuiltInPatch.I4 : BuiltInPatch.I8, section, (int)writer.Position, 0, region.Handler.Type.FullName + Metadata.TypeDefinition, SectionKind.ROData, 0);
-					}
-					else if (region.Handler.HandlerType == ExceptionHandlerType.Filter)
-					{
-						// TODO: There are no plans in the short term to support filtered exception clause as C# does not use them
-					}
-					else
-					{
-					}
-
-					writer.WriteZeroBytes(NativePointerSize);
+					if (trace.Active)
+						trace.Log("     Section: [" + start.ToString() + "-" + end.ToString() + "]");
 				}
 			}
 
+			// 1. Number of Regions (now put the real number)
 			writer.Position = 0;
 			writer.Write(sectioncount);
+		}
+
+		private LinkerSymbol CreateProtectedRegionDefinition(string name, uint start, uint end, uint handler, ExceptionHandlerType handlerType, MosaType exceptionType)
+		{
+			// Emit parameter table
+			var protectedRegionDefinitionSymbol = MethodCompiler.Linker.CreateSymbol(name, SectionKind.ROData, TypeLayout.NativePointerAlignment, 0);
+			var writer1 = new EndianAwareBinaryWriter(protectedRegionDefinitionSymbol.Stream, Architecture.Endianness);
+
+			// 1. Offset to start
+			writer1.Write(start, TypeLayout.NativePointerSize);
+
+			// 2. Offset to end
+			writer1.Write(end, TypeLayout.NativePointerSize);
+
+			// 3. Offset to handler
+			writer1.Write(handler, TypeLayout.NativePointerSize);
+
+			// 4. Handler type
+			writer1.Write((uint)handlerType, TypeLayout.NativePointerSize);
+
+			// 5. Exception object type
+			if (handlerType == ExceptionHandlerType.Exception)
+			{
+				// Store method table pointer of the exception object type
+				// The VES exception runtime will uses this to compare exception object types
+				MethodCompiler.Linker.Link(LinkType.AbsoluteAddress, NativePatchType, protectedRegionDefinitionSymbol, (int)writer1.Position, 0, exceptionType.FullName + Metadata.TypeDefinition, SectionKind.ROData, 0);
+			}
+			else if (handlerType == ExceptionHandlerType.Filter)
+			{
+				// TODO: There are no plans in the short term to support filtered exception clause as C# does not use them
+			}
+			else
+			{
+			}
+
+			writer1.WriteZeroBytes(TypeLayout.NativePointerSize);
+
+			// Return protectedRegionSymbol for linker usage
+			return protectedRegionDefinitionSymbol;
 		}
 
 		private Tuple<int, int> FindConnectingSection(List<Tuple<int, int>> sections, int start, int end)

@@ -77,12 +77,12 @@ namespace Mosa.Platform.Internal.x86
 				{
 					fixed (ulong* ptr = &remainder)
 					{
-						(*((ULong*)ptr))._lo |= 1;
+						((ULong*)ptr)->_lo |= 1;
 					}
 				}
 				fixed (ulong* ptr = &quotient)
 				{
-					isFlipped = ((*((ULong*)ptr))._hi & 0x80000000) == 0x80000000;
+					isFlipped = (((ULong*)ptr)->_hi & 0x80000000) == 0x80000000;
 				}
 				quotient <<= 1;
 
@@ -160,9 +160,9 @@ namespace Mosa.Platform.Internal.x86
 				uRemainder <<= 1;
 				if (isFlipped)
 				{
-					(*((ULong*)&uRemainder))._lo |= 1;
+					((ULong*)&uRemainder)->_lo |= 1;
 				}
-				isFlipped = ((*((ULong*)&uQuotient))._hi & 0x80000000) == 0x80000000;
+				isFlipped = (((ULong*)&uQuotient)->_hi & 0x80000000) == 0x80000000;
 				uQuotient <<= 1;
 
 				if (uRemainder >= uDivisor)
@@ -182,7 +182,7 @@ namespace Mosa.Platform.Internal.x86
 			{
 				fixed (long* ptr = &quotient)
 				{
-					int oldSign = (((*((Long*)ptr))._hi & 0x80000000) == 0x80000000) ? -1 : 1;
+					int oldSign = ((((Long*)ptr)->_hi & 0x80000000) == 0x80000000) ? -1 : 1;
 					if ((oldSign == -1 && quotientSign == -1))
 						quotient += 1;
 
@@ -193,7 +193,7 @@ namespace Mosa.Platform.Internal.x86
 			{
 				fixed (long* ptr = &remainder)
 				{
-					int oldSign = (((*((Long*)ptr))._hi & 0x80000000) == 0x80000000) ? -1 : 1;
+					int oldSign = ((((Long*)ptr)->_hi & 0x80000000) == 0x80000000) ? -1 : 1;
 					if ((oldSign == -1 && remainderSign == -1))
 						remainder += 1;
 

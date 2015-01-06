@@ -126,35 +126,35 @@ namespace System
 			this.handle = handle;
 			this.typeStruct = (MetadataTypeStruct*)((uint**)&handle)[0];
 
-			this.assemblyQualifiedName = x86Runtime.InitializeMetadataString((*this.typeStruct).Name);	// TODO
-			this.name = x86Runtime.InitializeMetadataString((*this.typeStruct).Name);					// TODO
-			this.@namespace = x86Runtime.InitializeMetadataString((*this.typeStruct).Name);				// TODO
-			this.fullname = x86Runtime.InitializeMetadataString((*this.typeStruct).Name);
+			this.assemblyQualifiedName = x86Runtime.InitializeMetadataString(this.typeStruct->Name);	// TODO
+			this.name = x86Runtime.InitializeMetadataString(this.typeStruct->Name);					// TODO
+			this.@namespace = x86Runtime.InitializeMetadataString(this.typeStruct->Name);				// TODO
+			this.fullname = x86Runtime.InitializeMetadataString(this.typeStruct->Name);
 
-			this.typeCode = (TypeCode)((*this.typeStruct).Attributes >> 24);
-			this.attributes = (TypeAttributes)((*this.typeStruct).Attributes & 0x00FFFFFF);
+			this.typeCode = (TypeCode)(this.typeStruct->Attributes >> 24);
+			this.attributes = (TypeAttributes)(this.typeStruct->Attributes & 0x00FFFFFF);
 
 			// Base Type
-			if ((*this.typeStruct).ParentType != null)
+			if (this.typeStruct->ParentType != null)
 			{
 				RuntimeTypeHandle parentHandle = new RuntimeTypeHandle();
-				((uint**)&parentHandle)[0] = (uint*)((*this.typeStruct).ParentType);
+				((uint**)&parentHandle)[0] = (uint*)this.typeStruct->ParentType;
 				this.baseType = Type.GetTypeFromHandle(parentHandle);
 			}
 
 			// Declaring Type
-			if ((*this.typeStruct).DeclaringType != null)
+			if (this.typeStruct->DeclaringType != null)
 			{
 				RuntimeTypeHandle declaringHandle = new RuntimeTypeHandle();
-				((uint**)&declaringHandle)[0] = (uint*)(*this.typeStruct).DeclaringType;
+				((uint**)&declaringHandle)[0] = (uint*)this.typeStruct->DeclaringType;
 				this.declaringType = Type.GetTypeFromHandle(declaringHandle);
 			}
 
 			// Element Type
-			if ((*this.typeStruct).ElementType != null)
+			if (this.typeStruct->ElementType != null)
 			{
 				RuntimeTypeHandle elementHandle = new RuntimeTypeHandle();
-				((uint**)&elementHandle)[0] = (uint*)((*this.typeStruct).ElementType);
+				((uint**)&elementHandle)[0] = (uint*)this.typeStruct->ElementType;
 				this.elementType = Type.GetTypeFromHandle(elementHandle);
 			}
 		}

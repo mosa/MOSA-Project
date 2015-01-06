@@ -22,7 +22,7 @@ namespace Mosa.Platform.Internal.x86
 		public MetadataTypeStruct* ParentType;
 		public MetadataTypeStruct* DeclaringType;
 		public MetadataTypeStruct* ElementType;
-		public uint* DefaultConstructor;
+		public MetadataMethodStruct* DefaultConstructor;
 		public uint* Properties;
 		public uint* Fields;
 		public uint* SlotTable;
@@ -30,9 +30,9 @@ namespace Mosa.Platform.Internal.x86
 		public uint NumberOfMethods;
 		public const uint MethodsOffset = 14;
 
-		public static uint* GetMethodDefinitionAddress(MetadataTypeStruct* data, uint slot)
+		public static MetadataMethodStruct* GetMethodDefinitionAddress(MetadataTypeStruct* data, uint slot)
 		{
-			return (uint*)*((uint*)data + MetadataTypeStruct.MethodsOffset + slot);
+			return (MetadataMethodStruct*)*((uint*)data + MetadataTypeStruct.MethodsOffset + slot);
 		}
 	}
 }

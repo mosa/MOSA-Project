@@ -20,9 +20,9 @@ namespace Mosa.Platform.Internal.x86
 		public uint NumberOfTypes;
 		public const uint TypesOffset = 4;
 
-		public static uint* GetTypeDefinitionAddress(MetadataAssemblyStruct* data, uint slot)
+		public static MetadataTypeStruct* GetTypeDefinitionAddress(MetadataAssemblyStruct* data, uint slot)
 		{
-			return (uint*)*((uint*)data + MetadataAssemblyStruct.TypesOffset + slot);
+			return (MetadataTypeStruct*)*((uint*)data + MetadataAssemblyStruct.TypesOffset + slot);
 		}
 	}
 }
