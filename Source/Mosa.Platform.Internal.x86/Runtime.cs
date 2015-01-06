@@ -119,7 +119,7 @@ namespace Mosa.Platform.Internal.x86
 				if (objTypeDefinition == typeDefinition)
 					return (void*)obj;
 
-				objTypeDefinition = (*objTypeDefinition).ParentType;
+				objTypeDefinition = objTypeDefinition->ParentType;
 			}
 
 			return null;
@@ -132,7 +132,7 @@ namespace Mosa.Platform.Internal.x86
 			if (objTypeDefinition == null)
 				return null;
 
-			uint* bitmap = (*objTypeDefinition).Bitmap;
+			uint* bitmap = objTypeDefinition->Bitmap;
 
 			if (bitmap == null)
 				return null;
@@ -301,7 +301,7 @@ namespace Mosa.Platform.Internal.x86
 			DebugOutput(code);
 		}
 
-		public static uint GetMethodDefinition(uint address)
+		public static MetadataMethodStruct* GetMethodDefinition(uint address)
 		{
 			uint table = Native.GetMethodLookupTable();
 			uint entries = Mosa.Internal.Native.Load32(table);
@@ -315,7 +315,7 @@ namespace Mosa.Platform.Internal.x86
 
 				if (address >= addr && address < addr + size)
 				{
-					return Mosa.Internal.Native.Load32(table, NativeIntSize * 2);
+					return (MetadataMethodStruct*)Mosa.Internal.Native.Load32(table, NativeIntSize * 2);
 				}
 
 				table = table + (NativeIntSize * 3);
@@ -323,15 +323,15 @@ namespace Mosa.Platform.Internal.x86
 				entries--;
 			}
 
-			return 0;
+			return null;
 		}
 
-		public static uint GetMethodDefinitionViaMethodExceptionLookup(uint address)
+		public static MetadataMethodStruct* GetMethodDefinitionViaMethodExceptionLookup(uint address)
 		{
 			uint table = Native.GetMethodExceptionLookupTable();
 
 			if (table == 0)
-				return 0;
+				return null;
 
 			uint entries = Mosa.Internal.Native.Load32(table);
 
@@ -344,7 +344,7 @@ namespace Mosa.Platform.Internal.x86
 
 				if (address >= addr && address < addr + size)
 				{
-					return Mosa.Internal.Native.Load32(table, NativeIntSize * 2);
+					return (MetadataMethodStruct*)Mosa.Internal.Native.Load32(table, NativeIntSize * 2);
 				}
 
 				table = table + (NativeIntSize * 3);
@@ -352,32 +352,32 @@ namespace Mosa.Platform.Internal.x86
 				entries--;
 			}
 
-			return 0;
+			return null;
 		}
 
-		public static uint GetProtectedRegionEntryByAddress(uint address, uint exceptionType, uint methodDef)
+		public static MetadataPRDefinitionStruct* GetProtectedRegionEntryByAddress(uint address, MetadataTypeStruct* exceptionType, MetadataMethodStruct* methodDef)
 		{
 			//DebugOutput("===GetProtectedRegionEntryByAddress===");
 
 			//DebugOutput("address:");
 			//DebugOutput(address);
 			//DebugOutput("exceptionType:");
-			//DebugOutput(exceptionType);
+			//DebugOutput((uint)exceptionType);
 			//DebugOutput("methodDef:");
-			//DebugOutput(methodDef);
+			//DebugOutput((uint)methodDef);
 
-			uint table = Mosa.Internal.Native.Load32(methodDef, NativeIntSize * 6);
+			var protectedRegionTable = methodDef->ProtectedRegionTable;
 
-			if (table == 0)
-				return 0;
+			if (protectedRegionTable == null)
+				return null;
 
-			uint method = Mosa.Internal.Native.Load32(methodDef, NativeIntSize * 4);
+			uint method = (uint)methodDef->Method;
 
 			if (method == 0)
-				return 0;
+				return null;
 
 			//DebugOutput("table:");
-			//DebugOutput(table);
+			//DebugOutput((uint)protectedRegionTable);
 			//DebugOutput("method:");
 			//DebugOutput(method);
 
@@ -386,64 +386,63 @@ namespace Mosa.Platform.Internal.x86
 			//DebugOutput("offset:");
 			//DebugOutput(offset);
 
-			uint entries = Mosa.Internal.Native.Load32(table);
+			int entries = protectedRegionTable->NumberOfRegions;
 
 			//DebugOutput("entries:");
-			//DebugOutput(entries);
+			//DebugOutput((uint)entries);
 
-			table = table + 4;
-
-			while (entries > 0)
+			int entry = 0;
+			while (entry < entries)
 			{
 				//DebugOutput("entry:");
-				//DebugOutput(entries);
+				//DebugOutput((uint)entries);
 
-				uint start = Mosa.Internal.Native.Load32(table, NativeIntSize * 0);
-				uint end = Mosa.Internal.Native.Load32(table, NativeIntSize * 1);
+				var protectedRegionDef = MetadataPRTableStruct.GetProtecteRegionDefinitionAddress(protectedRegionTable, (uint)entry);
+
+				uint start = protectedRegionDef->StartOffset;
+				uint end = protectedRegionDef->EndOffset;
 
 				//DebugOutput("start:");
 				//DebugOutput(start);
 
-				//DebugOutput("start:");
+				//DebugOutput("end:");
 				//DebugOutput(end);
 
 				if ((offset >= start) && (offset < end))
 				{
-					uint type = Mosa.Internal.Native.Load32(table, NativeIntSize * 3);
+					int handlerType = protectedRegionDef->ExceptionHandlerType;
 
 					//DebugOutput("type:");
-					//DebugOutput(type);
+					//DebugOutput((uint)handlerType);
 
-					if (type == 0)
+					if (handlerType == 0)
 					{
 						//DebugOutput("entry found:");
-						//DebugOutput(table);
+						//DebugOutput((uint)protectedRegionDef);
 
-						return table;
+						return protectedRegionDef;
 					}
 
-					uint exceptiontype = Mosa.Internal.Native.Load32(table, NativeIntSize * 4);
+					var exType = protectedRegionDef->ExceptionType;
 
-					//DebugOutput("exceptiontype:");
-					//DebugOutput(exceptiontype);
+					//DebugOutput("exType:");
+					//DebugOutput((uint)exType);
 
-					if (exceptiontype == exceptionType)
+					if (exType == exceptionType)
 					{
 						//DebugOutput("entry found:");
-						//DebugOutput(table);
+						//DebugOutput((uint)protectedRegionDef);
 
-						return table;
+						return protectedRegionDef;
 					}
 				}
 
-				table = table + (NativeIntSize * 5);
-
-				entries--;
+				entry++;
 			}
 
 			//DebugOutput("No entry found");
 
-			return 0;
+			return null;
 		}
 
 		public static uint GetPreviousStackFrame(uint ebp)
@@ -478,14 +477,12 @@ namespace Mosa.Platform.Internal.x86
 			Native.Set32(stackframe + NativeIntSize, value);
 		}
 
-		public static string GetMethodDefinitionName(uint methodDef)
+		public static string GetMethodDefinitionName(MetadataMethodStruct* methodDef)
 		{
-			uint name = Mosa.Internal.Native.Load32(methodDef);
-
-			return InitializeMetadataString((uint*)name);
+			return InitializeMetadataString(methodDef->Name);
 		}
 
-		public static uint GetMethodDefinitionFromStackFrameDepth(uint depth)
+		public static MetadataMethodStruct* GetMethodDefinitionFromStackFrameDepth(uint depth)
 		{
 			uint ebp = GetStackFrame(depth + 1);
 
@@ -511,21 +508,21 @@ namespace Mosa.Platform.Internal.x86
 					Fault(0XBAD00002);
 				}
 
-				uint exceptionType = Mosa.Internal.Native.Load32(exceptionObject);
+				var exceptionType = (MetadataTypeStruct*)Mosa.Internal.Native.Load32(exceptionObject);
 
-				uint methodDef = GetMethodDefinitionViaMethodExceptionLookup(returnAdddress);
+				var methodDef = GetMethodDefinitionViaMethodExceptionLookup(returnAdddress);
 
-				if (methodDef != 0)
+				if (methodDef != null)
 				{
-					uint protectedRegion = GetProtectedRegionEntryByAddress(returnAdddress - 1, exceptionType, methodDef);
+					var protectedRegion = GetProtectedRegionEntryByAddress(returnAdddress - 1, exceptionType, methodDef);
 
-					if (protectedRegion != 0)
+					if (protectedRegion != null)
 					{
 						// found handler for current method, call it
 
-						uint methodStart = Mosa.Internal.Native.Load32(methodDef, NativeIntSize * 4);
-						uint stackSize = Mosa.Internal.Native.Load32(methodDef, NativeIntSize * 3) & 0xFFFF; // lower 16-bits only
-						uint handlerOffset = Mosa.Internal.Native.Load32(protectedRegion, NativeIntSize * 2);
+						uint methodStart = (uint)methodDef->Method;
+						uint stackSize = methodDef->StackSize & 0xFFFF; // lower 16-bits only
+						uint handlerOffset = protectedRegion->HandlerOffset;
 						uint previousFrame = GetPreviousStackFrame(stackFrame);
 
 						uint jumpTarget = methodStart + handlerOffset;

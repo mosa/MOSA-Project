@@ -987,20 +987,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IIRVisitor.Throw(Context context)
 		{
-			/*
-			var type = TypeSystem.GetTypeByName("Mosa.Internal", "ExceptionEngine");
-			var runtimeMethod = type.FindMethodByName("ThrowException");
-			Operand throwMethod = Operand.CreateSymbolFromMethod(TypeSystem, runtimeMethod);
-
-			// Push exception object onto stack
-			context.SetInstruction(X86.Push, null, context.Operand1);
-
-			// Save entire CPU context onto stack
-			context.AppendInstruction(X86.Pushad);
-
-			// Call exception handling
-			context.AppendInstruction(X86.Call, null, throwMethod);
-			 */
+			throw new InvalidCompilerException("Throw instruction should have been processed by ExceptionStage.");
 		}
 
 		/// <summary>
