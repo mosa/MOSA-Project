@@ -8,6 +8,8 @@
  */
 
 using System.Collections.Generic;
+using Mosa.Compiler.Common;
+using Mosa.Compiler.MosaTypeSystem.Metadata;
 
 namespace Mosa.Compiler.MosaTypeSystem
 {
@@ -52,10 +54,10 @@ namespace Mosa.Compiler.MosaTypeSystem
 		public static MosaType ToSZArray(this MosaType type)
 		{
 			MosaType array = type.TypeSystem.GetTypeByName(type.TypeSystem.CorLib, "System", "Array");
-			MosaType result = type.TypeSystem.Controller.CreateType(array);
+			MosaType result = type.TypeSystem.Controller.CreateType();
 			using (var arrayType = type.TypeSystem.Controller.MutateType(result))
 			{
-				// See Partition II 14.2 Arrays
+				// See Partition II 14.1 Vectors
 
 				arrayType.Module = type.Module;
 				arrayType.DeclaringType = type.DeclaringType;
@@ -67,11 +69,57 @@ namespace Mosa.Compiler.MosaTypeSystem
 				arrayType.ElementType = type;
 				arrayType.TypeCode = MosaTypeCode.SZArray;
 				arrayType.ArrayInfo = MosaArrayInfo.Vector;
-
-				AddArrayMethods(type.TypeSystem, result, arrayType, MosaArrayInfo.Vector);
 			}
 			type.TypeSystem.Controller.AddType(result);
 			return result;
+		}
+
+		public static void FinishSZArray(this MosaType arrayType)
+		{
+			if (arrayType.ArrayInfo != MosaArrayInfo.Vector)
+				throw new InvalidCompilerException("Type must be a SZ Array.");
+
+			var typeSystem = arrayType.TypeSystem;
+
+			using (var type = typeSystem.Controller.MutateType(arrayType))
+			{
+				// Add the methods to the mutable type
+				MosaType szHelper = typeSystem.GetTypeByName(typeSystem.CorLib, "System", "Array+SZArrayHelper`1<" + arrayType.ElementType.FullName + ">");
+				using (var szHelperType = typeSystem.Controller.MutateType(szHelper))
+				{
+					foreach (var method in szHelper.Methods)
+					{
+						var newMethod = typeSystem.Controller.CreateMethod(method);
+						using (var mMethod = typeSystem.Controller.MutateMethod(newMethod))
+						{
+							mMethod.DeclaringType = arrayType;
+						}
+						type.Methods.Add(newMethod);
+					}
+
+					// Stops the methods from being compiled twice in two different classes
+					szHelperType.Methods.Clear();
+				}
+
+				// Add interfaces to the type and copy properties from interfaces into type so we can expose them
+				var list = new LinkedList<MosaType>();
+				list.AddLast(typeSystem.GetTypeByName(typeSystem.CorLib, "System.Collections.Generic", "IList`1<" + arrayType.ElementType.FullName + ">"));
+				list.AddLast(typeSystem.GetTypeByName(typeSystem.CorLib, "System.Collections.Generic", "ICollection`1<" + arrayType.ElementType.FullName + ">"));
+				list.AddLast(typeSystem.GetTypeByName(typeSystem.CorLib, "System.Collections.Generic", "IEnumerable`1<" + arrayType.ElementType.FullName + ">"));
+				foreach (var iface in list)
+				{
+					type.Interfaces.Add(iface);
+					foreach (var property in iface.Properties)
+					{
+						var newProperty = typeSystem.Controller.CreateProperty(property);
+						using (var mProperty = typeSystem.Controller.MutateProperty(newProperty))
+						{
+							mProperty.DeclaringType = arrayType;
+						}
+						type.Properties.Add(newProperty);
+					}
+				}
+			}
 		}
 
 		public static MosaType ToArray(this MosaType type, MosaArrayInfo info)

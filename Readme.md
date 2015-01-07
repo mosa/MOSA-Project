@@ -1,7 +1,7 @@
 [![Build status][build-status-image]][build-status]  [![Issue Stats][pull-requests-image]][pull-requests]  [![Issue Stats][issues-closed-image]][issues-closed]
 
-[build-status-image]: https://ci.appveyor.com/api/projects/status/dq5e28x88m6h044i/branch/master?svg=true
-[build-status]: https://ci.appveyor.com/project/mosa/mosa-project/branch/master
+[build-status-image]: https://ci.appveyor.com/api/projects/status/789e1jvbi1aguhj5/branch/master?svg=true
+[build-status]: https://ci.appveyor.com/project/tgiphil/mosa-project-245
 [pull-requests-image]: http://www.issuestats.com/github/mosa/mosa-project/badge/pr
 [pull-requests]: http://www.issuestats.com/github/mosa/mosa-project
 [issues-closed-image]: http://www.issuestats.com/github/mosa/mosa-project/badge/issue

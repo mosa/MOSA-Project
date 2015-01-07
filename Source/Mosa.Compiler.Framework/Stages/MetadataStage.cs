@@ -18,6 +18,72 @@ using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework.Stages
 {
+
+	#region EndianAwareBinaryWriter Extensions
+
+	public static class EndianAwareBinaryWriterExtensions
+	{
+		public static void Write(this EndianAwareBinaryWriter writer, byte[] value, int nativeSize)
+		{
+			byte[] bytesToWrite = new byte[nativeSize];
+			for (int i = 0; i < nativeSize && i < value.Length; i++)
+				bytesToWrite[i] = value[i];
+			writer.Write(bytesToWrite);
+		}
+
+		public static void Write(this EndianAwareBinaryWriter writer, bool value, int nativeSize)
+		{
+			Write(writer, BitConverter.GetBytes(value), nativeSize);
+		}
+
+		public static void Write(this EndianAwareBinaryWriter writer, sbyte value, int nativeSize)
+		{
+			Write(writer, BitConverter.GetBytes(value), nativeSize);
+		}
+
+		public static void Write(this EndianAwareBinaryWriter writer, char value, int nativeSize)
+		{
+			Write(writer, BitConverter.GetBytes(value), nativeSize);
+		}
+
+		public static void Write(this EndianAwareBinaryWriter writer, short value, int nativeSize)
+		{
+			Write(writer, BitConverter.GetBytes(value), nativeSize);
+		}
+
+		public static void Write(this EndianAwareBinaryWriter writer, int value, int nativeSize)
+		{
+			Write(writer, BitConverter.GetBytes(value), nativeSize);
+		}
+
+		public static void Write(this EndianAwareBinaryWriter writer, long value, int nativeSize)
+		{
+			Write(writer, BitConverter.GetBytes(value), nativeSize);
+		}
+
+		public static void Write(this EndianAwareBinaryWriter writer, byte value, int nativeSize)
+		{
+			Write(writer, BitConverter.GetBytes(value), nativeSize);
+		}
+
+		public static void Write(this EndianAwareBinaryWriter writer, ushort value, int nativeSize)
+		{
+			Write(writer, BitConverter.GetBytes(value), nativeSize);
+		}
+
+		public static void Write(this EndianAwareBinaryWriter writer, uint value, int nativeSize)
+		{
+			Write(writer, BitConverter.GetBytes(value), nativeSize);
+		}
+
+		public static void Write(this EndianAwareBinaryWriter writer, ulong value, int nativeSize)
+		{
+			Write(writer, BitConverter.GetBytes(value), nativeSize);
+		}
+	}
+
+	#endregion
+
 	/// <summary>
 	/// Emits metadata for assemblies and types
 	/// </summary>
@@ -48,7 +114,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			var symbol = Linker.CreateSymbol(name, SectionKind.ROData, TypeLayout.NativePointerAlignment, 0);
 			var stream = new EndianAwareBinaryWriter(symbol.Stream, Architecture.Endianness);
-			stream.Write(value.Length);
+			stream.Write(value.Length, TypeLayout.NativePointerSize);
 			stream.Write(System.Text.ASCIIEncoding.ASCII.GetBytes(value));
 			return symbol;
 		}
@@ -64,7 +130,7 @@ namespace Mosa.Compiler.Framework.Stages
 			var writer1 = new EndianAwareBinaryWriter(assemblyListSymbol.Stream, Architecture.Endianness);
 
 			// 1. Number of Assemblies
-			writer1.Write((uint)TypeSystem.Modules.Count);
+			writer1.Write((uint)TypeSystem.Modules.Count, TypeLayout.NativePointerSize);
 
 			// 2. Pointers to Assemblies
 			// Create the definitions along the way
@@ -102,7 +168,7 @@ namespace Mosa.Compiler.Framework.Stages
 			// 3. Attributes - IsReflectionOnly (32bit length)
 			uint flags = 0x0;
 			if (module.IsReflectionOnly) flags |= 0x1;
-			writer1.Write(flags);
+			writer1.Write(flags, TypeLayout.NativePointerSize);
 
 			// 4. Number of Types
 			uint count = 0;
@@ -113,7 +179,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 				count++;
 			}
-			writer1.Write(count);
+			writer1.Write(count, TypeLayout.NativePointerSize);
 
 			// 5. Pointers to Types
 			// Create the definitions along the way
@@ -162,10 +228,10 @@ namespace Mosa.Compiler.Framework.Stages
 			writer1.WriteZeroBytes(TypeLayout.NativePointerSize);
 
 			// 3. Type Code & Attributes
-			writer1.Write(((uint)type.TypeCode << 24) + (uint)type.TypeAttributes);
+			writer1.Write(((uint)type.TypeCode << 24) + (uint)type.TypeAttributes, TypeLayout.NativePointerSize);
 
 			// 4. Size
-			writer1.Write((uint)TypeLayout.GetTypeSize(type));
+			writer1.Write((uint)TypeLayout.GetTypeSize(type), TypeLayout.NativePointerSize);
 
 			// 5. Pointer to Assembly Definition
 			Linker.Link(LinkType.AbsoluteAddress, NativePatchType, typeTableSymbol, (int)writer1.Position, 0, assemblyTableSymbol, 0);
@@ -245,7 +311,7 @@ namespace Mosa.Compiler.Framework.Stages
 				var methodList = TypeLayout.GetMethodTable(type) ?? new List<MosaMethod>();
 
 				// 14. Number of Methods
-				writer1.Write(methodList.Count);
+				writer1.Write(methodList.Count, TypeLayout.NativePointerSize);
 
 				// 15. Pointer to Method Definitions
 				foreach (var method in methodList)
@@ -317,7 +383,7 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 
 			// 1. Number of Interface slots
-			writer1.Write((uint)slots.Count);
+			writer1.Write((uint)slots.Count, TypeLayout.NativePointerSize);
 
 			// 2. Pointers to Interface Method Tables
 			foreach (MosaType interfaceType in slots)
@@ -345,7 +411,7 @@ namespace Mosa.Compiler.Framework.Stages
 			var interfaceMethodTable = TypeLayout.GetInterfaceTable(type, interfaceType) ?? new MosaMethod[0];
 
 			// 1. Number of Interface Methods
-			writer1.Write((uint)interfaceMethodTable.Length);
+			writer1.Write((uint)interfaceMethodTable.Length, TypeLayout.NativePointerSize);
 
 			// 2. Pointer to Interface Type
 			Linker.Link(LinkType.AbsoluteAddress, NativePatchType, interfaceMethodTableSymbol, (int)writer1.Position, 0, interfaceType.FullName + Metadata.TypeDefinition, SectionKind.ROData, 0);
@@ -377,7 +443,7 @@ namespace Mosa.Compiler.Framework.Stages
 			var writer1 = new EndianAwareBinaryWriter(fieldsTableSymbol.Stream, Architecture.Endianness);
 
 			// 1. Number of Fields
-			writer1.Write((uint)type.Fields.Count);
+			writer1.Write((uint)type.Fields.Count, TypeLayout.NativePointerSize);
 
 			// 2. Pointers to Field Definitions
 			foreach (MosaField field in type.Fields)
@@ -402,7 +468,7 @@ namespace Mosa.Compiler.Framework.Stages
 				writer2.WriteZeroBytes(TypeLayout.NativePointerSize);
 
 				// 3. Attributes
-				writer2.Write((uint)field.FieldAttributes);
+				writer2.Write((uint)field.FieldAttributes, TypeLayout.NativePointerSize);
 
 				// 4. Pointer to Field Type
 				Linker.Link(LinkType.AbsoluteAddress, NativePatchType, fieldDefSymbol, (int)writer2.Position, 0, field.FieldType.FullName + Metadata.TypeDefinition, SectionKind.ROData, 0);
@@ -414,12 +480,12 @@ namespace Mosa.Compiler.Framework.Stages
 					var section = (field.Data != null) ? SectionKind.ROData : SectionKind.BSS;
 					Linker.Link(LinkType.AbsoluteAddress, NativePatchType, fieldDefSymbol, (int)writer2.Position, 0, field.FullName, section, 0);
 					writer2.WriteZeroBytes(TypeLayout.NativePointerSize);
-					writer2.Write((field.Data != null) ? field.Data.Length : 0);
+					writer2.Write((field.Data != null) ? field.Data.Length : 0, TypeLayout.NativePointerSize);
 				}
 				else
 				{
 					writer2.WriteZeroBytes(TypeLayout.NativePointerSize);
-					writer2.Write(TypeLayout.GetFieldOffset(field));
+					writer2.Write(TypeLayout.GetFieldOffset(field), TypeLayout.NativePointerSize);
 				}
 
 				// Create another symbol with field data if any
@@ -463,7 +529,7 @@ namespace Mosa.Compiler.Framework.Stages
 			var writer1 = new EndianAwareBinaryWriter(propertiesTableSymbol.Stream, Architecture.Endianness);
 
 			// 1. Number of Properties
-			writer1.Write((uint)type.Properties.Count);
+			writer1.Write((uint)type.Properties.Count, TypeLayout.NativePointerSize);
 
 			// 2. Pointers to Property Definitions
 			foreach (MosaProperty property in type.Properties)
@@ -488,7 +554,7 @@ namespace Mosa.Compiler.Framework.Stages
 				writer1.WriteZeroBytes(TypeLayout.NativePointerSize);
 
 				// 3. Attributes
-				writer1.Write((uint)property.PropertyAttributes);
+				writer1.Write((uint)property.PropertyAttributes, TypeLayout.NativePointerSize);
 
 				// 4. Pointer to Property Type
 				Linker.Link(LinkType.AbsoluteAddress, NativePatchType, propertyDefSymbol, (int)writer2.Position, 0, property.PropertyType.FullName + Metadata.TypeDefinition, SectionKind.ROData, 0);
@@ -548,11 +614,11 @@ namespace Mosa.Compiler.Framework.Stages
 			writer1.WriteZeroBytes(TypeLayout.NativePointerSize);
 
 			// 3. Attributes
-			writer1.Write((uint)method.MethodAttributes);
+			writer1.Write((uint)method.MethodAttributes, TypeLayout.NativePointerSize);
 
 			// 4. Local Stack Size (16 Bits) && Parameter Stack Size (16 Bits)
 			int value = TypeLayout.GetMethodStackSize(method) | (TypeLayout.GetMethodParameterStackSize(method) << 16);
-			writer1.Write(value);
+			writer1.Write(value, TypeLayout.NativePointerSize);
 
 			// 5. Pointer to Method
 			if (!method.IsAbstract)
@@ -577,7 +643,7 @@ namespace Mosa.Compiler.Framework.Stages
 			writer1.WriteZeroBytes(TypeLayout.NativePointerSize);
 
 			// 9. Number of Parameters
-			writer1.Write((uint)method.Signature.Parameters.Count);
+			writer1.Write((uint)method.Signature.Parameters.Count, TypeLayout.NativePointerSize);
 
 			// 10. Pointers to Parameter Definitions
 			foreach (var parameter in method.Signature.Parameters)
@@ -620,7 +686,7 @@ namespace Mosa.Compiler.Framework.Stages
 			writer1.WriteZeroBytes(TypeLayout.NativePointerSize);
 
 			// 3. Attributes
-			writer1.Write((uint)parameter.ParameterAttributes);
+			writer1.Write((uint)parameter.ParameterAttributes, TypeLayout.NativePointerSize);
 
 			// 4. Pointer to Parameter Type
 			Linker.Link(LinkType.AbsoluteAddress, NativePatchType, parameterTableSymbol, (int)writer1.Position, 0, parameter.ParameterType.FullName + Metadata.TypeDefinition, SectionKind.ROData, 0);
@@ -641,7 +707,7 @@ namespace Mosa.Compiler.Framework.Stages
 			var writer1 = new EndianAwareBinaryWriter(customAttributesTableSymbol.Stream, Architecture.Endianness);
 
 			// 1. Number of Custom Attributes
-			writer1.Write(unit.CustomAttributes.Count);
+			writer1.Write(unit.CustomAttributes.Count, TypeLayout.NativePointerSize);
 
 			// 2. Pointers to Custom Attributes
 			// Create the definitions along the way
@@ -678,7 +744,7 @@ namespace Mosa.Compiler.Framework.Stages
 			writer1.WriteZeroBytes(TypeLayout.NativePointerSize);
 
 			// 3. Number of Arguments (Both unnamed and named)
-			writer1.Write((uint)(ca.Arguments.Length + ca.NamedArguments.Length));
+			writer1.Write((uint)(ca.Arguments.Length + ca.NamedArguments.Length), TypeLayout.NativePointerSize);
 
 			// 4. Pointers to Custom Attribute Arguments (Both unnamed and named)
 			for (int i = 0; i < ca.Arguments.Length; i++)
@@ -725,7 +791,7 @@ namespace Mosa.Compiler.Framework.Stages
 			writer1.WriteZeroBytes(TypeLayout.NativePointerSize);
 
 			// 3. Argument Size
-			writer1.Write(ComputeArgumentSize(arg.Type, arg.Value));
+			writer1.Write(ComputeArgumentSize(arg.Type, arg.Value), TypeLayout.NativePointerSize);
 
 			// 4. Argument Value
 			WriteArgument(writer1, symbol, arg.Type, arg.Value);
@@ -846,7 +912,7 @@ namespace Mosa.Compiler.Framework.Stages
 					{
 						Debug.Assert(value is MosaCustomAttribute.Argument[]);
 						var arr = (MosaCustomAttribute.Argument[])value;
-						writer.Write(arr.Length);
+						writer.Write(arr.Length, TypeLayout.NativePointerSize);
 						foreach (var elem in arr)
 							WriteArgument(writer, symbol, elem.Type, elem.Value);
 					}
@@ -855,7 +921,7 @@ namespace Mosa.Compiler.Framework.Stages
 						if (type.TypeCode == MosaTypeCode.String)
 						{
 							var str = (string)value;
-							writer.Write(str.Length);
+							writer.Write(str.Length, TypeLayout.NativePointerSize);
 							writer.Write(System.Text.Encoding.Unicode.GetBytes(str));
 						}
 						else if (type.FullName == "System.Type")

@@ -50,12 +50,12 @@ namespace System
 		internal RuntimeAssembly(uint* pointer)
 		{
 			this.assemblyStruct = (MetadataAssemblyStruct*)pointer;
-			this.fullName = x86Runtime.InitializeMetadataString((*this.assemblyStruct).Name);
+			this.fullName = x86Runtime.InitializeMetadataString(this.assemblyStruct->Name);
 			uint typeCount = (*this.assemblyStruct).NumberOfTypes;
 			for (uint i = 0; i < typeCount; i++)
 			{
 				RuntimeTypeHandle handle = new RuntimeTypeHandle();
-				((uint**)&handle)[0] = MetadataAssemblyStruct.GetTypeDefinitionAddress(assemblyStruct, i);
+				((uint**)&handle)[0] = (uint*)MetadataAssemblyStruct.GetTypeDefinitionAddress(assemblyStruct, i);
 
 				if (this.typeHandles.Contains(handle))
 					continue;

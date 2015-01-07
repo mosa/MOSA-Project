@@ -74,6 +74,10 @@
     <Compile Include="Internals\InternalsForRuntimeHelpers.cs" />
     <Compile Include="Internals\InternalsForType.cs" />
     <Compile Include="MetadataStructures\MetadataAssemblyStruct.cs" />
+    <Compile Include="MetadataStructures\MetadataCAStruct.cs" />
+    <Compile Include="MetadataStructures\MetadataMethodStruct.cs" />
+    <Compile Include="MetadataStructures\MetadataPRDefinitionStruct.cs" />
+    <Compile Include="MetadataStructures\MetadataPRTableStruct.cs" />
     <Compile Include="MetadataStructures\MetadataTypeStruct.cs" />
     <Compile Include="Native.cs" />
     <Compile Include="SpinLock.cs" />

@@ -63,7 +63,12 @@ shape = "record"
 ];
 
 "ProtectedRegionTable" [
-label = "<f0>Protected Region Table|Number of Regions|<f1>Handler Type|<f2>Pointer to Protected Region|<f3>Length of Protected Region|<f4>Offset of Handler from Method Start Address|<f5>Pointer to Exception Type|<f6>Offset of Filter from Method Start Address"
+label = "<f0>Protected Region Table|<f1>Number of Regions|<f2>Pointer to Protected Region Definition 1|...|Protected Region Definition N"
+shape = "record"
+];
+
+"ProtectedRegionDefinition" [
+label = "<f0>Protected Region Definition|<f1>Region Start|<f2>Region End|<f3>Region Handler|<f4>Exception Handler Type|<f5>Pointer to Exception Type"
 shape = "record"
 ];
 
@@ -253,7 +258,11 @@ id = 0
 color = "blue"
 ];
 
-"ProtectedRegionTable":f5 -> "TypeDefinition":f0 [
+"ProtectedRegionTable":f2 -> "ProtectedRegionDefinition":f0 [
+id = 0
+];
+
+"ProtectedRegionDefinition":f5 -> "TypeDefinition":f0 [
 id = 0
 color = "blue"
 ];

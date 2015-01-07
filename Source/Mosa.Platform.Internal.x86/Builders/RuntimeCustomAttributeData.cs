@@ -8,15 +8,16 @@
  */
 
 using System.Reflection;
+using Mosa.Platform.Internal.x86;
 
 namespace System
 {
 	public sealed unsafe class RuntimeCustomAttributeData : CustomAttributeData
 	{
-		public RuntimeCustomAttributeData(uint* customAttributeTable)
+		public RuntimeCustomAttributeData(MetadataCAStruct* customAttributeTable)
 		{
 			RuntimeTypeHandle typeHandle = new RuntimeTypeHandle();
-			((uint**)&typeHandle)[0] = (uint*)customAttributeTable[0];
+			((uint**)&typeHandle)[0] = (uint*)customAttributeTable->AttributeType;
 			base.attributeType = Type.GetTypeFromHandle(typeHandle);
 		}
 	}

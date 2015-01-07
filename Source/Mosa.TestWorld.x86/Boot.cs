@@ -125,15 +125,15 @@ namespace Mosa.TestWorld.x86
 			}
 		}
 
-		public static void DumpStackTrace()
+		public unsafe static void DumpStackTrace()
 		{
 			uint depth = 0;
 
 			while (true)
 			{
-				uint methodDef = Runtime.GetMethodDefinitionFromStackFrameDepth(depth);
+				var methodDef = Runtime.GetMethodDefinitionFromStackFrameDepth(depth);
 
-				if (methodDef == 0)
+				if (methodDef == null)
 					return;
 
 				string caller = Runtime.GetMethodDefinitionName(methodDef);
