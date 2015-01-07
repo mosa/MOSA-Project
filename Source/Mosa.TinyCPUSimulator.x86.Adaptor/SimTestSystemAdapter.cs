@@ -21,7 +21,7 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 			CPU.AddDevice(new MosaTestMemory(CPU));
 			CPU.AddDevice(new MosaImage(CPU));
 			CPU.AddDevice(new BochDebug(CPU));
-            CPU.AddDevice(new MosaDebug(CPU));
+			CPU.AddDevice(new MosaDebug(CPU));
 		}
 	}
 }

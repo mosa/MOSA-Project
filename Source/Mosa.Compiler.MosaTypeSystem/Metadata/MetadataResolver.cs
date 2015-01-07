@@ -301,16 +301,16 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 			}
 		}
 
- 		private static int ResolveOffset(CilBody body, Instruction instruction)
- 		{
- 			if (instruction == null)
+		private static int ResolveOffset(CilBody body, Instruction instruction)
+		{
+			if (instruction == null)
 			{
 				instruction = body.Instructions[body.Instructions.Count - 1];
 				return (int)(instruction.Offset + instruction.GetSize());
 			}
 			else
 				return (int)instruction.Offset;
- 		}
+		}
 
 		private void ResolveBody(MethodDef methodDef, MosaMethod.Mutator method, CilBody body, GenericArgumentResolver resolver)
 		{
