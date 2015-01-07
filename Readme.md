@@ -1,4 +1,4 @@
-[![Build status][build-status-image]][build-status]  [![Issue Stats][pull-requests-image]][pull-requests]  [![Issue Stats][issues-closed-image]][issues-closed]
+[![Build status][build-status-image]][build-status] [![Bountysource][bounty-image]][bounty-issues]  [![Issue Stats][pull-requests-image]][pull-requests]  [![Issue Stats][issues-closed-image]][issues-closed]
 
 [build-status-image]: https://ci.appveyor.com/api/projects/status/789e1jvbi1aguhj5/branch/master?svg=true
 [build-status]: https://ci.appveyor.com/project/tgiphil/mosa-project-245
@@ -6,6 +6,8 @@
 [pull-requests]: http://www.issuestats.com/github/mosa/mosa-project
 [issues-closed-image]: http://www.issuestats.com/github/mosa/mosa-project/badge/issue
 [issues-closed]: http://www.issuestats.com/github/mosa/mosa-project
+[bounty-image]: https://api.bountysource.com/badge/team?team_id=55027&style=bounties_received
+[bounty-issues]: https://api.bountysource.com/badge/team?team_id=55027&style=bounties_received
 
 MOSA is an open source software project aiming to create a high quality, cross-platform, optimizing .NET compiler designed specifically to support a managed operating system based on the .NET framework.
 
@@ -15,7 +17,7 @@ The MOSA project consists of:
 * Kernel - a small, micro-kernel operating system.
 * Device Drivers Framework - a modular, device drivers framework and device drivers.
 
-Read our [Frequently Asked Questions](https://github.com/mosa/MOSA-Project/wiki/Frequently-Asked-Questions) for more about this project.
+Read our [Frequently Asked Questions](https://github.com/mosa/MOSA-Project/wiki/Frequently-Asked-Questions) for more information about this project.
 
 ### Current Status
 
