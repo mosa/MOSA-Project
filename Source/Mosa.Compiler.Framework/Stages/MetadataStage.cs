@@ -750,7 +750,7 @@ namespace Mosa.Compiler.Framework.Stages
 			for (int i = 0; i < ca.Arguments.Length; i++)
 			{
 				// Build definition
-				var customAttributeArgumentSymbol = CreateCustomAttributeArgument(name, i, null, ca.Arguments[i]);
+				var customAttributeArgumentSymbol = CreateCustomAttributeArgument(name, i, null, ca.Arguments[i], false);
 
 				// Link
 				Linker.Link(LinkType.AbsoluteAddress, NativePatchType, customAttributeSymbol, (int)writer1.Position, 0, customAttributeArgumentSymbol, 0);
@@ -760,7 +760,7 @@ namespace Mosa.Compiler.Framework.Stages
 			foreach (var namedArg in ca.NamedArguments)
 			{
 				// Build definition
-				var customAttributeArgumentSymbol = CreateCustomAttributeArgument(name, 0, namedArg.Name, namedArg.Argument);
+				var customAttributeArgumentSymbol = CreateCustomAttributeArgument(name, 0, namedArg.Name, namedArg.Argument, namedArg.IsField);
 
 				// Link
 				Linker.Link(LinkType.AbsoluteAddress, NativePatchType, customAttributeSymbol, (int)writer1.Position, 0, customAttributeArgumentSymbol, 0);
@@ -771,7 +771,7 @@ namespace Mosa.Compiler.Framework.Stages
 			return customAttributeSymbol;
 		}
 
-		private LinkerSymbol CreateCustomAttributeArgument(string symbolName, int count, string name, MosaCustomAttribute.Argument arg)
+		private LinkerSymbol CreateCustomAttributeArgument(string symbolName, int count, string name, MosaCustomAttribute.Argument arg, bool isField)
 		{
 			string nameForSymbol = (name == null) ? count.ToString() : name;
 			nameForSymbol = symbolName + ":" + nameForSymbol;
@@ -786,14 +786,17 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 			writer1.WriteZeroBytes(TypeLayout.NativePointerSize);
 
-			// 2. Argument Type Pointer
+			// 2. Is Argument A Field
+			writer1.Write(isField, TypeLayout.NativePointerSize);
+
+			// 3. Argument Type Pointer
 			Linker.Link(LinkType.AbsoluteAddress, NativePatchType, symbol, (int)writer1.Position, 0, arg.Type.FullName + Metadata.TypeDefinition, SectionKind.ROData, 0);
 			writer1.WriteZeroBytes(TypeLayout.NativePointerSize);
 
-			// 3. Argument Size
+			// 4. Argument Size
 			writer1.Write(ComputeArgumentSize(arg.Type, arg.Value), TypeLayout.NativePointerSize);
 
-			// 4. Argument Value
+			// 5. Argument Value
 			WriteArgument(writer1, symbol, arg.Type, arg.Value);
 
 			// Return symbol for linker usage
@@ -830,17 +833,21 @@ namespace Mosa.Compiler.Framework.Stages
 				case MosaTypeCode.R8:
 					return 8;
 
+				// SZArray
+				case MosaTypeCode.SZArray:
+					Debug.Assert(value is MosaCustomAttribute.Argument[]);
+					var arr = (MosaCustomAttribute.Argument[])value;
+					int size = 0;
+					foreach (var elem in arr)
+						size += ComputeArgumentSize(elem.Type, elem.Value);
+					return size;
+
+				// String
+				case MosaTypeCode.String:
+					return TypeLayout.NativePointerSize;
+
 				default:
-					if (type.IsArray)
-					{
-						Debug.Assert(value is MosaCustomAttribute.Argument[]);
-						var arr = (MosaCustomAttribute.Argument[])value;
-						int size = 0;
-						foreach (var elem in arr)
-							size += ComputeArgumentSize(elem.Type, elem.Value);
-						return size;
-					}
-					else if (type.IsReferenceType) // System.String or System.Type
+					if (type.FullName == "System.Type")
 					{
 						return TypeLayout.NativePointerSize;
 					}
@@ -907,31 +914,28 @@ namespace Mosa.Compiler.Framework.Stages
 					writer.Write((double)value);
 					break;
 
+				// SZArray
+				case MosaTypeCode.SZArray:
+					Debug.Assert(value is MosaCustomAttribute.Argument[]);
+					var arr = (MosaCustomAttribute.Argument[])value;
+					writer.Write(arr.Length, TypeLayout.NativePointerSize);
+					foreach (var elem in arr)
+						WriteArgument(writer, symbol, elem.Type, elem.Value);
+					break;
+
+				// String
+				case MosaTypeCode.String:
+					var str = (string)value;
+					writer.Write(str.Length, TypeLayout.NativePointerSize);
+					writer.Write(System.Text.Encoding.Unicode.GetBytes(str));
+					break;
+
 				default:
-					if (type.IsArray)
+					if (type.FullName == "System.Type")
 					{
-						Debug.Assert(value is MosaCustomAttribute.Argument[]);
-						var arr = (MosaCustomAttribute.Argument[])value;
-						writer.Write(arr.Length, TypeLayout.NativePointerSize);
-						foreach (var elem in arr)
-							WriteArgument(writer, symbol, elem.Type, elem.Value);
-					}
-					else if (type.IsReferenceType) // System.String or System.Type
-					{
-						if (type.TypeCode == MosaTypeCode.String)
-						{
-							var str = (string)value;
-							writer.Write(str.Length, TypeLayout.NativePointerSize);
-							writer.Write(System.Text.Encoding.Unicode.GetBytes(str));
-						}
-						else if (type.FullName == "System.Type")
-						{
-							var valueType = (MosaType)value;
-							Linker.Link(LinkType.AbsoluteAddress, NativePatchType, symbol, (int)writer.Position, 0, valueType.FullName + Metadata.TypeDefinition, SectionKind.ROData, 0);
-							writer.WriteZeroBytes(TypeLayout.NativePointerSize);
-						}
-						else
-							throw new NotSupportedException();
+						var valueType = (MosaType)value;
+						Linker.Link(LinkType.AbsoluteAddress, NativePatchType, symbol, (int)writer.Position, 0, valueType.FullName + Metadata.TypeDefinition, SectionKind.ROData, 0);
+						writer.WriteZeroBytes(TypeLayout.NativePointerSize);
 					}
 					else
 						throw new NotSupportedException();

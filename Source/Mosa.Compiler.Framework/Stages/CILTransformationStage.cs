@@ -1379,7 +1379,10 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="context">The context.</param>
 		void CIL.ICILVisitor.Sizeof(Context context)
 		{
-			throw new NotImplementCompilerException();
+			var type = context.MosaType;
+			context.MosaType = null;
+			var size = type.IsPointer ? TypeLayout.NativePointerSize : MethodCompiler.TypeLayout.GetTypeSize(type);
+			context.SetInstruction(IRInstruction.Move, context.Result, Operand.CreateConstantSignedInt(TypeSystem, size));
 		}
 
 		/// <summary>

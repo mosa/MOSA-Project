@@ -19,9 +19,9 @@ namespace Mosa.Platform.Internal.x86
 		public int NumberOfArguments;
 		public const uint ArgumentsOffset = 3;
 
-		public static uint* GetCAArgumentAddress(MetadataCAStruct* data, uint slot)
+		public static MetadataCAArgumentStruct* GetCAArgumentAddress(MetadataCAStruct* data, uint slot)
 		{
-			return (uint*)*((uint*)data + MetadataCAStruct.ArgumentsOffset + slot);
+			return (MetadataCAArgumentStruct*)*((uint*)data + MetadataCAStruct.ArgumentsOffset + slot);
 		}
 	}
 }
