@@ -81,7 +81,6 @@
     <Compile Include="NetworkDevicePacketBuffer.cs" />
     <Compile Include="INetworkDevice.cs" />
     <Compile Include="DeviceDriverPhysicalMemoryAttribute.cs" />
-    <Compile Include="IOPortRegister.cs" />
     <Compile Include="MACAddress.cs" />
     <Compile Include="DeviceDriver.cs" />
     <Compile Include="ISADeviceDriverAttribute.cs" />
