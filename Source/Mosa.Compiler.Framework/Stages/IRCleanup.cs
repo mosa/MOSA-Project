@@ -65,7 +65,6 @@ namespace Mosa.Compiler.Framework.Stages
 				//	}
 				//}
 
-
 				RemoveEmptyBlockWithSingleJump(block);
 			}
 		}

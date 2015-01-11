@@ -60,7 +60,7 @@ namespace Mosa.Platform.x86.Intrinsic
 
 			var nextBlocks = context.BasicBlock.NextBlocks;
 
-			foreach(var next in nextBlocks)
+			foreach (var next in nextBlocks)
 			{
 				next.PreviousBlocks.Remove(context.BasicBlock);
 			}

@@ -108,9 +108,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="PCI\NetworkCard\AMDPCNetII.cs" />
-    <Compile Include="PCI\TestDriver.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="PCI\VideoCard\GenericVGA.cs">
       <SubType>Code</SubType>
     </Compile>

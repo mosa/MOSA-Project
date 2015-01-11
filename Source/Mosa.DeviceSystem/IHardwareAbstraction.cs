@@ -65,5 +65,17 @@ namespace Mosa.DeviceSystem
 		/// <param name="memory">The memory.</param>
 		/// <returns></returns>
 		uint GetPhysicalAddress(IMemory memory);
+
+		/// <summary>
+		/// Debugs the write.
+		/// </summary>
+		/// <param name="msg">The message.</param>
+		void DebugWrite(string message);
+
+		/// <summary>
+		/// Debugs the write line.
+		/// </summary>
+		/// <param name="msg">The message.</param>
+		void DebugWriteLine(string message);
 	}
 }

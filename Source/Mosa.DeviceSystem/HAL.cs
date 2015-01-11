@@ -119,5 +119,23 @@ namespace Mosa.DeviceSystem
 		{
 			return HAL.AllocateMemory(size, alignment);
 		}
+
+		/// <summary>
+		/// Debugs the write.
+		/// </summary>
+		/// <param name="msg">The message.</param>
+		public static void DebugWrite(string message)
+		{
+			hardwareAbstraction.DebugWrite(message);
+		}
+
+		/// <summary>
+		/// Debugs the write line.
+		/// </summary>
+		/// <param name="msg">The message.</param>
+		public static void DebugWriteLine(string message)
+		{
+			hardwareAbstraction.DebugWriteLine(message);
+		}
 	}
 }

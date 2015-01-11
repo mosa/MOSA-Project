@@ -540,7 +540,6 @@ namespace Mosa.Platform.Internal.x86
 				// no handler in method, go up the stack
 				stackFrame = GetPreviousStackFrame(stackFrame);
 			}
-
 		}
 	}
 }
