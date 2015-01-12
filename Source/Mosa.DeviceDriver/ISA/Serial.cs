@@ -9,7 +9,7 @@
 
 using Mosa.DeviceSystem;
 
-namespace Mosa.DeviceDrivers.ISA
+namespace Mosa.DeviceDriver.ISA
 {
 	/// <summary>
 	/// Serial Device Driver

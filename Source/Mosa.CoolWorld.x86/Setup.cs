@@ -7,9 +7,10 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using Mosa.DeviceDrivers.ISA;
+using Mosa.DeviceDriver.ISA;
 using Mosa.DeviceSystem;
 using Mosa.DeviceSystem.PCI;
+using Mosa.DeviceDriver.PCI.VideoCard;
 
 namespace Mosa.CoolWorld.x86
 {
@@ -91,7 +92,7 @@ namespace Mosa.CoolWorld.x86
 		{
 			Boot.Console.Write("Starting PCI devices... ");
 
-			var devices = deviceManager.GetDevices(new FindDevice.IsPCIDevice()); //, new FindDevice.IsAvailable());
+			var devices = deviceManager.GetDevices(new FindDevice.IsPCIDevice(), new FindDevice.IsAvailable());
 
 			Boot.Console.Write(devices.Count.ToString());
 			Boot.Console.WriteLine(" Devices");
@@ -104,7 +105,7 @@ namespace Mosa.CoolWorld.x86
 
 				Boot.Console.WriteLine(device.Name + ": " + pciDevice.VendorID.ToString("x") + "." + pciDevice.DeviceID.ToString("x") + "." + pciDevice.Function.ToString("x") + "." + pciDevice.ClassCode.ToString("x"));
 
-				//StartDevice(device as IPCIDevice);
+				StartDevice(pciDevice);
 			}
 		}
 
@@ -113,13 +114,8 @@ namespace Mosa.CoolWorld.x86
 		/// </summary>
 		static public void StartISADevices()
 		{
-			//LinkedList<DeviceDriver> deviceDrivers = deviceDriverRegistry.GetISADeviceDrivers();
-
-			//foreach (DeviceDriver deviceDriver in deviceDrivers)
-			//    StartDevice(deviceDriver);
-
 			//[ISADeviceDriver(AutoLoad = true, BasePort = 0x60, PortRange = 1, AltBasePort = 0x64, AltPortRange = 1, IRQ = 1, Platforms = PlatformArchitecture.X86AndX64)]
-			ISADeviceDriverAttribute keyboardDeviceAttributes = new ISADeviceDriverAttribute();
+			var keyboardDeviceAttributes = new ISADeviceDriverAttribute();
 			keyboardDeviceAttributes.AutoLoad = true;
 			keyboardDeviceAttributes.BasePort = 0x60;
 			keyboardDeviceAttributes.PortRange = 1;
@@ -128,14 +124,14 @@ namespace Mosa.CoolWorld.x86
 			keyboardDeviceAttributes.Platforms = PlatformArchitecture.X86AndX64;
 
 			//[ISADeviceDriver(AutoLoad = true, BasePort = 0x0CF8, PortRange = 8, Platforms = PlatformArchitecture.X86AndX64)]
-			ISADeviceDriverAttribute pciAttributes = new ISADeviceDriverAttribute();
+			var pciAttributes = new ISADeviceDriverAttribute();
 			pciAttributes.AutoLoad = true;
 			pciAttributes.BasePort = 0x0CF8;
 			pciAttributes.PortRange = 8;
 			pciAttributes.Platforms = PlatformArchitecture.X86AndX64;
 
 			//[ISADeviceDriver(AutoLoad = true, BasePort = 0x20, PortRange = 2, AltBasePort = 0xA0, AltPortRange = 2, Platforms = PlatformArchitecture.X86AndX64)]
-			ISADeviceDriverAttribute picAttributes = new ISADeviceDriverAttribute();
+			var picAttributes = new ISADeviceDriverAttribute();
 			picAttributes.AutoLoad = true;
 			picAttributes.BasePort = 0x20;
 			picAttributes.PortRange = 2;
@@ -144,7 +140,7 @@ namespace Mosa.CoolWorld.x86
 			picAttributes.Platforms = PlatformArchitecture.X86AndX64;
 
 			//[ISADeviceDriver(AutoLoad = true, BasePort = 0x40, PortRange = 4, IRQ = 0, Platforms = PlatformArchitecture.X86AndX64)]
-			ISADeviceDriverAttribute pitAttributes = new ISADeviceDriverAttribute();
+			var pitAttributes = new ISADeviceDriverAttribute();
 			pitAttributes.AutoLoad = true;
 			pitAttributes.BasePort = 0x40;
 			pitAttributes.PortRange = 4;
@@ -152,7 +148,7 @@ namespace Mosa.CoolWorld.x86
 			pitAttributes.Platforms = PlatformArchitecture.X86AndX64;
 
 			//[ISADeviceDriver(AutoLoad = true, BasePort = 0x03B0, PortRange = 0x1F, BaseAddress = 0xB0000, AddressRange = 0x10000, Platforms = PlatformArchitecture.X86AndX64)]
-			ISADeviceDriverAttribute vgaTextAttributes = new ISADeviceDriverAttribute();
+			var vgaTextAttributes = new ISADeviceDriverAttribute();
 			vgaTextAttributes.AutoLoad = true;
 			vgaTextAttributes.BasePort = 0x03B0;
 			vgaTextAttributes.PortRange = 0x1F;
@@ -162,7 +158,7 @@ namespace Mosa.CoolWorld.x86
 			vgaTextAttributes.Platforms = PlatformArchitecture.X86AndX64;
 
 			//[ISADeviceDriver(AutoLoad = true, BasePort = 0x0070, PortRange = 2, Platforms = PlatformArchitecture.X86)]
-			ISADeviceDriverAttribute cmosAttributes = new ISADeviceDriverAttribute();
+			var cmosAttributes = new ISADeviceDriverAttribute();
 			cmosAttributes.AutoLoad = true;
 			cmosAttributes.BasePort = 0x0070;
 			cmosAttributes.PortRange = 0x02;
@@ -208,8 +204,8 @@ namespace Mosa.CoolWorld.x86
 			if (driverAtttribute.BaseAddress != 0x00)
 				memoryRegionCount++;
 
-			IIOPortRegion[] ioPortRegions = new IIOPortRegion[ioRegionCount];
-			IMemoryRegion[] memoryRegions = new IMemoryRegion[memoryRegionCount];
+			var ioPortRegions = new IIOPortRegion[ioRegionCount];
+			var memoryRegions = new IMemoryRegion[memoryRegionCount];
 
 			ioPortRegions[0] = new IOPortRegion(driverAtttribute.BasePort, driverAtttribute.PortRange);
 
@@ -223,7 +219,7 @@ namespace Mosa.CoolWorld.x86
 				memoryRegions[0] = new MemoryRegion(driverAtttribute.BaseAddress, driverAtttribute.AddressRange);
 			}
 
-			IHardwareResources hardwareResources = new HardwareResources(resourceManager, ioPortRegions, memoryRegions, new InterruptHandler(resourceManager.InterruptManager, driverAtttribute.IRQ, hardwareDevice));
+			var hardwareResources = new HardwareResources(resourceManager, ioPortRegions, memoryRegions, new InterruptHandler(resourceManager.InterruptManager, driverAtttribute.IRQ, hardwareDevice));
 
 			hardwareDevice.Setup(hardwareResources);
 
@@ -253,20 +249,47 @@ namespace Mosa.CoolWorld.x86
 		/// <param name="pciDevice">The pci device.</param>
 		static public void StartDevice(IPCIDevice pciDevice)
 		{
-			DeviceDriver deviceDriver = deviceDriverRegistry.FindDriver(pciDevice);
+			//var deviceDriver = deviceDriverRegistry.FindDriver(pciDevice);
 
-			if (deviceDriver == null)
+			//if (deviceDriver == null)
+			//{
+			//	pciDevice.SetNoDriverFound();
+			//	return;
+			//}
+
+			//var hardwareDevice = System.Activator.CreateInstance(deviceDriver.DriverType) as IHardwareDevice;
+
+			//StartDevice(pciDevice, deviceDriver, hardwareDevice);
+
+			IHardwareDevice hardwareDevice = null;
+
+			if (pciDevice.VendorID == 0x15AD && pciDevice.DeviceID == 0x0405)
 			{
-				pciDevice.SetNoDriverFound();
-				return;
+				hardwareDevice = new VMwareSVGAII();
+				Boot.Console.WriteLine("VMwareSVGAII");
 			}
 
-			IHardwareDevice hardwareDevice = System.Activator.CreateInstance(deviceDriver.DriverType) as IHardwareDevice;
+			if (hardwareDevice != null)
+			{
+				StartDevice(pciDevice, hardwareDevice);
+			}
 
+			if (pciDevice.VendorID == 0x15AD && pciDevice.DeviceID == 0x0405)
+			{
+				var display = hardwareDevice as VMwareSVGAII;
+
+				var color = new Color(255, 0, 0);
+
+				display.WritePixel(color, 10, 10);
+			}
+		}
+
+		private static void StartDevice(IPCIDevice pciDevice, IHardwareDevice hardwareDevice)
+		{
 			int ioRegionCount = 0;
 			int memoryRegionCount = 0;
 
-			foreach (BaseAddress pciBaseAddress in pciDevice.BaseAddresses)
+			foreach (var pciBaseAddress in pciDevice.BaseAddresses)
 			{
 				switch (pciBaseAddress.Region)
 				{
@@ -276,21 +299,13 @@ namespace Mosa.CoolWorld.x86
 				}
 			}
 
-			foreach (DeviceDriverPhysicalMemoryAttribute memoryAttribute in deviceDriver.MemoryAttributes)
-			{
-				if (memoryAttribute.MemorySize > 0)
-				{
-					memoryRegionCount++;
-				}
-			}
-
-			IIOPortRegion[] ioPortRegions = new IIOPortRegion[ioRegionCount];
-			IMemoryRegion[] memoryRegions = new IMemoryRegion[memoryRegionCount];
+			var ioPortRegions = new IIOPortRegion[ioRegionCount];
+			var memoryRegions = new IMemoryRegion[memoryRegionCount];
 
 			int ioRegionIndex = 0;
 			int memoryRegionIndex = 0;
 
-			foreach (BaseAddress pciBaseAddress in pciDevice.BaseAddresses)
+			foreach (var pciBaseAddress in pciDevice.BaseAddresses)
 			{
 				switch (pciBaseAddress.Region)
 				{
@@ -300,22 +315,18 @@ namespace Mosa.CoolWorld.x86
 				}
 			}
 
-			foreach (DeviceDriverPhysicalMemoryAttribute memoryAttribute in deviceDriver.MemoryAttributes)
-			{
-				if (memoryAttribute.MemorySize > 0)
-				{
-					IMemory memory = Mosa.DeviceSystem.HAL.AllocateMemory(memoryAttribute.MemorySize, memoryAttribute.MemoryAlignment);
-					memoryRegions[memoryRegionIndex++] = new MemoryRegion(memory.Address, memory.Size);
-				}
-			}
-
-			HardwareResources hardwareResources = new HardwareResources(resourceManager, ioPortRegions, memoryRegions, new InterruptHandler(resourceManager.InterruptManager, pciDevice.IRQ, hardwareDevice), pciDevice as IDeviceResource);
+			var hardwareResources = new HardwareResources(resourceManager, ioPortRegions, memoryRegions, new InterruptHandler(resourceManager.InterruptManager, pciDevice.IRQ, hardwareDevice), pciDevice as IDeviceResource);
 
 			if (resourceManager.ClaimResources(hardwareResources))
 			{
 				hardwareResources.EnableIRQ();
+
+				hardwareDevice.Setup(hardwareResources);
+
 				if (hardwareDevice.Start() == DeviceDriverStartStatus.Started)
+				{
 					pciDevice.SetDeviceOnline();
+				}
 				else
 				{
 					hardwareResources.DisableIRQ();

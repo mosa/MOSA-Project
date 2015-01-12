@@ -95,9 +95,9 @@
       <Project>{27A3C89C-1967-45FF-A77E-94F44995C42C}</Project>
       <Name>Mosa.ClassLib</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Mosa.DeviceDrivers\Mosa.DeviceDrivers.csproj">
+    <ProjectReference Include="..\Mosa.DeviceDriver\Mosa.DeviceDriver.csproj">
       <Project>{4dbd4c50-bec5-48d9-b471-9fb0a7f69999}</Project>
-      <Name>Mosa.DeviceDrivers</Name>
+      <Name>Mosa.DeviceDriver</Name>
     </ProjectReference>
     <ProjectReference Include="..\Mosa.DeviceSystem\Mosa.DeviceSystem.csproj">
       <Project>{6509477a-7360-4937-a1b9-26fed0a75cda}</Project>
