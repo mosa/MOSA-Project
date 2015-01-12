@@ -182,6 +182,23 @@ namespace Mosa.Platform.x86.Stages
 			context.Delete(false);
 		}
 
+		/// <summary>
+		/// Visitation function for <see cref="IX86Visitor.In"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IX86Visitor.In(Context context)
+		{
+			var size = context.Size;
+
+			if (size == InstructionSize.Size32)
+				return;
+
+			Debug.Assert(context.Result.Register == GeneralPurposeRegister.EAX);
+
+			// NOTE: Other option is to use Movzx after IN instruction
+			context.InsertBefore().SetInstruction(X86.Mov, context.Result, Operand.CreateConstantSignedInt(TypeSystem, 0));
+		}
+
 		#endregion IX86Visitor
 
 		#region IX86Visitor - Unused
@@ -279,14 +296,6 @@ namespace Mosa.Platform.x86.Stages
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IX86Visitor.Div(Context context)
-		{
-		}
-
-		/// <summary>
-		/// Visitation function for <see cref="IX86Visitor.In"/> instructions.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void IX86Visitor.In(Context context)
 		{
 		}
 

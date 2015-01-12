@@ -8,10 +8,9 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using Mosa.Compiler.Framework;
-using System;
-using System.Diagnostics;
 using Mosa.Compiler.Common;
+using Mosa.Compiler.Framework;
+using System.Diagnostics;
 
 namespace Mosa.Platform.x86.Instructions
 {
@@ -24,9 +23,10 @@ namespace Mosa.Platform.x86.Instructions
 
 		private static readonly OpCode C_8 = new OpCode(new byte[] { 0xE4 });
 		private static readonly OpCode R_8 = new OpCode(new byte[] { 0xEC });
+		private static readonly OpCode C_16 = new OpCode(new byte[] { 0x66, 0xE5 });
+		private static readonly OpCode R_16 = new OpCode(new byte[] { 0x66, 0xED });
 		private static readonly OpCode C_32 = new OpCode(new byte[] { 0xE5 });
 		private static readonly OpCode R_32 = new OpCode(new byte[] { 0xED });
-		private static readonly OpCode opcode = new OpCode(new byte[] { 0xEC });
 
 		#endregion Data Members
 
@@ -43,6 +43,8 @@ namespace Mosa.Platform.x86.Instructions
 		private OpCode ComputeOpCode(InstructionSize size, Operand destination, Operand source)
 		{
 			Debug.Assert(destination.IsConstant || destination.IsCPURegister);
+			Debug.Assert(size != InstructionSize.None);
+			Debug.Assert(size != InstructionSize.Native);
 
 			//size = BaseMethodCompilerStage.GetInstructionSize(size, destination);
 
@@ -51,6 +53,9 @@ namespace Mosa.Platform.x86.Instructions
 				if (size == InstructionSize.Size8)
 					return R_8;
 
+				if (size == InstructionSize.Size16)
+					return R_16;
+
 				return R_32;
 			}
 
@@ -58,6 +63,9 @@ namespace Mosa.Platform.x86.Instructions
 			{
 				if (size == InstructionSize.Size8)
 					return C_8;
+
+				if (size == InstructionSize.Size16)
+					return C_16;
 
 				return C_32;
 			}

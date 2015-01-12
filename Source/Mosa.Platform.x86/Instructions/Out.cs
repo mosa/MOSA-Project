@@ -50,6 +50,8 @@ namespace Mosa.Platform.x86.Instructions
 		private OpCode ComputeOpCode(InstructionSize size, Operand destination, Operand source)
 		{
 			Debug.Assert(destination.IsConstant || destination.IsCPURegister);
+			Debug.Assert(size != InstructionSize.None);
+			Debug.Assert(size != InstructionSize.Native);
 
 			//size = BaseMethodCompilerStage.GetInstructionSize(size, destination);
 

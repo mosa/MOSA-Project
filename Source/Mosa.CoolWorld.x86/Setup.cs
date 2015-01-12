@@ -46,6 +46,7 @@ namespace Mosa.CoolWorld.x86
 		static public PIT PIT = null;
 		static public VGAText VGAText = null;
 		static public CMOS CMOS = null;
+		static public PCIControllerManager PCIControllerManager = null;
 
 		/// <summary>
 		/// Initializes the Device Driver System.
@@ -88,10 +89,23 @@ namespace Mosa.CoolWorld.x86
 		/// </summary>
 		static public void StartPCIDevices()
 		{
-			//foreach (IDevice device in deviceManager.GetDevices(new FindDevice.IsPCIDevice(), new FindDevice.IsAvailable()))
-			//{
-			//    StartDevice(device as IPCIDevice);
-			//}
+			Boot.Console.Write("Starting PCI devices... ");
+
+			var devices = deviceManager.GetDevices(new FindDevice.IsPCIDevice()); //, new FindDevice.IsAvailable());
+
+			Boot.Console.Write(devices.Count.ToString());
+			Boot.Console.WriteLine(" Devices");
+
+			foreach (IDevice device in devices)
+			{
+				var pciDevice = device as IPCIDevice;
+
+				Mosa.CoolWorld.x86.Boot.BulletPoint();
+
+				Boot.Console.WriteLine(device.Name + ": " + pciDevice.VendorID.ToString("x") + "." + pciDevice.DeviceID.ToString("x") + "." + pciDevice.Function.ToString("x") + "." + pciDevice.ClassCode.ToString("x"));
+
+				//StartDevice(device as IPCIDevice);
+			}
 		}
 
 		/// <summary>
@@ -166,14 +180,14 @@ namespace Mosa.CoolWorld.x86
 			StartDevice(pciAttributes, PCI);
 			StartDevice(keyboardDeviceAttributes, Keyboard);
 			StartDevice(cmosAttributes, CMOS);
-
 			//StartDevice(vgaTextAttributes, VGAText);
 
-			PCIControllerManager pciController = new PCIControllerManager(deviceManager);
+			PCIControllerManager = new PCIControllerManager(deviceManager);
 
 			Boot.Console.Write("Probing PCI devices...");
 
-			pciController.CreatePCIDevices();
+			PCIControllerManager.CreatePCIDevices();
+
 			Boot.Console.WriteLine("[Completed]");
 		}
 

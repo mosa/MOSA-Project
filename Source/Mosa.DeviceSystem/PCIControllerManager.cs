@@ -40,7 +40,9 @@ namespace Mosa.DeviceSystem
 		/// <returns></returns>
 		protected bool ProbeDevice(IPCIController pciController, byte bus, byte slot, byte fun)
 		{
-			return pciController.ReadConfig32(bus, slot, fun, 0) != 0xFFFFFFFF;
+			uint value = pciController.ReadConfig32(bus, slot, fun, 0);
+			//HAL.DebugWrite(": " + value.ToString("x"));
+			return value != 0xFFFFFFFF;
 		}
 
 		/// <summary>
@@ -56,11 +58,19 @@ namespace Mosa.DeviceSystem
 			{
 				IPCIController pciController = device as IPCIController;
 
-				for (byte bus = 0; bus < 255; bus++)
-					for (byte slot = 0; slot < 16; slot++)
-						for (byte fun = 0; fun < 7; fun++)
-							if (ProbeDevice(pciController, bus, slot, fun))
-								deviceManager.Add(new Mosa.DeviceSystem.PCI.PCIDevice(pciController, bus, slot, fun));
+				for (int bus = 0; bus < 255; bus++)
+				{
+					for (int slot = 0; slot < 16; slot++)
+					{
+						for (int fun = 0; fun < 7; fun++)
+						{
+							if (ProbeDevice(pciController, (byte)bus, (byte)slot, (byte)fun))
+							{
+								deviceManager.Add(new Mosa.DeviceSystem.PCI.PCIDevice(pciController, (byte)bus, (byte)slot, (byte)fun));
+							}
+						}
+					}
+				}
 			}
 		}
 	}
