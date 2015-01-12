@@ -8,6 +8,7 @@
  */
 
 using Mosa.Platform.Internal.x86;
+using System.Collections.Generic;
 using System.Reflection;
 using x86Runtime = Mosa.Platform.Internal.x86.Runtime;
 
@@ -27,6 +28,7 @@ namespace System
 		private Type baseType;
 		private Type declaringType;
 		private Type elementType;
+		private LinkedList<CustomAttributeData> customAttributesData = new LinkedList<CustomAttributeData>();
 
 		internal readonly Type ValueType = typeof(System.ValueType);
 		internal readonly Type EnumType = typeof(System.Enum);
@@ -54,6 +56,11 @@ namespace System
 		public override bool ContainsGenericParameters
 		{
 			get { throw new NotImplementedException(); }
+		}
+
+		public override IEnumerable<CustomAttributeData> CustomAttributes
+		{
+			get { return customAttributesData; }
 		}
 
 		public override MethodBase DeclaringMethod
@@ -156,6 +163,19 @@ namespace System
 				RuntimeTypeHandle elementHandle = new RuntimeTypeHandle();
 				((uint**)&elementHandle)[0] = (uint*)this.typeStruct->ElementType;
 				this.elementType = Type.GetTypeFromHandle(elementHandle);
+			}
+
+			// Custom Attributes Data
+			if (this.typeStruct->CustomAttributes != null)
+			{
+				var customAttributesTablePtr = this.typeStruct->CustomAttributes;
+				var customAttributesCount = customAttributesTablePtr[0];
+				customAttributesTablePtr++;
+				for (uint i = 0; i < customAttributesCount; i++)
+				{
+					RuntimeCustomAttributeData cad = new RuntimeCustomAttributeData((MetadataCAStruct*)customAttributesTablePtr[i]);
+					customAttributesData.AddLast(cad);
+				}
 			}
 		}
 

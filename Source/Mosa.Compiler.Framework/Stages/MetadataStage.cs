@@ -112,10 +112,13 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private LinkerSymbol EmitStringWithLength(string name, string value)
 		{
+			// Strings are now going to be embedded objects since they are immutable
 			var symbol = Linker.CreateSymbol(name, SectionKind.ROData, TypeLayout.NativePointerAlignment, 0);
 			var stream = new EndianAwareBinaryWriter(symbol.Stream, Architecture.Endianness);
+			Linker.Link(LinkType.AbsoluteAddress, NativePatchType, symbol, (int)stream.Position, 0, "System.String" + Metadata.TypeDefinition, SectionKind.ROData, 0);
+			stream.WriteZeroBytes(TypeLayout.NativePointerSize * 2);
 			stream.Write(value.Length, TypeLayout.NativePointerSize);
-			stream.Write(System.Text.ASCIIEncoding.ASCII.GetBytes(value));
+			stream.Write(System.Text.UnicodeEncoding.Unicode.GetBytes(value));
 			return symbol;
 		}
 
@@ -925,7 +928,10 @@ namespace Mosa.Compiler.Framework.Stages
 
 				// String
 				case MosaTypeCode.String:
+					// Since strings are immutable, make it an object that we can just use
 					var str = (string)value;
+					Linker.Link(LinkType.AbsoluteAddress, NativePatchType, symbol, (int)writer.Position, 0, "System.String" + Metadata.TypeDefinition, SectionKind.ROData, 0);
+					writer.WriteZeroBytes(TypeLayout.NativePointerSize * 2);
 					writer.Write(str.Length, TypeLayout.NativePointerSize);
 					writer.Write(System.Text.Encoding.Unicode.GetBytes(str));
 					break;

@@ -68,11 +68,9 @@ namespace System
 			// Because C# doesn't like structs which contain object references to be referenced by pointers
 			// we need to box it, work on the boxed copy, then unbox back to normal
 			CustomAttributeTypedArgument typedArgument = new CustomAttributeTypedArgument();
-			var boxedCopy = (object)typedArgument;
-			var boxedCopyPtr = (uint**)Mosa.Internal.Native.GetObjectAddress(boxedCopy);
-			boxedCopyPtr[2] = (uint*)Mosa.Internal.Native.GetObjectAddress(type);
-			boxedCopyPtr[3] = (uint*)Mosa.Internal.Native.GetObjectAddress(value);
-			typedArgument = (CustomAttributeTypedArgument)boxedCopy;
+			var ptr = (uint**)Mosa.Internal.Native.GetValueTypeAddress(typedArgument);
+			ptr[0] = (uint*)Mosa.Internal.Native.GetObjectAddress(type);
+			ptr[1] = (uint*)Mosa.Internal.Native.GetObjectAddress(value);
 
 			return typedArgument;
 		}
@@ -82,13 +80,11 @@ namespace System
 			// Because C# doesn't like structs which contain object references to be referenced by pointers
 			// we need to box it, work on the boxed copy, then unbox back to normal
 			CustomAttributeNamedArgument namedArgument = new CustomAttributeNamedArgument();
-			var boxedCopy = (object)namedArgument;
-			var boxedCopyPtr = (uint**)Mosa.Internal.Native.GetObjectAddress(boxedCopy);
-			boxedCopyPtr[2] = (uint*)Mosa.Internal.Native.GetObjectAddress(name);
-			boxedCopyPtr[3] = (uint*)Mosa.Internal.Native.GetObjectAddress(type);
-			boxedCopyPtr[4] = (uint*)Mosa.Internal.Native.GetObjectAddress(value);
-			boxedCopyPtr[5] = (uint*)(isField ? 1 : 0);
-			namedArgument = (CustomAttributeNamedArgument)boxedCopy;
+			var ptr = (uint**)Mosa.Internal.Native.GetValueTypeAddress(namedArgument);
+			ptr[0] = (uint*)Mosa.Internal.Native.GetObjectAddress(name);
+			ptr[1] = (uint*)Mosa.Internal.Native.GetObjectAddress(type);
+			ptr[2] = (uint*)Mosa.Internal.Native.GetObjectAddress(value);
+			ptr[3] = (uint*)(isField ? 1 : 0);
 
 			return namedArgument;
 		}
@@ -159,7 +155,7 @@ namespace System
 						// Get the argument type
 						RuntimeTypeHandle argTypeHandle = new RuntimeTypeHandle();
 						((uint**)&argTypeHandle)[0] = (uint*)argument->ArgumentType;
-						var argType = Type.GetTypeFromHandle(argTypeHandle);
+						return Type.GetTypeFromHandle(argTypeHandle);
 					}
 					break;
 			}

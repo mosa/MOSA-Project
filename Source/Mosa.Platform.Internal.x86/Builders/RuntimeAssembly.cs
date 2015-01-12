@@ -19,6 +19,7 @@ namespace System
 		internal MetadataAssemblyStruct* assemblyStruct;
 		internal LinkedList<RuntimeType> typeList = new LinkedList<RuntimeType>();
 		internal LinkedList<RuntimeTypeHandle> typeHandles = new LinkedList<RuntimeTypeHandle>();
+		internal LinkedList<RuntimeTypeInfo> typeInfoList = new LinkedList<RuntimeTypeInfo>();
 		internal LinkedList<CustomAttributeData> customAttributesData = new LinkedList<CustomAttributeData>();
 
 		private string fullName;
@@ -30,7 +31,7 @@ namespace System
 
 		public override IEnumerable<TypeInfo> DefinedTypes
 		{
-			get { throw new NotImplementedException(); }
+			get { return this.typeInfoList.ToArray(); }
 		}
 
 		public override string FullName
@@ -81,7 +82,7 @@ namespace System
 
 		internal void Phase2()
 		{
-			foreach (RuntimeType type in typeList)
+			foreach (RuntimeType type in this.typeList)
 			{
 				type.FindRelativeTypes();
 			}
@@ -92,11 +93,16 @@ namespace System
 				var customAttributesTablePtr = this.assemblyStruct->CustomAttributes;
 				var customAttributesCount = customAttributesTablePtr[0];
 				customAttributesTablePtr++;
-				for (uint i = 0; i < this.assemblyStruct->CustomAttributes[0]; i++)
+				for (uint i = 0; i < customAttributesCount; i++)
 				{
 					RuntimeCustomAttributeData cad = new RuntimeCustomAttributeData((MetadataCAStruct*)customAttributesTablePtr[i]);
 					customAttributesData.AddLast(cad);
 				}
+			}
+
+			foreach (RuntimeType type in this.typeList)
+			{
+				this.typeInfoList.AddLast(new RuntimeTypeInfo(type.TypeHandle, this));
 			}
 		}
 	}

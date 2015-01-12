@@ -11,9 +11,8 @@ using Mosa.Compiler.Framework.IR;
 
 namespace Mosa.Compiler.Framework.Intrinsics
 {
-	[ReplacementTarget("Mosa.Internal.Native::GetObjectAddress")]
-	[ReplacementTarget("Mosa.Internal.Native::GetValueTypeAddress")]
-	public sealed class GetObjectAddress : IIntrinsicInternalMethod
+	[ReplacementTarget("Mosa.Internal.Native::GetObjectFromAddress")]
+	public sealed class GetObjectFromAddress : IIntrinsicInternalMethod
 	{
 		/// <summary>
 		/// Replaces the intrinsic call site
@@ -24,13 +23,6 @@ namespace Mosa.Compiler.Framework.Intrinsics
 		{
 			var result = context.Result;
 			var operand1 = context.Operand1;
-			if (operand1.IsValueType)
-			{
-				operand1 = context.Previous.Operand1;
-				context.Previous.Remove();
-				context.SetInstruction(IRInstruction.AddressOf, result, operand1);
-				return;
-			}
 			context.SetInstruction(IRInstruction.Move, result, operand1);
 		}
 	}

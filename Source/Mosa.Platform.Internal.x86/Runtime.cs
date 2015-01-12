@@ -78,8 +78,7 @@ namespace Mosa.Platform.Internal.x86
 
 		public static string InitializeMetadataString(uint* ptr)
 		{
-			int length = (int)(ptr[0]);
-			return new string((sbyte*)++ptr, 0, length);
+			return (string)Mosa.Internal.Native.GetObjectFromAddress(ptr);
 		}
 
 		public static void Setup()
