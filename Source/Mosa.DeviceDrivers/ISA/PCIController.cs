@@ -115,7 +115,7 @@ namespace Mosa.DeviceDrivers.ISA
 					   | (uint)((bus & 0xFF) << 16)
 					   | (uint)((slot & 0x0F) << 11)
 					   | (uint)((function & 0x07) << 8)
-					   | (uint)(register));
+					   | (uint)(register & 0xFC));
 		}
 
 		/// <summary>
@@ -143,7 +143,7 @@ namespace Mosa.DeviceDrivers.ISA
 		public ushort ReadConfig16(byte bus, byte slot, byte function, byte register)
 		{
 			configAddress.Write32(GetIndex(bus, slot, function, register));
-			return configData.Read16();
+			return (ushort)((configData.Read32() >> ((register % 4) * 8)) & 0xFFFF);
 		}
 
 		/// <summary>
@@ -157,7 +157,7 @@ namespace Mosa.DeviceDrivers.ISA
 		public byte ReadConfig8(byte bus, byte slot, byte function, byte register)
 		{
 			configAddress.Write32(GetIndex(bus, slot, function, register));
-			return configData.Read8();
+			return (byte)((configData.Read32() >> ((register % 4) * 8)) & 0xFF);
 		}
 
 		/// <summary>
