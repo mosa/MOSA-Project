@@ -46,10 +46,12 @@ namespace Mosa.Platform.x86.Instructions
 		/// <param name="destination">The destination operand.</param>
 		/// <param name="source">The source operand.</param>
 		/// <returns></returns>
-		/// <exception cref="System.ArgumentException">@No opcode for operand type. [ + destination + ,  + source + )</exception>
+		/// <exception cref="NotImplementCompilerException"></exception>
 		private OpCode ComputeOpCode(InstructionSize size, Operand destination, Operand source)
 		{
 			Debug.Assert(destination.IsConstant || destination.IsCPURegister);
+			Debug.Assert(size != InstructionSize.None);
+			Debug.Assert(size != InstructionSize.Native);
 
 			//size = BaseMethodCompilerStage.GetInstructionSize(size, destination);
 
@@ -60,6 +62,7 @@ namespace Mosa.Platform.x86.Instructions
 
 				return R_32;
 			}
+
 			if (destination.IsConstant)
 			{
 				if (size == InstructionSize.Size8)

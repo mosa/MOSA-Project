@@ -94,5 +94,23 @@ namespace Mosa.CoolWorld.x86.HAL
 		{
 			return Mosa.Kernel.x86.PageTable.GetPhysicalAddressFromVirtual(memory.Address);
 		}
+
+		/// <summary>
+		/// Debugs the write.
+		/// </summary>
+		/// <param name="msg">The message.</param>
+		void IHardwareAbstraction.DebugWrite(string message)
+		{
+			Mosa.CoolWorld.x86.Boot.Console.Write(message);
+		}
+
+		/// <summary>
+		/// Debugs the write line.
+		/// </summary>
+		/// <param name="msg">The message.</param>
+		void IHardwareAbstraction.DebugWriteLine(string message)
+		{
+			Mosa.CoolWorld.x86.Boot.Console.WriteLine(message);
+		}
 	}
 }

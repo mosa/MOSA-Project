@@ -1,5 +1,5 @@
 ﻿/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
+ * (c) 2015 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
  *
@@ -8,8 +8,9 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework;
-using System;
+using System.Diagnostics;
 
 namespace Mosa.Platform.x86.Instructions
 {
@@ -20,39 +21,56 @@ namespace Mosa.Platform.x86.Instructions
 	{
 		#region Data Members
 
-		private static readonly OpCode R_C_8 = new OpCode(new byte[] { 0xE4 });
-		private static readonly OpCode R_R_8 = new OpCode(new byte[] { 0xEC });
-		private static readonly OpCode R_C_32 = new OpCode(new byte[] { 0xE5 });
-		private static readonly OpCode R_R_32 = new OpCode(new byte[] { 0xED });
-		private static readonly OpCode opcode = new OpCode(new byte[] { 0xEC });
+		private static readonly OpCode C_8 = new OpCode(new byte[] { 0xE4 });
+		private static readonly OpCode R_8 = new OpCode(new byte[] { 0xEC });
+		private static readonly OpCode C_16 = new OpCode(new byte[] { 0x66, 0xE5 });
+		private static readonly OpCode R_16 = new OpCode(new byte[] { 0x66, 0xED });
+		private static readonly OpCode C_32 = new OpCode(new byte[] { 0xE5 });
+		private static readonly OpCode R_32 = new OpCode(new byte[] { 0xED });
 
 		#endregion Data Members
 
 		#region Methods
 
 		/// <summary>
-		/// Computes the op code.
+		/// Computes the opcode.
 		/// </summary>
-		/// <param name="destination">The destination.</param>
-		/// <param name="source">The source.</param>
-		/// <param name="third">The third operand.</param>
+		/// <param name="size">The size.</param>
+		/// <param name="destination">The destination operand.</param>
+		/// <param name="source">The source operand.</param>
 		/// <returns></returns>
-		/// <exception cref="System.ArgumentException"></exception>
-		protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
+		/// <exception cref="NotImplementCompilerException"></exception>
+		private OpCode ComputeOpCode(InstructionSize size, Operand destination, Operand source)
 		{
-			// FIXME: This method is not called.
-			if (source.IsByte)
+			Debug.Assert(destination.IsConstant || destination.IsCPURegister);
+			Debug.Assert(size != InstructionSize.None);
+			Debug.Assert(size != InstructionSize.Native);
+
+			//size = BaseMethodCompilerStage.GetInstructionSize(size, destination);
+
+			if (destination.IsCPURegister)
 			{
-				if ((destination.IsRegister) && (source.IsConstant)) return R_C_8;
-				if ((destination.IsRegister) && (source.IsRegister)) return R_R_8;
-			}
-			else
-			{
-				if ((destination.IsRegister) && (source.IsConstant)) return R_C_32;
-				if ((destination.IsRegister) && (source.IsRegister)) return R_R_32;
+				if (size == InstructionSize.Size8)
+					return R_8;
+
+				if (size == InstructionSize.Size16)
+					return R_16;
+
+				return R_32;
 			}
 
-			throw new ArgumentException(@"No opcode for operand type.");
+			if (destination.IsConstant)
+			{
+				if (size == InstructionSize.Size8)
+					return C_8;
+
+				if (size == InstructionSize.Size16)
+					return C_16;
+
+				return C_32;
+			}
+
+			throw new NotImplementCompilerException();
 		}
 
 		/// <summary>
@@ -62,8 +80,16 @@ namespace Mosa.Platform.x86.Instructions
 		/// <param name="emitter">The emitter.</param>
 		protected override void Emit(Context context, MachineCodeEmitter emitter)
 		{
-			// FIXME: Incoming operands are incorrect. This method ignores them.
-			emitter.Emit(R_R_8, null, null);
+			var opCode = ComputeOpCode(context.Size, context.Operand1, context.Operand2);
+
+			if (context.Operand1.IsConstant)
+			{
+				emitter.Emit(opCode, context.Operand1, null);
+			}
+			else
+			{
+				emitter.Emit(opCode, null, null);
+			}
 		}
 
 		/// <summary>

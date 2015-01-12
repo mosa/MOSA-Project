@@ -80,7 +80,7 @@ namespace Mosa.CoolWorld.x86
 			int lastSecond = -1;
 
 			Console.BackgroundColor = Colors.Black;
-			Console.Goto(15, 0);
+			Console.Goto(19, 0);
 			Console.Color = Colors.White;
 			Console.Write("> ");
 

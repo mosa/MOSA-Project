@@ -26,7 +26,7 @@ namespace Mosa.Kernel.x86
 			Native.Nop();
 			Native.Nop();
 			Native.Nop();
-			byte result = Native.In(0x71);
+			byte result = Native.In8(0x71);
 
 			//Native.Sti();
 			return result;
@@ -55,7 +55,7 @@ namespace Mosa.Kernel.x86
 		/// </summary>
 		private static void Delay()
 		{
-			Native.In(0x80);
+			Native.In8(0x80);
 			Native.Out8(0x80, 0);
 		}
 
