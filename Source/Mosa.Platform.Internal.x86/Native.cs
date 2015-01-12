@@ -49,25 +49,19 @@ namespace Mosa.Platform.Internal.x86
 		/// <summary>
 		/// Wraps the x86 in instruction to read from an 8-bit port.
 		/// </summary>
-		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.In, Mosa.Platform.x86")]
-		public extern static byte In(ushort address);
-
-		/// <summary>
-		/// Wraps the x86 in instruction to read from an 8-bit port.
-		/// </summary>
-		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.In, Mosa.Platform.x86")]
+		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.In8, Mosa.Platform.x86")]
 		public extern static byte In8(ushort address);
 
 		/// <summary>
 		/// Wraps the x86 in instruction to read from a 16-bit port.
 		/// </summary>
-		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.In, Mosa.Platform.x86")]
+		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.In16, Mosa.Platform.x86")]
 		public extern static ushort In16(ushort address);
 
 		/// <summary>
 		/// Wraps the x86 in instruction to read from a 32-bit port.
 		/// </summary>
-		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.In, Mosa.Platform.x86")]
+		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.In32, Mosa.Platform.x86")]
 		public extern static uint In32(ushort address);
 
 		/// <summary>

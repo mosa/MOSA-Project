@@ -36,8 +36,10 @@ namespace Mosa.Platform.x86.Stages
 			Operand EDX = Operand.CreateCPURegister(operand1.Type, GeneralPurposeRegister.EDX);
 			Operand EAX = Operand.CreateCPURegister(TypeSystem.BuiltIn.U4, GeneralPurposeRegister.EAX);
 
+			var size = context.Size;
+
 			context.SetInstruction(X86.Mov, EDX, operand1);
-			context.AppendInstruction(X86.In, EAX, EDX);
+			context.AppendInstruction(X86.In, size, EAX, EDX);
 			context.AppendInstruction(X86.Mov, result, EAX);
 		}
 
