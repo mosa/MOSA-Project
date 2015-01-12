@@ -16,7 +16,7 @@ shape = "record"
 ];
 
 "NameString" [
-label = "<f0>Name String|<f1>String Length|<f2>String"
+label = "<f0>Name String Object|<f1>Address of String Type Definition|<f2>Sync block|<f3>String Length|<f4>Unicode String"
 shape = "record"
 color = "red"
 ];
