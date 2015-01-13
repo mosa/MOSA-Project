@@ -18,7 +18,7 @@ namespace Mosa.Platform.Internal.x86
 		public uint* CustomAttributes;
 		public uint Attributes;
 		public uint StackSize;
-		public uint* Method;
+		public void* Method;
 		public MetadataTypeStruct* ReturnType;
 		public MetadataPRTableStruct* ProtectedRegionTable;
 		public uint* GCTrackingInformation;

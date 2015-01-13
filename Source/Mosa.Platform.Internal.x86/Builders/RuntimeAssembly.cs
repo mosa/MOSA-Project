@@ -31,7 +31,13 @@ namespace System
 
 		public override IEnumerable<TypeInfo> DefinedTypes
 		{
-			get { return this.typeInfoList.ToArray(); }
+			get
+			{
+				LinkedList<TypeInfo> types = new LinkedList<TypeInfo>();
+				foreach (var type in this.typeInfoList)
+					types.AddLast(type);
+				return types;
+			}
 		}
 
 		public override string FullName
@@ -44,7 +50,7 @@ namespace System
 			get
 			{
 				LinkedList<Type> types = new LinkedList<Type>();
-				foreach (RuntimeType type in typeList)
+				foreach (RuntimeType type in this.typeList)
 				{
 					if ((type.attributes & TypeAttributes.VisibilityMask) != TypeAttributes.Public)
 						continue;
@@ -102,7 +108,7 @@ namespace System
 
 			foreach (RuntimeType type in this.typeList)
 			{
-				this.typeInfoList.AddLast(new RuntimeTypeInfo(type.TypeHandle, this));
+				this.typeInfoList.AddLast(new RuntimeTypeInfo(type, this));
 			}
 		}
 	}

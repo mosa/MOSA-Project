@@ -36,7 +36,7 @@ namespace Mosa.Platform.x86.Instructions
 		/// <param name="emitter">The emitter.</param>
 		protected override void Emit(Context context, MachineCodeEmitter emitter)
 		{
-			Debug.Assert(context.Result == context.Operand1);
+			Debug.Assert(context.Result == context.Operand1, context.ToString());
 			OpCode opCode = ComputeOpCode(context.Result, context.Operand1, context.Operand2);
 			emitter.Emit(opCode, context.Result, context.Operand2);
 		}

@@ -28,6 +28,7 @@ namespace System
 		private Type baseType;
 		private Type declaringType;
 		private Type elementType;
+		private Type asType;
 		private LinkedList<CustomAttributeData> customAttributesData = new LinkedList<CustomAttributeData>();
 
 		internal readonly Type ValueType = typeof(System.ValueType);
@@ -127,8 +128,10 @@ namespace System
 			get { return this.@namespace; }
 		}
 
-		public RuntimeTypeInfo(RuntimeTypeHandle handle, Assembly assembly)
+		public RuntimeTypeInfo(RuntimeType type, Assembly assembly)
 		{
+			var handle = type.TypeHandle;
+			this.asType = type;
 			this.assembly = assembly;
 			this.handle = handle;
 			this.typeStruct = (MetadataTypeStruct*)((uint**)&handle)[0];
@@ -181,7 +184,7 @@ namespace System
 
 		public override Type AsType()
 		{
-			return Type.GetTypeFromHandle(this.handle);
+			return this.asType;
 		}
 
 		public override int GetArrayRank()

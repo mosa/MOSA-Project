@@ -103,6 +103,7 @@
     <Compile Include="Instructions\Test.cs" />
     <Compile Include="Instructions\TwoOperandInstruction.cs" />
     <Compile Include="Instructions\AddSD.cs" />
+    <Compile Include="Intrinsic\CreateInstanceSimple.cs" />
     <Compile Include="Intrinsic\Div.cs" />
     <Compile Include="Intrinsic\GetAssemblyListTable.cs" />
     <Compile Include="Intrinsic\FrameJump.cs" />

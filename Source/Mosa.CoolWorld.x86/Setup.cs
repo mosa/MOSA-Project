@@ -11,6 +11,7 @@ using Mosa.DeviceDriver.ISA;
 using Mosa.DeviceSystem;
 using Mosa.DeviceSystem.PCI;
 using Mosa.DeviceDriver.PCI.VideoCard;
+using System.Reflection;
 
 namespace Mosa.CoolWorld.x86
 {
@@ -90,6 +91,10 @@ namespace Mosa.CoolWorld.x86
 		/// </summary>
 		static public void StartPCIDevices()
 		{
+			Boot.Console.Write("Finding Drivers...");
+			deviceDriverRegistry.RegisterBuiltInDeviceDrivers();
+			Boot.Console.WriteLine("[Completed]");
+
 			Boot.Console.Write("Starting PCI devices... ");
 
 			var devices = deviceManager.GetDevices(new FindDevice.IsPCIDevice(), new FindDevice.IsAvailable());
@@ -107,6 +112,20 @@ namespace Mosa.CoolWorld.x86
 
 				StartDevice(pciDevice);
 			}
+
+			Boot.Console.WriteLine("Found " + deviceDriverRegistry.GetPCIDeviceDrivers().Count.ToString("x") + " PCI drivers.");
+			foreach (var a in Assembly.GetAssemblies())
+				foreach (var t in a.DefinedTypes)
+					if (t.AsType() == typeof(VMwareSVGAII))
+						foreach (var c in t.CustomAttributes)
+						{
+							Boot.Console.Write(c.AttributeType.FullName);
+							foreach (var n in c.NamedArguments)
+							{
+								Boot.Console.Write(n.MemberName + ((uint)n.TypedValue.Value).ToString());
+							}
+						}
+						
 		}
 
 		/// <summary>
@@ -249,29 +268,31 @@ namespace Mosa.CoolWorld.x86
 		/// <param name="pciDevice">The pci device.</param>
 		static public void StartDevice(IPCIDevice pciDevice)
 		{
-			//var deviceDriver = deviceDriverRegistry.FindDriver(pciDevice);
+			var deviceDriver = deviceDriverRegistry.FindDriver(pciDevice);
 
-			//if (deviceDriver == null)
-			//{
-			//	pciDevice.SetNoDriverFound();
-			//	return;
-			//}
-
-			//var hardwareDevice = System.Activator.CreateInstance(deviceDriver.DriverType) as IHardwareDevice;
-
-			//StartDevice(pciDevice, deviceDriver, hardwareDevice);
-
-			IHardwareDevice hardwareDevice = null;
-
-			if (pciDevice.VendorID == 0x15AD && pciDevice.DeviceID == 0x0405)
+			if (deviceDriver == null)
 			{
-				hardwareDevice = new VMwareSVGAII();
-				Boot.Console.WriteLine("VMwareSVGAII");
+				Boot.Console.Write(".");
+				pciDevice.SetNoDriverFound();
+				return;
 			}
+
+			var hardwareDevice = System.Activator.CreateInstance(deviceDriver.DriverType) as IHardwareDevice;
+
+			//if (pciDevice.VendorID == 0x15AD && pciDevice.DeviceID == 0x0405)
+			//{
+			//	hardwareDevice = new VMwareSVGAII();
+			//	Boot.Console.WriteLine("VMwareSVGAII");
+			//}
 
 			if (hardwareDevice != null)
 			{
 				StartDevice(pciDevice, hardwareDevice);
+			}
+			else
+			{
+				Boot.Console.WriteLine("Failed to load driver.");
+				return;
 			}
 
 			if (pciDevice.VendorID == 0x15AD && pciDevice.DeviceID == 0x0405)

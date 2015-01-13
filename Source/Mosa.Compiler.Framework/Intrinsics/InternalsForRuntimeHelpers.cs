@@ -13,6 +13,8 @@ namespace Mosa.Compiler.Framework.Intrinsics
 	[ReplacementTarget("System.Runtime.CompilerServices.RuntimeHelpers::GetHashCode")]
 	[ReplacementTarget("System.Runtime.CompilerServices.RuntimeHelpers::Equals")]
 	[ReplacementTarget("System.Runtime.CompilerServices.RuntimeHelpers::UnsafeCast")]
+	[ReplacementTarget("System.Runtime.CompilerServices.RuntimeHelpers::GetAssemblies")]
+	[ReplacementTarget("System.Runtime.CompilerServices.RuntimeHelpers::CreateInstance")]
 	public sealed class InternalsForRuntimeHelpers : InternalsBase, IIntrinsicInternalMethod
 	{
 		/// <summary>

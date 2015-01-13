@@ -171,9 +171,6 @@ namespace System
 			switch (typeCode)
 			{
 				// 1 byte
-				case TypeCode.Boolean:
-					return ((bool*)valuePtr)[0];
-
 				case TypeCode.U1:
 					return ((byte*)valuePtr)[0];
 
@@ -181,9 +178,6 @@ namespace System
 					return ((sbyte*)valuePtr)[0];
 
 				// 2 bytes
-				case TypeCode.Char:
-					return ((char*)valuePtr)[0];
-
 				case TypeCode.U2:
 					return ((ushort*)valuePtr)[0];
 
@@ -197,18 +191,12 @@ namespace System
 				case TypeCode.I4:
 					return ((int*)valuePtr)[0];
 
-				case TypeCode.R4:
-					return ((float*)valuePtr)[0];
-
 				// 8 bytes
 				case TypeCode.U8:
 					return ((ulong*)valuePtr)[0];
 
 				case TypeCode.I8:
 					return ((long*)valuePtr)[0];
-
-				case TypeCode.R8:
-					return ((double*)valuePtr)[0];
 
 				default:
 					// What kind of enum is this!?
