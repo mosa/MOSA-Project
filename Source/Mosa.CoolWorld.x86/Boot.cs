@@ -84,7 +84,7 @@ namespace Mosa.CoolWorld.x86
 			Console.Color = Colors.White;
 			Console.Write("> ");
 
-			Mosa.DeviceDrivers.ScanCodeMap.US KBDMAP = new DeviceDrivers.ScanCodeMap.US();
+			Mosa.DeviceDriver.ScanCodeMap.US KBDMAP = new DeviceDriver.ScanCodeMap.US();
 
 			while (true)
 			{

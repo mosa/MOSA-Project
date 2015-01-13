@@ -15,7 +15,7 @@
 
 using Mosa.DeviceSystem;
 
-namespace Mosa.DeviceDrivers.ISA
+namespace Mosa.DeviceDriver.ISA
 {
 	/// <summary>
 	/// Programmable Interrupt Controller (PIC) Device Driver

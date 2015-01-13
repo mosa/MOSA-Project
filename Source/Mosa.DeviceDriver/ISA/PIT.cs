@@ -12,7 +12,7 @@
 
 using Mosa.DeviceSystem;
 
-namespace Mosa.DeviceDrivers.ISA
+namespace Mosa.DeviceDriver.ISA
 {
 	/// <summary>
 	/// Programmable Interval Timer (PIT) Device Driver

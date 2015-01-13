@@ -9,7 +9,7 @@
 
 using Mosa.DeviceSystem;
 
-namespace Mosa.DeviceDrivers.ScanCodeMap
+namespace Mosa.DeviceDriver.ScanCodeMap
 {
 	/// <summary>
 	/// Implements the US Keyboard map (scan code set 2)

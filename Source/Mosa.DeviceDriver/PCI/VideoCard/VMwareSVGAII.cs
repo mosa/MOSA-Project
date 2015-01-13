@@ -17,7 +17,7 @@ using Mosa.DeviceSystem;
  *
  */
 
-namespace Mosa.DeviceDrivers.PCI.VideoCard
+namespace Mosa.DeviceDriver.PCI.VideoCard
 {
 	/// <summary>
 	/// VMware SVGA II Device Driver
@@ -278,7 +278,7 @@ namespace Mosa.DeviceDrivers.PCI.VideoCard
 			alphaMaskShift = GetMaskShift(alphaMask);
 			offset = GetValue(Register.FrameBufferOffset);
 
-			SetMode(640, 480);
+			SetMode(1024, 600);
 			InitializeFifo();
 
 			base.deviceStatus = DeviceStatus.Online;

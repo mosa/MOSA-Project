@@ -40,26 +40,6 @@ namespace Mosa.DeviceSystem.PCI
 		/// <summary>
 		///
 		/// </summary>
-		protected byte bus;
-
-		/// <summary>
-		///
-		/// </summary>
-		protected byte slot;
-
-		/// <summary>
-		///
-		/// </summary>
-		protected byte function;
-
-		/// <summary>
-		///
-		/// </summary>
-		protected BaseAddress[] baseAddresses;
-
-		/// <summary>
-		///
-		/// </summary>
 		protected byte memoryRegionCount;
 
 		/// <summary>
@@ -67,23 +47,25 @@ namespace Mosa.DeviceSystem.PCI
 		/// </summary>
 		protected byte ioPortRegionCount;
 
+		#region Properties
+
 		/// <summary>
 		/// Gets the bus.
 		/// </summary>
 		/// <value>The bus.</value>
-		public byte Bus { get { return bus; } }
+		public byte Bus { get; private set; }
 
 		/// <summary>
 		/// Gets the slot.
 		/// </summary>
 		/// <value>The slot.</value>
-		public byte Slot { get { return slot; } }
+		public byte Slot { get; private set; }
 
 		/// <summary>
 		/// Gets the function.
 		/// </summary>
 		/// <value>The function.</value>
-		public byte Function { get { return function; } }
+		public byte Function { get; private set; }
 
 		/// <summary>
 		/// Gets the vendor ID.
@@ -140,10 +122,32 @@ namespace Mosa.DeviceSystem.PCI
 		public byte IRQ { get { return pciController.ReadConfig8(Bus, Slot, Function, 0x3c); } }
 
 		/// <summary>
+		/// Gets or sets the status register.
+		/// </summary>
+		/// <value>The status.</value>
+		public ushort StatusRegister
+		{
+			get { return pciController.ReadConfig16(Bus, Slot, Function, 0x06); }
+			set { pciController.WriteConfig16(Bus, Slot, Function, 0x06, value); }
+		}
+
+		/// <summary>
+		/// Gets or sets the command register.
+		/// </summary>
+		/// <value>The status.</value>
+		public ushort CommandRegister
+		{
+			get { return pciController.ReadConfig16(Bus, Slot, Function, 0x04); }
+			set { pciController.WriteConfig16(Bus, Slot, Function, 0x04, value); }
+		}
+
+		/// <summary>
 		/// Gets the base addresses.
 		/// </summary>
 		/// <value>The base addresses.</value>
-		public BaseAddress[] BaseAddresses { get { return this.baseAddresses; } }
+		public BaseAddress[] BaseAddresses { get; private set; }
+
+		#endregion Properties
 
 		/// <summary>
 		/// Create a new PCIDevice instance
@@ -159,12 +163,12 @@ namespace Mosa.DeviceSystem.PCI
 			base.deviceStatus = DeviceStatus.Available;
 
 			this.pciController = pciController;
-			this.bus = bus;
-			this.slot = slot;
-			this.function = fun;
+			this.Bus = bus;
+			this.Slot = slot;
+			this.Function = fun;
 
 			ioPortRegionCount = memoryRegionCount = 0;
-			this.baseAddresses = new BaseAddress[8];
+			BaseAddresses = new BaseAddress[8];
 
 			for (byte i = 0; i < 6; i++)
 			{
@@ -181,46 +185,30 @@ namespace Mosa.DeviceSystem.PCI
 					HAL.EnableAllInterrupts();
 
 					if (address % 2 == 1)
-						this.baseAddresses[i] = new BaseAddress(AddressType.IO, address & 0x0000FFF8, (~(mask & 0xFFF8) + 1) & 0xFFFF, false);
+						BaseAddresses[i] = new BaseAddress(AddressType.IO, address & 0x0000FFF8, (~(mask & 0xFFF8) + 1) & 0xFFFF, false);
 					else
-						this.baseAddresses[i] = new BaseAddress(AddressType.Memory, address & 0xFFFFFFF0, ~(mask & 0xFFFFFFF0) + 1, ((address & 0x08) == 1));
+						BaseAddresses[i] = new BaseAddress(AddressType.Memory, address & 0xFFFFFFF0, ~(mask & 0xFFFFFFF0) + 1, ((address & 0x08) == 1));
 				}
 			}
 
 			if ((ClassCode == 0x03) && (SubClassCode == 0x00) && (ProgIF == 0x00))
 			{
 				// Special case for generic VGA
-				this.baseAddresses[6] = new BaseAddress(AddressType.Memory, 0xA0000, 0x1FFFF, false);
-				this.baseAddresses[7] = new BaseAddress(AddressType.IO, 0x3B0, 0x0F, false);
+				BaseAddresses[6] = new BaseAddress(AddressType.Memory, 0xA0000, 0x1FFFF, false);
+				BaseAddresses[7] = new BaseAddress(AddressType.IO, 0x3B0, 0x0F, false);
 			}
 
-			foreach (BaseAddress baseAddress in this.baseAddresses)
+			foreach (BaseAddress baseAddress in BaseAddresses)
+			{
 				if (baseAddress != null)
+				{
 					switch (baseAddress.Region)
 					{
 						case AddressType.IO: ioPortRegionCount++; break;
 						case AddressType.Memory: memoryRegionCount++; break;
 					}
-		}
-
-		/// <summary>
-		/// Gets or sets the status register.
-		/// </summary>
-		/// <value>The status.</value>
-		public ushort StatusRegister
-		{
-			get { return pciController.ReadConfig16(bus, slot, function, 0x06); }
-			set { pciController.WriteConfig16(bus, slot, function, 0x06, value); }
-		}
-
-		/// <summary>
-		/// Gets or sets the command register.
-		/// </summary>
-		/// <value>The status.</value>
-		public ushort CommandRegister
-		{
-			get { return pciController.ReadConfig16(bus, slot, function, 0x04); }
-			set { pciController.WriteConfig16(bus, slot, function, 0x04, value); }
+				}
+			}
 		}
 
 		/// <summary>

@@ -37,6 +37,11 @@ namespace Mosa.DeviceSystem
 			deviceDrivers = new LinkedList<DeviceDriver>();
 		}
 
+		public void AddDeviceDriver(DeviceDriver deviceDriver)
+		{
+			deviceDrivers.AddLast(deviceDriver);
+		}
+
 		/// <summary>
 		/// Finds the driver.
 		/// </summary>
@@ -47,11 +52,12 @@ namespace Mosa.DeviceSystem
 			DeviceDriver bestDeviceDriver = null;
 			int bestPriority = System.Int32.MaxValue;
 
-			foreach (DeviceDriver deviceDriver in deviceDrivers)
+			foreach (var deviceDriver in deviceDrivers)
 			{
 				if (deviceDriver.Attribute is PCIDeviceDriverAttribute)
 				{
-					PCIDeviceDriverAttribute pciDeviceDriverAttribute = deviceDriver.Attribute as PCIDeviceDriverAttribute;
+					var pciDeviceDriverAttribute = deviceDriver.Attribute as PCIDeviceDriverAttribute;
+
 					if ((pciDeviceDriverAttribute.Priority != 0) && (pciDeviceDriverAttribute.Priority < bestPriority))
 					{
 						if (pciDeviceDriverAttribute.CompareTo(pciDevice))
@@ -72,11 +78,15 @@ namespace Mosa.DeviceSystem
 		/// <returns></returns>
 		public LinkedList<DeviceDriver> GetISADeviceDrivers()
 		{
-			LinkedList<DeviceDriver> isaDeviceDrivers = new LinkedList<DeviceDriver>();
+			var isaDeviceDrivers = new LinkedList<DeviceDriver>();
 
-			foreach (DeviceDriver deviceDriver in deviceDrivers)
+			foreach (var deviceDriver in deviceDrivers)
+			{
 				if (deviceDriver.Attribute is ISADeviceDriverAttribute)
+				{
 					isaDeviceDrivers.AddLast(deviceDriver);
+				}
+			}
 
 			return isaDeviceDrivers;
 		}
@@ -111,12 +121,15 @@ namespace Mosa.DeviceSystem
 						object[] memAttributes = type.GetCustomAttributes(typeof(DeviceDriverPhysicalMemoryAttribute), false);
 
 						foreach (object memAttribute in memAttributes)
+						{
 							deviceDriver.Add(memAttribute as DeviceDriverPhysicalMemoryAttribute);
+						}
 
-						deviceDrivers.Add(deviceDriver);
+						AddDeviceDriver(deviceDriver);
 					}
 				}
 			}*/
 		}
+
 	}
 }

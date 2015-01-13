@@ -17,7 +17,7 @@
 
 using Mosa.DeviceSystem;
 
-namespace Mosa.DeviceDrivers.ISA
+namespace Mosa.DeviceDriver.ISA
 {
 	/// <summary>
 	/// Floppy Disk Controller (FDC) Device Driver

@@ -9,7 +9,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <AssemblyKeyContainerName>
     </AssemblyKeyContainerName>
-    <AssemblyName>Mosa.DeviceDrivers</AssemblyName>
+    <AssemblyName>Mosa.DeviceDriver</AssemblyName>
     <DefaultClientScript>JScript</DefaultClientScript>
     <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
     <DefaultTargetSchema>IE50</DefaultTargetSchema>
@@ -18,7 +18,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>
     </AppDesignerFolder>
-    <RootNamespace>Mosa.DeviceDrivers</RootNamespace>
+    <RootNamespace>Mosa.DeviceDriver</RootNamespace>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <OldToolsVersion>3.5</OldToolsVersion>
@@ -49,7 +49,7 @@
     <ConfigurationOverrideFile>
     </ConfigurationOverrideFile>
     <DefineConstants>TRACE</DefineConstants>
-    <DocumentationFile>..\..\bin\Mosa.DeviceDrivers.xml</DocumentationFile>
+    <DocumentationFile>..\..\bin\Mosa.DeviceDriver.xml</DocumentationFile>
     <FileAlignment>4096</FileAlignment>
     <Optimize>true</Optimize>
     <OutputPath>..\..\bin\</OutputPath>
