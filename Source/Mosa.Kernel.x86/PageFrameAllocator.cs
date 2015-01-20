@@ -59,10 +59,14 @@ namespace Mosa.Kernel.x86
 			for (uint index = 0; index < Multiboot.MemoryMapCount; index++)
 			{
 				byte value = Multiboot.GetMemoryMapType(index);
-				uint start = Multiboot.GetMemoryMapBase(index);
-				uint size = Multiboot.GetMemoryMapLength(index);
+
 				if (value == 1)
-					AddFreeMemory(cnt++, (uint)start, (uint)size);
+				{
+					uint start = Multiboot.GetMemoryMapBase(index);
+					uint size = Multiboot.GetMemoryMapLength(index);
+
+					AddFreeMemory(cnt++, start, size);
+				}
 			}
 		}
 
@@ -94,7 +98,9 @@ namespace Mosa.Kernel.x86
 
 			// Populate free table
 			for (uint mem = normstart; mem < normstart + normsize; mem = mem + PageSize, at = at + 4)
+			{
 				Native.Set32(at, mem);
+			}
 
 			at = at - 4;
 			totalPages = totalPages + (normsize / PageSize);
@@ -111,7 +117,7 @@ namespace Mosa.Kernel.x86
 
 			totalUsedPages++;
 			uint avail = Native.Get32(at);
-			at = at - sizeof(uint);
+			at = at - 4;
 
 			// Clear out memory
 			Memory.Clear(avail, PageSize);
@@ -126,7 +132,7 @@ namespace Mosa.Kernel.x86
 		public static void Free(uint address)
 		{
 			totalUsedPages--;
-			at = at + sizeof(uint);
+			at = at + 4;
 			Native.Set32(at, address);
 		}
 

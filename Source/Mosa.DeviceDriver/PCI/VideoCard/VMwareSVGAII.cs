@@ -143,94 +143,109 @@ namespace Mosa.DeviceDriver.PCI.VideoCard
 		protected SpinLock spinLock;
 
 		/// <summary>
-		///
+		/// The width
 		/// </summary>
 		protected ushort width;
 
 		/// <summary>
-		///
+		/// The height
 		/// </summary>
 		protected ushort height;
 
 		/// <summary>
-		///
+		/// The version
 		/// </summary>
 		protected uint version;
 
 		/// <summary>
-		///
+		/// The offset
 		/// </summary>
 		protected uint offset;
 
 		/// <summary>
-		///
+		/// The video ram size
 		/// </summary>
 		protected uint videoRamSize;
 
 		/// <summary>
-		///
+		/// The maximum width
 		/// </summary>
 		protected uint maxWidth;
 
 		/// <summary>
-		///
+		/// The maximum height
 		/// </summary>
 		protected uint maxHeight;
 
 		/// <summary>
-		///
+		/// The bits per pixel
 		/// </summary>
 		protected uint bitsPerPixel;
 
 		/// <summary>
-		///
+		/// The bytes per line
 		/// </summary>
 		protected uint bytesPerLine;
 
 		/// <summary>
-		///
+		/// The red mask
 		/// </summary>
 		protected uint redMask;
 
 		/// <summary>
-		///
+		/// The green mask
 		/// </summary>
 		protected uint greenMask;
 
 		/// <summary>
-		///
+		/// The blue mask
 		/// </summary>
 		protected uint blueMask;
 
 		/// <summary>
-		///
+		/// The alpha mask
 		/// </summary>
 		protected uint alphaMask;
 
 		/// <summary>
-		///
+		/// The red mask shift
 		/// </summary>
 		protected byte redMaskShift;
 
 		/// <summary>
-		///
+		/// The green mask shift
 		/// </summary>
 		protected byte greenMaskShift;
 
 		/// <summary>
-		///
+		/// The blue mask shift
 		/// </summary>
 		protected byte blueMaskShift;
 
 		/// <summary>
-		///
+		/// The alpha mask shift
 		/// </summary>
 		protected byte alphaMaskShift;
 
 		/// <summary>
-		///
+		/// The capabilities
 		/// </summary>
 		protected uint capabilities;
+
+		/// <summary>
+		/// The frame buffer size
+		/// </summary>
+		protected uint frameBufferSize;
+
+		/// <summary>
+		/// The fifo size
+		/// </summary>
+		protected uint fifoSize;
+
+		/// <summary>
+		/// The fifo number regs
+		/// </summary>
+		protected const uint FifoNumRegs = 32 + 255 + 1 + 1 + 1;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="VMwareSVGAII"/> class.
@@ -250,10 +265,11 @@ namespace Mosa.DeviceDriver.PCI.VideoCard
 
 			indexPort = hardwareResources.GetIOPort(0, 0);
 			valuePort = hardwareResources.GetIOPort(0, 1);
-
+			HAL.DebugWrite("**G**");
 			memory = base.hardwareResources.GetMemory(0);
+			HAL.DebugWrite("**I**");
 			fifo = base.hardwareResources.GetMemory(1);
-
+			HAL.DebugWrite("**J**");
 			return true;
 		}
 
@@ -263,25 +279,40 @@ namespace Mosa.DeviceDriver.PCI.VideoCard
 		/// <returns></returns>
 		public override DeviceDriverStartStatus Start()
 		{
-			capabilities = GetValue(Register.Capabilities);
-			videoRamSize = GetValue(Register.VRamSize);
-			maxWidth = GetValue(Register.MaxWidth);
-			maxHeight = GetValue(Register.MaxHeight);
-			bitsPerPixel = GetValue(Register.BitsPerPixel);
-			bytesPerLine = GetValue(Register.BytesPerLine);
-			redMask = GetValue(Register.RedMask);
-			greenMask = GetValue(Register.GreenMask);
-			blueMask = GetValue(Register.BlueMask);
+			videoRamSize = ReadRegister(Register.VRamSize);
+			maxWidth = ReadRegister(Register.MaxWidth);
+			maxHeight = ReadRegister(Register.MaxHeight);
+			bitsPerPixel = ReadRegister(Register.BitsPerPixel);
+			bytesPerLine = ReadRegister(Register.BytesPerLine);
+			redMask = ReadRegister(Register.RedMask);
+			greenMask = ReadRegister(Register.GreenMask);
+			blueMask = ReadRegister(Register.BlueMask);
 			redMaskShift = GetMaskShift(redMask);
 			greenMaskShift = GetMaskShift(greenMask);
 			blueMaskShift = GetMaskShift(blueMask);
 			alphaMaskShift = GetMaskShift(alphaMask);
-			offset = GetValue(Register.FrameBufferOffset);
+			offset = ReadRegister(Register.FrameBufferOffset);
+			fifoSize = ReadRegister(Register.MemSize);
+			//fifoNumRegs = GetValue(Register.MemRegs);
 
-			SetMode(1024, 600);
+			version = GetVersion();
+
+			if (version != ID.V0)
+			{
+				SendCommand(Register.GuestID, 0x5010); // 0x05010 == GUEST_OS_OTHER (vs GUEST_OS_WIN2000)
+			}
+
+			if (version != ID.V1 || version != ID.V2)
+			{
+				capabilities = ReadRegister(Register.Capabilities);
+			}
+
 			InitializeFifo();
 
+			SetMode(640, 480);
+
 			base.deviceStatus = DeviceStatus.Online;
+
 			return DeviceDriverStartStatus.Started;
 		}
 
@@ -310,7 +341,7 @@ namespace Mosa.DeviceDriver.PCI.VideoCard
 		/// </summary>
 		/// <param name="command">The command.</param>
 		/// <returns></returns>
-		protected uint GetValue(uint command)
+		protected uint ReadRegister(uint command)
 		{
 			indexPort.Write32(command);
 			return valuePort.Read32();
@@ -327,21 +358,26 @@ namespace Mosa.DeviceDriver.PCI.VideoCard
 			this.width = width;
 			this.height = height;
 
-			SendCommand(Register.Width, width);
+			// set heigth  & width
 			SendCommand(Register.Height, height);
+			SendCommand(Register.Width, width);
+			SendCommand(Register.BitsPerPixel, 32);
 			SendCommand(Register.Enable, 1);
 
-			offset = GetValue(Register.FrameBufferOffset);
+			// use the host's bits per pixel
+			bitsPerPixel = 32; // ReadRegister(Register.BitsPerPixel);
 
-			SendCommand(Register.GuestID, 0x5010); // ??
-			bytesPerLine = GetValue(Register.BytesPerLine);
+			// get the frame buffer offset
+			offset = ReadRegister(Register.FrameBufferOffset);
+			// get the bytes per line (pitch)
+			bytesPerLine = ReadRegister(Register.BytesPerLine);
 
 			switch (bitsPerPixel)
 			{
-				case 8: frameBuffer = new FrameBuffer8bpp(memory, width, height, offset, bytesPerLine); break;
-				case 16: frameBuffer = new FrameBuffer16bpp(memory, width, height, offset, bytesPerLine); break;
-				case 24: frameBuffer = new FrameBuffer24bpp(memory, width, height, offset, bytesPerLine); break;
-				case 32: frameBuffer = new FrameBuffer32bpp(memory, width, height, offset, bytesPerLine); break;
+				case 8: frameBuffer = new FrameBuffer8bpp(memory, width, height, offset, 1); break;
+				case 16: frameBuffer = new FrameBuffer16bpp(memory, width, height, offset, 2); break;
+				case 24: frameBuffer = new FrameBuffer24bpp(memory, width, height, offset, 3); break;
+				case 32: frameBuffer = new FrameBuffer32bpp(memory, width, height, offset, 4); break;
 				default: return false;
 			}
 
@@ -352,19 +388,18 @@ namespace Mosa.DeviceDriver.PCI.VideoCard
 		/// Initializes the fifo.
 		/// </summary>
 		/// <returns></returns>
-		protected bool InitializeFifo()
+		protected void InitializeFifo()
 		{
-			uint start = GetValue(Register.MemStart);
-			uint size = GetValue(Register.MemSize);
+			uint start = ReadRegister(Register.MemStart);
+			uint fifoSize = ReadRegister(Register.MemSize);
 
-			fifo.Write32(Fifo.Min * 4, 16);
-			fifo.Write32(Fifo.Max * 4, size);
-			fifo.Write32(Fifo.NextCmd * 4, 16);
-			fifo.Write32(Fifo.Stop * 4, 16);
+			SetFifo(Fifo.Min, FifoNumRegs * 4);
+			SetFifo(Fifo.Max, fifoSize);
+			SetFifo(Fifo.NextCmd, FifoNumRegs * 4);
+			SetFifo(Fifo.Stop, FifoNumRegs * 4);
 
+			SendCommand(Register.Enable, 1);
 			SendCommand(Register.ConfigDone, 1);
-
-			return true;
 		}
 
 		/// <summary>
@@ -394,7 +429,7 @@ namespace Mosa.DeviceDriver.PCI.VideoCard
 		{
 			SendCommand(Register.Sync, 1);
 
-			while (GetValue(Register.Busy) != 0)
+			while (ReadRegister(Register.Busy) != 0)
 			{
 				HAL.Sleep(10);
 			}
@@ -408,13 +443,17 @@ namespace Mosa.DeviceDriver.PCI.VideoCard
 		{
 			if (((GetFifo(Fifo.NextCmd) == GetFifo(Fifo.Max) - 4) && GetFifo(Fifo.Stop) == GetFifo(Fifo.Min)) ||
 				(GetFifo(Fifo.NextCmd) + 4 == GetFifo(Fifo.Stop)))
+			{
 				WaitForFifo();
+			}
 
 			SetFifo(GetFifo(Fifo.NextCmd) / 4, value);
 			SetFifo(Fifo.NextCmd, GetFifo(Fifo.NextCmd) + 4);
 
 			if (GetFifo(Fifo.NextCmd) == GetFifo(Fifo.Max))
+			{
 				SetFifo(Fifo.NextCmd, GetFifo(Fifo.Min));
+			}
 		}
 
 		/// <summary>
@@ -424,14 +463,14 @@ namespace Mosa.DeviceDriver.PCI.VideoCard
 		protected uint GetVersion()
 		{
 			SendCommand(Register.ID, ID.V2);
-			if (GetValue(Register.ID) == ID.V2)
+			if (ReadRegister(Register.ID) == ID.V2)
 				return ID.V2;
 
 			SendCommand(Register.ID, ID.V1);
-			if (GetValue(Register.ID) == ID.V1)
+			if (ReadRegister(Register.ID) == ID.V1)
 				return ID.V1;
 
-			if (GetValue(Register.ID) == ID.V0)
+			if (ReadRegister(Register.ID) == ID.V0)
 				return ID.V0;
 
 			return ID.Invalid;
@@ -480,6 +519,7 @@ namespace Mosa.DeviceDriver.PCI.VideoCard
 			WriteToFifo(y);
 			WriteToFifo(width);
 			WriteToFifo(height);
+			WaitForFifo();
 		}
 
 		/// <summary>
@@ -503,7 +543,7 @@ namespace Mosa.DeviceDriver.PCI.VideoCard
 		/// <param name="color">The color.</param>
 		/// <param name="x">The x.</param>
 		/// <param name="y">The y.</param>
-		public void WritePixel(Color color, ushort x, ushort y)
+		void IPixelGraphicsDevice.WritePixel(Color color, ushort x, ushort y)
 		{
 			frameBuffer.SetPixel(ConvertColor(color), x, y);
 			UpdateFrame(x, y, 1, 1);
@@ -515,7 +555,7 @@ namespace Mosa.DeviceDriver.PCI.VideoCard
 		/// <param name="x">The x.</param>
 		/// <param name="y">The y.</param>
 		/// <returns></returns>
-		public Color ReadPixel(ushort x, ushort y)
+		Color IPixelGraphicsDevice.ReadPixel(ushort x, ushort y)
 		{
 			uint color = frameBuffer.GetPixel(x, y);
 			return new Color(
@@ -530,7 +570,7 @@ namespace Mosa.DeviceDriver.PCI.VideoCard
 		/// Clears the specified color.
 		/// </summary>
 		/// <param name="color">The color.</param>
-		public void Clear(Color color)
+		void IPixelGraphicsDevice.Clear(Color color)
 		{
 			//TODO
 		}
@@ -539,12 +579,12 @@ namespace Mosa.DeviceDriver.PCI.VideoCard
 		/// Gets the width.
 		/// </summary>
 		/// <returns></returns>
-		public ushort Width { get { return width; } }
+		ushort IPixelGraphicsDevice.Width { get { return width; } }
 
 		/// <summary>
 		/// Gets the height.
 		/// </summary>
 		/// <returns></returns>
-		public ushort Height { get { return height; } }
+		ushort IPixelGraphicsDevice.Height { get { return height; } }
 	}
 }

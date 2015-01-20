@@ -8,9 +8,9 @@
  */
 
 using Mosa.DeviceDriver.ISA;
+using Mosa.DeviceDriver.PCI.VideoCard;
 using Mosa.DeviceSystem;
 using Mosa.DeviceSystem.PCI;
-using Mosa.DeviceDriver.PCI.VideoCard;
 
 namespace Mosa.CoolWorld.x86
 {
@@ -276,11 +276,11 @@ namespace Mosa.CoolWorld.x86
 
 			if (pciDevice.VendorID == 0x15AD && pciDevice.DeviceID == 0x0405)
 			{
-				var display = hardwareDevice as VMwareSVGAII;
+				var display = hardwareDevice as IPixelGraphicsDevice;
 
 				var color = new Color(255, 0, 0);
 
-				display.WritePixel(color, 10, 10);
+				display.WritePixel(color, 100, 100);
 			}
 		}
 

@@ -100,16 +100,6 @@ namespace Mosa.DeviceSystem
 		}
 
 		/// <summary>
-		/// Gets the physical address.
-		/// </summary>
-		/// <param name="memory">The memory.</param>
-		/// <returns></returns>
-		public static uint GetPhysicalAddress(IMemory memory)
-		{
-			return hardwareAbstraction.GetPhysicalAddress(memory);
-		}
-
-		/// <summary>
 		/// Allocates the memory.
 		/// </summary>
 		/// <param name="size">The size.</param>
@@ -118,6 +108,16 @@ namespace Mosa.DeviceSystem
 		public static IMemory AllocateMemory(uint size, uint alignment)
 		{
 			return HAL.AllocateMemory(size, alignment);
+		}
+
+		/// <summary>
+		/// Gets the physical address.
+		/// </summary>
+		/// <param name="memory">The memory.</param>
+		/// <returns></returns>
+		public static uint GetPhysicalAddress(IMemory memory)
+		{
+			return hardwareAbstraction.GetPhysicalAddress(memory);
 		}
 
 		/// <summary>
