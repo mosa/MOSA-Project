@@ -250,6 +250,7 @@ namespace Mosa.CoolWorld.x86
 			if (resourceManager.ClaimResources(hardwareResources))
 			{
 				hardwareResources.EnableIRQ();
+
 				if (hardwareDevice.Start() == DeviceDriverStartStatus.Started)
 				{
 					deviceManager.Add(hardwareDevice);
