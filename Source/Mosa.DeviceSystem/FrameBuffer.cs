@@ -37,7 +37,7 @@ namespace Mosa.DeviceSystem
 		/// <summary>
 		///
 		/// </summary>
-		protected uint bytesPerLine;
+		protected uint depth;
 
 		/// <summary>
 		/// Gets the width.

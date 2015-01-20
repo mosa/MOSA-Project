@@ -100,16 +100,6 @@ namespace Mosa.DeviceSystem
 		}
 
 		/// <summary>
-		/// Gets the physical address.
-		/// </summary>
-		/// <param name="memory">The memory.</param>
-		/// <returns></returns>
-		public static uint GetPhysicalAddress(IMemory memory)
-		{
-			return hardwareAbstraction.GetPhysicalAddress(memory);
-		}
-
-		/// <summary>
 		/// Allocates the memory.
 		/// </summary>
 		/// <param name="size">The size.</param>
@@ -121,9 +111,19 @@ namespace Mosa.DeviceSystem
 		}
 
 		/// <summary>
+		/// Gets the physical address.
+		/// </summary>
+		/// <param name="memory">The memory.</param>
+		/// <returns></returns>
+		public static uint GetPhysicalAddress(IMemory memory)
+		{
+			return hardwareAbstraction.GetPhysicalAddress(memory);
+		}
+
+		/// <summary>
 		/// Debugs the write.
 		/// </summary>
-		/// <param name="msg">The message.</param>
+		/// <param name="message">The message.</param>
 		public static void DebugWrite(string message)
 		{
 			hardwareAbstraction.DebugWrite(message);
@@ -132,7 +132,7 @@ namespace Mosa.DeviceSystem
 		/// <summary>
 		/// Debugs the write line.
 		/// </summary>
-		/// <param name="msg">The message.</param>
+		/// <param name="message">The message.</param>
 		public static void DebugWriteLine(string message)
 		{
 			hardwareAbstraction.DebugWriteLine(message);

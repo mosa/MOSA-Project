@@ -12,7 +12,7 @@ namespace Mosa.DeviceSystem
 	/// <summary>
 	/// Implementation of FrameBuffer with 32 Bits Per Pixel
 	/// </summary>
-	public class FrameBuffer32bpp : FrameBuffer, IFrameBuffer
+	public sealed class FrameBuffer32bpp : FrameBuffer, IFrameBuffer
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="FrameBuffer32bpp"/> class.
@@ -21,14 +21,14 @@ namespace Mosa.DeviceSystem
 		/// <param name="width">The width.</param>
 		/// <param name="height">The height.</param>
 		/// <param name="offset">The offset.</param>
-		/// <param name="bytesPerLine">The bytes per line.</param>
-		public FrameBuffer32bpp(IMemory memory, uint width, uint height, uint offset, uint bytesPerLine)
+		/// <param name="depth">The depth.</param>
+		public FrameBuffer32bpp(IMemory memory, uint width, uint height, uint offset, uint depth)
 		{
 			this.memory = memory;
 			this.width = width;
 			this.height = height;
 			this.offset = offset;
-			this.bytesPerLine = bytesPerLine;
+			this.depth = depth;
 		}
 
 		/// <summary>
@@ -39,7 +39,7 @@ namespace Mosa.DeviceSystem
 		/// <returns></returns>
 		protected override uint GetOffset(uint x, uint y)
 		{
-			return (uint)(offset + (y * bytesPerLine) + (x << 2));
+			return (uint)(offset + (y * depth) + (x << 2));
 		}
 
 		/// <summary>
@@ -50,7 +50,7 @@ namespace Mosa.DeviceSystem
 		/// <returns></returns>
 		public override uint GetPixel(uint x, uint y)
 		{
-			return memory.Read32(GetOffset(x, y), 4);
+			return memory.Read32(GetOffset(x, y));
 		}
 
 		/// <summary>
@@ -61,7 +61,7 @@ namespace Mosa.DeviceSystem
 		/// <param name="y">The y.</param>
 		public override void SetPixel(uint color, uint x, uint y)
 		{
-			memory.Write32(GetOffset(x, y), color, 4);
+			memory.Write32(GetOffset(x, y), color);
 		}
 	}
 }
