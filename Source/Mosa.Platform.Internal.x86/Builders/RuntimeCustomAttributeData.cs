@@ -94,6 +94,12 @@ namespace System
 			TypeCode typeCode = (TypeCode)(argument->ArgumentType->Attributes >> 24);
 			var valuePtr = MetadataCAArgumentStruct.GetArgumentAddress(argument);
 
+			// If its an enum type
+			if (argument->ArgumentType->ParentType == EnumTypePtr)
+			{
+				typeCode = (TypeCode)(argument->ArgumentType->ElementType->Attributes >> 24);
+			}
+
 			switch(typeCode)
 			{
 				// 1 byte
@@ -111,6 +117,8 @@ namespace System
 					return ((char*)valuePtr)[0];
 
 				case TypeCode.U2:
+					if ((argument + 4) == null)
+						throw new ArgumentException();
 					return ((ushort*)valuePtr)[0];
 
 				case TypeCode.I2:
@@ -145,63 +153,17 @@ namespace System
 					return x86Runtime.InitializeMetadataString(valuePtr);
 
 				default:
-					// If its an enum type
-					if (argument->ArgumentType->ParentType == EnumTypePtr)
-					{
-						return ResolveEnumValue(argument, type);
-					}
-					else if (type.FullName == "System.Type")
+					if (type.FullName == "System.Type")
 					{
 						// Get the argument type
 						RuntimeTypeHandle argTypeHandle = new RuntimeTypeHandle();
 						((uint**)&argTypeHandle)[0] = (uint*)argument->ArgumentType;
 						return Type.GetTypeFromHandle(argTypeHandle);
 					}
-					break;
+					throw new ArgumentException();
 			}
 
-			return null;
-		}
-
-		private object ResolveEnumValue(MetadataCAArgumentStruct* argument, Type type)
-		{
-			TypeCode typeCode = (TypeCode)(argument->ArgumentType->ElementType->Attributes >> 24);
-			var valuePtr = MetadataCAArgumentStruct.GetArgumentAddress(argument);
-
-			switch (typeCode)
-			{
-				// 1 byte
-				case TypeCode.U1:
-					return ((byte*)valuePtr)[0];
-
-				case TypeCode.I1:
-					return ((sbyte*)valuePtr)[0];
-
-				// 2 bytes
-				case TypeCode.U2:
-					return ((ushort*)valuePtr)[0];
-
-				case TypeCode.I2:
-					return ((short*)valuePtr)[0];
-
-				// 4 bytes
-				case TypeCode.U4:
-					return ((uint*)valuePtr)[0];
-
-				case TypeCode.I4:
-					return ((int*)valuePtr)[0];
-
-				// 8 bytes
-				case TypeCode.U8:
-					return ((ulong*)valuePtr)[0];
-
-				case TypeCode.I8:
-					return ((long*)valuePtr)[0];
-
-				default:
-					// What kind of enum is this!?
-					throw new NotSupportedException();
-			}
+			//return null;
 		}
 
 		private object ResolveArrayValue(MetadataCAArgumentStruct* argument, Type type)
