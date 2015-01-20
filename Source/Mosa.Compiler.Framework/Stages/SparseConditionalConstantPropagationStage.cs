@@ -61,6 +61,8 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			if (trace.Active) trace.Log(target.ToString() + " = " + value.ToString() + " Uses: " + target.Uses.Count.ToString());
 
+			Debug.Assert(target.Definitions.Count == 1);
+
 			if (target.Uses.Count != 0)
 			{
 				var constant = Operand.CreateConstant(target.Type, value);
@@ -94,8 +96,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (target.Definitions.Count == 0)
 				return;
-
-			Debug.Assert(target.Definitions.Count == 1);
 
 			var ctx = new Context(InstructionSet, target.Definitions[0]);
 
