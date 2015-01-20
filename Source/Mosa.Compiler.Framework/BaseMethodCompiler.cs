@@ -341,19 +341,14 @@ namespace Mosa.Compiler.Framework
 				var local = locals[index];
 				Operand operand;
 
-				if (!local.Type.IsValueType) // || local.Type.IsUI1 || local.Type.IsUI2 || local.Type.IsChar || local.Type.IsBoolean)
+				if (local.Type.IsValueType)
 				{
-					var stacktype = local.Type.GetStackType();
-					operand = VirtualRegisters.Allocate(stacktype);
-				}
-				else if (local.Type.IsValueType && (local.Type.IsUI1 || local.Type.IsUI2 || local.Type.IsChar || local.Type.IsBoolean))
-				{
-					var stacktype = local.Type.GetStackType();
-					operand = VirtualRegisters.Allocate(stacktype);
+					operand = StackLayout.AddStackLocal(local.Type);
 				}
 				else
 				{
-					operand = StackLayout.AddStackLocal(local.Type);
+					var stacktype = local.Type.GetStackType();
+					operand = VirtualRegisters.Allocate(stacktype);
 				}
 
 				LocalVariables[index] = operand;
