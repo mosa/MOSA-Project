@@ -391,6 +391,12 @@ namespace Mosa.Compiler.Framework.Analysis
 		{
 			Debug.Assert(!variable.IsOverDefined);
 
+			if (variable.IsConstant && variable.ConstantUnsignedInteger != value)
+			{
+				UpdateToOverDefined(variable);
+				return;
+			}
+
 			if (variable.IsConstant)
 				return;
 
