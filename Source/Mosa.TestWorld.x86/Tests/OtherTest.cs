@@ -7,7 +7,6 @@
  *  Stefan Andres Charsley (charsleysa) <charsleysa@gmail.com>
  */
 
-using System;
 using System.Collections.Generic;
 
 namespace Mosa.TestWorld.x86.Tests

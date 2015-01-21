@@ -7,8 +7,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
-
 namespace System
 {
 	/// <summary>

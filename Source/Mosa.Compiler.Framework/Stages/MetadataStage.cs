@@ -18,7 +18,6 @@ using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework.Stages
 {
-
 	#region EndianAwareBinaryWriter Extensions
 
 	public static class EndianAwareBinaryWriterExtensions
@@ -82,7 +81,7 @@ namespace Mosa.Compiler.Framework.Stages
 		}
 	}
 
-	#endregion
+	#endregion EndianAwareBinaryWriter Extensions
 
 	/// <summary>
 	/// Emits metadata for assemblies and types

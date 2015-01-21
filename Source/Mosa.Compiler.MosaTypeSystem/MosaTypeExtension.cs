@@ -7,9 +7,8 @@
  *  Ki (kiootic) <kiootic@gmail.com>
  */
 
-using System.Collections.Generic;
 using Mosa.Compiler.Common;
-using Mosa.Compiler.MosaTypeSystem.Metadata;
+using System.Collections.Generic;
 
 namespace Mosa.Compiler.MosaTypeSystem
 {

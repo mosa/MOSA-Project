@@ -125,6 +125,5 @@ namespace Mosa.CoolWorld.x86.HAL
 		{
 			Native.Set32(address + index, value);
 		}
-
 	}
 }

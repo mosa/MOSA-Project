@@ -37,7 +37,7 @@ namespace Mosa.Utility.Launcher
 			{
 				// find QEMU executable
 				QEMU = TryFind(
-                    new string[] {"qemu-system-i386.exe", "qemu-system-i386"},
+					new string[] { "qemu-system-i386.exe", "qemu-system-i386" },
 					new string[] {
 					CombineParameterAndDirectory("MOSA",@"Tools\QEMU"),
 					CombineParameterAndDirectory("MOSA",@"QEMU"),
@@ -50,14 +50,13 @@ namespace Mosa.Utility.Launcher
 				);
 			}
 
-            if (!string.IsNullOrEmpty(QEMU))
-            {
-
-                if (string.IsNullOrEmpty(QEMUImg))
-                {
-                    QEMUImg = TryFind(
-                        new string[] { "qemu-img.exe", "qemu-img" },
-                        new string[]
+			if (!string.IsNullOrEmpty(QEMU))
+			{
+				if (string.IsNullOrEmpty(QEMUImg))
+				{
+					QEMUImg = TryFind(
+						new string[] { "qemu-img.exe", "qemu-img" },
+						new string[]
                         {
                             CombineParameterAndDirectory("MOSA", @"Tools\QEMU"),
                             CombineParameterAndDirectory("MOSA", @"QEMU"),
@@ -67,31 +66,30 @@ namespace Mosa.Utility.Launcher
                             CombineParameterAndDirectory("ProgramFiles(x86)", @"qemu"),
                             @"/bin"
                         }
-                    );
-                }
+					);
+				}
 
-                if (string.IsNullOrEmpty(QEMUBIOSDirectory))
-                {
-                    QEMUBIOSDirectory = Path.GetDirectoryName(
-                        TryFind(
-                            new string[] { "bios.bin" },
-                            new string[]
+				if (string.IsNullOrEmpty(QEMUBIOSDirectory))
+				{
+					QEMUBIOSDirectory = Path.GetDirectoryName(
+						TryFind(
+							new string[] { "bios.bin" },
+							new string[]
                             {
                                 Path.GetDirectoryName(QEMU),
                                 Path.Combine(Path.GetDirectoryName(QEMU), "bios"),
                                 "/usr/share/qemu"
                             }
-                        )
-                    );
-                }
-
-            }
+						)
+					);
+				}
+			}
 
 			if (string.IsNullOrEmpty(NDISASM))
 			{
 				// find NDISMASM
 				NDISASM = TryFind(
-                    new string[] {"ndisasm.exe", "ndisasm"},
+					new string[] { "ndisasm.exe", "ndisasm" },
 					   new string[] {
 					CombineParameterAndDirectory("MOSA",@"Tools\ndisasm"),
 					CombineParameterAndDirectory("MOSA",@"ndisasm"),
@@ -105,7 +103,7 @@ namespace Mosa.Utility.Launcher
 			{
 				// find BOCHS
 				BOCHS = TryFind(
-                    new string[] {"bochs.exe", "bochs"},
+					new string[] { "bochs.exe", "bochs" },
 					new string[] {
 					CombineParameterAndDirectory("ProgramFiles",@"Bochs-2.6.5"),
 					CombineParameterAndDirectory("ProgramFiles(x86)",@"Bochs-2.6.5"),
@@ -124,7 +122,7 @@ namespace Mosa.Utility.Launcher
 			{
 				// find vmware player
 				VMwarePlayer = TryFind(
-                    new string[] {"vmplayer.exe", "vmplayer"},
+					new string[] { "vmplayer.exe", "vmplayer" },
 					new string[] {
 					CombineParameterAndDirectory("ProgramFiles",@"VMware\VMware Player"),
 					CombineParameterAndDirectory("ProgramFiles(x86)",@"VMware\VMware Player")
@@ -136,7 +134,7 @@ namespace Mosa.Utility.Launcher
 			{
 				// find mkisofs
 				mkisofs = TryFind(
-                    new string[] {"mkisofs.exe", "mkisofs"},
+					new string[] { "mkisofs.exe", "mkisofs" },
 					new string[] {
 					CombineParameterAndDirectory("ProgramFiles",@"VMware\VMware Player"),
 					CombineParameterAndDirectory("ProgramFiles(x86)",@"VMware\VMware Player"),
@@ -161,14 +159,14 @@ namespace Mosa.Utility.Launcher
 			return Path.Combine(variable, subdirectory);
 		}
 
-        private string TryFind(IList<string> files, IList<string> directories)
+		private string TryFind(IList<string> files, IList<string> directories)
 		{
 			string location;
 
 			foreach (var directory in directories)
-                foreach (var file in files)
-				    if (TryFind(file, directory, out location))
-					    return location;
+				foreach (var file in files)
+					if (TryFind(file, directory, out location))
+						return location;
 
 			return string.Empty;
 		}

@@ -7,8 +7,6 @@
  *  Stefan Andres Charsley (charsleysa) <charsleysa@gmail.com>
  */
 
-using System;
-
 namespace System.IO
 {
 	public class BinaryReader : IDisposable

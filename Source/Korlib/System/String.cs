@@ -467,7 +467,7 @@ namespace System
 
 			// FIXME: Following line does not compile correctly
 			if (startIndex < 0 || startIndex > this.length)
-			    throw new System.ArgumentOutOfRangeException("startIndex");
+				throw new System.ArgumentOutOfRangeException("startIndex");
 
 			if (startIndex < 0)
 				throw new System.ArgumentOutOfRangeException("startIndex");
