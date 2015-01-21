@@ -296,7 +296,7 @@ namespace Mosa.Utility.Launcher
 					" -hda " + Quote(imageFile);
 			}
 
-			arg = arg + "-vga vmware";
+			//arg = arg + "-vga vmware";
 
 			var output = LaunchApplication(AppLocations.QEMU, arg, !exit);
 

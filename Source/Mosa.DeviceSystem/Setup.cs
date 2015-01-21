@@ -20,6 +20,7 @@ namespace Mosa.DeviceSystem
 		static private DeviceDriverRegistry deviceDriverRegistry;
 		static private IDeviceManager deviceManager;
 		static private IResourceManager resourceManager;
+		static private PCIControllerManager pciControllerManager;
 
 		/// <summary>
 		/// Gets the device driver library
@@ -52,6 +53,9 @@ namespace Mosa.DeviceSystem
 
 			// Create Device Manager
 			deviceManager = new DeviceManager();
+
+			// Create the PCI Controller Manager
+			pciControllerManager = new PCIControllerManager(deviceManager);
 		}
 
 		/// <summary>
@@ -59,6 +63,9 @@ namespace Mosa.DeviceSystem
 		/// </summary>
 		static public void Start()
 		{
+			// Find all drviers
+			deviceDriverRegistry.RegisterBuiltInDeviceDrivers();
+
 			// Start drivers for ISA devices
 			StartISADevices();
 
@@ -71,6 +78,8 @@ namespace Mosa.DeviceSystem
 		/// </summary>
 		static public void StartPCIDevices()
 		{
+			pciControllerManager.CreatePCIDevices();
+
 			foreach (var device in deviceManager.GetDevices(new FindDevice.IsPCIDevice(), new FindDevice.IsAvailable()))
 			{
 				StartDevice(device as IPCIDevice);
@@ -125,6 +134,8 @@ namespace Mosa.DeviceSystem
 			if (resourceManager.ClaimResources(hardwareResources))
 			{
 				hardwareResources.EnableIRQ();
+				hardwareDevice.Setup(hardwareResources);
+
 				if (hardwareDevice.Start() == DeviceDriverStartStatus.Started)
 				{
 					pciDevice.SetDeviceOnline();
@@ -145,7 +156,9 @@ namespace Mosa.DeviceSystem
 			var deviceDrivers = deviceDriverRegistry.GetISADeviceDrivers();
 
 			foreach (var deviceDriver in deviceDrivers)
+			{
 				StartDevice(deviceDriver);
+			}
 		}
 
 		/// <summary>
@@ -186,7 +199,9 @@ namespace Mosa.DeviceSystem
 				{
 					hardwareResources.EnableIRQ();
 					if (hardwareDevice.Start() == DeviceDriverStartStatus.Started)
+					{
 						deviceManager.Add(hardwareDevice);
+					}
 					else
 					{
 						hardwareResources.DisableIRQ();

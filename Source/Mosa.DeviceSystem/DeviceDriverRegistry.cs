@@ -143,7 +143,7 @@ namespace Mosa.DeviceSystem
 
 					if ((attribute.Platforms & platformArchitecture) != 0)
 					{
-						DeviceDriver deviceDriver = new DeviceDriver(attribute, type.GetType());
+						DeviceDriver deviceDriver = new DeviceDriver(attribute, type.AsType());
 
 						foreach (var memAttributeData in attributes)
 						{

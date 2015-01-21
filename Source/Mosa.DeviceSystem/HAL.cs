@@ -107,7 +107,7 @@ namespace Mosa.DeviceSystem
 		/// <returns></returns>
 		public static IMemory AllocateMemory(uint size, uint alignment)
 		{
-			return HAL.AllocateMemory(size, alignment);
+			return hardwareAbstraction.AllocateMemory(size, alignment);
 		}
 
 		/// <summary>
