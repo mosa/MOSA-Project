@@ -24,6 +24,7 @@ namespace Mosa.TestWorld.x86.Tests
 			testMethods.AddLast(TypeHandleFromObjectTest);
 			testMethods.AddLast(DeclaringTypeTest);
 			testMethods.AddLast(ElementTypeTest);
+			testMethods.AddLast(TypeActivator);
 		}
 
 		public static bool PointerTest()
@@ -76,6 +77,23 @@ namespace Mosa.TestWorld.x86.Tests
 			Type foundType = Type.GetType("System.Int32[]");
 			Type elementType = Type.GetType("System.Int32");
 			return (foundType != null && foundType.HasElementType && foundType.GetElementType().Equals(elementType));
+		}
+
+		public static bool TypeActivator()
+		{
+			Type foundType = Type.GetType("Mosa.TestWorld.x86.Tests.TestClass123");
+			var obj = (TestClass123)Activator.CreateInstance(foundType);
+			return (obj.i == 52);
+		}
+	}
+
+	public class TestClass123
+	{
+		public int i = 0;
+
+		public TestClass123()
+		{
+			i = 52;
 		}
 	}
 }

@@ -16,7 +16,7 @@ shape = "record"
 ];
 
 "NameString" [
-label = "<f0>Name String|<f1>String Length|<f2>String"
+label = "<f0>Name String Object|<f1>Address of String Type Definition|<f2>Sync block|<f3>String Length|<f4>Unicode String"
 shape = "record"
 color = "red"
 ];
@@ -109,7 +109,7 @@ shape = "record"
 ];
 
 "CustomAttributeArgument" [
-label = "<f0>Custom Attribute Argument|<f1>~Pointer to Argument Name|<f2>Pointer to Argument Type | Argument Size|<f3>Argument"
+label = "<f0>Custom Attribute Argument|<f1>~Pointer to Argument Name|<f2>Is Argument a Field|<f3>Pointer to Argument Type|<f4>Argument Size|<f3>Argument"
 shape = "record"
 ];
 
@@ -136,7 +136,7 @@ id = 0
 color = "red"
 ];
 
-"CustomAttributeArgument":f2 -> "TypeDefinition":f0 [
+"CustomAttributeArgument":f3 -> "TypeDefinition":f0 [
 id = 0
 color = "blue"
 ];

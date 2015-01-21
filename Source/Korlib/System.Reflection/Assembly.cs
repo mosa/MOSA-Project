@@ -9,6 +9,7 @@
  */
 
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 namespace System.Reflection
 {
@@ -60,6 +61,15 @@ namespace System.Reflection
 		public override int GetHashCode()
 		{
 			return this.FullName.GetHashCode();
+		}
+
+		/// <summary>
+		/// Gets all loaded assemblies.
+		/// </summary>
+		/// <returns>Assemblies</returns>
+		public static IEnumerable<Assembly> GetAssemblies()
+		{
+			return RuntimeHelpers.GetAssemblies();
 		}
 	}
 }

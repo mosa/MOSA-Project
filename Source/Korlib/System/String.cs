@@ -106,11 +106,11 @@ namespace System
 		////[MethodImplAttribute(MethodImplOptions.InternalCall)]
 		////public unsafe extern String(sbyte* value, int startIndex, int length, Encoding enc);
 
-		////[MethodImplAttribute(MethodImplOptions.InternalCall)]
-		////public unsafe extern String(char* value);
+		[MethodImplAttribute(MethodImplOptions.InternalCall)]
+		public unsafe extern String(char* value);
 
-		////[MethodImplAttribute(MethodImplOptions.InternalCall)]
-		////public unsafe extern String(char* value, int startIndex, int length);
+		[MethodImplAttribute(MethodImplOptions.InternalCall)]
+		public unsafe extern String(char* value, int startIndex, int length);
 
 		[MethodImplAttribute(MethodImplOptions.InternalCall)]
 		internal static extern string InternalAllocateString(int length);
@@ -191,6 +191,52 @@ namespace System
 			for (int index = 0; index < length; index++)
 			{
 				*chars = (char)*value;
+				chars++;
+				value++;
+			}
+
+			return result;
+		}
+
+		private static unsafe string CreateString(char* value, int startIndex, int length)
+		{
+			if (length == 0)
+				return InternalAllocateString(0);
+
+			String result = InternalAllocateString(length);
+			char* chars = result.first_char;
+
+			value += startIndex;
+
+			for (int index = 0; index < length; index++)
+			{
+				*chars = *value;
+				chars++;
+				value++;
+			}
+
+			return result;
+		}
+
+		private static unsafe string CreateString(char* value)
+		{
+			int length = 0;
+			char* at = value;
+
+			while (*at != 0)
+			{
+				length++;
+			}
+
+			if (length == 0)
+				return string.Empty;
+
+			String result = InternalAllocateString(length);
+			char* chars = result.first_char;
+
+			for (int index = 0; index < length; index++)
+			{
+				*chars = *value;
 				chars++;
 				value++;
 			}
@@ -420,14 +466,14 @@ namespace System
 				return Empty;
 
 			// FIXME: Following line does not compile correctly
-			//if (startIndex < 0 || startIndex > this.length)
-			//    return Empty; //throw new System.ArgumentOutOfRangeException("startIndex");
+			if (startIndex < 0 || startIndex > this.length)
+			    throw new System.ArgumentOutOfRangeException("startIndex");
 
 			if (startIndex < 0)
-				return Empty; //throw new System.ArgumentOutOfRangeException("startIndex");
+				throw new System.ArgumentOutOfRangeException("startIndex");
 
 			if (startIndex > this.length)
-				return Empty; //throw new System.ArgumentOutOfRangeException("startIndex");
+				throw new System.ArgumentOutOfRangeException("startIndex");
 
 			int newlen = this.length - startIndex;
 			String result = InternalAllocateString(newlen);
@@ -443,10 +489,10 @@ namespace System
 		public unsafe string Substring(int startIndex, int length)
 		{
 			if (length < 0)
-				return Empty; //throw new System.ArgumentOutOfRangeException("length", "< 0");
+				throw new System.ArgumentOutOfRangeException("length", "< 0");
 
 			if (startIndex < 0 || startIndex > this.length)
-				return Empty; //throw new System.ArgumentOutOfRangeException("startIndex");
+				throw new System.ArgumentOutOfRangeException("startIndex");
 
 			String result = InternalAllocateString(length);
 
@@ -479,11 +525,11 @@ namespace System
 		public int IndexOf(char value, int startIndex, int count)
 		{
 			if (startIndex < 0)
-				return -1; // throw new System.ArgumentOutOfRangeException("startIndex", "< 0");
+				throw new System.ArgumentOutOfRangeException("startIndex", "< 0");
 			if (count < 0)
-				return -1; //throw new System.ArgumentOutOfRangeException("count", "< 0");
+				throw new System.ArgumentOutOfRangeException("count", "< 0");
 			if (startIndex > this.length - count)
-				return -1; //throw new System.ArgumentOutOfRangeException("startIndex + count > this.length");
+				throw new System.ArgumentOutOfRangeException("startIndex + count > this.length");
 
 			if ((startIndex == 0 && this.length == 0) || (startIndex == this.length) || (count == 0))
 				return -1;
@@ -494,7 +540,7 @@ namespace System
 		public int IndexOfAny(char[] anyOf)
 		{
 			if (anyOf == null)
-				return -1; //throw new System.ArgumentNullException("anyOf");
+				throw new System.ArgumentNullException("anyOf");
 			if (this.length == 0)
 				return -1;
 
@@ -504,9 +550,9 @@ namespace System
 		public int IndexOfAny(char[] anyOf, int startIndex)
 		{
 			if (anyOf == null)
-				return -1; //throw new System.ArgumentNullException("anyOf");
+				throw new System.ArgumentNullException("anyOf");
 			if (startIndex < 0 || startIndex > this.length)
-				return -1; //throw new System.ArgumentOutOfRangeException("startIndex");
+				throw new System.ArgumentOutOfRangeException("startIndex");
 
 			return IndexOfAnyImpl(anyOf, startIndex, this.length - startIndex);
 		}
@@ -514,13 +560,13 @@ namespace System
 		public int IndexOfAny(char[] anyOf, int startIndex, int count)
 		{
 			if (anyOf == null)
-				return -1; //throw new System.ArgumentNullException("anyOf");
+				throw new System.ArgumentNullException("anyOf");
 			if (startIndex < 0)
-				return -1; //throw new System.ArgumentOutOfRangeException("startIndex", "< 0");
+				throw new System.ArgumentOutOfRangeException("startIndex", "< 0");
 			if (count < 0)
-				return -1; //throw new System.ArgumentOutOfRangeException("count", "< 0");
+				throw new System.ArgumentOutOfRangeException("count", "< 0");
 			if (startIndex > this.length - count)
-				return -1; //throw new System.ArgumentOutOfRangeException("startIndex + count > this.length");
+				throw new System.ArgumentOutOfRangeException("startIndex + count > this.length");
 
 			return IndexOfAnyImpl(anyOf, startIndex, count);
 		}
@@ -528,7 +574,7 @@ namespace System
 		public int LastIndexOfAny(char[] anyOf)
 		{
 			if (anyOf == null)
-				return -1; //throw new System.ArgumentNullException("anyOf");
+				throw new System.ArgumentNullException("anyOf");
 
 			return InternalLastIndexOfAny(anyOf, this.length - 1, this.length);
 		}
@@ -536,10 +582,10 @@ namespace System
 		public int LastIndexOfAny(char[] anyOf, int startIndex)
 		{
 			if (anyOf == null)
-				return -1; //throw new System.ArgumentNullException("anyOf");
+				throw new System.ArgumentNullException("anyOf");
 
 			if (startIndex < 0 || startIndex >= this.length)
-				return -1; //throw new System.ArgumentOutOfRangeException();
+				throw new System.ArgumentOutOfRangeException();
 
 			if (this.length == 0)
 				return -1;
@@ -550,13 +596,13 @@ namespace System
 		public int LastIndexOfAny(char[] anyOf, int startIndex, int count)
 		{
 			if (anyOf == null)
-				return -1; //throw new System.ArgumentNullException("anyOf");
+				throw new System.ArgumentNullException("anyOf");
 			if ((startIndex < 0) || (startIndex >= this.Length))
-				return -1; //throw new System.ArgumentOutOfRangeException("startIndex", "< 0 || > this.Length");
+				throw new System.ArgumentOutOfRangeException("startIndex", "< 0 || > this.Length");
 			if ((count < 0) || (count > this.Length))
-				return -1; //throw new System.ArgumentOutOfRangeException("count", "< 0 || > this.Length");
+				throw new System.ArgumentOutOfRangeException("count", "< 0 || > this.Length");
 			if (startIndex - count + 1 < 0)
-				return -1; //throw new System.ArgumentOutOfRangeException("startIndex - count + 1 < 0");
+				throw new System.ArgumentOutOfRangeException("startIndex - count + 1 < 0");
 
 			if (this.length == 0)
 				return -1;
@@ -582,11 +628,11 @@ namespace System
 			if (startIndex == 0 && this.length == 0)
 				return -1;
 			if ((startIndex < 0) || (startIndex >= this.Length))
-				return -1; //throw new System.ArgumentOutOfRangeException("startIndex", "< 0 || >= this.Length");
+				throw new System.ArgumentOutOfRangeException("startIndex", "< 0 || >= this.Length");
 			if ((count < 0) || (count > this.Length))
-				return -1; //throw new System.ArgumentOutOfRangeException("count", "< 0 || > this.Length");
+				throw new System.ArgumentOutOfRangeException("count", "< 0 || > this.Length");
 			if (startIndex - count + 1 < 0)
-				return -1; //throw new System.ArgumentOutOfRangeException("startIndex - count + 1 < 0");
+				throw new System.ArgumentOutOfRangeException("startIndex - count + 1 < 0");
 
 			return LastIndexOfImpl(value, startIndex, count);
 		}

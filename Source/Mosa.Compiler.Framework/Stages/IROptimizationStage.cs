@@ -31,7 +31,6 @@ namespace Mosa.Compiler.Framework.Stages
 		private int constantFoldingIntegerOperationsCount = 0;
 		private int simpleConstantPropagationCount = 0;
 		private int simpleForwardCopyPropagationCount = 0;
-		private int simpleBackwardCopyPropagationCount = 0;
 		private int constantFoldingIntegerCompareCount = 0;
 		private int strengthReductionIntegerCompareBranchCount = 0;
 		private int deadCodeEliminationCount = 0;
@@ -100,7 +99,6 @@ namespace Mosa.Compiler.Framework.Stages
 			UpdateCounter("IROptimizations.ConstantFoldingIntegerOperations", constantFoldingIntegerOperationsCount);
 			UpdateCounter("IROptimizations.SimpleConstantPropagation", simpleConstantPropagationCount);
 			UpdateCounter("IROptimizations.SimpleForwardCopyPropagation", simpleForwardCopyPropagationCount);
-			UpdateCounter("IROptimizations.SimpleBackwardCopyPropagation", simpleBackwardCopyPropagationCount);
 			UpdateCounter("IROptimizations.ConstantFoldingIntegerCompare", constantFoldingIntegerCompareCount);
 			UpdateCounter("IROptimizations.StrengthReductionIntegerCompareBranch", strengthReductionIntegerCompareBranchCount);
 			UpdateCounter("IROptimizations.DeadCodeElimination", deadCodeEliminationCount);
@@ -139,7 +137,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			SimpleConstantPropagation(context);
 			SimpleForwardCopyPropagation(context);
-			SimpleBackwardCopyPropagation(context);
+
 			DeadCodeElimination(context);
 			DeadCodeElimination2(context);
 			SimplifySubtraction(context);
@@ -1586,72 +1584,6 @@ namespace Mosa.Compiler.Framework.Stages
 			context.SetInstruction(IRInstruction.Move, context.Result, context.Operand1);
 			simplifyExtendedMoveCount++;
 			if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
-		}
-
-		/// <summary>
-		/// Simple backward copy propagation.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		private void SimpleBackwardCopyPropagation(Context context)
-		{
-			if (context.IsEmpty)
-				return;
-
-			if (context.Instruction != IRInstruction.Move)
-				return;
-
-			if (context.Operand1.IsConstant)
-				return;
-
-			if (!context.Result.IsVirtualRegister)
-				return;
-
-			if (context.Result.Definitions.Count != 1)
-				return;
-
-			if (!context.Operand1.IsVirtualRegister)
-				return;
-
-			if (context.Operand1.Uses.Count != 1)
-				return;
-
-			if (context.Operand1.Definitions.Count != 1)
-				return;
-
-			// If the pointer or reference types are different, we can not copy propagation because type information would be lost.
-			// Also if the operand sign is different, we cannot do it as it requires a signed/unsigned extended move, not a normal move
-			if (!CanCopyPropagation(context.Result, context.Operand1))
-				return;
-
-			Operand destination = context.Result;
-			Operand source = context.Operand1;
-
-			//if (trace.IsLogging) trace.Log("REVIEWING:\t" + context.ToString());
-
-			AddOperandUsageToWorkList(context);
-
-			var ctx = new Context(InstructionSet, source.Definitions[0]);
-
-			for (int i = 0; i < ctx.OperandCount; i++)
-			{
-				Operand operand = ctx.GetOperand(i);
-
-				if (destination == operand)
-				{
-					if (trace.Active) trace.Log("*** SimpleBackwardCopyPropagation");
-					if (trace.Active) trace.Log("BEFORE:\t" + ctx.ToString());
-					ctx.SetOperand(i, source);
-					simpleBackwardCopyPropagationCount++;
-					if (trace.Active) trace.Log("AFTER: \t" + ctx.ToString());
-				}
-			}
-
-			Debug.Assert(destination.Uses.Count == 0);
-
-			if (trace.Active) trace.Log("REMOVED:\t" + context.ToString());
-			AddOperandUsageToWorkList(context);
-			context.SetInstruction(IRInstruction.Nop);
-			instructionsRemovedCount++;
 		}
 
 		private void FoldLoadStoreOffsets(Context context)

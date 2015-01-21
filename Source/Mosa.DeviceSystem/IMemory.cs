@@ -87,21 +87,5 @@ namespace Mosa.DeviceSystem
 		/// <param name="index">The index.</param>
 		/// <param name="value">The value.</param>
 		void Write32(uint index, uint value);
-
-		/// <summary>
-		/// Reads the specified index.
-		/// </summary>
-		/// <param name="index">The index.</param>
-		/// <param name="count">The count.</param>
-		/// <returns></returns>
-		uint Read32(uint index, byte count);
-
-		/// <summary>
-		/// Writes the specified index.
-		/// </summary>
-		/// <param name="index">The index.</param>
-		/// <param name="value">The value.</param>
-		/// <param name="count">The count.</param>
-		void Write32(uint index, uint value, byte count);
 	}
 }

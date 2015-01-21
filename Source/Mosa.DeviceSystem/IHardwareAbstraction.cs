@@ -69,13 +69,13 @@ namespace Mosa.DeviceSystem
 		/// <summary>
 		/// Debugs the write.
 		/// </summary>
-		/// <param name="msg">The message.</param>
+		/// <param name="message">The message.</param>
 		void DebugWrite(string message);
 
 		/// <summary>
 		/// Debugs the write line.
 		/// </summary>
-		/// <param name="msg">The message.</param>
+		/// <param name="message">The message.</param>
 		void DebugWriteLine(string message);
 	}
 }

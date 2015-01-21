@@ -19,12 +19,25 @@ namespace System
 		internal MetadataAssemblyStruct* assemblyStruct;
 		internal LinkedList<RuntimeType> typeList = new LinkedList<RuntimeType>();
 		internal LinkedList<RuntimeTypeHandle> typeHandles = new LinkedList<RuntimeTypeHandle>();
+		internal LinkedList<RuntimeTypeInfo> typeInfoList = new LinkedList<RuntimeTypeInfo>();
+		internal LinkedList<CustomAttributeData> customAttributesData = new LinkedList<CustomAttributeData>();
 
 		private string fullName;
 
+		public override IEnumerable<CustomAttributeData> CustomAttributes
+		{
+			get { return customAttributesData; }
+		}
+
 		public override IEnumerable<TypeInfo> DefinedTypes
 		{
-			get { throw new NotImplementedException(); }
+			get
+			{
+				LinkedList<TypeInfo> types = new LinkedList<TypeInfo>();
+				foreach (var type in this.typeInfoList)
+					types.AddLast(type);
+				return types;
+			}
 		}
 
 		public override string FullName
@@ -37,7 +50,7 @@ namespace System
 			get
 			{
 				LinkedList<Type> types = new LinkedList<Type>();
-				foreach (RuntimeType type in typeList)
+				foreach (RuntimeType type in this.typeList)
 				{
 					if ((type.attributes & TypeAttributes.VisibilityMask) != TypeAttributes.Public)
 						continue;
@@ -51,6 +64,7 @@ namespace System
 		{
 			this.assemblyStruct = (MetadataAssemblyStruct*)pointer;
 			this.fullName = x86Runtime.InitializeMetadataString(this.assemblyStruct->Name);
+
 			uint typeCount = (*this.assemblyStruct).NumberOfTypes;
 			for (uint i = 0; i < typeCount; i++)
 			{
@@ -74,9 +88,27 @@ namespace System
 
 		internal void Phase2()
 		{
-			foreach (RuntimeType type in typeList)
+			foreach (RuntimeType type in this.typeList)
 			{
 				type.FindRelativeTypes();
+			}
+
+			// Get Custom Attributes Data (must be done after RuntimeTypes have been completely resolved!)
+			if (this.assemblyStruct->CustomAttributes != null)
+			{
+				var customAttributesTablePtr = this.assemblyStruct->CustomAttributes;
+				var customAttributesCount = customAttributesTablePtr[0];
+				customAttributesTablePtr++;
+				for (uint i = 0; i < customAttributesCount; i++)
+				{
+					RuntimeCustomAttributeData cad = new RuntimeCustomAttributeData((MetadataCAStruct*)customAttributesTablePtr[i]);
+					customAttributesData.AddLast(cad);
+				}
+			}
+
+			foreach (RuntimeType type in this.typeList)
+			{
+				this.typeInfoList.AddLast(new RuntimeTypeInfo(type, this));
 			}
 		}
 	}

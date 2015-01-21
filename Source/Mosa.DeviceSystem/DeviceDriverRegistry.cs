@@ -9,6 +9,8 @@
 
 using Mosa.DeviceSystem.PCI;
 using System.Collections.Generic;
+using System.Reflection;
+using System;
 
 namespace Mosa.DeviceSystem
 {
@@ -37,6 +39,11 @@ namespace Mosa.DeviceSystem
 			deviceDrivers = new LinkedList<DeviceDriver>();
 		}
 
+		public void AddDeviceDriver(DeviceDriver deviceDriver)
+		{
+			deviceDrivers.AddLast(deviceDriver);
+		}
+
 		/// <summary>
 		/// Finds the driver.
 		/// </summary>
@@ -47,11 +54,12 @@ namespace Mosa.DeviceSystem
 			DeviceDriver bestDeviceDriver = null;
 			int bestPriority = System.Int32.MaxValue;
 
-			foreach (DeviceDriver deviceDriver in deviceDrivers)
+			foreach (var deviceDriver in deviceDrivers)
 			{
 				if (deviceDriver.Attribute is PCIDeviceDriverAttribute)
 				{
-					PCIDeviceDriverAttribute pciDeviceDriverAttribute = deviceDriver.Attribute as PCIDeviceDriverAttribute;
+					var pciDeviceDriverAttribute = deviceDriver.Attribute as PCIDeviceDriverAttribute;
+
 					if ((pciDeviceDriverAttribute.Priority != 0) && (pciDeviceDriverAttribute.Priority < bestPriority))
 					{
 						if (pciDeviceDriverAttribute.CompareTo(pciDevice))
@@ -72,13 +80,36 @@ namespace Mosa.DeviceSystem
 		/// <returns></returns>
 		public LinkedList<DeviceDriver> GetISADeviceDrivers()
 		{
-			LinkedList<DeviceDriver> isaDeviceDrivers = new LinkedList<DeviceDriver>();
+			var isaDeviceDrivers = new LinkedList<DeviceDriver>();
 
-			foreach (DeviceDriver deviceDriver in deviceDrivers)
+			foreach (var deviceDriver in deviceDrivers)
+			{
 				if (deviceDriver.Attribute is ISADeviceDriverAttribute)
+				{
 					isaDeviceDrivers.AddLast(deviceDriver);
+				}
+			}
 
 			return isaDeviceDrivers;
+		}
+
+		/// <summary>
+		/// Gets the PCI device drivers.
+		/// </summary>
+		/// <returns></returns>
+		public LinkedList<DeviceDriver> GetPCIDeviceDrivers()
+		{
+			var pciDeviceDrivers = new LinkedList<DeviceDriver>();
+
+			foreach (var deviceDriver in deviceDrivers)
+			{
+				if (deviceDriver.Attribute is PCIDeviceDriverAttribute)
+				{
+					pciDeviceDrivers.AddLast(deviceDriver);
+				}
+			}
+
+			return pciDeviceDrivers;
 		}
 
 		/// <summary>
@@ -86,37 +117,149 @@ namespace Mosa.DeviceSystem
 		/// </summary>
 		public void RegisterBuiltInDeviceDrivers()
 		{
-			//System.Reflection.Assembly assemblyInfo = typeof(DeviceDriverRegistry).Module.Assembly;
-			//RegisterDeviceDrivers(assemblyInfo);
+			foreach (var assembly in Assembly.GetAssemblies())
+				RegisterDeviceDrivers(assembly);
 		}
 
 		/// <summary>
 		/// Registers the device drivers.
 		/// </summary>
 		/// <param name="assemblyInfo">The assembly info.</param>
-		public void RegisterDeviceDrivers(System.Reflection.Assembly assemblyInfo)
+		public void RegisterDeviceDrivers(Assembly assemblyInfo)
 		{
-			/*System.Type[] types = assemblyInfo.GetTypes();
+			var types = assemblyInfo.DefinedTypes;
 
-			foreach (System.Type type in types)
+			foreach (var type in types)
 			{
-				object[] attributes = type.GetCustomAttributes(typeof(IDeviceDriver), false);
+				var attributes = type.CustomAttributes;
 
-				foreach (object attribute in attributes)
+				foreach (var attributeData in attributes)
 				{
-					if (((attribute as IDeviceDriver).Platforms & platformArchitecture) != 0)
+					if (attributeData.AttributeType != typeof(ISADeviceDriverAttribute) &&
+						attributeData.AttributeType != typeof(PCIDeviceDriverAttribute))
+						continue;
+
+					IDeviceDriver attribute = GetIDeviceDriver(attributeData);
+
+					if ((attribute.Platforms & platformArchitecture) != 0)
 					{
-						DeviceDriver deviceDriver = new DeviceDriver(attribute as IDeviceDriver, type);
+						DeviceDriver deviceDriver = new DeviceDriver(attribute, type.AsType());
 
-						object[] memAttributes = type.GetCustomAttributes(typeof(DeviceDriverPhysicalMemoryAttribute), false);
+						foreach (var memAttributeData in attributes)
+						{
+							if (memAttributeData.AttributeType != typeof(DeviceDriverPhysicalMemoryAttribute))
+								continue;
 
-						foreach (object memAttribute in memAttributes)
-							deviceDriver.Add(memAttribute as DeviceDriverPhysicalMemoryAttribute);
+							var memAttribute = GetDeviceDriverPhysicalMemoryAttribute(memAttributeData);
 
-						deviceDrivers.Add(deviceDriver);
+							deviceDriver.Add(memAttribute);
+						}
+
+						AddDeviceDriver(deviceDriver);
 					}
 				}
-			}*/
+			}
+		}
+
+		private IDeviceDriver GetIDeviceDriver(CustomAttributeData attributeData)
+		{
+			if (attributeData.AttributeType == typeof(ISADeviceDriverAttribute))
+			{
+				var attribute = new ISADeviceDriverAttribute();
+				foreach (var arg in attributeData.NamedArguments)
+					switch (arg.MemberName)
+					{
+						case "Platforms":
+							attribute.Platforms = (PlatformArchitecture)arg.TypedValue.Value;
+							break;
+						case "BasePort":
+							attribute.BasePort = (ushort)arg.TypedValue.Value;
+							break;
+						case "PortRange":
+							attribute.PortRange = (ushort)arg.TypedValue.Value;
+							break;
+						case "AltBasePort":
+							attribute.AltBasePort = (ushort)arg.TypedValue.Value;
+							break;
+						case "AltPortRange":
+							attribute.AltPortRange = (ushort)arg.TypedValue.Value;
+							break;
+						case "AutoLoad":
+							attribute.AutoLoad = (bool)arg.TypedValue.Value;
+							break;
+						case "ForceOption":
+							attribute.ForceOption = (string)arg.TypedValue.Value;
+							break;
+						case "IRQ":
+							attribute.IRQ = (byte)arg.TypedValue.Value;
+							break;
+						case "BaseAddress":
+							attribute.BaseAddress = (uint)arg.TypedValue.Value;
+							break;
+						case "AddressRange":
+							attribute.AddressRange = (uint)arg.TypedValue.Value;
+							break;
+					}
+				return attribute;
+			}
+			else
+			{
+				var attribute = new PCIDeviceDriverAttribute();
+				foreach (var arg in attributeData.NamedArguments)
+					switch (arg.MemberName)
+					{
+						case "Platforms":
+							attribute.Platforms = (PlatformArchitecture)arg.TypedValue.Value;
+							break;
+						case "DeviceID":
+							attribute.DeviceID = (ushort)arg.TypedValue.Value;
+							break;
+						case "VendorID":
+							attribute.VendorID = (ushort)arg.TypedValue.Value;
+							break;
+						case "SubVendorID":
+							attribute.SubVendorID = (ushort)arg.TypedValue.Value;
+							break;
+						case "SubDeviceID":
+							attribute.SubDeviceID = (ushort)arg.TypedValue.Value;
+							break;
+						case "RevisionID":
+							attribute.RevisionID = (byte)arg.TypedValue.Value;
+							break;
+						case "ProgIF":
+							attribute.ProgIF = (byte)arg.TypedValue.Value;
+							break;
+						case "ClassCode":
+							attribute.ClassCode = (ushort)arg.TypedValue.Value;
+							break;
+						case "SubClassCode":
+							attribute.SubClassCode = (byte)arg.TypedValue.Value;
+							break;
+					}
+				return attribute;
+			}
+		}
+
+		private DeviceDriverPhysicalMemoryAttribute GetDeviceDriverPhysicalMemoryAttribute(CustomAttributeData attributeData)
+		{
+			var attribute = new DeviceDriverPhysicalMemoryAttribute();
+			foreach (var arg in attributeData.NamedArguments)
+				switch (arg.MemberName)
+				{
+					case "MemorySize":
+						attribute.MemorySize = (uint)arg.TypedValue.Value;
+						break;
+					case "MemoryAlignment":
+						attribute.MemoryAlignment = (uint)arg.TypedValue.Value;
+						break;
+					case "RestrictUnder16M":
+						attribute.RestrictUnder16M = (bool)arg.TypedValue.Value;
+						break;
+					case "RestrictUnder4G":
+						attribute.RestrictUnder4G = (bool)arg.TypedValue.Value;
+						break;
+				}
+			return attribute;
 		}
 	}
 }

@@ -55,7 +55,23 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="context">The context.</param>
 		void CIL.ICILVisitor.Ldloc(Context context)
 		{
-			context.ReplaceInstructionOnly(IRInstruction.Move);
+			Debug.Assert(context.MosaType == null);
+
+			var instruction = IRInstruction.Move;
+
+			var type = context.Operand1.Type;
+
+			if (MustSignExtendOnLoad(type))
+			{
+				instruction = IRInstruction.SignExtendedMove;
+			}
+			else if (MustZeroExtendOnLoad(type))
+			{
+				instruction = IRInstruction.ZeroExtendedMove;
+			}
+
+			var size = GetInstructionSize(type);
+			context.SetInstruction(instruction, size, context.Result, context.Operand1);
 		}
 
 		/// <summary>
@@ -89,7 +105,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 			// This is actually ldind.* and ldobj - the opcodes have the same meanings
 
-			BaseInstruction loadInstruction = IRInstruction.Load;
+			var loadInstruction = IRInstruction.Load;
+
 			if (MustSignExtendOnLoad(type))
 			{
 				loadInstruction = IRInstruction.LoadSignExtended;
@@ -189,7 +206,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="context">The context.</param>
 		void CIL.ICILVisitor.Stloc(Context context)
 		{
-			ProcessStoreInstruction(context);
+			context.SetInstruction(IRInstruction.Move, context.Result, context.Operand1);
 		}
 
 		/// <summary>
@@ -198,7 +215,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="context">The context.</param>
 		void CIL.ICILVisitor.Starg(Context context)
 		{
-			ProcessStoreInstruction(context);
+			context.SetInstruction(IRInstruction.Move, context.Result, context.Operand1);
 		}
 
 		/// <summary>
@@ -1379,7 +1396,10 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="context">The context.</param>
 		void CIL.ICILVisitor.Sizeof(Context context)
 		{
-			throw new NotImplementCompilerException();
+			var type = context.MosaType;
+			context.MosaType = null;
+			var size = type.IsPointer ? TypeLayout.NativePointerSize : MethodCompiler.TypeLayout.GetTypeSize(type);
+			context.SetInstruction(IRInstruction.Move, context.Result, Operand.CreateConstantSignedInt(TypeSystem, size));
 		}
 
 		/// <summary>
@@ -1981,15 +2001,6 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 
 			context.ReplaceInstructionOnly(IRInstruction.Move);
-		}
-
-		/// <summary>
-		/// Replaces the IL store instruction by an appropriate IR move  instruction.
-		/// </summary>
-		/// <param name="context">Provides the transformation context.</param>
-		private void ProcessStoreInstruction(Context context)
-		{
-			context.SetInstruction(IRInstruction.Move, context.Result, context.Operand1);
 		}
 
 		/// <summary>

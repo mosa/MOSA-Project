@@ -18,7 +18,7 @@ using Mosa.DeviceSystem;
  * You can do whatever you want with it.
  */
 
-namespace Mosa.DeviceDrivers.PCI.VideoCard
+namespace Mosa.DeviceDriver.PCI.VideoCard
 {
 	/// <summary>
 	/// Generic VGA Device Driver

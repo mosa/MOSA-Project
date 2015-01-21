@@ -101,7 +101,7 @@ namespace Mosa.TestWorld.x86.Tests
 			genericsTest.Test();
 			generics2Test.Test();
 			isInstanceTest.Test();
-			//exceptionTest.Test();
+			exceptionTest.Test();
 			plugTestTest.Test();
 			compareTest.Test();
 			simpleTest.Test();

@@ -74,6 +74,7 @@
     <Compile Include="Internals\InternalsForRuntimeHelpers.cs" />
     <Compile Include="Internals\InternalsForType.cs" />
     <Compile Include="MetadataStructures\MetadataAssemblyStruct.cs" />
+    <Compile Include="MetadataStructures\MetadataCAArgumentStruct.cs" />
     <Compile Include="MetadataStructures\MetadataCAStruct.cs" />
     <Compile Include="MetadataStructures\MetadataMethodStruct.cs" />
     <Compile Include="MetadataStructures\MetadataPRDefinitionStruct.cs" />

@@ -43,9 +43,9 @@ namespace Mosa.Compiler.Framework.CIL
 
 			MosaType type = (MosaType)decoder.Instruction.Operand;
 
-			uint size = (uint)decoder.Compiler.TypeLayout.GetTypeSize(type);
+			ctx.MosaType = type;
 
-			ctx.Result = Operand.CreateConstantUnsignedInt(decoder.TypeSystem, size);
+			ctx.Result = decoder.Compiler.CreateVirtualRegister(decoder.TypeSystem.BuiltIn.I4);
 		}
 
 		/// <summary>

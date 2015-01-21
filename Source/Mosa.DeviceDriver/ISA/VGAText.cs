@@ -9,12 +9,12 @@
 
 using Mosa.DeviceSystem;
 
-namespace Mosa.DeviceDrivers.ISA
+namespace Mosa.DeviceDriver.ISA
 {
 	/// <summary>
 	/// VGA Text Device Driver
 	/// </summary>
-	[ISADeviceDriver(AutoLoad = true, BasePort = 0x03B0, PortRange = 0x1F, BaseAddress = 0xB0000, AddressRange = 0x10000, Platforms = PlatformArchitecture.X86AndX64)]
+	[ISADeviceDriver(AutoLoad = false, BasePort = 0x03B0, PortRange = 0x1F, BaseAddress = 0xB0000, AddressRange = 0x10000, Platforms = PlatformArchitecture.X86AndX64)]
 	public class VGAText : HardwareDevice, IDevice, ITextDevice
 	{
 		#region Definitions

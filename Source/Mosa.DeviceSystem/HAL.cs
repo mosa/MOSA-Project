@@ -100,6 +100,17 @@ namespace Mosa.DeviceSystem
 		}
 
 		/// <summary>
+		/// Allocates the memory.
+		/// </summary>
+		/// <param name="size">The size.</param>
+		/// <param name="alignment">The alignment.</param>
+		/// <returns></returns>
+		public static IMemory AllocateMemory(uint size, uint alignment)
+		{
+			return hardwareAbstraction.AllocateMemory(size, alignment);
+		}
+
+		/// <summary>
 		/// Gets the physical address.
 		/// </summary>
 		/// <param name="memory">The memory.</param>
@@ -110,20 +121,9 @@ namespace Mosa.DeviceSystem
 		}
 
 		/// <summary>
-		/// Allocates the memory.
-		/// </summary>
-		/// <param name="size">The size.</param>
-		/// <param name="alignment">The alignment.</param>
-		/// <returns></returns>
-		public static IMemory AllocateMemory(uint size, uint alignment)
-		{
-			return HAL.AllocateMemory(size, alignment);
-		}
-
-		/// <summary>
 		/// Debugs the write.
 		/// </summary>
-		/// <param name="msg">The message.</param>
+		/// <param name="message">The message.</param>
 		public static void DebugWrite(string message)
 		{
 			hardwareAbstraction.DebugWrite(message);
@@ -132,7 +132,7 @@ namespace Mosa.DeviceSystem
 		/// <summary>
 		/// Debugs the write line.
 		/// </summary>
-		/// <param name="msg">The message.</param>
+		/// <param name="message">The message.</param>
 		public static void DebugWriteLine(string message)
 		{
 			hardwareAbstraction.DebugWriteLine(message);

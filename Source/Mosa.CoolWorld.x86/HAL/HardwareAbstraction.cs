@@ -36,6 +36,20 @@ namespace Mosa.CoolWorld.x86.HAL
 		/// <returns></returns>
 		IMemory IHardwareAbstraction.RequestPhysicalMemory(uint address, uint size)
 		{
+			// Map physical memory space to virtual memory space
+
+			Boot.Console.WriteLine("");
+			Boot.Console.WriteLine(":" + address.ToString("X"));
+			Boot.Console.WriteLine(":" + size.ToString("X"));
+
+			//address = address & 0xFFFFF000;	// force alignment
+			uint end = address + size;
+			for (uint at = address; at < end; address = address + 4096)
+			{
+				Boot.Console.WriteLine(at.ToString("X"));
+				PageTable.MapVirtualAddressToPhysical(address, address);
+			}
+			Boot.Console.WriteLine("Y");
 			return new Memory(address, size);
 		}
 

@@ -31,6 +31,12 @@ namespace Mosa.Internal
 		[MethodImplAttribute(MethodImplOptions.InternalCall)]
 		public static extern void* GetObjectAddress(object obj);
 
+		[MethodImplAttribute(MethodImplOptions.InternalCall)]
+		public static extern void* GetValueTypeAddress<T>(T obj) where T : struct;
+
+		[MethodImplAttribute(MethodImplOptions.InternalCall)]
+		public static extern object GetObjectFromAddress(void* address);
+
 		#endregion Intrinsic
 	}
 }

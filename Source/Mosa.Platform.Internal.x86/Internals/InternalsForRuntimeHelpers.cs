@@ -1,5 +1,5 @@
 ﻿/*
- * (c) 2014 MOSA - The Managed Operating System Alliance
+ * (c) 2015 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
  *
@@ -8,6 +8,8 @@
  */
 
 using System;
+using System.Collections.Generic;
+using System.Reflection;
 
 namespace Mosa.Platform.Internal.x86
 {
@@ -46,6 +48,28 @@ namespace Mosa.Platform.Internal.x86
 		public static void* UnsafeCast(void* o)
 		{
 			return o;
+		}
+
+		public static IEnumerable<Assembly> GetAssemblies()
+		{
+			LinkedList<Assembly> assemblies = new LinkedList<Assembly>();
+			foreach (var assembly in Runtime.Assemblies)
+				assemblies.AddLast(assembly);
+			return assemblies;
+		}
+
+		public static object CreateInstance(Type type, params object[] args)
+		{
+			// Cheat
+			var handle = type.TypeHandle;
+			var typeStruct = (MetadataTypeStruct*)((uint**)&handle)[0];
+
+			if (typeStruct->DefaultConstructor == null)
+				throw new ArgumentException("Type has no parameterless constructor.");
+
+			var thisObject = Runtime.AllocateObject(type.TypeHandle, typeStruct->Size);
+
+			return Native.CreateInstanceSimple(typeStruct->DefaultConstructor->Method, thisObject);
 		}
 	}
 }

@@ -5,6 +5,9 @@
  *
  */
 
+using System.Collections.Generic;
+using System.Reflection;
+
 namespace System.Runtime.CompilerServices
 {
 	public static class RuntimeHelpers
@@ -20,5 +23,11 @@ namespace System.Runtime.CompilerServices
 
 		[MethodImpl(MethodImplOptions.InternalCall)]
 		internal static extern T UnsafeCast<T>(Object o) where T : class;
+
+		[MethodImpl(MethodImplOptions.InternalCall)]
+		internal static extern IEnumerable<Assembly> GetAssemblies();
+
+		[MethodImpl(MethodImplOptions.InternalCall)]
+		internal static extern object CreateInstance(Type type, params object[] args);
 	}
 }

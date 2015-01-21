@@ -14,7 +14,7 @@
 
 using Mosa.DeviceSystem;
 
-namespace Mosa.DeviceDrivers.PCI.NetworkCard
+namespace Mosa.DeviceDriver.PCI.NetworkCard
 {
 	/// <summary>
 	/// AMDPCNet Network Chip

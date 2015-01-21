@@ -12,7 +12,7 @@ namespace Mosa.DeviceSystem
 	/// <summary>
 	/// Implementation of FrameBuffer with 16 Bits Per Pixel
 	/// </summary>
-	public class FrameBuffer16bpp : FrameBuffer, IFrameBuffer
+	public sealed class FrameBuffer16bpp : FrameBuffer, IFrameBuffer
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="FrameBuffer16bpp"/> class.
@@ -21,14 +21,14 @@ namespace Mosa.DeviceSystem
 		/// <param name="width">The width.</param>
 		/// <param name="height">The height.</param>
 		/// <param name="offset">The offset.</param>
-		/// <param name="bytesPerLine">The bytes per line.</param>
-		public FrameBuffer16bpp(IMemory memory, uint width, uint height, uint offset, uint bytesPerLine)
+		/// <param name="depth">The depth.</param>
+		public FrameBuffer16bpp(IMemory memory, uint width, uint height, uint offset, uint depth)
 		{
 			this.memory = memory;
 			this.width = width;
 			this.height = height;
 			this.offset = offset;
-			this.bytesPerLine = bytesPerLine;
+			this.depth = depth;
 		}
 
 		/// <summary>
@@ -39,7 +39,7 @@ namespace Mosa.DeviceSystem
 		/// <returns></returns>
 		protected override uint GetOffset(uint x, uint y)
 		{
-			return (uint)(offset + (y * bytesPerLine) + (x << 1));
+			return (uint)(offset + (y * depth) + (x << 1));
 		}
 
 		/// <summary>

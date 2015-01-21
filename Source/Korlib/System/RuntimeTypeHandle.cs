@@ -8,6 +8,8 @@
  *  Stefan Andres Charsley (charsleysa) <charsleysa@gmail.com>
  */
 
+using System;
+
 namespace System
 {
 	/// <summary>
@@ -40,7 +42,7 @@ namespace System
 
 		public override bool Equals(object obj)
 		{
-			if (!(obj is System.RuntimeTypeHandle))
+			if (!(obj is RuntimeTypeHandle))
 				return false;
 
 			return ((RuntimeTypeHandle)obj).m_ptr == m_ptr;

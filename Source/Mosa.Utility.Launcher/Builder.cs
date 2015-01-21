@@ -283,7 +283,6 @@ namespace Mosa.Utility.Launcher
 		private void LaunchQemu(bool exit)
 		{
 			string arg =
-
 				" -L " + Quote(AppLocations.QEMUBIOSDirectory);
 
 			if (Options.ImageFormat == ImageFormat.ISO)
@@ -296,6 +295,8 @@ namespace Mosa.Utility.Launcher
 				arg = arg +
 					" -hda " + Quote(imageFile);
 			}
+
+			//arg = arg + "-vga vmware";
 
 			var output = LaunchApplication(AppLocations.QEMU, arg, !exit);
 

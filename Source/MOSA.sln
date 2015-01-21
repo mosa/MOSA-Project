@@ -18,7 +18,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Compiler.Framework", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.ClassLib", "Mosa.ClassLib\Mosa.ClassLib.csproj", "{27A3C89C-1967-45FF-A77E-94F44995C42C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.DeviceDrivers", "Mosa.DeviceDrivers\Mosa.DeviceDrivers.csproj", "{4DBD4C50-BEC5-48D9-B471-9FB0A7F69999}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.DeviceDriver", "Mosa.DeviceDriver\Mosa.DeviceDriver.csproj", "{4DBD4C50-BEC5-48D9-B471-9FB0A7F69999}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.FileSystem", "Mosa.FileSystem\Mosa.FileSystem.csproj", "{D89972FD-A930-4D0C-B393-1895E78FAFAB}"
 EndProject

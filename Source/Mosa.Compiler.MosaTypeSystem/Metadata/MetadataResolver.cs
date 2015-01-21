@@ -55,6 +55,9 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 						if (typeDef.DeclaringType != null)
 							mosaType.DeclaringType = metadata.Loader.GetType(typeDef.DeclaringType.ToTypeSig());
 
+						if (typeDef.IsEnum)
+							mosaType.ElementType = metadata.Loader.GetType(typeDef.GetEnumUnderlyingType());
+
 						foreach (var iface in typeDef.Interfaces)
 							mosaType.Interfaces.Add(metadata.Loader.GetType(iface.Interface.ToTypeSig()));
 
