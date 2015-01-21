@@ -35,7 +35,7 @@ namespace System
 
 		public override bool Equals(object obj)
 		{
-			if (!(obj is System.RuntimeMethodHandle))
+			if (!(obj is RuntimeMethodHandle))
 				return false;
 
 			return ((RuntimeMethodHandle)obj).m_ptr == m_ptr;

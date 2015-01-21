@@ -7,6 +7,8 @@
  *  Stefan Andres Charsley (charsleysa) <charsleysa@gmail.com>
  */
 
+using System;
+
 namespace System.IO
 {
 	public class BinaryReader : IDisposable
@@ -19,11 +21,11 @@ namespace System.IO
 		{
 			// Check if the stream is null
 			if (input == null)
-				throw new System.ArgumentException("The stream is null", "input");
+				throw new ArgumentException("The stream is null", "input");
 
 			// Check if the stream can be read
 			if (input.CanRead == false)
-				throw new System.ArgumentException("The stream does not support reading", "input");
+				throw new ArgumentException("The stream does not support reading", "input");
 
 			// Set the base stream
 			this.BaseStream = input;

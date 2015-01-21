@@ -7,10 +7,12 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using System;
+
 namespace System.Security
 {
 	[AttributeUsage(AttributeTargets.Module, AllowMultiple = true, Inherited = false)]
-	public sealed class UnverifiableCodeAttribute : System.Attribute
+	public sealed class UnverifiableCodeAttribute : Attribute
 	{
 	}
 }
