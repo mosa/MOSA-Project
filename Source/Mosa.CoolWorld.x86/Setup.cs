@@ -10,8 +10,6 @@
 using Mosa.DeviceDriver.ISA;
 using Mosa.DeviceSystem;
 using Mosa.DeviceSystem.PCI;
-using Mosa.DeviceDriver.PCI.VideoCard;
-using System.Reflection;
 using System.Collections.Generic;
 
 namespace Mosa.CoolWorld.x86

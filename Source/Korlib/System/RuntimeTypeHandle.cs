@@ -8,8 +8,6 @@
  *  Stefan Andres Charsley (charsleysa) <charsleysa@gmail.com>
  */
 
-using System;
-
 namespace System
 {
 	/// <summary>

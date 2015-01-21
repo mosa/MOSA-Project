@@ -10,7 +10,6 @@
 using Mosa.DeviceSystem.PCI;
 using System.Collections.Generic;
 using System.Reflection;
-using System;
 
 namespace Mosa.DeviceSystem
 {
@@ -172,30 +171,39 @@ namespace Mosa.DeviceSystem
 						case "Platforms":
 							attribute.Platforms = (PlatformArchitecture)arg.TypedValue.Value;
 							break;
+
 						case "BasePort":
 							attribute.BasePort = (ushort)arg.TypedValue.Value;
 							break;
+
 						case "PortRange":
 							attribute.PortRange = (ushort)arg.TypedValue.Value;
 							break;
+
 						case "AltBasePort":
 							attribute.AltBasePort = (ushort)arg.TypedValue.Value;
 							break;
+
 						case "AltPortRange":
 							attribute.AltPortRange = (ushort)arg.TypedValue.Value;
 							break;
+
 						case "AutoLoad":
 							attribute.AutoLoad = (bool)arg.TypedValue.Value;
 							break;
+
 						case "ForceOption":
 							attribute.ForceOption = (string)arg.TypedValue.Value;
 							break;
+
 						case "IRQ":
 							attribute.IRQ = (byte)arg.TypedValue.Value;
 							break;
+
 						case "BaseAddress":
 							attribute.BaseAddress = (uint)arg.TypedValue.Value;
 							break;
+
 						case "AddressRange":
 							attribute.AddressRange = (uint)arg.TypedValue.Value;
 							break;
@@ -211,27 +219,35 @@ namespace Mosa.DeviceSystem
 						case "Platforms":
 							attribute.Platforms = (PlatformArchitecture)arg.TypedValue.Value;
 							break;
+
 						case "DeviceID":
 							attribute.DeviceID = (ushort)arg.TypedValue.Value;
 							break;
+
 						case "VendorID":
 							attribute.VendorID = (ushort)arg.TypedValue.Value;
 							break;
+
 						case "SubVendorID":
 							attribute.SubVendorID = (ushort)arg.TypedValue.Value;
 							break;
+
 						case "SubDeviceID":
 							attribute.SubDeviceID = (ushort)arg.TypedValue.Value;
 							break;
+
 						case "RevisionID":
 							attribute.RevisionID = (byte)arg.TypedValue.Value;
 							break;
+
 						case "ProgIF":
 							attribute.ProgIF = (byte)arg.TypedValue.Value;
 							break;
+
 						case "ClassCode":
 							attribute.ClassCode = (ushort)arg.TypedValue.Value;
 							break;
+
 						case "SubClassCode":
 							attribute.SubClassCode = (byte)arg.TypedValue.Value;
 							break;
@@ -249,12 +265,15 @@ namespace Mosa.DeviceSystem
 					case "MemorySize":
 						attribute.MemorySize = (uint)arg.TypedValue.Value;
 						break;
+
 					case "MemoryAlignment":
 						attribute.MemoryAlignment = (uint)arg.TypedValue.Value;
 						break;
+
 					case "RestrictUnder16M":
 						attribute.RestrictUnder16M = (bool)arg.TypedValue.Value;
 						break;
+
 					case "RestrictUnder4G":
 						attribute.RestrictUnder4G = (bool)arg.TypedValue.Value;
 						break;
