@@ -74,6 +74,8 @@ namespace Mosa.Utility.Launcher
 			Counters.Add(data);
 		}
 
+        public bool HasCompileError { get; private set; }
+
 		public void Compile()
 		{
 			CompileStartTime = DateTime.Now;
@@ -102,6 +104,19 @@ namespace Mosa.Utility.Launcher
 			}
 
 			Compiler.CompilerTrace.TraceListener = traceListener;
+
+            if (string.IsNullOrEmpty(Options.SourceFile))
+            {
+                AddOutput("Please select a source file");
+                HasCompileError = true;
+                return;
+            }
+            else if (!File.Exists(Options.SourceFile))
+            {
+                AddOutput(string.Format("File {0} does not exists", Options.SourceFile));
+                HasCompileError = true;
+                return;
+            }
 
 			var inputFiles = new List<FileInfo>();
 			inputFiles.Add(new FileInfo(Options.SourceFile));
