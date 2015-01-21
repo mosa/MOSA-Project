@@ -7,9 +7,10 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-namespace System.System.Runtime.InteropServices
+namespace System.Runtime.InteropServices
 {
 	[AttributeUsage(AttributeTargets.Method, Inherited = false)]
+	[ComVisible(true)]
 	public sealed class PreserveSigAttribute : Attribute
 	{
 		public PreserveSigAttribute()
