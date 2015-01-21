@@ -287,7 +287,8 @@ namespace Mosa.Tool.Launcher
 					}
 					finally
 					{
-						OnCompileCompleted();
+						if (!Builder.HasCompileError)
+							OnCompileCompleted();
 					}
 				}
 			));
