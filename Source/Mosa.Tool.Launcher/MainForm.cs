@@ -283,12 +283,12 @@ namespace Mosa.Tool.Launcher
 				{
 					try
 					{
-                        Builder.Compile();
+						Builder.Compile();
 					}
 					finally
 					{
-                        if (!Builder.HasCompileError) 
-                            OnCompileCompleted();
+						if (!Builder.HasCompileError)
+							OnCompileCompleted();
 					}
 				}
 			));
@@ -298,7 +298,7 @@ namespace Mosa.Tool.Launcher
 		{
 			MethodInvoker method = delegate()
 			{
-                    CompileCompleted();
+				CompileCompleted();
 			};
 
 			Invoke(method);
