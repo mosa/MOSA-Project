@@ -31,8 +31,8 @@ namespace System
 		private Type asType;
 		private LinkedList<CustomAttributeData> customAttributesData = new LinkedList<CustomAttributeData>();
 
-		internal readonly Type ValueType = typeof(System.ValueType);
-		internal readonly Type EnumType = typeof(System.Enum);
+		internal readonly Type ValueType = typeof(ValueType);
+		internal readonly Type EnumType = typeof(Enum);
 
 		public override string AssemblyQualifiedName
 		{

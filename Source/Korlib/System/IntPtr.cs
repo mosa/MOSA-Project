@@ -7,6 +7,8 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using System;
+
 namespace System
 {
 	/// <summary>
@@ -46,7 +48,7 @@ namespace System
 
 		public override bool Equals(object obj)
 		{
-			if (!(obj is System.IntPtr))
+			if (!(obj is IntPtr))
 				return false;
 
 			return ((IntPtr)obj)._value == _value;
