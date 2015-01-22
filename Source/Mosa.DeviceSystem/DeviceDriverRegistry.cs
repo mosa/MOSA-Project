@@ -166,48 +166,28 @@ namespace Mosa.DeviceSystem
 			{
 				var attribute = new ISADeviceDriverAttribute();
 				foreach (var arg in attributeData.NamedArguments)
-					switch (arg.MemberName)
-					{
-						case "Platforms":
-							attribute.Platforms = (PlatformArchitecture)arg.TypedValue.Value;
-							break;
-
-						case "BasePort":
-							attribute.BasePort = (ushort)arg.TypedValue.Value;
-							break;
-
-						case "PortRange":
-							attribute.PortRange = (ushort)arg.TypedValue.Value;
-							break;
-
-						case "AltBasePort":
-							attribute.AltBasePort = (ushort)arg.TypedValue.Value;
-							break;
-
-						case "AltPortRange":
-							attribute.AltPortRange = (ushort)arg.TypedValue.Value;
-							break;
-
-						case "AutoLoad":
-							attribute.AutoLoad = (bool)arg.TypedValue.Value;
-							break;
-
-						case "ForceOption":
-							attribute.ForceOption = (string)arg.TypedValue.Value;
-							break;
-
-						case "IRQ":
-							attribute.IRQ = (byte)arg.TypedValue.Value;
-							break;
-
-						case "BaseAddress":
-							attribute.BaseAddress = (uint)arg.TypedValue.Value;
-							break;
-
-						case "AddressRange":
-							attribute.AddressRange = (uint)arg.TypedValue.Value;
-							break;
-					}
+				{
+					if (arg.MemberName == "Platforms")
+						attribute.Platforms = (PlatformArchitecture)arg.TypedValue.Value;
+					else if (arg.MemberName == "BasePort")
+						attribute.BasePort = (ushort)arg.TypedValue.Value;
+					else if (arg.MemberName == "PortRange")
+						attribute.PortRange = (ushort)arg.TypedValue.Value;
+					else if (arg.MemberName == "AltBasePort")
+						attribute.AltBasePort = (ushort)arg.TypedValue.Value;
+					else if (arg.MemberName == "AltPortRange")
+						attribute.AltPortRange = (ushort)arg.TypedValue.Value;
+					else if (arg.MemberName == "AutoLoad")
+						attribute.AutoLoad = (bool)arg.TypedValue.Value;
+					else if (arg.MemberName == "ForceOption")
+						attribute.ForceOption = (string)arg.TypedValue.Value;
+					else if (arg.MemberName == "IRQ")
+						attribute.IRQ = (byte)arg.TypedValue.Value;
+					else if (arg.MemberName == "BaseAddress")
+						attribute.BaseAddress = (uint)arg.TypedValue.Value;
+					else if (arg.MemberName == "AddressRange")
+						attribute.AddressRange = (uint)arg.TypedValue.Value;
+				}
 				return attribute;
 			}
 			else

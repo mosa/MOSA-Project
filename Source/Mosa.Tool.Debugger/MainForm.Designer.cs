@@ -190,7 +190,7 @@
 			this.Controls.Add(this.toolStrip1);
 			this.Controls.Add(this.dockPanel);
 			this.Name = "MainForm";
-			this.Text = "Mosa Debugger";
+			this.Text = "Mosa Debugger v1.4";
 			this.Load += new System.EventHandler(this.MainForm_Load);
 			this.toolStrip1.ResumeLayout(false);
 			this.toolStrip1.PerformLayout();
