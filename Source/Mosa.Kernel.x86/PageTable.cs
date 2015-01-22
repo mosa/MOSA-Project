@@ -60,7 +60,7 @@ namespace Mosa.Kernel.x86
 		/// <summary>
 		/// Gets the physical memory.
 		/// </summary>
-		/// <param name="address">The address.</param>
+		/// <param name="virtualAddress">The virtual address.</param>
 		/// <returns></returns>
 		public static uint GetPhysicalAddressFromVirtual(uint virtualAddress)
 		{

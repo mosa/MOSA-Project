@@ -5,11 +5,6 @@ WeiFen Luo released DockPanel Suite (WeifenLuo.WinFormsUI.Docking.dll)
 - The MIT License
 - Used in the MOSA debugger for docking panel layout.
 	
-Gallio & Mbunit - Automation Platform for .NET (Gallio.dll)
-- http://www.gallio.org
-- Apache License, Version 2.0
-- Used in the MOSA Test Suite for testing the compiler
-
 xUnit.Net - Unit testing tool for the .NET Framework
 - http://xunit.codeplex.com
 - Apache License
