@@ -18,7 +18,7 @@ namespace System
 	{
 		private MetadataTypeStruct* typeStruct;
 		private Assembly assembly;
-		private RuntimeTypeHandle handle;
+		//private RuntimeTypeHandle handle;
 		private string assemblyQualifiedName;
 		private string name;
 		private string @namespace;
@@ -133,7 +133,7 @@ namespace System
 			var handle = type.TypeHandle;
 			this.asType = type;
 			this.assembly = assembly;
-			this.handle = handle;
+			//this.handle = handle;
 			this.typeStruct = (MetadataTypeStruct*)((uint**)&handle)[0];
 
 			this.assemblyQualifiedName = x86Runtime.InitializeMetadataString(this.typeStruct->Name);	// TODO
