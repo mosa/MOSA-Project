@@ -185,7 +185,7 @@
 			this.Controls.Add(this.toolStrip1);
 			this.Controls.Add(this.dockPanel);
 			this.Name = "MainForm";
-			this.Text = "Mosa Tiny Simulator";
+			this.Text = "Mosa Tiny Simulator v1.4";
 			this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
 			this.Load += new System.EventHandler(this.MainForm_Load);

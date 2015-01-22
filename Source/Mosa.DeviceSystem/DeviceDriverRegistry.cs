@@ -166,92 +166,54 @@ namespace Mosa.DeviceSystem
 			{
 				var attribute = new ISADeviceDriverAttribute();
 				foreach (var arg in attributeData.NamedArguments)
-					switch (arg.MemberName)
-					{
-						case "Platforms":
-							attribute.Platforms = (PlatformArchitecture)arg.TypedValue.Value;
-							break;
-
-						case "BasePort":
-							attribute.BasePort = (ushort)arg.TypedValue.Value;
-							break;
-
-						case "PortRange":
-							attribute.PortRange = (ushort)arg.TypedValue.Value;
-							break;
-
-						case "AltBasePort":
-							attribute.AltBasePort = (ushort)arg.TypedValue.Value;
-							break;
-
-						case "AltPortRange":
-							attribute.AltPortRange = (ushort)arg.TypedValue.Value;
-							break;
-
-						case "AutoLoad":
-							attribute.AutoLoad = (bool)arg.TypedValue.Value;
-							break;
-
-						case "ForceOption":
-							attribute.ForceOption = (string)arg.TypedValue.Value;
-							break;
-
-						case "IRQ":
-							attribute.IRQ = (byte)arg.TypedValue.Value;
-							break;
-
-						case "BaseAddress":
-							attribute.BaseAddress = (uint)arg.TypedValue.Value;
-							break;
-
-						case "AddressRange":
-							attribute.AddressRange = (uint)arg.TypedValue.Value;
-							break;
-					}
+				{
+					if (arg.MemberName == "Platforms")
+						attribute.Platforms = (PlatformArchitecture)arg.TypedValue.Value;
+					else if (arg.MemberName == "BasePort")
+						attribute.BasePort = (ushort)arg.TypedValue.Value;
+					else if (arg.MemberName == "PortRange")
+						attribute.PortRange = (ushort)arg.TypedValue.Value;
+					else if (arg.MemberName == "AltBasePort")
+						attribute.AltBasePort = (ushort)arg.TypedValue.Value;
+					else if (arg.MemberName == "AltPortRange")
+						attribute.AltPortRange = (ushort)arg.TypedValue.Value;
+					else if (arg.MemberName == "AutoLoad")
+						attribute.AutoLoad = (bool)arg.TypedValue.Value;
+					else if (arg.MemberName == "ForceOption")
+						attribute.ForceOption = (string)arg.TypedValue.Value;
+					else if (arg.MemberName == "IRQ")
+						attribute.IRQ = (byte)arg.TypedValue.Value;
+					else if (arg.MemberName == "BaseAddress")
+						attribute.BaseAddress = (uint)arg.TypedValue.Value;
+					else if (arg.MemberName == "AddressRange")
+						attribute.AddressRange = (uint)arg.TypedValue.Value;
+				}
 				return attribute;
 			}
 			else
 			{
 				var attribute = new PCIDeviceDriverAttribute();
 				foreach (var arg in attributeData.NamedArguments)
-					switch (arg.MemberName)
-					{
-						case "Platforms":
-							attribute.Platforms = (PlatformArchitecture)arg.TypedValue.Value;
-							break;
-
-						case "DeviceID":
-							attribute.DeviceID = (ushort)arg.TypedValue.Value;
-							break;
-
-						case "VendorID":
-							attribute.VendorID = (ushort)arg.TypedValue.Value;
-							break;
-
-						case "SubVendorID":
-							attribute.SubVendorID = (ushort)arg.TypedValue.Value;
-							break;
-
-						case "SubDeviceID":
-							attribute.SubDeviceID = (ushort)arg.TypedValue.Value;
-							break;
-
-						case "RevisionID":
-							attribute.RevisionID = (byte)arg.TypedValue.Value;
-							break;
-
-						case "ProgIF":
-							attribute.ProgIF = (byte)arg.TypedValue.Value;
-							break;
-
-						case "ClassCode":
-							attribute.ClassCode = (ushort)arg.TypedValue.Value;
-							break;
-
-						case "SubClassCode":
-							attribute.SubClassCode = (byte)arg.TypedValue.Value;
-							break;
-					}
+				{
+					if (arg.MemberName == "Platforms")
+						attribute.Platforms = (PlatformArchitecture)arg.TypedValue.Value;
+					else if (arg.MemberName == "DeviceID")
+						attribute.DeviceID = (ushort)arg.TypedValue.Value;
+					else if (arg.MemberName == "VendorID")
+						attribute.VendorID = (ushort)arg.TypedValue.Value;
+					else if (arg.MemberName == "SubVendorID")
+						attribute.SubVendorID = (ushort)arg.TypedValue.Value;
+					else if (arg.MemberName == "SubDeviceID")
+						attribute.SubDeviceID = (ushort)arg.TypedValue.Value;
+					else if (arg.MemberName == "RevisionID")
+						attribute.RevisionID = (byte)arg.TypedValue.Value;
+					else if (arg.MemberName == "ProgIF")
+						attribute.ProgIF = (byte)arg.TypedValue.Value;
+					else if (arg.MemberName == "ClassCode")
+						attribute.ClassCode = (ushort)arg.TypedValue.Value;
+					else if (arg.MemberName == "SubClassCode")
+						attribute.SubClassCode = (byte)arg.TypedValue.Value;
+				}
 				return attribute;
 			}
 		}
@@ -260,24 +222,16 @@ namespace Mosa.DeviceSystem
 		{
 			var attribute = new DeviceDriverPhysicalMemoryAttribute();
 			foreach (var arg in attributeData.NamedArguments)
-				switch (arg.MemberName)
-				{
-					case "MemorySize":
-						attribute.MemorySize = (uint)arg.TypedValue.Value;
-						break;
-
-					case "MemoryAlignment":
-						attribute.MemoryAlignment = (uint)arg.TypedValue.Value;
-						break;
-
-					case "RestrictUnder16M":
-						attribute.RestrictUnder16M = (bool)arg.TypedValue.Value;
-						break;
-
-					case "RestrictUnder4G":
-						attribute.RestrictUnder4G = (bool)arg.TypedValue.Value;
-						break;
-				}
+			{
+				if (arg.MemberName == "MemorySize")
+					attribute.MemorySize = (uint)arg.TypedValue.Value;
+				else if (arg.MemberName == "MemoryAlignment")
+					attribute.MemoryAlignment = (uint)arg.TypedValue.Value;
+				else if (arg.MemberName == "RestrictUnder16M")
+					attribute.RestrictUnder16M = (bool)arg.TypedValue.Value;
+				else if (arg.MemberName == "RestrictUnder4G")
+					attribute.RestrictUnder4G = (bool)arg.TypedValue.Value;
+			}
 			return attribute;
 		}
 	}

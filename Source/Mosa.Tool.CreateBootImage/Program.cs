@@ -69,7 +69,7 @@ namespace Mosa.Tool.CreateBootImage
 		private static int Main(string[] args)
 		{
 			Console.WriteLine();
-			Console.WriteLine("MakeImageBoot v1.1 [www.mosa-project.org]");
+			Console.WriteLine("MakeImageBoot v1.4 [www.mosa-project.org]");
 			Console.WriteLine("Copyright 2012. New BSD License.");
 			Console.WriteLine("Written by Philipp Garcia (phil@thinkedge.com)");
 			Console.WriteLine();

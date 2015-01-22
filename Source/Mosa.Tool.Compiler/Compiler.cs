@@ -50,7 +50,7 @@ namespace Mosa.Tool.Compiler
 
 		private readonly int majorVersion = 1;
 		private readonly int minorVersion = 4;
-		private readonly string codeName = @"Neptune";
+		private readonly string codeName = "Neptune";
 
 		/// <summary>
 		/// A string holding a simple usage description.

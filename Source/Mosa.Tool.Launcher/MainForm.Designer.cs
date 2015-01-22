@@ -870,7 +870,7 @@
 			this.Controls.Add(this.tabControl1);
 			this.Name = "MainForm";
 			this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
-			this.Text = "MOSA Launcher";
+			this.Text = "MOSA Launcher v1.4";
 			this.Load += new System.EventHandler(this.MainForm_Load);
 			this.Shown += new System.EventHandler(this.MainForm_Shown);
 			this.tabControl1.ResumeLayout(false);
