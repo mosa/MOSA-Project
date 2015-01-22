@@ -49,7 +49,7 @@ namespace Mosa.Tool.Compiler
 		private OptionSet optionSet;
 
 		private readonly int majorVersion = 1;
-		private readonly int minorVersion = 3;
+		private readonly int minorVersion = 4;
 		private readonly string codeName = @"Neptune";
 
 		/// <summary>
