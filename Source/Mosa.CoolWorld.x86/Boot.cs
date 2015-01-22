@@ -35,7 +35,7 @@ namespace Mosa.CoolWorld.x86
 			Console.Color = Colors.White;
 			Console.BackgroundColor = Colors.Green;
 
-			Console.Write(@"                   MOSA OS Version 1.3 - Compiler Version 1.3");
+			Console.Write(@"                   MOSA OS Version 1.4 - Compiler Version 1.4");
 			FillLine();
 			Console.Color = Colors.White;
 			Console.BackgroundColor = Colors.Black;
@@ -69,7 +69,7 @@ namespace Mosa.CoolWorld.x86
 			Console.Goto(24, 0);
 			Console.Color = Colors.White;
 			Console.BackgroundColor = Colors.Green;
-			Console.Write("          Copyright (C) 2008-2014 [Managed Operating System Alliance]");
+			Console.Write("          Copyright (C) 2008-2015 [Managed Operating System Alliance]");
 			FillLine();
 
 			Process();

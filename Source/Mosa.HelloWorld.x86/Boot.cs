@@ -39,11 +39,11 @@ namespace Mosa.HelloWorld.x86
 			Console.Color = Colors.Yellow;
 			Console.BackgroundColor = Colors.Black;
 
-			Console.Write("MOSA OS Version 1.3 '");
+			Console.Write("MOSA OS Version 1.4 '");
 			Console.Color = Colors.Red;
 			Console.Write("Neptune");
 			Console.Color = Colors.Yellow;
-			Console.Write("'                                Copyright 2008-2014");
+			Console.Write("'                                Copyright 2008-2015");
 
 			Console.Color = 0x0F;
 			Console.Write(new String((char)205, 60));
