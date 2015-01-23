@@ -78,6 +78,7 @@ namespace Mosa.Utility.Launcher
 
 		public void Compile()
 		{
+			HasCompileError = false;
 			CompileStartTime = DateTime.Now;
 
 			compiledFile = Path.Combine(Options.DestinationDirectory, Path.GetFileNameWithoutExtension(Options.SourceFile) + ".bin");
