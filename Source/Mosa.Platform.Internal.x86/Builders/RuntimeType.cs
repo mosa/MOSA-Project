@@ -23,8 +23,10 @@ namespace System
 		private RuntimeTypeHandle handle;
 		private TypeCode typeCode;
 		internal TypeAttributes attributes; // FIXME: this should be private, only temporarily internal
-		private Type declaringType;
-		private Type elementType;
+		private RuntimeTypeHandle declaringTypeHandle;
+		private RuntimeTypeHandle elementTypeHandle;
+		private Type declaringType = null;
+		private Type elementType = null;
 
 		public override string AssemblyQualifiedName
 		{
@@ -33,7 +35,14 @@ namespace System
 
 		public override Type DeclaringType
 		{
-			get { return this.declaringType; }
+			get
+			{
+				if (this.declaringType == null)
+					// Declaring Type - Lazy load
+					this.declaringType = Type.GetTypeFromHandle(this.declaringTypeHandle);
+
+				return this.declaringType;
+			}
 		}
 
 		public override string FullName
@@ -90,22 +99,21 @@ namespace System
 
 			this.typeCode = (TypeCode)(this.typeStruct->Attributes >> 24);
 			this.attributes = (TypeAttributes)(this.typeStruct->Attributes & 0x00FFFFFF);
-		}
 
-		internal void FindRelativeTypes()
-		{
+			// Declaring Type
 			if (this.typeStruct->DeclaringType != null)
 			{
 				RuntimeTypeHandle declaringHandle = new RuntimeTypeHandle();
 				((uint**)&declaringHandle)[0] = (uint*)this.typeStruct->DeclaringType;
-				this.declaringType = Type.GetTypeFromHandle(declaringHandle);
+				this.declaringTypeHandle = declaringHandle;
 			}
 
+			// Element Type
 			if ((*this.typeStruct).ElementType != null)
 			{
 				RuntimeTypeHandle elementHandle = new RuntimeTypeHandle();
 				((uint**)&elementHandle)[0] = (uint*)this.typeStruct->ElementType;
-				this.elementType = Type.GetTypeFromHandle(elementHandle);
+				this.elementTypeHandle = elementHandle;
 			}
 		}
 
@@ -117,6 +125,9 @@ namespace System
 
 		public override Type GetElementType()
 		{
+			if (this.elementType == null)
+				// Element Type - Lazy load
+				this.elementType = Type.GetTypeFromHandle(this.elementTypeHandle);
 			return this.elementType;
 		}
 
@@ -128,7 +139,7 @@ namespace System
 
 		protected override bool HasElementTypeImpl()
 		{
-			return (this.elementType != null);
+			return (this.elementTypeHandle.Value != IntPtr.Zero);
 		}
 
 		protected override bool IsArrayImpl()

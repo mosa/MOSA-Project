@@ -84,23 +84,25 @@ namespace Mosa.DriverWorld.x86
 		/// </summary>
 		static public void Start()
 		{
+			Mosa.Kernel.x86.Screen.RawWrite(4, 1, 'A', 0x0A);
 			// Find all drivers
 			deviceDriverRegistry.RegisterBuiltInDeviceDrivers();
-
+			Mosa.Kernel.x86.Screen.RawWrite(4, 2, 'A', 0x0A);
 			// Start drivers for ISA devices
 			StartISADevices();
-
+			Mosa.Kernel.x86.Screen.RawWrite(4, 3, 'A', 0x0A);
 			// Start drivers for PCI devices
 			StartPCIDevices();
-
+			Mosa.Kernel.x86.Screen.RawWrite(4, 4, 'A', 0x0A);
 			// Get CMOS, StandardKeyboard, and PIC driver instances
 			CMOS = (CMOS)deviceManager.GetDevices(new FindDevice.WithName("CMOS")).First.Value;
 			PIC = (PIC)deviceManager.GetDevices(new FindDevice.WithName("PIC_0x20")).First.Value;
 			Keyboard = (StandardKeyboard)deviceManager.GetDevices(new FindDevice.WithName("StandardKeyboard")).First.Value;
-
+			Mosa.Kernel.x86.Screen.RawWrite(4, 5, 'A', 0x0A);
 			// Enable Interrupts
 			for (byte i = 0; i < byte.MaxValue; i++)
 				Setup.PIC.EnableIRQ(i);
+			Mosa.Kernel.x86.Screen.RawWrite(4, 0, '6', 0x0A);
 		}
 
 		/// <summary>

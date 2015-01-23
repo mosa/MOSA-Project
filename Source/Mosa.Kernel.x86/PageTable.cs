@@ -33,8 +33,8 @@ namespace Mosa.Kernel.x86
 				Native.Set32((uint)(pageDirectory + (index << 2)), (uint)(pageTable + (index * 4096) | 0x04 | 0x02 | 0x01));
 			}
 
-			// Map the first 128MB of memory (32786 4K pages) (why 128MB?)
-			for (int index = 0; index < 1024 * 32; index++)
+			// Map the first 256MB of memory (65536 4K pages) (why 256MB?)
+			for (int index = 0; index < 1024 * 64; index++)
 			{
 				Native.Set32((uint)(pageTable + (index << 2)), (uint)(index * 4096) | 0x04 | 0x02 | 0x01);
 			}

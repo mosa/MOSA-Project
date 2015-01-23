@@ -122,11 +122,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Utility.Launcher", "Mo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.DriverWorld.x86", "Mosa.DriverWorld.x86\Mosa.DriverWorld.x86.csproj", "{78A4131F-BD6A-4CCE-A6A3-48B48012DA8A}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{92741280-B12E-45D9-B1D3-69E8451412D0}"
-	ProjectSection(SolutionItems) = preProject
-		Performance1.psess = Performance1.psess
-	EndProjectSection
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -704,8 +699,5 @@ Global
 		{3BF17C10-A1FB-4517-923E-B609C2FD8282} = {90065B0F-1BFE-40D8-AED5-11096B2535B0}
 		{B69C2F31-5161-47AA-9FD3-2F2F2BCCF659} = {90065B0F-1BFE-40D8-AED5-11096B2535B0}
 		{78A4131F-BD6A-4CCE-A6A3-48B48012DA8A} = {1AB7FA6A-829C-4DCF-BCA6-A27156D8DA26}
-	EndGlobalSection
-	GlobalSection(Performance) = preSolution
-		HasPerformanceSessions = true
 	EndGlobalSection
 EndGlobal

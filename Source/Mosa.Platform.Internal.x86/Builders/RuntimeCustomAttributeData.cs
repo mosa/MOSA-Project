@@ -66,7 +66,7 @@ namespace System
 		public CustomAttributeTypedArgument CreateTypedArgumentStruct(Type type, object value)
 		{
 			// Because C# doesn't like structs which contain object references to be referenced by pointers
-			// we need to box it, work on the boxed copy, then unbox back to normal
+			// we need to use a special MOSA compiler trick to get its address to create a pointer
 			CustomAttributeTypedArgument typedArgument = new CustomAttributeTypedArgument();
 			var ptr = (uint**)Mosa.Internal.Native.GetValueTypeAddress(typedArgument);
 			ptr[0] = (uint*)Mosa.Internal.Native.GetObjectAddress(type);
@@ -78,7 +78,7 @@ namespace System
 		public CustomAttributeNamedArgument CreateNamedArgumentStruct(string name, Type type, object value, bool isField)
 		{
 			// Because C# doesn't like structs which contain object references to be referenced by pointers
-			// we need to box it, work on the boxed copy, then unbox back to normal
+			// we need to use a special MOSA compiler trick to get its address to create a pointer
 			CustomAttributeNamedArgument namedArgument = new CustomAttributeNamedArgument();
 			var ptr = (uint**)Mosa.Internal.Native.GetValueTypeAddress(namedArgument);
 			ptr[0] = (uint*)Mosa.Internal.Native.GetObjectAddress(name);

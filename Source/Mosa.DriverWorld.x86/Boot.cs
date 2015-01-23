@@ -28,6 +28,7 @@ namespace Mosa.DriverWorld.x86
 			IDT.SetInterruptHandler(null);
 			SSE.Setup();
 			Multiboot.Setup();
+			PIC.Setup();
 			GDT.Setup();
 			IDT.Setup();
 			PageFrameAllocator.Setup();
@@ -38,18 +39,21 @@ namespace Mosa.DriverWorld.x86
 			TaskManager.Setup();
 			SmbiosManager.Setup();
 			IDT.SetInterruptHandler(ProcessInterrupt);
+			Screen.RawWrite(3, 0, 'A', 0x0A);
 			Setup.Initialize();
+			Screen.RawWrite(4, 0, 'A', 0x0A);
 			Setup.Start();
+			Screen.RawWrite(5, 0, 'A', 0x0A);
 			var textDevice = (ITextDevice)Setup.DeviceManager.GetDevices(new FindDevice.WithName("VGAText")).First.Value;
 			Console = new TextScreen(textDevice);
-
+			Screen.RawWrite(6, 0, 'A', 0x0A);
 			Console.ClearScreen();
 
 			Console.Write("          Copyright (C) 2008-2015 [Managed Operating System Alliance]");
 			Console.WriteLine();
 			Console.WriteLine("> System ready");
 			Console.WriteLine();
-			
+			Screen.RawWrite(7, 0, 'A', 0x0A);
 			Process();
 		}
 

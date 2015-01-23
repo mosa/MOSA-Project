@@ -49,7 +49,6 @@ namespace Mosa.CoolWorld.x86
 
 		static public StandardKeyboard Keyboard = null;
 		static public CMOS CMOS = null;
-		static public PIC PIC = null;
 
 		/// <summary>
 		/// Initializes the Device Driver System.
@@ -97,12 +96,7 @@ namespace Mosa.CoolWorld.x86
 
 			// Get CMOS, StandardKeyboard, and PIC driver instances
 			CMOS = (CMOS)deviceManager.GetDevices(new FindDevice.WithName("CMOS")).First.Value;
-			PIC = (PIC)deviceManager.GetDevices(new FindDevice.WithName("PIC_0x20")).First.Value;
 			Keyboard = (StandardKeyboard)deviceManager.GetDevices(new FindDevice.WithName("StandardKeyboard")).First.Value;
-
-			// Enable Interrupts
-			for (byte i = 0; i < byte.MaxValue; i++)
-				PIC.EnableIRQ(i);
 		}
 
 		/// <summary>
@@ -224,6 +218,10 @@ namespace Mosa.CoolWorld.x86
 		static public void StartDevice(Mosa.DeviceSystem.DeviceDriver deviceDriver)
 		{
 			var driverAtttribute = deviceDriver.Attribute as ISADeviceDriverAttribute;
+
+			// Don't load the VGAText and PIC drivers
+			if (driverAtttribute.BasePort == 0x03B0 || driverAtttribute.BasePort == 0x20)
+				return;
 
 			if (driverAtttribute.AutoLoad)
 			{

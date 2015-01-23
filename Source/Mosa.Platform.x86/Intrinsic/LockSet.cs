@@ -34,7 +34,6 @@ namespace Mosa.Platform.x86.Intrinsic
 
 			context.SetInstruction(X86.Mov, v1, dest);
 			context.AppendInstruction(X86.Mov, v2, value);
-			context.AppendInstruction(X86.Lock);
 			context.AppendInstruction(X86.Mov, memory, v2);
 		}
 
