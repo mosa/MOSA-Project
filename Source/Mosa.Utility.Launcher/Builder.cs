@@ -26,7 +26,7 @@ namespace Mosa.Utility.Launcher
 {
 	public class Builder
 	{
-		public MosaCompiler Compiler { get; set; }
+		private MosaCompiler Compiler { get; set; }
 
 		public Options Options { get; set; }
 
@@ -46,7 +46,6 @@ namespace Mosa.Utility.Launcher
 
 		public Builder(Options options, AppLocations appLocations, IBuilderEvent builderEvent)
 		{
-			Compiler = new MosaCompiler();
 			Log = new List<string>();
 			Counters = new List<string>();
 			traceListener = new BuilderEventListener(this);
@@ -78,70 +77,80 @@ namespace Mosa.Utility.Launcher
 
 		public void Compile()
 		{
-			CompileStartTime = DateTime.Now;
-
-			compiledFile = Path.Combine(Options.DestinationDirectory, Path.GetFileNameWithoutExtension(Options.SourceFile) + ".bin");
-
-			Compiler.CompilerFactory = delegate { return new AotCompiler(); };
-
-			Compiler.CompilerOptions.EnableSSA = Options.EnableSSA;
-			Compiler.CompilerOptions.EnableOptimizations = Options.EnableIROptimizations;
-			Compiler.CompilerOptions.EnableSparseConditionalConstantPropagation = Options.EnableSparseConditionalConstantPropagation;
-			Compiler.CompilerOptions.OutputFile = compiledFile;
-
-			Compiler.CompilerOptions.Architecture = SelectArchitecture(Options.PlatformType);
-			Compiler.CompilerOptions.LinkerFactory = GetLinkerFactory(Options.LinkerFormat);
-			Compiler.CompilerOptions.BootStageFactory = GetBootStageFactory(Options.BootFormat);
-
-			if (Options.GenerateMapFile)
+			HasCompileError = false;
+			try
 			{
-				Compiler.CompilerOptions.MapFile = Path.Combine(Options.DestinationDirectory, Path.GetFileNameWithoutExtension(Options.SourceFile) + ".map");
-			}
+				Compiler = new MosaCompiler();
+				CompileStartTime = DateTime.Now;
 
-			if (!Directory.Exists(Options.DestinationDirectory))
-			{
-				Directory.CreateDirectory(Options.DestinationDirectory);
-			}
+				compiledFile = Path.Combine(Options.DestinationDirectory, Path.GetFileNameWithoutExtension(Options.SourceFile) + ".bin");
 
-			Compiler.CompilerTrace.TraceListener = traceListener;
+				Compiler.CompilerFactory = delegate { return new AotCompiler(); };
 
-			if (string.IsNullOrEmpty(Options.SourceFile))
-			{
-				AddOutput("Please select a source file");
-				HasCompileError = true;
-				return;
-			}
-			else if (!File.Exists(Options.SourceFile))
-			{
-				AddOutput(string.Format("File {0} does not exists", Options.SourceFile));
-				HasCompileError = true;
-				return;
-			}
+				Compiler.CompilerOptions.EnableSSA = Options.EnableSSA;
+				Compiler.CompilerOptions.EnableOptimizations = Options.EnableIROptimizations;
+				Compiler.CompilerOptions.EnableSparseConditionalConstantPropagation = Options.EnableSparseConditionalConstantPropagation;
+				Compiler.CompilerOptions.OutputFile = compiledFile;
 
-			var inputFiles = new List<FileInfo>();
-			inputFiles.Add(new FileInfo(Options.SourceFile));
+				Compiler.CompilerOptions.Architecture = SelectArchitecture(Options.PlatformType);
+				Compiler.CompilerOptions.LinkerFactory = GetLinkerFactory(Options.LinkerFormat);
+				Compiler.CompilerOptions.BootStageFactory = GetBootStageFactory(Options.BootFormat);
 
-			Compiler.Load(inputFiles);
-
-			Compiler.Execute(Environment.ProcessorCount);
-
-			if (Options.ImageFormat == ImageFormat.ISO)
-			{
-				CreateISOImage(compiledFile);
-			}
-			else
-			{
-				CreateDiskImage(compiledFile);
-
-				if (Options.ImageFormat == ImageFormat.VMDK)
+				if (Options.GenerateMapFile)
 				{
-					CreateVMDK(imageFile);
+					Compiler.CompilerOptions.MapFile = Path.Combine(Options.DestinationDirectory, Path.GetFileNameWithoutExtension(Options.SourceFile) + ".map");
+				}
+
+				if (!Directory.Exists(Options.DestinationDirectory))
+				{
+					Directory.CreateDirectory(Options.DestinationDirectory);
+				}
+
+				Compiler.CompilerTrace.TraceListener = traceListener;
+
+				if (string.IsNullOrEmpty(Options.SourceFile))
+				{
+					AddOutput("Please select a source file");
+					HasCompileError = true;
+					return;
+				}
+				else if (!File.Exists(Options.SourceFile))
+				{
+					AddOutput(string.Format("File {0} does not exists", Options.SourceFile));
+					HasCompileError = true;
+					return;
+				}
+
+				var inputFiles = new List<FileInfo>();
+				inputFiles.Add(new FileInfo(Options.SourceFile));
+
+				Compiler.Load(inputFiles);
+
+				Compiler.Execute(Environment.ProcessorCount);
+
+				if (Options.ImageFormat == ImageFormat.ISO)
+				{
+					CreateISOImage(compiledFile);
+				}
+				else
+				{
+					CreateDiskImage(compiledFile);
+
+					if (Options.ImageFormat == ImageFormat.VMDK)
+					{
+						CreateVMDK(imageFile);
+					}
+				}
+
+				if (Options.GenerateASMFile)
+				{
+					LaunchNDISASM();
 				}
 			}
-
-			if (Options.GenerateASMFile)
+			finally
 			{
-				LaunchNDISASM();
+				Compiler.Dispose();
+				Compiler = null;
 			}
 		}
 
