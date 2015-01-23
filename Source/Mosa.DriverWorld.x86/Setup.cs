@@ -11,8 +11,9 @@ using Mosa.DeviceDriver.ISA;
 using Mosa.DeviceSystem;
 using Mosa.DeviceSystem.PCI;
 using System.Collections.Generic;
+using Mosa.DriverWorld.x86.HAL;
 
-namespace Mosa.CoolWorld.x86
+namespace Mosa.DriverWorld.x86
 {
 	/// <summary>
 	/// Setup for the Device Driver System.
@@ -69,7 +70,7 @@ namespace Mosa.CoolWorld.x86
 			pciControllerManager = new PCIControllerManager(deviceManager);
 
 			// Setup hardware abstraction interface
-			IHardwareAbstraction hardwareAbstraction = new Mosa.CoolWorld.x86.HAL.HardwareAbstraction();
+			IHardwareAbstraction hardwareAbstraction = new HardwareAbstraction();
 
 			// Set device driver system to the hardware HAL
 			Mosa.DeviceSystem.HAL.SetHardwareAbstraction(hardwareAbstraction);
@@ -84,10 +85,7 @@ namespace Mosa.CoolWorld.x86
 		static public void Start()
 		{
 			// Find all drivers
-			Boot.Console.Write("Finding Drivers...");
 			deviceDriverRegistry.RegisterBuiltInDeviceDrivers();
-			var count = deviceDriverRegistry.GetPCIDeviceDrivers().Count + deviceDriverRegistry.GetISADeviceDrivers().Count;
-			Boot.Console.WriteLine("[Completed: " + count.ToString() + " found]");
 
 			// Start drivers for ISA devices
 			StartISADevices();
@@ -102,7 +100,7 @@ namespace Mosa.CoolWorld.x86
 
 			// Enable Interrupts
 			for (byte i = 0; i < byte.MaxValue; i++)
-				PIC.EnableIRQ(i);
+				Setup.PIC.EnableIRQ(i);
 		}
 
 		/// <summary>
@@ -110,26 +108,13 @@ namespace Mosa.CoolWorld.x86
 		/// </summary>
 		static public void StartPCIDevices()
 		{
-			Boot.Console.Write("Probing PCI devices...");
-
 			PCIControllerManager.CreatePCIDevices();
 
-			Boot.Console.WriteLine("[Completed]");
-
-			Boot.Console.Write("Starting PCI devices... ");
-
 			var devices = deviceManager.GetDevices(new FindDevice.IsPCIDevice(), new FindDevice.IsAvailable());
-
-			Boot.Console.Write(devices.Count.ToString());
-			Boot.Console.WriteLine(" Devices");
 
 			foreach (IDevice device in devices)
 			{
 				var pciDevice = device as IPCIDevice;
-
-				Mosa.CoolWorld.x86.Boot.BulletPoint();
-
-				Boot.Console.WriteLine(device.Name + ": " + pciDevice.VendorID.ToString("x") + "." + pciDevice.DeviceID.ToString("x") + "." + pciDevice.Function.ToString("x") + "." + pciDevice.ClassCode.ToString("x"));
 
 				StartDevice(pciDevice);
 			}
@@ -152,15 +137,6 @@ namespace Mosa.CoolWorld.x86
 			var hardwareDevice = System.Activator.CreateInstance(deviceDriver.DriverType);
 
 			StartDevice(pciDevice, deviceDriver, hardwareDevice as IHardwareDevice);
-
-			if (pciDevice.VendorID == 0x15AD && pciDevice.DeviceID == 0x0405)
-			{
-				var display = hardwareDevice as IPixelGraphicsDevice;
-
-				var color = new Color(255, 0, 0);
-
-				display.WritePixel(color, 100, 100);
-			}
 		}
 
 		private static void StartDevice(IPCIDevice pciDevice, Mosa.DeviceSystem.DeviceDriver deviceDriver, IHardwareDevice hardwareDevice)
@@ -250,11 +226,6 @@ namespace Mosa.CoolWorld.x86
 				var hardwareResources = new HardwareResources(resourceManager, ioPortRegions.ToArray(), memoryRegions.ToArray(), new InterruptHandler(resourceManager.InterruptManager, driverAtttribute.IRQ, hardwareDevice));
 
 				hardwareDevice.Setup(hardwareResources);
-
-				Mosa.CoolWorld.x86.Boot.BulletPoint();
-				Boot.Console.Write("Adding device ");
-				Boot.InBrackets(hardwareDevice.Name, Mosa.Kernel.x86.Colors.White, Mosa.Kernel.x86.Colors.LightGreen);
-				Boot.Console.WriteLine();
 
 				if (resourceManager.ClaimResources(hardwareResources))
 				{

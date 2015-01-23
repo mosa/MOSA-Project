@@ -1,5 +1,5 @@
 /*
- * (c) 2008 MOSA - The Managed Operating System Alliance
+ * (c) 2015 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
  *
@@ -10,7 +10,7 @@
 namespace Mosa.DeviceSystem
 {
 	/// <summary>
-	/// Translates IPixelGraphicsDevice to PixelPaletteGraphicsAdapter
+	/// Translates IPixelPaletteGraphicsDevice to PixelPaletteGraphicsAdapter
 	/// </summary>
 	public class PixelPaletteGraphicsAdapter : IPixelGraphicsDevice
 	{

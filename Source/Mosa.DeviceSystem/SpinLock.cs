@@ -1,13 +1,11 @@
 ﻿/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
+ * (c) 2015 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
-
-// This is a stub class until a real SpinLock is implemented
 
 namespace Mosa.DeviceSystem
 {
@@ -16,11 +14,16 @@ namespace Mosa.DeviceSystem
 	/// </summary>
 	public struct SpinLock
 	{
+		System.Threading.SpinLock spinlock;
+
 		/// <summary>
 		/// Enters spinlock
 		/// </summary>
-		public void Enter()
+		public bool Enter()
 		{
+			bool lockTaken = false;
+			spinlock.Enter(ref lockTaken);
+			return lockTaken;
 		}
 
 		/// <summary>
@@ -28,6 +31,7 @@ namespace Mosa.DeviceSystem
 		/// </summary>
 		public void Exit()
 		{
+			spinlock.Exit();
 		}
 	}
 }

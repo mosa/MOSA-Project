@@ -14,7 +14,7 @@ namespace Mosa.DeviceDriver.ISA
 	/// <summary>
 	/// VGA Text Device Driver
 	/// </summary>
-	[ISADeviceDriver(AutoLoad = false, BasePort = 0x03B0, PortRange = 0x1F, BaseAddress = 0xB0000, AddressRange = 0x10000, Platforms = PlatformArchitecture.X86AndX64)]
+	[ISADeviceDriver(AutoLoad = true, BasePort = 0x03B0, PortRange = 0x1F, BaseAddress = 0xB0000, AddressRange = 0x10000, Platforms = PlatformArchitecture.X86AndX64)]
 	public class VGAText : HardwareDevice, IDevice, ITextDevice
 	{
 		#region Definitions
@@ -363,11 +363,11 @@ namespace Mosa.DeviceDriver.ISA
 			crtControllerIndexColor.Write8(0x03);
 			crtControllerDataColor.Write8((byte)(crtControllerData.Read8() | 0x80));
 			crtControllerIndexColor.Write8(0x11);
-			crtControllerDataColor.Write8((byte)(crtControllerData.Read8() & ~0x80));
+			crtControllerDataColor.Write8((byte)(crtControllerData.Read8() & 0x7F));
 
 			// Make sure they remain unlocked
 			settings[0x03] = (byte)(settings[0x03] | 0x80);
-			settings[0x11] = (byte)(settings[0x11] & ~0x80);
+			settings[0x11] = (byte)(settings[0x11] & 0x7F);
 
 			// Write CRTC regs
 			for (byte i = 0; i < 25; i++)

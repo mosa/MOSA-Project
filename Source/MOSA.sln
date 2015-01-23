@@ -120,6 +120,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Utility.Aot", "Mosa.Ut
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Utility.Launcher", "Mosa.Utility.Launcher\Mosa.Utility.Launcher.csproj", "{B69C2F31-5161-47AA-9FD3-2F2F2BCCF659}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.DriverWorld.x86", "Mosa.DriverWorld.x86\Mosa.DriverWorld.x86.csproj", "{78A4131F-BD6A-4CCE-A6A3-48B48012DA8A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{92741280-B12E-45D9-B1D3-69E8451412D0}"
+	ProjectSection(SolutionItems) = preProject
+		Performance1.psess = Performance1.psess
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -631,6 +638,16 @@ Global
 		{B69C2F31-5161-47AA-9FD3-2F2F2BCCF659}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{B69C2F31-5161-47AA-9FD3-2F2F2BCCF659}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{B69C2F31-5161-47AA-9FD3-2F2F2BCCF659}.Release|x86.ActiveCfg = Release|Any CPU
+		{78A4131F-BD6A-4CCE-A6A3-48B48012DA8A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{78A4131F-BD6A-4CCE-A6A3-48B48012DA8A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{78A4131F-BD6A-4CCE-A6A3-48B48012DA8A}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{78A4131F-BD6A-4CCE-A6A3-48B48012DA8A}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{78A4131F-BD6A-4CCE-A6A3-48B48012DA8A}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{78A4131F-BD6A-4CCE-A6A3-48B48012DA8A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{78A4131F-BD6A-4CCE-A6A3-48B48012DA8A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{78A4131F-BD6A-4CCE-A6A3-48B48012DA8A}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{78A4131F-BD6A-4CCE-A6A3-48B48012DA8A}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{78A4131F-BD6A-4CCE-A6A3-48B48012DA8A}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -686,5 +703,9 @@ Global
 		{B69C2F31-5161-47BB-9FD3-2F2F2BCCF659} = {D032B24A-CE3A-4881-BACE-CC4FE0AFD69D}
 		{3BF17C10-A1FB-4517-923E-B609C2FD8282} = {90065B0F-1BFE-40D8-AED5-11096B2535B0}
 		{B69C2F31-5161-47AA-9FD3-2F2F2BCCF659} = {90065B0F-1BFE-40D8-AED5-11096B2535B0}
+		{78A4131F-BD6A-4CCE-A6A3-48B48012DA8A} = {1AB7FA6A-829C-4DCF-BCA6-A27156D8DA26}
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
 	EndGlobalSection
 EndGlobal
