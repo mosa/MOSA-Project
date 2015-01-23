@@ -44,7 +44,6 @@
 			this.nmMemory = new System.Windows.Forms.NumericUpDown();
 			this.cbExitOnLaunch = new System.Windows.Forms.CheckBox();
 			this.cbEmulator = new System.Windows.Forms.ComboBox();
-			this.button1 = new System.Windows.Forms.Button();
 			this.groupBox4 = new System.Windows.Forms.GroupBox();
 			this.lbSourceDirectory = new System.Windows.Forms.Label();
 			this.label7 = new System.Windows.Forms.Label();
@@ -92,6 +91,9 @@
 			this.tabPage3 = new System.Windows.Forms.TabPage();
 			this.rtbCounters = new System.Windows.Forms.RichTextBox();
 			this.openFileDialog2 = new System.Windows.Forms.OpenFileDialog();
+			this.button1 = new System.Windows.Forms.Button();
+			this.label8 = new System.Windows.Forms.Label();
+			this.cbDebugConnectionOption = new System.Windows.Forms.ComboBox();
 			this.tabControl1.SuspendLayout();
 			this.tbOptions.SuspendLayout();
 			this.groupBox5.SuspendLayout();
@@ -152,7 +154,6 @@
 			this.tbOptions.Controls.Add(this.groupBox5);
 			this.tbOptions.Controls.Add(this.groupBox2);
 			this.tbOptions.Controls.Add(this.groupBox6);
-			this.tbOptions.Controls.Add(this.button1);
 			this.tbOptions.Controls.Add(this.groupBox4);
 			this.tbOptions.Controls.Add(this.groupBox3);
 			this.tbOptions.Controls.Add(this.groupBox1);
@@ -165,12 +166,14 @@
 			// 
 			// groupBox5
 			// 
+			this.groupBox5.Controls.Add(this.cbDebugConnectionOption);
+			this.groupBox5.Controls.Add(this.label8);
 			this.groupBox5.Controls.Add(this.checkBox1);
 			this.groupBox5.Controls.Add(this.cbMOSADebugger);
 			this.groupBox5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.groupBox5.Location = new System.Drawing.Point(283, 266);
+			this.groupBox5.Location = new System.Drawing.Point(283, 196);
 			this.groupBox5.Name = "groupBox5";
-			this.groupBox5.Size = new System.Drawing.Size(139, 65);
+			this.groupBox5.Size = new System.Drawing.Size(139, 138);
 			this.groupBox5.TabIndex = 31;
 			this.groupBox5.TabStop = false;
 			this.groupBox5.Text = "Debugger:";
@@ -204,9 +207,9 @@
 			this.groupBox2.Controls.Add(this.cbGenerateASMFile);
 			this.groupBox2.Controls.Add(this.cbGenerateMapFile);
 			this.groupBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.groupBox2.Location = new System.Drawing.Point(283, 196);
+			this.groupBox2.Location = new System.Drawing.Point(5, 296);
 			this.groupBox2.Name = "groupBox2";
-			this.groupBox2.Size = new System.Drawing.Size(139, 63);
+			this.groupBox2.Size = new System.Drawing.Size(272, 38);
 			this.groupBox2.TabIndex = 29;
 			this.groupBox2.TabStop = false;
 			this.groupBox2.Text = "Diagnostic Output:";
@@ -215,7 +218,7 @@
 			// 
 			this.cbGenerateASMFile.AutoSize = true;
 			this.cbGenerateASMFile.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.cbGenerateASMFile.Location = new System.Drawing.Point(6, 42);
+			this.cbGenerateASMFile.Location = new System.Drawing.Point(137, 19);
 			this.cbGenerateASMFile.Name = "cbGenerateASMFile";
 			this.cbGenerateASMFile.Size = new System.Drawing.Size(115, 17);
 			this.cbGenerateASMFile.TabIndex = 14;
@@ -237,6 +240,7 @@
 			// 
 			this.groupBox6.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBox6.Controls.Add(this.button1);
 			this.groupBox6.Controls.Add(this.label6);
 			this.groupBox6.Controls.Add(this.nmMemory);
 			this.groupBox6.Controls.Add(this.cbExitOnLaunch);
@@ -244,7 +248,7 @@
 			this.groupBox6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.groupBox6.Location = new System.Drawing.Point(428, 197);
 			this.groupBox6.Name = "groupBox6";
-			this.groupBox6.Size = new System.Drawing.Size(191, 99);
+			this.groupBox6.Size = new System.Drawing.Size(191, 137);
 			this.groupBox6.TabIndex = 28;
 			this.groupBox6.TabStop = false;
 			this.groupBox6.Text = "Virtual Machine Emulator:";
@@ -286,7 +290,7 @@
 			// 
 			this.cbExitOnLaunch.AutoSize = true;
 			this.cbExitOnLaunch.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.cbExitOnLaunch.Location = new System.Drawing.Point(10, 76);
+			this.cbExitOnLaunch.Location = new System.Drawing.Point(10, 82);
 			this.cbExitOnLaunch.Name = "cbExitOnLaunch";
 			this.cbExitOnLaunch.Size = new System.Drawing.Size(102, 17);
 			this.cbExitOnLaunch.TabIndex = 22;
@@ -306,19 +310,6 @@
 			this.cbEmulator.Name = "cbEmulator";
 			this.cbEmulator.Size = new System.Drawing.Size(171, 21);
 			this.cbEmulator.TabIndex = 21;
-			// 
-			// button1
-			// 
-			this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.button1.Location = new System.Drawing.Point(428, 308);
-			this.button1.Name = "button1";
-			this.button1.Size = new System.Drawing.Size(191, 23);
-			this.button1.TabIndex = 27;
-			this.button1.Text = "Compile and Run";
-			this.button1.UseVisualStyleBackColor = true;
-			this.button1.Click += new System.EventHandler(this.button1_Click_1);
 			// 
 			// groupBox4
 			// 
@@ -537,7 +528,7 @@
 			this.groupBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.groupBox1.Location = new System.Drawing.Point(5, 196);
 			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(272, 135);
+			this.groupBox1.Size = new System.Drawing.Size(272, 94);
 			this.groupBox1.TabIndex = 22;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Optimizations:";
@@ -861,6 +852,44 @@
 			this.openFileDialog2.Filter = "Executable|*.exe";
 			this.openFileDialog2.Title = "Select Assembly";
 			// 
+			// button1
+			// 
+			this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.button1.Location = new System.Drawing.Point(14, 108);
+			this.button1.Name = "button1";
+			this.button1.Size = new System.Drawing.Size(171, 23);
+			this.button1.TabIndex = 28;
+			this.button1.Text = "Compile and Run";
+			this.button1.UseVisualStyleBackColor = true;
+			this.button1.Click += new System.EventHandler(this.button1_Click);
+			// 
+			// label8
+			// 
+			this.label8.AutoSize = true;
+			this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.label8.Location = new System.Drawing.Point(6, 71);
+			this.label8.Name = "label8";
+			this.label8.Size = new System.Drawing.Size(116, 13);
+			this.label8.TabIndex = 35;
+			this.label8.Text = "Debug Connection:";
+			// 
+			// cbDebugConnectionOption
+			// 
+			this.cbDebugConnectionOption.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.cbDebugConnectionOption.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.cbDebugConnectionOption.FormattingEnabled = true;
+			this.cbDebugConnectionOption.Items.AddRange(new object[] {
+            "None",
+            "Pipe",
+            "TCP Server",
+            "TCP Client"});
+			this.cbDebugConnectionOption.Location = new System.Drawing.Point(9, 87);
+			this.cbDebugConnectionOption.Name = "cbDebugConnectionOption";
+			this.cbDebugConnectionOption.Size = new System.Drawing.Size(120, 21);
+			this.cbDebugConnectionOption.TabIndex = 36;
+			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -914,7 +943,6 @@
 		private System.Windows.Forms.TabPage tpOutput;
 		private System.Windows.Forms.GroupBox groupBox6;
 		private System.Windows.Forms.ComboBox cbEmulator;
-		private System.Windows.Forms.Button button1;
 		private System.Windows.Forms.GroupBox groupBox4;
 		private System.Windows.Forms.Label lbSourceDirectory;
 		private System.Windows.Forms.Label label7;
@@ -971,5 +999,8 @@
 		private System.Windows.Forms.CheckBox cbGenerateASMFile;
 		private System.Windows.Forms.CheckBox cbGenerateMapFile;
 		private System.Windows.Forms.CheckBox cbEnableSparseConditionalConstantPropagation;
+		private System.Windows.Forms.ComboBox cbDebugConnectionOption;
+		private System.Windows.Forms.Label label8;
+		private System.Windows.Forms.Button button1;
 	}
 }

@@ -76,6 +76,15 @@ namespace Mosa.Tool.Launcher
 				default: break;
 			}
 
+			switch (cbDebugConnectionOption.SelectedIndex)
+			{
+				case 0: Options.DebugConnectionOption = DebugConnectionOption.None; break;
+				case 1: Options.DebugConnectionOption = DebugConnectionOption.Pipe; break;
+				case 2: Options.DebugConnectionOption = DebugConnectionOption.TCPServer; break;
+				case 3: Options.DebugConnectionOption = DebugConnectionOption.TCPClient; break;
+				default: break;
+			}
+
 			lbSource.Text = Path.GetFileName(Options.SourceFile);
 			lbSourceDirectory.Text = Path.GetDirectoryName(Options.SourceFile);
 
@@ -170,6 +179,15 @@ namespace Mosa.Tool.Launcher
 				default: cbBootFormat.SelectedIndex = 0; break;
 			}
 
+			switch (Options.DebugConnectionOption)
+			{
+				case DebugConnectionOption.None: cbDebugConnectionOption.SelectedIndex = 0; break;
+				case DebugConnectionOption.Pipe: cbDebugConnectionOption.SelectedIndex = 1; break;
+				case DebugConnectionOption.TCPServer: cbDebugConnectionOption.SelectedIndex = 2; break;
+				case DebugConnectionOption.TCPClient: cbDebugConnectionOption.SelectedIndex = 3; break;
+				default: break;
+			}
+
 			lbDestinationDirectory.Text = Options.DestinationDirectory;
 			lbSource.Text = Options.SourceFile;
 			lbSourceDirectory.Text = Path.GetDirectoryName(Options.SourceFile);
@@ -262,13 +280,6 @@ namespace Mosa.Tool.Launcher
 			}
 		}
 
-		private void button1_Click_1(object sender, EventArgs e)
-		{
-			UpdateBuilderOptions();
-
-			CompilerAndLaunch();
-		}
-
 		private void CompilerAndLaunch()
 		{
 			rtbOutput.Clear();
@@ -325,6 +336,13 @@ namespace Mosa.Tool.Launcher
 		private bool CheckKeyPressed()
 		{
 			return ((Control.ModifierKeys & Keys.Shift) != 0) || ((Control.ModifierKeys & Keys.Control) != 0);
+		}
+
+		private void button1_Click(object sender, EventArgs e)
+		{
+			UpdateBuilderOptions();
+
+			CompilerAndLaunch();
 		}
 	}
 }
