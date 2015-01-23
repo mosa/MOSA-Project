@@ -114,7 +114,7 @@
     <Compile Include="Intrinsic\Out16.cs" />
     <Compile Include="Intrinsic\Out32.cs" />
     <Compile Include="Intrinsic\Pause.cs" />
-    <Compile Include="Intrinsic\LockSet32.cs" />
+    <Compile Include="Intrinsic\LockSet.cs" />
     <Compile Include="Intrinsic\SyncCompareAndSwap.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Stages\BuildStackStage.cs" />

@@ -29,7 +29,7 @@ namespace System
 		private Type declaringType;
 		private Type elementType;
 		private Type asType;
-		private LinkedList<CustomAttributeData> customAttributesData = new LinkedList<CustomAttributeData>();
+		private LinkedList<CustomAttributeData> customAttributesData = null;
 
 		internal readonly Type ValueType = typeof(ValueType);
 		internal readonly Type EnumType = typeof(Enum);
@@ -61,7 +61,27 @@ namespace System
 
 		public override IEnumerable<CustomAttributeData> CustomAttributes
 		{
-			get { return customAttributesData; }
+			get
+			{
+				if (this.customAttributesData == null)
+				{
+					// Custom Attributes Data - Lazy load
+					this.customAttributesData = new LinkedList<CustomAttributeData>();
+					if (this.typeStruct->CustomAttributes != null)
+					{
+						var customAttributesTablePtr = this.typeStruct->CustomAttributes;
+						var customAttributesCount = customAttributesTablePtr[0];
+						customAttributesTablePtr++;
+						for (uint i = 0; i < customAttributesCount; i++)
+						{
+							RuntimeCustomAttributeData cad = new RuntimeCustomAttributeData((MetadataCAStruct*)customAttributesTablePtr[i]);
+							this.customAttributesData.AddLast(cad);
+						}
+					}
+				}
+
+				return this.customAttributesData;
+			}
 		}
 
 		public override MethodBase DeclaringMethod
@@ -166,19 +186,6 @@ namespace System
 				RuntimeTypeHandle elementHandle = new RuntimeTypeHandle();
 				((uint**)&elementHandle)[0] = (uint*)this.typeStruct->ElementType;
 				this.elementType = Type.GetTypeFromHandle(elementHandle);
-			}
-
-			// Custom Attributes Data
-			if (this.typeStruct->CustomAttributes != null)
-			{
-				var customAttributesTablePtr = this.typeStruct->CustomAttributes;
-				var customAttributesCount = customAttributesTablePtr[0];
-				customAttributesTablePtr++;
-				for (uint i = 0; i < customAttributesCount; i++)
-				{
-					RuntimeCustomAttributeData cad = new RuntimeCustomAttributeData((MetadataCAStruct*)customAttributesTablePtr[i]);
-					customAttributesData.AddLast(cad);
-				}
 			}
 		}
 

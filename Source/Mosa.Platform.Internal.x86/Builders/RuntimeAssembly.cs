@@ -19,20 +19,48 @@ namespace System
 		internal MetadataAssemblyStruct* assemblyStruct;
 		internal LinkedList<RuntimeType> typeList = new LinkedList<RuntimeType>();
 		internal LinkedList<RuntimeTypeHandle> typeHandles = new LinkedList<RuntimeTypeHandle>();
-		internal LinkedList<RuntimeTypeInfo> typeInfoList = new LinkedList<RuntimeTypeInfo>();
-		internal LinkedList<CustomAttributeData> customAttributesData = new LinkedList<CustomAttributeData>();
+		internal LinkedList<RuntimeTypeInfo> typeInfoList = null;
+		internal LinkedList<CustomAttributeData> customAttributesData = null;
 
 		private string fullName;
 
 		public override IEnumerable<CustomAttributeData> CustomAttributes
 		{
-			get { return customAttributesData; }
+			get
+			{
+				if (this.customAttributesData == null)
+				{
+					// Custom Attributes Data - Lazy load
+					this.customAttributesData = new LinkedList<CustomAttributeData>();
+					if (this.assemblyStruct->CustomAttributes != null)
+					{
+						var customAttributesTablePtr = this.assemblyStruct->CustomAttributes;
+						var customAttributesCount = customAttributesTablePtr[0];
+						customAttributesTablePtr++;
+						for (uint i = 0; i < customAttributesCount; i++)
+						{
+							RuntimeCustomAttributeData cad = new RuntimeCustomAttributeData((MetadataCAStruct*)customAttributesTablePtr[i]);
+							customAttributesData.AddLast(cad);
+						}
+					}
+				}
+
+				return this.customAttributesData;
+			}
 		}
 
 		public override IEnumerable<TypeInfo> DefinedTypes
 		{
 			get
 			{
+				if (this.typeInfoList == null)
+				{
+					// Type Info - Lazy load
+					this.typeInfoList = new LinkedList<RuntimeTypeInfo>();
+					foreach (RuntimeType type in this.typeList)
+						this.typeInfoList.AddLast(new RuntimeTypeInfo(type, this));
+				}
+
 				LinkedList<TypeInfo> types = new LinkedList<TypeInfo>();
 				foreach (var type in this.typeInfoList)
 					types.AddLast(type);
@@ -42,7 +70,7 @@ namespace System
 
 		public override string FullName
 		{
-			get { return fullName; }
+			get { return this.fullName; }
 		}
 
 		public override IEnumerable<Type> ExportedTypes
@@ -84,32 +112,6 @@ namespace System
 			var type = new RuntimeType(handle);
 			this.typeList.AddLast(type);
 			return type;
-		}
-
-		internal void Phase2()
-		{
-			foreach (RuntimeType type in this.typeList)
-			{
-				type.FindRelativeTypes();
-			}
-
-			// Get Custom Attributes Data (must be done after RuntimeTypes have been completely resolved!)
-			if (this.assemblyStruct->CustomAttributes != null)
-			{
-				var customAttributesTablePtr = this.assemblyStruct->CustomAttributes;
-				var customAttributesCount = customAttributesTablePtr[0];
-				customAttributesTablePtr++;
-				for (uint i = 0; i < customAttributesCount; i++)
-				{
-					RuntimeCustomAttributeData cad = new RuntimeCustomAttributeData((MetadataCAStruct*)customAttributesTablePtr[i]);
-					customAttributesData.AddLast(cad);
-				}
-			}
-
-			foreach (RuntimeType type in this.typeList)
-			{
-				this.typeInfoList.AddLast(new RuntimeTypeInfo(type, this));
-			}
 		}
 	}
 }
