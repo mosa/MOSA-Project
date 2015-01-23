@@ -298,7 +298,7 @@ namespace Mosa.Tool.Compiler
 		{
 			// always print header with version information
 			Console.WriteLine("MOSA AOT Compiler, Version {0}.{1} '{2}'", majorVersion, minorVersion, codeName);
-			Console.WriteLine("Copyright 2014 by the MOSA Project. Licensed under the New BSD License.");
+			Console.WriteLine("Copyright 2015 by the MOSA Project. Licensed under the New BSD License.");
 			Console.WriteLine("Copyright 2008 by Novell. NDesk.Options is released under the MIT/X11 license.");
 			Console.WriteLine();
 			Console.WriteLine("Parsing options...");

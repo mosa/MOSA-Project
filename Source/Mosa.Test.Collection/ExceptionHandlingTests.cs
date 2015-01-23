@@ -463,5 +463,67 @@ namespace Mosa.Test.Collection
 				throw new Exception();
 			}
 		}
+
+		public static ulong ExceptionTest9()
+		{
+			ulong n = 1;
+
+			try
+			{
+				try
+				{
+					n = n + 20;
+				}
+				catch
+				{
+					n = n + 300;
+				}
+				finally
+				{
+					n = n + 4000;
+				}
+
+				n = n + 50000;
+
+				try
+				{
+					n = n + 600000;
+					ExceptionTest9Exception();
+				}
+				catch
+				{
+					try
+					{
+						n = n + 7000000;
+						ExceptionTest9Exception();
+						n = n * 23;
+					}
+					finally
+					{
+						n = n + 80000000;
+					}
+				}
+				finally
+				{
+					n = n + 900000000;
+					ExceptionTest9Exception();
+				}
+			}
+			catch
+			{
+				n = n + 1000000000;
+			}
+			finally
+			{
+				n = n + 20000000000;
+			}
+
+			return n;
+		}
+
+		private static void ExceptionTest9Exception()
+		{
+			throw new Exception();
+		}
 	}
 }
