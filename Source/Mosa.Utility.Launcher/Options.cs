@@ -49,6 +49,8 @@ namespace Mosa.Utility.Launcher
 
 		public FileSystemFormat FileSystemFormat { get; set; }
 
+		public DebugConnectionOption DebugConnectionOption { get; set; }
+
 		public Options()
 		{
 			EnableSSA = true;
@@ -63,6 +65,7 @@ namespace Mosa.Utility.Launcher
 			MemoryInMB = 128;
 			DestinationDirectory = Path.Combine(Path.GetTempPath(), "MOSA");
 			FileSystemFormat = FileSystemFormat.FAT16;
+			DebugConnectionOption = DebugConnectionOption.None;
 		}
 
 		public void LoadArguments(string[] args)
@@ -91,6 +94,9 @@ namespace Mosa.Utility.Launcher
 					case "-pe": LinkerFormat = LinkerFormat.PE32; continue;
 					case "multibootHeader-0.7": BootFormat = BootFormat.Multiboot_0_7; continue;
 					case "mb0.7": BootFormat = BootFormat.Multiboot_0_7; continue;
+					case "pipe": DebugConnectionOption = DebugConnectionOption.Pipe; continue;
+					case "tcpclient": DebugConnectionOption = DebugConnectionOption.TCPClient; continue;
+					case "tcpserver": DebugConnectionOption = DebugConnectionOption.TCPServer; continue;
 					default: break;
 				}
 

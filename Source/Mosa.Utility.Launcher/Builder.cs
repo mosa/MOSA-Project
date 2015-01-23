@@ -311,7 +311,20 @@ namespace Mosa.Utility.Launcher
 					" -hda " + Quote(imageFile);
 			}
 
-			//arg = arg + "-vga vmware";
+			//arg = arg + " -vga vmware";
+
+			if (Options.DebugConnectionOption == DebugConnectionOption.Pipe)
+			{
+				arg = arg + " -serial pipe:MOSA";
+			}
+			else if (Options.DebugConnectionOption == DebugConnectionOption.TCPServer)
+			{
+				arg = arg + " -serial tcp:127.0.0.1:9999,server,nowait,nodelay";
+			}
+			else if (Options.DebugConnectionOption == DebugConnectionOption.TCPClient)
+			{
+				arg = arg + " -serial tcp:127.0.0.1:9999,client,nowait";
+			}
 
 			var output = LaunchApplication(AppLocations.QEMU, arg, !exit);
 
@@ -350,7 +363,11 @@ namespace Mosa.Utility.Launcher
 			{
 				sb.AppendLine("ata0-master: type=disk,path=" + Quote(imageFile) + ",biosdetect=none,cylinders=0,heads=0,spt=0");
 			}
-			//sb.AppendLine("com1: enabled=1, mode=pipe-server, dev=\\.\pipe\MOSA");
+
+			if (Options.DebugConnectionOption == DebugConnectionOption.Pipe)
+			{
+				sb.AppendLine(@"com1: enabled=1, mode=pipe-server, dev=\\.\pipe\MOSA");
+			}
 
 			File.WriteAllText(configfile, sb.ToString());
 
@@ -390,12 +407,15 @@ namespace Mosa.Utility.Launcher
 
 			sb.AppendLine("floppy0.present = \"FALSE\"");
 
-			//sb.AppendLine("serial0.present = \"TRUE\"");
-			//sb.AppendLine("serial0.yieldOnMsrRead = \"FALSE\"");
-			//sb.AppendLine("serial0.fileType = \"pipe\"");
-			//sb.AppendLine("serial0.fileName = \"\\\\.\\pipe\\MOSA\"");
-			//sb.AppendLine("serial0.pipe.endPoint = \"server\"");
-			//sb.AppendLine("serial0.tryNoRxLoss = \"FALSE\"");
+			if (Options.DebugConnectionOption == DebugConnectionOption.Pipe)
+			{
+				sb.AppendLine("serial0.present = \"TRUE\"");
+				sb.AppendLine("serial0.yieldOnMsrRead = \"FALSE\"");
+				sb.AppendLine("serial0.fileType = \"pipe\"");
+				sb.AppendLine("serial0.fileName = \"\\\\.\\pipe\\MOSA\"");
+				sb.AppendLine("serial0.pipe.endPoint = \"server\"");
+				sb.AppendLine("serial0.tryNoRxLoss = \"FALSE\"");
+			}
 
 			File.WriteAllText(configfile, sb.ToString());
 
