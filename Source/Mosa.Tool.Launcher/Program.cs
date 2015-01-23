@@ -8,6 +8,7 @@
  */
 
 using System;
+using System.IO;
 using System.Windows.Forms;
 
 namespace Mosa.Tool.Launcher
@@ -24,6 +25,9 @@ namespace Mosa.Tool.Launcher
 			Application.SetCompatibleTextRenderingDefault(false);
 
 			var main = new MainForm();
+			main.Options.LoadFile(main.ConfigFile);
+
+			//commannd line arguments will overwrite config file settings
 			main.Options.LoadArguments(args);
 
 			Application.Run(main);

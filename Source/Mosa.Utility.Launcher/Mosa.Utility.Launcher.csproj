@@ -69,6 +69,7 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.XML" />
+    <Reference Include="System.Xml.Linq" />
     <Reference Include="WeifenLuo.WinFormsUI.Docking">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\3rdParty\WeifenLuo.WinFormsUI.Docking.dll</HintPath>

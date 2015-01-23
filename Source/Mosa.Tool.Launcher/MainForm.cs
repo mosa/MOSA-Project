@@ -23,6 +23,14 @@ namespace Mosa.Tool.Launcher
 
 		public AppLocations AppLocations { get; set; }
 
+		public string ConfigFile
+		{
+			get
+			{
+				return Path.ChangeExtension(System.Reflection.Assembly.GetExecutingAssembly().Location, ".config.xml");
+			}
+		}
+
 		public MainForm()
 		{
 			InitializeComponent();
@@ -282,6 +290,7 @@ namespace Mosa.Tool.Launcher
 
 		private void CompilerAndLaunch()
 		{
+			Options.SaveFile(ConfigFile);
 			rtbOutput.Clear();
 			rtbCounters.Clear();
 
