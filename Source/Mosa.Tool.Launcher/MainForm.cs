@@ -288,6 +288,16 @@ namespace Mosa.Tool.Launcher
 			}
 		}
 
+		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+		{
+			if (keyData == Keys.F5)
+				CompilerAndLaunch();
+			if (keyData == Keys.F6)
+				Builder.Launch();
+
+			return base.ProcessCmdKey(ref msg, keyData);
+		}
+
 		private void CompilerAndLaunch()
 		{
 			Options.SaveFile(ConfigFile);
