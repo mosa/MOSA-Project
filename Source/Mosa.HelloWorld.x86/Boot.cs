@@ -40,7 +40,6 @@ namespace Mosa.HelloWorld.x86
 			Console.BackgroundColor = Colors.Black;
 
 			Console.Write("MOSA OS Version 1.4 '");
-			return;
 			Console.Color = Colors.Red;
 			Console.Write("Neptune");
 			Console.Color = Colors.Yellow;
