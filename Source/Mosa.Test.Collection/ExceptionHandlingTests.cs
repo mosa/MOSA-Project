@@ -472,41 +472,41 @@ namespace Mosa.Test.Collection
 			{
 				try
 				{
-					n = n + 10;
+					n = n + 20;
 				}
 				catch
 				{
-					n = n + 100;
+					n = n + 300;
 				}
 				finally
 				{
-					n = n + 1000;
+					n = n + 4000;
 				}
 
-				n = n + 10000;
+				n = n + 50000;
 
 				try
 				{
-					n = n + 100000;
-					ExceptionTest0Exception();
+					n = n + 600000;
+					ExceptionTest9Exception();
 				}
 				catch
 				{
 					try
 					{
-						n = n + 1000000;
-						ExceptionTest0Exception();
+						n = n + 7000000;
+						ExceptionTest9Exception();
 						n = n * 23;
 					}
 					finally
 					{
-						n = n + 10000000;
+						n = n + 80000000;
 					}
 				}
 				finally
 				{
-					n = n + 100000000;
-					ExceptionTest0Exception();
+					n = n + 900000000;
+					ExceptionTest9Exception();
 				}
 			}
 			catch
@@ -515,13 +515,13 @@ namespace Mosa.Test.Collection
 			}
 			finally
 			{
-				n = n + 10000000000;
+				n = n + 20000000000;
 			}
 
 			return n;
 		}
 
-		static void ExceptionTest0Exception()
+		private static void ExceptionTest9Exception()
 		{
 			throw new Exception();
 		}
