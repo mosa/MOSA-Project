@@ -76,17 +76,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BuilderEventListener.cs" />
+    <Compile Include="CheckOptions.cs" />
     <Compile Include="IBuilderEvent.cs" />
     <Compile Include="FileSystemFormat.cs" />
     <Compile Include="DebugConnectionOption.cs" />
     <Compile Include="LinkerFormat.cs" />
+    <Compile Include="Options.cs" />
     <Compile Include="PlatformType.cs" />
     <Compile Include="Builder.cs" />
     <Compile Include="AppLocations.cs" />
     <Compile Include="Emulator.cs" />
     <Compile Include="BootFormat.cs" />
     <Compile Include="ImageFormat.cs" />
-    <Compile Include="Options.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

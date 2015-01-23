@@ -193,6 +193,11 @@ namespace Mosa.Tool.Launcher
 			lbSourceDirectory.Text = Path.GetDirectoryName(Options.SourceFile);
 		}
 
+		public void UpdateStatusLabel(string msg)
+		{
+			tsStatusLabel.Text = msg;
+		}
+
 		private void NewStatus(string info)
 		{
 			AddOutput(info);
@@ -232,7 +237,7 @@ namespace Mosa.Tool.Launcher
 			this.Refresh();
 
 			if (Options.AutoLaunch)
-				CompilerAndLaunch();
+				CompileAndLaunch();
 		}
 
 		public void AddOutput(string data)
@@ -280,7 +285,7 @@ namespace Mosa.Tool.Launcher
 			}
 		}
 
-		private void CompilerAndLaunch()
+		private void CompileAndLaunch()
 		{
 			rtbOutput.Clear();
 			rtbCounters.Clear();
@@ -342,7 +347,17 @@ namespace Mosa.Tool.Launcher
 		{
 			UpdateBuilderOptions();
 
-			CompilerAndLaunch();
+			var result = CheckOptions.Verify(Options);
+
+			if (result == null)
+			{
+				CompileAndLaunch();
+			}
+			else
+			{
+				UpdateStatusLabel("ERROR: " + result);
+				AddOutput(result);
+			}
 		}
 	}
 }

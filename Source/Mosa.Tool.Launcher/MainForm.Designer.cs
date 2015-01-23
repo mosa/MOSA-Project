@@ -34,12 +34,15 @@
 			this.tabControl1 = new System.Windows.Forms.TabControl();
 			this.tbOptions = new System.Windows.Forms.TabPage();
 			this.groupBox5 = new System.Windows.Forms.GroupBox();
+			this.cbDebugConnectionOption = new System.Windows.Forms.ComboBox();
+			this.label8 = new System.Windows.Forms.Label();
 			this.checkBox1 = new System.Windows.Forms.CheckBox();
 			this.cbMOSADebugger = new System.Windows.Forms.CheckBox();
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
 			this.cbGenerateASMFile = new System.Windows.Forms.CheckBox();
 			this.cbGenerateMapFile = new System.Windows.Forms.CheckBox();
 			this.groupBox6 = new System.Windows.Forms.GroupBox();
+			this.button1 = new System.Windows.Forms.Button();
 			this.label6 = new System.Windows.Forms.Label();
 			this.nmMemory = new System.Windows.Forms.NumericUpDown();
 			this.cbExitOnLaunch = new System.Windows.Forms.CheckBox();
@@ -91,9 +94,8 @@
 			this.tabPage3 = new System.Windows.Forms.TabPage();
 			this.rtbCounters = new System.Windows.Forms.RichTextBox();
 			this.openFileDialog2 = new System.Windows.Forms.OpenFileDialog();
-			this.button1 = new System.Windows.Forms.Button();
-			this.label8 = new System.Windows.Forms.Label();
-			this.cbDebugConnectionOption = new System.Windows.Forms.ComboBox();
+			this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+			this.tsStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
 			this.tabControl1.SuspendLayout();
 			this.tbOptions.SuspendLayout();
 			this.groupBox5.SuspendLayout();
@@ -111,6 +113,7 @@
 			this.groupBox7.SuspendLayout();
 			this.tpOutput.SuspendLayout();
 			this.tabPage3.SuspendLayout();
+			this.statusStrip1.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// openFileDialog1
@@ -145,12 +148,13 @@
 			this.tabControl1.Name = "tabControl1";
 			this.tabControl1.Padding = new System.Drawing.Point(0, 0);
 			this.tabControl1.SelectedIndex = 0;
-			this.tabControl1.Size = new System.Drawing.Size(637, 369);
+			this.tabControl1.Size = new System.Drawing.Size(637, 388);
 			this.tabControl1.TabIndex = 22;
 			// 
 			// tbOptions
 			// 
 			this.tbOptions.BackColor = System.Drawing.SystemColors.Control;
+			this.tbOptions.Controls.Add(this.statusStrip1);
 			this.tbOptions.Controls.Add(this.groupBox5);
 			this.tbOptions.Controls.Add(this.groupBox2);
 			this.tbOptions.Controls.Add(this.groupBox6);
@@ -160,7 +164,7 @@
 			this.tbOptions.Location = new System.Drawing.Point(4, 22);
 			this.tbOptions.Margin = new System.Windows.Forms.Padding(0);
 			this.tbOptions.Name = "tbOptions";
-			this.tbOptions.Size = new System.Drawing.Size(629, 343);
+			this.tbOptions.Size = new System.Drawing.Size(629, 362);
 			this.tbOptions.TabIndex = 0;
 			this.tbOptions.Text = "MOSA Options";
 			// 
@@ -177,6 +181,31 @@
 			this.groupBox5.TabIndex = 31;
 			this.groupBox5.TabStop = false;
 			this.groupBox5.Text = "Debugger:";
+			// 
+			// cbDebugConnectionOption
+			// 
+			this.cbDebugConnectionOption.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.cbDebugConnectionOption.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.cbDebugConnectionOption.FormattingEnabled = true;
+			this.cbDebugConnectionOption.Items.AddRange(new object[] {
+            "None",
+            "Pipe",
+            "TCP Server",
+            "TCP Client"});
+			this.cbDebugConnectionOption.Location = new System.Drawing.Point(9, 87);
+			this.cbDebugConnectionOption.Name = "cbDebugConnectionOption";
+			this.cbDebugConnectionOption.Size = new System.Drawing.Size(120, 21);
+			this.cbDebugConnectionOption.TabIndex = 36;
+			// 
+			// label8
+			// 
+			this.label8.AutoSize = true;
+			this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.label8.Location = new System.Drawing.Point(6, 71);
+			this.label8.Name = "label8";
+			this.label8.Size = new System.Drawing.Size(116, 13);
+			this.label8.TabIndex = 35;
+			this.label8.Text = "Debug Connection:";
 			// 
 			// checkBox1
 			// 
@@ -252,6 +281,19 @@
 			this.groupBox6.TabIndex = 28;
 			this.groupBox6.TabStop = false;
 			this.groupBox6.Text = "Virtual Machine Emulator:";
+			// 
+			// button1
+			// 
+			this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.button1.Location = new System.Drawing.Point(14, 108);
+			this.button1.Name = "button1";
+			this.button1.Size = new System.Drawing.Size(171, 23);
+			this.button1.TabIndex = 28;
+			this.button1.Text = "Compile and Run";
+			this.button1.UseVisualStyleBackColor = true;
+			this.button1.Click += new System.EventHandler(this.button1_Click);
 			// 
 			// label6
 			// 
@@ -802,7 +844,7 @@
 			this.tpOutput.Location = new System.Drawing.Point(4, 22);
 			this.tpOutput.Name = "tpOutput";
 			this.tpOutput.Padding = new System.Windows.Forms.Padding(3);
-			this.tpOutput.Size = new System.Drawing.Size(629, 343);
+			this.tpOutput.Size = new System.Drawing.Size(629, 356);
 			this.tpOutput.TabIndex = 1;
 			this.tpOutput.Text = "Output";
 			this.tpOutput.UseVisualStyleBackColor = true;
@@ -816,7 +858,7 @@
 			this.rtbOutput.Location = new System.Drawing.Point(0, 0);
 			this.rtbOutput.Name = "rtbOutput";
 			this.rtbOutput.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedBoth;
-			this.rtbOutput.Size = new System.Drawing.Size(629, 342);
+			this.rtbOutput.Size = new System.Drawing.Size(629, 355);
 			this.rtbOutput.TabIndex = 0;
 			this.rtbOutput.Text = "";
 			this.rtbOutput.WordWrap = false;
@@ -852,49 +894,26 @@
 			this.openFileDialog2.Filter = "Executable|*.exe";
 			this.openFileDialog2.Title = "Select Assembly";
 			// 
-			// button1
+			// statusStrip1
 			// 
-			this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.button1.Location = new System.Drawing.Point(14, 108);
-			this.button1.Name = "button1";
-			this.button1.Size = new System.Drawing.Size(171, 23);
-			this.button1.TabIndex = 28;
-			this.button1.Text = "Compile and Run";
-			this.button1.UseVisualStyleBackColor = true;
-			this.button1.Click += new System.EventHandler(this.button1_Click);
+			this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsStatusLabel});
+			this.statusStrip1.Location = new System.Drawing.Point(0, 340);
+			this.statusStrip1.Name = "statusStrip1";
+			this.statusStrip1.Size = new System.Drawing.Size(629, 22);
+			this.statusStrip1.TabIndex = 32;
+			this.statusStrip1.Text = "statusStrip1";
 			// 
-			// label8
+			// tsStatusLabel
 			// 
-			this.label8.AutoSize = true;
-			this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.label8.Location = new System.Drawing.Point(6, 71);
-			this.label8.Name = "label8";
-			this.label8.Size = new System.Drawing.Size(116, 13);
-			this.label8.TabIndex = 35;
-			this.label8.Text = "Debug Connection:";
-			// 
-			// cbDebugConnectionOption
-			// 
-			this.cbDebugConnectionOption.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.cbDebugConnectionOption.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.cbDebugConnectionOption.FormattingEnabled = true;
-			this.cbDebugConnectionOption.Items.AddRange(new object[] {
-            "None",
-            "Pipe",
-            "TCP Server",
-            "TCP Client"});
-			this.cbDebugConnectionOption.Location = new System.Drawing.Point(9, 87);
-			this.cbDebugConnectionOption.Name = "cbDebugConnectionOption";
-			this.cbDebugConnectionOption.Size = new System.Drawing.Size(120, 21);
-			this.cbDebugConnectionOption.TabIndex = 36;
+			this.tsStatusLabel.Name = "tsStatusLabel";
+			this.tsStatusLabel.Size = new System.Drawing.Size(0, 17);
 			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(635, 400);
+			this.ClientSize = new System.Drawing.Size(635, 419);
 			this.Controls.Add(this.progressBar1);
 			this.Controls.Add(this.tabControl1);
 			this.Name = "MainForm";
@@ -904,6 +923,7 @@
 			this.Shown += new System.EventHandler(this.MainForm_Shown);
 			this.tabControl1.ResumeLayout(false);
 			this.tbOptions.ResumeLayout(false);
+			this.tbOptions.PerformLayout();
 			this.groupBox5.ResumeLayout(false);
 			this.groupBox5.PerformLayout();
 			this.groupBox2.ResumeLayout(false);
@@ -930,6 +950,8 @@
 			this.groupBox7.PerformLayout();
 			this.tpOutput.ResumeLayout(false);
 			this.tabPage3.ResumeLayout(false);
+			this.statusStrip1.ResumeLayout(false);
+			this.statusStrip1.PerformLayout();
 			this.ResumeLayout(false);
 
 		}
@@ -1002,5 +1024,7 @@
 		private System.Windows.Forms.ComboBox cbDebugConnectionOption;
 		private System.Windows.Forms.Label label8;
 		private System.Windows.Forms.Button button1;
+		private System.Windows.Forms.StatusStrip statusStrip1;
+		private System.Windows.Forms.ToolStripStatusLabel tsStatusLabel;
 	}
 }
