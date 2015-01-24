@@ -42,7 +42,6 @@ namespace Mosa.Compiler.Linker
 			Name = name;
 			Alignment = alignment;
 			SectionKind = kind;
-            Stream = new MemoryStream();
 		}
 
 		public void SetData(MemoryStream stream)
