@@ -17,7 +17,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 {
 	public class MosaArrayInfo : IEquatable<MosaArrayInfo>
 	{
-		public static readonly MosaArrayInfo Vector = new MosaArrayInfo(null, 0, null);
+		public static readonly MosaArrayInfo Vector = new MosaArrayInfo(new List<int>(), 1, new List<uint>());
 
 		public IList<int> LowerBounds { get; private set; }
 

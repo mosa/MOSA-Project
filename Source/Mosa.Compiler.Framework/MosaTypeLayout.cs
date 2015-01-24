@@ -216,6 +216,9 @@ namespace Mosa.Compiler.Framework
 			if (type.BaseType == null && !type.IsInterface && type.FullName != "System.Object")   // ghost types like generic params, function ptr, etc.
 				return null;
 
+			if (type.Modifier != null)   // For types having modifiers, use the method table of element type instead.
+				return GetMethodTable(type.ElementType);
+
 			ResolveType(type);
 
 			return typeMethodTables[type];
@@ -325,6 +328,12 @@ namespace Mosa.Compiler.Framework
 
 			if (type.BaseType == null && !type.IsInterface && type.FullName != "System.Object")   // ghost types like generic params, function ptr, etc.
 				return;
+
+			if (type.Modifier != null)   // For types having modifiers, resolve the element type instead.
+			{
+				ResolveType(type.ElementType);
+				return;
+			}
 
 			if (typeSet.Contains(type))
 				return;
@@ -573,7 +582,6 @@ namespace Mosa.Compiler.Framework
 		private List<MosaMethod> CreateMethodTable(MosaType type)
 		{
 			List<MosaMethod> methodTable;
-
 			if (typeMethodTables.TryGetValue(type, out methodTable))
 			{
 				return methodTable;
