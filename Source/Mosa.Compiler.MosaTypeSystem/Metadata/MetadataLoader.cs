@@ -356,6 +356,7 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 			using (var resultType = metadata.Controller.MutateType(result))
 			{
 				resultType.UnderlyingObject = desc.Clone(typeSig);
+				resultType.ElementType = origin;
 
 				foreach (var genericArg in typeSig.GenericArguments)
 					resultType.GenericArguments.Add(GetType(genericArg));

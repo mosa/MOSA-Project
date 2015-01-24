@@ -180,26 +180,33 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 		{
 			GenericArgumentResolver resolver = new GenericArgumentResolver();
 
+			MosaType srcType = type;
 			if (type.GenericArguments.Count > 0)
+			{
 				resolver.PushTypeGenericArguments(type.GenericArguments.GetGenericArguments());
+				srcType = type.ElementType;
+				Debug.Assert(srcType != null);
+			}
 
 			using (var mosaType = metadata.Controller.MutateType(type))
 			{
-				if (type.BaseType != null)
-					mosaType.BaseType = metadata.Loader.GetType(resolver.Resolve(type.BaseType.GetTypeSig()));
+				if (srcType.BaseType != null)
+					mosaType.BaseType = metadata.Loader.GetType(resolver.Resolve(srcType.BaseType.GetTypeSig()));
 
-				if (type.DeclaringType != null)
+				if (srcType.DeclaringType != null)
 				{
-					mosaType.DeclaringType = metadata.Loader.GetType(resolver.Resolve(type.DeclaringType.GetTypeSig()));
-					mosaType.Namespace = type.DeclaringType.Namespace;
+					mosaType.DeclaringType = metadata.Loader.GetType(resolver.Resolve(srcType.DeclaringType.GetTypeSig()));
+					mosaType.Namespace = srcType.DeclaringType.Namespace;
 				}
 
-				for (int i = 0; i < type.Interfaces.Count; i++)
-					mosaType.Interfaces[i] = metadata.Loader.GetType(resolver.Resolve(type.Interfaces[i].GetTypeSig()));
+				var ifaces = new List<MosaType>(srcType.Interfaces);
+				mosaType.Interfaces.Clear();
+				for (int i = 0; i < ifaces.Count; i++)
+					mosaType.Interfaces.Add(metadata.Loader.GetType(resolver.Resolve(ifaces[i].GetTypeSig())));
 
 				mosaType.HasOpenGenericParams = type.GetTypeSig().HasOpenGenericParameter();
 
-				ResolveCustomAttributes(mosaType, type.GetUnderlyingObject<UnitDesc<TypeDef, TypeSig>>().Definition);
+				ResolveCustomAttributes(mosaType, srcType.GetUnderlyingObject<UnitDesc<TypeDef, TypeSig>>().Definition);
 			}
 
 			// Add type again to make it easier to find
