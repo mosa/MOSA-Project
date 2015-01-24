@@ -16,7 +16,7 @@ using System.IO;
 
 namespace Mosa.Compiler.Framework
 {
-	public class MosaCompiler
+	public class MosaCompiler : IDisposable
 	{
 		public Func<BaseCompiler> CompilerFactory { get; set; }
 
@@ -131,6 +131,11 @@ namespace Mosa.Compiler.Framework
 		public void PostCompile()
 		{
 			BaseCompiler.PostCompile();
+		}
+
+		public void Dispose()
+		{
+			ModuleLoader.Dispose();
 		}
 	}
 }

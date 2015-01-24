@@ -438,6 +438,9 @@ namespace Mosa.Compiler.Framework
 			int size = 0;
 			foreach (MosaField field in type.Fields)
 			{
+				if (field.Offset == null)
+					continue;
+
 				int offset = (int)field.Offset.Value;
 				fieldOffsets.Add(field, offset);
 				size = Math.Max(size, offset + GetFieldSize(field));
@@ -447,7 +450,7 @@ namespace Mosa.Compiler.Framework
 				Debug.Assert(fieldSizes[field] != 0, @"Non-static field doesn't have layout!");
 			}
 
-			typeSizes.Add(type, type.ClassSize ?? size);
+			typeSizes.Add(type, (type.ClassSize == null || type.ClassSize == -1) ? size : (int)type.ClassSize);
 		}
 
 		#endregion Internal - Layout

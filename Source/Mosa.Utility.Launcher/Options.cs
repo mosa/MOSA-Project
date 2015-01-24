@@ -8,6 +8,7 @@
  */
 
 using System.IO;
+using System.Xml.Linq;
 
 namespace Mosa.Utility.Launcher
 {
@@ -66,6 +67,39 @@ namespace Mosa.Utility.Launcher
 			DestinationDirectory = Path.Combine(Path.GetTempPath(), "MOSA");
 			FileSystemFormat = FileSystemFormat.FAT16;
 			DebugConnectionOption = DebugConnectionOption.None;
+		}
+
+		public void LoadFile(string file)
+		{
+			if (!File.Exists(file)) return;
+			var xmlDoc = XDocument.Parse(File.ReadAllText(file, System.Text.Encoding.UTF8));
+			foreach (var node in xmlDoc.Root.Elements())
+			{
+				var key = node.Attribute("key").Value;
+				var value = node.Attribute("value").Value;
+				switch (key)
+				{
+					case "SourceFile":
+						SourceFile = value;
+						break;
+					//TODO: Other options
+				}
+			}
+		}
+
+		public void SaveFile(string file)
+		{
+			var xmlDoc = new XDocument(new XElement("config"));
+			var root = xmlDoc.Root;
+
+			if (!string.IsNullOrEmpty(SourceFile))
+				root.Add(new XElement("param", new XAttribute("key", "SourceFile"), new XAttribute("value", SourceFile)));
+
+			//TODO: Other options
+
+			if (File.Exists(file))
+				File.Delete(file);
+			xmlDoc.Save(file);
 		}
 
 		public void LoadArguments(string[] args)

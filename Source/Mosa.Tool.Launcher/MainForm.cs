@@ -23,6 +23,14 @@ namespace Mosa.Tool.Launcher
 
 		public AppLocations AppLocations { get; set; }
 
+		public string ConfigFile
+		{
+			get
+			{
+				return Path.ChangeExtension(System.Reflection.Assembly.GetExecutingAssembly().Location, ".config.xml");
+			}
+		}
+
 		public MainForm()
 		{
 			InitializeComponent();
@@ -285,8 +293,19 @@ namespace Mosa.Tool.Launcher
 			}
 		}
 
+		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+		{
+			if (keyData == Keys.F5)
+				CompileAndLaunch();
+			if (keyData == Keys.F6)
+				Builder.Launch();
+
+			return base.ProcessCmdKey(ref msg, keyData);
+		}
+
 		private void CompileAndLaunch()
 		{
+			Options.SaveFile(ConfigFile);
 			rtbOutput.Clear();
 			rtbCounters.Clear();
 

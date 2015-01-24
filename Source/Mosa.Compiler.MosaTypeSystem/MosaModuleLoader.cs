@@ -15,7 +15,7 @@ using System.IO;
 
 namespace Mosa.Compiler.MosaTypeSystem
 {
-	public class MosaModuleLoader : IModuleLoader
+	public class MosaModuleLoader : IModuleLoader, System.IDisposable
 	{
 		public AssemblyResolver Resolver { get; private set; }
 
@@ -96,6 +96,13 @@ namespace Mosa.Compiler.MosaTypeSystem
 		public IMetadata CreateMetadata()
 		{
 			return new CLRMetadata(this);
+		}
+
+		public void Dispose()
+		{
+			foreach (var module in Modules)
+				module.Dispose();
+			Modules.Clear();
 		}
 	}
 }
