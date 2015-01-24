@@ -267,18 +267,21 @@ namespace Mosa.Compiler.Framework
 
 		public void SetMethodStackSize(MosaMethod method, int size)
 		{
-			methodStackSizes.Add(method, size);
+            lock(methodStackSizes)
+			    methodStackSizes.Add(method, size);
 		}
 
 		public void SetMethodParameterStackSize(MosaMethod method, int size)
 		{
-			methodParameterStackSizes.Add(method, size);
+            lock(methodParameterStackSizes)
+			    methodParameterStackSizes.Add(method, size);
 		}
 
 		public int GetMethodStackSize(MosaMethod method)
 		{
 			var size = 0;
 
+            lock(methodStackSizes)
 			if (!methodStackSizes.TryGetValue(method, out size))
 			{
 				if ((method.MethodAttributes & MosaMethodAttributes.Abstract) == MosaMethodAttributes.Abstract)
@@ -295,6 +298,7 @@ namespace Mosa.Compiler.Framework
 		{
 			var size = 0;
 
+            lock(methodParameterStackSizes)
 			if (!methodParameterStackSizes.TryGetValue(method, out size))
 			{
 				if ((method.MethodAttributes & MosaMethodAttributes.Abstract) == MosaMethodAttributes.Abstract)
@@ -473,7 +477,7 @@ namespace Mosa.Compiler.Framework
 						var cleanInterfaceMethodName = GetCleanMethodName(interfaceMethod.Name);
 
 						// Check that the signatures match, the types and the names
-						if (overrideTarget.Equals(interfaceMethod) && overrideTarget.DeclaringType.Equals(interfaceType) && cleanOverrideTargetName.Equals(cleanInterfaceMethodName))
+                        if (overrideTarget.SignatureEquals(interfaceMethod) && overrideTarget.DeclaringType.Equals(interfaceType) && cleanOverrideTargetName.Equals(cleanInterfaceMethodName))
 						{
 							methodTable[slot] = method;
 						}
@@ -503,7 +507,7 @@ namespace Mosa.Compiler.Framework
 
 				if (cleanInterfaceMethodName.Equals(cleanMethodName))
 				{
-					if (interfaceMethod.Equals(method))
+                    if (interfaceMethod.SignatureEquals(method))
 					{
 						return method;
 					}
@@ -536,7 +540,7 @@ namespace Mosa.Compiler.Framework
 
 				if (cleanInterfaceMethodName.Equals(cleanMethodName))
 				{
-					if (interfaceMethod.Equals(method))
+                    if (interfaceMethod.SignatureEquals(method))
 					{
 						return method;
 					}
@@ -585,7 +589,7 @@ namespace Mosa.Compiler.Framework
 			{
 				if (method.IsVirtual)
 				{
-					if (method.IsNewSlot)
+                    if (method.IsNewSlot)
 					{
 						int slot = methodTable.Count;
 						methodTable.Add(method);
@@ -594,8 +598,17 @@ namespace Mosa.Compiler.Framework
 					else
 					{
 						int slot = FindOverrideSlot(methodTable, method);
-						methodTable[slot] = method;
-						methodTableOffsets.Add(method.FullName, slot);
+                        if (slot != -1)
+                        {
+                            methodTable[slot] = method;
+                            methodTableOffsets.Add(method.FullName, slot);
+                        }
+                        else
+                        {
+                            slot = methodTable.Count;
+                            methodTable.Add(method);
+                            methodTableOffsets.Add(method.FullName, slot);
+                        }
 					}
 				}
 				else
@@ -646,7 +659,7 @@ namespace Mosa.Compiler.Framework
 
 			foreach (var baseMethod in methodTable)
 			{
-				if (baseMethod.Name.Equals(method.Name) && baseMethod.Equals(method))
+                if (baseMethod.Name.Equals(method.Name) && baseMethod.SignatureEquals(method))
 				{
 					if (baseMethod.GenericArguments.Count == 0)
 						return methodTableOffsets[baseMethod.FullName];
@@ -658,7 +671,8 @@ namespace Mosa.Compiler.Framework
 			if (slot >= 0) // non generic methods are more exact
 				return slot;
 
-			throw new InvalidOperationException(@"Failed to find override method slot.");
+			//throw new InvalidOperationException(@"Failed to find override method slot.");
+            return -1;
 		}
 
 		/// <summary>

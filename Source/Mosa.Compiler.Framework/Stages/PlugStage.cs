@@ -100,7 +100,7 @@ namespace Mosa.Compiler.Framework.Stages
 							{
 								if (targetMethodCandidate.IsStatic)
 								{
-									if (targetMethodCandidate.Equals(method))
+                                    if (targetMethodCandidate.SignatureEquals(method))
 									{
 										targetMethod = targetMethodCandidate;
 										break;
