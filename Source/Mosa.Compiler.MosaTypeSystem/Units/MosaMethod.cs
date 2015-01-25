@@ -186,4 +186,17 @@ namespace Mosa.Compiler.MosaTypeSystem
 			}
 		}
 	}
+
+	public class MosaMethodFullNameComparer : IEqualityComparer<MosaMethod>
+	{
+		public bool Equals(MosaMethod x, MosaMethod y)
+		{
+			return x.FullName.Equals(y.FullName);
+		}
+
+		public int GetHashCode(MosaMethod obj)
+		{
+			return obj.FullName.GetHashCode();
+		}
+	}
 }

@@ -64,12 +64,12 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// The method stack sizes
 		/// </summary>
-		private Dictionary<MosaMethod, int> methodStackSizes = new Dictionary<MosaMethod, int>();
+		private Dictionary<MosaMethod, int> methodStackSizes = new Dictionary<MosaMethod, int>(new MosaMethodFullNameComparer());
 
 		/// <summary>
 		/// The method parameter stack sizes
 		/// </summary>
-		private Dictionary<MosaMethod, int> methodParameterStackSizes = new Dictionary<MosaMethod, int>();
+		private Dictionary<MosaMethod, int> methodParameterStackSizes = new Dictionary<MosaMethod, int>(new MosaMethodFullNameComparer());
 
 		#endregion Data members
 
