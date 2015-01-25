@@ -268,6 +268,10 @@ namespace Mosa.Compiler.Framework
 							{
 								CompileWorker(tid);
 							}
+							catch (Exception e)
+							{
+								this.CompilerTrace.NewCompilerTraceEvent(CompilerEvent.Exception, e.ToString(), threadID);
+							}
 							finally
 							{
 								finished.Signal();

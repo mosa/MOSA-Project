@@ -23,10 +23,13 @@ namespace Mosa.Compiler.Framework
 
 		public void UpdateCounter(string name, int count)
 		{
-			if (counters.ContainsKey(name))
-				counters[name] = counters[name] + count;
-			else
-				counters.Add(name, count);
+			lock (counters)
+			{
+				if (counters.ContainsKey(name))
+					counters[name] = counters[name] + count;
+				else
+					counters.Add(name, count);
+			}
 		}
 
 		public IList<string> Export()

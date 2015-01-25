@@ -126,7 +126,8 @@ namespace Mosa.Utility.Launcher
 
 				Compiler.Load(inputFiles);
 
-				Compiler.Execute(Environment.ProcessorCount);
+				var threads = Environment.ProcessorCount;
+				Compiler.Execute(threads);
 
 				if (Options.ImageFormat == ImageFormat.ISO)
 				{

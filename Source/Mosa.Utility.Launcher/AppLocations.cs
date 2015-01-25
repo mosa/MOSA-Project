@@ -125,7 +125,8 @@ namespace Mosa.Utility.Launcher
 					new string[] { "vmplayer.exe", "vmplayer" },
 					new string[] {
 					CombineParameterAndDirectory("ProgramFiles",@"VMware\VMware Player"),
-					CombineParameterAndDirectory("ProgramFiles(x86)",@"VMware\VMware Player")
+					CombineParameterAndDirectory("ProgramFiles(x86)",@"VMware\VMware Player"),
+                    @"/bin"
 				}
 				);
 			}
@@ -143,7 +144,8 @@ namespace Mosa.Utility.Launcher
 					CombineParameterAndDirectory("MOSA",@"Tools\mkisofs"),
 					CombineParameterAndDirectory("MOSA",@"mkisofs"),
 					@"..\Tools\mkisofs",
-					@"Tools\mkisofs"
+					@"Tools\mkisofs",
+                    @"/bin"
 				}
 				);
 			}

@@ -99,7 +99,13 @@ namespace Mosa.Compiler.MosaTypeSystem
 		public bool Equals(MosaMethod other)
 		{
 			return SignatureComparer.Equals(this.Signature, other.Signature);
+			//return SignatureEquals(other) && this.DeclaringType.FullName == other.DeclaringType.FullName && this.Name == other.Name;
 		}
+
+		//public bool SignatureEquals(MosaMethod other)
+		//{
+		//	return SignatureComparer.Equals(this.Signature, other.Signature);
+		//}
 
 		public class Mutator : MosaUnit.MutatorBase
 		{
@@ -178,6 +184,19 @@ namespace Mosa.Compiler.MosaTypeSystem
 					method.FullName = SignatureName.GetSignature(method.DeclaringType.FullName + "::" + methodName.ToString(), method.Signature, false);
 				}
 			}
+		}
+	}
+
+	public class MosaMethodFullNameComparer : IEqualityComparer<MosaMethod>
+	{
+		public bool Equals(MosaMethod x, MosaMethod y)
+		{
+			return x.FullName.Equals(y.FullName);
+		}
+
+		public int GetHashCode(MosaMethod obj)
+		{
+			return obj.FullName.GetHashCode();
 		}
 	}
 }
