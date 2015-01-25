@@ -20,7 +20,7 @@ namespace Mosa.Compiler.Framework
 		#region Data Members
 
 		private readonly Queue<MosaMethod> methodQueue = new Queue<MosaMethod>();
-		private readonly HashSet<string> methodScheduled = new HashSet<string>();
+		private readonly HashSet<MosaMethod> methodScheduled = new HashSet<MosaMethod>(new MosaMethodFullNameComparer());
 		//private readonly HashSet<MosaMethod> methodCompiled = new HashSet<MosaMethod>();
 
 		private readonly TypeSystem typeSystem;
@@ -64,7 +64,7 @@ namespace Mosa.Compiler.Framework
 			if (method.IsAbstract)
 				return;
 
-			if (methodScheduled.Contains(method.FullName))
+			if (methodScheduled.Contains(method))
 				return;
 
 			if (method.IsLinkerGenerated)
@@ -72,7 +72,7 @@ namespace Mosa.Compiler.Framework
 
 			lock (mylock)
 			{
-				methodScheduled.Add(method.FullName);
+				methodScheduled.Add(method);
 				methodQueue.Enqueue(method);
 			}
 		}
@@ -81,7 +81,7 @@ namespace Mosa.Compiler.Framework
 		{
 			lock (mylock)
 			{
-				return methodScheduled.Contains(method.FullName);
+				return methodScheduled.Contains(method);
 			}
 		}
 

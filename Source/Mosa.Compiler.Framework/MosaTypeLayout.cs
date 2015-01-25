@@ -34,7 +34,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Holds the method table offsets value for each method
 		/// </summary>
-		private Dictionary<string, int> methodTableOffsets = new Dictionary<string, int>();
+		private Dictionary<MosaMethod, int> methodTableOffsets = new Dictionary<MosaMethod, int>(new MosaMethodFullNameComparer());
 
 		/// <summary>
 		/// Holds the slot value for each interface
@@ -125,7 +125,7 @@ namespace Mosa.Compiler.Framework
 		public int GetMethodTableOffset(MosaMethod method)
 		{
 			ResolveType(method.DeclaringType);
-			return methodTableOffsets[method.FullName];
+			return methodTableOffsets[method];
 		}
 
 		/// <summary>
@@ -593,13 +593,13 @@ namespace Mosa.Compiler.Framework
 					{
 						int slot = methodTable.Count;
 						methodTable.Add(method);
-						methodTableOffsets.Add(method.FullName, slot);
+						methodTableOffsets.Add(method, slot);
 					}
 					else
 					{
 						int slot = FindOverrideSlot(methodTable, method);
 						methodTable[slot] = method;
-						methodTableOffsets.Add(method.FullName, slot);
+						methodTableOffsets.Add(method, slot);
 					}
 				}
 				else
@@ -608,13 +608,13 @@ namespace Mosa.Compiler.Framework
 					{
 						int slot = methodTable.Count;
 						methodTable.Add(method);
-						methodTableOffsets.Add(method.FullName, slot);
+						methodTableOffsets.Add(method, slot);
 					}
 					else if (!method.IsInternal && method.ExternMethod == null)
 					{
 						int slot = methodTable.Count;
 						methodTable.Add(method);
-						methodTableOffsets.Add(method.FullName, slot);
+						methodTableOffsets.Add(method, slot);
 					}
 				}
 			}
@@ -653,9 +653,9 @@ namespace Mosa.Compiler.Framework
 				if (baseMethod.Name.Equals(method.Name) && baseMethod.Equals(method))
 				{
 					if (baseMethod.GenericArguments.Count == 0)
-						return methodTableOffsets[baseMethod.FullName];
+						return methodTableOffsets[baseMethod];
 					else
-						slot = methodTableOffsets[baseMethod.FullName];
+						slot = methodTableOffsets[baseMethod];
 				}
 			}
 
