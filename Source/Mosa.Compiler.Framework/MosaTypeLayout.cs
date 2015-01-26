@@ -606,8 +606,17 @@ namespace Mosa.Compiler.Framework
 					else
 					{
 						int slot = FindOverrideSlot(methodTable, method);
-						methodTable[slot] = method;
-						methodTableOffsets.Add(method, slot);
+						if (slot != -1)
+						{
+							methodTable[slot] = method;
+							methodTableOffsets.Add(method, slot);
+						}
+						else
+						{
+							slot = methodTable.Count;
+							methodTable.Add(method);
+							methodTableOffsets.Add(method, slot);
+						}
 					}
 				}
 				else
@@ -670,7 +679,8 @@ namespace Mosa.Compiler.Framework
 			if (slot >= 0) // non generic methods are more exact
 				return slot;
 
-			throw new InvalidOperationException(@"Failed to find override method slot.");
+			//throw new InvalidOperationException(@"Failed to find override method slot.");
+			return -1;
 		}
 
 		/// <summary>
