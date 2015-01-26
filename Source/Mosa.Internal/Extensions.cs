@@ -12,9 +12,9 @@ namespace Mosa.Kernel.Helpers
 			return self ? 1 : 0;
 		}
 
-		public static int ToByte(this bool self)
+		public static byte ToByte(this bool self)
 		{
-			return self ? 1 : 0;
+			return self ? (byte)1 : (byte)0;
 		}
 
 		public static char ToChar(this bool self)
@@ -52,7 +52,7 @@ namespace Mosa.Kernel.Helpers
 			return (self & mask) == mask;
 		}
 
-		public static bool IsFlagSet(this byte self, byte bit)
+		public static bool IsBitSet(this byte self, byte bit)
 		{
 			return (self & (0x1 << bit)) == (0x1 << bit);
 		}
@@ -62,7 +62,7 @@ namespace Mosa.Kernel.Helpers
 			return (byte)(self | mask);
 		}
 
-		public static byte SetFlag(this byte self, byte bit)
+		public static byte SetBit(this byte self, byte bit)
 		{
 			return (byte)(self | (0x1 << bit));
 		}
@@ -72,7 +72,7 @@ namespace Mosa.Kernel.Helpers
 			return (byte)(self & ~mask);
 		}
 
-		public static byte ClearFlag(this byte self, byte bit)
+		public static byte ClearBit(this byte self, byte bit)
 		{
 			return (byte)(self & ~(0x1 << bit));
 		}
@@ -85,7 +85,7 @@ namespace Mosa.Kernel.Helpers
 				return (byte)(self & ~mask);
 		}
 
-		public static byte SetFlag(this byte self, byte bit, bool state)
+		public static byte SetBit(this byte self, byte bit, bool state)
 		{
 			if (state)
 				return (byte)(self | (0x1 << bit));
@@ -110,23 +110,6 @@ namespace Mosa.Kernel.Helpers
 
 		public static byte SetBits(this byte self, byte source, byte index, byte count)
 		{
-			//Does not work
-			//var cutLeft = 8 - count;
-			//var setMask = (source << cutLeft);
-			//var clearMask = (~source << cutLeft) >> (cutLeft - index);
-			//return (byte)((self | setMask) & ~clearMask);
-
-			//Does not work
-			//byte mask = (byte)(0xFF >> (8 - count));
-			//mask = (byte)(mask << index);
-			//return (byte)((self & ~mask) | (source & mask));
-
-			//for (byte i = 0; i < count; i++)
-			//	self = SetFlag(self, (byte)(index + i), IsFlagSet(source, index));
-
-			////return self;
-			//return self;
-
 			byte mask = (byte)(0xFF >> (8 - count));
 			byte bits = (byte)((source & mask) << index);
 			return (byte)((self & ~(mask << index)) | bits);
@@ -141,7 +124,7 @@ namespace Mosa.Kernel.Helpers
 			return (*self & mask) == mask;
 		}
 
-		unsafe public static bool IsFlagSet(byte* self, byte bit)
+		unsafe public static bool IsBitSet(byte* self, byte bit)
 		{
 			return (*self & (0x1 << bit)) == (0x1 << bit);
 		}
@@ -151,7 +134,7 @@ namespace Mosa.Kernel.Helpers
 			*self = (byte)(*self | mask);
 		}
 
-		unsafe public static void SetFlag(byte* self, byte bit)
+		unsafe public static void SetBit(byte* self, byte bit)
 		{
 			*self = (byte)(*self | (0x1 << bit));
 		}
@@ -161,7 +144,7 @@ namespace Mosa.Kernel.Helpers
 			*self = (byte)(*self & ~mask);
 		}
 
-		unsafe public static void ClearFlag(byte* self, byte bit)
+		unsafe public static void ClearBit(byte* self, byte bit)
 		{
 			*self = (byte)(*self & ~(0x1 << bit));
 		}
@@ -174,7 +157,7 @@ namespace Mosa.Kernel.Helpers
 				*self = (byte)(*self & ~mask);
 		}
 
-		unsafe public static void SetFlag(byte* self, byte bit, bool state)
+		unsafe public static void SetBit(byte* self, byte bit, bool state)
 		{
 			if (state)
 				*self = (byte)(*self | (0x1 << bit));
@@ -190,6 +173,18 @@ namespace Mosa.Kernel.Helpers
 		unsafe public static void CircularRightShift(byte* a, byte n)
 		{
 			*a = (byte)(*a >> n | *a << (8 - n));
+		}
+
+		unsafe public static void GetBits(byte* self, byte index, byte count)
+		{
+			*self = (byte)((*self >> index) << (8 - count));
+		}
+
+		unsafe public static void SetBits(byte* self, byte source, byte index, byte count)
+		{
+			byte mask = (byte)(0xFF >> (8 - count));
+			byte bits = (byte)((source & mask) << index);
+			*self = (byte)((*self & ~(mask << index)) | bits);
 		}
 
 		#endregion *Byte

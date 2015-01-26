@@ -1,10 +1,12 @@
 ﻿/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
+ * (c) 2015 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
+ *  Stefan Andres Charsley (charsleysa) <charsleysa@gmail.com>
+ *  Sebastion Loncar (Arakis) <sebastion.loncar@gmail.com>
  */
 
 using Mosa.Kernel.Helpers;
@@ -98,7 +100,7 @@ namespace Mosa.Kernel.x86
 	{
 		private static uint gdtTableAddress = 0x1401000;
 
-		private static ushort _Length = 0;
+		private static ushort length = 0;
 
 		private static GDTEntry* entries;
 
@@ -135,49 +137,55 @@ namespace Mosa.Kernel.x86
 		{
 			get
 			{
-				return _Length;
+				return length;
 			}
 			private set
 			{
-				_Length = value;
+				length = value;
 				SizeInternal = (ushort)(value * GDTEntry.EntrySize - 1);
 			}
 		}
 
+		/// <summary>
+		/// Sets up the GDT table and entries
+		/// </summary>
 		public static void Setup()
 		{
 			entries = (GDTEntry*)(gdtTableAddress + 6);
 			AdressOfEntries = (uint)entries;
 
 			//Null segment
-			var entry = AppendEmptyEntry();
+			var nullEntry = AppendEmptyEntry();
 
 			//code segment
-			entry = AppendEmptyEntry();
-			entry->BaseAddress = 0;
-			entry->Limit = 0xFFFFFFFF;
-			entry->Segment = true;
-			entry->Executable = true;
-			entry->Readable = true;
-			entry->PriviligeRing = 0;
-			entry->Present = true;
-			entry->AddressMode = GDTEntry.EAddressMode.Bits32;
-			entry->Granularity = true;
+			var codeEntry = AppendEmptyEntry();
+			codeEntry->BaseAddress = 0;
+			codeEntry->Limit = 0xFFFFFFFF;
+			codeEntry->Segment = true;
+			codeEntry->Executable = true;
+			codeEntry->Readable = true;
+			codeEntry->PriviligeRing = 0;
+			codeEntry->Present = true;
+			codeEntry->AddressMode = GDTEntry.EAddressMode.Bits32;
+			codeEntry->Granularity = true;
 
 			//data segment
-			entry = AppendEmptyEntry();
-			entry->BaseAddress = 0;
-			entry->Limit = 0xFFFFFFFF;
-			entry->Segment = true;
-			entry->Writable = true;
-			entry->PriviligeRing = 0;
-			entry->Present = true;
-			entry->AddressMode = GDTEntry.EAddressMode.Bits32;
-			entry->Granularity = true;
+			var dataEntry = AppendEmptyEntry();
+			dataEntry->BaseAddress = 0;
+			dataEntry->Limit = 0xFFFFFFFF;
+			dataEntry->Segment = true;
+			dataEntry->Writable = true;
+			dataEntry->PriviligeRing = 0;
+			dataEntry->Present = true;
+			dataEntry->AddressMode = GDTEntry.EAddressMode.Bits32;
+			dataEntry->Granularity = true;
 
 			Flush();
 		}
 
+		/// <summary>
+		/// Flushes the GDT table
+		/// </summary>
 		public static void Flush()
 		{
 			#region REMOVE_ME!
@@ -197,6 +205,10 @@ namespace Mosa.Kernel.x86
 			StoreEntry((ushort)(Length - 1), source);
 		}
 
+		/// <summary>
+		/// Appends an empty GDT entry to the end of the GDT entries.
+		/// </summary>
+		/// <returns>The a pointer to the appended entry.</returns>
 		public static GDTEntry* AppendEmptyEntry()
 		{
 			Length++;
@@ -215,22 +227,22 @@ namespace Mosa.Kernel.x86
 	unsafe public struct GDTEntry
 	{
 		[FieldOffset(0)]
-		private ushort LimitLow;
+		private ushort limitLow;
 
 		[FieldOffset(2)]
-		private ushort BaseLow;
+		private ushort baseLow;
 
 		[FieldOffset(4)]
-		private byte BaseMiddle;
+		private byte baseMiddle;
 
 		[FieldOffset(5)]
-		private byte Access;
+		private byte access;
 
 		[FieldOffset(6)]
-		private byte Flags;
+		private byte flags;
 
 		[FieldOffset(7)]
-		private byte BaseHigh;
+		private byte baseHigh;
 
 		public const byte EntrySize = 0x08;
 
@@ -247,7 +259,7 @@ namespace Mosa.Kernel.x86
 		{
 			get
 			{
-				return LimitLow == 0 && BaseLow == 0 && BaseMiddle == 0 && Access == 0 && Flags == 0 && BaseHigh == 0;
+				return limitLow == 0 && baseLow == 0 && baseMiddle == 0 && access == 0 && flags == 0 && baseHigh == 0;
 			}
 		}
 
@@ -255,13 +267,13 @@ namespace Mosa.Kernel.x86
 		{
 			get
 			{
-				return (uint)(BaseLow | (BaseMiddle << 16) | (BaseHigh << 24));
+				return (uint)(baseLow | (baseMiddle << 16) | (baseHigh << 24));
 			}
 			set
 			{
-				BaseLow = (ushort)(value & 0xFFFF);
-				BaseMiddle = (byte)((value >> 16) & 0xFF);
-				BaseHigh = (byte)((value >> 24) & 0xFF);
+				baseLow = (ushort)(value & 0xFFFF);
+				baseMiddle = (byte)((value >> 16) & 0xFF);
+				baseHigh = (byte)((value >> 24) & 0xFF);
 			}
 		}
 
@@ -269,12 +281,12 @@ namespace Mosa.Kernel.x86
 		{
 			get
 			{
-				return (uint)(LimitLow | Flags.GetBits(FlagsByteOffset.Limit, 4));
+				return (uint)(limitLow | flags.GetBits(FlagsByteOffset.Limit, 4));
 			}
 			set
 			{
-				LimitLow = (ushort)(value & 0xFFFF);
-				Flags = Flags.SetBits((byte)((value >> 16) & 0x0F), FlagsByteOffset.Limit, 4);
+				limitLow = (ushort)(value & 0xFFFF);
+				flags = flags.SetBits((byte)((value >> 16) & 0x0F), FlagsByteOffset.Limit, 4);
 			}
 		}
 
@@ -315,11 +327,11 @@ namespace Mosa.Kernel.x86
 		{
 			get
 			{
-				return Access.IsFlagSet(AccessByteOffset.Pr);
+				return access.IsBitSet(AccessByteOffset.Pr);
 			}
 			set
 			{
-				Access = Access.SetFlag(AccessByteOffset.Pr, value);
+				access = access.SetBit(AccessByteOffset.Pr, value);
 			}
 		}
 
@@ -328,12 +340,12 @@ namespace Mosa.Kernel.x86
 			get
 			{
 				CheckSegment();
-				return Access.IsFlagSet(AccessByteOffset.Ex);
+				return access.IsBitSet(AccessByteOffset.Ex);
 			}
 			set
 			{
 				CheckSegment();
-				Access = Access.SetFlag(AccessByteOffset.Ex, value);
+				access = access.SetBit(AccessByteOffset.Ex, value);
 			}
 		}
 
@@ -341,11 +353,11 @@ namespace Mosa.Kernel.x86
 		{
 			get
 			{
-				return Access.IsFlagSet(AccessByteOffset.IsCodeOrData);
+				return access.IsBitSet(AccessByteOffset.IsCodeOrData);
 			}
 			set
 			{
-				Access = Access.SetFlag(AccessByteOffset.IsCodeOrData, value);
+				access = access.SetBit(AccessByteOffset.IsCodeOrData, value);
 			}
 		}
 
@@ -354,12 +366,12 @@ namespace Mosa.Kernel.x86
 			get
 			{
 				CheckSegment();
-				return Access.IsFlagSet(AccessByteOffset.DC);
+				return access.IsBitSet(AccessByteOffset.DC);
 			}
 			set
 			{
 				CheckSegment();
-				Access = Access.SetFlag(AccessByteOffset.DC, value);
+				access = access.SetBit(AccessByteOffset.DC, value);
 			}
 		}
 
@@ -368,12 +380,12 @@ namespace Mosa.Kernel.x86
 			get
 			{
 				CheckSegment();
-				return Access.IsFlagSet(AccessByteOffset.RW);
+				return access.IsBitSet(AccessByteOffset.RW);
 			}
 			set
 			{
 				CheckSegment();
-				Access = Access.SetFlag(AccessByteOffset.RW, value);
+				access = access.SetBit(AccessByteOffset.RW, value);
 			}
 		}
 
@@ -382,13 +394,13 @@ namespace Mosa.Kernel.x86
 			get
 			{
 				CheckSegment();
-				return Access.IsFlagSet(AccessByteOffset.Ac);
+				return access.IsBitSet(AccessByteOffset.Ac);
 			}
 			set
 			{
 				CheckSegment();
 
-				Access = Access.SetFlag(AccessByteOffset.Ac, value);
+				access = access.SetBit(AccessByteOffset.Ac, value);
 			}
 		}
 
@@ -428,14 +440,14 @@ namespace Mosa.Kernel.x86
 		{
 			get
 			{
-				return Access.GetBits(AccessByteOffset.Privl, 2);
+				return access.GetBits(AccessByteOffset.Privl, 2);
 			}
 			set
 			{
 				if (value > 3)
 					Panic.Error("Privilege ring can't be larger than 3");
 
-				Access = Access.SetBits(value, AccessByteOffset.Privl, 2);
+				access = access.SetBits(value, AccessByteOffset.Privl, 2);
 			}
 		}
 
@@ -453,11 +465,11 @@ namespace Mosa.Kernel.x86
 		{
 			get
 			{
-				return Flags.IsFlagSet(FlagsByteOffset.Custom);
+				return flags.IsBitSet(FlagsByteOffset.Custom);
 			}
 			set
 			{
-				Flags = Flags.SetFlag(FlagsByteOffset.Custom, value);
+				flags = flags.SetBit(FlagsByteOffset.Custom, value);
 			}
 		}
 
@@ -465,11 +477,11 @@ namespace Mosa.Kernel.x86
 		{
 			get
 			{
-				return Flags.IsFlagSet(FlagsByteOffset.LongMode);
+				return flags.IsBitSet(FlagsByteOffset.LongMode);
 			}
 			set
 			{
-				Flags = Flags.SetFlag(FlagsByteOffset.LongMode, value);
+				flags = flags.SetBit(FlagsByteOffset.LongMode, value);
 				if (value)
 					SizeBit = false;
 			}
@@ -479,14 +491,14 @@ namespace Mosa.Kernel.x86
 		{
 			get
 			{
-				return Flags.IsFlagSet(FlagsByteOffset.Sz);
+				return flags.IsBitSet(FlagsByteOffset.Sz);
 			}
 			set
 			{
 				if (value && LongMode)
 					Panic.Error("Size type invalid for long mode");
 
-				Flags = Flags.SetFlag(FlagsByteOffset.Sz, value);
+				flags = flags.SetBit(FlagsByteOffset.Sz, value);
 			}
 		}
 
@@ -527,11 +539,11 @@ namespace Mosa.Kernel.x86
 		{
 			get
 			{
-				return Flags.IsFlagSet(FlagsByteOffset.Gr);
+				return flags.IsBitSet(FlagsByteOffset.Gr);
 			}
 			set
 			{
-				Flags = Flags.SetFlag(FlagsByteOffset.Gr, value);
+				flags = flags.SetBit(FlagsByteOffset.Gr, value);
 			}
 		}
 
