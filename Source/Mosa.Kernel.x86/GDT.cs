@@ -99,84 +99,38 @@ namespace Mosa.Kernel.x86
 	unsafe public static class GDT
 	{
 		private static uint gdtTableAddress = 0x1401000;
-
-		private static ushort length = 0;
-
-		private static DTEntry* entries;
-
-		private static DTEntry* GetEntryRef(ushort index)
-		{
-			return entries + index;
-		}
-
-		private static ushort SizeInternal
-		{
-			get
-			{
-				return *(ushort*)gdtTableAddress;
-			}
-			set
-			{
-				*(ushort*)gdtTableAddress = value;
-			}
-		}
-
-		private static uint AddressOfEntries
-		{
-			get
-			{
-				return *(uint*)(gdtTableAddress + 2);
-			}
-			set
-			{
-				*(uint*)(gdtTableAddress + 2) = value;
-			}
-		}
-
-		public static ushort Length
-		{
-			get
-			{
-				return length;
-			}
-			private set
-			{
-				length = value;
-				SizeInternal = (ushort)(value * DTEntry.EntrySize - 1);
-			}
-		}
+		private static DescriptorTable* table;
 
 		/// <summary>
 		/// Sets up the GDT table and entries
 		/// </summary>
 		public static void Setup()
 		{
-			entries = (DTEntry*)(gdtTableAddress + 6);
-			AddressOfEntries = (uint)entries;
+			table = (DescriptorTable*)gdtTableAddress;
+			table->Clear();
+			table->AdressOfEntries = gdtTableAddress + DescriptorTable.StructSize;
 
 			//Null segment
-			var nullEntry = DTEntry.CreateNullDescriptor();
-			AddEntry((DTEntry)nullEntry);
+			var nullEntry = DescriptorTableEntry.CreateNullDescriptor();
+			table->AddEntry((DescriptorTableEntry)nullEntry);
 
 			//code segment
-			var codeEntry = DTEntry.CreateCode(0, 0xFFFFFFFF);
+			var codeEntry = DescriptorTableEntry.CreateCode(0, 0xFFFFFFFF);
 			codeEntry.Readable = true;
 			codeEntry.PriviligeRing = 0;
 			codeEntry.Present = true;
-			codeEntry.AddressMode = DTEntry.EAddressMode.Bits32;
+			codeEntry.AddressMode = DescriptorTableEntry.EAddressMode.Bits32;
 			codeEntry.Granularity = true;
-			AddEntry((DTEntry)codeEntry);
+			table->AddEntry((DescriptorTableEntry)codeEntry);
 
 			//data segment
-			var dataEntry = DTEntry.CreateData(0, 0xFFFFFFFF);
+			var dataEntry = DescriptorTableEntry.CreateData(0, 0xFFFFFFFF);
 			dataEntry.Writable = true;
 			dataEntry.PriviligeRing = 0;
 			dataEntry.Present = true;
-			dataEntry.AddressMode = DTEntry.EAddressMode.Bits32;
+			dataEntry.AddressMode = DescriptorTableEntry.EAddressMode.Bits32;
 			dataEntry.Granularity = true;
-			AddEntry((DTEntry)dataEntry);
-
-			//Panic.DumpMemory((uint)entries);
+			table->AddEntry((DescriptorTableEntry)dataEntry);
 
 			Flush();
 		}
@@ -196,37 +150,87 @@ namespace Mosa.Kernel.x86
 
 			Native.Lgdt(gdtTableAddress);
 		}
+	}
 
-		public static void AddEntry(DTEntry source)
+	/// <summary>
+	/// Global Descriptor Table and Local Descriptor Table
+	/// </summary>
+	[StructLayout(LayoutKind.Explicit)]
+	unsafe public struct DescriptorTable
+	{
+		[FieldOffset(0)]
+		private ushort size;
+
+		[FieldOffset(2)]
+		public uint AdressOfEntries;
+
+		public const byte StructSize = 0x06;
+
+		private DescriptorTableEntry* entries
+		{
+			get
+			{
+				return (DescriptorTableEntry*)AdressOfEntries;
+			}
+			set
+			{
+				AdressOfEntries = (uint)value;
+			}
+		}
+
+		private DescriptorTableEntry* GetEntryRef(ushort index)
+		{
+			return entries + index;
+		}
+
+		public ushort Length
+		{
+			get
+			{
+				if (size == 0)
+					return 0;
+				else
+					return (ushort)((size + 1) / DescriptorTableEntry.EntrySize);
+			}
+			private set
+			{
+				if (value == 0)
+					size = 0;
+				else
+					size = (ushort)(value * DescriptorTableEntry.EntrySize - 1);
+			}
+		}
+
+		public void Clear()
+		{
+			Length = 0;
+		}
+
+		public void AddEntry(DescriptorTableEntry source)
 		{
 			Length++;
 			SetEntry((ushort)(Length - 1), source);
 		}
 
-		public static void SetEntry(ushort index, DTEntry source)
+		public void SetEntry(ushort index, DescriptorTableEntry source)
 		{
-			if (index < 0 || index >= length)
+			if (index < 0 || index >= Length)
 				Panic.OutOfRange();
 
-			DTEntry.CopyTo(&source, entries + index);
+			DescriptorTableEntry.CopyTo(&source, entries + index);
 		}
 
-		public static DTEntry GetEntry(ushort index)
+		public DescriptorTableEntry GetEntry(ushort index)
 		{
-			if (index < 0 || index >= length)
+			if (index < 0 || index >= Length)
 				Panic.OutOfRange();
 
 			return *(entries + index);
 		}
-
-		public static T GetValueTypeFromAddress<T>(uint address) where T : struct
-		{
-			return default(T);
-		}
 	}
 
 	[StructLayout(LayoutKind.Explicit)]
-	unsafe public struct DTEntry : IDTEntry, IDTCodeSegment, IDTDataSegment, IDTUserDescriptor, IDTSystemDescriptor
+	unsafe public struct DescriptorTableEntry : IDTEntry, IDTCodeSegment, IDTDataSegment, IDTUserDescriptor, IDTSystemDescriptor
 	{
 		[FieldOffset(0)]
 		private ushort limitLow;
@@ -248,14 +252,14 @@ namespace Mosa.Kernel.x86
 
 		public const byte EntrySize = 0x08;
 
-		public static DTEntry CreateNullDescriptor()
+		public static DescriptorTableEntry CreateNullDescriptor()
 		{
-			return new DTEntry();
+			return new DescriptorTableEntry();
 		}
 
-		private static DTEntry Create(uint baseAddress, uint limit)
+		private static DescriptorTableEntry Create(uint baseAddress, uint limit)
 		{
-			return new DTEntry() { BaseAddress = baseAddress, Limit = limit };
+			return new DescriptorTableEntry() { BaseAddress = baseAddress, Limit = limit };
 		}
 
 		public static IDTCodeSegment CreateCode(uint baseAddress, uint limit)
@@ -308,12 +312,12 @@ namespace Mosa.Kernel.x86
 			}
 		}
 
-		public static void CopyTo(DTEntry* source, DTEntry* destination)
+		public static void CopyTo(DescriptorTableEntry* source, DescriptorTableEntry* destination)
 		{
 			Memory.Copy((uint)source, (uint)destination, EntrySize);
 		}
 
-		public static void Clear(DTEntry* entry)
+		public static void Clear(DescriptorTableEntry* entry)
 		{
 			Memory.Clear((uint)entry, EntrySize);
 		}
@@ -658,7 +662,7 @@ namespace Mosa.Kernel.x86
 
 		bool Custom { get; set; }
 
-		DTEntry.EAddressMode AddressMode { get; set; }
+		DescriptorTableEntry.EAddressMode AddressMode { get; set; }
 
 		bool Granularity { get; set; }
 
