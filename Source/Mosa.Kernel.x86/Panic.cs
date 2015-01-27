@@ -69,6 +69,8 @@ namespace Mosa.Kernel.x86
 		public static void DumpMemory(uint address)
 		{
 			PrepareScreen("Memory Dump");
+			Screen.Write("Start address: 0x");
+			Screen.Write(address.ToString("X"));
 
 			var a = address;
 			for (var y = 0; y < 20; y++)
@@ -79,7 +81,8 @@ namespace Mosa.Kernel.x86
 				{
 					for (var x2 = 0; x2 < 4; x2++)
 					{
-						WriteHex(Native.Get8(a).ToString("X"), 2);
+						var number = Native.Get8(a);
+						WriteHex(number.ToString("X"), 2, number == 0);
 						Screen.Write(' ');
 						a++;
 					}
@@ -90,11 +93,16 @@ namespace Mosa.Kernel.x86
 			Halt();
 		}
 
-		private static void WriteHex(string hex, byte digits)
+		private static void WriteHex(string hex, byte digits, bool zero)
 		{
+			if (!zero)
+				Screen.Color = Colors.Black;
+
 			for (var i = 0; i < digits - hex.Length; i++)
 				Screen.Write('0');
 			Screen.Write(hex);
+
+			Screen.Color = Colors.DarkGray;
 		}
 
 		public static void Message(string message)
