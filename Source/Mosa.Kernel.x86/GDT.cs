@@ -18,7 +18,7 @@ namespace Mosa.Kernel.x86
 	/// <summary>
 	///
 	/// </summary>
-	//public static class GDT_OLD
+	//public static class GDT_
 	//{
 	//	private static uint gdtTable = 0x1401000;
 	//	private static uint gdtEntries = gdtTable + 6;
@@ -102,9 +102,9 @@ namespace Mosa.Kernel.x86
 
 		private static ushort length = 0;
 
-		private static GDTEntry* entries;
+		private static DTEntry* entries;
 
-		public static GDTEntry* GetEntry(ushort index)
+		private static DTEntry* GetEntryRef(ushort index)
 		{
 			return entries + index;
 		}
@@ -121,13 +121,13 @@ namespace Mosa.Kernel.x86
 			}
 		}
 
-		public static uint AdressOfEntries
+		private static uint AddressOfEntries
 		{
 			get
 			{
 				return *(uint*)(gdtTableAddress + 2);
 			}
-			private set
+			set
 			{
 				*(uint*)(gdtTableAddress + 2) = value;
 			}
@@ -142,7 +142,7 @@ namespace Mosa.Kernel.x86
 			private set
 			{
 				length = value;
-				SizeInternal = (ushort)(value * GDTEntry.EntrySize - 1);
+				SizeInternal = (ushort)(value * DTEntry.EntrySize - 1);
 			}
 		}
 
@@ -151,34 +151,32 @@ namespace Mosa.Kernel.x86
 		/// </summary>
 		public static void Setup()
 		{
-			entries = (GDTEntry*)(gdtTableAddress + 6);
-			AdressOfEntries = (uint)entries;
+			entries = (DTEntry*)(gdtTableAddress + 6);
+			AddressOfEntries = (uint)entries;
 
 			//Null segment
-			var nullEntry = AppendEmptyEntry();
+			var nullEntry = DTEntry.CreateNullDescriptor();
+			AddEntry((DTEntry)nullEntry);
 
 			//code segment
-			var codeEntry = AppendEmptyEntry();
-			codeEntry->BaseAddress = 0;
-			codeEntry->Limit = 0xFFFFFFFF;
-			codeEntry->Segment = true;
-			codeEntry->Executable = true;
-			codeEntry->Readable = true;
-			codeEntry->PriviligeRing = 0;
-			codeEntry->Present = true;
-			codeEntry->AddressMode = GDTEntry.EAddressMode.Bits32;
-			codeEntry->Granularity = true;
+			var codeEntry = DTEntry.CreateCode(0, 0xFFFFFFFF);
+			codeEntry.Readable = true;
+			codeEntry.PriviligeRing = 0;
+			codeEntry.Present = true;
+			codeEntry.AddressMode = DTEntry.EAddressMode.Bits32;
+			codeEntry.Granularity = true;
+			AddEntry((DTEntry)codeEntry);
 
 			//data segment
-			var dataEntry = AppendEmptyEntry();
-			dataEntry->BaseAddress = 0;
-			dataEntry->Limit = 0xFFFFFFFF;
-			dataEntry->Segment = true;
-			dataEntry->Writable = true;
-			dataEntry->PriviligeRing = 0;
-			dataEntry->Present = true;
-			dataEntry->AddressMode = GDTEntry.EAddressMode.Bits32;
-			dataEntry->Granularity = true;
+			var dataEntry = DTEntry.CreateData(0, 0xFFFFFFFF);
+			dataEntry.Writable = true;
+			dataEntry.PriviligeRing = 0;
+			dataEntry.Present = true;
+			dataEntry.AddressMode = DTEntry.EAddressMode.Bits32;
+			dataEntry.Granularity = true;
+			AddEntry((DTEntry)dataEntry);
+
+			//Panic.DumpMemory((uint)entries);
 
 			Flush();
 		}
@@ -199,32 +197,36 @@ namespace Mosa.Kernel.x86
 			Native.Lgdt(gdtTableAddress);
 		}
 
-		public static void AppendEntry(GDTEntry* source)
+		public static void AddEntry(DTEntry source)
 		{
 			Length++;
-			StoreEntry((ushort)(Length - 1), source);
+			SetEntry((ushort)(Length - 1), source);
 		}
 
-		/// <summary>
-		/// Appends an empty GDT entry to the end of the GDT entries.
-		/// </summary>
-		/// <returns>The a pointer to the appended entry.</returns>
-		public static GDTEntry* AppendEmptyEntry()
+		public static void SetEntry(ushort index, DTEntry source)
 		{
-			Length++;
-			var entry = entries + Length - 1;
-			GDTEntry.Clear(entry);
-			return entry;
+			if (index < 0 || index >= length)
+				Panic.OutOfRange();
+
+			DTEntry.CopyTo(&source, entries + index);
 		}
 
-		public static void StoreEntry(ushort index, GDTEntry* source)
+		public static DTEntry GetEntry(ushort index)
 		{
-			GDTEntry.CopyTo(source, entries + index);
+			if (index < 0 || index >= length)
+				Panic.OutOfRange();
+
+			return *(entries + index);
+		}
+
+		public static T GetValueTypeFromAddress<T>(uint address) where T : struct
+		{
+			return default(T);
 		}
 	}
 
 	[StructLayout(LayoutKind.Explicit)]
-	unsafe public struct GDTEntry
+	unsafe public struct DTEntry : IDTEntry, IDTCodeSegment, IDTDataSegment, IDTUserDescriptor, IDTSystemDescriptor
 	{
 		[FieldOffset(0)]
 		private ushort limitLow;
@@ -246,14 +248,30 @@ namespace Mosa.Kernel.x86
 
 		public const byte EntrySize = 0x08;
 
-		//public void* AdressOfEntry
-		//{
-		//	get
-		//	{
-		//		fixed (void* p = &this)
-		//			return p;
-		//	}
-		//}
+		public static DTEntry CreateNullDescriptor()
+		{
+			return new DTEntry();
+		}
+
+		private static DTEntry Create(uint baseAddress, uint limit)
+		{
+			return new DTEntry() { BaseAddress = baseAddress, Limit = limit };
+		}
+
+		public static IDTCodeSegment CreateCode(uint baseAddress, uint limit)
+		{
+			IDTCodeSegment seg = Create(baseAddress, limit);
+			seg.IsUserType = true;
+			seg.Executable = true;
+			return seg;
+		}
+
+		public static IDTDataSegment CreateData(uint baseAddress, uint limit)
+		{
+			IDTDataSegment seg = Create(baseAddress, limit);
+			seg.IsUserType = true;
+			return seg;
+		}
 
 		public bool IsNullDescriptor
 		{
@@ -290,12 +308,12 @@ namespace Mosa.Kernel.x86
 			}
 		}
 
-		public static void CopyTo(GDTEntry* source, GDTEntry* destination)
+		public static void CopyTo(DTEntry* source, DTEntry* destination)
 		{
 			Memory.Copy((uint)source, (uint)destination, EntrySize);
 		}
 
-		public static void Clear(GDTEntry* entry)
+		public static void Clear(DTEntry* entry)
 		{
 			Memory.Clear((uint)entry, EntrySize);
 		}
@@ -306,7 +324,7 @@ namespace Mosa.Kernel.x86
 			public const byte RW = 1;
 			public const byte DC = 2;
 			public const byte Ex = 3;
-			public const byte IsCodeOrData = 4;
+			public const byte UserDescriptor = 4;
 			public const byte Privl = 5;
 			public const byte Pr = 7;
 			public const byte SegmentType = 0; //bits 0-4
@@ -349,29 +367,63 @@ namespace Mosa.Kernel.x86
 			}
 		}
 
-		public bool Segment
+		public bool IsUserType
 		{
 			get
 			{
-				return access.IsBitSet(AccessByteOffset.IsCodeOrData);
+				return access.IsBitSet(AccessByteOffset.UserDescriptor);
 			}
 			set
 			{
-				access = access.SetBit(AccessByteOffset.IsCodeOrData, value);
+				access = access.SetBit(AccessByteOffset.UserDescriptor, value);
 			}
 		}
 
-		public bool DirectionConfirming
+		private bool DirectionConfirming
 		{
 			get
 			{
-				CheckSegment();
 				return access.IsBitSet(AccessByteOffset.DC);
 			}
 			set
 			{
-				CheckSegment();
 				access = access.SetBit(AccessByteOffset.DC, value);
+			}
+		}
+
+		public bool Confirming
+		{
+			get
+			{
+				return access.IsBitSet(AccessByteOffset.DC);
+			}
+			set
+			{
+				access = access.SetBit(AccessByteOffset.DC, value);
+			}
+		}
+
+		public bool Direction_ExpandDown
+		{
+			get
+			{
+				return access.IsBitSet(AccessByteOffset.DC);
+			}
+			set
+			{
+				access = access.SetBit(AccessByteOffset.DC, value);
+			}
+		}
+
+		public byte Type
+		{
+			get
+			{
+				return access.GetBits(AccessByteOffset.SegmentType, 4);
+			}
+			set
+			{
+				access = access.SetBits(AccessByteOffset.SegmentType, value, 4);
 			}
 		}
 
@@ -453,7 +505,7 @@ namespace Mosa.Kernel.x86
 
 		private void CheckSegment()
 		{
-			if (!Segment)
+			if (!IsUserType)
 				Panic.Error("This attribute can't accessed with this segment type");
 		}
 
@@ -567,11 +619,11 @@ namespace Mosa.Kernel.x86
 				+ ",Ring=" + this.PriviligeRing.ToString()
 				+ ",Mode=" + AddressMode.ToStringNumber()
 				+ ",Present=" + this.Present.ToChar()
-				+ ",Segment=" + this.Segment.ToChar()
+				+ ",Segment=" + this.IsUserType.ToChar()
 				+ ",Cust=" + this.Custom.ToChar()
 			;
 			string seg = "";
-			if (Segment)
+			if (IsUserType)
 			{
 				seg = ""
 					+ ",Exec=" + this.Executable.ToChar()
@@ -582,5 +634,60 @@ namespace Mosa.Kernel.x86
 			}
 			return s + seg;
 		}
+	}
+
+	public interface IDTEntry
+	{
+		bool IsNullDescriptor { get; }
+
+		uint BaseAddress { get; set; }
+
+		uint Limit { get; set; }
+
+		#region AccessByte
+
+		bool Present { get; set; }
+
+		bool IsUserType { get; set; }
+
+		byte PriviligeRing { get; set; }
+
+		#endregion AccessByte
+
+		#region Flags
+
+		bool Custom { get; set; }
+
+		DTEntry.EAddressMode AddressMode { get; set; }
+
+		bool Granularity { get; set; }
+
+		#endregion Flags
+	}
+
+	public interface IDTUserDescriptor : IDTEntry
+	{
+		bool Accessed { get; set; }
+
+		bool Executable { get; set; }
+	}
+
+	public interface IDTCodeSegment : IDTUserDescriptor
+	{
+		bool Readable { get; set; }
+
+		bool Confirming { get; set; }
+	}
+
+	public interface IDTDataSegment : IDTUserDescriptor
+	{
+		bool Direction_ExpandDown { get; set; }
+
+		bool Writable { get; set; }
+	}
+
+	public interface IDTSystemDescriptor : IDTEntry
+	{
+		byte Type { get; set; }
 	}
 }

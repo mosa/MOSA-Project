@@ -15,15 +15,35 @@ namespace Mosa.HelloWorld.x86
 	/// <summary>
 	///
 	/// </summary>
-	public static class Boot
+	unsafe public static class Boot
 	{
 		public static ConsoleSession Console;
+
+		public static T GetValueTypeFromAddress<T>(uint address) where T : struct
+		{
+			return default(T);
+		}
+
+		public static T GetValueTypeFromAddress<T>(void* address) where T : struct
+		{
+			return default(T);
+		}
+
+		public static void TEST()
+		{
+		}
 
 		/// <summary>
 		/// Main
 		/// </summary>
 		public static void Main()
 		{
+			uint addr = 5;
+			DTEntry* add2 = (DTEntry*)5;
+
+			GetValueTypeFromAddress<DTEntry>(addr);
+			GetValueTypeFromAddress<DTEntry>(add2);
+
 			Mosa.Kernel.x86.Kernel.Setup();
 
 			Console = ConsoleManager.Controller.Boot;
