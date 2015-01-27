@@ -14,5 +14,11 @@ namespace System
 	/// </summary>
 	public struct Boolean
 	{
+		internal bool _value;
+
+		public override string ToString()
+		{
+			return _value ? "True" : "False";
+		}
 	}
 }
