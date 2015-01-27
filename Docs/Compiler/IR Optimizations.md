@@ -71,6 +71,10 @@ c = a << 0 | c = a
 c = 0 << b | c = 0
 c = 0 >> b | c = 0
 
-_Note: More arithmetic simplification can be added._
+_Note: More arithmetic simplifications can be added._
+
+## Move Constants to the Right
+
+This move constants from the left side of an operation to the right, when the operating has the commutative property. This is not an optimization unto itself, simplifies the source code for other optimizations.
 
 

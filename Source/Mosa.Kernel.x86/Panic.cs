@@ -7,7 +7,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using Mosa.Kernel.Helpers;
 using Mosa.Platform.Internal.x86;
 
 namespace Mosa.Kernel.x86
