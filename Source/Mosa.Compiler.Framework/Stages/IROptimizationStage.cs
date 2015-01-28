@@ -695,17 +695,20 @@ namespace Mosa.Compiler.Framework.Stages
 			if (context.IsEmpty)
 				return;
 
-			if (!(context.Instruction == IRInstruction.MulSigned || context.Instruction == IRInstruction.MulUnsigned || context.Instruction == IRInstruction.MulFloat))
+			if (!(context.Instruction == IRInstruction.MulSigned || context.Instruction == IRInstruction.MulUnsigned))
 				return;
 
 			if (!context.Result.IsVirtualRegister)
+				return;
+
+			if (!context.Operand2.IsConstant)
 				return;
 
 			Operand result = context.Result;
 			Operand op1 = context.Operand1;
 			Operand op2 = context.Operand2;
 
-			if (op2.IsConstant && op2.IsConstantZero)
+			if (op2.IsConstantZero)
 			{
 				AddOperandUsageToWorkList(context);
 				if (trace.Active) trace.Log("*** ArithmeticSimplificationMultiplication");
@@ -716,7 +719,7 @@ namespace Mosa.Compiler.Framework.Stages
 				return;
 			}
 
-			if (op2.IsConstant && op2.IsConstantOne)
+			if (op2.IsConstantOne)
 			{
 				AddOperandUsageToWorkList(context);
 				if (trace.Active) trace.Log("*** ArithmeticSimplificationMultiplication");
@@ -725,6 +728,22 @@ namespace Mosa.Compiler.Framework.Stages
 				arithmeticSimplificationMultiplicationCount++;
 				if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
 				return;
+			}
+
+			if (IsPowerOfTwo(op2.ConstantUnsignedInteger))
+			{
+				uint shift = GetPowerOfTwo(op2.ConstantUnsignedInteger);
+
+				if (shift < 32)
+				{
+					AddOperandUsageToWorkList(context);
+					if (trace.Active) trace.Log("*** ArithmeticSimplificationMultiplication");
+					if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
+					context.SetInstruction(IRInstruction.ShiftLeft, result, op1, Operand.CreateConstantUnsignedInt(TypeSystem, shift));
+					arithmeticSimplificationMultiplicationCount++;
+					if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
+					return;
+				}
 			}
 		}
 
@@ -747,9 +766,9 @@ namespace Mosa.Compiler.Framework.Stages
 			Operand op1 = context.Operand1;
 			Operand op2 = context.Operand2;
 
-			if (!op2.IsConstant ||  op2.IsConstantZero)
+			if (!op2.IsConstant || op2.IsConstantZero)
 			{
-				 // Possible divide by zero
+				// Possible divide by zero
 				return;
 			}
 
@@ -758,7 +777,7 @@ namespace Mosa.Compiler.Framework.Stages
 				AddOperandUsageToWorkList(context);
 				if (trace.Active) trace.Log("*** ArithmeticSimplificationDivision");
 				if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
-				context.SetInstruction(IRInstruction.Move, result, Operand.CreateConstant(context.Result.Type, 0));
+				context.SetInstruction(IRInstruction.Move, result, Operand.CreateConstant(result.Type, 0));
 				arithmeticSimplificationDivisionCount++;
 				if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
 				return;
@@ -773,6 +792,22 @@ namespace Mosa.Compiler.Framework.Stages
 				arithmeticSimplificationDivisionCount++;
 				if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
 				return;
+			}
+
+			if (context.Instruction == IRInstruction.DivUnsigned && IsPowerOfTwo(op2.ConstantUnsignedInteger))
+			{
+				uint shift = GetPowerOfTwo(op2.ConstantUnsignedInteger);
+
+				if (shift < 32)
+				{
+					AddOperandUsageToWorkList(context);
+					if (trace.Active) trace.Log("*** ArithmeticSimplificationDivision");
+					if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
+					context.SetInstruction(IRInstruction.ShiftRight, result, op1, Operand.CreateConstantUnsignedInt(TypeSystem, shift));
+					arithmeticSimplificationDivisionCount++;
+					if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
+					return;
+				}
 			}
 		}
 
@@ -1646,6 +1681,23 @@ namespace Mosa.Compiler.Framework.Stages
 			if (trace.Active) trace.Log("REMOVED:\t" + context.ToString());
 			context.SetInstruction(IRInstruction.Nop);
 			removeUselessPhiCount++;
+		}
+
+		private static bool IsPowerOfTwo(ulong n)
+		{
+			return (n & (n - 1)) == 0;
+		}
+
+		private static uint GetPowerOfTwo(ulong n)
+		{
+			uint bits = 0;
+			while (n > 0)
+			{
+				bits++;
+				n >>= 1;
+			}
+
+			return bits - 1;
 		}
 	}
 }
