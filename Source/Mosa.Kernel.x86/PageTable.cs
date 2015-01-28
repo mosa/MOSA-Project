@@ -218,8 +218,8 @@ namespace Mosa.Kernel.x86
 			get { return (byte)Value.GetBits(Offset.Address, 20); }
 			set
 			{
-				if (value.GetBits(0, Offset.Address + 1) != 0)
-					Panic.Error("Adress needs to be 4k aligned");
+				if (value.GetBits(0, Offset.Address) != 0)
+					Panic.Error("Address needs to be 4k aligned");
 				Value = Value.SetBits(Offset.Address, 20, value);
 			}
 		}
