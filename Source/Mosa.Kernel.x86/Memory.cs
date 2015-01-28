@@ -38,5 +38,11 @@ namespace Mosa.Kernel.x86
 			for (uint at = start; at < (start + bytes); at = at + 4)
 				Native.Set32(at, 0);
 		}
+
+		public static void Copy(uint source, uint destination, uint length)
+		{
+			for (uint i = 0; i < length; i++)
+				Native.Set8(destination + i, Native.Get8(source + i));  //TODO: Optimize with Set32
+		}
 	}
 }

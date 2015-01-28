@@ -11,7 +11,7 @@ using Mosa.Compiler.Framework.IR;
 
 namespace Mosa.Compiler.Framework.Intrinsics
 {
-	[ReplacementTarget("Mosa.Internal.Native::GetObjectFromAddress")]
+	[ReplacementTarget("Mosa.Internal.Intrinsic::GetObjectFromAddress")]
 	public sealed class GetObjectFromAddress : IIntrinsicInternalMethod
 	{
 		/// <summary>

@@ -12,6 +12,7 @@
 
 using System;
 using System.Collections.Generic;
+using Mosa.Internal;
 
 namespace Mosa.Platform.Internal.x86
 {
@@ -78,7 +79,7 @@ namespace Mosa.Platform.Internal.x86
 
 		public static string InitializeMetadataString(uint* ptr)
 		{
-			return (string)Mosa.Internal.Native.GetObjectFromAddress(ptr);
+			return (string)Intrinsic.GetObjectFromAddress(ptr);
 		}
 
 		public static void Setup()
@@ -298,18 +299,18 @@ namespace Mosa.Platform.Internal.x86
 		public static MetadataMethodStruct* GetMethodDefinition(uint address)
 		{
 			uint table = Native.GetMethodLookupTable();
-			uint entries = Mosa.Internal.Native.Load32(table);
+			uint entries = Intrinsic.Load32(table);
 
 			table = table + 4;
 
 			while (entries > 0)
 			{
-				uint addr = Mosa.Internal.Native.Load32(table);
-				uint size = Mosa.Internal.Native.Load32(table, NativeIntSize);
+				uint addr = Intrinsic.Load32(table);
+				uint size = Intrinsic.Load32(table, NativeIntSize);
 
 				if (address >= addr && address < addr + size)
 				{
-					return (MetadataMethodStruct*)Mosa.Internal.Native.Load32(table, NativeIntSize * 2);
+					return (MetadataMethodStruct*)Intrinsic.Load32(table, NativeIntSize * 2);
 				}
 
 				table = table + (NativeIntSize * 3);
@@ -327,18 +328,18 @@ namespace Mosa.Platform.Internal.x86
 			if (table == 0)
 				return null;
 
-			uint entries = Mosa.Internal.Native.Load32(table);
+			uint entries = Intrinsic.Load32(table);
 
 			table = table + NativeIntSize;
 
 			while (entries > 0)
 			{
-				uint addr = Mosa.Internal.Native.Load32(table);
-				uint size = Mosa.Internal.Native.Load32(table, NativeIntSize);
+				uint addr = Intrinsic.Load32(table);
+				uint size = Intrinsic.Load32(table, NativeIntSize);
 
 				if (address >= addr && address < addr + size)
 				{
-					return (MetadataMethodStruct*)Mosa.Internal.Native.Load32(table, NativeIntSize * 2);
+					return (MetadataMethodStruct*)Intrinsic.Load32(table, NativeIntSize * 2);
 				}
 
 				table = table + (NativeIntSize * 3);
@@ -441,7 +442,7 @@ namespace Mosa.Platform.Internal.x86
 
 		public static uint GetPreviousStackFrame(uint ebp)
 		{
-			return Mosa.Internal.Native.Load32(ebp);
+			return Intrinsic.Load32(ebp);
 		}
 
 		public static uint GetStackFrame(uint depth)
@@ -463,7 +464,7 @@ namespace Mosa.Platform.Internal.x86
 
 		public static uint GetReturnAddressFromStackFrame(uint stackframe)
 		{
-			return Mosa.Internal.Native.Load32(stackframe, NativeIntSize);
+			return Intrinsic.Load32(stackframe, NativeIntSize);
 		}
 
 		public static void SetReturnAddressForStackFrame(uint stackframe, uint value)
@@ -502,7 +503,7 @@ namespace Mosa.Platform.Internal.x86
 					Fault(0XBAD00002);
 				}
 
-				var exceptionType = (MetadataTypeStruct*)Mosa.Internal.Native.Load32(exceptionObject);
+				var exceptionType = (MetadataTypeStruct*)Intrinsic.Load32(exceptionObject);
 
 				var methodDef = GetMethodDefinitionViaMethodExceptionLookup(returnAdddress);
 

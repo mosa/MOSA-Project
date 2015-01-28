@@ -70,10 +70,13 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Native.cs" />
+    <Compile Include="Intrinsic.cs" />
     <Compile Include="Plug\FieldAttribute.cs" />
     <Compile Include="Plug\MethodAttribute.cs" />
     <Compile Include="Plug\TypeAttribute.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />
   <PropertyGroup>

@@ -320,6 +320,10 @@ namespace Mosa.Tool.Launcher
 					{
 						Builder.Compile();
 					}
+					catch (Exception e)
+					{
+						AddOutput(e.ToString());
+					}
 					finally
 					{
 						if (!Builder.HasCompileError)
