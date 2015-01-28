@@ -677,7 +677,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (op2.IsConstant && !op1.IsConstant && op2.IsConstantZero)
 			{
 				AddOperandUsageToWorkList(context);
-				if (trace.Active) trace.Log("*** StrengthReductionIntegerAdditionAndSubstraction");
+				if (trace.Active) trace.Log("*** ArithmeticSimplificationAdditionAndSubstraction");
 				if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
 				context.SetInstruction(IRInstruction.Move, result, op1);
 				if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
@@ -708,7 +708,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (op2.IsConstant && op2.IsConstantZero)
 			{
 				AddOperandUsageToWorkList(context);
-				if (trace.Active) trace.Log("*** StrengthReductionMultiplication");
+				if (trace.Active) trace.Log("*** ArithmeticSimplificationMultiplication");
 				if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
 				context.SetInstruction(IRInstruction.Move, result, Operand.CreateConstant(context.Result.Type, 0));
 				arithmeticSimplificationMultiplicationCount++;
@@ -719,7 +719,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (op2.IsConstant && op2.IsConstantOne)
 			{
 				AddOperandUsageToWorkList(context);
-				if (trace.Active) trace.Log("*** StrengthReductionMultiplication");
+				if (trace.Active) trace.Log("*** ArithmeticSimplificationMultiplication");
 				if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
 				context.SetInstruction(IRInstruction.Move, result, op1);
 				arithmeticSimplificationMultiplicationCount++;
@@ -756,7 +756,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (op1.IsConstant && op1.IsConstantZero)
 			{
 				AddOperandUsageToWorkList(context);
-				if (trace.Active) trace.Log("*** StrengthReductionDivision");
+				if (trace.Active) trace.Log("*** ArithmeticSimplificationDivision");
 				if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
 				context.SetInstruction(IRInstruction.Move, result, Operand.CreateConstant(context.Result.Type, 0));
 				arithmeticSimplificationDivisionCount++;
@@ -767,7 +767,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (op2.IsConstant && op2.IsConstantOne)
 			{
 				AddOperandUsageToWorkList(context);
-				if (trace.Active) trace.Log("*** StrengthReductionDivision");
+				if (trace.Active) trace.Log("*** ArithmeticSimplificationDivision");
 				if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
 				context.SetInstruction(IRInstruction.Move, result, op1);
 				arithmeticSimplificationDivisionCount++;
@@ -852,7 +852,7 @@ namespace Mosa.Compiler.Framework.Stages
 				return;
 
 			AddOperandUsageToWorkList(context);
-			if (trace.Active) trace.Log("*** SimplifySubtraction");
+			if (trace.Active) trace.Log("*** ArithmeticSimplificationSubtraction");
 			if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
 			context.SetInstruction(IRInstruction.Move, result, Operand.CreateConstant(context.Result.Type, 0));
 			arithmeticSimplificationSubtractionCount++;
@@ -885,7 +885,7 @@ namespace Mosa.Compiler.Framework.Stages
 				if (op2.IsConstantZero)
 				{
 					AddOperandUsageToWorkList(context);
-					if (trace.Active) trace.Log("*** StrengthReductionLogicalOperators");
+					if (trace.Active) trace.Log("*** ArithmeticSimplificationLogicalOperators");
 					if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
 					context.SetInstruction(IRInstruction.Move, result, op1);
 					arithmeticSimplificationLogicalOperatorsCount++;
@@ -898,7 +898,7 @@ namespace Mosa.Compiler.Framework.Stages
 				if (op2.IsConstantZero)
 				{
 					AddOperandUsageToWorkList(context);
-					if (trace.Active) trace.Log("*** StrengthReductionLogicalOperators");
+					if (trace.Active) trace.Log("*** ArithmeticSimplificationLogicalOperators");
 					if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
 					context.SetInstruction(IRInstruction.Move, result, Operand.CreateConstant(context.Result.Type, 0));
 					arithmeticSimplificationLogicalOperatorsCount++;
@@ -909,7 +909,7 @@ namespace Mosa.Compiler.Framework.Stages
 				if ((result.IsI4 || result.IsU4) && op2.ConstantUnsignedInteger == 0xFFFFFFFF)
 				{
 					AddOperandUsageToWorkList(context);
-					if (trace.Active) trace.Log("*** StrengthReductionLogicalOperators");
+					if (trace.Active) trace.Log("*** ArithmeticSimplificationLogicalOperators");
 					if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
 					context.SetInstruction(IRInstruction.Move, result, op1);
 					arithmeticSimplificationLogicalOperatorsCount++;
@@ -920,7 +920,7 @@ namespace Mosa.Compiler.Framework.Stages
 				if ((result.IsI8 || result.IsU8) && op2.ConstantUnsignedInteger == 0xFFFFFFFFFFFFFFFF)
 				{
 					AddOperandUsageToWorkList(context);
-					if (trace.Active) trace.Log("*** StrengthReductionLogicalOperators");
+					if (trace.Active) trace.Log("*** ArithmeticSimplificationLogicalOperators");
 					if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
 					context.SetInstruction(IRInstruction.Move, result, op1);
 					arithmeticSimplificationLogicalOperatorsCount++;
@@ -953,21 +953,10 @@ namespace Mosa.Compiler.Framework.Stages
 			Operand op1 = context.Operand1;
 			Operand op2 = context.Operand2;
 
-			if (op2.IsConstantZero)
+			if (op2.IsConstantZero || op1.IsConstantZero)
 			{
 				AddOperandUsageToWorkList(context);
-				if (trace.Active) trace.Log("*** StrengthReductionShiftOperators");
-				if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
-				context.SetInstruction(IRInstruction.Move, result, op1);
-				arithmeticSimplificationShiftOperators++;
-				if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
-				return;
-			}
-
-			if (op1.IsConstantZero)
-			{
-				AddOperandUsageToWorkList(context);
-				if (trace.Active) trace.Log("*** StrengthReductionShiftOperators-2");
+				if (trace.Active) trace.Log("*** ArithmeticSimplificationShiftOperators");
 				if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
 				context.SetInstruction(IRInstruction.Move, result, op1);
 				arithmeticSimplificationShiftOperators++;
