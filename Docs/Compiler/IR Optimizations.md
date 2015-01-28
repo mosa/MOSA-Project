@@ -70,6 +70,8 @@ c = a >> 0 | c = a
 c = a << 0 | c = a
 c = 0 << b | c = 0
 c = 0 >> b | c = 0
+c = a * b | c << s | where b is a power of 2 and s = log 2 (b)
+c = a / b | c >> s | where b is a power of 2, the division is unsigned and s = log 2 (b)
 
 _Note: More arithmetic simplifications can be added._
 
