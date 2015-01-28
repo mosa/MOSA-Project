@@ -1,21 +1,24 @@
 ﻿/*
- * (c) 2014 MOSA - The Managed Operating System Alliance
+ * (c) 2008 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
+ *  Michael Ruck (grover) <sharpos@michaelruck.de>
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- *  Stefan Andres Charsley (charsleysa) <charsleysa@gmail.com>
+ *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
+ *  Scott Balmos <sbalmos@fastmail.fm>
 */
 
+using System.Runtime.InteropServices;
 using System.Runtime.CompilerServices;
 
 namespace Mosa.Internal
 {
 	/// <summary>
-	/// Provides stub methods for selected x86 native assembly instructions.
+	/// Provides stub methods for selected native IR instructions.
 	/// </summary>
-	public static unsafe class Native
+	public static unsafe class Intrinsic
 	{
 		#region Intrinsic
 

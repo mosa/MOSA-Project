@@ -12,7 +12,7 @@ using Mosa.Platform.Internal.x86;
 
 namespace Mosa.DriverWorld.x86.HAL
 {
-	public class Memory : IMemory
+	public sealed class Memory : IMemory
 	{
 		private uint address;
 		private uint size;
