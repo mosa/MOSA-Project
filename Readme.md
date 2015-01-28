@@ -19,17 +19,6 @@ The MOSA project consists of:
 
 Read our [Frequently Asked Questions](https://github.com/mosa/MOSA-Project/wiki/Frequently-Asked-Questions) for more information about this project.
 
-### Current Status
-
-The MOSA compiler supports:
-
-* almost all non-object oriented code (arithmetic, assignment, bitwise logic, bitwise shifts, boolean logic, conditional evaluation, equality testing, calling functions, increment and decrement,  member selection, object size, order relations, reference and dereference, sequencing, and subexpression grouping), 
-* basic object oriented code (such as new operator, member methods and virtual methods), 
-* basic type conversion (implicit type and explicit type conversion on primitives types and "is" and "as" operators), 
-* generic code (example, List<T>), and
-* delegates (static and non-static) and with optional parameters.
-* exception handling (try, finally, and catch code blocks)
-
 ### Getting Started
 
 **Download**
@@ -37,7 +26,7 @@ The MOSA compiler supports:
 The MOSA project is available as a [zip download](https://github.com/mosa/MOSA-Project/archive/master.zip) or via git:
 
 <pre>
-git clone https://github.com/tgiphil/MOSA-Project.git
+git clone https://github.com/MOSA-Project/MOSA-Project.git
 </pre>
 
 ### Prerequisites
@@ -77,6 +66,17 @@ By default, the CoolWorld operating system demo is pre-selected. Click the "Comp
 ![MOSA Launcher](https://raw.githubusercontent.com/mosa/MOSA-Screenshots/master/MOSA%20Launcher.png)
 
 ![MOSA CoolWorld Demo](https://raw.githubusercontent.com/mosa/MOSA-Screenshots/master/MOSA%20QEMU%20CoolWorld.png)
+
+### Current Status
+
+The MOSA compiler supports:
+
+* almost all non-object oriented code (arithmetic, assignment, bitwise logic, bitwise shifts, boolean logic, conditional evaluation, equality testing, calling functions, increment and decrement,  member selection, object size, order relations, reference and dereference, sequencing, and subexpression grouping), 
+* basic object oriented code (such as new operator, member methods and virtual methods), 
+* basic type conversion (implicit type and explicit type conversion on primitives types and "is" and "as" operators), 
+* generic code (example, List<T>), and
+* delegates (static and non-static) and with optional parameters.
+* exception handling (try, finally, and catch code blocks)
 
 ### Join the Discussion
 
