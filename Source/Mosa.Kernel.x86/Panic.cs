@@ -133,11 +133,6 @@ namespace Mosa.Kernel.x86
 			Halt();
 		}
 
-		public static void OutOfRange()
-		{
-			Error("Index out of range");
-		}
-
 		private static void Halt()
 		{
 			Screen.Goto(Screen.Rows - 1, 0);

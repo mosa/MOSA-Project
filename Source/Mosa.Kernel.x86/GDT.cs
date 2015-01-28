@@ -168,14 +168,8 @@ namespace Mosa.Kernel.x86
 
 		private DescriptorTableEntry* entries
 		{
-			get
-			{
-				return (DescriptorTableEntry*)AdressOfEntries;
-			}
-			set
-			{
-				AdressOfEntries = (uint)value;
-			}
+			get { return (DescriptorTableEntry*)AdressOfEntries; }
+			set { AdressOfEntries = (uint)value; }
 		}
 
 		private DescriptorTableEntry* GetEntryRef(ushort index)
@@ -214,17 +208,17 @@ namespace Mosa.Kernel.x86
 
 		public void SetEntry(ushort index, DescriptorTableEntry source)
 		{
-			if (index < 0 || index >= Length)
-				Panic.OutOfRange();
-
+#if DEBUG
+			Assert.InRange(index, Length);
+#endif
 			DescriptorTableEntry.CopyTo(&source, entries + index);
 		}
 
 		public DescriptorTableEntry GetEntry(ushort index)
 		{
-			if (index < 0 || index >= Length)
-				Panic.OutOfRange();
-
+#if DEBUG
+			Assert.InRange(index, Length);
+#endif
 			return *(entries + index);
 		}
 	}
@@ -279,18 +273,12 @@ namespace Mosa.Kernel.x86
 
 		public bool IsNullDescriptor
 		{
-			get
-			{
-				return limitLow == 0 && baseLow == 0 && baseMiddle == 0 && access == 0 && flags == 0 && baseHigh == 0;
-			}
+			get { return limitLow == 0 && baseLow == 0 && baseMiddle == 0 && access == 0 && flags == 0 && baseHigh == 0; }
 		}
 
 		public uint BaseAddress
 		{
-			get
-			{
-				return (uint)(baseLow | (baseMiddle << 16) | (baseHigh << 24));
-			}
+			get { return (uint)(baseLow | (baseMiddle << 16) | (baseHigh << 24)); }
 			set
 			{
 				baseLow = (ushort)(value & 0xFFFF);
@@ -301,14 +289,11 @@ namespace Mosa.Kernel.x86
 
 		public uint Limit
 		{
-			get
-			{
-				return (uint)(limitLow | flags.GetBits(FlagsByteOffset.Limit, 4));
-			}
+			get { return (uint)(limitLow | flags.GetBits(FlagsByteOffset.Limit, 4)); }
 			set
 			{
 				limitLow = (ushort)(value & 0xFFFF);
-				flags = flags.SetBits((byte)((value >> 16) & 0x0F), FlagsByteOffset.Limit, 4);
+				flags = flags.SetBits(FlagsByteOffset.Limit, 4, (byte)((value >> 16) & 0x0F));
 			}
 		}
 
@@ -347,14 +332,8 @@ namespace Mosa.Kernel.x86
 
 		public bool Present
 		{
-			get
-			{
-				return access.IsBitSet(AccessByteOffset.Pr);
-			}
-			set
-			{
-				access = access.SetBit(AccessByteOffset.Pr, value);
-			}
+			get { return access.IsBitSet(AccessByteOffset.Pr); }
+			set { access = access.SetBit(AccessByteOffset.Pr, value); }
 		}
 
 		public bool Executable
@@ -373,62 +352,32 @@ namespace Mosa.Kernel.x86
 
 		public bool IsUserType
 		{
-			get
-			{
-				return access.IsBitSet(AccessByteOffset.UserDescriptor);
-			}
-			set
-			{
-				access = access.SetBit(AccessByteOffset.UserDescriptor, value);
-			}
+			get { return access.IsBitSet(AccessByteOffset.UserDescriptor); }
+			set { access = access.SetBit(AccessByteOffset.UserDescriptor, value); }
 		}
 
 		private bool DirectionConfirming
 		{
-			get
-			{
-				return access.IsBitSet(AccessByteOffset.DC);
-			}
-			set
-			{
-				access = access.SetBit(AccessByteOffset.DC, value);
-			}
+			get { return access.IsBitSet(AccessByteOffset.DC); }
+			set { access = access.SetBit(AccessByteOffset.DC, value); }
 		}
 
 		public bool Confirming
 		{
-			get
-			{
-				return access.IsBitSet(AccessByteOffset.DC);
-			}
-			set
-			{
-				access = access.SetBit(AccessByteOffset.DC, value);
-			}
+			get { return access.IsBitSet(AccessByteOffset.DC); }
+			set { access = access.SetBit(AccessByteOffset.DC, value); }
 		}
 
 		public bool Direction_ExpandDown
 		{
-			get
-			{
-				return access.IsBitSet(AccessByteOffset.DC);
-			}
-			set
-			{
-				access = access.SetBit(AccessByteOffset.DC, value);
-			}
+			get { return access.IsBitSet(AccessByteOffset.DC); }
+			set { access = access.SetBit(AccessByteOffset.DC, value); }
 		}
 
 		public byte Type
 		{
-			get
-			{
-				return access.GetBits(AccessByteOffset.SegmentType, 4);
-			}
-			set
-			{
-				access = access.SetBits(AccessByteOffset.SegmentType, value, 4);
-			}
+			get { return access.GetBits(AccessByteOffset.SegmentType, 4); }
+			set { access = access.SetBits(AccessByteOffset.SegmentType, 4, value); }
 		}
 
 		public bool ReadWrite
@@ -479,10 +428,7 @@ namespace Mosa.Kernel.x86
 
 		public bool Writable
 		{
-			get
-			{
-				return Executable ? ReadWrite : false;
-			}
+			get { return Executable ? ReadWrite : false; }
 			set
 			{
 				if (Executable && value)
@@ -494,16 +440,13 @@ namespace Mosa.Kernel.x86
 
 		public byte PriviligeRing
 		{
-			get
-			{
-				return access.GetBits(AccessByteOffset.Privl, 2);
-			}
+			get { return access.GetBits(AccessByteOffset.Privl, 2); }
 			set
 			{
 				if (value > 3)
 					Panic.Error("Privilege ring can't be larger than 3");
 
-				access = access.SetBits(value, AccessByteOffset.Privl, 2);
+				access = access.SetBits(AccessByteOffset.Privl, 2, value);
 			}
 		}
 

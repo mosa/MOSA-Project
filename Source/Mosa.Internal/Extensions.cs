@@ -108,14 +108,86 @@ namespace Mosa.Kernel.Helpers
 			return (byte)((self >> index) << (8 - count));
 		}
 
-		public static byte SetBits(this byte self, byte source, byte index, byte count)
+		public static byte SetBits(this byte self, byte index, byte count, byte value)
 		{
 			byte mask = (byte)(0xFF >> (8 - count));
-			byte bits = (byte)((source & mask) << index);
+			byte bits = (byte)((value & mask) << index);
 			return (byte)((self & ~(mask << index)) | bits);
 		}
 
 		#endregion Byte
+
+		#region uint
+
+		public static bool IsMaskSet(this uint self, uint mask)
+		{
+			return (self & mask) == mask;
+		}
+
+		public static bool IsBitSet(this uint self, byte bit)
+		{
+			return (self & (0x1 << bit)) == (0x1 << bit);
+		}
+
+		public static uint SetMask(this uint self, byte mask)
+		{
+			return self | mask;
+		}
+
+		public static uint SetBit(this uint self, byte bit)
+		{
+			return self | (0x1U << bit);
+		}
+
+		public static uint ClearMask(this uint self, uint mask)
+		{
+			return self & ~mask;
+		}
+
+		public static uint ClearBit(this uint self, byte bit)
+		{
+			return self & ~(0x1U << bit);
+		}
+
+		public static uint SetMask(this uint self, uint mask, bool state)
+		{
+			if (state)
+				return self | mask;
+			else
+				return self & ~mask;
+		}
+
+		public static uint SetBit(this uint self, byte bit, bool state)
+		{
+			if (state)
+				return self | (0x1U << bit);
+			else
+				return self & ~(0x1U << bit);
+		}
+
+		public static uint CircularLeftShift(this uint a, byte n)
+		{
+			return a << n | a >> (8 - n);
+		}
+
+		public static uint CircularRightShift(this uint a, byte n)
+		{
+			return a >> n | a << (8 - n);
+		}
+
+		public static uint GetBits(this uint self, byte index, byte count)
+		{
+			return (self >> index) << (8 - count);
+		}
+
+		public static uint SetBits(this uint self, byte index, byte count, uint value)
+		{
+			uint mask = 0xFFFFFFFFU >> (8 - count);
+			uint bits = (value & mask) << index;
+			return (self & ~(mask << index)) | bits;
+		}
+
+		#endregion uint
 
 		#region *Byte
 
@@ -188,5 +260,44 @@ namespace Mosa.Kernel.Helpers
 		}
 
 		#endregion *Byte
+	}
+
+	/// <summary>
+	/// Represents the HEX value of a bit position
+	/// </summary>
+	public static class BitMask
+	{
+		public const uint Bit0 = 0x1;
+		public const uint Bit1 = 0x2;
+		public const uint Bit2 = 0x4;
+		public const uint Bit3 = 0x8;
+		public const uint Bit4 = 0x10;
+		public const uint Bit5 = 0x20;
+		public const uint Bit6 = 0x40;
+		public const uint Bit7 = 0x80;
+		public const uint Bit8 = 0x100;
+		public const uint Bit9 = 0x200;
+		public const uint Bit10 = 0x400;
+		public const uint Bit11 = 0x800;
+		public const uint Bit12 = 0x1000;
+		public const uint Bit13 = 0x2000;
+		public const uint Bit14 = 0x4000;
+		public const uint Bit15 = 0x8000;
+		public const uint Bit16 = 0x10000;
+		public const uint Bit17 = 0x20000;
+		public const uint Bit18 = 0x40000;
+		public const uint Bit19 = 0x80000;
+		public const uint Bit20 = 0x100000;
+		public const uint Bit21 = 0x200000;
+		public const uint Bit22 = 0x400000;
+		public const uint Bit23 = 0x800000;
+		public const uint Bit24 = 0x1000000;
+		public const uint Bit25 = 0x2000000;
+		public const uint Bit26 = 0x4000000;
+		public const uint Bit27 = 0x8000000;
+		public const uint Bit28 = 0x10000000;
+		public const uint Bit29 = 0x20000000;
+		public const uint Bit30 = 0x40000000;
+		public const uint Bit31 = 0x80000000;
 	}
 }
