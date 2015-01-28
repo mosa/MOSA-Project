@@ -26,7 +26,7 @@ Read our [Frequently Asked Questions](https://github.com/mosa/MOSA-Project/wiki/
 The MOSA project is available as a [zip download](https://github.com/mosa/MOSA-Project/archive/master.zip) or via git:
 
 <pre>
-git clone https://github.com/MOSA-Project/MOSA-Project.git
+git clone https://github.com/mosa/MOSA-Project.git
 </pre>
 
 ### Prerequisites
