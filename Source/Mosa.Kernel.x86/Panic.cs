@@ -121,6 +121,14 @@ namespace Mosa.Kernel.x86
 			Halt();
 		}
 
+		public static void Message(uint message)
+		{
+			PrepareScreen("Debug Message");
+			Screen.Color = Colors.Red;
+			Screen.Write(message);
+			Halt();
+		}
+
 		public static void Error(string message)
 		{
 			PrepareScreen("Kernel Panic");
@@ -131,6 +139,11 @@ namespace Mosa.Kernel.x86
 			DumpStackTrace();
 			Screen.Color = Colors.LightGray;
 			Halt();
+		}
+
+		public static void Error(uint error)
+		{
+			Error(error.ToString());
 		}
 
 		private static void Halt()
