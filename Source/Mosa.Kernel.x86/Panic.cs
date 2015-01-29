@@ -125,7 +125,8 @@ namespace Mosa.Kernel.x86
 		{
 			PrepareScreen("Debug Message");
 			Screen.Color = Colors.Red;
-			Screen.Write(message);
+			Screen.Write(" Number: 0x");
+			Screen.Write(message.ToString("X"));
 			Halt();
 		}
 

@@ -180,10 +180,22 @@ namespace Mosa.Kernel.Helpers
 			return (self >> index) << (8 - count);
 		}
 
+		public static uint GetBits(this uint self, byte index, byte count, byte sourceIndex)
+		{
+			return ((self >> index) << (8 - count)) << sourceIndex;
+		}
+
 		public static uint SetBits(this uint self, byte index, byte count, uint value)
 		{
 			uint mask = 0xFFFFFFFFU >> (8 - count);
 			uint bits = (value & mask) << index;
+			return (self & ~(mask << index)) | bits;
+		}
+
+		public static uint SetBits(this uint self, byte index, byte count, uint value, byte sourceIndex)
+		{
+			uint mask = 0xFFFFFFFFU >> (8 - count);
+			uint bits = ((value >> sourceIndex) & mask) << index;
 			return (self & ~(mask << index)) | bits;
 		}
 
