@@ -19,7 +19,7 @@ namespace Mosa.Kernel.x86
 	{
 		public static void Setup()
 		{
-			Mosa.Kernel.Helpers.InternalPanic.ExceptionHandler = Error;
+			//Mosa.Kernel.Helpers.InternalPanic.ExceptionHandler = Error;
 		}
 
 		/// <summary>
