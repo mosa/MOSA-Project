@@ -16,7 +16,7 @@ namespace Mosa.Kernel.x86
 	/// <summary>
 	///
 	/// </summary>
-	public static class PageTable
+	public static class PageTable_
 	{
 		// Location for page directory starts at 20MB
 		private static uint pageDirectory = 1024 * 1024 * 20; // 0x1400000
@@ -40,6 +40,8 @@ namespace Mosa.Kernel.x86
 			{
 				Native.Set32((uint)(pageTable + (index << 2)), (uint)(index * 4096) | 0x04 | 0x02 | 0x01);
 			}
+
+			//Panic.DumpMemory(pageDirectory);
 
 			// Set CR3 register on processor - sets page directory
 			Native.SetCR3(pageDirectory);
@@ -71,7 +73,7 @@ namespace Mosa.Kernel.x86
 		}
 	}
 
-	unsafe public static class PageTable_
+	unsafe public static class PageTable
 	{
 		// Location for page directory starts at 20MB
 		private static uint pageDirectoryAddress = 1024 * 1024 * 20; // 0x1400000
@@ -106,6 +108,8 @@ namespace Mosa.Kernel.x86
 			for (uint index = 0; index < 1024 * 64; index++)
 				AllocatePage();
 
+			//Panic.DumpMemory(pageDirectoryAddress);
+
 			// Set CR3 register on processor - sets page directory
 			Native.SetCR3(pageDirectoryAddress);
 
@@ -128,7 +132,15 @@ namespace Mosa.Kernel.x86
 #if DEBUG
 			Assert.InRange(index, PageDirectoryLength);
 #endif
-			return pageDirectoryEntries + index;
+
+			#region COMPILER_BUG?
+
+			//return pageDirectoryEntries + index;
+
+			#endregion COMPILER_BUG?
+
+			//workarround
+			return (PageDirectoryEntry*)(pageDirectoryAddress + index * PageDirectoryEntry.EntrySize);
 		}
 
 		public static PageTableEntry* GetPageTableEntry(uint index)
@@ -137,14 +149,8 @@ namespace Mosa.Kernel.x86
 			Assert.InRange(index, PageTableLength);
 #endif
 
-			//if ((uint)(pageTableEntries + index) << 20 != 0)
-			//{
-			//	//Panic.Message(allTableEntryCount);
-			//	Panic.Message((uint)pageTableEntries + index);
-			//	//Panic.Message(currentDictionaryEntryCount);
-			//}
-
-			return pageTableEntries + index;
+			//return pageTableEntries + index;
+			return (PageTableEntry*)(pageTableAddress + index * PageTableEntry.EntrySize);
 		}
 
 		private static uint currentDictionaryEntryCount;
@@ -157,13 +163,6 @@ namespace Mosa.Kernel.x86
 			{
 				currentDictionaryEntryCount++;
 				var dicEntry = GetPageDirectoryEntry(currentDictionaryEntryCount - 1);
-				//if ((uint)page << 20 != 0)
-				//{
-				//	//Panic.Message(allTableEntryCount);
-				//	Panic.Message((uint)page);
-				//	//Panic.Message(currentDictionaryEntryCount);
-				//}
-
 				dicEntry->PageTableEntry = page;
 				dicEntry->Present = true;
 				dicEntry->Readonly = true; //??
@@ -177,15 +176,8 @@ namespace Mosa.Kernel.x86
 		{
 			currentTableEntryCount++;
 			allTableEntryCount++;
+
 			var tabEntry = GetPageTableEntry(allTableEntryCount - 1);
-
-			if ((uint)(tabEntry) << 20 != 0)
-			{
-				//Panic.Message(allTableEntryCount);
-				Panic.Message((uint)tabEntry);
-				//Panic.Message(currentDictionaryEntryCount);
-			}
-
 			tabEntry->PhysicalAddress = (allTableEntryCount - 1) * 4096;
 			tabEntry->Present = true;
 			tabEntry->Readonly = true; //??
@@ -221,7 +213,7 @@ namespace Mosa.Kernel.x86
 	unsafe public struct PageDirectoryEntry
 	{
 		[FieldOffset(0)]
-		private uint Value;
+		private uint data;
 
 		public const byte EntrySize = 4;
 
@@ -237,7 +229,7 @@ namespace Mosa.Kernel.x86
 			public const byte PageSize4Mib = 7;
 			private const byte IGNORED8 = 8;
 			public const byte Custom = 9;
-			public const byte Address = 11;
+			public const byte Address = 12;
 		}
 
 		private const byte AddressBitSize = 20;
@@ -245,12 +237,13 @@ namespace Mosa.Kernel.x86
 
 		private uint PageTableAddress
 		{
-			get { return Value & AddressMask; }
+			get { return data & AddressMask; }
 			set
 			{
 				if (value << AddressBitSize != 0)
 					Panic.Error("PageDirectoryEntry.Address needs to be 4k aligned");
-				Value = Value.SetBits(Offset.Address, AddressBitSize, value, Offset.Address);
+
+				data = data.SetBits(Offset.Address, AddressBitSize, value, Offset.Address);
 			}
 		}
 
@@ -262,50 +255,50 @@ namespace Mosa.Kernel.x86
 
 		public bool Present
 		{
-			get { return Value.IsBitSet(Offset.Present); }
-			set { Value = Value.SetBit(Offset.Present, value); }
+			get { return data.IsBitSet(Offset.Present); }
+			set { data = data.SetBit(Offset.Present, value); }
 		}
 
 		public bool Readonly
 		{
-			get { return Value.IsBitSet(Offset.Readonly); }
-			set { Value = Value.SetBit(Offset.Readonly, value); }
+			get { return data.IsBitSet(Offset.Readonly); }
+			set { data = data.SetBit(Offset.Readonly, value); }
 		}
 
 		public bool User
 		{
-			get { return Value.IsBitSet(Offset.User); }
-			set { Value = Value.SetBit(Offset.User, value); }
+			get { return data.IsBitSet(Offset.User); }
+			set { data = data.SetBit(Offset.User, value); }
 		}
 
 		public bool WriteThrough
 		{
-			get { return Value.IsBitSet(Offset.WriteThrough); }
-			set { Value = Value.SetBit(Offset.WriteThrough, value); }
+			get { return data.IsBitSet(Offset.WriteThrough); }
+			set { data = data.SetBit(Offset.WriteThrough, value); }
 		}
 
 		public bool DisableCache
 		{
-			get { return Value.IsBitSet(Offset.DisableCache); }
-			set { Value = Value.SetBit(Offset.DisableCache, value); }
+			get { return data.IsBitSet(Offset.DisableCache); }
+			set { data = data.SetBit(Offset.DisableCache, value); }
 		}
 
 		public bool Accessed
 		{
-			get { return Value.IsBitSet(Offset.Accessed); }
-			set { Value = Value.SetBit(Offset.Accessed, value); }
+			get { return data.IsBitSet(Offset.Accessed); }
+			set { data = data.SetBit(Offset.Accessed, value); }
 		}
 
 		public bool PageSize4Mib
 		{
-			get { return Value.IsBitSet(Offset.PageSize4Mib); }
-			set { Value = Value.SetBit(Offset.PageSize4Mib, value); }
+			get { return data.IsBitSet(Offset.PageSize4Mib); }
+			set { data = data.SetBit(Offset.PageSize4Mib, value); }
 		}
 
 		public byte Custom
 		{
-			get { return (byte)Value.GetBits(Offset.Custom, 2); }
-			set { Value = Value.SetBits(Offset.Custom, 2, value); }
+			get { return (byte)data.GetBits(Offset.Custom, 2); }
+			set { data = data.SetBits(Offset.Custom, 2, value); }
 		}
 	}
 
@@ -329,7 +322,7 @@ namespace Mosa.Kernel.x86
 			private const byte SIZE0 = 7;
 			public const byte Global = 8;
 			public const byte Custom = 9;
-			public const byte Address = 11;
+			public const byte Address = 12;
 		}
 
 		private const byte AddressBitSize = 20;
@@ -346,7 +339,7 @@ namespace Mosa.Kernel.x86
 				if (value << AddressBitSize != 0)
 					Panic.Error("PageTableEntry.PhysicalAddress needs to be 4k aligned");
 
-				Value = Value.SetBits(Offset.Address, 20, value, Offset.Address);
+				Value = Value.SetBits(Offset.Address, AddressBitSize, value, Offset.Address);
 			}
 		}
 

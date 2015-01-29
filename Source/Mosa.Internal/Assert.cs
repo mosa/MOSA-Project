@@ -5,16 +5,16 @@ using System.Text;
 
 namespace Mosa.Kernel.Helpers
 {
-	//public static class InternalPanic
-	//{
-	//	public static ExceptionHandler ExceptionHandler;
+	public static class InternalPanic
+	{
+		public static ExceptionHandler ExceptionHandler;
 
-	//	public static void Error(string message)
-	//	{
-	//		if (ExceptionHandler != null)
-	//			ExceptionHandler(message);
-	//	}
-	//}
+		public static void Error(string message)
+		{
+			if (ExceptionHandler != null)
+				ExceptionHandler(message);
+		}
+	}
 
 	public delegate void ExceptionHandler(string message);
 
