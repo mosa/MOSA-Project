@@ -72,7 +72,7 @@
   <ItemGroup>
     <Compile Include="Assert.cs" />
     <Compile Include="Extensions.cs" />
-    <Compile Include="Native.cs" />
+    <Compile Include="Intrinsic.cs" />
     <Compile Include="Plug\FieldAttribute.cs" />
     <Compile Include="Plug\MethodAttribute.cs" />
     <Compile Include="Plug\TypeAttribute.cs" />

@@ -28,11 +28,11 @@ namespace System
 		{
 			get
 			{
-				if (this.customAttributesData == null)
+				if (customAttributesData == null)
 				{
 					// Custom Attributes Data - Lazy load
-					this.customAttributesData = new LinkedList<CustomAttributeData>();
-					if (this.assemblyStruct->CustomAttributes != null)
+					customAttributesData = new LinkedList<CustomAttributeData>();
+					if (assemblyStruct->CustomAttributes != null)
 					{
 						var customAttributesTablePtr = this.assemblyStruct->CustomAttributes;
 						var customAttributesCount = customAttributesTablePtr[0];

@@ -18,7 +18,7 @@ namespace Mosa.Platform.Internal.x86
 		public uint StartOffset;
 		public uint EndOffset;
 		public uint HandlerOffset;
-		public int ExceptionHandlerType;
+		public ExceptionHandlerType HandlerType;
 		public MetadataTypeStruct* ExceptionType;
 	}
 }

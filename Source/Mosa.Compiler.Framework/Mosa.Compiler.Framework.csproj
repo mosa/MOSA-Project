@@ -88,6 +88,7 @@
     <Compile Include="DelegatePatcher.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Intrinsics\GetObjectFromAddress.cs" />
+    <Compile Include="Intrinsics\Load64.cs" />
     <Compile Include="IR\FinallyReturn.cs" />
     <Compile Include="Intrinsics\InternalsForArray.cs" />
     <Compile Include="IR\KillAllExcept.cs" />
@@ -96,7 +97,7 @@
     <Compile Include="Intrinsics\GetObjectAddress.cs" />
     <Compile Include="Intrinsics\InternalsForObject.cs" />
     <Compile Include="Intrinsics\InternalsForRuntimeHelpers.cs" />
-    <Compile Include="Intrinsics\Load.cs" />
+    <Compile Include="Intrinsics\Load32.cs" />
     <Compile Include="Intrinsics\InternalsBase.cs" />
     <Compile Include="Intrinsics\InternalsForType.cs" />
     <Compile Include="IR\InternalCall.cs" />

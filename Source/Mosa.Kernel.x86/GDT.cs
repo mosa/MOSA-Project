@@ -48,7 +48,7 @@ namespace Mosa.Kernel.x86
 			Set(1, 0, 0xFFFFFFFF, 0x9A, 0xCF); // Code segment
 			Set(2, 0, 0xFFFFFFFF, 0x92, 0xCF); // Data segment
 
-			Panic.DumpMemory(gdtTable);
+			//Panic.DumpMemory(gdtTable);
 
 			Native.Lgdt(gdtTable);
 		}
@@ -144,13 +144,13 @@ namespace Mosa.Kernel.x86
 		/// </summary>
 		public static void Flush()
 		{
-			#region REMOVE_ME!
+			//#region REMOVE_ME!
 
-			//FIXME: Both statements are not needed, they are here only because of a compiler bug
-			Memory.Clear(0, 0);
-			Native.Set16(0, Native.Get16(0));
+			////FIXME: Both statements are not needed, they are here only because of a compiler bug
+			//Memory.Clear(0, 0);
+			//Native.Set16(0, Native.Get16(0));
 
-			#endregion REMOVE_ME!
+			//#endregion REMOVE_ME!
 
 			Native.Lgdt(gdtTableAddress);
 		}

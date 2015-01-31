@@ -12,6 +12,7 @@
 
 using System;
 using System.Collections.Generic;
+using Mosa.Internal;
 
 namespace Mosa.Platform.Internal.x86
 {
@@ -78,7 +79,7 @@ namespace Mosa.Platform.Internal.x86
 
 		public static string InitializeMetadataString(uint* ptr)
 		{
-			return (string)Mosa.Internal.Native.GetObjectFromAddress(ptr);
+			return (string)Intrinsic.GetObjectFromAddress(ptr);
 		}
 
 		public static void Setup()
@@ -99,6 +100,20 @@ namespace Mosa.Platform.Internal.x86
 
 		#endregion Metadata
 
+
+		public static bool IsTypeInInheritanceChain(MetadataTypeStruct* typeDefinition, MetadataTypeStruct* chain)
+		{
+			while (chain != null)
+			{
+				if (chain == typeDefinition)
+					return true;
+
+				chain = chain->ParentType;
+			}
+
+			return false;
+		}
+
 		public static void* IsInstanceOfType(RuntimeTypeHandle handle, void* obj)
 		{
 			if (obj == null)
@@ -108,13 +123,8 @@ namespace Mosa.Platform.Internal.x86
 
 			MetadataTypeStruct* objTypeDefinition = (MetadataTypeStruct*)((uint*)obj)[0];
 
-			while (objTypeDefinition != null)
-			{
-				if (objTypeDefinition == typeDefinition)
-					return (void*)obj;
-
-				objTypeDefinition = objTypeDefinition->ParentType;
-			}
+			if (IsTypeInInheritanceChain(typeDefinition, objTypeDefinition))
+				return (void*)obj;
 
 			return null;
 		}
@@ -298,18 +308,18 @@ namespace Mosa.Platform.Internal.x86
 		public static MetadataMethodStruct* GetMethodDefinition(uint address)
 		{
 			uint table = Native.GetMethodLookupTable();
-			uint entries = Mosa.Internal.Native.Load32(table);
+			uint entries = Intrinsic.Load32(table);
 
 			table = table + 4;
 
 			while (entries > 0)
 			{
-				uint addr = Mosa.Internal.Native.Load32(table);
-				uint size = Mosa.Internal.Native.Load32(table, NativeIntSize);
+				uint addr = Intrinsic.Load32(table);
+				uint size = Intrinsic.Load32(table, NativeIntSize);
 
 				if (address >= addr && address < addr + size)
 				{
-					return (MetadataMethodStruct*)Mosa.Internal.Native.Load32(table, NativeIntSize * 2);
+					return (MetadataMethodStruct*)Intrinsic.Load32(table, NativeIntSize * 2);
 				}
 
 				table = table + (NativeIntSize * 3);
@@ -327,18 +337,18 @@ namespace Mosa.Platform.Internal.x86
 			if (table == 0)
 				return null;
 
-			uint entries = Mosa.Internal.Native.Load32(table);
+			uint entries = Intrinsic.Load32(table);
 
 			table = table + NativeIntSize;
 
 			while (entries > 0)
 			{
-				uint addr = Mosa.Internal.Native.Load32(table);
-				uint size = Mosa.Internal.Native.Load32(table, NativeIntSize);
+				uint addr = Intrinsic.Load32(table);
+				uint size = Intrinsic.Load32(table, NativeIntSize);
 
 				if (address >= addr && address < addr + size)
 				{
-					return (MetadataMethodStruct*)Mosa.Internal.Native.Load32(table, NativeIntSize * 2);
+					return (MetadataMethodStruct*)Intrinsic.Load32(table, NativeIntSize * 2);
 				}
 
 				table = table + (NativeIntSize * 3);
@@ -386,15 +396,18 @@ namespace Mosa.Platform.Internal.x86
 			//DebugOutput((uint)entries);
 
 			int entry = 0;
+			MetadataPRDefinitionStruct* protectedRegionDef = null;
+			uint currentStart = uint.MinValue;
+			uint currentEnd = uint.MaxValue;
 			while (entry < entries)
 			{
 				//DebugOutput("entry:");
 				//DebugOutput((uint)entries);
 
-				var protectedRegionDef = MetadataPRTableStruct.GetProtecteRegionDefinitionAddress(protectedRegionTable, (uint)entry);
+				var prDef = MetadataPRTableStruct.GetProtecteRegionDefinitionAddress(protectedRegionTable, (uint)entry);
 
-				uint start = protectedRegionDef->StartOffset;
-				uint end = protectedRegionDef->EndOffset;
+				uint start = prDef->StartOffset;
+				uint end = prDef->EndOffset;
 
 				//DebugOutput("start:");
 				//DebugOutput(start);
@@ -402,37 +415,51 @@ namespace Mosa.Platform.Internal.x86
 				//DebugOutput("end:");
 				//DebugOutput(end);
 
-				if ((offset >= start) && (offset < end))
+				if ((offset >= start) && (offset < end) && (start >= currentStart) && (end < currentEnd))
 				{
-					int handlerType = protectedRegionDef->ExceptionHandlerType;
+					var handlerType = prDef->HandlerType;
 
 					//DebugOutput("type:");
 					//DebugOutput((uint)handlerType);
 
-					if (handlerType == 0)
+					// If the handler is a Finally clause, accept without testing
+					if (handlerType == ExceptionHandlerType.Finally)
 					{
 						//DebugOutput("entry found:");
 						//DebugOutput((uint)protectedRegionDef);
 
-						return protectedRegionDef;
+						protectedRegionDef = prDef;
+						currentStart = start;
+						currentEnd = end;
+						entry++;
+						continue;
 					}
 
-					var exType = protectedRegionDef->ExceptionType;
+					var exType = prDef->ExceptionType;
 
 					//DebugOutput("exType:");
 					//DebugOutput((uint)exType);
 
-					if (exType == exceptionType)
+					// If the handler is a Exception clause, accept if the exception Type
+					// is in the is within the inhertiance chain of the exception object
+					if (handlerType == ExceptionHandlerType.Exception && IsTypeInInheritanceChain(exType, exceptionType))
 					{
 						//DebugOutput("entry found:");
 						//DebugOutput((uint)protectedRegionDef);
 
-						return protectedRegionDef;
+						protectedRegionDef = prDef;
+						currentStart = start;
+						currentEnd = end;
+						entry++;
+						continue;
 					}
 				}
 
 				entry++;
 			}
+
+			if (protectedRegionDef != null)
+				return protectedRegionDef;
 
 			//DebugOutput("No entry found");
 
@@ -441,7 +468,7 @@ namespace Mosa.Platform.Internal.x86
 
 		public static uint GetPreviousStackFrame(uint ebp)
 		{
-			return Mosa.Internal.Native.Load32(ebp);
+			return Intrinsic.Load32(ebp);
 		}
 
 		public static uint GetStackFrame(uint depth)
@@ -463,7 +490,7 @@ namespace Mosa.Platform.Internal.x86
 
 		public static uint GetReturnAddressFromStackFrame(uint stackframe)
 		{
-			return Mosa.Internal.Native.Load32(stackframe, NativeIntSize);
+			return Intrinsic.Load32(stackframe, NativeIntSize);
 		}
 
 		public static void SetReturnAddressForStackFrame(uint stackframe, uint value)
@@ -502,7 +529,7 @@ namespace Mosa.Platform.Internal.x86
 					Fault(0XBAD00002);
 				}
 
-				var exceptionType = (MetadataTypeStruct*)Mosa.Internal.Native.Load32(exceptionObject);
+				var exceptionType = (MetadataTypeStruct*)Intrinsic.Load32(exceptionObject);
 
 				var methodDef = GetMethodDefinitionViaMethodExceptionLookup(returnAdddress);
 
