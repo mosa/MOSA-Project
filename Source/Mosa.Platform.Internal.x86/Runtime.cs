@@ -387,15 +387,18 @@ namespace Mosa.Platform.Internal.x86
 			//DebugOutput((uint)entries);
 
 			int entry = 0;
+			MetadataPRDefinitionStruct* protectedRegionDef = null;
+			uint currentStart = uint.MinValue;
+			uint currentEnd = uint.MaxValue;
 			while (entry < entries)
 			{
 				//DebugOutput("entry:");
 				//DebugOutput((uint)entries);
 
-				var protectedRegionDef = MetadataPRTableStruct.GetProtecteRegionDefinitionAddress(protectedRegionTable, (uint)entry);
+				var prDef = MetadataPRTableStruct.GetProtecteRegionDefinitionAddress(protectedRegionTable, (uint)entry);
 
-				uint start = protectedRegionDef->StartOffset;
-				uint end = protectedRegionDef->EndOffset;
+				uint start = prDef->StartOffset;
+				uint end = prDef->EndOffset;
 
 				//DebugOutput("start:");
 				//DebugOutput(start);
@@ -403,22 +406,28 @@ namespace Mosa.Platform.Internal.x86
 				//DebugOutput("end:");
 				//DebugOutput(end);
 
-				if ((offset >= start) && (offset < end))
+				if ((offset >= start) && (offset < end) && (start >= currentStart) && (end < currentEnd))
 				{
-					int handlerType = protectedRegionDef->ExceptionHandlerType;
+					var handlerType = prDef->HandlerType;
 
 					//DebugOutput("type:");
 					//DebugOutput((uint)handlerType);
 
-					if (handlerType == 0)
+					// NOTE: this is technically not correct
+					// Exception clauses need to have their exception type checked
+					if (handlerType == ExceptionHandlerType.Exception || handlerType == ExceptionHandlerType.Finally)
 					{
 						//DebugOutput("entry found:");
 						//DebugOutput((uint)protectedRegionDef);
 
-						return protectedRegionDef;
+						protectedRegionDef = prDef;
+						currentStart = start;
+						currentEnd = end;
+						entry++;
+						continue;
 					}
 
-					var exType = protectedRegionDef->ExceptionType;
+					var exType = prDef->ExceptionType;
 
 					//DebugOutput("exType:");
 					//DebugOutput((uint)exType);
@@ -428,12 +437,19 @@ namespace Mosa.Platform.Internal.x86
 						//DebugOutput("entry found:");
 						//DebugOutput((uint)protectedRegionDef);
 
-						return protectedRegionDef;
+						protectedRegionDef = prDef;
+						currentStart = start;
+						currentEnd = end;
+						entry++;
+						continue;
 					}
 				}
 
 				entry++;
 			}
+
+			if (protectedRegionDef != null)
+				return protectedRegionDef;
 
 			//DebugOutput("No entry found");
 
