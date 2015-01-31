@@ -27,7 +27,7 @@ namespace Mosa.Compiler.Framework.CIL
 		MosaMethod Method { get; }
 
 		/// <summary>
-		/// Gets the Instruction being decoded.
+		/// Gets the instruction being decoded.
 		/// </summary>
 		MosaInstruction Instruction { get; }
 

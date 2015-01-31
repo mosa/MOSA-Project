@@ -395,20 +395,23 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 					if (liveSetTrace.Active)
 						liveSetTrace.Log(context.ToString());
 
-					OperandVisitor visitor = new OperandVisitor(context);
+					var visitor = new OperandVisitor(context);
 
-					foreach (var ops in visitor.Input)
+					foreach (var op in visitor.Input)
 					{
-						if (liveSetTrace.Active)
-							liveSetTrace.Log("INPUT:  " + ops.ToString());
+						if (op.IsCPURegister && op.Register.IsSpecial)
+							continue;
 
-						int index = GetIndex(ops);
+						if (liveSetTrace.Active)
+							liveSetTrace.Log("INPUT:  " + op.ToString());
+
+						int index = GetIndex(op);
 						if (!liveKill.Get(index))
 						{
 							liveGen.Set(index, true);
 
 							if (liveSetTrace.Active)
-								liveSetTrace.Log("GEN:  " + index.ToString() + " " + ops.ToString());
+								liveSetTrace.Log("GEN:  " + index.ToString() + " " + op.ToString());
 						}
 					}
 
@@ -438,16 +441,19 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 							liveSetTrace.Log("KILL EXCEPT PHYSICAL: " + context.Operand1.ToString());
 					}
 
-					foreach (var ops in visitor.Output)
+					foreach (var op in visitor.Output)
 					{
-						if (liveSetTrace.Active)
-							liveSetTrace.Log("OUTPUT: " + ops.ToString());
+						if (op.IsCPURegister && op.Register.IsSpecial)
+							continue;
 
-						int index = GetIndex(ops);
+						if (liveSetTrace.Active)
+							liveSetTrace.Log("OUTPUT: " + op.ToString());
+
+						int index = GetIndex(op);
 						liveKill.Set(index, true);
 
 						if (liveSetTrace.Active)
-							liveSetTrace.Log("KILL: " + index.ToString() + " " + ops.ToString());
+							liveSetTrace.Log("KILL: " + index.ToString() + " " + op.ToString());
 					}
 				}
 
@@ -574,6 +580,9 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 						foreach (var result in visitor.Output)
 						{
+							if (result.IsCPURegister && result.Register.IsSpecial)
+								continue;
+
 							var register = VirtualRegisters[GetIndex(result)];
 
 							if (register.IsReserved)
@@ -606,6 +615,9 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 						foreach (var result in visitor.Input)
 						{
+							if (result.IsCPURegister && result.Register.IsSpecial)
+								continue;
+
 							var register = VirtualRegisters[GetIndex(result)];
 
 							if (register.IsReserved)
