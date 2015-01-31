@@ -100,6 +100,20 @@ namespace Mosa.Platform.Internal.x86
 
 		#endregion Metadata
 
+
+		public static bool IsTypeInInheritanceChain(MetadataTypeStruct* typeDefinition, MetadataTypeStruct* chain)
+		{
+			while (chain != null)
+			{
+				if (chain == typeDefinition)
+					return true;
+
+				chain = chain->ParentType;
+			}
+
+			return false;
+		}
+
 		public static void* IsInstanceOfType(RuntimeTypeHandle handle, void* obj)
 		{
 			if (obj == null)
@@ -109,13 +123,8 @@ namespace Mosa.Platform.Internal.x86
 
 			MetadataTypeStruct* objTypeDefinition = (MetadataTypeStruct*)((uint*)obj)[0];
 
-			while (objTypeDefinition != null)
-			{
-				if (objTypeDefinition == typeDefinition)
-					return (void*)obj;
-
-				objTypeDefinition = objTypeDefinition->ParentType;
-			}
+			if (IsTypeInInheritanceChain(typeDefinition, objTypeDefinition))
+				return (void*)obj;
 
 			return null;
 		}
@@ -413,9 +422,8 @@ namespace Mosa.Platform.Internal.x86
 					//DebugOutput("type:");
 					//DebugOutput((uint)handlerType);
 
-					// NOTE: this is technically not correct
-					// Exception clauses need to have their exception type checked
-					if (handlerType == ExceptionHandlerType.Exception || handlerType == ExceptionHandlerType.Finally)
+					// If the handler is a Finally clause, accept without testing
+					if (handlerType == ExceptionHandlerType.Finally)
 					{
 						//DebugOutput("entry found:");
 						//DebugOutput((uint)protectedRegionDef);
@@ -432,7 +440,9 @@ namespace Mosa.Platform.Internal.x86
 					//DebugOutput("exType:");
 					//DebugOutput((uint)exType);
 
-					if (exType == exceptionType)
+					// If the handler is a Exception clause, accept if the exception Type
+					// is in the is within the inhertiance chain of the exception object
+					if (handlerType == ExceptionHandlerType.Exception && IsTypeInInheritanceChain(exType, exceptionType))
 					{
 						//DebugOutput("entry found:");
 						//DebugOutput((uint)protectedRegionDef);
