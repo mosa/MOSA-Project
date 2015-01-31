@@ -525,5 +525,40 @@ namespace Mosa.Test.Collection
 		{
 			throw new Exception();
 		}
+
+		public static ulong ExceptionTest10()
+		{
+			ulong n = 1;
+
+			try
+			{
+				n = n + 20;
+
+				try
+				{
+					n = n + 300;
+					ExceptionTest10Exception();
+				}
+				finally
+				{
+					n = n + 4000;
+				}
+			}
+			catch
+			{
+				n = n + 50000;
+			}
+			finally
+			{
+				n = n + 600000;
+			}
+
+			return n;
+		}
+
+		private static void ExceptionTest10Exception()
+		{
+			throw new Exception();
+		}
 	}
 }
