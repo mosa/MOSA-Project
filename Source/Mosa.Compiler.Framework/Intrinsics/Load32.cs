@@ -12,8 +12,8 @@ using Mosa.Compiler.Framework.IR;
 
 namespace Mosa.Compiler.Framework.Intrinsics
 {
-	[ReplacementTarget("Mosa.Internal.Native::Load32")]
-	public sealed class Load : IIntrinsicInternalMethod
+	[ReplacementTarget("Mosa.Internal.Intrinsic::Load32")]
+	public sealed class Load32 : IIntrinsicInternalMethod
 	{
 		/// <summary>
 		/// Replaces the intrinsic call site
@@ -22,7 +22,7 @@ namespace Mosa.Compiler.Framework.Intrinsics
 		/// <param name="methodCompiler">The method compiler.</param>
 		void IIntrinsicInternalMethod.ReplaceIntrinsicCall(Context context, BaseMethodCompiler methodCompiler)
 		{
-			var size = methodCompiler.Architecture.NativePointerSize == 4 ? InstructionSize.Size32 : InstructionSize.Size64;
+			var size = InstructionSize.Size32;
 
 			if (context.OperandCount == 1)
 			{

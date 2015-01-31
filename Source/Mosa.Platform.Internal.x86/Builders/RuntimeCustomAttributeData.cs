@@ -10,6 +10,8 @@
 using Mosa.Platform.Internal.x86;
 using System.Collections.Generic;
 using System.Reflection;
+using Mosa.Platform.Internal;
+using Mosa.Internal;
 using x86Runtime = Mosa.Platform.Internal.x86.Runtime;
 
 namespace System
@@ -41,7 +43,9 @@ namespace System
 				// Get the argument name (if any)
 				string name = null;
 				if (argument->Name != null)
+				{
 					name = x86Runtime.InitializeMetadataString(argument->Name);
+				}
 
 				// Get the argument type
 				RuntimeTypeHandle argTypeHandle = new RuntimeTypeHandle();
@@ -53,9 +57,13 @@ namespace System
 
 				// If the argument has a name then its a NamedArgument, otherwise its a TypedArgument
 				if (name == null)
+				{
 					typedArgs.AddLast(CreateTypedArgumentStruct(argType, value));
+				}
 				else
+				{
 					namedArgs.AddLast(CreateNamedArgumentStruct(name, argType, value, argument->IsField));
+				}
 			}
 
 			// Generate arrays from the argument lists
@@ -68,9 +76,9 @@ namespace System
 			// Because C# doesn't like structs which contain object references to be referenced by pointers
 			// we need to use a special MOSA compiler trick to get its address to create a pointer
 			CustomAttributeTypedArgument typedArgument = new CustomAttributeTypedArgument();
-			var ptr = (uint**)Mosa.Internal.Native.GetValueTypeAddress(typedArgument);
-			ptr[0] = (uint*)Mosa.Internal.Native.GetObjectAddress(type);
-			ptr[1] = (uint*)Mosa.Internal.Native.GetObjectAddress(value);
+			var ptr = (uint**)Intrinsic.GetValueTypeAddress(typedArgument);
+			ptr[0] = (uint*)Intrinsic.GetObjectAddress(type);
+			ptr[1] = (uint*)Intrinsic.GetObjectAddress(value);
 
 			return typedArgument;
 		}
@@ -80,10 +88,10 @@ namespace System
 			// Because C# doesn't like structs which contain object references to be referenced by pointers
 			// we need to use a special MOSA compiler trick to get its address to create a pointer
 			CustomAttributeNamedArgument namedArgument = new CustomAttributeNamedArgument();
-			var ptr = (uint**)Mosa.Internal.Native.GetValueTypeAddress(namedArgument);
-			ptr[0] = (uint*)Mosa.Internal.Native.GetObjectAddress(name);
-			ptr[1] = (uint*)Mosa.Internal.Native.GetObjectAddress(type);
-			ptr[2] = (uint*)Mosa.Internal.Native.GetObjectAddress(value);
+			var ptr = (uint**)Intrinsic.GetValueTypeAddress(namedArgument);
+			ptr[0] = (uint*)Intrinsic.GetObjectAddress(name);
+			ptr[1] = (uint*)Intrinsic.GetObjectAddress(type);
+			ptr[2] = (uint*)Intrinsic.GetObjectAddress(value);
 			ptr[3] = (uint*)(isField ? 1 : 0);
 
 			return namedArgument;

@@ -11,8 +11,8 @@ using Mosa.Compiler.Framework.IR;
 
 namespace Mosa.Compiler.Framework.Intrinsics
 {
-	[ReplacementTarget("Mosa.Internal.Native::GetObjectAddress")]
-	[ReplacementTarget("Mosa.Internal.Native::GetValueTypeAddress")]
+	[ReplacementTarget("Mosa.Internal.Intrinsic::GetObjectAddress")]
+	[ReplacementTarget("Mosa.Internal.Intrinsic::GetValueTypeAddress")]
 	public sealed class GetObjectAddress : IIntrinsicInternalMethod
 	{
 		/// <summary>
