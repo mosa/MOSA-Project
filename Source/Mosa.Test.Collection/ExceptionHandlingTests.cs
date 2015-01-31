@@ -470,52 +470,30 @@ namespace Mosa.Test.Collection
 
 			try
 			{
+				n = n + 20;
+
 				try
 				{
-					n = n + 20;
-				}
-				catch
-				{
 					n = n + 300;
+					ExceptionTest9Exception();
 				}
 				finally
 				{
 					n = n + 4000;
 				}
-
-				n = n + 50000;
-
-				try
-				{
-					n = n + 600000;
-					ExceptionTest9Exception();
-				}
-				catch
-				{
-					try
-					{
-						n = n + 7000000;
-						ExceptionTest9Exception();
-						n = n * 23;
-					}
-					finally
-					{
-						n = n + 80000000;
-					}
-				}
-				finally
-				{
-					n = n + 900000000;
-					ExceptionTest9Exception();
-				}
 			}
-			catch
+			catch(SystemException ex)
 			{
-				n = n + 1000000000;
+				// There should never be a 50000
+				n = n + 50000;
+			}
+			catch(TestExceptionType ex)
+			{
+				n = n + 600000;
 			}
 			finally
 			{
-				n = n + 20000000000;
+				n = n + 7000000;
 			}
 
 			return n;
@@ -523,7 +501,11 @@ namespace Mosa.Test.Collection
 
 		private static void ExceptionTest9Exception()
 		{
-			throw new Exception();
+			throw new TestExceptionType();
+		}
+
+		private class TestExceptionType : Exception
+		{
 		}
 
 		public static ulong ExceptionTest10()
