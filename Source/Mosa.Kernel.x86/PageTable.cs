@@ -8,6 +8,7 @@
  */
 
 using Mosa.Kernel.Helpers;
+using Mosa.Kernel.x86.Helpers;
 using Mosa.Platform.Internal.x86;
 using System.Runtime.InteropServices;
 

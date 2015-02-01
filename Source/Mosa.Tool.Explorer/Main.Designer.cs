@@ -187,25 +187,25 @@
             this.toolStripMenuItem1,
             this.quitToolStripMenuItem});
 			this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-			this.fileToolStripMenuItem.Size = new System.Drawing.Size(35, 20);
+			this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
 			this.fileToolStripMenuItem.Text = "&File";
 			// 
 			// openToolStripMenuItem
 			// 
 			this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-			this.openToolStripMenuItem.Size = new System.Drawing.Size(100, 22);
+			this.openToolStripMenuItem.Size = new System.Drawing.Size(103, 22);
 			this.openToolStripMenuItem.Text = "&Open";
 			this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
 			// 
 			// toolStripMenuItem1
 			// 
 			this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-			this.toolStripMenuItem1.Size = new System.Drawing.Size(97, 6);
+			this.toolStripMenuItem1.Size = new System.Drawing.Size(100, 6);
 			// 
 			// quitToolStripMenuItem
 			// 
 			this.quitToolStripMenuItem.Name = "quitToolStripMenuItem";
-			this.quitToolStripMenuItem.Size = new System.Drawing.Size(100, 22);
+			this.quitToolStripMenuItem.Size = new System.Drawing.Size(103, 22);
 			this.quitToolStripMenuItem.Text = "&Quit";
 			this.quitToolStripMenuItem.Click += new System.EventHandler(this.quitToolStripMenuItem_Click);
 			// 
@@ -215,20 +215,20 @@
             this.nowToolStripMenuItem,
             this.snippetToolStripMenuItem});
 			this.compileToolStripMenuItem.Name = "compileToolStripMenuItem";
-			this.compileToolStripMenuItem.Size = new System.Drawing.Size(56, 20);
+			this.compileToolStripMenuItem.Size = new System.Drawing.Size(64, 20);
 			this.compileToolStripMenuItem.Text = "Compile";
 			// 
 			// nowToolStripMenuItem
 			// 
 			this.nowToolStripMenuItem.Name = "nowToolStripMenuItem";
-			this.nowToolStripMenuItem.Size = new System.Drawing.Size(110, 22);
+			this.nowToolStripMenuItem.Size = new System.Drawing.Size(114, 22);
 			this.nowToolStripMenuItem.Text = "Now";
 			this.nowToolStripMenuItem.Click += new System.EventHandler(this.nowToolStripMenuItem_Click);
 			// 
 			// snippetToolStripMenuItem
 			// 
 			this.snippetToolStripMenuItem.Name = "snippetToolStripMenuItem";
-			this.snippetToolStripMenuItem.Size = new System.Drawing.Size(110, 22);
+			this.snippetToolStripMenuItem.Size = new System.Drawing.Size(114, 22);
 			this.snippetToolStripMenuItem.Text = "Snippet";
 			this.snippetToolStripMenuItem.Click += new System.EventHandler(this.snippetToolStripMenuItem_Click);
 			// 
@@ -243,7 +243,7 @@
             this.enableSparseConditionalConstantPropagation,
             this.enableBinaryCodeGeneration});
 			this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
-			this.optionsToolStripMenuItem.Size = new System.Drawing.Size(56, 20);
+			this.optionsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
 			this.optionsToolStripMenuItem.Text = "Options";
 			// 
 			// showSizes
@@ -252,7 +252,7 @@
 			this.showSizes.CheckOnClick = true;
 			this.showSizes.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.showSizes.Name = "showSizes";
-			this.showSizes.Size = new System.Drawing.Size(270, 22);
+			this.showSizes.Size = new System.Drawing.Size(293, 22);
 			this.showSizes.Text = "Show Sizes";
 			this.showSizes.Click += new System.EventHandler(this.showSizes_Click);
 			// 
@@ -262,14 +262,14 @@
 			this.displayShortName.CheckOnClick = true;
 			this.displayShortName.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.displayShortName.Name = "displayShortName";
-			this.displayShortName.Size = new System.Drawing.Size(270, 22);
+			this.displayShortName.Size = new System.Drawing.Size(293, 22);
 			this.displayShortName.Text = "Display Short Name";
 			// 
 			// includeTestKorlibToolStripMenuItem
 			// 
 			this.includeTestKorlibToolStripMenuItem.CheckOnClick = true;
 			this.includeTestKorlibToolStripMenuItem.Name = "includeTestKorlibToolStripMenuItem";
-			this.includeTestKorlibToolStripMenuItem.Size = new System.Drawing.Size(270, 22);
+			this.includeTestKorlibToolStripMenuItem.Size = new System.Drawing.Size(293, 22);
 			this.includeTestKorlibToolStripMenuItem.Text = "Include Test Components";
 			// 
 			// enableSSA
@@ -278,7 +278,7 @@
 			this.enableSSA.CheckOnClick = true;
 			this.enableSSA.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.enableSSA.Name = "enableSSA";
-			this.enableSSA.Size = new System.Drawing.Size(270, 22);
+			this.enableSSA.Size = new System.Drawing.Size(293, 22);
 			this.enableSSA.Text = "Enable SSA";
 			// 
 			// enableOptimizations
@@ -287,7 +287,7 @@
 			this.enableOptimizations.CheckOnClick = true;
 			this.enableOptimizations.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.enableOptimizations.Name = "enableOptimizations";
-			this.enableOptimizations.Size = new System.Drawing.Size(270, 22);
+			this.enableOptimizations.Size = new System.Drawing.Size(293, 22);
 			this.enableOptimizations.Text = "Enable Optimizations";
 			// 
 			// enableSparseConditionalConstantPropagation
@@ -296,7 +296,7 @@
 			this.enableSparseConditionalConstantPropagation.CheckOnClick = true;
 			this.enableSparseConditionalConstantPropagation.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.enableSparseConditionalConstantPropagation.Name = "enableSparseConditionalConstantPropagation";
-			this.enableSparseConditionalConstantPropagation.Size = new System.Drawing.Size(270, 22);
+			this.enableSparseConditionalConstantPropagation.Size = new System.Drawing.Size(293, 22);
 			this.enableSparseConditionalConstantPropagation.Text = "Enable Conditional Constant Propagation";
 			// 
 			// enableBinaryCodeGeneration
@@ -305,7 +305,7 @@
 			this.enableBinaryCodeGeneration.CheckOnClick = true;
 			this.enableBinaryCodeGeneration.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.enableBinaryCodeGeneration.Name = "enableBinaryCodeGeneration";
-			this.enableBinaryCodeGeneration.Size = new System.Drawing.Size(270, 22);
+			this.enableBinaryCodeGeneration.Size = new System.Drawing.Size(293, 22);
 			this.enableBinaryCodeGeneration.Text = "Enable Binary Code Generation";
 			// 
 			// openFileDialog
@@ -362,7 +362,7 @@
 			this.tabControl1.Location = new System.Drawing.Point(3, 3);
 			this.tabControl1.Name = "tabControl1";
 			this.tabControl1.SelectedIndex = 0;
-			this.tabControl1.Size = new System.Drawing.Size(712, 405);
+			this.tabControl1.Size = new System.Drawing.Size(713, 405);
 			this.tabControl1.TabIndex = 38;
 			// 
 			// tabPage1
@@ -378,7 +378,7 @@
 			this.tabPage1.Location = new System.Drawing.Point(4, 25);
 			this.tabPage1.Name = "tabPage1";
 			this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPage1.Size = new System.Drawing.Size(704, 376);
+			this.tabPage1.Size = new System.Drawing.Size(705, 376);
 			this.tabPage1.TabIndex = 0;
 			this.tabPage1.Text = "Instructions";
 			// 
@@ -440,7 +440,7 @@
 			this.tabPage2.Location = new System.Drawing.Point(4, 25);
 			this.tabPage2.Name = "tabPage2";
 			this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPage2.Size = new System.Drawing.Size(704, 376);
+			this.tabPage2.Size = new System.Drawing.Size(705, 376);
 			this.tabPage2.TabIndex = 1;
 			this.tabPage2.Text = "Debug";
 			// 
@@ -478,7 +478,7 @@
 			this.tabPage3.Location = new System.Drawing.Point(4, 25);
 			this.tabPage3.Name = "tabPage3";
 			this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPage3.Size = new System.Drawing.Size(704, 376);
+			this.tabPage3.Size = new System.Drawing.Size(705, 376);
 			this.tabPage3.TabIndex = 2;
 			this.tabPage3.Text = "Errors";
 			// 
@@ -502,7 +502,7 @@
 			this.tabPage4.Location = new System.Drawing.Point(4, 25);
 			this.tabPage4.Name = "tabPage4";
 			this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPage4.Size = new System.Drawing.Size(704, 376);
+			this.tabPage4.Size = new System.Drawing.Size(705, 376);
 			this.tabPage4.TabIndex = 3;
 			this.tabPage4.Text = "Log";
 			// 
@@ -526,7 +526,7 @@
 			this.tabPage5.Location = new System.Drawing.Point(4, 25);
 			this.tabPage5.Name = "tabPage5";
 			this.tabPage5.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPage5.Size = new System.Drawing.Size(704, 376);
+			this.tabPage5.Size = new System.Drawing.Size(705, 376);
 			this.tabPage5.TabIndex = 4;
 			this.tabPage5.Text = "Counters";
 			// 
@@ -549,7 +549,7 @@
 			this.tabPage6.Location = new System.Drawing.Point(4, 25);
 			this.tabPage6.Name = "tabPage6";
 			this.tabPage6.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPage6.Size = new System.Drawing.Size(704, 376);
+			this.tabPage6.Size = new System.Drawing.Size(705, 376);
 			this.tabPage6.TabIndex = 5;
 			this.tabPage6.Text = "Exceptions";
 			this.tabPage6.UseVisualStyleBackColor = true;
@@ -586,7 +586,7 @@
 			this.toolStripButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton1.Image")));
 			this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButton1.Name = "toolStripButton1";
-			this.toolStripButton1.Size = new System.Drawing.Size(53, 22);
+			this.toolStripButton1.Size = new System.Drawing.Size(56, 22);
 			this.toolStripButton1.Text = "Open";
 			this.toolStripButton1.Click += new System.EventHandler(this.toolStripButton1_Click);
 			// 
@@ -595,7 +595,7 @@
 			this.toolStripButton2.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton2.Image")));
 			this.toolStripButton2.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButton2.Name = "toolStripButton2";
-			this.toolStripButton2.Size = new System.Drawing.Size(63, 22);
+			this.toolStripButton2.Size = new System.Drawing.Size(67, 22);
 			this.toolStripButton2.Text = "Snippet";
 			this.toolStripButton2.Click += new System.EventHandler(this.toolStripButton2_Click);
 			// 
@@ -609,7 +609,7 @@
 			this.toolStripButton4.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton4.Image")));
 			this.toolStripButton4.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButton4.Name = "toolStripButton4";
-			this.toolStripButton4.Size = new System.Drawing.Size(64, 22);
+			this.toolStripButton4.Size = new System.Drawing.Size(72, 22);
 			this.toolStripButton4.Text = "Compile";
 			this.toolStripButton4.Click += new System.EventHandler(this.toolStripButton4_Click);
 			// 
@@ -640,7 +640,6 @@
 			this.Controls.Add(this.statusStrip1);
 			this.Controls.Add(this.menuStrip1);
 			this.Controls.Add(this.splitContainer1);
-			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.MainMenuStrip = this.menuStrip1;
 			this.Name = "Main";
 			this.Text = "MOSA Explorer v1.4";
