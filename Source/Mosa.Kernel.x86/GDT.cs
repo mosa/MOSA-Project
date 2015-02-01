@@ -1,13 +1,17 @@
 ﻿/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
+ * (c) 2015 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
+ *  Stefan Andres Charsley (charsleysa) <charsleysa@gmail.com>
+ *  Sebastion Loncar (Arakis) <sebastion.loncar@gmail.com>
  */
 
+using Mosa.Kernel.Helpers;
 using Mosa.Platform.Internal.x86;
+using System.Runtime.InteropServices;
 
 namespace Mosa.Kernel.x86
 {
@@ -17,7 +21,7 @@ namespace Mosa.Kernel.x86
 	public static class GDT
 	{
 		private static uint gdtTable = 0x1401000;
-		private static uint gdtEntries = 0x1401000 + 6;
+		private static uint gdtEntries = gdtTable + 6;
 
 		#region Data members
 
@@ -43,6 +47,8 @@ namespace Mosa.Kernel.x86
 			Set(0, 0, 0, 0, 0);                // Null segment
 			Set(1, 0, 0xFFFFFFFF, 0x9A, 0xCF); // Code segment
 			Set(2, 0, 0xFFFFFFFF, 0x92, 0xCF); // Data segment
+
+			//Panic.DumpMemory(gdtTable);
 
 			Native.Lgdt(gdtTable);
 		}

@@ -21,7 +21,7 @@ namespace Mosa.Compiler.Linker
 
 		public SectionKind SectionKind { get; private set; }
 
-		public MemoryStream Stream { get; internal set; }
+		public Stream Stream { get; internal set; }
 
 		public uint Alignment { get; internal set; }
 
@@ -51,7 +51,7 @@ namespace Mosa.Compiler.Linker
 
 		public void SetData(byte[] data)
 		{
-			Stream = new MemoryStream(data);
+			Stream = Stream.Synchronized(new MemoryStream(data));
 		}
 
 		public void ApplyPatch(long offset, ulong value, ulong mask, byte patchSize, Endianness endianness)

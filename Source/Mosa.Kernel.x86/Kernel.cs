@@ -19,6 +19,7 @@ namespace Mosa.Kernel.x86
 	{
 		public static void Setup()
 		{
+			Panic.Setup();
 			DebugClient.Setup(Serial.COM1);
 			IDT.SetInterruptHandler(null);
 			SSE.Setup();

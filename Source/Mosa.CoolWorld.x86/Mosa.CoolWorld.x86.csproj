@@ -105,6 +105,10 @@
       <Project>{6509477a-7360-4937-a1b9-26fed0a75cda}</Project>
       <Name>Mosa.DeviceSystem</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Mosa.Internal\Mosa.Internal.csproj">
+      <Project>{77961864-db33-4189-804f-d774022c96e2}</Project>
+      <Name>Mosa.Internal</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Mosa.Kernel.x86\Mosa.Kernel.x86.csproj">
       <Project>{FF099D48-3FA5-4ED6-BBA0-1497D734962A}</Project>
       <Name>Mosa.Kernel.x86</Name>
