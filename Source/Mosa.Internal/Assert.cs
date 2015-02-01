@@ -22,7 +22,7 @@ namespace Mosa.Kernel.Helpers
 	{
 		private static void AssertError(string message)
 		{
-			//InternalPanic.Error(message);
+			InternalPanic.Error(message);
 		}
 
 		public static void InRange(uint value, uint length)
