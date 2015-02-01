@@ -7,9 +7,7 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using Mosa.Kernel.Helpers;
 using Mosa.Platform.Internal.x86;
-using System.Runtime.InteropServices;
 
 namespace Mosa.Kernel.x86
 {

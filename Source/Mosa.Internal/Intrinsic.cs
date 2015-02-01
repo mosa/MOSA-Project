@@ -10,7 +10,6 @@
  *  Scott Balmos <sbalmos@fastmail.fm>
 */
 
-using System.Runtime.InteropServices;
 using System.Runtime.CompilerServices;
 
 namespace Mosa.Internal
