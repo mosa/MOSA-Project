@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace Mosa.Kernel.Helpers
+﻿namespace Mosa.Kernel.x86.Helpers
 {
 	public static class InternalPanic
 	{
