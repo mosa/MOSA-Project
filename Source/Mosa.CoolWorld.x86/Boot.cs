@@ -26,9 +26,6 @@ namespace Mosa.CoolWorld.x86
 		{
 			Mosa.Kernel.x86.Kernel.Setup();
 
-			//Panic.Message("test");
-			//Panic.Message(10.ToString("X"));
-
 			Console = ConsoleManager.Controller.Boot;
 
 			Console.Clear();

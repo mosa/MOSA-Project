@@ -115,29 +115,19 @@ namespace Mosa.Kernel.x86
 					else
 						Screen.Color = Colors.LightGray;
 
-					byte byteMin = 32;
-					byte byteMax = 128;
-
-					#region COMPILER_BUG
-
-					//if (num >= 32 && num < 128) //COMPILER_BUG: This conditinal expression will not resolved correctly!
-					//{
-					//	Screen.Color = Colors.LightGray;
-					//	Screen.Write((char)num);
-					//}
-					//else
-					//{
-					//	if (num == 0)
-					//		Screen.Color = Colors.DarkGray;
-					//	else
-					//		Screen.Color = Colors.LightGray;
-					//	Screen.Write('.');
-					//}
-
-					#endregion COMPILER_BUG
-
-					//workarround: separate method
-					WriteHexChar(num);
+					if (num >= 32 && num < 128)
+					{
+						Screen.Color = Colors.LightGray;
+						Screen.Write((char)num);
+					}
+					else
+					{
+						if (num == 0)
+							Screen.Color = Colors.DarkGray;
+						else
+							Screen.Color = Colors.LightGray;
+						Screen.Write('.');
+					}
 				}
 				Screen.Color = Colors.LightGray;
 
