@@ -166,14 +166,10 @@ namespace Mosa.TestWorld.x86.Tests
 			Mosa.Platform.Internal.x86.Native.Set8(address, 81); //set ascii 'Q'
 			var num = Mosa.Platform.Internal.x86.Native.Get8(address); //get the 'Q' back
 
-			#region COMPILER_BUG
-
-			if (num >= 32 && num < 128) //COMPILER_BUG: This conditinal expression will not resolved correctly!
+			if (num >= 32 && num < 128)
 				return true;
 			else
 				return false;
-
-			#endregion COMPILER_BUG
 		}
 	}
 
