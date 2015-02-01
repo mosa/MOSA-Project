@@ -11,7 +11,6 @@
 */
 
 using System.Runtime.InteropServices;
-using System.Runtime.CompilerServices;
 
 namespace Mosa.Platform.Internal.x86
 {
@@ -187,17 +186,17 @@ namespace Mosa.Platform.Internal.x86
 		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.GetCR4, Mosa.Platform.x86")]
 		public extern static uint GetCR4();
 
-		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.Get, Mosa.Platform.x86")]
+		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.Get8, Mosa.Platform.x86")]
 		public extern static byte Get8(uint address);
 
-		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.Get, Mosa.Platform.x86")]
+		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.Get16, Mosa.Platform.x86")]
 		public extern static ushort Get16(uint address);
 
-		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.Get, Mosa.Platform.x86")]
+		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.Get32, Mosa.Platform.x86")]
 		public extern static uint Get32(uint address);
 
-		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.Get, Mosa.Platform.x86")]
-		public extern static ulong Get64(uint address);
+		//[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.Get64, Mosa.Platform.x86")]
+		//public extern static ulong Get64(uint address);
 
 		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.Set, Mosa.Platform.x86")]
 		public extern static void Set8(uint address, byte value);
@@ -208,8 +207,8 @@ namespace Mosa.Platform.Internal.x86
 		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.Set, Mosa.Platform.x86")]
 		public extern static void Set32(uint address, uint value);
 
-		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.Set, Mosa.Platform.x86")]
-		public extern static void Set64(uint address, ulong value);
+		//[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.Set, Mosa.Platform.x86")]
+		//public extern static void Set64(uint address, ulong value);
 
 		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.GetEBP, Mosa.Platform.x86")]
 		public extern static uint GetEBP();

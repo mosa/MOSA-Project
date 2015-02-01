@@ -105,6 +105,8 @@
     <Compile Include="Instructions\AddSD.cs" />
     <Compile Include="Intrinsic\CreateInstanceSimple.cs" />
     <Compile Include="Intrinsic\Div.cs" />
+    <Compile Include="Intrinsic\Get32.cs" />
+    <Compile Include="Intrinsic\Get16.cs" />
     <Compile Include="Intrinsic\GetAssemblyListTable.cs" />
     <Compile Include="Intrinsic\FrameJump.cs" />
     <Compile Include="Intrinsic\GetExceptionRegister.cs" />
@@ -149,7 +151,7 @@
     <Compile Include="Intrinsic\SetCR3.cs" />
     <Compile Include="Intrinsic\SetCR4.cs" />
     <Compile Include="Intrinsic\SwitchTask.cs" />
-    <Compile Include="Intrinsic\Get.cs" />
+    <Compile Include="Intrinsic\Get8.cs" />
     <Compile Include="Intrinsic\Hlt.cs" />
     <Compile Include="Intrinsic\Set.cs" />
     <Compile Include="Intrinsic\CpuIdEax.cs" />
