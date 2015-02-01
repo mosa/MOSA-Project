@@ -26,6 +26,7 @@ namespace Mosa.TestWorld.x86.Tests
 			testMethods.AddLast(StructNewObjTest);
 			testMethods.AddLast(StructNotBoxed);
 			testMethods.AddLast(ForeachBreak);
+			testMethods.AddLast(ConditionalBug);
 		}
 
 		private static uint StaticValue = 0x200000;
@@ -157,6 +158,18 @@ namespace Mosa.TestWorld.x86.Tests
 					return p;
 			}
 			return new Pair(0, 0);
+		}
+
+		public static bool ConditionalBug()
+		{
+			uint address = 0x0B8050; //it's the display memory, but you can use any other adress, so far it's no critical area
+			Mosa.Platform.Internal.x86.Native.Set8(address, 81); //set ascii 'Q'
+			var num = Mosa.Platform.Internal.x86.Native.Get8(address); //get the 'Q' back
+
+			if (num >= 32 && num < 128)
+				return true;
+			else
+				return false;
 		}
 	}
 

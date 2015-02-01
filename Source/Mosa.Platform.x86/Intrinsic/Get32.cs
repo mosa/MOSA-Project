@@ -14,7 +14,7 @@ namespace Mosa.Platform.x86.Intrinsic
 	/// <summary>
 	///
 	/// </summary>
-	internal sealed class Get : IIntrinsicPlatformMethod
+	internal sealed class Get32 : IIntrinsicPlatformMethod
 	{
 		#region Methods
 
@@ -27,10 +27,10 @@ namespace Mosa.Platform.x86.Intrinsic
 		{
 			Operand result = context.Result;
 			Operand v1 = methodCompiler.CreateVirtualRegister(methodCompiler.TypeSystem.BuiltIn.Pointer);
-			Operand operand = Operand.CreateMemoryAddress(context.Operand1.Type, v1, 0);
+			Operand operand = Operand.CreateMemoryAddress(methodCompiler.TypeSystem.BuiltIn.U4, v1, 0);
 
 			context.SetInstruction(X86.Mov, v1, context.Operand1);
-			context.AppendInstruction(X86.Mov, result, operand);
+			context.AppendInstruction(X86.Mov, InstructionSize.Size32, result, operand);
 		}
 
 		#endregion Methods
