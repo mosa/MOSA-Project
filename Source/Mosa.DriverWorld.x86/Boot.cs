@@ -17,43 +17,48 @@ namespace Mosa.DriverWorld.x86
 	/// </summary>
 	public static class Boot
 	{
-		public static TextScreen Console = null;
+		public static ConsoleSession console;
+
+		public static ConsoleSession Console
+		{
+			get { return console; }
+		}
 
 		/// <summary>
 		/// Main
 		/// </summary>
 		public static void Main()
 		{
-			DebugClient.Setup(Serial.COM1);
-			IDT.SetInterruptHandler(null);
-			SSE.Setup();
-			Multiboot.Setup();
-			PIC.Setup();
-			GDT.Setup();
-			IDT.Setup();
-			PageFrameAllocator.Setup();
-			PageTable.Setup();
-			VirtualPageAllocator.Setup();
-			ProcessManager.Setup();
-			Runtime.Setup();
-			TaskManager.Setup();
-			SmbiosManager.Setup();
-			IDT.SetInterruptHandler(ProcessInterrupt);
-			Screen.RawWrite(3, 0, 'A', 0x0A);
-			Setup.Initialize();
-			Screen.RawWrite(4, 0, 'A', 0x0A);
-			Setup.Start();
-			Screen.RawWrite(5, 0, 'A', 0x0A);
-			var textDevice = (ITextDevice)Setup.DeviceManager.GetDevices(new FindDevice.WithName("VGAText")).First.Value;
-			Console = new TextScreen(textDevice);
-			Screen.RawWrite(6, 0, 'A', 0x0A);
-			Console.ClearScreen();
+			Mosa.Kernel.x86.Kernel.Setup();
 
-			Console.Write("          Copyright (C) 2008-2015 [Managed Operating System Alliance]");
-			Console.WriteLine();
+			console = ConsoleManager.Controller.Boot;
+
+			Console.Clear();
+
+			IDT.SetInterruptHandler(ProcessInterrupt);
+
+			Console.Color = Colors.White;
+			Console.BackgroundColor = Colors.Green;
+
+			Console.Write(@"                   MOSA OS Version 1.4 - Compiler Version 1.4");
+			FillLine();
+			Console.Color = Colors.White;
+			Console.BackgroundColor = Colors.Black;
+
+			Console.WriteLine("> Initializing hardware abstraction layer...");
+			Setup.Initialize();
+
+			Console.WriteLine("> Adding hardware devices...");
+			Setup.Start();
+
 			Console.WriteLine("> System ready");
 			Console.WriteLine();
-			Screen.RawWrite(7, 0, 'A', 0x0A);
+			Console.Goto(24, 0);
+			Console.Color = Colors.White;
+			Console.BackgroundColor = Colors.Green;
+			Console.Write("          Copyright (C) 2008-2015 [Managed Operating System Alliance]");
+			FillLine();
+
 			Process();
 		}
 
@@ -61,6 +66,9 @@ namespace Mosa.DriverWorld.x86
 		{
 			int lastSecond = -1;
 
+			Console.BackgroundColor = Colors.Black;
+			Console.Goto(21, 0);
+			Console.Color = Colors.White;
 			Console.Write("> ");
 
 			Mosa.DeviceDriver.ScanCodeMap.US KBDMAP = new DeviceDriver.ScanCodeMap.US();
@@ -104,21 +112,32 @@ namespace Mosa.DriverWorld.x86
 			}
 		}
 
+		public static void FillLine()
+		{
+			for (uint c = 80 - Console.Column; c != 0; c--)
+				Console.Write(' ');
+		}
+
 		public static void PrintDone()
 		{
-			InBrackets("Done");
+			InBrackets("Done", Colors.White, Colors.LightGreen);
 			Console.WriteLine();
 		}
 
 		public static void BulletPoint()
 		{
+			Console.Color = Colors.Yellow;
 			Console.Write("  * ");
+			Console.Color = Colors.White;
 		}
 
-		public static void InBrackets(string message)
+		public static void InBrackets(string message, byte outerColor, byte innerColor)
 		{
+			Console.Color = outerColor;
 			Console.Write("[");
+			Console.Color = innerColor;
 			Console.Write(message);
+			Console.Color = outerColor;
 			Console.Write("]");
 		}
 
@@ -130,7 +149,6 @@ namespace Mosa.DriverWorld.x86
 			}
 			else if (interrupt >= 0x20 && interrupt < 0x30)
 			{
-				Console.WriteLine("1");
 				Mosa.DeviceSystem.HAL.ProcessInterrupt((byte)(interrupt - 0x20));
 
 				//Debug.Trace("Returned from HAL.ProcessInterrupt");

@@ -642,7 +642,8 @@ namespace Mosa.Compiler.Framework.Stages
 			int elementSize = 0;
 			var elementType = arrayType.ElementType;
 
-			elementSize = TypeLayout.GetTypeSize(elementType);
+			int alignment = 0;
+			Architecture.GetTypeRequirements(TypeLayout, arrayType.ElementType, out elementSize, out alignment);
 
 			Operand lengthOperand = context.Operand1;
 
