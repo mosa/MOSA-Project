@@ -8,6 +8,7 @@
  */
 
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 
 namespace Mosa.TestWorld.x86.Tests
 {
@@ -27,6 +28,7 @@ namespace Mosa.TestWorld.x86.Tests
 			testMethods.AddLast(StructNotBoxed);
 			testMethods.AddLast(ForeachBreak);
 			testMethods.AddLast(ConditionalBug);
+			testMethods.AddLast(PointerBug);
 		}
 
 		private static uint StaticValue = 0x200000;
@@ -162,14 +164,49 @@ namespace Mosa.TestWorld.x86.Tests
 
 		public static bool ConditionalBug()
 		{
-			uint address = 0x0B8050; //it's the display memory, but you can use any other adress, so far it's no critical area
-			Mosa.Platform.Internal.x86.Native.Set8(address, 81); //set ascii 'Q'
-			var num = Mosa.Platform.Internal.x86.Native.Get8(address); //get the 'Q' back
+			uint address = 0x1000;
+			Mosa.Platform.Internal.x86.Native.Set8(address, 81);
+			var num = Mosa.Platform.Internal.x86.Native.Get8(address);
 
 			if (num >= 32 && num < 128)
 				return true;
 			else
 				return false;
+		}
+
+		public static bool PointerBug()
+		{
+			return PointerBugClass.Test();
+		}
+
+		unsafe public static class PointerBugClass
+		{
+			private static uint pageDirectoryAddress = 0x1000;
+			private static PageDirectoryEntry* pageDirectoryEntries;
+
+			public static bool Test()
+			{
+				pageDirectoryEntries = (PageDirectoryEntry*)pageDirectoryAddress;
+				return GetItem(1);
+			}
+
+			internal static bool GetItem(uint index)
+			{
+				//increpmenting a pointer
+				var addr1 = (uint)(pageDirectoryEntries + index);
+
+				//increpmenting a UInt32
+				var addr2 = (uint)(pageDirectoryAddress + (index * 4));  //struct PageDirectoryEntry as a size of 4 bytes
+
+				return addr1 == addr2;
+			}
+
+			[StructLayout(LayoutKind.Explicit)]
+			unsafe public struct PageDirectoryEntry
+			{
+				[FieldOffset(0)]
+				private uint data;
+			}
 		}
 	}
 
