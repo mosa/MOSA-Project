@@ -18,5 +18,19 @@ namespace Mosa.Kernel.x86.Helpers
 			if (value >= length)
 				AssertError("Out of Range");
 		}
+
+		[Conditional("DEBUG")]
+		public static void True(bool condition)
+		{
+			if (!condition)
+				AssertError("Assert.True failed");
+		}
+
+		[Conditional("DEBUG")]
+		public static void True(bool condition, string userMessage)
+		{
+			if (!condition)
+				AssertError(userMessage);
+		}
 	}
 }
