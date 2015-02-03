@@ -38,11 +38,12 @@ namespace Mosa.DriverWorld.x86.HAL
 		{
 			// Map physical memory space to virtual memory space
 			//address = address & 0xFFFFF000;	// force alignment
-			uint end = address + size;
+			// TODO: Fix this, its still buggy
+			/*uint end = address + size;
 			for (uint at = address; at < end; address = address + 4096)
 			{
 				PageTable.MapVirtualAddressToPhysical(address, address);
-			}
+			}*/
 			return new Memory(address, size);
 		}
 

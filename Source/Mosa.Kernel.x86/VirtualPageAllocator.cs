@@ -7,6 +7,7 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using Mosa.Kernel.x86.Helpers;
 using Mosa.Platform.Internal.x86;
 
 namespace Mosa.Kernel.x86
@@ -23,6 +24,7 @@ namespace Mosa.Kernel.x86
 		private static uint bitmap = 1024 * 1024 * 21; // 0x1500000
 
 		private static uint pages;
+		private static bool initialized = false;
 
 		/// <summary>
 		/// Setups this instance.
@@ -33,6 +35,7 @@ namespace Mosa.Kernel.x86
 
 			// Bits: 0 = Available, 1 = Not Available
 			Memory.Clear(bitmap, pages / 8);
+			initialized = true;
 		}
 
 		/// <summary>
@@ -89,6 +92,8 @@ namespace Mosa.Kernel.x86
 		/// <returns></returns>
 		public static uint Reserve(uint size)
 		{
+			//Assert.True(initialized, "VirtualPageAllocator is not initialized");
+
 			uint first = 0xFFFFFFFF; // Marker
 			uint requested = ((size - 1) / PageFrameAllocator.PageSize) + 1;
 

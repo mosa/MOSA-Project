@@ -33,6 +33,8 @@
 			this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
 			this.tabControl1 = new System.Windows.Forms.TabControl();
 			this.tbOptions = new System.Windows.Forms.TabPage();
+			this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+			this.tsStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
 			this.groupBox5 = new System.Windows.Forms.GroupBox();
 			this.cbDebugConnectionOption = new System.Windows.Forms.ComboBox();
 			this.label8 = new System.Windows.Forms.Label();
@@ -94,10 +96,11 @@
 			this.tabPage3 = new System.Windows.Forms.TabPage();
 			this.rtbCounters = new System.Windows.Forms.RichTextBox();
 			this.openFileDialog2 = new System.Windows.Forms.OpenFileDialog();
-			this.statusStrip1 = new System.Windows.Forms.StatusStrip();
-			this.tsStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
+			this.groupBox12 = new System.Windows.Forms.GroupBox();
+			this.cbCompilerUsesMultipleThreads = new System.Windows.Forms.CheckBox();
 			this.tabControl1.SuspendLayout();
 			this.tbOptions.SuspendLayout();
+			this.statusStrip1.SuspendLayout();
 			this.groupBox5.SuspendLayout();
 			this.groupBox2.SuspendLayout();
 			this.groupBox6.SuspendLayout();
@@ -113,7 +116,7 @@
 			this.groupBox7.SuspendLayout();
 			this.tpOutput.SuspendLayout();
 			this.tabPage3.SuspendLayout();
-			this.statusStrip1.SuspendLayout();
+			this.groupBox12.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// openFileDialog1
@@ -148,12 +151,13 @@
 			this.tabControl1.Name = "tabControl1";
 			this.tabControl1.Padding = new System.Drawing.Point(0, 0);
 			this.tabControl1.SelectedIndex = 0;
-			this.tabControl1.Size = new System.Drawing.Size(637, 388);
+			this.tabControl1.Size = new System.Drawing.Size(637, 431);
 			this.tabControl1.TabIndex = 22;
 			// 
 			// tbOptions
 			// 
 			this.tbOptions.BackColor = System.Drawing.SystemColors.Control;
+			this.tbOptions.Controls.Add(this.groupBox12);
 			this.tbOptions.Controls.Add(this.statusStrip1);
 			this.tbOptions.Controls.Add(this.groupBox5);
 			this.tbOptions.Controls.Add(this.groupBox2);
@@ -164,9 +168,24 @@
 			this.tbOptions.Location = new System.Drawing.Point(4, 22);
 			this.tbOptions.Margin = new System.Windows.Forms.Padding(0);
 			this.tbOptions.Name = "tbOptions";
-			this.tbOptions.Size = new System.Drawing.Size(629, 362);
+			this.tbOptions.Size = new System.Drawing.Size(629, 405);
 			this.tbOptions.TabIndex = 0;
 			this.tbOptions.Text = "MOSA Options";
+			// 
+			// statusStrip1
+			// 
+			this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsStatusLabel});
+			this.statusStrip1.Location = new System.Drawing.Point(0, 383);
+			this.statusStrip1.Name = "statusStrip1";
+			this.statusStrip1.Size = new System.Drawing.Size(629, 22);
+			this.statusStrip1.TabIndex = 32;
+			this.statusStrip1.Text = "statusStrip1";
+			// 
+			// tsStatusLabel
+			// 
+			this.tsStatusLabel.Name = "tsStatusLabel";
+			this.tsStatusLabel.Size = new System.Drawing.Size(0, 17);
 			// 
 			// groupBox5
 			// 
@@ -624,7 +643,7 @@
 			this.tabPage4.Location = new System.Drawing.Point(4, 22);
 			this.tabPage4.Name = "tabPage4";
 			this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPage4.Size = new System.Drawing.Size(629, 343);
+			this.tabPage4.Size = new System.Drawing.Size(629, 362);
 			this.tabPage4.TabIndex = 3;
 			this.tabPage4.Text = "Application Settings";
 			this.tabPage4.UseVisualStyleBackColor = true;
@@ -844,7 +863,7 @@
 			this.tpOutput.Location = new System.Drawing.Point(4, 22);
 			this.tpOutput.Name = "tpOutput";
 			this.tpOutput.Padding = new System.Windows.Forms.Padding(3);
-			this.tpOutput.Size = new System.Drawing.Size(629, 356);
+			this.tpOutput.Size = new System.Drawing.Size(629, 362);
 			this.tpOutput.TabIndex = 1;
 			this.tpOutput.Text = "Output";
 			this.tpOutput.UseVisualStyleBackColor = true;
@@ -869,7 +888,7 @@
 			this.tabPage3.Location = new System.Drawing.Point(4, 22);
 			this.tabPage3.Name = "tabPage3";
 			this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPage3.Size = new System.Drawing.Size(629, 343);
+			this.tabPage3.Size = new System.Drawing.Size(629, 362);
 			this.tabPage3.TabIndex = 2;
 			this.tabPage3.Text = "Counters";
 			this.tabPage3.UseVisualStyleBackColor = true;
@@ -894,26 +913,35 @@
 			this.openFileDialog2.Filter = "Executable|*.exe";
 			this.openFileDialog2.Title = "Select Assembly";
 			// 
-			// statusStrip1
+			// groupBox12
 			// 
-			this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.tsStatusLabel});
-			this.statusStrip1.Location = new System.Drawing.Point(0, 340);
-			this.statusStrip1.Name = "statusStrip1";
-			this.statusStrip1.Size = new System.Drawing.Size(629, 22);
-			this.statusStrip1.TabIndex = 32;
-			this.statusStrip1.Text = "statusStrip1";
+			this.groupBox12.Controls.Add(this.cbCompilerUsesMultipleThreads);
+			this.groupBox12.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.groupBox12.Location = new System.Drawing.Point(5, 338);
+			this.groupBox12.Name = "groupBox12";
+			this.groupBox12.Size = new System.Drawing.Size(614, 38);
+			this.groupBox12.TabIndex = 30;
+			this.groupBox12.TabStop = false;
+			this.groupBox12.Text = "Misc Options:";
 			// 
-			// tsStatusLabel
+			// cbCompilerUsesMultipleThreads
 			// 
-			this.tsStatusLabel.Name = "tsStatusLabel";
-			this.tsStatusLabel.Size = new System.Drawing.Size(0, 17);
+			this.cbCompilerUsesMultipleThreads.AutoSize = true;
+			this.cbCompilerUsesMultipleThreads.Checked = true;
+			this.cbCompilerUsesMultipleThreads.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.cbCompilerUsesMultipleThreads.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.cbCompilerUsesMultipleThreads.Location = new System.Drawing.Point(6, 19);
+			this.cbCompilerUsesMultipleThreads.Name = "cbCompilerUsesMultipleThreads";
+			this.cbCompilerUsesMultipleThreads.Size = new System.Drawing.Size(171, 17);
+			this.cbCompilerUsesMultipleThreads.TabIndex = 13;
+			this.cbCompilerUsesMultipleThreads.Text = "Compiler uses multiple Threads";
+			this.cbCompilerUsesMultipleThreads.UseVisualStyleBackColor = true;
 			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(635, 419);
+			this.ClientSize = new System.Drawing.Size(635, 462);
 			this.Controls.Add(this.progressBar1);
 			this.Controls.Add(this.tabControl1);
 			this.Name = "MainForm";
@@ -924,6 +952,8 @@
 			this.tabControl1.ResumeLayout(false);
 			this.tbOptions.ResumeLayout(false);
 			this.tbOptions.PerformLayout();
+			this.statusStrip1.ResumeLayout(false);
+			this.statusStrip1.PerformLayout();
 			this.groupBox5.ResumeLayout(false);
 			this.groupBox5.PerformLayout();
 			this.groupBox2.ResumeLayout(false);
@@ -950,8 +980,8 @@
 			this.groupBox7.PerformLayout();
 			this.tpOutput.ResumeLayout(false);
 			this.tabPage3.ResumeLayout(false);
-			this.statusStrip1.ResumeLayout(false);
-			this.statusStrip1.PerformLayout();
+			this.groupBox12.ResumeLayout(false);
+			this.groupBox12.PerformLayout();
 			this.ResumeLayout(false);
 
 		}
@@ -1026,5 +1056,7 @@
 		private System.Windows.Forms.Button button1;
 		private System.Windows.Forms.StatusStrip statusStrip1;
 		private System.Windows.Forms.ToolStripStatusLabel tsStatusLabel;
+		private System.Windows.Forms.GroupBox groupBox12;
+		private System.Windows.Forms.CheckBox cbCompilerUsesMultipleThreads;
 	}
 }

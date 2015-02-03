@@ -92,8 +92,11 @@ namespace Mosa.Compiler.Linker
 			foreach (var symbol in Symbols)
 			{
 				stream.Seek(FileOffset + symbol.SectionOffset, SeekOrigin.Begin);
-				symbol.Stream.Position = 0;
-				symbol.Stream.WriteTo(stream);
+				if (symbol.IsDataAvailable)
+				{
+					symbol.Stream.Position = 0;
+					symbol.Stream.WriteTo(stream);
+				}
 			}
 
 			stream.WriteZeroBytes((int)(FileOffset + AlignedSize - stream.Position));

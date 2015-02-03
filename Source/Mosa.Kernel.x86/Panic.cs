@@ -60,7 +60,9 @@ namespace Mosa.Kernel.x86
 			Screen.Clear();
 			Screen.Goto(1, 1);
 			Screen.Color = Colors.LightGray;
-			Screen.Write("*** " + title + " ***");
+			Screen.Write("*** ");
+			Screen.Write(title);
+			Screen.Write(" ***");
 			Screen.Goto(3, 1);
 		}
 

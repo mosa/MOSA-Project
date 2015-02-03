@@ -7,6 +7,7 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using System.Threading;
 using Mosa.Platform.Internal.x86;
 
 namespace Mosa.Kernel.x86
@@ -16,6 +17,8 @@ namespace Mosa.Kernel.x86
 	/// </summary>
 	public static class PageFaultHandler
 	{
+		private static System.Threading.SpinLock spinLock = new System.Threading.SpinLock();
+
 		/// <summary>
 		/// Handle Page Faults
 		/// </summary>
@@ -29,7 +32,8 @@ namespace Mosa.Kernel.x86
 				Panic.Now(2);	// Can't map null! what happened?
 			}
 
-			// TODO: acquire lock
+			//bool taken = false;
+			//spinLock.Enter(ref taken);
 
 			uint physicalpage = PageFrameAllocator.Allocate();
 
@@ -38,7 +42,7 @@ namespace Mosa.Kernel.x86
 
 			PageTable.MapVirtualAddressToPhysical(virtualpage, physicalpage);
 
-			// TODO: release lock
+			//spinLock.Exit();
 		}
 	}
 }

@@ -41,6 +41,7 @@ namespace Mosa.Compiler.Framework.Stages
 		private void PerformStaticAllocationOf(Context allocation, Context assignment)
 		{
 			MosaType allocatedType = (allocation.MosaMethod != null) ? allocation.MosaMethod.DeclaringType : allocation.Result.Type;
+			MosaField assignmentField = (assignment.Instruction is DupInstruction) ? FindStsfldForDup(assignment).MosaField : assignment.MosaField;
 
 			// Get size of type
 			int typeSize = TypeLayout.GetTypeSize(allocatedType);
@@ -51,7 +52,7 @@ namespace Mosa.Compiler.Framework.Stages
 				typeSize = (TypeLayout.GetTypeSize(allocatedType.ElementType) * (int)allocation.Previous.Operand1.ConstantSignedInteger) + (TypeLayout.NativePointerSize * 3);
 
 			// Allocate a linker symbol to refer to this allocation. Use the destination field name as the linker symbol name.
-			var symbolName = MethodCompiler.Linker.CreateSymbol(assignment.MosaField.FullName + @"<<$cctor", SectionKind.ROData, Architecture.NativeAlignment, typeSize);
+			var symbolName = MethodCompiler.Linker.CreateSymbol(assignmentField.FullName + @"<<$cctor", SectionKind.ROData, Architecture.NativeAlignment, typeSize);
 
 			// Try to get typeDefinitionSymbol if allocatedType isn't a value type
 			string typeDefinitionSymbol = GetTypeDefinition(allocatedType);
@@ -60,8 +61,12 @@ namespace Mosa.Compiler.Framework.Stages
 				MethodCompiler.Linker.Link(LinkType.AbsoluteAddress, BuiltInPatch.I4, symbolName, 0, 0, typeDefinitionSymbol, SectionKind.ROData, 0);
 
 			// Issue a load request before the newobj and before the assignment.
-			Operand symbol1 = InsertLoadBeforeInstruction(assignment, symbolName.Name, assignment.MosaField.FieldType);
+			Operand symbol1 = InsertLoadBeforeInstruction(assignment, symbolName.Name, assignmentField.FieldType);
 			assignment.Operand1 = symbol1;
+
+			// If the instruction is a newarr and the assignment instruction is a dup then we want to remove it
+			if (allocation.Instruction is NewarrInstruction && assignment.Instruction is DupInstruction)
+				assignment.SetInstruction(CILInstruction.Get(OpCode.Ldc_i4), assignment.Result, assignment.Operand1);
 
 			// Change the newobj to a call and increase the operand count to include the this ptr.
 			// If the instruction is a newarr, then just replace with a nop instead
@@ -69,11 +74,11 @@ namespace Mosa.Compiler.Framework.Stages
 			if (allocation.Instruction is NewarrInstruction)
 			{
 				allocation.OperandCount = 0;
-				allocation.ReplaceInstructionOnly(CILInstruction.Get(OpCode.Nop));
+				allocation.SetInstruction(CILInstruction.Get(OpCode.Nop));
 			}
 			else
 			{
-				Operand symbol2 = InsertLoadBeforeInstruction(allocation, symbolName.Name, assignment.MosaField.FieldType);
+				Operand symbol2 = InsertLoadBeforeInstruction(allocation, symbolName.Name, assignmentField.FieldType);
 				IEnumerable<Operand> ops = allocation.Operands;
 				allocation.OperandCount++;
 				allocation.Operand1 = symbol2;
@@ -128,7 +133,9 @@ namespace Mosa.Compiler.Framework.Stages
 				next.GotoNext();
 			}
 
-			if (next.IsBlockEndInstruction || !(next.Instruction is StsfldInstruction))
+			if (next.IsBlockEndInstruction ||
+				!(next.Instruction is StsfldInstruction ||
+					(next.Instruction is DupInstruction && FindStsfldForDup(next) != null)))
 			{
 				return null;
 			}
@@ -144,13 +151,21 @@ namespace Mosa.Compiler.Framework.Stages
 			// as that is hard to complete at this point of time.
 
 			MosaType allocationType = (allocation.MosaMethod != null) ? allocation.MosaMethod.DeclaringType : allocation.Result.Type.ElementType;
-			MosaType storageType = assignment.MosaField.DeclaringType;
+			MosaType storageType = (assignment.Instruction is DupInstruction) ? assignment.Operand1.Type.ElementType : assignment.MosaField.DeclaringType;
 
 			return ReferenceEquals(allocationType, storageType);
 		}
 
-		private void ExpandAllocationToStaticInitialization()
+		private Context FindStsfldForDup(Context dup)
 		{
+			var context = dup;
+			while(!(context.Instruction is StsfldInstruction))
+			{
+				if (context.IsBlockEndInstruction)
+					return null;
+				context = context.Next;
+			}
+			return context;
 		}
 	}
 }

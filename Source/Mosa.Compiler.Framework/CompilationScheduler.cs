@@ -50,7 +50,7 @@ namespace Mosa.Compiler.Framework
 			if (type.IsInterface)
 				return;
 
-			if (type.IsInterface || type.IsPointer)
+			if (type.HasOpenGenericParams || type.IsPointer)
 				return;
 
 			foreach (var method in type.Methods)
@@ -61,7 +61,7 @@ namespace Mosa.Compiler.Framework
 
 		public void Schedule(MosaMethod method)
 		{
-			if (method.IsAbstract)
+			if (method.IsAbstract || method.HasOpenGenericParams)
 				return;
 
 			if (methodScheduled.Contains(method))
