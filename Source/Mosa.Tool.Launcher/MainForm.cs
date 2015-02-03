@@ -64,6 +64,7 @@ namespace Mosa.Tool.Launcher
 			Options.GenerateMapFile = cbGenerateMapFile.Checked;
 			Options.ExitOnLaunch = cbExitOnLaunch.Checked;
 			Options.MOSADebugger = cbMOSADebugger.Checked;
+			Options.CompilerUsesMultipleThreads = cbCompilerUsesMultipleThreads.Checked;
 			Options.MemoryInMB = (uint)nmMemory.Value;
 
 			switch (cbImageFormat.SelectedIndex)
@@ -140,6 +141,7 @@ namespace Mosa.Tool.Launcher
 			cbGenerateMapFile.Checked = Options.GenerateMapFile;
 			cbExitOnLaunch.Checked = Options.ExitOnLaunch;
 			cbMOSADebugger.Checked = Options.MOSADebugger;
+			cbCompilerUsesMultipleThreads.Checked = Options.CompilerUsesMultipleThreads;
 			nmMemory.Value = Options.MemoryInMB;
 
 			switch (Options.ImageFormat)

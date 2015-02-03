@@ -16,6 +16,10 @@ namespace Mosa.Kernel.x86
 	/// </summary>
 	public static class Panic
 	{
+		public static void Setup()
+		{
+		}
+
 		/// <summary>
 		/// Nows this instance.
 		/// </summary>
@@ -52,11 +56,13 @@ namespace Mosa.Kernel.x86
 		private static void PrepareScreen(string title)
 		{
 			IDT.SetInterruptHandler(null);
-			Screen.BackgroundColor = Colors.LightGray;
+			Screen.BackgroundColor = Colors.Black;
 			Screen.Clear();
 			Screen.Goto(1, 1);
-			Screen.Color = Colors.DarkGray;
-			Screen.Write("*** " + title + " ***");
+			Screen.Color = Colors.LightGray;
+			Screen.Write("*** ");
+			Screen.Write(title);
+			Screen.Write(" ***");
 			Screen.Goto(3, 1);
 		}
 
@@ -68,40 +74,109 @@ namespace Mosa.Kernel.x86
 		public static void DumpMemory(uint address)
 		{
 			PrepareScreen("Memory Dump");
-			Screen.Write("Start address: 0x");
-			Screen.Write(address.ToString("X"));
+			Screen.Column = 0;
+			//Screen.Write("Address   dword        dword         dword       dword      ascii");
+			Screen.Write("ADDRESS  ");
+			Screen.Color = Colors.Brown;
+			Screen.Write("03 02 01 00  07 06 05 04   11 10 09 08  15 14 13 12   ASCII");
+			//Screen.Write(address.ToString("X"));
 
-			var a = address;
-			for (var y = 0; y < 20; y++)
+			var word = address;
+			var rowAddress = address;
+			uint rows = 21;
+			for (uint y = 0; y < rows; y++)
 			{
 				Screen.Row++;
 				Screen.Column = 0;
-				for (var x = 0; x < 6; x++)
+
+				WriteHex(word.ToString("X"), Colors.Brown);
+				Screen.Write("  ");
+
+				const uint dwordsPerRow = 4;
+				for (uint x = 0; x < dwordsPerRow; x++)
 				{
-					for (var x2 = 0; x2 < 4; x2++)
+					for (uint x2 = 0; x2 < 4; x2++)
 					{
-						var number = Native.Get8(a);
+						var number = Native.Get8(word + ((4 - 1) - x2));
+						//var number = Native.Get8(word + x2);
 						WriteHex(number.ToString("X"), 2, number == 0);
 						Screen.Write(' ');
-						a++;
 					}
+					if (x == 1 || x == 3)
+						Screen.Write(' ');
 					Screen.Write(' ');
+					word += 4;
 				}
+
+				for (uint x = 0; x < dwordsPerRow * 4; x++)
+				{
+					var num = Native.Get8(rowAddress + x);
+					if (num == 0)
+						Screen.Color = Colors.DarkGray;
+					else
+						Screen.Color = Colors.LightGray;
+
+					if (num >= 32 && num < 128)
+					{
+						Screen.Color = Colors.LightGray;
+						Screen.Write((char)num);
+					}
+					else
+					{
+						if (num == 0)
+							Screen.Color = Colors.DarkGray;
+						else
+							Screen.Color = Colors.LightGray;
+						Screen.Write('.');
+					}
+				}
+				Screen.Color = Colors.LightGray;
+
+				//avoid empty line, when line before was fully filled
+				if (Screen.Column == 0)
+					Screen.Row--;
+
+				rowAddress += (dwordsPerRow * 4);
 			}
 
 			Halt();
 		}
 
+		private static void WriteHexChar(byte num)
+		{
+			if (num >= 32 && num < 128)
+			{
+				Screen.Color = Colors.LightGray;
+				Screen.Write((char)num);
+			}
+			else
+			{
+				if (num == 0)
+					Screen.Color = Colors.DarkGray;
+				else
+					Screen.Color = Colors.LightGray;
+				Screen.Write('.');
+			}
+		}
+
 		private static void WriteHex(string hex, byte digits, bool zero)
 		{
 			if (!zero)
-				Screen.Color = Colors.Black;
+				Screen.Color = Colors.LightGray;
 
 			for (var i = 0; i < digits - hex.Length; i++)
 				Screen.Write('0');
 			Screen.Write(hex);
 
 			Screen.Color = Colors.DarkGray;
+		}
+
+		private static void WriteHex(string hex, byte color)
+		{
+			var oldColor = Screen.Color;
+			Screen.Color = color;
+			Screen.Write(hex);
+			Screen.Color = oldColor;
 		}
 
 		public static void Message(string message)
@@ -120,6 +195,15 @@ namespace Mosa.Kernel.x86
 			Halt();
 		}
 
+		public static void Message(uint message)
+		{
+			PrepareScreen("Debug Message");
+			Screen.Color = Colors.Red;
+			Screen.Write(" Number: 0x");
+			Screen.Write(message.ToString("X"));
+			Halt();
+		}
+
 		public static void Error(string message)
 		{
 			PrepareScreen("Kernel Panic");
@@ -132,9 +216,9 @@ namespace Mosa.Kernel.x86
 			Halt();
 		}
 
-		public static void OutOfRange()
+		public static void Error(uint error)
 		{
-			Error("Index out of range");
+			Error(error.ToString());
 		}
 
 		private static void Halt()

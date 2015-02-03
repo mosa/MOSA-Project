@@ -137,7 +137,7 @@ namespace Mosa.Compiler.Linker
 			var symbol = CreateSymbol(name, kind, (uint)alignment);
 
 			MemoryStream stream = (size == 0) ? new MemoryStream() : new MemoryStream(size);
-			symbol.Stream = stream;
+			symbol.Stream = Stream.Synchronized(stream);
 
 			if (size != 0)
 			{

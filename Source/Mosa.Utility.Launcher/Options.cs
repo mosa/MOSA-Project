@@ -52,6 +52,8 @@ namespace Mosa.Utility.Launcher
 
 		public DebugConnectionOption DebugConnectionOption { get; set; }
 
+		public bool CompilerUsesMultipleThreads { get; set; }
+
 		public Options()
 		{
 			EnableSSA = true;
@@ -67,6 +69,7 @@ namespace Mosa.Utility.Launcher
 			DestinationDirectory = Path.Combine(Path.GetTempPath(), "MOSA");
 			FileSystemFormat = FileSystemFormat.FAT16;
 			DebugConnectionOption = DebugConnectionOption.None;
+			CompilerUsesMultipleThreads = true;
 		}
 
 		public void LoadFile(string file)
@@ -82,6 +85,10 @@ namespace Mosa.Utility.Launcher
 					case "SourceFile":
 						SourceFile = value;
 						break;
+
+					case "CompilerUsesMultipleThreads":
+						CompilerUsesMultipleThreads = value.ToLower() == "true";
+						break;
 					//TODO: Other options
 				}
 			}
@@ -94,6 +101,8 @@ namespace Mosa.Utility.Launcher
 
 			if (!string.IsNullOrEmpty(SourceFile))
 				root.Add(new XElement("param", new XAttribute("key", "SourceFile"), new XAttribute("value", SourceFile)));
+			if (!CompilerUsesMultipleThreads)
+				root.Add(new XElement("param", new XAttribute("key", "CompilerUsesMultipleThreads"), new XAttribute("value", CompilerUsesMultipleThreads.ToString())));
 
 			//TODO: Other options
 

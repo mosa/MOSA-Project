@@ -63,8 +63,10 @@
     <NoWarn>1685</NoWarn>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Assert.cs" />
     <Compile Include="ConsoleManager.cs" />
     <Compile Include="ConsoleSession.cs" />
+    <Compile Include="ELFHeader.cs" />
     <Compile Include="SSE.cs" />
     <Compile Include="DebugClient.cs" />
     <Compile Include="Serial.cs" />
@@ -108,7 +110,9 @@
       <Name>Mosa.Platform.Internal.x86</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Reference Include="System" />
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />
   <PropertyGroup>
     <PreBuildEvent>

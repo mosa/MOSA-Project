@@ -61,6 +61,7 @@
     <Compile Include="System.Collections\IComparer.cs" />
     <Compile Include="System.Collections\IStructuralComparable.cs" />
     <Compile Include="System.Collections\IStructuralEquatable.cs" />
+    <Compile Include="System.Diagnostics\ConditionalAttribute.cs" />
     <Compile Include="System.Diagnostics\DebuggerHiddenAttribute.cs" />
     <Compile Include="System.Globalization\CultureInfo.cs" />
     <Compile Include="System.IO\BinaryReader.cs" />
@@ -124,6 +125,7 @@
     <Compile Include="System\ICloneable.cs" />
     <Compile Include="System\IFormatProvider.cs" />
     <Compile Include="System\NotImplementedException.cs" />
+    <Compile Include="System\Nullable.cs" />
     <Compile Include="System\RuntimeMethodHandle.cs" />
     <Compile Include="System\SystemException.cs" />
     <Compile Include="System\TypedReference.cs" />

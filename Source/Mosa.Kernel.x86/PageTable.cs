@@ -39,6 +39,8 @@ namespace Mosa.Kernel.x86
 				Native.Set32((uint)(pageTable + (index << 2)), (uint)(index * 4096) | 0x04 | 0x02 | 0x01);
 			}
 
+			//Panic.DumpMemory(pageDirectory);
+
 			// Set CR3 register on processor - sets page directory
 			Native.SetCR3(pageDirectory);
 
