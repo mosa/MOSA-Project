@@ -28,11 +28,14 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
 			this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
 			this.progressBar1 = new System.Windows.Forms.ProgressBar();
 			this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
 			this.tabControl1 = new System.Windows.Forms.TabControl();
 			this.tbOptions = new System.Windows.Forms.TabPage();
+			this.groupBox12 = new System.Windows.Forms.GroupBox();
+			this.cbCompilerUsesMultipleThreads = new System.Windows.Forms.CheckBox();
 			this.statusStrip1 = new System.Windows.Forms.StatusStrip();
 			this.tsStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
 			this.groupBox5 = new System.Windows.Forms.GroupBox();
@@ -96,10 +99,9 @@
 			this.tabPage3 = new System.Windows.Forms.TabPage();
 			this.rtbCounters = new System.Windows.Forms.RichTextBox();
 			this.openFileDialog2 = new System.Windows.Forms.OpenFileDialog();
-			this.groupBox12 = new System.Windows.Forms.GroupBox();
-			this.cbCompilerUsesMultipleThreads = new System.Windows.Forms.CheckBox();
 			this.tabControl1.SuspendLayout();
 			this.tbOptions.SuspendLayout();
+			this.groupBox12.SuspendLayout();
 			this.statusStrip1.SuspendLayout();
 			this.groupBox5.SuspendLayout();
 			this.groupBox2.SuspendLayout();
@@ -116,7 +118,6 @@
 			this.groupBox7.SuspendLayout();
 			this.tpOutput.SuspendLayout();
 			this.tabPage3.SuspendLayout();
-			this.groupBox12.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// openFileDialog1
@@ -171,6 +172,30 @@
 			this.tbOptions.Size = new System.Drawing.Size(629, 405);
 			this.tbOptions.TabIndex = 0;
 			this.tbOptions.Text = "MOSA Options";
+			// 
+			// groupBox12
+			// 
+			this.groupBox12.Controls.Add(this.cbCompilerUsesMultipleThreads);
+			this.groupBox12.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.groupBox12.Location = new System.Drawing.Point(5, 338);
+			this.groupBox12.Name = "groupBox12";
+			this.groupBox12.Size = new System.Drawing.Size(614, 38);
+			this.groupBox12.TabIndex = 30;
+			this.groupBox12.TabStop = false;
+			this.groupBox12.Text = "Misc Options:";
+			// 
+			// cbCompilerUsesMultipleThreads
+			// 
+			this.cbCompilerUsesMultipleThreads.AutoSize = true;
+			this.cbCompilerUsesMultipleThreads.Checked = true;
+			this.cbCompilerUsesMultipleThreads.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.cbCompilerUsesMultipleThreads.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.cbCompilerUsesMultipleThreads.Location = new System.Drawing.Point(6, 19);
+			this.cbCompilerUsesMultipleThreads.Name = "cbCompilerUsesMultipleThreads";
+			this.cbCompilerUsesMultipleThreads.Size = new System.Drawing.Size(171, 17);
+			this.cbCompilerUsesMultipleThreads.TabIndex = 13;
+			this.cbCompilerUsesMultipleThreads.Text = "Compiler uses multiple Threads";
+			this.cbCompilerUsesMultipleThreads.UseVisualStyleBackColor = true;
 			// 
 			// statusStrip1
 			// 
@@ -643,7 +668,7 @@
 			this.tabPage4.Location = new System.Drawing.Point(4, 22);
 			this.tabPage4.Name = "tabPage4";
 			this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPage4.Size = new System.Drawing.Size(629, 362);
+			this.tabPage4.Size = new System.Drawing.Size(629, 405);
 			this.tabPage4.TabIndex = 3;
 			this.tabPage4.Text = "Application Settings";
 			this.tabPage4.UseVisualStyleBackColor = true;
@@ -863,7 +888,7 @@
 			this.tpOutput.Location = new System.Drawing.Point(4, 22);
 			this.tpOutput.Name = "tpOutput";
 			this.tpOutput.Padding = new System.Windows.Forms.Padding(3);
-			this.tpOutput.Size = new System.Drawing.Size(629, 362);
+			this.tpOutput.Size = new System.Drawing.Size(629, 405);
 			this.tpOutput.TabIndex = 1;
 			this.tpOutput.Text = "Output";
 			this.tpOutput.UseVisualStyleBackColor = true;
@@ -888,7 +913,7 @@
 			this.tabPage3.Location = new System.Drawing.Point(4, 22);
 			this.tabPage3.Name = "tabPage3";
 			this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPage3.Size = new System.Drawing.Size(629, 362);
+			this.tabPage3.Size = new System.Drawing.Size(629, 405);
 			this.tabPage3.TabIndex = 2;
 			this.tabPage3.Text = "Counters";
 			this.tabPage3.UseVisualStyleBackColor = true;
@@ -913,30 +938,6 @@
 			this.openFileDialog2.Filter = "Executable|*.exe";
 			this.openFileDialog2.Title = "Select Assembly";
 			// 
-			// groupBox12
-			// 
-			this.groupBox12.Controls.Add(this.cbCompilerUsesMultipleThreads);
-			this.groupBox12.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.groupBox12.Location = new System.Drawing.Point(5, 338);
-			this.groupBox12.Name = "groupBox12";
-			this.groupBox12.Size = new System.Drawing.Size(614, 38);
-			this.groupBox12.TabIndex = 30;
-			this.groupBox12.TabStop = false;
-			this.groupBox12.Text = "Misc Options:";
-			// 
-			// cbCompilerUsesMultipleThreads
-			// 
-			this.cbCompilerUsesMultipleThreads.AutoSize = true;
-			this.cbCompilerUsesMultipleThreads.Checked = true;
-			this.cbCompilerUsesMultipleThreads.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.cbCompilerUsesMultipleThreads.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.cbCompilerUsesMultipleThreads.Location = new System.Drawing.Point(6, 19);
-			this.cbCompilerUsesMultipleThreads.Name = "cbCompilerUsesMultipleThreads";
-			this.cbCompilerUsesMultipleThreads.Size = new System.Drawing.Size(171, 17);
-			this.cbCompilerUsesMultipleThreads.TabIndex = 13;
-			this.cbCompilerUsesMultipleThreads.Text = "Compiler uses multiple Threads";
-			this.cbCompilerUsesMultipleThreads.UseVisualStyleBackColor = true;
-			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -944,6 +945,7 @@
 			this.ClientSize = new System.Drawing.Size(635, 462);
 			this.Controls.Add(this.progressBar1);
 			this.Controls.Add(this.tabControl1);
+			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.Name = "MainForm";
 			this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
 			this.Text = "MOSA Launcher v1.4";
@@ -952,6 +954,8 @@
 			this.tabControl1.ResumeLayout(false);
 			this.tbOptions.ResumeLayout(false);
 			this.tbOptions.PerformLayout();
+			this.groupBox12.ResumeLayout(false);
+			this.groupBox12.PerformLayout();
 			this.statusStrip1.ResumeLayout(false);
 			this.statusStrip1.PerformLayout();
 			this.groupBox5.ResumeLayout(false);
@@ -980,8 +984,6 @@
 			this.groupBox7.PerformLayout();
 			this.tpOutput.ResumeLayout(false);
 			this.tabPage3.ResumeLayout(false);
-			this.groupBox12.ResumeLayout(false);
-			this.groupBox12.PerformLayout();
 			this.ResumeLayout(false);
 
 		}
