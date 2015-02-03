@@ -34,11 +34,9 @@ namespace Mosa.DriverWorld.x86
 			IDT.SetInterruptHandler(ProcessInterrupt);
 
 			Setup.Initialize();
-			Screen.RawWrite(9, 0, (Multiboot.IsMultibootEnabled) ? 'A' : 'B', 0x0F);
 			Setup.Start();
-			Screen.RawWrite(10, 0, (Multiboot.IsMultibootEnabled) ? 'A' : 'B', 0x0F);
-			/*var textDevice = (ITextDevice)Setup.DeviceManager.GetDevices(new FindDevice.WithName("VGAText")).First.Value;
-			Screen.RawWrite(11, 0, (Multiboot.IsMultibootEnabled) ? 'A': 'B', 0x0F);
+			
+			var textDevice = (ITextDevice)Setup.DeviceManager.GetDevices(new FindDevice.WithName("VGAText")).First.Value;
 			console = new TextScreen(textDevice);
 
 			Console.ClearScreen();
@@ -46,18 +44,17 @@ namespace Mosa.DriverWorld.x86
 			Console.Write(@"                   MOSA OS Version 1.4 - Compiler Version 1.4");
 			Console.WriteLine("> System ready");
 			Console.WriteLine();
-			//Console.Goto(24, 0);
+			Console.SetCursor(0, 24);
 			Console.Write("          Copyright (C) 2008-2015 [Managed Operating System Alliance]");
 
-			Process();*/
-			Native.Hlt();
+			Process();
 		}
 
 		public static void Process()
 		{
 			int lastSecond = -1;
 
-			//Console.Goto(21, 0);
+			Console.SetCursor(0, 21);
 			Console.Write("> ");
 
 			Mosa.DeviceDriver.ScanCodeMap.US KBDMAP = new DeviceDriver.ScanCodeMap.US();

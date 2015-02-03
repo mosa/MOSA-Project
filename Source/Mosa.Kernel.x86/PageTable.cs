@@ -55,14 +55,14 @@ namespace Mosa.Kernel.x86
 		/// <param name="physicalAddress">The physical address.</param>
 		public static void MapVirtualAddressToPhysical(uint virtualAddress, uint physicalAddress)
 		{
-			//Panic.Now(virtualAddress);
 			//FUTURE: traverse page directory from CR3 --- do not assume page table is linearly allocated
-			uint pdIndex = virtualAddress >> 22;
-			uint ptIndex = virtualAddress >> 12 & 0x03FF;
-			uint location = pageTable + (0x1000 * pdIndex) + ptIndex;
-			Native.Set32(location, (uint)(physicalAddress & 0xFFC00000 | 0x04 | 0x02 | 0x01));
+			//uint pdIndex = virtualAddress >> 22;
+			//uint ptIndex = virtualAddress >> 12 & 0x03FF;
+			//uint location = pageTable + (0x1000 * pdIndex) + ptIndex;
+			//Native.Set32(location, (uint)(physicalAddress & 0xFFC00000 | 0x04 | 0x02 | 0x01));
+			Native.Set32(pageTable + ((virtualAddress & 0xFFC00000) >> 10), (uint)(physicalAddress & 0xFFC00000 | 0x04 | 0x02 | 0x01));
 			// Flush TLB
-			Native.SetCR3(Native.GetCR3());
+			//Native.SetCR3(Native.GetCR3());
 		}
 
 		/// <summary>
@@ -73,10 +73,11 @@ namespace Mosa.Kernel.x86
 		public static uint GetPhysicalAddressFromVirtual(uint virtualAddress)
 		{
 			//FUTURE: traverse page directory from CR3 --- do not assume page table is linearly allocated
-			uint pdIndex = virtualAddress >> 22;
-			uint ptIndex = virtualAddress >> 12 & 0x03FF;
-			uint location = pageTable + (0x400 * pdIndex) + ptIndex;
-			return Native.Get32(location + (virtualAddress & 0xFFF));
+			//uint pdIndex = virtualAddress >> 22;
+			//uint ptIndex = virtualAddress >> 12 & 0x03FF;
+			//uint location = pageTable + (0x400 * pdIndex) + ptIndex;
+			//return Native.Get32(location + (virtualAddress & 0xFFF));
+			return Native.Get32(pageTable + ((virtualAddress & 0xFFFFF000) >> 10)) + (virtualAddress & 0xFFF);
 		}
 	}
 }
